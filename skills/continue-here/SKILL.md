@@ -119,14 +119,50 @@ mkdir -p ~/.claude/hooks/continue-here
 cat > ~/.claude/hooks/continue-here/read-continuation.sh << 'SCRIPT'
 #!/bin/bash
 # SessionStart hook: inject CONTINUE_HERE.md into session context
+# OS-aware: works on native Linux, WSL, macOS, and Windows (Git Bash/MSYS)
+set -uo pipefail
+
+# --- Platform detection ---
+detect_platform() {
+  case "$(uname -s)" in
+    Darwin) echo "mac" ;;
+    Linux)
+      if grep -qi microsoft /proc/version 2>/dev/null; then
+        echo "wsl"
+      else
+        echo "linux"
+      fi ;;
+    MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
+    *) echo "unknown" ;;
+  esac
+}
+PLATFORM=${PLATFORM:-$(detect_platform)}
+
 CONTINUE_FILE="$PWD/CONTINUE_HERE.md"
 
 if [ ! -f "$CONTINUE_FILE" ]; then
   exit 0
 fi
 
-CONTENT=$(cat "$CONTINUE_FILE")
-ESCAPED=$(echo "$CONTENT" | jq -Rsa .)
+# Strip CRLF (files on NTFS often have Windows line endings)
+CONTENT=$(sed 's/\r$//' "$CONTINUE_FILE")
+
+# JSON-escape: prefer jq, fall back to portable awk
+if command -v jq >/dev/null 2>&1; then
+  ESCAPED=$(printf '%s' "$CONTENT" | jq -Rsa .)
+else
+  ESCAPED=$(printf '%s' "$CONTENT" | awk '
+    BEGIN { ORS=""; print "\"" }
+    {
+      gsub(/\\/, "\\\\")
+      gsub(/"/, "\\\"")
+      gsub(/\t/, "\\t")
+      if (NR > 1) print "\\n"
+      print
+    }
+    END { print "\"" }
+  ')
+fi
 
 cat << EOF
 {"hookSpecificOutput":{"sessionStartContext":{"additionalContext":$ESCAPED}}}
@@ -148,7 +184,7 @@ Add to `~/.claude/settings.json` in the SessionStart hooks array:
 
 **Expected:** The hook script exists, is executable, and is registered in settings.json. On next session start, if CONTINUE_HERE.md exists, its content is injected into the session context.
 
-**On failure:** Verify `jq` is installed (`which jq`). Check that settings.json is valid JSON after editing. Test the hook manually: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`.
+**On failure:** Check that settings.json is valid JSON after editing. Test the hook manually: `cd /your/project && ~/.claude/hooks/continue-here/read-continuation.sh`. The script falls back to `awk` if `jq` is not installed, so `jq` is recommended but not required.
 
 ### Step 5: Add CLAUDE.md Instruction (Optional)
 
