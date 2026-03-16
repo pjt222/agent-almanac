@@ -1,5 +1,5 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 306 skillIds to a specific glyph drawing function.
+# Maps each of 307 skillIds to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #
@@ -420,6 +420,9 @@ SKILL_GLYPHS <- list(
   "design-logic-circuit"            = "glyph_logic_gates",
   "build-sequential-circuit"        = "glyph_flip_flop",
   "simulate-cpu-architecture"       = "glyph_cpu_chip",
+
+  # ── i18n (1) ────────────────────────────────────────────────────────
+  "translate-content"              = "glyph_translate",
 
   # ── electromagnetism (4) ─────────────────────────────────────────────
   "analyze-magnetic-field"          = "glyph_magnetic_field",

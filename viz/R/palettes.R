@@ -8,13 +8,14 @@ PALETTE_NAMES <- c(
   "plasma", "cividis", "mako", "rocket", "turbo"
 )
 
-# ── Domain order (alphabetical, 55 domains) ──────────────────────────────
+# ── Domain order (alphabetical, 56 domains) ──────────────────────────────
 PALETTE_DOMAIN_ORDER <- c(
   "3d-printing", "a2a-protocol", "alchemy", "animal-training", "blender",
   "bushcraft", "chromatography", "citations", "compliance", "containerization", "crafting",
   "data-serialization", "defensive", "design", "devops", "diffusion", "digital-logic",
   "electromagnetism", "entomology",
-  "esoteric", "gardening", "general", "geometry", "git", "hildegard", "intellectual-property",
+  "esoteric", "gardening", "general", "geometry", "git", "hildegard", "i18n",
+  "intellectual-property",
   "jigsawr", "lapidary", "levitation", "library-science", "linguistics", "maintenance",
   "mcp-integration", "mlops", "morphic", "mycology", "number-theory",
   "observability", "project-management", "prospecting", "r-packages", "relocation",
@@ -108,6 +109,7 @@ get_cyberpunk_colors <- function() {
     "geometry"               = "#55ccdd",
     "git"                    = "#66ffcc",
     "hildegard"              = "#99bb44",
+    "i18n"                   = "#55bbcc",   # teal -- translation/international
     "intellectual-property"  = "#33ccff",
     "jigsawr"                = "#22ddaa",
     "lapidary"               = "#88ccee",

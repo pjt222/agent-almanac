@@ -1,6 +1,6 @@
-# primitives_18.R - Glyph library part 18: community-discovered operational skills (5)
+# primitives_18.R - Glyph library part 18: community-discovered operational skills (5) + i18n (1)
 # Sourced by build-icons.R
-# Domains: general (4), morphic (1)
+# Domains: general (4), morphic (1), i18n (1)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # General skills (4)
@@ -304,6 +304,86 @@ glyph_identity_boot <- function(cx, cy, s, col, bright) {
   )
   layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = arrow_head, .aes(x, y),
     fill = hex_with_alpha(bright, 0.4), color = "transparent", linewidth = 0)
+
+  layers
+}
+
+# ══════════════════════════════════════════════════════════════════════════════
+# i18n skills (1)
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── glyph_translate: two offset documents with curved arrow ──────────────
+glyph_translate <- function(cx, cy, s, col, bright) {
+  # Two overlapping document pages offset horizontally, with a curved arrow
+  # from left to right suggesting content translation between languages.
+  # Left page has "source" text lines; right page has "translated" text lines.
+  layers <- list()
+
+  # Left document (source)
+  left_cx <- cx - 10 * s
+  doc_w <- 22 * s
+  doc_h <- 30 * s
+  left_doc <- data.frame(
+    xmin = left_cx - doc_w / 2, xmax = left_cx + doc_w / 2,
+    ymin = cy - doc_h / 2, ymax = cy + doc_h / 2
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = left_doc,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.12), color = bright, linewidth = .lw(s, 2))
+
+  # Source text lines (4 lines, uniform)
+  for (i in 1:4) {
+    ly <- cy + (10 - i * 6) * s
+    line_data <- data.frame(
+      x = c(left_cx - 8 * s, left_cx + 7 * s),
+      y = c(ly, ly)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = line_data, .aes(x, y),
+      color = hex_with_alpha(col, 0.5), linewidth = .lw(s, 1.3))
+  }
+
+  # Right document (translated, offset right and slightly down)
+  right_cx <- cx + 10 * s
+  right_doc <- data.frame(
+    xmin = right_cx - doc_w / 2, xmax = right_cx + doc_w / 2,
+    ymin = cy - doc_h / 2 - 2 * s, ymax = cy + doc_h / 2 - 2 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = right_doc,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.08), color = hex_with_alpha(bright, 0.7),
+    linewidth = .lw(s, 2))
+
+  # Translated text lines (4 lines, varied lengths to suggest different script)
+  line_widths <- c(6, 9, 5, 8)
+  for (i in 1:4) {
+    ly <- cy + (10 - i * 6) * s - 2 * s
+    line_data <- data.frame(
+      x = c(right_cx - 8 * s, right_cx - 8 * s + line_widths[i] * s),
+      y = c(ly, ly)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = line_data, .aes(x, y),
+      color = hex_with_alpha(bright, 0.45), linewidth = .lw(s, 1.3))
+  }
+
+  # Curved arrow from left doc to right doc (above the documents)
+  t_arrow <- seq(pi, 0, length.out = 30)
+  arrow_r <- 12 * s
+  arrow_arc <- data.frame(
+    x = cx + arrow_r * cos(t_arrow),
+    y = cy + 18 * s + 6 * s * sin(t_arrow)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arrow_arc, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2))
+
+  # Arrowhead at right end of curve
+  arrow_tip_x <- cx + arrow_r
+  arrow_tip_y <- cy + 18 * s
+  arrow_head <- data.frame(
+    x = arrow_tip_x + c(-4, 0, -4) * s,
+    y = arrow_tip_y + c(3, 0, -3) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = arrow_head, .aes(x, y),
+    fill = bright, color = "transparent", linewidth = 0)
 
   layers
 }
