@@ -1205,136 +1205,128 @@
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, WSL penguin, terminal window, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220001,
-      "path": "public/icons/cyberpunk/general/setup-wsl-dev-environment.webp",
-      "status": "done"
+      "path": "public/icons/general/setup-wsl-dev-environment.webp",
+      "status": "pending"
     },
     {
       "skillId": "write-claude-md",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Claude AI icon, instruction document, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220002,
-      "path": "public/icons/cyberpunk/general/write-claude-md.webp",
-      "status": "done"
+      "path": "public/icons/general/write-claude-md.webp",
+      "status": "pending"
     },
     {
       "skillId": "security-audit-codebase",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, security scan, vulnerability shield, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220003,
-      "path": "public/icons/cyberpunk/general/security-audit-codebase.webp",
-      "status": "done"
+      "path": "public/icons/general/security-audit-codebase.webp",
+      "status": "pending"
     },
     {
       "skillId": "manage-memory",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Manage, Memory, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220004,
-      "path": "public/icons/cyberpunk/general/manage-memory.webp",
-      "status": "done"
+      "path": "public/icons/general/manage-memory.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-skill",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, skill blueprint, creation spark, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220005,
-      "path": "public/icons/cyberpunk/general/create-skill.webp",
-      "status": "done"
+      "path": "public/icons/general/create-skill.webp",
+      "status": "pending"
     },
     {
       "skillId": "evolve-skill",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, evolution spiral, skill upgrade arrow, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220006,
-      "path": "public/icons/cyberpunk/general/evolve-skill.webp",
-      "status": "done"
+      "path": "public/icons/general/evolve-skill.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-agent",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Create, New, Agent, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220007,
-      "path": "public/icons/cyberpunk/general/create-agent.webp",
-      "status": "done"
+      "path": "public/icons/general/create-agent.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-team",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Create, New, Team, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220008,
-      "path": "public/icons/cyberpunk/general/create-team.webp",
-      "status": "done"
+      "path": "public/icons/general/create-team.webp",
+      "status": "pending"
     },
     {
       "skillId": "fail-early-pattern",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Fail, Early, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220009,
-      "path": "public/icons/cyberpunk/general/fail-early-pattern.webp",
-      "status": "done"
+      "path": "public/icons/general/fail-early-pattern.webp",
+      "status": "pending"
     },
     {
       "skillId": "argumentation",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Construct, Arguments, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220010,
-      "path": "public/icons/cyberpunk/general/argumentation.webp",
-      "status": "done"
+      "path": "public/icons/general/argumentation.webp",
+      "status": "pending"
     },
     {
       "skillId": "evolve-agent",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Evolve, Existing, Agent, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220011,
-      "path": "public/icons/cyberpunk/general/evolve-agent.webp",
-      "status": "done"
+      "path": "public/icons/general/evolve-agent.webp",
+      "status": "pending"
     },
     {
       "skillId": "evolve-team",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Evolve, Existing, Team, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220012,
-      "path": "public/icons/cyberpunk/general/evolve-team.webp",
-      "status": "done"
+      "path": "public/icons/general/evolve-team.webp",
+      "status": "pending"
     },
     {
       "skillId": "manage-token-budget",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, token gauge, budget meter, cost cap, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220013,
-      "path": "public/icons/cyberpunk/general/manage-token-budget.webp",
-      "status": "done"
+      "path": "public/icons/general/manage-token-budget.webp",
+      "status": "pending"
     },
     {
       "skillId": "prune-agent-memory",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, memory cards, pruning shears, forget policy, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220014,
-      "path": "public/icons/cyberpunk/general/prune-agent-memory.webp",
-      "status": "done"
+      "path": "public/icons/general/prune-agent-memory.webp",
+      "status": "pending"
     },
     {
       "skillId": "circuit-breaker-pattern",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, circuit switch, break gap, fault tolerance, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220015,
-      "path": "public/icons/cyberpunk/general/circuit-breaker-pattern.webp",
-      "status": "done"
+      "path": "public/icons/general/circuit-breaker-pattern.webp",
+      "status": "pending"
     },
     {
       "skillId": "verify-agent-output",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, verification stamp, evidence chain, checkmark, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 220016,
-      "path": "public/icons/cyberpunk/general/verify-agent-output.webp",
-      "status": "done"
-    },
-    {
-      "skillId": "continue-here",
-      "domain": "general",
-      "prompt": "Glowing terminal prompt, document page, play resume triangle, bookmark, session handoff, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 220017,
-      "path": "public/icons/cyberpunk/general/continue-here.webp",
-      "status": "done"
+      "path": "public/icons/general/verify-agent-output.webp",
+      "status": "pending"
     },
     {
       "skillId": "construct-geometric-figure",
@@ -1773,56 +1765,56 @@
       "domain": "morphic",
       "prompt": "Glowing icon, Assess, Form, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 350001,
-      "path": "public/icons/cyberpunk/morphic/assess-form.webp",
-      "status": "done"
+      "path": "public/icons/morphic/assess-form.webp",
+      "status": "pending"
     },
     {
       "skillId": "adapt-architecture",
       "domain": "morphic",
       "prompt": "Glowing icon, Adapt, Architecture, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 350002,
-      "path": "public/icons/cyberpunk/morphic/adapt-architecture.webp",
-      "status": "done"
+      "path": "public/icons/morphic/adapt-architecture.webp",
+      "status": "pending"
     },
     {
       "skillId": "dissolve-form",
       "domain": "morphic",
       "prompt": "Glowing icon, Dissolve, Form, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 350003,
-      "path": "public/icons/cyberpunk/morphic/dissolve-form.webp",
-      "status": "done"
+      "path": "public/icons/morphic/dissolve-form.webp",
+      "status": "pending"
     },
     {
       "skillId": "repair-damage",
       "domain": "morphic",
       "prompt": "Glowing icon, Repair, Damage, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 350004,
-      "path": "public/icons/cyberpunk/morphic/repair-damage.webp",
-      "status": "done"
+      "path": "public/icons/morphic/repair-damage.webp",
+      "status": "pending"
     },
     {
       "skillId": "shift-camouflage",
       "domain": "morphic",
       "prompt": "Glowing icon, Shift, Camouflage, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 350005,
-      "path": "public/icons/cyberpunk/morphic/shift-camouflage.webp",
-      "status": "done"
+      "path": "public/icons/morphic/shift-camouflage.webp",
+      "status": "pending"
     },
     {
       "skillId": "assess-context",
       "domain": "morphic",
       "prompt": "Glowing icon, Assess, Context, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 350006,
-      "path": "public/icons/cyberpunk/morphic/assess-context.webp",
-      "status": "done"
+      "path": "public/icons/morphic/assess-context.webp",
+      "status": "pending"
     },
     {
       "skillId": "bootstrap-agent-identity",
       "domain": "morphic",
       "prompt": "Glowing icon, identity rings, cold start, loading anchor, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 350007,
-      "path": "public/icons/cyberpunk/morphic/bootstrap-agent-identity.webp",
-      "status": "done"
+      "path": "public/icons/morphic/bootstrap-agent-identity.webp",
+      "status": "pending"
     },
     {
       "skillId": "fungi-identification",

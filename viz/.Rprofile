@@ -17,7 +17,13 @@ if (file.exists("renv/activate.R")) {
         # Walk down to the R-version/arch directory
         r_dirs <- list.files(lib_dir, full.names = TRUE)
         if (length(r_dirs) > 0) {
-          .libPaths(c(r_dirs[1], .libPaths()))
+          # Walk into arch subdirectory (e.g. x86_64-pc-linux-gnu/)
+          arch_dirs <- list.files(r_dirs[1], full.names = TRUE)
+          if (length(arch_dirs) > 0) {
+            .libPaths(c(arch_dirs[1], .libPaths()))
+          } else {
+            .libPaths(c(r_dirs[1], .libPaths()))
+          }
           message("Note: renv library loaded directly (activate.R bypassed)")
         }
       }
