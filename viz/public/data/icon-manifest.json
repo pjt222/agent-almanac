@@ -1329,6 +1329,14 @@
       "status": "done"
     },
     {
+      "skillId": "continue-here",
+      "domain": "general",
+      "prompt": "Glowing terminal prompt, document page, play resume triangle, bookmark, session handoff, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 220017,
+      "path": "public/icons/cyberpunk/general/continue-here.webp",
+      "status": "done"
+    },
+    {
       "skillId": "construct-geometric-figure",
       "domain": "geometry",
       "prompt": "Ruler and compass, Euclidean circle, geometric proof, compass, ruler, geometric construction, dark background, vector art, clean edges, single centered icon, no text",

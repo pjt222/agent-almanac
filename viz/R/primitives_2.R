@@ -403,6 +403,48 @@ glyph_spark_create <- function(cx, cy, s, col, bright) {
   )
 }
 
+# ── glyph_continue_here: document page with resume triangle ─────────────
+glyph_continue_here <- function(cx, cy, s, col, bright) {
+  # document page outline (rounded rectangle via polygon)
+  page_w <- 20 * s; page_h <- 28 * s
+  fold <- 8 * s
+  page <- data.frame(
+    x = c(cx - page_w, cx + page_w - fold, cx + page_w, cx + page_w, cx - page_w),
+    y = c(cy + page_h, cy + page_h, cy + page_h - fold, cy - page_h, cy - page_h)
+  )
+  # folded corner
+  corner <- data.frame(
+    x = c(cx + page_w - fold, cx + page_w - fold, cx + page_w),
+    y = c(cy + page_h, cy + page_h - fold, cy + page_h - fold)
+  )
+  # resume/play triangle (center of page)
+  tri_s <- 12 * s
+  triangle <- data.frame(
+    x = c(cx - tri_s * 0.5, cx - tri_s * 0.5, cx + tri_s * 0.7),
+    y = c(cy + tri_s * 0.7, cy - tri_s * 0.7, cy)
+  )
+  # text lines (left-aligned, below center)
+  line_y_positions <- c(cy - page_h * 0.55, cy - page_h * 0.72)
+  line_widths <- c(24 * s, 18 * s)
+  layers <- list(
+    ggplot2::geom_polygon(data = page, .aes(x, y),
+      fill = hex_with_alpha(col, 0.12), color = bright, linewidth = .lw(s, 2)),
+    ggplot2::geom_polygon(data = corner, .aes(x, y),
+      fill = hex_with_alpha(col, 0.20), color = bright, linewidth = .lw(s, 1.5)),
+    ggplot2::geom_polygon(data = triangle, .aes(x, y),
+      fill = hex_with_alpha(col, 0.25), color = bright, linewidth = .lw(s, 2.5))
+  )
+  for (i in seq_along(line_y_positions)) {
+    line_df <- data.frame(
+      x = c(cx - page_w * 0.7, cx - page_w * 0.7 + line_widths[i]),
+      y = c(line_y_positions[i], line_y_positions[i])
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(
+      data = line_df, .aes(x, y), color = col, linewidth = .lw(s, 1.5))
+  }
+  layers
+}
+
 # ── glyph_evolution_arrow: ascending curve/arrow ────────────────────────
 glyph_evolution_arrow <- function(cx, cy, s, col, bright) {
   t <- seq(0, 1, length.out = 40)
