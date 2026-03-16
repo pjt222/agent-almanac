@@ -392,24 +392,26 @@ async function main() {
       updateFilteredStats(getVisibleSkillIds());
     },
     onTagFilterChange() {
-      const visSkills = getVisibleSkillIds();
-      activeMode.setSkillVisibility(visSkills);
+      // Update agent/team ID sets BEFORE setSkillVisibility, which
+      // re-renders the graph using visibleAgentIds and visibleTeamIds.
       activeMode.setVisibleAgents(getFilteredAgentIds());
       activeMode.setVisibleTeams(getFilteredTeamIds());
+      const visSkills = getVisibleSkillIds();
+      activeMode.setSkillVisibility(visSkills);
       updateFilteredStats(visSkills);
     },
     onLanguageFilterChange() {
-      const visSkills = getVisibleSkillIds();
-      activeMode.setSkillVisibility(visSkills);
       activeMode.setVisibleAgents(getFilteredAgentIds());
       activeMode.setVisibleTeams(getFilteredTeamIds());
+      const visSkills = getVisibleSkillIds();
+      activeMode.setSkillVisibility(visSkills);
       updateFilteredStats(visSkills);
     },
     onLocaleFilterChange() {
-      const visSkills = getVisibleSkillIds();
-      activeMode.setSkillVisibility(visSkills);
       activeMode.setVisibleAgents(getFilteredAgentIds());
       activeMode.setVisibleTeams(getFilteredTeamIds());
+      const visSkills = getVisibleSkillIds();
+      activeMode.setSkillVisibility(visSkills);
       updateFilteredStats(visSkills);
     },
   });
@@ -666,7 +668,8 @@ function updateFilteredStats(visibleSkillIds) {
     if (agentIds === null) return true;
     return agentIds.has(n.id);
   });
-  const visTeams = allData.nodes.filter(n => n.type === 'team');
+  const filteredTeamIds = new Set(getFilteredTeamIds());
+  const visTeams = allData.nodes.filter(n => n.type === 'team' && filteredTeamIds.has(n.id));
   const visNodeIds = new Set([...visSkills, ...visAgents, ...visTeams].map(n => n.id));
   const visLinks = allData.links.filter(l => visNodeIds.has(l.source) && visNodeIds.has(l.target));
 
