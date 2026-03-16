@@ -33,6 +33,9 @@
     "selectAllTeams": "Seleccionar todos los equipos",
     "deselectAllTeams": "Deseleccionar todos los equipos",
     "clearAllTags": "Limpiar todas las etiquetas",
+    "languages": "Idiomas",
+    "bulkLanguages": "Acciones masivas para Idiomas",
+    "clearAllLanguages": "Limpiar todos los idiomas",
     "togglePanel": "Mostrar/ocultar panel de filtros"
   },
   "controls": {

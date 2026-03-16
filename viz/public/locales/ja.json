@@ -33,6 +33,9 @@
     "selectAllTeams": "すべてのチームを選択",
     "deselectAllTeams": "すべてのチームの選択を解除",
     "clearAllTags": "すべてのタグをクリア",
+    "languages": "言語",
+    "bulkLanguages": "言語の一括操作",
+    "clearAllLanguages": "すべての言語をクリア",
     "togglePanel": "フィルターパネルの切り替え"
   },
   "controls": {

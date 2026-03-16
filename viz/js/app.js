@@ -398,6 +398,13 @@ async function main() {
       activeMode.setVisibleTeams(getFilteredTeamIds());
       updateFilteredStats(visSkills);
     },
+    onLanguageFilterChange() {
+      const visSkills = getVisibleSkillIds();
+      activeMode.setSkillVisibility(visSkills);
+      activeMode.setVisibleAgents(getFilteredAgentIds());
+      activeMode.setVisibleTeams(getFilteredTeamIds());
+      updateFilteredStats(visSkills);
+    },
   });
 
   // ── Init graph ──
@@ -436,6 +443,9 @@ async function main() {
     // Tags count
     const tagsCount = document.getElementById('tags-section-count');
     if (tagsCount) tagsCount.textContent = t('filter.selected', { count: 0 });
+    // Languages count
+    const langsCount = document.getElementById('languages-section-count');
+    if (langsCount) langsCount.textContent = t('filter.selected', { count: 0 });
     // Hive sort button
     const hiveSortBtn = document.getElementById('btn-hive-sort');
     if (hiveSortBtn && hiveMod) {

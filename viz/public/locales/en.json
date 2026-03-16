@@ -33,6 +33,9 @@
     "selectAllTeams": "Select all teams",
     "deselectAllTeams": "Deselect all teams",
     "clearAllTags": "Clear all tags",
+    "languages": "Languages",
+    "bulkLanguages": "Bulk actions for Languages",
+    "clearAllLanguages": "Clear all languages",
     "togglePanel": "Toggle filter panel"
   },
   "controls": {

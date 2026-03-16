@@ -33,6 +33,9 @@
     "selectAllTeams": "Alle Teams auswählen",
     "deselectAllTeams": "Alle Teams abwählen",
     "clearAllTags": "Alle Tags löschen",
+    "languages": "Sprachen",
+    "bulkLanguages": "Massenaktionen für Sprachen",
+    "clearAllLanguages": "Alle Sprachen löschen",
     "togglePanel": "Filterpanel ein-/ausblenden"
   },
   "controls": {

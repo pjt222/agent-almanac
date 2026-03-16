@@ -33,6 +33,9 @@
     "selectAllTeams": "全选团队",
     "deselectAllTeams": "取消全选团队",
     "clearAllTags": "清除所有标签",
+    "languages": "语言",
+    "bulkLanguages": "语言批量操作",
+    "clearAllLanguages": "清除所有语言",
     "togglePanel": "切换筛选面板"
   },
   "controls": {

@@ -26,6 +26,12 @@ let nodeTagsMap = {};       // nodeId -> Set<string> (lowercase tags)
 let allTags = [];           // sorted array of { tag, count }
 let selectedTags = new Set();
 
+// Language filter state
+let onLanguageChange = null;
+let nodeLanguageMap = {};   // nodeId -> normalized language string
+let allLanguages = [];      // sorted array of { key, display, count }
+let selectedLanguages = new Set();
+
 /**
  * @param {HTMLElement} el - Filter panel element
  * @param {Array} skillNodes - Array of skill node objects (from data.nodes where type==='skill')
@@ -33,12 +39,13 @@ let selectedTags = new Set();
  * @param {Array} teams - Array of team node objects
  * @param {Object} callbacks - { onFilterChange, onAgentFilterChange, onTeamFilterChange, onTagFilterChange }
  */
-export function initFilters(el, skillNodes, agents, teams, { onFilterChange, onAgentFilterChange, onTeamFilterChange, onTagFilterChange } = {}) {
+export function initFilters(el, skillNodes, agents, teams, { onFilterChange, onAgentFilterChange, onTeamFilterChange, onTagFilterChange, onLanguageFilterChange } = {}) {
   filterEl = el;
   onChange = onFilterChange;
   onAgentChange = onAgentFilterChange;
   onTeamChange = onTeamFilterChange;
   onTagChange = onTagFilterChange;
+  onLanguageChange = onLanguageFilterChange;
 
   // Build domain -> skills lookup
   skillsByDomain = {};
@@ -78,6 +85,9 @@ export function initFilters(el, skillNodes, agents, teams, { onFilterChange, onA
   renderTeams(teams);
   buildTagIndex(skillNodes, agents, teams);
   renderTagFilter();
+  buildLanguageIndex(skillNodes);
+  renderLanguageFilter();
+  restoreLanguageSelection();
   bindSectionHeaders();
   bindPanelToggle();
 
@@ -437,6 +447,134 @@ function fireTagFilterChange() {
   if (onTagChange) onTagChange();
 }
 
+// ── Language filter ──────────────────────────────────────────────
+
+/** Normalize language values: lowercase, merge "natural-language" into "natural" */
+function normalizeLanguage(lang) {
+  if (!lang) return null;
+  return lang.toLowerCase().replace('-language', '');
+}
+
+/** Pick the best display name: prefer capitalized form, title-case as fallback */
+function bestDisplayName(variants) {
+  // Prefer a variant that starts with uppercase
+  const capitalized = variants.find(v => v[0] === v[0].toUpperCase());
+  return capitalized || variants[0];
+}
+
+function buildLanguageIndex(skillNodes) {
+  nodeLanguageMap = {};
+  const keyToVariants = {};   // normalized key -> [original values seen]
+  const keyCounts = {};
+
+  for (const node of skillNodes) {
+    const raw = node.language;
+    const key = normalizeLanguage(raw);
+    if (!key) continue;
+
+    nodeLanguageMap[node.id] = key;
+
+    if (!keyToVariants[key]) keyToVariants[key] = [];
+    if (!keyToVariants[key].includes(raw)) keyToVariants[key].push(raw);
+    keyCounts[key] = (keyCounts[key] || 0) + 1;
+  }
+
+  allLanguages = Object.entries(keyCounts)
+    .map(([key, count]) => ({
+      key,
+      display: bestDisplayName(keyToVariants[key]),
+      count,
+    }))
+    .sort((a, b) => b.count - a.count || a.key.localeCompare(b.key));
+}
+
+function renderLanguageFilter() {
+  const container = filterEl.querySelector('#languages-filter-list');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const list = document.createElement('div');
+  list.className = 'tag-label-list';
+
+  for (const { key, display, count } of allLanguages) {
+    const label = document.createElement('span');
+    label.className = 'tag-label';
+    label.dataset.language = key;
+    label.innerHTML = `${display}<span class="tag-label-count">${count}</span>`;
+    label.addEventListener('click', () => toggleLanguage(key));
+    list.appendChild(label);
+  }
+
+  container.appendChild(list);
+}
+
+function toggleLanguage(key) {
+  if (selectedLanguages.has(key)) {
+    selectedLanguages.delete(key);
+  } else {
+    selectedLanguages.add(key);
+  }
+  refreshLanguageSelection();
+  updateLanguagesCount();
+  saveLanguageSelection();
+  fireLanguageFilterChange();
+}
+
+function clearAllLanguages() {
+  selectedLanguages.clear();
+  refreshLanguageSelection();
+  updateLanguagesCount();
+  saveLanguageSelection();
+  fireLanguageFilterChange();
+}
+
+function refreshLanguageSelection() {
+  const labels = filterEl.querySelectorAll('#languages-filter-list .tag-label');
+  for (const label of labels) {
+    label.classList.toggle('selected', selectedLanguages.has(label.dataset.language));
+  }
+}
+
+function updateLanguagesCount() {
+  const el = filterEl.querySelector('#languages-section-count');
+  if (!el) return;
+  el.textContent = t('filter.selected', { count: selectedLanguages.size });
+}
+
+function nodePassesLanguageFilter(nodeId) {
+  if (selectedLanguages.size === 0) return true;
+  const lang = nodeLanguageMap[nodeId];
+  if (!lang) return true;  // Nodes without language data always pass
+  return selectedLanguages.has(lang);
+}
+
+function saveLanguageSelection() {
+  if (selectedLanguages.size > 0) {
+    localStorage.setItem('skillnet-language-filter', [...selectedLanguages].join(','));
+  } else {
+    localStorage.removeItem('skillnet-language-filter');
+  }
+}
+
+function restoreLanguageSelection() {
+  const saved = localStorage.getItem('skillnet-language-filter');
+  if (!saved) return;
+  const keys = saved.split(',').filter(Boolean);
+  const validKeys = new Set(allLanguages.map(l => l.key));
+  for (const key of keys) {
+    if (validKeys.has(key)) selectedLanguages.add(key);
+  }
+  if (selectedLanguages.size > 0) {
+    refreshLanguageSelection();
+    updateLanguagesCount();
+  }
+}
+
+function fireLanguageFilterChange() {
+  logEvent('filters', { event: 'languageFilterChange', selectedLanguages: [...selectedLanguages], count: selectedLanguages.size });
+  if (onLanguageChange) onLanguageChange();
+}
+
 // ── Section collapse / expand ────────────────────────────────────
 
 function toggleSection(header) {
@@ -504,6 +642,8 @@ function bindSectionHeaders() {
           fireTeamChange();
         } else if (target === 'tags') {
           clearAllTags();
+        } else if (target === 'languages') {
+          clearAllLanguages();
         }
       });
     });
@@ -634,7 +774,7 @@ function fireAgentChange() {
 
 export function getVisibleSkillIds() {
   return Object.entries(skillStates)
-    .filter(([id, v]) => v && nodePassesTagFilter(id))
+    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLanguageFilter(id))
     .map(([k]) => k);
 }
 
