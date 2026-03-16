@@ -98,9 +98,9 @@
   "error": {
     "noWebGL": "Su navegador no soporta WebGL. El modo 3D requiere WebGL.",
     "dataNotFound": "Datos no encontrados",
-    "dataNotFoundDetail": "Ejecute <code>cd viz && npm install && node build-data.js</code> para generar skills.json",
+    "dataNotFoundDetail": "Ejecute el siguiente comando para generar skills.json:",
     "runtimeError": "Error de ejecución",
     "workflowUnavailable": "Diagrama de flujo no disponible",
-    "workflowUnavailableDetail": "Ejecute <code>cd viz && node build-workflow.js</code> para generar los datos del diagrama."
+    "workflowUnavailableDetail": "Ejecute el siguiente comando para generar los datos del diagrama:"
   }
 }

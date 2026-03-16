@@ -9,16 +9,20 @@
 let currentLocale = 'en';
 let strings = {};       // current locale strings (flat: "header.skills" → "skills")
 let enStrings = {};     // English fallback (always loaded)
+const localeChangeCallbacks = [];
 
 const SUPPORTED_LOCALES = [
   { code: 'en',    name: 'English' },
   { code: 'de',    name: 'Deutsch' },
-  { code: 'zh-CN', name: '中文' },
+  { code: 'zh-CN', name: '简体中文' },
   { code: 'ja',    name: '日本語' },
   { code: 'es',    name: 'Español' },
 ];
 
 const LOCALE_CODES = new Set(SUPPORTED_LOCALES.map(l => l.code));
+
+// Cache-bust parameter — build timestamp in production, epoch in dev
+const __cacheBust = typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : Date.now();
 
 // ── Flatten nested JSON to dot-separated keys ──────────────────────
 
@@ -66,7 +70,7 @@ export async function loadLocale(code) {
   if (!LOCALE_CODES.has(code)) code = 'en';
 
   try {
-    const res = await fetch(`locales/${code}.json`);
+    const res = await fetch(`locales/${code}.json?v=${__cacheBust}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     strings = flatten(data);
@@ -79,6 +83,7 @@ export async function loadLocale(code) {
 
   document.documentElement.lang = currentLocale;
   applyLocaleToDOM();
+  for (const cb of localeChangeCallbacks) cb(currentLocale);
 }
 
 /**
@@ -86,14 +91,16 @@ export async function loadLocale(code) {
  */
 export async function initI18n() {
   try {
-    const res = await fetch('locales/en.json');
+    const res = await fetch(`locales/en.json?v=${__cacheBust}`);
     if (res.ok) {
       const data = await res.json();
       enStrings = flatten(data);
       strings = { ...enStrings };
+    } else {
+      console.warn(`[i18n] Failed to load en.json: HTTP ${res.status} — UI will show raw keys`);
     }
-  } catch {
-    // Silent fail — t() will return raw keys
+  } catch (err) {
+    console.warn('[i18n] Failed to load en.json — UI will show raw keys:', err.message);
   }
 }
 
@@ -127,6 +134,14 @@ export function getLocale() {
 
 export function getSupportedLocales() {
   return SUPPORTED_LOCALES;
+}
+
+/**
+ * Register a callback invoked after every locale change (after DOM is updated).
+ * @param {function(string): void} cb - Receives the new locale code
+ */
+export function onLocaleChange(cb) {
+  localeChangeCallbacks.push(cb);
 }
 
 /**

@@ -115,8 +115,8 @@ function openSkillPanel(node) {
   `;
 
   if (node.tags && node.tags.length) {
-    html += `<div class="panel-tags">${node.tags.map(t =>
-      `<span class="tag">${escHtml(t)}</span>`
+    html += `<div class="panel-tags">${node.tags.map(tag =>
+      `<span class="tag">${escHtml(tag)}</span>`
     ).join('')}</div>`;
   }
 
@@ -178,8 +178,8 @@ function openTeamPanel(node) {
 
   if (node.tags && node.tags.length) {
     html += `<h3 class="panel-section-title">${t('panel.tags')}</h3>`;
-    html += `<div class="panel-tags">${node.tags.map(t =>
-      `<span class="tag">${escHtml(t)}</span>`
+    html += `<div class="panel-tags">${node.tags.map(tag =>
+      `<span class="tag">${escHtml(tag)}</span>`
     ).join('')}</div>`;
   }
 
@@ -227,22 +227,22 @@ function openAgentPanel(node) {
 
   if (node.tools && node.tools.length) {
     html += `<h3 class="panel-section-title">${t('panel.tools')}</h3>`;
-    html += `<div class="panel-tags">${node.tools.map(t =>
-      `<span class="tag">${escHtml(t)}</span>`
+    html += `<div class="panel-tags">${node.tools.map(tool =>
+      `<span class="tag">${escHtml(tool)}</span>`
     ).join('')}</div>`;
   }
 
   if (node.mcp_servers && node.mcp_servers.length) {
     html += `<h3 class="panel-section-title">${t('panel.mcpServers')}</h3>`;
-    html += `<div class="panel-tags">${node.mcp_servers.map(t =>
-      `<span class="tag">${escHtml(t)}</span>`
+    html += `<div class="panel-tags">${node.mcp_servers.map(srv =>
+      `<span class="tag">${escHtml(srv)}</span>`
     ).join('')}</div>`;
   }
 
   if (node.tags && node.tags.length) {
     html += `<h3 class="panel-section-title">${t('panel.tags')}</h3>`;
-    html += `<div class="panel-tags">${node.tags.map(t =>
-      `<span class="tag">${escHtml(t)}</span>`
+    html += `<div class="panel-tags">${node.tags.map(tag =>
+      `<span class="tag">${escHtml(tag)}</span>`
     ).join('')}</div>`;
   }
 

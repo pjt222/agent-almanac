@@ -287,13 +287,19 @@ async function render() {
     logEvent('workflow', { event: 'rendered', theme: getCurrentThemeName() });
   } catch (err) {
     console.error('Workflow render failed:', err);
-    containerEl.innerHTML = `
-      <div class="load-error">
-        <h2>${t('error.workflowUnavailable')}</h2>
-        <p>${t('error.workflowUnavailableDetail')}</p>
-        <p class="error-detail">${err.message}</p>
-      </div>
-    `;
+    const errDiv = document.createElement('div');
+    errDiv.className = 'load-error';
+    const errH2 = document.createElement('h2');
+    errH2.textContent = t('error.workflowUnavailable');
+    const errP = document.createElement('p');
+    errP.textContent = t('error.workflowUnavailableDetail');
+    const errCode = document.createElement('p');
+    errCode.innerHTML = '<code>cd viz && node build-workflow.js</code>';
+    const errDetail = document.createElement('p');
+    errDetail.className = 'error-detail';
+    errDetail.textContent = err.message;
+    errDiv.append(errH2, errP, errCode, errDetail);
+    containerEl.replaceChildren(errDiv);
   }
 }
 

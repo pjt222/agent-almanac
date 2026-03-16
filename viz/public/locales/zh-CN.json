@@ -1,7 +1,7 @@
 {
   "_meta": {
     "locale": "zh-CN",
-    "name": "中文"
+    "name": "简体中文"
   },
   "header": {
     "skills": "技能",
@@ -98,9 +98,9 @@
   "error": {
     "noWebGL": "您的浏览器不支持 WebGL。3D 模式需要 WebGL 支持。",
     "dataNotFound": "未找到数据",
-    "dataNotFoundDetail": "请运行 <code>cd viz && npm install && node build-data.js</code> 以生成 skills.json",
+    "dataNotFoundDetail": "请运行以下命令以生成 skills.json：",
     "runtimeError": "运行时错误",
     "workflowUnavailable": "工作流图不可用",
-    "workflowUnavailableDetail": "请运行 <code>cd viz && node build-workflow.js</code> 以生成图表数据。"
+    "workflowUnavailableDetail": "请运行以下命令以生成图表数据："
   }
 }

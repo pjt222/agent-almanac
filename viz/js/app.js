@@ -11,7 +11,7 @@ import { initPanel, openPanel, closePanel, refreshPanelTheme } from './panel.js'
 import { initFilters, getVisibleSkillIds, getVisibleAgentIds as getFilteredAgentIds, getVisibleTeamIds as getFilteredTeamIds, refreshSwatches } from './filters.js';
 import { setTheme, getThemeNames, getCurrentThemeName } from './colors.js';
 import { logEvent, isEnabled as isEventLogEnabled, downloadLog } from './eventlog.js';
-import { t, initI18n, loadLocale, detectLocale, getSupportedLocales, getLocale, applyLocaleToDOM } from './i18n.js';
+import { t, initI18n, loadLocale, detectLocale, getSupportedLocales, getLocale, applyLocaleToDOM, onLocaleChange } from './i18n.js';
 
 const DATA_URL = 'data/skills.json';
 const LAYOUT_SETTLE_MS = 3500;
@@ -325,13 +325,20 @@ async function main() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     data = await res.json();
   } catch (err) {
-    document.getElementById('graph-container').innerHTML = `
-      <div class="load-error">
-        <h2>${t('error.dataNotFound')}</h2>
-        <p>${t('error.dataNotFoundDetail')}</p>
-        <p class="error-detail">${err.message}</p>
-      </div>
-    `;
+    const errContainer = document.getElementById('graph-container');
+    const errDiv = document.createElement('div');
+    errDiv.className = 'load-error';
+    const errH2 = document.createElement('h2');
+    errH2.textContent = t('error.dataNotFound');
+    const errP = document.createElement('p');
+    errP.textContent = t('error.dataNotFoundDetail');
+    const errCode = document.createElement('p');
+    errCode.innerHTML = '<code>cd viz && npm install && node build-data.js</code>';
+    const errDetail = document.createElement('p');
+    errDetail.className = 'error-detail';
+    errDetail.textContent = err.message;
+    errDiv.append(errH2, errP, errCode, errDetail);
+    errContainer.replaceChildren(errDiv);
     return;
   }
 
@@ -417,6 +424,33 @@ async function main() {
       await loadLocale(code);
     });
   }
+
+  // ── Re-render dynamic text on locale change ──
+  onLocaleChange(() => {
+    // Search box placeholder
+    const searchInput = document.querySelector('.filter-search');
+    if (searchInput) {
+      searchInput.placeholder = t('filter.searchPlaceholder');
+      searchInput.setAttribute('aria-label', t('filter.searchAriaLabel'));
+    }
+    // Tags count
+    const tagsCount = document.getElementById('tags-section-count');
+    if (tagsCount) tagsCount.textContent = t('filter.selected', { count: 0 });
+    // Hive sort button
+    const hiveSortBtn = document.getElementById('btn-hive-sort');
+    if (hiveSortBtn && hiveMod) {
+      const mode = hiveMod.getHiveSortMode();
+      hiveSortBtn.textContent = mode === 'interleaved' ? t('controls.hiveSortRanked') : t('controls.hiveSortSpread');
+    }
+    // Hive "All Domains" option
+    const domainSelect = document.getElementById('hive-domain-focus');
+    if (domainSelect && domainSelect.options.length > 0) {
+      domainSelect.options[0].textContent = t('controls.hiveAllDomains');
+    }
+    // Event log button title
+    const logBtn = document.getElementById('btn-event-log');
+    if (logBtn) logBtn.title = t('controls.downloadEventLog');
+  });
 
   // ── Event log download ──
   const logBtn = document.getElementById('btn-event-log');

@@ -98,9 +98,9 @@
   "error": {
     "noWebGL": "お使いのブラウザは WebGL をサポートしていません。3D モードには WebGL が必要です。",
     "dataNotFound": "データが見つかりません",
-    "dataNotFoundDetail": "<code>cd viz && npm install && node build-data.js</code> を実行して skills.json を生成してください",
+    "dataNotFoundDetail": "以下のコマンドを実行して skills.json を生成してください：",
     "runtimeError": "ランタイムエラー",
     "workflowUnavailable": "ワークフロー図は利用できません",
-    "workflowUnavailableDetail": "<code>cd viz && node build-workflow.js</code> を実行して図表データを生成してください。"
+    "workflowUnavailableDetail": "以下のコマンドを実行して図表データを生成してください："
   }
 }

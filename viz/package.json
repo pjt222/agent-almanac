@@ -13,7 +13,8 @@
     "build-manifest": "node build-icon-manifest.js",
     "build-favicon": "Rscript build-favicon.R",
     "build-workflow": "Rscript build-workflow.R",
-    "test": "vitest run"
+    "test": "vitest run",
+    "validate-locales": "node scripts/validate-locales.js"
   },
   "dependencies": {
     "3d-force-graph": "^1",

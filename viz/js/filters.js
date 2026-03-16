@@ -359,7 +359,7 @@ function buildTagIndex(skillNodes, agents, teams) {
 
   for (const node of [...skillNodes, ...agents, ...(teams || [])]) {
     if (!Array.isArray(node.tags) || node.tags.length === 0) continue;
-    const normalized = new Set(node.tags.map(t => String(t).toLowerCase()));
+    const normalized = new Set(node.tags.map(tag => String(tag).toLowerCase()));
     nodeTagsMap[node.id] = normalized;
     for (const tag of normalized) {
       tagCounts[tag] = (tagCounts[tag] || 0) + 1;
@@ -426,8 +426,8 @@ function nodePassesTagFilter(nodeId) {
   if (selectedTags.size === 0) return true;
   const tags = nodeTagsMap[nodeId];
   if (!tags) return false;
-  for (const t of selectedTags) {
-    if (tags.has(t)) return true;
+  for (const selectedTag of selectedTags) {
+    if (tags.has(selectedTag)) return true;
   }
   return false;
 }
@@ -495,7 +495,7 @@ function bindSectionHeaders() {
           );
           fireAgentChange();
         } else if (target === 'teams') {
-          for (const t of Object.keys(teamStates)) teamStates[t] = isAll;
+          for (const tid of Object.keys(teamStates)) teamStates[tid] = isAll;
           filterEl.querySelectorAll('#teams-filter-list input[type=checkbox]')
             .forEach(cb => cb.checked = isAll);
           updateTeamsCount(
