@@ -1,12 +1,12 @@
 # Interactive Skills Visualization
 
-Force-graph explorer for the 316-skill, 65-agent, 13-team development platform. Built with [force-graph](https://github.com/vasturiano/force-graph), R/ggplot2 icon rendering, and 9 color themes.
+Force-graph explorer for the 317-skill, 65-agent, 13-team development platform. Built with [force-graph](https://github.com/vasturiano/force-graph), R/ggplot2 icon rendering, and 9 color themes.
 
 ## Architecture
 
 - **Force-graph** (`js/graph.js`): 2D canvas rendering with zoom, pan, and click-to-inspect
 - **R icon pipeline** (`R/`): ggplot2 + ggfx neon glow pictograms rendered per-skill as transparent WebP icons
-- **316 skill icons** (`icons/<domain>/`): one glyph per skill, domain-colored
+- **317 skill icons** (`icons/<domain>/`): one glyph per skill, domain-colored
 - **9 color themes**: cyberpunk, viridis, magma, inferno, plasma, cividis, mako, rocket, turbo
 - **Data pipeline**: `build-data.js` reads all three registries and generates `data/skills.json`
 
