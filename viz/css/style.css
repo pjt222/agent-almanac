@@ -135,7 +135,8 @@ body::after {
   cursor: not-allowed;
 }
 
-#theme-select {
+#theme-select,
+#locale-select {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-primary);
@@ -149,12 +150,15 @@ body::after {
 }
 
 #theme-select:hover,
-#theme-select:focus {
+#theme-select:focus,
+#locale-select:hover,
+#locale-select:focus {
   border-color: var(--text-accent);
   color: var(--text-accent);
 }
 
-#theme-select option {
+#theme-select option,
+#locale-select option {
   /* Note: #0a0a0f used instead of var(--bg-primary) because
      browsers do not support CSS custom properties in <option> elements */
   background: #0a0a0f;
