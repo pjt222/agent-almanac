@@ -8,7 +8,7 @@
 import { initGraph, destroyGraph, focusNode, resetView, zoomIn, zoomOut, setSkillVisibility, getGraph, refreshGraph, preloadIcons, switchIconPalette, setVisibleAgents, setVisibleTeams, getVisibleAgentIds } from './graph.js';
 import { setIconMode, getIconMode, setHdMode, getHdMode } from './icons.js';
 import { initPanel, openPanel, closePanel, refreshPanelTheme } from './panel.js';
-import { initFilters, getVisibleSkillIds, getVisibleAgentIds as getFilteredAgentIds, getVisibleTeamIds as getFilteredTeamIds, refreshSwatches } from './filters.js';
+import { initFilters, getVisibleSkillIds, getVisibleAgentIds as getFilteredAgentIds, getVisibleTeamIds as getFilteredTeamIds, refreshSwatches, setLocaleFilter } from './filters.js';
 import { setTheme, getThemeNames, getCurrentThemeName } from './colors.js';
 import { logEvent, isEnabled as isEventLogEnabled, downloadLog } from './eventlog.js';
 import { t, initI18n, loadLocale, detectLocale, getSupportedLocales, getLocale, applyLocaleToDOM, onLocaleChange } from './i18n.js';
@@ -405,6 +405,13 @@ async function main() {
       activeMode.setVisibleTeams(getFilteredTeamIds());
       updateFilteredStats(visSkills);
     },
+    onLocaleFilterChange() {
+      const visSkills = getVisibleSkillIds();
+      activeMode.setSkillVisibility(visSkills);
+      activeMode.setVisibleAgents(getFilteredAgentIds());
+      activeMode.setVisibleTeams(getFilteredTeamIds());
+      updateFilteredStats(visSkills);
+    },
   });
 
   // ── Init graph ──
@@ -429,7 +436,15 @@ async function main() {
       logEvent('app', { event: 'localeChange', locale: code });
       localStorage.setItem('skillnet-locale', code);
       await loadLocale(code);
+      // Trigger locale-based node filtering
+      setLocaleFilter(code);
     });
+  }
+
+  // Apply initial locale filter if non-English locale was restored
+  const initialLocale = getLocale();
+  if (initialLocale !== 'en') {
+    setLocaleFilter(initialLocale);
   }
 
   // ── Re-render dynamic text on locale change ──

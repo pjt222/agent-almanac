@@ -8,7 +8,7 @@
 // put id:"parse_teams", label:"Parse team nodes & team-agent links", input:"agents_linked", output:"teams_linked"
 // put id:"write_json", label:"Write public/data/skills.json", node_type:"output", input:"merged_graph", output:"public/data/skills.json"
 
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import yaml from 'js-yaml';
@@ -19,10 +19,73 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SKILLS_DIR = resolve(__dirname, '..', 'skills');
 const AGENTS_DIR = resolve(__dirname, '..', 'agents');
 const TEAMS_DIR = resolve(__dirname, '..', 'teams');
+const I18N_DIR = resolve(__dirname, '..', 'i18n');
+const I18N_CONFIG_PATH = resolve(I18N_DIR, '_config.yml');
 const REGISTRY_PATH = resolve(SKILLS_DIR, '_registry.yml');
 const AGENTS_REGISTRY_PATH = resolve(AGENTS_DIR, '_registry.yml');
 const TEAMS_REGISTRY_PATH = resolve(TEAMS_DIR, '_registry.yml');
 const OUTPUT_PATH = resolve(__dirname, 'public', 'data', 'skills.json');
+
+// ── Build locale index from i18n directory ──────────────────────
+function buildLocaleIndex() {
+  const localeIndex = new Map();  // nodeId -> string[] of locale codes
+  const localeCodes = [];
+
+  if (!existsSync(I18N_CONFIG_PATH)) {
+    console.warn('WARN: i18n/_config.yml not found, skipping locale index');
+    return { localeIndex, localeCodes };
+  }
+
+  const config = yaml.load(readFileSync(I18N_CONFIG_PATH, 'utf8'));
+  for (const loc of config.supported_locales || []) {
+    if (loc.status === 'active') localeCodes.push(loc.code);
+  }
+
+  for (const code of localeCodes) {
+    const localeDir = resolve(I18N_DIR, code);
+
+    // Scan skills: i18n/<locale>/skills/*/SKILL.md
+    const skillsDir = resolve(localeDir, 'skills');
+    if (existsSync(skillsDir)) {
+      for (const entry of readdirSync(skillsDir, { withFileTypes: true })) {
+        if (entry.isDirectory() && existsSync(resolve(skillsDir, entry.name, 'SKILL.md'))) {
+          const nodeId = entry.name;
+          if (!localeIndex.has(nodeId)) localeIndex.set(nodeId, []);
+          localeIndex.get(nodeId).push(code);
+        }
+      }
+    }
+
+    // Scan agents: i18n/<locale>/agents/*.md
+    const agentsDir = resolve(localeDir, 'agents');
+    if (existsSync(agentsDir)) {
+      for (const entry of readdirSync(agentsDir, { withFileTypes: true })) {
+        if (entry.isFile() && entry.name.endsWith('.md')) {
+          const nodeId = `agent:${entry.name.replace(/\.md$/, '')}`;
+          if (!localeIndex.has(nodeId)) localeIndex.set(nodeId, []);
+          localeIndex.get(nodeId).push(code);
+        }
+      }
+    }
+
+    // Scan teams: i18n/<locale>/teams/*.md
+    const teamsDir = resolve(localeDir, 'teams');
+    if (existsSync(teamsDir)) {
+      for (const entry of readdirSync(teamsDir, { withFileTypes: true })) {
+        if (entry.isFile() && entry.name.endsWith('.md')) {
+          const nodeId = `team:${entry.name.replace(/\.md$/, '')}`;
+          if (!localeIndex.has(nodeId)) localeIndex.set(nodeId, []);
+          localeIndex.get(nodeId).push(code);
+        }
+      }
+    }
+  }
+
+  return { localeIndex, localeCodes };
+}
+
+// ── Build locale index ──────────────────────────────────────────
+const { localeIndex, localeCodes } = buildLocaleIndex();
 
 // ── Parse registry ──────────────────────────────────────────────
 // put id:"parse_registry", label:"Parse skills/_registry.yml into skill map", input:"skill_map", output:"skill_map_parsed"
@@ -122,6 +185,7 @@ for (const [id, meta] of skillMap) {
     tags,
     related: relatedIds,
     path: meta.path,
+    locales: localeIndex.get(id) || [],
   });
 
   for (const targetId of relatedIds) {
@@ -162,6 +226,7 @@ if (existsSync(AGENTS_REGISTRY_PATH)) {
       mcp_servers: agent.mcp_servers || [],
       skills: agent.skills || [],
       path: agent.path,
+      locales: localeIndex.get(agentNodeId) || [],
     });
 
     for (const skillId of agent.skills || []) {
@@ -199,6 +264,7 @@ if (existsSync(TEAMS_REGISTRY_PATH)) {
       description: team.description,
       tags: team.tags || [],
       path: team.path,
+      locales: localeIndex.get(teamNodeId) || [],
     });
 
     // Create team -> agent links for each member
@@ -234,6 +300,7 @@ const output = {
     totalAgentLinks: agentLinks.length,
     totalTeamLinks: teamLinks.length,
     totalDomains: Object.keys(domains).length,
+    supportedLocales: localeCodes,
   },
   domains,
   nodes: allNodes,

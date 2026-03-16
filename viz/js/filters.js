@@ -32,6 +32,11 @@ let nodeLanguageMap = {};   // nodeId -> normalized language string
 let allLanguages = [];      // sorted array of { key, display, count }
 let selectedLanguages = new Set();
 
+// Locale filter state (i18n dropdown → node visibility)
+let onLocaleFilterChange = null;
+let nodeLocalesMap = {};    // nodeId -> Set<string> (locale codes)
+let activeLocale = 'en';   // current locale from the header dropdown
+
 /**
  * @param {HTMLElement} el - Filter panel element
  * @param {Array} skillNodes - Array of skill node objects (from data.nodes where type==='skill')
@@ -39,13 +44,17 @@ let selectedLanguages = new Set();
  * @param {Array} teams - Array of team node objects
  * @param {Object} callbacks - { onFilterChange, onAgentFilterChange, onTeamFilterChange, onTagFilterChange }
  */
-export function initFilters(el, skillNodes, agents, teams, { onFilterChange, onAgentFilterChange, onTeamFilterChange, onTagFilterChange, onLanguageFilterChange } = {}) {
+export function initFilters(el, skillNodes, agents, teams, { onFilterChange, onAgentFilterChange, onTeamFilterChange, onTagFilterChange, onLanguageFilterChange, onLocaleFilterChange: localeFilterCb } = {}) {
   filterEl = el;
   onChange = onFilterChange;
   onAgentChange = onAgentFilterChange;
   onTeamChange = onTeamFilterChange;
   onTagChange = onTagFilterChange;
   onLanguageChange = onLanguageFilterChange;
+  onLocaleFilterChange = localeFilterCb;
+
+  // Build locale index from node data
+  buildLocaleIndex([...skillNodes, ...agents, ...teams]);
 
   // Build domain -> skills lookup
   skillsByDomain = {};
@@ -575,6 +584,32 @@ function fireLanguageFilterChange() {
   if (onLanguageChange) onLanguageChange();
 }
 
+// ── Locale filter (i18n dropdown → node visibility) ─────────────
+
+function buildLocaleIndex(allNodes) {
+  nodeLocalesMap = {};
+  for (const node of allNodes) {
+    if (Array.isArray(node.locales) && node.locales.length > 0) {
+      nodeLocalesMap[node.id] = new Set(node.locales);
+    }
+  }
+}
+
+/**
+ * Set the active locale for node filtering.
+ * 'en' = show everything (canonical); any other code filters to translated nodes only.
+ */
+export function setLocaleFilter(localeCode) {
+  activeLocale = localeCode;
+  logEvent('filters', { event: 'localeFilterChange', locale: localeCode });
+  if (onLocaleFilterChange) onLocaleFilterChange();
+}
+
+function nodePassesLocaleFilter(nodeId) {
+  if (activeLocale === 'en') return true;
+  return nodeLocalesMap[nodeId]?.has(activeLocale) ?? false;
+}
+
 // ── Section collapse / expand ────────────────────────────────────
 
 function toggleSection(header) {
@@ -774,7 +809,7 @@ function fireAgentChange() {
 
 export function getVisibleSkillIds() {
   return Object.entries(skillStates)
-    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLanguageFilter(id))
+    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLanguageFilter(id) && nodePassesLocaleFilter(id))
     .map(([k]) => k);
 }
 
@@ -792,13 +827,13 @@ export function getVisibleDomains() {
 
 export function getVisibleAgentIds() {
   return Object.entries(agentStates)
-    .filter(([id, v]) => v && nodePassesTagFilter(id))
+    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLocaleFilter(id))
     .map(([k]) => k);
 }
 
 export function getVisibleTeamIds() {
   return Object.entries(teamStates)
-    .filter(([id, v]) => v && nodePassesTagFilter(id))
+    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLocaleFilter(id))
     .map(([k]) => k);
 }
 
