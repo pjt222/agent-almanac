@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: general
   complexity: intermediate
   language: multi
@@ -370,6 +370,57 @@ If the expeditor is "cooking" (making tool calls to work around other tool failu
 
 **On failure:** If orchestration and execution are entangled, refactor by extracting the decision logic into a separate step that runs before each tool call. The decision step produces one of four outputs: CALL, SKIP, PROBE, or PAUSE. The execution step acts on that output.
 
+### Step 9: Detect Cascading Failures
+
+When multiple tools share infrastructure (network, filesystem, permissions), a single root cause can trip several breakers simultaneously. Detect and handle this correlated pattern rather than treating each breaker independently.
+
+**Cascading failure indicators:**
+
+- 3+ tools transition to OPEN within the same task step or a narrow window
+- Failures share a common error signature (e.g., "connection refused," "permission denied")
+- Tools that previously had independent failure histories suddenly fail together
+
+**Response protocol:**
+
+1. When a second breaker opens, check whether the failure category matches the first
+2. If correlated: flag as **systemic failure** — pause all tool calls, not just the broken ones
+3. Report the suspected root cause: "Multiple tools failing with [shared pattern] — likely [network/filesystem/permissions] issue"
+4. Do not probe half-open tools during a systemic failure — probes will also fail and waste budget
+5. Resume probing only after the user confirms the infrastructure issue is resolved
+
+**Backoff compounding:** When cascading failures trigger, use exponential backoff for half-open probes: probe at step 3, then step 6, then step 12. Cap the maximum interval at 20 steps to prevent permanent circuit lock. This prevents rapid-fire probes from overwhelming a recovering system.
+
+**Expected:** Correlated failures are detected and treated as a single systemic event rather than N independent breaker trips. The failure budget counts the systemic event once, not N times.
+
+**On failure:** If correlation detection is impractical (failures have different error signatures despite a shared cause), fall back to independent per-tool breakers. The system still degrades gracefully — it just consumes budget faster.
+
+### Step 10: Pre-Call Tool Selection Layer
+
+Before engaging the circuit breaker loop (Step 3), optionally verify that a tool is available and likely to succeed. This reduces unnecessary breaker trips from predictable failures.
+
+**Pre-call checks:**
+
+| Check | Method | Action on failure |
+|-------|--------|-------------------|
+| Tool exists | Verify tool is in the allowed-tools list | Skip — do not even attempt |
+| MCP server health | Check server process/connection status | Route to alternative immediately |
+| Resource availability | Verify target file/URL/endpoint exists | Route or degrade scope |
+
+**Decision table:**
+
+```
+Pre-call score:
+  AVAILABLE  → proceed to circuit breaker loop (Step 3)
+  DEGRADED   → proceed with caution, lower the failure threshold by 1
+  UNAVAILABLE → skip tool, route to alternative (Step 4) without consuming budget
+```
+
+Pre-call checks are advisory, not authoritative. A tool that passes pre-call checks can still fail during execution. The circuit breaker remains the primary reliability mechanism.
+
+**Expected:** Predictable failures (missing tools, unreachable servers) are caught before they consume the failure budget. The circuit breaker handles only genuine runtime failures.
+
+**On failure:** If pre-call checks are unavailable or add too much overhead, skip this step entirely. The circuit breaker loop in Step 3 handles all failures — pre-call selection is an optimization, not a requirement.
+
 ## Validation
 
 - [ ] Capability map covers all tools with alternatives and fallbacks documented
@@ -383,6 +434,9 @@ If the expeditor is "cooking" (making tool calls to work around other tool failu
 - [ ] Expeditor logic does not execute tool calls or retry failed calls
 - [ ] Status report includes completed work, incomplete work, and tool health
 - [ ] No silent failures — every skip, deferral, and degradation is documented
+- [ ] Cascading failures are detected when 3+ tools open simultaneously
+- [ ] Systemic failure mode pauses all probes until infrastructure is confirmed recovered
+- [ ] Pre-call checks (if used) do not consume the failure budget on predictable failures
 
 ## Common Pitfalls
 
@@ -393,6 +447,8 @@ If the expeditor is "cooking" (making tool calls to work around other tool failu
 - **Opening circuits too eagerly**: A single transient failure should not open the circuit. Use a threshold (default: 3) to filter noise from signal.
 - **Never probing after opening**: A permanently open circuit means the agent never discovers that a tool has recovered. Half-open probes are essential for recovery.
 - **Ignoring the failure budget**: Without a budget, an agent can accumulate dozens of failures across different tools while still "making progress" on paper. The budget forces an honest checkpoint.
+- **Cascading backoff multiplication**: When multiple tools in a dependency chain each apply their own exponential backoff, the compound delay grows multiplicatively. Cap total aggregate backoff across the chain, not just per tool.
+- **Stale discovery scores**: Pre-call selection (Step 10) caches tool availability assessments. If the cache is not invalidated when conditions change, the agent may skip a recovered tool or attempt an unavailable one. Re-check scores after any systemic failure event.
 
 ## Related Skills
 
