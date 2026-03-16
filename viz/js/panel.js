@@ -4,7 +4,7 @@
 
 import { getColor, COMPLEXITY_BADGE_COLORS, getAgentColor, getTeamColor, getCurrentThemeName } from './colors.js';
 import { getHdMode } from './icons.js';
-import { t } from './i18n.js';
+import { t, getLocale } from './i18n.js';
 
 // TODO(#76): Make configurable for forks — could read from skills.json metadata or data attribute
 const GITHUB_REPO_BASE = 'https://github.com/pjt222/agent-almanac/blob/main/';
@@ -130,7 +130,7 @@ function openSkillPanel(node) {
 
   html += `
     <div class="panel-actions">
-      <a href="${GITHUB_SKILLS_BASE}${encodeURI(node.path)}" target="_blank" rel="noopener" class="source-link">
+      <a href="${resolveSourceUrl(node)}" target="_blank" rel="noopener" class="source-link">
         ${t('panel.viewSourceSkill')}
       </a>
     </div>
@@ -185,7 +185,7 @@ function openTeamPanel(node) {
 
   html += `
     <div class="panel-actions">
-      <a href="${GITHUB_REPO_BASE}${encodeURI(node.path)}" target="_blank" rel="noopener" class="source-link">
+      <a href="${resolveSourceUrl(node)}" target="_blank" rel="noopener" class="source-link">
         ${t('panel.viewTeamDefinition')}
       </a>
     </div>
@@ -256,7 +256,7 @@ function openAgentPanel(node) {
 
   html += `
     <div class="panel-actions">
-      <a href="${GITHUB_REPO_BASE}${encodeURI(node.path)}" target="_blank" rel="noopener" class="source-link">
+      <a href="${resolveSourceUrl(node)}" target="_blank" rel="noopener" class="source-link">
         ${t('panel.viewAgentDefinition')}
       </a>
     </div>
@@ -319,4 +319,25 @@ function escHtml(s) {
 
 function escAttr(s) {
   return (s || '').replace(/"/g, '&quot;');
+}
+
+/**
+ * Resolve the GitHub source URL for a node, preferring the translated
+ * version when a non-English locale is active and a translation exists.
+ *
+ * Skill paths are relative to skills/ (e.g. "create-r-package/SKILL.md"),
+ * while agent/team paths include their directory (e.g. "agents/r-developer.md").
+ * The i18n tree mirrors this: i18n/<locale>/skills/..., i18n/<locale>/agents/...
+ */
+function resolveSourceUrl(node) {
+  const locale = getLocale();
+  if (locale !== 'en' && Array.isArray(node.locales) && node.locales.includes(locale)) {
+    const prefix = node.type === 'skill' ? 'skills/' : '';
+    return `${GITHUB_REPO_BASE}i18n/${encodeURI(locale)}/${prefix}${encodeURI(node.path)}`;
+  }
+  // Default: canonical English source
+  if (node.type === 'skill') {
+    return `${GITHUB_SKILLS_BASE}${encodeURI(node.path)}`;
+  }
+  return `${GITHUB_REPO_BASE}${encodeURI(node.path)}`;
 }
