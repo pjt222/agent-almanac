@@ -247,6 +247,8 @@ After bootstrap, verify that the loaded identity is internally consistent. Contr
 
 ## Related Skills
 
+- `continue-here` — session handoff file that provides the evidence bootstrap-agent-identity consumes at cold start
+- `manage-memory` — persistent memory that supplements the bootstrap's progressive identity loading
 - `center` — behavioral baseline establishment; invoked during the calibration sequence
 - `attune` — relational calibration to the user; invoked during the calibration sequence
 - `heal` — deeper subsystem assessment when bootstrap reveals significant drift

@@ -464,6 +464,7 @@ All glyph functions across the three primitives files, grouped by source file:
 
 ## Related Skills
 
+- [glyph-enhance](../glyph-enhance/SKILL.md) — improve an existing glyph's visual quality, fix rendering issues, or add detail layers
 - [ornament-style-mono](../ornament-style-mono/SKILL.md) — complementary AI-based image generation (Z-Image vs R-coded glyphs)
 - [ornament-style-color](../ornament-style-color/SKILL.md) — color theory applicable to glyph accent fill decisions
 - [create-skill](../create-skill/SKILL.md) — the parent workflow that triggers glyph creation when adding new skills

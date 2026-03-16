@@ -188,6 +188,8 @@ ls <memory-dir>/*.md | grep -v MEMORY.md
 ## Related Skills
 
 - `write-claude-md` — CLAUDE.md captures project instructions; memory captures cross-session learning
+- `prune-agent-memory` — the inverse of manage-memory: auditing, classifying, and selectively forgetting stored memories
+- `continue-here` — write a structured continuation file for session handoff; complements memory as a short-term context bridge
 - `create-skill` — new skills may produce memory-worthy patterns
 - `heal` — self-healing may update memory as part of integration step
 - `meditate` — meditation sessions may surface insights worth persisting

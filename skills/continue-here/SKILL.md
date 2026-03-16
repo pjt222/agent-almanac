@@ -221,6 +221,7 @@ If `CONTINUE_HERE.md` exists in the project root, read it at session start. It c
 
 ## Related Skills
 
+- `bootstrap-agent-identity` — cold-start identity reconstruction that consumes the continuation file this skill produces
 - `manage-memory` — durable cross-session knowledge (complements this ephemeral handoff)
 - `commit-changes` — save work to git before writing the continuation file
 - `write-claude-md` — project instructions where the optional continuity guidance lives
