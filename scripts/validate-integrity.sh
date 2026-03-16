@@ -165,6 +165,7 @@ done
 # B5: Orphan detection (warn only, not fail)
 echo "--- B5: Orphan detection ---"
 orphan_count=0
+orphan_list=""
 # Build reference corpus: all .md files except registries, READMEs, and templates
 ref_corpus_file=$(mktemp)
 find agents teams guides -name '*.md' -not -name '_template.md' -not -name 'README.md' -exec cat {} + > "$ref_corpus_file" 2>/dev/null
@@ -180,11 +181,13 @@ for dir in skills/*/; do
   external=$((total - self))
   if [ "$external" -le 0 ]; then
     orphan_count=$((orphan_count + 1))
+    orphan_list="${orphan_list}  - ${skill_name} (self-refs: ${self}, external: ${external})\n"
   fi
 done
 rm -f "$ref_corpus_file"
 if [ "$orphan_count" -gt 0 ]; then
-  echo "WARN: $orphan_count orphan skills detected (registered but never referenced)"
+  echo "WARN: $orphan_count orphan skills detected (registered but never referenced):"
+  printf "$orphan_list"
   warn_count=$((warn_count + orphan_count))
 else
   echo "OK: No orphan skills detected"
