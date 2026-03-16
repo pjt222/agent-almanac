@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: general
   complexity: intermediate
   language: multi
@@ -235,6 +235,69 @@ Keep the pruning log concise. It exists for accountability, not archaeology. If 
 
 **On failure:** If creating a separate log file feels excessive (only 1-2 entries pruned), add a brief note to MEMORY.md instead: `<!-- Last pruned: YYYY-MM-DD, removed 2 stale entries -->`. Any record is better than silent deletion.
 
+### Step 7: Designate Protected Memories
+
+Certain memory entries should be immune from pruning regardless of age, access frequency, or fidelity score. These represent irreplaceable context that, if lost, would require significant effort to reconstruct.
+
+**Protected memory criteria:**
+
+| Category | Examples | Why protected |
+|----------|----------|---------------|
+| Architecture decisions | "Chose flat skill directory over nested" | Rationale is lost if re-derived later |
+| User identity preferences | "Always use kebab-case," "Never auto-commit" | Explicit user intent, not inferrable |
+| Security audit results | "Last audit: 2025-12-13 — PASSED" | Compliance evidence with timestamps |
+| Rename/migration records | "Repo renamed: X to Y on date Z" | Cross-reference integrity depends on this |
+
+**Designation method:** Mark protected entries with `<!-- PROTECTED -->` inline or maintain a `protected` list in the pruning log. The decision tree in Step 4 must check for protected status before applying any deletion rule.
+
+**Unprotecting:** To prune a protected entry, explicitly remove the designation first and document the reason in the pruning log. This two-step process prevents accidental deletion of high-value memories.
+
+**Expected:** Protected entries survive all prune passes. The pruning log records any protection additions or removals.
+
+**On failure:** If the protected set grows too large (>30% of total entries), review the criteria — protection is for irreplaceable context, not for "important" entries. Important but reconstructible facts should remain subject to normal pruning.
+
+### Step 8: Re-Synthesize After Pruning
+
+After deletion, remaining memories may be fragmented — cross-references point to deleted entries, topic files lose coherence, and MEMORY.md may have gaps. Re-synthesis restores structural integrity.
+
+**Re-synthesis checklist:**
+
+1. **Resolve broken references**: Scan remaining entries for links to deleted content. Remove or redirect the reference.
+2. **Merge related fragments**: If pruning left two entries covering overlapping aspects of the same topic, merge them into one coherent entry.
+3. **Update topic file structure**: If a topic file lost >50% of its content, consider folding the remainder back into MEMORY.md and deleting the topic file.
+4. **Classify cold memories**: Review entries that survived pruning but have not been accessed recently:
+   - **Cold-from-disuse**: Topic aligns with active project goals but the specific phase that generated it has passed. Retain — it may become relevant again when that phase resumes (e.g., CRAN submission notes during active development).
+   - **Cold-from-irrelevance**: Topic was always marginal — a one-off experiment, a tangential investigation, or a superseded approach. Flag for deletion in the next pruning cycle.
+5. **Verify MEMORY.md coherence**: Read MEMORY.md top-to-bottom. It should tell a coherent story about the project, not read as a random collection of facts.
+
+**Expected:** Post-pruning memory is structurally sound — no orphan references, no redundant fragments, no incoherent topic files. Cold entries are classified for future pruning decisions.
+
+**On failure:** If re-synthesis reveals that pruning was too aggressive (critical context was lost), check the pruning log and reconstruct from the audit trail. This is why the audit trail exists.
+
+### Step 9: Recover from Memory Drift
+
+Memory drift occurs when stored facts become silently wrong — not because they were always wrong, but because the underlying reality changed and the memory was not updated. Drift recovery attempts to fix memories in-place rather than pruning them.
+
+**Drift detection triggers:**
+
+- A memory claim contradicts current tool output or file contents
+- A count or version number in memory does not match the registry or lockfile
+- A path in memory returns "file not found"
+- A memory about a dependency references a renamed or deprecated package
+
+**Recovery procedure:**
+
+1. **Identify the drift**: Compare the memory claim against the current ground truth (git log, registry, actual files)
+2. **Assess recoverability**: Can the correct value be determined from current project state?
+   - Yes → Update the memory entry in-place with the current value and a `[corrected YYYY-MM-DD]` annotation
+   - No → Mark the entry as `unverifiable` and flag for pruning
+3. **Trace the cause**: Was this a gradual drift (count slowly diverged) or a discrete event (rename, migration)? Discrete events often affect multiple entries — scan for siblings.
+4. **Prevent recurrence**: If the drift affects a frequently-changing value (counts, versions), consider whether the memory should track the value at all or instead reference the source of truth: "See skills/_registry.yml for current count" rather than "317 skills."
+
+**Expected:** Drifted memories are corrected in-place where possible, preserving context. Entries that cannot be corrected are flagged for pruning. Prevention rules reduce future drift.
+
+**On failure:** If drift is widespread (>20% of entries), the memory may need a full rebuild rather than incremental correction. In that case, archive the current memory directory, start fresh, and selectively re-import entries that pass verification.
+
 ## Validation
 
 - [ ] All memory files were inventoried and entries classified by type
@@ -247,6 +310,10 @@ Keep the pruning log concise. It exists for accountability, not archaeology. If 
 - [ ] MEMORY.md remains under 200 lines after pruning
 - [ ] Remaining memories are accurate (spot-checked against project state)
 - [ ] No orphan topic files were created by pruning references from MEMORY.md
+- [ ] Protected entries are designated and survive all prune passes
+- [ ] Post-pruning re-synthesis resolves broken cross-references and merges fragments
+- [ ] Cold entries are classified as disuse vs irrelevance for future pruning decisions
+- [ ] Drifted entries are corrected in-place where possible, not just deleted
 
 ## Common Pitfalls
 
@@ -257,6 +324,8 @@ Keep the pruning log concise. It exists for accountability, not archaeology. If 
 - **Ignoring the preemptive filters**: Pruning existing entries but not establishing rules to prevent the same patterns from recurring. Without filters, the next 10 sessions will recreate the same ephemeral entries you just deleted.
 - **Treating all types equally**: Decision memories and feedback memories should almost never be pruned — they represent user intent and rationale. Project and reference memories are the primary pruning targets because they track state that changes.
 - **Confusing compression with corruption**: A memory that summarizes a complex topic in one line is compressed, not corrupted. Only flag it as a fidelity failure if the compression lost the actionable insight, not merely the detail.
+- **Over-pinning**: Marking too many entries as protected defeats the purpose of pruning. If >30% of entries are protected, the criteria are too loose. Protect irreplaceable context, not merely important facts.
+- **Re-synthesis loops**: Merging fragments during re-synthesis can create new entries that themselves need pruning next cycle. Keep merges minimal — combine only entries that clearly cover the same topic. Do not synthesize new insights during a pruning pass.
 
 ## Related Skills
 
