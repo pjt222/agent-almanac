@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 317
+total_skills: 318
 
 domains:
   r-packages:
@@ -1539,6 +1539,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Find and fix broken links, dead URLs, stale imports, and orphaned files
+      - id: audit-discovery-symlinks
+        path: audit-discovery-symlinks/SKILL.md
+        complexity: intermediate
+        language: shell
+        description: Audit and repair Claude Code discovery symlinks for skills, agents, and teams
       - id: escalate-issues
         path: escalate-issues/SKILL.md
         complexity: basic

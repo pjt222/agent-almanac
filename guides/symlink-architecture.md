@@ -4,7 +4,8 @@ description: "How symlinks enable multi-project discovery of skills, agents, and
 category: infrastructure
 agents: []
 teams: []
-skills: []
+skills:
+  - audit-discovery-symlinks
 ---
 
 # Symlink Architecture
@@ -37,7 +38,7 @@ Claude Code looks for agents and skills in the `.claude/` directory of the curre
 ├── skills/
 │   ├── <skill-a> → <almanac>/skills/<skill-a>
 │   └── <skill-b> → <almanac>/skills/<skill-b>
-└── teams/                              (optional)
+└── teams → <almanac>/teams
 
 <workspace>/.claude/                    Layer 2: Workspace (multi-project root)
 ├── agents → ~/.claude/agents           (chains through global)
@@ -62,6 +63,7 @@ The agent-almanac repository uses **relative symlinks** within its own `.claude/
 ```
 <almanac>/.claude/
 ├── agents -> ../agents                 (relative — portable)
+├── teams -> ../teams                   (relative — portable)
 └── skills/
     ├── <skill-a> -> ../../skills/<skill-a>
     ├── <skill-b> -> ../../skills/<skill-b>
@@ -80,7 +82,15 @@ ln -s <almanac-path>/agents ~/.claude/agents
 
 This single symlink makes all agent definitions available globally.
 
-### Step 2: Create the global skills directory
+### Step 2: Create the global teams symlink
+
+```bash
+ln -s <almanac-path>/teams ~/.claude/teams
+```
+
+This single symlink makes all team definitions available globally. If `~/.claude/teams/` already exists as an empty directory (from Claude Code runtime state), remove it first: `rmdir ~/.claude/teams`.
+
+### Step 3: Create the global skills directory
 
 Skills use a directory of individual symlinks (not a single directory symlink) so that project-specific skills can coexist alongside shared ones.
 
@@ -89,11 +99,14 @@ mkdir -p ~/.claude/skills
 
 for skill_dir in <almanac-path>/skills/*/; do
   skill_name=$(basename "$skill_dir")
+  [[ "$skill_name" == _template ]] && continue
   ln -s "<almanac-path>/skills/$skill_name" ~/.claude/skills/"$skill_name"
 done
 ```
 
-### Step 3: Link projects to the hub
+**Note:** The `_template` directory is excluded — templates are scaffolding for creating new skills, not consumable content for Claude Code discovery.
+
+### Step 4: Link projects to the hub
 
 For each project that should discover shared skills and agents:
 
@@ -101,11 +114,12 @@ For each project that should discover shared skills and agents:
 mkdir -p <project>/.claude
 ln -s ~/.claude/agents <project>/.claude/agents
 ln -s ~/.claude/skills <project>/.claude/skills
+ln -s ~/.claude/teams <project>/.claude/teams
 ```
 
 This creates a two-hop chain: `project/.claude/agents → ~/.claude/agents → <almanac>/agents`.
 
-### Step 4: Verify
+### Step 5: Verify
 
 ```bash
 # Test that the chain resolves
@@ -134,6 +148,7 @@ To add all missing skills at once:
 ```bash
 for skill_dir in <almanac-path>/skills/*/; do
   skill_name=$(basename "$skill_dir")
+  [[ "$skill_name" == _template ]] && continue
   link="$HOME/.claude/skills/$skill_name"
   if [ ! -e "$link" ]; then
     ln -s "<almanac-path>/skills/$skill_name" "$link"
@@ -142,6 +157,41 @@ done
 ```
 
 ## Auditing Symlinks
+
+### Quick health check
+
+Compare registered counts against actual symlinks at a glance:
+
+```bash
+# Registered vs actual (almanac skills only)
+almanac="<almanac-path>"
+echo "Registered: $(grep '^ \{6\}- id:' "$almanac/skills/_registry.yml" | wc -l)"
+echo "Project:    $(ls .claude/skills/ 2>/dev/null | grep -v '^_template$' | wc -l)"
+echo "Global:     $(ls ~/.claude/skills/ | wc -l) (includes external)"
+
+# Show exact delta between registry and global
+comm -23 \
+  <(grep '^ \{6\}- id:' "$almanac/skills/_registry.yml" | awk '{print $3}' | sort) \
+  <(ls ~/.claude/skills/ | sort)
+```
+
+### External content coexistence
+
+The global `~/.claude/skills/` directory may contain skills from other projects alongside almanac symlinks (e.g., peon-ping sound notification skills). When auditing, distinguish almanac content from external content by checking whether each symlink's target is under the almanac path:
+
+```bash
+for item in ~/.claude/skills/*/; do
+  name=$(basename "$item")
+  target=$(readlink -f "$item" 2>/dev/null)
+  if echo "$target" | grep -q "^$almanac"; then
+    echo "almanac: $name"
+  else
+    echo "external: $name"
+  fi
+done
+```
+
+External content is not an error — it belongs to other projects and should be left untouched during auditing and repair.
 
 ### Check for broken symlinks
 
@@ -225,6 +275,7 @@ find ~/.claude/skills/ -maxdepth 1 -type l ! -exec test -e {} \; -delete
 
 for skill_dir in <new-almanac-path>/skills/*/; do
   skill_name=$(basename "$skill_dir")
+  [[ "$skill_name" == _template ]] && continue
   link="$HOME/.claude/skills/$skill_name"
   if [ ! -e "$link" ]; then
     ln -s "<new-almanac-path>/skills/$skill_name" "$link"
@@ -283,10 +334,12 @@ ln -s ~/.claude/skills <project>/.claude/skills
 | Only some skills work | Partial symlink creation; new skills not added to hub | Run bulk sync (see "Adding New Skills") |
 | All projects broken at once | Hub symlink target moved or renamed | Update `~/.claude/agents` and rebuild `~/.claude/skills/` |
 | One project broken, others fine | Project-level symlink points to wrong location | Check and repoint the project's `.claude/` symlinks |
-| `_template` appears as a skill | Almanac's `skills/_template/` was symlinked | Harmless; ignore or exclude from symlink creation |
+| `_template` appears as a skill | Almanac's `skills/_template/` was symlinked | Remove it — templates must never be in discovery paths. Update bulk sync scripts to skip `_template` |
+| Counts don't match but nothing is broken | `~/.claude/skills/` contains external content from other projects | Use the `comm` command or the [audit-discovery-symlinks](../skills/audit-discovery-symlinks/SKILL.md) skill to classify almanac vs external entries |
 
 ## Related Resources
 
+- [audit-discovery-symlinks](../skills/audit-discovery-symlinks/SKILL.md) -- procedural skill for systematic symlink auditing and repair
 - [Understanding the System](understanding-the-system.md) -- how agents, skills, and teams compose
 - [Setting Up Your Environment](setting-up-your-environment.md) -- WSL, MCP, and Claude Code setup
 - [Quick Reference](quick-reference.md) -- command cheat sheet
