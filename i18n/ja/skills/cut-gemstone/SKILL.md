@@ -1,13 +1,12 @@
 ---
 name: cut-gemstone
 description: >
-  Cut gemstones using cabochon and faceting techniques. Covers rough
-  assessment, orientation for optimal color and yield, dopping, cutting
-  angles, and crown/pavilion geometry for standard brilliant cuts. Use when
-  you have rough gemstone material to cut into a cabochon or faceted stone,
-  planning cutting orientation for optimal colour or optical phenomena,
-  setting up a cabbing or faceting machine, or selecting the appropriate
-  cutting approach for a given material.
+  カボションとファセッティング技法を用いて宝石を研磨する。原石の評価、最適な色と
+  歩留まりのためのオリエンテーション、ドッピング、カット角度、標準ブリリアントカットの
+  クラウン/パビリオンジオメトリをカバーする。カボションまたはファセット石にカットする
+  原石がある時、最適な色や光学現象のためのカットオリエンテーション計画時、キャビング
+  またはファセッティングマシンの初回セットアップ時、素材に適したカットアプローチの
+  選定時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,32 +25,32 @@ metadata:
 
 # 宝石のカット
 
-Cut gemstones from rough material using cabochon and faceting techniques, including rough assessment, orientation planning, dopping, grinding, and faceting geometry.
+カボションとファセッティング技法を使用して原石から宝石をカットする。原石の評価、オリエンテーション計画、ドッピング、研削、ファセッティングジオメトリを含む。
 
 ## 使用タイミング
 
-- You have rough gemstone material and want to cut it into a finished cabochon or faceted stone
-- You need to plan cutting orientation for optimal colour, yield, or optical phenomena
-- You are setting up a cabbing machine or faceting machine for the first time
-- You want to understand crown and pavilion angles for standard brilliant cuts
-- You need to select the appropriate cutting approach for a given material
+- 原石をカボションまたはファセット石に仕上げたい時
+- 最適な色、歩留まり、光学現象のためのカットオリエンテーションを計画する必要がある時
+- キャビングマシンまたはファセッティングマシンを初めてセットアップする時
+- 標準ブリリアントカットのクラウンとパビリオンの角度を理解したい時
+- 素材に適したカットアプローチを選定する必要がある時
 
 ## 入力
 
-- **必須**: Rough gemstone material (identified species — see `identify-gemstone`)
-- **必須**: Cutting approach decision: cabochon or faceting
-- **必須**: Target shape and approximate size
-- **任意**: Trim saw with diamond blade
-- **任意**: Cabbing machine with 80/220/600/1200/3000 grit wheels (for cabochons)
-- **任意**: Faceting machine with index gear, mast, and lap set (for faceting)
-- **任意**: Dop wax or epoxy, dop sticks, alcohol lamp
-- **任意**: Templates (oval, round, marquise) in standard calibrated sizes
+- **必須**: 原石（鑑別済みの鉱物種 — `identify-gemstone`を参照）
+- **必須**: カットアプローチの判断: カボションまたはファセッティング
+- **必須**: 目標形状と概算サイズ
+- **任意**: ダイヤモンドブレード付きトリムソー
+- **任意**: 80/220/600/1200/3000番ホイール付きキャビングマシン（カボション用）
+- **任意**: インデックスギア、マスト、ラップセット付きファセッティングマシン（ファセッティング用）
+- **任意**: ドップワックスまたはエポキシ、ドップスティック、アルコールランプ
+- **任意**: テンプレート（オーバル、ラウンド、マーキス）標準キャリブレーションサイズ
 
 ## 手順
 
-### ステップ1: Rough Assessment and Safety Check
+### ステップ1: 原石の評価と安全チェック
 
-Evaluate the rough material before any cutting begins.
+カットを始める前に原石を評価する。
 
 ```
 Rough Assessment Checklist:
@@ -92,19 +91,19 @@ ALL stone cutting produces silica dust. Always use water cooling
 and never grind or cut dry without a dust extraction system.
 ```
 
-1. Confirm the species identification (if uncertain, run `identify-gemstone` first)
-2. Check for toxic dust risk — some materials require extra precautions
-3. Examine for fractures under strong transmitted light
-4. Map colour zones and inclusion locations
-5. Estimate what finished shapes the rough can yield
+1. 鉱物種の同定を確認する（不明な場合は先に`identify-gemstone`を実行）
+2. 有毒粉塵リスクをチェックする — 一部の素材は追加の予防措置が必要
+3. 強い透過光下でフラクチャーを検査する
+4. カラーゾーンとインクルージョンの位置をマッピングする
+5. 原石から得られる仕上がり形状を見積もる
 
-**期待結果:** A documented rough assessment with species confirmed, fractures mapped, colour zones identified, and a cutting plan formed.
+**期待結果:** 鉱物種が確認され、フラクチャーがマッピングされ、カラーゾーンが特定され、カット計画が立てられた原石評価書。
 
-**失敗時:** If the rough has extensive fracturing, consider whether it can be stabilized (epoxy impregnation for porous material) or if the yield is too low to justify cutting. Some rough is better sold or traded as specimen material.
+**失敗時:** 原石に広範なフラクチャーがある場合、安定化処理（多孔質素材へのエポキシ含浸）が可能か、歩留まりがカットを正当化するには低すぎるかを検討する。一部の原石は標本素材として販売・交換した方がよい。
 
-### ステップ2: Orientation Planning
+### ステップ2: オリエンテーション計画
 
-Determine the optimal cutting orientation for colour and phenomena.
+最適な色と現象のためのカット方向を決定する。
 
 ```
 Orientation Principles by Stone Type:
@@ -132,19 +131,19 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 - Or feature them intentionally (ametrine, watermelon tourmaline)
 ```
 
-1. Determine if the stone is pleochroic — view through the dichroscope from multiple directions
-2. For phenomenal stones (star, cat's eye), locate the inclusion pattern and orient accordingly
-3. For colour-zoned material, decide whether to hide or feature the zoning
-4. Mark the orientation on the rough with an aluminum pencil
-5. Plan the table position and depth to maximise yield at the chosen orientation
+1. ダイクロスコープで複数方向から観察し、多色性があるか確認する
+2. 現象石（スター、キャッツアイ）の場合、インクルージョンパターンを特定し、それに合わせてオリエンテーションを決める
+3. カラーゾーンのある素材の場合、ゾーニングを隠すか見せるかを判断する
+4. アルミニウムペンシルで原石にオリエンテーションをマーキングする
+5. 選択したオリエンテーションで歩留まりを最大化するようテーブル位置と深さを計画する
 
-**期待結果:** A marked rough stone with the table direction, orientation, and approximate outline indicated. The cutting plan optimises colour presentation and yield.
+**期待結果:** テーブル方向、オリエンテーション、概略の輪郭が示されたマーキング済みの原石。カット計画が色の見え方と歩留まりを最適化している。
 
-**失敗時:** If the best colour orientation conflicts with maximum yield, decide based on priority: colour quality almost always increases value more than additional carat weight. When in doubt, orient for colour.
+**失敗時:** 最良の色のオリエンテーションが最大歩留まりと矛盾する場合、優先度に基づいて判断する: 色の品質はほぼ常に追加のカラット重量より価値を高める。迷った場合は色を優先してオリエンテーションを決める。
 
-### ステップ3: Cabochon Cutting
+### ステップ3: カボションカット
 
-Shape a gemstone into a domed cabochon on a cabbing machine.
+キャビングマシンでドーム型カボションに成形する。
 
 ```
 Cabochon Cutting Sequence:
@@ -178,20 +177,20 @@ STEP-BY-STEP:
 10. POLISH: See polish-gemstone skill for final finishing
 ```
 
-1. Set up the cabbing machine with water flow on all wheels
-2. Put on safety glasses — no exceptions
-3. Cut a slab and mark the template outline
-4. Dop the stone securely — a loose stone during grinding is dangerous
-5. Grind to shape on 80 grit, dome on 220, smooth through 600 and 1200
-6. Maintain consistent dome curvature throughout — uneven domes show "flat spots" after polishing
+1. すべてのホイールに水流を確保してキャビングマシンをセットアップする
+2. 保護メガネを着用する — 例外なし
+3. スラブをカットし、テンプレートの輪郭をマーキングする
+4. 石をしっかりドッピングする — 研削中の石の脱落は危険
+5. 80番でシェイプ、220番でドーム、600番と1200番で滑らかに仕上げる
+6. 全体を通して一定のドーム曲率を維持する — 不均一なドームは研磨後に「フラットスポット」が見える
 
-**期待結果:** A smoothly domed cabochon ready for final polishing, with symmetrical outline, even dome height, and no visible scratches from the 1200-grit stage.
+**期待結果:** 対称的な輪郭、均一なドーム高さ、1200番段階からの目に見える傷がない、最終研磨の準備ができた滑らかなドーム型カボション。
 
-**失敗時:** If the dome has flat spots or asymmetry, return to 220 grit and reshape. Better to lose a little material than to polish an uneven dome. If the stone comes off the dop during grinding, re-dop carefully and continue — check the stone for chips first.
+**失敗時:** ドームにフラットスポットや非対称がある場合、220番に戻って再成形する。不均一なドームを研磨するより少量の素材を失う方がよい。研削中に石がドップから外れた場合、注意深く再ドッピングして続行する — まず石のチッピングを確認する。
 
-### ステップ4: Faceting
+### ステップ4: ファセッティング
 
-Cut precise geometric facets using a faceting machine.
+ファセッティングマシンで精密な幾何学的ファセットをカットする。
 
 ```
 Standard Round Brilliant Angles (quartz-family, RI ~1.54):
@@ -220,54 +219,54 @@ CRITICAL: Pavilion angles determine brilliance.
 - Correct angle → total internal reflection (brilliance)
 ```
 
-1. Select a published faceting diagram for the target shape and material RI
-2. Prepare the rough: flat the pavilion side (the pointed bottom will face down)
-3. Dop the stone — use a cone dop for round stones, flat dop for others
-4. Cut pavilion facets first at the published angles on the coarse lap (600 mesh diamond)
-5. Meet all pavilion facets to a precise point (the "culet meet")
-6. Transfer to a cone dop (or use a transfer jig) to cut the crown
-7. Cut crown mains, then breaks, then stars, establishing the table last
-8. Pre-polish and polish each tier (see `polish-gemstone` for lap and compound selection)
+1. 目標形状と素材のRI用の公表されたファセッティングダイアグラムを選択する
+2. 原石を準備する: パビリオン側（尖った底面が下向き）を平らにする
+3. 石をドッピングする — ラウンド石にはコーンドップ、その他にはフラットドップを使用
+4. パビリオンファセットを粗いラップ（600メッシュダイヤモンド）で公表角度にカットする
+5. すべてのパビリオンファセットを精密な一点（「キュレットミート」）に合わせる
+6. コーンドップに移す（またはトランスファージグを使用）してクラウンをカットする
+7. クラウンメイン、次にブレイク、次にスターをカットし、テーブルを最後に仕上げる
+8. 各段階を事前研磨し研磨する（ラップとコンパウンドの選択は`polish-gemstone`を参照）
 
-**期待結果:** A faceted gemstone with precise meets (where facet edges converge to a single point), consistent facet sizes, good symmetry, and proper angles for the material's RI.
+**期待結果:** 精密なミート（ファセットの稜が単一の点に収束する）、一定のファセットサイズ、良好な対称性、素材のRIに適した角度を持つファセット石。
 
-**失敗時:** If facet meets are off, the angles or index settings are slightly wrong. Re-check the published diagram. "Chasing meets" (adjusting one facet to fix another) compounds errors — it is better to re-cut the tier if the error is large. Small meet errors are normal for beginners and do not significantly affect brilliance.
+**失敗時:** ファセットミートがずれている場合、角度またはインデックス設定がわずかに間違っている。公表されたダイアグラムを再確認する。「ミートを追う」（一つのファセットを直すために別のファセットを調整する）とエラーが複合する — 誤差が大きい場合はその段階を再カットする方がよい。初心者の小さなミートエラーは正常であり、ブリリアンスに大きな影響を与えない。
 
-### ステップ5: Post-Cut Inspection
+### ステップ5: カット後の検査
 
-Evaluate the cut stone before proceeding to final polish.
+最終研磨に進む前にカットした石を評価する。
 
-1. Clean the stone thoroughly
-2. Check symmetry: view from above (outline), from the side (proportions), and through the table (meet precision)
-3. For cabochons: verify dome evenness, check for flat spots, ensure consistent outline shape
-4. For faceted stones: check meets under 10x loupe, look for facet scratches remaining from cutting
-5. Measure final dimensions and weight
-6. If defects are found, return to the appropriate cutting step before polishing
+1. 石を徹底的に洗浄する
+2. 対称性を確認する: 上から（輪郭）、横から（プロポーション）、テーブルを通して（ミートの精度）
+3. カボションの場合: ドームの均一性を確認し、フラットスポットをチェックし、一貫した輪郭形状を確保する
+4. ファセット石の場合: 10倍ルーペでミートを確認し、カット段階の残留傷を探す
+5. 最終寸法と重量を測定する
+6. 欠陥が見つかった場合、研磨前に適切なカットステップに戻る
 
-**期待結果:** A fully cut stone that meets quality standards for symmetry, meets, and surface preparation, ready for the polishing stage.
+**期待結果:** 対称性、ミート、表面処理の品質基準を満たし、研磨段階の準備ができた完全にカットされた石。
 
-**失敗時:** If significant defects are found (poor symmetry, bad meets, incorrect proportions), it is more time-efficient to re-cut now than to polish a defective stone and re-cut later. Document what went wrong for the next stone.
+**失敗時:** 重大な欠陥が見つかった場合（不良な対称性、悪いミート、不正確なプロポーション）、欠陥のある石を研磨して後で再カットするより、今再カットする方が時間効率が良い。次の石のために何が問題だったかを記録する。
 
 ## バリデーション
 
-- [ ] Species identified and toxic dust risk assessed before cutting
-- [ ] Safety equipment worn throughout (eye protection, dust/splash control)
-- [ ] Water cooling active on all grinding and cutting operations
-- [ ] Orientation planned for optimal colour or phenomena
-- [ ] Cabochon dome is symmetrical with no flat spots (cabochon path)
-- [ ] Facet meets converge to points without significant offset (faceting path)
-- [ ] Final dimensions measured and recorded
-- [ ] Stone is free of cutting-stage scratches and ready for polishing
+- [ ] カット前に鉱物種が同定され、有毒粉塵リスクが評価されている
+- [ ] すべての研削・カット作業中に安全装備が着用されている（目の保護、粉塵/飛散制御）
+- [ ] すべての研削・カット作業で水冷却が有効になっている
+- [ ] 最適な色または現象のためのオリエンテーションが計画されている
+- [ ] カボションドームが対称でフラットスポットがない（カボションパス）
+- [ ] ファセットミートが著しいオフセットなく点に収束している（ファセッティングパス）
+- [ ] 最終寸法が測定・記録されている
+- [ ] 石にカット段階の傷がなく研磨の準備ができている
 
 ## よくある落とし穴
 
-- **Cutting an unidentified stone**: Some materials produce toxic dust (malachite, cinnabar, chrysotile). Always identify before cutting. Always use water cooling regardless
-- **Skipping orientation planning**: Cutting a pleochroic stone without orienting for colour can produce a dull or off-colour finished gem that would have been beautiful with correct orientation
-- **Grinding dry**: Dry grinding produces silica dust (chronic health hazard) and overheats the stone (thermal shock can fracture it). Water must flow continuously on all wheels and laps
-- **Rushing through grits**: Skipping from 220 to 1200 grit leaves deep scratches that show after polishing. Each grit stage must fully remove the scratches from the previous stage
-- **Dopping failure**: Inadequate dop adhesion causes the stone to shift or fly off during grinding. Use enough wax, ensure the stone is warm (not cold), and let the dop cool completely before grinding
+- **未鑑別の石のカット**: 一部の素材は有毒粉塵を発生する（マラカイト、辰砂、クリソタイル）。カット前に必ず鑑別する。素材に関係なく常に水冷却を使用する
+- **オリエンテーション計画の省略**: 多色性のある石をオリエンテーションなしにカットすると、正しいオリエンテーションなら美しかったはずの鈍い色や変色した仕上がりになりうる
+- **乾式研削**: 乾式研削はシリカ粉塵（慢性的な健康被害）を発生させ、石を過熱させる（熱衝撃でフラクチャーが生じうる）。すべてのホイールとラップで水を連続的に流す必要がある
+- **番手の飛ばし**: 220番から1200番に飛ぶと、研磨後に見える深い傷が残る。各番手段階で前の段階の傷を完全に除去する必要がある
+- **ドッピング不良**: 不十分なドップ接着は研削中に石がずれたり飛び出す原因になる。十分なワックスを使い、石が温かい（冷たくない）ことを確認し、研削前にドップを完全に冷却する
 
 ## 関連スキル
 
-- `identify-gemstone` — Species identification is required before cutting begins
-- `polish-gemstone` — The next step after cutting, covering lap selection, compound choice, and final finish
+- `identify-gemstone` -- カット開始前に鉱物種の鑑別が必要
+- `polish-gemstone` -- カット後の次のステップ。ラップの選択、コンパウンドの選定、最終仕上げをカバー

@@ -1,10 +1,18 @@
 ---
 name: validate-piles-notation
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  PILES-Notation (Puzzle Input Line Entry System) fuer die Spezifikation
-  von Teilefusionsgruppen in jigsawR parsen und validieren. Umfasst
-  Syntaxvalidierung, Parsen in Gruppenlisten, Klartext-Erklaerung,
-  Adjazenzverifizierung gegen Puzzleergebnisse und Roundtrip-Serialisierung.
+  PILES-Notation (Puzzle Input Line Entry System) fuer die Spezifikation von
+  Teilefusionsgruppen in jigsawR parsen und validieren. Umfasst Syntaxvalidierung,
+  Parsen in Gruppenlisten, Klartext-Erklaerung, Adjazenzverifikation gegen
+  Puzzleergebnisse und Round-Trip-Serialisierung. Anwenden beim Validieren
+  benutzerdefinierter PILES-Zeichenketten vor der Uebergabe an generate_puzzle(),
+  beim Debuggen von Fusionsgruppen-Problemen, beim Erklaeren der Notation fuer
+  Benutzer, oder beim Testen der Round-Trip-Parse/Serialize-Treue.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -14,29 +22,24 @@ metadata:
   complexity: intermediate
   language: R
   tags: jigsawr, piles, notation, fusion, parsing, dsl
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude-sonnet-4-6
-  translation_date: 2026-03-16
 ---
 
 # PILES-Notation validieren
 
-PILES-Notationsstrings fuer Puzzle-Teilefusionsgruppen parsen und validieren.
+PILES-Notationszeichenketten fuer Puzzle-Teilefusionsgruppen parsen und validieren.
 
 ## Wann verwenden
 
-- Vom Benutzer bereitgestellte PILES-Strings vor der Uebergabe an `generate_puzzle()` validieren
+- Benutzerdefinierte PILES-Zeichenketten vor der Uebergabe an `generate_puzzle()` validieren
 - Fusionsgruppen-Probleme debuggen (falsche Teile zusammengefuegt, unerwartete Ergebnisse)
-- PILES-Notation in Klartext fuer Benutzer erklaeren
-- Roundtrip-Treue testen: parse -> groups -> serialize -> parse
+- PILES-Notation fuer Benutzer in Klartext erklaeren
+- Round-Trip-Treue testen: Parsen -> Gruppen -> Serialisieren -> Parsen
 
 ## Eingaben
 
-- **Erforderlich**: PILES-Notationsstring (z.B. `"1-2-3,4-5"`)
+- **Erforderlich**: PILES-Notationszeichenkette (z.B. `"1-2-3,4-5"`)
 - **Optional**: Puzzle-Ergebnisobjekt (fuer Adjazenzvalidierung und Schluesselwortaufloesung)
-- **Optional**: Puzzletyp (fuer Schluesselwortunterstuetzung wie `"center"`, `"ring1"`, `"R1"`)
+- **Optional**: Puzzletyp (fuer Schluesselwort-Unterstuetzung wie `"center"`, `"ring1"`, `"R1"`)
 
 ## Vorgehensweise
 
@@ -49,13 +52,13 @@ result <- validate_piles_syntax("1-2-3,4-5")
 ```
 
 Auf haeufige Syntaxfehler pruefen:
-- Nicht uebereinstimmende Klammern: `"1-2(-3)-4"` mit nicht passenden `()`
+- Ungepaarte Klammern: `"1-2(-3)-4"` mit nicht zusammenpassenden `()`
 - Ungueltige Zeichen: nur Ziffern, `-`, `,`, `:`, `(`, `)` und Schluesselwoerter erlaubt
 - Leere Gruppen: `"1-2,,3-4"` (doppeltes Komma)
 
 **Erwartet:** `TRUE` fuer gueltige Syntax, beschreibender Fehler fuer ungueltige.
 
-**Bei Fehler:** Den genauen PILES-String und die Validierungsfehlermeldung ausgeben.
+**Bei Fehler:** Die genaue PILES-Zeichenkette und die Validierungsfehlermeldung ausgeben.
 
 ### Schritt 2: In Gruppen parsen
 
@@ -64,15 +67,15 @@ groups <- parse_piles("1-2-3,4-5")
 # Gibt zurueck: list(c(1, 2, 3), c(4, 5))
 ```
 
-Fuer Strings mit Bereichen:
+Fuer Zeichenketten mit Bereichen:
 ```r
 groups <- parse_piles("1:6,7-8")
 # Gibt zurueck: list(c(1, 2, 3, 4, 5, 6), c(7, 8))
 ```
 
-**Erwartet:** Liste von Integer-Vektoren, einer pro Fusionsgruppe, mit korrekten Teile-IDs und Gruppengrenzen.
+**Erwartet:** Liste von Integer-Vektoren, einer pro Fusionsgruppe, mit korrekten Teil-IDs und Gruppengrenzen.
 
-**Bei Fehler:** Pruefen, ob der PILES-String die Syntaxvalidierung in Schritt 1 zuerst bestanden hat. Falls das Parsen unerwartete Gruppen zurueckgibt, sicherstellen, dass `-` Teile innerhalb einer Gruppe trennt und `,` Gruppen trennt, und dass die Bereichsnotation (`:`) zu inklusiven Endpunkten expandiert.
+**Bei Fehler:** Zuerst pruefen ob die PILES-Zeichenkette die Syntaxvalidierung in Schritt 1 bestanden hat. Wenn das Parsen unerwartete Gruppen zurueckgibt, ueberpruefen ob `-` Teile innerhalb einer Gruppe trennt und `,` Gruppen trennt, und dass die Bereichsnotation (`:`) zu inklusiven Endpunkten expandiert.
 
 ### Schritt 3: In Klartext erklaeren
 
@@ -80,34 +83,34 @@ Jede Gruppe fuer den Benutzer beschreiben:
 
 - `"1-2-3,4-5"` -> "Gruppe 1: Teile 1, 2 und 3 fusionieren. Gruppe 2: Teile 4 und 5 fusionieren."
 - `"1:6"` -> "Gruppe 1: Teile 1 bis 6 fusionieren (6 Teile)."
-- `"center,ring1"` -> "Gruppe 1: Mittelteil. Gruppe 2: Alle Teile in Ring 1."
+- `"center,ring1"` -> "Gruppe 1: Mittelteil. Gruppe 2: alle Teile in Ring 1."
 
-**Erwartet:** Jede Fusionsgruppe in Klartext mit Teileanzahl und Bezeichnern beschrieben, sodass die Notation fuer nicht-technische Benutzer verstaendlich wird.
+**Erwartet:** Jede Fusionsgruppe wird in Klartext beschrieben mit Teilezahlen und Bezeichnern, sodass die Notation fuer nicht-technische Benutzer verstaendlich wird.
 
-**Bei Fehler:** Falls Schluesselwoerter nicht erklaert werden koennen (z.B. `"ring1"` hat keine klare Bedeutung), benoetigt die Notation moeglicherweise ein Puzzle-Ergebnisobjekt fuer Kontext. Den Benutzer empfehlen, den Puzzletyp anzugeben oder stattdessen numerische Teile-IDs zu verwenden.
+**Bei Fehler:** Wenn Schluesselwoerter nicht erklaert werden koennen (z.B. hat `"ring1"` keine klare Bedeutung), braucht die Notation moeglicherweise ein Puzzle-Ergebnisobjekt fuer Kontext. Den Benutzer empfehlen den Puzzletyp anzugeben oder stattdessen numerische Teil-IDs zu verwenden.
 
-### Schritt 4: Gegen Puzzleergebnis validieren (optional)
+### Schritt 4: Gegen Puzzle-Ergebnis validieren (Optional)
 
-Falls ein Puzzle-Ergebnisobjekt verfuegbar ist, verifizieren:
+Wenn ein Puzzle-Ergebnisobjekt verfuegbar ist, verifizieren:
 
 ```r
-# Puzzle zuerst generieren
+# Zuerst das Puzzle generieren
 puzzle <- generate_puzzle(type = "hexagonal", grid = c(3), size = c(200))
 
-# Mit Puzzlekontext parsen (loest Schluesselwoerter auf)
+# Mit Puzzle-Kontext parsen (loest Schluesselwoerter auf)
 groups <- parse_fusion("center,ring1", puzzle)
 ```
 
 Pruefen:
-- Alle Teile-IDs existieren im Puzzle
+- Alle Teil-IDs existieren im Puzzle
 - Schluesselwoerter loesen zu gueltigen Teilemengen auf
-- Fusionierte Teile sind tatsaechlich benachbart (Warnung falls nicht)
+- Fusionierte Teile sind tatsaechlich benachbart (Warnung wenn nicht)
 
-**Erwartet:** Alle Teile-IDs gueltig. Benachbarte Teile fusionieren sauber.
+**Erwartet:** Alle Teil-IDs gueltig. Benachbarte Teile fusionieren sauber.
 
-**Bei Fehler:** Ungueltige Teile-IDs oder nicht-benachbarte Paare auflisten.
+**Bei Fehler:** Ungueltige Teil-IDs oder nicht benachbarte Paare auflisten.
 
-### Schritt 5: Roundtrip-Serialisierung
+### Schritt 5: Round-Trip-Serialisierung
 
 Parse/Serialize-Treue verifizieren:
 
@@ -115,54 +118,54 @@ Parse/Serialize-Treue verifizieren:
 original <- "1-2-3,4-5"
 groups <- parse_piles(original)
 roundtrip <- to_piles(groups)
-# roundtrip sollte dem Original entsprechen (oder kanonisches Aequivalent)
+# roundtrip sollte gleich original sein (oder kanonisch aequivalent)
 
 groups2 <- parse_piles(roundtrip)
 identical(groups, groups2)  # Muss TRUE sein
 ```
 
-**Erwartet:** Roundtrip erzeugt identische Gruppenlisten, was bestaetigt, dass `parse_piles()` und `to_piles()` Inverse sind.
+**Erwartet:** Der Round-Trip erzeugt identische Gruppenlisten, was bestaetigt dass `parse_piles()` und `to_piles()` zueinander invers sind.
 
-**Bei Fehler:** Falls der Roundtrip sich unterscheidet, pruefen, ob der Serializer die Notation normalisiert (z.B. Teile-IDs sortieren oder Bereiche in explizite Listen umwandeln). Kanonische Unterschiede sind akzeptabel, solange `identical(groups, groups2)` `TRUE` zurueckgibt.
+**Bei Fehler:** Wenn der Round-Trip abweicht, pruefen ob der Serialisierer die Notation normalisiert (z.B. Teil-IDs sortiert oder Bereiche in explizite Listen konvertiert). Kanonische Unterschiede sind akzeptabel solange `identical(groups, groups2)` `TRUE` zurueckgibt.
 
 ## PILES-Kurzreferenz
 
 ```
-# Grundlegende Syntax
+# Grundsyntax
 "1-2"           # Teile 1 und 2 fusionieren
 "1-2-3,4-5"     # Zwei Gruppen: (1,2,3) und (4,5)
 "1:6"           # Bereich: Teile 1 bis 6
 
-# Schluesselwoerter (erfordern puzzle_result)
+# Schluesselwoerter (benoetigen puzzle_result)
 "center"        # Mittelteil (hex/concentric)
 "ring1"         # Alle Teile in Ring 1
 "R1"            # Reihe 1 (rectangular)
 "boundary"      # Alle Randteile
 
 # Funktionen
-parse_piles("1-2-3,4-5")                    # PILES-String parsen
+parse_piles("1-2-3,4-5")                    # PILES-Zeichenkette parsen
 parse_fusion("1-2-3", puzzle)               # Format automatisch erkennen
-to_piles(list(c(1,2), c(3,4)))              # Zu PILES konvertieren
+to_piles(list(c(1,2), c(3,4)))              # In PILES konvertieren
 validate_piles_syntax("1-2(-3)-4")          # Syntax validieren
 ```
 
 ## Validierung
 
-- [ ] `validate_piles_syntax()` gibt TRUE fuer gueltige Strings zurueck
+- [ ] `validate_piles_syntax()` gibt TRUE fuer gueltige Zeichenketten zurueck
 - [ ] `parse_piles()` gibt korrekte Gruppenlisten zurueck
-- [ ] Roundtrip-Serialisierung bewahrt Gruppen
-- [ ] Schluesselwoerter loesen mit Puzzlekontext korrekt auf
+- [ ] Round-Trip-Serialisierung bewahrt die Gruppen
+- [ ] Schluesselwoerter loesen korrekt mit Puzzle-Kontext auf
 - [ ] Ungueltige Syntax erzeugt klare Fehlermeldungen
 
-## Haeufige Fehler
+## Haeufige Stolperfallen
 
-- **Schluesselwort ohne Puzzlekontext**: Schluesselwoerter wie `"center"` erfordern ein Puzzle-Ergebnisobjekt. An `parse_fusion()` uebergeben, nicht an `parse_piles()`.
-- **1-indizierte Teile**: Teile-IDs beginnen bei 1, nicht bei 0.
-- **Benachbarte vs. nicht-benachbarte Fusion**: Die Fusion nicht-benachbarter Teile funktioniert, kann aber unerwartete visuelle Ergebnisse erzeugen. Adjazenz wenn moeglich validieren.
+- **Schluesselwort ohne Puzzle-Kontext**: Schluesselwoerter wie `"center"` benoetigen ein Puzzle-Ergebnisobjekt. Es an `parse_fusion()` uebergeben, nicht an `parse_piles()`.
+- **1-indizierte Teile**: Teil-IDs beginnen bei 1, nicht bei 0.
+- **Benachbarte vs. nicht benachbarte Fusion**: Nicht benachbarte Teile zu fusionieren funktioniert, kann aber unerwartete visuelle Ergebnisse erzeugen. Adjazenz validieren wenn moeglich.
 - **Bereichsnotation**: `"1:6"` schliesst beide Endpunkte ein (1, 2, 3, 4, 5, 6).
 
 ## Verwandte Skills
 
-- `generate-puzzle` -- Puzzles mit Fusionsgruppen generieren
-- `add-puzzle-type` -- Neue Typen benoetigen PILES/Fusions-Unterstuetzung
-- `run-puzzle-tests` -- PILES-Parsing mit der vollstaendigen Suite testen
+- `generate-puzzle` — Puzzles mit Fusionsgruppen generieren
+- `add-puzzle-type` — neue Typen brauchen PILES/Fusions-Unterstuetzung
+- `run-puzzle-tests` — PILES-Parsing mit der vollstaendigen Suite testen

@@ -1,12 +1,14 @@
 ---
 name: forecast-operational-metrics
 description: >
-  Forecast infrastructure and application metrics using Prophet or statsmodels for capacity
-  planning, cost optimization, and proactive scaling. Visualize predictions in Grafana and
-  set up alerts for projected resource exhaustion. Use when forecasting infrastructure
-  capacity needs for CPU, memory, or disk, planning hardware procurement for next quarter,
-  predicting cost trends to optimize cloud spending, or setting up proactive scaling policies
-  based on predicted load.
+  Infrastruktur- und Anwendungsmetriken mit Prophet oder statsmodels fuer
+  Kapazitaetsplanung, Kostenoptimierung und proaktive Skalierung prognostizieren.
+  Vorhersagen in Grafana visualisieren und Alarme fuer prognostizierte
+  Ressourcenerschoepfung einrichten. Verwenden beim Prognostizieren von
+  Infrastruktur-Kapazitaetsbedarf fuer CPU, Speicher oder Festplatte, beim
+  Planen von Hardware-Beschaffung fuer das naechste Quartal, beim Vorhersagen
+  von Kostentrends zur Optimierung von Cloud-Ausgaben oder beim Einrichten
+  proaktiver Skalierungsrichtlinien basierend auf vorhergesagter Last.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,34 +27,34 @@ metadata:
 
 # Betriebsmetriken prognostizieren
 
-Predict future resource usage and system metrics for capacity planning and cost optimization.
+Zukuenftige Ressourcennutzung und Systemmetriken fuer Kapazitaetsplanung und Kostenoptimierung vorhersagen.
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> Siehe [Erweiterte Beispiele](references/EXAMPLES.md) fuer vollstaendige Konfigurationsdateien und Vorlagen.
 
-## When to Use
+## Wann verwenden
 
-- Need to forecast infrastructure capacity needs (CPU, memory, disk, network)
-- Planning hardware/cloud resource procurement for next quarter
-- Want to predict cost trends and optimize cloud spending
-- Need to set up proactive scaling policies based on predicted load
-- Forecasting user traffic for event planning
-- Predicting database storage growth for backup planning
-- Estimating API usage for rate limiting configuration
+- Infrastruktur-Kapazitaetsbedarf prognostizieren (CPU, Speicher, Festplatte, Netzwerk)
+- Hardware-/Cloud-Ressourcenbeschaffung fuer das naechste Quartal planen
+- Kostentrends vorhersagen und Cloud-Ausgaben optimieren
+- Proaktive Skalierungsrichtlinien basierend auf vorhergesagter Last einrichten
+- Benutzerverkehr fuer Veranstaltungsplanung prognostizieren
+- Datenbank-Speicherwachstum fuer Backup-Planung vorhersagen
+- API-Nutzung fuer Rate-Limiting-Konfiguration schaetzen
 
-## Inputs
+## Eingaben
 
-- **Required**: Historical time series metrics (3-12 months minimum)
-- **Required**: Metric type (CPU, memory, requests/sec, costs, etc.)
-- **Required**: Forecast horizon (days, weeks, or months ahead)
-- **Optional**: Known future events (deployments, marketing campaigns, holidays)
-- **Optional**: Seasonality information (daily, weekly, yearly patterns)
-- **Optional**: External regressors (e.g., marketing spend, user signups)
+- **Erforderlich**: Historische Zeitreihenmetriken (mindestens 3-12 Monate)
+- **Erforderlich**: Metriktyp (CPU, Speicher, Anfragen/Sek., Kosten usw.)
+- **Erforderlich**: Prognosehorizont (Tage, Wochen oder Monate voraus)
+- **Optional**: Bekannte zukuenftige Ereignisse (Deployments, Marketing-Kampagnen, Feiertage)
+- **Optional**: Saisonalitaetsinformationen (taegliche, woechentliche, jaehrliche Muster)
+- **Optional**: Externe Regressoren (z.B. Marketing-Ausgaben, Benutzeranmeldungen)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Set Up Environment and Load Data
+### Schritt 1: Umgebung einrichten und Daten laden
 
-Install forecasting libraries and prepare time series data.
+Prognosebibliotheken installieren und Zeitreihendaten vorbereiten.
 
 ```bash
 # Create virtual environment
@@ -66,7 +68,7 @@ pip install prometheus-api-client influxdb-client
 pip install grafana-api
 ```
 
-Load and prepare data with MetricsLoader:
+Daten mit MetricsLoader laden und vorbereiten:
 
 ```python
 # forecasting/data_loader.py (abbreviated)
@@ -91,15 +93,15 @@ df = loader.load_from_prometheus(
 df_daily = loader.resample_and_aggregate(df, freq="1D")
 ```
 
-See [EXAMPLES.md Step 1](references/EXAMPLES.md#step-1-data-loading--complete-metricsloader-class) for the complete MetricsLoader implementation.
+Siehe [EXAMPLES.md Schritt 1](references/EXAMPLES.md#step-1-data-loading--complete-metricsloader-class) fuer die vollstaendige MetricsLoader-Implementierung.
 
-**Expected:** Time series data loaded with regular intervals, missing values filled, ready for forecasting.
+**Erwartet:** Zeitreihendaten mit regelmaessigen Intervallen geladen, fehlende Werte gefuellt, bereit fuer Prognose.
 
-**On failure:** If data gaps exist, use forward-fill or interpolation, ensure lookback period has sufficient data (90+ days recommended), verify timestamp timezone consistency, check for outliers (>5 sigma) that may skew forecasts.
+**Bei Fehler:** Bei Datenluecken Forward-Fill oder Interpolation verwenden, sicherstellen dass der Rueckblickzeitraum ausreichend Daten hat (90+ Tage empfohlen), Zeitstempel-Zeitzonenkonsistenz verifizieren, auf Ausreisser (>5 Sigma) pruefen die Prognosen verzerren koennten.
 
-### Step 2: Implement Prophet Forecasting
+### Schritt 2: Prophet-Prognose implementieren
 
-Use Facebook Prophet for automatic seasonality detection and forecasting.
+Facebook Prophet fuer automatische Saisonalitaetserkennung und Prognose verwenden.
 
 ```python
 # forecasting/prophet_forecaster.py (abbreviated)
@@ -129,15 +131,15 @@ forecast = forecaster.forecast(periods=30, freq="D")
 forecaster.plot_forecast(forecast, save_path="results/cpu_forecast.png")
 ```
 
-See [EXAMPLES.md Step 2](references/EXAMPLES.md#step-2-prophet-forecasting--complete-prophetforecaster-class) for the complete ProphetForecaster implementation.
+Siehe [EXAMPLES.md Schritt 2](references/EXAMPLES.md#step-2-prophet-forecasting--complete-prophetforecaster-class) fuer die vollstaendige ProphetForecaster-Implementierung.
 
-**Expected:** Forecast generated for 30+ days ahead with confidence intervals, seasonal patterns captured in components plot, cross-validation MAPE < 15%.
+**Erwartet:** Prognose fuer 30+ Tage voraus mit Konfidenzintervallen generiert, saisonale Muster im Komponentendiagramm erfasst, Kreuzvalidierungs-MAPE < 15%.
 
-**On failure:** If forecast looks unrealistic, try different growth model (linear vs logistic), if seasonality missing adjust seasonality_mode, if accuracy poor (<70% MAPE) add more historical data or external regressors, check for data quality issues.
+**Bei Fehler:** Wenn die Prognose unrealistisch aussieht, ein anderes Wachstumsmodell versuchen (linear vs. logistisch); wenn Saisonalitaet fehlt, seasonality_mode anpassen; wenn die Genauigkeit schlecht ist (<70% MAPE), mehr historische Daten oder externe Regressoren hinzufuegen; auf Datenqualitaetsprobleme pruefen.
 
-### Step 3: Implement ARIMA/SARIMAX Forecasting (Alternative)
+### Schritt 3: ARIMA/SARIMAX-Prognose implementieren (Alternative)
 
-Use statsmodels for traditional time series forecasting.
+statsmodels fuer traditionelle Zeitreihenprognose verwenden.
 
 ```python
 # forecasting/arima_forecaster.py (abbreviated)
@@ -166,15 +168,15 @@ forecaster.fit(df_hourly)
 forecast = forecaster.forecast(steps=168)  # 7 days
 ```
 
-See [EXAMPLES.md Step 3](references/EXAMPLES.md#step-3-arima-forecasting--complete-arimaforecaster-class) for the complete ARIMAForecaster implementation and auto_arima function.
+Siehe [EXAMPLES.md Schritt 3](references/EXAMPLES.md#step-3-arima-forecasting--complete-arimaforecaster-class) fuer die vollstaendige ARIMAForecaster-Implementierung und auto_arima-Funktion.
 
-**Expected:** ARIMA model fitted with optimal parameters, forecast generated with confidence intervals, diagnostic plots show white noise residuals.
+**Erwartet:** ARIMA-Modell mit optimalen Parametern angepasst, Prognose mit Konfidenzintervallen generiert, Diagnosediagramme zeigen weisses Rauschen in den Residuen.
 
-**On failure:** If model doesn't converge, simplify parameters (reduce p, q, P, Q), if forecast has wrong trend check differencing order (d, D), if residuals not white noise add more AR/MA terms, ensure series length >2x seasonal period.
+**Bei Fehler:** Wenn das Modell nicht konvergiert, Parameter vereinfachen (p, q, P, Q reduzieren); wenn die Prognose einen falschen Trend hat, Differenzierungsordnung pruefen (d, D); wenn Residuen kein weisses Rauschen sind, mehr AR/MA-Terme hinzufuegen; sicherstellen dass Reihenlaenge >2x saisonaler Periode ist.
 
-### Step 4: Identify Capacity Thresholds and Alerts
+### Schritt 4: Kapazitaetsschwellen und Alarme identifizieren
 
-Analyze forecast to predict when resources will be exhausted.
+Prognose analysieren, um vorherzusagen, wann Ressourcen erschoepft sein werden.
 
 ```python
 # forecasting/capacity_planning.py (abbreviated)
@@ -202,15 +204,15 @@ print(f"Exhaustion Date: {report['exhaustion_date']}")
 recommendation = planner.recommend_scaling_action(report)
 ```
 
-See [EXAMPLES.md Step 4](references/EXAMPLES.md#step-4-capacity-planning--complete-capacityplanner-class) for the complete CapacityPlanner implementation.
+Siehe [EXAMPLES.md Schritt 4](references/EXAMPLES.md#step-4-capacity-planning--complete-capacityplanner-class) fuer die vollstaendige CapacityPlanner-Implementierung.
 
-**Expected:** Report shows when capacity limits will be reached, recommendations provided with urgency levels, growth rates calculated.
+**Erwartet:** Bericht zeigt, wann Kapazitaetsgrenzen erreicht werden, Empfehlungen mit Dringlichkeitsstufen bereitgestellt, Wachstumsraten berechnet.
 
-**On failure:** If exhaustion date unrealistic, verify capacity_limit is correct, if growth rate too high check for outliers in historical data, consider non-linear growth models for mature systems.
+**Bei Fehler:** Wenn das Erschoepfungsdatum unrealistisch ist, capacity_limit auf Richtigkeit pruefen; wenn die Wachstumsrate zu hoch ist, auf Ausreisser in historischen Daten pruefen; nichtlineare Wachstumsmodelle fuer ausgereifte Systeme in Betracht ziehen.
 
-### Step 5: Visualize Forecasts in Grafana
+### Schritt 5: Prognosen in Grafana visualisieren
 
-Push forecast data to Grafana for real-time monitoring.
+Prognosedaten fuer Echtzeit-Monitoring an Grafana uebertragen.
 
 ```python
 # forecasting/grafana_integration.py (abbreviated)
@@ -245,15 +247,15 @@ grafana.create_capacity_alert_annotation(report)
 export_forecast_to_csv(forecast, "grafana/forecasts/cpu_forecast.csv")
 ```
 
-See [EXAMPLES.md Step 5](references/EXAMPLES.md#step-5-grafana-integration--complete-grafanaforecaster-class) for the complete GrafanaForecaster implementation.
+Siehe [EXAMPLES.md Schritt 5](references/EXAMPLES.md#step-5-grafana-integration--complete-grafanaforecaster-class) fuer die vollstaendige GrafanaForecaster-Implementierung.
 
-**Expected:** Forecast annotations appear in Grafana dashboards, capacity warnings visible as vertical markers, forecast data accessible via CSV datasource.
+**Erwartet:** Prognoseannotationen erscheinen in Grafana-Dashboards, Kapazitaetswarnungen als vertikale Markierungen sichtbar, Prognosedaten ueber CSV-Datenquelle zugaenglich.
 
-**On failure:** Verify Grafana API key has correct permissions, check dashboard UID is correct, ensure timestamps in milliseconds for annotations, test API with curl before integrating.
+**Bei Fehler:** Grafana-API-Schluessel auf korrekte Berechtigungen verifizieren, Dashboard-UID auf Richtigkeit pruefen, sicherstellen dass Zeitstempel in Millisekunden fuer Annotationen vorliegen, API vor Integration mit curl testen.
 
-### Step 6: Automate Forecast Generation
+### Schritt 6: Prognosegenerierung automatisieren
 
-Set up scheduled jobs to generate forecasts regularly.
+Geplante Jobs einrichten, um regelmaessig Prognosen zu generieren.
 
 ```python
 # forecasting/scheduler.py (abbreviated)
@@ -292,36 +294,36 @@ while True:
     time.sleep(60)
 ```
 
-See [EXAMPLES.md Step 6](references/EXAMPLES.md#step-6-automation-scheduler--complete-implementation) for the complete scheduler implementation.
+Siehe [EXAMPLES.md Schritt 6](references/EXAMPLES.md#step-6-automation-scheduler--complete-implementation) fuer die vollstaendige Scheduler-Implementierung.
 
-**Expected:** Forecasts generated daily for all metrics, capacity reports logged, CSV files exported for Grafana, alerts sent for critical capacity warnings.
+**Erwartet:** Prognosen werden taeglich fuer alle Metriken generiert, Kapazitaetsberichte protokolliert, CSV-Dateien fuer Grafana exportiert, Alarme fuer kritische Kapazitaetswarnungen gesendet.
 
-**On failure:** Verify scheduler process runs continuously (use systemd/supervisor), check Prometheus connectivity, ensure sufficient disk space for forecast exports, implement retry logic for transient failures, set up monitoring for scheduler itself.
+**Bei Fehler:** Verifizieren dass der Scheduler-Prozess kontinuierlich laeuft (systemd/supervisor verwenden), Prometheus-Konnektivitaet pruefen, ausreichend Festplattenspeicher fuer Prognose-Exporte sicherstellen, Wiederholungslogik fuer voruebergehende Fehler implementieren, Monitoring fuer den Scheduler selbst einrichten.
 
-## Validation
+## Validierung
 
-- [ ] Historical data loaded with 90+ days of continuous metrics
-- [ ] Prophet forecast captures daily/weekly seasonality in components plot
-- [ ] Forecast confidence intervals contain 85-95% of actual values in validation
-- [ ] Capacity exhaustion dates calculated correctly for known scenarios
-- [ ] ARIMA model residuals appear as white noise in diagnostic plots
-- [ ] Grafana annotations appear at predicted warning/exhaustion dates
-- [ ] Automated forecasting runs daily without manual intervention
-- [ ] Forecast accuracy (MAPE) < 15% on validation set
+- [ ] Historische Daten mit 90+ Tagen kontinuierlicher Metriken geladen
+- [ ] Prophet-Prognose erfasst taegliche/woechentliche Saisonalitaet im Komponentendiagramm
+- [ ] Prognose-Konfidenzintervalle enthalten 85-95% der tatsaechlichen Werte in der Validierung
+- [ ] Kapazitaetserschoepfungsdaten fuer bekannte Szenarien korrekt berechnet
+- [ ] ARIMA-Modellresiduen erscheinen als weisses Rauschen in Diagnosediagrammen
+- [ ] Grafana-Annotationen erscheinen an prognostizierten Warn-/Erschoepfungsdaten
+- [ ] Automatisierte Prognose laeuft taeglich ohne manuellen Eingriff
+- [ ] Prognosegenauigkeit (MAPE) < 15% auf Validierungsdatensatz
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Insufficient historical data**: Need 3-12 months for reliable seasonality detection; avoid forecasting with <60 days
-- **Ignoring known events**: Holidays, deployments, marketing campaigns skew forecasts; add as external regressors or holidays
-- **Overconfidence in long-term forecasts**: Accuracy degrades beyond 30-90 days; use as directional guidance, not exact predictions
-- **Static capacity limits**: Infrastructure changes over time; update capacity_limit when adding resources
-- **Forecasting anomalies**: Outliers in training data propagate to forecast; clean data or use robust methods
-- **Not updating models**: Forecasts stale after system changes; retrain weekly or after significant architecture changes
-- **Ignoring confidence intervals**: Point forecasts misleading; always use lower/upper bounds for planning
-- **Wrong seasonality period**: Daily for hourly data, weekly for daily data; mismatch causes poor forecasts
+- **Unzureichende historische Daten**: 3-12 Monate fuer zuverlaessige Saisonalitaetserkennung benoetigt; Prognose mit <60 Tagen vermeiden
+- **Bekannte Ereignisse ignorieren**: Feiertage, Deployments, Marketing-Kampagnen verzerren Prognosen; als externe Regressoren oder Feiertage hinzufuegen
+- **Uebermaessiges Vertrauen in Langzeitprognosen**: Genauigkeit verschlechtert sich jenseits von 30-90 Tagen; als Richtungshinweis verwenden, nicht als exakte Vorhersagen
+- **Statische Kapazitaetsgrenzen**: Infrastruktur aendert sich im Laufe der Zeit; capacity_limit bei Ressourcenerweiterung aktualisieren
+- **Anomalien prognostizieren**: Ausreisser in Trainingsdaten pflanzen sich in die Prognose fort; Daten bereinigen oder robuste Methoden verwenden
+- **Modelle nicht aktualisieren**: Prognosen veralten nach Systemaenderungen; woechentlich oder nach signifikanten Architekturaenderungen neu trainieren
+- **Konfidenzintervalle ignorieren**: Punktprognosen sind irrefuehrend; immer untere/obere Grenzen fuer die Planung verwenden
+- **Falsche Saisonalitaetsperiode**: Taeglich fuer stuendliche Daten, woechentlich fuer taegliche Daten; Nichtubereinstimmung verursacht schlechte Prognosen
 
-## Related Skills
+## Verwandte Skills
 
-- `detect-anomalies-aiops` - Anomaly detection complements forecasting for proactive monitoring
-- `plan-capacity` - Infrastructure capacity planning workflows
-- `build-grafana-dashboards` - Visualize forecasts and capacity trends
+- `detect-anomalies-aiops` — Anomalieerkennung ergaenzt Prognose fuer proaktives Monitoring
+- `plan-capacity` — Infrastruktur-Kapazitaetsplanungs-Workflows
+- `build-grafana-dashboards` — Prognosen und Kapazitaetstrends visualisieren

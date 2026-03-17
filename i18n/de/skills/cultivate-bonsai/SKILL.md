@@ -1,13 +1,15 @@
 ---
 name: cultivate-bonsai
 description: >
-  Cultivate bonsai trees from species selection through long-term seasonal care.
-  Covers species suitability, structural and maintenance pruning, wiring technique,
-  repotting protocol, soil mix preparation, seasonal care schedules, and
-  contemplative sitting practice. Use when selecting a species for a first or next
-  bonsai, performing structural or maintenance pruning, repotting when roots are
-  circling or growth has stalled, wiring branches for shaping, developing a
-  seasonal care calendar, or building a contemplative practice with a living tree.
+  Bonsai-Baeume von der Artenauswahl bis zur langfristigen saisonalen Pflege
+  kultivieren. Umfasst Arteneignung, Struktur- und Erhaltungsschnitt,
+  Drahttechnik, Umtopfprotokoll, Substratmischungsvorbereitung, saisonale
+  Pflegeplaene und kontemplative Sitzpraxis. Verwenden beim Auswaehlen einer
+  Art fuer einen ersten oder naechsten Bonsai, beim Durchfuehren von Struktur-
+  oder Erhaltungsschnitt, beim Umtopfen wenn Wurzeln kreisen oder das Wachstum
+  stagniert, beim Drahten von Aesten zur Formgebung, beim Entwickeln eines
+  saisonalen Pflegekalenders oder beim Aufbauen einer kontemplativen Praxis
+  mit einem lebenden Baum.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,30 +28,30 @@ metadata:
 
 # Bonsai kultivieren
 
-Cultivate and maintain bonsai trees through seasonal care, structural shaping, and contemplative practice.
+Bonsai-Baeume durch saisonale Pflege, strukturelle Formgebung und kontemplative Praxis kultivieren und pflegen.
 
-## When to Use
+## Wann verwenden
 
-- You are selecting a species for your first or next bonsai
-- You need to prune (maintenance or structural) a bonsai tree
-- Your bonsai needs repotting (roots circling, soil depleted, or growth stalled)
-- You want to wire branches for shaping
-- You need a seasonal care calendar for an existing bonsai collection
-- You want to develop a contemplative sitting practice with a living tree
+- Sie waehlen eine Art fuer Ihren ersten oder naechsten Bonsai aus
+- Sie muessen einen Bonsai-Baum schneiden (Erhaltungs- oder Strukturschnitt)
+- Ihr Bonsai muss umgetopft werden (Wurzeln kreisen, Substrat erschoepft oder Wachstum stagniert)
+- Sie moechten Aeste zur Formgebung drahten
+- Sie benoetigen einen saisonalen Pflegekalender fuer eine bestehende Bonsai-Sammlung
+- Sie moechten eine kontemplative Sitzpraxis mit einem lebenden Baum entwickeln
 
-## Inputs
+## Eingaben
 
-- **Required**: Species of tree (or climate zone for species selection guidance)
-- **Optional**: Current state of tree (age estimate, pot size, health, last repotting date)
-- **Optional**: Goal style (formal upright, informal upright, cascade, semi-cascade, literati, windswept, forest)
-- **Optional**: Season and current weather conditions
-- **Optional**: Experience level (beginner, intermediate, advanced)
+- **Erforderlich**: Baumart (oder Klimazone fuer Artenauswahlberatung)
+- **Optional**: Aktueller Zustand des Baumes (geschaetztes Alter, Schalengroesse, Gesundheit, letztes Umtopfdatum)
+- **Optional**: Zielstil (streng aufrecht, frei aufrecht, Kaskade, Halbkaskade, Literati, windgepeitscht, Wald)
+- **Optional**: Jahreszeit und aktuelle Wetterbedingungen
+- **Optional**: Erfahrungsstufe (Anfaenger, Fortgeschrittener, Experte)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Select or Assess the Species
+### Schritt 1: Art auswaehlen oder bewerten
 
-Match species to climate, experience level, and desired aesthetic.
+Art mit Klima, Erfahrungsstufe und gewuenschter Aesthetik abgleichen.
 
 ```
 Beginner-Friendly Species by Climate:
@@ -79,13 +81,13 @@ Selection Criteria:
 4. Available as nursery stock (don't start from seed — too slow for learning)
 ```
 
-**Expected:** Species selected that matches climate, experience, and aesthetic goal.
+**Erwartet:** Art ausgewaehlt, die zu Klima, Erfahrung und aesthetischem Ziel passt.
 
-**On failure:** If unsure about species suitability, default to Chinese elm — it tolerates the widest range of conditions and forgives beginner mistakes.
+**Bei Fehler:** Bei Unsicherheit ueber die Arteneignung standardmaessig die Chinesische Ulme waehlen — sie toleriert die breiteste Palette von Bedingungen und verzeiht Anfaengerfehler.
 
-### Step 2: Meditate Checkpoint — Sitting with the Tree
+### Schritt 2: Meditate-Checkpoint — Beim Baum sitzen
 
-Before any structural work (pruning, wiring, repotting), sit with the tree.
+Vor jeder strukturellen Arbeit (Schnitt, Drahtung, Umtopfen) beim Baum sitzen.
 
 ```
 Bonsai Sitting Protocol (5-10 minutes):
@@ -102,13 +104,13 @@ Bonsai Sitting Protocol (5-10 minutes):
 If you feel rushed or impatient, you are not ready. Return tomorrow.
 ```
 
-**Expected:** Calm, unhurried state. A sense of the tree's natural movement and character.
+**Erwartet:** Ruhiger, ungehetzter Zustand. Ein Gefuehl fuer die natuerliche Bewegung und den Charakter des Baumes.
 
-**On failure:** If unable to quiet the planning mind, do not proceed to structural pruning. Maintenance watering and feeding may continue without this checkpoint.
+**Bei Fehler:** Wenn der planende Geist nicht zur Ruhe gebracht werden kann, nicht mit dem Strukturschnitt fortfahren. Erhaltungsgiessen und Duengen duerfen ohne diesen Checkpoint fortgesetzt werden.
 
-### Step 3: Pruning
+### Schritt 3: Schnitt
 
-Two types: maintenance pruning (ongoing) and structural pruning (seasonal).
+Zwei Arten: Erhaltungsschnitt (laufend) und Strukturschnitt (saisonal).
 
 ```
 Maintenance Pruning (any time during growing season):
@@ -134,13 +136,13 @@ a branch, leave it for one more season. You can always remove later;
 you cannot reattach.
 ```
 
-**Expected:** Tree with cleaner silhouette, improved light penetration, and clear trunk line.
+**Erwartet:** Baum mit klarerer Silhouette, verbesserter Lichtdurchlaessigkeit und deutlicher Stammlinie.
 
-**On failure:** If too much foliage was removed, move tree to sheltered spot with dappled light. Reduce watering slightly (less foliage = less transpiration). Do not fertilize until new growth appears.
+**Bei Fehler:** Wenn zu viel Laub entfernt wurde, den Baum an einen geschuetzten Platz mit gefiltertem Licht stellen. Bewaesserung leicht reduzieren (weniger Laub = weniger Transpiration). Nicht duengen, bis neuer Austrieb erscheint.
 
-### Step 4: Wiring
+### Schritt 4: Drahtung
 
-Shape branches by wrapping them with anodized aluminium or annealed copper wire.
+Aeste durch Umwicklung mit eloxiertem Aluminium- oder gegluehtem Kupferdraht formen.
 
 ```
 Wiring Protocol:
@@ -165,13 +167,13 @@ Common Errors:
 - Bending too fast: branch snaps at the wire point
 ```
 
-**Expected:** Branches held in desired position without bark damage. Wire will be removed in 3-6 months.
+**Erwartet:** Aeste in gewuenschter Position gehalten ohne Rindenschaeden. Draht wird in 3-6 Monaten entfernt.
 
-**On failure:** If wire bites into bark, cut it off immediately. The scar will heal over 2-3 growing seasons. Apply cut paste to deep wounds.
+**Bei Fehler:** Wenn der Draht in die Rinde einwaechst, sofort abschneiden. Die Narbe heilt ueber 2-3 Vegetationsperioden ab. Wundpaste auf tiefe Verletzungen auftragen.
 
-### Step 5: Repotting
+### Schritt 5: Umtopfen
 
-Repot when roots circle the pot interior or soil no longer drains freely.
+Umtopfen, wenn Wurzeln den Schalenrand umkreisen oder das Substrat nicht mehr frei draeniert.
 
 ```
 Repotting Protocol:
@@ -210,13 +212,13 @@ Repotting Protocol:
    - Do NOT fertilize for 4-6 weeks (new roots need to establish)
 ```
 
-**Expected:** Tree stable in pot, soil drains freely when watered, no wobble in trunk.
+**Erwartet:** Baum stabil in der Schale, Substrat draeniert frei beim Giessen, kein Wackeln am Stamm.
 
-**On failure:** If tree shows severe wilting within days of repotting, too many roots were removed. Move to shade, mist foliage daily, and apply rooting hormone to next watering. Recovery takes 4-8 weeks.
+**Bei Fehler:** Wenn der Baum innerhalb von Tagen nach dem Umtopfen starkes Welken zeigt, wurden zu viele Wurzeln entfernt. In den Schatten stellen, Laub taeglich benebeln und Bewurzelungshormon beim naechsten Giessen anwenden. Erholung dauert 4-8 Wochen.
 
-### Step 6: Heal Checkpoint — Post-Repot Assessment
+### Schritt 6: Heal-Checkpoint — Nachkontrolle nach dem Umtopfen
 
-Two weeks after repotting, assess the tree's recovery.
+Zwei Wochen nach dem Umtopfen die Erholung des Baumes beurteilen.
 
 ```
 Post-Repot Health Triage:
@@ -238,11 +240,11 @@ If 3+ indicators show stress:
 5. Reassess at 4 weeks
 ```
 
-**Expected:** Tree showing new bud activity and stable footing within 2-3 weeks.
+**Erwartet:** Baum zeigt innerhalb von 2-3 Wochen neue Knospenaktivitaet und stabilen Stand.
 
-**On failure:** If no new growth at 6 weeks and indicators remain stressed, the tree may need to be removed from the bonsai pot and placed in a larger recovery container with standard potting mix for one full growing season.
+**Bei Fehler:** Wenn nach 6 Wochen kein neues Wachstum und die Indikatoren weiterhin Stress zeigen, muss der Baum moeglicherweise aus der Bonsaischale genommen und fuer eine volle Vegetationsperiode in einen groesseren Erholungsbehaelter mit Standardsubstrat gesetzt werden.
 
-### Step 7: Seasonal Care Calendar
+### Schritt 7: Saisonaler Pflegekalender
 
 ```
 Bonsai Seasonal Calendar (Temperate Zones):
@@ -270,34 +272,34 @@ Bonsai Seasonal Calendar (Temperate Zones):
 └─────────┴──────────────────────────────────────────────────┘
 ```
 
-**Expected:** Year-round care rhythm established with seasonal transitions.
+**Erwartet:** Ganzjaehriger Pflegerhythmus mit saisonalen Uebergaengen etabliert.
 
-**On failure:** If a seasonal task was missed (e.g., spring repot), wait until next year — out-of-season repotting is more dangerous than waiting.
+**Bei Fehler:** Wenn eine saisonale Aufgabe verpasst wurde (z.B. Fruehjahrumtopfen), bis zum naechsten Jahr warten — Umtopfen ausserhalb der Saison ist gefaehrlicher als zu warten.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Species appropriate for climate zone and experience level
-- [ ] Meditate checkpoint completed before structural pruning or wiring
-- [ ] No more than 1/3 of foliage removed in any single pruning session
-- [ ] Wire gauge approximately 1/3 branch diameter, applied at 45°
-- [ ] Soil mix sifted, free-draining, appropriate for species
-- [ ] No more than 1/3 of root mass removed during repotting
-- [ ] Heal checkpoint performed 2 weeks post-repot
-- [ ] Seasonal care tasks aligned with current season
+- [ ] Art ist fuer Klimazone und Erfahrungsstufe geeignet
+- [ ] Meditate-Checkpoint vor Strukturschnitt oder Drahtung abgeschlossen
+- [ ] Nicht mehr als 1/3 des Laubes in einer einzelnen Schnittsitzung entfernt
+- [ ] Drahtstaerke ungefaehr 1/3 des Astdurchmessers, im 45°-Winkel aufgebracht
+- [ ] Substratmischung gesiebt, frei drainierend, fuer die Art geeignet
+- [ ] Nicht mehr als 1/3 der Wurzelmasse beim Umtopfen entfernt
+- [ ] Heal-Checkpoint 2 Wochen nach dem Umtopfen durchgefuehrt
+- [ ] Saisonale Pflegeaufgaben auf die aktuelle Jahreszeit abgestimmt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Over-pruning**: Removing too much foliage weakens the tree. When in doubt, leave it
-2. **Forgotten wire**: Wire left too long scars bark permanently. Set monthly reminders to check
-3. **Wrong season for repotting**: Repotting in summer or mid-winter can kill the tree
-4. **Overwatering**: More bonsai die from overwatering than underwatering. Check soil moisture before watering — not on a schedule
-5. **Impatience**: Bonsai develop over decades. A tree shaped this year may not look finished for five years. This is the practice
-6. **Indoor placement**: Most bonsai are outdoor trees. Indoor placement (except tropical species) leads to slow decline from insufficient light and dormancy disruption
+1. **Ueberschnitt**: Zu viel Laub entfernen schwaecht den Baum. Im Zweifelsfall stehen lassen
+2. **Vergessener Draht**: Zu lange belassener Draht hinterlaesst dauerhafte Rindennarben. Monatliche Erinnerungen zur Kontrolle setzen
+3. **Falsche Jahreszeit zum Umtopfen**: Umtopfen im Sommer oder Mitte des Winters kann den Baum toeten
+4. **Ueberwaesserung**: Mehr Bonsai sterben durch Ueberwaesserung als durch Unterwaesserung. Substratfeuchtigkeit vor dem Giessen pruefen — nicht nach Zeitplan
+5. **Ungeduld**: Bonsai entwickeln sich ueber Jahrzehnte. Ein heute geformter Baum sieht moeglicherweise erst in fuenf Jahren fertig aus. Das ist die Praxis
+6. **Innenraumhaltung**: Die meisten Bonsai sind Freilandbaeume. Innenraumhaltung (ausser bei tropischen Arten) fuehrt zu schleichendem Verfall durch unzureichendes Licht und gestoerte Winterruhe
 
-## Related Skills
+## Verwandte Skills
 
-- `prepare-soil` — Soil mix preparation overlaps with bonsai substrate knowledge
-- `maintain-hand-tools` — Bonsai tools (concave cutter, wire cutter, jin pliers) require the same sharpening and oiling care
-- `meditate` — Pre-work contemplative checkpoint (full protocol)
-- `heal` — Post-intervention health assessment (full protocol)
-- `plan-garden-calendar` — Seasonal timing for bonsai work aligns with the solar/lunar calendar
+- `prepare-soil` — Substratmischungsvorbereitung ueberschneidet sich mit Bonsai-Substratkenntnissen
+- `maintain-hand-tools` — Bonsai-Werkzeuge (Konkavzange, Drahtschneider, Jin-Zange) benoetigen die gleiche Schaerfungs- und Oelpflege
+- `meditate` — Kontemplativer Checkpoint vor der Arbeit (vollstaendiges Protokoll)
+- `heal` — Gesundheitsbewertung nach der Intervention (vollstaendiges Protokoll)
+- `plan-garden-calendar` — Saisonales Timing fuer Bonsai-Arbeit stimmt mit dem Solar-/Mondkalender ueberein

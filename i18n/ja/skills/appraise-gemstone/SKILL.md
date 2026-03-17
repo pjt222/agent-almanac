@@ -1,13 +1,11 @@
 ---
 name: appraise-gemstone
 description: >
-  Appraise gemstone value using the four Cs (color, clarity, cut, carat),
-  origin assessment, treatment detection, and market factor analysis.
-  Advisory educational guidance only — not a certified appraisal. Use when
-  understanding factors that determine a gemstone's value, pre-screening
-  stones before a professional appraisal, evaluating whether a seller's asking
-  price is reasonable, learning gemstone grading methodology, or understanding
-  how treatment status affects value.
+  4C（カラー、クラリティ、カット、カラット）、産地評価、処理検出、市場要因分析を
+  使用して宝石の価値を鑑定する。教育的アドバイザリーガイダンスのみ —
+  認定鑑定ではない。宝石の価値を決定する要因を理解する時、専門鑑定前の
+  事前スクリーニング、販売者の提示価格が妥当か評価する時、宝石グレーディング
+  方法論を学ぶ時、処理状態が価値に与える影響を理解する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,33 +24,33 @@ metadata:
 
 # 宝石の鑑定
 
-Appraise gemstone value using the four Cs (colour, clarity, cut, carat weight), treatment detection, origin assessment, and market factor analysis. This is educational advisory guidance only and does not constitute a certified gemological appraisal.
+4C（カラー、クラリティ、カット、カラット重量）、処理検出、産地評価、市場要因分析を使用して宝石の価値を鑑定する。これは教育的アドバイザリーガイダンスのみであり、認定宝石鑑定を構成するものではない。
 
-> **DISCLAIMER**: This procedure provides educational guidance on gemstone valuation methodology. It is NOT a certified appraisal. For insurance, estate, sale, or legal purposes, always obtain a formal appraisal from a certified gemologist (GIA Graduate Gemologist, FGA, or equivalent). Gemstone values can vary enormously based on factors that require hands-on professional assessment.
+> **免責事項**: この手順は宝石評価方法論に関する教育的ガイダンスを提供する。認定鑑定ではない。保険、遺産、売買、法的目的には、必ず認定宝石鑑定士（GIA Graduate Gemologist、FGA、または同等資格）による正式な鑑定を取得すること。宝石の価値は、実物を専門家が直接評価する必要がある要因に基づいて大きく変動する可能性がある。
 
 ## 使用タイミング
 
-- You want to understand the factors that determine a gemstone's value
-- You are pre-screening stones before paying for a professional appraisal
-- You need to evaluate whether a seller's asking price is within a reasonable range
-- You are learning gemstone grading methodology for educational purposes
-- You want to understand how treatment status affects value
+- 宝石の価値を決定する要因を理解したい時
+- 専門鑑定費用を支払う前に石を事前スクリーニングする時
+- 販売者の提示価格が妥当な範囲内か評価する必要がある時
+- 教育目的で宝石グレーディング方法論を学んでいる時
+- 処理状態が価値にどう影響するか理解したい時
 
 ## 入力
 
-- **必須**: Identified gemstone (species confirmed — see `identify-gemstone`)
-- **必須**: Access to the stone (loose preferred; mounted stones limit assessment)
-- **任意**: Carat scale (accurate to 0.01 ct)
-- **任意**: 10x loupe or gemological microscope
-- **任意**: Daylight-equivalent light source (5500-6500K)
-- **任意**: Colour grading master stones or reference images (GIA system)
-- **任意**: Refractometer and Chelsea filter (for treatment detection)
+- **必須**: 鑑定済みの宝石（種が確認済み — `identify-gemstone`を参照）
+- **必須**: 石へのアクセス（ルースが望ましい; マウント石は評価を制限する）
+- **任意**: カラットスケール（0.01 ctまでの精度）
+- **任意**: 10倍ルーペまたは宝石学顕微鏡
+- **任意**: 昼光相当光源（5500-6500K）
+- **任意**: カラーグレーディングマスターストーンまたは参考画像（GIAシステム）
+- **任意**: 屈折計およびチェルシーフィルター（処理検出用）
 
 ## 手順
 
-### ステップ1: Colour Grading
+### ステップ1: カラーグレーディング
 
-Assess the stone's colour using the three components: hue, saturation, and tone.
+石のカラーを3つの要素（色相、彩度、明度）を使用して評価する。
 
 ```
 Colour Assessment Framework:
@@ -104,20 +102,20 @@ IDEAL COLOUR RANGES (highest value):
 - Aquamarine: medium, strong blue (not greenish)
 ```
 
-1. View the stone face-up under daylight-equivalent lighting
-2. Identify the primary hue and any secondary modifiers
-3. Assess saturation — vivid and strong command the highest premiums
-4. Assess tone — medium is generally optimal; too dark or too light reduces value
-5. Compare to reference images or master stones if available
-6. Note any colour zoning visible face-up (reduces value)
+1. 昼光相当照明下でフェイスアップで石を観察する
+2. 主要色相と二次的修飾色を特定する
+3. 彩度を評価する — ビビッドとストロングが最も高いプレミアムを得る
+4. 明度を評価する — ミディアムが一般的に最適; 暗すぎるか明るすぎると価値が下がる
+5. 利用可能な場合、参考画像またはマスターストーンと比較する
+6. フェイスアップで見えるカラーゾーニングを記録する（価値を下げる）
 
-**期待結果:** A three-component colour grade (e.g., "medium vivid blue with slight violetish modifier") that positions the stone on the colour quality spectrum for its species.
+**期待結果:** 石のカラー品質スペクトラム上の位置を示す3要素カラーグレード（例: 「わずかにバイオレット修飾のある中程度ビビッドブルー」）。
 
-**失敗時:** If lighting conditions are not ideal (yellowish indoor light), note the limitation. Colour grading under incorrect lighting produces unreliable results. If colour-change is suspected (alexandrite, some sapphires, some garnets), assess under both daylight and incandescent light.
+**失敗時:** 照明条件が理想的でない場合（黄色い室内照明）、その制限を記録する。不適切な照明下でのカラーグレーディングは信頼性の低い結果を生む。カラーチェンジが疑われる場合（アレキサンドライト、一部のサファイア、一部のガーネット）、昼光と白熱灯の両方で評価する。
 
-### ステップ2: Clarity Grading
+### ステップ2: クラリティグレーディング
 
-Evaluate the stone's internal characteristics under 10x magnification.
+10倍拡大下で石の内部特徴を評価する。
 
 ```
 Coloured Gemstone Clarity Scale (GIA-based):
@@ -155,20 +153,20 @@ Different species have different "normal" clarity levels:
   → Eye-clean examples are extremely rare and valuable
 ```
 
-1. Examine the stone face-up first — does the unaided eye see any inclusions?
-2. Examine under 10x magnification, focusing through the table
-3. Note inclusion type (crystal, feather, fingerprint, silk, needle), size, location, and number
-4. Assess whether inclusions affect transparency, brilliance, or durability
-5. Assign a clarity grade based on the visibility and impact of inclusions
-6. Consider species expectations — an SI1 emerald is excellent; an SI1 aquamarine is average
+1. まずフェイスアップで石を観察する — 肉眼でインクルージョンが見えるか？
+2. 10倍拡大で観察し、テーブルを通して焦点を合わせる
+3. インクルージョンのタイプ（結晶、フェザー、フィンガープリント、シルク、ニードル）、サイズ、位置、数を記録する
+4. インクルージョンが透明度、輝き、耐久性に影響するか評価する
+5. インクルージョンの視認性と影響に基づいてクラリティグレードを付与する
+6. 種固有の期待値を考慮する — SI1のエメラルドは優秀; SI1のアクアマリンは平均的
 
-**期待結果:** A clarity grade with description of key inclusions, their location, and their impact on beauty and durability. Grade is calibrated to species-specific expectations.
+**期待結果:** 主要なインクルージョン、その位置、美しさと耐久性への影響の説明を伴うクラリティグレード。グレードは種固有の期待値に合わせて調整される。
 
-**失敗時:** If magnification is insufficient (no loupe available), perform an eye-clean/not-eye-clean assessment only. Note the limitation. If the stone is mounted and pavilion inclusions are hidden, note which areas could not be assessed.
+**失敗時:** 拡大が不十分な場合（ルーペなし）、アイクリーン/非アイクリーンの評価のみ行う。制限を記録する。石がマウントされていてパビリオンのインクルージョンが隠れている場合、評価できなかった領域を記録する。
 
-### ステップ3: Cut Quality Assessment
+### ステップ3: カット品質評価
 
-Evaluate the quality of the cut based on proportions, symmetry, and light performance.
+プロポーション、シンメトリー、光パフォーマンスに基づいてカット品質を評価する。
 
 ```
 Cut Quality Factors:
@@ -209,38 +207,38 @@ SYMMETRY AND FINISH:
 - Girdle consistency (even thickness)
 ```
 
-1. View the stone face-up and rock it gently — observe brilliance, windowing, and extinction
-2. Check proportions: table size, crown height, pavilion depth
-3. Assess symmetry: outline shape, facet alignment, meet precision
-4. Evaluate surface polish: scratches, polish lines, orange peel under 10x
-5. Check girdle: even thickness, not too thin (chipping risk) or too thick (dead weight)
-6. Rate the cut from Excellent to Poor
+1. フェイスアップで石を見て、ゆっくり揺らす — 輝き、ウインドウイング、エクスティンクションを観察する
+2. プロポーションを確認する: テーブルサイズ、クラウンハイト、パビリオンデプス
+3. シンメトリーを評価する: アウトラインの形状、ファセットの整列、ミートの精度
+4. 10倍拡大で表面研磨を評価する: 傷、ポリッシュライン、オレンジピール
+5. ガードルを確認する: 均一な厚さ、薄すぎ（チッピングリスク）や厚すぎ（デッドウェイト）でないか
+6. カットをExcellentからPoorまで評価する
 
-**期待結果:** A cut quality assessment covering proportions, light performance, symmetry, and surface finish. The cut grade significantly affects value — a well-cut stone of moderate quality can outperform a poorly-cut stone of higher colour and clarity.
+**期待結果:** プロポーション、光パフォーマンス、シンメトリー、表面仕上げをカバーするカット品質評価。カットグレードは価値に大きく影響する — 中程度の品質の石でも良いカットなら、より高いカラーとクラリティの悪いカットの石を上回ることがある。
 
-**失敗時:** If the stone is mounted and proportions cannot be fully measured, assess what is visible (face-up light performance, symmetry, polish) and note that proportions could not be verified. Mounted stones always have assessment limitations.
+**失敗時:** 石がマウントされていてプロポーションを完全に測定できない場合、見える部分（フェイスアップの光パフォーマンス、シンメトリー、研磨）を評価し、プロポーションが確認できなかったことを記録する。マウント石には常に評価の制限がある。
 
-### ステップ4: Carat Weight and Measurements
+### ステップ4: カラット重量と寸法
 
-Record the stone's weight and dimensions.
+石の重量と寸法を記録する。
 
-1. Weigh the stone on a carat scale (1 carat = 0.2 grams)
-2. Record weight to two decimal places (e.g., 2.37 ct)
-3. Measure dimensions: length x width x depth in millimetres
-4. For mounted stones, estimate weight from dimensions using species-specific formulas:
-   - Round: diameter^2 x depth x SG factor
-   - Oval: length x width x depth x SG factor x 0.0020
-5. Note that per-carat value increases at commercially significant weight thresholds:
+1. カラットスケールで石を計量する（1カラット = 0.2グラム）
+2. 小数点以下2桁まで重量を記録する（例: 2.37 ct）
+3. 寸法を測定する: 長さ x 幅 x 深さ（ミリメートル）
+4. マウント石の場合、種固有の公式を使用して寸法から重量を推定する:
+   - ラウンド: 直径^2 x 深さ x SG係数
+   - オーバル: 長さ x 幅 x 深さ x SG係数 x 0.0020
+5. カラットあたりの価値は商業的に重要な重量閾値で増加することに注意:
    - 0.50 ct, 1.00 ct, 2.00 ct, 3.00 ct, 5.00 ct, 10.00 ct
-   - A 1.02 ct stone commands a premium over a 0.98 ct stone of equal quality
+   - 1.02 ctの石は同品質の0.98 ctの石よりプレミアムが付く
 
-**期待結果:** Accurate carat weight (to 0.01 ct) and millimetre dimensions. For mounted stones, a weight estimate with stated margin of error.
+**期待結果:** 正確なカラット重量（0.01 ctまで）とミリメートル寸法。マウント石の場合、誤差範囲を明示した重量推定値。
 
-**失敗時:** If no carat scale is available, measure dimensions and estimate weight using standard formulas. Note that the weight is estimated. For valuable stones, always verify weight on a calibrated scale.
+**失敗時:** カラットスケールがない場合、寸法を測定し標準公式で重量を推定する。重量は推定値であることを記録する。高価な石の場合、必ず校正済みスケールで重量を検証する。
 
-### ステップ5: Treatment Detection
+### ステップ5: 処理検出
 
-Assess whether the stone has been treated to enhance its appearance.
+石の外観を向上させるための処理が行われたか評価する。
 
 ```
 Common Gemstone Treatments:
@@ -282,19 +280,19 @@ TREATMENT IMPACT ON VALUE:
 - Requires disclosure at point of sale in all jurisdictions
 ```
 
-1. Examine inclusions for signs of heat treatment (dissolved silk, stress halos)
-2. Use fibre-optic light to check for fracture filling (flash effect)
-3. Check for surface coatings by examining edges and scratches
-4. For high-value stones, note that laboratory certification is essential for treatment status
-5. Record treatment assessment: untreated, heated, filled, coated, diffused, or unknown
+1. 加熱処理の兆候がないかインクルージョンを調べる（溶解シルク、応力ハロー）
+2. ファイバーオプティックライトを使用してフラクチャーフィリングを確認する（フラッシュ効果）
+3. 端やスクラッチを調べて表面コーティングを確認する
+4. 高価な石の場合、処理状態の権威ある判定にはラボ認定が不可欠であることを記録する
+5. 処理評価を記録する: 無処理、加熱、充填、コーティング、拡散、または不明
 
-**期待結果:** A treatment assessment with supporting observations. For stones above $500, recommend laboratory certification (GIA, GRS, SSEF, Gubelin) for authoritative treatment determination.
+**期待結果:** 裏付けとなる観察を伴う処理評価。$500以上の石の場合、権威ある処理判定のためにラボ認定（GIA、GRS、SSEF、Gubelin）を推奨する。
 
-**失敗時:** Many treatments (especially mild heat treatment and some irradiation) cannot be detected without laboratory instruments (FTIR spectroscopy, UV-Vis, Raman). If treatment status is uncertain, record "unknown — laboratory testing recommended" rather than guessing.
+**失敗時:** 多くの処理（特に軽度の加熱処理と一部の照射）はラボ機器（FTIRスペクトロスコピー、UV-Vis、ラマン）なしでは検出できない。処理状態が不確かな場合、推測するのではなく「不明 — ラボ検査推奨」と記録する。
 
-### ステップ6: Market Factor Analysis
+### ステップ6: 市場要因分析
 
-Consider external factors that affect market value beyond the four Cs.
+4Cを超えて市場価値に影響する外部要因を考慮する。
 
 ```
 Market Factors:
@@ -327,37 +325,37 @@ Market Factors:
 +-------------------+------------------------------------------+
 ```
 
-1. Research the stone's likely origin if known or certifiable
-2. Consider the species' current market position (trending up, stable, declining)
-3. Assess whether laboratory certification would add value (generally yes for stones >1 ct and >$500)
-4. Note any provenance or historical significance
-5. Compile the complete assessment into a value range (not a single price point)
+1. 既知または認定可能な場合、石の産地を調査する
+2. その種の現在の市場ポジションを考慮する（上昇傾向、安定、下降傾向）
+3. ラボ認定が価値を加えるか評価する（一般的に1 ct超かつ$500超の石ではイエス）
+4. 来歴や歴史的重要性を記録する
+5. 完全な評価を価値範囲（単一の価格ポイントではなく）にまとめる
 
-**期待結果:** A contextualised value range that accounts for the four Cs, treatment status, origin, and market factors. Expressed as a range with stated assumptions.
+**期待結果:** 4C、処理状態、産地、市場要因を考慮した文脈化された価値範囲。前提条件を明示した範囲として表現される。
 
-**失敗時:** Gemstone pricing requires market expertise that evolves continuously. If market data is unavailable, provide the quality assessment (four Cs + treatment) without a price estimate and recommend consultation with a dealer or certified appraiser.
+**失敗時:** 宝石価格設定には継続的に進化する市場専門知識が必要。市場データが利用できない場合、価格推定なしで品質評価（4C + 処理）を提供し、ディーラーまたは認定鑑定士への相談を推奨する。
 
 ## バリデーション
 
-- [ ] Species positively identified before appraisal began
-- [ ] Colour assessed under daylight-equivalent lighting with hue, saturation, and tone
-- [ ] Clarity graded under 10x magnification with inclusion inventory
-- [ ] Cut quality evaluated for proportions, light performance, symmetry, and finish
-- [ ] Carat weight measured (or estimated with stated margin)
-- [ ] Treatment status assessed with supporting observations
-- [ ] Market factors considered (origin, rarity, certification value)
-- [ ] Value expressed as a range, not a single number
-- [ ] Disclaimer included: this is educational guidance, not a certified appraisal
+- [ ] 鑑定開始前に種が確実に特定された
+- [ ] 昼光相当照明下で色相、彩度、明度によるカラー評価が行われた
+- [ ] 10倍拡大下でインクルージョンインベントリを伴うクラリティグレーディングが行われた
+- [ ] プロポーション、光パフォーマンス、シンメトリー、仕上げについてカット品質が評価された
+- [ ] カラット重量が測定された（または誤差範囲を明示して推定された）
+- [ ] 裏付けとなる観察を伴う処理状態の評価が行われた
+- [ ] 市場要因が考慮された（産地、希少性、認定価値）
+- [ ] 価値が単一の数値ではなく範囲として表現された
+- [ ] 免責事項が含まれている: これは教育的ガイダンスであり、認定鑑定ではない
 
 ## よくある落とし穴
 
-- **Omitting the disclaimer**: This procedure provides educational guidance only. Formal appraisals for insurance, sale, or legal purposes require a certified gemologist. Always state this clearly
-- **Grading colour under incorrect lighting**: Fluorescent, incandescent, and LED lights all shift colour perception. Use daylight-equivalent (5500-6500K) or natural north-facing daylight
-- **Ignoring species-specific clarity expectations**: An SI1 emerald is a fine stone; an SI1 aquamarine is below average. Clarity must be graded relative to what is normal for the species
-- **Overvaluing carat weight**: A large, poorly-cut, included stone is worth less per carat than a smaller, well-cut, clean stone. The four Cs interact — weight alone does not determine value
-- **Assuming untreated without evidence**: The majority of rubies and sapphires on the market are heat-treated. Assume treatment unless laboratory certification confirms otherwise
+- **免責事項の省略**: この手順は教育的ガイダンスのみを提供する。保険、売買、法的目的の正式な鑑定には認定宝石鑑定士が必要。常にこれを明確に述べる
+- **不適切な照明下でのカラーグレーディング**: 蛍光灯、白熱灯、LED照明はすべてカラー知覚をシフトさせる。昼光相当（5500-6500K）または自然の北向き昼光を使用する
+- **種固有のクラリティ期待値の無視**: SI1のエメラルドは素晴らしい石; SI1のアクアマリンは平均以下。クラリティはその種にとって正常な基準に対して相対的にグレーディングしなければならない
+- **カラット重量の過大評価**: 大きくてもカットが悪く、インクルージョンのある石は、小さくてもカットが良く、クリーンな石よりカラットあたりの価値が低い。4Cは相互作用する — 重量だけでは価値は決まらない
+- **証拠なく無処理と仮定する**: 市場のルビーとサファイアの大部分は加熱処理されている。ラボ認定が確認しない限り、処理済みと仮定する
 
 ## 関連スキル
 
-- `identify-gemstone` — Positive species identification is the prerequisite for appraisal; misidentification invalidates the entire assessment
-- `grade-tcg-card` — The observation-first, bias-prevention methodology parallels the discipline needed to avoid "wishful grading" in gemstone appraisal
+- `identify-gemstone` — 確実な種の特定が鑑定の前提条件; 誤同定は評価全体を無効にする
+- `grade-tcg-card` — 観察優先、バイアス防止の方法論は、宝石鑑定における「希望的グレーディング」を避けるために必要な規律と並行する

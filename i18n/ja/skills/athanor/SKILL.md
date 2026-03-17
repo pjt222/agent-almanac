@@ -1,14 +1,13 @@
 ---
 name: athanor
 description: >
-  Four-stage alchemical code transmutation — nigredo (decomposition), albedo
-  (purification), citrinitas (illumination), rubedo (synthesis) — with meditate
-  and heal checkpoints between stages. Transforms tangled or legacy code into
-  optimized, well-structured output through systematic material analysis. Use
-  when transforming legacy code into modern equivalents, refactoring deeply
-  tangled modules where incremental fixes keep failing, converting a codebase
-  between paradigms, or when simpler refactoring approaches have stalled and a
-  full-cycle transformation is needed.
+  四段階の錬金術的コード変容 — ニグレド（分解）、アルベド（浄化）、キトリニタス
+  （照明）、ルベド（合成） — 段階間にmeditateとhealチェックポイントを含む。
+  体系的な素材分析を通じて、絡み合ったりレガシーなコードを最適化された
+  構造の良い出力に変換する。レガシーコードを現代的な同等物に変換する時、
+  段階的修正が失敗し続ける深く絡み合ったモジュールをリファクタリングする時、
+  パラダイム間でコードベースを変換する時、より単純なリファクタリングアプローチが
+  行き詰まって完全なサイクル変換が必要な時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -27,182 +26,182 @@ metadata:
 
 # アタノール
 
-Execute a four-stage alchemical transmutation of code or data — decomposing the prima materia, purifying its essence, illuminating its target form, and synthesizing the refined output. The athanor is the furnace that maintains steady heat across all stages.
+コードまたはデータの四段階錬金術的変容を実行する — プリマ・マテリアを分解し、その本質を浄化し、目標形態を照明し、精製された出力を合成する。アタノールはすべての段階にわたって安定した熱を維持する炉である。
 
 ## 使用タイミング
 
-- Transforming legacy code into modern, well-structured equivalents
-- Refactoring deeply tangled modules where incremental fixes keep failing
-- Converting a codebase from one paradigm to another (procedural to functional, monolith to modular)
-- Processing raw, messy data into clean analytical datasets
-- When simpler refactoring approaches have stalled and a full-cycle transformation is needed
+- レガシーコードを現代的で構造の良い同等物に変換する時
+- 段階的修正が失敗し続ける深く絡み合ったモジュールをリファクタリングする時
+- コードベースをあるパラダイムから別のパラダイムに変換する時（手続き型から関数型、モノリスからモジュラー）
+- 生の乱雑なデータをクリーンな分析データセットに処理する時
+- より単純なリファクタリングアプローチが行き詰まって完全なサイクル変換が必要な時
 
 ## 入力
 
-- **必須**: The material to transform (file paths, module names, or data sources)
-- **必須**: The desired end state (target architecture, paradigm, or format)
-- **任意**: Known constraints (must preserve API, can't change database schema, etc.)
-- **任意**: Prior failed transformation attempts and why they stalled
+- **必須**: 変換する素材（ファイルパス、モジュール名、またはデータソース）
+- **必須**: 望ましい最終状態（目標アーキテクチャ、パラダイム、またはフォーマット）
+- **任意**: 既知の制約（APIを保持しなければならない、データベーススキーマを変更できないなど）
+- **任意**: 過去の失敗した変換試みとそれが行き詰まった理由
 
 ## 手順
 
-### ステップ1: Nigredo — Decomposition
+### ステップ1: ニグレド — 分解
 
-Break the prima materia into its constituent elements. Nothing is sacred; everything is cataloged.
+プリマ・マテリアを構成要素に分解する。神聖なものは何もない; すべてがカタログ化される。
 
-1. Inventory the material completely:
-   - List every function, class, module, or data entity
-   - Map all dependencies (imports, calls, data flows)
-   - Identify hidden coupling (shared globals, implicit state, side effects)
-2. Surface hidden assumptions:
-   - What undocumented behaviors does the code rely on?
-   - What error conditions are silently swallowed?
-   - What ordering dependencies exist?
-3. Catalog anti-patterns and technical debt:
-   - God objects, circular dependencies, copy-paste duplication
-   - Dead code paths, unreachable branches, vestigial features
-   - Hardcoded values, magic numbers, embedded configuration
-4. Produce the **Nigredo Inventory**: a structured catalog of every element, dependency, assumption, and anti-pattern
+1. 素材を完全にインベントリする:
+   - すべての関数、クラス、モジュール、データエンティティをリストする
+   - すべての依存関係をマッピングする（インポート、呼び出し、データフロー）
+   - 隠れた結合を特定する（共有グローバル、暗黙の状態、副作用）
+2. 隠れた前提を表面化する:
+   - コードが依存する文書化されていない動作は何か？
+   - どのエラー条件が暗黙のうちに飲み込まれているか？
+   - どの順序依存が存在するか？
+3. アンチパターンと技術的負債をカタログ化する:
+   - 神オブジェクト、循環依存、コピー&ペーストの重複
+   - デッドコードパス、到達不能ブランチ、残存機能
+   - ハードコードされた値、マジックナンバー、埋め込み設定
+4. **ニグレドインベントリ**を作成する: すべての要素、依存関係、前提、アンチパターンの構造化されたカタログ
 
-**期待結果:** A complete, unflinching inventory of the material. The inventory should feel uncomfortable — if it doesn't, the decomposition isn't thorough enough. Every hidden assumption is now explicit.
+**期待結果:** 素材の完全で容赦ないインベントリ。インベントリは不快に感じるべき — そうでなければ分解が十分に徹底されていない。すべての隠れた前提が明示的になっている。
 
-**失敗時:** If the material is too large to inventory fully, decompose by module boundary and treat each module as a separate athanor run. If dependencies are too tangled to map, use `grep`/`Grep` to trace actual call sites rather than relying on documentation.
+**失敗時:** 素材が大きすぎて完全にインベントリできない場合、モジュール境界で分解し、各モジュールを別々のアタノール実行として扱う。依存関係が絡み合いすぎてマッピングできない場合、ドキュメントに頼るのではなく`grep`/`Grep`で実際の呼び出しサイトを追跡する。
 
-### ステップ2: Meditate — Calcination Checkpoint
+### ステップ2: メディテート — 焼成チェックポイント
 
-Run the `meditate` skill to clear assumptions accumulated during nigredo.
+ニグレド中に蓄積された前提をクリアするために`meditate`スキルを実行する。
 
-1. Set aside the nigredo inventory and clear mental context
-2. Anchor on the transformation goal stated in Inputs
-3. Observe what biases nigredo introduced — did the decomposition make certain approaches seem inevitable?
-4. Label any premature solution ideas as "tangent" and return to the goal
+1. ニグレドインベントリを脇に置き、精神的コンテキストをクリアする
+2. 入力で述べた変換目標にアンカーする
+3. ニグレドがどのようなバイアスを導入したか観察する — 分解が特定のアプローチを不可避に見せたか？
+4. 早すぎるソリューションのアイデアを「タンジェント」とラベル付けし、目標に戻る
 
-**期待結果:** A clear, unbiased state ready to evaluate the material without being anchored to its current form. The goal feels fresh rather than constrained by what was found.
+**期待結果:** 素材を現在の形態に固定されずに評価する準備ができた、クリアで偏りのない状態。目標は現在の形態に制約されるのではなく、新鮮に感じられる。
 
-**失敗時:** If the nigredo findings keep pulling attention (a particularly bad anti-pattern, a clever hack that's tempting to preserve), write it down and explicitly set it aside. Proceed only when the goal is clearer than the current form.
+**失敗時:** ニグレドの発見が注意を引き続ける場合（特にひどいアンチパターン、保持したくなる巧妙なハック）、書き留めて明示的に脇に置く。目標が現在の形態よりも明確になった時のみ進む。
 
-### ステップ3: Albedo — Purification
+### ステップ3: アルベド — 浄化
 
-Separate the essential from the accidental. Strip away everything that doesn't serve the target form.
+本質的なものと偶発的なものを分離する。目標形態に寄与しないものをすべて取り除く。
 
-1. From the nigredo inventory, classify each element:
-   - **Essential**: Core business logic, irreplaceable algorithms, critical data transformations
-   - **Accidental**: Framework boilerplate, workarounds for old bugs, compatibility shims
-   - **Toxic**: Anti-patterns, security vulnerabilities, dead code
-2. Extract the essential elements into isolation:
-   - Pull core logic out of framework wrappers
-   - Separate data transformation from I/O
-   - Extract interfaces from implementations
-3. Remove toxic elements entirely — document what was removed and why
-4. For accidental elements, determine if equivalents exist in the target form
-5. Produce the **Albedo Extract**: purified essential logic with clean interfaces
+1. ニグレドインベントリから各要素を分類する:
+   - **本質的**: コアビジネスロジック、置き換え不可能なアルゴリズム、重要なデータ変換
+   - **偶発的**: フレームワークのボイラープレート、古いバグへの回避策、互換性シム
+   - **有毒**: アンチパターン、セキュリティ脆弱性、デッドコード
+2. 本質的な要素を分離して抽出する:
+   - フレームワークラッパーからコアロジックを引き出す
+   - データ変換をI/Oから分離する
+   - 実装からインターフェースを抽出する
+3. 有毒な要素を完全に削除する — 削除したものとその理由を文書化する
+4. 偶発的な要素について、目標形態に同等物が存在するか判定する
+5. **アルベドエキストラクト**を作成する: クリーンなインターフェースを持つ浄化された本質的ロジック
 
-**期待結果:** A set of pure, isolated functions/modules that represent the core value of the original material. Each piece is testable in isolation. The extract is significantly smaller than the original.
+**期待結果:** 元の素材のコア価値を表す純粋で分離された関数/モジュールのセット。各ピースは分離してテスト可能。エキストラクトはオリジナルよりも大幅に小さい。
 
-**失敗時:** If essential and accidental are too intertwined to separate, introduce seam points (interfaces) first. If the material resists purification, it may need `dissolve-form` before the athanor can continue.
+**失敗時:** 本質的なものと偶発的なものが絡み合いすぎて分離できない場合、まずシームポイント（インターフェース）を導入する。素材が浄化に抵抗する場合、アタノールを続行する前に`dissolve-form`が必要かもしれない。
 
-### ステップ4: Heal — Purification Assessment
+### ステップ4: ヒール — 浄化評価
 
-Run the `heal` skill to assess whether the purification was thorough.
+浄化が十分であったか評価するために`heal`スキルを実行する。
 
-1. Triage the albedo extract: is anything still carrying toxic residue?
-2. Check for drift: has the purification drifted from the original transformation goal?
-3. Assess completeness: are all essential elements accounted for, or were some discarded prematurely?
-4. Rebalance if needed: restore any essential elements that were incorrectly classified as accidental
+1. アルベドエキストラクトをトリアージする: 有毒な残留物がまだ残っているものはないか？
+2. ドリフトを確認する: 浄化が元の変換目標からドリフトしていないか？
+3. 完全性を評価する: すべての本質的要素が考慮されているか、早すぎる段階で廃棄されたものはないか？
+4. 必要に応じてリバランスする: 偶発的と誤って分類された本質的要素を復元する
 
-**期待結果:** Confidence that the albedo extract is complete, clean, and ready for illumination. No essential logic was lost; no toxic patterns remain.
+**期待結果:** アルベドエキストラクトが完全でクリーンで、照明の準備ができているという確信。本質的なロジックは失われておらず、有毒なパターンは残っていない。
 
-**失敗時:** If the assessment reveals significant gaps, return to Step 3 with the specific gaps identified. Do not proceed to citrinitas with incomplete material.
+**失敗時:** 評価で重大なギャップが明らかになった場合、特定されたギャップとともにステップ3に戻る。不完全な素材でキトリニタスに進まない。
 
-### ステップ5: Citrinitas — Illumination
+### ステップ5: キトリニタス — 照明
 
-See the target form. Map the purified elements to their optimal structure.
+目標形態を見る。浄化された要素を最適な構造にマッピングする。
 
-1. Pattern recognition: identify which design patterns serve the purified elements
-   - Does the data flow suggest pipes/filters, event sourcing, CQRS?
-   - Do the interfaces suggest strategy, adapter, facade?
-   - Does the module structure suggest hexagonal, layered, micro-kernel?
-2. Design the target architecture:
-   - Map each essential element to its new location
-   - Define the interfaces between components
-   - Specify the data flow through the new structure
-3. Identify what must be created new (has no equivalent in the original):
-   - New abstractions that unify duplicated logic
-   - New interfaces that replace implicit coupling
-   - New error handling that replaces silent failures
-4. Produce the **Citrinitas Blueprint**: a complete mapping from albedo extract to target form
+1. パターン認識: 浄化された要素に適したデザインパターンを特定する
+   - データフローはパイプ/フィルター、イベントソーシング、CQRSを示唆するか？
+   - インターフェースはストラテジー、アダプター、ファサードを示唆するか？
+   - モジュール構造はヘキサゴナル、レイヤード、マイクロカーネルを示唆するか？
+2. 目標アーキテクチャを設計する:
+   - 各本質的要素を新しい場所にマッピングする
+   - コンポーネント間のインターフェースを定義する
+   - 新しい構造を通じたデータフローを指定する
+3. 新たに作成する必要があるもの（オリジナルに同等物がないもの）を特定する:
+   - 重複ロジックを統一する新しい抽象化
+   - 暗黙の結合を置き換える新しいインターフェース
+   - サイレントな失敗を置き換える新しいエラーハンドリング
+4. **キトリニタスブループリント**を作成する: アルベドエキストラクトから目標形態への完全なマッピング
 
-**期待結果:** A clear, detailed blueprint where every essential element has a home and every interface is defined. The blueprint should feel inevitable — given the purified elements, this structure is the natural fit.
+**期待結果:** すべての本質的要素に居場所があり、すべてのインターフェースが定義された明確で詳細なブループリント。ブループリントは必然的に感じるべき — 浄化された要素を前提として、この構造が自然にフィットする。
 
-**失敗時:** If multiple valid architectures compete, evaluate each against the constraints from Inputs. If no clear winner emerges, prefer the simplest option and document the alternatives as future options.
+**失敗時:** 複数の有効なアーキテクチャが競合する場合、入力の制約に対して各アーキテクチャを評価する。明確な勝者が現れない場合、最もシンプルなオプションを選択し、代替案を将来のオプションとして文書化する。
 
-### ステップ6: Meditate — Pre-Synthesis Checkpoint
+### ステップ6: メディテート — 合成前チェックポイント
 
-Run the `meditate` skill to prepare for the final synthesis.
+最終合成の準備のために`meditate`スキルを実行する。
 
-1. Clear the analytical context from citrinitas
-2. Anchor on the citrinitas blueprint as the synthesis guide
-3. Observe any anxiety about the transformation — is anything being rushed?
-4. Confirm readiness: the blueprint is clear, the material is purified, the constraints are known
+1. キトリニタスの分析的コンテキストをクリアする
+2. 合成ガイドとしてキトリニタスブループリントにアンカーする
+3. 変革についての不安を観察する — 何かが急がされていないか？
+4. 準備完了を確認する: ブループリントは明確で、素材は浄化され、制約は既知
 
-**期待結果:** Calm clarity about what needs to be built. The synthesis phase should be execution, not design.
+**期待結果:** 何を構築する必要があるかについての穏やかな明晰さ。合成フェーズは設計ではなく実行であるべき。
 
-**失敗時:** If doubt persists about the blueprint, revisit Step 5 with the specific concerns. Better to refine the blueprint than to begin synthesis with uncertainty.
+**失敗時:** ブループリントへの疑念が残る場合、具体的な懸念とともにステップ5を再訪する。不確実性を伴って合成を開始するよりも、ブループリントを洗練する方が良い。
 
-### ステップ7: Rubedo — Synthesis
+### ステップ7: ルベド — 合成
 
-Compose the purified elements into their target form. The philosopher's stone: working, optimized code.
+浄化された要素を目標形態に構成する。賢者の石: 動作する最適化されたコード。
 
-1. Build the new structure following the citrinitas blueprint:
-   - Create files, modules, and interfaces as specified
-   - Migrate each essential element to its new location
-   - Implement new abstractions and interfaces
-2. Wire the components together:
-   - Connect data flows as designed
-   - Implement error propagation through new paths
-   - Configure dependency injection or module loading
-3. Verify the synthesis:
-   - Does each component work in isolation? (unit tests)
-   - Do the components compose correctly? (integration tests)
-   - Does the full system produce the same outputs as the original? (regression tests)
-4. Remove scaffolding:
-   - Delete temporary compatibility shims
-   - Remove migration aids
-   - Clean up any remaining references to the old structure
-5. Produce the **Rubedo Output**: the transmuted code, fully functional in its new form
+1. キトリニタスブループリントに従って新しい構造を構築する:
+   - 指定されたファイル、モジュール、インターフェースを作成する
+   - 各本質的要素を新しい場所に移行する
+   - 新しい抽象化とインターフェースを実装する
+2. コンポーネントを接続する:
+   - 設計通りにデータフローを接続する
+   - 新しいパスを通じたエラー伝播を実装する
+   - 依存性注入またはモジュールローディングを設定する
+3. 合成を検証する:
+   - 各コンポーネントは分離して動作するか？（ユニットテスト）
+   - コンポーネントは正しく構成されるか？（統合テスト）
+   - 完全なシステムはオリジナルと同じ出力を生成するか？（回帰テスト）
+4. スキャフォールディングを削除する:
+   - 一時的な互換性シムを削除する
+   - 移行補助を削除する
+   - 古い構造への残りの参照をクリーンアップする
+5. **ルベドアウトプット**を作成する: 新しい形態で完全に機能する変容されたコード
 
-**期待結果:** Working code that is measurably better than the original: fewer lines, clearer structure, better test coverage, fewer dependencies. The transformation is complete and the old form can be retired.
+**期待結果:** オリジナルより測定可能に優れた動作するコード: より少ない行数、より明確な構造、より良いテストカバレッジ、より少ない依存関係。変換が完了し、古い形態は引退できる。
 
-**失敗時:** If synthesis reveals gaps in the blueprint, do not patch — return to Step 5 (citrinitas) to revise the design. If individual components fail, isolate and fix them before attempting full integration. The rubedo must not produce a half-transformed chimera.
+**失敗時:** 合成がブループリントのギャップを明らかにした場合、パッチを当てない — ステップ5（キトリニタス）に戻って設計を修正する。個々のコンポーネントが失敗する場合、完全な統合を試みる前に分離して修正する。ルベドは半変容のキメラを生成してはならない。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Nigredo inventory is complete (all elements, dependencies, assumptions cataloged)
-- [ ] Meditate checkpoint passed between nigredo/albedo (assumptions cleared)
-- [ ] Albedo extract contains only essential elements with clean interfaces
-- [ ] Heal assessment confirms purification completeness
-- [ ] Citrinitas blueprint maps every essential element to target form
-- [ ] Meditate checkpoint passed between citrinitas/rubedo (ready for synthesis)
-- [ ] Rubedo output passes regression tests against original behavior
-- [ ] Rubedo output is measurably improved (complexity, coupling, test coverage)
-- [ ] No toxic elements survived into the final output
-- [ ] Transformation constraints from Inputs are satisfied
+- [ ] ニグレドインベントリが完了している（すべての要素、依存関係、前提がカタログ化）
+- [ ] ニグレド/アルベド間のメディテートチェックポイントに合格（前提がクリア）
+- [ ] アルベドエキストラクトがクリーンなインターフェースを持つ本質的要素のみを含む
+- [ ] ヒール評価が浄化の完全性を確認
+- [ ] キトリニタスブループリントがすべての本質的要素を目標形態にマッピング
+- [ ] キトリニタス/ルベド間のメディテートチェックポイントに合格（合成の準備完了）
+- [ ] ルベドアウトプットがオリジナルの動作に対する回帰テストに合格
+- [ ] ルベドアウトプットが測定可能に改善されている（複雑さ、結合、テストカバレッジ）
+- [ ] 有毒な要素が最終出力に生き残っていない
+- [ ] 入力からの変換制約が満たされている
 
 ## よくある落とし穴
 
-- **Skipping nigredo depth**: Rushing decomposition means hidden coupling surfaces during synthesis. Invest fully in the inventory
-- **Preserving accidental complexity**: Attachment to clever workarounds or "it works, don't touch it" code. If it's not essential, it goes
-- **Skipping meditate checkpoints**: Cognitive momentum from one stage biases the next. The pauses are structural, not optional
-- **Blueprint-less synthesis**: Starting to code before citrinitas is complete produces patchwork, not transmutation
-- **Incomplete regression testing**: The rubedo must reproduce original behavior. Untested paths will break silently
-- **Scope creep during citrinitas**: The illumination phase reveals opportunities for improvement beyond the original goal. Note them but don't pursue them — the athanor serves the stated transformation, not a hypothetical ideal
+- **ニグレドの深さのスキップ**: 分解を急ぐと、合成中に隠れた結合が表面化する。インベントリに十分に投資する
+- **偶発的な複雑さの保持**: 巧妙な回避策や「動いているから触れない」コードへの執着。本質的でなければ除去する
+- **メディテートチェックポイントのスキップ**: ある段階からの認知的慣性が次の段階にバイアスをかける。一時停止は構造的であり、任意ではない
+- **ブループリントなしの合成**: キトリニタスが完了する前にコーディングを開始すると、変容ではなくパッチワークが生まれる
+- **不完全な回帰テスト**: ルベドはオリジナルの動作を再現しなければならない。テストされていないパスはサイレントに壊れる
+- **キトリニタス中のスコープクリープ**: 照明フェーズは元の目標を超える改善の機会を明らかにする。記録するが追求しない — アタノールは仮説的な理想ではなく、述べられた変換に奉仕する
 
 ## 関連スキル
 
-- `transmute` — Lighter-weight transformation for single functions or small modules
-- `chrysopoeia` — Value extraction and optimization (turning base code into gold)
-- `meditate` — Meta-cognitive clearing used as stage-gate checkpoints
-- `heal` — Subsystem assessment used for purification validation
-- `dissolve-form` — When material is too rigid for the athanor, dissolve first
-- `adapt-architecture` — Complementary approach for system-level migration patterns
-- `review-software-architecture` — Post-synthesis architecture review
+- `transmute` — 単一関数や小さなモジュールの軽量な変換
+- `chrysopoeia` — 価値の抽出と最適化（ベースコードをゴールドに変える）
+- `meditate` — ステージゲートチェックポイントとして使用されるメタ認知クリアリング
+- `heal` — 浄化検証に使用されるサブシステム評価
+- `dissolve-form` — 素材がアタノールには剛性すぎる場合、まず溶解する
+- `adapt-architecture` — システムレベルの移行パターンのための補完的アプローチ
+- `review-software-architecture` — 合成後のアーキテクチャレビュー

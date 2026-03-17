@@ -1,14 +1,15 @@
 ---
 name: curate-collection
 description: >
-  Build and maintain a library collection through acquisitions, weeding
-  (deaccessioning), collection assessment, reader advisory, and interlibrary
-  loan coordination. Covers selection criteria, collection development policies,
-  the CREW/MUSTIE method for weeding, usage analysis, and responsive collection
-  management. Use when building a new collection with a defined scope and budget,
-  assessing an existing collection for gaps or outdated materials, when shelves
-  are overcrowded and systematic weeding is needed, or when establishing a formal
-  collection development policy.
+  Eine Bibliothekssammlung durch Erwerbungen, Aussonderung (Deakzession),
+  Bestandsbewertung, Leserberatung und Fernleihe-Koordination aufbauen und
+  pflegen. Umfasst Auswahlkriterien, Bestandsentwicklungsrichtlinien, die
+  CREW/MUSTIE-Methode zur Aussonderung, Nutzungsanalyse und responsive
+  Bestandsverwaltung. Verwenden beim Aufbau einer neuen Sammlung mit
+  definiertem Umfang und Budget, bei der Bewertung einer bestehenden Sammlung
+  auf Luecken oder veraltete Materialien, wenn Regale ueberfuellt sind und
+  systematische Aussonderung benoetigt wird, oder beim Erstellen einer
+  formalen Bestandsentwicklungsrichtlinie.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -27,29 +28,29 @@ metadata:
 
 # Sammlung kuratieren
 
-Build, assess, and maintain a library collection through strategic acquisitions, systematic weeding, usage analysis, and responsive reader advisory.
+Eine Bibliothekssammlung durch strategische Erwerbungen, systematische Aussonderung, Nutzungsanalyse und responsive Leserberatung aufbauen, bewerten und pflegen.
 
-## When to Use
+## Wann verwenden
 
-- You are building a new collection with a defined scope and budget
-- An existing collection needs assessment for gaps, redundancies, or outdated materials
-- Shelves are overcrowded and systematic weeding is needed
-- Users request materials the collection does not hold
-- You want to establish a formal collection development policy
+- Sie bauen eine neue Sammlung mit definiertem Umfang und Budget auf
+- Eine bestehende Sammlung muss auf Luecken, Redundanzen oder veraltete Materialien bewertet werden
+- Regale sind ueberfuellt und systematische Aussonderung ist erforderlich
+- Nutzer fragen Materialien an, die die Sammlung nicht enthaelt
+- Sie moechten eine formale Bestandsentwicklungsrichtlinie erstellen
 
-## Inputs
+## Eingaben
 
-- **Required**: Collection scope (subject areas, audience, formats)
-- **Required**: Budget (annual acquisitions budget or one-time allocation)
-- **Optional**: Usage data (circulation statistics, hold requests, ILL requests)
-- **Optional**: Community or institutional profile (demographics, curriculum, research areas)
-- **Optional**: Existing collection development policy
+- **Erforderlich**: Sammlungsumfang (Fachgebiete, Zielgruppe, Formate)
+- **Erforderlich**: Budget (jaehrliches Erwerbungsbudget oder einmalige Zuweisung)
+- **Optional**: Nutzungsdaten (Ausleihstatistiken, Vormerkungen, Fernleihanfragen)
+- **Optional**: Gemeinde- oder Institutionsprofil (Demografie, Lehrplan, Forschungsbereiche)
+- **Optional**: Bestehende Bestandsentwicklungsrichtlinie
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Define the Collection Development Policy
+### Schritt 1: Bestandsentwicklungsrichtlinie definieren
 
-Establish the guiding document for all acquisition and weeding decisions.
+Das Leitdokument fuer alle Erwerbungs- und Aussonderungsentscheidungen erstellen.
 
 ```
 Collection Development Policy Template:
@@ -91,13 +92,13 @@ Collection Development Policy Template:
    - Policy reviewed and updated every 3 years
 ```
 
-**Expected:** A written policy that guides consistent, defensible acquisition and weeding decisions.
+**Erwartet:** Eine schriftliche Richtlinie, die konsistente, nachvollziehbare Erwerbungs- und Aussonderungsentscheidungen leitet.
 
-**On failure:** If a formal policy seems excessive for a small collection, write a one-page scope statement covering mission, subjects collected, and basic selection criteria. Even a brief statement prevents drift.
+**Bei Fehler:** Wenn eine formale Richtlinie fuer eine kleine Sammlung uebertrieben erscheint, eine einseitige Umfangsbeschreibung verfassen, die Auftrag, gesammelte Fachgebiete und grundlegende Auswahlkriterien abdeckt. Selbst eine kurze Erklaerung verhindert Abdriften.
 
-### Step 2: Assess the Existing Collection
+### Schritt 2: Bestehende Sammlung bewerten
 
-Understand what you have before deciding what to add or remove.
+Verstehen, was vorhanden ist, bevor entschieden wird, was hinzugefuegt oder entfernt werden soll.
 
 ```
 Collection Assessment Methods:
@@ -137,13 +138,13 @@ Mark each cell as: Strong, Adequate, Weak, or Not Collected.
 This visual map reveals gaps and overlaps at a glance.
 ```
 
-**Expected:** A clear picture of the collection's strengths, weaknesses, gaps, and deadweight, supported by data.
+**Erwartet:** Ein klares Bild der Staerken, Schwaechen, Luecken und des toten Bestands der Sammlung, gestuetzt auf Daten.
 
-**On failure:** If circulation data is unavailable (no automated system), use shelf observation: dusty, tightly packed books that haven't moved indicate low use. In-library use can be estimated by counting items left on tables rather than reshelved.
+**Bei Fehler:** Wenn Ausleihdaten nicht verfuegbar sind (kein automatisiertes System), Regalbeobachtung nutzen: verstaubte, dicht gepackte Buecher, die sich nicht bewegt haben, deuten auf geringe Nutzung hin. Praesenznutzung kann geschaetzt werden, indem auf Tischen liegen gelassene statt zurueckgestellte Medien gezaehlt werden.
 
-### Step 3: Acquire Materials Strategically
+### Schritt 3: Materialien strategisch erwerben
 
-Select and purchase materials that fill gaps and serve user needs.
+Materialien auswaehlen und beschaffen, die Luecken fuellen und Nutzerbedarf decken.
 
 ```
 Acquisition Workflow:
@@ -186,13 +187,13 @@ Budget Allocation Rule of Thumb:
 - 5%: reserve for urgent or unexpected needs
 ```
 
-**Expected:** New acquisitions systematically fill identified gaps and respond to user demand, within budget.
+**Erwartet:** Neue Erwerbungen fuellen systematisch identifizierte Luecken und reagieren auf Nutzernachfrage, im Rahmen des Budgets.
 
-**On failure:** If budget is severely constrained, prioritize user requests (proven demand) over speculative purchases. Supplement with ILL for low-demand subjects rather than buying materials that may not circulate.
+**Bei Fehler:** Wenn das Budget stark begrenzt ist, Nutzeranfragen (nachgewiesene Nachfrage) gegenueber spekulativen Kaeufen priorisieren. Fuer Fachgebiete mit geringer Nachfrage durch Fernleihe ergaenzen, anstatt Materialien zu kaufen, die moeglicherweise nicht ausgeliehen werden.
 
-### Step 4: Weed the Collection (Deaccessioning)
+### Schritt 4: Sammlung aussondern (Deakzession)
 
-Remove materials that no longer serve the collection's mission.
+Materialien entfernen, die dem Sammlungsauftrag nicht mehr dienen.
 
 ```
 CREW Method / MUSTIE Criteria:
@@ -236,13 +237,13 @@ Never discard items with local historical significance
 without institutional review.
 ```
 
-**Expected:** Collection is regularly weeded, with clear documentation of withdrawn items and disposition. The remaining collection is current, relevant, and in good condition.
+**Erwartet:** Sammlung wird regelmaessig ausgesondert, mit klarer Dokumentation der ausgesonderten Medien und ihrer Verwendung. Die verbleibende Sammlung ist aktuell, relevant und in gutem Zustand.
 
-**On failure:** If weeding feels emotionally difficult (it does for many librarians), remember: keeping a misleading medical text is more harmful than removing it. Weeding is an act of care for the user, not disrespect for the book.
+**Bei Fehler:** Wenn Aussonderung emotional schwerfaellt (was bei vielen Bibliothekaren der Fall ist), bedenken: Ein irreguehrendes medizinisches Fachbuch zu behalten ist schaedlicher als es zu entfernen. Aussonderung ist ein Akt der Fuersorge fuer den Nutzer, nicht Respektlosigkeit gegenueber dem Buch.
 
-### Step 5: Provide Reader Advisory and Reference
+### Schritt 5: Leserberatung und Auskunft bereitstellen
 
-Connect users with materials that meet their needs.
+Nutzer mit Materialien verbinden, die ihren Beduerfnissen entsprechen.
 
 ```
 Reader Advisory Framework:
@@ -274,30 +275,30 @@ Reader Advisory Framework:
    - Display new acquisitions prominently — users notice responsiveness
 ```
 
-**Expected:** Users find what they need, either in the collection or through ILL, and their feedback shapes future acquisitions.
+**Erwartet:** Nutzer finden, was sie brauchen, entweder in der Sammlung oder ueber Fernleihe, und ihr Feedback praegt kuenftige Erwerbungen.
 
-**On failure:** If ILL is not available (no library network), explore open access sources, digital libraries (HathiTrust, Internet Archive, Project Gutenberg), and reciprocal borrowing agreements with nearby libraries.
+**Bei Fehler:** Wenn Fernleihe nicht verfuegbar ist (kein Bibliotheksverbund), Open-Access-Quellen, digitale Bibliotheken (HathiTrust, Internet Archive, Project Gutenberg) und gegenseitige Leihvereinbarungen mit nahegelegenen Bibliotheken erkunden.
 
-## Validation
+## Validierung
 
-- [ ] Collection development policy written and approved
-- [ ] Collection assessment completed with quantitative and qualitative data
-- [ ] Gaps identified and prioritized for acquisition
-- [ ] Budget allocated across subject areas and need categories
-- [ ] Acquisition workflow established with review sources and vendor relationships
-- [ ] Weeding cycle scheduled (annual) with CREW/MUSTIE criteria
-- [ ] User feedback loop in place (requests, ILL data, search logs)
+- [ ] Bestandsentwicklungsrichtlinie verfasst und genehmigt
+- [ ] Bestandsbewertung mit quantitativen und qualitativen Daten abgeschlossen
+- [ ] Luecken identifiziert und fuer die Erwerbung priorisiert
+- [ ] Budget auf Fachgebiete und Bedarfskategorien verteilt
+- [ ] Erwerbungsworkflow mit Rezensionsquellen und Lieferantenbeziehungen etabliert
+- [ ] Aussonderungszyklus geplant (jaehrlich) mit CREW/MUSTIE-Kriterien
+- [ ] Nutzer-Feedbackschleife eingerichtet (Anfragen, Fernleihdaten, Suchlogs)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Collecting without a policy**: Without a scope statement, collections grow by accumulation rather than intention. Everything gets added, nothing gets removed, and the collection becomes a warehouse
-- **Fear of weeding**: Keeping everything "just in case" buries useful materials under deadweight. A smaller, curated collection serves users better than a large, undifferentiated one
-- **Ignoring usage data**: Buying based on professional judgment alone misses what users actually need. Let circulation and ILL data drive at least 30% of acquisition decisions
-- **No budget for replacement**: New acquisitions get all the budget, and worn-out popular items never get replaced. Reserve 10-15% for replacements
-- **Neglecting format diversity**: Not all users read print. Audiobooks, ebooks, and accessible formats serve users who can't or prefer not to read print
+- **Sammeln ohne Richtlinie**: Ohne Umfangsbeschreibung wachsen Sammlungen durch Anhaeufen statt durch Absicht. Alles wird hinzugefuegt, nichts entfernt, und die Sammlung wird zum Lager
+- **Angst vor dem Aussondern**: Alles "fuer alle Faelle" aufzubewahren vergraebt nuetzliche Materialien unter totem Bestand. Eine kleinere, kuratierte Sammlung dient den Nutzern besser als eine grosse, undifferenzierte
+- **Nutzungsdaten ignorieren**: Nur aufgrund fachlicher Einschaetzung einzukaufen verfehlt, was Nutzer tatsaechlich brauchen. Ausleih- und Fernleihdaten sollten mindestens 30% der Erwerbungsentscheidungen bestimmen
+- **Kein Budget fuer Ersatz**: Neuerwerbungen erhalten das gesamte Budget, und abgenutzte populaere Medien werden nie ersetzt. 10-15% fuer Ersatzbeschaffung reservieren
+- **Formatvielfalt vernachlaessigen**: Nicht alle Nutzer lesen gedruckt. Hoerbuecher, E-Books und barrierefreie Formate dienen Nutzern, die nicht drucken koennen oder es vorziehen, nicht zu lesen
 
-## Related Skills
+## Verwandte Skills
 
-- `catalog-collection` — Newly acquired materials need cataloging; withdrawn items need record deletion
-- `preserve-materials` — Condition assessment during weeding identifies items needing preservation
-- `review-research` — Evaluating information quality parallels evaluating materials for selection
+- `catalog-collection` — Neu erworbene Materialien muessen katalogisiert werden; ausgesonderte Medien benoetigen Datensatzloeschung
+- `preserve-materials` — Zustandsbewertung waehrend der Aussonderung identifiziert konservierungsbeduerftige Medien
+- `review-research` — Die Bewertung von Informationsqualitaet entspricht der Bewertung von Materialien fuer die Auswahl

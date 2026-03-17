@@ -2,11 +2,11 @@
 name: scaffold-mcp-server
 description: >
   Scaffold a new MCP server from tool specifications using the official SDK
-  (TypeScript or Python), including transport configuration, tool handlers,
-  and test harness. Use when you have a tool specification and need a working
+  (TypeScript or Python), einschliesslich transport configuration, tool handlers,
+  and test harness. Verwenden wenn you have a tool specification and need a working
   server, when starting a new MCP server project and want correct structure
   from the start, when migrating an existing tool integration to the MCP
-  protocol, or when prototyping a tool surface to test with Claude Code before
+  protocol, or when prototyping a tool surface to test with Claude Code vor
   full implementation.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
@@ -26,50 +26,50 @@ metadata:
 
 # MCP-Server aufsetzen
 
-Generate a complete, runnable MCP server project from a tool specification document, using the official MCP SDK for TypeScript or Python.
+Generieren a complete, runnable MCP server project from a tool specification document, using the official MCP SDK for TypeScript or Python.
 
-## When to Use
+## Wann verwenden
 
-- You have a tool specification (from `analyze-codebase-for-mcp` or written manually) and need a working server
+- You have a tool specification (from `analyze-codebase-for-mcp` or written manuell) and need a working server
 - Starting a new MCP server project and want correct structure from the start
 - Migrating an existing tool integration to the MCP protocol
-- Prototyping a tool surface to test with Claude Code before full implementation
-- Need both the server scaffold and a test harness for CI
+- Prototyping a tool surface to test with Claude Code vor full implementation
+- Need both der Server scaffold and a test harness for CI
 
-## Inputs
+## Eingaben
 
-- **Required**: Tool specification document (YAML or JSON with tool names, parameters, return types)
-- **Required**: Target language (`typescript` or `python`)
-- **Required**: Transport type (`stdio` or `sse`)
+- **Erforderlich**: Tool specification document (YAML or JSON with tool names, parameters, return types)
+- **Erforderlich**: Target language (`typescript` or `python`)
+- **Erforderlich**: Transport type (`stdio` or `sse`)
 - **Optional**: Output directory (default: current directory)
 - **Optional**: Package name and version
 - **Optional**: Authentication method (`none`, `bearer-token`, `api-key`)
 - **Optional**: Docker packaging (`true` or `false`, default: `false`)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Select SDK Language and Transport
+### Schritt 1: Auswaehlen SDK Language and Transport
 
-1.1. Choose the implementation language based on project context:
+1.1. Waehlen the implementation language basierend auf project context:
    - **TypeScript**: Best for Node.js ecosystems, web-adjacent tools, JSON-heavy workloads
    - **Python**: Best for data science, ML, and scientific computing tool surfaces
 
-1.2. Choose the transport mechanism:
-   - **stdio**: Default for local tool execution. Claude Code launches the server as a subprocess.
+1.2. Waehlen the transport mechanism:
+   - **stdio**: Default for local tool execution. Claude Code launches der Server as a subprocess.
    - **SSE (Server-Sent Events)**: For remote/shared servers. Requires HTTP hosting.
 
-1.3. Determine authentication requirements:
+1.3. Bestimmen Authentifizierung requirements:
    - **none**: Local stdio servers (process-level trust)
    - **bearer-token**: Remote SSE servers with static tokens
    - **api-key**: Remote servers with per-client keys
 
-**Expected:** Clear language, transport, and auth choices documented.
+**Erwartet:** Clear language, transport, and auth choices documented.
 
-**On failure:** If requirements are ambiguous, default to TypeScript + stdio + no auth for fastest time-to-working-server.
+**Bei Fehler:** If requirements are ambiguous, default to TypeScript + stdio + no auth for fastest time-to-working-server.
 
-### Step 2: Initialize Project Structure
+### Schritt 2: Initialize Project Structure
 
-2.1. Create the project directory and initialize:
+2.1. Erstellen das Projekt directory and initialize:
 
 **TypeScript:**
 
@@ -90,7 +90,7 @@ source .venv/bin/activate
 pip install mcp pydantic
 ```
 
-2.2. Create the standard directory structure:
+2.2. Erstellen the standard Verzeichnisstruktur:
 
 ```
 $PROJECT_NAME/
@@ -111,7 +111,7 @@ $PROJECT_NAME/
 └── README.md
 ```
 
-2.3. Add a bin entry for npm (TypeScript) or entry point for Python:
+2.3. Hinzufuegen a bin entry for npm (TypeScript) or entry point for Python:
 
 **TypeScript package.json:**
 
@@ -130,13 +130,13 @@ $PROJECT_NAME/
 }
 ```
 
-**Expected:** A buildable project skeleton with all dependencies installed.
+**Erwartet:** A buildable project skeleton with all Abhaengigkeiten installed.
 
-**On failure:** If npm/pip install fails, check network connectivity and registry access. For TypeScript, ensure Node.js >= 18. For Python, ensure Python >= 3.10.
+**Bei Fehler:** If npm/pip install fails, check network connectivity and registry access. For TypeScript, ensure Node.js >= 18. For Python, ensure Python >= 3.10.
 
-### Step 3: Implement Tool Handlers from Spec
+### Schritt 3: Implementieren Tool Handlers from Spec
 
-3.1. Parse the tool specification document and for each tool, generate a handler:
+3.1. Parsen the tool specification document and fuer jede tool, generate a handler:
 
 **TypeScript handler template:**
 
@@ -189,23 +189,23 @@ async def handle_tool_name(params: ToolNameParams) -> list[TextContent]:
         return [TextContent(type="text", text=f"Error: {e}")]
 ```
 
-3.2. Generate one handler file per tool category from the specification.
+3.2. Generieren one handler file per tool category from the specification.
 
-3.3. Add input validation beyond type checking:
+3.3. Hinzufuegen input validation beyond type checking:
    - String length limits
    - Numeric range bounds
    - Enum value constraints
    - Required field enforcement
 
-3.4. Add structured error responses for all anticipated failure modes.
+3.4. Hinzufuegen structured error responses for all anticipated failure modes.
 
-**Expected:** A handler file per category with typed parameters and error handling.
+**Erwartet:** A handler file per category with typed parameters and Fehlerbehandlung.
 
-**On failure:** If the spec contains ambiguous types, default to `string` and add a TODO comment for manual refinement.
+**Bei Fehler:** If the spec contains ambiguous types, default to `string` and add a TODO comment for manual refinement.
 
-### Step 4: Configure Transport
+### Schritt 4: Konfigurieren Transport
 
-4.1. Create the server entry point with the chosen transport:
+4.1. Erstellen der Server entry point with the chosen transport:
 
 **stdio (TypeScript):**
 
@@ -243,23 +243,23 @@ const transport = new SSEServerTransport("/messages", response);
 await server.connect(transport);
 ```
 
-4.2. If authentication is required, add middleware:
+4.2. If Authentifizierung ist erforderlich, add middleware:
    - Bearer token: validate `Authorization` header
    - API key: validate `X-API-Key` header
 
-4.3. Add a shebang line for stdio servers to enable direct execution:
+4.3. Hinzufuegen a shebang line for stdio servers to enable direct execution:
 
 ```typescript
 #!/usr/bin/env node
 ```
 
-**Expected:** A working entry point that starts the MCP server on the configured transport.
+**Erwartet:** A working entry point that starts the MCP server on the configured transport.
 
-**On failure:** If the SDK version does not match the import paths, check the `@modelcontextprotocol/sdk` version and adjust imports. The SDK restructured paths between versions.
+**Bei Fehler:** If the SDK version nicht match the import paths, check the `@modelcontextprotocol/sdk` version and adjust imports. The SDK restructured paths zwischen versions.
 
-### Step 5: Create Test Harness
+### Schritt 5: Erstellen Testen Harness
 
-5.1. Build a test harness that validates every tool:
+5.1. Erstellen a test harness that validates every tool:
 
 ```typescript
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -300,17 +300,17 @@ async function runTests(): Promise<void> {
 }
 ```
 
-5.2. Create test fixtures for each tool: valid inputs, invalid inputs, and edge cases.
+5.2. Erstellen test fixtures fuer jede tool: valid inputs, invalid inputs, and Grenzfaelle.
 
-5.3. Add a `test` script to `package.json` or `pyproject.toml`.
+5.3. Hinzufuegen a `test` script to `package.json` or `pyproject.toml`.
 
-**Expected:** A test harness that exercises every tool with both valid and invalid inputs.
+**Erwartet:** A test harness that exercises every tool with both valid and invalid inputs.
 
-**On failure:** If `InMemoryTransport` is not available in the SDK version, fall back to spawning the server as a subprocess and communicating via stdio pipes.
+**Bei Fehler:** If `InMemoryTransport` ist nicht available in the SDK version, fall back to spawning der Server as a subprocess and communicating via stdio pipes.
 
-### Step 6: Generate Documentation and Configuration
+### Schritt 6: Generieren Documentation and Configuration
 
-6.1. Generate a `README.md` with:
+6.1. Generieren a `README.md` with:
    - Project description
    - Installation instructions
    - Claude Code configuration command
@@ -318,7 +318,7 @@ async function runTests(): Promise<void> {
    - Tool listing with descriptions and parameter schemas
    - Development and testing instructions
 
-6.2. Generate Claude Code registration command:
+6.2. Generieren Claude Code registration command:
 
 ```bash
 # stdio transport
@@ -328,7 +328,7 @@ claude mcp add $PACKAGE_NAME stdio "node" "dist/index.js"
 claude mcp add $PACKAGE_NAME -e API_KEY=your_key -- mcp-remote http://localhost:3000/mcp
 ```
 
-6.3. Generate Claude Desktop configuration snippet:
+6.3. Generieren Claude Desktop configuration snippet:
 
 ```json
 {
@@ -359,34 +359,34 @@ COPY --from=build /app/package.json .
 ENTRYPOINT ["node", "dist/index.js"]
 ```
 
-**Expected:** Complete documentation and configuration files for immediate use.
+**Erwartet:** Abschliessen documentation and configuration files for immediate use.
 
-**On failure:** If the generated README has placeholder values, search the project for actual values to substitute. If Docker build fails, verify the base image matches the Node.js/Python version used.
+**Bei Fehler:** If the generated README has placeholder values, search das Projekt for actual values to substitute. If Docker build fails, verify the base image matches the Node.js/Python version used.
 
-## Validation
+## Validierung
 
-- [ ] Project builds without errors (`npm run build` or equivalent)
+- [ ] Project builds ohne errors (`npm run build` or equivalent)
 - [ ] Server starts and responds to `tools/list` JSON-RPC request
 - [ ] Every tool from the specification is registered and discoverable
-- [ ] Test harness passes for all tools with valid inputs
-- [ ] Test harness confirms error responses for invalid inputs
+- [ ] Testen harness passes for all tools with valid inputs
+- [ ] Testen harness confirms error responses for invalid inputs
 - [ ] Claude Code can connect via `claude mcp add` command
 - [ ] README includes working installation and configuration instructions
 - [ ] All generated code passes linting (if configured)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **SDK import path changes**: The `@modelcontextprotocol/sdk` package restructured its exports between versions. Always check the installed version's actual export paths.
+- **SDK import path changes**: The `@modelcontextprotocol/sdk` package restructured its exports zwischen versions. Always check the installed version's actual export paths.
 - **Forgetting the shebang**: stdio servers invoked directly need `#!/usr/bin/env node` as the first line to be executable.
-- **Blocking the event loop**: Tool handlers in TypeScript must be `async`. Synchronous operations block all other tool calls on the server.
+- **Blocking the event loop**: Tool handlers in TypeScript muss `async`. Synchronous operations block all other tool calls on der Server.
 - **Missing `type: "module"` in package.json**: The MCP SDK uses ESM imports. Without `"type": "module"`, Node.js treats files as CommonJS and imports fail.
-- **Zod schema drift**: If the tool spec evolves but Zod schemas are not updated, validation mismatches cause silent failures. Generate schemas from a single source of truth.
-- **stdout pollution**: stdio transport uses stdout for JSON-RPC. Any `console.log` in tool handlers corrupts the protocol stream. Use `console.error` or a file logger instead.
+- **Zod schema drift**: If the tool spec evolves but Zod schemas sind nicht updated, validation mismatches cause silent failures. Generieren schemas from a single source of truth.
+- **stdout pollution**: stdio transport uses stdout for JSON-RPC. Any `console.log` in tool handlers corrupts the protocol stream. Use `console.error` or a file logger stattdessen.
 
-## Related Skills
+## Verwandte Skills
 
 - `analyze-codebase-for-mcp` - generate the tool specification this skill consumes
 - `build-custom-mcp-server` - manual server implementation for complex cases
 - `configure-mcp-server` - connect the scaffolded server to Claude Code/Desktop
-- `troubleshoot-mcp-connection` - debug connectivity issues after deployment
-- `containerize-mcp-server` - package the server in Docker for distribution
+- `troubleshoot-mcp-connection` - debug connectivity issues nach deployment
+- `containerize-mcp-server` - package der Server in Docker for distribution

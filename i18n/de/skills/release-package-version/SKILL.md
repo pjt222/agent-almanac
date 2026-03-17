@@ -1,17 +1,18 @@
 ---
 name: release-package-version
-description: >
-  Eine neue Version eines R-Pakets veroeffentlichen, einschliesslich
-  Versionserhoehung, NEWS.md-Aktualisierungen, Git-Tagging, GitHub
-  Release-Erstellung und Post-Release-Entwicklungsversionierung. Verwenden,
-  wenn ein Paket fuer ein neues Patch-, Minor- oder Major-Release bereit ist,
-  nach CRAN-Annahme zur Erstellung des entsprechenden GitHub-Releases oder
-  beim Einrichten der Entwicklungsversion-Erhoehung unmittelbar nach einem Release.
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
+description: >
+  Eine neue Version eines R-Pakets veroeffentlichen einschliesslich
+  Versionserhoehung, NEWS.md-Aktualisierungen, Git-Tagging,
+  GitHub-Release-Erstellung und Einrichtung der Post-Release-
+  Entwicklungsversion. Anwenden wenn ein Paket fuer eine neue Patch-,
+  Minor- oder Major-Veroeffentlichung bereit ist, nach CRAN-Akzeptanz
+  zur Erstellung des entsprechenden GitHub-Release, oder beim Einrichten
+  der Entwicklungsversionsanpassung direkt nach einer Veroeffentlichung.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,35 +26,35 @@ metadata:
 
 # Paketversion veroeffentlichen
 
-Den vollstaendigen Versions-Release-Zyklus fuer ein R-Paket ausfuehren.
+Den vollstaendigen Versionsveroeffentlichungszyklus fuer ein R-Paket ausfuehren.
 
 ## Wann verwenden
 
-- Bereit, eine neue Version zu veroeffentlichen (Fehlerbehebung, Feature oder Breaking Change)
-- Nach CRAN-Annahme das entsprechende GitHub-Release erstellen
+- Bereit zur Veroeffentlichung einer neuen Version (Fehlerbehebung, neues Feature oder einschneidende Aenderung)
+- Nach CRAN-Akzeptanz ein entsprechendes GitHub-Release erstellen
 - Post-Release-Entwicklungsversion einrichten
 
 ## Eingaben
 
-- **Erforderlich**: Paket mit releasebereit en Aenderungen
-- **Erforderlich**: Release-Typ: patch (0.1.0 -> 0.1.1), minor (0.1.0 -> 0.2.0) oder major (0.1.0 -> 1.0.0)
-- **Optional**: Ob bei CRAN eingereicht werden soll (Standard: nein, Skill `submit-to-cran` separat verwenden)
+- **Erforderlich**: Paket mit veroeffentlichungsbereiten Aenderungen
+- **Erforderlich**: Veroeffentlichungstyp: Patch (0.1.0 -> 0.1.1), Minor (0.1.0 -> 0.2.0) oder Major (0.1.0 -> 1.0.0)
+- **Optional**: Ob bei CRAN eingereicht werden soll (Standard: nein, `submit-to-cran`-Skill separat verwenden)
 
 ## Vorgehensweise
 
-### Schritt 1: Art der Versionserhoehung bestimmen
+### Schritt 1: Versionserhoehung bestimmen
 
 Semantische Versionierung befolgen:
 
 | Aenderungstyp | Versionserhoehung | Beispiel |
-|---------------|------------------|---------|
+|---------------|-------------------|----------|
 | Nur Fehlerbehebungen | Patch | 0.1.0 -> 0.1.1 |
 | Neue Features (rueckwaertskompatibel) | Minor | 0.1.0 -> 0.2.0 |
-| Breaking Changes | Major | 0.1.0 -> 1.0.0 |
+| Einschneidende Aenderungen | Major | 0.1.0 -> 1.0.0 |
 
-**Erwartet:** Der korrekte Erhoehungstyp (patch, minor oder major) wird basierend auf der Art der Aenderungen seit dem letzten Release bestimmt.
+**Erwartet:** Der korrekte Erhoehungstyp (Patch, Minor oder Major) ist basierend auf der Art der Aenderungen seit der letzten Veroeffentlichung bestimmt.
 
-**Bei Fehler:** Bei Unsicherheit `git log` seit dem letzten Tag durchsehen und jede Aenderung klassifizieren. Jede nicht abwaertskompatible API-Aenderung erfordert eine Major-Erhoehung.
+**Bei Fehler:** Im Zweifelsfall `git log` seit dem letzten Tag ueberpruefen und jede Aenderung klassifizieren. Jede einschneidende API-Aenderung erfordert eine Major-Erhoehung.
 
 ### Schritt 2: Version aktualisieren
 
@@ -61,39 +62,39 @@ Semantische Versionierung befolgen:
 usethis::use_version("minor")  # oder "patch" oder "major"
 ```
 
-Aktualisiert das `Version`-Feld in DESCRIPTION und fuegt eine Ueberschrift zu NEWS.md hinzu.
+Dies aktualisiert das `Version`-Feld in DESCRIPTION und fuegt eine Ueberschrift zu NEWS.md hinzu.
 
-**Erwartet:** DESCRIPTION-Version aktualisiert. NEWS.md hat eine neue Abschnittsunterschrift fuer die Release-Version.
+**Erwartet:** DESCRIPTION-Version aktualisiert. NEWS.md hat einen neuen Abschnittstitel fuer die Veroeffentlichungsversion.
 
-**Bei Fehler:** Wenn `usethis::use_version()` nicht verfuegbar ist, das `Version`-Feld in DESCRIPTION manuell aktualisieren und eine `# packagename x.y.z`-Ueberschrift zu NEWS.md hinzufuegen.
+**Bei Fehler:** Wenn `usethis::use_version()` nicht verfuegbar ist, manuell das `Version`-Feld in DESCRIPTION aktualisieren und eine `# paketname x.y.z`-Ueberschrift zu NEWS.md hinzufuegen.
 
 ### Schritt 3: NEWS.md aktualisieren
 
-Release-Notizen unter der neuen Versionsunterschrift eintragen:
+Die Veroeffentlichungsnotizen unter der neuen Versionsueuberschrift ausfuellen:
 
 ```markdown
-# packagename 0.2.0
+# paketname 0.2.0
 
-## New Features
-- Added `new_function()` for processing data (#42)
-- Support for custom themes in `plot_results()` (#45)
+## Neue Features
+- `neue_funktion()` zur Datenverarbeitung hinzugefuegt (#42)
+- Unterstuetzung fuer benutzerdefinierte Themes in `plot_results()` (#45)
 
-## Bug Fixes
-- Fixed crash when input contains all NAs (#38)
-- Corrected off-by-one error in `window_calc()` (#41)
+## Fehlerbehebungen
+- Absturz behoben wenn Eingabe nur NAs enthaelt (#38)
+- Off-by-One-Fehler in `window_calc()` korrigiert (#41)
 
-## Minor Improvements
-- Improved error messages for invalid input types
-- Updated documentation examples
+## Kleinere Verbesserungen
+- Fehlermeldungen fuer ungueltige Eingabetypen verbessert
+- Dokumentationsbeispiele aktualisiert
 ```
 
-Issue/PR-Nummern fuer Nachverfolgbarkeit verwenden.
+Issue-/PR-Nummern fuer die Rueckverfolgbarkeit verwenden.
 
-**Erwartet:** NEWS.md enthaelt eine vollstaendige Zusammenfassung der benutzerseitigen Aenderungen, nach Kategorien gegliedert, mit Issue/PR-Nummern fuer Nachverfolgbarkeit.
+**Erwartet:** NEWS.md enthaelt eine vollstaendige Zusammenfassung benutzersichtbarer Aenderungen nach Kategorien geordnet, mit Issue-/PR-Nummern fuer die Rueckverfolgbarkeit.
 
-**Bei Fehler:** Wenn Aenderungen schwer zu rekonstruieren sind, `git log --oneline v<vorherige>..HEAD` verwenden, um alle Commits seit dem letzten Release aufzulisten und zu kategorisieren.
+**Bei Fehler:** Wenn Aenderungen schwer zu rekonstruieren sind, `git log --oneline v<vorgaenger>..HEAD` verwenden um alle Commits seit der letzten Veroeffentlichung aufzulisten und zu kategorisieren.
 
-### Schritt 4: Abschliessende Pruefungen
+### Schritt 4: Abschlusspruefungen
 
 ```r
 devtools::check()
@@ -101,22 +102,22 @@ devtools::spell_check()
 urlchecker::url_check()
 ```
 
-**Erwartet:** `devtools::check()` liefert 0 Fehler, 0 Warnungen und 0 Hinweise. Rechtschreib- und URL-Pruefung finden keine Probleme.
+**Erwartet:** `devtools::check()` gibt 0 Fehler, 0 Warnungen und 0 Anmerkungen zurueck. Rechtschreib- und URL-Pruefung finden keine Probleme.
 
-**Bei Fehler:** Alle Fehler und Warnungen vor der Veroeffentlichung beheben. Falsch-positive Woerter fuer die Rechtschreibpruefung zu `inst/WORDLIST` hinzufuegen. Defekte URLs ersetzen.
+**Bei Fehler:** Alle Fehler und Warnungen vor der Veroeffentlichung beheben. Falsch-positive Woerter zu `inst/WORDLIST` fuer die Rechtschreibpruefung hinzufuegen. Fehlerhafte URLs ersetzen.
 
-### Schritt 5: Release committen
+### Schritt 5: Veroeffentlichung committen
 
 ```bash
 git add DESCRIPTION NEWS.md
-git commit -m "Release packagename v0.2.0"
+git commit -m "Release paketname v0.2.0"
 ```
 
-**Erwartet:** Ein einzelner Commit, der die Versionserhoehung in DESCRIPTION und die aktualisierte NEWS.md enthaelt.
+**Erwartet:** Ein einzelner Commit der die Versionserhoehung in DESCRIPTION und die aktualisierte NEWS.md enthaelt.
 
-**Bei Fehler:** Wenn andere uncommittete Aenderungen vorhanden sind, nur DESCRIPTION und NEWS.md stagen. Release-Commits sollten nur versionsbezogene Aenderungen enthalten.
+**Bei Fehler:** Wenn andere nicht-committete Aenderungen vorhanden sind, nur DESCRIPTION und NEWS.md stagen. Veroeffentlichungs-Commits sollten nur versionsbezogene Aenderungen enthalten.
 
-### Schritt 6: Release taggen
+### Schritt 6: Das Release taggen
 
 ```bash
 git tag -a v0.2.0 -m "Release v0.2.0"
@@ -125,13 +126,13 @@ git push origin main --tags
 
 **Erwartet:** Annotierter Tag `v0.2.0` erstellt und zum Remote gepusht. `git tag -l` zeigt den Tag lokal; `git ls-remote --tags origin` bestaetigt ihn auf dem Remote.
 
-**Bei Fehler:** Wenn der Push fehlschlaegt, pruefen, ob Schreibzugriff vorhanden ist. Wenn der Tag bereits existiert, mit `git show v0.2.0` pruefen, ob er auf den richtigen Commit zeigt.
+**Bei Fehler:** Wenn der Push fehlschlaegt, Schreibzugriff pruefen. Wenn der Tag bereits existiert, verifizieren dass er auf den korrekten Commit zeigt mit `git show v0.2.0`.
 
 ### Schritt 7: GitHub-Release erstellen
 
 ```bash
 gh release create v0.2.0 \
-  --title "packagename v0.2.0" \
+  --title "paketname v0.2.0" \
   --notes-file NEWS.md
 ```
 
@@ -141,50 +142,50 @@ Oder verwenden:
 usethis::use_github_release()
 ```
 
-**Erwartet:** GitHub-Release mit sichtbaren Release-Notizen auf der Releases-Seite des Repositorys erstellt.
+**Erwartet:** GitHub-Release erstellt mit Veroeffentlichungsnotizen sichtbar auf der Releases-Seite des Repositorys.
 
-**Bei Fehler:** Wenn `gh release create` fehlschlaegt, sicherstellen, dass die `gh`-CLI authentifiziert ist (`gh auth status`). Wenn `usethis::use_github_release()` fehlschlaegt, den Release manuell auf GitHub erstellen.
+**Bei Fehler:** Wenn `gh release create` fehlschlaegt, sicherstellen dass die `gh`-CLI authentifiziert ist (`gh auth status`). Wenn `usethis::use_github_release()` fehlschlaegt, das Release manuell auf GitHub erstellen.
 
 ### Schritt 8: Entwicklungsversion setzen
 
-Nach dem Release auf Entwicklungsversion hochsetzen:
+Nach der Veroeffentlichung zur Entwicklungsversion wechseln:
 
 ```r
 usethis::use_dev_version()
 ```
 
-Aendert die Version auf `0.2.0.9000` als Kennzeichnung der Entwicklungsphase.
+Dies aendert die Version zu `0.2.0.9000` als Kennzeichnung fuer Entwicklung.
 
 ```bash
 git add DESCRIPTION NEWS.md
-git commit -m "Begin development for next version"
+git commit -m "Entwicklung fuer naechste Version beginnen"
 git push
 ```
 
 **Erwartet:** DESCRIPTION-Version ist jetzt `0.2.0.9000` (Entwicklungsversion). NEWS.md hat eine neue Ueberschrift fuer die Entwicklungsversion. Aenderungen sind zum Remote gepusht.
 
-**Bei Fehler:** Wenn `usethis::use_dev_version()` nicht verfuegbar ist, die Version in DESCRIPTION manuell auf `x.y.z.9000` aendern und eine `# packagename (development version)`-Ueberschrift zu NEWS.md hinzufuegen.
+**Bei Fehler:** Wenn `usethis::use_dev_version()` nicht verfuegbar ist, die Version manuell zu `x.y.z.9000` in DESCRIPTION aendern und eine `# paketname (Entwicklungsversion)`-Ueberschrift zu NEWS.md hinzufuegen.
 
 ## Validierung
 
-- [ ] Version in DESCRIPTION stimmt mit dem beabsichtigten Release ueberein
-- [ ] NEWS.md hat vollstaendige, korrekte Release-Notizen
+- [ ] Version in DESCRIPTION stimmt mit beabsichtigter Veroeffentlichung ueberein
+- [ ] NEWS.md hat vollstaendige, genaue Veroeffentlichungsnotizen
 - [ ] `R CMD check` besteht
-- [ ] Git-Tag stimmt mit der Version ueberein (z.B. `v0.2.0`)
-- [ ] GitHub-Release existiert mit Release-Notizen
+- [ ] Git-Tag stimmt mit Version ueberein (z.B. `v0.2.0`)
+- [ ] GitHub-Release existiert mit Veroeffentlichungsnotizen
 - [ ] Post-Release-Entwicklungsversion gesetzt (x.y.z.9000)
 
 ## Haeufige Stolperfallen
 
-- **Tags zu pushen vergessen**: `git push` allein pusht keine Tags. `--tags` oder `git push origin v0.2.0` verwenden
-- **NEWS.md-Format**: Markdown-Ueberschriften verwenden, die dem pkgdown/CRAN-erwarteten Format entsprechen
-- **Falschen Commit taggen**: Immer nach dem Versions-Erhoehungs-Commit taggen, nicht davor
-- **CRAN-Version existiert bereits**: CRAN akzeptiert keine Version, die bereits veroeffentlicht wurde. Immer inkrementieren.
-- **Entwicklungsversion im Release**: Niemals eine `.9000`-Version bei CRAN einreichen
+- **Vergessen Tags zu pushen**: `git push` allein pusht keine Tags. `--tags` verwenden oder `git push origin v0.2.0`
+- **NEWS.md-Format**: Markdown-Ueberschriften im von pkgdown/CRAN erwarteten Format verwenden
+- **Falschen Commit taggen**: Immer nach dem Versionserhoehungs-Commit taggen, nicht davor
+- **CRAN-Version existiert bereits**: CRAN akzeptiert keine bereits veroeffentlichte Version. Immer inkrementieren.
+- **Entwicklungsversion in der Veroeffentlichung**: Nie eine `.9000`-Version bei CRAN einreichen
 
 ## Verwandte Skills
 
-- `submit-to-cran` - CRAN-Einreichung nach der Versionsveroeffentlichung
-- `create-github-release` - allgemeine GitHub Release-Erstellung
-- `setup-github-actions-ci` - loest pkgdown-Neuerstellung bei Release aus
-- `build-pkgdown-site` - Dokumentationswebsite spiegelt neue Version wider
+- `submit-to-cran` -- CRAN-Einreichung nach Versionsveroeffentlichung
+- `create-github-release` -- Allgemeine GitHub-Release-Erstellung
+- `setup-github-actions-ci` -- Loest pkgdown-Neubau bei Release aus
+- `build-pkgdown-site` -- Dokumentationsseite spiegelt neue Version wider

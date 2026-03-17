@@ -1,12 +1,12 @@
 ---
 name: build-feature-store
 description: >
-  Build a feature store using Feast for centralized feature management, configure
-  offline and online stores for batch and real-time serving, define feature views
-  with transformations, and implement point-in-time correct joins for ML pipelines.
-  Use when managing features for multiple ML models, ensuring training-serving consistency,
-  serving low-latency features for real-time inference, reusing feature definitions
-  across projects, or building a feature catalog for discovery and governance.
+  Feastを使用して集中型特徴量管理のための特徴量ストアを構築する。バッチおよび
+  リアルタイムサービング用のオフライン/オンラインストアの設定、変換付き特徴量ビューの
+  定義、MLパイプライン用のポイントインタイム正確結合の実装をカバーする。
+  複数のMLモデルの特徴量を管理する時、学習-サービング一貫性を確保する時、
+  リアルタイム推論用の低レイテンシ特徴量を提供する時、プロジェクト間で特徴量定義を
+  再利用する時、検出とガバナンスのための特徴量カタログを構築する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,36 +26,36 @@ metadata:
 # 特徴量ストアの構築
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完全な設定ファイルとテンプレートについては[拡張例](references/EXAMPLES.md)を参照。
 
-Implement centralized feature management with Feast for consistent feature serving across training and inference.
+学習と推論にわたる一貫した特徴量サービングのために、Feastで集中型特徴量管理を実装する。
 
 ## 使用タイミング
 
-- Managing features for multiple ML models across teams
-- Ensuring training-serving consistency for features
-- Implementing point-in-time correct historical features
-- Serving low-latency features for real-time inference
-- Reusing feature definitions across projects
-- Versioning feature transformations
-- Building feature catalog for discovery and governance
-- Preventing feature leakage in training pipelines
+- チーム横断で複数のMLモデルの特徴量を管理する時
+- 特徴量の学習-サービング一貫性を確保する時
+- ポイントインタイム正確な履歴特徴量を実装する時
+- リアルタイム推論用の低レイテンシ特徴量を提供する時
+- プロジェクト間で特徴量定義を再利用する時
+- 特徴量変換のバージョニングを行う時
+- 検出とガバナンスのための特徴量カタログを構築する時
+- 学習パイプラインでの特徴量リーケージを防止する時
 
 ## 入力
 
-- **必須**: Raw data sources (databases, data lakes, data warehouses)
-- **必須**: Python environment with Feast installed
-- **必須**: Offline store backend (BigQuery, Snowflake, Redshift, or Parquet files)
-- **必須**: Online store backend (Redis, DynamoDB, Cassandra, or SQLite for dev)
-- **任意**: Feature transformation logic (Python, SQL, Spark)
-- **任意**: Entity key definitions (user_id, product_id, etc.)
-- **任意**: Kubernetes cluster for Feast server deployment
+- **必須**: 生データソース（データベース、データレイク、データウェアハウス）
+- **必須**: Feastがインストールされたpython環境
+- **必須**: オフラインストアバックエンド（BigQuery、Snowflake、Redshift、またはParquetファイル）
+- **必須**: オンラインストアバックエンド（Redis、DynamoDB、Cassandra、または開発用SQLite）
+- **任意**: 特徴量変換ロジック（Python、SQL、Spark）
+- **任意**: エンティティキー定義（user_id、product_idなど）
+- **任意**: Feastサーバーデプロイ用のKubernetesクラスター
 
 ## 手順
 
-### ステップ1: Initialize Feast Feature Repository
+### ステップ1: Feast特徴量リポジトリの初期化
 
-Set up Feast project structure and configure storage backends.
+Feastプロジェクト構造をセットアップし、ストレージバックエンドを設定する。
 
 ```bash
 # Install Feast with required extras
@@ -72,7 +72,7 @@ cd my_feature_repo
 # └── data/                    # Sample data (dev only)
 ```
 
-Configure `feature_store.yaml`:
+`feature_store.yaml`を設定する:
 
 ```yaml
 # feature_store.yaml
@@ -86,7 +86,7 @@ offline_store:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Production configuration with cloud backends:
+クラウドバックエンドによる本番設定:
 
 ```yaml
 # feature_store.prod.yaml
@@ -100,13 +100,13 @@ offline_store:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Feast repository initialized with config file, sample feature definitions created, offline and online stores configured, registry path accessible.
+**期待結果:** Feast リポジトリが設定ファイルとともに初期化され、サンプル特徴量定義が作成され、オフラインおよびオンラインストアが設定され、レジストリパスがアクセス可能。
 
-**失敗時:** Verify database/Redis credentials (`psql -U feast_user -h localhost`), check connection strings format, ensure databases exist (`CREATE DATABASE feature_store`), verify cloud permissions for S3/BigQuery/DynamoDB, test connectivity to storage backends, check Feast version compatibility with backends (`feast version`).
+**失敗時:** データベース/Redisの資格情報を確認する（`psql -U feast_user -h localhost`）、接続文字列のフォーマットを確認する、データベースが存在することを確認する（`CREATE DATABASE feature_store`）、S3/BigQuery/DynamoDBのクラウド権限を確認する、ストレージバックエンドへの接続をテストする、Feastバージョンとバックエンドの互換性を確認する（`feast version`）。
 
-### ステップ2: Define Entities and Data Sources
+### ステップ2: エンティティとデータソースの定義
 
-Create entity definitions and connect to raw data sources.
+エンティティ定義を作成し、生データソースに接続する。
 
 ```python
 # entities.py
@@ -120,7 +120,7 @@ customer = Entity(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Define data sources:
+データソースを定義する:
 
 ```python
 # data_sources.py
@@ -134,13 +134,13 @@ customer_transactions_source = FileSource(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Entity definitions reference correct ID columns, data sources connect to raw data successfully, event_timestamp_column exists in source data, created_timestamp_column allows point-in-time queries.
+**期待結果:** エンティティ定義が正しいIDカラムを参照し、データソースが生データに正常に接続し、event_timestamp_columnがソースデータに存在し、created_timestamp_columnがポイントインタイムクエリを可能にする。
 
-**失敗時:** Verify source data files exist and are readable, check BigQuery/Redshift credentials and table access, ensure timestamp columns have correct format (Unix timestamp or ISO8601), verify Kafka connectivity and topic existence, check schema compatibility between sources and entities.
+**失敗時:** ソースデータファイルが存在し読み取り可能であることを確認する、BigQuery/Redshiftの資格情報とテーブルアクセスを確認する、タイムスタンプカラムが正しいフォーマット（Unixタイムスタンプまたは ISO8601）であることを確認する、Kafkaの接続性とトピックの存在を確認する、ソースとエンティティ間のスキーマ互換性を確認する。
 
-### ステップ3: Define Feature Views with Transformations
+### ステップ3: 変換付き特徴量ビューの定義
 
-Create feature views that define how raw data becomes ML-ready features.
+生データをML対応の特徴量にする特徴量ビューを作成する。
 
 ```python
 # feature_views.py
@@ -154,13 +154,13 @@ from data_sources import customer_features_source
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Feature views registered successfully, schema matches source data, transformations execute without errors, TTL values appropriate for use case, on-demand views combine batch and request features.
+**期待結果:** 特徴量ビューが正常に登録され、スキーマがソースデータと一致し、変換がエラーなく実行され、TTL値がユースケースに適切で、オンデマンドビューがバッチとリクエスト特徴量を結合する。
 
-**失敗時:** Verify field names match source columns exactly, check dtype compatibility (Int64 vs Int32), ensure entity references exist, validate transformation logic with sample data, check for division by zero in calculations, verify request source schema matches inference payload.
+**失敗時:** フィールド名がソースカラムと正確に一致することを確認する、dtype互換性を確認する（Int64 vs Int32）、エンティティ参照が存在することを確認する、サンプルデータで変換ロジックを検証する、計算でのゼロ除算を確認する、リクエストソーススキーマが推論ペイロードと一致することを確認する。
 
-### ステップ4: Apply Feature Definitions and Materialize Features
+### ステップ4: 特徴量定義の適用と特徴量のマテリアライズ
 
-Deploy feature definitions to registry and materialize to online store.
+特徴量定義をレジストリにデプロイし、オンラインストアにマテリアライズする。
 
 ```bash
 # Apply feature definitions to registry
@@ -174,7 +174,7 @@ feast apply
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Programmatic materialization:
+プログラマティックなマテリアライゼーション:
 
 ```python
 # materialize_features.py
@@ -188,13 +188,13 @@ fs = FeatureStore(repo_path=".")
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Feature definitions applied to registry without conflicts, materialization job completes successfully, online store populated with features, feature freshness within configured TTL.
+**期待結果:** 特徴量定義が競合なくレジストリに適用され、マテリアライゼーションジョブが正常に完了し、オンラインストアに特徴量が格納され、特徴量の鮮度が設定されたTTL内。
 
-**失敗時:** Check offline store query succeeds (`feast feature-views describe customer_stats`), verify time range has data, ensure online store writable (Redis/DynamoDB permissions), check for duplicate feature names across views, verify entity keys exist in source data, monitor materialization job logs for errors, check disk space for local stores.
+**失敗時:** オフラインストアクエリが成功することを確認する（`feast feature-views describe customer_stats`）、時間範囲にデータがあることを確認する、オンラインストアが書き込み可能であることを確認する（Redis/DynamoDB権限）、ビュー間で重複する特徴量名がないか確認する、ソースデータにエンティティキーが存在することを確認する、マテリアライゼーションジョブログでエラーを監視する、ローカルストアのディスク容量を確認する。
 
-### ステップ5: Retrieve Features for Training
+### ステップ5: 学習用特徴量の取得
 
-Fetch point-in-time correct historical features for model training.
+モデル学習用のポイントインタイム正確な履歴特徴量を取得する。
 
 ```python
 # get_training_data.py
@@ -208,7 +208,7 @@ fs = FeatureStore(repo_path=".")
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Point-in-time correctness validation:
+ポイントインタイム正確性の検証:
 
 ```python
 # validate_pit_correctness.py
@@ -222,13 +222,13 @@ def validate_point_in_time_correctness(training_df, entity_df):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Historical features retrieved successfully, entity_df timestamps preserved, no NaN values for materialized features, point-in-time correctness guaranteed (no future data leakage), feature service groups features logically.
+**期待結果:** 履歴特徴量が正常に取得され、entity_dfのタイムスタンプが保存され、マテリアライズされた特徴量にNaN値がなく、ポイントインタイム正確性が保証され（将来のデータリーケージなし）、特徴量サービスが特徴量を論理的にグループ化する。
 
-**失敗時:** Check entity_df has required columns (entity names + event_timestamp), verify feature view names match registry, ensure offline store has data for requested time range, check for timezone mismatches (use UTC), verify entity IDs exist in source data, inspect logs for SQL query errors, validate feature view TTL covers requested time range.
+**失敗時:** entity_dfに必要なカラム（エンティティ名 + event_timestamp）があることを確認する、特徴量ビュー名がレジストリと一致することを確認する、オフラインストアにリクエストされた時間範囲のデータがあることを確認する、タイムゾーンの不一致を確認する（UTCを使用）、ソースデータにエンティティIDが存在することを確認する、SQLクエリエラーについてログを検査する、特徴量ビューのTTLがリクエストされた時間範囲をカバーしていることを確認する。
 
-### ステップ6: Serve Features for Real-Time Inference
+### ステップ6: リアルタイム推論用特徴量のサービング
 
-Retrieve low-latency features from online store for model serving.
+モデルサービング用にオンラインストアから低レイテンシ特徴量を取得する。
 
 ```python
 # serve_features.py
@@ -242,7 +242,7 @@ def get_inference_features(customer_ids: list, request_data: dict = None):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-FastAPI integration:
+FastAPI統合:
 
 ```python
 # api.py
@@ -256,42 +256,42 @@ fs = FeatureStore(repo_path=".")
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Online features retrieved in <10ms for single entity, batch retrieval scales efficiently, on-demand transformations execute correctly, request-time features merged with batch features, API responds quickly (<50ms end-to-end).
+**期待結果:** 単一エンティティのオンライン特徴量が<10msで取得され、バッチ取得が効率的にスケールし、オンデマンド変換が正しく実行され、リクエスト時特徴量がバッチ特徴量とマージされ、APIが迅速に応答する（<50msエンドツーエンド）。
 
-**失敗時:** Check online store populated (run materialize if empty), verify Redis/DynamoDB connectivity and latency, ensure entity keys exist in online store, check for cold start issues (warm up cache), verify on-demand transformation logic, monitor online store memory/CPU usage, check network latency between service and online store.
+**失敗時:** オンラインストアが格納されていることを確認する（空の場合materializeを実行）、Redis/DynamoDBの接続性とレイテンシを確認する、オンラインストアにエンティティキーが存在することを確認する、コールドスタートの問題を確認する（キャッシュのウォームアップ）、オンデマンド変換ロジックを確認する、オンラインストアのメモリ/CPU使用量を監視する、サービスとオンラインストア間のネットワークレイテンシを確認する。
 
 ## バリデーション
 
-- [ ] Feast repository initialized and configured
-- [ ] Offline and online stores connected successfully
-- [ ] Entity definitions match source data
-- [ ] Feature views registered in registry
-- [ ] On-demand transformations execute correctly
-- [ ] Materialization completes without errors
-- [ ] Historical features retrieved with point-in-time correctness
-- [ ] Online features served with low latency (<10ms)
-- [ ] Feature freshness within configured TTL
-- [ ] Training-serving consistency verified
-- [ ] Feature catalog accessible for discovery
+- [ ] Feastリポジトリが初期化され設定されている
+- [ ] オフラインおよびオンラインストアが正常に接続されている
+- [ ] エンティティ定義がソースデータと一致する
+- [ ] 特徴量ビューがレジストリに登録されている
+- [ ] オンデマンド変換が正しく実行される
+- [ ] マテリアライゼーションがエラーなく完了する
+- [ ] ポイントインタイム正確性で履歴特徴量が取得される
+- [ ] オンライン特徴量が低レイテンシ（<10ms）で提供される
+- [ ] 特徴量の鮮度が設定されたTTL内
+- [ ] 学習-サービング一貫性が検証されている
+- [ ] 検出のための特徴量カタログがアクセス可能
 
 ## よくある落とし穴
 
-- **Feature leakage**: Using future data in historical features - always validate point-in-time correctness, use created_timestamp column
-- **Inconsistent transformations**: Different logic for training vs serving - use Feast on-demand views for consistency
-- **Stale features**: Online store not materialized regularly - set up scheduled materialization jobs (cron/Airflow)
-- **Missing entity keys**: Entities in training set not in online store - ensure comprehensive materialization, handle missing keys gracefully
-- **Type mismatches**: Schema types don't match source data - validate dtypes before apply, use explicit Field definitions
-- **Slow online retrieval**: Network latency or overloaded online store - co-locate feature store with inference service, use connection pooling
-- **Large feature views**: Materializing millions of entities is slow - partition by date, use incremental materialization, optimize offline queries
-- **No feature versioning**: Breaking changes affect production models - version feature views, maintain backward compatibility
-- **Timezone confusion**: Mixing timezones causes incorrect joins - always use UTC for timestamps
-- **Ignoring TTL**: Serving expired features - set appropriate TTL values, monitor feature freshness
+- **特徴量リーケージ**: 履歴特徴量で将来のデータを使用する - 常にポイントインタイム正確性を検証し、created_timestampカラムを使用する
+- **一貫性のない変換**: 学習とサービングで異なるロジック - 一貫性のためにFeastオンデマンドビューを使用する
+- **古い特徴量**: オンラインストアが定期的にマテリアライズされていない - スケジュールされたマテリアライゼーションジョブ（cron/Airflow）をセットアップする
+- **欠落するエンティティキー**: 学習セットのエンティティがオンラインストアにない - 包括的なマテリアライゼーションを確保し、欠落キーを適切に処理する
+- **型の不一致**: スキーマの型がソースデータと一致しない - 適用前にdtypeを検証し、明示的なField定義を使用する
+- **遅いオンライン取得**: ネットワークレイテンシまたは過負荷のオンラインストア - 特徴量ストアを推論サービスと同じ場所に配置し、コネクションプーリングを使用する
+- **大きな特徴量ビュー**: 数百万のエンティティのマテリアライズは遅い - 日付でパーティション化し、増分マテリアライゼーションを使用し、オフラインクエリを最適化する
+- **特徴量のバージョニングなし**: 破壊的変更が本番モデルに影響 - 特徴量ビューをバージョニングし、後方互換性を維持する
+- **タイムゾーンの混乱**: タイムゾーンの混在が不正な結合を引き起こす - タイムスタンプには常にUTCを使用する
+- **TTLの無視**: 期限切れの特徴量を提供する - 適切なTTL値を設定し、特徴量の鮮度を監視する
 
 ## 関連スキル
 
-- `track-ml-experiments` - Log feature metadata in MLflow experiments
-- `orchestrate-ml-pipeline` - Schedule feature materialization jobs
-- `version-ml-data` - Version raw data sources for feature engineering
-- `deploy-ml-model-serving` - Integrate feature store with model serving
-- `serialize-data-formats` - Choose efficient storage formats for features
-- `design-serialization-schema` - Design schemas for feature sources
+- `track-ml-experiments` -- MLflow実験で特徴量メタデータを記録する
+- `orchestrate-ml-pipeline` -- 特徴量マテリアライゼーションジョブをスケジュールする
+- `version-ml-data` -- 特徴量エンジニアリング用の生データソースをバージョニングする
+- `deploy-ml-model-serving` -- 特徴量ストアをモデルサービングと統合する
+- `serialize-data-formats` -- 特徴量に効率的なストレージフォーマットを選択する
+- `design-serialization-schema` -- 特徴量ソースのスキーマを設計する

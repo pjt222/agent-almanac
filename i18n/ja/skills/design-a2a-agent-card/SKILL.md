@@ -1,13 +1,12 @@
 ---
 name: design-a2a-agent-card
 description: >
-  Design an A2A Agent Card (.well-known/agent.json) manifest describing agent
-  capabilities, skills, authentication requirements, and supported content types.
-  Use when building an agent that must be discoverable by other A2A-compliant
-  agents, exposing capabilities for multi-agent orchestration, migrating an
-  existing agent to the A2A protocol, defining the public contract for an agent
-  before implementation, or integrating with agent registries that consume Agent
-  Cards.
+  エージェントの機能、スキル、認証要件、サポートするコンテンツタイプを記述するA2A
+  Agent Card（.well-known/agent.json）マニフェストを設計する。他のA2A準拠エージェント
+  から発見可能なエージェントを構築する時、マルチエージェントオーケストレーション用に
+  機能を公開する時、既存エージェントをA2Aプロトコルに移行する時、実装前にエージェントの
+  パブリック契約を定義する時、Agent Cardを消費するエージェントレジストリと統合する時に
+  使用する。
 license: MIT
 allowed-tools: Read Write Edit Grep Glob
 metadata:
@@ -24,33 +23,33 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# A2Aエージェントカードの設計
+# A2A Agent Cardの設計
 
-Create a standards-compliant A2A Agent Card that advertises an agent's identity, skills, authentication requirements, and capabilities for discovery by other agents.
+他のエージェントによる発見のためにエージェントのアイデンティティ、スキル、認証要件、機能を宣伝する標準準拠のA2A Agent Cardを作成する。
 
 ## 使用タイミング
 
-- Building an agent that must be discoverable by other A2A-compliant agents
-- Exposing agent capabilities for multi-agent orchestration
-- Migrating an existing agent to the A2A (Agent-to-Agent) protocol
-- Defining the public contract for an agent before implementation
-- Integrating with agent registries or directories that consume Agent Cards
+- 他のA2A準拠エージェントから発見可能なエージェントを構築する時
+- マルチエージェントオーケストレーション用にエージェント機能を公開する時
+- 既存エージェントをA2A（Agent-to-Agent）プロトコルに移行する時
+- 実装前にエージェントのパブリック契約を定義する時
+- Agent Cardを消費するエージェントレジストリやディレクトリと統合する時
 
 ## 入力
 
-- **必須**: Agent name and description
-- **必須**: List of skills the agent can perform (name, description, input/output schemas)
-- **必須**: Base URL where the agent will be hosted
-- **任意**: Authentication method (`none`, `oauth2`, `oidc`, `api-key`)
-- **任意**: Supported content types beyond `text/plain` (e.g., `image/png`, `application/json`)
-- **任意**: Capability flags (streaming, push notifications, state transition history)
-- **任意**: Provider organization name and URL
+- **必須**: エージェント名と説明
+- **必須**: エージェントが実行できるスキルのリスト（名前、説明、入出力スキーマ）
+- **必須**: エージェントがホストされるベースURL
+- **任意**: 認証方式（`none`、`oauth2`、`oidc`、`api-key`）
+- **任意**: `text/plain`以外のサポートコンテンツタイプ（例: `image/png`、`application/json`）
+- **任意**: 機能フラグ（ストリーミング、プッシュ通知、状態遷移履歴）
+- **任意**: プロバイダ組織名とURL
 
 ## 手順
 
-### ステップ1: Define Agent Identity and Description
+### ステップ1: エージェントのアイデンティティと説明の定義
 
-1.1. Choose the agent identity fields:
+1.1. エージェントのアイデンティティフィールドを選択する:
 
 ```json
 {
@@ -65,20 +64,20 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-1.2. Write a clear, actionable description that answers:
-   - What domains does this agent cover?
-   - What kinds of tasks can it handle?
-   - What are its limitations?
+1.2. 以下の質問に答える明確で実行可能な説明を書く:
+   - このエージェントはどのドメインをカバーするか？
+   - どのようなタスクを処理できるか？
+   - 制限事項は何か？
 
-1.3. Set the canonical URL where the Agent Card will be served at `/.well-known/agent.json`.
+1.3. Agent Cardが`/.well-known/agent.json`で配信される正規URLを設定する。
 
-**期待結果:** A complete identity block with name, description, URL, provider, and version.
+**期待結果:** name、description、URL、provider、versionを含む完全なアイデンティティブロック。
 
-**失敗時:** If the agent serves multiple domains, consider whether it should be one agent with many skills or multiple agents with focused scopes. A2A favors focused agents with clear boundaries.
+**失敗時:** エージェントが複数のドメインを提供する場合、多くのスキルを持つ1つのエージェントにするか、焦点を絞ったスコープの複数のエージェントにするかを検討する。A2Aは明確な境界を持つ焦点を絞ったエージェントを推奨する。
 
-### ステップ2: Enumerate Skills with Input/Output Schemas
+### ステップ2: 入出力スキーマ付きスキルの列挙
 
-2.1. Define each skill the agent can perform:
+2.1. エージェントが実行できる各スキルを定義する:
 
 ```json
 {
@@ -111,26 +110,26 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-2.2. For each skill, provide:
-   - **id**: Unique identifier (kebab-case)
-   - **name**: Human-readable display name
-   - **description**: What the skill does, in one to two sentences
-   - **tags**: Searchable keywords for discovery
-   - **examples**: Natural language task examples that trigger this skill
-   - **inputModes**: MIME types the skill accepts
-   - **outputModes**: MIME types the skill can produce
+2.2. 各スキルに以下を提供する:
+   - **id**: 一意の識別子（ケバブケース）
+   - **name**: 人間が読める表示名
+   - **description**: スキルが何をするか、1〜2文で
+   - **tags**: 発見のための検索可能なキーワード
+   - **examples**: このスキルをトリガーする自然言語タスクの例
+   - **inputModes**: スキルが受け入れるMIMEタイプ
+   - **outputModes**: スキルが生成できるMIMEタイプ
 
-2.3. Ensure skill boundaries are clear and non-overlapping. Each task should map to exactly one skill.
+2.3. スキルの境界が明確で重複しないことを確認する。各タスクは正確に1つのスキルにマッピングされるべき。
 
-**期待結果:** A skills array where each entry has id, name, description, tags, examples, and I/O modes.
+**期待結果:** 各エントリにid、name、description、tags、examples、I/Oモードを持つskills配列。
 
-**失敗時:** If skills overlap significantly, merge them into a single broader skill with more examples. If a skill is too broad, split it into focused sub-skills.
+**失敗時:** スキルが大幅に重複する場合、より多くの例を持つ1つの広いスキルにマージする。スキルが広すぎる場合、焦点を絞ったサブスキルに分割する。
 
-### ステップ3: Configure Authentication
+### ステップ3: 認証の設定
 
-3.1. Define the authentication scheme based on deployment context:
+3.1. デプロイメントコンテキストに基づいて認証スキームを定義する:
 
-**No authentication (local/trusted network):**
+**認証なし（ローカル/信頼されたネットワーク）:**
 
 ```json
 {
@@ -140,7 +139,7 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-**OAuth 2.0 (recommended for production):**
+**OAuth 2.0（本番環境に推奨）:**
 
 ```json
 {
@@ -160,7 +159,7 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-**API Key (simple shared-secret):**
+**APIキー（シンプルな共有シークレット）:**
 
 ```json
 {
@@ -175,20 +174,20 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-3.2. Choose the minimum viable authentication for the deployment environment:
-   - Local development: `none`
-   - Internal services: `apiKey`
-   - Public-facing agents: `oauth2` or `oidc`
+3.2. デプロイメント環境に最小限の認証を選択する:
+   - ローカル開発: `none`
+   - 内部サービス: `apiKey`
+   - パブリックエージェント: `oauth2`または`oidc`
 
-3.3. Document the token/key provisioning process in the Agent Card's provider section or external documentation.
+3.3. トークン/キーのプロビジョニングプロセスをAgent Cardのproviderセクションまたは外部ドキュメントに文書化する。
 
-**期待結果:** An authentication block matching the deployment security requirements.
+**期待結果:** デプロイメントのセキュリティ要件に一致する認証ブロック。
 
-**失敗時:** If OAuth 2.0 infrastructure is not available, start with API key authentication and plan migration. Never deploy a public agent with `none` authentication.
+**失敗時:** OAuth 2.0インフラストラクチャが利用できない場合、APIキー認証で開始し移行を計画する。パブリックエージェントを`none`認証でデプロイしない。
 
-### ステップ4: Specify Capabilities
+### ステップ4: 機能の指定
 
-4.1. Declare what protocol features the agent supports:
+4.1. エージェントがサポートするプロトコル機能を宣言する:
 
 ```json
 {
@@ -200,21 +199,21 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-4.2. Set each capability flag based on implementation readiness:
+4.2. 実装の準備状況に基づいて各機能フラグを設定する:
 
-   - **streaming**: `true` if the agent supports SSE streaming via `tasks/sendSubscribe`. Enables real-time progress updates for long-running tasks.
-   - **pushNotifications**: `true` if the agent can send webhook callbacks when task state changes. Requires the agent to store and call back webhook URLs.
-   - **stateTransitionHistory**: `true` if the agent maintains a full history of task state transitions (submitted, working, completed, etc.). Useful for audit trails.
+   - **streaming**: エージェントが`tasks/sendSubscribe`経由のSSEストリーミングをサポートする場合`true`。長時間実行タスクのリアルタイム進捗更新を有効にする。
+   - **pushNotifications**: エージェントがタスク状態変更時にWebhookコールバックを送信できる場合`true`。エージェントがWebhook URLを保存しコールバックする必要がある。
+   - **stateTransitionHistory**: エージェントがタスク状態遷移（submitted、working、completedなど）の完全な履歴を維持する場合`true`。監査証跡に有用。
 
-4.3. Only set capabilities to `true` if the implementation fully supports them. Advertising unsupported capabilities breaks interoperability.
+4.3. 実装が完全にサポートしている場合のみ機能を`true`に設定する。サポートされていない機能の宣伝は相互運用性を壊す。
 
-**期待結果:** A capabilities object with boolean flags matching actual implementation.
+**期待結果:** 実際の実装に一致するブール値フラグを持つcapabilitiesオブジェクト。
 
-**失敗時:** If unsure whether a capability will be implemented, set it to `false`. Capabilities can be added in future versions. Removing a capability is a breaking change.
+**失敗時:** 機能が実装されるか不確かな場合、`false`に設定する。機能は将来のバージョンで追加できる。機能の削除は破壊的変更である。
 
-### ステップ5: Validate and Publish Agent Card
+### ステップ5: Agent Cardの検証と公開
 
-5.1. Assemble the complete Agent Card:
+5.1. 完全なAgent Cardを組み立てる:
 
 ```json
 {
@@ -241,52 +240,52 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-5.2. Validate the Agent Card:
-   - Parse as JSON and verify no syntax errors
-   - Verify all required fields are present (name, description, url, skills)
-   - Verify each skill has id, name, description, and at least one input/output mode
-   - Verify the URL is reachable and serves the card at `/.well-known/agent.json`
+5.2. Agent Cardを検証する:
+   - JSONとしてパースし構文エラーがないことを確認
+   - すべての必須フィールドが存在することを確認（name、description、url、skills）
+   - 各スキルにid、name、description、少なくとも1つの入出力モードがあることを確認
+   - URLが到達可能で`/.well-known/agent.json`でカードを配信していることを確認
 
-5.3. Publish the Agent Card:
-   - Serve at `https://<agent-url>/.well-known/agent.json`
-   - Set `Content-Type: application/json`
-   - Enable CORS headers if cross-origin discovery is needed
-   - Register with any relevant agent directories or registries
+5.3. Agent Cardを公開する:
+   - `https://<agent-url>/.well-known/agent.json`で配信
+   - `Content-Type: application/json`を設定
+   - クロスオリジン発見が必要な場合はCORSヘッダーを有効にする
+   - 関連するエージェントディレクトリやレジストリに登録する
 
-5.4. Test discovery by fetching the card:
+5.4. カードのフェッチにより発見をテストする:
 
 ```bash
 curl -s https://agent.example.com/.well-known/agent.json | python3 -m json.tool
 ```
 
-**期待結果:** A valid JSON Agent Card served at the well-known URL, parseable by any A2A client.
+**期待結果:** well-known URLで配信され、任意のA2Aクライアントがパース可能な有効なJSON Agent Card。
 
-**失敗時:** If JSON validation fails, use a JSON linter to identify syntax errors. If the URL is not reachable, check DNS, SSL certificates, and web server configuration. If CORS is needed, add `Access-Control-Allow-Origin` headers.
+**失敗時:** JSON検証が失敗する場合、JSONリンターを使用して構文エラーを特定する。URLが到達不能な場合、DNS、SSL証明書、Webサーバー設定を確認する。CORSが必要な場合、`Access-Control-Allow-Origin`ヘッダーを追加する。
 
 ## バリデーション
 
-- [ ] Agent Card is valid JSON with no syntax errors
-- [ ] All required fields are present: name, description, url, skills
-- [ ] Each skill has id, name, description, inputModes, and outputModes
-- [ ] Authentication scheme matches deployment security requirements
-- [ ] Capability flags accurately reflect implementation status
-- [ ] Agent Card is served at `/.well-known/agent.json` with correct Content-Type
-- [ ] A2A clients can fetch and parse the card successfully
-- [ ] Examples in skills are realistic and trigger the correct skill
+- [ ] Agent Cardが構文エラーのない有効なJSONである
+- [ ] すべての必須フィールドが存在する: name、description、url、skills
+- [ ] 各スキルにid、name、description、inputModes、outputModesがある
+- [ ] 認証スキームがデプロイメントのセキュリティ要件に一致する
+- [ ] 機能フラグが実際の実装状態を正確に反映する
+- [ ] Agent Cardが正しいContent-Typeで`/.well-known/agent.json`に配信されている
+- [ ] A2Aクライアントがカードを正常にフェッチ・パースできる
+- [ ] スキル内のexamplesが現実的で正しいスキルをトリガーする
 
 ## よくある落とし穴
 
-- **Overpromising capabilities**: Setting `streaming: true` or `pushNotifications: true` without implementation causes client failures when those features are used. Be conservative.
-- **Vague skill descriptions**: Descriptions like "does data stuff" prevent accurate skill matching. Be specific about inputs, outputs, and domains.
-- **Missing CORS headers**: Browser-based A2A clients cannot fetch the Agent Card without proper CORS configuration.
-- **Skill overlap**: If two skills could handle the same task, client agents cannot determine which to invoke. Ensure clear boundaries.
-- **Forgetting default modes**: If `defaultInputModes` and `defaultOutputModes` are omitted, clients may not know what content types to send.
-- **Version stagnation**: Update the Agent Card version when skills or capabilities change. Clients may cache old versions.
-- **Publishing before implementation**: The Agent Card is a contract. Publishing skills that are not yet implemented leads to runtime failures.
+- **機能の過大宣伝**: 実装なしに`streaming: true`や`pushNotifications: true`を設定すると、それらの機能が使用された時にクライアント障害を引き起こす。控えめにする
+- **曖昧なスキル説明**: 「データ関連のことをする」のような説明は正確なスキルマッチングを妨げる。入力、出力、ドメインについて具体的にする
+- **CORSヘッダーの欠落**: ブラウザベースのA2AクライアントはCORS設定なしにAgent Cardをフェッチできない
+- **スキルの重複**: 2つのスキルが同じタスクを処理できる場合、クライアントエージェントはどちらを呼び出すか判断できない。明確な境界を確保する
+- **デフォルトモードの省略**: `defaultInputModes`と`defaultOutputModes`が省略されると、クライアントはどのコンテンツタイプを送信すべきか分からない場合がある
+- **バージョンの停滞**: スキルや機能が変更された時にAgent Cardのバージョンを更新する。クライアントが古いバージョンをキャッシュしている場合がある
+- **実装前の公開**: Agent Cardは契約である。まだ実装されていないスキルを公開するとランタイム障害につながる
 
 ## 関連スキル
 
-- `implement-a2a-server` - implement the server behind the Agent Card
-- `test-a2a-interop` - validate Agent Card conformance and interoperability
-- `build-custom-mcp-server` - MCP server as alternative/complement to A2A
-- `configure-mcp-server` - MCP configuration patterns applicable to A2A setup
+- `implement-a2a-server` -- Agent Cardの背後にあるサーバーを実装する
+- `test-a2a-interop` -- Agent Cardの適合性と相互運用性を検証する
+- `build-custom-mcp-server` -- A2Aの代替/補完としてのMCPサーバー
+- `configure-mcp-server` -- A2Aセットアップに適用可能なMCP設定パターン

@@ -1,13 +1,14 @@
 ---
 name: identify-gemstone
 description: >
-  Identify gemstones using optical properties, physical tests, and
-  inclusion analysis. Covers refractive index, specific gravity,
-  pleochroism, spectroscopy indicators, and common simulant detection.
-  Use when identifying an unknown gemstone, verifying a seller's claim about
-  species identity, distinguishing natural stones from simulants or synthetics,
-  building gemological literacy through structured observation, or identifying
-  rough material before cutting to ensure safe handling.
+  Edelsteine anhand optischer Eigenschaften, physikalischer Tests und
+  Einschlussanalyse identifizieren. Umfasst Brechungsindex, spezifisches
+  Gewicht, Pleochroismus, Spektroskopie-Indikatoren und Erkennung gaengiger
+  Simulanten. Verwenden beim Identifizieren eines unbekannten Edelsteins,
+  beim Ueberpruefen der Artangabe eines Verkaeufers, beim Unterscheiden
+  natuerlicher Steine von Simulanten oder Synthesen, beim Aufbau
+  gemmologischer Kompetenz durch strukturierte Beobachtung oder beim
+  Identifizieren von Rohmaterial vor dem Schleifen zur sicheren Handhabung.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,32 +27,32 @@ metadata:
 
 # Edelstein identifizieren
 
-Identify gemstones using systematic physical and optical property testing, inclusion analysis, and elimination against known species profiles.
+Edelsteine anhand systematischer physikalischer und optischer Eigenschaftstests, Einschlussanalyse und Ausschlussverfahren gegen bekannte Artprofile identifizieren.
 
-## When to Use
+## Wann verwenden
 
-- You have an unknown gemstone or suspect gemstone and want to identify the species
-- You need to verify a seller's claim about a gemstone's identity
-- You want to distinguish a natural gemstone from a common simulant or synthetic
-- You are building gemological literacy through structured observation and testing
-- You need to identify rough material before cutting to ensure safe handling
+- Sie haben einen unbekannten Edelstein oder vermuteten Edelstein und moechten die Art bestimmen
+- Sie muessen die Artangabe eines Verkaeufers ueberpruefen
+- Sie moechten einen natuerlichen Edelstein von einem gaengigen Simulanten oder einer Synthese unterscheiden
+- Sie bauen gemmologische Kompetenz durch strukturierte Beobachtung und Tests auf
+- Sie muessen Rohmaterial vor dem Schleifen identifizieren, um sichere Handhabung zu gewaehrleisten
 
-## Inputs
+## Eingaben
 
-- **Required**: A gemstone specimen (loose stone preferred; mounted stones limit testing)
-- **Optional**: Refractometer with contact liquid (RI fluid, 1.81 standard)
-- **Optional**: Dichroscope (for pleochroism testing)
-- **Optional**: Chelsea colour filter
-- **Optional**: Specific gravity balance or heavy liquids
-- **Optional**: 10x loupe or gemological microscope
-- **Optional**: UV lamp (long-wave 365nm and short-wave 254nm)
-- **Optional**: Polariscope (for optic character determination)
+- **Erforderlich**: Ein Edelstein-Exemplar (loser Stein bevorzugt; gefasste Steine schraenken die Testmoeglichkeiten ein)
+- **Optional**: Refraktometer mit Kontaktfluessigkeit (RI-Fluessigkeit, 1,81 Standard)
+- **Optional**: Dichroskop (fuer Pleochroismus-Tests)
+- **Optional**: Chelsea-Farbfilter
+- **Optional**: Hydrostatische Waage oder schwere Fluessigkeiten
+- **Optional**: 10x Lupe oder gemmologisches Mikroskop
+- **Optional**: UV-Lampe (Langwelle 365nm und Kurzwelle 254nm)
+- **Optional**: Polariskop (fuer optische Charakterbestimmung)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Visual Inspection
+### Schritt 1: Visuelle Inspektion
 
-Examine the specimen with the unaided eye and then under 10x magnification.
+Das Exemplar mit blossem Auge und anschliessend unter 10-facher Vergroesserung untersuchen.
 
 ```
 Visual Inspection Checklist:
@@ -79,19 +80,19 @@ Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 ```
 
-1. Note the body colour under daylight-equivalent lighting (5500-6500K)
-2. Check for colour zoning by viewing through the stone from different angles
-3. Assess transparency and luster — these narrow the candidate list immediately
-4. Look for optical phenomena (star, cat's eye, play of colour)
-5. Record any visible inclusions without magnification
+1. Die Koerperfarbe unter tageslichtaequivalenter Beleuchtung (5500-6500K) notieren
+2. Auf Farbzonierung pruefen, indem der Stein aus verschiedenen Winkeln betrachtet wird
+3. Transparenz und Glanz bewerten — diese grenzen die Kandidatenliste sofort ein
+4. Nach optischen Phaenomenen suchen (Stern, Katzenauge, Farbspiel)
+5. Alle ohne Vergroesserung sichtbaren Einschluesse erfassen
 
-**Expected:** A complete visual profile including colour, transparency, luster, and any phenomena. This alone narrows candidates to a manageable shortlist.
+**Erwartet:** Ein vollstaendiges visuelles Profil einschliesslich Farbe, Transparenz, Glanz und etwaiger Phaenomene. Dies allein grenzt die Kandidaten auf eine handhabbare Auswahlliste ein.
 
-**On failure:** If lighting is poor (yellowish indoor light), note the limitation. Daylight or daylight-equivalent bulbs are strongly preferred. Incandescent light shifts colour perception and can cause misidentification of colour-change stones.
+**Bei Fehler:** Wenn die Beleuchtung schlecht ist (gelbliches Raumlicht), die Einschraenkung notieren. Tageslicht oder tageslichtaequivalente Leuchtmittel werden dringend empfohlen. Gluehlampen verschieben die Farbwahrnehmung und koennen zur Fehlidentifikation von Farbwechselsteinen fuehren.
 
-### Step 2: Physical Property Testing
+### Schritt 2: Physikalische Eigenschaftstests
 
-Test measurable physical properties to narrow the identification.
+Messbare physikalische Eigenschaften testen, um die Identifikation einzugrenzen.
 
 ```
 Key Physical Properties:
@@ -123,18 +124,18 @@ Key Physical Properties:
 +--------------------+------------------------------------------+
 ```
 
-1. For rough material: test hardness using Mohs scale reference points
-2. For cut stones: measure specific gravity using hydrostatic method
-3. Assess heft — experienced handlers can distinguish CZ from diamond by weight alone
-4. Note any cleavage planes visible on the surface
+1. Bei Rohmaterial: Haerte anhand von Mohs-Skala-Referenzpunkten testen
+2. Bei geschliffenen Steinen: Spezifisches Gewicht mit hydrostatischer Methode messen
+3. Die Haptik bewerten — erfahrene Pruefer koennen CZ von Diamant allein am Gewicht unterscheiden
+4. Alle an der Oberflaeche sichtbaren Spaltflaechen notieren
 
-**Expected:** Hardness range (for rough) or SG value (for cut stones) that differentiates between candidate species. SG is often the most powerful single diagnostic for cut stones.
+**Erwartet:** Haertebereich (bei Rohmaterial) oder SG-Wert (bei geschliffenen Steinen), der zwischen Kandidatenarten differenziert. SG ist oft die aussagekraeftigste Einzeldiagnostik fuer geschliffene Steine.
 
-**On failure:** If hydrostatic balance is unavailable, use the heft test as a rough guide. Stones that feel "too heavy for their size" likely have high SG (>3.5). If hardness testing would damage a cut stone, skip to optical tests.
+**Bei Fehler:** Wenn keine hydrostatische Waage verfuegbar ist, den Haptik-Test als grobe Orientierung verwenden. Steine, die sich „zu schwer fuer ihre Groesse" anfuehlen, haben wahrscheinlich ein hohes SG (>3,5). Wenn ein Haertetest den geschliffenen Stein beschaedigen wuerde, zu den optischen Tests springen.
 
-### Step 3: Optical Tests
+### Schritt 3: Optische Tests
 
-Apply gemological optical instruments for definitive properties.
+Gemmologische optische Instrumente fuer definitive Eigenschaften anwenden.
 
 ```
 Optical Property Tests:
@@ -179,19 +180,19 @@ Optical Property Tests:
 +--------------------+------------------------------------------+
 ```
 
-1. Measure RI on refractometer — take both high and low readings for birefringence
-2. Test pleochroism with dichroscope — rotate slowly and note colour changes
-3. Check optic character on polariscope (SR vs DR vs AGG)
-4. Test UV fluorescence under both long-wave and short-wave
-5. Use Chelsea filter if chromium-coloured stones are suspected
+1. RI am Refraktometer messen — sowohl hohe als auch niedrige Ablesung fuer die Doppelbrechung nehmen
+2. Pleochroismus mit Dichroskop testen — langsam drehen und Farbwechsel notieren
+3. Optischen Charakter am Polariskop pruefen (SR vs. DR vs. AGG)
+4. UV-Fluoreszenz unter Langwelle und Kurzwelle testen
+5. Chelsea-Filter verwenden, wenn chromgefaerbte Steine vermutet werden
 
-**Expected:** RI value (to 0.001), birefringence, optic character, pleochroism description, and UV response. Combined with Step 2, this identifies most gemstone species definitively.
+**Erwartet:** RI-Wert (auf 0,001), Doppelbrechung, optischer Charakter, Pleochroismus-Beschreibung und UV-Reaktion. Zusammen mit Schritt 2 identifiziert dies die meisten Edelsteinarten definitiv.
 
-**On failure:** If RI is over-the-limit (OTL, >1.81), the stone is likely diamond, CZ, zircon (high-type), or a high-RI synthetic. Use SG and thermal conductivity to differentiate. If no refractometer is available, rely on SG + visual properties + inclusions.
+**Bei Fehler:** Wenn der RI ueber der Messgrenze liegt (OTL, >1,81), handelt es sich wahrscheinlich um Diamant, CZ, Zirkon (Hochtyp) oder eine Synthese mit hohem RI. SG und Waermeleitfaehigkeit zur Differenzierung verwenden. Wenn kein Refraktometer verfuegbar ist, auf SG + visuelle Eigenschaften + Einschluesse stuetzen.
 
-### Step 4: Inclusion Analysis
+### Schritt 4: Einschlussanalyse
 
-Examine internal features under magnification for species confirmation and natural vs. synthetic determination.
+Innere Merkmale unter Vergroesserung zur Artbestaetigung und Bestimmung natuerlich vs. synthetisch untersuchen.
 
 ```
 Diagnostic Inclusions by Species:
@@ -233,60 +234,60 @@ Synthetic Indicators:
 +------------------+------------------------------------------+
 ```
 
-1. Examine the stone under darkfield illumination (gemological microscope) or oblique lighting through a 10x loupe
-2. Look for species-diagnostic inclusions first
-3. Check for synthetic indicators — curved striae and gas bubbles are definitive for flame-fusion synthetics
-4. Note the inclusion type, location, and frequency
-5. Photograph inclusions if possible for records
+1. Den Stein unter Dunkelfeld-Beleuchtung (gemmologisches Mikroskop) oder Schraegbeleuchtung durch eine 10x Lupe untersuchen
+2. Zuerst nach artdiagnostischen Einschluessen suchen
+3. Auf Synthese-Indikatoren pruefen — gekruemmte Streifen und Gasblasen sind beweisend fuer Flammen-Schmelzsynthesen
+4. Einschlusstyp, Lage und Haeufigkeit notieren
+5. Einschluesse nach Moeglichkeit fotografisch dokumentieren
 
-**Expected:** Species-confirming inclusion pattern and natural/synthetic determination. Some species are identified more by their inclusions than by optical properties (e.g., emerald's jardin).
+**Erwartet:** Artbestaetigende Einschlussmuster und Bestimmung natuerlich/synthetisch. Einige Arten werden eher durch ihre Einschluesse als durch optische Eigenschaften identifiziert (z.B. der Jardin des Smaragds).
 
-**On failure:** If the stone is eye-clean and no inclusions are visible at 10x, it may be a very clean natural stone or a synthetic. Lack of inclusions raises the synthetic probability — refer to optical and physical tests for confirmation. Laboratory analysis (FTIR, Raman) may be needed.
+**Bei Fehler:** Wenn der Stein augenrein ist und bei 10x keine Einschluesse sichtbar sind, kann es sich um einen sehr sauberen natuerlichen Stein oder eine Synthese handeln. Das Fehlen von Einschluessen erhoeht die Synthese-Wahrscheinlichkeit — optische und physikalische Tests zur Bestaetigung heranziehen. Laboranalyse (FTIR, Raman) kann erforderlich sein.
 
-### Step 5: Identification by Elimination
+### Schritt 5: Identifikation durch Ausschlussverfahren
 
-Cross-reference all collected data to reach a final identification.
+Alle gesammelten Daten zur endgueltigen Identifikation abgleichen.
 
-1. Compile the property profile:
-   - Colour + transparency + luster
-   - Hardness or SG
-   - RI + birefringence + optic character
-   - Pleochroism + UV fluorescence
-   - Inclusion pattern
-2. Compare against reference tables for candidate species
-3. Eliminate species that conflict with any measured property
-4. If two or more candidates remain, identify the distinguishing test:
-   - Example: blue topaz vs. aquamarine — SG is definitive (3.53 vs. 2.70)
-5. State the identification with confidence level:
-   - **Definitive**: Multiple properties confirm a single species
-   - **Probable**: Properties consistent with one species, but one test missing
-   - **Uncertain**: Conflicting data or insufficient testing — laboratory referral recommended
+1. Das Eigenschaftsprofil zusammenstellen:
+   - Farbe + Transparenz + Glanz
+   - Haerte oder SG
+   - RI + Doppelbrechung + optischer Charakter
+   - Pleochroismus + UV-Fluoreszenz
+   - Einschlussmuster
+2. Mit Referenztabellen fuer Kandidatenarten vergleichen
+3. Arten eliminieren, die mit einer gemessenen Eigenschaft in Widerspruch stehen
+4. Wenn zwei oder mehr Kandidaten verbleiben, den unterscheidenden Test identifizieren:
+   - Beispiel: Blautopas vs. Aquamarin — SG ist beweisend (3,53 vs. 2,70)
+5. Die Identifikation mit Konfidenzgrad angeben:
+   - **Definitiv**: Mehrere Eigenschaften bestaetigen eine einzelne Art
+   - **Wahrscheinlich**: Eigenschaften konsistent mit einer Art, aber ein Test fehlt
+   - **Unsicher**: Widerspruechliche Daten oder unzureichende Tests — Laborueberweisung empfohlen
 
-**Expected:** A final species identification (e.g., "Natural sapphire, blue, heat-treated") with supporting evidence from each test category. Or a clear recommendation for laboratory analysis if field tests are insufficient.
+**Erwartet:** Eine endgueltige Artidentifikation (z.B. „Natuerlicher Saphir, blau, waermebehandelt") mit stuetzenden Belegen aus jeder Testkategorie. Oder eine klare Empfehlung zur Laboranalyse, wenn Feldtests nicht ausreichen.
 
-**On failure:** If the stone cannot be identified with available equipment, document all measured properties and refer to a gemological laboratory. Provide the measured data to the lab — it accelerates their analysis.
+**Bei Fehler:** Wenn der Stein mit verfuegbarer Ausruestung nicht identifiziert werden kann, alle gemessenen Eigenschaften dokumentieren und an ein gemmologisches Labor ueberweisen. Die gemessenen Daten dem Labor bereitstellen — das beschleunigt deren Analyse.
 
-## Validation
+## Validierung
 
-- [ ] Visual inspection completed under daylight-equivalent lighting
-- [ ] At least two physical properties measured (hardness/SG + one other)
-- [ ] RI measured and birefringence calculated (if refractometer available)
-- [ ] Pleochroism tested (if dichroscope available)
-- [ ] Inclusions examined under at least 10x magnification
-- [ ] Identification reached by systematic elimination, not assumption
-- [ ] Common simulants explicitly considered and ruled out
-- [ ] Natural vs. synthetic determination made (or flagged as uncertain)
+- [ ] Visuelle Inspektion unter tageslichtaequivalenter Beleuchtung abgeschlossen
+- [ ] Mindestens zwei physikalische Eigenschaften gemessen (Haerte/SG + eine weitere)
+- [ ] RI gemessen und Doppelbrechung berechnet (wenn Refraktometer verfuegbar)
+- [ ] Pleochroismus getestet (wenn Dichroskop verfuegbar)
+- [ ] Einschluesse unter mindestens 10-facher Vergroesserung untersucht
+- [ ] Identifikation durch systematisches Ausschlussverfahren erreicht, nicht durch Annahme
+- [ ] Gaengige Simulanten explizit in Betracht gezogen und ausgeschlossen
+- [ ] Bestimmung natuerlich vs. synthetisch getroffen (oder als unsicher gekennzeichnet)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Trusting colour alone**: Colour is the least reliable identification property. Blue stones include sapphire, topaz, aquamarine, tanzanite, iolite, spinel, glass, and CZ. Always confirm with measurable properties
-- **Skipping SG on mounted stones**: Mounted stones limit testing, but you can still check RI, pleochroism, inclusions, and UV. Document the limitation rather than guessing
-- **Confusing high-RI synthetics with naturals**: Flame-fusion rubies and sapphires have identical RI and SG to natural stones. Only inclusions (curved striae vs. straight growth) differentiate them
-- **Assuming expensive = natural**: Commercial jewellery frequently contains treated, synthetic, or simulant stones. Test every stone regardless of provenance claims
-- **Damaging the specimen**: Never hardness-test a faceted gemstone — it will leave visible scratches. Use non-destructive tests (RI, SG, inclusions) for cut stones
+- **Farbe allein vertrauen**: Farbe ist die unzuverlaessigste Identifikationseigenschaft. Blaue Steine umfassen Saphir, Topas, Aquamarin, Tansanit, Iolith, Spinell, Glas und CZ. Immer mit messbaren Eigenschaften bestaetigen
+- **SG bei gefassten Steinen ueberspringen**: Gefasste Steine schraenken die Tests ein, aber RI, Pleochroismus, Einschluesse und UV koennen trotzdem geprueft werden. Die Einschraenkung dokumentieren statt zu raten
+- **Hochbrechende Synthesen mit natuerlichen Steinen verwechseln**: Flammen-Schmelz-Rubine und -Saphire haben identische RI- und SG-Werte wie natuerliche Steine. Nur Einschluesse (gekruemmte Streifen vs. gerades Wachstum) unterscheiden sie
+- **Annehmen, teuer = natuerlich**: Kommerzieller Schmuck enthaelt haeufig behandelte, synthetische oder simulierte Steine. Jeden Stein testen, unabhaengig von Herkunftsangaben
+- **Das Exemplar beschaedigen**: Niemals einen facettierten Edelstein einem Haertetest unterziehen — es hinterlaesst sichtbare Kratzer. Zerstoerungsfreie Tests (RI, SG, Einschluesse) fuer geschliffene Steine verwenden
 
-## Related Skills
+## Verwandte Skills
 
-- `cut-gemstone` — Identification determines safe cutting parameters and orientation requirements for the species
-- `appraise-gemstone` — Positive identification is the prerequisite for any meaningful valuation
-- `mineral-identification` — Field mineral identification methodology using physical properties (prospecting domain) shares the systematic elimination approach
+- `cut-gemstone` — Die Identifikation bestimmt sichere Schleifparameter und Orientierungsanforderungen fuer die Art
+- `appraise-gemstone` — Positive Identifikation ist die Voraussetzung fuer jede aussagekraeftige Bewertung
+- `mineral-identification` — Feldmineralidentifikation anhand physikalischer Eigenschaften (Prospecting-Domaene) teilt den systematischen Ausschlussansatz

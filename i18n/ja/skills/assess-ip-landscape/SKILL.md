@@ -1,13 +1,11 @@
 ---
 name: assess-ip-landscape
 description: >
-  Map the intellectual property landscape for a technology domain or product
-  area. Covers patent cluster analysis, white space identification, competitor
-  IP portfolio assessment, freedom-to-operate preliminary screening, and
-  strategic IP positioning recommendations. Use before starting R&D in a new
-  technology area, when evaluating market entry against incumbents with strong
-  patent portfolios, preparing for investment due diligence, informing a patent
-  filing strategy, or assessing freedom-to-operate risk for a new product.
+  技術ドメインまたは製品分野の知的財産ランドスケープをマッピングする。特許クラスター
+  分析、ホワイトスペース特定、競合他社IPポートフォリオ評価、実施自由（FTO）予備
+  スクリーニング、戦略的IPポジショニング推奨をカバーする。新技術分野でR&D開始前、
+  強力な特許ポートフォリオを持つ既存企業に対して市場参入を評価する時、投資
+  デューデリジェンスの準備、特許出願戦略の策定、新製品のFTOリスク評価時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,64 +22,64 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 知的財産ランドスケープの評価
+# IPランドスケープの評価
 
-Map the intellectual property landscape for a technology area — identify patent clusters, white spaces, key players, and freedom-to-operate risks. Produces a strategic assessment that informs R&D direction, licensing decisions, and IP filing strategy.
+技術分野の知的財産ランドスケープをマッピングする — 特許クラスター、ホワイトスペース、主要プレイヤー、実施自由（FTO）リスクを特定する。R&Dの方向性、ライセンス決定、IP出願戦略に情報を提供する戦略的評価を生成する。
 
 ## 使用タイミング
 
-- Before starting R&D in a new technology area (what's already claimed?)
-- Evaluating a market entry where incumbents have strong patent portfolios
-- Preparing for investment due diligence (IP asset assessment)
-- Informing a patent filing strategy (where to file, what to claim)
-- Assessing freedom-to-operate risk for a new product or feature
-- Monitoring competitor IP activity for strategic positioning
+- 新技術分野でR&Dを開始する前（何がすでに請求されているか？）
+- 既存企業が強力な特許ポートフォリオを持つ市場への参入を評価する時
+- 投資デューデリジェンス（IP資産評価）の準備時
+- 特許出願戦略の策定時（どこに出願するか、何を請求するか）
+- 新製品や機能のFTOリスクを評価する時
+- 戦略的ポジショニングのために競合他社のIP活動を監視する時
 
 ## 入力
 
-- **必須**: Technology domain or product area to assess
-- **必須**: Geographic scope (US, EU, global)
-- **任意**: Specific competitors to focus on
-- **任意**: Own patent portfolio (for gap analysis and FTO)
-- **任意**: Time horizon (last 5 years, last 10 years, all time)
-- **任意**: Classification codes (IPC, CPC) if known
+- **必須**: 評価する技術ドメインまたは製品分野
+- **必須**: 地理的範囲（米国、EU、グローバル）
+- **任意**: 焦点を当てる特定の競合他社
+- **任意**: 自社の特許ポートフォリオ（ギャップ分析とFTO用）
+- **任意**: 時間軸（過去5年、過去10年、全期間）
+- **任意**: 分類コード（IPC、CPC）（既知の場合）
 
 ## 手順
 
-### ステップ1: Define the Search Scope
+### ステップ1: 検索範囲の定義
 
-Establish the boundaries of the landscape analysis.
+ランドスケープ分析の境界を確立する。
 
-1. Define the technology domain precisely:
-   - Core technology area (e.g., "transformer-based language models" not "AI")
-   - Adjacent areas to include (e.g., "attention mechanisms, tokenization, inference optimization")
-   - Areas to explicitly exclude (e.g., "computer vision transformers" if focusing on NLP)
-2. Identify relevant classification codes:
-   - IPC (International Patent Classification) — broad, used worldwide
-   - CPC (Cooperative Patent Classification) — more specific, US/EU standard
-   - Search WIPO's IPC publication or USPTO's CPC browser
-3. Define the geographic scope:
-   - US (USPTO), EU (EPO), WIPO (PCT), specific national offices
-   - Most analyses start with US + EU + PCT for broad coverage
-4. Set the time window:
-   - Recent activity: last 3-5 years (current competitive landscape)
-   - Full history: 10-20 years (mature technology areas)
-   - Watch for expired patents that open up design space
-5. Document the scope as the **Landscape Charter**
+1. 技術ドメインを正確に定義する:
+   - コア技術分野（例: 「AIではなく、Transformerベースの言語モデル」）
+   - 含める隣接分野（例: 「アテンションメカニズム、トークン化、推論最適化」）
+   - 明示的に除外する分野（例: NLPに焦点を当てる場合「コンピュータビジョンTransformer」）
+2. 関連する分類コードを特定する:
+   - IPC（国際特許分類） — 広範、世界中で使用
+   - CPC（共同特許分類） — より具体的、米国/EU標準
+   - WIPOのIPC公報またはUSPTOのCPCブラウザを検索
+3. 地理的範囲を定義する:
+   - 米国（USPTO）、EU（EPO）、WIPO（PCT）、特定の国内庁
+   - ほとんどの分析は広範なカバレッジのために米国 + EU + PCTから開始
+4. 時間枠を設定する:
+   - 最近の活動: 過去3-5年（現在の競争環境）
+   - 完全な履歴: 10-20年（成熟した技術分野）
+   - 設計空間を開放する期限切れ特許に注意
+5. 範囲を**ランドスケープチャーター**として文書化する
 
-**期待結果:** A clear, bounded scope that is specific enough to produce actionable results but broad enough to capture the relevant competitive landscape. Classification codes identified for systematic search.
+**期待結果:** 実行可能な結果を生むのに十分具体的だが、関連する競争環境を捕捉するのに十分広い、明確で境界のある範囲。体系的検索のための分類コードが特定される。
 
-**失敗時:** If the technology domain is too broad (thousands of results), narrow by adding technical specificity or focusing on a specific application area. If too narrow (few results), broaden to adjacent technologies. The right scope typically yields 100-1000 patent families.
+**失敗時:** 技術ドメインが広すぎる場合（数千件の結果）、技術的な具体性を追加するか特定のアプリケーション分野に焦点を当てて絞り込む。狭すぎる場合（少数の結果）、隣接技術に広げる。適切な範囲は通常100-1000の特許ファミリーを生む。
 
-### ステップ2: Harvest Patent Data
+### ステップ2: 特許データの収集
 
-Collect the patent data within the defined scope.
+定義された範囲内の特許データを収集する。
 
-1. Query patent databases using the Landscape Charter:
-   - **Free databases**: Google Patents, USPTO PatFT/AppFT, Espacenet, WIPO Patentscope
-   - **Commercial databases**: Orbit, PatSnap, Derwent, Lens.org (freemium)
-   - Combine keyword search + classification codes for best coverage
-2. Build search queries systematically:
+1. ランドスケープチャーターを使用して特許データベースにクエリする:
+   - **無料データベース**: Google Patents、USPTO PatFT/AppFT、Espacenet、WIPO Patentscope
+   - **商用データベース**: Orbit、PatSnap、Derwent、Lens.org（フリーミアム）
+   - キーワード検索 + 分類コードを組み合わせて最良のカバレッジを得る
+2. 体系的に検索クエリを構築する:
 
 ```
 Query Construction:
@@ -96,117 +94,117 @@ Query Construction:
 +-------------------+------------------------------------------+
 ```
 
-3. Download results in structured format (CSV, JSON) including:
-   - Patent/application number, title, abstract, filing date
-   - Assignee/applicant, inventor(s)
-   - Classification codes, citation data
-   - Legal status (granted, pending, expired, abandoned)
-4. Deduplicate by patent family (group national filings of the same invention)
-5. Record the total patent family count and source databases
+3. 構造化フォーマット（CSV、JSON）で結果をダウンロードする。以下を含む:
+   - 特許/出願番号、タイトル、要約、出願日
+   - 出願人/出願者、発明者
+   - 分類コード、引用データ
+   - 法的ステータス（付与済み、審査中、期限切れ、放棄）
+4. 特許ファミリーで重複排除する（同一発明の各国出願をグループ化）
+5. 総特許ファミリー数とソースデータベースを記録する
 
-**期待結果:** A structured dataset of patent families within scope, deduplicated and timestamped. The dataset is the foundation for all subsequent analysis.
+**期待結果:** 範囲内の特許ファミリーの構造化データセット。重複排除済みでタイムスタンプ付き。データセットは後続のすべての分析の基盤となる。
 
-**失敗時:** If database access is limited, Google Patents + Lens.org (free) provide good coverage. If the query returns too many results (>5000), add technical specificity. If too few (<50), broaden keywords or add classification codes.
+**失敗時:** データベースアクセスが制限されている場合、Google Patents + Lens.org（無料）が良いカバレッジを提供する。クエリが多すぎる結果を返す場合（>5000）、技術的な具体性を追加する。少なすぎる場合（<50）、キーワードを広げるか分類コードを追加する。
 
-### ステップ3: Analyze the Landscape
+### ステップ3: ランドスケープの分析
 
-Map the patent clusters, key players, and trends.
+特許クラスター、主要プレイヤー、トレンドをマッピングする。
 
-1. **Cluster analysis**: Group patents by sub-technology:
-   - Use classification codes or keyword clustering to identify 5-10 sub-areas
-   - Count patent families per cluster
-   - Identify which clusters are growing (recent filing surges) vs. mature (flat or declining)
-2. **Key player analysis**: Identify the top 10 assignees by:
-   - Total patent family count (portfolio breadth)
-   - Recent filing rate (last 3 years — current activity)
-   - Average citation count (patent quality proxy)
-   - Geographic filing breadth (US-only vs. global filings)
-3. **Trend analysis**: Chart filing trends over the time window:
-   - Overall filing volume by year
-   - Filing volume by cluster by year
-   - New entrants (assignees filing for the first time in the domain)
-4. **Citation network**: Identify the most-cited patents (foundational IP):
-   - High forward citations = heavily relied upon by subsequent filings
-   - These are likely blocking patents or essential prior art
-5. Produce the **Landscape Map**: clusters, players, trends, and key patents
+1. **クラスター分析**: サブ技術別に特許をグループ化する:
+   - 分類コードまたはキーワードクラスタリングを使用して5-10のサブ分野を特定
+   - クラスターごとの特許ファミリー数をカウント
+   - 成長中のクラスター（最近の出願急増）vs成熟したクラスター（横ばいまたは減少）を特定
+2. **主要プレイヤー分析**: 以下の基準でトップ10出願人を特定する:
+   - 総特許ファミリー数（ポートフォリオの広さ）
+   - 最近の出願率（過去3年 — 現在の活動）
+   - 平均引用数（特許品質の代理指標）
+   - 地理的な出願の広さ（米国のみ vs グローバル出願）
+3. **トレンド分析**: 時間枠にわたる出願トレンドをチャート化する:
+   - 年別の全体出願数
+   - 年別クラスター別の出願数
+   - 新規参入者（ドメインで初めて出願する出願人）
+4. **引用ネットワーク**: 最も引用されている特許（基盤IP）を特定する:
+   - 前方引用数が多い = 後続の出願で頻繁に参照されている
+   - これらはブロッキング特許または重要な先行技術である可能性が高い
+5. **ランドスケープマップ**を作成する: クラスター、プレイヤー、トレンド、主要特許
 
-**期待結果:** A clear picture of who owns what, where the activity is concentrated, and how the landscape is evolving. Key blocking patents identified. White spaces (areas with few filings) visible.
+**期待結果:** 誰が何を所有しているか、活動が集中している場所、ランドスケープがどのように進化しているかの明確な全体像。主要なブロッキング特許が特定される。ホワイトスペース（出願が少ない分野）が可視化される。
 
-**失敗時:** If the dataset is too small for meaningful clustering, combine clusters into broader groups. If one assignee dominates (>50% of filings), analyze their portfolio as a separate sub-landscape.
+**失敗時:** データセットが有意なクラスタリングに小さすぎる場合、クラスターをより広いグループに結合する。1つの出願人が支配的な場合（出願の>50%）、そのポートフォリオを別のサブランドスケープとして分析する。
 
-### ステップ4: Identify White Spaces and Risks
+### ステップ4: ホワイトスペースとリスクの特定
 
-Extract strategic insights from the landscape.
+ランドスケープから戦略的インサイトを抽出する。
 
-1. **White space analysis** (opportunities):
-   - Technology areas within scope with few or no patent filings
-   - Expired patent families where the design space has reopened
-   - Active areas where only one player has filed (first-mover but no competition)
-   - White spaces adjacent to growing clusters (next frontier)
-2. **FTO risk screening** (threats) — adapted from `heal` triage matrix:
-   - **Critical**: Granted patents directly covering your planned product/feature
-   - **High**: Pending applications likely to grant with relevant claims
-   - **Medium**: Granted patents in adjacent areas that could be broadly interpreted
-   - **Low**: Expired patents, narrow claims, or geographically irrelevant filings
-3. **Competitive positioning**:
-   - Where does your portfolio (if any) sit relative to competitors?
-   - Which competitors have blocking positions in your target areas?
-   - Which competitors might be interested in cross-licensing?
-4. Produce the **Strategic Assessment**: white spaces, FTO risks, positioning, and recommendations
+1. **ホワイトスペース分析**（機会）:
+   - 範囲内で特許出願が少ないまたはない技術分野
+   - 設計空間が再開放された期限切れ特許ファミリー
+   - 1社のみが出願している活発な分野（先行者だが競合なし）
+   - 成長中のクラスターに隣接するホワイトスペース（次のフロンティア）
+2. **FTOリスクスクリーニング**（脅威）:
+   - **重大**: 計画された製品/機能を直接カバーする付与済み特許
+   - **高**: 関連する請求項を持ち付与される可能性が高い出願中の出願
+   - **中**: 広く解釈される可能性のある隣接分野の付与済み特許
+   - **低**: 期限切れ特許、狭い請求項、地理的に無関係な出願
+3. **競争ポジショニング**:
+   - 自社のポートフォリオ（もしあれば）は競合他社と比較してどこに位置するか？
+   - どの競合他社がターゲット分野でブロッキングポジションを持っているか？
+   - どの競合他社がクロスライセンスに関心がある可能性があるか？
+4. **戦略的評価**を作成する: ホワイトスペース、FTOリスク、ポジショニング、推奨事項
 
-**期待結果:** Actionable strategic recommendations: where to file, what to avoid, who to watch, and what risks need detailed FTO analysis.
+**期待結果:** 実行可能な戦略的推奨: どこに出願するか、何を避けるか、誰を注視するか、どのリスクが詳細なFTO分析を必要とするか。
 
-**失敗時:** If FTO risks are identified, this screening is preliminary — it does NOT replace a formal FTO opinion from a patent attorney. Flag critical risks for legal review. If white spaces seem too good (a valuable area with no filings), verify the search scope didn't accidentally exclude relevant filings.
+**失敗時:** FTOリスクが特定された場合、このスクリーニングは予備的なものであり、特許弁護士による正式なFTO意見を置き換えるものではない。重大なリスクを法的レビュー用にフラグ立てする。ホワイトスペースがあまりにも良く見える場合（出願のない価値ある分野）、検索範囲が関連する出願を偶然に除外していないか確認する。
 
-### ステップ5: Document and Recommend
+### ステップ5: 文書化と推奨
 
-Package the landscape assessment for decision-makers.
+意思決定者向けにランドスケープ評価をパッケージ化する。
 
-1. Write the **Landscape Report** with sections:
-   - Executive summary (1 page: key findings, top risks, main recommendations)
-   - Scope and methodology (search terms, databases, date range)
-   - Landscape overview (clusters, trends, key players with visualizations)
-   - White space analysis (opportunities ranked by strategic value)
-   - Risk assessment (FTO concerns ranked by severity)
-   - Recommendations (filing strategy, licensing targets, monitoring alerts)
-2. Include supporting data:
-   - Patent family list (structured, sortable)
-   - Cluster map (visual)
-   - Filing trend charts
-   - Key patent summaries (top 10-20 most relevant patents)
-3. Set up ongoing monitoring:
-   - Define alert queries for new filings in critical areas
-   - Set review cadence (quarterly for active areas, annually for stable ones)
+1. 以下のセクションで**ランドスケープレポート**を作成する:
+   - エグゼクティブサマリー（1ページ: 主要な発見事項、トップリスク、主な推奨事項）
+   - 範囲と方法論（検索用語、データベース、日付範囲）
+   - ランドスケープ概要（クラスター、トレンド、可視化付き主要プレイヤー）
+   - ホワイトスペース分析（戦略的価値順にランク付けされた機会）
+   - リスク評価（深刻度順にランク付けされたFTO懸念）
+   - 推奨事項（出願戦略、ライセンスターゲット、監視アラート）
+2. 裏付けデータを含める:
+   - 特許ファミリーリスト（構造化、ソート可能）
+   - クラスターマップ（ビジュアル）
+   - 出願トレンドチャート
+   - 主要特許サマリー（最も関連性の高い10-20件の特許）
+3. 継続的な監視を設定する:
+   - 重要な分野の新規出願に対するアラートクエリを定義する
+   - レビュー頻度を設定する（活発な分野は四半期ごと、安定した分野は年次）
 
-**期待結果:** A complete landscape report that enables strategic IP decisions. The report is evidence-based, clearly scoped, and actionable.
+**期待結果:** 戦略的IP決定を可能にする完全なランドスケープレポート。レポートはエビデンスベースで、範囲が明確で、実行可能。
 
-**失敗時:** If the report is too large, produce the executive summary first and offer detailed sections on request. The executive summary should always stand alone as a decision document.
+**失敗時:** レポートが大きすぎる場合、まずエグゼクティブサマリーを作成し、詳細セクションをリクエストに応じて提供する。エグゼクティブサマリーは常に意思決定文書として独立できなければならない。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Landscape Charter defines scope, classification, geography, and time window
-- [ ] Patent dataset harvested from multiple databases and deduplicated
-- [ ] Clusters identified with filing counts and trend direction
-- [ ] Top 10 key players profiled with portfolio metrics
-- [ ] White spaces identified and ranked by strategic value
-- [ ] FTO risks screened and classified by severity
-- [ ] Key blocking patents identified with citation analysis
-- [ ] Recommendations are specific and actionable
-- [ ] Limitations acknowledged (screening vs. formal FTO opinion)
-- [ ] Monitoring alerts defined for ongoing landscape tracking
+- [ ] ランドスケープチャーターが範囲、分類、地理、時間枠を定義している
+- [ ] 複数のデータベースから特許データセットが収集され重複排除されている
+- [ ] 出願数とトレンド方向付きでクラスターが特定されている
+- [ ] ポートフォリオ指標付きでトップ10主要プレイヤーがプロファイルされている
+- [ ] ホワイトスペースが特定され戦略的価値順にランク付けされている
+- [ ] FTOリスクがスクリーニングされ深刻度別に分類されている
+- [ ] 引用分析で主要ブロッキング特許が特定されている
+- [ ] 推奨事項が具体的で実行可能である
+- [ ] 制限事項が認識されている（スクリーニング vs 正式FTO意見）
+- [ ] 継続的なランドスケープ追跡のための監視アラートが定義されている
 
 ## よくある落とし穴
 
-- **Too broad a scope**: "AI patents" is not a landscape — it's an ocean. Be specific about the technology and application
-- **Single-database reliance**: No single patent database has complete coverage. Use at least two sources
-- **Ignoring patent families**: Counting individual filings instead of families inflates the numbers. One invention filed in 10 countries is one patent family, not ten
-- **Confusing applications with grants**: A pending application is not an enforceable right. Distinguish between granted patents and published applications
-- **White space misinterpretation**: An empty area might mean "nobody tried" or "everybody tried and failed." Investigate before assuming opportunity
-- **Landscape as legal opinion**: This skill produces strategic intelligence, not legal advice. FTO risks flagged here need formal analysis by patent counsel
+- **範囲が広すぎる**: 「AI特許」はランドスケープではなく大海原。技術とアプリケーションについて具体的にする
+- **単一データベースへの依存**: 完全なカバレッジを持つ単一の特許データベースはない。少なくとも2つのソースを使用する
+- **特許ファミリーの無視**: ファミリーではなく個別出願をカウントすると数が膨張する。10カ国に出願された1つの発明は10件ではなく1つの特許ファミリー
+- **出願と付与の混同**: 審査中の出願は行使可能な権利ではない。付与済み特許と公開出願を区別する
+- **ホワイトスペースの誤解**: 空白の分野は「誰も試みなかった」か「全員が試みて失敗した」を意味する可能性がある。機会と仮定する前に調査する
+- **ランドスケープを法的意見として扱う**: このスキルは戦略的インテリジェンスを生成するものであり、法的アドバイスではない。ここでフラグ立てされたFTOリスクは特許弁護士による正式な分析が必要
 
 ## 関連スキル
 
-- `search-prior-art` — Detailed prior art search for specific inventions or patent validity challenges
-- `security-audit-codebase` — Risk assessment methodology parallels IP risk screening
-- `review-research` — Literature review skills apply to prior art analysis
-- `conduct-gxp-audit` — Audit methodology parallels systematic IP landscape documentation
+- `search-prior-art` — 特定の発明または特許有効性チャレンジのための詳細な先行技術調査
+- `security-audit-codebase` — リスク評価方法論はIPリスクスクリーニングと並行する
+- `review-research` — 文献レビュースキルは先行技術分析に適用される
+- `conduct-gxp-audit` — 監査方法論は体系的なIPランドスケープ文書化と並行する

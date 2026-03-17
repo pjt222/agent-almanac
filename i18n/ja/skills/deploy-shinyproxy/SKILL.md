@@ -1,13 +1,12 @@
 ---
 name: deploy-shinyproxy
 description: >
-  Deploy ShinyProxy for hosting multiple containerized Shiny applications.
-  Covers ShinyProxy Docker deployment, application.yml configuration,
-  Shiny app Docker images, authentication, container backends, usage
-  tracking, and scaling. Use when hosting multiple Shiny apps behind a single
-  entry point, needing per-app authentication and access control, deploying
-  Shiny apps as isolated Docker containers, or scaling beyond single-app
-  deployment with usage analytics and audit logging.
+  複数のコンテナ化されたShinyアプリケーションをホスティングするためにShinyProxyを
+  デプロイする。ShinyProxyのDockerデプロイメント、application.yml設定、Shinyアプリの
+  Dockerイメージ、認証、コンテナバックエンド、利用追跡、スケーリングをカバーする。
+  単一エントリーポイントで複数のShinyアプリをホスティングする時、アプリごとの認証と
+  アクセス制御が必要な時、隔離されたDockerコンテナとしてShinyアプリをデプロイする時、
+  利用分析と監査ログを備えた単一アプリデプロイメントを超えるスケーリング時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,29 +25,29 @@ metadata:
 
 # ShinyProxyのデプロイ
 
-Deploy ShinyProxy to host multiple containerized Shiny applications with authentication and usage tracking.
+認証と利用追跡を備えた複数のコンテナ化Shinyアプリケーションをホスティングするため、ShinyProxyをデプロイする。
 
 ## 使用タイミング
 
-- Hosting multiple Shiny apps behind a single entry point
-- Need per-app authentication and access control
-- Deploying Shiny apps as isolated Docker containers
-- Scaling beyond single-app deployment (shinyapps.io or standalone Docker)
-- Requiring usage analytics and audit logging
+- 単一エントリーポイントで複数のShinyアプリをホスティングする時
+- アプリごとの認証とアクセス制御が必要な時
+- 隔離されたDockerコンテナとしてShinyアプリをデプロイする時
+- 単一アプリデプロイメント（shinyapps.ioやスタンドアロンDocker）を超えてスケーリングする時
+- 利用分析と監査ログが必要な時
 
 ## 入力
 
-- **必須**: One or more Shiny apps to deploy
-- **必須**: Server with Docker installed
-- **任意**: Authentication provider (LDAP, OpenID, social)
-- **任意**: Domain name and SSL certificate
-- **任意**: Container orchestrator (Docker or Kubernetes)
+- **必須**: デプロイする1つ以上のShinyアプリ
+- **必須**: Dockerがインストールされたサーバー
+- **任意**: 認証プロバイダ（LDAP、OpenID、ソーシャル）
+- **任意**: ドメイン名とSSL証明書
+- **任意**: コンテナオーケストレーター（DockerまたはKubernetes）
 
 ## 手順
 
-### ステップ1: Create Shiny App Docker Images
+### ステップ1: ShinyアプリのDockerイメージ作成
 
-Each Shiny app needs its own Docker image. Example `Dockerfile` for a Shiny app:
+各Shinyアプリには独自のDockerイメージが必要。Shinyアプリ用の`Dockerfile`例:
 
 ```dockerfile
 FROM rocker/shiny:4.5.0
@@ -70,16 +69,16 @@ EXPOSE 3838
 CMD ["R", "-e", "shiny::runApp('/srv/shiny-server/app', host='0.0.0.0', port=3838)"]
 ```
 
-Build and test each app:
+各アプリのビルドとテスト:
 
 ```bash
 docker build -t myorg/dashboard:latest ./apps/dashboard/
 docker run --rm -p 3838:3838 myorg/dashboard:latest
 ```
 
-**期待結果:** Each Shiny app runs independently in its own container.
+**期待結果:** 各Shinyアプリが独自のコンテナで独立して実行される。
 
-### ステップ2: Configure ShinyProxy
+### ステップ2: ShinyProxyの設定
 
 `application.yml`:
 
@@ -128,7 +127,7 @@ server:
   forward-headers-strategy: native
 ```
 
-### ステップ3: Deploy ShinyProxy with Docker Compose
+### ステップ3: Docker ComposeによるShinyProxyのデプロイ
 
 `docker-compose.yml`:
 
@@ -167,15 +166,15 @@ docker compose up -d
 docker compose logs -f shinyproxy
 ```
 
-**期待結果:** ShinyProxy starts on port 8080, shows login page, and lists configured apps.
+**期待結果:** ShinyProxyがポート8080で起動し、ログインページを表示し、設定済みアプリを一覧表示する。
 
-**失敗時:** Check `docker compose logs shinyproxy`. Verify app images are available locally (`docker images`).
+**失敗時:** `docker compose logs shinyproxy`を確認する。アプリイメージがローカルで利用可能か確認する（`docker images`）。
 
-### ステップ4: Configure Authentication
+### ステップ4: 認証の設定
 
-#### Simple (built-in)
+#### Simple（組み込み）
 
-As shown in Step 2 with `authentication: simple` and inline users.
+ステップ2で示した`authentication: simple`とインラインユーザー。
 
 #### LDAP
 
@@ -192,7 +191,7 @@ proxy:
     group-search-filter: (member={0})
 ```
 
-#### OpenID Connect (Keycloak, Auth0, etc.)
+#### OpenID Connect（Keycloak、Auth0など）
 
 ```yaml
 proxy:
@@ -206,9 +205,9 @@ proxy:
     roles-claim: realm_access.roles
 ```
 
-### ステップ5: Add Reverse Proxy with Nginx
+### ステップ5: Nginxによるリバースプロキシの追加
 
-For production, place Nginx in front of ShinyProxy:
+本番環境では、ShinyProxyの前にNginxを配置する:
 
 ```nginx
 map $http_upgrade $connection_upgrade {
@@ -238,11 +237,11 @@ server {
 }
 ```
 
-WebSocket support is critical — ShinyProxy and Shiny use WebSockets heavily.
+WebSocketサポートが重要 — ShinyProxyとShinyはWebSocketを多用する。
 
-### ステップ6: Usage Tracking
+### ステップ6: 利用追跡
 
-ShinyProxy logs usage events to its log file. For structured tracking, configure InfluxDB:
+ShinyProxyはログファイルに利用イベントを記録する。構造化された追跡にはInfluxDBを設定する:
 
 ```yaml
 proxy:
@@ -251,7 +250,7 @@ proxy:
   usage-stats-password: stats_password
 ```
 
-Add InfluxDB to the compose stack:
+ComposeスタックにInfluxDBを追加する:
 
 ```yaml
 services:
@@ -270,7 +269,7 @@ volumes:
   influxdata:
 ```
 
-### ステップ7: App Resource Limits
+### ステップ7: アプリリソース制限
 
 ```yaml
 specs:
@@ -283,7 +282,7 @@ specs:
       R_MAX_MEM_SIZE: 768m
 ```
 
-### ステップ8: Verify Deployment
+### ステップ8: デプロイメントの検証
 
 ```bash
 # Check ShinyProxy health
@@ -297,30 +296,30 @@ curl -s -c cookies.txt -d "username=admin&password=admin_password" \
 curl -s -b cookies.txt http://localhost:8080/api/proxyspec
 ```
 
-**期待結果:** Health endpoint returns `UP`. Login succeeds. Apps launch in isolated containers.
+**期待結果:** ヘルスエンドポイントが`UP`を返す。ログインが成功する。アプリが隔離されたコンテナで起動する。
 
 ## バリデーション
 
-- [ ] ShinyProxy starts and shows login page
-- [ ] Authentication works for all configured users
-- [ ] Each Shiny app launches in its own container
-- [ ] WebSocket connections work (Shiny reactivity functions)
-- [ ] Access groups restrict app visibility correctly
-- [ ] Container cleanup works when users disconnect
-- [ ] Logs capture usage events
+- [ ] ShinyProxyが起動しログインページを表示する
+- [ ] すべての設定済みユーザーで認証が機能する
+- [ ] 各Shinyアプリが独自のコンテナで起動する
+- [ ] WebSocket接続が機能する（Shinyのリアクティビティ機能）
+- [ ] アクセスグループがアプリの表示を正しく制限する
+- [ ] ユーザー切断時のコンテナクリーンアップが機能する
+- [ ] ログが利用イベントをキャプチャする
 
 ## よくある落とし穴
 
-- **Docker socket permissions**: ShinyProxy needs Docker socket access to launch containers. Run as a user in the `docker` group or mount the socket.
-- **Network mismatch**: App containers must be on the same Docker network as ShinyProxy (`container-network` in specs must match).
-- **WebSocket proxy**: Nginx or other proxies in front of ShinyProxy must forward WebSocket upgrade headers.
-- **Image not found**: App images must be pulled or built locally on the Docker host before ShinyProxy tries to use them.
-- **Container cleanup**: If ShinyProxy crashes, orphaned app containers may remain. Use `docker ps` to check and clean up.
-- **Memory limits**: Shiny apps can consume significant memory. Set `container-memory-limit` to prevent a single app from starving others.
+- **Dockerソケットの権限**: ShinyProxyはコンテナを起動するためにDockerソケットへのアクセスが必要。`docker`グループのユーザーとして実行するか、ソケットをマウントする
+- **ネットワークの不一致**: アプリコンテナはShinyProxyと同じDockerネットワーク上にある必要がある（specsの`container-network`が一致する必要がある）
+- **WebSocketプロキシ**: ShinyProxyの前のNginxやその他のプロキシはWebSocketアップグレードヘッダーを転送する必要がある
+- **イメージが見つからない**: ShinyProxyが使用を試みる前にアプリイメージがDockerホスト上でプルまたはビルドされている必要がある
+- **コンテナクリーンアップ**: ShinyProxyがクラッシュした場合、孤立したアプリコンテナが残る可能性がある。`docker ps`で確認しクリーンアップする
+- **メモリ制限**: Shinyアプリは大量のメモリを消費する可能性がある。単一アプリが他を飢えさせないよう`container-memory-limit`を設定する
 
 ## 関連スキル
 
-- `deploy-shiny-app` - single-app deployment to shinyapps.io, Posit Connect, or Docker
-- `configure-reverse-proxy` - reverse proxy patterns including WebSocket proxying
-- `create-dockerfile` - general Dockerfile creation for app images
-- `create-r-dockerfile` - R-specific Dockerfiles with rocker images
+- `deploy-shiny-app` -- shinyapps.io、Posit Connect、またはDockerへの単一アプリデプロイメント
+- `configure-reverse-proxy` -- WebSocketプロキシを含むリバースプロキシパターン
+- `create-dockerfile` -- アプリイメージ用の一般的なDockerfile作成
+- `create-r-dockerfile` -- rockerイメージを使用するR固有のDockerfile

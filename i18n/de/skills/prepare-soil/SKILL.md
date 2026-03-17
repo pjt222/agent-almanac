@@ -1,14 +1,20 @@
 ---
 name: prepare-soil
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Assess and improve garden soil through testing, amendment, composting, and
-  biodynamic preparations. Covers jar test, spade test, earthworm count,
-  amendment by soil type (clay, sandy, depleted, compacted), composting methods
-  (hot, cold, vermicomposting), no-till practices, cover cropping, and
-  biodynamic preparations 500-508. Use when starting a new garden bed, when
-  plants underperform despite adequate water and light, when transitioning to
-  organic or biodynamic practice, when soil has become compacted or depleted,
-  or when building a composting system.
+  Gartenboden durch Tests, Verbesserung, Kompostierung und biodynamische
+  Praeparate bewerten und verbessern. Umfasst Glastest, Spatentest,
+  Regenwurmzaehlung, Verbesserung nach Bodentyp (Ton, Sand, erschoepft,
+  verdichtet), Kompostierungsmethoden (heiss, kalt, Vermikompostierung),
+  No-Till-Praktiken, Gruenduengung und biodynamische Praeparate 500-508.
+  Anwenden beim Anlegen eines neuen Gartenbeets, wenn Pflanzen trotz
+  ausreichend Wasser und Licht schlecht gedeihen, bei der Umstellung auf
+  biologische oder biodynamische Praxis, wenn der Boden verdichtet oder
+  erschoepft ist, oder beim Aufbau eines Kompostiersystems.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -18,308 +24,326 @@ metadata:
   complexity: intermediate
   language: natural
   tags: gardening, soil, compost, biodynamic, amendment, no-till, cover-crop
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Boden vorbereiten
 
-Assess soil condition and build healthy, living soil through amendment, composting, and biological activation.
+Bodenzustand bewerten und gesunden, lebenden Boden durch Verbesserung, Kompostierung und biologische Aktivierung aufbauen.
 
-## When to Use
+## Wann verwenden
 
-- You are starting a new garden bed and need to assess the existing soil
-- Your plants are underperforming despite adequate water and light (soil is the likely cause)
-- You want to transition from conventional to organic or biodynamic practice
-- Soil has become compacted, depleted, or hydrophobic
-- You need to build a composting system
-- You want to apply biodynamic preparations (500-508)
+- Ein neues Gartenbeet wird angelegt und der vorhandene Boden muss bewertet werden
+- Pflanzen gedeihen trotz ausreichend Wasser und Licht schlecht (der Boden ist wahrscheinlich die Ursache)
+- Umstellung von konventioneller auf biologische oder biodynamische Praxis
+- Boden ist verdichtet, erschoepft oder hydrophob geworden
+- Ein Kompostiersystem muss aufgebaut werden
+- Biodynamische Praeparate (500-508) sollen angewendet werden
 
-## Inputs
+## Eingaben
 
-- **Required**: Access to the soil to be assessed (garden bed, field, or container)
-- **Optional**: Current soil test results (pH, N-P-K, organic matter %)
-- **Optional**: Garden history (previous crops, amendments applied, years cultivated)
-- **Optional**: Target crops or plants to be grown
-- **Optional**: Approach preference (organic, biodynamic, permaculture)
+- **Erforderlich**: Zugang zum zu bewertenden Boden (Gartenbeet, Feld oder Gefaess)
+- **Optional**: Aktuelle Bodenanalyseergebnisse (pH, N-P-K, organische Substanz %)
+- **Optional**: Gartenhistorie (vorherige Kulturen, angewandte Verbesserungen, Jahre der Bewirtschaftung)
+- **Optional**: Zielkulturen oder -pflanzen
+- **Optional**: Ansatzpraeferenz (biologisch, biodynamisch, Permakultur)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Assess the Soil
+### Schritt 1: Den Boden bewerten
 
-Three field tests that require no laboratory — do all three.
-
-```
-Test 1: Jar Test (Texture — Sand/Silt/Clay Ratio)
-1. Fill a quart jar 1/3 full with soil from 15cm depth
-2. Fill to top with water, add 1 tablespoon dish soap
-3. Shake vigorously for 3 minutes, then set on level surface
-4. Read layers after settling:
-   - Sand settles in 1 minute (bottom layer)
-   - Silt settles in 4-6 hours (middle layer)
-   - Clay settles in 24-48 hours (top layer)
-5. Measure each layer as % of total soil depth
-   - Ideal garden soil: ~40% sand, ~40% silt, ~20% clay (loam)
-
-Test 2: Spade Test (Structure and Compaction)
-1. Push a spade into moist soil to full depth (25cm)
-2. Lever up a block of soil and place on a board
-3. Observe:
-   - Crumbles easily → good structure
-   - Breaks into angular blocks → compacted
-   - Smears or is sticky → too much clay or waterlogged
-   - Layers visible → hardpan or plough pan present
-4. Smell the soil:
-   - Sweet, earthy → healthy aerobic biology
-   - Sour, sulphurous → anaerobic conditions (drainage problem)
-
-Test 3: Earthworm Count (Biological Activity)
-1. Dig a 30cm × 30cm × 30cm cube of soil
-2. Place on a tarp or board
-3. Gently break apart and count earthworms
-   - 0-5: Poor biology — needs organic matter
-   - 5-10: Fair — improving but not yet thriving
-   - 10-20: Good — healthy biological activity
-   - 20+: Excellent — this soil is alive
-```
-
-**Expected:** Clear picture of soil texture, structure, and biology. A jar test result, a structure rating, and a worm count.
-
-**On failure:** If jar test layers are hard to distinguish, repeat with cleaner water and more vigorous shaking. If worm count is zero and soil smells sour, the soil may be anaerobic — drainage must be addressed before amendment.
-
-### Step 2: Diagnose and Plan Amendment
-
-Match your assessment to an amendment plan.
+Drei Feldtests die kein Labor erfordern — alle drei durchfuehren.
 
 ```
-Amendment by Soil Type:
+Test 1: Glastest (Textur — Sand/Schluff/Ton-Verhaeltnis)
+1. Ein Einmachglas zu 1/3 mit Boden aus 15cm Tiefe fuellen
+2. Bis oben mit Wasser fuellen, 1 Essloeffel Spuelmittel zugeben
+3. 3 Minuten kraeftig schuetteln, dann auf ebene Flaeche stellen
+4. Schichten nach dem Absetzen ablesen:
+   - Sand setzt sich in 1 Minute ab (unterste Schicht)
+   - Schluff setzt sich in 4-6 Stunden ab (mittlere Schicht)
+   - Ton setzt sich in 24-48 Stunden ab (oberste Schicht)
+5. Jede Schicht als % der Gesamtbodentiefe messen
+   - Idealer Gartenboden: ~40% Sand, ~40% Schluff, ~20% Ton (Lehm)
+
+Test 2: Spatentest (Struktur und Verdichtung)
+1. Einen Spaten in feuchten Boden bis zur vollen Tiefe (25cm)
+   druecken
+2. Einen Bodenblock heraushebeln und auf ein Brett legen
+3. Beobachten:
+   - Zerkruemelt leicht -> gute Struktur
+   - Bricht in kantige Bloecke -> verdichtet
+   - Schmiert oder ist klebrig -> zu viel Ton oder staunass
+   - Schichten sichtbar -> Pflugsohle vorhanden
+4. Am Boden riechen:
+   - Suess, erdig -> gesunde aerobe Biologie
+   - Sauer, schweflig -> anaerobe Bedingungen (Drainageproblem)
+
+Test 3: Regenwurmzaehlung (Biologische Aktivitaet)
+1. Einen 30cm x 30cm x 30cm Wuerfel Boden ausgraben
+2. Auf eine Plane oder ein Brett legen
+3. Vorsichtig auseinanderbrechen und Regenwuermer zaehlen
+   - 0-5: Schwache Biologie — braucht organische Substanz
+   - 5-10: Maessig — verbessernd aber noch nicht gedeihend
+   - 10-20: Gut — gesunde biologische Aktivitaet
+   - 20+: Hervorragend — dieser Boden lebt
+```
+
+**Erwartet:** Klares Bild von Bodentextur, Struktur und Biologie. Ein Glastest-Ergebnis, eine Strukturbewertung und eine Wurmzaehlung.
+
+**Bei Fehler:** Wenn Glastest-Schichten schwer zu unterscheiden sind, mit sauberem Wasser und kraeftigerem Schuetteln wiederholen. Wenn die Wurmzaehlung null ist und der Boden sauer riecht, ist der Boden moeglicherweise anaerob — die Drainage muss vor der Verbesserung adressiert werden.
+
+### Schritt 2: Diagnose stellen und Verbesserung planen
+
+Die Bewertung einem Verbesserungsplan zuordnen.
+
+```
+Verbesserung nach Bodentyp:
 ┌────────────────┬─────────────────────────┬──────────────────────────────┐
-│ Diagnosis      │ Symptoms                │ Amendment                    │
+│ Diagnose       │ Symptome                │ Verbesserung                 │
 ├────────────────┼─────────────────────────┼──────────────────────────────┤
-│ Heavy clay     │ Sticky, slow drainage,  │ Gypsum (calcium sulfate)     │
-│                │ >40% clay in jar test   │ 1 kg/m², worked into top     │
-│                │                         │ 15cm. Add coarse compost.    │
-│                │                         │ Plant daikon radish to break │
-│                │                         │ hardpan biologically.        │
+│ Schwerer Ton   │ Klebrig, langsame       │ Gips (Calciumsulfat) 1 kg/m²│
+│                │ Drainage, >40% Ton      │ in obere 15cm einarbeiten.   │
+│                │ im Glastest             │ Groben Kompost hinzufuegen.  │
+│                │                         │ Oelrettich zur biologischen  │
+│                │                         │ Aufbrechung der Pflugsohle.  │
 ├────────────────┼─────────────────────────┼──────────────────────────────┤
-│ Sandy          │ Drains instantly, won't │ Compost 5-10cm thick, worked │
-│                │ hold moisture, <20%     │ into top 20cm. Add biochar   │
-│                │ silt+clay in jar test   │ (pre-charged with compost    │
-│                │                         │ tea) for moisture retention.  │
+│ Sandig         │ Draeniert sofort, haelt │ Kompost 5-10cm dick, in      │
+│                │ keine Feuchtigkeit,     │ obere 20cm einarbeiten.      │
+│                │ <20% Schluff+Ton        │ Pflanzenkohle (vorgeladen    │
+│                │ im Glastest             │ mit Komposttee) fuer         │
+│                │                         │ Feuchtigkeitshaltung.        │
 ├────────────────┼─────────────────────────┼──────────────────────────────┤
-│ Depleted       │ Pale colour, low worm   │ 10cm compost top-dress.      │
-│                │ count, poor growth      │ Cover crop (legume mix) for  │
-│                │ despite watering        │ nitrogen fixation. Foliar    │
-│                │                         │ seaweed spray monthly.       │
+│ Erschoepft     │ Blasse Farbe, niedrige  │ 10cm Kompost als Mulch.      │
+│                │ Wurmzahl, schlechtes    │ Gruenduengung (Leguminosen-  │
+│                │ Wachstum trotz          │ mischung) zur Stickstoff-    │
+│                │ Bewaesserung            │ fixierung. Blatt-Seetang-    │
+│                │                         │ spray monatlich.             │
 ├────────────────┼─────────────────────────┼──────────────────────────────┤
-│ Compacted      │ Angular blocks in spade │ Broadfork (not rototiller)   │
-│                │ test, surface pooling,  │ to fracture without          │
-│                │ hard when dry           │ inverting. Deep mulch (15cm  │
-│                │                         │ wood chips on paths). Plant  │
-│                │                         │ deep-rooted comfrey.         │
+│ Verdichtet     │ Kantige Bloecke im      │ Grabegabel (kein Rototiller) │
+│                │ Spatentest, Oberflaech- │ zum Auflockern ohne Wenden.  │
+│                │ enpfuetzen, hart wenn   │ Dicker Mulch (15cm Holz-     │
+│                │ trocken                 │ haecksel auf Wegen). Tief-   │
+│                │                         │ wurzelnden Beinwell pflanzen. │
 ├────────────────┼─────────────────────────┼──────────────────────────────┤
-│ Acidic (pH<6)  │ Blueberries thrive but  │ Wood ash (light application) │
-│                │ brassicas struggle      │ or dolomite lime. Test pH    │
-│                │                         │ before and after — adjust    │
-│                │                         │ slowly over 2 seasons.       │
+│ Sauer (pH<6)   │ Heidelbeeren gedeihen   │ Holzasche (leichte Gabe)     │
+│                │ aber Kohlgewaechse      │ oder Dolomitkalk. pH vorher  │
+│                │ kaempfen                │ und nachher testen — langsam │
+│                │                         │ ueber 2 Saisons anpassen.   │
 ├────────────────┼─────────────────────────┼──────────────────────────────┤
-│ Alkaline (pH>7)│ Iron chlorosis (yellow  │ Elemental sulphur or acidic  │
-│                │ leaves, green veins)    │ compost (pine needles, oak   │
-│                │                         │ leaves). Very slow to shift. │
+│ Alkalisch      │ Eisenchlorose (gelbe    │ Elementarer Schwefel oder    │
+│ (pH>7)         │ Blaetter, gruene Adern) │ saurer Kompost (Kiefern-     │
+│                │                         │ nadeln, Eichenlaub). Sehr    │
+│                │                         │ langsam zu verschieben.      │
 └────────────────┴─────────────────────────┴──────────────────────────────┘
 ```
 
-**Expected:** A specific amendment plan matched to the diagnosed soil condition.
+**Erwartet:** Ein spezifischer Verbesserungsplan der dem diagnostizierten Bodenzustand entspricht.
 
-**On failure:** If multiple conditions overlap (e.g., heavy clay AND depleted), address structure first (gypsum + broadfork), then biology (compost + cover crop). Trying to fix everything at once overwhelms the soil.
+**Bei Fehler:** Wenn sich mehrere Zustaende ueberschneiden (z.B. schwerer Ton UND erschoepft), zuerst die Struktur adressieren (Gips + Grabegabel), dann die Biologie (Kompost + Gruenduengung). Alles gleichzeitig beheben zu wollen ueberfordert den Boden.
 
-### Step 3: Build Compost
+### Schritt 3: Kompost aufbauen
 
-Choose a method based on available space, materials, and timeline.
+Eine Methode basierend auf verfuegbarem Platz, Material und Zeitrahmen waehlen.
 
 ```
-Composting Methods:
+Kompostierungsmethoden:
 ┌────────────────┬──────────────┬──────────────┬─────────────────────────┐
-│ Method         │ Time to      │ Space Needed │ Best For                │
-│                │ Finished     │              │                         │
+│ Methode        │ Zeit bis     │ Platz-       │ Am besten fuer          │
+│                │ fertig       │ bedarf       │                         │
 ├────────────────┼──────────────┼──────────────┼─────────────────────────┤
-│ Hot compost    │ 4-8 weeks    │ 1m³ minimum  │ Large gardens, weed     │
-│                │              │              │ seed / disease kill      │
+│ Heisskompost   │ 4-8 Wochen   │ 1m³ Minimum  │ Grosse Gaerten, Unkraut-│
+│                │              │              │ samen / Krankheitsabt.  │
 ├────────────────┼──────────────┼──────────────┼─────────────────────────┤
-│ Cold compost   │ 6-12 months  │ Any size     │ Low effort, small       │
-│                │              │              │ quantities              │
+│ Kaltkompost    │ 6-12 Monate  │ Beliebig     │ Geringer Aufwand, kleine│
+│                │              │              │ Mengen                  │
 ├────────────────┼──────────────┼──────────────┼─────────────────────────┤
-│ Vermicompost   │ 3-6 months   │ 0.5m² indoor │ Kitchen scraps, indoor  │
-│                │              │              │ / apartment gardens     │
+│ Wurmkompost    │ 3-6 Monate   │ 0,5m² Innen  │ Kuechenabfaelle, Innen- │
+│                │              │              │ / Balkongazerten         │
 └────────────────┴──────────────┴──────────────┴─────────────────────────┘
 
-Hot Compost Protocol:
-1. Build pile in layers — 2 parts brown (carbon) to 1 part green (nitrogen)
-   - Brown: dried leaves, straw, cardboard, wood chips
-   - Green: kitchen scraps, fresh grass, manure, coffee grounds
-2. Moisten each layer (damp sponge consistency)
-3. Pile must be at least 1m × 1m × 1m to reach temperature
-4. Internal temperature should reach 55-65°C (130-150°F) within 3-5 days
-5. Turn pile when temperature drops below 45°C (every 5-7 days)
-6. After 3-4 turns, cure for 2-4 weeks without turning
-7. Finished compost: dark, crumbly, smells like forest floor, no recognizable inputs
+Heisskompost-Protokoll:
+1. Haufen in Schichten aufbauen — 2 Teile Braun (Kohlenstoff) zu
+   1 Teil Gruen (Stickstoff)
+   - Braun: getrocknete Blaetter, Stroh, Karton, Holzhaecksel
+   - Gruen: Kuechenabfaelle, frisches Gras, Mist, Kaffeesatz
+2. Jede Schicht befeuchten (Konsistenz eines ausgedrueckten Schwamms)
+3. Haufen muss mindestens 1m x 1m x 1m sein um Temperatur zu
+   erreichen
+4. Innentemperatur sollte innerhalb von 3-5 Tagen 55-65°C erreichen
+5. Haufen wenden wenn Temperatur unter 45°C faellt (alle 5-7 Tage)
+6. Nach 3-4 Mal Wenden 2-4 Wochen ohne Wenden nachreifen lassen
+7. Fertiger Kompost: dunkel, kruemelig, riecht nach Waldboden,
+   keine erkennbaren Ausgangsstoffe
 
-Never Compost:
-- Meat, dairy, oils (attract pests)
-- Diseased plant material (unless hot compost reaches 60°C+ for 3 days)
-- Treated wood, glossy paper
-- Pet waste (pathogen risk)
+Nie kompostieren:
+- Fleisch, Milchprodukte, Oele (ziehen Schaedlinge an)
+- Krankes Pflanzenmaterial (es sei denn Heisskompost erreicht
+  60°C+ fuer 3 Tage)
+- Behandeltes Holz, Hochglanzpapier
+- Haustierkot (Pathogenrisiko)
 ```
 
-**Expected:** Composting system established and first batch in progress.
+**Erwartet:** Kompostiersystem eingerichtet und erste Charge in Bearbeitung.
 
-**On failure:** If hot compost won't heat up: check moisture (too dry or too wet), check C:N ratio (add more green for nitrogen), check pile size (below 1m³ won't heat reliably).
+**Bei Fehler:** Wenn Heisskompost nicht warm wird: Feuchtigkeit pruefen (zu trocken oder zu nass), C:N-Verhaeltnis pruefen (mehr Gruen fuer Stickstoff hinzufuegen), Haufengroesse pruefen (unter 1m³ heizt nicht zuverlaessig).
 
-### Step 4: Apply No-Till and Cover Cropping
+### Schritt 4: No-Till und Gruenduengung anwenden
 
-Protect and build soil structure without inversion.
+Bodenstruktur schuetzen und aufbauen ohne Wenden.
 
 ```
-No-Till Sheet Mulching (New Bed from Lawn or Weeds):
-1. Mow or scythe existing vegetation as low as possible
-2. Layer cardboard (overlapping edges) directly on ground — no gaps
-3. Wet cardboard thoroughly
-4. Add 5cm compost on top of cardboard
-5. Add 10-15cm organic mulch (straw, wood chips, leaves)
-6. Wait 3-6 months (autumn application → spring planting)
-7. Plant through mulch by pulling it aside — do not till
+No-Till-Flaechenmulch (Neues Beet aus Rasen oder Unkraut):
+1. Bestehende Vegetation so niedrig wie moeglich maehen oder sensen
+2. Karton (ueberlappende Kanten) direkt auf den Boden legen — keine
+   Luecken
+3. Karton gruendlich naessen
+4. 5cm Kompost auf den Karton geben
+5. 10-15cm organischen Mulch auftragen (Stroh, Holzhaecksel,
+   Blaetter)
+6. 3-6 Monate warten (Herbstausbringung -> Fruehlingspflanzung)
+7. Durch den Mulch pflanzen indem er zur Seite geschoben wird —
+   nicht umgraben
 
-Cover Crop Quick Reference:
+Gruenduenung-Kurzuebersicht:
 ┌─────────────────┬────────────────┬───────────────────────────────┐
-│ Crop            │ Season         │ Benefit                       │
+│ Kultur          │ Saison         │ Nutzen                        │
 ├─────────────────┼────────────────┼───────────────────────────────┤
-│ Crimson clover  │ Autumn sow     │ Nitrogen fixation, bee forage │
-│ Winter rye      │ Autumn sow     │ Biomass, weed suppression     │
-│ Buckwheat       │ Summer sow     │ Fast cover, phosphorus mining │
-│ Phacelia        │ Spring/autumn  │ Pollinator magnet, breaks up  │
-│                 │                │ compaction                    │
-│ Daikon radish   │ Autumn sow     │ Deep root breaks hardpan,     │
-│                 │                │ decomposes in place over      │
-│                 │                │ winter (bio-drill)            │
+│ Inkarnatklee    │ Herbstaussaat  │ Stickstofffixierung,          │
+│                 │                │ Bienenweide                   │
+│ Winterroggen    │ Herbstaussaat  │ Biomasse, Unkrautunterd.      │
+│ Buchweizen      │ Sommeraussaat  │ Schnelle Abdeckung,           │
+│                 │                │ Phosphorerschliessung         │
+│ Phacelia        │ Fruehling/     │ Bestaeubungsmagnet, bricht    │
+│                 │ Herbst         │ Verdichtung auf               │
+│ Oelrettich      │ Herbstaussaat  │ Tiefwurzel bricht Pflugsohle, │
+│                 │                │ verrottet an Ort und Stelle   │
+│                 │                │ ueber Winter (Bio-Bohrer)     │
 └─────────────────┴────────────────┴───────────────────────────────┘
 
-Terminate cover crops by:
-- Crimp and roll (best — leaves roots in place)
-- Scythe and lay as mulch
-- Never rototill — this destroys the soil structure you're building
+Gruenduengung beenden durch:
+- Walzen und knicken (am besten — laesst Wurzeln an Ort und Stelle)
+- Sensen und als Mulch ablegen
+- Nie rototillen — das zerstoert die Bodenstruktur die aufgebaut wird
 ```
 
-**Expected:** Soil protected year-round, biology undisturbed, organic matter increasing.
+**Erwartet:** Boden ganzjaehrig bedeckt, Biologie ungestoert, organische Substanz zunehmend.
 
-**On failure:** If cover crop fails to establish, check sowing depth (most need surface or shallow sowing) and moisture. Resow or apply thick mulch as substitute ground cover.
+**Bei Fehler:** Wenn Gruenduengung nicht anwaechst, Saattiefe (die meisten brauchen oberflaechliche oder flache Aussaat) und Feuchtigkeit pruefen. Nachsaeen oder dicken Mulch als Ersatz-Bodenbedeckung auftragen.
 
-### Step 5: Biodynamic Preparations (Optional — Advanced)
+### Schritt 5: Biodynamische Praeparate (optional — Fortgeschritten)
 
-For practitioners following Demeter or biodynamic principles.
+Fuer Praktizierende nach Demeter- oder biodynamischen Grundsaetzen.
 
 ```
-Biodynamic Preparations Overview:
+Biodynamische Praeparate — Uebersicht:
 ┌──────┬───────────────┬──────────────────────┬─────────────────────────┐
-│ Prep │ Material      │ Application          │ Purpose                 │
+│ Prae.│ Material      │ Anwendung            │ Zweck                   │
 ├──────┼───────────────┼──────────────────────┼─────────────────────────┤
-│ 500  │ Horn manure   │ Spray on soil,       │ Stimulate soil biology,  │
-│      │               │ autumn & spring      │ root growth, humus      │
+│ 500  │ Hornmist      │ Auf Boden spruehen,  │ Bodenbiologie anregen,  │
+│      │               │ Herbst & Fruehling   │ Wurzelwachstum, Humus   │
 ├──────┼───────────────┼──────────────────────┼─────────────────────────┤
-│ 501  │ Horn silica   │ Spray on foliage,    │ Light metabolism, fruit  │
-│      │               │ morning, summer      │ quality, ripening       │
+│ 501  │ Hornkiesel    │ Auf Laub spruehen,   │ Lichtstoffwechsel,      │
+│      │               │ Morgens, Sommer      │ Fruchtqualitaet, Reife  │
 ├──────┼───────────────┼──────────────────────┼─────────────────────────┤
-│ 502  │ Yarrow        │ Added to compost     │ Sulphur and potassium   │
-│ 503  │ Chamomile     │ Added to compost     │ Calcium, stabilizes N   │
-│ 504  │ Stinging nettle│ Added to compost    │ Iron, stimulates soil   │
-│ 505  │ Oak bark      │ Added to compost     │ Calcium, disease resist │
-│ 506  │ Dandelion     │ Added to compost     │ Silica, light forces    │
-│ 507  │ Valerian      │ Sprayed on compost   │ Warmth, phosphorus      │
+│ 502  │ Schafgarbe    │ Dem Kompost zugeben   │ Schwefel und Kalium     │
+│ 503  │ Kamille       │ Dem Kompost zugeben   │ Calcium, stabilisiert N │
+│ 504  │ Brennnessel   │ Dem Kompost zugeben   │ Eisen, regt Boden an   │
+│ 505  │ Eichenrinde   │ Dem Kompost zugeben   │ Calcium, Krankheitsres. │
+│ 506  │ Loewenzahn    │ Dem Kompost zugeben   │ Kieselsaeure, Lichtkr.  │
+│ 507  │ Baldrian      │ Auf Kompost spruehen  │ Waerme, Phosphor        │
 ├──────┼───────────────┼──────────────────────┼─────────────────────────┤
-│ 508  │ Horsetail tea │ Spray on foliage     │ Fungal disease prevent  │
+│ 508  │ Schachtelhalm │ Auf Laub spruehen    │ Pilzkrankheitsvorb.     │
 └──────┴───────────────┴──────────────────────┴─────────────────────────┘
 
-Preparation 500 Application:
-1. Stir 100g horn manure in 35 litres warm water
-2. Stir dynamically for 1 hour — create vortex, reverse, create vortex
-   (alternating direction every minute)
-3. Apply within 1 hour of stirring
-4. Spray in large droplets on soil surface — late afternoon, descending moon
-5. Apply autumn (before winter) and early spring (before sowing)
+Praeparat-500-Anwendung:
+1. 100g Hornmist in 35 Liter warmem Wasser ruehren
+2. 1 Stunde dynamisch ruehren — Strudel erzeugen, umkehren,
+   Strudel erzeugen (Richtung jede Minute wechseln)
+3. Innerhalb 1 Stunde nach dem Ruehren ausbringen
+4. In grossen Tropfen auf Bodenoberflaeche spruehen — spaeter
+   Nachmittag, absteigender Mond
+5. Herbst (vor Winter) und frueh im Fruehling (vor Aussaat) anwenden
 
-Note: Biodynamic preparations are available from certified suppliers
-or local biodynamic farming groups. Making your own requires the
-previous season's preparations and specific animal horn sheaths.
+Hinweis: Biodynamische Praeparate sind bei zertifizierten
+Lieferanten oder lokalen biodynamischen Landwirtschaftsgruppen
+erhaeltlich. Eigenherstellung erfordert die Praeparate der
+Vorsaison und spezifische Tierhornhuellen.
 ```
 
-**Expected:** Preparations applied at correct time and moon phase. Soil biology activation visible over 1-2 seasons.
+**Erwartet:** Praeparate zur richtigen Zeit und Mondphase angewendet. Aktivierung der Bodenbiologie sichtbar ueber 1-2 Saisons.
 
-**On failure:** If preparations are unavailable, good compost and cover cropping achieve 80% of the biological benefit. Preparations enhance but are not a substitute for sound soil management.
+**Bei Fehler:** Wenn Praeparate nicht verfuegbar sind, erreichen guter Kompost und Gruenduengung 80% des biologischen Nutzens. Praeparate verstaerken, sind aber kein Ersatz fuer solides Bodenmanagement.
 
-### Step 6: Heal Checkpoint — Post-Amendment Assessment
+### Schritt 6: Heal-Checkpoint — Nachverbesserungsbewertung
 
-Six weeks after amendment, reassess the soil.
+Sechs Wochen nach der Verbesserung den Boden neu bewerten.
 
 ```
-Post-Amendment Soil Health Check:
-1. Repeat the spade test:
-   - Has structure improved? (Crumbles more easily)
-   - Are roots penetrating deeper?
-   - Any remaining hardpan layers?
+Bodengesundheitspruefung nach Verbesserung:
+1. Spatentest wiederholen:
+   - Hat sich die Struktur verbessert? (Zerkruemelt leichter)
+   - Dringen Wurzeln tiefer ein?
+   - Noch verbleibende Pflugsohlen?
 
-2. Repeat the earthworm count:
-   - Has the count increased? (Even 2-3 more is progress)
-   - Are worms distributed through the depth or just at surface?
+2. Regenwurmzaehlung wiederholen:
+   - Hat die Zaehlung zugenommen? (Auch 2-3 mehr sind Fortschritt)
+   - Sind Wuermer durch die Tiefe verteilt oder nur an der
+     Oberflaeche?
 
-3. Drainage test:
-   - Dig a 30cm hole, fill with water, let drain, refill
-   - Second fill should drain within 1-4 hours
-   - <1 hour: very free draining (may need more organic matter)
-   - >4 hours: still compacted or clay-heavy (continue treatment)
+3. Drainagetest:
+   - Ein 30cm-Loch graben, mit Wasser fuellen, ablaufen lassen,
+     nachfuellen
+   - Zweite Fuellung sollte innerhalb von 1-4 Stunden ablaufen
+   - <1 Stunde: Sehr frei draenierend (braucht moeglicherweise
+     mehr organische Substanz)
+   - >4 Stunden: Noch verdichtet oder tonlastig (Behandlung
+     fortsetzen)
 
-4. Surface observation:
-   - Fungal threads visible in mulch layer? (Good — decomposition active)
-   - Green algae on surface? (Too wet or too compacted)
-   - Mulch layer breaking down? (Biology is working)
+4. Oberflaechenbeobachtung:
+   - Pilzfaeden im Mulch sichtbar? (Gut — Zersetzung aktiv)
+   - Gruenalgen an der Oberflaeche? (Zu nass oder zu verdichtet)
+   - Mulchschicht baut sich ab? (Biologie arbeitet)
 
 Triage:
-- All improving → Continue current approach, reassess next season
-- Structure improved but worms low → Add more diverse organic matter
-- Worms present but drainage poor → Broadfork again, add coarse material
-- No improvement → Soil may have contamination — consider lab test for heavy metals
+- Alles verbessert sich -> Aktuellen Ansatz fortsetzen, naechste
+  Saison neu bewerten
+- Struktur verbessert aber Wuermer niedrig -> Vielfaeltigere
+  organische Substanz hinzufuegen
+- Wuermer vorhanden aber Drainage schlecht -> Erneut mit Grabe-
+  gabel lockern, grobes Material hinzufuegen
+- Keine Verbesserung -> Boden hat moeglicherweise Kontamination —
+  Labortest auf Schwermetalle in Betracht ziehen
 ```
 
-**Expected:** Measurable improvement in at least 2 of 3 indicators (structure, biology, drainage).
+**Erwartet:** Messbare Verbesserung bei mindestens 2 von 3 Indikatoren (Struktur, Biologie, Drainage).
 
-**On failure:** If no improvement after 6 weeks, the issue may be deeper than topsoil amendment can address. Consider raised beds with imported soil mix as a parallel strategy while continuing to improve the in-ground soil over multiple seasons.
+**Bei Fehler:** Wenn nach 6 Wochen keine Verbesserung, liegt das Problem moeglicherweise tiefer als Oberboden-Verbesserung adressieren kann. Hochbeete mit importierter Erdmischung als parallele Strategie in Betracht ziehen, waehrend der In-Ground-Boden ueber mehrere Saisons weiter verbessert wird.
 
-## Validation Checklist
+## Validierung
 
-- [ ] All three field tests completed (jar, spade, earthworm)
-- [ ] Soil type correctly diagnosed from test results
-- [ ] Amendment plan matches diagnosed condition
-- [ ] Compost system established (hot, cold, or vermi)
-- [ ] Soil covered year-round (mulch, cover crop, or living plants)
-- [ ] No rototilling or soil inversion
-- [ ] Heal checkpoint performed 6 weeks post-amendment
-- [ ] Garden journal updated with test results and amendment applied
+- [ ] Alle drei Feldtests durchgefuehrt (Glas, Spaten, Regenwurm)
+- [ ] Bodentyp aus Testergebnissen korrekt diagnostiziert
+- [ ] Verbesserungsplan entspricht diagnostiziertem Zustand
+- [ ] Kompostiersystem eingerichtet (heiss, kalt oder Wurm)
+- [ ] Boden ganzjaehrig bedeckt (Mulch, Gruenduengung oder lebende Pflanzen)
+- [ ] Kein Rototillen oder Bodenwenden
+- [ ] Heal-Checkpoint 6 Wochen nach Verbesserung durchgefuehrt
+- [ ] Gartentagebuch mit Testergebnissen und angewandter Verbesserung aktualisiert
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Adding without testing**: Random amendments waste money and can worsen imbalances. Always test first
-2. **Rototilling**: Feels productive but destroys soil structure, kills earthworms, and brings weed seeds to surface. Use a broadfork if you must loosen
-3. **Bare soil**: Exposed soil loses moisture, structure, and biology. Always mulch or plant cover crops
-4. **Fresh manure on beds**: Burns roots and introduces pathogens. Compost all manure for at least 6 months before soil contact
-5. **Lime without testing pH**: Overliming makes nutrients unavailable. Only adjust pH based on actual test results
-6. **Expecting instant results**: Soil building is measured in seasons and years, not weeks
+1. **Hinzufuegen ohne zu testen**: Wahllose Verbesserungen verschwenden Geld und koennen Ungleichgewichte verschlimmern. Immer zuerst testen
+2. **Rototillen**: Fuehlt sich produktiv an, zerstoert aber Bodenstruktur, toetet Regenwuermer und bringt Unkrautsamen an die Oberflaeche. Bei Bedarf Grabegabel verwenden
+3. **Nackter Boden**: Freiliegender Boden verliert Feuchtigkeit, Struktur und Biologie. Immer mulchen oder Gruenduengung pflanzen
+4. **Frischer Mist auf Beeten**: Verbrennt Wurzeln und bringt Pathogene ein. Allen Mist mindestens 6 Monate kompostieren bevor er in Bodenkontakt kommt
+5. **Kalken ohne pH zu testen**: Ueberkalken macht Naehrstoffe unverfuegbar. pH nur basierend auf tatsaechlichen Testergebnissen anpassen
+6. **Sofortige Ergebnisse erwarten**: Bodenaufbau wird in Saisons und Jahren gemessen, nicht in Wochen
 
-## Related Skills
+## Verwandte Skills
 
-- `cultivate-bonsai` — Bonsai soil mix (akadama/pumice/lava) is a specialized soil preparation
-- `plan-garden-calendar` — Soil amendment timing aligns with seasonal calendar (autumn for lime, spring for compost)
-- `read-garden` — Soil observation is part of the garden reading protocol
-- `heal` — Post-amendment assessment follows the heal triage pattern
-- `forage-plants` — Understanding soil-plant relationships aids wild plant habitat reading
-- `make-fire` — Wood ash from fire is a traditional soil amendment (potassium + lime)
+- `cultivate-bonsai` — Bonsai-Erdmischung (Akadama/Bimsstein/Lava) ist eine spezialisierte Bodenvorbereitung
+- `plan-garden-calendar` — Zeitpunkt der Bodenverbesserung stimmt mit dem saisonalen Kalender ueberein (Herbst fuer Kalk, Fruehling fuer Kompost)
+- `read-garden` — Bodenbeobachtung ist Teil des Gartenleseprotokolls
+- `heal` — Die Nachverbesserungsbewertung folgt dem Heal-Triagemuster
+- `forage-plants` — Verstaendnis von Boden-Pflanze-Beziehungen hilft beim Lesen von Wildpflanzen-Habitaten
+- `make-fire` — Holzasche aus Feuer ist eine traditionelle Bodenverbesserung (Kalium + Kalk)

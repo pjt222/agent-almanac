@@ -1,12 +1,13 @@
 ---
 name: explore-diophantine-equations
 description: >
-  Solve Diophantine equations (integer-only solutions) including linear,
-  quadratic, and Pell equations. Covers the extended Euclidean algorithm,
-  descent methods, and existence proofs. Use when finding all integer
-  solutions to ax + by = c, solving Pell's equation, generating Pythagorean
-  triples, proving no integer solutions exist via modular constraints, or
-  finding the fundamental solution from which all others are generated.
+  Diophantische Gleichungen (nur ganzzahlige Loesungen) einschliesslich linearer,
+  quadratischer und Pell-Gleichungen loesen. Umfasst den erweiterten Euklidischen
+  Algorithmus, Abstiegsmethoden und Existenzbeweise. Verwenden beim Finden aller
+  ganzzahligen Loesungen von ax + by = c, beim Loesen der Pell-Gleichung, beim
+  Generieren Pythagoreischer Tripel, beim Beweisen, dass keine ganzzahligen
+  Loesungen existieren ueber modulare Einschraenkungen, oder beim Finden der
+  Fundamentalloesung, aus der alle anderen erzeugt werden.
 license: MIT
 allowed-tools: Read Bash
 metadata:
@@ -25,79 +26,79 @@ metadata:
 
 # Diophantische Gleichungen erkunden
 
-Solve Diophantine equations -- polynomial equations where only integer solutions are sought. Classify the equation by type, test for solvability, find particular and general solutions, and generate solution families. Covers linear equations, Pell equations, Pythagorean triples, and general quadratic forms.
+Diophantische Gleichungen loesen -- Polynomgleichungen, bei denen nur ganzzahlige Loesungen gesucht werden. Die Gleichung nach Typ klassifizieren, auf Loesbarkeit testen, partikulaere und allgemeine Loesungen finden und Loesungsfamilien erzeugen. Umfasst lineare Gleichungen, Pell-Gleichungen, Pythagoreische Tripel und allgemeine quadratische Formen.
 
-## When to Use
+## Wann verwenden
 
-- Finding all integer solutions to a linear equation ax + by = c
-- Solving Pell's equation x^2 - Dy^2 = 1 (or = -1)
-- Generating Pythagorean triples or other parametric integer families
-- Proving that a given equation has no integer solutions (via modular constraints)
-- Testing solvability of a general quadratic Diophantine equation
-- Finding the fundamental solution from which all others are generated
+- Alle ganzzahligen Loesungen einer linearen Gleichung ax + by = c finden
+- Die Pell-Gleichung x^2 - Dy^2 = 1 (oder = -1) loesen
+- Pythagoreische Tripel oder andere parametrische ganzzahlige Familien erzeugen
+- Beweisen, dass eine gegebene Gleichung keine ganzzahligen Loesungen hat (ueber modulare Einschraenkungen)
+- Loesbarkeit einer allgemeinen quadratischen diophantischen Gleichung testen
+- Die Fundamentalloesung finden, aus der alle anderen erzeugt werden
 
-## Inputs
+## Eingaben
 
-- **Required**: The Diophantine equation to solve (in explicit form, e.g., 3x + 5y = 17 or x^2 - 7y^2 = 1)
-- **Optional**: Whether to find all solutions, just one particular solution, or prove non-existence
-- **Optional**: Constraints on variable ranges (e.g., positive integers only)
-- **Optional**: Whether to express the general solution parametrically
-- **Optional**: Preferred proof technique (constructive, descent, modular obstruction)
+- **Erforderlich**: Die zu loesende diophantische Gleichung (in expliziter Form, z.B. 3x + 5y = 17 oder x^2 - 7y^2 = 1)
+- **Optional**: Ob alle Loesungen gefunden, nur eine partikulaere Loesung bestimmt oder Nichtexistenz bewiesen werden soll
+- **Optional**: Einschraenkungen fuer Variablenbereiche (z.B. nur positive ganze Zahlen)
+- **Optional**: Ob die allgemeine Loesung parametrisch ausgedrueckt werden soll
+- **Optional**: Bevorzugte Beweistechnik (konstruktiv, Abstieg, modulare Obstruktion)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Classify the Equation Type
+### Schritt 1: Gleichungstyp klassifizieren
 
-Determine the structure of the Diophantine equation to select the appropriate solving method.
+Die Struktur der diophantischen Gleichung bestimmen, um die geeignete Loesungsmethode auszuwaehlen.
 
-1. **Linear**: ax + by = c where a, b, c are given integers and x, y are unknowns.
-   - Solving method: Extended Euclidean algorithm.
+1. **Linear**: ax + by = c wobei a, b, c gegebene ganze Zahlen und x, y Unbekannte sind.
+   - Loesungsmethode: Erweiterter Euklidischer Algorithmus.
 
-2. **Pell equation**: x^2 - Dy^2 = 1 (or = -1, or = N) where D is a positive non-square integer.
-   - Solving method: Continued fraction expansion of sqrt(D).
+2. **Pell-Gleichung**: x^2 - Dy^2 = 1 (oder = -1, oder = N) wobei D eine positive nicht-quadratische ganze Zahl ist.
+   - Loesungsmethode: Kettenbruchentwicklung von sqrt(D).
 
-3. **Pythagorean**: x^2 + y^2 = z^2.
-   - Solving method: Parametric family x = m^2 - n^2, y = 2mn, z = m^2 + n^2.
+3. **Pythagoreisch**: x^2 + y^2 = z^2.
+   - Loesungsmethode: Parametrische Familie x = m^2 - n^2, y = 2mn, z = m^2 + n^2.
 
-4. **General quadratic**: ax^2 + bxy + cy^2 + dx + ey + f = 0.
-   - Solving method: Complete the square, reduce to Pell or simpler form, or apply modular constraints.
+4. **Allgemein quadratisch**: ax^2 + bxy + cy^2 + dx + ey + f = 0.
+   - Loesungsmethode: Quadratische Ergaenzung, auf Pell oder einfachere Form reduzieren, oder modulare Einschraenkungen anwenden.
 
-5. **Higher-order or special**: Fermat-type (x^n + y^n = z^n for n > 2), sum of squares, or other.
-   - Solving method: Modular obstruction, descent, or known impossibility results.
+5. **Hoehere Ordnung oder speziell**: Fermat-Typ (x^n + y^n = z^n fuer n > 2), Quadratsummen oder andere.
+   - Loesungsmethode: Modulare Obstruktion, Abstieg oder bekannte Unmoeglichkeitsergebnisse.
 
-Record the classification and chosen method.
+Klassifikation und gewaehlte Methode festhalten.
 
-**Expected:** A precise classification with the solving strategy identified.
+**Erwartet:** Eine praezise Klassifikation mit identifizierter Loesungsstrategie.
 
-**On failure:** If the equation does not fit a standard type, try substitution or transformation to reduce it to a known form. For example, x^2 + y^2 + z^2 = n can be approached via Legendre's three-square theorem. If no reduction is apparent, apply modular constraints (Step 4) to test for obstructions.
+**Bei Fehler:** Wenn die Gleichung keinem Standardtyp entspricht, Substitution oder Transformation versuchen, um sie auf eine bekannte Form zu reduzieren. Zum Beispiel kann x^2 + y^2 + z^2 = n ueber Legendres Drei-Quadrate-Theorem angegangen werden. Wenn keine Reduktion erkennbar ist, modulare Einschraenkungen (Schritt 4) zur Pruefung auf Obstruktionen anwenden.
 
-### Step 2: Solve Linear Diophantine Equations (if type = linear)
+### Schritt 2: Lineare diophantische Gleichungen loesen (wenn Typ = linear)
 
-Solve ax + by = c for integer x, y.
+ax + by = c fuer ganzzahlige x, y loesen.
 
-1. **Compute g = gcd(a, b)** using the Euclidean algorithm.
+1. **g = ggT(a, b) berechnen** mit dem Euklidischen Algorithmus.
 
-2. **Test solvability**: Solutions exist if and only if g | c.
-   - If g does not divide c, prove non-existence: "Since gcd(a, b) = g and g does not divide c, the equation ax + by = c has no integer solutions."
-   - Stop if no solution exists.
+2. **Loesbarkeit testen**: Loesungen existieren genau dann, wenn g | c.
+   - Wenn g nicht c teilt, Nichtexistenz beweisen: "Da ggT(a, b) = g und g nicht c teilt, hat die Gleichung ax + by = c keine ganzzahligen Loesungen."
+   - Stoppen, wenn keine Loesung existiert.
 
-3. **Simplify**: Divide through by g to get (a/g)x + (b/g)y = c/g, where now gcd(a/g, b/g) = 1.
+3. **Vereinfachen**: Durch g teilen um (a/g)x + (b/g)y = c/g zu erhalten, wobei nun ggT(a/g, b/g) = 1.
 
-4. **Find a particular solution** using the extended Euclidean algorithm:
-   - Express 1 = (a/g)*s + (b/g)*t via back-substitution.
-   - Multiply by c/g: (c/g) = (a/g)*(s*c/g) + (b/g)*(t*c/g).
-   - Particular solution: x0 = s * (c/g), y0 = t * (c/g).
+4. **Partikulaere Loesung finden** mit dem erweiterten Euklidischen Algorithmus:
+   - 1 = (a/g)*s + (b/g)*t ueber Rueckwaertssubstitution ausdruecken.
+   - Mit c/g multiplizieren: (c/g) = (a/g)*(s*c/g) + (b/g)*(t*c/g).
+   - Partikulaere Loesung: x0 = s * (c/g), y0 = t * (c/g).
 
-5. **Write the general solution**:
+5. **Allgemeine Loesung aufschreiben**:
    - x = x0 + (b/g)*k
    - y = y0 - (a/g)*k
-   - for all integers k.
+   - fuer alle ganzen Zahlen k.
 
-6. **Apply constraints** (if positive solutions required):
-   - Solve x0 + (b/g)*k > 0 and y0 - (a/g)*k > 0 for k.
-   - Report the range of valid k values or state that no positive solution exists.
+6. **Einschraenkungen anwenden** (wenn positive Loesungen erforderlich):
+   - x0 + (b/g)*k > 0 und y0 - (a/g)*k > 0 nach k loesen.
+   - Den Bereich gueltiger k-Werte angeben oder feststellen, dass keine positive Loesung existiert.
 
-**Example (15x + 21y = 39):**
+**Beispiel (15x + 21y = 39):**
 ```
 gcd(15, 21) = 3. Does 3 | 39? Yes.
 Simplify: 5x + 7y = 13.
@@ -108,35 +109,35 @@ General: x = 39 + 7k, y = -26 - 5k, k in Z.
 Check (k=0): 5*39 + 7*(-26) = 195 - 182 = 13. Correct.
 ```
 
-**Expected:** The general solution family (x, y) parameterized by an integer k, with verification of the particular solution.
+**Erwartet:** Die allgemeine Loesungsfamilie (x, y) parametrisiert durch eine ganze Zahl k, mit Verifikation der partikulaeren Loesung.
 
-**On failure:** If the particular solution is wrong, re-check the extended Euclidean back-substitution step by step. The most common error is a sign mistake. Verify: a * x0 + b * y0 should equal c exactly (not just modulo something).
+**Bei Fehler:** Wenn die partikulaere Loesung falsch ist, die erweiterte Euklidische Rueckwaertssubstitution Schritt fuer Schritt nochmals pruefen. Der haeufigste Fehler ist ein Vorzeichenfehler. Verifizieren: a * x0 + b * y0 muss exakt c ergeben (nicht nur modulo etwas).
 
-### Step 3: Solve Pell Equations (if type = Pell)
+### Schritt 3: Pell-Gleichungen loesen (wenn Typ = Pell)
 
-Solve x^2 - Dy^2 = 1 where D is a positive non-square integer.
+x^2 - Dy^2 = 1 loesen, wobei D eine positive nicht-quadratische ganze Zahl ist.
 
-1. **Verify D is not a perfect square**: If D = k^2, then x^2 - k^2*y^2 = (x - ky)(x + ky) = 1, which forces x - ky = x + ky = +/-1, giving y = 0, x = +/-1 (trivial). The equation is interesting only for non-square D.
+1. **Verifizieren, dass D kein perfektes Quadrat ist**: Falls D = k^2, dann x^2 - k^2*y^2 = (x - ky)(x + ky) = 1, was x - ky = x + ky = +/-1 erzwingt und y = 0, x = +/-1 ergibt (trivial). Die Gleichung ist nur fuer nicht-quadratisches D interessant.
 
-2. **Compute the continued fraction expansion of sqrt(D)**:
-   - Initialize: a0 = floor(sqrt(D)), m0 = 0, d0 = 1.
-   - Iterate: m_{i+1} = d_i * a_i - m_i, d_{i+1} = (D - m_{i+1}^2) / d_i, a_{i+1} = floor((a0 + m_{i+1}) / d_{i+1}).
-   - Continue until the sequence of a_i repeats (the expansion is periodic after a0).
-   - Record the period length r.
+2. **Kettenbruchentwicklung von sqrt(D) berechnen**:
+   - Initialisieren: a0 = floor(sqrt(D)), m0 = 0, d0 = 1.
+   - Iterieren: m_{i+1} = d_i * a_i - m_i, d_{i+1} = (D - m_{i+1}^2) / d_i, a_{i+1} = floor((a0 + m_{i+1}) / d_{i+1}).
+   - Fortfahren bis sich die Folge der a_i wiederholt (die Entwicklung ist nach a0 periodisch).
+   - Periodenlaenge r festhalten.
 
-3. **Extract the fundamental solution from convergents**:
-   - Compute the convergents p_i / q_i of the continued fraction.
-   - The convergent p_{r-1} / q_{r-1} (at the end of the first period) gives the fundamental solution:
-     - If r is even: (x1, y1) = (p_{r-1}, q_{r-1}) solves x^2 - Dy^2 = 1.
-     - If r is odd: (p_{r-1}, q_{r-1}) solves x^2 - Dy^2 = -1 (the negative Pell equation). Then (p_{2r-1}, q_{2r-1}) solves the positive equation.
+3. **Fundamentalloesung aus den Konvergenten extrahieren**:
+   - Die Konvergenten p_i / q_i des Kettenbruchs berechnen.
+   - Die Konvergente p_{r-1} / q_{r-1} (am Ende der ersten Periode) liefert die Fundamentalloesung:
+     - Wenn r gerade: (x1, y1) = (p_{r-1}, q_{r-1}) loest x^2 - Dy^2 = 1.
+     - Wenn r ungerade: (p_{r-1}, q_{r-1}) loest x^2 - Dy^2 = -1 (die negative Pell-Gleichung). Dann loest (p_{2r-1}, q_{2r-1}) die positive Gleichung.
 
-4. **Generate further solutions** from the fundamental solution (x1, y1):
-   - The recurrence: x_{n+1} + y_{n+1} * sqrt(D) = (x1 + y1 * sqrt(D))^{n+1}.
-   - Equivalently: x_{n+1} = x1 * x_n + D * y1 * y_n, y_{n+1} = x1 * y_n + y1 * x_n.
+4. **Weitere Loesungen erzeugen** aus der Fundamentalloesung (x1, y1):
+   - Die Rekursion: x_{n+1} + y_{n+1} * sqrt(D) = (x1 + y1 * sqrt(D))^{n+1}.
+   - Aequivalent: x_{n+1} = x1 * x_n + D * y1 * y_n, y_{n+1} = x1 * y_n + y1 * x_n.
 
-5. **Present** the fundamental solution and the recurrence for generating all solutions.
+5. Die Fundamentalloesung und die Rekursion zur Erzeugung aller Loesungen **praesentieren**.
 
-**Fundamental solutions for small D:**
+**Fundamentalloesungen fuer kleine D:**
 
 | D  | (x1, y1) | D  | (x1, y1)   | D  | (x1, y1)   |
 |----|----------|----|-------------|----|-----------  |
@@ -145,31 +146,31 @@ Solve x^2 - Dy^2 = 1 where D is a positive non-square integer.
 | 5  | (9, 4)   | 10 | (19, 6)     | 15 | (4, 1)      |
 | 6  | (5, 2)   | 11 | (10, 3)     | 17 | (33, 8)     |
 
-**Expected:** The fundamental solution (x1, y1) verified by substitution, plus the recurrence for generating all positive solutions.
+**Erwartet:** Die Fundamentalloesung (x1, y1) durch Einsetzen verifiziert, plus die Rekursion zur Erzeugung aller positiven Loesungen.
 
-**On failure:** If the continued fraction computation does not converge to a period, check the iteration formula. The period length r can be large (e.g., D = 61 has r = 11 and fundamental solution (1766319049, 226153980)). For large D, use computational tools rather than manual computation.
+**Bei Fehler:** Wenn die Kettenbruchberechnung nicht zu einer Periode konvergiert, die Iterationsformel pruefen. Die Periodenlaenge r kann gross sein (z.B. hat D = 61 r = 11 und die Fundamentalloesung (1766319049, 226153980)). Fuer grosse D Rechenwerkzeuge anstatt manueller Berechnung verwenden.
 
-### Step 4: Apply Modular Constraints for Existence/Non-Existence (if type = general quadratic or higher)
+### Schritt 4: Modulare Einschraenkungen fuer Existenz/Nichtexistenz anwenden (wenn Typ = allgemein quadratisch oder hoeher)
 
-Prove that an equation has no integer solutions by showing a modular obstruction.
+Beweisen, dass eine Gleichung keine ganzzahligen Loesungen hat, indem eine modulare Obstruktion gezeigt wird.
 
-1. **Choose a modulus m** (typically m = 2, 3, 4, 5, 7, 8, or 16).
+1. **Einen Modul m waehlen** (typischerweise m = 2, 3, 4, 5, 7, 8 oder 16).
 
-2. **Enumerate all residues**: Compute the left-hand side modulo m for all possible residues of the variables.
+2. **Alle Reste aufzaehlen**: Die linke Seite modulo m fuer alle moeglichen Reste der Variablen berechnen.
 
-3. **Check if any combination gives the required right-hand side modulo m**.
-   - If no combination works, the equation has no solution (modular obstruction).
+3. **Pruefen, ob irgendeine Kombination die erforderliche rechte Seite modulo m ergibt**.
+   - Wenn keine Kombination funktioniert, hat die Gleichung keine Loesung (modulare Obstruktion).
 
-4. **Common obstructions**:
-   - **Squares mod 4**: n^2 = 0 or 1 (mod 4). So x^2 + y^2 = c has no solution if c = 3 (mod 4).
-   - **Squares mod 8**: n^2 = 0, 1, or 4 (mod 8). So x^2 + y^2 + z^2 = c has no solution if c = 7 (mod 8).
-   - **Cubes mod 9**: n^3 = 0, 1, or 8 (mod 9). So x^3 + y^3 + z^3 = c may be obstructed for certain c mod 9.
+4. **Haeufige Obstruktionen**:
+   - **Quadrate mod 4**: n^2 = 0 oder 1 (mod 4). Also hat x^2 + y^2 = c keine Loesung wenn c = 3 (mod 4).
+   - **Quadrate mod 8**: n^2 = 0, 1 oder 4 (mod 8). Also hat x^2 + y^2 + z^2 = c keine Loesung wenn c = 7 (mod 8).
+   - **Kuben mod 9**: n^3 = 0, 1 oder 8 (mod 9). Also kann x^3 + y^3 + z^3 = c fuer bestimmte c mod 9 obstruiert sein.
 
-5. **If no obstruction is found**, a modular approach cannot prove non-existence. Solutions may or may not exist; try constructive methods or descent.
+5. **Wenn keine Obstruktion gefunden wird**, kann ein modularer Ansatz die Nichtexistenz nicht beweisen. Loesungen koennen existieren oder nicht; konstruktive Methoden oder Abstieg versuchen.
 
-**Quadratic residues reference:**
+**Referenz quadratischer Reste:**
 
-| Mod | Squares (residues)         |
+| Mod | Quadrate (Reste)           |
 |-----|---------------------------|
 | 3   | {0, 1}                    |
 | 4   | {0, 1}                    |
@@ -180,72 +181,72 @@ Prove that an equation has no integer solutions by showing a modular obstruction
 | 13  | {0, 1, 3, 4, 9, 10, 12}  |
 | 16  | {0, 1, 4, 9}             |
 
-**Expected:** Either a proof of non-existence via modular obstruction, or a statement that no obstruction was found at the tested moduli.
+**Erwartet:** Entweder ein Beweis der Nichtexistenz ueber modulare Obstruktion oder eine Feststellung, dass bei den getesteten Modulen keine Obstruktion gefunden wurde.
 
-**On failure:** If modular methods are inconclusive, try infinite descent: assume a solution exists, derive a strictly smaller solution, and repeat until a contradiction with positivity is reached. This technique is classical for proving x^4 + y^4 = z^2 has no non-trivial solutions.
+**Bei Fehler:** Wenn modulare Methoden ergebnislos sind, den unendlichen Abstieg versuchen: eine Loesung annehmen, eine strikt kleinere Loesung ableiten und wiederholen, bis ein Widerspruch zur Positivitaet erreicht wird. Diese Technik ist klassisch fuer den Beweis, dass x^4 + y^4 = z^2 keine nicht-trivialen Loesungen hat.
 
-### Step 5: Generate Solution Families from Fundamental Solution
+### Schritt 5: Loesungsfamilien aus der Fundamentalloesung erzeugen
 
-Express all solutions in terms of the fundamental solution and integer parameters.
+Alle Loesungen in Bezug auf die Fundamentalloesung und ganzzahlige Parameter ausdruecken.
 
-1. **For linear equations**: The family is x = x0 + (b/g)*k, y = y0 - (a/g)*k (from Step 2).
+1. **Fuer lineare Gleichungen**: Die Familie ist x = x0 + (b/g)*k, y = y0 - (a/g)*k (aus Schritt 2).
 
-2. **For Pell equations**: Use the recurrence from Step 3 to generate the first several solutions:
+2. **Fuer Pell-Gleichungen**: Die Rekursion aus Schritt 3 verwenden, um die ersten Loesungen zu erzeugen:
    ```
    (x1, y1), (x2, y2), (x3, y3), ...
    ```
-   List at least 3-5 solutions as a sanity check.
+   Mindestens 3-5 Loesungen als Plausibilitaetspruefung auflisten.
 
-3. **For Pythagorean triples**: Generate primitive triples from parameters m > n > 0, gcd(m, n) = 1, m - n odd:
+3. **Fuer Pythagoreische Tripel**: Primitive Tripel aus Parametern m > n > 0, ggT(m, n) = 1, m - n ungerade erzeugen:
    - a = m^2 - n^2, b = 2mn, c = m^2 + n^2.
-   - All primitive triples arise this way (up to swapping a and b).
+   - Alle primitiven Tripel entstehen so (bis auf Vertauschung von a und b).
 
-4. **For general families**: Express solutions in parametric form if possible. If the equation defines a curve of genus 0, a rational parametrization exists. If genus >= 1, there may be finitely many solutions (Faltings' theorem for genus >= 2).
+4. **Fuer allgemeine Familien**: Loesungen wenn moeglich in parametrischer Form ausdruecken. Wenn die Gleichung eine Kurve vom Geschlecht 0 definiert, existiert eine rationale Parametrisierung. Bei Geschlecht >= 1 kann es endlich viele Loesungen geben (Satz von Faltings fuer Geschlecht >= 2).
 
-5. **Verify** at least 3 members of the family by substitution into the original equation.
+5. Mindestens 3 Mitglieder der Familie durch Einsetzen in die Originalgleichung **verifizieren**.
 
-**Example (Pell, D = 2):**
+**Beispiel (Pell, D = 2):**
 ```
 Fundamental: (x1, y1) = (3, 2). Check: 9 - 2*4 = 1. Correct.
 (x2, y2) = (3*3 + 2*2*2, 3*2 + 2*3) = (17, 12). Check: 289 - 2*144 = 1.
 (x3, y3) = (3*17 + 2*2*12, 3*12 + 2*17) = (99, 70). Check: 9801 - 2*4900 = 1.
 ```
 
-**Expected:** A parametric or recursive description of all solutions, with at least 3 solutions verified.
+**Erwartet:** Eine parametrische oder rekursive Beschreibung aller Loesungen, mit mindestens 3 verifizierten Loesungen.
 
-**On failure:** If generated solutions fail verification, the fundamental solution or the recurrence formula is wrong. For Pell equations, re-derive the fundamental solution from the continued fraction. For linear equations, re-check the extended Euclidean computation.
+**Bei Fehler:** Wenn erzeugte Loesungen die Verifikation nicht bestehen, ist die Fundamentalloesung oder die Rekursionsformel falsch. Fuer Pell-Gleichungen die Fundamentalloesung aus dem Kettenbruch neu ableiten. Fuer lineare Gleichungen die erweiterte Euklidische Berechnung nochmals pruefen.
 
-## Validation
+## Validierung
 
-- [ ] Equation is correctly classified by type (linear, Pell, Pythagorean, general quadratic, higher-order)
-- [ ] For linear equations: gcd(a, b) | c is checked before solving
-- [ ] Extended Euclidean back-substitution is verified: a*x0 + b*y0 = c exactly
-- [ ] General solution includes all solutions (parameterized by integer k or recurrence)
-- [ ] For Pell: D is verified as non-square before applying continued fraction method
-- [ ] For Pell: fundamental solution satisfies x1^2 - D*y1^2 = 1 by direct computation
-- [ ] Modular obstruction proofs enumerate all residue combinations, not just some
-- [ ] At least 3 members of any solution family are verified by substitution
-- [ ] Constraints (positive integers, bounded range) are applied after finding the general solution
-- [ ] Non-existence claims are justified either by gcd condition or modular obstruction
+- [ ] Gleichung ist korrekt nach Typ klassifiziert (linear, Pell, Pythagoreisch, allgemein quadratisch, hoehere Ordnung)
+- [ ] Fuer lineare Gleichungen: ggT(a, b) | c wird vor dem Loesen geprueft
+- [ ] Erweiterte Euklidische Rueckwaertssubstitution ist verifiziert: a*x0 + b*y0 = c exakt
+- [ ] Allgemeine Loesung umfasst alle Loesungen (parametrisiert durch ganze Zahl k oder Rekursion)
+- [ ] Fuer Pell: D ist als nicht-quadratisch verifiziert vor Anwendung der Kettenbruchmethode
+- [ ] Fuer Pell: Fundamentalloesung erfuellt x1^2 - D*y1^2 = 1 durch direkte Berechnung
+- [ ] Beweise modularer Obstruktion zaehlen alle Restkombinationen auf, nicht nur einige
+- [ ] Mindestens 3 Mitglieder jeder Loesungsfamilie sind durch Einsetzen verifiziert
+- [ ] Einschraenkungen (positive ganze Zahlen, begrenzter Bereich) werden nach Finden der allgemeinen Loesung angewendet
+- [ ] Nichtexistenz-Behauptungen sind entweder durch ggT-Bedingung oder modulare Obstruktion gerechtfertigt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Assuming all equations with gcd | c have positive solutions**: The general solution x = x0 + (b/g)*k includes negative values. Positive solutions may not exist even when the equation is solvable over all integers.
+- **Annahme, dass alle Gleichungen mit ggT | c positive Loesungen haben**: Die allgemeine Loesung x = x0 + (b/g)*k schliesst negative Werte ein. Positive Loesungen existieren moeglicherweise nicht, selbst wenn die Gleichung ueber allen ganzen Zahlen loesbar ist.
 
-- **Confusing x^2 - Dy^2 = 1 with x^2 - Dy^2 = -1**: The negative Pell equation has solutions only when the continued fraction period length is odd. Applying the positive equation formula to a negative equation target gives the wrong result.
+- **Verwechslung von x^2 - Dy^2 = 1 mit x^2 - Dy^2 = -1**: Die negative Pell-Gleichung hat nur Loesungen, wenn die Kettenbruch-Periodenlaenge ungerade ist. Die Formel der positiven Gleichung auf ein negatives Gleichungsziel anzuwenden ergibt ein falsches Ergebnis.
 
-- **Forgetting the trivial solution of Pell's equation**: (x, y) = (1, 0) always satisfies x^2 - Dy^2 = 1 but is not useful for generating non-trivial solutions. The fundamental solution is the *smallest* solution with y > 0.
+- **Triviale Loesung der Pell-Gleichung vergessen**: (x, y) = (1, 0) erfuellt immer x^2 - Dy^2 = 1, ist aber nicht nuetzlich zur Erzeugung nicht-trivialer Loesungen. Die Fundamentalloesung ist die *kleinste* Loesung mit y > 0.
 
-- **Incomplete modular obstruction**: Checking only mod 2 or mod 4 may miss obstructions visible at higher moduli. If the first few moduli show no obstruction, try mod 8, 9, 16, or the discriminant of the quadratic form.
+- **Unvollstaendige modulare Obstruktion**: Nur mod 2 oder mod 4 zu pruefen kann Obstruktionen uebersehen, die bei hoeheren Modulen sichtbar sind. Wenn die ersten Modulen keine Obstruktion zeigen, mod 8, 9, 16 oder die Diskriminante der quadratischen Form versuchen.
 
-- **Off-by-one in continued fraction period**: The convergent indices must be carefully tracked. The fundamental solution comes from p_{r-1}/q_{r-1} where r is the period length, not from p_r/q_r.
+- **Off-by-one in der Kettenbruchperiode**: Die Konvergentenindizes muessen sorgfaeltig verfolgt werden. Die Fundamentalloesung kommt von p_{r-1}/q_{r-1} wobei r die Periodenlaenge ist, nicht von p_r/q_r.
 
-- **Infinite descent without a base case**: When using descent to prove non-existence, you must show that the descent terminates at a contradiction (e.g., x = 0 contradicts x > 0). Without this base case, the argument is incomplete.
+- **Unendlicher Abstieg ohne Basisfall**: Beim Abstieg zum Beweis der Nichtexistenz muss gezeigt werden, dass der Abstieg bei einem Widerspruch terminiert (z.B. x = 0 widerspricht x > 0). Ohne diesen Basisfall ist das Argument unvollstaendig.
 
-- **Applying Fermat's Last Theorem incorrectly**: x^n + y^n = z^n has no non-trivial integer solutions for n > 2 (Wiles, 1995), but this does not apply to equations with different coefficients like 2x^3 + 3y^3 = z^3.
+- **Fermats Letzten Satz falsch anwenden**: x^n + y^n = z^n hat keine nicht-trivialen ganzzahligen Loesungen fuer n > 2 (Wiles, 1995), aber dies gilt nicht fuer Gleichungen mit verschiedenen Koeffizienten wie 2x^3 + 3y^3 = z^3.
 
-## Related Skills
+## Verwandte Skills
 
-- `analyze-prime-numbers` -- Factorization and gcd computation are prerequisites for Diophantine solving
-- `solve-modular-arithmetic` -- Linear congruences ax = c (mod b) are equivalent to linear Diophantine equations
-- `derive-theoretical-result` -- Formal derivation techniques for proving Diophantine impossibility results
+- `analyze-prime-numbers` -- Faktorisierung und ggT-Berechnung sind Voraussetzungen fuer diophantisches Loesen
+- `solve-modular-arithmetic` -- Lineare Kongruenzen ax = c (mod b) sind aequivalent zu linearen diophantischen Gleichungen
+- `derive-theoretical-result` -- Formale Ableitungstechniken zum Beweis diophantischer Unmoeglichkeitsergebnisse

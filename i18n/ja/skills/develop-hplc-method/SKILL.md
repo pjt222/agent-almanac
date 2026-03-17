@@ -1,10 +1,9 @@
 ---
 name: develop-hplc-method
 description: >
-  Develop a high-performance liquid chromatography method: define separation goals,
-  select column chemistry and mobile phase, optimize gradient and flow conditions,
-  choose the appropriate detector, and evaluate initial method performance for
-  target analytes in solution or complex matrices.
+  高速液体クロマトグラフィー法を開発する：分離目標の定義、カラム化学と移動相の選択、
+  グラジエントおよび流量条件の最適化、適切な検出器の選択、溶液または複雑マトリックス中の
+  ターゲット分析対象物に対する初期メソッド性能の評価。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -23,181 +22,181 @@ metadata:
 
 # HPLCメソッドの開発
 
-Systematic development of a high-performance liquid chromatography method covering mode selection, column chemistry, mobile phase and gradient design, flow and temperature optimization, detector choice, and iterative refinement for non-volatile, thermally labile, or polar analytes.
+モード選択、カラム化学、移動相およびグラジエント設計、流量と温度の最適化、検出器選択、不揮発性・熱不安定性・極性分析対象物に対する反復的な改良を網羅する、高速液体クロマトグラフィー法の体系的開発。
 
 ## 使用タイミング
 
-- Analyzing compounds that are non-volatile, thermally labile, or too polar for GC
-- Developing a new HPLC-UV, HPLC-fluorescence, or LC-MS method from scratch
-- Adapting a literature or pharmacopeial HPLC method to a different column or instrument
-- Improving an existing method that suffers from poor resolution, long run times, or sensitivity issues
-- Selecting the appropriate chromatographic mode (reversed-phase, HILIC, ion-exchange, SEC, chiral)
+- GCには不揮発性、熱不安定性、または極性が高すぎる化合物を分析する時
+- 新しいHPLC-UV、HPLC-蛍光、またはLC-MSメソッドをゼロから開発する時
+- 文献または薬局方HPLCメソッドを異なるカラムまたは装置に適応させる時
+- 分離能不良、長い分析時間、または感度問題を抱える既存メソッドを改善する時
+- 適切なクロマトグラフィーモード（逆相、HILIC、イオン交換、SEC、キラル）を選択する時
 
 ## 入力
 
-### Required
+### 必須
 
-- **Target analytes**: Compound names, structures, molecular weights, pKa values, logP/logD
-- **Sample matrix**: Formulation, biological fluid, environmental extract, or neat solution
-- **Performance targets**: Required resolution, detection limits, quantitation range
+- **ターゲット分析対象物**: 化合物名、構造、分子量、pKa値、logP/logD
+- **サンプルマトリックス**: 製剤、生体液、環境抽出物、またはニート溶液
+- **性能目標**: 要求される分離度、検出限界、定量範囲
 
-### Optional
+### 任意
 
-- **Reference method**: Compendial or literature method to use as a starting point
-- **Available columns**: Inventory of HPLC columns on hand
-- **Instrument configuration**: UHPLC vs. conventional HPLC, available detectors, column oven range
-- **Throughput requirements**: Maximum acceptable run time including re-equilibration
-- **Regulatory context**: ICH, USP, EPA, or other compliance framework
+- **参照メソッド**: 出発点として使用する薬局方または文献メソッド
+- **利用可能カラム**: 手持ちのHPLCカラムの在庫
+- **装置構成**: UHPLC vs. 従来型HPLC、利用可能な検出器、カラムオーブン範囲
+- **スループット要件**: 再平衡化を含む許容可能な最大分析時間
+- **規制コンテキスト**: ICH、USP、EPA、またはその他のコンプライアンスフレームワーク
 
 ## 手順
 
-### ステップ1: Define Separation Goals
+### ステップ1: 分離目標の定義
 
-1. Compile analyte properties: molecular weight, pKa, logP (or logD at relevant pH), chromophores, fluorophores, ionizable groups.
-2. Identify the sample matrix and expected interferents (excipients, endogenous compounds, degradation products).
-3. Specify performance criteria:
-   - Resolution between critical pairs (Rs >= 2.0 for regulated methods)
-   - Detection limits (LOD/LOQ)
-   - Acceptable run time including gradient re-equilibration
-4. Determine whether the method is for assay, impurity profiling, dissolution, content uniformity, or cleaning verification -- this drives the validation category.
-5. Decide between isocratic and gradient elution: use isocratic if all analytes elute within a retention factor range of 2 < k' < 10; otherwise use gradient.
+1. 分析対象物の物性をまとめる：分子量、pKa、logP（または関連pHでのlogD）、発色団、蛍光団、イオン化基。
+2. サンプルマトリックスと予想される妨害物質（賦形剤、内因性化合物、分解生成物）を特定する。
+3. 性能基準を規定する：
+   - クリティカルペア間の分離度（規制メソッドではRs >= 2.0）
+   - 検出限界（LOD/LOQ）
+   - グラジエント再平衡化を含む許容可能な分析時間
+4. メソッドの目的を決定する：定量、不純物プロファイリング、溶出試験、含量均一性、洗浄バリデーションのいずれか — これがバリデーションカテゴリを決定する。
+5. アイソクラティックとグラジエント溶出の選択：すべての分析対象物が2 < k' < 10の保持係数範囲内に溶出する場合はアイソクラティックを使用、そうでなければグラジエントを使用する。
 
-**期待結果:** A specification document listing analytes with physicochemical properties, matrix description, performance criteria, and isocratic vs. gradient decision.
+**期待結果:** 物理化学的性質を持つ分析対象物リスト、マトリックスの説明、性能基準、アイソクラティック vs. グラジエントの判断を含む仕様文書。
 
-**失敗時:** If pKa or logP values are unknown, estimate from structure using prediction tools (ChemAxon, ACD/Labs) or run a scouting gradient on a C18 column at pH 3 and pH 7 to empirically assess retention behavior.
+**失敗時:** pKaまたはlogP値が不明な場合、構造から予測ツール（ChemAxon、ACD/Labs）で推定するか、pH 3とpH 7のC18カラムでスカウティンググラジエントを実行して保持挙動を経験的に評価する。
 
-### ステップ2: Select Column Chemistry
+### ステップ2: カラム化学の選択
 
-Choose the chromatographic mode and column based on analyte properties.
+分析対象物の物性に基づいてクロマトグラフィーモードとカラムを選択する。
 
-| Mode | Column Chemistry | Mobile Phase | Best For |
+| モード | カラム化学 | 移動相 | 適用対象 |
 |---|---|---|---|
-| Reversed-phase (RP) | C18 (ODS) | Water/ACN or water/MeOH + acid/buffer | Non-polar to moderately polar, most small molecules |
-| RP (extended) | C8, phenyl-hexyl, biphenyl | Water/organic + modifier | Shape selectivity, aromatic compounds, positional isomers |
-| RP (polar-embedded) | Amide-C18, polar-endcapped C18 | Water/organic, compatible with high aqueous | Polar analytes that elute too early on standard C18 |
-| HILIC | Bare silica, amide, zwitterionic | High organic (80-95% ACN) + aqueous buffer | Very polar, hydrophilic compounds (sugars, amino acids, nucleotides) |
-| Ion-exchange (IEX) | SAX or SCX | Buffer with ionic strength gradient | Permanently charged species, proteins, oligonucleotides |
-| Size-exclusion (SEC) | Diol-bonded silica, polymer | Isocratic aqueous or organic buffer | Protein aggregates, polymers, molecular weight distribution |
-| Chiral | Polysaccharide (amylose/cellulose) | Normal-phase or polar organic mode | Enantiomeric separations, chiral purity |
+| 逆相 (RP) | C18 (ODS) | 水/ACNまたは水/MeOH + 酸/バッファー | 非極性〜中程度極性、ほとんどの低分子 |
+| RP（拡張） | C8, phenyl-hexyl, biphenyl | 水/有機溶媒 + 修飾剤 | 形状選択性、芳香族化合物、位置異性体 |
+| RP（極性埋め込み） | Amide-C18, 極性エンドキャップC18 | 水/有機溶媒、高水性と互換 | 標準C18で溶出が早すぎる極性分析対象物 |
+| HILIC | ベアシリカ, amide, 双性イオン | 高有機溶媒（80-95% ACN）+ 水性バッファー | 非常に極性の高い親水性化合物（糖、アミノ酸、ヌクレオチド） |
+| イオン交換 (IEX) | SAXまたはSCX | イオン強度グラジエントバッファー | 永久荷電種、タンパク質、オリゴヌクレオチド |
+| サイズ排除 (SEC) | ジオール結合シリカ, ポリマー | アイソクラティック水性または有機バッファー | タンパク質凝集体、ポリマー、分子量分布 |
+| キラル | 多糖類（アミロース/セルロース） | ノーマルフェーズまたは極性有機モード | エナンチオマー分離、キラル純度 |
 
-1. Default to reversed-phase C18 for small molecules with logP > 0.
-2. For analytes with logP < 0, evaluate HILIC or ion-exchange.
-3. Select particle size: sub-2 um for UHPLC (higher efficiency, higher backpressure), 3-5 um for conventional HPLC.
-4. Select column dimensions: 50-150 mm length, 2.1-4.6 mm ID. Narrower columns save solvent and improve MS sensitivity.
-5. For chiral separations, screen at least 3-4 chiral stationary phases with different selectors.
+1. logP > 0の低分子はデフォルトで逆相C18を使用する。
+2. logP < 0の分析対象物はHILICまたはイオン交換を評価する。
+3. 粒子径を選択する：UHPLC用はsub-2 um（高効率、高背圧）、従来型HPLC用は3-5 um。
+4. カラム寸法を選択する：長さ50-150 mm、内径2.1-4.6 mm。細いカラムは溶媒を節約しMS感度を向上させる。
+5. キラル分離では、異なるセレクターを持つ少なくとも3-4種のキラル固定相をスクリーニングする。
 
-**期待結果:** Column chemistry, dimensions, and particle size selected with justification based on analyte properties.
+**期待結果:** 分析対象物の物性に基づいた正当性を伴うカラム化学、寸法、粒子径の選択。
 
-**失敗時:** If initial scouting shows poor retention on C18, switch to a more retentive phase (phenyl-hexyl for aromatics) or a different mode (HILIC for polar compounds).
+**失敗時:** 初期スカウティングでC18での保持が不良な場合、より保持力の強い相（芳香族にはphenyl-hexyl）に変更するか、異なるモード（極性化合物にはHILIC）に変更する。
 
-### ステップ3: Design Mobile Phase and Gradient
+### ステップ3: 移動相とグラジエントの設計
 
-1. Select organic modifier:
-   - Acetonitrile (ACN): lower viscosity, sharper peaks, better UV transparency below 210 nm
-   - Methanol (MeOH): different selectivity, sometimes better for polar analytes, higher viscosity
-2. Select aqueous component and pH:
-   - For neutral analytes: water with 0.1% formic acid (MS-compatible) or phosphate buffer (UV only)
-   - For ionizable analytes: buffer the mobile phase 2 pH units away from analyte pKa to ensure a single ionic form
-   - pH 2-3 (formic/phosphoric acid): suppresses ionization of acids, good general starting point
-   - pH 6-8 (ammonium formate/acetate): for basic analytes or when selectivity at low pH is insufficient
-   - pH 9-11 (ammonium bicarbonate, BEH columns): for very basic compounds on high-pH-stable columns
-3. Design the gradient:
-   - Start at 5-10% organic, ramp to 90-95% organic over 10-20 min for initial scouting
-   - Evaluate the scouting chromatogram to identify the useful organic range
-   - Narrow the gradient to span only the elution window of interest
-   - Gradient slope: steeper = faster but lower resolution; shallower = better resolution but longer run
-4. Include a column wash step (95% organic, 2-3 min) and re-equilibration (initial conditions, 5-10 column volumes).
-5. For isocratic methods, target k' = 3-8 for the analytes of interest.
+1. 有機修飾剤を選択する：
+   - アセトニトリル（ACN）：低粘度、シャープなピーク、210 nm以下でのUV透明性が良好
+   - メタノール（MeOH）：異なる選択性、極性分析対象物に適する場合がある、高粘度
+2. 水性成分とpHを選択する：
+   - 中性分析対象物：0.1%ギ酸水溶液（MS互換）またはリン酸バッファー（UVのみ）
+   - イオン化性分析対象物：単一イオン形態を確保するため分析対象物pKaから2 pH単位離れたpHでバッファーする
+   - pH 2-3（ギ酸/リン酸）：酸のイオン化を抑制、一般的な良い出発点
+   - pH 6-8（ギ酸アンモニウム/酢酸アンモニウム）：塩基性分析対象物用、または低pHでの選択性が不十分な場合
+   - pH 9-11（炭酸水素アンモニウム、BEHカラム）：高pH安定カラムでの非常に塩基性の化合物用
+3. グラジエントを設計する：
+   - 初期スカウティングでは有機溶媒5-10%から開始し、10-20分で90-95%まで上昇
+   - スカウティングクロマトグラムを評価して有効な有機溶媒範囲を特定
+   - グラジエントを目的の溶出ウィンドウのみをカバーするよう狭める
+   - グラジエント傾斜：急 = 高速だが低分離能；緩やか = 高分離能だが長時間
+4. カラム洗浄ステップ（95%有機溶媒、2-3分）と再平衡化（初期条件、5-10カラム容量）を含める。
+5. アイソクラティックメソッドでは、目的分析対象物のk' = 3-8を目標とする。
 
-**期待結果:** Mobile phase composition (organic, aqueous, buffer/additive, pH) and gradient profile defined, with a scouting run confirming analyte elution within the programmed window.
+**期待結果:** 移動相組成（有機溶媒、水性、バッファー/添加剤、pH）とグラジエントプロファイルが定義され、スカウティングランで分析対象物の溶出がプログラムされたウィンドウ内にあることが確認された。
 
-**失敗時:** If selectivity is poor (analytes co-elute despite gradient optimization), change the organic modifier (ACN to MeOH or vice versa), adjust pH by 2 units, or add an ion-pair reagent for charged analytes.
+**失敗時:** 選択性が不良の場合（グラジエント最適化にもかかわらず分析対象物が共溶出する）、有機修飾剤を変更（ACNからMeOHまたはその逆）、pHを2単位調整、または荷電分析対象物にはイオンペア試薬を添加する。
 
-### ステップ4: Optimize Flow Rate and Temperature
+### ステップ4: 流量と温度の最適化
 
-1. Set initial flow rate based on column dimensions:
-   - 4.6 mm ID: 1.0 mL/min
-   - 3.0 mm ID: 0.4-0.6 mL/min
-   - 2.1 mm ID: 0.2-0.4 mL/min
-2. Verify backpressure is within instrument and column limits (typically < 400 bar conventional, < 1200 bar UHPLC).
-3. Optimize column temperature:
-   - Start at 30 C for reproducibility (avoid ambient fluctuations)
-   - Increase to 40-60 C to reduce viscosity, lower backpressure, and sharpen peaks
-   - For chiral columns, temperature often has a strong effect on enantioselectivity -- screen 15-45 C
-4. Evaluate the effect of flow rate on resolution: small increases in flow can improve throughput without significant resolution loss if operating near the van Deemter minimum.
-5. Document the optimal flow rate, column temperature, and resulting backpressure.
+1. カラム寸法に基づいて初期流量を設定する：
+   - 内径4.6 mm：1.0 mL/min
+   - 内径3.0 mm：0.4-0.6 mL/min
+   - 内径2.1 mm：0.2-0.4 mL/min
+2. 背圧が装置とカラムの限界内（通常、従来型 < 400 bar、UHPLC < 1200 bar）であることを確認する。
+3. カラム温度を最適化する：
+   - 再現性のため30 Cで開始する（室温変動を回避）
+   - 粘度低下、背圧低下、ピークのシャープ化のため40-60 Cに上昇
+   - キラルカラムでは温度がエナンチオ選択性に強い影響を持つことが多い — 15-45 Cでスクリーニング
+4. 流量が分離度に与える影響を評価する：ファンデームター最小値付近で動作している場合、流量のわずかな増加は分離度を大幅に低下させることなくスループットを改善できる。
+5. 最適な流量、カラム温度、結果の背圧を記録する。
 
-**期待結果:** Flow rate and column temperature optimized with backpressure within limits, resolution maintained or improved relative to initial conditions.
+**期待結果:** 流量とカラム温度が最適化され、背圧が限界内、分離度が初期条件に対して維持または改善。
 
-**失敗時:** If backpressure is too high, reduce flow rate, increase temperature, or switch to a wider-bore or larger-particle column. If resolution degrades at higher temperature, return to 30 C and accept the longer run time.
+**失敗時:** 背圧が高すぎる場合、流量を下げる、温度を上げる、またはより太い口径やより大きな粒子径のカラムに変更する。高温で分離度が低下する場合、30 Cに戻してより長い分析時間を受け入れる。
 
-### ステップ5: Select the Detector
+### ステップ5: 検出器の選択
 
-| Detector | Principle | Sensitivity | Selectivity | Key Considerations |
+| 検出器 | 原理 | 感度 | 選択性 | 主な考慮事項 |
 |---|---|---|---|---|
-| UV (single wavelength) | Absorbance at fixed lambda | ng range | Compounds with chromophores | Simple, robust, most common |
-| DAD (diode array) | Full UV-Vis spectrum | ng range | Chromophores + spectral ID | Peak purity assessment, library matching |
-| Fluorescence (FLD) | Excitation/emission | pg range (10-100x more sensitive than UV) | Native fluorophores or derivatized | Excellent selectivity, requires fluorescent analytes |
-| Refractive index (RI) | Bulk property | ug range | Universal (no chromophore needed) | Temperature-sensitive, gradient-incompatible |
-| Evaporative light scattering (ELSD) | Nebulization + light scattering | ng range | Universal, non-volatile analytes | Semi-quantitative, non-linear response |
-| Charged aerosol (CAD) | Nebulization + corona discharge | ng range | Universal, non-volatile analytes | More uniform response than ELSD |
-| Mass spectrometry (MS) | m/z detection | pg-fg range | Structural, highest selectivity | Requires MS-compatible mobile phases |
+| UV（単一波長） | 固定波長での吸光度 | ng範囲 | 発色団を持つ化合物 | シンプル、堅牢、最も一般的 |
+| DAD（ダイオードアレイ） | 全UV-Visスペクトル | ng範囲 | 発色団 + スペクトルID | ピーク純度評価、ライブラリマッチング |
+| 蛍光 (FLD) | 励起/蛍光 | pg範囲（UVの10-100倍高感度） | 天然蛍光団または誘導体化 | 優れた選択性、蛍光性分析対象物が必要 |
+| 示差屈折率 (RI) | バルク物性 | ug範囲 | ユニバーサル（発色団不要） | 温度感受性、グラジエント非互換 |
+| 蒸発光散乱 (ELSD) | 噴霧 + 光散乱 | ng範囲 | ユニバーサル、不揮発性分析対象物 | 半定量的、非線形応答 |
+| 荷電エアロゾル (CAD) | 噴霧 + コロナ放電 | ng範囲 | ユニバーサル、不揮発性分析対象物 | ELSDより均一な応答 |
+| 質量分析 (MS) | m/z検出 | pg-fg範囲 | 構造的、最高の選択性 | MS互換移動相が必要 |
 
-1. For analytes with UV chromophores (aromatic rings, conjugated systems), start with DAD -- it provides both quantitation and peak purity.
-2. For trace analysis in complex matrices, prefer MS (ESI or APCI) in SIM or MRM mode.
-3. For compounds without chromophores (sugars, lipids, polymers), use CAD, ELSD, or RI.
-4. Set detection wavelength at the analyte's absorption maximum (lambda-max) for best sensitivity, or at 210-220 nm for general screening.
-5. For fluorescence, optimize excitation and emission wavelengths using a spectral scan of the analyte.
-6. Ensure mobile phase additives are compatible: no phosphate buffers with MS, no UV-absorbing additives at low wavelengths.
+1. UV発色団（芳香環、共役系）を持つ分析対象物にはDADから始める — 定量とピーク純度の両方を提供する。
+2. 複雑マトリックス中の微量分析にはSIMまたはMRMモードのMS（ESIまたはAPCI）を優先する。
+3. 発色団のない化合物（糖、脂質、ポリマー）にはCAD、ELSD、またはRIを使用する。
+4. 検出波長は最大感度のため分析対象物の吸収極大（λ-max）に設定するか、一般スクリーニングでは210-220 nmに設定する。
+5. 蛍光検出では、分析対象物のスペクトルスキャンを使用して励起と蛍光の波長を最適化する。
+6. 移動相添加剤の互換性を確認する：MSにリン酸バッファーは不可、低波長でUV吸収のある添加剤は不可。
 
-**期待結果:** Detector selected and configured (wavelength, gain, acquisition rate) appropriate for analyte chemistry and sensitivity requirements.
+**期待結果:** 分析対象物の化学と感度要件に適した検出器が選択・設定（波長、ゲイン、データ取得速度）されている。
 
-**失敗時:** If UV sensitivity is insufficient at the required LOQ, consider fluorescence derivatization (e.g., OPA for amines, FMOC for amino acids) or switch to LC-MS/MS for maximum sensitivity and selectivity.
+**失敗時:** 要求LOQでUV感度が不十分な場合、蛍光誘導体化（例：アミンにOPA、アミノ酸にFMOC）を検討するか、最大感度と選択性のためLC-MS/MSに切り替える。
 
-### ステップ6: Evaluate and Refine
+### ステップ6: 評価と改良
 
-1. Inject a system suitability standard 6 times and evaluate:
-   - Retention time RSD < 1.0%
-   - Peak area RSD < 2.0%
-   - Resolution of critical pair >= 2.0
-   - Tailing factor 0.8-1.5 for all peaks
-   - Theoretical plates per column specification
-2. Inject a placebo/matrix blank to check for interference at analyte retention times.
-3. Inject a stressed or spiked sample to verify the method separates degradation products from the main analyte(s).
-4. If any criterion fails, adjust one variable at a time:
-   - Poor resolution: change pH, gradient slope, or column chemistry
-   - Tailing: add amine modifier (TEA for basic analytes), change buffer, or try a different bonded phase
-   - Sensitivity: increase injection volume, concentrate the sample, or switch detector
-5. Lock the final method parameters and document all conditions.
+1. システム適合性標準を6回注入して評価する：
+   - 保持時間RSD < 1.0%
+   - ピーク面積RSD < 2.0%
+   - クリティカルペアの分離度 >= 2.0
+   - すべてのピークのテーリング係数0.8-1.5
+   - カラム仕様あたりの理論段数
+2. プラセボ/マトリックスブランクを注入して、分析対象物保持時間での妨害を確認する。
+3. ストレスまたはスパイクサンプルを注入して、メソッドが分解生成物を主分析対象物から分離することを確認する。
+4. いずれかの基準が不合格の場合、一度に1つの変数を調整する：
+   - 分離度不良：pH、グラジエント傾斜、またはカラム化学を変更
+   - テーリング：アミン修飾剤（塩基性分析対象物にTEA）を添加、バッファーを変更、または異なる結合相を試す
+   - 感度：注入量を増加、サンプルを濃縮、または検出器を変更
+5. 最終メソッドパラメータを確定し、すべての条件を文書化する。
 
-**期待結果:** All system suitability criteria met; method resolves target analytes from matrix interferents and known degradation products; parameters documented for transfer.
+**期待結果:** すべてのシステム適合性基準が満たされ、メソッドがターゲット分析対象物をマトリックス妨害物質と既知の分解生成物から分離し、パラメータが移管用に文書化されている。
 
-**失敗時:** If iterative adjustment does not resolve the issue, consider a fundamentally different approach (change chromatographic mode, 2D-LC, or derivatization) and return to Step 2.
+**失敗時:** 反復調整で問題が解決しない場合、根本的に異なるアプローチ（クロマトグラフィーモードの変更、2D-LC、または誘導体化）を検討し、ステップ2に戻る。
 
 ## バリデーション
 
-- [ ] All target analytes resolved with Rs >= 2.0 for critical pairs
-- [ ] Retention time RSD < 1.0% across 6 replicate injections
-- [ ] Peak area RSD < 2.0% across 6 replicate injections
-- [ ] Tailing factors 0.8-1.5 for all analyte peaks
-- [ ] No matrix interference at analyte retention times
-- [ ] Degradation products resolved from main analyte(s)
-- [ ] Run time (including re-equilibration) meets throughput requirements
-- [ ] Mobile phase compatible with selected detector
-- [ ] Method parameters fully documented (column, mobile phase, gradient, flow, temperature, detector)
+- [ ] すべてのターゲット分析対象物がクリティカルペアでRs >= 2.0で分離されている
+- [ ] 6回反復注入で保持時間RSD < 1.0%
+- [ ] 6回反復注入でピーク面積RSD < 2.0%
+- [ ] すべての分析対象物ピークでテーリング係数0.8-1.5
+- [ ] 分析対象物保持時間でマトリックス妨害なし
+- [ ] 分解生成物が主分析対象物から分離されている
+- [ ] 分析時間（再平衡化含む）がスループット要件を満たす
+- [ ] 移動相が選択した検出器と互換
+- [ ] メソッドパラメータが完全に文書化されている（カラム、移動相、グラジエント、流量、温度、検出器）
 
 ## よくある落とし穴
 
-- **Ignoring mobile phase pH for ionizable analytes**: Running at a pH near the analyte's pKa causes split peaks or poor reproducibility because the compound exists in two ionic forms. Buffer at least 2 pH units away from pKa.
-- **Using phosphate buffers with MS detection**: Phosphate is non-volatile and contaminates the MS source. Use formate or acetate buffers for LC-MS work.
-- **Insufficient re-equilibration after gradient**: The column must be flushed with at least 5-10 column volumes of initial mobile phase before the next injection. Inadequate re-equilibration causes retention time drift.
-- **Selecting too short a column for complex mixtures**: While short columns (50 mm) offer speed, they may not provide enough theoretical plates for multi-component separations. Start with 100-150 mm for method development.
-- **Neglecting system dwell volume**: The dwell volume (mixer to column head) delays the gradient reaching the column. This differs between instruments and causes method transfer failures. Measure and document it.
-- **Running HILIC like reversed-phase**: HILIC requires high organic (80-95% ACN) with a small aqueous fraction. Increasing aqueous content increases elution strength -- the opposite of RP. Equilibration times are also longer.
+- **イオン化性分析対象物の移動相pHを無視する**: 分析対象物のpKa付近のpHで分析すると、化合物が2つのイオン形態で存在するためピーク分裂や再現性不良を引き起こす。pKaから少なくとも2 pH単位離れてバッファーする
+- **MS検出でリン酸バッファーを使用する**: リン酸は不揮発性でMSソースを汚染する。LC-MSではギ酸塩または酢酸塩バッファーを使用する
+- **グラジエント後の再平衡化不足**: カラムは次の注入前に少なくとも5-10カラム容量の初期移動相でフラッシュする必要がある。不十分な再平衡化は保持時間のドリフトを引き起こす
+- **複雑混合物に短すぎるカラムを選択する**: 短いカラム（50 mm）は速度を提供するが、多成分分離には十分な理論段数を提供しない場合がある。メソッド開発では100-150 mmから始める
+- **システム滞留容量を無視する**: 滞留容量（ミキサーからカラム入口まで）はグラジエントがカラムに到達するのを遅延させる。装置間で異なり、メソッド移管の失敗を引き起こす。測定して文書化する
+- **HILICを逆相のように分析する**: HILICは高有機溶媒（80-95% ACN）と少量の水性画分を必要とする。水性含量の増加は溶出力を増加させる — RPとは逆。平衡化時間も長い
 
 ## 関連スキル
 
-- `develop-gc-method` -- gas chromatography method development for volatile and semi-volatile analytes
-- `interpret-chromatogram` -- reading and interpreting HPLC and GC chromatograms
-- `troubleshoot-separation` -- diagnosing and fixing peak shape, retention, and resolution problems
-- `validate-analytical-method` -- formal ICH Q2 validation of the developed HPLC method
+- `develop-gc-method` -- 揮発性および半揮発性分析対象物のガスクロマトグラフィー法開発
+- `interpret-chromatogram` -- HPLCおよびGCクロマトグラムの読解と解釈
+- `troubleshoot-separation` -- ピーク形状、保持、分離度の問題の診断と修正
+- `validate-analytical-method` -- 開発したHPLCメソッドの正式なICH Q2バリデーション

@@ -1,12 +1,11 @@
 ---
 name: create-2d-composition
 description: >
-  Compose 2D graphics programmatically using SVG generation, diagram layout
-  algorithms, image compositing, and batch processing workflows. Use when
-  generating diagrams, flowcharts, or infographics programmatically, creating
-  reproducible scientific figures, automating production of badges or visual
-  assets, building custom chart types not in standard libraries, or batch
-  generating graphics with parameter variations.
+  SVG生成、ダイアグラムレイアウトアルゴリズム、画像合成、バッチ処理ワークフローを使用して
+  プログラム的に2Dグラフィックスを作成する。ダイアグラム、フローチャート、インフォグラフィックスの
+  プログラム的生成時、再現可能な科学的図版の作成時、バッジやビジュアルアセットの自動生成時、
+  標準ライブラリにないカスタムチャートタイプの構築時、パラメータバリエーションによる
+  バッチグラフィックス生成時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,33 +24,33 @@ metadata:
 
 # 2Dコンポジションの作成
 
-Generate 2D graphics programmatically using SVG construction, diagram layout algorithms, image compositing, and batch processing workflows. Covers vector graphics generation, raster image manipulation, typography, and automated production of charts, diagrams, and infographics.
+SVG構築、ダイアグラムレイアウトアルゴリズム、画像合成、バッチ処理ワークフローを使用してプログラム的に2Dグラフィックスを生成する。ベクターグラフィックス生成、ラスター画像操作、タイポグラフィ、チャート・ダイアグラム・インフォグラフィックスの自動生成をカバーする。
 
 ## 使用タイミング
 
-- Generating diagrams, flowcharts, or infographics programmatically
-- Creating reproducible scientific figures or publication graphics
-- Automating production of badges, icons, or visual assets
-- Compositing multiple images or data visualizations
-- Building custom chart types not available in standard libraries
-- Batch generating graphics with parameter variations
-- Creating SVG templates for web or print applications
+- ダイアグラム、フローチャート、インフォグラフィックスをプログラム的に生成する時
+- 再現可能な科学的図版や出版用グラフィックスを作成する時
+- バッジ、アイコン、ビジュアルアセットの生成を自動化する時
+- 複数の画像やデータビジュアライゼーションを合成する時
+- 標準ライブラリにないカスタムチャートタイプを構築する時
+- パラメータバリエーションによりグラフィックスをバッチ生成する時
+- Web用またはプリント用のSVGテンプレートを作成する時
 
 ## 入力
 
-| Input | Type | Description | Example |
-|-------|------|-------------|---------|
-| Layout specification | Configuration | Dimensions, margins, grid layout | Canvas 800x600px, 20px margins |
-| Visual elements | Data/Assets | Shapes, text, images, data points | Rectangle coordinates, labels, icons |
-| Style parameters | CSS/Attributes | Colors, fonts, stroke widths, opacity | `fill="#3366cc"`, `stroke-width="2"` |
-| Data sources | Files/Arrays | Values to visualize or annotate | CSV data, JSON configuration |
-| Output format | String | SVG, PNG, PDF, composite formats | `output.svg`, 300 DPI PNG |
+| 入力 | 型 | 説明 | 例 |
+|------|------|------|------|
+| レイアウト仕様 | 設定 | 寸法、マージン、グリッドレイアウト | キャンバス800x600px、20pxマージン |
+| ビジュアル要素 | データ/アセット | 図形、テキスト、画像、データポイント | 矩形座標、ラベル、アイコン |
+| スタイルパラメータ | CSS/属性 | 色、フォント、線幅、不透明度 | `fill="#3366cc"`, `stroke-width="2"` |
+| データソース | ファイル/配列 | 可視化またはアノテーション用の値 | CSVデータ、JSON設定 |
+| 出力フォーマット | 文字列 | SVG、PNG、PDF、合成フォーマット | `output.svg`、300 DPI PNG |
 
 ## 手順
 
-### 1. Set Up Python Environment
+### 1. Python環境のセットアップ
 
-Install required libraries for 2D composition:
+2Dコンポジションに必要なライブラリをインストールする:
 
 ```bash
 # Core libraries
@@ -64,12 +63,12 @@ pip install drawsvg reportlab pycairo
 pip install matplotlib numpy pandas
 ```
 
-**期待結果:** Libraries installed successfully
-**失敗時:** Check Python version (3.7+), use virtual environment to avoid conflicts
+**期待結果:** ライブラリが正常にインストールされる
+**失敗時:** Pythonバージョン（3.7以上）を確認し、競合を避けるため仮想環境を使用する
 
-### 2. Create Basic SVG Graphics
+### 2. 基本的なSVGグラフィックスの作成
 
-Generate SVG using svgwrite:
+svgwriteを使用してSVGを生成する:
 
 ```python
 import svgwrite
@@ -120,12 +119,12 @@ def create_basic_svg(output_path):
     print(f"Saved: {output_path}")
 ```
 
-**期待結果:** SVG file generated with shapes and text
-**失敗時:** Check svgwrite version, verify output directory writable
+**期待結果:** 図形とテキストを含むSVGファイルが生成される
+**失敗時:** svgwriteのバージョンを確認し、出力ディレクトリが書き込み可能か確認する
 
-### 3. Build Diagrams with Layout Logic
+### 3. レイアウトロジックによるダイアグラムの構築
 
-Create structured diagrams with calculated positioning:
+計算された配置で構造化ダイアグラムを作成する:
 
 ```python
 def create_flowchart(steps, output_path):
@@ -213,12 +212,12 @@ def wrap_text(text, max_width=20):
     return lines
 ```
 
-**期待結果:** Flowchart with connected boxes and arrows
-**失敗時:** Adjust layout calculations, verify arrow marker definitions
+**期待結果:** 接続されたボックスと矢印を持つフローチャート
+**失敗時:** レイアウト計算を調整し、矢印マーカー定義を確認する
 
-### 4. Composite Raster Images
+### 4. ラスター画像の合成
 
-Combine multiple images using Pillow:
+Pillowを使用して複数の画像を結合する:
 
 ```python
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -230,21 +229,14 @@ def composite_images(image_paths, output_path, layout='grid'):
     images = [Image.open(path) for path in image_paths]
 
     if layout == 'grid':
-        # Calculate grid dimensions
         n = len(images)
         cols = int(n ** 0.5)
         rows = (n + cols - 1) // cols
-
-        # Get max dimensions
         max_width = max(img.width for img in images)
         max_height = max(img.height for img in images)
-
-        # Create composite canvas
         canvas_width = cols * max_width
         canvas_height = rows * max_height
         composite = Image.new('RGB', (canvas_width, canvas_height), 'white')
-
-        # Paste images
         for i, img in enumerate(images):
             row = i // cols
             col = i % cols
@@ -253,22 +245,18 @@ def composite_images(image_paths, output_path, layout='grid'):
             composite.paste(img, (x, y))
 
     elif layout == 'horizontal':
-        # Horizontal concatenation
         total_width = sum(img.width for img in images)
         max_height = max(img.height for img in images)
         composite = Image.new('RGB', (total_width, max_height), 'white')
-
         x_offset = 0
         for img in images:
             composite.paste(img, (x_offset, 0))
             x_offset += img.width
 
     elif layout == 'vertical':
-        # Vertical concatenation
         max_width = max(img.width for img in images)
         total_height = sum(img.height for img in images)
         composite = Image.new('RGB', (max_width, total_height), 'white')
-
         y_offset = 0
         for img in images:
             composite.paste(img, (0, y_offset))
@@ -281,8 +269,6 @@ def add_annotations(image_path, annotations, output_path):
     """Add text annotations to image."""
     img = Image.open(image_path)
     draw = ImageDraw.Draw(img)
-
-    # Load font
     try:
         font = ImageFont.truetype("Arial.ttf", 24)
     except:
@@ -292,26 +278,22 @@ def add_annotations(image_path, annotations, output_path):
         text = annotation['text']
         position = annotation['position']
         color = annotation.get('color', 'black')
-
-        # Add text shadow for readability
         shadow_offset = 2
         draw.text(
             (position[0] + shadow_offset, position[1] + shadow_offset),
-            text,
-            font=font,
-            fill='white'
+            text, font=font, fill='white'
         )
         draw.text(position, text, font=font, fill=color)
 
     img.save(output_path)
 ```
 
-**期待結果:** Composite image created with proper layout
-**失敗時:** Check all input images exist, verify image modes compatible
+**期待結果:** 適切なレイアウトで合成画像が作成される
+**失敗時:** すべての入力画像が存在するか確認し、画像モードに互換性があるか検証する
 
-### 5. Generate Data-Driven Graphics
+### 5. データ駆動グラフィックスの生成
 
-Create visualizations from data:
+データからビジュアライゼーションを作成する:
 
 ```python
 import numpy as np
@@ -319,77 +301,42 @@ import numpy as np
 def create_bar_chart_svg(data, labels, output_path):
     """Generate SVG bar chart from data."""
     dwg = svgwrite.Drawing(output_path, size=('600px', '400px'))
-
-    # Chart area
     margin = 50
     chart_width = 500
     chart_height = 300
     bar_spacing = 10
-
-    # Calculate bar dimensions
     n_bars = len(data)
     bar_width = (chart_width - (n_bars - 1) * bar_spacing) / n_bars
-
-    # Scale data to fit chart
     max_value = max(data)
     scale = chart_height / max_value
 
     # Draw axes
-    dwg.add(dwg.line(
-        start=(margin, margin),
-        end=(margin, margin + chart_height),
-        stroke='black',
-        stroke_width=2
-    ))
-    dwg.add(dwg.line(
-        start=(margin, margin + chart_height),
+    dwg.add(dwg.line(start=(margin, margin), end=(margin, margin + chart_height),
+        stroke='black', stroke_width=2))
+    dwg.add(dwg.line(start=(margin, margin + chart_height),
         end=(margin + chart_width, margin + chart_height),
-        stroke='black',
-        stroke_width=2
-    ))
+        stroke='black', stroke_width=2))
 
-    # Draw bars
     for i, (value, label) in enumerate(zip(data, labels)):
         x = margin + i * (bar_width + bar_spacing)
         bar_height = value * scale
         y = margin + chart_height - bar_height
-
-        # Bar
-        dwg.add(dwg.rect(
-            insert=(x, y),
-            size=(bar_width, bar_height),
-            fill='steelblue',
-            stroke='navy',
-            stroke_width=1
-        ))
-
-        # Value label
-        dwg.add(dwg.text(
-            f'{value:.1f}',
-            insert=(x + bar_width/2, y - 5),
-            text_anchor='middle',
-            font_size='10pt',
-            fill='black'
-        ))
-
-        # X-axis label
-        dwg.add(dwg.text(
-            label,
-            insert=(x + bar_width/2, margin + chart_height + 20),
-            text_anchor='middle',
-            font_size='10pt',
-            fill='black'
-        ))
+        dwg.add(dwg.rect(insert=(x, y), size=(bar_width, bar_height),
+            fill='steelblue', stroke='navy', stroke_width=1))
+        dwg.add(dwg.text(f'{value:.1f}', insert=(x + bar_width/2, y - 5),
+            text_anchor='middle', font_size='10pt', fill='black'))
+        dwg.add(dwg.text(label, insert=(x + bar_width/2, margin + chart_height + 20),
+            text_anchor='middle', font_size='10pt', fill='black'))
 
     dwg.save()
 ```
 
-**期待結果:** SVG bar chart with scaled data
-**失敗時:** Handle edge cases (empty data, negative values), add validation
+**期待結果:** スケーリングされたデータを持つSVG棒グラフ
+**失敗時:** エッジケース（空データ、負の値）を処理し、バリデーションを追加する
 
-### 6. Batch Generate Graphics
+### 6. グラフィックスのバッチ生成
 
-Automate creation of multiple graphics:
+複数グラフィックスの作成を自動化する:
 
 ```python
 def batch_generate_badges(users, template_path, output_dir):
@@ -398,67 +345,36 @@ def batch_generate_badges(users, template_path, output_dir):
 
     for user in users:
         output_path = os.path.join(output_dir, f"{user['id']}_badge.svg")
-
         dwg = svgwrite.Drawing(output_path, size=('300px', '100px'))
-
-        # Background
-        dwg.add(dwg.rect(
-            insert=(0, 0),
-            size=('100%', '100%'),
-            fill='#3366cc',
-            rx=10,
-            ry=10
-        ))
-
-        # User name
-        dwg.add(dwg.text(
-            user['name'],
-            insert=(150, 40),
-            text_anchor='middle',
-            font_size='20pt',
-            font_weight='bold',
-            fill='white'
-        ))
-
-        # User role
-        dwg.add(dwg.text(
-            user['role'],
-            insert=(150, 70),
-            text_anchor='middle',
-            font_size='14pt',
-            fill='lightblue'
-        ))
-
+        dwg.add(dwg.rect(insert=(0, 0), size=('100%', '100%'),
+            fill='#3366cc', rx=10, ry=10))
+        dwg.add(dwg.text(user['name'], insert=(150, 40),
+            text_anchor='middle', font_size='20pt',
+            font_weight='bold', fill='white'))
+        dwg.add(dwg.text(user['role'], insert=(150, 70),
+            text_anchor='middle', font_size='14pt', fill='lightblue'))
         dwg.save()
         print(f"Generated badge: {output_path}")
 ```
 
-**期待結果:** Individual graphic generated for each data item
-**失敗時:** Check data structure, handle missing fields with defaults
+**期待結果:** 各データ項目に対して個別のグラフィックが生成される
+**失敗時:** データ構造を確認し、欠損フィールドにデフォルト値を設定する
 
-### 7. Convert SVG to Raster
+### 7. SVGからラスターへの変換
 
-Export SVG to PNG/PDF for various uses:
+SVGをPNG/PDFに書き出して様々な用途に使用する:
 
 ```python
 import cairosvg
 
 def svg_to_png(svg_path, png_path, dpi=300):
     """Convert SVG to PNG with specified DPI."""
-    # Calculate pixel dimensions from DPI
-    # Assuming A4 size as example
     width_inches = 8.27
     height_inches = 11.69
-
     width_px = int(width_inches * dpi)
     height_px = int(height_inches * dpi)
-
-    cairosvg.svg2png(
-        url=svg_path,
-        write_to=png_path,
-        output_width=width_px,
-        output_height=height_px
-    )
+    cairosvg.svg2png(url=svg_path, write_to=png_path,
+        output_width=width_px, output_height=height_px)
     print(f"Converted to PNG: {png_path}")
 
 def svg_to_pdf(svg_path, pdf_path):
@@ -467,37 +383,37 @@ def svg_to_pdf(svg_path, pdf_path):
     print(f"Converted to PDF: {pdf_path}")
 ```
 
-**期待結果:** Raster output generated at specified resolution
-**失敗時:** Install cairo system library if missing, check SVG validity
+**期待結果:** 指定された解像度でラスター出力が生成される
+**失敗時:** cairoシステムライブラリが不足している場合はインストールし、SVGの妥当性を確認する
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Graphics render correctly in target applications
-- [ ] Text is readable and properly positioned
-- [ ] Colors match specifications (check hex codes)
-- [ ] Dimensions appropriate for use case
-- [ ] SVG validates against standard (if required)
-- [ ] Raster exports have correct DPI
-- [ ] Layout adapts to data variations
-- [ ] Batch processing completes without errors
-- [ ] Output files organized logically
-- [ ] Code includes error handling
+- [ ] ターゲットアプリケーションでグラフィックスが正しくレンダリングされる
+- [ ] テキストが読みやすく適切に配置されている
+- [ ] 色が仕様に一致している（16進コードを確認）
+- [ ] 用途に適した寸法である
+- [ ] SVGが標準に対して妥当である（必要な場合）
+- [ ] ラスター書き出しが正しいDPIである
+- [ ] レイアウトがデータのバリエーションに対応している
+- [ ] バッチ処理がエラーなく完了する
+- [ ] 出力ファイルが論理的に整理されている
+- [ ] コードにエラーハンドリングが含まれている
 
 ## よくある落とし穴
 
-1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
-2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
-3. **Font availability**: System fonts may differ, embed or use web-safe fonts
-4. **Coordinate calculations**: Off-by-one errors in grid layouts
-5. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
-6. **SVG validity**: Check XML structure, close all tags
-7. **File paths**: Handle special characters, spaces in filenames
-8. **Memory usage**: Large batch operations may require chunking
-9. **Aspect ratio**: Maintain proportions when resizing images
-10. **Transparency**: PNG supports alpha, JPEG does not
+1. **単位の混同**: SVG単位（px、mm、cm）とスクリーンピクセル、プリントDPIの違い
+2. **テキストのオーバーフロー**: テキストが図形の境界を超える場合、折り返しを実装する
+3. **フォントの可用性**: システムフォントは環境により異なる。埋め込みフォントまたはWebセーフフォントを使用する
+4. **座標計算**: グリッドレイアウトでのオフバイワンエラー
+5. **色フォーマット**: SVGは16進文字列（`#rrggbb`）を使用し、タプルではない
+6. **SVGの妥当性**: XML構造を確認し、すべてのタグを閉じる
+7. **ファイルパス**: 特殊文字やファイル名のスペースを処理する
+8. **メモリ使用量**: 大規模なバッチ操作にはチャンキングが必要な場合がある
+9. **アスペクト比**: 画像のリサイズ時に比率を維持する
+10. **透過性**: PNGはアルファをサポートするが、JPEGはサポートしない
 
 ## 関連スキル
 
-- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication-specific output requirements
-- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into reports
+- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: 出版物固有の出力要件
+- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: 3D向けの同様のプログラマティックアプローチ
+- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: レポートへのグラフィックス統合

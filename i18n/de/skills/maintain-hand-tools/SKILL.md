@@ -1,13 +1,19 @@
 ---
 name: maintain-hand-tools
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Maintain the 8 essential garden hand tools through sharpening, handle care,
-  rust prevention, and seasonal storage. Covers bypass secateurs, hori-hori,
-  hand fork, trowel, pruning saw, sharpening stone, watering can, and soil
-  rake. Use after each garden session for quick cleaning, monthly during the
-  growing season for sharpening and oiling, at end of season for winter storage
-  preparation, before spring for pre-season readiness checks, or whenever a
-  tool feels dull, stiff, or shows rust.
+  Die 8 essentiellen Gartenhandwerkzeuge durch Schaerfen, Griffpflege,
+  Rostvorbeugung und saisonale Lagerung warten. Umfasst Bypass-Gartenschere,
+  Hori-Hori, Handgabel, Pflanzkelle, Astsaege, Schleifstein, Giesskanne und
+  Bodenrechen. Anwenden nach jeder Gartensitzung fuer schnelle Reinigung,
+  monatlich waehrend der Wachstumssaison zum Schaerfen und Oelen, am
+  Saisonende zur Winterlagerungsvorbereitung, vor dem Fruehling zur
+  Bereitschaftspruefung oder wann immer ein Werkzeug stumpf oder rostig
+  wirkt.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -17,281 +23,309 @@ metadata:
   complexity: basic
   language: natural
   tags: gardening, tools, sharpening, maintenance, hand-tools, care
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Handwerkzeuge warten
 
-Maintain essential garden hand tools through regular sharpening, cleaning, and seasonal care.
+Essentielle Gartenhandwerkzeuge durch regelmaessiges Schaerfen, Reinigen und saisonale Pflege in Stand halten.
 
-## When to Use
+## Wann verwenden
 
-- After each garden session (quick clean protocol)
-- Monthly during the growing season (sharpening and oil)
-- End of growing season (winter storage preparation)
-- Before spring (pre-season readiness check)
-- When a tool feels dull, stiff, or shows rust
+- Nach jeder Gartensitzung (Schnellreinigungsprotokoll)
+- Monatlich waehrend der Wachstumssaison (Schaerfen und Oelen)
+- Am Ende der Wachstumssaison (Winterlagerungsvorbereitung)
+- Vor dem Fruehling (Bereitschaftspruefung vor der Saison)
+- Wenn ein Werkzeug stumpf oder steif wirkt oder Rost zeigt
 
-## Inputs
+## Eingaben
 
-- **Required**: Garden hand tools to maintain
-- **Required**: Sharpening stone (1000/3000 grit combination stone or diamond plate)
-- **Required**: Light machine oil or camellia oil (tsubaki oil)
-- **Optional**: Wire brush, steel wool (fine grade)
-- **Optional**: Linseed oil (for wooden handles)
-- **Optional**: 220-grit sandpaper (for handle refinishing)
-- **Optional**: Replacement handles or hardware
+- **Erforderlich**: Gartenhandwerkzeuge zur Wartung
+- **Erforderlich**: Schleifstein (1000/3000 Korn Kombinationsstein oder Diamantplatte)
+- **Erforderlich**: Leichtes Maschinenoel oder Kamelienoel (Tsubaki-Oel)
+- **Optional**: Drahtbuerste, Stahlwolle (feine Koernung)
+- **Optional**: Leinoel (fuer Holzgriffe)
+- **Optional**: 220er-Korn Schleifpapier (fuer Griffnachbearbeitung)
+- **Optional**: Ersatzgriffe oder Beschlaege
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Know the Eight Essential Tools
+### Schritt 1: Die acht essentiellen Werkzeuge kennen
 
-These are the core hand tools for a well-maintained garden. No power tools.
+Dies sind die Kernhandwerkzeuge fuer einen gepflegten Garten. Keine Elektrowerkzeuge.
 
 ```
-The Eight Essential Garden Hand Tools:
+Die acht essentiellen Gartenhandwerkzeuge:
 ┌───┬─────────────────────┬──────────────────────────────────────────┐
-│ # │ Tool                │ Primary Use                              │
+│ # │ Werkzeug            │ Hauptverwendung                          │
 ├───┼─────────────────────┼──────────────────────────────────────────┤
-│ 1 │ Bypass secateurs    │ Live stems up to 2cm diameter. The most  │
-│   │ (hand pruners)      │ used tool in the garden.                 │
+│ 1 │ Bypass-Gartenschere │ Lebende Triebe bis 2cm Durchmesser. Das │
+│   │ (Handschere)        │ meistgenutzte Werkzeug im Garten.        │
 ├───┼─────────────────────┼──────────────────────────────────────────┤
-│ 2 │ Hori-hori           │ Japanese soil knife. Digging, cutting,   │
-│   │ (soil knife)        │ weeding, transplanting, measuring depth. │
+│ 2 │ Hori-Hori           │ Japanisches Bodenmesser. Graben,         │
+│   │ (Bodenmesser)       │ Schneiden, Jaeten, Umpflanzen, Tiefe.    │
 ├───┼─────────────────────┼──────────────────────────────────────────┤
-│ 3 │ Hand fork           │ Loosening soil, lifting weeds with roots,│
-│   │                     │ incorporating amendments.                │
+│ 3 │ Handgabel           │ Boden lockern, Unkraut mit Wurzeln       │
+│   │                     │ herausheben, Bodenverbesserer einarbeiten.│
 ├───┼─────────────────────┼──────────────────────────────────────────┤
-│ 4 │ Trowel              │ Planting, transplanting, scooping        │
-│   │                     │ compost, digging small holes.            │
+│ 4 │ Pflanzkelle         │ Pflanzen, Umpflanzen, Kompost schaufeln, │
+│   │                     │ kleine Loecher graben.                    │
 ├───┼─────────────────────┼──────────────────────────────────────────┤
-│ 5 │ Pruning saw         │ Woody cuts beyond secateur range         │
-│   │ (folding or fixed)  │ (2-10cm diameter branches).              │
+│ 5 │ Astsaege            │ Holzschnitte jenseits des Scherenbereichs│
+│   │ (klapp- oder fest)  │ (2-10cm Durchmesser Aeste).              │
 ├───┼─────────────────────┼──────────────────────────────────────────┤
-│ 6 │ Sharpening stone    │ Maintains all edged tools. A 1000/3000  │
-│   │ (combination)       │ grit combo stone handles most needs.     │
+│ 6 │ Schleifstein        │ Haelt alle Schneidwerkzeuge scharf. Ein  │
+│   │ (Kombination)       │ 1000/3000 Korn Kombistein genuegt.       │
 ├───┼─────────────────────┼──────────────────────────────────────────┤
-│ 7 │ Watering can        │ Precision watering. Long neck for reach, │
-│   │ (long-neck, 8-10L)  │ fine rose for seedlings.                │
+│ 7 │ Giesskanne          │ Praezisionsbewaesserung. Langer Hals     │
+│   │ (Langhals, 8-10L)   │ fuer Reichweite, feiner Brausekopf.      │
 ├───┼─────────────────────┼──────────────────────────────────────────┤
-│ 8 │ Soil rake           │ Bed preparation, leveling, seed bed      │
-│   │ (bow or level-head) │ finishing, light cultivation.            │
+│ 8 │ Bodenrechen         │ Beetvorbereitung, Einebnung, Saatbeet-   │
+│   │ (Buegel- o. Flach-) │ finish, leichte Bodenbearbeitung.        │
 └───┴─────────────────────┴──────────────────────────────────────────┘
 
-Quality Principle:
-Buy the best you can afford, maintain them well, and they will last decades.
-A well-maintained mid-range secateur outperforms a neglected expensive one.
+Qualitaetsprinzip:
+Kaufe das Beste was du dir leisten kannst, pflege es gut, und es
+haelt Jahrzehnte. Eine gepflegte Mittelklasse-Schere uebertrifft
+eine vernachlaessigte teure.
 ```
 
-**Expected:** Familiarity with the core tool set and each tool's primary function.
+**Erwartet:** Vertrautheit mit dem Kernwerkzeugsatz und der Hauptfunktion jedes Werkzeugs.
 
-**On failure:** If budget is limited, prioritize in this order: secateurs → trowel → hand fork → hori-hori. These four cover 90% of garden tasks.
+**Bei Fehler:** Bei begrenztem Budget in dieser Reihenfolge priorisieren: Gartenschere -> Pflanzkelle -> Handgabel -> Hori-Hori. Diese vier decken 90% der Gartenarbeiten ab.
 
-### Step 2: After-Use Quick Clean (2-3 Minutes)
+### Schritt 2: Schnellreinigung nach Gebrauch (2-3 Minuten)
 
-Do this every time you put tools down.
-
-```
-After-Use Protocol:
-1. Wipe soil off all metal surfaces with a rag or handful of grass
-2. For sticky sap (especially on secateurs): wipe with alcohol or WD-40
-3. Dry all metal surfaces — moisture left on steel = rust within 24 hours
-4. Return tools to their hanging storage (not a pile on the ground)
-
-The 30-Second Secateur Clean:
-1. Open secateurs fully
-2. Wipe both blades with an oiled rag
-3. Drop one drop of oil on the pivot bolt
-4. Open and close 3-4 times to distribute oil
-5. Close and store
-
-This takes 30 seconds and adds years to the tool's life.
-```
-
-**Expected:** Clean, dry tools returned to designated storage after every use.
-
-**On failure:** If rust has already started (orange spots on steel), it's not too late. See Step 3 for remediation.
-
-### Step 3: Monthly Maintenance — Sharpening and Oiling
-
-Once per month during the growing season, sharpen all edged tools.
+Dies jedes Mal tun wenn Werkzeuge abgelegt werden.
 
 ```
-Sharpening Protocol:
+Nachgebrauchsprotokoll:
+1. Erde von allen Metalloberflaechen mit einem Lappen oder einer
+   Handvoll Gras abwischen
+2. Bei klebrigem Harz (besonders bei Gartenscheren): mit Alkohol
+   oder WD-40 abwischen
+3. Alle Metalloberflaechen trocknen — Feuchtigkeit auf Stahl
+   = Rost innerhalb von 24 Stunden
+4. Werkzeuge an ihre Haengeaufbewahrung zurueckstellen
+   (nicht auf einen Haufen auf den Boden)
 
-SECATEURS (Bypass Type):
-1. Disassemble if possible (remove the centre bolt to separate blades)
-2. Identify the beveled blade (the cutting blade — only one side is ground)
-3. Soak sharpening stone for 10 minutes in water
-4. Place the beveled face flat on the 1000-grit side of the stone
-5. Push the blade forward along the stone at the existing bevel angle
-   (typically 20-25°) — 5-8 strokes
-6. Flip stone to 3000-grit — 3-5 finishing strokes
-7. Remove any wire edge (burr) by laying the FLAT side of the blade
-   flat on the stone and making one light pass
-8. Reassemble, oil pivot, test cut on a green twig — should slice cleanly
+Die 30-Sekunden-Scherenreinigung:
+1. Schere vollstaendig oeffnen
+2. Beide Klingen mit einem geoelten Lappen abwischen
+3. Einen Tropfen Oel auf die Gelenkschraube geben
+4. 3-4 Mal oeffnen und schliessen um das Oel zu verteilen
+5. Schliessen und lagern
 
-   ⚠️ Never sharpen the flat (anvil) side of bypass secateurs.
-   Only the beveled blade gets sharpened.
+Das dauert 30 Sekunden und verlaengert die Lebensdauer um Jahre.
+```
+
+**Erwartet:** Saubere, trockene Werkzeuge nach jedem Gebrauch an der vorgesehenen Aufbewahrung.
+
+**Bei Fehler:** Wenn Rost bereits begonnen hat (orange Flecken auf Stahl), ist es nicht zu spaet. Siehe Schritt 4 fuer Sanierung.
+
+### Schritt 3: Monatliche Wartung — Schaerfen und Oelen
+
+Einmal pro Monat waehrend der Wachstumssaison alle Schneidwerkzeuge schaerfen.
+
+```
+Schaerfprotokoll:
+
+GARTENSCHERE (Bypass-Typ):
+1. Wenn moeglich zerlegen (Gelenkschraube entfernen um Klingen zu trennen)
+2. Die angeschliffene Klinge identifizieren (die Schneidklinge —
+   nur eine Seite ist geschliffen)
+3. Schleifstein 10 Minuten in Wasser einweichen
+4. Die angeschliffene Flaeche flach auf die 1000er-Korn-Seite des
+   Steins legen
+5. Die Klinge im bestehenden Fasenwinkel (typischerweise 20-25°)
+   vorwaerts ueber den Stein fuehren — 5-8 Striche
+6. Stein auf 3000er-Korn wenden — 3-5 Feinschliffstriche
+7. Grat entfernen indem die FLACHE Seite der Klinge flach auf den
+   Stein gelegt und ein leichter Strich gemacht wird
+8. Zusammenbauen, Gelenk oelen, Testschnitt an einem gruenen
+   Zweig — sollte sauber schneiden
+
+   Achtung: Nie die flache (Amboss-)Seite von Bypass-Scheren
+   schaerfen. Nur die angeschliffene Klinge wird geschaerft.
 
 HORI-HORI:
-1. Both edges are beveled — sharpen both
-2. Follow the existing bevel angle (usually 15-20°)
-3. 5 strokes per side on 1000-grit, 3 strokes per side on 3000-grit
-4. Test: should slice through cardboard cleanly
+1. Beide Kanten sind angeschliffen — beide schaerfen
+2. Dem bestehenden Fasenwinkel folgen (meist 15-20°)
+3. 5 Striche pro Seite auf 1000er-Korn, 3 Striche pro Seite auf
+   3000er-Korn
+4. Test: sollte sauber durch Karton schneiden
 
-PRUNING SAW:
-- Do NOT sharpen pruning saw teeth yourself unless experienced
-- Most modern pruning saws have hardened impulse-hardened teeth
-- Replace the blade when it stops cutting efficiently (they're consumable)
-- Clean and oil the blade only
+ASTSAEGE:
+- Saegezaehne NICHT selbst schaerfen, ausser bei Erfahrung
+- Die meisten modernen Astsaegen haben gehaertete impulsverguetete
+  Zaehne
+- Klinge ersetzen wenn sie nicht mehr effizient schneidet (sie sind
+  Verschleissteile)
+- Klinge nur reinigen und oelen
 
-HAND FORK / TROWEL / RAKE:
-- These don't need sharpening (they're for soil work, not cutting)
-- Wire brush to remove soil
-- Light oil coat on all metal surfaces
+HANDGABEL / PFLANZKELLE / RECHEN:
+- Diese brauchen kein Schaerfen (sie sind fuer Bodenarbeit, nicht
+  zum Schneiden)
+- Drahtbuerste um Erde zu entfernen
+- Leichte Oelschicht auf alle Metalloberflaechen
 
-General Oiling:
-- Use camellia oil (tsubaki) — traditional Japanese tool oil, food-safe
-- Alternative: light machine oil or mineral oil
-- Apply thin coat with a rag — no dripping
-- Focus on: blade surfaces, pivot points, spring mechanisms
-- Never use vegetable oils (they go rancid and attract insects)
+Allgemeines Oelen:
+- Kamelienoel (Tsubaki) verwenden — traditionelles japanisches
+  Werkzeugoel, lebensmittelsicher
+- Alternative: leichtes Maschinen- oder Mineraloel
+- Duenne Schicht mit einem Lappen auftragen — kein Tropfen
+- Fokus auf: Klingenoberflaechen, Gelenkpunkte, Federmechanismen
+- Nie Pflanzenfett verwenden (wird ranzig und zieht Insekten an)
 ```
 
-**Expected:** All edged tools sharp enough to cut cleanly. All metal surfaces lightly oiled.
+**Erwartet:** Alle Schneidwerkzeuge scharf genug fuer sauberen Schnitt. Alle Metalloberflaechen leicht geoelt.
 
-**On failure:** If a blade has nicks or chips, more aggressive sharpening is needed — start with a coarser stone (400-600 grit) before finishing with 1000/3000. Deep damage may require professional grinding.
+**Bei Fehler:** Wenn eine Klinge Kerben oder Absplitterungen hat, ist aggressiveres Schaerfen noetig — mit einem groeberen Stein (400-600 Korn) beginnen bevor mit 1000/3000 abgeschlossen wird. Tiefe Schaeden erfordern moeglicherweise professionelles Schleifen.
 
-### Step 4: Rust Remediation
+### Schritt 4: Rostsanierung
 
-For tools that have been neglected.
-
-```
-Rust Removal Protocol:
-1. Soak tool in white vinegar for 2-4 hours (overnight for heavy rust)
-2. Scrub with steel wool (fine grade) or wire brush
-3. Rinse with clean water and dry IMMEDIATELY — thoroughly
-4. Sand any pitting lightly with 320-grit if needed
-5. Apply oil immediately after drying
-6. For wooden handles affected by moisture: dry completely,
-   then sand and re-oil (see Step 5)
-
-Prevention (ongoing):
-- Oil bucket method: Fill a 5-gallon bucket with sand, pour in 1 cup
-  of mineral oil, mix. Plunge clean tools into the oiled sand after
-  each use. The sand cleans, the oil protects.
-- Hang tools, never pile them. Air circulation prevents moisture buildup.
-- Store in a dry location — not an unheated outdoor shed that
-  condenses moisture in temperature swings
-```
-
-**Expected:** Rust removed, tool functional, protective oil applied.
-
-**On failure:** If rust has pitted the blade deeply (visible craters), the tool has lost metal and may not hold a sharp edge. Consider replacement — a deeply pitted secateur blade can damage plant tissue, inviting disease.
-
-### Step 5: Handle Care
-
-Wooden handles need annual attention.
+Fuer vernachlaessigte Werkzeuge.
 
 ```
-Wooden Handle Protocol:
-1. Inspect for cracks, splitting, or looseness
-   - Loose handle: tighten the ferrule (metal collar) or re-seat the tang
-   - Cracked handle: replace — a cracked handle will break under load
-     and can cause injury
+Rostentfernungsprotokoll:
+1. Werkzeug 2-4 Stunden in Weissessig einlegen (ueber Nacht bei
+   starkem Rost)
+2. Mit Stahlwolle (feine Koernung) oder Drahtbuerste schrubben
+3. Mit klarem Wasser abspuelen und SOFORT gruendlich trocknen
+4. Lochfrass bei Bedarf leicht mit 320er-Korn anschleifen
+5. Sofort nach dem Trocknen oelen
+6. Fuer Holzgriffe die durch Feuchtigkeit betroffen sind:
+   vollstaendig trocknen, dann schleifen und nachoelen (siehe
+   Schritt 5)
 
-2. Sand lightly with 220-grit sandpaper
-   - Follow the grain
-   - Remove any raised grain, rough spots, or splinters
-   - Don't over-sand — you're smoothing, not reshaping
-
-3. Apply linseed oil (raw or boiled):
-   - Boiled linseed oil dries faster (24-48 hours) but has additives
-   - Raw linseed oil is pure but takes 3-7 days to cure
-   - Apply with a rag — thin coat, rubbed into the grain
-   - Two coats, 24 hours apart
-   - Wipe off any excess after 15 minutes — pooled oil becomes sticky
-
-4. Let cure fully before use (at least 48 hours)
-
-⚠️ SAFETY: Linseed oil rags can spontaneously combust.
-After oiling, spread rags flat to dry outdoors or soak in water
-and dispose of safely. NEVER ball up oiled rags in a bin.
+Vorbeugung (laufend):
+- Oeleimer-Methode: Einen 20-Liter-Eimer mit Sand fuellen, 250ml
+  Mineraloel eingiessen, mischen. Saubere Werkzeuge nach jedem
+  Gebrauch in den geoelten Sand stecken. Der Sand reinigt, das
+  Oel schuetzt.
+- Werkzeuge aufhaengen, nie stapeln. Luftzirkulation verhindert
+  Feuchtigkeitsansammlung.
+- An trockenem Ort lagern — nicht in einem unbeheizten Schuppen
+  der bei Temperaturschwankungen Feuchtigkeit kondensiert
 ```
 
-**Expected:** Smooth, oil-finished handles that shed water and prevent blisters.
+**Erwartet:** Rost entfernt, Werkzeug funktionsfaehig, Schutzoel aufgetragen.
 
-**On failure:** If handles are beyond repair (deep cracks, rot), replacement handles are available for quality tools. Most secateur, fork, and trowel manufacturers sell replacement handles.
+**Bei Fehler:** Wenn Rost die Klinge tief angefressen hat (sichtbare Krater), hat das Werkzeug Metall verloren und haelt moeglicherweise keine scharfe Klinge mehr. Ersatz in Betracht ziehen — eine tief angefressene Scherenklinge kann Pflanzengewebe beschaedigen und Krankheiten einladen.
 
-### Step 6: Meditate Checkpoint — Winter Tool Care Ritual
+### Schritt 5: Griffpflege
 
-The end-of-season tool maintenance is a contemplative practice.
+Holzgriffe brauchen jaehrliche Aufmerksamkeit.
 
 ```
-Winter Tool Care Ritual:
-This is not a rush job. Set aside 1-2 hours on a quiet winter day.
+Holzgriff-Protokoll:
+1. Auf Risse, Spalten oder Lockerheit pruefen
+   - Lockerer Griff: Zwinge (Metallring) nachziehen oder Angel
+     neu einsetzen
+   - Gerissener Griff: ersetzen — ein gerissener Griff bricht unter
+     Belastung und kann Verletzungen verursachen
 
-Meditate (5-10 minutes):
-1. Lay all eight tools out on a clean workbench or table
-2. Sit with them. These are the instruments of your year's work.
-3. Remember what each tool did this season:
-   - The secateurs that pruned the roses in June
-   - The hori-hori that divided the iris in September
-   - The trowel that planted 200 garlic cloves in October
-4. Acknowledge the work. Acknowledge the tools. Acknowledge the hands.
-5. When ready, begin the maintenance — slowly, carefully, one tool at a time.
+2. Leicht mit 220er-Korn Schleifpapier schleifen
+   - Der Maserung folgen
+   - Aufgeworfene Fasern, raue Stellen oder Splitter entfernen
+   - Nicht ueberschleifen — es wird geglättet, nicht umgeformt
 
-Full Winter Maintenance Sequence:
-For each of the 8 tools:
-1. Clean thoroughly (wire brush, rag, alcohol for sap)
-2. Inspect for damage (loose handles, bent tines, worn edges)
-3. Repair what can be repaired (tighten, re-seat, replace parts)
-4. Sharpen all edges (full sharpening protocol — both grits)
-5. Oil all metal surfaces (heavier coat than monthly — winter storage)
-6. Oil all wooden handles (linseed oil, two coats)
-7. Hang on pegs in dry storage — tools should not touch each other
+3. Leinoel auftragen (roh oder gekocht):
+   - Gekochtes Leinoel trocknet schneller (24-48 Stunden) hat aber
+     Zusaetze
+   - Rohes Leinoel ist rein aber braucht 3-7 Tage zum Aushaerten
+   - Mit einem Lappen auftragen — duenne Schicht, in die Maserung
+     einreiben
+   - Zwei Schichten, 24 Stunden Abstand
+   - Ueberschuss nach 15 Minuten abwischen — stehendes Oel wird
+     klebrig
 
-Completion:
-When all tools are sharp, oiled, and hung, the garden's active year
-is complete. The tools will wait, ready, for spring.
+4. Vor Gebrauch vollstaendig aushaerten lassen (mindestens
+   48 Stunden)
 
-Start your seed catalogue browsing now — the tools are ready
-before you are.
+SICHERHEIT: Leinoellappen koennen sich selbst entzuenden.
+Nach dem Oelen Lappen flach zum Trocknen im Freien ausbreiten
+oder in Wasser einweichen und sicher entsorgen. Geoelte Lappen
+NIE zusammenknuellen und in einen Behaelter werfen.
 ```
 
-**Expected:** All tools in peak condition, stored properly for winter, gardener settled into the dormant season.
+**Erwartet:** Glatte, oelbehandelte Griffe die Wasser abperlen lassen und Blasenbildung verhindern.
 
-**On failure:** If winter maintenance is skipped entirely, do a pre-spring emergency cleanup: wire brush all rust, sharpen everything, oil everything. It's never too late to start caring for your tools.
+**Bei Fehler:** Wenn Griffe nicht mehr reparierbar sind (tiefe Risse, Faeulnis), sind Ersatzgriffe fuer Qualitaetswerkzeuge erhaeltlich. Die meisten Hersteller von Scheren, Gabeln und Kellen verkaufen Ersatzgriffe.
 
-## Validation Checklist
+### Schritt 6: Meditate-Checkpoint — Winterwerkzeugpflege-Ritual
 
-- [ ] All 8 essential tools inventoried and accounted for
-- [ ] After-use quick clean performed consistently
-- [ ] Edged tools (secateurs, hori-hori) sharpened monthly during growing season
-- [ ] No active rust on any tool surface
-- [ ] Wooden handles smooth, oiled, and crack-free
-- [ ] Tools stored hanging, not piled, in a dry location
-- [ ] Winter tool care ritual completed before spring
-- [ ] Meditate checkpoint integrated into winter maintenance
+Die Werkzeugwartung am Saisonende ist eine kontemplative Praxis.
 
-## Common Pitfalls
+```
+Winterwerkzeugpflege-Ritual:
+Dies ist keine eilige Aufgabe. 1-2 Stunden an einem ruhigen
+Wintertag einplanen.
 
-1. **Sharpening the wrong side of secateurs**: Only the beveled blade gets sharpened. Sharpening the flat side creates a gap that crushes instead of cuts
-2. **Using vegetable oil instead of mineral/camellia oil**: Vegetable oil goes rancid, attracts insects, and becomes gummy. Always use mineral-based oil on tools
-3. **Storing tools in soil**: Some gardeners plunge tools into a pot of sand — good if the sand is oiled (prevention bucket), bad if it's dry sand (scratches and moisture retention)
-4. **Ignoring loose handles**: A tool that flies off its handle mid-stroke is a safety hazard. Check handles monthly
-5. **Skipping the after-use clean**: "I'll do it later" means rust by morning. The 30-second clean is the single most important maintenance habit
-6. **Buying cheap tools**: A cheap secateur that won't hold an edge costs more in frustration and plant damage than a quality tool that lasts decades
+Meditieren (5-10 Minuten):
+1. Alle acht Werkzeuge auf einer sauberen Werkbank oder einem
+   Tisch auslegen
+2. Bei ihnen sitzen. Dies sind die Instrumente der Jahresarbeit.
+3. Sich erinnern was jedes Werkzeug in dieser Saison getan hat:
+   - Die Schere die im Juni die Rosen beschnitten hat
+   - Das Hori-Hori das im September die Schwertlilien geteilt hat
+   - Die Pflanzkelle die im Oktober 200 Knoblauchzehen gepflanzt hat
+4. Die Arbeit anerkennen. Die Werkzeuge anerkennen. Die Haende
+   anerkennen.
+5. Wenn bereit, mit der Wartung beginnen — langsam, sorgfaeltig,
+   ein Werkzeug nach dem anderen.
 
-## Related Skills
+Vollstaendige Winterwartungsabfolge:
+Fuer jedes der 8 Werkzeuge:
+1. Gruendlich reinigen (Drahtbuerste, Lappen, Alkohol fuer Harz)
+2. Auf Schaeden pruefen (lockere Griffe, verbogene Zinken,
+   abgenutzte Kanten)
+3. Reparieren was repariert werden kann (nachziehen, neu einsetzen,
+   Teile ersetzen)
+4. Alle Kanten schaerfen (vollstaendiges Schaerfprotokoll — beide
+   Koernungen)
+5. Alle Metalloberflaechen oelen (dickere Schicht als monatlich —
+   Winterlagerung)
+6. Alle Holzgriffe oelen (Leinoel, zwei Schichten)
+7. An Haken in trockener Lagerung aufhaengen — Werkzeuge sollten
+   sich nicht beruehren
 
-- `cultivate-bonsai` — Bonsai tools (concave cutter, wire cutter, jin pliers) follow the same maintenance protocol
-- `sharpen-knife` — Deeper knife-specific sharpening technique applicable to hori-hori and other garden blades
-- `make-fire` — Fire-making tools (ferro rod, striker) also benefit from regular maintenance
-- `plan-garden-calendar` — Winter tool care is a scheduled seasonal task
-- `meditate` — Winter tool care ritual uses the meditate checkpoint (full protocol)
+Abschluss:
+Wenn alle Werkzeuge scharf, geoelt und aufgehaengt sind, ist das
+aktive Gartenjahr abgeschlossen. Die Werkzeuge werden warten,
+bereit, fuer den Fruehling.
+
+Jetzt mit dem Saatkatalog-Stoebern beginnen — die Werkzeuge sind
+bereit bevor man es selbst ist.
+```
+
+**Erwartet:** Alle Werkzeuge in bestem Zustand, ordnungsgemaess fuer den Winter gelagert, der Gaertner in die Ruhesaison eingekehrt.
+
+**Bei Fehler:** Wenn die Winterwartung komplett ausgelassen wird, eine Notfall-Fruehjahrsreinigung durchfuehren: allen Rost abbuersten, alles schaerfen, alles oelen. Es ist nie zu spaet mit der Werkzeugpflege zu beginnen.
+
+## Validierung
+
+- [ ] Alle 8 essentiellen Werkzeuge inventarisiert und vorhanden
+- [ ] Schnellreinigung nach Gebrauch wird konsistent durchgefuehrt
+- [ ] Schneidwerkzeuge (Gartenschere, Hori-Hori) monatlich waehrend der Wachstumssaison geschaerft
+- [ ] Kein aktiver Rost auf irgendeiner Werkzeugoberflaeche
+- [ ] Holzgriffe glatt, geoelt und rissfrei
+- [ ] Werkzeuge haengend gelagert, nicht gestapelt, an trockenem Ort
+- [ ] Winterwerkzeugpflege-Ritual vor dem Fruehling abgeschlossen
+- [ ] Meditate-Checkpoint in die Winterwartung integriert
+
+## Haeufige Stolperfallen
+
+1. **Die falsche Seite der Schere schaerfen**: Nur die angeschliffene Klinge wird geschaerft. Die flache Seite schaerfen erzeugt einen Spalt der quetscht statt zu schneiden
+2. **Pflanzenoel statt Mineral-/Kamelienoel verwenden**: Pflanzenoel wird ranzig, zieht Insekten an und wird klebrig. Immer Mineraloel-basiertes Oel fuer Werkzeuge verwenden
+3. **Werkzeuge in Erde lagern**: Manche Gaertner stecken Werkzeuge in einen Topf mit Sand — gut wenn der Sand geoelt ist (Vorbeugungseimer), schlecht wenn trockener Sand (Kratzer und Feuchtigkeitsspeicherung)
+4. **Lockere Griffe ignorieren**: Ein Werkzeug das beim Arbeiten vom Griff fliegt ist ein Sicherheitsrisiko. Griffe monatlich pruefen
+5. **Die Reinigung nach Gebrauch auslassen**: "Mache ich spaeter" bedeutet Rost am naechsten Morgen. Die 30-Sekunden-Reinigung ist die einzeln wichtigste Wartungsgewohnheit
+6. **Billige Werkzeuge kaufen**: Eine billige Gartenschere die keine Schaerfe haelt kostet mehr an Frust und Pflanzenschaeden als ein Qualitaetswerkzeug das Jahrzehnte haelt
+
+## Verwandte Skills
+
+- `cultivate-bonsai` — Bonsai-Werkzeuge (Konkavzange, Drahtzange, Jin-Zange) folgen demselben Wartungsprotokoll
+- `sharpen-knife` — Vertiefte messerspezifische Schaerftechnik anwendbar auf Hori-Hori und andere Gartenklingen
+- `make-fire` — Feuerstartwerkzeuge (Feuerstahl, Schlagstahl) profitieren ebenfalls von regelmaessiger Wartung
+- `plan-garden-calendar` — Winterwerkzeugpflege ist eine geplante saisonale Aufgabe
+- `meditate` — Das Winterwerkzeugpflege-Ritual nutzt den Meditate-Checkpoint (vollstaendiges Protokoll)

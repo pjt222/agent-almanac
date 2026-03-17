@@ -1,11 +1,11 @@
 ---
 name: build-sequential-circuit
 description: >
-  Build sequential (stateful) logic circuits including latches, flip-flops,
-  registers, counters, and finite state machines. Covers SR latch, D and JK
-  flip-flops, binary/BCD/ring counters, and Mealy/Moore FSM design with
-  clock signal and timing analysis. Use when a circuit must remember past
-  inputs, count events, or implement a state-dependent control sequence.
+  ラッチ、フリップフロップ、レジスタ、カウンタ、有限状態機械を含む順序（ステートフル）
+  論理回路を構築する。SRラッチ、DおよびJKフリップフロップ、バイナリ/BCD/リング
+  カウンタ、クロック信号とタイミング分析を伴うMealy/Moore FSM設計をカバーする。
+  回路が過去の入力を記憶する必要がある時、イベントをカウントする時、
+  状態依存の制御シーケンスを実装する時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,42 +24,42 @@ metadata:
 
 # 順序回路の構築
 
-Design a sequential logic circuit by identifying the required memory and state type, constructing a state diagram and transition table, deriving excitation equations for the chosen flip-flop type, implementing the circuit at the gate level using flip-flops and combinational logic, and verifying correctness through timing diagram analysis and state sequence simulation.
+必要なメモリと状態タイプを特定し、状態図と遷移表を構成し、選択したフリップフロップタイプの励起方程式を導出し、フリップフロップと組み合わせ論理を使用してゲートレベルで回路を実装し、タイミング図分析と状態シーケンスシミュレーションによって正確性を検証することで、順序論理回路を設計する。
 
 ## 使用タイミング
 
-- A circuit must remember past inputs or maintain internal state across clock cycles
-- Designing counters (binary, BCD, ring, Johnson), shift registers, or sequence detectors
-- Implementing a finite state machine (Mealy or Moore) from a state diagram or regular expression
-- Adding clocked storage elements to a combinational datapath (registers, pipeline stages)
-- Preparing stateful components for the simulate-cpu-architecture skill (register file, program counter, control FSM)
+- 回路がクロックサイクルにわたって過去の入力を記憶するか内部状態を維持する必要がある時
+- カウンタ（バイナリ、BCD、リング、ジョンソン）、シフトレジスタ、シーケンス検出器を設計する時
+- 状態図または正規表現から有限状態機械（MealyまたはMoore）を実装する時
+- 組み合わせデータパスにクロック付きストレージ要素（レジスタ、パイプラインステージ）を追加する時
+- simulate-cpu-architectureスキル用のステートフルコンポーネント（レジスタファイル、プログラムカウンタ、制御FSM）を準備する時
 
 ## 入力
 
-- **必須**: Behavioral specification -- one of: state diagram, state table, timing diagram, regular expression to detect, or verbal description of the desired sequential behavior
-- **必須**: Clock characteristics -- edge-triggered (rising/falling) or level-sensitive; single clock or multi-phase
-- **任意**: Flip-flop type preference (D, JK, T, or SR)
-- **任意**: Reset type -- synchronous, asynchronous, or none
-- **任意**: Maximum state count or bit width constraint
-- **任意**: Timing constraints (setup time, hold time, maximum clock frequency)
+- **必須**: 動作仕様 -- 状態図、状態表、タイミング図、検出する正規表現、または望ましい順序動作の言語記述のいずれか
+- **必須**: クロック特性 -- エッジトリガ（立ち上がり/立ち下がり）またはレベル感応; 単一クロックまたはマルチフェーズ
+- **任意**: フリップフロップタイプの好み（D、JK、T、またはSR）
+- **任意**: リセットタイプ -- 同期、非同期、またはなし
+- **任意**: 最大状態数またはビット幅制約
+- **任意**: タイミング制約（セットアップ時間、ホールド時間、最大クロック周波数）
 
 ## 手順
 
-### ステップ1: Identify Memory and State Requirements
+### ステップ1: メモリと状態要件の特定
 
-Determine what the circuit needs to remember and how many distinct states it requires:
+回路が記憶する必要があるものと必要な異なる状態の数を判定する:
 
-1. **State enumeration**: List all distinct states the circuit must be in. For a sequence detector, each state represents the progress through the target sequence. For a counter, each state is a count value.
-2. **State encoding**: Choose a binary encoding for the states.
-   - **Binary encoding**: Uses ceil(log2(N)) flip-flops for N states. Minimizes flip-flop count.
-   - **One-hot encoding**: Uses N flip-flops, one per state. Simplifies next-state logic at the cost of more flip-flops.
-   - **Gray code encoding**: Adjacent states differ in exactly one bit. Minimizes transient glitches during transitions.
-3. **Input and output classification**: Identify primary inputs (external signals), primary outputs, and internal state variables (flip-flop outputs). For Mealy machines, outputs depend on both state and input. For Moore machines, outputs depend only on state.
-4. **Flip-flop type selection**: Choose based on the design's needs.
-   - **D flip-flop**: Simplest -- next state equals the D input. Best default choice.
-   - **JK flip-flop**: Most flexible -- J=K=1 toggles. Good for counters.
-   - **T flip-flop**: Toggle type -- changes state when T=1. Natural for binary counters.
-   - **SR latch/flip-flop**: Set-Reset -- avoid the S=R=1 condition. Rarely preferred for new designs.
+1. **状態列挙**: 回路が取る必要があるすべての異なる状態をリストする。シーケンス検出器の場合、各状態はターゲットシーケンスの進行を表す。カウンタの場合、各状態はカウント値。
+2. **状態符号化**: 状態のバイナリ符号化を選択する。
+   - **バイナリ符号化**: N状態にceil(log2(N))個のフリップフロップを使用。フリップフロップ数を最小化。
+   - **ワンホット符号化**: 状態ごとに1つのN個のフリップフロップを使用。より多くのフリップフロップのコストで次状態ロジックを簡素化。
+   - **グレーコード符号化**: 隣接する状態が正確に1ビットだけ異なる。遷移中の過渡的グリッチを最小化。
+3. **入出力分類**: 主入力（外部信号）、主出力、内部状態変数（フリップフロップ出力）を特定する。Mealy機械では出力は状態と入力の両方に依存する。Moore機械では出力は状態のみに依存する。
+4. **フリップフロップタイプ選択**: 設計のニーズに基づいて選択する。
+   - **Dフリップフロップ**: 最もシンプル -- 次状態はD入力に等しい。最良のデフォルト選択。
+   - **JKフリップフロップ**: 最も柔軟 -- J=K=1でトグル。カウンタに適する。
+   - **Tフリップフロップ**: トグルタイプ -- T=1で状態を変更。バイナリカウンタに自然。
+   - **SRラッチ/フリップフロップ**: セット-リセット -- S=R=1条件を避ける。新しい設計ではほとんど好まれない。
 
 ```markdown
 ## State Requirements
@@ -72,21 +72,21 @@ Determine what the circuit needs to remember and how many distinct states it req
 - **Reset behavior**: [synchronous / asynchronous / none]
 ```
 
-**期待結果:** A complete state inventory with encoding chosen, flip-flop type selected, and the machine classified as Mealy or Moore.
+**期待結果:** 符号化が選択され、フリップフロップタイプが選択され、機械がMealyまたはMooreに分類された完全な状態インベントリ。
 
-**失敗時:** If the state count is unclear from the specification, enumerate states by tracing through all possible input sequences up to the memory depth of the circuit. If the count exceeds practical limits (more than 16 states for manual design), consider decomposing into smaller interacting FSMs.
+**失敗時:** 仕様から状態数が不明確な場合、回路のメモリ深度までのすべての可能な入力シーケンスを追跡して状態を列挙する。数が実用的な限界を超える場合（手動設計で16状態以上）、相互作用するより小さなFSMへの分解を検討する。
 
-### ステップ2: Construct State Diagram and Transition Table
+### ステップ2: 状態図と遷移表の構成
 
-Formalize the circuit's behavior as a state diagram and equivalent tabular form:
+回路の動作を状態図と等価な表形式として形式化する:
 
-1. **State diagram**: Draw a directed graph where:
-   - Each node is a state, labeled with the state name and (for Moore machines) the output value.
-   - Each edge is a transition, labeled with the input condition and (for Mealy machines) the output value.
-   - Every state must have an outgoing edge for every possible input combination -- no implicit "stay" transitions.
-2. **Transition table**: Convert the diagram to a table with columns for present state, input(s), next state, and output(s).
-3. **Reachability check**: Starting from the initial/reset state, verify that all states are reachable through some input sequence. Unreachable states indicate a design error or should be treated as don't-cares.
-4. **State minimization** (optional): Check for equivalent states -- two states are equivalent if they produce the same output for every input and transition to equivalent next states. Merge equivalent states to reduce flip-flop count.
+1. **状態図**: 有向グラフを描く:
+   - 各ノードは状態で、状態名と（Moore機械の場合）出力値でラベル付け
+   - 各辺は遷移で、入力条件と（Mealy機械の場合）出力値でラベル付け
+   - すべての状態はすべての可能な入力組み合わせに対して出力辺を持つ必要がある -- 暗黙の「滞在」遷移はない
+2. **遷移表**: 図を現在状態、入力、次状態、出力のカラムを持つ表に変換する
+3. **到達可能性チェック**: 初期/リセット状態から開始して、すべての状態がある入力シーケンスを通じて到達可能であることを確認する。到達不能な状態は設計エラーを示すか、ドントケアとして扱うべき
+4. **状態最小化**（任意）: 等価状態をチェックする -- すべての入力に対して同じ出力を生成し、等価な次状態に遷移する2つの状態は等価。等価状態をマージしてフリップフロップ数を削減する
 
 ```markdown
 ## State Transition Table
@@ -102,21 +102,21 @@ Formalize the circuit's behavior as a state diagram and equivalent tabular form:
 - **Equivalent state pairs**: [list, or "none"]
 ```
 
-**期待結果:** A complete state transition table covering every present-state/input combination, with all states reachable from the initial state.
+**期待結果:** すべての現在状態/入力組み合わせをカバーする完全な状態遷移表で、初期状態からすべての状態が到達可能。
 
-**失敗時:** If the transition table has missing entries, the specification is incomplete. Return to the requirements and resolve the ambiguity. If unreachable states exist, either add transitions to reach them or remove them and reduce the state encoding.
+**失敗時:** 遷移表に欠落エントリがある場合、仕様が不完全。要件に戻って曖昧さを解決する。到達不能状態がある場合、それに到達する遷移を追加するか、削除して状態符号化を縮小する。
 
-### ステップ3: Derive Excitation Equations
+### ステップ3: 励起方程式の導出
 
-Compute the flip-flop input equations (excitation equations) from the transition table:
+遷移表からフリップフロップ入力方程式（励起方程式）を計算する:
 
-1. **Encode states**: Replace state names with their binary encoding in the transition table. Each bit position corresponds to one flip-flop.
-2. **Build per-flip-flop truth table**: For each flip-flop, create a truth table with present-state bits and inputs as the input columns and the required flip-flop input as the output column.
-   - **D flip-flop**: D = next state bit (the simplest case).
-   - **JK flip-flop**: Use the excitation table: 0->0 requires J=0,K=X; 0->1 requires J=1,K=X; 1->0 requires J=X,K=1; 1->1 requires J=X,K=0.
-   - **T flip-flop**: T = present state XOR next state (T=1 when the bit must change).
-3. **Minimize each equation**: Apply evaluate-boolean-expression (K-map or algebraic simplification) to each flip-flop input function. Don't-care conditions from unreachable states and JK excitation table X-entries can reduce the expressions significantly.
-4. **Derive output equations**: For Moore machines, express each output as a function of present state bits only. For Mealy machines, express each output as a function of present state bits and inputs.
+1. **状態の符号化**: 遷移表の状態名をバイナリ符号化に置換する。各ビット位置が1つのフリップフロップに対応する
+2. **フリップフロップごとの真理値表の構築**: 各フリップフロップについて、現在状態ビットと入力を入力カラム、必要なフリップフロップ入力を出力カラムとする真理値表を作成する
+   - **Dフリップフロップ**: D = 次状態ビット（最もシンプルなケース）
+   - **JKフリップフロップ**: 励起表を使用: 0->0にはJ=0,K=X; 0->1にはJ=1,K=X; 1->0にはJ=X,K=1; 1->1にはJ=X,K=0が必要
+   - **Tフリップフロップ**: T = 現在状態 XOR 次状態（ビットが変更される必要がある時T=1）
+3. **各方程式の最小化**: evaluate-boolean-expression（カルノー図または代数簡略化）を各フリップフロップ入力関数に適用する。到達不能状態からのドントケア条件とJK励起表のXエントリが式を大幅に削減できる
+4. **出力方程式の導出**: Moore機械の場合、各出力を現在状態ビットのみの関数として表現する。Mealy機械の場合、各出力を現在状態ビットと入力の関数として表現する
 
 ```markdown
 ## Excitation Equations
@@ -134,19 +134,19 @@ Compute the flip-flop input equations (excitation equations) from the transition
 | Y      | [minimized expression]       |
 ```
 
-**期待結果:** Minimized excitation equations for each flip-flop and output equations for each primary output, with all don't-cares exploited.
+**期待結果:** 各フリップフロップの最小化された励起方程式と各主出力の出力方程式で、すべてのドントケアが活用されている。
 
-**失敗時:** If the excitation equations seem overly complex, reconsider the state encoding. A different encoding (e.g., switching from binary to one-hot, or reassigning state codes) can dramatically simplify the combinational logic. Try at least two encodings and compare literal counts.
+**失敗時:** 励起方程式が過度に複雑に見える場合、状態符号化を再考する。異なる符号化（例: バイナリからワンホットへの切り替え、または状態コードの再割り当て）が組み合わせロジックを劇的に簡素化できる。少なくとも2つの符号化を試みてリテラル数を比較する。
 
-### ステップ4: Implement at Gate Level
+### ステップ4: ゲートレベルでの実装
 
-Build the complete circuit from flip-flops and combinational logic gates:
+フリップフロップと組み合わせ論理ゲートから完全な回路を構築する:
 
-1. **Place flip-flops**: Instantiate one flip-flop per state bit. Connect all clock inputs to the system clock. Connect reset inputs if specified (asynchronous reset goes directly to the flip-flop's CLR/PRE pin; synchronous reset is part of the excitation logic).
-2. **Build excitation logic**: Implement each excitation equation as a combinational circuit using the design-logic-circuit skill. The inputs to this logic are the present-state flip-flop outputs (Q, Q') and primary inputs.
-3. **Build output logic**: Implement each output equation as combinational logic. For Moore machines, this logic takes only state bits. For Mealy machines, it takes state bits and primary inputs.
-4. **Connect the circuit**: Wire the excitation logic outputs to the flip-flop D/JK/T inputs. Wire the output logic to the primary outputs.
-5. **Add initialization**: Ensure the circuit reaches a known initial state on power-up. This typically means an asynchronous reset that forces all flip-flops to 0 (or the encoded initial state).
+1. **フリップフロップの配置**: 状態ビットごとに1つのフリップフロップをインスタンス化する。すべてのクロック入力をシステムクロックに接続する。指定された場合リセット入力を接続する（非同期リセットはフリップフロップのCLR/PREピンに直接; 同期リセットは励起ロジックの一部）
+2. **励起ロジックの構築**: design-logic-circuitスキルを使用して各励起方程式を組み合わせ回路として実装する。このロジックへの入力は現在状態フリップフロップ出力（Q、Q'）と主入力
+3. **出力ロジックの構築**: 各出力方程式を組み合わせロジックとして実装する。Moore機械の場合、このロジックは状態ビットのみを取る。Mealy機械の場合、状態ビットと主入力を取る
+4. **回路の接続**: 励起ロジック出力をフリップフロップのD/JK/T入力に配線する。出力ロジックを主出力に配線する
+5. **初期化の追加**: 回路が電源投入時に既知の初期状態に到達することを保証する。これは通常、すべてのフリップフロップを0（または符号化された初期状態）に強制する非同期リセットを意味する
 
 ```markdown
 ## Circuit Implementation
@@ -157,27 +157,27 @@ Build the complete circuit from flip-flops and combinational logic gates:
 - **Reset mechanism**: [asynchronous CLR / synchronous mux / none]
 ```
 
-**期待結果:** A complete gate-level netlist with flip-flops, excitation logic, output logic, clock distribution, and reset mechanism, where every signal has exactly one driver.
+**期待結果:** フリップフロップ、励起ロジック、出力ロジック、クロック配分、リセットメカニズムを含む完全なゲートレベルネットリストで、すべての信号が正確に1つのドライバーを持つ。
 
-**失敗時:** If the implementation has feedback outside of the flip-flops, a combinational loop has been introduced. All feedback in a synchronous sequential circuit must pass through a flip-flop. Trace the offending path and reroute it through a register.
+**失敗時:** 実装にフリップフロップ外のフィードバックがある場合、組み合わせループが導入されている。同期順序回路のすべてのフィードバックはフリップフロップを通過しなければならない。問題のパスを追跡してレジスタを通じてルートを変更する。
 
-### ステップ5: Verify via Timing Diagram and State Sequence Simulation
+### ステップ5: タイミング図と状態シーケンスシミュレーションによる検証
 
-Confirm the circuit behaves correctly across multiple clock cycles:
+複数のクロックサイクルにわたって回路が正しく動作することを確認する:
 
-1. **Choose test sequence**: Select an input sequence that exercises every state transition at least once. For sequence detectors, include the target sequence, partial matches, overlapping matches, and non-matching runs.
-2. **Draw timing diagram**: For each clock cycle, record:
-   - Clock edge (rising/falling)
-   - Primary input values (sampled at the active clock edge)
-   - Present state (flip-flop outputs before the clock edge)
-   - Next state (flip-flop outputs after the clock edge)
-   - Output values (valid after the output logic settles)
-3. **Trace state sequence**: Verify that the sequence of states matches the state diagram from Step 2. Every transition should follow an edge in the diagram.
-4. **Check timing constraints**: Verify that:
-   - **Setup time**: Inputs are stable for at least t_setup before the active clock edge.
-   - **Hold time**: Inputs remain stable for at least t_hold after the active clock edge.
-   - **Clock-to-output delay**: Outputs settle within the clock period minus the setup time of downstream logic.
-5. **Reset verification**: Confirm that applying reset drives the circuit to the initial state regardless of the current state.
+1. **テストシーケンスの選択**: すべての状態遷移を少なくとも1回行使する入力シーケンスを選択する。シーケンス検出器の場合、ターゲットシーケンス、部分一致、重複一致、非一致ランを含める
+2. **タイミング図の作成**: 各クロックサイクルについて記録する:
+   - クロックエッジ（立ち上がり/立ち下がり）
+   - 主入力値（アクティブクロックエッジでサンプリング）
+   - 現在状態（クロックエッジ前のフリップフロップ出力）
+   - 次状態（クロックエッジ後のフリップフロップ出力）
+   - 出力値（出力ロジックが安定した後に有効）
+3. **状態シーケンスの追跡**: 状態のシーケンスがステップ2の状態図と一致することを確認する。すべての遷移は図のエッジに従うべき
+4. **タイミング制約のチェック**: 以下を確認する:
+   - **セットアップ時間**: 入力がアクティブクロックエッジの少なくともt_setup前に安定している
+   - **ホールド時間**: 入力がアクティブクロックエッジの少なくともt_hold後に安定したままである
+   - **クロック-出力遅延**: 出力がクロック周期から下流ロジックのセットアップ時間を引いた時間内に安定する
+5. **リセット検証**: リセットを適用すると、現在の状態に関係なく回路が初期状態に駆動されることを確認する
 
 ```markdown
 ## Timing Verification
@@ -193,34 +193,34 @@ Confirm the circuit behaves correctly across multiple clock cycles:
 - **Reset verified**: [Yes / No]
 ```
 
-**期待結果:** Every cycle in the timing diagram matches the state transition table, outputs are correct for every cycle, and no timing violations are present.
+**期待結果:** タイミング図のすべてのサイクルが状態遷移表と一致し、すべてのサイクルで出力が正しく、タイミング違反がない。
 
-**失敗時:** If a state transition is wrong, trace the excitation logic for that specific present-state and input combination. If outputs are wrong but transitions are correct, the error is in the output logic. If the circuit enters an unintended state, check for incomplete reset or missing transitions from unused state codes.
+**失敗時:** 状態遷移が間違っている場合、その特定の現在状態と入力組み合わせの励起ロジックを追跡する。出力が間違っているが遷移は正しい場合、エラーは出力ロジックにある。回路が意図しない状態に入る場合、不完全なリセットまたは未使用状態コードからの欠落遷移を確認する。
 
 ## バリデーション
 
-- [ ] All states are enumerated and reachable from the initial state
-- [ ] State encoding is documented with the assignment table
-- [ ] Transition table covers every present-state/input combination
-- [ ] Excitation equations are minimized with don't-cares exploited
-- [ ] Output equations correctly implement Mealy or Moore semantics
-- [ ] Every flip-flop has clock, reset, and excitation inputs connected
-- [ ] No combinational feedback loops exist outside of flip-flops
-- [ ] Timing diagram covers all state transitions at least once
-- [ ] Reset drives the circuit to the documented initial state
-- [ ] Setup and hold time constraints are satisfied
+- [ ] すべての状態が列挙され初期状態から到達可能
+- [ ] 状態符号化が割り当て表とともに文書化されている
+- [ ] 遷移表がすべての現在状態/入力組み合わせをカバーしている
+- [ ] 励起方程式がドントケアを活用して最小化されている
+- [ ] 出力方程式がMealyまたはMooreセマンティクスを正しく実装している
+- [ ] すべてのフリップフロップにクロック、リセット、励起入力が接続されている
+- [ ] フリップフロップ外に組み合わせフィードバックループが存在しない
+- [ ] タイミング図がすべての状態遷移を少なくとも1回カバーしている
+- [ ] リセットが回路を文書化された初期状態に駆動する
+- [ ] セットアップおよびホールド時間制約が満たされている
 
 ## よくある落とし穴
 
-- **Incomplete state transitions**: Forgetting to specify what happens for every input in every state. Missing transitions often cause the circuit to enter an undefined or unintended state. Always define behavior for all input combinations.
-- **Unused state codes**: With N flip-flops, there are 2^N possible codes but perhaps fewer valid states. If the circuit accidentally enters an unused code (due to noise or power-on), it may lock up. Always add transitions from unused codes to the reset state or prove they are unreachable.
-- **Confusing Mealy and Moore outputs**: In a Mealy machine, outputs change immediately when inputs change (combinational path from input to output). In a Moore machine, outputs change only on clock edges. Mixing the two models in one design leads to timing hazards.
-- **Asynchronous inputs to synchronous circuits**: External signals not synchronized to the clock can violate setup/hold times, causing metastability. Always pass asynchronous inputs through a two-flip-flop synchronizer before using them in state logic.
-- **SR latch S=R=1 hazard**: Driving both Set and Reset high simultaneously puts the SR latch in an undefined state. If using SR elements, add logic to guarantee this combination never occurs, or switch to D or JK flip-flops.
-- **Clock skew in multi-flip-flop designs**: If the clock arrives at different flip-flops at different times, one flip-flop may sample stale data from another. For introductory designs, assume zero skew; for real hardware, use clock tree synthesis.
+- **不完全な状態遷移**: すべての状態のすべての入力に対して何が起こるかを指定し忘れる。欠落した遷移は回路を未定義または意図しない状態に入らせることが多い。すべての入力組み合わせの動作を常に定義する
+- **未使用の状態コード**: N個のフリップフロップでは2^N個の可能なコードがあるが、有効な状態はそれより少ない場合がある。回路が偶然に未使用コードに入ると（ノイズや電源投入により）、ロックアップする可能性がある。常に未使用コードからリセット状態への遷移を追加するか、到達不能であることを証明する
+- **MealyとMoore出力の混同**: Mealy機械では、出力は入力が変更されると即座に変化する（入力から出力への組み合わせパス）。Moore機械では、出力はクロックエッジでのみ変化する。1つの設計で2つのモデルを混合するとタイミングハザードにつながる
+- **同期回路への非同期入力**: クロックに同期していない外部信号はセットアップ/ホールド時間に違反し、メタスタビリティを引き起こす可能性がある。非同期入力を状態ロジックで使用する前に、常に2段フリップフロップシンクロナイザを通す
+- **SRラッチのS=R=1ハザード**: セットとリセットの両方を同時にハイにすると、SRラッチが未定義の状態になる。SR要素を使用する場合、この組み合わせが決して発生しないことを保証するロジックを追加するか、DまたはJKフリップフロップに切り替える
+- **マルチフリップフロップ設計でのクロックスキュー**: クロックが異なるフリップフロップに異なるタイミングで到着する場合、1つのフリップフロップが別のフリップフロップから古いデータをサンプリングする可能性がある。入門設計ではゼロスキューを仮定する; 実際のハードウェアではクロックツリーシンセシスを使用する
 
 ## 関連スキル
 
-- `design-logic-circuit` -- design the combinational excitation and output logic blocks
-- `simulate-cpu-architecture` -- use sequential blocks (registers, counters, control FSMs) in a CPU datapath
-- `model-markov-chain` -- finite state machines share the formal framework of discrete-time Markov chains
+- `design-logic-circuit` -- 組み合わせ励起および出力ロジックブロックを設計する
+- `simulate-cpu-architecture` -- CPUデータパスで順序ブロック（レジスタ、カウンタ、制御FSM）を使用する
+- `model-markov-chain` -- 有限状態機械は離散時間マルコフ連鎖の形式的フレームワークを共有する

@@ -1,10 +1,10 @@
 ---
 name: setup-putior-ci
 description: >
-  Set up GitHub Actions CI/CD to automatically regenerate putior workflow
-  diagrams on push. Covers workflow YAML creation, R script for diagram
+  Einrichten GitHub Actions CI/CD to automatisch regenerate putior workflow
+  diagrams on push. Umfasst workflow YAML creation, R script for diagram
   generation with sentinel markers, auto-commit of updated diagrams, and
-  README sentinel integration for in-place diagram updates. Use when workflow
+  README sentinel integration for in-place diagram updates. Verwenden wenn workflow
   diagrams should always reflect the current state of the code, when multiple
   contributors may change workflow-affecting code, or when replacing manual
   diagram regeneration with an automated CI/CD pipeline.
@@ -26,28 +26,28 @@ metadata:
 
 # Putior-CI einrichten
 
-Configure GitHub Actions to automatically regenerate workflow diagrams when source code changes, keeping documentation in sync with code.
+Konfigurieren GitHub Actions to automatisch regenerate workflow diagrams when Quellcode changes, keeping documentation in sync with code.
 
-## When to Use
+## Wann verwenden
 
 - Workflow diagrams should always reflect the current state of the code
 - The project has CI/CD and wants automated documentation updates
 - Multiple contributors may change workflow-affecting code
 - Replacing manual diagram regeneration with automated pipeline
 
-## Inputs
+## Eingaben
 
-- **Required**: GitHub repository with putior annotations in source files
-- **Required**: Target file for diagram output (e.g., `README.md`, `docs/workflow.md`)
+- **Erforderlich**: GitHub repository with putior annotations in Quelldateis
+- **Erforderlich**: Target file for diagram output (e.g., `README.md`, `docs/workflow.md`)
 - **Optional**: putior theme (default: `"github"`)
 - **Optional**: Source directories to scan (default: `"./R/"` or `"./src/"`)
 - **Optional**: Branch to trigger on (default: `main`)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Create GitHub Actions Workflow
+### Schritt 1: Erstellen GitHub Actions Workflow
 
-Create the workflow YAML file for automated diagram generation.
+Erstellen der Workflow YAML file for automated diagram generation.
 
 ```yaml
 # .github/workflows/update-workflow-diagram.yml
@@ -94,13 +94,13 @@ jobs:
           git push
 ```
 
-**Expected:** File created at `.github/workflows/update-workflow-diagram.yml`.
+**Erwartet:** File created at `.github/workflows/update-workflow-diagram.yml`.
 
-**On failure:** Ensure the `.github/workflows/` directory exists. Adjust the `paths` filter to match where annotated source files live in the repository.
+**Bei Fehler:** Sicherstellen the `.github/workflows/` directory exists. Anpassen the `paths` filter to match where annotated Quelldateis live in das Repository.
 
-### Step 2: Write Generation Script
+### Schritt 2: Schreiben Generation Script
 
-Create the R script that generates the diagram and updates target files using sentinel markers.
+Erstellen the R script that generates the diagram and updates target files using sentinel markers.
 
 ```r
 # scripts/generate-workflow-diagram.R
@@ -151,28 +151,28 @@ writeLines(
 cat("Updated docs/workflow.md\n")
 ```
 
-**Expected:** Script at `scripts/generate-workflow-diagram.R` that reads annotations, generates Mermaid code, and replaces content between sentinel markers.
+**Erwartet:** Script at `scripts/generate-workflow-diagram.R` that reads annotations, generates Mermaid code, and replaces content zwischen sentinel markers.
 
-**On failure:** If `put_merge()` returns empty, check that source paths match the repository layout. Adjust `"./R/"` to the actual source directory.
+**Bei Fehler:** If `put_merge()` returns empty, check that source paths match das Repository layout. Anpassen `"./R/"` to the actual source directory.
 
-### Step 3: Configure Auto-Commit
+### Schritt 3: Konfigurieren Auto-Commit
 
-The workflow must avoid infinite loops where an auto-commit re-triggers the same workflow. Pushes made with the default `GITHUB_TOKEN` typically do not trigger new workflow runs, but the workflow also includes an explicit `if:` guard on the job as a safety net.
+The workflow must avoid infinite loops where an auto-commit re-triggers the same workflow. Pushes made with the default `GITHUB_TOKEN` typischerweise nicht trigger new workflow runs, but der Workflow also includes an explicit `if:` guard on the job as a safety net.
 
 Key configuration points:
-- `permissions: contents: write` grants push access
+- `Berechtigungs: contents: write` grants push access
 - `if: github.actor != 'github-actions[bot]'` skips the job when the push came from the bot itself
 - `git diff --staged --quiet || git commit` only commits if there are changes
 - `[skip ci]` in the commit message is a convention some CI systems honor (not built into GitHub Actions, but useful as a signal)
 - Bot identity used for commits: `github-actions[bot]`
 
-**Expected:** The workflow only commits when diagrams actually change. No empty commits, no infinite loops.
+**Erwartet:** The workflow only commits when diagrams actually change. No empty commits, no infinite loops.
 
-**On failure:** If push fails with permission denied, check repository settings: Settings > Actions > General > Workflow permissions must be set to "Read and write permissions".
+**Bei Fehler:** If push fails with Berechtigung denied, check repository settings: Settings > Actions > General > Workflow Berechtigungs muss set to "Lesen and write Berechtigungs".
 
-### Step 4: Add Sentinel Markers to README
+### Schritt 4: Hinzufuegen Sentinel Markers to README
 
-Insert sentinel markers in the target file where the diagram should appear.
+Insert sentinel markers in das Ziel file where the diagram should appear.
 
 ```markdown
 ## Workflow
@@ -182,19 +182,19 @@ Insert sentinel markers in the target file where the diagram should appear.
 
 ```mermaid
 flowchart TD
-  A["Placeholder — will be replaced on next CI run"]
+  A["Placeholder — wird replaced on next CI run"]
 ```
 
 <!-- PUTIOR-WORKFLOW-END -->
 ```
 
-**Expected:** Sentinel markers in README.md (or other target file). The content between them will be replaced on each CI run.
+**Erwartet:** Sentinel markers in README.md (or other target file). The content zwischen them wird replaced on each CI run.
 
-**On failure:** Ensure markers are on their own lines with no leading/trailing whitespace. The script matches exact line content.
+**Bei Fehler:** Sicherstellen markers are on their own lines with no leading/trailing whitespace. The script matches exact line content.
 
-### Step 5: Test the Pipeline
+### Schritt 5: Testen the Pipeline
 
-Trigger the workflow and verify the diagram updates.
+Ausloesen der Workflow and verify the diagram updates.
 
 ```bash
 # Make a small change to trigger the workflow
@@ -211,36 +211,36 @@ git pull
 cat README.md | grep -A 5 "PUTIOR-WORKFLOW-START"
 ```
 
-**Expected:** GitHub Actions run completes successfully. The diagram between sentinel markers in README.md is updated with current workflow data.
+**Erwartet:** GitHub Actions run completes erfolgreich. The diagram zwischen sentinel markers in README.md is updated with current workflow data.
 
-**On failure:** Check the Actions log for errors. Common issues:
-- `putior` package not available: add to `DESCRIPTION` Suggests or install explicitly in the workflow
-- Source path wrong: the R script's `put_merge()` path must be relative to the repo root
+**Bei Fehler:** Check the Actions log for errors. Common issues:
+- `putior` package not available: add to `DESCRIPTION` Suggests or install explicitly in der Workflow
+- Source path wrong: the R script's `put_merge()` path muss relative to the repo root
 - No sentinel markers: the script warns but doesn't crash; add markers to README.md
 
-## Validation
+## Validierung
 
 - [ ] `.github/workflows/update-workflow-diagram.yml` exists and is valid YAML
-- [ ] `scripts/generate-workflow-diagram.R` runs without errors locally
+- [ ] `scripts/generate-workflow-diagram.R` runs ohne errors locally
 - [ ] README.md contains `<!-- PUTIOR-WORKFLOW-START -->` and `<!-- PUTIOR-WORKFLOW-END -->` sentinels
 - [ ] GitHub Actions workflow triggers on push to the correct branch and paths
-- [ ] Diagram content between sentinels is updated after a workflow run
+- [ ] Diagram content zwischen sentinels is updated nach a workflow run
 - [ ] Job-level `if:` guard prevents infinite commit loops from bot pushes
 - [ ] No changes = no commit (idempotent)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Infinite CI loops**: Pushes with the default `GITHUB_TOKEN` typically don't trigger new runs, but always add an explicit `if: github.actor != 'github-actions[bot]'` guard on the job. The `[skip ci]` tag in the commit message is a useful convention but is not a built-in GitHub Actions mechanism.
-- **Permission denied on push**: GitHub Actions needs write permission. Set `permissions: contents: write` in the workflow file, or configure it in repository settings.
+- **Infinite CI loops**: Pushes with the default `GITHUB_TOKEN` typischerweise don't trigger new runs, but always add an explicit `if: github.actor != 'github-actions[bot]'` guard on the job. The `[skip ci]` tag in the commit message is a useful convention but ist nicht a built-in GitHub Actions mechanism.
+- **Permission denied on push**: GitHub Actions needs write Berechtigung. Set `Berechtigungs: contents: write` in der Workflow file, or configure it in repository settings.
 - **Sentinel marker mismatch**: If markers have trailing spaces, leading tabs, or are on the same line as other content, the script won't find them. Keep markers on their own clean lines.
-- **Source path mismatch**: The R script runs from the repo root. Paths like `"./R/"` or `"./src/"` must match the actual directory structure.
-- **Package installation in CI**: If the project uses renv, the CI workflow needs `renv::restore()` before putior is available. Alternatively, install putior explicitly in the workflow.
-- **Large repos slowing CI**: For repos with many source files, limit the `paths` trigger filter to directories that contain PUT annotations, not the entire repo.
+- **Source path mismatch**: The R script runs from the repo root. Paths like `"./R/"` or `"./src/"` must match the actual Verzeichnisstruktur.
+- **Package installation in CI**: If das Projekt uses renv, the CI workflow needs `renv::restore()` vor putior ist verfuegbar. Alternatively, install putior explicitly in der Workflow.
+- **Large repos slowing CI**: For repos with many Quelldateis, limit the `paths` trigger filter to directories that contain PUT annotations, not the entire repo.
 
-## Related Skills
+## Verwandte Skills
 
 - `generate-workflow-diagram` — the manual version of what this CI automates
 - `setup-github-actions-ci` — general GitHub Actions CI/CD setup for R packages
 - `build-ci-cd-pipeline` — broader CI/CD pipeline design
-- `annotate-source-files` — annotations must exist before CI can generate diagrams
+- `annotate-source-files` — annotations must exist vor CI can generate diagrams
 - `commit-changes` — understanding auto-commit patterns

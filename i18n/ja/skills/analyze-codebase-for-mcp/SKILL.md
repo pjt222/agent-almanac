@@ -1,12 +1,11 @@
 ---
 name: analyze-codebase-for-mcp
 description: >
-  Analyze an arbitrary codebase to identify functions, APIs, and data sources
-  suitable for exposure as MCP tools, producing a tool specification document.
-  Use when planning an MCP server for an existing project, auditing a codebase
-  before wrapping it as an AI-accessible tool surface, comparing what a codebase
-  can do versus what is already exposed via MCP, or generating a tool spec to
-  hand off to scaffold-mcp-server.
+  任意のコードベースを分析し、MCPツールとして公開するのに適した関数、API、
+  データソースを特定し、ツール仕様書を作成する。既存プロジェクトのMCPサーバーを
+  計画する時、AI対応ツールサーフェスとしてラップする前にコードベースを監査する時、
+  コードベースの機能とMCP経由で既に公開されている機能を比較する時、
+  scaffold-mcp-serverに渡すツール仕様を生成する時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob Bash
 metadata:
@@ -25,100 +24,100 @@ metadata:
 
 # MCP向けコードベース分析
 
-Scan a codebase to discover functions, REST endpoints, CLI commands, and data access patterns that are good candidates for MCP tool exposure, then produce a structured tool specification document.
+コードベースをスキャンして、MCPツール公開の候補となる関数、RESTエンドポイント、CLIコマンド、データアクセスパターンを発見し、構造化されたツール仕様書を作成する。
 
 ## 使用タイミング
 
-- Planning an MCP server for an existing project and need to know what to expose
-- Auditing a codebase before wrapping it as an AI-accessible tool surface
-- Comparing what a codebase can do versus what is already exposed via MCP
-- Generating a tool specification document to hand off to `scaffold-mcp-server`
-- Evaluating whether a third-party library is worth wrapping as MCP tools
+- 既存プロジェクトのMCPサーバーを計画しており、何を公開すべきか知る必要がある時
+- AI対応ツールサーフェスとしてラップする前にコードベースを監査する時
+- コードベースの機能とMCP経由で既に公開されている機能を比較する時
+- `scaffold-mcp-server`に渡すツール仕様書を生成する時
+- サードパーティライブラリをMCPツールとしてラップする価値があるか評価する時
 
 ## 入力
 
-- **必須**: Path to the codebase root directory
-- **必須**: Target language(s) of the codebase (e.g., TypeScript, Python, R, Go)
-- **任意**: Existing MCP server code to compare against (gap analysis)
-- **任意**: Domain focus (e.g., "data analysis", "file operations", "API integration")
-- **任意**: Maximum number of tools to recommend (default: 20)
+- **必須**: コードベースのルートディレクトリへのパス
+- **必須**: コードベースの対象言語（例: TypeScript、Python、R、Go）
+- **任意**: 比較対象の既存MCPサーバーコード（ギャップ分析）
+- **任意**: ドメインフォーカス（例: 「データ分析」「ファイル操作」「API統合」）
+- **任意**: 推奨ツールの最大数（デフォルト: 20）
 
 ## 手順
 
-### ステップ1: Scan Codebase Structure
+### ステップ1: コードベース構造をスキャンする
 
-1.1. Use `Glob` to map the directory tree, focusing on source directories:
-   - `src/**/*.{ts,js,py,R,go,rs}` for source files
-   - `**/routes/**`, `**/api/**`, `**/controllers/**` for endpoint definitions
-   - `**/cli/**`, `**/commands/**` for CLI entry points
-   - `**/package.json`, `**/setup.py`, `**/DESCRIPTION` for dependency metadata
+1.1. `Glob`を使用してディレクトリツリーをマッピングし、ソースディレクトリに焦点を当てる:
+   - `src/**/*.{ts,js,py,R,go,rs}` ソースファイル用
+   - `**/routes/**`、`**/api/**`、`**/controllers/**` エンドポイント定義用
+   - `**/cli/**`、`**/commands/**` CLIエントリポイント用
+   - `**/package.json`、`**/setup.py`、`**/DESCRIPTION` 依存関係メタデータ用
 
-1.2. Categorize files by role:
-   - **Entry points**: main files, route handlers, CLI commands
-   - **Core logic**: business logic functions, algorithms, data transformers
-   - **Data access**: database queries, file I/O, API clients
-   - **Utilities**: helpers, formatters, validators
+1.2. ファイルを役割別に分類する:
+   - **エントリポイント**: メインファイル、ルートハンドラー、CLIコマンド
+   - **コアロジック**: ビジネスロジック関数、アルゴリズム、データトランスフォーマー
+   - **データアクセス**: データベースクエリ、ファイルI/O、APIクライアント
+   - **ユーティリティ**: ヘルパー、フォーマッター、バリデーター
 
-1.3. Count total files, lines of code, and exported symbols to gauge project size.
+1.3. 総ファイル数、コード行数、エクスポートされたシンボルを数えてプロジェクトの規模を把握する。
 
-**期待結果:** A categorized file inventory with role annotations.
+**期待結果:** 役割アノテーション付きの分類されたファイルインベントリ。
 
-**失敗時:** If the codebase is too large (>10,000 files), narrow the scan to specific directories or modules using the domain focus input. If no source files are found, verify the root path and language parameters.
+**失敗時:** コードベースが大きすぎる場合（10,000ファイル以上）、ドメインフォーカス入力を使用して特定のディレクトリやモジュールにスキャンを絞る。ソースファイルが見つからない場合、ルートパスと言語パラメータを確認する。
 
-### ステップ2: Identify Exposed Functions and Endpoints
+### ステップ2: 公開された関数とエンドポイントを特定する
 
-2.1. Use `Grep` to find exported functions and public APIs:
-   - TypeScript/JavaScript: `export (async )?function`, `export default`, `module.exports`
-   - Python: functions not prefixed with `_`, `@app.route`, `@router`
-   - R: functions listed in NAMESPACE or `#' @export` roxygen tags
-   - Go: capitalized function names (exported by convention)
+2.1. `Grep`を使用してエクスポートされた関数とパブリックAPIを見つける:
+   - TypeScript/JavaScript: `export (async )?function`、`export default`、`module.exports`
+   - Python: `_`プレフィックスのない関数、`@app.route`、`@router`
+   - R: NAMESPACEにリストされた関数または`#' @export` roxygenタグ
+   - Go: 大文字で始まる関数名（規約によりエクスポート）
 
-2.2. For each candidate function, extract:
-   - **Name**: function or endpoint name
-   - **Signature**: parameters with types and defaults
-   - **Return type**: what the function produces
-   - **Documentation**: docstrings, JSDoc, roxygen, godoc
-   - **Location**: file path and line number
+2.2. 各候補関数について以下を抽出する:
+   - **名前**: 関数名またはエンドポイント名
+   - **シグネチャ**: 型とデフォルト値を含むパラメータ
+   - **戻り値型**: 関数が生成するもの
+   - **ドキュメント**: docstring、JSDoc、roxygen、godoc
+   - **場所**: ファイルパスと行番号
 
-2.3. For REST APIs, additionally extract:
-   - HTTP method and route pattern
-   - Request body schema
-   - Response shape
-   - Authentication requirements
+2.3. REST APIについては追加で以下を抽出する:
+   - HTTPメソッドとルートパターン
+   - リクエストボディスキーマ
+   - レスポンスの形状
+   - 認証要件
 
-2.4. Build a candidate list sorted by potential utility (public, documented, well-typed functions first).
+2.4. 潜在的な有用性でソートされた候補リストを構築する（パブリック、ドキュメント済み、型付き関数を優先）。
 
-**期待結果:** A list of 20-100 candidate functions/endpoints with extracted metadata.
+**期待結果:** 抽出されたメタデータ付きの20-100個の候補関数/エンドポイントのリスト。
 
-**失敗時:** If few candidates are found, broaden the search to include internal functions that could be made public. If documentation is sparse, flag this as a risk in the output.
+**失敗時:** 候補が少ない場合、パブリックにできる内部関数も含めて検索を広げる。ドキュメントが不足している場合、出力にリスクとしてフラグを立てる。
 
-### ステップ3: Evaluate MCP Suitability
+### ステップ3: MCP適合性を評価する
 
-3.1. For each candidate, assess against MCP tool criteria:
+3.1. 各候補について、MCPツール基準に対して評価する:
 
-   - **Input contract clarity**: Are parameters well-typed and documented? Can they be described in a JSON Schema?
-   - **Output predictability**: Does the function return structured data (JSON-serializable)? Is the return shape consistent?
-   - **Side effects**: Does the function modify state (files, database, external services)? Side effects must be clearly labeled.
-   - **Idempotency**: Is the operation safe to retry? Non-idempotent tools need explicit warnings.
-   - **Execution time**: Will it complete within a reasonable timeout (< 30 seconds)? Long-running operations need async patterns.
-   - **Error handling**: Does it throw structured errors or fail silently?
+   - **入力契約の明確さ**: パラメータは適切に型付けされドキュメント化されているか？ JSON Schemaで記述できるか？
+   - **出力の予測可能性**: 関数は構造化データ（JSONシリアライズ可能）を返すか？ 戻り値の形状は一貫しているか？
+   - **副作用**: 関数は状態を変更するか（ファイル、データベース、外部サービス）？ 副作用は明確にラベル付けが必要。
+   - **冪等性**: 操作は安全にリトライできるか？ 非冪等ツールは明示的な警告が必要。
+   - **実行時間**: 合理的なタイムアウト内（30秒未満）で完了するか？ 長時間実行操作は非同期パターンが必要。
+   - **エラーハンドリング**: 構造化エラーをスローするか、サイレントに失敗するか？
 
-3.2. Score each candidate on a 1-5 scale:
-   - **5**: Pure function, typed I/O, documented, fast, no side effects
-   - **4**: Well-typed, documented, minor side effects (e.g., logging)
-   - **3**: Reasonable I/O contract but needs wrapping (e.g., returns raw objects)
-   - **2**: Significant side effects or unclear contract, needs substantial adaptation
-   - **1**: Not suitable without major refactoring
+3.2. 各候補を1-5のスケールでスコアリングする:
+   - **5**: 純粋関数、型付きI/O、ドキュメント済み、高速、副作用なし
+   - **4**: 適切に型付けされドキュメント済み、軽微な副作用（例: ロギング）
+   - **3**: 合理的なI/O契約だがラッピングが必要（例: 生オブジェクトを返す）
+   - **2**: 重大な副作用または不明確な契約、大幅な適応が必要
+   - **1**: 大規模なリファクタリングなしには不適切
 
-3.3. Filter candidates to those scoring 3 or above. Flag score-2 items as "future candidates" requiring refactoring.
+3.3. スコア3以上の候補にフィルタリングする。スコア2の項目はリファクタリングが必要な「将来の候補」としてフラグを立てる。
 
-**期待結果:** A scored and filtered candidate list with suitability rationale for each.
+**期待結果:** 各候補の適合性根拠付きのスコアリングおよびフィルタリングされた候補リスト。
 
-**失敗時:** If most candidates score below 3, the codebase may need refactoring before MCP exposure. Document the gaps and recommend specific improvements (add types, extract pure functions, wrap side effects).
+**失敗時:** ほとんどの候補が3未満のスコアの場合、MCP公開前にコードベースのリファクタリングが必要な可能性がある。ギャップを文書化し、具体的な改善（型の追加、純粋関数の抽出、副作用のラッピング）を推奨する。
 
-### ステップ4: Design Tool Specifications
+### ステップ4: ツール仕様を設計する
 
-4.1. For each selected candidate (score >= 3), draft a tool specification:
+4.1. 選択された各候補（スコア >= 3）について、ツール仕様を起草する:
 
 ```yaml
 - name: tool_name
@@ -141,69 +140,69 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
   suitability_score: 5
 ```
 
-4.2. Group tools into logical categories (e.g., "Data Queries", "File Operations", "Analysis", "Configuration").
+4.2. ツールを論理的なカテゴリにグループ化する（例: 「データクエリ」「ファイル操作」「分析」「設定」）。
 
-4.3. Identify dependencies between tools (e.g., "list_datasets" should be called before "query_dataset").
+4.3. ツール間の依存関係を特定する（例: 「list_datasets」は「query_dataset」の前に呼ぶべき）。
 
-4.4. Determine if any tools need wrappers to:
-   - Simplify complex parameter objects into flat inputs
-   - Convert raw return values to structured text or JSON
-   - Add safety guards (e.g., read-only wrappers for database functions)
+4.4. ラッパーが必要なツールがあるか判断する:
+   - 複雑なパラメータオブジェクトをフラットな入力に簡素化する
+   - 生の戻り値を構造化テキストまたはJSONに変換する
+   - 安全ガードを追加する（例: データベース関数の読み取り専用ラッパー）
 
-**期待結果:** A complete YAML tool specification with categories, dependencies, and wrapper notes.
+**期待結果:** カテゴリ、依存関係、ラッパーノート付きの完全なYAMLツール仕様。
 
-**失敗時:** If tool specifications are ambiguous, revisit Step 2 to extract more detail from source code. If parameter types cannot be inferred, flag for manual review.
+**失敗時:** ツール仕様が曖昧な場合、ステップ2に戻ってソースコードからより多くの詳細を抽出する。パラメータ型が推論できない場合、手動レビュー用にフラグを立てる。
 
-### ステップ5: Generate Tool Spec Document
+### ステップ5: ツール仕様書を生成する
 
-5.1. Write the final specification document with these sections:
-   - **Summary**: Codebase overview, language, size, and analysis date
-   - **Recommended Tools**: Full specifications from Step 4, grouped by category
-   - **Future Candidates**: Score-2 items with refactoring recommendations
-   - **Excluded Items**: Score-1 items with exclusion rationale
-   - **Dependencies**: Tool dependency graph
-   - **Implementation Notes**: Wrapper requirements, authentication needs, transport recommendations
+5.1. 以下のセクションを含む最終仕様書を作成する:
+   - **サマリー**: コードベースの概要、言語、規模、分析日
+   - **推奨ツール**: ステップ4のフル仕様、カテゴリ別にグループ化
+   - **将来の候補**: リファクタリング推奨付きのスコア2項目
+   - **除外項目**: 除外根拠付きのスコア1項目
+   - **依存関係**: ツール依存関係グラフ
+   - **実装ノート**: ラッパー要件、認証ニーズ、トランスポート推奨
 
-5.2. Save as `mcp-tool-spec.yml` (machine-readable) and optionally `mcp-tool-spec.md` (human-readable summary).
+5.2. `mcp-tool-spec.yml`（機械可読）として保存し、オプションで`mcp-tool-spec.md`（人間可読のサマリー）も保存する。
 
-5.3. If an existing MCP server was provided, include a gap analysis section:
-   - Tools in the spec but not yet implemented
-   - Implemented tools not in the spec (possibly stale)
-   - Tools with specification drift (implementation diverges from spec)
+5.3. 既存のMCPサーバーが提供された場合、ギャップ分析セクションを含める:
+   - 仕様にあるが未実装のツール
+   - 実装されているが仕様にないツール（古い可能性あり）
+   - 仕様のドリフトがあるツール（実装が仕様から乖離）
 
-**期待結果:** A complete tool specification document ready for consumption by `scaffold-mcp-server`.
+**期待結果:** `scaffold-mcp-server`で利用可能な完全なツール仕様書。
 
-**失敗時:** If the document exceeds reasonable size (>200 tools), split into modules with cross-references. If the codebase has no suitable candidates, produce a "readiness assessment" document with refactoring recommendations instead.
+**失敗時:** ドキュメントが合理的なサイズを超える場合（200ツール以上）、クロスリファレンス付きのモジュールに分割する。コードベースに適切な候補がない場合、代わりにリファクタリング推奨付きの「準備状況評価」ドキュメントを作成する。
 
 ## バリデーション
 
-- [ ] All source files in the target codebase were scanned
-- [ ] Candidate functions have extracted names, signatures, and return types
-- [ ] Each candidate has a suitability score with written rationale
-- [ ] Tool specifications include complete parameter schemas with types
-- [ ] Side effects are explicitly documented for every tool
-- [ ] The output document is valid YAML (parseable by any YAML library)
-- [ ] Tool names follow MCP conventions (snake_case, descriptive, unique)
-- [ ] Categories and dependencies form a coherent tool surface
-- [ ] Gap analysis is included when an existing MCP server was provided
-- [ ] Future candidates section lists refactoring steps needed for score-2 items
+- [ ] 対象コードベースのすべてのソースファイルがスキャンされた
+- [ ] 候補関数の名前、シグネチャ、戻り値型が抽出されている
+- [ ] 各候補に記述された根拠付きの適合性スコアがある
+- [ ] ツール仕様に型付きの完全なパラメータスキーマが含まれている
+- [ ] すべてのツールの副作用が明示的に文書化されている
+- [ ] 出力ドキュメントが有効なYAMLである（任意のYAMLライブラリでパース可能）
+- [ ] ツール名がMCP規約に従っている（snake_case、記述的、一意）
+- [ ] カテゴリと依存関係が一貫したツールサーフェスを形成している
+- [ ] 既存MCPサーバーが提供された場合、ギャップ分析が含まれている
+- [ ] 将来の候補セクションにスコア2項目に必要なリファクタリング手順がリストされている
 
 ## よくある落とし穴
 
-- **Exposing too many tools**: AI assistants work best with 10-30 focused tools. Prioritize breadth of capability over depth. Resist exposing every public function.
-- **Ignoring side effects**: A function that "just reads" but also writes to a log or cache still has side effects. Audit carefully with `Grep` for file writes, network calls, and database mutations.
-- **Assuming type safety**: Dynamic languages (Python, R, JavaScript) may have functions with no type annotations. Infer types from usage patterns and tests, but flag uncertainty in the spec.
-- **Missing authentication context**: Functions that work in an authenticated web request may fail when called via MCP without session context. Check for implicit auth dependencies such as session cookies, JWT tokens, or environment-injected credentials.
-- **Over-engineering wrappers**: If a function needs a 50-line wrapper to be MCP-compatible, it may not be a good candidate. Prefer functions that map naturally to tool interfaces.
-- **Neglecting error paths**: MCP tools must return structured errors. Functions that throw untyped exceptions need error-handling wrappers.
-- **Conflating internal and external APIs**: Internal helper functions called by other internal code are poor MCP candidates. Focus on functions designed for external consumption or clear boundary APIs.
-- **Skipping the gap analysis**: If an existing MCP server is provided, always compare the spec against current implementation. Without gap analysis, you risk duplicating work or missing stale tools.
+- **ツールを公開しすぎる**: AIアシスタントは10-30の集中したツールで最もよく機能する。深さよりも機能の幅を優先する。すべてのパブリック関数を公開する誘惑に抵抗する。
+- **副作用を無視する**: 「読み取りのみ」だがログやキャッシュにも書き込む関数にはまだ副作用がある。`Grep`でファイル書き込み、ネットワーク呼び出し、データベース変更を注意深く監査する。
+- **型安全性を仮定する**: 動的言語（Python、R、JavaScript）には型アノテーションのない関数がある可能性がある。使用パターンとテストから型を推論するが、仕様に不確実性をフラグとして立てる。
+- **認証コンテキストの欠落**: 認証されたWebリクエストで動作する関数は、セッションコンテキストなしにMCP経由で呼ばれると失敗する可能性がある。セッションCookie、JWTトークン、環境注入された認証情報などの暗黙的な認証依存をチェックする。
+- **ラッパーの過剰設計**: 関数がMCP互換にするために50行のラッパーを必要とする場合、良い候補ではない可能性がある。ツールインターフェースに自然にマッピングされる関数を優先する。
+- **エラーパスの軽視**: MCPツールは構造化エラーを返す必要がある。型なし例外をスローする関数にはエラーハンドリングラッパーが必要。
+- **内部APIと外部APIの混同**: 他の内部コードから呼ばれる内部ヘルパー関数はMCP候補として不適切。外部利用向けに設計された関数や明確な境界APIに焦点を当てる。
+- **ギャップ分析のスキップ**: 既存のMCPサーバーが提供された場合、常に仕様を現在の実装と比較する。ギャップ分析なしでは、作業の重複や古いツールの見落としのリスクがある。
 
 ## 関連スキル
 
-- `scaffold-mcp-server` - use the output spec to generate a working MCP server
-- `build-custom-mcp-server` - manual server implementation reference
-- `configure-mcp-server` - connect the resulting server to Claude Code/Desktop
-- `troubleshoot-mcp-connection` - debug connectivity after deploying the server
-- `review-software-architecture` - architecture review for tool surface design
-- `security-audit-codebase` - security audit before exposing functions externally
+- `scaffold-mcp-server` - 出力仕様を使用して動作するMCPサーバーを生成する
+- `build-custom-mcp-server` - 手動サーバー実装のリファレンス
+- `configure-mcp-server` - 結果のサーバーをClaude Code/Desktopに接続する
+- `troubleshoot-mcp-connection` - サーバーデプロイ後の接続性をデバッグする
+- `review-software-architecture` - ツールサーフェス設計のアーキテクチャレビュー
+- `security-audit-codebase` - 関数を外部に公開する前のセキュリティ監査

@@ -4,8 +4,8 @@ description: >
   Translate agent-almanac content (skills, agents, teams, guides) into a target
   locale while preserving code blocks, IDs, and technical structure. Covers
   scaffolding, frontmatter setup, prose translation, code preservation, and
-  freshness tracking. Use when localizing content for a new language, updating
-  stale translations after source changes, or batch-translating a domain.
+  freshness tracking. Verwenden wenn localizing content for a new language, updating
+  stale translations nach source changes, or batch-translating a domain.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,81 +26,81 @@ metadata:
 
 Translate English source content into a target locale, preserving technical accuracy and structural integrity.
 
-## When to Use
+## Wann verwenden
 
 - Localizing a skill, agent, team, or guide into a supported language
-- Updating a translation that has become stale after source changes
-- Batch-translating multiple items within a domain or content type
+- Updating a translation that has become stale nach source changes
+- Batch-translating multiple items innerhalb a domain or content type
 - Creating initial translations for a new locale
 
-## Inputs
+## Eingaben
 
-- **Required**: Content type — `skills`, `agents`, `teams`, or `guides`
-- **Required**: Item ID — the name/identifier of the content (e.g., `create-r-package`)
-- **Required**: Target locale — IETF BCP 47 code (e.g., `de`, `zh-CN`, `ja`, `es`)
+- **Erforderlich**: Content type — `skills`, `agents`, `teams`, or `guides`
+- **Erforderlich**: Item ID — the name/identifier of the content (e.g., `create-r-package`)
+- **Erforderlich**: Target locale — IETF BCP 47 code (e.g., `de`, `zh-CN`, `ja`, `es`)
 - **Optional**: Batch list — multiple IDs to translate in sequence
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Read the English source
+### Schritt 1: Lesen the English source
 
-1.1. Determine the source file path:
+1.1. Bestimmen die Quelle Dateipfad:
    - Skills: `skills/<id>/SKILL.md`
    - Agents: `agents/<id>.md`
    - Teams: `teams/<id>.md`
    - Guides: `guides/<id>.md`
 
-1.2. Read the entire source file to understand context, structure, and content.
+1.2. Lesen the entire Quelldatei to understand context, structure, and content.
 
-1.3. Identify sections that must stay in English:
+1.3. Identifizieren sections that must stay in English:
    - All code blocks (fenced with triple backticks)
    - Inline code (backtick-wrapped)
    - YAML frontmatter field names and technical values (`name`, `tools`, `model`, `priority`, `skills` list entries, `allowed-tools`, `tags`, `domain`, `language`)
    - File paths, URLs, command examples
    - `<!-- CONFIG:START -->` / `<!-- CONFIG:END -->` blocks in teams
 
-**Expected:** Full understanding of source content with clear mental separation of translatable prose vs preserved technical content.
+**Erwartet:** Full understanding of source content with clear mental separation of translatable prose vs preserved technical content.
 
-**On failure:** If source file is not found, verify the ID exists in the registry. Check for typos in the content type or ID.
+**Bei Fehler:** If Quelldatei ist nicht found, verify the ID exists in the registry. Pruefen auf typos in the content type or ID.
 
-### Step 2: Scaffold the translation file
+### Schritt 2: Scaffold the translation file
 
-2.1. Run the scaffolding script:
+2.1. Ausfuehren the scaffolding script:
 ```bash
 npm run translate:scaffold -- <content-type> <id> <locale>
 ```
 
-2.2. If the file already exists, read it to check whether it needs updating (stale) or is already current.
+2.2. If die Datei already exists, read it to check whether it needs updating (stale) or is already current.
 
-2.3. Verify the scaffolded file has translation frontmatter fields:
+2.3. Verifizieren the scaffolded file has translation frontmatter fields:
    - `locale` — matches target locale
    - `source_locale` — `en`
    - `source_commit` — current git short hash
    - `translator` — attribution string
    - `translation_date` — today's date
 
-**Expected:** Scaffolded file at `i18n/<locale>/<content-type>/<id>/SKILL.md` (or `.md` for other types) with correct frontmatter.
+**Erwartet:** Scaffolded file at `i18n/<locale>/<content-type>/<id>/SKILL.md` (or `.md` for other types) with correct frontmatter.
 
-**On failure:** If the scaffold script fails, create the directory manually with `mkdir -p` and copy the source file. Add frontmatter fields manually.
+**Bei Fehler:** If the scaffold script fails, create das Verzeichnis manuell with `mkdir -p` and copy die Quelle file. Hinzufuegen frontmatter fields manuell.
 
-### Step 3: Translate the description
+### Schritt 3: Translate the description
 
-3.1. Translate the `description` field in the YAML frontmatter into the target locale.
+3.1. Translate the `description` field in the YAML frontmatter into das Ziel locale.
 
 3.2. For skills, the description is inside the top-level frontmatter. For agents/teams/guides, it is also in the top-level frontmatter.
 
 3.3. Keep the translation concise — match the length and style of the original.
 
-**Expected:** Description field contains an idiomatic translation that accurately conveys the original meaning.
+**Erwartet:** Description field contains an idiomatic translation that accurately conveys the original meaning.
 
-**On failure:** If the description is ambiguous, keep it closer to literal translation rather than risk misinterpretation.
+**Bei Fehler:** If the description is ambiguous, keep it closer to literal translation anstatt risk misinterpretation.
 
-### Step 4: Translate prose sections
+### Schritt 4: Translate prose sections
 
 4.1. Translate all prose content section by section:
    - Section headings (e.g., "## When to Use" → "## Wann verwenden" in German)
    - Paragraph text
-   - List item text (but not list item code/paths)
+   - Auflisten item text (but not list item code/paths)
    - Table cell text (but not table cell code/values)
 
 4.2. Preserve these elements exactly as-is:
@@ -130,43 +130,43 @@ npm run translate:scaffold -- <content-type> <id> <locale>
    - All prose sections, troubleshooting text, table descriptions
    - Keep command examples, code blocks, and configuration snippets in English
 
-**Expected:** All prose sections translated idiomatically. Code blocks identical to English source. Cross-references use English IDs.
+**Erwartet:** All prose sections translated idiomatically. Code blocks identical to English source. Cross-references use English IDs.
 
-**On failure:** If uncertain about a technical term, keep the English term with a parenthetical translation. Example: "Staging-Bereich (Staging Area)" in German.
+**Bei Fehler:** If uncertain about a technical term, keep the English term with a parenthetical translation. Example: "Staging-Bereich (Staging Area)" in German.
 
-### Step 5: Verify structural integrity
+### Schritt 5: Verifizieren structural integrity
 
-5.1. Confirm the translated file has the same number of sections as the source.
+5.1. Bestaetigen the translated file has the same number of sections as die Quelle.
 
 5.2. For skills, verify all required sections are present:
    - YAML frontmatter with `name`, `description`, `allowed-tools`, `metadata`
    - When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills
 
-5.3. Verify code blocks are identical to the English source (diff the fenced blocks).
+5.3. Verifizieren code blocks are identical to the English source (diff the fenced blocks).
 
-5.4. Check line count: skills must be ≤ 500 lines.
+5.4. Check line count: skills muss ≤ 500 lines.
 
-5.5. Verify `name` field matches the English source exactly (it is the ID, never translated).
+5.5. Verifizieren `name` field matches the English source exactly (it is the ID, never translated).
 
-**Expected:** Structurally valid translated file that passes validation.
+**Erwartet:** Structurally valid translated file that passes validation.
 
-**On failure:** Compare section-by-section with the English source. Restore any missing sections.
+**Bei Fehler:** Vergleichen section-by-section with the English source. Wiederherstellen any missing sections.
 
-### Step 6: Write the translated file
+### Schritt 6: Schreiben the translated file
 
-6.1. Write the complete translated content to the target path using the Write or Edit tool.
+6.1. Schreiben the complete translated content to das Ziel path using the Schreiben or Bearbeiten tool.
 
-6.2. Verify the file exists at the expected path:
+6.2. Verifizieren die Datei exists at the expected path:
    - Skills: `i18n/<locale>/skills/<id>/SKILL.md`
    - Agents: `i18n/<locale>/agents/<id>.md`
    - Teams: `i18n/<locale>/teams/<id>.md`
    - Guides: `i18n/<locale>/guides/<id>.md`
 
-**Expected:** Translated file written to disk at the correct path.
+**Erwartet:** Translated file written to disk at the correct path.
 
-**On failure:** Check directory exists. Create with `mkdir -p` if needed.
+**Bei Fehler:** Check directory exists. Erstellen with `mkdir -p` if needed.
 
-## Validation
+## Validierung
 
 - [ ] Translated file exists at `i18n/<locale>/<type>/<id>`
 - [ ] `name` field matches English source exactly
@@ -176,19 +176,19 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 - [ ] All cross-referenced IDs (skills, agents, teams) are in English
 - [ ] File is under 500 lines (for skills)
 - [ ] `npm run validate:translations` reports no issues for this file
-- [ ] Prose reads idiomatically in the target language
+- [ ] Prose reads idiomatically in das Ziel language
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
 - **Translating code blocks**: Code, commands, and configuration must stay in English. Only translate surrounding prose.
 - **Translating the `name` field**: The `name` field is the canonical ID. Never translate it.
 - **Translating tag values**: Tags in `metadata.tags` stay in English for cross-locale consistency.
-- **Inconsistent terminology**: Use the same translation for a technical term throughout the file and across files in the same locale.
-- **Literal translation of idioms**: Translate the meaning, not the words. "Common Pitfalls" should become the locale's natural equivalent, not a word-for-word translation.
+- **Inconsistent terminology**: Use the same translation for a technical term durchout die Datei and across files in the same locale.
+- **Literal translation of idioms**: Translate the meaning, not the words. "Common Pitfalls" solltecome the locale's natural equivalent, not a word-for-word translation.
 - **Missing `source_commit`**: Without this field, freshness tracking breaks. Always include it.
-- **Exceeding 500 lines**: Translations may expand ~10-20% vs English. If near the limit, tighten prose rather than removing content.
+- **Exceeding 500 lines**: Translations may expand ~10-20% vs English. If near the limit, tighten prose anstatt removing content.
 
-## Related Skills
+## Verwandte Skills
 
 - [create-skill](../create-skill/SKILL.md) — understand the SKILL.md structure being translated
 - [review-skill-format](../review-skill-format/SKILL.md) — validate translated skill structure

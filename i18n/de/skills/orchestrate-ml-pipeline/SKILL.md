@@ -1,8 +1,8 @@
 ---
 name: orchestrate-ml-pipeline
 description: >
-  Orchestrate end-to-end machine learning pipelines using Prefect or Airflow with
-  DAG construction, task dependencies, retry logic, scheduling, monitoring, and
+  Orchestrate end-to-end maschinelles Lernen pipelines using Prefect or Airflow with
+  DAG construction, task Abhaengigkeiten, retry logic, scheduling, monitoring, and
   integration with MLflow, DVC, and feature stores for production ML workflows. Use
   when automating multi-step ML workflows from data ingestion to deployment, scheduling
   periodic model retraining, coordinating distributed training tasks, or managing retry
@@ -28,35 +28,35 @@ metadata:
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-Build and orchestrate end-to-end machine learning pipelines with dependency management, scheduling, and monitoring.
+Erstellen and orchestrate end-to-end maschinelles Lernen pipelines with Abhaengigkeit management, scheduling, and monitoring.
 
-## When to Use
+## Wann verwenden
 
 - Automating multi-step ML workflows from data ingestion to deployment
 - Scheduling periodic model retraining on fresh data
 - Coordinating distributed data processing and training tasks
-- Implementing complex dependencies between ML pipeline stages
+- Implementing complex Abhaengigkeiten zwischen ML pipeline stages
 - Managing retry logic and failure recovery
 - Monitoring pipeline execution and alerting on failures
 - Orchestrating feature engineering, training, evaluation, and deployment
 - Building reproducible ML workflows across environments
 
-## Inputs
+## Eingaben
 
-- **Required**: ML pipeline components (data ingestion, preprocessing, training, evaluation)
-- **Required**: Orchestration framework choice (Prefect, Airflow, Kubeflow)
-- **Required**: Python environment with orchestration library installed
+- **Erforderlich**: ML pipeline components (data ingestion, preprocessing, training, evaluation)
+- **Erforderlich**: Orchestration framework choice (Prefect, Airflow, Kubeflow)
+- **Erforderlich**: Python environment with orchestration library installed
 - **Optional**: Kubernetes cluster for distributed execution
 - **Optional**: MLflow tracking server for experiment logging
 - **Optional**: DVC for data versioning
 - **Optional**: Slack/email for alerting
 - **Optional**: Monitoring infrastructure (Prometheus, Grafana)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Choose and Install Orchestration Framework
+### Schritt 1: Waehlen and Installieren Orchestration Framework
 
-Select appropriate framework and set up infrastructure.
+Auswaehlen appropriate framework and set up infrastructure.
 
 ```bash
 # Option 1: Prefect (modern, Pythonic, simpler)
@@ -84,13 +84,13 @@ x-airflow-common: &airflow-common
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Orchestration framework installed, web UI accessible (Prefect at http://localhost:4200, Airflow at http://localhost:8080), database initialized, scheduler running.
+**Erwartet:** Orchestration framework installed, web UI accessible (Prefect at http://localhost:4200, Airflow at http://localhost:8080), database initialized, scheduler running.
 
-**On failure:** Check port availability (`netstat -tulpn | grep 8080`), verify database connection, ensure Redis running for Celery, check Python version compatibility (Airflow requires ≥3.8), verify Docker daemon for containerized setup, inspect logs for initialization errors.
+**Bei Fehler:** Check port availability (`netstat -tulpn | grep 8080`), verify database connection, ensure Redis running for Celery, check Python version compatibility (Airflow requires ≥3.8), verify Docker daemon for containerized setup, inspect logs for initialization errors.
 
-### Step 2: Build ML Pipeline with Prefect
+### Schritt 2: Erstellen ML Pipeline with Prefect
 
-Create Prefect flow with tasks for each pipeline stage.
+Erstellen Prefect flow with tasks fuer jede pipeline stage.
 
 ```python
 # prefect_ml_pipeline.py
@@ -104,7 +104,7 @@ from sklearn.model_selection import train_test_split
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy and schedule:
+Bereitstellen and schedule:
 
 ```python
 # deploy_prefect.py
@@ -118,13 +118,13 @@ deployment = Deployment.build_from_flow(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prefect flow executes all tasks in correct order, task failures trigger retries automatically, successful runs show green in UI, MLflow logs experiments, model registered and deployed.
+**Erwartet:** Prefect flow executes all tasks in correct order, task failures trigger retries automatisch, successful runs show green in UI, MLflow logs experiments, model registered and deployed.
 
-**On failure:** Check task dependencies defined correctly, verify MLflow server accessible, ensure data source paths correct, check for circular dependencies, verify task timeout limits, inspect Prefect logs for detailed errors, check resource availability (memory/CPU).
+**Bei Fehler:** Check task Abhaengigkeiten defined korrekt, verify MLflow server accessible, ensure Datenquelle paths correct, check for circular Abhaengigkeiten, verify task timeout limits, inspect Prefect logs for detailed errors, check resource availability (memory/CPU).
 
-### Step 3: Build ML Pipeline with Airflow
+### Schritt 3: Erstellen ML Pipeline with Airflow
 
-Create Airflow DAG for production ML workflow.
+Erstellen Airflow DAG for production ML workflow.
 
 ```python
 # dags/ml_training_dag.py
@@ -138,13 +138,13 @@ import pandas as pd
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** DAG appears in Airflow UI, scheduled runs execute on time, task failures trigger retries and alerts, XCom passes data between tasks, MLflow integration logs experiments.
+**Erwartet:** DAG appears in Airflow UI, scheduled runs execute on time, task failures trigger retries and alerts, XCom passes data zwischen tasks, MLflow integration logs experiments.
 
-**On failure:** Check DAG file syntax (`python dags/ml_training_dag.py`), verify imports available in Airflow environment, ensure XCom not exceeding size limits (use file paths for large data), check email configuration for alerts, verify scheduler running, inspect task logs in Airflow UI.
+**Bei Fehler:** Check DAG file syntax (`python dags/ml_training_dag.py`), verify imports available in Airflow environment, ensure XCom not exceeding size limits (use Dateipfads for large data), check email configuration for alerts, verify scheduler running, inspect task logs in Airflow UI.
 
-### Step 4: Implement Advanced Features
+### Schritt 4: Implementieren Advanced Features
 
-Add dynamic DAGs, branching, and parallel execution.
+Hinzufuegen dynamic DAGs, branching, and parallel execution.
 
 ```python
 # advanced_pipeline.py (Prefect)
@@ -172,13 +172,13 @@ def check_data_quality(**context):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Parallel tasks execute concurrently (faster pipeline), conditional branches execute based on logic, dynamic task generation works, Dask cluster distributes work.
+**Erwartet:** Parallel tasks execute conderzeit (faster pipeline), conditional branches execute basierend auf logic, dynamic task generation works, Dask cluster distributes work.
 
-**On failure:** Check Dask cluster configured and accessible, verify task_runner specified, ensure branching returns valid task IDs, check for resource contention with parallel tasks, verify conditional logic correctness.
+**Bei Fehler:** Check Dask cluster configured and accessible, verify task_runner specified, ensure branching returns valid task IDs, check for resource contention with parallel tasks, verify conditional logic correctness.
 
-### Step 5: Integrate Monitoring and Alerting
+### Schritt 5: Integrieren Monitoring and Alerting
 
-Add comprehensive monitoring and failure notifications.
+Hinzufuegen comprehensive monitoring and failure notifications.
 
 ```python
 # monitoring_integration.py
@@ -206,11 +206,11 @@ default_args = {
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Slack/email notifications sent on failures, SLA violations trigger alerts, custom metrics tracked, logs aggregated in monitoring system.
+**Erwartet:** Slack/email notifications sent on failures, SLA violations trigger alerts, custom metrics tracked, logs aggregated in monitoring system.
 
-**On failure:** Verify Slack webhook configured correctly, check email SMTP settings, ensure notification blocks loaded properly, verify SLA values reasonable, check for network issues blocking notifications.
+**Bei Fehler:** Verifizieren Slack webhook configured korrekt, check email SMTP settings, ensure notification blocks loaded ordnungsgemaess, verify SLA values reasonable, check for network issues blocking notifications.
 
-### Step 6: Implement CI/CD for Pipelines
+### Schritt 6: Implementieren CI/CD for Pipelines
 
 Version control and automate pipeline deployments.
 
@@ -226,42 +226,42 @@ on:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Pipeline tests pass before deployment, automated deployment to production, team notified on successful deployment, pipeline versioning tracked in Git.
+**Erwartet:** Pipeline tests pass vor deployment, automated deployment to production, team notified on successful deployment, pipeline versioning tracked in Git.
 
-**On failure:** Check test coverage and failures, verify Prefect Cloud credentials, ensure deployment script handles errors, check Slack webhook configuration, inspect CI logs for deployment errors.
+**Bei Fehler:** Check test coverage and failures, verify Prefect Cloud Zugangsdaten, ensure deployment script handles errors, check Slack webhook configuration, inspect CI logs for deployment errors.
 
-## Validation
+## Validierung
 
 - [ ] Orchestration framework installed and running
-- [ ] Pipeline DAG defined with correct dependencies
+- [ ] Pipeline DAG defined with correct Abhaengigkeiten
 - [ ] All tasks execute in proper order
-- [ ] Retry logic functions correctly on failures
+- [ ] Retry logic functions korrekt on failures
 - [ ] Scheduled runs execute on time
 - [ ] MLflow integration logs experiments
 - [ ] DVC integration versions data
-- [ ] Parallel tasks execute concurrently
-- [ ] Conditional branches work correctly
+- [ ] Parallel tasks execute conderzeit
+- [ ] Conditional branches work korrekt
 - [ ] Monitoring and alerting functional
-- [ ] CI/CD pipeline deploys automatically
+- [ ] CI/CD pipeline deploys automatisch
 - [ ] Pipeline reproducible across environments
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Circular dependencies**: Task A depends on B, B depends on A - carefully design DAG structure, use Airflow/Prefect validators
+- **Circular Abhaengigkeiten**: Task A depends on B, B depends on A - carefully design DAG structure, use Airflow/Prefect validators
 - **Memory leaks**: Long-running tasks accumulate memory - set task timeouts, monitor resource usage, restart workers periodically
-- **XCom size limits**: Passing large data via XCom - use file paths or external storage (S3) instead of direct serialization
-- **Timezone confusion**: Schedule runs at wrong times - always use UTC, explicitly set timezone in schedule
+- **XCom size limits**: Passing large data via XCom - use Dateipfads or external storage (S3) stattdessen of direct serialization
+- **Timezone confusion**: Planen runs at wrong times - always use UTC, explicitly set timezone in schedule
 - **Missing retries**: Tasks fail permanently on transient errors - configure retries with exponential backoff
 - **Tight coupling**: Tasks directly depend on implementation details - use clear interfaces, pass parameters explicitly
 - **No idempotency**: Re-running tasks causes duplicates or errors - design tasks to be idempotent (safe to retry)
-- **Poor error handling**: Failures don't provide useful context - add detailed logging, capture exceptions properly
+- **Poor Fehlerbehandlung**: Failures don't provide useful context - add detailed logging, capture exceptions ordnungsgemaess
 - **Resource contention**: Parallel tasks overwhelm resources - limit concurrency, set resource quotas
-- **Version conflicts**: Different tasks need incompatible dependencies - use Docker containers for task isolation
+- **Version conflicts**: Different tasks need incompatible Abhaengigkeiten - use Docker containers for task isolation
 
-## Related Skills
+## Verwandte Skills
 
-- `track-ml-experiments` - Integrate MLflow tracking into pipeline tasks
+- `track-ml-experiments` - Integrieren MLflow tracking into pipeline tasks
 - `version-ml-data` - Use DVC for data versioning in pipelines
 - `build-feature-store` - Materialize features as pipeline task
-- `deploy-ml-model-serving` - Add deployment as final pipeline stage
-- `deploy-to-kubernetes` - Run orchestrated pipelines on Kubernetes
+- `deploy-ml-model-serving` - Hinzufuegen deployment as final pipeline stage
+- `deploy-to-kubernetes` - Ausfuehren orchestrated pipelines on Kubernetes

@@ -1,14 +1,15 @@
 ---
 name: catalog-collection
 description: >
-  Catalog and classify materials using standard library systems. Covers
-  descriptive cataloging, subject headings, call number assignment using Dewey
-  Decimal and Library of Congress Classification, MARC record basics, shelf
-  organization, and authority control for consistent access points. Use when
-  organizing a personal, institutional, or community library from scratch,
-  assigning call numbers and subject headings to new acquisitions, reclassifying
-  a collection that has outgrown its original system, or establishing authority
-  control for authors, series, or subjects.
+  Materialien mit Standard-Bibliothekssystemen katalogisieren und klassifizieren.
+  Umfasst deskriptive Katalogisierung, Schlagwoerter, Signaturvergabe mit
+  Dewey-Dezimalklassifikation und Library of Congress Classification, MARC-
+  Grundlagen, Regalorganisation und Normdatenkontrolle fuer konsistente
+  Zugangspunkte. Verwenden beim Organisieren einer persoenlichen, institutionellen
+  oder Gemeindebibliothek von Grund auf, beim Zuweisen von Signaturen und
+  Schlagwoertern zu Neuerwerbungen, beim Umklassifizieren einer Sammlung,
+  die ihrem urspruenglichen System entwachsen ist, oder beim Einrichten von
+  Normdatenkontrolle fuer Autoren, Reihen oder Themen.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -27,29 +28,29 @@ metadata:
 
 # Sammlung katalogisieren
 
-Catalog and classify library or archival materials using standard classification systems and descriptive cataloging practices.
+Bibliotheks- oder Archivmaterialien mit Standard-Klassifikationssystemen und deskriptiven Katalogisierungspraktiken katalogisieren und klassifizieren.
 
-## When to Use
+## Wann verwenden
 
-- You are organizing a personal, institutional, or community library from scratch
-- You need to assign call numbers and subject headings to new acquisitions
-- You want to create consistent catalog records for findability
-- You are reclassifying a collection that has outgrown its original system
-- You need to establish authority control for authors, series, or subjects
+- Eine persoenliche, institutionelle oder Gemeindebibliothek von Grund auf organisieren
+- Signaturen und Schlagwoerter neuen Erwerbungen zuweisen
+- Konsistente Katalogdatensaetze fuer Auffindbarkeit erstellen
+- Eine Sammlung umklassifizieren, die ihrem urspruenglichen System entwachsen ist
+- Normdatenkontrolle fuer Autoren, Reihen oder Themen einrichten
 
-## Inputs
+## Eingaben
 
-- **Required**: Materials to catalog (books, serials, media, archival items)
-- **Required**: Chosen classification system (Dewey Decimal or Library of Congress)
-- **Optional**: Existing catalog or inventory to integrate with
-- **Optional**: Subject heading authority (LCSH, Sears, or custom thesaurus)
-- **Optional**: MARC-compatible cataloging software (Koha, Evergreen, LibraryThing)
+- **Erforderlich**: Zu katalogisierende Materialien (Buecher, Zeitschriften, Medien, Archivgut)
+- **Erforderlich**: Gewaehltes Klassifikationssystem (Dewey-Dezimalklassifikation oder Library of Congress)
+- **Optional**: Bestehender Katalog oder Bestandsliste zur Integration
+- **Optional**: Schlagwort-Normdatei (LCSH, Sears oder benutzerdefinierter Thesaurus)
+- **Optional**: MARC-kompatible Katalogisierungssoftware (Koha, Evergreen, LibraryThing)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Choose the Classification System
+### Schritt 1: Das Klassifikationssystem waehlen
 
-Select a system that matches the collection's size, scope, and audience.
+Ein System waehlen, das zu Groesse, Umfang und Zielgruppe der Sammlung passt.
 
 ```
 Classification System Comparison:
@@ -78,13 +79,13 @@ Decision Rule:
 - Mixed or uncertain: Start with DDC; migrate to LCC if collection exceeds 10K
 ```
 
-**Expected:** A classification system chosen that fits the collection's scale and purpose.
+**Erwartet:** Ein Klassifikationssystem gewaehlt, das zu Groesse und Zweck der Sammlung passt.
 
-**On failure:** If neither system fits (e.g., a highly specialized archive), consider a faceted classification or custom scheme, but document the mapping to DDC or LCC for interoperability.
+**Bei Fehler:** Wenn keines der Systeme passt (z.B. ein hoch spezialisiertes Archiv), eine Facettenklassifikation oder ein benutzerdefiniertes Schema erwaegen, aber die Zuordnung zu DDC oder LCC fuer Interoperabilitaet dokumentieren.
 
-### Step 2: Perform Descriptive Cataloging
+### Schritt 2: Deskriptive Katalogisierung durchfuehren
 
-Create a bibliographic description for each item following standard practice.
+Fuer jeden Gegenstand eine bibliographische Beschreibung nach Standardpraxis erstellen.
 
 ```
 Descriptive Cataloging Elements (RDA-aligned):
@@ -121,13 +122,13 @@ Take information from the item itself (title page first,
 then cover, colophon, verso). Do not guess or embellish.
 ```
 
-**Expected:** A consistent bibliographic record for each item with enough detail for unique identification and discovery.
+**Erwartet:** Ein konsistenter bibliographischer Datensatz fuer jeden Gegenstand mit genuegend Detail fuer eindeutige Identifikation und Auffindbarkeit.
 
-**On failure:** If publication information is missing (common in older or self-published works), use square brackets to indicate supplied information: `[ca. 1920]`, `[s.l.]` (no place), `[s.n.]` (no publisher).
+**Bei Fehler:** Wenn Publikationsinformationen fehlen (haeufig bei aelteren oder selbst veroeffentlichten Werken), eckige Klammern verwenden, um ergaenzte Informationen anzuzeigen: `[ca. 1920]`, `[s.l.]` (kein Ort), `[s.n.]` (kein Verlag).
 
-### Step 3: Assign Subject Headings
+### Schritt 3: Schlagwoerter zuweisen
 
-Apply controlled vocabulary terms so users can find materials by topic.
+Kontrollierte Vokabular-Begriffe anwenden, damit Benutzer Materialien nach Thema finden koennen.
 
 ```
 Subject Heading Sources:
@@ -160,13 +161,13 @@ Assignment Rules:
 5. Be consistent: if you use "Automobiles" don't also use "Cars" as a heading
 ```
 
-**Expected:** Each item has 1-3 subject headings from a controlled vocabulary, applied consistently across the collection.
+**Erwartet:** Jeder Gegenstand hat 1-3 Schlagwoerter aus einem kontrollierten Vokabular, konsistent ueber die gesamte Sammlung angewendet.
 
-**On failure:** If no suitable heading exists in your authority, create a local heading and document it in a local authority file. Review periodically for alignment with the main authority.
+**Bei Fehler:** Wenn kein passendes Schlagwort in der Normdatei existiert, ein lokales Schlagwort erstellen und es in einer lokalen Normdatei dokumentieren. Periodisch auf Uebereinstimmung mit der Haupt-Normdatei pruefen.
 
-### Step 4: Assign Call Numbers
+### Schritt 4: Signaturen zuweisen
 
-Build the shelf address using the chosen classification system.
+Die Regaladresse mit dem gewaehlten Klassifikationssystem aufbauen.
 
 ```
 Dewey Decimal Call Number Construction:
@@ -199,13 +200,13 @@ segment by segment. Numbers sort numerically,
 letters sort alphabetically, Cutters sort as decimals.
 ```
 
-**Expected:** Every cataloged item has a unique call number that determines its shelf position.
+**Erwartet:** Jeder katalogisierte Gegenstand hat eine eindeutige Signatur, die seine Regalposition bestimmt.
 
-**On failure:** If two items generate the same call number, add a work mark (first letter of title, excluding articles) or a copy number to disambiguate.
+**Bei Fehler:** Wenn zwei Gegenstaende die gleiche Signatur erzeugen, eine Werkmarkierung (erster Buchstabe des Titels, ohne Artikel) oder eine Exemplarnummer zur Unterscheidung hinzufuegen.
 
-### Step 5: Create or Update Catalog Records
+### Schritt 5: Katalogdatensaetze erstellen oder aktualisieren
 
-Enter the cataloged information into your catalog system.
+Die katalogisierten Informationen in das Katalogsystem eingeben.
 
 ```
 Minimum Viable Catalog Record:
@@ -238,13 +239,13 @@ shared database before creating original records. Someone has
 likely already cataloged the same edition.
 ```
 
-**Expected:** Each item has a catalog record in the system with all required fields populated. Records are searchable by author, title, subject, and call number.
+**Erwartet:** Jeder Gegenstand hat einen Katalogdatensatz im System mit allen erforderlichen Feldern. Datensaetze sind nach Autor, Titel, Thema und Signatur durchsuchbar.
 
-**On failure:** If cataloging software is unavailable, a well-structured spreadsheet (with consistent column headings matching the fields above) serves as a functional catalog. Migrate to proper software when available.
+**Bei Fehler:** Wenn keine Katalogisierungssoftware verfuegbar ist, dient eine gut strukturierte Tabellenkalkulation (mit konsistenten Spaltenkoepfen, die den obigen Feldern entsprechen) als funktionaler Katalog. Auf richtige Software migrieren, wenn verfuegbar.
 
-### Step 6: Organize the Physical Shelf
+### Schritt 6: Das physische Regal organisieren
 
-Arrange materials according to their call numbers.
+Materialien gemaess ihren Signaturen anordnen.
 
 ```
 Shelf Organization Principles:
@@ -267,30 +268,30 @@ Shelf Reading (periodic verification):
 - Note damaged items for repair or replacement
 ```
 
-**Expected:** Materials are physically arranged in call number order with clear spine labels and growth space.
+**Erwartet:** Materialien sind physisch in Signaturenreihenfolge mit klaren Rueckenschildern und Wachstumsplatz angeordnet.
 
-**On failure:** If space is insufficient, prioritize high-circulation items on accessible shelves and move low-use items to compact storage, noting the location change in catalog records.
+**Bei Fehler:** Wenn der Platz nicht ausreicht, vielgenutzte Gegenstaende auf zugaenglichen Regalen priorisieren und wenig genutzte Gegenstaende in Kompaktspeicher verlegen, wobei die Standortaenderung in Katalogdatensaetzen notiert wird.
 
-## Validation
+## Validierung
 
-- [ ] Classification system chosen and documented
-- [ ] Descriptive cataloging completed for all items with title, author, and publication data
-- [ ] Subject headings assigned from a controlled vocabulary (1-3 per item)
-- [ ] Call numbers assigned and unique for each item
-- [ ] Catalog records created in system or spreadsheet
-- [ ] Physical materials shelved in call number order with spine labels
-- [ ] Authority control established for consistent name and subject forms
+- [ ] Klassifikationssystem gewaehlt und dokumentiert
+- [ ] Deskriptive Katalogisierung fuer alle Gegenstaende mit Titel, Autor und Publikationsdaten abgeschlossen
+- [ ] Schlagwoerter aus einem kontrollierten Vokabular zugewiesen (1-3 pro Gegenstand)
+- [ ] Signaturen zugewiesen und eindeutig fuer jeden Gegenstand
+- [ ] Katalogdatensaetze im System oder in Tabellenkalkulation erstellt
+- [ ] Physische Materialien in Signaturenreihenfolge mit Rueckenschildern aufgestellt
+- [ ] Normdatenkontrolle fuer konsistente Namens- und Themenformen eingerichtet
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Inconsistent headings**: Using both "World War, 1939-1945" and "WWII" defeats the purpose of controlled vocabulary. Pick one authority and stick to it
-- **Over-classification**: Assigning a 15-digit DDC number to a small personal library adds complexity without benefit. Match granularity to collection size
-- **Ignoring copy cataloging**: Creating original records when copy records exist wastes time. Always check shared databases first
-- **Spine label neglect**: A cataloged book without a spine label will be misshelved. Label immediately after cataloging
-- **No growth space**: Packing shelves to 100% capacity means every new acquisition triggers a chain of shifting. Leave room
+- **Inkonsistente Schlagwoerter**: Sowohl "Weltkrieg, 1939-1945" als auch "2. WK" zu verwenden, unterlaueft den Zweck des kontrollierten Vokabulars. Eine Normdatei waehlen und dabei bleiben
+- **Ueberklassifikation**: Einer kleinen persoenlichen Bibliothek eine 15-stellige DDC-Nummer zuzuweisen, fuegt Komplexitaet ohne Nutzen hinzu. Granularitaet an Sammlungsgroesse anpassen
+- **Fremdkatalogisierung ignorieren**: Originaldatensaetze erstellen, wenn Fremddatensaetze existieren, verschwendet Zeit. Immer zuerst gemeinsame Datenbanken pruefen
+- **Rueckenschilder vernachlaessigen**: Ein katalogisiertes Buch ohne Rueckenschild wird falsch eingestellt. Sofort nach der Katalogisierung beschriften
+- **Kein Wachstumsplatz**: Regale zu 100% zu fuellen bedeutet, dass jede Neuerwerbung eine Kette von Verschiebungen ausloest. Platz lassen
 
-## Related Skills
+## Verwandte Skills
 
-- `preserve-materials` — Conservation of cataloged materials to maintain their condition
-- `curate-collection` — Collection development decisions that determine what gets cataloged
-- `manage-memory` — Organizing persistent knowledge stores (digital parallel to physical cataloging)
+- `preserve-materials` — Erhaltung katalogisierter Materialien zur Zustandsbewahrung
+- `curate-collection` — Bestandsentwicklungsentscheidungen, die bestimmen, was katalogisiert wird
+- `manage-memory` — Organisation persistenter Wissensspeicher (digitale Parallele zur physischen Katalogisierung)

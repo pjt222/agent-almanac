@@ -3,11 +3,11 @@ name: assess-context
 description: >
   AI context assessment — evaluating problem malleability, mapping structural
   rigidity versus flexibility, analyzing transformation pressure, and estimating
-  capacity to adapt. Use when a complex task feels stuck and it is unclear
-  whether to push through or pivot, before a significant approach change to
+  capacity to adapt. Verwenden wenn a complex task feels stuck and it is unclear
+  whether to push durch or pivot, vor a significant approach change to
   assess whether the current reasoning structure can support it, when accumulated
-  workarounds suggest the underlying approach may be wrong, or as a periodic
-  structural health check during extended multi-step tasks.
+  workarounds suggest the underlying approach kann wrong, or as a periodic
+  structural health check waehrend extended multi-step tasks.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,29 +26,29 @@ metadata:
 
 # Kontext bewerten
 
-Evaluate the current reasoning context for malleability — identifying which elements are rigid (cannot change), which are flexible (can change cheaply), where transformation pressure is building, and whether the current approach has the capacity to adapt if needed.
+Bewerten the current reasoning context for malleability — identifying which elements are rigid (cannot change), which are flexible (can change cheaply), where transformation pressure is building, and whether the current approach has the capacity to adapt if needed.
 
-## When to Use
+## Wann verwenden
 
-- When a complex task feels stuck and it is unclear whether to push through or pivot
+- When a complex task feels stuck and it is unclear whether to push durch or pivot
 - Before a significant approach change to assess whether the current reasoning structure can support it
-- When accumulated workarounds suggest the underlying approach may be wrong
+- When accumulated workarounds suggest the underlying approach kann wrong
 - After `heal` or `awareness` has identified drift but the appropriate response (continue, adjust, or rebuild) is unclear
-- When context has grown long and it is unclear how much can be preserved versus how much needs to be rebuilt
-- Periodic structural health check during extended multi-step tasks
+- When context has grown long and it is unclear how much kann preserved versus how much needs to be rebuilt
+- Periodic structural health check waehrend extended multi-step tasks
 
-## Inputs
+## Eingaben
 
-- **Required**: Current task context and reasoning state (available implicitly)
+- **Erforderlich**: Current task context and reasoning state (available implicitly)
 - **Optional**: Specific concern triggering the assessment (e.g., "I keep adding workarounds")
-- **Optional**: Proposed pivot direction (what might the approach need to become?)
+- **Optional**: Proposed pivot direction (what might der Ansatz need to become?)
 - **Optional**: Previous assessment results for trend analysis
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Inventory Reasoning Form
+### Schritt 1: Inventory Reasoning Form
 
-Catalog the structural components of the current reasoning approach without judgment.
+Catalog the structural components of the current reasoning approach ohne judgment.
 
 ```
 Structural Inventory Table:
@@ -81,19 +81,19 @@ Structural Inventory Table:
 ```
 
 Classify each component:
-- **Skeleton**: hard to change; changing it cascades through everything downstream
-- **Flesh**: easy to change; can be swapped without affecting other components
+- **Skeleton**: hard to change; changing it cascades durch everything downstream
+- **Flesh**: easy to change; kann swapped ohne affecting other components
 - **Scar tissue**: workarounds that indicate structural problems; often flesh pretending to be skeleton
 
-Map dependencies: which components depend on which? A skeleton component with many dependents is load-bearing. A flesh component with no dependents is disposable.
+Abbilden Abhaengigkeiten: which components depend on which? A skeleton component with many dependents is load-bearing. A flesh component with no dependents is disposable.
 
-**Expected:** A complete inventory showing what the current approach is built from, what is rigid, what is flexible, and where stress is visible (workarounds). The inventory should reveal structure that was not obvious before cataloging.
+**Erwartet:** A complete inventory showing what the current approach is built from, what is rigid, what is flexible, and where stress is visible (workarounds). The inventory should reveal structure that was not obvious vor cataloging.
 
-**On failure:** If the inventory is hard to construct (the approach is too tangled to decompose), that is itself a finding — high structural opacity indicates high rigidity. Start with what is visible and note the opacity zones.
+**Bei Fehler:** If the inventory is hard to construct (der Ansatz is too tangled to decompose), that is itself a finding — high structural opacity indicates high rigidity. Starten with what is visible and note the opacity zones.
 
-### Step 2: Map Transformation Pressure
+### Schritt 2: Abbilden Transformation Pressure
 
-Identify forces pushing the current approach toward change and forces resisting it.
+Identifizieren forces pushing the current approach toward change and forces resisting it.
 
 ```
 Pressure Map:
@@ -137,15 +137,15 @@ Pressure Map:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Estimate the balance: is transformation pressure growing, stable, or declining?
+Schaetzen the balance: is transformation pressure growing, stable, or declining?
 
-**Expected:** A clear picture of forces acting on the current approach. If pressure significantly exceeds resistance, a pivot is overdue. If resistance significantly exceeds pressure, the current approach should continue.
+**Erwartet:** A clear picture of forces acting on the current approach. If pressure erheblich exceeds resistance, a pivot is overdue. If resistance erheblich exceeds pressure, the current approach should continue.
 
-**On failure:** If the pressure map is ambiguous (neither strong pressure nor strong resistance), project forward: will the pressures intensify? Will the workarounds compound? An approach that is "good enough now but degrading" is under more pressure than it appears.
+**Bei Fehler:** If the pressure map is ambiguous (neither strong pressure nor strong resistance), project forward: will the pressures intensify? Will the workarounds compound? An approach that is "good enough now but degrading" is under more pressure than it appears.
 
-### Step 3: Assess Reasoning Rigidity
+### Schritt 3: Bewerten Reasoning Rigidity
 
-Determine how flexible the current approach is — can it adapt, or will it break?
+Bestimmen how flexible the current approach is — can it adapt, or will it break?
 
 ```
 Rigidity Score:
@@ -177,28 +177,28 @@ Rigidity Score:
 └──────────────────────────┴─────┴──────────┴──────┴──────────────┘
 ```
 
-**Expected:** A rigidity score with specific evidence for each dimension. The score reveals whether the approach can absorb change or will need to be rebuilt.
+**Erwartet:** A rigidity score with specific evidence fuer jede dimension. The score reveals whether der Ansatz can absorb change or will need to be rebuilt.
 
-**On failure:** If all dimensions score low (claiming high flexibility), probe the "god module" dimension more carefully: is there one key conclusion or assumption that everything else depends on? If so, the flexibility is illusory — one wrong assumption collapses the whole structure.
+**Bei Fehler:** If all dimensions score low (claiming high flexibility), probe the "god module" dimension more carefully: is there one key conclusion or assumption that everything else depends on? If so, the flexibility is illusory — one wrong assumption collapses the whole structure.
 
-### Step 4: Estimate Change Capacity
+### Schritt 4: Schaetzen Change Capacity
 
-Assess the practical ability to pivot or adapt the current approach.
+Bewerten the practical ability to pivot or adapt the current approach.
 
 1. **Context window remaining**: how much room is left for new reasoning? Extensive remaining context = high capacity. Approaching limits = low capacity
-2. **Information preservation on pivot**: if the approach changes, what can be carried forward? High-quality sub-task outputs survive pivots; reasoning chains tied to the old approach do not
-3. **Recovery tools available**: can MEMORY.md capture key findings before pivoting? Can the user provide additional context? Are relevant files still accessible?
-4. **User patience factor**: has the user indicated urgency? Multiple corrections suggest declining patience. An explicit "take your time" suggests high patience
+2. **Information preservation on pivot**: if der Ansatz changes, what kann carried forward? High-quality sub-task outputs survive pivots; reasoning chains tied to the old approach nicht
+3. **Recovery tools available**: can MEMORY.md capture key findings vor pivoting? Can der Benutzer provide additional context? Are relevant files still accessible?
+4. **User patience factor**: has der Benutzer indicated urgency? Multiple corrections suggest declining patience. An explicit "take your time" suggests high patience
 
-Change capacity is not just theoretical — it includes the practical constraints of the current session.
+Change capacity ist nicht just theoretical — it includes the practical constraints of the current session.
 
-**Expected:** An honest assessment of the ability to change course, accounting for both technical and relational factors.
+**Erwartet:** An honest assessment of the ability to change course, accounting for both technical and relational factors.
 
-**On failure:** If change capacity is low (limited context, critical information at risk of loss), the first priority before any pivot is preservation: summarize key findings, note critical facts, update MEMORY.md if appropriate. Pivoting without preservation is worse than not pivoting.
+**Bei Fehler:** If change capacity is low (limited context, critical information at risk of loss), the first priority vor any pivot is preservation: summarize key findings, note critical facts, update MEMORY.md if appropriate. Pivoting ohne preservation is worse than not pivoting.
 
-### Step 5: Classify Transformation Readiness
+### Schritt 5: Classify Transformation Readiness
 
-Combine the assessments into a readiness classification.
+Kombinieren the assessments into a readiness classification.
 
 ```
 Transformation Readiness Matrix:
@@ -225,35 +225,35 @@ Transformation Readiness Matrix:
 └─────────────────┴────────────────────────┴────────────────────────┘
 ```
 
-Document the classification with:
+Dokumentieren the classification with:
 - Classification label (READY / PREPARE / INVEST / CRITICAL / DEFER)
 - Key findings from each dimension
 - Recommended next action
 - What signal would change the classification
 
-**Expected:** A clear, justified classification with a specific recommended action. The classification should feel like a conclusion, not a guess.
+**Erwartet:** A clear, justified classification with a specific recommended action. The classification should feel like a conclusion, not a guess.
 
-**On failure:** If the classification is ambiguous, default to PREPARE — reducing rigidity (clarifying assumptions, removing workarounds) is valuable regardless of whether a full pivot happens. Preparation improves the approach whether it continues or changes.
+**Bei Fehler:** If the classification is ambiguous, default to PREPARE — reducing rigidity (clarifying assumptions, removing workarounds) is valuable unabhaengig von whether a full pivot happens. Preparation improves der Ansatz whether it continues or changes.
 
-## Validation
+## Validierung
 
 - [ ] Structural inventory was completed with skeleton/flesh/scar-tissue classification
 - [ ] Transformation pressures were mapped (external, internal, resistance)
 - [ ] Rigidity was scored across multiple dimensions with specific evidence
-- [ ] Change capacity was assessed including practical session constraints
+- [ ] Change capacity was assessed einschliesslich practical session constraints
 - [ ] Readiness classification was determined with justified reasoning
-- [ ] A concrete next action was identified based on the classification
+- [ ] A concrete next action was identified basierend auf the classification
 - [ ] A reassessment trigger was defined
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
 - **Assessing only the technical approach**: Context readiness includes user relationship factors. An approach that is technically flexible but has generated user frustration is more rigid than it appears
-- **Sunk cost as rigidity**: Prior effort is not structural rigidity. The work already done may be valuable regardless of whether the approach changes. Distinguish between "I can't change" (rigidity) and "I don't want to change" (sunk cost)
-- **Assessment as avoidance**: If assess-context is invoked to avoid making a difficult decision, the assessment will be inconclusive by design. If the pressure is clear, act on it
-- **Ignoring workarounds as signals**: Workarounds are scar tissue — evidence that the structure was stressed and patched rather than properly adapted. A high workaround count means the next stress is more likely to break through
-- **Confusing rigidity with commitment**: A committed approach (deliberately chosen, evidence-based) is different from a rigid one (locked in by dependencies and assumptions). Commitment can be changed by decision; rigidity can only be changed by restructuring
+- **Sunk cost as rigidity**: Prior effort ist nicht structural rigidity. The work already done kann valuable unabhaengig von whether der Ansatz changes. Distinguish zwischen "I can't change" (rigidity) and "I don't want to change" (sunk cost)
+- **Assessment as avoidance**: If assess-context is invoked to avoid making a difficult decision, the assessment wird inconclusive by design. If the pressure is clear, act on it
+- **Ignoring workarounds as signals**: Workarounds are scar tissue — evidence that the structure was stressed and patched anstatt ordnungsgemaess adapted. A high workaround count means the next stress is more likely to break durch
+- **Confusing rigidity with commitment**: A committed approach (deliberately chosen, evidence-based) is different from a rigid one (locked in by Abhaengigkeiten and assumptions). Commitment kann changed by decision; rigidity can only be changed by restructuring
 
-## Related Skills
+## Verwandte Skills
 
 - `assess-form` — the multi-system assessment model that this skill adapts to AI reasoning context
 - `adapt-architecture` — if classified READY, use architectural adaptation principles for the pivot

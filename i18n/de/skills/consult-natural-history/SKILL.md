@@ -1,14 +1,15 @@
 ---
 name: consult-natural-history
 description: >
-  Reference Hildegard von Bingen's Physica natural history knowledge. Covers
-  classification of plants, stones, animals, fish, birds, elements, and trees
-  with their medicinal, symbolic, and practical properties. Enables cross-
-  referencing between categories and application guidance. Use when exploring
-  a specific plant, stone, or animal from Hildegard's perspective, researching
-  medieval natural history and cosmology, cross-referencing properties across
-  categories, or integrating Physica knowledge into health, spiritual, or
-  creative practice.
+  Hildegard von Bingens Naturgeschichtswissen aus der Physica nachschlagen.
+  Umfasst Klassifikation von Pflanzen, Steinen, Tieren, Fischen, Voegeln,
+  Elementen und Baeumen mit ihren medizinischen, symbolischen und praktischen
+  Eigenschaften. Ermoeglicht Querverweise zwischen Kategorien und
+  Anwendungsanleitung. Verwenden beim Erkunden einer bestimmten Pflanze,
+  eines Steins oder Tieres aus Hildegards Perspektive, beim Erforschen
+  mittelalterlicher Naturgeschichte und Kosmologie, beim Querverweisen von
+  Eigenschaften ueber Kategorien hinweg oder beim Integrieren von Physica-
+  Wissen in Gesundheits-, spirituelle oder kreative Praxis.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,30 +28,30 @@ metadata:
 
 # Naturgeschichte konsultieren
 
-Reference Hildegard von Bingen's *Physica* for natural history knowledge — properties of plants, stones, animals, fish, birds, elements, and trees with their medicinal, symbolic, and practical applications.
+Hildegard von Bingens *Physica* fuer Naturgeschichtswissen nachschlagen — Eigenschaften von Pflanzen, Steinen, Tieren, Fischen, Voegeln, Elementen und Baeumen mit ihren medizinischen, symbolischen und praktischen Anwendungen.
 
-## When to Use
+## Wann verwenden
 
-- You need to understand a specific plant, stone, or animal from Hildegard's perspective
-- You want to explore symbolic or medicinal properties of natural objects in *Physica*
-- You are researching medieval natural history and cosmology
-- You need to cross-reference properties across categories (e.g., a plant and a stone with similar temperament)
-- You want to integrate *Physica*'s knowledge into health, spiritual, or creative practice
-- You are studying the relationship between nature and theology in Hildegard's thought
+- Eine bestimmte Pflanze, einen Stein oder ein Tier aus Hildegards Perspektive verstehen
+- Symbolische oder medizinische Eigenschaften natuerlicher Objekte in der *Physica* erkunden
+- Mittelalterliche Naturgeschichte und Kosmologie erforschen
+- Eigenschaften ueber Kategorien hinweg querverweisen (z.B. eine Pflanze und einen Stein mit aehnlichem Temperament)
+- *Physica*-Wissen in Gesundheits-, spirituelle oder kreative Praxis integrieren
+- Die Beziehung zwischen Natur und Theologie in Hildegards Denken studieren
 
-## Inputs
+## Eingaben
 
-- **Required**: Category to consult (plants, stones, animals, fish, birds, elements, trees, reptiles, metals)
-- **Required**: Specific item or property inquiry (e.g., "emerald", "fennel", "properties of fire element")
-- **Optional**: Application context (medicinal, symbolic, liturgical, practical)
-- **Optional**: Related temperament or ailment (to guide property interpretation)
-- **Optional**: Cross-reference request (e.g., "plants and stones for cold temperament")
+- **Erforderlich**: Zu konsultierende Kategorie (Pflanzen, Steine, Tiere, Fische, Voegel, Elemente, Baeume, Reptilien, Metalle)
+- **Erforderlich**: Spezifische Anfrage zu Gegenstand oder Eigenschaft (z.B. "Smaragd", "Fenchel", "Eigenschaften des Feuerelements")
+- **Optional**: Anwendungskontext (medizinisch, symbolisch, liturgisch, praktisch)
+- **Optional**: Zugehoeriges Temperament oder Leiden (zur Anleitung der Eigenschaftsinterpretation)
+- **Optional**: Querverweisanfrage (z.B. "Pflanzen und Steine fuer kaltes Temperament")
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Identify the Category in Physica
+### Schritt 1: Die Kategorie in der Physica bestimmen
 
-Determine which of the nine books of *Physica* contains the requested knowledge.
+Bestimmen, welches der neun Buecher der *Physica* das angefragte Wissen enthaelt.
 
 ```
 Physica — Nine Books of Natural History:
@@ -100,13 +101,13 @@ Lookup Process:
 4. Note symbolic or theological associations if relevant
 ```
 
-**Expected:** Correct book/category identified for the inquiry (e.g., "emerald" → Book IV Stones; "fennel" → Book I Plants).
+**Erwartet:** Korrektes Buch/Kategorie fuer die Anfrage identifiziert (z.B. "Smaragd" → Buch IV Steine; "Fenchel" → Buch I Pflanzen).
 
-**On failure:** If uncertain which category, search multiple. Example: "willow" could be Book I (plant) or Book III (tree) — Hildegard lists it in Book III as a tree with bark and wood properties.
+**Bei Fehler:** Bei Unsicherheit ueber die Kategorie mehrere durchsuchen. Beispiel: "Weide" koennte Buch I (Pflanze) oder Buch III (Baum) sein — Hildegard fuehrt sie in Buch III als Baum mit Rinden- und Holzeigenschaften auf.
 
-### Step 2: Extract Properties and Applications
+### Schritt 2: Eigenschaften und Anwendungen extrahieren
 
-Retrieve the specific properties Hildegard attributes to the item.
+Die spezifischen Eigenschaften abrufen, die Hildegard dem Gegenstand zuschreibt.
 
 ```
 Property Categories in Physica:
@@ -167,13 +168,13 @@ OAK TREE (Book III, Chapter 5):
 - Medicinal: Oak bark decoction for diarrhea, wounds (external)
 ```
 
-**Expected:** Properties extracted with temperature, moisture, medicinal use, and symbolic associations clearly noted.
+**Erwartet:** Eigenschaften extrahiert mit klar notierten Temperatur-, Feuchtigkeits-, Medizin- und symbolischen Zuordnungen.
 
-**On failure:** If *Physica* entry is brief or unclear, supplement with known temperamental logic. Example: If Hildegard says only "it is warm," infer that it treats cold conditions and avoid in hot conditions.
+**Bei Fehler:** Wenn der *Physica*-Eintrag kurz oder unklar ist, mit bekannter Temperamentlogik ergaenzen. Beispiel: Wenn Hildegard nur sagt "es ist warm", daraus ableiten, dass es kalte Zustaende behandelt und bei heissen Zustaenden zu meiden ist.
 
-### Step 3: Cross-Reference Between Categories (Optional)
+### Schritt 3: Zwischen Kategorien querverweisen (Optional)
 
-Identify related items across categories that share properties or work synergistically.
+Verwandte Gegenstaende ueber Kategorien hinweg identifizieren, die Eigenschaften teilen oder synergetisch wirken.
 
 ```
 Cross-Referencing Patterns:
@@ -218,13 +219,13 @@ Strength/Endurance:
 - METALS: Iron (Book IX) — fortitude, weapon-making
 ```
 
-**Expected:** Related items identified across 2-3 categories that share temperament, medicinal use, or symbolic meaning. Synergistic use suggested where appropriate.
+**Erwartet:** Verwandte Gegenstaende ueber 2-3 Kategorien hinweg identifiziert, die Temperament, medizinische Verwendung oder symbolische Bedeutung teilen. Synergetische Nutzung wo angemessen vorgeschlagen.
 
-**On failure:** If cross-references are unclear, focus on single-category lookup. Cross-referencing is enrichment, not essential for basic consultation.
+**Bei Fehler:** Wenn Querverweise unklar sind, auf Einzelkategorie-Nachschlagen konzentrieren. Querverweise sind Bereicherung, nicht wesentlich fuer die Grundkonsultation.
 
-### Step 4: Application Guidance
+### Schritt 4: Anwendungsanleitung
 
-Provide practical or symbolic guidance for using the knowledge.
+Praktische oder symbolische Anleitung zur Nutzung des Wissens bereitstellen.
 
 ```
 Application Types:
@@ -273,13 +274,13 @@ stones (Book IV). Compare to *Scivias* Book I for theological integration of
 creation and redemption."
 ```
 
-**Expected:** Clear, actionable guidance for using *Physica* knowledge in context (medicinal, spiritual, seasonal, scholarly). User knows what to do with the information.
+**Erwartet:** Klare, umsetzbare Anleitung zur Nutzung des *Physica*-Wissens im Kontext (medizinisch, spirituell, saisonal, wissenschaftlich). Der Benutzer weiss, was mit den Informationen zu tun ist.
 
-**On failure:** If application is unclear, provide the raw *Physica* entry text and let user determine application. Hildegard's entries are often self-explanatory.
+**Bei Fehler:** Wenn die Anwendung unklar ist, den rohen *Physica*-Eintragstext bereitstellen und den Benutzer die Anwendung bestimmen lassen. Hildegards Eintraege sind oft selbsterklaerend.
 
-### Step 5: Contextualize within Hildegard's Holistic System
+### Schritt 5: In Hildegards ganzheitliches System einordnen
 
-Integrate *Physica* knowledge with broader Hildegardian health and spiritual practice.
+*Physica*-Wissen mit der breiteren hildegardischen Gesundheits- und Spiritualpraxis integrieren.
 
 ```
 Integration with Other Hildegardian Practices:
@@ -324,35 +325,35 @@ Hildegard's medicine is NOT isolated remedies but integrated practice:
 Body (herbs, diet), Soul (prayer, music), Nature (seasons, viriditas)
 ```
 
-**Expected:** User understands *Physica* as one component of Hildegard's holistic system. Cross-references to temperament, viriditas, and liturgical context provided where relevant.
+**Erwartet:** Der Benutzer versteht die *Physica* als eine Komponente von Hildegards ganzheitlichem System. Querverweise zu Temperament, Viriditas und liturgischem Kontext wo relevant bereitgestellt.
 
-**On failure:** If integration feels complex, focus on immediate practical use (Step 4) and defer holistic integration for advanced study.
+**Bei Fehler:** Wenn die Integration komplex erscheint, auf die unmittelbare praktische Nutzung (Schritt 4) konzentrieren und die ganzheitliche Integration fuer fortgeschrittenes Studium zurueckstellen.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Correct *Physica* book/category identified (I–IX)
-- [ ] Properties extracted: temperature, moisture, medicinal use, symbolic meaning
-- [ ] Contraindications or cautions noted (if any)
-- [ ] Application guidance provided (medicinal, spiritual, seasonal, or scholarly)
-- [ ] Cross-references noted (if requested) across 2+ categories
-- [ ] Integration with broader Hildegardian system contextualized
-- [ ] User informed this is medieval natural history, not modern scientific taxonomy
+- [ ] Korrektes *Physica*-Buch/Kategorie identifiziert (I–IX)
+- [ ] Eigenschaften extrahiert: Temperatur, Feuchtigkeit, medizinische Verwendung, symbolische Bedeutung
+- [ ] Kontraindikationen oder Vorsichtsmassnahmen vermerkt (falls vorhanden)
+- [ ] Anwendungsanleitung bereitgestellt (medizinisch, spirituell, saisonal oder wissenschaftlich)
+- [ ] Querverweise notiert (falls angefragt) ueber 2+ Kategorien
+- [ ] Integration mit dem breiteren hildegardischen System kontextualisiert
+- [ ] Benutzer informiert, dass es sich um mittelalterliche Naturgeschichte handelt, nicht um moderne wissenschaftliche Taxonomie
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Modern Scientific Overlay**: *Physica* is pre-scientific. Don't expect botanical accuracy by Linnaean standards
-2. **Literal Ingredient Substitution**: Medieval plants may differ from modern cultivars. Research carefully before using
-3. **Ignoring Temperament**: Hildegard's properties are temperamental (hot/cold, moist/dry), not chemical. Context matters
-4. **Isolated Remedy Focus**: *Physica* is not a standalone herbal. It integrates with *Causae et Curae*, viriditas, and spirituality
-5. **Animal Cruelty**: Some *Physica* remedies use animal parts. Adapt ethically or omit
-6. **Stone Ingestion**: Some remedies involve powdering stones in wine. Modern safety: Do NOT ingest stones/minerals
-7. **Symbolic Dismissal**: *Physica*'s symbolic meanings are integral to Hildegard's theology. Don't separate "practical" from "spiritual"
+1. **Moderne wissenschaftliche Ueberlagerung**: Die *Physica* ist vorwissenschaftlich. Keine botanische Genauigkeit nach Linneschen Standards erwarten
+2. **Woertliche Zutatensubstitution**: Mittelalterliche Pflanzen koennen sich von modernen Sorten unterscheiden. Vor der Verwendung sorgfaeltig recherchieren
+3. **Temperament ignorieren**: Hildegards Eigenschaften sind temperamentbezogen (heiss/kalt, feucht/trocken), nicht chemisch. Kontext ist wichtig
+4. **Isolierter Heilmittelfokus**: Die *Physica* ist kein eigenstaendiges Kraeuterbuch. Sie integriert sich mit *Causae et Curae*, Viriditas und Spiritualitaet
+5. **Tierquaelerei**: Einige *Physica*-Heilmittel verwenden tierische Teile. Ethisch anpassen oder weglassen
+6. **Steineinnahme**: Einige Heilmittel beinhalten das Pulverisieren von Steinen in Wein. Moderne Sicherheit: Steine/Mineralien NICHT einnehmen
+7. **Symbolische Abwertung**: Die symbolischen Bedeutungen der *Physica* sind integraler Bestandteil von Hildegards Theologie. "Praktisches" nicht vom "Spirituellen" trennen
 
-## Related Skills
+## Verwandte Skills
 
-- `formulate-herbal-remedy` — Uses *Physica* Book I (Plants) as primary source
-- `assess-holistic-health` — *Physica* properties align with temperament system in *Causae et Curae*
-- `practice-viriditas` — *Physica* as catalog of viriditas expressions in creation
-- `compose-sacred-music` — Many chants reference *Physica* natural imagery
-- `heal` (esoteric domain) — *Physica* remedies as part of holistic healing modalities
-- `prepare-soil` (gardening domain) — Growing *Physica* medicinal plants
+- `formulate-herbal-remedy` — Verwendet *Physica* Buch I (Pflanzen) als Primaerquelle
+- `assess-holistic-health` — *Physica*-Eigenschaften stimmen mit dem Temperamentsystem in *Causae et Curae* ueberein
+- `practice-viriditas` — *Physica* als Katalog von Viriditas-Ausdruecken in der Schoepfung
+- `compose-sacred-music` — Viele Gesaenge referenzieren *Physica*-Naturbilder
+- `heal` (Domaene: esoteric) — *Physica*-Heilmittel als Teil ganzheitlicher Heilmodalitaeten
+- `prepare-soil` (Domaene: gardening) — *Physica*-Heilpflanzen anbauen

@@ -1,13 +1,12 @@
 ---
 name: compose-sacred-music
 description: >
-  Compose or analyze sacred music in Hildegard von Bingen's distinctive modal
-  style. Covers modal selection, melodic contour (wide-range melodies),
-  text-setting (syllabic and melismatic), neumatic notation, and liturgical
-  context for antiphons, sequences, and responsories. Use when composing a
-  new piece in Hildegardian style, analyzing an existing chant for structure
-  and mode, researching medieval modal music, preparing to perform or teach
-  Hildegard's music, or setting Latin sacred texts.
+  ヒルデガルト・フォン・ビンゲンの独特な旋法スタイルで聖歌を作曲または分析する。
+  旋法選択、旋律輪郭（広音域の旋律）、テキスト・セッティング（シラビックと
+  メリスマティック）、ネウマ記譜法、アンティフォナ・セクエンツィア・レスポンソリウム
+  の典礼的文脈をカバーする。ヒルデガルト様式で新作を作曲する時、既存の聖歌の構造と
+  旋法を分析する時、中世の旋法音楽を研究する時、ヒルデガルトの音楽の演奏や教育を
+  準備する時、ラテン語の聖なるテキストに旋律を付ける時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,32 +25,32 @@ metadata:
 
 # 聖歌の作曲
 
-Compose or analyze sacred music in Hildegard von Bingen's distinctive style, following her *Symphonia harmoniae caelestium revelationum* and modal composition principles.
+ヒルデガルト・フォン・ビンゲンの独特なスタイルで聖歌を作曲または分析する。彼女の *Symphonia harmoniae caelestium revelationum*（天上の啓示の調和）と旋法作曲の原則に従う。
 
 ## 使用タイミング
 
-- You want to compose a new piece of sacred music in Hildegardian style
-- You need to analyze an existing Hildegard chant for structure, mode, and text-setting
-- You are researching medieval modal music and neumatic notation
-- You want to understand the liturgical context of Hildegard's compositions
-- You are preparing to perform or teach Hildegard's music
-- You need guidance on text-setting for Latin sacred texts
+- ヒルデガルト様式で新しい聖歌を作曲したい時
+- 既存のヒルデガルト聖歌の構造、旋法、テキスト・セッティングを分析する必要がある時
+- 中世の旋法音楽とネウマ記譜法を研究している時
+- ヒルデガルトの楽曲の典礼的文脈を理解したい時
+- ヒルデガルトの音楽の演奏や教育を準備している時
+- ラテン語の聖なるテキストへの旋律付けについてのガイダンスが必要な時
 
 ## 入力
 
-- **必須**: Purpose (compose new piece OR analyze existing piece)
-- **Required for composition**: Sacred text (Latin preferred, English acceptable for study)
-- **Required for composition**: Liturgical context (antiphon, sequence, responsory, hymn)
-- **Required for analysis**: Title of Hildegard piece to analyze (e.g., "O vis aeternitatis")
-- **任意**: Feast day or liturgical season (influences modal choice)
-- **任意**: Intended performer experience level (simple syllabic vs. virtuosic melismatic)
-- **任意**: Mode preference (if composing)
+- **必須**: 目的（新作の作曲 または 既存作品の分析）
+- **作曲に必須**: 聖なるテキスト（ラテン語が望ましい、研究用には英語も可）
+- **作曲に必須**: 典礼的文脈（アンティフォナ、セクエンツィア、レスポンソリウム、賛歌）
+- **分析に必須**: 分析するヒルデガルト作品のタイトル（例："O vis aeternitatis"）
+- **任意**: 祝日または典礼暦の季節（旋法選択に影響）
+- **任意**: 演奏者の経験レベル（簡単なシラビック vs 技巧的なメリスマティック）
+- **任意**: 旋法の希望（作曲の場合）
 
 ## 手順
 
-### ステップ1: Modal Selection (if composing) or Identification (if analyzing)
+### ステップ1: 旋法の選択（作曲時）または同定（分析時）
 
-Choose or identify the liturgical mode that governs the melodic structure.
+旋律構造を支配する典礼旋法を選択または同定する。
 
 ```
 The Eight Church Modes (Medieval System):
@@ -101,13 +100,13 @@ Modal Selection by Liturgical Context:
 - General saints → Mode 1 or Mode 8
 ```
 
-**期待結果:** Mode identified (if analyzing) or selected (if composing) with final note and characteristic range established.
+**期待結果:** 旋法が同定（分析時）または選択（作曲時）され、終止音と特徴的な音域が確立される。
 
-**失敗時:** If uncertain, default to Mode 1 (Dorian authentic, final on D). This is Hildegard's most frequent choice and offers wide melodic range.
+**失敗時:** 不確かな場合、第1旋法（ドリア正格、終止音D）をデフォルトとする。これはヒルデガルトの最も頻繁な選択であり、広い旋律的音域を提供する。
 
-### ステップ2: Melodic Contour and Range
+### ステップ2: 旋律輪郭と音域
 
-Establish the distinctive wide-range, soaring melodic contour characteristic of Hildegard's style.
+ヒルデガルトのスタイルに特徴的な、広音域で飛翔する旋律輪郭を確立する。
 
 ```
 Hildegard's Melodic Signature:
@@ -138,13 +137,13 @@ Hildegard's Melismatic Technique:
   - Example: "aeternitatis" may carry 15-30 notes across the word
 ```
 
-**期待結果:** Melodic contour sketched with identified climax point, wide range planned (minimum 9th, preferably 10th-12th), and syllabic/melismatic distribution determined.
+**期待結果:** クライマックスポイントが特定され、広い音域が計画され（最低9度、できれば10度〜12度）、シラビック/メリスマティックの配分が決定された旋律輪郭のスケッチ。
 
-**失敗時:** If melodic range feels too wide for performers, reduce climax by one step (e.g., from high D to C). Maintain the arch shape but compress the range.
+**失敗時:** 旋律の音域が演奏者にとって広すぎると感じる場合、クライマックスを1音下げる（例：高いDからCへ）。アーチ形は維持するが音域を圧縮する。
 
-### ステップ3: Text-Setting — Syllabic and Melismatic
+### ステップ3: テキスト・セッティング — シラビックとメリスマティック
 
-Map the sacred text to melody with appropriate syllabic, neumatic, and melismatic distribution.
+聖なるテキストを旋律にマッピングし、適切なシラビック、ネウマティック、メリスマティックの配分を行う。
 
 ```
 Hildegard's Text-Setting Principles:
@@ -196,13 +195,13 @@ RESPONSORY (call-and-response structure):
 - Example: "O ignis Spiritus" — highly melismatic solo sections
 ```
 
-**期待結果:** Text fully mapped to melody with syllabic/neumatic/melismatic choices marked. Key theological terms receive melismatic treatment. Text remains intelligible despite ornamentation.
+**期待結果:** テキストがシラビック/ネウマティック/メリスマティックの選択とともに旋律に完全にマッピングされる。重要な神学用語がメリスマティック処理を受ける。装飾にもかかわらずテキストが理解可能。
 
-**失敗時:** If text becomes unintelligible (too much melisma), simplify non-essential words to syllabic. Retain melisma ONLY on 1-2 most important words per phrase.
+**失敗時:** テキストが不明瞭になる場合（メリスマが多すぎる）、重要でない語をシラビックに簡略化する。1フレーズあたり最も重要な1〜2語のみにメリスマを保持する。
 
-### ステップ4: Neumatic Notation (Optional — for authenticity)
+### ステップ4: ネウマ記譜法（任意 — 本格性を求める場合）
 
-Notate using medieval square-note neumes on a 4-line staff (if desired for historical accuracy).
+中世の四角音符ネウマを4線譜上に記譜する（歴史的正確性が求められる場合）。
 
 ```
 Medieval Neumatic Notation Basics:
@@ -234,13 +233,13 @@ Modern Alternative:
 - Mark text syllables clearly under each neume group
 ```
 
-**期待結果:** (Optional) Neumatic notation sketch provided if user requests historical authenticity. Modern staff notation acceptable for performance preparation.
+**期待結果:**（任意）ユーザーが歴史的本格性を求める場合にネウマ記譜法のスケッチが提供される。演奏準備には近代的な五線譜も許容。
 
-**失敗時:** If neumatic notation is too complex, provide modern staff notation with clear phrasing marks. Hildegard's music can be performed from modern notation without loss of essential character.
+**失敗時:** ネウマ記譜法が複雑すぎる場合、明確なフレージングマークを付けた近代的な五線譜で提供する。ヒルデガルトの音楽は近代的な記譜法から演奏しても本質的な特徴を失わない。
 
-### ステップ5: Liturgical Context and Performance Notes
+### ステップ5: 典礼的文脈と演奏ノート
 
-Situate the composition or analysis within liturgical use and provide performance guidance.
+作品を典礼的使用の中に位置づけ、演奏のガイダンスを提供する。
 
 ```
 Liturgical Context by Form:
@@ -296,36 +295,36 @@ ENSEMBLE:
   for Hildegard's convent, but aesthetically compatible)
 ```
 
-**期待結果:** Liturgical use identified (when/where the piece is sung), performance notes provided (tempo, dynamics, pronunciation), and historical context clarified.
+**期待結果:** 典礼的使用が特定され（いつ・どこでその曲が歌われるか）、演奏ノートが提供され（テンポ、ダイナミクス、発音）、歴史的文脈が明確化される。
 
-**失敗時:** If liturgical context is unclear, focus on performance notes only. Hildegard's music can be performed in concert settings without strict liturgical adherence.
+**失敗時:** 典礼的文脈が不明確な場合、演奏ノートのみに焦点を当てる。ヒルデガルトの音楽は厳格な典礼的遵守なしにコンサート設定でも演奏できる。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Mode identified or selected (1-8, with final note)
-- [ ] Melodic range spans at least a 9th (preferably 10th-12th)
-- [ ] Key theological terms receive melismatic treatment
-- [ ] Climax placed on most important word in text
-- [ ] Phrase begins low (near final) and ends on final note
-- [ ] Text intelligible despite ornamentation (not over-melismatic on every word)
-- [ ] Liturgical context noted (antiphon/sequence/responsory)
-- [ ] Performance notes provided (tempo, dynamics, pronunciation)
-- [ ] If analyzing: Comparison to Hildegard's authentic works cited
+- [ ] 旋法が同定または選択されている（1〜8、終止音付き）
+- [ ] 旋律の音域が少なくとも9度に及ぶ（できれば10度〜12度）
+- [ ] 重要な神学用語がメリスマティック処理を受けている
+- [ ] クライマックスがテキスト中の最も重要な語に配置されている
+- [ ] フレーズが低い音（終止音付近）で始まり終止音で終わる
+- [ ] 装飾にもかかわらずテキストが理解可能（すべての語にメリスマを付けすぎていない）
+- [ ] 典礼的文脈が記載されている（アンティフォナ/セクエンツィア/レスポンソリウム）
+- [ ] 演奏ノートが提供されている（テンポ、ダイナミクス、発音）
+- [ ] 分析の場合：ヒルデガルトの真作との比較が引用されている
 
 ## よくある落とし穴
 
-1. **Over-melisma**: Adding melismas to every syllable obscures text. Reserve for key words
-2. **Ignoring Mode**: Hildegard respects modal boundaries. Don't drift to unrelated pitches
-3. **Modern Rhythm**: Medieval chant is non-metrical. Avoid imposing 4/4 time signatures
-4. **Narrow Range**: Hildegard's signature is WIDE range. Less than a 9th is not Hildegardian
-5. **Premature Climax**: Placing highest note too early leaves nowhere to build. Save for key word
-6. **Monotone Sections**: Long syllabic sections without melodic interest sound flat. Mix syllabic with neumatic
-7. **Ignoring Text Meaning**: Melody must serve theological meaning. Random melisma placement is anti-Hildegardian
+1. **過剰なメリスマ**: すべての音節にメリスマを付けるとテキストが不明瞭になる。重要な語にのみ使用する
+2. **旋法の無視**: ヒルデガルトは旋法の境界を尊重する。無関係な音高に逸脱しない
+3. **近代的リズム**: 中世の聖歌は非拍節的。4/4拍子を押し付けない
+4. **狭い音域**: ヒルデガルトの特徴は広い音域。9度未満はヒルデガルト的ではない
+5. **早すぎるクライマックス**: 最高音を早く置きすぎると盛り上がる余地がなくなる。重要な語のために取っておく
+6. **単調なセクション**: 旋律的な変化のない長いシラビックセクションは平板に聞こえる。シラビックとネウマティックを混ぜる
+7. **テキストの意味の無視**: 旋律は神学的意味に奉仕しなければならない。無作為なメリスマの配置はヒルデガルト的ではない
 
 ## 関連スキル
 
-- `practice-viriditas` — Hildegard's music is an expression of viriditas (greening life force)
-- `consult-natural-history` — Many chants reference plants, stones, elements from *Physica*
-- `assess-holistic-health` — Music as healing modality in Hildegard's holistic system
-- `meditate` (esoteric domain) — Singing Hildegard's music can be meditative practice
-- `formulate-herbal-remedy` — Some chants reference herbs with healing properties
+- `practice-viriditas` -- ヒルデガルトの音楽はヴィリディタス（緑化する生命力）の表現
+- `consult-natural-history` -- 多くの聖歌は *Physica* の植物、鉱物、元素を参照する
+- `assess-holistic-health` -- ヒルデガルトの全体論的システムにおける癒しの手段としての音楽
+- `meditate`（エソテリックドメイン）-- ヒルデガルトの音楽を歌うことは瞑想的実践となりうる
+- `formulate-herbal-remedy` -- 一部の聖歌は薬効のあるハーブを参照する

@@ -1,10 +1,10 @@
 ---
 name: run-ab-test-models
 description: >
-  Design and execute A/B tests for ML models in production using traffic splitting,
+  Entwerfen and execute A/B tests for ML models in production using traffic splitting,
   statistical significance testing, and canary/shadow deployment strategies. Measure
-  performance differences and make data-driven decisions about model rollout. Use when
-  validating a new model version before full rollout, comparing candidate models trained
+  performance differences and make data-driven decisions about model rollout. Verwenden wenn
+  validating a new model version vor full rollout, comparing candidate models trained
   with different algorithms, measuring business metric impact of model changes, or when
   regulatory requirements mandate gradual rollout.
 license: MIT
@@ -28,32 +28,32 @@ metadata:
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-Execute controlled experiments comparing model versions using traffic splitting and statistical analysis.
+Ausfuehren controlled experiments comparing model versions using traffic splitting and statistical analysis.
 
-## When to Use
+## Wann verwenden
 
-- Deploying new model version and want to validate improvement before full rollout
+- Deploying new model version and want to validate improvement vor full rollout
 - Comparing multiple candidate models trained with different algorithms or features
 - Testing impact of hyperparameter changes on business metrics
-- Need to measure model performance in production without risking full traffic
+- Need to measure model performance in production ohne risking full traffic
 - Regulatory requirements for gradual rollout (e.g., medical ML systems)
-- Evaluating cost-performance tradeoffs between model sizes
+- Evaluating cost-performance tradeoffs zwischen model sizes
 
-## Inputs
+## Eingaben
 
-- **Required**: Champion model (current production version)
-- **Required**: Challenger model(s) (new version to test)
-- **Required**: Traffic allocation percentage (e.g., 5% to challenger)
-- **Required**: Success metrics (business and ML metrics)
-- **Required**: Minimum sample size or test duration
+- **Erforderlich**: Champion model (current production version)
+- **Erforderlich**: Challenger model(s) (new version to test)
+- **Erforderlich**: Traffic allocation percentage (e.g., 5% to challenger)
+- **Erforderlich**: Success metrics (business and ML metrics)
+- **Erforderlich**: Minimum sample size or test duration
 - **Optional**: Guardrail metrics (latency, error rate thresholds)
 - **Optional**: User segments for stratified testing
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Design Experiment
+### Schritt 1: Entwerfen Experiment
 
-Define test parameters, success criteria, and statistical requirements.
+Definieren test parameters, success criteria, and statistical requirements.
 
 ```python
 # ab_test/experiment_config.py
@@ -67,13 +67,13 @@ from scipy.stats import norm
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Experiment configuration with statistically sound sample size calculation, typically 5-10k samples per variant for 5-10% MDE.
+**Erwartet:** Experiment configuration with statistically sound sample size calculation, typischerweise 5-10k samples per variant for 5-10% MDE.
 
-**On failure:** If required sample size too large, increase traffic allocation, extend test duration, or accept larger MDE; verify baseline metric estimate is accurate; consider sequential testing for continuous monitoring.
+**Bei Fehler:** If required sample size too large, increase traffic allocation, extend test duration, or accept larger MDE; verify baseline metric estimate is accurate; consider sequential testing for continuous monitoring.
 
-### Step 2: Implement Traffic Splitting
+### Schritt 2: Implementieren Traffic Splitting
 
-Set up routing logic to randomly assign requests to models.
+Einrichten routing logic to randomly assign requests to models.
 
 ```python
 # ab_test/traffic_router.py
@@ -87,13 +87,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Consistent user-to-variant assignment, accurate traffic split matching configured percentages, all assignments logged for analysis.
+**Erwartet:** Consistent user-to-variant assignment, accurate traffic split matching configured percentages, all assignments logged for analysis.
 
-**On failure:** Verify hash function produces uniform distribution (test with 10k user IDs), check that user_id is stable across requests (not session_id), ensure logs capture all prediction events, validate traffic split in first 1000 requests.
+**Bei Fehler:** Verifizieren hash function produces uniform distribution (test with 10k user IDs), check that user_id is stable across requests (not session_id), ensure logs capture all prediction events, validate traffic split in first 1000 requests.
 
-### Step 3: Implement Shadow Deployment (Optional)
+### Schritt 3: Implementieren Shadow Deployment (Optional)
 
-Run challenger model in parallel without affecting users (shadow mode).
+Ausfuehren challenger model in parallel ohne affecting users (shadow mode).
 
 ```python
 # ab_test/shadow_deployment.py
@@ -107,13 +107,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Champion predictions served with normal latency, challenger predictions logged asynchronously without blocking, prediction differences captured for analysis.
+**Erwartet:** Champion predictions served with normal latency, challenger predictions logged asynchronously ohne blocking, prediction differences captured for analysis.
 
-**On failure:** Set challenger timeout < champion SLA to avoid blocking, handle challenger errors gracefully without affecting champion, monitor memory usage (two models loaded), consider sampling (log only 10% of shadow predictions).
+**Bei Fehler:** Set challenger timeout < champion SLA to avoid blocking, handle challenger errors gracefully ohne affecting champion, monitor memory usage (two models loaded), consider sampling (log only 10% of shadow predictions).
 
-### Step 4: Collect and Analyze Metrics
+### Schritt 4: Sammeln and Analysieren Metrics
 
-Gather experiment data and perform statistical tests.
+Sammeln experiment data and perform statistical tests.
 
 ```python
 # ab_test/analysis.py
@@ -127,11 +127,11 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Statistical test results with p-values, confidence intervals, and clear decision (rollout/keep/inconclusive), typically after 7-14 days or reaching sample size.
+**Erwartet:** Statistical test results with p-values, confidence intervals, and clear decision (rollout/keep/inconclusive), typischerweise nach 7-14 days or reaching sample size.
 
-**On failure:** Verify ground truth labels are available (may need delayed analysis), check for sample ratio mismatch (SRM) indicating assignment bugs, ensure sufficient sample size reached, look for novelty/primacy effects in early data, consider sequential testing if fixed-horizon test is too slow.
+**Bei Fehler:** Verifizieren ground truth labels are available (may need delayed analysis), check for sample ratio mismatch (SRM) indicating assignment bugs, ensure sufficient sample size reached, look for novelty/primacy effects in early data, consider sequential testing if fixed-horizon test is too slow.
 
-### Step 5: Monitor Guardrail Metrics
+### Schritt 5: Ueberwachen Guardrail Metrics
 
 Continuously check that challenger doesn't violate safety thresholds.
 
@@ -147,11 +147,11 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Guardrail violations detected within 5-15 minutes, automated experiment stop if critical thresholds breached (latency, errors), alerts sent to team.
+**Erwartet:** Guardrail violations detected innerhalb 5-15 minutes, automated experiment stop if critical thresholds breached (latency, errors), alerts sent to team.
 
-**On failure:** Verify guardrail thresholds are realistic (not too tight), ensure monitoring loop is running continuously, check that stop_experiment() function actually updates routing, test alert delivery channels.
+**Bei Fehler:** Verifizieren guardrail thresholds are realistic (not too tight), ensure monitoring loop is running continuously, check that stop_experiment() function actually updates routing, test alert delivery channels.
 
-### Step 6: Make Rollout Decision
+### Schritt 6: Make Rollout Decision
 
 Based on experiment results, decide whether to rollout challenger.
 
@@ -167,33 +167,33 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Clear decision (full/gradual rollout, keep champion, or extend test) with justification and action items.
+**Erwartet:** Clear decision (full/gradual rollout, keep champion, or extend test) with justification and action items.
 
-**On failure:** If decision unclear, perform subgroup analysis (by user segment, time of day, device type), check for interaction effects, review business context (e.g., is 2% lift worth engineering cost?), consult with stakeholders.
+**Bei Fehler:** If decision unclear, perform subgroup analysis (by user segment, time of day, device type), check for interaction effects, review business context (e.g., is 2% lift worth engineering cost?), consult with stakeholders.
 
-## Validation
+## Validierung
 
-- [ ] Traffic split matches configured percentages (within 1%)
+- [ ] Traffic split matches configured percentages (innerhalb 1%)
 - [ ] Same user always assigned to same variant (consistency check)
 - [ ] Sample size calculation produces reasonable numbers (5-50k per variant)
 - [ ] Statistical tests produce p-values consistent with manual calculation
-- [ ] Guardrail violations trigger alerts within 5 minutes
-- [ ] Shadow deployment shows <5% prediction divergence between models
+- [ ] Guardrail violations trigger alerts innerhalb 5 minutes
+- [ ] Shadow deployment shows <5% prediction divergence zwischen models
 - [ ] Experiment reports include confidence intervals
 - [ ] Rollout decision documented with justification
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
 - **Sample ratio mismatch (SRM)**: If observed traffic split differs from configured (e.g., 95/5 becomes 92/8), indicates assignment bug; check hash function uniformity
-- **Peeking**: Checking results before reaching sample size inflates Type I error; use sequential testing or wait for pre-determined end date
+- **Peeking**: Checking results vor reaching sample size inflates Type I error; use sequential testing or wait for pre-determined end date
 - **Novelty effect**: Users respond differently to new model initially; run for 2+ weeks to see steady-state behavior
 - **Carryover effects**: Previous variant exposure affects current behavior; use new users or sufficient washout period
 - **Multiple testing**: Testing many metrics increases false positive risk; correct with Bonferroni or focus on single primary metric
 - **Insufficient power**: Small traffic allocation may require months to detect realistic effects; balance statistical power with risk tolerance
 - **Ignoring segments**: Aggregate lift may hide negative impact on important user segments; perform subgroup analysis
-- **Attribution errors**: Ensure outcome metrics correctly attributed to model predictions (not other system changes)
+- **Attribution errors**: Sicherstellen outcome metrics korrekt attributed to model predictions (not other system changes)
 
-## Related Skills
+## Verwandte Skills
 
-- `deploy-ml-model-serving` - Model deployment infrastructure and versioning
+- `deploy-ml-model-serving` - Modellieren deployment infrastructure and versioning
 - `monitor-model-drift` - Ongoing performance monitoring post-rollout

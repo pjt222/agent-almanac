@@ -1,12 +1,18 @@
 ---
 name: tidy-project-structure
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Organize project files into conventional directories, update stale READMEs,
-  clean configuration drift, and archive deprecated items without changing
-  code logic. Use when files are scattered without clear organization, READMEs
-  are outdated or contain broken examples, configuration files have multiplied
-  across dev/staging/prod, deprecated files remain in the project root, or
-  naming conventions are inconsistent across directories.
+  Projektdateien in konventionelle Verzeichnisse organisieren, veraltete READMEs
+  aktualisieren, Konfigurationsdrift bereinigen und veraltete Elemente archivieren
+  ohne Code-Logik zu aendern. Anwenden wenn Dateien ohne klare Organisation
+  verstreut sind, READMEs veraltet sind oder defekte Beispiele enthalten,
+  Konfigurationsdateien sich ueber Dev/Staging/Prod vermehrt haben, veraltete
+  Dateien im Projektstamm verbleiben oder Namenskonventionen ueber Verzeichnisse
+  hinweg inkonsistent sind.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -16,351 +22,346 @@ metadata:
   complexity: intermediate
   language: multi
   tags: maintenance, organization, structure, readme, config
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Projektstruktur aufraumen
 
-## When to Use
+## Wann verwenden
 
-Use this skill when project organization has drifted from conventions:
+Diesen Skill verwenden wenn die Projektorganisation von Konventionen abgewichen ist:
 
-- Files scattered across directories without clear organization
-- READMEs are outdated or contain broken examples
-- Configuration files have multiplied (dev, staging, prod drift)
-- Deprecated files remain in project root
-- Naming conventions inconsistent across directories
+- Dateien ohne klare Organisation ueber Verzeichnisse verstreut
+- READMEs veraltet oder mit defekten Beispielen
+- Konfigurationsdateien haben sich vermehrt (Dev-, Staging-, Prod-Drift)
+- Veraltete Dateien verbleiben im Projektstamm
+- Namenskonventionen inkonsistent ueber Verzeichnisse hinweg
 
-**Do NOT use** for code refactoring or dependency restructuring. This skill focuses on file organization and documentation hygiene.
+**NICHT verwenden** fuer Code-Refactoring oder Abhaengigkeits-Umstrukturierung. Dieser Skill konzentriert sich auf Dateiorganisation und Dokumentationshygiene.
 
-## Inputs
+## Eingaben
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `project_path` | string | Yes | Absolute path to project root |
-| `conventions` | string | No | Path to style guide (e.g., `docs/conventions.md`) |
-| `archive_mode` | enum | No | `move` (default) or `delete` for deprecated files |
-| `readme_update` | boolean | No | Update stale READMEs (default: true) |
+| Parameter | Typ | Erforderlich | Beschreibung |
+|-----------|-----|--------------|-------------|
+| `project_path` | string | Ja | Absoluter Pfad zum Projektstamm |
+| `conventions` | string | Nein | Pfad zum Stilhandbuch (z.B. `docs/conventions.md`) |
+| `archive_mode` | enum | Nein | `move` (Standard) oder `delete` fuer veraltete Dateien |
+| `readme_update` | boolean | Nein | Veraltete READMEs aktualisieren (Standard: true) |
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Audit Directory Layout
+### Schritt 1: Verzeichnisstruktur pruefen
 
-Compare current structure against project conventions or language best practices.
+Aktuelle Struktur mit Projektkonventionen oder sprachspezifischen Best Practices vergleichen.
 
-**Common conventions by language**:
+**Gaengige Konventionen nach Sprache**:
 
 **JavaScript/TypeScript**:
 ```
-src/          # Source code
-tests/        # Test files
-dist/         # Build output (gitignored)
-docs/         # Documentation
-.github/      # CI/CD workflows
+src/          # Quellcode
+tests/        # Testdateien
+dist/         # Build-Ausgabe (gitignored)
+docs/         # Dokumentation
+.github/      # CI/CD-Workflows
 ```
 
 **Python**:
 ```
-package_name/      # Package code
-tests/             # Test suite
-docs/              # Sphinx docs
-scripts/           # Utility scripts
+package_name/      # Paketcode
+tests/             # Testsuite
+docs/              # Sphinx-Dokumentation
+scripts/           # Hilfsskripte
 ```
 
 **R**:
 ```
-R/                 # R source
-tests/testthat/    # Test suite
-man/               # Documentation (generated)
-vignettes/         # Long-form guides
-inst/              # Installed files
-data/              # Package data
+R/                 # R-Quellcode
+tests/testthat/    # Testsuite
+man/               # Dokumentation (generiert)
+vignettes/         # Ausfuehrliche Anleitungen
+inst/              # Installierte Dateien
+data/              # Paketdaten
 ```
 
 **Rust**:
 ```
-src/          # Source code
-tests/        # Integration tests
+src/          # Quellcode
+tests/        # Integrationstests
 benches/      # Benchmarks
-examples/     # Usage examples
+examples/     # Verwendungsbeispiele
 ```
 
-**Expected:** List of files/directories violating conventions saved to `structure_audit.txt`
+**Erwartet:** Liste der gegen Konventionen verstossenden Dateien/Verzeichnisse in `structure_audit.txt` gespeichert
 
-**On failure:** If no conventions documented, use language-standard defaults
+**Bei Fehler:** Wenn keine Konventionen dokumentiert sind, sprachspezifische Standards verwenden
 
-### Step 2: Move Misplaced Files
+### Schritt 2: Fehlplatzierte Dateien verschieben
 
-Relocate files to their conventional directories.
+Dateien in ihre konventionellen Verzeichnisse umlagern.
 
-**Common moves**:
-1. Test files outside `tests/` → move to `tests/`
-2. Documentation outside `docs/` → move to `docs/`
-3. Build artifacts in `src/` → delete (should be gitignored)
-4. Config files in root → move to `config/` or `.config/`
+**Haeufige Verschiebungen**:
+1. Testdateien ausserhalb von `tests/` nach `tests/` verschieben
+2. Dokumentation ausserhalb von `docs/` nach `docs/` verschieben
+3. Build-Artefakte in `src/` loeschen (sollten gitignored sein)
+4. Konfigurationsdateien im Stammverzeichnis nach `config/` oder `.config/` verschieben
 
-For each move:
+Fuer jede Verschiebung:
 ```bash
-# Check if file is referenced anywhere
+# Pruefen ob Datei irgendwo referenziert wird
 grep -r "filename" .
 
-# If no references or only relative path references:
+# Wenn keine Referenzen oder nur relative Pfadreferenzen:
 mkdir -p target_directory/
 git mv source/file target_directory/file
 
-# Update any imports/requires
-# (language-specific — see repair-broken-references skill)
+# Alle Imports/Requires aktualisieren
+# (sprachspezifisch — siehe repair-broken-references Skill)
 ```
 
-**Expected:** All files in conventional locations; git history preserved via `git mv`
+**Erwartet:** Alle Dateien an konventionellen Positionen; Git-Historie ueber `git mv` erhalten
 
-**On failure:** If moving breaks imports, update import paths or escalate
+**Bei Fehler:** Wenn Verschieben Imports bricht, Importpfade aktualisieren oder eskalieren
 
-### Step 3: Check README Freshness
+### Schritt 3: README-Aktualitaet pruefen
 
-Identify stale information in all README files.
+Veraltete Informationen in allen README-Dateien identifizieren.
 
-**Staleness indicators**:
-1. Last modified >6 months ago
-2. References to old version numbers
-3. Broken links or code examples
-4. Missing sections (Installation, Usage, Contributing)
-5. No license badge or broken badge links
+**Veralterungsindikatoren**:
+1. Letzte Aenderung vor >6 Monaten
+2. Referenzen auf alte Versionsnummern
+3. Defekte Links oder Code-Beispiele
+4. Fehlende Abschnitte (Installation, Verwendung, Mitwirkung)
+5. Kein Lizenz-Badge oder defekte Badge-Links
 
 ```bash
-# Find all READMEs
+# Alle READMEs finden
 find . -name "README.md" -o -name "readme.md"
 
-# For each README:
-# - Check last modified date
+# Fuer jede README:
+# - Letztes Aenderungsdatum pruefen
 git log -1 --format="%ci" README.md
 
-# - Check for broken links
+# - Auf defekte Links pruefen
 markdown-link-check README.md
 
-# - Verify example code still runs (sample first example)
+# - Beispielcode auf Funktionsfaehigkeit pruefen (erstes Beispiel testen)
 ```
 
-**Expected:** List of stale READMEs in `readme_freshness.txt` with specific issues
+**Erwartet:** Liste veralteter READMEs in `readme_freshness.txt` mit konkreten Problemen
 
-**On failure:** If markdown-link-check unavailable, manually review external links
+**Bei Fehler:** Wenn markdown-link-check nicht verfuegbar, externe Links manuell pruefen
 
-### Step 4: Update Stale READMEs
+### Schritt 4: Veraltete READMEs aktualisieren
 
-Fix broken links, update examples, add missing sections.
+Defekte Links reparieren, Beispiele aktualisieren, fehlende Abschnitte ergaenzen.
 
-**Standard fixes**:
-1. Replace broken badge URLs
-2. Update version numbers in installation instructions
-3. Fix broken example code (run to verify)
-4. Add missing sections (use template from project conventions)
-5. Update copyright year
+**Standard-Korrekturen**:
+1. Defekte Badge-URLs ersetzen
+2. Versionsnummern in Installationsanweisungen aktualisieren
+3. Defekten Beispielcode reparieren (zur Verifizierung ausfuehren)
+4. Fehlende Abschnitte ergaenzen (Vorlage aus Projektkonventionen verwenden)
+5. Copyright-Jahr aktualisieren
 
-**README template structure**:
+**README-Vorlagenstruktur**:
 ```markdown
-# Project Name
+# Projektname
 
-Brief description (1-2 sentences).
+Kurzbeschreibung (1-2 Saetze).
 
 ## Installation
 
 ```bash
-# Language-specific install command
+# Sprachspezifischer Installationsbefehl
 ```
 
-## Usage
+## Verwendung
 
 ```language
-# Basic example
+# Grundlegendes Beispiel
 ```
 
-## Documentation
+## Dokumentation
 
-Link to full docs.
+Link zur vollstaendigen Dokumentation.
 
-## Contributing
+## Mitwirkung
 
-Link to CONTRIBUTING.md or inline guidelines.
+Link zu CONTRIBUTING.md oder eingebettete Richtlinien.
 
-## License
+## Lizenz
 
-LICENSE badge and link.
+LIZENZ-Badge und Link.
 ```
 
-**Expected:** All READMEs updated; examples verified to run
+**Erwartet:** Alle READMEs aktualisiert; Beispiele auf Funktionsfaehigkeit verifiziert
 
-**On failure:** If example code cannot be verified, mark with warning comment
+**Bei Fehler:** Wenn Beispielcode nicht verifizierbar, mit Warnkommentar markieren
 
-### Step 5: Review Config Files
+### Schritt 5: Konfigurationsdateien ueberpruefen
 
-Identify configuration drift and consolidate duplicate settings.
+Konfigurationsdrift identifizieren und doppelte Einstellungen konsolidieren.
 
-**Common config issues**:
-1. Multiple `.env` files (`.env`, `.env.local`, `.env.dev`, `.env.prod`)
-2. Duplicate settings across config files
-3. Hardcoded secrets (should use environment variables)
-4. Outdated API endpoints or feature flags
+**Haeufige Konfigurationsprobleme**:
+1. Mehrere `.env`-Dateien (`.env`, `.env.local`, `.env.dev`, `.env.prod`)
+2. Doppelte Einstellungen ueber Konfigurationsdateien hinweg
+3. Hartcodierte Geheimnisse (sollten Umgebungsvariablen verwenden)
+4. Veraltete API-Endpunkte oder Feature-Flags
 
 ```bash
-# Find all config files
+# Alle Konfigurationsdateien finden
 find . -name "*.config.*" -o -name ".env*" -o -name "*.yml" -o -name "*.yaml"
 
-# For each config:
-# - Check for duplicate keys
-# - Grep for hardcoded secrets (API keys, tokens, passwords)
+# Fuer jede Konfiguration:
+# - Auf doppelte Schluessel pruefen
+# - Nach hartcodierten Geheimnissen suchen (API-Schluessel, Token, Passwoerter)
 grep -E "(api[_-]?key|token|password|secret)" config_file
 
-# - Compare dev vs prod settings
+# - Dev- vs Prod-Einstellungen vergleichen
 diff .env.dev .env.prod
 ```
 
-**Expected:** Config drift documented in `config_review.txt`; secrets flagged for escalation
+**Erwartet:** Konfigurationsdrift in `config_review.txt` dokumentiert; Geheimnisse zur Eskalation markiert
 
-**On failure:** If diff shows major divergence, escalate to devops-engineer
+**Bei Fehler:** Wenn Diff grosse Abweichungen zeigt, an devops-engineer eskalieren
 
-### Step 6: Archive Deprecated Files
+### Schritt 6: Veraltete Dateien archivieren
 
-Move or delete files no longer needed.
+Nicht mehr benoetigte Dateien verschieben oder loeschen.
 
-**Candidates for archiving**:
-- Commented-out config files (e.g., `nginx.conf.old`)
-- Legacy scripts not run in >1 year
-- Backup files (e.g., `file.bak`, `file~`)
-- Build artifacts accidentally committed
+**Kandidaten fuer Archivierung**:
+- Auskommentierte Konfigurationsdateien (z.B. `nginx.conf.old`)
+- Altskripte die seit >1 Jahr nicht ausgefuehrt wurden
+- Sicherungsdateien (z.B. `file.bak`, `file~`)
+- Versehentlich committete Build-Artefakte
 
-**Archive process**:
+**Archivierungsprozess**:
 ```bash
-# Create archive directory (if archive_mode=move)
+# Archivverzeichnis erstellen (wenn archive_mode=move)
 mkdir -p archive/YYYY-MM-DD/
 
-# For each deprecated file:
-# 1. Verify not referenced anywhere
+# Fuer jede veraltete Datei:
+# 1. Pruefen ob nirgends referenziert
 grep -r "filename" .
 
-# 2. Check git history for last modification
+# 2. Git-Historie auf letzte Aenderung pruefen
 git log -1 --format="%ci" filename
 
-# 3. If not modified in >1 year and no references:
+# 3. Wenn seit >1 Jahr nicht geaendert und keine Referenzen:
 if [ "$archive_mode" = "move" ]; then
   git mv filename archive/YYYY-MM-DD/
 else
   git rm filename
 fi
 
-# 4. Document in ARCHIVE_LOG.md
-echo "- filename (reason, last modified: DATE)" >> ARCHIVE_LOG.md
+# 4. In ARCHIVE_LOG.md dokumentieren
+echo "- filename (Grund, letzte Aenderung: DATUM)" >> ARCHIVE_LOG.md
 ```
 
-**Expected:** Deprecated files archived; `ARCHIVE_LOG.md` updated
+**Erwartet:** Veraltete Dateien archiviert; `ARCHIVE_LOG.md` aktualisiert
 
-**On failure:** If uncertain whether file is deprecated, leave in place and document in report
+**Bei Fehler:** Wenn unsicher ob Datei veraltet ist, belassen und im Bericht dokumentieren
 
-### Step 7: Verify Naming Conventions
+### Schritt 7: Namenskonventionen ueberpruefen
 
-Check for inconsistent file naming across project.
+Auf inkonsistente Dateibenennung im Projekt pruefen.
 
-**Common conventions**:
-- **kebab-case**: `my-file.js` (common in JS/web projects)
-- **snake_case**: `my_file.py` (Python standard)
-- **PascalCase**: `MyComponent.tsx` (React components)
-- **camelCase**: `myUtility.js` (JavaScript functions)
+**Gaengige Konventionen**:
+- **kebab-case**: `my-file.js` (ueblich in JS/Web-Projekten)
+- **snake_case**: `my_file.py` (Python-Standard)
+- **PascalCase**: `MyComponent.tsx` (React-Komponenten)
+- **camelCase**: `myUtility.js` (JavaScript-Funktionen)
 
 ```bash
-# Find files violating conventions
-# Example: Python project expecting snake_case
+# Dateien finden die gegen Konventionen verstossen
+# Beispiel: Python-Projekt mit erwarteter snake_case
 find . -name "*.py" | grep -v "__pycache__" | grep -E "[A-Z-]"
 
-# For each violation, either:
-# 1. Rename to match conventions
-# 2. Document exception (e.g., Django settings.py convention)
+# Fuer jeden Verstoss entweder:
+# 1. Umbenennen um Konventionen einzuhalten
+# 2. Ausnahme dokumentieren (z.B. Django settings.py Konvention)
 ```
 
-**Expected:** All files follow naming conventions or exceptions documented
+**Erwartet:** Alle Dateien folgen Namenskonventionen oder Ausnahmen dokumentiert
 
-**On failure:** If renaming breaks imports, update references or escalate
+**Bei Fehler:** Wenn Umbenennung Imports bricht, Referenzen aktualisieren oder eskalieren
 
-### Step 8: Generate Tidying Report
+### Schritt 8: Bereinigungsbericht erstellen
 
-Document all structural changes.
+Alle strukturellen Aenderungen dokumentieren.
 
 ```markdown
-# Project Structure Tidying Report
+# Projektstruktur-Bereinigungsbericht
 
-**Date**: YYYY-MM-DD
-**Project**: <project_name>
+**Datum**: JJJJ-MM-TT
+**Projekt**: <projektname>
 
-## Directory Changes
+## Verzeichnisaenderungen
 
-- Moved X files to conventional directories
-- Created Y new directories
-- Archived Z deprecated files
+- X Dateien in konventionelle Verzeichnisse verschoben
+- Y neue Verzeichnisse erstellt
+- Z veraltete Dateien archiviert
 
-## README Updates
+## README-Aktualisierungen
 
-- Updated W stale READMEs
-- Fixed X broken links
-- Verified Y code examples
+- W veraltete READMEs aktualisiert
+- X defekte Links repariert
+- Y Code-Beispiele verifiziert
 
-## Config Cleanup
+## Konfigurationsbereinigung
 
-- Consolidated X duplicate settings
-- Flagged Y hardcoded secrets for removal
-- Documented Z config drift issues
+- X doppelte Einstellungen konsolidiert
+- Y hartcodierte Geheimnisse zur Entfernung markiert
+- Z Konfigurationsdrift-Probleme dokumentiert
 
-## Files Archived
+## Archivierte Dateien
 
-See ARCHIVE_LOG.md for full list (Z files).
+Siehe ARCHIVE_LOG.md fuer vollstaendige Liste (Z Dateien).
 
-## Naming Convention Fixes
+## Namenskonventionskorrekturen
 
-- Renamed X files to match conventions
-- Documented Y exceptions
+- X Dateien entsprechend Konventionen umbenannt
+- Y Ausnahmen dokumentiert
 
-## Escalations
+## Eskalierungen
 
-- [Config drift requiring devops review]
-- [Hardcoded secrets requiring security audit]
+- [Konfigurationsdrift erfordert DevOps-Pruefung]
+- [Hartcodierte Geheimnisse erfordern Sicherheitsaudit]
 ```
 
-**Expected:** Report saved to `TIDYING_REPORT.md`
+**Erwartet:** Bericht in `TIDYING_REPORT.md` gespeichert
 
-**On failure:** (N/A — generate report regardless)
+**Bei Fehler:** (Entfaellt — Bericht unabhaengig generieren)
 
-## Validation Checklist
+## Validierung
 
-After tidying:
+Nach der Bereinigung:
 
-- [ ] All files in conventional directories
-- [ ] No broken links in any README
-- [ ] README examples verified to run
-- [ ] Config files reviewed for secrets
-- [ ] Deprecated files archived with documentation
-- [ ] Naming conventions consistent
-- [ ] Git history preserved (used `git mv`, not `mv`)
-- [ ] Tests still pass after moves
+- [ ] Alle Dateien in konventionellen Verzeichnissen
+- [ ] Keine defekten Links in READMEs
+- [ ] README-Beispiele auf Funktionsfaehigkeit verifiziert
+- [ ] Konfigurationsdateien auf Geheimnisse geprueft
+- [ ] Veraltete Dateien mit Dokumentation archiviert
+- [ ] Namenskonventionen konsistent
+- [ ] Git-Historie erhalten (verwendet `git mv`, nicht `mv`)
+- [ ] Tests bestehen nach Verschiebungen weiterhin
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Breaking Relative Imports**: Moving files breaks relative import paths. Update all references or use absolute imports.
+1. **Relative Imports brechen**: Verschieben von Dateien bricht relative Importpfade. Alle Referenzen aktualisieren oder absolute Imports verwenden.
 
-2. **Losing Git History**: Using `mv` instead of `git mv` loses file history. Always use git commands for moves.
+2. **Git-Historie verlieren**: Verwendung von `mv` statt `git mv` verliert Dateihistorie. Immer Git-Befehle fuer Verschiebungen verwenden.
 
-3. **Over-Organizing**: Creating too many nested directories makes navigation harder. Keep it flat until complexity requires structure.
+3. **Ueberorganisation**: Zu viele verschachtelte Verzeichnisse erschweren die Navigation. Flach halten bis Komplexitaet Struktur erfordert.
 
-4. **Deleting Instead of Archiving**: Direct deletion loses ability to recover. Always archive first unless certain.
+4. **Loeschen statt Archivieren**: Direktes Loeschen verliert Wiederherstellungsmoeglichkeit. Immer zuerst archivieren wenn nicht sicher.
 
-5. **Ignoring Language Conventions**: Imposing personal preferences over language standards. Follow established conventions.
+5. **Sprachkonventionen ignorieren**: Persoenliche Vorlieben ueber Sprachstandards stellen. Etablierte Konventionen befolgen.
 
-6. **Not Updating Documentation**: Moving files without updating README paths leaves docs broken.
+6. **Dokumentation nicht aktualisieren**: Dateien verschieben ohne README-Pfade anzupassen hinterlaesst defekte Dokumentation.
 
-## Related Skills
+## Verwandte Skills
 
-- [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code, fix lint warnings
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Fix links and imports after moves
-- [escalate-issues](../escalate-issues/SKILL.md) — Route complex config issues to specialists
-- [devops/config-management](../../devops/config-management/SKILL.md) — Advanced config consolidation
-- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Comprehensive doc review
+- [clean-codebase](../clean-codebase/SKILL.md) — Toten Code entfernen, Lint-Warnungen beheben
+- [repair-broken-references](../repair-broken-references/SKILL.md) — Links und Imports nach Verschiebungen reparieren
+- [escalate-issues](../escalate-issues/SKILL.md) — Komplexe Konfigurationsprobleme an Spezialisten weiterleiten
+- [devops/config-management](../../devops/config-management/SKILL.md) — Erweiterte Konfigurationskonsolidierung
+- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Umfassende Dokumentationspruefung

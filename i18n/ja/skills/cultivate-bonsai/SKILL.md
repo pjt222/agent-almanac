@@ -1,13 +1,11 @@
 ---
 name: cultivate-bonsai
 description: >
-  Cultivate bonsai trees from species selection through long-term seasonal care.
-  Covers species suitability, structural and maintenance pruning, wiring technique,
-  repotting protocol, soil mix preparation, seasonal care schedules, and
-  contemplative sitting practice. Use when selecting a species for a first or next
-  bonsai, performing structural or maintenance pruning, repotting when roots are
-  circling or growth has stalled, wiring branches for shaping, developing a
-  seasonal care calendar, or building a contemplative practice with a living tree.
+  樹種選定から長期的な季節管理まで、盆栽の育成をカバーする。樹種の適性、構造剪定と
+  維持剪定、針金かけ技術、植替えプロトコル、用土配合、季節管理スケジュール、
+  生きた樹木との瞑想的実践を含む。初めてまたは次の盆栽の樹種選定時、構造剪定または
+  維持剪定の実施時、根が回ったり成長が停滞した時の植替え時、整枝のための針金かけ時、
+  季節管理カレンダーの策定時、生きた樹木との瞑想的実践の構築時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,32 +22,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 盆栽の栽培
+# 盆栽の育成
 
-Cultivate and maintain bonsai trees through seasonal care, structural shaping, and contemplative practice.
+季節管理、構造的な整枝、瞑想的実践を通じて盆栽を育成・維持する。
 
 ## 使用タイミング
 
-- You are selecting a species for your first or next bonsai
-- You need to prune (maintenance or structural) a bonsai tree
-- Your bonsai needs repotting (roots circling, soil depleted, or growth stalled)
-- You want to wire branches for shaping
-- You need a seasonal care calendar for an existing bonsai collection
-- You want to develop a contemplative sitting practice with a living tree
+- 初めてまたは次の盆栽の樹種を選定する時
+- 盆栽の剪定（維持剪定または構造剪定）が必要な時
+- 盆栽の植替えが必要な時（根が回っている、用土が劣化している、成長が停滞している）
+- 整枝のために枝に針金をかけたい時
+- 既存の盆栽コレクションの季節管理カレンダーが必要な時
+- 生きた樹木との瞑想的な座り込み実践を発展させたい時
 
 ## 入力
 
-- **必須**: Species of tree (or climate zone for species selection guidance)
-- **任意**: Current state of tree (age estimate, pot size, health, last repotting date)
-- **任意**: Goal style (formal upright, informal upright, cascade, semi-cascade, literati, windswept, forest)
-- **任意**: Season and current weather conditions
-- **任意**: Experience level (beginner, intermediate, advanced)
+- **必須**: 樹種（または樹種選定ガイダンス用の気候帯）
+- **任意**: 樹木の現状（推定樹齢、鉢のサイズ、健康状態、最終植替え日）
+- **任意**: 目標樹形（直幹、模様木、懸崖、半懸崖、文人木、吹流し、寄植え）
+- **任意**: 季節と現在の気象条件
+- **任意**: 経験レベル（初心者、中級者、上級者）
 
 ## 手順
 
-### ステップ1: Select or Assess the Species
+### ステップ1: 樹種の選定または評価
 
-Match species to climate, experience level, and desired aesthetic.
+気候、経験レベル、希望する美的感覚に合った樹種を選ぶ。
 
 ```
 Beginner-Friendly Species by Climate:
@@ -79,13 +77,13 @@ Selection Criteria:
 4. Available as nursery stock (don't start from seed — too slow for learning)
 ```
 
-**期待結果:** Species selected that matches climate, experience, and aesthetic goal.
+**期待結果:** 気候、経験、美的目標に合った樹種が選定される。
 
-**失敗時:** If unsure about species suitability, default to Chinese elm — it tolerates the widest range of conditions and forgives beginner mistakes.
+**失敗時:** 樹種の適性が不明な場合、ニレケヤキ（Chinese elm）をデフォルトとする。最も幅広い条件に耐え、初心者のミスを許容する。
 
-### ステップ2: Meditate Checkpoint — Sitting with the Tree
+### ステップ2: 瞑想チェックポイント — 樹木との座り込み
 
-Before any structural work (pruning, wiring, repotting), sit with the tree.
+構造的な作業（剪定、針金かけ、植替え）の前に、樹木と向き合って座る。
 
 ```
 Bonsai Sitting Protocol (5-10 minutes):
@@ -102,13 +100,13 @@ Bonsai Sitting Protocol (5-10 minutes):
 If you feel rushed or impatient, you are not ready. Return tomorrow.
 ```
 
-**期待結果:** Calm, unhurried state. A sense of the tree's natural movement and character.
+**期待結果:** 穏やかで急がない状態。樹木の自然な動きと個性への理解。
 
-**失敗時:** If unable to quiet the planning mind, do not proceed to structural pruning. Maintenance watering and feeding may continue without this checkpoint.
+**失敗時:** 計画する心を静められない場合、構造剪定に進まない。水やりや施肥などの維持管理はこのチェックポイントなしでも続けてよい。
 
-### ステップ3: Pruning
+### ステップ3: 剪定
 
-Two types: maintenance pruning (ongoing) and structural pruning (seasonal).
+2つの種類がある: 維持剪定（継続的）と構造剪定（季節的）。
 
 ```
 Maintenance Pruning (any time during growing season):
@@ -134,13 +132,13 @@ a branch, leave it for one more season. You can always remove later;
 you cannot reattach.
 ```
 
-**期待結果:** Tree with cleaner silhouette, improved light penetration, and clear trunk line.
+**期待結果:** より整理されたシルエット、改善された光の透過、明確な幹線を持つ樹木。
 
-**失敗時:** If too much foliage was removed, move tree to sheltered spot with dappled light. Reduce watering slightly (less foliage = less transpiration). Do not fertilize until new growth appears.
+**失敗時:** 葉を取り過ぎた場合、木漏れ日が当たる保護された場所に移動する。水やりをやや減らす（葉が少ない＝蒸散が少ない）。新芽が出るまで施肥しない。
 
-### ステップ4: Wiring
+### ステップ4: 針金かけ
 
-Shape branches by wrapping them with anodized aluminium or annealed copper wire.
+アルマイト処理されたアルミニウムまたは焼きなました銅線で枝を巻いて整枝する。
 
 ```
 Wiring Protocol:
@@ -165,13 +163,13 @@ Common Errors:
 - Bending too fast: branch snaps at the wire point
 ```
 
-**期待結果:** Branches held in desired position without bark damage. Wire will be removed in 3-6 months.
+**期待結果:** 樹皮を傷つけることなく枝が希望の位置に保持される。針金は3〜6ヶ月で除去する。
 
-**失敗時:** If wire bites into bark, cut it off immediately. The scar will heal over 2-3 growing seasons. Apply cut paste to deep wounds.
+**失敗時:** 針金が樹皮に食い込んだ場合、直ちに切り取る。傷跡は2〜3成長期で治癒する。深い傷には切口保護剤を塗布する。
 
-### ステップ5: Repotting
+### ステップ5: 植替え
 
-Repot when roots circle the pot interior or soil no longer drains freely.
+根が鉢の内側を回っている場合や、用土の排水性が低下した場合に植替える。
 
 ```
 Repotting Protocol:
@@ -210,13 +208,13 @@ Repotting Protocol:
    - Do NOT fertilize for 4-6 weeks (new roots need to establish)
 ```
 
-**期待結果:** Tree stable in pot, soil drains freely when watered, no wobble in trunk.
+**期待結果:** 樹木が鉢の中で安定し、水やり時に用土が自由に排水され、幹にぐらつきがない。
 
-**失敗時:** If tree shows severe wilting within days of repotting, too many roots were removed. Move to shade, mist foliage daily, and apply rooting hormone to next watering. Recovery takes 4-8 weeks.
+**失敗時:** 植替え後数日以内に深刻な萎れが見られる場合、根を切り過ぎた可能性がある。日陰に移動し、毎日葉に霧吹きし、次の水やり時に発根促進剤を加える。回復には4〜8週間かかる。
 
-### ステップ6: Heal Checkpoint — Post-Repot Assessment
+### ステップ6: ヒールチェックポイント — 植替え後の評価
 
-Two weeks after repotting, assess the tree's recovery.
+植替えから2週間後に樹木の回復を評価する。
 
 ```
 Post-Repot Health Triage:
@@ -238,11 +236,11 @@ If 3+ indicators show stress:
 5. Reassess at 4 weeks
 ```
 
-**期待結果:** Tree showing new bud activity and stable footing within 2-3 weeks.
+**期待結果:** 2〜3週間以内に新芽の活動と安定した足場が見られる。
 
-**失敗時:** If no new growth at 6 weeks and indicators remain stressed, the tree may need to be removed from the bonsai pot and placed in a larger recovery container with standard potting mix for one full growing season.
+**失敗時:** 6週間経っても新芽がなく、ストレス指標が改善しない場合、盆栽鉢から取り出し、標準的な培養土を入れたより大きな回復用容器に1成長期間置く必要があるかもしれない。
 
-### ステップ7: Seasonal Care Calendar
+### ステップ7: 季節管理カレンダー
 
 ```
 Bonsai Seasonal Calendar (Temperate Zones):
@@ -270,34 +268,34 @@ Bonsai Seasonal Calendar (Temperate Zones):
 └─────────┴──────────────────────────────────────────────────┘
 ```
 
-**期待結果:** Year-round care rhythm established with seasonal transitions.
+**期待結果:** 季節の移り変わりに合わせた年間管理リズムが確立される。
 
-**失敗時:** If a seasonal task was missed (e.g., spring repot), wait until next year — out-of-season repotting is more dangerous than waiting.
+**失敗時:** 季節の作業を逃した場合（例：春の植替え）、来年まで待つ。時期外れの植替えは待つことより危険である。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Species appropriate for climate zone and experience level
-- [ ] Meditate checkpoint completed before structural pruning or wiring
-- [ ] No more than 1/3 of foliage removed in any single pruning session
-- [ ] Wire gauge approximately 1/3 branch diameter, applied at 45°
-- [ ] Soil mix sifted, free-draining, appropriate for species
-- [ ] No more than 1/3 of root mass removed during repotting
-- [ ] Heal checkpoint performed 2 weeks post-repot
-- [ ] Seasonal care tasks aligned with current season
+- [ ] 気候帯と経験レベルに適した樹種が選定されている
+- [ ] 構造剪定や針金かけの前に瞑想チェックポイントが完了している
+- [ ] 1回の剪定で葉の1/3以上を除去していない
+- [ ] 針金の太さが枝の直径の約1/3で、45度の角度で巻かれている
+- [ ] 用土はふるいにかけられ、排水性が良く、樹種に適している
+- [ ] 植替え時に根の1/3以上を除去していない
+- [ ] 植替え後2週間でヒールチェックポイントが実施されている
+- [ ] 季節管理タスクが現在の季節に合っている
 
 ## よくある落とし穴
 
-1. **Over-pruning**: Removing too much foliage weakens the tree. When in doubt, leave it
-2. **Forgotten wire**: Wire left too long scars bark permanently. Set monthly reminders to check
-3. **Wrong season for repotting**: Repotting in summer or mid-winter can kill the tree
-4. **Overwatering**: More bonsai die from overwatering than underwatering. Check soil moisture before watering — not on a schedule
-5. **Impatience**: Bonsai develop over decades. A tree shaped this year may not look finished for five years. This is the practice
-6. **Indoor placement**: Most bonsai are outdoor trees. Indoor placement (except tropical species) leads to slow decline from insufficient light and dormancy disruption
+1. **過度の剪定**: 葉を取り過ぎると樹木が弱る。迷ったら残す
+2. **針金の放置**: 針金を長く放置すると樹皮に永久的な傷が残る。毎月チェックするリマインダーを設定する
+3. **植替え時期の誤り**: 夏や真冬の植替えは樹木を枯死させる可能性がある
+4. **水のやり過ぎ**: 水のやり過ぎで枯れる盆栽は水切れで枯れるものより多い。スケジュールではなく、水やり前に用土の湿り具合を確認する
+5. **焦り**: 盆栽は数十年かけて発展する。今年整枝した樹木が完成するのは5年後かもしれない。これが修練である
+6. **室内管理**: ほとんどの盆栽は屋外の樹木である。室内管理（熱帯種を除く）は、光不足と休眠期の乱れにより緩やかな衰退を招く
 
 ## 関連スキル
 
-- `prepare-soil` — Soil mix preparation overlaps with bonsai substrate knowledge
-- `maintain-hand-tools` — Bonsai tools (concave cutter, wire cutter, jin pliers) require the same sharpening and oiling care
-- `meditate` — Pre-work contemplative checkpoint (full protocol)
-- `heal` — Post-intervention health assessment (full protocol)
-- `plan-garden-calendar` — Seasonal timing for bonsai work aligns with the solar/lunar calendar
+- `prepare-soil` -- 用土配合は盆栽の基盤知識と重なる
+- `maintain-hand-tools` -- 盆栽道具（又枝切り、針金切り、ジンプライヤー）は同様の研磨と油さしの手入れが必要
+- `meditate` -- 作業前の瞑想チェックポイント（完全プロトコル）
+- `heal` -- 作業後の健康評価（完全プロトコル）
+- `plan-garden-calendar` -- 盆栽作業の季節的タイミングは太陽/月暦カレンダーに一致する

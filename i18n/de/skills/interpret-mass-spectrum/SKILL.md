@@ -3,16 +3,14 @@ name: interpret-mass-spectrum
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Interpretiere Elektronenstoss- und Elektrospray-Massenspektren zur
-  Bestimmung von Molekularmasse, Molekuelformel und Strukturfragmenten.
-  Verwende diesen Skill beim Bestimmen des Molekuelionenpeaks und der
-  Molekuelformel aus Hochaufloesungs-MS, beim Erklaeren charakteristischer
-  Fragmentierungsmuster, beim Identifizieren von Isotopenmustern fuer
-  Halogene und Schwefel oder beim Kombinieren von MS-Daten mit anderen
-  spektroskopischen Methoden zur Strukturaufklaerung.
+  Massenspektren systematisch interpretieren um Summenformel zu bestimmen,
+  Fragmentierungswege zu identifizieren und Molekuelstrukturen vorzuschlagen.
+  Behandelt Ionisierungsmethoden-Bewertung, Molekuelion-Identifikation,
+  Isotopenmuster-Analyse, haeufige Fragmentierungsverluste und
+  Reinheitsbewertung.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -21,151 +19,172 @@ metadata:
   domain: spectroscopy
   complexity: advanced
   language: natural
-  tags: spectroscopy, mass-spectrometry, fragmentation, molecular-ion, isotope-pattern
+  tags: spectroscopy, mass-spectrometry, fragmentation, molecular-ion, isotope
 ---
 
 # Massenspektrum interpretieren
 
-Interpretiere Massenspektren systematisch durch Identifizierung des Molekuelionensignals, Analyse des Isotopenmusters, Bestimmung der Molekuelformel aus Hochaufloesungsdaten und Zuordnung charakteristischer Fragmentionen zur Strukturaufklaerung.
+Massenspektren aus jeder gaengigen Ionisierungsmethode analysieren um das Molekuelion, die Summenformel, Fragmentierungswege und Strukturmerkmale des Analyten zu bestimmen.
 
 ## Wann verwenden
 
-- Bestimmen des Molekulargewichts und der Molekuelformel einer unbekannten Verbindung
-- Erklaeren von Fragmentierungsmustern zur Ableitung struktureller Merkmale
-- Identifizieren von Halogen- oder Schwefelgehalt aus Isotopenmustern
-- Bestaetigen einer vorgeschlagenen Struktur durch Vergleich mit berechnetem Spektrum
-- Kombinieren von MS-Daten mit IR- und NMR-Evidenz fuer vollstaendige Strukturaufklaerung
+- Bestimmung des Molekulargewichts und der Summenformel einer unbekannten Verbindung
+- Bestaetigung der Identitaet eines Syntheseprodukts durch Molekuelion und Fragmentierung
+- Identifikation von Verunreinigungen oder Abbauprodukten in einer Probe
+- Vorschlag von Strukturmerkmalen aus charakteristischen Fragmentierungsverlusten
+- Analyse von Isotopenmustern zum Nachweis von Halogenen, Schwefel oder Metallen
 
 ## Eingaben
 
-- **Erforderlich**: Massenspektrum mit m/z-Werten und relativen Intensitaeten
-- **Erforderlich**: Ionisierungsmethode (EI, ESI, APCI, MALDI)
-- **Optional**: Hochaufloesungs-MS-Daten (HRMS) fuer genaue Massenbestimmung
-- **Optional**: MS/MS-Daten fuer strukturelle Fragmentierungsanalyse
-- **Optional**: Vorgeschlagene Struktur zur Bestaetigung
+- **Erforderlich**: Massenspektrumdaten (m/z-Werte mit relativen Intensitaeten, mindestens das Vollscan-Spektrum)
+- **Erforderlich**: Verwendete Ionisierungsmethode (EI, ESI, MALDI, CI, APCI, APPI)
+- **Optional**: Hochaufloesende Massendaten (exakte Masse, gemessen vs. berechnet)
+- **Optional**: Summenformel aus anderen Quellen (Elementaranalyse, NMR)
+- **Optional**: Tandem-MS/MS-Daten (Fragmentierung ausgewaehlter Vorlaeuferionen)
+- **Optional**: Chromatographischer Kontext (LC-MS- oder GC-MS-Retentionszeit, Reinheit)
 
 ## Vorgehensweise
 
-### Schritt 1: Molekuelionenpeak identifizieren
+### Schritt 1: Ionisierungsmethode identifizieren und erwartete Ionentypen bestimmen
 
-Lokalisiere den Molekuelionenpeak (M+) oder die entsprechende Ionenform:
+Bestimmen welche Spezies das Spektrum enthaelt bevor Peaks zugeordnet werden:
 
-1. **EI-Massenspektrometrie**: M+ ist der Peak hoechster Masse (ausser Isotopenpeaks). Pruefe ob M+ sichtbar ist; manche Verbindungen zeigen nur M-1 oder kein M+.
-2. **ESI-Massenspektrometrie**:
-   - Positive Mode: [M+H]+, [M+Na]+, [M+K]+, Addukte oder mehrfach geladene Ionen [M+nH]n+
-   - Negative Mode: [M-H]-, [M+Cl]-, Addukte
-3. **Basiswissen**: Der schwerste Nicht-Isotopen-Peak ist der Kandidat fuer M+ (EI) oder entsprechendes Addukt (ESI).
-4. **Pruefen auf charakteristische Verluste** vom hoechsten m/z-Peak:
-   - M-15: Verlust von CH3
-   - M-18: Verlust von H2O
-   - M-28: Verlust von CO oder C2H4
-   - M-35/M-37: Verlust von Cl
+1. **Die Ionisierungsmethode klassifizieren**:
 
-```markdown
-## Molekuelion
-- Ionisierungsmethode: [EI/ESI/andere]
-- Hauptionstyp: [M+/[M+H]+/[M+Na]+]
-- m/z des Molekuelions: [wert]
-- Berechnetes Molekulargewicht: [wert]
-```
+| Methode | Energie | Primaerion | Fragmentierung | Typische Anwendung |
+|---------|---------|------------|----------------|--------------------|
+| EI (70 eV) | Hart | M+. (Radikalkation) | Umfangreich | Kleine fluechtige Molekuele, GC-MS |
+| CI | Weich | [M+H]+, [M+NH4]+ | Minimal | Molekulargewichtsbestaetigung |
+| ESI | Weich | [M+H]+, [M+Na]+, [M-H]- | Minimal | Polare Molekuele, Biomolekuele, LC-MS |
+| MALDI | Weich | [M+H]+, [M+Na]+, [M+K]+ | Minimal | Grosse Molekuele, Polymere, Proteine |
+| APCI | Weich | [M+H]+, [M-H]- | Etwas | Mittlere Polaritaet, LC-MS |
 
-**Erwartet:** Eindeutig identifizierter Molekuelionenpeak oder entsprechendes Adduktion mit zugeordnetem Molekulargewicht.
+2. **Polaritaetsmodus beachten**: Der Positivmodus erzeugt Kationen; der Negativmodus erzeugt Anionen. ESI verwendet haeufig beide.
+3. **Auf Addukte und Cluster pruefen**: Weiche Ionisierung erzeugt oft [M+Na]+ (M+23), [M+K]+ (M+39), [2M+H]+ und [2M+Na]+ zusaetzlich zu [M+H]+. Diese identifizieren bevor das Molekuelion zugeordnet wird.
+4. **Mehrfach geladene Ionen identifizieren**: Bei ESI erscheinen mehrfach geladene Ionen bei m/z = (M + nH) / n. Nach Peaks mit gebrochenen m/z-Abstaenden suchen (z.B. 0,5 Da Abstand zeigt z=2 an).
 
-**Bei Fehler:** Falls kein M+ sichtbar (haeufig bei labilen EI-Verbindungen), pruefe auf chemische Ionisierung (CI) oder Weichionisierungsmethoden. Bei ESI pruefe verschiedene Addukte.
+**Erwartet:** Ionisierungsmethode dokumentiert, erwartete Ionentypen aufgelistet und Addukte/Cluster identifiziert, sodass das wahre Molekuelion bestimmt werden kann.
 
-### Schritt 2: Isotopenverteilung auswerten
+**Bei Fehler:** Wenn die Ionisierungsmethode unbekannt ist, das Spektrum auf Hinweise untersuchen: umfangreiche Fragmentierung deutet auf EI, Adduktmuster auf ESI und Matrixpeaks auf MALDI hin. Falls verfuegbar das Geraeteprotokoll konsultieren.
 
-Das Isotopenmuster liefert wertvolle Information zur Elementzusammensetzung:
+### Schritt 2: Molekuelion und Summenformel bestimmen
 
-1. **Reine C/H/N/O-Verbindungen**: M und M+1 und M+2 gemaess binomialer Verteilung; M+1 ca. 1,1% pro Kohlenstoffatom.
-2. **Chlor-Isotopenmuster**:
-   - 1 Cl: M:M+2 = 3:1
-   - 2 Cl: M:M+2:M+4 = 9:6:1
-3. **Brom-Isotopenmuster**:
-   - 1 Br: M:M+2 = 1:1
-   - 2 Br: M:M+2:M+4 = 1:2:1
-4. **Schwefel**: M+2 um 4,4% erhoeht pro S-Atom (34S).
-5. **Stickstoffregel**: Verbindungen mit ungerader Stickstoffanzahl haben ungerade Molekularmasse (EI, M+).
+Den Molekuelionenpeak identifizieren und die Summenformel ableiten:
 
-```markdown
-## Isotopenanalyse
-| Ion | m/z | Relative Intensitaet | Interpretation |
-|-----|-----|---------------------|----------------|
-| M   | [wert] | 100% | Molekuelion |
-| M+1 | [wert] | [%] | 13C-Anteil (~1,1% pro C) |
-| M+2 | [wert] | [%] | Halogen/S-Indikator |
-```
+1. **Das Molekuelion (M) lokalisieren**: Bei EI ist M+. der Peak mit dem hoechsten m/z und einem chemisch sinnvollen Isotopenmuster (er kann bei labilen Verbindungen schwach oder fehlend sein). Bei weicher Ionisierung [M+H]+ oder [M+Na]+ identifizieren und das Addukt subtrahieren um M zu erhalten.
+2. **Die Stickstoffregel anwenden**: Ein ungerades Molekulargewicht zeigt eine ungerade Anzahl Stickstoffatome an. Ein gerades Molekulargewicht zeigt null oder eine gerade Anzahl Stickstoffatome an.
+3. **Doppelbindungsaequivalente (DBE) berechnen**: DBE = (2C + 2 + N - H - X) / 2, wobei X = Halogene. Jeder Ring oder jede Pi-Bindung traegt ein DBE bei. Benzol = 4 DBE, Carbonyl = 1 DBE.
+4. **Hochaufloesende Daten verwenden**: Wenn die exakte Masse verfuegbar ist, die Summenformel ueber den Massendefekt berechnen. Die gemessene Masse mit allen Kandidatenformeln innerhalb des Massengenauigkeitsfensters vergleichen (typischerweise < 5 ppm bei modernen Instrumenten).
+5. **Mit dem Isotopenmuster abgleichen**: Das beobachtete Isotopenmuster muss zur vorgeschlagenen Summenformel passen (siehe Schritt 3).
 
-**Erwartet:** Ermittlung der Anzahl von Halogenen oder Schwefelheteroatomen aus Isotopenverhaeltnis.
+**Erwartet:** Molekuelion identifiziert, Molekulargewicht bestimmt, Stickstoffregel angewandt und eine Summenformel vorgeschlagen (bestaetigt durch HRMS falls verfuegbar).
 
-**Bei Fehler:** Falls Isotopenmuster nicht dem erwarteten Muster entspricht, pruefe auf Verunreinigungen oder Addukte.
+**Bei Fehler:** Wenn kein Molekuelion im EI sichtbar ist (haeufig bei thermisch labilen oder stark verzweigten Verbindungen), eine weichere Ionisierungsmethode versuchen. Wenn das Molekuelion mehrdeutig ist, auf den Verlust haeufiger kleiner Fragmente vom Peak mit dem hoechsten m/z pruefen (z.B. M-1, M-15, M-18 koennen helfen M zu identifizieren).
 
-### Schritt 3: Molekuelformel aus Hochaufloesungs-MS bestimmen
+### Schritt 3: Isotopenmuster analysieren
 
-Bei HRMS-Daten berechne die exakte Elementarzusammensetzung:
+Isotopensignaturen verwenden um bestimmte Elemente nachzuweisen:
 
-1. **Exakte Masse berechnen**: Nutze Massen der haeufigsten Isotope (1H = 1,007825, 12C = 12,000000, 14N = 14,003074, 16O = 15,994915).
-2. **Datenbankabfrage**: Tools wie ChemCalc, Xcalibur oder MZmine vergleichen gemessene exakte Masse mit berechneten Formeln.
-3. **Einschraenkungen anwenden**: Isotopenverteilung, Stickstoffregel, DoU muessen mit der Kandidatenformel konsistent sein.
-4. **Toleranz**: Typisch 5 ppm fuer Hochaufloesungsmessungen (Orbitrap, Q-TOF).
+1. **Monoisotopische Elemente**: H, C, N, O, F, P, I haben charakteristische natuerliche Haeufigkeitsmuster. Fuer Molekuele die nur C, H, N, O enthalten betraegt der M+1-Peak etwa 1,1% pro Kohlenstoff.
+2. **Halogenmuster**:
 
-**Erwartet:** Eindeutige Molekuelformel oder kurze Liste von Kandidatenformeln mit dem wahrscheinlichsten Treffer.
+| Element | Isotope | M : M+2 Verhaeltnis | Visuelles Muster |
+|---------|---------|----------------------|------------------|
+| 35Cl / 37Cl | 35, 37 | 3 : 1 | Dublett, 2 Da Abstand |
+| 79Br / 81Br | 79, 81 | 1 : 1 | Gleiches Dublett, 2 Da Abstand |
+| 2 Cl | -- | 9 : 6 : 1 | Triplett |
+| 2 Br | -- | 1 : 2 : 1 | Triplett |
+| 1 Cl + 1 Br | -- | 3 : 4 : 1 | Charakteristisches Quartett-aehnliches Muster |
 
-**Bei Fehler:** Falls Massengenauigkeit unter 5 ppm, pruefe Kalibrierung des Instruments. Falls viele Kandidatenformeln verbleiben, nutze Isotopenmuster oder bekannte Atombeschraenkungen zur Eingrenzung.
+3. **Schwefeldetektion**: 34S traegt 4,4% bei M+2 bei. Ein M+2-Peak von ungefaehr 4--5% relativ zu M (nach Korrektur fuer den Beitrag von 13C2) deutet auf ein Schwefelatom hin.
+4. **Siliziumdetektion**: 29Si (5,1%) und 30Si (3,4%) erzeugen charakteristische M+1- und M+2-Beitraege.
+5. **Mit berechneten Mustern vergleichen**: Die vorgeschlagene Summenformel verwenden um das theoretische Isotopenmuster zu berechnen. Mit dem beobachteten Muster ueberlagern um die Formel zu bestaetigen oder zu widerlegen.
 
-### Schritt 4: Fragmentierungsmuster interpretieren
+**Erwartet:** Isotopenmuster analysiert, An- oder Abwesenheit von Cl, Br, S, Si bestimmt und Muster konsistent mit der vorgeschlagenen Summenformel.
 
-Erklaere die Hauptfragmentionen strukturell:
+**Bei Fehler:** Wenn die Isotopenaufloesung ungenuegend ist (niederauflosendes Instrument), koennte das M+2-Muster nicht aufloesbar sein. Die Einschraenkung vermerken und sich fuer die Elementzusammensetzung auf exakte Masse und andere spektroskopische Daten stuetzen.
 
-1. **Alpha-Spaltung**: Bindungsbruch neben Heteroatom oder Doppelbindung; haeufig bei Carbonylverbindungen und Aminen.
-2. **McLafferty-Umlagerung**: Gamma-Wasserstoffuebertragung auf Carbonyl; ergibt geradzahligen m/z-Wert.
-3. **Benzylspaltung**: Stabilisiertes Benzyl- oder Tropyliumkation (m/z 91) bei Alkylaromaten.
-4. **Retro-Diels-Alder**: Cyclische Verbindungen, Verlust von 4C-Dien- oder 2C-Dienophileinheit.
-5. **Charakteristische Verluste** vom M+-Peak:
-   - -15 (CH3), -17 (OH), -18 (H2O), -28 (CO), -32 (CH3OH), -35/37 (Cl)
+### Schritt 4: Fragmentierungsverluste und Schluesselfragement-Ionen identifizieren
 
-```markdown
-## Fragmentierungsinterpretation
-| m/z | Relativer Anteil | Strukturzuweisung | Verlust von M+ |
-|-----|-----------------|-------------------|----------------|
-| [wert] | [%] | [Fragment] | [neutraler Verlust] |
-```
+Die Fragmentierungswege kartieren um Strukturinformation zu extrahieren:
 
-**Erwartet:** Erklaerung der wichtigsten Fragmente und Rekonstruktion plausibler Struktureinheiten.
+1. **Hauptfragmente katalogisieren**: Alle Peaks ueber 5--10% relativer Intensitaet mit ihren m/z-Werten auflisten.
+2. **Neutralverluste vom Molekuelion berechnen**:
 
-**Bei Fehler:** Falls Fragmente nicht erklaerbar, pruefe auf Verunreinigungen oder Umlagerungsreaktionen im Ionenstrahl. MS/MS-Experimente ermitteln praezise Vorlaeufer-Produkt-Beziehungen.
+| Verlust (Da) | Verlorenes Neutral | Strukturelle Implikation |
+|--------------|-------------------|--------------------------|
+| 1 | H. | Labiler Wasserstoff |
+| 15 | CH3. | Methylgruppe |
+| 17 | OH. | Hydroxyl |
+| 18 | H2O | Alkohol, Carbonsaeure |
+| 27 | HCN | Stickstoffheterozyklus, Amin |
+| 28 | CO oder C2H4 | Carbonyl oder Ethyl |
+| 29 | CHO. oder C2H5. | Aldehyd oder Ethyl |
+| 31 | OCH3. oder CH2OH. | Methoxy oder Hydroxymethyl |
+| 32 | CH3OH | Methylester |
+| 35/36 | Cl./HCl | Chlorierte Verbindung |
+| 44 | CO2 | Carbonsaeure, Ester |
+| 45 | OC2H5. | Ethoxy |
+| 46 | NO2. | Nitroverbindung |
 
-### Schritt 5: Strukturvorschlag ableiten und verifizieren
+3. **Charakteristische Fragment-Ionen identifizieren**:
 
-Kombiniere alle MS-Informationen mit anderen Spektraldaten:
+| m/z | Ion | Herkunft |
+|-----|-----|----------|
+| 77 | C6H5+ | Phenylkation |
+| 91 | C7H7+ | Tropylium (Benzyl-Umlagerung) |
+| 105 | C6H5CO+ | Benzoylkation |
+| 43 | CH3CO+ oder C3H7+ | Acetyl oder Propyl |
+| 57 | C4H9+ oder C3H5O+ | tert-Butyl oder Acrolein |
+| 149 | Phthalat-Fragment | Weichmacher-Kontaminant |
 
-1. **Tentative Struktur vorschlagen** basierend auf Molekuelformel, DoU, Isotopenverteilung und Fragmentierungsmustern.
-2. **Konsistenzpruefung mit NMR und IR**: Stimmt die aus MS abgeleitete Struktur mit Signalanzahl, Verschiebungen und funktionellen Gruppen ueberein?
-3. **Spektrenbibliothek abfragen**: NIST-Datenbank, SDBS oder ChemSpider fuer EI-Spektrenvergleich.
-4. **Berechnung des theoretischen Spektrums** mit Softwaretools wie ACD/MS Manager oder mzCloud.
+4. **Fragmentierungswege kartieren**: Fragment-Ionen durch aufeinanderfolgende Verluste verbinden um einen Fragmentierungsbaum von M hinunter zu niedrigmassigen Fragmenten aufzubauen.
+5. **Umlagerungsionen identifizieren**: Die McLafferty-Umlagerung (gamma-Wasserstoff-Transfer mit beta-Spaltung) erzeugt Ionen mit geradem Elektronenpaar aus carbonylhaltigen Verbindungen. Retro-Diels-Alder-Fragmentierung ist charakteristisch fuer Cyclohexen-Systeme.
 
-**Erwartet:** Bestaetigung oder Revision der vorgeschlagenen Struktur mit expliziter Erklaerung, wie alle MS-Daten zur Struktur passen.
+**Erwartet:** Alle Hauptfragement-Ionen zugeordnet, Neutralverluste berechnet und mit Strukturmerkmalen korreliert, Fragmentierungsbaum konstruiert.
 
-**Bei Fehler:** Falls MS-Daten und NMR widersprechen, pruefe auf Isomere oder Gemisch mehrerer Verbindungen. Trenne gegebenenfalls mit LC-MS.
+**Bei Fehler:** Wenn Fragmente nicht einfachen Verlusten vom Molekuelion entsprechen, Umlagerungsprozesse in Betracht ziehen. Nicht zugeordnete Fragmente koennen auf unerwartete funktionelle Gruppen, Verunreinigungen oder Matrix-/Hintergrundpeaks hinweisen.
+
+### Schritt 5: Reinheit bewerten und Struktur vorschlagen
+
+Das Gesamtspektrum auf Reinheitsindikatoren evaluieren und einen Strukturvorschlag zusammenstellen:
+
+1. **Reinheitspruefung**: Bei GC-MS oder LC-MS das Chromatogramm auf zusaetzliche Peaks untersuchen. Bei Direktinfusions-MS nach unerwarteten Ionen suchen die keine Fragmente oder Addukte des Hauptanalyten sind.
+2. **Hintergrund- und Kontaminantenpeaks**: Haeufige Kontaminanten sind Phthalatweichmacher (m/z 149, 167, 279), Saeulenbluten (Siloxane bei m/z 207, 281, 355, 429 im GC-MS) und Loesungsmittelcluster.
+3. **Strukturvorschlag**: Summenformel (Schritt 2), Isotopenmuster (Schritt 3) und Fragmentierung (Schritt 4) kombinieren um eine Struktur oder eine Reihe von Kandidatenstrukturen vorzuschlagen.
+4. **Kandidaten rangieren**: Den Fragmentierungsbaum verwenden um Strukturkandidaten zu rangieren. Die beste Struktur erklaert die meisten Fragment-Ionen mit den wenigsten Ad-hoc-Annahmen.
+5. **Kreuzvalidieren**: Die vorgeschlagene Struktur mit Daten aus anderen Techniken (NMR, IR, UV-Vis) vergleichen. Das Massenspektrum allein liefert selten eine eindeutige Struktur fuer neuartige Verbindungen.
+
+**Erwartet:** Reinheit bewertet, Kontaminanten identifiziert falls vorhanden, und ein Strukturvorschlag (oder eine gerankte Kandidatenliste) konsistent mit allen MS-Daten und kreuzvalidiert wo moeglich.
+
+**Bei Fehler:** Wenn das Spektrum mehrere Komponenten zu enthalten scheint und keine chromatographische Trennung verwendet wurde, das Gemisch kennzeichnen und LC-MS- oder GC-MS-Reanalyse empfehlen. Wenn kein zufriedenstellender Strukturvorschlag entsteht, identifizieren welche zusaetzlichen Daten (HRMS, MS/MS, NMR) die Mehrdeutigkeit aufloesen wuerden.
 
 ## Validierung
 
-- [ ] Molekuelionenpeak oder Addukt korrekt identifiziert
-- [ ] Stickstoffregel angewendet (gerade/ungerade Masse)
-- [ ] Isotopenmuster fuer Halogene und Schwefel ausgewertet
-- [ ] Bei HRMS: Molekuelformel aus exakter Masse bestimmt
-- [ ] Hauptfragmente erklaert (mindestens 80% der Gesamtionenstromintensitaet)
-- [ ] Vorgeschlagene Struktur mit Bibliotheksspektrum verglichen
+- [ ] Ionisierungsmethode identifiziert und erwartete Ionentypen dokumentiert
+- [ ] Molekuelion lokalisiert und von Addukten, Fragmenten und Clustern unterschieden
+- [ ] Stickstoffregel angewandt und konsistent mit vorgeschlagener Formel
+- [ ] Doppelbindungsaequivalente berechnet und in der Struktur beruecksichtigt
+- [ ] Isotopenmuster stimmt mit vorgeschlagener Summenformel ueberein
+- [ ] Hauptfragement-Ionen mit Neutralverlusten und struktureller Begruendung zugeordnet
+- [ ] Fragmentierungsbaum vom Molekuelion zu niedrigmassigen Fragmenten konstruiert
+- [ ] Haeufige Kontaminanten- und Hintergrundpeaks identifiziert und ausgeschlossen
+- [ ] Strukturvorschlag mit anderen spektroskopischen Daten kreuzvalidiert
 
 ## Haeufige Stolperfallen
 
-- **Verwechslung M+ mit Fragmentionen**: Der hoechste m/z-Peak muss nicht M+ sein; pruefe auf typische Verluste.
-- **ESI-Addukte vergessen**: Na- und K-Addukte liegen 22 und 38 Da hoeher als [M+H]+; unerkannte Addukte fuehren zu falschen Molekulargewichten.
-- **Ignorieren der Stickstoffregel**: Verbindungen ohne N oder mit geradzahliger N-Zahl haben geradzahliges M+; ungerade M+ bei EI deutet auf ungerade Anzahl N-Atome.
-- **McLafferty-Umlagerung uebersehen**: Wird haeufig als zunaechst unerklaerender geradzahliger Peak übersehen.
+- **Das Molekuelion falsch identifizieren**: Bei EI ist der Basispeak oft ein Fragment, nicht das Molekuelion. Das Molekuelion ist der Peak mit dem hoechsten m/z und einem chemisch sinnvollen Isotopenmuster. Addukt-Ionen im ESI ([M+Na]+, [2M+H]+) koennen ebenfalls mit dem Molekuelion verwechselt werden.
+- **Die Stickstoffregel ignorieren**: Ein ungerades Molekulargewicht erfordert eine ungerade Anzahl Stickstoffatome. Das zu vergessen fuehrt zu unmoeglichen Summenformeln.
+- **Isobare Verluste verwechseln**: Ein Verlust von 28 Da koennte CO oder C2H4 sein; ein Verlust von 29 koennte CHO oder C2H5 sein. Hochaufloesende MS oder zusaetzliche Fragmentierungsdaten werden benoetigt um isobare Verluste zu unterscheiden.
+- **Mehrfach geladene Ionen uebersehen**: Bei ESI erscheinen zweifach oder dreifach geladene Ionen bei der Haelfte bzw. einem Drittel des erwarteten m/z. Auf nichtganzzahlige Abstaende zwischen Isotopenpeaks als Diagnostik fuer Mehrfachladung achten.
+- **Niedrigintensitaetspeaks ueberinterpretieren**: Peaks unter 1--2% relativer Intensitaet koennen Rauschen, Isotopenbeitraege oder geringfuegige Kontaminanten sein statt aussagekraeftiger Fragmente.
+- **Reine Probe voraussetzen**: Viele reale Spektren sind Gemische. Immer die chromatographische Reinheit pruefen und nach Ionen suchen die nicht zur vorgeschlagenen Struktur passen.
 
 ## Verwandte Skills
 
-- `interpret-nmr-spectrum` -- ergaenzende Strukturinformation aus NMR
-- `interpret-ir-spectrum` -- funktionelle Gruppen aus IR-Daten bestaetigen
-- `plan-spectroscopic-analysis` -- systematische Messplanung vor der Analyse
+- `interpret-nmr-spectrum` -- Konnektivitaet und Wasserstoffumgebungen fuer die Strukturbestaetigung bestimmen
+- `interpret-ir-spectrum` -- Funktionelle Gruppen identifizieren die die beobachtete Fragmentierung erklaeren
+- `interpret-uv-vis-spectrum` -- Chromophore im Analyten charakterisieren
+- `interpret-raman-spectrum` -- Komplementaere Schwingungsanalyse
+- `plan-spectroscopic-analysis` -- Analytische Techniken vor der Datenerfassung auswaehlen und sequenzieren
+- `interpret-chromatogram` -- GC- oder LC-Chromatographiedaten gekoppelt mit MS analysieren

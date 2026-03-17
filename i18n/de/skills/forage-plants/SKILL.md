@@ -1,14 +1,15 @@
 ---
 name: forage-plants
 description: >
-  Identify and safely gather edible and useful wild plants. Covers safety rules
-  and deadly plant recognition, habitat reading, multi-feature identification
-  methodology, the universal edibility test, sustainable harvesting practices,
-  preparation methods, reaction monitoring, and building knowledge with
-  beginner-friendly universal species. Use when supplementing food supply in a
-  wilderness or survival setting, needing medicinal or utility plants, identifying
-  plants around camp for safety, or in long-term scenarios where foraging extends
-  available rations.
+  Essbare und nuetzliche Wildpflanzen identifizieren und sicher sammeln. Umfasst
+  Sicherheitsregeln und Erkennung toedlicher Pflanzen, Lebensraum-Erkundung,
+  Mehrfachmerkmal-Bestimmungsmethodik, den universellen Essbarkeitstest,
+  nachhaltige Erntepraktiken, Zubereitungsmethoden, Reaktionsueberwachung und
+  Wissensaufbau mit anfaengerfreundlichen universellen Arten. Verwenden beim
+  Ergaenzen der Nahrungsversorgung in einer Wildnis- oder Ueberlebenssituation,
+  beim Benoetigen von Heil- oder Nutzpflanzen, beim Identifizieren von Pflanzen
+  im Lagerbereich zur Sicherheit oder in Langzeitszenarien, in denen Sammeln
+  die verfuegbaren Rationen erweitert.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,29 +28,29 @@ metadata:
 
 # Pflanzen sammeln
 
-Identify and safely gather edible and useful wild plants in wilderness settings.
+Essbare und nuetzliche Wildpflanzen in Wildnisumgebungen identifizieren und sicher sammeln.
 
-## When to Use
+## Wann verwenden
 
-- You need to supplement food supply in a wilderness or survival setting
-- You need medicinal or utility plants (cordage, tinder, insect repellent)
-- You want to identify plants around camp for safety (avoid toxic species)
-- Long-term wilderness scenario where foraging extends available rations
+- Sie muessen die Nahrungsversorgung in einer Wildnis- oder Ueberlebenssituation ergaenzen
+- Sie benoetigen Heil- oder Nutzpflanzen (Schnurmaterial, Zunder, Insektenschutz)
+- Sie moechten Pflanzen im Lagerbereich zur Sicherheit identifizieren (giftige Arten vermeiden)
+- Langzeit-Wildnisszenario, in dem Sammeln die verfuegbaren Rationen erweitert
 
-## Inputs
+## Eingaben
 
-- **Required**: A habitat to forage in (forest, meadow, wetland, shoreline)
-- **Required**: Ability to observe fine plant details (leaf shape, arrangement, flower structure)
-- **Optional**: Field guide or reference material for the region
-- **Optional**: Container for collected plants
-- **Optional**: Knife for harvesting
-- **Optional**: Fire and water for preparation (see `make-fire`, `purify-water`)
+- **Erforderlich**: Ein Lebensraum zum Sammeln (Wald, Wiese, Feuchtgebiet, Kueste)
+- **Erforderlich**: Faehigkeit, feine Pflanzendetails zu beobachten (Blattform, Anordnung, Bluetenstruktur)
+- **Optional**: Bestimmungsbuch oder Referenzmaterial fuer die Region
+- **Optional**: Behaelter fuer gesammelte Pflanzen
+- **Optional**: Messer zum Ernten
+- **Optional**: Feuer und Wasser zur Zubereitung (siehe `make-fire`, `purify-water`)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Know the Deadly Plants First
+### Schritt 1: Zuerst die toedlichen Pflanzen kennen
 
-Before learning what to eat, learn what will kill you. Memorize these high-risk families and species for your region.
+Bevor man lernt, was essbar ist, lernen, was toedlich ist. Diese Hochrisiko-Familien und -Arten fuer die eigene Region einpraegen.
 
 ```
 Critical "Never Eat" Plants (Northern Hemisphere):
@@ -87,13 +88,13 @@ Absolute Rules:
 5. NEVER eat plants from the carrot/parsley family (Apiaceae) unless certain — this family contains the deadliest plants alongside the most common herbs
 ```
 
-**Expected:** You can recognize the most dangerous plants in your region on sight and will not confuse them with edible species.
+**Erwartet:** Sie koennen die gefaehrlichsten Pflanzen Ihrer Region auf Anhieb erkennen und werden sie nicht mit essbaren Arten verwechseln.
 
-**On failure:** If unsure about any plant in these families, do not eat it. The cost of a false positive (eating a deadly plant) is death. The cost of a false negative (skipping a safe plant) is a missed meal. Always err toward caution.
+**Bei Fehler:** Wenn bei einer Pflanze aus diesen Familien Unsicherheit besteht, nicht essen. Die Kosten eines falsch Positiven (eine toedliche Pflanze essen) sind der Tod. Die Kosten eines falsch Negativen (eine sichere Pflanze ueberspringen) sind eine verpasste Mahlzeit. Immer zur Vorsicht neigen.
 
-### Step 2: Read the Habitat
+### Schritt 2: Den Lebensraum lesen
 
-Different habitats produce different resources. Survey the area before collecting.
+Verschiedene Lebensraeume erzeugen verschiedene Ressourcen. Das Gebiet vor dem Sammeln erkunden.
 
 ```
 Habitat-to-Resource Mapping:
@@ -124,13 +125,13 @@ Habitat-to-Resource Mapping:
 └──────────────────┴─────────────────────────────┴──────────────────────────┘
 ```
 
-**Expected:** You identify which habitat type you are in and have a shortlist of likely edible species to look for.
+**Erwartet:** Sie identifizieren, in welchem Lebensraumtyp Sie sich befinden, und haben eine Auswahlliste wahrscheinlich essbarer Arten zum Suchen.
 
-**On failure:** If the habitat is unfamiliar or plant diversity is low (dense conifer forest, desert), focus on the universal species in Step 8. In arid environments, look for cacti pads (Opuntia), mesquite pods, or acorns from oaks. In deep forest, look for inner bark (cambium) of pine, birch, or basswood as emergency calories.
+**Bei Fehler:** Wenn der Lebensraum unbekannt ist oder die Pflanzenvielfalt gering (dichter Nadelwald, Wueste), auf die universellen Arten in Schritt 8 konzentrieren. In trockenen Umgebungen nach Kakteenpolstern (Opuntia), Mesquite-Schoten oder Eicheln suchen. Im tiefen Wald nach Innenrinde (Kambium) von Kiefer, Birke oder Linde als Notkalorien suchen.
 
-### Step 3: Identify Using Multiple Features
+### Schritt 3: Anhand mehrerer Merkmale identifizieren
 
-Never identify a plant by a single feature. Use the multi-feature method.
+Eine Pflanze niemals anhand eines einzelnen Merkmals identifizieren. Die Mehrfachmerkmal-Methode verwenden.
 
 ```
 Identification Checklist — Confirm ALL of the following:
@@ -171,13 +172,13 @@ Rule: You need a match on ALL features, not just some.
       A single mismatch means you have the wrong plant.
 ```
 
-**Expected:** Positive identification based on at least 5 matching features. You can name the species and explain why it is not a dangerous look-alike.
+**Erwartet:** Positive Bestimmung basierend auf mindestens 5 uebereinstimmenden Merkmalen. Sie koennen die Art benennen und erklaeren, warum es kein gefaehrlicher Doppelgaenger ist.
 
-**On failure:** If any feature does not match your reference, do not eat the plant. Set it aside and move to another candidate. Look-alikes are the primary cause of foraging poisoning — wild carrot (edible) vs. poison hemlock (deadly) differ in stem markings and smell but share leaf shape.
+**Bei Fehler:** Wenn ein Merkmal nicht mit der Referenz uebereinstimmt, die Pflanze nicht essen. Beiseitelegen und zu einem anderen Kandidaten weitergehen. Doppelgaenger sind die Hauptursache fuer Sammelvergiftungen — Wilde Moehre (essbar) vs. Gefleckter Schierling (toedlich) unterscheiden sich in Stielmarkierungen und Geruch, teilen aber die Blattform.
 
-### Step 4: Apply the Universal Edibility Test (Emergency Only)
+### Schritt 4: Den universellen Essbarkeitstest anwenden (nur im Notfall)
 
-This test is a last resort for completely unknown plants when you have no reference material and are facing starvation. It takes 24+ hours and carries risk.
+Dieser Test ist ein letzter Ausweg fuer voellig unbekannte Pflanzen, wenn kein Referenzmaterial vorhanden ist und Hunger droht. Er dauert 24+ Stunden und birgt Risiken.
 
 ```
 Universal Edibility Test Protocol:
@@ -216,13 +217,13 @@ CRITICAL WARNINGS:
 - This test does NOT detect all toxins (cumulative toxins, carcinogens)
 ```
 
-**Expected:** After the full test protocol, you have a tentative edible plant, though with less certainty than a positive ID.
+**Erwartet:** Nach dem vollstaendigen Testprotokoll haben Sie eine vorlaeufig essbare Pflanze, wenn auch mit weniger Sicherheit als bei einer positiven Bestimmung.
 
-**On failure:** If any reaction occurs at any stage, spit out or induce vomiting if swallowed. Drink water. Do not re-test the same plant. Move to a different species. If vomiting or diarrhea occur, focus on hydration and rest before resuming the test with another plant.
+**Bei Fehler:** Wenn in irgendeiner Phase eine Reaktion auftritt, ausspucken oder Erbrechen ausloesen, falls geschluckt. Wasser trinken. Dieselbe Pflanze nicht erneut testen. Zu einer anderen Art wechseln. Bei Erbrechen oder Durchfall auf Fluessigkeitszufuhr und Ruhe konzentrieren, bevor der Test mit einer anderen Pflanze fortgesetzt wird.
 
-### Step 5: Harvest Sustainably
+### Schritt 5: Nachhaltig ernten
 
-Take only what you need and preserve the plant population.
+Nur nehmen, was benoetigt wird, und die Pflanzenpopulation erhalten.
 
 ```
 Sustainable Harvesting Rules:
@@ -256,13 +257,13 @@ Harvest by Plant Part:
 └──────────────┴───────────────────────────────────────────────┘
 ```
 
-**Expected:** A reasonable quantity of positively identified plant material, harvested without destroying the source population.
+**Erwartet:** Eine angemessene Menge positiv bestimmten Pflanzenmaterials, geerntet ohne die Quellpopulation zu zerstoeren.
 
-**On failure:** If the plant stand is too small (fewer than 10 individuals), take only a token sample or find a larger population elsewhere. Overharvesting in a survival situation is understandable, but in short-term scenarios, conservation ensures the resource is available in coming days.
+**Bei Fehler:** Wenn der Pflanzenbestand zu klein ist (weniger als 10 Individuen), nur eine symbolische Probe nehmen oder eine groessere Population anderswo suchen. Uebermaessiges Ernten in einer Ueberlebenssituation ist verstaendlich, aber in Kurzzeitszenarien stellt Schonung sicher, dass die Ressource in den kommenden Tagen verfuegbar ist.
 
-### Step 6: Prepare for Consumption
+### Schritt 6: Zur Verwendung zubereiten
 
-Many edible wild plants benefit from or require preparation.
+Viele essbare Wildpflanzen profitieren von einer Zubereitung oder erfordern diese.
 
 ```
 Preparation Methods:
@@ -298,13 +299,13 @@ Key Preparation Rules:
 - Leach acorns in multiple changes of water until bitterness is gone
 ```
 
-**Expected:** Plant material is clean, prepared appropriately for the species, and ready to eat.
+**Erwartet:** Pflanzenmaterial ist sauber, artgerecht zubereitet und verzehrbereit.
 
-**On failure:** If you have no fire for cooking (see `make-fire`), limit foraging to species safe to eat raw. If taste is extremely bitter after preparation, the plant may contain high levels of tannins or alkaloids — do not force yourself to eat it. Discard and try another species.
+**Bei Fehler:** Wenn kein Feuer zum Kochen vorhanden ist (siehe `make-fire`), das Sammeln auf Arten beschraenken, die roh sicher essbar sind. Wenn der Geschmack nach der Zubereitung extrem bitter ist, kann die Pflanze hohe Gehalte an Tanninen oder Alkaloiden enthalten — sich nicht zwingen, sie zu essen. Entsorgen und eine andere Art versuchen.
 
-### Step 7: Monitor for Reactions
+### Schritt 7: Auf Reaktionen ueberwachen
 
-Even correctly identified plants can cause individual reactions.
+Selbst korrekt bestimmte Pflanzen koennen individuelle Reaktionen verursachen.
 
 ```
 Reaction Monitoring Protocol:
@@ -326,13 +327,13 @@ If a reaction occurs:
 - Do not re-eat that plant
 ```
 
-**Expected:** No adverse reaction after 1-2 hours. You can then eat a normal portion.
+**Erwartet:** Keine unerwuenschte Reaktion nach 1-2 Stunden. Sie koennen dann eine normale Portion essen.
 
-**On failure:** If a mild reaction occurs (stomach discomfort, mild nausea), stop eating the plant, hydrate, and rest. The reaction should pass within a few hours. If a severe reaction occurs (swelling, difficulty breathing, confusion, rapid heartbeat), this is a medical emergency — seek help immediately. Induce vomiting only if directed by medical guidance and the ingestion was within 1 hour.
+**Bei Fehler:** Bei einer leichten Reaktion (Magenbeschwerden, leichte Uebelkeit) die Pflanze nicht weiter essen, hydrieren und ruhen. Die Reaktion sollte innerhalb weniger Stunden abklingen. Bei einer schweren Reaktion (Schwellung, Atemnot, Verwirrung, schneller Herzschlag) handelt es sich um einen medizinischen Notfall — sofort Hilfe suchen. Erbrechen nur ausloesen, wenn medizinisch angeleitet und die Aufnahme innerhalb von 1 Stunde erfolgte.
 
-### Step 8: Build Your Knowledge — The Universal Five
+### Schritt 8: Wissen aufbauen — Die universellen Fuenf
 
-Start with five plants found across most of the temperate Northern Hemisphere. Master these before expanding your repertoire.
+Mit fuenf Pflanzen beginnen, die in den meisten Teilen der gemaessigten noerdlichen Hemispaere vorkommen. Diese beherrschen, bevor das Repertoire erweitert wird.
 
 ```
 The Universal Five (Beginner-Friendly Edible Plants):
@@ -386,31 +387,31 @@ Progression:
   (20 positively known species provides meaningful foraging capability)
 ```
 
-**Expected:** You can identify all five universal plants on sight using multiple features and know which parts to eat and how to prepare them.
+**Erwartet:** Sie koennen alle fuenf universellen Pflanzen auf Anhieb anhand mehrerer Merkmale identifizieren und wissen, welche Teile essbar sind und wie sie zubereitet werden.
 
-**On failure:** If none of these five are present in your area (e.g., desert, high arctic, tropical), consult region-specific references. These five are specific to temperate zones. In tropical environments, look for coconut palm, banana/plantain, taro (must cook), breadfruit, and moringa. In arid regions, look for prickly pear cactus (Opuntia), mesquite, and agave.
+**Bei Fehler:** Wenn keine dieser fuenf Pflanzen in Ihrem Gebiet vorhanden ist (z.B. Wueste, Hocharktis, Tropen), regionsspezifische Referenzen konsultieren. Diese fuenf sind spezifisch fuer gemaessigte Zonen. In tropischen Umgebungen nach Kokospalme, Banane/Kochbanane, Taro (muss gekocht werden), Brotfrucht und Moringa suchen. In trockenen Regionen nach Feigenkaktus (Opuntia), Mesquite und Agave suchen.
 
-## Validation
+## Validierung
 
-- [ ] Deadly plants for the region are known and can be identified on sight
-- [ ] Habitat was surveyed and likely edible species were shortlisted
-- [ ] Each plant was identified using at least 5 features (multi-feature method)
-- [ ] Plant was confirmed as NOT a dangerous look-alike
-- [ ] Harvesting was sustainable (no more than 1/3 of any stand)
-- [ ] Preparation method was appropriate for the species
-- [ ] A small test portion was eaten first with a 1-2 hour monitoring period
-- [ ] No adverse reactions occurred before eating a full portion
+- [ ] Toedliche Pflanzen der Region sind bekannt und koennen auf Anhieb identifiziert werden
+- [ ] Lebensraum wurde erkundet und wahrscheinlich essbare Arten wurden in eine Auswahlliste aufgenommen
+- [ ] Jede Pflanze wurde anhand mindestens 5 Merkmalen identifiziert (Mehrfachmerkmal-Methode)
+- [ ] Pflanze wurde als KEIN gefaehrlicher Doppelgaenger bestaetigt
+- [ ] Ernte war nachhaltig (nicht mehr als 1/3 eines Bestandes)
+- [ ] Zubereitungsmethode war fuer die Art angemessen
+- [ ] Eine kleine Testportion wurde zuerst mit einer 1-2-stuendigen Ueberwachungsphase gegessen
+- [ ] Keine unerwuenschten Reaktionen traten auf, bevor eine volle Portion gegessen wurde
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Single-feature identification**: "It has three leaves like clover" is not enough. Many toxic plants share individual features with edible ones. Always use the full multi-feature checklist
-- **Carrot family confusion**: The Apiaceae family (carrot, parsnip, parsley) contains both common foods and the deadliest plants in the Northern Hemisphere. Avoid unless expert-level certain
-- **Mushroom foraging in survival situations**: Mushrooms offer little caloric value and include some of the most lethal organisms on earth. The risk-reward ratio is terrible in a survival context
-- **Eating too much of a new plant**: Even safe plants can cause digestive upset in quantity, especially if your gut is not accustomed. Start small
-- **Ignoring preparation requirements**: Raw fiddleheads, raw elderberries, unleached acorns — some plants that are edible when cooked are mildly toxic raw
-- **Foraging near contaminated areas**: Roadsides (lead, exhaust), agricultural margins (pesticides), and industrial zones may have technically edible but contaminated plants
+- **Einzelmerkmal-Bestimmung**: "Es hat drei Blaetter wie Klee" reicht nicht aus. Viele giftige Pflanzen teilen einzelne Merkmale mit essbaren. Immer die vollstaendige Mehrfachmerkmal-Checkliste verwenden
+- **Verwechslung in der Moehrenfamilie**: Die Familie Apiaceae (Moehre, Pastinake, Petersilie) enthaelt sowohl gaengige Nahrungsmittel als auch die toedlichsten Pflanzen der noerdlichen Hemispaere. Vermeiden, ausser bei Experten-Sicherheit
+- **Pilzsammeln in Ueberlebenssituationen**: Pilze bieten wenig Kalorienwert und umfassen einige der toedlichsten Organismen der Erde. Das Risiko-Nutzen-Verhaeltnis ist in einem Ueberlebenskontext miserabel
+- **Zu viel von einer neuen Pflanze essen**: Selbst sichere Pflanzen koennen in groesserer Menge Verdauungsbeschwerden verursachen, besonders wenn der Darm nicht daran gewoehnt ist. Klein anfangen
+- **Zubereitungsanforderungen ignorieren**: Rohe Farnspitzen, rohe Holunderbeereen, ungelaugte Eicheln — einige Pflanzen, die gekocht essbar sind, sind roh leicht giftig
+- **Sammeln in der Naehe kontaminierter Gebiete**: Strassenraender (Blei, Abgase), landwirtschaftliche Raender (Pestizide) und Industriegebiete koennen technisch essbare, aber kontaminierte Pflanzen aufweisen
 
-## Related Skills
+## Verwandte Skills
 
-- `make-fire` — required for cooking foraged plants; many species need boiling or roasting to be safe or palatable
-- `purify-water` — clean water is needed for washing foraged plants and for the leaching/boiling preparation methods
+- `make-fire` — erforderlich zum Kochen gesammelter Pflanzen; viele Arten muessen gekocht oder geroestet werden, um sicher oder schmackhaft zu sein
+- `purify-water` — sauberes Wasser wird zum Waschen gesammelter Pflanzen und fuer die Auslaugungs-/Kochmethoden der Zubereitung benoetigt

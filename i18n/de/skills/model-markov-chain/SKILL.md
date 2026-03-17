@@ -1,13 +1,15 @@
 ---
 name: model-markov-chain
 description: >
-  Build and analyze discrete or continuous Markov chains including transition
-  matrix construction, state classification, stationary distribution computation,
-  and mean first passage times. Use when modeling a memoryless system with
-  observed transition counts or rates, computing long-run steady-state
-  probabilities, determining expected hitting times or absorption probabilities,
-  classifying states as transient or recurrent, or building a foundation for
-  hidden Markov models or reinforcement learning MDPs.
+  Diskrete oder kontinuierliche Markov-Ketten erstellen und analysieren,
+  einschliesslich Uebergangsmatrix-Konstruktion, Zustandsklassifikation,
+  Berechnung stationaerer Verteilungen und mittlerer Erstpassagezeiten.
+  Verwenden beim Modellieren eines gedaechtnislosen Systems mit beobachteten
+  Uebergangszaehlungen oder -raten, beim Berechnen von langfristigen
+  stationaeren Wahrscheinlichkeiten, beim Bestimmen erwarteter Treffzeiten
+  oder Absorptionswahrscheinlichkeiten, beim Klassifizieren von Zustaenden
+  als transient oder rekurrent oder beim Aufbau einer Grundlage fuer Hidden
+  Markov Models oder Reinforcement Learning MDPs.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,184 +28,184 @@ metadata:
 
 # Markov-Kette modellieren
 
-Construct, classify, and analyze discrete-time or continuous-time Markov chains from raw transition data or domain specifications, producing stationary distributions, mean first passage times, and simulation-based validation. Covers both DTMC and CTMC workflows end-to-end.
+Diskrete oder zeitkontinuierliche Markov-Ketten aus Roh-Uebergangsdaten oder Domaenenspezifikationen konstruieren, klassifizieren und analysieren, mit Berechnung stationaerer Verteilungen, mittlerer Erstpassagezeiten und simulationsbasierter Validierung. Umfasst sowohl DTMC- als auch CTMC-Workflows durchgaengig.
 
-## When to Use
+## Wann verwenden
 
-- You need to model a system whose future state depends only on its current state (memoryless property)
-- You have observed transition counts or rates between a finite set of states
-- You want to compute long-run steady-state probabilities for a process
-- You need to determine expected hitting times or absorption probabilities
-- You are classifying states as transient, recurrent, or absorbing for structural analysis
-- You want to compare alternative Markov models for the same system
-- You are building a foundation for more advanced models (hidden Markov models, reinforcement learning MDPs)
+- Sie muessen ein System modellieren, dessen kuenftiger Zustand nur vom aktuellen Zustand abhaengt (Gedaechtnislosigkeits-Eigenschaft)
+- Sie haben beobachtete Uebergangszaehlungen oder -raten zwischen einer endlichen Menge von Zustaenden
+- Sie moechten langfristige stationaere Wahrscheinlichkeiten fuer einen Prozess berechnen
+- Sie muessen erwartete Treffzeiten oder Absorptionswahrscheinlichkeiten bestimmen
+- Sie klassifizieren Zustaende als transient, rekurrent oder absorbierend fuer Strukturanalyse
+- Sie moechten alternative Markov-Modelle fuer dasselbe System vergleichen
+- Sie bauen eine Grundlage fuer fortgeschrittenere Modelle auf (Hidden Markov Models, Reinforcement Learning MDPs)
 
-## Inputs
+## Eingaben
 
-### Required
+### Erforderlich
 
-| Input | Type | Description |
-|-------|------|-------------|
-| `state_space` | list/vector | Exhaustive enumeration of all states in the chain |
-| `transition_data` | matrix, data frame, or edge list | Raw transition counts, a probability matrix, or a rate matrix (for CTMC) |
-| `chain_type` | string | Either `"discrete"` (DTMC) or `"continuous"` (CTMC) |
+| Eingabe | Typ | Beschreibung |
+|---------|-----|--------------|
+| `state_space` | list/vector | Vollstaendige Aufzaehlung aller Zustaende in der Kette |
+| `transition_data` | Matrix, Data Frame oder Kantenliste | Roh-Uebergangszaehlungen, eine Wahrscheinlichkeitsmatrix oder eine Ratenmatrix (fuer CTMC) |
+| `chain_type` | string | Entweder `"discrete"` (DTMC) oder `"continuous"` (CTMC) |
 
 ### Optional
 
-| Input | Type | Default | Description |
-|-------|------|---------|-------------|
-| `initial_distribution` | vector | uniform | Starting state probabilities |
-| `time_horizon` | integer/float | 100 | Number of steps (DTMC) or time units (CTMC) for simulation |
-| `tolerance` | float | 1e-10 | Convergence tolerance for iterative computations |
-| `absorbing_states` | list | auto-detect | States explicitly marked as absorbing |
-| `labels` | list | state indices | Human-readable names for each state |
-| `method` | string | `"eigen"` | Solver method: `"eigen"`, `"power"`, or `"linear_system"` |
+| Eingabe | Typ | Standard | Beschreibung |
+|---------|-----|----------|--------------|
+| `initial_distribution` | vector | uniform | Startzustandswahrscheinlichkeiten |
+| `time_horizon` | integer/float | 100 | Anzahl der Schritte (DTMC) oder Zeiteinheiten (CTMC) fuer Simulation |
+| `tolerance` | float | 1e-10 | Konvergenztoleranz fuer iterative Berechnungen |
+| `absorbing_states` | list | auto-detect | Explizit als absorbierend markierte Zustaende |
+| `labels` | list | state indices | Menschenlesbare Namen fuer jeden Zustand |
+| `method` | string | `"eigen"` | Loesermethode: `"eigen"`, `"power"` oder `"linear_system"` |
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Define State Space and Transitions
+### Schritt 1: Zustandsraum und Uebergaenge definieren
 
-1.1. Enumerate all distinct states. Confirm the list is exhaustive and mutually exclusive.
+1.1. Alle unterscheidbaren Zustaende aufzaehlen. Bestaetigen, dass die Liste vollstaendig und sich gegenseitig ausschliessend ist.
 
-1.2. If working from raw observations, tabulate transition counts into an `n x n` count matrix `C` where `C[i,j]` is the number of observed transitions from state `i` to state `j`.
+1.2. Bei Arbeit mit Rohbeobachtungen die Uebergangszaehlungen in eine `n x n` Zaehlmatrix `C` tabellieren, wobei `C[i,j]` die Anzahl beobachteter Uebergaenge von Zustand `i` zu Zustand `j` ist.
 
-1.3. For continuous-time chains, collect holding times in each state alongside transition destinations.
+1.3. Fuer zeitkontinuierliche Ketten die Verweilzeiten in jedem Zustand zusammen mit den Uebergangsdestinationen erfassen.
 
-1.4. Verify no state is missing from the enumeration by checking that every observed origin and destination appears in the state space.
+1.4. Verifizieren, dass kein Zustand in der Aufzaehlung fehlt, indem geprueft wird, dass jeder beobachtete Ursprung und jede Destination im Zustandsraum vorkommt.
 
-1.5. Document the data source, observation period, and any filtering applied. This provenance record is essential for reproducing the analysis and explaining anomalies.
+1.5. Datenquelle, Beobachtungszeitraum und etwaige angewandte Filterung dokumentieren. Dieser Herkunftsnachweis ist wesentlich fuer die Reproduzierbarkeit der Analyse und die Erklaerung von Anomalien.
 
-**Expected:** A well-defined state space of size `n` and either a count matrix or a list of (origin, destination, rate/count) tuples covering all observed transitions. The state space should be small enough for matrix operations (typically `n < 10000` for dense methods).
+**Erwartet:** Ein wohldefinierter Zustandsraum der Groesse `n` und entweder eine Zaehlmatrix oder eine Liste von (Ursprung, Destination, Rate/Zaehlung)-Tupeln, die alle beobachteten Uebergaenge abdecken. Der Zustandsraum sollte klein genug fuer Matrixoperationen sein (typischerweise `n < 10000` fuer dichte Methoden).
 
-**On failure:** If states are missing, re-examine the source data and expand the enumeration. If the state space is too large for matrix methods, consider lumping rare states into an aggregate "other" state or switching to simulation-based analysis. If the count matrix is extremely sparse, verify the observation period is long enough to capture typical transitions.
+**Bei Fehler:** Wenn Zustaende fehlen, die Quelldaten erneut untersuchen und die Aufzaehlung erweitern. Wenn der Zustandsraum zu gross fuer Matrixmethoden ist, das Zusammenfassen seltener Zustaende in einen aggregierten „Sonstige"-Zustand erwaegen oder auf simulationsbasierte Analyse umsteigen. Wenn die Zaehlmatrix extrem duenn besetzt ist, pruefen ob der Beobachtungszeitraum lang genug ist, um typische Uebergaenge zu erfassen.
 
-### Step 2: Construct Transition Matrix or Generator
+### Schritt 2: Uebergangsmatrix oder Generator konstruieren
 
-2.1. **Discrete-time (DTMC):** Normalize each row of the count matrix to obtain the transition probability matrix `P`:
+2.1. **Diskrete Zeit (DTMC):** Jede Zeile der Zaehlmatrix normalisieren, um die Uebergangswahrscheinlichkeitsmatrix `P` zu erhalten:
    - `P[i,j] = C[i,j] / sum(C[i,])`
-   - Verify every row sums to 1 (within tolerance).
+   - Verifizieren, dass jede Zeile sich zu 1 summiert (innerhalb der Toleranz).
 
-2.2. **Continuous-time (CTMC):** Construct the rate (generator) matrix `Q`:
-   - Off-diagonal: `Q[i,j] = rate of transition from i to j`
-   - Diagonal: `Q[i,i] = -sum(Q[i,j] for j != i)`
-   - Verify every row sums to 0 (within tolerance).
+2.2. **Kontinuierliche Zeit (CTMC):** Die Raten-(Generator-)Matrix `Q` konstruieren:
+   - Nebendiagonale: `Q[i,j] = Rate des Uebergangs von i nach j`
+   - Diagonale: `Q[i,i] = -sum(Q[i,j] fuer j != i)`
+   - Verifizieren, dass jede Zeile sich zu 0 summiert (innerhalb der Toleranz).
 
-2.3. Handle zero-count rows (states never observed as origins) by deciding on a smoothing strategy: Laplace smoothing, absorbing convention, or flagging for review.
+2.3. Nullzaehlungszeilen (Zustaende, die nie als Urspruenge beobachtet wurden) behandeln, indem eine Glaettungsstrategie gewaehlt wird: Laplace-Glaettung, Absorptionskonvention oder Kennzeichnung zur Ueberpruefung.
 
-2.4. Store the matrix in a format suitable for downstream computation (dense for small chains, sparse for large ones).
+2.4. Die Matrix in einem fuer nachgelagerte Berechnungen geeigneten Format speichern (dicht fuer kleine Ketten, duenn besetzt fuer grosse).
 
-**Expected:** A valid stochastic matrix `P` (rows sum to 1) or generator matrix `Q` (rows sum to 0) with no negative off-diagonal entries in `P` and no positive diagonal entries in `Q`.
+**Erwartet:** Eine gueltige stochastische Matrix `P` (Zeilen summieren sich zu 1) oder Generatormatrix `Q` (Zeilen summieren sich zu 0) ohne negative Nebendiagonaleintraege in `P` und ohne positive Diagonaleintraege in `Q`.
 
-**On failure:** If row sums deviate beyond tolerance, check for data corruption or floating-point issues. Re-normalize or re-examine source data.
+**Bei Fehler:** Wenn Zeilensummen ueber die Toleranz hinaus abweichen, auf Datenkorruption oder Gleitkommaprobleme pruefen. Renormalisieren oder Quelldaten erneut untersuchen.
 
-### Step 3: Classify States
+### Schritt 3: Zustaende klassifizieren
 
-3.1. Compute the communication classes by finding strongly connected components of the directed graph induced by the transition matrix (only edges with positive probability).
+3.1. Die Kommunikationsklassen berechnen, indem die stark zusammenhaengenden Komponenten des gerichteten Graphen gefunden werden, der durch die Uebergangsmatrix induziert wird (nur Kanten mit positiver Wahrscheinlichkeit).
 
-3.2. For each communication class, determine:
-   - **Recurrent** if the class has no outgoing edges to other classes.
-   - **Transient** if it does have outgoing edges.
-   - **Absorbing** if the class consists of a single state with `P[i,i] = 1`.
+3.2. Fuer jede Kommunikationsklasse bestimmen:
+   - **Rekurrent**, wenn die Klasse keine ausgehenden Kanten zu anderen Klassen hat.
+   - **Transient**, wenn sie ausgehende Kanten hat.
+   - **Absorbierend**, wenn die Klasse aus einem einzigen Zustand mit `P[i,i] = 1` besteht.
 
-3.3. Check periodicity for each recurrent class by computing the GCD of all cycle lengths reachable from any state in the class.
-   - Period = 1 means aperiodic.
+3.3. Die Periodizitaet fuer jede rekurrente Klasse pruefen, indem der GGT aller Zykluslaengen berechnet wird, die von jedem Zustand in der Klasse erreichbar sind.
+   - Periode = 1 bedeutet aperiodisch.
 
-3.4. Determine if the chain is **irreducible** (single communication class) or **reducible** (multiple classes).
+3.4. Bestimmen, ob die Kette **irreduzibel** (einzelne Kommunikationsklasse) oder **reduzibel** (mehrere Klassen) ist.
 
-3.5. Summarize: list each class, its type (transient/recurrent), its period, and whether any absorbing states exist.
+3.5. Zusammenfassen: jede Klasse auflisten mit Typ (transient/rekurrent), Periode und ob absorbierende Zustaende existieren.
 
-**Expected:** A complete classification: every state assigned to a communication class with labels (transient, positive recurrent, null recurrent, absorbing) and periodicity.
+**Erwartet:** Eine vollstaendige Klassifikation: jeder Zustand einer Kommunikationsklasse zugeordnet mit Bezeichnungen (transient, positiv rekurrent, null-rekurrent, absorbierend) und Periodizitaet.
 
-**On failure:** If the graph analysis is inconsistent, verify the transition matrix has no negative entries and rows sum correctly. For very large chains, use iterative graph algorithms instead of full matrix powers.
+**Bei Fehler:** Wenn die Graphanalyse inkonsistent ist, die Uebergangsmatrix auf negative Eintraege und korrekte Zeilensummen pruefen. Fuer sehr grosse Ketten iterative Graphalgorithmen statt voller Matrixpotenzen verwenden.
 
-### Step 4: Compute Stationary Distribution
+### Schritt 4: Stationaere Verteilung berechnen
 
-4.1. **Irreducible aperiodic chain:** Solve `pi * P = pi` subject to `sum(pi) = 1`.
-   - Reformulate as `pi * (P - I) = 0` with the normalization constraint.
-   - Use eigenvalue decomposition: `pi` is the left eigenvector of `P` corresponding to eigenvalue 1, normalized to sum to 1.
+4.1. **Irreduzible aperiodische Kette:** `pi * P = pi` unter der Nebenbedingung `sum(pi) = 1` loesen.
+   - Umformulieren als `pi * (P - I) = 0` mit der Normierungsbedingung.
+   - Eigenwertzerlegung verwenden: `pi` ist der linke Eigenvektor von `P` zum Eigenwert 1, normiert auf Summe 1.
 
-4.2. **Irreducible periodic chain:** The stationary distribution still exists but the chain does not converge to it from arbitrary initial states. Compute it the same way as 4.1.
+4.2. **Irreduzible periodische Kette:** Die stationaere Verteilung existiert weiterhin, aber die Kette konvergiert nicht im ueblichen Sinne von beliebigen Startzustaenden. Berechnung wie in 4.1.
 
-4.3. **Reducible chain:** Compute the stationary distribution for each recurrent class independently. The overall stationary distribution is a convex combination depending on absorption probabilities from transient states.
+4.3. **Reduzible Kette:** Die stationaere Verteilung fuer jede rekurrente Klasse unabhaengig berechnen. Die Gesamtverteilung ist eine Konvexkombination, abhaengig von Absorptionswahrscheinlichkeiten aus transienten Zustaenden.
 
-4.4. **CTMC:** Solve `pi * Q = 0` with `sum(pi) = 1`.
+4.4. **CTMC:** `pi * Q = 0` mit `sum(pi) = 1` loesen.
 
-4.5. Verify: multiply the computed `pi` by `P` (or `Q`) and confirm the result equals `pi` within tolerance.
+4.5. Verifizieren: das berechnete `pi` mit `P` (oder `Q`) multiplizieren und bestaetigen, dass das Ergebnis `pi` innerhalb der Toleranz entspricht.
 
-4.6. For reducible chains, compute the absorption probabilities from each transient state to each recurrent class. These probabilities, combined with the per-class stationary distributions, give the long-run behavior conditional on starting state.
+4.6. Fuer reduzible Ketten die Absorptionswahrscheinlichkeiten von jedem transienten Zustand zu jeder rekurrenten Klasse berechnen. Diese Wahrscheinlichkeiten, kombiniert mit den klassenweisen stationaeren Verteilungen, ergeben das langfristige Verhalten bedingt auf den Startzustand.
 
-4.7. Record the spectral gap (difference between the largest and second-largest eigenvalue magnitudes). This quantity governs the rate of convergence to stationarity and is useful for determining how many simulation steps are needed in Step 6.
+4.7. Die Spektralluecke erfassen (Differenz zwischen dem groessten und zweitgroessten Eigenwertbetrag). Diese Groesse bestimmt die Konvergenzrate zur Stationaritaet und ist nuetzlich fuer die Bestimmung der benoetigten Simulationsschritte in Schritt 6.
 
-**Expected:** A probability vector `pi` of length `n` with all entries non-negative, summing to 1, satisfying the balance equations within tolerance. The spectral gap should be positive for aperiodic irreducible chains.
+**Erwartet:** Ein Wahrscheinlichkeitsvektor `pi` der Laenge `n` mit allen nicht-negativen Eintraegen, Summe 1, der die Gleichgewichtsgleichungen innerhalb der Toleranz erfuellt. Die Spektralluecke sollte fuer aperiodische irreduzible Ketten positiv sein.
 
-**On failure:** If the eigensolver fails to converge, try iterative power method (`pi_k+1 = pi_k * P` until convergence). If multiple eigenvalues equal 1, the chain is reducible -- handle per Step 4.3. If the spectral gap is extremely small, the chain mixes slowly and will require very long simulations for validation.
+**Bei Fehler:** Wenn der Eigenwertloeser nicht konvergiert, die iterative Potenzmethode versuchen (`pi_k+1 = pi_k * P` bis Konvergenz). Wenn mehrere Eigenwerte gleich 1 sind, ist die Kette reduzibel — gemaess Schritt 4.3 behandeln. Wenn die Spektralluecke extrem klein ist, mischt die Kette langsam und erfordert sehr lange Simulationen zur Validierung.
 
-### Step 5: Calculate Mean First Passage Times
+### Schritt 5: Mittlere Erstpassagezeiten berechnen
 
-5.1. Define the mean first passage time `m[i,j]` as the expected number of steps to reach state `j` starting from state `i`.
+5.1. Die mittlere Erstpassagezeit `m[i,j]` als die erwartete Anzahl von Schritten definieren, um Zustand `j` ausgehend von Zustand `i` zu erreichen.
 
-5.2. For an irreducible chain, solve the system of linear equations:
-   - `m[i,j] = 1 + sum(P[i,k] * m[k,j] for k != j)` for all `i != j`
-   - `m[j,j] = 1 / pi[j]` (mean recurrence time)
+5.2. Fuer eine irreduzible Kette das System linearer Gleichungen loesen:
+   - `m[i,j] = 1 + sum(P[i,k] * m[k,j] fuer k != j)` fuer alle `i != j`
+   - `m[j,j] = 1 / pi[j]` (mittlere Rekurrenzzeit)
 
-5.3. For absorbing chains, compute absorption probabilities and expected times to absorption:
-   - Partition `P` into transient (`Q_t`) and absorbing blocks.
-   - Fundamental matrix: `N = (I - Q_t)^{-1}`
-   - Expected steps to absorption: `N * 1` (column vector of ones)
-   - Absorption probabilities: `N * R` where `R` is the transient-to-absorbing block.
+5.3. Fuer absorbierende Ketten Absorptionswahrscheinlichkeiten und erwartete Zeiten bis zur Absorption berechnen:
+   - `P` in transiente (`Q_t`) und absorbierende Bloecke partitionieren.
+   - Fundamentalmatrix: `N = (I - Q_t)^{-1}`
+   - Erwartete Schritte bis zur Absorption: `N * 1` (Spaltenvektor aus Einsen)
+   - Absorptionswahrscheinlichkeiten: `N * R` wobei `R` der Transient-zu-Absorbierend-Block ist.
 
-5.4. For CTMC, replace step counts with expected holding times using the generator matrix.
+5.4. Fuer CTMC Schrittzaehlungen durch erwartete Verweilzeiten unter Verwendung der Generatormatrix ersetzen.
 
-5.5. Present results as a matrix or table of pairwise first passage times for key state pairs.
+5.5. Ergebnisse als Matrix oder Tabelle paarweiser Erstpassagezeiten fuer wichtige Zustandspaare darstellen.
 
-**Expected:** A matrix of mean first passage times where diagonal entries equal mean recurrence times (`1/pi[j]`) and off-diagonal entries are finite for communicating state pairs.
+**Erwartet:** Eine Matrix mittlerer Erstpassagezeiten, bei der Diagonaleintraege den mittleren Rekurrenzzeiten entsprechen (`1/pi[j]`) und Nebendiagonaleintraege fuer kommunizierende Zustandspaare endlich sind.
 
-**On failure:** If the linear system is singular, the chain has transient states that cannot reach the target. Report unreachable pairs as infinite. Verify the chain structure from Step 3.
+**Bei Fehler:** Wenn das lineare System singulaer ist, hat die Kette transiente Zustaende, die das Ziel nicht erreichen koennen. Unerreichbare Paare als unendlich melden. Die Kettenstruktur aus Schritt 3 verifizieren.
 
-### Step 6: Validate with Simulation
+### Schritt 6: Mit Simulation validieren
 
-6.1. Simulate `K` independent sample paths of the chain for `T` steps each, starting from the initial distribution.
+6.1. `K` unabhaengige Stichprobenpfade der Kette fuer `T` Schritte simulieren, startend von der Anfangsverteilung.
 
-6.2. Estimate the stationary distribution empirically by counting state occupancy frequencies across all paths after discarding a burn-in period.
+6.2. Die stationaere Verteilung empirisch schaetzen, indem Zustandsbelegungshaeufigkeiten ueber alle Pfade gezaehlt werden, nach Verwerfen einer Einbrennphase.
 
-6.3. Compare simulated frequencies to the analytical stationary distribution. Compute the total variation distance or chi-squared statistic.
+6.3. Simulierte Haeufigkeiten mit der analytischen stationaeren Verteilung vergleichen. Die Totalvariationsdistanz oder Chi-Quadrat-Statistik berechnen.
 
-6.4. Estimate mean first passage times empirically by recording the first hitting time for each target state across replications.
+6.4. Mittlere Erstpassagezeiten empirisch schaetzen, indem die erste Treffzeit fuer jeden Zielzustand ueber Replikationen erfasst wird.
 
-6.5. Report agreement metrics:
-   - Max absolute deviation between analytical and simulated stationary probabilities.
-   - 95% confidence intervals for simulated first passage times vs. analytical values.
+6.5. Uebereinstimmungsmetriken berichten:
+   - Maximale absolute Abweichung zwischen analytischen und simulierten stationaeren Wahrscheinlichkeiten.
+   - 95%-Konfidenzintervalle fuer simulierte Erstpassagezeiten vs. analytische Werte.
 
-6.6. If discrepancies exceed tolerance, re-examine the transition matrix construction and classification steps.
+6.6. Wenn Abweichungen die Toleranz ueberschreiten, die Uebergangsmatrix-Konstruktion und Klassifikationsschritte erneut untersuchen.
 
-**Expected:** Simulated stationary distribution within 0.01 total variation distance of the analytical solution (for sufficiently long runs). Simulated mean first passage times within 10% of analytical values.
+**Erwartet:** Simulierte stationaere Verteilung innerhalb von 0,01 Totalvariationsdistanz zur analytischen Loesung (bei ausreichend langen Laeufen). Simulierte mittlere Erstpassagezeiten innerhalb von 10% der analytischen Werte.
 
-**On failure:** Increase simulation length `T` or number of replications `K`. If discrepancies persist, the analytical solution may have numerical errors -- recompute with higher precision.
+**Bei Fehler:** Simulationslaenge `T` oder Anzahl der Replikationen `K` erhoehen. Wenn Abweichungen bestehen bleiben, kann die analytische Loesung numerische Fehler haben — mit hoeherer Praezision neu berechnen.
 
-## Validation
+## Validierung
 
-- The transition matrix `P` has all non-negative entries and each row sums to 1 (or `Q` rows sum to 0 for CTMC)
-- The stationary distribution `pi` is a valid probability vector satisfying `pi * P = pi`
-- Mean recurrence times equal `1/pi[j]` for each recurrent state `j`
-- Simulated state frequencies converge to the analytical stationary distribution
-- State classification is consistent: no recurrent state has edges leaving its communication class
-- All eigenvalues of `P` have magnitude at most 1, with exactly one eigenvalue equal to 1 per recurrent class
-- For absorbing chains: absorption probabilities from each transient state sum to 1 across all absorbing classes
-- The fundamental matrix `N = (I - Q_t)^{-1}` has all positive entries (expected visit counts are positive)
-- Detailed balance holds if and only if the chain is reversible: `pi[i] * P[i,j] = pi[j] * P[j,i]` for all `i,j`
+- Die Uebergangsmatrix `P` hat alle nicht-negativen Eintraege und jede Zeile summiert sich zu 1 (oder `Q`-Zeilen summieren sich zu 0 fuer CTMC)
+- Die stationaere Verteilung `pi` ist ein gueltiger Wahrscheinlichkeitsvektor, der `pi * P = pi` erfuellt
+- Mittlere Rekurrenzzeiten entsprechen `1/pi[j]` fuer jeden rekurrenten Zustand `j`
+- Simulierte Zustandshaeufigkeiten konvergieren zur analytischen stationaeren Verteilung
+- Zustandsklassifikation ist konsistent: kein rekurrenter Zustand hat Kanten, die seine Kommunikationsklasse verlassen
+- Alle Eigenwerte von `P` haben Betrag hoechstens 1, mit genau einem Eigenwert gleich 1 pro rekurrenter Klasse
+- Fuer absorbierende Ketten: Absorptionswahrscheinlichkeiten von jedem transienten Zustand summieren sich zu 1 ueber alle absorbierenden Klassen
+- Die Fundamentalmatrix `N = (I - Q_t)^{-1}` hat alle positiven Eintraege (erwartete Besuchszaehlungen sind positiv)
+- Detailliertes Gleichgewicht gilt genau dann, wenn die Kette reversibel ist: `pi[i] * P[i,j] = pi[j] * P[j,i]` fuer alle `i,j`
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Non-exhaustive state space**: Missing states produce a sub-stochastic matrix (rows sum to less than 1). Always verify row sums before analysis.
-- **Confusing DTMC and CTMC**: A rate matrix must have non-positive diagonal and rows summing to 0. Applying DTMC formulas to a rate matrix produces nonsense.
-- **Ignoring periodicity**: A periodic chain has a valid stationary distribution but does not converge to it in the usual sense. Mixing time analysis must account for period.
-- **Numerical instability for large chains**: Eigenvalue decomposition of large dense matrices is expensive and can lose precision. Use sparse solvers or iterative methods for chains with more than a few hundred states.
-- **Zero-probability transitions**: Structural zeros in the transition matrix can make the chain reducible. Verify irreducibility before computing a single stationary distribution.
-- **Insufficient simulation length**: Short simulations with poor mixing produce biased estimates. Always compute effective sample size and check trace plots.
-- **Assuming reversibility without checking**: Many analytical shortcuts (e.g., detailed balance) apply only to reversible chains. Verify `pi[i] * P[i,j] = pi[j] * P[j,i]` before using reversibility-dependent results.
-- **Floating-point accumulation in power method**: Iterating `pi * P` many times accumulates rounding errors. Periodically re-normalize `pi` to sum to 1 during power iteration.
+- **Nicht-vollstaendiger Zustandsraum**: Fehlende Zustaende erzeugen eine sub-stochastische Matrix (Zeilen summieren sich zu weniger als 1). Immer Zeilensummen vor der Analyse verifizieren
+- **DTMC und CTMC verwechseln**: Eine Ratenmatrix muss nicht-positive Diagonale und Zeilen mit Summe 0 haben. Die Anwendung von DTMC-Formeln auf eine Ratenmatrix erzeugt Unsinn
+- **Periodizitaet ignorieren**: Eine periodische Kette hat eine gueltige stationaere Verteilung, konvergiert aber nicht im ueblichen Sinne dorthin. Die Mischzeitanalyse muss die Periode beruecksichtigen
+- **Numerische Instabilitaet bei grossen Ketten**: Eigenwertzerlegung grosser dichter Matrizen ist teuer und kann Praezision verlieren. Duenn besetzte Loeser oder iterative Methoden fuer Ketten mit mehr als einigen hundert Zustaenden verwenden
+- **Null-Wahrscheinlichkeits-Uebergaenge**: Strukturelle Nullen in der Uebergangsmatrix koennen die Kette reduzibel machen. Irreduzibilitaet vor der Berechnung einer einzelnen stationaeren Verteilung verifizieren
+- **Unzureichende Simulationslaenge**: Kurze Simulationen mit schlechter Mischung erzeugen verzerrte Schaetzungen. Immer effektive Stichprobengroesse berechnen und Traceplots pruefen
+- **Reversibilitaet ohne Pruefung annehmen**: Viele analytische Abkuerzungen (z.B. detailliertes Gleichgewicht) gelten nur fuer reversible Ketten. `pi[i] * P[i,j] = pi[j] * P[j,i]` vor der Verwendung reversibilitaetsabhaengiger Ergebnisse verifizieren
+- **Gleitkomma-Akkumulation bei der Potenzmethode**: Vielfaches Iterieren von `pi * P` akkumuliert Rundungsfehler. `pi` waehrend der Potenziteration periodisch auf Summe 1 renormalisieren
 
-## Related Skills
+## Verwandte Skills
 
-- [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) -- extends Markov chains to latent-state models with observed emissions
-- [Simulate Stochastic Process](../simulate-stochastic-process/SKILL.md) -- general simulation framework applicable to Markov chain sample paths and Monte Carlo validation
+- [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) -- Erweitert Markov-Ketten zu Latent-Zustand-Modellen mit beobachteten Emissionen
+- [Simulate Stochastic Process](../simulate-stochastic-process/SKILL.md) -- Allgemeines Simulationsrahmenwerk, anwendbar auf Markov-Ketten-Stichprobenpfade und Monte-Carlo-Validierung

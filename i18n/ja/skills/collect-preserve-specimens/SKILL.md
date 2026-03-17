@@ -1,16 +1,14 @@
 ---
 name: collect-preserve-specimens
 description: >
-  Collect and preserve insect specimens following museum-grade standards
-  including legal compliance, collection methods, humane dispatch, dry pinning,
-  wet preservation, labeling, storage, and curation. Covers permit requirements,
-  protected species regulations, sweep nets, beating trays, pitfall traps, light
-  traps, Malaise traps, aspirators, ethyl acetate killing jars, freezing, pin
-  placement by order, wing spreading, ethanol preservation for soft-bodied
-  specimens, specimen labeling with locality and date, storage with pest
-  management, and database entry. Use when building a reference collection for
-  taxonomic study, preserving voucher specimens for ecological research, preparing
-  specimens for identification by specialists, or curating an existing collection.
+  博物館グレードの基準に従って昆虫標本を収集・保存する。法的コンプライアンス、
+  収集方法、人道的な致死処理、ドライピニング、液浸保存、ラベリング、保管、
+  キュレーションを含む。許可要件、保護種規制、スイープネット、ビーティングトレイ、
+  ピットフォールトラップ、ライトトラップ、マレーゼトラップ、アスピレーター、
+  酢酸エチル殺虫瓶、冷凍、目別のピン位置、展翅、軟体標本のエタノール保存、
+  産地・日付付きの標本ラベリング、害虫管理付き保管、データベース入力をカバーする。
+  分類学研究用の参考コレクション構築時、生態学研究用のバウチャー標本保存時、
+  専門家による同定のための標本準備時、既存コレクションのキュレーション時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,35 +25,35 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 標本の採集と保存
+# 標本の収集と保存
 
-Collect and preserve insect specimens to museum-grade standards for taxonomic study, reference collections, and ecological research.
+分類学研究、参考コレクション、生態学研究のために、博物館グレードの基準で昆虫標本を収集・保存する。
 
 ## 使用タイミング
 
-- You need physical specimens for definitive taxonomic identification
-- You are building a reference collection for a habitat, region, or taxon
-- You are preserving voucher specimens for published ecological research
-- You need to send specimens to taxonomic specialists for identification
-- You are curating or restoring an existing insect collection
+- 確定的な分類学的同定のために物理的標本が必要な時
+- 生息地、地域、または分類群の参考コレクションを構築する時
+- 出版される生態学研究用のバウチャー標本を保存する時
+- 分類学の専門家に同定のために標本を送付する必要がある時
+- 既存の昆虫コレクションをキュレーションまたは修復する時
 
 ## 入力
 
-- **必須**: Legal authorization to collect at the intended site (permits, landowner consent)
-- **必須**: Collection equipment appropriate to the target taxa
-- **必須**: Preservation materials (pins, ethanol, or both)
-- **必須**: Labeling materials (archival paper, fine-point pen or printer)
-- **任意**: Spreading boards for Lepidoptera and Odonata
-- **任意**: Relaxing chamber for rehydrating dried specimens
-- **任意**: Dissecting microscope for sorting and preparation
-- **任意**: Database or catalog system for specimen records
-- **任意**: Unit trays, drawers, and storage cabinets
+- **必須**: 予定地での収集の法的許可（許可証、土地所有者の同意）
+- **必須**: 対象分類群に適した収集器具
+- **必須**: 保存材料（ピン、エタノール、または両方）
+- **必須**: ラベリング材料（保存用紙、細字ペンまたはプリンター）
+- **任意**: 鱗翅目とトンボ目用の展翅板
+- **任意**: 乾燥標本を再水和するための軟化室
+- **任意**: 選別と準備用の実体顕微鏡
+- **任意**: 標本記録用のデータベースまたはカタログシステム
+- **任意**: ユニットトレイ、引き出し、保管キャビネット
 
 ## 手順
 
-### ステップ1: Verify Legal Requirements
+### ステップ1: 法的要件の確認
 
-Before any collection activity, confirm that you have the legal right to collect at the site and that your target taxa are not protected.
+収集活動の前に、その場所での収集の法的権利があること、対象分類群が保護されていないことを確認する。
 
 ```
 FUNDAMENTAL RULE:
@@ -101,13 +99,13 @@ Minimizing Collection Impact:
 - Prefer common and abundant species for teaching collections
 ```
 
-**期待結果:** All required permits are obtained, protected species lists have been checked, and the collector has a clear understanding of what may and may not be collected at the site.
+**期待結果:** 必要なすべての許可が取得され、保護種リストが確認され、収集者がその場所で収集できるもの・できないものを明確に理解している。
 
-**失敗時:** If permits cannot be obtained, do not collect. Photograph specimens in situ and use citizen science platforms for identification. If a collected specimen turns out to be a protected species, consult the relevant wildlife authority immediately. Do not discard the specimen — accidental collection should be reported, not concealed.
+**失敗時:** 許可が取得できない場合、収集しない。現地で標本を撮影し、市民科学プラットフォームを使用して同定する。収集した標本が保護種であると判明した場合、直ちに関連する野生生物当局に相談する。標本を廃棄しない — 偶発的な収集は隠蔽ではなく報告すべき。
 
-### ステップ2: Select Collection Method
+### ステップ2: 収集方法の選択
 
-Choose the method that matches your target taxa, habitat, and research objectives. Different methods sample different portions of the insect community.
+対象分類群、生息地、研究目的に合った方法を選択する。異なる方法は昆虫群集の異なる部分をサンプリングする。
 
 ```
 Collection Methods:
@@ -169,13 +167,13 @@ Collection Methods:
 +--------------------+------------------------------------------+
 ```
 
-**期待結果:** One or more collection methods selected based on target taxa and habitat, with equipment assembled and ready before entering the field.
+**期待結果:** 対象分類群と生息地に基づいて1つ以上の収集方法が選択され、フィールドに出る前に器具が準備されている。
 
-**失敗時:** If the intended method is not yielding specimens (e.g., sweep netting in heavy rain), switch to an alternative method. Light trapping requires specific weather conditions — warm, humid, still, moonless nights are optimal. If conditions are poor, reschedule rather than running traps inefficiently.
+**失敗時:** 意図した方法で標本が得られない場合（例：豪雨中のスイープネット）、代替方法に切り替える。ライトトラップは特定の気象条件を必要とする — 暖かく、湿度が高く、風がなく、月のない夜が最適。条件が悪い場合、非効率にトラップを運用するより日程を変更する。
 
-### ステップ3: Dispatch Specimens Humanely
+### ステップ3: 人道的な致死処理
 
-Kill collected insects as quickly and humanely as possible. Prolonged distress damages specimens (broken legs, lost scales) and is ethically unacceptable.
+収集した昆虫をできるだけ迅速かつ人道的に致死させる。長時間の苦痛は標本を損傷し（脚の破損、鱗粉の脱落）、倫理的にも受け入れられない。
 
 ```
 Dispatch Methods:
@@ -213,13 +211,13 @@ NEVER use:
 - Prolonged suffocation — slow and damages specimens from struggling
 ```
 
-**期待結果:** Specimens dispatched quickly (within minutes) with minimal damage to morphological features. Lepidoptera kept separate to prevent scale loss from contact with other specimens.
+**期待結果:** 形態学的特徴への損傷を最小限に抑えて標本が迅速に（数分以内に）致死処理される。鱗翅目は他の標本との接触による鱗粉の脱落を防ぐため別に保管される。
 
-**失敗時:** If ethyl acetate is unavailable, freezing is the best alternative for most taxa. In the field without either, place specimens in individual vials or envelopes (for Lepidoptera, use glassine envelopes with wings folded) and freeze upon return. Do not leave live insects in a sealed container without a killing agent — they will damage themselves.
+**失敗時:** 酢酸エチルが入手できない場合、ほとんどの分類群で冷凍が最良の代替手段。フィールドでどちらも利用できない場合、標本を個別のバイアルまたは封筒（鱗翅目にはグラシン封筒に翅を折りたたんで）に入れ、帰宅後に冷凍する。致死剤なしで密閉容器に生きた昆虫を放置しない — 自ら損傷する。
 
-### ステップ4: Pin Specimens (Dry Preservation)
+### ステップ4: 標本のピニング（ドライ保存）
 
-Pin each specimen through the correct location for its order. Proper pin placement is essential for both access to diagnostic features and long-term structural integrity.
+各標本を目に応じた正しい位置でピニングする。適切なピン位置は、診断的特徴へのアクセスと長期的な構造的完全性の両方に不可欠。
 
 ```
 Pin Placement by Order:
@@ -283,13 +281,13 @@ Spreading Wings (Lepidoptera, Odonata):
 6. Remove paper strips carefully
 ```
 
-**期待結果:** Each specimen pinned through the correct position for its order, at the correct height on the pin, with wings spread where required (Lepidoptera, Odonata). Specimens allowed to dry fully before handling.
+**期待結果:** 各標本が目に応じた正しい位置でピニングされ、ピン上の正しい高さに、必要に応じて翅が展翅されている（鱗翅目、トンボ目）。取り扱う前に標本が完全に乾燥するまで放置。
 
-**失敗時:** If a specimen is too dry and brittle to pin (legs snapping, wings cracking), it needs relaxing first. Place the specimen in a relaxing chamber (a sealed container with damp sand or paper towels and a few drops of phenol to prevent mold) for 24-48 hours until limbs are pliable. If a pin is placed in the wrong position, it is better to carefully re-pin while the specimen is still fresh than to leave it incorrectly mounted.
+**失敗時:** 標本が乾燥しすぎてピニングできない場合（脚が折れる、翅が割れる）、まず軟化が必要。軟化室（湿った砂またはペーパータオルと防カビ用のフェノール数滴を入れた密閉容器）に24〜48時間入れ、四肢が柔軟になるまで待つ。ピンが間違った位置に刺さった場合、標本がまだ新鮮なうちに慎重に刺し直す方が、間違ったマウントのまま放置するよりも良い。
 
-### ステップ5: Preserve in Ethanol (Wet Preservation)
+### ステップ5: エタノール保存（液浸保存）
 
-Soft-bodied specimens that would shrivel or distort if dried must be preserved in liquid.
+乾燥させると縮んだり変形したりする軟体標本は液体で保存する必要がある。
 
 ```
 Wet Preservation Protocol:
@@ -330,13 +328,13 @@ Do NOT use:
   color loss compared to ethanol.
 ```
 
-**期待結果:** Soft-bodied specimens preserved in 70-80% ethanol (or 95%+ for DNA work) in labeled vials with sufficient fluid volume.
+**期待結果:** 軟体標本が70〜80%エタノール（またはDNA作業用に95%以上）でラベル付きバイアルに十分な液量で保存されている。
 
-**失敗時:** If ethanol is unavailable in the field, specimens can be temporarily stored in high-proof clear spirits (vodka, Everclear) as an emergency measure. Transfer to laboratory-grade ethanol as soon as possible. If specimens have been stored too long in weak preservative and show decomposition, they may still be identifiable but will be unsuitable for molecular work.
+**失敗時:** フィールドでエタノールが入手できない場合、高アルコール度の透明な蒸留酒（ウォッカ、エバークリア）を緊急措置として一時的に使用できる。できるだけ早く試薬グレードのエタノールに移し替える。弱い保存液に長期間保管されて分解の兆候がある標本は、同定可能かもしれないが分子解析には不適。
 
-### ステップ6: Label Every Specimen
+### ステップ6: すべての標本にラベルを付ける
 
-Every specimen must carry labels providing the minimum data needed for scientific use. An unlabeled specimen has no scientific value.
+すべての標本に科学的使用に必要な最低限のデータを記載したラベルを付ける。ラベルのない標本には科学的価値がない。
 
 ```
 Labeling Standards:
@@ -371,13 +369,13 @@ Label Format Rules:
   heights
 ```
 
-**期待結果:** Every specimen carries at minimum a locality label with country, locality, coordinates, date, and collector. Wet specimens have the same data on an internal label written in pencil or laser-printed.
+**期待結果:** すべての標本に最低限、国、産地、座標、日付、採集者を記載した産地ラベルが付いている。液浸標本は鉛筆またはレーザープリンターで印刷された内部ラベルに同じデータが記載されている。
 
-**失敗時:** If GPS coordinates were not recorded in the field, estimate them from a map using the locality description. If the date is uncertain, record the best estimate and mark it with a question mark. A specimen with approximate data is far more valuable than one with no label at all. Never move a label from one specimen to another.
+**失敗時:** フィールドでGPS座標が記録されなかった場合、産地の記述から地図を使用して推定する。日付が不確かな場合、最良の推定値を記録し疑問符を付ける。概算データのある標本は、ラベルのない標本よりもはるかに価値がある。ラベルをある標本から別の標本に移動させない。
 
-### ステップ7: Store and Protect the Collection
+### ステップ7: コレクションの保管と保護
 
-Proper storage protects specimens from physical damage, pests, and environmental degradation.
+適切な保管は、物理的損傷、害虫、環境劣化から標本を保護する。
 
 ```
 Dry Collection Storage:
@@ -419,13 +417,13 @@ Wet Collection Storage:
   plastic vials allow more evaporation
 ```
 
-**期待結果:** Dry specimens stored in sealed drawers with pest deterrents. Wet specimens stored upright with adequate ethanol levels. Storage area has stable temperature and humidity.
+**期待結果:** 乾燥標本が害虫忌避剤入りの密閉引き出しに保管されている。液浸標本が十分なエタノール量で直立保管されている。保管場所の温度と湿度が安定している。
 
-**失敗時:** If proper museum storage is not available, store pinned specimens in airtight plastic containers (tackle boxes, Tupperware) with foam inserts and pest deterrent. This is adequate for personal collections and short-term storage. For long-term preservation of scientifically valuable specimens, deposit them in a recognized museum or university collection.
+**失敗時:** 適切な博物館保管設備がない場合、ピニングされた標本をフォームインサートと害虫忌避剤付きの気密プラスチック容器（タックルボックス、タッパーウェア）に保管する。これは個人コレクションと短期保管には十分。科学的に価値のある標本の長期保存には、認定された博物館または大学のコレクションに寄託する。
 
-### ステップ8: Curate and Enter into Database
+### ステップ8: キュレーションとデータベース入力
 
-Maintain the collection as a living scientific resource through systematic curation and data management.
+体系的なキュレーションとデータ管理を通じて、コレクションを生きた科学的資源として維持する。
 
 ```
 Curation Tasks:
@@ -470,36 +468,36 @@ Database Standards:
 - Assign a unique catalog number to every specimen, even if unidentified
 ```
 
-**期待結果:** All specimens cataloged in a database with unique identifiers, taxonomy, locality, date, collector, and storage location. Collection is on a regular inspection and maintenance schedule.
+**期待結果:** すべての標本が一意の識別番号、分類情報、産地、日付、採集者、保管場所とともにデータベースに登録されている。コレクションが定期的な検査・メンテナンススケジュールに載っている。
 
-**失敗時:** If a full database is not feasible, maintain at minimum a handwritten catalog or spreadsheet with catalog numbers corresponding to specimens. The catalog number links the specimen to its data — without it, the specimen and its data become disconnected if labels are lost. Even a simple numbered list is better than no catalog at all.
+**失敗時:** 完全なデータベースが実現できない場合、最低限、標本に対応するカタログ番号を記載した手書きのカタログまたはスプレッドシートを維持する。カタログ番号は標本とそのデータを結びつける — これがないと、ラベルが失われた場合に標本とデータが切り離される。単純な番号リストでさえ、カタログがないよりもましである。
 
 ## バリデーション
 
-- [ ] Legal requirements were verified and permits obtained before collecting
-- [ ] Collection methods were appropriate for the target taxa and habitat
-- [ ] Specimens were dispatched humanely and promptly
-- [ ] Dry specimens were pinned through the correct position for their order
-- [ ] Lepidoptera and Odonata had wings properly spread before drying
-- [ ] Soft-bodied specimens were preserved in 70-80% ethanol
-- [ ] Every specimen carries a locality label with date, location, coordinates, and collector
-- [ ] Wet specimen labels are written in pencil or laser-printed and placed inside the vial
-- [ ] Storage includes pest deterrents and stable environmental conditions
-- [ ] Specimens are cataloged in a database or notebook with unique identifiers
+- [ ] 収集前に法的要件が確認され許可が取得された
+- [ ] 対象分類群と生息地に適した収集方法が使用された
+- [ ] 標本が人道的かつ迅速に致死処理された
+- [ ] 乾燥標本が目に応じた正しい位置でピニングされた
+- [ ] 鱗翅目とトンボ目は乾燥前に適切に展翅された
+- [ ] 軟体標本が70〜80%エタノールで保存された
+- [ ] すべての標本に日付、産地、座標、採集者を記載した産地ラベルが付いている
+- [ ] 液浸標本のラベルが鉛筆またはレーザープリンターで作成されバイアル内に入っている
+- [ ] 保管に害虫忌避剤と安定した環境条件が含まれている
+- [ ] 標本が一意の識別番号とともにデータベースまたはノートブックに登録されている
 
 ## よくある落とし穴
 
-- **Collecting without permits**: A specimen collected illegally cannot be used in published research, deposited in a museum, or transferred across borders. Always obtain authorization first
-- **Over-collecting**: Taking more specimens than needed depletes populations without scientific benefit. Collect the minimum required for identification (often 5-10 individuals per morphospecies per site)
-- **Mixing specimens from different sites in one container**: This makes locality data uncertain for all specimens in the batch. Keep each collecting event in a separate container with its own temporary label
-- **Using the wrong pin position**: Pinning a beetle through the center of the thorax instead of the right elytron obscures ventral diagnostic features. Always check the order-specific pin position
-- **Ethanol concentration too low for DNA work**: Specimens for molecular analysis require 95%+ ethanol with a change after 24 hours to remove body fluid dilution. Standard 70% ethanol preserves morphology but degrades DNA over time
-- **Forgetting to label wet specimens internally**: A label taped to the outside of a vial can detach. The label inside the vial is the permanent record. Always place a pencil-written or laser-printed label inside with the specimen
-- **Neglecting pest management**: Dermestid beetles (museum beetles) can destroy an entire drawer of specimens in weeks. Regular pest monitoring and fumigant replacement are not optional for any collection stored longer than a few months
+- **無許可での収集**: 違法に収集された標本は、出版された研究に使用できず、博物館に寄託できず、国境を越えて移動できない。常に最初に許可を取得する
+- **過剰収集**: 必要以上の標本を採取すると科学的利益なく個体群を減少させる。1サイトあたり1形態種につき同定に必要な最小数（多くの場合5〜10個体）を収集する
+- **異なるサイトの標本を1つの容器に混合**: これはバッチ内のすべての標本の産地データを不確かにする。各収集イベントは独自の一時ラベル付きの別の容器に保管する
+- **間違ったピン位置の使用**: 甲虫を右翅鞘ではなく胸部中央にピニングすると腹面の診断的特徴が隠される。常に目固有のピン位置を確認する
+- **DNA作業にはエタノール濃度が低すぎる**: 分子解析用の標本には、体液希釈を除去するために24時間後に交換した95%以上のエタノールが必要。標準の70%エタノールは形態を保存するが時間とともにDNAを劣化させる
+- **液浸標本の内部ラベル忘れ**: バイアルの外側にテープで貼ったラベルは剥がれる可能性がある。バイアル内のラベルが永久記録。常に鉛筆またはレーザープリンターで作成したラベルを標本とともに内部に入れる
+- **害虫管理の怠慢**: カツオブシムシ（博物館害虫）は数週間で引き出し全体の標本を破壊できる。数ヶ月以上保管するコレクションでは、定期的な害虫監視と忌避剤の交換は任意ではない
 
 ## 関連スキル
 
-- `identify-insect` — morphological identification of collected specimens using dichotomous keys, wing venation, mouthparts, and antennae
-- `document-insect-sighting` — photographic and contextual documentation of sightings that may supplement or replace physical collecting
-- `observe-insect-behavior` — behavioral observation protocols for live insects before or instead of collecting
-- `survey-insect-population` — systematic population surveys that typically require specimen collection for identification and voucher purposes
+- `identify-insect` -- 二分検索表、翅脈、口器、触角を用いた収集標本の形態学的同定
+- `document-insect-sighting` -- 物理的収集を補完または代替する可能性のある目撃情報の写真・コンテキスト記録
+- `observe-insect-behavior` -- 収集前または収集の代わりに行う生きた昆虫の行動観察プロトコル
+- `survey-insect-population` -- 同定とバウチャー目的で通常標本収集を必要とする体系的な個体群調査

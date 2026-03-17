@@ -1,13 +1,19 @@
 ---
 name: select-print-material
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Choose 3D printing materials based on mechanical, thermal, and chemical
-  requirements. Covers PLA, PETG, ABS, ASA, TPU, Nylon, and resin variants
-  with property comparisons. Use when selecting material for parts with
-  specific mechanical or thermal requirements, choosing for outdoor or chemical
-  exposure, evaluating food-safe or biocompatible applications, balancing
-  printability vs. performance, or troubleshooting material-related print
-  failures.
+  3D-Druckmaterialien basierend auf mechanischen, thermischen und chemischen
+  Anforderungen auswaehlen. Umfasst PLA, PETG, ABS, ASA, TPU, Nylon und
+  Harzvarianten mit Eigenschaftsvergleichen. Anwenden bei der Materialauswahl
+  fuer Teile mit spezifischen mechanischen oder thermischen Anforderungen,
+  bei der Auswahl fuer Aussen- oder Chemikalienexposition, bei der Bewertung
+  lebensmittelsicherer oder biokompatibler Anwendungen, beim Abwaegen von
+  Druckbarkeit gegen Leistung oder bei der Fehlersuche bei materialbedingten
+  Druckfehlern.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
@@ -17,252 +23,247 @@ metadata:
   complexity: intermediate
   language: multi
   tags: 3d-printing, materials, fdm, sla, material-selection, properties
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Druckmaterial auswaehlen
 
-Choose appropriate 3D printing materials by matching material properties to functional requirements. This skill covers FDM filaments (PLA, PETG, ABS, ASA, TPU, Nylon) and SLA resins (standard, tough, flexible, castable) with detailed property comparisons for mechanical strength, temperature resistance, chemical resistance, flexibility, and post-processing options.
+Geeignete 3D-Druckmaterialien auswaehlen indem Materialeigenschaften mit funktionalen Anforderungen abgeglichen werden. Dieser Skill umfasst FDM-Filamente (PLA, PETG, ABS, ASA, TPU, Nylon) und SLA-Harze (Standard, Zaeh, Flexibel, Giessbar, Hochtemperatur) mit detaillierten Eigenschaftsvergleichen fuer mechanische Festigkeit, Temperaturbestaendigkeit, Chemikalienbestaendigkeit, Flexibilitaet und Nachbearbeitungsoptionen.
 
-## When to Use
+## Wann verwenden
 
-- Selecting material for a part with specific mechanical requirements (tensile strength, impact resistance, flexibility)
-- Choosing material for temperature-sensitive applications (hot environment, cold environment)
-- Parts exposed to chemicals, UV light, or outdoor weathering
-- Food-safe or biocompatible applications
-- Balancing printability vs. performance for prototypes vs. production parts
-- Troubleshooting material-related print failures or part performance issues
-- Optimizing cost vs. properties for production runs
+- Materialauswahl fuer ein Teil mit spezifischen mechanischen Anforderungen (Zugfestigkeit, Schlagfestigkeit, Flexibilitaet)
+- Materialauswahl fuer temperaturempfindliche Anwendungen (heisse Umgebung, kalte Umgebung)
+- Teile die Chemikalien, UV-Licht oder Aussenbewitterung ausgesetzt sind
+- Lebensmittelsichere oder biokompatible Anwendungen
+- Druckbarkeit gegen Leistung abwaegen fuer Prototypen vs. Serienteile
+- Fehlersuche bei materialbedingten Druckfehlern oder Teilversagen
+- Kosten-Eigenschafts-Optimierung fuer Produktionslaeufe
 
-## Inputs
+## Eingaben
 
-- **functional_requirements**: Load type (tensile, compressive, bending, torsion), magnitude, duty cycle
-- **environmental_conditions**: Operating temperature range, UV exposure, chemical contact, moisture
-- **mechanical_properties_needed**: Strength, flexibility, impact resistance, fatigue resistance
-- **surface_finish**: Appearance requirements, post-processing planned
-- **printability_constraints**: Printer capabilities (heated bed, enclosure), user experience level
-- **special_requirements**: Food safety, biocompatibility, electrical insulation, transparency
+- **functional_requirements**: Lasttyp (Zug, Druck, Biegung, Torsion), Groesse, Lastzyklus
+- **environmental_conditions**: Betriebstemperaturbereich, UV-Belastung, Chemikalienkontakt, Feuchtigkeit
+- **mechanical_properties_needed**: Festigkeit, Flexibilitaet, Schlagfestigkeit, Ermuedungsfestigkeit
+- **surface_finish**: Oberflaechenanforderungen, geplante Nachbearbeitung
+- **printability_constraints**: Druckerfaehigkeiten (Heizbett, Einhausung), Erfahrungsstufe
+- **special_requirements**: Lebensmittelsicherheit, Biokompatibilitaet, elektrische Isolation, Transparenz
 
-## Procedure
+## Vorgehensweise
 
-### 1. Identify Primary Requirement Category
+### Schritt 1: Primaere Anforderungskategorie identifizieren
 
-Determine the dominant requirement that drives material selection:
+Die dominierende Anforderung bestimmen die die Materialauswahl bestimmt:
 
-**Mechanical Performance**:
-- High strength under load
-- Impact/shock absorption
-- Flexibility or elastic behavior
-- Fatigue resistance (repeated loading)
+**Mechanische Leistung**:
+- Hohe Festigkeit unter Last
+- Schlag-/Stossabsorption
+- Flexibilitaet oder elastisches Verhalten
+- Ermuedungsfestigkeit (wiederholte Belastung)
 
-**Environmental Durability**:
-- High/low temperature exposure
-- UV/outdoor weathering
-- Chemical resistance (solvents, oils, acids)
-- Moisture/water exposure
+**Umgebungsbestaendigkeit**:
+- Hoch-/Niedrigtemperaturexposition
+- UV-/Aussenbewitterung
+- Chemikalienbestaendigkeit (Loesungsmittel, Oele, Saeuren)
+- Feuchtigkeits-/Wasserexposition
 
-**Special Applications**:
-- Food contact safety
-- Biocompatibility (medical)
-- Electrical properties (insulation, conductivity)
-- Optical properties (transparency, color)
+**Spezielle Anwendungen**:
+- Lebensmittelkontaktsicherheit
+- Biokompatibilitaet (medizinisch)
+- Elektrische Eigenschaften (Isolation, Leitfaehigkeit)
+- Optische Eigenschaften (Transparenz, Farbe)
 
-**Printability/Cost**:
-- Ease of printing for prototypes
-- Minimal warping/support requirements
-- Low material cost for large parts
-- Wide availability
+**Druckbarkeit/Kosten**:
+- Einfache Druckbarkeit fuer Prototypen
+- Minimales Warping/Stuetzstrukturbedarf
+- Niedrige Materialkosten fuer grosse Teile
+- Breite Verfuegbarkeit
 
-**Expected:** Primary requirement identified (e.g., "outdoor UV resistance" or "high impact strength").
+**Erwartet:** Primaere Anforderung identifiziert (z.B. "UV-Bestaendigkeit im Aussenbereich" oder "hohe Schlagfestigkeit").
 
-**On failure:** If multiple requirements are equally critical, use decision matrix to score materials across requirements (see step 6).
+**Bei Fehler:** Wenn mehrere Anforderungen gleich kritisch sind, Entscheidungsmatrix verwenden um Materialien ueber Anforderungen hinweg zu bewerten (siehe Schritt 6).
 
-### 2. Apply Material Selection Filters
+### Schritt 2: Materialauswahlfilter anwenden
 
-Use requirement to filter material candidates:
+Anforderung nutzen um Materialkandidaten zu filtern:
 
-**Filter 1: Process Type**
-- FDM available: All thermoplastics (PLA, PETG, ABS, ASA, TPU, Nylon)
-- SLA available: All resins (standard, tough, flexible, castable, high-temp)
-- Printer constraints: Heated bed (60-110°C) required for ABS/ASA/Nylon; enclosure required for ABS/ASA
+**Filter 1: Prozesstyp**
+- FDM verfuegbar: Alle Thermoplaste (PLA, PETG, ABS, ASA, TPU, Nylon)
+- SLA verfuegbar: Alle Harze (Standard, Zaeh, Flexibel, Giessbar, Hochtemperatur)
+- Druckereinschraenkungen: Heizbett (60-110°C) erforderlich fuer ABS/ASA/Nylon; Einhausung erforderlich fuer ABS/ASA
 
-**Filter 2: Temperature Range**
+**Filter 2: Temperaturbereich**
 ```
-Operating Temperature → Minimum Material Glass Transition (Tg):
+Betriebstemperatur -> Minimale Glasuebergangstemperatur (Tg):
 
-< 45°C:  PLA, PLA+, Standard Resin, Tough Resin
-< 60°C:  PETG, Flexible Resin
+< 45°C:  PLA, PLA+, Standardharz, Zaehharz
+< 60°C:  PETG, Flexibles Harz
 < 80°C:  ABS, ASA, CPE
-< 100°C: Nylon, Polycarbonate, High-Temp Resin
-> 100°C: PEEK, PEI (Ultem) - specialty printers only
+< 100°C: Nylon, Polycarbonat, Hochtemperaturharz
+> 100°C: PEEK, PEI (Ultem) - nur Spezialdrucker
 ```
 
-**Filter 3: Mechanical Requirements**
+**Filter 3: Mechanische Anforderungen**
 ```
-High tensile strength:     Nylon > ABS/ASA > PETG > PLA > TPU
-High impact resistance:    Nylon > PETG > ABS > ASA > PLA
-Flexibility:              TPU > Flexible Resin > PLA (brittle)
-Fatigue resistance:       Nylon > PETG > ABS > PLA
-```
-
-**Filter 4: Environmental**
-```
-UV resistance:            ASA > PETG > ABS > PLA (poor)
-Chemical resistance:      Nylon > PETG > ABS/ASA > PLA
-Outdoor durability:       ASA > Nylon > PETG > PLA (degrades)
-Moisture resistance:      ABS/ASA > PETG > PLA > Nylon (hygroscopic)
+Hohe Zugfestigkeit:     Nylon > ABS/ASA > PETG > PLA > TPU
+Hohe Schlagfestigkeit:  Nylon > PETG > ABS > ASA > PLA
+Flexibilitaet:          TPU > Flex. Harz > PLA (sproede)
+Ermuedungsfestigkeit:   Nylon > PETG > ABS > PLA
 ```
 
-**Expected:** 2-5 candidate materials remain after filtering.
-
-**On failure:** If no materials pass all filters, relax least-critical requirement or consider post-processing (e.g., UV coating for PLA).
-
-### 3. Compare Material Properties
-
-Consult material property table for detailed comparison:
-
-## FDM Filament Properties
-
-| Material | Print Temp | Bed Temp | Tensile Strength | Elongation | Tg/HDT | UV Resist | Ease | Hygroscopic |
-|----------|------------|----------|------------------|------------|--------|-----------|------|-------------|
-| **PLA** | 190-220°C | 50-60°C | 50-70 MPa | 5-7% | 55-60°C | Poor | Easy | Low |
-| **PLA+** | 200-230°C | 50-60°C | 60-75 MPa | 10-15% | 60-65°C | Poor | Easy | Low |
-| **PETG** | 220-250°C | 70-85°C | 50-60 MPa | 15-20% | 75-80°C | Good | Medium | Medium |
-| **ABS** | 230-260°C | 95-110°C | 40-50 MPa | 20-40% | 95-105°C | Fair | Hard | Low |
-| **ASA** | 240-260°C | 95-110°C | 45-55 MPa | 15-30% | 95-105°C | Excellent | Hard | Low |
-| **TPU** | 210-230°C | 40-60°C | 30-50 MPa | 400-600% | 60-80°C | Good | Medium | Low |
-| **Nylon** | 240-270°C | 70-90°C | 70-80 MPa | 50-150% | 75-90°C | Excellent | Hard | Very High |
-
-**Notes**:
-- **Tensile Strength**: Higher = stronger under pulling load
-- **Elongation**: Higher = more flexible before breaking
-- **Tg/HDT**: Glass transition / heat deflection temperature (max operating temp)
-- **Ease**: Printing difficulty (warping, adhesion, stringing, supports)
-- **Hygroscopic**: Water absorption from air (requires dry box storage)
-
-## SLA Resin Properties
-
-| Resin Type | Cure Time | Tensile Strength | Elongation | HDT | Hardness | Best For |
-|------------|-----------|------------------|------------|-----|----------|----------|
-| **Standard** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | Miniatures, prototypes |
-| **Tough** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | Functional parts, snaps |
-| **Flexible** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | Gaskets, grips |
-| **High-Temp** | 8-12s | 60-70 MPa | 6-10% | 120-150°C | 85-88 Shore D | Heat-resistant parts |
-| **Castable** | 3-5s | 35-45 MPa | 8-12% | 60°C | 80 Shore D | Jewelry (lost-wax) |
-
-**Expected:** Material properties compared, 1-3 top candidates identified based on requirements.
-
-**On failure:** If properties unclear, consult manufacturer technical datasheets via WebFetch tool.
-
-### 4. Evaluate Printability Tradeoffs
-
-Assess printing difficulty vs. performance for candidates:
-
-**Printability factors**:
-
-**Easy (PLA, PLA+)**:
-- Minimal warping, good bed adhesion
-- Wide temperature tolerance
-- Low stringing, supports remove easily
-- Ideal for beginners and prototypes
-- **Tradeoff**: Lower temperature resistance, UV degradation, brittle
-
-**Medium (PETG, TPU)**:
-- Moderate warping (PETG needs 70°C+ bed)
-- Some stringing (tune retraction)
-- TPU requires direct drive extruder, slow speeds
-- Good strength-to-ease ratio
-- **Tradeoff**: PETG strings easily, TPU challenging for overhangs
-
-**Hard (ABS, ASA, Nylon)**:
-- Severe warping without enclosure
-- Strong fumes (ABS/ASA need ventilation)
-- Nylon extremely hygroscopic (dry box required)
-- High bed temps (95-110°C) and chamber heat
-- **Tradeoff**: Excellent mechanical and environmental properties
-
-**Cost considerations**:
+**Filter 4: Umgebung**
 ```
-Material cost per kg (typical):
-PLA:    $15-25
-PETG:   $20-30
-ABS:    $18-28
-ASA:    $25-35
-TPU:    $30-45
-Nylon:  $35-55
-Standard Resin: $30-50/L
-Specialty Resin: $60-150/L
+UV-Bestaendigkeit:        ASA > PETG > ABS > PLA (schlecht)
+Chemikalienbestaendigkeit: Nylon > PETG > ABS/ASA > PLA
+Aussenbestaendigkeit:     ASA > Nylon > PETG > PLA (degradiert)
+Feuchtigkeitsbestaendig.: ABS/ASA > PETG > PLA > Nylon (hygroskop.)
 ```
 
-**Expected:** Printability assessed relative to printer capabilities and user experience. Decision balances performance needs vs. practical constraints.
+**Erwartet:** 2-5 Materialkandidaten verbleiben nach der Filterung.
 
-**On failure:** If material too difficult for current setup, choose easier alternative and compensate with design changes (thicker walls, fillets, etc.).
+**Bei Fehler:** Wenn kein Material alle Filter besteht, die am wenigsten kritische Anforderung lockern oder Nachbearbeitung in Betracht ziehen (z.B. UV-Beschichtung fuer PLA).
 
-### 5. Check Special Requirements
+### Schritt 3: Materialeigenschaften vergleichen
 
-Verify material compatibility with special use cases:
+Materialeigenschaftstabelle fuer detaillierten Vergleich konsultieren:
 
-**Food Safety**:
-- **Safe when printed correctly**: PLA, PETG (with food-safe additives)
-- **Never food safe**: ABS, ASA (toxic additives), Nylon (porous, absorbs bacteria)
-- **Requirements**: Use food-safe nozzles (stainless steel, not brass), seal surface with food-safe epoxy
-- **Note**: FDM layer lines trap bacteria—SLA smooth resin better for food contact
+## FDM-Filament-Eigenschaften
 
-**Biocompatibility** (medical/dental):
-- **FDM**: Nylon (some grades), PLA (limited)
-- **SLA**: Medical-grade resins (certified for skin/tissue contact)
-- **Warning**: Home 3D printing not sterile; consult regulations for medical devices
+| Material | Drucktemp. | Betttemp. | Zugfestigkeit | Dehnung | Tg/HDT | UV-Best. | Schwiergk. | Hygroskop. |
+|----------|------------|-----------|---------------|---------|--------|----------|------------|------------|
+| **PLA** | 190-220°C | 50-60°C | 50-70 MPa | 5-7% | 55-60°C | Schlecht | Leicht | Niedrig |
+| **PLA+** | 200-230°C | 50-60°C | 60-75 MPa | 10-15% | 60-65°C | Schlecht | Leicht | Niedrig |
+| **PETG** | 220-250°C | 70-85°C | 50-60 MPa | 15-20% | 75-80°C | Gut | Mittel | Mittel |
+| **ABS** | 230-260°C | 95-110°C | 40-50 MPa | 20-40% | 95-105°C | Maessig | Schwer | Niedrig |
+| **ASA** | 240-260°C | 95-110°C | 45-55 MPa | 15-30% | 95-105°C | Exzellent | Schwer | Niedrig |
+| **TPU** | 210-230°C | 40-60°C | 30-50 MPa | 400-600% | 60-80°C | Gut | Mittel | Niedrig |
+| **Nylon** | 240-270°C | 70-90°C | 70-80 MPa | 50-150% | 75-90°C | Exzellent | Schwer | Sehr hoch |
 
-**Electrical Properties**:
-- **Insulation**: PLA, PETG, ABS, ASA all good insulators (>10^14 Ω·m)
-- **Conductivity**: Use conductive filaments (carbon black, metal-filled)
-- **Considerations**: Moisture absorption (Nylon) reduces insulation
+**Anmerkungen**:
+- **Zugfestigkeit**: Hoeher = staerker unter Zuglast
+- **Dehnung**: Hoeher = flexibler vor dem Bruch
+- **Tg/HDT**: Glasuebergangs-/Waermeformbestaendigkeitstemperatur (max. Betriebstemperatur)
+- **Schwierigkeit**: Druckschwierigkeit (Warping, Haftung, Stringing, Stuetzstrukturen)
+- **Hygroskopisch**: Wasseraufnahme aus der Luft (erfordert Trockenbox-Lagerung)
 
-**Transparency**:
-- **FDM**: Nearly impossible (layer lines scatter light); use very thin walls or polish extensively
-- **SLA**: Clear resins can achieve transparency with post-processing (sand/polish/coat)
+## SLA-Harz-Eigenschaften
 
-**UV Resistance**:
-- **Excellent**: ASA (designed for outdoor), Nylon
-- **Good**: PETG, TPU
-- **Poor**: PLA (yellows and degrades), ABS (yellows)
+| Harztyp | Belichtung | Zugfestigkeit | Dehnung | HDT | Haerte | Am besten fuer |
+|---------|-----------|---------------|---------|-----|--------|----------------|
+| **Standard** | 2-4s | 45-55 MPa | 6-8% | 60-70°C | 82-85 Shore D | Miniaturen, Prototypen |
+| **Zaeh** | 4-6s | 55-65 MPa | 15-25% | 70-80°C | 80-85 Shore D | Funktionsteile, Clips |
+| **Flexibel** | 6-8s | 5-10 MPa | 80-120% | 50-60°C | 60-70 Shore A | Dichtungen, Griffe |
+| **Hochtemp.** | 8-12s | 60-70 MPa | 6-10% | 120-150°C | 85-88 Shore D | Hitzebestaendige Teile |
+| **Giessbar** | 3-5s | 35-45 MPa | 8-12% | 60°C | 80 Shore D | Schmuck (Wachsausschmelz.) |
 
-**Expected:** Special requirements verified against material capabilities.
+**Erwartet:** Materialeigenschaften verglichen, 1-3 Top-Kandidaten basierend auf Anforderungen identifiziert.
 
-**On failure:** If material doesn't meet special requirement, apply post-processing (e.g., UV-resistant coating on PLA) or choose different material.
+**Bei Fehler:** Wenn Eigenschaften unklar, technische Datenblaetter des Herstellers ueber das WebFetch-Tool konsultieren.
 
-### 6. Make Final Selection with Decision Matrix
+### Schritt 4: Druckbarkeits-Abwaegungen bewerten
 
-Score candidates across weighted criteria:
+Druckschwierigkeit gegen Leistung fuer Kandidaten abwaegen:
 
-**Example for outdoor functional part**:
+**Druckbarkeitsfaktoren**:
 
-| Criterion | Weight | PLA | PETG | ABS | ASA | Nylon |
-|-----------|--------|-----|------|-----|-----|-------|
-| UV Resistance | 30% | 1 | 6 | 5 | 10 | 9 |
-| Strength | 25% | 6 | 7 | 6 | 7 | 9 |
-| Printability | 20% | 10 | 7 | 4 | 3 | 3 |
-| Temperature | 15% | 2 | 6 | 8 | 8 | 9 |
-| Cost | 10% | 10 | 8 | 8 | 6 | 4 |
-| **Weighted Total** | | **5.35** | **6.80** | **5.90** | **7.25** | **7.45** |
+**Leicht (PLA, PLA+)**:
+- Minimales Warping, gute Betthaftung
+- Breite Temperaturtoleranz
+- Geringes Stringing, Stuetzstrukturen leicht entfernbar
+- Ideal fuer Anfaenger und Prototypen
+- **Abwaegung**: Niedrigere Temperaturbestaendigkeit, UV-Degradation, sproede
 
-**Scoring**: 1 (poor) to 10 (excellent)
+**Mittel (PETG, TPU)**:
+- Maessiges Warping (PETG braucht 70°C+ Bett)
+- Etwas Stringing (Retraction abstimmen)
+- TPU erfordert Direct-Drive-Extruder, langsame Geschwindigkeiten
+- Gutes Festigkeits-zu-Einfachheits-Verhaeltnis
+- **Abwaegung**: PETG neigt zu Stringing, TPU schwierig bei Ueberhängen
 
-**Decision**: Nylon scores highest (7.45) but ASA (7.25) nearly tied with better printability. **Select ASA** if printer has enclosure, or **PETG** (6.80) if printability important.
+**Schwer (ABS, ASA, Nylon)**:
+- Starkes Warping ohne Einhausung
+- Starke Daempfe (ABS/ASA brauchen Belueftung)
+- Nylon extrem hygroskopisch (Trockenbox erforderlich)
+- Hohe Betttemperaturen (95-110°C) und Kammerheizung
+- **Abwaegung**: Ausgezeichnete mechanische und Umgebungseigenschaften
 
-**Expected:** Final material selected with documented rationale based on weighted priorities.
+**Kostenerwaegungen**:
+```
+Materialkosten pro kg (typisch):
+PLA:    15-25€
+PETG:   20-30€
+ABS:    18-28€
+ASA:    25-35€
+TPU:    30-45€
+Nylon:  35-55€
+Standardharz: 30-50€/L
+Spezialharz:  60-150€/L
+```
 
-**On failure:** If decision unclear, default to PETG for FDM or Tough Resin for SLA (best all-around compromises).
+**Erwartet:** Druckbarkeit relativ zu Druckerfaehigkeiten und Benutzererfahrung bewertet. Entscheidung balanciert Leistungsanforderungen gegen praktische Einschraenkungen.
 
-### 7. Document Material Settings
+**Bei Fehler:** Wenn Material zu schwierig fuer aktuelles Setup, einfachere Alternative waehlen und durch Designaenderungen kompensieren (dickere Waende, Verrundungen usw.).
 
-Record material-specific print settings for future use:
+### Schritt 5: Spezielle Anforderungen pruefen
 
-**FDM settings template**:
+Materialkompatibilitaet mit speziellen Anwendungsfaellen verifizieren:
+
+**Lebensmittelsicherheit**:
+- **Sicher wenn korrekt gedruckt**: PLA, PETG (mit lebensmittelsicheren Additiven)
+- **Nie lebensmittelsicher**: ABS, ASA (toxische Additive), Nylon (poroes, absorbiert Bakterien)
+- **Anforderungen**: Lebensmittelsichere Duesen verwenden (Edelstahl, nicht Messing), Oberflaeche mit lebensmittelsicherem Epoxid versiegeln
+- **Hinweis**: FDM-Schichtlinien fangen Bakterien ein — SLA-glattes Harz besser fuer Lebensmittelkontakt
+
+**Biokompatibilitaet** (medizinisch/dental):
+- **FDM**: Nylon (einige Grade), PLA (eingeschraenkt)
+- **SLA**: Medizinische Harze (zertifiziert fuer Haut-/Gewebekontakt)
+- **Warnung**: Heim-3D-Druck ist nicht steril; Vorschriften fuer Medizinprodukte beachten
+
+**Elektrische Eigenschaften**:
+- **Isolation**: PLA, PETG, ABS, ASA alle gute Isolatoren (>10^14 Ohm*m)
+- **Leitfaehigkeit**: Leitfaehige Filamente verwenden (Kohlenstoff-gefuellt, Metall-gefuellt)
+- **Erwaegungen**: Feuchtigkeitsaufnahme (Nylon) reduziert Isolation
+
+**Transparenz**:
+- **FDM**: Nahezu unmoeglich (Schichtlinien streuen Licht); sehr duenne Waende oder extensiv polieren
+- **SLA**: Klare Harze koennen mit Nachbearbeitung Transparenz erreichen (schleifen/polieren/beschichten)
+
+**UV-Bestaendigkeit**:
+- **Exzellent**: ASA (fuer Aussenbereich konzipiert), Nylon
+- **Gut**: PETG, TPU
+- **Schlecht**: PLA (vergilbt und degradiert), ABS (vergilbt)
+
+**Erwartet:** Spezielle Anforderungen gegen Materialfaehigkeiten verifiziert.
+
+**Bei Fehler:** Wenn Material die spezielle Anforderung nicht erfuellt, Nachbearbeitung anwenden (z.B. UV-bestaendige Beschichtung auf PLA) oder anderes Material waehlen.
+
+### Schritt 6: Endauswahl mit Entscheidungsmatrix treffen
+
+Kandidaten ueber gewichtete Kriterien bewerten:
+
+**Beispiel fuer funktionales Aussenteil**:
+
+| Kriterium | Gewicht | PLA | PETG | ABS | ASA | Nylon |
+|-----------|---------|-----|------|-----|-----|-------|
+| UV-Bestaendigkeit | 30% | 1 | 6 | 5 | 10 | 9 |
+| Festigkeit | 25% | 6 | 7 | 6 | 7 | 9 |
+| Druckbarkeit | 20% | 10 | 7 | 4 | 3 | 3 |
+| Temperatur | 15% | 2 | 6 | 8 | 8 | 9 |
+| Kosten | 10% | 10 | 8 | 8 | 6 | 4 |
+| **Gewichtete Summe** | | **5,35** | **6,80** | **5,90** | **7,25** | **7,45** |
+
+**Bewertung**: 1 (schlecht) bis 10 (ausgezeichnet)
+
+**Entscheidung**: Nylon erzielt die hoechste Punktzahl (7,45) aber ASA (7,25) nahezu gleichauf mit besserer Druckbarkeit. **ASA waehlen** wenn der Drucker eine Einhausung hat, oder **PETG** (6,80) wenn Druckbarkeit wichtig ist.
+
+**Erwartet:** Endgueltiges Material mit dokumentierter Begruendung basierend auf gewichteten Prioritaeten ausgewaehlt.
+
+**Bei Fehler:** Wenn die Entscheidung unklar ist, Standardwahl PETG fuer FDM oder Zaehharz fuer SLA (beste Allround-Kompromisse).
+
+### Schritt 7: Materialeinstellungen dokumentieren
+
+Materialspezifische Druckeinstellungen fuer kuenftigen Gebrauch festhalten:
+
+**FDM-Einstellungsvorlage**:
 ```yaml
 material: PETG
 brand: "PolyMaker PolyLite"
@@ -274,10 +275,10 @@ print_speed: 50mm/s
 retraction_distance: 4.5mm
 retraction_speed: 40mm/s
 cooling: 50% (after layer 3)
-notes: "Strings moderately, Z-hop helps. Dried 6h at 65°C."
+notes: "Maessiges Stringing, Z-hop hilft. 6h bei 65°C getrocknet."
 ```
 
-**SLA settings template**:
+**SLA-Einstellungsvorlage**:
 ```yaml
 resin: "Anycubic Tough Resin"
 color: "Clear"
@@ -286,40 +287,38 @@ exposure_time: 6s
 bottom_exposure: 40s
 lift_distance: 6mm
 lift_speed: 65mm/min
-notes: "Post-cure 15min at 60°C for full strength. Brittle without cure."
+notes: "Nachhaerten 15min bei 60°C fuer volle Festigkeit. Ohne Haertung sproede."
 ```
 
-**Expected:** Settings documented in project notes or slicer profile library.
+**Erwartet:** Einstellungen in Projektnotizen oder Slicer-Profilbibliothek dokumentiert.
 
-**On failure:** Start with manufacturer recommended settings, then iterate and document successful changes.
+**Bei Fehler:** Mit den vom Hersteller empfohlenen Einstellungen beginnen, dann iterieren und erfolgreiche Aenderungen dokumentieren.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Primary functional requirement identified (mechanical, environmental, special)
-- [ ] Material candidates filtered by process, temperature, and requirements
-- [ ] Material properties compared via reference table or manufacturer datasheets
-- [ ] Printability assessed relative to printer capabilities (bed temp, enclosure, ventilation)
-- [ ] Special requirements checked (food safety, UV resistance, transparency, etc.)
-- [ ] Final selection made using decision matrix with weighted priorities
-- [ ] Material-specific print settings documented for reproducibility
-- [ ] Cost and availability verified for planned quantity
+- [ ] Primaere funktionale Anforderung identifiziert (mechanisch, Umgebung, speziell)
+- [ ] Materialkandidaten nach Prozess, Temperatur und Anforderungen gefiltert
+- [ ] Materialeigenschaften ueber Referenztabelle oder Herstellerdatenblaetter verglichen
+- [ ] Druckbarkeit relativ zu Druckerfaehigkeiten bewertet (Betttemperatur, Einhausung, Belueftung)
+- [ ] Spezielle Anforderungen geprueft (Lebensmittelsicherheit, UV-Bestaendigkeit, Transparenz usw.)
+- [ ] Endauswahl mit Entscheidungsmatrix und gewichteten Prioritaeten getroffen
+- [ ] Materialspezifische Druckeinstellungen fuer Reproduzierbarkeit dokumentiert
+- [ ] Kosten und Verfuegbarkeit fuer geplante Menge verifiziert
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Choosing PLA for everything**: PLA is easy but unsuitable for temperature >50°C, outdoor use, or long-term durability
-2. **Ignoring hygroscopy**: Nylon and TPU absorb moisture from air, causing bubbling, poor adhesion, and brittleness—must use dry box
-3. **ABS without enclosure**: ABS warps severely without heated chamber; ASA slightly better but still needs enclosure
-4. **Assuming food safety**: FDM parts are porous and trap bacteria; true food safety requires sealing or using SLA smooth resin
-5. **Over-designing for strength**: Using expensive Nylon when PETG sufficient; overkill wastes money and adds printing difficulty
-6. **Underestimating temperature**: Parts near motors, heated beds, or in cars reach 60°C+ where PLA softens
-7. **UV exposure neglect**: PLA and ABS yellow and degrade in sunlight within months; use ASA or coat with UV-resistant finish
-8. **Wet filament printing**: Moisture causes steam bubbles in extruder, weak layer adhesion, stringing—always dry hygroscopic materials
-9. **Ignoring fumes**: ABS and ASA emit styrene fumes; requires active ventilation (not just open window)
-10. **Resin handling**: Uncured resin is skin sensitizer and toxic; always wear gloves and work in ventilated area
+1. **PLA fuer alles waehlen**: PLA ist einfach aber ungeeignet fuer Temperaturen >50°C, Ausseneinsatz oder langfristige Haltbarkeit
+2. **Hygroskopie ignorieren**: Nylon und TPU absorbieren Feuchtigkeit aus der Luft, was Blasenbildung, schlechte Haftung und Sproedie verursacht — Trockenbox verwenden
+3. **ABS ohne Einhausung**: ABS warpt stark ohne beheizte Kammer; ASA etwas besser aber braucht ebenfalls Einhausung
+4. **Lebensmittelsicherheit voraussetzen**: FDM-Teile sind poroes und fangen Bakterien ein; echte Lebensmittelsicherheit erfordert Versiegelung oder SLA-glattes Harz
+5. **Festigkeit ueberentwerfen**: Teures Nylon verwenden wenn PETG ausreicht; Ueberdimensionierung verschwendet Geld und erhoeht Druckschwierigkeit
+6. **Temperatur unterschaetzen**: Teile in der Naehe von Motoren, Heizbetten oder in Autos erreichen 60°C+ wo PLA erweicht
+7. **UV-Exposition vernachlaessigen**: PLA und ABS vergilben und degradieren im Sonnenlicht innerhalb von Monaten; ASA verwenden oder mit UV-bestaendigem Finish beschichten
+8. **Nasses Filament drucken**: Feuchtigkeit verursacht Dampfblasen im Extruder, schwache Schichthaftung, Stringing — hygroskopische Materialien immer trocknen
+9. **Daempfe ignorieren**: ABS und ASA emittieren Styrolddaempfe; erfordert aktive Belueftung (nicht nur offenes Fenster)
+10. **Harzhandhabung**: Ungehaertetes Harz ist Hautsensibilisator und toxisch; immer Handschuhe tragen und in belueftetem Bereich arbeiten
 
-## Related Skills
+## Verwandte Skills
 
-- **[prepare-print-model](../prepare-print-model/SKILL.md)**: Configure slicer settings for chosen material
-- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Fix material-related print failures (stringing, warping, adhesion)
-- **Dry Filament** (future skill): Proper drying procedures for hygroscopic materials
-- **Post-Process 3D Prints** (future skill): Sanding, vapor smoothing, painting, annealing for improved properties
+- `prepare-print-model` — Slicer-Einstellungen fuer gewaehltes Material konfigurieren
+- `troubleshoot-print-issues` — Materialbedingte Druckfehler beheben (Stringing, Warping, Haftung)

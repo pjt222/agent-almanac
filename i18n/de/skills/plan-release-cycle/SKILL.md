@@ -1,13 +1,14 @@
 ---
 name: plan-release-cycle
 description: >
-  Plan a software release cycle with milestones, feature freezes,
-  release candidates, and go/no-go criteria. Covers calendar-based
-  and feature-based release strategies. Use when starting planning for a
-  major or minor version release, transitioning from ad-hoc to structured
-  release cadence, coordinating a release across multiple teams or components,
-  defining quality gates for a regulated project, or planning the first
-  public release (v1.0.0) of a project.
+  Einen Software-Release-Zyklus mit Meilensteinen, Feature Freezes,
+  Release Candidates und Go/No-Go-Kriterien planen. Umfasst kalenderbasierte
+  und funktionsbasierte Release-Strategien. Verwenden beim Beginn der Planung
+  fuer ein Major- oder Minor-Versions-Release, beim Uebergang von Ad-hoc- zu
+  strukturierter Release-Kadenz, bei der Koordination eines Releases ueber mehrere
+  Teams oder Komponenten, bei der Definition von Qualitaets-Gates fuer ein
+  reguliertes Projekt oder bei der Planung des ersten oeffentlichen Releases
+  (v1.0.0) eines Projekts.
 license: MIT
 allowed-tools: Read Write Grep Glob
 metadata:
@@ -26,55 +27,55 @@ metadata:
 
 # Release-Zyklus planen
 
-Plan a structured software release cycle by defining strategy (calendar-based or feature-based), setting milestones with target dates, establishing feature freeze criteria, managing release candidates, defining go/no-go checklists, and documenting rollback plans. Produces a `RELEASE-PLAN.md` artifact that guides the team from development through release.
+Einen strukturierten Software-Release-Zyklus planen durch Definition der Strategie (kalenderbasiert oder funktionsbasiert), Festlegung von Meilensteinen mit Zieldaten, Etablierung von Feature-Freeze-Kriterien, Verwaltung von Release Candidates, Definition von Go/No-Go-Checklisten und Dokumentation von Rollback-Plaenen. Erzeugt ein `RELEASE-PLAN.md`-Artefakt, das das Team von der Entwicklung bis zum Release leitet.
 
-## When to Use
+## Wann verwenden
 
-- Starting planning for a major or minor version release
-- Transitioning from ad-hoc releases to a structured release cadence
-- Coordinating a release across multiple teams or components
-- Defining quality gates and release criteria for a regulated project
-- Planning the first public release (v1.0.0) of a project
+- Beginn der Planung fuer ein Major- oder Minor-Versions-Release
+- Uebergang von Ad-hoc-Releases zu einer strukturierten Release-Kadenz
+- Koordination eines Releases ueber mehrere Teams oder Komponenten
+- Definition von Qualitaets-Gates und Release-Kriterien fuer ein reguliertes Projekt
+- Planung des ersten oeffentlichen Releases (v1.0.0) eines Projekts
 
-## Inputs
+## Eingaben
 
-- **Required**: Target version number (e.g., v2.0.0)
-- **Required**: Desired release date or release window
-- **Required**: List of planned features or scope (backlog, roadmap, or description)
-- **Optional**: Team size and availability
-- **Optional**: Release strategy preference (calendar-based or feature-based)
-- **Optional**: Regulatory or compliance requirements affecting release
-- **Optional**: Previous release velocity or cycle duration data
+- **Erforderlich**: Ziel-Versionsnummer (z.B. v2.0.0)
+- **Erforderlich**: Gewuenschtes Release-Datum oder Release-Fenster
+- **Erforderlich**: Liste geplanter Funktionen oder Umfang (Backlog, Roadmap oder Beschreibung)
+- **Optional**: Teamgroesse und Verfuegbarkeit
+- **Optional**: Release-Strategie-Praeferenz (kalenderbasiert oder funktionsbasiert)
+- **Optional**: Regulatorische oder Compliance-Anforderungen, die das Release beeinflussen
+- **Optional**: Fruehere Release-Geschwindigkeit oder Zyklusdauerdaten
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Determine Release Strategy
+### Schritt 1: Release-Strategie bestimmen
 
-Choose between two primary strategies:
+Zwischen zwei primaeren Strategien waehlen:
 
-**Calendar-based** (time-boxed):
-- Release on a fixed schedule (e.g., every 4 weeks, quarterly)
-- Features that are not ready are deferred to the next release
-- Predictable for users and downstream projects
-- Best for: libraries, frameworks, tools with external consumers
+**Kalenderbasiert** (zeitlich begrenzt):
+- Release nach festem Zeitplan (z.B. alle 4 Wochen, quartalsweise)
+- Funktionen, die nicht bereit sind, werden auf das naechste Release verschoben
+- Vorhersagbar fuer Benutzer und nachgelagerte Projekte
+- Am besten fuer: Bibliotheken, Frameworks, Werkzeuge mit externen Nutzern
 
-**Feature-based** (scope-driven):
-- Release when a defined set of features is complete
-- Date adjusts to accommodate scope
-- Risk of scope creep and indefinite delays
-- Best for: internal tools, first releases, major rewrites
+**Funktionsbasiert** (umfangsgesteuert):
+- Release, wenn ein definierter Satz von Funktionen vollstaendig ist
+- Datum passt sich dem Umfang an
+- Risiko von Umfangserweiterung und unbefristeten Verzoegerungen
+- Am besten fuer: interne Werkzeuge, Erst-Releases, grosse Neuentwicklungen
 
-For most projects, a hybrid approach works well: set a target date with a defined scope, but allow a 1-2 week buffer. If scope is not met by the buffer deadline, defer remaining features.
+Fuer die meisten Projekte funktioniert ein hybrider Ansatz gut: ein Zieldatum mit definiertem Umfang setzen, aber einen 1-2-Wochen-Puffer zulassen. Wenn der Umfang bis zur Puffer-Frist nicht erreicht ist, verbleibende Funktionen verschieben.
 
-Document the strategy choice with rationale.
+Die Strategiewahl mit Begruendung dokumentieren.
 
-**Expected:** Release strategy documented with rationale matching project context.
+**Erwartet:** Release-Strategie mit Begruendung dokumentiert, passend zum Projektkontext.
 
-**On failure:** If the team cannot agree on a strategy, default to calendar-based with a feature-priority list. Time-boxing forces prioritization decisions.
+**Bei Fehler:** Wenn sich das Team nicht auf eine Strategie einigen kann, standardmaessig kalenderbasiert mit einer Funktionsprioritaetsliste waehlen. Zeitliche Begrenzung erzwingt Priorisierungsentscheidungen.
 
-### Step 2: Define Milestones
+### Schritt 2: Meilensteine definieren
 
-Break the release cycle into phases with target dates:
+Den Release-Zyklus in Phasen mit Zieldaten unterteilen:
 
 ```markdown
 ## Release Plan: v2.0.0
@@ -93,18 +94,18 @@ Break the release cycle into phases with target dates:
 | Release | 2026-04-01 | 2026-04-01 | 1 day | Tag, publish, announce |
 ```
 
-Typical phase durations:
-- **Development**: 50-70% of total cycle
-- **Stabilization**: 15-25% of total cycle
-- **RC testing**: 10-20% of total cycle
+Typische Phasendauern:
+- **Entwicklung**: 50-70% des Gesamtzyklus
+- **Stabilisierung**: 15-25% des Gesamtzyklus
+- **RC-Tests**: 10-20% des Gesamtzyklus
 
-**Expected:** Milestone table with dates, durations, and descriptions for each phase.
+**Erwartet:** Meilensteintabelle mit Daten, Dauern und Beschreibungen fuer jede Phase.
 
-**On failure:** If the timeline is too compressed (stabilization < 1 week), either extend the release date or reduce scope. Never skip stabilization.
+**Bei Fehler:** Wenn der Zeitplan zu komprimiert ist (Stabilisierung < 1 Woche), entweder das Release-Datum verlaengern oder den Umfang reduzieren. Niemals die Stabilisierung ueberspringen.
 
-### Step 3: Set Feature Freeze Criteria
+### Schritt 3: Feature-Freeze-Kriterien festlegen
 
-Define what "feature freeze" means for this release:
+Definieren, was "Feature Freeze" fuer dieses Release bedeutet:
 
 ```markdown
 ### Feature Freeze Criteria
@@ -123,15 +124,15 @@ After feature freeze (2026-03-15):
 | P2 (nice) | Dark mode support | Not started | [Name] | Defer to v2.1.0 if needed |
 ```
 
-P0 features block the release. P1 features should be included if ready. P2 features are deferred without delay.
+P0-Funktionen blockieren das Release. P1-Funktionen sollten eingeschlossen werden, wenn sie bereit sind. P2-Funktionen werden ohne Verzoegerung verschoben.
 
-**Expected:** Feature freeze rules documented with exception process and prioritized feature list.
+**Erwartet:** Feature-Freeze-Regeln mit Ausnahmeverfahren und priorisierter Funktionsliste dokumentiert.
 
-**On failure:** If P0 features are at risk of missing the freeze date, escalate immediately. Options: extend development phase, split the feature into a smaller deliverable, or defer to a point release (v2.0.1).
+**Bei Fehler:** Wenn P0-Funktionen Gefahr laufen, den Freeze-Termin zu verpassen, sofort eskalieren. Optionen: Entwicklungsphase verlaengern, die Funktion in eine kleinere Liefereinheit aufteilen oder auf ein Punkt-Release (v2.0.1) verschieben.
 
-### Step 4: Plan Release Candidate Process
+### Schritt 4: Release-Candidate-Prozess planen
 
-Define how release candidates are produced and tested:
+Definieren, wie Release Candidates erzeugt und getestet werden:
 
 ```markdown
 ### Release Candidate Process
@@ -163,13 +164,13 @@ Define how release candidates are produced and tested:
    ```
 ```
 
-**Expected:** RC process documented with tagging convention, distribution method, testing checklist, and escalation criteria.
+**Erwartet:** RC-Prozess dokumentiert mit Tagging-Konvention, Verteilungsmethode, Test-Checkliste und Eskalationskriterien.
 
-**On failure:** If the RC process is skipped (pressure to release), document the risk. Untested releases have higher rollback probability.
+**Bei Fehler:** Wenn der RC-Prozess uebersprungen wird (Druck zum Release), das Risiko dokumentieren. Ungetestete Releases haben eine hoehere Rollback-Wahrscheinlichkeit.
 
-### Step 5: Define Go/No-Go Checklist
+### Schritt 5: Go/No-Go-Checkliste definieren
 
-Create the criteria that must be met before release approval:
+Die Kriterien erstellen, die vor der Release-Freigabe erfuellt sein muessen:
 
 ```markdown
 ### Go/No-Go Checklist
@@ -196,13 +197,13 @@ Create the criteria that must be met before release approval:
 - **Conditional Go**: All "Must Pass" checked, significant "Should Pass" items unchecked — document accepted risks
 ```
 
-**Expected:** Go/no-go checklist with clear pass/fail criteria and decision rules.
+**Erwartet:** Go/No-Go-Checkliste mit klaren Bestanden/Nicht-Bestanden-Kriterien und Entscheidungsregeln.
 
-**On failure:** If the go/no-go meeting results in no-go, identify the blocking items, assign owners, set a new target date (typically 1-2 weeks later), and update the release plan.
+**Bei Fehler:** Wenn das Go/No-Go-Meeting zu einem No-Go fuehrt, die blockierenden Punkte identifizieren, Verantwortliche zuweisen, ein neues Zieldatum setzen (typischerweise 1-2 Wochen spaeter) und den Release-Plan aktualisieren.
 
-### Step 6: Document Rollback Plan
+### Schritt 6: Rollback-Plan dokumentieren
 
-Define how to roll back if the release causes critical issues in production:
+Definieren, wie zurueckgerollt wird, wenn das Release kritische Probleme in der Produktion verursacht:
 
 ```markdown
 ### Rollback Plan
@@ -232,37 +233,37 @@ Define how to roll back if the release causes critical issues in production:
 - Patch releases do not require full RC cycle but must pass CI and critical test suite
 ```
 
-Write the complete release plan to `RELEASE-PLAN.md` or `RELEASE-PLAN-v2.0.0.md`.
+Den vollstaendigen Release-Plan in `RELEASE-PLAN.md` oder `RELEASE-PLAN-v2.0.0.md` schreiben.
 
-**Expected:** Rollback plan documented with triggers, procedure, communication template, and point release policy. Complete RELEASE-PLAN.md written.
+**Erwartet:** Rollback-Plan dokumentiert mit Ausloesern, Verfahren, Kommunikationsvorlage und Punkt-Release-Richtlinie. Vollstaendige RELEASE-PLAN.md geschrieben.
 
-**On failure:** If rollback is not feasible (e.g., database migration already applied), document the forward-fix procedure instead. Every release should have a recovery path.
+**Bei Fehler:** Wenn Rollback nicht machbar ist (z.B. Datenbankmigration bereits durchgefuehrt), stattdessen das Forward-Fix-Verfahren dokumentieren. Jedes Release sollte einen Wiederherstellungspfad haben.
 
-## Validation
+## Validierung
 
-- [ ] Release strategy (calendar/feature/hybrid) documented with rationale
-- [ ] Milestone table includes all phases with dates: development, freeze, stabilization, RC, release
-- [ ] Feature freeze criteria defined with allowed/disallowed change types
-- [ ] Feature priority list categorized (P0 must / P1 should / P2 nice)
-- [ ] RC process documented: tagging convention, distribution, testing period, escalation
-- [ ] Go/no-go checklist has clear "must pass" and "should pass" sections
-- [ ] Rollback plan includes triggers, procedure, and communication template
-- [ ] RELEASE-PLAN.md (or equivalent) file created and saved
-- [ ] Timeline is realistic (stabilization is at least 15% of total cycle)
+- [ ] Release-Strategie (kalender-/funktionsbasiert/hybrid) mit Begruendung dokumentiert
+- [ ] Meilensteintabelle enthaelt alle Phasen mit Daten: Entwicklung, Freeze, Stabilisierung, RC, Release
+- [ ] Feature-Freeze-Kriterien mit erlaubten/nicht erlaubten Aenderungstypen definiert
+- [ ] Funktionsprioritaetsliste kategorisiert (P0 muss / P1 sollte / P2 wuenschenswert)
+- [ ] RC-Prozess dokumentiert: Tagging-Konvention, Verteilung, Testzeitraum, Eskalation
+- [ ] Go/No-Go-Checkliste hat klare "Muss bestehen"- und "Sollte bestehen"-Abschnitte
+- [ ] Rollback-Plan enthaelt Ausloeser, Verfahren und Kommunikationsvorlage
+- [ ] RELEASE-PLAN.md (oder Aequivalent) erstellt und gespeichert
+- [ ] Zeitplan ist realistisch (Stabilisierung betraegt mindestens 15% des Gesamtzyklus)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **No stabilization phase**: Going directly from development to release. Even a 3-day stabilization period catches issues that active development masks.
-- **Scope creep after freeze**: Allowing "just one more feature" after feature freeze. Every post-freeze addition resets testing and introduces regression risk.
-- **Ignoring P0 risks**: Not escalating early when a P0 feature is at risk. The earlier scope is adjusted, the less disruption to the timeline.
-- **Skipping RC for "small" releases**: Even minor releases benefit from at least one RC. A day of RC testing is cheaper than a post-release hotfix.
-- **No rollback plan**: Assuming the release will succeed. Every release plan should answer "what if this goes wrong?" before publishing.
-- **Calendar pressure overriding quality**: Releasing on a date because it was promised, despite failing go/no-go criteria. A delayed release is a minor inconvenience; a broken release is a trust violation.
+- **Keine Stabilisierungsphase**: Direkt von Entwicklung zum Release gehen. Selbst eine 3-taegige Stabilisierungsphase entdeckt Probleme, die aktive Entwicklung maskiert
+- **Umfangserweiterung nach Freeze**: "Nur noch eine Funktion" nach Feature Freeze zulassen. Jede Post-Freeze-Ergaenzung setzt Tests zurueck und fuehrt zu Regressionsrisiko
+- **P0-Risiken ignorieren**: Nicht fruehzeitig eskalieren, wenn eine P0-Funktion gefaehrdet ist. Je frueher der Umfang angepasst wird, desto weniger Stoerung fuer den Zeitplan
+- **RC fuer "kleine" Releases ueberspringen**: Auch Minor-Releases profitieren von mindestens einem RC. Ein Tag RC-Tests ist guenstiger als ein Post-Release-Hotfix
+- **Kein Rollback-Plan**: Annehmen, dass das Release erfolgreich sein wird. Jeder Release-Plan sollte "Was wenn das schiefgeht?" vor der Veroeffentlichung beantworten
+- **Kalenderdruck ueberwiegt Qualitaet**: An einem Datum releasen, weil es versprochen wurde, trotz Nichtbestehens der Go/No-Go-Kriterien. Ein verspaetetes Release ist eine kleine Unannehmlichkeit; ein kaputtes Release ist ein Vertrauensbruch
 
-## Related Skills
+## Verwandte Skills
 
-- `apply-semantic-versioning` -- Determine the version number for the planned release
-- `manage-changelog` -- Maintain the changelog that feeds into release notes
-- `plan-sprint` -- Sprint planning within the development phase of the release cycle
-- `draft-project-charter` -- Project charter may define the release roadmap and success criteria
-- `generate-status-report` -- Track progress against release milestones
+- `apply-semantic-versioning` — Die Versionsnummer fuer das geplante Release bestimmen
+- `manage-changelog` — Das Changelog pflegen, das in die Release Notes einfliesst
+- `plan-sprint` — Sprint-Planung innerhalb der Entwicklungsphase des Release-Zyklus
+- `draft-project-charter` — Projektcharta kann die Release-Roadmap und Erfolgskriterien definieren
+- `generate-status-report` — Fortschritt gegen Release-Meilensteine verfolgen

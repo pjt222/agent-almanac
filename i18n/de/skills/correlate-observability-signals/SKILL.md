@@ -1,9 +1,9 @@
 ---
 name: correlate-observability-signals
 description: >
-  Unify metrics, logs, and traces for cohesive debugging. Implement exemplars
+  Unify metrics, logs, and traces for cohesive debugging. Implementieren exemplars
   for log-to-trace linking, build unified dashboards using RED/USE methods,
-  and enable rapid root cause analysis across observability signals. Use when
+  and enable rapid root cause analysis across observability signals. Verwenden wenn
   investigating complex incidents spanning multiple systems, reducing mean time
   to resolution, implementing distributed tracing, or moving from siloed tools
   to a unified observability platform.
@@ -25,9 +25,9 @@ metadata:
 
 # Observability-Signale korrelieren
 
-Connect metrics, logs, and traces for unified debugging across the three pillars of observability.
+Verbinden metrics, logs, and traces for unified debugging across the three pillars of observability.
 
-## When to Use
+## Wann verwenden
 
 - Investigating complex incidents that span multiple systems
 - Reducing MTTR (mean time to resolution)
@@ -35,22 +35,22 @@ Connect metrics, logs, and traces for unified debugging across the three pillars
 - Implementing distributed tracing
 - Moving from siloed tools to unified observability
 
-## Inputs
+## Eingaben
 
-- **Required**: Prometheus (metrics)
-- **Required**: Log aggregation system (Loki, Elasticsearch, CloudWatch)
-- **Required**: Distributed tracing backend (Tempo, Jaeger, Zipkin)
+- **Erforderlich**: Prometheus (metrics)
+- **Erforderlich**: Log aggregation system (Loki, Elasticsearch, CloudWatch)
+- **Erforderlich**: Distributed tracing backend (Tempo, Jaeger, Zipkin)
 - **Optional**: Grafana for unified visualization
 - **Optional**: OpenTelemetry instrumentation
 
-## Procedure
+## Vorgehensweise
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
 
-### Step 1: Implement Trace Context Propagation
+### Schritt 1: Implementieren Trace Context Propagation
 
-Add trace IDs to all logs and metrics using OpenTelemetry:
+Hinzufuegen trace IDs to all logs and metrics using OpenTelemetry:
 
 ```go
 // Go example: Propagate trace context to logs
@@ -119,11 +119,11 @@ def get_user(user_id):
     return {"user_id": user_id}
 ```
 
-**Expected:** All logs include `trace_id` field, enabling log-to-trace correlation.
+**Erwartet:** All logs include `trace_id` field, enabling log-to-trace correlation.
 
-**On failure:** If trace IDs missing, check OpenTelemetry SDK initialization and context propagation.
+**Bei Fehler:** If trace IDs missing, check OpenTelemetry SDK initialization and context propagation.
 
-### Step 2: Configure Exemplars in Prometheus
+### Schritt 2: Konfigurieren Exemplars in Prometheus
 
 Exemplars link metrics to traces:
 
@@ -190,11 +190,11 @@ histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 
 In Grafana, exemplars appear as dots on histogram graphs that link to traces.
 
-**Expected:** Grafana shows exemplars in metric graphs, clicking opens corresponding trace.
+**Erwartet:** Grafana shows exemplars in metric graphs, clicking opens corresponding trace.
 
-**On failure:** Verify Prometheus version ≥2.26 (exemplar support), check Grafana data source config enables exemplars.
+**Bei Fehler:** Verifizieren Prometheus version ≥2.26 (exemplar support), check Grafana Datenquelle config enables exemplars.
 
-### Step 3: Build Unified Dashboard with RED Method
+### Schritt 3: Erstellen Unified Dashboard with RED Method
 
 RED Method: Rate, Errors, Duration (for services)
 
@@ -263,11 +263,11 @@ RED Method: Rate, Errors, Duration (for services)
 }
 ```
 
-**Expected:** Single dashboard showing rate, errors, duration + correlated logs.
+**Erwartet:** Single dashboard showing rate, errors, duration + correlated logs.
 
-**On failure:** If panels show "No Data", verify metric names match your instrumentation.
+**Bei Fehler:** If panels show "No Data", verify metric names match your instrumentation.
 
-### Step 4: Implement USE Method for Resources
+### Schritt 4: Implementieren USE Method for Resources
 
 USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, disk)
 
@@ -349,13 +349,13 @@ USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, dis
 }
 ```
 
-**Expected:** Dashboard showing resource health across all USE dimensions.
+**Erwartet:** Dashboard showing resource health across all USE dimensions.
 
-**On failure:** Ensure node_exporter is running and scraping system metrics.
+**Bei Fehler:** Sicherstellen node_exporter is running and scraping system metrics.
 
-### Step 5: Link Logs to Traces in Loki
+### Schritt 5: Link Logs to Traces in Loki
 
-Configure Loki to extract trace IDs:
+Konfigurieren Loki to extract trace IDs:
 
 ```yaml
 # loki-config.yml
@@ -378,7 +378,7 @@ query_config:
       urlDisplayLabel: 'View Trace'
 ```
 
-In Grafana, configure Loki data source:
+In Grafana, configure Loki Datenquelle:
 
 ```json
 {
@@ -398,13 +398,13 @@ In Grafana, configure Loki data source:
 }
 ```
 
-**Expected:** Clicking trace ID in Loki logs opens corresponding trace in Tempo.
+**Erwartet:** Clicking trace ID in Loki logs opens corresponding trace in Tempo.
 
-**On failure:** Verify regex matches your log format, check Tempo data source UID.
+**Bei Fehler:** Verifizieren regex matches your log format, check Tempo Datenquelle UID.
 
-### Step 6: Create Unified Incident View
+### Schritt 6: Erstellen Unified Incident View
 
-Build a dashboard that brings all signals together:
+Erstellen a dashboard that brings all signals together:
 
 ```json
 {
@@ -416,9 +416,9 @@ Build a dashboard that brings all signals together:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Workflow during incident:
+Workflow waehrend incident:
 
-1. Alert fires for high error rate
+1. Alarmieren fires for high error rate
 2. On-call engineer opens Grafana dashboard
 3. Identifies spike in error rate at specific time
 4. Clicks exemplar dot on duration histogram → opens trace
@@ -427,11 +427,11 @@ Workflow during incident:
 7. Logs reveal specific SQL query causing timeout
 8. Root cause identified in <2 minutes
 
-**Expected:** Single pane of glass for debugging, jumping between metrics/logs/traces.
+**Erwartet:** Single pane of glass for debugging, jumping zwischen metrics/logs/traces.
 
-**On failure:** If links don't work, check data source configurations and trace ID propagation.
+**Bei Fehler:** If links don't work, check Datenquelle configurations and trace ID propagation.
 
-## Validation
+## Validierung
 
 - [ ] Trace IDs present in all application logs
 - [ ] Prometheus scraping exemplars
@@ -440,17 +440,17 @@ Workflow during incident:
 - [ ] Loki logs have "View Trace" links that work
 - [ ] RED dashboard created for key services
 - [ ] USE dashboard created for infrastructure
-- [ ] Unified incident dashboard tested during GameDay
+- [ ] Unified incident dashboard tested waehrend GameDay
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Inconsistent trace ID format**: OpenTelemetry uses 32-char hex, Jaeger uses 16-char. Choose one.
+- **Inconsistent trace ID format**: OpenTelemetry uses 32-char hex, Jaeger uses 16-char. Waehlen one.
 - **Missing context propagation**: If trace IDs don't flow across services, distributed tracing breaks. Use OpenTelemetry auto-instrumentation.
 - **Exemplar overload**: Too many exemplars (>100k) can slow Prometheus. Sample high-volume metrics.
-- **Clock skew**: Traces span multiple services. Ensure NTP is configured; clock drift causes trace ordering issues.
-- **Data retention mismatch**: If traces expire before metrics, correlation breaks. Align retention policies.
+- **Clock skew**: Traces span multiple services. Sicherstellen NTP is configured; clock drift causes trace ordering issues.
+- **Data retention mismatch**: If traces expire vor metrics, correlation breaks. Ausrichten retention policies.
 
-## Related Skills
+## Verwandte Skills
 
 - `setup-prometheus-monitoring` - metrics foundation for correlation
 - `configure-log-aggregation` - logs foundation for correlation

@@ -1,13 +1,19 @@
 ---
 name: glyph-enhance
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Improve an existing R-based pictogram glyph for the visualization layer.
-  Covers visual audit of the current glyph, diagnosis of specific issues
-  (proportions, readability, glow balance), targeted modifications to the
-  glyph function, re-rendering, and before/after comparison. Use when a glyph
-  renders poorly at small sizes, its visual metaphor is unclear, it has
-  proportion issues, the neon glow effect is unbalanced, or after adding new
-  palettes or changing the rendering pipeline.
+  Ein bestehendes R-basiertes Piktogramm-Glyph fuer die Visualisierungsebene
+  verbessern. Umfasst visuelle Pruefung des aktuellen Glyphs, Diagnose
+  spezifischer Probleme (Proportionen, Lesbarkeit, Glow-Balance), gezielte
+  Aenderungen an der Glyph-Funktion, Neu-Rendering und Vorher/Nachher-Vergleich.
+  Anwenden wenn ein Glyph bei kleinen Groessen schlecht rendert, seine visuelle
+  Metapher unklar ist, es Proportionsprobleme gibt, der Neon-Glow-Effekt
+  unausgewogen ist, oder nach dem Hinzufuegen neuer Paletten oder Aenderungen
+  an der Rendering-Pipeline.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -17,191 +23,186 @@ metadata:
   complexity: intermediate
   language: R
   tags: design, glyph, enhancement, icon, ggplot2, visualization, refinement
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Glyph verbessern
 
-Improve an existing pictogram glyph in the `viz/` visualization layer — audit its current rendering, diagnose visual issues, apply targeted modifications, re-render, and compare before/after.
+Ein bestehendes Piktogramm-Glyph in der `viz/`-Visualisierungsebene verbessern — aktuelles Rendering pruefen, visuelle Probleme diagnostizieren, gezielte Aenderungen anwenden, neu rendern und Vorher/Nachher vergleichen.
 
-## When to Use
+## Wann verwenden
 
-- A glyph renders poorly at small sizes (details lost, shapes merge)
-- A glyph's visual metaphor is unclear or doesn't match the skill it represents
-- A glyph has proportion issues (too large, too small, off-center)
-- The neon glow effect overpowers or underwhelms the glyph
-- A glyph looks good in one palette but poor in others
-- Batch improvement after adding new palettes or changing the rendering pipeline
+- Ein Glyph rendert bei kleinen Groessen schlecht (Details gehen verloren, Formen verschmelzen)
+- Die visuelle Metapher eines Glyphs ist unklar oder passt nicht zum dargestellten Skill
+- Ein Glyph hat Proportionsprobleme (zu gross, zu klein, nicht zentriert)
+- Der Neon-Glow-Effekt ueberstrahlt das Glyph oder wirkt zu schwach
+- Ein Glyph sieht in einer Palette gut, in anderen aber schlecht aus
+- Stapelverbesserung nach dem Hinzufuegen neuer Paletten oder Aenderungen an der Rendering-Pipeline
 
-## Inputs
+## Eingaben
 
-- **Required**: Skill ID of the glyph to enhance (e.g., `commit-changes`)
-- **Required**: Specific issue to address (readability, proportions, glow, palette compat)
-- **Optional**: Reference glyph that demonstrates the desired quality level
-- **Optional**: Target palette(s) to optimize for (default: all palettes)
+- **Erforderlich**: Skill-ID des zu verbessernden Glyphs (z.B. `commit-changes`)
+- **Erforderlich**: Konkretes Problem (Lesbarkeit, Proportionen, Glow, Palettenkompatibilitaet)
+- **Optional**: Referenz-Glyph das die gewuenschte Qualitaetsstufe demonstriert
+- **Optional**: Zielpalette(n) fuer die Optimierung (Standard: alle Paletten)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Audit — Assess Current State
+### Schritt 1: Pruefung — Aktuellen Zustand bewerten
 
-Examine the current glyph and identify specific issues.
+Das aktuelle Glyph untersuchen und spezifische Probleme identifizieren.
 
-1. Locate the glyph function:
-   - Skill glyphs: `viz/R/primitives*.R` and mapped in `viz/R/glyphs.R`
-   - Agent glyphs: `viz/R/agent_primitives.R` and mapped in `viz/R/agent_glyphs.R`
-2. Read the glyph function to understand its structure:
-   - How many layers does it use?
-   - What primitives does it call (from `primitives.R`, `primitives_2.R`, etc.)?
-   - What are the scale factors and positioning?
-3. View the rendered output:
-   - Check `viz/public/icons/cyberpunk/<domain>/<skillId>.webp` as the reference palette
-   - If available, check 2-3 other palettes for cross-palette rendering
-   - View at both icon size (~48px in the graph) and panel size (~160px in the detail panel)
-4. Score the glyph on the **quality dimensions**:
+1. Die Glyph-Funktion finden:
+   - Skill-Glyphs: `viz/R/primitives*.R` und zugeordnet in `viz/R/glyphs.R`
+   - Agent-Glyphs: `viz/R/agent_primitives.R` und zugeordnet in `viz/R/agent_glyphs.R`
+2. Die Glyph-Funktion lesen um ihre Struktur zu verstehen:
+   - Wie viele Ebenen verwendet sie?
+   - Welche Primitive ruft sie auf (aus `primitives.R`, `primitives_2.R` usw.)?
+   - Was sind die Skalierungsfaktoren und Positionierungen?
+3. Die gerenderte Ausgabe betrachten:
+   - `viz/public/icons/cyberpunk/<domain>/<skillId>.webp` als Referenzpalette pruefen
+   - Wenn verfuegbar, 2-3 weitere Paletten fuer palettenuebergreifendes Rendering pruefen
+   - Sowohl bei Icon-Groesse (~48px im Graph) als auch bei Panel-Groesse (~160px im Detailpanel) betrachten
+4. Das Glyph auf den **Qualitaetsdimensionen** bewerten:
 
 ```
-Glyph Quality Dimensions:
-+----------------+------+-----------------------------------------------+
-| Dimension      | 1-5  | Assessment Criteria                           |
-+----------------+------+-----------------------------------------------+
-| Readability    |      | Recognizable at 48px? Clear at 160px?         |
-| Proportions    |      | Well-centered? Good use of the 100x100 canvas?|
-| Metaphor       |      | Does the shape clearly represent the skill?    |
-| Glow balance   |      | Glow enhances without overwhelming?            |
-| Palette compat |      | Looks good across cyberpunk + viridis palettes?|
-| Complexity     |      | Appropriate layer count (not too busy/sparse)? |
-+----------------+------+-----------------------------------------------+
+Glyph-Qualitaetsdimensionen:
++-------------------+------+-----------------------------------------------+
+| Dimension         | 1-5  | Bewertungskriterien                           |
++-------------------+------+-----------------------------------------------+
+| Lesbarkeit        |      | Bei 48px erkennbar? Bei 160px klar?           |
+| Proportionen      |      | Gut zentriert? Gute Nutzung der 100x100-Fl.?  |
+| Metapher          |      | Stellt die Form den Skill klar dar?           |
+| Glow-Balance      |      | Glow verstaerkt ohne zu ueberstrahlen?        |
+| Palettenkompatib. |      | Sieht gut aus ueber cyberpunk + viridis?      |
+| Komplexitaet      |      | Angemessene Ebenenzahl (nicht zu voll/leer)?  |
++-------------------+------+-----------------------------------------------+
 ```
 
-5. Identify the 1-2 dimensions with the lowest scores — these are the enhancement targets
+5. Die 1-2 Dimensionen mit den niedrigsten Werten identifizieren — das sind die Verbesserungsziele
 
-**Expected:** A clear diagnosis of what's wrong with the glyph and which dimensions to improve. The audit should be specific: "proportions: glyph uses only 40% of canvas" not "looks bad."
+**Erwartet:** Eine klare Diagnose dessen was am Glyph nicht stimmt und welche Dimensionen verbessert werden sollen. Die Pruefung sollte spezifisch sein: "Proportionen: Glyph nutzt nur 40% der Flaeche" nicht "sieht schlecht aus."
 
-**On failure:** If the glyph function is missing or the skill isn't in `glyphs.R`, the glyph may not have been created yet — use `create-skill-glyph` instead.
+**Bei Fehler:** Wenn die Glyph-Funktion fehlt oder der Skill nicht in `glyphs.R` ist, wurde das Glyph moeglicherweise noch nicht erstellt — stattdessen `create-skill-glyph` verwenden.
 
-### Step 2: Diagnose — Root Cause Analysis
+### Schritt 2: Diagnose — Ursachenanalyse
 
-Determine why the identified issues exist.
+Feststellen warum die identifizierten Probleme bestehen.
 
-1. For **readability** issues:
-   - Too many fine details that merge at small sizes?
-   - Insufficient contrast between glyph elements?
-   - Lines too thin (< 1.5 `size` at s=1.0)?
-   - Elements too close together?
-2. For **proportion** issues:
-   - Scale factor `s` too small or too large?
-   - Center offset from (50, 50)?
-   - Elements extending beyond the safe area (10-90 range)?
-3. For **glow** issues:
-   - Glyph stroke width interacts with `ggfx::with_outer_glow()`:
-     - Thin lines: glow makes them fuzzy
-     - Thick fills: glow adds excessive bloom
-   - Multiple overlapping elements: compound glow creates hot spots
-4. For **palette compatibility** issues:
-   - Glyph uses hardcoded colors instead of `col`/`bright` parameters?
-   - Low-contrast palettes (cividis, mako) make the glyph invisible?
-   - The glyph relies on color variation that some palettes don't provide?
-5. Document the specific root cause for each issue
+1. Bei **Lesbarkeitsproblemen**:
+   - Zu viele feine Details die bei kleinen Groessen verschmelzen?
+   - Unzureichender Kontrast zwischen Glyph-Elementen?
+   - Linien zu duenn (< 1.5 `size` bei s=1.0)?
+   - Elemente zu nah beieinander?
+2. Bei **Proportionsproblemen**:
+   - Skalierungsfaktor `s` zu klein oder zu gross?
+   - Zentrumsversatz von (50, 50)?
+   - Elemente die ueber den sicheren Bereich (10-90) hinausragen?
+3. Bei **Glow-Problemen**:
+   - Glyph-Strichbreite interagiert mit `ggfx::with_outer_glow()`:
+     - Duenne Linien: Glow macht sie unscharf
+     - Dicke Fuellungen: Glow erzeugt uebermassige Ausstrahlung
+   - Mehrere ueberlappende Elemente: zusammengesetzter Glow erzeugt Hotspots
+4. Bei **Palettenkompatibilitaetsproblemen**:
+   - Glyph verwendet hartcodierte Farben statt `col`/`bright`-Parametern?
+   - Kontrastarme Paletten (cividis, mako) machen das Glyph unsichtbar?
+   - Das Glyph basiert auf Farbvariation die manche Paletten nicht bieten?
+5. Die spezifische Ursache fuer jedes Problem dokumentieren
 
-**Expected:** Root causes that directly point to code changes. "The glyph is too small" → "scale factor is 0.6 but should be 0.8." "Glow overwhelms" → "three overlapping filled polygons each generate glow."
+**Erwartet:** Ursachen die direkt auf Codeaenderungen hinweisen. "Das Glyph ist zu klein" -> "Skalierungsfaktor ist 0.6, sollte aber 0.8 sein." "Glow ueberstrahlt" -> "drei ueberlappende gefuellte Polygone erzeugen jeweils Glow."
 
-**On failure:** If the root cause isn't obvious from code inspection, render the glyph in isolation with different parameters to isolate the issue. Use `render_glyph()` with a single glyph to test.
+**Bei Fehler:** Wenn die Ursache aus der Code-Inspektion nicht offensichtlich ist, das Glyph isoliert mit verschiedenen Parametern rendern um das Problem einzugrenzen. `render_glyph()` mit einem einzelnen Glyph zum Testen verwenden.
 
-### Step 3: Modify — Apply Targeted Fixes
+### Schritt 3: Aendern — Gezielte Korrekturen anwenden
 
-Edit the glyph function to address the diagnosed issues.
+Die Glyph-Funktion bearbeiten um die diagnostizierten Probleme zu beheben.
 
-1. Open the file containing the glyph function
-2. Apply modifications specific to the diagnosis:
-   - **Scale/proportion**: Adjust `s` multiplier or element offsets
-   - **Readability**: Simplify complex elements, increase stroke width, add spacing
-   - **Glow balance**: Reduce overlapping filled areas, use outlines where fills create bloom
-   - **Palette compat**: Ensure all colors derive from `col`/`bright` parameters, add alpha for depth
-3. Follow the **glyph function contract**:
+1. Die Datei mit der Glyph-Funktion oeffnen
+2. Aenderungen spezifisch zur Diagnose anwenden:
+   - **Skalierung/Proportionen**: `s`-Multiplikator oder Element-Offsets anpassen
+   - **Lesbarkeit**: Komplexe Elemente vereinfachen, Strichbreite erhoehen, Abstaende hinzufuegen
+   - **Glow-Balance**: Ueberlappende Fuellflaechen reduzieren, Konturen statt Fuellungen verwenden wo diese Ausstrahlung erzeugen
+   - **Palettenkompatibilitaet**: Sicherstellen dass alle Farben von `col`/`bright`-Parametern abgeleitet werden, Alpha fuer Tiefe hinzufuegen
+3. Den **Glyph-Funktionsvertrag** einhalten:
    ```r
    glyph_name <- function(cx, cy, s, col, bright) {
-     # cx, cy = center (50, 50)
-     # s = scale (1.0 = ~70% of canvas)
-     # col = domain color, bright = brightened variant
-     # Returns: list() of ggplot2 layers
+     # cx, cy = Zentrum (50, 50)
+     # s = Skalierung (1.0 = ~70% der Flaeche)
+     # col = Domainfarbe, bright = aufgehellte Variante
+     # Rueckgabe: list() von ggplot2-Ebenen
    }
    ```
-4. Preserve the function signature — do not change parameters
-5. Keep modifications minimal: fix the diagnosed issues, don't redesign the entire glyph
+4. Die Funktionssignatur beibehalten — Parameter nicht aendern
+5. Aenderungen minimal halten: die diagnostizierten Probleme beheben, nicht das gesamte Glyph neu gestalten
 
-**Expected:** A modified glyph function that addresses the specific issues identified in Steps 1-2. Changes are targeted and minimal — enhance, don't redesign.
+**Erwartet:** Eine modifizierte Glyph-Funktion die die in Schritt 1-2 identifizierten spezifischen Probleme behebt. Aenderungen sind gezielt und minimal — verbessern, nicht neu gestalten.
 
-**On failure:** If the modifications make other dimensions worse (e.g., fixing proportions breaks readability), revert and try a different approach. If the glyph needs a complete redesign, use `create-skill-glyph` instead.
+**Bei Fehler:** Wenn die Aenderungen andere Dimensionen verschlechtern (z.B. Proportionenfix beeintraechtigt Lesbarkeit), Aenderungen rueckgaengig machen und einen anderen Ansatz versuchen. Wenn das Glyph eine komplette Neugestaltung braucht, stattdessen `create-skill-glyph` verwenden.
 
-### Step 4: Re-render — Generate Updated Icons
+### Schritt 4: Neu-Rendering — Aktualisierte Icons generieren
 
-Render the modified glyph and verify the fix.
+Das modifizierte Glyph rendern und die Korrektur verifizieren.
 
-1. Re-render the specific glyph using the build pipeline:
+1. Das spezifische Glyph ueber die Build-Pipeline neu rendern:
    ```bash
    cd /mnt/d/dev/p/agent-almanac/viz
    Rscript build-icons.R --only <domain> --no-cache
    ```
-   For agent glyphs:
+   Fuer Agent-Glyphs:
    ```bash
    Rscript build-agent-icons.R --only <agent-id> --no-cache
    ```
-2. Verify the output files exist:
-   - `viz/public/icons/<palette>/<domain>/<skillId>.webp` for each palette
-3. Check file sizes — icons should be 2-15 KB (WebP):
-   - Under 2 KB: glyph may be too simple or rendering failed
-   - Over 15 KB: glyph may be too complex (too many layers)
+2. Verifizieren dass die Ausgabedateien existieren:
+   - `viz/public/icons/<palette>/<domain>/<skillId>.webp` fuer jede Palette
+3. Dateigroessen pruefen — Icons sollten 2-15 KB (WebP) sein:
+   - Unter 2 KB: Glyph ist moeglicherweise zu einfach oder Rendering fehlgeschlagen
+   - Ueber 15 KB: Glyph ist moeglicherweise zu komplex (zu viele Ebenen)
 
-**Expected:** Fresh icon files generated for all palettes. File sizes are in the expected range.
+**Erwartet:** Frische Icon-Dateien fuer alle Paletten generiert. Dateigroessen im erwarteten Bereich.
 
-**On failure:** If `build-icons.R` errors, check the R console output for the specific error. Common causes: missing closing parenthesis in the glyph function, referencing undefined primitives, or returning non-list from the function. If rendering succeeds but output is blank, the glyph layers may be outside the canvas bounds.
+**Bei Fehler:** Wenn `build-icons.R` Fehler wirft, die R-Konsolenausgabe auf den spezifischen Fehler pruefen. Haeufige Ursachen: fehlende schliessende Klammer in der Glyph-Funktion, Verweis auf undefinierte Primitive, oder Rueckgabe eines Nicht-list-Typs aus der Funktion. Wenn das Rendering erfolgreich ist aber die Ausgabe leer, liegen die Glyph-Ebenen moeglicherweise ausserhalb der Flaechengrenzen.
 
-### Step 5: Compare — Before/After Verification
+### Schritt 5: Vergleichen — Vorher/Nachher-Verifizierung
 
-Verify the enhancement improved the target dimensions.
+Verifizieren dass die Verbesserung die Zieldimensionen verbessert hat.
 
-1. Compare old and new renderings:
-   - View the cyberpunk palette version at both icon (48px) and panel (160px) sizes
-   - View at least 2 other palettes (one light like turbo, one dark like mako)
-2. Re-score the quality dimensions from Step 1:
-   - Target dimensions should improve by at least 1 point
-   - Non-target dimensions should not decrease
-3. If the glyph is used in the force-graph, test it there:
-   - Start the HTTP server: `python3 -m http.server 8080` from `viz/`
-   - Load the graph and find the skill node
-   - Verify the icon renders correctly at default zoom and when zoomed in
-4. Document the changes made and the improvement achieved
+1. Alte und neue Renderings vergleichen:
+   - Die Cyberpunk-Palettenversion sowohl bei Icon- (48px) als auch bei Panel-Groesse (160px) betrachten
+   - Mindestens 2 weitere Paletten betrachten (eine helle wie turbo, eine dunkle wie mako)
+2. Die Qualitaetsdimensionen aus Schritt 1 neu bewerten:
+   - Zieldimensionen sollten sich um mindestens 1 Punkt verbessern
+   - Nicht-Zieldimensionen sollten nicht abnehmen
+3. Wenn das Glyph im Force-Graph verwendet wird, dort testen:
+   - HTTP-Server starten: `python3 -m http.server 8080` aus `viz/`
+   - Den Graphen laden und den Skill-Knoten finden
+   - Verifizieren dass das Icon bei Standard-Zoom und beim Hineinzoomen korrekt rendert
+4. Die vorgenommenen Aenderungen und die erzielte Verbesserung dokumentieren
 
-**Expected:** Measurable improvement on the target dimensions with no regression on others. The glyph looks better at both sizes and across palettes.
+**Erwartet:** Messbare Verbesserung bei den Zieldimensionen ohne Regression bei anderen. Das Glyph sieht bei beiden Groessen und ueber Paletten hinweg besser aus.
 
-**On failure:** If improvement is marginal or regression occurs, revert the changes and reconsider the diagnosis. Sometimes the original glyph's limitations are inherent to the metaphor, not the implementation — in that case, the metaphor itself may need to change (escalate to `create-skill-glyph`).
+**Bei Fehler:** Wenn die Verbesserung marginal ist oder eine Regression auftritt, die Aenderungen rueckgaengig machen und die Diagnose ueberdenken. Manchmal sind die Einschraenkungen des urspruenglichen Glyphs der Metapher inhaerent, nicht der Implementierung — in diesem Fall muss moeglicherweise die Metapher selbst geaendert werden (an `create-skill-glyph` eskalieren).
 
-## Validation Checklist
+## Validierung
 
-- [ ] Current glyph audited with specific issue diagnosis
-- [ ] Root cause identified for each issue
-- [ ] Modifications targeted to diagnosed issues (not over-edited)
-- [ ] Glyph function contract preserved (signature unchanged)
-- [ ] Icons re-rendered for all palettes
-- [ ] Before/after comparison shows improvement on target dimensions
-- [ ] No regression on non-target dimensions
-- [ ] File sizes in expected range (2-15 KB WebP)
-- [ ] Glyph renders correctly in force-graph context (if applicable)
+- [ ] Aktuelles Glyph mit spezifischer Problemdiagnose geprueft
+- [ ] Ursache fuer jedes Problem identifiziert
+- [ ] Aenderungen gezielt auf diagnostizierte Probleme (nicht ueberarbeitet)
+- [ ] Glyph-Funktionsvertrag beibehalten (Signatur unveraendert)
+- [ ] Icons fuer alle Paletten neu gerendert
+- [ ] Vorher/Nachher-Vergleich zeigt Verbesserung bei Zieldimensionen
+- [ ] Keine Regression bei Nicht-Zieldimensionen
+- [ ] Dateigroessen im erwarteten Bereich (2-15 KB WebP)
+- [ ] Glyph rendert korrekt im Force-Graph-Kontext (falls zutreffend)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Over-enhancement**: Fixing one issue and then tweaking everything else. Stick to the diagnosed issues
-- **Breaking the contract**: Changing the function signature breaks the rendering pipeline. The 5-parameter contract is immutable
-- **Palette-specific optimization**: Making the glyph perfect for cyberpunk but poor for viridis. Always check 3+ palettes
-- **Ignoring small-size rendering**: A beautiful 160px icon that becomes a blob at 48px is a failed enhancement
-- **Forgetting to re-render**: Editing the function without running `build-icons.R` means the changes aren't visible
+- **Ueberverbesserung**: Ein Problem beheben und dann alles andere noch anpassen. Bei den diagnostizierten Problemen bleiben
+- **Vertragsbruch**: Die Funktionssignatur aendern bricht die Rendering-Pipeline. Der 5-Parameter-Vertrag ist unveraenderlich
+- **Palettenspezifische Optimierung**: Das Glyph perfekt fuer Cyberpunk machen aber schlecht fuer Viridis. Immer 3+ Paletten pruefen
+- **Rendering bei kleiner Groesse ignorieren**: Ein schoenes 160px-Icon das bei 48px zu einem Klecks wird ist eine fehlgeschlagene Verbesserung
+- **Vergessen neu zu rendern**: Die Funktion bearbeiten ohne `build-icons.R` auszufuehren bedeutet dass die Aenderungen nicht sichtbar sind
 
-## Related Skills
+## Verwandte Skills
 
-- `create-skill-glyph` — Create a new glyph from scratch (use when enhancement isn't enough)
-- `ornament-style-mono` — Visual design principles that apply to glyph composition
-- `chrysopoeia` — Value extraction methodology parallels glyph optimization (amplify gold, remove dross)
+- `create-skill-glyph` — Ein neues Glyph von Grund auf erstellen (verwenden wenn Verbesserung nicht ausreicht)
+- `ornament-style-mono` — Visuelle Designprinzipien die auf Glyph-Komposition anwendbar sind
+- `chrysopoeia` — Wertextraktionsmethodik parallelt Glyph-Optimierung (Gold verstaerken, Schlacke entfernen)

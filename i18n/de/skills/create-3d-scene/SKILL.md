@@ -1,12 +1,13 @@
 ---
 name: create-3d-scene
 description: >
-  Set up a Blender scene programmatically via Python (bpy) with objects,
-  materials, lighting, camera, and environment configuration. Use when
-  creating reproducible 3D visualization scenes, automating product or
-  architectural rendering setup, generating multiple scene variations
-  programmatically, building template scenes for batch rendering workflows,
-  or integrating 3D visualization into data pipelines.
+  Eine Blender-Szene programmatisch ueber Python (bpy) mit Objekten, Materialien,
+  Beleuchtung, Kamera und Umgebungskonfiguration einrichten. Verwenden beim
+  Erstellen reproduzierbarer 3D-Visualisierungsszenen, beim Automatisieren von
+  Produkt- oder Architekturrendering-Setup, beim programmatischen Generieren
+  mehrerer Szenenvariationen, beim Erstellen von Vorlagenszenen fuer Stapel-
+  Rendering-Workflows oder beim Integrieren von 3D-Visualisierung in
+  Datenpipelines.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,32 +26,32 @@ metadata:
 
 # 3D-Szene erstellen
 
-Set up a complete Blender scene programmatically using the Python API (bpy). Configure scene hierarchy, add mesh objects, create PBR materials with node-based shaders, position lighting and cameras, and set up environment/world settings.
+Eine vollstaendige Blender-Szene programmatisch mit der Python-API (bpy) einrichten. Szenenhierarchie konfigurieren, Mesh-Objekte hinzufuegen, PBR-Materialien mit node-basierten Shadern erstellen, Beleuchtung und Kameras positionieren und Umgebungs-/Welteinstellungen einrichten.
 
-## When to Use
+## Wann verwenden
 
-- Creating reproducible 3D visualization scenes from scratch
-- Automating product visualization or architectural rendering setup
-- Generating multiple scene variations programmatically
-- Building template scenes for batch rendering workflows
-- Prototyping scene layouts before manual refinement
-- Integrating 3D visualization into data pipelines or reporting systems
+- Reproduzierbare 3D-Visualisierungsszenen von Grund auf erstellen
+- Produktvisualisierung oder Architekturrendering-Setup automatisieren
+- Mehrere Szenenvariationen programmatisch generieren
+- Vorlagenszenen fuer Stapel-Rendering-Workflows erstellen
+- Szenenlayouts vor manueller Verfeinerung prototypisieren
+- 3D-Visualisierung in Datenpipelines oder Berichtssysteme integrieren
 
-## Inputs
+## Eingaben
 
-| Input | Type | Description | Example |
-|-------|------|-------------|---------|
-| Scene specifications | Configuration | Objects, materials, lighting requirements | Product dimensions, material colors, lighting setup |
-| Output requirements | Parameters | Resolution, render engine, quality settings | 1920x1080, Cycles, 128 samples |
-| Asset paths | File paths | External models, textures, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |
-| Camera settings | Parameters | Position, rotation, focal length, DOF | `location=(7,-7,5)`, `lens=50mm` |
-| Environment | Configuration | World shader, background, ambient settings | HDRI lighting, solid color, gradient |
+| Eingabe | Typ | Beschreibung | Beispiel |
+|---------|-----|--------------|----------|
+| Szenenspezifikationen | Konfiguration | Objekte, Materialien, Beleuchtungsanforderungen | Produktabmessungen, Materialfarben, Beleuchtungssetup |
+| Ausgabeanforderungen | Parameter | Aufloesung, Render-Engine, Qualitaetseinstellungen | 1920x1080, Cycles, 128 Samples |
+| Asset-Pfade | Dateipfade | Externe Modelle, Texturen, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |
+| Kameraeinstellungen | Parameter | Position, Rotation, Brennweite, DOF | `location=(7,-7,5)`, `lens=50mm` |
+| Umgebung | Konfiguration | Welt-Shader, Hintergrund, Umgebungseinstellungen | HDRI-Beleuchtung, Volltonfarbe, Verlauf |
 
-## Procedure
+## Vorgehensweise
 
-### 1. Set Up Script Structure
+### 1. Skriptstruktur einrichten
 
-Create a Python script with proper imports and structure:
+Ein Python-Skript mit korrekten Imports und Struktur erstellen:
 
 ```python
 #!/usr/bin/env python3
@@ -86,12 +87,12 @@ if __name__ == "__main__":
     main()
 ```
 
-**Expected:** Script structure with clear_scene() and main() functions
-**On failure:** Review Python syntax, check bpy import works in Blender Python environment
+**Erwartet:** Skriptstruktur mit clear_scene()- und main()-Funktionen
+**Bei Fehler:** Python-Syntax ueberpruefen, bpy-Import in der Blender-Python-Umgebung testen
 
-### 2. Add Mesh Objects
+### 2. Mesh-Objekte hinzufuegen
 
-Create primitive or imported mesh objects:
+Primitive oder importierte Mesh-Objekte erstellen:
 
 ```python
 def add_objects():
@@ -120,12 +121,12 @@ def add_objects():
     return cube, sphere
 ```
 
-**Expected:** Objects appear in scene with correct names and positions
-**On failure:** Check operator syntax, verify coordinates, ensure no naming conflicts
+**Erwartet:** Objekte erscheinen in der Szene mit korrekten Namen und Positionen
+**Bei Fehler:** Operator-Syntax pruefen, Koordinaten verifizieren, sicherstellen, dass keine Namenskonflikte bestehen
 
-### 3. Create Materials with Node-Based Shaders
+### 3. Materialien mit Node-basierten Shadern erstellen
 
-Set up PBR materials using shader nodes:
+PBR-Materialien mit Shader-Nodes einrichten:
 
 ```python
 def create_material(name, base_color, metallic=0.0, roughness=0.5):
@@ -173,12 +174,12 @@ def apply_materials(cube, sphere):
         sphere.data.materials.append(mat_metal)
 ```
 
-**Expected:** Materials visible in shader editor with proper node connections
-**On failure:** Check node types exist, verify link syntax, ensure color values in [0,1] range
+**Erwartet:** Materialien im Shader-Editor mit korrekten Node-Verbindungen sichtbar
+**Bei Fehler:** Node-Typen auf Existenz pruefen, Link-Syntax verifizieren, sicherstellen, dass Farbwerte im Bereich [0,1] liegen
 
-### 4. Set Up Lighting
+### 4. Beleuchtung einrichten
 
-Configure lights for scene illumination:
+Lichter fuer die Szenenbeleuchtung konfigurieren:
 
 ```python
 def setup_lighting():
@@ -214,12 +215,12 @@ def setup_lighting():
     point.data.energy = 500.0
 ```
 
-**Expected:** Three lights with appropriate intensities and positions
-**On failure:** Adjust energy values for render engine (Cycles vs EEVEE), check rotation format
+**Erwartet:** Drei Lichter mit angemessenen Intensitaeten und Positionen
+**Bei Fehler:** Energiewerte fuer Render-Engine anpassen (Cycles vs. EEVEE), Rotationsformat pruefen
 
-### 5. Position Camera
+### 5. Kamera positionieren
 
-Set up camera with proper framing:
+Kamera mit korrektem Bildausschnitt einrichten:
 
 ```python
 def setup_camera():
@@ -245,12 +246,12 @@ def setup_camera():
     bpy.context.scene.camera = camera
 ```
 
-**Expected:** Camera positioned with correct focal length and DOF settings
-**On failure:** Use simpler rotation method if track_to fails, verify lens units
+**Erwartet:** Kamera mit korrekter Brennweite und DOF-Einstellungen positioniert
+**Bei Fehler:** Einfachere Rotationsmethode verwenden, wenn track_to fehlschlaegt, Objektiveinheiten verifizieren
 
-### 6. Configure World Environment
+### 6. Weltumgebung konfigurieren
 
-Set up world shader and background:
+Welt-Shader und Hintergrund einrichten:
 
 ```python
 def setup_world():
@@ -286,12 +287,12 @@ def setup_world():
     links.new(node_bg.outputs['Background'], node_output.inputs['Surface'])
 ```
 
-**Expected:** World shader with HDRI or solid background configured
-**On failure:** Skip HDRI loading if file missing, use Background node alone with color
+**Erwartet:** Welt-Shader mit HDRI oder Volltonhintergrund konfiguriert
+**Bei Fehler:** HDRI-Laden ueberspringen, wenn Datei fehlt, Background-Node allein mit Farbe verwenden
 
-### 7. Configure Render Settings
+### 7. Render-Einstellungen konfigurieren
 
-Set basic render parameters:
+Grundlegende Renderparameter festlegen:
 
 ```python
 def setup_render_settings():
@@ -315,12 +316,12 @@ def setup_render_settings():
     scene.render.filepath = "/tmp/render_"
 ```
 
-**Expected:** Render settings configured, ready for rendering
-**On failure:** Check engine name spelling, verify resolution values are positive integers
+**Erwartet:** Render-Einstellungen konfiguriert, bereit zum Rendern
+**Bei Fehler:** Engine-Namenorthografie pruefen, sicherstellen, dass Aufloesungswerte positive Ganzzahlen sind
 
-### 8. Organize Scene Hierarchy
+### 8. Szenenhierarchie organisieren
 
-Create collections for organization:
+Collections zur Organisation erstellen:
 
 ```python
 def organize_collections():
@@ -349,37 +350,37 @@ def organize_collections():
             col_cameras.objects.link(obj)
 ```
 
-**Expected:** Objects organized in named collections for easier management
-**On failure:** Check collection already exists before creating, handle orphaned objects
+**Erwartet:** Objekte in benannten Collections fuer einfachere Verwaltung organisiert
+**Bei Fehler:** Pruefen, ob Collection bereits existiert, bevor sie erstellt wird, verwaiste Objekte behandeln
 
-## Validation Checklist
+## Validierung
 
-- [ ] Script runs without errors in Blender background mode
-- [ ] All expected objects present in scene outliner
-- [ ] Materials show correct colors and properties in shader editor
-- [ ] Camera positioned with objects in frame
-- [ ] Lighting provides adequate illumination (test render)
-- [ ] World environment loads correctly (HDRI or background color)
-- [ ] Render settings configured appropriately for output requirements
-- [ ] Scene organized logically in collections
-- [ ] No orphaned data blocks (materials, meshes without users)
-- [ ] Script includes clear_scene() for reproducibility
+- [ ] Skript laeuft ohne Fehler im Blender-Hintergrundmodus
+- [ ] Alle erwarteten Objekte im Szenen-Outliner vorhanden
+- [ ] Materialien zeigen korrekte Farben und Eigenschaften im Shader-Editor
+- [ ] Kamera positioniert mit Objekten im Bildausschnitt
+- [ ] Beleuchtung bietet ausreichende Ausleuchtung (Testrender)
+- [ ] Weltumgebung laedt korrekt (HDRI oder Hintergrundfarbe)
+- [ ] Render-Einstellungen angemessen fuer Ausgabeanforderungen konfiguriert
+- [ ] Szene logisch in Collections organisiert
+- [ ] Keine verwaisten Datenbloecke (Materialien, Meshes ohne Benutzer)
+- [ ] Skript enthaelt clear_scene() fuer Reproduzierbarkeit
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Object naming conflicts**: Use unique names, check for existing objects before creating
-2. **Incorrect color format**: RGB values must be tuples (r, g, b, a) in [0,1] range
-3. **Missing alpha channel**: When setting colors, include alpha: `(r, g, b, 1.0)`
-4. **Node connection errors**: Verify node types have expected inputs/outputs before linking
-5. **Camera not active**: Must set `bpy.context.scene.camera = camera_object`
-6. **Relative vs absolute paths**: Use absolute paths or Path() for cross-platform compatibility
-7. **Units confusion**: Blender uses meters by default, camera lens in millimeters
-8. **Rotation formats**: Use `math.radians()` for degree-to-radian conversion
-9. **Render engine differences**: EEVEE and Cycles have different features and parameters
-10. **Memory leaks**: Clear orphaned data blocks to prevent memory buildup in batch operations
+1. **Objektbenennungskonflikte**: Eindeutige Namen verwenden, vor dem Erstellen auf bestehende Objekte pruefen
+2. **Falsches Farbformat**: RGB-Werte muessen Tupel (r, g, b, a) im Bereich [0,1] sein
+3. **Fehlender Alpha-Kanal**: Beim Setzen von Farben Alpha einschliessen: `(r, g, b, 1.0)`
+4. **Node-Verbindungsfehler**: Node-Typen auf erwartete Ein-/Ausgaenge vor dem Verlinken verifizieren
+5. **Kamera nicht aktiv**: `bpy.context.scene.camera = camera_object` muss gesetzt werden
+6. **Relative vs. absolute Pfade**: Absolute Pfade oder Path() fuer plattformuebergreifende Kompatibilitaet verwenden
+7. **Einheitenverwirrung**: Blender verwendet standardmaessig Meter, Kameraobjektiv in Millimetern
+8. **Rotationsformate**: `math.radians()` fuer Grad-zu-Radiant-Umrechnung verwenden
+9. **Render-Engine-Unterschiede**: EEVEE und Cycles haben unterschiedliche Funktionen und Parameter
+10. **Speicherlecks**: Verwaiste Datenbloecke bereinigen, um Speicheraufbau bei Stapeloperationen zu verhindern
 
-## Related Skills
+## Verwandte Skills
 
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Advanced scripting patterns for procedural modeling and batch operations
-- **[render-blender-output](../render-blender-output/SKILL.md)**: Configure rendering pipeline and execute renders
-- **[create-2d-composition](../../visualization/create-2d-composition/SKILL.md)**: 2D graphics composition using similar scripting approaches
+- `script-blender-automation` — Fortgeschrittene Scripting-Muster fuer prozedurale Modellierung und Stapeloperationen
+- `render-blender-output` — Rendering-Pipeline konfigurieren und Renders ausfuehren
+- `create-2d-composition` — 2D-Grafik-Komposition mit aehnlichen Scripting-Ansaetzen

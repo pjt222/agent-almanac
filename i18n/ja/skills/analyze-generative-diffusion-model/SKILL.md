@@ -1,13 +1,12 @@
 ---
 name: analyze-generative-diffusion-model
 description: >
-  Analyze pre-trained generative diffusion models (Stable Diffusion, DALL-E,
-  Flux) by computing quality metrics (FID, IS, CLIP score, precision/recall),
-  inspecting noise schedules, extracting and visualizing attention maps, and
-  probing latent spaces. Use when evaluating a pre-trained generative diffusion
-  model's output quality, comparing noise schedule variants, analyzing
-  cross-attention patterns for text-conditioned generation, interpolating
-  between latent codes, or detecting out-of-distribution inputs.
+  事前学習済み生成拡散モデル（Stable Diffusion、DALL-E、Flux）を品質メトリクス
+  （FID、IS、CLIPスコア、精度/再現率）の計算、ノイズスケジュールの検査、
+  アテンションマップの抽出と可視化、潜在空間の探索によって分析する。
+  事前学習済み生成拡散モデルの出力品質を評価する時、ノイズスケジュール変種を
+  比較する時、テキスト条件付き生成のクロスアテンションパターンを分析する時、
+  潜在コード間を補間する時、分布外入力を検出する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,33 +25,33 @@ metadata:
 
 # 生成拡散モデルの分析
 
-Evaluate pre-trained generative diffusion models through quantitative quality metrics, noise schedule inspection, cross-attention map analysis, and latent space probing to understand model behavior, diagnose failure modes, and guide fine-tuning decisions.
+定量的品質メトリクス、ノイズスケジュール検査、クロスアテンションマップ分析、潜在空間探索を通じて事前学習済み生成拡散モデルを評価し、モデルの挙動を理解し、障害モードを診断し、ファインチューニングの判断を導く。
 
 ## 使用タイミング
 
-- Evaluating a pre-trained generative diffusion model's output quality with standard metrics
-- Computing FID, IS, CLIP score, or precision/recall for generated image sets
-- Inspecting and comparing noise schedules (linear, cosine, learned) via SNR curves
-- Extracting cross-attention maps to understand text-to-image token-region correspondences
-- Interpolating between latent codes or discovering semantic directions in the latent space
-- Detecting out-of-distribution inputs for a diffusion model pipeline
+- 標準メトリクスで事前学習済み生成拡散モデルの出力品質を評価する時
+- 生成画像セットのFID、IS、CLIPスコア、精度/再現率を計算する時
+- SNR曲線によるノイズスケジュール（線形、コサイン、学習済み）の検査と比較をする時
+- テキストから画像へのトークン-領域対応を理解するためにクロスアテンションマップを抽出する時
+- 潜在コード間の補間や潜在空間での意味方向の発見をする時
+- 拡散モデルパイプラインの分布外入力を検出する時
 
 ## 入力
 
-- **必須**: Pre-trained model identifier or checkpoint path (e.g., `stabilityai/stable-diffusion-2-1`)
-- **必須**: Analysis mode — one or more of: `metrics`, `schedule`, `attention`, `latent`
-- **必須**: Reference dataset for metric computation (real images or dataset name)
-- **任意**: Text prompts for attention analysis (default: model-appropriate test prompts)
-- **任意**: Number of generated samples for metric computation (default: 10000)
-- **任意**: Device configuration (default: `cuda` if available, else `cpu`)
+- **必須**: 事前学習済みモデル識別子またはチェックポイントパス（例: `stabilityai/stable-diffusion-2-1`）
+- **必須**: 分析モード — 1つ以上: `metrics`、`schedule`、`attention`、`latent`
+- **必須**: メトリクス計算用の参照データセット（実画像またはデータセット名）
+- **任意**: アテンション分析用のテキストプロンプト（デフォルト: モデルに適したテストプロンプト）
+- **任意**: メトリクス計算用の生成サンプル数（デフォルト: 10000）
+- **任意**: デバイス設定（デフォルト: 利用可能なら`cuda`、そうでなければ`cpu`）
 
 ## 手順
 
-### ステップ1: Quantitative Evaluation
+### ステップ1: 定量的評価
 
-Compute standard generative quality metrics against a reference dataset.
+参照データセットに対して標準的な生成品質メトリクスを計算する。
 
-1. Set up the evaluation pipeline:
+1. 評価パイプラインをセットアップする:
 
 ```python
 import torch
@@ -69,7 +68,7 @@ fid = FrechetInceptionDistance(feature=2048, normalize=True).to(device)
 inception = InceptionScore(normalize=True).to(device)
 ```
 
-2. Feed real images into the metric accumulators:
+2. 実画像をメトリクスアキュムレータに供給する:
 
 ```python
 from torch.utils.data import DataLoader
@@ -79,7 +78,7 @@ for batch in DataLoader(real_dataset, batch_size=64):
     fid.update(imgs, real=True)
 ```
 
-3. Generate samples and accumulate fake statistics:
+3. サンプルを生成してフェイク統計を蓄積する:
 
 ```python
 prompts = load_evaluation_prompts("prompts.txt")  # one prompt per line
@@ -94,7 +93,7 @@ while n_generated < 10000:
     n_generated += len(images)
 ```
 
-4. Compute CLIP score for text-image alignment:
+4. テキスト-画像整合性のCLIPスコアを計算する:
 
 ```python
 from torchmetrics.multimodal.clip_score import CLIPScore
@@ -108,7 +107,7 @@ print(f"IS:  {inception.compute()[0]:.2f} +/- {inception.compute()[1]:.2f}")
 print(f"CLIP: {clip_metric.compute():.2f}")
 ```
 
-5. Compute precision and recall for mode coverage:
+5. モードカバレッジの精度と再現率を計算する:
 
 ```python
 from torchmetrics.image import FrechetInceptionDistance
@@ -119,15 +118,15 @@ from torchmetrics.image import FrechetInceptionDistance
 # feature embeddings from the Inception network
 ```
 
-**期待結果:** FID below 30 for a well-trained Stable Diffusion model on standard benchmarks. IS above 50 on ImageNet-class prompts. CLIP score above 25 for text-conditioned models. Precision and recall both above 0.6.
+**期待結果:** 標準ベンチマークで十分に学習されたStable DiffusionモデルのFIDが30未満。ImageNetクラスのプロンプトでISが50以上。テキスト条件付きモデルでCLIPスコアが25以上。精度と再現率がともに0.6以上。
 
-**失敗時:** If FID is above 100, verify that real and generated images share the same resolution and normalization. If CLIP score is low but FID is acceptable, the model generates plausible images that do not match the text prompt -- check the text encoder. Ensure at least 10,000 samples for stable FID estimates.
+**失敗時:** FIDが100以上の場合、実画像と生成画像が同じ解像度と正規化を共有しているか確認する。CLIPスコアが低いがFIDは許容範囲内の場合、モデルはもっともらしい画像を生成しているがテキストプロンプトに一致していない -- テキストエンコーダーを確認する。安定したFID推定のために少なくとも10,000サンプルを使用する。
 
-### ステップ2: Noise Schedule Inspection
+### ステップ2: ノイズスケジュールの検査
 
-Visualize and compare the forward and reverse noise schedules.
+順方向および逆方向のノイズスケジュールを可視化して比較する。
 
-1. Extract schedule parameters from the model:
+1. モデルからスケジュールパラメータを抽出する:
 
 ```python
 scheduler = pipe.scheduler
@@ -136,7 +135,7 @@ alphas_cumprod = torch.tensor(scheduler.alphas_cumprod)
 timesteps = torch.arange(len(alphas_cumprod))
 ```
 
-2. Compute the signal-to-noise ratio curve:
+2. 信号対雑音比曲線を計算する:
 
 ```python
 import numpy as np
@@ -162,7 +161,7 @@ fig.tight_layout()
 fig.savefig("noise_schedule.png", dpi=150)
 ```
 
-3. Compare multiple schedule types:
+3. 複数のスケジュールタイプを比較する:
 
 ```python
 from diffusers import DDPMScheduler
@@ -182,15 +181,15 @@ ax.set_title("Schedule Comparison"); ax.legend()
 fig.savefig("schedule_comparison.png", dpi=150)
 ```
 
-**期待結果:** Cosine schedule shows a more gradual SNR decrease in mid-timesteps compared to linear. The log-SNR curve should span from approximately +10 (clean) to -10 (pure noise). Learned schedules should be monotonically decreasing.
+**期待結果:** コサインスケジュールは線形と比較して中間タイムステップでより緩やかなSNR減少を示す。log-SNR曲線は約+10（クリーン）から-10（純粋なノイズ）にわたるべき。学習済みスケジュールは単調に減少すべき。
 
-**失敗時:** If alphas_cumprod is not monotonically decreasing, the schedule is misconfigured. If values are constant, check that the scheduler was properly initialized with the model's config. For custom schedulers, verify that `set_timesteps()` has been called.
+**失敗時:** alphas_cumprodが単調に減少していない場合、スケジュールが誤設定されている。値が一定の場合、スケジューラーがモデルの設定で適切に初期化されたか確認する。カスタムスケジューラーの場合、`set_timesteps()`が呼ばれたことを確認する。
 
-### ステップ3: Attention Map Analysis
+### ステップ3: アテンションマップの分析
 
-Extract and visualize cross-attention maps from text-conditioned models.
+テキスト条件付きモデルからクロスアテンションマップを抽出して可視化する。
 
-1. Register attention hooks on the U-Net cross-attention layers:
+1. U-Netのクロスアテンション層にアテンションフックを登録する:
 
 ```python
 attention_maps = {}
@@ -207,7 +206,7 @@ for name, module in pipe.unet.named_modules():
         module.register_forward_hook(hook_fn(name))
 ```
 
-2. Run inference and collect attention at specific timesteps:
+2. 推論を実行して特定のタイムステップでアテンションを収集する:
 
 ```python
 prompt = "a red car parked next to a blue house"
@@ -224,7 +223,7 @@ def callback_fn(pipe, step_index, timestep, callback_kwargs):
 output = pipe(prompt, num_inference_steps=50, callback_on_step_end=callback_fn)
 ```
 
-3. Visualize token-region correspondences:
+3. トークン-領域対応を可視化する:
 
 ```python
 tokenizer = pipe.tokenizer
@@ -251,15 +250,15 @@ fig.tight_layout()
 fig.savefig("attention_maps.png", dpi=150)
 ```
 
-**期待結果:** Content tokens ("car", "house") activate localized spatial regions. Style/color tokens ("red", "blue") activate regions overlapping with their associated object. Early timesteps (high noise) show diffuse attention; later timesteps show sharp, localized attention.
+**期待結果:** コンテンツトークン（"car"、"house"）が局所的な空間領域を活性化する。スタイル/色トークン（"red"、"blue"）が関連するオブジェクトと重なる領域を活性化する。初期タイムステップ（高ノイズ）は拡散的なアテンションを示し、後期タイムステップは鋭い局所的アテンションを示す。
 
-**失敗時:** If all attention maps look uniform, the hook may be capturing self-attention instead of cross-attention -- verify the layer name contains `attn2` (cross) not `attn1` (self). If attention is captured but has wrong dimensions, check that the output tensor indexing matches the layer's head count and spatial resolution.
+**失敗時:** すべてのアテンションマップが均一に見える場合、フックがクロスアテンションではなくセルフアテンションをキャプチャしている可能性がある -- レイヤー名に`attn1`（セルフ）ではなく`attn2`（クロス）が含まれていることを確認する。アテンションはキャプチャされたが次元が間違っている場合、出力テンソルのインデックスがレイヤーのヘッド数と空間解像度に一致しているか確認する。
 
-### ステップ4: Latent Space Probing
+### ステップ4: 潜在空間の探索
 
-Explore the structure of the latent space through interpolation and direction discovery.
+補間と方向発見を通じて潜在空間の構造を探索する。
 
-1. Encode reference images into latent space:
+1. 参照画像を潜在空間にエンコードする:
 
 ```python
 from diffusers import AutoencoderKL
@@ -280,7 +279,7 @@ z1 = encode_image("image_a.png")
 z2 = encode_image("image_b.png")
 ```
 
-2. Perform spherical linear interpolation (slerp):
+2. 球面線形補間（slerp）を実行する:
 
 ```python
 def slerp(z1, z2, alpha):
@@ -303,7 +302,7 @@ for z in interpolated:
     decoded.append(img.cpu())
 ```
 
-3. Discover semantic directions via prompt-pair differences:
+3. プロンプトペアの差分による意味方向を発見する:
 
 ```python
 def get_text_embedding(prompt):
@@ -318,7 +317,7 @@ neg_emb = get_text_embedding("a sad person frowning")
 direction = pos_emb - neg_emb  # semantic direction in text embedding space
 ```
 
-4. Detect out-of-distribution latents:
+4. 分布外の潜在コードを検出する:
 
 ```python
 # Compute latent space statistics from a reference set
@@ -336,32 +335,32 @@ score = ood_score(test_z)
 print(f"OOD score: {score:.2f} (reference mean: {np.mean([ood_score(r) for r in ref_latents]):.2f})")
 ```
 
-**期待結果:** Interpolated images show smooth, semantically meaningful transitions without artifacts. Semantic directions produce consistent attribute changes when added to diverse latent codes. OOD scores for in-distribution images cluster tightly; outliers score significantly higher.
+**期待結果:** 補間された画像がアーティファクトなしにスムーズで意味のある遷移を示す。意味方向が多様な潜在コードに追加された時に一貫した属性変化を生む。分布内画像のOODスコアが密集し、外れ値は大幅に高いスコアとなる。
 
-**失敗時:** If interpolation produces blurry or incoherent midpoints, use slerp instead of linear interpolation -- linear interpolation traverses low-density regions in high-dimensional latent spaces. If semantic directions have no visible effect, increase the direction magnitude or verify the text encoder is the same one used during model training.
+**失敗時:** 補間がぼやけたまたは一貫性のない中間点を生成する場合、線形補間の代わりにslerpを使用する -- 線形補間は高次元潜在空間の低密度領域を横断する。意味方向に目に見える効果がない場合、方向の大きさを増やすか、テキストエンコーダーがモデル学習時に使用されたものと同じか確認する。
 
 ## バリデーション
 
-- [ ] FID computed on at least 10,000 generated samples and matching real sample count
-- [ ] CLIP score computed with the same CLIP model used during training (if applicable)
-- [ ] Noise schedule visualization shows monotonically decreasing alphas_cumprod
-- [ ] Log-SNR spans approximately +10 to -10 across the full timestep range
-- [ ] Attention maps resolve per-token spatial activations at mid-resolution layers
-- [ ] Attention sharpens from early (diffuse) to late (localized) timesteps
-- [ ] Latent interpolations are smooth with no sudden jumps or artifacts
-- [ ] OOD detection baseline established from at least 100 reference samples
+- [ ] FIDが少なくとも10,000の生成サンプルと同数の実サンプルで計算されている
+- [ ] CLIPスコアが学習時に使用されたのと同じCLIPモデルで計算されている（該当する場合）
+- [ ] ノイズスケジュールの可視化が単調に減少するalphas_cumprodを示している
+- [ ] log-SNRがフルタイムステップ範囲で約+10から-10にわたっている
+- [ ] アテンションマップが中解像度レイヤーでトークンごとの空間活性化を解像している
+- [ ] アテンションが初期（拡散的）から後期（局所的）タイムステップにかけて鋭くなっている
+- [ ] 潜在補間が突然のジャンプやアーティファクトなしにスムーズである
+- [ ] OOD検出ベースラインが少なくとも100の参照サンプルから確立されている
 
 ## よくある落とし穴
 
-- **FID on mismatched resolutions**: Real and generated images must be the same resolution before feeding to Inception. Resize both sets identically or FID will be inflated.
-- **Forgetting to normalize for torchmetrics**: `FrechetInceptionDistance(normalize=True)` expects [0, 1] float tensors. With `normalize=False` it expects [0, 255] uint8. Mixing conventions gives meaningless FID.
-- **Hooking self-attention instead of cross-attention**: U-Net layers named `attn1` are self-attention (image-to-image). Use `attn2` for cross-attention (text-to-image). Confusing them produces uninformative uniform maps.
-- **Linear interpolation in high dimensions**: Linear interpolation between two high-dimensional Gaussians passes through a low-density shell. Always use slerp for latent space interpolation in diffusion models.
-- **Ignoring the VAE scaling factor**: Stable Diffusion latents are scaled by `vae.config.scaling_factor` after encoding. Forgetting to apply or remove this factor produces garbled decoded images.
-- **Too few samples for precision/recall**: Precision and recall estimates from fewer than 5,000 samples per set are unreliable. Use at least 10,000 for stable estimates.
+- **解像度不一致のFID**: 実画像と生成画像はInceptionに供給する前に同じ解像度でなければならない。両セットを同一にリサイズしなければFIDが膨張する。
+- **torchmetricsの正規化の忘れ**: `FrechetInceptionDistance(normalize=True)`は[0, 1]のfloatテンソルを期待する。`normalize=False`では[0, 255]のuint8を期待する。規約を混在させると無意味なFIDになる。
+- **クロスアテンションの代わりにセルフアテンションをフックする**: `attn1`という名前のU-Netレイヤーはセルフアテンション（画像対画像）である。クロスアテンション（テキスト対画像）には`attn2`を使用する。混同すると情報のない均一なマップが生成される。
+- **高次元での線形補間**: 2つの高次元ガウシアン間の線形補間は低密度のシェルを通過する。拡散モデルの潜在空間補間には常にslerpを使用する。
+- **VAEスケーリングファクターの無視**: Stable Diffusionの潜在コードはエンコード後に`vae.config.scaling_factor`でスケーリングされる。このファクターの適用や除去を忘れると、デコードされた画像が壊れる。
+- **精度/再現率のサンプル数不足**: セットあたり5,000未満のサンプルからの精度と再現率の推定は信頼性が低い。安定した推定のために少なくとも10,000を使用する。
 
 ## 関連スキル
 
-- `implement-diffusion-network` - building diffusion models that this skill evaluates
-- `analyze-diffusion-dynamics` - mathematical foundations of the noise processes inspected here
-- `fit-drift-diffusion-model` - a different diffusion model family sharing SDE foundations
+- `implement-diffusion-network` - このスキルが評価する拡散モデルの構築
+- `analyze-diffusion-dynamics` - ここで検査されるノイズプロセスの数学的基礎
+- `fit-drift-diffusion-model` - SDE基盤を共有する異なる拡散モデルファミリー

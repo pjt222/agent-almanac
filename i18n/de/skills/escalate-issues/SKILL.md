@@ -1,12 +1,19 @@
 ---
 name: escalate-issues
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Triage maintenance problems by severity, document findings with context,
-  route to appropriate specialist agent or human, and create actionable issue
-  reports. Use when a maintenance task encounters problems beyond automated
-  cleanup: code that is unsafe to delete, configuration changes requiring domain
-  expertise, breaking changes detected during cleanup, complex refactoring needed,
-  or security-sensitive findings such as hardcoded secrets or vulnerabilities.
+  Wartungsprobleme nach Schweregrad triagieren, Befunde mit Kontext
+  dokumentieren, an geeigneten Spezialisten-Agenten oder Menschen weiterleiten
+  und umsetzbare Fehlerberichte erstellen. Anwenden wenn eine Wartungsaufgabe
+  auf Probleme stoesst die ueber automatisierte Bereinigung hinausgehen:
+  Code der unsicher zu loeschen ist, Konfigurationsaenderungen die
+  Domaenenwissen erfordern, waehrend der Bereinigung erkannte brechende
+  Aenderungen, komplexes Refactoring oder sicherheitsrelevante Befunde
+  wie hartcodierte Geheimnisse oder Schwachstellen.
 license: MIT
 allowed-tools: Read Write Edit Grep Glob
 metadata:
@@ -16,159 +23,154 @@ metadata:
   complexity: basic
   language: multi
   tags: maintenance, triage, escalation, routing, issue-reporting
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Probleme eskalieren
 
-## When to Use
+## Wann verwenden
 
-Use this skill when a maintenance task encounters problems beyond automated cleanup:
+Diesen Skill verwenden wenn eine Wartungsaufgabe auf Probleme stoesst die ueber automatisierte Bereinigung hinausgehen:
 
-- Uncertain whether code is safe to delete
-- Configuration changes require domain expertise (security, performance, architecture)
-- Breaking changes detected during cleanup
-- Complex refactoring needed (not just cleanup)
-- Security-sensitive findings (hardcoded secrets, vulnerabilities)
+- Unsicher ob Code sicher geloescht werden kann
+- Konfigurationsaenderungen erfordern Domaenenwissen (Sicherheit, Performance, Architektur)
+- Waehrend der Bereinigung erkannte brechende Aenderungen
+- Komplexes Refactoring erforderlich (nicht nur Bereinigung)
+- Sicherheitsrelevante Befunde (hartcodierte Geheimnisse, Schwachstellen)
 
-**Do NOT use** for simple issues with clear fixes. Escalate only when automated cleanup is risky or insufficient.
+**NICHT verwenden** fuer einfache Probleme mit klaren Loesungen. Nur eskalieren wenn automatisierte Bereinigung riskant oder unzureichend ist.
 
-## Inputs
+## Eingaben
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `issue_description` | string | Yes | Clear description of the problem |
-| `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
-| `context_files` | array | No | Paths to relevant files |
-| `specialist` | string | No | Target agent (auto-route if not specified) |
-| `blocking` | boolean | No | Whether issue blocks further cleanup (default: false) |
+| Parameter | Typ | Erforderlich | Beschreibung |
+|-----------|-----|--------------|-------------|
+| `issue_description` | string | Ja | Klare Beschreibung des Problems |
+| `severity` | enum | Ja | `critical`, `high`, `medium`, `low` |
+| `context_files` | array | Nein | Pfade zu relevanten Dateien |
+| `specialist` | string | Nein | Zielagent (automatisches Routing wenn nicht angegeben) |
+| `blocking` | boolean | Nein | Ob das Problem weitere Bereinigung blockiert (Standard: false) |
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Assess Severity
+### Schritt 1: Schweregrad bewerten
 
-Classify the issue using standard severity levels.
+Das Problem mit Standard-Schweregradstufen klassifizieren.
 
-**CRITICAL** — Blocks production functionality:
-- Broken imports in actively used code
-- Security vulnerabilities (exposed secrets, SQL injection)
-- Data loss risk from cleanup operation
-- Production service outages
+**KRITISCH** — Blockiert Produktionsfunktionalitaet:
+- Defekte Imports in aktiv genutztem Code
+- Sicherheitsschwachstellen (offengelegte Geheimnisse, SQL-Injection)
+- Datenverlustrisiko durch Bereinigungsoperation
+- Produktionsdienstausfaelle
 
-**HIGH** — Impacts maintainability or developer productivity:
-- Significant dead code bloat (>1000 lines)
-- Broken CI/CD pipelines
-- Major configuration drift between environments
-- Unreferenced modules that might be dynamically loaded
+**HOCH** — Beeintraechtigt Wartbarkeit oder Entwicklerproduktivitaet:
+- Erheblicher toter Code (>1000 Zeilen)
+- Defekte CI/CD-Pipelines
+- Grosse Konfigurationsdrift zwischen Umgebungen
+- Unreferenzierte Module die moeglicherweise dynamisch geladen werden
 
-**MEDIUM** — Minor hygiene issues:
-- Unused helper functions (<100 lines)
-- Stale documentation requiring updates
-- Deprecated config files (no longer used but present)
-- Lint warnings in non-critical paths
+**MITTEL** — Geringfuegige Hygieneprobleme:
+- Ungenutzte Hilfsfunktionen (<100 Zeilen)
+- Veraltete Dokumentation die Aktualisierung erfordert
+- Veraltete Konfigurationsdateien (nicht mehr verwendet aber vorhanden)
+- Lint-Warnungen in unkritischen Pfaden
 
-**LOW** — Style inconsistencies:
-- Mixed indentation (works but inconsistent)
-- Trailing whitespace
-- Inconsistent naming (camelCase vs snake_case)
-- Minor formatting differences
+**NIEDRIG** — Stilinkonsistenzen:
+- Gemischte Einrueckung (funktioniert aber inkonsistent)
+- Nachfolgende Leerzeichen
+- Inkonsistente Benennung (camelCase vs snake_case)
+- Geringfuegige Formatierungsunterschiede
 
-**Severity Decision Tree**:
+**Schweregrad-Entscheidungsbaum**:
 ```
-Does it break production? → CRITICAL
-Does it block development? → HIGH
-Does it impact code quality? → MEDIUM
-Is it purely cosmetic? → LOW
+Bricht es die Produktion? -> KRITISCH
+Blockiert es die Entwicklung? -> HOCH
+Beeintraechtigt es die Codequalitaet? -> MITTEL
+Ist es rein kosmetisch? -> NIEDRIG
 ```
 
-**Expected:** Issue classified with clear severity label
+**Erwartet:** Problem mit klarem Schweregrad-Label klassifiziert
 
-**On failure:** If uncertain, default to HIGH and escalate to human for re-triage
+**Bei Fehler:** Wenn unsicher, Standard HOCH waehlen und zur Neueinschaetzung an einen Menschen eskalieren
 
-### Step 2: Document Finding
+### Schritt 2: Befund dokumentieren
 
-Capture all relevant context for the specialist to review.
+Allen relevanten Kontext fuer den Spezialisten zur Pruefung erfassen.
 
-**Issue Report Template**:
+**Fehlerbericht-Vorlage**:
 ```markdown
-# Issue: [Brief Title]
+# Problem: [Kurzer Titel]
 
-**Severity**: CRITICAL | HIGH | MEDIUM | LOW
-**Discovered During**: [Skill name, e.g., clean-codebase]
-**Date**: YYYY-MM-DD
-**Blocking**: Yes | No
+**Schweregrad**: KRITISCH | HOCH | MITTEL | NIEDRIG
+**Entdeckt waehrend**: [Skill-Name, z.B. clean-codebase]
+**Datum**: JJJJ-MM-TT
+**Blockierend**: Ja | Nein
 
-## Description
+## Beschreibung
 
-Clear description of the problem in 2-3 sentences.
+Klare Beschreibung des Problems in 2-3 Saetzen.
 
-## Context
+## Kontext
 
-- **File(s)**: [List of affected files with line numbers]
-- **Related**: [Related issues, commits, or previous attempts to fix]
-- **Impact**: [What breaks if this isn't fixed, or what's wasted if not cleaned]
+- **Datei(en)**: [Liste betroffener Dateien mit Zeilennummern]
+- **Verwandt**: [Verwandte Issues, Commits oder fruehere Loesungsversuche]
+- **Auswirkung**: [Was bricht wenn nicht behoben, oder was wird verschwendet wenn nicht bereinigt]
 
-## Evidence
+## Beweismaterial
 
-```language
-# Code snippet or log excerpt showing the problem
+```sprache
+# Code-Ausschnitt oder Log-Auszug der das Problem zeigt
 ```
 
-## Attempted Fixes
+## Versuchte Loesungen
 
-- Tried X but failed because Y
-- Considered Z but uncertain due to W
+- X versucht aber gescheitert wegen Y
+- Z in Betracht gezogen aber unsicher wegen W
 
-## Recommendation
+## Empfehlung
 
-- **Option 1**: [Safe conservative approach]
-- **Option 2**: [More aggressive fix with risks]
-- **Preferred**: [Which option to pursue and why]
+- **Option 1**: [Sicherer konservativer Ansatz]
+- **Option 2**: [Aggressivere Loesung mit Risiken]
+- **Bevorzugt**: [Welche Option und warum]
 
-## Specialist Routing
+## Spezialisten-Routing
 
-**Suggested Agent**: [agent-name]
-**Reason**: [Why this specialist is appropriate]
+**Vorgeschlagener Agent**: [Agentname]
+**Begruendung**: [Warum dieser Spezialist geeignet ist]
 
-## References
+## Referenzen
 
-- [Link to related documentation]
-- [Link to similar past issues]
+- [Link zu verwandter Dokumentation]
+- [Link zu aehnlichen frueheren Problemen]
 ```
 
-**Expected:** Issue documented with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
+**Erwartet:** Problem mit vollstaendigem Kontext in `ESCALATION_REPORTS/issue_JJJJMMTT_HHMM.md` dokumentiert
 
-**On failure:** (N/A — always document, even if incomplete)
+**Bei Fehler:** (Entfaellt — immer dokumentieren, auch wenn unvollstaendig)
 
-### Step 3: Determine Routing
+### Schritt 3: Routing bestimmen
 
-Match issue type to appropriate specialist agent or human reviewer.
+Problemtyp dem geeigneten Spezialisten-Agenten oder menschlichen Pruefer zuordnen.
 
-**Routing Table**:
+**Routing-Tabelle**:
 
-| Issue Type | Specialist | Reason |
+| Problemtyp | Spezialist | Begruendung |
 |------------|-----------|---------|
-| Security vulnerability | security-analyst | Security expertise required |
-| GxP compliance concern | gxp-validator | Regulatory knowledge needed |
-| Architecture decision | senior-software-developer | Design pattern expertise |
-| Config management | devops-engineer | Infrastructure knowledge |
-| Dependency conflicts | devops-engineer | Package management expertise |
-| Performance bottleneck | senior-data-scientist | Optimization knowledge |
-| Code style dispute | code-reviewer | Style guide authority |
-| Dead code uncertainty | r-developer (or lang-specific) | Language-specific knowledge |
-| Broken test unclear | code-reviewer | Test design expertise |
-| Documentation accuracy | senior-researcher | Domain knowledge required |
-| License compatibility | auditor | Legal/compliance expertise |
+| Sicherheitsschwachstelle | security-analyst | Sicherheitsexpertise erforderlich |
+| GxP-Compliance-Bedenken | gxp-validator | Regulatorisches Wissen noetig |
+| Architekturentscheidung | senior-software-developer | Designmuster-Expertise |
+| Konfigurationsmanagement | devops-engineer | Infrastrukturwissen |
+| Abhaengigkeitskonflikte | devops-engineer | Paketmanagement-Expertise |
+| Performance-Engpass | senior-data-scientist | Optimierungswissen |
+| Code-Stil-Streit | code-reviewer | Stilrichtlinien-Autoritaet |
+| Unsicherheit bei totem Code | r-developer (o. sprachspez.) | Sprachspezifisches Wissen |
+| Unklarer defekter Test | code-reviewer | Testdesign-Expertise |
+| Dokumentationsgenauigkeit | senior-researcher | Domaenenwissen erforderlich |
+| Lizenzkompatibilitaet | auditor | Rechts-/Compliance-Expertise |
 
-**Automatic Routing Logic**:
+**Automatische Routing-Logik**:
 ```python
 def route_issue(severity, issue_type):
     if severity == "CRITICAL":
-        # Always escalate to human for critical issues
+        # Kritische Probleme immer an Menschen eskalieren
         return "human"
 
     if "security" in issue_type or "secret" in issue_type:
@@ -183,19 +185,19 @@ def route_issue(severity, issue_type):
     if "config" in issue_type or "deployment" in issue_type:
         return "devops-engineer"
 
-    # Default: code-reviewer for general code issues
+    # Standard: code-reviewer fuer allgemeine Code-Probleme
     return "code-reviewer"
 ```
 
-**Expected:** Issue routed to appropriate specialist with justification
+**Erwartet:** Problem mit Begruendung an geeigneten Spezialisten geroutet
 
-**On failure:** If no clear specialist, escalate to human for manual routing
+**Bei Fehler:** Wenn kein klarer Spezialist, an Menschen fuer manuelles Routing eskalieren
 
-### Step 4: Create Actionable Issue Report
+### Schritt 4: Umsetzbaren Fehlerbericht erstellen
 
-Generate a formatted report suitable for the target audience (agent or human).
+Einen formatierten Bericht erstellen der fuer die Zielgruppe geeignet ist (Agent oder Mensch).
 
-**For Specialist Agents** (structured format for MCP tools):
+**Fuer Spezialisten-Agenten** (strukturiertes Format fuer MCP-Tools):
 ```yaml
 ---
 type: escalation
@@ -205,134 +207,134 @@ to_agent: security-analyst
 blocking: false
 ---
 
-# Security Concern: Hardcoded API Key in Config
+# Sicherheitsbedenken: Hartcodierter API-Schluessel in Konfiguration
 
-**File**: config/production.yml:45
-**Pattern**: API_KEY="sk_live_abc123..."
+**Datei**: config/production.yml:45
+**Muster**: API_KEY="sk_live_abc123..."
 
-**Request**: Please review if this is a valid secret or a placeholder.
-If valid, recommend secure credential management strategy.
+**Anfrage**: Bitte pruefen ob dies ein gueltiges Geheimnis oder ein
+Platzhalter ist. Wenn gueltig, sichere Credential-Management-Strategie
+empfehlen.
 
-**Context**: Discovered during config cleanup sweep.
+**Kontext**: Waehrend Konfigurations-Bereinigungsdurchlauf entdeckt.
 ```
 
-**For Human Reviewers** (detailed markdown):
+**Fuer menschliche Pruefer** (ausfuehrliches Markdown):
 ```markdown
-# Escalation Report: Uncertain Dead Code Removal
+# Eskalierungsbericht: Unsichere Loeschung toten Codes
 
-**From**: Janitor Agent
-**Date**: 2026-02-16
-**Severity**: HIGH
+**Von**: Janitor-Agent
+**Datum**: 2026-02-16
+**Schweregrad**: HOCH
 
 ## Problem
 
-File `src/legacy_payments.js` (450 lines) appears unused but contains
-complex payment processing logic. Static analysis shows zero references,
-but name suggests business-critical functionality.
+Datei `src/legacy_payments.js` (450 Zeilen) erscheint ungenutzt, enthaelt
+aber komplexe Zahlungsverarbeitungslogik. Statische Analyse zeigt null
+Referenzen, aber der Name deutet auf geschaeftskritische Funktionalitaet.
 
-## Why Escalated
+## Grund der Eskalierung
 
-- Uncertain if payment code is dynamically loaded at runtime
-- Potential data loss risk if deleted incorrectly
-- Requires domain knowledge to assess business impact
+- Unsicher ob Zahlungscode zur Laufzeit dynamisch geladen wird
+- Potenzielles Datenverlustrisiko bei falscher Loeschung
+- Erfordert Domaenenwissen um geschaeftliche Auswirkung zu bewerten
 
-## Evidence
+## Beweismaterial
 
-- No direct imports found
-- Last modified 8 months ago
-- Git history shows it was part of payment refactor
+- Keine direkten Imports gefunden
+- Letzte Aenderung vor 8 Monaten
+- Git-Historie zeigt Zugehoerigkeit zum Zahlungs-Refactoring
 
-## Recommendation
+## Empfehlung
 
-Request human review before deletion. If confirmed dead:
-1. Archive to archive/legacy/ directory
-2. Document in ARCHIVE_LOG.md
-3. Create ticket to verify payment flows still work
+Menschliche Pruefung vor Loeschung anfordern. Wenn als tot bestaetigt:
+1. Nach archive/legacy/ archivieren
+2. In ARCHIVE_LOG.md dokumentieren
+3. Ticket erstellen um Zahlungsablaeufe zu verifizieren
 
-## Next Steps
+## Naechste Schritte
 
-Awaiting human confirmation before proceeding with cleanup.
+Warte auf menschliche Bestaetigung vor Fortsetzung der Bereinigung.
 ```
 
-**Expected:** Report formatted appropriately for target audience
+**Erwartet:** Bericht fuer die Zielgruppe angemessen formatiert
 
-**On failure:** (N/A — generate report in generic markdown if uncertain)
+**Bei Fehler:** (Entfaellt — Bericht im generischen Markdown generieren wenn unsicher)
 
-### Step 5: Track Escalation Status
+### Schritt 5: Eskalierungsstatus verfolgen
 
-Maintain a log of all escalations to prevent duplicate reports.
+Ein Protokoll aller Eskalierungen fuehren um doppelte Berichte zu vermeiden.
 
 ```markdown
-# Escalation Log
+# Eskalierungsprotokoll
 
-| ID | Date | Severity | Issue | Specialist | Status |
-|----|------|----------|-------|-----------|--------|
-| ESC-001 | 2026-02-16 | CRITICAL | Broken prod import | human | Resolved |
-| ESC-002 | 2026-02-16 | HIGH | Dead payment code | human | Pending |
-| ESC-003 | 2026-02-16 | MEDIUM | Config drift | devops-engineer | In Progress |
+| ID | Datum | Schweregrad | Problem | Spezialist | Status |
+|----|-------|-------------|---------|-----------|--------|
+| ESC-001 | 2026-02-16 | KRITISCH | Defekter Prod-Import | Mensch | Geloest |
+| ESC-002 | 2026-02-16 | HOCH | Toter Zahlungscode | Mensch | Ausstehend |
+| ESC-003 | 2026-02-16 | MITTEL | Konfigurationsdrift | devops-engineer | In Arbeit |
 ```
 
-**Expected:** `ESCALATION_LOG.md` updated with new entry
+**Erwartet:** `ESCALATION_LOG.md` mit neuem Eintrag aktualisiert
 
-**On failure:** If log doesn't exist, create it
+**Bei Fehler:** Wenn das Protokoll nicht existiert, erstellen
 
-### Step 6: Notify and Block (If Required)
+### Schritt 6: Benachrichtigen und blockieren (falls erforderlich)
 
-If issue is blocking further maintenance, notify and pause cleanup.
+Wenn das Problem weitere Wartung blockiert, benachrichtigen und Bereinigung pausieren.
 
-**Blocking Logic**:
-- CRITICAL issues always block
-- HIGH issues block if in critical path
-- MEDIUM/LOW issues do not block
+**Blockierungslogik**:
+- KRITISCHE Probleme blockieren immer
+- HOHE Probleme blockieren wenn im kritischen Pfad
+- MITTLERE/NIEDRIGE Probleme blockieren nicht
 
-**Notification**:
+**Benachrichtigung**:
 ```markdown
-⚠️ MAINTENANCE BLOCKED ⚠️
+WARTUNG BLOCKIERT
 
-Issue ESC-002 (HIGH severity) requires human review before proceeding.
+Problem ESC-002 (HOHER Schweregrad) erfordert menschliche Pruefung
+vor Fortsetzung.
 
-**Affected Operation**: clean-codebase (Step 5: Remove Dead Code)
-**Reason**: Uncertain if src/legacy_payments.js is truly dead
+**Betroffene Operation**: clean-codebase (Schritt 5: Toten Code entfernen)
+**Grund**: Unsicher ob src/legacy_payments.js wirklich tot ist
 
-**Action Required**: Review ESCALATION_REPORTS/ESC-002_2026-02-16.md
+**Erforderliche Aktion**: ESCALATION_REPORTS/ESC-002_2026-02-16.md pruefen
 
-Once resolved, re-run maintenance from Step 5.
+Nach Loesung Wartung ab Schritt 5 erneut ausfuehren.
 ```
 
-**Expected:** Maintenance paused; clear notification generated
+**Erwartet:** Wartung pausiert; klare Benachrichtigung generiert
 
-**On failure:** If notification mechanism unavailable, document in report
+**Bei Fehler:** Wenn der Benachrichtigungsmechanismus nicht verfuegbar ist, im Bericht dokumentieren
 
-## Validation Checklist
+## Validierung
 
-After escalation:
+Nach der Eskalierung:
 
-- [ ] Issue severity correctly assessed
-- [ ] Full context documented (files, evidence, attempts)
-- [ ] Appropriate specialist identified
-- [ ] Escalation report created in ESCALATION_REPORTS/
-- [ ] ESCALATION_LOG.md updated
-- [ ] Blocking status communicated if applicable
-- [ ] No sensitive information exposed in report
+- [ ] Schweregrad des Problems korrekt bewertet
+- [ ] Vollstaendiger Kontext dokumentiert (Dateien, Beweise, Versuche)
+- [ ] Geeigneter Spezialist identifiziert
+- [ ] Eskalierungsbericht in ESCALATION_REPORTS/ erstellt
+- [ ] ESCALATION_LOG.md aktualisiert
+- [ ] Blockierungsstatus kommuniziert falls zutreffend
+- [ ] Keine sensiblen Informationen im Bericht offengelegt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Over-Escalating**: Escalating simple issues wastes specialist time. Only escalate when truly uncertain or risky.
+1. **Uebereskalierung**: Einfache Probleme eskalieren verschwendet Spezialisten-Zeit. Nur eskalieren wenn wirklich unsicher oder riskant.
 
-2. **Under-Escalating**: Deleting code "just to see if tests pass" without escalation can cause production outages.
+2. **Untereskalierung**: Code loeschen "um zu sehen ob die Tests bestehen" ohne Eskalierung kann Produktionsausfaelle verursachen.
 
-3. **Insufficient Context**: Escalating without evidence forces specialists to re-investigate. Include file paths, line numbers, error messages.
+3. **Unzureichender Kontext**: Ohne Beweise eskalieren zwingt Spezialisten zur erneuten Untersuchung. Dateipfade, Zeilennummern, Fehlermeldungen beifuegen.
 
-4. **Vague Descriptions**: "Something's wrong with config" is not actionable. Be specific: "Config drift: dev uses API v1, prod uses v2".
+4. **Vage Beschreibungen**: "Irgendwas stimmt nicht mit der Config" ist nicht umsetzbar. Spezifisch sein: "Konfigurationsdrift: Dev nutzt API v1, Prod nutzt v2".
 
-5. **Not Tracking Status**: Re-escalating already-reviewed issues. Check ESCALATION_LOG.md first.
+5. **Status nicht verfolgen**: Bereits gepruefte Probleme erneut eskalieren. Zuerst ESCALATION_LOG.md pruefen.
 
-6. **Exposing Secrets**: Including actual API keys or passwords in escalation reports. Redact sensitive values.
+6. **Geheimnisse offenlegen**: Tatsaechliche API-Schluessel oder Passwoerter in Eskalierungsberichte aufnehmen. Sensible Werte schwaerzen.
 
-## Related Skills
+## Verwandte Skills
 
-- [clean-codebase](../clean-codebase/SKILL.md) — Often triggers escalations when uncertain
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — May discover complex organizational issues
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Escalate when unclear if reference should be fixed or removed
-- [compliance/security-scan](../../compliance/security-scan/SKILL.md) — Escalate security findings
-- [general/issue-triage](../../general/issue-triage/SKILL.md) — General issue classification patterns
+- `clean-codebase` — Loest haeufig Eskalierungen aus wenn Unsicherheit besteht
+- `tidy-project-structure` — Kann komplexe organisatorische Probleme aufdecken
+- `repair-broken-references` — Eskalieren wenn unklar ob Referenz behoben oder entfernt werden soll

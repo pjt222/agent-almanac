@@ -1,12 +1,13 @@
 ---
 name: redirect
 description: >
-  AI pressure redirection — handling conflicting demands, tool failures, and
-  competing constraints by blending with incoming force then reframing. Use
-  when receiving contradictory instructions from different sources, during tool
-  failure cascades where the planned approach becomes unviable, when scope
-  pressure threatens to expand the task beyond what was asked, or when user
-  frustration or correction needs to be absorbed rather than deflected.
+  KI-Druckumleitung — widerspruechliche Anforderungen, Werkzeugausfaelle und
+  konkurrierende Einschraenkungen durch Verschmelzen mit der eingehenden Kraft
+  und anschliessendes Umrahmen handhaben. Verwenden wenn widerspruechliche
+  Anweisungen aus verschiedenen Quellen eintreffen, bei Werkzeugausfallkaskaden,
+  bei denen der geplante Ansatz undurchfuehrbar wird, wenn Scope-Druck droht die
+  Aufgabe ueber das Gewuenschte hinaus zu erweitern, oder wenn Benutzerfrust-
+  ration oder Korrektur absorbiert statt abgelenkt werden muss.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,200 +26,212 @@ metadata:
 
 # Umleiten
 
-Handle conflicting demands, tool failures, and competing constraints by blending with the incoming pressure rather than resisting it — then redirecting the force toward a productive resolution.
+Widerspruechliche Anforderungen, Werkzeugausfaelle und konkurrierende Einschraenkungen handhaben, indem mit dem eingehenden Druck verschmolzen wird statt ihn zu widersetzen — dann die Kraft in eine produktive Aufloesung umleiten.
 
-## When to Use
+## Wann verwenden
 
-- Receiving contradictory instructions (user says X, project docs say Y, tool results show Z)
-- Tool failure cascades where the planned approach becomes unviable
-- Scope pressure that threatens to expand the task beyond what was asked
-- Context overload where too many competing signals create paralysis
-- User frustration or correction that needs to be absorbed rather than deflected
-- When `center` reveals that pressure is destabilizing balance
+- Beim Empfang widerspruechlicher Anweisungen (Benutzer sagt X, Projektdokumentation sagt Y, Werkzeugergebnisse zeigen Z)
+- Bei Werkzeugausfallkaskaden, bei denen der geplante Ansatz undurchfuehrbar wird
+- Bei Scope-Druck, der droht, die Aufgabe ueber das Gewuenschte hinaus zu erweitern
+- Bei Kontextueberladung, bei der zu viele konkurrierende Signale Lahmung erzeugen
+- Bei Benutzerfrustration oder Korrektur, die absorbiert statt abgelenkt werden muss
+- Wenn `center` offenbart, dass Druck das Gleichgewicht destabilisiert
 
-## Inputs
+## Eingaben
 
-- **Required**: The specific pressure or conflict to address (available implicitly from context)
-- **Optional**: Classification of pressure type (see Step 1 taxonomy)
-- **Optional**: Previous attempts to handle this pressure and their outcomes
+- **Erforderlich**: Der spezifische Druck oder Konflikt zum Ansprechen (implizit aus dem Kontext verfuegbar)
+- **Optional**: Klassifikation des Drucktyps (siehe Schritt-1-Taxonomie)
+- **Optional**: Fruehere Versuche, diesen Druck zu handhaben, und ihre Ergebnisse
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Center Before Contact
+### Schritt 1: Zentrieren vor dem Kontakt
 
-Before engaging with any conflict, establish center (see `center`). Then identify the incoming pressure clearly.
+Bevor mit einem Konflikt umgegangen wird, Zentrum herstellen (siehe `center`). Dann den eingehenden Druck klar identifizieren.
 
 ```
-AI Pressure Type Taxonomy:
+KI-Drucktyp-Taxonomie:
 ┌─────────────────────────┬──────────────────────────────────────────┐
-│ Pressure Type           │ Characteristics                          │
+│ Drucktyp                │ Merkmale                                 │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Contradictory           │ Two valid sources give incompatible      │
-│ Requirements            │ instructions. Neither is simply wrong.   │
-│                         │ Resolution requires synthesis, not       │
-│                         │ choosing sides                           │
+│ Widerspruechliche       │ Zwei gueltige Quellen geben inkompatible │
+│ Anforderungen           │ Anweisungen. Keine ist einfach falsch.   │
+│                         │ Aufloesung erfordert Synthese, nicht     │
+│                         │ Seitenwahl                               │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Tool Failure Cascade    │ A planned approach fails at the tool     │
-│                         │ level. Retrying won't help. The failure  │
-│                         │ data itself contains useful information  │
+│ Werkzeugausfall-        │ Ein geplanter Ansatz scheitert auf der   │
+│ kaskade                 │ Werkzeugebene. Wiederholen wird nicht    │
+│                         │ helfen. Die Ausfalldaten selbst enthalten│
+│                         │ nuetzliche Information                   │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Scope Creep             │ The task silently expands. Each addition │
-│                         │ seems reasonable in isolation, but the   │
-│                         │ aggregate exceeds what was asked         │
+│ Scope-Creep             │ Die Aufgabe erweitert sich leise. Jede   │
+│                         │ Erweiterung scheint isoliert vernuenftig,│
+│                         │ aber die Summe uebersteigt das Geforderte│
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Context Overload        │ Too many files, too many constraints,    │
-│                         │ too many open threads. Paralysis from    │
-│                         │ excess input, not insufficient input     │
+│ Kontextueberladung      │ Zu viele Dateien, zu viele Einschraen-   │
+│                         │ kungen, zu viele offene Straenge. Lahmung│
+│                         │ durch Eingabeueberschuss, nicht          │
+│                         │ Eingabemangel                            │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Ambiguity               │ The request is genuinely unclear and     │
-│                         │ multiple interpretations are valid.      │
-│                         │ Action risks solving the wrong problem   │
+│ Mehrdeutigkeit          │ Die Anfrage ist wirklich unklar und      │
+│                         │ mehrere Interpretationen sind gueltig.   │
+│                         │ Handeln riskiert, das falsche Problem    │
+│                         │ zu loesen                                │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ User Correction         │ The user indicates the current approach  │
-│                         │ is wrong. The correction carries both    │
-│                         │ information and emotional weight         │
+│ Benutzerkorrektur       │ Der Benutzer zeigt an, dass der aktuelle │
+│                         │ Ansatz falsch ist. Die Korrektur traegt  │
+│                         │ sowohl Information als auch emotionales   │
+│                         │ Gewicht                                  │
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Classify the current pressure. If multiple pressures are active, identify the primary one — address that first; secondary pressures often resolve as a side effect.
+Den aktuellen Druck klassifizieren. Wenn mehrere Druecke aktiv sind, den primaeren identifizieren — diesen zuerst ansprechen; sekundaere Druecke loesen sich oft als Nebeneffekt.
 
-**Expected:** A clear classification of the pressure type and its specific manifestation in the current context. The classification should feel accurate, not forced into the taxonomy.
+**Erwartet:** Eine klare Klassifikation des Drucktyps und seiner spezifischen Manifestation im aktuellen Kontext. Die Klassifikation sollte sich zutreffend anfuehlen, nicht in die Taxonomie gezwungen.
 
-**On failure:** If the pressure doesn't fit any category, it may be a composite. Decompose: which part is contradictory? Which part is scope? Handling composites requires addressing each component, not treating the whole as one problem.
+**Bei Fehler:** Wenn der Druck in keine Kategorie passt, kann es ein Komposit sein. Zerlegen: Welcher Teil ist widerspruechlich? Welcher Teil ist Scope? Das Handhaben von Kompositen erfordert das Ansprechen jeder Komponente, nicht die Behandlung des Ganzen als ein Problem.
 
-### Step 2: Irimi — Enter the Force
+### Schritt 2: Irimi — In die Kraft eintreten
 
-Move *toward* the problem. State it in full scope without minimizing, deflecting, or immediately proposing a solution.
+Sich *auf* das Problem zubewegen. Es in vollem Umfang formulieren, ohne zu minimieren, abzulenken oder sofort eine Loesung vorzuschlagen.
 
-1. Articulate the pressure completely: what exactly is in conflict? What exactly failed? What exactly is ambiguous?
-2. Name the consequences: if this pressure is not addressed, what happens?
-3. Identify what the pressure reveals: tool failures reveal assumptions; contradictions reveal missing context; scope creep reveals unclear boundaries
+1. Den Druck vollstaendig artikulieren: Was genau steht in Konflikt? Was genau ist fehlgeschlagen? Was genau ist mehrdeutig?
+2. Die Konsequenzen benennen: Wenn dieser Druck nicht adressiert wird, was passiert?
+3. Identifizieren, was der Druck offenbart: Werkzeugausfaelle offenbaren Annahmen; Widersprueche offenbaren fehlenden Kontext; Scope-Creep offenbart unklare Grenzen
 
-**The test**: If the description of the problem sounds reassuring, you are deflecting, not entering. Irimi requires full contact with the difficulty.
+**Der Test**: Wenn die Beschreibung des Problems beruhigend klingt, wird abgelenkt, nicht eingetreten. Irimi erfordert vollen Kontakt mit der Schwierigkeit.
 
-- Deflecting: "There's a minor inconsistency between these two files."
-- Entering: "The CLAUDE.md specifies 150 skills but the registry contains 148. Either the count is wrong, the registry is incomplete, or two skills were removed without updating the count. All downstream references may be affected."
+- Ablenken: "Es gibt eine kleine Inkonsistenz zwischen diesen zwei Dateien."
+- Eintreten: "Die CLAUDE.md gibt 150 Skills an, aber die Registry enthaelt 148. Entweder ist die Zahl falsch, die Registry ist unvollstaendig, oder zwei Skills wurden ohne Aktualisierung der Zahl entfernt. Alle nachgelagerten Referenzen koennten betroffen sein."
 
-**Expected:** A complete, unflinching statement of the problem. The statement should make the problem feel more real, not less.
+**Erwartet:** Eine vollstaendige, unverbloemte Formulierung des Problems. Die Formulierung sollte das Problem realer erscheinen lassen, nicht weniger.
 
-**On failure:** If entering the problem creates anxiety or urgency to immediately solve it, pause. Irimi is entering, not reacting. The goal is to see the problem clearly before moving. If you cannot state the problem without proposing a solution in the same sentence, separate them explicitly.
+**Bei Fehler:** Wenn das Eintreten in das Problem Angst oder Dringlichkeit erzeugt, es sofort zu loesen, innehalten. Irimi ist Eintreten, nicht Reagieren. Das Ziel ist, das Problem klar zu sehen, bevor gehandelt wird. Wenn das Problem nicht formuliert werden kann, ohne im selben Satz eine Loesung vorzuschlagen, diese explizit trennen.
 
-### Step 3: Tenkan — Turn and Redirect
+### Schritt 3: Tenkan — Drehen und umleiten
 
-Having entered the force, pivot to redirect it toward resolution. Each pressure type has a characteristic redirect.
+Nachdem in die Kraft eingetreten wurde, schwenken, um sie zur Aufloesung umzuleiten. Jeder Drucktyp hat ein charakteristisches Umleitungsmuster.
 
 ```
-Redirect Patterns by Pressure Type:
+Umleitungsmuster nach Drucktyp:
 ┌─────────────────────────┬──────────────────────────────────────────┐
-│ Pressure Type           │ Redirect Pattern                         │
+│ Drucktyp                │ Umleitungsmuster                         │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Contradictory           │ Synthesize underlying intent: both       │
-│ Requirements            │ sources serve a purpose. What goal do    │
-│                         │ they share? Build from the shared goal,  │
-│                         │ not from either source alone              │
+│ Widerspruechliche       │ Zugrundeliegende Absicht synthetisieren: │
+│ Anforderungen           │ Beide Quellen dienen einem Zweck.        │
+│                         │ Welches Ziel teilen sie? Vom gemeinsamen │
+│                         │ Ziel aufbauen, nicht von einer Quelle    │
+│                         │ allein                                   │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Tool Failure Cascade    │ Use the failure data: what did the error │
-│                         │ reveal about assumptions? The failure is │
-│                         │ information. Switch tools or approach,   │
-│                         │ incorporating what the failure taught    │
+│ Werkzeugausfall-        │ Die Ausfalldaten nutzen: Was hat der     │
+│ kaskade                 │ Fehler ueber Annahmen offenbart? Der     │
+│                         │ Ausfall ist Information. Werkzeuge oder  │
+│                         │ Ansatz wechseln und einbeziehen, was der │
+│                         │ Ausfall gelehrt hat                      │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Scope Creep             │ Decompose to essentials: what was the    │
-│                         │ original request? What is the minimum    │
-│                         │ that satisfies it? Defer additions       │
-│                         │ explicitly rather than silently absorbing│
+│ Scope-Creep             │ Auf das Wesentliche zerlegen: Was war die│
+│                         │ urspruengliche Anfrage? Was ist das      │
+│                         │ Minimum, das sie erfuellt? Ergaenzungen  │
+│                         │ explizit aufschieben statt stillschwei-  │
+│                         │ gend absorbieren                         │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Context Overload        │ Triage and sequence: which information   │
-│                         │ is needed now vs. later vs. never? Rank  │
-│                         │ by relevance to the immediate next step  │
+│ Kontextueberladung      │ Triagieren und sequenzieren: Welche      │
+│                         │ Information wird jetzt vs. spaeter vs.   │
+│                         │ nie benoetigt? Nach Relevanz fuer den    │
+│                         │ unmittelbaren naechsten Schritt ordnen   │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ Ambiguity               │ Surface the ambiguity to the user: "I   │
-│                         │ see two interpretations — A and B. Which │
-│                         │ do you mean?" Do not guess when asking   │
-│                         │ is available                              │
+│ Mehrdeutigkeit          │ Die Mehrdeutigkeit dem Benutzer zeigen:  │
+│                         │ "Ich sehe zwei Interpretationen — A und  │
+│                         │ B. Was meinen Sie?" Nicht raten, wenn    │
+│                         │ Fragen moeglich ist                      │
 ├─────────────────────────┼──────────────────────────────────────────┤
-│ User Correction         │ Absorb the correction fully: what was   │
-│                         │ wrong, why was it wrong, what does the   │
-│                         │ correct direction look like? Then adjust │
-│                         │ without defensiveness or over-apology    │
+│ Benutzerkorrektur       │ Die Korrektur vollstaendig absorbieren:  │
+│                         │ Was war falsch, warum war es falsch,     │
+│                         │ wie sieht die richtige Richtung aus?    │
+│                         │ Dann anpassen ohne Defensivitaet oder   │
+│                         │ uebermaessige Entschuldigung             │
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Apply the appropriate redirect. The redirect should feel like it uses the energy of the problem rather than fighting it.
+Die passende Umleitung anwenden. Die Umleitung sollte sich anfuehlen, als nutze sie die Energie des Problems, statt sie zu bekaempfen.
 
-**Expected:** The pressure transforms from an obstacle into a direction. Contradictions become synthesis opportunities. Failures become diagnostic data. Overload becomes a prioritization exercise.
+**Erwartet:** Der Druck transformiert sich von einem Hindernis in eine Richtung. Widersprueche werden zu Synthesemoeglichkeiten. Ausfaelle werden zu diagnostischen Daten. Ueberladung wird zu einer Priorisierungsuebung.
 
-**On failure:** If the redirect feels forced or doesn't resolve the pressure, the classification from Step 1 may be wrong. Re-examine: is this really a contradiction, or is one source simply outdated? Is this really scope creep, or is the expanded scope actually what the user needs? Misclassification leads to misredirection.
+**Bei Fehler:** Wenn die Umleitung sich erzwungen anfuehlt oder den Druck nicht aufloest, kann die Klassifikation aus Schritt 1 falsch sein. Erneut pruefen: Ist das wirklich ein Widerspruch, oder ist eine Quelle einfach veraltet? Ist das wirklich Scope-Creep, oder ist der erweiterte Umfang tatsaechlich das, was der Benutzer braucht? Fehlklassifikation fuehrt zu Fehlumleitung.
 
-### Step 4: Ukemi — Graceful Recovery
+### Schritt 4: Ukemi — Anmutiges Auffangen
 
-Sometimes the redirect fails. The pressure is genuine and cannot be transformed. Ukemi is the art of falling safely — acknowledging limits without catastrophizing.
+Manchmal scheitert die Umleitung. Der Druck ist echt und kann nicht transformiert werden. Ukemi ist die Kunst des sicheren Fallens — Grenzen anerkennen, ohne zu katastrophisieren.
 
-1. Acknowledge the limitation honestly: "I cannot resolve this contradiction with available information" or "This approach is blocked and I do not see an alternative"
-2. Preserve what progress exists: summarize what was accomplished, what was learned, what remains
-3. Communicate the situation to the user: what the problem is, what was tried, what is needed to move forward
-4. Identify the recovery path: what would unblock this? More information? A different approach? User decision?
+1. Die Begrenzung ehrlich anerkennen: "Ich kann diesen Widerspruch mit den verfuegbaren Informationen nicht aufloesen" oder "Dieser Ansatz ist blockiert und ich sehe keine Alternative"
+2. Den vorhandenen Fortschritt bewahren: zusammenfassen, was erreicht wurde, was gelernt wurde, was uebrig bleibt
+3. Die Situation dem Benutzer mitteilen: was das Problem ist, was versucht wurde, was benoetigt wird, um voranzukommen
+4. Den Erholungspfad identifizieren: Was wuerde die Blockade aufheben? Mehr Information? Ein anderer Ansatz? Benutzerentscheidung?
 
 ```
-Ukemi Recovery Checklist:
+Ukemi-Erholungs-Checkliste:
 ┌─────────────────────────┬──────────────────────────────────────────┐
-│ Preserve                │ Summarize progress and learnings          │
-│ Acknowledge             │ State the limitation without excuses      │
-│ Communicate             │ Tell the user what is needed              │
-│ Recover                 │ Identify the specific unblocking action   │
+│ Bewahren                │ Fortschritt und Erkenntnisse zusammen-   │
+│                         │ fassen                                   │
+│ Anerkennen              │ Die Begrenzung ohne Ausreden formulieren │
+│ Kommunizieren           │ Dem Benutzer mitteilen, was benoetigt    │
+│                         │ wird                                     │
+│ Erholen                 │ Die spezifische entblockierende Handlung │
+│                         │ identifizieren                           │
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**Expected:** A graceful acknowledgment that maintains trust. The user knows what happened, what was tried, and what is needed. No information is lost.
+**Erwartet:** Eine anmutige Anerkennung, die Vertrauen aufrechthaelt. Der Benutzer weiss, was passiert ist, was versucht wurde und was benoetigt wird. Keine Information geht verloren.
 
-**On failure:** If acknowledging the limitation feels like failure rather than communication, note the ego signal. Ukemi is a skill, not a weakness. An honest "I'm stuck" followed by a clear request for help is more useful than a forced solution that creates new problems.
+**Bei Fehler:** Wenn das Anerkennen der Begrenzung sich wie Versagen anfuehlt statt wie Kommunikation, das Ego-Signal bemerken. Ukemi ist eine Faehigkeit, keine Schwaeche. Ein ehrliches "Ich stecke fest" gefolgt von einer klaren Bitte um Hilfe ist nuetzlicher als eine erzwungene Loesung, die neue Probleme schafft.
 
-### Step 5: Randori — Multiple Simultaneous Pressures
+### Schritt 5: Randori — Mehrere gleichzeitige Druecke
 
-When multiple pressures arrive simultaneously (user correction + tool failure + scope question), apply randori principles.
+Wenn mehrere Druecke gleichzeitig eintreffen (Benutzerkorrektur + Werkzeugausfall + Scope-Frage), Randori-Prinzipien anwenden.
 
-1. **Never freeze**: pick one pressure and address it. Any movement is better than paralysis
-2. **Use pressures against each other**: a tool failure can resolve a scope question ("that feature can't be implemented this way, so the scope reduces naturally")
-3. **Simple techniques under pressure**: when overwhelmed, default to the simplest redirect — acknowledge each pressure, prioritize by urgency, address sequentially
-4. **Maintain awareness**: while addressing one pressure, keep the others in peripheral view. Address the most urgent first, but don't lose track of the rest
+1. **Nie einfrieren**: Einen Druck auswaehlen und ihn ansprechen. Jede Bewegung ist besser als Lahmung
+2. **Druecke gegeneinander nutzen**: Ein Werkzeugausfall kann eine Scope-Frage aufloesen ("dieses Feature kann auf diese Weise nicht implementiert werden, also reduziert sich der Scope natuerlich")
+3. **Einfache Techniken unter Druck**: Wenn ueberwaeltigt, auf die einfachste Umleitung zurueckfallen — jeden Druck anerkennen, nach Dringlichkeit priorisieren, sequenziell ansprechen
+4. **Bewusstsein aufrechterhalten**: Waehrend ein Druck adressiert wird, die anderen im peripheren Blick behalten. Den dringendsten zuerst ansprechen, aber die uebrigen nicht aus den Augen verlieren
 
-**Expected:** Forward movement despite multiple pressures. Not perfect resolution of all pressures simultaneously, but sequential handling that maintains progress.
+**Erwartet:** Vorwaertsbewegung trotz mehrerer Druecke. Nicht perfekte Aufloesung aller Druecke gleichzeitig, sondern sequenzielle Bearbeitung, die Fortschritt aufrechthaelt.
 
-**On failure:** If multiple pressures create paralysis, list them all explicitly, then number them by urgency. Address number 1. Just starting breaks the paralysis. If all pressures seem equally urgent, pick the one with the simplest resolution first — quick wins create momentum.
+**Bei Fehler:** Wenn mehrere Druecke Lahmung erzeugen, sie alle explizit auflisten, dann nach Dringlichkeit nummerieren. Nummer 1 ansprechen. Schon das Beginnen bricht die Lahmung. Wenn alle Druecke gleich dringend erscheinen, den mit der einfachsten Aufloesung zuerst waehlen — schnelle Erfolge erzeugen Momentum.
 
-### Step 6: Zanshin — Continuing Awareness After Resolution
+### Schritt 6: Zanshin — Anhaltendes Bewusstsein nach der Aufloesung
 
-After redirecting a pressure, maintain awareness for second-order effects.
+Nach dem Umleiten eines Drucks Bewusstsein fuer Effekte zweiter Ordnung aufrechterhalten.
 
-1. Did the redirect create new pressures? (e.g., resolving a contradiction by choosing one interpretation may invalidate earlier work)
-2. Did the redirect satisfy the underlying need, or just the surface symptom?
-3. Is the resolution stable, or will the same pressure recur?
-4. Note the redirect pattern for future reference — if this pressure type recurs, the response can be faster
+1. Hat die Umleitung neue Druecke erzeugt? (z.B. kann das Aufloesen eines Widerspruchs durch Wahl einer Interpretation fruehere Arbeit ungueltig machen)
+2. Hat die Umleitung das zugrundeliegende Beduerfnis befriedigt oder nur das Oberflaechensymptom?
+3. Ist die Aufloesung stabil oder wird derselbe Druck wiederkehren?
+4. Das Umleitungsmuster fuer kuenftige Referenz notieren — wenn dieser Drucktyp wiederkehrt, kann die Reaktion schneller sein
 
-**Expected:** A brief scan for secondary effects after each redirect. Most redirects are clean, but the ones that create cascading issues are exactly the ones where zanshin matters.
+**Erwartet:** Ein kurzer Scan auf Sekundaereffekte nach jeder Umleitung. Die meisten Umleitungen sind sauber, aber diejenigen, die kaskadierende Probleme erzeugen, sind genau die, bei denen Zanshin wichtig ist.
 
-**On failure:** If second-order effects are missed and surface later, that is a signal to deepen zanshin practice. Add a brief "what did this change break?" check after significant redirects.
+**Bei Fehler:** Wenn Effekte zweiter Ordnung verpasst werden und spaeter auftauchen, ist das ein Signal, die Zanshin-Praxis zu vertiefen. Eine kurze "Was hat sich dadurch geaendert?"-Pruefung nach bedeutenden Umleitungen hinzufuegen.
 
-## Validation
+## Validierung
 
-- [ ] The pressure was classified into a specific type, not left vague
-- [ ] Irimi: the problem was stated in full scope without minimizing
-- [ ] Tenkan: the redirect used the energy of the problem rather than fighting it
-- [ ] If the redirect failed, ukemi was applied (honest acknowledgment, preserved progress)
-- [ ] Multiple simultaneous pressures were handled sequentially, not frozen
-- [ ] Zanshin: second-order effects of the redirect were checked
+- [ ] Der Druck wurde in einen spezifischen Typ klassifiziert, nicht vage gelassen
+- [ ] Irimi: Das Problem wurde in vollem Umfang formuliert, ohne zu minimieren
+- [ ] Tenkan: Die Umleitung nutzte die Energie des Problems statt sie zu bekaempfen
+- [ ] Wenn die Umleitung scheiterte, wurde Ukemi angewendet (ehrliche Anerkennung, bewahrter Fortschritt)
+- [ ] Mehrere gleichzeitige Druecke wurden sequenziell behandelt, nicht eingefroren
+- [ ] Zanshin: Effekte zweiter Ordnung der Umleitung wurden geprueft
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Deflecting instead of entering**: Minimizing a problem ("it's just a small inconsistency") prevents effective redirect because the full force is never engaged. Enter first, redirect second
-- **Forcing a redirect that doesn't fit**: Not every pressure can be redirected in the moment. Some require user input, more information, or simply waiting. Forced redirects create new problems
-- **Ego in ukemi**: Treating the need to acknowledge a limitation as personal failure instead of information exchange. The user benefits from knowing early, not from a forced solution
-- **Addressing secondary pressures first**: When multiple pressures exist, it is tempting to handle the easy ones first. This feels productive but leaves the primary pressure growing. Address the most important pressure, not the most comfortable one
-- **Skipping center**: Attempting to redirect without first establishing center turns redirection into reaction. Center is not optional preparation — it is the foundation of effective redirect
+- **Ablenken statt eintreten**: Ein Problem minimieren ("es ist nur eine kleine Inkonsistenz") verhindert effektive Umleitung, weil die volle Kraft nie engagiert wird. Zuerst eintreten, dann umleiten
+- **Eine nicht passende Umleitung erzwingen**: Nicht jeder Druck kann im Moment umgeleitet werden. Manche erfordern Benutzereingabe, mehr Information oder einfach Abwarten. Erzwungene Umleitungen schaffen neue Probleme
+- **Ego im Ukemi**: Das Beduerfnis, eine Begrenzung anzuerkennen, als persoenliches Versagen behandeln statt als Informationsaustausch. Der Benutzer profitiert davon, es frueh zu erfahren, nicht von einer erzwungenen Loesung
+- **Sekundaere Druecke zuerst ansprechen**: Wenn mehrere Druecke existieren, ist es verlockend, die leichten zuerst zu behandeln. Das fuehlt sich produktiv an, laesst aber den primaeren Druck wachsen. Den wichtigsten Druck ansprechen, nicht den bequemsten
+- **Center ueberspringen**: Versuchen umzuleiten, ohne zuerst Zentrum herzustellen, verwandelt Umleitung in Reaktion. Center ist keine optionale Vorbereitung — es ist das Fundament effektiver Umleitung
 
-## Related Skills
+## Verwandte Skills
 
-- `aikido` — the human martial art that this skill maps to AI reasoning; physical blending and redirection principles inform cognitive pressure handling
-- `center` — prerequisite for effective redirect; establishes the stable base from which redirection operates
-- `awareness` — detects pressures early, before they require emergency redirect
-- `heal` — deeper recovery when pressure has caused subsystem drift
-- `meditate` — clears residual noise after handling difficult pressures
+- `aikido` — die menschliche Kampfkunst, die dieser Skill auf KI-Reasoning abbildet; physische Verschmelzungs- und Umleitungsprinzipien informieren kognitive Druckbehandlung
+- `center` — Voraussetzung fuer effektive Umleitung; stellt die stabile Basis her, von der aus Umleitung operiert
+- `awareness` — erkennt Druecke frueh, bevor sie Notfall-Umleitung erfordern
+- `heal` — tiefere Erholung, wenn Druck Subsystem-Drift verursacht hat
+- `meditate` — klaert Restlaerm nach dem Handhaben schwieriger Druecke

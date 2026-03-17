@@ -203,13 +203,13 @@ After each sampling event:
 - [ ] Store preserved specimens in a cool location until processing
 ```
 
-**Esperado:** All planned samples collected with standardized effort, each sample in a separately labeled container, with full metadata recorded for every sampling event.
+**Esperado:** Todas las muestras planificadas recolectadas con esfuerzo estandarizado, cada muestra en un contenedor etiquetado por separado, con metadatos completos registrados para cada evento de muestreo.
 
-**En caso de fallo:** If a sample is compromised (trap disturbed, heavy rain during sweep netting), record the issue and either discard the sample or note it as a potential outlier. It is better to have one fewer replicate than to include compromised data. If weather prevents sampling on a planned date, reschedule to the nearest suitable day — do not attempt to sample under inappropriate conditions.
+**En caso de fallo:** Si una muestra está comprometida (trampa perturbada, lluvia fuerte durante el barrido con red), registrar el problema y descartar la muestra o anotarla como posible valor atípico. Es mejor tener una réplica menos que incluir datos comprometidos. Si el clima impide el muestreo en una fecha planificada, reprogramar al día adecuado más cercano — no intentar muestrear bajo condiciones inapropiadas.
 
-### Paso 4: Identify Specimens
+### Paso 4: Identificar Especímenes
 
-Sort and identify all collected specimens to the lowest practical taxonomic level. This is typically the most time-consuming step.
+Clasificar e identificar todos los especímenes recolectados al nivel taxonómico práctico más bajo. Este es típicamente el paso que más tiempo consume.
 
 ```
 Identification Workflow:
@@ -256,13 +256,13 @@ Taxonomic Resolution:
   collect-preserve-specimens) so identifications can be verified later.
 ```
 
-**Esperado:** All specimens sorted and identified to at least morphospecies level, recorded in a species-by-sample abundance matrix, with voucher specimens preserved for each morphospecies.
+**Esperado:** Todos los especímenes clasificados e identificados al menos a nivel de morfoespecie, registrados en una matriz de abundancia especies-por-muestra, con especímenes de referencia preservados para cada morfoespecie.
 
-**En caso de fallo:** If certain groups cannot be identified even to morphospecies (e.g., very small Diptera that all look alike), record them as an aggregate taxon (e.g., "Diptera spp. unsorted") and note the limitation. Exclude poorly resolved groups from diversity analyses rather than introducing uncertain identifications. If identification stalls, send specimens to specialists — this is normal and expected for professional surveys.
+**En caso de fallo:** Si ciertos grupos no pueden identificarse ni siquiera a morfoespecie (ej., Diptera muy pequeños que todos se ven iguales), registrarlos como un taxón agregado (ej., "Diptera spp. sin clasificar") y anotar la limitación. Excluir grupos pobremente resueltos de los análisis de diversidad en lugar de introducir identificaciones inciertas. Si la identificación se estanca, enviar especímenes a especialistas — esto es normal y esperado en muestreos profesionales.
 
-### Paso 5: Calculate Diversity Indices
+### Paso 5: Calcular Índices de Diversidad
 
-Convert the species-by-sample abundance matrix into quantitative diversity measures.
+Convertir la matriz de abundancia especies-por-muestra en medidas cuantitativas de diversidad.
 
 ```
 Diversity Metrics:
@@ -321,13 +321,13 @@ Diversity Metrics:
    - If the curve is still rising steeply, more sampling is needed
 ```
 
-**Esperado:** Species richness, Shannon-Wiener index, Simpson index, and evenness calculated for each sample and each site/treatment. Rarefaction curves plotted to assess sampling completeness.
+**Esperado:** Riqueza de especies, índice Shannon-Wiener, índice Simpson y equitatividad calculados para cada muestra y cada sitio/tratamiento. Curvas de rarefacción graficadas para evaluar la completitud del muestreo.
 
-**En caso de fallo:** If sample sizes are too small for reliable diversity calculation (fewer than 30 individuals per sample), report raw species counts and abundances rather than computed indices. Small samples produce unreliable index values with large confidence intervals. Note the small sample size as a limitation and recommend increased sampling effort for future surveys.
+**En caso de fallo:** Si los tamaños de muestra son demasiado pequeños para un cálculo confiable de diversidad (menos de 30 individuos por muestra), reportar conteos y abundancias crudas de especies en lugar de índices calculados. Las muestras pequeñas producen valores de índice poco confiables con intervalos de confianza amplios. Anotar el pequeño tamaño de muestra como limitación y recomendar mayor esfuerzo de muestreo para futuros estudios.
 
-### Paso 6: Conduct Statistical Analysis
+### Paso 6: Realizar Análisis Estadístico
 
-Compare diversity across sites, treatments, or time periods using appropriate statistical methods.
+Comparar la diversidad entre sitios, tratamientos o períodos de tiempo usando métodos estadísticos apropiados.
 
 ```
 Analysis Approaches:
@@ -374,13 +374,13 @@ Minimum Reporting:
 - Effect sizes where applicable
 ```
 
-**Esperado:** Statistical comparisons completed with appropriate tests, results reported with test statistics and p-values, and ecological interpretation provided.
+**Esperado:** Comparaciones estadísticas completadas con pruebas apropiadas, resultados reportados con estadísticos de prueba y valores p, e interpretación ecológica proporcionada.
 
-**En caso de fallo:** If replication is insufficient for formal statistical testing (fewer than 3 replicates per group), report descriptive statistics (means, ranges) and rarefaction curves without hypothesis tests. Acknowledge the limitation and recommend increased replication for future surveys. Descriptive data from a well-executed survey is more valuable than p-values from an underpowered design.
+**En caso de fallo:** Si la replicación es insuficiente para pruebas estadísticas formales (menos de 3 réplicas por grupo), reportar estadísticas descriptivas (medias, rangos) y curvas de rarefacción sin pruebas de hipótesis. Reconocer la limitación y recomendar mayor replicación para futuros muestreos. Datos descriptivos de un muestreo bien ejecutado son más valiosos que valores p de un diseño con poder insuficiente.
 
-### Paso 7: Report Results
+### Paso 7: Reportar Resultados
 
-Compile the survey into a structured report that can inform management decisions, support publication, or serve as a baseline for future monitoring.
+Compilar el muestreo en un informe estructurado que pueda informar decisiones de manejo, apoyar publicación, o servir como línea base para monitoreo futuro.
 
 ```
 Survey Report Structure:
@@ -431,36 +431,36 @@ Data Archiving:
 - Archive the survey report with the managing agency or institution
 ```
 
-**Esperado:** A complete survey report with methods, results (including species list, diversity indices, statistical tests), discussion, and recommendations. Raw data archived in a repository.
+**Esperado:** Un informe completo del muestreo con métodos, resultados (incluyendo lista de especies, índices de diversidad, pruebas estadísticas), discusión y recomendaciones. Datos crudos archivados en un repositorio.
 
-**En caso de fallo:** If the survey is incomplete (e.g., not all specimens identified, insufficient replicates for statistics), produce a preliminary report with what is available and clearly label it as preliminary. Identify the gaps and the timeline for completing them. A preliminary report with honest limitations is more useful than no report at all.
+**En caso de fallo:** Si el muestreo está incompleto (ej., no todos los especímenes identificados, réplicas insuficientes para estadísticas), producir un informe preliminar con lo disponible y etiquetarlo claramente como preliminar. Identificar las brechas y el cronograma para completarlas. Un informe preliminar con limitaciones honestas es más útil que ningún informe.
 
 ## Validación
 
-- [ ] Survey objectives were defined before fieldwork began
-- [ ] Sampling design included replication (minimum 3 per comparison group)
-- [ ] Sampling effort was standardized across all samples
-- [ ] Each sample was kept separate and labeled with full metadata
-- [ ] Environmental covariates were recorded for every sampling event
-- [ ] Specimens were identified to a consistent taxonomic level with vouchers preserved
-- [ ] Species-by-sample abundance matrix was constructed
-- [ ] Diversity indices (Shannon, Simpson, richness, evenness) were calculated
-- [ ] Rarefaction curves were plotted to assess sampling completeness
-- [ ] Statistical comparisons used appropriate tests with reported test statistics
-- [ ] Results were compiled into a structured report with species list and recommendations
+- [ ] Los objetivos del muestreo fueron definidos antes del trabajo de campo
+- [ ] El diseño de muestreo incluyó replicación (mínimo 3 por grupo de comparación)
+- [ ] El esfuerzo de muestreo fue estandarizado en todas las muestras
+- [ ] Cada muestra fue mantenida separada y etiquetada con metadatos completos
+- [ ] Las covariables ambientales fueron registradas para cada evento de muestreo
+- [ ] Los especímenes fueron identificados a un nivel taxonómico consistente con ejemplares de referencia preservados
+- [ ] La matriz de abundancia especies-por-muestra fue construida
+- [ ] Los índices de diversidad (Shannon, Simpson, riqueza, equitatividad) fueron calculados
+- [ ] Las curvas de rarefacción fueron graficadas para evaluar la completitud del muestreo
+- [ ] Las comparaciones estadísticas usaron pruebas apropiadas con estadísticos de prueba reportados
+- [ ] Los resultados fueron compilados en un informe estructurado con lista de especies y recomendaciones
 
 ## Errores Comunes
 
-- **No standardization of effort**: Comparing a 10-sweep sample to a 50-sweep sample confounds effort with diversity. Every sample must receive the same effort — same number of sweeps, same trap duration, same transect length
-- **Pooling data from different methods**: Pitfall traps and sweep nets sample different insect communities. Analyzing pooled data produces a number that does not represent either community accurately. Analyze each method's data separately
-- **Too few replicates**: A single sample per site provides no estimate of within-site variability and no basis for statistical comparison. Minimum 3 replicates per comparison group; 5-10 is better
-- **Inconsistent taxonomy**: Identifying some specimens to species and others to order in the same analysis inflates apparent richness at one level and obscures it at another. Choose a consistent resolution (e.g., all to family, or all to morphospecies) and apply it uniformly
-- **Ignoring seasonality**: Most insect communities change dramatically across seasons. Comparing a spring survey to an autumn survey confounds seasonal effects with any treatment or site differences. Compare same-season data
-- **Reporting diversity indices without sample size**: Shannon H' of 2.5 from 500 individuals is far more reliable than H' of 2.5 from 20 individuals. Always report sample sizes alongside indices, and use rarefaction for comparisons across different abundances
+- **Sin estandarización del esfuerzo**: Comparar una muestra de 10 barridos con una de 50 barridos confunde esfuerzo con diversidad. Cada muestra debe recibir el mismo esfuerzo — mismo número de barridos, misma duración de trampa, misma longitud de transecto
+- **Mezclar datos de diferentes métodos**: Las trampas de caída y las redes de barrido muestrean diferentes comunidades de insectos. Analizar datos mezclados produce un número que no representa con precisión ninguna comunidad. Analizar los datos de cada método por separado
+- **Muy pocas réplicas**: Una sola muestra por sitio no proporciona estimación de la variabilidad intra-sitio ni base para comparación estadística. Mínimo 3 réplicas por grupo de comparación; 5-10 es mejor
+- **Taxonomía inconsistente**: Identificar algunos especímenes a especie y otros a orden en el mismo análisis infla la riqueza aparente en un nivel y la oscurece en otro. Elegir una resolución consistente (ej., todos a familia, o todos a morfoespecie) y aplicarla uniformemente
+- **Ignorar la estacionalidad**: La mayoría de las comunidades de insectos cambian dramáticamente entre estaciones. Comparar un muestreo de primavera con uno de otoño confunde efectos estacionales con cualquier diferencia de tratamiento o sitio. Comparar datos de la misma estación
+- **Reportar índices de diversidad sin tamaño de muestra**: Un Shannon H' de 2.5 con 500 individuos es mucho más confiable que H' de 2.5 con 20 individuos. Siempre reportar tamaños de muestra junto con los índices, y usar rarefacción para comparaciones entre diferentes abundancias
 
 ## Habilidades Relacionadas
 
-- `collect-preserve-specimens` — collection methods, preservation, and labeling standards for the specimens gathered during surveys
-- `identify-insect` — morphological identification procedures for sorting and identifying survey specimens
-- `document-insect-sighting` — photographic documentation protocols that complement physical collection
-- `observe-insect-behavior` — behavioral observation methods for supplementing population data with ecological context
+- `collect-preserve-specimens` — métodos de recolección, preservación y estándares de etiquetado para los especímenes recopilados durante los muestreos
+- `identify-insect` — procedimientos de identificación morfológica para clasificar e identificar especímenes del muestreo
+- `document-insect-sighting` — protocolos de documentación fotográfica que complementan la recolección física
+- `observe-insect-behavior` — métodos de observación conductual para complementar los datos poblacionales con contexto ecológico

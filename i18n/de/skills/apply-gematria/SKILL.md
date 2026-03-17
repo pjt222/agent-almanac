@@ -1,7 +1,14 @@
 ---
 name: apply-gematria
 description: >
-  Gematria (hebraeische Zahlenwerte) berechnen und analysieren mit Standard-, Ordinal- und reduzierten Methoden. Umfasst Wort-zu-Zahl-Konvertierung, Isopsephie-Vergleiche und interpretative Rahmenwerke. Verwenden bei der Berechnung des Zahlenwerts eines hebraeischen Wortes oder Satzes, beim Vergleich zweier Woerter auf gemeinsame Gematria-Werte, beim Studium eines biblischen Verses oder Gottesnamens auf numerische Korrespondenzen oder bei der Verbindung eines numerischen Ergebnisses mit seiner Position am Baum des Lebens.
+  Gematria (hebraeische Zahlenwerte) mit Standard-, Ordinal- und reduzierten
+  Methoden berechnen und analysieren. Umfasst Wort-zu-Zahl-Umwandlung,
+  Isopsephie-Vergleiche und interpretative Rahmenwerke. Verwenden beim
+  Berechnen des Zahlenwerts eines hebraeischen Wortes oder Satzes, beim
+  Vergleichen zweier Woerter auf gemeinsame Gematria-Werte, beim Studieren
+  eines Bibelverses oder Gottesnamens auf numerische Entsprechungen oder
+  beim Verbinden eines numerischen Ergebnisses mit seiner Position am
+  Lebensbaum.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -20,29 +27,29 @@ metadata:
 
 # Gematria anwenden
 
-Compute and analyze gematria — the system of assigning numerical values to Hebrew letters and words. Covers standard (Mispar Hechrachi), ordinal (Mispar Siduri), and reduced (Mispar Katan) methods, isopsephy comparisons between words of equal value, and interpretive frameworks for contemplation.
+Gematria berechnen und analysieren — das System der Zuweisung von Zahlenwerten zu hebraeischen Buchstaben und Woertern. Umfasst Standard- (Mispar Hechrachi), Ordinal- (Mispar Siduri) und reduzierte (Mispar Katan) Methoden, Isopsephie-Vergleiche zwischen Woertern gleichen Wertes und interpretative Rahmenwerke fuer die Kontemplation.
 
-## When to Use
+## Wann verwenden
 
-- You want to compute the numerical value of a Hebrew word or phrase
-- You are comparing two words to determine if they share a gematria value (isopsephy)
-- You need to understand which gematria method is appropriate for a given analysis
-- You are studying a biblical verse or divine name and want to uncover numerical correspondences
-- You are exploring the relationship between a word's meaning and its numerical value
-- You want to connect a numerical result to its position on the Tree of Life
+- Den Zahlenwert eines hebraeischen Wortes oder Satzes berechnen
+- Zwei Woerter vergleichen, um festzustellen, ob sie einen Gematria-Wert teilen (Isopsephie)
+- Verstehen, welche Gematria-Methode fuer eine bestimmte Analyse geeignet ist
+- Einen Bibelvers oder Gottesnamen studieren und numerische Entsprechungen aufdecken
+- Die Beziehung zwischen der Bedeutung eines Wortes und seinem Zahlenwert erforschen
+- Ein numerisches Ergebnis mit seiner Position am Lebensbaum verbinden
 
-## Inputs
+## Eingaben
 
-- **Required**: A Hebrew word, phrase, or divine name to analyze (in Hebrew script or transliteration)
-- **Optional**: A second word/phrase for comparison (isopsephy)
-- **Optional**: Preferred gematria method (standard, ordinal, reduced, or all three)
-- **Optional**: Context or question guiding the analysis (e.g., "Why do these two words share a value?")
+- **Erforderlich**: Ein hebraeisches Wort, ein Satz oder ein Gottesname zur Analyse (in hebraeischer Schrift oder Transliteration)
+- **Optional**: Ein zweites Wort/einen zweiten Satz zum Vergleich (Isopsephie)
+- **Optional**: Bevorzugte Gematria-Methode (Standard, Ordinal, reduziert oder alle drei)
+- **Optional**: Kontext oder Frage, die die Analyse leitet (z.B. "Warum teilen diese beiden Woerter einen Wert?")
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Transliterate and Identify the Hebrew Source
+### Schritt 1: Transliterieren und hebraeische Quelle identifizieren
 
-Establish the exact Hebrew spelling of the word or phrase.
+Die exakte hebraeische Schreibweise des Wortes oder Satzes feststellen.
 
 ```
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
@@ -71,36 +78,36 @@ same values for regular and final forms. The 500-900 values above
 follow the extended system (Mispar Gadol).
 ```
 
-1. If the input is in English transliteration, convert to Hebrew letter sequence
-2. Verify the spelling: Hebrew has multiple possible spellings for some words (plene vs. defective)
-3. Note if the word contains final-form letters (Kaf-sofit, Mem-sofit, Nun-sofit, Peh-sofit, Tzadi-sofit)
-4. State the source: is this a biblical word, a divine name, a modern Hebrew word, or a technical Kabbalistic term?
-5. If ambiguous, present both common spellings and compute gematria for each
+1. Wenn die Eingabe in englischer Transliteration vorliegt, in eine hebraeische Buchstabenfolge umwandeln
+2. Die Schreibweise ueberpruefen: Hebraeisch hat fuer manche Woerter mehrere moegliche Schreibweisen (plene vs. defektiv)
+3. Notieren, ob das Wort Endform-Buchstaben enthaelt (Kaf-sofit, Mem-sofit, Nun-sofit, Peh-sofit, Tzadi-sofit)
+4. Die Quelle angeben: Ist dies ein biblisches Wort, ein Gottesname, ein modernes hebraeisches Wort oder ein technischer kabbalistischer Begriff?
+5. Bei Mehrdeutigkeit beide gaengigen Schreibweisen praesentieren und fuer jede die Gematria berechnen
 
-**Expected:** The Hebrew letter sequence is established with confidence. The user knows exactly which letters are being summed and can verify the spelling.
+**Erwartet:** Die hebraeische Buchstabenfolge ist mit Sicherheit festgelegt. Der Benutzer weiss genau, welche Buchstaben summiert werden, und kann die Schreibweise ueberpruefen.
 
-**On failure:** If the transliteration is ambiguous (e.g., "chai" could be Chet-Yod or Chet-Yod-Yod in some contexts), present both options with their gematria values and let the user select.
+**Bei Fehler:** Wenn die Transliteration mehrdeutig ist (z.B. "chai" koennte Chet-Yod oder Chet-Yod-Yod in manchen Kontexten sein), beide Optionen mit ihren Gematria-Werten praesentieren und den Benutzer waehlen lassen.
 
-### Step 2: Apply Standard Gematria (Mispar Hechrachi)
+### Schritt 2: Standard-Gematria anwenden (Mispar Hechrachi)
 
-Sum the letter values using the standard Hebrew number table.
+Die Buchstabenwerte mit der Standard-Zahlentabelle des Hebraeischen summieren.
 
-1. Write out each letter with its standard value
-2. Sum the values left to right (Hebrew reads right to left, but addition is commutative)
-3. State the total clearly
-4. Note if the total matches a significant number:
-   - A sephira number (1-10)
-   - A path number (11-32)
-   - A well-known gematria value (26 = YHVH, 18 = chai, 72 = Shem ha-Mephorash, 137 = Kabbalah)
-5. If the total exceeds 400, note that it requires summing multiple hundreds
+1. Jeden Buchstaben mit seinem Standardwert aufschreiben
+2. Die Werte von links nach rechts summieren (Hebraeisch liest von rechts nach links, aber Addition ist kommutativ)
+3. Die Summe klar angeben
+4. Notieren, ob die Summe mit einer bedeutenden Zahl uebereinstimmt:
+   - Eine Sephira-Zahl (1-10)
+   - Eine Pfadzahl (11-32)
+   - Ein bekannter Gematria-Wert (26 = JHWH, 18 = Chai, 72 = Shem ha-Mephorash, 137 = Kabbala)
+5. Wenn die Summe 400 uebersteigt, anmerken, dass mehrere Hunderter summiert werden muessen
 
-**Expected:** A clear numerical result with the computation shown step by step. The user can verify each letter's value against the table.
+**Erwartet:** Ein klares numerisches Ergebnis mit schrittweise dargestellter Berechnung. Der Benutzer kann den Wert jedes Buchstabens anhand der Tabelle ueberpruefen.
 
-**On failure:** If the user provides a word with uncertain Hebrew spelling, compute values for all plausible spellings and note the range. The "correct" spelling depends on the source text.
+**Bei Fehler:** Wenn der Benutzer ein Wort mit unsicherer hebraeischer Schreibweise angibt, Werte fuer alle plausiblen Schreibweisen berechnen und den Bereich angeben. Die "korrekte" Schreibweise haengt vom Quelltext ab.
 
-### Step 3: Apply Ordinal and Reduced Methods (Optional)
+### Schritt 3: Ordinal- und reduzierte Methoden anwenden (Optional)
 
-Compute alternative gematria values that reveal different patterns.
+Alternative Gematria-Werte berechnen, die unterschiedliche Muster aufdecken.
 
 ```
 ORDINAL GEMATRIA (Mispar Siduri):
@@ -125,72 +132,72 @@ A substitution cipher: first letter ↔ last letter.
   "Sheshach" = Babel via Atbash).
 ```
 
-1. Compute ordinal gematria: sum each letter's position (1-22) in the alphabet
-2. Compute reduced gematria: reduce each standard value to single digit, then sum and reduce again
-3. Present all three values together for comparison
-4. Note which method reveals the most interesting connections for this particular word
+1. Ordinal-Gematria berechnen: die Position jedes Buchstabens (1-22) im Alphabet summieren
+2. Reduzierte Gematria berechnen: jeden Standardwert auf eine einzelne Ziffer reduzieren, dann summieren und erneut reduzieren
+3. Alle drei Werte nebeneinander zum Vergleich praesentieren
+4. Anmerken, welche Methode fuer dieses bestimmte Wort die interessantesten Verbindungen aufdeckt
 
-**Expected:** Three numerical values (standard, ordinal, reduced) presented side by side. The reduced value often links to single-digit sephirotic numbers, making it useful for Tree of Life mapping.
+**Erwartet:** Drei Zahlenwerte (Standard, Ordinal, reduziert) nebeneinander dargestellt. Der reduzierte Wert verknuepft oft mit einstelligen sephirotischen Zahlen, was ihn nuetzlich fuer die Lebensbaum-Zuordnung macht.
 
-**On failure:** If the user only wants one method, provide that method and mention the others exist for future exploration. Do not overwhelm with calculations if a single method was requested.
+**Bei Fehler:** Wenn der Benutzer nur eine Methode moechte, diese Methode bereitstellen und die anderen fuer zukuenftige Erforschung erwaehnen. Nicht mit Berechnungen ueberwaeltigen, wenn nur eine einzelne Methode angefordert wurde.
 
-### Step 4: Search for Isopsephy Connections
+### Schritt 4: Isopsephie-Verbindungen suchen
 
-Identify other Hebrew words or phrases that share the same numerical value.
+Andere hebraeische Woerter oder Saetze identifizieren, die den gleichen Zahlenwert teilen.
 
-1. Take the standard gematria value from Step 2
-2. Search for well-known words, divine names, or phrases with the same value
-3. Present 2-5 connections, prioritizing:
-   - Biblical words and phrases
-   - Divine names and sephirotic titles
-   - Traditional Kabbalistic connections documented in classical sources
-   - Surprising or illuminating connections
-4. For each connection, note the source tradition (Zohar, Talmud, later Kabbalistic commentary, Hermetic tradition)
-5. Note if no significant connections are found — not every number has rich isopsephy
+1. Den Standard-Gematria-Wert aus Schritt 2 nehmen
+2. Nach bekannten Woertern, Gottesnamen oder Saetzen mit dem gleichen Wert suchen
+3. 2-5 Verbindungen praesentieren, priorisiert nach:
+   - Biblische Woerter und Saetze
+   - Gottesnamen und sephirotische Titel
+   - Traditionelle kabbalistische Verbindungen, die in klassischen Quellen dokumentiert sind
+   - Ueberraschende oder erhellende Verbindungen
+4. Fuer jede Verbindung die Quelltradition angeben (Zohar, Talmud, spaeterer kabbalistischer Kommentar, hermetische Tradition)
+5. Anmerken, wenn keine bedeutenden Verbindungen gefunden werden — nicht jede Zahl hat reiche Isopsephie
 
-**Expected:** A set of words sharing the same gematria value, each with a brief note on why the connection might be meaningful. The user has material for contemplation.
+**Erwartet:** Eine Reihe von Woertern, die den gleichen Gematria-Wert teilen, jeweils mit einer kurzen Notiz, warum die Verbindung bedeutsam sein koennte. Der Benutzer hat Material zur Kontemplation.
 
-**On failure:** If no well-known connections exist for the computed value, acknowledge this. Offer to compute the value's relationship to nearby significant numbers (e.g., "your value is 378, which is 2 more than shalom [376] — what does that suggest?").
+**Bei Fehler:** Wenn keine bekannten Verbindungen fuer den berechneten Wert existieren, dies anerkennen. Anbieten, die Beziehung des Wertes zu nahegelegenen bedeutsamen Zahlen zu berechnen (z.B. "Ihr Wert ist 378, das sind 2 mehr als Schalom [376] — was koennte das nahelegen?").
 
-### Step 5: Interpret Connections and Correspondences
+### Schritt 5: Verbindungen und Entsprechungen interpretieren
 
-Move from computation to contemplation — what do the numerical relationships suggest?
+Von der Berechnung zur Kontemplation uebergehen — was legen die numerischen Beziehungen nahe?
 
-1. State clearly: gematria reveals correspondences for contemplation, not proofs or predictions
-2. For each isopsephy connection found, pose a contemplative question:
-   - "Word A and Word B share the value N. How might their meanings illuminate each other?"
-   - "The reduced value points to sephira X. How does this word's meaning relate to that sephira's quality?"
-3. Note connections to the Tree of Life:
-   - Standard value 1-10 → direct sephirotic correspondence
-   - Reduced value 1-9 → sephirotic resonance
-   - Value = a path number (11-32) → resonance with that path's Hebrew letter
-4. If the user provided a guiding question (from Inputs), address it directly using the gematria results
-5. Close with one integrative statement connecting the numerical analysis to the word's meaning
+1. Klar feststellen: Gematria enthuellt Entsprechungen zur Kontemplation, keine Beweise oder Vorhersagen
+2. Fuer jede gefundene Isopsephie-Verbindung eine kontemplative Frage stellen:
+   - "Wort A und Wort B teilen den Wert N. Wie koennten sich ihre Bedeutungen gegenseitig erhellen?"
+   - "Der reduzierte Wert verweist auf Sephira X. Wie verhaelt sich die Bedeutung dieses Wortes zur Qualitaet dieser Sephira?"
+3. Verbindungen zum Lebensbaum anmerken:
+   - Standardwert 1-10 → direkte sephirotische Entsprechung
+   - Reduzierter Wert 1-9 → sephirotische Resonanz
+   - Wert = eine Pfadzahl (11-32) → Resonanz mit dem hebraeischen Buchstaben dieses Pfades
+4. Wenn der Benutzer eine Leitfrage angegeben hat (aus Eingaben), diese direkt mit den Gematria-Ergebnissen beantworten
+5. Mit einer integrativen Aussage schliessen, die die numerische Analyse mit der Wortbedeutung verbindet
 
-**Expected:** The numerical analysis has become meaningful — not just arithmetic but a lens for understanding the word's place in the symbolic network of Kabbalah.
+**Erwartet:** Die numerische Analyse ist bedeutungsvoll geworden — nicht nur Arithmetik, sondern eine Linse zum Verstaendnis der Stellung des Wortes im symbolischen Netzwerk der Kabbala.
 
-**On failure:** If interpretation feels forced or speculative, say so directly. Some gematria computations are more fruitful than others. Honest acknowledgment of thin connections is better than fabricating significance.
+**Bei Fehler:** Wenn die Interpretation erzwungen oder spekulativ wirkt, dies direkt sagen. Manche Gematria-Berechnungen sind ergiebiger als andere. Ehrliches Anerkennen duenner Verbindungen ist besser als Bedeutsamkeit zu fabrizieren.
 
-## Validation
+## Validierung
 
-- [ ] The Hebrew spelling was established with confidence (or multiple spellings presented)
-- [ ] Standard gematria was computed with each letter's value shown
-- [ ] At least one additional method (ordinal or reduced) was applied
-- [ ] Isopsephy connections were searched and results presented with source notes
-- [ ] Interpretation was framed as contemplative, not demonstrative
-- [ ] The computation is verifiable — the user can check each letter against the value table
+- [ ] Die hebraeische Schreibweise wurde mit Sicherheit festgelegt (oder mehrere Schreibweisen praesentiert)
+- [ ] Standard-Gematria wurde mit dem Wert jedes Buchstabens berechnet
+- [ ] Mindestens eine zusaetzliche Methode (Ordinal oder reduziert) wurde angewendet
+- [ ] Isopsephie-Verbindungen wurden gesucht und Ergebnisse mit Quellenangaben praesentiert
+- [ ] Die Interpretation wurde als kontemplativ gerahmt, nicht als beweisend
+- [ ] Die Berechnung ist nachpruefbar — der Benutzer kann jeden Buchstaben anhand der Wertetabelle ueberpruefen
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Spelling ambiguity**: Hebrew words can be spelled with or without vowel letters (matres lectionis). The gematria changes significantly — always confirm the spelling
-- **Final-form confusion**: Whether Mem-final = 40 or 600 depends on which gematria system is used. State the system explicitly
-- **Finding what you expect**: Gematria with enough methods will eventually connect any two words. Privileging connections that confirm a preexisting belief is confirmation bias, not analysis
-- **Ignoring tradition**: Classical Kabbalistic gematria connections (e.g., YHVH = 26, echad [one] = 13, ahavah [love] = 13, so love + unity = God) are documented in authoritative sources. Novel connections should be distinguished from traditional ones
-- **Treating gematria as proof**: Numerical equality between words suggests a correspondence to contemplate, not an identity or causal relationship
-- **Forgetting context**: The same word may have different gematria significance in a biblical verse vs. a liturgical text vs. a Kabbalistic meditation. Context shapes interpretation
+- **Schreibweisen-Mehrdeutigkeit**: Hebraeische Woerter koennen mit oder ohne Vokalbuchstaben (matres lectionis) geschrieben werden. Die Gematria aendert sich erheblich — die Schreibweise immer bestaetigen
+- **Endform-Verwirrung**: Ob Mem-final = 40 oder 600 betraegt, haengt davon ab, welches Gematria-System verwendet wird. Das System explizit angeben
+- **Finden, was man erwartet**: Gematria mit genug Methoden wird irgendwann beliebige zwei Woerter verbinden. Verbindungen zu bevorzugen, die eine bestehende Ueberzeugung bestaetigen, ist Bestaetigungsfehler, keine Analyse
+- **Tradition ignorieren**: Klassische kabbalistische Gematria-Verbindungen (z.B. JHWH = 26, Echad [eins] = 13, Ahava [Liebe] = 13, also Liebe + Einheit = Gott) sind in massgeblichen Quellen dokumentiert. Neue Verbindungen sollten von traditionellen unterschieden werden
+- **Gematria als Beweis behandeln**: Numerische Gleichheit zwischen Woertern legt eine Entsprechung zur Kontemplation nahe, keine Identitaet oder Kausalbeziehung
+- **Kontext vergessen**: Dasselbe Wort kann in einem Bibelvers, einem liturgischen Text oder einer kabbalistischen Meditation unterschiedliche Gematria-Bedeutung haben. Kontext praegt die Interpretation
 
-## Related Skills
+## Verwandte Skills
 
-- `read-tree-of-life` — Map gematria values to sephirot and paths for structural context
-- `study-hebrew-letters` — Understanding individual letter symbolism deepens gematria interpretation
-- `observe` — Sustained neutral attention to patterns; gematria is a form of numerical pattern recognition
+- `read-tree-of-life` — Gematria-Werte auf Sephirot und Pfade abbilden fuer strukturellen Kontext
+- `study-hebrew-letters` — Verstaendnis individueller Buchstabensymbolik vertieft die Gematria-Interpretation
+- `observe` — Nachhaltige neutrale Aufmerksamkeit fuer Muster; Gematria ist eine Form numerischer Mustererkennung

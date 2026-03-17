@@ -1,13 +1,20 @@
 ---
 name: search-prior-art
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Search for prior art relevant to a specific invention or patent claim.
-  Covers patent literature, non-patent literature (academic papers, products,
-  open source), defensive publications, and standard-essential patents.
-  Use when evaluating whether an invention is novel and non-obvious before
-  filing, challenging the validity of an existing patent, supporting a
-  freedom-to-operate analysis, documenting a defensive publication, or
-  responding to a patent office action questioning novelty or obviousness.
+  Stand der Technik recherchieren der fuer eine bestimmte Erfindung oder
+  Patentanspruch relevant ist. Umfasst Patentliteratur, Nichtpatentliteratur
+  (wissenschaftliche Arbeiten, Produkte, Open Source), defensive Publikationen
+  und standardessentielle Patente. Anwenden bei der Bewertung ob eine Erfindung
+  vor der Anmeldung neuartig und nicht naheliegend ist, bei der Anfechtung
+  der Gueltigkeit eines bestehenden Patents, zur Unterstuetzung einer
+  Freedom-to-Operate-Analyse, bei der Dokumentation einer defensiven
+  Publikation oder bei der Beantwortung eines Patentamtsbescheids der
+  Neuheit oder Erfindungshoehe in Frage stellt.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -17,217 +24,213 @@ metadata:
   complexity: intermediate
   language: natural
   tags: intellectual-property, prior-art, patents, novelty, obviousness, invalidity, fto
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Stand der Technik recherchieren
 
-Conduct a structured prior art search to find publications, patents, products, or disclosures that predate a specific invention. Used to assess patentability (can this be patented?), challenge validity (should this patent have been granted?), or establish freedom-to-operate (is this design covered by existing rights?).
+Eine strukturierte Stand-der-Technik-Recherche durchfuehren um Publikationen, Patente, Produkte oder Offenlegungen zu finden die einer bestimmten Erfindung vorausgehen. Verwendet zur Beurteilung der Patentierbarkeit (kann dies patentiert werden?), zur Anfechtung der Gueltigkeit (haette dieses Patent erteilt werden sollen?) oder zur Feststellung der Handlungsfreiheit (decken bestehende Schutzrechte dieses Design ab?).
 
-## When to Use
+## Wann verwenden
 
-- Evaluating whether an invention is novel and non-obvious before filing a patent application
-- Challenging the validity of an existing patent by finding prior art the examiner missed
-- Supporting a freedom-to-operate analysis by finding prior art that limits a blocking patent's scope
-- Documenting a defensive publication to prevent others from patenting a concept
-- Responding to a patent office action that questions novelty or obviousness
+- Bewertung ob eine Erfindung vor Einreichung einer Patentanmeldung neuartig und nicht naheliegend ist
+- Anfechtung der Gueltigkeit eines bestehenden Patents durch Auffinden von Stand der Technik den der Pruefer uebersehen hat
+- Unterstuetzung einer Freedom-to-Operate-Analyse durch Auffinden von Stand der Technik der den Schutzumfang eines blockierenden Patents einschraenkt
+- Dokumentation einer defensiven Publikation um andere an der Patentierung eines Konzepts zu hindern
+- Beantwortung eines Patentamtsbescheids der Neuheit oder Erfindungshoehe in Frage stellt
 
-## Inputs
+## Eingaben
 
-- **Required**: Invention description (what it does, how it works, what problem it solves)
-- **Required**: Search purpose (patentability, invalidity, FTO, defensive)
-- **Required**: Critical date (filing date of the patent application, or invention date for prior art)
-- **Optional**: Known related patents or publications
-- **Optional**: Technology classification codes (IPC, CPC)
-- **Optional**: Key inventors or companies in the field
+- **Erforderlich**: Erfindungsbeschreibung (was sie tut, wie sie funktioniert, welches Problem sie loest)
+- **Erforderlich**: Recherchezweck (Patentierbarkeit, Ungueltigmachung, FTO, defensiv)
+- **Erforderlich**: Kritisches Datum (Anmeldedatum der Patentanmeldung oder Erfindungsdatum fuer Stand der Technik)
+- **Optional**: Bekannte verwandte Patente oder Publikationen
+- **Optional**: Technologieklassifikationscodes (IPC, CPC)
+- **Optional**: Wichtige Erfinder oder Unternehmen im Fachgebiet
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Decompose the Invention into Searchable Elements
+### Schritt 1: Die Erfindung in durchsuchbare Elemente zerlegen
 
-Break the invention into its constituent technical features.
+Die Erfindung in ihre technischen Bestandteile aufglieder.
 
-1. Read the invention description (or patent claims if searching against an existing patent)
-2. Extract the **essential elements** — each independent technical feature:
-   - What components does it have?
-   - What steps does the process follow?
-   - What technical effect does it achieve?
-   - What problem does it solve and how?
-3. Identify the **novel combination** — what makes this different from the known art:
-   - Is it a new element added to known elements?
-   - Is it a new combination of known elements?
-   - Is it a known element applied in a new field?
-4. Generate search terms for each element:
-   - Technical terms, synonyms, and abbreviations
-   - Broader and narrower terms (hierarchy)
-   - Alternative descriptions of the same concept
-5. Document the **Search Map**: elements, terms, and relationships
+1. Die Erfindungsbeschreibung lesen (oder Patentansprueche falls gegen ein bestehendes Patent recherchiert wird)
+2. Die **wesentlichen Elemente** extrahieren — jedes unabhaengige technische Merkmal:
+   - Welche Komponenten hat sie?
+   - Welche Schritte folgt der Prozess?
+   - Welchen technischen Effekt erzielt sie?
+   - Welches Problem loest sie und wie?
+3. Die **neuartige Kombination** identifizieren — was unterscheidet dies vom bekannten Stand der Technik:
+   - Ist es ein neues Element ergaenzt zu bekannten Elementen?
+   - Ist es eine neue Kombination bekannter Elemente?
+   - Ist es ein bekanntes Element angewendet in einem neuen Gebiet?
+4. Suchbegriffe fuer jedes Element generieren:
+   - Fachbegriffe, Synonyme und Abkuerzungen
+   - Breitere und engere Begriffe (Hierarchie)
+   - Alternative Beschreibungen desselben Konzepts
+5. Die **Suchkarte** dokumentieren: Elemente, Begriffe und Beziehungen
 
 ```
-Search Map Example:
+Suchkarten-Beispiel:
 +------------------+-----------------------------------+-----------+
-| Element          | Search Terms                      | Priority  |
+| Element          | Suchbegriffe                      | Prioritaet|
 +------------------+-----------------------------------+-----------+
-| Attention layer  | attention mechanism, self-         | High      |
+| Attention layer  | attention mechanism, self-         | Hoch      |
 |                  | attention, multi-head attention    |           |
-| Sparse routing   | mixture of experts, sparse MoE,   | High      |
+| Sparse routing   | mixture of experts, sparse MoE,   | Hoch      |
 |                  | top-k routing, expert selection    |           |
-| Training method  | knowledge distillation, teacher-   | Medium    |
+| Training method  | knowledge distillation, teacher-   | Mittel    |
 |                  | student, progressive training      |           |
 +------------------+-----------------------------------+-----------+
 ```
 
-**Expected:** A complete decomposition with search terms for each element. The novel combination is identified — this is what the search must either find (to invalidate) or confirm is absent (to support novelty).
+**Erwartet:** Eine vollstaendige Zerlegung mit Suchbegriffen fuer jedes Element. Die neuartige Kombination ist identifiziert — danach muss die Recherche entweder suchen (zur Ungueltigmachung) oder deren Abwesenheit bestaetigen (zur Stuetzung der Neuheit).
 
-**On failure:** If the invention is too abstract to decompose, ask for a more specific description. If the claims are unclear, focus on the broadest reasonable interpretation of each claim element.
+**Bei Fehler:** Wenn die Erfindung zu abstrakt ist um sie zu zerlegen, eine spezifischere Beschreibung anfordern. Wenn die Ansprueche unklar sind, sich auf die breiteste vernuenftige Auslegung jedes Anspruchselements konzentrieren.
 
-### Step 2: Search Patent Literature
+### Schritt 2: Patentliteratur recherchieren
 
-Search patent databases systematically.
+Patentdatenbanken systematisch durchsuchen.
 
-1. Construct queries combining element terms:
-   - Search each element individually first (broad)
-   - Then combine elements to find closer art (narrow)
-   - Use classification codes to filter by technology area
-2. Search multiple databases:
-   - **Google Patents**: Good for full-text search, free, large corpus
-   - **USPTO PatFT/AppFT**: US patents and applications, official source
-   - **Espacenet**: European patents, excellent classification search
-   - **WIPO Patentscope**: PCT applications, global coverage
-3. Apply date filters:
-   - Prior art must predate the **critical date** (filing date or priority date)
-   - Include publications up to 1 year before filing (grace period varies by jurisdiction)
-4. For each relevant result, record:
-   - Document number, title, filing date, publication date
-   - Which elements it discloses (map to Search Map)
-   - Whether it discloses the novel combination
-5. Classify results by relevance:
-   - **X reference**: Discloses the invention alone (anticipation)
-   - **Y reference**: Discloses key elements, combinable with other references (obviousness)
-   - **A reference**: Background art, defines the general state of the art
+1. Abfragen aus Elementbegriffen konstruieren:
+   - Zuerst jedes Element einzeln suchen (breit)
+   - Dann Elemente kombinieren um naehere Treffer zu finden (eng)
+   - Klassifikationscodes verwenden um nach Technologiebereich zu filtern
+2. Mehrere Datenbanken durchsuchen:
+   - **Google Patents**: Gut fuer Volltextsuche, kostenlos, grosser Korpus
+   - **USPTO PatFT/AppFT**: US-Patente und -Anmeldungen, offizielle Quelle
+   - **Espacenet**: Europaeische Patente, ausgezeichnete Klassifikationssuche
+   - **WIPO Patentscope**: PCT-Anmeldungen, globale Abdeckung
+3. Datumsfilter anwenden:
+   - Stand der Technik muss dem **kritischen Datum** vorausgehen (Anmelde- oder Prioritaetsdatum)
+   - Publikationen bis 1 Jahr vor der Anmeldung einbeziehen (Neuheitsschonfrist variiert je nach Rechtsordnung)
+4. Fuer jedes relevante Ergebnis erfassen:
+   - Dokumentennummer, Titel, Anmeldedatum, Veroeffentlichungsdatum
+   - Welche Elemente es offenbart (auf Suchkarte abbilden)
+   - Ob es die neuartige Kombination offenbart
+5. Ergebnisse nach Relevanz klassifizieren:
+   - **X-Referenz**: Offenbart die Erfindung allein (Neuheitsschaedlichkeit)
+   - **Y-Referenz**: Offenbart Schluesselelemente, kombinierbar mit anderen Referenzen (Naheliegen)
+   - **A-Referenz**: Hintergrund, definiert den allgemeinen Stand der Technik
 
-**Expected:** A classified list of patent references mapped to the invention's elements. X references (if found) are showstoppers for novelty. Y references are the building blocks for obviousness arguments.
+**Erwartet:** Eine klassifizierte Liste von Patentreferenzen die den Erfindungselementen zugeordnet sind. X-Referenzen (falls gefunden) sind Showstopper fuer die Neuheit. Y-Referenzen sind die Bausteine fuer Naheliegen-Argumente.
 
-**On failure:** If no relevant patent art is found, this doesn't mean the invention is novel — non-patent literature (Step 3) may contain the critical reference. Absence in one database doesn't mean absence everywhere.
+**Bei Fehler:** Wenn kein relevanter Patentstand gefunden wird, bedeutet das nicht dass die Erfindung neuartig ist — Nichtpatentliteratur (Schritt 3) kann die entscheidende Referenz enthalten. Abwesenheit in einer Datenbank bedeutet nicht Abwesenheit ueberall.
 
-### Step 3: Search Non-Patent Literature
+### Schritt 3: Nichtpatentliteratur recherchieren
 
-Search academic papers, products, open source, and other non-patent disclosures.
+Wissenschaftliche Arbeiten, Produkte, Open Source und andere Nicht-Patent-Offenlegungen durchsuchen.
 
-1. **Academic literature**:
+1. **Wissenschaftliche Literatur**:
    - Google Scholar, arXiv, IEEE Xplore, ACM Digital Library
-   - Search using the same terms from Step 1
-   - Conference papers and workshop proceedings often predate patent filings
-2. **Products and commercial disclosures**:
-   - Product documentation, user manuals, marketing materials
-   - Internet Archive (Wayback Machine) for date-verified web content
-   - Trade publications and press releases
-3. **Open source and code**:
-   - GitHub, GitLab — search for implementations of the technical features
-   - README files, documentation, and commit histories for date evidence
-   - Software releases with version dates
-4. **Standards and specifications**:
-   - IEEE, IETF (RFCs), W3C, ISO standards
-   - Standards-essential patents must be disclosed; search standard bodies' IP databases
-5. **Defensive publications**:
+   - Mit denselben Begriffen aus Schritt 1 suchen
+   - Konferenzbeitraege und Workshop-Proceedings gehen Patentanmeldungen oft voraus
+2. **Produkte und kommerzielle Offenlegungen**:
+   - Produktdokumentation, Benutzerhandbuecher, Marketingmaterialien
+   - Internet Archive (Wayback Machine) fuer datumsverifizierte Webinhalte
+   - Fachpublikationen und Pressemitteilungen
+3. **Open Source und Code**:
+   - GitHub, GitLab — nach Implementierungen der technischen Merkmale suchen
+   - README-Dateien, Dokumentation und Commit-Historien fuer Datumsnachweise
+   - Software-Releases mit Versionsdaten
+4. **Standards und Spezifikationen**:
+   - IEEE, IETF (RFCs), W3C, ISO-Standards
+   - Standardessentielle Patente muessen offengelegt werden; IP-Datenbanken der Normungsorganisationen durchsuchen
+5. **Defensive Publikationen**:
    - IBM Technical Disclosure Bulletin
-   - Research Disclosure journal
+   - Research Disclosure Journal
    - IP.com Prior Art Database
-6. For each result, verify the **publication date** is before the critical date:
-   - Web pages: use Wayback Machine for date evidence
-   - Software: use release dates or commit timestamps
-   - Papers: use publication date, not submission date
+6. Fuer jedes Ergebnis das **Veroeffentlichungsdatum** vor dem kritischen Datum verifizieren:
+   - Webseiten: Wayback Machine fuer Datumsnachweise verwenden
+   - Software: Release-Daten oder Commit-Zeitstempel verwenden
+   - Arbeiten: Veroeffentlichungsdatum verwenden, nicht Einreichungsdatum
 
-**Expected:** Non-patent references that complement the patent search. Academic papers and open-source code are often the most powerful prior art because they tend to describe technical details more explicitly than patents.
+**Erwartet:** Nicht-Patent-Referenzen die die Patentrecherche ergaenzen. Wissenschaftliche Arbeiten und Open-Source-Code sind oft der wirkungsvollste Stand der Technik, da sie technische Details tendenziell expliziter beschreiben als Patente.
 
-**On failure:** If non-patent literature is sparse, the technology may be primarily developed in corporate R&D (patent-heavy). Shift emphasis to patent literature and focus on the combination-based obviousness argument.
+**Bei Fehler:** Wenn Nichtpatentliteratur duenn ist, wird die Technologie moeglicherweise hauptsaechlich in der Unternehmens-F&E entwickelt (patentlastig). Den Schwerpunkt auf Patentliteratur verlagern und sich auf das kombinationsbasierte Naheliegen-Argument konzentrieren.
 
-### Step 4: Analyze and Map Results
+### Schritt 4: Ergebnisse analysieren und zuordnen
 
-Evaluate how the collected prior art relates to the invention.
+Bewerten wie der gesammelte Stand der Technik sich zur Erfindung verhaelt.
 
-1. Create a **claim chart** mapping prior art to invention elements:
+1. Eine **Anspruchskarte** erstellen die Stand der Technik den Erfindungselementen zuordnet:
 
 ```
-Claim Element vs. Prior Art Matrix:
+Anspruchselement vs. Stand-der-Technik-Matrix:
 +------------------+--------+--------+--------+--------+
 | Element          | Ref #1 | Ref #2 | Ref #3 | Ref #4 |
 +------------------+--------+--------+--------+--------+
 | Element A        |   X    |   X    |        |   X    |
 | Element B        |        |   X    |   X    |        |
 | Element C        |   X    |        |   X    |        |
-| Novel combo A+B+C|        |        |        |        |
+| Neuartige Komb.  |        |        |        |        |
+| A+B+C            |        |        |        |        |
 +------------------+--------+--------+--------+--------+
-X = element disclosed in this reference
+X = Element in dieser Referenz offenbart
 ```
 
-2. Assess **novelty**: Does any single reference disclose all elements?
-   - If yes → invention is anticipated (not novel)
-   - If no → invention may be novel (proceed to obviousness)
-3. Assess **obviousness**: Can a small number of references (2-3) be combined to cover all elements?
-   - Is there motivation to combine? (would a skilled person see a reason to combine these?)
-   - Do the references teach away from the combination? (suggest it wouldn't work?)
-4. For **FTO searches**: Does the prior art narrow the blocking patent's claims?
-   - Prior art that overlaps with the blocking patent's claims limits their enforceable scope
-5. Document the analysis clearly with citation to specific passages
+2. **Neuheit** bewerten: Offenbart eine einzelne Referenz alle Elemente?
+   - Falls ja -> Erfindung ist vorweggenommen (nicht neuartig)
+   - Falls nein -> Erfindung kann neuartig sein (weiter mit Naheliegen)
+3. **Naheliegen** bewerten: Kann eine kleine Anzahl von Referenzen (2-3) kombiniert werden um alle Elemente abzudecken?
+   - Gibt es eine Motivation zur Kombination? (wuerde ein Fachmann einen Grund sehen diese zu kombinieren?)
+   - Lehren die Referenzen von der Kombination weg? (legen nahe dass sie nicht funktionieren wuerde?)
+4. Fuer **FTO-Recherchen**: Schraenkt der Stand der Technik die Ansprueche des blockierenden Patents ein?
+   - Stand der Technik der sich mit den Anspruechen des blockierenden Patents ueberschneidet begrenzt deren durchsetzbaren Schutzumfang
+5. Die Analyse klar mit Verweis auf spezifische Passagen dokumentieren
 
-**Expected:** A clear claim chart showing which elements are covered by which references, with an assessment of novelty and obviousness. Each mapping cites specific passages or figures in the references.
+**Erwartet:** Eine klare Anspruchskarte die zeigt welche Elemente von welchen Referenzen abgedeckt werden, mit einer Bewertung von Neuheit und Naheliegen. Jede Zuordnung zitiert spezifische Passagen oder Figuren in den Referenzen.
 
-**On failure:** If the claim chart shows gaps (elements not found in any prior art), those gaps represent the potentially novel aspects. Focus follow-up searches on those specific gaps.
+**Bei Fehler:** Wenn die Anspruchskarte Luecken zeigt (Elemente in keinem Stand der Technik gefunden), stellen diese Luecken die potenziell neuartigen Aspekte dar. Nachfolgende Recherchen auf diese spezifischen Luecken konzentrieren.
 
-### Step 5: Document and Deliver
+### Schritt 5: Dokumentieren und liefern
 
-Package the search results for their intended use.
+Die Rechercheergebnisse fuer ihren beabsichtigten Zweck aufbereiten.
 
-1. Write the **Prior Art Search Report**:
-   - Purpose and scope of the search
-   - Search methodology (databases, queries, date ranges)
-   - Results summary (number of references found, classification breakdown)
-   - Top references with detailed analysis (claim charts)
-   - Assessment: novelty, obviousness, and FTO implications
-   - Limitations and recommendations for further search
-2. Organize references:
-   - Sorted by relevance (X references first, then Y, then A)
-   - Each reference with full bibliographic data and access link
-   - Key passages highlighted or extracted
-3. Recommendations based on search purpose:
-   - **Patentability**: File/don't file, suggested claim scope based on prior art gaps
-   - **Invalidity**: Strongest combination of references, suggested legal argument
-   - **FTO**: Risk level, design-around opportunities, licensing considerations
-   - **Defensive**: Whether to publish as defensive disclosure based on white space found
+1. Den **Stand-der-Technik-Recherchebericht** verfassen:
+   - Zweck und Umfang der Recherche
+   - Recherchemethodik (Datenbanken, Abfragen, Zeitraeume)
+   - Ergebniszusammenfassung (Anzahl gefundener Referenzen, Klassifikationsaufschluesselung)
+   - Top-Referenzen mit detaillierter Analyse (Anspruchskarten)
+   - Bewertung: Neuheit, Naheliegen und FTO-Implikationen
+   - Einschraenkungen und Empfehlungen fuer weitere Recherche
+2. Referenzen organisieren:
+   - Nach Relevanz sortiert (X-Referenzen zuerst, dann Y, dann A)
+   - Jede Referenz mit vollstaendigen bibliographischen Daten und Zugangslink
+   - Schluesselpassagen hervorgehoben oder extrahiert
+3. Empfehlungen basierend auf dem Recherchezweck:
+   - **Patentierbarkeit**: Anmelden/nicht anmelden, vorgeschlagener Anspruchsumfang basierend auf Luecken im Stand der Technik
+   - **Ungueltigmachung**: Staerkste Kombination von Referenzen, vorgeschlagene rechtliche Argumentation
+   - **FTO**: Risikoniveau, Design-Around-Moeglichkeiten, Lizenzierungsueberlegungen
+   - **Defensiv**: Ob als defensive Publikation veroeffentlicht werden soll basierend auf gefundenem Freiraum
 
-**Expected:** A complete, well-organized search report that directly supports the intended decision. References are accessible and analysis is traceable.
+**Erwartet:** Ein vollstaendiger, gut organisierter Recherchebericht der die beabsichtigte Entscheidung direkt unterstuetzt. Referenzen sind zugaenglich und die Analyse ist nachvollziehbar.
 
-**On failure:** If the search is inconclusive (no strong X or Y references, but some relevant background), state the conclusion clearly: "No anticipatory art found; closest art addresses elements A and B but not C. Recommend filing with claims emphasizing element C." Inconclusive is a valid and useful result.
+**Bei Fehler:** Wenn die Recherche nicht eindeutig ist (keine starken X- oder Y-Referenzen, aber etwas relevanter Hintergrund), die Schlussfolgerung klar formulieren: "Kein neuheitsschaedlicher Stand der Technik gefunden; naechster Stand adressiert Elemente A und B aber nicht C. Anmeldung mit Anspruechen empfohlen die Element C betonen." Nicht eindeutig ist ein gueltiges und nuetzliches Ergebnis.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Invention decomposed into distinct searchable elements
-- [ ] Novel combination explicitly identified
-- [ ] Patent databases searched (minimum 2 databases)
-- [ ] Non-patent literature searched (academic + products + open source)
-- [ ] All references predate the critical date (dates verified)
-- [ ] Claim chart maps elements to references with passage citations
-- [ ] Novelty and obviousness assessed with reasoning
-- [ ] Results classified by relevance (X, Y, A references)
-- [ ] Report includes methodology, limitations, and recommendations
-- [ ] Search is reproducible (queries and databases documented)
+- [ ] Erfindung in eigenstaendige durchsuchbare Elemente zerlegt
+- [ ] Neuartige Kombination explizit identifiziert
+- [ ] Patentdatenbanken durchsucht (mindestens 2 Datenbanken)
+- [ ] Nichtpatentliteratur durchsucht (wissenschaftlich + Produkte + Open Source)
+- [ ] Alle Referenzen liegen vor dem kritischen Datum (Daten verifiziert)
+- [ ] Anspruchskarte ordnet Elemente Referenzen mit Passagenzitaten zu
+- [ ] Neuheit und Naheliegen mit Begruendung bewertet
+- [ ] Ergebnisse nach Relevanz klassifiziert (X-, Y-, A-Referenzen)
+- [ ] Bericht enthaelt Methodik, Einschraenkungen und Empfehlungen
+- [ ] Recherche ist reproduzierbar (Abfragen und Datenbanken dokumentiert)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Keyword tunnel vision**: Searching only exact terms misses synonyms and alternative descriptions. Use the term hierarchy from Step 1
-- **Patent-only search**: Non-patent literature (papers, products, code) is often more explicit than patents. Don't skip Step 3
-- **Date carelessness**: Prior art must predate the critical date. A brilliant reference from one day after the filing date is worthless
-- **Ignoring foreign language art**: Major inventions may first appear in Chinese, Japanese, Korean, or German patent literature. Machine translation makes these searchable
-- **Confirmation bias**: Searching to confirm novelty rather than searching to find invalidating art. The best search tries hardest to find the closest art
-- **Stopping too early**: The first few results are rarely the best. Iterate search terms based on what early results reveal about the field's vocabulary
+- **Stichworttunnelblick**: Nur exakte Begriffe suchen uebersieht Synonyme und alternative Beschreibungen. Die Begriffshierarchie aus Schritt 1 verwenden
+- **Nur-Patent-Recherche**: Nichtpatentliteratur (Arbeiten, Produkte, Code) ist oft expliziter als Patente. Schritt 3 nicht ueberspringen
+- **Datumsnachlaessigkeit**: Stand der Technik muss dem kritischen Datum vorausgehen. Eine brillante Referenz von einem Tag nach dem Anmeldedatum ist wertlos
+- **Fremdsprachigen Stand der Technik ignorieren**: Bedeutende Erfindungen erscheinen moeglicherweise zuerst in chinesischer, japanischer, koreanischer oder deutscher Patentliteratur. Maschinelle Uebersetzung macht diese durchsuchbar
+- **Bestaetigungsfehler**: Recherchieren um Neuheit zu bestaetigen statt zu suchen um entkraeftenden Stand der Technik zu finden. Die beste Recherche versucht am haertesten den naechsten Stand der Technik zu finden
+- **Zu frueh aufhoeren**: Die ersten Ergebnisse sind selten die besten. Suchbegriffe basierend auf dem iterieren was fruehe Ergebnisse ueber den Fachwortschatz des Gebiets offenbaren
 
-## Related Skills
+## Verwandte Skills
 
-- `assess-ip-landscape` — Broader landscape mapping that contextualizes specific prior art searches
-- `review-research` — Literature review methodology overlaps significantly with prior art search
-- `security-audit-codebase` — Systematic search methodology parallels (thoroughness, documentation, reproducibility)
+- `assess-ip-landscape` — Breitere Landschaftskartierung die spezifische Stand-der-Technik-Recherchen kontextualisiert
+- `review-research` — Literaturrecherche-Methodik ueberschneidet sich erheblich mit Stand-der-Technik-Recherche
+- `security-audit-codebase` — Systematische Suchmethodik parallelt (Gruendlichkeit, Dokumentation, Reproduzierbarkeit)

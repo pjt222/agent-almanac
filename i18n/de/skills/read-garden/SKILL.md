@@ -1,14 +1,21 @@
 ---
 name: read-garden
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Observe and assess a garden using a structured sensory protocol adapted from
-  Coordinate Remote Viewing. Covers pre-entry clearing (meditate checkpoint),
-  Stage I gestalt impression, Stage II sensory layer (leaf, stem, root, soil),
-  Stage III pattern recognition with AOL management, and garden health triage
-  matrix (heal checkpoint). Use before any intervention, when plants show stress
-  symptoms, at seasonal transitions, when evaluating a new garden site, during
-  regular health monitoring, or after extreme weather events such as frost or
-  heat waves.
+  Einen Garten mittels eines strukturierten sensorischen Protokolls beobachten
+  und bewerten, adaptiert von Coordinate Remote Viewing. Umfasst
+  Vor-Eingangs-Klaerung (Meditate-Checkpoint), Stufe-I-Gesamteindruck,
+  Stufe-II-Sinnesschicht (Blatt, Stiel, Wurzel, Boden),
+  Stufe-III-Mustererkennung mit AOL-Management und Gartengesundheits-
+  Triagematrix (Heal-Checkpoint). Anwenden vor jeder Intervention, wenn
+  Pflanzen Stresssymptome zeigen, bei saisonalen Uebergaengen, bei der
+  Bewertung eines neuen Gartenstandorts, waehrend regelmaessiger
+  Gesundheitsueberwachung oder nach extremen Wetterereignissen wie Frost
+  oder Hitzewellen.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -18,294 +25,330 @@ metadata:
   complexity: intermediate
   language: natural
   tags: gardening, observation, diagnosis, assessment, plant-health, CRV-adapted
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Garten lesen
 
-Observe and assess a garden using a structured sensory protocol before making any intervention decisions.
+Einen Garten mittels eines strukturierten sensorischen Protokolls beobachten und bewerten, bevor Interventionsentscheidungen getroffen werden.
 
-## When to Use
+## Wann verwenden
 
-- Before any intervention — read the garden first, act second
-- Plants are showing stress symptoms (yellowing, wilting, curling, spots)
-- Seasonal transitions (spring wakeup, autumn decline) need assessment
-- New garden site evaluation before planting
-- Regular (weekly or biweekly) garden health monitoring
-- After extreme weather events (frost, heat wave, heavy rain)
+- Vor jeder Intervention — zuerst den Garten lesen, dann handeln
+- Pflanzen zeigen Stresssymptome (Vergilben, Welken, Einrollen, Flecken)
+- Saisonale Uebergaenge (Fruehlingserwachen, Herbstniedergang) erfordern Bewertung
+- Bewertung eines neuen Gartenstandorts vor dem Pflanzen
+- Regelmaessige (woechentliche oder zweiwoechentliche) Gartengesundheitsueberwachung
+- Nach extremen Wetterereignissen (Frost, Hitzewelle, Starkregen)
 
-## Inputs
+## Eingaben
 
-- **Required**: Physical access to the garden
-- **Required**: Garden journal or notebook for recording observations
-- **Optional**: Previous observation records for comparison
-- **Optional**: Soil thermometer, pH test strips, moisture meter
-- **Optional**: Hand lens or magnifying glass (for pest/disease identification)
+- **Erforderlich**: Physischer Zugang zum Garten
+- **Erforderlich**: Gartentagebuch oder Notizbuch zum Festhalten der Beobachtungen
+- **Optional**: Fruehere Beobachtungsaufzeichnungen zum Vergleich
+- **Optional**: Bodenthermometer, pH-Teststreifen, Feuchtigkeitsmessgeraet
+- **Optional**: Handlupe oder Vergroesserungsglas (fuer Schaedlings-/Krankheitsbestimmung)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Meditate Checkpoint — Pre-Entry Clearing
+### Schritt 1: Meditate-Checkpoint — Vor-Eingangs-Klaerung
 
-Before entering the garden for assessment, clear preconceptions.
-
-```
-Pre-Garden Clearing (3-5 minutes):
-1. Stand at the garden's edge — do not enter yet
-2. Take three slow breaths (inhale 4 counts, exhale 6 counts)
-3. Set aside what you expect to find:
-   - "I think the tomatoes need water" → Set aside
-   - "That pest spray probably didn't work" → Set aside
-   - "The lettuce should be ready by now" → Set aside
-4. Adopt the observer's stance: you are here to receive information,
-   not confirm hypotheses
-5. Let your eyes soften — peripheral vision, not focused scanning
-6. When you feel neutral and receptive, enter the garden
-
-Why this matters:
-Gardeners who enter with a diagnosis in mind see confirmation
-everywhere and miss what the garden is actually showing them.
-Observation before interpretation is the foundation of good practice.
-```
-
-**Expected:** A calm, receptive state free from preconceptions about what you will find.
-
-**On failure:** If you cannot release expectations (strong anxiety about a specific plant, frustration from recent losses), acknowledge the emotion, write it down as "AOL: [concern]", and proceed. Naming it reduces its influence.
-
-### Step 2: Stage I — Gestalt Impression
-
-Walk the garden perimeter. Record your first, unfiltered impression.
+Vor dem Betreten des Gartens zur Bewertung Vorurteile abstreifen.
 
 ```
-Gestalt Protocol:
-1. Walk slowly around the entire garden boundary
-2. Do NOT examine individual plants yet — take in the whole
-3. Record your impression using only these categories:
-   - Overall vigour: thriving / stable / declining
-   - Dominant colour tone: deep green / pale / mixed / yellowing
-   - Density: lush / adequate / sparse / bare patches
-   - Energy: (subjective) vibrant / calm / tired / distressed
-4. Note what draws your eye first — this is often the loudest signal
-5. Record ambient conditions: temperature, wind, sky, soil moisture
-   (visual), recent weather
+Vor-Garten-Klaerung (3-5 Minuten):
+1. Am Gartenrand stehen — noch nicht eintreten
+2. Drei langsame Atemzuege nehmen (4 Zaehler einatmen, 6 Zaehler
+   ausatmen)
+3. Erwartungen beiseitelegen:
+   - "Die Tomaten brauchen bestimmt Wasser" -> Beiseitelegen
+   - "Das Schaedlingsspray hat wahrscheinlich nicht gewirkt" ->
+     Beiseitelegen
+   - "Der Salat muesste jetzt fertig sein" -> Beiseitelegen
+4. Die Beobachterhaltung einnehmen: hier sein um Informationen zu
+   empfangen, nicht um Hypothesen zu bestaetigen
+5. Die Augen weich werden lassen — peripheres Sehen, nicht
+   fokussiertes Scannen
+6. Wenn ein neutraler und empfaenglicher Zustand erreicht ist,
+   den Garten betreten
 
-Example Gestalt Record:
-  Date: 2026-04-15, 9:30am, 14°C, overcast, light rain yesterday
-  Overall: Stable, but northeast corner looks depleted
-  Colour: Mixed — good green on brassicas, pale on tomato starts
-  Density: Adequate except herb bed (sparse)
-  Energy: Calm, not vibrant — spring is slow this year
-  Eye drawn to: Wilting squash transplants (row 3)
+Warum das wichtig ist:
+Gaertner die mit einer Diagnose im Kopf eintreten sehen ueberall
+Bestaetigung und uebersehen was der Garten tatsaechlich zeigt.
+Beobachtung vor Interpretation ist die Grundlage guter Praxis.
 ```
 
-**Expected:** A brief, holistic record of the garden's state without analysis or diagnosis.
+**Erwartet:** Ein ruhiger, empfaenglicher Zustand frei von Vorurteilen ueber das was gefunden werden wird.
 
-**On failure:** If you immediately start diagnosing (e.g., "the squash is wilting because..."), write "AOL: [diagnosis]" and return to pure observation. Analysis comes in Stage III.
+**Bei Fehler:** Wenn Erwartungen nicht losgelassen werden koennen (starke Angst um eine bestimmte Pflanze, Frust ueber juengste Verluste), die Emotion anerkennen, als "AOL: [Sorge]" aufschreiben und fortfahren. Das Benennen reduziert den Einfluss.
 
-### Step 3: Stage II — Sensory Layer
+### Schritt 2: Stufe I — Gesamteindruck
 
-Now move through the garden bed by bed. Engage all senses for each area.
-
-```
-Sensory Observation Protocol (per bed or zone):
-
-LEAF LANGUAGE:
-- Colour: Deep green, pale green, yellowing, purpling, browning
-  - Yellowing (chlorosis): general = nitrogen, interveinal = iron/manganese
-  - Purpling: phosphorus deficiency or cold stress
-  - Browning: tip burn = salt/fertilizer, edge burn = potassium
-- Curl direction:
-  - Upward: heat stress, drought, herbicide exposure
-  - Downward: overwatering, root damage
-  - Inward (cupping): virus, mite damage
-- Surface: Smooth, rough, sticky (aphid honeydew), powdery (mildew), spotted
-- Underside: Check for eggs, mites (tiny dots), early mildew
-
-STEM AND STRUCTURE:
-- Strength: Upright and sturdy vs. leaning or lodged
-- Colour: Normal woody/green vs. blackening (rot) or pale (etiolation)
-- Flexibility: Supple (healthy) vs. brittle (dehydrated) vs. mushy (disease)
-- Growth pattern: Normal internodes vs. elongated (light-seeking)
-
-ROOT SIGNALS (check at soil line and during transplant):
-- Colour: White/cream (healthy), brown/black (rot), orange (rust fungus)
-- Smell: Earthy (healthy), sour/sulphurous (anaerobic rot)
-- Structure: Fibrous network (good) vs. circling (pot-bound) vs. sparse (stress)
-
-SOIL AT THE PLANT:
-- Moisture: Dry and cracked / moist and dark / waterlogged and gleaming
-- Surface: Mulched / bare / crusted / mossy / algae-covered
-- Smell: Sweet and earthy (good) / sour (anaerobic) / musty (fungal)
-- Inhabitants: Earthworms, beetles, spiders (good) / slugs, ants farming aphids (concerning)
-
-Record each observation as a sensory descriptor — no analysis yet.
-Wrong: "The tomatoes have early blight"
-Right: "Tomato lower leaves: brown spots, concentric rings, yellowing around spots"
-```
-
-**Expected:** A detailed sensory record for each bed or zone, using descriptive language only.
-
-**On failure:** If you catch yourself diagnosing (naming a disease, blaming a pest), write "AOL: [diagnosis]" and return to raw observation. The name comes later — the data comes first.
-
-### Step 4: Stage III — Pattern Recognition
-
-Now, and only now, begin connecting observations to patterns.
+Den Gartenrand ablaufen. Den ersten, ungefilterten Eindruck festhalten.
 
 ```
-Pattern Analysis Protocol:
-1. Review your Stage II notes for each bed
-2. Ask these structured questions:
+Gesamteindrucks-Protokoll:
+1. Langsam die gesamte Gartengrenze ablaufen
+2. Einzelne Pflanzen noch NICHT untersuchen — das Ganze aufnehmen
+3. Den Eindruck nur mit diesen Kategorien festhalten:
+   - Gesamtvitalitaet: gedeihend / stabil / ruecklaeufig
+   - Dominanter Farbton: tiefgruen / blass / gemischt / vergilbend
+   - Dichte: ueppig / angemessen / duenn / kahle Stellen
+   - Energie: (subjektiv) lebendig / ruhig / muede / gestresst
+4. Notieren was zuerst ins Auge faellt — das ist oft das lauteste
+   Signal
+5. Umgebungsbedingungen festhalten: Temperatur, Wind, Himmel,
+   Bodenfeuchtigkeit (visuell), juengstes Wetter
 
-   SPATIAL:
-   - Are symptoms localized (one plant, one bed) or systemic (whole garden)?
-   - Is there a gradient? (Worse near a fence = shade; worse near path = compaction)
-   - Are only certain species affected? (Host-specific = disease; all species = environmental)
+Beispiel-Gesamteindruck:
+  Datum: 17.04.2026, 9:30 Uhr, 14°C, bewoelkt, leichter Regen gestern
+  Gesamt: Stabil, aber Nordostecke wirkt erschoepft
+  Farbe: Gemischt — gutes Gruen bei Kohlgewaechsen, blass bei
+         Tomatensetzlingen
+  Dichte: Angemessen ausser Kraeuterbeet (duenn)
+  Energie: Ruhig, nicht lebendig — der Fruehling ist langsam
+  Blick faellt auf: Welkende Kuerbissetzlinge (Reihe 3)
+```
 
-   TEMPORAL:
-   - Is this new growth or old growth?
-     - New growth affected: nutrient deficiency (can't build new tissue)
-     - Old growth affected: mobile nutrient being relocated, or infection spreading
-   - Did symptoms appear suddenly (weather event, application) or gradually (chronic condition)?
+**Erwartet:** Eine knappe, ganzheitliche Aufzeichnung des Gartenzustands ohne Analyse oder Diagnose.
+
+**Bei Fehler:** Wenn sofort Diagnosen gestellt werden (z.B. "der Kuerbis welkt weil..."), "AOL: [Diagnose]" schreiben und zur reinen Beobachtung zurueckkehren. Die Analyse kommt in Stufe III.
+
+### Schritt 3: Stufe II — Sinnesschicht
+
+Jetzt den Garten Beet fuer Beet durchgehen. Alle Sinne fuer jeden Bereich einsetzen.
+
+```
+Sensorisches Beobachtungsprotokoll (pro Beet oder Zone):
+
+BLATTSPRACHE:
+- Farbe: Tiefgruen, blassgruen, vergilbend, violett, braeunend
+  - Vergilbung (Chlorose): allgemein = Stickstoff,
+    interkostal = Eisen/Mangan
+  - Violettfaerbung: Phosphormangel oder Kaeltestress
+  - Braeunung: Spitzenbrand = Salz/Duenger,
+    Randbrand = Kalium
+- Rollrichtung:
+  - Aufwaerts: Hitzestress, Trockenheit, Herbizidexposition
+  - Abwaerts: Ueberwaesserung, Wurzelschaeden
+  - Einwaerts (Schalenbildung): Virus, Milbenbefall
+- Oberflaeche: Glatt, rau, klebrig (Blattlaushonigtau),
+  pudrig (Mehltau), gefleckt
+- Unterseite: Auf Eier, Milben (winzige Punkte), fruehen
+  Mehltau pruefen
+
+STIEL UND STRUKTUR:
+- Staerke: Aufrecht und kraeftig vs. geneigt oder umgeknickt
+- Farbe: Normal holzig/gruen vs. schwaerzend (Faeule) oder
+  blass (Vergeilung)
+- Biegsamkeit: Geschmeidig (gesund) vs. sproede (dehydriert)
+  vs. matschig (Krankheit)
+- Wuchsmuster: Normale Internodien vs. verlaengert
+  (Lichtsuche)
+
+WURZELSIGNALE (am Bodenansatz und beim Umpflanzen pruefen):
+- Farbe: Weiss/creme (gesund), braun/schwarz (Faeule),
+  orange (Rostpilz)
+- Geruch: Erdig (gesund), sauer/schweflig (anaerobe Faeule)
+- Struktur: Faseriges Netzwerk (gut) vs. kreisend (topfgebunden)
+  vs. spärlich (Stress)
+
+BODEN AN DER PFLANZE:
+- Feuchtigkeit: Trocken und rissig / feucht und dunkel /
+  staunass und glaenzend
+- Oberflaeche: Gemulcht / kahl / verkrustet / bemoost /
+  algenbedeckt
+- Geruch: Suess und erdig (gut) / sauer (anaerob) /
+  muffig (Pilz)
+- Bewohner: Regenwuermer, Kaefer, Spinnen (gut) / Schnecken,
+  Ameisen die Blattlaeuse halten (bedenklich)
+
+Jede Beobachtung als sensorischen Deskriptor festhalten —
+noch keine Analyse.
+Falsch: "Die Tomaten haben Duerre-Fleckenkrankheit"
+Richtig: "Tomate untere Blaetter: braune Flecken, konzentrische
+         Ringe, Vergilbung um die Flecken"
+```
+
+**Erwartet:** Eine detaillierte sensorische Aufzeichnung fuer jedes Beet oder jede Zone, nur in beschreibender Sprache.
+
+**Bei Fehler:** Wenn eine Diagnose ertappt wird (eine Krankheit benennen, einen Schaedling beschuldigen), "AOL: [Diagnose]" schreiben und zur Rohbeobachtung zurueckkehren. Der Name kommt spaeter — die Daten kommen zuerst.
+
+### Schritt 4: Stufe III — Mustererkennung
+
+Jetzt, und erst jetzt, Beobachtungen mit Mustern verbinden.
+
+```
+Musteranalyse-Protokoll:
+1. Die Stufe-II-Notizen fuer jedes Beet durchgehen
+2. Diese strukturierten Fragen stellen:
+
+   RAEUMLICH:
+   - Sind Symptome lokal (eine Pflanze, ein Beet) oder
+     systemisch (ganzer Garten)?
+   - Gibt es einen Gradienten? (Schlimmer nahe Zaun = Schatten;
+     schlimmer nahe Weg = Verdichtung)
+   - Sind nur bestimmte Arten betroffen? (Wirtsspezifisch =
+     Krankheit; alle Arten = Umwelt)
+
+   ZEITLICH:
+   - Ist es Neuwuchs oder Altwuchs?
+     - Neuwuchs betroffen: Naehrstoffmangel (kann neues Gewebe
+       nicht aufbauen)
+     - Altwuchs betroffen: Mobiler Naehrstoff wird verlagert,
+       oder Infektion breitet sich aus
+   - Traten Symptome ploetzlich auf (Wetterereignis, Ausbringung)
+     oder allmaehlich (chronischer Zustand)?
 
    POPULATION:
-   - One plant: likely individual issue (root damage, transplant shock)
-   - One species: likely species-specific (disease, pest preference)
-   - All plants: likely environmental (soil, water, weather)
+   - Eine Pflanze: wahrscheinlich individuelles Problem
+     (Wurzelschaden, Pflanzschock)
+   - Eine Art: wahrscheinlich artspezifisch (Krankheit,
+     Schaedlingspraeferenz)
+   - Alle Pflanzen: wahrscheinlich umweltbedingt (Boden, Wasser,
+     Wetter)
 
-3. Cross-reference with Five Indicators (leaf, stem, root, soil, phenology):
-   - Do multiple indicators point to the same cause?
-   - Convergent signals = higher confidence diagnosis
-   - Contradictory signals = more observation needed
+3. Mit den Fuenf Indikatoren (Blatt, Stiel, Wurzel, Boden,
+   Phaenologie) abgleichen:
+   - Deuten mehrere Indikatoren auf dieselbe Ursache?
+   - Konvergente Signale = hoehere Diagnosekonfdenz
+   - Widerspruechliche Signale = mehr Beobachtung noetig
 
-AOL Management:
-If your mind jumps to a conclusion before the pattern analysis is complete:
-- Write "AOL: [conclusion]" on a separate line
-- Do NOT act on it yet
-- Return to the data
-- If the same conclusion re-emerges from multiple independent observations,
-  it graduates from AOL to tentative diagnosis
-- A tentative diagnosis is still not action — it's a hypothesis to test
+AOL-Management:
+Wenn der Verstand zu einer Schlussfolgerung springt bevor die
+Musteranalyse abgeschlossen ist:
+- "AOL: [Schlussfolgerung]" auf eine separate Zeile schreiben
+- NICHT danach handeln
+- Zu den Daten zurueckkehren
+- Wenn dieselbe Schlussfolgerung aus mehreren unabhaengigen
+  Beobachtungen wieder auftaucht, steigt sie vom AOL zur
+  vorlaeufigen Diagnose auf
+- Eine vorlaeufige Diagnose ist noch keine Handlung — sie ist
+  eine zu testende Hypothese
 
-Distinguish:
-- Premature label (low evidence, high confidence) → dangerous
-- Convergent conclusion (high evidence, proportional confidence) → actionable
+Unterscheiden:
+- Voreiliges Etikett (wenig Evidenz, hohe Zuversicht) -> gefaehrlich
+- Konvergente Schlussfolgerung (viel Evidenz, proportionale
+  Zuversicht) -> handlungsfaehig
 ```
 
-**Expected:** One or more tentative diagnoses supported by multiple independent observations.
+**Erwartet:** Eine oder mehrere vorlaeufige Diagnosen die durch mehrere unabhaengige Beobachtungen gesteuert werden.
 
-**On failure:** If no clear pattern emerges, the garden may be healthy (not everything is a problem) or the signals may be too early to read. Record observations and reassess in one week. Time often clarifies what a single visit cannot.
+**Bei Fehler:** Wenn kein klares Muster erkennbar wird, ist der Garten moeglicherweise gesund (nicht alles ist ein Problem) oder die Signale sind zu frueh zum Lesen. Beobachtungen festhalten und in einer Woche neu bewerten. Zeit klaert oft was ein einzelner Besuch nicht klaeren kann.
 
-### Step 5: Heal Checkpoint — Garden Health Triage
+### Schritt 5: Heal-Checkpoint — Gartengesundheits-Triage
 
-Convert your observations into a prioritized action plan.
+Beobachtungen in einen priorisierten Aktionsplan umwandeln.
 
 ```
-Garden Health Triage Matrix:
+Gartengesundheits-Triagematrix:
 ┌──────────┬──────────────────────────┬─────────────────────────────┐
-│ Priority │ Criteria                 │ Example Actions             │
+│ Priorit. │ Kriterien                │ Beispielaktionen            │
 ├──────────┼──────────────────────────┼─────────────────────────────┤
-│ TODAY    │ Actively dying, wilting  │ Deep water. Emergency shade.│
-│ (Red)    │ severely, pest           │ Hand-remove pests. Support  │
-│          │ infestation visible      │ lodged stems.               │
+│ HEUTE    │ Stirbt aktiv, welkt      │ Tiefwaessern. Notbeschat-   │
+│ (Rot)    │ stark, Schaedlingsbefall │ tung. Schaedlinge per Hand  │
+│          │ sichtbar                 │ entfernen. Umgeknickte       │
+│          │                          │ Stiele stuetzen.             │
 ├──────────┼──────────────────────────┼─────────────────────────────┤
-│ THIS     │ Declining but stable,    │ Feed (compost tea or foliar │
-│ WEEK     │ nutrient deficiency      │ seaweed). Mulch bare soil.  │
-│ (Amber)  │ symptoms, early disease  │ Improve drainage. Prune     │
-│          │ signs                    │ affected foliage.           │
+│ DIESE    │ Ruecklaeufig aber stabil,│ Fuettern (Komposttee oder   │
+│ WOCHE    │ Naehrstoffmangel-        │ Blatt-Seetang). Kahlen      │
+│ (Gelb)   │ symptome, fruehe         │ Boden mulchen. Draenung     │
+│          │ Krankheitszeichen        │ verbessern. Betroffenes      │
+│          │                          │ Laub beschneiden.            │
 ├──────────┼──────────────────────────┼─────────────────────────────┤
-│ WATCH    │ Subtle changes, early    │ Record in journal. Reassess │
-│ (Green)  │ signs that may resolve   │ in 1 week. Take photos for  │
-│          │ naturally, seasonal      │ comparison. Do NOT          │
-│          │ transitions              │ intervene yet.              │
+│ BEOBACH- │ Subtile Veraenderungen,  │ Im Tagebuch festhalten. In  │
+│ TEN      │ fruehe Anzeichen die     │ 1 Woche neu bewerten. Fotos │
+│ (Gruen)  │ sich natuerlich loesen   │ zum Vergleich machen. NOCH  │
+│          │ koennen, saisonale       │ NICHT eingreifen.            │
+│          │ Uebergaenge              │                              │
 ├──────────┼──────────────────────────┼─────────────────────────────┤
-│ HEALTHY  │ No issues observed,      │ Appreciate. Continue        │
-│ (Blue)   │ vigorous growth, good    │ current care. Note what's   │
-│          │ colour, active biology   │ working for future seasons. │
+│ GESUND   │ Keine Probleme           │ Wertschaetzen. Aktuelle      │
+│ (Blau)   │ beobachtet, kraeftiger   │ Pflege fortsetzen. Notieren  │
+│          │ Wuchs, gute Farbe,       │ was funktioniert fuer        │
+│          │ aktive Biologie          │ kuenftige Saisons.           │
 └──────────┴──────────────────────────┴─────────────────────────────┘
 
-Triage Rules:
-1. Address RED items immediately — everything else can wait
-2. Address AMBER items this week — schedule specific days
-3. GREEN items: observe only. Most "watch" items resolve themselves.
-   The most common gardener error is treating green items as amber
-4. BLUE items: actively note what's working — these are your successes
-5. Never address more than 2 priorities per garden visit
-   (doing too many things at once means doing nothing well)
+Triageregeln:
+1. ROTE Punkte sofort angehen — alles andere kann warten
+2. GELBE Punkte diese Woche angehen — bestimmte Tage einplanen
+3. GRUENE Punkte: nur beobachten. Die meisten "Beobachtungs"-
+   Punkte loesen sich von selbst. Der haeufigste Gaertnerfehler
+   ist gruene Punkte als gelbe zu behandeln
+4. BLAUE Punkte: aktiv notieren was funktioniert — das sind die
+   Erfolge
+5. Nie mehr als 2 Prioritaeten pro Gartenbesuch angehen
+   (zu viel auf einmal heisst nichts richtig machen)
 ```
 
-**Expected:** A triaged action list with clear priorities and timeline.
+**Erwartet:** Eine triagierte Aktionsliste mit klaren Prioritaeten und Zeitplan.
 
-**On failure:** If everything feels like a red priority, you may be in anxiety mode rather than observation mode. Return to the meditate checkpoint (Step 1) and re-enter. True emergencies are rare — most garden problems develop slowly and can wait a day.
+**Bei Fehler:** Wenn alles wie eine rote Prioritaet erscheint, befindet man sich moeglicherweise im Angstmodus statt im Beobachtungsmodus. Zum Meditate-Checkpoint (Schritt 1) zurueckkehren und neu eintreten. Echte Notfaelle sind selten — die meisten Gartenprobleme entwickeln sich langsam und koennen einen Tag warten.
 
-### Step 6: Record and Track
+### Schritt 6: Aufzeichnen und Verfolgen
 
-Complete the observation session with a journal entry.
+Die Beobachtungssitzung mit einem Tagebucheintrag abschliessen.
 
 ```
-Garden Observation Record Template:
-Date: ___________  Time: ___________
-Weather: ___________  Recent weather: ___________
+Gartenbeobachtungs-Aufzeichnungsvorlage:
+Datum: ___________  Uhrzeit: ___________
+Wetter: ___________  Juengstes Wetter: ___________
 
-GESTALT: (1-2 sentences from Stage I)
+GESAMTEINDRUCK: (1-2 Saetze aus Stufe I)
 
-BED-BY-BED OBSERVATIONS: (Stage II data)
-  Bed 1: ___________
-  Bed 2: ___________
+BEET-FUR-BEET-BEOBACHTUNGEN: (Stufe-II-Daten)
+  Beet 1: ___________
+  Beet 2: ___________
   [...]
 
-PATTERNS NOTED: (Stage III analysis)
+ERKANNTE MUSTER: (Stufe-III-Analyse)
   ___________
 
 TRIAGE:
-  RED (today): ___________
-  AMBER (this week): ___________
-  GREEN (watch): ___________
-  BLUE (healthy): ___________
+  ROT (heute): ___________
+  GELB (diese Woche): ___________
+  GRUEN (beobachten): ___________
+  BLAU (gesund): ___________
 
-AOLs RECORDED: (list any premature conclusions that arose)
+ERFASSTE AOLS: (voreilige Schlussfolgerungen auflisten)
   ___________
 
-ACTIONS TAKEN:
+ERGRIFFENE MASSNAHMEN:
   ___________
 
-COMPARE TO LAST VISIT:
-  Improving: ___________
-  Worsening: ___________
-  Unchanged: ___________
+VERGLEICH ZUM LETZTEN BESUCH:
+  Verbessernd: ___________
+  Verschlechternd: ___________
+  Unveraendert: ___________
 ```
 
-**Expected:** A complete, dated observation record that can be compared to previous visits.
+**Erwartet:** Eine vollstaendige, datierte Beobachtungsaufzeichnung die mit frueheren Besuchen verglichen werden kann.
 
-**On failure:** If journaling feels burdensome, reduce to the minimum: date, weather, triage summary, and one observation per bed. Consistency matters more than detail.
+**Bei Fehler:** Wenn das Tagebuchfuehren als belastend empfunden wird, auf das Minimum reduzieren: Datum, Wetter, Triage-Zusammenfassung und eine Beobachtung pro Beet. Konsistenz ist wichtiger als Detailtiefe.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Meditate checkpoint completed before entering the garden
-- [ ] Gestalt impression recorded before examining individual plants
-- [ ] Sensory observations use descriptive language (no diagnosis in Stage II)
-- [ ] AOLs identified and set aside (not acted upon prematurely)
-- [ ] Pattern analysis considers spatial, temporal, and population factors
-- [ ] Triage matrix completed with clear priority levels
-- [ ] Observation record dated and filed in garden journal
-- [ ] Actions proportional to triage level (no over-treatment of green items)
+- [ ] Meditate-Checkpoint vor dem Betreten des Gartens abgeschlossen
+- [ ] Gesamteindruck festgehalten bevor einzelne Pflanzen untersucht werden
+- [ ] Sinnesbeobachtungen verwenden beschreibende Sprache (keine Diagnose in Stufe II)
+- [ ] AOLs identifiziert und beiseitegelegt (nicht voreilig darauf reagiert)
+- [ ] Musteranalyse beruecksichtigt raeumliche, zeitliche und Populationsfaktoren
+- [ ] Triagematrix mit klaren Prioritaetsstufen ausgefuellt
+- [ ] Beobachtungsaufzeichnung datiert und im Gartentagebuch abgelegt
+- [ ] Massnahmen proportional zur Triagestufe (keine Ueberbehandlung gruener Punkte)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Confirmation bias**: Entering the garden looking for a specific problem guarantees you'll find it (or something that looks like it). The meditate checkpoint prevents this
-2. **Diagnosing in Stage II**: Naming a disease during sensory observation biases all subsequent data collection. Stay with descriptors until Stage III
-3. **Treating green as amber**: Most garden "problems" resolve themselves. Spraying or pruning at the first sign of anything often causes more harm than the original symptom
-4. **Skipping the record**: Without a journal, every visit starts from scratch. Patterns only emerge over time — and time requires records
-5. **AOL suppression vs. management**: The goal is not to have no analytical thoughts — that's impossible. The goal is to notice them, name them, and set them aside until the data supports or refutes them
-6. **Over-intervention**: The garden reading protocol should increase confidence and reduce the number of actions taken, not increase them. If you're doing more after reading, you may be treating anxiety, not the garden
+1. **Bestaetigungsfehler**: Den Garten betreten um ein bestimmtes Problem zu suchen garantiert dass man es findet (oder etwas das so aussieht). Der Meditate-Checkpoint verhindert dies
+2. **Diagnostizieren in Stufe II**: Eine Krankheit waehrend der Sinnesbeobachtung benennen verzerrt alle nachfolgende Datenerhebung. Bei Deskriptoren bleiben bis Stufe III
+3. **Gruen als Gelb behandeln**: Die meisten Garten-"Probleme" loesen sich von selbst. Spritzen oder Schneiden beim ersten Anzeichen von irgendetwas verursacht oft mehr Schaden als das urspruengliche Symptom
+4. **Aufzeichnung ueberspringen**: Ohne Tagebuch beginnt jeder Besuch von null. Muster zeigen sich erst ueber die Zeit — und Zeit erfordert Aufzeichnungen
+5. **AOL-Unterdrueckung vs. Management**: Das Ziel ist nicht keine analytischen Gedanken zu haben — das ist unmoeglich. Das Ziel ist sie zu bemerken, zu benennen und beiseitezulegen bis die Daten sie stuetzen oder widerlegen
+6. **Ueberintervention**: Das Gartenleseprotokoll sollte Zuversicht erhoehen und die Anzahl der Massnahmen reduzieren, nicht erhoehen. Wenn nach dem Lesen mehr getan wird, wird moeglicherweise die Angst behandelt, nicht der Garten
 
-## Related Skills
+## Verwandte Skills
 
-- `meditate` — Pre-entry clearing protocol (full meditation procedure)
-- `heal` — Health triage pattern used in the checkpoint
-- `prepare-soil` — Soil assessment overlaps with the soil observation layer
-- `cultivate-bonsai` — Bonsai health assessment follows the same staged observation
-- `plan-garden-calendar` — Observation records inform calendar adjustments mid-season
-- `remote-viewing` — The CRV-adapted staging protocol originates from this skill
+- `meditate` — Vor-Eingangs-Klaerungsprotokoll (vollstaendige Meditationsprozedur)
+- `heal` — Gesundheits-Triagemuster das im Checkpoint verwendet wird
+- `prepare-soil` — Bodenbewertung ueberschneidet sich mit der Bodenbeobachtungsschicht
+- `cultivate-bonsai` — Bonsai-Gesundheitsbewertung folgt derselben gestuften Beobachtung
+- `plan-garden-calendar` — Beobachtungsaufzeichnungen informieren Kalenderanpassungen zur Saisonmitte
+- `remote-viewing` — Das CRV-adaptierte Stufenprotokoll stammt aus diesem Skill

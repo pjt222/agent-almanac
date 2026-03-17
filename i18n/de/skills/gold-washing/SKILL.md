@@ -1,13 +1,14 @@
 ---
 name: gold-washing
 description: >
-  Alluvial gold recovery using panning, sluicing, and classification.
-  Covers site reading (geological indicators, stream dynamics, pay streak
-  location), panning technique, sluice box operation, and responsible
-  extraction practices. Use when prospecting in an area with known or
-  suspected alluvial gold deposits, sampling a stream to test for gold
-  presence, maximizing recovery during recreational panning, or assessing a
-  site's gold potential before investing more effort.
+  Alluviale Goldgewinnung mittels Goldwaschen, Rinnenarbeit und Klassifizierung.
+  Umfasst Standortanalyse (geologische Indikatoren, Gewaesserdynamik,
+  Goldader-Lokalisierung), Waschtechnik, Waschrinnen-Betrieb und
+  verantwortungsvolle Gewinnungspraktiken. Verwenden beim Schuerfen in einem
+  Gebiet mit bekannten oder vermuteten alluvialen Goldvorkommen, beim
+  Beproben eines Gewaessers auf Goldvorkommen, beim Maximieren der Ausbeute
+  beim Freizeitgoldwaschen oder beim Bewerten des Goldpotentials eines
+  Standorts vor groesserem Aufwand.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,30 +27,30 @@ metadata:
 
 # Goldwaschen
 
-Recover alluvial gold from stream deposits using panning, sluicing, and classification techniques.
+Alluviales Gold aus Gewaesserablagerungen mittels Waschtechnik, Rinnenarbeit und Klassifizierung gewinnen.
 
-## When to Use
+## Wann verwenden
 
-- You are prospecting in an area with known or suspected alluvial gold deposits
-- You want to sample a stream or river to test for gold presence
-- You are recreational panning and want to maximize recovery
-- You need to assess a site's gold potential before investing more effort
+- Sie schuerfen in einem Gebiet mit bekannten oder vermuteten alluvialen Goldvorkommen
+- Sie moechten ein Gewaesser beproben, um Goldvorkommen zu testen
+- Sie waschen Gold als Freizeitaktivitaet und moechten die Ausbeute maximieren
+- Sie muessen das Goldpotential eines Standorts bewerten, bevor mehr Aufwand investiert wird
 
-## Inputs
+## Eingaben
 
-- **Required**: A gold pan (14-16 inch, with riffles)
-- **Required**: Access to a stream, river, or alluvial deposit
-- **Optional**: Classifier/screen (1/4 inch mesh)
-- **Optional**: Sluice box (for higher volume processing)
-- **Optional**: Snuffer bottle or tweezers (for fine gold recovery)
-- **Optional**: Vial with water (for storing recovered gold)
-- **Optional**: Shovel and bucket for material collection
+- **Erforderlich**: Eine Goldwaschpfanne (14-16 Zoll, mit Riffelleisten)
+- **Erforderlich**: Zugang zu einem Bach, Fluss oder alluvialen Ablagerung
+- **Optional**: Klassifizierer/Sieb (1/4-Zoll-Masche)
+- **Optional**: Waschrinne (fuer hoehere Verarbeitungsmengen)
+- **Optional**: Saugflasche oder Pinzette (fuer Feingold-Gewinnung)
+- **Optional**: Flaeschchen mit Wasser (zur Aufbewahrung gewonnenen Golds)
+- **Optional**: Schaufel und Eimer zur Materialsammlung
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Read the Site
+### Schritt 1: Den Standort lesen
 
-Gold is heavy (specific gravity 19.3) and concentrates predictably. Read the water and geology before digging.
+Gold ist schwer (spezifisches Gewicht 19,3) und konzentriert sich vorhersagbar. Das Wasser und die Geologie vor dem Graben lesen.
 
 ```
 Where Gold Concentrates:
@@ -93,13 +94,13 @@ Geological Indicators:
   which can host gold deposits
 ```
 
-**Expected:** You have identified 2-3 promising sample locations based on stream dynamics and geological indicators.
+**Erwartet:** Sie haben 2-3 vielversprechende Probenahmestellen basierend auf Gewaesserdynamik und geologischen Indikatoren identifiziert.
 
-**On failure:** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). Even a single color (flake of gold) confirms the stream carries gold.
+**Bei Fehler:** Wenn keine klaren Indikatoren sichtbar sind, mehrere Standorte systematisch beproben — eine Pfanne von jedem markanten Merkmal (Innenbiegung, hinter Hindernis, zufaellige Kiesbank). Selbst ein einzelner Goldflitter bestaetigt, dass das Gewaesser Gold fuehrt.
 
-### Step 2: Classify and Collect Material
+### Schritt 2: Material klassifizieren und sammeln
 
-Prepare the raw material for panning.
+Das Rohmaterial fuer das Waschen vorbereiten.
 
 ```
 Collection Protocol:
@@ -118,13 +119,13 @@ Classification:
 5. Classified material is now ready for panning
 ```
 
-**Expected:** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
+**Erwartet:** Eine Pfanne oder ein Eimer mit klassifiziertem Material (Kies und Sand kleiner als 1/4 Zoll), entnommen von einem geologisch vielversprechenden Standort.
 
-**On failure:** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
+**Bei Fehler:** Wenn das Grundgestein nicht erreicht werden kann, das zugaengliche Material beproben. Flache Proben enthalten weniger wahrscheinlich Gold, sind aber dennoch einen Test wert — Hochwasserereignisse koennen Gold in verschiedenen Tiefen ablagern.
 
-### Step 3: Pan the Material
+### Schritt 3: Das Material waschen
 
-The gold pan separates gold from lighter material using gravity and water.
+Die Goldwaschpfanne trennt Gold von leichterem Material durch Schwerkraft und Wasser.
 
 ```
 Panning Technique:
@@ -162,13 +163,13 @@ Common Errors:
   you start washing off material.
 ```
 
-**Expected:** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
+**Erwartet:** Alles schwere Material (Gold, Schwarzsand, Granate) konzentriert sich am Boden der Pfanne. Gold ist als leuchtend gelbe Flitter, abgeflachte Koerner oder (selten) kleine Nuggets sichtbar.
 
-**On failure:** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
+**Bei Fehler:** Wenn nach sorgfaeltigem Waschen kein Gold sichtbar ist, enthaelt der Standort moeglicherweise kein Gold — oder das Gold ist zu fein zum Sehen (Mehlgold). Mit einer Handlupe pruefen. Wenn immer noch nichts zu sehen ist, zu einem anderen Probenahmestandort wechseln.
 
-### Step 4: Scale Up with a Sluice Box (Optional)
+### Schritt 4: Mit einer Waschrinne aufskalieren (optional)
 
-For processing larger volumes of material.
+Fuer die Verarbeitung groesserer Materialmengen.
 
 ```
 Sluice Box Operation:
@@ -191,29 +192,29 @@ Sluice Calibration:
   If it is caught by the riffles, gold will be too.
 ```
 
-**Expected:** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
+**Erwartet:** Hoehere Verarbeitungsmenge mit Goldkonzentration in der Riffelmatte, gewonnen durch abschliessendes Pfannenwaschen.
 
-**On failure:** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
+**Bei Fehler:** Wenn die Rinne das Testmaterial (Bleischrot) nicht faengt, Winkel oder Wasserfluss anpassen. Die Rinne sollte alles fangen, was schwerer als Quarzsand ist.
 
-## Validation
+## Validierung
 
-- [ ] Site was read for geological indicators before sampling
-- [ ] Material was collected from a geologically promising location
-- [ ] Material was classified before panning
-- [ ] Panning used side-to-side shaking for stratification
-- [ ] Black sand concentrate was checked thoroughly for fine gold
-- [ ] Any gold recovered was stored safely in water in a sealed vial
-- [ ] The site was left without significant environmental disturbance
+- [ ] Standort wurde vor der Probenahme auf geologische Indikatoren untersucht
+- [ ] Material wurde von einem geologisch vielversprechenden Standort entnommen
+- [ ] Material wurde vor dem Waschen klassifiziert
+- [ ] Beim Waschen wurde seitliches Schuetteln zur Schichtung verwendet
+- [ ] Schwarzsand-Konzentrat wurde gruendlich auf Feingold geprueft
+- [ ] Gewonnenes Gold wurde sicher in Wasser in einem verschlossenen Flaeschchen aufbewahrt
+- [ ] Der Standort wurde ohne erhebliche Umweltstoerung hinterlassen
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Panning too fast**: Impatience loses fine gold. A proper pan takes 5-10 minutes. Speed is the enemy of recovery
-- **Ignoring black sand**: If you see heavy black sand concentrating, gold is likely present — even if too fine to see without magnification
-- **Confusing pyrite with gold**: Pyrite (fool's gold) is lighter, breaks when pressed with a pin, and has a brassy rather than buttery yellow colour. Real gold is malleable and does not tarnish
-- **Sampling random locations**: Gold concentrates predictably. Sampling the middle of a straight stretch is far less productive than sampling the inside of a bend
-- **Environmental damage**: Respect waterways. Do not dig large holes in stream banks, do not use mercury (illegal in most jurisdictions and extremely toxic), and fill in any test holes
-- **Ignoring regulations**: Most jurisdictions require permits for gold prospecting, even recreational panning. Check local regulations before starting
+- **Zu schnelles Waschen**: Ungeduld verliert Feingold. Ein sorgfaeltiger Waschvorgang dauert 5-10 Minuten. Geschwindigkeit ist der Feind der Ausbeute
+- **Schwarzsand ignorieren**: Wenn sich schwerer Schwarzsand konzentriert, ist Gold wahrscheinlich vorhanden — selbst wenn es ohne Vergroesserung zu fein zum Sehen ist
+- **Pyrit mit Gold verwechseln**: Pyrit (Narrengold) ist leichter, bricht wenn mit einer Nadel gedrueckt, und hat eine messinggelbe statt buttergelbe Farbe. Echtes Gold ist formbar und laeuft nicht an
+- **Zufaellige Standorte beproben**: Gold konzentriert sich vorhersagbar. Das Beproben der Mitte einer geraden Strecke ist weit weniger ergiebig als das Beproben der Innenseite einer Biegung
+- **Umweltschaeden**: Gewaesser respektieren. Keine grossen Loecher in Ufern graben, kein Quecksilber verwenden (in den meisten Rechtsordnungen illegal und extrem giftig), und alle Testloecher verfuellen
+- **Vorschriften ignorieren**: Die meisten Rechtsordnungen erfordern Genehmigungen fuer Goldschuerfen, selbst fuer Freizeitwaschen. Lokale Vorschriften vor Beginn pruefen
 
-## Related Skills
+## Verwandte Skills
 
-- `mineral-identification` — understanding rock and mineral types helps read geological indicators that point to gold-bearing areas
+- `mineral-identification` — Das Verstaendnis von Gesteins- und Mineraltypen hilft beim Lesen geologischer Indikatoren, die auf goldfuehrende Gebiete hinweisen

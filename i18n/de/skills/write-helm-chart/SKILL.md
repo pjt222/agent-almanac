@@ -1,13 +1,15 @@
 ---
 name: write-helm-chart
 description: >
-  Create production-ready Helm charts for Kubernetes application deployment with templating,
-  values management, chart dependencies, hooks, and testing. Covers chart structure, Go
-  template syntax, values.yaml design, chart repositories, versioning, and best practices
-  for maintainable and reusable charts. Use when packaging a Kubernetes application for
-  repeatable deployments, parameterizing manifests for multiple environments, managing
-  complex multi-component applications with dependencies, or standardizing deployment
-  practices with versioned rollback capability across teams.
+  Produktionsreife Helm-Charts fuer Kubernetes-Anwendungsbereitstellung mit
+  Templating, Values-Verwaltung, Chart-Abhaengigkeiten, Hooks und Tests
+  erstellen. Umfasst Chart-Struktur, Go-Template-Syntax, values.yaml-Design,
+  Chart-Repositories, Versionierung und Best Practices fuer wartbare und
+  wiederverwendbare Charts. Verwenden beim Paketieren einer
+  Kubernetes-Anwendung fuer wiederholbare Bereitstellungen, Parametrisieren
+  von Manifesten fuer mehrere Umgebungen, Verwalten komplexer
+  Mehrkomponenten-Anwendungen mit Abhaengigkeiten oder Standardisieren von
+  Bereitstellungspraktiken mit versionierter Rollback-Faehigkeit ueber Teams.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,37 +28,37 @@ metadata:
 
 # Helm-Chart schreiben
 
-Create production-ready Helm charts for deploying applications to Kubernetes.
+Produktionsreife Helm-Charts fuer die Bereitstellung von Anwendungen auf Kubernetes erstellen.
 
-## When to Use
+## Wann verwenden
 
-- Need to package Kubernetes application for repeatable deployments
-- Want to parameterize manifests for different environments (dev/staging/prod)
-- Managing complex multi-component applications with dependencies
-- Sharing reusable deployment patterns across teams or organizations
-- Implementing versioned application releases with rollback capability
-- Need template-based configuration management for Kubernetes resources
-- Want to standardize deployment practices across projects
+- Kubernetes-Anwendung fuer wiederholbare Bereitstellungen paketieren
+- Manifeste fuer verschiedene Umgebungen parametrisieren (dev/staging/prod)
+- Komplexe Mehrkomponenten-Anwendungen mit Abhaengigkeiten verwalten
+- Wiederverwendbare Bereitstellungsmuster ueber Teams oder Organisationen teilen
+- Versionierte Anwendungsreleases mit Rollback-Faehigkeit implementieren
+- Template-basiertes Konfigurationsmanagement fuer Kubernetes-Ressourcen benoetigt
+- Bereitstellungspraktiken ueber Projekte hinweg standardisieren
 
-## Inputs
+## Eingaben
 
-- **Required**: Kubernetes manifests for your application (deployment, service, etc.)
-- **Required**: Application name and version
-- **Required**: List of configurable parameters (image tag, replicas, resources, etc.)
-- **Optional**: Dependencies on other Helm charts (databases, message queues)
-- **Optional**: Pre/post-install hooks for migrations or setup
-- **Optional**: Chart repository URL for publishing
-- **Optional**: Values for different environments
+- **Erforderlich**: Kubernetes-Manifeste fuer die Anwendung (Deployment, Service, etc.)
+- **Erforderlich**: Anwendungsname und Version
+- **Erforderlich**: Liste konfigurierbarer Parameter (Image-Tag, Replikas, Ressourcen, etc.)
+- **Optional**: Abhaengigkeiten von anderen Helm-Charts (Datenbanken, Message-Queues)
+- **Optional**: Pre/Post-Install-Hooks fuer Migrationen oder Setup
+- **Optional**: Chart-Repository-URL zur Veroeffentlichung
+- **Optional**: Values fuer verschiedene Umgebungen
 
-## Procedure
+## Vorgehensweise
 
-> See [Extended Examples](references/EXAMPLES.md) for complete template files, values structures, and hooks.
+> Siehe [Erweiterte Beispiele](references/EXAMPLES.md) fuer vollstaendige Template-Dateien, Values-Strukturen und Hooks.
 
-### Step 1: Initialize Chart Structure and Metadata
+### Schritt 1: Chart-Struktur und Metadaten initialisieren
 
-Create the Helm chart directory structure and define chart metadata.
+Die Helm-Chart-Verzeichnisstruktur erstellen und Chart-Metadaten definieren.
 
-**Install Helm:**
+**Helm installieren:**
 ```bash
 # Linux
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
@@ -71,7 +73,7 @@ choco install kubernetes-helm
 helm version
 ```
 
-**Create chart structure:**
+**Chart-Struktur erstellen:**
 ```bash
 # Create new chart
 helm create my-app
@@ -94,7 +96,7 @@ mkdir -p my-app/{templates,charts}
 cd my-app
 ```
 
-**Define Chart.yaml:**
+**Chart.yaml definieren:**
 ```yaml
 # Chart.yaml (excerpt - see EXAMPLES.md for complete file)
 apiVersion: v2
@@ -108,7 +110,7 @@ maintainers:
 # ... (keywords, dependencies, kubeVersion - see EXAMPLES.md)
 ```
 
-**Create .helmignore:**
+**.helmignore erstellen:**
 ```
 # .helmignore
 # Patterns to ignore when packaging chart
@@ -131,20 +133,20 @@ maintainers:
 .vscode/
 ```
 
-**Expected:** Chart directory structure created with all required files. Chart.yaml contains complete metadata. Dependencies listed if applicable. Chart validates: `helm lint my-app`.
+**Erwartet:** Chart-Verzeichnisstruktur mit allen erforderlichen Dateien erstellt. Chart.yaml enthaelt vollstaendige Metadaten. Abhaengigkeiten aufgelistet, falls zutreffend. Chart validiert: `helm lint my-app`.
 
-**On failure:**
-- Check YAML syntax in Chart.yaml: `helm lint my-app`
-- Verify apiVersion is v2 (v1 deprecated)
-- Ensure version follows SemVer (x.y.z)
-- Check dependency repository URLs are reachable
-- Use `helm show chart <chart>` to inspect existing charts for examples
+**Bei Fehler:**
+- YAML-Syntax in Chart.yaml pruefen: `helm lint my-app`
+- Verifizieren, dass apiVersion v2 ist (v1 veraltet)
+- Sicherstellen, dass Version SemVer folgt (x.y.z)
+- Pruefen, ob Abhaengigkeits-Repository-URLs erreichbar sind
+- `helm show chart <chart>` verwenden, um bestehende Charts als Beispiele zu inspizieren
 
-### Step 2: Design values.yaml Structure
+### Schritt 2: values.yaml-Struktur entwerfen
 
-Create well-organized values.yaml with sensible defaults and documentation.
+Gut organisierte values.yaml mit sinnvollen Standardwerten und Dokumentation erstellen.
 
-**Create comprehensive values.yaml:**
+**Umfassende values.yaml erstellen:**
 ```yaml
 # values.yaml (excerpt - see EXAMPLES.md for complete structure)
 global:
@@ -163,22 +165,22 @@ resources:
 # ... (ingress, autoscaling, probes, persistence - see EXAMPLES.md)
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-2-valuesyaml--complete-structure) for the complete values.yaml structure and values.schema.json
+Siehe [EXAMPLES.md](references/EXAMPLES.md#step-2-valuesyaml--complete-structure) fuer die vollstaendige values.yaml-Struktur und values.schema.json
 
-**Expected:** values.yaml organized logically with sections. All values documented with comments. Sensible defaults that work out-of-box. Schema validates value types. No hardcoded environment-specific values.
+**Erwartet:** values.yaml logisch mit Abschnitten organisiert. Alle Werte mit Kommentaren dokumentiert. Sinnvolle Standardwerte, die sofort funktionieren. Schema validiert Werttypen. Keine hartcodierten umgebungsspezifischen Werte.
 
-**On failure:**
-- Validate YAML syntax: `yamllint values.yaml`
-- Check schema validation: `helm lint my-app`
-- Review against Helm best practices: `helm lint --strict my-app`
-- Ensure all template references have corresponding values
-- Test with minimal values: `helm template my-app --set image.repository=test`
+**Bei Fehler:**
+- YAML-Syntax validieren: `yamllint values.yaml`
+- Schema-Validierung pruefen: `helm lint my-app`
+- Gegen Helm Best Practices ueberpruefen: `helm lint --strict my-app`
+- Sicherstellen, dass alle Template-Referenzen entsprechende Values haben
+- Mit minimalen Values testen: `helm template my-app --set image.repository=test`
 
-### Step 3: Create Template Files with Go Templating
+### Schritt 3: Template-Dateien mit Go-Templating erstellen
 
-Write Kubernetes resource templates using Go template syntax and Helm functions.
+Kubernetes-Ressourcen-Templates unter Verwendung von Go-Template-Syntax und Helm-Funktionen schreiben.
 
-**Create deployment template:**
+**Deployment-Template erstellen:**
 ```yaml
 # templates/deployment.yaml (excerpt)
 apiVersion: apps/v1
@@ -197,9 +199,9 @@ spec:
         # ... (see EXAMPLES.md for complete template with probes, volumes, etc.)
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-3-deploymentyaml--complete-template) for the complete deployment template
+Siehe [EXAMPLES.md](references/EXAMPLES.md#step-3-deploymentyaml--complete-template) fuer das vollstaendige Deployment-Template
 
-**Create helper template file:**
+**Helper-Template-Datei erstellen:**
 ```yaml
 # templates/_helpers.tpl (excerpt)
 {{- define "my-app.name" -}}
@@ -216,7 +218,7 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-3-deploymentyaml--complete-templat
 # ... (labels, serviceAccountName, hpa.apiVersion - see EXAMPLES.md)
 ```
 
-**Create conditional templates:**
+**Bedingte Templates erstellen:**
 ```yaml
 # templates/ingress.yaml (excerpt)
 {{- if .Values.ingress.enabled -}}
@@ -227,23 +229,23 @@ metadata:
 # ... (see EXAMPLES.md for complete ingress and HPA templates)
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-3-helperstpl--complete-helper-functions) for complete _helpers.tpl and conditional templates
+Siehe [EXAMPLES.md](references/EXAMPLES.md#step-3-helperstpl--complete-helper-functions) fuer vollstaendige _helpers.tpl und bedingte Templates
 
-**Expected:** Templates generate valid Kubernetes YAML. Conditionals work correctly (if/with). Helper functions produce expected output. Resources properly labeled and named. No hardcoded values in templates.
+**Erwartet:** Templates generieren gueltige Kubernetes-YAML. Bedingungen funktionieren korrekt (if/with). Helper-Funktionen erzeugen erwartete Ausgabe. Ressourcen ordnungsgemaess beschriftet und benannt. Keine hartcodierten Werte in Templates.
 
-**On failure:**
-- Test template rendering: `helm template my-app`
-- Check for template syntax errors: `helm lint my-app`
-- Validate Go template syntax carefully (dashes, spaces matter)
-- Use `helm template --debug` for detailed error messages
-- Test with different values files: `helm template my-app -f values-prod.yaml`
-- Verify output is valid Kubernetes YAML: `helm template my-app | kubectl apply --dry-run=client -f -`
+**Bei Fehler:**
+- Template-Rendering testen: `helm template my-app`
+- Auf Template-Syntaxfehler pruefen: `helm lint my-app`
+- Go-Template-Syntax sorgfaeltig validieren (Bindestriche, Leerzeichen sind relevant)
+- `helm template --debug` fuer detaillierte Fehlermeldungen verwenden
+- Mit verschiedenen Values-Dateien testen: `helm template my-app -f values-prod.yaml`
+- Verifizieren, dass Ausgabe gueltiges Kubernetes-YAML ist: `helm template my-app | kubectl apply --dry-run=client -f -`
 
-### Step 4: Add Hooks for Pre/Post-Install Actions
+### Schritt 4: Hooks fuer Pre/Post-Install-Aktionen hinzufuegen
 
-Create hooks for database migrations, setup tasks, or cleanup.
+Hooks fuer Datenbankmigrationen, Setup-Aufgaben oder Bereinigung erstellen.
 
-**Create pre-install hook for migrations:**
+**Pre-Install-Hook fuer Migrationen erstellen:**
 ```yaml
 # templates/hooks/pre-install-migration.yaml (excerpt)
 apiVersion: batch/v1
@@ -263,23 +265,23 @@ spec:
 # ... (see EXAMPLES.md for test hook, pre-delete backup, NOTES.txt)
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-4-helm-hooks) for complete hook templates and NOTES.txt
+Siehe [EXAMPLES.md](references/EXAMPLES.md#step-4-helm-hooks) fuer vollstaendige Hook-Templates und NOTES.txt
 
-**Expected:** Hooks execute in correct order (weights determine sequence). Pre-install migration completes before deployment. Test hook validates deployment. Pre-delete hook runs cleanup. NOTES.txt provides helpful post-install information.
+**Erwartet:** Hooks werden in korrekter Reihenfolge ausgefuehrt (Gewichte bestimmen Sequenz). Pre-Install-Migration wird vor Deployment abgeschlossen. Test-Hook validiert Deployment. Pre-Delete-Hook fuehrt Bereinigung durch. NOTES.txt liefert hilfreiche Post-Install-Informationen.
 
-**On failure:**
-- Check hook annotations syntax exactly matches Helm spec
-- Verify hook jobs have `restartPolicy: Never`
-- Review hook execution: `kubectl get jobs -n <namespace>`
-- Check hook logs: `kubectl logs job/<job-name> -n <namespace>`
-- Ensure hook-delete-policy appropriate (before-hook-creation, hook-succeeded, hook-failed)
-- Test hooks independently: `helm install --dry-run --debug my-app`
+**Bei Fehler:**
+- Hook-Annotations-Syntax auf exakte Uebereinstimmung mit Helm-Spezifikation pruefen
+- Verifizieren, dass Hook-Jobs `restartPolicy: Never` haben
+- Hook-Ausfuehrung ueberpruefen: `kubectl get jobs -n <namespace>`
+- Hook-Logs pruefen: `kubectl logs job/<job-name> -n <namespace>`
+- Sicherstellen, dass hook-delete-policy angemessen ist (before-hook-creation, hook-succeeded, hook-failed)
+- Hooks unabhaengig testen: `helm install --dry-run --debug my-app`
 
-### Step 5: Test and Package Chart
+### Schritt 5: Chart testen und paketieren
 
-Validate chart, run tests, and package for distribution.
+Chart validieren, Tests ausfuehren und fuer Verteilung paketieren.
 
-**Lint and validate chart:**
+**Chart linten und validieren:**
 ```bash
 # Basic linting
 helm lint my-app
@@ -300,7 +302,7 @@ helm install my-app my-app --dry-run --debug
 helm install my-app my-app --dry-run | kubectl apply --dry-run=server -f -
 ```
 
-**Create chart tests:**
+**Chart-Tests erstellen:**
 ```bash
 # Run Helm tests
 helm install my-app my-app -n test --create-namespace
@@ -310,7 +312,7 @@ kubectl logs -n test -l "helm.sh/hook=test" --tail=-1
 # See EXAMPLES.md for complete test script (test-chart.sh)
 ```
 
-**Package chart:**
+**Chart paketieren:**
 ```bash
 # Update dependencies first
 helm dependency update my-app
@@ -329,7 +331,7 @@ helm repo index . --url https://charts.example.com/
 # Creates: index.yaml
 ```
 
-**Create different values files for environments:**
+**Verschiedene Values-Dateien fuer Umgebungen erstellen:**
 ```yaml
 # values-dev.yaml (excerpt)
 replicaCount: 1
@@ -360,7 +362,7 @@ postgresql:
         memory: 8Gi
 ```
 
-**Test with different environments:**
+**Mit verschiedenen Umgebungen testen:**
 ```bash
 # Test development values
 helm install my-app-dev my-app -f values-dev.yaml --dry-run --debug
@@ -375,22 +377,22 @@ helm install my-app my-app -f values-dev.yaml -n development --create-namespace
 helm install my-app my-app -f values-prod.yaml -n production --create-namespace
 ```
 
-**Expected:** Chart passes all lint checks. Template rendering produces valid Kubernetes YAML. Tests pass successfully. Chart packages without errors. Different values files work for each environment. Installation succeeds without warnings.
+**Erwartet:** Chart besteht alle Lint-Pruefungen. Template-Rendering erzeugt gueltiges Kubernetes-YAML. Tests bestehen erfolgreich. Chart wird fehlerfrei paketiert. Verschiedene Values-Dateien funktionieren fuer jede Umgebung. Installation gelingt ohne Warnungen.
 
-**On failure:**
-- Review lint output for specific issues
-- Check template syntax errors with `--debug` flag
-- Verify all required values are set: `helm get values <release>`
-- Test dependency resolution: `helm dependency list my-app`
-- Validate packaged chart: `tar -tzf my-app-0.1.0.tgz`
-- Check for missing files in package
+**Bei Fehler:**
+- Lint-Ausgabe auf spezifische Probleme ueberpruefen
+- Template-Syntaxfehler mit `--debug`-Flag pruefen
+- Verifizieren, dass alle erforderlichen Values gesetzt sind: `helm get values <release>`
+- Abhaengigkeitsaufloesung testen: `helm dependency list my-app`
+- Paketiertes Chart validieren: `tar -tzf my-app-0.1.0.tgz`
+- Auf fehlende Dateien im Paket pruefen
 
 
-### Step 6: Publish to Chart Repository
+### Schritt 6: In Chart-Repository veroeffentlichen
 
-Set up chart repository and publish versioned releases.
+Chart-Repository einrichten und versionierte Releases veroeffentlichen.
 
-**Options for publishing:**
+**Optionen zur Veroeffentlichung:**
 ```bash
 # GitHub Pages
 git checkout -b gh-pages && mkdir charts
@@ -406,12 +408,12 @@ helm repo add myrepo https://charts.example.com
 helm install my-app myrepo/my-app -f custom-values.yaml
 ```
 
-See [Extended Examples](references/EXAMPLES.md) for ChartMuseum setup, release automation, and complete README template.
+Siehe [Erweiterte Beispiele](references/EXAMPLES.md) fuer ChartMuseum-Setup, Release-Automatisierung und vollstaendige README-Vorlage.
 
-**Expected:** Chart published to repository successfully. Chart discoverable via `helm search`. Installation works from repository. Versioning follows SemVer.
+**Erwartet:** Chart erfolgreich im Repository veroeffentlicht. Chart ueber `helm search` auffindbar. Installation aus dem Repository funktioniert. Versionierung folgt SemVer.
 
-**On failure:**
-- Verify repository URL accessible
-- Check index.yaml generated: `helm repo index --help`
-- For OCI registries, ensure authentication working
-- Test repository addition: `helm repo add test <url>`
+**Bei Fehler:**
+- Verifizieren, dass Repository-URL erreichbar ist
+- Pruefen, ob index.yaml generiert wurde: `helm repo index --help`
+- Fuer OCI-Registries sicherstellen, dass Authentifizierung funktioniert
+- Repository-Hinzufuegung testen: `helm repo add test <url>`

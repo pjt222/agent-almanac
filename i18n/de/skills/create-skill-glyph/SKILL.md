@@ -1,11 +1,11 @@
 ---
 name: create-skill-glyph
 description: >
-  Create R-based pictogram glyphs for skill icons in the visualization layer.
-  Covers concept sketching, ggplot2 layer composition using the primitives library,
+  Erstellen R-based pictogram glyphs for skill icons in the visualization layer.
+  Umfasst concept sketching, ggplot2 layer composition using the primitives library,
   color strategy, registration in glyphs.R and icon-manifest.json, rendering via
-  build-icons.R, and visual verification of the neon-glow output. Use when a new
-  skill has been added and needs a visual icon for the force-graph visualization,
+  build-icons.R, and visual verification of the neon-glow output. Verwenden wenn a new
+  skill wurde added and needs a visual icon for the force-graph visualization,
   an existing glyph needs replacement, or when batch-creating glyphs for a new
   domain of skills.
 license: MIT
@@ -26,30 +26,30 @@ metadata:
 
 # Skill-Glyph erstellen
 
-Create R-based pictogram glyphs for skill icons in the `viz/` visualization layer. Each glyph is a pure-ggplot2 function that draws a recognizable shape on a 100x100 canvas, rendered with a neon glow effect to transparent-background WebP.
+Erstellen R-based pictogram glyphs for skill icons in the `viz/` visualization layer. Each glyph is a pure-ggplot2 function that draws a recognizable shape on a 100x100 canvas, rendered with a neon glow effect to transparent-background WebP.
 
-## When to Use
+## Wann verwenden
 
-- A new skill has been added and needs a visual icon for the force-graph visualization
+- A new skill wurde added and needs a visual icon for the force-graph visualization
 - An existing glyph needs replacement or redesign
 - Batch-creating glyphs for a new domain of skills
 - Prototyping visual metaphors for skill concepts
 
-## Inputs
+## Eingaben
 
-- **Required**: Skill ID (e.g., `create-skill-glyph`) and domain (e.g., `design`)
-- **Required**: Visual concept — what the glyph should depict
+- **Erforderlich**: Skill ID (e.g., `create-skill-glyph`) and domain (e.g., `design`)
+- **Erforderlich**: Visual concept — what the glyph should depict
 - **Optional**: Reference glyph to study for complexity level
 - **Optional**: Custom `--glow-sigma` value (default: 4)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Concept — Design the Visual Metaphor
+### Schritt 1: Concept — Entwerfen the Visual Metaphor
 
-Identify the skill being iconified and choose a visual metaphor.
+Identifizieren the skill being iconified and choose a visual metaphor.
 
-1. Read the skill's SKILL.md to understand its core concept
-2. Choose a metaphor type:
+1. Lesen the skill's SKILL.md to understand its core concept
+2. Waehlen a metaphor type:
    - **Literal object**: a flask for experiments, a shield for security
    - **Abstract symbol**: arrows for merging, spirals for iteration
    - **Composite**: combine 2-3 simple shapes (e.g., document + pen)
@@ -68,13 +68,13 @@ Complexity Tiers:
 
 4. Decide on a function name: `glyph_<descriptive_name>` (snake_case, unique)
 
-**Expected:** A clear mental sketch of the shape with 2-6 planned layers.
+**Erwartet:** A clear mental sketch of the shape with 2-6 planned layers.
 
-**On failure:** If the concept is too abstract, fall back to a related concrete object. Review existing glyphs in the same domain for inspiration.
+**Bei Fehler:** If the concept is too abstract, fall back to a related concrete object. Ueberpruefen existing glyphs in the same domain for inspiration.
 
-### Step 2: Compose — Write the Glyph Function
+### Schritt 2: Compose — Schreiben the Glyph Function
 
-Write the R function that produces ggplot2 layers.
+Schreiben the R function that produces ggplot2 layers.
 
 1. Function signature (immutable contract):
    ```r
@@ -87,7 +87,7 @@ Write the R function that produces ggplot2 layers.
    }
    ```
 
-2. Apply scale factor `* s` to ALL dimensions for consistent scaling:
+2. Anwenden scale factor `* s` to ALL dimensions for consistent scaling:
    ```r
    r <- 20 * s        # radius
    hw <- 15 * s       # half-width
@@ -95,17 +95,17 @@ Write the R function that produces ggplot2 layers.
    lw_thin <- .lw(s, 1.2)  # thinner line width
    ```
 
-3. Build geometry using available primitives:
+3. Erstellen geometry using available primitives:
 
    | Geometry | Usage |
    |----------|-------|
    | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | Filled shapes |
-   | `ggplot2::geom_path(data, .aes(x, y), ...)` | Open lines/curves |
+   | `ggplot2::geom_path(data, .aes(x, y), ...)` | Oeffnen lines/curves |
    | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | Line segments, arrows |
    | `ggplot2::geom_rect(data, .aes(xmin, xmax, ymin, ymax), ...)` | Rectangles |
    | `ggforce::geom_circle(data, .aes(x0, y0, r), ...)` | Circles |
 
-4. Apply the color strategy:
+4. Anwenden the color strategy:
 
    ```
    Alpha Guide:
@@ -121,16 +121,16 @@ Write the R function that produces ggplot2 layers.
    └──────────────────────┴────────────┴──────────────────────────┘
    ```
 
-5. Return a flat `list()` of layers (the renderer iterates and wraps each with glow)
+5. Zurueckgeben a flat `list()` of layers (the renderer iterates and wraps each with glow)
 
-6. Place the function in the appropriate primitives file based on domain grouping:
+6. Place die Funktion in the appropriate primitives file basierend auf domain grouping:
    - `primitives.R` — bushcraft, compliance, containerization, data-serialization, defensive
    - `primitives_2.R` — devops, general, git, mcp-integration
    - `primitives_3.R` — mlops, observability, project-management, r-packages, reporting, review, web-dev, esoteric, design
 
-**Expected:** A working R function that returns a list of 2-6 ggplot2 layers.
+**Erwartet:** A working R function that returns a list of 2-6 ggplot2 layers.
 
-**On failure:** If `ggforce::geom_circle` causes errors, ensure ggforce is installed. If coordinates are off, remember the canvas is 100x100 with (0,0) at bottom-left. Test the function interactively:
+**Bei Fehler:** If `ggforce::geom_circle` causes errors, ensure ggforce is installed. If coordinates are off, remember the canvas is 100x100 with (0,0) at bottom-left. Testen die Funktion interactively:
 ```r
 source("viz/R/utils.R"); source("viz/R/primitives.R")  # etc.
 layers <- glyph_<name>(50, 50, 1.0, "#ff88dd", "#ffa8f0")
@@ -140,29 +140,29 @@ for (l in layers) p <- p + l
 print(p)
 ```
 
-### Step 3: Register — Map Skill to Glyph
+### Schritt 3: Registrieren — Abbilden Skill to Glyph
 
-Add the skill-to-glyph mapping in `viz/R/glyphs.R`.
+Hinzufuegen the skill-to-glyph mapping in `viz/R/glyphs.R`.
 
 1. Open `viz/R/glyphs.R`
-2. Find the comment section for the target domain (e.g., `# -- design (3)`)
-3. Add the entry in alphabetical order within the domain block:
+2. Finden the comment section for das Ziel domain (e.g., `# -- design (3)`)
+3. Hinzufuegen the entry in alphabetical order innerhalb the domain block:
    ```r
    "skill-id" = "glyph_function_name",
    ```
-4. Update the domain count in the comment if applicable (e.g., `(3)` -> `(4)`)
-5. Verify no duplicate skill ID exists in `SKILL_GLYPHS`
+4. Aktualisieren the domain count in the comment if applicable (e.g., `(3)` -> `(4)`)
+5. Verifizieren no duplicate skill ID exists in `SKILL_GLYPHS`
 
-**Expected:** The `SKILL_GLYPHS` list contains the new mapping.
+**Erwartet:** The `SKILL_GLYPHS` list contains the new mapping.
 
-**On failure:** If the build later reports "No glyph mapped for skill", double-check that the skill ID exactly matches the one in the manifest and registry.
+**Bei Fehler:** If the build later reports "No glyph mapped for skill", double-check that the skill ID exactly matches the one in the manifest and registry.
 
-### Step 4: Manifest — Add Icon Entry
+### Schritt 4: Manifest — Hinzufuegen Icon Entry
 
-Register the icon in `viz/data/icon-manifest.json`.
+Registrieren the icon in `viz/data/icon-manifest.json`.
 
-1. Open the manifest and find the domain's existing entries
-2. Identify the next seed number for that domain:
+1. Oeffnen the manifest and find the domain's existing entries
+2. Identifizieren the next seed number for that domain:
 
    ```
    Domain Seed Ranges:
@@ -191,7 +191,7 @@ Register the icon in `viz/data/icon-manifest.json`.
    └──────────────────────┴──────────────┘
    ```
 
-3. Add the entry to the `icons` array:
+3. Hinzufuegen the entry to the `icons` array:
    ```json
    {
      "skillId": "skill-id",
@@ -203,16 +203,16 @@ Register the icon in `viz/data/icon-manifest.json`.
    }
    ```
 
-**Expected:** Valid JSON with the new entry placed among its domain siblings.
+**Erwartet:** Valid JSON with the new entry placed among its domain siblings.
 
-**On failure:** Validate JSON syntax. Common mistakes: trailing comma after last array element, missing quotes.
+**Bei Fehler:** Validieren JSON syntax. Common mistakes: trailing comma nach last array element, missing quotes.
 
-### Step 5: Render — Generate the Icon
+### Schritt 5: Rendern — Generieren the Icon
 
-Run the build pipeline to render the WebP.
+Ausfuehren the build pipeline to render the WebP.
 
-1. Navigate to the `viz/` directory (or project root)
-2. Render the target domain:
+1. Navigieren to the `viz/` directory (or project root)
+2. Rendern das Ziel domain:
    ```bash
    cd viz && Rscript build-icons.R --only <domain>
    ```
@@ -226,25 +226,25 @@ Run the build pipeline to render the WebP.
    ```
 5. Output location: `viz/public/icons/<palette>/<domain>/<skill-id>.webp`
 
-**Expected:** The log shows `OK: <domain>/<skill-id> (seed=XXXXX, XX.XKB)` and the WebP file exists.
+**Erwartet:** The log shows `OK: <domain>/<skill-id> (seed=XXXXX, XX.XKB)` and the WebP file exists.
 
-**On failure:**
-- `"No glyph mapped for skill"` — Step 3 mapping is missing or has a typo
+**Bei Fehler:**
+- `"No glyph mapped for skill"` — Step 3 mapping fehlt or has a typo
 - `"Unknown domain"` — Domain not in `get_palette_colors()` in `palettes.R`
 - R package errors — Run `install.packages(c("ggplot2", "ggforce", "ggfx", "ragg", "magick"))` first
 - If rendering crashes, test the glyph function interactively (see Step 2 fallback)
 
-### Step 6: Verify — Visual Inspection
+### Schritt 6: Verifizieren — Visual Inspection
 
 Check the rendered output meets quality standards.
 
-1. Verify file exists and has reasonable size:
+1. Verifizieren file exists and has reasonable size:
    ```bash
    ls -la viz/public/icons/cyberpunk/<domain>/<skill-id>.webp
    # Expected: 15-80 KB typical range
    ```
 
-2. Open the WebP in an image viewer to check:
+2. Oeffnen the WebP in an image viewer to check:
    - Shape reads clearly at full size (1024x1024)
    - Neon glow is present but not overpowering
    - Background is transparent (no black/white rectangle)
@@ -255,15 +255,15 @@ Check the rendered output meets quality standards.
    - Detail doesn't turn to noise
    - Glow doesn't overwhelm the shape
 
-**Expected:** A clear, recognizable pictogram with even neon glow on transparent background.
+**Erwartet:** A clear, recognizable pictogram with even neon glow on transparent background.
 
-**On failure:**
+**Bei Fehler:**
 - Glow too strong: re-render with `--glow-sigma 2` (default is 4)
 - Glow too weak: re-render with `--glow-sigma 8`
 - Shape unreadable at small sizes: simplify the glyph (fewer layers, bolder strokes, increase `.lw(s, base)` base value)
 - Clipping at edges: reduce shape dimensions or shift center
 
-### Step 7: Iterate — Refine if Needed
+### Schritt 7: Iterate — Verfeinern if Needed
 
 Make adjustments and re-render.
 
@@ -271,9 +271,9 @@ Make adjustments and re-render.
    - **Bolder strokes**: increase `.lw(s, base)` — try `base = 3.0` or `3.5`
    - **More visible fill**: increase alpha from 0.10 to 0.15-0.20
    - **Shape proportions**: adjust multipliers on `s` (e.g., `20 * s` -> `24 * s`)
-   - **Add/remove detail layers**: keep total layers between 2-6 for best results
+   - **Add/remove detail layers**: keep total layers zwischen 2-6 for best results
 
-2. To re-render after changes:
+2. To re-render nach changes:
    ```bash
    # Delete the existing icon first
    rm viz/public/icons/cyberpunk/<domain>/<skill-id>.webp
@@ -281,11 +281,11 @@ Make adjustments and re-render.
    Rscript build-icons.R --only <domain> --skip-existing
    ```
 
-3. When satisfied, verify the manifest status shows `"done"` (the build script updates it automatically on success)
+3. When satisfied, verify the manifest status shows `"done"` (the build script updates it automatisch on success)
 
-**Expected:** The final icon passes all verification checks from Step 6.
+**Erwartet:** The final icon passes all verification checks from Step 6.
 
-**On failure:** If after 3+ iterations the glyph still doesn't read well, consider using a completely different visual metaphor (return to Step 1).
+**Bei Fehler:** If nach 3+ iterations the glyph still doesn't read well, consider using a vollstaendig different visual metaphor (return to Step 1).
 
 ## Reference
 
@@ -305,11 +305,11 @@ get_palette_colors("cyberpunk")$domains[["design"]]
 When adding a new domain, add it to three places in `palettes.R`:
 1. `PALETTE_DOMAIN_ORDER` (alphabetical)
 2. `get_cyberpunk_colors()` domains list
-3. Run `Rscript generate-palette-colors.R` to regenerate JSON + JS
+3. Ausfuehren `Rscript generate-palette-colors.R` to regenerate JSON + JS
 
 ### Glyph Function Catalog
 
-All glyph functions across the three primitives files, grouped by source file:
+All glyph functions across the three primitives files, grouped by Quelldatei:
 
 **primitives.R** (bushcraft, compliance, containerization, data-serialization, defensive):
 - `glyph_flame` — teardrop flame shape
@@ -355,7 +355,7 @@ All glyph functions across the three primitives files, grouped by source file:
 - `glyph_cluster_local` — local cluster nodes
 - `glyph_anchor` — anchor shape (Helm)
 - `glyph_terminal` — terminal window with prompt
-- `glyph_robot_doc` — robot head above document
+- `glyph_robot_doc` — robot head ueber document
 - `glyph_shield_scan` — shield with scan lines
 - `glyph_spark_create` — creation spark/starburst
 - `glyph_evolution_arrow` — evolution spiral arrow
@@ -407,7 +407,7 @@ All glyph functions across the three primitives files, grouped by source file:
 - `glyph_test_tube` — test tube with liquid
 - `glyph_github_actions` — GitHub actions workflow
 - `glyph_book_web` — book with web pages
-- `glyph_lock_tree` — lock with dependency tree
+- `glyph_lock_tree` — lock with Abhaengigkeit tree
 - `glyph_bridge_cpp` — bridge connector (C++)
 - `glyph_scroll_tutorial` — tutorial scroll (alias)
 - `glyph_rocket_tag` — rocket with tag (alias)
@@ -438,7 +438,7 @@ All glyph functions across the three primitives files, grouped by source file:
 |----------|-----------|---------|
 | `.lw(s, base)` | `(scale, base=2.5)` | Scale-aware line width |
 | `.aes(...)` | alias for `ggplot2::aes` | Shorthand aesthetic mapping |
-| `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Add alpha to hex color |
+| `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Hinzufuegen alpha to hex color |
 | `brighten_hex(hex, factor)` | `(string, factor=1.3)` | Brighten a hex color |
 | `dim_hex(hex, factor)` | `(string, factor=0.4)` | Dim a hex color |
 
@@ -450,24 +450,24 @@ All glyph functions across the three primitives files, grouped by source file:
 - [ ] Function placed in correct primitives file for domain grouping
 - [ ] `SKILL_GLYPHS` entry added in `viz/R/glyphs.R` with correct skill ID
 - [ ] `icon-manifest.json` entry added with correct domain, seed, path, and `"status": "pending"`
-- [ ] `build-icons.R --dry-run` runs without error
+- [ ] `build-icons.R --dry-run` runs ohne error
 - [ ] Rendered WebP exists at `viz/public/icons/cyberpunk/<domain>/<skill-id>.webp`
 - [ ] File size in expected range (15-80 KB)
 - [ ] Icon reads clearly at both 1024px and ~40px display sizes
 - [ ] Transparent background (no solid rectangle behind the glyph)
-- [ ] Manifest status updated to `"done"` after successful render
+- [ ] Manifest status updated to `"done"` nach successful render
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
 - **Forgetting `* s`**: Hard-coded pixel values break when scale changes. Always multiply by `s`.
 - **Canvas origin confusion**: (0,0) is bottom-left, not top-left. Higher `y` values move UP.
 - **Double glow**: The renderer already applies `ggfx::with_outer_glow()` to every layer. Do NOT add glow inside the glyph function.
 - **Too many layers**: Each layer gets individual glow wrapping. More than 8 layers makes rendering slow and visually noisy.
 - **Mismatched IDs**: The skill ID in `SKILL_GLYPHS`, `icon-manifest.json`, and `_registry.yml` must all match exactly.
-- **JSON trailing commas**: The manifest is strict JSON. No trailing comma after the last array element.
-- **Missing domain color**: If the domain isn't in `get_cyberpunk_colors()` in `palettes.R`, rendering will error. Add the color to `palettes.R` first, then run `Rscript generate-palette-colors.R` to regenerate the JS module.
+- **JSON trailing commas**: The manifest is strict JSON. No trailing comma nach the last array element.
+- **Missing domain color**: If the domain isn't in `get_cyberpunk_colors()` in `palettes.R`, rendering will error. Hinzufuegen the color to `palettes.R` first, then run `Rscript generate-palette-colors.R` to regenerate the JS module.
 
-## Related Skills
+## Verwandte Skills
 
 - [glyph-enhance](../glyph-enhance/SKILL.md) — improve an existing glyph's visual quality, fix rendering issues, or add detail layers
 - [ornament-style-mono](../ornament-style-mono/SKILL.md) — complementary AI-based image generation (Z-Image vs R-coded glyphs)

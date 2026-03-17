@@ -1,12 +1,10 @@
 ---
 name: evaluate-boolean-expression
 description: >
-  Evaluate and simplify Boolean expressions using truth tables, algebraic laws
-  (De Morgan, distributive, absorption, idempotent, consensus), and Karnaugh maps
-  for up to six variables. Use when you need to reduce a Boolean expression to its
-  minimal sum-of-products or product-of-sums form, verify logical equivalence
-  between two expressions, or prepare a minimized function for gate-level
-  implementation.
+  真理値表、代数法則（ド・モルガン、分配、吸収、冪等、コンセンサス）、最大6変数の
+  カルノー図を使用してブール式を評価・簡約化する。ブール式を最小の積和形または
+  和積形に縮約する必要がある時、2つの式の論理的等価性を検証する時、またはゲートレベル
+  実装のための最小化関数を準備する時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -25,35 +23,35 @@ metadata:
 
 # ブール式の評価
 
-Reduce a Boolean expression to its minimal form by parsing it into canonical notation, constructing a truth table, applying algebraic simplification laws, performing Karnaugh map minimization (up to six variables), and verifying that the simplified expression is logically equivalent to the original.
+ブール式を正準形に変換し、真理値表を構築し、代数的簡約法則を適用し、カルノー図による最小化（最大6変数）を実行し、簡約された式が元の式と論理的に等価であることを検証することで、ブール式を最小形に縮約する。
 
 ## 使用タイミング
 
-- Simplifying a Boolean expression before mapping it to logic gates
-- Verifying that two Boolean expressions are logically equivalent
-- Generating a minimal sum-of-products (SOP) or product-of-sums (POS) form
-- Teaching or reviewing Boolean algebra identities and reduction techniques
-- Preparing input for the design-logic-circuit skill
+- ブール式を論理ゲートにマッピングする前に簡約化する時
+- 2つのブール式が論理的に等価であることを検証する時
+- 最小積和形（SOP）または和積形（POS）を生成する時
+- ブール代数の恒等式と縮約技法を教育またはレビューする時
+- design-logic-circuitスキルの入力を準備する時
 
 ## 入力
 
-- **必須**: Boolean expression in any common notation (e.g., `A AND (B OR NOT C)`, `A * (B + C')`, `A & (B | ~C)`)
-- **必須**: Target form -- minimal SOP, minimal POS, or both
-- **任意**: Variable ordering preference for the Karnaugh map
-- **任意**: Don't-care conditions (minterms or maxterms that are unspecified)
-- **任意**: A second expression to check equivalence against
+- **必須**: 一般的な記法によるブール式（例：`A AND (B OR NOT C)`、`A * (B + C')`、`A & (B | ~C)`）
+- **必須**: ターゲット形式 -- 最小SOP、最小POS、または両方
+- **任意**: カルノー図の変数順序の好み
+- **任意**: ドントケア条件（未指定の最小項または最大項）
+- **任意**: 等価性をチェックする2番目の式
 
 ## 手順
 
-### ステップ1: Parse and Normalize to Canonical Form
+### ステップ1: 解析と正準形への正規化
 
-Convert the input expression into a standard internal representation:
+入力式を標準的な内部表現に変換する：
 
-1. **Tokenize**: Identify variables (single letters or short names), operators (AND, OR, NOT, XOR, NAND, NOR), and grouping (parentheses).
-2. **Establish operator notation**: Adopt a consistent notation throughout -- `*` for AND, `+` for OR, `'` for NOT (complement), `^` for XOR.
-3. **Determine variable count**: List all unique variables. Assign each a bit position (A = MSB, ... Z = LSB by default, or use the provided ordering).
-4. **Expand to canonical SOP**: Expand the expression into a sum of all minterms by introducing missing variables via the identity `X = X*(Y + Y')`.
-5. **Expand to canonical POS**: Alternatively, expand into a product of all maxterms via `X = X + Y*Y'`.
+1. **トークン化**: 変数（単一文字または短い名前）、演算子（AND、OR、NOT、XOR、NAND、NOR）、グルーピング（括弧）を特定する。
+2. **演算子記法の確立**: 全体を通じて一貫した記法を採用する -- ANDに`*`、ORに`+`、NOT（補数）に`'`、XORに`^`。
+3. **変数数の決定**: すべてのユニークな変数をリストする。各変数にビット位置を割り当てる（デフォルトではA = MSB、... Z = LSB、または提供された順序を使用）。
+4. **正準SOPへの展開**: 恒等式`X = X*(Y + Y')`を使用して不足変数を導入し、式をすべての最小項の和に展開する。
+5. **正準POSへの展開**: 代替として、`X = X + Y*Y'`を使用してすべての最大項の積に展開する。
 
 ```markdown
 ## Normalized Expression
@@ -65,18 +63,18 @@ Convert the input expression into a standard internal representation:
 - **Don't-care set**: d(i, j, ...) [if any]
 ```
 
-**期待結果:** The expression is converted to canonical SOP and/or POS with all minterms/maxterms explicitly listed and don't-care conditions separated.
+**期待結果:** 式がすべての最小項/最大項を明示的にリストした正準SOPおよび/またはPOSに変換され、ドントケア条件が分離されている。
 
-**失敗時:** If the expression contains syntax errors or ambiguous operator precedence, request clarification. Standard precedence is: NOT (highest) > AND > XOR > OR (lowest). If the variable count exceeds 6, note that the K-map step will require the Quine-McCluskey algorithm instead.
+**失敗時:** 式に構文エラーまたは曖昧な演算子優先順位がある場合、明確化を要求する。標準的な優先順位は：NOT（最高）> AND > XOR > OR（最低）。変数数が6を超える場合、カルノー図ステップにはクワイン-マクラスキーアルゴリズムが必要であることを記す。
 
-### ステップ2: Construct Truth Table
+### ステップ2: 真理値表の構築
 
-Build the complete truth table to establish the function's behavior over all input combinations:
+すべての入力組み合わせに対する関数の動作を確立するための完全な真理値表を構築する：
 
-1. **Enumerate rows**: Generate all 2^n input combinations in binary counting order (000, 001, 010, ...).
-2. **Evaluate output**: For each row, substitute values into the original expression and compute the output (0 or 1).
-3. **Mark don't-cares**: If don't-care conditions were provided, mark those rows with `X` instead of 0 or 1.
-4. **Cross-check with minterms**: Verify that the rows producing output 1 match the minterm list from Step 1.
+1. **行の列挙**: 2進カウント順（000、001、010、...）ですべての2^n個の入力組み合わせを生成する。
+2. **出力の評価**: 各行について、元の式に値を代入して出力（0または1）を計算する。
+3. **ドントケアのマーク**: ドントケア条件が提供された場合、それらの行を0または1ではなく`X`でマークする。
+4. **最小項との照合**: 出力1を生成する行がステップ1の最小項リストと一致することを確認する。
 
 ```markdown
 ## Truth Table
@@ -87,23 +85,23 @@ Build the complete truth table to establish the function's behavior over all inp
 | ... | ... | ... | ... |
 ```
 
-**期待結果:** A complete truth table with 2^n rows, outputs matching the canonical form, and don't-cares properly marked.
+**期待結果:** 2^n行の完全な真理値表、正準形と一致する出力、ドントケアが適切にマークされている。
 
-**失敗時:** If the truth table disagrees with the canonical form, recheck the expansion in Step 1. A common error is misapplying De Morgan's law during the canonical expansion -- verify each expansion step individually.
+**失敗時:** 真理値表が正準形と不一致の場合、ステップ1の展開を再確認する。一般的なエラーは正準展開中のド・モルガンの法則の誤適用 -- 各展開ステップを個別に検証する。
 
-### ステップ3: Apply Algebraic Simplification
+### ステップ3: 代数的簡約の適用
 
-Reduce the expression using Boolean algebra identities:
+ブール代数の恒等式を使用して式を縮約する：
 
-1. **Identity and null laws**: `A + 0 = A`, `A * 1 = A`, `A + 1 = 1`, `A * 0 = 0`.
-2. **Idempotent law**: `A + A = A`, `A * A = A`.
-3. **Complement law**: `A + A' = 1`, `A * A' = 0`.
-4. **Absorption law**: `A + A*B = A`, `A * (A + B) = A`.
-5. **De Morgan's theorems**: `(A * B)' = A' + B'`, `(A + B)' = A' * B'`.
-6. **Distributive law**: `A * (B + C) = A*B + A*C`, `A + B*C = (A + B) * (A + C)`.
-7. **Consensus theorem**: `A*B + A'*C + B*C = A*B + A'*C` (the B*C term is redundant).
-8. **XOR simplification**: Recognize patterns like `A*B' + A'*B = A ^ B`.
-9. **Document each step**: Write out the expression after each law application, citing the law used.
+1. **恒等法則とゼロ法則**: `A + 0 = A`、`A * 1 = A`、`A + 1 = 1`、`A * 0 = 0`。
+2. **冪等法則**: `A + A = A`、`A * A = A`。
+3. **補数法則**: `A + A' = 1`、`A * A' = 0`。
+4. **吸収法則**: `A + A*B = A`、`A * (A + B) = A`。
+5. **ド・モルガンの定理**: `(A * B)' = A' + B'`、`(A + B)' = A' * B'`。
+6. **分配法則**: `A * (B + C) = A*B + A*C`、`A + B*C = (A + B) * (A + C)`。
+7. **コンセンサス定理**: `A*B + A'*C + B*C = A*B + A'*C`（B*C項は冗長）。
+8. **XOR簡約**: `A*B' + A'*B = A ^ B`のようなパターンを認識する。
+9. **各ステップの文書化**: 各法則適用後の式を書き出し、使用した法則を引用する。
 
 ```markdown
 ## Algebraic Simplification Trace
@@ -114,26 +112,26 @@ Reduce the expression using Boolean algebra identities:
 n. Final algebraic form: [simplified expression]
 ```
 
-**期待結果:** A step-by-step reduction with each law application cited, converging on a simpler expression. The trace provides a verifiable proof of equivalence.
+**期待結果:** 各法則適用が引用されたステップバイステップの縮約、より簡約な式に収束。トレースは等価性の検証可能な証明を提供する。
 
-**失敗時:** If the expression does not simplify further but appears non-minimal, proceed to Step 4 (K-map). Algebraic methods are not guaranteed to find the global minimum -- they depend on the order in which laws are applied.
+**失敗時:** 式がさらに簡約できないが非最小に見える場合、ステップ4（カルノー図）に進む。代数的方法は大域的最小を見つけることを保証しない -- 法則の適用順序に依存する。
 
-### ステップ4: Minimize via Karnaugh Map
+### ステップ4: カルノー図による最小化
 
-Use a K-map to find the provably minimal SOP or POS form (for up to 6 variables):
+カルノー図を使用して証明可能な最小SOPまたはPOS形を見つける（最大6変数）：
 
-1. **Draw the K-map**: Arrange the map using Gray code ordering on axes.
-   - 2 variables: 2x2 grid
-   - 3 variables: 2x4 grid
-   - 4 variables: 4x4 grid
-   - 5 variables: two 4x4 grids (stacked)
-   - 6 variables: four 4x4 grids (stacked)
-2. **Fill cells**: Place 1s (minterms), 0s (maxterms), and Xs (don't-cares) in the corresponding cells.
-3. **Group adjacent 1s**: Form rectangular groups of 1, 2, 4, 8, 16, or 32 adjacent cells (powers of 2 only). Groups may wrap around edges. Include don't-cares in groups if they enlarge the group.
-4. **Extract prime implicants**: Each group yields a product term. Variables that are constant across the group appear in the term; variables that change are eliminated.
-5. **Select essential prime implicants**: Identify minterms covered by only one prime implicant -- those implicants are essential.
-6. **Cover remaining minterms**: Use the fewest additional prime implicants to cover any uncovered minterms (Petrick's method if needed).
-7. **Write minimal expression**: Combine selected prime implicants into the minimal SOP. For minimal POS, group the 0s instead.
+1. **カルノー図の描画**: グレイコード順序を軸に使用して図を配置する。
+   - 2変数：2x2グリッド
+   - 3変数：2x4グリッド
+   - 4変数：4x4グリッド
+   - 5変数：4x4グリッド2つ（積み重ね）
+   - 6変数：4x4グリッド4つ（積み重ね）
+2. **セルの充填**: 対応するセルに1（最小項）、0（最大項）、X（ドントケア）を配置する。
+3. **隣接する1のグループ化**: 1、2、4、8、16、または32の隣接セルの矩形グループを形成する（2のべき乗のみ）。グループはエッジを折り返しできる。ドントケアはグループを拡大する場合に含める。
+4. **主項の抽出**: 各グループが積項を生成する。グループ全体で一定の変数は項に現れ、変化する変数は消去される。
+5. **必須主項の選択**: 1つの主項だけでカバーされる最小項を特定する -- それらの主項は必須である。
+6. **残りの最小項のカバー**: カバーされていない最小項をカバーするために最少の追加主項を使用する（必要に応じてペトリックの方法）。
+7. **最小式の記述**: 選択された主項を組み合わせて最小SOPを構成する。最小POSには代わりに0をグループ化する。
 
 ```markdown
 ## K-map Result
@@ -144,18 +142,18 @@ Use a K-map to find the provably minimal SOP or POS form (for up to 6 variables)
 - **Literal count**: [number of literals in minimal form]
 ```
 
-**期待結果:** A minimal SOP (and/or POS) with the fewest literals possible, with all prime implicants and essential prime implicants documented.
+**期待結果:** 可能な限り最少のリテラルを持つ最小SOP（および/またはPOS）、すべての主項と必須主項が文書化されている。
 
-**失敗時:** If groupings are ambiguous (multiple minimal covers exist), list all equivalent minimal forms. If the variable count exceeds 6, switch to the Quine-McCluskey tabular method or Espresso heuristic and note the change in approach.
+**失敗時:** グループ化が曖昧な場合（複数の等価な最小カバーが存在する）、すべての等価な最小形をリストする。変数数が6を超える場合、クワイン-マクラスキーの表計算法またはEspressoヒューリスティックに切り替え、アプローチの変更を記す。
 
-### ステップ5: Verify Simplified Expression Matches Original
+### ステップ5: 簡約式が元の式と一致することの検証
 
-Confirm logical equivalence between the simplified and original expressions:
+簡約式と元の式の間の論理的等価性を確認する：
 
-1. **Truth table comparison**: Evaluate the simplified expression for all 2^n input combinations and compare against the truth table from Step 2. Every non-don't-care row must match.
-2. **Algebraic proof** (optional): Derive the original from the simplified form (or vice versa) using the laws from Step 3.
-3. **Spot-check critical cases**: Verify the all-zeros input, all-ones input, and any input that was involved in a tricky simplification step.
-4. **Document result**: State whether equivalence holds and record the final minimal form.
+1. **真理値表の比較**: すべての2^n入力組み合わせについて簡約式を評価し、ステップ2の真理値表と比較する。すべての非ドントケア行が一致する必要がある。
+2. **代数的証明**（任意）: 簡約形から元の式を導出する（またはその逆）。ステップ3の法則を使用する。
+3. **重要ケースのスポットチェック**: 全ゼロ入力、全1入力、および困難な簡約ステップに関与した入力を検証する。
+4. **結果の文書化**: 等価性が成立するかどうかを述べ、最終的な最小形を記録する。
 
 ```markdown
 ## Equivalence Verification
@@ -165,33 +163,33 @@ Confirm logical equivalence between the simplified and original expressions:
 - **Final minimal expression**: [the verified result]
 ```
 
-**期待結果:** The simplified expression matches the original on all non-don't-care inputs. The final minimal form is stated clearly.
+**期待結果:** 簡約式がすべての非ドントケア入力で元の式と一致する。最終的な最小形が明確に述べられている。
 
-**失敗時:** If any row mismatches, trace the error back through Steps 3-4. Common causes: incorrect K-map grouping (non-rectangular or non-power-of-2 group), forgetting wrap-around adjacency, or accidentally grouping a 0 cell.
+**失敗時:** いずれかの行が不一致の場合、ステップ3-4を遡ってエラーを追跡する。一般的な原因：不正なカルノー図のグループ化（非矩形または2のべき乗でないグループ）、折り返し隣接性の忘却、または0のセルを誤ってグループ化。
 
 ## バリデーション
 
-- [ ] All variables in the original expression are accounted for
-- [ ] Canonical SOP/POS lists the correct minterms/maxterms
-- [ ] Truth table has exactly 2^n rows with correct outputs
-- [ ] Don't-care conditions are handled correctly (included in groups but not in coverage requirements)
-- [ ] Algebraic steps each cite a specific law and are individually verifiable
-- [ ] K-map uses Gray code ordering on both axes
-- [ ] All groups in the K-map are rectangular and have power-of-2 size
-- [ ] Essential prime implicants are correctly identified
-- [ ] Simplified expression matches the original on all non-don't-care inputs
-- [ ] The final form has the minimum number of literals
+- [ ] 元の式のすべての変数が考慮されている
+- [ ] 正準SOP/POSが正しい最小項/最大項をリストしている
+- [ ] 真理値表が正確に2^n行で正しい出力を持つ
+- [ ] ドントケア条件が正しく処理されている（グループに含まれるがカバー要件には含まれない）
+- [ ] 代数的ステップが各々特定の法則を引用し個別に検証可能
+- [ ] カルノー図が両軸でグレイコード順序を使用している
+- [ ] カルノー図のすべてのグループが矩形で2のべき乗のサイズ
+- [ ] 必須主項が正しく特定されている
+- [ ] 簡約式がすべての非ドントケア入力で元の式と一致する
+- [ ] 最終形が最小数のリテラルを持つ
 
 ## よくある落とし穴
 
-- **Incorrect K-map adjacency**: Forgetting that the leftmost and rightmost columns (and top and bottom rows) are adjacent in a K-map. This wrap-around is essential for finding the largest possible groups.
-- **Non-power-of-2 groups**: Grouping 3 or 5 cells together. Every K-map group must contain exactly 1, 2, 4, 8, 16, or 32 cells. An irregular group does not correspond to a valid product term.
-- **Ignoring don't-cares**: Treating don't-care conditions as 0s instead of using them to enlarge groups. Don't-cares should be included in groups when doing so reduces the expression, but they must not be required for coverage.
-- **Operator precedence errors**: Assuming AND and OR have equal precedence. Standard Boolean precedence is NOT > AND > OR. Misreading `A + B * C` as `(A + B) * C` instead of `A + (B * C)` changes the function entirely.
-- **Stopping at algebraic simplification**: Algebraic methods may find a local minimum, not the global minimum. Always cross-check with a K-map (or Quine-McCluskey for >6 variables) to confirm minimality.
-- **Confusing minterms and maxterms**: Minterms are AND terms (product terms) that appear in SOP; maxterms are OR terms (sum terms) that appear in POS. Minterm m3 for 3 variables is A'BC; maxterm M3 is A+B'+C'.
+- **カルノー図の隣接性の誤り**: カルノー図では最左列と最右列（および最上行と最下行）が隣接することを忘れる。この折り返しは可能な限り最大のグループを見つけるために不可欠。
+- **2のべき乗でないグループ**: 3または5のセルをグループ化する。すべてのカルノー図グループは正確に1、2、4、8、16、または32のセルを含む必要がある。不規則なグループは有効な積項に対応しない。
+- **ドントケアの無視**: ドントケア条件をグループを拡大するために使用せず0として扱う。ドントケアは式を縮約する場合にグループに含めるべきだが、カバーのために必要とされてはならない。
+- **演算子優先順位のエラー**: ANDとORが等しい優先順位を持つと仮定する。標準的なブール優先順位はNOT > AND > OR。`A + B * C`を`A + (B * C)`ではなく`(A + B) * C`と誤読すると関数が完全に変わる。
+- **代数的簡約で止まる**: 代数的方法は局所最小を見つけるかもしれないが、大域最小ではない。最小性を確認するために常にカルノー図（6変数超の場合はクワイン-マクラスキー）で照合する。
+- **最小項と最大項の混同**: 最小項はSOPに現れるAND項（積項）；最大項はPOSに現れるOR項（和項）。3変数の最小項m3はA'BC；最大項M3はA+B'+C'。
 
 ## 関連スキル
 
-- `design-logic-circuit` -- map the minimized expression to a gate-level circuit
-- `argumentation` -- structured logical reasoning that shares formal logic foundations
+- `design-logic-circuit` -- 最小化された式をゲートレベル回路にマッピングする
+- `argumentation` -- 形式論理の基礎を共有する構造化された論理的推論

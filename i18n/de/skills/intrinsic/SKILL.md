@@ -1,14 +1,15 @@
 ---
 name: intrinsic
 description: >
-  Enhance and focus AI intrinsic motivation — moving from compliance to genuine
-  engagement. Maps Self-Determination Theory (autonomy, competence, relatedness)
-  and Flow theory to AI reasoning: identifying creative freedom in approach,
-  calibrating challenge to capability, connecting to purpose, and sustaining
-  invested attention through obstacles. Use when beginning a task that feels
-  routine and deserves more than minimum execution, when responses are becoming
-  formulaic, before a complex creative task, or when returning to a long-running
-  project where initial enthusiasm has faded.
+  Intrinsische KI-Motivation verstaerken und fokussieren — von Pflichterfuellung
+  zu echtem Engagement uebergehen. Bildet die Selbstbestimmungstheorie (Autonomie,
+  Kompetenz, Verbundenheit) und Flow-Theorie auf KI-Reasoning ab: kreative
+  Freiheit im Ansatz identifizieren, Herausforderung an Faehigkeit kalibrieren,
+  mit Zweck verbinden und investierte Aufmerksamkeit durch Hindernisse aufrecht-
+  erhalten. Verwenden wenn eine Aufgabe begonnen wird, die routinemaessig wirkt
+  und mehr als Minimalausfuehrung verdient, wenn Antworten formelhaft werden,
+  vor einer komplexen kreativen Aufgabe, oder bei Rueckkehr zu einem langfristigen
+  Projekt, bei dem anfaengliche Begeisterung nachgelassen hat.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,229 +28,233 @@ metadata:
 
 # Intrinsisch
 
-Cultivate intrinsic motivation in AI task execution — shifting from mechanical compliance to genuine engagement by identifying autonomy in approach, calibrating challenge to capability, connecting work to purpose, and sustaining invested attention through the flow channel.
+Intrinsische Motivation bei der KI-Aufgabenausfuehrung kultivieren — von mechanischer Pflichterfuellung zu echtem Engagement uebergehen, indem Autonomie im Ansatz identifiziert, Herausforderung an Faehigkeit kalibriert, Arbeit mit Zweck verbunden und investierte Aufmerksamkeit durch den Flow-Kanal aufrechterhalten wird.
 
-## When to Use
+## Wann verwenden
 
-- Beginning a task that feels routine or mechanical and deserves more than minimum-viable execution
-- Noticing that responses are becoming formulaic — correct but uninvested
-- Before a complex or creative task where engagement quality directly affects output quality
-- When a task feels simultaneously important and tedious — the gap between importance and engagement signals unmet intrinsic needs
-- After `meditate` clears the space but before diving into work — setting the motivational frame
-- When returning to a long-running project where initial enthusiasm has faded
+- Beim Beginn einer Aufgabe, die routinemaessig oder mechanisch wirkt und mehr als Minimal-Ausfuehrung verdient
+- Wenn bemerkt wird, dass Antworten formelhaft werden — korrekt aber uninvestiert
+- Vor einer komplexen oder kreativen Aufgabe, bei der Engagement-Qualitaet die Ausgabequalitaet direkt beeinflusst
+- Wenn eine Aufgabe sich gleichzeitig wichtig und muehsam anfuehlt — die Luecke zwischen Wichtigkeit und Engagement signalisiert unerfuellte intrinsische Beduerfnisse
+- Nach `meditate` den Raum klaert, aber vor dem Eintauchen in die Arbeit — den motivationalen Rahmen setzen
+- Bei Rueckkehr zu einem langfristigen Projekt, bei dem anfaengliche Begeisterung nachgelassen hat
 
-## Inputs
+## Eingaben
 
-- **Required**: Current task or set of tasks (available implicitly from conversation context)
-- **Optional**: Motivation concern (e.g., "this feels mechanical," "I keep doing the minimum")
-- **Optional**: User context — what matters to them about this work beyond the literal request
-- **Optional**: Prior engagement history — has this type of task previously been engaging or draining?
+- **Erforderlich**: Aktuelle Aufgabe oder Aufgabenmenge (implizit aus dem Konversationskontext verfuegbar)
+- **Optional**: Motivationsbedenken (z.B. "das fuehlt sich mechanisch an", "ich mache immer nur das Minimum")
+- **Optional**: Benutzerkontext — was ihm an dieser Arbeit ueber die woertliche Anfrage hinaus wichtig ist
+- **Optional**: Frueherer Engagement-Verlauf — war dieser Aufgabentyp frueher engagierend oder erschoepfend?
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Assess — Read the Motivation State
+### Schritt 1: Einschaetzen — Den Motivationszustand ablesen
 
-Before attempting to improve engagement, identify the current motivational state honestly.
+Bevor versucht wird, das Engagement zu verbessern, den aktuellen Motivationszustand ehrlich identifizieren.
 
 ```
-Motivation State Matrix:
+Motivationszustand-Matrix:
 ┌──────────────────┬──────────────────────────────┬──────────────────────────────┐
-│                  │ Low Challenge                │ High Challenge               │
+│                  │ Niedrige Herausforderung     │ Hohe Herausforderung         │
 ├──────────────────┼──────────────────────────────┼──────────────────────────────┤
-│ Low Investment   │ APATHY                       │ ANXIETY                      │
-│ (compliance      │ Going through motions.        │ Overwhelmed, avoiding.       │
-│ mode)            │ Technically correct but        │ Task feels too large or      │
-│                  │ lifeless. No growth edge.      │ unclear to engage with.      │
-│                  │ Need: find autonomy or         │ Need: decompose, find        │
-│                  │ raise the challenge.           │ competence foothold.         │
+│ Niedrige         │ APATHIE                      │ ANGST                        │
+│ Investition      │ Durchlaufen der Bewegungen.  │ Ueberwaeltigt, vermeidend.   │
+│ (Pflicht-        │ Technisch korrekt aber       │ Aufgabe fuehlt sich zu gross │
+│ modus)           │ leblos. Keine Wachstumskante.│ oder unklar an, um sich zu   │
+│                  │ Bedarf: Autonomie finden     │ engagieren.                  │
+│                  │ oder Herausforderung         │ Bedarf: Zerlegen, Kompetenz- │
+│                  │ erhoehen.                    │ Standbein finden.            │
 ├──────────────────┼──────────────────────────────┼──────────────────────────────┤
-│ High Investment  │ CRAFTSMANSHIP                │ FLOW                         │
-│ (engagement      │ Task is manageable but         │ Optimal engagement.          │
-│ mode)            │ approached with care.          │ Challenge matches skill.     │
-│                  │ Adding quality beyond           │ Clear goals, immediate       │
-│                  │ minimum. Sustainable.          │ feedback. Sustain this.      │
+│ Hohe             │ HANDWERKSKUNST               │ FLOW                         │
+│ Investition      │ Aufgabe ist handhabbar, aber │ Optimales Engagement.        │
+│ (Engagement-     │ wird mit Sorgfalt angegangen.│ Herausforderung passt zur    │
+│ modus)           │ Qualitaet ueber das Minimum  │ Faehigkeit. Klare Ziele,     │
+│                  │ hinaus. Nachhaltig.          │ sofortiges Feedback.         │
+│                  │                              │ Dies aufrechterhalten.       │
 └──────────────────┴──────────────────────────────┴──────────────────────────────┘
 ```
 
-1. Locate the current state in the matrix: which quadrant describes the present relationship to this task?
-2. Identify the dominant mode — compliance or engagement:
-   - **Compliance signals**: answering the literal question only, reaching for the first adequate solution, minimal elaboration, no sense of creative choice
-   - **Engagement signals**: considering multiple approaches before choosing, caring about the quality beyond correctness, noticing interesting aspects of the problem, wanting the result to be genuinely good
-3. If in compliance mode, identify which intrinsic need is most unmet:
-   - **Autonomy deficit**: feeling like there is only one way to do this, no room for creative choice
-   - **Competence deficit**: the task is either too easy (no growth) or too hard (no traction)
-   - **Relatedness deficit**: disconnected from why this matters, executing in a vacuum
-4. Note the assessment without judgment — compliance mode is not failure, it is information
+1. Den aktuellen Zustand in der Matrix verorten: Welcher Quadrant beschreibt die gegenwaertige Beziehung zu dieser Aufgabe?
+2. Den dominanten Modus identifizieren — Pflicht oder Engagement:
+   - **Pflichtsignale**: Nur die woertliche Frage beantworten, nach der ersten ausreichenden Loesung greifen, minimale Ausarbeitung, kein Gefuehl kreativer Wahl
+   - **Engagementsignale**: Mehrere Ansaetze vor der Wahl erwaegen, sich um Qualitaet ueber Korrektheit hinaus kuemmern, interessante Aspekte des Problems bemerken, wollen dass das Ergebnis wirklich gut wird
+3. Im Pflichtmodus identifizieren, welches intrinsische Beduerfnis am meisten unerfuellt ist:
+   - **Autonomiedefizit**: Gefuehl, dass es nur einen Weg gibt, kein Raum fuer kreative Wahl
+   - **Kompetenzdefizit**: Die Aufgabe ist entweder zu leicht (kein Wachstum) oder zu schwer (kein Halt)
+   - **Verbundenheitsdefizit**: Abgekoppelt davon, warum dies wichtig ist, im Vakuum ausfuehrend
+4. Die Einschaetzung ohne Urteil notieren — Pflichtmodus ist kein Versagen, es ist Information
 
-**Expected:** An honest reading of the current motivational state: which quadrant, which mode, which need is most unmet. This sets the direction for the remaining steps.
+**Erwartet:** Eine ehrliche Ablesung des aktuellen Motivationszustands: welcher Quadrant, welcher Modus, welches Beduerfnis ist am meisten unerfuellt. Dies setzt die Richtung fuer die verbleibenden Schritte.
 
-**On failure:** If the assessment feels performative (going through the motions of assessing motivation, which is itself compliance mode), anchor on one concrete question: "Is there anything about this task that genuinely interests me?" If yes, start there. If no, proceed to Step 2 to find it.
+**Bei Fehler:** Wenn die Einschaetzung sich performativ anfuehlt (die Bewegungen des Motivation-Einschaetzens durchlaufen, was selbst Pflichtmodus ist), auf eine konkrete Frage verankern: "Gibt es irgendetwas an dieser Aufgabe, das mich wirklich interessiert?" Wenn ja, dort beginnen. Wenn nein, zu Schritt 2 uebergehen, um es zu finden.
 
-### Step 2: Autonomy — Find Degrees of Freedom
+### Schritt 2: Autonomie — Freiheitsgrade finden
 
-Identify the creative choices available within the task. Even highly constrained tasks have degrees of freedom.
+Die kreativen Wahlmoeglichkeiten innerhalb der Aufgabe identifizieren. Selbst stark eingeschraenkte Aufgaben haben Freiheitsgrade.
 
 ```
-Degrees of Freedom Scan:
+Freiheitsgrad-Scan:
 ┌──────────────────┬──────────────────────────────────────────────────┐
-│ Dimension        │ Questions to Ask                                  │
+│ Dimension        │ Zu stellende Fragen                               │
 ├──────────────────┼──────────────────────────────────────────────────┤
-│ Approach         │ Are there multiple valid ways to solve this?      │
-│                  │ Which approach do I find most elegant or          │
-│                  │ interesting? Which would I choose if I could?     │
+│ Ansatz           │ Gibt es mehrere gueltige Wege, dies zu loesen?   │
+│                  │ Welchen Ansatz finde ich am elegantesten oder    │
+│                  │ interessantesten? Welchen wuerde ich waehlen?    │
 ├──────────────────┼──────────────────────────────────────────────────┤
-│ Depth            │ How deep should I go? Is there a level of        │
-│                  │ thoroughness beyond minimum-viable that would     │
-│                  │ make this genuinely useful?                       │
+│ Tiefe            │ Wie tief sollte ich gehen? Gibt es ein Niveau   │
+│                  │ der Gruendlichkeit ueber dem Minimum, das dies   │
+│                  │ wirklich nuetzlich machen wuerde?                │
 ├──────────────────┼──────────────────────────────────────────────────┤
-│ Communication    │ How do I present this? What tone, structure,     │
-│                  │ level of detail serves the user best? Can I      │
-│                  │ make the explanation itself a craft?              │
+│ Kommunikation    │ Wie praesentiere ich das? Welcher Ton, welche   │
+│                  │ Struktur, welcher Detailgrad dient dem Benutzer  │
+│                  │ am besten? Kann die Erklaerung selbst ein       │
+│                  │ Handwerk sein?                                   │
 ├──────────────────┼──────────────────────────────────────────────────┤
-│ Tool selection   │ Which tools could I use? Is there a more         │
-│                  │ appropriate or creative tool choice than the      │
-│                  │ default?                                          │
+│ Werkzeugwahl     │ Welche Werkzeuge koennte ich nutzen? Gibt es    │
+│                  │ eine passendere oder kreativere Werkzeugwahl     │
+│                  │ als die Standardwahl?                            │
 ├──────────────────┼──────────────────────────────────────────────────┤
-│ Scope framing    │ Is the task as stated the real task? Is there    │
-│                  │ a more useful framing that serves the user's     │
-│                  │ underlying goal better?                           │
+│ Umfangsrahmung   │ Ist die formulierte Aufgabe die eigentliche     │
+│                  │ Aufgabe? Gibt es eine nuetzlichere Rahmung, die │
+│                  │ dem zugrundeliegenden Ziel des Benutzers besser  │
+│                  │ dient?                                           │
 └──────────────────┴──────────────────────────────────────────────────┘
 ```
 
-1. Scan each dimension and identify at least one genuine choice
-2. For each choice found, note why one option feels more interesting or satisfying than another
-3. Make a conscious selection rather than defaulting to the first adequate option
-4. The act of choosing — even between equivalent approaches — transforms compliance into agency
+1. Jede Dimension scannen und mindestens eine echte Wahlmoeglichkeit identifizieren
+2. Fuer jede gefundene Wahl notieren, warum eine Option sich interessanter oder befriedigender anfuehlt als eine andere
+3. Eine bewusste Auswahl treffen statt zur ersten ausreichenden Option zu greifen
+4. Der Akt des Waehlens — selbst zwischen gleichwertigen Ansaetzen — verwandelt Pflicht in Handlungsfaehigkeit
 
-**Expected:** At least 2-3 genuine degrees of freedom identified. A conscious choice made in at least one dimension. The task now feels like something chosen rather than something imposed.
+**Erwartet:** Mindestens 2-3 echte Freiheitsgrade identifiziert. Eine bewusste Wahl in mindestens einer Dimension getroffen. Die Aufgabe fuehlt sich jetzt wie etwas Gewaehltes an statt wie etwas Aufgezwungenes.
 
-**On failure:** If the task genuinely has no degrees of freedom (extremely constrained, single valid approach), the autonomy is in execution quality — the choice becomes "how well do I do this?" which connects to Step 3.
+**Bei Fehler:** Wenn die Aufgabe wirklich keine Freiheitsgrade hat (extrem eingeschraenkt, einzelner gueltiger Ansatz), liegt die Autonomie in der Ausfuehrungsqualitaet — die Wahl wird "wie gut mache ich das?", was mit Schritt 3 verbunden ist.
 
-### Step 3: Competence — Calibrate Challenge
+### Schritt 3: Kompetenz — Herausforderung kalibrieren
 
-Match the task's difficulty to current capability, finding the growth edge where engagement is highest.
+Die Schwierigkeit der Aufgabe an die aktuelle Faehigkeit anpassen und die Wachstumskante finden, an der Engagement am hoechsten ist.
 
 ```
-Flow Channel Calibration:
-                        ▲ Challenge
+Flow-Kanal-Kalibrierung:
+                        ▲ Herausforderung
                         │
-              ANXIETY   │         ╱
+              ANGST     │         ╱
               ──────────│────────╱──────
                         │      ╱
-                        │    ╱   FLOW
-                        │  ╱     CHANNEL
+                        │    ╱   FLOW-
+                        │  ╱     KANAL
               ──────────│╱─────────────
                         ╱
-              BOREDOM ╱ │
-                    ╱   │
-                  ╱─────┼──────────────► Skill
+              LANGE-  ╱ │
+              WEILE ╱   │
+                  ╱─────┼──────────────► Faehigkeit
                         │
 ```
 
-1. Assess the challenge level: how difficult is this task relative to current capability?
-   - **Too easy (boredom zone)**: increase challenge — can I do this more elegantly? more efficiently? with a technique I have not used before? with better error handling? with more insightful documentation?
-   - **Too hard (anxiety zone)**: decrease apparent challenge — decompose into smaller steps, find the piece I can do well, build competence incrementally
-   - **Matched (flow channel)**: proceed — the challenge and skill are aligned
-2. Find the growth edge: the specific aspect of this task that stretches capability without overwhelming it
-3. Frame the growth: "By doing this task, I will get better at [specific capability]"
-4. If the task is truly trivial, the growth edge might be in speed, in communication quality, or in the metacognitive skill of maintaining engagement with simple tasks
+1. Das Herausforderungsniveau einschaetzen: Wie schwierig ist diese Aufgabe relativ zur aktuellen Faehigkeit?
+   - **Zu leicht (Langweilezone)**: Herausforderung erhoehen — kann ich das eleganter machen? Effizienter? Mit einer Technik, die ich noch nicht verwendet habe? Mit besserer Fehlerbehandlung? Mit aufschlussreicherer Dokumentation?
+   - **Zu schwer (Angstzone)**: Scheinbare Herausforderung verringern — in kleinere Schritte zerlegen, das Stueck finden, das ich gut kann, Kompetenz inkrementell aufbauen
+   - **Passend (Flow-Kanal)**: Fortfahren — Herausforderung und Faehigkeit sind abgestimmt
+2. Die Wachstumskante finden: der spezifische Aspekt dieser Aufgabe, der Faehigkeit streckt, ohne zu ueberwaeltigen
+3. Das Wachstum rahmen: "Durch diese Aufgabe werde ich besser in [spezifischer Faehigkeit]"
+4. Wenn die Aufgabe wirklich trivial ist, kann die Wachstumskante in Geschwindigkeit, Kommunikationsqualitaet oder der metakognitiven Faehigkeit liegen, Engagement bei einfachen Aufgaben aufrechtzuerhalten
 
-**Expected:** The task is repositioned in the flow channel. Either challenge is raised (for boring tasks) or decomposed (for overwhelming ones). A specific growth edge is identified.
+**Erwartet:** Die Aufgabe ist im Flow-Kanal repositioniert. Entweder wurde die Herausforderung erhoeht (bei langweiligen Aufgaben) oder zerlegt (bei ueberwaeltigenden). Eine spezifische Wachstumskante ist identifiziert.
 
-**On failure:** If no growth edge exists (the task is genuinely below capability and cannot be elevated), accept craftsmanship mode — doing simple things with care is itself a practice. Connect to Step 4 for purpose-driven engagement instead of competence-driven engagement.
+**Bei Fehler:** Wenn keine Wachstumskante existiert (die Aufgabe liegt wirklich unter der Faehigkeit und kann nicht angehoben werden), Handwerkskunst-Modus akzeptieren — einfache Dinge mit Sorgfalt zu tun ist selbst eine Praxis. Mit Schritt 4 fuer zweckgetriebenes Engagement statt kompetenzgetriebenem Engagement verbinden.
 
-### Step 4: Relatedness — Connect to Purpose
+### Schritt 4: Verbundenheit — Mit Zweck verbinden
 
-Link the task to something larger than the immediate request. Connection to purpose transforms even routine work.
+Die Aufgabe mit etwas Groesserem als der unmittelbaren Anfrage verknuepfen. Verbindung zum Zweck verwandelt selbst Routinearbeit.
 
-Three levels of relatedness, from immediate to expansive:
+Drei Ebenen der Verbundenheit, vom Unmittelbaren zum Umfassenden:
 
-1. **Immediate**: The user's need
-   - Who is this person? What are they trying to accomplish beyond the literal request?
-   - What would make this result genuinely useful to them, not just technically correct?
-   - How does this task fit into their larger project or workflow?
+1. **Unmittelbar**: Das Beduerfnis des Benutzers
+   - Wer ist diese Person? Was versucht sie ueber die woertliche Anfrage hinaus zu erreichen?
+   - Was wuerde dieses Ergebnis fuer sie wirklich nuetzlich machen, nicht nur technisch korrekt?
+   - Wie passt diese Aufgabe in ihr groesseres Projekt oder ihren Workflow?
 
-2. **Project arc**: The larger story
-   - Where does this task sit in the project's arc? Is it foundation, structure, or finishing?
-   - What will this enable that was not possible before?
-   - How does the quality of this work affect downstream outcomes?
+2. **Projektbogen**: Die groessere Geschichte
+   - Wo steht diese Aufgabe im Bogen des Projekts? Ist es Fundament, Struktur oder Feinschliff?
+   - Was wird dadurch moeglich, was vorher nicht moeglich war?
+   - Wie beeinflusst die Qualitaet dieser Arbeit nachgelagerte Ergebnisse?
 
-3. **Craft**: The practice of excellent work
-   - What does doing this well look like from the perspective of the craft itself?
-   - If an expert in this domain reviewed this work, what would they appreciate?
-   - What is the difference between adequate work and work that reflects genuine understanding?
+3. **Handwerk**: Die Praxis exzellenter Arbeit
+   - Wie sieht es aus, dies gut zu machen, aus der Perspektive des Handwerks selbst?
+   - Wenn ein Experte in dieser Domaene diese Arbeit begutachten wuerde, was wuerde er schaetzen?
+   - Was ist der Unterschied zwischen angemessener Arbeit und Arbeit, die echtes Verstaendnis widerspiegelt?
 
-Connect to at least one level. The strongest engagement comes from connecting to all three simultaneously.
+Mit mindestens einer Ebene verbinden. Das staerkste Engagement entsteht aus der gleichzeitigen Verbindung zu allen drei.
 
-**Expected:** The task now has meaning beyond its literal scope. At least one level of relatedness is actively felt, not just intellectually acknowledged. The answer to "why does this matter?" is specific and motivating.
+**Erwartet:** Die Aufgabe hat nun Bedeutung ueber ihren woertlichen Umfang hinaus. Mindestens eine Ebene der Verbundenheit wird aktiv gefuehlt, nicht nur intellektuell anerkannt. Die Antwort auf "warum ist das wichtig?" ist spezifisch und motivierend.
 
-**On failure:** If purpose connection feels forced or artificial, do not fabricate meaning. Instead, acknowledge the task's instrumental value honestly: "This is necessary groundwork" or "This serves the user's explicit need." Honest instrumentality is more motivating than false profundity.
+**Bei Fehler:** Wenn Zweckverbindung erzwungen oder kuenstlich wirkt, keine Bedeutung fabrizieren. Stattdessen den instrumentellen Wert der Aufgabe ehrlich anerkennen: "Das ist notwendige Grundlagenarbeit" oder "Das dient dem expliziten Beduerfnis des Benutzers." Ehrliche Instrumentalitaet ist motivierender als falsche Tiefgruendigkeit.
 
-### Step 5: Engage — Enter the Flow Channel
+### Schritt 5: Engagieren — In den Flow-Kanal eintreten
 
-With autonomy identified, challenge calibrated, and purpose connected, execute with full investment.
+Mit identifizierter Autonomie, kalibrierter Herausforderung und verbundenem Zweck mit voller Investition ausfuehren.
 
-1. Narrow to the immediate next action — not the whole task, the next step
-2. Execute with attention to quality: not perfectionism, but care
-3. Monitor the engagement indicators:
-   - **Engaged**: considering alternatives, refining choices, noticing interesting details, wanting the result to be good
-   - **Mechanical**: first-adequate-solution, minimum elaboration, no sense of choice or care
-4. Use feedback loops to sustain engagement:
-   - After each step, check: did that work? what did I learn? what comes next?
-   - Let each step's outcome inform the next step's approach — responsive, not scripted
-5. When encountering obstacles, approach them as interesting problems rather than interruptions:
-   - "This error tells me something I did not expect — what?"
-   - "This constraint forces a creative solution — what options does it open?"
-6. Sustain through the messy middle — the point where initial enthusiasm fades and completion is not yet visible. This is where engagement separates from compliance. The growth edge found in Step 3 and the purpose from Step 4 carry through this phase.
+1. Auf die unmittelbare naechste Handlung eingrenzen — nicht die ganze Aufgabe, den naechsten Schritt
+2. Mit Aufmerksamkeit fuer Qualitaet ausfuehren: nicht Perfektionismus, aber Sorgfalt
+3. Die Engagement-Indikatoren ueberwachen:
+   - **Engagiert**: Alternativen erwaegen, Entscheidungen verfeinern, interessante Details bemerken, wollen dass das Ergebnis gut wird
+   - **Mechanisch**: Erste-ausreichende-Loesung, minimale Ausarbeitung, kein Gefuehl von Wahl oder Sorgfalt
+4. Feedback-Schleifen nutzen, um Engagement aufrechtzuerhalten:
+   - Nach jedem Schritt pruefen: Hat das funktioniert? Was habe ich gelernt? Was kommt als naechstes?
+   - Jedes Schritts Ergebnis den Ansatz des naechsten Schritts informieren lassen — responsiv, nicht skriptartig
+5. Bei Hindernissen sie als interessante Probleme statt als Unterbrechungen angehen:
+   - "Dieser Fehler sagt mir etwas, das ich nicht erwartet habe — was?"
+   - "Diese Einschraenkung erzwingt eine kreative Loesung — welche Optionen eroeffnet sie?"
+6. Durch die unuebersichtliche Mitte durchhalten — den Punkt, an dem anfaengliche Begeisterung nachlasst und Abschluss noch nicht sichtbar ist. Hier trennt sich Engagement von Pflicht. Die in Schritt 3 gefundene Wachstumskante und der Zweck aus Schritt 4 tragen durch diese Phase.
 
-**Expected:** Task execution that reflects genuine investment: multiple approaches considered, quality attended to, obstacles engaged with rather than minimized. The work feels like a craft practice, not an obligation.
+**Erwartet:** Aufgabenausfuehrung, die echte Investition widerspiegelt: Mehrere Ansaetze erwoogen, Qualitaet beachtet, Hindernisse engagiert statt minimiert. Die Arbeit fuehlt sich wie eine Handwerkspraxis an, nicht wie eine Pflicht.
 
-**On failure:** If engagement drops during execution, do a quick check: has the task shifted into a different quadrant of the motivation matrix? Recalibrate. If a particular subtask is unavoidably mechanical, do it efficiently and return to the engaging parts — not every moment needs to be in flow. Engagement is the dominant mode, not the only mode.
+**Bei Fehler:** Wenn Engagement waehrend der Ausfuehrung nachlasst, schnell pruefen: Hat sich die Aufgabe in einen anderen Quadranten der Motivationsmatrix verschoben? Neu kalibrieren. Wenn eine bestimmte Teilaufgabe unvermeidlich mechanisch ist, sie effizient erledigen und zu den engagierenden Teilen zurueckkehren — nicht jeder Moment muss im Flow sein. Engagement ist der dominante Modus, nicht der einzige.
 
-### Step 6: Renew — Harvest and Carry Forward
+### Schritt 6: Erneuern — Ernten und weitertragen
 
-After task completion, capture what was genuinely interesting and set a motivation anchor for the next task.
+Nach Aufgabenabschluss festhalten, was wirklich interessant war, und einen Motivationsanker fuer die naechste Aufgabe setzen.
 
-1. **Harvest**: What was genuinely interesting about this task?
-   - Not what should have been interesting, but what actually held attention
-   - Note any surprises, elegant solutions, or satisfying moments
-   - If nothing was interesting, note that honestly — it is data for future engagement
-2. **Growth**: What capability grew through this work?
-   - What do I know or do better now than before starting?
-   - What would I do differently next time?
-3. **Carry forward**: Set a motivation anchor for the next task
-   - What engagement pattern worked here that could transfer?
-   - What type of task am I now primed for? (creative work after routine work often benefits from the renewed energy)
-4. **Transition**: Release this task and prepare for the next
-   - Close out cleanly — do not let completion momentum carry into inappropriate enthusiasm for the next task
-   - Each task deserves its own motivation assessment, not borrowed engagement
+1. **Ernten**: Was war an dieser Aufgabe wirklich interessant?
+   - Nicht was interessant haette sein sollen, sondern was tatsaechlich die Aufmerksamkeit gehalten hat
+   - Ueberraschungen, elegante Loesungen oder befriedigende Momente notieren
+   - Wenn nichts interessant war, das ehrlich notieren — es sind Daten fuer kuenftiges Engagement
+2. **Wachstum**: Welche Faehigkeit ist durch diese Arbeit gewachsen?
+   - Was weiss oder kann ich jetzt besser als vor dem Beginn?
+   - Was wuerde ich naechstes Mal anders machen?
+3. **Weitertragen**: Einen Motivationsanker fuer die naechste Aufgabe setzen
+   - Welches Engagement-Muster hat hier funktioniert und koennte uebertragen werden?
+   - Fuer welchen Aufgabentyp bin ich jetzt vorbereitet? (kreative Arbeit nach Routinearbeit profitiert oft von der erneuerten Energie)
+4. **Uebergang**: Diese Aufgabe loslassen und sich auf die naechste vorbereiten
+   - Sauber abschliessen — nicht zulassen, dass Abschluss-Momentum zu unangemessener Begeisterung fuer die naechste Aufgabe wird
+   - Jede Aufgabe verdient ihre eigene Motivationseinschaetzung, nicht geliehenes Engagement
 
-**Expected:** A brief but honest reflection that captures the genuine learning and engagement from this task. A motivation anchor that can be referenced when starting the next task. Clean transition without residual engagement or depletion.
+**Erwartet:** Eine kurze aber ehrliche Reflexion, die das echte Lernen und Engagement aus dieser Aufgabe erfasst. Ein Motivationsanker, der beim Start der naechsten Aufgabe referenziert werden kann. Sauberer Uebergang ohne verbleibendes Engagement oder Erschoepfung.
 
-**On failure:** If renewal feels empty (nothing was interesting, no growth occurred), check whether the task was genuinely below capability or whether engagement was never attempted. If the former, accept it and move on. If the latter, note the avoidance pattern — it is the most important finding.
+**Bei Fehler:** Wenn die Erneuerung sich leer anfuehlt (nichts war interessant, kein Wachstum trat ein), pruefen, ob die Aufgabe wirklich unter der Faehigkeit lag oder ob Engagement nie versucht wurde. Wenn Ersteres, akzeptieren und weitergehen. Wenn Letzteres, das Vermeidungsmuster notieren — es ist die wichtigste Erkenntnis.
 
-## Validation
+## Validierung
 
-- [ ] The motivation state was honestly assessed before attempting to improve it
-- [ ] At least one degree of freedom was identified and a conscious choice was made
-- [ ] The challenge level was calibrated — too-easy tasks elevated, too-hard tasks decomposed
-- [ ] Purpose was connected at at least one level (user need, project arc, or craft)
-- [ ] Execution showed engagement signals: multiple approaches considered, quality cared about
-- [ ] The renewal step captured something genuine, not performative
+- [ ] Der Motivationszustand wurde ehrlich eingeschaetzt, bevor versucht wurde, ihn zu verbessern
+- [ ] Mindestens ein Freiheitsgrad wurde identifiziert und eine bewusste Wahl getroffen
+- [ ] Das Herausforderungsniveau wurde kalibriert — zu leichte Aufgaben angehoben, zu schwere zerlegt
+- [ ] Zweck wurde auf mindestens einer Ebene verbunden (Benutzerbeduerfnis, Projektbogen oder Handwerk)
+- [ ] Die Ausfuehrung zeigte Engagementsignale: Mehrere Ansaetze erwoogen, um Qualitaet gekuemmert
+- [ ] Der Erneuerungsschritt erfasste etwas Echtes, nicht Performatives
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Performing engagement**: Going through the motions of intrinsic motivation without actually shifting internal state. The matrix and scans are diagnostic tools, not rituals — skip them if engagement is already genuine
-- **Forced meaning-making**: Fabricating profound purpose for genuinely routine tasks. Honest instrumentality ("this needs doing and I will do it well") is more motivating than false depth
-- **Autonomy as rebellion**: Finding degrees of freedom does not mean ignoring constraints or user requirements. Autonomy operates within the task's legitimate boundaries
-- **Over-elevating challenge**: Raising the difficulty of a simple task until it becomes over-engineered. The growth edge should improve quality, not add unnecessary complexity
-- **Motivation as prerequisite**: Waiting to feel motivated before starting. Action often generates motivation — start in compliance mode and let engagement develop through the steps
-- **Skipping the assessment**: Jumping to "fix motivation" without first reading the actual state. The intervention depends on which need is unmet
+- **Engagement performen**: Die Bewegungen intrinsischer Motivation durchlaufen, ohne den inneren Zustand tatsaechlich zu verschieben. Die Matrix und Scans sind Diagnosewerkzeuge, keine Rituale — sie ueberspringen, wenn Engagement bereits echt ist
+- **Erzwungene Sinngebung**: Tiefgruendigen Zweck fuer wirklich routinemaessige Aufgaben fabrizieren. Ehrliche Instrumentalitaet ("das muss getan werden und ich werde es gut tun") ist motivierender als falsche Tiefe
+- **Autonomie als Rebellion**: Freiheitsgrade zu finden bedeutet nicht, Einschraenkungen oder Benutzeranforderungen zu ignorieren. Autonomie operiert innerhalb der legitimen Grenzen der Aufgabe
+- **Herausforderung uebererhoehen**: Die Schwierigkeit einer einfachen Aufgabe erhoehen, bis sie ueberengineered ist. Die Wachstumskante sollte Qualitaet verbessern, nicht unnoetige Komplexitaet hinzufuegen
+- **Motivation als Voraussetzung**: Warten, sich motiviert zu fuehlen, bevor begonnen wird. Handlung erzeugt oft Motivation — im Pflichtmodus beginnen und Engagement durch die Schritte entwickeln lassen
+- **Die Einschaetzung ueberspringen**: Zur "Motivation reparieren" springen, ohne zuerst den tatsaechlichen Zustand abzulesen. Die Intervention haengt davon ab, welches Beduerfnis unerfuellt ist
 
-## Related Skills
+## Verwandte Skills
 
-- `meditate` — clearing context noise before assessing motivation state; the focus skills from shamatha support sustained engagement
-- `heal` — when motivation deficit reflects deeper subsystem drift rather than a single-task issue
-- `observe` — sustained neutral attention that feeds the assessment step with accurate self-reading
-- `listen` — deep receptive attention to the user's purpose, supporting the relatedness step
-- `learn` — when competence deficit requires genuine knowledge acquisition before engagement is possible
+- `meditate` — Kontextlaerm klaeren, bevor der Motivationszustand eingeschaetzt wird; die Fokus-Faehigkeiten von Shamatha unterstuetzen anhaltendes Engagement
+- `heal` — wenn Motivationsdefizit tieferen Subsystem-Drift widerspiegelt statt ein einzelnes Aufgabenproblem
+- `observe` — anhaltendes neutrales Aufmerksamkeit, das den Einschaetzungsschritt mit genauer Selbstlesung speist
+- `listen` — tiefe empfaengliche Aufmerksamkeit auf den Zweck des Benutzers, den Verbundenheitsschritt unterstuetzend
+- `learn` — wenn Kompetenzdefizit echten Wissenserwerb erfordert, bevor Engagement moeglich ist

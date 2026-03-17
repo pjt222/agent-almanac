@@ -1,13 +1,19 @@
 ---
 name: prepare-print-model
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Export and optimize 3D models for FDM/SLA printing including STL/3MF export,
-  mesh integrity verification, wall thickness checking, support generation, and
-  slicing. Use when exporting from CAD or modeling software for 3D printing,
-  verifying STL/3MF files are printable before slicing, troubleshooting models
-  that fail to slice correctly, optimizing part orientation for strength or
-  surface finish, or converting between model formats while preserving
-  printability.
+  3D-Modelle fuer FDM/SLA-Druck exportieren und optimieren einschliesslich
+  STL/3MF-Export, Netz-Integritaetspruefung, Wandstaerke-Kontrolle,
+  Stuetzstruktur-Generierung und Slicing. Anwenden beim Export aus CAD- oder
+  Modellierungssoftware fuer 3D-Druck, bei Pruefung von STL/3MF-Dateien auf
+  Druckbarkeit vor dem Slicing, bei der Fehlersuche an Modellen die nicht
+  korrekt geslicet werden, bei Optimierung der Teileorientierung fuer Festigkeit
+  oder Oberflaechenqualitaet oder bei Formatkonvertierung unter Beibehaltung
+  der Druckbarkeit.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
@@ -17,87 +23,82 @@ metadata:
   complexity: intermediate
   language: multi
   tags: 3d-printing, fdm, sla, slicing, mesh-repair, supports
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Druckmodell vorbereiten
 
-Export and optimize 3D models for additive manufacturing. This skill covers the complete workflow from CAD/modeling software export through mesh repair, printability analysis, support generation, and slicer configuration. Ensures models are manifold, have adequate wall thickness, and are properly oriented for strength and print quality.
+3D-Modelle fuer die additive Fertigung exportieren und optimieren. Dieser Skill deckt den vollstaendigen Workflow vom CAD/Modellierungssoftware-Export ueber Netzreparatur, Druckbarkeitsanalyse, Stuetzstruktur-Generierung bis zur Slicer-Konfiguration ab. Stellt sicher dass Modelle mannigfaltig sind, ausreichende Wandstaerke aufweisen und korrekt fuer Festigkeit und Druckqualitaet orientiert sind.
 
-## When to Use
+## Wann verwenden
 
-- Exporting models from CAD software (Fusion 360, SolidWorks, Onshape) or 3D modeling tools (Blender, Maya) for 3D printing
-- Verifying that existing STL/3MF files are printable before sending to slicer
-- Troubleshooting models that fail to slice or print correctly
-- Optimizing part orientation for strength, surface finish, or minimal support material
-- Preparing mechanical parts with specific strength or tolerance requirements
-- Converting between model formats (STL, 3MF, OBJ) while preserving printability
+- Modelle aus CAD-Software (Fusion 360, SolidWorks, Onshape) oder 3D-Modellierungswerkzeugen (Blender, Maya) fuer 3D-Druck exportieren
+- Bestehende STL/3MF-Dateien vor dem Senden an den Slicer auf Druckbarkeit pruefen
+- Fehlersuche an Modellen die nicht korrekt geslicet oder gedruckt werden
+- Teileorientierung fuer Festigkeit, Oberflaechenqualitaet oder minimalen Stuetzmaterialverbrauch optimieren
+- Mechanische Teile mit spezifischen Festigkeits- oder Toleranzanforderungen vorbereiten
+- Zwischen Modellformaten (STL, 3MF, OBJ) konvertieren unter Beibehaltung der Druckbarkeit
 
-## Inputs
+## Eingaben
 
-- **source_model**: Path to CAD file or 3D model file (STEP, F3D, STL, OBJ, 3MF)
-- **target_process**: Printing process type (`fdm`, `sla`, `sls`)
-- **material**: Intended print material (e.g., `pla`, `petg`, `abs`, `standard-resin`)
-- **functional_requirements**: Load direction, tolerance requirements, surface finish needs
-- **printer_specs**: Build volume, nozzle diameter (FDM), layer height capabilities
-- **slicer_tool**: Target slicer (`cura`, `prusaslicer`, `orcaslicer`, `chitubox`)
+- **source_model**: Pfad zur CAD-Datei oder 3D-Modelldatei (STEP, F3D, STL, OBJ, 3MF)
+- **target_process**: Druckverfahren (`fdm`, `sla`, `sls`)
+- **material**: Vorgesehenes Druckmaterial (z.B. `pla`, `petg`, `abs`, `standard-resin`)
+- **functional_requirements**: Lastrichtung, Toleranzanforderungen, Oberflaechenqualitaetsansprueche
+- **printer_specs**: Bauraum, Duesengroesse (FDM), Schichthoehe-Faehigkeiten
+- **slicer_tool**: Ziel-Slicer (`cura`, `prusaslicer`, `orcaslicer`, `chitubox`)
 
-## Procedure
+## Vorgehensweise
 
-### 1. Export Model from Source Software
+### Schritt 1: Modell aus Quellsoftware exportieren
 
-Export the 3D model in a suitable format for printing:
+Das 3D-Modell in einem geeigneten Format fuer den Druck exportieren:
 
-**For FDM/SLA**:
+**Fuer FDM/SLA**:
 ```bash
-# If starting from CAD (Fusion 360, SolidWorks)
-# Export as: STL (binary) or 3MF
-# Resolution: High (triangle count sufficient for detail)
-# Units: mm (verify scale)
+# Bei Start aus CAD (Fusion 360, SolidWorks)
+# Exportieren als: STL (binaer) oder 3MF
+# Aufloesung: Hoch (Dreiecksanzahl ausreichend fuer Details)
+# Einheiten: mm (Massstab ueberpruefen)
 
-# Example export settings:
-# STL: Binary format, refinement 0.1mm
-# 3MF: Include color/material data if using multi-material printer
+# Beispiel-Exporteinstellungen:
+# STL: Binaerformat, Verfeinerung 0.1mm
+# 3MF: Farb-/Materialdaten einschliessen bei Multimaterial-Drucker
 ```
 
-**Expected:** Model file exported with appropriate resolution (0.1mm chord tolerance for mechanical parts, 0.05mm for organic shapes).
+**Erwartet:** Modelldatei mit geeigneter Aufloesung exportiert (0.1mm Sehnentoleranz fuer mechanische Teile, 0.05mm fuer organische Formen).
 
-**On failure:** Check that model is fully defined (no construction geometry), no missing faces, all components visible.
+**Bei Fehler:** Pruefen ob Modell vollstaendig definiert ist (keine Konstruktionsgeometrie), keine fehlenden Flaechen, alle Komponenten sichtbar.
 
-### 2. Verify Mesh Integrity
+### Schritt 2: Netz-Integritaet verifizieren
 
-Check that the mesh is manifold and printable:
+Pruefen ob das Netz mannigfaltig und druckbar ist:
 
 ```bash
-# Install mesh repair tools if needed
+# Netzreparatur-Werkzeuge bei Bedarf installieren
 # sudo apt install meshlab admesh
 
-# Check STL file for errors
+# STL-Datei auf Fehler pruefen
 admesh --check model.stl
 
-# Look for:
-# - Non-manifold edges: 0 (every edge connects exactly 2 faces)
-# - Holes: 0
-# - Backwards/inverted normals: 0
-# - Degenerate facets: 0
+# Pruefen auf:
+# - Nicht-mannigfaltige Kanten: 0 (jede Kante verbindet genau 2 Flaechen)
+# - Loecher: 0
+# - Umgekehrte/invertierte Normalen: 0
+# - Degenerierte Facetten: 0
 ```
 
-**Common issues**:
-- **Non-manifold edges**: Multiple faces share an edge, or edge has only one face
-- **Holes**: Gaps in mesh surface
-- **Inverted normals**: Inside/outside of model reversed
-- **Intersecting faces**: Self-intersecting geometry
+**Haeufige Probleme**:
+- **Nicht-mannigfaltige Kanten**: Mehrere Flaechen teilen eine Kante oder Kante hat nur eine Flaeche
+- **Loecher**: Luecken in der Netzoberflaeche
+- **Invertierte Normalen**: Innen/Aussen des Modells vertauscht
+- **Sich schneidende Flaechen**: Selbstschneidende Geometrie
 
-**Expected:** Report shows 0 errors, or errors are repairable.
+**Erwartet:** Bericht zeigt 0 Fehler oder Fehler sind reparierbar.
 
-**On failure:** Repair mesh automatically or manually:
+**Bei Fehler:** Netz automatisch oder manuell reparieren:
 
 ```bash
-# Automatic repair with admesh
+# Automatische Reparatur mit admesh
 admesh --write-binary-stl=model_fixed.stl \
        --exact \
        --nearby \
@@ -106,112 +107,112 @@ admesh --write-binary-stl=model_fixed.stl \
        --normal-directions \
        model.stl
 
-# Or use meshlab GUI for manual inspection/repair
+# Oder meshlab GUI fuer manuelle Inspektion/Reparatur
 meshlab model.stl
 # Filters → Cleaning and Repairing → Remove Duplicate Vertices
 # Filters → Cleaning and Repairing → Remove Duplicate Faces
 # Filters → Normals → Re-Orient all faces coherently
 ```
 
-If automatic repair fails, return to source software and fix modeling errors (coincident vertices, open edges, overlapping bodies).
+Wenn automatische Reparatur fehlschlaegt, zur Quellsoftware zurueckkehren und Modellierungsfehler beheben (koinzidente Vertices, offene Kanten, ueberlappende Koerper).
 
-### 3. Check Wall Thickness
+### Schritt 3: Wandstaerke pruefen
 
-Verify minimum wall thickness for chosen process:
+Mindestwandstaerke fuer gewaehltes Verfahren verifizieren:
 
-**Minimum wall thickness by process**:
+**Mindestwandstaerke nach Verfahren**:
 
-| Process | Min Wall | Recommended Min | Structural Parts |
-|---------|----------|-----------------|------------------|
-| FDM (0.4mm nozzle) | 0.8mm | 1.2mm | 2.4mm+ |
-| FDM (0.6mm nozzle) | 1.2mm | 1.8mm | 3.6mm+ |
-| SLA (standard) | 0.4mm | 0.8mm | 2.0mm+ |
-| SLA (engineering) | 0.6mm | 1.2mm | 2.5mm+ |
-| SLS (nylon) | 0.7mm | 1.0mm | 2.0mm+ |
-
-```bash
-# Check wall thickness visually in slicer:
-# - Import model
-# - Enable "Thin walls" detection
-# - Slice with 0 infill to see wall structure
-
-# For precise measurement, use CAD software:
-# - Measure distance between parallel surfaces
-# - Check in critical load-bearing areas
-```
-
-**Expected:** All walls meet minimum thickness for chosen process. Thin walls flagged for review.
-
-**On failure:** Return to CAD and thicken walls, or:
-- Switch to smaller nozzle (FDM)
-- Use "detect thin walls" slicer setting
-- Accept reduced strength for prototypes
-
-### 4. Determine Print Orientation
-
-Select orientation to optimize strength, surface finish, and support usage:
-
-**Orientation decision matrix**:
-
-**For strength**:
-- Orient so layer lines run perpendicular to primary load direction
-- Example: Bracket under tension → print vertically so layers stack along load axis
-
-**For surface finish**:
-- Orient largest/most visible surface flat on bed (minimal stair-stepping)
-- Critical dimensions aligned with X/Y plane (higher precision than Z)
-
-**For minimal supports**:
-- Minimize overhangs >45° (FDM) or >30° (SLA)
-- Place flat surfaces on bed when possible
-
-**Load direction analysis**:
-```
-If part experiences:
-- Tensile load along axis → print with layers perpendicular to axis
-- Compressive load → layers can be parallel (less critical)
-- Bending moment → layers perpendicular to neutral axis
-- Shear → avoid layer interfaces parallel to shear direction
-```
-
-**Expected:** Orientation chosen with explicit rationale for strength, finish, or support tradeoffs.
-
-**On failure:** If no orientation satisfies all requirements, prioritize in order: functional strength → dimensional accuracy → surface finish → support minimization.
-
-### 5. Generate Support Structures
-
-Configure automatic or manual supports for overhangs:
-
-**Support angle thresholds**:
-- FDM: 45° from vertical (some bridging up to 60° possible)
-- SLA: 30° from vertical (less bridging capability)
-- SLS: No supports needed (powder bed support)
-
-**Support types**:
-
-**Tree supports** (FDM, recommended):
-- Fewer contact points with model
-- Easier removal
-- Better for organic shapes
-- Configure: Branch angle 40-50°, branch density medium
-
-**Linear supports** (FDM, traditional):
-- More stable for large overhangs
-- More contact points (harder removal)
-- Configure: Pattern grid, density 15-20%, interface layers 2-3
-
-**Heavy supports** (SLA):
-- Thicker contact points for heavy parts
-- Risk of marks on surface
-- Configure: Contact diameter 0.5-0.8mm, density based on part weight
-
-**Interface layers**:
-- Add 2-3 interface layers between support and model
-- Reduces surface marks
-- Slightly easier removal
+| Verfahren | Min. Wand | Empfohlenes Min. | Strukturteile |
+|-----------|-----------|-------------------|---------------|
+| FDM (0.4mm Duese) | 0.8mm | 1.2mm | 2.4mm+ |
+| FDM (0.6mm Duese) | 1.2mm | 1.8mm | 3.6mm+ |
+| SLA (Standard) | 0.4mm | 0.8mm | 2.0mm+ |
+| SLA (Engineering) | 0.6mm | 1.2mm | 2.5mm+ |
+| SLS (Nylon) | 0.7mm | 1.0mm | 2.0mm+ |
 
 ```bash
-# In slicer (PrusaSlicer example):
+# Wandstaerke visuell im Slicer pruefen:
+# - Modell importieren
+# - "Duennwaende"-Erkennung aktivieren
+# - Mit 0 Fuellung slicen um Wandstruktur zu sehen
+
+# Fuer praezise Messung CAD-Software verwenden:
+# - Abstand zwischen parallelen Flaechen messen
+# - In kritischen lasttragenden Bereichen pruefen
+```
+
+**Erwartet:** Alle Waende erfuellen Mindeststärke fuer gewaehltes Verfahren. Duenne Waende zur Pruefung markiert.
+
+**Bei Fehler:** Zurueck zum CAD und Waende verstaerken, oder:
+- Auf kleinere Duese wechseln (FDM)
+- "Duennwaende erkennen"-Slicer-Einstellung verwenden
+- Reduzierte Festigkeit fuer Prototypen akzeptieren
+
+### Schritt 4: Druckorientierung bestimmen
+
+Orientierung zur Optimierung von Festigkeit, Oberflaechenqualitaet und Stuetzstrukturverbrauch waehlen:
+
+**Orientierungs-Entscheidungsmatrix**:
+
+**Fuer Festigkeit**:
+- Orientieren damit Schichtlinien senkrecht zur primaeren Lastrichtung verlaufen
+- Beispiel: Halterung unter Zug nach oben drucken damit Schichten entlang der Lastachse gestapelt werden
+
+**Fuer Oberflaechenqualitaet**:
+- Groesste/sichtbarste Flaeche flach aufs Bett (minimale Treppenstufenbildung)
+- Kritische Masse in X/Y-Ebene ausrichten (hoehere Praezision als Z)
+
+**Fuer minimale Stuetzstrukturen**:
+- Ueberhaenge >45 Grad (FDM) oder >30 Grad (SLA) minimieren
+- Flache Flaechen auf das Bett legen wenn moeglich
+
+**Lastrichtungsanalyse**:
+```
+Wenn Teil erfaehrt:
+- Zuglast entlang Achse → mit Schichten senkrecht zur Achse drucken
+- Drucklast → Schichten koennen parallel sein (weniger kritisch)
+- Biegemoment → Schichten senkrecht zur neutralen Achse
+- Scherung → Schichtgrenzflaechen parallel zur Scherrichtung vermeiden
+```
+
+**Erwartet:** Orientierung mit expliziter Begruendung fuer Festigkeits-, Oberflaechenqualitaets- oder Stuetzstruktur-Kompromisse gewaehlt.
+
+**Bei Fehler:** Wenn keine Orientierung alle Anforderungen erfuellt, in folgender Reihenfolge priorisieren: funktionale Festigkeit, Massgenauigkeit, Oberflaechenqualitaet, Stuetzstruktur-Minimierung.
+
+### Schritt 5: Stuetzstrukturen generieren
+
+Automatische oder manuelle Stuetzstrukturen fuer Ueberhaenge konfigurieren:
+
+**Stuetzwinkel-Schwellenwerte**:
+- FDM: 45 Grad von der Vertikalen (etwas Brueckenbildung bis 60 Grad moeglich)
+- SLA: 30 Grad von der Vertikalen (weniger Brueckenbildungsfaehigkeit)
+- SLS: Keine Stuetzstrukturen noetig (Pulverbett-Stuetzung)
+
+**Stuetzstrukturtypen**:
+
+**Baumstrukturen** (FDM, empfohlen):
+- Weniger Kontaktpunkte mit Modell
+- Einfachere Entfernung
+- Besser fuer organische Formen
+- Konfiguration: Astwinkel 40-50 Grad, Astdichte mittel
+
+**Lineare Stuetzstrukturen** (FDM, traditionell):
+- Stabiler fuer grosse Ueberhaenge
+- Mehr Kontaktpunkte (schwierigere Entfernung)
+- Konfiguration: Muster Gitter, Dichte 15-20%, Grenzschichten 2-3
+
+**Schwere Stuetzstrukturen** (SLA):
+- Dickere Kontaktpunkte fuer schwere Teile
+- Risiko von Markierungen auf der Oberflaeche
+- Konfiguration: Kontaktdurchmesser 0.5-0.8mm, Dichte basierend auf Teilgewicht
+
+**Grenzschichten**:
+- 2-3 Grenzschichten zwischen Stuetzstruktur und Modell hinzufuegen
+- Reduziert Oberflaechenmarkierungen
+- Etwas einfachere Entfernung
+
+```bash
+# Im Slicer (PrusaSlicer Beispiel):
 # Print Settings → Support material
 # - Generate support material: Yes
 # - Overhang threshold: 45° (FDM) / 30° (SLA)
@@ -220,148 +221,148 @@ Configure automatic or manual supports for overhangs:
 # - Interface pattern spacing: 0.2mm
 ```
 
-**Expected:** Supports generated for all overhangs exceeding threshold angle, preview shows no floating geometry.
+**Erwartet:** Stuetzstrukturen fuer alle Ueberhaenge ueber Schwellenwertwinkel generiert, Vorschau zeigt keine schwebende Geometrie.
 
-**On failure:** If automatic supports inadequate:
-- Add manual support enforcers in critical areas
-- Increase support density near thin overhangs
-- Split model and print in sections if supports infeasible
+**Bei Fehler:** Wenn automatische Stuetzstrukturen unzureichend:
+- Manuelle Stuetzverstaerker in kritischen Bereichen hinzufuegen
+- Stuetzdichte nahe duennen Ueberhaengen erhoehen
+- Modell teilen und in Abschnitten drucken wenn Stuetzstrukturen nicht realisierbar
 
-### 6. Configure Slicer Profile
+### Schritt 6: Slicer-Profil konfigurieren
 
-Set process-appropriate parameters:
+Verfahrensgerechte Parameter einstellen:
 
-**FDM layer heights**:
-- Draft: 0.28-0.32mm (fast, visible layers)
-- Standard: 0.16-0.20mm (balanced quality/speed)
-- Fine: 0.08-0.12mm (smooth, slow)
-- Rule: Layer height = 25-75% of nozzle diameter
+**FDM-Schichthoehen**:
+- Entwurf: 0.28-0.32mm (schnell, sichtbare Schichten)
+- Standard: 0.16-0.20mm (ausgewogene Qualitaet/Geschwindigkeit)
+- Fein: 0.08-0.12mm (glatt, langsam)
+- Regel: Schichthoehe = 25-75% des Duesendurchmessers
 
-**SLA layer heights**:
-- Standard: 0.05mm (balanced)
-- Fine: 0.025mm (miniatures, high detail)
-- Fast: 0.1mm (prototypes)
+**SLA-Schichthoehen**:
+- Standard: 0.05mm (ausgewogen)
+- Fein: 0.025mm (Miniaturen, hohe Detailtreue)
+- Schnell: 0.1mm (Prototypen)
 
-**Key parameters by process**:
+**Schluesselparameter nach Verfahren**:
 
 **FDM**:
 ```yaml
 layer_height: 0.2mm
-line_width: 0.4mm (= nozzle diameter)
-perimeters: 3-4 (structural), 2 (cosmetic)
-top_bottom_layers: 5 (0.2mm layers = 1mm solid)
-infill_percentage: 20% (cosmetic), 40-60% (functional)
-infill_pattern: gyroid (FDM), grid (basic)
-print_speed: 50mm/s perimeter, 80mm/s infill
-temperature: material-specific (see select-print-material skill)
+line_width: 0.4mm (= Duesendurchmesser)
+perimeters: 3-4 (strukturell), 2 (kosmetisch)
+top_bottom_layers: 5 (0.2mm Schichten = 1mm Vollmaterial)
+infill_percentage: 20% (kosmetisch), 40-60% (funktional)
+infill_pattern: gyroid (FDM), grid (einfach)
+print_speed: 50mm/s Perimeter, 80mm/s Fuellung
+temperature: materialspezifisch (siehe select-print-material Skill)
 ```
 
 **SLA**:
 ```yaml
 layer_height: 0.05mm
-bottom_layers: 6-8 (strong bed adhesion)
-exposure_time: material-specific (2-8s per layer)
+bottom_layers: 6-8 (starke Betthaftung)
+exposure_time: materialspezifisch (2-8s pro Schicht)
 bottom_exposure_time: 30-60s
 lift_speed: 60-80mm/min
 retract_speed: 150-180mm/min
 ```
 
-**Expected:** Profile configured with process-appropriate defaults, modified for specific material/model requirements.
+**Erwartet:** Profil mit verfahrensgerechten Standardwerten konfiguriert, modifiziert fuer spezifische Material-/Modellanforderungen.
 
-**On failure:** If unsure about parameters, start with slicer's default "Standard Quality" profile for chosen material, then iterate.
+**Bei Fehler:** Wenn Parameter unsicher, mit dem Standard-"Standardqualitaet"-Profil des Slicers fuer gewaehltes Material beginnen, dann iterieren.
 
-### 7. Preview Slice Layer-by-Layer
+### Schritt 7: Schicht-fuer-Schicht-Vorschau pruefen
 
-Inspect sliced G-code for issues:
-
-```bash
-# In slicer:
-# - Slice model
-# - Use layer preview slider to inspect each layer
-# - Check for:
-#   * Gaps in perimeters (indicates thin walls)
-#   * Floating regions (missing supports)
-#   * Excessive stringing paths (reduce travel)
-#   * First layer: proper squish and adhesion
-#   * Top layers: sufficient solid infill
-```
-
-**Red flags in preview**:
-- **White gaps in solid regions**: Walls too thin for current line width
-- **Travels over large distances**: Increase retraction or add z-hop
-- **First layer not squishing**: Adjust Z-offset down by 0.05mm
-- **Sparse top layers**: Increase top solid layers to 5+
-
-**Expected:** Preview shows continuous perimeters, proper infill, clean travels, and no obvious defects.
-
-**On failure:** Adjust slicer settings and re-slice. Common fixes:
-- Thin wall gaps → Enable "Detect thin walls" or reduce line width
-- Poor bridging → Reduce bridge speed to 30mm/s, increase cooling
-- Stringing → Increase retraction distance +1mm, reduce temperature -5°C
-
-### 8. Export G-code and Verify
-
-Save sliced G-code with descriptive name:
+Gesliceten G-Code auf Probleme untersuchen:
 
 ```bash
-# Naming convention:
-# <part_name>_<material>_<layer_height>_<profile>.gcode
-# Example: bracket_petg_0.2mm_standard.gcode
-
-# Verify G-code:
-grep "^;PRINT_TIME:" model.gcode  # Check estimated time
-grep "^;Filament used:" model.gcode  # Check material usage
-head -n 50 model.gcode | grep "^M104\|^M140"  # Verify temperatures
-
-# Expected first layer temp:
-# M140 S85  (bed temp for PETG)
-# M104 S245 (hotend temp for PETG)
+# Im Slicer:
+# - Modell slicen
+# - Schichtvorschau-Schieberegler zur Inspektion jeder Schicht verwenden
+# - Pruefen auf:
+#   * Luecken in Perimetern (zeigt duenne Waende an)
+#   * Schwebende Bereiche (fehlende Stuetzstrukturen)
+#   * Uebermassige Fadenzieh-Pfade (Fahrwege reduzieren)
+#   * Erste Schicht: korrekte Anpressung und Haftung
+#   * Obere Schichten: ausreichende Vollmaterial-Fuellung
 ```
 
-**Pre-print checklist**:
-- [ ] Bed leveled and clean
-- [ ] Correct material loaded and dry
-- [ ] Temperatures match material requirements
-- [ ] First layer Z-offset calibrated
-- [ ] Adequate filament/resin remaining
-- [ ] Print time acceptable for monitoring plan
+**Warnsignale in der Vorschau**:
+- **Weisse Luecken in Vollbereichen**: Waende zu duenn fuer aktuelle Linienbreite
+- **Fahrwege ueber grosse Distanzen**: Einzug erhoehen oder Z-Hop hinzufuegen
+- **Erste Schicht presst nicht**: Z-Offset um 0.05mm nach unten anpassen
+- **Spaerliche obere Schichten**: Obere Vollschichten auf 5+ erhoehen
 
-**Expected:** G-code file saved with embedded metadata, temperatures verified, print time/material estimate reasonable.
+**Erwartet:** Vorschau zeigt durchgaengige Perimeter, korrekte Fuellung, saubere Fahrwege und keine offensichtlichen Defekte.
 
-**On failure:** If print time excessive (>12 hours), consider:
-- Increase layer height (0.2 → 0.28mm saves ~30% time)
-- Reduce perimeters (4 → 3)
-- Reduce infill (40% → 20% for non-structural)
-- Scale model down if size not critical
+**Bei Fehler:** Slicer-Einstellungen anpassen und neu slicen. Haeufige Korrekturen:
+- Duennwand-Luecken: "Duennwaende erkennen" aktivieren oder Linienbreite reduzieren
+- Schlechte Brueckenbildung: Brueckengeschwindigkeit auf 30mm/s reduzieren, Kuehlung erhoehen
+- Fadenziehen: Einzugsdistanz +1mm erhoehen, Temperatur -5 Grad C senken
 
-## Validation Checklist
+### Schritt 8: G-Code exportieren und verifizieren
 
-- [ ] Model exported from source software with correct units (mm) and scale
-- [ ] Mesh integrity verified: manifold, no holes, normals correct
-- [ ] Wall thickness meets minimum for chosen process (≥0.8mm FDM, ≥0.4mm SLA)
-- [ ] Print orientation optimized for strength, finish, or support tradeoffs
-- [ ] Supports generated for all overhangs >45° (FDM) or >30° (SLA)
-- [ ] Slicer profile configured with appropriate layer height and parameters
-- [ ] Layer-by-layer preview inspected, no gaps or floating regions
-- [ ] G-code exported with verified temperatures and reasonable print time
-- [ ] Pre-print checklist completed (bed leveled, material loaded, etc.)
+Gesliceten G-Code mit beschreibendem Namen speichern:
 
-## Common Pitfalls
+```bash
+# Namenskonvention:
+# <teilname>_<material>_<schichthoehe>_<profil>.gcode
+# Beispiel: halterung_petg_0.2mm_standard.gcode
 
-1. **Skipping mesh repair**: Non-manifold meshes can slice but fail to print correctly with gaps or malformed layers
-2. **Ignoring wall thickness**: Thin walls (< minimum) will have gaps, drastically reducing strength
-3. **Wrong orientation for strength**: Printing tensile parts with layers parallel to load direction creates weak delamination plane
-4. **Insufficient supports**: Underestimating overhang angle leads to sagging, stringing, or complete failure
-5. **First layer neglect**: 90% of print failures occur in first layer—Z-offset and bed adhesion are critical
-6. **Temperature from Internet**: Every printer/material combination is unique; always calibrate temperature with tower tests
-7. **Excessive detail for layer height**: Fine features smaller than 2× layer height won't resolve properly
-8. **Not previewing slice**: Slicers can make unexpected decisions (thin wall gaps, weird infill); always preview before printing
-9. **Material hygroscopy**: Wet filament (especially Nylon, TPU, PETG) causes poor layer adhesion, stringing, and brittleness
-10. **Overconfidence in supports**: Heavy parts with large overhangs can still sag even with supports—test on smaller models first
+# G-Code verifizieren:
+grep "^;PRINT_TIME:" model.gcode  # Geschaetzte Zeit pruefen
+grep "^;Filament used:" model.gcode  # Materialverbrauch pruefen
+head -n 50 model.gcode | grep "^M104\|^M140"  # Temperaturen verifizieren
 
-## Related Skills
+# Erwartete Erstschicht-Temperaturen:
+# M140 S85  (Betttemperatur fuer PETG)
+# M104 S245 (Hotend-Temperatur fuer PETG)
+```
 
-- **[select-print-material](../select-print-material/SKILL.md)**: Choose appropriate material based on mechanical, thermal, and chemical requirements
-- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Diagnose and fix print failures if prepared model still fails
-- **Model with Blender** (future skill): Create 3D models optimized for printing from scratch
-- **Calibrate 3D Printer** (future skill): E-steps, flow rate, temperature towers, and retraction tuning
+**Vor-Druck-Checkliste**:
+- [ ] Bett nivelliert und sauber
+- [ ] Korrektes Material geladen und trocken
+- [ ] Temperaturen entsprechen Materialanforderungen
+- [ ] Erstschicht-Z-Offset kalibriert
+- [ ] Ausreichend Filament/Resin vorhanden
+- [ ] Druckzeit akzeptabel fuer Ueberwachungsplan
+
+**Erwartet:** G-Code-Datei mit eingebetteten Metadaten gespeichert, Temperaturen verifiziert, Druckzeit-/Materialschaetzung plausibel.
+
+**Bei Fehler:** Wenn Druckzeit uebermassig (>12 Stunden), erwaegen:
+- Schichthoehe erhoehen (0.2 auf 0.28mm spart ca. 30% Zeit)
+- Perimeter reduzieren (4 auf 3)
+- Fuellung reduzieren (40% auf 20% fuer nicht-strukturelle Teile)
+- Modell verkleinern wenn Groesse nicht kritisch
+
+## Validierung
+
+- [ ] Modell aus Quellsoftware mit korrekten Einheiten (mm) und Massstab exportiert
+- [ ] Netz-Integritaet verifiziert: mannigfaltig, keine Loecher, Normalen korrekt
+- [ ] Wandstaerke erfuellt Minimum fuer gewaehltes Verfahren (>=0.8mm FDM, >=0.4mm SLA)
+- [ ] Druckorientierung fuer Festigkeits-, Oberflaechenqualitaets- oder Stuetzstruktur-Kompromisse optimiert
+- [ ] Stuetzstrukturen fuer alle Ueberhaenge >45 Grad (FDM) oder >30 Grad (SLA) generiert
+- [ ] Slicer-Profil mit geeigneter Schichthoehe und Parametern konfiguriert
+- [ ] Schicht-fuer-Schicht-Vorschau inspiziert, keine Luecken oder schwebende Bereiche
+- [ ] G-Code mit verifizierten Temperaturen und plausibeler Druckzeit exportiert
+- [ ] Vor-Druck-Checkliste abgeschlossen (Bett nivelliert, Material geladen usw.)
+
+## Haeufige Stolperfallen
+
+1. **Netzreparatur ueberspringen**: Nicht-mannigfaltige Netze koennen geslicet werden, drucken aber mit Luecken oder fehlerhaften Schichten nicht korrekt
+2. **Wandstaerke ignorieren**: Duenne Waende (< Minimum) weisen Luecken auf und reduzieren die Festigkeit drastisch
+3. **Falsche Orientierung fuer Festigkeit**: Zugteile mit Schichten parallel zur Lastrichtung drucken erzeugt eine schwache Delaminationsebene
+4. **Unzureichende Stuetzstrukturen**: Unterschaetzung des Ueberhangwinkels fuehrt zu Durchhaengen, Fadenziehen oder vollstaendigem Versagen
+5. **Erste-Schicht-Vernachlaessigung**: 90% der Druckfehler treten in der ersten Schicht auf — Z-Offset und Betthaftung sind entscheidend
+6. **Temperatur aus dem Internet**: Jede Drucker/Material-Kombination ist einzigartig; immer mit Temperaturtuerme kalibrieren
+7. **Uebermassige Details fuer Schichthoehe**: Feine Merkmale kleiner als 2x Schichthoehe werden nicht korrekt aufgeloest
+8. **Slice nicht vorschauen**: Slicer koennen unerwartete Entscheidungen treffen (Duennwand-Luecken, seltsame Fuellung); vor dem Drucken immer vorschauen
+9. **Material-Hygroskopie**: Feuchtes Filament (besonders Nylon, TPU, PETG) verursacht schlechte Schichthaftung, Fadenziehen und Sproedigkeit
+10. **Uebervertrauen in Stuetzstrukturen**: Schwere Teile mit grossen Ueberhaengen koennen trotz Stuetzstrukturen durchhaengen — zuerst an kleineren Modellen testen
+
+## Verwandte Skills
+
+- **[select-print-material](../select-print-material/SKILL.md)**: Geeignetes Material basierend auf mechanischen, thermischen und chemischen Anforderungen waehlen
+- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Druckfehler diagnostizieren und beheben wenn vorbereitetes Modell trotzdem versagt
+- **Modellieren mit Blender** (zukuenftiger Skill): Fuer Druck optimierte 3D-Modelle von Grund auf erstellen
+- **3D-Drucker kalibrieren** (zukuenftiger Skill): E-Steps, Durchflussrate, Temperaturtuerme und Einzugstuning

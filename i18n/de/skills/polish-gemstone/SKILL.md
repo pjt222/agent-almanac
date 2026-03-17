@@ -1,13 +1,14 @@
 ---
 name: polish-gemstone
 description: >
-  Polish cut gemstones to final finish using progressive abrasive
-  sequences. Covers pre-polish sanding, polishing compounds, lap
-  selection, and quality assessment for both cabochons and faceted stones.
-  Use when a cabochon or faceted stone has completed cutting and is ready
-  for polishing, selecting the correct compound and lap for a specific
-  species, troubleshooting a polish that will not reach full lustre
-  (orange peel, haze, scratches), or re-polishing a stone with surface wear.
+  Geschliffene Edelsteine mit progressiven Schleifmittelsequenzen auf
+  Endpolitur bringen. Umfasst Vorpolitur-Schleifen, Poliermittel, Scheiben-
+  auswahl und Qualitaetsbewertung fuer Cabochons und facettierte Steine.
+  Verwenden wenn ein Cabochon oder facettierter Stein den Schliff abgeschlossen
+  hat und polierbereit ist, beim Auswaehlen des richtigen Poliermittels und
+  der Scheibe fuer eine bestimmte Steinart, bei der Fehlersuche einer Politur,
+  die keinen vollen Glanz erreicht (Orangenhaut, Schleier, Kratzer), oder
+  beim Nachpolieren eines Steins mit Oberflaechenabnutzung.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,30 +27,30 @@ metadata:
 
 # Edelstein polieren
 
-Polish cut gemstones to a final optical-quality finish using progressive abrasive sequences, appropriate polishing compounds, and correct lap or pad selection for both cabochons and faceted stones.
+Geschliffene Edelsteine mit progressiven Schleifmittelsequenzen, geeigneten Poliermitteln und korrekter Scheiben- oder Pad-Auswahl fuer Cabochons und facettierte Steine auf optische Endqualitaet polieren.
 
-## When to Use
+## Wann verwenden
 
-- You have a cabochon or faceted stone that has completed the cutting stage and is ready for polishing
-- You need to select the correct polishing compound and lap for a specific gemstone species
-- You are troubleshooting a polish that will not reach full lustre (orange peel, haze, scratches)
-- You want to re-polish an existing stone that has surface wear or scratches
+- Sie haben einen Cabochon oder facettierten Stein, der die Schliffphase abgeschlossen hat und polierbereit ist
+- Sie muessen das richtige Poliermittel und die richtige Scheibe fuer eine bestimmte Edelsteinart auswaehlen
+- Sie suchen Fehler bei einer Politur, die keinen vollen Glanz erreicht (Orangenhaut, Schleier, Kratzer)
+- Sie moechten einen vorhandenen Stein mit Oberflaechenabnutzung oder Kratzern nachpolieren
 
-## Inputs
+## Eingaben
 
-- **Required**: A cut gemstone ready for polishing (cabochon dome shaped and smoothed, or faceted stone with all facets cut)
-- **Required**: Species identification (polishing compound and lap selection depend on the material)
-- **Optional**: Cabbing machine with polishing wheels/pads (for cabochons)
-- **Optional**: Faceting machine with polishing laps (for faceted stones)
-- **Optional**: Polishing compounds: cerium oxide, aluminum oxide, diamond paste (various micron grades), tin oxide, chromium oxide
-- **Optional**: Polishing laps: tin, copper, ceramic, Batt (synthetic), BATT lap, Corian, Lucite, leather, felt
-- **Optional**: 10x loupe or gemological microscope for quality inspection
+- **Erforderlich**: Ein geschliffener Edelstein, polierbereit (Cabochon gewoelbt und geglaettet, oder facettierter Stein mit allen Facetten geschliffen)
+- **Erforderlich**: Artbestimmung (Poliermittel- und Scheibenauswahl haengen vom Material ab)
+- **Optional**: Cabochon-Maschine mit Polierscheiben/-pads (fuer Cabochons)
+- **Optional**: Facettiermaschine mit Polierscheiben (fuer facettierte Steine)
+- **Optional**: Poliermittel: Ceroxid, Aluminiumoxid, Diamantpaste (verschiedene Mikron-Koernungen), Zinnoxid, Chromoxid
+- **Optional**: Polierscheiben: Zinn, Kupfer, Keramik, Batt (synthetisch), BATT-Scheibe, Corian, Lucite, Leder, Filz
+- **Optional**: 10x-Lupe oder gemmologisches Mikroskop zur Qualitaetspruefung
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Surface Preparation
+### Schritt 1: Oberflaechenvorbereitung
 
-Ensure the stone's surface is properly prepared from the cutting stage.
+Sicherstellen, dass die Oberflaeche des Steins aus der Schliffphase ordnungsgemaess vorbereitet ist.
 
 ```
 Pre-Polish Surface Check:
@@ -72,19 +73,19 @@ Pre-Polish Surface Check:
 +--------------------+------------------------------------------+
 ```
 
-1. Examine the stone under 10x magnification
-2. Look for remaining scratches from the cutting grits — they appear as parallel lines
-3. If scratches remain, return to the appropriate grit stage before polishing
-4. Clean the stone thoroughly: ultrasonic cleaner, or brush with dish soap and water
-5. Clean your hands, the dop, and the work area — grit contamination transfers easily
+1. Den Stein unter 10-facher Vergroesserung untersuchen
+2. Nach verbleibenden Kratzern von den Schliffkoernungen suchen — sie erscheinen als parallele Linien
+3. Wenn Kratzer verbleiben, zur entsprechenden Koernungsstufe zurueckkehren, bevor poliert wird
+4. Den Stein gruendlich reinigen: Ultraschallreiniger oder mit Spuelmittel und Wasser buersten
+5. Haende, Kittstock und Arbeitsbereich reinigen — Kornkontamination uebertraegt sich leicht
 
-**Expected:** A scratch-free surface at the pre-polish grit level, thoroughly cleaned, with secure dopping. The surface should feel glass-smooth to the fingernail.
+**Erwartet:** Eine kratzerfreie Oberflaeche auf dem Vorpolitur-Koernungsniveau, gruendlich gereinigt, mit sicherem Kitten. Die Oberflaeche sollte sich unter dem Fingernagel glasglatt anfuehlen.
 
-**On failure:** If scratches persist after repeated grinding at the fine grit, the stone may have directional hardness (common in corundum and kyanite). Try changing the grinding direction. If contamination is the issue, clean everything and replace the water supply.
+**Bei Fehler:** Wenn Kratzer nach wiederholtem Schleifen bei der feinen Koernung bestehen bleiben, hat der Stein moeglicherweise richtungsabhaengige Haerte (haeufig bei Korund und Kyanit). Die Schleifrichtung aendern. Wenn Kontamination das Problem ist, alles reinigen und die Wasserversorgung erneuern.
 
-### Step 2: Pre-Polish Sequence (Cabochons)
+### Schritt 2: Vorpolitur-Sequenz (Cabochons)
 
-For cabochon stones, work through the pre-polish grit stages.
+Fuer Cabochon-Steine die Vorpolitur-Koernungsstufen durcharbeiten.
 
 ```
 Cabochon Pre-Polish Sequence:
@@ -109,19 +110,19 @@ stage means scratches carry forward and become visible after
 polishing. A typical cabochon takes 3-5 minutes per grit stage.
 ```
 
-1. Work through each grit stage in order — never skip a grit
-2. At each stage, examine the stone under magnification to confirm all previous-grit scratches are removed before advancing
-3. Clean the stone and your hands thoroughly between grits
-4. Maintain consistent pressure and motion across the entire surface
-5. Keep water flowing to prevent heat buildup
+1. Jede Koernungsstufe der Reihe nach durcharbeiten — niemals eine Koernung ueberspringen
+2. Bei jeder Stufe den Stein unter Vergroesserung untersuchen, um zu bestaetigen, dass alle Kratzer der vorherigen Koernung entfernt sind, bevor zur naechsten uebergegangen wird
+3. Den Stein und die Haende zwischen den Koernungen gruendlich reinigen
+4. Gleichmaessigen Druck und gleichmaessige Bewegung ueber die gesamte Oberflaeche beibehalten
+5. Wasser am Laufen halten, um Waermeaufbau zu verhindern
 
-**Expected:** After completing the pre-polish sequence, the stone should have a uniform satin-smooth surface with no visible scratches under 10x magnification.
+**Erwartet:** Nach Abschluss der Vorpolitur-Sequenz sollte der Stein eine gleichmaessig satinglatte Oberflaeche ohne sichtbare Kratzer unter 10-facher Vergroesserung aufweisen.
 
-**On failure:** If scratches persist at a given grit, continue working at that grit — do not advance. If deep scratches will not come out, drop back one grit stage and re-grind. Contamination from coarser grits is the most common cause of persistent scratching.
+**Bei Fehler:** Wenn Kratzer bei einer bestimmten Koernung bestehen bleiben, bei dieser Koernung weiterarbeiten — nicht voranschreiten. Wenn tiefe Kratzer nicht herauskommen, eine Koernungsstufe zurueckgehen und nachschleifen. Kontamination durch groebere Koernungen ist die haeufigste Ursache fuer anhaltendes Kratzen.
 
-### Step 3: Polishing Compound and Lap Selection
+### Schritt 3: Poliermittel- und Scheibenauswahl
 
-Select the correct polishing compound and lap for the gemstone species.
+Das richtige Poliermittel und die richtige Scheibe fuer die Edelsteinart auswaehlen.
 
 ```
 Polishing Compound Guide:
@@ -176,19 +177,19 @@ Polishing Lap Guide (Faceted Stones):
 +-------------------+------------------------------------------+
 ```
 
-1. Match the polishing compound to the gemstone species
-2. Select the appropriate lap or pad material
-3. For unknown or uncommon stones, diamond paste on a ceramic lap is the safest starting choice
-4. Prepare the compound: mix oxides to a thin paste with water; apply diamond paste sparingly to the lap
-5. Apply compound evenly to the lap — excess compound causes "orange peel" texture
+1. Poliermittel auf die Edelsteinart abstimmen
+2. Das geeignete Scheiben- oder Pad-Material auswaehlen
+3. Fuer unbekannte oder ungewoehnliche Steine ist Diamantpaste auf einer Keramikscheibe die sicherste Ausgangswahl
+4. Das Poliermittel vorbereiten: Oxide zu einer duennen Paste mit Wasser mischen; Diamantpaste sparsam auf die Scheibe auftragen
+5. Poliermittel gleichmaessig auf die Scheibe auftragen — ueberschuessiges Mittel verursacht "Orangenhaut"-Textur
 
-**Expected:** A compound + lap combination appropriate for the gemstone species. Using the wrong combination wastes time and can produce a sub-optimal finish.
+**Erwartet:** Eine Poliermittel-Scheiben-Kombination, die fuer die Edelsteinart geeignet ist. Die falsche Kombination verschwendet Zeit und kann ein suboptimales Ergebnis erzeugen.
 
-**On failure:** If the standard compound does not produce a good polish on the first attempt, try: (1) a different lap material, (2) a finer compound grade, or (3) reducing pressure. Some stones are sensitive to polishing speed — try slower rpm. If all else fails, diamond paste on tin or ceramic works on virtually any material.
+**Bei Fehler:** Wenn das Standard-Poliermittel beim ersten Versuch keine gute Politur erzeugt: (1) ein anderes Scheibenmaterial versuchen, (2) eine feinere Poliermittelkoernung, oder (3) den Druck reduzieren. Manche Steine reagieren empfindlich auf Poliergeschwindigkeit — langsamere Umdrehungen versuchen. Wenn nichts anderes hilft, funktioniert Diamantpaste auf Zinn oder Keramik bei praktisch jedem Material.
 
-### Step 4: Final Polishing
+### Schritt 4: Endpolitur
 
-Execute the polishing process.
+Den Polierprozess ausfuehren.
 
 ```
 Polishing Technique:
@@ -216,24 +217,24 @@ SPEED AND PRESSURE:
 - On faceted stones, heavy pressure rounds facet edges ("soft meets")
 ```
 
-1. Apply compound to the lap/pad
-2. Set the correct angle (faceted stones) or hold at the dome angle (cabochons)
-3. Polish with light, even pressure
-4. Check progress every 1-2 minutes under 10x magnification
-5. Continue until the surface shows full lustre with no remaining scratches
-6. Final rinse: clean the stone thoroughly to remove all compound residue
+1. Poliermittel auf Scheibe/Pad auftragen
+2. Den richtigen Winkel einstellen (facettierte Steine) oder im Woelbungswinkel halten (Cabochons)
+3. Mit leichtem, gleichmaessigem Druck polieren
+4. Fortschritt alle 1-2 Minuten unter 10-facher Vergroesserung pruefen
+5. Fortfahren, bis die Oberflaeche vollen Glanz ohne verbleibende Kratzer zeigt
+6. Abschlussspuelung: den Stein gruendlich reinigen, um alle Poliermittelrueckstaende zu entfernen
 
-**Expected:** A fully polished surface with mirror-like lustre (faceted stones) or deep, even lustre (cabochons). No scratches visible under 10x magnification. Facet edges are sharp and meets are crisp.
+**Erwartet:** Eine vollstaendig polierte Oberflaeche mit spiegelartigem Glanz (facettierte Steine) oder tiefem, gleichmaessigem Glanz (Cabochons). Keine Kratzer unter 10-facher Vergroesserung sichtbar. Facettenkanten sind scharf und Treffpunkte sind praezise.
 
-**On failure:** Common polish problems and solutions:
-- **Orange peel** (textured surface): Too much compound, too much pressure, or contaminated lap. Clean the lap and re-apply compound sparingly
-- **Persistent scratches**: Contamination from coarser grit. Clean everything, check compound for contamination, re-polish
-- **Soft meets** (rounded facet edges): Too much pressure. Reduce pressure and use a harder lap
-- **Haze** (no full lustre): Wrong compound for the material, or compound too dry. Try a different compound or add water/extender
+**Bei Fehler:** Haeufige Politurprobleme und Loesungen:
+- **Orangenhaut** (texturierte Oberflaeche): Zu viel Poliermittel, zu viel Druck oder kontaminierte Scheibe. Scheibe reinigen und Poliermittel sparsam neu auftragen
+- **Anhaltende Kratzer**: Kontamination durch groebere Koernung. Alles reinigen, Poliermittel auf Kontamination pruefen, nachpolieren
+- **Weiche Treffpunkte** (abgerundete Facettenkanten): Zu viel Druck. Druck reduzieren und eine haertere Scheibe verwenden
+- **Schleier** (kein voller Glanz): Falsches Poliermittel fuer das Material oder Poliermittel zu trocken. Anderes Poliermittel versuchen oder Wasser/Verduenner hinzufuegen
 
-### Step 5: Quality Assessment
+### Schritt 5: Qualitaetsbewertung
 
-Inspect the finished stone under magnification.
+Den fertigen Stein unter Vergroesserung inspizieren.
 
 ```
 Final Quality Checklist:
@@ -260,38 +261,38 @@ Final Quality Checklist:
 +--------------------+------------------------------------------+
 ```
 
-1. Clean the stone thoroughly — remaining compound can mimic a polish
-2. Examine under a bright, directional light source at multiple angles
-3. Use 10x magnification to check for remaining scratches
-4. For faceted stones: check each facet individually and verify meet precision
-5. For cabochons: verify the dome reflects a single, undistorted light point (the "light return test")
-6. Record final weight and dimensions
+1. Den Stein gruendlich reinigen — verbleibendes Poliermittel kann eine Politur vortaeuschen
+2. Unter einer hellen, gerichteten Lichtquelle aus mehreren Winkeln untersuchen
+3. 10-fache Vergroesserung verwenden, um auf verbleibende Kratzer zu pruefen
+4. Fuer facettierte Steine: jede Facette einzeln pruefen und Treffpunktpraezision verifizieren
+5. Fuer Cabochons: verifizieren, dass die Woelbung einen einzelnen, unverzerrten Lichtpunkt reflektiert (der "Lichtrueckgabe-Test")
+6. Endgewicht und Abmessungen erfassen
 
-**Expected:** A gemstone with professional-quality polish — full lustre, no visible scratches under 10x, sharp facet edges or smooth dome, and clean of all residue. Ready for setting, display, or sale.
+**Erwartet:** Ein Edelstein mit professioneller Politurqualitaet — voller Glanz, keine sichtbaren Kratzer unter 10x, scharfe Facettenkanten oder glatte Woelbung, und frei von allen Rueckstaenden. Bereit zum Fassen, Ausstellen oder Verkaufen.
 
-**On failure:** If specific areas fail inspection, you can spot-polish individual facets (faceted stones) or return to the polishing wheel for specific areas (cabochons). Do not re-polish the entire stone unless the defect is widespread.
+**Bei Fehler:** Wenn bestimmte Bereiche die Inspektion nicht bestehen, koennen einzelne Facetten punktuell nachpoliert werden (facettierte Steine) oder es kann fuer bestimmte Bereiche zur Polierscheibe zurueckgekehrt werden (Cabochons). Den gesamten Stein nicht nachpolieren, es sei denn, der Defekt ist weitverbreitet.
 
-## Validation
+## Validierung
 
-- [ ] Pre-polish surface was scratch-free before polishing began
-- [ ] Stone and equipment cleaned between every grit stage
-- [ ] Correct polishing compound selected for the gemstone species
-- [ ] Appropriate lap or pad material used
-- [ ] Light pressure maintained throughout polishing
-- [ ] No scratches visible under 10x magnification in final inspection
-- [ ] Full lustre achieved across all surfaces
-- [ ] Facet edges sharp (faceted) or dome smooth (cabochon)
-- [ ] All compound residue removed in final cleaning
+- [ ] Vorpolitur-Oberflaeche war kratzerfrei, bevor die Politur begann
+- [ ] Stein und Ausruestung zwischen jeder Koernungsstufe gereinigt
+- [ ] Richtiges Poliermittel fuer die Edelsteinart ausgewaehlt
+- [ ] Geeignetes Scheiben- oder Pad-Material verwendet
+- [ ] Leichter Druck waehrend der gesamten Politur beibehalten
+- [ ] Keine Kratzer unter 10-facher Vergroesserung bei der Endinspektion sichtbar
+- [ ] Voller Glanz ueber alle Oberflaechen erreicht
+- [ ] Facettenkanten scharf (facettiert) oder Woelbung glatt (Cabochon)
+- [ ] Alle Poliermittelrueckstaende bei der Endreinigung entfernt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Grit contamination**: The single most common cause of polish failure. A single grain of 220 grit on a polishing lap creates deep scratches. Clean everything obsessively between stages
-- **Too much pressure**: Heavy pressure generates heat (can crack the stone), causes orange peel texture, and rounds facet edges. Let the compound do the work — pressure should be barely more than the stone's own weight
-- **Too much compound**: Over-charging the lap creates a slurry layer that produces orange peel rather than a flat polish. Apply compound sparingly and re-charge periodically rather than loading the lap
-- **Wrong compound for the species**: Cerium oxide works beautifully on quartz but poorly on corundum. Diamond paste works on everything but is expensive. Match the compound to the stone
-- **Skipping the inspection**: Always check under 10x before declaring the polish complete. Defects invisible to the naked eye become obvious once the stone is set in jewellery or examined by a buyer
+- **Kornkontamination**: Die einzelne haeufigste Ursache fuer Politurversagen. Ein einzelnes Korn 220er-Koernung auf einer Polierscheibe erzeugt tiefe Kratzer. Alles obsessiv zwischen den Stufen reinigen
+- **Zu viel Druck**: Starker Druck erzeugt Waerme (kann den Stein spalten), verursacht Orangenhaut-Textur und rundet Facettenkanten ab. Das Poliermittel die Arbeit machen lassen — der Druck sollte kaum mehr als das Eigengewicht des Steins betragen
+- **Zu viel Poliermittel**: Ueberladung der Scheibe erzeugt eine Schlaemm-Schicht, die Orangenhaut statt einer flachen Politur erzeugt. Poliermittel sparsam auftragen und periodisch nachladen, statt die Scheibe zu ueberfluten
+- **Falsches Poliermittel fuer die Art**: Ceroxid funktioniert wunderbar bei Quarz, aber schlecht bei Korund. Diamantpaste funktioniert bei allem, ist aber teuer. Das Poliermittel auf den Stein abstimmen
+- **Inspektion ueberspringen**: Immer unter 10x pruefen, bevor die Politur als abgeschlossen erklaert wird. Fuer das blosse Auge unsichtbare Defekte werden offensichtlich, sobald der Stein in Schmuck gefasst oder von einem Kaeufer untersucht wird
 
-## Related Skills
+## Verwandte Skills
 
-- `cut-gemstone` — The cutting stage must be completed properly before polishing begins; scratches carried from cutting cannot be fixed during polishing alone
-- `appraise-gemstone` — Polish quality directly affects the "cut" grade in gemstone appraisal, particularly brilliance and surface finish assessment
+- `cut-gemstone` — Die Schliffphase muss ordnungsgemaess abgeschlossen sein, bevor die Politur beginnt; Kratzer aus dem Schliff koennen nicht allein durch Polieren behoben werden
+- `appraise-gemstone` — Politurqualitaet beeinflusst direkt die "Schliff"-Bewertung bei der Edelsteinbewertung, insbesondere Brillanz- und Oberflaechenqualitaetsbewertung

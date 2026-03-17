@@ -1,12 +1,11 @@
 ---
 name: correlate-observability-signals
 description: >
-  Unify metrics, logs, and traces for cohesive debugging. Implement exemplars
-  for log-to-trace linking, build unified dashboards using RED/USE methods,
-  and enable rapid root cause analysis across observability signals. Use when
-  investigating complex incidents spanning multiple systems, reducing mean time
-  to resolution, implementing distributed tracing, or moving from siloed tools
-  to a unified observability platform.
+  一貫したデバッグのためにメトリクス、ログ、トレースを統合する。ログからトレースへの
+  リンク用のエグザンプラーを実装し、RED/USEメソッドを使用した統合ダッシュボードを
+  構築し、オブザーバビリティシグナル間の迅速な根本原因分析を実現する。複数システムに
+  またがる複雑なインシデント調査時、平均修復時間の短縮時、分散トレーシングの実装時、
+  サイロ化されたツールから統合オブザーバビリティプラットフォームへの移行時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -23,34 +22,33 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 可観測性シグナルの相関分析
+# オブザーバビリティシグナルの相関
 
-Connect metrics, logs, and traces for unified debugging across the three pillars of observability.
+オブザーバビリティの三本柱にわたって、メトリクス、ログ、トレースを統合デバッグ用に接続する。
 
 ## 使用タイミング
 
-- Investigating complex incidents that span multiple systems
-- Reducing MTTR (mean time to resolution)
-- Building unified observability dashboards
-- Implementing distributed tracing
-- Moving from siloed tools to unified observability
+- 複数システムにまたがる複雑なインシデントの調査時
+- MTTR（平均修復時間）の短縮時
+- 統合オブザーバビリティダッシュボードの構築時
+- 分散トレーシングの実装時
+- サイロ化されたツールから統合オブザーバビリティへの移行時
 
 ## 入力
 
-- **必須**: Prometheus (metrics)
-- **必須**: Log aggregation system (Loki, Elasticsearch, CloudWatch)
-- **必須**: Distributed tracing backend (Tempo, Jaeger, Zipkin)
-- **任意**: Grafana for unified visualization
-- **任意**: OpenTelemetry instrumentation
+- **必須**: Prometheus（メトリクス）
+- **必須**: ログ集約システム（Loki、Elasticsearch、CloudWatch）
+- **必須**: 分散トレーシングバックエンド（Tempo、Jaeger、Zipkin）
+- **任意**: 統合可視化用のGrafana
+- **任意**: OpenTelemetryインストルメンテーション
 
 ## 手順
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完全な設定ファイルとテンプレートについては[拡張例](references/EXAMPLES.md)を参照。
 
+### ステップ1: トレースコンテキスト伝播の実装
 
-### ステップ1: Implement Trace Context Propagation
-
-Add trace IDs to all logs and metrics using OpenTelemetry:
+OpenTelemetryを使用してすべてのログとメトリクスにトレースIDを追加する:
 
 ```go
 // Go example: Propagate trace context to logs
@@ -88,7 +86,7 @@ func processData(ctx context.Context, userID string) {
 }
 ```
 
-Python example:
+Pythonの例:
 
 ```python
 # Python: Flask with OpenTelemetry
@@ -119,13 +117,13 @@ def get_user(user_id):
     return {"user_id": user_id}
 ```
 
-**期待結果:** All logs include `trace_id` field, enabling log-to-trace correlation.
+**期待結果:** すべてのログに`trace_id`フィールドが含まれ、ログからトレースへの相関が可能になる。
 
-**失敗時:** If trace IDs missing, check OpenTelemetry SDK initialization and context propagation.
+**失敗時:** トレースIDが欠落している場合、OpenTelemetry SDKの初期化とコンテキスト伝播を確認する。
 
-### ステップ2: Configure Exemplars in Prometheus
+### ステップ2: Prometheusでのエグザンプラー設定
 
-Exemplars link metrics to traces:
+エグザンプラーはメトリクスをトレースにリンクする:
 
 ```yaml
 # prometheus.yml
@@ -146,7 +144,7 @@ scrape_configs:
         action: keep
 ```
 
-Instrument application to emit exemplars:
+エグザンプラーを発行するようにアプリケーションをインストルメント:
 
 ```go
 // Go: Emit exemplars with Prometheus histogram
@@ -181,22 +179,22 @@ func recordRequest(ctx context.Context, method, endpoint, status string, duratio
 }
 ```
 
-Query exemplars in Prometheus:
+Prometheusでエグザンプラーをクエリする:
 
 ```promql
 # Histogram with exemplars
 histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 ```
 
-In Grafana, exemplars appear as dots on histogram graphs that link to traces.
+Grafanaでは、エグザンプラーがヒストグラムグラフ上にドットとして表示され、トレースにリンクする。
 
-**期待結果:** Grafana shows exemplars in metric graphs, clicking opens corresponding trace.
+**期待結果:** Grafanaのメトリクスグラフにエグザンプラーが表示され、クリックすると対応するトレースが開く。
 
-**失敗時:** Verify Prometheus version ≥2.26 (exemplar support), check Grafana data source config enables exemplars.
+**失敗時:** Prometheusバージョンが2.26以上（エグザンプラーサポート）であることを確認し、Grafanaデータソース設定でエグザンプラーが有効になっているか確認する。
 
-### ステップ3: Build Unified Dashboard with RED Method
+### ステップ3: REDメソッドによる統合ダッシュボードの構築
 
-RED Method: Rate, Errors, Duration (for services)
+REDメソッド: Rate（レート）、Errors（エラー）、Duration（期間）（サービス向け）
 
 ```json
 {
@@ -263,13 +261,13 @@ RED Method: Rate, Errors, Duration (for services)
 }
 ```
 
-**期待結果:** Single dashboard showing rate, errors, duration + correlated logs.
+**期待結果:** レート、エラー、期間+相関ログを表示する単一ダッシュボード。
 
-**失敗時:** If panels show "No Data", verify metric names match your instrumentation.
+**失敗時:** パネルが「No Data」を表示する場合、メトリクス名がインストルメンテーションと一致しているか確認する。
 
-### ステップ4: Implement USE Method for Resources
+### ステップ4: リソース用のUSEメソッドの実装
 
-USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, disk)
+USEメソッド: Utilization（使用率）、Saturation（飽和度）、Errors（エラー）（CPU、メモリ、ディスクなどのリソース向け）
 
 ```json
 {
@@ -349,13 +347,13 @@ USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, dis
 }
 ```
 
-**期待結果:** Dashboard showing resource health across all USE dimensions.
+**期待結果:** すべてのUSEディメンションにわたるリソースの健全性を表示するダッシュボード。
 
-**失敗時:** Ensure node_exporter is running and scraping system metrics.
+**失敗時:** node_exporterが実行中でシステムメトリクスをスクレイピングしていることを確認する。
 
-### ステップ5: Link Logs to Traces in Loki
+### ステップ5: Lokiでのログからトレースへのリンク
 
-Configure Loki to extract trace IDs:
+トレースIDを抽出するようにLokiを設定する:
 
 ```yaml
 # loki-config.yml
@@ -378,7 +376,7 @@ query_config:
       urlDisplayLabel: 'View Trace'
 ```
 
-In Grafana, configure Loki data source:
+GrafanaでLokiデータソースを設定する:
 
 ```json
 {
@@ -398,13 +396,13 @@ In Grafana, configure Loki data source:
 }
 ```
 
-**期待結果:** Clicking trace ID in Loki logs opens corresponding trace in Tempo.
+**期待結果:** LokiログのトレースIDをクリックするとTempoの対応するトレースが開く。
 
-**失敗時:** Verify regex matches your log format, check Tempo data source UID.
+**失敗時:** 正規表現がログフォーマットに一致しているか確認し、TempoデータソースUIDを確認する。
 
-### ステップ6: Create Unified Incident View
+### ステップ6: 統合インシデントビューの作成
 
-Build a dashboard that brings all signals together:
+すべてのシグナルをまとめるダッシュボードを構築する:
 
 ```json
 {
@@ -413,46 +411,46 @@ Build a dashboard that brings all signals together:
     "templating": {
       "list": [
         {
-# ... (see EXAMPLES.md for complete configuration)
+# ... (完全な設定はEXAMPLES.mdを参照)
 ```
 
-Workflow during incident:
+インシデント中のワークフロー:
 
-1. Alert fires for high error rate
-2. On-call engineer opens Grafana dashboard
-3. Identifies spike in error rate at specific time
-4. Clicks exemplar dot on duration histogram → opens trace
-5. Trace shows slow database query
-6. Clicks "View Logs" on span → opens logs for that trace
-7. Logs reveal specific SQL query causing timeout
-8. Root cause identified in <2 minutes
+1. 高エラー率のアラートが発報
+2. オンコールエンジニアがGrafanaダッシュボードを開く
+3. 特定の時間帯のエラー率のスパイクを特定
+4. 期間ヒストグラムのエグザンプラードットをクリック→トレースが開く
+5. トレースが遅いデータベースクエリを表示
+6. スパンの「View Logs」をクリック→そのトレースのログが開く
+7. ログがタイムアウトの原因となっている特定のSQLクエリを明らかにする
+8. 2分以内に根本原因を特定
 
-**期待結果:** Single pane of glass for debugging, jumping between metrics/logs/traces.
+**期待結果:** メトリクス/ログ/トレース間を行き来するデバッグ用の単一ペイン。
 
-**失敗時:** If links don't work, check data source configurations and trace ID propagation.
+**失敗時:** リンクが機能しない場合、データソース設定とトレースID伝播を確認する。
 
 ## バリデーション
 
-- [ ] Trace IDs present in all application logs
-- [ ] Prometheus scraping exemplars
-- [ ] Grafana dashboards show exemplar dots on histograms
-- [ ] Clicking exemplar opens corresponding trace in Tempo/Jaeger
-- [ ] Loki logs have "View Trace" links that work
-- [ ] RED dashboard created for key services
-- [ ] USE dashboard created for infrastructure
-- [ ] Unified incident dashboard tested during GameDay
+- [ ] すべてのアプリケーションログにトレースIDが含まれている
+- [ ] Prometheusがエグザンプラーをスクレイピングしている
+- [ ] Grafanaダッシュボードのヒストグラムにエグザンプラードットが表示される
+- [ ] エグザンプラーをクリックするとTempo/Jaegerの対応するトレースが開く
+- [ ] Lokiログに機能する「View Trace」リンクがある
+- [ ] 主要サービスのREDダッシュボードが作成されている
+- [ ] インフラストラクチャのUSEダッシュボードが作成されている
+- [ ] 統合インシデントダッシュボードがGameDayでテスト済み
 
 ## よくある落とし穴
 
-- **Inconsistent trace ID format**: OpenTelemetry uses 32-char hex, Jaeger uses 16-char. Choose one.
-- **Missing context propagation**: If trace IDs don't flow across services, distributed tracing breaks. Use OpenTelemetry auto-instrumentation.
-- **Exemplar overload**: Too many exemplars (>100k) can slow Prometheus. Sample high-volume metrics.
-- **Clock skew**: Traces span multiple services. Ensure NTP is configured; clock drift causes trace ordering issues.
-- **Data retention mismatch**: If traces expire before metrics, correlation breaks. Align retention policies.
+- **一貫性のないトレースIDフォーマット**: OpenTelemetryは32文字hex、Jaegerは16文字を使用。1つを選ぶ
+- **コンテキスト伝播の欠落**: トレースIDがサービス間で流れない場合、分散トレーシングが壊れる。OpenTelemetryの自動インストルメンテーションを使用する
+- **エグザンプラーの過負荷**: エグザンプラーが多すぎると（>100k）Prometheusが遅くなる可能性がある。高ボリュームメトリクスをサンプリングする
+- **時計のズレ**: トレースは複数サービスにまたがる。NTPが設定されていることを確認する。クロックドリフトがトレースの順序の問題を引き起こす
+- **データ保持期間の不一致**: トレースがメトリクスより先に期限切れになると相関が壊れる。保持ポリシーを揃える
 
 ## 関連スキル
 
-- `setup-prometheus-monitoring` - metrics foundation for correlation
-- `configure-log-aggregation` - logs foundation for correlation
-- `instrument-distributed-tracing` - traces foundation for correlation
-- `build-grafana-dashboards` - unified visualization layer
+- `setup-prometheus-monitoring` -- 相関のためのメトリクス基盤
+- `configure-log-aggregation` -- 相関のためのログ基盤
+- `instrument-distributed-tracing` -- 相関のためのトレース基盤
+- `build-grafana-dashboards` -- 統合可視化レイヤー

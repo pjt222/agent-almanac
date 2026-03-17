@@ -1,14 +1,13 @@
 ---
 name: behavioral-modification
 description: >
-  Address unwanted dog behaviors through desensitization, counter-conditioning,
-  and management. Covers reactivity (to dogs, people, sounds), separation
-  anxiety, resource guarding, excessive barking, and leash pulling using
-  force-free methods with systematic threshold management. Use when a dog shows
-  reactivity toward other dogs, people, or stimuli; when separation anxiety
-  causes destructive behavior or vocalization; when resource guarding is present;
-  or when behaviors like excessive barking or leash pulling interfere with
-  daily life — after basic obedience is established.
+  脱感作、拮抗条件付け、環境管理を通じて犬の望ましくない行動に対処する。
+  反応性（他の犬、人、音に対する）、分離不安、資源保護、過度の吠え、
+  リードの引っ張りをカバーする。体系的な閾値管理による強制なしの方法を使用。
+  犬が他の犬、人、刺激に対して反応性を示す時、分離不安が破壊的行動や
+  発声を引き起こす時、資源保護が存在する時、過度の吠えやリードの引っ張り
+  などの行動が日常生活に支障をきたす時 — 基本的な服従訓練が確立された後に
+  使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,29 +26,29 @@ metadata:
 
 # 行動修正
 
-Address unwanted dog behaviors through desensitization, counter-conditioning, and environmental management.
+脱感作、拮抗条件付け、環境管理を通じて犬の望ましくない行動に対処する。
 
 ## 使用タイミング
 
-- A dog shows reactivity (lunging, barking, growling) toward other dogs, people, or stimuli
-- Separation anxiety manifests as destructive behavior, vocalization, or house soiling when left alone
-- Resource guarding: the dog stiffens, growls, or snaps when approached while eating or holding an object
-- Excessive barking, jumping, pulling on leash, or other behaviors that interfere with daily life
-- After basic obedience is established — behavioral modification builds on foundation commands
+- 犬が他の犬、人、刺激に対して反応性（突進、吠え、唸り）を示す時
+- 分離不安が一人にされた時の破壊的行動、発声、排泄として現れる時
+- 資源保護: 犬が食事中やオブジェクトを保持中に近づくと体を硬くする、唸る、噛みつく
+- 過度の吠え、ジャンプ、リードの引っ張り、その他日常生活に支障をきたす行動
+- 基本的な服従訓練が確立された後 — 行動修正は基礎コマンドの上に構築される
 
 ## 入力
 
-- **必須**: A specific unwanted behavior to address (not "the dog is bad" but "the dog lunges at other dogs on leash")
-- **必須**: The dog's threshold distance or trigger level (how close/intense before the behavior starts)
-- **任意**: History of the behavior (when it started, what triggers it, what makes it worse)
-- **任意**: High-value treats that the dog will eat even when mildly stressed
-- **任意**: Veterinary clearance (rule out pain or medical causes for behavior changes)
+- **必須**: 対処する具体的な望ましくない行動（「犬が悪い」ではなく「犬がリードで他の犬に突進する」）
+- **必須**: 犬の閾値距離またはトリガーレベル（行動が始まるまでの距離/強度）
+- **任意**: 行動の履歴（いつ始まったか、何がトリガーするか、何が悪化させるか）
+- **任意**: 軽度のストレス下でも犬が食べる高価値トリーツ
+- **任意**: 獣医クリアランス（行動変化の痛みや医学的原因を除外）
 
 ## 手順
 
-### ステップ1: Identify and Define the Behavior
+### ステップ1: 行動の特定と定義
 
-Precision matters — vague descriptions lead to vague interventions.
+精度が重要 — 曖昧な記述は曖昧な介入につながる。
 
 ```
 Behavior Analysis (ABC Model):
@@ -75,11 +74,11 @@ Threshold Mapping:
 - The working zone is BELOW threshold — where the dog notices but can still think
 ```
 
-**期待結果:** A precise behavior definition with identified trigger, threshold distance, and current consequence pattern.
+**期待結果:** トリガー、閾値距離、現在の結果パターンが特定された正確な行動定義。
 
-**失敗時:** If the behavior seems to have no consistent trigger, keep a log for one week: date, time, context, behavior, consequence. Patterns often emerge that are not obvious in the moment.
+**失敗時:** 行動に一貫したトリガーがないように思える場合、1週間ログを取る: 日付、時間、状況、行動、結果。パターンはしばしば、その瞬間には明らかでなかったものが浮かび上がる。
 
-### ステップ2: Choose the Intervention Strategy
+### ステップ2: 介入戦略の選択
 
 ```
 Strategy Selection:
@@ -103,13 +102,13 @@ Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 ```
 
-**期待結果:** A specific strategy selected for the identified behavior.
+**期待結果:** 特定された行動に対する具体的な戦略が選択される。
 
-**失敗時:** If the behavior is severe (biting with contact, extreme panic, self-harm), refer to a certified applied animal behaviorist (CAAB) or veterinary behaviorist (DACVB). This skill covers moderate behavioral issues, not clinical cases.
+**失敗時:** 行動が重篤な場合（接触を伴う咬傷、極度のパニック、自傷行為）、認定応用動物行動学者（CAAB）または獣医行動学者（DACVB）に紹介する。このスキルは中程度の行動問題をカバーし、臨床ケースはカバーしない。
 
-### ステップ3: Execute Desensitization and Counter-Conditioning
+### ステップ3: 脱感作と拮抗条件付けの実施
 
-The core protocol for reactivity and fear-based behaviors.
+反応性と恐怖ベースの行動のためのコアプロトコル。
 
 ```
 DS/CC Protocol:
@@ -145,13 +144,13 @@ DS/CC Protocol:
    - Dog's body language at threshold becomes more relaxed
 ```
 
-**期待結果:** Over weeks, the dog's threshold distance decreases and emotional response to the trigger shifts from fear/aggression to neutral or positive.
+**期待結果:** 数週間にわたり、犬の閾値距離が減少し、トリガーへの感情的反応が恐怖/攻撃性から中立またはポジティブに変化する。
 
-**失敗時:** If no progress after 3-4 weeks of consistent sessions, reassess: (1) are you working below threshold? (2) are the treats high-value enough? (3) is the trigger exposure too frequent outside of training (flooding undoes DS/CC)? (4) consider consulting a professional.
+**失敗時:** 3-4週間の一貫したセッション後に進歩がない場合、再評価する: (1) 閾値以下で作業しているか？ (2) トリーツは十分に高価値か？ (3) トレーニング外でのトリガー露出が頻繁すぎないか（フラッディングはDS/CCを取り消す）？ (4) 専門家への相談を検討する。
 
-### ステップ4: Manage the Environment
+### ステップ4: 環境の管理
 
-Training changes behavior over time. Management prevents rehearsal now.
+トレーニングは時間をかけて行動を変える。管理は今すぐリハーサルを防ぐ。
 
 ```
 Management Strategies:
@@ -179,29 +178,29 @@ Every rehearsal of the unwanted behavior strengthens it.
 Management prevents rehearsal while training builds the new response.
 ```
 
-**期待結果:** The unwanted behavior is not being practiced outside of controlled training sessions.
+**期待結果:** 管理されたトレーニングセッション外で望ましくない行動が練習されていない。
 
-**失敗時:** If management is impossible (e.g., cannot avoid all dog encounters), reduce training criteria to match reality. Some environmental exposure is unavoidable; ensure training sessions provide a strong enough counter-experience.
+**失敗時:** 管理が不可能な場合（例: すべての犬との遭遇を避けられない）、現実に合わせてトレーニング基準を下げる。環境的露出は避けられない場合もある; トレーニングセッションが十分に強い対抗体験を提供するようにする。
 
 ## バリデーション
 
-- [ ] The behavior was defined precisely using the ABC model
-- [ ] Threshold distance was identified before starting DS/CC
-- [ ] Training was conducted consistently below threshold
-- [ ] Treats were high-value enough for the dog to eat in the presence of the trigger
-- [ ] Sessions were 5-15 minutes, ending before the dog went over threshold
-- [ ] Environmental management prevented behavior rehearsal outside training
-- [ ] Progress indicators (check-ins, reduced threshold distance) are being tracked
+- [ ] ABCモデルを使用して行動が正確に定義された
+- [ ] DS/CC開始前に閾値距離が特定された
+- [ ] トレーニングが一貫して閾値以下で実施された
+- [ ] トリーツがトリガー存在下で犬が食べるのに十分な高価値だった
+- [ ] セッションが5-15分で、犬が閾値を超える前に終了した
+- [ ] 環境管理がトレーニング外での行動リハーサルを防いだ
+- [ ] 進捗指標（チェックイン、閾値距離の減少）が追跡されている
 
 ## よくある落とし穴
 
-- **Working over threshold**: The single most common error. If the dog cannot eat treats, you are too close. Move back
-- **Inconsistency**: DS/CC requires regular sessions (3-5 per week minimum). Sporadic training produces sporadic results
-- **Flooding**: Forcing the dog to endure the trigger at close range does not "get them used to it" — it traumatizes and worsens the behavior
-- **Punishment**: Correcting a reactive dog (leash pop, yelling "no") suppresses the warning signals but increases the underlying emotion. The dog learns to bite without warning
-- **Expecting linear progress**: Behavioral modification has plateaus and regressions. A bad session does not erase prior progress. Zoom out and look at the trend over weeks
-- **Ignoring medical causes**: Pain, thyroid disorders, and neurological issues can all present as behavioral problems. Veterinary clearance is not optional for sudden-onset behavior changes
+- **閾値を超えた作業**: 最も一般的なエラー。犬がトリーツを食べられない場合、近すぎる。後退する
+- **一貫性のなさ**: DS/CCは定期的なセッション（最低週3-5回）を必要とする。散発的なトレーニングは散発的な結果を生む
+- **フラッディング**: 犬に近距離でトリガーに耐えることを強制しても「慣れさせる」ことにはならない — トラウマを与え、行動を悪化させる
+- **罰**: 反応的な犬を矯正する（リーシュポップ、「ダメ」と叫ぶ）は警告シグナルを抑制するが、根本的な感情を増大させる。犬は警告なしに噛むことを学ぶ
+- **直線的な進歩の期待**: 行動修正にはプラトーとリグレッションがある。悪いセッションが以前の進歩を消去することはない。ズームアウトして数週間のトレンドを見る
+- **医学的原因の無視**: 痛み、甲状腺障害、神経学的問題はすべて行動問題として現れる可能性がある。突然発症した行動変化に対する獣医クリアランスはオプションではない
 
 ## 関連スキル
 
-- `basic-obedience` — foundation commands that behavioral modification builds upon; reliable recall is essential for safety
+- `basic-obedience` — 行動修正が構築される基礎コマンド; 信頼できるリコールは安全に不可欠

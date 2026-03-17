@@ -1,14 +1,15 @@
 ---
 name: fungi-identification
 description: >
-  Field identification of fungi using morphological features, spore prints,
-  habitat analysis, and seasonal context with a safety-first approach. Covers
-  cap, gill, stem, and spore characteristics, look-alike differentiation,
-  toxicity risk assessment, and the critical rule of absolute certainty before
-  consumption. Use when encountering an unknown fungus, foraging for edible
-  mushrooms and needing to confirm species before consumption, assessing whether
-  fungi in a garden or property are harmful, or differentiating an edible
-  species from a dangerous look-alike.
+  Feldbestimmung von Pilzen anhand morphologischer Merkmale, Sporenabdrucke,
+  Lebensraumanalyse und saisonalem Kontext mit einem Sicherheit-zuerst-Ansatz.
+  Umfasst Hut-, Lamellen-, Stiel- und Sporeneigenschaften, Verwechslungspartner-
+  Differenzierung, Toxizitaetsrisikobewertung und die kritische Regel absoluter
+  Sicherheit vor dem Verzehr. Verwenden beim Antreffen eines unbekannten Pilzes,
+  beim Sammeln essbarer Pilze und der Notwendigkeit die Art vor dem Verzehr zu
+  bestaetigen, beim Beurteilen ob Pilze in Garten oder auf dem Grundstueck
+  schaedlich sind oder beim Unterscheiden einer essbaren Art von einem
+  gefaehrlichen Verwechslungspartner.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,30 +28,30 @@ metadata:
 
 # Pilzbestimmung
 
-Identify fungi in the field using morphological features, spore prints, habitat, and season with an absolute safety-first approach.
+Pilze im Feld anhand morphologischer Merkmale, Sporenabdrucke, Lebensraum und Jahreszeit mit einem absoluten Sicherheit-zuerst-Ansatz bestimmen.
 
-## When to Use
+## Wann verwenden
 
-- You encounter an unknown fungus and need to identify it
-- You are foraging for edible mushrooms and need to confirm species before consumption
-- You want to assess whether fungi in your garden or property are harmful
-- You are building field identification skills through structured observation practice
-- You need to differentiate an edible species from a dangerous look-alike
+- Sie treffen einen unbekannten Pilz an und muessen ihn bestimmen
+- Sie sammeln essbare Pilze und muessen die Art vor dem Verzehr bestaetigen
+- Sie moechten beurteilen, ob Pilze in Ihrem Garten oder auf Ihrem Grundstueck schaedlich sind
+- Sie bauen Feldbestimmungsfaehigkeiten durch strukturierte Beobachtungspraxis auf
+- Sie muessen eine essbare Art von einem gefaehrlichen Verwechslungspartner unterscheiden
 
-## Inputs
+## Eingaben
 
-- **Required**: A fungus specimen or clear observation of one in situ
-- **Required**: Ability to observe fine morphological details (cap, gills, stem, base)
-- **Optional**: Field guide or reference material for the region
-- **Optional**: Paper and glass for spore prints
-- **Optional**: Knife for cross-section examination
-- **Optional**: Hand lens (10x) for fine detail
+- **Erforderlich**: Ein Pilzexemplar oder eine klare Beobachtung eines Pilzes in situ
+- **Erforderlich**: Faehigkeit, feine morphologische Details zu beobachten (Hut, Lamellen, Stiel, Basis)
+- **Optional**: Bestimmungsbuch oder Referenzmaterial fuer die Region
+- **Optional**: Papier und Glas fuer Sporenabdrucke
+- **Optional**: Messer fuer Querschnittuntersuchung
+- **Optional**: Handlupe (10x) fuer Feindetails
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: The Cardinal Rule
+### Schritt 1: Die Grundregel
 
-Before any identification work, internalize the absolute rule of mycology.
+Vor jeder Bestimmungsarbeit die absolute Regel der Mykologie verinnerlichen.
 
 ```
 CARDINAL RULE:
@@ -68,13 +69,13 @@ edible mushroom) is a missed meal.
 ALWAYS ERR TOWARD CAUTION.
 ```
 
-**Expected:** The cardinal rule is internalized before proceeding with identification.
+**Erwartet:** Die Grundregel ist verinnerlicht, bevor mit der Bestimmung fortgefahren wird.
 
-**On failure:** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
+**Bei Fehler:** Es gibt keinen Fehlermodus fuer diesen Schritt. Wenn die Regel nicht verinnerlicht ist, nicht mit der Feldbestimmung zu Verzehrzwecken fortfahren.
 
-### Step 2: Document the Habitat
+### Schritt 2: Den Lebensraum dokumentieren
 
-Context narrows identification before touching the specimen.
+Der Kontext grenzt die Bestimmung ein, bevor das Exemplar beruehrt wird.
 
 ```
 Habitat Recording:
@@ -101,13 +102,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete habitat record that provides context for species-level identification.
+**Erwartet:** Ein vollstaendiger Lebensraumdatensatz, der Kontext fuer die Bestimmung auf Artebene liefert.
 
-**On failure:** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
+**Bei Fehler:** Wenn der Lebensraum unklar ist (z.B. Stadtgarten mit gemischter Bepflanzung), aufzeichnen was sichtbar ist. Unvollstaendige Lebensraumdaten verringern die Bestimmungssicherheit — dies in die Sicherheitsbewertung einbeziehen.
 
-### Step 3: Examine Morphological Features
+### Schritt 3: Morphologische Merkmale untersuchen
 
-Systematic examination of the specimen itself.
+Systematische Untersuchung des Exemplars selbst.
 
 ```
 Morphological Checklist:
@@ -152,13 +153,13 @@ SPORE PRINT:
   black, rust-orange
 ```
 
-**Expected:** A complete morphological description covering all major features.
+**Erwartet:** Eine vollstaendige morphologische Beschreibung, die alle Hauptmerkmale abdeckt.
 
-**On failure:** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
+**Bei Fehler:** Wenn ein Merkmal nicht beobachtet werden kann (z.B. kein Ring sichtbar, aber moeglicherweise verloren gegangen), als "nicht beobachtet" statt "fehlend" aufzeichnen. Die Unterscheidung ist fuer die Bestimmung wichtig.
 
-### Step 4: Identify Using Multiple Confirmations
+### Schritt 4: Anhand mehrerer Bestaetigungen identifizieren
 
-Cross-reference all data against reference material.
+Alle Daten gegen Referenzmaterial abgleichen.
 
 ```
 Identification Protocol:
@@ -191,31 +192,31 @@ Confidence Levels:
 +----------+---------------------------+---------------------------+
 ```
 
-**Expected:** A species-level identification with explicit confidence level and look-alike assessment.
+**Erwartet:** Eine Bestimmung auf Artebene mit explizitem Konfidenzgrad und Verwechslungspartner-Bewertung.
 
-**On failure:** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
+**Bei Fehler:** Wenn die Bestimmung auf Gattungsebene steckenbleibt, ist das fuer Lernzwecke akzeptabel. Fuer den Verzehr ist nur eine Bestimmung auf Artebene mit dem Konfidenzgrad "Sicher" akzeptabel.
 
-## Validation
+## Validierung
 
-- [ ] The cardinal rule was acknowledged before starting identification
-- [ ] Habitat was documented before examining the specimen
-- [ ] All morphological features were examined systematically
-- [ ] The base was excavated to check for a volva
-- [ ] A spore print was taken (if time allows)
-- [ ] Dangerous look-alikes were explicitly checked and eliminated
-- [ ] Confidence level was honestly assessed
-- [ ] Only "Certain" identifications were considered for consumption
+- [ ] Die Grundregel wurde vor Beginn der Bestimmung anerkannt
+- [ ] Der Lebensraum wurde vor der Untersuchung des Exemplars dokumentiert
+- [ ] Alle morphologischen Merkmale wurden systematisch untersucht
+- [ ] Die Basis wurde ausgegraben, um auf eine Volva zu pruefen
+- [ ] Ein Sporenabdruck wurde genommen (wenn die Zeit es erlaubt)
+- [ ] Gefaehrliche Verwechslungspartner wurden explizit geprueft und ausgeschlossen
+- [ ] Der Konfidenzgrad wurde ehrlich bewertet
+- [ ] Nur "Sichere" Bestimmungen wurden fuer den Verzehr in Betracht gezogen
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Relying on a single feature**: "It looks like a chanterelle" based on colour alone. True chanterelles have false gills (ridges), grow from soil near trees, and have a specific apricot smell. False chanterelles and Jack-o'-lanterns share the colour but differ in every other feature
-- **Skipping the base examination**: Failing to dig up the base misses the volva — the single most important feature for identifying deadly Amanita species (death cap, destroying angel)
-- **Trusting apps blindly**: AI-based mushroom identification apps have significant error rates for look-alike species. Use them as a starting point, never as confirmation
-- **Assuming "common = safe"**: Abundance does not indicate edibility. Deadly species can be locally abundant
-- **Tasting unknown species**: Some mycologists use taste as a diagnostic tool, but this requires expert-level knowledge of which species are safe to taste. For non-experts, do not taste unknown fungi
-- **Ignoring temporal toxins**: Some species (e.g., Amanita phalloides) have pleasant taste and delayed symptoms. By the time symptoms appear (24-48 hours), liver damage is severe
+- **Sich auf ein einzelnes Merkmal verlassen**: "Er sieht aus wie ein Pfifferling" basierend allein auf der Farbe. Echte Pfifferlinge haben Scheinlamellen (Leisten), wachsen auf Boden in Baumnaehe und haben einen spezifischen Aprikosengeruch. Falsche Pfifferlinge und Leuchtpilze teilen die Farbe, unterscheiden sich aber in jedem anderen Merkmal
+- **Die Basisuntersuchung ueberspringen**: Das Versaeumen, die Basis auszugraben, uebersieht die Volva — das einzelne wichtigste Merkmal zur Bestimmung toedlicher Amanita-Arten (Gruener Knollenblaettpilz, Kegelhuetigr Knollenblaettpilz)
+- **Apps blind vertrauen**: KI-basierte Pilzbestimmungs-Apps haben erhebliche Fehlerquoten bei Verwechslungsarten. Als Ausgangspunkt verwenden, niemals als Bestaetigung
+- **Annehmen "haeufig = sicher"**: Haeufigkeit zeigt keine Essbarkeit an. Toedliche Arten koennen lokal haeufig sein
+- **Unbekannte Arten kosten**: Einige Mykologen verwenden Geschmack als diagnostisches Werkzeug, aber dies erfordert Expertenwissen darueber, welche Arten sicher zu kosten sind. Fuer Nicht-Experten unbekannte Pilze nicht kosten
+- **Verzoegerte Toxine ignorieren**: Einige Arten (z.B. Amanita phalloides) haben angenehmen Geschmack und verzoegerte Symptome. Wenn Symptome auftreten (24-48 Stunden), ist der Leberschaden bereits schwer
 
-## Related Skills
+## Verwandte Skills
 
-- `mushroom-cultivation` — growing known species eliminates identification risk entirely
-- `forage-plants` — complementary field identification skill; shares the multi-feature confirmation methodology
+- `mushroom-cultivation` — Der Anbau bekannter Arten eliminiert das Bestimmungsrisiko vollstaendig
+- `forage-plants` — Ergaenzender Feldbestimmungs-Skill; teilt die Mehrfachbestaetigung-Methodik

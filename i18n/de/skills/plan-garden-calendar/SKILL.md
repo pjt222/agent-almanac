@@ -1,15 +1,15 @@
 ---
 name: plan-garden-calendar
 description: >
-  Plan garden activities using solar, lunar, and biodynamic calendars. Covers
-  USDA hardiness zones, frost date calculation, equinox/solstice anchoring,
-  synodic lunar cycle (waxing/waning), ascending/descending moon, Maria Thun
-  biodynamic calendar (root/leaf/flower/fruit days), succession planting
-  schedules, and seasonal task planning. Use when planning a new growing season
-  and needing a planting schedule, integrating lunar or biodynamic timing into
-  garden practice, calculating frost dates and planting windows for a specific
-  zone, setting up succession planting for continuous harvest, or conducting
-  end-of-season review.
+  Gartenaktivitaeten mit Solar-, Mond- und biodynamischen Kalendern planen. Umfasst
+  USDA-Winterhaertezonen, Frostdatumsberechnung, Tagundnachtgleichen-/Sonnenwende-Verankerung,
+  synodischen Mondzyklus (zunehmend/abnehmend), aufsteigenden/absteigenden Mond, Maria-Thun-
+  biodynamischen Kalender (Wurzel-/Blatt-/Blueten-/Fruchttage), Staffelpflanzungsplaene
+  und saisonale Aufgabenplanung. Verwenden beim Planen einer neuen Anbausaison
+  und Benoetigen eines Pflanzplans, beim Integrieren von Mond- oder biodynamischem
+  Timing in die Gartenpraxis, beim Berechnen von Frostdaten und Pflanzfenstern fuer
+  eine bestimmte Zone, beim Einrichten von Staffelpflanzung fuer kontinuierliche
+  Ernte oder bei der Saisonendauswertung.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -28,29 +28,29 @@ metadata:
 
 # Gartenkalender planen
 
-Plan garden activities using solar, lunar, and biodynamic calendar systems for optimal timing.
+Gartenaktivitaeten mit Solar-, Mond- und biodynamischen Kalendersystemen fuer optimales Timing planen.
 
-## When to Use
+## Wann verwenden
 
-- You are planning a new growing season and need a planting schedule
-- You want to integrate lunar or biodynamic timing into your garden practice
-- You need to calculate frost dates and planting windows for your zone
-- You want to set up succession planting for continuous harvest
-- End-of-season review and planning for the next year
+- Sie planen eine neue Anbausaison und benoetigen einen Pflanzplan
+- Sie moechten Mond- oder biodynamisches Timing in Ihre Gartenpraxis integrieren
+- Sie muessen Frostdaten und Pflanzfenster fuer Ihre Zone berechnen
+- Sie moechten Staffelpflanzung fuer kontinuierliche Ernte einrichten
+- Saisonendauswertung und Planung fuer das naechste Jahr
 
-## Inputs
+## Eingaben
 
-- **Required**: USDA hardiness zone or geographic location (for frost dates)
-- **Required**: Crops or plants to schedule
-- **Optional**: Calendar system preference (solar only, lunar, or biodynamic)
-- **Optional**: Garden size and bed count
-- **Optional**: Previous season's garden journal
+- **Erforderlich**: USDA-Winterhaertezone oder geografischer Standort (fuer Frostdaten)
+- **Erforderlich**: Kulturen oder Pflanzen, die eingeplant werden sollen
+- **Optional**: Kalendersystem-Praeferenz (nur solar, lunar oder biodynamisch)
+- **Optional**: Gartengroesse und Beetanzahl
+- **Optional**: Gartentagebuch der vorherigen Saison
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Establish the Solar Framework
+### Schritt 1: Solarrahmen festlegen
 
-The solar calendar provides the hard boundaries — frost dates and day length.
+Der Solarkalender liefert die festen Grenzen — Frostdaten und Tageslaenge.
 
 ```
 Solar Calendar Anchors:
@@ -85,13 +85,13 @@ Solar Calendar Anchors:
    └───────────────────┴───────────────┴────────────────────────────┘
 ```
 
-**Expected:** Clear frost dates and growing season length for your specific location.
+**Erwartet:** Klare Frostdaten und Vegetationsperiodendauer fuer Ihren spezifischen Standort.
 
-**On failure:** If frost dates are unknown, use conservative estimates (add 2 weeks to average LSF for safe direct-sow date). Local garden clubs or agricultural extension offices are the best regional sources.
+**Bei Fehler:** Wenn Frostdaten unbekannt sind, konservative Schaetzungen verwenden (2 Wochen zum durchschnittlichen LSF hinzufuegen fuer sicheres Direktsaat-Datum). Lokale Gartenvereine oder landwirtschaftliche Beratungsstellen sind die besten regionalen Quellen.
 
-### Step 2: Overlay the Lunar Calendar
+### Schritt 2: Mondkalender ueberlagern
 
-The moon influences sap flow, germination, and soil biology. Two cycles matter.
+Der Mond beeinflusst Saftfluss, Keimung und Bodenbiologie. Zwei Zyklen sind relevant.
 
 ```
 Lunar Cycle 1: Synodic (Phase Cycle — 29.5 days)
@@ -128,13 +128,13 @@ Ascending = moon's position in the zodiac moving northward.
 Check a biodynamic calendar for daily ascending/descending status.
 ```
 
-**Expected:** Understanding of both lunar cycles and their garden applications.
+**Erwartet:** Verstaendnis beider Mondzyklen und ihrer Gartenanwendungen.
 
-**On failure:** If lunar calendar feels overwhelming, start with just the synodic cycle (waxing = above-ground, waning = below-ground) and add the sidereal layer in the second season.
+**Bei Fehler:** Wenn der Mondkalender ueberfordernd wirkt, mit nur dem synodischen Zyklus beginnen (zunehmend = oberirdisch, abnehmend = unterirdisch) und die siderische Ebene in der zweiten Saison hinzufuegen.
 
-### Step 3: Integrate the Biodynamic Calendar (Optional — Advanced)
+### Schritt 3: Biodynamischen Kalender integrieren (Optional — Fortgeschritten)
 
-The Maria Thun biodynamic calendar assigns each day to one of four plant organs based on the moon's zodiacal position.
+Der Maria-Thun-biodynamische Kalender ordnet jeden Tag einem von vier Pflanzenorganen zu, basierend auf der Stellung des Mondes im Tierkreis.
 
 ```
 Biodynamic Day Types:
@@ -175,13 +175,13 @@ Practical Reality:
   on the "wrong" day beats a seed in the packet on the "right" day.
 ```
 
-**Expected:** Awareness of biodynamic day types and how to use the annual calendar.
+**Erwartet:** Kenntnis der biodynamischen Tagestypen und wie der Jahreskalender zu verwenden ist.
 
-**On failure:** If biodynamic calendar is unavailable, the lunar phase calendar (Step 2) captures the most important timing signals. Add biodynamic day types when you have access to the annual calendar.
+**Bei Fehler:** Wenn kein biodynamischer Kalender verfuegbar ist, erfasst der Mondphasenkalender (Schritt 2) die wichtigsten Timing-Signale. Biodynamische Tagestypen hinzufuegen, wenn Sie Zugang zum Jahreskalender haben.
 
-### Step 4: Build a Succession Planting Schedule
+### Schritt 4: Staffelpflanzungsplan erstellen
 
-Stagger plantings for continuous harvest rather than one overwhelming glut.
+Aussaaten staffeln fuer kontinuierliche Ernte statt einer ueberwaeltigenden Schwemme.
 
 ```
 Succession Planting Principles:
@@ -215,13 +215,13 @@ Succession Planting Principles:
    └─────────┴────────────────┴───────────────────────────────┘
 ```
 
-**Expected:** A week-by-week planting calendar customized to your zone, with succession intervals noted.
+**Erwartet:** Ein wochenweiser Pflanzkalender, angepasst an Ihre Zone, mit notierten Staffelintervallen.
 
-**On failure:** If the schedule feels overwhelming, pick your 3 most important crops and plan successions for those only. Add more crops in the second season once the rhythm is established.
+**Bei Fehler:** Wenn der Zeitplan ueberfordernd wirkt, die 3 wichtigsten Kulturen auswaehlen und nur fuer diese Staffelungen planen. In der zweiten Saison weitere Kulturen hinzufuegen, sobald der Rhythmus etabliert ist.
 
-### Step 5: Seasonal Task Schedule
+### Schritt 5: Saisonaler Aufgabenplan
 
-Beyond planting, the garden has cyclical maintenance tasks.
+Ueber das Pflanzen hinaus hat der Garten zyklische Pflegeaufgaben.
 
 ```
 Seasonal Task Framework:
@@ -255,13 +255,13 @@ Seasonal Task Framework:
 └───────────┴──────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A seasonal framework that complements the weekly planting schedule.
+**Erwartet:** Ein saisonaler Rahmen, der den woechentlichen Pflanzplan ergaenzt.
 
-**On failure:** If tasks are consistently missed, the schedule may be too ambitious. Reduce the number of beds or crops until the rhythm feels sustainable.
+**Bei Fehler:** Wenn Aufgaben konsistent verpasst werden, ist der Zeitplan moeglicherweise zu ambitioniert. Die Anzahl der Beete oder Kulturen reduzieren, bis sich der Rhythmus tragbar anfuehlt.
 
-### Step 6: Meditate Checkpoint — End-of-Season Reflection
+### Schritt 6: Meditationspruefpunkt — Saisonend-Reflexion
 
-At the close of the growing season (after first frost), sit with the garden journal.
+Am Ende der Anbausaison (nach dem ersten Frost) mit dem Gartentagebuch hinsetzen.
 
 ```
 End-of-Season Reflection (20-30 minutes):
@@ -286,34 +286,34 @@ End-of-Season Reflection (20-30 minutes):
 This reflection becomes the first page of next year's plan.
 ```
 
-**Expected:** A reflective summary that grounds next year's planning in this year's reality.
+**Erwartet:** Eine reflektierende Zusammenfassung, die die Planung des naechsten Jahres in der Realitaet dieses Jahres verankert.
 
-**On failure:** If reflection feels like self-criticism, reframe: the garden is the teacher. Every "failure" is data. The only real failure is not observing.
+**Bei Fehler:** Wenn Reflexion sich wie Selbstkritik anfuehlt, umrahmen: Der Garten ist der Lehrer. Jedes "Scheitern" sind Daten. Das einzige wirkliche Scheitern ist, nicht zu beobachten.
 
-## Validation Checklist
+## Validierung
 
-- [ ] USDA zone and frost dates identified for your location
-- [ ] Solar calendar anchors marked (equinoxes, solstices, frost dates)
-- [ ] Lunar cycle understood (at minimum: waxing/waning = above/below ground)
-- [ ] Planting schedule built with succession intervals
-- [ ] Schedule accounts for indoor start times (weeks before LSF)
-- [ ] Seasonal task framework adapted to local conditions
-- [ ] Garden journal started or updated with this year's calendar
-- [ ] Meditate checkpoint completed at end of growing season
+- [ ] USDA-Zone und Frostdaten fuer Ihren Standort identifiziert
+- [ ] Solarkalender-Ankerpunkte markiert (Tagundnachtgleichen, Sonnenwenden, Frostdaten)
+- [ ] Mondzyklus verstanden (mindestens: zunehmend/abnehmend = oberirdisch/unterirdisch)
+- [ ] Pflanzplan mit Staffelintervallen erstellt
+- [ ] Plan beruecksichtigt Vorkultur-Startzeiten (Wochen vor LSF)
+- [ ] Saisonaler Aufgabenrahmen an lokale Bedingungen angepasst
+- [ ] Gartentagebuch begonnen oder mit dem diesjaehrigen Kalender aktualisiert
+- [ ] Meditationspruefpunkt am Ende der Anbausaison durchgefuehrt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Planting too early**: Eager spring planting into cold soil wastes seeds. Soil temperature matters more than air temperature — use a soil thermometer
-2. **Ignoring microclimates**: South-facing walls are warmer, low spots collect frost. Your garden has zones within zones
-3. **Calendar rigidity**: The calendar is a guide, not a command. If the weather is wrong, wait. Plants don't read calendars
-4. **No succession planting**: A single large sowing produces a single overwhelming harvest followed by nothing. Stagger for continuity
-5. **Skipping the reflection**: Without reviewing what happened, you plan from hope instead of evidence. The journal is the most important tool
-6. **Over-scheduling**: A packed calendar leads to burnout. Leave breathing room — the garden will fill it
+1. **Zu frueh pflanzen**: Eifriges Fruehjahrspflanzen in kalten Boden verschwendet Saatgut. Bodentemperatur ist wichtiger als Lufttemperatur — ein Bodenthermometer verwenden
+2. **Mikroklimate ignorieren**: Suedwaende sind waermer, Senken sammeln Frost. Ihr Garten hat Zonen innerhalb von Zonen
+3. **Kalender-Starrheit**: Der Kalender ist ein Leitfaden, kein Befehl. Wenn das Wetter falsch ist, warten. Pflanzen lesen keine Kalender
+4. **Keine Staffelpflanzung**: Eine einzige grosse Aussaat erzeugt eine einzige ueberwaeltigende Ernte, gefolgt von nichts. Staffeln fuer Kontinuitaet
+5. **Reflexion ueberspringen**: Ohne zu ueberpruefen, was passiert ist, plant man aus Hoffnung statt aus Evidenz. Das Tagebuch ist das wichtigste Werkzeug
+6. **Ueberplanung**: Ein vollgepackter Kalender fuehrt zu Burnout. Freiraeume lassen — der Garten wird sie fuellen
 
-## Related Skills
+## Verwandte Skills
 
-- `read-garden` — Observation skills that inform calendar adjustments mid-season
-- `prepare-soil` — Soil amendment timing depends on the seasonal calendar
-- `cultivate-bonsai` — Bonsai seasonal care follows the same solar/lunar framework
-- `meditate` — End-of-season reflection checkpoint (full protocol)
-- `maintain-hand-tools` — Winter tool care is a scheduled seasonal task
+- `read-garden` — Beobachtungsfaehigkeiten, die Kalenderanpassungen waehrend der Saison informieren
+- `prepare-soil` — Bodenverbesserungszeitpunkt haengt vom saisonalen Kalender ab
+- `cultivate-bonsai` — Bonsai-Saisonpflege folgt dem gleichen Solar-/Mond-Rahmen
+- `meditate` — Saisonend-Reflexionspruefpunkt (vollstaendiges Protokoll)
+- `maintain-hand-tools` — Winterwerkzeugpflege ist eine geplante saisonale Aufgabe

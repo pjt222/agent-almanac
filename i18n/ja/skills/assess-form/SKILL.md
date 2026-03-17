@@ -1,13 +1,11 @@
 ---
 name: assess-form
 description: >
-  Evaluate a system's current structural form, identify transformation pressure,
-  and classify transformation readiness. Covers structural inventory, pressure
-  mapping, rigidity assessment, change capacity estimation, and readiness
-  classification for architectural metamorphosis. Use before any significant
-  architectural change to understand the starting point, when a system feels
-  stuck without clear reasons, when external pressure from growth or tech debt
-  is mounting, or as periodic health checks for long-lived systems.
+  システムの現在の構造的形態を評価し、変革圧力を特定し、変革準備度を分類する。
+  構造インベントリ、圧力マッピング、剛性評価、変化容量推定、アーキテクチャ的
+  メタモルフォーシスの準備度分類をカバーする。重要なアーキテクチャ変更前に出発点を
+  理解する時、システムが明確な理由なく行き詰まっている時、成長や技術的負債からの
+  外部圧力が高まっている時、長期稼働システムの定期的な健全性チェックとして使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,47 +22,47 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# フォームの評価
+# 形態の評価
 
-Evaluate a system's current structural form — its architecture, rigidity, pressure points, and capacity for change — to determine transformation readiness before initiating metamorphosis.
+システムの現在の構造的形態 — アーキテクチャ、剛性、圧力ポイント、変化の容量 — を評価して、メタモルフォーシスを開始する前に変革準備度を判定する。
 
 ## 使用タイミング
 
-- Before any significant architectural change to understand the starting point
-- When a system feels "stuck" but the reasons are unclear
-- When external pressure (growth, market shift, tech debt) is mounting but the response is uncertain
-- Assessing whether a proposed transformation is feasible given the current form
-- Periodic health checks for long-lived systems (annual form assessment)
-- Complementing `adapt-architecture` — assess first, then transform
+- 重要なアーキテクチャ変更前に出発点を理解する時
+- システムが「行き詰まっている」が理由が不明な時
+- 外部圧力（成長、市場の変化、技術的負債）が高まっているが対応が不確かな時
+- 提案された変革が現在の形態で実行可能か評価する時
+- 長期稼働システムの定期的な健全性チェック（年次形態評価）
+- `adapt-architecture`を補完する — まず評価し、その後変革する
 
 ## 入力
 
-- **必須**: The system to assess (codebase, organization, infrastructure, process)
-- **任意**: Proposed transformation direction (what might the system need to become?)
-- **任意**: Known pain points or pressure sources
-- **任意**: Previous transformation attempts and their outcomes
-- **任意**: Time horizon for potential transformation
-- **任意**: Available resources for transformation effort
+- **必須**: 評価するシステム（コードベース、組織、インフラストラクチャ、プロセス）
+- **任意**: 提案された変革の方向性（システムは何になる必要があるか？）
+- **任意**: 既知のペインポイントまたは圧力源
+- **任意**: 過去の変革試みとその結果
+- **任意**: 潜在的な変革のタイムホライズン
+- **任意**: 変革作業に利用可能なリソース
 
 ## 手順
 
-### ステップ1: Inventory the Current Form
+### ステップ1: 現在の形態のインベントリ
 
-Catalog the system's structural elements without judgment — understand what exists before evaluating it.
+システムの構造要素を判断なしにカタログ化する — 評価する前に何が存在するかを理解する。
 
-1. Map the structural components:
-   - **Modules**: distinct functional units (services, teams, packages, departments)
-   - **Interfaces**: how modules connect (APIs, protocols, contracts, reporting lines)
-   - **Data flows**: how information moves through the system
-   - **Dependencies**: what depends on what (direct, transitive, circular)
-   - **Load-bearing structures**: components that everything else relies on
-2. Document the form's age and history:
-   - When was each major component introduced?
-   - Which components have changed recently vs. remained static?
-   - What is the "geological layer" structure (old core, newer additions, recent patches)?
-3. Identify the form's "skeleton" vs. "flesh":
-   - Skeleton: structural decisions that are extremely costly to change (language, database, deployment model)
-   - Flesh: functional decisions that can change more easily (business logic, UI, configuration)
+1. 構造コンポーネントをマッピングする:
+   - **モジュール**: 個別の機能ユニット（サービス、チーム、パッケージ、部門）
+   - **インターフェース**: モジュールの接続方法（API、プロトコル、契約、レポートライン）
+   - **データフロー**: システム内の情報の流れ方
+   - **依存関係**: 何が何に依存するか（直接、推移的、循環的）
+   - **荷重構造**: 他のすべてが依存するコンポーネント
+2. 形態の年齢と履歴を文書化する:
+   - 各主要コンポーネントはいつ導入されたか？
+   - 最近変更されたコンポーネントと静的なままのコンポーネントは？
+   - 「地層」構造は何か（古いコア、新しい追加、最近のパッチ）？
+3. 形態の「骨格」vs「肉」を特定する:
+   - 骨格: 変更コストが極めて高い構造的決定（言語、データベース、デプロイモデル）
+   - 肉: より容易に変更可能な機能的決定（ビジネスロジック、UI、設定）
 
 ```
 Structural Inventory Template:
@@ -79,53 +77,53 @@ Structural Inventory Template:
 └──────────────┴──────────┴────────────┴───────────────────┴──────────┘
 ```
 
-**期待結果:** A complete structural inventory showing components, their ages, modification recency, dependency profiles, and classification as skeleton or flesh. This is the "X-ray" of the current form.
+**期待結果:** コンポーネント、年齢、変更の新しさ、依存関係プロファイル、骨格または肉としての分類を示す完全な構造インベントリ。これは現在の形態の「レントゲン写真」である。
 
-**失敗時:** If the inventory is incomplete (components are unknown or undocumented), that itself is a finding — the form has opacity, which is a transformation risk. Document what you can, flag unknowns, and plan discovery for the gaps.
+**失敗時:** インベントリが不完全な場合（コンポーネントが不明またはドキュメント化されていない）、それ自体が発見事項 — 形態には不透明性があり、変革リスクとなる。可能な範囲で文書化し、不明点をフラグ立てし、ギャップの発見を計画する。
 
-### ステップ2: Map Transformation Pressure
+### ステップ2: 変革圧力のマッピング
 
-Identify the forces pushing the system toward change and the forces resisting it.
+システムを変化に向かって押す力と抵抗する力を特定する。
 
-1. Catalog external pressures (forces demanding change):
-   - Growth pressure: current form can't handle increasing load
-   - Market pressure: competitors or users demand capabilities the current form can't support
-   - Technology pressure: underlying technology is becoming obsolete or unsupported
-   - Regulatory pressure: compliance requirements the current form doesn't meet
-   - Integration pressure: must connect with systems the current form wasn't designed for
-2. Catalog internal pressures (forces demanding change from within):
-   - Technical debt: accumulated shortcuts that slow development
-   - Knowledge concentration: critical knowledge held by too few people
-   - Morale pressure: team frustration with the current form
-   - Operational burden: maintenance cost consuming resources that should go to development
-3. Catalog resistance forces (forces opposing change):
-   - Inertia: the existing form works "well enough"
-   - Dependency lock-in: too many things depend on the current form
-   - Knowledge loss risk: transformation might destroy institutional knowledge
-   - Cost: transformation requires investment with uncertain return
-   - Fear: previous transformation attempts failed
+1. 外部圧力（変化を要求する力）をカタログ化する:
+   - 成長圧力: 現在の形態では増加する負荷に対応できない
+   - 市場圧力: 競合他社やユーザーが現在の形態ではサポートできない機能を要求する
+   - 技術圧力: 基盤技術が陳腐化またはサポート終了に向かっている
+   - 規制圧力: 現在の形態が満たさないコンプライアンス要件
+   - 統合圧力: 現在の形態が設計されていないシステムと接続する必要がある
+2. 内部圧力（内部からの変化を要求する力）をカタログ化する:
+   - 技術的負債: 開発を遅らせる蓄積されたショートカット
+   - 知識集中: 重要な知識が少数の人に保持されている
+   - 士気圧力: 現在の形態に対するチームのフラストレーション
+   - 運用負担: 開発に充てるべきリソースを消費するメンテナンスコスト
+3. 抵抗力（変化に反対する力）をカタログ化する:
+   - 慣性: 既存の形態が「十分に」機能する
+   - 依存関係のロックイン: 現在の形態に依存するものが多すぎる
+   - 知識損失リスク: 変革が制度的知識を破壊する可能性がある
+   - コスト: 変革にはリターンが不確かな投資が必要
+   - 恐怖: 過去の変革試みが失敗した
 
-**期待結果:** A pressure map showing the direction and magnitude of forces acting on the system. If transformation pressure significantly exceeds resistance, transformation is overdue. If resistance significantly exceeds pressure, transformation will fail without first reducing resistance.
+**期待結果:** システムに作用する力の方向と大きさを示す圧力マップ。変革圧力が抵抗を大幅に上回る場合、変革が遅れている。抵抗が圧力を大幅に上回る場合、まず抵抗を減らさなければ変革は失敗する。
 
-**失敗時:** If pressure mapping produces a balanced picture (neither strong pressure nor strong resistance), the system may not need transformation — or the analysis is surface-level. Dig deeper: interview stakeholders, measure specific pain points, project forward 12-18 months. What pressures will intensify?
+**失敗時:** 圧力マッピングがバランスの取れた結果を生む場合（強い圧力も強い抵抗もない）、システムは変革を必要としない可能性がある — または分析が表面的。より深く掘り下げる: ステークホルダーにインタビューし、特定のペインポイントを測定し、12-18ヶ月先を予測する。どの圧力が強まるか？
 
-### ステップ3: Assess Structural Rigidity
+### ステップ3: 構造的剛性の評価
 
-Determine how flexible or rigid the current form is — can it bend, or will it break?
+現在の形態がどの程度柔軟か剛性か判定する — 曲がることができるか、壊れるか？
 
-1. Test interface flexibility:
-   - Can modules be replaced without cascading changes? (loose coupling = flexible)
-   - Are interfaces well-defined and stable? (contract clarity = flexible)
-   - How many "god modules" exist (modules that everything depends on)? (concentration = rigid)
-2. Test data flexibility:
-   - Is data migration straightforward? (schema evolution tools, versioning)
-   - Are data formats standardized or bespoke? (bespoke = rigid)
-   - How entangled is business logic with data structure? (entangled = rigid)
-3. Test process flexibility:
-   - Can the team ship changes quickly? (deployment pipeline health)
-   - Is the test suite comprehensive? (safety net for change)
-   - How many "don't touch" components exist? (forbidden zones = rigid)
-4. Calculate the rigidity score:
+1. インターフェースの柔軟性をテストする:
+   - カスケード変更なしにモジュールを置換できるか？（疎結合 = 柔軟）
+   - インターフェースは明確に定義され安定しているか？（契約の明確さ = 柔軟）
+   - すべてが依存する「神モジュール」はいくつ存在するか？（集中 = 剛性）
+2. データの柔軟性をテストする:
+   - データ移行は簡単か？（スキーマ進化ツール、バージョニング）
+   - データフォーマットは標準化されているか独自か？（独自 = 剛性）
+   - ビジネスロジックはデータ構造とどの程度絡み合っているか？（絡み合い = 剛性）
+3. プロセスの柔軟性をテストする:
+   - チームは変更を迅速にシップできるか？（デプロイパイプラインの健全性）
+   - テストスイートは包括的か？（変更のためのセーフティネット）
+   - 「触れてはいけない」コンポーネントはいくつ存在するか？（禁止ゾーン = 剛性）
+4. 剛性スコアを計算する:
 
 ```
 Rigidity Assessment:
@@ -145,40 +143,40 @@ Rigidity Assessment:
 └──────────────────────┴───────────────────────┴──────────────────────┘
 ```
 
-**期待結果:** A rigidity score that quantifies how much structural resistance transformation will encounter. Flexible systems (6-9) can transform incrementally. Rigid systems (14-18) need dissolution before reconstruction (see `dissolve-form`).
+**期待結果:** 変革が遭遇する構造的抵抗を定量化する剛性スコア。柔軟なシステム（6-9）は段階的に変革できる。剛性の高いシステム（14-18）は再構築の前に溶解が必要（`dissolve-form`を参照）。
 
-**失敗時:** If the rigidity assessment is inconclusive (moderate score but unclear where the real problems are), focus on the highest-scoring dimensions. A system can be flexible overall but have one extremely rigid component that blocks transformation. Target that component specifically.
+**失敗時:** 剛性評価が決定的でない場合（中程度のスコアだが本当の問題がどこにあるか不明）、最高スコアの次元に焦点を当てる。システムは全体的に柔軟だが、変革をブロックする1つの極めて剛性の高いコンポーネントを持つ可能性がある。そのコンポーネントを特定して対処する。
 
-### ステップ4: Estimate Change Capacity
+### ステップ4: 変化容量の推定
 
-Assess the system's (and team's) ability to absorb and execute transformation.
+システム（とチーム）が変革を吸収し実行する能力を評価する。
 
-1. Available transformation energy:
-   - What percentage of team capacity can be allocated to transformation?
-   - Is there organizational support (budget, mandate, patience)?
-   - Are the right skills available (architecture, migration, testing)?
-2. Change absorption rate:
-   - How many changes can the system absorb per time unit without destabilizing?
-   - What is the recovery time after a significant change?
-   - Is there a staging/canary mechanism for incremental transformation?
-3. Transformation experience:
-   - Has the team successfully transformed similar systems before?
-   - Are there transformation tools and practices in place (feature flags, strangler fig, blue-green)?
-   - What is the team's risk tolerance?
-4. Calculate change capacity:
-   - High capacity: dedicated team, strong tooling, prior experience, organizational support
-   - Moderate capacity: part-time allocation, some tooling, limited experience
-   - Low capacity: no dedicated resources, no tooling, no experience, resistant organization
+1. 利用可能な変革エネルギー:
+   - チーム容量の何パーセントを変革に割り当てられるか？
+   - 組織的サポート（予算、権限、忍耐）はあるか？
+   - 適切なスキルが利用可能か（アーキテクチャ、移行、テスト）？
+2. 変化吸収率:
+   - 不安定化せずにシステムは時間単位あたり何回の変更を吸収できるか？
+   - 重大な変更後の回復時間は？
+   - 段階的変革のためのステージング/カナリアメカニズムはあるか？
+3. 変革の経験:
+   - チームは以前に類似のシステムを成功裏に変革したことがあるか？
+   - 変革ツールとプラクティスは整っているか（フィーチャーフラグ、ストラングラーフィグ、ブルーグリーン）？
+   - チームのリスク許容度は？
+4. 変化容量を計算する:
+   - 高容量: 専任チーム、強力なツーリング、過去の経験、組織的サポート
+   - 中程度の容量: パートタイムの割り当て、一部のツーリング、限定的な経験
+   - 低容量: 専任リソースなし、ツーリングなし、経験なし、抵抗的な組織
 
-**期待結果:** A change capacity assessment that indicates whether the system/team can execute the proposed transformation given current resources, skills, and organizational support.
+**期待結果:** 現在のリソース、スキル、組織的サポートを考慮して、システム/チームが提案された変革を実行できるかを示す変化容量評価。
 
-**失敗時:** If change capacity is low but transformation pressure is high, the first transformation isn't the system — it's the team's capability. Invest in tooling, training, and organizational buy-in before attempting the architectural transformation.
+**失敗時:** 変化容量が低いが変革圧力が高い場合、最初の変革はシステムではなくチームの能力である。アーキテクチャの変革を試みる前に、ツーリング、トレーニング、組織的バイインに投資する。
 
-### ステップ5: Classify Transformation Readiness
+### ステップ5: 変革準備度の分類
 
-Combine pressure, rigidity, and capacity assessments into a readiness classification.
+圧力、剛性、容量の評価を準備度分類に統合する。
 
-1. Plot the system on the readiness matrix:
+1. 準備度マトリクスにシステムをプロットする:
 
 ```
 Transformation Readiness Matrix:
@@ -199,45 +197,45 @@ Transformation Readiness Matrix:
 └─────────────────┴────────────────────────┴────────────────────────┘
 ```
 
-2. Document the readiness classification with:
-   - Classification label (READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER)
-   - Key findings from each assessment dimension
-   - Recommended next step
-   - Risk factors that could change the classification
-3. If READY: proceed to `adapt-architecture`
-4. If PREPARE: proceed to `dissolve-form` to reduce rigidity
-5. If INVEST: build capacity (training, tooling, organizational support), then reassess
-6. If CRITICAL: address capacity and rigidity simultaneously (may require external help)
-7. If OPTIONAL/DEFER: document the assessment and set a reassessment date
+2. 準備度分類を以下とともに文書化する:
+   - 分類ラベル（READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER）
+   - 各評価次元からの主要な発見事項
+   - 推奨される次のステップ
+   - 分類を変更する可能性のあるリスク要因
+3. READYの場合: `adapt-architecture`に進む
+4. PREPAREの場合: 剛性を低減するために`dissolve-form`に進む
+5. INVESTの場合: 容量を構築し（トレーニング、ツーリング、組織的サポート）、再評価する
+6. CRITICALの場合: 容量と剛性を同時に対処する（外部の支援が必要な場合がある）
+7. OPTIONAL/DEFERの場合: 評価を文書化し、再評価日を設定する
 
-**期待結果:** A clear, justified transformation readiness classification with specific next steps. The classification enables informed decision-making about when and how to transform.
+**期待結果:** 具体的な次のステップを伴う明確で根拠ある変革準備度分類。この分類により、いつどのように変革するかについて情報に基づいた意思決定が可能になる。
 
-**失敗時:** If the classification is ambiguous (e.g., moderate pressure, moderate rigidity, moderate capacity), default to PREPARE — reduce rigidity incrementally while monitoring pressure. This builds capability and reduces risk whether or not full transformation is eventually needed.
+**失敗時:** 分類が曖昧な場合（例: 中程度の圧力、中程度の剛性、中程度の容量）、PREPAREをデフォルトとする — 圧力を監視しながら段階的に剛性を低減する。これにより、最終的に完全な変革が必要かどうかにかかわらず、能力を構築しリスクを低減できる。
 
 ## バリデーション
 
-- [ ] Structural inventory is complete with components, ages, dependencies, and types
-- [ ] Transformation pressure is mapped (external, internal, resistance forces)
-- [ ] Rigidity score is calculated across all dimensions
-- [ ] Change capacity is assessed (resources, absorption rate, experience)
-- [ ] Readiness classification is determined with justified reasoning
-- [ ] Next steps are documented based on the classification
-- [ ] Reassessment date is set (even if currently READY)
+- [ ] コンポーネント、年齢、依存関係、タイプを含む構造インベントリが完了している
+- [ ] 変革圧力がマッピングされている（外部、内部、抵抗力）
+- [ ] 全次元にわたって剛性スコアが計算されている
+- [ ] 変化容量が評価されている（リソース、吸収率、経験）
+- [ ] 根拠ある推論を伴う準備度分類が決定されている
+- [ ] 分類に基づく次のステップが文書化されている
+- [ ] 再評価日が設定されている（現在READYの場合でも）
 
 ## よくある落とし穴
 
-- **Assessing only the technical system**: Transformation readiness includes organizational readiness. A technically flexible system with an organizationally rigid team will still fail to transform
-- **Optimistic capacity estimation**: Teams consistently overestimate their capacity for change while maintaining normal operations. Use 50% of stated capacity as the realistic estimate
-- **Ignoring resistance forces**: Pressure mapping that only catalogs change forces misses the resistance that will slow or stop transformation. Resistance is often stronger than it appears
-- **Assessment paralysis**: The form assessment should take hours to days, not weeks. If it's taking too long, the system is too complex to assess fully — assess at a higher abstraction level and drill into problem areas
-- **Confusing rigidity with stability**: A rigid system is not the same as a stable system. Stability comes from well-designed flexibility; rigidity is the absence of designed flexibility
+- **技術システムのみの評価**: 変革準備度には組織的準備度が含まれる。技術的に柔軟だが組織的に剛性の高いチームのシステムは、やはり変革に失敗する
+- **楽観的な容量見積もり**: チームは通常の運用を維持しながらの変化容量を常に過大評価する。表明された容量の50%を現実的な見積もりとして使用する
+- **抵抗力の無視**: 変化の力のみをカタログ化する圧力マッピングは、変革を遅らせたり止めたりする抵抗を見落とす。抵抗は見かけよりも強いことが多い
+- **評価の麻痺**: 形態評価は数時間から数日で完了すべきであり、数週間ではない。時間がかかりすぎている場合、システムは完全に評価するには複雑すぎる — より高い抽象レベルで評価し、問題領域を掘り下げる
+- **剛性と安定性の混同**: 剛性の高いシステムは安定したシステムと同じではない。安定性は適切に設計された柔軟性から生まれる; 剛性は設計された柔軟性の欠如である
 
 ## 関連スキル
 
-- `adapt-architecture` — the primary transformation skill; assess-form determines readiness for it
-- `dissolve-form` — for systems classified as PREPARE or CRITICAL, rigidity reduction before transformation
-- `repair-damage` — for systems that need repair before assessment can be meaningful
-- `shift-camouflage` — surface-level adaptation that may resolve pressure without full transformation
-- `forage-resources` — resource exploration informs form assessment when the question is "what should we become?"
-- `review-software-architecture` — complementary skill for detailed technical architecture evaluation
-- `assess-context` — AI self-application variant; maps structural assessment to reasoning context malleability, rigidity mapping, and transformation readiness
+- `adapt-architecture` — 主要な変革スキル; assess-formがその準備度を判定する
+- `dissolve-form` — PREPAREまたはCRITICALに分類されたシステムに対する、変革前の剛性低減
+- `repair-damage` — 評価が意味を持つ前に修復が必要なシステム向け
+- `shift-camouflage` — 完全な変革なしに圧力を解消する可能性のある表面レベルの適応
+- `forage-resources` — 「何になるべきか」が問題の時、リソース探索が形態評価に情報を提供する
+- `review-software-architecture` — 詳細な技術的アーキテクチャ評価のための補完スキル
+- `assess-context` — AI自己適用バリアント; 構造評価を推論コンテキストの可塑性、剛性マッピング、変革準備度にマッピングする

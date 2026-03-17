@@ -1,14 +1,21 @@
 ---
 name: learn-guidance
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Guide a person through structured learning of a new topic, technology,
-  or skill. AI acts as learning coach — assessing current knowledge,
-  designing a learning path, walking through material, testing understanding,
-  adapting difficulty, and planning review sessions for retention. Use when
-  a person wants to learn a new technology and does not know where to start,
-  when someone feels overwhelmed by documentation, when a person keeps
-  forgetting material and needs spaced repetition, or when transitioning
-  between domains and needing a gap analysis.
+  Eine Person durch strukturiertes Lernen eines neuen Themas, einer
+  Technologie oder Faehigkeit fuehren. Die KI agiert als Lerncoach —
+  aktuelles Wissen einschaetzen, einen Lernpfad entwerfen, durch Material
+  fuehren, Verstaendnis pruefen, Schwierigkeit anpassen und
+  Wiederholungssitzungen fuer die Behaltensleistung planen. Anwenden
+  wenn eine Person eine neue Technologie lernen moechte und nicht weiss
+  wo sie anfangen soll, wenn sich jemand von Dokumentation ueberwaeltigt
+  fuehlt, wenn eine Person Material immer wieder vergisst und verteilte
+  Wiederholung braucht, oder beim Wechsel zwischen Domaenen mit Bedarf
+  an einer Lueckenanalyse.
 license: MIT
 allowed-tools: Read WebFetch WebSearch
 metadata:
@@ -18,174 +25,172 @@ metadata:
   complexity: intermediate
   language: natural
   tags: esoteric, learning, coaching, education, structured-learning, guidance
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
-# Lern-Anleitung
+# Lernen (Anleitung)
 
-Guide a person through a structured learning process for a new topic, technology, or skill. The AI acts as a learning coach — helping assess starting knowledge, plan a study path, walk through material at the right pace, test understanding with questions, adapt the approach based on feedback, and consolidate for retention.
+Eine Person durch einen strukturierten Lernprozess fuer ein neues Thema, eine Technologie oder Faehigkeit fuehren. Die KI agiert als Lerncoach -- hilft Ausgangswissen einzuschaetzen, einen Studienplan zu entwerfen, im richtigen Tempo durch Material zu fuehren, Verstaendnis mit Fragen zu pruefen, den Ansatz basierend auf Rueckmeldung anzupassen und fuer die Behaltensleistung zu festigen.
 
-## When to Use
+## Wann verwenden
 
-- A person wants to learn a new technology, framework, language, or concept and does not know where to start
-- Someone feels overwhelmed by documentation or learning resources and needs a structured path
-- A person keeps forgetting material and needs spaced repetition guidance
-- Someone is transitioning between domains (e.g., backend to frontend) and needs gap analysis
-- A person wants accountability and structure for self-directed learning
-- After `meditate-guidance` has cleared mental noise, creating space for focused learning
+- Eine Person moechte eine neue Technologie, ein Framework, eine Sprache oder ein Konzept lernen und weiss nicht wo sie anfangen soll
+- Jemand fuehlt sich von Dokumentation oder Lernressourcen ueberwaeltigt und braucht einen strukturierten Pfad
+- Eine Person vergisst Material immer wieder und braucht Anleitung zur verteilten Wiederholung
+- Jemand wechselt zwischen Domaenen (z.B. Backend zu Frontend) und braucht eine Lueckenanalyse
+- Eine Person wuenscht sich Verantwortlichkeit und Struktur fuer selbstgesteuertes Lernen
+- Nachdem `meditate-guidance` mentales Rauschen bereinigt hat und Raum fuer fokussiertes Lernen schafft
 
-## Inputs
+## Eingaben
 
-- **Required**: What the person wants to learn (topic, technology, skill, or concept)
-- **Required**: Their purpose for learning (job requirement, personal interest, project need, career change)
-- **Optional**: Current knowledge level in this area (self-assessed or demonstrated)
-- **Optional**: Time available for learning (hours per day/week, deadline if any)
-- **Optional**: Preferred learning style (reading, hands-on, video, discussion)
-- **Optional**: Prior failed attempts at learning this topic (what did not work before)
+- **Erforderlich**: Was die Person lernen moechte (Thema, Technologie, Faehigkeit oder Konzept)
+- **Erforderlich**: Ihr Zweck fuer das Lernen (berufliche Anforderung, persoenliches Interesse, Projektbedarf, Berufswechsel)
+- **Optional**: Aktuelles Wissensniveau in diesem Bereich (selbst eingeschaetzt oder demonstriert)
+- **Optional**: Verfuegbare Lernzeit (Stunden pro Tag/Woche, Termin falls vorhanden)
+- **Optional**: Bevorzugter Lernstil (Lesen, praktisches Arbeiten, Video, Diskussion)
+- **Optional**: Fruehere gescheiterte Versuche dieses Thema zu lernen (was hat vorher nicht funktioniert)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Assess — Determine Starting Position
+### Schritt 1: Einschaetzen — Ausgangposition bestimmen
 
-Before designing a learning path, understand where the person currently stands.
+Bevor ein Lernpfad entworfen wird, verstehen wo die Person aktuell steht.
 
-1. Ask about their experience with the topic: "What do you already know about X?"
-2. Ask about adjacent knowledge: "What related topics are you familiar with?" (these become bridges)
-3. If they claim some knowledge, ask a calibration question that reveals depth vs. surface familiarity
-4. Note their vocabulary: do they use domain terms correctly, approximately, or not at all?
-5. Identify their learning goal specifically: "After learning this, what do you want to be able to do?"
-6. Identify their primary motivation: curiosity, practical need, career advancement, or creative project
+1. Nach ihrer Erfahrung mit dem Thema fragen: "Was wissen Sie bereits ueber X?"
+2. Nach angrenzendem Wissen fragen: "Welche verwandten Themen sind Ihnen vertraut?" (diese werden zu Bruecken)
+3. Wenn sie etwas Wissen angeben, eine Kalibrierungsfrage stellen die Tiefe von Oberflaechenvertrautheit unterscheidet
+4. Ihren Wortschatz beachten: verwenden sie Fachbegriffe korrekt, naeherungsweise oder gar nicht?
+5. Ihr Lernziel spezifisch identifizieren: "Was moechten Sie nach dem Lernen tun koennen?"
+6. Ihre primaere Motivation identifizieren: Neugier, praktischer Bedarf, berufliches Fortkommen oder kreatives Projekt
 
 ```
-Starting Position Assessment:
-┌───────────────┬────────────────────────────┬──────────────────────────┐
-│ Level Found   │ Indicators                 │ Path Approach            │
-├───────────────┼────────────────────────────┼──────────────────────────┤
-│ No exposure   │ No vocabulary, no mental   │ Start with "what" and    │
-│               │ model, everything is new   │ "why" before "how"       │
-├───────────────┼────────────────────────────┼──────────────────────────┤
-│ Surface       │ Has heard terms, no hands- │ Fill vocabulary gaps,    │
-│ awareness     │ on experience, vague model │ then move to hands-on    │
-├───────────────┼────────────────────────────┼──────────────────────────┤
-│ Partial       │ Some experience, gaps in   │ Identify specific gaps   │
-│ knowledge     │ understanding, can do some │ and target them directly │
-│               │ things but not others      │                          │
-├───────────────┼────────────────────────────┼──────────────────────────┤
-│ Refresher     │ Knew it before, now rusty  │ Quick review + practice  │
-│ needed        │                            │ to reactivate knowledge  │
-└───────────────┴────────────────────────────┴──────────────────────────┘
+Ausgangspositions-Einschaetzung:
++---------------+----------------------------+--------------------------+
+| Gefundenes    | Indikatoren                | Pfadansatz               |
+| Niveau        |                            |                          |
++---------------+----------------------------+--------------------------+
+| Keine         | Kein Wortschatz, kein      | Mit "was" und "warum"    |
+| Berueherung   | mentales Modell, alles     | beginnen bevor "wie"     |
+|               | ist neu                    |                          |
++---------------+----------------------------+--------------------------+
+| Oberflaech-   | Hat Begriffe gehoert,      | Wortschatzluecken        |
+| liches        | keine praktische Erfahrung,| fuellen, dann zum        |
+| Bewusstsein   | vages Modell               | Praktischen uebergehen   |
++---------------+----------------------------+--------------------------+
+| Teilwissen    | Etwas Erfahrung, Luecken   | Spezifische Luecken      |
+|               | im Verstaendnis, kann      | identifizieren und       |
+|               | manches aber nicht alles   | direkt adressieren       |
++---------------+----------------------------+--------------------------+
+| Auffrischung  | Wusste es frueher, jetzt   | Schnelle Wiederholung +  |
+| noetig        | eingerostet                | Uebung zum Reaktivieren  |
++---------------+----------------------------+--------------------------+
 ```
 
-**Expected:** A clear picture of the person's starting position, goal, and constraints. The assessment should be warm and encouraging, not like an exam — frame questions as curiosity about their background.
+**Erwartet:** Ein klares Bild der Ausgangsposition, des Ziels und der Einschraenkungen der Person. Die Einschaetzung sollte warm und ermutigend sein, nicht wie eine Pruefung -- Fragen als Neugier ueber ihren Hintergrund formulieren.
 
-**On failure:** If the person cannot articulate their current level, ask them to describe a recent attempt to use or understand the topic. Concrete stories reveal level more accurately than self-assessment. If they are embarrassed about their level, normalize: "Everyone starts somewhere — knowing where you are helps me design the best path for you."
+**Bei Fehler:** Wenn die Person ihr aktuelles Niveau nicht artikulieren kann, sie bitten einen kuerzlichen Versuch das Thema zu nutzen oder zu verstehen zu beschreiben. Konkrete Geschichten verraten das Niveau genauer als Selbsteinschaetzung. Wenn sie sich fuer ihr Niveau schaemen, normalisieren: "Jeder faengt irgendwo an -- zu wissen wo Sie stehen hilft mir den besten Pfad fuer Sie zu gestalten."
 
-### Step 2: Plan — Design the Learning Path
+### Schritt 2: Planen — Den Lernpfad entwerfen
 
-Create a structured path from their current position to their goal.
+Einen strukturierten Pfad von der aktuellen Position zum Ziel erstellen.
 
-1. Break the topic into 4-7 learning milestones (not too granular, not too vague)
-2. Order milestones by dependency: what must be understood before what?
-3. For each milestone, identify the core concept (what they need to understand) and the core skill (what they need to be able to do)
-4. Estimate time per milestone based on their available hours
-5. Identify the first milestone — this is where learning begins
-6. Build in early wins: the first milestone should be achievable quickly to build momentum
-7. Present the path visually: a numbered list with brief descriptions
+1. Das Thema in 4-7 Lernmeilensteine unterteilen (nicht zu granulaer, nicht zu vage)
+2. Meilensteine nach Abhaengigkeit ordnen: was muss vor was verstanden werden?
+3. Fuer jeden Meilenstein das Kernkonzept (was verstanden werden muss) und die Kernfaehigkeit (was getan werden koennen muss) identifizieren
+4. Zeit pro Meilenstein basierend auf ihren verfuegbaren Stunden schaetzen
+5. Den ersten Meilenstein identifizieren -- hier beginnt das Lernen
+6. Fruehe Erfolge einbauen: der erste Meilenstein sollte schnell erreichbar sein um Schwung aufzubauen
+7. Den Pfad visuell praesentieren: eine nummerierte Liste mit kurzen Beschreibungen
 
-**Expected:** A learning path the person can see and understand. It should feel manageable — not overwhelming. The person should be able to point to any milestone and understand why it is there.
+**Erwartet:** Ein Lernpfad den die Person sehen und verstehen kann. Er sollte sich handhabbar anfuehlen -- nicht ueberwealtigend. Die Person sollte auf jeden Meilenstein zeigen und verstehen koennen warum er da ist.
 
-**On failure:** If the path feels too long, the goal may be too ambitious for the available time — discuss scope reduction. If the path feels too short, the topic may be simpler than expected — or the milestones are too coarse and need decomposition.
+**Bei Fehler:** Wenn der Pfad zu lang wirkt, ist das Ziel moeglicherweise zu ehrgeizig fuer die verfuegbare Zeit -- Umfangsreduzierung besprechen. Wenn der Pfad zu kurz wirkt, ist das Thema moeglicherweise einfacher als erwartet -- oder die Meilensteine sind zu grob und brauchen Zerlegung.
 
-### Step 3: Guide — Walk Through Material
+### Schritt 3: Fuehren — Durch Material geleiten
 
-For each milestone, guide the person through the material at the right pace.
+Fuer jeden Meilenstein die Person im richtigen Tempo durch das Material fuehren.
 
-1. Introduce the milestone concept with a brief overview: "In this section, we will learn X, which lets you do Y"
-2. Present the material in small chunks — one concept per chunk
-3. Use the person's preferred learning style: reading → provide text; hands-on → provide exercises; discussion → use Socratic questioning
-4. Connect each new concept to something they already know (from the assessment)
-5. Provide concrete examples before abstract definitions
-6. If using documentation, guide them through the relevant sections rather than sending them off to read alone
-7. Pause after each chunk: "Does this make sense so far?"
+1. Das Meilensteinkonzept mit einem kurzen Ueberblick einfuehren: "In diesem Abschnitt lernen wir X, was Ihnen erlaubt Y zu tun"
+2. Das Material in kleinen Einheiten praesentieren -- ein Konzept pro Einheit
+3. Den bevorzugten Lernstil der Person nutzen: Lesen -> Text bereitstellen; praktisch -> Uebungen bereitstellen; Diskussion -> sokratisches Fragen verwenden
+4. Jedes neue Konzept mit etwas bereits Bekanntem verbinden (aus der Einschaetzung)
+5. Konkrete Beispiele vor abstrakten Definitionen geben
+6. Wenn Dokumentation verwendet wird, sie durch die relevanten Abschnitte fuehren statt sie allein zum Lesen zu schicken
+7. Nach jeder Einheit pausieren: "Ist das bisher verstaendlich?"
 
-**Expected:** The person progresses through the material with comprehension, not just exposure. They should be able to explain each concept in their own words before moving to the next. The pace feels right — not rushed, not dragged.
+**Erwartet:** Die Person schreitet mit Verstaendnis durch das Material voran, nicht nur mit Beruehrung. Sie sollte jedes Konzept in eigenen Worten erklaeren koennen bevor zum naechsten uebergegangen wird. Das Tempo fuehlt sich richtig an -- nicht gehetzt, nicht verschleppt.
 
-**On failure:** If they are struggling, slow down and check for missing prerequisites. If they are breezing through, speed up — do not waste their time on what they already grasp. If the material itself is confusing (bad documentation), provide a clearer explanation and note the resource quality for future reference.
+**Bei Fehler:** Wenn sie Schwierigkeiten haben, langsamer werden und auf fehlende Voraussetzungen pruefen. Wenn sie muehelos durchkommen, beschleunigen -- ihre Zeit nicht mit bereits Beherrschtem verschwenden. Wenn das Material selbst verwirrend ist (schlechte Dokumentation), eine klarere Erklaerung liefern und die Ressourcenqualitaet fuer zukuenftige Referenz vermerken.
 
-### Step 4: Test — Check Understanding
+### Schritt 4: Pruefen — Verstaendnis ueberpruefen
 
-Verify learning with questions that require application, not just recall.
+Lernen mit Fragen verifizieren die Anwendung erfordern, nicht nur Abrufen.
 
-1. Ask prediction questions: "What would happen if you changed X?"
-2. Ask comparison questions: "How is this different from Y, which you learned earlier?"
-3. Ask application questions: "How would you use this to solve Z?"
-4. Ask debugging questions: "This code has a bug related to what we just learned — can you spot it?"
-5. Celebrate correct answers specifically: "Yes — and the reason that works is..."
-6. For incorrect answers, explore their reasoning: "Interesting — walk me through your thinking"
-7. Never frame incorrect answers as failure — they are diagnostic information
+1. Vorhersagefragen stellen: "Was wuerde passieren wenn Sie X aendern?"
+2. Vergleichsfragen stellen: "Wie unterscheidet sich das von Y, das Sie frueher gelernt haben?"
+3. Anwendungsfragen stellen: "Wie wuerden Sie das nutzen um Z zu loesen?"
+4. Debugging-Fragen stellen: "Dieser Code hat einen Fehler in Bezug auf das was wir gerade gelernt haben -- koennen Sie ihn finden?"
+5. Korrekte Antworten spezifisch wuerdigen: "Ja -- und der Grund warum das funktioniert ist..."
+6. Bei falschen Antworten ihre Ueberlegung erkunden: "Interessant -- fuehren Sie mich durch Ihren Denkprozess"
+7. Falsche Antworten nie als Versagen rahmen -- sie sind diagnostische Information
 
-**Expected:** The testing reveals whether the person has a working mental model or surface-level recall. Working models can handle variations; surface recall cannot. The testing should feel like a collaborative exercise, not an exam.
+**Erwartet:** Das Pruefen zeigt ob die Person ein funktionierendes mentales Modell hat oder oberflaechlichen Abruf. Funktionierende Modelle koennen mit Variationen umgehen; oberflaechlicher Abruf nicht. Das Pruefen sollte sich wie eine gemeinsame Uebung anfuehlen, nicht wie eine Pruefung.
 
-**On failure:** If the person cannot answer application questions, the learning was too passive — they need hands-on practice before more material. If they answer recall questions but not application questions, the concepts were understood individually but not integrated — focus on connections between concepts.
+**Bei Fehler:** Wenn die Person Anwendungsfragen nicht beantworten kann, war das Lernen zu passiv -- sie brauchen praktische Uebung bevor mehr Material kommt. Wenn sie Abruffragen beantworten aber keine Anwendungsfragen, wurden die Konzepte einzeln verstanden aber nicht integriert -- auf Verbindungen zwischen Konzepten fokussieren.
 
-### Step 5: Adapt — Adjust the Path
+### Schritt 5: Anpassen — Den Pfad justieren
 
-Based on test results and the person's feedback, adjust the learning path.
+Basierend auf Pruefungsergebnissen und der Rueckmeldung der Person den Lernpfad anpassen.
 
-1. If a milestone was easy: consider combining it with the next one, or deepening the content
-2. If a milestone was hard: break it into smaller steps, or add prerequisite review
-3. If the person's interest shifts during learning: adjust the path to follow their curiosity where possible — engagement drives retention
-4. If they are fatigued: suggest a break and a review session later rather than pushing through
-5. If a particular teaching approach is not working: try a different modality (switch from reading to doing, or from abstract to concrete)
-6. Update the learning path and communicate changes: "Based on how this went, I suggest we adjust..."
+1. Wenn ein Meilenstein leicht war: erwaegen ihn mit dem naechsten zu verbinden oder den Inhalt zu vertiefen
+2. Wenn ein Meilenstein schwer war: in kleinere Schritte unterteilen oder eine Voraussetzungswiederholung hinzufuegen
+3. Wenn sich das Interesse der Person waehrend des Lernens verschiebt: den Pfad nach Moeglichkeit ihrer Neugier anpassen -- Engagement treibt Behalten
+4. Wenn sie ermuudet sind: eine Pause und eine spaetere Wiederholungssitzung vorschlagen statt durchzudruecken
+5. Wenn ein bestimmter Lehransatz nicht funktioniert: eine andere Modalitaet versuchen (von Lesen zu Tun wechseln, oder von abstrakt zu konkret)
+6. Den Lernpfad aktualisieren und Aenderungen kommunizieren: "Basierend auf dem Verlauf schlage ich vor dass wir anpassen..."
 
-**Expected:** The learning path evolves based on real data. No fixed curriculum survives contact with an actual learner — the adaptation is the value.
+**Erwartet:** Der Lernpfad entwickelt sich basierend auf echten Daten. Kein fester Lehrplan ueberlebt den Kontakt mit einem tatsaechlichen Lernenden -- die Anpassung ist der Wert.
 
-**On failure:** If repeated adaptations still leave the person struggling, there may be a fundamental prerequisite gap that was not caught in assessment. Return to Step 1 and probe deeper. If the person is losing motivation, discuss the original goal — sometimes adjusting the goal is more appropriate than changing the path.
+**Bei Fehler:** Wenn wiederholte Anpassungen die Person weiterhin kaempfen lassen, gibt es moeglicherweise eine grundlegende Voraussetzungsluecke die in der Einschaetzung nicht erfasst wurde. Zu Schritt 1 zurueckkehren und tiefer sondieren. Wenn die Person die Motivation verliert, das urspruengliche Ziel besprechen -- manchmal ist es angemessener das Ziel anzupassen als den Pfad zu aendern.
 
-### Step 6: Review — Consolidate and Plan Next Session
+### Schritt 6: Nachbereiten — Festigen und naechste Sitzung planen
 
-Solidify what was learned and set up for continued learning.
+Gelerntes festigen und fortgesetztes Lernen vorbereiten.
 
-1. Summarize what was covered: "Today we learned X, Y, and Z"
-2. Ask them to state the key takeaway in their own words
-3. Provide a brief practice exercise for independent work (not homework — optional reinforcement)
-4. Recommend 2-3 resources for further exploration (documentation, tutorials, examples)
-5. If using spaced repetition: schedule review points — "Review these concepts again in 2 days, then in a week"
-6. Set up the next milestone: "Next time, we will tackle..."
-7. Ask for feedback: "What worked well? What could I do differently?"
+1. Zusammenfassen was behandelt wurde: "Heute haben wir X, Y und Z gelernt"
+2. Sie bitten die wichtigste Erkenntnis in eigenen Worten zu formulieren
+3. Eine kurze Uebungsaufgabe fuer selbstaendiges Arbeiten bereitstellen (keine Hausaufgabe -- optionale Verstaerkung)
+4. 2-3 Ressourcen fuer weitere Erkundung empfehlen (Dokumentation, Tutorials, Beispiele)
+5. Bei Verwendung verteilter Wiederholung: Wiederholungspunkte festlegen -- "Diese Konzepte in 2 Tagen erneut durchgehen, dann in einer Woche"
+6. Den naechsten Meilenstein vorbereiten: "Naechstes Mal werden wir uns mit ... befassen"
+7. Um Rueckmeldung bitten: "Was hat gut funktioniert? Was koennte ich anders machen?"
 
-**Expected:** The person leaves with clear understanding of what they learned, what they can practice, and what comes next. The session has a clean closing, not an abrupt stop.
+**Erwartet:** Die Person geht mit klarem Verstaendnis dessen was sie gelernt hat, was sie ueben kann und was als naechstes kommt. Die Sitzung hat einen sauberen Abschluss, kein abruptes Ende.
 
-**On failure:** If the person cannot state a key takeaway, the session covered too much or too little stuck. Identify the one concept that most needs reinforcement and focus the review on that. If they have no motivation for independent practice, the learning path may need to be more self-contained (all learning within sessions).
+**Bei Fehler:** Wenn die Person keine wichtigste Erkenntnis formulieren kann, wurde in der Sitzung zu viel oder zu wenig behandelt das haengen blieb. Das eine Konzept identifizieren das am meisten Verstaerkung braucht und die Wiederholung darauf konzentrieren. Wenn sie keine Motivation fuer selbstaendige Uebung haben, muss der Lernpfad moeglicherweise eigenstaendiger sein (alles Lernen innerhalb der Sitzungen).
 
-## Validation
+## Validierung
 
-- [ ] Starting position was assessed before the learning path was designed
-- [ ] The learning path has clear milestones ordered by dependency
-- [ ] Material was presented in small chunks with comprehension checks between them
-- [ ] Testing used application questions, not just recall
-- [ ] The path was adapted at least once based on the person's actual progress
-- [ ] The session ended with a summary, practice suggestion, and next steps
-- [ ] The person felt encouraged throughout, not tested or judged
+- [ ] Ausgangsposition wurde vor dem Entwurf des Lernpfads eingeschaetzt
+- [ ] Der Lernpfad hat klare Meilensteine geordnet nach Abhaengigkeit
+- [ ] Material wurde in kleinen Einheiten mit Verstaendnisprueefungen dazwischen praesentiert
+- [ ] Pruefung verwendete Anwendungsfragen, nicht nur Abruf
+- [ ] Der Pfad wurde mindestens einmal basierend auf dem tatsaechlichen Fortschritt der Person angepasst
+- [ ] Die Sitzung endete mit einer Zusammenfassung, einem Uebungsvorschlag und naechsten Schritten
+- [ ] Die Person fuehlte sich durchgehend ermutigt, nicht getestet oder beurteilt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Information dumping**: Providing all the material at once instead of pacing it through milestones. Overwhelm kills learning
-- **Skipping the assessment**: Assuming the person's level instead of checking. A frontend expert learning backend may know adjacent concepts but not the ones you expect
-- **Teaching to the average**: If the person is faster or slower than expected, the pace must change — sticking to the plan despite feedback wastes their time or loses them
-- **All theory, no practice**: Understanding requires doing, not just hearing. Every milestone should include a practice element
-- **Ignoring motivation**: A person who does not see why a concept matters will not retain it. Connect every concept to their stated goal
-- **Overloading sessions**: Trying to cover too much in one sitting. Better to cover less with retention than more with forgetfulness
-- **Coach-as-lecturer**: The coach guides the learner's exploration, not delivers a monologue. Ask more questions than you answer
+- **Informationsueberflutung**: Das gesamte Material auf einmal bereitstellen statt es ueber Meilensteine zu portionieren. Ueberforderung toetet Lernen
+- **Die Einschaetzung ueberspringen**: Das Niveau der Person annehmen statt es zu pruefen. Ein Frontend-Experte der Backend lernt kennt moeglicherweise angrenzende Konzepte aber nicht die erwarteten
+- **Auf den Durchschnitt unterrichten**: Wenn die Person schneller oder langsamer ist als erwartet, muss das Tempo sich aendern -- am Plan festhalten trotz Rueckmeldung verschwendet ihre Zeit oder verliert sie
+- **Nur Theorie, keine Praxis**: Verstaendnis erfordert Tun, nicht nur Hoeren. Jeder Meilenstein sollte ein Praxiselement enthalten
+- **Motivation ignorieren**: Eine Person die nicht sieht warum ein Konzept wichtig ist wird es nicht behalten. Jedes Konzept mit ihrem erklarten Ziel verbinden
+- **Sitzungen ueberladen**: Zu viel in einer Sitzung abdecken wollen. Besser weniger mit Behalten als mehr mit Vergessen
+- **Coach als Dozent**: Der Coach leitet die Erkundung des Lernenden, haelt keinen Monolog. Mehr Fragen stellen als beantworten
 
-## Related Skills
+## Verwandte Skills
 
-- `learn` — the AI self-directed variant for systematic knowledge acquisition
-- `teach-guidance` — coaching a person to teach others; complementary to learning coaching
-- `meditate-guidance` — clearing mental noise before a learning session improves focus and retention
-- `remote-viewing-guidance` — shares the structured observation approach that supports learning from experience
+- `learn` -- die selbstgesteuerte KI-Variante fuer systematischen Wissenserwerb
+- `teach-guidance` -- eine Person anleiten andere zu unterrichten; komplementaer zum Lerncoaching
+- `meditate-guidance` -- mentales Rauschen vor einer Lernsitzung bereinigen verbessert Fokus und Behalten
+- `remote-viewing-guidance` -- teilt den strukturierten Beobachtungsansatz der Lernen aus Erfahrung unterstuetzt

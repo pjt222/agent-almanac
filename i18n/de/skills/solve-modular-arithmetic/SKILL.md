@@ -1,13 +1,12 @@
 ---
 name: solve-modular-arithmetic
 description: >
-  Solve modular arithmetic problems including congruences, systems
-  via the Chinese Remainder Theorem, modular inverses, and
-  Euler's theorem applications. Covers both manual and computational
-  approaches. Use when solving linear congruences, computing modular
-  inverses, evaluating large modular exponentiations, working with
-  simultaneous congruences (CRT), or operating in cyclic groups and
-  discrete logarithm contexts.
+  Modulare Arithmetik-Probleme loesen einschliesslich Kongruenzen, Systeme ueber den
+  Chinesischen Restsatz, modulare Inverse und Anwendungen des Satzes von Euler.
+  Umfasst sowohl manuelle als auch rechnerische Ansaetze. Verwenden beim Loesen
+  linearer Kongruenzen, Berechnen modularer Inverser, Auswerten grosser modularer
+  Potenzen, Arbeiten mit simultanen Kongruenzen (CRT) oder Operieren in zyklischen
+  Gruppen und Kontexten diskreter Logarithmen.
 license: MIT
 allowed-tools: Read Bash
 metadata:
@@ -26,67 +25,67 @@ metadata:
 
 # Modulare Arithmetik loesen
 
-Solve modular arithmetic problems by parsing congruence systems, applying the extended Euclidean algorithm for inverses, using the Chinese Remainder Theorem for simultaneous congruences, and leveraging Euler's theorem for modular exponentiation. Verify every solution by substitution.
+Modulare Arithmetik-Probleme loesen durch Parsen von Kongruenzsystemen, Anwenden des erweiterten euklidischen Algorithmus fuer Inverse, Verwenden des Chinesischen Restsatzes fuer simultane Kongruenzen und Nutzen des Satzes von Euler fuer modulare Potenzierung. Jede Loesung durch Einsetzen verifizieren.
 
-## When to Use
+## Wann verwenden
 
-- Solving a single linear congruence ax = b (mod m)
-- Solving a system of simultaneous congruences (Chinese Remainder Theorem)
-- Computing a modular inverse a^{-1} (mod m)
-- Evaluating large modular exponentiations a^k (mod m)
-- Determining the order of an element in Z/mZ
-- Working with cyclic groups, primitive roots, or discrete logarithm contexts
+- Loesen einer einzelnen linearen Kongruenz ax = b (mod m)
+- Loesen eines Systems simultaner Kongruenzen (Chinesischer Restsatz)
+- Berechnen eines modularen Inversen a^{-1} (mod m)
+- Auswerten grosser modularer Potenzen a^k (mod m)
+- Bestimmen der Ordnung eines Elements in Z/mZ
+- Arbeiten mit zyklischen Gruppen, Primitivwurzeln oder diskreten Logarithmus-Kontexten
 
-## Inputs
+## Eingaben
 
-- **Required**: The congruence(s) or modular equation to solve
-- **Optional**: Whether to show the extended Euclidean algorithm steps explicitly
-- **Optional**: Whether Euler's theorem or Fermat's little theorem should be applied
-- **Optional**: Whether to find primitive roots or element orders
-- **Optional**: Output format (step-by-step, compact, or proof-style)
+- **Erforderlich**: Die zu loesende Kongruenz(en) oder modulare Gleichung
+- **Optional**: Ob die Schritte des erweiterten euklidischen Algorithmus explizit gezeigt werden sollen
+- **Optional**: Ob der Satz von Euler oder der kleine Fermatsche Satz angewandt werden soll
+- **Optional**: Ob Primitivwurzeln oder Elementordnungen gefunden werden sollen
+- **Optional**: Ausgabeformat (Schritt-fuer-Schritt, kompakt oder Beweisstil)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Parse the Congruence System or Modular Equation
+### Schritt 1: Kongruenzsystem oder modulare Gleichung parsen
 
-Extract the mathematical structure from the problem statement.
+Die mathematische Struktur aus der Problemstellung extrahieren.
 
-1. **Identify the type**:
-   - Single linear congruence: ax = b (mod m)
-   - System of congruences: x = a1 (mod m1), x = a2 (mod m2), ...
-   - Modular exponentiation: a^k (mod m)
-   - Modular inverse: find a^{-1} (mod m)
+1. **Typ identifizieren**:
+   - Einzelne lineare Kongruenz: ax = b (mod m)
+   - Kongruenzsystem: x = a1 (mod m1), x = a2 (mod m2), ...
+   - Modulare Potenzierung: a^k (mod m)
+   - Modulares Inverses: a^{-1} (mod m) finden
 
-2. **Normalize**: Reduce all coefficients modulo their respective moduli. Ensure a, b, m are non-negative integers with m > 0.
+2. **Normalisieren**: Alle Koeffizienten modulo ihrer jeweiligen Moduli reduzieren. Sicherstellen dass a, b, m nicht-negative ganze Zahlen mit m > 0 sind.
 
-3. **Record** the parsed problem in standard notation.
+3. **Erfassen**: Das geparste Problem in Standardnotation aufschreiben.
 
-**Expected:** A clearly parsed and normalized modular problem with all values reduced.
+**Erwartet:** Ein klar geparstes und normalisiertes modulares Problem mit allen reduzierten Werten.
 
-**On failure:** If the notation is ambiguous (e.g., "solve 3x + 5 = 2 mod 7" could mean 3x + 5 = 2 (mod 7) or 3x + (5 = 2 mod 7)), clarify with the user. Default to interpreting mod as applying to the entire equation.
+**Bei Fehler:** Wenn die Notation mehrdeutig ist (z.B. "loese 3x + 5 = 2 mod 7" koennte 3x + 5 = 2 (mod 7) oder 3x + (5 = 2 mod 7) bedeuten), mit dem Benutzer klaeren. Standardmaessig mod als auf die gesamte Gleichung angewandt interpretieren.
 
-### Step 2: Solve a Single Congruence (if applicable)
+### Schritt 2: Einzelne Kongruenz loesen (falls zutreffend)
 
-Solve ax = b (mod m) using the extended Euclidean algorithm.
+ax = b (mod m) mittels erweitertem euklidischen Algorithmus loesen.
 
-1. **Compute g = gcd(a, m)** using the Euclidean algorithm:
-   - Apply repeated division: m = q1*a + r1, a = q2*r1 + r2, ... until remainder = 0.
-   - The last non-zero remainder is gcd(a, m).
+1. **g = ggT(a, m) berechnen** mittels euklidischem Algorithmus:
+   - Wiederholte Division anwenden: m = q1*a + r1, a = q2*r1 + r2, ... bis Rest = 0.
+   - Der letzte von Null verschiedene Rest ist ggT(a, m).
 
-2. **Check solvability**: ax = b (mod m) has a solution if and only if g | b.
-   - If g does not divide b, the congruence has no solution. Stop.
+2. **Loesbarkeit pruefen**: ax = b (mod m) hat genau dann eine Loesung, wenn g | b.
+   - Wenn g nicht b teilt, hat die Kongruenz keine Loesung. Stopp.
 
-3. **Reduce**: Divide through by g to get (a/g)x = (b/g) (mod m/g). Now gcd(a/g, m/g) = 1.
+3. **Reduzieren**: Durch g teilen um (a/g)x = (b/g) (mod m/g) zu erhalten. Nun ist ggT(a/g, m/g) = 1.
 
-4. **Find the modular inverse** of a/g modulo m/g using the extended Euclidean algorithm:
-   - Back-substitute through the Euclidean algorithm steps to express gcd as a linear combination: 1 = (a/g)*s + (m/g)*t.
-   - The coefficient s (reduced mod m/g) is the inverse.
+4. **Modulares Inverses finden** von a/g modulo m/g mittels erweitertem euklidischen Algorithmus:
+   - Durch die Schritte des euklidischen Algorithmus rueckwaerts einsetzen um ggT als Linearkombination auszudruecken: 1 = (a/g)*s + (m/g)*t.
+   - Der Koeffizient s (reduziert mod m/g) ist das Inverse.
 
-5. **Compute the particular solution**: x0 = s * (b/g) mod (m/g).
+5. **Partikulaere Loesung berechnen**: x0 = s * (b/g) mod (m/g).
 
-6. **Write the general solution**: x = x0 + (m/g)*k for k = 0, 1, ..., g - 1 gives all g incongruent solutions modulo m.
+6. **Allgemeine Loesung aufschreiben**: x = x0 + (m/g)*k fuer k = 0, 1, ..., g - 1 ergibt alle g inkongruenten Loesungen modulo m.
 
-**Extended Euclidean algorithm example (finding 17^{-1} mod 43):**
+**Beispiel des erweiterten euklidischen Algorithmus (Finden von 17^{-1} mod 43):**
 ```
 43 = 2*17 + 9
 17 = 1*9  + 8
@@ -101,29 +100,29 @@ Back-substitute:
 So 17*(-5) = 1 (mod 43), i.e., 17^{-1} = -5 = 38 (mod 43).
 ```
 
-**Expected:** The complete solution set for the congruence, or a proof that no solution exists.
+**Erwartet:** Die vollstaendige Loesungsmenge der Kongruenz oder ein Beweis, dass keine Loesung existiert.
 
-**On failure:** If the extended Euclidean back-substitution produces the wrong result, verify each division step. The most common error is a sign mistake during back-substitution. Check: a * inverse mod m should equal 1.
+**Bei Fehler:** Wenn die Rueckwaertssubstitution des erweiterten euklidischen Algorithmus ein falsches Ergebnis liefert, jeden Divisionsschritt verifizieren. Der haeufigste Fehler ist ein Vorzeichenfehler bei der Rueckwaertssubstitution. Pruefung: a * Inverses mod m sollte 1 ergeben.
 
-### Step 3: Solve a System via the Chinese Remainder Theorem (if applicable)
+### Schritt 3: System ueber den Chinesischen Restsatz loesen (falls zutreffend)
 
-Solve x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
+x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk) loesen.
 
-1. **Check pairwise coprimality**: For every pair (mi, mj), verify gcd(mi, mj) = 1.
-   - If all pairs are coprime, CRT applies directly.
-   - If some pairs are not coprime, check compatibility: for each non-coprime pair, verify ai = aj (mod gcd(mi, mj)). If compatible, reduce using lcm. If incompatible, no solution exists.
+1. **Paarweise Teilerfremdheit pruefen**: Fuer jedes Paar (mi, mj) verifizieren dass ggT(mi, mj) = 1.
+   - Wenn alle Paare teilerfremd sind, ist der CRT direkt anwendbar.
+   - Wenn einige Paare nicht teilerfremd sind, Kompatibilitaet pruefen: fuer jedes nicht-teilerfremde Paar verifizieren dass ai = aj (mod ggT(mi, mj)). Falls kompatibel, mittels kgV reduzieren. Falls inkompatibel, existiert keine Loesung.
 
-2. **Compute M = m1 * m2 * ... * mk** (the product of all moduli).
+2. **M = m1 * m2 * ... * mk berechnen** (das Produkt aller Moduli).
 
-3. **For each i, compute Mi = M / mi** (the product of all moduli except mi).
+3. **Fuer jedes i, Mi = M / mi berechnen** (das Produkt aller Moduli ausser mi).
 
-4. **For each i, find yi = Mi^{-1} (mod mi)** using the extended Euclidean algorithm from Step 2.
+4. **Fuer jedes i, yi = Mi^{-1} (mod mi) finden** mittels erweitertem euklidischen Algorithmus aus Schritt 2.
 
-5. **Compute the solution**: x = sum(ai * Mi * yi for i = 1..k) mod M.
+5. **Loesung berechnen**: x = sum(ai * Mi * yi fuer i = 1..k) mod M.
 
-6. **State the result**: x = [value] (mod M). This is the unique solution modulo M.
+6. **Ergebnis angeben**: x = [Wert] (mod M). Dies ist die eindeutige Loesung modulo M.
 
-**Common totients reference:**
+**Referenz haeufiger Euler-Funktionswerte:**
 
 | n    | phi(n) | n    | phi(n) | n    | phi(n) |
 |------|--------|------|--------|------|--------|
@@ -136,45 +135,45 @@ Solve x = a1 (mod m1), x = a2 (mod m2), ..., x = ak (mod mk).
 | 8    | 4      | 16   | 8      | 60   | 16     |
 | 9    | 6      | 18   | 6      | 100  | 40     |
 
-**Expected:** A unique solution modulo M, or a proof of incompatibility.
+**Erwartet:** Eine eindeutige Loesung modulo M oder ein Beweis der Inkompatibilitaet.
 
-**On failure:** If the CRT computation yields a result that fails verification, check the modular inverse computations in step 4. A common mistake is computing Mi^{-1} mod M instead of Mi^{-1} mod mi. Each inverse is computed modulo the *individual* modulus, not the product.
+**Bei Fehler:** Wenn die CRT-Berechnung ein Ergebnis liefert, das die Verifikation nicht besteht, die modularen Inversberechnungen in Schritt 4 pruefen. Ein haeufiger Fehler ist die Berechnung von Mi^{-1} mod M statt Mi^{-1} mod mi. Jedes Inverse wird modulo des *einzelnen* Modulus berechnet, nicht des Produkts.
 
-### Step 4: Apply Euler's Theorem or Fermat's Little Theorem (if applicable)
+### Schritt 4: Satz von Euler oder kleinen Fermatschen Satz anwenden (falls zutreffend)
 
-Evaluate modular exponentiations or simplify expressions using Euler's theorem.
+Modulare Potenzen auswerten oder Ausdruecke mittels Satz von Euler vereinfachen.
 
-1. **Euler's theorem**: If gcd(a, m) = 1, then a^{phi(m)} = 1 (mod m).
-   - Compute phi(m) using the totient formula: if m = p1^e1 * p2^e2 * ... * pk^ek, then phi(m) = m * product((1 - 1/pi) for each prime pi dividing m).
+1. **Satz von Euler**: Wenn ggT(a, m) = 1, dann a^{phi(m)} = 1 (mod m).
+   - phi(m) mittels Euler-Formel berechnen: wenn m = p1^e1 * p2^e2 * ... * pk^ek, dann phi(m) = m * Produkt((1 - 1/pi) fuer jede Primzahl pi die m teilt).
 
-2. **Fermat's little theorem** (special case): If p is prime and gcd(a, p) = 1, then a^{p-1} = 1 (mod p).
+2. **Kleiner Fermatscher Satz** (Spezialfall): Wenn p Primzahl und ggT(a, p) = 1, dann a^{p-1} = 1 (mod p).
 
-3. **Reduce the exponent**: To compute a^k (mod m):
-   - Compute r = k mod phi(m).
-   - Then a^k = a^r (mod m).
+3. **Exponenten reduzieren**: Um a^k (mod m) zu berechnen:
+   - r = k mod phi(m) berechnen.
+   - Dann a^k = a^r (mod m).
 
-4. **Compute a^r (mod m)** using repeated squaring (binary exponentiation):
-   - Write r in binary: r = b_n * 2^n + ... + b_1 * 2 + b_0.
-   - Start with result = 1.
-   - For each bit from most significant to least: result = result^2 mod m; if bit is 1, result = result * a mod m.
+4. **a^r (mod m) berechnen** mittels wiederholtem Quadrieren (binaere Potenzierung):
+   - r in Binaerdarstellung schreiben: r = b_n * 2^n + ... + b_1 * 2 + b_0.
+   - Mit result = 1 beginnen.
+   - Fuer jedes Bit von hoechstwertig bis niedrigstwertig: result = result^2 mod m; wenn Bit 1 ist, result = result * a mod m.
 
-5. **Handle the case gcd(a, m) > 1**: Euler's theorem does not apply directly. Factor m and use CRT to combine results from prime power moduli, using lifting the exponent or direct computation.
+5. **Fall ggT(a, m) > 1 behandeln**: Der Satz von Euler ist nicht direkt anwendbar. m faktorisieren und CRT verwenden um Ergebnisse aus Primzahlpotenz-Moduli zu kombinieren, mittels Exponentenanhebung oder direkter Berechnung.
 
-**Expected:** The value of a^k (mod m), computed via exponent reduction and repeated squaring.
+**Erwartet:** Der Wert von a^k (mod m), berechnet ueber Exponenrenreduktion und wiederholtes Quadrieren.
 
-**On failure:** If gcd(a, m) > 1 and the result seems wrong, do not apply Euler's theorem. Instead, compute directly or factor m into coprime parts where at least some parts are coprime to a, solve modulo each part, and recombine with CRT.
+**Bei Fehler:** Wenn ggT(a, m) > 1 und das Ergebnis falsch erscheint, den Satz von Euler nicht anwenden. Stattdessen direkt berechnen oder m in teilerfremde Teile faktorisieren, wobei zumindest einige Teile teilerfremd zu a sind, modulo jedes Teils loesen und mit CRT rekombinieren.
 
-### Step 5: Verify Solution by Substitution
+### Schritt 5: Loesung durch Einsetzen verifizieren
 
-Check every solution by plugging it back into the original equations.
+Jede Loesung durch Einsetzen in die Originalgleichungen pruefen.
 
-1. **For single congruences**: Compute a * x mod m and verify it equals b.
+1. **Fuer einzelne Kongruenzen**: a * x mod m berechnen und verifizieren dass es gleich b ist.
 
-2. **For CRT systems**: For each congruence x = ai (mod mi), verify x mod mi = ai.
+2. **Fuer CRT-Systeme**: Fuer jede Kongruenz x = ai (mod mi) verifizieren dass x mod mi = ai.
 
-3. **For modular exponentiations**: If possible, verify with a second computational method (e.g., direct computation for small values, or independent repeated squaring implementation).
+3. **Fuer modulare Potenzen**: Falls moeglich, mit einer zweiten Berechnungsmethode verifizieren (z.B. direkte Berechnung fuer kleine Werte oder unabhaengige Implementierung wiederholten Quadrierens).
 
-4. **Document the verification** explicitly:
+4. **Verifikation explizit dokumentieren**:
 ```
 Solution: x = 23
 Check 1: 23 mod 3 = 2 = a1. Correct.
@@ -183,39 +182,39 @@ Check 3: 23 mod 7 = 2 = a3. Correct.
 All congruences satisfied.
 ```
 
-**Expected:** All original equations verified with explicit computation shown.
+**Erwartet:** Alle Originalgleichungen mit explizit gezeigter Berechnung verifiziert.
 
-**On failure:** If verification fails, trace back through the procedure to find the computational error. Common sources: arithmetic mistakes in the extended Euclidean algorithm, wrong sign in back-substitution, or forgetting to reduce modulo M in the final CRT step.
+**Bei Fehler:** Wenn die Verifikation fehlschlaegt, durch die Vorgehensweise zurueckverfolgen um den Rechenfehler zu finden. Haeufige Quellen: Rechenfehler im erweiterten euklidischen Algorithmus, falsches Vorzeichen bei der Rueckwaertssubstitution oder vergessene Reduktion modulo M im letzten CRT-Schritt.
 
-## Validation
+## Validierung
 
-- [ ] Problem type is correctly identified (single congruence, system, exponentiation, inverse)
-- [ ] All coefficients are reduced modulo their respective moduli
-- [ ] For ax = b (mod m): gcd(a, m) | b is checked before solving
-- [ ] Extended Euclidean algorithm back-substitution is verified: a * inverse mod m = 1
-- [ ] For CRT: pairwise coprimality is verified before applying the theorem
-- [ ] For CRT with non-coprime moduli: compatibility is checked
-- [ ] Euler's theorem is applied only when gcd(a, m) = 1
-- [ ] Totient phi(m) is computed from the prime factorization, not guessed
-- [ ] Repeated squaring uses modular reduction at every step (no overflow)
-- [ ] Every solution is verified by substitution into the original equations
+- [ ] Problemtyp ist korrekt identifiziert (einzelne Kongruenz, System, Potenzierung, Inverses)
+- [ ] Alle Koeffizienten sind modulo ihrer jeweiligen Moduli reduziert
+- [ ] Fuer ax = b (mod m): ggT(a, m) | b ist vor dem Loesen geprueft
+- [ ] Rueckwaertssubstitution des erweiterten euklidischen Algorithmus ist verifiziert: a * Inverses mod m = 1
+- [ ] Fuer CRT: paarweise Teilerfremdheit ist vor Anwendung des Satzes verifiziert
+- [ ] Fuer CRT mit nicht-teilerfremden Moduli: Kompatibilitaet ist geprueft
+- [ ] Satz von Euler wird nur angewandt wenn ggT(a, m) = 1
+- [ ] Euler-Funktion phi(m) ist aus der Primfaktorzerlegung berechnet, nicht geraten
+- [ ] Wiederholtes Quadrieren verwendet modulare Reduktion bei jedem Schritt (kein Ueberlauf)
+- [ ] Jede Loesung ist durch Einsetzen in die Originalgleichungen verifiziert
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Applying CRT without coprimality check**: The standard CRT formula requires pairwise coprime moduli. Applying it to non-coprime moduli gives a wrong answer, not an error. Always check gcd(mi, mj) = 1 first.
+- **CRT ohne Teilerfremdheitspruefung anwenden**: Die Standard-CRT-Formel erfordert paarweise teilerfremde Moduli. Anwendung auf nicht-teilerfremde Moduli gibt eine falsche Antwort, keinen Fehler. Immer zuerst ggT(mi, mj) = 1 pruefen.
 
-- **Computing the wrong inverse**: Mi^{-1} must be computed modulo mi (the *individual* modulus), not modulo M (the product). This is the single most common CRT implementation error.
+- **Das falsche Inverse berechnen**: Mi^{-1} muss modulo mi (dem *einzelnen* Modulus) berechnet werden, nicht modulo M (dem Produkt). Dies ist der einzelne haeufigste CRT-Implementierungsfehler.
 
-- **Applying Euler's theorem when gcd(a, m) > 1**: a^{phi(m)} = 1 (mod m) requires gcd(a, m) = 1. If this fails, the theorem does not apply and the result is wrong.
+- **Satz von Euler anwenden wenn ggT(a, m) > 1**: a^{phi(m)} = 1 (mod m) erfordert ggT(a, m) = 1. Wenn dies fehlschlaegt, ist der Satz nicht anwendbar und das Ergebnis falsch.
 
-- **Sign errors in extended Euclidean back-substitution**: Keep careful track of signs at each step. The final inverse may be negative; always reduce modulo m to get a positive representative.
+- **Vorzeichenfehler bei der Rueckwaertssubstitution des erweiterten euklidischen Algorithmus**: Bei jedem Schritt sorgfaeltig auf Vorzeichen achten. Das endgueltige Inverse kann negativ sein; immer modulo m reduzieren um einen positiven Repraesentanten zu erhalten.
 
-- **Overflow in modular exponentiation**: Even with repeated squaring, intermediate products can overflow. Always reduce modulo m after every multiplication, not just at the end.
+- **Ueberlauf bei modularer Potenzierung**: Selbst bei wiederholtem Quadrieren koennen Zwischenprodukte ueberlaufen. Immer modulo m nach jeder Multiplikation reduzieren, nicht erst am Ende.
 
-- **Forgetting multiple solutions**: ax = b (mod m) with g = gcd(a, m) > 1 and g | b has exactly g incongruent solutions modulo m, not just one.
+- **Mehrfachloesungen vergessen**: ax = b (mod m) mit g = ggT(a, m) > 1 und g | b hat genau g inkongruente Loesungen modulo m, nicht nur eine.
 
-## Related Skills
+## Verwandte Skills
 
-- `analyze-prime-numbers` -- Prime factorization is needed to compute phi(m) and to verify coprimality
-- `explore-diophantine-equations` -- Linear Diophantine equations ax + by = c are equivalent to linear congruences ax = c (mod b)
-- `prove-geometric-theorem` -- Modular arithmetic appears in constructibility proofs (e.g., which regular n-gons are constructible)
+- `analyze-prime-numbers` -- Primfaktorzerlegung wird zur Berechnung von phi(m) und zur Verifikation der Teilerfremdheit benoetigt
+- `explore-diophantine-equations` -- Lineare diophantische Gleichungen ax + by = c sind aequivalent zu linearen Kongruenzen ax = c (mod b)
+- `prove-geometric-theorem` -- Modulare Arithmetik erscheint in Konstruierbarkeiitsbeweisen (z.B. welche regelmaessigen n-Ecke konstruierbar sind)

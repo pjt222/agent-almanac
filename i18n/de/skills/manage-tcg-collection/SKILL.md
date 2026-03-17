@@ -1,13 +1,19 @@
 ---
 name: manage-tcg-collection
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Organize, track, and value a trading card game collection. Covers inventory
-  methods, storage best practices, grade-based valuation, want-list management,
-  and collection analytics for Pokemon, MTG, Flesh and Blood, and Kayou cards.
-  Use when starting a new collection and setting up inventory tracking, cataloging
-  an existing collection that has grown beyond casual knowledge, valuing a
-  collection for insurance or sale, or deciding which cards to submit for
-  professional grading based on value potential.
+  Eine Sammelkartenspiel-Sammlung organisieren, verfolgen und bewerten. Umfasst
+  Inventarmethoden, Aufbewahrungspraktiken, zustandsbasierte Bewertung,
+  Wunschlistenverwaltung und Sammlungsanalysen fuer Pokemon, MTG, Flesh and
+  Blood und Kayou-Karten. Anwenden beim Start einer neuen Sammlung und
+  Einrichten der Bestandsverfolgung, beim Katalogisieren einer bestehenden
+  Sammlung die ueber informelles Wissen hinausgewachsen ist, bei der Bewertung
+  einer Sammlung fuer Versicherung oder Verkauf, oder bei der Entscheidung
+  welche Karten fuer professionelles Grading eingereicht werden sollen.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -17,203 +23,200 @@ metadata:
   complexity: basic
   language: natural
   tags: tcg, collection, inventory, storage, valuation, pokemon, mtg, fab, kayou
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
-# TCG-Sammlung verwalten
+# Sammelkartenspiel-Sammlung verwalten
 
-Organize, inventory, and value a trading card game collection with structured tracking, proper storage, and data-driven valuation.
+Eine Sammelkartenspiel-Sammlung mit strukturierter Bestandsverfolgung, sachgemaesser Aufbewahrung und datengetriebener Bewertung organisieren, inventarisieren und bewerten.
 
-## When to Use
+## Wann verwenden
 
-- Starting a new collection and setting up inventory tracking from the beginning
-- Cataloging an existing collection that has grown beyond casual knowledge
-- Valuing a collection for insurance, sale, or estate purposes
-- Managing want-lists and trade binders for acquiring specific cards
-- Deciding which cards to submit for professional grading based on value potential
+- Start einer neuen Sammlung und Einrichtung der Bestandsverfolgung von Anfang an
+- Katalogisierung einer bestehenden Sammlung die ueber informelles Wissen hinausgewachsen ist
+- Bewertung einer Sammlung fuer Versicherung, Verkauf oder Nachlasszwecke
+- Verwaltung von Wunschlisten und Tauschordnern zum Erwerb bestimmter Karten
+- Entscheidung welche Karten basierend auf Wertpotenzial fuer professionelles Grading eingereicht werden sollen
 
-## Inputs
+## Eingaben
 
-- **Required**: Card game(s) in the collection (Pokemon, MTG, FaB, Kayou, etc.)
-- **Required**: Collection scope (entire collection, specific sets, or specific cards)
-- **Optional**: Current inventory system (spreadsheet, app, physical binder organization)
-- **Optional**: Collection goal (complete sets, competitive play, investment, nostalgia)
-- **Optional**: Budget for storage and grading supplies
+- **Erforderlich**: Kartenspiel(e) in der Sammlung (Pokemon, MTG, FaB, Kayou usw.)
+- **Erforderlich**: Sammlungsumfang (gesamte Sammlung, bestimmte Sets oder bestimmte Karten)
+- **Optional**: Aktuelles Inventarsystem (Tabelle, App, physische Ordnerorganisation)
+- **Optional**: Sammlungsziel (komplette Sets, kompetitives Spielen, Investment, Nostalgie)
+- **Optional**: Budget fuer Aufbewahrungs- und Grading-Zubehoer
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Establish the Inventory System
+### Schritt 1: Das Inventarsystem einrichten
 
-Set up a tracking system appropriate to the collection's size.
+Ein Bestandsverfolgungssystem einrichten das der Sammlungsgroesse entspricht.
 
-1. Choose an inventory method based on collection size:
+1. Eine Inventarmethode basierend auf der Sammlungsgroesse waehlen:
 
 ```
-Collection Size Guide:
+Sammlungsgroessen-Leitfaden:
 +-----------+-------+-------------------------------------------+
-| Size      | Cards | Recommended System                        |
+| Groesse   | Karten| Empfohlenes System                        |
 +-----------+-------+-------------------------------------------+
-| Small     | <200  | Spreadsheet (Google Sheets, Excel)         |
-| Medium    | 200-  | Dedicated app (TCGPlayer, Moxfield,        |
+| Klein     | <200  | Tabelle (Google Sheets, Excel)             |
+| Mittel    | 200-  | Spezial-App (TCGPlayer, Moxfield,          |
 |           | 2000  | PokeCollector, Collectr)                   |
-| Large     | 2000+ | Database + app combo with barcode scanning |
+| Gross     | 2000+ | Datenbank + App-Kombination mit            |
+|           |       | Barcode-Scanning                           |
 +-----------+-------+-------------------------------------------+
 ```
 
-2. Define the data fields to track for each card:
-   - **Identity**: Set, card number, name, variant (holo, reverse, full art)
-   - **Condition**: Raw grade estimate (NM, LP, MP, HP, DMG) or numeric grade
-   - **Quantity**: How many copies owned
-   - **Location**: Where the card is stored (binder page, box label, graded slab)
-   - **Acquisition**: Date acquired, price paid, source (pack, purchase, trade)
-   - **Value**: Current market value at condition, last updated date
-3. Set up the chosen system with these fields
-4. Establish an update cadence (weekly for active collectors, monthly for stable collections)
+2. Die zu verfolgenden Datenfelder fuer jede Karte definieren:
+   - **Identitaet**: Set, Kartennummer, Name, Variante (Holo, Reverse, Full Art)
+   - **Zustand**: Rohzustand-Schaetzung (NM, LP, MP, HP, DMG) oder numerischer Grad
+   - **Menge**: Wie viele Exemplare vorhanden
+   - **Standort**: Wo die Karte aufbewahrt wird (Ordnerseite, Box-Bezeichnung, Grading-Slab)
+   - **Erwerb**: Erwerbsdatum, bezahlter Preis, Quelle (Pack, Kauf, Tausch)
+   - **Wert**: Aktueller Marktwert zum Zustand, Datum der letzten Aktualisierung
+3. Das gewaehlte System mit diesen Feldern einrichten
+4. Einen Aktualisierungsrhythmus festlegen (woechentlich fuer aktive Sammler, monatlich fuer stabile Sammlungen)
 
-**Expected:** A functional inventory system with defined fields, ready for data entry. The system matches the collection's scale — not over-engineered for a small collection, not under-powered for a large one.
+**Erwartet:** Ein funktionsfaehiges Inventarsystem mit definierten Feldern, bereit fuer die Dateneingabe. Das System passt zur Sammlungsgroesse — nicht ueberentwickelt fuer eine kleine Sammlung, nicht unterdimensioniert fuer eine grosse.
 
-**On failure:** If the ideal app isn't available for your game/platform, use a spreadsheet. The format matters less than consistency. A simple spreadsheet updated regularly beats a sophisticated app abandoned after a week.
+**Bei Fehler:** Wenn die ideale App fuer das Spiel/die Plattform nicht verfuegbar ist, eine Tabelle verwenden. Das Format ist weniger wichtig als Konsistenz. Eine einfache Tabelle die regelmaessig aktualisiert wird ist besser als eine ausgefeilte App die nach einer Woche aufgegeben wird.
 
-### Step 2: Catalog the Collection
+### Schritt 2: Die Sammlung katalogisieren
 
-Enter existing cards into the inventory system.
+Vorhandene Karten in das Inventarsystem eingeben.
 
-1. Sort cards physically before entering digitally:
-   - By set (all cards from one set together)
-   - Within set, by card number (ascending)
-   - Variants grouped with their base card
-2. Enter cards into the system:
-   - Use bulk entry where available (barcode scanning, set checklists)
-   - Record condition honestly — over-grading your own cards leads to valuation errors
-   - Note any cards with special provenance (signed, first edition, tournament prizes)
-3. For large collections, work in sessions:
-   - Process one set or one storage box per session
-   - Mark progress clearly (which boxes/binders are done)
-   - Verify a random sample from each session for accuracy
-4. Cross-reference against set checklists to identify completion percentages
+1. Karten physisch sortieren bevor sie digital erfasst werden:
+   - Nach Set (alle Karten eines Sets zusammen)
+   - Innerhalb eines Sets nach Kartennummer (aufsteigend)
+   - Varianten mit ihrer Basiskarte gruppiert
+2. Karten in das System eingeben:
+   - Masseneingabe nutzen wo verfuegbar (Barcode-Scanning, Set-Checklisten)
+   - Zustand ehrlich erfassen — Ueberbewertung eigener Karten fuehrt zu Bewertungsfehlern
+   - Karten mit besonderer Provenienz vermerken (signiert, Erstauflage, Turnierpreise)
+3. Fuer grosse Sammlungen in Sitzungen arbeiten:
+   - Ein Set oder eine Aufbewahrungsbox pro Sitzung bearbeiten
+   - Fortschritt klar markieren (welche Boxen/Ordner sind erledigt)
+   - Eine Zufallsstichprobe jeder Sitzung auf Richtigkeit pruefen
+4. Mit Set-Checklisten abgleichen um Vervollstaendigungsraten zu ermitteln
 
-**Expected:** Every card in the collection entered with accurate condition and location data. Completion percentages known for each set being collected.
+**Erwartet:** Jede Karte der Sammlung mit genauen Zustands- und Standortdaten erfasst. Vervollstaendigungsraten fuer jedes gesammelte Set bekannt.
 
-**On failure:** If the collection is too large for manual entry, prioritize: enter all rare/valuable cards first, then bulk-enter commons by set with estimated quantities. An 80% accurate inventory is far better than no inventory.
+**Bei Fehler:** Wenn die Sammlung fuer manuelle Eingabe zu gross ist, priorisieren: zuerst alle seltenen/wertvollen Karten erfassen, dann Common-Karten per Set mit geschaetzten Mengen massenerfassen. Ein zu 80% genaues Inventar ist weit besser als gar keins.
 
-### Step 3: Organize Physical Storage
+### Schritt 3: Physische Aufbewahrung organisieren
 
-Store cards appropriately for their value and use.
+Karten ihrem Wert und ihrer Verwendung entsprechend aufbewahren.
 
-1. Apply the **storage tier system**:
+1. Das **Aufbewahrungsstufensystem** anwenden:
 
 ```
-Storage Tiers:
+Aufbewahrungsstufen:
 +----------+---------------+----------------------------------------------+
-| Tier     | Card Value    | Storage Method                               |
+| Stufe    | Kartenwert    | Aufbewahrungsmethode                         |
 +----------+---------------+----------------------------------------------+
-| Premium  | >$50          | Top-loader + team bag, or penny sleeve in    |
-|          |               | magnetic case. Stored upright in a box.       |
-| Standard | $5-$50        | Penny sleeve + top-loader or binder with      |
-|          |               | side-loading pages.                          |
-| Bulk     | <$5           | Row box (BCW 800-count or similar), sorted    |
-|          |               | by set. No individual sleeves needed.         |
-| Graded   | Any (slabbed) | Upright in graded card box. Never stack heavy.|
+| Premium  | >50€          | Toploader + Teamhuelle, oder Pennysleeve in  |
+|          |               | Magnetcase. Aufrecht in einer Box gelagert.  |
+| Standard | 5€-50€        | Pennysleeve + Toploader oder Ordner mit       |
+|          |               | seitlich ladenden Huellen.                   |
+| Masse    | <5€           | Reihenbox (BCW 800er oder aehnlich), nach     |
+|          |               | Set sortiert. Keine Einzelhuellen noetig.     |
+| Bewertet | Alle (Slab)   | Aufrecht in Grading-Kartenbox. Nie schwer     |
+|          |               | stapeln.                                     |
 +----------+---------------+----------------------------------------------+
 ```
 
-2. Environmental controls:
-   - Store in a cool, dry, dark location (not attic, not basement)
-   - Avoid direct sunlight, humidity, and temperature swings
-   - Use silica gel packets in storage boxes for moisture control
-3. Label everything:
-   - Each box labeled with contents (set name, card range, date stored)
-   - Each binder page corresponds to inventory location codes
-   - Graded cards labeled with inventory ID matching digital system
-4. Update the inventory system with storage locations
+2. Umgebungskontrolle:
+   - An einem kuehlen, trockenen, dunklen Ort aufbewahren (nicht Dachboden, nicht Keller)
+   - Direktes Sonnenlicht, Feuchtigkeit und Temperaturschwankungen vermeiden
+   - Silikagel-Paeckchen in Aufbewahrungsboxen fuer Feuchtigkeitskontrolle verwenden
+3. Alles beschriften:
+   - Jede Box mit Inhalt beschriftet (Setname, Kartenbereich, Einlagerungsdatum)
+   - Jede Ordnerseite entspricht Inventar-Standortcodes
+   - Bewertete Karten mit Inventar-ID gekennzeichnet die dem digitalen System entspricht
+4. Das Inventarsystem mit Aufbewahrungsstandorten aktualisieren
 
-**Expected:** Every card stored appropriately for its value with location data in the inventory. Premium cards are protected, bulk cards are organized and accessible.
+**Erwartet:** Jede Karte ihrem Wert entsprechend aufbewahrt mit Standortdaten im Inventar. Premiumkarten sind geschuetzt, Massenkarten sind organisiert und zugaenglich.
 
-**On failure:** If premium storage supplies aren't available immediately, penny sleeves + top-loaders are always the minimum for any card worth >$10. Upgrade storage as supplies become available; the priority is getting valuable cards into some form of protection.
+**Bei Fehler:** Wenn Premium-Aufbewahrungszubehoer nicht sofort verfuegbar ist, sind Pennysleeves + Toploader immer das Minimum fuer jede Karte ueber 10€ Wert. Aufbewahrung aufruesten wenn Zubehoer verfuegbar wird; die Prioritaet ist wertvolle Karten in irgendeine Form von Schutz zu bringen.
 
-### Step 4: Value the Collection
+### Schritt 4: Die Sammlung bewerten
 
-Calculate current market values.
+Aktuelle Marktwerte berechnen.
 
-1. Choose a pricing source:
-   - **TCGPlayer Market Price**: Most common for US market (MTG, Pokemon)
-   - **CardMarket**: Standard for European market
-   - **eBay Sold Listings**: Best for rare/unique items without standard pricing
-   - **PSA/BGS Price Guide**: For graded cards specifically
-2. Update values for all Standard and Premium tier cards
-3. For bulk cards, use per-set bulk pricing rather than individual lookups
-4. Calculate collection summary:
+1. Eine Preisquelle waehlen:
+   - **TCGPlayer-Marktpreis**: Am gaengigsten fuer den US-Markt (MTG, Pokemon)
+   - **CardMarket**: Standard fuer den europaeischen Markt
+   - **eBay-Verkaufshistorie**: Am besten fuer seltene/einzigartige Stuecke ohne Standardpreise
+   - **PSA/BGS-Preisfuehrer**: Speziell fuer bewertete Karten
+2. Werte fuer alle Standard- und Premium-Stufenkarten aktualisieren
+3. Fuer Massenkarten Set-uebergreifende Massenpreise statt Einzelrecherchen verwenden
+4. Sammlungszusammenfassung berechnen:
 
 ```
-Collection Value Summary:
-+------------------+--------+--------+
-| Category         | Count  | Value  |
-+------------------+--------+--------+
-| Graded cards     |        | $      |
-| Premium ungraded |        | $      |
-| Standard cards   |        | $      |
-| Bulk cards       |        | $      |
-+------------------+--------+--------+
-| TOTAL            |        | $      |
-+------------------+--------+--------+
+Sammlungswert-Zusammenfassung:
++--------------------+--------+--------+
+| Kategorie          | Anzahl | Wert   |
++--------------------+--------+--------+
+| Bewertete Karten   |        | €      |
+| Premium unbew.     |        | €      |
+| Standardkarten     |        | €      |
+| Massenkarten       |        | €      |
++--------------------+--------+--------+
+| GESAMT             |        | €      |
++--------------------+--------+--------+
 ```
 
-5. Identify grading candidates: cards where the grade-premium exceeds grading costs
-   - Rule of thumb: grade if (expected graded value - raw value) > 2x grading cost
+5. Grading-Kandidaten identifizieren: Karten bei denen die Gradingpraemie die Gradingkosten uebersteigt
+   - Faustregel: Grading wenn (erwarteter Gradingwert - Rohwert) > 2x Gradingkosten
 
-**Expected:** A current valuation of the collection with per-card values for significant cards and aggregate values for bulk. Grading candidates identified.
+**Erwartet:** Eine aktuelle Bewertung der Sammlung mit Einzelwerten fuer bedeutende Karten und Gesamtwerten fuer Massenware. Grading-Kandidaten identifiziert.
 
-**On failure:** If pricing data is stale or unavailable, note the pricing date and source. For very rare cards, check multiple sources and use the median. Never rely on a single outlier sale.
+**Bei Fehler:** Wenn Preisdaten veraltet oder nicht verfuegbar sind, das Preisdatum und die Quelle vermerken. Fuer sehr seltene Karten mehrere Quellen pruefen und den Median verwenden. Nie auf einen einzelnen Ausreisserverkauf vertrauen.
 
-### Step 5: Maintain and Optimize
+### Schritt 5: Pflegen und optimieren
 
-Establish ongoing collection management routines.
+Laufende Routinen zur Sammlungsverwaltung etablieren.
 
-1. **Regular updates** (match cadence from Step 1):
-   - Enter new acquisitions immediately
-   - Update values for Premium tier quarterly, Standard tier semi-annually
-   - Re-assess storage tier as values change
-2. **Want-list management**:
-   - Maintain a list of desired cards with maximum prices
-   - Cross-reference want-list against trade binder inventory
-   - Set price alerts where supported by the inventory app
-3. **Collection analytics**:
-   - Track total value over time (monthly snapshots)
-   - Monitor set completion percentages
-   - Identify concentration risk (too much value in one card/set)
-4. **Periodic audit** (annually):
-   - Physical count vs. inventory count for a random sample
-   - Verify storage conditions (check for humidity, pest damage)
-   - Review and update grading candidates based on current values
+1. **Regelmaessige Aktualisierungen** (gemaess Rhythmus aus Schritt 1):
+   - Neue Zugaenge sofort erfassen
+   - Werte fuer Premium-Stufe vierteljaehrlich, Standard-Stufe halbjaehrlich aktualisieren
+   - Aufbewahrungsstufe bei Wertaenderungen neu bewerten
+2. **Wunschlistenverwaltung**:
+   - Eine Liste gewuenschter Karten mit Hoechstpreisen fuehren
+   - Wunschliste mit Tauschordner-Bestand abgleichen
+   - Preisalarme setzen wo die Inventar-App dies unterstuetzt
+3. **Sammlungsanalysen**:
+   - Gesamtwert ueber die Zeit verfolgen (monatliche Momentaufnahmen)
+   - Set-Vervollstaendigungsraten beobachten
+   - Konzentrationsrisiko identifizieren (zu viel Wert in einer Karte/einem Set)
+4. **Periodische Pruefung** (jaehrlich):
+   - Physische Zaehlung vs. Inventarzaehlung fuer eine Zufallsstichprobe
+   - Aufbewahrungsbedingungen pruefen (auf Feuchtigkeit, Schaedlingsbefall pruefen)
+   - Grading-Kandidaten basierend auf aktuellen Werten ueberpruefen und aktualisieren
 
-**Expected:** A living collection management system that stays current and supports informed decisions about buying, selling, grading, and trading.
+**Erwartet:** Ein lebendes Sammlungsverwaltungssystem das aktuell bleibt und informierte Entscheidungen ueber Kauf, Verkauf, Grading und Tausch unterstuetzt.
 
-**On failure:** If maintenance lapses, prioritize: update Premium tier values first, then catch up on new acquisitions. The most important thing is knowing what your most valuable cards are worth today.
+**Bei Fehler:** Wenn die Pflege nachlasst, priorisieren: zuerst Premium-Stufenwerte aktualisieren, dann neue Zugaenge nacherfassen. Das Wichtigste ist zu wissen was die wertvollsten Karten heute wert sind.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Inventory system established with appropriate data fields
-- [ ] All cards cataloged with condition and location data
-- [ ] Physical storage matches card value tiers
-- [ ] Environmental controls in place (cool, dry, dark)
-- [ ] Collection valued with current market prices and dates
-- [ ] Grading candidates identified with cost/benefit analysis
-- [ ] Maintenance cadence established and followed
-- [ ] Want-list maintained for acquisition targets
+- [ ] Inventarsystem mit angemessenen Datenfeldern eingerichtet
+- [ ] Alle Karten mit Zustands- und Standortdaten katalogisiert
+- [ ] Physische Aufbewahrung entspricht den Kartenwert-Stufen
+- [ ] Umgebungskontrollen vorhanden (kuehl, trocken, dunkel)
+- [ ] Sammlung mit aktuellen Marktpreisen und Daten bewertet
+- [ ] Grading-Kandidaten mit Kosten-Nutzen-Analyse identifiziert
+- [ ] Pflegerhythmus festgelegt und eingehalten
+- [ ] Wunschliste fuer Erwerbsziele gefuehrt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Over-grading own cards**: Collectors consistently rate their own cards 1-2 grades higher than reality. Be honest or use `grade-tcg-card` for structured assessment
-- **Ignoring bulk**: Bulk cards accumulate value collectively. A box of 800 commons at $0.10 each is $80 — worth tracking
-- **Poor storage environment**: Humidity and temperature swings damage cards faster than handling. Environment matters more than sleeves
-- **Stale valuations**: Card markets move. A valuation from 6 months ago may be wildly inaccurate, especially around set releases or ban announcements
-- **No backup**: Digital inventory without backup is fragile. Export to CSV monthly. Photograph premium cards for insurance
+- **Eigene Karten ueberbewerten**: Sammler bewerten ihre eigenen Karten durchgehend 1-2 Grade hoeher als die Realitaet. Ehrlich sein oder `grade-tcg-card` fuer strukturierte Bewertung verwenden
+- **Massenware ignorieren**: Massenkarten akkumulieren kollektiv Wert. Eine Box mit 800 Common-Karten zu je 0,10€ sind 80€ — es lohnt sich diese zu verfolgen
+- **Schlechte Aufbewahrungsumgebung**: Feuchtigkeit und Temperaturschwankungen schaedigen Karten schneller als Handhabung. Die Umgebung ist wichtiger als Huellen
+- **Veraltete Bewertungen**: Kartenmaerkte bewegen sich. Eine 6 Monate alte Bewertung kann voellig ungenau sein, besonders rund um Set-Veroeffentlichungen oder Bannankuendigungen
+- **Kein Backup**: Digitales Inventar ohne Backup ist fragil. Monatlich als CSV exportieren. Premiumkarten fuer die Versicherung fotografieren
 
-## Related Skills
+## Verwandte Skills
 
-- `grade-tcg-card` — Structured card grading for accurate condition assessment
-- `build-tcg-deck` — Deck construction using the collection inventory
+- `grade-tcg-card` — Strukturiertes Kartengrading fuer genaue Zustandsbewertung
+- `build-tcg-deck` — Deckbau unter Nutzung des Sammlungsinventars

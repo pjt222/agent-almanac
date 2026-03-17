@@ -1,13 +1,13 @@
 ---
 name: prepare-print-model
 description: >
-  Export and optimize 3D models for FDM/SLA printing including STL/3MF export,
-  mesh integrity verification, wall thickness checking, support generation, and
-  slicing. Use when exporting from CAD or modeling software for 3D printing,
-  verifying STL/3MF files are printable before slicing, troubleshooting models
-  that fail to slice correctly, optimizing part orientation for strength or
-  surface finish, or converting between model formats while preserving
-  printability.
+  Exportar y optimizar modelos 3D para impresión FDM/SLA incluyendo exportación
+  STL/3MF, verificación de integridad de malla, comprobación de grosor de pared,
+  generación de soportes y laminado. Usar al exportar desde software CAD o de
+  modelado para impresión 3D, verificar que archivos STL/3MF sean imprimibles
+  antes del laminado, resolver problemas de modelos que fallan al laminar
+  correctamente, optimizar la orientación de piezas para resistencia o acabado
+  superficial, o convertir entre formatos de modelo preservando la imprimibilidad.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
@@ -26,31 +26,31 @@ metadata:
 
 # Prepare Print Model
 
-Export and optimize 3D models for additive manufacturing. This skill covers the complete workflow from CAD/modeling software export through mesh repair, printability analysis, support generation, and slicer configuration. Ensures models are manifold, have adequate wall thickness, and are properly oriented for strength and print quality.
+Exportar y optimizar modelos 3D para manufactura aditiva. Esta habilidad cubre el flujo de trabajo completo desde la exportación del software CAD/modelado hasta la reparación de malla, análisis de imprimibilidad, generación de soportes y configuración del slicer. Asegura que los modelos sean manifold, tengan grosor de pared adecuado y estén correctamente orientados para resistencia y calidad de impresión.
 
 ## Cuándo Usar
 
-- Exporting models from CAD software (Fusion 360, SolidWorks, Onshape) or 3D modeling tools (Blender, Maya) for 3D printing
-- Verifying that existing STL/3MF files are printable before sending to slicer
-- Troubleshooting models that fail to slice or print correctly
-- Optimizing part orientation for strength, surface finish, or minimal support material
-- Preparing mechanical parts with specific strength or tolerance requirements
-- Converting between model formats (STL, 3MF, OBJ) while preserving printability
+- Exportar modelos desde software CAD (Fusion 360, SolidWorks, Onshape) o herramientas de modelado 3D (Blender, Maya) para impresión 3D
+- Verificar que archivos STL/3MF existentes sean imprimibles antes de enviarlos al slicer
+- Resolver problemas de modelos que fallan al laminar o imprimir correctamente
+- Optimizar la orientación de piezas para resistencia, acabado superficial o mínimo material de soporte
+- Preparar piezas mecánicas con requisitos específicos de resistencia o tolerancia
+- Convertir entre formatos de modelo (STL, 3MF, OBJ) preservando la imprimibilidad
 
 ## Entradas
 
-- **source_model**: Path to CAD file or 3D model file (STEP, F3D, STL, OBJ, 3MF)
-- **target_process**: Printing process type (`fdm`, `sla`, `sls`)
-- **material**: Intended print material (e.g., `pla`, `petg`, `abs`, `standard-resin`)
-- **functional_requirements**: Load direction, tolerance requirements, surface finish needs
-- **printer_specs**: Build volume, nozzle diameter (FDM), layer height capabilities
-- **slicer_tool**: Target slicer (`cura`, `prusaslicer`, `orcaslicer`, `chitubox`)
+- **Requerido**: **source_model** — Ruta al archivo CAD o modelo 3D (STEP, F3D, STL, OBJ, 3MF)
+- **Requerido**: **target_process** — Tipo de proceso de impresión (`fdm`, `sla`, `sls`)
+- **Requerido**: **material** — Material de impresión previsto (ej., `pla`, `petg`, `abs`, `standard-resin`)
+- **Opcional**: **functional_requirements** — Dirección de carga, requisitos de tolerancia, necesidades de acabado superficial
+- **Opcional**: **printer_specs** — Volumen de construcción, diámetro de boquilla (FDM), capacidades de altura de capa
+- **Opcional**: **slicer_tool** — Slicer objetivo (`cura`, `prusaslicer`, `orcaslicer`, `chitubox`)
 
 ## Procedimiento
 
-### 1. Export Model from Source Software
+### 1. Exportar Modelo desde el Software Fuente
 
-Export the 3D model in a suitable format for printing:
+Exportar el modelo 3D en un formato adecuado para impresión:
 
 **For FDM/SLA**:
 ```bash
@@ -64,13 +64,13 @@ Export the 3D model in a suitable format for printing:
 # 3MF: Include color/material data if using multi-material printer
 ```
 
-**Esperado:** Model file exported with appropriate resolution (0.1mm chord tolerance for mechanical parts, 0.05mm for organic shapes).
+**Esperado:** Archivo de modelo exportado con resolución apropiada (tolerancia de cuerda de 0.1mm para piezas mecánicas, 0.05mm para formas orgánicas).
 
-**En caso de fallo:** Check that model is fully defined (no construction geometry), no missing faces, all components visible.
+**En caso de fallo:** Verificar que el modelo esté completamente definido (sin geometría de construcción), sin caras faltantes, todos los componentes visibles.
 
-### 2. Verify Mesh Integrity
+### 2. Verificar la Integridad de la Malla
 
-Check that the mesh is manifold and printable:
+Verificar que la malla sea manifold e imprimible:
 
 ```bash
 # Install mesh repair tools if needed
@@ -86,15 +86,15 @@ admesh --check model.stl
 # - Degenerate facets: 0
 ```
 
-**Common issues**:
-- **Non-manifold edges**: Multiple faces share an edge, or edge has only one face
-- **Holes**: Gaps in mesh surface
-- **Inverted normals**: Inside/outside of model reversed
-- **Intersecting faces**: Self-intersecting geometry
+**Problemas comunes**:
+- **Aristas no manifold**: Múltiples caras comparten una arista, o la arista tiene solo una cara
+- **Agujeros**: Huecos en la superficie de la malla
+- **Normales invertidas**: Interior/exterior del modelo invertidos
+- **Caras intersectantes**: Geometría auto-intersectante
 
-**Esperado:** Report shows 0 errors, or errors are repairable.
+**Esperado:** El informe muestra 0 errores, o los errores son reparables.
 
-**En caso de fallo:** Repair mesh automatically or manually:
+**En caso de fallo:** Reparar la malla automática o manualmente:
 
 ```bash
 # Automatic repair with admesh
@@ -113,13 +113,13 @@ meshlab model.stl
 # Filters → Normals → Re-Orient all faces coherently
 ```
 
-If automatic repair fails, return to source software and fix modeling errors (coincident vertices, open edges, overlapping bodies).
+Si la reparación automática falla, volver al software fuente y corregir errores de modelado (vértices coincidentes, aristas abiertas, cuerpos superpuestos).
 
-### 3. Check Wall Thickness
+### 3. Verificar Grosor de Pared
 
-Verify minimum wall thickness for chosen process:
+Verificar el grosor mínimo de pared para el proceso elegido:
 
-**Minimum wall thickness by process**:
+**Grosor mínimo de pared por proceso**:
 
 | Process | Min Wall | Recommended Min | Structural Parts |
 |---------|----------|-----------------|------------------|
@@ -140,16 +140,16 @@ Verify minimum wall thickness for chosen process:
 # - Check in critical load-bearing areas
 ```
 
-**Esperado:** All walls meet minimum thickness for chosen process. Thin walls flagged for review.
+**Esperado:** Todas las paredes cumplen el grosor mínimo para el proceso elegido. Paredes delgadas marcadas para revisión.
 
-**En caso de fallo:** Return to CAD and thicken walls, or:
-- Switch to smaller nozzle (FDM)
-- Use "detect thin walls" slicer setting
-- Accept reduced strength for prototypes
+**En caso de fallo:** Volver al CAD y engrosar las paredes, o:
+- Cambiar a boquilla más pequeña (FDM)
+- Usar la configuración "detectar paredes delgadas" del slicer
+- Aceptar resistencia reducida para prototipos
 
-### 4. Determine Print Orientation
+### 4. Determinar la Orientación de Impresión
 
-Select orientation to optimize strength, surface finish, and support usage:
+Seleccionar la orientación para optimizar resistencia, acabado superficial y uso de soportes:
 
 **Orientation decision matrix**:
 
@@ -174,13 +174,13 @@ If part experiences:
 - Shear → avoid layer interfaces parallel to shear direction
 ```
 
-**Esperado:** Orientation chosen with explicit rationale for strength, finish, or support tradeoffs.
+**Esperado:** Orientación elegida con justificación explícita para compromisos de resistencia, acabado o soportes.
 
-**En caso de fallo:** If no orientation satisfies all requirements, prioritize in order: functional strength → dimensional accuracy → surface finish → support minimization.
+**En caso de fallo:** Si ninguna orientación satisface todos los requisitos, priorizar en orden: resistencia funcional -> precisión dimensional -> acabado superficial -> minimización de soportes.
 
-### 5. Generate Support Structures
+### 5. Generar Estructuras de Soporte
 
-Configure automatic or manual supports for overhangs:
+Configurar soportes automáticos o manuales para voladizos:
 
 **Support angle thresholds**:
 - FDM: 45° from vertical (some bridging up to 60° possible)
@@ -220,16 +220,16 @@ Configure automatic or manual supports for overhangs:
 # - Interface pattern spacing: 0.2mm
 ```
 
-**Esperado:** Supports generated for all overhangs exceeding threshold angle, preview shows no floating geometry.
+**Esperado:** Soportes generados para todos los voladizos que excedan el ángulo umbral, la vista previa no muestra geometría flotante.
 
-**En caso de fallo:** If automatic supports inadequate:
-- Add manual support enforcers in critical areas
-- Increase support density near thin overhangs
-- Split model and print in sections if supports infeasible
+**En caso de fallo:** Si los soportes automáticos son inadecuados:
+- Agregar refuerzos de soporte manuales en áreas críticas
+- Aumentar la densidad de soportes cerca de voladizos delgados
+- Dividir el modelo e imprimir en secciones si los soportes son inviables
 
-### 6. Configure Slicer Profile
+### 6. Configurar el Perfil del Slicer
 
-Set process-appropriate parameters:
+Establecer parámetros apropiados para el proceso:
 
 **FDM layer heights**:
 - Draft: 0.28-0.32mm (fast, visible layers)
@@ -266,13 +266,13 @@ lift_speed: 60-80mm/min
 retract_speed: 150-180mm/min
 ```
 
-**Esperado:** Profile configured with process-appropriate defaults, modified for specific material/model requirements.
+**Esperado:** Perfil configurado con valores por defecto apropiados para el proceso, modificado para requisitos específicos de material/modelo.
 
-**En caso de fallo:** If unsure about parameters, start with slicer's default "Standard Quality" profile for chosen material, then iterate.
+**En caso de fallo:** Si no se está seguro de los parámetros, comenzar con el perfil "Calidad Estándar" por defecto del slicer para el material elegido, luego iterar.
 
-### 7. Preview Slice Layer-by-Layer
+### 7. Previsualizar el Laminado Capa por Capa
 
-Inspect sliced G-code for issues:
+Inspeccionar el G-code laminado en busca de problemas:
 
 ```bash
 # In slicer:
@@ -286,22 +286,22 @@ Inspect sliced G-code for issues:
 #   * Top layers: sufficient solid infill
 ```
 
-**Red flags in preview**:
-- **White gaps in solid regions**: Walls too thin for current line width
-- **Travels over large distances**: Increase retraction or add z-hop
-- **First layer not squishing**: Adjust Z-offset down by 0.05mm
-- **Sparse top layers**: Increase top solid layers to 5+
+**Señales de alerta en la vista previa**:
+- **Huecos blancos en regiones sólidas**: Paredes demasiado delgadas para el ancho de línea actual
+- **Desplazamientos sobre largas distancias**: Aumentar retracción o agregar z-hop
+- **Primera capa sin aplastamiento**: Ajustar Z-offset hacia abajo 0.05mm
+- **Capas superiores dispersas**: Aumentar capas sólidas superiores a 5+
 
-**Esperado:** Preview shows continuous perimeters, proper infill, clean travels, and no obvious defects.
+**Esperado:** La vista previa muestra perímetros continuos, relleno adecuado, desplazamientos limpios y sin defectos obvios.
 
-**En caso de fallo:** Adjust slicer settings and re-slice. Common fixes:
-- Thin wall gaps → Enable "Detect thin walls" or reduce line width
-- Poor bridging → Reduce bridge speed to 30mm/s, increase cooling
-- Stringing → Increase retraction distance +1mm, reduce temperature -5°C
+**En caso de fallo:** Ajustar configuraciones del slicer y re-laminar. Correcciones comunes:
+- Huecos en paredes delgadas -> Habilitar "Detectar paredes delgadas" o reducir ancho de línea
+- Mal puenteo -> Reducir velocidad de puente a 30mm/s, aumentar enfriamiento
+- Hilos -> Aumentar distancia de retracción +1mm, reducir temperatura -5°C
 
-### 8. Export G-code and Verify
+### 8. Exportar G-code y Verificar
 
-Save sliced G-code with descriptive name:
+Guardar el G-code laminado con nombre descriptivo:
 
 ```bash
 # Naming convention:
@@ -318,50 +318,50 @@ head -n 50 model.gcode | grep "^M104\|^M140"  # Verify temperatures
 # M104 S245 (hotend temp for PETG)
 ```
 
-**Pre-print checklist**:
-- [ ] Bed leveled and clean
-- [ ] Correct material loaded and dry
-- [ ] Temperatures match material requirements
-- [ ] First layer Z-offset calibrated
-- [ ] Adequate filament/resin remaining
-- [ ] Print time acceptable for monitoring plan
+**Lista de verificación pre-impresión**:
+- [ ] Cama nivelada y limpia
+- [ ] Material correcto cargado y seco
+- [ ] Temperaturas coinciden con los requisitos del material
+- [ ] Z-offset de primera capa calibrado
+- [ ] Filamento/resina suficiente restante
+- [ ] Tiempo de impresión aceptable para el plan de monitoreo
 
-**Esperado:** G-code file saved with embedded metadata, temperatures verified, print time/material estimate reasonable.
+**Esperado:** Archivo G-code guardado con metadatos embebidos, temperaturas verificadas, estimación de tiempo/material de impresión razonable.
 
-**En caso de fallo:** If print time excessive (>12 hours), consider:
-- Increase layer height (0.2 → 0.28mm saves ~30% time)
-- Reduce perimeters (4 → 3)
-- Reduce infill (40% → 20% for non-structural)
-- Scale model down if size not critical
+**En caso de fallo:** Si el tiempo de impresión es excesivo (>12 horas), considerar:
+- Aumentar altura de capa (0.2 -> 0.28mm ahorra ~30% de tiempo)
+- Reducir perímetros (4 -> 3)
+- Reducir relleno (40% -> 20% para no estructurales)
+- Reducir escala del modelo si el tamaño no es crítico
 
 ## Validación
 
-- [ ] Model exported from source software with correct units (mm) and scale
-- [ ] Mesh integrity verified: manifold, no holes, normals correct
-- [ ] Wall thickness meets minimum for chosen process (≥0.8mm FDM, ≥0.4mm SLA)
-- [ ] Print orientation optimized for strength, finish, or support tradeoffs
-- [ ] Supports generated for all overhangs >45° (FDM) or >30° (SLA)
-- [ ] Slicer profile configured with appropriate layer height and parameters
-- [ ] Layer-by-layer preview inspected, no gaps or floating regions
-- [ ] G-code exported with verified temperatures and reasonable print time
-- [ ] Pre-print checklist completed (bed leveled, material loaded, etc.)
+- [ ] Modelo exportado desde software fuente con unidades correctas (mm) y escala
+- [ ] Integridad de malla verificada: manifold, sin agujeros, normales correctas
+- [ ] Grosor de pared cumple el mínimo para el proceso elegido (>=0.8mm FDM, >=0.4mm SLA)
+- [ ] Orientación de impresión optimizada para compromisos de resistencia, acabado o soportes
+- [ ] Soportes generados para todos los voladizos >45° (FDM) o >30° (SLA)
+- [ ] Perfil del slicer configurado con altura de capa y parámetros apropiados
+- [ ] Vista previa capa por capa inspeccionada, sin huecos ni regiones flotantes
+- [ ] G-code exportado con temperaturas verificadas y tiempo de impresión razonable
+- [ ] Lista de verificación pre-impresión completada (cama nivelada, material cargado, etc.)
 
 ## Errores Comunes
 
-1. **Skipping mesh repair**: Non-manifold meshes can slice but fail to print correctly with gaps or malformed layers
-2. **Ignoring wall thickness**: Thin walls (< minimum) will have gaps, drastically reducing strength
-3. **Wrong orientation for strength**: Printing tensile parts with layers parallel to load direction creates weak delamination plane
-4. **Insufficient supports**: Underestimating overhang angle leads to sagging, stringing, or complete failure
-5. **First layer neglect**: 90% of print failures occur in first layer—Z-offset and bed adhesion are critical
-6. **Temperature from Internet**: Every printer/material combination is unique; always calibrate temperature with tower tests
-7. **Excessive detail for layer height**: Fine features smaller than 2× layer height won't resolve properly
-8. **Not previewing slice**: Slicers can make unexpected decisions (thin wall gaps, weird infill); always preview before printing
-9. **Material hygroscopy**: Wet filament (especially Nylon, TPU, PETG) causes poor layer adhesion, stringing, and brittleness
-10. **Overconfidence in supports**: Heavy parts with large overhangs can still sag even with supports—test on smaller models first
+1. **Saltarse la reparación de malla**: Las mallas no manifold pueden laminarse pero fallan al imprimir correctamente con huecos o capas malformadas
+2. **Ignorar el grosor de pared**: Las paredes delgadas (< mínimo) tendrán huecos, reduciendo drásticamente la resistencia
+3. **Orientación incorrecta para resistencia**: Imprimir piezas bajo tensión con capas paralelas a la dirección de carga crea un plano de delaminación débil
+4. **Soportes insuficientes**: Subestimar el ángulo de voladizo lleva a caída, hilos o fallo completo
+5. **Descuido de la primera capa**: El 90% de los fallos de impresión ocurren en la primera capa — Z-offset y adhesión a la cama son críticos
+6. **Temperatura de Internet**: Cada combinación impresora/material es única; siempre calibrar la temperatura con pruebas de torre
+7. **Detalle excesivo para la altura de capa**: Características finas menores que 2x la altura de capa no se resolverán correctamente
+8. **No previsualizar el laminado**: Los slicers pueden tomar decisiones inesperadas (huecos en paredes delgadas, relleno extraño); siempre previsualizar antes de imprimir
+9. **Higroscopicidad del material**: El filamento húmedo (especialmente Nylon, TPU, PETG) causa mala adhesión entre capas, hilos y fragilidad
+10. **Exceso de confianza en soportes**: Piezas pesadas con grandes voladizos aún pueden ceder incluso con soportes — probar primero con modelos más pequeños
 
 ## Habilidades Relacionadas
 
-- **[select-print-material](../select-print-material/SKILL.md)**: Choose appropriate material based on mechanical, thermal, and chemical requirements
-- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Diagnose and fix print failures if prepared model still fails
-- **Model with Blender** (future skill): Create 3D models optimized for printing from scratch
-- **Calibrate 3D Printer** (future skill): E-steps, flow rate, temperature towers, and retraction tuning
+- **[select-print-material](../select-print-material/SKILL.md)**: Elegir material apropiado basado en requisitos mecánicos, térmicos y químicos
+- **[troubleshoot-print-issues](../troubleshoot-print-issues/SKILL.md)**: Diagnosticar y corregir fallos de impresión si el modelo preparado aún falla
+- **Model with Blender** (habilidad futura): Crear modelos 3D optimizados para impresión desde cero
+- **Calibrate 3D Printer** (habilidad futura): E-steps, tasa de flujo, torres de temperatura y ajuste de retracción

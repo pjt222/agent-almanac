@@ -3,16 +3,15 @@ name: interpret-ir-spectrum
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Interpretiere Infrarotspektren zur Identifizierung funktioneller Gruppen
-  in organischen und anorganischen Verbindungen durch systematische Analyse
-  von Absorptionsbanden, Wellenzahlen und Bandenformen. Verwende diesen Skill
-  beim Identifizieren von Carbonyl-, Hydroxyl-, Amino- und anderen Gruppen
-  aus IR-Daten, beim Unterscheiden von Verbindungsklassen, beim Vergleich
-  von Spektren mit Referenzdaten oder beim Unterstuetzen der Strukturaufklaerung
-  in Kombination mit NMR und MS.
+  Infrarotspektren systematisch interpretieren um in einer Probe vorhandene
+  funktionelle Gruppen zu identifizieren. Behandelt die Analyse des
+  diagnostischen Bereichs (4000-1500 cm-1), die Bewertung des
+  Fingerprintbereichs (1500-400 cm-1), Wasserstoffbrueckenbindungseffekte
+  und die Erstellung eines Funktionelle-Gruppen-Inventars mit
+  Vertrauensstufen.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -21,131 +20,168 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, infrared, functional-groups, absorption, wavenumber
+  tags: spectroscopy, ir, infrared, functional-groups, absorption
 ---
 
 # IR-Spektrum interpretieren
 
-Interpretiere IR-Absorptionsspektren systematisch durch Analyse charakteristischer Banden in definierten Wellenzahlbereichen, Bestimmung des Bandenmusters und Zuordnung zu funktionellen Gruppen, um die molekulare Zusammensetzung und Verbindungsklasse zu identifizieren.
+Infrarot-Absorptionsspektren analysieren um funktionelle Gruppen zu identifizieren, Wasserstoffbrueckenbindungen zu bewerten und ein umfassendes Inventar der in der Probe vorhandenen Strukturmerkmale zu erstellen.
 
 ## Wann verwenden
 
-- Identifizieren funktioneller Gruppen (Carbonyl, Hydroxyl, Amino, Ether) aus IR-Daten
-- Unterscheiden von Verbindungsklassen (Aldehyd vs. Keton, primaeres vs. sekundaeres Amin)
-- Bestaetigen des Reaktionsverlaufs durch Verschwinden oder Erscheinen charakteristischer Banden
-- Vergleichen eines unbekannten Spektrums mit einer Referenzbibliothek
-- Unterstuetzen der Strukturaufklaerung zusammen mit NMR- und Massendaten
+- Identifikation funktioneller Gruppen in einer unbekannten Verbindung als erster Screening-Schritt
+- Bestaetigung der An- oder Abwesenheit bestimmter funktioneller Gruppen (z.B. Verifizierung dass eine Reaktion einen Alkohol in ein Keton umgewandelt hat)
+- Ueberwachung des Reaktionsfortschritts durch Verfolgung des Erscheinens oder Verschwindens charakteristischer Absorptionen
+- Unterscheidung aehnlicher Verbindungen die sich im Gehalt funktioneller Gruppen unterscheiden
+- Ergaenzung von NMR- und Massenspektrometriedaten mit Schwingungsinformation
 
 ## Eingaben
 
-- **Erforderlich**: IR-Spektrum als Transmissions- oder Absorptionskurve (400-4000 cm-1)
-- **Erforderlich**: Aggregatzustand der Probe (KBr-Pressling, Nujol-Mull, Fluessigfilm, ATR)
-- **Optional**: Molekuelformel oder Verbindungsklasse (bekannte Information)
-- **Optional**: Vergleichsspektren aus Bibliothek oder Literatur
+- **Erforderlich**: IR-Spektrumdaten (Absorptionsfrequenzen in cm-1 mit Intensitaeten, entweder als %Transmission- oder Absorbanzplot)
+- **Erforderlich**: Probenvorbereitungsmethode (KBr-Pressling, ATR, Nujol-Verreibung, Duennfilm, Loesungsmittelkuevette)
+- **Optional**: Summenformel oder erwartete Verbindungsklasse
+- **Optional**: Bekannte Strukturfragmente aus anderen spektroskopischen Daten
+- **Optional**: Geraeteparameter (Aufloesung, Scanbereich, Detektortyp)
 
 ## Vorgehensweise
 
-### Schritt 1: Uebersicht des Spektrums gewinnen
+### Schritt 1: Spektrumqualitaet und Format ueberpruefen
 
-Analysiere das Spektrum zunaechst in groben Zuegen:
+Verifizieren dass das Spektrum fuer die Interpretation geeignet ist bevor Peaks analysiert werden:
 
-1. **Fingerprintbereich (400-1500 cm-1)**: Komplex, verbindungsspezifisch; Vergleich mit Bibliothek sinnvoll.
-2. **Funktionsgruppenbereich (1500-4000 cm-1)**: Systematisch auswerten; wenige diagnostische Banden.
-3. **Bandensstaerke und -breite**: Starke, breite Banden auf OH oder NH hinweisend; scharfe starke Banden typisch fuer C=O; schwache Banden koennen auf symmetrische oder schwach polare Bindungen hinweisen.
+1. **Y-Achsenformat pruefen**: Feststellen ob das Spektrum in %Transmission (%T, Peaks zeigen nach unten) oder Absorbanz (A, Peaks zeigen nach oben) dargestellt ist. Alle nachfolgenden Analysen setzen eine konsistente Konvention voraus.
+2. **Wellenzahlbereich verifizieren**: Bestaetigen dass das Spektrum mindestens 4000--400 cm-1 fuer eine Standard-MIR-Analyse abdeckt. Etwaige Beschneidungen vermerken.
+3. **Basislinie bewerten**: Eine gute Basislinie sollte relativ flach und nahe 100%T (oder 0 Absorbanz) in Bereichen ohne Absorption sein. Geneigte oder verrauschte Basislinien verringern die Zuverlaessigkeit.
+4. **Aufloesung pruefen**: Benachbarte Peaks die weniger als die instrumentelle Aufloesung auseinanderliegen koennen nicht unterschieden werden. Typische FTIR-Aufloesung betraegt 4 cm-1.
+5. **Praeparationsartefakte identifizieren**: KBr-Presslinge koennen eine breite O-H-Bande von absorbierter Feuchtigkeit zeigen (~3400 cm-1). Nujol-Verreibungen verdecken C-H-Streckschwingungen. ATR-Spektren zeigen Intensitaetsverzerrung bei niedrigen Wellenzahlen. Alle Artefakte vermerken die die Interpretation einschraenken.
 
-```markdown
-## Spektrumueberblick
-- Messbedingung: [KBr/ATR/Fluessigfilm]
-- Auffaelligste Banden: [Liste der dominierenden Absorptionen]
-- Allgemeiner Charakter: [polar/unpolar, organisch/anorganisch]
-```
+**Erwartet:** Spektrum als fuer die Analyse geeignet bestaetigt, mit dokumentiertem Format, Bereich und Artefakten.
 
-**Erwartet:** Eine erste Einordnung des Spektrums und Identifizierung der diagnostisch wichtigsten Regionen.
+**Bei Fehler:** Wenn das Spektrum schwere Basislinienprobleme, Saettigung (flachbodige Peaks von zu konzentrierten Proben) oder Praeparationsartefakte aufweist die kritische Bereiche verdecken, die Einschraenkung vermerken und betroffene Spektralbereiche als unzuverlaessig kennzeichnen.
 
-**Bei Fehler:** Falls das Spektrum zu verrauscht oder schlecht kalibriert ist, bitte um eine Neumessung unter optimierten Bedingungen (richtige Konzentration, geeignete Probentechnik).
+### Schritt 2: Den diagnostischen Bereich scannen (4000--1500 cm-1)
 
-### Schritt 2: OH- und NH-Bereiche auswerten (2500-3700 cm-1)
+Den Hochfrequenzbereich systematisch analysieren, in dem die meisten funktionellen Gruppen charakteristische Absorptionen erzeugen:
 
-Dieser Bereich gibt wichtige Informationen ueber Wasserstoffbruecken:
+1. **O-H-Streckschwingungen (3200--3600 cm-1)**: Nach breiten Absorptionen suchen. Ein scharfer Peak nahe 3600 cm-1 zeigt freies O-H an; eine breite Bande zentriert bei 3200--3400 cm-1 zeigt wasserstoffbrueckengebundenes O-H an (Alkohole, Carbonsaeuren, Wasser).
+2. **N-H-Streckschwingungen (3300--3500 cm-1)**: Primaere Amine zeigen zwei Peaks (symmetrische und asymmetrische Streckschwingung); sekundaere Amine zeigen einen Peak. Diese sind typischerweise schaerfer als O-H-Banden.
+3. **C-H-Streckschwingungen (2800--3300 cm-1)**:
 
-1. **Breite OH-Bande um 3200-3550 cm-1**: Alkohol oder Wasser; durch Wasserstoffbruecken verbreitert.
-2. **Scharfe OH-Bande um 3580-3650 cm-1**: Freie OH-Gruppe (in verduennter Loesung oder gasfoermig).
-3. **Breite COOH-Absorption 2500-3300 cm-1**: Carbonsaeure; ueberlagert oft CH-Banden.
-4. **NH-Banden**:
-   - Primaeres Amin: zwei NH-Banden (3300-3500 cm-1, Streckschwingung)
-   - Sekundaeres Amin: eine NH-Bande
-   - Tertiares Amin: keine NH-Bande
+| Frequenz (cm-1) | Zuordnung |
+|------------------|-----------|
+| 3300 | sp-C-H (Alkin, scharf) |
+| 3000--3100 | sp2-C-H (aromatisch, Vinyl) |
+| 2850--3000 | sp3-C-H (Alkyl, mehrere Peaks) |
+| 2700--2850 | Aldehyd-C-H (zwei Peaks durch Fermi-Resonanz) |
 
-**Erwartet:** Entscheidung ob OH, NH oder beides vorhanden; erste Hinweise auf Alkohol, Amin, Saeure oder Amid.
+4. **Dreifachbindungsbereich (2000--2300 cm-1)**:
 
-**Bei Fehler:** Breite Banden durch Feuchtigkeitsschwingungen von Wasser (1630 cm-1 und 3400 cm-1) verwechseln. Probe trocknen und neu messen oder ATR-Technik einsetzen.
+| Frequenz (cm-1) | Zuordnung | Anmerkungen |
+|------------------|-----------|-------------|
+| 2100--2260 | C-Dreifachbindung-C | Schwach oder fehlend bei Symmetrie |
+| 2200--2260 | C-Dreifachbindung-N | Mittel bis stark |
+| ~2350 | CO2 | Atmosphaerisches Artefakt, ignorieren |
 
-### Schritt 3: CH-Banden analysieren (2700-3100 cm-1)
+5. **Carbonylbereich (1650--1800 cm-1)** -- der diagnostisch ergiebigste einzelne Bereich im IR:
 
-CH-Streckschwingungen geben Hinweise auf Hybridisierung:
+| Frequenz (cm-1) | Zuordnung |
+|------------------|-----------|
+| 1800--1830, 1740--1770 | Saeureanhydrid (zwei C=O-Streckschwingungen) |
+| 1770--1780 | Saeurechlorid |
+| 1735--1750 | Ester |
+| 1700--1725 | Carbonsaeure |
+| 1705--1720 | Aldehyd |
+| 1705--1720 | Keton |
+| 1680--1700 | Konjugiertes Keton / alpha-beta-ungesaettigt |
+| 1630--1690 | Amid (Amid-I-Bande) |
 
-1. **sp3-CH**: 2850-3000 cm-1 (aliphatische CH3, CH2)
-2. **sp2-CH**: 3000-3100 cm-1 (olefinische, aromatische CH)
-3. **sp-CH**: 3300 cm-1 (Alkin-CH, scharf)
-4. **Aldehyd-CH**: charakteristisches Dublett um 2720 und 2820 cm-1
+6. **C=C- und C=N-Streckschwingungen (1600--1680 cm-1)**: Alken-C=C erscheint bei 1620--1680 cm-1 (schwach bis mittel). Aromatisches C=C zeigt mehrere Peaks nahe 1450--1600 cm-1. C=N (Imin) erscheint bei 1620--1660 cm-1.
 
-**Erwartet:** Identifikation des dominierenden CH-Typs und Hinweise auf Aliphaten, Alkene, Aromaten oder Aldehyde.
+**Erwartet:** Alle Absorptionen im diagnostischen Bereich identifiziert, mit Zuordnungen funktioneller Gruppen und Vertrauensstufen (sicher, vorlaefig, fehlend).
 
-### Schritt 4: Carbonylbanden auswerten (1650-1850 cm-1)
+**Bei Fehler:** Wenn der Carbonylbereich verdeckt ist (z.B. Wasserabsorption in KBr, atmosphaerisches CO2), die Luecke vermerken. Wenn eine erwartete Absorption einer funktionellen Gruppe fehlt, mit einer zweiten Praeparationsmethode bestaetigen bevor auf tatsaechliches Fehlen geschlossen wird.
 
-Die C=O-Streckschwingung ist oft die diagnostisch wichtigste Bande:
+### Schritt 3: Den Fingerprintbereich analysieren (1500--400 cm-1)
 
-1. **Aldehyd**: ~1720-1740 cm-1 (plus Aldehyd-CH-Dublett)
-2. **Keton**: ~1705-1725 cm-1
-3. **Carbonsaeure**: ~1700-1725 cm-1 (zusammen mit breitem OH)
-4. **Ester**: ~1735-1750 cm-1 (hoeher als Keton, kein OH)
-5. **Amid**: ~1630-1690 cm-1 (tiefste Wellenzahl, durch Resonanz)
-6. **Anhydrid**: zwei Carbonylbanden (~1800 und ~1850 cm-1)
-7. **Saeurehalogenid**: ~1800 cm-1 (hoechste Wellenzahl)
+Den Niederfrequenzbereich auf bestaetigendes und strukturelles Detail untersuchen:
 
-```markdown
-## Carbonylanalyse
-| Wellenzahl (cm-1) | Intensitaet | Bandenform | Zuweisung |
-|-------------------|-------------|------------|-----------|
-| [wert]            | [stark/mittel/schwach] | [scharf/breit] | [Gruppe] |
-```
+1. **C-O-Streckschwingungen (1000--1300 cm-1)**: Ether, Ester, Alkohole und Carbonsaeuren erzeugen starke C-O-Streckschwingungsabsorptionen. Ester zeigen zusaetzlich zur Carbonylbande eine charakteristische starke Bande nahe 1000--1100 cm-1.
+2. **C-N-Streckschwingungen (1000--1250 cm-1)**: Amine und Amide; Ueberlappung mit C-O macht die Zuordnung ohne weitere Belege vorlaefig.
+3. **C-F-, C-Cl-, C-Br-Streckschwingungen**:
 
-**Erwartet:** Identifikation der Carbonylverbindungsklasse oder Ausschluss von Carbonylgruppen.
+| Frequenz (cm-1) | Zuordnung |
+|------------------|-----------|
+| 1000--1400 | C-F (stark) |
+| 600--800 | C-Cl |
+| 500--680 | C-Br |
 
-**Bei Fehler:** Bei sehr breiten oder ueberlagerten Carbonylbanden erwaege mehrere Komponenten oder unreine Probe; FTIR-Differenzspektroskopie oder Chromatographie vor Messung.
+4. **Aromatisches Substitutionsmuster (700--900 cm-1)**: Die Out-of-plane-C-H-Deformationsschwingung verraet das Substitutionsmuster:
 
-### Schritt 5: Fingerprint-Bereich und abschliessende Zuweisung
+| Frequenz (cm-1) | Muster |
+|------------------|--------|
+| 730--770 | Monosubstituiert (+ 690--710) |
+| 735--770 | Ortho-disubstituiert |
+| 750--810, 860--900 | Meta-disubstituiert |
+| 790--840 | Para-disubstituiert |
 
-Nutze den Fingerprint-Bereich fuer die endgueltige Identifizierung:
+5. **Gesamtvergleich des Fingerprintbereichs**: Der Fingerprintbereich ist fuer jede Verbindung einzigartig. Wenn ein Referenzspektrum verfuegbar ist, diesen Bereich ueberlagern und vergleichen fuer die Identitaetsbestaetigung.
 
-1. **C-O-Einfachbindung** (1000-1300 cm-1): Unterscheidet Ether, Ester, Alkohole.
-2. **Aromatische Banden** (1450-1600 cm-1): C=C-Streckschwingungen des Rings; out-of-plane CH-Biegung (700-900 cm-1) zeigt Substitutionsmuster.
-3. **Nitro-Gruppe**: starke Banden bei ~1350 und ~1550 cm-1.
-4. **Alkin C≡C**: 2100-2260 cm-1 (bei symmetrischen Alkinen IR-inaktiv).
-5. **Bibliotheksvergleich**: Suche nach Treffern im Fingerprint-Bereich.
+**Erwartet:** Bestaetigendes Zuordnungen fuer in Schritt 2 identifizierte funktionelle Gruppen, plus zusaetzliches strukturelles Detail (Substitutionsmuster, C-O/C-N-Zuordnungen).
 
-**Erwartet:** Vollstaendige Liste identifizierter funktioneller Gruppen und Vorschlag der Verbindungsklasse.
+**Bei Fehler:** Der Fingerprintbereich ist inhaerent komplex und ueberlappend. Wenn Zuordnungen mehrdeutig sind, sie als vorlaefig kennzeichnen und sich fuer endgueltige Schlussfolgerungen auf den diagnostischen Bereich und andere spektroskopische Daten stuetzen.
 
-**Bei Fehler:** Falls keine eindeutige Zuweisung moeglich, kombiniere mit NMR und MS. Ueberlagernde Banden erfordern Entfaltung oder zusaetzliche Messung.
+### Schritt 4: Wasserstoffbrueckenbindungen und intermolekulare Effekte bewerten
+
+Evaluieren wie Probenzustand und intermolekulare Wechselwirkungen das Spektrum beeinflussen:
+
+1. **Verbreiterung durch Wasserstoffbrueckenbindung**: Breite und Position der O-H- und N-H-Banden vergleichen. Freies O-H ist scharf und nahe 3600 cm-1; wasserstoffbrueckengebundenes O-H ist breit und nach 3200--3400 cm-1 verschoben. Carbonsaeuredimere zeigen ein sehr breites O-H von 2500--3300 cm-1.
+2. **Konzentrations- und Zustandseffekte**: Loesungsspektren bei verschiedenen Konzentrationen koennen intramolekulare (konzentrationsunabhaengige) von intermolekularen (konzentrationsabhaengigen) Wasserstoffbrueckenbindungen unterscheiden.
+3. **Fermi-Resonanz**: Zwei ueberlappende Banden koennen wechselwirken und in ein Dublett aufspalten. Das klassische Beispiel ist das Aldehyd-C-H-Paar nahe 2720 und 2820 cm-1. Fermi-Resonanz erkennen um zusaetzliche Peaks nicht als getrennte funktionelle Gruppen fehlzuordnen.
+4. **Festkoerpereffekte**: KBr-Presslinge und Nujol-Verreibungen spiegeln die Festkoerperpackung wider, die Banden verbreitert und Frequenzen um 10--20 cm-1 relativ zu Loesungsspektren verschieben kann. ATR-Spektren entsprechen am ehesten dem reinen Fluessigkeitszustand.
+
+**Erwartet:** Wasserstoffbrueckenbindungszustand charakterisiert, Praeparationsmethoden-Artefakte beruecksichtigt und anomale Bandenformen erklaert.
+
+**Bei Fehler:** Wenn Wasserstoffbrueckenbindungseffekte nicht aufgeloest werden koennen (z.B. ueberlappende O-H- und N-H-Banden), die Mehrdeutigkeit vermerken. Ein D2O-Austauschexperiment oder eine temperaturabhaengige Studie kann helfen, erfordert aber zusaetzliche Daten.
+
+### Schritt 5: Funktionelle-Gruppen-Inventar erstellen
+
+Alle Befunde zu einem strukturierten Bericht zusammenfassen:
+
+1. **Bestaetigte funktionelle Gruppen auflisten**: Gruppen mit starken, eindeutigen Absorptionen im diagnostischen Bereich (z.B. scharfes C=O bei 1715 cm-1 = Keton oder Aldehyd).
+2. **Vorlaefige Zuordnungen auflisten**: Gruppen mit schwaeecherer Evidenz oder ueberlappenden Absorptionen die durch mehr als eine funktionelle Gruppe erklaerbar sind.
+3. **Abwesende funktionelle Gruppen auflisten**: Gruppen deren charakteristische starke Absorptionen eindeutig im Spektrum fehlen (z.B. keine breite O-H-Bande bedeutet kein freier Alkohol oder keine Carbonsaeure).
+4. **Diskrepanzen vermerken**: Absorptionen die nicht zum vorgeschlagenen Satz funktioneller Gruppen passen, oder erwartete Absorptionen die fehlen.
+5. **Quervergleich**: Das IR-abgeleitete Funktionelle-Gruppen-Inventar mit Informationen aus anderen Techniken (NMR, MS, UV-Vis) vergleichen falls verfuegbar.
+
+**Erwartet:** Ein vollstaendiges Funktionelle-Gruppen-Inventar nach Vertrauensstufen kategorisiert, mit spezifischen Frequenzen und Intensitaeten als Beleg fuer jede Zuordnung.
+
+**Bei Fehler:** Wenn das Inventar unvollstaendig oder widerspruechlich ist, identifizieren welche zusaetzlichen Experimente (ATR vs. KBr-Vergleich, variable Konzentration, D2O-Austausch) die Mehrdeutigkeiten aufloesen wuerden.
 
 ## Validierung
 
-- [ ] Alle Hauptabsorptionsbanden zugewiesen
-- [ ] OH/NH-Banden korrekt differenziert
-- [ ] Carbonylklasse eindeutig bestimmt (falls Carbonyl vorhanden)
-- [ ] Aromatische oder olefinische Systeme identifiziert (falls vorhanden)
-- [ ] Ergebnis mit Molekuelformel konsistent
-- [ ] Spektrum mit Referenz oder Bibliothek verglichen
+- [ ] Spektrumqualitaet bewertet (Basislinie, Aufloesung, Artefakte, Y-Achsenformat)
+- [ ] Loesungsmittel-, Praeparationsmethoden- und atmosphaerische Artefakte identifiziert und ausgeschlossen
+- [ ] Alle Absorptionen im diagnostischen Bereich (4000--1500 cm-1) zugeordnet oder markiert
+- [ ] Carbonylbereich mit spezifischer Subtypzuordnung analysiert wo moeglich
+- [ ] Fingerprintbereich auf bestaetigendes Evidenz untersucht
+- [ ] Wasserstoffbrueckenbindungseffekte evaluiert und deren Einfluss auf Peakform/-position dokumentiert
+- [ ] Funktionelle-Gruppen-Inventar mit Vertrauensstufen erstellt
+- [ ] Abwesende funktionelle Gruppen explizit vermerkt (Negativevidenz ist informativ)
+- [ ] Zuordnungen mit anderen verfuegbaren spektroskopischen Daten quervergleicht
 
 ## Haeufige Stolperfallen
 
-- **Wasserverunreinigung**: Breite Bande bei 3400 cm-1 kann OH der Probe oder Feuchtigkeit sein; ATR-Technik oder Trocknung der Probe hilft.
-- **Verwechslung Alkohol/Carbonsaeure**: Beide zeigen OH-Banden, aber Carbonsaeure hat tiefere C=O-Wellenzahl und breiteres OH.
-- **Fehlinterpretation des Fingerprintbereichs**: Viele Ueberlagerungen; nicht einzelne Banden isoliert interpretieren, immer Gesamtbild betrachten.
-- **Vernachlaessigung der Probentechnik**: ATR-, KBr- und Fluessigfilmmessungen koennen unterschiedliche relative Bandenintensitaeten zeigen.
+- **Praeparationsartefakte ignorieren**: KBr-Feuchtigkeit (breite 3400 cm-1), Nujol-C-H (2850--2950 cm-1) und ATR-Intensitaetsverzerrung bei niedrigen Wellenzahlen imitieren oder verdecken alle echte Probenabsorptionen. Immer die Praeparationsmethode beruecksichtigen.
+- **Den Fingerprintbereich ueberinterpretieren**: Der Bereich unter 1500 cm-1 ist komplex und ueberlappend. Ihn zur Bestaetigung verwenden, nicht zur Primaeridentifikation. Nicht jeden Peak zuordnen.
+- **Atmosphaerisches CO2 mit Probenpeaks verwechseln**: Das scharfe Dublett nahe 2350 cm-1 ist fast immer atmosphaerisches CO2, keine Probenabsorption. Die Hintergrundsubtraktion sollte es entfernen, aber zur Sicherheit verifizieren.
+- **Bandenintensitaet und -breite vernachlaessigen**: Eine starke, breite Absorption hat einen anderen diagnostischen Wert als ein schwacher, scharfer Peak bei der gleichen Frequenz. Intensitaet (stark/mittel/schwach) und Form (scharf/breit) neben der Frequenz angeben.
+- **Einzelpeakzuordnungen**: Nie eine funktionelle Gruppe anhand einer einzelnen Absorption allein identifizieren. Carbonylgruppen zum Beispiel sollten durch zusaetzliche Banden unterstuetzt werden (C-O fuer Ester, N-H fuer Amide, C-H fuer Aldehyde).
+- **Abwesenheit aus schwacher Absorption folgern**: Einige funktionelle Gruppen erzeugen inhaerent schwache IR-Absorptionen (symmetrisches C=C, Dreifachbindungen in symmetrischen Alkinen). Abwesenheit eines Peaks bedeutet nicht immer Abwesenheit der Gruppe.
 
 ## Verwandte Skills
 
-- `interpret-nmr-spectrum` -- ergaenzende Strukturinformation aus NMR
-- `interpret-mass-spectrum` -- Molmasse und Fragmentierungsmuster
-- `plan-spectroscopic-analysis` -- optimale Messstrategie auswahlen
+- `interpret-nmr-spectrum` -- detaillierte Konnektivitaet und Wasserstoffumgebungen bestimmen
+- `interpret-mass-spectrum` -- Summenformel und Fragmentierungsmuster ermitteln
+- `interpret-uv-vis-spectrum` -- Chromophore charakterisieren als Ergaenzung zu IR-Funktionelle-Gruppen-Daten
+- `interpret-raman-spectrum` -- komplementaere Schwingungsdaten fuer IR-inaktive Moden erhalten
+- `plan-spectroscopic-analysis` -- spektroskopische Techniken vor der Datenerfassung auswaehlen und sequenzieren

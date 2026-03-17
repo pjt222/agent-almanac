@@ -1,14 +1,13 @@
 ---
 name: analyze-codebase-workflow
 description: >
-  Analyze an arbitrary codebase to auto-detect workflows, data pipelines,
-  and file dependencies using putior's put_auto() engine. Produces an
-  annotation plan that maps detected I/O patterns to source files across
-  30+ supported languages with 902 auto-detection patterns. Use when
-  onboarding onto an unfamiliar codebase to understand data flow, starting
-  putior integration in a project without existing annotations, auditing a
-  project's data pipeline before documentation, or preparing an annotation
-  plan before running annotate-source-files.
+  putiorのput_auto()エンジンを使用して、任意のコードベースのワークフロー、
+  データパイプライン、ファイル依存関係を自動検出する。30以上の対応言語と
+  902の自動検出パターンで、検出されたI/Oパターンをソースファイルにマッピングする
+  アノテーション計画を作成する。馴染みのないコードベースのデータフローを理解する時、
+  既存のアノテーションなしでputior統合を開始する時、ドキュメント作成前に
+  データパイプラインを監査する時、annotate-source-filesの前にアノテーション計画を
+  準備する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -27,27 +26,27 @@ metadata:
 
 # コードベースワークフロー分析
 
-Survey an arbitrary repository to auto-detect data flows, file I/O, and script dependencies, then produce a structured annotation plan for manual refinement.
+任意のリポジトリを調査してデータフロー、ファイルI/O、スクリプト依存関係を自動検出し、手動で精緻化するための構造化されたアノテーション計画を作成する。
 
 ## 使用タイミング
 
-- Onboarding onto an unfamiliar codebase and need to understand data flow
-- Starting putior integration in a project that has no PUT annotations yet
-- Auditing an existing project's data pipeline before documentation
-- Preparing an annotation plan before running `annotate-source-files`
+- 馴染みのないコードベースにオンボーディングしてデータフローを理解する必要がある時
+- PUTアノテーションがまだないプロジェクトでputior統合を開始する時
+- ドキュメント作成前に既存プロジェクトのデータパイプラインを監査する時
+- `annotate-source-files`を実行する前にアノテーション計画を準備する時
 
 ## 入力
 
-- **必須**: Path to the repository or source directory to analyze
-- **任意**: Specific subdirectories to focus on (default: entire repo)
-- **任意**: Languages to include or exclude (default: all detected)
-- **任意**: Detection scope: inputs only, outputs only, or both (default: both + dependencies)
+- **必須**: 分析対象のリポジトリまたはソースディレクトリへのパス
+- **任意**: フォーカスする特定のサブディレクトリ（デフォルト: リポジトリ全体）
+- **任意**: 含めるまたは除外する言語（デフォルト: 検出されたすべて）
+- **任意**: 検出スコープ: 入力のみ、出力のみ、または両方（デフォルト: 両方 + 依存関係）
 
 ## 手順
 
-### ステップ1: Survey Repository Structure
+### ステップ1: リポジトリ構造を調査する
 
-Identify source files and their languages to understand what putior can analyze.
+ソースファイルとその言語を特定し、putiorが何を分析できるかを理解する。
 
 ```r
 library(putior)
@@ -60,20 +59,20 @@ list_supported_languages(detection_only = TRUE)  # Only languages with auto-dete
 exts <- get_supported_extensions()
 ```
 
-Use file listing to understand repo composition:
+ファイルリストを使用してリポジトリの構成を理解する:
 
 ```bash
 # Count files by extension in the target directory
 find /path/to/repo -type f | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -20
 ```
 
-**期待結果:** A list of file extensions present in the repo, with counts. Map these against `get_supported_extensions()` to know coverage.
+**期待結果:** リポジトリに存在するファイル拡張子のリストとカウント。これらを`get_supported_extensions()`と照合してカバレッジを把握する。
 
-**失敗時:** If the repo has no files matching supported extensions, putior cannot auto-detect workflows. Consider whether the language is supported but files use non-standard extensions.
+**失敗時:** リポジトリにサポートされた拡張子に一致するファイルがない場合、putiorはワークフローを自動検出できない。言語はサポートされているがファイルが非標準の拡張子を使用していないか検討する。
 
-### ステップ2: Check Language Detection Coverage
+### ステップ2: 言語検出カバレッジを確認する
 
-For each detected language, verify auto-detection pattern availability.
+検出された各言語について、自動検出パターンの利用可能性を確認する。
 
 ```r
 # Check which languages have auto-detection patterns (18 languages, 902 patterns)
@@ -93,13 +92,13 @@ for (lang in c("r", "python", "javascript", "sql", "dockerfile", "makefile")) {
 }
 ```
 
-**期待結果:** Pattern counts printed for each language. R has 124 patterns, Python 159, JavaScript 71, etc.
+**期待結果:** 各言語のパターン数が表示される。Rは124パターン、Pythonは159、JavaScriptは71など。
 
-**失敗時:** If a language returns no patterns, it supports manual annotations but not auto-detection. Plan to annotate those files manually.
+**失敗時:** 言語がパターンを返さない場合、手動アノテーションはサポートしているが自動検出はサポートしていない。それらのファイルは手動でアノテーションする計画を立てる。
 
-### ステップ3: Run Auto-Detection
+### ステップ3: 自動検出を実行する
 
-Execute `put_auto()` on the target directory to discover workflow elements.
+対象ディレクトリで`put_auto()`を実行してワークフロー要素を発見する。
 
 ```r
 # Full auto-detection
@@ -124,7 +123,7 @@ print(workflow)
 cat(sprintf("Detected %d workflow nodes\n", nrow(workflow)))
 ```
 
-For large repos, analyze subdirectories incrementally:
+大規模リポジトリでは、サブディレクトリごとにインクリメンタルに分析する:
 
 ```r
 # Analyze specific subdirectories
@@ -132,13 +131,13 @@ etl_workflow <- put_auto("./src/etl/")
 api_workflow <- put_auto("./src/api/")
 ```
 
-**期待結果:** A data frame with columns including `id`, `label`, `input`, `output`, `source_file`. Each row represents a detected workflow step.
+**期待結果:** `id`、`label`、`input`、`output`、`source_file`を含むカラムを持つデータフレーム。各行は検出されたワークフローステップを表す。
 
-**失敗時:** If the result is empty, the source files may not contain recognizable I/O patterns. Try enabling debug logging: `workflow <- put_auto("./src/", log_level = "DEBUG")` to see which files are scanned and which patterns match.
+**失敗時:** 結果が空の場合、ソースファイルに認識可能なI/Oパターンが含まれていない可能性がある。デバッグログを有効にしてみる: `workflow <- put_auto("./src/", log_level = "DEBUG")` でどのファイルがスキャンされ、どのパターンがマッチしたかを確認する。
 
-### ステップ4: Generate Initial Diagram
+### ステップ4: 初期ダイアグラムを生成する
 
-Visualize the auto-detected workflow to assess coverage and identify gaps.
+自動検出されたワークフローを可視化してカバレッジを評価し、ギャップを特定する。
 
 ```r
 # Generate diagram from auto-detected workflow
@@ -151,13 +150,13 @@ cat(put_diagram(workflow, show_source_info = TRUE))
 writeLines(put_diagram(workflow, theme = "github"), "workflow-auto.md")
 ```
 
-**期待結果:** A Mermaid flowchart showing detected nodes connected by data flow edges. Nodes should be labeled with meaningful function/file names.
+**期待結果:** 検出されたノードがデータフローエッジで接続されたMermaidフローチャート。ノードには意味のある関数/ファイル名がラベル付けされているべき。
 
-**失敗時:** If the diagram shows disconnected nodes, the auto-detection found I/O patterns but couldn't infer connections. This is normal — connections are derived from matching output filenames to input filenames. The annotation plan (next step) will address gaps.
+**失敗時:** ダイアグラムが切断されたノードを表示する場合、自動検出はI/Oパターンを見つけたが接続を推論できなかった。これは正常である — 接続は出力ファイル名と入力ファイル名のマッチングから導出される。アノテーション計画（次のステップ）がギャップに対処する。
 
-### ステップ5: Produce Annotation Plan
+### ステップ5: アノテーション計画を作成する
 
-Generate a structured plan documenting what was found and what needs manual annotation.
+発見されたものと手動アノテーションが必要なものを文書化した構造化計画を生成する。
 
 ```r
 # Generate annotation suggestions
@@ -170,7 +169,7 @@ put_generate("./src/", style = "multiline")
 put_generate("./src/", output = "clipboard")
 ```
 
-Document the plan with coverage assessment:
+カバレッジ評価付きで計画を文書化する:
 
 ```markdown
 ## Annotation Plan
@@ -191,29 +190,29 @@ Document the plan with coverage assessment:
 - transform.py output `clean.parquet` → load.R input (needs annotation)
 ```
 
-**期待結果:** A clear plan separating auto-detected files from those needing manual annotation, with specific recommendations for each file.
+**期待結果:** 自動検出されたファイルと手動アノテーションが必要なファイルを分離した明確な計画、各ファイルへの具体的な推奨事項付き。
 
-**失敗時:** If `put_generate()` produces no output, ensure the directory path is correct and contains source files in supported languages.
+**失敗時:** `put_generate()`が出力を生成しない場合、ディレクトリパスが正しく、サポートされた言語のソースファイルが含まれていることを確認する。
 
 ## バリデーション
 
-- [ ] `put_auto()` executes without errors on the target directory
-- [ ] Detected workflow has at least one node (unless repo has no recognizable I/O)
-- [ ] `put_diagram()` produces valid Mermaid code from the auto-detected workflow
-- [ ] `put_generate()` produces annotation suggestions for files with detected patterns
-- [ ] Annotation plan document created with coverage assessment
+- [ ] `put_auto()`が対象ディレクトリでエラーなく実行される
+- [ ] 検出されたワークフローに少なくとも1つのノードがある（リポジトリに認識可能なI/Oがない場合を除く）
+- [ ] `put_diagram()`が自動検出されたワークフローから有効なMermaidコードを生成する
+- [ ] `put_generate()`が検出パターンのあるファイルのアノテーション提案を生成する
+- [ ] カバレッジ評価付きのアノテーション計画ドキュメントが作成される
 
 ## よくある落とし穴
 
-- **Scanning too broadly**: Running `put_auto(".")` on a repo root may include `node_modules/`, `.git/`, `venv/`, etc. Target specific source directories.
-- **Expecting full coverage**: Auto-detection finds file I/O and library calls, not business logic. A 40-60% coverage rate is typical; the rest needs manual annotation.
-- **Ignoring dependencies**: The `detect_dependencies = TRUE` flag catches `source()`, `import`, `require()` calls that link scripts together. Disabling it loses cross-file connections.
-- **Language mismatch**: Files with non-standard extensions (e.g., `.R` vs `.r`, `.jsx` vs `.js`) may not be detected. Use `get_comment_prefix()` to check if an extension is recognized. Note that extensionless files like `Dockerfile` and `Makefile` are supported via exact filename matching.
-- **Large repos**: For repos with 100+ source files, analyze by module/directory to keep diagrams readable.
+- **スキャン範囲が広すぎる**: リポジトリルートで`put_auto(".")`を実行すると`node_modules/`、`.git/`、`venv/`などが含まれる可能性がある。特定のソースディレクトリを対象にする。
+- **完全なカバレッジを期待する**: 自動検出はファイルI/Oとライブラリ呼び出しを見つけるが、ビジネスロジックは見つけない。40-60%のカバレッジ率が典型的であり、残りは手動アノテーションが必要。
+- **依存関係を無視する**: `detect_dependencies = TRUE`フラグは`source()`、`import`、`require()`呼び出しをキャッチしてスクリプト同士をリンクする。無効にするとファイル間の接続が失われる。
+- **言語の不一致**: 非標準の拡張子（例: `.R` vs `.r`、`.jsx` vs `.js`）のファイルは検出されない可能性がある。`get_comment_prefix()`を使用して拡張子が認識されるか確認する。`Dockerfile`や`Makefile`のような拡張子なしファイルは正確なファイル名マッチングでサポートされている。
+- **大規模リポジトリ**: 100以上のソースファイルを持つリポジトリでは、ダイアグラムの可読性を保つためにモジュール/ディレクトリ単位で分析する。
 
 ## 関連スキル
 
-- `install-putior` — prerequisite: putior must be installed first
-- `annotate-source-files` — next step: add manual annotations based on the plan
-- `generate-workflow-diagram` — generate final diagram after annotation is complete
-- `configure-putior-mcp` — use MCP tools for interactive analysis sessions
+- `install-putior` — 前提条件: putiorを先にインストールする必要がある
+- `annotate-source-files` — 次のステップ: 計画に基づいて手動アノテーションを追加する
+- `generate-workflow-diagram` — アノテーション完了後に最終ダイアグラムを生成する
+- `configure-putior-mcp` — インタラクティブな分析セッションにMCPツールを使用する

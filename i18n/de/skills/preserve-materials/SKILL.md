@@ -1,10 +1,10 @@
 ---
 name: preserve-materials
 description: >
-  Preserve and conserve library and archival materials. Covers environmental
+  Preserve and conserve library and archival materials. Umfasst environmental
   controls (temperature, humidity, light), handling procedures, book repair
   techniques (torn pages, loose spines, foxing), acid-free storage, digitization
-  for preservation, and disaster recovery planning. Use when establishing
+  for preservation, and disaster recovery planning. Verwenden wenn establishing
   preservation practices for a new or existing collection, when materials show
   signs of deterioration, when setting up environmental controls for storage,
   when planning digitization to preserve fragile originals, or when creating a
@@ -27,9 +27,9 @@ metadata:
 
 # Materialien konservieren
 
-Preserve and conserve library and archival materials through environmental control, proper handling, repair techniques, and disaster preparedness.
+Preserve and conserve library and archival materials durch environmental control, proper handling, repair techniques, and disaster preparedness.
 
-## When to Use
+## Wann verwenden
 
 - You are establishing preservation practices for a new or existing collection
 - Materials show signs of deterioration (foxing, brittleness, loose bindings)
@@ -37,19 +37,19 @@ Preserve and conserve library and archival materials through environmental contr
 - You are planning digitization to preserve fragile originals
 - You need a disaster recovery plan for a library or archive
 
-## Inputs
+## Eingaben
 
-- **Required**: Materials to preserve (books, manuscripts, photographs, maps, media)
-- **Required**: Current storage conditions (temperature, humidity, light exposure)
+- **Erforderlich**: Materials to preserve (books, manuscripts, photographs, maps, media)
+- **Erforderlich**: Current storage conditions (temperature, humidity, light exposure)
 - **Optional**: Budget for preservation supplies and equipment
 - **Optional**: Digitization equipment (scanner, camera, software)
 - **Optional**: Condition survey of existing collection
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Assess Current Conditions
+### Schritt 1: Bewerten Current Conditions
 
-Survey the environment and the materials to establish a baseline.
+Survey die Umgebung and the materials to establish a baseline.
 
 ```
 Environmental Assessment Checklist:
@@ -82,13 +82,13 @@ Material Condition Survey (sample 10% of collection):
 Record the percentage in each condition category.
 ```
 
-**Expected:** Baseline data for environmental conditions and material health, identifying immediate risks and long-term trends.
+**Erwartet:** Baseline data for environmental conditions and material health, identifying immediate risks and long-term trends.
 
-**On failure:** If monitoring equipment is unavailable, use a basic thermometer/hygrometer from a hardware store. Imprecise data is far better than no data. Prioritize humidity monitoring — it is the single most damaging environmental factor.
+**Bei Fehler:** If monitoring equipment is unavailable, use a basic thermometer/hygrometer from a hardware store. Imprecise data is far better than no data. Priorisieren humidity monitoring — it is the single most damaging environmental factor.
 
-### Step 2: Establish Environmental Controls
+### Schritt 2: Establish Environmental Controls
 
-Create and maintain the conditions that slow deterioration.
+Erstellen and maintain the conditions that slow deterioration.
 
 ```
 Environmental Control Priorities (in order of impact):
@@ -127,13 +127,13 @@ Environmental Control Priorities (in order of impact):
      (-20°C for 72 hours kills most book pests)
 ```
 
-**Expected:** Environmental conditions within target ranges, monitored continuously, with documented response procedures for excursions.
+**Erwartet:** Environmental conditions innerhalb target ranges, monitored continuously, with documented response procedures for excursions.
 
-**On failure:** If HVAC is not controllable (rental space, historic building), focus on microenvironments: archival boxes, silica gel packets, and sealed display cases create local climate control even when the room cannot be managed.
+**Bei Fehler:** If HVAC ist nicht controllable (rental space, historic building), focus on microenvironments: archival boxes, silica gel packets, and sealed display cases create local climate control even when the room cannot be managed.
 
-### Step 3: Handle Materials Properly
+### Schritt 3: Behandeln Materials Properly
 
-Prevent damage from the most common source: human handling.
+Verhindern damage from the most common source: human handling.
 
 ```
 Handling Rules:
@@ -158,11 +158,11 @@ Shelving Rules:
 - Pamphlets in acid-free pamphlet binders, not loose on shelves
 ```
 
-**Expected:** All users and staff follow handling procedures. No new damage from routine use.
+**Erwartet:** All users and staff follow handling procedures. No new damage from routine use.
 
-**On failure:** If damage occurs from handling, repair promptly (Step 4) and retrain the person involved. Most handling damage is cumulative — a single instance of pulling by the headcap won't destroy a book, but doing it daily will.
+**Bei Fehler:** If damage occurs from handling, repair promptly (Step 4) and retrain the person involved. Most handling damage is cumulative — a single instance of pulling by the headcap won't destroy a book, but doing it daily will.
 
-### Step 4: Repair Damaged Materials
+### Schritt 4: Repair Damaged Materials
 
 Perform conservation treatments matched to the damage level.
 
@@ -217,11 +217,11 @@ Essential Repair Supplies:
 - Book press or weights
 ```
 
-**Expected:** Damaged items stabilized using reversible treatments, with documentation in the catalog record.
+**Erwartet:** Damaged items stabilized using reversible treatments, with documentation in the catalog record.
 
-**On failure:** If a repair exceeds your skill level, stabilize the item (wrap in acid-free tissue, place in a protective box) and flag it for professional conservation. A bad repair is worse than no repair.
+**Bei Fehler:** If a repair exceeds your skill level, stabilize the item (wrap in acid-free tissue, place in a protective box) and flag it for professional conservation. A bad repair is worse than no repair.
 
-### Step 5: Store in Archival Materials
+### Schritt 5: Speichern in Archival Materials
 
 Replace harmful storage materials with acid-free alternatives.
 
@@ -257,13 +257,13 @@ Special Format Storage:
 - Audio/video media: upright, in jewel cases, cool and dry
 ```
 
-**Expected:** All materials housed in appropriate archival-quality containers, free from acidic or harmful enclosures.
+**Erwartet:** All materials housed in appropriate archival-quality containers, free from acidic or harmful enclosures.
 
-**On failure:** If archival supplies are beyond budget, prioritize the most valuable and fragile items first. Even placing acid-free tissue between a book and a cardboard box significantly slows acid migration.
+**Bei Fehler:** If archival supplies are beyond budget, prioritize the most valuable and fragile items first. Even placing acid-free tissue zwischen a book and a cardboard box erheblich slows acid migration.
 
-### Step 6: Plan for Disasters
+### Schritt 6: Planen for Disasters
 
-Prepare a response plan for water, fire, mold, and other emergencies.
+Vorbereiten a response plan for water, fire, mold, and other emergencies.
 
 ```
 Disaster Preparedness Essentials:
@@ -295,11 +295,11 @@ Disaster Preparedness Essentials:
    Record all affected items and their condition.
 ```
 
-**Expected:** A written disaster plan, pre-positioned supplies, and a trained response team (even if the "team" is one person).
+**Erwartet:** A written disaster plan, pre-positioned supplies, and a trained response team (even if the "team" is one person).
 
-**On failure:** If a disaster occurs without a plan, the 48-hour rule for water damage is the critical knowledge: get wet materials air-drying or frozen within 48 hours. Everything else can wait.
+**Bei Fehler:** If a disaster occurs ohne a plan, the 48-hour rule for water damage is the critical knowledge: get wet materials air-drying or frozen innerhalb 48 hours. Everything else can wait.
 
-## Validation
+## Validierung
 
 - [ ] Environmental baseline established (temperature, humidity, light)
 - [ ] Monitoring in place (continuous datalogger or daily readings)
@@ -309,16 +309,16 @@ Disaster Preparedness Essentials:
 - [ ] Disaster plan written with priority list and emergency contacts
 - [ ] High-value or fragile items prioritized for preservation attention
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Humidity neglect**: Temperature gets all the attention, but humidity is the primary driver of mold, foxing, warping, and pest infestations. Monitor humidity first
+- **Humidity neglect**: Temperature gets all the attention, but humidity is the primary driver of mold, foxing, warping, and pest infestations. Ueberwachen humidity first
 - **Irreversible repairs**: Superglue, pressure-sensitive tape, and rubber cement permanently damage paper. Always use reversible adhesives (wheat starch paste, PVA)
-- **Over-handling during preservation**: Ironically, zealous preservation efforts can cause more handling damage than benign neglect. Sometimes the best preservation is leaving an item undisturbed in a good environment
-- **Treating foxing aggressively**: Bleaching removes foxing spots but weakens paper fibers. Accept cosmetic imperfections unless they threaten legibility
+- **Over-handling waehrend preservation**: Ironically, zealous preservation efforts can cause more handling damage than benign neglect. Sometimes the best preservation is leaving an item undisturbed in a good environment
+- **Treating foxing aggressively**: Bleaching removes foxing spots but weakens paper fibers. Akzeptieren cosmetic imperfections unless they threaten legibility
 - **No disaster plan**: Most libraries that lose collections to water damage had no plan and no pre-positioned supplies. The plan costs nothing; the loss costs everything
 
-## Related Skills
+## Verwandte Skills
 
 - `catalog-collection` — Catalog records should note preservation actions and condition
 - `curate-collection` — Weeding decisions consider item condition alongside use
-- `maintain-hand-tools` — Tool care principles (clean, oil, store properly) parallel material care
+- `maintain-hand-tools` — Tool care principles (clean, oil, store ordnungsgemaess) parallel material care

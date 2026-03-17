@@ -3,16 +3,15 @@ name: interpret-raman-spectrum
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Interpretiere Raman-Spektren zur Charakterisierung chemischer Bindungen,
-  Kristallstruktur und Materialzusammensetzung. Verwende diesen Skill beim
-  Identifizieren von Raman-aktiven Schwingungsmoden, beim Unterscheiden von
-  Raman- und IR-komplementaerer Information, beim Analysieren von
-  Kohlenstoffmaterialien (D- und G-Banden), beim Charakterisieren
-  anorganischer Materialien oder beim Nutzen von SERS fuer
-  Ultrasensitivitaetsdetektierung.
+  Raman-Spektren systematisch interpretieren um Molekuelschwingungen zu
+  identifizieren, polarisierbarkeitsgetriebene Auswahlregeln zu bewerten,
+  mit komplementaeren IR-Daten zu vergleichen und Depolarisationsverhaeltnisse
+  fuer die Symmetriezuordnung zu evaluieren. Umfasst Identifikation
+  Raman-aktiver Moden, Minderung von Fluoreszenzinterferenzen und Abgleich
+  mit Referenzspektren.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -21,135 +20,156 @@ metadata:
   domain: spectroscopy
   complexity: intermediate
   language: natural
-  tags: spectroscopy, raman, vibrational, polarizability, carbon-materials
+  tags: spectroscopy, raman, polarizability, vibrational, complementary-ir
 ---
 
 # Raman-Spektrum interpretieren
 
-Interpretiere Raman-Streuspektren durch Identifizierung charakteristischer Schwingungsmoden, Auswertung von Intensitaetsverhaeltnissen und Bandenpositionen sowie Ableitung von Strukturinformation ueber chemische Bindungen, Materialkomposition und Kristallgueite.
+Raman-Streuungsspektren analysieren um Molekuelschwingungen zu identifizieren, komplementaere Auswahlregeln zur Infrarotabsorption anzuwenden und Raman-Daten mit IR-Ergebnissen fuer eine umfassende Schwingungsanalyse zu integrieren.
 
 ## Wann verwenden
 
-- Identifizieren von Raman-aktiven Schwingungsmoden organischer oder anorganischer Verbindungen
-- Charakterisieren von Kohlenstoffmaterialien (Graphen, CNT, Diamant, amorphes C) ueber D- und G-Banden
-- Analysieren kristalliner Materialien und Polymorphe
-- Nutzen der Komplementaritaet zur IR-Spektroskopie (Raman aktiv: symmetrische Moden; IR aktiv: asymmetrische Moden)
-- Oberflaechenverstaerkte Raman-Spektroskopie (SERS) fuer Spurenanalytik
+- Analyse von Proben die fuer IR schwierig sind (waessrige Loesungen, versiegelte Behaelter, Fernerkundung)
+- Identifikation symmetrischer Schwingungen die im IR schwach oder inaktiv sind
+- Ergaenzung von IR-Daten unter Nutzung des Prinzips des gegenseitigen Ausschlusses fuer zentrosymmetrische Molekuele
+- Charakterisierung von Kohlenstoffmaterialien (Graphen, Kohlenstoffnanoroehren, Diamant) ueber charakteristische Raman-Banden
+- Analyse anorganischer Verbindungen, Minerale oder kristalliner Phasen wo Raman oft informativer als IR ist
+- Durchfuehrung zerstoerungsfreier In-situ-Analyse (fuer viele Raman-Messungen keine Probenvorbereitung noetig)
 
 ## Eingaben
 
-- **Erforderlich**: Raman-Spektrum mit Wellenzahl (cm-1) und Intensitaet (Streulicht)
-- **Erforderlich**: Anregungswellenlaenge des Lasers (typisch 532, 633, 785, 1064 nm)
-- **Optional**: Polarisationsabhaengigkeitsdaten (Depolarisierungsverhaeltnis)
-- **Optional**: Vergleichsdaten aus Bibliothek oder Literatur
+- **Erforderlich**: Raman-Spektrendaten (Raman-Verschiebung in cm-1 vs. Intensitaet)
+- **Erforderlich**: Anregungslaserwellenlaenge (z.B. 532 nm, 633 nm, 785 nm, 1064 nm)
+- **Optional**: IR-Spektrum derselben Probe fuer komplementaere Analyse
+- **Optional**: Polarisationsdaten (parallele und senkrechte Spektren fuer Depolarisationsverhaeltnisse)
+- **Optional**: Bekannte Summenformel oder Verbindungsklasse
+- **Optional**: Physikalischer Zustand der Probe (fest, fluessig, Loesung, Gas, Duennschicht)
 
 ## Vorgehensweise
 
-### Schritt 1: Basislinienkorrektur und Spektrenueberblick
+### Schritt 1: Spektrenqualitaet bewerten und Artefakte identifizieren
 
-Bereite das Raman-Spektrum fuer die Interpretation vor:
+Das Raman-Spektrum auf Zuverlaessigkeit evaluieren bevor Peaks analysiert werden:
 
-1. **Fluoreszenzuntergrund**: Raman-Spektren haben oft starken Fluoreszenzuntergrund; dieser muss subtrahiert werden (Polynom-Fit oder adaptive Basislinienkorrektur).
-2. **Wellenzahlkalibrierung**: Pruefe gegen bekannte Referenzbanden (z.B. Silizium bei 520 cm-1, Cyclohexan-Banden).
-3. **Hauptbandenpositionen dokumentieren**: Liste alle Stokes-Raman-Banden mit ihren Wellenzahlen auf.
-4. **Signal-Rausch-Verhaeltnis bewerten**: Signifikante Banden muessen S/N > 3 haben.
+1. **Laserwellenlaenge und Fluoreszenz**: Fluoreszenz ist die haeufigste Stoerung in der Raman-Spektroskopie. Sie erzeugt einen breiten, intensiven Untergrund der Raman-Peaks ueberdecken kann. Kuerzerwellige Laser (532 nm) regen mehr Fluoreszenz an; laengerwellige Laser (785 nm, 1064 nm) reduzieren sie auf Kosten schwaeecherer Raman-Signale (Intensitaet skaliert als lambda^-4).
+2. **Signal-Rausch-Verhaeltnis**: Bewerten ob Raman-Peaks klar vom Rauschen unterscheidbar sind. Schwache Raman-Streuer koennten laengere Aufnahmezeiten oder hoehere Laserleistung erfordern.
+3. **Kosmische Strahlung**: Scharfe, schmale Spikes an zufaelligen Positionen sind Artefakte kosmischer Strahlung, keine Raman-Peaks. Sie erscheinen nur in einem Spektrum eines zeitgemittelten Satzes und koennen durch Spike-Filter entfernt werden.
+4. **Basislinienkorrektur**: Eine abfallende oder gekruemmte Basislinie (von Fluoreszenz oder thermischer Emission) sollte subtrahiert werden bevor Peakpositionen und -intensitaeten gemessen werden.
+5. **Photodegradation**: Hohe Laserleistung kann die Probe beschaedigen oder transformieren. Auf Spektrenaenderungen zwischen aufeinanderfolgenden Aufnahmen am selben Punkt pruefen. Leistung reduzieren wenn Degradation beobachtet wird.
+6. **Spektralbereich**: Standard-Raman-Spektren decken 100--4000 cm-1 Raman-Verschiebung ab. Die Niederfrequenz-Grenze haengt vom verwendeten Kanten- oder Notch-Filter zur Blockierung der Rayleigh-Linie ab. Vermerken wenn ein Bereich abgeschnitten ist.
 
-```markdown
-## Spektrenueberblick
-- Anregungswellenlaenge: [nm]
-- Hauptbanden (cm-1): [Liste]
-- Fluoreszenzuntergrund: [niedrig/mittel/stark]
-- Kalibrierungsreferenz: [Substanz, Wellenzahl]
-```
+**Erwartet:** Spektrenqualitaet bewertet, Fluoreszenzniveau dokumentiert, Artefakte (kosmische Strahlung, Basisliniendrift) identifiziert oder korrigiert, und der nutzbare Spektralbereich bestaetigt.
 
-**Erwartet:** Korrigiertes Spektrum mit identifizierten Hauptbanden und bewerteter Datenqualitaet.
+**Bei Fehler:** Wenn Fluoreszenz das Spektrum dominiert (breiter Untergrund >> Raman-Peaks), Neumessung mit laengerwelligem Laser (785 oder 1064 nm) oder oberflaechenverstaerkte Raman-Spektroskopie (SERS) empfehlen. Wenn die Probe degradiert, Laserleistung reduzieren oder rotierende Probenbuehne verwenden.
 
-**Bei Fehler:** Bei starker Fluoreszenz wechsle zu laengerer Anregungswellenlaenge (785 oder 1064 nm) oder wende NIR-Raman an.
+### Schritt 2: Raman-aktive Moden identifizieren und Auswahlregeln anwenden
 
-### Schritt 2: Charakteristische Raman-Banden organischer Verbindungen zuordnen
+Bestimmen welche Schwingungen Raman-aktiv sind und wie sie IR-Daten ergaenzen:
 
-Ordne Banden strukturellen Merkmalen zu:
+1. **Raman-Auswahlregel**: Eine Schwingung ist Raman-aktiv wenn sie eine Aenderung der Polarisierbarkeit des Molekuels beinhaltet. Symmetrische Streckschwingungen (die oft das Molekuelvolumen aendern) sind typischerweise stark im Raman.
+2. **IR-Auswahlregel (zum Vergleich)**: Eine Schwingung ist IR-aktiv wenn sie eine Aenderung des Dipolmoments beinhaltet. Asymmetrische Streckschwingungen sind typischerweise stark im IR.
+3. **Prinzip des gegenseitigen Ausschlusses**: Fuer Molekuele mit Inversionszentrum (zentrosymmetrisch) kann keine Schwingung sowohl Raman-aktiv als auch IR-aktiv sein. Wenn eine Bande in beiden Spektren erscheint, hat das Molekuel kein Symmetriezentrum.
+4. **Allgemeine Komplementaritaet**: Auch fuer nicht-zentrosymmetrische Molekuele sind Schwingungen die im Raman stark sind tendenziell im IR schwach und umgekehrt.
+5. **Raman-beguenstigte Moden identifizieren**: Symmetrische Streckschwingungen (C-C, C=C, S-S, N=N), Ringatmungsmoden und Schwingungen homonuklearer Bindungen (die keine Dipolaenderung haben und IR-inaktiv sind) sind typischerweise stark im Raman.
 
-1. **Streckschwingungsbereiche**:
-   - OH/NH: 3200-3600 cm-1 (schmaeler als in IR bei Raman-aktiven Systemen)
-   - CH (sp3): 2850-3000 cm-1
-   - CH (sp2/aromatisch): 3000-3100 cm-1
-   - C≡C und C≡N: 2100-2260 cm-1 (stark in Raman, schwach in IR)
-   - C=O: 1650-1800 cm-1 (oft schwaecher als in IR)
-   - C=C: 1600-1680 cm-1 (stark in Raman, stark konjugierte Systeme)
-2. **Deformationsschwingungen** (Fingerprint):
-   - CH2-Scissoring: ~1460 cm-1
-   - CH3-Umbrella: ~1375 cm-1
-   - Ring-Atembewegung (Benzol): ~992 cm-1 (sehr charakteristisch, stark)
-3. **Skelettchwingungen** (unterhalb 1000 cm-1): Verbindungsspezifisch.
+**Erwartet:** Auswahlregeln angewendet, Raman-aktive vs. IR-aktive Moden unterschieden, und gegenseitiger Ausschluss getestet falls das Molekuel zentrosymmetrisch ist.
 
-**Erwartet:** Hauptbanden organischer Verbindungen identifiziert und funktionellen Gruppen zugeordnet.
+**Bei Fehler:** Wenn die Molekuelsymmetrie unbekannt ist, die kombinierten Raman- und IR-Daten zur Ableitung nutzen. Wenn eine Bande in beiden Spektren mit vergleichbarer Intensitaet erscheint, ist das Molekuel nicht zentrosymmetrisch.
 
-**Bei Fehler:** Falls Banden nicht zugeordnet werden koennen, nutze Raman-Spektrenbibliotheken (RRUFF, SDBS) fuer Vergleich.
+### Schritt 3: Raman-Verschiebungspositionen analysieren
 
-### Schritt 3: Kohlenstoffmaterialien charakterisieren
+Beobachtete Raman-Banden spezifischen Schwingungsmoden zuordnen unter Verwendung charakteristischer Frequenzen:
 
-Analysiere spezifische Merkmale fuer Kohlenstoffallotrope:
+1. **C-H-Streckbereich (2800--3100 cm-1)**: Aehnlich wie IR, aber Raman-Intensitaeten unterscheiden sich. Aromatische und olefinische C-H (3000--3100 cm-1) sind im Raman oft staerker als aliphatische C-H.
+2. **Dreifachbindungen (2100--2260 cm-1)**: Die symmetrische C-C-Dreifachbindungs-Streckschwingung ist im Raman stark und im IR oft schwach oder abwesend. C-N-Dreifachbindung ist in beiden aktiv.
+3. **Doppelbindungs-Streckschwingungen**:
 
-1. **G-Bande (~1580 cm-1)**: E2g-Mode graphitischer Kohlenstoffe; scharf und stark in Graphen und Graphit; verbreitert in amorphem C.
-2. **D-Bande (~1350 cm-1)**: A1g-Mode, aktiviert durch Defekte und Unordnung; verschwindet in perfektem Graphen.
-3. **ID/IG-Verhaeltnis**: Indikator fuer Defektdichte in Graphen, CNT oder Graphit; hoeher = mehr Defekte.
-4. **2D-Bande (~2700 cm-1)**: Zweite Ordnung, besonders in Graphen ausgepraegt; Form und Position zeigen Lagenanzahl.
-5. **Diamant**: charakteristische Bande bei 1332 cm-1 (Td-Symmetrie, erste Ordnung TO-Phonon).
+| Verschiebung (cm-1) | Zuordnung | Raman-Intensitaet |
+|----------------------|-----------|-------------------|
+| 1600--1680 | C=C-Streckschwingung | Stark |
+| 1650--1800 | C=O-Streckschwingung | Mittel (schwaecher als IR) |
+| 1500--1600 | Aromatische C=C | Mittel bis stark |
 
-```markdown
-## Kohlenstoffanalyse
-| Bande | Position (cm-1) | Halbwertsbreite | ID/IG | Interpretation |
-|-------|----------------|-----------------|-------|----------------|
-| D | [wert] | [wert] | - | Defekte |
-| G | [wert] | [wert] | - | Graphitisch |
-| 2D | [wert] | [wert] | - | Lagenanzahl |
-```
+4. **Aromatische Ringmoden**:
 
-**Erwartet:** Charakterisierung des Kohlenstoffmaterials (Graphen, CNT, amorph) mit Defektdichte-Abschaetzung.
+| Verschiebung (cm-1) | Zuordnung | Anmerkungen |
+|----------------------|-----------|-------------|
+| 990--1010 | Ringatmung (monosubstituiert) | Sehr stark, diagnostisch |
+| 1000 | Ringatmung (sym. trisubstituiert) | Stark |
+| 1580--1600 | Ringstreckschwingung | Mittel |
+| 3050--3070 | Aromatische C-H-Streckschwingung | Mittel |
 
-**Bei Fehler:** Bei stark fluoreszierenden Proben koennen D- und G-Banden schwer trennbar sein; Basislinienkorrektur verfeinern.
+5. **Weitere charakteristische Raman-Banden**:
 
-### Schritt 4: Anorganische Materialien und Polymorphe
+| Verschiebung (cm-1) | Zuordnung |
+|----------------------|-----------|
+| 430--550 | S-S-Streckschwingung (Disulfid) |
+| 570--705 | C-S-Streckschwingung |
+| 800--1100 | C-C-Geruest-Streckschwingung |
+| 630--770 | C-Cl-Streckschwingung |
+| 500--680 | C-Br-Streckschwingung |
+| 200--400 | Metall-Ligand-Streckschwingung |
 
-Nutze Raman zur Phasen- und Kristallstrukturcharakterisierung:
+6. **Kohlenstoffmaterialien**: Die G-Bande (~1580 cm-1, graphitisches sp2) und D-Bande (~1350 cm-1, Defekt/Unordnung) sind diagnostisch fuer Kohlenstoff-Allotrope. Die 2D-Bande (~2700 cm-1) charakterisiert die Graphen-Lagenzahl. Diamant zeigt einen scharfen Peak bei 1332 cm-1.
 
-1. **Gitterschwingungen** (< 400 cm-1): Charakteristisch fuer Kristallstruktur und Ionenbindung; TiO2-Polymorphe (Anatas 144 cm-1, Rutil 447 cm-1).
-2. **Carbonat/Sulfat/Phosphat-Verbindungen**: Starke Streckschwingungen des Anions.
-3. **Mineralidentifikation**: Raman-Bibliotheken wie RRUFF bieten ueber 10000 Mineralspektren.
-4. **Polymorphe unterscheiden**: Unterschiedliche Kristallsymmetrie fuehrt zu unterschiedlichen Raman-Mustern (z.B. Calcit vs. Aragonit).
+**Erwartet:** Alle signifikanten Raman-Banden Schwingungsmoden zugeordnet mit Bezug auf charakteristische Frequenzbereiche.
 
-**Erwartet:** Phase und Polymorph des anorganischen Materials identifiziert.
+**Bei Fehler:** Wenn eine Bande nicht aus den obigen Tabellen zugeordnet werden kann, Spektrendatenbanken konsultieren (RRUFF fuer Minerale, SDBS fuer organische Verbindungen). Nicht zugeordnete Banden koennten zu Kombinationsmoden, Obertoenen oder Gitterschwingungen in kristallinen Proben gehoeren.
 
-**Bei Fehler:** Bei Mehrphasensystemen koennen ueberlagernde Banden auftreten; ortsaufgeloeste Raman-Kartierung ermoeglicht Phasenverteilungsanalyse.
+### Schritt 4: Raman mit IR-Daten vergleichen
 
-### Schritt 5: Strukturelle Schlussfolgerungen zusammenfuehren
+Die zwei komplementaeren Schwingungstechniken integrieren:
 
-Kombiniere alle Raman-Informationen zu einer Gesamtauswertung:
+1. **Korrespondierende Banden tabellarisieren**: Eine Vergleichstabelle erstellen die jede Schwingungsmode mit ihrer Raman-Verschiebung, IR-Frequenz und relativer Intensitaet in jeder Technik auffuehrt.
+2. **Moden identifizieren die nur in einer Technik beobachtet werden**: Moden die im Raman vorhanden aber im IR abwesend sind (oder umgekehrt) liefern Symmetrieinformation.
+3. **Mehrdeutigkeiten aufloesen**: Wo IR-Zuordnungen vorlaeufig waren, pruefen ob Raman durch verschiedene relative Intensitaeten ein klareres Bild liefert.
+4. **Funktionelle Gruppen bestaetigen**: Im IR identifizierte funktionelle Gruppen ueber ihre Raman-Gegenparts bestaetigen.
+5. **Gesamtkonsistenz bewerten**: Die Raman- und IR-Daten sollten wechselseitig konsistent sein. Widersprueche zeigen einen Fehler in der Zuordnung oder Symmetrieannahme an.
 
-1. **Komplementaritaet zur IR**: Raman bevorzugt symmetrische Schwingungen, IR bevorzugt asymmetrische; bei Inversionssymmetrie schliessen sich Aktivitaeten aus (Ausschlussprinzip).
-2. **Quantitative Auswertung**: Banden-Flaechenverhaeltnisse fuer Kompositionsanalyse; Kalibrierung mit Standards.
-3. **Strukturbericht verfassen**: Dokumentiere alle Bandenzuweisungen, Vergleichsdaten und Schlussfolgerungen.
+**Erwartet:** Eine vereinheitlichte Schwingungsanalysetabelle die Raman- und IR-Daten kombiniert, mit durch die komplementaere Information bestaetigten oder verfeinerten Zuordnungen funktioneller Gruppen.
 
-**Erwartet:** Vollstaendige strukturelle Charakterisierung mit explizitem Verweis auf komplementaere Spektralmethoden.
+**Bei Fehler:** Wenn IR-Daten nicht verfuegbar sind, liefert das Raman-Spektrum allein immer noch nuetzliche Information aber mit verringerter Sicherheit. Vermerken welche Zuordnungen von IR-Bestaetigung profitieren wuerden.
+
+### Schritt 5: Polarisationsdaten evaluieren und Ergebnisse dokumentieren
+
+Depolarisationsverhaeltnisse fuer die Symmetriezuordnung nutzen und die abschliessende Analyse zusammenstellen:
+
+1. **Depolarisationsverhaeltnis (rho)**: rho = I_senkrecht / I_parallel, gemessen aus polarisierten Raman-Experimenten.
+   - **rho = 0 bis 0.75**: Polarisierte Bande (rho < 0.75). Total-symmetrische Schwingungen (A-Typ) sind polarisiert.
+   - **rho = 0.75**: Depolarisierte Bande. Nicht-total-symmetrische Schwingungen ergeben rho = 0.75.
+2. **Symmetriezuordnung**: Polarisierte Banden muessen zur total-symmetrischen irreduziblen Darstellung der molekularen Punktgruppe gehoeren.
+3. **Ergebnisse zusammenstellen**: Eine vollstaendige Tabelle aller beobachteten Raman-Banden mit Raman-Verschiebung (cm-1), relativer Intensitaet, Depolarisationsverhaeltnis, Zuordnung und korrespondierender IR-Bande zusammensetzen.
+4. **Mit Referenzspektren vergleichen**: Wenn die Verbindung bekannt ist, das beobachtete Raman-Spektrum mit veroeffentlichten Referenzspektren vergleichen (Datenbanken wie RRUFF, SDBS oder NIST). Uebereinstimmung der Peakpositionen innerhalb +/- 3 cm-1 und passende relative Intensitaeten bestaetigen die Identitaet.
+5. **Unsicherheiten berichten**: Zuordnungen die vorlaeufig bleiben kennzeichnen und vermerken welche zusaetzlichen Experimente Mehrdeutigkeiten aufloesen koennten.
+
+**Erwartet:** Vollstaendige Raman-Analyse mit allen zugeordneten Banden, interpretierten Polarisationsdaten fuer Symmetrie und mit IR und anderen spektroskopischen Daten integrierten Ergebnissen.
+
+**Bei Fehler:** Wenn Polarisationsdaten nicht verfuegbar sind, stuetzt sich die Symmetriezuordnung allein auf Frequenz- und Intensitaetsmuster. Die Einschraenkung vermerken und polarisierte Messungen empfehlen wenn Symmetrieinformation kritisch ist.
 
 ## Validierung
 
-- [ ] Fluoreszenzuntergrund subtrahiert und Kalibrierung geprueft
-- [ ] Alle Hauptbanden zugeordnet
-- [ ] Komplementaritaet zur IR-Spektroskopie beruecksichtigt
-- [ ] Fuer Kohlenstoffmaterialien: ID/IG berechnet
-- [ ] Ergebnis mit Referenzspektren oder Bibliothek verglichen
+- [ ] Spektrenqualitaet bewertet (Fluoreszenz, kosmische Strahlung, Basislinie, Photodegradation)
+- [ ] Raman-Auswahlregeln angewendet und Raman-aktive Moden identifiziert
+- [ ] Prinzip des gegenseitigen Ausschlusses getestet falls das Molekuel zentrosymmetrisch ist
+- [ ] Alle signifikanten Raman-Banden Schwingungsmoden zugeordnet
+- [ ] Raman-Daten wo verfuegbar mit IR-Daten verglichen und integriert
+- [ ] Depolarisationsverhaeltnisse fuer Symmetriezuordnung interpretiert (falls Polarisationsdaten verfuegbar)
+- [ ] Zuordnungen konsistent mit bekannter Molekuelstruktur oder aus anderen Techniken vorgeschlagener Struktur
+- [ ] Ergebnisse wo moeglich mit Referenzspektren verglichen
 
 ## Haeufige Stolperfallen
 
-- **Fluoreszenz ueberdeckt Raman-Signal**: Wechsel zu laengerer Anregungswellenlaenge (785 nm oder 1064 nm) notwendig.
-- **Verwechslung Stokes- und Anti-Stokes-Linien**: Anti-Stokes-Linien (blauverschoben) sind intensitaetsschwaecher und temperaturabhaengig.
-- **Reabsorption bei SERS**: Sehr hohe lokale Feldverstaerkung kann zu nichtlinearen Effekten fuehren.
-- **Thermische Schaeden durch zu hohe Laserleistung**: Probe kann durch Laserheizung degradieren; Leistung reduzieren oder Probe bewegen.
+- **Fluoreszenz ueberwaeltigt das Raman-Signal**: Das haeufigste Problem. Zu laengerwelligem Laser wechseln oder zeitaufgeloeste Detektion verwenden. Keine breiten Fluoreszenzbuckel als Raman-Banden interpretieren.
+- **Kosmische Strahlung mit echten Peaks verwechseln**: Kosmische Strahlung erzeugt scharfe, intensive Spikes die an zufaelligen Positionen erscheinen. Immer auf Reproduzierbarkeit pruefen.
+- **Die Polarisierbarkeits-Auswahlregel vernachlaessigen**: Moden die im IR stark sind koennen im Raman schwach oder abwesend sein und umgekehrt. Nicht dasselbe Intensitaetsmuster wie im IR erwarten.
+- **Probendegradation ignorieren**: Hohe Laserleistung kann die Probe verkohlen, polymerisieren oder phasentransformieren. Spektrenaenderungen zwischen aufeinanderfolgenden Messungen weisen auf Degradation hin.
+- **Annehmen dass alle Raman-Banden Grundtoene sind**: Obertoene und Kombinationsbanden koennen in Raman-Spektren erscheinen.
+- **Niederfrequenzmoden uebersehen**: Gitterschwingungen, Torsionsmoden und Metall-Ligand-Schwingungen erscheinen unter 400 cm-1. Pruefen ob der Notch-/Kantenfilter des Instruments Messungen im Niederfrequenzbereich erlaubt.
 
 ## Verwandte Skills
 
-- `interpret-ir-spectrum` -- komplementaere Schwingungsinformation
-- `interpret-uv-vis-spectrum` -- elektronische Uebergaenge und Resonanz-Raman
-- `plan-spectroscopic-analysis` -- Messstrategie und Methodenauswahl
+- `interpret-ir-spectrum` -- komplementaere Schwingungstechnik fuer dipol-aktive Moden
+- `interpret-nmr-spectrum` -- Molekuelkonnektivitaet fuer vollstaendige Strukturzuordnung bestimmen
+- `interpret-mass-spectrum` -- Summenformel und Fragmentierung etablieren
+- `interpret-uv-vis-spectrum` -- elektronische Uebergaenge und Chromophore charakterisieren
+- `plan-spectroscopic-analysis` -- analytische Techniken vor der Datenerfassung auswaehlen und sequenzieren

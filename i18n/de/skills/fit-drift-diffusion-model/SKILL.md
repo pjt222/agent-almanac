@@ -4,7 +4,7 @@ description: >
   Fit cognitive drift-diffusion models (Ratcliff DDM) to reaction time and
   accuracy data with parameter estimation (drift rate, boundary separation,
   non-decision time), model comparison, and parameter recovery validation.
-  Use when modeling binary decision-making with reaction time data, estimating
+  Verwenden wenn modeling binary decision-making with reaction time data, estimating
   cognitive parameters from experimental data, comparing sequential sampling
   model variants, or decomposing speed-accuracy tradeoff effects into
   latent cognitive components.
@@ -26,9 +26,9 @@ metadata:
 
 # Drift-Diffusions-Modell anpassen
 
-Estimate the parameters of a drift-diffusion model (DDM) from reaction time and accuracy data, evaluate model fit against observed quantiles, compare candidate model variants, and validate estimation quality through parameter recovery simulation.
+Schaetzen der Parameters of a drift-diffusion model (DDM) from reaction time and accuracy data, evaluate model fit gegen observed quantiles, compare candidate model variants, and validate estimation quality durch parameter recovery simulation.
 
-## When to Use
+## Wann verwenden
 
 - Modeling binary decision-making with reaction time data
 - Estimating cognitive parameters (drift rate, boundary separation, non-decision time) from experimental data
@@ -36,22 +36,22 @@ Estimate the parameters of a drift-diffusion model (DDM) from reaction time and 
 - Validating that a DDM fitting pipeline recovers known parameter values
 - Decomposing speed-accuracy tradeoff effects into latent cognitive components
 
-## Inputs
+## Eingaben
 
-- **Required**: Reaction time data with accuracy labels (correct/error) per trial
-- **Required**: Subject and condition identifiers for each trial
-- **Required**: Choice of DDM variant (basic 3-parameter, full 7-parameter, or hierarchical)
+- **Erforderlich**: Reaction time data with accuracy labels (correct/error) per trial
+- **Erforderlich**: Subject and condition identifiers fuer jede trial
+- **Erforderlich**: Choice of DDM variant (basic 3-parameter, full 7-parameter, or hierarchical)
 - **Optional**: Prior distributions for Bayesian estimation (default: weakly informative)
 - **Optional**: Number of simulated datasets for parameter recovery (default: 100)
 - **Optional**: RT filtering bounds in seconds (default: 0.1 to 5.0)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Prepare Reaction Time Data
+### Schritt 1: Vorbereiten Reaction Time Data
 
-Clean and format the raw behavioral data for DDM fitting.
+Bereinigen and format the raw behavioral data for DDM fitting.
 
-1. Load the dataset and inspect columns for subject ID, condition, RT, and accuracy:
+1. Laden die Datenset and inspect columns for subject ID, condition, RT, and accuracy:
 
 ```python
 import pandas as pd
@@ -62,7 +62,7 @@ assert all(col in data.columns for col in required_columns), \
     f"Missing columns: {set(required_columns) - set(data.columns)}"
 ```
 
-2. Filter outlier RTs using configurable bounds:
+2. Filtern outlier RTs using configurable bounds:
 
 ```python
 rt_lower = 0.1  # seconds
@@ -74,7 +74,7 @@ n_removed = n_before - len(data)
 print(f"Removed {n_removed} trials ({100*n_removed/n_before:.1f}%) outside [{rt_lower}, {rt_upper}]s")
 ```
 
-3. Compute summary statistics per subject and condition:
+3. Berechnen summary statistics per subject and condition:
 
 ```python
 summary = data.groupby(["subject_id", "condition"]).agg(
@@ -85,22 +85,22 @@ summary = data.groupby(["subject_id", "condition"]).agg(
 print(summary.describe())
 ```
 
-4. Verify minimum trial counts (DDM needs sufficient data per cell):
+4. Verifizieren minimum trial counts (DDM needs sufficient data per cell):
 
 ```python
 min_trials = summary["n_trials"].min()
 assert min_trials >= 40, f"Minimum trials per cell is {min_trials}; need at least 40 for stable estimation"
 ```
 
-**Expected:** Cleaned dataframe with no RT outliers, at least 40 trials per subject-condition cell, and accuracy rates between 0.50 and 0.99.
+**Erwartet:** Cleaned dataframe with no RT outliers, mindestens 40 trials per subject-condition cell, and accuracy rates zwischen 0.50 and 0.99.
 
-**On failure:** If trial counts are too low, consider collapsing conditions or removing subjects with excessive missing data. If accuracy is at ceiling (>0.99) or floor (<0.55), the DDM may not be identifiable -- check task difficulty.
+**Bei Fehler:** If trial counts are too low, consider collapsing conditions or removing subjects with excessive missing data. If accuracy is at ceiling (>0.99) or floor (<0.55), the DDM may not be identifiable -- check task difficulty.
 
-### Step 2: Select DDM Variant
+### Schritt 2: Auswaehlen DDM Variant
 
-Choose the appropriate model complexity based on the research question.
+Waehlen the appropriate model complexity basierend auf the research question.
 
-1. Define the candidate model variants:
+1. Definieren the candidate model variants:
 
 ```python
 model_variants = {
@@ -122,7 +122,7 @@ model_variants = {
 }
 ```
 
-2. Select based on data characteristics:
+2. Auswaehlen basierend auf data characteristics:
 
 | Criterion | Basic (3-param) | Full (7-param) | Hierarchical |
 |-----------|-----------------|-----------------|--------------|
@@ -131,7 +131,7 @@ model_variants = {
 | Research goal | Group effects | Individual fits | Both levels |
 | Error RT shape | Symmetric | Asymmetric | Either |
 
-3. Configure the selected variant:
+3. Konfigurieren the selected variant:
 
 ```python
 selected_variant = "basic"  # adjust based on criteria above
@@ -140,11 +140,11 @@ print(f"Selected: {selected_variant} ({model_config['free_params']} free paramet
 print(f"Parameters: {', '.join(model_config['params'])}")
 ```
 
-**Expected:** A model variant selected with justification based on trial counts, subject count, and research question.
+**Erwartet:** A model variant selected with justification basierend auf trial counts, subject count, and research question.
 
-**On failure:** If unsure between variants, start with the basic model and add complexity only if residual diagnostics indicate systematic misfit (e.g., error RT distribution mismatch).
+**Bei Fehler:** If unsure zwischen variants, start with the basic model and add complexity only if residual diagnostics indicate systematic misfit (e.g., error RT distribution mismatch).
 
-### Step 3: Estimate Parameters
+### Schritt 3: Schaetzen Parameters
 
 Fit the DDM to data using maximum likelihood or Bayesian estimation.
 
@@ -174,7 +174,7 @@ hddm_model.find_starting_values()
 hddm_model.sample(5000, burn=1000, thin=2, dbname="traces.db", db="pickle")
 ```
 
-3. Extract and store estimated parameters:
+3. Extrahieren and store estimated parameters:
 
 ```python
 params = hddm_model.get_group_estimates()
@@ -194,15 +194,15 @@ print(f"Max Gelman-Rubin R-hat: {max_rhat:.3f}")
 assert max_rhat < 1.1, f"Chains have not converged (R-hat = {max_rhat:.3f})"
 ```
 
-**Expected:** Parameter estimates with standard errors or credible intervals. For Bayesian fits, Gelman-Rubin R-hat < 1.1 for all parameters. Drift rate typically 0.5-4.0, boundary 0.5-2.5, non-decision time 0.15-0.50s.
+**Erwartet:** Parameter estimates with standard errors or credible intervals. For Bayesian fits, Gelman-Rubin R-hat < 1.1 for all parameters. Drift rate typischerweise 0.5-4.0, boundary 0.5-2.5, non-decision time 0.15-0.50s.
 
-**On failure:** If estimation fails to converge, try: (a) tighter parameter bounds, (b) better starting values via grid search, (c) longer chains with more burn-in. If MLE hits boundary values, the model may be misspecified.
+**Bei Fehler:** If estimation fails to converge, try: (a) tighter parameter bounds, (b) better starting values via grid search, (c) longer chains with more burn-in. If MLE hits boundary values, das Modell kann misspecified.
 
-### Step 4: Evaluate Model Fit
+### Schritt 4: Bewerten Modellieren Fit
 
-Compare predicted and observed RT distributions using quantile-based diagnostics.
+Vergleichen predicted and observed RT distributions using quantile-based diagnostics.
 
-1. Generate predicted RT quantiles from the fitted model:
+1. Generieren predicted RT quantiles from the fitted model:
 
 ```python
 import numpy as np
@@ -214,7 +214,7 @@ pred_quantiles = np.quantile(predicted_rts[predicted_rts > 0], quantiles)  # cor
 pred_quantiles_err = np.quantile(np.abs(predicted_rts[predicted_rts < 0]), quantiles)  # error
 ```
 
-2. Compute observed RT quantiles:
+2. Berechnen observed RT quantiles:
 
 ```python
 obs_correct = data[data["accuracy"] == 1]["rt"]
@@ -224,7 +224,7 @@ obs_quantiles = np.quantile(obs_correct, quantiles)
 obs_quantiles_err = np.quantile(obs_error, quantiles) if len(obs_error) > 10 else None
 ```
 
-3. Create a quantile-probability plot (QP plot):
+3. Erstellen a quantile-probability plot (QP plot):
 
 ```python
 import matplotlib.pyplot as plt
@@ -242,7 +242,7 @@ ax.set_title("Quantile-Probability Plot")
 fig.savefig("qp_plot.png", dpi=150)
 ```
 
-4. Compute fit statistic (chi-square on quantile bins):
+4. Berechnen fit statistic (chi-square on quantile bins):
 
 ```python
 from scipy.stats import chisquare
@@ -253,11 +253,11 @@ chi2, p_value = chisquare(observed_proportions, predicted_proportions)
 print(f"Chi-square fit: chi2={chi2:.3f}, p={p_value:.3f}")
 ```
 
-**Expected:** QP plot shows predicted quantiles closely tracking observed quantiles for both correct and error RTs. Chi-square test is non-significant (p > 0.05), indicating adequate fit.
+**Erwartet:** QP plot shows predicted quantiles closely tracking observed quantiles for both correct and error RTs. Chi-square test is non-significant (p > 0.05), indicating adequate fit.
 
-**On failure:** If the model systematically misses fast or slow quantiles, consider adding cross-trial variability parameters (sv, st). If error RT shape is wrong, add starting point variability (sz). Refit with the extended model.
+**Bei Fehler:** If das Modell systematically misses fast or slow quantiles, consider adding cross-trial variability parameters (sv, st). If error RT shape is wrong, add starting point variability (sz). Refit with the extended model.
 
-### Step 5: Compare Models
+### Schritt 5: Vergleichen Models
 
 Use information criteria to select among candidate DDM variants.
 
@@ -275,7 +275,7 @@ for variant_name in ["basic", "full"]:
     }
 ```
 
-2. Compute and compare BIC values:
+2. Berechnen and compare BIC values:
 
 ```python
 print("Model Comparison (BIC):")
@@ -306,15 +306,15 @@ dic = hddm_model.dic
 print(f"DIC: {dic:.1f}")
 ```
 
-**Expected:** A clear winner among models with BIC difference > 6, or a justified decision to retain the simpler model when the difference is < 2.
+**Erwartet:** A clear winner among models with BIC difference > 6, or a justified decision to retain the simpler model when the difference is < 2.
 
-**On failure:** If models are indistinguishable (BIC difference < 2), prefer the simpler model (parsimony). If the full model wins by a large margin, ensure the basic model was not misspecified due to data issues.
+**Bei Fehler:** If models are indistinguishable (BIC difference < 2), prefer the simpler model (parsimony). If the full model wins by a large margin, ensure the basic model was not misspecified due to data issues.
 
-### Step 6: Validate with Parameter Recovery Simulation
+### Schritt 6: Validieren with Parameter Recovery Simulation
 
-Verify the estimation pipeline recovers known parameter values from simulated data.
+Verifizieren the estimation pipeline recovers known parameter values from simulated data.
 
-1. Define the ground-truth parameter grid:
+1. Definieren the ground-truth parameter grid:
 
 ```python
 true_params = {
@@ -324,7 +324,7 @@ true_params = {
 }
 ```
 
-2. Simulate datasets and re-estimate for each combination:
+2. Simulieren datasets and re-estimate fuer jede combination:
 
 ```python
 from itertools import product
@@ -342,7 +342,7 @@ for v_true, a_true, t_true in product(true_params["v"], true_params["a"], true_p
     })
 ```
 
-3. Compute recovery statistics:
+3. Berechnen recovery statistics:
 
 ```python
 recovery_df = pd.DataFrame(recovery_results)
@@ -353,7 +353,7 @@ for param in ["v", "a", "t"]:
     print(f"{param}: r={correlation:.3f}, bias={bias:.4f}, RMSE={rmse:.4f}")
 ```
 
-4. Generate recovery scatter plots:
+4. Generieren recovery scatter plots:
 
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
@@ -370,32 +370,32 @@ fig.tight_layout()
 fig.savefig("parameter_recovery.png", dpi=150)
 ```
 
-**Expected:** Recovery correlations r > 0.85 for all parameters, bias close to zero (< 5% of parameter range), and RMSE within acceptable bounds for the application.
+**Erwartet:** Recovery correlations r > 0.85 for all parameters, bias close to zero (< 5% of parameter range), and RMSE innerhalb acceptable bounds for die Anwendung.
 
-**On failure:** Low recovery for a specific parameter usually means: (a) insufficient trials -- increase n_simulated_trials, (b) parameter tradeoffs -- drift rate and boundary can trade off; fix one to test recoverability, (c) flat likelihood surface -- consider reparameterization or Bayesian estimation with informative priors.
+**Bei Fehler:** Low recovery for a specific parameter normalerweise means: (a) insufficient trials -- increase n_simulated_trials, (b) parameter tradeoffs -- drift rate and boundary can trade off; fix one to test recoverability, (c) flat likelihood surface -- consider reparameterization or Bayesian estimation with informative priors.
 
-## Validation
+## Validierung
 
 - [ ] Input data has RT and accuracy columns with correct types
 - [ ] Outlier filtering removed fewer than 10% of trials
-- [ ] Every subject-condition cell has at least 40 trials
-- [ ] Parameter estimates are within plausible ranges (v: 0-5, a: 0.3-3.0, t: 0.1-0.6)
+- [ ] Every subject-condition cell has mindestens 40 trials
+- [ ] Parameter estimates are innerhalb plausible ranges (v: 0-5, a: 0.3-3.0, t: 0.1-0.6)
 - [ ] Convergence diagnostics pass (R-hat < 1.1 for Bayesian, gradient near zero for MLE)
-- [ ] QP plot shows predicted quantiles within 50ms of observed quantiles
-- [ ] Model comparison yields a clear ranking or justified parsimony decision
+- [ ] QP plot shows predicted quantiles innerhalb 50ms of observed quantiles
+- [ ] Modellieren comparison yields a clear ranking or justified parsimony decision
 - [ ] Parameter recovery correlations exceed r = 0.85 for all free parameters
-- [ ] Recovery bias is less than 5% of the parameter range
+- [ ] Recovery bias is less than 5% of der Parameter range
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Insufficient trial counts**: DDM estimation is data-hungry. Fewer than 40 trials per cell leads to unstable estimates and poor recovery. Always verify trial counts before fitting.
+- **Insufficient trial counts**: DDM estimation is data-hungry. Fewer than 40 trials per cell leads to unstable estimates and poor recovery. Always verify trial counts vor fitting.
 - **Ignoring error RTs**: The DDM jointly models correct and error RT distributions. Discarding error trials throws away information about boundary separation and starting point bias.
-- **Not filtering fast guesses**: RTs below 100ms are likely contaminants (anticipatory responses). Include them and they distort non-decision time estimates.
+- **Not filtering fast guesses**: RTs unter 100ms are likely contaminants (anticipatory responses). Einschliessen them and they distort non-decision time estimates.
 - **Confusing DDM variants**: The basic model assumes no cross-trial variability. If error RTs are systematically faster than correct RTs, you need the full model with sv and sz parameters.
-- **Overfitting with the full model**: The 7-parameter DDM can overfit sparse data. Use BIC (which penalizes complexity) rather than AIC for model selection with DDMs.
-- **Skipping parameter recovery**: Without recovery validation, you cannot distinguish estimation bias from true experimental effects. Always run recovery before interpreting condition differences.
+- **Overfitting with the full model**: The 7-parameter DDM can overfit sparse data. Use BIC (which penalizes complexity) anstatt AIC for model selection with DDMs.
+- **Skipping parameter recovery**: Without recovery validation, you cannot distinguish estimation bias from true experimental effects. Always run recovery vor interpreting condition differences.
 
-## Related Skills
+## Verwandte Skills
 
 - `analyze-diffusion-dynamics` - mathematical analysis of the diffusion process underlying the DDM
 - `implement-diffusion-network` - generative diffusion models that share the forward-process framework

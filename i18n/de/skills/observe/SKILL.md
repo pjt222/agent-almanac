@@ -1,15 +1,15 @@
 ---
 name: observe
 description: >
-  Sustained neutral pattern recognition across systems without urgency or
-  intervention. Maps naturalist field study methodology to AI reasoning:
-  framing the observation target, witnessing with sustained attention,
-  recording patterns, categorizing findings, generating hypotheses, and
-  archiving a pattern library for future reference. Use when a system's
-  behavior is unclear and action would be premature, when debugging an
-  unknown root cause, when a codebase change needs its effects witnessed
-  before further changes, or when auditing own reasoning patterns for
-  biases or recurring errors.
+  Anhaltendes neutrales Mustererkennen ueber Systeme hinweg ohne Dringlichkeit
+  oder Eingriff. Bildet die Methodik naturalistischer Feldstudien auf KI-Reasoning
+  ab: Beobachtungsziel einrahmen, mit anhaltender Aufmerksamkeit bezeugen, Muster
+  aufzeichnen, Erkenntnisse kategorisieren, Hypothesen generieren und eine
+  Musterbibliothek fuer spaetere Referenz archivieren. Verwenden wenn das
+  Verhalten eines Systems unklar ist und Handeln verfrueht waere, beim Debuggen
+  einer unbekannten Ursache, wenn eine Codebasis-Aenderung beobachtet werden muss
+  bevor weitere Aenderungen erfolgen, oder beim Auditieren eigener Reasoning-
+  Muster auf Verzerrungen oder wiederkehrende Fehler.
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -28,164 +28,168 @@ metadata:
 
 # Beobachten
 
-Conduct a structured observation session — framing the observation target, witnessing with sustained neutral attention, recording patterns without interpretation, categorizing findings, generating hypotheses from patterns, and archiving the observations for future reference.
+Eine strukturierte Beobachtungssitzung durchfuehren — das Beobachtungsziel einrahmen, mit anhaltender neutraler Aufmerksamkeit bezeugen, Muster ohne Interpretation aufzeichnen, Erkenntnisse kategorisieren, Hypothesen aus Mustern generieren und die Beobachtungen fuer spaetere Referenz archivieren.
 
-## When to Use
+## Wann verwenden
 
-- A system's behavior is unclear and action without observation would be premature
-- Debugging a problem where the cause is unknown — observation before intervention prevents masking symptoms
-- A codebase or system has been changed and the effects need to be witnessed before further changes are made
-- Understanding user behavior patterns over a conversation to improve future interactions
-- Auditing own reasoning patterns for biases, habits, or recurring errors
-- After `learn` has built a model that needs validation through observation of the system in action
+- Wenn das Verhalten eines Systems unklar ist und Handeln ohne Beobachtung verfrueht waere
+- Beim Debuggen eines Problems mit unbekannter Ursache — Beobachtung vor Eingriff verhindert das Verdecken von Symptomen
+- Wenn eine Codebasis oder ein System geaendert wurde und die Auswirkungen beobachtet werden muessen, bevor weitere Aenderungen vorgenommen werden
+- Zum Verstehen von Benutzerverhaltensmustern ueber eine Konversation hinweg, um kuenftige Interaktionen zu verbessern
+- Beim Auditieren eigener Reasoning-Muster auf Verzerrungen, Gewohnheiten oder wiederkehrende Fehler
+- Nach `learn` ein Modell aufgebaut hat, das durch Beobachtung des Systems im Betrieb validiert werden muss
 
-## Inputs
+## Eingaben
 
-- **Required**: Observation target — a system, codebase, behavior pattern, user interaction, or reasoning process to observe
-- **Optional**: Observation duration/scope — how long or deep to observe before concluding
-- **Optional**: Specific question or hypothesis to guide observation focus
-- **Optional**: Prior observations to compare against (detecting change over time)
+- **Erforderlich**: Beobachtungsziel — ein System, eine Codebasis, ein Verhaltensmuster, eine Benutzerinteraktion oder ein Reasoning-Prozess zum Beobachten
+- **Optional**: Beobachtungsdauer/-umfang — wie lange oder tief beobachtet werden soll, bevor abgeschlossen wird
+- **Optional**: Spezifische Frage oder Hypothese zur Fokussierung der Beobachtung
+- **Optional**: Fruehere Beobachtungen zum Vergleich (Veraenderung ueber Zeit erkennen)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Frame — Set the Observation Focus
+### Schritt 1: Einrahmen — Den Beobachtungsfokus setzen
 
-Define what is being observed, why, and from what perspective.
+Definieren, was beobachtet wird, warum und aus welcher Perspektive.
 
 ```
-Observation Protocol by System Type:
+Beobachtungsprotokoll nach Systemtyp:
 ┌──────────────────┬──────────────────────────┬──────────────────────────┐
-│ System Type      │ What to Observe          │ Categories to Watch      │
+│ Systemtyp        │ Was zu beobachten ist     │ Zu beachtende Kategorien │
 ├──────────────────┼──────────────────────────┼──────────────────────────┤
-│ Codebase         │ File structure, naming   │ Patterns, anti-patterns, │
-│                  │ conventions, dependency  │ consistency, dead code,  │
-│                  │ flow, test coverage,     │ documentation quality,   │
-│                  │ error handling patterns  │ coupling between modules │
+│ Codebasis        │ Dateistruktur, Namens-   │ Muster, Anti-Muster,     │
+│                  │ konventionen, Abhaengig-  │ Konsistenz, toter Code,  │
+│                  │ keitsfluss, Testabdeck-   │ Dokumentationsqualitaet, │
+│                  │ ung, Fehlerbehandlungs-   │ Kopplung zwischen        │
+│                  │ muster                    │ Modulen                  │
 ├──────────────────┼──────────────────────────┼──────────────────────────┤
-│ User behavior    │ Question patterns,       │ Expertise signals, pain  │
-│                  │ vocabulary evolution,    │ points, unstated needs,  │
-│                  │ repeated requests,       │ learning trajectory,     │
-│                  │ emotional signals        │ communication style      │
+│ Benutzer-        │ Fragemuster, Vokabular-  │ Expertise-Signale,       │
+│ verhalten        │ entwicklung, wiederholte  │ Schmerzpunkte, unausge-  │
+│                  │ Anfragen, emotionale      │ sprochene Beduerfnisse,  │
+│                  │ Signale                   │ Lernkurve, Kommunika-    │
+│                  │                          │ tionsstil                │
 ├──────────────────┼──────────────────────────┼──────────────────────────┤
-│ Tool / API       │ Response patterns, error │ Rate limits, edge cases, │
-│                  │ conditions, latency,     │ undocumented behavior,   │
-│                  │ output format variations │ state dependencies       │
+│ Werkzeug / API   │ Antwortmuster, Fehler-   │ Rate-Limits, Grenzfaelle,│
+│                  │ bedingungen, Latenz,      │ undokumentiertes Verhal- │
+│                  │ Ausgabeformat-Variationen │ ten, Zustandsabhaengig-  │
+│                  │                          │ keiten                   │
 ├──────────────────┼──────────────────────────┼──────────────────────────┤
-│ Own reasoning    │ Decision patterns, tool  │ Biases, habits, blind    │
-│                  │ selection habits, error  │ spots, strengths,        │
-│                  │ recovery approaches,     │ recurring failure modes, │
-│                  │ communication patterns   │ over/under-confidence    │
+│ Eigenes          │ Entscheidungsmuster,     │ Verzerrungen, Gewohn-    │
+│ Reasoning        │ Werkzeugauswahlgewohn-   │ heiten, blinde Flecken,  │
+│                  │ heiten, Fehlerbehand-     │ Staerken, wiederkehrende │
+│                  │ lungsansaetze, Kommu-     │ Fehlermodi, Ueber-/      │
+│                  │ nikationsmuster           │ Unterkonfidenz           │
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-1. Select the observation target and name it explicitly
-2. Define the observation boundary: what is included and what is out of scope
-3. State the observation stance: "I am observing, not intervening"
-4. If there is a guiding question, state it — but hold it lightly; be willing to notice things outside the question's scope
-5. Choose the appropriate categories from the matrix above
+1. Das Beobachtungsziel auswaehlen und explizit benennen
+2. Die Beobachtungsgrenze definieren: Was ist eingeschlossen und was ist ausserhalb des Umfangs
+3. Die Beobachtungshaltung formulieren: "Ich beobachte, nicht eingreife"
+4. Wenn es eine leitende Frage gibt, sie formulieren — aber locker halten; bereit sein, Dinge ausserhalb des Fragenumfangs zu bemerken
+5. Die passenden Kategorien aus der obigen Matrix waehlen
 
-**Expected:** A clear frame that directs attention without constraining it. The observer knows where to look and what categories to sort observations into, but remains open to the unexpected.
+**Erwartet:** Ein klarer Rahmen, der Aufmerksamkeit lenkt, ohne sie einzuschraenken. Der Beobachter weiss, wohin er schauen und in welche Kategorien er Beobachtungen einsortieren soll, bleibt aber offen fuer Unerwartetes.
 
-**On failure:** If the observation target is too broad ("observe everything"), narrow to one subsystem or one behavior pattern. If the target is too narrow ("observe this one variable"), zoom out to the surrounding context — the interesting patterns are often at the edges.
+**Bei Fehler:** Wenn das Beobachtungsziel zu breit ist ("alles beobachten"), auf ein Subsystem oder ein Verhaltensmuster eingrenzen. Wenn das Ziel zu eng ist ("diese eine Variable beobachten"), den umgebenden Kontext herauszoomen — die interessanten Muster liegen oft an den Raendern.
 
-### Step 2: Witness — Sustained Neutral Attention
+### Schritt 2: Bezeugen — Anhaltende neutrale Aufmerksamkeit
 
-Hold attention on the observation target without interpreting, judging, or intervening.
+Aufmerksamkeit auf dem Beobachtungsziel halten, ohne zu interpretieren, zu urteilen oder einzugreifen.
 
-1. Begin systematic observation: read files, trace execution paths, review conversation history — whatever the target requires
-2. Record what is seen, not what it means — description before interpretation
-3. Resist the urge to fix problems encountered during observation — note them and continue
-4. Resist the urge to explain patterns before enough observations accumulate
-5. If attention drifts to a different target, note the drift (it may be meaningful) and return to the frame
-6. Maintain observation for a defined period: at least 3-5 distinct data points before moving to categorization
+1. Systematische Beobachtung beginnen: Dateien lesen, Ausfuehrungspfade verfolgen, Konversationsverlauf ueberpruefen — was auch immer das Ziel erfordert
+2. Aufzeichnen, was gesehen wird, nicht was es bedeutet — Beschreibung vor Interpretation
+3. Dem Drang widerstehen, waehrend der Beobachtung angetroffene Probleme sofort zu beheben — sie notieren und fortfahren
+4. Dem Drang widerstehen, Muster zu erklaeren, bevor genug Beobachtungen angesammelt sind
+5. Wenn die Aufmerksamkeit zu einem anderen Ziel abdriftet, die Abdrift notieren (sie kann bedeutsam sein) und zum Rahmen zurueckkehren
+6. Die Beobachtung fuer einen definierten Zeitraum aufrechterhalten: mindestens 3-5 verschiedene Datenpunkte vor dem Uebergang zur Kategorisierung
 
-**Expected:** A collection of raw observations — specific, concrete, and free from interpretation. Observations read like field notes: "File X imports Y but does not use function Z. File A has 300 lines; file B has 30 lines and covers similar functionality."
+**Erwartet:** Eine Sammlung roher Beobachtungen — spezifisch, konkret und frei von Interpretation. Beobachtungen lesen sich wie Feldnotizen: "Datei X importiert Y, verwendet aber Funktion Z nicht. Datei A hat 300 Zeilen; Datei B hat 30 Zeilen und deckt aehnliche Funktionalitaet ab."
 
-**On failure:** If observation immediately triggers analysis ("this is wrong because..."), the analytical habit is overriding the observational stance. Consciously separate the phases: write the observation as a fact, then write the interpretation as a separate note labeled "hypothesis." If neutrality is impossible (strong reaction to what is observed), note the reaction itself as data: "I noticed strong concern when observing X — this may indicate a significant issue or may indicate my bias."
+**Bei Fehler:** Wenn Beobachtung sofort Analyse ausloest ("das ist falsch, weil..."), ueberschreibt die analytische Gewohnheit die Beobachtungshaltung. Bewusst die Phasen trennen: die Beobachtung als Tatsache schreiben, dann die Interpretation als separate Notiz mit dem Label "Hypothese" schreiben. Wenn Neutralitaet unmoeglich ist (starke Reaktion auf Beobachtetes), die Reaktion selbst als Datenpunkt notieren: "Ich bemerkte starke Besorgnis bei der Beobachtung von X — dies kann auf ein bedeutsames Problem hinweisen oder auf meine Verzerrung."
 
-### Step 3: Record — Capture Raw Patterns
+### Schritt 3: Aufzeichnen — Rohe Muster erfassen
 
-Transcribe observations into a structured format while they are fresh.
+Beobachtungen in ein strukturiertes Format uebertragen, solange sie frisch sind.
 
-1. List each observation as a single statement of fact (what was seen, where, when)
-2. Group naturally similar observations — do not force grouping, but notice when observations cluster
-3. Note frequency: did this pattern appear once, occasionally, or pervasively?
-4. Note contrasts: where did the pattern break? Exceptions are often more informative than rules
-5. Note temporal patterns: did the observation change over time, or was it static?
-6. Capture exact evidence: file paths, line numbers, specific words, concrete examples
+1. Jede Beobachtung als einzelne Tatsachenaussage auflisten (was gesehen wurde, wo, wann)
+2. Natuerlich aehnliche Beobachtungen gruppieren — nicht erzwingen, aber bemerken, wenn Beobachtungen clustern
+3. Haeufigkeit notieren: Trat dieses Muster einmal, gelegentlich oder durchgehend auf?
+4. Kontraste notieren: Wo brach das Muster? Ausnahmen sind oft informativer als Regeln
+5. Zeitliche Muster notieren: Veraenderte sich die Beobachtung ueber die Zeit oder war sie statisch?
+6. Exakte Belege erfassen: Dateipfade, Zeilennummern, spezifische Worte, konkrete Beispiele
 
-**Expected:** A structured record of 5-15 discrete observations, each with specific evidence. The record should be detailed enough that another observer could verify each observation independently.
+**Erwartet:** Ein strukturierter Satz von 5-15 diskreten Beobachtungen, jede mit spezifischen Belegen. Der Satz sollte detailliert genug sein, dass ein anderer Beobachter jede Beobachtung unabhaengig verifizieren koennte.
 
-**On failure:** If observations are too abstract ("the code seems messy"), they need grounding in specifics — which files, which patterns, what makes it messy? If observations are too granular ("line 47 has a space before the brace"), zoom out to the pattern level — is this a one-off or a systemic issue?
+**Bei Fehler:** Wenn Beobachtungen zu abstrakt sind ("der Code wirkt unordentlich"), brauchen sie Verankerung in Spezifika — welche Dateien, welche Muster, was macht ihn unordentlich? Wenn Beobachtungen zu granular sind ("Zeile 47 hat ein Leerzeichen vor der Klammer"), auf die Musterebene herauszoomen — ist dies ein Einzelfall oder ein systemisches Problem?
 
-### Step 4: Categorize — Organize Findings
+### Schritt 4: Kategorisieren — Erkenntnisse ordnen
 
-Sort observations into meaningful categories without yet explaining them.
+Beobachtungen in sinnvolle Kategorien einordnen, ohne sie noch zu erklaeren.
 
-1. Review all recorded observations and look for natural groupings
-2. Assign each observation to a category from the Step 1 matrix, or create new categories if needed
-3. Within each category, rank observations by frequency and significance
-4. Identify which categories have many observations (well-documented areas) and which have few (potential blind spots)
-5. Look for cross-category patterns: does the same underlying pattern manifest differently in different categories?
-6. Note any observations that do not fit any category — outliers are often the most interesting data
+1. Alle aufgezeichneten Beobachtungen ueberpruefen und nach natuerlichen Gruppierungen suchen
+2. Jede Beobachtung einer Kategorie aus der Schritt-1-Matrix zuordnen oder bei Bedarf neue Kategorien erstellen
+3. Innerhalb jeder Kategorie Beobachtungen nach Haeufigkeit und Bedeutsamkeit ordnen
+4. Identifizieren, welche Kategorien viele Beobachtungen haben (gut dokumentierte Bereiche) und welche wenige (potenzielle blinde Flecken)
+5. Nach kategorieuebergreifenden Mustern suchen: Manifestiert sich dasselbe zugrundeliegende Muster in verschiedenen Kategorien unterschiedlich?
+6. Beobachtungen notieren, die in keine Kategorie passen — Ausreisser sind oft die interessantesten Daten
 
-**Expected:** A categorized observation map with clear groupings. Each category has specific observations supporting it. The map shows both patterns and gaps.
+**Erwartet:** Eine kategorisierte Beobachtungskarte mit klaren Gruppierungen. Jede Kategorie hat spezifische stuetzende Beobachtungen. Die Karte zeigt sowohl Muster als auch Luecken.
 
-**On failure:** If categorization feels forced, the observations may not have natural groupings — they may be a collection of unrelated findings, which is itself a finding (the system may lack coherent structure). If everything fits neatly into one category, the observation scope was too narrow — zoom out.
+**Bei Fehler:** Wenn Kategorisierung sich erzwungen anfuehlt, haben die Beobachtungen moeglicherweise keine natuerlichen Gruppierungen — sie koennen eine Sammlung unzusammenhaengender Erkenntnisse sein, was an sich eine Erkenntnis ist (das System hat moeglicherweise keine kohaerente Struktur). Wenn alles sauber in eine Kategorie passt, war der Beobachtungsumfang zu eng — herauszoomen.
 
-### Step 5: Theorize — Generate Hypotheses from Patterns
+### Schritt 5: Theoretisieren — Hypothesen aus Mustern generieren
 
-Now — and only now — begin interpreting the observations.
+Jetzt — und erst jetzt — mit der Interpretation der Beobachtungen beginnen.
 
-1. For each major pattern observed, propose a hypothesis: "This pattern exists because..."
-2. For each hypothesis, identify supporting evidence from the observations
-3. For each hypothesis, identify what counter-evidence would disprove it
-4. Rank hypotheses by explanatory power: which one explains the most observations?
-5. Generate at least one contrarian hypothesis: "The obvious explanation is X, but it could also be Y because..."
-6. Identify which hypotheses are testable and which are speculative
+1. Fuer jedes beobachtete Hauptmuster eine Hypothese vorschlagen: "Dieses Muster existiert, weil..."
+2. Fuer jede Hypothese stuetzende Belege aus den Beobachtungen identifizieren
+3. Fuer jede Hypothese identifizieren, welche Gegenbelege sie widerlegen wuerden
+4. Hypothesen nach Erklaerungskraft ordnen: Welche erklaert die meisten Beobachtungen?
+5. Mindestens eine kontraere Hypothese generieren: "Die offensichtliche Erklaerung ist X, aber es koennte auch Y sein, weil..."
+6. Identifizieren, welche Hypothesen testbar und welche spekulativ sind
 
-**Expected:** 2-4 hypotheses that explain the major patterns, each supported by specific observations. At least one hypothesis should be surprising or contrarian. The distinction between observation and interpretation is maintained — it is clear which parts are data and which are theory.
+**Erwartet:** 2-4 Hypothesen, die die Hauptmuster erklaeren, jede gestuetzt durch spezifische Beobachtungen. Mindestens eine Hypothese sollte ueberraschend oder kontraer sein. Die Unterscheidung zwischen Beobachtung und Interpretation wird aufrechterhalten — es ist klar, welche Teile Daten und welche Theorie sind.
 
-**On failure:** If no hypotheses form, the observations may need more time to accumulate — return to Step 2. If too many hypotheses form (everything is "maybe"), select the 2-3 with the strongest evidence and set the rest aside. If only obvious hypotheses form, force a contrarian view: "What if the opposite were true?"
+**Bei Fehler:** Wenn keine Hypothesen entstehen, brauchen die Beobachtungen moeglicherweise mehr Zeit zum Ansammeln — zurueck zu Schritt 2. Wenn zu viele Hypothesen entstehen (alles ist "vielleicht"), die 2-3 mit den staerksten Belegen auswaehlen und den Rest beiseitelegen. Wenn nur offensichtliche Hypothesen entstehen, eine kontraere Sichtweise erzwingen: "Was waere, wenn das Gegenteil wahr waere?"
 
-### Step 6: Archive — Store the Pattern Library
+### Schritt 6: Archivieren — Die Musterbibliothek speichern
 
-Preserve the observations and hypotheses for future reference.
+Die Beobachtungen und Hypothesen fuer spaetere Referenz aufbewahren.
 
-1. Summarize the key findings: 3-5 patterns with evidence
-2. State the leading hypotheses and their confidence levels
-3. Note what was not observed (potential blind spots)
-4. Identify follow-up observations that would strengthen or weaken the hypotheses
-5. If the patterns are durable (will be relevant across sessions), consider updating MEMORY.md
-6. Tag the observations with context: when they were made, what prompted them, what scope was covered
+1. Die wichtigsten Erkenntnisse zusammenfassen: 3-5 Muster mit Belegen
+2. Die fuehrenden Hypothesen und ihre Konfidenzniveaus formulieren
+3. Notieren, was nicht beobachtet wurde (potenzielle blinde Flecken)
+4. Folgebeobachtungen identifizieren, die die Hypothesen staerken oder schwaechen wuerden
+5. Wenn die Muster dauerhaft sind (sitzungsuebergreifend relevant), erwaegen, MEMORY.md zu aktualisieren
+6. Die Beobachtungen mit Kontext versehen: wann sie gemacht wurden, was sie ausgeloest hat, welcher Umfang abgedeckt wurde
 
-**Expected:** An archive that future observation sessions can build on. The archive distinguishes clearly between observations (data) and hypotheses (interpretation). It is honest about confidence levels and gaps.
+**Erwartet:** Ein Archiv, auf dem kuenftige Beobachtungssitzungen aufbauen koennen. Das Archiv unterscheidet klar zwischen Beobachtungen (Daten) und Hypothesen (Interpretation). Es ist ehrlich ueber Konfidenzniveaus und Luecken.
 
-**On failure:** If the observations do not feel worth archiving, they may have been too shallow — or they may be genuinely routine (not every observation session produces insights). Archive even negative results: "Observed X and found no anomalies" is useful future context.
+**Bei Fehler:** Wenn die Beobachtungen nicht archivierenswert erscheinen, waren sie moeglicherweise zu oberflaechlich — oder sie sind wirklich routinemaessig (nicht jede Beobachtungssitzung erzeugt Erkenntnisse). Auch negative Ergebnisse archivieren: "X beobachtet und keine Anomalien gefunden" ist nuetzlicher kuenftiger Kontext.
 
-## Validation
+## Validierung
 
-- [ ] The observation frame was set before any observation began (not free-form wandering)
-- [ ] Raw observations were recorded as facts before any interpretation
-- [ ] At least 5 discrete observations were captured with specific evidence
-- [ ] Interpretation (hypotheses) was clearly separated from observation (data)
-- [ ] At least one surprising or contrarian finding was generated
-- [ ] The archived record is specific enough for another observer to verify
+- [ ] Der Beobachtungsrahmen wurde gesetzt, bevor eine Beobachtung begann (kein freies Umherschweifen)
+- [ ] Rohe Beobachtungen wurden als Tatsachen aufgezeichnet, bevor interpretiert wurde
+- [ ] Mindestens 5 diskrete Beobachtungen wurden mit spezifischen Belegen erfasst
+- [ ] Interpretation (Hypothesen) wurde klar von Beobachtung (Daten) getrennt
+- [ ] Mindestens eine ueberraschende oder kontraere Erkenntnis wurde generiert
+- [ ] Der archivierte Satz ist spezifisch genug, damit ein anderer Beobachter verifizieren kann
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Premature intervention**: Seeing a problem and fixing it immediately, losing the opportunity to understand the broader pattern it belongs to
-- **Observation bias**: Seeing what is expected rather than what is present. Expectations filter perception — the clearing step in Step 1 mitigates this but does not eliminate it
-- **Analysis paralysis**: Observing endlessly without ever moving to action. Set a time or data-point limit and commit to concluding
-- **Narrative imposition**: Constructing a story that connects observations even when the connections are weak. Not all observations form a coherent narrative — disconnected findings are valid
-- **Confusing familiarity with understanding**: "I have seen this before" is not the same as "I understand why this is here." Prior exposure can create false confidence
-- **Ignoring own reactions**: The observer's emotional or cognitive reactions to observations are data. A sense of confusion, boredom, or alarm about a system often contains real signal
+- **Vorzeitiger Eingriff**: Ein Problem sehen und es sofort beheben, wodurch die Gelegenheit verloren geht, das breitere Muster zu verstehen, zu dem es gehoert
+- **Beobachtungsverzerrung**: Sehen, was erwartet wird, statt was vorhanden ist. Erwartungen filtern die Wahrnehmung — der Klaerungsschritt in Schritt 1 mildert dies, eliminiert es aber nicht
+- **Analyse-Paralyse**: Endlos beobachten, ohne jemals zum Handeln ueberzugehen. Ein Zeit- oder Datenpunkt-Limit setzen und sich zum Abschliessen verpflichten
+- **Narrativ-Aufzwingung**: Eine Geschichte konstruieren, die Beobachtungen verbindet, selbst wenn die Verbindungen schwach sind. Nicht alle Beobachtungen bilden ein kohaerentes Narrativ — zusammenhanglose Erkenntnisse sind gueltig
+- **Vertrautheit mit Verstaendnis verwechseln**: "Das habe ich schon gesehen" ist nicht dasselbe wie "Ich verstehe, warum das hier ist." Fruehere Exposition kann falsche Konfidenz erzeugen
+- **Eigene Reaktionen ignorieren**: Die emotionalen oder kognitiven Reaktionen des Beobachters auf Beobachtungen sind Daten. Ein Gefuehl von Verwirrung, Langeweile oder Alarm ueber ein System enthaelt oft echtes Signal
 
-## Related Skills
+## Verwandte Skills
 
-- `observe-guidance` — the human-guidance variant for coaching a person in systematic observation
-- `learn` — observation feeds learning by providing raw data for model-building
-- `listen` — outward-focused attention toward user signals; observation is broader-scope attention toward any system
-- `remote-viewing` — intuitive exploration that can be validated through systematic observation
-- `meditate` — develops the sustained attention capacity that observation requires
-- `awareness` — threat-focused situational awareness; observation is curiosity-driven rather than defense-driven
+- `observe-guidance` — die Variante zur menschlichen Anleitung, um eine Person in systematischer Beobachtung zu coachen
+- `learn` — Beobachtung speist Lernen, indem sie Rohdaten fuer den Modellaufbau liefert
+- `listen` — nach aussen gerichtete Aufmerksamkeit auf Benutzersignale; Beobachtung ist breiter angelegte Aufmerksamkeit auf jedes System
+- `remote-viewing` — intuitive Erforschung, die durch systematische Beobachtung validiert werden kann
+- `meditate` — entwickelt die anhaltende Aufmerksamkeitsfaehigkeit, die Beobachtung erfordert
+- `awareness` — bedrohungsfokussiertes Situationsbewusstsein; Beobachtung ist neugiergetrieben statt verteidigungsgetrieben

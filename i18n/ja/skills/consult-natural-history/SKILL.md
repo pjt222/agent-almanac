@@ -1,14 +1,11 @@
 ---
 name: consult-natural-history
 description: >
-  Reference Hildegard von Bingen's Physica natural history knowledge. Covers
-  classification of plants, stones, animals, fish, birds, elements, and trees
-  with their medicinal, symbolic, and practical properties. Enables cross-
-  referencing between categories and application guidance. Use when exploring
-  a specific plant, stone, or animal from Hildegard's perspective, researching
-  medieval natural history and cosmology, cross-referencing properties across
-  categories, or integrating Physica knowledge into health, spiritual, or
-  creative practice.
+  ヒルデガルト・フォン・ビンゲンのPhysicaの博物学知識を参照する。植物、鉱物、
+  動物、魚、鳥、元素、樹木の分類とその薬用、象徴的、実用的特性をカバーする。
+  カテゴリ間の相互参照と応用ガイダンスを提供する。ヒルデガルトの視点から特定の
+  植物・鉱物・動物を探求する時、中世の博物学と宇宙論を研究する時、カテゴリ間で
+  特性を相互参照する時、Physicaの知識を健康・精神・創造的実践に統合する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,32 +22,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 自然史の参照
+# 博物学の参照
 
-Reference Hildegard von Bingen's *Physica* for natural history knowledge — properties of plants, stones, animals, fish, birds, elements, and trees with their medicinal, symbolic, and practical applications.
+ヒルデガルト・フォン・ビンゲンの *Physica* で博物学知識を参照する — 植物、鉱物、動物、魚、鳥、元素、樹木の特性とその薬用、象徴的、実用的応用。
 
 ## 使用タイミング
 
-- You need to understand a specific plant, stone, or animal from Hildegard's perspective
-- You want to explore symbolic or medicinal properties of natural objects in *Physica*
-- You are researching medieval natural history and cosmology
-- You need to cross-reference properties across categories (e.g., a plant and a stone with similar temperament)
-- You want to integrate *Physica*'s knowledge into health, spiritual, or creative practice
-- You are studying the relationship between nature and theology in Hildegard's thought
+- ヒルデガルトの視点から特定の植物、鉱物、または動物を理解する必要がある時
+- *Physica* における自然物の象徴的または薬用特性を探求したい時
+- 中世の博物学と宇宙論を研究している時
+- カテゴリ間で特性を相互参照する必要がある時（例：類似の気質を持つ植物と鉱物）
+- *Physica* の知識を健康、精神的、または創造的実践に統合したい時
+- ヒルデガルトの思想における自然と神学の関係を研究している時
 
 ## 入力
 
-- **必須**: Category to consult (plants, stones, animals, fish, birds, elements, trees, reptiles, metals)
-- **必須**: Specific item or property inquiry (e.g., "emerald", "fennel", "properties of fire element")
-- **任意**: Application context (medicinal, symbolic, liturgical, practical)
-- **任意**: Related temperament or ailment (to guide property interpretation)
-- **任意**: Cross-reference request (e.g., "plants and stones for cold temperament")
+- **必須**: 参照するカテゴリ（植物、鉱物、動物、魚、鳥、元素、樹木、爬虫類、金属）
+- **必須**: 特定の項目または特性の問い合わせ（例：「エメラルド」「フェンネル」「火の元素の特性」）
+- **任意**: 応用の文脈（薬用、象徴的、典礼的、実用的）
+- **任意**: 関連する気質または疾患（特性の解釈を導くため）
+- **任意**: 相互参照リクエスト（例：「冷たい気質に対する植物と鉱物」）
 
 ## 手順
 
-### ステップ1: Identify the Category in Physica
+### ステップ1: Physicaのカテゴリの特定
 
-Determine which of the nine books of *Physica* contains the requested knowledge.
+*Physica* の9巻のうち、要求された知識を含む巻を特定する。
 
 ```
 Physica — Nine Books of Natural History:
@@ -100,13 +97,13 @@ Lookup Process:
 4. Note symbolic or theological associations if relevant
 ```
 
-**期待結果:** Correct book/category identified for the inquiry (e.g., "emerald" → Book IV Stones; "fennel" → Book I Plants).
+**期待結果:** 問い合わせに対する正しい巻/カテゴリが特定される（例：「エメラルド」→ 第IV巻 鉱物、「フェンネル」→ 第I巻 植物）。
 
-**失敗時:** If uncertain which category, search multiple. Example: "willow" could be Book I (plant) or Book III (tree) — Hildegard lists it in Book III as a tree with bark and wood properties.
+**失敗時:** どのカテゴリか不確かな場合、複数を検索する。例：「柳」は第I巻（植物）にも第III巻（樹木）にもある可能性がある — ヒルデガルトは樹皮と木材の特性を持つ樹木として第III巻に記載。
 
-### ステップ2: Extract Properties and Applications
+### ステップ2: 特性と応用の抽出
 
-Retrieve the specific properties Hildegard attributes to the item.
+ヒルデガルトがその項目に帰している具体的な特性を取得する。
 
 ```
 Property Categories in Physica:
@@ -167,13 +164,13 @@ OAK TREE (Book III, Chapter 5):
 - Medicinal: Oak bark decoction for diarrhea, wounds (external)
 ```
 
-**期待結果:** Properties extracted with temperature, moisture, medicinal use, and symbolic associations clearly noted.
+**期待結果:** 温度、湿度、薬用、象徴的関連が明確に記載された特性の抽出。
 
-**失敗時:** If *Physica* entry is brief or unclear, supplement with known temperamental logic. Example: If Hildegard says only "it is warm," infer that it treats cold conditions and avoid in hot conditions.
+**失敗時:** *Physica* のエントリが簡潔または不明確な場合、既知の気質論理で補足する。例：ヒルデガルトが「温かい」としか言っていない場合、冷たい状態を治療し、暑い状態では避けるべきと推論する。
 
-### ステップ3: Cross-Reference Between Categories (Optional)
+### ステップ3: カテゴリ間の相互参照（任意）
 
-Identify related items across categories that share properties or work synergistically.
+特性を共有したり相乗効果のあるカテゴリ間の関連項目を特定する。
 
 ```
 Cross-Referencing Patterns:
@@ -218,13 +215,13 @@ Strength/Endurance:
 - METALS: Iron (Book IX) — fortitude, weapon-making
 ```
 
-**期待結果:** Related items identified across 2-3 categories that share temperament, medicinal use, or symbolic meaning. Synergistic use suggested where appropriate.
+**期待結果:** 気質、薬用、または象徴的意味を共有する2〜3カテゴリにわたる関連項目が特定される。適切な場合に相乗的使用が提案される。
 
-**失敗時:** If cross-references are unclear, focus on single-category lookup. Cross-referencing is enrichment, not essential for basic consultation.
+**失敗時:** 相互参照が不明確な場合、単一カテゴリの検索に焦点を当てる。相互参照は基本的な参照の強化であり、必須ではない。
 
-### ステップ4: Application Guidance
+### ステップ4: 応用ガイダンス
 
-Provide practical or symbolic guidance for using the knowledge.
+知識を使用するための実用的または象徴的なガイダンスを提供する。
 
 ```
 Application Types:
@@ -273,13 +270,13 @@ stones (Book IV). Compare to *Scivias* Book I for theological integration of
 creation and redemption."
 ```
 
-**期待結果:** Clear, actionable guidance for using *Physica* knowledge in context (medicinal, spiritual, seasonal, scholarly). User knows what to do with the information.
+**期待結果:** 文脈に応じた（薬用、精神的、季節的、学術的）*Physica* 知識の使用に関する明確で実行可能なガイダンス。ユーザーが情報の使い方を理解している。
 
-**失敗時:** If application is unclear, provide the raw *Physica* entry text and let user determine application. Hildegard's entries are often self-explanatory.
+**失敗時:** 応用が不明確な場合、*Physica* のエントリテキストをそのまま提供し、ユーザーに応用を判断させる。ヒルデガルトのエントリはしばしば自明的。
 
-### ステップ5: Contextualize within Hildegard's Holistic System
+### ステップ5: ヒルデガルトの全体論的システム内での文脈化
 
-Integrate *Physica* knowledge with broader Hildegardian health and spiritual practice.
+*Physica* の知識をより広いヒルデガルト的健康・精神的実践と統合する。
 
 ```
 Integration with Other Hildegardian Practices:
@@ -324,35 +321,35 @@ Hildegard's medicine is NOT isolated remedies but integrated practice:
 Body (herbs, diet), Soul (prayer, music), Nature (seasons, viriditas)
 ```
 
-**期待結果:** User understands *Physica* as one component of Hildegard's holistic system. Cross-references to temperament, viriditas, and liturgical context provided where relevant.
+**期待結果:** ユーザーが *Physica* をヒルデガルトの全体論的システムの一構成要素として理解する。気質、ヴィリディタス、典礼的文脈への相互参照が関連する場合に提供される。
 
-**失敗時:** If integration feels complex, focus on immediate practical use (Step 4) and defer holistic integration for advanced study.
+**失敗時:** 統合が複雑に感じる場合、即座の実用的使用（ステップ4）に焦点を当て、全体論的統合は上級の学習に先送りする。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Correct *Physica* book/category identified (I–IX)
-- [ ] Properties extracted: temperature, moisture, medicinal use, symbolic meaning
-- [ ] Contraindications or cautions noted (if any)
-- [ ] Application guidance provided (medicinal, spiritual, seasonal, or scholarly)
-- [ ] Cross-references noted (if requested) across 2+ categories
-- [ ] Integration with broader Hildegardian system contextualized
-- [ ] User informed this is medieval natural history, not modern scientific taxonomy
+- [ ] 正しい *Physica* の巻/カテゴリが特定された（I〜IX）
+- [ ] 特性が抽出された：温度、湿度、薬用、象徴的意味
+- [ ] 禁忌または注意事項が記載された（ある場合）
+- [ ] 応用ガイダンスが提供された（薬用、精神的、季節的、または学術的）
+- [ ] 相互参照が記載された（要求された場合）2つ以上のカテゴリにわたって
+- [ ] より広いヒルデガルト的システムとの統合が文脈化された
+- [ ] これが中世の博物学であり、近代的な科学的分類ではないことがユーザーに伝えられた
 
 ## よくある落とし穴
 
-1. **Modern Scientific Overlay**: *Physica* is pre-scientific. Don't expect botanical accuracy by Linnaean standards
-2. **Literal Ingredient Substitution**: Medieval plants may differ from modern cultivars. Research carefully before using
-3. **Ignoring Temperament**: Hildegard's properties are temperamental (hot/cold, moist/dry), not chemical. Context matters
-4. **Isolated Remedy Focus**: *Physica* is not a standalone herbal. It integrates with *Causae et Curae*, viriditas, and spirituality
-5. **Animal Cruelty**: Some *Physica* remedies use animal parts. Adapt ethically or omit
-6. **Stone Ingestion**: Some remedies involve powdering stones in wine. Modern safety: Do NOT ingest stones/minerals
-7. **Symbolic Dismissal**: *Physica*'s symbolic meanings are integral to Hildegard's theology. Don't separate "practical" from "spiritual"
+1. **近代科学の重ね合わせ**: *Physica* は前科学的。リンネ分類学の基準による植物学的正確性を期待しない
+2. **文字通りの成分代替**: 中世の植物は現代の栽培品種とは異なる可能性がある。使用前に慎重に調査する
+3. **気質の無視**: ヒルデガルトの特性は気質的（温/冷、湿/乾）であり、化学的ではない。文脈が重要
+4. **孤立した処方への焦点**: *Physica* は独立したハーブ辞典ではない。*Causae et Curae*、ヴィリディタス、精神性と統合される
+5. **動物への虐待**: 一部の *Physica* の処方は動物の部位を使用する。倫理的に適応するか省略する
+6. **鉱物の摂取**: 一部の処方は鉱物をワインで粉砕することを含む。現代の安全性：石/鉱物を摂取しない
+7. **象徴の軽視**: *Physica* の象徴的意味はヒルデガルトの神学に不可欠。「実用的」を「精神的」から分離しない
 
 ## 関連スキル
 
-- `formulate-herbal-remedy` — Uses *Physica* Book I (Plants) as primary source
-- `assess-holistic-health` — *Physica* properties align with temperament system in *Causae et Curae*
-- `practice-viriditas` — *Physica* as catalog of viriditas expressions in creation
-- `compose-sacred-music` — Many chants reference *Physica* natural imagery
-- `heal` (esoteric domain) — *Physica* remedies as part of holistic healing modalities
-- `prepare-soil` (gardening domain) — Growing *Physica* medicinal plants
+- `formulate-herbal-remedy` -- *Physica* 第I巻（植物）を主要ソースとして使用
+- `assess-holistic-health` -- *Physica* の特性は *Causae et Curae* の気質システムと整合する
+- `practice-viriditas` -- 創造におけるヴィリディタス表現のカタログとしての *Physica*
+- `compose-sacred-music` -- 多くの聖歌が *Physica* の自然のイメージを参照する
+- `heal`（エソテリックドメイン）-- 全体論的ヒーリングモダリティの一部としての *Physica* の処方
+- `prepare-soil`（ガーデニングドメイン）-- *Physica* の薬用植物の栽培

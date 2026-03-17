@@ -1,14 +1,12 @@
 ---
 name: forage-plants
 description: >
-  Identify and safely gather edible and useful wild plants. Covers safety rules
-  and deadly plant recognition, habitat reading, multi-feature identification
-  methodology, the universal edibility test, sustainable harvesting practices,
-  preparation methods, reaction monitoring, and building knowledge with
-  beginner-friendly universal species. Use when supplementing food supply in a
-  wilderness or survival setting, needing medicinal or utility plants, identifying
-  plants around camp for safety, or in long-term scenarios where foraging extends
-  available rations.
+  食用および有用な野生植物を同定し安全に採取する。安全規則と致死性植物の認識、
+  生息地の読解、複数特徴による同定方法、汎用食用テスト、持続可能な収穫実践、
+  調理方法、反応モニタリング、初心者向けの汎用種による知識構築を網羅する。
+  野生またはサバイバル環境での食料供給の補完時、薬用または実用植物が必要な時、
+  キャンプ周辺の植物の安全性確認時、または採取により利用可能な食料を延長する
+  長期シナリオ時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,31 +23,31 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 植物の採集
+# 野生植物の採取
 
-Identify and safely gather edible and useful wild plants in wilderness settings.
+野生環境で食用および有用な野生植物を同定し安全に採取する。
 
 ## 使用タイミング
 
-- You need to supplement food supply in a wilderness or survival setting
-- You need medicinal or utility plants (cordage, tinder, insect repellent)
-- You want to identify plants around camp for safety (avoid toxic species)
-- Long-term wilderness scenario where foraging extends available rations
+- 野生またはサバイバル環境で食料供給を補完する必要がある時
+- 薬用または実用植物（コーデージ、火口、防虫剤）が必要な時
+- キャンプ周辺の植物を安全のために同定したい時（有毒種の回避）
+- 採取により利用可能な食料を延長する長期野生シナリオ
 
 ## 入力
 
-- **必須**: A habitat to forage in (forest, meadow, wetland, shoreline)
-- **必須**: Ability to observe fine plant details (leaf shape, arrangement, flower structure)
-- **任意**: Field guide or reference material for the region
-- **任意**: Container for collected plants
-- **任意**: Knife for harvesting
-- **任意**: Fire and water for preparation (see `make-fire`, `purify-water`)
+- **必須**: 採取する生息地（森林、草地、湿地、海岸線）
+- **必須**: 植物の微細な詳細（葉の形状、配置、花の構造）を観察する能力
+- **任意**: その地域のフィールドガイドまたは参考資料
+- **任意**: 採取した植物を入れる容器
+- **任意**: 収穫用のナイフ
+- **任意**: 調理のための火と水（`make-fire`、`purify-water`参照）
 
 ## 手順
 
-### ステップ1: Know the Deadly Plants First
+### ステップ1: まず致死性植物を知る
 
-Before learning what to eat, learn what will kill you. Memorize these high-risk families and species for your region.
+何を食べるかを学ぶ前に、何があなたを殺すかを学ぶ。あなたの地域のこれらの高リスク科と種を記憶する。
 
 ```
 Critical "Never Eat" Plants (Northern Hemisphere):
@@ -87,13 +85,13 @@ Absolute Rules:
 5. NEVER eat plants from the carrot/parsley family (Apiaceae) unless certain — this family contains the deadliest plants alongside the most common herbs
 ```
 
-**期待結果:** You can recognize the most dangerous plants in your region on sight and will not confuse them with edible species.
+**期待結果:** 自分の地域で最も危険な植物を一目で認識でき、食用種と混同しない。
 
-**失敗時:** If unsure about any plant in these families, do not eat it. The cost of a false positive (eating a deadly plant) is death. The cost of a false negative (skipping a safe plant) is a missed meal. Always err toward caution.
+**失敗時:** これらの科のいずれかの植物について不確実な場合、食べない。偽陽性（致死性植物を食べる）のコストは死である。偽陰性（安全な植物をスキップする）のコストは食事1回分の損失にすぎない。常に慎重側に判断する。
 
-### ステップ2: Read the Habitat
+### ステップ2: 生息地を読む
 
-Different habitats produce different resources. Survey the area before collecting.
+異なる生息地は異なる資源を産出する。採取前にエリアを調査する。
 
 ```
 Habitat-to-Resource Mapping:
@@ -124,13 +122,13 @@ Habitat-to-Resource Mapping:
 └──────────────────┴─────────────────────────────┴──────────────────────────┘
 ```
 
-**期待結果:** You identify which habitat type you are in and have a shortlist of likely edible species to look for.
+**期待結果:** 自分がいる生息地タイプを特定し、探すべき食用種のショートリストができている。
 
-**失敗時:** If the habitat is unfamiliar or plant diversity is low (dense conifer forest, desert), focus on the universal species in Step 8. In arid environments, look for cacti pads (Opuntia), mesquite pods, or acorns from oaks. In deep forest, look for inner bark (cambium) of pine, birch, or basswood as emergency calories.
+**失敗時:** 生息地が馴染みがないか植物多様性が低い場合（密生した針葉樹林、砂漠）、ステップ8の汎用種に集中する。乾燥環境ではサボテンのパッド（ウチワサボテン）、メスキートの莢、またはオークのドングリを探す。深い森林では、緊急カロリー源として松、白樺、またはシナノキの内樹皮（形成層）を探す。
 
-### ステップ3: Identify Using Multiple Features
+### ステップ3: 複数の特徴を使用して同定する
 
-Never identify a plant by a single feature. Use the multi-feature method.
+単一の特徴で植物を同定しない。複数特徴法を使用する。
 
 ```
 Identification Checklist — Confirm ALL of the following:
@@ -171,13 +169,13 @@ Rule: You need a match on ALL features, not just some.
       A single mismatch means you have the wrong plant.
 ```
 
-**期待結果:** Positive identification based on at least 5 matching features. You can name the species and explain why it is not a dangerous look-alike.
+**期待結果:** 少なくとも5つの一致する特徴に基づく正の同定。種を名前で挙げ、なぜ危険な類似種ではないかを説明できる。
 
-**失敗時:** If any feature does not match your reference, do not eat the plant. Set it aside and move to another candidate. Look-alikes are the primary cause of foraging poisoning — wild carrot (edible) vs. poison hemlock (deadly) differ in stem markings and smell but share leaf shape.
+**失敗時:** いずれかの特徴が参考資料と一致しない場合、その植物を食べない。脇に置いて別の候補に移る。類似種は採取中毒の主な原因である — ワイルドキャロット（食用）vs. ポイズンヘムロック（致死）は茎の模様と匂いが異なるが葉の形状は共通。
 
-### ステップ4: Apply the Universal Edibility Test (Emergency Only)
+### ステップ4: 汎用食用テストの適用（緊急時のみ）
 
-This test is a last resort for completely unknown plants when you have no reference material and are facing starvation. It takes 24+ hours and carries risk.
+このテストは参考資料がなく完全に未知の植物で、飢餓に直面している場合の最後の手段である。24時間以上かかり、リスクを伴う。
 
 ```
 Universal Edibility Test Protocol:
@@ -216,13 +214,13 @@ CRITICAL WARNINGS:
 - This test does NOT detect all toxins (cumulative toxins, carcinogens)
 ```
 
-**期待結果:** After the full test protocol, you have a tentative edible plant, though with less certainty than a positive ID.
+**期待結果:** 完全なテストプロトコル後、暫定的な食用植物が得られるが、正の同定よりも確実性は低い。
 
-**失敗時:** If any reaction occurs at any stage, spit out or induce vomiting if swallowed. Drink water. Do not re-test the same plant. Move to a different species. If vomiting or diarrhea occur, focus on hydration and rest before resuming the test with another plant.
+**失敗時:** いずれかの段階で反応があった場合、吐き出すか、嚥下した場合は嘔吐を誘発する。水を飲む。同じ植物を再テストしない。別の種に移る。嘔吐や下痢が起こった場合、別の植物でテストを再開する前に水分補給と休息に集中する。
 
-### ステップ5: Harvest Sustainably
+### ステップ5: 持続可能に収穫する
 
-Take only what you need and preserve the plant population.
+必要な分だけ取り、植物個体群を保全する。
 
 ```
 Sustainable Harvesting Rules:
@@ -256,13 +254,13 @@ Harvest by Plant Part:
 └──────────────┴───────────────────────────────────────────────┘
 ```
 
-**期待結果:** A reasonable quantity of positively identified plant material, harvested without destroying the source population.
+**期待結果:** 正確に同定された植物材料の妥当な量が、供給源の個体群を破壊することなく収穫されている。
 
-**失敗時:** If the plant stand is too small (fewer than 10 individuals), take only a token sample or find a larger population elsewhere. Overharvesting in a survival situation is understandable, but in short-term scenarios, conservation ensures the resource is available in coming days.
+**失敗時:** 植物の群生が小さすぎる場合（10個体未満）、少量のサンプルのみ取るか、他のより大きな個体群を見つける。サバイバル状況での過剰収穫は理解できるが、短期的なシナリオでは保全により今後数日間リソースが利用可能であり続ける。
 
-### ステップ6: Prepare for Consumption
+### ステップ6: 食用の準備
 
-Many edible wild plants benefit from or require preparation.
+多くの食用野生植物は調理から恩恵を受けるか、調理を必要とする。
 
 ```
 Preparation Methods:
@@ -298,13 +296,13 @@ Key Preparation Rules:
 - Leach acorns in multiple changes of water until bitterness is gone
 ```
 
-**期待結果:** Plant material is clean, prepared appropriately for the species, and ready to eat.
+**期待結果:** 植物材料がきれいで、その種に適切に調理され、食べる準備ができている。
 
-**失敗時:** If you have no fire for cooking (see `make-fire`), limit foraging to species safe to eat raw. If taste is extremely bitter after preparation, the plant may contain high levels of tannins or alkaloids — do not force yourself to eat it. Discard and try another species.
+**失敗時:** 調理用の火がない場合（`make-fire`参照）、生で食べても安全な種に採取を限定する。調理後も味が極度に苦い場合、植物に高レベルのタンニンまたはアルカロイドが含まれている可能性がある — 無理に食べない。破棄して別の種を試す。
 
-### ステップ7: Monitor for Reactions
+### ステップ7: 反応のモニタリング
 
-Even correctly identified plants can cause individual reactions.
+正しく同定された植物でも個人的な反応を引き起こすことがある。
 
 ```
 Reaction Monitoring Protocol:
@@ -326,13 +324,13 @@ If a reaction occurs:
 - Do not re-eat that plant
 ```
 
-**期待結果:** No adverse reaction after 1-2 hours. You can then eat a normal portion.
+**期待結果:** 1-2時間後に副反応なし。その後通常量を食べることができる。
 
-**失敗時:** If a mild reaction occurs (stomach discomfort, mild nausea), stop eating the plant, hydrate, and rest. The reaction should pass within a few hours. If a severe reaction occurs (swelling, difficulty breathing, confusion, rapid heartbeat), this is a medical emergency — seek help immediately. Induce vomiting only if directed by medical guidance and the ingestion was within 1 hour.
+**失敗時:** 軽い反応（胃の不快感、軽い吐き気）が起こった場合、その植物の摂取を中止し、水分補給して休む。反応は数時間以内に治まるはずである。重篤な反応（腫れ、呼吸困難、混乱、頻脈）が起こった場合、これは医療緊急事態である — すぐに助けを求める。嘔吐の誘発は医療指導がありかつ摂取から1時間以内の場合のみ行う。
 
-### ステップ8: Build Your Knowledge — The Universal Five
+### ステップ8: 知識を構築する — 汎用5種
 
-Start with five plants found across most of the temperate Northern Hemisphere. Master these before expanding your repertoire.
+温帯北半球のほとんどで見られる5種の植物から始める。レパートリーを広げる前にこれらをマスターする。
 
 ```
 The Universal Five (Beginner-Friendly Edible Plants):
@@ -386,31 +384,31 @@ Progression:
   (20 positively known species provides meaningful foraging capability)
 ```
 
-**期待結果:** You can identify all five universal plants on sight using multiple features and know which parts to eat and how to prepare them.
+**期待結果:** 5種すべてを複数の特徴で一目で同定でき、どの部位を食べ、どう調理するかを知っている。
 
-**失敗時:** If none of these five are present in your area (e.g., desert, high arctic, tropical), consult region-specific references. These five are specific to temperate zones. In tropical environments, look for coconut palm, banana/plantain, taro (must cook), breadfruit, and moringa. In arid regions, look for prickly pear cactus (Opuntia), mesquite, and agave.
+**失敗時:** これら5種がすべて自分の地域に存在しない場合（例：砂漠、高緯度北極圏、熱帯）、地域固有の参考資料を参照する。これら5種は温帯地域に特有である。熱帯環境ではココナッツヤシ、バナナ/プランテン、タロイモ（調理必須）、パンノキ、モリンガを探す。乾燥地域ではウチワサボテン（Opuntia）、メスキート、アガベを探す。
 
 ## バリデーション
 
-- [ ] Deadly plants for the region are known and can be identified on sight
-- [ ] Habitat was surveyed and likely edible species were shortlisted
-- [ ] Each plant was identified using at least 5 features (multi-feature method)
-- [ ] Plant was confirmed as NOT a dangerous look-alike
-- [ ] Harvesting was sustainable (no more than 1/3 of any stand)
-- [ ] Preparation method was appropriate for the species
-- [ ] A small test portion was eaten first with a 1-2 hour monitoring period
-- [ ] No adverse reactions occurred before eating a full portion
+- [ ] その地域の致死性植物が既知で一目で同定できる
+- [ ] 生息地が調査され、食用種のショートリストが作成された
+- [ ] 各植物が少なくとも5つの特徴で同定された（複数特徴法）
+- [ ] 植物が危険な類似種でないことが確認された
+- [ ] 収穫が持続可能だった（いかなる群生の1/3を超えない）
+- [ ] 調理方法がその種に適切だった
+- [ ] 少量のテスト部分が最初に食べられ、1-2時間のモニタリング期間があった
+- [ ] 全量を食べる前に副反応が発生しなかった
 
 ## よくある落とし穴
 
-- **Single-feature identification**: "It has three leaves like clover" is not enough. Many toxic plants share individual features with edible ones. Always use the full multi-feature checklist
-- **Carrot family confusion**: The Apiaceae family (carrot, parsnip, parsley) contains both common foods and the deadliest plants in the Northern Hemisphere. Avoid unless expert-level certain
-- **Mushroom foraging in survival situations**: Mushrooms offer little caloric value and include some of the most lethal organisms on earth. The risk-reward ratio is terrible in a survival context
-- **Eating too much of a new plant**: Even safe plants can cause digestive upset in quantity, especially if your gut is not accustomed. Start small
-- **Ignoring preparation requirements**: Raw fiddleheads, raw elderberries, unleached acorns — some plants that are edible when cooked are mildly toxic raw
-- **Foraging near contaminated areas**: Roadsides (lead, exhaust), agricultural margins (pesticides), and industrial zones may have technically edible but contaminated plants
+- **単一特徴での同定**: 「クローバーのように3枚の葉がある」では不十分。多くの有毒植物が食用種と個々の特徴を共有する。常に完全な複数特徴チェックリストを使用する
+- **セリ科の混同**: セリ科（Apiaceae）（ニンジン、パースニップ、パセリ）は一般的な食材と北半球で最も致死的な植物の両方を含む。専門家レベルの確信がない限り避ける
+- **サバイバル状況でのキノコ採取**: キノコはカロリー的価値が低く、地球上で最も致命的な生物の一部を含む。サバイバルの文脈ではリスク-リワード比が非常に悪い
+- **新しい植物を大量に食べる**: 安全な植物でも大量に摂取すると消化不良を引き起こす可能性があり、特に腸が慣れていない場合。少量から始める
+- **調理要件を無視する**: 生のゼンマイ、生のエルダーベリー、あく抜きしていないドングリ — 調理すれば食用だが生では軽度に有毒な植物がある
+- **汚染地域付近での採取**: 道路脇（鉛、排気ガス）、農地の縁（農薬）、工業地帯の植物は技術的には食用でも汚染されている可能性がある
 
 ## 関連スキル
 
-- `make-fire` — required for cooking foraged plants; many species need boiling or roasting to be safe or palatable
-- `purify-water` — clean water is needed for washing foraged plants and for the leaching/boiling preparation methods
+- `make-fire` — 採取した植物の調理に必要。多くの種は安全または美味に食べるために煮沸または焙焼が必要
+- `purify-water` — 採取した植物の洗浄およびあく抜き/煮沸調理方法にきれいな水が必要

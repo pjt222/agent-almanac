@@ -1,13 +1,12 @@
 ---
 name: audit-dependency-versions
 description: >
-  Audit project dependencies for version staleness, security vulnerabilities,
-  and compatibility issues. Covers lock file analysis, upgrade path planning,
-  and breaking change assessment. Use before a release to ensure dependencies
-  are current and secure, during periodic maintenance reviews, after receiving
-  a security advisory, when upgrading to a new language version, before
-  submitting to CRAN or npm, or when inheriting a project to assess its
-  dependency health.
+  プロジェクトの依存関係をバージョンの陳腐化、セキュリティ脆弱性、互換性の問題に
+  ついて監査する。ロックファイル分析、アップグレードパス計画、破壊的変更の評価を
+  カバーする。リリース前に依存関係が最新で安全であることを確認する時、定期的な
+  メンテナンスレビュー中、セキュリティアドバイザリー受領後、新しい言語バージョンへの
+  アップグレード時、CRANやnpmへの提出前、プロジェクトを引き継いで依存関係の
+  健全性を評価する時に使用する。
 license: MIT
 allowed-tools: Read Bash Grep Glob
 metadata:
@@ -26,32 +25,32 @@ metadata:
 
 # 依存関係バージョンの監査
 
-Audit project dependencies for version staleness, known security vulnerabilities, and compatibility issues. This skill inventories all dependencies from lock files, checks each against the latest available version, classifies staleness levels, identifies security concerns, and produces a prioritized upgrade report with recommended actions.
+プロジェクトの依存関係をバージョンの陳腐化、既知のセキュリティ脆弱性、互換性の問題について監査する。このスキルはロックファイルからすべての依存関係をインベントリし、各依存関係を最新の利用可能なバージョンに対してチェックし、陳腐化レベルを分類し、セキュリティ上の懸念を特定し、推奨アクション付きの優先順位付きアップグレードレポートを作成する。
 
 ## 使用タイミング
 
-- Before a release to ensure dependencies are current and secure
-- During periodic maintenance (monthly or quarterly dependency reviews)
-- After receiving a security advisory affecting a project dependency
-- When upgrading a project to a new language version (e.g., R 4.4 to 4.5)
-- Before submitting a package to CRAN, npm, or crates.io
-- When inheriting a project and assessing its dependency health
+- リリース前に依存関係が最新で安全であることを確認する時
+- 定期的なメンテナンス中（毎月または四半期の依存関係レビュー）
+- プロジェクトの依存関係に影響するセキュリティアドバイザリーを受領した後
+- プロジェクトを新しい言語バージョンにアップグレードする時（例: R 4.4から4.5）
+- CRAN、npm、crates.ioにパッケージを提出する前
+- プロジェクトを引き継いで依存関係の健全性を評価する時
 
 ## 入力
 
-- **必須**: Project root directory containing dependency/lock files
-- **任意**: Ecosystem type if not auto-detectable (R, Node.js, Python, Rust)
-- **任意**: Security-only mode flag (skip staleness, focus on CVEs)
-- **任意**: Allowlist of dependencies to skip (known acceptable older versions)
-- **任意**: Target date for compatibility (e.g., "must work with R 4.4.x")
+- **必須**: 依存関係/ロックファイルを含むプロジェクトルートディレクトリ
+- **任意**: 自動検出できない場合のエコシステムタイプ（R、Node.js、Python、Rust）
+- **任意**: セキュリティのみモードフラグ（陳腐化をスキップし、CVEに焦点を当てる）
+- **任意**: スキップする依存関係の許可リスト（既知の許容可能な古いバージョン）
+- **任意**: 互換性のターゲット日付（例: 「R 4.4.xで動作する必要がある」）
 
 ## 手順
 
-### ステップ1: Inventory All Dependencies
+### ステップ1: すべての依存関係のインベントリ
 
-Locate and parse dependency files to build a complete inventory.
+依存関係ファイルを見つけてパースし、完全なインベントリを構築する。
 
-**R packages:**
+**Rパッケージ:**
 ```bash
 # Direct dependencies from DESCRIPTION
 grep -A 100 "^Imports:" DESCRIPTION | grep -B 100 "^[A-Z]" | head -50
@@ -89,7 +88,7 @@ grep -A 50 "\[dependencies\]" Cargo.toml
 cat Cargo.lock | grep -A 2 "name ="
 ```
 
-Build an inventory table:
+インベントリテーブルを構築する:
 
 ```markdown
 | Package | Pinned Version | Type | Ecosystem |
@@ -100,13 +99,13 @@ Build an inventory table:
 | pytest | 8.0.0 | dev | Python |
 ```
 
-**期待結果:** Complete inventory of all direct and (optionally) transitive dependencies with pinned versions.
+**期待結果:** ピン留めされたバージョン付きのすべての直接依存関係（およびオプションで推移的依存関係）の完全なインベントリ。
 
-**失敗時:** If lock files are missing, the project has reproducibility issues. Note this as a finding and inventory from the manifest file (DESCRIPTION, package.json) using declared version constraints instead of pinned versions.
+**失敗時:** ロックファイルがない場合、プロジェクトに再現性の問題がある。これを発見事項として記録し、ピン留めバージョンの代わりに宣言されたバージョン制約を使用してマニフェストファイル（DESCRIPTION、package.json）からインベントリする。
 
-### ステップ2: Check Latest Available Versions
+### ステップ2: 最新の利用可能バージョンの確認
 
-For each dependency, determine the latest available version.
+各依存関係について、最新の利用可能バージョンを判定する。
 
 **R:**
 ```r
@@ -144,7 +143,7 @@ cargo outdated
 cargo search serde --limit 1
 ```
 
-Update the inventory with latest versions:
+インベントリを最新バージョンで更新する:
 
 ```markdown
 | Package | Pinned | Latest | Gap |
@@ -155,23 +154,23 @@ Update the inventory with latest versions:
 | shiny | 1.7.4 | 1.9.1 | minor |
 ```
 
-**期待結果:** Latest version identified for each dependency with the gap magnitude (patch/minor/major).
+**期待結果:** 各依存関係の最新バージョンがギャップの大きさ（patch/minor/major）とともに特定される。
 
-**失敗時:** If a package registry is unreachable, note the dependency as "unable to check" and proceed with the rest. Do not block the entire audit on one unreachable registry.
+**失敗時:** パッケージレジストリに到達できない場合、その依存関係を「チェック不可」として記録し、残りで進む。1つの到達不能なレジストリで監査全体をブロックしない。
 
-### ステップ3: Classify Staleness
+### ステップ3: 陳腐化の分類
 
-Assign a staleness level to each dependency:
+各依存関係に陳腐化レベルを割り当てる:
 
-| Level | Definition | Action |
+| レベル | 定義 | アクション |
 |---|---|---|
-| **Current** | At latest version or within latest patch | No action needed |
-| **Patch behind** | Same major.minor, older patch | Low priority upgrade, usually safe |
-| **Minor behind** | Same major, older minor | Medium priority, review changelog for new features |
-| **Major behind** | Older major version | High priority, likely breaking changes in upgrade |
-| **EOL / Archived** | Package no longer maintained | Critical: find replacement or fork |
+| **最新** | 最新バージョンまたは最新パッチ内 | アクション不要 |
+| **パッチ遅れ** | 同じmajor.minor、古いパッチ | 低優先度のアップグレード、通常安全 |
+| **マイナー遅れ** | 同じmajor、古いマイナー | 中優先度、新機能のチェンジログをレビュー |
+| **メジャー遅れ** | 古いメジャーバージョン | 高優先度、アップグレード時に破壊的変更の可能性 |
+| **EOL / アーカイブ済** | パッケージのメンテナンスが終了 | 重大: 代替を見つけるかフォークする |
 
-Produce a staleness summary:
+陳腐化サマリーを作成する:
 
 ```markdown
 ### Staleness Summary
@@ -185,18 +184,18 @@ Produce a staleness summary:
 **Overall health**: AMBER (major-behind and EOL packages present)
 ```
 
-Color coding:
-- **GREEN**: All packages current or patch-behind
-- **AMBER**: Any minor-behind or one major-behind
-- **RED**: Multiple major-behind or any EOL packages
+カラーコーディング:
+- **GREEN**: すべてのパッケージが最新またはパッチ遅れ
+- **AMBER**: マイナー遅れがあるか、1つのメジャー遅れ
+- **RED**: 複数のメジャー遅れまたはEOLパッケージあり
 
-**期待結果:** Every dependency classified by staleness with an overall health rating.
+**期待結果:** すべての依存関係が陳腐化別に分類され、全体的な健全性評価が付く。
 
-**失敗時:** If version comparison logic is ambiguous (non-SemVer versions, date-based versions), classify conservatively as "minor behind" and note the non-standard versioning.
+**失敗時:** バージョン比較ロジックが曖昧な場合（非SemVerバージョン、日付ベースバージョン）、保守的に「マイナー遅れ」と分類し、非標準のバージョニングを記録する。
 
-### ステップ4: Check for Security Vulnerabilities
+### ステップ4: セキュリティ脆弱性の確認
 
-Run ecosystem-specific security audit tools:
+エコシステム固有のセキュリティ監査ツールを実行する:
 
 **R:**
 ```r
@@ -229,7 +228,7 @@ safety check --json
 cargo audit --json
 ```
 
-Document findings:
+発見事項を文書化する:
 
 ```markdown
 ### Security Findings
@@ -242,13 +241,13 @@ Document findings:
 **Security status**: RED (1 critical, 1 high)
 ```
 
-**期待結果:** Security vulnerabilities identified with CVE, severity, affected version, and fix version.
+**期待結果:** CVE、深刻度、影響バージョン、修正バージョン付きでセキュリティ脆弱性が特定される。
 
-**失敗時:** If no audit tool is available for the ecosystem, search GitHub Security Advisories manually for each dependency. Note that the audit is best-effort without tooling.
+**失敗時:** エコシステムに監査ツールがない場合、GitHub Security Advisoriesで各依存関係を手動検索する。ツールなしの監査はベストエフォートであることを記録する。
 
-### ステップ5: Plan Upgrade Path
+### ステップ5: アップグレードパスの計画
 
-Prioritize upgrades based on risk and impact:
+リスクと影響に基づいてアップグレードを優先順位付けする:
 
 ```markdown
 ### Upgrade Plan
@@ -276,15 +275,15 @@ Prioritize upgrades based on risk and impact:
 | ggplot2 | 3.4.0 | 3.5.1 | New geom functions added |
 ```
 
-For each major upgrade, note known breaking changes by checking the dependency's changelog.
+各メジャーアップグレードについて、依存関係のチェンジログを確認して既知の破壊的変更を記録する。
 
-**期待結果:** Prioritized upgrade plan with security fixes first, then EOL replacements, major upgrades, and minor/patch batches.
+**期待結果:** セキュリティ修正を最優先とし、その後EOL置換、メジャーアップグレード、マイナー/パッチバッチと続く優先順位付きアップグレード計画。
 
-**失敗時:** If a dependency has no clear upgrade path (abandoned with no fork), document the risk and recommend: (1) vendoring the current version, (2) finding an alternative package, or (3) accepting the risk with monitoring.
+**失敗時:** 依存関係に明確なアップグレードパスがない場合（フォークなしで放棄された）、リスクを文書化し推奨する: (1) 現在のバージョンをベンダリングする、(2) 代替パッケージを見つける、(3) 監視付きでリスクを受け入れる。
 
-### ステップ6: Document Compatibility Risks
+### ステップ6: 互換性リスクの文書化
 
-For each planned upgrade, assess compatibility:
+計画された各アップグレードについて互換性を評価する:
 
 ```markdown
 ### Compatibility Assessment
@@ -303,38 +302,38 @@ For each planned upgrade, assess compatibility:
 - **Migration guide**: https://webpack.js.org/migrate/5/
 ```
 
-Write the complete audit report to `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDIT-2026-02-17.md`.
+完全な監査レポートを`DEPENDENCY-AUDIT.md`または`DEPENDENCY-AUDIT-2026-02-17.md`に書き込む。
 
-**期待結果:** Compatibility risks documented for each significant upgrade. Complete audit report written.
+**期待結果:** 各重要なアップグレードについて互換性リスクが文書化される。完全な監査レポートが作成される。
 
-**失敗時:** If compatibility cannot be assessed without testing, recommend a branch-based upgrade approach: create a branch, apply the upgrade, run tests, and evaluate results before merging.
+**失敗時:** テストなしで互換性を評価できない場合、ブランチベースのアップグレードアプローチを推奨する: ブランチを作成し、アップグレードを適用し、テストを実行し、マージ前に結果を評価する。
 
 ## バリデーション
 
-- [ ] All direct dependencies inventoried from lock/manifest files
-- [ ] Latest available version checked for each dependency
-- [ ] Staleness level assigned (current / patch / minor / major / EOL)
-- [ ] Overall health rating calculated (GREEN / AMBER / RED)
-- [ ] Security audit run with ecosystem-appropriate tooling
-- [ ] All CVEs documented with severity, affected version, and fix version
-- [ ] Upgrade plan prioritized: security > EOL > major > minor/patch
-- [ ] Compatibility risks assessed for each major upgrade
-- [ ] Audit report written to DEPENDENCY-AUDIT.md
-- [ ] No dependencies left as "unable to check" without documented reason
+- [ ] ロック/マニフェストファイルからすべての直接依存関係がインベントリされている
+- [ ] 各依存関係の最新の利用可能バージョンがチェックされている
+- [ ] 陳腐化レベルが割り当てられている（最新 / パッチ / マイナー / メジャー / EOL）
+- [ ] 全体的な健全性評価が計算されている（GREEN / AMBER / RED）
+- [ ] エコシステムに適したツールでセキュリティ監査が実行されている
+- [ ] すべてのCVEが深刻度、影響バージョン、修正バージョン付きで文書化されている
+- [ ] アップグレード計画が優先順位付けされている: セキュリティ > EOL > メジャー > マイナー/パッチ
+- [ ] 各メジャーアップグレードについて互換性リスクが評価されている
+- [ ] 監査レポートがDEPENDENCY-AUDIT.mdに書き込まれている
+- [ ] 文書化された理由なしに「チェック不可」のままの依存関係がない
 
 ## よくある落とし穴
 
-- **Ignoring transitive dependencies**: A project may have 10 direct dependencies but 200 transitive ones. Security vulnerabilities often hide in transitive dependencies. Use `npm ls` or `renv::dependencies()` to see the full tree.
-- **Upgrading everything at once**: Batch-upgrading all dependencies in one commit makes it impossible to identify which upgrade caused a regression. Upgrade in logical groups (security first, then majors individually, then minors/patches as a batch).
-- **Confusing "outdated" with "insecure"**: A package one major version behind with no CVEs is lower risk than a current package with a critical vulnerability. Always prioritize security over freshness.
-- **Not reading changelogs**: Blindly upgrading a major version without reading the changelog. Breaking changes in the dependency become breaking changes in your project.
-- **Audit fatigue**: Running audits but not acting on findings. Set a policy: security findings must be addressed within 1 sprint, EOL within 1 quarter.
-- **Missing lock files**: Projects without lock files have non-reproducible builds. If the audit reveals missing lock files, that is itself a critical finding to address before versioned upgrades.
+- **推移的依存関係の無視**: プロジェクトに直接依存関係が10あっても推移的には200ある場合がある。セキュリティ脆弱性は推移的依存関係に潜むことが多い。`npm ls`や`renv::dependencies()`を使用して完全なツリーを確認する
+- **すべてを一度にアップグレード**: すべての依存関係を1コミットでバッチアップグレードすると、どのアップグレードがリグレッションを引き起こしたか特定できなくなる。論理的なグループでアップグレードする（まずセキュリティ、次にメジャーを個別に、その後マイナー/パッチをバッチで）
+- **「古い」と「安全でない」の混同**: CVEのない1メジャーバージョン遅れのパッケージは、重大な脆弱性のある最新パッケージよりリスクが低い。常にセキュリティを新しさより優先する
+- **チェンジログを読まない**: チェンジログを読まずにメジャーバージョンを盲目的にアップグレードする。依存関係の破壊的変更がプロジェクトの破壊的変更になる
+- **監査疲れ**: 監査を実行するが発見事項に対処しない。ポリシーを設定する: セキュリティの発見事項は1スプリント以内に対処、EOLは1四半期以内に対処
+- **ロックファイルの欠落**: ロックファイルのないプロジェクトは非再現可能なビルドを持つ。監査でロックファイルの欠落が明らかになった場合、それ自体がバージョン管理されたアップグレードの前に対処すべき重大な発見事項
 
 ## 関連スキル
 
-- `apply-semantic-versioning` -- Version bumps may be triggered by dependency upgrades
-- `manage-renv-dependencies` -- R-specific dependency management with renv
-- `security-audit-codebase` -- Broader security audit that includes dependency vulnerabilities
-- `manage-changelog` -- Document dependency upgrades in the changelog
-- `plan-release-cycle` -- Schedule dependency upgrades within the release timeline
+- `apply-semantic-versioning` -- 依存関係のアップグレードによりバージョンバンプがトリガーされる場合がある
+- `manage-renv-dependencies` -- renvによるR固有の依存関係管理
+- `security-audit-codebase` -- 依存関係の脆弱性を含むより広範なセキュリティ監査
+- `manage-changelog` -- 依存関係のアップグレードをチェンジログに文書化する
+- `plan-release-cycle` -- リリースタイムライン内で依存関係のアップグレードをスケジュールする

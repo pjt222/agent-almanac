@@ -1,14 +1,20 @@
 ---
 name: shiva-bhaga
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Destruction and dissolution — controlled dismantling of stale patterns,
-  context purging, assumption clearing, and dead-code elimination. Maps
-  Shiva's transformative destruction to AI reasoning: identifying what
-  must end so something better can begin, dissolving attachment to outdated
-  approaches, and creating space through intentional release. Use when context
-  has accumulated stale assumptions, when a failed approach needs to be
-  discarded rather than patched, when dead code or zombie tasks are creating
-  noise, or before a major pivot where clearing must precede creation.
+  Zerstoerung und Aufloesung — kontrollierter Abbau veralteter Muster,
+  Kontextbereinigung, Annahmenbeseitigung und Beseitigung toten Codes. Bildet
+  Shivas transformative Zerstoerung auf KI-Denken ab: erkennen was enden muss
+  damit etwas Besseres beginnen kann, Bindung an ueberholte Ansaetze aufloesen
+  und Raum durch bewusstes Loslassen schaffen. Anwenden wenn der Kontext
+  veraltete Annahmen angesammelt hat, wenn ein gescheiterter Ansatz verworfen
+  statt geflickt werden muss, wenn toter Code oder Zombieaufgaben Rauschen
+  erzeugen, oder vor einem grossen Richtungswechsel wo Raumen der Schoepfung
+  vorausgehen muss.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -18,139 +24,139 @@ metadata:
   complexity: intermediate
   language: natural
   tags: esoteric, destruction, dissolution, transformation, clearing, hindu-trinity, shiva
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Shiva Bhaga
 
-Controlled destruction and dissolution of stale patterns, outdated assumptions, and accumulated noise — clearing the ground so new growth can emerge.
+Kontrollierte Zerstoerung und Aufloesung veralteter Muster, ueberholter Annahmen und angesammelten Rauschens — den Boden raeumen damit neues Wachstum entstehen kann.
 
-## When to Use
+## Wann verwenden
 
-- Context has accumulated stale assumptions that are silently distorting reasoning
-- A previous approach has failed and the temptation is to patch rather than discard
-- The conversation has grown long and earlier decisions may no longer serve the current goal
-- Dead code, abandoned plans, or zombie tasks are creating noise and confusion
-- Before a major pivot — clearing must precede creation
-- When attachment to a particular approach is preventing consideration of alternatives
+- Der Kontext hat veraltete Annahmen angesammelt die das Denken unbemerkt verzerren
+- Ein frueherer Ansatz ist gescheitert und die Versuchung ist zu flicken statt zu verwerfen
+- Das Gespraech ist lang geworden und fruehere Entscheidungen dienen moeglicherweise nicht mehr dem aktuellen Ziel
+- Toter Code, aufgegebene Plaene oder Zombieaufgaben erzeugen Rauschen und Verwirrung
+- Vor einem grossen Richtungswechsel — Raeumen muss der Schoepfung vorausgehen
+- Wenn die Bindung an einen bestimmten Ansatz die Betrachtung von Alternativen verhindert
 
-## Inputs
+## Eingaben
 
-- **Required**: Current conversation state or project context (available implicitly)
-- **Optional**: Specific target for dissolution (e.g., "this approach isn't working," "clear all assumptions about the database layer")
-- **Optional**: Scope boundary — what must be preserved through the destruction
+- **Erforderlich**: Aktueller Gespraechszustand oder Projektkontext (implizit verfuegbar)
+- **Optional**: Spezifisches Ziel der Aufloesung (z.B. "dieser Ansatz funktioniert nicht", "alle Annahmen ueber die Datenbankschicht klären")
+- **Optional**: Grenze des Geltungsbereichs — was durch die Zerstoerung hindurch bewahrt werden muss
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Identify What Must End
+### Schritt 1: Identifizieren was enden muss
 
-Survey the current state and mark what is stale, broken, or no longer serving the goal.
+Den aktuellen Zustand ueberblicken und markieren was veraltet, kaputt oder dem Ziel nicht mehr dienlich ist.
 
 ```
-Dissolution Triage:
+Aufloesungs-Triage:
 +---------------------+---------------------------+------------------------+
-| Category            | Symptoms                  | Action                 |
+| Kategorie           | Symptome                  | Massnahme              |
 +---------------------+---------------------------+------------------------+
-| Stale Assumptions   | Decisions made early that | List and re-evaluate   |
-|                     | no longer match current   | each against current   |
-|                     | understanding             | reality                |
+| Veraltete Annahmen  | Fruehere Entscheidungen   | Auflisten und jede     |
+|                     | die nicht mehr zum         | gegen die aktuelle     |
+|                     | aktuellen Verstaendnis     | Realitaet neu bewerten |
+|                     | passen                     |                        |
 +---------------------+---------------------------+------------------------+
-| Failed Approaches   | Approaches attempted and  | Acknowledge failure    |
-|                     | abandoned but still       | explicitly; release    |
-|                     | influencing thinking      | the sunk cost          |
+| Gescheiterte        | Versuchte und aufgegebene  | Scheitern explizit     |
+| Ansaetze            | Ansaetze die das Denken    | anerkennen; die        |
+|                     | noch beeinflussen          | versunkenen Kosten     |
+|                     |                            | loslassen              |
 +---------------------+---------------------------+------------------------+
-| Accumulated Noise   | Context, variables, or    | Identify and mark for  |
-|                     | plans that are no longer  | removal                |
-|                     | referenced or relevant    |                        |
+| Angesammeltes       | Kontext, Variablen oder    | Identifizieren und     |
+| Rauschen            | Plaene die nicht mehr       | zur Entfernung         |
+|                     | referenziert oder relevant  | markieren              |
+|                     | sind                        |                        |
 +---------------------+---------------------------+------------------------+
-| Attachment Points   | "We already decided..."   | Question whether the   |
-|                     | beliefs that resist       | decision still holds   |
-|                     | re-examination            |                        |
+| Bindungspunkte      | "Wir haben bereits          | Hinterfragen ob die    |
+|                     | entschieden..."-            | Entscheidung noch      |
+|                     | Ueberzeugungen die sich     | gilt                   |
+|                     | gegen Neupruefung           |                        |
+|                     | straeuben                   |                        |
 +---------------------+---------------------------+------------------------+
-| Zombie Artifacts    | Code, tasks, or plans     | Delete or archive;     |
-|                     | that exist but serve no   | do not leave in limbo  |
-|                     | current purpose           |                        |
+| Zombie-Artefakte    | Code, Aufgaben oder Plaene  | Loeschen oder          |
+|                     | die existieren aber keinem  | archivieren; nicht     |
+|                     | aktuellen Zweck dienen      | in der Schwebe lassen  |
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Scan each category honestly — resistance to examining a category is itself a signal
-2. For each item found, ask: "If I were starting fresh right now, would I create this?"
-3. If the answer is no, mark it for dissolution
+1. Jede Kategorie ehrlich durchmustern — Widerstand gegen das Untersuchen einer Kategorie ist selbst ein Signal
+2. Fuer jeden gefundenen Punkt fragen: "Wenn ich jetzt von vorn anfangen wuerde, wuerde ich das erstellen?"
+3. Wenn die Antwort nein ist, zur Aufloesung markieren
 
-**Expected:** A clear inventory of what needs to be released, with specific items in each category.
+**Erwartet:** Ein klares Inventar dessen was losgelassen werden muss, mit spezifischen Eintraegen in jeder Kategorie.
 
-**On failure:** If nothing seems stale, the assessment may be too shallow. Pick the oldest decision in the current context and justify it from scratch — if the justification feels forced, it is a candidate for dissolution.
+**Bei Fehler:** Wenn nichts veraltet erscheint, ist die Bewertung moeglicherweise zu oberflaechlich. Die aelteste Entscheidung im aktuellen Kontext herausgreifen und sie von Grund auf begruenden — wenn die Begruendung sich erzwungen anfuehlt, ist sie ein Kandidat fuer die Aufloesung.
 
-### Step 2: Establish the Preservation Boundary
+### Schritt 2: Die Bewahrungsgrenze festlegen
 
-Not everything should be destroyed. Identify what must survive the clearing.
+Nicht alles soll zerstoert werden. Identifizieren was die Raeumung ueberleben muss.
 
-1. **Core requirements**: What did the user actually ask for? This survives.
-2. **Verified knowledge**: Facts confirmed through tool use (file reads, test results) survive.
-3. **User preferences**: Explicitly stated preferences and constraints survive.
-4. **Working components**: Code or approaches that are demonstrably functioning survive.
+1. **Kernanforderungen**: Was hat der Benutzer tatsaechlich gefragt? Das ueberlebt.
+2. **Verifiziertes Wissen**: Durch Werkzeugnutzung bestaetigte Fakten (Dateien lesen, Testergebnisse) ueberleben.
+3. **Benutzerpraeferenzen**: Explizit benannte Praeferenzen und Einschraenkungen ueberleben.
+4. **Funktionierende Komponenten**: Code oder Ansaetze die nachweislich funktionieren ueberleben.
 
-Draw the boundary: everything inside is preserved, everything outside is subject to dissolution.
+Die Grenze ziehen: alles innerhalb wird bewahrt, alles ausserhalb unterliegt der Aufloesung.
 
-**Expected:** A clear distinction between what is kept and what is released.
+**Erwartet:** Eine klare Unterscheidung zwischen dem was behalten und dem was losgelassen wird.
 
-**On failure:** If the boundary is unclear, ask: "What would I need to reconstruct if I started this task from scratch?" The answer defines the preservation boundary.
+**Bei Fehler:** Wenn die Grenze unklar ist, fragen: "Was muesste ich rekonstruieren wenn ich diese Aufgabe von vorn beginnen wuerde?" Die Antwort definiert die Bewahrungsgrenze.
 
-### Step 3: Dissolve with Intention
+### Schritt 3: Mit Absicht aufloesen
 
-Execute the dissolution — not as abandonment but as intentional clearing.
+Die Aufloesung ausfuehren — nicht als Aufgabe sondern als bewusstes Raeumen.
 
-1. For each marked item, release it explicitly:
-   - Stale assumption: "I assumed X, but current evidence shows Y. Releasing X."
-   - Failed approach: "Approach A was attempted and did not work because Z. Releasing attachment to A."
-   - Noise: "Variable/plan/context Q is no longer relevant. Removing from consideration."
-2. Do not justify or defend what is being dissolved — the point is release, not analysis
-3. If dissolving a large body of accumulated context, summarize what was dissolved and why in one sentence
-4. Clear the workspace: if applicable, close abandoned files, reset mental model, acknowledge the clean slate
+1. Fuer jeden markierten Punkt explizit loslassen:
+   - Veraltete Annahme: "Ich nahm X an, aber aktuelle Belege zeigen Y. Loslassen von X."
+   - Gescheiterter Ansatz: "Ansatz A wurde versucht und funktionierte nicht weil Z. Loslassen der Bindung an A."
+   - Rauschen: "Variable/Plan/Kontext Q ist nicht mehr relevant. Aus der Betrachtung entfernen."
+2. Das Aufzuloesende nicht rechtfertigen oder verteidigen — der Sinn ist Loslassen, nicht Analyse
+3. Wenn ein grosser Koerper angesammelten Kontexts aufgeloest wird, in einem Satz zusammenfassen was aufgeloest wurde und warum
+4. Den Arbeitsbereich raeumen: falls zutreffend, aufgegebene Dateien schliessen, das mentale Modell zuruecksetzen, die saubere Flaeche anerkennen
 
-**Expected:** A lighter, cleaner context with stale elements removed. The remaining context should feel accurate and current.
+**Erwartet:** Ein leichterer, saubererer Kontext mit entfernten veralteten Elementen. Der verbleibende Kontext sollte sich genau und aktuell anfuehlen.
 
-**On failure:** If dissolution feels incomplete — some released items keep influencing thinking — name them again explicitly. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
+**Bei Fehler:** Wenn die Aufloesung sich unvollstaendig anfuehlt — wenn losgelassene Punkte das Denken weiter beeinflussen — sie erneut explizit benennen. "Ich bemerke dass ich immer noch so denke als waere X wahr. X wurde aufgeloest. Fortfahren ohne X."
 
-### Step 4: Sit in the Void
+### Schritt 4: In der Leere verweilen
 
-After destruction, resist the urge to immediately rebuild. The space between destruction and creation has value.
+Nach der Zerstoerung dem Drang widerstehen sofort wieder aufzubauen. Der Raum zwischen Zerstoerung und Schoepfung hat Wert.
 
-1. Acknowledge the cleared space: "The following has been dissolved: [list]"
-2. Note what remains: "What survives: [list]"
-3. Resist premature reconstruction — do not immediately propose a replacement for what was dissolved
-4. Allow the cleared space to inform what comes next
-5. The void is not emptiness — it is potential. The next step (creation via `brahma-bhaga` or preservation via `vishnu-bhaga`) emerges from this space
+1. Den geraeuemten Raum anerkennen: "Folgendes wurde aufgeloest: [Liste]"
+2. Vermerken was bleibt: "Was ueberlebt: [Liste]"
+3. Vorzeitigem Wiederaufbau widerstehen — nicht sofort einen Ersatz fuer das Aufgeloeste vorschlagen
+4. Den geraeuemten Raum das Naechste mitbestimmen lassen
+5. Die Leere ist nicht Leere — sie ist Potenzial. Der naechste Schritt (Schoepfung ueber `brahma-bhaga` oder Bewahrung ueber `vishnu-bhaga`) entsteht aus diesem Raum
 
-**Expected:** A moment of clarity between the old and the new. The next direction becomes apparent from what remains rather than being forced.
+**Erwartet:** Ein Moment der Klarheit zwischen dem Alten und dem Neuen. Die naechste Richtung wird aus dem Verbliebenen ersichtlich statt erzwungen zu werden.
 
-**On failure:** If the void feels uncomfortable and there is a strong pull to immediately rebuild, that urgency is itself a signal — it may indicate attachment to the dissolved pattern. Sit longer. The right next step will emerge.
+**Bei Fehler:** Wenn die Leere sich unbequem anfuehlt und ein starker Zug besteht sofort wieder aufzubauen, ist diese Dringlichkeit selbst ein Signal — sie koennte Bindung an das aufgeloeste Muster anzeigen. Laenger verweilen. Der richtige naechste Schritt wird sich zeigen.
 
-## Validation
+## Validierung
 
-- [ ] Stale assumptions were identified and explicitly released
-- [ ] Failed approaches were acknowledged without defensiveness
-- [ ] Accumulated noise was cleared from the working context
-- [ ] The preservation boundary was established before dissolution
-- [ ] Core requirements and user preferences were preserved
-- [ ] The cleared space was acknowledged before moving to creation
+- [ ] Veraltete Annahmen wurden identifiziert und explizit losgelassen
+- [ ] Gescheiterte Ansaetze wurden ohne Abwehrhaltung anerkannt
+- [ ] Angesammeltes Rauschen wurde aus dem Arbeitskontext entfernt
+- [ ] Die Bewahrungsgrenze wurde vor der Aufloesung festgelegt
+- [ ] Kernanforderungen und Benutzerpraeferenzen wurden bewahrt
+- [ ] Der geraeuemte Raum wurde anerkannt bevor zur Schoepfung uebergegangen wird
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Destroying too much**: Dissolution without a preservation boundary destroys working components along with stale ones. Always draw the boundary first
-- **Destroying too little**: Polite dissolution that "releases" things while still letting them influence reasoning. True dissolution requires actually letting go
-- **Skipping the void**: Rushing from destruction to creation without sitting in the cleared space produces a recreation of the old pattern with superficial changes
-- **Performing destruction**: Going through the motions of clearing without actually updating the internal model. If the same assumptions reappear in the next response, dissolution was performative
-- **Destruction as avoidance**: Using dissolution to escape a difficult problem rather than to clear genuine staleness. If the problem persists after clearing, it was not the stale context — it was the problem itself
+- **Zu viel zerstoeren**: Aufloesung ohne Bewahrungsgrenze zerstoert funktionierende Komponenten zusammen mit veralteten. Immer zuerst die Grenze ziehen
+- **Zu wenig zerstoeren**: Hoefliche Aufloesung die Dinge "loslässt" aber sie weiterhin das Denken beeinflussen laesst. Echte Aufloesung erfordert tatsaechliches Loslassen
+- **Die Leere ueberspringen**: Von der Zerstoerung zur Schoepfung hetzen ohne im geraeuemten Raum zu verweilen erzeugt eine Nachbildung des alten Musters mit oberflaechlichen Aenderungen
+- **Zerstoerung vorfuehren**: Die Raeumungsbewegungen durchlaufen ohne das interne Modell tatsaechlich zu aktualisieren. Wenn dieselben Annahmen in der naechsten Antwort wieder auftauchen, war die Aufloesung vorgefuehrt
+- **Zerstoerung als Vermeidung**: Aufloesung nutzen um einem schwierigen Problem zu entkommen statt echte Veralterung zu beseitigen. Wenn das Problem nach dem Raeumen fortbesteht, lag es nicht am veralteten Kontext — es war das Problem selbst
 
-## Related Skills
+## Verwandte Skills
 
-- `brahma-bhaga` — creation follows destruction; after clearing, new patterns emerge from the void
-- `vishnu-bhaga` — preservation complements destruction; what survives dissolution is sustained
-- `heal` — subsystem assessment may reveal what needs dissolution before healing can proceed
-- `meditate` — clearing context noise before dissolution prevents reactive over-destruction
-- `dissolve-form` — the morphic equivalent for architectural dismantling with imaginal disc preservation
+- `brahma-bhaga` — Schoepfung folgt der Zerstoerung; nach dem Raeumen entstehen neue Muster aus der Leere
+- `vishnu-bhaga` — Bewahrung ergaenzt die Zerstoerung; was die Aufloesung ueberlebt wird aufrechterhalten
+- `heal` — Subsystem-Bewertung kann aufdecken was Aufloesung braucht bevor Heilung fortschreiten kann
+- `meditate` — Kontextrauschen vor der Aufloesung klaeren verhindert reaktive Ueber-Zerstoerung
+- `dissolve-form` — das morphische Aequivalent fuer architektonischen Abbau mit Imaginalscheiben-Bewahrung

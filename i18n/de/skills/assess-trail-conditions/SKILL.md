@@ -1,12 +1,12 @@
 ---
 name: assess-trail-conditions
 description: >
-  Evaluate current trail conditions including weather, snow line, river
+  Bewerten current trail conditions einschliesslich weather, snow line, river
   crossings, exposure, and trail maintenance status for safety decision-making.
   Produces a GREEN/YELLOW/RED safety rating with actionable go/no-go
-  recommendations. Use the day before or morning of a planned hike, during tour
-  planning to assess seasonal viability, after unexpected weather changes on a
-  multi-day tour, when reports suggest trail damage or closures, or before
+  recommendations. Use the day vor or morning of a planned hike, waehrend tour
+  planning to assess seasonal viability, nach unexpected weather changes on a
+  multi-day tour, when reports suggest trail damage or closures, or vor
   committing to an alpine or exposed route.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
@@ -26,30 +26,30 @@ metadata:
 
 # Wegbedingungen bewerten
 
-Evaluate current trail conditions for safety decision-making before a planned hike or during tour planning.
+Bewerten current trail conditions for safety decision-making vor a planned hike or waehrend tour planning.
 
-## When to Use
+## Wann verwenden
 
-- The day before or morning of a planned hike to make a go/no-go decision
+- The day vor or morning of a planned hike to make a go/no-go decision
 - During tour planning to assess seasonal viability of a route
-- After unexpected weather changes during a multi-day tour
+- After unexpected weather changes waehrend a multi-day tour
 - When reports suggest trail damage, closures, or unusual hazards
 - Before committing to an alpine or exposed route
 
-## Inputs
+## Eingaben
 
-- **Required**: Trail name, region, and approximate coordinates or waypoints
-- **Required**: Planned date(s) of the hike
+- **Erforderlich**: Trail name, region, and approximate coordinates or waypoints
+- **Erforderlich**: Planned date(s) of the hike
 - **Optional**: Trail difficulty rating (SAC T1-T6)
 - **Optional**: Maximum elevation on the route
 - **Optional**: Known hazard points (river crossings, exposed ridges, glaciers)
 - **Optional**: Group experience level (affects risk tolerance thresholds)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Gather Weather Data
+### Schritt 1: Sammeln Weather Data
 
-Collect weather forecasts from multiple sources for the trail's elevation range.
+Sammeln weather forecasts from multiple sources for the trail's elevation range.
 
 ```
 Weather Data Sources (in preference order):
@@ -73,7 +73,7 @@ Weather Data Sources (in preference order):
 └────────────────────────┴──────────────────────────────────────┘
 ```
 
-Collect the following data points:
+Sammeln die folgenden data points:
 
 ```
 Weather Assessment:
@@ -94,13 +94,13 @@ Weather Assessment:
 └─────────────────────┴───────────────┴───────────────────────────┘
 ```
 
-**Expected:** Weather data from at least 2 independent sources, with altitude-specific information for both the lowest and highest points of the route.
+**Erwartet:** Weather data from mindestens 2 independent sources, with altitude-specific information for both the lowest and highest points of the route.
 
-**On failure:** If detailed mountain forecasts are unavailable for the specific region, use general forecasts with altitude adjustments: temperature drops approximately 6.5 C per 1000 m of elevation gain, wind speed increases with altitude and exposure. If forecasts disagree, plan for the worse prediction.
+**Bei Fehler:** If detailed mountain forecasts are unavailable for the specific region, use general forecasts with altitude adjustments: temperature drops ungefaehr 6.5 C per 1000 m of elevation gain, wind speed increases with altitude and exposure. If forecasts disagree, plan for the worse prediction.
 
-### Step 2: Assess Terrain Conditions
+### Schritt 2: Bewerten Terrain Conditions
 
-Evaluate the current state of the trail surface, snow, water, and exposure hazards.
+Bewerten the current state of the trail surface, snow, water, and exposure hazards.
 
 ```
 Terrain Condition Factors:
@@ -141,13 +141,13 @@ Data sources for terrain conditions:
 - Avalanche bulletins (include snow and terrain info even in summer)
 - Trail maintenance authorities (national park offices, Alpenverein sections)
 
-**Expected:** A terrain assessment for each significant hazard point on the route, based on current data no more than 48 hours old.
+**Erwartet:** A terrain assessment fuer jede significant hazard point on the route, basierend auf current data no more than 48 hours old.
 
-**On failure:** If current condition data is unavailable (remote area, no recent reports), assume conditions are worse than average for the season. Contact the nearest staffed hut or mountain rescue station for local knowledge.
+**Bei Fehler:** If current condition data is unavailable (remote area, no recent reports), assume conditions are worse than average for the season. Contact the nearest staffed hut or mountain rescue station for local knowledge.
 
-### Step 3: Evaluate Trail Status
+### Schritt 3: Bewerten Trail Status
 
-Check for closures, diversions, and maintenance issues on the planned route.
+Pruefen auf closures, diversions, and maintenance issues on the planned route.
 
 ```
 Trail Status Sources:
@@ -175,13 +175,13 @@ Check for:
 4. **Damage reports**: Landslides, bridge washouts, trail erosion
 5. **Event impacts**: Races, military exercises, hunting seasons
 
-**Expected:** Confirmed trail status (open, partially closed, closed) with any diversions mapped and time impact estimated.
+**Erwartet:** Confirmed trail status (open, teilweise closed, closed) with any diversions mapped and time impact estimated.
 
-**On failure:** If trail status cannot be confirmed, plan for potential diversions. Carry a detailed map (not just the trail app route) so that alternatives can be navigated on the spot. If a trail is listed as closed, respect the closure even if it appears passable.
+**Bei Fehler:** If trail status cannot be confirmed, plan for potential diversions. Carry a detailed map (not just the trail app route) so that alternatives kann navigated on the spot. If a trail is listed as closed, respect the closure even if it appears passable.
 
-### Step 4: Rate Safety Level
+### Schritt 4: Rate Safety Level
 
-Combine all assessment data into an overall safety rating.
+Kombinieren all assessment data into an overall safety rating.
 
 ```
 Safety Rating Criteria:
@@ -219,16 +219,16 @@ Safety Rating Criteria:
 ```
 
 For YELLOW ratings, define specific mitigation actions:
-- Early start to beat afternoon weather
+- Early start to beat nachnoon weather
 - Turnaround time if conditions worsen
 - Specific sections to monitor closely
 - Communication plan if group separates
 
-**Expected:** A clear GREEN, YELLOW, or RED rating with specific justification. YELLOW ratings include actionable mitigation steps and defined trigger points for abort.
+**Erwartet:** A clear GREEN, YELLOW, or RED rating with specific justification. YELLOW ratings include actionable mitigation steps and defined trigger points for abort.
 
-**On failure:** If the assessment is inconclusive (insufficient data to rate confidently), treat it as YELLOW at minimum. Uncertainty should increase caution, not decrease it. If any single factor is RED, the overall rating is RED regardless of other factors.
+**Bei Fehler:** If the assessment is inconclusive (insufficient data to rate confidently), treat it as YELLOW at minimum. Uncertainty should increase caution, not decrease it. If any single factor is RED, the overall rating is RED unabhaengig von other factors.
 
-### Step 5: Generate Conditions Report
+### Schritt 5: Generieren Conditions Report
 
 Compile the assessment into a concise, actionable report.
 
@@ -272,13 +272,13 @@ DECISION
 ═══════════════════════════════════════════════
 ```
 
-**Expected:** A complete, dated conditions report that enables an informed go/no-go decision. The report should be shareable with all group members and understandable without additional context.
+**Erwartet:** A complete, dated conditions report that enables an informed go/no-go decision. The report sollte shareable with all group members and understandable ohne additional context.
 
-**On failure:** If the report cannot be completed (e.g., key data unavailable), state what is unknown and how it affects the decision. An incomplete assessment with acknowledged gaps is safer than a false sense of certainty.
+**Bei Fehler:** If der Bericht cannot be completed (e.g., key data unavailable), state what is unknown and how it affects the decision. An incomplete assessment with acknowledged gaps is safer than a false sense of certainty.
 
-## Validation
+## Validierung
 
-- [ ] Weather data collected from at least 2 independent sources
+- [ ] Weather data collected from mindestens 2 independent sources
 - [ ] Altitude-specific forecasts obtained (not just valley weather)
 - [ ] Terrain conditions assessed for all key hazard points on the route
 - [ ] Trail status verified (open/closed/diversions)
@@ -288,19 +288,19 @@ DECISION
 - [ ] Report shared with all group members
 - [ ] Assessment is no more than 24 hours old at time of departure
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Valley weather bias**: Clear skies in the valley mean nothing at altitude. Always check summit-level forecasts; conditions can be dramatically different 1000 m higher.
+- **Valley weather bias**: Clear skies in the valley mean nothing at altitude. Always check summit-level forecasts; conditions kann dramatically different 1000 m higher.
 - **Stale data**: A report from 3 days ago is unreliable. Mountain conditions change rapidly. Reassess on the morning of the hike.
 - **Optimism bias**: The desire to hike a planned route makes people rationalize marginal conditions. If you have to argue the case for going, the conditions are probably not good enough.
-- **Single-source reliance**: One forecast can be wrong. Cross-check with at least two sources, and weight local/mountain-specific sources over general ones.
-- **Ignoring trend**: Current conditions may be acceptable but deteriorating. A deteriorating trend requires more caution than the snapshot suggests.
-- **Social pressure override**: Never proceed because the group is eager or because you drove a long way. The mountain will be there next week; you might not be.
-- **Snow line miscalculation**: The reported snow line is an average. North-facing slopes can hold snow 200-500 m below the reported line.
+- **Single-source reliance**: One forecast kann wrong. Cross-check with mindestens two sources, and weight local/mountain-specific sources over general ones.
+- **Ignoring trend**: Current conditions kann acceptable but deteriorating. A deteriorating trend requires more caution than the snapshot suggests.
+- **Social pressure override**: Never proceed because the group is eager or because you drove a long way. The mountain wird there next week; you might not be.
+- **Snow line miscalculation**: The reported snow line is an average. North-facing slopes can hold snow 200-500 m unter der Berichted line.
 
-## Related Skills
+## Verwandte Skills
 
 - `plan-hiking-tour` — uses this assessment as input for the safety evaluation step
-- `check-hiking-gear` — gear adjustments based on assessed conditions (add microspikes, extra layers)
+- `check-hiking-gear` — gear adjustments basierend auf assessed conditions (add microspikes, extra layers)
 - `plan-tour-route` — trail condition awareness for broader tour planning
 - `create-spatial-visualization` — visualize hazard zones on a map overlay

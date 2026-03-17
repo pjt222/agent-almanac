@@ -1,12 +1,18 @@
 ---
 name: repair-broken-references
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Find and fix broken internal links, dead external URLs, stale imports,
-  missing cross-references, and orphaned files. Ensures all project references
-  remain valid and up-to-date. Use when documentation contains broken internal
-  links, external URLs return 404 errors, import statements reference moved or
-  deleted modules, cross-references between files are out of sync, or files
-  exist but are never referenced anywhere in the project.
+  Defekte interne Links, tote externe URLs, veraltete Imports, fehlende
+  Querverweise und verwaiste Dateien finden und reparieren. Stellt sicher
+  dass alle Projektreferenzen gueltig und aktuell bleiben. Anwenden wenn
+  Dokumentation defekte interne Links enthaelt, externe URLs 404-Fehler
+  zurueckgeben, Import-Anweisungen auf verschobene oder geloeschte Module
+  verweisen, Querverweise zwischen Dateien nicht synchron sind oder Dateien
+  existieren die nirgends im Projekt referenziert werden.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -16,114 +22,109 @@ metadata:
   complexity: intermediate
   language: multi
   tags: maintenance, links, imports, references, orphans
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Defekte Referenzen reparieren
 
-## When to Use
+## Wann verwenden
 
-Use this skill when project references have become stale:
+Diesen Skill verwenden wenn Projektreferenzen veraltet sind:
 
-- Documentation contains broken internal links
-- External URLs return 404 errors
-- Import statements reference moved or deleted modules
-- Cross-references between files are out of sync
-- Files exist but are never referenced anywhere
+- Dokumentation enthaelt defekte interne Links
+- Externe URLs geben 404-Fehler zurueck
+- Import-Anweisungen verweisen auf verschobene oder geloeschte Module
+- Querverweise zwischen Dateien sind nicht synchron
+- Dateien existieren die nirgends referenziert werden
 
-**Do NOT use** for refactoring module dependencies or redesigning information architecture. This skill repairs existing references, not restructures them.
+**NICHT verwenden** fuer Refactoring von Modulabhaengigkeiten oder Neugestaltung der Informationsarchitektur. Dieser Skill repariert bestehende Referenzen, strukturiert sie nicht um.
 
-## Inputs
+## Eingaben
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `project_path` | string | Yes | Absolute path to project root |
-| `check_external` | boolean | No | Verify external URLs (default: true, slow) |
-| `fix_mode` | enum | No | `auto` (fix obvious), `report` (document only), `interactive` (prompt) |
-| `orphan_threshold` | integer | No | Days since last modified to flag as orphan (default: 180) |
+| Parameter | Typ | Erforderlich | Beschreibung |
+|-----------|-----|--------------|-------------|
+| `project_path` | string | Ja | Absoluter Pfad zum Projektstamm |
+| `check_external` | boolean | Nein | Externe URLs verifizieren (Standard: true, langsam) |
+| `fix_mode` | enum | Nein | `auto` (offensichtliche beheben), `report` (nur dokumentieren), `interactive` (nachfragen) |
+| `orphan_threshold` | integer | Nein | Tage seit letzter Aenderung um als verwaist zu markieren (Standard: 180) |
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Scan for Broken Internal Links
+### Schritt 1: Defekte interne Links scannen
 
-Find all markdown links pointing to non-existent files.
+Alle Markdown-Links finden die auf nicht existierende Dateien zeigen.
 
 ```bash
-# Find all markdown files
+# Alle Markdown-Dateien finden
 find . -name "*.md" -type f > markdown_files.txt
 
-# Extract all markdown links: [text](path)
+# Alle Markdown-Links extrahieren: [Text](Pfad)
 grep -oP '\[.*?\]\(\K[^)]+' *.md | sort | uniq > all_links.txt
 
-# For each link:
+# Fuer jeden Link:
 while read link; do
-  # Skip external URLs (http/https)
+  # Externe URLs ueberspringen (http/https)
   if [[ "$link" =~ ^https?:// ]]; then
     continue
   fi
 
-  # Resolve relative path
+  # Relativen Pfad aufloesen
   target=$(realpath -m "$link")
 
-  # Check if target exists
+  # Pruefen ob Ziel existiert
   if [ ! -e "$target" ]; then
-    echo "BROKEN: $link (referenced in $file)" >> broken_internal.txt
+    echo "DEFEKT: $link (referenziert in $file)" >> broken_internal.txt
   fi
 done < all_links.txt
 ```
 
-**Expected:** `broken_internal.txt` lists all broken internal references
+**Erwartet:** `broken_internal.txt` listet alle defekten internen Referenzen auf
 
-**On failure:** If `realpath` unavailable, manually check each link
+**Bei Fehler:** Wenn `realpath` nicht verfuegbar, jeden Link manuell pruefen
 
-### Step 2: Check External URLs
+### Schritt 2: Externe URLs pruefen
 
-Verify that external links are still accessible (HTTP 200 response).
+Verifizieren dass externe Links noch erreichbar sind (HTTP 200 Antwort).
 
 ```bash
-# Extract external URLs
+# Externe URLs extrahieren
 grep -ohP 'https?://[^\s\)]+' *.md | sort | uniq > external_urls.txt
 
-# Check each URL (rate-limit to avoid bans)
+# Jede URL pruefen (Ratelimit um Sperren zu vermeiden)
 while read url; do
   status=$(curl -o /dev/null -s -w "%{http_code}" "$url")
 
   if [ "$status" -ge 400 ]; then
-    echo "DEAD ($status): $url" >> dead_urls.txt
+    echo "TOT ($status): $url" >> dead_urls.txt
   fi
 
-  sleep 0.5  # Rate limit
+  sleep 0.5  # Ratelimit
 done < external_urls.txt
 ```
 
-**Expected:** `dead_urls.txt` lists URLs returning 4xx/5xx errors
+**Erwartet:** `dead_urls.txt` listet URLs die 4xx/5xx-Fehler zurueckgeben
 
-**On failure:** If curl unavailable or blocked, use online link checker or skip
+**Bei Fehler:** Wenn curl nicht verfuegbar oder blockiert, Online-Link-Checker verwenden oder ueberspringen
 
-**Note**: Some URLs may return 403 due to bot detection but work in browsers. Manual review required.
+**Hinweis**: Einige URLs koennen 403 zurueckgeben wegen Bot-Erkennung, funktionieren aber im Browser. Manuelle Pruefung erforderlich.
 
-### Step 3: Find Broken Imports
+### Schritt 3: Defekte Imports finden
 
-Check that all import/require statements reference existing modules.
+Pruefen dass alle Import-/Require-Anweisungen auf existierende Module verweisen.
 
 **JavaScript/TypeScript**:
 ```bash
-# Find all import statements
+# Alle Import-Anweisungen finden
 grep -rh "^import.*from ['\"]" . | sed -E "s/.*from ['\"]([^'\"]+)['\"].*/\1/" > imports.txt
 
-# For each import:
+# Fuer jeden Import:
 while read import; do
-  # Skip node_modules and external packages
+  # node_modules und externe Pakete ueberspringen
   if [[ "$import" =~ ^[./] ]]; then
-    # Resolve to file path
-    target="${import}.js"  # Try .js, .ts, .jsx, .tsx
+    # Zu Dateipfad aufloesen
+    target="${import}.js"  # .js, .ts, .jsx, .tsx versuchen
 
     if [ ! -e "$target" ]; then
-      echo "BROKEN IMPORT: $import" >> broken_imports.txt
+      echo "DEFEKTER IMPORT: $import" >> broken_imports.txt
     fi
   fi
 done < imports.txt
@@ -131,239 +132,239 @@ done < imports.txt
 
 **Python**:
 ```bash
-# Find all import statements
+# Alle Import-Anweisungen finden
 grep -rh "^from .* import\|^import " . --include="*.py" | \
   sed -E "s/from ([^ ]+) import.*/\1/" | \
   sed -E "s/import ([^ ]+)/\1/" > imports.txt
 
-# For each local import (starts with .)
-# Check if module file exists
+# Fuer jeden lokalen Import (beginnt mit .)
+# Pruefen ob Moduldatei existiert
 ```
 
 **R**:
 ```bash
-# Find library() and source() calls
+# library()- und source()-Aufrufe finden
 grep -rh "library(\\|source(" . --include="*.R" | \
   sed -E 's/.*library\("([^"]+)"\).*/\1/' > packages.txt
 
-# For source() calls, check if file exists
-# For library() calls, check if package installed
+# Fuer source()-Aufrufe pruefen ob Datei existiert
+# Fuer library()-Aufrufe pruefen ob Paket installiert
 Rscript -e "installed.packages()[,'Package']" > installed_packages.txt
 ```
 
-**Expected:** `broken_imports.txt` lists all references to deleted/moved modules
+**Erwartet:** `broken_imports.txt` listet alle Referenzen auf geloeschte/verschobene Module
 
-**On failure:** If language-specific tool unavailable, manually review recent refactoring commits
+**Bei Fehler:** Wenn sprachspezifisches Werkzeug nicht verfuegbar, kuerzliche Refactoring-Commits manuell pruefen
 
-### Step 4: Find Orphaned Files
+### Schritt 4: Verwaiste Dateien finden
 
-Identify files that exist but are never referenced anywhere.
+Dateien identifizieren die existieren aber nirgends referenziert werden.
 
 ```bash
-# Find all code files
+# Alle Codedateien finden
 find . -type f \( -name "*.js" -o -name "*.py" -o -name "*.R" \) > all_files.txt
 
-# For each file:
+# Fuer jede Datei:
 while read file; do
   basename=$(basename "$file")
 
-  # Search for references (import, require, source, href, link)
+  # Nach Referenzen suchen (Import, Require, Source, href, Link)
   refs=$(grep -r "$basename" . --exclude-dir=node_modules --exclude-dir=.git | wc -l)
 
-  # If only 1 reference (itself):
+  # Wenn nur 1 Referenz (sich selbst):
   if [ "$refs" -le 1 ]; then
-    # Check last modified date
+    # Letztes Aenderungsdatum pruefen
     last_mod=$(git log -1 --format="%ci" "$file")
 
-    # If modified more than orphan_threshold days ago
-    # Flag as potential orphan
-    echo "ORPHAN: $file (last modified: $last_mod)" >> orphans.txt
+    # Wenn laenger als orphan_threshold Tage nicht geaendert
+    # Als potenziell verwaist markieren
+    echo "VERWAIST: $file (letzte Aenderung: $last_mod)" >> orphans.txt
   fi
 done < all_files.txt
 ```
 
-**Expected:** `orphans.txt` lists files not referenced elsewhere
+**Erwartet:** `orphans.txt` listet Dateien die anderweitig nicht referenziert werden
 
-**On failure:** If git log fails, use filesystem mtime instead
+**Bei Fehler:** Wenn git log fehlschlaegt, stattdessen Dateisystem-mtime verwenden
 
-**Note**: Some files (e.g., CLI entry points, top-level scripts) are legitimately unreferenced but not orphans. Requires manual review.
+**Hinweis**: Einige Dateien (z.B. CLI-Einstiegspunkte, Top-Level-Skripte) sind legitimerweise unreferenziert aber keine Waisen. Erfordert manuelle Pruefung.
 
-### Step 5: Fix Internal Links
+### Schritt 5: Interne Links reparieren
 
-Repair broken internal references using one of three strategies:
+Defekte interne Referenzen mit einer von drei Strategien reparieren:
 
-**Strategy 1: Find Moved Files**
+**Strategie 1: Verschobene Dateien finden**
 ```bash
-# For each broken link, search for file by name
+# Fuer jeden defekten Link nach Datei nach Name suchen
 while read broken_link; do
   filename=$(basename "$broken_link")
 
-  # Search for file in project
+  # Im Projekt nach Datei suchen
   found=$(find . -name "$filename" | head -1)
 
   if [ -n "$found" ]; then
-    # Update link to new path
+    # Link auf neuen Pfad aktualisieren
     old_path="$broken_link"
     new_path="$found"
 
-    # Use Edit tool to replace in all markdown files
-    echo "FIX: $old_path -> $new_path"
+    # Edit-Tool zum Ersetzen in allen Markdown-Dateien verwenden
+    echo "KORREKTUR: $old_path -> $new_path"
   fi
 done < broken_internal.txt
 ```
 
-**Strategy 2: Create Redirect Stub**
+**Strategie 2: Weiterleitungs-Stub erstellen**
 ```bash
-# If file was deleted intentionally, create redirect stub
-echo "# Moved" > "$broken_link"
-echo "This content moved to [new location](new_path.md)" >> "$broken_link"
+# Wenn Datei absichtlich geloescht wurde, Weiterleitungs-Stub erstellen
+echo "# Verschoben" > "$broken_link"
+echo "Dieser Inhalt wurde nach [neuer Ort](new_path.md) verschoben" >> "$broken_link"
 ```
 
-**Strategy 3: Remove Dead Link**
+**Strategie 3: Toten Link entfernen**
 ```bash
-# If content no longer exists, remove link (keep text)
-# Replace [text](broken_link) with text (plain)
+# Wenn Inhalt nicht mehr existiert, Link entfernen (Text beibehalten)
+# [Text](defekter_link) durch Text (Klartext) ersetzen
 ```
 
-**Expected:** All broken internal links either fixed, redirected, or removed
+**Erwartet:** Alle defekten internen Links entweder repariert, weitergeleitet oder entfernt
 
-**On failure:** If automated fix breaks context, escalate for manual review
+**Bei Fehler:** Wenn automatische Korrektur den Kontext bricht, zur manuellen Pruefung eskalieren
 
-### Step 6: Fix Broken Imports
+### Schritt 6: Defekte Imports reparieren
 
-Update import statements to reference correct paths after moves.
+Import-Anweisungen aktualisieren um nach Verschiebungen auf korrekte Pfade zu verweisen.
 
-**JavaScript Example**:
+**JavaScript-Beispiel**:
 ```javascript
-// Before (broken)
+// Vorher (defekt)
 import { helper } from './utils/helper';
 
-// After (fixed — file moved to lib/)
+// Nachher (repariert — Datei nach lib/ verschoben)
 import { helper } from './lib/helper';
 ```
 
-For each broken import:
-1. Locate the moved module (similar to Step 5)
-2. Update import path in all files referencing it
-3. Run linter/type checker to verify fix
+Fuer jeden defekten Import:
+1. Verschobenes Modul finden (aehnlich wie Schritt 5)
+2. Importpfad in allen referenzierenden Dateien aktualisieren
+3. Linter/Typechecker zur Verifizierung der Korrektur ausfuehren
 
-**Expected:** All imports resolve correctly; no module-not-found errors
+**Erwartet:** Alle Imports loesen korrekt auf; keine Modul-nicht-gefunden-Fehler
 
-**On failure:** If module was truly deleted, escalate to determine if functionality still needed
+**Bei Fehler:** Wenn Modul tatsaechlich geloescht wurde, eskalieren um festzustellen ob Funktionalitaet noch benoetigt wird
 
-### Step 7: Document Orphaned Files
+### Schritt 7: Verwaiste Dateien dokumentieren
 
-For files flagged as orphans, determine disposition:
+Fuer als verwaist markierte Dateien Verwendungszweck bestimmen:
 
-1. **Keep**: Legitimately unreferenced (entry points, scripts, templates)
-2. **Archive**: Old code no longer needed but preserve history
-3. **Delete**: Dead code with no value
-
-```markdown
-# Orphaned Files Review
-
-| File | Last Modified | Recommendation | Reason |
-|------|---------------|----------------|--------|
-| scripts/old_deploy.sh | 2024-01-05 | Archive | Replaced by CI/CD |
-| src/legacy_api.js | 2023-06-12 | Delete | API v1 fully deprecated |
-| bin/cli.py | 2025-12-01 | Keep | CLI entry point (unreferenced by design) |
-```
-
-**Expected:** Orphan review document created; automated decisions flagged for human approval
-
-**On failure:** (N/A — document even if no clear disposition)
-
-### Step 8: Generate Repair Report
-
-Summarize all broken references and fixes applied.
+1. **Behalten**: Legitimerweise unreferenziert (Einstiegspunkte, Skripte, Vorlagen)
+2. **Archivieren**: Alter Code nicht mehr benoetigt aber Historie bewahren
+3. **Loeschen**: Toter Code ohne Wert
 
 ```markdown
-# Reference Repair Report
+# Pruefung verwaister Dateien
 
-**Date**: YYYY-MM-DD
-**Project**: <project_name>
-**Fix Mode**: auto | report | interactive
-
-## Broken Internal Links
-
-- Total: X
-- Fixed: Y
-- Redirected: Z
-- Escalated: W
-
-Details:
-- [file.md](file.md) line 45: Fixed broken link to moved doc
-- [another.md](another.md) line 12: Created redirect stub
-
-## Dead External URLs
-
-- Total: X
-- Fixed (wayback machine): Y
-- Removed: Z
-
-Details:
-- https://example.com/old-page (404) → Removed
-- https://api.old.com/docs (gone) → Replaced with new docs
-
-## Broken Imports
-
-- Total: X
-- Fixed: Y
-- Escalated: Z
-
-Details:
-- src/main.js line 3: Updated import path after refactor
-
-## Orphaned Files
-
-- Total: X
-- Kept: Y
-- Archived: Z
-- Escalated for review: W
-
-See ORPHAN_REVIEW.md for full analysis.
-
-## Validation
-
-- [x] All tests pass after fixes
-- [x] Linter reports no module-not-found errors
-- [x] Dead links documented in report
+| Datei | Letzte Aenderung | Empfehlung | Grund |
+|-------|------------------|------------|-------|
+| scripts/old_deploy.sh | 2024-01-05 | Archivieren | Durch CI/CD ersetzt |
+| src/legacy_api.js | 2023-06-12 | Loeschen | API v1 vollstaendig abgekuendigt |
+| bin/cli.py | 2025-12-01 | Behalten | CLI-Einstiegspunkt (absichtlich unreferenziert) |
 ```
 
-**Expected:** Report saved to `REFERENCE_REPAIR_REPORT.md`
+**Erwartet:** Dokument zur Pruefung verwaister Dateien erstellt; automatische Entscheidungen zur menschlichen Genehmigung markiert
 
-**On failure:** (N/A — generate report regardless)
+**Bei Fehler:** (Entfaellt — auch ohne klare Empfehlung dokumentieren)
 
-## Validation Checklist
+### Schritt 8: Reparaturbericht erstellen
 
-After repairs:
+Alle defekten Referenzen und angewandten Korrekturen zusammenfassen.
 
-- [ ] No broken internal links in documentation
-- [ ] Dead external URLs documented (not all fixable)
-- [ ] All imports resolve correctly
-- [ ] Orphaned files reviewed and dispositioned
-- [ ] Tests pass after import fixes
-- [ ] Linter reports no unresolved references
-- [ ] Git history preserved (used `git mv` for any moves)
+```markdown
+# Referenz-Reparaturbericht
 
-## Common Pitfalls
+**Datum**: JJJJ-MM-TT
+**Projekt**: <projektname>
+**Korrekturmodus**: auto | report | interactive
 
-1. **Automatic URL Fixes Break Context**: Replacing dead links with web.archive.org URLs may not be what the author intended. Some links are better removed.
+## Defekte interne Links
 
-2. **Over-Aggressive Orphan Deletion**: Entry points, CLI scripts, and templates are often unreferenced by design. Don't delete without review.
+- Gesamt: X
+- Repariert: Y
+- Weitergeleitet: Z
+- Eskaliert: W
 
-3. **Import Path Assumptions**: Assuming all relative imports use the same base path. Different module systems (CommonJS, ES6, TypeScript) handle paths differently.
+Details:
+- [datei.md](datei.md) Zeile 45: Defekten Link zu verschobenem Dokument repariert
+- [andere.md](andere.md) Zeile 12: Weiterleitungs-Stub erstellt
 
-4. **External URL False Positives**: Some sites block curl/bots but work fine in browsers. Always manually verify dead URLs.
+## Tote externe URLs
 
-5. **Circular Reference Traps**: File A imports B, B imports A. Updating one breaks the other. Requires simultaneous fix.
+- Gesamt: X
+- Repariert (Wayback Machine): Y
+- Entfernt: Z
 
-6. **Ignoring Fragment Identifiers**: Fixing `[link](#section)` requires checking if `#section` anchor exists, not just if file exists.
+Details:
+- https://example.com/old-page (404) → Entfernt
+- https://api.old.com/docs (verschwunden) → Durch neue Dokumentation ersetzt
 
-## Related Skills
+## Defekte Imports
 
-- [clean-codebase](../clean-codebase/SKILL.md) — Remove dead code after confirming orphans
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — Reorganize files (may create broken references)
-- [escalate-issues](../escalate-issues/SKILL.md) — Route complex reference issues to specialists
-- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Comprehensive documentation review
-- [web-dev/link-checker](../../web-dev/link-checker/SKILL.md) — Advanced external URL validation
+- Gesamt: X
+- Repariert: Y
+- Eskaliert: Z
+
+Details:
+- src/main.js Zeile 3: Importpfad nach Refactoring aktualisiert
+
+## Verwaiste Dateien
+
+- Gesamt: X
+- Behalten: Y
+- Archiviert: Z
+- Zur Pruefung eskaliert: W
+
+Siehe ORPHAN_REVIEW.md fuer vollstaendige Analyse.
+
+## Validierung
+
+- [x] Alle Tests bestehen nach Korrekturen
+- [x] Linter meldet keine Modul-nicht-gefunden-Fehler
+- [x] Tote Links im Bericht dokumentiert
+```
+
+**Erwartet:** Bericht in `REFERENCE_REPAIR_REPORT.md` gespeichert
+
+**Bei Fehler:** (Entfaellt — Bericht unabhaengig generieren)
+
+## Validierung
+
+Nach Reparaturen:
+
+- [ ] Keine defekten internen Links in Dokumentation
+- [ ] Tote externe URLs dokumentiert (nicht alle reparierbar)
+- [ ] Alle Imports loesen korrekt auf
+- [ ] Verwaiste Dateien geprueft und zugeordnet
+- [ ] Tests bestehen nach Import-Korrekturen
+- [ ] Linter meldet keine unaufgeloesten Referenzen
+- [ ] Git-Historie erhalten (verwendet `git mv` fuer Verschiebungen)
+
+## Haeufige Stolperfallen
+
+1. **Automatische URL-Korrekturen brechen Kontext**: Tote Links durch web.archive.org-URLs zu ersetzen entspricht moeglicherweise nicht der Absicht des Autors. Manche Links werden besser entfernt.
+
+2. **Ueberagressive Waisen-Loeschung**: Einstiegspunkte, CLI-Skripte und Vorlagen sind oft absichtlich unreferenziert. Nicht ohne Pruefung loeschen.
+
+3. **Import-Pfad-Annahmen**: Annahme dass alle relativen Imports denselben Basispfad verwenden. Verschiedene Modulsysteme (CommonJS, ES6, TypeScript) behandeln Pfade unterschiedlich.
+
+4. **Externe URL Falsch-Positive**: Einige Websites blockieren curl/Bots funktionieren aber einwandfrei im Browser. Tote URLs immer manuell verifizieren.
+
+5. **Zirkulaere Referenz-Fallen**: Datei A importiert B, B importiert A. Aktualisierung einer bricht die andere. Erfordert gleichzeitige Korrektur.
+
+6. **Fragment-Bezeichner ignorieren**: Reparatur von `[Link](#abschnitt)` erfordert Pruefung ob der `#abschnitt`-Anker existiert, nicht nur ob die Datei existiert.
+
+## Verwandte Skills
+
+- [clean-codebase](../clean-codebase/SKILL.md) — Toten Code entfernen nach Bestaetigung verwaister Dateien
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — Dateien reorganisieren (kann defekte Referenzen erzeugen)
+- [escalate-issues](../escalate-issues/SKILL.md) — Komplexe Referenzprobleme an Spezialisten weiterleiten
+- [compliance/documentation-audit](../../compliance/documentation-audit/SKILL.md) — Umfassende Dokumentationspruefung
+- [web-dev/link-checker](../../web-dev/link-checker/SKILL.md) — Erweiterte externe URL-Validierung

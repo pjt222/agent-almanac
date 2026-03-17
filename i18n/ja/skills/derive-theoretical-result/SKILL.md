@@ -1,12 +1,11 @@
 ---
 name: derive-theoretical-result
 description: >
-  Derive a theoretical result step-by-step from first principles or established
-  theorems, with every step explicitly justified and special cases checked.
-  Use when deriving a formula or theorem from first principles, proving a
-  mathematical statement by logical deduction, re-deriving a textbook result
-  for verification or adaptation, extending a known result to a more general
-  setting, or producing a self-contained derivation for a paper or thesis.
+  第一原理または確立された定理からステップバイステップで理論的結果を導出する。すべての
+  ステップを明示的に正当化し、特殊ケースをチェックする。第一原理からの公式や定理の
+  導出時、論理的演繹による数学的命題の証明時、検証や適応のための教科書的結果の再導出時、
+  既知の結果のより一般的な設定への拡張時、論文や学位論文のための自己完結的な導出の
+  作成時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -25,34 +24,34 @@ metadata:
 
 # 理論的結果の導出
 
-Produce a rigorous, step-by-step derivation of a theoretical result starting from stated axioms, first principles, or established theorems. Every algebraic or logical step is explicitly justified, limiting cases are verified, and the final result is presented with a complete notation glossary.
+述べられた公理、第一原理、または確立された定理から出発して、厳密なステップバイステップの理論的結果の導出を生成する。すべての代数的・論理的ステップは明示的に正当化され、極限ケースが検証され、最終結果は完全な記号一覧と共に提示される。
 
 ## 使用タイミング
 
-- Deriving a formula, relation, or theorem from first principles (e.g., deriving the Euler-Lagrange equation from the action principle)
-- Proving a mathematical statement by logical deduction from axioms
-- Re-deriving a textbook result to verify it or adapt it to a modified context
-- Extending a known result to a more general setting (e.g., from flat spacetime to curved spacetime)
-- Producing a self-contained derivation for a paper, thesis, or technical report
+- 第一原理から公式、関係、定理を導出する時（例: 作用原理からオイラー-ラグランジュ方程式を導出）
+- 公理からの論理的演繹により数学的命題を証明する時
+- 教科書的な結果を検証するため、または修正された文脈に適応するために再導出する時
+- 既知の結果をより一般的な設定に拡張する時（例: 平坦時空から曲がった時空へ）
+- 論文、学位論文、技術報告書のための自己完結的な導出を作成する時
 
 ## 入力
 
-- **必須**: Target result to derive (equation, inequality, theorem statement, or relation)
-- **必須**: Starting point (axioms, postulates, previously established results, or Lagrangian/Hamiltonian)
-- **任意**: Preferred proof technique (direct, by contradiction, by induction, variational, constructive)
-- **任意**: Notation conventions to follow (if matching a specific textbook or collaborator's conventions)
-- **任意**: Known intermediate results that may be cited without re-derivation
+- **必須**: 導出する目標結果（方程式、不等式、定理の命題、関係式）
+- **必須**: 出発点（公理、公準、既に確立された結果、ラグランジアン/ハミルトニアン）
+- **任意**: 好みの証明技法（直接、背理法、帰納法、変分法、構成的）
+- **任意**: 従うべき記号規約（特定の教科書や共同研究者の規約に合わせる場合）
+- **任意**: 再導出せずに引用してよい既知の中間結果
 
 ## 手順
 
-### ステップ1: State Starting Assumptions and Target Result
+### ステップ1: 出発仮定と目標結果の表明
 
-Write the derivation's contract explicitly before any calculation:
+計算を始める前に、導出の契約を明示的に記述する:
 
-1. **Axioms and postulates**: List every assumption the derivation rests on. For physics, this includes the symmetry group, the action principle, or the postulates of quantum mechanics. For mathematics, this includes the axiom system and any previously proven lemmas.
-2. **Target result**: State the result to be derived in precise mathematical notation. If the result is an equation, write both sides. If it is an inequality, state the direction and the conditions for equality.
-3. **Scope and restrictions**: State the domain of validity (e.g., "valid for non-relativistic, spinless particles in three dimensions"). Identify what the derivation does not cover.
-4. **Notation declaration**: Define every symbol that will appear. This prevents ambiguity and makes the derivation self-contained.
+1. **公理と公準**: 導出が基づくすべての仮定を列挙する。物理学では、対称性群、作用原理、量子力学の公準を含む。数学では、公理系と既に証明された補題を含む。
+2. **目標結果**: 導出すべき結果を精密な数学的記法で表明する。結果が方程式の場合、両辺を書く。不等式の場合、方向と等号成立の条件を述べる。
+3. **範囲と制限**: 有効性の領域を述べる（例: 「非相対論的、スピンなしの3次元粒子に有効」）。導出がカバーしないものを特定する。
+4. **記号宣言**: 現れるすべての記号を定義する。これにより曖昧さが防がれ、導出が自己完結する。
 
 ```markdown
 ## Derivation Contract
@@ -64,19 +63,19 @@ Write the derivation's contract explicitly before any calculation:
   - ...
 ```
 
-**期待結果:** A complete, unambiguous statement of what is being derived from what, with all notation defined upfront.
+**期待結果:** 何から何を導出するかの完全で曖昧さのない表明。すべての記号が事前に定義されている。
 
-**失敗時:** If the target result is ambiguous or the starting assumptions are incomplete, clarify before proceeding. A derivation with hidden assumptions is unreliable.
+**失敗時:** 目標結果が曖昧または出発仮定が不完全な場合、進む前に明確にする。隠れた仮定を持つ導出は信頼できない。
 
-### ステップ2: Identify Required Mathematical Machinery
+### ステップ2: 必要な数学的道具の特定
 
-Survey the tools needed and verify their applicability:
+必要なツールを調査し、適用可能性を検証する:
 
-1. **Algebraic techniques**: Identify required manipulations (tensor algebra, commutator algebra, matrix operations, series expansions). Verify that the structures involved satisfy the prerequisites (e.g., convergence conditions for series, invertibility for matrix operations).
-2. **Calculus and analysis**: Identify whether the derivation requires ordinary or partial differentiation, integration (and over what domain), functional derivatives, contour integration, or distribution theory. Verify regularity conditions (differentiability, integrability, analyticity).
-3. **Symmetry and group theory**: Identify representation-theoretic tools needed (irreducible representations, Clebsch-Gordan coefficients, character orthogonality, Wigner-Eckart theorem).
-4. **Topology and geometry** (if applicable): Identify geometric structures (manifolds, fiber bundles, connections) and topological constraints (boundary terms, winding numbers, index theorems).
-5. **Known identities and lemmas**: Collect the specific identities that will be invoked (e.g., Jacobi identity, Bianchi identity, integration by parts, Stokes' theorem). State each one explicitly so the derivation can cite them by name.
+1. **代数的技法**: 必要な操作を特定する（テンソル代数、交換子代数、行列演算、級数展開）。関係する構造が前提条件を満たすことを検証する（例: 級数の収束条件、行列演算の可逆性）。
+2. **微積分学と解析学**: 導出に常微分または偏微分、積分（どの領域上か）、汎関数微分、複素積分、超関数論が必要かを特定する。正則性条件（微分可能性、可積分性、解析性）を検証する。
+3. **対称性と群論**: 必要な表現論的ツールを特定する（既約表現、クレブシュ-ゴルダン係数、指標の直交性、ウィグナー-エッカートの定理）。
+4. **トポロジーと幾何学**（該当する場合）: 幾何学的構造（多様体、ファイバー束、接続）とトポロジー的制約（境界項、巻き数、指数定理）を特定する。
+5. **既知の恒等式と補題**: 引用する特定の恒等式を収集する（例: ヤコビ恒等式、ビアンキ恒等式、部分積分、ストークスの定理）。導出が名前で引用できるよう、各々を明示的に述べる。
 
 ```markdown
 ## Mathematical Toolkit
@@ -86,26 +85,26 @@ Survey the tools needed and verify their applicability:
 - **Identities to invoke**: [list with precise statements]
 ```
 
-**期待結果:** A checklist of mathematical tools with their applicability conditions verified for the specific problem at hand.
+**期待結果:** 特定の問題に対する適用可能性条件が検証された数学的ツールのチェックリスト。
 
-**失敗時:** If a required tool has unverified prerequisites (e.g., term-by-term differentiation of a series whose uniform convergence is unknown), flag it as a gap. Either prove the prerequisite or state it as an additional assumption.
+**失敗時:** 必要なツールの前提条件が未検証の場合（例: 一様収束が不明な級数の項ごとの微分）、ギャップとしてフラグを立てる。前提条件を証明するか、追加の仮定として述べる。
 
-### ステップ3: Execute Derivation with Step-by-Step Justification
+### ステップ3: ステップバイステップの正当化付き導出の実行
 
-Carry out the derivation with every step labeled and justified:
+各ステップにラベルと正当化を付けて導出を実行する:
 
-1. **One operation per step**: Each numbered step performs exactly one algebraic or logical operation. Do not combine multiple manipulations into a single step.
-2. **Justification labels**: Tag each step with its justification. Common labels:
-   - `[by assumption]` -- invoking a stated axiom or assumption
-   - `[by definition]` -- using a previously declared definition
-   - `[by {identity name}]` -- applying a named identity (e.g., "by Jacobi identity")
-   - `[by Step N]` -- citing a previous step in this derivation
-   - `[by {theorem name}]` -- invoking an external theorem (stated in Step 2)
-3. **Intermediate checkpoints**: After every 5-10 steps, pause and verify:
-   - Units/dimensions are consistent on both sides
-   - Known symmetries are preserved
-   - The expression has the correct transformation properties
-4. **Branch points**: If the derivation branches (e.g., case analysis for degenerate vs. non-degenerate eigenvalues), treat each branch as a labeled sub-derivation and merge the results.
+1. **1ステップに1操作**: 各番号付きステップは正確に1つの代数的または論理的操作を行う。複数の操作を1ステップに結合しない。
+2. **正当化ラベル**: 各ステップに正当化をタグ付けする。一般的なラベル:
+   - `[仮定による]` -- 述べられた公理または仮定を引用
+   - `[定義による]` -- 以前に宣言された定義を使用
+   - `[{恒等式名}による]` -- 名前付き恒等式を適用（例: 「ヤコビ恒等式による」）
+   - `[ステップNによる]` -- この導出の以前のステップを引用
+   - `[{定理名}による]` -- 外部定理を引用（ステップ2で述べたもの）
+3. **中間チェックポイント**: 5〜10ステップごとに一時停止して検証:
+   - 単位/次元が両辺で一致
+   - 既知の対称性が保存されている
+   - 式が正しい変換性を持つ
+4. **分岐点**: 導出が分岐する場合（例: 縮退vs非縮退固有値の場合分け）、各分岐をラベル付きサブ導出として扱い、結果をマージする。
 
 ```markdown
 ## Derivation
@@ -128,24 +127,24 @@ Carry out the derivation with every step labeled and justified:
 *Justification*: [final operation]  QED
 ```
 
-**期待結果:** A linear sequence of steps from the starting point to the target result, with no gaps in logic. Every step is independently verifiable.
+**期待結果:** 出発点から目標結果までの論理にギャップのないステップの線形列。各ステップが独立に検証可能。
 
-**失敗時:** If a step does not follow from the previous one, the derivation has a gap. Either insert the missing intermediate steps or identify the additional assumption needed. Never skip a step with "it can be shown that" unless the omitted result is a well-known identity listed in Step 2.
+**失敗時:** ステップが前のステップから導かれない場合、導出にギャップがある。不足する中間ステップを挿入するか、必要な追加仮定を特定する。ステップ2で列挙した既知の恒等式でない限り、「〜であることが示せる」でステップを省略しない。
 
-### ステップ4: Check Limiting Cases and Special Values
+### ステップ4: 極限ケースと特殊値のチェック
 
-Validate the derived result against known physics or mathematics:
+導出された結果を既知の物理学または数学に対して検証する:
 
-1. **Limiting cases**: Identify at least three limiting cases where the result should reduce to something known:
-   - A simpler, previously derived formula (e.g., non-relativistic limit of a relativistic result)
-   - A trivial case (e.g., setting a coupling constant to zero)
-   - An extreme parameter regime (e.g., high-temperature or low-temperature limit)
+1. **極限ケース**: 結果が既知のものに帰着すべき少なくとも3つの極限ケースを特定する:
+   - より単純な、以前に導出された公式（例: 相対論的結果の非相対論的極限）
+   - 自明なケース（例: 結合定数をゼロに設定）
+   - 極端なパラメータ領域（例: 高温極限または低温極限）
 
-2. **Special values**: Substitute specific values of parameters where the answer is known independently (e.g., n=1 for the hydrogen atom, d=3 for three-dimensional results).
+2. **特殊値**: 答えが独立に既知であるパラメータの特定の値を代入する（例: 水素原子のn=1、3次元結果のd=3）。
 
-3. **Symmetry checks**: Verify that the result transforms correctly under the symmetry group. If the result should be a scalar, check that it is invariant. If it should be a vector, check its transformation law.
+3. **対称性チェック**: 結果が対称性群の下で正しく変換されることを確認する。結果がスカラーであるべきなら不変であることをチェック。ベクトルであるべきなら変換則をチェック。
 
-4. **Consistency with related results**: Check that the derived result is consistent with other known results in the same theory (e.g., Ward identities, sum rules, reciprocity relations).
+4. **関連する結果との整合性**: 導出された結果が同じ理論の他の既知の結果と整合するかチェックする（例: ワード恒等式、和則、相反関係）。
 
 ```markdown
 ## Limiting Case Verification
@@ -155,19 +154,19 @@ Validate the derived result against known physics or mathematics:
 | ... | ... | ... | ... | ... |
 ```
 
-**期待結果:** All limiting cases and special values produce the expected results. The derivation is internally consistent.
+**期待結果:** すべての極限ケースと特殊値が期待される結果を生成する。導出が内部的に整合する。
 
-**失敗時:** A failed limiting case indicates an error in the derivation. Trace the failure back by checking which step first produces an expression that fails the limit. Common causes: incorrect sign, missing factor of 2 or pi, wrong combinatorial coefficient, or a step where an order of limits matters.
+**失敗時:** 極限ケースの失敗は導出のエラーを示す。極限に失敗する式を最初に生成するステップを逆追跡してチェックする。一般的な原因: 符号の間違い、2またはπの因子の欠落、組合せ係数の間違い、極限の順序が重要なステップ。
 
-### ステップ5: Present Complete Derivation with Notation Glossary
+### ステップ5: 記号一覧付きの完全な導出の提示
 
-Assemble the final, polished derivation:
+最終的な洗練された導出を組み立てる:
 
-1. **Narrative structure**: Write a brief introductory paragraph stating the physical or mathematical motivation, the approach, and the main result.
-2. **Derivation body**: Present the steps from Step 3, cleaned up for readability. Group related steps into logical blocks with descriptive headings (e.g., "Expanding the action to second order", "Applying the stationary phase condition").
-3. **Result box**: State the final result in a highlighted block, clearly separated from the derivation.
-4. **Notation glossary**: Compile every symbol used in the derivation with its meaning, units (if physical), and first occurrence.
-5. **Assumptions summary**: List all assumptions in a single place, distinguishing fundamental postulates from technical assumptions (e.g., smoothness, convergence).
+1. **叙述構造**: 物理的または数学的動機、アプローチ、主要結果を述べる簡潔な導入段落を書く。
+2. **導出本体**: ステップ3のステップを読みやすさのために整理して提示する。関連するステップを記述的な見出し付きの論理的ブロックにグループ化する（例: 「作用を2次まで展開する」、「停留位相条件を適用する」）。
+3. **結果ボックス**: 最終結果を導出から明確に分離されたハイライトブロックで表明する。
+4. **記号一覧**: 導出で使用したすべての記号を意味、単位（物理的な場合）、初出箇所と共にまとめる。
+5. **仮定の要約**: すべての仮定を1箇所に列挙し、基本的な公準と技術的仮定（例: 滑らかさ、収束性）を区別する。
 
 ```markdown
 ## Final Result
@@ -186,32 +185,32 @@ Assemble the final, polished derivation:
 3. ...
 ```
 
-**期待結果:** A self-contained document that a reader can follow from start to finish without consulting external references, except for the explicitly cited identities and theorems.
+**期待結果:** 明示的に引用された恒等式と定理以外の外部参照を参照せずに、読者が最初から最後まで追える自己完結的な文書。
 
-**失敗時:** If the derivation is too long for a single document (more than ~50 steps), break it into lemmas. Derive each lemma separately, then assemble the main result by citing the lemmas.
+**失敗時:** 導出が単一文書には長すぎる場合（約50ステップ超）、補題に分割する。各補題を個別に導出し、補題を引用して主要結果を組み立てる。
 
 ## バリデーション
 
-- [ ] All starting assumptions are explicitly stated before the first calculation step
-- [ ] Every derivation step has a labeled justification (no unjustified leaps)
-- [ ] Units and dimensions are consistent at every intermediate checkpoint
-- [ ] At least three limiting cases are checked and produce expected results
-- [ ] Special values match independently known answers
-- [ ] The result transforms correctly under the stated symmetry group
-- [ ] A notation glossary defines every symbol used
-- [ ] The derivation is complete: no steps are deferred with "it can be shown"
-- [ ] The domain of validity is explicitly stated with the final result
+- [ ] すべての出発仮定が最初の計算ステップの前に明示的に述べられている
+- [ ] すべての導出ステップにラベル付きの正当化がある（正当化されていない飛躍がない）
+- [ ] 各中間チェックポイントで単位と次元が一致している
+- [ ] 少なくとも3つの極限ケースがチェックされ期待される結果を生成する
+- [ ] 特殊値が独立に既知の答えに一致する
+- [ ] 結果が述べられた対称性群の下で正しく変換される
+- [ ] 記号一覧が使用されたすべての記号を定義している
+- [ ] 導出が完全である: 「〜であることが示せる」で延期されたステップがない
+- [ ] 有効性の領域が最終結果と共に明示的に述べられている
 
 ## よくある落とし穴
 
-- **Hidden assumptions**: Assuming a function is analytic, a series converges, or an integral exists without stating it. Every regularity condition is an assumption and must be declared.
-- **Sign errors**: The most common mechanical error. Verify signs at every step by tracking them through substitutions. Cross-check against dimensional analysis (a sign error often produces a dimensionally inconsistent expression).
-- **Dropped boundary terms**: When integrating by parts or applying Stokes' theorem, boundary terms vanish only if specific conditions are met. State why they vanish (e.g., "because the field decays faster than 1/r at infinity").
-- **Order of limits**: Taking limits in the wrong order can give different results (e.g., thermodynamic limit before zero-temperature limit). State the order explicitly and justify it.
-- **Circular reasoning**: Using the result to be derived as an intermediate step. This is especially subtle when the result is a well-known formula that "seems obvious." Every step must follow from the stated starting point, not from familiarity with the answer.
-- **Notation collisions**: Using the same symbol for different quantities (e.g., 'E' for energy and for electric field). The notation glossary prevents this, but only if it is written before the derivation rather than after.
+- **隠れた仮定**: 関数が解析的であること、級数が収束すること、積分が存在することを述べずに仮定する。すべての正則性条件は仮定であり、宣言されなければならない
+- **符号エラー**: 最も一般的な機械的エラー。代入を通じて追跡することで各ステップで符号を検証する。次元解析に対してクロスチェックする（符号エラーはしばしば次元的に整合しない式を生む）
+- **境界項の落とし**: 部分積分やストークスの定理を適用する際、境界項は特定の条件が満たされる場合にのみ消える。なぜ消えるかを述べる（例: 「無限遠で場が1/rより速く減衰するため」）
+- **極限の順序**: 極限を間違った順序で取ると異なる結果になりうる（例: ゼロ温度極限の前の熱力学的極限）。順序を明示し正当化する
+- **循環論法**: 導出すべき結果を中間ステップとして使用する。結果がよく知られた公式で「自明に見える」場合に特に微妙。すべてのステップは答えへの慣れからではなく、述べられた出発点から導かれなければならない
+- **記号の衝突**: 異なる量に同じ記号を使用する（例: エネルギーと電場の両方に'E'を使用）。記号一覧がこれを防ぐが、導出の後ではなく前に書かれた場合のみ有効
 
 ## 関連スキル
 
-- `formulate-quantum-problem` -- formulate the quantum mechanical framework before deriving results from it
-- `survey-theoretical-literature` -- find prior derivations of the same or related results for comparison
+- `formulate-quantum-problem` -- そこから結果を導出する前に量子力学的枠組みを定式化する
+- `survey-theoretical-literature` -- 比較のために同じまたは関連する結果の先行導出を見つける

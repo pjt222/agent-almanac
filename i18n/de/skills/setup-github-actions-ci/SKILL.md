@@ -1,18 +1,18 @@
 ---
 name: setup-github-actions-ci
-description: >
-  GitHub Actions CI/CD fuer R-Pakete konfigurieren, einschliesslich R CMD
-  check auf mehreren Plattformen, Testabdeckungsberichten und Bereitstellung
-  der pkgdown-Website. Verwendet r-lib/actions fuer Standardworkflows.
-  Verwenden beim Einrichten von CI/CD fuer ein neues R-Paket, beim
-  Hinzufuegen von Mehrplattformtests zu einem bestehenden Paket, beim
-  Konfigurieren automatisierter pkgdown-Bereitstellung oder beim
-  Hinzufuegen von Code-Coverage-Berichten.
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
+description: >
+  GitHub Actions CI/CD fuer R-Pakete konfigurieren einschliesslich R CMD check
+  auf mehreren Plattformen, Testabdeckungsberichten und pkgdown-Site-
+  Bereitstellung. Verwendet r-lib/actions fuer Standardworkflows. Anwenden
+  beim Einrichten von CI/CD fuer ein neues R-Paket, beim Hinzufuegen von
+  Multiplattform-Tests zu einem bestehenden Paket, beim Konfigurieren der
+  automatisierten pkgdown-Site-Bereitstellung oder beim Hinzufuegen von
+  Codeabdeckungsberichten zu einem Repository.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -30,21 +30,21 @@ Automatisierten R CMD check, Testabdeckung und Dokumentationsbereitstellung uebe
 
 ## Wann verwenden
 
-- CI/CD fuer ein neues R-Paket auf GitHub einrichten
-- Mehrplattformtests zu einem bestehenden Paket hinzufuegen
-- Automatisierte pkgdown-Website-Bereitstellung konfigurieren
-- Code-Coverage-Berichte hinzufuegen
+- Einrichten von CI/CD fuer ein neues R-Paket auf GitHub
+- Hinzufuegen von Multiplattform-Tests zu einem bestehenden Paket
+- Konfigurieren der automatisierten pkgdown-Site-Bereitstellung
+- Hinzufuegen von Codeabdeckungsberichten
 
 ## Eingaben
 
-- **Erforderlich**: R-Paket mit gueltiger DESCRIPTION und Tests
+- **Erforderlich**: R-Paket mit gueltigem DESCRIPTION und Tests
 - **Erforderlich**: GitHub-Repository (oeffentlich oder privat)
-- **Optional**: Ob pkgdown-Bereitstellung eingeschlossen werden soll (Standard: nein)
-- **Optional**: Ob Coverage-Berichte eingeschlossen werden sollen (Standard: nein)
+- **Optional**: Ob pkgdown-Bereitstellung einbezogen werden soll (Standard: nein)
+- **Optional**: Ob Abdeckungsberichte einbezogen werden sollen (Standard: nein)
 
 ## Vorgehensweise
 
-### Schritt 1: R CMD Check-Workflow erstellen
+### Schritt 1: R CMD Check Workflow erstellen
 
 `.github/workflows/R-CMD-check.yaml` erstellen:
 
@@ -101,9 +101,9 @@ jobs:
           build_args: 'c("--no-manual", "--compact-vignettes=gs+qpdf")'
 ```
 
-**Erwartet:** Workflow-Datei `.github/workflows/R-CMD-check.yaml` erstellt mit einer Mehrplattformmatrix (macOS, Windows, Ubuntu), die release, devel und oldrel abdeckt.
+**Erwartet:** Workflow-Datei `.github/workflows/R-CMD-check.yaml` erstellt mit einer Multiplattform-Matrix (macOS, Windows, Ubuntu) die Release, Devel und Oldrel abdeckt.
 
-**Bei Fehler:** Wenn das Verzeichnis `.github/workflows/` nicht existiert, es mit `mkdir -p .github/workflows` erstellen. YAML-Syntax mit einem YAML-Linter pruefen.
+**Bei Fehler:** Wenn das Verzeichnis `.github/workflows/` nicht existiert, mit `mkdir -p .github/workflows` erstellen. YAML-Syntax mit einem YAML-Linter verifizieren.
 
 ### Schritt 2: Testabdeckungs-Workflow erstellen (optional)
 
@@ -159,7 +159,7 @@ jobs:
 
 **Erwartet:** Workflow-Datei `.github/workflows/test-coverage.yaml` erstellt. Abdeckungsberichte werden bei jedem Push und PR zu Codecov hochgeladen.
 
-**Bei Fehler:** Wenn der Codecov-Upload fehlschlaegt, pruefen, ob das Secret `CODECOV_TOKEN` in den Repository-Einstellungen gesetzt ist. Bei oeffentlichen Repositories kann das Token optional sein.
+**Bei Fehler:** Wenn der Codecov-Upload fehlschlaegt, verifizieren dass das `CODECOV_TOKEN`-Secret in den Repository-Einstellungen gesetzt ist. Fuer oeffentliche Repos kann der Token optional sein.
 
 ### Schritt 3: pkgdown-Bereitstellungs-Workflow erstellen (optional)
 
@@ -213,65 +213,65 @@ jobs:
           folder: docs
 ```
 
-**Erwartet:** Workflow-Datei `.github/workflows/pkgdown.yaml` erstellt. Website wird bei Push zu main oder bei Release auf dem `gh-pages`-Branch gebaut und bereitgestellt.
+**Erwartet:** Workflow-Datei `.github/workflows/pkgdown.yaml` erstellt. Die Site wird bei Push nach main oder Release gebaut und auf den `gh-pages`-Branch bereitgestellt.
 
-**Bei Fehler:** Wenn die Bereitstellung fehlschlaegt, sicherstellen, dass das Repository `contents: write`-Berechtigungen aktiviert hat. Pruefen, ob `_pkgdown.yml` `development: mode: release` gesetzt hat.
+**Bei Fehler:** Wenn die Bereitstellung fehlschlaegt, sicherstellen dass das Repository `contents: write`-Berechtigungen aktiviert hat. Verifizieren dass `_pkgdown.yml` `development: mode: release` gesetzt hat.
 
-### Schritt 4: Status-Badge zu README hinzufuegen
+### Schritt 4: Statusabzeichen zur README hinzufuegen
 
-In `README.md` einfuegen:
+Zu `README.md` hinzufuegen:
 
 ```markdown
 [![R-CMD-check](https://github.com/USERNAME/REPO/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/USERNAME/REPO/actions/workflows/R-CMD-check.yaml)
 ```
 
-**Erwartet:** README zeigt ein Live-CI-Status-Badge an, das sich nach jedem Workflow-Lauf automatisch aktualisiert.
+**Erwartet:** README zeigt ein Live-CI-Statusabzeichen das nach jedem Workflow-Durchlauf automatisch aktualisiert wird.
 
-**Bei Fehler:** Wenn das Badge "no status" anzeigt, pruefen, ob der Workflow-Dateiname in der Badge-URL mit der tatsaechlichen Datei uebereinstimmt. Einen Commit pushen, um den ersten Workflow-Lauf auszuloesen.
+**Bei Fehler:** Wenn das Abzeichen "no status" anzeigt, verifizieren dass der Workflow-Dateiname in der Abzeichen-URL mit der tatsaechlichen Datei uebereinstimmt. Einen Commit pushen um den ersten Workflow-Durchlauf auszuloesen.
 
 ### Schritt 5: GitHub-Repository-Einstellungen konfigurieren
 
-1. GitHub Pages aktivieren (Einstellungen > Pages) und auf den `gh-pages`-Branch zeigen lassen, falls pkgdown verwendet wird
-2. Das Secret `CODECOV_TOKEN` hinzufuegen, falls Coverage-Berichte verwendet werden
-3. Sicherstellen, dass `GITHUB_TOKEN` ausreichende Berechtigungen hat
+1. GitHub Pages aktivieren (Settings > Pages) mit Verweis auf den `gh-pages`-Branch falls pkgdown verwendet wird
+2. `CODECOV_TOKEN`-Secret hinzufuegen falls Abdeckungsberichte verwendet werden
+3. Sicherstellen dass `GITHUB_TOKEN` ausreichende Berechtigungen hat
 
-**Erwartet:** GitHub Pages ist fuer die pkgdown-Bereitstellung konfiguriert. Erforderliche Secrets sind gesetzt. Token-Berechtigungen sind fuer die Workflows ausreichend.
+**Erwartet:** GitHub Pages ist fuer pkgdown-Bereitstellung konfiguriert. Erforderliche Secrets sind gesetzt. Token-Berechtigungen reichen fuer die Workflows aus.
 
-**Bei Fehler:** Wenn die Pages-Bereitstellung fehlschlaegt, in Einstellungen > Pages pruefen, ob die Quelle auf den `gh-pages`-Branch gesetzt ist. Wenn Secrets fehlen, sie unter Einstellungen > Secrets and variables > Actions hinzufuegen.
+**Bei Fehler:** Wenn die Pages-Bereitstellung fehlschlaegt, unter Settings > Pages pruefen ob die Quelle auf den `gh-pages`-Branch gesetzt ist. Wenn Secrets fehlen, unter Settings > Secrets and variables > Actions hinzufuegen.
 
 ### Schritt 6: Pushen und verifizieren
 
 ```bash
 git add .github/
-git commit -m "Add GitHub Actions CI workflows"
+git commit -m "GitHub Actions CI Workflows hinzufuegen"
 git push
 ```
 
-Den Actions-Tab auf GitHub pruefen, um sicherzustellen, dass Workflows erfolgreich laufen.
+Den Actions-Tab auf GitHub pruefen um zu verifizieren dass die Workflows erfolgreich laufen.
 
-**Erwartet:** Gruene Haekchen bei allen Jobs im GitHub Actions-Tab. Workflows werden sowohl bei Push- als auch bei PR-Ereignissen ausgeloest.
+**Erwartet:** Gruene Haekchen bei allen Jobs im GitHub Actions-Tab. Workflows werden sowohl bei Push- als auch bei PR-Events ausgeloest.
 
-**Bei Fehler:** Workflow-Protokolle im Actions-Tab pruefen. Haeufige Probleme: fehlende Systemabhaengigkeiten (zu `extra-packages` hinzufuegen), Vignetten-Build-Fehler (Pandoc-Setup-Schritt sicherstellen), YAML-Syntaxfehler.
+**Bei Fehler:** Workflow-Logs im Actions-Tab pruefen. Haeufige Probleme: fehlende Systemabhaengigkeiten (zu `extra-packages` hinzufuegen), Vignetten-Build-Fehler (sicherstellen dass der Pandoc-Setup-Schritt vorhanden ist), YAML-Syntaxfehler.
 
 ## Validierung
 
 - [ ] R CMD check besteht auf allen Matrix-Plattformen
 - [ ] Abdeckungsbericht wird generiert (falls konfiguriert)
-- [ ] pkgdown-Website wird bereitgestellt (falls konfiguriert)
-- [ ] Status-Badge erscheint in README
+- [ ] pkgdown-Site wird bereitgestellt (falls konfiguriert)
+- [ ] Statusabzeichen wird in README angezeigt
 - [ ] Workflows werden sowohl bei Push als auch bei PR ausgeloest
 
 ## Haeufige Stolperfallen
 
 - **Fehlende `permissions`**: GitHub Actions erfordert jetzt explizite Berechtigungen. Mindestens `permissions: read-all` hinzufuegen
-- **Systemabhaengigkeiten**: Einige R-Pakete benoetigen Systembibliotheken. `r-lib/actions/setup-r-dependencies` verwenden, das die meisten Faelle behandelt
-- **Vignetten ohne pandoc**: Immer `r-lib/actions/setup-pandoc@v2` einschliessen
-- **pkgdown-Entwicklungsmodus**: Sicherstellen, dass `_pkgdown.yml` `development: mode: release` fuer GitHub Pages hat
-- **Caching-Probleme**: `r-lib/actions/setup-r-dependencies` verwaltet Caching automatisch
+- **Systemabhaengigkeiten**: Einige R-Pakete brauchen Systembibliotheken. `r-lib/actions/setup-r-dependencies` verwenden, das die meisten Faelle behandelt
+- **Vignetten ohne Pandoc**: Immer `r-lib/actions/setup-pandoc@v2` einbeziehen
+- **pkgdown-Entwicklungsmodus**: Sicherstellen dass `_pkgdown.yml` `development: mode: release` fuer GitHub Pages gesetzt hat
+- **Caching-Probleme**: `r-lib/actions/setup-r-dependencies` handhabt Caching automatisch
 
 ## Verwandte Skills
 
-- `create-r-package` - erstmalige Paketeinrichtung einschliesslich CI-Workflow
-- `build-pkgdown-site` - detaillierte pkgdown-Konfiguration
-- `submit-to-cran` - CI-Pruefungen sollten CRAN-Anforderungen widerspiegeln
-- `release-package-version` - Bereitstellung bei Release ausloesen
+- `create-r-package` -- Anfaengliches Paket-Setup einschliesslich CI-Workflow
+- `build-pkgdown-site` -- Detaillierte pkgdown-Konfiguration
+- `submit-to-cran` -- CI-Checks sollten CRAN-Erwartungen widerspiegeln
+- `release-package-version` -- Bereitstellung bei Release ausloesen

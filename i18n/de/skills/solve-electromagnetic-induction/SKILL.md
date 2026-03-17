@@ -1,12 +1,13 @@
 ---
 name: solve-electromagnetic-induction
 description: >
-  Solve problems involving changing magnetic flux using Faraday's law, Lenz's
-  law, motional EMF, mutual and self-inductance, and RL circuit transients.
-  Use when computing induced EMF from time-varying B-fields or moving
-  conductors, determining current direction via Lenz's law, analyzing
-  inductance and energy storage in magnetic fields, or solving RL circuit
-  differential equations for switching transients.
+  Probleme mit sich aenderndem magnetischen Fluss mittels Faradayschem Gesetz,
+  Lenzscher Regel, Bewegungs-EMK, Gegen- und Selbstinduktivitaet sowie
+  RL-Schaltungstransienten loesen. Verwenden bei der Berechnung induzierter EMK
+  aus zeitveraenderlichen B-Feldern oder bewegten Leitern, bei der Bestimmung
+  der Stromrichtung ueber die Lenzsche Regel, bei der Analyse von Induktivitaet
+  und Energiespeicherung in Magnetfeldern oder beim Loesen von
+  RL-Schaltungs-Differentialgleichungen fuer Schalttransienten.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -25,38 +26,38 @@ metadata:
 
 # Elektromagnetische Induktion loesen
 
-Analyze electromagnetic induction phenomena by identifying the source of changing magnetic flux, computing the flux through the relevant surface, applying Faraday's law to obtain the induced EMF, determining the induced current direction via Lenz's law, and solving the resulting circuit equations including RL transients and energy stored in the magnetic field.
+Elektromagnetische Induktionsphaenomene analysieren durch Identifikation der Quelle des sich aendernden magnetischen Flusses, Berechnung des Flusses durch die relevante Flaeche, Anwendung des Faradayschen Gesetzes zur Bestimmung der induzierten EMK, Bestimmung der Richtung des induzierten Stroms ueber die Lenzsche Regel und Loesung der resultierenden Schaltungsgleichungen einschliesslich RL-Transienten und im Magnetfeld gespeicherter Energie.
 
-## When to Use
+## Wann verwenden
 
-- Computing the induced EMF in a loop or coil due to a time-varying magnetic field
-- Analyzing motional EMF from a conductor moving through a static B-field
-- Determining the direction of induced current using Lenz's law
-- Calculating mutual inductance between coupled coils or self-inductance of a single coil
-- Solving RL circuit transients (energizing, de-energizing, switching between states)
-- Computing energy stored in a magnetic field or in an inductor
+- Berechnung der induzierten EMK in einer Schleife oder Spule aufgrund eines zeitveraenderlichen Magnetfelds
+- Analyse der Bewegungs-EMK eines Leiters, der sich durch ein statisches B-Feld bewegt
+- Bestimmung der Richtung des induzierten Stroms mittels Lenzscher Regel
+- Berechnung der Gegeninduktivitaet zwischen gekoppelten Spulen oder der Selbstinduktivitaet einer einzelnen Spule
+- Loesung von RL-Schaltungstransienten (Einschalten, Ausschalten, Umschalten zwischen Zustaenden)
+- Berechnung der im Magnetfeld oder in einer Induktivitaet gespeicherten Energie
 
-## Inputs
+## Eingaben
 
-- **Required**: Source of changing flux (time-varying B-field, moving conductor, or changing loop area)
-- **Required**: Geometry of the circuit or loop through which flux is computed
-- **Required**: Relevant physical parameters (B-field magnitude, velocity, resistance, inductance, or geometry for inductance calculation)
-- **Optional**: Circuit elements connected to the induction loop (resistors, additional inductors, sources)
-- **Optional**: Initial conditions for transient analysis (initial current, initial stored energy)
-- **Optional**: Time interval of interest for transient solutions
+- **Erforderlich**: Quelle des sich aendernden Flusses (zeitveraenderliches B-Feld, bewegter Leiter oder sich aendernde Schleifenflaeche)
+- **Erforderlich**: Geometrie der Schaltung oder Schleife, durch die der Fluss berechnet wird
+- **Erforderlich**: Relevante physikalische Parameter (B-Feld-Staerke, Geschwindigkeit, Widerstand, Induktivitaet oder Geometrie fuer Induktivitaetsberechnung)
+- **Optional**: An die Induktionsschleife angeschlossene Schaltungselemente (Widerstaende, zusaetzliche Induktivitaeten, Quellen)
+- **Optional**: Anfangsbedingungen fuer Transientenanalyse (Anfangsstrom, anfaenglich gespeicherte Energie)
+- **Optional**: Interessierendes Zeitintervall fuer Transientenloesungen
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Identify Source of Changing Flux
+### Schritt 1: Quelle des sich aendernden Flusses identifizieren
 
-Classify the physical mechanism that produces a time-varying magnetic flux:
+Den physikalischen Mechanismus klassifizieren, der einen zeitveraenderlichen magnetischen Fluss erzeugt:
 
-1. **Changing B-field**: The magnetic field itself varies in time (e.g., AC electromagnet, approaching magnet, current ramp in a nearby coil). The loop is stationary.
-2. **Changing area**: The loop area changes (e.g., expanding or contracting loop, rotating coil in a static field). The B-field may be static.
-3. **Moving conductor (motional EMF)**: A straight conductor moves through a static B-field. The flux change arises from the conductor sweeping out area.
-4. **Combined**: Both the field and geometry change simultaneously (e.g., a coil rotating in a time-varying field). Separate the contributions for clarity.
+1. **Sich aenderndes B-Feld**: Das Magnetfeld selbst variiert in der Zeit (z.B. Wechselstrom-Elektromagnet, sich naehernder Magnet, Stromrampe in einer nahen Spule). Die Schleife ist stationaer.
+2. **Sich aendernde Flaeche**: Die Schleifenflaeche aendert sich (z.B. expandierende oder kontrahierende Schleife, rotierende Spule in einem statischen Feld). Das B-Feld kann statisch sein.
+3. **Bewegter Leiter (Bewegungs-EMK)**: Ein gerader Leiter bewegt sich durch ein statisches B-Feld. Die Flussaenderung entsteht dadurch, dass der Leiter Flaeche ueberstreicht.
+4. **Kombiniert**: Sowohl Feld als auch Geometrie aendern sich gleichzeitig (z.B. eine Spule rotiert in einem zeitveraenderlichen Feld). Die Beitraege zur Klarheit trennen.
 
-For each mechanism, identify the relevant surface S bounded by the circuit loop C:
+Fuer jeden Mechanismus die relevante Flaeche S identifizieren, die vom Schaltungsring C begrenzt wird:
 
 ```markdown
 ## Flux Change Classification
@@ -66,35 +67,35 @@ For each mechanism, identify the relevant surface S bounded by the circuit loop 
 - **Relevant parameters**: [B magnitude, loop dimensions, velocity, angular frequency]
 ```
 
-**Expected:** A clear identification of why the flux changes, what surface to integrate over, and which physical quantities carry the time dependence.
+**Erwartet:** Eine klare Identifikation, warum sich der Fluss aendert, ueber welche Flaeche integriert werden muss und welche physikalischen Groessen die Zeitabhaengigkeit tragen.
 
-**On failure:** If the source of changing flux is ambiguous (e.g., a deforming loop in a non-uniform field), decompose the problem into a sum of contributions: one from the field change at fixed geometry, and one from the geometry change in the instantaneous field. This decomposition is always valid.
+**Bei Fehler:** Wenn die Quelle des sich aendernden Flusses mehrdeutig ist (z.B. eine sich verformende Schleife in einem ungleichfoermigen Feld), das Problem in eine Summe von Beitraegen zerlegen: einen von der Feldaenderung bei fester Geometrie und einen von der Geometrieaenderung im momentanen Feld. Diese Zerlegung ist immer gueltig.
 
-### Step 2: Calculate Magnetic Flux Through the Relevant Surface
+### Schritt 2: Magnetischen Fluss durch die relevante Flaeche berechnen
 
-Compute the magnetic flux Phi_B = integral of B . dA over the surface S:
+Den magnetischen Fluss Phi_B = Integral von B . dA ueber die Flaeche S berechnen:
 
-1. **Uniform field, flat loop**: Phi_B = B * A * cos(theta), where theta is the angle between B and the area normal vector n_hat. This is the most common textbook case.
+1. **Gleichfoermiges Feld, flache Schleife**: Phi_B = B * A * cos(theta), wobei theta der Winkel zwischen B und dem Flaechennormalenvektor n_hat ist. Dies ist der haeufigste Lehrbuchfall.
 
-2. **Non-uniform field**: Parameterize the surface S and evaluate the integral:
-   - Choose coordinates aligned with the surface (e.g., polar for a circular loop)
-   - Express B(r) at each point on the surface
-   - Compute the dot product B . dA = B . n_hat dA
-   - Integrate over the surface
+2. **Ungleichfoermiges Feld**: Die Flaeche S parametrisieren und das Integral auswerten:
+   - Koordinaten passend zur Flaeche waehlen (z.B. Polarkoordinaten fuer eine kreisfoermige Schleife)
+   - B(r) an jedem Punkt der Flaeche ausdruecken
+   - Das Skalarprodukt B . dA = B . n_hat dA berechnen
+   - Ueber die Flaeche integrieren
 
-3. **Coupled coils (mutual inductance)**: For coil 2 linked to coil 1:
-   - Compute B_1 (field from coil 1) at the location of coil 2
-   - Integrate B_1 over the area of each turn of coil 2
-   - Multiply by N_2 (number of turns in coil 2) for total flux linkage: Lambda_21 = N_2 * Phi_21
-   - Mutual inductance: M = Lambda_21 / I_1
+3. **Gekoppelte Spulen (Gegeninduktivitaet)**: Fuer Spule 2 verbunden mit Spule 1:
+   - B_1 (Feld von Spule 1) am Ort von Spule 2 berechnen
+   - B_1 ueber die Flaeche jeder Windung von Spule 2 integrieren
+   - Mit N_2 (Windungszahl in Spule 2) fuer Gesamtflussverkettung multiplizieren: Lambda_21 = N_2 * Phi_21
+   - Gegeninduktivitaet: M = Lambda_21 / I_1
 
-4. **Self-inductance**: For a single coil carrying current I:
-   - Compute B inside the coil from the coil's own current
-   - Integrate B over one turn's cross-section and multiply by N
-   - Self-inductance: L = N * Phi / I = Lambda / I
-   - Known results: solenoid L = mu_0 * n^2 * A * l; toroid L = mu_0 * N^2 * A / (2 pi R)
+4. **Selbstinduktivitaet**: Fuer eine einzelne stromfuehrende Spule mit Strom I:
+   - B innerhalb der Spule aus dem eigenen Strom der Spule berechnen
+   - B ueber den Querschnitt einer Windung integrieren und mit N multiplizieren
+   - Selbstinduktivitaet: L = N * Phi / I = Lambda / I
+   - Bekannte Ergebnisse: Solenoid L = mu_0 * n^2 * A * l; Toroid L = mu_0 * N^2 * A / (2 pi R)
 
-5. **Time dependence**: Express Phi_B(t) explicitly by substituting the time-varying quantities identified in Step 1.
+5. **Zeitabhaengigkeit**: Phi_B(t) explizit ausdruecken durch Einsetzen der in Schritt 1 identifizierten zeitveraenderlichen Groessen.
 
 ```markdown
 ## Flux Calculation
@@ -104,28 +105,28 @@ Compute the magnetic flux Phi_B = integral of B . dA over the surface S:
 - **Inductance** (if applicable): L = [value with units] or M = [value with units]
 ```
 
-**Expected:** An explicit expression for Phi_B(t) with correct units (Weber = T . m^2) and, if applicable, inductance values with units of Henry.
+**Erwartet:** Ein expliziter Ausdruck fuer Phi_B(t) mit korrekten Einheiten (Weber = T . m^2) und, falls zutreffend, Induktivitaetswerte mit der Einheit Henry.
 
-**On failure:** If the flux integral cannot be evaluated analytically (e.g., non-uniform field over a non-trivial surface), use numerical quadrature. For mutual inductance of complex geometries, consider the Neumann formula: M = (mu_0 / 4 pi) * double_contour_integral of (dl_1 . dl_2) / |r_1 - r_2|.
+**Bei Fehler:** Wenn das Flussintegral nicht analytisch ausgewertet werden kann (z.B. ungleichfoermiges Feld ueber eine nicht-triviale Flaeche), numerische Quadratur verwenden. Fuer die Gegeninduktivitaet komplexer Geometrien die Neumann-Formel in Betracht ziehen: M = (mu_0 / 4 pi) * Doppel-Konturintegral von (dl_1 . dl_2) / |r_1 - r_2|.
 
-### Step 3: Apply Faraday's Law for Induced EMF
+### Schritt 3: Faradaysches Gesetz fuer induzierte EMK anwenden
 
-Compute the induced EMF from the time derivative of the flux:
+Die induzierte EMK aus der Zeitableitung des Flusses berechnen:
 
-1. **Faraday's law**: EMF = -d(Lambda)/dt = -N * d(Phi_B)/dt. The negative sign encodes Lenz's law (opposition to the change).
+1. **Faradaysches Gesetz**: EMK = -d(Lambda)/dt = -N * d(Phi_B)/dt. Das negative Vorzeichen kodiert die Lenzsche Regel (Gegenwirkung zur Aenderung).
 
-2. **Differentiation**: Take the total time derivative of Phi_B(t):
-   - If B = B(t) and A, theta are constant: EMF = -N * A * cos(theta) * dB/dt
-   - If theta = omega * t (rotating coil in static B): EMF = N * B * A * omega * sin(omega * t)
-   - If the area changes (e.g., sliding rail): EMF = -B * l * v (motional EMF, where l is the rail length and v the velocity)
-   - For the general case: use the Leibniz integral rule to differentiate under the integral sign
+2. **Differentiation**: Die totale Zeitableitung von Phi_B(t) bilden:
+   - Wenn B = B(t) und A, theta konstant: EMK = -N * A * cos(theta) * dB/dt
+   - Wenn theta = omega * t (rotierende Spule in statischem B): EMK = N * B * A * omega * sin(omega * t)
+   - Wenn sich die Flaeche aendert (z.B. Gleitschiene): EMK = -B * l * v (Bewegungs-EMK, wobei l die Schienenlaenge und v die Geschwindigkeit ist)
+   - Fuer den allgemeinen Fall: die Leibniz-Integralregel zum Differenzieren unter dem Integralzeichen verwenden
 
-3. **Motional EMF (alternative derivation)**: For a conductor of length l moving with velocity v in field B:
-   - The Lorentz force on charges in the conductor: F = q(v x B)
-   - EMF = integral of (v x B) . dl along the conductor
-   - This is equivalent to Faraday's law but can be more intuitive for moving conductors
+3. **Bewegungs-EMK (alternative Herleitung)**: Fuer einen Leiter der Laenge l, der sich mit Geschwindigkeit v im Feld B bewegt:
+   - Die Lorentz-Kraft auf Ladungen im Leiter: F = q(v x B)
+   - EMK = Integral von (v x B) . dl entlang des Leiters
+   - Dies ist aequivalent zum Faradayschen Gesetz, kann aber fuer bewegte Leiter intuitiver sein
 
-4. **Sign and magnitude check**: The magnitude of EMF should be physically reasonable. For typical laboratory setups: mV to V range. For power generation: V to kV range.
+4. **Vorzeichen- und Groessenordnungspruefung**: Die Groessenordnung der EMK sollte physikalisch vernuenftig sein. Fuer typische Laboraufbauten: mV- bis V-Bereich. Fuer Stromerzeugung: V- bis kV-Bereich.
 
 ```markdown
 ## Induced EMF
@@ -135,28 +136,28 @@ Compute the induced EMF from the time derivative of the flux:
 - **Derivation method**: [Faraday's law / motional EMF / Leibniz rule]
 ```
 
-**Expected:** An explicit expression for EMF(t) with correct units (Volts) and physically reasonable magnitude.
+**Erwartet:** Ein expliziter Ausdruck fuer EMK(t) mit korrekten Einheiten (Volt) und physikalisch vernuenftiger Groessenordnung.
 
-**On failure:** If the EMF has wrong units, trace back to the flux calculation -- a missing factor of area or an inconsistent unit system (e.g., mixing CGS and SI) is the most likely cause. If the EMF sign seems wrong, re-examine the surface normal orientation relative to the circuit loop direction (right-hand rule).
+**Bei Fehler:** Wenn die EMK falsche Einheiten hat, zurueck zur Flussberechnung verfolgen -- ein fehlender Flaechenfaktor oder ein inkonsistentes Einheitensystem (z.B. Mischung von CGS und SI) ist die wahrscheinlichste Ursache. Wenn das EMK-Vorzeichen falsch erscheint, die Orientierung der Flaechennormale relativ zur Schaltungsschleifenrichtung erneut pruefen (Rechte-Hand-Regel).
 
-### Step 4: Determine Current Direction via Lenz's Law
+### Schritt 4: Stromrichtung ueber Lenzsche Regel bestimmen
 
-Establish the direction of the induced current and its physical consequences:
+Die Richtung des induzierten Stroms und seine physikalischen Konsequenzen festlegen:
 
-1. **Lenz's law statement**: The induced current flows in the direction that opposes the change in magnetic flux that produced it. This is a consequence of energy conservation.
+1. **Aussage der Lenzschen Regel**: Der induzierte Strom fliesst in der Richtung, die der Aenderung des magnetischen Flusses entgegenwirkt, die ihn erzeugt hat. Dies ist eine Folge der Energieerhaltung.
 
-2. **Application procedure**:
-   - Determine whether the flux through the loop is increasing or decreasing
-   - If flux is increasing: induced current creates a B-field that opposes the increase (opposing the external field direction through the loop)
-   - If flux is decreasing: induced current creates a B-field that supports the decreasing flux (same direction as the external field through the loop)
-   - Use the right-hand rule to convert the required B-field direction into a current direction
+2. **Anwendungsverfahren**:
+   - Bestimmen ob der Fluss durch die Schleife zunimmt oder abnimmt
+   - Wenn der Fluss zunimmt: induzierter Strom erzeugt ein B-Feld, das der Zunahme entgegenwirkt (entgegengesetzt zur externen Feldrichtung durch die Schleife)
+   - Wenn der Fluss abnimmt: induzierter Strom erzeugt ein B-Feld, das den abnehmenden Fluss unterstuetzt (gleiche Richtung wie das externe Feld durch die Schleife)
+   - Die Rechte-Hand-Regel verwenden um die erforderliche B-Feld-Richtung in eine Stromrichtung umzuwandeln
 
-3. **Force consequences**: The induced current in the presence of the external B-field experiences a force:
-   - Eddy current braking: the force opposes the relative motion (always decelerating)
-   - Magnetic levitation: the repulsive force supports weight when the geometry is appropriate
-   - These forces are a direct manifestation of Lenz's law at the mechanical level
+3. **Kraftkonsequenzen**: Der induzierte Strom in Anwesenheit des externen B-Felds erfaehrt eine Kraft:
+   - Wirbelstrombremsung: die Kraft wirkt der Relativbewegung entgegen (immer verzoegernd)
+   - Magnetische Levitation: die abstossende Kraft traegt Gewicht wenn die Geometrie geeignet ist
+   - Diese Kraefte sind eine direkte Manifestation der Lenzschen Regel auf mechanischer Ebene
 
-4. **Qualitative verification**: The induced effects should always resist the change. A falling magnet through a conducting tube falls slower than in free fall. A generator requires mechanical work input to produce electrical energy.
+4. **Qualitative Verifikation**: Die induzierten Effekte sollten immer der Aenderung widerstehen. Ein fallender Magnet durch ein leitendes Rohr faellt langsamer als im freien Fall. Ein Generator erfordert mechanische Arbeitseinspeisung um elektrische Energie zu erzeugen.
 
 ```markdown
 ## Current Direction
@@ -166,38 +167,38 @@ Establish the direction of the induced current and its physical consequences:
 - **Mechanical consequence**: [braking force / levitation / energy transfer]
 ```
 
-**Expected:** A clearly stated current direction that is consistent with Lenz's law, with the physical consequence (force, braking, energy transfer) identified.
+**Erwartet:** Eine klar formulierte Stromrichtung, die mit der Lenzschen Regel konsistent ist, mit identifizierter physikalischer Konsequenz (Kraft, Bremsung, Energieuebertragung).
 
-**On failure:** If the current direction seems to amplify the flux change rather than oppose it, the surface normal orientation or the right-hand rule application is reversed. Re-examine the loop orientation convention. A current that reinforces the flux change would violate energy conservation.
+**Bei Fehler:** Wenn die Stromrichtung die Flussaenderung zu verstaerken scheint statt ihr entgegenzuwirken, ist die Orientierung der Flaechennormale oder die Anwendung der Rechte-Hand-Regel umgekehrt. Die Schleifenorientierungskonvention erneut pruefen. Ein Strom, der die Flussaenderung verstaerkt, wuerde die Energieerhaltung verletzen.
 
-### Step 5: Solve Resulting Circuit Equation
+### Schritt 5: Resultierende Schaltungsgleichung loesen
 
-Formulate and solve the circuit equation including the inductance:
+Die Schaltungsgleichung einschliesslich der Induktivitaet formulieren und loesen:
 
-1. **RL circuit formation**: When the induced EMF drives current through a circuit with resistance R and inductance L, Kirchhoff's voltage law gives:
-   - Energizing (switch closes onto DC source V_0): V_0 = L dI/dt + R I
-   - De-energizing (source removed, loop closed): 0 = L dI/dt + R I
-   - General (time-varying EMF): EMF(t) = L dI/dt + R I
+1. **RL-Schaltungsbildung**: Wenn die induzierte EMK Strom durch eine Schaltung mit Widerstand R und Induktivitaet L treibt, gibt die Kirchhoffsche Spannungsregel:
+   - Einschalten (Schalter schliesst auf DC-Quelle V_0): V_0 = L dI/dt + R I
+   - Ausschalten (Quelle entfernt, Schleife geschlossen): 0 = L dI/dt + R I
+   - Allgemein (zeitveraenderliche EMK): EMK(t) = L dI/dt + R I
 
-2. **Solution of the first-order ODE**:
-   - Energizing: I(t) = (V_0 / R) * [1 - exp(-t / tau)], where tau = L / R is the time constant
-   - De-energizing: I(t) = I_0 * exp(-t / tau)
-   - AC drive EMF = EMF_0 sin(omega t): solve using phasor methods or particular + homogeneous solution
-   - Transient duration: current reaches ~63% of final value after 1 tau, ~95% after 3 tau, ~99.3% after 5 tau
+2. **Loesung der gewoehnlichen Differentialgleichung erster Ordnung**:
+   - Einschalten: I(t) = (V_0 / R) * [1 - exp(-t / tau)], wobei tau = L / R die Zeitkonstante ist
+   - Ausschalten: I(t) = I_0 * exp(-t / tau)
+   - Wechselstromantrieb EMK = EMK_0 sin(omega t): mittels Zeigermethoden oder partikulaerer + homogener Loesung loesen
+   - Transientendauer: Strom erreicht ~63% des Endwerts nach 1 tau, ~95% nach 3 tau, ~99.3% nach 5 tau
 
-3. **Energy analysis**:
-   - Energy stored in the inductor: U_L = (1/2) L I^2
-   - Energy stored in the magnetic field per unit volume: u_B = B^2 / (2 mu_0) in vacuum, or u_B = (1/2) B . H in magnetic materials
-   - Power dissipated in resistance: P_R = I^2 R
-   - Energy conservation: rate of energy input = rate of energy storage + rate of dissipation
+3. **Energieanalyse**:
+   - In der Induktivitaet gespeicherte Energie: U_L = (1/2) L I^2
+   - Im Magnetfeld pro Volumeneinheit gespeicherte Energie: u_B = B^2 / (2 mu_0) im Vakuum, oder u_B = (1/2) B . H in magnetischen Materialien
+   - Im Widerstand dissipierte Leistung: P_R = I^2 R
+   - Energieerhaltung: Energieeingangsrate = Energiespeicherrate + Dissipationsrate
 
-4. **Mutual inductance coupling**: For two coupled coils with mutual inductance M:
+4. **Gegeninduktivitaetskopplung**: Fuer zwei gekoppelte Spulen mit Gegeninduktivitaet M:
    - V_1 = L_1 dI_1/dt + M dI_2/dt + R_1 I_1
    - V_2 = M dI_1/dt + L_2 dI_2/dt + R_2 I_2
-   - Coupling coefficient: k = M / sqrt(L_1 L_2), where 0 <= k <= 1
-   - Solve the coupled ODEs simultaneously (matrix exponential or Laplace transform)
+   - Kopplungskoeffizient: k = M / sqrt(L_1 L_2), wobei 0 <= k <= 1
+   - Die gekoppelten DGLs gleichzeitig loesen (Matrixexponential oder Laplace-Transformation)
 
-5. **Steady-state and transient separation**: For AC-driven circuits, decompose the solution into a transient (decaying exponential) and steady-state (sinusoidal at the drive frequency). Report impedance Z_L = j omega L and phase angle.
+5. **Stationaer- und Transientenseparation**: Fuer wechselstromgetriebene Schaltungen die Loesung in einen Transienten (abklingende Exponentialfunktion) und einen stationaeren Anteil (sinusfoermig bei Antriebsfrequenz) zerlegen. Impedanz Z_L = j omega L und Phasenwinkel berichten.
 
 ```markdown
 ## Circuit Solution
@@ -209,36 +210,36 @@ Formulate and solve the circuit equation including the inductance:
 - **Steady-state impedance** (if AC): Z_L = [value]
 ```
 
-**Expected:** A complete time-domain solution for the current with correct exponential time constants, energy balance verified, and physically reasonable magnitudes.
+**Erwartet:** Eine vollstaendige Zeitbereichsloesung fuer den Strom mit korrekten exponentiellen Zeitkonstanten, verifizierter Energiebilanz und physikalisch vernuenftigen Groessenordnungen.
 
-**On failure:** If the current grows without bound, a sign error in the ODE setup is likely (the inductance term should oppose changes in current). If the time constant is unreasonably large or small, double-check the inductance calculation from Step 2 and the resistance value. Time constants for typical laboratory RL circuits range from microseconds to seconds.
+**Bei Fehler:** Wenn der Strom unbegrenzt waechst, liegt wahrscheinlich ein Vorzeichenfehler im DGL-Aufbau vor (der Induktivitaetsterm sollte Stromaenderungen entgegenwirken). Wenn die Zeitkonstante unvernuenftig gross oder klein ist, die Induktivitaetsberechnung aus Schritt 2 und den Widerstandswert erneut pruefen. Zeitkonstanten fuer typische Labor-RL-Schaltungen reichen von Mikrosekunden bis Sekunden.
 
-## Validation
+## Validierung
 
-- [ ] Source of changing flux is clearly identified (changing B, changing area, motional, combined)
-- [ ] Magnetic flux integral is set up over the correct surface with proper orientation
-- [ ] Flux has correct units (Weber = T . m^2)
-- [ ] Inductance values (self or mutual) have correct units (Henry) and reasonable magnitude
-- [ ] EMF has correct units (Volts) and physically reasonable magnitude
-- [ ] EMF sign is consistent with Lenz's law (opposes the flux change)
-- [ ] Current direction is determined by Lenz's law and verified with the right-hand rule
-- [ ] RL circuit ODE is correctly set up with proper signs
-- [ ] Time constant tau = L/R has correct units (seconds) and reasonable magnitude
-- [ ] Energy balance is verified: input energy = stored energy + dissipated energy
-- [ ] Limiting cases checked (t -> 0 for initial conditions, t -> infinity for steady state)
+- [ ] Quelle des sich aendernden Flusses ist klar identifiziert (sich aenderndes B, sich aendernde Flaeche, Bewegung, kombiniert)
+- [ ] Magnetisches Flussintegral ist ueber die korrekte Flaeche mit richtiger Orientierung aufgestellt
+- [ ] Fluss hat korrekte Einheiten (Weber = T . m^2)
+- [ ] Induktivitaetswerte (Selbst- oder Gegen-) haben korrekte Einheiten (Henry) und vernuenftige Groessenordnung
+- [ ] EMK hat korrekte Einheiten (Volt) und physikalisch vernuenftige Groessenordnung
+- [ ] EMK-Vorzeichen ist konsistent mit Lenzscher Regel (wirkt der Flussaenderung entgegen)
+- [ ] Stromrichtung ist durch Lenzsche Regel bestimmt und mit Rechte-Hand-Regel verifiziert
+- [ ] RL-Schaltungs-DGL ist korrekt mit richtigen Vorzeichen aufgestellt
+- [ ] Zeitkonstante tau = L/R hat korrekte Einheiten (Sekunden) und vernuenftige Groessenordnung
+- [ ] Energiebilanz ist verifiziert: Eingangsenergie = gespeicherte Energie + dissipierte Energie
+- [ ] Grenzfaelle geprueft (t -> 0 fuer Anfangsbedingungen, t -> unendlich fuer stationaeren Zustand)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Wrong sign in Faraday's law**: The EMF is EMF = -d(Lambda)/dt, not +d(Lambda)/dt. The negative sign is essential -- it encodes Lenz's law and energy conservation. Omitting it produces a current that amplifies the flux change, violating thermodynamics.
-- **Confusing flux and flux linkage**: For a single-turn loop, Phi_B and Lambda are the same. For an N-turn coil, Lambda = N * Phi_B. Inductance is defined as L = Lambda / I, not L = Phi_B / I. Missing the factor of N produces inductance values that are N times too small.
-- **Surface normal inconsistency**: The surface normal n_hat must be related to the loop circulation direction by the right-hand rule. Choosing them independently leads to sign errors in both the flux and the EMF.
-- **Ignoring back-EMF in RL circuits**: When current changes in an inductor, the inductor generates a back-EMF that opposes the change. Omitting this term from Kirchhoff's voltage law makes the circuit equation algebraic instead of differential, missing the transient entirely.
-- **Assuming instantaneous current change**: Current through an ideal inductor cannot change instantaneously (it would require infinite voltage). Initial conditions for RL transients must satisfy continuity of inductor current across switching events.
-- **Neglecting eddy currents in bulk conductors**: Faraday's law applies to any closed path in a conductor, not just discrete wire loops. Time-varying fields in bulk conductors induce distributed eddy currents that produce heating (loss) and opposing fields (shielding). These are critical in transformer cores and must be minimized with lamination.
+- **Falsches Vorzeichen im Faradayschen Gesetz**: Die EMK ist EMK = -d(Lambda)/dt, nicht +d(Lambda)/dt. Das negative Vorzeichen ist wesentlich -- es kodiert die Lenzsche Regel und die Energieerhaltung. Sein Weglassen erzeugt einen Strom, der die Flussaenderung verstaerkt, was die Thermodynamik verletzt.
+- **Verwechslung von Fluss und Flussverkettung**: Fuer eine Einwindungsschleife sind Phi_B und Lambda identisch. Fuer eine Spule mit N Windungen ist Lambda = N * Phi_B. Induktivitaet ist definiert als L = Lambda / I, nicht L = Phi_B / I. Das Fehlen des Faktors N erzeugt Induktivitaetswerte, die N-mal zu klein sind.
+- **Inkonsistenz der Flaechennormale**: Die Flaechennormale n_hat muss durch die Rechte-Hand-Regel mit der Schleifenumlaufrichtung zusammenhaengen. Unabhaengige Wahl fuehrt zu Vorzeichenfehlern sowohl im Fluss als auch in der EMK.
+- **Gegen-EMK in RL-Schaltungen ignorieren**: Wenn sich der Strom in einer Induktivitaet aendert, erzeugt die Induktivitaet eine Gegen-EMK, die der Aenderung entgegenwirkt. Das Weglassen dieses Terms aus der Kirchhoffschen Spannungsregel macht die Schaltungsgleichung algebraisch statt differentiell und verfehlt den Transienten vollstaendig.
+- **Annahme instantaner Stromaenderung**: Der Strom durch eine ideale Induktivitaet kann sich nicht instantan aendern (es wuerde unendliche Spannung erfordern). Anfangsbedingungen fuer RL-Transienten muessen Stetigkeit des Induktivitaetsstroms ueber Schaltereignisse hinweg erfuellen.
+- **Vernachlaessigung von Wirbelstroemen in Massivleitern**: Das Faradaysche Gesetz gilt fuer jeden geschlossenen Pfad in einem Leiter, nicht nur fuer diskrete Drahtschleifen. Zeitveraenderliche Felder in Massivleitern induzieren verteilte Wirbelstroeme, die Erwaermung (Verlust) und entgegenwirkende Felder (Abschirmung) erzeugen. Diese sind in Transformatorkernen kritisch und muessen durch Laminierung minimiert werden.
 
-## Related Skills
+## Verwandte Skills
 
-- `analyze-magnetic-field` -- compute the B-field from current distributions that serve as the flux source
-- `formulate-maxwell-equations` -- generalize induction to the full Maxwell framework including displacement current
-- `design-electromagnetic-device` -- apply induction principles to motors, generators, and transformers
-- `derive-theoretical-result` -- derive analytic results for inductance, EMF, or transient solutions from first principles
+- `analyze-magnetic-field` -- das B-Feld aus Stromverteilungen berechnen, die als Flussquelle dienen
+- `formulate-maxwell-equations` -- Induktion auf den vollstaendigen Maxwell-Rahmen verallgemeinern einschliesslich Verschiebungsstrom
+- `design-electromagnetic-device` -- Induktionsprinzipien auf Motoren, Generatoren und Transformatoren anwenden
+- `derive-theoretical-result` -- analytische Ergebnisse fuer Induktivitaet, EMK oder Transientenloesungen aus ersten Prinzipien herleiten

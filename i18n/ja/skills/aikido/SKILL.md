@@ -1,14 +1,12 @@
 ---
 name: aikido
 description: >
-  Practice aikido as a defensive martial art emphasizing harmony, redirection,
-  and controlled resolution. Covers centering and grounding, ukemi (safe
-  falling and rolling), core techniques (irimi-nage, shiho-nage, kote-gaeshi,
-  ikkyo), blending and tai sabaki (body movement), randori (multiple attacker
-  practice), weapons awareness, and applying principles off the mat. Use when
-  learning a defensive martial art that prioritizes de-escalation, developing
-  the ability to redirect aggression without causing unnecessary harm, building
-  safe falling skills, or cultivating calm centeredness under physical pressure.
+  調和、転換、制御された解決を重視する防御武道としての合気道を実践する。
+  中心と接地、受身（安全な転倒と回転）、基本技（入身投げ、四方投げ、小手返し、
+  一教）、合わせと体捌き（身体の動き）、乱取り（複数人掛け）、武器の認識、
+  畳の外での原則の適用をカバーする。脱力を優先する防御武道を学ぶ時、不必要な
+  危害を与えずに攻撃を転換する能力を養う時、安全な受身技術を身につける時、
+  身体的圧力の下での落ち着いた中心性を養う時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,52 +25,52 @@ metadata:
 
 # 合気道の実践
 
-Develop an aikido practice rooted in centering, blending with incoming force, and resolving conflict through controlled technique rather than opposing strength with strength.
+中心を据え、入ってくる力に合わせ、力対力で対抗するのではなく制御された技術で紛争を解決することに根ざした合気道の稽古を発展させる。
 
 ## 使用タイミング
 
-- Learning a defensive martial art that prioritizes de-escalation and controlled resolution
-- Developing the ability to redirect aggression without causing unnecessary harm
-- Building safe falling skills (ukemi) applicable to any physical activity or emergency
-- Cultivating calm centeredness under physical pressure or confrontation
-- Complementing tai chi or meditation with a partner-based martial practice (see `tai-chi`, `meditate`)
-- Training awareness and response to multiple simultaneous threats
+- 脱力と制御された解決を優先する防御武道を学ぶ時
+- 不必要な危害を与えずに攻撃を転換する能力を養う時
+- あらゆる身体活動や緊急時に応用できる安全な受身技術（受身）を身につける時
+- 身体的圧力や対峙の下での落ち着いた中心性を養う時
+- 太極拳や瞑想にパートナーベースの武道稽古を補完する時（`tai-chi`、`meditate`参照）
+- 複数の同時脅威への認識と対応を訓練する時
 
 ## 入力
 
-- **必須**: Practice space with a padded or yielding surface (tatami, judo mats, grass; avoid concrete)
-- **必須**: Comfortable clothing allowing full range of motion (gi preferred; loose exercise clothing acceptable)
-- **任意**: Training partner (essential for techniques; solo practice covers centering, ukemi, and movement)
-- **任意**: Practice weapons (wooden: jo staff ~128cm, bokken sword ~102cm, tanto knife ~30cm)
-- **任意**: Experience level (beginner, intermediate, advanced; default: beginner)
-- **任意**: Available practice time (minimum 20 minutes; recommended 60-90 minutes)
+- **必須**: パッド付きまたは柔軟な表面を持つ稽古スペース（畳、柔道マット、芝生；コンクリートは避ける）
+- **必須**: 全可動域を許す快適な服装（道着が望ましい；ゆったりした運動着でも可）
+- **任意**: 稽古パートナー（技には必須；一人稽古では中心、受身、動きをカバー）
+- **任意**: 稽古用武器（木製：杖 約128cm、木剣 約102cm、短刀 約30cm）
+- **任意**: 経験レベル（初心者、中級者、上級者；デフォルト：初心者）
+- **任意**: 利用可能な稽古時間（最低20分；推奨60-90分）
 
 ## 手順
 
-### ステップ1: Ground and Center
+### ステップ1: 接地と中心を据える
 
-Every aikido technique begins from a centered state. Without center, technique becomes muscular struggle.
+すべての合気道の技は中心の据わった状態から始まる。中心がなければ、技は筋力の闘いになる。
 
-1. Stand in hanmi (half-facing stance): one foot forward, feet roughly shoulder-width apart at 60-degree angle
-2. Bend knees slightly — weight sinks toward the one-point (seika tanden), located 5cm below the navel
-3. Relax the shoulders completely — let them drop away from the ears
-4. Extend awareness outward while keeping attention anchored at the one-point
-5. Test your center: have a partner push gently on your chest
-   - If you resist with upper body, you are not centered — relax and sink lower
-   - If you maintain stability without effort, center is established
-6. Practice weight underside: imagine that the heavy part of each arm is the underside; let the upper surface feel light and buoyant
-7. Extend ki: project calm, positive energy forward through the fingertips — not tension, but focused intention
+1. 半身（はんみ）で立つ：片足を前に出し、足は肩幅程度で60度の角度
+2. 膝を軽く曲げる — 重心が臍下5cmにある一点（正中丹田）に向かって沈む
+3. 肩を完全にリラックスさせる — 耳から離れるように落とす
+4. 一点に注意を据えたまま、意識を外に広げる
+5. 中心をテストする：パートナーに胸を軽く押してもらう
+   - 上半身で抵抗する場合、中心が据わっていない — リラックスしてさらに低く沈む
+   - 努力なく安定を保てれば、中心が確立されている
+6. 重さの下側を意識する：各腕の重い部分は下側であると想像し、上側は軽く浮力があるように感じさせる
+7. 気を伸ばす：指先を通して穏やかで積極的なエネルギーを前方に投射する — 緊張ではなく、集中した意図
 
-**期待結果:** A stable, relaxed stance where pushes are absorbed through the structure into the ground rather than resisted by muscles. A quiet mind with broad awareness.
+**期待結果:** 押しが筋肉で抵抗されるのではなく、構造を通じて地面に吸収される安定したリラックスした構え。広い意識を持つ静かな心。
 
-**失敗時:** If the stance feels rigid, you are holding tension. Shake out the arms and legs, take 5 deep breaths, and re-establish from scratch. If pushes easily displace you, lower your center of gravity (bend knees more) and focus on the one-point. Centering is a skill that deepens over months — initial wobbliness is normal.
+**失敗時:** 構えが硬く感じられる場合、緊張を保持している。腕と脚を振りほどき、5回深呼吸をして、最初から再確立する。押しで簡単に動かされる場合、重心を低くし（膝をより曲げる）、一点に集中する。中心を据えることは数ヶ月かけて深まるスキルであり、最初のぐらつきは正常である。
 
-### ステップ2: Master Ukemi (Falling and Rolling)
+### ステップ2: 受身を習得する（転倒と回転）
 
-Ukemi is the art of receiving technique safely. It is the most important skill in aikido — you will fall thousands of times.
+受身は技を安全に受ける術である。合気道で最も重要なスキルである — 何千回も転倒することになる。
 
 ```
-Ukemi Progression:
+受身の進行:
 ┌────────────────────┬──────────────────────────┬───────────────────────────┐
 │ Level              │ Technique                │ Practice Method            │
 ├────────────────────┼──────────────────────────┼───────────────────────────┤
@@ -95,20 +93,20 @@ Ukemi Progression:
 └────────────────────┴──────────────────────────┴───────────────────────────┘
 ```
 
-Key principles:
-1. The slap absorbs impact by spreading force across the arm surface — time it to land just before the body
-2. Tuck the chin on every fall — the head never contacts the ground
-3. Exhale on impact; holding the breath creates rigidity and increases injury risk
-4. Forward rolls should be round and smooth — if there are thuds or flat spots, the body is not curved enough
-5. Practice both sides: right shoulder forward and left shoulder forward
+主要な原則:
+1. 打ち付けは腕の表面全体に力を分散させて衝撃を吸収する — 身体が着く直前にタイミングを合わせる
+2. すべての転倒で顎を引く — 頭は絶対に地面に接触しない
+3. 衝撃時に息を吐く；息を止めると硬直が生まれ、怪我のリスクが増す
+4. 前方回転は丸く滑らかであるべき — ドスンという音や平らな部分があれば、身体の曲がりが足りない
+5. 両側を練習する：右肩前方と左肩前方
 
-**期待結果:** After 2-3 months of regular practice, forward rolls are smooth and quiet on both sides. Backward falls are automatic (no fear response). You can be thrown at moderate speed without hesitation.
+**期待結果:** 2-3ヶ月の定期的な稽古の後、前方回転が両側とも滑らかで静かになる。後方受身が自動的になる（恐怖反応なし）。中程度の速度で投げられても躊躇なく受けられる。
 
-**失敗時:** If forward rolls cause shoulder pain, the angle is likely too steep (going over the top of the shoulder instead of across the back diagonally). Have a partner or instructor check the line. If fear prevents commitment to the roll, return to the kneeling version and build up gradually. Never force a breakfall before the forward roll is second nature.
+**失敗時:** 前方回転で肩に痛みが出る場合、角度が急すぎる可能性がある（背中を斜めに横切るのではなく、肩の頂点を越えている）。パートナーか指導者にラインを確認してもらう。恐怖がロールへのコミットを妨げる場合、膝をついたバージョンに戻って段階的に積み上げる。前方回転が自然になる前にブレイクフォールを無理に行ってはならない。
 
-### ステップ3: Practice Basic Techniques
+### ステップ3: 基本技を稽古する
 
-The four foundational techniques address the most common attack scenarios and embody aikido's core principles.
+4つの基本技は最も一般的な攻撃シナリオに対応し、合気道の核心的原則を体現している。
 
 ```
 Technique Selection by Attack:
@@ -132,117 +130,117 @@ Technique Selection by Attack:
 └─────────────────┴──────────────────┴──────────────────────────────────────┘
 ```
 
-For each technique:
-1. Begin with the attack at slow, cooperative speed
-2. Blend first: move your body off the attack line (never block head-on)
-3. Connect: make contact with the attacker's arm or body to feel their balance
-4. Redirect: use circular motion to guide the attacker's energy into the technique
-5. Complete: throw or pin with control — the goal is to end the encounter, not to injure
-6. Practice 10-20 repetitions per side, alternating roles (nage/tori throws, uke attacks and falls)
-7. Gradually increase speed and resistance as both partners gain proficiency
+各技について:
+1. ゆっくりとした協調速度で攻撃を始める
+2. まず合わせ：身体を攻撃ラインから外す（正面からのブロックは決してしない）
+3. 接触：攻撃者の腕や身体に触れてバランスを感じる
+4. 転換：円運動で攻撃者のエネルギーを技に導く
+5. 完了：制御をもって投げるか固める — 目的は事態を終結させることであり、傷つけることではない
+6. 片側10-20回反復し、役割を交代する（投げ/取りが投げ、受けが攻撃して転倒する）
+7. 両パートナーの習熟に応じて徐々に速度と抵抗を上げる
 
-**期待結果:** Techniques feel smooth and circular. The attacker is led rather than forced. At cooperative speed, both partners finish the exchange safely and without strain.
+**期待結果:** 技が滑らかで円的に感じられる。攻撃者は強制されるのではなく導かれる。協調速度では、両パートナーが安全に無理なく交換を終了する。
 
-**失敗時:** If a technique requires significant muscular effort, the blending is incomplete — the defender is fighting the attack instead of redirecting it. Return to the moment of contact and practice the initial blend in isolation. If the attacker feels yanked or wrenched, slow down and focus on leading with the center, not pulling with the hands.
+**失敗時:** 技にかなりの筋力が必要な場合、合わせが不完全である — 防御者が攻撃を転換するのではなく闘っている。接触の瞬間に戻り、初期の合わせを単独で練習する。攻撃者が引っ張られたりねじられたりする感覚がある場合、速度を落とし、手で引くのではなく中心で導くことに集中する。
 
-### ステップ4: Develop Blending (Tai Sabaki)
+### ステップ4: 合わせを発展させる（体捌き）
 
-Tai sabaki — body movement — is the engine of aikido. Technique without movement is just wrestling.
+体捌き — 身体の動き — は合気道のエンジンである。動きのない技はただの組み合いである。
 
-1. **Irimi (entering)**: Step directly forward and past the attacker, moving inside their reach
-   - Practice: partner extends a punch; step past it so you end behind their shoulder
-2. **Tenkan (turning)**: Pivot 180 degrees on the front foot, redirecting the attacker's line
-   - Practice: partner grabs your wrist; pivot smoothly so you face the same direction they do
-3. **Irimi-tenkan (enter and turn)**: Combine entering with a pivot — the most common movement
-   - Practice: enter past the attack, then pivot to control the attacker from behind
-4. **Kaiten (rotation)**: Full body rotation to generate circular force for throws
-   - Practice: combined with shiho-nage and other rotational techniques
-5. Practice all movements solo first: step-pivot, step-pivot, step-pivot across the mat
-6. Then with a partner: focus on matching timing to the attack — move as they commit, not before or after
+1. **入身（いりみ）**: 攻撃者に向かって直接踏み込み、通過する。相手のリーチの内側に入る
+   - 練習：パートナーがパンチを伸ばす；その横を通り過ぎて相手の肩の後ろに位置する
+2. **転換（てんかん）**: 前足を軸に180度回転し、攻撃者のラインを転換する
+   - 練習：パートナーが手首を掴む；滑らかに回転して相手と同じ方向を向く
+3. **入身転換**: 入身と転換の組み合わせ — 最も一般的な動き
+   - 練習：攻撃を通過して入り、次に回転して後ろから攻撃者を制御する
+4. **回転（かいてん）**: 投げのための円的な力を生成する全身回転
+   - 練習：四方投げやその他の回転技と組み合わせる
+5. すべての動きをまず一人で練習する：ステップ-ピボット、ステップ-ピボット、マットを横切って
+6. 次にパートナーと：攻撃へのタイミング合わせに集中する — 相手がコミットした時に動き、前後ではなく
 
-**期待結果:** Movement is fluid, centered, and timed to the attack. The defender is never squared up facing the attack force — always angled off the line.
+**期待結果:** 動きが流動的で中心が据わり、攻撃にタイミングが合っている。防御者は攻撃力に正面を向けて立つことは決してない — 常にラインから角度をつけている。
 
-**失敗時:** If timing is off (arriving too early or too late), practice with a very slow, telegraphed attack. The defender should move at the same moment the attack commits — this is the "aiki" timing. If turns feel clumsy, practice tenkan as a standalone drill: 100 pivots per session builds smooth, automatic rotation.
+**失敗時:** タイミングがずれている場合（到着が早すぎるまたは遅すぎる）、非常にゆっくりとした、テレグラフされた攻撃で練習する。防御者は攻撃がコミットした同じ瞬間に動くべきである — これが「合気」のタイミングである。回転がぎこちない場合、転換を単独のドリルとして練習する：1セッションあたり100回の回転が滑らかで自動的な回転を構築する。
 
-### ステップ5: Train Randori (Multiple Attackers)
+### ステップ5: 乱取りの稽古（複数人掛け）
 
-Randori develops the awareness and decisiveness needed when overwhelmed. It is where principles are truly tested.
+乱取りは圧倒された時に必要な認識力と決断力を養う。原則が本当に試される場である。
 
-1. Begin with two attackers at slow speed — they take turns (not simultaneous)
-2. Core principle: never stop moving. Stationary means surrounded
-3. Use each attacker as a shield against the others: redirect one into the path of another
-4. Move to open space — never back into a corner or wall
-5. Extend awareness in all directions; do not fixate on one attacker (see `mindfulness`)
-6. Apply simple, reliable techniques — complex techniques fail under pressure
-7. Progress to three attackers, then four, increasing speed gradually
-8. Randori is not about defeating every attacker — it is about maintaining center and freedom of movement
+1. ゆっくりした速度で2人の攻撃者から始める — 交代で（同時ではなく）
+2. 核心的原則：動きを止めない。静止は包囲を意味する
+3. 各攻撃者を他の攻撃者に対する盾として使う：一人を別の一人の進路に転換する
+4. 開けた空間に移動する — 角や壁に追い詰められない
+5. 全方向に意識を広げる；一人の攻撃者に固執しない（`mindfulness`参照）
+6. シンプルで信頼できる技を適用する — 複雑な技はプレッシャー下で失敗する
+7. 3人の攻撃者、次に4人へと進み、徐々に速度を上げる
+8. 乱取りはすべての攻撃者を倒すことではない — 中心と移動の自由を維持することである
 
-**期待結果:** The ability to stay calm and mobile while being approached from multiple angles. Techniques are applied fluidly without freezing or tunnel vision.
+**期待結果:** 複数の角度からアプローチされながらも落ち着いて移動し続ける能力。技がフリーズやトンネルビジョンなく流動的に適用される。
 
-**失敗時:** If panic sets in, return to two slow attackers. Randori anxiety is normal and decreases with exposure. If techniques collapse under pressure, simplify: focus on irimi (entering) and tenkan (turning) only, ignoring throws entirely. Movement and positioning are more important than technique execution in randori.
+**失敗時:** パニックが起きた場合、2人のゆっくりした攻撃者に戻る。乱取りの不安は正常であり、経験とともに減少する。プレッシャー下で技が崩壊する場合、簡素化する：入身（入る）と転換（回る）のみに集中し、投げは完全に無視する。乱取りでは技の実行よりも移動とポジショニングの方が重要である。
 
-### ステップ6: Integrate Weapons Awareness
+### ステップ6: 武器の認識を統合する
 
-Weapons training deepens understanding of distance, timing, and line — principles that improve empty-hand technique.
+武器稽古は距離、タイミング、ラインの理解を深める — 徒手技を向上させる原則である。
 
-1. **Jo (staff)**: Practice 31-count jo kata for line and extension
-   - The jo teaches maintaining distance and controlling space
-   - Partner practice: jo-dori (staff taking) — disarm a staff attack with empty hands
-2. **Bokken (wooden sword)**: Practice suburi (cutting exercises) for precision and center line awareness
-   - The sword teaches commitment: every cut must follow a precise line
-   - Partner practice: kumitachi (paired sword forms) for timing and distance
-3. **Tanto (wooden knife)**: Practice tanto-dori (knife defense)
-   - The knife teaches respect for close-range danger
-   - Always redirect the weapon hand — never reach for the blade
-4. Weapons principles that transfer to empty-hand:
-   - Ma-ai (proper distance): too close invites the weapon; too far wastes the response
-   - Shomen (center line): all attacks and defenses relate to the vertical center line
-   - Zanshin (continuing awareness): remain alert after the technique completes
+1. **杖（じょう）**: ラインと伸びのために31の杖の型を練習する
+   - 杖は距離の維持と空間の制御を教える
+   - パートナー稽古：杖取り — 徒手で杖攻撃を受けて取る
+2. **木剣（ぼっけん）**: 精度と正中線の認識のために素振り（切り下ろし練習）を行う
+   - 剣はコミットメントを教える：すべての切りは正確なラインに従わなければならない
+   - パートナー稽古：組太刀（対人剣形）でタイミングと距離を練る
+3. **短刀（たんとう）**: 短刀取り（ナイフ防御）を練習する
+   - ナイフは至近距離の危険への敬意を教える
+   - 常に武器を持つ手を転換する — 刃に手を伸ばしてはならない
+4. 徒手に転用される武器の原則:
+   - 間合い（適切な距離）：近すぎると武器を招き、遠すぎると対応を浪費する
+   - 正面（正中線）：すべての攻撃と防御は垂直の正中線に関係する
+   - 残心（継続する意識）：技が完了した後も警戒を維持する
 
-**期待結果:** Weapons practice clarifies why tai sabaki, timing, and distance matter. Empty-hand technique improves as body movement becomes more precise.
+**期待結果:** 武器稽古が体捌き、タイミング、距離がなぜ重要かを明確にする。身体の動きがより精密になるにつれて徒手技が向上する。
 
-**失敗時:** If weapons feel awkward or disconnected from empty-hand practice, focus on suburi (solo cutting exercises) for one month before adding partner work. If a partner practice becomes competitive or dangerous, slow down immediately — wooden weapons can cause real injury at speed.
+**失敗時:** 武器がぎこちなく感じられたり、徒手稽古と断絶している場合、パートナー稽古を加える前に1ヶ月間素振り（一人での切り下ろし練習）に集中する。パートナー稽古が競争的または危険になった場合、直ちに速度を落とす — 木製武器は速度が上がると実際の怪我を引き起こしうる。
 
-### ステップ7: Apply Principles Off the Mat
+### ステップ7: 畳の外で原則を適用する
 
-Aikido's value extends beyond the dojo into daily interaction and conflict resolution.
+合気道の価値は道場を超えて日常的なやり取りや紛争解決に広がる。
 
-1. In confrontation, apply irimi-tenkan mentally: move toward the person's concern (enter), then redirect the conversation to common ground (turn)
-2. In physical space, maintain awareness of position, exits, and others' body language (see `mindfulness`)
-3. Practice "receiving" criticism or aggression without resistance — acknowledge the energy, then redirect
-4. Cultivate the habit of centering before stressful situations: drop awareness to the one-point, relax shoulders, extend calm intention
-5. Regular practice schedule:
-   - Solo (daily, 15-30 min): centering, ukemi rolls, tai sabaki, weapons suburi
-   - Partner (2-3x weekly, 60-90 min): techniques, randori, weapons partner work
-6. Complement with tai chi for internal energy development (see `tai-chi`)
-7. Complement with meditation for mental stillness and equanimity (see `meditate`)
+1. 対峙において、入身転換を精神的に適用する：相手の懸念に向かって動き（入る）、次に共通基盤に会話を転換する（回る）
+2. 物理的空間において、位置、出口、他者のボディランゲージの認識を維持する（`mindfulness`参照）
+3. 抵抗なく批判や攻撃を「受ける」練習をする — エネルギーを認め、次に転換する
+4. ストレスの多い状況の前に中心を据える習慣を養う：意識を一点に落とし、肩をリラックスさせ、穏やかな意図を伸ばす
+5. 定期的な稽古スケジュール:
+   - 一人稽古（毎日、15-30分）：中心を据える、受身の回転、体捌き、武器の素振り
+   - パートナー稽古（週2-3回、60-90分）：技、乱取り、武器のパートナー稽古
+6. 内的エネルギーの発達のために太極拳で補完する（`tai-chi`参照）
+7. 精神的な静けさと平静のために瞑想で補完する（`meditate`参照）
 
-**期待結果:** Aikido principles — blending, redirecting, centering — become natural responses to conflict in daily life. Physical practice maintains and deepens martial skill.
+**期待結果:** 合気道の原則 — 合わせ、転換、中心を据えること — が日常生活における紛争への自然な反応になる。身体的な稽古が武術の技量を維持し深める。
 
-**失敗時:** If daily practice lapses, focus on the smallest unit: 5 minutes of centering and 20 forward rolls. Consistency matters more than duration. If the martial aspects feel disconnected from daily life, reflect on how each technique is a metaphor: irimi is facing a problem directly; tenkan is changing perspective; ukemi is recovering from setbacks.
+**失敗時:** 毎日の稽古が途絶えた場合、最小単位に集中する：5分間の中心を据えることと20回の前方回転。継続性は時間よりも重要である。武術的な側面が日常生活と断絶して感じられる場合、各技がどのように比喩であるかを省みる：入身は問題に直接向き合うこと、転換は視点を変えること、受身は挫折から回復することである。
 
 ## バリデーション
 
-- [ ] Centered stance absorbs moderate pushes without muscular resistance
-- [ ] Forward rolls are smooth, quiet, and practiced on both sides
-- [ ] At least four basic techniques can be performed cooperatively with a partner
-- [ ] Tai sabaki (irimi, tenkan, irimi-tenkan) is practiced both solo and with a partner
-- [ ] Randori with two slow attackers can be sustained for 60 seconds without freezing
-- [ ] At least one weapon (jo, bokken, or tanto) has been practiced in solo kata
-- [ ] Practice includes both solo and partner components regularly
+- [ ] 中心の据わった構えが筋肉の抵抗なしに中程度の押しを吸収する
+- [ ] 前方回転が両側とも滑らかで静かに練習されている
+- [ ] 少なくとも4つの基本技がパートナーと協調的に実行できる
+- [ ] 体捌き（入身、転換、入身転換）が一人でもパートナーとも練習されている
+- [ ] 2人のゆっくりした攻撃者との乱取りが60秒間フリーズなく維持できる
+- [ ] 少なくとも1つの武器（杖、木剣、または短刀）が一人型で練習されている
+- [ ] 稽古に一人とパートナーの両方の要素が定期的に含まれている
 
 ## よくある落とし穴
 
-- **Using muscle instead of blending**: If a technique requires strength, the timing or angle is wrong. Relax, re-enter, and let the attacker's energy do the work. Aikido's power comes from redirecting force, not generating it
-- **Neglecting ukemi**: Students who avoid falling avoid learning. Ukemi IS aikido — the ability to receive force safely. Practice it every session, especially at the start
-- **Fear of commitment**: Half-hearted entering (irimi) puts you in the worst position — too close to evade, too far to control. Once you decide to enter, commit fully to moving past the attack
-- **Fixating on one attacker**: In randori and in life, tunnel vision is dangerous. Keep soft, wide awareness. Peripheral vision detects motion before focused vision does
-- **Training only with compliant partners**: While beginners need cooperation, intermediate students should gradually increase resistance. Technique that only works on a cooperative partner is incomplete
+- **合わせの代わりに筋力を使う**: 技に力が必要な場合、タイミングか角度が間違っている。リラックスし、再度入り、攻撃者のエネルギーに仕事をさせる。合気道の力は力を転換することから生まれ、力を生成することからではない
+- **受身を軽視する**: 転倒を避ける生徒は学びを避けている。受身こそが合気道である — 力を安全に受ける能力。毎セッション、特に最初に練習する
+- **コミットメントへの恐怖**: 中途半端な入身（いりみ）は最悪のポジションに置く — 回避するには近すぎ、制御するには遠すぎる。入ると決めたら、攻撃を通過する動きに完全にコミットする
+- **一人の攻撃者に固執する**: 乱取りでも人生でも、トンネルビジョンは危険である。柔らかく広い意識を保つ。周辺視野は集中視野よりも先に動きを検出する
+- **従順なパートナーとのみ稽古する**: 初心者には協力が必要だが、中級者は徐々に抵抗を増やすべきである。協力的なパートナーにのみ効く技は不完全である
 
 ## 関連スキル
 
-- `tai-chi` — complementary internal martial art; shares the principle of yielding to overcome force, with emphasis on solo cultivation
-- `mindfulness` — defensive situational awareness provides the perceptual foundation for martial readiness and conflict avoidance
-- `meditate` — seated meditation develops the centered, equanimous mind state that aikido requires under pressure
-- `heal` — understanding body mechanics from aikido practice informs first aid and bodywork approaches
-- `redirect` — AI self-application variant; maps aikido blending and redirection to handling conflicting demands and tool failures
+- `tai-chi` — 補完的な内家武術；力に譲ることで克服する原則を共有し、一人稽古を重視する
+- `mindfulness` — 防御的な状況認識は武術的準備と紛争回避の知覚的基盤を提供する
+- `meditate` — 座禅は合気道がプレッシャー下で必要とする中心の据わった平静な心の状態を養う
+- `heal` — 合気道の稽古からの身体力学の理解が応急処置やボディワークのアプローチに役立つ
+- `redirect` — AI自己適用バリアント；合気道の合わせと転換を相反する要求やツールの障害への対処にマッピングする

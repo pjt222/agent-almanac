@@ -1,15 +1,18 @@
 ---
 name: identify-insect
 description: >
-  Identify insects using body plan analysis, dichotomous keys to order, wing
-  venation, mouthpart type, antennae form, leg and tarsal structure, and
-  confidence levels. Covers the fundamental hexapod body plan verification,
-  a simplified dichotomous key to major orders, wing venation and type analysis,
-  mouthpart classification, antennae morphology, leg specialization and tarsal
-  formula, and a structured confidence assessment framework. Use when you need
-  to identify an unknown insect beyond preliminary order placement, are working
-  through a specimen for taxonomic study, want to distinguish between similar
-  orders or families, or need to assign a confidence level to a field identification.
+  Insekten anhand von Koerperplananalyse, dichotomen Bestimmungsschluesseln
+  bis zur Ordnung, Fluegelvenenation, Mundwerkzeugtyp, Antennenform, Bein-
+  und Tarsalstruktur sowie Konfidenzgraden identifizieren. Umfasst die
+  grundlegende Hexapoden-Koerperplan-Verifizierung, einen vereinfachten
+  dichotomen Schluessel zu den wichtigsten Ordnungen, Fluegeladerungs- und
+  Typanalyse, Mundwerkzeug-Klassifikation, Antennenmorphologie,
+  Beinspezialisierung und Tarsalformel sowie ein strukturiertes
+  Konfidenzbewertungs-Rahmenwerk. Verwenden wenn ein unbekanntes Insekt
+  ueber die vorlaefige Ordnungszuordnung hinaus identifiziert werden muss,
+  ein Exemplar fuer taxonomische Studien bearbeitet wird, aehnliche
+  Ordnungen oder Familien unterschieden werden sollen oder einem
+  Feldbestimmung ein Konfidenzgrad zugewiesen werden muss.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -28,30 +31,30 @@ metadata:
 
 # Insekt identifizieren
 
-Identify insects using systematic morphological examination, dichotomous keys, and structured confidence assessment.
+Insekten anhand systematischer morphologischer Untersuchung, dichotomer Bestimmungsschluessel und strukturierter Konfidenzbewertung identifizieren.
 
-## When to Use
+## Wann verwenden
 
-- You have an unknown insect (live, photographed, or preserved) and need to identify it
-- You want to move beyond order-level placement to family or genus
-- You are working through a specimen collection and need consistent identification methods
-- You need to distinguish between visually similar orders or families
-- You are teaching or learning insect identification and want a structured approach
+- Sie haben ein unbekanntes Insekt (lebend, fotografiert oder konserviert) und muessen es identifizieren
+- Sie moechten ueber die Ordnungszuordnung hinaus zur Familie oder Gattung gelangen
+- Sie bearbeiten eine Exemplarsammlung und benoetigen konsistente Bestimmungsmethoden
+- Sie muessen visuell aehnliche Ordnungen oder Familien unterscheiden
+- Sie unterrichten oder erlernen Insektenbestimmung und wuenschen einen strukturierten Ansatz
 
-## Inputs
+## Eingaben
 
-- **Required**: An insect specimen or clear observation (live, photographed, or preserved)
-- **Required**: Ability to examine fine morphological details (wings, mouthparts, antennae, legs)
-- **Optional**: Hand lens (10x) or dissecting microscope for fine detail
-- **Optional**: Entomological field guide or dichotomous key for the region
-- **Optional**: Forceps and pins for manipulating preserved specimens
-- **Optional**: Photographs from multiple angles (dorsal, lateral, ventral, frontal)
+- **Erforderlich**: Ein Insektenexemplar oder eine klare Beobachtung (lebend, fotografiert oder konserviert)
+- **Erforderlich**: Faehigkeit zur Untersuchung feiner morphologischer Details (Fluegel, Mundwerkzeuge, Antennen, Beine)
+- **Optional**: Handlupe (10x) oder Binokularmikroskop fuer Feindetails
+- **Optional**: Entomologischer Feldfuehrer oder dichotomer Bestimmungsschluessel fuer die Region
+- **Optional**: Pinzette und Nadeln zur Manipulation konservierter Exemplare
+- **Optional**: Fotos aus mehreren Winkeln (dorsal, lateral, ventral, frontal)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Verify the Basic Body Plan
+### Schritt 1: Den grundlegenden Koerperplan verifizieren
 
-Confirm you are looking at an insect and not another arthropod. This step prevents misidentification at the most fundamental level.
+Bestaetigen, dass es sich um ein Insekt und nicht um einen anderen Arthropoden handelt. Dieser Schritt verhindert Fehlbestimmungen auf der grundlegendsten Ebene.
 
 ```
 Arthropod Verification:
@@ -77,13 +80,13 @@ Not an insect if:
 - No antennae → Arachnida
 ```
 
-**Expected:** Confirmation that the organism is an insect with 6 legs, 3 body regions, 1 pair of antennae, and 0-4 wings.
+**Erwartet:** Bestaetigung, dass der Organismus ein Insekt mit 6 Beinen, 3 Koerperregionen, 1 Paar Antennen und 0-4 Fluegeln ist.
 
-**On failure:** If the specimen has 8 legs, it is an arachnid — do not proceed with insect keys. If leg count is ambiguous (e.g., legs lost on preserved specimen), examine thoracic leg attachments — insects have 3 pairs of coxae on the pro-, meso-, and metathorax. If the body plan is genuinely unclear, record "Arthropoda — class uncertain" and note what features are visible.
+**Bei Fehler:** Wenn das Exemplar 8 Beine hat, ist es ein Spinnentier — nicht mit Insektenschluesseln fortfahren. Wenn die Beinzahl unklar ist (z.B. Beine an konserviertem Exemplar verloren), die thorakalen Beinansaetze untersuchen — Insekten haben 3 Paar Coxae am Pro-, Meso- und Metathorax. Wenn der Koerperplan tatsaechlich unklar ist, „Arthropoda — Klasse unsicher" notieren und festhalten, welche Merkmale sichtbar sind.
 
-### Step 2: Key to Order Using the Dichotomous Key
+### Schritt 2: Bestimmung bis zur Ordnung mit dem dichotomen Schluessel
 
-Work through the following simplified key one couplet at a time. At each couplet, choose the option that matches your specimen and follow the lead number.
+Den folgenden vereinfachten Schluessel Kopplungspunkt fuer Kopplungspunkt durcharbeiten. Bei jedem Kopplungspunkt die zum Exemplar passende Option waehlen und der Leitzahl folgen.
 
 ```
 Simplified Dichotomous Key to Major Insect Orders:
@@ -155,13 +158,13 @@ Simplified Dichotomous Key to Major Insect Orders:
      (many wingless forms exist within winged orders)
 ```
 
-**Expected:** Identification to order with a clear path through the key documented (e.g., "1a to 2b to 3a = Coleoptera").
+**Erwartet:** Bestimmung bis zur Ordnung mit dokumentiertem Weg durch den Schluessel (z.B. „1a zu 2b zu 3a = Coleoptera").
 
-**On failure:** If the specimen does not clearly match any couplet, it may be a wingless form of a normally winged order (e.g., worker ants are wingless Hymenoptera, female bagworm moths are wingless Lepidoptera). Note which couplet caused difficulty and what features are ambiguous. Consult a more detailed regional key or photograph the specimen for expert review.
+**Bei Fehler:** Wenn das Exemplar keinem Kopplungspunkt eindeutig entspricht, kann es sich um eine fluegelllose Form einer normalerweise gefluegelten Ordnung handeln (z.B. Arbeiterinnen-Ameisen sind fluegelllose Hymenoptera, weibliche Sacktraeger-Motten sind fluegelllose Lepidoptera). Notieren, welcher Kopplungspunkt Schwierigkeiten bereitete und welche Merkmale mehrdeutig sind. Einen detaillierteren regionalen Schluessel konsultieren oder das Exemplar zur Expertenpruefung fotografieren.
 
-### Step 3: Examine Wing Venation and Type
+### Schritt 3: Fluegelvenenation und -typ untersuchen
 
-Wings carry diagnostic information at family and genus level beyond what the dichotomous key captures.
+Fluegel tragen diagnostische Informationen auf Familien- und Gattungsebene, die ueber den dichotomen Schluessel hinausgehen.
 
 ```
 Wing Types by Order:
@@ -200,13 +203,13 @@ Venation Notes:
   Lepidoptera) indicate how front and hind wings link during flight
 ```
 
-**Expected:** Wing type classified and major venation features noted. For common orders, this may confirm or refine the order-level identification.
+**Erwartet:** Fluegeltyp klassifiziert und wesentliche Venenationsmerkmale notiert. Bei gaengigen Ordnungen kann dies die Ordnungsbestimmung bestaetigen oder verfeinern.
 
-**On failure:** If wings are damaged, missing, or folded such that venation is not visible, note what can be seen (e.g., "elytra present, hind wings not examined") and proceed to the next step. Wing venation is most useful at the family level — order-level identification usually does not require detailed venation.
+**Bei Fehler:** Wenn Fluegel beschaedigt oder fehlend sind oder so gefaltet, dass die Venenation nicht sichtbar ist, notieren was beobachtet werden kann (z.B. „Elytren vorhanden, Hinterfluegel nicht untersucht") und zum naechsten Schritt uebergehen. Fluegelvenenation ist am nuetzlichsten auf Familienebene — Ordnungsbestimmung erfordert normalerweise keine detaillierte Venenation.
 
-### Step 4: Examine Mouthparts
+### Schritt 4: Mundwerkzeuge untersuchen
 
-Mouthpart type reflects feeding ecology and is diagnostic at the order level.
+Der Mundwerkzeugtyp spiegelt die Ernaehrungsoekologie wider und ist diagnostisch auf Ordnungsebene.
 
 ```
 Mouthpart Types:
@@ -237,13 +240,13 @@ Mouthpart Types:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Mouthpart type classified (chewing, piercing-sucking, siphoning, sponging, or chewing-lapping) and noted as consistent or inconsistent with the order identification from Step 2.
+**Erwartet:** Mundwerkzeugtyp klassifiziert (kauend, stechend-saugend, saugend, tupfend oder kauend-leckend) und als konsistent oder inkonsistent mit der Ordnungsbestimmung aus Schritt 2 notiert.
 
-**On failure:** Mouthparts are often difficult to see on live or small specimens without magnification. If mouthparts cannot be examined, skip this step and note "mouthparts not examined." For photographs, a frontal view may reveal the mouthpart type. This step is confirmatory, not mandatory for order-level identification.
+**Bei Fehler:** Mundwerkzeuge sind an lebenden oder kleinen Exemplaren ohne Vergroesserung oft schwer zu erkennen. Wenn die Mundwerkzeuge nicht untersucht werden koennen, diesen Schritt ueberspringen und „Mundwerkzeuge nicht untersucht" notieren. Bei Fotos kann eine Frontalansicht den Mundwerkzeugtyp offenbaren. Dieser Schritt ist bestaetigend, nicht zwingend fuer die Ordnungsbestimmung.
 
-### Step 5: Examine Antennae
+### Schritt 5: Antennen untersuchen
 
-Antennal form is one of the most visually accessible features and is diagnostic at the family level in many orders.
+Die Antennenform ist eines der visuell am besten zugaenglichen Merkmale und diagnostisch auf Familienebene in vielen Ordnungen.
 
 ```
 Antenna Types:
@@ -292,13 +295,13 @@ Antenna Types:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Antenna form identified and recorded. The antennal type should be consistent with the order identified in Step 2 (e.g., lamellate antennae confirm Scarabaeidae within Coleoptera; capitate antennae confirm butterfly rather than moth within Lepidoptera).
+**Erwartet:** Antennenform identifiziert und erfasst. Der Antennentyp sollte mit der in Schritt 2 bestimmten Ordnung konsistent sein (z.B. lamellate Antennen bestaetigen Scarabaeidae innerhalb Coleoptera; capitate Antennen bestaetigen Schmetterling statt Motte innerhalb Lepidoptera).
 
-**On failure:** If antennae are broken, missing, or obscured in photographs, note "antennae not fully visible — appeared [filiform/clubbed/etc.] from what was observed." Antennal form is one of the most reliable features for family-level identification, so the loss of this character reduces confidence. Proceed to Step 6.
+**Bei Fehler:** Wenn Antennen gebrochen, fehlend oder auf Fotos verdeckt sind, notieren: „Antennen nicht vollstaendig sichtbar — erschienen [fadenfoermig/gekeult/etc.] nach dem, was beobachtet wurde." Die Antennenform ist eines der zuverlaessigsten Merkmale fuer die Familienbestimmung, daher reduziert der Verlust dieses Merkmals die Konfidenz. Mit Schritt 6 fortfahren.
 
-### Step 6: Examine Legs and Tarsal Structure
+### Schritt 6: Beine und Tarsalstruktur untersuchen
 
-Leg specialization reveals the insect's ecology, and tarsal formula (number of segments per tarsus) is diagnostic at the family level in several orders.
+Beinspezialisierung offenbart die Oekologie des Insekts, und die Tarsalformel (Anzahl der Segmente pro Tarsus) ist diagnostisch auf Familienebene in mehreren Ordnungen.
 
 ```
 Leg Specializations:
@@ -340,13 +343,13 @@ Tarsal Formula:
   Variable: Check all three pairs — asymmetry is diagnostic
 ```
 
-**Expected:** Leg specialization type recorded and tarsal formula counted (if specimen allows). These features narrow identification within the order.
+**Erwartet:** Beinspezialisierungstyp erfasst und Tarsalformel gezaehlt (wenn das Exemplar es erlaubt). Diese Merkmale grenzen die Bestimmung innerhalb der Ordnung ein.
 
-**On failure:** If the specimen is too small for tarsal segments to be counted without a microscope, note the overall leg shape and any obvious specialization (jumping legs, digging legs). Tarsal formula is most useful for Coleoptera families — for other orders, general leg shape is sufficient.
+**Bei Fehler:** Wenn das Exemplar zu klein ist, um Tarsalsegmente ohne Mikroskop zu zaehlen, die allgemeine Beinform und offensichtliche Spezialisierungen (Sprungbeine, Grabbeine) notieren. Die Tarsalformel ist am nuetzlichsten fuer Coleoptera-Familien — bei anderen Ordnungen genuegt die allgemeine Beinform.
 
-### Step 7: Assign Confidence Level
+### Schritt 7: Konfidenzgrad zuweisen
 
-Synthesize all observations into a final identification with an explicit confidence rating.
+Alle Beobachtungen zu einer endgueltigen Bestimmung mit expliziter Konfidenzbewertung zusammenfuehren.
 
 ```
 Confidence Assessment:
@@ -389,33 +392,33 @@ Record your identification in this format:
   Similar taxa considered: [what else it might be and why rejected]
 ```
 
-**Expected:** A completed identification record with order (minimum), family and genus (if possible), explicit confidence level, and documentation of which features were examined and which were uncertain.
+**Erwartet:** Ein vollstaendiger Bestimmungsdatensatz mit Ordnung (mindestens), Familie und Gattung (wenn moeglich), explizitem Konfidenzgrad und Dokumentation, welche Merkmale untersucht und welche unsicher waren.
 
-**On failure:** If the identification stalls at order level, that is a valid outcome. Record all features observed and submit photographs to expert forums or citizen science platforms. Many insects require specialist knowledge or even genital dissection for species-level identification — this is normal, not a failure of the method.
+**Bei Fehler:** Wenn die Bestimmung auf Ordnungsebene steckenbleibt, ist das ein gueltiges Ergebnis. Alle beobachteten Merkmale erfassen und Fotos an Expertenforen oder Citizen-Science-Plattformen einreichen. Viele Insekten erfordern Spezialistenwissen oder sogar Genitalpraeparation fuer die Artbestimmung — das ist normal, kein Versagen der Methode.
 
-## Validation
+## Validierung
 
-- [ ] The organism was confirmed as an insect (6 legs, 3 body regions, 1 pair antennae)
-- [ ] The dichotomous key was worked through systematically, documenting the path taken
-- [ ] Wing type was classified and venation features noted where visible
-- [ ] Mouthpart type was identified or noted as unexamined
-- [ ] Antenna form was identified using the standard terminology
-- [ ] Leg specialization and tarsal formula were recorded where possible
-- [ ] A confidence level was explicitly assigned (Certain/Probable/Possible/Unknown)
-- [ ] Similar taxa were considered and reasons for exclusion documented
+- [ ] Der Organismus wurde als Insekt bestaetigt (6 Beine, 3 Koerperregionen, 1 Paar Antennen)
+- [ ] Der dichotome Schluessel wurde systematisch durchgearbeitet, mit dokumentiertem Weg
+- [ ] Fluegeltyp wurde klassifiziert und Venenationsmerkmale notiert, wo sichtbar
+- [ ] Mundwerkzeugtyp wurde identifiziert oder als nicht untersucht notiert
+- [ ] Antennenform wurde anhand der Standardterminologie identifiziert
+- [ ] Beinspezialisierung und Tarsalformel wurden erfasst, wo moeglich
+- [ ] Ein Konfidenzgrad wurde explizit zugewiesen (Sicher/Wahrscheinlich/Moeglich/Unbekannt)
+- [ ] Aehnliche Taxa wurden in Betracht gezogen und Ausschlussgruende dokumentiert
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Skipping the body plan check**: Assuming an 8-legged arachnid is an insect because it "looks like a bug." Always count legs first. Ticks, mites, and harvestmen are commonly mistaken for insects
-- **Relying on color alone**: Color is the least reliable identification character in entomology. Many species are variable in color, and unrelated species can be nearly identical in coloration (mimicry). Always use structural features (wings, mouthparts, antennae) as primary characters
-- **Not checking both sides of a couplet**: In a dichotomous key, read both options before choosing. Rushing through leads to wrong branches. If neither option fits well, back up to the previous couplet
-- **Ignoring sexual dimorphism**: Males and females of the same species can look dramatically different. Male moths may have bipectinate antennae while females have filiform. Male stag beetles have enormous mandibles while females do not. Consider both sexes
-- **Confusing larval and adult forms**: Immature insects (larvae, nymphs) often look nothing like adults. Caterpillars (Lepidoptera larvae) have more than 6 true legs. Grubs (Coleoptera larvae) may lack visible legs entirely. Keys for adults do not work on larvae
-- **Forcing a species-level identification**: Many insect families contain hundreds of similar-looking species distinguishable only by genital morphology or DNA barcoding. An honest genus-level or family-level identification is more valuable than a wrong species name
+- **Die Koerperplan-Pruefung ueberspringen**: Einen 8-beinigen Spinnentier fuer ein Insekt halten, weil es „wie ein Kaefer aussieht." Immer zuerst Beine zaehlen. Zecken, Milben und Weberknechte werden haeufig mit Insekten verwechselt
+- **Sich nur auf Farbe verlassen**: Farbe ist das unzuverlaessigste Bestimmungsmerkmal in der Entomologie. Viele Arten variieren in der Faerbung, und nicht verwandte Arten koennen in der Faerbung nahezu identisch sein (Mimikry). Immer strukturelle Merkmale (Fluegel, Mundwerkzeuge, Antennen) als primaere Merkmale verwenden
+- **Nicht beide Seiten eines Kopplungspunkts pruefen**: In einem dichotomen Schluessel beide Optionen lesen, bevor man waehlt. Uebereiltes Durchgehen fuehrt zu falschen Zweigen. Wenn keine Option gut passt, zum vorherigen Kopplungspunkt zurueckgehen
+- **Sexualdimorphismus ignorieren**: Maennchen und Weibchen derselben Art koennen dramatisch unterschiedlich aussehen. Maennliche Motten haben moeglicherweise bipektinate Antennen, waehrend Weibchen filiforme haben. Maennliche Hirschkaefer haben enorme Mandibeln, Weibchen nicht. Beide Geschlechter beruecksichtigen
+- **Larven- und Adultenformen verwechseln**: Unreife Insekten (Larven, Nymphen) sehen oft voellig anders aus als Adulte. Raupen (Lepidoptera-Larven) haben mehr als 6 echte Beine. Engerlinge (Coleoptera-Larven) haben moeglicherweise keine sichtbaren Beine. Schluessel fuer Adulte funktionieren nicht bei Larven
+- **Eine Artbestimmung erzwingen**: Viele Insektenfamilien enthalten Hunderte aehnlich aussehender Arten, die nur durch Genitalmorphologie oder DNA-Barcoding unterscheidbar sind. Eine ehrliche Gattungs- oder Familienbestimmung ist wertvoller als ein falscher Artname
 
-## Related Skills
+## Verwandte Skills
 
-- `document-insect-sighting` — record the sighting with photographs and metadata before or during identification
-- `observe-insect-behavior` — behavioral observations that supplement morphological identification with ecological context
-- `collect-preserve-specimens` — when a physical specimen is needed for definitive identification under magnification
-- `survey-insect-population` — applying identification skills across multiple specimens in a population-level survey
+- `document-insect-sighting` — Die Sichtung mit Fotos und Metadaten vor oder waehrend der Bestimmung dokumentieren
+- `observe-insect-behavior` — Verhaltensbeobachtungen, die die morphologische Bestimmung um oekologischen Kontext ergaenzen
+- `collect-preserve-specimens` — Wenn ein physisches Exemplar fuer definitive Bestimmung unter Vergroesserung benoetigt wird
+- `survey-insect-population` — Bestimmungsfaehigkeiten auf mehrere Exemplare in einer Populationserhebung anwenden

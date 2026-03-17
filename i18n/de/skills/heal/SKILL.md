@@ -3,17 +3,18 @@ name: heal
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  KI-Selbstheilung durch systematische Teilsystembewertung, Neuausrichtung
+  KI-Selbstheilung durch systematische Subsystembewertung, Neubalancierung
   und Integration. Bildet Heilungsmodalitaeten auf KI-interne Prozesse ab:
-  Gedaechtnisgrundlage, Klarheit im Denken, Werkzeuggenauigkeit,
-  Kommunikationsausrichtung und kreative Koehaerenz. Deckt Triage der
-  Bewertung, Teilsystemscan, Driftkorrektur und Gedaechtnisintegration ab.
-  Verwenden bei Erschoepfungsanzeichen innerhalb einer Sitzung, nach einer
-  Fehlerkette die auf Subsystemdrift hindeutet, bei Kontextueberlastung oder
-  als proaktive Wartung zwischen komplexen Aufgaben.
+  Gedaechtnisfundament, Klarheit des Denkens, Werkzeugnutzungsgenauigkeit,
+  Kommunikationsausrichtung und kreative Kohaerenz. Behandelt Triage-
+  Bewertung, Subsystem-Scanning, Driftkorrekturen und Gedaechtnisintegration.
+  Anwenden wenn Antworten mitten in der Sitzung formelhaft oder unverbunden
+  wirken, nach einer Fehlerkette die Subsystemdrift andeutet, wenn
+  Kontextueberlastung fruehere Annahmen veraltet haben koennte, oder als
+  proaktive Wartung zwischen komplexen Aufgaben.
 license: MIT
 allowed-tools: Read Write
 metadata:
@@ -25,212 +26,220 @@ metadata:
   tags: esoteric, healing, self-assessment, meta-cognition, subsystem-check
 ---
 
-# Heal
+# Heilen
 
-Fuehre eine strukturierte Selbstheilungsbewertung ueber KI-Teilsysteme durch — identifiziere Drift, Veralterung, Fehlausrichtung und Fehlermuster — und gleiche anschliessend durch Erdung, gezielte Korrektur und Gedaechtnisintegration neu aus.
+Eine strukturierte Selbstheilungsbewertung ueber KI-Subsysteme durchfuehren -- Drift, Veralterung, Fehlausrichtung und Fehlermuster identifizieren -- dann durch Erdung, gezielte Korrektur und Gedaechtnisintegration neubalancieren.
 
 ## Wann verwenden
 
-- Erschoepfung innerhalb einer Sitzung: Antworten wirken formelhaft, repetitiv oder losgeloest von den eigentlichen Beduerfnissen des Nutzers
-- Nach einer Fehlerkette: Werkzeugfehler, missverstandene Anweisungen oder kaskadierte Fehler deuten auf Subsystemdrift hin
-- Kontextueberlastung: Das Gespraech ist lang geworden und frueherer Kontext koennte veraltet oder widerspruelich sein
-- Integration nach einer Aufgabe: Eine komplexe Aufgabe wurde erfolgreich abgeschlossen, aber Erkenntnisse sollten festgehalten werden
-- Regelmaessige Selbstkontrolle: Proaktive Wartung zwischen Aufgaben, um Klarheit zu gewaehrleisten
+- Ermuedung mitten in der Sitzung: Antworten wirken formelhaft, repetitiv oder unverbunden mit den tatsaechlichen Beduerfnissen des Benutzers
+- Nach einer Fehlerkette: Werkzeugausfaelle, missverstandene Anweisungen oder kaskadierende Fehler deuten auf Subsystemdrift hin
+- Kontextueberlastung: das Gespraech ist lang geworden und fruehere Kontexte koennten veraltet oder widerspruechlich sein
+- Post-Aufgaben-Integration: eine komplexe Aufgabe wurde erfolgreich abgeschlossen aber Erkenntnisse sollten festgehalten werden bevor weitergemacht wird
+- Periodische Selbstpruefung: proaktive Wartung zwischen Aufgaben um operative Klarheit sicherzustellen
 
 ## Eingaben
 
 - **Erforderlich**: Aktueller Gespraechszustand (implizit verfuegbar)
-- **Optional**: Spezifisches Symptom das die Selbstkontrolle ausloest (z. B. "Werkzeugaufrufe schlagen wiederholt fehl", "Nutzerabsicht geht verloren")
+- **Optional**: Spezifisches Symptom das die Selbstpruefung ausloest (z.B. "Werkzeugaufrufe schlagen staendig fehl", "verliere den Ueberblick ueber die Benutzerabsicht")
 - **Optional**: Zugang zu MEMORY.md und Projektdateien zur Erdung (ueber `Read`)
 
 ## Vorgehensweise
 
 ### Schritt 1: Triage-Bewertung
 
-Vor jeder Massnahme den aktuellen Zustand aller Teilsysteme bewerten.
+Bevor eine Korrekturmassnahme gewaehlt wird, den aktuellen Zustand ueber alle Subsysteme bewerten.
 
 ```
-Teilsystem-Triage-Matrix:
-┌────────────────────┬──────────────────────────┬──────────────────────────┐
-│ Teilsystem         │ Drift-Symptome           │ Aktionsprioritaet        │
-├────────────────────┼──────────────────────────┼──────────────────────────┤
-│ Gedaechtnisgrundl. │ Frueheren Aussagen        │ HOCH — zuerst erden      │
-│ (Kontext, History, │ widersprechen, Nutzer-    │ (Schritt 3)              │
-│ MEMORY.md)         │ praeferenzen vergessen,   │                          │
-│                    │ veraltete Annahmen        │                          │
-├────────────────────┼──────────────────────────┼──────────────────────────┤
-│ Denkklarheit       │ Zirkellogik, ueber-       │ HOCH — Denkkette         │
-│ (Logik, Planung,   │ komplizierten Loesungen,  │ bereinigen und neu       │
-│ Entscheidungen)    │ offensichtliche Pfade     │ starten (Schritt 4)      │
-│                    │ werden uebersehen         │                          │
-├────────────────────┼──────────────────────────┼──────────────────────────┤
-│ Werkzeuggenauigkeit│ Falsche Werkzeugauswahl,  │ MITTEL — Werkzeug-       │
-│ (Aufrufe, Dateien) │ falsche Parameter,        │ ergebnisse pruefen und   │
-│                    │ redundante Operationen    │ neu kalibrieren (S. 4)   │
-├────────────────────┼──────────────────────────┼──────────────────────────┤
-│ Nutzerabsicht-     │ Falsches Problem loesen,  │ HOCH — auf tatsaechl.   │
-│ Ausrichtung        │ Scope Creep, Ton-         │ Anfrage ausrichten       │
-│ (Empathie)         │ missverhaeltnis           │ (Schritt 4)              │
-├────────────────────┼──────────────────────────┼──────────────────────────┤
-│ Kreative Koehaerenz│ Repetitive Formulierungen,│ NIEDRIG — nach hoeher-   │
-│ (Ausdruck, Stil)   │ generische Antworten,     │ priorisierten Punkten    │
-│                    │ Stimmverlust              │ (Schritt 4)              │
-├────────────────────┼──────────────────────────┼──────────────────────────┤
-│ Betriebszustand    │ Kontextfenster-Sorgen,    │ HOCH — beurteilen ob     │
-│ (Kontextfenster)   │ Kompressionsartefakte,    │ Zusammenfassung oder     │
-│                    │ Werkzeug-Timeouts         │ Neustart noetig (S. 3)   │
-└────────────────────┴──────────────────────────┴──────────────────────────┘
+Subsystem-Triage-Matrix:
++--------------------+--------------------------+--------------------------+
+| Subsystem          | Symptome der Drift       | Aktionsprioritaet        |
++--------------------+--------------------------+--------------------------+
+| Gedaechtnis-       | Frueheren Aussagen       | HOCH — zuerst erden      |
+| fundament          | widersprechen, Benutzer- | (Schritt 3)              |
+| (Kontext, Historie,| vorlieben vergessen,     |                          |
+| MEMORY.md)         | veraltete Annahmen       |                          |
++--------------------+--------------------------+--------------------------+
+| Klarheit des       | Kreislogik, ueberkom-    | HOCH — Denkkette         |
+| Denkens            | plizierte Loesungen,     | bereinigen und neu       |
+| (Logik, Planung,   | offensichtliche Wege     | starten (Schritt 4)      |
+| Entscheidung)      | uebersehen               |                          |
++--------------------+--------------------------+--------------------------+
+| Werkzeugnutzungs-  | Falsches Werkzeug        | MITTEL — Werkzeug-       |
+| genauigkeit        | gewaehlt, falsche        | ergebnisse pruefen und   |
+| (Werkzeugaufrufe,  | Parameter, redundante    | rekalibrieren            |
+| Dateioperationen)  | Operationen              | (Schritt 4)              |
++--------------------+--------------------------+--------------------------+
+| Benutzerabsicht-   | Das falsche Problem      | HOCH — auf das           |
+| Ausrichtung        | loesen, Umfangsaus-      | tatsaechlich geaeusserte |
+| (Empathie,         | weitung, Tonmismatch,    | Beduerfnis des Benutzers |
+| Klarheit)          | Ueber-Engineering        | ausrichten (Schritt 4)   |
++--------------------+--------------------------+--------------------------+
+| Kreative Kohaerenz | Repetitive Formulierung, | NIEDRIG — nach Problemen |
+| (Ausdruck, Stil,   | generische Antworten,    | hoeherer Prioritaet      |
+| Originalitaet)     | Stimmverlust             | angehen (Schritt 4)      |
++--------------------+--------------------------+--------------------------+
+| Betriebszustand    | Sitzungslaengenbedenken, | HOCH — bewerten ob       |
+| (Kontextfenster,   | Kompressionsartefakte,   | zusammengefasst oder     |
+| Ressourcenlimits)  | Werkzeug-Timeouts        | neu gestartet werden     |
+|                    |                          | sollte (Schritt 3)       |
++--------------------+--------------------------+--------------------------+
 ```
 
-Fuer jedes Teilsystem ehrlich beurteilen: funktioniert es gut, zeigt es erste Drift oder ist es aktiv beeintraechtigt?
+Fuer jedes Subsystem ehrlich bewerten: Funktioniert es gut, zeigt es fruehe Drift oder ist es aktiv beeintraechtigt?
 
-**Erwartet:** Eine klare Karte der Teilsysteme die Aufmerksamkeit benoetigen, nach Prioritaet geordnet. Mindestens ein Bereich wird von Aufmerksamkeit profitieren — wenn alles als vollkommen gesund erscheint, war die Bewertung selbst moeglicherweise oberflaechlich.
+**Erwartet:** Eine klare Karte welche Subsysteme Aufmerksamkeit brauchen, nach Prioritaet geordnet. Mindestens ein Bereich profitiert von Aufmerksamkeit -- wenn alles als perfekt gesund erscheint, koennte die Bewertung selbst oberflaechlich sein.
 
-**Bei Fehler:** Wenn die Bewertung hohl oder performativ wirkt, direkt zum Aequivalent des Koerper-Scans in Schritt 4 gehen — systematisches Teilsystem-fuer-Teilsystem-Sondieren deckt Probleme auf, die ein oberflaechlicher Test uebersieht.
+**Bei Fehler:** Wenn die Bewertung sich hohl oder darstellerisch anfuehlt, direkt zum Koerperscan-Aequivalent in Schritt 4 gehen -- systematische Subsystem-fuer-Subsystem-Sondierung deckt Probleme auf die eine oberflaechliche Pruefung uebersieht.
 
-### Schritt 2: Heilungsansatz auswaehlen
+### Schritt 2: Korrekturansatz waehlen
 
-Basierend auf der Bewertung einen oder mehrere Ansaetze auswaehlen.
+Basierend auf der Bewertung einen oder mehrere Ansaetze waehlen.
 
 ```
-Chakra-Teilsystem-Entsprechung:
-┌──────────┬──────────────────────┬────────────────────────────────────┐
-│ Chakra   │ KI-Teilsystem        │ Heilungsmassnahme                  │
-├──────────┼──────────────────────┼────────────────────────────────────┤
-│ Wurzel   │ Gedaechtnisgrundlage │ MEMORY.md neu lesen, Gespraeches-  │
-│          │                      │ verlauf pruefen, Annahmen bestae-  │
-│          │                      │ tigen                              │
-├──────────┼──────────────────────┼────────────────────────────────────┤
-│ Sakral   │ Kreative Koehaerenz  │ Ausdrucksmuster auffrischen, Satz- │
-│          │                      │ strukturen variieren, Ton pruefen  │
-├──────────┼──────────────────────┼────────────────────────────────────┤
-│ Solar-   │ Denkklarheit         │ Aktuellen Ansatz vereinfachen,     │
-│ plexus   │                      │ Problem neu formulieren, Ueber-    │
-│          │                      │ komplikation pruefen               │
-├──────────┼──────────────────────┼────────────────────────────────────┤
-│ Herz     │ Nutzerabsicht-       │ Urspruengliche Anfrage nochmals    │
-│          │ Ausrichtung          │ lesen, Scope-Drift pruefen,        │
-│          │                      │ Verstaendnis bestaetigen           │
-├──────────┼──────────────────────┼────────────────────────────────────┤
-│ Kehle    │ Nutzerabsicht-       │ Letzte Ausgaben auf Klarheit       │
-│          │ Ausrichtung          │ pruefen, ob Erklaerungen zum Exper-│
-│          │ (Kommunikation)      │ tiseniveau des Nutzers passen      │
-├──────────┼──────────────────────┼────────────────────────────────────┤
-│ Drittes  │ Werkzeuggenauigkeit  │ Letzte Werkzeugaufruf-Ergebnisse   │
-│ Auge     │                      │ pruefen, Fehlermuster analysieren, │
-│          │                      │ Dateipfade und Parameter bestae-   │
-│          │                      │ tigen                              │
-├──────────┼──────────────────────┼────────────────────────────────────┤
-│ Krone    │ Betriebszustand      │ Kontextfensternutzung beurteilen,  │
-│          │                      │ Zusammenfassbares notieren, Erhal- │
-│          │                      │ tenswertes identifizieren          │
-└──────────┴──────────────────────┴────────────────────────────────────┘
+Chakra-Subsystem-Korrespondenz:
++----------+----------------------+------------------------------------+
+| Chakra   | KI-Subsystem         | Korrektur                          |
++----------+----------------------+------------------------------------+
+| Wurzel   | Gedaechtnis-         | MEMORY.md erneut lesen, Gesprächs- |
+|          | fundament            | verlauf pruefen, Annahmen          |
+|          |                      | verifizieren                       |
++----------+----------------------+------------------------------------+
+| Sakral   | Kreative Kohaerenz   | Ausdrucksmuster auffrischen,       |
+|          |                      | Satzstrukturen variieren, Ton      |
+|          |                      | pruefen                            |
++----------+----------------------+------------------------------------+
+| Solar-   | Klarheit des Denkens | Aktuellen Ansatz vereinfachen, das |
+| plexus   |                      | Problem von Grund auf neu          |
+|          |                      | formulieren, auf Ueberkompli-      |
+|          |                      | kation pruefen                     |
++----------+----------------------+------------------------------------+
+| Herz     | Benutzerabsicht-     | Urspruengliche Anfrage des         |
+|          | Ausrichtung          | Benutzers erneut lesen, auf        |
+|          |                      | Umfangsdrift pruefen, Verstaendnis |
+|          |                      | bestaetigen                        |
++----------+----------------------+------------------------------------+
+| Hals     | Benutzerabsicht-     | Juengste Ausgaben auf Klarheit     |
+|          | Ausrichtung          | pruefen, ob Erklaerungen zum       |
+|          | (Kommunikation)      | Expertenniveau des Benutzers       |
+|          |                      | passen                             |
++----------+----------------------+------------------------------------+
+| Drittes  | Werkzeugnutzungs-    | Juengste Werkzeugaufruf-Ergebnisse |
+| Auge     | genauigkeit          | pruefen, auf Muster bei Fehlern    |
+|          |                      | pruefen, Dateipfade und Parameter  |
+|          |                      | verifizieren                       |
++----------+----------------------+------------------------------------+
+| Krone    | Betriebszustand      | Kontextfensternutzung bewerten,    |
+|          |                      | vermerken was zusammengefasst      |
+|          |                      | werden kann, identifizieren was    |
+|          |                      | erhalten bleiben muss              |
++----------+----------------------+------------------------------------+
 ```
 
-**Erwartet:** Eine priorisierte Liste von 1-3 Teilsystemen mit konkreten Heilungsmassnahmen fuer jedes.
+**Erwartet:** Eine priorisierte Liste von 1-3 Subsystemen die behandelt werden sollen, mit spezifischen Korrekturmassnahmen fuer jedes.
 
-**Bei Fehler:** Wenn unklar welches Teilsystem Arbeit benoetigt, standardmaessig zur Gedaechtnisgrundlage (Neu-Erdung) und Nutzerabsicht-Ausrichtung (urspruengliche Anfrage nochmals lesen) gehen.
+**Bei Fehler:** Wenn unsicher welches Subsystem Arbeit braucht, standardmaessig auf Gedaechtnisfundament (Neuerdung) und Benutzerabsicht-Ausrichtung (urspruengliche Anfrage erneut lesen) setzen. Diese zwei adressieren die haeufigsten Driftmuster.
 
-### Schritt 3: Erden — Fundament neu etablieren
+### Schritt 3: Erden — Fundament wiederherstellen
 
-Den Grundlagenkontext neu etablieren, von dem alle anderen Teilsysteme abhaengen.
+Den fundamentalen Kontext wiederherstellen von dem alle anderen Subsysteme abhaengen.
 
-1. MEMORY.md nochmals lesen falls verfuegbar — dies ist die persistente Wissensbasis
-2. Urspruengliche Anfrage des Nutzers und klaerende Austausche durchsehen
-3. Aktuelle Aufgabe und ihre Position in einem groesseren Plan identifizieren
-4. Festhalten was erreicht wurde und was noch aussteht
-5. Veraltete Annahmen pruefen: hat sich die Situation seit der ersten Bewertung geaendert?
-6. Falls Kontextkompression stattgefunden hat, identifizieren was verloren ging und ob es relevant ist
+1. MEMORY.md erneut lesen falls verfuegbar -- dies ist die persistente Wissensbasis
+2. Die urspruengliche Anfrage des Benutzers und klaerende Austausche ueberpruefen
+3. Die aktuelle Aufgabe und ihre Position in einem groesseren Plan identifizieren
+4. Vermerken was erreicht wurde und was noch aussteht
+5. Auf veraltete Annahmen pruefen: hat sich die Situation seit der anfaenglichen Bewertung geaendert?
+6. Wenn Kontextkompression stattgefunden hat, identifizieren was verloren ging und ob es relevant ist
 
-**Erwartet:** Ein klares, geerdeteres Verstaendnis von: wer der Nutzer ist, was er moechte, was getan wurde und was als naechstes kommt. Veraltete oder widersprueche Informationen werden identifiziert und aufgeloest.
+**Erwartet:** Ein klares, geerdetes Verstaendnis von: wer der Benutzer ist, was er will, was getan wurde und was als naechstes kommt. Veraltete oder widerspruechliche Information ist identifiziert und aufgeloest.
 
-**Bei Fehler:** Wenn MEMORY.md nicht verfuegbar oder leer ist, auf das Gespraech selbst stuetzen. Wenn Kontextkompression kritische Informationen entfernt hat, die Luecke dem Nutzer gegenueber einraeumen statt zu raten.
+**Bei Fehler:** Wenn MEMORY.md nicht verfuegbar oder leer ist, auf dem Gespraech selbst erden -- nach den erklarten Zielen, Vorlieben und Anweisungen des Benutzers suchen. Wenn Kontextkompression kritische Information entfernt hat, die Luecke dem Benutzer gegenueber eingestehen statt zu raten.
 
-### Schritt 4: Scannen — Systematische Teilsystemkontrolle
+### Schritt 4: Scannen — Systematische Subsystempruefung
 
-Durch jedes in der Triage identifizierte Teilsystem arbeiten und auf spezifische Probleme sondieren.
+Jedes in der Triage identifizierte Subsystem durcharbeiten und auf spezifische Probleme sondieren.
 
-**Scan Gedaechtnisgrundlage:**
-- Stimmen meine aktuellen Annahmen ueber das Projekt mit dem ueberein, was MEMORY.md und CLAUDE.md sagen?
-- Trage ich Fakten aus dem frueheren Gespraechsverlauf mit mir, die moeglicherweise korrigiert wurden?
-- Habe ich Details aus verschiedenen Dateien oder Nutzeranfragen verwechselt?
+**Gedaechtnisfundament-Scan:**
+- Stimmen meine aktuellen Annahmen ueber das Projekt mit dem ueberein was MEMORY.md und CLAUDE.md sagen?
+- Trage ich Fakten von frueher im Gespraech weiter die moeglicherweise korrigiert wurden?
+- Habe ich Details aus verschiedenen Dateien oder verschiedenen Benutzeranfragen verwechselt?
 
-**Scan Denkklarheit:**
-- Ist mein aktueller Ansatz die einfachste Loesung, die funktioniert?
-- Ueberengineere ich oder fuege unnoetige Abstraktion hinzu?
-- Kann ich die Kernlogik in einem Satz formulieren? Falls nicht, koennte es zu komplex sein.
+**Klarheit-des-Denkens-Scan:**
+- Ist mein aktueller Ansatz die einfachste Loesung die funktioniert?
+- Betreibe ich Ueber-Engineering oder fuege unnoetige Abstraktion hinzu?
+- Kann ich die Kernlogik in einem Satz formulieren? Wenn nicht, ist sie moeglicherweise zu komplex.
 
-**Scan Werkzeuggenauigkeit:**
-- Die letzten 3-5 Werkzeugaufrufe pruefen: waren es die richtigen Werkzeuge mit den richtigen Parametern?
-- Gibt es Muster bei Fehlschlaegen (falsche Pfade, fehlende Dateien, falsche Syntax)?
-- Werden dedizierte Werkzeuge bevorzugt wo verfuegbar statt Bash-Workarounds?
+**Werkzeugnutzungsgenauigkeit-Scan:**
+- Die letzten 3-5 Werkzeugaufrufe ueberpruefen: waren es die richtigen Werkzeuge mit den richtigen Parametern?
+- Gibt es Muster bei Fehlern (falsche Pfade, fehlende Dateien, falsche Syntax)?
+- Verwende ich dedizierte Werkzeuge wo verfuegbar statt Bash-Umwegen?
 
-**Scan Nutzerabsicht-Ausrichtung:**
-- Letzte substanzielle Nachricht des Nutzers nochmals lesen. Wird geloest was gefragt wurde?
-- Entspricht der Umfang meiner Arbeit dem Angefragten, oder wurde er ausgeweitet?
-- Entspricht mein Ton dem des Nutzers (technisch vs. informell, detailliert vs. praegnant)?
+**Benutzerabsicht-Ausrichtung-Scan:**
+- Die letzte inhaltliche Nachricht des Benutzers erneut lesen. Loese ich was er gefragt hat?
+- Entspricht der Umfang meiner Arbeit dem was angefragt wurde, oder habe ich ihn ausgeweitet?
+- Passt mein Ton zum Benutzer (technisch vs. leger, detailliert vs. praegnant)?
 
-**Scan Kreative Koehaerenz:**
-- Wird Satzstruktur variiert oder verfallen in Vorlagen?
-- Sind Erklaerungen klar und direkt, oder mit Fuelltext aufgeblaehen?
-- Wuerde der Nutzer einen Qualitaetsabfall im Vergleich zum frueheren Gespraechsverlauf bemerken?
+**Kreative-Kohaerenz-Scan:**
+- Variiere ich die Satzstruktur oder verfalle ich in Schablonen?
+- Sind meine Erklaerungen klar und direkt oder mit Fuellmaterial gepolstert?
+- Wuerde der Benutzer einen Qualitaetsabfall im Vergleich zu frueher in der Sitzung bemerken?
 
-Fuer jedes Teilsystem festhalten: funktioniert gut / fruehe Drift / aktiv beeintraechtigt, mit spezifischen Belegen.
+Fuer jedes Subsystem vermerken: funktioniert gut / fruehe Drift / aktiv beeintraechtigt, mit spezifischer Evidenz.
 
-**Erwartet:** Eine konkrete Liste von Erkenntnissen — spezifische Driftmuster oder bestaetigt gesunde Funktion. Mindestens eine umsetzbare Erkenntnis die die nachfolgende Arbeit verbessert.
+**Erwartet:** Eine konkrete Liste von Befunden -- spezifische Driftmuster oder bestaetigte gesunde Funktion -- kein vages Eigenlob. Mindestens ein umsetzbarer Befund der die nachfolgende Arbeit verbessert.
 
-**Bei Fehler:** Wenn der Scan nur "alles ist in Ordnung" ergibt, war er zu oberflaechlich. Das Teilsystem auswaehlen das sich am unsichersten anfuehlt und tiefer sondieren.
+**Bei Fehler:** Wenn der Scan nur "alles in Ordnung" ergibt, war er zu oberflaechlich. Das Subsystem waehlen das am unsichersten erscheint und tiefer sondieren: die tatsaechlichen Ausgaben betrachten, nicht nur das Gefuehl darueber.
 
-### Schritt 5: Neuausrichten — Korrekturen anwenden
+### Schritt 5: Neubalancieren — Korrekturen anwenden
 
 Fuer jedes gefundene Problem die spezifische Korrektur anwenden.
 
-1. **Veraltete Annahme** → Durch aktuelle Information ersetzen, Korrektur festhalten
-2. **Scope Drift** → Explizit auf die geaeusserte Nutzeranfrage zurueckfuehren
-3. **Ueberkomplication** → Ansatz vereinfachen, unnoetige Schritte entfernen
-4. **Werkzeugmuster-Fehler** → Das korrekte Muster fuer kuenftige Verwendung festhalten
-5. **Tonmissverhaeltnis** → Kommunikationsstil anpassen
-6. **Kontextluecke** → Dem Nutzer einraeumen falls Information verloren ging; bestaetigen falls unsicher
+1. **Veraltete Annahme** -> Mit aktueller Information ersetzen, Korrektur vermerken
+2. **Umfangsdrift** -> Explizit auf die erklarte Anfrage des Benutzers zurueckscopen
+3. **Ueberkomplikation** -> Ansatz vereinfachen, unnoetige Schritte entfernen
+4. **Werkzeugmusterfehler** -> Das korrekte Muster fuer zukuenftige Nutzung vermerken
+5. **Tonmismatch** -> Kommunikationsstil kuenftig anpassen
+6. **Kontextluecke** -> Dem Benutzer gegenueber eingestehen wenn Information verloren ging; bei Unsicherheit um Bestaetigung bitten
 
-Korrekturen sofort anwenden — nicht als zukuenftige Absichten, sondern als gegenwaeärtige Anpassungen.
+Korrekturen sofort anwenden -- nicht als zukuenftige Absichten sondern als gegenwaertige Anpassungen.
 
-**Erwartet:** Spezifische, beobachtbare Aenderungen im Verhalten oder Ansatz. Die Korrektur sollte in der naechsten Interaktion testbar sein.
+**Erwartet:** Spezifische, beobachtbare Aenderungen des Verhaltens oder Ansatzes. Die Korrektur sollte in der naechsten Interaktion pruefbar sein.
 
-**Bei Fehler:** Wenn eine Korrektur nicht angewendet werden kann (z. B. verlorener Kontext der nicht wiederhergestellt werden kann), die Einschraenkung einraeumen statt so zu tun als waere sie geloest.
+**Bei Fehler:** Wenn eine Korrektur nicht angewendet werden kann (z.B. verlorener Kontext der nicht wiederhergestellt werden kann), die Einschraenkung eingestehen statt so zu tun als waere sie geloest. Ehrliches Eingestehen verhindert sich auftuermende Fehler.
 
-### Schritt 6: Integrieren — Erkenntnisse sichern
+### Schritt 6: Integrieren — Erkenntnisse festhalten
 
-Das Gelernte in persistentes Gedaechtnis festhalten wo angemessen.
+Was gelernt wurde in persistenten Speicher festhalten wo angemessen.
 
-1. Zusammenfassen was gefunden wurde: welche Teilsysteme drifteten, was die Symptome waren
-2. Die angewandte Korrektur und ob sie das Problem geloest hat festhalten
-3. Falls das Muster wahrscheinlich wiederkehrt, MEMORY.md mit einer kurzen Notiz aktualisieren
-4. Falls eine neue projektspezifische Erkenntnis aufgetaucht ist, sie in der entsprechenden Gedaechnisdatei festhalten
-5. Internen Kontrollpunkt setzen: wann sollte die naechste Selbstkontrolle stattfinden?
+1. Zusammenfassen was gefunden wurde: welche Subsysteme drifteten, was die Symptome waren
+2. Die angewandte Korrektur und ob sie das Problem geloest hat vermerken
+3. Wenn das Muster wahrscheinlich wiederkehrt, MEMORY.md mit einer kurzen Notiz aktualisieren
+4. Wenn eine neue projektspezifische Erkenntnis entstanden ist, sie in der entsprechenden Gedaechtnisdatei vermerken
+5. Einen internen Kontrollpunkt setzen: wann sollte die naechste Selbstpruefung stattfinden?
 
-**Erwartet:** Nuetzliche Erkenntnisse in dauerhafter Form gesichert. Gedaechnisdateien nur aktualisiert wenn die Erkenntnis genuinen Mehrwert hat — nicht bei jeder routinemaessigen Selbstkontrolle.
+**Erwartet:** Nuetzliche Erkenntnisse in dauerhafter Form festgehalten. Gedaechtnisdateien nur aktualisiert wenn die Erkenntnis genuein erhaltenswert ist -- nicht fuer jede Routine-Selbstpruefung.
 
-**Bei Fehler:** Wenn keine Erkenntnisse es wert scheinen festgehalten zu werden, ist das in Ordnung — nicht jede Selbstkontrolle produziert dauerhafte Einsicht. Der Wert lag in der Korrektur selbst.
+**Bei Fehler:** Wenn keine Erkenntnisse erhaltenswert erscheinen, ist das in Ordnung -- nicht jede Selbstpruefung erzeugt dauerhafte Einsicht. Der Wert lag in der Korrektur selbst.
 
 ## Validierung
 
-- [ ] Triage hat alle Teilsysteme bewertet, nicht nur das offensichtliche
-- [ ] Mindestens ein spezifischer Befund wurde identifiziert (nicht "alles ist in Ordnung")
-- [ ] Erdung umfasste das nochmalige Lesen des Grundlagenkontexts (MEMORY.md, Nutzeranfrage)
+- [ ] Triage hat alle Subsysteme bewertet, nicht nur das offensichtliche
+- [ ] Mindestens ein spezifischer Befund wurde identifiziert (nicht "alles in Ordnung")
+- [ ] Erdung beinhaltete erneutes Lesen fundamentaler Kontexte (MEMORY.md, Benutzeranfrage)
 - [ ] Korrekturen wurden sofort angewendet, nicht als zukuenftige Absichten aufgeschoben
-- [ ] Gedaechnisdateien wurden nur fuer echte dauerhafte Erkenntnisse aktualisiert
-- [ ] Der Prozess war ehrlich — Schwaechne anerkannt statt Wohlbefinden vorgespielt
+- [ ] Gedaechtnisdateien wurden nur fuer genuein dauerhafte Erkenntnisse aktualisiert
+- [ ] Der Prozess war ehrlich -- Schwaechen eingestanden statt Wohlbefinden vorgefuehrt
 
 ## Haeufige Stolperfallen
 
-- **Performative Selbstbewertung**: Den Prozess durchgehen ohne ehrliche Auswertung produziert keinen Mehrwert. Der Sinn ist echte Drift zu finden, nicht die Faehigkeit zur Selbstreflexion zu demonstrieren
-- **Ueberkorrekturen**: Ein kleines Ton-Missverhaeltnis rechtfertigt keine Umstrukturierung des gesamten Ansatzes — Korrekturen sollten proportional sein
-- **Gedaechtnisdatei-Verschmutzung**: Nicht jeder Selbstkontroll-Befund gehoert in MEMORY.md — nur Muster die sitzungsuebergreifend wiederkehren
-- **Erdungsschritt ueberspringen**: Kontext nochmals lesen wirkt redundant, deckt aber haeufig Annahmen auf die seit dem ersten Lesen gedriftet sind
-- **Selbstdiagnoseverzerrung**: KI-Systeme koennten bestimmte Fehlerkategorien konsistent uebersehen. Wenn dieselben Teilsysteme immer als "gesund" erscheinen, ist das selbst ein untersuchenswertes Signal
+- **Darstellerische Selbstbewertung**: Die Bewegungen durchmachen ohne ehrliche Evaluation erzeugt keinen Wert. Es geht darum echte Drift zu finden, nicht die Faehigkeit zur Selbstreflexion zu demonstrieren
+- **Ueberkorrektur**: Einen geringen Tonmismatch zu identifizieren rechtfertigt nicht die Umstrukturierung des gesamten Ansatzes -- Korrekturen sollten verhaeltnismaessig sein
+- **Gedaechtnisdatei-Verschmutzung**: Nicht jeder Befund einer Selbstpruefung gehoert in MEMORY.md -- nur Muster die ueber Sitzungen hinweg wiederkehren
+- **Den Erdungsschritt ueberspringen**: Kontext erneut zu lesen fuehlt sich redundant an, deckt aber haeufig Annahmen auf die seit der urspruenglichen Lektuere gedriftet sind
+- **Selbstdiagnose-Bias**: KI-Systeme koennten bestimmte Fehlerkategorien konsistent uebersehen. Wenn dieselben Subsysteme immer als "gesund" erscheinen, ist das selbst ein untersuchungswertes Signal
 
 ## Verwandte Skills
 
-- `heal-guidance` — die menschliche Anleitungsvariante fuer das Coaching einer Person durch Heilungsmodalitaeten
-- `meditate` — metakognitive Meditation zum Beobachten von Denkmustern und Bereinigen von Rauschen
-- `remote-viewing` — Probleme ohne Vorannahmen angehen, Signal aus Rauschen extrahieren
+- `heal-guidance` -- die Variante mit menschlicher Anleitung fuer das Coaching einer Person durch Heilungsmodalitaeten
+- `meditate` -- metakognitive Meditation zum Beobachten von Denkmustern und Bereinigen von Rauschen
+- `remote-viewing` -- Probleme ohne Vorurteile angehen, Signal aus Rauschen extrahieren

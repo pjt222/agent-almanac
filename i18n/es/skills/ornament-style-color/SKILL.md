@@ -1,13 +1,14 @@
 ---
 name: ornament-style-color
 description: >
-  Design polychromatic ornamental patterns grounded in Alexander Speltz's classical
-  ornament taxonomy. Builds on monochrome structural analysis by adding period-authentic
-  color palettes, color-to-motif mapping, and rendering styles suited to painted,
-  illuminated, and glazed ornament. Use when creating decorative designs where color
-  is integral to the tradition (Islamic tilework, illuminated manuscripts, Art Nouveau),
-  exploring how historical periods used color in ornament, or producing colored reference
-  imagery for design, illustration, or educational materials.
+  Diseñar patrones ornamentales policromáticos fundamentados en la taxonomía clásica
+  de ornamentación de Alexander Speltz. Se basa en el análisis estructural monocromo
+  añadiendo paletas de color auténticas del período, mapeo color-a-motivo, y estilos
+  de renderizado adecuados para ornamentación pintada, iluminada y esmaltada. Usar
+  al crear diseños decorativos donde el color es integral a la tradición (azulejos
+  islámicos, manuscritos iluminados, Art Nouveau), explorar cómo los períodos
+  históricos usaban el color en la ornamentación, o producir imágenes de referencia
+  coloreadas para diseño, ilustración o materiales educativos.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,32 +27,32 @@ metadata:
 
 # Ornament Style — Color
 
-Design polychromatic ornamental patterns by combining art historical color knowledge with AI-assisted image generation. Builds on the structural foundation of `ornament-style-mono` by adding period-authentic color palettes, color harmony principles, and rendering styles suited to painted, illuminated, and glazed ornament.
+Diseñar patrones ornamentales policromáticos combinando conocimiento histórico-artístico del color con generación de imágenes asistida por IA. Se construye sobre la base estructural de `ornament-style-mono` añadiendo paletas de color auténticas del período, principios de armonía cromática y estilos de renderizado adecuados para ornamentación pintada, iluminada y esmaltada.
 
 ## Cuándo Usar
 
-- Creating decorative designs where color is integral to the ornamental tradition (e.g., Islamic tilework, illuminated manuscripts, Art Nouveau posters)
-- Exploring how historical periods used color in ornament — palette, distribution, and symbolic meaning
-- Producing colored reference imagery for design, illustration, or educational materials
-- Generating painted, illuminated, glazed, or stained glass renderings of classical motifs
-- Studying the relationship between color and form in ornamental traditions
+- Crear diseños decorativos donde el color es integral a la tradición ornamental (ej., azulejos islámicos, manuscritos iluminados, carteles Art Nouveau)
+- Explorar cómo los períodos históricos usaban el color en la ornamentación — paleta, distribución y significado simbólico
+- Producir imágenes de referencia coloreadas para diseño, ilustración o materiales educativos
+- Generar renderizados de motivos clásicos pintados, iluminados, de cerámica esmaltada o de vitral
+- Estudiar la relación entre color y forma en las tradiciones ornamentales
 
 ## Entradas
 
-- **Requerido**: Desired historical period or style (or "surprise me" for random selection)
-- **Requerido**: Application context (border, medallion, frieze, panel, tile, standalone motif)
-- **Opcional**: Color palette preference (period-authentic, custom, or specific colors)
-- **Opcional**: Specific motif preference (acanthus, arabesque, rosette, etc.)
-- **Opcional**: Rendering style preference (painted, illuminated, glazed tile, stained glass, watercolor)
-- **Opcional**: Color mood (muted/antique, balanced/natural, vivid/saturated)
-- **Opcional**: Target resolution and aspect ratio
-- **Opcional**: Seed value for reproducible generation
+- **Requerido**: Período histórico o estilo deseado (o "sorpréndeme" para selección aleatoria)
+- **Requerido**: Contexto de aplicación (borde, medallón, friso, panel, azulejo, motivo independiente)
+- **Opcional**: Preferencia de paleta de color (auténtica del período, personalizada o colores específicos)
+- **Opcional**: Preferencia de motivo específico (acanto, arabesco, roseta, etc.)
+- **Opcional**: Preferencia de estilo de renderizado (pintado, iluminado, cerámica esmaltada, vitral, acuarela)
+- **Opcional**: Ambiente cromático (apagado/antiguo, equilibrado/natural, vívido/saturado)
+- **Opcional**: Resolución y relación de aspecto objetivo
+- **Opcional**: Valor de semilla para generación reproducible
 
 ## Procedimiento
 
-### Paso 1: Select Historical Period and Color Palette
+### Paso 1: Seleccionar Período Histórico y Paleta de Color
 
-Choose a period and identify its characteristic color language. Color in ornament is never arbitrary — each period has a palette rooted in available pigments, cultural symbolism, and material context.
+Elegir un período e identificar su lenguaje cromático característico. El color en la ornamentación nunca es arbitrario — cada período tiene una paleta enraizada en pigmentos disponibles, simbolismo cultural y contexto material.
 
 ```
 Historical Ornament Periods with Characteristic Palettes:
@@ -90,17 +91,17 @@ Historical Ornament Periods with Characteristic Palettes:
 └───────────────────┴─────────────────┴────────────────────────────────────────────────────────┘
 ```
 
-1. If the user specified a period, confirm and note its characteristic palette
-2. If "surprise me," select randomly — weight toward periods with rich color traditions (Islamic, Byzantine, Gothic, Art Nouveau)
-3. Note the material context (fresco, mosaic, tile, stained glass, print) as this affects how color renders
+1. Si el usuario especificó un período, confirmar y notar su paleta característica
+2. Si dijo "sorpréndeme", seleccionar aleatoriamente — ponderar hacia períodos con ricas tradiciones cromáticas (islámico, bizantino, gótico, Art Nouveau)
+3. Notar el contexto material (fresco, mosaico, azulejo, vitral, impreso) ya que esto afecta cómo se renderiza el color
 
-**Esperado:** A clearly identified period with its characteristic palette and material context understood.
+**Esperado:** Un período claramente identificado con su paleta característica y contexto material comprendidos.
 
-**En caso de fallo:** If the user requests a period not in the table, research its color language using WebSearch for "[period] ornament color palette pigments" and construct an equivalent entry. Historical pigment availability is a reliable guide to period-authentic color.
+**En caso de fallo:** Si el usuario solicita un período que no está en la tabla, investigar su lenguaje cromático usando WebSearch para "[período] ornament color palette pigments" y construir una entrada equivalente. La disponibilidad histórica de pigmentos es una guía confiable para colores auténticos del período.
 
-### Paso 2: Define Color Palette
+### Paso 2: Definir la Paleta de Color
 
-Translate the historical palette into a specific 3-5 color set with defined roles.
+Traducir la paleta histórica en un conjunto específico de 3-5 colores con roles definidos.
 
 **Color Role Framework:**
 ```
@@ -123,35 +124,35 @@ Color Distribution (60/30/10 Rule):
 - **Analogous**: Adjacent colors (e.g., sage green, teal, muted blue) — harmonious, subtle
 - **Triadic**: Three equally spaced colors (e.g., red, blue, gold) — vibrant, balanced
 
-1. Select 3-5 colors with named roles (dominant, secondary, accent, optional)
-2. Choose the harmony approach
-3. Assign approximate hex values or descriptive color names
-4. Note the color mood: muted/antique, balanced/natural, or vivid/saturated
+1. Seleccionar 3-5 colores con roles nombrados (dominante, secundario, acento, opcional)
+2. Elegir el enfoque de armonía
+3. Asignar valores hex aproximados o nombres descriptivos de color
+4. Notar el ambiente cromático: apagado/antiguo, equilibrado/natural, o vívido/saturado
 
 **Example Palette Definitions:**
 - **Islamic Tilework**: turquoise (dominant), white (secondary), cobalt blue (accent), gold (detail) — analogous + metallic — vivid
 - **Art Nouveau Poster**: sage green (dominant), dusty rose (secondary), amber gold (accent) — analogous — muted
 - **Byzantine Mosaic**: gold (dominant), deep blue (secondary), crimson (accent), white (detail) — complementary — vivid
 
-**Esperado:** A palette of 3-5 named colors with roles, proportions, harmony approach, and mood defined.
+**Esperado:** Una paleta de 3-5 colores nombrados con roles, proporciones, enfoque de armonía y ambiente definidos.
 
-**En caso de fallo:** If color selection feels arbitrary, anchor to the period's material context. Ask: "What pigments were physically available?" and "What was the ground material?" (gold leaf on vellum, glaze on ceramic, paint on plaster). The material constrains and authenticates the palette.
+**En caso de fallo:** Si la selección de color se siente arbitraria, anclar al contexto material del período. Preguntar: "¿Qué pigmentos estaban físicamente disponibles?" y "¿Cuál era el material base?" (pan de oro sobre vitela, esmalte sobre cerámica, pintura sobre yeso). El material restringe y autentica la paleta.
 
-### Paso 3: Analyze Motif Structure
+### Paso 3: Analizar la Estructura del Motivo
 
-Understand the structural grammar of the chosen motif, extending the monochrome analysis with color-to-structure mapping.
+Comprender la gramática estructural del motivo elegido, extendiendo el análisis monocromo con mapeo color-a-estructura.
 
-1. Perform the same structural analysis as `ornament-style-mono` Step 2:
-   - Symmetry type (bilateral, radial, translational, point)
-   - Geometric scaffold (circle, rectangle, triangle, band)
-   - Fill pattern (solid, line-filled, open, mixed)
-   - Edge treatment (clean, organic, interlocking)
+1. Realizar el mismo análisis estructural que `ornament-style-mono` Paso 2:
+   - Tipo de simetría (bilateral, radial, traslacional, puntual)
+   - Andamiaje geométrico (círculo, rectángulo, triángulo, banda)
+   - Patrón de relleno (sólido, con líneas, abierto, mixto)
+   - Tratamiento de bordes (limpio, orgánico, entrelazado)
 
-2. Add **color-to-structure mapping**:
-   - Which structural elements receive which colors?
-   - Does color follow form (each shape gets one color) or flow (color gradients cross structural boundaries)?
-   - Where does the accent color appear? (Typically at focal points, intersections, or small detail elements)
-   - What color is the ground/background?
+2. Agregar **mapeo color-a-estructura**:
+   - ¿Qué elementos estructurales reciben qué colores?
+   - ¿El color sigue la forma (cada figura recibe un color) o fluye (gradientes de color cruzan límites estructurales)?
+   - ¿Dónde aparece el color de acento? (Típicamente en puntos focales, intersecciones o pequeños elementos de detalle)
+   - ¿Cuál es el color del fondo/base?
 
 **Example Mapping:**
 ```
@@ -163,13 +164,13 @@ Islamic Star Pattern:
 → Color follows form strictly — each geometric shape is one flat color
 ```
 
-**Esperado:** A structural description with explicit color assignments for each structural element.
+**Esperado:** Una descripción estructural con asignaciones de color explícitas para cada elemento estructural.
 
-**En caso de fallo:** If the color-to-structure mapping is unclear, study historical examples using WebSearch for "[period] [motif] ornament color" and observe how color was actually used. Historical ornament almost always uses color to clarify structure, not obscure it.
+**En caso de fallo:** Si el mapeo color-a-estructura no es claro, estudiar ejemplos históricos usando WebSearch para "[período] [motivo] ornament color" y observar cómo se usaba realmente el color. La ornamentación histórica casi siempre usa el color para clarificar la estructura, no para oscurecerla.
 
-### Paso 4: Construct Color Prompt
+### Paso 4: Construir el Prompt de Color
 
-Build the text prompt for Z-Image generation, incorporating color palette and rendering style.
+Construir el prompt de texto para la generación con Z-Image, incorporando paleta de color y estilo de renderizado.
 
 **Prompt Template:**
 ```
@@ -199,13 +200,13 @@ Build the text prompt for Z-Image generation, incorporating color palette and re
 - `illuminated manuscript border in the Gothic style, vine and trefoil ornament, ultramarine blue and ruby red with gold leaf details on cream vellum, rich jewel tones, vertical panel, medieval book of hours quality`
 - `watercolor illustration of Art Nouveau floral ornament, whiplash curves with lily motif, sage green and dusty rose with amber gold accents, muted organic tones, vertical panel, Alphonse Mucha influence`
 
-**Esperado:** A prompt of 25-50 words that specifies rendering style, motif, period, composition, and explicit color information.
+**Esperado:** Un prompt de 25-50 palabras que especifique estilo de renderizado, motivo, período, composición e información de color explícita.
 
-**En caso de fallo:** If the prompt produces color that does not match the palette, front-load the color description in the prompt (put it before the motif description). Z-Image weights earlier prompt tokens more heavily. Also try naming specific hex colors or well-known pigment names (ultramarine, vermillion, ochre).
+**En caso de fallo:** Si el prompt produce color que no coincide con la paleta, cargar la descripción del color al inicio del prompt (ponerla antes de la descripción del motivo). Z-Image pondera más los tokens iniciales del prompt. También intentar nombrar colores hex específicos o nombres de pigmentos conocidos (ultramarino, bermellón, ocre).
 
-### Paso 5: Configure Generation Parameters
+### Paso 5: Configurar Parámetros de Generación
 
-Select resolution and generation parameters. Color ornament often benefits from slightly more inference steps than monochrome.
+Seleccionar resolución y parámetros de generación. La ornamentación en color a menudo se beneficia de ligeramente más pasos de inferencia que la monocroma.
 
 ```
 Resolution by Application (same as ornament-style-mono):
@@ -222,37 +223,37 @@ Resolution by Application (same as ornament-style-mono):
 └────────────────────┴─────────────────────┴────────────────────────────────┘
 ```
 
-1. Select resolution based on application context
-2. Set `steps` to 10-12 for color work (color detail and palette accuracy benefit from more steps)
-3. Set `shift` to 3 (default)
-4. Choose `random_seed: true` for exploration or `random_seed: false` with a specific seed for reproducibility
-5. Record all parameters for documentation
+1. Seleccionar resolución basada en el contexto de aplicación
+2. Establecer `steps` en 10-12 para trabajo en color (el detalle cromático y la precisión de la paleta se benefician de más pasos)
+3. Establecer `shift` en 3 (por defecto)
+4. Elegir `random_seed: true` para exploración o `random_seed: false` con una semilla específica para reproducibilidad
+5. Registrar todos los parámetros para documentación
 
-**Esperado:** A complete parameter set. Note that color ornament generally needs 10+ steps for good palette fidelity.
+**Esperado:** Un conjunto de parámetros completo. Notar que la ornamentación en color generalmente necesita 10+ pasos para buena fidelidad de paleta.
 
-**En caso de fallo:** If unsure, use 1024x1024 at 10 steps. This is a reliable default for most color ornament contexts.
+**En caso de fallo:** Si no se está seguro, usar 1024x1024 a 10 pasos. Este es un valor por defecto confiable para la mayoría de contextos de ornamentación en color.
 
-### Paso 6: Generate Image
+### Paso 6: Generar la Imagen
 
-Invoke the Z-Image MCP tool to produce the ornament.
+Invocar la herramienta MCP Z-Image para producir el ornamento.
 
-1. Call `mcp__hf-mcp-server__gr1_z_image_turbo_generate` with:
-   - `prompt`: the constructed prompt from Step 4
-   - `resolution`: from Step 5
-   - `steps`: from Step 5 (recommend 10-12)
-   - `shift`: from Step 5
-   - `random_seed`: from Step 5
-   - `seed`: specific seed if `random_seed` is false
-2. Record the returned seed value for reproducibility
-3. Note the generation time
+1. Llamar a `mcp__hf-mcp-server__gr1_z_image_turbo_generate` con:
+   - `prompt`: el prompt construido en el Paso 4
+   - `resolution`: del Paso 5
+   - `steps`: del Paso 5 (se recomiendan 10-12)
+   - `shift`: del Paso 5
+   - `random_seed`: del Paso 5
+   - `seed`: semilla específica si `random_seed` es false
+2. Registrar el valor de semilla devuelto para reproducibilidad
+3. Anotar el tiempo de generación
 
-**Esperado:** A generated image with recognizable ornamental forms and visible color. The color may not perfectly match the specified palette — this is addressed in evaluation.
+**Esperado:** Una imagen generada con formas ornamentales reconocibles y color visible. El color puede no coincidir perfectamente con la paleta especificada — esto se aborda en la evaluación.
 
-**En caso de fallo:** If the MCP tool is unavailable, verify that hf-mcp-server is configured (see `configure-mcp-server` or `troubleshoot-mcp-connection`). If the generated image is entirely abstract, the prompt needs more specific structural language — return to Step 4. If colors are completely wrong, front-load the color names in the prompt.
+**En caso de fallo:** Si la herramienta MCP no está disponible, verificar que hf-mcp-server esté configurado (ver `configure-mcp-server` o `troubleshoot-mcp-connection`). Si la imagen generada es enteramente abstracta, el prompt necesita lenguaje estructural más específico — volver al Paso 4. Si los colores están completamente equivocados, cargar los nombres de colores al inicio del prompt.
 
-### Paso 7: Evaluate Color Fidelity
+### Paso 7: Evaluar la Fidelidad del Color
 
-Assess the generated image against five criteria, extending the monochrome rubric with color-specific evaluation.
+Evaluar la imagen generada contra cinco criterios, extendiendo la rúbrica monocroma con evaluación específica de color.
 
 ```
 Polychromatic Ornament Evaluation Rubric:
@@ -281,18 +282,18 @@ Polychromatic Ornament Evaluation Rubric:
 └─────────────────────┴───────────────────────────────────────────────────────┘
 ```
 
-1. Score each criterion: **Strong** (clearly meets), **Adequate** (partially meets), **Weak** (does not meet)
-2. Note specific observations for each criterion
-3. If 4+ criteria score Strong, the design is successful
-4. If 2+ criteria score Weak, return to Step 4 for prompt refinement
+1. Puntuar cada criterio: **Fuerte** (cumple claramente), **Adecuado** (cumple parcialmente), **Débil** (no cumple)
+2. Anotar observaciones específicas para cada criterio
+3. Si 4+ criterios puntúan Fuerte, el diseño es exitoso
+4. Si 2+ criterios puntúan Débil, volver al Paso 4 para refinamiento del prompt
 
-**Esperado:** A scored evaluation with specific observations. Color ornament is harder to control than monochrome — expect Adequate scores on first generation for palette match and distribution.
+**Esperado:** Una evaluación puntuada con observaciones específicas. La ornamentación en color es más difícil de controlar que la monocroma — esperar puntuaciones de Adecuado en la primera generación para coincidencia de paleta y distribución.
 
-**En caso de fallo:** If most criteria score Weak, the prompt may need fundamental restructuring. Common fixes: move color names to the very beginning of the prompt, use fewer colors, specify the ground color explicitly, increase steps to 12.
+**En caso de fallo:** Si la mayoría de los criterios puntúan Débil, el prompt puede necesitar reestructuración fundamental. Correcciones comunes: mover los nombres de colores al inicio del prompt, usar menos colores, especificar el color de fondo explícitamente, aumentar los pasos a 12.
 
-### Paso 8: Iterate or Finalize
+### Paso 8: Iterar o Finalizar
 
-Refine the design through targeted iteration or accept the result.
+Refinar el diseño mediante iteración dirigida o aceptar el resultado.
 
 **Color-Specific Iteration Strategies:**
 1. **Palette correction**: If colors are wrong, put specific color names at the start of the prompt: "turquoise blue and gold: [rest of prompt]"
@@ -303,20 +304,20 @@ Refine the design through targeted iteration or accept the result.
 
 **Iteration Budget:** Limit to 3 iterations per design concept. Color iteration often requires more prompt adjustment than monochrome.
 
-1. If the evaluation in Step 7 indicates specific weaknesses, apply the corresponding correction strategy
-2. Regenerate using Step 6
-3. Re-evaluate using Step 7
-4. Accept when 4+ criteria score Strong or iteration budget is exhausted
+1. Si la evaluación del Paso 7 indica debilidades específicas, aplicar la estrategia de corrección correspondiente
+2. Regenerar usando el Paso 6
+3. Re-evaluar usando el Paso 7
+4. Aceptar cuando 4+ criterios puntúen Fuerte o el presupuesto de iteraciones se haya agotado
 
-**Esperado:** Improved color fidelity after 1-2 iterations. Perfect palette match is unlikely — aim for "recognizably in the right color family."
+**Esperado:** Fidelidad de color mejorada después de 1-2 iteraciones. La coincidencia perfecta de paleta es improbable — apuntar a "reconociblemente en la familia de colores correcta."
 
-**En caso de fallo:** If iteration is not converging, the color palette may be too specific for the model to reproduce reliably. Simplify to fewer colors (3 instead of 5), use broader color descriptions ("warm earth tones" instead of specific hex values), or accept the closest approximation.
+**En caso de fallo:** Si la iteración no converge, la paleta de color puede ser demasiado específica para que el modelo la reproduzca confiablemente. Simplificar a menos colores (3 en lugar de 5), usar descripciones de color más amplias ("tonos cálidos terrosos" en lugar de valores hex específicos), o aceptar la aproximación más cercana.
 
-### Paso 9: Document the Design
+### Paso 9: Documentar el Diseño
 
-Create a complete record of the final design for reproducibility and reference.
+Crear un registro completo del diseño final para reproducibilidad y referencia.
 
-1. Record the following:
+1. Registrar lo siguiente:
    - **Period**: Historical period name and date range
    - **Motif**: Primary motif(s) used
    - **Rendering Style**: Painted, illuminated, glazed tile, etc.
@@ -333,39 +334,39 @@ Create a complete record of the final design for reproducibility and reference.
    - **Steps/Shift**: Generation parameters
    - **Evaluation**: Brief notes on the five criteria scores
    - **Iterations**: Number of iterations and key changes made
-2. Note how the generated palette compares to the historical reference palette
-3. Note any color-specific observations (colors that the model handled well or poorly)
-4. Suggest potential applications and color adaptation notes (e.g., "palette would adapt well to screen display" or "would need adjustment for CMYK print")
+2. Notar cómo la paleta generada se compara con la paleta de referencia histórica
+3. Anotar observaciones específicas de color (colores que el modelo manejó bien o mal)
+4. Sugerir aplicaciones potenciales y notas de adaptación cromática (ej., "la paleta se adaptaría bien a visualización en pantalla" o "necesitaría ajuste para impresión CMYK")
 
-**Esperado:** A reproducible record with full color documentation including hex approximations and palette analysis.
+**Esperado:** Un registro reproducible con documentación completa de color incluyendo aproximaciones hex y análisis de paleta.
 
-**En caso de fallo:** If full documentation feels excessive, at minimum record the final prompt, seed, and a list of intended vs. actual colors. These allow reproduction and palette adjustment in future iterations.
+**En caso de fallo:** Si la documentación completa se siente excesiva, como mínimo registrar el prompt final, la semilla, y una lista de colores pretendidos vs. reales. Estos permiten reproducción y ajuste de paleta en futuras iteraciones.
 
 ## Validación
 
-- [ ] A specific historical period was selected with its characteristic color palette identified
-- [ ] A 3-5 color palette was defined with roles (dominant/secondary/accent) and proportions
-- [ ] Color harmony approach was consciously chosen (period-authentic, complementary, analogous, triadic)
-- [ ] Motif structure was analyzed with color-to-structure mapping
-- [ ] Prompt includes explicit color names and color mood description
-- [ ] Prompt specifies a color-appropriate rendering style (painted, glazed, illuminated, etc.)
-- [ ] Resolution matches the application context
-- [ ] Steps set to 10+ for color fidelity
-- [ ] Generated image was evaluated against the 5-point rubric
-- [ ] Seed value was recorded for reproducibility
-- [ ] Final design is documented with prompt, seed, palette (with hex approximations), and parameters
+- [ ] Se seleccionó un período histórico específico con su paleta de color característica identificada
+- [ ] Se definió una paleta de 3-5 colores con roles (dominante/secundario/acento) y proporciones
+- [ ] El enfoque de armonía cromática fue elegido conscientemente (auténtico del período, complementario, análogo, triádico)
+- [ ] La estructura del motivo fue analizada con mapeo color-a-estructura
+- [ ] El prompt incluye nombres de colores explícitos y descripción del ambiente cromático
+- [ ] El prompt especifica un estilo de renderizado apropiado para color (pintado, esmaltado, iluminado, etc.)
+- [ ] La resolución coincide con el contexto de aplicación
+- [ ] Los pasos establecidos en 10+ para fidelidad de color
+- [ ] La imagen generada fue evaluada contra la rúbrica de 5 puntos
+- [ ] El valor de semilla fue registrado para reproducibilidad
+- [ ] El diseño final está documentado con prompt, semilla, paleta (con aproximaciones hex) y parámetros
 
 ## Errores Comunes
 
-- **Relying on color names alone**: "Blue" is ambiguous — specify "turquoise blue," "cobalt blue," or "ultramarine blue." Different blues evoke entirely different periods and moods
-- **Too many colors**: More than 5 colors in a prompt confuses the model and produces muddy results. Historical ornament typically uses 3-4 colors plus a ground. Restraint is authentic
-- **Ignoring the ground color**: The background/ground color is as important as the motif colors. Cream vellum, white ceramic, gold leaf, or dark stone ground fundamentally changes how all other colors read. Specify it explicitly
-- **Color without structural basis**: Adding color to poorly structured ornament does not improve it. If the monochrome version does not work, adding color will not help — fix the structure first using `ornament-style-mono`
-- **Anachronistic palettes**: Bright magenta, neon colors, or candy pastels do not belong in historical ornament. Pigment availability constrains period palettes — respect the constraint for authentic results
-- **Insufficient steps**: Color detail needs more inference steps than monochrome. Using 8 steps for color work often produces washed-out or imprecise palette rendering. Use 10-12
+- **Depender solo de nombres de colores**: "Azul" es ambiguo — especificar "azul turquesa", "azul cobalto" o "azul ultramarino". Diferentes azules evocan períodos y ambientes completamente distintos
+- **Demasiados colores**: Más de 5 colores en un prompt confunde al modelo y produce resultados turbios. La ornamentación histórica típicamente usa 3-4 colores más un fondo. La moderación es auténtica
+- **Ignorar el color de fondo**: El color de fondo/base es tan importante como los colores del motivo. Vitela crema, cerámica blanca, pan de oro o fondo de piedra oscura cambia fundamentalmente cómo se leen todos los demás colores. Especificarlo explícitamente
+- **Color sin base estructural**: Agregar color a ornamentación pobremente estructurada no la mejora. Si la versión monocroma no funciona, agregar color no ayudará — arreglar la estructura primero usando `ornament-style-mono`
+- **Paletas anacrónicas**: Magenta brillante, colores neón o pasteles de caramelo no pertenecen a la ornamentación histórica. La disponibilidad de pigmentos restringe las paletas del período — respetar la restricción para resultados auténticos
+- **Pasos insuficientes**: El detalle de color necesita más pasos de inferencia que el monocromo. Usar 8 pasos para trabajo en color frecuentemente produce renderizado de paleta lavado o impreciso. Usar 10-12
 
 ## Habilidades Relacionadas
 
-- `ornament-style-mono` — the monochrome foundation skill; always available as a fallback when color is not cooperating, and recommended as a first step for understanding motif structure before adding color
-- `review-web-design` — color theory principles (contrast, harmony, rhythm) apply directly to ornamental color composition
-- `meditate` — focused attention and color visualization practices can inform palette development
+- `ornament-style-mono` — la habilidad de base monocroma; siempre disponible como alternativa cuando el color no coopera, y recomendada como primer paso para comprender la estructura del motivo antes de agregar color
+- `review-web-design` — los principios de teoría del color (contraste, armonía, ritmo) se aplican directamente a la composición cromática ornamental
+- `meditate` — las prácticas de atención enfocada y visualización de color pueden informar el desarrollo de paletas

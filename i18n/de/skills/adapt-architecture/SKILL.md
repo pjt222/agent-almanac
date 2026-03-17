@@ -57,7 +57,7 @@ Den Metamorphose-Pfad von der aktuellen Form zur Zielform planen.
    - Aktuelle Form → Zwischenform 1 → ... → Zielform
    - Jede Zwischenform muss betriebsfaehig sein (kann Traffic bedienen, Tests bestehen)
    - Keine Zwischenform sollte schwieriger zu warten sein als die aktuelle Form
-2. Die Transformationsnähte identifizieren:
+2. Die Transformationsnaehte identifizieren:
    - Wo kann die aktuelle Form "geschnitten" werden, um die neue Architektur einzufuegen?
    - Natuerliche Naehte: bestehende Schnittstellen, Modulgrenzen, Datenpartitionen
    - Kuenstliche Naehte: Schnittstellen, die speziell fuer den Schnitt erstellt wurden (Anti-Corruption-Layer)

@@ -1,13 +1,19 @@
 ---
 name: generate-workflow-diagram
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Generate themed Mermaid flowchart diagrams from putior workflow data.
-  Covers theme selection (9 themes including 4 colorblind-safe), output
-  modes (console, file, clipboard, raw), interactive features (clickable
-  nodes, source info), and embedding in README, Quarto, and R Markdown.
-  Use after annotating source files and ready to produce a visual diagram,
-  when regenerating a diagram after workflow changes, or when switching
-  themes or output formats for different audiences.
+  Thematisierte Mermaid-Flussdiagramme aus putior-Workflowdaten generieren.
+  Umfasst Themenauswahl (9 Themen einschliesslich 4 farbenblindensicherer),
+  Ausgabemodi (Konsole, Datei, Zwischenablage, Rohtext), interaktive
+  Funktionen (klickbare Knoten, Quellinformation) und Einbettung in README,
+  Quarto und R Markdown. Anwenden nach dem Annotieren von Quelldateien wenn
+  ein visuelles Diagramm erstellt werden soll, beim Neuerstellen eines
+  Diagramms nach Workflow-Aenderungen oder beim Wechsel von Themen oder
+  Ausgabeformaten fuer verschiedene Zielgruppen.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -17,108 +23,103 @@ metadata:
   complexity: basic
   language: R
   tags: putior, mermaid, diagram, theme, visualization, flowchart
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Workflow-Diagramm generieren
 
-Generate a themed Mermaid flowchart diagram from putior workflow data and embed it in documentation.
+Ein thematisiertes Mermaid-Flussdiagramm aus putior-Workflowdaten generieren und in Dokumentation einbetten.
 
-## When to Use
+## Wann verwenden
 
-- After annotating source files and ready to produce the visual diagram
-- Regenerating a diagram after workflow changes
-- Switching themes or output formats for different audiences
-- Embedding workflow diagrams in README, Quarto, or R Markdown documents
+- Nach dem Annotieren von Quelldateien, wenn das visuelle Diagramm erstellt werden soll
+- Neuerstellen eines Diagramms nach Workflow-Aenderungen
+- Wechsel von Themen oder Ausgabeformaten fuer verschiedene Zielgruppen
+- Einbettung von Workflow-Diagrammen in README-, Quarto- oder R-Markdown-Dokumente
 
-## Inputs
+## Eingaben
 
-- **Required**: Workflow data from `put()`, `put_auto()`, or `put_merge()`
-- **Optional**: Theme name (default: `"light"`; options: light, dark, auto, minimal, github, viridis, magma, plasma, cividis)
-- **Optional**: Output target: console, file path, clipboard, or raw string
-- **Optional**: Interactive features: `show_source_info`, `enable_clicks`
+- **Erforderlich**: Workflowdaten von `put()`, `put_auto()` oder `put_merge()`
+- **Optional**: Themenname (Standard: `"light"`; Optionen: light, dark, auto, minimal, github, viridis, magma, plasma, cividis)
+- **Optional**: Ausgabeziel: Konsole, Dateipfad, Zwischenablage oder Rohtext
+- **Optional**: Interaktive Funktionen: `show_source_info`, `enable_clicks`
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Extract Workflow Data
+### Schritt 1: Workflowdaten extrahieren
 
-Obtain workflow data from one of three sources.
+Workflowdaten aus einer von drei Quellen beziehen.
 
 ```r
 library(putior)
 
-# From manual annotations
+# Aus manuellen Annotationen
 workflow <- put("./src/")
 
-# From manual annotations, excluding specific files
+# Aus manuellen Annotationen, bestimmte Dateien ausschliessend
 workflow <- put("./src/", exclude = c("build-workflow\\.R$", "test_"))
 
-# From auto-detection only
+# Nur aus Auto-Erkennung
 workflow <- put_auto("./src/")
 
-# From merged (manual + auto)
+# Aus zusammengefuehrt (manuell + auto)
 workflow <- put_merge("./src/", merge_strategy = "supplement")
 ```
 
-The workflow data frame may include a `node_type` column from annotations. Node types control Mermaid shapes:
+Der Workflow-Dataframe kann eine `node_type`-Spalte aus Annotationen enthalten. Knotentypen steuern Mermaid-Formen:
 
-| `node_type` | Mermaid Shape | Use Case |
-|-------------|---------------|----------|
-| `"input"` | Stadium `([...])` | Data sources, configuration files |
-| `"output"` | Subroutine `[[...]]` | Generated artifacts, reports |
-| `"process"` | Rectangle `[...]` | Processing steps (default) |
-| `"decision"` | Diamond `{...}` | Conditional logic, branching |
-| `"start"` / `"end"` | Stadium `([...])` | Entry/terminal nodes |
+| `node_type` | Mermaid-Form | Verwendungszweck |
+|-------------|--------------|------------------|
+| `"input"` | Stadion `([...])` | Datenquellen, Konfigurationsdateien |
+| `"output"` | Unterprogramm `[[...]]` | Erzeugte Artefakte, Berichte |
+| `"process"` | Rechteck `[...]` | Verarbeitungsschritte (Standard) |
+| `"decision"` | Raute `{...}` | Bedingte Logik, Verzweigungen |
+| `"start"` / `"end"` | Stadion `([...])` | Einstiegs-/Endknoten |
 
-Each `node_type` also receives a corresponding CSS class (e.g., `class nodeId input;`) for theme-based styling.
+Jeder `node_type` erhaelt auch eine entsprechende CSS-Klasse (z.B. `class nodeId input;`) fuer themenbasiertes Styling.
 
-**Expected:** A data frame with at least one row, containing `id`, `label`, and optionally `input`, `output`, `source_file`, `node_type` columns.
+**Erwartet:** Ein Dataframe mit mindestens einer Zeile, der `id`, `label` und optional `input`, `output`, `source_file`, `node_type`-Spalten enthaelt.
 
-**On failure:** If the data frame is empty, no annotations or patterns were found. Run `analyze-codebase-workflow` first, or check that annotations are syntactically valid with `put("./src/", validate = TRUE)`.
+**Bei Fehler:** Wenn der Dataframe leer ist, wurden keine Annotationen oder Muster gefunden. Zuerst `analyze-codebase-workflow` ausfuehren, oder pruefen ob Annotationen syntaktisch gueltig sind mit `put("./src/", validate = TRUE)`.
 
-### Step 2: Select Theme and Options
+### Schritt 2: Thema und Optionen waehlen
 
-Choose a theme appropriate for the target audience.
+Ein fuer die Zielgruppe geeignetes Thema auswaehlen.
 
 ```r
-# List all available themes
+# Alle verfuegbaren Themen auflisten
 get_diagram_themes()
 
-# Standard themes
-# "light"   — Default, bright colors
-# "dark"    — For dark mode environments
-# "auto"    — GitHub-adaptive with solid colors
-# "minimal" — Grayscale, print-friendly
-# "github"  — Optimized for GitHub README files
+# Standardthemen
+# "light"   — Standard, helle Farben
+# "dark"    — Fuer Dunkelmodusumgebungen
+# "auto"    — GitHub-adaptiv mit Volltonfarben
+# "minimal" — Graustufen, druckfreundlich
+# "github"  — Optimiert fuer GitHub-README-Dateien
 
-# Colorblind-safe themes (viridis family)
-# "viridis" — Purple→Blue→Green→Yellow, general accessibility
-# "magma"   — Purple→Red→Yellow, high contrast for print
-# "plasma"  — Purple→Pink→Orange→Yellow, presentations
-# "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
+# Farbenblindensichere Themen (Viridis-Familie)
+# "viridis" — Lila→Blau→Gruen→Gelb, allgemeine Barrierefreiheit
+# "magma"   — Lila→Rot→Gelb, hoher Kontrast fuer Druck
+# "plasma"  — Lila→Pink→Orange→Gelb, Praesentationen
+# "cividis" — Blau→Grau→Gelb, maximale Barrierefreiheit (kein Rot-Gruen)
 ```
 
-Additional parameters:
-- `direction`: Diagram flow direction — `"TD"` (top-down, default), `"LR"` (left-right), `"RL"`, `"BT"`
-- `show_artifacts`: `TRUE`/`FALSE` — show artifact nodes (files, data); can be noisy for large workflows (e.g., 16+ extra nodes)
-- `show_workflow_boundaries`: `TRUE`/`FALSE` — wrap each source file's nodes in a Mermaid subgraph
-- `source_info_style`: How source file info is displayed on nodes (e.g., as subtitle)
-- `node_labels`: Format for node label text
+Zusaetzliche Parameter:
+- `direction`: Diagrammflussrichtung — `"TD"` (von oben nach unten, Standard), `"LR"` (von links nach rechts), `"RL"`, `"BT"`
+- `show_artifacts`: `TRUE`/`FALSE` — Artefaktknoten anzeigen (Dateien, Daten); kann bei grossen Workflows unuebersichtlich werden (z.B. 16+ zusaetzliche Knoten)
+- `show_workflow_boundaries`: `TRUE`/`FALSE` — Knoten jeder Quelldatei in einen Mermaid-Subgraphen einschliessen
+- `source_info_style`: Wie Quelldateiinformationen auf Knoten angezeigt werden (z.B. als Untertitel)
+- `node_labels`: Format fuer Knotenbeschriftungstext
 
-**Expected:** Theme names printed. Select one based on context.
+**Erwartet:** Themennamen werden ausgegeben. Eines basierend auf dem Kontext auswaehlen.
 
-**On failure:** If a theme name is not recognized, `put_diagram()` falls back to `"light"`. Check spelling.
+**Bei Fehler:** Wenn ein Themenname nicht erkannt wird, faellt `put_diagram()` auf `"light"` zurueck. Schreibweise pruefen.
 
-### Step 3: Custom Palette with `put_theme()` (Optional)
+### Schritt 3: Benutzerdefinierte Palette mit `put_theme()` (optional)
 
-If the 9 built-in themes don't match your project's palette, create a custom theme with `put_theme()`.
+Wenn die 9 eingebauten Themen nicht zur Projektpalette passen, ein benutzerdefiniertes Thema mit `put_theme()` erstellen.
 
 ```r
-# Create custom palette — unspecified types inherit from base theme
+# Benutzerdefinierte Palette erstellen — nicht angegebene Typen erben vom Basisthema
 cyberpunk <- put_theme(
   base = "dark",
   input    = c(fill = "#1a1a2e", stroke = "#00ff88", color = "#00ff88"),
@@ -127,18 +128,18 @@ cyberpunk <- put_theme(
   decision = c(fill = "#1a1a2e", stroke = "#ffaa33", color = "#ffaa33")
 )
 
-# Use the palette parameter (overrides theme when provided)
+# Palette-Parameter verwenden (ueberschreibt Thema wenn angegeben)
 mermaid_content <- put_diagram(workflow, palette = cyberpunk, output = "raw")
 writeLines(mermaid_content, "workflow.mmd")
 ```
 
-`put_theme()` accepts `input`, `process`, `output`, `decision`, `artifact`, `start`, and `end` node types. Each takes a named vector `c(fill = "#hex", stroke = "#hex", color = "#hex")`. Unset types inherit from the `base` theme.
+`put_theme()` akzeptiert die Knotentypen `input`, `process`, `output`, `decision`, `artifact`, `start` und `end`. Jeder nimmt einen benannten Vektor `c(fill = "#hex", stroke = "#hex", color = "#hex")` entgegen. Nicht gesetzte Typen erben vom `base`-Thema.
 
-**Expected:** Mermaid output with your custom classDef lines. Node shapes from `node_type` are preserved; only colors change. All node types use `stroke-width:2px` — override not currently supported via `put_theme()`.
+**Erwartet:** Mermaid-Ausgabe mit benutzerdefinierten classDef-Zeilen. Knotenformen aus `node_type` bleiben erhalten; nur Farben aendern sich. Alle Knotentypen verwenden `stroke-width:2px` — Ueberschreiben derzeit nicht ueber `put_theme()` unterstuetzt.
 
-**On failure:** If the palette object is not a `putior_theme` class, `put_diagram()` raises a descriptive error. Ensure you pass the return value of `put_theme()`, not a raw list.
+**Bei Fehler:** Wenn das Palettenobjekt nicht die Klasse `putior_theme` hat, gibt `put_diagram()` einen beschreibenden Fehler aus. Sicherstellen dass der Rueckgabewert von `put_theme()` uebergeben wird, nicht eine rohe Liste.
 
-**Fallback — manual classDef replacement:** For fine-grained control beyond what `put_theme()` offers (e.g., per-type stroke widths), generate with a base theme and replace classDef lines manually:
+**Rueckfallmethode — manueller classDef-Ersatz:** Fuer feingranulare Kontrolle ueber das hinaus was `put_theme()` bietet (z.B. typspezifische Strichbreiten), mit einem Basisthema generieren und classDef-Zeilen manuell ersetzen:
 
 ```r
 mermaid_content <- put_diagram(workflow, theme = "dark", output = "raw")
@@ -148,31 +149,31 @@ custom_defs <- c("  classDef input fill:#1a1a2e,stroke:#00ff88,stroke-width:3px,
 mermaid_content <- paste(c(lines, custom_defs), collapse = "\n")
 ```
 
-### Step 4: Generate Mermaid Output
+### Schritt 4: Mermaid-Ausgabe generieren
 
-Produce the diagram in the desired output mode.
+Das Diagramm im gewuenschten Ausgabemodus erzeugen.
 
 ```r
-# Print to console (default)
+# Auf Konsole ausgeben (Standard)
 cat(put_diagram(workflow, theme = "github"))
 
-# Save to file
+# In Datei speichern
 writeLines(put_diagram(workflow, theme = "github"), "docs/workflow.md")
 
-# Get raw string for embedding
+# Rohtext fuer Einbettung erhalten
 mermaid_code <- put_diagram(workflow, output = "raw", theme = "github")
 
-# With source file info (shows which file each node comes from)
+# Mit Quelldateiinformation (zeigt woher jeder Knoten kommt)
 cat(put_diagram(workflow, theme = "github", show_source_info = TRUE))
 
-# With clickable nodes (for VS Code, RStudio, or file:// protocol)
+# Mit klickbaren Knoten (fuer VS Code, RStudio oder file://-Protokoll)
 cat(put_diagram(workflow,
   theme = "github",
   enable_clicks = TRUE,
-  click_protocol = "vscode"  # or "rstudio", "file"
+  click_protocol = "vscode"  # oder "rstudio", "file"
 ))
 
-# Full-featured
+# Voll ausgestattet
 cat(put_diagram(workflow,
   theme = "viridis",
   show_source_info = TRUE,
@@ -181,74 +182,74 @@ cat(put_diagram(workflow,
 ))
 ```
 
-**Expected:** Valid Mermaid code starting with `flowchart TD` (or `LR` depending on direction). Nodes are connected by arrows showing data flow.
+**Erwartet:** Gueltiger Mermaid-Code der mit `flowchart TD` (oder `LR` je nach Richtung) beginnt. Knoten sind durch Pfeile verbunden die den Datenfluss zeigen.
 
-**On failure:** If the output is `flowchart TD` with no nodes, the workflow data frame is empty. If connections are missing, check that output filenames match input filenames across nodes.
+**Bei Fehler:** Wenn die Ausgabe `flowchart TD` ohne Knoten ist, ist der Workflow-Dataframe leer. Wenn Verbindungen fehlen, pruefen ob Ausgabedateinamen den Eingabedateinamen knotenuebergreifend exakt entsprechen.
 
-### Step 5: Embed in Target Document
+### Schritt 5: In Zieldokument einbetten
 
-Insert the diagram into the appropriate documentation format.
+Das Diagramm in das passende Dokumentationsformat einfuegen.
 
-**GitHub README (```mermaid code fence):**
+**GitHub README (```mermaid Code-Fence):**
 ````markdown
 ## Workflow
 
 ```mermaid
 flowchart TD
-  A["Extract Data"] --> B["Transform"]
-  B --> C["Load"]
+  A["Daten extrahieren"] --> B["Transformieren"]
+  B --> C["Laden"]
 ```
 ````
 
-**Quarto document (native mermaid chunk via knit_child):**
+**Quarto-Dokument (nativer Mermaid-Chunk ueber knit_child):**
 ```r
-# Chunk 1: Generate code (visible, foldable)
+# Chunk 1: Code generieren (sichtbar, faltbar)
 workflow <- put("./src/")
 mermaid_code <- put_diagram(workflow, output = "raw", theme = "github")
 ```
 
 ```r
-# Chunk 2: Output as native mermaid chunk (hidden)
+# Chunk 2: Als nativen Mermaid-Chunk ausgeben (versteckt)
 #| output: asis
 #| echo: false
 mermaid_chunk <- paste0("```{mermaid}\n", mermaid_code, "\n```")
 cat(knitr::knit_child(text = mermaid_chunk, quiet = TRUE))
 ```
 
-**R Markdown (with mermaid.js CDN or DiagrammeR):**
+**R Markdown (mit mermaid.js CDN oder DiagrammeR):**
 ```r
 DiagrammeR::mermaid(put_diagram(workflow, output = "raw"))
 ```
 
-**Expected:** Diagram renders correctly in the target format. GitHub renders mermaid code fences natively.
+**Erwartet:** Diagramm rendert korrekt im Zielformat. GitHub rendert Mermaid-Code-Fences nativ.
 
-**On failure:** If GitHub doesn't render the diagram, ensure the code fence uses exactly ` ```mermaid ` (no extra attributes). For Quarto, ensure the `knit_child()` approach is used since direct variable interpolation in `{mermaid}` chunks is not supported.
+**Bei Fehler:** Wenn GitHub das Diagramm nicht rendert, sicherstellen dass der Code-Fence exakt ` ```mermaid ` verwendet (keine zusaetzlichen Attribute). Fuer Quarto sicherstellen dass der `knit_child()`-Ansatz verwendet wird, da direkte Variableninterpolation in `{mermaid}`-Chunks nicht unterstuetzt wird.
 
-## Validation
+## Validierung
 
-- [ ] `put_diagram()` produces valid Mermaid code (starts with `flowchart`)
-- [ ] All expected nodes appear in the diagram
-- [ ] Data flow connections (arrows) are present between connected nodes
-- [ ] Selected theme is applied (check init block in output for theme-specific colors)
-- [ ] Diagram renders correctly in the target format (GitHub, Quarto, etc.)
+- [ ] `put_diagram()` erzeugt gueltigen Mermaid-Code (beginnt mit `flowchart`)
+- [ ] Alle erwarteten Knoten erscheinen im Diagramm
+- [ ] Datenflussverbindungen (Pfeile) zwischen verbundenen Knoten vorhanden
+- [ ] Gewaehltes Thema wird angewendet (init-Block in Ausgabe auf themenspezifische Farben pruefen)
+- [ ] Diagramm rendert korrekt im Zielformat (GitHub, Quarto usw.)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Empty diagrams**: Usually means `put()` returned no rows. Check annotations exist and are syntactically valid.
-- **All nodes disconnected**: Output filenames must exactly match input filenames (including extension) for putior to draw connections. `data.csv` and `Data.csv` are different.
-- **Theme not visible on GitHub**: GitHub's mermaid renderer has limited theme support. The `"github"` theme is specifically designed for GitHub rendering. The `%%{init:...}%%` theme block may be ignored by some renderers.
-- **Quarto mermaid variable interpolation**: Quarto's `{mermaid}` chunks don't support R variables directly. Use the `knit_child()` technique described in Step 5.
-- **Clickable nodes not working**: Click directives require a renderer that supports Mermaid interaction events. GitHub's static renderer does not support clicks. Use a local Mermaid renderer or the putior Shiny sandbox.
-- **Self-referential meta-pipeline files**: Scanning a directory that includes the build script generating the diagram causes duplicate subgraph IDs and Mermaid errors. Use the `exclude` parameter to skip them at scan time:
+- **Leere Diagramme**: Bedeutet meist dass `put()` keine Zeilen zurueckgegeben hat. Pruefen ob Annotationen existieren und syntaktisch gueltig sind.
+- **Alle Knoten unverbunden**: Ausgabedateinamen muessen exakt mit Eingabedateinamen uebereinstimmen (einschliesslich Erweiterung) damit putior Verbindungen zeichnet. `data.csv` und `Data.csv` sind unterschiedlich.
+- **Thema nicht sichtbar auf GitHub**: GitHubs Mermaid-Renderer hat eingeschraenkte Themenunterstuetzung. Das `"github"`-Thema ist speziell fuer GitHub-Rendering konzipiert. Der `%%{init:...}%%`-Themenblock wird von einigen Renderern moeglicherweise ignoriert.
+- **Quarto Mermaid-Variableninterpolation**: Quartos `{mermaid}`-Chunks unterstuetzen R-Variablen nicht direkt. Die in Schritt 5 beschriebene `knit_child()`-Technik verwenden.
+- **Klickbare Knoten funktionieren nicht**: Click-Direktiven erfordern einen Renderer der Mermaid-Interaktionsereignisse unterstuetzt. GitHubs statischer Renderer unterstuetzt keine Klicks. Einen lokalen Mermaid-Renderer oder die putior-Shiny-Sandbox verwenden.
+- **Selbstreferenzielle Meta-Pipeline-Dateien**: Ein Verzeichnis scannen das das Build-Skript enthaelt das das Diagramm generiert verursacht doppelte Subgraph-IDs und Mermaid-Fehler. Den `exclude`-Parameter verwenden um sie beim Scannen zu ueberspringen:
   ```r
   workflow <- put("./src/", exclude = c("build-workflow\\.R$", "build-workflow\\.js$"))
   ```
-- **`show_artifacts = TRUE` too noisy**: Large projects may generate many artifact nodes (10–20+), cluttering the diagram. Use `show_artifacts = FALSE` and rely on `node_type` annotations to mark key inputs/outputs explicitly.
+- **`show_artifacts = TRUE` zu unuebersichtlich**: Grosse Projekte koennen viele Artefaktknoten generieren (10-20+), die das Diagramm ueberladen. `show_artifacts = FALSE` verwenden und sich auf `node_type`-Annotationen verlassen um wichtige Ein-/Ausgaben explizit zu markieren.
 
-## Related Skills
+## Verwandte Skills
 
-- `annotate-source-files` — prerequisite: files must be annotated before diagram generation
-- `analyze-codebase-workflow` — auto-detection can supplement manual annotations
-- `setup-putior-ci` — automate diagram regeneration in CI/CD
-- `create-quarto-report` — embed diagrams in Quarto reports
-- `build-pkgdown-site` — embed diagrams in pkgdown documentation sites
+- `annotate-source-files` — Voraussetzung: Dateien muessen vor der Diagrammgenerierung annotiert sein
+- `analyze-codebase-workflow` — Auto-Erkennung kann manuelle Annotationen ergaenzen
+- `setup-putior-ci` — Diagramm-Neugenerierung in CI/CD automatisieren
+- `create-quarto-report` — Diagramme in Quarto-Berichte einbetten
+- `build-pkgdown-site` — Diagramme in pkgdown-Dokumentationsseiten einbetten

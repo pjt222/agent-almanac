@@ -1,13 +1,11 @@
 ---
 name: design-acoustic-levitation
 description: >
-  Design an acoustic levitation system that uses standing waves to trap and
-  suspend small objects at pressure nodes. Covers ultrasonic transducer
-  selection, standing wave formation between a transducer and reflector,
-  node spacing and trapping position calculation, acoustic radiation pressure
-  analysis, and phased array configurations for multi-axis manipulation.
-  Use when designing contactless sample handling for chemistry, biology,
-  materials science, or demonstration purposes.
+  定在波を使用して圧力ノードに小さな物体をトラップし浮遊させる音響浮揚システムを
+  設計する。超音波トランスデューサの選定、トランスデューサとリフレクタ間の定在波形成、
+  ノード間隔とトラップ位置の計算、音響放射圧分析、多軸操作のためのフェーズドアレイ
+  構成をカバーする。化学、生物学、材料科学、デモンストレーション用の非接触サンプル
+  ハンドリングの設計時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,40 +22,40 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 音響浮上の設計
+# 音響浮揚の設計
 
-Design and validate an acoustic levitation system by determining the acoustic radiation pressure required to balance gravity, selecting transducer and reflector geometry to form a stable standing wave, computing the positions and trapping strength of pressure nodes, and verifying that the trapped object is stable against lateral and axial perturbations.
+重力とバランスするために必要な音響放射圧の決定、安定な定在波を形成するトランスデューサとリフレクタの形状選定、圧力ノードの位置とトラップ強度の計算、トラップされた物体の横方向・軸方向摂動に対する安定性の検証を行い、音響浮揚システムを設計・検証する。
 
 ## 使用タイミング
 
-- Designing a contactless sample holder for chemical or biological experiments
-- Building an acoustic levitation demonstrator for education or outreach
-- Evaluating whether a given object can be levitated acoustically (size, density, and frequency constraints)
-- Selecting between single-axis (transducer-reflector) and phased array configurations
-- Calculating the node positions and trapping forces for a given transducer frequency and geometry
-- Extending a single-axis levitator to multi-axis manipulation using phased arrays
+- 化学または生物実験用の非接触サンプルホルダーを設計する時
+- 教育やアウトリーチ用の音響浮揚デモンストレーターを構築する時
+- 特定の物体が音響的に浮揚可能かを評価する時（サイズ、密度、周波数の制約）
+- 単軸（トランスデューサ-リフレクタ）とフェーズドアレイ構成の選択時
+- 特定のトランスデューサ周波数と形状でのノード位置とトラップ力を計算する時
+- 単軸浮揚装置をフェーズドアレイによる多軸操作に拡張する時
 
 ## 入力
 
-- **必須**: Object properties (mass, density, radius or characteristic dimension, compressibility if known)
-- **必須**: Target levitation medium (air, water, inert gas) with its density and speed of sound
-- **任意**: Available transducer frequency (default: 40 kHz, common for hobbyist and lab systems)
-- **任意**: Transducer power or voltage rating
-- **任意**: Desired manipulation capability (static trapping only, or dynamic repositioning)
+- **必須**: 物体の特性（質量、密度、半径または特性寸法、既知の場合は圧縮率）
+- **必須**: 目標浮揚媒体（空気、水、不活性ガス）とその密度と音速
+- **任意**: 利用可能なトランスデューサ周波数（デフォルト: 40 kHz、趣味や研究室システムで一般的）
+- **任意**: トランスデューサの出力または電圧定格
+- **任意**: 望む操作能力（静的トラップのみ、または動的再配置）
 
 ## 手順
 
-### ステップ1: Determine Object Properties and Acoustic Contrast
+### ステップ1: 物体の特性と音響コントラストの決定
 
-Characterize the object and the medium to establish the fundamental feasibility of acoustic levitation:
+物体と媒体を特性化し、音響浮揚の基本的な実現可能性を確立する:
 
-1. **Object parameters**: Record the mass m, density rho_p, radius a (or equivalent sphere radius for non-spherical objects), and bulk modulus K_p (compressibility kappa_p = 1/K_p). For rigid objects like metal spheres, K_p is effectively infinite.
-2. **Medium parameters**: Record the density rho_0, speed of sound c_0, and bulk modulus K_0 = rho_0 * c_0^2 for the host medium.
-3. **Acoustic contrast factor**: Compute the Gor'kov contrast factors that determine whether the object migrates to pressure nodes or antinodes:
-   - Monopole coefficient: f_1 = 1 - (K_0 / K_p) = 1 - (rho_0 * c_0^2) / (rho_p * c_p^2)
-   - Dipole coefficient: f_2 = 2 * (rho_p - rho_0) / (2 * rho_p + rho_0)
-   - For most solid objects in air, f_1 ~ 1 and f_2 ~ 1, so the object is trapped at pressure nodes (velocity antinodes).
-4. **Size constraint**: Verify that the object radius a is much smaller than the acoustic wavelength lambda = c_0 / f. The Gor'kov theory requires a << lambda (typically a < lambda/4). If this condition is not met, ray acoustics or full numerical simulation is needed.
+1. **物体パラメータ**: 質量m、密度rho_p、半径a（非球形物体の場合は等価球半径）、体積弾性率K_p（圧縮率kappa_p = 1/K_p）を記録する。金属球のような剛体の場合、K_pは事実上無限大。
+2. **媒体パラメータ**: ホスト媒体の密度rho_0、音速c_0、体積弾性率K_0 = rho_0 * c_0^2を記録する。
+3. **音響コントラスト因子**: 物体が圧力ノードに移動するか圧力反ノードに移動するかを決定するゴルコフコントラスト因子を計算する:
+   - 単極係数: f_1 = 1 - (K_0 / K_p) = 1 - (rho_0 * c_0^2) / (rho_p * c_p^2)
+   - 双極係数: f_2 = 2 * (rho_p - rho_0) / (2 * rho_p + rho_0)
+   - 空気中のほとんどの固体物体では、f_1 ~ 1、f_2 ~ 1であり、物体は圧力ノード（速度反ノード）にトラップされる。
+4. **サイズ制約**: 物体の半径aが音響波長lambda = c_0 / fよりもはるかに小さいことを確認する。ゴルコフ理論はa << lambda（通常a < lambda/4）を要求する。この条件が満たされない場合、幾何音響学または完全な数値シミュレーションが必要。
 
 ```markdown
 ## Object and Medium Parameters
@@ -69,25 +67,25 @@ Characterize the object and the medium to establish the fundamental feasibility 
 - **Trapping location**: [pressure node / pressure antinode]
 ```
 
-**期待結果:** Complete characterization of the object and medium with contrast factors computed. The object should be confirmed to migrate toward pressure nodes (typical case for solids in air). The size constraint a << lambda is satisfied.
+**期待結果:** コントラスト因子が計算された物体と媒体の完全な特性化。物体が圧力ノードに移動することが確認される（空気中の固体の典型的ケース）。サイズ制約a << lambdaが満たされている。
 
-**失敗時:** If a / lambda > 0.25, the Gor'kov point-particle theory breaks down. Use numerical methods (finite element acoustic simulation) or experimental calibration instead. If f_1 and f_2 have opposite signs, the object may be trapped at an intermediate position rather than a clean node or antinode -- this requires careful Gor'kov potential mapping.
+**失敗時:** a / lambda > 0.25の場合、ゴルコフ点粒子理論が破綻する。代わりに数値的方法（有限要素音響シミュレーション）または実験的キャリブレーションを使用する。f_1とf_2が逆符号の場合、物体はクリーンなノードまたは反ノードではなく中間位置にトラップされる可能性がある — これにはゴルコフポテンシャルの慎重なマッピングが必要。
 
-### ステップ2: Calculate Required Acoustic Radiation Pressure
+### ステップ2: 必要な音響放射圧の計算
 
-Determine the acoustic field intensity needed to balance gravity:
+重力をバランスするために必要な音場強度を決定する:
 
-1. **Acoustic radiation force**: For a small sphere at a pressure node in a one-dimensional standing wave, the time-averaged axial force is:
+1. **音響放射力**: 1次元定在波中の圧力ノードにある小球に対する時間平均軸方向力:
    - F_ax = -(4 * pi / 3) * a^3 * [f_1 * (1 / (2 * rho_0 * c_0^2)) * d(p^2)/dz - (3 * f_2 * rho_0 / 4) * d(v^2)/dz]
-   - In a plane standing wave p(z,t) = P_0 * cos(kz) * cos(omega*t), this simplifies near a node to:
+   - 平面定在波p(z,t) = P_0 * cos(kz) * cos(omega*t)では、ノード付近で簡略化:
    - F_ax = (pi * a^3 * P_0^2 * k) / (3 * rho_0 * c_0^2) * Phi * sin(2kz)
-   - where Phi = f_1 + (3/2) * f_2 is the acoustic contrast factor and k = 2*pi/lambda.
-2. **Force balance**: Set the maximum radiation force (at sin(2kz) = 1, which occurs at lambda/8 from the node) equal to gravity:
+   - ここでPhi = f_1 + (3/2) * f_2は音響コントラスト因子、k = 2*pi/lambda。
+2. **力のバランス**: 最大放射力（ノードからlambda/8の位置でsin(2kz) = 1）を重力に等しくする:
    - F_ax_max = (pi * a^3 * P_0^2 * k) / (3 * rho_0 * c_0^2) * Phi = m * g = (4/3) * pi * a^3 * rho_p * g
-   - Solve for the required pressure amplitude:
+   - 必要な圧力振幅を求解:
    - P_0 = sqrt(4 * rho_p * rho_0 * c_0^2 * g / (k * Phi))
-3. **Acoustic intensity**: Convert pressure amplitude to intensity: I = P_0^2 / (2 * rho_0 * c_0). Compare with the transducer's rated output.
-4. **Sound pressure level**: Express in dB SPL: L = 20 * log10(P_0 / 20e-6). Typical acoustic levitation in air requires 150-165 dB SPL.
+3. **音響強度**: 圧力振幅を強度に変換: I = P_0^2 / (2 * rho_0 * c_0)。トランスデューサの定格出力と比較する。
+4. **音圧レベル**: dB SPLで表現: L = 20 * log10(P_0 / 20e-6)。空気中の音響浮揚には通常150-165 dB SPLが必要。
 
 ```markdown
 ## Acoustic Requirements
@@ -97,19 +95,19 @@ Determine the acoustic field intensity needed to balance gravity:
 - **Safety note**: [hearing protection required if > 120 dB at audible frequencies]
 ```
 
-**期待結果:** A quantitative determination of the minimum acoustic pressure amplitude to achieve levitation, expressed in Pa, W/m^2, and dB SPL. The required intensity should be achievable with the specified or a commercially available transducer.
+**期待結果:** 浮揚を達成するための最小音圧振幅の定量的決定。Pa、W/m^2、dB SPLで表現。必要な強度が指定されたまたは市販のトランスデューサで達成可能であること。
 
-**失敗時:** If the required pressure amplitude exceeds what available transducers can produce, reduce the object mass or density, use a lighter material, or switch to a medium with higher density (e.g., levitate in a dense gas like SF6 to increase the radiation force). Alternatively, use multiple transducers in a focused array to concentrate acoustic energy at the trapping point.
+**失敗時:** 必要な圧力振幅が利用可能なトランスデューサの能力を超える場合、物体の質量または密度を減らすか、より軽い材料を使用するか、より高い密度の媒体（例: SF6のような高密度ガスで浮揚し放射力を増加）に切り替える。または、集束アレイで複数のトランスデューサを使用してトラップポイントに音響エネルギーを集中させる。
 
-### ステップ3: Design Transducer-Reflector Geometry
+### ステップ3: トランスデューサ-リフレクタ形状の設計
 
-Configure the physical hardware to produce a stable standing wave:
+安定な定在波を生成するための物理ハードウェアを構成する:
 
-1. **Transducer selection**: Choose an ultrasonic transducer at frequency f (common: 28 kHz, 40 kHz, or 60-80 kHz piezoelectric transducers). Higher frequency gives smaller wavelength and tighter trapping, but reduces the maximum object size. Verify that the transducer can produce the required P_0 at the operating distance.
-2. **Reflector design**: Place a flat or concave reflector opposite the transducer. The reflector surface should be acoustically hard (high acoustic impedance mismatch with the medium). Metal or glass plates work well in air. A concave reflector concentrates the sound field and increases the pressure amplitude at the axis.
-3. **Cavity length**: Set the transducer-reflector distance L to an integer number of half-wavelengths: L = n * lambda/2, where n is a positive integer. This creates n pressure nodes between the transducer and reflector, spaced lambda/2 apart.
-4. **Node positions**: The pressure nodes are located at z_j = (2j - 1) * lambda/4 from the reflector surface, for j = 1, 2, ..., n. The node closest to the center of the cavity is typically the most stable trapping site.
-5. **Resonance tuning**: Fine-tune L by adjusting the transducer-reflector distance with a micrometer stage while monitoring the levitation force or the acoustic pressure with a microphone. The optimal distance produces the strongest standing wave.
+1. **トランスデューサの選定**: 周波数f（一般的: 28 kHz、40 kHz、60-80 kHz圧電トランスデューサ）の超音波トランスデューサを選択する。高い周波数は波長が短くタイトなトラップになるが、最大物体サイズを制限する。動作距離で必要なP_0をトランスデューサが生成できることを確認する。
+2. **リフレクタ設計**: トランスデューサの反対側に平面または凹面リフレクタを配置する。リフレクタ表面は音響的に硬い（媒体との音響インピーダンス不整合が大きい）必要がある。空気中では金属またはガラス板が有効。凹面リフレクタは音場を集中させ軸上の圧力振幅を増加させる。
+3. **キャビティ長**: トランスデューサ-リフレクタ間距離Lを半波長の整数倍に設定: L = n * lambda/2（nは正の整数）。これによりトランスデューサとリフレクタ間にlambda/2間隔でn個の圧力ノードが生成される。
+4. **ノード位置**: 圧力ノードはリフレクタ表面からz_j = (2j - 1) * lambda/4の位置にある（j = 1, 2, ..., n）。キャビティ中央に最も近いノードが通常最も安定なトラップサイトとなる。
+5. **共振調整**: 浮揚力または音圧をマイクロフォンで監視しながらマイクロメータステージでトランスデューサ-リフレクタ間距離を微調整してLを最適化する。最適距離は最も強い定在波を生成する。
 
 ```markdown
 ## Geometry Design
@@ -121,25 +119,25 @@ Configure the physical hardware to produce a stable standing wave:
 - **Selected trapping node**: z_[j] = [value]
 ```
 
-**期待結果:** A complete hardware specification with transducer, reflector, and cavity length determined. Node positions are computed and the trapping node is selected.
+**期待結果:** トランスデューサ、リフレクタ、キャビティ長が決定された完全なハードウェア仕様。ノード位置が計算されトラップノードが選択されている。
 
-**失敗時:** If no stable standing wave forms (common when L is not precisely n * lambda/2), adjust the cavity length in increments of 0.1 mm. Temperature changes shift c_0 and thus lambda, requiring re-tuning. If the transducer beam diverges too much for the cavity length, add a horn or waveguide to collimate the beam, or reduce L.
+**失敗時:** 安定な定在波が形成されない場合（Lが正確にn * lambda/2でない場合に一般的）、0.1 mm刻みでキャビティ長を調整する。温度変化がc_0を変化させlambdaを変化させるため、再調整が必要。トランスデューサビームがキャビティ長に対して発散しすぎる場合、ホーンまたは導波管を追加してビームを平行化するか、Lを短くする。
 
-### ステップ4: Compute Trapping Potential and Restoring Forces
+### ステップ4: トラップポテンシャルと復元力の計算
 
-Quantify the strength and spatial extent of the acoustic trap:
+音響トラップの強度と空間的範囲を定量化する:
 
-1. **Gor'kov potential**: For a small sphere in the standing wave field, compute the Gor'kov potential:
+1. **ゴルコフポテンシャル**: 定在波場中の小球に対してゴルコフポテンシャルを計算する:
    - U(r) = (4/3) * pi * a^3 * [(f_1 / (2 * rho_0 * c_0^2)) * <p^2> - (3 * f_2 * rho_0 / 4) * <v^2>]
-   - where <p^2> and <v^2> are the time-averaged squared pressure and velocity fields.
-   - The object is trapped at the minimum of U(r) + m*g*z (including gravity).
-2. **Axial restoring force**: Near the trapping node, expand F_z to first order:
-   - F_z ~ -k_z * delta_z, where k_z = (2 * pi * a^3 * P_0^2 * k^2) / (3 * rho_0 * c_0^2) * Phi
-   - The axial natural frequency is omega_z = sqrt(k_z / m).
-3. **Lateral restoring force**: In a finite-width beam, the lateral radiation force arises from the transverse intensity gradient. For a Gaussian beam profile with waist w:
-   - k_r ~ k_z * (a / w)^2 (approximate, lateral stiffness is weaker than axial)
-   - Lateral trapping is weaker than axial; this is the limiting factor for stability.
-4. **Trapping depth**: The maximum displacement before the object escapes the trap is determined by the potential well depth. For the axial direction, the well depth is Delta_U = F_ax_max * lambda / (2 * pi). Express as a multiple of the thermal energy k_B * T if relevant (always relevant for micrometer-scale particles, negligible for millimeter-scale objects in air).
+   - ここで<p^2>と<v^2>は時間平均二乗圧力と速度場。
+   - 物体はU(r) + m*g*z（重力を含む）の最小値にトラップされる。
+2. **軸方向復元力**: トラップノード付近で、F_zを1次に展開:
+   - F_z ~ -k_z * delta_z、ここでk_z = (2 * pi * a^3 * P_0^2 * k^2) / (3 * rho_0 * c_0^2) * Phi
+   - 軸方向固有振動数はomega_z = sqrt(k_z / m)。
+3. **横方向復元力**: 有限幅ビームでは、横方向放射力は横方向強度勾配から生じる。ウエストwのガウスビームプロファイルの場合:
+   - k_r ~ k_z * (a / w)^2（近似、横方向剛性は軸方向より弱い）
+   - 横方向トラップは軸方向より弱い。これが安定性の制限因子。
+4. **トラップ深さ**: 物体がトラップから脱出する前の最大変位はポテンシャル井戸深さで決まる。軸方向では、井戸深さはDelta_U = F_ax_max * lambda / (2 * pi)。熱エネルギーk_B * Tの倍数で表現する（マイクロメートルスケールの粒子では常に重要、空気中のミリメートルスケールの物体では無視可能）。
 
 ```markdown
 ## Trapping Analysis
@@ -151,19 +149,19 @@ Quantify the strength and spatial extent of the acoustic trap:
 - **Stiffness ratio**: k_z / k_r = [value] (lateral is weaker)
 ```
 
-**期待結果:** Quantitative stiffness values for both axial and lateral directions, natural frequencies computed, and the trapping potential well depth determined. Lateral stiffness is confirmed to be positive (though weaker than axial).
+**期待結果:** 軸方向と横方向の両方向の定量的な剛性値、計算された固有振動数、決定されたトラップポテンシャル井戸深さ。横方向剛性が正であることが確認される（軸方向より弱いが）。
 
-**失敗時:** If the lateral stiffness is negative or negligibly small, the object will drift sideways out of the beam. Solutions include using a wider transducer (larger beam waist), adding lateral transducers, switching to a phased array configuration, or using a concave reflector to create a converging wavefront that provides stronger lateral confinement.
+**失敗時:** 横方向剛性が負またはごく小さい場合、物体はビームから横方向にドリフトして脱出する。解決策として、より広いトランスデューサ（大きなビームウエスト）の使用、横方向トランスデューサの追加、フェーズドアレイ構成への切り替え、または収束波面を作成してより強い横方向閉じ込めを提供する凹面リフレクタの使用がある。
 
-### ステップ5: Verify Stability Against Perturbations
+### ステップ5: 摂動に対する安定性の検証
 
-Confirm that the designed system will reliably trap and hold the object:
+設計されたシステムが物体を確実にトラップし保持することを確認する:
 
-1. **Gravity offset**: The equilibrium position is shifted below the pressure node by delta_z = m * g / k_z. Verify that delta_z << lambda/4 (the distance to the potential maximum). If delta_z approaches lambda/4, the object falls out of the trap.
-2. **Air current sensitivity**: Estimate the drag force from ambient air currents. For a sphere, F_drag = 6 * pi * eta * a * v_air (Stokes drag). Compare with the lateral restoring force: the maximum tolerable air speed is v_max = k_r * a / (6 * pi * eta * a) = k_r / (6 * pi * eta).
-3. **Acoustic streaming**: The standing wave drives steady circulatory flows (Rayleigh streaming) with velocity v_stream ~ P_0^2 / (4 * rho_0 * c_0^3 * eta) * lambda. These flows exert drag on the levitated object. Verify that the streaming drag is smaller than the lateral restoring force.
-4. **Thermal effects**: Acoustic absorption heats the medium, changing c_0 and shifting the node positions. For high-intensity operation (> 160 dB SPL), estimate the temperature rise and the resulting node drift over the operating time.
-5. **Phased array extension** (if manipulation is needed): For dynamic object repositioning, replace the single transducer-reflector pair with a phased array of transducers. By adjusting the relative phases, the pressure node positions can be moved continuously, carrying the trapped object with them. The phase resolution determines the positioning precision: delta_z ~ lambda / (2 * pi * N_phase_bits).
+1. **重力オフセット**: 平衡位置は圧力ノードの下にdelta_z = m * g / k_zだけシフトする。delta_z << lambda/4（ポテンシャル最大までの距離）であることを確認する。delta_zがlambda/4に近づくと、物体はトラップから落下する。
+2. **気流感度**: 周囲の気流からの抗力を推定する。球の場合、F_drag = 6 * pi * eta * a * v_air（ストークス抗力）。横方向復元力と比較する: 許容最大風速はv_max = k_r / (6 * pi * eta)。
+3. **音響ストリーミング**: 定在波は定常的な循環流（レイリーストリーミング）を駆動し、その速度はv_stream ~ P_0^2 / (4 * rho_0 * c_0^3 * eta) * lambda。これらの流れは浮揚物体に抗力を及ぼす。ストリーミング抗力が横方向復元力より小さいことを確認する。
+4. **熱効果**: 音響吸収が媒体を加熱し、c_0を変化させノード位置をシフトさせる。高強度動作（> 160 dB SPL）では、動作時間にわたる温度上昇とそれによるノードドリフトを推定する。
+5. **フェーズドアレイ拡張**（操作が必要な場合）: 動的な物体再配置のために、単一のトランスデューサ-リフレクタ対をフェーズドアレイのトランスデューサに置き換える。相対位相を調整することで圧力ノード位置を連続的に移動でき、トラップされた物体をそれに伴って運ぶ。位相分解能が位置決め精度を決定する: delta_z ~ lambda / (2 * pi * N_phase_bits)。
 
 ```markdown
 ## Stability Verification
@@ -175,33 +173,33 @@ Confirm that the designed system will reliably trap and hold the object:
 | Thermal drift | Delta_T = [val] K | Re-tune interval | [time] | [Acceptable/No] |
 ```
 
-**期待結果:** All perturbation sources are quantified and shown to be within the trapping margins. The gravity offset is a small fraction of lambda/4. Air current and streaming effects do not overwhelm the lateral trap.
+**期待結果:** すべての摂動源が定量化され、トラップマージン内にあることが示される。重力オフセットがlambda/4のごく一部。気流とストリーミング効果が横方向トラップを圧倒しない。
 
-**失敗時:** If the gravity offset is too large (heavy object, weak field), increase P_0 or use a higher frequency (stronger gradient per wavelength). If air currents are a problem, enclose the levitator in a draft shield. If acoustic streaming destabilizes the object, reduce the driving amplitude and use a reflector geometry that minimizes streaming vortices (e.g., a shallow concave reflector).
+**失敗時:** 重力オフセットが大きすぎる場合（重い物体、弱い音場）、P_0を増加させるか高い周波数を使用する（波長あたりの勾配が強くなる）。気流が問題の場合、浮揚装置をドラフトシールドで囲む。音響ストリーミングが物体を不安定化する場合、駆動振幅を下げ、ストリーミング渦を最小化するリフレクタ形状（例: 浅い凹面リフレクタ）を使用する。
 
 ## バリデーション
 
-- [ ] Object size satisfies a << lambda (Gor'kov theory applicable)
-- [ ] Acoustic contrast factors are computed and the trapping location (node/antinode) is identified
-- [ ] Required pressure amplitude P_0 is calculated and achievable with specified hardware
-- [ ] Transducer-reflector cavity length is set to n * lambda/2 with node positions computed
-- [ ] Axial and lateral stiffness are both positive
-- [ ] Gravity offset delta_z is a small fraction of lambda/4
-- [ ] Air current and acoustic streaming perturbations are within trapping margins
-- [ ] Safety considerations for high-SPL operation are documented
-- [ ] If phased array is used, phase control resolution and positioning precision are specified
+- [ ] 物体サイズがa << lambdaを満たす（ゴルコフ理論が適用可能）
+- [ ] 音響コントラスト因子が計算され、トラップ位置（ノード/反ノード）が特定されている
+- [ ] 必要な圧力振幅P_0が計算され、指定のハードウェアで達成可能
+- [ ] トランスデューサ-リフレクタキャビティ長がn * lambda/2に設定され、ノード位置が計算されている
+- [ ] 軸方向と横方向の剛性がともに正
+- [ ] 重力オフセットdelta_zがlambda/4のごく一部
+- [ ] 気流と音響ストリーミングの摂動がトラップマージン内
+- [ ] 高SPL動作の安全上の考慮事項が文書化されている
+- [ ] フェーズドアレイを使用する場合、位相制御分解能と位置決め精度が指定されている
 
 ## よくある落とし穴
 
-- **Violating the small-particle assumption**: The Gor'kov radiation force formula assumes a << lambda. For objects approaching lambda/4 in size, the point-particle approximation breaks down and the actual force can differ significantly (both in magnitude and direction) from the Gor'kov prediction. Use full-wave simulation for large objects.
-- **Ignoring lateral confinement**: Most introductory treatments focus on the axial (vertical) trapping force and neglect the much weaker lateral restoring force. In practice, lateral instability is the primary failure mode, especially for objects near the upper size limit.
-- **Forgetting acoustic streaming**: High-intensity standing waves always drive steady streaming flows. These flows exert drag on the levitated object that competes with the radiation force. Streaming is not a small effect -- it can be the dominant destabilizing influence at high SPL.
-- **Temperature sensitivity**: The speed of sound in air changes by about 0.6 m/s per degree Celsius. Over a 10-degree temperature swing, the wavelength shifts by about 2%, which moves the node positions by millimeters in a typical cavity. Long-running experiments need active length compensation or temperature control.
-- **Confusing pressure nodes with velocity nodes**: Pressure nodes are velocity antinodes and vice versa. Solid objects with positive contrast factors are trapped at pressure nodes (where the pressure oscillation is minimum and the velocity oscillation is maximum). Reversing this leads to trapping at the wrong position.
-- **Neglecting nonlinear effects at high amplitude**: Above approximately 155-160 dB SPL, nonlinear acoustic effects (harmonic generation, shock formation) become significant and reduce the effective trapping force compared to linear theory predictions.
+- **小粒子仮定の違反**: ゴルコフ放射力公式はa << lambdaを仮定する。lambda/4に近づくサイズの物体では、点粒子近似が破綻し、実際の力がゴルコフ予測と大幅に（大きさと方向の両方で）異なりうる。大きな物体には全波シミュレーションを使用する
+- **横方向閉じ込めの無視**: ほとんどの入門的な扱いは軸方向（垂直方向）のトラップ力に焦点を当て、はるかに弱い横方向復元力を無視する。実際には、横方向不安定性が主要な障害モードであり、特にサイズ上限付近の物体で顕著
+- **音響ストリーミングの忘却**: 高強度の定在波は常に定常的なストリーミング流を駆動する。これらの流れは放射力と競合する浮揚物体への抗力を及ぼす。ストリーミングは小さな効果ではない — 高SPLでは支配的な不安定化要因となりうる
+- **温度感度**: 空気中の音速は摂氏1度あたり約0.6 m/s変化する。10度の温度変動で波長が約2%シフトし、典型的なキャビティでノード位置がミリメートル単位で移動する。長時間の実験には能動的な長さ補償または温度制御が必要
+- **圧力ノードと速度ノードの混同**: 圧力ノードは速度反ノードであり、その逆も然り。正のコントラスト因子を持つ固体物体は圧力ノード（圧力振動が最小で速度振動が最大の場所）にトラップされる。これを逆にすると間違った位置にトラップされる
+- **高振幅での非線形効果の無視**: 約155-160 dB SPLを超えると、非線形音響効果（高調波生成、衝撃波形成）が重要になり、線形理論の予測と比較して有効なトラップ力が低下する
 
 ## 関連スキル
 
-- `evaluate-levitation-mechanism` -- compare acoustic levitation with magnetic, electrostatic, and aerodynamic alternatives
-- `analyze-magnetic-levitation` -- complementary magnetic levitation analysis for comparison
-- `derive-theoretical-result` -- derive acoustic radiation pressure from first principles
+- `evaluate-levitation-mechanism` -- 音響浮揚を磁気、静電、空力代替手段と比較する
+- `analyze-magnetic-levitation` -- 比較のための補完的な磁気浮揚分析
+- `derive-theoretical-result` -- 第一原理から音響放射圧を導出する

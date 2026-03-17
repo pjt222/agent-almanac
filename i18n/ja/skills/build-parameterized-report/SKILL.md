@@ -1,13 +1,12 @@
 ---
 name: build-parameterized-report
 description: >
-  Create parameterized Quarto or R Markdown reports that can be rendered
-  with different inputs to generate multiple variations. Covers parameter
-  definitions, programmatic rendering, and batch generation. Use when
-  generating the same report for different departments, regions, or time
-  periods; creating client-specific reports from a single template;
-  building dashboards that filter to specific subsets; or automating
-  recurring reports with varying inputs.
+  異なる入力でレンダリングして複数のバリエーションを生成できるパラメータ化された
+  QuartoまたはR Markdownレポートを作成する。パラメータ定義、プログラマティック
+  レンダリング、バッチ生成をカバーする。異なる部門、地域、期間で同じレポートを
+  生成する時、単一テンプレートからクライアント固有のレポートを作成する時、特定の
+  サブセットにフィルタリングするダッシュボードを構築する時、異なる入力で繰り返し
+  レポートを自動化する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,27 +25,27 @@ metadata:
 
 # パラメータ化レポートの構築
 
-Create reports that accept parameters to generate multiple customized variations from a single template.
+パラメータを受け取り、単一テンプレートから複数のカスタマイズされたバリエーションを生成するレポートを作成する。
 
 ## 使用タイミング
 
-- Generating the same report for different departments, regions, or time periods
-- Creating client-specific reports from a template
-- Building dashboards that filter to specific subsets
-- Automating recurring reports with different inputs
+- 異なる部門、地域、または期間で同じレポートを生成する時
+- テンプレートからクライアント固有のレポートを作成する時
+- 特定のサブセットにフィルタリングするダッシュボードを構築する時
+- 異なる入力で繰り返しレポートを自動化する時
 
 ## 入力
 
-- **必須**: Report template (Quarto or R Markdown)
-- **必須**: Parameter definitions (names, types, defaults)
-- **任意**: List of parameter values for batch generation
-- **任意**: Output directory for generated reports
+- **必須**: レポートテンプレート（QuartoまたはR Markdown）
+- **必須**: パラメータ定義（名前、型、デフォルト値）
+- **任意**: バッチ生成用のパラメータ値リスト
+- **任意**: 生成レポートの出力ディレクトリ
 
 ## 手順
 
-### ステップ1: Define Parameters in YAML
+### ステップ1: YAMLでパラメータを定義
 
-For Quarto (`report.qmd`):
+Quarto（`report.qmd`）の場合:
 
 ```yaml
 ---
@@ -61,7 +60,7 @@ format:
 ---
 ```
 
-For R Markdown (`report.Rmd`):
+R Markdown（`report.Rmd`）の場合:
 
 ```yaml
 ---
@@ -74,11 +73,11 @@ output: html_document
 ---
 ```
 
-**期待結果:** The YAML header contains a `params:` block with named parameters, each having a default value of the correct type.
+**期待結果:** YAMLヘッダーに名前付きパラメータを含む`params:`ブロックがあり、各パラメータが正しい型のデフォルト値を持つ。
 
-**失敗時:** If rendering fails with "object 'params' not found", ensure the `params:` block is correctly indented under the YAML frontmatter. For Quarto, `params` must be at the top level of the YAML, not nested under `format:`.
+**失敗時:** 「object 'params' not found」でレンダリングが失敗する場合、`params:`ブロックがYAMLフロントマター下で正しくインデントされていることを確認する。Quartoの場合、`params`はYAMLのトップレベルでなければならず、`format:`の下にネストしてはならない。
 
-### ステップ2: Use Parameters in Code
+### ステップ2: コードでパラメータを使用
 
 ````markdown
 ```{r}
@@ -104,13 +103,13 @@ forecast::autoplot(forecast_model)
 ```
 ````
 
-**期待結果:** Code chunks reference parameters via `params$name` and conditional chunks use `#| eval: !expr params$flag` for Quarto. Inline R expressions like `` `r params$region` `` render dynamic text.
+**期待結果:** コードチャンクが`params$name`でパラメータを参照し、条件付きチャンクがQuartoでは`#| eval: !expr params$flag`を使用する。`` `r params$region` ``のようなインラインR式が動的テキストをレンダリングする。
 
-**失敗時:** If `params$name` returns NULL, verify the parameter name matches exactly between the YAML definition and the code reference (case-sensitive). Check that default values are the correct type.
+**失敗時:** `params$name`がNULLを返す場合、パラメータ名がYAML定義とコード参照間で正確に一致していることを確認する（大文字小文字を区別）。デフォルト値が正しい型であることを確認する。
 
-### ステップ3: Render with Custom Parameters
+### ステップ3: カスタムパラメータでレンダリング
 
-Single render:
+単一レンダリング:
 
 ```r
 # Quarto
@@ -127,11 +126,11 @@ rmarkdown::render(
 )
 ```
 
-**期待結果:** A single report renders successfully with custom parameter values overriding the YAML defaults. The output file is created at the specified path.
+**期待結果:** カスタムパラメータ値でYAMLデフォルトを上書きして単一レポートが正常にレンダリングされる。出力ファイルが指定パスに作成される。
 
-**失敗時:** If Quarto render fails, check that `quarto` CLI is installed and on PATH. If R Markdown render fails, verify `rmarkdown` is installed. Ensure parameter names in `execute_params` (Quarto) or `params` (R Markdown) match the YAML definitions exactly.
+**失敗時:** Quartoレンダリングが失敗する場合、`quarto` CLIがインストールされPATHにあることを確認する。R Markdownレンダリングが失敗する場合、`rmarkdown`がインストールされていることを確認する。`execute_params`（Quarto）または`params`（R Markdown）のパラメータ名がYAML定義と正確に一致していることを確認する。
 
-### ステップ4: Batch Render Multiple Reports
+### ステップ4: 複数レポートのバッチレンダリング
 
 ```r
 regions <- c("North America", "Europe", "Asia Pacific", "Latin America")
@@ -153,11 +152,11 @@ purrr::pwalk(combinations, function(region, year) {
 })
 ```
 
-**期待結果:** One HTML file per region-year combination.
+**期待結果:** 地域-年の組み合わせごとに1つのHTMLファイル。
 
-**失敗時:** Check that parameter names match exactly between YAML and code. Ensure all parameter values are valid.
+**失敗時:** パラメータ名がYAMLとコード間で正確に一致していることを確認する。すべてのパラメータ値が有効であることを確認する。
 
-### Step 5: Add Parameter バリデーション
+### ステップ5: パラメータバリデーションの追加
 
 ```r
 #| label: validate-params
@@ -169,11 +168,11 @@ stopifnot(
 )
 ```
 
-**期待結果:** The validation code chunk runs at the start of each render and stops with an informative error if any parameter is out of range or the wrong type.
+**期待結果:** バリデーションコードチャンクが各レンダリングの開始時に実行され、パラメータが範囲外または誤った型の場合に情報的なエラーで停止する。
 
-**失敗時:** If `stopifnot()` produces unhelpful error messages, switch to explicit `if (!cond) stop("message")` calls for clearer diagnostics.
+**失敗時:** `stopifnot()`が不明確なエラーメッセージを生成する場合、より明確な診断のために明示的な`if (!cond) stop("message")`呼び出しに切り替える。
 
-### ステップ6: Organize Output
+### ステップ6: 出力の整理
 
 ```r
 # Create output directory
@@ -188,29 +187,29 @@ quarto::quarto_render(
 )
 ```
 
-**期待結果:** Output files are written to a date-stamped subdirectory with descriptive names (e.g., `reports/2025-06/report-europe.html`).
+**期待結果:** 出力ファイルが日付スタンプ付きサブディレクトリに記述的な名前で書き込まれる（例: `reports/2025-06/report-europe.html`）。
 
-**失敗時:** If `dir.create()` fails, check that the parent directory exists and is writable. On Windows, verify the path length does not exceed 260 characters.
+**失敗時:** `dir.create()`が失敗する場合、親ディレクトリが存在し書き込み可能であることを確認する。Windowsではパス長が260文字を超えていないことを確認する。
 
 ## バリデーション
 
-- [ ] Report renders with default parameters
-- [ ] Report renders with each set of custom parameters
-- [ ] Parameters are validated before processing
-- [ ] Output files are named descriptively
-- [ ] Conditional sections render correctly based on parameters
-- [ ] Batch generation completes for all combinations
+- [ ] レポートがデフォルトパラメータでレンダリングされる
+- [ ] レポートが各セットのカスタムパラメータでレンダリングされる
+- [ ] 処理前にパラメータがバリデーションされる
+- [ ] 出力ファイルが記述的に名前付けされている
+- [ ] 条件付きセクションがパラメータに基づいて正しくレンダリングされる
+- [ ] バッチ生成がすべての組み合わせで完了する
 
 ## よくある落とし穴
 
-- **Parameter name mismatch**: YAML names must exactly match `params$name` references in code
-- **Type coercion**: YAML may parse `year: 2025` as integer but code expects character. Be explicit.
-- **Conditional evaluation**: Use `#| eval: !expr params$flag` not `eval = params$flag` in Quarto
-- **File overwriting**: Without unique output names, each render overwrites the previous
-- **Memory in batch mode**: Long batch runs may accumulate memory. Consider using `callr::r()` for isolation.
+- **パラメータ名の不一致**: YAML名はコード内の`params$name`参照と正確に一致しなければならない
+- **型変換**: YAMLは`year: 2025`を整数としてパースするかもしれないが、コードは文字列を期待する場合がある。明示的にする
+- **条件付き評価**: Quartoでは`eval = params$flag`ではなく`#| eval: !expr params$flag`を使用する
+- **ファイルの上書き**: 一意の出力名なしでは、各レンダリングが前のものを上書きする
+- **バッチモードでのメモリ**: 長いバッチ実行はメモリを蓄積する可能性がある。分離のために`callr::r()`の使用を検討する
 
 ## 関連スキル
 
-- `create-quarto-report` - base Quarto document setup
-- `generate-statistical-tables` - tables that adapt to parameters
-- `format-apa-report` - parameterized academic reports
+- `create-quarto-report` -- 基本的なQuartoドキュメントセットアップ
+- `generate-statistical-tables` -- パラメータに適応するテーブル
+- `format-apa-report` -- パラメータ化された学術レポート

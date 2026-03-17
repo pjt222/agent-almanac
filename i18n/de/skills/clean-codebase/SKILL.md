@@ -1,11 +1,18 @@
 ---
 name: clean-codebase
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Remove dead code, unused imports, fix lint warnings, and normalize formatting
-  across a codebase without changing business logic or architecture. Use when
-  lint warnings have piled up during rapid development, unused imports and
-  variables clutter files, dead code paths were never removed, formatting is
-  inconsistent, or static analysis tools report fixable hygiene issues.
+  Toten Code entfernen, ungenutzte Imports bereinigen, Lint-Warnungen beheben
+  und Formatierung in einer Codebasis vereinheitlichen ohne Geschaeftslogik
+  oder Architektur zu aendern. Anwenden wenn sich Lint-Warnungen waehrend
+  schneller Entwicklung angehaeuft haben, ungenutzte Imports und Variablen
+  Dateien ueberladen, tote Codepfade nie entfernt wurden, Formatierung
+  ueber Dateien hinweg inkonsistent ist oder statische Analysewerkzeuge
+  behebbare Hygienprobleme melden.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -15,63 +22,58 @@ metadata:
   complexity: intermediate
   language: multi
   tags: maintenance, cleanup, lint, dead-code, formatting
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Codebasis bereinigen
 
-## When to Use
+## Wann verwenden
 
-Use this skill when a codebase has accumulated hygiene debt:
+Diesen Skill verwenden wenn eine Codebasis Hygieneschulden angehaeuft hat:
 
-- Lint warnings have piled up during rapid development
-- Unused imports and variables clutter files
-- Dead code paths exist but were never removed
-- Formatting is inconsistent across files
-- Static analysis tools report fixable issues
+- Lint-Warnungen haben sich waehrend schneller Entwicklung angehaeuft
+- Ungenutzte Imports und Variablen ueberladen Dateien
+- Tote Codepfade existieren, wurden aber nie entfernt
+- Formatierung ist ueber Dateien hinweg inkonsistent
+- Statische Analysewerkzeuge melden behebbare Probleme
 
-**Do NOT use** for architectural refactoring, bug fixes, or business logic changes. This skill focuses purely on hygiene and automated cleanup.
+**NICHT verwenden** fuer architektonisches Refactoring, Fehlerbehebungen oder Aenderungen der Geschaeftslogik. Dieser Skill konzentriert sich ausschliesslich auf Hygiene und automatisierte Bereinigung.
 
-## Inputs
+## Eingaben
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `codebase_path` | string | Yes | Absolute path to codebase root |
-| `language` | string | Yes | Primary language (js, python, r, rust, etc.) |
-| `cleanup_mode` | enum | No | `safe` (default) or `aggressive` |
-| `run_tests` | boolean | No | Run test suite after cleanup (default: true) |
-| `backup` | boolean | No | Create backup before deletion (default: true) |
+| Parameter | Typ | Erforderlich | Beschreibung |
+|-----------|-----|--------------|-------------|
+| `codebase_path` | string | Ja | Absoluter Pfad zum Codebasis-Stammverzeichnis |
+| `language` | string | Ja | Primaersprache (js, python, r, rust usw.) |
+| `cleanup_mode` | enum | Nein | `safe` (Standard) oder `aggressive` |
+| `run_tests` | boolean | Nein | Testsuite nach Bereinigung ausfuehren (Standard: true) |
+| `backup` | boolean | Nein | Backup vor Loeschung erstellen (Standard: true) |
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Pre-Cleanup Assessment
+### Schritt 1: Vorbewertung
 
-Measure the current state to quantify improvements later.
+Den aktuellen Zustand messen um Verbesserungen spaeter zu quantifizieren.
 
 ```bash
-# Count lint warnings by severity
+# Lint-Warnungen nach Schweregrad zaehlen
 lint_tool --format json > lint_before.json
 
-# Count lines of code
+# Codezeilen zaehlen
 cloc . --json > cloc_before.json
 
-# List unused symbols (language-dependent)
-# JavaScript/TypeScript: ts-prune or depcheck
+# Ungenutzte Symbole auflisten (sprachabhaengig)
+# JavaScript/TypeScript: ts-prune oder depcheck
 # Python: vulture
-# R: lintr unused function checks
+# R: lintr-Pruefung ungenutzter Funktionen
 ```
 
-**Expected:** Baseline metrics saved to `lint_before.json` and `cloc_before.json`
+**Erwartet:** Ausgangskennzahlen in `lint_before.json` und `cloc_before.json` gespeichert
 
-**On failure:** If lint tool not found, skip automated fixes and focus on manual review
+**Bei Fehler:** Wenn das Lint-Werkzeug nicht gefunden wird, automatisierte Korrekturen ueberspringen und auf manuelle Pruefung konzentrieren
 
-### Step 2: Fix Automated Lint Warnings
+### Schritt 2: Automatisierte Lint-Warnungen beheben
 
-Apply safe automated fixes (spacing, quotes, semicolons, trailing whitespace).
+Sichere automatisierte Korrekturen anwenden (Abstande, Anfuehrungszeichen, Semikolons, nachfolgende Leerzeichen).
 
 **JavaScript/TypeScript**:
 ```bash
@@ -97,13 +99,13 @@ cargo fmt
 cargo clippy --fix --allow-dirty
 ```
 
-**Expected:** All safe lint warnings resolved; files formatted consistently
+**Erwartet:** Alle sicheren Lint-Warnungen behoben; Dateien konsistent formatiert
 
-**On failure:** If automated fixes introduce test failures, revert changes and escalate
+**Bei Fehler:** Wenn automatisierte Korrekturen Testfehler einfuehren, Aenderungen rueckgaengig machen und eskalieren
 
-### Step 3: Identify Dead Code Paths
+### Schritt 3: Tote Codepfade identifizieren
 
-Use static analysis to find unreferenced functions, unused variables, and orphaned files.
+Statische Analyse verwenden um unreferenzierte Funktionen, ungenutzte Variablen und verwaiste Dateien zu finden.
 
 **JavaScript/TypeScript**:
 ```bash
@@ -121,18 +123,18 @@ vulture . | tee dead_code.txt
 Rscript -e "lintr::lint_dir('.', linters = lintr::unused_function_linter())"
 ```
 
-**General approach**:
-1. Grep for function definitions
-2. Grep for function calls
-3. Report functions defined but never called
+**Allgemeiner Ansatz**:
+1. Nach Funktionsdefinitionen suchen
+2. Nach Funktionsaufrufen suchen
+3. Funktionen melden die definiert aber nie aufgerufen werden
 
-**Expected:** `dead_code.txt` lists unused functions, variables, and files
+**Erwartet:** `dead_code.txt` listet ungenutzte Funktionen, Variablen und Dateien auf
 
-**On failure:** If static analysis tool unavailable, manually review recent commit history for orphaned code
+**Bei Fehler:** Wenn das statische Analysewerkzeug nicht verfuegbar ist, manuell die juengste Commit-Historie auf verwaisten Code pruefen
 
-### Step 4: Remove Unused Imports
+### Schritt 4: Ungenutzte Imports entfernen
 
-Clean up import blocks by removing references to packages never used.
+Importbloecke bereinigen indem Referenzen auf nie verwendete Pakete entfernt werden.
 
 **JavaScript**:
 ```bash
@@ -146,143 +148,141 @@ autoflake --remove-all-unused-imports --in-place --recursive .
 
 **R**:
 ```bash
-# Manual review: grep for library() calls, check if package used
+# Manuelle Pruefung: nach library()-Aufrufen suchen, pruefen ob Paket verwendet wird
 grep -r "library(" . | cut -d: -f2 | sort | uniq
 ```
 
-**Expected:** All unused import statements removed
+**Erwartet:** Alle ungenutzten Import-Anweisungen entfernt
 
-**On failure:** If removing imports breaks build, they were used indirectly — restore and document
+**Bei Fehler:** Wenn das Entfernen von Imports den Build bricht, wurden sie indirekt verwendet — wiederherstellen und dokumentieren
 
-### Step 5: Remove Dead Code (Mode-Dependent)
+### Schritt 5: Toten Code entfernen (modusabhaengig)
 
-**Safe Mode** (default):
-- Only remove code explicitly marked as deprecated
-- Remove commented-out code blocks (if >10 lines and >6 months old)
-- Remove TODO comments referencing completed issues
+**Sicherer Modus** (Standard):
+- Nur explizit als veraltet markierten Code entfernen
+- Auskommentierte Codebloecke entfernen (wenn >10 Zeilen und >6 Monate alt)
+- TODO-Kommentare entfernen die auf abgeschlossene Issues verweisen
 
-**Aggressive Mode** (opt-in):
-- Remove all functions identified as unused in Step 3
-- Remove private methods with zero references
-- Remove feature flags for deprecated features
+**Aggressiver Modus** (opt-in):
+- Alle in Schritt 3 als ungenutzt identifizierten Funktionen entfernen
+- Private Methoden mit null Referenzen entfernen
+- Feature-Flags fuer veraltete Features entfernen
 
-For each candidate deletion:
-1. Verify zero references in codebase
-2. Check git history for recent activity (skip if modified in last 30 days)
-3. Remove code and add entry to `CLEANUP_LOG.md`
+Fuer jede Loeschkandidatin:
+1. Null Referenzen in der Codebasis verifizieren
+2. Git-Historie auf juengste Aktivitaet pruefen (ueberspringen wenn in den letzten 30 Tagen geaendert)
+3. Code entfernen und Eintrag in `CLEANUP_LOG.md` hinzufuegen
 
-**Expected:** Dead code removed; `CLEANUP_LOG.md` documents all deletions
+**Erwartet:** Toter Code entfernt; `CLEANUP_LOG.md` dokumentiert alle Loeschungen
 
-**On failure:** If uncertain whether code is truly dead, move to `archive/` directory instead
+**Bei Fehler:** Wenn unsicher ob Code wirklich tot ist, in ein `archive/`-Verzeichnis verschieben statt zu loeschen
 
-### Step 6: Normalize Formatting
+### Schritt 6: Formatierung vereinheitlichen
 
-Ensure consistent formatting across all files (even if not caught by linters).
+Konsistente Formatierung ueber alle Dateien sicherstellen (auch wenn nicht von Lintern erfasst).
 
-1. Normalize line endings (LF vs CRLF)
-2. Ensure single newline at end of file
-3. Remove trailing whitespace
-4. Normalize indentation (spaces vs tabs, indent width)
+1. Zeilenenden normalisieren (LF vs CRLF)
+2. Einzelnen Zeilenumbruch am Dateiende sicherstellen
+3. Nachfolgende Leerzeichen entfernen
+4. Einrueckung normalisieren (Leerzeichen vs Tabs, Einrueckungstiefe)
 
 ```bash
-# Example: Fix line endings and trailing whitespace
+# Beispiel: Zeilenenden und nachfolgende Leerzeichen beheben
 find . -type f -name "*.js" -exec sed -i 's/\r$//' {} +
 find . -type f -name "*.js" -exec sed -i 's/[[:space:]]*$//' {} +
 ```
 
-**Expected:** All files follow consistent formatting conventions
+**Erwartet:** Alle Dateien folgen konsistenten Formatierungskonventionen
 
-**On failure:** If sed breaks binary files, skip and document
+**Bei Fehler:** Wenn sed Binaerdateien beschaedigt, ueberspringen und dokumentieren
 
-### Step 7: Run Tests
+### Schritt 7: Tests ausfuehren
 
-Validate that cleanup didn't break functionality.
+Validieren dass die Bereinigung die Funktionalitaet nicht beeintraechtigt hat.
 
 ```bash
-# Language-specific test command
+# Sprachspezifischer Testbefehl
 npm test              # JavaScript
 pytest                # Python
 R CMD check           # R
 cargo test            # Rust
 ```
 
-**Expected:** All tests pass (or same failures as before cleanup)
+**Erwartet:** Alle Tests bestehen (oder dieselben Fehler wie vor der Bereinigung)
 
-**On failure:** Revert changes incrementally to identify breaking change, then escalate
+**Bei Fehler:** Aenderungen inkrementell rueckgaengig machen um die brechende Aenderung zu identifizieren, dann eskalieren
 
-### Step 8: Generate Cleanup Report
+### Schritt 8: Bereinigungsbericht erstellen
 
-Document all changes for review.
+Alle Aenderungen zur Pruefung dokumentieren.
 
 ```markdown
-# Codebase Cleanup Report
+# Codebasis-Bereinigungsbericht
 
-**Date**: YYYY-MM-DD
-**Mode**: safe | aggressive
-**Language**: <language>
+**Datum**: JJJJ-MM-TT
+**Modus**: safe | aggressive
+**Sprache**: <Sprache>
 
-## Metrics
+## Kennzahlen
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Lint warnings | X | Y | -Z |
-| Lines of code | A | B | -C |
-| Unused imports | D | 0 | -D |
-| Dead functions | E | F | -G |
+| Kennzahl | Vorher | Nachher | Aenderung |
+|----------|--------|---------|-----------|
+| Lint-Warnungen | X | Y | -Z |
+| Codezeilen | A | B | -C |
+| Ungenutzte Imports | D | 0 | -D |
+| Tote Funktionen | E | F | -G |
 
-## Changes Applied
+## Angewandte Aenderungen
 
-1. Fixed X lint warnings (automated)
-2. Removed Y unused imports
-3. Deleted Z lines of dead code (see CLEANUP_LOG.md)
-4. Normalized formatting across W files
+1. X Lint-Warnungen behoben (automatisiert)
+2. Y ungenutzte Imports entfernt
+3. Z Zeilen toten Code geloescht (siehe CLEANUP_LOG.md)
+4. Formatierung ueber W Dateien vereinheitlicht
 
-## Escalations
+## Eskalierungen
 
-- [Issue description requiring human review]
-- [Uncertain deletion moved to archive/]
+- [Problembeschreibung die menschliche Pruefung erfordert]
+- [Unsichere Loeschung nach archive/ verschoben]
 
-## Validation
+## Validierung
 
-- [x] All tests pass
-- [x] Backup created: backup_YYYYMMDD/
-- [x] CLEANUP_LOG.md updated
+- [x] Alle Tests bestehen
+- [x] Backup erstellt: backup_JJJJMMTT/
+- [x] CLEANUP_LOG.md aktualisiert
 ```
 
-**Expected:** Report saved to `CLEANUP_REPORT.md` in project root
+**Erwartet:** Bericht als `CLEANUP_REPORT.md` im Projektstammverzeichnis gespeichert
 
-**On failure:** (N/A — generate report regardless of outcome)
+**Bei Fehler:** (Entfaellt — Bericht unabhaengig vom Ergebnis erstellen)
 
-## Validation Checklist
+## Validierung
 
-After cleanup:
+Nach der Bereinigung:
 
-- [ ] All tests pass (or same failures as before)
-- [ ] No new lint warnings introduced
-- [ ] Backup created before any deletions
-- [ ] `CLEANUP_LOG.md` documents all removed code
-- [ ] Cleanup report generated with metrics
-- [ ] Git diff reviewed for unexpected changes
-- [ ] CI pipeline passes
+- [ ] Alle Tests bestehen (oder dieselben Fehler wie vorher)
+- [ ] Keine neuen Lint-Warnungen eingefuehrt
+- [ ] Backup vor allen Loeschungen erstellt
+- [ ] `CLEANUP_LOG.md` dokumentiert allen entfernten Code
+- [ ] Bereinigungsbericht mit Kennzahlen erstellt
+- [ ] Git-Diff auf unerwartete Aenderungen geprueft
+- [ ] CI-Pipeline besteht
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Removing Code Still Used via Reflection**: Static analysis misses dynamic calls (e.g., `eval()`, metaprogramming). Always check git history.
+1. **Code entfernen der noch ueber Reflexion verwendet wird**: Statische Analyse uebersieht dynamische Aufrufe (z.B. `eval()`, Metaprogrammierung). Immer Git-Historie pruefen.
 
-2. **Breaking Implicit Dependencies**: Removing imports that were used by dependencies. Run tests after every import removal.
+2. **Implizite Abhaengigkeiten brechen**: Imports entfernen die von Abhaengigkeiten verwendet wurden. Nach jeder Import-Entfernung Tests ausfuehren.
 
-3. **Deleting Feature Flags for Active Features**: Even if unused in current branch, feature flags may be active in other environments. Check deployment configs.
+3. **Feature-Flags fuer aktive Features loeschen**: Auch wenn im aktuellen Branch ungenutzt, koennen Feature-Flags in anderen Umgebungen aktiv sein. Deployment-Konfigurationen pruefen.
 
-4. **Over-Aggressive Formatting**: Tools like `black` or `prettier` may reformat code in ways that trigger unnecessary diffs. Configure tools to match project style.
+4. **Ueberaggressive Formatierung**: Werkzeuge wie `black` oder `prettier` koennen Code auf eine Weise umformatieren die unnoetige Diffs ausloest. Werkzeuge so konfigurieren dass sie zum Projektstil passen.
 
-5. **Ignoring Test Coverage**: Cannot safely clean codebases without tests. If coverage is low, escalate for test additions first.
+5. **Testabdeckung ignorieren**: Codebasen ohne Tests koennen nicht sicher bereinigt werden. Wenn die Abdeckung niedrig ist, zuerst fuer Testergaenzungen eskalieren.
 
-6. **Not Backing Up**: Always create `backup_YYYYMMDD/` directory before deleting anything, even if using git.
+6. **Kein Backup erstellen**: Immer ein `backup_JJJJMMTT/`-Verzeichnis erstellen bevor irgendetwas geloescht wird, auch bei Verwendung von Git.
 
-## Related Skills
+## Verwandte Skills
 
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — Organize directory layout, update READMEs
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Fix dead links and imports
-- [escalate-issues](../escalate-issues/SKILL.md) — Route complex problems to specialists
-- [r-packages/run-r-cmd-check](../../r-packages/run-r-cmd-check/SKILL.md) — Run full R package checks
-- [devops/dependency-audit](../../devops/dependency-audit/SKILL.md) — Check for outdated dependencies
+- `tidy-project-structure` — Verzeichnislayout organisieren, READMEs aktualisieren
+- `repair-broken-references` — Tote Links und Imports reparieren
+- `escalate-issues` — Komplexe Probleme an Spezialisten weiterleiten

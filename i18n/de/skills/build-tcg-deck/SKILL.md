@@ -1,13 +1,19 @@
 ---
 name: build-tcg-deck
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Build a competitive or casual trading card game deck. Covers archetype
-  selection, mana/energy curve analysis, win condition identification,
-  meta-game positioning, and sideboard construction for Pokemon TCG, Magic:
-  The Gathering, Flesh and Blood, and other TCGs. Use when building a new deck
-  for a tournament format or casual play, adapting an existing deck to a changed
-  meta-game, evaluating whether a new set warrants a deck change, or converting
-  a deck concept into a tournament-ready list.
+  Ein kompetitives oder Freizeit-Sammelkartenspiel-Deck bauen. Behandelt
+  Archetyp-Auswahl, Mana-/Energiekurvenanalyse, Siegbedingungsidentifikation,
+  Metagame-Positionierung und Sideboard-Zusammenstellung fuer Pokemon TCG,
+  Magic: The Gathering, Flesh and Blood und andere Sammelkartenspiele.
+  Anwenden beim Bau eines neuen Decks fuer ein Turnierformat oder
+  Freizeitspiel, bei der Anpassung eines bestehenden Decks an ein veraendertes
+  Metagame, bei der Bewertung ob ein neues Set eine Deckaenderung rechtfertigt,
+  oder bei der Umwandlung eines Deckkonzepts in eine turniertaugliche Liste.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -17,170 +23,165 @@ metadata:
   complexity: intermediate
   language: natural
   tags: tcg, deck-building, pokemon, mtg, fab, strategy, meta, archetype
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
-# TCG-Deck bauen
+# Sammelkartenspiel-Deck bauen
 
-Construct a trading card game deck from archetype selection through final optimization, following a structured process that works across Pokemon TCG, Magic: The Gathering, Flesh and Blood, and other major TCGs.
+Ein Sammelkartenspiel-Deck von der Archetyp-Auswahl bis zur finalen Optimierung konstruieren, nach einem strukturierten Prozess der fuer Pokemon TCG, Magic: The Gathering, Flesh and Blood und andere grosse Sammelkartenspiele funktioniert.
 
-## When to Use
+## Wann verwenden
 
-- Building a new deck for a specific tournament format or casual play
-- Adapting an existing deck to a changed meta-game
-- Evaluating whether a new card or set release warrants a deck change
-- Teaching someone the principles of deck construction
-- Converting a deck concept into a tournament-ready list
+- Bau eines neuen Decks fuer ein bestimmtes Turnierformat oder Freizeitspiel
+- Anpassung eines bestehenden Decks an ein veraendertes Metagame
+- Bewertung ob eine neue Karte oder ein neues Set eine Deckaenderung rechtfertigt
+- Jemanden in den Prinzipien des Deckbaus unterrichten
+- Umwandlung eines Deckkonzepts in eine turniertaugliche Liste
 
-## Inputs
+## Eingaben
 
-- **Required**: Card game (Pokemon TCG, MTG, FaB, etc.)
-- **Required**: Format (Standard, Expanded, Modern, Legacy, Blitz, etc.)
-- **Required**: Goal (competitive tournament, casual play, budget build)
-- **Optional**: Preferred archetype or strategy (aggro, control, combo, midrange)
-- **Optional**: Budget constraints (maximum spend, cards already owned)
-- **Optional**: Current meta-game snapshot (top decks, expected field)
+- **Erforderlich**: Kartenspiel (Pokemon TCG, MTG, FaB usw.)
+- **Erforderlich**: Format (Standard, Expanded, Modern, Legacy, Blitz usw.)
+- **Erforderlich**: Ziel (kompetitives Turnier, Freizeitspiel, Budget-Build)
+- **Optional**: Bevorzugter Archetyp oder Strategie (Aggro, Control, Combo, Midrange)
+- **Optional**: Budgetbeschraenkungen (Maximalausgabe, bereits vorhandene Karten)
+- **Optional**: Aktuelle Metagame-Momentaufnahme (Top-Decks, erwartetes Feld)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Define the Archetype
+### Schritt 1: Den Archetyp definieren
 
-Choose the deck's strategic identity.
+Die strategische Identitaet des Decks waehlen.
 
-1. Identify the available archetypes in the current format:
-   - **Aggro**: Win quickly through early pressure and efficient attackers
-   - **Control**: Answer threats efficiently, win in the late game with card advantage
-   - **Combo**: Assemble specific card combinations for powerful synergy or instant wins
-   - **Midrange**: Flexible strategy that shifts between aggro and control as needed
-   - **Tempo**: Gain resource advantage through efficient timing and disruption
-2. Select an archetype based on:
-   - Player preference and playstyle
-   - Meta-game positioning (what beats the top decks?)
-   - Budget constraints (combo decks often need specific expensive cards)
-   - Format legality (check ban lists and rotation status)
-3. Identify 1-2 primary win conditions:
-   - How does this deck actually win the game?
-   - What is the ideal game state this deck is trying to reach?
-4. State the archetype selection and win condition clearly
+1. Die verfuegbaren Archetypen im aktuellen Format identifizieren:
+   - **Aggro**: Schnell gewinnen durch fruehen Druck und effiziente Angreifer
+   - **Control**: Bedrohungen effizient beantworten, im spaeten Spiel mit Kartenvorteil gewinnen
+   - **Combo**: Bestimmte Kartenkombinationen fuer starke Synergie oder sofortige Siege zusammenstellen
+   - **Midrange**: Flexible Strategie die nach Bedarf zwischen Aggro und Control wechselt
+   - **Tempo**: Ressourcenvorteil durch effizientes Timing und Disruption erlangen
+2. Einen Archetyp basierend auf folgenden Kriterien waehlen:
+   - Spielervorliebe und Spielstil
+   - Metagame-Positionierung (was schlaegt die Top-Decks?)
+   - Budgetbeschraenkungen (Combo-Decks brauchen oft bestimmte teure Karten)
+   - Formatlegales (Verbotslisten und Rotationsstatus pruefen)
+3. 1-2 primaere Siegbedingungen identifizieren:
+   - Wie gewinnt dieses Deck tatsaechlich das Spiel?
+   - Welchen idealen Spielzustand versucht dieses Deck zu erreichen?
+4. Archetyp-Auswahl und Siegbedingung klar formulieren
 
-**Expected:** A clear archetype with defined win conditions. The strategy is specific enough to guide card selection but flexible enough to adapt.
+**Erwartet:** Ein klarer Archetyp mit definierten Siegbedingungen. Die Strategie ist spezifisch genug um die Kartenauswahl zu leiten, aber flexibel genug um sich anzupassen.
 
-**On failure:** If no archetype feels right, start with the strongest individual cards available and let the archetype emerge from the card pool. Sometimes the best deck is built around a card, not a concept.
+**Bei Fehler:** Wenn kein Archetyp sich richtig anfuehlt, mit den staerksten einzelnen verfuegbaren Karten beginnen und den Archetyp aus dem Kartenpool entstehen lassen. Manchmal wird das beste Deck um eine Karte herum gebaut, nicht um ein Konzept.
 
-### Step 2: Build the Core
+### Schritt 2: Den Kern aufbauen
 
-Select the cards that define the deck's strategy.
+Die Karten auswaehlen die die Strategie des Decks definieren.
 
-1. Identify the **core engine** (12-20 cards depending on game):
-   - The cards that directly enable the win condition
-   - Maximum legal copies of each core card
-   - These are non-negotiable — the deck doesn't function without them
-2. Add **support cards** (8-15 cards):
-   - Cards that find or protect the core engine
-   - Draw/search effects to improve consistency
-   - Protection for key pieces (counters, shields, removal)
-3. Add **interaction** (8-12 cards):
-   - Removal for opponent's threats
-   - Disruption for opponent's strategy
-   - Defensive options appropriate to the format
-4. Fill the **resource base** (game-specific):
-   - MTG: Lands (typically 24-26 for 60-card, 16-17 for 40-card)
-   - Pokemon: Energy cards (8-12 basic + special)
-   - FaB: Pitch value distribution (balance red/yellow/blue)
+1. Das **Kernmodul** identifizieren (12-20 Karten je nach Spiel):
+   - Die Karten die direkt die Siegbedingung ermoeglichen
+   - Maximale legale Kopien jeder Kernkarte
+   - Diese sind nicht verhandelbar -- das Deck funktioniert ohne sie nicht
+2. **Unterstuetzungskarten** hinzufuegen (8-15 Karten):
+   - Karten die das Kernmodul finden oder schuetzen
+   - Zieh-/Sucheffekte zur Verbesserung der Konsistenz
+   - Schutz fuer Schluesselstuecke (Konter, Schilde, Removal)
+3. **Interaktion** hinzufuegen (8-12 Karten):
+   - Removal fuer gegnerische Bedrohungen
+   - Disruption der gegnerischen Strategie
+   - Dem Format angemessene defensive Optionen
+4. Die **Ressourcenbasis** auffuellen (spielspezifisch):
+   - MTG: Laender (typischerweise 24-26 fuer 60 Karten, 16-17 fuer 40 Karten)
+   - Pokemon: Energiekarten (8-12 Basis + Spezial)
+   - FaB: Pitch-Wert-Verteilung (Rot/Gelb/Blau ausbalancieren)
 
-**Expected:** A complete deck list at or near the minimum deck size for the format. Every card has a clear role (core, support, interaction, or resource).
+**Erwartet:** Eine vollstaendige Deckliste bei oder nahe der Mindestdeckgroesse fuer das Format. Jede Karte hat eine klare Rolle (Kern, Unterstuetzung, Interaktion oder Ressource).
 
-**On failure:** If the deck list exceeds the format size, cut the weakest support cards first. If the core engine requires too many cards (>25), the strategy may be too fragile — simplify the win condition.
+**Bei Fehler:** Wenn die Deckliste die Formatgroesse ueberschreitet, die schwaechsten Unterstuetzungskarten zuerst streichen. Wenn das Kernmodul zu viele Karten erfordert (>25), ist die Strategie moeglicherweise zu fragil -- die Siegbedingung vereinfachen.
 
-### Step 3: Analyze the Curve
+### Schritt 3: Die Kurve analysieren
 
-Verify the deck's resource distribution supports its strategy.
+Verifizieren dass die Ressourcenverteilung des Decks seine Strategie unterstuetzt.
 
-1. Plot the **mana/energy/cost curve**:
-   - Count cards at each cost point (0, 1, 2, 3, 4, 5+)
-   - Verify the curve matches the archetype:
-     - Aggro: peaks at 1-2, drops sharply after 3
-     - Midrange: peaks at 2-3, moderate presence at 4-5
-     - Control: flatter curve, more high-cost finishers
-     - Combo: concentrated at combo-piece costs
-2. Check **color/type distribution** (MTG: color balance; Pokemon: energy type coverage):
-   - Can the resource base reliably cast cards on curve?
-   - Are there color-intensive cards that need dedicated resource support?
-3. Verify **card type balance**:
-   - Sufficient creatures/attackers to apply pressure
-   - Sufficient spells/trainers for interaction and consistency
-   - No critical category completely missing
-4. Adjust if the curve doesn't support the strategy
+1. Die **Mana-/Energie-/Kostenkurve** darstellen:
+   - Karten bei jedem Kostenpunkt zaehlen (0, 1, 2, 3, 4, 5+)
+   - Verifizieren dass die Kurve zum Archetyp passt:
+     - Aggro: Maximum bei 1-2, faellt nach 3 steil ab
+     - Midrange: Maximum bei 2-3, moderate Praesenz bei 4-5
+     - Control: Flachere Kurve, mehr teure Finisher
+     - Combo: Konzentriert bei den Kosten der Kombostuecke
+2. **Farb-/Typverteilung** pruefen (MTG: Farbbalance; Pokemon: Energietypabdeckung):
+   - Kann die Ressourcenbasis zuverlaessig Karten auf der Kurve ausspielen?
+   - Gibt es farbintensive Karten die dedizierte Ressourcenunterstuetzung brauchen?
+3. **Kartentyp-Balance** verifizieren:
+   - Genuegend Kreaturen/Angreifer um Druck auszuueben
+   - Genuegend Zauber/Trainer fuer Interaktion und Konsistenz
+   - Keine kritische Kategorie komplett fehlend
+4. Anpassen wenn die Kurve die Strategie nicht unterstuetzt
 
-**Expected:** A smooth curve that lets the deck execute its strategy on time. Aggro plays out fast, control survives early, combo assembles on schedule.
+**Erwartet:** Eine gleichmaessige Kurve die dem Deck erlaubt seine Strategie rechtzeitig auszufuehren. Aggro spielt schnell aus, Control ueberlebt die Fruehphase, Combo stellt planmaessig zusammen.
 
-**On failure:** If the curve is lumpy (too many expensive cards, not enough early plays), swap expensive support cards for cheaper alternatives. The curve is more important than any individual card.
+**Bei Fehler:** Wenn die Kurve ungleichmaessig ist (zu viele teure Karten, zu wenig fruehe Spielzuege), teure Unterstuetzungskarten gegen guenstigere Alternativen tauschen. Die Kurve ist wichtiger als jede einzelne Karte.
 
-### Step 4: Meta-Game Positioning
+### Schritt 4: Metagame-Positionierung
 
-Evaluate the deck against the expected field.
+Das Deck gegen das erwartete Feld evaluieren.
 
-1. Identify the top 5 decks in the current meta (use tournament results, tier lists)
-2. For each top deck, evaluate:
-   - **Favorable**: Your strategy naturally counters theirs (score: +1)
-   - **Even**: Neither deck has a structural advantage (score: 0)
-   - **Unfavorable**: Their strategy naturally counters yours (score: -1)
-3. Calculate the expected win rate against the field:
-   - Weight matchups by the opponent's meta share
-   - A deck with 60%+ expected win rate against the top 5 is well-positioned
-4. If positioning is poor, consider:
-   - Switching interaction cards to target the worst matchups
-   - Adding sideboard (if the format allows) for unfavorable matchups
-   - Whether a different archetype is better positioned
+1. Die Top-5-Decks im aktuellen Metagame identifizieren (Turnierergebnisse, Tierlisten nutzen)
+2. Fuer jedes Top-Deck bewerten:
+   - **Guenstig**: Die eigene Strategie kontert deren natuerlich (Bewertung: +1)
+   - **Ausgeglichen**: Keines der Decks hat einen strukturellen Vorteil (Bewertung: 0)
+   - **Unguenstig**: Deren Strategie kontert die eigene natuerlich (Bewertung: -1)
+3. Die erwartete Gewinnrate gegen das Feld berechnen:
+   - Matchups nach dem Metagame-Anteil des Gegners gewichten
+   - Ein Deck mit 60%+ erwarteter Gewinnrate gegen die Top 5 ist gut positioniert
+4. Wenn die Positionierung schlecht ist, erwaegen:
+   - Interaktionskarten aendern um die schlechtesten Matchups zu adressieren
+   - Sideboard hinzufuegen (wenn das Format es erlaubt) fuer unguenstige Matchups
+   - Ob ein anderer Archetyp besser positioniert ist
 
-**Expected:** A clear picture of where the deck sits in the meta. Favorable and unfavorable matchups identified with specific reasons.
+**Erwartet:** Ein klares Bild wo das Deck im Metagame steht. Guenstige und unguenstige Matchups mit spezifischen Gruenden identifiziert.
 
-**On failure:** If meta data isn't available, focus on versatility — ensure the deck can interact with multiple strategies rather than being optimized for one matchup.
+**Bei Fehler:** Wenn keine Metagame-Daten verfuegbar sind, auf Vielseitigkeit setzen -- sicherstellen dass das Deck mit mehreren Strategien interagieren kann statt auf ein Matchup optimiert zu sein.
 
-### Step 5: Build the Sideboard
+### Schritt 5: Das Sideboard bauen
 
-Construct sideboard/side deck for format-specific adaptation (if applicable).
+Sideboard/Nebendeck fuer formatspezifische Anpassung zusammenstellen (falls zutreffend).
 
-1. For each unfavorable matchup from Step 4:
-   - Identify 2-4 cards that improve the matchup significantly
-   - These should be high-impact cards, not marginal improvements
-2. For each card in the sideboard, know:
-   - What matchup(s) it comes in against
-   - What it replaces from the main deck
-   - Whether bringing it in changes the deck's curve significantly
-3. Verify sideboard doesn't exceed format limits (MTG: 15 cards, FaB: varies)
-4. Ensure no sideboard card is only relevant against one fringe deck
-   - Each sideboard slot should cover at least 2 matchups if possible
+1. Fuer jedes unguenstige Matchup aus Schritt 4:
+   - 2-4 Karten identifizieren die das Matchup erheblich verbessern
+   - Diese sollten wirkungsstarke Karten sein, keine marginalen Verbesserungen
+2. Fuer jede Karte im Sideboard wissen:
+   - Gegen welche(s) Matchup(s) sie hereinkommt
+   - Was sie aus dem Hauptdeck ersetzt
+   - Ob ihr Einbringen die Kurve des Decks erheblich veraendert
+3. Verifizieren dass das Sideboard die Formatgrenzen nicht ueberschreitet (MTG: 15 Karten, FaB: variiert)
+4. Sicherstellen dass keine Sideboard-Karte nur gegen ein einziges Randdeck relevant ist
+   - Jeder Sideboard-Platz sollte nach Moeglichkeit mindestens 2 Matchups abdecken
 
-**Expected:** A focused sideboard that meaningfully improves the worst matchups without diluting the main strategy.
+**Erwartet:** Ein fokussiertes Sideboard das die schlechtesten Matchups sinnvoll verbessert ohne die Hauptstrategie zu verwaessern.
 
-**On failure:** If the sideboard can't fix the worst matchups, the deck may be poorly positioned in the current meta. Consider whether the core strategy needs adjustment rather than sideboard patches.
+**Bei Fehler:** Wenn das Sideboard die schlechtesten Matchups nicht beheben kann, ist das Deck moeglicherweise im aktuellen Metagame schlecht positioniert. Erwaegen ob die Kernstrategie angepasst werden muss statt Sideboard-Pflaster anzulegen.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Archetype and win conditions clearly defined
-- [ ] Deck meets format legality (ban list, rotation, card count)
-- [ ] Every card has a defined role (core, support, interaction, resource)
-- [ ] Mana/energy curve supports the strategy's speed
-- [ ] Resource base can reliably cast cards on curve
-- [ ] Meta matchups evaluated with specific reasoning
-- [ ] Sideboard targets the worst matchups with clear swap plans
-- [ ] Budget constraints satisfied (if applicable)
+- [ ] Archetyp und Siegbedingungen klar definiert
+- [ ] Deck erfuellt die Formatlegalitaet (Verbotsliste, Rotation, Kartenzahl)
+- [ ] Jede Karte hat eine definierte Rolle (Kern, Unterstuetzung, Interaktion, Ressource)
+- [ ] Mana-/Energiekurve unterstuetzt die Geschwindigkeit der Strategie
+- [ ] Ressourcenbasis kann zuverlaessig Karten auf der Kurve ausspielen
+- [ ] Metagame-Matchups mit spezifischer Begruendung evaluiert
+- [ ] Sideboard adressiert die schlechtesten Matchups mit klaren Tauschplaenen
+- [ ] Budgetbeschraenkungen erfuellt (falls zutreffend)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Too many win conditions**: A deck with 3 different ways to win usually does none of them well. Focus on 1-2
-- **Curve blindness**: Adding powerful expensive cards without checking if the deck can cast them on time
-- **Ignoring the meta**: Building in a vacuum. The best deck in theory loses to the most common deck in practice
-- **Emotional card inclusion**: Keeping a pet card that doesn't serve the strategy. Every slot must earn its place
-- **Sideboard afterthought**: Building the sideboard last with leftover cards. The sideboard is part of the deck, not an appendix
-- **Over-teching**: Filling the deck with narrow answers to specific decks instead of proactive strategy
+- **Zu viele Siegbedingungen**: Ein Deck mit 3 verschiedenen Wegen zu gewinnen macht normalerweise keinen davon gut. Auf 1-2 konzentrieren
+- **Kurvenblindheit**: Starke teure Karten hinzufuegen ohne zu pruefen ob das Deck sie rechtzeitig ausspielen kann
+- **Das Metagame ignorieren**: Im Vakuum bauen. Das theoretisch beste Deck verliert gegen das in der Praxis haeufigste Deck
+- **Emotionale Karteneinbindung**: Eine Lieblingskarte behalten die der Strategie nicht dient. Jeder Platz muss seinen Platz verdienen
+- **Sideboard als Nebensache**: Das Sideboard zuletzt mit Restkarten bauen. Das Sideboard ist Teil des Decks, kein Anhang
+- **Ueber-Spezialisierung**: Das Deck mit engen Antworten auf bestimmte Decks fuellen statt proaktiver Strategie
 
-## Related Skills
+## Verwandte Skills
 
-- `grade-tcg-card` — Card condition assessment for tournament legality and collection value
-- `manage-tcg-collection` — Inventory management for tracking which cards are available for deck building
+- `grade-tcg-card` -- Kartenzustandsbewertung fuer Turnierlegalitaet und Sammlungswert
+- `manage-tcg-collection` -- Bestandsverwaltung um zu verfolgen welche Karten fuer den Deckbau verfuegbar sind

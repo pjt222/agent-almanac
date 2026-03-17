@@ -1,12 +1,12 @@
 ---
 name: deploy-ml-model-serving
 description: >
-  Deploy machine learning models to production serving infrastructure using MLflow,
-  BentoML, or Seldon Core with REST/gRPC endpoints, implement autoscaling, monitoring,
-  and A/B testing capabilities for high-performance model inference at scale. Use when
-  deploying trained models for real-time inference, setting up REST or gRPC prediction
-  APIs, implementing autoscaling for variable load, running A/B tests between model
-  versions, or migrating from batch to real-time inference.
+  MLflow、BentoML、またはSeldon Coreを使用して、REST/gRPCエンドポイント付きの本番
+  サービングインフラストラクチャに機械学習モデルをデプロイする。高性能なモデル推論の
+  ためのオートスケーリング、モニタリング、A/Bテスト機能を実装する。学習済みモデルの
+  リアルタイム推論デプロイ時、RESTまたはgRPC予測APIのセットアップ時、可変負荷の
+  オートスケーリング実装時、モデルバージョン間のA/Bテスト実行時、バッチからリアルタイム
+  推論への移行時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,35 +25,34 @@ metadata:
 
 # MLモデルサービングのデプロイ
 
+> 完全な設定ファイルとテンプレートについては[拡張例](references/EXAMPLES.md)を参照。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
-
-Deploy machine learning models to production with scalable serving infrastructure, monitoring, and A/B testing.
+スケーラブルなサービングインフラストラクチャ、モニタリング、A/Bテストを使用して機械学習モデルを本番環境にデプロイする。
 
 ## 使用タイミング
 
-- Deploying trained models to production for real-time inference
-- Setting up REST or gRPC APIs for model predictions
-- Implementing autoscaling for variable load patterns
-- Running A/B tests between model versions
-- Migrating from batch to real-time inference
-- Building low-latency prediction services
-- Managing multiple model versions in production
+- 学習済みモデルをリアルタイム推論のために本番環境にデプロイする時
+- モデル予測用のRESTまたはgRPC APIをセットアップする時
+- 可変負荷パターンに対するオートスケーリングを実装する時
+- モデルバージョン間のA/Bテストを実行する時
+- バッチからリアルタイム推論に移行する時
+- 低レイテンシの予測サービスを構築する時
+- 本番環境で複数のモデルバージョンを管理する時
 
 ## 入力
 
-- **必須**: Registered model in MLflow Model Registry or trained model artifact
-- **必須**: Kubernetes cluster or container orchestration platform
-- **必須**: Serving framework choice (MLflow, BentoML, Seldon Core, TorchServe)
-- **任意**: GPU resources for deep learning models
-- **任意**: Monitoring infrastructure (Prometheus, Grafana)
-- **任意**: Load balancer and ingress controller
+- **必須**: MLflow Model Registryに登録されたモデルまたは学習済みモデルアーティファクト
+- **必須**: Kubernetesクラスターまたはコンテナオーケストレーションプラットフォーム
+- **必須**: サービングフレームワークの選択（MLflow、BentoML、Seldon Core、TorchServe）
+- **任意**: ディープラーニングモデル用のGPUリソース
+- **任意**: モニタリングインフラストラクチャ（Prometheus、Grafana）
+- **任意**: ロードバランサーとIngressコントローラー
 
 ## 手順
 
-### ステップ1: Deploy with MLflow Models Serving
+### ステップ1: MLflow Models Servingによるデプロイ
 
-Use MLflow's built-in serving for quick deployment of scikit-learn, PyTorch, and TensorFlow models.
+scikit-learn、PyTorch、TensorFlowモデルの迅速なデプロイにMLflowの組み込みサービングを使用する。
 
 ```bash
 # Serve model locally for testing
@@ -72,7 +71,7 @@ curl -X POST http://localhost:5001/invocations \
   }'
 ```
 
-Docker deployment:
+Dockerデプロイメント:
 
 ```dockerfile
 # Dockerfile.mlflow-serving
@@ -86,7 +85,7 @@ ENV MLFLOW_TRACKING_URI=http://mlflow-server:5000
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Docker Compose for local testing:
+ローカルテスト用のDocker Compose:
 
 ```yaml
 # docker-compose.mlflow-serving.yml
@@ -100,7 +99,7 @@ services:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Test the deployment:
+デプロイメントのテスト:
 
 ```python
 # test_mlflow_serving.py
@@ -114,13 +113,13 @@ def test_prediction():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Model server starts successfully, responds to HTTP POST requests, returns predictions in JSON format, Docker container runs without errors.
+**期待結果:** モデルサーバーが正常に起動し、HTTP POSTリクエストに応答し、JSON形式で予測を返す。Dockerコンテナがエラーなく実行される。
 
-**失敗時:** Check model URI is valid (`mlflow models list`), verify MLflow tracking server accessibility, ensure all model dependencies installed in container, check port availability (`netstat -tulpn | grep 8080`), verify model flavor compatibility, inspect container logs (`docker logs <container-id>`).
+**失敗時:** モデルURIが有効か確認（`mlflow models list`）、MLflowトラッキングサーバーへのアクセス可能性を確認、コンテナ内にすべてのモデル依存関係がインストールされているか確認、ポートの空き状況を確認（`netstat -tulpn | grep 8080`）、モデルフレーバーの互換性を確認、コンテナログを検査（`docker logs <container-id>`）。
 
-### ステップ2: Deploy with BentoML for Production Scale
+### ステップ2: 本番スケール向けBentoMLによるデプロイ
 
-Use BentoML for advanced serving with better performance and features.
+より高いパフォーマンスと機能を持つ高度なサービングにBentoMLを使用する。
 
 ```python
 # bentoml_service.py
@@ -134,7 +133,7 @@ import mlflow
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Build and containerize:
+ビルドとコンテナ化:
 
 ```bash
 # Build Bento
@@ -148,7 +147,7 @@ bentoml containerize customer_churn_classifier:latest \
 docker run -p 3000:3000 customer-churn:v1.0
 ```
 
-BentoML configuration:
+BentoML設定:
 
 ```yaml
 # bentofile.yaml
@@ -168,7 +167,7 @@ docker:
   cuda_version: null  # Set to "11.6" for GPU support
 ```
 
-Kubernetes deployment:
+Kubernetesデプロイメント:
 
 ```yaml
 # k8s/deployment.yaml
@@ -182,7 +181,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy to Kubernetes:
+Kubernetesへのデプロイ:
 
 ```bash
 # Apply Kubernetes manifests
@@ -200,13 +199,13 @@ curl -X POST http://$EXTERNAL_IP/predict \
   -d '{"instances": [{"tenure": 12, "monthly_charges": 70.35}]}'
 ```
 
-**期待結果:** BentoML service builds successfully, container runs and serves predictions, Kubernetes deployment creates 3 replicas, load balancer exposes external endpoint, health checks pass.
+**期待結果:** BentoMLサービスが正常にビルドされ、コンテナが実行され予測をサーブし、Kubernetesデプロイメントが3レプリカを作成し、ロードバランサーが外部エンドポイントを公開し、ヘルスチェックがパスする。
 
-**失敗時:** Verify BentoML installation (`bentoml --version`), check model exists in BentoML store (`bentoml models list`), ensure Docker daemon running, verify Kubernetes cluster access (`kubectl cluster-info`), check resource limits not exceeded, inspect pod logs (`kubectl logs <pod-name>`), verify service selector matches pod labels.
+**失敗時:** BentoMLのインストールを確認（`bentoml --version`）、BentoMLストアにモデルが存在するか確認（`bentoml models list`）、Dockerデーモンが実行中か確認、Kubernetesクラスターへのアクセスを確認（`kubectl cluster-info`）、リソース制限が超過していないか確認、Podログを検査（`kubectl logs <pod-name>`）、サービスセレクターがPodラベルに一致するか確認。
 
-### ステップ3: Implement Seldon Core for Advanced Features
+### ステップ3: 高度な機能のためのSeldon Coreの実装
 
-Use Seldon Core for multi-model serving, A/B testing, and explainability.
+マルチモデルサービング、A/Bテスト、説明可能性にSeldon Coreを使用する。
 
 ```python
 # seldon_wrapper.py
@@ -220,7 +219,7 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Seldon deployment configuration:
+Seldonデプロイメント設定:
 
 ```yaml
 # seldon-deployment.yaml
@@ -234,7 +233,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-A/B testing configuration:
+A/Bテスト設定:
 
 ```yaml
 # seldon-ab-test.yaml
@@ -248,7 +247,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy to Kubernetes:
+Kubernetesへのデプロイ:
 
 ```bash
 # Install Seldon Core operator
@@ -262,13 +261,13 @@ helm install seldon-core seldon-core-operator \
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Seldon Core operator installed successfully, model deployment creates pods, REST endpoint responds to predictions, A/B test splits traffic correctly, Seldon Analytics records metrics.
+**期待結果:** Seldon Coreオペレーターが正常にインストールされ、モデルデプロイメントがPodを作成し、RESTエンドポイントが予測に応答し、A/Bテストがトラフィックを正しく分割し、Seldon Analyticsがメトリクスを記録する。
 
-**失敗時:** Verify Seldon Core operator running (`kubectl get pods -n seldon-system`), check SeldonDeployment status (`kubectl describe seldondeployment`), ensure image registry accessible from cluster, verify model URI resolution, check RBAC permissions for Seldon operator, inspect model container logs.
+**失敗時:** Seldon Coreオペレーターの実行を確認（`kubectl get pods -n seldon-system`）、SeldonDeploymentのステータスを確認（`kubectl describe seldondeployment`）、クラスターからイメージレジストリにアクセス可能か確認、モデルURIの解決を確認、SeldonオペレーターのRBAC権限を確認、モデルコンテナログを検査。
 
-### ステップ4: Implement Monitoring and Observability
+### ステップ4: モニタリングとオブザーバビリティの実装
 
-Add comprehensive monitoring for model serving infrastructure.
+モデルサービングインフラストラクチャに包括的なモニタリングを追加する。
 
 ```python
 # monitoring.py
@@ -282,7 +281,7 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Prometheus configuration:
+Prometheus設定:
 
 ```yaml
 # prometheus-config.yaml
@@ -296,7 +295,7 @@ scrape_configs:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Grafana dashboard JSON:
+Grafanaダッシュボード JSON:
 
 ```json
 {
@@ -310,13 +309,13 @@ Grafana dashboard JSON:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Prometheus scrapes metrics successfully, Grafana dashboards display prediction throughput, latency percentiles, error rates, and active requests in real-time.
+**期待結果:** Prometheusがメトリクスを正常にスクレイプし、Grafanaダッシュボードが予測スループット、レイテンシパーセンタイル、エラー率、アクティブリクエストをリアルタイムで表示する。
 
-**失敗時:** Verify Prometheus scrape targets are UP (`http://prometheus:9090/targets`), check metrics endpoint accessibility (`curl http://model-pod:8000/metrics`), ensure Kubernetes service discovery configured, verify Grafana data source connection, check firewall rules for metrics port.
+**失敗時:** Prometheusのスクレイプターゲットがアクティブか確認（`http://prometheus:9090/targets`）、メトリクスエンドポイントへのアクセス可能性を確認（`curl http://model-pod:8000/metrics`）、Kubernetesサービスディスカバリーの設定を確認、Grafanaデータソース接続を確認、メトリクスポートのファイアウォールルールを確認。
 
-### ステップ5: Implement Autoscaling
+### ステップ5: オートスケーリングの実装
 
-Configure horizontal pod autoscaling based on request load.
+リクエスト負荷に基づくHorizontal Pod Autoscalingを設定する。
 
 ```yaml
 # hpa.yaml
@@ -330,7 +329,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Apply autoscaling:
+オートスケーリングの適用:
 
 ```bash
 # Enable metrics server (if not already installed)
@@ -350,13 +349,13 @@ kubectl run -it --rm load-generator --image=busybox --restart=Never -- /bin/sh -
 kubectl get hpa -n seldon --watch
 ```
 
-**期待結果:** HPA monitors CPU/memory/custom metrics, scales replicas up under load, scales down after stabilization period, min/max replica limits respected.
+**期待結果:** HPAがCPU/メモリ/カスタムメトリクスを監視し、負荷時にレプリカをスケールアップし、安定化期間後にスケールダウンし、最小/最大レプリカ制限が遵守される。
 
-**失敗時:** Verify metrics-server running (`kubectl get deployment metrics-server -n kube-system`), check pod resource requests defined (HPA requires requests), ensure custom metrics available if used, verify RBAC permissions for HPA controller, check stabilization windows not too restrictive.
+**失敗時:** metrics-serverの実行を確認（`kubectl get deployment metrics-server -n kube-system`）、Podリソースリクエストが定義されているか確認（HPAにはリクエストが必要）、カスタムメトリクスを使用する場合その利用可能性を確認、HPAコントローラーのRBAC権限を確認、安定化ウィンドウが制限的すぎないか確認。
 
-### ステップ6: Implement Canary Deployment Strategy
+### ステップ6: カナリアデプロイメント戦略の実装
 
-Gradually roll out new model versions with traffic shifting.
+トラフィック移行による新モデルバージョンの段階的ロールアウト。
 
 ```yaml
 # canary-deployment.yaml
@@ -370,7 +369,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Gradual rollout script:
+段階的ロールアウトスクリプト:
 
 ```python
 # canary_rollout.py
@@ -384,42 +383,42 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Canary deployment starts with 0% traffic, gradual traffic shift occurs automatically, health checks pass at each stage, rollback triggered if metrics degrade, complete rollout after all stages pass.
+**期待結果:** カナリアデプロイメントが0%のトラフィックで開始し、段階的なトラフィック移行が自動的に行われ、各段階でヘルスチェックがパスし、メトリクスが劣化した場合にロールバックが発動し、すべての段階がパスした後に完全ロールアウトされる。
 
-**失敗時:** Verify Seldon deployment has multiple predictors, check traffic percentages sum to 100, ensure canary image exists and is pullable, verify Prometheus metrics available for health checks, check rollback logic executes correctly, inspect pod logs for both versions.
+**失敗時:** Seldonデプロイメントに複数のpredictorがあるか確認、トラフィック割合の合計が100であるか確認、カナリアイメージが存在しプル可能か確認、ヘルスチェック用のPrometheusメトリクスが利用可能か確認、ロールバックロジックが正しく実行されるか確認、両バージョンのPodログを検査。
 
 ## バリデーション
 
-- [ ] Model server responds to prediction requests
-- [ ] REST/gRPC endpoints functional and documented
-- [ ] Docker containers build and run successfully
-- [ ] Kubernetes deployment creates expected replicas
-- [ ] Load balancer exposes external endpoint
-- [ ] Health checks (liveness/readiness) pass
-- [ ] Prometheus metrics exported and scraped
-- [ ] Grafana dashboards display real-time metrics
-- [ ] Autoscaling triggers under load
-- [ ] A/B test splits traffic correctly
-- [ ] Canary deployment rolls out gradually
-- [ ] Rollback works when canary fails
+- [ ] モデルサーバーが予測リクエストに応答する
+- [ ] REST/gRPCエンドポイントが機能しドキュメント化されている
+- [ ] Dockerコンテナが正常にビルド・実行される
+- [ ] Kubernetesデプロイメントが期待されるレプリカを作成する
+- [ ] ロードバランサーが外部エンドポイントを公開する
+- [ ] ヘルスチェック（liveness/readiness）がパスする
+- [ ] Prometheusメトリクスがエクスポート・スクレイプされている
+- [ ] Grafanaダッシュボードがリアルタイムメトリクスを表示する
+- [ ] 負荷下でオートスケーリングが発動する
+- [ ] A/Bテストがトラフィックを正しく分割する
+- [ ] カナリアデプロイメントが段階的にロールアウトされる
+- [ ] カナリア失敗時にロールバックが機能する
 
 ## よくある落とし穴
 
-- **Cold start latency**: First request slow due to model loading - use readiness probes with adequate delay, implement model caching
-- **Memory leaks**: Long-running servers accumulate memory - monitor memory usage, implement periodic restarts, profile code
-- **Dependency conflicts**: Model dependencies incompatible with serving framework - use exact pinned versions, test in Docker before deployment
-- **Resource limits too low**: Pods OOMKilled or CPU throttled - profile resource usage, set appropriate limits based on load testing
-- **Missing health checks**: Kubernetes routes traffic to unhealthy pods - implement proper liveness/readiness probes
-- **No rollback strategy**: Bad deployment without easy rollback - use canary deployments, keep previous version available
-- **Ignoring latency**: Focusing only on accuracy, not inference speed - benchmark latency, optimize model/code, use batching
-- **Single replica**: No high availability, downtime during deployments - use min 2 replicas, configure anti-affinity
-- **No monitoring**: Issues not detected until customers complain - implement comprehensive metrics from day one
-- **GPU not utilized**: GPU available but not used - set CUDA visible devices, verify GPU allocation in Kubernetes
+- **コールドスタートレイテンシ**: モデルロードによる最初のリクエストの遅延。適切な遅延を持つreadinessプローブを使用し、モデルキャッシングを実装する
+- **メモリリーク**: 長期実行サーバーがメモリを蓄積する。メモリ使用量を監視し、定期的な再起動を実装し、コードをプロファイリングする
+- **依存関係の競合**: モデルの依存関係がサービングフレームワークと非互換。正確にピン留めされたバージョンを使用し、デプロイ前にDockerでテストする
+- **リソース制限が低すぎる**: PodがOOMKilledまたはCPUスロットル。リソース使用量をプロファイリングし、負荷テストに基づいて適切な制限を設定する
+- **ヘルスチェックの欠如**: Kubernetesが不健全なPodにトラフィックをルーティング。適切なliveness/readinessプローブを実装する
+- **ロールバック戦略がない**: 簡単なロールバックなしの不良デプロイ。カナリアデプロイメントを使用し、前バージョンを利用可能に保つ
+- **レイテンシの無視**: 精度のみに注目し推論速度を軽視。レイテンシをベンチマークし、モデル/コードを最適化し、バッチングを使用する
+- **単一レプリカ**: 高可用性がなくデプロイ中にダウンタイム。最低2レプリカを使用し、アンチアフィニティを設定する
+- **モニタリングなし**: 顧客から苦情が来るまで問題が検知されない。初日から包括的なメトリクスを実装する
+- **GPUが活用されていない**: GPUが利用可能だが使用されていない。CUDA visible devicesを設定し、KubernetesでのGPU割り当てを確認する
 
 ## 関連スキル
 
-- `register-ml-model` - Register models before deploying them
-- `run-ab-test-models` - Implement A/B testing between model versions
-- `deploy-to-kubernetes` - General Kubernetes deployment patterns
-- `monitor-ml-model-performance` - Monitor model drift and degradation
-- `orchestrate-ml-pipeline` - Automate model retraining and deployment
+- `register-ml-model` -- デプロイ前にモデルを登録する
+- `run-ab-test-models` -- モデルバージョン間のA/Bテストを実装する
+- `deploy-to-kubernetes` -- 一般的なKubernetesデプロイメントパターン
+- `monitor-ml-model-performance` -- モデルドリフトと劣化を監視する
+- `orchestrate-ml-pipeline` -- モデルの再学習とデプロイを自動化する

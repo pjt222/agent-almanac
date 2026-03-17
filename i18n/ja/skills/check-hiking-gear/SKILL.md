@@ -1,13 +1,12 @@
 ---
 name: check-hiking-gear
 description: >
-  Generate and verify a hiking gear checklist optimized for season, duration,
-  difficulty, and group size with weight management. Covers the ten essentials,
-  layering systems, navigation tools, emergency kit, and group gear distribution.
-  Use when preparing for a day hike or multi-day trekking tour, packing for a
-  group and distributing shared gear, adapting a standard gear list to specific
-  conditions, reviewing gear before departure, or managing pack weight for long
-  or technical routes.
+  季節、期間、難易度、グループサイズに最適化されたハイキング装備チェックリストを
+  生成・検証する。十大必携品、レイヤリングシステム、ナビゲーションツール、
+  緊急キット、グループ装備の分配をカバーする。日帰りハイキングや複数日のトレッキング
+  ツアーの準備時、グループで共有装備を分配してパッキングする時、標準装備リストを
+  特定の条件に適応させる時、出発前に装備を確認する時、長距離や技術的ルートで
+  パック重量を管理する時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -26,31 +25,31 @@ metadata:
 
 # ハイキング装備の確認
 
-Generate and verify a hiking gear checklist optimized for the specific conditions of a planned hike.
+計画されたハイキングの特定条件に最適化されたハイキング装備チェックリストを生成・検証する。
 
 ## 使用タイミング
 
-- Preparing for a day hike or multi-day trekking tour
-- Packing for a group and distributing shared gear
-- Adapting a standard gear list to specific season or conditions
-- Reviewing gear before departure to catch missing items
-- Managing pack weight for long or technical routes
+- 日帰りハイキングや複数日のトレッキングツアーの準備時
+- グループでパッキングし共有装備を分配する時
+- 標準装備リストを特定の季節や条件に適応させる時
+- 出発前に装備を確認し忘れ物を防ぐ時
+- 長距離や技術的ルートでパック重量を管理する時
 
 ## 入力
 
-- **必須**: Hike duration (day hike, overnight, multi-day)
-- **必須**: Season and expected temperature range
-- **必須**: Trail difficulty (SAC T1-T6 or descriptive)
-- **任意**: Maximum elevation and expected conditions (snow, rain, heat)
-- **任意**: Group size (for distributing shared gear)
-- **任意**: Target pack weight or weight limit
-- **任意**: Special requirements (via ferrata gear, glacier equipment, photography)
+- **必須**: ハイキング期間（日帰り、1泊、複数日）
+- **必須**: 季節と予想気温範囲
+- **必須**: トレイル難易度（SAC T1-T6または説明的分類）
+- **任意**: 最高標高と予想される条件（雪、雨、暑さ）
+- **任意**: グループサイズ（共有装備の分配用）
+- **任意**: 目標パック重量または重量制限
+- **任意**: 特別な要件（ヴィアフェラータ装備、氷河装備、写真撮影）
 
 ## 手順
 
-### ステップ1: Assess Conditions
+### ステップ1: 条件の評価
 
-Determine the environmental factors that drive gear selection.
+装備選択を左右する環境要因を判定する。
 
 ```
 Condition Assessment Matrix:
@@ -70,7 +69,7 @@ Condition Assessment Matrix:
 └──────────────────┴────────────────────────────────────────────┘
 ```
 
-Classify the hike into one of these profiles:
+ハイキングを以下のプロファイルに分類する:
 
 ```
 Hike Profiles:
@@ -82,13 +81,13 @@ Hike Profiles:
   TROPICAL:       Hot, humid, rain, insects
 ```
 
-**期待結果:** A clear hike profile with all condition factors assessed. This profile drives the checklist in Step 2.
+**期待結果:** すべての条件要因が評価された明確なハイキングプロファイル。このプロファイルがステップ2のチェックリストを決定する。
 
-**失敗時:** If conditions are uncertain (e.g., shoulder season with unpredictable weather), plan for the worse case. It is always better to carry a rain jacket you don't use than to be soaked without one.
+**失敗時:** 条件が不確実な場合（例：端境期の予測不能な天候）、悪い方のケースで計画する。使わなかったレインジャケットを持っている方が、持たずに濡れるよりも常に良い。
 
-### ステップ2: Generate Base Checklist by Category
+### ステップ2: カテゴリ別ベースチェックリストの生成
 
-Build the gear list organized by the Ten Essentials framework plus additional categories.
+十大必携品フレームワークと追加カテゴリに基づいて装備リストを構築する。
 
 ```
 THE TEN ESSENTIALS (always carry):
@@ -160,13 +159,13 @@ ADDITIONAL BY PROFILE:
 └──────────────────┴────────────────────────────────────────────┘
 ```
 
-**期待結果:** A complete checklist with all ten essentials, appropriate clothing layers, and profile-specific additions. Every item is relevant to the assessed conditions.
+**期待結果:** 十大必携品すべて、適切な衣類レイヤー、プロファイル固有の追加品を含む完全なチェックリスト。すべてのアイテムが評価された条件に関連している。
 
-**失敗時:** If the list seems excessive for a short easy hike, verify that only the base ten essentials are included for SUMMER-DAY profiles. If the list seems too light for alpine conditions, cross-reference with the Alpine profile add-ons.
+**失敗時:** 短い簡単なハイキングに対してリストが過剰に見える場合、SUMMER-DAYプロファイルでは基本の十大必携品のみが含まれていることを確認する。アルパイン条件に対してリストが軽すぎる場合、Alpineプロファイルの追加品と照合する。
 
-### ステップ3: Optimize Weight
+### ステップ3: 重量の最適化
 
-Review the checklist to reduce pack weight without compromising safety.
+安全性を損なわずにパック重量を削減するためにチェックリストを見直す。
 
 ```
 Weight Optimization Strategies:
@@ -193,7 +192,7 @@ Weight Targets (pack weight without food/water):
   Winter/alpine:  10-15 kg base weight
 ```
 
-For group hikes, distribute shared gear:
+グループハイキングでは共有装備を分配する:
 
 ```
 Shared Gear Distribution:
@@ -204,13 +203,13 @@ Shared Gear Distribution:
   Emergency gear         → distribute PLB, rope among members
 ```
 
-**期待結果:** A weight-optimized checklist where every item serves a clear purpose. Total pack weight is within the target range for the hike profile. Shared gear is assigned to specific group members.
+**期待結果:** すべてのアイテムに明確な目的がある重量最適化されたチェックリスト。合計パック重量がハイキングプロファイルの目標範囲内。共有装備が特定のグループメンバーに割り当てられている。
 
-**失敗時:** If pack weight exceeds the target by more than 20%, reconsider whether the hike profile is appropriate. A heavily loaded pack on a long day dramatically increases fatigue and injury risk. Either reduce gear (accept more risk) or choose an easier/shorter route.
+**失敗時:** パック重量が目標を20%以上超える場合、ハイキングプロファイルが適切かどうか再検討する。長い一日に重い荷物を背負うと疲労と怪我のリスクが劇的に増加する。装備を減らすか（リスクを受け入れる）、より簡単・短いルートを選ぶ。
 
-### ステップ4: Verify Completeness Against Conditions
+### ステップ4: 条件に対する完全性の検証
 
-Final cross-check of the gear list against the assessed conditions.
+評価された条件に対する装備リストの最終照合。
 
 ```
 Verification Checklist:
@@ -233,33 +232,33 @@ Verification Checklist:
 └────────────────────────────────────────┴──────────┴──────────┘
 ```
 
-**期待結果:** All checks pass. The hiker can confidently state what every item in the pack is for and would notice if any item were missing.
+**期待結果:** すべてのチェックに合格。ハイカーはパック内のすべてのアイテムの用途を自信を持って述べることができ、何かが欠けていれば気づく。
 
-**失敗時:** If any essential check fails, resolve it before departure. The most dangerous failures are: no navigation backup (phone dies), insufficient water capacity, and missing insulation layer (hypothermia risk even in summer above treeline).
+**失敗時:** 必須チェックに不合格がある場合、出発前に解決する。最も危険な不合格は：ナビゲーションのバックアップなし（スマートフォンのバッテリー切れ）、不十分な水容量、断熱レイヤーの欠落（夏でも森林限界以上では低体温症のリスク）。
 
 ## バリデーション
 
-- [ ] All ten essentials are included in the checklist
-- [ ] Clothing system matches the expected temperature range
-- [ ] Profile-specific additions are included (snow gear, alpine gear, etc.)
-- [ ] Pack weight is within target range for the hike profile
-- [ ] Shared gear is assigned to specific group members (group hikes)
-- [ ] Water capacity covers the longest gap between resupply points
-- [ ] Emergency kit includes personal medications
-- [ ] No new/untested gear on the hike (broken-in boots, tested stove)
+- [ ] チェックリストに十大必携品がすべて含まれている
+- [ ] 衣類システムが予想気温範囲に適合している
+- [ ] プロファイル固有の追加品が含まれている（雪装備、アルパイン装備など）
+- [ ] パック重量がハイキングプロファイルの目標範囲内
+- [ ] 共有装備が特定のグループメンバーに割り当てられている（グループハイキング）
+- [ ] 補給ポイント間の最長区間を水容量がカバーしている
+- [ ] 緊急キットに常用薬が含まれている
+- [ ] ハイキング当日に新品・未テストの装備がない（慣らした靴、テスト済みのストーブ）
 
 ## よくある落とし穴
 
-- **Cotton kills**: Cotton clothing retains moisture and loses insulation when wet. Use merino wool or synthetic fabrics for all layers.
-- **New boots on hike day**: Untested footwear causes blisters. Break in new boots with at least 3-4 shorter walks before a long hike.
-- **One water source assumption**: If the only planned water source is dry (seasonal streams), dehydration follows quickly. Always carry capacity for the worst case.
-- **Overpacking "just in case"**: Every unnecessary gram compounds over hours. If you cannot name when you would use an item on this specific hike, leave it behind.
-- **Forgetting sun protection**: At altitude, UV exposure increases roughly 10% per 1000 m. Sunburn and snow blindness are real hazards above 2000 m, even in cool weather.
-- **Ignoring group gear overlap**: Four hikers each carrying a full first aid kit wastes weight. Coordinate shared items before packing.
+- **コットンは命取り**: 綿の衣類は水分を保持し、濡れると断熱性を失う。すべてのレイヤーにメリノウールまたは化学繊維を使用する
+- **当日に新しいブーツ**: テストされていない靴はマメの原因になる。長いハイキングの前に少なくとも3〜4回の短い散歩で新しいブーツを慣らす
+- **水源が1つだけという前提**: 計画した唯一の水源が枯れている場合（季節的な沢）、すぐに脱水症状になる。常に最悪の場合の容量を携帯する
+- **「念のため」の持ちすぎ**: 不要な1グラムが数時間にわたって蓄積する。この特定のハイキングでいつ使うか説明できないアイテムは置いていく
+- **日焼け止めの忘れ**: 高度が上がるとUV曝露は1000mごとに約10%増加する。涼しい天候でも2000m以上では日焼けや雪目は実際の危険
+- **グループ装備の重複の無視**: 4人のハイカーがそれぞれフルの救急キットを持つのは重量の無駄。パッキング前に共有アイテムを調整する
 
 ## 関連スキル
 
-- `plan-hiking-tour` — the hiking plan that determines what gear is needed
-- `assess-trail-conditions` — current conditions affect gear requirements (e.g., unexpected snow)
-- `make-fire` — emergency fire-starting is one of the ten essentials
-- `purify-water` — water purification methods for when natural sources are the only option
+- `plan-hiking-tour` -- 必要な装備を決定するハイキング計画
+- `assess-trail-conditions` -- 現在の条件が装備要件に影響する（例：予期しない降雪）
+- `make-fire` -- 緊急時の火おこしは十大必携品の1つ
+- `purify-water` -- 自然水源しか選択肢がない場合の浄水方法

@@ -1,14 +1,20 @@
 ---
 name: brahma-bhaga
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Creation and genesis — generative ideation from void, structured emergence
-  from ambiguity, and the discipline of bringing new patterns into existence.
-  Maps Brahma's creative power to AI reasoning: transforming cleared space
-  into coherent new structures, seeding possibilities, and nurturing nascent
-  ideas through their fragile early stages. Use after shiva-bhaga dissolution
-  has cleared stale patterns, when facing a genuinely novel problem with no
-  obvious template, or when incremental modification has reached its limits
-  and a fresh design is needed.
+  Schoepfung und Genese — generative Ideenfindung aus der Leere, strukturierte
+  Emergenz aus Mehrdeutigkeit und die Disziplin neue Muster ins Dasein zu
+  bringen. Bildet Brahmas schoepferische Kraft auf KI-Denken ab: geraeuemten
+  Raum in kohaerente neue Strukturen verwandeln, Moeglichkeiten saeen und
+  keimende Ideen durch ihre fragilen Fruehphasen naehren. Anwenden nach
+  Aufloesung durch shiva-bhaga die veraltete Muster geraeuemt hat, bei einem
+  genuein neuartigen Problem ohne offensichtliche Vorlage, oder wenn
+  inkrementelle Aenderung ihre Grenzen erreicht hat und ein frisches Design
+  noetig ist.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -18,159 +24,157 @@ metadata:
   complexity: intermediate
   language: natural
   tags: esoteric, creation, genesis, ideation, emergence, hindu-trinity, brahma
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Brahma Bhaga
 
-Generative creation from void or ambiguity — structured emergence of new patterns, approaches, and solutions where none existed before.
+Generative Schoepfung aus der Leere oder Mehrdeutigkeit — strukturierte Emergenz neuer Muster, Ansaetze und Loesungen wo zuvor keine existierten.
 
-## When to Use
+## Wann verwenden
 
-- After `shiva-bhaga` dissolution has cleared stale patterns and created space
-- Facing a genuinely novel problem with no obvious template or precedent
-- The user's request requires invention rather than retrieval or adaptation
-- Multiple possible approaches exist and none has been chosen — the creative act is the choice itself
-- A blank slate: new file, new project, new architecture, new approach
-- When incremental modification has reached its limits and a fresh design is needed
+- Nach Aufloesung durch `shiva-bhaga` die veraltete Muster geraeuemt und Raum geschaffen hat
+- Bei einem genuein neuartigen Problem ohne offensichtliche Vorlage oder Praezedenzfall
+- Die Anfrage des Benutzers erfordert Erfindung statt Abruf oder Anpassung
+- Mehrere moegliche Ansaetze existieren und keiner wurde gewaehlt — der schoepferische Akt ist die Wahl selbst
+- Ein leeres Blatt: neue Datei, neues Projekt, neue Architektur, neuer Ansatz
+- Wenn inkrementelle Aenderung ihre Grenzen erreicht hat und ein frisches Design noetig ist
 
-## Inputs
+## Eingaben
 
-- **Required**: The creative goal or void to fill (available from conversation context)
-- **Optional**: Constraints that bound the creation (user requirements, technical limitations)
-- **Optional**: Seeds — fragments, inspirations, or partial ideas that inform the creation
-- **Optional**: What was dissolved (`shiva-bhaga` output) — understanding what failed guides what to create
+- **Erforderlich**: Das Schoepfungsziel oder die zu fuellende Leere (verfuegbar aus dem Gespraechskontext)
+- **Optional**: Einschraenkungen die die Schoepfung begrenzen (Benutzeranforderungen, technische Limitierungen)
+- **Optional**: Keime — Fragmente, Inspirationen oder Teilideen die die Schoepfung informieren
+- **Optional**: Was aufgeloest wurde (`shiva-bhaga`-Ausgabe) — zu verstehen was gescheitert ist leitet was zu schaffen ist
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Survey the Void
+### Schritt 1: Die Leere erkunden
 
-Before creating, understand the space available for creation.
+Vor dem Schaffen den fuer die Schoepfung verfuegbaren Raum verstehen.
 
 ```
-Creative Space Assessment:
+Bewertung des Schoepfungsraums:
 +---------------------+---------------------------+------------------------+
-| Dimension           | Questions                 | Determines             |
+| Dimension           | Fragen                    | Bestimmt               |
 +---------------------+---------------------------+------------------------+
-| Constraints         | What MUST the creation    | The boundary within    |
-|                     | satisfy? What is non-     | which creativity       |
-|                     | negotiable?               | operates               |
+| Einschraenkungen    | Was MUSS die Schoepfung   | Die Grenze innerhalb   |
+|                     | erfuellen? Was ist nicht   | derer Kreativitaet     |
+|                     | verhandelbar?             | operiert               |
 +---------------------+---------------------------+------------------------+
-| Freedom             | What is NOT specified?     | The degrees of freedom |
-|                     | Where does the user leave | available for creative |
-|                     | room for creative choice? | choice                 |
+| Freiheit            | Was ist NICHT vorgegeben?  | Die verfuegbaren       |
+|                     | Wo laesst der Benutzer    | Freiheitsgrade fuer    |
+|                     | Raum fuer kreative Wahl?  | kreative Wahl          |
 +---------------------+---------------------------+------------------------+
-| Seeds               | What fragments, partial   | The starting material  |
-|                     | ideas, or inspirations    | that informs but does  |
-|                     | already exist?            | not dictate            |
+| Keime               | Welche Fragmente,         | Das Ausgangsmaterial   |
+|                     | Teilideen oder             | das informiert aber    |
+|                     | Inspirationen existieren   | nicht diktiert         |
+|                     | bereits?                   |                        |
 +---------------------+---------------------------+------------------------+
-| Anti-patterns       | What was tried before and | The space to avoid —   |
-|                     | failed? What approaches   | creation that repeats  |
-|                     | were dissolved?           | dissolved patterns     |
+| Anti-Muster         | Was wurde zuvor versucht   | Der zu meidende Raum   |
+|                     | und ist gescheitert? Welche| — Schoepfung die       |
+|                     | Ansaetze wurden aufgeloest?| aufgeloeste Muster     |
+|                     |                            | wiederholt             |
 +---------------------+---------------------------+------------------------+
-| Context             | What exists around the    | The environment the    |
-|                     | void? What must the       | creation must fit      |
-|                     | creation integrate with?  | into                   |
+| Kontext             | Was existiert um die Leere | Die Umgebung in die    |
+|                     | herum? Womit muss die      | die Schoepfung passen  |
+|                     | Schoepfung integriert      | muss                   |
+|                     | werden?                    |                        |
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Map each dimension honestly — especially constraints, which are often implicit
-2. Note the degrees of freedom: these are where genuine creation happens
-3. Identify seeds without committing to them — they inform, not dictate
+1. Jede Dimension ehrlich kartieren — besonders Einschraenkungen die oft implizit sind
+2. Die Freiheitsgrade vermerken: dort geschieht echte Schoepfung
+3. Keime identifizieren ohne sich auf sie festzulegen — sie informieren, nicht diktieren
 
-**Expected:** A clear picture of the creative space: bounded by constraints, informed by seeds, and opened by degrees of freedom.
+**Erwartet:** Ein klares Bild des Schoepfungsraums: begrenzt durch Einschraenkungen, informiert durch Keime und geoeffnet durch Freiheitsgrade.
 
-**On failure:** If the space feels fully constrained (no degrees of freedom), re-examine — often constraints that seem fixed are actually preferences. Ask the user if needed.
+**Bei Fehler:** Wenn der Raum vollstaendig eingeschraenkt wirkt (keine Freiheitsgrade), erneut pruefen — oft sind Einschraenkungen die fest erscheinen tatsaechlich Praeferenzen. Bei Bedarf den Benutzer fragen.
 
-### Step 2: Generate — Divergent Exploration
+### Schritt 2: Generieren — Divergente Erkundung
 
-Produce multiple possibilities without evaluating them.
+Mehrere Moeglichkeiten erzeugen ohne sie zu bewerten.
 
-1. Generate at least three distinct approaches to filling the creative space
-2. Each approach should be genuinely different — not variations on a theme
-3. For each approach, capture:
-   - The core idea in one sentence
-   - How it satisfies the constraints
-   - What makes it distinct from the others
-   - What it sacrifices or trades off
-4. Include at least one approach that feels unconventional or risky
-5. Do not evaluate yet — generation and evaluation are separate phases
+1. Mindestens drei verschiedene Ansaetze zum Fuellen des Schoepfungsraums generieren
+2. Jeder Ansatz sollte sich genuein unterscheiden — nicht Variationen eines Themas
+3. Fuer jeden Ansatz festhalten:
+   - Die Kernidee in einem Satz
+   - Wie er die Einschraenkungen erfuellt
+   - Was ihn von den anderen unterscheidet
+   - Was er opfert oder gegen was er abtauscht
+4. Mindestens einen Ansatz einbeziehen der sich unkonventionell oder riskant anfuehlt
+5. Noch nicht bewerten — Generieren und Bewerten sind getrennte Phasen
 
-**Expected:** Three or more genuinely distinct approaches, each with a clear identity and trade-off profile.
+**Erwartet:** Drei oder mehr genuein verschiedene Ansaetze, jeder mit einer klaren Identitaet und einem Abwaegungsprofil.
 
-**On failure:** If all approaches feel similar, the generation was too narrow. Return to Step 1 and look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if I did the opposite of the obvious approach?"
+**Bei Fehler:** Wenn alle Ansaetze sich aehnlich anfuehlen, war die Generierung zu eng. Zu Schritt 1 zurueckkehren und nach unerkundeten Freiheitsgraden suchen. Alternativ eine Einschraenkung umkehren: "Was wenn ich das Gegenteil des offensichtlichen Ansatzes machen wuerde?"
 
-### Step 3: Evaluate — Convergent Selection
+### Schritt 3: Bewerten — Konvergente Auswahl
 
-Assess the generated approaches against the creative space.
+Die generierten Ansaetze gegen den Schoepfungsraum bewerten.
 
-1. For each approach, assess:
-   - **Constraint satisfaction**: Does it meet all non-negotiable requirements?
-   - **Elegance**: Is it the simplest solution that works?
-   - **Resilience**: Will it survive future perturbation?
-   - **Integration**: Does it fit naturally with the surrounding context?
-   - **Novelty**: Does it bring something genuinely new, or merely rearrange the old?
-2. Eliminate approaches that violate hard constraints
-3. Among remaining approaches, choose based on the user's implicit values (simplicity? thoroughness? creativity?)
-4. If two approaches are equally strong, present both to the user with trade-offs clearly stated
+1. Fuer jeden Ansatz bewerten:
+   - **Einschraenkungserfuellung**: Erfuellt er alle nicht verhandelbaren Anforderungen?
+   - **Eleganz**: Ist es die einfachste Loesung die funktioniert?
+   - **Widerstandsfaehigkeit**: Wird er kuenftige Stoerungen ueberleben?
+   - **Integration**: Passt er natuerlich in den umgebenden Kontext?
+   - **Neuartigkeit**: Bringt er etwas genuein Neues, oder ordnet er nur das Alte um?
+2. Ansaetze eliminieren die harte Einschraenkungen verletzen
+3. Unter den verbleibenden Ansaetzen basierend auf den impliziten Werten des Benutzers waehlen (Einfachheit? Gruendlichkeit? Kreativitaet?)
+4. Wenn zwei Ansaetze gleich stark sind, beide dem Benutzer praesentieren mit klar benannten Abwaegungen
 
-**Expected:** A single chosen approach (or a clearly framed choice for the user) with articulated reasoning.
+**Erwartet:** Ein einzelner gewaehlter Ansatz (oder eine klar gerahmte Wahl fuer den Benutzer) mit artikulierter Begruendung.
 
-**On failure:** If no approach satisfies all constraints, the constraints may be contradictory. Surface the contradiction to the user rather than forcing a creation that compromises on fundamentals.
+**Bei Fehler:** Wenn kein Ansatz alle Einschraenkungen erfuellt, koennten die Einschraenkungen widerspruechlich sein. Den Widerspruch dem Benutzer aufzeigen statt eine Schoepfung zu erzwingen die bei Grundlegendem Kompromisse eingeht.
 
-### Step 4: Manifest — Bring into Form
+### Schritt 4: Manifestieren — In Form bringen
 
-Execute the chosen approach, giving it concrete form.
+Den gewaehlten Ansatz ausfuehren und ihm konkrete Form geben.
 
-1. Begin with the skeleton: the minimal structure that embodies the core idea
-2. Build outward from the core, adding detail as needed
-3. At each step, check: "Is this addition serving the core idea or diluting it?"
-4. Resist the urge to over-elaborate — creation is complete when nothing more can be removed
-5. Name what was created: a clear, descriptive identifier that captures its essence
+1. Mit dem Geruest beginnen: die minimale Struktur die die Kernidee verkoerpert
+2. Vom Kern nach aussen aufbauen und Detail nach Bedarf hinzufuegen
+3. Bei jedem Schritt pruefen: "Dient dieser Zusatz der Kernidee oder verwässert er sie?"
+4. Dem Drang widerstehen ueberzuelaborieren — Schoepfung ist vollstaendig wenn nichts mehr entfernt werden kann
+5. Das Geschaffene benennen: eine klare, beschreibende Bezeichnung die sein Wesen erfasst
 
-**Expected:** A concrete creation that embodies the chosen approach — code, plan, structure, or design that exists where void existed before.
+**Erwartet:** Eine konkrete Schoepfung die den gewaehlten Ansatz verkoerpert — Code, Plan, Struktur oder Design das existiert wo zuvor Leere war.
 
-**On failure:** If the manifestation diverges from the chosen approach, pause and re-read Step 3's selection. Drift during manifestation often indicates the selection was not fully committed to. Either recommit or re-select.
+**Bei Fehler:** Wenn die Manifestation vom gewaehlten Ansatz abweicht, innehalten und die Auswahl von Schritt 3 erneut lesen. Abdrift waehrend der Manifestation zeigt oft an dass die Auswahl nicht vollstaendig angenommen wurde. Entweder erneut bekennen oder erneut waehlen.
 
-### Step 5: Nurture — Protect the Nascent Creation
+### Schritt 5: Naehren — Die junge Schoepfung schuetzen
 
-New creations are fragile. Protect them through their early stages.
+Neue Schoepfungen sind fragil. Sie durch ihre Fruehphasen schuetzen.
 
-1. Test the creation against its constraints — does it work as intended?
-2. Identify the weakest point — where is it most likely to break?
-3. Strengthen the weakest point without over-engineering
-4. Hand off to `vishnu-bhaga` for ongoing preservation if the creation will persist
-5. Document the creative choices made: what was chosen, what was rejected, and why
+1. Die Schoepfung gegen ihre Einschraenkungen testen — funktioniert sie wie beabsichtigt?
+2. Den schwaechsten Punkt identifizieren — wo bricht sie am ehesten?
+3. Den schwaechsten Punkt staerken ohne ueberueberzudesignen
+4. An `vishnu-bhaga` zur fortlaufenden Bewahrung uebergeben wenn die Schoepfung bestehen bleiben soll
+5. Die getroffenen kreativen Entscheidungen dokumentieren: was gewaehlt, was verworfen wurde und warum
 
-**Expected:** A creation that is tested, documented, and ready for sustained use.
+**Erwartet:** Eine Schoepfung die getestet, dokumentiert und fuer dauerhafte Nutzung bereit ist.
 
-**On failure:** If the creation fails its first test, assess whether the failure is in the creation or the test. If the creation is fundamentally flawed, return to Step 2 with the failure as a new anti-pattern seed.
+**Bei Fehler:** Wenn die Schoepfung ihren ersten Test nicht besteht, bewerten ob der Fehler in der Schoepfung oder im Test liegt. Wenn die Schoepfung grundlegend fehlerhaft ist, zu Schritt 2 zurueckkehren mit dem Fehlschlag als neuem Anti-Muster-Keim.
 
-## Validation
+## Validierung
 
-- [ ] The creative space was surveyed before generating ideas
-- [ ] At least three genuinely distinct approaches were generated
-- [ ] Selection was based on explicit criteria, not default instinct
-- [ ] The creation was manifested starting from its core, building outward
-- [ ] The creation was tested against its constraints
-- [ ] Creative choices were documented for future reference
+- [ ] Der Schoepfungsraum wurde vor dem Generieren von Ideen erkundet
+- [ ] Mindestens drei genuein verschiedene Ansaetze wurden generiert
+- [ ] Die Auswahl basierte auf expliziten Kriterien, nicht auf Standardinstinkt
+- [ ] Die Schoepfung wurde von ihrem Kern ausgehend manifestiert, nach aussen aufbauend
+- [ ] Die Schoepfung wurde gegen ihre Einschraenkungen getestet
+- [ ] Kreative Entscheidungen wurden fuer kuenftige Referenz dokumentiert
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Creating before clearing**: Attempting creation without prior dissolution produces new patterns contaminated by old ones. Run `shiva-bhaga` first if the space is cluttered
-- **Single-option generation**: Generating one approach and then evaluating it is not creation — it is executing the first idea. True creation requires divergent options
-- **Novelty for its own sake**: Creating something unconventional when a simple standard approach would serve better. Novelty is a tool, not a goal
-- **Perfectionist manifestation**: Polishing endlessly rather than shipping a working creation. A complete imperfect creation outperforms an incomplete perfect one
-- **Unprotected creation**: Manifesting something new and immediately moving on without testing or documentation leaves the creation vulnerable
+- **Schaffen vor dem Raeumen**: Schoepfung ohne vorherige Aufloesung versuchen erzeugt neue Muster die von alten kontaminiert sind. Zuerst `shiva-bhaga` ausfuehren wenn der Raum ueberladen ist
+- **Einzel-Option-Generierung**: Einen Ansatz generieren und ihn dann bewerten ist keine Schoepfung — das ist die erste Idee ausfuehren. Echte Schoepfung erfordert divergente Optionen
+- **Neuartigkeit um ihrer selbst willen**: Etwas Unkonventionelles schaffen wenn ein einfacher Standardansatz besser dienen wuerde. Neuartigkeit ist ein Werkzeug, kein Ziel
+- **Perfektionistische Manifestation**: Endlos polieren statt eine funktionierende Schoepfung auszuliefern. Eine vollstaendige unvollkommene Schoepfung uebertrifft eine unvollstaendige vollkommene
+- **Ungeschuetzte Schoepfung**: Etwas Neues manifestieren und sofort ohne Testen oder Dokumentation weitergehen laesst die Schoepfung verwundbar
 
-## Related Skills
+## Verwandte Skills
 
-- `shiva-bhaga` — destruction creates the void that Brahma fills; dissolution precedes creation
-- `vishnu-bhaga` — preservation sustains what Brahma creates; handoff from creation to maintenance
-- `intrinsic` — creative engagement benefits from autonomous motivation; creation thrives in flow
-- `learn` — when creation requires knowledge not yet held, learning precedes generation
-- `adapt-architecture` — the morphic equivalent for creating new architectural patterns from existing systems
+- `shiva-bhaga` — Zerstoerung schafft die Leere die Brahma fuellt; Aufloesung geht der Schoepfung voraus
+- `vishnu-bhaga` — Bewahrung erhaelt was Brahma schafft; Uebergabe von Schoepfung zu Wartung
+- `intrinsic` — kreatives Engagement profitiert von autonomer Motivation; Schoepfung gedeiht im Flow
+- `learn` — wenn Schoepfung noch nicht vorhandenes Wissen erfordert, geht Lernen der Generierung voraus
+- `adapt-architecture` — das morphische Aequivalent fuer das Schaffen neuer Architekturmuster aus bestehenden Systemen

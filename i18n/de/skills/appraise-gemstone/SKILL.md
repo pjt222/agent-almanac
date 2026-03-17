@@ -1,7 +1,14 @@
 ---
 name: appraise-gemstone
 description: >
-  Edelsteinwert bewerten anhand der vier Cs (Farbe, Reinheit, Schliff, Karat), Herkunftsbewertung, Behandlungserkennung und Marktfaktoranalyse. Nur beratende paedagogische Anleitung -- keine zertifizierte Schaetzung. Verwenden zum Verstaendnis der wertbestimmenden Faktoren eines Edelsteins, zur Vorauswahl vor einer professionellen Schaetzung, zur Bewertung ob ein Verkaufspreis angemessen ist, zum Erlernen der Edelstein-Bewertungsmethodik oder zum Verstaendnis des Einflusses des Behandlungsstatus auf den Wert.
+  Edelsteinwert anhand der vier Cs (Farbe, Reinheit, Schliff, Karatgewicht),
+  Herkunftsbewertung, Behandlungserkennung und Marktfaktorenanalyse bewerten.
+  Nur beratende Bildungsanleitung — keine zertifizierte Schaetzung. Verwenden
+  beim Verstaendnis der wertbestimmenden Faktoren eines Edelsteins, bei der
+  Vorauswahl von Steinen vor einer professionellen Schaetzung, bei der
+  Bewertung, ob ein Verkaufspreis angemessen ist, beim Erlernen der
+  Edelstein-Bewertungsmethodik oder beim Verstaendnis, wie der
+  Behandlungsstatus den Wert beeinflusst.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -20,33 +27,33 @@ metadata:
 
 # Edelstein bewerten
 
-Appraise gemstone value using the four Cs (colour, clarity, cut, carat weight), treatment detection, origin assessment, and market factor analysis. This is educational advisory guidance only and does not constitute a certified gemological appraisal.
+Edelsteinwert anhand der vier Cs (Farbe, Reinheit, Schliff, Karatgewicht), Behandlungserkennung, Herkunftsbewertung und Marktfaktorenanalyse bewerten. Dies ist nur beratende Bildungsanleitung und stellt keine zertifizierte gemmologische Schaetzung dar.
 
-> **DISCLAIMER**: This procedure provides educational guidance on gemstone valuation methodology. It is NOT a certified appraisal. For insurance, estate, sale, or legal purposes, always obtain a formal appraisal from a certified gemologist (GIA Graduate Gemologist, FGA, or equivalent). Gemstone values can vary enormously based on factors that require hands-on professional assessment.
+> **HAFTUNGSAUSSCHLUSS**: Diese Vorgehensweise bietet Bildungsanleitung zur Edelstein-Bewertungsmethodik. Sie ist KEINE zertifizierte Schaetzung. Fuer Versicherungs-, Nachlass-, Verkaufs- oder Rechtszwecke immer eine formelle Schaetzung von einem zertifizierten Gemmologen (GIA Graduate Gemologist, FGA oder gleichwertig) einholen. Edelsteinwerte koennen enorm variieren, basierend auf Faktoren, die eine praktische professionelle Bewertung erfordern.
 
-## When to Use
+## Wann verwenden
 
-- You want to understand the factors that determine a gemstone's value
-- You are pre-screening stones before paying for a professional appraisal
-- You need to evaluate whether a seller's asking price is within a reasonable range
-- You are learning gemstone grading methodology for educational purposes
-- You want to understand how treatment status affects value
+- Die Faktoren verstehen, die den Wert eines Edelsteins bestimmen
+- Steine vor der Bezahlung einer professionellen Schaetzung vorpruefen
+- Bewerten, ob der Verkaufspreis eines Haendlers innerhalb eines angemessenen Bereichs liegt
+- Edelstein-Bewertungsmethodik zu Bildungszwecken erlernen
+- Verstehen, wie der Behandlungsstatus den Wert beeinflusst
 
-## Inputs
+## Eingaben
 
-- **Required**: Identified gemstone (species confirmed — see `identify-gemstone`)
-- **Required**: Access to the stone (loose preferred; mounted stones limit assessment)
-- **Optional**: Carat scale (accurate to 0.01 ct)
-- **Optional**: 10x loupe or gemological microscope
-- **Optional**: Daylight-equivalent light source (5500-6500K)
-- **Optional**: Colour grading master stones or reference images (GIA system)
-- **Optional**: Refractometer and Chelsea filter (for treatment detection)
+- **Erforderlich**: Identifizierter Edelstein (Art bestaetigt — siehe `identify-gemstone`)
+- **Erforderlich**: Zugang zum Stein (lose bevorzugt; gefasste Steine beschraenken die Bewertung)
+- **Optional**: Karatwaage (genau bis 0,01 ct)
+- **Optional**: 10x Lupe oder gemmologisches Mikroskop
+- **Optional**: Tageslichaequivalente Lichtquelle (5500-6500K)
+- **Optional**: Farbbewertungs-Referenzsteine oder Referenzbilder (GIA-System)
+- **Optional**: Refraktometer und Chelsea-Filter (fuer Behandlungserkennung)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Colour Grading
+### Schritt 1: Farbbewertung
 
-Assess the stone's colour using the three components: hue, saturation, and tone.
+Die Farbe des Steins anhand der drei Komponenten bewerten: Farbton, Saettigung und Tonwert.
 
 ```
 Colour Assessment Framework:
@@ -98,20 +105,20 @@ IDEAL COLOUR RANGES (highest value):
 - Aquamarine: medium, strong blue (not greenish)
 ```
 
-1. View the stone face-up under daylight-equivalent lighting
-2. Identify the primary hue and any secondary modifiers
-3. Assess saturation — vivid and strong command the highest premiums
-4. Assess tone — medium is generally optimal; too dark or too light reduces value
-5. Compare to reference images or master stones if available
-6. Note any colour zoning visible face-up (reduces value)
+1. Den Stein von oben unter tageslichaequivalenter Beleuchtung betrachten
+2. Den primaeren Farbton und eventuelle sekundaere Modifikatoren identifizieren
+3. Saettigung bewerten — lebhaft und stark erzielen die hoechsten Aufpreise
+4. Tonwert bewerten — mittel ist generell optimal; zu dunkel oder zu hell mindert den Wert
+5. Mit Referenzbildern oder Referenzsteinen vergleichen, falls verfuegbar
+6. Eventuelle Farbzonierung notieren, die von oben sichtbar ist (mindert den Wert)
 
-**Expected:** A three-component colour grade (e.g., "medium vivid blue with slight violetish modifier") that positions the stone on the colour quality spectrum for its species.
+**Erwartet:** Eine dreikomponentige Farbbewertung (z.B. "mittleres lebhaftes Blau mit leichtem violetten Modifikator"), die den Stein auf dem Farbqualitaetsspektrum fuer seine Art positioniert.
 
-**On failure:** If lighting conditions are not ideal (yellowish indoor light), note the limitation. Colour grading under incorrect lighting produces unreliable results. If colour-change is suspected (alexandrite, some sapphires, some garnets), assess under both daylight and incandescent light.
+**Bei Fehler:** Wenn die Lichtbedingungen nicht ideal sind (gelbliches Innenlicht), die Einschraenkung notieren. Farbbewertung unter falscher Beleuchtung liefert unzuverlaessige Ergebnisse. Wenn Farbwechsel vermutet wird (Alexandrit, manche Saphire, manche Granate), sowohl unter Tageslicht als auch unter Gluehlampen bewerten.
 
-### Step 2: Clarity Grading
+### Schritt 2: Reinheitsbewertung
 
-Evaluate the stone's internal characteristics under 10x magnification.
+Die inneren Merkmale des Steins unter 10-facher Vergroesserung bewerten.
 
 ```
 Coloured Gemstone Clarity Scale (GIA-based):
@@ -149,20 +156,20 @@ Different species have different "normal" clarity levels:
   → Eye-clean examples are extremely rare and valuable
 ```
 
-1. Examine the stone face-up first — does the unaided eye see any inclusions?
-2. Examine under 10x magnification, focusing through the table
-3. Note inclusion type (crystal, feather, fingerprint, silk, needle), size, location, and number
-4. Assess whether inclusions affect transparency, brilliance, or durability
-5. Assign a clarity grade based on the visibility and impact of inclusions
-6. Consider species expectations — an SI1 emerald is excellent; an SI1 aquamarine is average
+1. Den Stein zuerst von oben untersuchen — sieht das unbewaffnete Auge Einschluesse?
+2. Unter 10-facher Vergroesserung untersuchen, durch die Tafel fokussierend
+3. Einschlusstyp (Kristall, Feder, Fingerabdruck, Seide, Nadel), Groesse, Lage und Anzahl notieren
+4. Bewerten, ob Einschluesse Transparenz, Brillanz oder Haltbarkeit beeintraechtigen
+5. Einen Reinheitsgrad zuweisen, basierend auf der Sichtbarkeit und Auswirkung der Einschluesse
+6. Artspezifische Erwartungen beruecksichtigen — ein SI1-Smaragd ist ausgezeichnet; ein SI1-Aquamarin ist durchschnittlich
 
-**Expected:** A clarity grade with description of key inclusions, their location, and their impact on beauty and durability. Grade is calibrated to species-specific expectations.
+**Erwartet:** Ein Reinheitsgrad mit Beschreibung der wichtigsten Einschluesse, ihrer Lage und ihrer Auswirkung auf Schoenheit und Haltbarkeit. Der Grad ist auf artspezifische Erwartungen kalibriert.
 
-**On failure:** If magnification is insufficient (no loupe available), perform an eye-clean/not-eye-clean assessment only. Note the limitation. If the stone is mounted and pavilion inclusions are hidden, note which areas could not be assessed.
+**Bei Fehler:** Wenn die Vergroesserung unzureichend ist (keine Lupe verfuegbar), nur eine augenrein/nicht-augenrein Bewertung durchfuehren. Die Einschraenkung notieren. Wenn der Stein gefasst ist und Pavilion-Einschluesse verborgen sind, notieren, welche Bereiche nicht bewertet werden konnten.
 
-### Step 3: Cut Quality Assessment
+### Schritt 3: Schliffqualitaets-Bewertung
 
-Evaluate the quality of the cut based on proportions, symmetry, and light performance.
+Die Qualitaet des Schliffs basierend auf Proportionen, Symmetrie und Lichtleistung bewerten.
 
 ```
 Cut Quality Factors:
@@ -203,38 +210,38 @@ SYMMETRY AND FINISH:
 - Girdle consistency (even thickness)
 ```
 
-1. View the stone face-up and rock it gently — observe brilliance, windowing, and extinction
-2. Check proportions: table size, crown height, pavilion depth
-3. Assess symmetry: outline shape, facet alignment, meet precision
-4. Evaluate surface polish: scratches, polish lines, orange peel under 10x
-5. Check girdle: even thickness, not too thin (chipping risk) or too thick (dead weight)
-6. Rate the cut from Excellent to Poor
+1. Den Stein von oben betrachten und sanft bewegen — Brillanz, Fensterbildung und Extinktion beobachten
+2. Proportionen pruefen: Tafelgroesse, Kronenhoehe, Paviliontiefe
+3. Symmetrie bewerten: Umrissform, Facettenausrichtung, Treffpunktpraezision
+4. Oberflaechenpolitur bewerten: Kratzer, Polierlinien, Orangenhaut unter 10x
+5. Ruendiste pruefen: gleichmaessige Dicke, nicht zu duenn (Abplatzrisiko) oder zu dick (totes Gewicht)
+6. Den Schliff von Ausgezeichnet bis Schlecht bewerten
 
-**Expected:** A cut quality assessment covering proportions, light performance, symmetry, and surface finish. The cut grade significantly affects value — a well-cut stone of moderate quality can outperform a poorly-cut stone of higher colour and clarity.
+**Erwartet:** Eine Schliffqualitaetsbewertung, die Proportionen, Lichtleistung, Symmetrie und Oberflaechenfinish abdeckt. Der Schliffgrad beeinflusst den Wert erheblich — ein gut geschliffener Stein mittlerer Qualitaet kann einen schlecht geschliffenen Stein hoeherer Farbe und Reinheit uebertreffen.
 
-**On failure:** If the stone is mounted and proportions cannot be fully measured, assess what is visible (face-up light performance, symmetry, polish) and note that proportions could not be verified. Mounted stones always have assessment limitations.
+**Bei Fehler:** Wenn der Stein gefasst ist und Proportionen nicht vollstaendig gemessen werden koennen, das Sichtbare bewerten (Lichtleistung von oben, Symmetrie, Politur) und notieren, dass Proportionen nicht verifiziert werden konnten. Gefasste Steine haben immer Bewertungseinschraenkungen.
 
-### Step 4: Carat Weight and Measurements
+### Schritt 4: Karatgewicht und Masse
 
-Record the stone's weight and dimensions.
+Gewicht und Abmessungen des Steins erfassen.
 
-1. Weigh the stone on a carat scale (1 carat = 0.2 grams)
-2. Record weight to two decimal places (e.g., 2.37 ct)
-3. Measure dimensions: length x width x depth in millimetres
-4. For mounted stones, estimate weight from dimensions using species-specific formulas:
-   - Round: diameter^2 x depth x SG factor
-   - Oval: length x width x depth x SG factor x 0.0020
-5. Note that per-carat value increases at commercially significant weight thresholds:
-   - 0.50 ct, 1.00 ct, 2.00 ct, 3.00 ct, 5.00 ct, 10.00 ct
-   - A 1.02 ct stone commands a premium over a 0.98 ct stone of equal quality
+1. Den Stein auf einer Karatwaage wiegen (1 Karat = 0,2 Gramm)
+2. Gewicht auf zwei Dezimalstellen erfassen (z.B. 2,37 ct)
+3. Abmessungen messen: Laenge x Breite x Tiefe in Millimetern
+4. Fuer gefasste Steine das Gewicht anhand der Abmessungen mit artspezifischen Formeln schaetzen:
+   - Rund: Durchmesser^2 x Tiefe x SG-Faktor
+   - Oval: Laenge x Breite x Tiefe x SG-Faktor x 0,0020
+5. Beachten, dass der Pro-Karat-Wert an kommerziell bedeutsamen Gewichtsschwellen steigt:
+   - 0,50 ct, 1,00 ct, 2,00 ct, 3,00 ct, 5,00 ct, 10,00 ct
+   - Ein 1,02-ct-Stein erzielt einen Aufpreis gegenueber einem 0,98-ct-Stein gleicher Qualitaet
 
-**Expected:** Accurate carat weight (to 0.01 ct) and millimetre dimensions. For mounted stones, a weight estimate with stated margin of error.
+**Erwartet:** Genaues Karatgewicht (auf 0,01 ct) und Millimeter-Abmessungen. Fuer gefasste Steine eine Gewichtsschaetzung mit angegebener Fehlermarge.
 
-**On failure:** If no carat scale is available, measure dimensions and estimate weight using standard formulas. Note that the weight is estimated. For valuable stones, always verify weight on a calibrated scale.
+**Bei Fehler:** Wenn keine Karatwaage verfuegbar ist, Abmessungen messen und Gewicht mit Standardformeln schaetzen. Notieren, dass das Gewicht geschaetzt ist. Fuer wertvolle Steine das Gewicht immer auf einer kalibrierten Waage verifizieren.
 
-### Step 5: Treatment Detection
+### Schritt 5: Behandlungserkennung
 
-Assess whether the stone has been treated to enhance its appearance.
+Bewerten, ob der Stein behandelt wurde, um sein Erscheinungsbild zu verbessern.
 
 ```
 Common Gemstone Treatments:
@@ -276,19 +283,19 @@ TREATMENT IMPACT ON VALUE:
 - Requires disclosure at point of sale in all jurisdictions
 ```
 
-1. Examine inclusions for signs of heat treatment (dissolved silk, stress halos)
-2. Use fibre-optic light to check for fracture filling (flash effect)
-3. Check for surface coatings by examining edges and scratches
-4. For high-value stones, note that laboratory certification is essential for treatment status
-5. Record treatment assessment: untreated, heated, filled, coated, diffused, or unknown
+1. Einschluesse auf Anzeichen von Waermebehandlung untersuchen (aufgeloeste Seide, Spannungshoefe)
+2. Glasfaserlicht verwenden, um auf Rissfuellung zu pruefen (Blitzeffekt)
+3. Auf Oberflaechenbeschichtungen pruefen, indem Kanten und Kratzer untersucht werden
+4. Fuer hochwertige Steine anmerken, dass Laborzertifizierung fuer den Behandlungsstatus unerlasslich ist
+5. Behandlungsbewertung erfassen: unbehandelt, erhitzt, gefuellt, beschichtet, diffundiert oder unbekannt
 
-**Expected:** A treatment assessment with supporting observations. For stones above $500, recommend laboratory certification (GIA, GRS, SSEF, Gubelin) for authoritative treatment determination.
+**Erwartet:** Eine Behandlungsbewertung mit stuetzenden Beobachtungen. Fuer Steine ueber 500 USD Laborzertifizierung (GIA, GRS, SSEF, Guebelin) fuer verbindliche Behandlungsbestimmung empfehlen.
 
-**On failure:** Many treatments (especially mild heat treatment and some irradiation) cannot be detected without laboratory instruments (FTIR spectroscopy, UV-Vis, Raman). If treatment status is uncertain, record "unknown — laboratory testing recommended" rather than guessing.
+**Bei Fehler:** Viele Behandlungen (besonders milde Waermebehandlung und manche Bestrahlung) koennen ohne Laborinstrumente (FTIR-Spektroskopie, UV-Vis, Raman) nicht erkannt werden. Wenn der Behandlungsstatus unsicher ist, "unbekannt — Labortestung empfohlen" erfassen, anstatt zu raten.
 
-### Step 6: Market Factor Analysis
+### Schritt 6: Marktfaktorenanalyse
 
-Consider external factors that affect market value beyond the four Cs.
+Externe Faktoren beruecksichtigen, die den Marktwert ueber die vier Cs hinaus beeinflussen.
 
 ```
 Market Factors:
@@ -321,37 +328,37 @@ Market Factors:
 +-------------------+------------------------------------------+
 ```
 
-1. Research the stone's likely origin if known or certifiable
-2. Consider the species' current market position (trending up, stable, declining)
-3. Assess whether laboratory certification would add value (generally yes for stones >1 ct and >$500)
-4. Note any provenance or historical significance
-5. Compile the complete assessment into a value range (not a single price point)
+1. Die wahrscheinliche Herkunft des Steins recherchieren, falls bekannt oder zertifizierbar
+2. Die aktuelle Marktposition der Art beruecksichtigen (steigend, stabil, ruecklaeufig)
+3. Bewerten, ob Laborzertifizierung Wert hinzufuegen wuerde (generell ja fuer Steine >1 ct und >500 USD)
+4. Jegliche Provenienz oder historische Bedeutung notieren
+5. Die vollstaendige Bewertung in eine Wertspanne zusammenstellen (nicht einen einzelnen Preispunkt)
 
-**Expected:** A contextualised value range that accounts for the four Cs, treatment status, origin, and market factors. Expressed as a range with stated assumptions.
+**Erwartet:** Eine kontextualisierte Wertspanne, die die vier Cs, den Behandlungsstatus, die Herkunft und Marktfaktoren beruecksichtigt. Als Spanne mit angegebenen Annahmen ausgedrueckt.
 
-**On failure:** Gemstone pricing requires market expertise that evolves continuously. If market data is unavailable, provide the quality assessment (four Cs + treatment) without a price estimate and recommend consultation with a dealer or certified appraiser.
+**Bei Fehler:** Edelsteinpreise erfordern Marktkompetenz, die sich kontinuierlich weiterentwickelt. Wenn Marktdaten nicht verfuegbar sind, die Qualitaetsbewertung (vier Cs + Behandlung) ohne Preisschaetzung bereitstellen und die Konsultation eines Haendlers oder zertifizierten Schaetzers empfehlen.
 
-## Validation
+## Validierung
 
-- [ ] Species positively identified before appraisal began
-- [ ] Colour assessed under daylight-equivalent lighting with hue, saturation, and tone
-- [ ] Clarity graded under 10x magnification with inclusion inventory
-- [ ] Cut quality evaluated for proportions, light performance, symmetry, and finish
-- [ ] Carat weight measured (or estimated with stated margin)
-- [ ] Treatment status assessed with supporting observations
-- [ ] Market factors considered (origin, rarity, certification value)
-- [ ] Value expressed as a range, not a single number
-- [ ] Disclaimer included: this is educational guidance, not a certified appraisal
+- [ ] Art vor Beginn der Schaetzung positiv identifiziert
+- [ ] Farbe unter tageslichaequivalenter Beleuchtung mit Farbton, Saettigung und Tonwert bewertet
+- [ ] Reinheit unter 10-facher Vergroesserung mit Einschlussinventar bewertet
+- [ ] Schliffqualitaet auf Proportionen, Lichtleistung, Symmetrie und Finish bewertet
+- [ ] Karatgewicht gemessen (oder mit angegebener Marge geschaetzt)
+- [ ] Behandlungsstatus mit stuetzenden Beobachtungen bewertet
+- [ ] Marktfaktoren beruecksichtigt (Herkunft, Seltenheit, Zertifizierungswert)
+- [ ] Wert als Spanne ausgedrueckt, nicht als einzelne Zahl
+- [ ] Haftungsausschluss enthalten: Dies ist Bildungsanleitung, keine zertifizierte Schaetzung
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Omitting the disclaimer**: This procedure provides educational guidance only. Formal appraisals for insurance, sale, or legal purposes require a certified gemologist. Always state this clearly
-- **Grading colour under incorrect lighting**: Fluorescent, incandescent, and LED lights all shift colour perception. Use daylight-equivalent (5500-6500K) or natural north-facing daylight
-- **Ignoring species-specific clarity expectations**: An SI1 emerald is a fine stone; an SI1 aquamarine is below average. Clarity must be graded relative to what is normal for the species
-- **Overvaluing carat weight**: A large, poorly-cut, included stone is worth less per carat than a smaller, well-cut, clean stone. The four Cs interact — weight alone does not determine value
-- **Assuming untreated without evidence**: The majority of rubies and sapphires on the market are heat-treated. Assume treatment unless laboratory certification confirms otherwise
+- **Haftungsausschluss weglassen**: Diese Vorgehensweise bietet nur Bildungsanleitung. Formelle Schaetzungen fuer Versicherungs-, Verkaufs- oder Rechtszwecke erfordern einen zertifizierten Gemmologen. Dies immer klar angeben
+- **Farbbewertung unter falscher Beleuchtung**: Leuchtstoff-, Glueh- und LED-Lampen verschieben alle die Farbwahrnehmung. Tageslichaequivalent (5500-6500K) oder natuerliches nordseitiges Tageslicht verwenden
+- **Artspezifische Reinheitserwartungen ignorieren**: Ein SI1-Smaragd ist ein feiner Stein; ein SI1-Aquamarin ist unterdurchschnittlich. Reinheit muss relativ zum Normalen fuer die Art bewertet werden
+- **Karatgewicht ueberbewerten**: Ein grosser, schlecht geschliffener, einschlussreicher Stein ist pro Karat weniger wert als ein kleinerer, gut geschliffener, reiner Stein. Die vier Cs interagieren — Gewicht allein bestimmt nicht den Wert
+- **Unbehandelt annehmen ohne Beweise**: Die Mehrheit der Rubine und Saphire auf dem Markt sind waermebehandelt. Behandlung annehmen, es sei denn, Laborzertifizierung bestaetigt das Gegenteil
 
-## Related Skills
+## Verwandte Skills
 
-- `identify-gemstone` — Positive species identification is the prerequisite for appraisal; misidentification invalidates the entire assessment
-- `grade-tcg-card` — The observation-first, bias-prevention methodology parallels the discipline needed to avoid "wishful grading" in gemstone appraisal
+- `identify-gemstone` — Positive Artidentifikation ist die Voraussetzung fuer eine Schaetzung; Fehlidentifikation macht die gesamte Bewertung ungueltig
+- `grade-tcg-card` — Die beobachtungszuerst, verzerrungsvermeidende Methodik entspricht der Disziplin, die noetig ist, um "Wunschbewertung" bei der Edelsteinschaetzung zu vermeiden

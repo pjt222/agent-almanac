@@ -1,10 +1,9 @@
 ---
 name: develop-gc-method
 description: >
-  Develop a gas chromatography method from scratch: define analytical objectives,
-  select column chemistry, optimize temperature programming, choose carrier gas
-  and detector, and validate initial system performance for target analytes in
-  a given matrix.
+  ガスクロマトグラフィー法をゼロから開発する: 分析目標の定義、カラム化学の選定、
+  昇温プログラムの最適化、キャリアガスと検出器の選択、ターゲット分析種のマトリックス
+  における初期システム性能の検証。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -21,172 +20,172 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# GCメソッドの開発
+# GC法の開発
 
-Systematic development of a gas chromatography method covering column selection, temperature program optimization, carrier gas and detector choice, and initial performance verification for volatile and semi-volatile analytes.
+カラム選定、昇温プログラム最適化、キャリアガスと検出器の選択、揮発性および半揮発性分析種の初期性能検証をカバーするガスクロマトグラフィー法の体系的開発。
 
 ## 使用タイミング
 
-- Starting a new GC analysis for volatile or semi-volatile compounds
-- Adapting a published method to a different instrument or matrix
-- Replacing an existing method that no longer meets performance requirements
-- Developing a method for compounds with known boiling points and polarities
-- Transitioning from a packed-column method to a capillary method
+- 揮発性または半揮発性化合物の新規GC分析を開始する時
+- 公表された方法を異なる装置やマトリックスに適応させる時
+- 既存の方法が性能要件を満たさなくなり置き換える時
+- 既知の沸点と極性を持つ化合物の方法を開発する時
+- 充填カラム法からキャピラリーカラム法に移行する時
 
 ## 入力
 
-### Required
+### 必須
 
-- **Target analytes**: List of compounds with CAS numbers, molecular weights, and boiling points
-- **Sample matrix**: Description of the sample type (e.g., air, water extract, solvent solution, biological fluid)
-- **Detection limits**: Required LOD/LOQ for each analyte
+- **ターゲット分析種**: CAS番号、分子量、沸点を含む化合物のリスト
+- **試料マトリックス**: 試料タイプの説明（例: 大気、水抽出液、溶媒溶液、生体液）
+- **検出限界**: 各分析種に必要なLOD/LOQ
 
-### Optional
+### 任意
 
-- **Reference method**: Published method (EPA, ASTM, pharmacopeial) to use as a starting point
-- **Available columns**: Inventory of columns already on hand
-- **Instrument configuration**: GC model, available detectors, autosampler type
-- **Throughput requirements**: Maximum acceptable run time per sample
-- **Regulatory framework**: GLP, GMP, EPA, or other compliance context
+- **参考方法**: 出発点として使用する公表方法（EPA、ASTM、薬局方）
+- **利用可能カラム**: 手持ちのカラムのインベントリ
+- **装置構成**: GCモデル、利用可能な検出器、オートサンプラータイプ
+- **スループット要件**: 1試料あたりの最大許容実行時間
+- **規制フレームワーク**: GLP、GMP、EPA、またはその他のコンプライアンスコンテキスト
 
 ## 手順
 
-### ステップ1: Define Analytical Objectives
+### ステップ1: 分析目標の定義
 
-1. List all target analytes with their physical properties (boiling point, polarity, molecular weight).
-2. Identify the sample matrix and any expected interferents or co-extractives.
-3. Specify required detection limits, quantitation range, and acceptable resolution between critical pairs.
-4. Determine whether the method must meet a regulatory standard (EPA 8260, USP, etc.).
-5. Document throughput needs: maximum run time, injection volume, sample preparation constraints.
+1. 物理的特性（沸点、極性、分子量）と共にすべてのターゲット分析種を列挙する。
+2. 試料マトリックスと予想される干渉物質または共抽出物を特定する。
+3. 必要な検出限界、定量範囲、クリティカルペア間の許容分離度を指定する。
+4. 方法が規制基準（EPA 8260、USPなど）を満たす必要があるかを決定する。
+5. スループットニーズを文書化する: 最大実行時間、注入量、試料前処理の制約。
 
-**期待結果:** A written specification listing analytes, matrix, detection limits, resolution requirements, and any regulatory or throughput constraints.
+**期待結果:** 分析種、マトリックス、検出限界、分離度要件、および規制またはスループットの制約を列挙した文書化された仕様。
 
-**失敗時:** If analyte volatility data is unavailable, estimate boiling points from structural analogs or use a scouting run on a mid-polarity column to establish elution order.
+**失敗時:** 分析種の揮発性データが利用できない場合、構造類似体から沸点を推定するか、中極性カラムでスカウティングランを実施して溶出順序を確立する。
 
-### ステップ2: Select the Column
+### ステップ2: カラムの選定
 
-Choose column dimensions and stationary phase based on analyte polarity and separation difficulty.
+分析種の極性と分離の難易度に基づいてカラム寸法と固定相を選択する。
 
-| Column Type | Stationary Phase | Polarity | Typical Use Cases |
+| カラムタイプ | 固定相 | 極性 | 典型的な用途 |
 |---|---|---|---|
-| DB-1 / HP-1 | 100% dimethylpolysiloxane | Non-polar | Hydrocarbons, solvents, general screening |
-| DB-5 / HP-5 | 5% phenyl-methylpolysiloxane | Low polarity | Semi-volatiles, EPA 8270, drugs of abuse |
-| DB-1701 | 14% cyanopropylphenyl | Mid polarity | Pesticides, herbicides |
-| DB-WAX / HP-INNOWax | Polyethylene glycol | Polar | Alcohols, fatty acids, flavors, essential oils |
-| DB-624 | 6% cyanopropylphenyl | Mid polarity | Volatile organics, EPA 624/8260 |
-| DB-FFAP | Modified PEG (nitroterephthalic acid) | Highly polar | Organic acids, free fatty acids |
-| DB-35 | 35% phenyl-methylpolysiloxane | Mid-low polarity | Polychlorinated biphenyls, confirmatory column |
+| DB-1 / HP-1 | 100%ジメチルポリシロキサン | 非極性 | 炭化水素、溶媒、一般スクリーニング |
+| DB-5 / HP-5 | 5%フェニル-メチルポリシロキサン | 低極性 | 半揮発性物質、EPA 8270、乱用薬物 |
+| DB-1701 | 14%シアノプロピルフェニル | 中極性 | 農薬、除草剤 |
+| DB-WAX / HP-INNOWax | ポリエチレングリコール | 極性 | アルコール、脂肪酸、香料、精油 |
+| DB-624 | 6%シアノプロピルフェニル | 中極性 | 揮発性有機物、EPA 624/8260 |
+| DB-FFAP | 変性PEG（ニトロテレフタル酸） | 高極性 | 有機酸、遊離脂肪酸 |
+| DB-35 | 35%フェニル-メチルポリシロキサン | 中低極性 | ポリ塩化ビフェニル、確認カラム |
 
-1. Match analyte polarity to stationary phase: like dissolves like.
-2. Select column length (15-60 m): longer columns give more plates but longer run times.
-3. Select inner diameter (0.25-0.53 mm): narrower gives better efficiency, wider gives more capacity.
-4. Select film thickness (0.25-5.0 um): thicker films retain volatile analytes longer.
-5. For complex matrices, consider a guard column or retention gap.
+1. 分析種の極性を固定相に一致させる: 似たものは似たものを溶かす。
+2. カラム長を選定（15-60 m）: 長いカラムは理論段数が増えるが実行時間も長くなる。
+3. 内径を選定（0.25-0.53 mm）: 細いカラムは効率が高く、太いカラムは容量が大きい。
+4. 膜厚を選定（0.25-5.0 um）: 厚い膜は揮発性分析種をより長く保持する。
+5. 複雑なマトリックスでは、ガードカラムまたはリテンションギャップを検討する。
 
-**期待結果:** A column specification (phase, length, ID, film thickness) justified by analyte properties and separation requirements.
+**期待結果:** 分析種の特性と分離要件により正当化されたカラム仕様（固定相、長さ、内径、膜厚）。
 
-**失敗時:** If no single column resolves all critical pairs, plan a confirmation column with orthogonal selectivity (e.g., DB-1 primary, DB-WAX confirmatory).
+**失敗時:** 単一カラムですべてのクリティカルペアが分離できない場合、直交選択性を持つ確認カラムを計画する（例: DB-1プライマリ、DB-WAX確認用）。
 
-### ステップ3: Optimize the Temperature Program
+### ステップ3: 昇温プログラムの最適化
 
-1. Set the initial oven temperature at or below the boiling point of the most volatile analyte (hold 1-2 min for solvent focusing).
-2. Apply a linear ramp. General starting points:
-   - Simple mixtures: 10-20 C/min
-   - Complex mixtures: 3-8 C/min for better resolution
-   - Ultra-fast screening: 25-40 C/min on short thin-film columns
-3. Set the final temperature 10-20 C above the boiling point of the least volatile analyte.
-4. Add a final hold (2-5 min) to ensure complete elution and column bake-out.
-5. For critical pairs that co-elute, insert an isothermal hold at the temperature just before their elution, or reduce the ramp rate in that region.
-6. Verify that the total run time meets throughput requirements.
+1. 最も揮発性の高い分析種の沸点以下にオーブン初期温度を設定する（溶媒フォーカシングのため1-2分ホールド）。
+2. リニアランプを適用する。一般的な出発点:
+   - 単純混合物: 10-20 C/min
+   - 複雑混合物: 3-8 C/min（より良い分離度のため）
+   - 超高速スクリーニング: 25-40 C/min（短い薄膜カラム上）
+3. 最も揮発性の低い分析種の沸点の10-20 C上に最終温度を設定する。
+4. 最終ホールド（2-5分）を追加して完全な溶出とカラムベークアウトを確保する。
+5. 共溶出するクリティカルペアに対して、溶出直前の温度でアイソサーマルホールドを挿入するか、その領域のランプ速度を下げる。
+6. 合計実行時間がスループット要件を満たすことを確認する。
 
-**期待結果:** A temperature program (initial temp, hold, ramp rate(s), final temp, final hold) that separates all target analytes within the acceptable run time.
+**期待結果:** 許容される実行時間内にすべてのターゲット分析種を分離する昇温プログラム（初期温度、ホールド、ランプ速度、最終温度、最終ホールド）。
 
-**失敗時:** If critical pairs remain unresolved after ramp optimization, revisit column selection (Step 2) or consider a multi-ramp program with slower rates in the problem region.
+**失敗時:** ランプ最適化後もクリティカルペアが分離されない場合、カラム選定（ステップ2）を再検討するか、問題領域でより遅い速度を持つマルチランププログラムを検討する。
 
-### ステップ4: Select the Carrier Gas
+### ステップ4: キャリアガスの選定
 
-| Property | Helium (He) | Hydrogen (H2) | Nitrogen (N2) |
+| 特性 | ヘリウム（He） | 水素（H2） | 窒素（N2） |
 |---|---|---|---|
-| Optimal linear velocity | 20-40 cm/s | 30-60 cm/s | 10-20 cm/s |
-| Efficiency at high flow | Good | Best (flat van Deemter) | Poor |
-| Speed advantage | Baseline | 1.5-2x faster than He | Slowest |
-| Safety | Inert | Flammable (needs leak detection) | Inert |
-| Cost / availability | Expensive, supply concerns | Low cost, generator option | Very low cost |
-| Detector compatibility | All detectors | Not with ECD; caution with some MS | All detectors |
+| 最適線速度 | 20-40 cm/s | 30-60 cm/s | 10-20 cm/s |
+| 高流量での効率 | 良好 | 最良（平坦なファンデームター曲線） | 不良 |
+| 速度優位性 | ベースライン | Heより1.5-2倍速い | 最も遅い |
+| 安全性 | 不活性 | 可燃性（漏洩検知が必要） | 不活性 |
+| コスト/入手性 | 高価、供給懸念 | 低コスト、発生器オプション | 非常に低コスト |
+| 検出器互換性 | すべての検出器 | ECDには不適; 一部のMSに注意 | すべての検出器 |
 
-1. Default to helium for general-purpose work and regulatory methods specifying He.
-2. Consider hydrogen for faster analysis or when helium supply is constrained; install hydrogen-specific leak detection and safety interlocks.
-3. Use nitrogen only for simple separations or when cost is the primary driver.
-4. Set the carrier gas flow to the optimal linear velocity for the chosen gas and column ID.
-5. Measure actual linear velocity using an unretained compound (e.g., methane on FID).
+1. 汎用作業やHeを指定する規制方法にはヘリウムをデフォルトとする。
+2. より速い分析やヘリウム供給が制約される場合は水素を検討する。水素固有の漏洩検知と安全インターロックを設置する。
+3. 窒素は単純な分離やコストが主要な要因の場合のみ使用する。
+4. 選択したガスとカラム内径の最適線速度にキャリアガス流量を設定する。
+5. 非保持化合物（FIDではメタンなど）を使用して実際の線速度を測定する。
 
-**期待結果:** Carrier gas selected with flow rate set to optimal linear velocity, verified by unretained peak measurement.
+**期待結果:** キャリアガスが選定され、流量が最適線速度に設定され、非保持ピーク測定で検証されている。
 
-**失敗時:** If efficiency is lower than expected at the set flow, generate a van Deemter curve (plate height vs. linear velocity) using 5-7 flow rates to find the true optimum.
+**失敗時:** 設定流量で効率が期待より低い場合、5-7の流量を使用してファンデームター曲線（段高vs線速度）を作成し、真の最適値を見つける。
 
-### ステップ5: Choose the Detector
+### ステップ5: 検出器の選択
 
-| Detector | Selectivity | Sensitivity (approx.) | Linear Range | Best For |
+| 検出器 | 選択性 | 感度（概算） | リニアレンジ | 最適用途 |
 |---|---|---|---|---|
-| FID | C-H bonds (universal organic) | Low pg C/s | 10^7 | Hydrocarbons, general organics, quantitation |
-| TCD | Universal (all compounds) | Low ng | 10^5 | Permanent gases, bulk analysis |
-| ECD | Electronegative groups (halogens, nitro) | Low fg (Cl compounds) | 10^4 | Pesticides, PCBs, halogenated solvents |
-| NPD/FPD | N, P (NPD); S, P (FPD) | Low pg | 10^4-10^5 | Organophosphorus pesticides, sulfur compounds |
-| MS (EI) | Structural identification | Low pg (scan), fg (SIM) | 10^5-10^6 | Unknowns, confirmation, trace analysis |
-| MS/MS | Highest selectivity | fg range | 10^5 | Complex matrices, ultra-trace, forensic |
+| FID | C-H結合（汎用有機） | 低pgC/s | 10^7 | 炭化水素、一般有機物、定量 |
+| TCD | ユニバーサル（全化合物） | 低ng | 10^5 | 永久ガス、バルク分析 |
+| ECD | 電気陰性基（ハロゲン、ニトロ） | 低fg（塩素化合物） | 10^4 | 農薬、PCB、ハロゲン化溶媒 |
+| NPD/FPD | N, P（NPD）; S, P（FPD） | 低pg | 10^4-10^5 | 有機リン農薬、硫黄化合物 |
+| MS（EI） | 構造同定 | 低pg（スキャン）、fg（SIM） | 10^5-10^6 | 未知物質、確認、微量分析 |
+| MS/MS | 最高選択性 | fgレンジ | 10^5 | 複雑マトリックス、超微量、法医学 |
 
-1. Match detector to analyte chemistry and required sensitivity.
-2. For quantitative work with simple matrices, FID is the default (robust, linear, low maintenance).
-3. For trace analysis in complex matrices, prefer MS in SIM mode or MS/MS in MRM mode.
-4. For halogenated compounds at trace levels, ECD provides the best sensitivity.
-5. Set detector temperature 20-50 C above the maximum oven temperature to prevent condensation.
-6. Optimize detector gas flows per manufacturer recommendations.
+1. 分析種の化学的性質と必要な感度に検出器を一致させる。
+2. 単純マトリックスでの定量作業には、FIDをデフォルトとする（堅牢、リニア、低メンテナンス）。
+3. 複雑マトリックスでの微量分析には、SIMモードのMSまたはMRMモードのMS/MSを選好する。
+4. 微量レベルのハロゲン化合物には、ECDが最高感度を提供する。
+5. 凝縮防止のため、検出器温度をオーブン最高温度の20-50 C上に設定する。
+6. メーカー推奨に従って検出器ガス流量を最適化する。
 
-**期待結果:** Detector selected and configured with appropriate temperatures and gas flows for the target analytes.
+**期待結果:** ターゲット分析種に適切な温度とガス流量で選定・設定された検出器。
 
-**失敗時:** If detector sensitivity is insufficient at the required detection limits, consider concentrating the sample (larger injection volume, solvent evaporation) or switching to a more sensitive/selective detector.
+**失敗時:** 必要な検出限界で検出器感度が不十分な場合、試料の濃縮（注入量の増加、溶媒蒸発）を検討するか、より感度の高い/選択性の高い検出器に切り替える。
 
-### ステップ6: Validate Initial Performance
+### ステップ6: 初期性能の検証
 
-1. Prepare a system suitability standard containing all target analytes at mid-range concentration.
-2. Inject the standard 6 times consecutively.
-3. Evaluate:
-   - Retention time RSD: must be < 1.0%
-   - Peak area RSD: must be < 2.0% (< 5.0% for trace-level)
-   - Resolution between critical pairs: Rs >= 1.5 (baseline) or >= 2.0 for regulated methods
-   - Peak tailing factor: 0.8-1.5 (USP criteria T <= 2.0)
-   - Theoretical plates (N): verify against column manufacturer specification
-4. Inject a blank to confirm absence of carryover or ghost peaks.
-5. Inject a matrix blank to identify potential interferents at target retention times.
-6. Document all parameters in a method summary sheet.
+1. すべてのターゲット分析種を中間濃度で含むシステム適合性標準を調製する。
+2. 標準を連続6回注入する。
+3. 評価する:
+   - 保持時間RSD: 1.0%未満でなければならない
+   - ピーク面積RSD: 2.0%未満でなければならない（微量レベルでは5.0%未満）
+   - クリティカルペア間の分離度: Rs >= 1.5（ベースライン）、規制方法では >= 2.0
+   - ピークテーリングファクター: 0.8-1.5（USP基準 T <= 2.0）
+   - 理論段数（N）: カラムメーカー仕様に対して確認
+4. ブランクを注入してキャリーオーバーやゴーストピークがないことを確認する。
+5. マトリックスブランクを注入してターゲット保持時間での潜在的干渉物質を特定する。
+6. すべてのパラメータをメソッドサマリーシートに文書化する。
 
-**期待結果:** System suitability criteria met for all analytes across replicate injections, with no carryover or matrix interferences at target retention windows.
+**期待結果:** 繰り返し注入にわたってすべての分析種がシステム適合性基準を満たし、ターゲット保持ウィンドウでキャリーオーバーやマトリックス干渉がない。
 
-**失敗時:** If tailing is observed, check for active sites (re-condition column, trim 0.5 m from inlet end, replace liner). If RSD exceeds limits, investigate autosampler precision and injection technique. If resolution is insufficient, return to Step 3 to refine the temperature program.
+**失敗時:** テーリングが観察される場合、活性部位を確認する（カラムの再コンディショニング、入口端から0.5 mトリミング、ライナー交換）。RSDが限界を超える場合、オートサンプラー精度と注入技術を調査する。分離度が不十分な場合、ステップ3に戻って昇温プログラムを改良する。
 
 ## バリデーション
 
-- [ ] All target analytes are separated with Rs >= 1.5 for critical pairs
-- [ ] Retention time RSD < 1.0% over 6 replicate injections
-- [ ] Peak area RSD < 2.0% over 6 replicate injections
-- [ ] Peak tailing factors within 0.8-1.5 for all analytes
-- [ ] Blank injection shows no carryover above 0.1% of working concentration
-- [ ] Matrix blank shows no interferents at target retention windows
-- [ ] Total run time meets throughput requirements
-- [ ] Method parameters are fully documented (column, temps, flows, detector settings)
+- [ ] すべてのターゲット分析種がクリティカルペアでRs >= 1.5で分離されている
+- [ ] 6回繰り返し注入で保持時間RSD < 1.0%
+- [ ] 6回繰り返し注入でピーク面積RSD < 2.0%
+- [ ] すべての分析種のピークテーリングファクターが0.8-1.5の範囲内
+- [ ] ブランク注入で作業濃度の0.1%以上のキャリーオーバーがない
+- [ ] マトリックスブランクでターゲット保持ウィンドウに干渉物質がない
+- [ ] 合計実行時間がスループット要件を満たす
+- [ ] メソッドパラメータが完全に文書化されている（カラム、温度、流量、検出器設定）
 
 ## よくある落とし穴
 
-- **Ignoring column bleed temperature limits**: Operating above the maximum isothermal temperature of the stationary phase causes elevated baseline, ghost peaks, and accelerated column degradation. Always check the column specification sheet.
-- **Oversized injection volumes**: Injecting too much solvent causes fronting peaks and poor resolution for early eluters. Match injection volume to column capacity (typically 0.5-2 uL for 0.25 mm ID columns in split mode).
-- **Wrong liner for the injection mode**: Splitless injections require a single-taper or double-taper deactivated liner; split injections use a liner with glass wool. Mismatched liners cause poor reproducibility.
-- **Neglecting septum and liner maintenance**: Septum coring and liner contamination are the most common sources of ghost peaks and tailing. Replace septa every 50-100 injections and liners on a documented schedule.
-- **Skipping the van Deemter optimization**: Running at the manufacturer's default flow rate instead of the measured optimum wastes efficiency, especially when switching carrier gases.
-- **Insufficient column conditioning**: New columns must be conditioned (ramped to maximum temperature under carrier gas flow, no detector) to remove manufacturing residues before analytical use.
+- **カラムブリード温度限界の無視**: 固定相の最高アイソサーマル温度を超える運転は、ベースライン上昇、ゴーストピーク、カラム劣化の加速を引き起こす。常にカラム仕様シートを確認する
+- **過大な注入量**: 溶媒の注入過多は早い溶出物のフロンティングピークと分離度低下を引き起こす。注入量をカラム容量に合わせる（スプリットモードの0.25 mm IDカラムでは通常0.5-2 uL）
+- **注入モードに合わないライナー**: スプリットレス注入にはシングルテーパーまたはダブルテーパーの不活性化ライナーが必要。スプリット注入にはガラスウール入りライナーを使用する。不適合なライナーは再現性不良の原因
+- **セプタムとライナーのメンテナンス不足**: セプタムコアリングとライナー汚染はゴーストピークとテーリングの最も一般的な原因。50-100注入ごとにセプタムを交換し、ライナーは文書化されたスケジュールで交換する
+- **ファンデームター最適化の省略**: メーカーのデフォルト流量で運転するのは、特にキャリアガスを切り替える際に効率の無駄である
+- **不十分なカラムコンディショニング**: 新しいカラムは分析使用前にコンディショニング（キャリアガス流下で最高温度まで昇温、検出器なし）して製造残渣を除去する必要がある
 
 ## 関連スキル
 
-- `develop-hplc-method` -- liquid chromatography method development for non-volatile or thermally labile analytes
-- `interpret-chromatogram` -- reading and interpreting GC and HPLC chromatograms
-- `troubleshoot-separation` -- diagnosing and fixing peak shape, retention, and resolution problems
-- `validate-analytical-method` -- formal ICH Q2 validation of the developed GC method
+- `develop-hplc-method` -- 非揮発性または熱不安定な分析種のための液体クロマトグラフィー法開発
+- `interpret-chromatogram` -- GCおよびHPLCクロマトグラムの読み取りと解釈
+- `troubleshoot-separation` -- ピーク形状、保持、分離度の問題の診断と修正
+- `validate-analytical-method` -- 開発されたGC法の正式なICH Q2バリデーション

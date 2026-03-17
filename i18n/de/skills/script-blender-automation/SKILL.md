@@ -1,12 +1,12 @@
 ---
 name: script-blender-automation
 description: >
-  Write Blender Python scripts for procedural modeling, animation, batch
-  operations, and add-on development using advanced bpy API patterns. Use
-  when automating repetitive modeling or animation tasks, generating procedural
-  geometry from algorithms or data, creating batch rendering pipelines with
-  parameter variations, building custom operators or add-ons, or integrating
-  Blender with external data pipelines and APIs.
+  Blender-Python-Skripte fuer prozedurale Modellierung, Animation, Batch-Operationen
+  und Add-on-Entwicklung mit fortgeschrittenen bpy-API-Mustern schreiben. Verwenden
+  beim Automatisieren sich wiederholender Modellierungs- oder Animationsaufgaben,
+  Generieren prozeduraler Geometrie aus Algorithmen oder Daten, Erstellen von
+  Batch-Rendering-Pipelines mit Parametervariationen, Bauen eigener Operatoren
+  oder Add-ons oder Integrieren von Blender mit externen Datenpipelines und APIs.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,33 +25,33 @@ metadata:
 
 # Blender-Automatisierung skripten
 
-Advanced Blender Python scripting for procedural modeling, keyframe animation, batch operations, operator registration, and add-on development. Covers complex geometry generation, automated workflows, and integration with external data sources.
+Fortgeschrittenes Blender-Python-Skripting fuer prozedurale Modellierung, Keyframe-Animation, Batch-Operationen, Operator-Registrierung und Add-on-Entwicklung. Umfasst komplexe Geometrieerzeugung, automatisierte Workflows und Integration mit externen Datenquellen.
 
-## When to Use
+## Wann verwenden
 
-- Automating repetitive modeling or animation tasks
-- Generating procedural geometry from algorithms or data
-- Creating batch rendering pipelines with parameter variations
-- Building custom operators or add-ons for workflow enhancement
-- Integrating Blender with external data pipelines or APIs
-- Scripting complex animations with mathematical precision
-- Developing reusable tools for team workflows
+- Automatisierung sich wiederholender Modellierungs- oder Animationsaufgaben
+- Generieren prozeduraler Geometrie aus Algorithmen oder Daten
+- Erstellen von Batch-Rendering-Pipelines mit Parametervariationen
+- Bauen eigener Operatoren oder Add-ons zur Workflow-Verbesserung
+- Integrieren von Blender mit externen Datenpipelines oder APIs
+- Skripten komplexer Animationen mit mathematischer Praezision
+- Entwicklung wiederverwendbarer Werkzeuge fuer Team-Workflows
 
-## Inputs
+## Eingaben
 
-| Input | Type | Description | Example |
-|-------|------|-------------|---------|
-| Automation requirements | Specification | Task description, parameters, constraints | Render 100 variations, animate path from data |
-| Data sources | Files/APIs | External data for procedural generation | CSV coordinates, JSON parameters, API responses |
-| Algorithm definitions | Code/Math | Procedural generation logic | Fractal patterns, parametric curves, L-systems |
-| Operator specifications | Requirements | Custom tool behavior and UI | Tool name, properties, modal interaction |
-| Animation parameters | Keyframes/Data | Timing, easing, constraints | Frame ranges, interpolation curves |
+| Eingabe | Typ | Beschreibung | Beispiel |
+|---------|-----|--------------|----------|
+| Automatisierungsanforderungen | Spezifikation | Aufgabenbeschreibung, Parameter, Einschraenkungen | 100 Variationen rendern, Pfad aus Daten animieren |
+| Datenquellen | Dateien/APIs | Externe Daten fuer prozedurale Erzeugung | CSV-Koordinaten, JSON-Parameter, API-Antworten |
+| Algorithmusdefinitionen | Code/Mathematik | Logik der prozeduralen Erzeugung | Fraktalmuster, parametrische Kurven, L-Systeme |
+| Operator-Spezifikationen | Anforderungen | Werkzeugverhalten und UI | Werkzeugname, Eigenschaften, modale Interaktion |
+| Animationsparameter | Keyframes/Daten | Timing, Easing, Constraints | Frame-Bereiche, Interpolationskurven |
 
-## Procedure
+## Vorgehensweise
 
-### 1. Procedural Geometry Generation
+### 1. Prozedurale Geometrieerzeugung
 
-Create mesh geometry programmatically using BMesh:
+Mesh-Geometrie programmatisch mit BMesh erstellen:
 
 ```python
 import bpy
@@ -98,12 +98,12 @@ def create_parametric_surface(name, u_res=32, v_res=32):
     return obj
 ```
 
-**Expected:** Complex geometry generated from mathematical functions
-**On failure:** Check BMesh API calls, verify vertex indexing, ensure faces are manifold
+**Erwartet:** Komplexe Geometrie aus mathematischen Funktionen erzeugt
+**Bei Fehler:** BMesh-API-Aufrufe pruefen, Vertex-Indizierung verifizieren, sicherstellen dass Faces mannigfaltig sind
 
-### 2. Keyframe Animation Automation
+### 2. Keyframe-Animations-Automatisierung
 
-Script animation keyframes and drivers:
+Animations-Keyframes und Driver skripten:
 
 ```python
 def animate_rotation(obj, start_frame=1, end_frame=250, axis='Z', rotations=2):
@@ -149,12 +149,12 @@ def create_driver(obj, property_path, expression):
     # expression = "frame / 10"
 ```
 
-**Expected:** Keyframes inserted, animation plays back correctly
-**On failure:** Check property paths, verify data_path syntax, ensure objects are keyable
+**Erwartet:** Keyframes eingefuegt, Animation spielt korrekt ab
+**Bei Fehler:** Property-Pfade pruefen, data_path-Syntax verifizieren, sicherstellen dass Objekte keybar sind
 
-### 3. Batch Processing Operations
+### 3. Batch-Verarbeitungsoperationen
 
-Process multiple objects or files in batch:
+Mehrere Objekte oder Dateien im Batch verarbeiten:
 
 ```python
 import os
@@ -204,12 +204,12 @@ def batch_material_variation(base_object, colors, output_prefix):
         bpy.ops.render.render(write_still=True)
 ```
 
-**Expected:** Multiple files processed, renders generated for each variant
-**On failure:** Check file paths exist, verify import operators, handle missing materials
+**Erwartet:** Mehrere Dateien verarbeitet, Renders fuer jede Variante erzeugt
+**Bei Fehler:** Dateipfade auf Existenz pruefen, Import-Operatoren verifizieren, fehlende Materialien behandeln
 
-### 4. Custom Operator Development
+### 4. Eigene Operator-Entwicklung
 
-Create custom operators for reusable tools:
+Eigene Operatoren fuer wiederverwendbare Werkzeuge erstellen:
 
 ```python
 import bpy
@@ -285,12 +285,12 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Operator appears in search, executes with proper undo support
-**On failure:** Check bl_idname format (lowercase with underscores), verify property types
+**Erwartet:** Operator erscheint in der Suche, wird mit ordnungsgemaesser Undo-Unterstuetzung ausgefuehrt
+**Bei Fehler:** bl_idname-Format pruefen (Kleinbuchstaben mit Unterstrichen), Property-Typen verifizieren
 
-### 5. Modal Operator for Interactive Tools
+### 5. Modaler Operator fuer interaktive Werkzeuge
 
-Create interactive modal operators:
+Interaktive modale Operatoren erstellen:
 
 ```python
 class OBJECT_OT_modal_scale(bpy.types.Operator):
@@ -339,12 +339,12 @@ class OBJECT_OT_modal_scale(bpy.types.Operator):
             return {'CANCELLED'}
 ```
 
-**Expected:** Interactive operator responds to mouse, left-click confirms, ESC cancels
-**On failure:** Check event types, ensure modal handler is added, handle no active object
+**Erwartet:** Interaktiver Operator reagiert auf Maus, Linksklick bestaetigt, ESC bricht ab
+**Bei Fehler:** Event-Typen pruefen, sicherstellen dass Modal-Handler hinzugefuegt ist, kein aktives Objekt behandeln
 
-### 6. Add-on Packaging
+### 6. Add-on-Paketierung
 
-Structure code as installable add-on:
+Code als installierbares Add-on strukturieren:
 
 ```python
 bl_info = {
@@ -387,12 +387,12 @@ if __name__ == "__main__":
     register()
 ```
 
-**Expected:** Add-on installs via Preferences, operators appear in menus
-**On failure:** Check bl_info format, verify Blender version requirement, ensure all classes listed
+**Erwartet:** Add-on installiert ueber Einstellungen, Operatoren erscheinen in Menues
+**Bei Fehler:** bl_info-Format pruefen, Blender-Versionsanforderung verifizieren, sicherstellen dass alle Klassen aufgelistet sind
 
-### 7. Data-Driven Procedural Generation
+### 7. Datengetriebene prozedurale Erzeugung
 
-Generate geometry from external data:
+Geometrie aus externen Daten generieren:
 
 ```python
 import csv
@@ -441,37 +441,37 @@ def create_from_json(filepath):
                 obj.data.materials.append(mat)
 ```
 
-**Expected:** Objects created based on external data files
-**On failure:** Validate file format, handle missing fields, provide default values
+**Erwartet:** Objekte basierend auf externen Datendateien erstellt
+**Bei Fehler:** Dateiformat validieren, fehlende Felder behandeln, Standardwerte bereitstellen
 
-## Validation Checklist
+## Validierung
 
-- [ ] Scripts run without errors in Blender Python environment
-- [ ] Procedural geometry generates as expected
-- [ ] Animation keyframes inserted at correct frames
-- [ ] Batch operations process all files successfully
-- [ ] Custom operators appear in search and execute correctly
-- [ ] Modal operators respond to mouse/keyboard events
-- [ ] Add-ons install and uninstall cleanly
-- [ ] External data files parsed correctly
-- [ ] Error handling covers edge cases
-- [ ] Code follows PEP 8 style guidelines
+- [ ] Skripte laufen ohne Fehler in der Blender-Python-Umgebung
+- [ ] Prozedurale Geometrie wird wie erwartet erzeugt
+- [ ] Animations-Keyframes an korrekten Frames eingefuegt
+- [ ] Batch-Operationen verarbeiten alle Dateien erfolgreich
+- [ ] Eigene Operatoren erscheinen in der Suche und werden korrekt ausgefuehrt
+- [ ] Modale Operatoren reagieren auf Maus-/Tastaturereignisse
+- [ ] Add-ons installieren und deinstallieren sauber
+- [ ] Externe Datendateien korrekt geparst
+- [ ] Fehlerbehandlung deckt Grenzfaelle ab
+- [ ] Code folgt PEP-8-Stilrichtlinien
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Circular imports in add-ons**: Use relative imports, structure modules carefully
-2. **Operator naming**: bl_idname must be lowercase with single underscore (category.name)
-3. **Property types**: Use correct bpy.props types (FloatProperty, IntProperty, etc.)
-4. **Context access**: Not all operators work in all contexts (viewport vs render)
-5. **BMesh cleanup**: Always call `bm.free()` after `bm.to_mesh()` to prevent memory leaks
-6. **Animation keyframe timing**: Frame numbers start at 1, not 0
-7. **Driver expression errors**: Validate expressions, use safe namespace
-8. **Modal operator blocking**: Don't block in modal(), use non-blocking operations
-9. **Add-on installation paths**: Place in Blender's scripts/addons directory
-10. **Version compatibility**: API changes between Blender versions, document requirements
+1. **Zirkulaere Imports in Add-ons**: Relative Imports verwenden, Module sorgfaeltig strukturieren
+2. **Operator-Benennung**: bl_idname muss kleingeschrieben mit einfachem Unterstrich sein (category.name)
+3. **Property-Typen**: Korrekte bpy.props-Typen verwenden (FloatProperty, IntProperty, etc.)
+4. **Kontextzugriff**: Nicht alle Operatoren funktionieren in allen Kontexten (Viewport vs. Render)
+5. **BMesh-Bereinigung**: Immer `bm.free()` nach `bm.to_mesh()` aufrufen, um Speicherlecks zu vermeiden
+6. **Animations-Keyframe-Timing**: Frame-Nummern beginnen bei 1, nicht bei 0
+7. **Driver-Ausdrucksfehler**: Ausdruecke validieren, sicheren Namensraum verwenden
+8. **Modaler Operator blockiert**: Nicht in modal() blockieren, nicht-blockierende Operationen verwenden
+9. **Add-on-Installationspfade**: Im Blender-Verzeichnis scripts/addons platzieren
+10. **Versionskompatibilitaet**: API-Aenderungen zwischen Blender-Versionen, Anforderungen dokumentieren
 
-## Related Skills
+## Verwandte Skills
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Basic scene setup and object creation
-- **[render-blender-output](../render-blender-output/SKILL.md)**: Rendering workflows for automated output
-- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**: Similar packaging patterns for code distribution
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Grundlegende Szeneneinrichtung und Objekterstellung
+- **[render-blender-output](../render-blender-output/SKILL.md)**: Rendering-Workflows fuer automatisierte Ausgabe
+- **[create-r-package](../../r-packages/create-r-package/SKILL.md)**: Aehnliche Paketierungsmuster fuer Code-Distribution

@@ -1,14 +1,12 @@
 ---
 name: curate-collection
 description: >
-  Build and maintain a library collection through acquisitions, weeding
-  (deaccessioning), collection assessment, reader advisory, and interlibrary
-  loan coordination. Covers selection criteria, collection development policies,
-  the CREW/MUSTIE method for weeding, usage analysis, and responsive collection
-  management. Use when building a new collection with a defined scope and budget,
-  assessing an existing collection for gaps or outdated materials, when shelves
-  are overcrowded and systematic weeding is needed, or when establishing a formal
-  collection development policy.
+  収集、除籍（蔵書整理）、コレクション評価、読書相談、図書館間貸借の連携を通じて
+  図書館コレクションを構築・維持する。選定基準、コレクション開発方針、除籍のための
+  CREW/MUSTIEメソッド、利用分析、レスポンシブなコレクション管理をカバーする。
+  定められた範囲と予算で新規コレクションを構築する時、既存コレクションのギャップや
+  古い資料の評価時、書架が過密で体系的な除籍が必要な時、正式なコレクション開発方針の
+  策定時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -27,29 +25,29 @@ metadata:
 
 # コレクションのキュレーション
 
-Build, assess, and maintain a library collection through strategic acquisitions, systematic weeding, usage analysis, and responsive reader advisory.
+戦略的な収集、体系的な除籍、利用分析、レスポンシブな読書相談を通じて図書館コレクションを構築・評価・維持する。
 
 ## 使用タイミング
 
-- You are building a new collection with a defined scope and budget
-- An existing collection needs assessment for gaps, redundancies, or outdated materials
-- Shelves are overcrowded and systematic weeding is needed
-- Users request materials the collection does not hold
-- You want to establish a formal collection development policy
+- 定められた範囲と予算で新規コレクションを構築する時
+- 既存コレクションのギャップ、重複、古い資料の評価が必要な時
+- 書架が過密で体系的な除籍が必要な時
+- 利用者がコレクションにない資料をリクエストする時
+- 正式なコレクション開発方針を策定したい時
 
 ## 入力
 
-- **必須**: Collection scope (subject areas, audience, formats)
-- **必須**: Budget (annual acquisitions budget or one-time allocation)
-- **任意**: Usage data (circulation statistics, hold requests, ILL requests)
-- **任意**: Community or institutional profile (demographics, curriculum, research areas)
-- **任意**: Existing collection development policy
+- **必須**: コレクション範囲（主題分野、対象利用者、フォーマット）
+- **必須**: 予算（年間収集予算または一括配分額）
+- **任意**: 利用データ（貸出統計、予約リクエスト、ILLリクエスト）
+- **任意**: コミュニティまたは機関プロファイル（人口統計、カリキュラム、研究分野）
+- **任意**: 既存のコレクション開発方針
 
 ## 手順
 
-### ステップ1: Define the Collection Development Policy
+### ステップ1: コレクション開発方針の策定
 
-Establish the guiding document for all acquisition and weeding decisions.
+すべての収集・除籍判断を導く基本文書を策定する。
 
 ```
 Collection Development Policy Template:
@@ -91,13 +89,13 @@ Collection Development Policy Template:
    - Policy reviewed and updated every 3 years
 ```
 
-**期待結果:** A written policy that guides consistent, defensible acquisition and weeding decisions.
+**期待結果:** 一貫性のある、根拠に基づいた収集・除籍判断を導く成文化された方針。
 
-**失敗時:** If a formal policy seems excessive for a small collection, write a one-page scope statement covering mission, subjects collected, and basic selection criteria. Even a brief statement prevents drift.
+**失敗時:** 小規模コレクションにとって正式な方針が過剰に思える場合、ミッション、収集主題、基本的な選定基準を記載した1ページの範囲声明書を作成する。簡潔な声明書でも方針のぶれを防ぐ。
 
-### ステップ2: Assess the Existing Collection
+### ステップ2: 既存コレクションの評価
 
-Understand what you have before deciding what to add or remove.
+追加・除去の判断前に、所蔵状況を把握する。
 
 ```
 Collection Assessment Methods:
@@ -137,13 +135,13 @@ Mark each cell as: Strong, Adequate, Weak, or Not Collected.
 This visual map reveals gaps and overlaps at a glance.
 ```
 
-**期待結果:** A clear picture of the collection's strengths, weaknesses, gaps, and deadweight, supported by data.
+**期待結果:** データに裏付けられたコレクションの強み、弱み、ギャップ、不要資料の明確な全体像。
 
-**失敗時:** If circulation data is unavailable (no automated system), use shelf observation: dusty, tightly packed books that haven't moved indicate low use. In-library use can be estimated by counting items left on tables rather than reshelved.
+**失敗時:** 貸出データが利用できない場合（自動化システムがない場合）、書架の観察を使用する: 埃をかぶり、ぎっしり詰まった動いていない本は低利用を示す。館内利用は、再配架されずにテーブルに残された資料を数えることで推定できる。
 
-### ステップ3: Acquire Materials Strategically
+### ステップ3: 戦略的な資料収集
 
-Select and purchase materials that fill gaps and serve user needs.
+ギャップを埋め、利用者ニーズに応える資料を選定・購入する。
 
 ```
 Acquisition Workflow:
@@ -186,13 +184,13 @@ Budget Allocation Rule of Thumb:
 - 5%: reserve for urgent or unexpected needs
 ```
 
-**期待結果:** New acquisitions systematically fill identified gaps and respond to user demand, within budget.
+**期待結果:** 新規収集が特定されたギャップを体系的に埋め、利用者需要に応える。予算内に収まる。
 
-**失敗時:** If budget is severely constrained, prioritize user requests (proven demand) over speculative purchases. Supplement with ILL for low-demand subjects rather than buying materials that may not circulate.
+**失敗時:** 予算が著しく制約されている場合、利用者リクエスト（実証された需要）を投機的購入より優先する。低需要の主題は購入せずILLで補完する。
 
-### ステップ4: Weed the Collection (Deaccessioning)
+### ステップ4: コレクションの除籍（蔵書整理）
 
-Remove materials that no longer serve the collection's mission.
+コレクションのミッションに合わなくなった資料を除去する。
 
 ```
 CREW Method / MUSTIE Criteria:
@@ -236,13 +234,13 @@ Never discard items with local historical significance
 without institutional review.
 ```
 
-**期待結果:** Collection is regularly weeded, with clear documentation of withdrawn items and disposition. The remaining collection is current, relevant, and in good condition.
+**期待結果:** コレクションが定期的に除籍され、除去資料と処分方法の明確な記録がある。残りのコレクションが最新で、関連性があり、良好な状態にある。
 
-**失敗時:** If weeding feels emotionally difficult (it does for many librarians), remember: keeping a misleading medical text is more harmful than removing it. Weeding is an act of care for the user, not disrespect for the book.
+**失敗時:** 除籍に感情的な抵抗がある場合（多くの図書館員にとってそうである）、次のことを思い出す: 誤った医学書を保持することは除去することより有害である。除籍は利用者へのケアの行為であり、本への不敬ではない。
 
-### ステップ5: Provide Reader Advisory and Reference
+### ステップ5: 読書相談とレファレンス
 
-Connect users with materials that meet their needs.
+利用者をニーズに合った資料につなげる。
 
 ```
 Reader Advisory Framework:
@@ -274,30 +272,30 @@ Reader Advisory Framework:
    - Display new acquisitions prominently — users notice responsiveness
 ```
 
-**期待結果:** Users find what they need, either in the collection or through ILL, and their feedback shapes future acquisitions.
+**期待結果:** 利用者がコレクション内またはILLを通じて必要なものを見つけ、そのフィードバックが将来の収集方針を形づくる。
 
-**失敗時:** If ILL is not available (no library network), explore open access sources, digital libraries (HathiTrust, Internet Archive, Project Gutenberg), and reciprocal borrowing agreements with nearby libraries.
+**失敗時:** ILLが利用できない場合（図書館ネットワークがない場合）、オープンアクセスソース、電子図書館（HathiTrust、Internet Archive、Project Gutenberg）、近隣図書館との相互貸借協定を探索する。
 
 ## バリデーション
 
-- [ ] Collection development policy written and approved
-- [ ] Collection assessment completed with quantitative and qualitative data
-- [ ] Gaps identified and prioritized for acquisition
-- [ ] Budget allocated across subject areas and need categories
-- [ ] Acquisition workflow established with review sources and vendor relationships
-- [ ] Weeding cycle scheduled (annual) with CREW/MUSTIE criteria
-- [ ] User feedback loop in place (requests, ILL data, search logs)
+- [ ] コレクション開発方針が策定・承認されている
+- [ ] 定量的・定性的データによるコレクション評価が完了している
+- [ ] ギャップが特定され、収集の優先順位が付けられている
+- [ ] 主題分野とニーズカテゴリにわたって予算が配分されている
+- [ ] レビューソースとベンダー関係を含む収集ワークフローが確立されている
+- [ ] CREW/MUSTIE基準による除籍サイクルがスケジュールされている（年次）
+- [ ] 利用者フィードバックループが整備されている（リクエスト、ILLデータ、検索ログ）
 
 ## よくある落とし穴
 
-- **Collecting without a policy**: Without a scope statement, collections grow by accumulation rather than intention. Everything gets added, nothing gets removed, and the collection becomes a warehouse
-- **Fear of weeding**: Keeping everything "just in case" buries useful materials under deadweight. A smaller, curated collection serves users better than a large, undifferentiated one
-- **Ignoring usage data**: Buying based on professional judgment alone misses what users actually need. Let circulation and ILL data drive at least 30% of acquisition decisions
-- **No budget for replacement**: New acquisitions get all the budget, and worn-out popular items never get replaced. Reserve 10-15% for replacements
-- **Neglecting format diversity**: Not all users read print. Audiobooks, ebooks, and accessible formats serve users who can't or prefer not to read print
+- **方針なしの収集**: 範囲声明書がないと、コレクションは意図ではなく蓄積により成長する。すべてが追加され、何も除去されず、コレクションは倉庫になる
+- **除籍への恐怖**: 「万が一のため」にすべてを保持すると、有用な資料が不要資料に埋もれる。小規模でキュレーションされたコレクションは、大規模で未整理のものより利用者に良く奉仕する
+- **利用データの無視**: 専門的判断だけに基づく購入は利用者の実際のニーズを見逃す。貸出とILLデータで少なくとも収集判断の30%を駆動させる
+- **交換用予算の不足**: 新規収集にすべての予算が使われ、摩耗した人気資料が交換されない。交換用に10〜15%を確保する
+- **フォーマット多様性の軽視**: すべての利用者が印刷物を読むわけではない。オーディオブック、電子書籍、アクセシブルなフォーマットは、印刷物を読めない、または好まない利用者に奉仕する
 
 ## 関連スキル
 
-- `catalog-collection` — Newly acquired materials need cataloging; withdrawn items need record deletion
-- `preserve-materials` — Condition assessment during weeding identifies items needing preservation
-- `review-research` — Evaluating information quality parallels evaluating materials for selection
+- `catalog-collection` -- 新規収集資料は目録作成が必要。除籍資料はレコード削除が必要
+- `preserve-materials` -- 除籍時の状態評価で保存が必要な資料を特定する
+- `review-research` -- 情報品質の評価は資料選定の評価と並行する

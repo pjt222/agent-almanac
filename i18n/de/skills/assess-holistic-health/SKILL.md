@@ -1,14 +1,15 @@
 ---
 name: assess-holistic-health
 description: >
-  Conduct temperament-based health assessment from Hildegard von Bingen's
-  Causae et Curae. Evaluates the four temperaments (sanguine, choleric,
-  melancholic, phlegmatic), elemental correspondences (air, fire, earth, water),
-  and provides dietary and lifestyle recommendations for rebalancing. Use when
-  understanding constitutional type in Hildegardian terms, experiencing
-  imbalance (fatigue, digestive issues, mental fog) needing holistic guidance,
-  seeking dietary recommendations by temperament, or researching medieval
-  humoral medicine.
+  Temperamentbasierte Gesundheitsbewertung nach Hildegard von Bingens
+  Causae et Curae durchfuehren. Bewertet die vier Temperamente (sanguinisch,
+  cholerisch, melancholisch, phlegmatisch), elementare Entsprechungen
+  (Luft, Feuer, Erde, Wasser) und gibt Ernaehrungs- und Lebensstil-
+  Empfehlungen zur Wiederherstellung des Gleichgewichts. Verwenden beim
+  Verstaendnis des konstitutionellen Typs nach Hildegard, bei Ungleichgewicht
+  (Muedigkeit, Verdauungsprobleme, geistiger Nebel), bei Ernaehrungs-
+  Empfehlungen nach Temperament oder bei der Erforschung mittelalterlicher
+  Humoralmedizin.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,31 +28,31 @@ metadata:
 
 # Ganzheitliche Gesundheit bewerten
 
-Evaluate health through Hildegard von Bingen's temperament system from *Causae et Curae*, assessing the four temperaments, elemental balance, and providing dietary and lifestyle recommendations.
+Gesundheit durch Hildegard von Bingens Temperamentsystem aus *Causae et Curae* bewerten, die vier Temperamente und das elementare Gleichgewicht erfassen und Ernaehrungs- und Lebensstil-Empfehlungen geben.
 
-## When to Use
+## Wann verwenden
 
-- You want to understand your constitutional type (temperament) in Hildegardian terms
-- You are experiencing imbalance (fatigue, irritability, digestive issues, mental fog) and need holistic guidance
-- You need dietary recommendations based on temperament
-- You are integrating Hildegard's health principles into a wellness practice
-- You want to understand the relationship between temperament, elements, and health
-- You are researching medieval humoral medicine
+- Den eigenen konstitutionellen Typ (Temperament) in hildegardianischen Begriffen verstehen
+- Ungleichgewicht erleben (Muedigkeit, Reizbarkeit, Verdauungsprobleme, geistiger Nebel) und ganzheitliche Anleitung benoetigen
+- Ernaehrungsempfehlungen basierend auf dem Temperament benoetigen
+- Hildegards Gesundheitsprinzipien in eine Wellnesspraxis integrieren
+- Die Beziehung zwischen Temperament, Elementen und Gesundheit verstehen
+- Mittelalterliche Humoralmedizin erforschen
 
-## Inputs
+## Eingaben
 
-- **Required**: Current symptoms or health concerns (physical, mental, emotional)
-- **Required**: Responses to temperament assessment questions (constitution, habits, preferences)
-- **Optional**: Age, sex, and general health history (for context)
-- **Optional**: Current season (for seasonal adjustment recommendations)
-- **Optional**: Existing dietary restrictions or preferences
-- **Optional**: Known temperament from previous assessment
+- **Erforderlich**: Aktuelle Symptome oder Gesundheitsanliegen (koerperlich, geistig, emotional)
+- **Erforderlich**: Antworten auf Temperament-Bewertungsfragen (Konstitution, Gewohnheiten, Vorlieben)
+- **Optional**: Alter, Geschlecht und allgemeine Gesundheitsgeschichte (fuer den Kontext)
+- **Optional**: Aktuelle Jahreszeit (fuer saisonale Anpassungsempfehlungen)
+- **Optional**: Bestehende Ernaehrungseinschraenkungen oder -vorlieben
+- **Optional**: Bekanntes Temperament aus frueherer Bewertung
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Temperament Assessment
+### Schritt 1: Temperamentbewertung
 
-Determine the dominant temperament through observation and structured questions.
+Das vorherrschende Temperament durch Beobachtung und strukturierte Fragen bestimmen.
 
 ```
 The Four Temperaments in Causae et Curae:
@@ -116,13 +117,13 @@ Scoring:
 - Scores within 2-3 points indicate balanced type (rare)
 ```
 
-**Expected:** Dominant and secondary temperament identified, with score profile showing primary constitutional tendencies.
+**Erwartet:** Dominantes und sekundaeres Temperament identifiziert, mit Punkteprofil, das die primaeren konstitutionellen Tendenzen zeigt.
 
-**On failure:** If all scores are within 2-3 points of each other, the person has a balanced temperament (unusual in Hildegard's system). Proceed with general recommendations avoiding extremes (no very hot or very cold foods).
+**Bei Fehler:** Wenn alle Punktzahlen innerhalb von 2-3 Punkten voneinander liegen, hat die Person ein ausgeglichenes Temperament (ungewoehnlich in Hildegards System). Mit allgemeinen Empfehlungen fortfahren, die Extreme vermeiden (keine sehr heissen oder sehr kalten Speisen).
 
-### Step 2: Elemental Balance Assessment
+### Schritt 2: Elementares Gleichgewicht bewerten
 
-Evaluate whether the current state reflects excess, deficiency, or balance of elemental qualities.
+Bewerten, ob der aktuelle Zustand einen Ueberschuss, Mangel oder ein Gleichgewicht elementarer Qualitaeten widerspiegelt.
 
 ```
 Elemental Imbalance Patterns:
@@ -162,13 +163,13 @@ Assessment:
 4. Determine if imbalance is acute (recent onset) or chronic (longstanding pattern)
 ```
 
-**Expected:** Identification of 1-2 elemental imbalances (e.g., "Excess water with deficient fire" = cold/damp pattern with low vitality).
+**Erwartet:** Identifikation von 1-2 elementaren Ungleichgewichten (z.B. "Ueberschuss Wasser mit Mangel Feuer" = kalt/feucht Muster mit geringer Vitalitaet).
 
-**On failure:** If symptom pattern is unclear or contradictory, default to the opposite qualities of the dominant temperament. Example: Choleric (hot/dry) feeling unwell likely has excess fire → recommend cooling/moistening.
+**Bei Fehler:** Wenn das Symptommuster unklar oder widerspruchlich ist, auf die entgegengesetzten Qualitaeten des dominanten Temperaments zurueckgreifen. Beispiel: Choleriker (heiss/trocken), der sich unwohl fuehlt, hat wahrscheinlich Feuer-Ueberschuss → kuehlende/befeuchtende Massnahmen empfehlen.
 
-### Step 3: Dietary Recommendations
+### Schritt 3: Ernaehrungsempfehlungen
 
-Prescribe foods to rebalance elemental excess or deficiency, following Hildegard's *Physica* and *Causae et Curae*.
+Lebensmittel zur Wiederherstellung des elementaren Gleichgewichts verschreiben, nach Hildegards *Physica* und *Causae et Curae*.
 
 ```
 Hildegard's Dietary Principles:
@@ -231,13 +232,13 @@ eat galangal, and he will be restored to health."
 - Especially for melancholic and phlegmatic types
 ```
 
-**Expected:** Specific food recommendations tailored to temperament and current imbalance, with clear "favor/moderate/avoid" categories.
+**Erwartet:** Spezifische Lebensmittelempfehlungen, zugeschnitten auf Temperament und aktuelles Ungleichgewicht, mit klaren Kategorien "bevorzugen/maessigen/vermeiden".
 
-**On failure:** If dietary restrictions prevent following recommendations (e.g., vegetarian unable to eat lamb), substitute within the same elemental category (warming/cooling/moistening/drying). Consult the plant-based options within each category.
+**Bei Fehler:** Wenn Ernaehrungseinschraenkungen die Befolgung von Empfehlungen verhindern (z.B. Vegetarier kann kein Lamm essen), innerhalb der gleichen elementaren Kategorie (waermend/kuehlend/befeuchtend/trocknend) substituieren. Die pflanzlichen Optionen innerhalb jeder Kategorie konsultieren.
 
-### Step 4: Lifestyle and Seasonal Adjustments
+### Schritt 4: Lebensstil- und Saisonanpassungen
 
-Recommend non-dietary practices to support rebalancing: sleep, movement, prayer, seasonal rhythms.
+Nicht-diaetetische Praktiken zur Unterstuetzung des Wiederausgleichs empfehlen: Schlaf, Bewegung, Gebet, saisonale Rhythmen.
 
 ```
 Lifestyle Recommendations by Imbalance:
@@ -297,13 +298,13 @@ SEASONAL ADJUSTMENTS (all temperaments):
 - Winter (Water depth): Warming foods, rest more, contemplation, less activity
 ```
 
-**Expected:** 3-5 specific lifestyle recommendations that address the identified imbalance and align with Hildegard's holistic view (body, mind, spirit, nature).
+**Erwartet:** 3-5 spezifische Lebensstilempfehlungen, die das identifizierte Ungleichgewicht adressieren und mit Hildegards ganzheitlicher Sicht (Koerper, Geist, Seele, Natur) uebereinstimmen.
 
-**On failure:** If recommendations feel overwhelming, prioritize ONE dietary change and ONE lifestyle change to begin. Full rebalancing takes weeks to months — start small.
+**Bei Fehler:** Wenn Empfehlungen ueberfordernd wirken, EINE Ernaehrungsaenderung und EINE Lebensstilaenderung priorisieren. Vollstaendiges Wiederausgleichen dauert Wochen bis Monate — klein anfangen.
 
-### Step 5: Integration and Monitoring
+### Schritt 5: Integration und Ueberwachung
 
-Provide timeline, monitoring guidelines, and when to reassess.
+Zeitplan, Ueberwachungsrichtlinien und Kriterien fuer eine Neubewertung bereitstellen.
 
 ```
 Integration Protocol:
@@ -333,37 +334,37 @@ Hildegard's system is preventive and lifelong. The goal is not to "fix" and retu
 to old habits, but to develop a sustainable, temperament-harmonious way of living.
 ```
 
-**Expected:** User has clear timeline for change implementation, monitoring practices, and criteria for reassessment.
+**Erwartet:** Der Benutzer hat einen klaren Zeitplan fuer die Umsetzung von Aenderungen, Ueberwachungspraktiken und Kriterien fuer eine Neubewertung.
 
-**On failure:** If user reports feeling worse after 1-2 weeks, reassess for overcorrection. Example: Adding too many warming foods to a choleric type could cause excess fire. Dial back to neutral foods temporarily.
+**Bei Fehler:** Wenn der Benutzer berichtet, dass es ihm nach 1-2 Wochen schlechter geht, auf Ueberkorrektur pruefen. Beispiel: Zu viele waermende Lebensmittel bei einem cholerischen Typ koennten Feuer-Ueberschuss verursachen. Voruebergehend auf neutrale Lebensmittel zurueckfahren.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Temperament assessment completed with dominant and secondary types identified
-- [ ] Elemental imbalance(s) identified (excess/deficiency of air/fire/earth/water)
-- [ ] Dietary recommendations provided with "favor/moderate/avoid" categories
-- [ ] Spelt and galangal (Hildegard's universals) included unless contraindicated
-- [ ] Lifestyle recommendations address imbalance (grounding, cooling, stimulating, etc.)
-- [ ] Seasonal adjustments noted if applicable
-- [ ] Integration timeline provided (weeks 1-2, 3-4, 5-8)
-- [ ] Monitoring and reassessment triggers documented
-- [ ] User informed this is holistic guidance, not medical diagnosis
+- [ ] Temperamentbewertung mit identifiziertem dominantem und sekundaerem Typ abgeschlossen
+- [ ] Elementare(s) Ungleichgewicht(e) identifiziert (Ueberschuss/Mangel von Luft/Feuer/Erde/Wasser)
+- [ ] Ernaehrungsempfehlungen mit Kategorien "bevorzugen/maessigen/vermeiden" gegeben
+- [ ] Dinkel und Galgant (Hildegards Universalmittel) eingeschlossen, sofern nicht kontraindiziert
+- [ ] Lebensstilempfehlungen adressieren Ungleichgewicht (Erdung, Kuehlung, Stimulation usw.)
+- [ ] Saisonale Anpassungen notiert, falls zutreffend
+- [ ] Integrationszeitplan bereitgestellt (Wochen 1-2, 3-4, 5-8)
+- [ ] Ueberwachungs- und Neubewertungsausloeser dokumentiert
+- [ ] Benutzer informiert, dass dies ganzheitliche Anleitung ist, keine medizinische Diagnose
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Rigid Type-Casting**: Most people are blends. Don't force a single temperament identity
-2. **Ignoring Season**: Winter melancholic needs different foods than summer melancholic
-3. **Overcorrecting**: Adding excessive opposite qualities can create new imbalance. Go gradually
-4. **Modern Food Confusion**: Hildegard's foods reflect 12th-century European diet. Adapt to available foods with same elemental qualities
-5. **Expecting Fast Results**: Temperament is constitutional; rebalancing takes weeks to months
-6. **Isolating Diet**: Hildegard's system is holistic. Diet alone without lifestyle/spiritual integration is incomplete
-7. **Neglecting Spiritual Component**: *Causae et Curae* integrates body and soul. Prayer, meditation, and virtue are part of health
+1. **Starre Typisierung**: Die meisten Menschen sind Mischformen. Nicht eine einzelne Temperament-Identitaet erzwingen
+2. **Jahreszeit ignorieren**: Ein winterlicher Melancholiker braucht andere Lebensmittel als ein sommerlicher Melancholiker
+3. **Ueberkorrigieren**: Uebermassiges Hinzufuegen entgegengesetzter Qualitaeten kann ein neues Ungleichgewicht schaffen. Schrittweise vorgehen
+4. **Moderne Lebensmittelverwirrung**: Hildegards Lebensmittel spiegeln die europaeische Ernaehrung des 12. Jahrhunderts wider. An verfuegbare Lebensmittel mit gleichen elementaren Qualitaeten anpassen
+5. **Schnelle Ergebnisse erwarten**: Temperament ist konstitutionell; Wiederausgleichen dauert Wochen bis Monate
+6. **Ernaehrung isolieren**: Hildegards System ist ganzheitlich. Ernaehrung allein ohne Lebensstil-/spirituelle Integration ist unvollstaendig
+7. **Spirituelle Komponente vernachlaessigen**: *Causae et Curae* integriert Koerper und Seele. Gebet, Meditation und Tugend sind Teil der Gesundheit
 
-## Related Skills
+## Verwandte Skills
 
-- `formulate-herbal-remedy` — Use herbs to support temperament rebalancing (warming/cooling plants)
-- `practice-viriditas` — Spiritual practice supports holistic health integration
-- `consult-natural-history` — Foods in *Physica* have temperamental and elemental properties
-- `meditate` (esoteric domain) — Meditation practices tailored to temperament imbalance
-- `heal` (esoteric domain) — Post-assessment healing modalities for specific imbalances
-- `plan-garden-calendar` (gardening domain) — Seasonal food growing aligned with Hildegard's calendar
+- `formulate-herbal-remedy` — Kraeuter zur Unterstuetzung der Temperament-Wiederherstellung verwenden (waermende/kuehlende Pflanzen)
+- `practice-viriditas` — Spirituelle Praxis unterstuetzt die ganzheitliche Gesundheitsintegration
+- `consult-natural-history` — Lebensmittel in *Physica* haben temperamentale und elementare Eigenschaften
+- `meditate` (esoteric domain) — Meditationspraktiken, zugeschnitten auf Temperament-Ungleichgewicht
+- `heal` (esoteric domain) — Heilungsmodalitaeten nach der Bewertung fuer spezifische Ungleichgewichte
+- `plan-garden-calendar` (gardening domain) — Saisonaler Lebensmittelanbau im Einklang mit Hildegards Kalender

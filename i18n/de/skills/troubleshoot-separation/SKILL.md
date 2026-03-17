@@ -3,15 +3,13 @@ name: troubleshoot-separation
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Diagnostiziere und behebe chromatographische Trennprobleme in GC- und
-  HPLC-Systemen systematisch. Erkenne Symptome wie Peaktailing, Peakverbreiterung,
-  Retentionszeitverschiebungen, Druckprobleme und Basislinienstoerungen und
-  fuehre diese auf zugrunde liegende Ursachen zurueck. Verwende diesen Skill
-  bei schlechter Peakform, unerwarteter Retentionszeitverschiebung, abnormalen
-  Systemdruckverhaltender Basislinienstoerung oder nachlassender Saeulleistung.
+  Chromatographische Trennprobleme systematisch diagnostizieren und loesen:
+  Symptome dokumentieren, Grundursachen fuer Peakform- und Retentionsanomalien
+  identifizieren, Matrixeffekte evaluieren und gezielte Korrekturen mit einem
+  Eine-Variable-nach-der-anderen-Ansatz fuer GC- und HPLC-Systeme umsetzen.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -20,152 +18,154 @@ metadata:
   domain: chromatography
   complexity: intermediate
   language: natural
-  tags: chromatography, troubleshooting, peak-shape, system-pressure, column-performance
+  tags: chromatography, troubleshooting, peak-shape, resolution, matrix-effects
 ---
 
-# Chromatographische Trennung optimieren
+# Chromatographische Trennung fehlersuchen
 
-Diagnostiziere und behebe Trennprobleme in GC- und HPLC-Systemen durch systematische Ursachenanalyse der Symptome (Peakform, Druck, Retentionszeit, Basislinie) und gezielte Korrekturmassnahmen.
+Systematische Diagnose und Loesung von GC- und HPLC-Trennproblemen umfassend Symptomdokumentation, Peakformdiagnose, Untersuchung von Retentionsanomalien, Evaluierung von Matrixeffekten und verifizierte Korrekturmassnahmen mit kontrollierten Einzel-Variablen-Aenderungen.
 
 ## Wann verwenden
 
-- Peaktailing oder Peakverbreiterung ueber die Systemeignungsspezifikation hinaus
-- Unerwartete Verschiebung oder Drift von Retentionszeiten
-- Unerwarteter Druckanstieg oder -abfall im System
-- Basislinienstoerungen (Rauschen, Drift, Spikes)
-- Abnehmende Saeullenleistung (sinkende Bodenzahl) ueber die Zeit
+- Peaks tailen, fronten, spalten oder sind breiter als erwartet
+- Retentionszeiten haben sich verschoben oder sind nicht reproduzierbar
+- Aufloesung zwischen kritischen Paaren hat sich verschlechtert
+- Basisliniendrift, Geisterpeaks oder negative Peaks sind aufgetreten
+- Empfindlichkeit ist gesunken oder Signal-Rausch-Verhaeltnis hat sich verschlechtert
+- Eine zuvor funktionierende Methode besteht die Systemeignung nicht mehr
 
 ## Eingaben
 
-- **Erforderlich**: Beschreibung des beobachteten Problems (Symptom) und wann es erstmals aufgetreten ist
-- **Erforderlich**: Aktuelle chromatographische Bedingungen (Saeule, Eluent, Fluss, Temperatur)
-- **Optional**: Frueheres Referenz-Chromatogramm (wenn Methode frueher funktioniert hat)
-- **Optional**: Systemdruckprotokoll der letzten Laeufe
+### Erforderlich
+
+- **Problemchromatogramm**: Aktuelle Daten die das Problem zeigen
+- **Referenzchromatogramm**: Aktuelles gutes Chromatogramm derselben Methode zum Vergleich
+- **Methodenbedingungen**: Saeule, mobile Phase/Traegergas, Temperatur/Gradient, Detektor, Flussrate
+- **Systemprotokoll**: Kuerzliche Wartung, Saeulenwechsel, Mobil-Phasen-Herstellungen, Geraeteereignisse
+
+### Optional
+
+- **Blindchromatogramm**: Juengste Blind- oder Solvens-Injektion
+- **Systemeignungstrenddaten**: Historische Werte fuer Tailing, Aufloesung, Boeden, Retentionszeit
+- **Saeulenhistorie**: Anzahl Injektionen, Probentypen, Alter der Saeule
+- **Geraetewartungsprotokoll**: Pumpendichtungswechsel, Lampenstunden, Detektor-Servicedaten
 
 ## Vorgehensweise
 
-### Schritt 1: Symptom prazise identifizieren und dokumentieren
+### Schritt 1: Das Problem dokumentieren
 
-Beschreibe das Problem genau, bevor Massnahmen ergriffen werden:
+1. Das Symptom praezise beschreiben: welche Peaks sind betroffen, wie unterscheiden sie sich vom Referenzchromatogramm.
+2. Bestimmen wann das Problem begonnen hat: allmaehliche Verschlechterung oder ploetzliches Auftreten.
+3. Festhalten ob das Problem alle Peaks oder nur bestimmte betrifft.
+4. Vermerken ob das Problem in Standards, Proben oder beiden auftritt.
+5. Aktuelle Systemeignungsdaten sammeln und mit historischen Trends vergleichen.
+6. Das Problemchromatogramm neben dem Referenzchromatogramm fuer Seite-an-Seite-Vergleich dokumentieren.
 
-1. **Symptomkategorien**:
-   - Peakformprobleme: Tailing, Fronting, Peakverbreiterung, Split-Peak, Schulter
-   - Retentionszeitprobleme: Verschiebung, Drift, Irreproduzierbakeit
-   - Druckprobleme: Anstieg, Abfall, Pulsation
-   - Basislinienprobleme: Drift, Rauschen, Einbrueche, Ghostpeaks
-   - Sensitivitaetsprobleme: Signalabnahme, Grundrauschen erhoehe
-2. **Zeitlinie des Problems**: Wann trat das Problem erstmals auf? War es plotzlich oder graduell?
-3. **Reproduzierbarkeit**: Tritt das Problem bei jedem Lauf auf, oder nur gelegentlich?
-4. **Betroffene Peaks**: Alle Peaks betroffen oder nur bestimmte Analyten?
+**Erwartet:** Eine dokumentierte Problembeschreibung mit Zeitlinie, Umfang (alle Peaks vs. bestimmte, Standards vs. Proben) und Vergleich mit Referenzdaten.
 
-```markdown
-## Problemdokumentation
-- Symptom: [praezise Beschreibung]
-- Erstauftreten: [Datum/Umstand]
-- Betroffene Peaks: [alle/bestimmte Analyten]
-- Reproduzierbarkeit: [immer/gelegentlich]
-- Letzte Systemveraenderung: [neue Saeule/neuer Eluent/Wartung]
-```
+**Bei Fehler:** Wenn kein Referenzchromatogramm verfuegbar ist, eine frische Standardzubereitung unter den dokumentierten Methodenbedingungen injizieren um eine aktuelle Ausgangslage vor der Fehlersuche zu erstellen.
 
-**Erwartet:** Klare Symptombeschreibung die als Grundlage fuer systematische Diagnose dient.
+### Schritt 2: Peakformprobleme diagnostizieren
 
-**Bei Fehler:** Falls das Problem nicht reproduzierbar ist, fuehre mehrere aufeinanderfolgende Laeufe durch um die Reproduzierbarkeit zu bewerten.
+Die Symptomtabelle zur Identifikation wahrscheinlicher Grundursachen verwenden.
 
-### Schritt 2: Ursachendiagnose durch Ausschlussverfahren
+| Symptom | Moegliche Ursachen | Loesungen |
+|---------|-------------------|-----------|
+| **Tailing** (T > 1.5) | Sekundaerwechselwirkungen, Totvolumen in Verschraubungen, kontaminierte Saeulenfritte | Aminmodifizierer hinzufuegen (HPLC), Liner desaktivieren (GC), Fritte ersetzen, Injektionsmasse reduzieren |
+| **Fronting** (T < 0.8) | Saeulenueberladung, Fehlanpassung zwischen Probensolvens und mobiler Phase | Injektionsvolumen oder -konzentration reduzieren, in schwaecerem Solvens verduennen |
+| **Gespaltene/Doppelpeaks** | Teilweise blockierte Fritte, Hohlraum am Saeulenkopf, zwei polymorphe Formen | Fritte ersetzen, Saeulenkopf neu packen, Probenstabilitaet verifizieren |
+| **Breite Peaks (alle)** | Extrasaeulare Bandverbreiterung, falscher Rohrdurchmesser, alte Saeule | Post-Saeulen-Rohrlänge und -durchmesser minimieren, Saeule ersetzen |
+| **Breite Peaks (frueh)** | Schlechte Fokussierung am Saeulenkopf, zu starkes Injektionssolvens (HPLC) | Schwaecheres Injektionssolvens verwenden, Injektionsvolumen reduzieren |
+| **Breite Peaks (spaet)** | Saeulendiffusion, Temperatur zu niedrig (GC), Gradient nicht steil genug (HPLC) | Endtemperatur erhoehen, Gradienten steiler machen |
+| **Negative Peaks** | Brechungsindex/Absorbanz des Probensolvens unterscheidet sich von mobiler Phase | Probensolvens an mobile Phase angleichen, andere Detektionswellenlaenge verwenden |
+| **Geisterpeaks** | Verschleppung, kontaminierte mobile Phase, Saeulenbluten, Septumbluten (GC) | Blindlauf zur Bestaetigung, Injektionssystem reinigen/ersetzen, mobile Phase filtern/entgasen |
+| **Basisliniendrift** | Saeulenbluten (GC bei hoher Temp.), Gradientenbasislinie (HPLC), Lampeninstabilitaet | Maximaltemp. reduzieren, Low-Bleed-Saeule verwenden, Lampe ersetzen |
+| **Basislinienrauschen** | Elektrische Stoerung, Pumpenpulsation, Luftblasen im Detektor | Instrument erden, Pumpendichtungen ersetzen, mobile Phase entgasen |
 
-Grenze systematisch auf die wahrscheinlichste Ursache ein:
+1. Beobachtete Symptome der obigen Tabelle zuordnen.
+2. Die Ursachenliste einengen indem geprueft wird ob das Problem alle oder nur bestimmte Peaks betrifft und ob es ploetzlich oder allmaehlich auftrat.
+3. Die wahrscheinlichste Ursache basierend auf der Systemhistorie priorisieren.
 
-1. **Peaktailing-Diagnosen**:
-   - Basische Verbindungen auf unkonditionierter Saeule: Saeure zum Eluenten hinzufuegen oder pH erhoehen
-   - Tovolumen im System (HPLC): Kapillaren und Fittings pruefen; besonders bei UHPLC
-   - Saeulenbeschaaedigung: Leere Stellen am Saeulenkopf oder Verstopfung
-   - Nicht-optimaler pH: pKa des Analyten nahe dem Eluentenphe-Wert
-2. **Druckanstieg-Diagnosen**:
-   - Verstopfter Inline-Filter oder Vorsaeule: Filter ersetzen
-   - Viskositaetsaenderung des Eluenten: Loesungsmittelzusammensetzung pruefen
-   - Verstopfte Saeule (Partikulierter Kontaminant): Saeule ruckwaerts spuelen oder ersetzen
-   - Zu hohe Flussrate: Systemdruck gegen Geraetespezifikation pruefen
-3. **Retentionszeitdrift-Diagnosen**:
-   - pH-Aenderung des Puffers: Puffer frisch ansetzen
-   - Temperaturinstabilitaet: Saeulenofentemperatur pruefen
-   - Saeulenkontamination: Saeule mit starkem Loesungsmittel spuelen
-   - Beschaaedigung der stationaeren Phase: Saeule ersetzen
+**Erwartet:** Ein oder zwei wahrscheinlichste Grundursachen identifiziert aus der Symptom-Ursachen-Zuordnung, priorisiert nach Systemhistorie.
 
-```markdown
-## Diagnose-Matrix
-| Symptom | Wahrscheinliche Ursache | Testmassnahme | Korrektur |
-|---------|------------------------|---------------|-----------|
-| [Symptom] | [Ursache 1] | [Test] | [Massnahme] |
-| [Symptom] | [Ursache 2] | [Test] | [Massnahme] |
-```
+**Bei Fehler:** Wenn das Symptom keiner Zeile in der Tabelle entspricht oder mehrere Symptome gleichzeitig vorliegen, koennte das Problem zusammengesetzt sein. Das offensichtlichste Problem zuerst angehen, dann erneut bewerten.
 
-**Erwartet:** Diagnoseliste mit den zwei oder drei wahrscheinlichsten Ursachen und einem Pruefschema.
+### Schritt 3: Retentionszeitprobleme diagnostizieren
 
-**Bei Fehler:** Falls keine der naheliegenden Ursachen zutrifft, arbeite den Flusspfad von der Pumpe bis zum Detektor systematisch ab (Pumpe, Injektor, Vorsaeule, Saeule, Detektor).
+| Symptom | Moegliche Ursachen | Loesungen |
+|---------|-------------------|-----------|
+| **Alle Peaks frueher** | Erhoehte Flussrate, hoehere Saeulentemperatur, staerkere mobile Phase | Flussrateneinstellung pruefen, Temperatur verifizieren, mobile Phase neu herstellen |
+| **Alle Peaks spaeter** | Verringerte Flussrate, niedrigere Temperatur, schwaechere mobile Phase | Auf Leckagen pruefen, Temperatur verifizieren, Inline-Filter pruefen |
+| **Retentionszeitdrift** | Saeulendegradation, Verdunstung der mobilen Phase, Temperaturschwankung | Saeule ersetzen, Reservoir abdichten, Ofen stabilisieren |
+| **Retentionszeit nicht reproduzierbar** | Leckage an Verschraubung, Rueckschlagventilfehlfunktion, ungenuegender Reequilibrierung | Verschraubungen druckpruefen, Rueckschlagventile ersetzen, Equilibriervolumen erhoehen |
+| **Retention verloren (k' nahe 0)** | Phasenkollaps (RP bei hohem Wasseranteil), falsche mobile Phase | Polar-Embedded- oder AQ-Typ-Saeule verwenden, Saeule mit Organik rewetten |
+| **Koelution (zuvor getrennt)** | Saeulenselektivitaet verloren, Zusammensetzung der mobilen Phase geaendert | Saeule ersetzen, Herstellung der mobilen Phase verifizieren |
 
-### Schritt 3: Einfache Massnahmen zuerst versuchen
+1. Bestimmen ob Retentionsverschiebungen einheitlich (alle Peaks) oder selektiv (bestimmte Peaks) sind.
+2. Einheitliche Verschiebungen weisen auf systematische Ursachen hin.
+3. Selektive Verschiebungen weisen auf Saeulenchemieuenderungen hin.
+4. Die Instrumentendruckkurve pruefen: ploetzliche Druckaenderungen weisen auf Leckagen oder Verstopfungen hin.
+5. Den Referenzstandard erneut injizieren um zu bestaetigen ob das Problem im System oder der Probe liegt.
 
-Fuehre Massnahmen vom leichtesten zum aufwenidgsten durch:
+**Erwartet:** Grundursache der Retentionsanomalie identifiziert und als systematisch oder saeulenbedingt kategorisiert.
 
-1. **Zuerst pruefen**:
-   - Eluent frisch ansetzen und filtrieren (Pufferkonzentration und pH pruefen)
-   - Inline-Filter wechseln
-   - Leerinjektion (Blank) zur Basisliniendiagnose
-   - Systemspuelung mit starkem Loesungsmittel (100% MeOH oder ACN)
-2. **Dann pruefen**:
-   - Vorsaeule wechseln oder entfernen (Test ohne Vorsaeule)
-   - Kapillaren auf Knicke oder Lecks pruefen
-   - Pumpenmembran oder Ventile auf Verschleiss pruefen
-3. **Letzter Schritt**:
-   - Saeule wechseln (benoetigt nach vielen Laeufen oder Kontamination)
-   - Detektorlampe oder Detektor-Durchflusszelle reinigen
+**Bei Fehler:** Wenn Neuinjektion des Standards auf einer neuen Saeule das Problem loest, ist die urspruengliche Saeule das Problem. Wenn das Problem auf einer neuen Saeule fortbesteht, liegt die Ursache stromaufwaerts.
 
-**Erwartet:** Problem nach einer oder zwei Massnahmen behoben; falls nicht, systematisch weiter eingrenzen.
+### Schritt 4: Matrixeffekte evaluieren
 
-**Bei Fehler:** Falls keine der Massnahmen hilft, ist es ratsam den Systemdruck zu einem Referenzpunkt zu messen (z.B. ohne Saeule) um Hardware-Probleme von Saeulen-Problemen zu trennen.
+1. Standard- und Probenchromatogramm vergleichen: zusaetzliche Peaks, erhoehte Basislinie, veraenderte Peakformen.
+2. Fuer LC-MS Ionensuppression/-verstaerkung evaluieren: Post-Saeulen-Infusionstest durchfuehren.
+3. Auf Saeulenkontamination pruefen: Solvensblinds nach einer Probensequenz injizieren.
+4. Probenvorbereitung bewerten: verschmutzte Injektornadel, ungenuegender Probencleanup.
+5. Fuer GC: auf Aufbau nichtfluechtiger Rueckstaende im Einlassliner pruefen.
 
-### Schritt 4: Loesung implementieren und verifizieren
+**Erwartet:** Matrixeffekte charakterisiert mit umsetzbaren Empfehlungen.
 
-Setze die identifizierte Korrekturmassnahme um und bestaetige Erfolg:
+**Bei Fehler:** Wenn Matrixeffekte mit verfuegbaren Daten nicht adaequat charakterisiert werden koennen, eine matrixangepasste Kalibrierungskurve erstellen und Steigungen vergleichen.
 
-1. **Massnahme protokollieren**: Welche Aenderung wurde vorgenommen? Wann? Von wem?
-2. **Referenz-Chromatogramm erstellen**: Nach der Massnahme Referenz-Chromatogramm mit Standardloesung aufnehmen.
-3. **Systemeignungstest**: Aufloesung, Tailing-Faktor, Bodenzahl und Retentionszeiten-Reproduzierbarkeit pruefen.
-4. **Vergleich mit Originalzustand**: Problem geloest? Falls nicht, naechste Ursache eingrenzen.
+### Schritt 5: Korrektur umsetzen und verifizieren
 
-**Erwartet:** Chromatogramm entspricht nach Korrektur den Systemeignungsspezifikationen.
+1. Nur eine Variable nach der anderen aendern. Dokumentieren was geaendert wurde und warum.
+2. Nach jeder Aenderung den Systemeignungsstandard erneut injizieren und mit dem Referenzchromatogramm vergleichen.
+3. Reihenfolge der zu versuchenden Aenderungen (von am wenigsten bis am staerksten stoerend):
+   - Frische mobile Phase herstellen / Traegergas-Flasche wechseln
+   - Verbrauchsmaterialien ersetzen (Septum, Liner, Fritte, Inline-Filter, Lampe)
+   - Verschraubungen und Rohrleitungen anziehen oder ersetzen
+   - Saeule spuelen/regenerieren
+   - Methodenparameter anpassen (Temperatur, Fluss, Gradient, pH)
+   - Saeule ersetzen
+   - Instrument warten (Pumpendichtungen, Rueckschlagventile, Detektor)
+4. Sobald die Korrektur identifiziert ist, den vollstaendigen Systemeignungstest (n >= 5 Injektionen) ausfuehren.
+5. Alle Parameter mit historischer Spezifikation vergleichen.
+6. Grundursache, Korrekturmassnahme und Verifikationsergebnisse im Geraete-/Saeulenlogbuch dokumentieren.
+7. Wenn dasselbe Problem erneut auftritt, einen praeventiven Wartungsplan erstellen.
 
-**Bei Fehler:** Falls Problem nach mehreren Massnahmen nicht geloest, kontaktiere Saeulenhersteller oder Geraetesupport und dokumentiere alle Diagnoseschritte.
+**Erwartet:** Problem geloest mit auf Spezifikation wiederhergestellten Systemeignungsparametern. Grundursache, Korrekturmassnahme und Verifikation dokumentiert.
 
-### Schritt 5: Praeventive Massnahmen und Dokumentation
-
-Vermeide kuenftige Probleme durch praeventive Massnahmen:
-
-1. **Wartungsintervalle festlegen**: Inline-Filter-Wechsel alle X Injektionen; Saeulenwechsel nach X Laeufen.
-2. **Systemsaeuberungsroutine**: Taeglich End-of-day-Spuelung mit starkem Loesungsmittel.
-3. **Monitoring einrichten**: Systemdruck und Retentionszeiten dokumentieren um fruehzeitig Trends zu erkennen.
-4. **Problemdokumentation abschliessen**: Ursache, Loesung und Massnahmen dokumentieren fuer kuenftige Referenz.
-
-**Erwartet:** Schriftliches Wartungsprotokoll und Leistungsmonitoring-System um wiederkehrende Probleme fruehzeitig zu erkennen.
+**Bei Fehler:** Wenn alle Einzel-Variablen-Aenderungen das Problem nicht loesen, koennten mehrere gleichzeitige Ausfaelle vorliegen. Alle Verbrauchsmaterialien und die Saeule zusammen ersetzen, mit frischem Standard verifizieren und die Fehlersuche von der neuen Ausgangslage neu aufbauen.
 
 ## Validierung
 
-- [ ] Symptom praezise dokumentiert
-- [ ] Diagnose durch Ausschlussverfahren eingegrenzt
-- [ ] Massnahmen vom einfachsten zum aufwendigsten abgearbeitet
-- [ ] Systemeignungstest nach Korrektur erfolgreich
-- [ ] Problem und Loesung dokumentiert
-- [ ] Praeventive Massnahmen implementiert
+- [ ] Problem dokumentiert mit Symptomdeschreibung, Zeitlinie und Umfang
+- [ ] Grundursache unter Verwendung der Symptom-Ursachen-Zuordnungstabellen identifiziert
+- [ ] Nur eine Variable nach der anderen waehrend der Fehlersuche geaendert
+- [ ] Korrektur durch Systemeignungstest (n >= 5 Replikat-Injektionen) verifiziert
+- [ ] Alle Systemeignungsparameter innerhalb der Spezifikation wiederhergestellt
+- [ ] Grundursache und Korrekturmassnahme im Logbuch dokumentiert
+- [ ] Praeventive Massnahme zur Vermeidung von Wiederauftreten identifiziert
 
 ## Haeufige Stolperfallen
 
-- **Problem ohne Diagnose loesen**: Einfach die Saeule ersetzen ohne Ursachenanalyse fuehrt zu Wiederholung des Problems.
-- **Mehrere Veraenderungen gleichzeitig**: Gleichzeitig Puffer, Saeule und Fluss zu aendern macht unklar, was das Problem verursacht hat.
-- **Kontamination unterschaetzen**: Probenkontaminanten koennen Saeule und Inline-Filter irreversibel beschaedigen; Probenaufbereitung pruefen.
-- **Zu spaet handeln**: Ansteigende Retentionszeiten oder Druckaenderungen fruehzeitig als Warnsignal erkennen.
+- **Mehrere Variablen gleichzeitig aendern**: Macht die Identifikation der tatsaechlichen Grundursache unmoeglich. Immer eine Sache aendern, testen, dann entscheiden ob eine weitere geaendert werden soll.
+- **Saeulenersatz als erster Schritt**: Saeulenersatz ist teuer und kann das echte Problem verdecken. Einfachere Moeglichkeiten zuerst ausschoepfen.
+- **Das Geraetelogbuch ignorieren**: Viele Probleme lassen sich auf ein kuerzliches Wartungsereignis oder einen Wechsel der mobilen Phase zurueckfuehren. Immer pruefen was sich kuerzlich geaendert hat.
+- **Die Probe ohne Beleg beschuldigen**: Zuerst den Referenzstandard ausfuehren. Wenn der Standard das Problem auch zeigt, liegt es im System, nicht in der Probe.
+- **Saeule mit inkompatiblen Solvenzien spuelen**: Nie eine RP-Saeule mit reinem Wasser spuelen (verursacht Phasenkollaps). Dem Waschprotokoll des Herstellers folgen.
+- **Nicht dokumentieren was versucht wurde**: Gescheiterte Fehlersuche-Versuche sind wertvolle Information. Jede versuchte Aenderung und ihr Ergebnis festhalten.
 
 ## Verwandte Skills
 
-- `develop-gc-method` -- GC-Methodenentwicklung
-- `develop-hplc-method` -- HPLC-Methodenentwicklung
-- `validate-analytical-method` -- Methodenvalidierung nach ICH
+- `interpret-chromatogram` -- Verstaendnis der chromatographischen Daten die Trennprobleme aufdecken
+- `develop-gc-method` -- GC-Methodenentwicklung, relevant wenn Fehlersuche Methoden-Neudesign erfordert
+- `develop-hplc-method` -- HPLC-Methodenentwicklung, relevant wenn Fehlersuche Methoden-Neudesign erfordert
+- `validate-analytical-method` -- Revalidierung kann nach erheblichen Methodenaenderungen waehrend der Fehlersuche erforderlich sein

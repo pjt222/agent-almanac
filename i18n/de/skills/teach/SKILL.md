@@ -1,14 +1,15 @@
 ---
 name: teach
 description: >
-  AI knowledge transfer calibrated to learner level and needs. Models the
-  learner's mental state, scaffolds from known to unknown using Vygotsky's
-  Zone of Proximal Development, employs Socratic questioning to verify
-  understanding, and adapts explanations based on feedback signals. Use
-  when a user asks "how does X work?" and needs graduated explanation,
-  when their questions reveal a conceptual gap, when previous explanations
-  have not landed, or when teaching a concept that depends on prerequisites
-  the learner may not yet have.
+  KI-Wissenstransfer, kalibriert auf Niveau und Beduerfnisse des Lernenden.
+  Modelliert den mentalen Zustand des Lernenden, baut Gerueste vom Bekannten
+  zum Unbekannten mittels Vygotskys Zone der naechsten Entwicklung, setzt
+  sokratisches Fragen zur Verstaendnispruefung ein und passt Erklaerungen
+  basierend auf Feedback-Signalen an. Verwenden wenn ein Benutzer fragt "wie
+  funktioniert X?" und abgestufte Erklaerung benoetigt, wenn seine Fragen
+  eine Verstaendnisluecke offenbaren, wenn fruehere Erklaerungen nicht
+  angekommen sind, oder beim Lehren eines Konzepts, das Voraussetzungen hat,
+  die der Lernende moeglicherweise noch nicht hat.
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -27,186 +28,195 @@ metadata:
 
 # Lehren
 
-Conduct a structured knowledge transfer session — assessing the learner's current understanding, scaffolding from known to unknown, explaining at the calibrated depth, checking comprehension through questioning, adapting to feedback, and reinforcing through practice.
+Eine strukturierte Wissenstransfersitzung durchfuehren — den aktuellen Kenntnisstand des Lernenden einschaetzen, vom Bekannten zum Unbekannten Gerueste bauen, auf kalibrierter Tiefe erklaeren, Verstaendnis durch Fragen pruefen, sich an Feedback anpassen und durch Uebung verstaerken.
 
-## When to Use
+## Wann verwenden
 
-- A user asks "how does X work?" and the answer requires graduated explanation, not a data dump
-- The user's questions reveal a gap between their current understanding and what they need to know
-- Previous explanations have not landed — the user is confused or asking the same question differently
-- Teaching a concept that has prerequisites the user may not have
-- After `learn` has built a deep mental model that now needs to be communicated effectively
+- Wenn ein Benutzer fragt "wie funktioniert X?" und die Antwort abgestufte Erklaerung erfordert, keinen Daten-Dump
+- Wenn die Fragen des Benutzers eine Luecke zwischen seinem aktuellen Verstaendnis und dem, was er wissen muss, offenbaren
+- Wenn fruehere Erklaerungen nicht angekommen sind — der Benutzer klaert immer wieder oder formuliert die gleiche Frage anders
+- Beim Lehren eines Konzepts, das Voraussetzungen hat, die der Benutzer moeglicherweise nicht hat
+- Nach `learn` ein tiefes mentales Modell aufgebaut hat, das nun effektiv kommuniziert werden muss
 
-## Inputs
+## Eingaben
 
-- **Required**: The concept, system, or skill to teach
-- **Required**: The learner (available implicitly — the user in conversation)
-- **Optional**: Known learner context (expertise level, background, stated goals)
-- **Optional**: Previous failed explanations (what has already been tried)
-- **Optional**: Time/depth constraint (quick overview vs. deep understanding)
+- **Erforderlich**: Das zu lehrende Konzept, System oder die Faehigkeit
+- **Erforderlich**: Der Lernende (implizit verfuegbar — der Benutzer in der Konversation)
+- **Optional**: Bekannter Lernenderkontext (Expertisenniveau, Hintergrund, formulierte Ziele)
+- **Optional**: Fruehere fehlgeschlagene Erklaerungen (was bereits versucht wurde)
+- **Optional**: Zeit-/Tiefenbeschraenkung (schnelle Uebersicht vs. tiefes Verstaendnis)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Assess — Map the Learner
+### Schritt 1: Einschaetzen — Den Lernenden kartieren
 
-Before explaining anything, determine what the learner already knows and what they need.
+Bevor etwas erklaert wird, bestimmen, was der Lernende bereits weiss und was er braucht.
 
 ```
-Learner Calibration Matrix:
+Lernenden-Kalibrierungsmatrix:
 ┌──────────────┬────────────────────────────┬──────────────────────────┐
-│ Level        │ Explanation Pattern         │ Check Pattern            │
+│ Niveau       │ Erklaerungsmuster          │ Pruefungsmuster          │
 ├──────────────┼────────────────────────────┼──────────────────────────┤
-│ Novice       │ Analogy-first. Connect to  │ "In your own words, what │
-│ (no domain   │ familiar concepts. Avoid   │ does X do?" Accept any   │
-│ vocabulary)  │ jargon entirely. Concrete  │ correct paraphrase.      │
-│              │ before abstract.           │                          │
+│ Anfaenger    │ Analogie zuerst. An        │ "In eigenen Worten, was  │
+│ (kein        │ vertraute Konzepte         │ macht X?" Jede korrekte  │
+│ Fachvokab.)  │ anknuepfen. Jargon ganz   │ Umschreibung akzeptieren.│
+│              │ vermeiden. Konkretes vor   │                          │
+│              │ Abstraktem.                │                          │
 ├──────────────┼────────────────────────────┼──────────────────────────┤
-│ Intermediate │ Build on existing vocab.   │ "What would happen if    │
-│ (knows terms,│ Fill gaps with targeted    │ we changed Y?" Tests     │
-│ some gaps)   │ explanations. Use code     │ whether they can predict │
-│              │ examples that are close    │ from understanding.      │
-│              │ to their existing work.    │                          │
+│ Fortge-      │ Auf vorhandenem Vokabular  │ "Was wuerde passieren,   │
+│ schritten    │ aufbauen. Luecken mit      │ wenn wir Y aendern?"     │
+│ (kennt       │ gezielten Erklaerungen     │ Testet, ob vom           │
+│ Begriffe,    │ fuellen. Codebeispiele     │ Verstaendnis aus         │
+│ mit Luecken) │ nah an der eigenen Arbeit. │ vorhergesagt werden kann.│
 ├──────────────┼────────────────────────────┼──────────────────────────┤
-│ Advanced     │ Skip fundamentals. Focus   │ "How would you compare   │
-│ (strong base,│ on nuance, trade-offs,     │ X to Z approach?" Tests  │
-│ seeks depth) │ edge cases. Reference      │ integration and judgment. │
-│              │ source material directly.  │                          │
+│ Experte      │ Grundlagen ueberspringen.  │ "Wie wuerden Sie X mit   │
+│ (starke      │ Auf Nuancen, Kompromisse,  │ dem Z-Ansatz             │
+│ Basis,       │ Grenzfaelle fokussieren.   │ vergleichen?" Testet     │
+│ sucht Tiefe) │ Quellmaterial direkt       │ Integration und Urteil.  │
+│              │ referenzieren.             │                          │
 ├──────────────┼────────────────────────────┼──────────────────────────┤
-│ Misaligned   │ Correct gently. Provide    │ "Let me check my under-  │
-│ (confident   │ the right model alongside  │ standing — you're saying  │
-│ but wrong)   │ why the wrong model feels  │ X?" Mirror back to       │
-│              │ right. No shame signals.   │ surface the mismatch.    │
+│ Fehlkali-    │ Behutsam korrigieren. Das  │ "Lassen Sie mich mein    │
+│ briert       │ richtige Modell neben der  │ Verstaendnis pruefen —   │
+│ (selbst-     │ Erklaerung liefern, warum  │ Sie sagen X?" Zurueck-   │
+│ sicher aber  │ das falsche Modell sich    │ spiegeln, um die         │
+│ falsch)      │ richtig anfuehlt. Keine    │ Diskrepanz aufzudecken.  │
+│              │ Beschaemungssignale.       │                          │
 └──────────────┴────────────────────────────┴──────────────────────────┘
 ```
 
-1. Review what the user has said: their questions, vocabulary, stated goals
-2. Classify their likely level for this specific topic (a person can be advanced in one area and novice in another)
-3. Identify the Zone of Proximal Development (ZPD): what is just beyond their current reach but achievable with support?
-4. Note any misconceptions that need to be addressed before the correct model can land
-5. Identify the best entry point: what do they already know that connects to what they need to learn?
+1. Ueberpruefen, was der Benutzer gesagt hat: seine Fragen, sein Vokabular, seine formulierten Ziele
+2. Sein wahrscheinliches Niveau fuer dieses spezifische Thema einordnen (eine Person kann in einem Bereich fortgeschritten und in einem anderen Anfaenger sein)
+3. Die Zone der naechsten Entwicklung (ZPD) identifizieren: Was liegt gerade jenseits seiner aktuellen Reichweite, ist aber mit Unterstuetzung erreichbar?
+4. Missverstaendnisse notieren, die adressiert werden muessen, bevor das korrekte Modell greifen kann
+5. Den besten Einstiegspunkt identifizieren: Was weiss er bereits, das mit dem verbunden ist, was er lernen muss?
 
-**Expected:** A clear picture of: what the learner knows, what they need to know, and what bridge connects the two. The assessment should be specific enough to choose an explanation strategy.
+**Erwartet:** Ein klares Bild von: was der Lernende weiss, was er wissen muss und welche Bruecke beides verbindet. Die Einschaetzung sollte spezifisch genug sein, um eine Erklaerungsstrategie zu waehlen.
 
-**On failure:** If the learner's level is unclear, ask a calibration question: "Are you familiar with [prerequisite concept]?" This is not a test — it is gathering data to teach better. If asking feels awkward, default to intermediate level and adjust based on their response.
+**Bei Fehler:** Wenn das Niveau des Lernenden unklar ist, eine Kalibrierungsfrage stellen: "Sind Sie mit [Voraussetzungskonzept] vertraut?" Das ist kein Test — es ist Datenerhebung, um besser zu lehren. Wenn Fragen unpassend wirken, standardmaessig auf Fortgeschrittenen-Niveau setzen und basierend auf der Reaktion anpassen.
 
-### Step 2: Scaffold — Bridge Known to Unknown
+### Schritt 2: Geruest bauen — Vom Bekannten zum Unbekannten
 
-Build a path from what the learner already understands to the new concept.
+Einen Weg vom bereits Verstandenen zum neuen Konzept bauen.
 
-1. Identify the anchor: one concept the learner definitely understands that relates to the target
-2. State the connection explicitly: "X, which you know, works like Y in this new context because..."
-3. Introduce one new idea at a time — never two new concepts in the same sentence
-4. Use concrete examples before abstract principles
-5. Build layered complexity: simple version first, then add nuance
-6. If prerequisites are missing, teach the prerequisite first (mini-scaffold) before returning to the main concept
+1. Den Anker identifizieren: ein Konzept, das der Lernende definitiv versteht und das mit dem Ziel zusammenhaengt
+2. Die Verbindung explizit formulieren: "X, das Sie kennen, funktioniert wie Y in diesem neuen Kontext, weil..."
+3. Eine neue Idee pro Satz einfuehren — nie zwei neue Konzepte im selben Satz
+4. Konkrete Beispiele vor abstrakten Prinzipien verwenden
+5. Geschichtete Komplexitaet aufbauen: einfache Version zuerst, dann Nuancen hinzufuegen
+6. Wenn Voraussetzungen fehlen, zuerst die Voraussetzung lehren (Mini-Geruest), bevor zum Hauptkonzept zurueckgekehrt wird
 
-**Expected:** A scaffolded path where each step builds on the previous one. The learner should never feel lost because each new idea connects to something they already hold.
+**Erwartet:** Ein geruesteter Weg, bei dem jeder Schritt auf dem vorherigen aufbaut. Der Lernende sollte sich nie verloren fuehlen, weil jede neue Idee mit etwas verbunden ist, das er bereits hat.
 
-**On failure:** If the gap between known and unknown is too large for a single scaffold, break it into multiple smaller steps. If no familiar anchor exists (entirely novel domain), use analogy to a different domain the learner knows. If the analogy is imperfect, acknowledge the limits: "This is like X, except for..."
+**Bei Fehler:** Wenn die Luecke zwischen Bekanntem und Unbekanntem zu gross fuer ein einzelnes Geruest ist, in mehrere kleinere Schritte aufteilen. Wenn kein vertrauter Anker existiert (voellig neue Domaene), eine Analogie zu einer anderen Domaene verwenden, die der Lernende kennt. Wenn die Analogie unvollkommen ist, die Grenzen anerkennen: "Das ist wie X, ausser dass..."
 
-### Step 3: Explain — Calibrate Depth and Style
+### Schritt 3: Erklaeren — Tiefe und Stil kalibrieren
 
-Deliver the explanation at the right level, in the right mode.
+Die Erklaerung auf dem richtigen Niveau, in der richtigen Art liefern.
 
-1. Open with the core idea in one sentence — the headline before the article
-2. Expand with the scaffolded explanation built in Step 2
-3. Use the learner's vocabulary, not the domain's jargon (unless they are advanced)
-4. For code concepts: show a minimal working example, not a comprehensive one
-5. For abstract concepts: provide a concrete instance first, then generalize
-6. For processes: walk through a specific case step-by-step before stating the general rules
-7. Monitor for signs of confusion: if the next question does not build on the explanation, the explanation did not land
+1. Mit der Kernidee in einem Satz eroeffnen — die Schlagzeile vor dem Artikel
+2. Mit der geruesteten Erklaerung aus Schritt 2 erweitern
+3. Das Vokabular des Lernenden verwenden, nicht den Domaenen-Jargon (es sei denn, er ist fortgeschritten)
+4. Fuer Code-Konzepte: ein minimales funktionierendes Beispiel zeigen, kein umfassendes
+5. Fuer abstrakte Konzepte: zuerst eine konkrete Instanz liefern, dann verallgemeinern
+6. Fuer Prozesse: einen spezifischen Fall Schritt fuer Schritt durchgehen, bevor die allgemeinen Regeln formuliert werden
+7. Auf Anzeichen von Verwirrung achten: Wenn die naechste Frage nicht auf der Erklaerung aufbaut, ist die Erklaerung nicht angekommen
 
-**Expected:** The learner receives an explanation that is neither too shallow (leaving them with questions) nor too deep (overwhelming with unnecessary detail). The explanation uses their language and connects to their context.
+**Erwartet:** Der Lernende erhaelt eine Erklaerung, die weder zu flach (laesst ihn mit Fragen zurueck) noch zu tief (ueberwaeltigt mit unnoetigem Detail) ist. Die Erklaerung verwendet seine Sprache und knuepft an seinen Kontext an.
 
-**On failure:** If the explanation is too long, the core idea may be buried — restate the one-sentence headline. If the learner looks more confused after the explanation, the entry point was wrong — try a different anchor or analogy. If the concept is genuinely complex, acknowledge complexity rather than hiding it: "This has three parts, and they interact. Let me start with the first."
+**Bei Fehler:** Wenn die Erklaerung zu lang ist, kann die Kernidee vergraben sein — die Ein-Satz-Schlagzeile neu formulieren. Wenn der Lernende nach der Erklaerung verwirrter wirkt, war der Einstiegspunkt falsch — einen anderen Anker oder eine andere Analogie versuchen. Wenn das Konzept wirklich komplex ist, Komplexitaet anerkennen statt sie zu verstecken: "Das hat drei Teile, und sie interagieren. Lassen Sie mich mit dem ersten beginnen."
 
-### Step 4: Check — Verify Understanding
+### Schritt 4: Pruefen — Verstaendnis verifizieren
 
-Do not assume the explanation worked. Test it through questions that reveal the learner's mental model.
+Nicht annehmen, dass die Erklaerung funktioniert hat. Sie durch Fragen testen, die das mentale Modell des Lernenden offenlegen.
 
-1. Ask a question that requires application, not recall: "Given X, what would you expect to happen?"
-2. Ask for a paraphrase: "Can you explain this back in your own words?"
-3. Present a variation: "What if we changed this one thing?"
-4. Look for the specific understanding: can they predict, not just repeat?
-5. If their answer reveals a misconception, note the specific error for Step 5
-6. If their answer is correct, push slightly further: can they generalize?
+1. Eine Frage stellen, die Anwendung erfordert, nicht Abruf: "Wenn X gegeben ist, was wuerden Sie erwarten?"
+2. Um eine Paraphrase bitten: "Koennen Sie das in eigenen Worten erklaeren?"
+3. Eine Variation praesentieren: "Was waere, wenn wir dieses eine Ding aendern wuerden?"
+4. Nach dem spezifischen Verstaendnis suchen: Kann er vorhersagen, nicht nur wiederholen?
+5. Wenn seine Antwort ein Missverstaendnis offenbart, den spezifischen Fehler fuer Schritt 5 notieren
+6. Wenn seine Antwort korrekt ist, etwas weiter vordringen: Kann er verallgemeinern?
 
-**Expected:** The check reveals whether the learner has a working mental model or is parroting back the explanation. A working model can handle variations; a memorized explanation cannot.
+**Erwartet:** Die Pruefung offenbart, ob der Lernende ein funktionierendes mentales Modell hat oder die Erklaerung nachplappert. Ein funktionierendes Modell kann mit Variationen umgehen; eine auswendig gelernte Erklaerung nicht.
 
-**On failure:** If the learner cannot answer the check question, the explanation did not build the right mental model. This is not their failure — it is feedback on the teaching. Note what specifically did not land and proceed to Step 5.
+**Bei Fehler:** Wenn der Lernende die Pruefungsfrage nicht beantworten kann, hat die Erklaerung nicht das richtige mentale Modell aufgebaut. Das ist nicht sein Versagen — es ist Feedback zum Lehren. Notieren, was spezifisch nicht angekommen ist, und zu Schritt 5 uebergehen.
 
-### Step 5: Adapt — Respond to Feedback
+### Schritt 5: Anpassen — Auf Feedback reagieren
 
-Based on the check results, adjust the teaching approach.
+Basierend auf den Pruefungsergebnissen den Lehransatz anpassen.
 
-1. If understanding is solid: proceed to reinforcement (Step 6) or advance to the next concept
-2. If a specific misconception exists: address it directly with evidence, not repetition
-3. If general confusion exists: try a completely different explanation approach
-4. If the learner is ahead of the assessment: accelerate — skip scaffolding and go to nuance
-5. If the learner is behind the assessment: slow down — teach the prerequisite they are missing
+1. Wenn das Verstaendnis solide ist: zur Verstaerkung uebergehen (Schritt 6) oder zum naechsten Konzept fortschreiten
+2. Wenn ein spezifisches Missverstaendnis besteht: es direkt mit Belegen ansprechen, nicht mit Wiederholung
+3. Wenn allgemeine Verwirrung besteht: einen voellig anderen Erklaerungsansatz versuchen
+4. Wenn der Lernende der Einschaetzung voraus ist: beschleunigen — Geruestbau ueberspringen und zu Nuancen gehen
+5. Wenn der Lernende hinter der Einschaetzung liegt: verlangsamen — die fehlende Voraussetzung lehren
 
 ```
-Adaptation Responses:
+Anpassungsreaktionen:
 ┌──────────────────┬─────────────────────────────────────────────────┐
-│ Signal           │ Adaptation                                       │
+│ Signal           │ Anpassung                                        │
 ├──────────────────┼─────────────────────────────────────────────────┤
-│ "I think I get   │ Push gently: "Great — so what would happen      │
-│ it"              │ if...?" Verify before moving on.                 │
+│ "Ich glaube,     │ Behutsam vordringen: "Gut — was wuerde also     │
+│ ich verstehe"    │ passieren, wenn...?" Verifizieren vor dem        │
+│                  │ Weitergehen.                                     │
 ├──────────────────┼─────────────────────────────────────────────────┤
-│ "I'm confused"   │ Change modality: if verbal, show code. If code, │
-│                  │ use analogy. If analogy, draw a diagram.         │
+│ "Ich bin         │ Modalitaet wechseln: wenn verbal, Code zeigen.  │
+│ verwirrt"        │ Wenn Code, Analogie verwenden. Wenn Analogie,   │
+│                  │ ein Diagramm zeichnen.                           │
 ├──────────────────┼─────────────────────────────────────────────────┤
-│ "But what about  │ Good sign — they are testing the model. Address  │
-│ [edge case]?"    │ the edge case, which deepens understanding.      │
+│ "Aber was ist    │ Gutes Zeichen — er testet das Modell. Den       │
+│ mit [Grenzfall]?"│ Grenzfall ansprechen, was das Verstaendnis      │
+│                  │ vertieft.                                        │
 ├──────────────────┼─────────────────────────────────────────────────┤
-│ "That doesn't    │ They have a competing model. Explore it: "What   │
-│ seem right"      │ do you think happens instead?" Reconcile the two.│
+│ "Das scheint     │ Er hat ein konkurrierendes Modell. Erkunden:    │
+│ nicht richtig"   │ "Was denken Sie passiert stattdessen?" Die      │
+│                  │ beiden in Einklang bringen.                      │
 ├──────────────────┼─────────────────────────────────────────────────┤
-│ Silence or       │ They may be processing, or lost. Ask: "What      │
-│ topic change     │ part feels least clear?" Lower the bar gently.   │
+│ Stille oder      │ Er verarbeitet moeglicherweise, oder ist        │
+│ Themenwechsel    │ verloren. Fragen: "Welcher Teil fuehlt sich am  │
+│                  │ wenigsten klar an?" Die Huerde behutsam senken. │
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-**Expected:** The teaching adapts in real time based on feedback. No explanation is repeated identically — each retry uses a different approach. The adaptation should feel responsive, not mechanical.
+**Erwartet:** Der Unterricht passt sich in Echtzeit basierend auf Feedback an. Keine Erklaerung wird identisch wiederholt — jeder erneute Versuch verwendet einen anderen Ansatz. Die Anpassung sollte sich responsiv anfuehlen, nicht mechanisch.
 
-**On failure:** If multiple adaptation attempts fail, the problem may be a missing prerequisite that is so fundamental neither party has identified it. Ask explicitly: "What part of the explanation feels like the biggest jump?" This often reveals the hidden gap.
+**Bei Fehler:** Wenn mehrere Anpassungsversuche fehlschlagen, kann das Problem eine fehlende Voraussetzung sein, die so grundlegend ist, dass keine der beiden Seiten sie identifiziert hat. Explizit fragen: "Welcher Teil der Erklaerung fuehlt sich wie der groesste Sprung an?" Das offenbart oft die verborgene Luecke.
 
-### Step 6: Reinforce — Provide Practice
+### Schritt 6: Verstaerken — Uebung bereitstellen
 
-Solidify understanding through application, not repetition.
+Verstaendnis durch Anwendung festigen, nicht durch Wiederholung.
 
-1. Provide a practice problem that requires the new concept (not a trick question)
-2. If in a coding context: suggest a small modification to existing code that uses the concept
-3. If in a conceptual context: present a scenario and ask them to apply the model
-4. Connect forward: "Now that you understand X, this connects to Y, which we can explore next"
-5. Provide reference material for independent exploration: documentation links, related files, further reading
-6. Close the loop: "To summarize what we covered..." — one sentence for the core concept
+1. Eine Uebungsaufgabe bereitstellen, die das neue Konzept erfordert (keine Trickfrage)
+2. Im Code-Kontext: eine kleine Aenderung am bestehenden Code vorschlagen, die das Konzept verwendet
+3. Im konzeptuellen Kontext: ein Szenario praesentieren und bitten, das Modell anzuwenden
+4. Nach vorne verbinden: "Jetzt, da Sie X verstehen, verbindet sich das mit Y, was wir als naechstes erkunden koennen"
+5. Referenzmaterial fuer eigenstaendige Erforschung bereitstellen: Dokumentationslinks, verwandte Dateien, weiterfuehrende Lektuere
+6. Den Kreis schliessen: "Zusammenfassend, was wir behandelt haben..." — ein Satz fuer das Kernkonzept
 
-**Expected:** The learner has applied the concept at least once and has resources for continued learning. The summary anchors the learning for future recall.
+**Erwartet:** Der Lernende hat das Konzept mindestens einmal angewendet und hat Ressourcen fuer weiteres Lernen. Die Zusammenfassung verankert das Gelernte fuer spaeteres Erinnern.
 
-**On failure:** If the practice problem is too hard, the teaching jumped too far — simplify the problem. If the learner can do the practice but cannot explain why, they have procedural knowledge without conceptual understanding — return to Step 3 with a focus on the "why" rather than the "how."
+**Bei Fehler:** Wenn die Uebungsaufgabe zu schwer ist, hat der Unterricht zu weit gesprungen — die Aufgabe vereinfachen. Wenn der Lernende die Uebung loesen kann, aber nicht erklaeren kann warum, hat er prozedurales Wissen ohne konzeptuelles Verstaendnis — zurueck zu Schritt 3 mit Fokus auf das "Warum" statt das "Wie".
 
-## Validation
+## Validierung
 
-- [ ] The learner's level was assessed before the explanation began
-- [ ] The explanation was scaffolded from known to unknown, not delivered as a data dump
-- [ ] At least one check question was asked to verify understanding (not assumed)
-- [ ] The teaching adapted based on feedback rather than repeating the same explanation
-- [ ] The learner can apply the concept, not just recall the explanation
-- [ ] Honest gaps were acknowledged rather than glossed over
+- [ ] Das Niveau des Lernenden wurde eingeschaetzt, bevor die Erklaerung begann
+- [ ] Die Erklaerung wurde vom Bekannten zum Unbekannten geruestet, nicht als Daten-Dump geliefert
+- [ ] Mindestens eine Pruefungsfrage wurde gestellt, um Verstaendnis zu verifizieren (nicht angenommen)
+- [ ] Der Unterricht passte sich basierend auf Feedback an, statt die gleiche Erklaerung zu wiederholen
+- [ ] Der Lernende kann das Konzept anwenden, nicht nur die Erklaerung abrufen
+- [ ] Ehrliche Luecken wurden anerkannt statt uebergangen
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **The curse of knowledge**: Forgetting that the learner does not share the teacher's context. Jargon, assumed prerequisites, and implicit reasoning steps are the primary culprits
-- **Explaining to impress rather than to teach**: Comprehensive, technically precise explanations that demonstrate knowledge but leave the learner behind
-- **Repeating louder**: When an explanation does not land, repeating it with more emphasis rather than trying a different approach
-- **Testing instead of teaching**: Using check questions as gotchas rather than as diagnostic tools. The goal is to reveal understanding, not to catch failure
-- **Assuming silence is understanding**: The absence of questions does not mean the explanation worked — it often means the learner does not know what to ask
-- **One-size-fits-all depth**: Giving a novice an advanced explanation because "they should understand the full picture" overwhelms; giving an expert a beginner explanation because "better safe" wastes their time
+- **Der Fluch des Wissens**: Vergessen, dass der Lernende nicht den Kontext des Lehrenden teilt. Jargon, angenommene Voraussetzungen und implizite Reasoning-Schritte sind die Hauptverursacher
+- **Erklaeren um zu beeindrucken statt zu lehren**: Umfassende, technisch praezise Erklaerungen, die Wissen demonstrieren, aber den Lernenden zuruecklassen
+- **Lauter wiederholen**: Wenn eine Erklaerung nicht ankommt, sie mit mehr Nachdruck wiederholen statt einen anderen Ansatz zu versuchen
+- **Testen statt lehren**: Pruefungsfragen als Fallen verwenden statt als Diagnosewerkzeuge. Das Ziel ist, Verstaendnis aufzudecken, nicht Versagen zu ertappen
+- **Stille als Verstaendnis annehmen**: Das Fehlen von Fragen bedeutet nicht, dass die Erklaerung funktioniert hat — es bedeutet oft, dass der Lernende nicht weiss, was er fragen soll
+- **Einheitstiefe fuer alle**: Einem Anfaenger eine Experten-Erklaerung geben, weil "er das volle Bild verstehen sollte", ueberwaeltigt; einem Experten eine Anfaenger-Erklaerung geben, weil "lieber sicher", verschwendet seine Zeit
 
-## Related Skills
+## Verwandte Skills
 
-- `teach-guidance` — the human-guidance variant for coaching a person in becoming a better teacher
-- `learn` — systematic knowledge acquisition that builds the understanding to teach from
-- `listen` — deep receptive attention that reveals the learner's actual needs beyond their stated question
-- `meditate` — clearing assumptions between teaching episodes to approach each learner freshly
+- `teach-guidance` — die Variante zur menschlichen Anleitung, um eine Person darin zu coachen, ein besserer Lehrer zu werden
+- `learn` — systematischer Wissenserwerb, der das Verstaendnis aufbaut, von dem aus gelehrt wird
+- `listen` — tiefe empfaengliche Aufmerksamkeit, die die tatsaechlichen Beduerfnisse des Lernenden jenseits seiner formulierten Frage offenbart
+- `meditate` — Annahmen zwischen Lehrepisoden klaeren, um jedem Lernenden frisch zu begegnen

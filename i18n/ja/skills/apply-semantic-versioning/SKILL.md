@@ -1,13 +1,12 @@
 ---
 name: apply-semantic-versioning
 description: >
-  Apply semantic versioning (SemVer 2.0.0) to determine the correct
-  version bump based on change analysis. Covers major/minor/patch
-  classification, pre-release identifiers, build metadata, and
-  breaking change detection. Use when preparing a new release to determine
-  the correct version number, after merging changes before tagging, evaluating
-  whether a change constitutes a breaking change, adding pre-release identifiers,
-  or resolving disagreement about what version bump is appropriate.
+  セマンティックバージョニング（SemVer 2.0.0）を適用して、変更分析に基づく
+  正しいバージョンバンプを決定する。メジャー/マイナー/パッチの分類、
+  プレリリース識別子、ビルドメタデータ、破壊的変更の検出をカバーする。
+  新しいリリースを準備して正しいバージョン番号を決定する時、変更をマージした後
+  タグ付け前に、変更が破壊的変更に該当するか評価する時、プレリリース識別子を
+  追加する時、適切なバージョンバンプについて意見が分かれた時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -26,29 +25,29 @@ metadata:
 
 # セマンティックバージョニングの適用
 
-Determine and apply the correct semantic version bump by analyzing changes since the last release. This skill reads version files, classifies changes as breaking (major), feature (minor), or fix (patch), computes the new version number, and updates the appropriate files. Follows [SemVer 2.0.0](https://semver.org/) specification.
+最後のリリース以降の変更を分析して、正しいセマンティックバージョンバンプを決定し適用する。このスキルはバージョンファイルを読み、変更を破壊的（メジャー）、機能（マイナー）、修正（パッチ）に分類し、新しいバージョン番号を計算し、適切なファイルを更新する。[SemVer 2.0.0](https://semver.org/)仕様に従う。
 
 ## 使用タイミング
 
-- Preparing a new release and need to determine the correct version number
-- After merging a set of changes and before tagging a release
-- Evaluating whether a change constitutes a breaking change
-- Adding pre-release identifiers (alpha, beta, rc) to a version
-- Resolving disagreement about what version bump is appropriate
+- 新しいリリースを準備して正しいバージョン番号を決定する必要がある時
+- 一連の変更をマージした後、リリースをタグ付けする前
+- 変更が破壊的変更に該当するか評価する時
+- バージョンにプレリリース識別子（alpha、beta、rc）を追加する時
+- 適切なバージョンバンプについて意見が分かれた時
 
 ## 入力
 
-- **必須**: Project root directory containing a version file (DESCRIPTION, package.json, Cargo.toml, pyproject.toml, or VERSION)
-- **必須**: Git history since the last release (tag or commit)
-- **任意**: Commit convention in use (Conventional Commits, free-form)
-- **任意**: Pre-release label to apply (alpha, beta, rc)
-- **任意**: Previous version if not readable from files
+- **必須**: バージョンファイル（DESCRIPTION、package.json、Cargo.toml、pyproject.toml、またはVERSION）を含むプロジェクトルートディレクトリ
+- **必須**: 最後のリリース以降のGit履歴（タグまたはコミット）
+- **任意**: 使用中のコミット規約（Conventional Commits、自由形式）
+- **任意**: 適用するプレリリースラベル（alpha、beta、rc）
+- **任意**: ファイルから読み取れない場合の前のバージョン
 
 ## 手順
 
-### ステップ1: Read Current Version
+### ステップ1: 現在のバージョンを読み取る
 
-Locate and read the version file in the project root.
+プロジェクトルートでバージョンファイルを見つけて読み取る。
 
 ```bash
 # R packages
@@ -67,15 +66,15 @@ grep 'version' pyproject.toml
 cat VERSION
 ```
 
-Parse the current version into major.minor.patch components. If the version contains a pre-release suffix (e.g., `1.2.0-beta.1`), note it separately.
+現在のバージョンをmajor.minor.patchコンポーネントにパースする。バージョンにプレリリースサフィックス（例: `1.2.0-beta.1`）が含まれる場合、個別に記録する。
 
-**期待結果:** Current version identified as `MAJOR.MINOR.PATCH[-PRERELEASE]`.
+**期待結果:** 現在のバージョンが`MAJOR.MINOR.PATCH[-PRERELEASE]`として特定される。
 
-**失敗時:** If no version file is found, check for a VERSION file or git tags (`git describe --tags --abbrev=0`). If no version exists at all, start at `0.1.0` for initial development or `1.0.0` if the project has a stable public API.
+**失敗時:** バージョンファイルが見つからない場合、VERSIONファイルまたはgitタグ（`git describe --tags --abbrev=0`）を確認する。バージョンが全く存在しない場合、初期開発には`0.1.0`、安定したパブリックAPIを持つプロジェクトには`1.0.0`から始める。
 
-### ステップ2: Analyze Changes Since Last Release
+### ステップ2: 最後のリリース以降の変更を分析する
 
-Retrieve the list of changes since the last tagged release.
+最後にタグ付けされたリリース以降の変更リストを取得する。
 
 ```bash
 # Find the last version tag
@@ -88,62 +87,62 @@ git log --oneline v1.2.3..HEAD
 git log --oneline v1.2.3..HEAD | grep -E "^[a-f0-9]+ (feat|fix|BREAKING)"
 ```
 
-If no tags exist, compare against the initial commit or a known baseline.
+タグが存在しない場合、最初のコミットまたは既知のベースラインと比較する。
 
-**期待結果:** A list of commits with messages that can be classified by change type.
+**期待結果:** 変更タイプ別に分類できるメッセージ付きのコミットリスト。
 
-**失敗時:** If git history is unavailable or tags are missing, ask the developer to describe the changes manually. Classify based on their description.
+**失敗時:** git履歴が利用できないかタグが欠落している場合、開発者に変更を手動で説明してもらう。説明に基づいて分類する。
 
-### ステップ3: Classify Changes
+### ステップ3: 変更を分類する
 
-Apply the SemVer classification rules:
+SemVer分類ルールを適用する:
 
-| Change Type | Version Bump | Examples |
+| 変更タイプ | バージョンバンプ | 例 |
 |---|---|---|
-| **Breaking** (incompatible API change) | MAJOR | Renamed/removed public function, changed return type, removed parameter, changed default behavior |
-| **Feature** (new backwards-compatible functionality) | MINOR | New exported function, new parameter with default, new file format support |
-| **Fix** (backwards-compatible bug fix) | PATCH | Bug fix, documentation correction, performance improvement with same API |
+| **破壊的**（非互換APIの変更） | MAJOR | パブリック関数の名前変更/削除、戻り値型の変更、パラメータの削除、デフォルト動作の変更 |
+| **機能**（後方互換の新機能） | MINOR | 新しいエクスポート関数、デフォルト付き新パラメータ、新ファイル形式サポート |
+| **修正**（後方互換のバグ修正） | PATCH | バグ修正、ドキュメント修正、同じAPIでのパフォーマンス改善 |
 
-Classification rules:
-1. If ANY change is breaking, the bump is MAJOR (resets minor and patch to 0)
-2. If no breaking changes but ANY new features, the bump is MINOR (resets patch to 0)
-3. If only fixes, the bump is PATCH
+分類ルール:
+1. いずれかの変更が破壊的であれば、バンプはMAJOR（マイナーとパッチを0にリセット）
+2. 破壊的変更はないが新機能がある場合、バンプはMINOR（パッチを0にリセット）
+3. 修正のみの場合、バンプはPATCH
 
-Special cases:
-- **Pre-1.0.0**: During initial development (`0.x.y`), minor bumps may contain breaking changes. Document clearly.
-- **Deprecation**: Deprecating a function is a MINOR change (it still works). Removing it is MAJOR.
-- **Internal changes**: Refactoring that does not change the public API is PATCH.
+特殊ケース:
+- **1.0.0未満**: 初期開発中（`0.x.y`）、マイナーバンプに破壊的変更が含まれる場合がある。明確にドキュメント化する。
+- **非推奨化**: 関数を非推奨にするのはMINOR変更（まだ動作する）。削除するのがMAJOR。
+- **内部変更**: パブリックAPIを変更しないリファクタリングはPATCH。
 
-**期待結果:** Each change classified as breaking/feature/fix, and the overall bump level determined.
+**期待結果:** 各変更が破壊的/機能/修正に分類され、全体的なバンプレベルが決定される。
 
-**失敗時:** If changes are ambiguous, err on the side of a higher bump. A conservative major bump is better than a minor bump that breaks downstream code.
+**失敗時:** 変更が曖昧な場合、より高いバンプ側に倒す。控えめなメジャーバンプは、下流のコードを壊すマイナーバンプよりも良い。
 
-### ステップ4: Compute New Version
+### ステップ4: 新しいバージョンを計算する
 
-Apply the bump to the current version:
+現在のバージョンにバンプを適用する:
 
-| Current | Bump | New Version |
+| 現在 | バンプ | 新バージョン |
 |---|---|---|
 | 1.2.3 | MAJOR | 2.0.0 |
 | 1.2.3 | MINOR | 1.3.0 |
 | 1.2.3 | PATCH | 1.2.4 |
 | 0.9.5 | MINOR | 0.10.0 |
-| 2.0.0-rc.1 | (release) | 2.0.0 |
+| 2.0.0-rc.1 | （リリース） | 2.0.0 |
 
-If a pre-release label is requested:
-- `1.3.0-alpha.1` for first alpha of upcoming 1.3.0
-- `1.3.0-beta.1` for first beta
-- `1.3.0-rc.1` for first release candidate
+プレリリースラベルが要求された場合:
+- `1.3.0-alpha.1` 次の1.3.0の最初のアルファ
+- `1.3.0-beta.1` 最初のベータ
+- `1.3.0-rc.1` 最初のリリース候補
 
-Pre-release precedence: `alpha < beta < rc < (release)`.
+プレリリースの優先順位: `alpha < beta < rc < （リリース）`。
 
-**期待結果:** New version number computed following SemVer rules.
+**期待結果:** SemVerルールに従って計算された新しいバージョン番号。
 
-**失敗時:** If the current version is malformed or non-SemVer, normalize it first. For example, `1.2` becomes `1.2.0`.
+**失敗時:** 現在のバージョンが不正な形式または非SemVerの場合、まず正規化する。例えば、`1.2`は`1.2.0`になる。
 
-### ステップ5: Update Version Files
+### ステップ5: バージョンファイルを更新する
 
-Write the new version to the appropriate file(s).
+適切なファイルに新しいバージョンを書き込む。
 
 ```r
 # R: Update DESCRIPTION
@@ -161,15 +160,15 @@ Write the new version to the appropriate file(s).
 # Change version = "1.2.3" to version = "1.3.0"
 ```
 
-If the project has multiple files that reference the version (e.g., `_pkgdown.yml`, `CITATION`, `codemeta.json`), update all of them.
+プロジェクトにバージョンを参照する複数のファイルがある場合（例: `_pkgdown.yml`、`CITATION`、`codemeta.json`）、すべて更新する。
 
-**期待結果:** All version files updated consistently to the new version number.
+**期待結果:** すべてのバージョンファイルが新しいバージョン番号に一貫して更新される。
 
-**失敗時:** If a file update fails, revert all changes to maintain consistency. Never leave version files in a partially updated state.
+**失敗時:** ファイル更新が失敗した場合、一貫性を維持するためにすべての変更を元に戻す。バージョンファイルを部分的に更新された状態のまま放置してはならない。
 
-### ステップ6: Create Version Tag
+### ステップ6: バージョンタグを作成する
 
-After committing the version bump, create a git tag.
+バージョンバンプをコミットした後、gitタグを作成する。
 
 ```bash
 # Annotated tag (preferred)
@@ -179,40 +178,40 @@ git tag -a v1.3.0 -m "Release v1.3.0"
 git tag v1.3.0
 ```
 
-Use the project's established tag format:
-- `v1.3.0` (most common)
-- `1.3.0` (no prefix)
-- `package-name@1.3.0` (monorepo)
+プロジェクトで確立されたタグ形式を使用する:
+- `v1.3.0`（最も一般的）
+- `1.3.0`（プレフィックスなし）
+- `package-name@1.3.0`（モノレポ）
 
-**期待結果:** Git tag created matching the new version.
+**期待結果:** 新しいバージョンに一致するGitタグが作成される。
 
-**失敗時:** If the tag already exists, the version was not properly bumped. Check for duplicate tags with `git tag -l "v1.3*"` and resolve before proceeding.
+**失敗時:** タグが既に存在する場合、バージョンが適切にバンプされていなかった。`git tag -l "v1.3*"`で重複タグを確認し、続行する前に解決する。
 
 ## バリデーション
 
-- [ ] Current version was read from the correct version file
-- [ ] All commits since the last release were analyzed
-- [ ] Each change is classified as breaking, feature, or fix
-- [ ] The bump level matches the highest-severity change (breaking > feature > fix)
-- [ ] New version follows SemVer 2.0.0 format: `MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`
-- [ ] All version files in the project are updated consistently
-- [ ] No version was skipped (e.g., 1.2.3 to 1.4.0 without 1.3.0 being released)
-- [ ] Git tag matches the new version and project's tag format convention
-- [ ] Pre-release suffix, if used, follows correct precedence (alpha < beta < rc)
+- [ ] 現在のバージョンが正しいバージョンファイルから読み取られた
+- [ ] 最後のリリース以降のすべてのコミットが分析された
+- [ ] 各変更が破壊的、機能、修正に分類されている
+- [ ] バンプレベルが最も重大な変更に一致する（破壊的 > 機能 > 修正）
+- [ ] 新しいバージョンがSemVer 2.0.0形式に従う: `MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`
+- [ ] プロジェクト内のすべてのバージョンファイルが一貫して更新されている
+- [ ] バージョンがスキップされていない（例: 1.3.0がリリースされずに1.2.3から1.4.0）
+- [ ] Gitタグが新しいバージョンとプロジェクトのタグ形式規約に一致する
+- [ ] プレリリースサフィックスが使用された場合、正しい優先順位に従っている（alpha < beta < rc）
 
 ## よくある落とし穴
 
-- **Skipping minor versions**: Going from 1.2.3 directly to 1.4.0 because "we added two features." Each release gets one bump; the number of features does not determine the version.
-- **Treating deprecation as breaking**: Deprecating a function (adding a warning) is a minor change. Only removing it is a breaking change.
-- **Forgetting pre-1.0.0 rules**: Before 1.0.0, the API is considered unstable. Some projects bump minor for breaking changes during this phase, but it should be documented.
-- **Inconsistent version files**: Updating package.json but not package-lock.json, or updating DESCRIPTION but not CITATION. All version references must stay in sync.
-- **Build metadata confusion**: Build metadata (`+build.123`) does not affect version precedence. `1.0.0+build.1` and `1.0.0+build.2` have the same precedence.
-- **Not tagging releases**: Without git tags, future version bumps cannot determine the baseline for change analysis.
+- **マイナーバージョンのスキップ**: 「2つの機能を追加した」ため1.2.3から直接1.4.0にする。各リリースは1つのバンプを得る; 機能の数がバージョンを決定するのではない。
+- **非推奨化を破壊的として扱う**: 関数を非推奨にする（警告を追加する）のはマイナー変更。削除することのみが破壊的変更である。
+- **1.0.0未満のルールの忘れ**: 1.0.0の前はAPIが不安定と見なされる。一部のプロジェクトはこのフェーズで破壊的変更にマイナーバンプを使用するが、ドキュメント化すべきである。
+- **一貫性のないバージョンファイル**: package.jsonは更新したがpackage-lock.jsonはしない、またはDESCRIPTIONは更新したがCITATIONはしない。すべてのバージョン参照は同期を維持しなければならない。
+- **ビルドメタデータの混同**: ビルドメタデータ（`+build.123`）はバージョンの優先順位に影響しない。`1.0.0+build.1`と`1.0.0+build.2`は同じ優先順位を持つ。
+- **リリースにタグを付けない**: gitタグなしでは、将来のバージョンバンプが変更分析のベースラインを決定できない。
 
 ## 関連スキル
 
-- `manage-changelog` -- Maintain changelog entries that pair with version bumps
-- `plan-release-cycle` -- Plan release milestones that determine when version bumps occur
-- `release-package-version` -- R-specific release workflow that includes version bumping
-- `commit-changes` -- Commit the version bump with a proper message
-- `create-github-release` -- Create a GitHub release from the version tag
+- `manage-changelog` -- バージョンバンプと対になる変更ログエントリを維持する
+- `plan-release-cycle` -- バージョンバンプの発生時期を決定するリリースマイルストーンを計画する
+- `release-package-version` -- バージョンバンプを含むR固有のリリースワークフロー
+- `commit-changes` -- 適切なメッセージでバージョンバンプをコミットする
+- `create-github-release` -- バージョンタグからGitHubリリースを作成する

@@ -1,13 +1,13 @@
 ---
 name: audit-dependency-versions
 description: >
-  Audit project dependencies for version staleness, security vulnerabilities,
-  and compatibility issues. Covers lock file analysis, upgrade path planning,
-  and breaking change assessment. Use before a release to ensure dependencies
-  are current and secure, during periodic maintenance reviews, after receiving
-  a security advisory, when upgrading to a new language version, before
+  Audit project Abhaengigkeiten for version staleness, security Schwachstellen,
+  and compatibility issues. Umfasst lock file analysis, upgrade path planning,
+  and brechende Aenderung assessment. Verwenden vor a release to ensure Abhaengigkeiten
+  are current and secure, waehrend periodic maintenance reviews, nach receiving
+  a security advisory, when upgrading to a new language version, vor
   submitting to CRAN or npm, or when inheriting a project to assess its
-  dependency health.
+  Abhaengigkeit health.
 license: MIT
 allowed-tools: Read Bash Grep Glob
 metadata:
@@ -26,30 +26,30 @@ metadata:
 
 # Abhaengigkeitsversionen pruefen
 
-Audit project dependencies for version staleness, known security vulnerabilities, and compatibility issues. This skill inventories all dependencies from lock files, checks each against the latest available version, classifies staleness levels, identifies security concerns, and produces a prioritized upgrade report with recommended actions.
+Audit project Abhaengigkeiten for version staleness, known security Schwachstellen, and compatibility issues. This skill inventories all Abhaengigkeiten from lock files, checks each gegen the latest available version, classifies staleness levels, identifies security concerns, and produces a prioritized upgrade report with recommended actions.
 
-## When to Use
+## Wann verwenden
 
-- Before a release to ensure dependencies are current and secure
-- During periodic maintenance (monthly or quarterly dependency reviews)
-- After receiving a security advisory affecting a project dependency
+- Before a release to ensure Abhaengigkeiten are current and secure
+- During periodic maintenance (monthly or quarterly Abhaengigkeit reviews)
+- After receiving a security advisory affecting a project Abhaengigkeit
 - When upgrading a project to a new language version (e.g., R 4.4 to 4.5)
 - Before submitting a package to CRAN, npm, or crates.io
-- When inheriting a project and assessing its dependency health
+- When inheriting a project and assessing its Abhaengigkeit health
 
-## Inputs
+## Eingaben
 
-- **Required**: Project root directory containing dependency/lock files
+- **Erforderlich**: Project root directory containing Abhaengigkeit/lock files
 - **Optional**: Ecosystem type if not auto-detectable (R, Node.js, Python, Rust)
 - **Optional**: Security-only mode flag (skip staleness, focus on CVEs)
-- **Optional**: Allowlist of dependencies to skip (known acceptable older versions)
+- **Optional**: Allowlist of Abhaengigkeiten to skip (known acceptable older versions)
 - **Optional**: Target date for compatibility (e.g., "must work with R 4.4.x")
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Inventory All Dependencies
+### Schritt 1: Inventory All Dependencies
 
-Locate and parse dependency files to build a complete inventory.
+Lokalisieren and parse Abhaengigkeit files to build a complete inventory.
 
 **R packages:**
 ```bash
@@ -89,7 +89,7 @@ grep -A 50 "\[dependencies\]" Cargo.toml
 cat Cargo.lock | grep -A 2 "name ="
 ```
 
-Build an inventory table:
+Erstellen an inventory table:
 
 ```markdown
 | Package | Pinned Version | Type | Ecosystem |
@@ -100,13 +100,13 @@ Build an inventory table:
 | pytest | 8.0.0 | dev | Python |
 ```
 
-**Expected:** Complete inventory of all direct and (optionally) transitive dependencies with pinned versions.
+**Erwartet:** Abschliessen inventory of all direct and (optionally) transitive Abhaengigkeiten with pinned versions.
 
-**On failure:** If lock files are missing, the project has reproducibility issues. Note this as a finding and inventory from the manifest file (DESCRIPTION, package.json) using declared version constraints instead of pinned versions.
+**Bei Fehler:** If lock files are missing, das Projekt has reproducibility issues. Note this as a finding and inventory from the manifest file (DESCRIPTION, package.json) using declared version constraints stattdessen of pinned versions.
 
-### Step 2: Check Latest Available Versions
+### Schritt 2: Check Latest Available Versions
 
-For each dependency, determine the latest available version.
+Fuer jede Abhaengigkeit, determine the latest available version.
 
 **R:**
 ```r
@@ -144,7 +144,7 @@ cargo outdated
 cargo search serde --limit 1
 ```
 
-Update the inventory with latest versions:
+Aktualisieren the inventory with latest versions:
 
 ```markdown
 | Package | Pinned | Latest | Gap |
@@ -155,23 +155,23 @@ Update the inventory with latest versions:
 | shiny | 1.7.4 | 1.9.1 | minor |
 ```
 
-**Expected:** Latest version identified for each dependency with the gap magnitude (patch/minor/major).
+**Erwartet:** Latest version identified fuer jede Abhaengigkeit with the gap magnitude (patch/minor/major).
 
-**On failure:** If a package registry is unreachable, note the dependency as "unable to check" and proceed with the rest. Do not block the entire audit on one unreachable registry.
+**Bei Fehler:** If a package registry is unreachable, note the Abhaengigkeit as "unable to check" and proceed with the rest. Do not block the entire audit on one unreachable registry.
 
-### Step 3: Classify Staleness
+### Schritt 3: Classify Staleness
 
-Assign a staleness level to each dependency:
+Zuweisen a staleness level to each Abhaengigkeit:
 
 | Level | Definition | Action |
 |---|---|---|
-| **Current** | At latest version or within latest patch | No action needed |
-| **Patch behind** | Same major.minor, older patch | Low priority upgrade, usually safe |
+| **Current** | At latest version or innerhalb latest patch | No action needed |
+| **Patch behind** | Same major.minor, older patch | Low priority upgrade, normalerweise safe |
 | **Minor behind** | Same major, older minor | Medium priority, review changelog for new features |
-| **Major behind** | Older major version | High priority, likely breaking changes in upgrade |
+| **Major behind** | Older major version | High priority, likely brechende Aenderungs in upgrade |
 | **EOL / Archived** | Package no longer maintained | Critical: find replacement or fork |
 
-Produce a staleness summary:
+Erzeugen a staleness summary:
 
 ```markdown
 ### Staleness Summary
@@ -190,13 +190,13 @@ Color coding:
 - **AMBER**: Any minor-behind or one major-behind
 - **RED**: Multiple major-behind or any EOL packages
 
-**Expected:** Every dependency classified by staleness with an overall health rating.
+**Erwartet:** Every Abhaengigkeit classified by staleness with an overall health rating.
 
-**On failure:** If version comparison logic is ambiguous (non-SemVer versions, date-based versions), classify conservatively as "minor behind" and note the non-standard versioning.
+**Bei Fehler:** If version comparison logic is ambiguous (non-SemVer versions, date-based versions), classify conservatively as "minor behind" and note the non-standard versioning.
 
-### Step 4: Check for Security Vulnerabilities
+### Schritt 4: Pruefen auf Security Vulnerabilities
 
-Run ecosystem-specific security audit tools:
+Ausfuehren ecosystem-specific security audit tools:
 
 **R:**
 ```r
@@ -229,7 +229,7 @@ safety check --json
 cargo audit --json
 ```
 
-Document findings:
+Dokumentieren findings:
 
 ```markdown
 ### Security Findings
@@ -242,13 +242,13 @@ Document findings:
 **Security status**: RED (1 critical, 1 high)
 ```
 
-**Expected:** Security vulnerabilities identified with CVE, severity, affected version, and fix version.
+**Erwartet:** Security Schwachstellen identified with CVE, severity, affected version, and fix version.
 
-**On failure:** If no audit tool is available for the ecosystem, search GitHub Security Advisories manually for each dependency. Note that the audit is best-effort without tooling.
+**Bei Fehler:** If no audit tool ist verfuegbar for the ecosystem, search GitHub Security Advisories manuell fuer jede Abhaengigkeit. Beachte, dass the audit is best-effort ohne tooling.
 
-### Step 5: Plan Upgrade Path
+### Schritt 5: Planen Upgrade Path
 
-Prioritize upgrades based on risk and impact:
+Priorisieren upgrades basierend auf risk and impact:
 
 ```markdown
 ### Upgrade Plan
@@ -276,15 +276,15 @@ Prioritize upgrades based on risk and impact:
 | ggplot2 | 3.4.0 | 3.5.1 | New geom functions added |
 ```
 
-For each major upgrade, note known breaking changes by checking the dependency's changelog.
+Fuer jede major upgrade, note known brechende Aenderungs by checking the Abhaengigkeit's changelog.
 
-**Expected:** Prioritized upgrade plan with security fixes first, then EOL replacements, major upgrades, and minor/patch batches.
+**Erwartet:** Prioritized upgrade plan with security fixes first, then EOL replacements, major upgrades, and minor/patch batches.
 
-**On failure:** If a dependency has no clear upgrade path (abandoned with no fork), document the risk and recommend: (1) vendoring the current version, (2) finding an alternative package, or (3) accepting the risk with monitoring.
+**Bei Fehler:** If a Abhaengigkeit has no clear upgrade path (abandoned with no fork), document the risk and recommend: (1) vendoring the aktuelle Version, (2) finding an alternative package, or (3) accepting the risk with monitoring.
 
-### Step 6: Document Compatibility Risks
+### Schritt 6: Dokumentieren Compatibility Risks
 
-For each planned upgrade, assess compatibility:
+Fuer jede planned upgrade, assess compatibility:
 
 ```markdown
 ### Compatibility Assessment
@@ -303,38 +303,38 @@ For each planned upgrade, assess compatibility:
 - **Migration guide**: https://webpack.js.org/migrate/5/
 ```
 
-Write the complete audit report to `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDIT-2026-02-17.md`.
+Schreiben the complete audit report to `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDIT-2026-02-17.md`.
 
-**Expected:** Compatibility risks documented for each significant upgrade. Complete audit report written.
+**Erwartet:** Compatibility risks documented fuer jede significant upgrade. Abschliessen audit report written.
 
-**On failure:** If compatibility cannot be assessed without testing, recommend a branch-based upgrade approach: create a branch, apply the upgrade, run tests, and evaluate results before merging.
+**Bei Fehler:** If compatibility cannot be assessed ohne testing, recommend a branch-based upgrade approach: create a branch, apply the upgrade, run tests, and evaluate results vor merging.
 
-## Validation
+## Validierung
 
-- [ ] All direct dependencies inventoried from lock/manifest files
-- [ ] Latest available version checked for each dependency
+- [ ] All direct Abhaengigkeiten inventoried from lock/manifest files
+- [ ] Latest available version checked fuer jede Abhaengigkeit
 - [ ] Staleness level assigned (current / patch / minor / major / EOL)
 - [ ] Overall health rating calculated (GREEN / AMBER / RED)
 - [ ] Security audit run with ecosystem-appropriate tooling
 - [ ] All CVEs documented with severity, affected version, and fix version
 - [ ] Upgrade plan prioritized: security > EOL > major > minor/patch
-- [ ] Compatibility risks assessed for each major upgrade
+- [ ] Compatibility risks assessed fuer jede major upgrade
 - [ ] Audit report written to DEPENDENCY-AUDIT.md
-- [ ] No dependencies left as "unable to check" without documented reason
+- [ ] No Abhaengigkeiten left as "unable to check" ohne documented reason
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Ignoring transitive dependencies**: A project may have 10 direct dependencies but 200 transitive ones. Security vulnerabilities often hide in transitive dependencies. Use `npm ls` or `renv::dependencies()` to see the full tree.
-- **Upgrading everything at once**: Batch-upgrading all dependencies in one commit makes it impossible to identify which upgrade caused a regression. Upgrade in logical groups (security first, then majors individually, then minors/patches as a batch).
-- **Confusing "outdated" with "insecure"**: A package one major version behind with no CVEs is lower risk than a current package with a critical vulnerability. Always prioritize security over freshness.
-- **Not reading changelogs**: Blindly upgrading a major version without reading the changelog. Breaking changes in the dependency become breaking changes in your project.
-- **Audit fatigue**: Running audits but not acting on findings. Set a policy: security findings must be addressed within 1 sprint, EOL within 1 quarter.
-- **Missing lock files**: Projects without lock files have non-reproducible builds. If the audit reveals missing lock files, that is itself a critical finding to address before versioned upgrades.
+- **Ignoring transitive Abhaengigkeiten**: A project may have 10 direct Abhaengigkeiten but 200 transitive ones. Security Schwachstellen often hide in transitive Abhaengigkeiten. Use `npm ls` or `renv::Abhaengigkeiten()` to see the full tree.
+- **Upgrading everything at once**: Batch-upgrading all Abhaengigkeiten in one commit makes it impossible to identify which upgrade caused a regression. Upgrade in logical groups (security first, then majors individually, then minors/patches as a batch).
+- **Confusing "outdated" with "insecure"**: A package one major version behind with no CVEs is lower risk than a current package with a critical Schwachstelle. Always prioritize security over freshness.
+- **Not reading changelogs**: Blindly upgrading a major version ohne reading the changelog. Breaking changes in the Abhaengigkeit become brechende Aenderungs in your project.
+- **Audit fatigue**: Running audits but not acting on findings. Set a policy: security findings muss addressed innerhalb 1 sprint, EOL innerhalb 1 quarter.
+- **Missing lock files**: Projects ohne lock files have non-reproducible builds. If the audit reveals missing lock files, that is itself a critical finding to address vor versioned upgrades.
 
-## Related Skills
+## Verwandte Skills
 
-- `apply-semantic-versioning` -- Version bumps may be triggered by dependency upgrades
-- `manage-renv-dependencies` -- R-specific dependency management with renv
-- `security-audit-codebase` -- Broader security audit that includes dependency vulnerabilities
-- `manage-changelog` -- Document dependency upgrades in the changelog
-- `plan-release-cycle` -- Schedule dependency upgrades within the release timeline
+- `apply-semantic-versioning` -- Version bumps kann triggered by Abhaengigkeit upgrades
+- `manage-renv-Abhaengigkeiten` -- R-specific Abhaengigkeit management with renv
+- `security-audit-codebase` -- Broader security audit that includes Abhaengigkeit Schwachstellen
+- `manage-changelog` -- Dokumentieren Abhaengigkeit upgrades in the changelog
+- `plan-release-cycle` -- Planen Abhaengigkeit upgrades innerhalb the release timeline

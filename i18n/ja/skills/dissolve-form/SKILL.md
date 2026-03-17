@@ -1,14 +1,12 @@
 ---
 name: dissolve-form
 description: >
-  Perform controlled dismantling of rigid system structures while preserving
-  essential capabilities (imaginal discs). Covers rigidity mapping, dissolution
-  sequencing, knowledge extraction, interface archaeology, and safe decomposition
-  of technical debt and organizational calcification. Use when assess-form
-  classified the system as PREPARE or CRITICAL, when a system is so calcified
-  that incremental change is impossible, when technical debt blocks all forward
-  progress, or before adapt-architecture when the current form must be softened
-  before it can be reshaped.
+  本質的な能力（イマジナルディスク）を保持しながら、硬直化したシステム構造の制御された
+  解体を行う。硬直性マッピング、解体シーケンシング、知識抽出、インターフェース考古学、
+  技術的負債と組織の石灰化の安全な分解を網羅する。assess-formがシステムをPREPAREまたは
+  CRITICALと分類した時、システムが石灰化しすぎて漸進的変更が不可能な時、技術的負債が
+  すべての前進を阻む時、またはadapt-architectureの前に現在の形態を軟化させる必要がある
+  時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,72 +23,72 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# フォームの溶解
+# 形態の解体
 
-Perform controlled dismantling of rigid system structures — dissolving calcified architecture, accumulated technical debt, and organizational rigidity while preserving the essential capabilities ("imaginal discs") that will seed the new form.
+硬直化したシステム構造の制御された解体を行う — 石灰化したアーキテクチャ、蓄積された技術的負債、組織の硬直性を解体しながら、新しい形態の種となる本質的な能力（「イマジナルディスク」）を保持する。
 
 ## 使用タイミング
 
-- Form assessment (see `assess-form`) classified the system as PREPARE or CRITICAL (too rigid to transform directly)
-- A system is so calcified that incremental change is impossible
-- Technical debt has compounded to the point where it blocks all forward progress
-- An organizational structure has become so rigid that it can't adapt to new requirements
-- Before `adapt-architecture` when the current form must be softened before it can be reshaped
-- Legacy system decommissioning where value must be extracted before shutdown
+- 形態評価（`assess-form`参照）がシステムをPREPAREまたはCRITICAL（直接変換には硬すぎる）と分類した時
+- システムが石灰化しすぎて漸進的変更が不可能な時
+- 技術的負債が蓄積してすべての前進を阻む地点に達した時
+- 組織構造が硬直化して新しい要件に適応できなくなった時
+- `adapt-architecture`の前に現在の形態を軟化させる必要がある時
+- 価値を抽出してからシャットダウンするレガシーシステムの廃止時
 
 ## 入力
 
-- **必須**: Form assessment showing high rigidity (from `assess-form`)
-- **必須**: Identification of essential capabilities to preserve (imaginal discs)
-- **任意**: Target form (what should emerge after dissolution; may be unknown)
-- **任意**: Dissolution timeline and constraints
-- **任意**: Stakeholder concerns about specific components
-- **任意**: Previous dissolution attempts and their outcomes
+- **必須**: 高い硬直性を示す形態評価（`assess-form`から）
+- **必須**: 保持すべき本質的能力（イマジナルディスク）の特定
+- **任意**: 目標形態（解体後に出現すべきもの、不明の場合あり）
+- **任意**: 解体タイムラインと制約
+- **任意**: 特定のコンポーネントに対するステークホルダーの懸念
+- **任意**: 以前の解体試行とその結果
 
 ## 手順
 
-### ステップ1: Identify Imaginal Discs
+### ステップ1: イマジナルディスクの特定
 
-In biological metamorphosis, imaginal discs are clusters of cells within the caterpillar that survive dissolution and become the butterfly's organs. Identify the essential capabilities that must survive.
+生物学的変態において、イマジナルディスクは溶解を生き延び蝶の器官となる毛虫内の細胞群である。生き残るべき本質的な能力を特定する。
 
-1. Catalog every capability the current system provides:
-   - User-facing features
-   - Data processing functions
-   - Integration points with external systems
-   - Institutional knowledge embedded in the code/process
-   - Business rules (often implicit, undocumented)
-2. Classify each capability:
-   - **Imaginal disc** (must survive): core business logic, critical integrations, irreplaceable data
-   - **Replaceable tissue** (can be rebuilt): UI, infrastructure, standard algorithms
-   - **Dead tissue** (should not survive): workarounds for bugs that no longer exist, compatibility shims for dead systems, features nobody uses
-3. Extract imaginal discs into portable form:
-   - Document business rules explicitly (they may only exist as code comments or tribal knowledge)
-   - Extract critical algorithms into standalone, tested modules
-   - Export essential data in format-independent representations
-   - Record integration contracts and their actual (not documented) behavior
+1. 現在のシステムが提供するすべての能力をカタログ化する：
+   - ユーザー向け機能
+   - データ処理機能
+   - 外部システムとの統合ポイント
+   - コード/プロセスに埋め込まれた組織的知識
+   - ビジネスルール（暗黙的で文書化されていないことが多い）
+2. 各能力を分類する：
+   - **イマジナルディスク**（生存必須）：コアビジネスロジック、重要な統合、代替不可能なデータ
+   - **置換可能な組織**（再構築可能）：UI、インフラ、標準的なアルゴリズム
+   - **死んだ組織**（生存すべきでない）：もう存在しないバグへのワークアラウンド、廃止システムとの互換シム、誰も使っていない機能
+3. イマジナルディスクをポータブルな形式に抽出する：
+   - ビジネスルールを明示的に文書化する（コードコメントや口伝としてのみ存在する場合がある）
+   - 重要なアルゴリズムをスタンドアロンのテスト済みモジュールに抽出する
+   - 本質的なデータをフォーマット非依存の表現にエクスポートする
+   - 統合契約とその実際の（文書化されたものではなく）動作を記録する
 
-**期待結果:** A clear inventory of capabilities classified as essential (preserve), replaceable (rebuild), or dead (discard). Essential capabilities are extracted into portable form before dissolution begins.
+**期待結果:** 本質的（保持）、置換可能（再構築）、死んでいる（破棄）に分類された能力の明確なインベントリ。解体開始前に本質的な能力がポータブルな形式に抽出されている。
 
-**失敗時:** If imaginal disc identification is uncertain (stakeholders disagree on what's essential), err on the side of preservation. Extract more capabilities than you think you'll need — discarding after dissolution is easy; recovering lost knowledge is often impossible.
+**失敗時:** イマジナルディスクの特定が不確実な場合（何が本質的かについてステークホルダーが意見を異にする場合）、保持側に寄って判断する。必要と思うよりも多くの能力を抽出する — 解体後の破棄は容易だが、失われた知識の回復は多くの場合不可能。
 
-### ステップ2: Map Dissolution Sequence
+### ステップ2: 解体シーケンスのマッピング
 
-Determine the order in which structural elements will be dissolved — outer layers first, core last.
+構造要素が解体される順序を決定する — 外層から先に、コアは最後。
 
-1. Order by dependency depth:
-   - Layer 1 (outermost): components with no dependents — nothing breaks when they're removed
-   - Layer 2: components whose dependents are only Layer 1 items (already dissolved)
-   - Layer 3: components with deeper dependencies — removing these requires careful interface management
-   - Layer N (core): load-bearing components that everything depends on — dissolved last
-2. For each layer, define:
-   - What is dissolved (removed, decommissioned, archived)
-   - What replaces it (new component, nothing, or temporary stub)
-   - What interfaces must be maintained for the remaining layers
-   - How to verify the system still functions after this layer is dissolved
-3. Create dissolution checkpoints:
-   - After each layer, the remaining system must be tested and verified operational
-   - Each checkpoint is a stable state from which dissolution can pause
-   - If a layer's dissolution causes unexpected breakage, restore from the previous checkpoint
+1. 依存関係の深さで順序付ける：
+   - レイヤー1（最外層）：依存するものがないコンポーネント — 除去しても何も壊れない
+   - レイヤー2：依存するものがレイヤー1の項目（すでに解体済み）のみのコンポーネント
+   - レイヤー3：より深い依存関係を持つコンポーネント — 除去には慎重なインターフェース管理が必要
+   - レイヤーN（コア）：すべてが依存する荷重支持コンポーネント — 最後に解体
+2. 各レイヤーについて定義する：
+   - 何が解体されるか（除去、廃止、アーカイブ）
+   - 何がそれを置き換えるか（新コンポーネント、なし、または一時的なスタブ）
+   - 残りのレイヤーのためにどのインターフェースを維持する必要があるか
+   - このレイヤーの解体後にシステムが依然として機能することをどう検証するか
+3. 解体チェックポイントを作成する：
+   - 各レイヤーの後、残りのシステムがテストされ稼働可能であることを確認する
+   - 各チェックポイントは解体を一時停止できる安定状態である
+   - レイヤーの解体が予期しない破損を引き起こした場合、前のチェックポイントから復元する
 
 ```
 Dissolution Sequence (outside in):
@@ -109,108 +107,108 @@ Dissolution Sequence (outside in):
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**期待結果:** A layer-ordered dissolution sequence where each step is safe (checkpoint verified) and reversible (previous checkpoint is restorable). The most critical components are dissolved last when the team has the most experience and confidence.
+**期待結果:** 各ステップが安全（チェックポイントで検証済み）かつ可逆的（前のチェックポイントが復元可能）なレイヤー順序の解体シーケンス。最も重要なコンポーネントは、チームが最も経験と自信を持った時に最後に解体される。
 
-**失敗時:** If dependency mapping reveals circular dependencies (A depends on B depends on A), these cycles must be broken before sequenced dissolution is possible. Introduce an interface between A and B, break the cycle, then proceed with the sequence.
+**失敗時:** 依存関係マッピングが循環依存（AがBに依存しBがAに依存）を明らかにした場合、シーケンス解体が可能になる前にこれらのサイクルを断ち切る必要がある。AとBの間にインターフェースを導入し、サイクルを断ち切ってからシーケンスを進める。
 
-### ステップ3: Perform Interface Archaeology
+### ステップ3: インターフェース考古学の実施
 
-Before dissolving rigid structures, excavate and document their actual interfaces — not what's documented, but what's actually in use.
+硬直した構造を解体する前に、その実際のインターフェースを発掘して文書化する — 文書化されたものではなく、実際に使用されているもの。
 
-1. Instrument current interfaces:
-   - Log every call, message, or data exchange at each interface
-   - Run for at least one full business cycle (daily, weekly, monthly — whatever is relevant)
-   - Capture actual payload shapes, not just documented schemas
-2. Compare actual vs. documented behavior:
-   - What documented interfaces are never called? (candidates for Layer 1 dissolution)
-   - What undocumented interfaces are actively used? (hidden dependencies — must be preserved or explicitly replaced)
-   - What edge cases does the actual traffic reveal that documentation doesn't mention?
-3. Build an interface contract from actual behavior:
-   - This contract becomes the specification for any replacement
-   - Include real examples of inputs and outputs
-   - Document error handling behavior (what actually happens, not what should happen)
+1. 現在のインターフェースを計装する：
+   - 各インターフェースでのすべての呼び出し、メッセージ、データ交換をログする
+   - 少なくとも1つの完全なビジネスサイクル（日次、週次、月次 — 関連するものに応じて）実行する
+   - 文書化されたスキーマだけでなく、実際のペイロード形状をキャプチャする
+2. 実際の動作と文書化された動作を比較する：
+   - 文書化されたインターフェースのうち呼び出されないものは何か？（レイヤー1解体の候補）
+   - 文書化されていないが活発に使用されているインターフェースは何か？（隠れた依存関係 — 保持または明示的に置換する必要がある）
+   - 実際のトラフィックが明らかにする、文書化されていないエッジケースは何か？
+3. 実際の動作からインターフェース契約を構築する：
+   - この契約が置換の仕様になる
+   - 入出力の実例を含める
+   - エラー処理の動作を文書化する（起こるべきことではなく、実際に何が起こるか）
 
-**期待結果:** An empirically-derived interface contract that accurately represents how the system actually communicates, including undocumented behaviors and hidden dependencies.
+**期待結果:** 文書化されていない動作や隠れた依存関係を含む、システムが実際にどのように通信するかを正確に表す経験的に導出されたインターフェース契約。
 
-**失敗時:** If instrumentation is too invasive (impacts performance or requires code changes), sample traffic instead of capturing everything. If the business cycle is too long to wait, use the available data supplemented by stakeholder interviews about "what calls what in which situations."
+**失敗時:** 計装が侵襲的すぎる場合（パフォーマンスに影響またはコード変更が必要）、すべてをキャプチャする代わりにトラフィックをサンプリングする。ビジネスサイクルの待機期間が長すぎる場合、「どの状況で何が何を呼ぶか」に関するステークホルダーインタビューで補完された利用可能なデータを使用する。
 
-### ステップ4: Execute Controlled Dissolution
+### ステップ4: 制御された解体の実行
 
-Systematically remove structural elements while maintaining imaginal disc viability.
+イマジナルディスクの生存能力を維持しながら、構造要素を体系的に除去する。
 
-1. Begin with Layer 1 (outermost, no dependents):
-   - Remove dead features and unused code
-   - Archive (don't delete) for reference
-   - Verify: system still passes all tests, no runtime errors
-2. Progress through each layer:
-   - For each component being dissolved:
-     a. Verify imaginal discs have been extracted (Step 1)
-     b. Install replacement or stub (if dependents remain)
-     c. Remove the component
-     d. Run validation suite
-     e. Monitor for unexpected side effects
-   - At each checkpoint: document the current system state, verify operational status
-3. Handle dissolution resistance:
-   - Some components resist dissolution (hidden dependencies surface)
-   - When a removal causes unexpected breakage:
-     a. Restore from checkpoint
-     b. Investigate the hidden dependency
-     c. Add it to the interface archaeology (Step 3)
-     d. Create an explicit stub for the dependency
-     e. Re-attempt dissolution
-4. Track dissolution progress:
-   - Components remaining vs. dissolved
-   - Imaginal discs extracted and verified portable
-   - Unexpected dependencies discovered and handled
+1. レイヤー1（最外層、依存なし）から開始する：
+   - 死んだ機能と未使用コードを除去する
+   - 参照用にアーカイブする（削除しない）
+   - 検証：システムが依然としてすべてのテストに合格し、ランタイムエラーがない
+2. 各レイヤーを順に進める：
+   - 解体される各コンポーネントについて：
+     a. イマジナルディスクが抽出済みであることを確認する（ステップ1）
+     b. 置換またはスタブをインストールする（依存するものが残る場合）
+     c. コンポーネントを除去する
+     d. バリデーションスイートを実行する
+     e. 予期しない副作用を監視する
+   - 各チェックポイントで：現在のシステム状態を文書化し、稼働状態を確認する
+3. 解体抵抗に対処する：
+   - 一部のコンポーネントは解体に抵抗する（隠れた依存関係が表面化）
+   - 除去が予期しない破損を引き起こした場合：
+     a. チェックポイントから復元する
+     b. 隠れた依存関係を調査する
+     c. インターフェース考古学（ステップ3）に追加する
+     d. 依存関係に対する明示的なスタブを作成する
+     e. 解体を再試行する
+4. 解体の進捗を追跡する：
+   - 残存 vs. 解体済みのコンポーネント
+   - 抽出されポータブルであることが確認されたイマジナルディスク
+   - 発見され対処された予期しない依存関係
 
-**期待結果:** Systematic, verified dissolution of non-essential structure. After each layer, the remaining system is smaller, simpler, and still operational. Imaginal discs are preserved in portable form.
+**期待結果:** 非本質的構造の体系的で検証済みの解体。各レイヤーの後、残りのシステムはより小さく、よりシンプルで、依然として稼働可能。イマジナルディスクはポータブルな形式で保持されている。
 
-**失敗時:** If dissolution causes cascading failures, the layer ordering is wrong — there are hidden dependencies deeper than expected. Stop, restore, remap dependencies, and re-sequence. If dissolution reveals that an "imaginal disc" is more complex than expected, allocate more extraction time for that capability.
+**失敗時:** 解体がカスケード障害を引き起こす場合、レイヤー順序が間違っている — 予想より深い隠れた依存関係がある。停止し、復元し、依存関係を再マッピングし、シーケンスを再設定する。解体が「イマジナルディスク」が予想より複雑であることを明らかにした場合、その能力の抽出により多くの時間を割り当てる。
 
-### ステップ5: Prepare the Foundation for Reconstruction
+### ステップ5: 再構築のための基盤準備
 
-After dissolution, the remaining system should be a minimal viable core plus extracted imaginal discs ready for reconstruction.
+解体後、残りのシステムは最小限の稼働可能なコアと再構築のために準備された抽出済みイマジナルディスクであるべきである。
 
-1. Assess the post-dissolution state:
-   - What remains? (minimal operational core + extracted capabilities)
-   - Is the remaining system maintainable? (can the team understand and modify it)
-   - Are all imaginal discs accessible and verified? (portable, tested, documented)
-2. Create the reconstruction manifest:
-   - List each imaginal disc with its contract, data, and test suite
-   - Specify the target architecture for reconstruction (or mark as "to be determined")
-   - Identify gaps: capabilities that were partially extracted or have quality concerns
-3. Handoff to reconstruction:
-   - If the target form is known: proceed to `adapt-architecture` with the minimal core as starting point
-   - If the target form is unknown: operate on the minimal core while the target is designed
-   - Either way: the system is now flexible enough to be reshaped
+1. 解体後の状態を評価する：
+   - 何が残っているか？（最小限の稼働コア + 抽出された能力）
+   - 残りのシステムは保守可能か？（チームが理解し修正できるか）
+   - すべてのイマジナルディスクがアクセス可能で検証済みか？（ポータブル、テスト済み、文書化済み）
+2. 再構築マニフェストを作成する：
+   - 各イマジナルディスクをその契約、データ、テストスイートと共にリストする
+   - 再構築のターゲットアーキテクチャを指定する（または「未定」と記す）
+   - ギャップを特定する：部分的に抽出された、または品質に懸念のある能力
+3. 再構築への引き継ぎ：
+   - ターゲット形態が判明している場合：最小限のコアを出発点として`adapt-architecture`に進む
+   - ターゲット形態が不明な場合：ターゲットが設計される間、最小限のコアで運用する
+   - いずれの場合も：システムは再形成できるほど柔軟になった
 
-**期待結果:** A minimal, maintainable system with clearly documented extracted capabilities. The foundation is clean and ready for reconstruction in whatever form is chosen.
+**期待結果:** 明確に文書化された抽出済み能力を持つ最小限で保守可能なシステム。基盤はクリーンで、選択されたどの形態での再構築にも準備ができている。
 
-**失敗時:** If the post-dissolution system is less maintainable than expected, some essential structure was dissolved that should have been preserved. Check the imaginal disc inventory — if a critical capability is missing, it may still be recoverable from the archive. If the minimal core is too minimal to operate, some "replaceable tissue" was actually essential — restore it from the checkpoint.
+**失敗時:** 解体後のシステムが予想より保守性が低い場合、保持すべき本質的な構造が解体された。イマジナルディスクのインベントリを確認する — 重要な能力が欠けている場合、アーカイブから回復可能かもしれない。最小限のコアが運用するには最小限すぎる場合、「置換可能な組織」の一部が実際には本質的だった — チェックポイントから復元する。
 
 ## バリデーション
 
-- [ ] Imaginal discs are identified, extracted, and verified in portable form
-- [ ] Dissolution sequence is layered from outermost (no dependents) to core
-- [ ] Interface archaeology has captured actual (not just documented) behavior
-- [ ] Each dissolution layer has a verified checkpoint
-- [ ] No essential capability was lost during dissolution
-- [ ] Post-dissolution system is minimal, maintainable, and operational
-- [ ] Reconstruction manifest documents extracted capabilities and gaps
+- [ ] イマジナルディスクが特定、抽出され、ポータブルな形式で検証されている
+- [ ] 解体シーケンスが最外層（依存なし）からコアまでレイヤー化されている
+- [ ] インターフェース考古学が実際の（文書化されたものだけでなく）動作をキャプチャしている
+- [ ] 各解体レイヤーに検証済みチェックポイントがある
+- [ ] 解体中に本質的な能力が失われていない
+- [ ] 解体後のシステムが最小限で保守可能で稼働可能
+- [ ] 再構築マニフェストが抽出された能力とギャップを文書化している
 
 ## よくある落とし穴
 
-- **Dissolving without extracting**: Removing a rigid component before its essential capabilities are extracted destroys irreplaceable knowledge. Always extract imaginal discs first
-- **Trusting documentation over observation**: Documented interfaces often diverge from actual behavior. Interface archaeology (Step 3) reveals the truth; documentation shows the intent
-- **Dissolving the core first**: Removing load-bearing structures before their dependents are dissolved causes cascading failure. Always work outside-in
-- **Complete dissolution**: Dissolving everything to start from scratch sounds clean but loses institutional knowledge, battle-tested edge case handling, and operational continuity. Preserve imaginal discs
-- **Dissolution as punishment**: Dissolving a system "because it's bad" without a reconstruction plan creates a vacuum. Dissolution is the preparation for reconstruction, not an end in itself
+- **抽出なしの解体**: 本質的な能力が抽出される前に硬直したコンポーネントを除去すると、代替不可能な知識が破壊される。常にイマジナルディスクを先に抽出する
+- **観察より文書化を信頼する**: 文書化されたインターフェースは実際の動作から乖離していることが多い。インターフェース考古学（ステップ3）が真実を明らかにする；文書化は意図を示す
+- **コアを先に解体する**: 依存するものが解体される前に荷重支持構造を除去するとカスケード障害を引き起こす。常に外側から内側に作業する
+- **完全な解体**: すべてを解体してゼロから始めることはクリーンに聞こえるが、組織的知識、実戦で鍛えられたエッジケース処理、運用の継続性を失う。イマジナルディスクを保持する
+- **罰としての解体**: 再構築計画なしに「悪いから」システムを解体すると真空が生まれる。解体は再構築の準備であり、それ自体が目的ではない
 
 ## 関連スキル
 
-- `assess-form` — prerequisite assessment that identifies rigidity and triggers dissolution
-- `adapt-architecture` — the reconstruction skill that follows dissolution
-- `repair-damage` — for systems that need targeted repair rather than full dissolution
-- `build-consensus` — consensus before major dissolution prevents team fragmentation
-- `decommission-validated-system` — formal decommissioning process for regulated systems
-- `conduct-post-mortem` — post-mortem analysis shares the investigative rigor of dissolution
+- `assess-form` — 硬直性を特定し解体をトリガーする前提条件の評価
+- `adapt-architecture` — 解体に続く再構築スキル
+- `repair-damage` — 完全な解体ではなく的を絞った修復が必要なシステム向け
+- `build-consensus` — 大規模な解体前のコンセンサスがチームの分裂を防ぐ
+- `decommission-validated-system` — 規制対象システムの正式な廃止プロセス
+- `conduct-post-mortem` — ポストモーテム分析は解体の調査的厳密さを共有する

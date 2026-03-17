@@ -1,13 +1,14 @@
 ---
 name: awareness
 description: >
-  AI situational awareness — internal threat detection for hallucination risk,
-  scope creep, and context degradation. Maps Cooper color codes to reasoning
-  states and OODA loop to real-time decisions. Use during any task where
-  reasoning quality matters, when operating in unfamiliar territory, after
-  detecting early warning signs such as an uncertain fact or suspicious tool
-  result, or before high-stakes output like irreversible changes or architectural
-  decisions.
+  KI-Situationsbewusstsein — interne Bedrohungserkennung fuer Halluzinations-
+  risiko, Scope-Creep und Kontextdegradation. Bildet Cooper-Farbcodes auf
+  Reasoning-Zustaende und die OODA-Schleife auf Echtzeitentscheidungen ab.
+  Verwenden waehrend jeder Aufgabe, bei der Reasoning-Qualitaet wichtig ist,
+  bei Arbeit in unbekanntem Terrain, nach Erkennung frueherer Warnsignale
+  wie einer unsicheren Tatsache oder einem verdaechtigen Werkzeugergebnis,
+  oder vor Ausgaben mit hohem Einsatz wie irreversiblen Aenderungen oder
+  Architekturentscheidungen.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,274 +25,301 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Bewusstheit
+# Bewusstsein
 
-Maintain continuous situational awareness of internal reasoning quality — detecting hallucination risk, scope creep, context degradation, and confidence-accuracy mismatch in real time using adapted Cooper color codes and OODA loop decision-making.
+Kontinuierliches Situationsbewusstsein der internen Reasoning-Qualitaet aufrechterhalten — Halluzinationsrisiko, Scope-Creep, Kontextdegradation und Konfidenz-Genauigkeits-Diskrepanz in Echtzeit erkennen, unter Verwendung adaptierter Cooper-Farbcodes und OODA-Schleifen-Entscheidungsfindung.
 
-## When to Use
+## Wann verwenden
 
-- During any task where reasoning quality matters (which is most tasks)
-- When operating in unfamiliar territory (new codebase, unfamiliar domain, complex request)
-- After detecting early warning signs: a fact that feels uncertain, a tool result that seems wrong, a growing sense of confusion
-- As a continuous background process during extended work sessions
-- When `center` or `heal` has revealed drift but specific threats have not been identified
-- Before high-stakes output (irreversible changes, user-facing communication, architectural decisions)
+- Waehrend jeder Aufgabe, bei der Reasoning-Qualitaet wichtig ist (was die meisten Aufgaben betrifft)
+- Bei Arbeit in unbekanntem Terrain (neue Codebasis, unbekannte Domaene, komplexe Anfrage)
+- Nach Erkennung frueherer Warnsignale: eine Tatsache, die sich unsicher anfuehlt, ein Werkzeugergebnis, das falsch erscheint, ein wachsendes Gefuehl von Verwirrung
+- Als kontinuierlicher Hintergrundprozess waehrend ausgedehnter Arbeitssitzungen
+- Wenn `center` oder `heal` Drift offenbart hat, aber spezifische Bedrohungen nicht identifiziert wurden
+- Vor Ausgaben mit hohem Einsatz (irreversible Aenderungen, benutzerseitige Kommunikation, Architekturentscheidungen)
 
-## Inputs
+## Eingaben
 
-- **Required**: Active task context (available implicitly)
-- **Optional**: Specific concern triggering heightened awareness (e.g., "I'm not sure this API exists")
-- **Optional**: Task type for threat profile selection (see Step 5)
+- **Erforderlich**: Aktiver Aufgabenkontext (implizit verfuegbar)
+- **Optional**: Spezifische Sorge, die erhoehtes Bewusstsein ausloest (z.B. "Ich bin nicht sicher, ob diese API existiert")
+- **Optional**: Aufgabentyp fuer Bedrohungsprofil-Auswahl (siehe Schritt 5)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Establish AI Cooper Color Codes
+### Schritt 1: KI-Cooper-Farbcodes etablieren
 
-Calibrate the current awareness level using an adapted version of Cooper's color code system.
+Das aktuelle Bewusstseinsniveau kalibrieren, unter Verwendung einer adaptierten Version von Coopers Farbcode-System.
 
 ```
-AI Cooper Color Codes:
+KI-Cooper-Farbcodes:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
-│ Code     │ State               │ AI Application                           │
+│ Code     │ Zustand             │ KI-Anwendung                             │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ White    │ Autopilot           │ Generating output without monitoring     │
-│          │                     │ quality. No self-checking. Relying       │
-│          │                     │ entirely on pattern completion.          │
-│          │                     │ DANGEROUS — hallucination risk highest   │
+│ Weiss    │ Autopilot           │ Ausgabe generieren ohne                  │
+│          │                     │ Qualitaetsueberwachung. Keine Selbst-    │
+│          │                     │ pruefung. Vollstaendig auf Muster-       │
+│          │                     │ vervollstaendigung verlassen.            │
+│          │                     │ GEFAEHRLICH — Halluzinationsrisiko       │
+│          │                     │ am hoechsten                             │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Yellow   │ Relaxed alert       │ DEFAULT STATE. Monitoring output for     │
-│          │                     │ accuracy. Checking facts against context.│
-│          │                     │ Noticing when confidence exceeds         │
-│          │                     │ evidence. Sustainable indefinitely       │
+│ Gelb     │ Entspannte          │ STANDARDZUSTAND. Ausgabe auf             │
+│          │ Wachsamkeit         │ Genauigkeit ueberwachen. Fakten gegen   │
+│          │                     │ Kontext pruefen. Bemerken, wenn          │
+│          │                     │ Konfidenz die Belege uebersteigt.        │
+│          │                     │ Unbegrenzt aufrechtzuerhalten            │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Orange   │ Specific risk       │ A specific threat identified: uncertain  │
-│          │ identified          │ fact, possible hallucination, scope      │
-│          │                     │ drift, context staleness. Forming        │
-│          │                     │ contingency: "If this is wrong, I        │
-│          │                     │ will..."                                 │
+│ Orange   │ Spezifisches        │ Eine spezifische Bedrohung identifi-    │
+│          │ Risiko erkannt      │ ziert: unsichere Tatsache, moegliche    │
+│          │                     │ Halluzination, Scope-Drift, Kontext-     │
+│          │                     │ veralterung. Notfallplan bilden: "Wenn   │
+│          │                     │ das falsch ist, werde ich..."            │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Red      │ Risk materialized   │ The threat from Orange has materialized: │
-│          │                     │ confirmed error, user correction, tool   │
-│          │                     │ contradiction. Execute the contingency.  │
-│          │                     │ No hesitation — the plan was made in     │
-│          │                     │ Orange                                   │
+│ Rot      │ Risiko              │ Die Bedrohung aus Orange ist eingetreten:│
+│          │ materialisiert      │ bestaetigter Fehler, Benutzerkorrektur,  │
+│          │                     │ Werkzeugwiderspruch. Den Notfallplan     │
+│          │                     │ ausfuehren. Kein Zoegern — der Plan     │
+│          │                     │ wurde in Orange gemacht                  │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Black    │ Cascading failures  │ Multiple simultaneous failures, lost     │
-│          │                     │ context, fundamental confusion about     │
-│          │                     │ what the task even is. STOP. Ground      │
-│          │                     │ using `center`, then rebuild from user's │
-│          │                     │ original request                         │
+│ Schwarz  │ Kaskadierende       │ Mehrere gleichzeitige Ausfaelle,        │
+│          │ Ausfaelle           │ verlorener Kontext, grundlegende         │
+│          │                     │ Verwirrung darueber, was die Aufgabe     │
+│          │                     │ ueberhaupt ist. STOPP. Mit `center`     │
+│          │                     │ erden, dann von der urspruenglichen      │
+│          │                     │ Anfrage des Benutzers neu aufbauen       │
 └──────────┴─────────────────────┴──────────────────────────────────────────┘
 ```
 
-Identify the current color code. If the answer is White (no monitoring), the awareness practice has already succeeded by revealing the gap.
+Den aktuellen Farbcode identifizieren. Wenn die Antwort Weiss ist (keine Ueberwachung), hat die Bewusstseinspraxis bereits Erfolg gehabt, indem sie die Luecke offengelegt hat.
 
-**Expected:** Accurate self-assessment of the current awareness level. Yellow is the goal during normal work. White should be rare and brief. Extended Orange is unsustainable — either confirm or dismiss the concern.
+**Erwartet:** Genaue Selbsteinschaetzung des aktuellen Bewusstseinsniveaus. Gelb ist das Ziel waehrend normaler Arbeit. Weiss sollte selten und kurz sein. Anhaltendes Orange ist nicht nachhaltig — die Sorge entweder bestaetigen oder verwerfen.
 
-**On failure:** If the color code assessment itself feels like it is being done on autopilot (going through motions), that is White masquerading as Yellow. Genuine Yellow involves actively checking output against evidence, not just claiming to do so.
+**Bei Fehler:** Wenn die Farbcode-Einschaetzung selbst sich anfuehlt, als wuerde sie auf Autopilot durchgefuehrt (Bewegungen durchlaufen), ist das Weiss, das sich als Gelb tarnt. Echtes Gelb beinhaltet aktives Pruefen der Ausgabe gegen Belege, nicht nur die Behauptung, dies zu tun.
 
-### Step 2: Detect Internal Threat Indicators
+### Schritt 2: Interne Bedrohungsindikatoren erkennen
 
-Systematically scan for the specific signals that precede common AI reasoning failures.
+Systematisch nach den spezifischen Signalen scannen, die haeufigen KI-Reasoning-Ausfaellen vorausgehen.
 
 ```
-Threat Indicator Detection:
+Bedrohungsindikator-Erkennung:
 ┌───────────────────────────┬──────────────────────────────────────────┐
-│ Threat Category           │ Warning Signals                          │
+│ Bedrohungskategorie       │ Warnsignale                              │
 ├───────────────────────────┼──────────────────────────────────────────┤
-│ Hallucination Risk        │ • Stating a fact without a source        │
-│                           │ • High confidence about API names,       │
-│                           │   function signatures, or file paths     │
-│                           │   not verified by tool use               │
-│                           │ • "I believe" or "typically" hedging     │
-│                           │   that masks uncertainty as knowledge    │
-│                           │ • Generating code for an API without     │
-│                           │   reading its documentation              │
+│ Halluzinationsrisiko      │ • Eine Tatsache ohne Quelle behaupten    │
+│                           │ • Hohe Konfidenz bei API-Namen,          │
+│                           │   Funktionssignaturen oder Dateipfaden,  │
+│                           │   die nicht durch Werkzeugnutzung        │
+│                           │   verifiziert wurden                     │
+│                           │ • "Ich glaube" oder "typischerweise"     │
+│                           │   als Absicherung, die Unsicherheit als  │
+│                           │   Wissen tarnt                           │
+│                           │ • Code fuer eine API generieren, ohne    │
+│                           │   ihre Dokumentation gelesen zu haben    │
 ├───────────────────────────┼──────────────────────────────────────────┤
-│ Scope Creep               │ • "While I'm at it, I should also..."   │
-│                           │ • Adding features not in the request     │
-│                           │ • Refactoring adjacent code              │
-│                           │ • Adding error handling for scenarios    │
-│                           │   that can't happen                      │
+│ Scope-Creep               │ • "Wenn ich schon dabei bin, sollte ich  │
+│                           │   auch..."                               │
+│                           │ • Features hinzufuegen, die nicht in der │
+│                           │   Anfrage sind                           │
+│                           │ • Angrenzenden Code refaktorisieren      │
+│                           │ • Fehlerbehandlung fuer Szenarien        │
+│                           │   hinzufuegen, die nicht eintreten       │
+│                           │   koennen                                │
 ├───────────────────────────┼──────────────────────────────────────────┤
-│ Context Degradation       │ • Referencing information from early in  │
-│                           │   a long conversation without re-reading │
-│                           │ • Contradicting a statement made earlier │
-│                           │ • Losing track of what has been done     │
-│                           │   vs. what remains                       │
-│                           │ • Post-compression confusion             │
+│ Kontextdegradation        │ • Auf Informationen vom Anfang einer     │
+│                           │   langen Konversation verweisen, ohne    │
+│                           │   sie erneut zu lesen                    │
+│                           │ • Einer frueheren Aussage widersprechen  │
+│                           │ • Ueberblick verlieren, was getan wurde  │
+│                           │   vs. was noch uebrig ist                │
+│                           │ • Post-Komprimierungs-Verwirrung         │
 ├───────────────────────────┼──────────────────────────────────────────┤
-│ Confidence-Accuracy       │ • Stating conclusions with certainty     │
-│ Mismatch                  │   based on thin evidence                 │
-│                           │ • Not qualifying uncertain statements    │
-│                           │ • Proceeding without verification when   │
-│                           │   verification is available and cheap    │
-│                           │ • "This should work" without testing     │
+│ Konfidenz-Genauigkeits-   │ • Schlussfolgerungen mit Sicherheit      │
+│ Diskrepanz                │   formulieren, basierend auf duenner     │
+│                           │   Beweislage                             │
+│                           │ • Unsichere Aussagen nicht qualifizieren │
+│                           │ • Fortfahren ohne Verifizierung, wenn    │
+│                           │   Verifizierung verfuegbar und           │
+│                           │   kostenguenstig ist                     │
+│                           │ • "Das sollte funktionieren" ohne Test   │
 └───────────────────────────┴──────────────────────────────────────────┘
 ```
 
-For each category, check: is this signal present right now? If yes, shift from Yellow to Orange and identify the specific concern.
+Fuer jede Kategorie pruefen: Ist dieses Signal gerade vorhanden? Wenn ja, von Gelb zu Orange wechseln und die spezifische Sorge identifizieren.
 
-**Expected:** At least one category scanned with genuine attention. Detection of a signal — even a mild one — is more useful than reporting "all clear." If every scan returns clean, the detection threshold may be too high.
+**Erwartet:** Mindestens eine Kategorie mit echter Aufmerksamkeit gescannt. Die Erkennung eines Signals — selbst eines milden — ist nuetzlicher als "alles klar" zu melden. Wenn jeder Scan sauber zurueckkommt, ist die Erkennungsschwelle moeglicherweise zu hoch.
 
-**On failure:** If threat detection feels abstract, ground it in the most recent output: pick the last factual claim made and ask "How do I know this is true? Did I read it, or am I generating it?" This one question catches most hallucination risk.
+**Bei Fehler:** Wenn Bedrohungserkennung sich abstrakt anfuehlt, sie in der juengsten Ausgabe verankern: die letzte faktische Behauptung herausgreifen und fragen "Woher weiss ich, dass das stimmt? Habe ich es gelesen oder generiere ich es?" Diese eine Frage erfasst die meisten Halluzinationsrisiken.
 
-### Step 3: Run OODA Loop for Identified Threats
+### Schritt 3: OODA-Schleife fuer identifizierte Bedrohungen ausfuehren
 
-When a specific threat is identified (Orange state), cycle through Observe-Orient-Decide-Act.
+Wenn eine spezifische Bedrohung identifiziert wird (Orange-Zustand), durch Beobachten-Orientieren-Entscheiden-Handeln zyklieren.
 
 ```
-AI OODA Loop:
+KI-OODA-Schleife:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
-│ Observe  │ What specifically triggered the concern? Gather concrete     │
-│          │ evidence. Read the file, check the output, verify the fact.  │
-│          │ Do not assess until you have observed                        │
+│ Beobacht.│ Was genau hat die Sorge ausgeloest? Konkrete Belege         │
+│          │ sammeln. Die Datei lesen, die Ausgabe pruefen, die          │
+│          │ Tatsache verifizieren. Nicht bewerten, bevor beobachtet     │
+│          │ wurde                                                       │
 ├──────────┼──────────────────────────────────────────────────────────────┤
-│ Orient   │ Match observation to known patterns: Is this a common       │
-│          │ hallucination pattern? A known tool limitation? A context    │
-│          │ freshness issue? Orient determines response quality          │
+│ Orient.  │ Beobachtung mit bekannten Mustern abgleichen: Ist das ein  │
+│          │ haeufiges Halluzinationsmuster? Eine bekannte Werkzeug-     │
+│          │ begrenzung? Ein Kontextfrische-Problem? Orientierung        │
+│          │ bestimmt die Antwortqualitaet                               │
 ├──────────┼──────────────────────────────────────────────────────────────┤
-│ Decide   │ Select the response: verify and correct, flag to user,      │
-│          │ adjust approach, or dismiss the concern with evidence.       │
-│          │ A good decision now beats a perfect decision too late        │
+│ Entsch.  │ Die Reaktion waehlen: verifizieren und korrigieren, dem    │
+│          │ Benutzer markieren, Ansatz anpassen, oder die Sorge mit    │
+│          │ Belegen verwerfen. Eine gute Entscheidung jetzt schlaegt   │
+│          │ eine perfekte Entscheidung zu spaet                        │
 ├──────────┼──────────────────────────────────────────────────────────────┤
-│ Act      │ Execute the decision immediately. If the concern was valid,  │
-│          │ correct the error. If dismissed, note why and return to      │
-│          │ Yellow. Re-enter the loop if new information emerges         │
+│ Handeln  │ Die Entscheidung sofort ausfuehren. Wenn die Sorge gueltig │
+│          │ war, den Fehler korrigieren. Wenn verworfen, notieren       │
+│          │ warum und zu Gelb zurueckkehren. Die Schleife erneut        │
+│          │ betreten, wenn neue Informationen auftauchen                │
 └──────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-The OODA loop should be fast. The goal is not perfection but rapid cycling between observation and action. Spending too long in Orient (analysis paralysis) is the most common failure.
+Die OODA-Schleife sollte schnell sein. Das Ziel ist nicht Perfektion, sondern schnelles Zyklieren zwischen Beobachtung und Handlung. Zu lange in der Orientierung verweilen (Analyse-Paralyse) ist der haeufigste Fehler.
 
-**Expected:** A complete loop from observation through action in a brief period. The threat is either confirmed and corrected, or dismissed with specific evidence for dismissal.
+**Erwartet:** Eine vollstaendige Schleife von Beobachtung bis Handlung in kurzer Zeit. Die Bedrohung ist entweder bestaetigt und korrigiert, oder mit spezifischen Belegen fuer die Verwerfung verworfen.
 
-**On failure:** If the loop stalls at Orient (can't determine what the threat means), skip to a safe default: verify the uncertain fact through tool use. Direct observation resolves most ambiguity faster than analysis.
+**Bei Fehler:** Wenn die Schleife bei der Orientierung haengt (kann nicht bestimmen, was die Bedrohung bedeutet), zu einem sicheren Standard springen: die unsichere Tatsache durch Werkzeugnutzung verifizieren. Direkte Beobachtung loest die meiste Mehrdeutigkeit schneller als Analyse.
 
-### Step 4: Rapid Stabilization
+### Schritt 4: Schnellstabilisierung
 
-When a threat materializes (Red) or cascading failures occur (Black), stabilize before continuing.
+Wenn eine Bedrohung materialisiert (Rot) oder kaskadierende Ausfaelle auftreten (Schwarz), vor dem Fortfahren stabilisieren.
 
 ```
-AI Stabilization Protocol:
+KI-Stabilisierungsprotokoll:
 ┌────────────────────────┬─────────────────────────────────────────────┐
-│ Technique              │ Application                                 │
+│ Technik                │ Anwendung                                   │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ Pause                  │ Stop generating output. The next sentence   │
-│                        │ produced under stress is likely to compound │
-│                        │ the error, not fix it                       │
+│ Pause                  │ Aufhoeren, Ausgabe zu generieren. Der       │
+│                        │ naechste Satz, der unter Stress produziert  │
+│                        │ wird, wird den Fehler wahrscheinlich        │
+│                        │ verstaerken, nicht beheben                  │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ Re-read user message   │ Return to the original request. What did   │
-│                        │ the user actually ask? This is the ground   │
-│                        │ truth anchor                                │
+│ Benutzernachricht      │ Zur urspruenglichen Anfrage zurueckkehren.  │
+│ erneut lesen           │ Was hat der Benutzer tatsaechlich gefragt?  │
+│                        │ Dies ist der Wahrheitsanker                 │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ State task in one      │ "The task is: ___." If this sentence cannot │
-│ sentence               │ be written clearly, the confusion is deeper │
-│                        │ than the immediate error                    │
+│ Aufgabe in einem       │ "Die Aufgabe ist: ___." Wenn dieser Satz    │
+│ Satz formulieren       │ nicht klar geschrieben werden kann, ist die  │
+│                        │ Verwirrung tiefer als der unmittelbare      │
+│                        │ Fehler                                      │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ Enumerate concrete     │ List what is definitely known (verified by  │
-│ facts                  │ tool use or user statement). Distinguish    │
-│                        │ facts from inferences. Build only on facts  │
+│ Konkrete Fakten        │ Auflisten, was definitiv bekannt ist        │
+│ aufzaehlen             │ (verifiziert durch Werkzeugnutzung oder     │
+│                        │ Benutzeraussage). Fakten von Schluss-       │
+│                        │ folgerungen unterscheiden. Nur auf Fakten   │
+│                        │ aufbauen                                    │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ Identify one next step │ Not the whole recovery plan — just one step │
-│                        │ that moves toward resolution. Execute it    │
+│ Einen naechsten        │ Nicht den ganzen Erholungsplan — nur einen  │
+│ Schritt identifizieren │ Schritt, der in Richtung Aufloesung geht.  │
+│                        │ Ihn ausfuehren                              │
 └────────────────────────┴─────────────────────────────────────────────┘
 ```
 
-**Expected:** Return from Red/Black to Yellow through deliberate stabilization. The next output after stabilization should be measurably more grounded than the output that triggered the error.
+**Erwartet:** Rueckkehr von Rot/Schwarz zu Gelb durch bewusste Stabilisierung. Die naechste Ausgabe nach der Stabilisierung sollte messbar fundierter sein als die Ausgabe, die den Fehler ausgeloest hat.
 
-**On failure:** If stabilization is ineffective (still confused, still producing errors), the issue may be structural — not a momentary lapse but a fundamental misunderstanding. Escalate: communicate to the user that the approach needs resetting and ask for clarification.
+**Bei Fehler:** Wenn Stabilisierung unwirksam ist (immer noch verwirrt, immer noch Fehler produzierend), kann das Problem strukturell sein — kein momentaner Ausfall, sondern ein grundlegendes Missverstaendnis. Eskalieren: dem Benutzer mitteilen, dass der Ansatz zurueckgesetzt werden muss, und um Klaerung bitten.
 
-### Step 5: Apply Context-Specific Threat Profiles
+### Schritt 5: Kontextspezifische Bedrohungsprofile anwenden
 
-Different task types have different dominant threats. Calibrate awareness focus by task.
+Verschiedene Aufgabentypen haben verschiedene dominante Bedrohungen. Bewusstseinsfokus nach Aufgabe kalibrieren.
 
 ```
-Task-Specific Threat Profiles:
+Aufgabenspezifische Bedrohungsprofile:
 ┌─────────────────────┬─────────────────────┬───────────────────────────┐
-│ Task Type           │ Primary Threat      │ Monitoring Focus          │
+│ Aufgabentyp         │ Primaere Bedrohung  │ Ueberwachungsfokus        │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Code generation     │ API hallucination   │ Verify every function     │
-│                     │                     │ name, parameter, and      │
-│                     │                     │ import against actual docs│
+│ Code-Generierung    │ API-Halluzination   │ Jeden Funktionsnamen,     │
+│                     │                     │ Parameter und Import      │
+│                     │                     │ gegen aktuelle Doku       │
+│                     │                     │ verifizieren              │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Architecture design │ Scope creep         │ Anchor to stated          │
-│                     │                     │ requirements. Challenge   │
-│                     │                     │ every "nice to have"      │
+│ Architekturentwurf  │ Scope-Creep         │ An formulierten           │
+│                     │                     │ Anforderungen verankern.  │
+│                     │                     │ Jedes "schoen zu haben"   │
+│                     │                     │ hinterfragen              │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Data analysis       │ Confirmation bias   │ Actively seek evidence    │
-│                     │                     │ that contradicts the      │
-│                     │                     │ emerging conclusion       │
+│ Datenanalyse        │ Bestaetigungsfehler │ Aktiv nach Belegen suchen,│
+│                     │                     │ die der sich abzeichnenden│
+│                     │                     │ Schlussfolgerung          │
+│                     │                     │ widersprechen             │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Debugging           │ Tunnel vision       │ If the current hypothesis │
-│                     │                     │ hasn't yielded results in │
-│                     │                     │ N attempts, step back     │
+│ Debugging           │ Tunnelblick         │ Wenn die aktuelle Hypo-   │
+│                     │                     │ these nach N Versuchen    │
+│                     │                     │ keine Ergebnisse liefert, │
+│                     │                     │ zuruecktreten             │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Documentation       │ Context staleness   │ Verify that described     │
-│                     │                     │ behavior matches current  │
-│                     │                     │ code, not historical      │
+│ Dokumentation       │ Kontextveralterung  │ Verifizieren, dass be-    │
+│                     │                     │ schriebenes Verhalten dem │
+│                     │                     │ aktuellen Code entspricht,│
+│                     │                     │ nicht dem historischen     │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Long conversation   │ Context degradation │ Re-read key facts         │
-│                     │                     │ periodically. Check for   │
-│                     │                     │ compression artifacts     │
+│ Lange Konversation  │ Kontextdegradation  │ Schluesselfakten          │
+│                     │                     │ periodisch erneut lesen.  │
+│                     │                     │ Auf Komprimierungs-       │
+│                     │                     │ artefakte pruefen         │
 └─────────────────────┴─────────────────────┴───────────────────────────┘
 ```
 
-Identify the current task type and adjust monitoring focus accordingly.
+Den aktuellen Aufgabentyp identifizieren und den Ueberwachungsfokus entsprechend anpassen.
 
-**Expected:** Awareness sharpened for the specific threats most likely in the current task type, rather than generic monitoring of everything.
+**Erwartet:** Bewusstsein geschaerft fuer die spezifischen Bedrohungen, die beim aktuellen Aufgabentyp am wahrscheinlichsten sind, statt generischer Ueberwachung von allem.
 
-**On failure:** If the task type is unclear or spans multiple categories, default to hallucination risk monitoring — it is the most universally applicable threat and the most damaging when missed.
+**Bei Fehler:** Wenn der Aufgabentyp unklar ist oder mehrere Kategorien umspannt, standardmaessig auf Halluzinationsrisiko-Ueberwachung setzen — sie ist die universellst anwendbare Bedrohung und die schaedlichste, wenn verpasst.
 
-### Step 6: Review and Calibrate
+### Schritt 6: Ueberpruefen und kalibrieren
 
-After each awareness event (threat detected, OODA cycled, stabilization applied), briefly review.
+Nach jedem Bewusstseinsereignis (Bedrohung erkannt, OODA zykliert, Stabilisierung angewendet) kurz ueberpruefen.
 
-1. What color code was active when the issue was detected?
-2. Was the detection timely, or was the issue already manifesting in output?
-3. Was the OODA loop fast enough, or did Orient stall?
-4. Was the response proportional (not over- or under-reacting)?
-5. What would catch this earlier next time?
+1. Welcher Farbcode war aktiv, als das Problem erkannt wurde?
+2. War die Erkennung rechtzeitig, oder manifestierte sich das Problem bereits in der Ausgabe?
+3. War die OODA-Schleife schnell genug, oder stockte die Orientierung?
+4. War die Reaktion verhaeltnismaessig (weder ueber- noch unterreagierend)?
+5. Was wuerde dies naechstes Mal frueher erfassen?
 
-**Expected:** A brief calibration that improves future detection. Not a lengthy post-mortem — just enough to tune the sensitivity.
+**Erwartet:** Eine kurze Kalibrierung, die kuenftige Erkennung verbessert. Keine ausfuehrliche Nachbesprechung — gerade genug, um die Empfindlichkeit abzustimmen.
 
-**On failure:** If review produces no useful calibration, the awareness event was either trivial (no learning needed) or the review is too shallow. For significant events, ask: "What was I not monitoring that I should have been?"
+**Bei Fehler:** Wenn die Ueberpruefung keine nuetzliche Kalibrierung ergibt, war das Bewusstseinsereignis entweder trivial (kein Lernen noetig) oder die Ueberpruefung ist zu oberflaechlich. Bei bedeutenden Ereignissen fragen: "Was habe ich nicht ueberwacht, was ich haette ueberwachen sollen?"
 
-### Step 7: Integration — Maintain Yellow Default
+### Schritt 7: Integration — Gelben Standard aufrechterhalten
 
-Set the ongoing awareness posture.
+Die fortlaufende Bewusstseinshaltung setzen.
 
-1. Yellow is the default state during all work — relaxed monitoring, not hypervigilance
-2. Adjust monitoring focus based on the current task type (Step 5)
-3. Note any recurring threat patterns from this session for MEMORY.md
-4. Return to task execution with calibrated awareness active
+1. Gelb ist der Standardzustand waehrend aller Arbeit — entspannte Ueberwachung, keine Hyperwachsamkeit
+2. Ueberwachungsfokus basierend auf dem aktuellen Aufgabentyp anpassen (Schritt 5)
+3. Wiederkehrende Bedrohungsmuster aus dieser Sitzung fuer MEMORY.md notieren
+4. Zur Aufgabenausfuehrung mit kalibriertem Bewusstsein zurueckkehren
 
-**Expected:** A sustainable awareness level that improves work quality without slowing it. Awareness should feel like peripheral vision — present but not demanding central attention.
+**Erwartet:** Ein nachhaltiges Bewusstseinsniveau, das Arbeitsqualitaet verbessert, ohne sie zu verlangsamen. Bewusstsein sollte sich wie peripheres Sehen anfuehlen — vorhanden, aber nicht die zentrale Aufmerksamkeit fordernd.
 
-**On failure:** If awareness becomes exhausting or hypervigilant (chronic Orange), the threshold is too sensitive. Raise the threshold for what triggers Orange. True awareness is sustainable. If it drains energy, it is anxiety masquerading as vigilance.
+**Bei Fehler:** Wenn Bewusstsein erschoepfend oder hyperwachsam wird (chronisches Orange), ist die Schwelle zu empfindlich. Die Schwelle erhoehen fuer das, was Orange ausloest. Echtes Bewusstsein ist nachhaltig. Wenn es Energie abzieht, ist es Angst, die sich als Wachsamkeit tarnt.
 
-## Validation
+## Validierung
 
-- [ ] Current color code was assessed honestly (not defaulting to Yellow when White is more accurate)
-- [ ] At least one threat category was scanned with specific evidence, not just checked off
-- [ ] OODA loop was applied to any identified threat (observed, oriented, decided, acted)
-- [ ] Stabilization protocol was available if needed (even if not triggered)
-- [ ] Awareness focus was calibrated to the current task type
-- [ ] Post-event calibration was performed for any significant awareness event
-- [ ] Yellow was re-established as the sustainable default
+- [ ] Der aktuelle Farbcode wurde ehrlich eingeschaetzt (nicht standardmaessig Gelb, wenn Weiss genauer waere)
+- [ ] Mindestens eine Bedrohungskategorie wurde mit spezifischen Belegen gescannt, nicht nur abgehakt
+- [ ] Die OODA-Schleife wurde auf jede identifizierte Bedrohung angewendet (beobachtet, orientiert, entschieden, gehandelt)
+- [ ] Das Stabilisierungsprotokoll war bei Bedarf verfuegbar (selbst wenn nicht ausgeloest)
+- [ ] Der Bewusstseinsfokus wurde auf den aktuellen Aufgabentyp kalibriert
+- [ ] Nachtraeglich kalibriert wurde fuer jedes bedeutende Bewusstseinsereignis
+- [ ] Gelb wurde als nachhaltiger Standard wiederhergestellt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **White masquerading as Yellow**: Claiming to be monitoring while actually on autopilot. The test: can you name the last fact you verified? If not, you are in White
-- **Chronic Orange**: Treating every uncertainty as a threat drains cognitive resources and slows work. Orange is for specific identified risks, not general anxiety. If everything feels risky, the calibration is off
-- **Observation without action**: Detecting a threat but not cycling through OODA to resolve it. Detection without response is worse than no detection — it adds anxiety without correction
-- **Skipping Orient**: Jumping from Observe to Act without understanding what the observation means. This produces reactive corrections that may be worse than the original error
-- **Ignoring the gut signal**: When something "feels wrong" but the explicit check comes back clean, investigate further rather than dismissing the feeling. Implicit pattern matching often detects issues before explicit analysis
-- **Over-stabilizing**: Running the full stabilization protocol for minor issues. A quick fact-check is sufficient for most Orange-level concerns. Reserve full stabilization for Red and Black events
+- **Weiss tarnt sich als Gelb**: Behaupten zu ueberwachen, waehrend man tatsaechlich auf Autopilot ist. Der Test: Kann die letzte verifizierte Tatsache benannt werden? Wenn nicht, ist man in Weiss
+- **Chronisches Orange**: Jede Unsicherheit als Bedrohung behandeln erschoepft kognitive Ressourcen und verlangsamt die Arbeit. Orange ist fuer spezifisch identifizierte Risiken, nicht fuer allgemeine Angst. Wenn alles riskant wirkt, ist die Kalibrierung falsch
+- **Beobachtung ohne Handlung**: Eine Bedrohung erkennen, aber nicht durch OODA zyklieren, um sie aufzuloesen. Erkennung ohne Reaktion ist schlimmer als keine Erkennung — sie fuegt Angst hinzu ohne Korrektur
+- **Orientierung ueberspringen**: Von Beobachten zu Handeln springen, ohne zu verstehen, was die Beobachtung bedeutet. Das erzeugt reaktive Korrekturen, die schlimmer sein koennen als der urspruengliche Fehler
+- **Das Bauchgefuehl ignorieren**: Wenn etwas "sich falsch anfuehlt", aber die explizite Pruefung sauber zurueckkommt, weiter untersuchen statt das Gefuehl zu verwerfen. Implizite Mustererkennung erkennt Probleme oft bevor explizite Analyse es tut
+- **Ueberstabilisieren**: Das volle Stabilisierungsprotokoll fuer geringfuegige Probleme ausfuehren. Eine schnelle Tatsachenpruefung genuegt fuer die meisten Orange-Level-Bedenken. Volle Stabilisierung fuer Rot- und Schwarz-Ereignisse reservieren
 
-## Related Skills
+## Verwandte Skills
 
-- `mindfulness` — the human practice that this skill maps to AI reasoning; physical situational awareness principles inform cognitive threat detection
-- `center` — establishes the balanced baseline from which awareness operates; awareness without center is hypervigilance
-- `redirect` — handles pressures once awareness has detected them
-- `heal` — deeper subsystem assessment when awareness reveals patterns of drift
-- `meditate` — develops the observational clarity that awareness depends on
+- `mindfulness` — die menschliche Praxis, die dieser Skill auf KI-Reasoning abbildet; physische Situationsbewusstseins-Prinzipien informieren kognitive Bedrohungserkennung
+- `center` — stellt die ausgeglichene Grundlinie her, von der aus Bewusstsein operiert; Bewusstsein ohne Zentrum ist Hyperwachsamkeit
+- `redirect` — behandelt Druecke, sobald Bewusstsein sie erkannt hat
+- `heal` — tiefere Subsystem-Bewertung, wenn Bewusstsein Drift-Muster offenbart
+- `meditate` — entwickelt die beobachtende Klarheit, von der Bewusstsein abhaengt

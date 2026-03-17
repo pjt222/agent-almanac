@@ -3,16 +3,13 @@ name: develop-gc-method
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Entwickle und optimiere gaschromatographische Methoden fuer flueichtige
-  und halbflueichtige organische Verbindungen. Waehle stationaere Phasen,
-  Trenntemperaturprogramme und Detektoren aus, optimiere Injektions-
-  und Trennparameter und validiere Peakidentifizierung durch Retentionszeit
-  und MS-Referenz. Verwende diesen Skill bei der Entwicklung einer neuen
-  GC-Methode, Optimierung der Trennung bei Coelutionen oder Peakabfall,
-  Methodentransfer zwischen GC-Systemen oder Planung einer GC-MS-Strategie.
+  Eine Gaschromatographie-Methode von Grund auf entwickeln: analytische Ziele
+  definieren, Saeulenchemie auswaehlen, Temperaturprogrammierung optimieren,
+  Traegergas und Detektor waehlen und die anfaengliche Systemleistung fuer
+  Zielanalyten in einer gegebenen Matrix validieren.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -21,154 +18,175 @@ metadata:
   domain: chromatography
   complexity: advanced
   language: natural
-  tags: chromatography, gc, method-development, temperature-programming, detector
+  tags: chromatography, gc, gas-chromatography, method-development, separation
 ---
 
 # GC-Methode entwickeln
 
-Entwickle eine gaschromatographische Trennmethode durch systematische Auswahl der stationaeren Phase, Optimierung des Temperaturprogramms, Einstellung der Injektions- und Traegergasparameter sowie Validierung der Peaktrennung und -identifizierung.
+Systematische Entwicklung einer Gaschromatographie-Methode umfassend Saeulenauswahl, Temperaturprogramm-Optimierung, Traegergas- und Detektorwahl und anfaengliche Leistungsverifikation fuer fluechtige und halbfluechtige Analyten.
 
 ## Wann verwenden
 
-- Entwickeln einer neuen GC-Methode fuer flueichtige oder halbflueichtige Analyten
-- Optimieren einer bestehenden Methode bei unbefriedigender Trennung oder langer Laufzeit
-- Transfer einer Methode auf ein anderes GC-System oder andere Saeule
-- Auswahl des geeigneten Detektors (FID, MS, ECD, NPD, FPD)
-- Planung einer GC-MS-Trennstrategie fuer unbekannte Probengemische
+- Start einer neuen GC-Analyse fuer fluechtige oder halbfluechtige Verbindungen
+- Anpassung einer publizierten Methode an ein anderes Instrument oder eine andere Matrix
+- Ersatz einer bestehenden Methode die die Leistungsanforderungen nicht mehr erfuellt
+- Entwicklung einer Methode fuer Verbindungen mit bekannten Siedepunkten und Polaritaeten
+- Umstellung von einer gepackten Saeule auf eine Kapillarsaeule
 
 ## Eingaben
 
-- **Erforderlich**: Analytenliste mit bekannter oder geschaetzter Fluechtigkeit (Siedepunkt oder logP)
-- **Erforderlich**: Probenmatrix und Loesungsmittel
-- **Optional**: Anforderungen an Nachweisgrenzen und Linearitaet
-- **Optional**: Vorhandene Saeulen und Detektoren
-- **Optional**: Referenz- oder Normmethoode (z.B. EPA-Methode, Pharmakopoe)
+### Erforderlich
+
+- **Zielanalyten**: Liste der Verbindungen mit CAS-Nummern, Molekulargewichten und Siedepunkten
+- **Probenmatrix**: Beschreibung des Probentyps (z.B. Luft, Wasserextrakt, Loesungsmittelloesung, biologische Fluessigkeit)
+- **Nachweisgrenzen**: Erforderliche LOD/LOQ fuer jeden Analyten
+
+### Optional
+
+- **Referenzmethode**: Publizierte Methode (EPA, ASTM, Arzneibuch) als Ausgangspunkt
+- **Verfuegbare Saeulen**: Inventar vorhandener Saeulen
+- **Instrumentenkonfiguration**: GC-Modell, verfuegbare Detektoren, Autosampler-Typ
+- **Durchsatzanforderungen**: Maximal akzeptable Laufzeit pro Probe
+- **Regulatorischer Rahmen**: GLP, GMP, EPA oder anderer Compliance-Kontext
 
 ## Vorgehensweise
 
-### Schritt 1: Analyten charakterisieren und stationaere Phase auswaehlen
+### Schritt 1: Analytische Ziele definieren
 
-Bestimme Analystenpolaaritaet und Siedepunktsbereich fuer die Saeulenwahl:
+1. Alle Zielanalyten mit ihren physikalischen Eigenschaften auflisten (Siedepunkt, Polaritaet, Molekulargewicht).
+2. Die Probenmatrix und etwaige erwartete Interferenzen oder Ko-Extraktive identifizieren.
+3. Erforderliche Nachweisgrenzen, Quantifizierungsbereich und akzeptable Aufloesung zwischen kritischen Paaren spezifizieren.
+4. Bestimmen ob die Methode einen regulatorischen Standard erfuellen muss (EPA 8260, USP usw.).
+5. Durchsatzbedarf dokumentieren: maximale Laufzeit, Injektionsvolumen, Einschraenkungen der Probenvorbereitung.
 
-1. **Analytenpolaritaet abschaetzen**: Benutze logP-Werte oder Siedepunkte als Richtwerte.
-2. **Stationaere Phasen auswaehlen** (Aehnlichkeitsprinzip: aehnliches loest aehnliches):
-   - Apolare Analyten: 100% Polydimethylsiloxan (DB-1, HP-1, BP-1) oder 5% Phenyl-Polysiloxan (DB-5, HP-5)
-   - Maessig polare Analyten: 35% Phenyl-Polysiloxan (DB-35, HP-35) oder Polyethylenglykol (Wax, DB-WAX)
-   - Polare Analyten: Polyethylenglykol (FFAP, DB-FFAP) fuer Carbonsaeuren und Alkohole
-   - Chirale Analyten: Cyclodextrin-basierte stationaere Phasen (beta-DEX, Lipodex)
-3. **Saeulenabmessungen festlegen**:
-   - Routineanalytik: 30 m x 0,25 mm x 0,25 microm (gutes Gleichgewicht Aufloesung/Zeit)
-   - Schnellmethoden: 15 m oder kuerzere Saeulen mit engem Innendurchmesser
-   - Hohe Aufloesung: 60 m-Sauelen oder geringere Filmdicke
+**Erwartet:** Eine schriftliche Spezifikation die Analyten, Matrix, Nachweisgrenzen, Aufloesungsanforderungen und etwaige regulatorische oder Durchsatzeinschraenkungen auflistet.
 
-```markdown
-## Saeulenwahl
-- Stationaere Phase: [Beschreibung]
-- Polaaritaet (McReynolds-Konstanten): [Werte]
-- Dimensionen: [Laenge] m x [ID] mm x [Filmdicke] microm
-- Traegergasfluss: [mL/min] bei [Starttemperatur]
-```
+**Bei Fehler:** Wenn Analytfluechttigkeitsdaten nicht verfuegbar sind, Siedepunkte aus Strukturanaloga abschaetzen oder einen Scouting-Lauf auf einer mittelpolareren Saeule durchfuehren um die Elutionsreihenfolge zu ermitteln.
 
-**Erwartet:** Eine begrundete Saeulenwahl mit Angabe der Polaaritaet und kommerziellen Bezeichnung.
+### Schritt 2: Die Saeule auswaehlen
 
-**Bei Fehler:** Falls Analystenpolaaritaet unbekannt, beginne mit einer mittleren Polaaritaet (DB-5) als Universalphase und passe nach ersten Ergebnissen an.
+Saeulenabmessungen und stationaere Phase basierend auf Analytpolaritaet und Trennschwierigkeit waehlen.
 
-### Schritt 2: Temperaturprogramm entwickeln
+| Saeulentyp | Stationaere Phase | Polaritaet | Typische Anwendungsfaelle |
+|------------|-------------------|------------|--------------------------|
+| DB-1 / HP-1 | 100% Dimethylpolysiloxan | Unpolar | Kohlenwasserstoffe, Loesungsmittel, Allgemeinscreening |
+| DB-5 / HP-5 | 5% Phenyl-Methylpolysiloxan | Niedrig polar | Halbfluechtige, EPA 8270, Suchtmittel |
+| DB-1701 | 14% Cyanopropylphenyl | Mittelpolar | Pestizide, Herbizide |
+| DB-WAX / HP-INNOWax | Polyethylenglykol | Polar | Alkohole, Fettsaeuren, Aromen, aetherische Oele |
+| DB-624 | 6% Cyanopropylphenyl | Mittelpolar | Fluechtige Organik, EPA 624/8260 |
+| DB-FFAP | Modifiziertes PEG (Nitroterephthaelsaeure) | Hochpolar | Organische Saeuren, freie Fettsaeuren |
+| DB-35 | 35% Phenyl-Methylpolysiloxan | Mittel-niedrig polar | Polychlorierte Biphenyle, Bestaetigungssaeule |
 
-Entwickle ein Temperaturprogramm fuer optimale Trennung und kurze Laufzeit:
+1. Analytpolaritaet auf stationaere Phase abstimmen: Gleiches loest Gleiches.
+2. Saeulenlange waehlen (15-60 m): Laengere Saeulen liefern mehr Boeden aber laengere Laufzeiten.
+3. Innendurchmesser waehlen (0,25-0,53 mm): Enger ergibt bessere Effizienz, weiter ergibt mehr Kapazitaet.
+4. Filmdicke waehlen (0,25-5,0 um): Dickere Filme halten fluechtige Analyten laenger zurueck.
+5. Fuer komplexe Matrices eine Vorsaeule oder einen Retention Gap in Betracht ziehen.
 
-1. **Starttemperatur waehlen**: 10-20 degC unter dem Siedepunkt des leichtflueichtigsten Analyten; oder 40 degC fuer typische organische Verbindungen.
-2. **Endtemperatur waehlen**: 20-50 degC ueber dem Siedepunkt des schwerstflueichtigsten Analyten; unter dem maximalen Betriebspunkt der stationaeren Phase.
-3. **Heizrate optimieren**:
-   - Schnell (20-30 degC/min): Kurze Laufzeit, moeglicherweise schlechtere Aufloesung
-   - Moderat (10 degC/min): Ausgeglichenes Verhaeltnis
-   - Langsam (2-5 degC/min): Bessere Aufloesung, laengere Laufzeit
-4. **Isothermen einplanen**: Falls Peaks sehr unterschiedlich spaet eluieren, Haltezeit bei bestimmten Temperaturen einplanen.
-5. **Spuelprogramm**: Endreinigungsschritt bei maximaler Betriebstemperatur fuer 5-10 Minuten.
+**Erwartet:** Eine Saeulenspezifikation (Phase, Laenge, ID, Filmdicke) begruendet durch Analyteigenschaften und Trennungsanforderungen.
 
-```markdown
-## Temperaturprogramm
-| Stufe | Starttemperatur (degC) | Heizrate (degC/min) | Endtemperatur (degC) | Haltezeit (min) |
-|-------|----------------------|--------------------|--------------------|----------------|
-| 1 | [T_start] | - | [T_start] | [t_hold_1] |
-| 2 | [T_start] | [Rate_1] | [T_2] | [t_hold_2] |
-| 3 | [T_2] | [Rate_2] | [T_max] | [t_hold_3] |
-```
+**Bei Fehler:** Wenn keine einzelne Saeule alle kritischen Paare aufloest, eine Bestaetigungssaeule mit orthogonaler Selektivitaet planen (z.B. DB-1 primaer, DB-WAX als Bestaetigung).
 
-**Erwartet:** Ein vollstaendiges Temperaturprogramm, das Aufloesung und Laufzeit optimal abwaegt.
+### Schritt 3: Das Temperaturprogramm optimieren
 
-**Bei Fehler:** Falls fruehe Peaks ungetrennt eluieren, verlaengere Haltezeit bei Starttemperatur. Falls spaete Peaks zu lange brauchen, erhoehe Heizrate im hoeheren Temperaturbereich.
+1. Die anfaengliche Ofentemperatur auf oder unter dem Siedepunkt des fluechtigsten Analyten setzen (1-2 min halten fuer Solvensfokussierung).
+2. Eine lineare Rampe anwenden. Allgemeine Ausgangspunkte:
+   - Einfache Gemische: 10-20 C/min
+   - Komplexe Gemische: 3-8 C/min fuer bessere Aufloesung
+   - Ultra-Schnellscreening: 25-40 C/min auf kurzen Duennfilmsaeulen
+3. Die Endtemperatur 10-20 C ueber dem Siedepunkt des am wenigsten flueechtigen Analyten setzen.
+4. Eine Endhaltezeit hinzufuegen (2-5 min) um vollstaendige Elution und Saeulenausheizen sicherzustellen.
+5. Fuer kritische Paare die ko-eluieren, eine isotherme Haltezeit bei der Temperatur kurz vor ihrer Elution einfuegen oder die Rampenrate in diesem Bereich reduzieren.
+6. Verifizieren dass die Gesamtlaufzeit den Durchsatzanforderungen entspricht.
 
-### Schritt 3: Injektionsparameter optimieren
+**Erwartet:** Ein Temperaturprogramm (Anfangstemperatur, Haltezeit, Rampenrate(n), Endtemperatur, Endhaltezeit) das alle Zielanalyten innerhalb der akzeptablen Laufzeit trennt.
 
-Waehle den Injektionsmodus und optimiere Parameter:
+**Bei Fehler:** Wenn kritische Paare nach Rampenoptimierung unaufgeloest bleiben, die Saeulenauswahl (Schritt 2) ueberdenken oder ein Mehrrampenprogramm mit langsameren Raten im Problembereich in Betracht ziehen.
 
-1. **Injektionsmodus**:
-   - Split-Injektion: Fuer konzentrierte Proben; Split-Verhaeltnis 10:1 bis 100:1 einstellbar
-   - Splitless-Injektion: Fuer verdueannte Proben und hohe Empfindlichkeit
-   - On-column-Injektion: Fuer thermisch labile Verbindungen ohne Verdampfungsschritt
-   - PTV (Programmable Temperature Vaporization): Flexibel, insbesondere fuer Headspace-GC
-2. **Injektionsvolumen**: Typisch 1-2 microliter fuer fluessige Proben.
-3. **Injektortemperatur**: 250-300 degC fuer flueichtige Verbindungen; hoeher fuer schwerstflueichtige; niedriger fuer thermisch labile Substanzen.
-4. **Splitless-Zeit**: Typisch 0,5-1,5 min; dann Split oeffnen um Loesungsmittelspitze zu reduzieren.
+### Schritt 4: Das Traegergas waehlen
 
-**Erwartet:** Injektionsmodus und -parameter begruendet ausgewaehlt; Loesungsmittelpeak gut getrennt von den ersten Analytenpeaks.
+| Eigenschaft | Helium (He) | Wasserstoff (H2) | Stickstoff (N2) |
+|-------------|-------------|-------------------|-----------------|
+| Optimale Lineargeschwindigkeit | 20-40 cm/s | 30-60 cm/s | 10-20 cm/s |
+| Effizienz bei hohem Fluss | Gut | Beste (flache van-Deemter-Kurve) | Schlecht |
+| Geschwindigkeitsvorteil | Basis | 1,5-2x schneller als He | Langsamster |
+| Sicherheit | Inert | Brennbar (Leckdetektion erforderlich) | Inert |
+| Kosten / Verfuegbarkeit | Teuer, Lieferengpaesse | Guenstig, Generator-Option | Sehr guenstig |
+| Detektorkompatibilitaet | Alle Detektoren | Nicht mit ECD; Vorsicht bei einigen MS | Alle Detektoren |
 
-**Bei Fehler:** Falls Peakform schlecht (breite Peaks), pruefe Liners und Dichtungen. Falls Loesungsmittel Analyten maskiert, verlaengere Splitless-Zeit oder erhoehe Starttemperatur.
+1. Standardmaessig Helium fuer Allzweckarbeit und regulatorische Methoden die He vorschreiben.
+2. Wasserstoff fuer schnellere Analysen erwaegen oder wenn die Heliumversorgung eingeschraenkt ist; wasserstoffspezifische Leckdetektion und Sicherheitsverriegelungen installieren.
+3. Stickstoff nur fuer einfache Trennungen oder wenn Kosten der primaere Treiber sind verwenden.
+4. Den Traegergasfluss auf die optimale Lineargeschwindigkeit fuer das gewaehlte Gas und den Saeulen-ID einstellen.
+5. Die tatsaechliche Lineargeschwindigkeit mit einer nicht-retardierten Verbindung messen (z.B. Methan am FID).
 
-### Schritt 4: Detektor auswaehlen und optimieren
+**Erwartet:** Traegergas ausgewaehlt mit auf optimale Lineargeschwindigkeit eingestellter Flussrate, verifiziert durch Messung des nicht-retardierten Peaks.
 
-Passe Detektionsparameter an Analyse und Analyt an:
+**Bei Fehler:** Wenn die Effizienz bei der eingestellten Flussrate niedriger als erwartet ist, eine van-Deemter-Kurve (Bodenhoehe vs. Lineargeschwindigkeit) mit 5-7 Flussraten erstellen um das wahre Optimum zu finden.
 
-1. **Flammenionisationsdetektor (FID)**: Universell fuer organische Verbindungen; linear ueber 7 Groessenordnungen; nicht sensitiv fuer Wasser, CO2, CO.
-2. **Massenspektrometerdetektor (MS)**: Strukturinformation durch Fragmentierungsmuster; Bibliotheksidentifizierung; Selective Ion Monitoring (SIM) fuer Spurenanalyse.
-3. **Elektroneneinfangdetektor (ECD)**: Sehr empfindlich fuer Halogene und Nitroverbindungen; ideal fuer Pestizidrueckstands- und PCB-Analytik.
-4. **Stickstoff-Phosphor-Detektor (NPD)**: Selektiv fuer N und P; ideal fuer Pestizide und Amine.
-5. **Flammphotometerdetektor (FPD)**: Fuer Schwefel und Phosphorverbindungen.
+### Schritt 5: Den Detektor waehlen
 
-```markdown
-## Detektorparameter
-- Detektoretyp: [FID/MS/ECD/NPD/FPD]
-- Temperatur: [degC]
-- Spezifische Parameter: [Spannung/Gasfluesse/MS-Scan-Bereich]
-```
+| Detektor | Selektivitaet | Empfindlichkeit (ca.) | Linearer Bereich | Geeignet fuer |
+|----------|---------------|----------------------|-------------------|---------------|
+| FID | C-H-Bindungen (universell organisch) | Niedrige pg C/s | 10^7 | Kohlenwasserstoffe, allgemeine Organik, Quantifizierung |
+| TCD | Universell (alle Verbindungen) | Niedrige ng | 10^5 | Permanentgase, Massenanalyse |
+| ECD | Elektronegative Gruppen (Halogene, Nitro) | Niedrige fg (Cl-Verbindungen) | 10^4 | Pestizide, PCB, halogenierte Loesungsmittel |
+| NPD/FPD | N, P (NPD); S, P (FPD) | Niedrige pg | 10^4-10^5 | Organophosphor-Pestizide, Schwefelverbindungen |
+| MS (EI) | Strukturidentifikation | Niedrige pg (Scan), fg (SIM) | 10^5-10^6 | Unbekannte, Bestaetigung, Spurenanalytik |
+| MS/MS | Hoechste Selektivitaet | fg-Bereich | 10^5 | Komplexe Matrices, Ultraspuren, Forensik |
 
-**Erwartet:** Detektorwahl begruendet; Nachweisgrenzen abgeschaetzt oder gemessen.
+1. Detektor auf Analytchemie und erforderliche Empfindlichkeit abstimmen.
+2. Fuer quantitative Arbeit mit einfachen Matrices ist FID die Standardwahl (robust, linear, wartungsarm).
+3. Fuer Spurenanalytik in komplexen Matrices MS im SIM-Modus oder MS/MS im MRM-Modus bevorzugen.
+4. Fuer halogenierte Verbindungen auf Spurenniveau bietet ECD die beste Empfindlichkeit.
+5. Detektortemperatur 20-50 C ueber der maximalen Ofentemperatur setzen um Kondensation zu verhindern.
+6. Detektorgasfluesse gemaess Herstellerempfehlungen optimieren.
 
-**Bei Fehler:** Falls Empfindlichkeit ungenuegend, pruefe Detektorzustand (Leckagen, Kontamination), Injektionsparameter und Probenanreicherung.
+**Erwartet:** Detektor ausgewaehlt und mit geeigneten Temperaturen und Gasfluessen fuer die Zielanalyten konfiguriert.
 
-### Schritt 5: Methode validieren und dokumentieren
+**Bei Fehler:** Wenn die Detektorempfindlichkeit bei den geforderten Nachweisgrenzen nicht ausreicht, die Probe anreichern (groesseres Injektionsvolumen, Loesungsmittelverdampfung) oder zu einem empfindlicheren/selektiveren Detektor wechseln.
 
-Bestaetige Methodenguete anhand von Systemeignungsparametern:
+### Schritt 6: Anfaengliche Leistung validieren
 
-1. **Retentionszeit-Reproduzierbarkeit**: RSD < 0,5% fuer qualitative Identifizierung.
-2. **Aufloesung (Rs)**: Rs >= 1,5 fuer benachbarte Peaks (Basislinienseparation).
-3. **Peaksymmetrie**: Tailing-Faktor zwischen 0,8 und 1,5.
-4. **Linearitaet und Nachweisgrenzen**: Kalibrierkurven mit mindestens 5 Punkten; R2 > 0,999.
-5. **Wiederfindung**: Falls Matrixeffekte erwartet, mit markierten Standards oder Standardaddition pruefen.
+1. Einen Systemeignungsstandard herstellen der alle Zielanalyten in mittlerer Konzentration enthaelt.
+2. Den Standard 6-mal hintereinander injizieren.
+3. Bewerten:
+   - Retentionszeit-RSD: muss < 1,0% sein
+   - Peakflaechen-RSD: muss < 2,0% sein (< 5,0% fuer Spurenniveau)
+   - Aufloesung zwischen kritischen Paaren: Rs >= 1,5 (Basislinie) oder >= 2,0 fuer regulierte Methoden
+   - Peaktailingfaktor: 0,8-1,5 (USP-Kriterien T <= 2,0)
+   - Theoretische Boeden (N): gegen Herstellerspezifikation der Saeule verifizieren
+4. Einen Blindlauf injizieren um Abwesenheit von Verschleppung oder Geisterpeaks zu bestaetigen.
+5. Einen Matrixblank injizieren um moegliche Interferenzen bei Zielretentionszeiten zu identifizieren.
+6. Alle Parameter in einem Methodenzusammenfassungsblatt dokumentieren.
 
-**Erwartet:** Validierungsprotokoll mit allen Systemeignungsparametern innerhalb der Spezifikation.
+**Erwartet:** Systemeignungskriterien fuer alle Analyten ueber die Replikatinjektionen erfuellt, ohne Verschleppung oder Matrixinterferenzen bei Zielretentionsfenstern.
 
-**Bei Fehler:** Falls Aufloesung zu gering, optimiere Temperaturprogramm, wechsle stationaere Phase oder erhoehe Saeulenlaenge. Falls Tailing auftritt, pruefe Saeulenkonditionierung und Liners.
+**Bei Fehler:** Wenn Tailing beobachtet wird, auf aktive Stellen pruefen (Saeule nachkonditionieren, 0,5 m vom Einlassende abschneiden, Liner ersetzen). Wenn RSD die Grenzen ueberschreitet, Autosampler-Praezision und Injektionstechnik untersuchen. Wenn die Aufloesung ungenuegend ist, zu Schritt 3 zurueckkehren um das Temperaturprogramm zu verfeinern.
 
 ## Validierung
 
-- [ ] Stationaere Phase anhand Analystenpolaaritaet ausgewaehlt
-- [ ] Temperaturprogramm optimiert (Heizrate, Starttemperatur, Endtemperatur)
-- [ ] Injektionsparameter auf Probenkonzentration abgestimmt
-- [ ] Detektor mit begruendetem Selektivitaets-Empfindlichkeits-Trade-off ausgewaehlt
-- [ ] Rs >= 1,5 fuer alle kritischen Peakpaare
-- [ ] Retentionszeit-Reproduzierbarkeit dokumentiert (RSD < 0,5%)
+- [ ] Alle Zielanalyten sind mit Rs >= 1,5 fuer kritische Paare getrennt
+- [ ] Retentionszeit-RSD < 1,0% ueber 6 Replikatinjektionen
+- [ ] Peakflaechen-RSD < 2,0% ueber 6 Replikatinjektionen
+- [ ] Peaktailingfaktoren innerhalb von 0,8-1,5 fuer alle Analyten
+- [ ] Blindinjektion zeigt keine Verschleppung ueber 0,1% der Arbeitskonzentration
+- [ ] Matrixblank zeigt keine Interferenzen bei Zielretentionsfenstern
+- [ ] Gesamtlaufzeit erfuellt Durchsatzanforderungen
+- [ ] Methodenparameter sind vollstaendig dokumentiert (Saeule, Temperaturen, Fluesse, Detektoreinstellungen)
 
 ## Haeufige Stolperfallen
 
-- **Falsche stationaere Phase**: Die stationaere Phase sollte chemisch aehnlich zu den Analyten sein; eine zu unpolare Phase fuer polare Analyten fuehrt zu schlechter Trennung und Peaktailing.
-- **Zu hohe Starttemperatur**: Fruehe Peaks werden komprimiert oder gehen verloren; Starttemperatur unter dem Siedepunkt des leichtflueichtigsten Analyten waehlen.
-- **Kontaminierter Liner**: Nicht-gereinigter oder falscher Liner fuehrt zu Peaktailing und Materialverlust; regelmaessig wechseln.
-- **Matrixeffekte ignorieren**: Komplexe Probenmatrizes koennen Peakform und Retentionszeit beeinflussen; Matrixkalibrierung oder Standardaddition erwaegen.
+- **Saeulenbluten-Temperaturgrenzen ignorieren**: Betrieb ueber der maximalen isothermen Temperatur der stationaeren Phase verursacht erhoehte Basislinie, Geisterpeaks und beschleunigte Saeulendegradation. Immer das Saeulenspezifikationsblatt pruefen.
+- **Ueberdimensionierte Injektionsvolumina**: Zu viel Loesungsmittel injizieren verursacht Frontingpeaks und schlechte Aufloesung fuer fruehe Eluenten. Injektionsvolumen an die Saeulenkapazitaet anpassen (typischerweise 0,5-2 uL fuer 0,25 mm ID-Saeulen im Split-Modus).
+- **Falscher Liner fuer den Injektionsmodus**: Splitless-Injektionen erfordern einen einfach oder doppelt konisch zulaufenden desaktivierten Liner; Split-Injektionen verwenden einen Liner mit Glaswolle. Fehlende Uebereinstimmung verursacht schlechte Reproduzierbarkeit.
+- **Septum- und Linerwartung vernachlaessigen**: Septumstanzen und Linerkontamination sind die haeufigsten Ursachen fuer Geisterpeaks und Tailing. Septen alle 50-100 Injektionen und Liner nach dokumentiertem Zeitplan ersetzen.
+- **Van-Deemter-Optimierung ueberspringen**: Mit der Standardflussrate des Herstellers arbeiten statt am gemessenen Optimum verschenkt Effizienz, besonders beim Wechsel des Traegergases.
+- **Ungenueegende Saeulenkonditionierung**: Neue Saeulen muessen konditioniert werden (auf Maximaltemperatur unter Traegergasfluss rampen, ohne Detektor) um Herstellungsrueckstaende vor dem analytischen Einsatz zu entfernen.
 
 ## Verwandte Skills
 
-- `develop-hplc-method` -- HPLC-Methoden fuer nicht-flueichtige Verbindungen
-- `troubleshoot-separation` -- Diagnose und Behebung chromatographischer Probleme
-- `validate-analytical-method` -- ICH-konforme Methodenvalidierung
+- `develop-hplc-method` -- Fluessigchromatographie-Methodenentwicklung fuer nicht-fluechtige oder thermisch labile Analyten
+- `interpret-chromatogram` -- GC- und HPLC-Chromatogramme lesen und interpretieren
+- `troubleshoot-separation` -- Diagnose und Behebung von Problemen mit Peakform, Retention und Aufloesung
+- `validate-analytical-method` -- Formale ICH-Q2-Validierung der entwickelten GC-Methode

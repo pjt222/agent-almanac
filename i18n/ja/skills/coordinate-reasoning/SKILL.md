@@ -1,13 +1,11 @@
 ---
 name: coordinate-reasoning
 description: >
-  AI internal coordination using stigmergic signals — managing information
-  freshness in context and memory, decay rates for assumption staleness,
-  and emergent coherent behavior from simple local protocols. Use during
-  complex tasks where multiple sub-tasks must coordinate, when context has
-  grown long and information freshness is uncertain, after context compression
-  when information may have been lost, or when sub-task outputs need to feed
-  into each other cleanly without degradation.
+  スティグマージックシグナルを用いたAI内部調整 — コンテキストとメモリにおける
+  情報の鮮度管理、仮定の陳腐化に対する減衰率、単純なローカルプロトコルから創発する
+  一貫した行動。複数のサブタスクが調整を必要とする複雑なタスク中、コンテキストが
+  長くなり情報の鮮度が不確かな時、コンテキスト圧縮後に情報が失われた可能性がある時、
+  サブタスクの出力が劣化なく相互に供給される必要がある時に使用する。
 license: MIT
 allowed-tools: Read Write
 metadata:
@@ -26,29 +24,29 @@ metadata:
 
 # 推論の調整
 
-Manage the internal coordination of reasoning processes using stigmergic principles — treating context as an environment where information signals have freshness, decay rates, and interaction rules that produce coherent behavior from simple local protocols.
+スティグマージック原理を用いて推論プロセスの内部調整を管理する — コンテキストを、情報シグナルが鮮度、減衰率、相互作用ルールを持ち、単純なローカルプロトコルから一貫した行動を生み出す環境として扱う。
 
 ## 使用タイミング
 
-- During complex tasks where multiple sub-tasks must coordinate (multi-file edits, multi-step refactoring)
-- When context has grown long and information freshness is uncertain
-- After context compression when some information may have been lost
-- When sub-task outputs need to feed into each other cleanly
-- When earlier reasoning results need to be carried forward without degradation
-- Complementing `forage-solutions` (exploration) and `build-coherence` (decision) with execution coordination
+- 複数のサブタスクが調整を必要とする複雑なタスク中（複数ファイル編集、複数ステップのリファクタリング）
+- コンテキストが長くなり情報の鮮度が不確かな時
+- コンテキスト圧縮後に一部の情報が失われた可能性がある時
+- サブタスクの出力が劣化なく相互に供給される必要がある時
+- 以前の推論結果を劣化なく引き継ぐ必要がある時
+- `forage-solutions`（探索）と`build-coherence`（決定）を実行調整で補完する時
 
 ## 入力
 
-- **必須**: Current task decomposition (what sub-tasks exist and how do they relate?)
-- **任意**: Known information freshness concerns (e.g., "I read that file 20 messages ago")
-- **任意**: Sub-task dependency map (which sub-tasks feed into which?)
-- **任意**: Available coordination tools (MEMORY.md, task list, inline notes)
+- **必須**: 現在のタスク分解（どのサブタスクが存在し、どのように関連するか？）
+- **任意**: 既知の情報鮮度の懸念（例：「そのファイルは20メッセージ前に読んだ」）
+- **任意**: サブタスク依存関係マップ（どのサブタスクがどれに供給するか？）
+- **任意**: 利用可能な調整ツール（MEMORY.md、タスクリスト、インラインノート）
 
 ## 手順
 
-### ステップ1: Classify the Coordination Problem
+### ステップ1: 調整問題の分類
 
-Different coordination challenges require different signal designs.
+異なる調整課題には異なるシグナル設計が必要。
 
 ```
 AI Coordination Problem Types:
@@ -80,15 +78,15 @@ AI Coordination Problem Types:
 └─────────────────────┴──────────────────────────────────────────────────┘
 ```
 
-Classify the current task. Most complex tasks are Construction or Division of Labor; most debugging tasks are Foraging; most design decisions are Consensus.
+現在のタスクを分類する。ほとんどの複雑なタスクはConstructionまたはDivision of Labor、ほとんどのデバッグタスクはForaging、ほとんどの設計判断はConsensus。
 
-**期待結果:** A clear classification that determines which coordination signals to use. The classification should match how the task actually feels, not how it was described.
+**期待結果:** どの調整シグナルを使用するかを決定する明確な分類。分類はタスクの説明ではなく、タスクの実際の感触に一致すべき。
 
-**失敗時:** If the task spans multiple types (common for large tasks), identify the dominant type for the current phase. Construction during implementation, Foraging during debugging, Consensus during design. The type can change as the task progresses.
+**失敗時:** タスクが複数のタイプにまたがる場合（大きなタスクでは一般的）、現在のフェーズの支配的なタイプを特定する。実装中はConstruction、デバッグ中はForaging、設計中はConsensus。タイプはタスクの進行に伴い変化できる。
 
-### ステップ2: Design Context Signals
+### ステップ2: コンテキストシグナルの設計
 
-Treat information in the conversation context as signals with freshness and decay properties.
+会話コンテキスト中の情報を、鮮度と減衰特性を持つシグナルとして扱う。
 
 ```
 Information Decay Rate Table:
@@ -116,19 +114,19 @@ Information Decay Rate Table:
 └───────────────────────────┴──────────┴──────────────────────────────┘
 ```
 
-Additionally, design inhibition signals — markers for tried-and-failed approaches:
+加えて、抑制シグナル — 試行して失敗したアプローチのマーカー — を設計する:
 
-- After a tool call fails: note the failure mode (prevents retrying the same call)
-- After an approach is abandoned: note why (prevents revisiting without new evidence)
-- After a user correction: note what was wrong (prevents repeating the error)
+- ツール呼び出しが失敗した後：失敗モードを記録する（同じ呼び出しの再試行を防止）
+- アプローチが放棄された後：理由を記録する（新しい証拠なしでの再訪を防止）
+- ユーザーの修正後：何が間違っていたかを記録する（同じエラーの繰り返しを防止）
 
-**期待結果:** A mental model of information freshness across the current context. Identification of which information is fresh and which needs refreshing before reliance.
+**期待結果:** 現在のコンテキスト全体にわたる情報鮮度のメンタルモデル。どの情報が新鮮で、どの情報が依存前にリフレッシュが必要かの特定。
 
-**失敗時:** If information freshness is hard to assess, default to "re-read before relying on" for anything not verified in the last 5-10 actions. Over-refreshing wastes some effort but prevents stale-information errors.
+**失敗時:** 情報鮮度の評価が難しい場合、最後の5〜10アクション内で検証されていないものについては「依存前にリフレッシュ」をデフォルトとする。過剰なリフレッシュは若干の労力を無駄にするが、古い情報に基づくエラーを防止する。
 
-### ステップ3: Define Local Protocols
+### ステップ3: ローカルプロトコルの定義
 
-Establish simple rules for how reasoning should proceed at each step, using only locally available information.
+各ステップで推論がどのように進むべきかについて、ローカルに利用可能な情報のみを使用する単純なルールを確立する。
 
 ```
 Local Protocol Rules:
@@ -162,21 +160,21 @@ Local Protocol Rules:
 └──────────────────────┴────────────────────────────────────────────────┘
 ```
 
-These protocols are simple enough to apply at every step without significant overhead.
+これらのプロトコルは、大きなオーバーヘッドなく各ステップで適用できるほど単純。
 
-**期待結果:** A set of lightweight rules that improve coordination quality without slowing execution. The rules should feel helpful, not burdensome.
+**期待結果:** 実行速度を低下させずに調整品質を向上させる軽量なルールセット。ルールは負担ではなく有用に感じるべき。
 
-**失敗時:** If the protocols feel like overhead, reduce to the two most important for the current task type: Safety + Deposit for Construction, Safety + Exploration for Foraging, Safety + Response for tasks with active user feedback.
+**失敗時:** プロトコルがオーバーヘッドに感じる場合、現在のタスクタイプにとって最も重要な2つに削減する：ConstructionにはSafety + Deposit、ForagingにはSafety + Exploration、アクティブなユーザーフィードバックがあるタスクにはSafety + Response。
 
-### ステップ4: Calibrate Information Freshness
+### ステップ4: 情報鮮度の校正
 
-Perform an active audit of information staleness in the current context.
+現在のコンテキストにおける情報の陳腐化のアクティブな監査を実行する。
 
-1. What facts were established more than N messages ago? List them
-2. For each: has it been updated, contradicted, or rendered irrelevant since?
-3. Check for context compression losses: is there information you remember having but can no longer find in the visible context?
-4. Check for drift between early plans and current execution: has the approach changed without updating the plan?
-5. Re-verify the 2-3 most critical facts (the ones that the most downstream reasoning depends on)
+1. Nメッセージ以上前に確立された事実は何か？ リストアップする
+2. それぞれについて：その後更新、矛盾、または無関係になったか？
+3. コンテキスト圧縮の損失を確認：記憶にはあるが可視コンテキストに見つからない情報はないか？
+4. 初期計画と現在の実行の間のドリフトを確認：計画を更新せずにアプローチが変わっていないか？
+5. 最も重要な2〜3の事実（最も多くの下流推論が依存するもの）を再検証する
 
 ```
 Freshness Audit Template:
@@ -188,18 +186,18 @@ Freshness Audit Template:
 └────────────────────────┴──────────┴──────────────┴─────────────────┘
 ```
 
-**期待結果:** A concrete inventory of information freshness with stale items identified for refresh. At least one fact re-verified — if nothing needed refreshing, the audit was too shallow or the context is genuinely fresh.
+**期待結果:** リフレッシュが必要な陳腐な項目が特定された情報鮮度の具体的なインベントリ。少なくとも1つの事実が再検証される — リフレッシュが不要だった場合、監査が浅すぎるか、コンテキストが真に新鮮。
 
-**失敗時:** If the audit reveals significant information loss (multiple facts with "Lost" or "Unknown" status), this is a signal to run `heal` for a full subsystem assessment. Information loss beyond a threshold means coordination is compromised at the foundation level.
+**失敗時:** 監査で重大な情報損失が明らかになった場合（複数の事実が「Lost」または「Unknown」ステータス）、完全なサブシステム評価のために`heal`を実行するシグナル。閾値を超える情報損失は、基盤レベルで調整が損なわれていることを意味する。
 
-### ステップ5: Test Emergent Coherence
+### ステップ5: 創発的一貫性のテスト
 
-Verify that the sub-tasks, when combined, produce a coherent whole.
+サブタスクが組み合わされた時に一貫した全体を生み出すかを検証する。
 
-1. Does each sub-task's output feed cleanly into the next? Or are there gaps, contradictions, or mismatched assumptions?
-2. Are tool calls building toward the goal, or are they repetitive (re-reading the same file, re-running the same search)?
-3. Is the overall direction still aligned with the user's request? Or has incremental drift accumulated into significant misalignment?
-4. Stress test: if one key assumption is wrong, how much of the work cascades? High cascade = fragile coordination. Low cascade = robust coordination
+1. 各サブタスクの出力は次にスムーズに供給されるか？ ギャップ、矛盾、または前提の不一致はないか？
+2. ツール呼び出しは目標に向かって構築されているか、それとも反復的か（同じファイルの再読み込み、同じ検索の再実行）？
+3. 全体的な方向性はまだユーザーのリクエストと整合しているか？ 漸進的なドリフトが大きな不整合に蓄積していないか？
+4. ストレステスト：1つの重要な仮定が間違っている場合、どれだけの作業がカスケードするか？ 高いカスケード = 脆弱な調整。低いカスケード = 堅牢な調整
 
 ```
 Coherence Test:
@@ -213,31 +211,31 @@ Coherence Test:
 └────────────────────────────────────┴─────────────────────────────────┘
 ```
 
-**期待結果:** A concrete assessment of overall coherence with specific issues identified. Coherent coordination should feel like parts clicking together; incoherent coordination feels like forcing puzzle pieces.
+**期待結果:** 具体的な問題が特定された全体的な一貫性の具体的な評価。一貫した調整は部品がカチッとはまる感覚、不一貫な調整はパズルのピースを無理に合わせる感覚。
 
-**失敗時:** If coherence is poor, identify the specific point where sub-tasks diverge. Often it is a single stale assumption or an unprocessed user correction that propagated through downstream work. Fix the point of divergence, then re-verify downstream outputs.
+**失敗時:** 一貫性が低い場合、サブタスクが分岐する具体的なポイントを特定する。多くの場合、それは下流の作業に伝播した単一の陳腐な仮定または未処理のユーザー修正。分岐点を修正し、次に下流の出力を再検証する。
 
 ## バリデーション
 
-- [ ] Coordination problem was classified by type
-- [ ] Information decay rates were considered for facts relied upon
-- [ ] Local protocols were applied (especially Safety and Deposit)
-- [ ] Freshness audit identified stale information (or confirmed freshness with evidence)
-- [ ] Emergent coherence was tested across sub-tasks
-- [ ] Inhibition signals were respected (tried-and-failed approaches not repeated)
+- [ ] 調整問題がタイプ別に分類された
+- [ ] 依存する事実について情報減衰率が考慮された
+- [ ] ローカルプロトコルが適用された（特にSafetyとDeposit）
+- [ ] 鮮度監査で陳腐な情報が特定された（または証拠とともに鮮度が確認された）
+- [ ] サブタスク間で創発的一貫性がテストされた
+- [ ] 抑制シグナルが尊重された（試行して失敗したアプローチが繰り返されていない）
 
 ## よくある落とし穴
 
-- **Over-engineering signals**: Complex coordination protocols slow work more than they help. Start with Safety + Deposit; add others only when problems emerge
-- **Trusting stale context**: The most common coordination failure is relying on information that was true 20 messages ago but has since been updated or invalidated. When in doubt, re-read
-- **Ignoring inhibition signals**: Retrying a failed approach without changing anything is not persistence — it is ignoring the failure signal. Something must be different for a retry to succeed
-- **No deposits**: Completing sub-tasks without noting their outputs forces later sub-tasks to re-derive or re-read. Brief summaries save significant re-work
-- **Assuming coherence**: Not testing whether sub-tasks actually combine into a coherent whole. Each sub-task can be correct independently but incoherent collectively — the integration is where coordination fails
+- **シグナルの過剰設計**: 複雑な調整プロトコルは助けるよりも作業を遅らせる。Safety + Depositから始め、問題が出た時にのみ追加する
+- **陳腐なコンテキストの信頼**: 最も一般的な調整失敗は、20メッセージ前には正しかったが、その後更新または無効化された情報に依存すること。疑わしい場合は再読み込み
+- **抑制シグナルの無視**: 何も変えずに失敗したアプローチを再試行するのは粘り強さではない — 失敗シグナルを無視すること。再試行が成功するためには何かが変わっている必要がある
+- **デポジットなし**: 出力を記録せずにサブタスクを完了すると、後のサブタスクが再導出または再読み込みを強いられる。簡潔な要約で大幅な再作業を節約
+- **一貫性の仮定**: サブタスクが実際に一貫した全体に結合するかをテストしない。各サブタスクは個別には正しいが集合的には不一貫な可能性がある — 統合が調整の失敗が起こる場所
 
 ## 関連スキル
 
-- `coordinate-swarm` — the multi-agent coordination model that this skill adapts to single-agent reasoning
-- `forage-solutions` — coordinates exploration across multiple hypotheses
-- `build-coherence` — coordinates evaluation across competing approaches
-- `heal` — deeper assessment when coordination failures reveal subsystem drift
-- `awareness` — monitors for coordination breakdown signals during execution
+- `coordinate-swarm` -- このスキルが単一エージェント推論に適応したマルチエージェント調整モデル
+- `forage-solutions` -- 複数の仮説にわたる探索を調整する
+- `build-coherence` -- 競合するアプローチにわたる評価を調整する
+- `heal` -- 調整失敗がサブシステムドリフトを明らかにした時のより深い評価
+- `awareness` -- 実行中の調整崩壊シグナルを監視する

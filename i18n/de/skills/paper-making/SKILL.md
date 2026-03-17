@@ -1,13 +1,13 @@
 ---
 name: paper-making
 description: >
-  Handcraft paper from plant fibres — fibre harvesting, pulping, sheet
-  forming with a mould and deckle, pressing, and drying. Covers fibre
-  sources (cotton, kozo, abaca, recycled paper), beating methods, sizing,
-  and decorative techniques. Use when making handmade paper for art,
-  stationery, or bookbinding, when creating unique textured or embedded paper
-  for special projects, or when learning traditional paper making as a craft
-  practice.
+  Papier aus Pflanzenfasern von Hand herstellen — Fasergewinnung, Pulpenherstellung,
+  Blattbildung mit Schoepfrahmen und Deckel, Pressen und Trocknen. Umfasst
+  Faserquellen (Baumwolle, Kozo, Abaca, Recyclingpapier), Schlagmethoden,
+  Leimung und dekorative Techniken. Verwenden beim Herstellen von handgeschoepftem
+  Papier fuer Kunst, Briefpapier oder Buchbinderei, beim Erstellen von einzigartig
+  texturiertem oder mit Einlagen versehenem Papier fuer besondere Projekte oder
+  beim Erlernen traditioneller Papierherstellung als Handwerkspraxis.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,31 +26,31 @@ metadata:
 
 # Papierherstellung
 
-Handcraft paper from plant fibres using traditional mould and deckle sheet-forming techniques.
+Papier aus Pflanzenfasern mit traditioneller Schoepfrahmen-und-Deckel-Technik von Hand herstellen.
 
-## When to Use
+## Wann verwenden
 
-- You want to make handmade paper for art, stationery, or bookbinding
-- You have plant fibres (cotton linters, kozo bark, recycled paper) to process
-- You want to create unique textured or embedded paper for special projects
-- You are teaching or learning traditional paper making as a craft practice
+- Sie moechten handgeschoepftes Papier fuer Kunst, Briefpapier oder Buchbinderei herstellen
+- Sie haben Pflanzenfasern (Baumwoll-Linters, Kozo-Rinde, Recyclingpapier) zur Verarbeitung
+- Sie moechten einzigartig texturiertes oder mit Einlagen versehenes Papier fuer besondere Projekte erstellen
+- Sie unterrichten oder erlernen traditionelle Papierherstellung als Handwerkspraxis
 
-## Inputs
+## Eingaben
 
-- **Required**: Fibre source (cotton linters, recycled paper, kozo bark, or plant stalks)
-- **Required**: Mould and deckle (a flat screen frame with a removable top frame)
-- **Required**: Vat or tub large enough to submerge the mould (basin, plastic tub)
-- **Required**: Water (generous amounts)
-- **Optional**: Blender for pulping (dedicated to paper making — not for food afterward)
-- **Optional**: Pressing boards and felt sheets (couching felts)
-- **Optional**: Sizing agent (gelatin, methylcellulose, or rice starch)
-- **Optional**: Additives: flower petals, threads, pigments, plant material for embedding
+- **Erforderlich**: Faserquelle (Baumwoll-Linters, Recyclingpapier, Kozo-Rinde oder Pflanzenstengel)
+- **Erforderlich**: Schoepfrahmen und Deckel (ein flacher Siebrahmen mit abnehmbarem Oberrahmen)
+- **Erforderlich**: Buette oder Wanne, gross genug um den Schoepfrahmen einzutauchen (Becken, Kunststoffwanne)
+- **Erforderlich**: Wasser (reichlich)
+- **Optional**: Mixer zum Pulpen (ausschliesslich fuer die Papierherstellung — nicht mehr fuer Lebensmittel verwenden)
+- **Optional**: Pressbretter und Filzboegen (Gautschfilze)
+- **Optional**: Leimungsmittel (Gelatine, Methylcellulose oder Reisstaerke)
+- **Optional**: Zusaetze: Bluetenblaetter, Faeden, Pigmente, Pflanzenmaterial zum Einlegen
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Prepare the Fibre
+### Schritt 1: Faser vorbereiten
 
-Different fibre sources require different preparation.
+Verschiedene Faserquellen erfordern unterschiedliche Vorbereitung.
 
 ```
 Fibre Sources and Preparation:
@@ -85,13 +85,13 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 5. Results vary — experiment with fibre length and beating time
 ```
 
-**Expected:** A slurry of prepared fibre (pulp) with the consistency of thin oatmeal.
+**Erwartet:** Eine Aufschlaemmung aus vorbereiteter Faser (Pulpe) mit der Konsistenz von duennem Haferbrei.
 
-**On failure:** If the pulp is too chunky, blend longer. If too thin and watery, add more fibre. The consistency should coat the back of a spoon lightly.
+**Bei Fehler:** Wenn die Pulpe zu klumpig ist, laenger mixen. Wenn zu duenn und waessrig, mehr Faser hinzufuegen. Die Konsistenz sollte die Rueckseite eines Loeffels leicht bedecken.
 
-### Step 2: Prepare the Vat
+### Schritt 2: Buette vorbereiten
 
-Set up the sheet-forming station.
+Die Blattbildungsstation einrichten.
 
 ```
 Vat Setup:
@@ -108,13 +108,13 @@ Test: dip your hand in the vat. The water should be milky/cloudy
 with evenly suspended fibres. If you can see clumps, stir more.
 ```
 
-**Expected:** A vat of evenly suspended pulp ready for sheet forming.
+**Erwartet:** Eine Buette mit gleichmaessig suspendierter Pulpe, bereit zur Blattbildung.
 
-**On failure:** If fibres clump despite stirring, the fibre may be too long. Blend briefly to shorten the fibres, then re-suspend.
+**Bei Fehler:** Wenn Fasern trotz Ruehren verklumpen, sind die Fasern moeglicherweise zu lang. Kurz mixen, um die Fasern zu kuerzen, dann erneut suspendieren.
 
-### Step 3: Form the Sheet
+### Schritt 3: Blatt bilden
 
-The mould and deckle technique is the heart of paper making.
+Die Schoepfrahmen-und-Deckel-Technik ist das Herzstueck der Papierherstellung.
 
 ```
 Sheet Forming Protocol:
@@ -148,13 +148,13 @@ THICKNESS CONTROL:
   smoothly and leveling before lifting
 ```
 
-**Expected:** A wet sheet of paper sitting evenly on the mould screen with consistent thickness and no thin spots or holes.
+**Erwartet:** Ein nasses Papierblatt, das gleichmaessig auf dem Schoepfrahmensieb liegt, mit konsistenter Dicke und ohne duenne Stellen oder Loecher.
 
-**On failure:** If the sheet has thin spots, the mould was not level during the lift. If the sheet is thick on one side, the mould was tilted during draining. Practice the lift motion: smooth, level, and confident.
+**Bei Fehler:** Wenn das Blatt duenne Stellen hat, war der Schoepfrahmen beim Anheben nicht waagerecht. Wenn das Blatt auf einer Seite dicker ist, war der Schoepfrahmen beim Abtropfen geneigt. Die Hebebewegung ueben: gleichmaessig, waagerecht und zuversichtlich.
 
-### Step 4: Couch, Press, and Dry
+### Schritt 4: Gautschen, Pressen und Trocknen
 
-Transfer the wet sheet and remove water.
+Das nasse Blatt uebertragen und Wasser entfernen.
 
 ```
 COUCHING (transferring the sheet):
@@ -195,27 +195,27 @@ Option C — Iron dry (fast):
 3. Produces a smooth, flat sheet quickly
 ```
 
-**Expected:** Finished sheets of handmade paper — dry, flat (if board-dried), with deckled edges and visible fibre texture.
+**Erwartet:** Fertige Boegen handgeschoepftes Papier — trocken, flach (bei Bretttrocknung), mit Buettenraendern und sichtbarer Faserstruktur.
 
-**On failure:** If sheets tear during couching, the mould was lifted before enough water drained. Let the mould drain longer before flipping. If sheets wrinkle during drying, they were not pressed firmly enough or the drying surface was not smooth.
+**Bei Fehler:** Wenn Boegen beim Gautschen reissen, wurde der Schoepfrahmen angehoben, bevor genug Wasser abgetropft war. Den Schoepfrahmen laenger abtropfen lassen, bevor er umgedreht wird. Wenn Boegen beim Trocknen knittern, wurden sie nicht fest genug gepresst oder die Trocknungsflaeche war nicht glatt.
 
-## Validation
+## Validierung
 
-- [ ] Fibre was prepared to an even, lump-free pulp
-- [ ] Pulp was evenly suspended in the vat before each sheet
-- [ ] Sheet forming included the interlocking shake in both directions
-- [ ] Sheets have consistent thickness without thin spots or holes
-- [ ] Pressing removed sufficient water before drying
-- [ ] Finished sheets are dry, intact, and suitable for their intended use
+- [ ] Faser wurde zu einer gleichmaessigen, klumpenfreien Pulpe verarbeitet
+- [ ] Pulpe war vor jedem Blatt gleichmaessig in der Buette suspendiert
+- [ ] Blattbildung umfasste das verzahnende Schuetteln in beide Richtungen
+- [ ] Boegen haben konsistente Dicke ohne duenne Stellen oder Loecher
+- [ ] Pressen entfernte ausreichend Wasser vor dem Trocknen
+- [ ] Fertige Boegen sind trocken, intakt und fuer den vorgesehenen Verwendungszweck geeignet
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Not stirring before each sheet**: Fibres settle in seconds. Every sheet needs a fresh stir or the last sheets will be thin and sparse
-- **Tearing during couching**: Too much water still on the mould, or the couching motion was too slow. Drain longer and flip in one confident motion
-- **Uneven thickness**: The mould was not level during the lift and drain. Practice the motion slowly, focusing on keeping the frame horizontal
-- **Paper too fragile**: The fibres may not be beaten enough (too long, too stiff) or the sheet may be too thin. Beat longer or use more pulp
-- **Mould warps when wet**: Wooden moulds can warp. Use marine-grade wood or seal with waterproofing. Aluminium frames avoid this issue entirely
+- **Nicht vor jedem Blatt ruehren**: Fasern setzen sich in Sekunden ab. Jedes Blatt braucht frisches Ruehren, sonst werden die letzten Boegen duenn und spaerlich
+- **Reissen beim Gautschen**: Zu viel Wasser noch auf dem Schoepfrahmen, oder die Gautschbewegung war zu langsam. Laenger abtropfen lassen und in einer zuversichtlichen Bewegung umdrehen
+- **Ungleichmaessige Dicke**: Der Schoepfrahmen war beim Anheben und Abtropfen nicht waagerecht. Die Bewegung langsam ueben und darauf konzentrieren, den Rahmen horizontal zu halten
+- **Papier zu fragil**: Die Fasern sind moeglicherweise nicht genug geschlagen (zu lang, zu steif) oder das Blatt ist zu duenn. Laenger schlagen oder mehr Pulpe verwenden
+- **Schoepfrahmen verzieht sich bei Naesse**: Holzrahmen koennen sich verziehen. Marinequalitaet-Holz verwenden oder mit Wasserschutz versiegeln. Aluminiumrahmen vermeiden dieses Problem vollstaendig
 
-## Related Skills
+## Verwandte Skills
 
-- `forage-plants` — fibre plants can be foraged in the wild; understanding plant anatomy helps identify suitable fibre sources
+- `forage-plants` — Faserpflanzen koennen in der Natur gesammelt werden; Verstaendnis der Pflanzenanatomie hilft bei der Identifikation geeigneter Faserquellen

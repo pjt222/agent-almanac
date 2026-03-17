@@ -1,10 +1,10 @@
 ---
 name: version-ml-data
 description: >
-  Version machine learning datasets using DVC (Data Version Control) with remote
-  storage backends, build reproducible data pipelines with dependency tracking,
+  Version maschinelles Lernen datasets using DVC (Data Version Control) with remote
+  storage backends, build reproducible data pipelines with Abhaengigkeit tracking,
   integrate with Git workflows, and ensure data lineage for model reproducibility.
-  Use when versioning large datasets that do not fit in Git, tracking data changes
+  Verwenden wenn versioning large datasets that nicht fit in Git, tracking data changes
   alongside code changes, ensuring ML experiment reproducibility, sharing datasets
   across team members, or auditing data lineage for compliance requirements.
 license: MIT
@@ -28,33 +28,33 @@ metadata:
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-Implement data version control for machine learning datasets to ensure reproducibility and track data lineage.
+Implementieren data version control for maschinelles Lernen datasets to ensure reproducibility and track data lineage.
 
-## When to Use
+## Wann verwenden
 
 - Versioning large datasets that don't fit in Git
 - Tracking data changes alongside code changes
 - Ensuring reproducibility of ML experiments
-- Building automated data pipelines with dependency tracking
+- Building automated data pipelines with Abhaengigkeit tracking
 - Sharing datasets across team members
 - Rolling back to previous data versions
 - Auditing data lineage for compliance
 - Managing multiple dataset variants (train/test splits, feature sets)
 
-## Inputs
+## Eingaben
 
-- **Required**: Git repository for metadata tracking
-- **Required**: DVC installation (`pip install dvc`)
-- **Required**: Raw data files or directories to version
+- **Erforderlich**: Git repository for metadata tracking
+- **Erforderlich**: DVC installation (`pip install dvc`)
+- **Erforderlich**: Raw data files or directories to version
 - **Optional**: Remote storage backend (S3, Azure Blob, GCS, SSH, local)
 - **Optional**: Data processing scripts for pipeline automation
 - **Optional**: CI/CD integration for automated pipeline execution
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Initialize DVC in Git Repository
+### Schritt 1: Initialize DVC in Git Repository
 
-Set up DVC for data versioning alongside code versioning.
+Einrichten DVC for data versioning alongside code versioning.
 
 ```bash
 # Navigate to project root
@@ -68,7 +68,7 @@ git commit -m "Initial commit"
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Configure DVC settings:
+Konfigurieren DVC settings:
 
 ```bash
 # Set analytics opt-out (optional)
@@ -85,13 +85,13 @@ git add .dvc/config
 git commit -m "Configure DVC settings"
 ```
 
-**Expected:** `.dvc/` directory created with config files, `.dvcignore` file present, DVC files tracked by Git, large data files not in Git staging area.
+**Erwartet:** `.dvc/` directory created with config files, `.dvcignore` file present, DVC files tracked by Git, large data files not in Git staging area.
 
-**On failure:** Verify Git repository initialized (`git status`), check DVC installation (`dvc version`), ensure write permissions in project directory, check for conflicting `.dvc/` directory from previous setup, verify Python environment active.
+**Bei Fehler:** Verifizieren Git repository initialized (`git status`), check DVC installation (`dvc version`), ensure write Berechtigungs in project directory, check for conflicting `.dvc/` directory from previous setup, verify Python environment active.
 
-### Step 2: Configure Remote Storage Backend
+### Schritt 2: Konfigurieren Remote Storage Backend
 
-Set up remote storage for data sharing and backup.
+Einrichten remote storage for data sharing and backup.
 
 ```bash
 # AWS S3
@@ -105,7 +105,7 @@ dvc remote modify storage secret_access_key YOUR_SECRET_KEY
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Test remote connection:
+Testen remote connection:
 
 ```bash
 # List remote storage contents
@@ -125,13 +125,13 @@ rm test.txt test.txt.dvc
 git checkout .
 ```
 
-**Expected:** Remote storage configured and accessible, credentials stored securely in `.dvc/config.local` (git-ignored), test push/pull succeeds, remote storage shows uploaded cache files.
+**Erwartet:** Remote storage configured and accessible, Zugangsdaten stored securely in `.dvc/config.local` (git-ignored), test push/pull succeeds, remote storage shows uploaded cache files.
 
-**On failure:** Verify cloud credentials (`aws s3 ls` or equivalent CLI), check bucket/container exists and is accessible, ensure IAM permissions for read/write, verify network connectivity to remote, check firewall rules, test SSH key authentication for SSH remotes, verify storage path has write permissions.
+**Bei Fehler:** Verifizieren cloud Zugangsdaten (`aws s3 ls` or equivalent CLI), check bucket/container exists and is accessible, ensure IAM Berechtigungs for read/write, verify network connectivity to remote, check firewall rules, test SSH key Authentifizierung for SSH remotes, verify storage path has write Berechtigungs.
 
-### Step 3: Version Datasets with DVC
+### Schritt 3: Version Datasets with DVC
 
-Add datasets to DVC tracking and push to remote storage.
+Hinzufuegen datasets to DVC tracking and push to remote storage.
 
 ```bash
 # Add single file
@@ -159,13 +159,13 @@ def version_dataset(data_path, git_message=None):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** `.dvc` metadata files created and committed to Git, original data files git-ignored automatically, `dvc push` uploads data to remote storage, `.dvc/cache` contains data hash, remote storage has cached data files.
+**Erwartet:** `.dvc` metadata files created and committed to Git, original data files git-ignored automatisch, `dvc push` uploads data to remote storage, `.dvc/cache` contains data hash, remote storage has cached data files.
 
-**On failure:** Check DVC remote configured (`dvc remote list`), verify write permissions in data directory, ensure sufficient disk space for cache, check network connectivity for push, verify no special characters in file paths, check for large file warnings from Git.
+**Bei Fehler:** Check DVC remote configured (`dvc remote list`), verify write Berechtigungs in data directory, ensure sufficient disk space for cache, check network connectivity for push, verify no special characters in Dateipfads, check for large file warnings from Git.
 
-### Step 4: Build Reproducible Data Pipelines
+### Schritt 4: Erstellen Reproducible Data Pipelines
 
-Create DVC pipelines for automated, dependency-tracked data processing.
+Erstellen DVC pipelines for automated, Abhaengigkeit-tracked data processing.
 
 ```yaml
 # dvc.yaml - Pipeline definition
@@ -199,7 +199,7 @@ model:
     min_samples_split: 5
 ```
 
-Run pipeline:
+Ausfuehren pipeline:
 
 ```bash
 # Run entire pipeline
@@ -213,13 +213,13 @@ dvc repro
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** DVC pipeline executes in correct dependency order, only changed stages rerun, outputs cached efficiently, metrics tracked automatically, Git commits include `dvc.yaml` and `dvc.lock`.
+**Erwartet:** DVC pipeline executes in correct Abhaengigkeit order, only changed stages rerun, outputs cached efficiently, metrics tracked automatisch, Git commits include `dvc.yaml` and `dvc.lock`.
 
-**On failure:** Check script paths exist and are executable, verify dependencies specified correctly, ensure params.yaml keys match script usage, check for circular dependencies in pipeline, verify output paths writable, inspect script error messages in stderr, check Python environment has required packages.
+**Bei Fehler:** Check script paths exist and are executable, verify Abhaengigkeiten specified korrekt, ensure params.yaml keys match script usage, check for circular Abhaengigkeiten in pipeline, verify output paths writable, inspect script Fehlermeldungs in stderr, check Python environment has required packages.
 
-### Step 5: Share and Reproduce Data Versions
+### Schritt 5: Teilen and Reproduce Data Versions
 
-Enable team members to reproduce exact data versions.
+Aktivieren team members to reproduce exact data versions.
 
 ```bash
 # Team member clones repository
@@ -233,7 +233,7 @@ pip install dvc[s3]  # or appropriate backend
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Switch between data versions:
+Switch zwischen data versions:
 
 ```bash
 # View data version history
@@ -261,13 +261,13 @@ dvc repro preprocess
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** `git clone` + `dvc pull` reproduces exact environment, data versions match across team, experiments isolated in branches, metrics comparable across versions.
+**Erwartet:** `git clone` + `dvc pull` reproduces exact environment, data versions match across team, experiments isolated in branches, metrics comparable across versions.
 
-**On failure:** Verify remote access configured correctly, check credentials for new team members, ensure all .dvc files committed to Git, verify `dvc.lock` tracked by Git (pins exact versions), check network bandwidth for large pulls, verify storage backend has all referenced cache files.
+**Bei Fehler:** Verifizieren remote access configured korrekt, check Zugangsdaten for new team members, ensure all .dvc files committed to Git, verify `dvc.lock` tracked by Git (pins exact versions), check network bandwidth for large pulls, verify storage backend has all referenced cache files.
 
-### Step 6: Integrate with MLflow and CI/CD
+### Schritt 6: Integrieren with MLflow and CI/CD
 
-Connect DVC data versioning with experiment tracking and automation.
+Verbinden DVC data versioning with experiment tracking and automation.
 
 ```python
 # train_with_mlflow.py
@@ -295,41 +295,41 @@ on:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** MLflow logs DVC data versions with runs, CI/CD automatically pulls data and runs pipeline, metrics validated before deployment, reproducibility enforced by CI.
+**Erwartet:** MLflow logs DVC data versions with runs, CI/CD automatisch pulls data and runs pipeline, metrics validated vor deployment, reproducibility enforced by CI.
 
-**On failure:** Check secrets configured in GitHub repository settings, verify DVC remote accessible from CI runners, ensure Git credentials configured for push, check Python dependencies installed, verify metrics validation logic, inspect CI logs for DVC/MLflow errors.
+**Bei Fehler:** Check secrets configured in GitHub repository settings, verify DVC remote accessible from CI runners, ensure Git Zugangsdaten configured for push, check Python Abhaengigkeiten installed, verify metrics validation logic, inspect CI logs for DVC/MLflow errors.
 
-## Validation
+## Validierung
 
 - [ ] DVC initialized in Git repository
 - [ ] Remote storage configured and accessible
 - [ ] Datasets versioned and pushed to remote
 - [ ] `.dvc` files committed to Git
-- [ ] Large data files git-ignored automatically
-- [ ] DVC pipeline executes successfully
+- [ ] Large data files git-ignored automatisch
+- [ ] DVC pipeline executes erfolgreich
 - [ ] Team members can reproduce data with `dvc pull`
 - [ ] Data versions switchable via Git checkout
 - [ ] Metrics tracked across pipeline runs
 - [ ] Integration with MLflow working
 - [ ] CI/CD pipeline reproduces results
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
 - **Committing large files to Git**: Forgot to run `dvc add` first - always use DVC for large files (>10MB), check `.gitignore`
-- **Missing remote configuration**: `dvc push` fails because no remote - configure remote before sharing, test with `dvc remote list`
-- **Lost data versions**: Deleted `.dvc/cache` without pushing - always `dvc push` before cleaning cache
-- **Inconsistent environments**: Different Python/package versions - use virtual environments, pin dependencies in `requirements.txt`
-- **Broken pipelines**: Changed script without updating `dvc.yaml` - keep pipeline definitions in sync with code
+- **Missing remote configuration**: `dvc push` fails because no remote - configure remote vor sharing, test with `dvc remote list`
+- **Lost data versions**: Deleted `.dvc/cache` ohne pushing - always `dvc push` vor cleaning cache
+- **Inconsistent environments**: Different Python/package versions - use virtual environments, pin Abhaengigkeiten in `requirements.txt`
+- **Broken pipelines**: Changed script ohne updating `dvc.yaml` - keep pipeline definitions in sync with code
 - **Slow pipeline**: Rerunning unchanged stages - DVC caches by default, check `dvc status` to diagnose
-- **Merge conflicts**: `.dvc` files conflict during merges - resolve like code conflicts, use `dvc checkout` after resolution
+- **Zusammenfuehren conflicts**: `.dvc` files conflict waehrend merges - resolve like code conflicts, use `dvc checkout` nach resolution
 - **Large pull times**: Pulling all data for small experiments - use `dvc pull <specific.dvc>` for selective pulls
-- **Credential leaks**: Committing `.dvc/config.local` - keep credentials in `config.local` (git-ignored), not `config`
+- **Credential leaks**: Committing `.dvc/config.local` - keep Zugangsdaten in `config.local` (git-ignored), not `config`
 - **No data lineage**: Not tracking preprocessing steps - use DVC pipelines to track all transformations
 
-## Related Skills
+## Verwandte Skills
 
-- `track-ml-experiments` - Integrate DVC versions with MLflow experiment tracking
-- `orchestrate-ml-pipeline` - Combine DVC pipelines with Airflow/Prefect orchestration
-- `build-feature-store` - Version raw data sources for feature engineering
-- `serialize-data-formats` - Choose efficient formats for DVC-tracked datasets
-- `design-serialization-schema` - Design schemas for versioned data files
+- `track-ml-experiments` - Integrieren DVC versions with MLflow experiment tracking
+- `orchestrate-ml-pipeline` - Kombinieren DVC pipelines with Airflow/Prefect orchestration
+- `build-feature-store` - Version raw Datenquelles for feature engineering
+- `serialize-data-formats` - Waehlen efficient formats for DVC-tracked datasets
+- `design-serialization-schema` - Entwerfen schemas for versioned data files

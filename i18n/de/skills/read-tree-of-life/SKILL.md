@@ -1,13 +1,14 @@
 ---
 name: read-tree-of-life
 description: >
-  Navigate the Kabbalistic Tree of Life (Etz Chaim) — explore the ten
-  sephirot, twenty-two paths, four worlds, and three pillars. Covers
-  correspondences, contemplative exercises, and structural analysis. Use
-  when exploring a sephira's attributes and divine names, studying structural
-  relationships between sephirot, learning the four worlds (Atzilut through
-  Assiah), tracing a path's Hebrew letter and tarot attributions, or using
-  the Tree as a symbolic map for understanding a concept or system.
+  Den kabbalistischen Lebensbaum (Etz Chaim) navigieren — die zehn Sephirot,
+  zweiundzwanzig Pfade, vier Welten und drei Saeulen erkunden. Umfasst
+  Korrespondenzen, kontemplative Uebungen und Strukturanalyse. Verwenden
+  beim Erkunden der Attribute und goettlichen Namen einer Sephira, beim
+  Studieren der strukturellen Beziehungen zwischen Sephirot, beim Erlernen
+  der vier Welten (Atzilut bis Assiah), beim Verfolgen der Hebraeischen-
+  Buchstaben- und Tarot-Zuordnungen eines Pfades oder beim Nutzen des Baums
+  als symbolische Karte zum Verstaendnis eines Konzepts oder Systems.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,29 +27,29 @@ metadata:
 
 # Baum des Lebens lesen
 
-Navigate the Kabbalistic Tree of Life (Etz Chaim) — locating sephirot, tracing paths, identifying correspondences, and conducting contemplative exercises within the structure of the four worlds and three pillars.
+Den kabbalistischen Lebensbaum (Etz Chaim) navigieren — Sephirot lokalisieren, Pfade verfolgen, Korrespondenzen identifizieren und kontemplative Uebungen innerhalb der Struktur der vier Welten und drei Saeulen durchfuehren.
 
-## When to Use
+## Wann verwenden
 
-- You want to explore a specific sephira's attributes, divine names, and correspondences
-- You need to understand the structural relationships between sephirot (paths, triads, pillars)
-- You are studying the four worlds (Atzilut, Briah, Yetzirah, Assiah) and how they layer the Tree
-- You want a contemplative exercise grounded in a specific location on the Tree
-- You are tracing a path between two sephirot and need its Hebrew letter, tarot, and elemental attributions
-- You need the Tree as a map for understanding a concept, process, or system through Kabbalistic symbolism
+- Sie moechten die Attribute, goettlichen Namen und Korrespondenzen einer bestimmten Sephira erkunden
+- Sie muessen die strukturellen Beziehungen zwischen Sephirot verstehen (Pfade, Triaden, Saeulen)
+- Sie studieren die vier Welten (Atzilut, Briah, Yetzirah, Assiah) und wie sie den Baum schichten
+- Sie moechten eine kontemplative Uebung, verankert an einem bestimmten Ort auf dem Baum
+- Sie verfolgen einen Pfad zwischen zwei Sephirot und benoetigen dessen hebraeischen Buchstaben, Tarot- und Elementarzuordnungen
+- Sie brauchen den Baum als Karte zum Verstaendnis eines Konzepts, Prozesses oder Systems durch kabbalistische Symbolik
 
-## Inputs
+## Eingaben
 
-- **Required**: A sephira, path, or structural element to explore (e.g., "Tiferet," "the path between Hod and Yesod," "the Pillar of Severity")
-- **Optional**: Tradition preference (classical Jewish Kabbalah, Hermetic Qabalah, comparative)
-- **Optional**: Depth level (overview, detailed study, contemplative exercise)
-- **Optional**: Current context or question the Tree should illuminate
+- **Erforderlich**: Eine Sephira, ein Pfad oder ein Strukturelement zum Erkunden (z.B. "Tiferet", "der Pfad zwischen Hod und Yesod", "die Saeule der Strenge")
+- **Optional**: Traditionspraeferenz (klassische juedische Kabbala, hermetische Qabalah, vergleichend)
+- **Optional**: Tiefengrad (Ueberblick, detailliertes Studium, kontemplative Uebung)
+- **Optional**: Aktueller Kontext oder Frage, die der Baum beleuchten soll
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Identify the Sephira or Path to Explore
+### Schritt 1: Die zu erkundende Sephira oder den Pfad identifizieren
 
-Determine the specific location on the Tree and its basic identity.
+Den spezifischen Ort auf dem Baum und seine grundlegende Identitaet bestimmen.
 
 ```
 The Ten Sephirot:
@@ -91,18 +92,18 @@ Three Pillars:
 - Pillar of Balance (middle): Keter, Tiferet, Yesod, Malkut — equilibrium, integration
 ```
 
-1. Name the sephira, path, or structural element the user wants to explore
-2. Locate it on the Tree diagram — which pillar, which world, which triad
-3. Note its number (sephirot are 1-10; paths are traditionally numbered 11-32)
-4. Identify the tradition context: classical (Cordovero, Luria) or Hermetic (Golden Dawn)
+1. Die Sephira, den Pfad oder das Strukturelement benennen, das erkundet werden soll
+2. Auf dem Baum-Diagramm lokalisieren — welche Saeule, welche Welt, welche Triade
+3. Nummer notieren (Sephirot sind 1-10; Pfade werden traditionell 11-32 nummeriert)
+4. Den Traditionskontext identifizieren: klassisch (Cordovero, Luria) oder hermetisch (Golden Dawn)
 
-**Expected:** A clear identification of where on the Tree the exploration begins. The user can mentally locate the element within the overall structure.
+**Erwartet:** Eine klare Identifikation des Ausgangspunkts der Erkundung auf dem Baum. Der Anwender kann das Element mental innerhalb der Gesamtstruktur lokalisieren.
 
-**On failure:** If the user's request is vague (e.g., "tell me about the Tree"), start with an overview of the three pillars and ten sephirot, then ask which area to explore in depth.
+**Bei Fehler:** Wenn die Anfrage vage ist (z.B. "erzaehl mir ueber den Baum"), mit einem Ueberblick ueber die drei Saeulen und zehn Sephirot beginnen, dann fragen, welchen Bereich vertieft erkundet werden soll.
 
-### Step 2: Study the Sephira's Attributes
+### Schritt 2: Attribute der Sephira studieren
 
-For the identified sephira, present its full attribute set from traditional sources.
+Fuer die identifizierte Sephira den vollstaendigen Attributsatz aus traditionellen Quellen praesentieren.
 
 ```
 Sephira Attribute Template:
@@ -132,19 +133,19 @@ does not use tarot or color scales (these are Hermetic additions).
 Always note the tradition source for each attribution.
 ```
 
-1. Fill in the attribute template for the selected sephira
-2. Note the divine name and its significance (each sephira has a unique Name of God)
-3. Identify the archangel and angelic order associated with the sephira
-4. Record planetary and color correspondences (noting tradition: Jewish vs. Hermetic)
-5. State the virtue (balanced expression) and vice (excess or deficiency)
+1. Die Attributvorlage fuer die ausgewaehlte Sephira ausfuellen
+2. Den goettlichen Namen und seine Bedeutung notieren (jede Sephira hat einen einzigartigen Gottesnamen)
+3. Den Erzengel und die Engelordnung identifizieren, die mit der Sephira verbunden sind
+4. Planetarische und Farbkorrespondenzen erfassen (Tradition beachten: juedisch vs. hermetisch)
+5. Die Tugend (ausgewogener Ausdruck) und das Laster (Uebermass oder Mangel) benennen
 
-**Expected:** A complete attribute profile for the sephira. The user understands what the sephira represents, how it is addressed in practice, and what correspondences link it to other symbolic systems.
+**Erwartet:** Ein vollstaendiges Attributprofil der Sephira. Der Anwender versteht, was die Sephira repraesentiert, wie sie in der Praxis angesprochen wird und welche Korrespondenzen sie mit anderen symbolischen Systemen verbinden.
 
-**On failure:** If the user is overwhelmed by correspondences, present only name, translation, number, pillar, and one-sentence summary. Add detail incrementally on request.
+**Bei Fehler:** Wenn der Anwender von Korrespondenzen ueberfordert ist, nur Name, Uebersetzung, Nummer, Saeule und einzeilige Zusammenfassung praesentieren. Details inkrementell auf Anfrage hinzufuegen.
 
-### Step 3: Examine Connecting Paths
+### Schritt 3: Verbindende Pfade untersuchen
 
-Trace the paths that connect the sephira to its neighbors, noting the Hebrew letter, tarot attribution, and elemental/planetary/zodiacal correspondence of each path.
+Die Pfade verfolgen, die die Sephira mit ihren Nachbarn verbinden, wobei der hebraeische Buchstabe, die Tarot-Zuordnung und die elementare/planetarische/zodiakalische Korrespondenz jedes Pfades notiert werden.
 
 ```
 The Twenty-Two Paths (Hermetic/Golden Dawn Attribution):
@@ -180,19 +181,19 @@ Note: Path attributions above follow the Golden Dawn system. The Gra
 in path assignments. Always note which system is being used.
 ```
 
-1. List all paths connecting to the sephira under study
-2. For each path, note: Hebrew letter, direction (from/to), and correspondence
-3. Identify which paths cross the Abyss (between Supernals and lower sephirot) — these are significant thresholds
-4. Note Hermetic tarot attributions separately from Jewish Kabbalistic content
-5. Observe the pattern: which sephirot does this one communicate with most directly?
+1. Alle Pfade auflisten, die mit der untersuchten Sephira verbunden sind
+2. Fuer jeden Pfad notieren: hebraeischer Buchstabe, Richtung (von/nach) und Korrespondenz
+3. Identifizieren, welche Pfade den Abgrund ueberqueren (zwischen Supernalen und unteren Sephirot) — dies sind bedeutsame Schwellen
+4. Hermetische Tarot-Zuordnungen getrennt vom juedisch-kabbalistischen Inhalt notieren
+5. Das Muster beobachten: mit welchen Sephirot kommuniziert diese am direktesten?
 
-**Expected:** The user sees the sephira in context — not isolated but connected to its neighbors through specific paths, each carrying its own symbolic weight.
+**Erwartet:** Der Anwender sieht die Sephira im Kontext — nicht isoliert, sondern verbunden mit ihren Nachbarn durch spezifische Pfade, von denen jeder sein eigenes symbolisches Gewicht traegt.
 
-**On failure:** If path attributions are confusing, focus on the sephira's direct neighbors (which sephirot it connects to) without detailing individual path letters. Add letter attributions when the user is ready.
+**Bei Fehler:** Wenn Pfadzuordnungen verwirrend sind, sich auf die direkten Nachbarn der Sephira konzentrieren (mit welchen Sephirot sie verbunden ist), ohne einzelne Pfadbuchstaben zu detaillieren. Buchstabenzuordnungen hinzufuegen, wenn der Anwender bereit ist.
 
-### Step 4: Locate Within the Four Worlds
+### Schritt 4: Innerhalb der vier Welten verorten
 
-Place the sephira or path within the four-world framework to understand its level of manifestation.
+Die Sephira oder den Pfad innerhalb des Vier-Welten-Rahmens platzieren, um die Manifestationsebene zu verstehen.
 
 ```
 The Four Worlds (Olamot):
@@ -227,55 +228,55 @@ influence is felt, but Tiferet-of-Atzilut is different from
 Tiferet-of-Assiah — same position, different level of reality.
 ```
 
-1. Identify which world the sephira primarily operates in
-2. Note the soul level (Yechidah, Chayah, Neshamah, Ruach, Nephesh) associated with that world
-3. Explain how the sephira's quality manifests differently at each world level
-4. If studying a path, note whether it stays within one world or crosses a boundary
+1. Identifizieren, in welcher Welt die Sephira primaer wirkt
+2. Die Seelenebene (Yechidah, Chayah, Neshamah, Ruach, Nephesh) notieren, die mit dieser Welt verbunden ist
+3. Erklaeren, wie sich die Qualitaet der Sephira auf jeder Weltebene unterschiedlich manifestiert
+4. Bei Pfadstudium notieren, ob der Pfad innerhalb einer Welt bleibt oder eine Grenze ueberquert
 
-**Expected:** The user understands that the Tree is not flat but layered — the same structure repeats at four levels of reality, and the sephira under study has a specific "home world" with expressions at all levels.
+**Erwartet:** Der Anwender versteht, dass der Baum nicht flach, sondern geschichtet ist — die gleiche Struktur wiederholt sich auf vier Realitaetsebenen, und die untersuchte Sephira hat eine spezifische "Heimatwelt" mit Ausdruecken auf allen Ebenen.
 
-**On failure:** If the four-worlds framework is too abstract, simplify: Atzilut = divine, Briah = intellectual, Yetzirah = emotional, Assiah = physical. Ask which level the user wants to focus on.
+**Bei Fehler:** Wenn der Vier-Welten-Rahmen zu abstrakt ist, vereinfachen: Atzilut = goettlich, Briah = intellektuell, Yetzirah = emotional, Assiah = physisch. Fragen, auf welche Ebene sich der Anwender konzentrieren moechte.
 
-### Step 5: Contemplative Exercise
+### Schritt 5: Kontemplative Uebung
 
-Guide a meditation or contemplation grounded in the specific sephira or path.
+Eine Meditation oder Kontemplation anleiten, verankert in der spezifischen Sephira oder dem Pfad.
 
-1. Set the context: review the sephira's core quality in one sentence
-2. Suggest a posture and breathing pattern (simple: seated, eyes closed, natural breath)
-3. Offer a visualization: imagine the sephira as a sphere of its associated color, located at its body correspondence point
-4. Provide a contemplative question tied to the sephira's virtue/vice:
-   - Chesed: "Where do I give freely? Where do I give to avoid discomfort?"
-   - Gevurah: "Where do I set necessary boundaries? Where does my severity harm?"
-   - Tiferet: "Where is beauty in my life? Where am I hiding from harmony?"
-   - (Adapt for each sephira)
-5. Close with a brief chant or affirmation using the sephira's divine name (silently or aloud)
-6. Return to ordinary awareness with one concrete insight or intention
+1. Den Kontext setzen: die Kernqualitaet der Sephira in einem Satz zusammenfassen
+2. Eine Koerperhaltung und ein Atemmuster vorschlagen (einfach: sitzend, Augen geschlossen, natuerlicher Atem)
+3. Eine Visualisierung anbieten: sich die Sephira als Sphaere in ihrer zugeordneten Farbe vorstellen, lokalisiert an ihrem Koerperkorrespondenzpunkt
+4. Eine kontemplative Frage bereitstellen, die an Tugend/Laster der Sephira gebunden ist:
+   - Chesed: "Wo gebe ich frei? Wo gebe ich, um Unbehagen zu vermeiden?"
+   - Gevurah: "Wo setze ich notwendige Grenzen? Wo schadet meine Strenge?"
+   - Tiferet: "Wo ist Schoenheit in meinem Leben? Wo verberge ich mich vor Harmonie?"
+   - (Fuer jede Sephira anpassen)
+5. Mit einem kurzen Gesang oder einer Affirmation unter Verwendung des goettlichen Namens der Sephira abschliessen (still oder laut)
+6. Zum gewoehnlichen Bewusstsein zurueckkehren mit einer konkreten Einsicht oder Absicht
 
-**Expected:** The user has moved from intellectual study to experiential engagement with the sephira. The contemplative exercise grounds abstract symbolism in personal reflection.
+**Erwartet:** Der Anwender ist von intellektuellem Studium zu erfahrungsbezogener Begegnung mit der Sephira uebergegangen. Die kontemplative Uebung verankert abstrakte Symbolik in persoenlicher Reflexion.
 
-**On failure:** If meditation feels forced or artificial, replace with journaling: write for 5 minutes about how the sephira's quality appears in your current life. Written reflection achieves similar integration through a different mode.
+**Bei Fehler:** Wenn Meditation erzwungen oder kuenstlich wirkt, durch Journaling ersetzen: 5 Minuten darueber schreiben, wie die Qualitaet der Sephira im aktuellen Leben erscheint. Schriftliche Reflexion erreicht aehnliche Integration durch einen anderen Modus.
 
-## Validation
+## Validierung
 
-- [ ] The specific sephira or path was identified and located on the Tree (pillar, world, triad)
-- [ ] Core attributes were presented (name, number, divine name, archangel, correspondences)
-- [ ] Connecting paths were traced with their Hebrew letter attributions
-- [ ] The four-worlds context was addressed (which world, which soul level)
-- [ ] A contemplative exercise or reflective prompt was offered
-- [ ] Tradition sources were noted where attributions differ (Jewish vs. Hermetic)
+- [ ] Die spezifische Sephira oder der Pfad wurde identifiziert und auf dem Baum verortet (Saeule, Welt, Triade)
+- [ ] Kernattribute wurden praesentiert (Name, Nummer, goettlicher Name, Erzengel, Korrespondenzen)
+- [ ] Verbindende Pfade wurden mit ihren hebraeischen Buchstabenzuordnungen verfolgt
+- [ ] Der Vier-Welten-Kontext wurde behandelt (welche Welt, welche Seelenebene)
+- [ ] Eine kontemplative Uebung oder ein reflektierender Impuls wurde angeboten
+- [ ] Traditionsquellen wurden notiert, wo Zuordnungen abweichen (juedisch vs. hermetisch)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Conflating traditions**: The Golden Dawn's path attributions differ from the Gra's and from Ari's (Isaac Luria). Always specify which system is in use
-- **Treating the Tree as static**: The Tree is dynamic — sephirot interact, paths carry energy between them. Present it as a living system, not a filing cabinet
-- **Skipping Da'at**: The "hidden" sephira (Da'at/Knowledge) sits between the Supernal Triad and the lower seven. It is not a sephira in the same sense but functions as a gateway across the Abyss
-- **Over-relying on correspondences**: Tables of correspondences are maps, not the territory. They aid contemplation but should not replace direct engagement with the sephira's quality
-- **Ignoring the negative**: Each sephira has a vice (qliphotic shell) as well as a virtue. Presenting only positive attributes gives an incomplete picture
-- **Rushing to advanced material**: The Tree's structure is deceptively simple and endlessly deep. Ensure basic orientation (ten sephirot, three pillars) before introducing paths, worlds, and advanced theosophy
+- **Traditionen vermischen**: Die Pfadzuordnungen des Golden Dawn unterscheiden sich von denen des Gra und von Aris (Isaac Luria). Immer angeben, welches System verwendet wird
+- **Den Baum als statisch behandeln**: Der Baum ist dynamisch — Sephirot interagieren, Pfade tragen Energie zwischen ihnen. Ihn als lebendiges System praesentieren, nicht als Aktenschrank
+- **Da'at ueberspringen**: Die "verborgene" Sephira (Da'at/Wissen) sitzt zwischen der Supernalen Triade und den unteren sieben. Sie ist keine Sephira im gleichen Sinne, fungiert aber als Tor ueber den Abgrund
+- **Uebermaessiges Verlassen auf Korrespondenzen**: Korrespondenztabellen sind Karten, nicht das Gebiet. Sie unterstuetzen Kontemplation, sollten aber direkte Begegnung mit der Qualitaet der Sephira nicht ersetzen
+- **Das Negative ignorieren**: Jede Sephira hat ein Laster (qliphotische Huelle) ebenso wie eine Tugend. Nur positive Attribute zu praesentieren ergibt ein unvollstaendiges Bild
+- **Zu fortgeschrittenem Material eilen**: Die Struktur des Baums ist taeuschend einfach und endlos tief. Grundlegende Orientierung (zehn Sephirot, drei Saeulen) sicherstellen, bevor Pfade, Welten und fortgeschrittene Theosophie eingefuehrt werden
 
-## Related Skills
+## Verwandte Skills
 
-- `apply-gematria` — Compute numerical values of divine names and sephirotic titles for deeper analysis
-- `study-hebrew-letters` — Each path carries a Hebrew letter; understanding the letter deepens understanding of the path
-- `meditate` — General meditation framework that supports the contemplative exercises in this skill
-- `practice-viriditas` — Hildegardian nature contemplation shares structural parallels with Kabbalistic meditation on the natural world
+- `apply-gematria` — Zahlenwerte goettlicher Namen und sephirotischer Titel fuer tiefere Analyse berechnen
+- `study-hebrew-letters` — Jeder Pfad traegt einen hebraeischen Buchstaben; Verstaendnis des Buchstabens vertieft das Pfadverstaendnis
+- `meditate` — Allgemeines Meditationsframework, das die kontemplativen Uebungen in diesem Skill unterstuetzt
+- `practice-viriditas` — Hildegardianische Naturkontemplation teilt strukturelle Parallelen mit kabbalistischer Meditation ueber die natuerliche Welt

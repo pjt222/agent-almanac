@@ -1,13 +1,11 @@
 ---
 name: defend-colony
 description: >
-  Implement layered collective defense using alarm signaling, role mobilization,
-  and proportional response. Covers threat detection, alert propagation, immune
-  response patterns, escalation tiers, and post-incident recovery for distributed
-  systems and organizations. Use when designing defense-in-depth where no single
-  guardian covers all threats, building incident response that scales with severity,
-  or when current defense is over-reactive to every alert or under-reactive to
-  genuine threats.
+  アラームシグナリング、役割動員、比例対応を用いた多層的集団防衛を実装する。脅威検知、
+  アラート伝播、免疫応答パターン、エスカレーション段階、インシデント後の回復を分散
+  システムや組織向けにカバーする。単一の守護者では全ての脅威に対応できない多層防御の
+  設計時、重大度に応じてスケールするインシデント対応の構築時、現在の防御がすべての
+  アラートに過剰反応するか本物の脅威に対して反応不足の場合に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,72 +24,72 @@ metadata:
 
 # コロニーの防衛
 
-Implement layered collective defense for distributed systems, teams, or organizations — using alarm signaling, role mobilization, proportional response, and immune memory patterns inspired by social insect colony defense and biological immune systems.
+分散システム、チーム、組織のための多層的集団防衛を実装する。社会性昆虫のコロニー防衛と生物学的免疫システムに着想を得たアラームシグナリング、役割動員、比例対応、免疫記憶パターンを使用する。
 
 ## 使用タイミング
 
-- Designing defense-in-depth for distributed systems where no single guardian can cover all threats
-- Building incident response processes that scale with threat severity
-- Protecting a system where individual components cannot defend themselves alone
-- Current defense is either over-reactive (every alert triggers full mobilization) or under-reactive (threats go unnoticed until damage is done)
-- Building organizational resilience where teams must self-organize in response to incidents
-- Complementing `coordinate-swarm` with specific threat-response coordination patterns
+- 単一の守護者では全ての脅威をカバーできない分散システム向けの多層防御を設計する時
+- 脅威の重大度に応じてスケールするインシデント対応プロセスを構築する時
+- 個々のコンポーネントが単独では自己防衛できないシステムを保護する時
+- 現在の防御が過剰反応（すべてのアラートで全面動員）または反応不足（損害が発生するまで脅威に気づかない）の場合
+- インシデントに対してチームが自己組織化する必要がある組織の回復力を構築する時
+- `coordinate-swarm`を脅威対応固有の連携パターンで補完する時
 
 ## 入力
 
-- **必須**: Description of the colony (system, organization, team) to be defended
-- **必須**: Known threat categories (attacks, failures, competitors, environmental risks)
-- **任意**: Current defense mechanisms and their failure modes
-- **任意**: Available defender types and their capabilities
-- **任意**: Acceptable response latency per threat tier
-- **任意**: Post-incident recovery requirements
+- **必須**: 防衛するコロニー（システム、組織、チーム）の説明
+- **必須**: 既知の脅威カテゴリ（攻撃、障害、競合、環境リスク）
+- **任意**: 現在の防衛メカニズムとその障害モード
+- **任意**: 利用可能な防衛者タイプとその能力
+- **任意**: 脅威段階ごとの許容対応レイテンシ
+- **任意**: インシデント後の復旧要件
 
 ## 手順
 
-### ステップ1: Map the Threat Landscape and Defense Perimeter
+### ステップ1: 脅威ランドスケープと防御境界のマッピング
 
-Identify what needs defending, from what, and where the perimeter lies.
+何を、何から、どこで防衛するかを特定する。
 
-1. Define the colony's critical assets:
-   - What must be protected at all costs? (core data, production systems, key people)
-   - What can sustain temporary damage? (staging environments, non-critical services)
-   - What is expendable under extreme threat? (caches, replicas, non-essential features)
-2. Classify threats by type and severity:
-   - **Probes**: low-level reconnaissance or testing (port scans, repeated failed logins)
-   - **Incursions**: active boundary violations (unauthorized access, injection attempts)
-   - **Infestations**: persistent threats already inside the perimeter (compromised nodes, insider threats)
-   - **Existential**: threats to the colony's survival (data corruption, catastrophic failure, DDoS)
-3. Map the defense perimeter:
-   - Outer perimeter: first detection opportunity (firewalls, rate limits, monitoring)
-   - Inner perimeter: critical asset boundaries (access controls, encryption, isolation)
-   - Core: last-resort defenses (backups, kill switches, circuit breakers)
+1. コロニーの重要資産を定義する:
+   - 何が何としても保護されなければならないか？（コアデータ、本番システム、キーパーソン）
+   - 何が一時的な損害を許容できるか？（ステージング環境、非重要サービス）
+   - 極端な脅威下で何が犠牲にできるか？（キャッシュ、レプリカ、非必須機能）
+2. 脅威をタイプと重大度で分類する:
+   - **プローブ**: 低レベルの偵察またはテスト（ポートスキャン、ログイン失敗の繰り返し）
+   - **侵入**: 能動的な境界違反（不正アクセス、インジェクション試行）
+   - **感染**: 境界内に既に存在する持続的脅威（侵害されたノード、内部脅威）
+   - **存続的脅威**: コロニーの存続に対する脅威（データ破損、壊滅的障害、DDoS）
+3. 防御境界をマッピングする:
+   - 外部境界: 最初の検知機会（ファイアウォール、レート制限、モニタリング）
+   - 内部境界: 重要資産の境界（アクセス制御、暗号化、隔離）
+   - コア: 最終手段の防御（バックアップ、キルスイッチ、サーキットブレーカー）
 
-**期待結果:** A clear map of assets (prioritized), threats (classified by severity), and defense perimeters (layered). This map guides all subsequent defense design.
+**期待結果:** 資産（優先順位付き）、脅威（重大度別分類）、防御境界（多層）の明確なマップ。このマップがすべての後続の防御設計を導く。
 
-**失敗時:** If the threat landscape feels overwhelming, start with the top 3 critical assets and the top 3 threat types. Perfect coverage is less important than coverage of what matters most. If perimeter boundaries are unclear, default to "trust nothing, verify everything" (zero-trust posture) and define boundaries as you observe actual traffic patterns.
+**失敗時:** 脅威ランドスケープが圧倒的に感じる場合、上位3つの重要資産と上位3つの脅威タイプから始める。完全なカバレッジより最も重要なもののカバレッジが優先される。境界が不明確な場合、「何も信頼せず、すべてを検証する」（ゼロトラストの姿勢）をデフォルトとし、実際のトラフィックパターンを観察しながら境界を定義する。
 
-### ステップ2: Design the Alarm Signaling Network
+### ステップ2: アラームシグナリングネットワークの設計
 
-Build the communication system that detects threats and propagates alerts.
+脅威を検知しアラートを伝播する通信システムを構築する。
 
-1. Deploy sentinels at each defense layer:
-   - Outer sentinels: lightweight, high-sensitivity detectors (may produce false positives)
-   - Inner sentinels: heavier, high-specificity detectors (fewer false positives, slower)
-   - Core sentinels: critical asset monitors (zero tolerance for missed threats)
-2. Define alarm signals with graduated intensity:
-   - **Yellow**: anomaly detected, increased monitoring, no mobilization
-   - **Orange**: confirmed threat pattern, local defenders mobilize, scouts investigate
-   - **Red**: active breach or severe threat, full defense mobilization, non-essential activity paused
-   - **Black**: existential threat, all resources to defense, sacrifice expendable assets if needed
-3. Implement alarm propagation:
-   - Local: sentinels alert nearby defenders directly
-   - Regional: sentinel clusters aggregate signals and escalate if threshold is met
-   - Colony-wide: regional escalation triggers broadcast alarm
-   - Each propagation step adds confirmation — a single sentinel cannot trigger colony-wide alarm
-4. Build in alarm fatigue prevention:
-   - Auto-suppress repeated identical alarms (dedup with time window)
-   - Require escalation to be confirmed by independent sentinels
-   - Track alarm-to-threat ratio — if false positive rate exceeds 50%, recalibrate sentinels
+1. 各防御層にセンチネルを配備する:
+   - 外部センチネル: 軽量で高感度の検知器（偽陽性あり）
+   - 内部センチネル: 重量で高特異性の検知器（偽陽性少、低速）
+   - コアセンチネル: 重要資産モニター（脅威の見逃しゼロ許容）
+2. 段階的な強度のアラームシグナルを定義する:
+   - **イエロー**: 異常検知、モニタリング強化、動員なし
+   - **オレンジ**: 脅威パターン確認、ローカル防衛者動員、スカウト調査
+   - **レッド**: アクティブな侵害または重大な脅威、全面防衛動員、非必須活動の一時停止
+   - **ブラック**: 存続的脅威、全リソースを防衛に投入、必要に応じて犠牲可能な資産を放棄
+3. アラーム伝播を実装する:
+   - ローカル: センチネルが近くの防衛者に直接アラート
+   - リージョナル: センチネルクラスターがシグナルを集約し、閾値を超えたらエスカレーション
+   - コロニー全体: リージョナルエスカレーションがブロードキャストアラームを発動
+   - 各伝播ステップで確認を追加 — 単一のセンチネルではコロニー全体のアラームを発動できない
+4. アラーム疲労の防止を組み込む:
+   - 同一アラームの繰り返しを自動抑制（時間ウィンドウ付きの重複排除）
+   - エスカレーションには独立したセンチネルによる確認を要求
+   - アラーム対脅威比を追跡 — 偽陽性率が50%を超えたらセンチネルを再調整
 
 ```
 Alarm Propagation:
@@ -109,114 +107,114 @@ Alarm Propagation:
 └──────────────────────────────────────────────────────────┘
 ```
 
-**期待結果:** A graduated alarm system where threat severity determines response intensity. Multiple independent sentinel confirmations prevent single-point false alarms. Alarm fatigue is managed through deduplication and calibration.
+**期待結果:** 脅威の重大度が対応の強度を決定する段階的アラームシステム。複数の独立したセンチネル確認が単一点の誤報を防ぐ。重複排除と調整によりアラーム疲労が管理される。
 
-**失敗時:** If the alarm system produces too many false positives, raise sentinel thresholds or require more confirmations before escalation. If threats slip through undetected, add sentinels at the penetrated layer or lower detection thresholds. If alarm propagation is too slow, reduce the confirmation requirements — but accept higher false positive rate as the tradeoff.
+**失敗時:** アラームシステムが偽陽性を多く生成する場合、センチネル閾値を上げるかエスカレーション前の確認回数を増やす。脅威が検知されずに通過する場合、侵入された層にセンチネルを追加するか検知閾値を下げる。アラーム伝播が遅すぎる場合、確認要件を減らす — ただし偽陽性率の上昇をトレードオフとして受け入れる。
 
-### ステップ3: Mobilize Role-Based Defenders
+### ステップ3: 役割ベースの防衛者の動員
 
-Assign defense roles and mobilization protocols proportional to threat level.
+脅威レベルに比例した防衛役割と動員プロトコルを割り当てる。
 
-1. Define defender roles:
-   - **Sentinels**: detection specialists (always active, low resource cost)
-   - **Guards**: first responders (idle until mobilized, fast response)
-   - **Soldiers**: heavy defenders (expensive to mobilize, high capability)
-   - **Healers**: damage repair and recovery specialists (see `repair-damage`)
-   - **Messengers**: coordinate defense across colony regions
-2. Map roles to alert levels:
-   - Yellow: sentinels increase monitoring frequency, guards on standby
-   - Orange: guards mobilize to threat location, soldiers on standby
-   - Red: soldiers mobilize, non-essential workers reassigned to defense
-   - Black: all roles to defense, colony activities suspended
-3. Implement proportional response:
-   - Never deploy soldiers for a probe (wasteful and reveals capabilities)
-   - Never rely only on sentinels against an incursion (insufficient response)
-   - Match the response to the threat tier — escalate if the current tier fails, de-escalate when the threat recedes
-4. Role transition protocol:
-   - Workers can become guards (temporary upskilling for emergency)
-   - Guards can become soldiers (sustained threat requires heavier response)
-   - After threat passes, reverse transitions restore normal operations
+1. 防衛者の役割を定義する:
+   - **センチネル**: 検知専門家（常時稼働、低リソースコスト）
+   - **ガード**: 第一対応者（動員まで待機、高速対応）
+   - **ソルジャー**: 重装防衛者（動員コスト高、高能力）
+   - **ヒーラー**: 損害修復・復旧専門家（`repair-damage`を参照）
+   - **メッセンジャー**: コロニー地域間の防衛を調整
+2. 役割をアラートレベルにマッピングする:
+   - イエロー: センチネルがモニタリング頻度を上げ、ガードが待機
+   - オレンジ: ガードが脅威箇所に動員、ソルジャーが待機
+   - レッド: ソルジャーが動員、非必須ワーカーが防衛に再配置
+   - ブラック: 全役割が防衛に、コロニー活動を停止
+3. 比例対応を実装する:
+   - プローブにソルジャーを投入しない（浪費であり能力を露呈する）
+   - 侵入に対してセンチネルだけに頼らない（対応不十分）
+   - 脅威段階に対応を一致させる — 現在の段階が失敗したらエスカレーション、脅威が退いたらデエスカレーション
+4. 役割移行プロトコル:
+   - ワーカーがガードになれる（緊急時の一時的スキルアップ）
+   - ガードがソルジャーになれる（持続的脅威にはより重い対応が必要）
+   - 脅威が過ぎた後、逆の移行で通常運用を回復
 
-**期待結果:** A defense force that scales with threat severity. Normal operations use minimal defense resources. Under threat, the colony can rapidly mobilize proportional defense without over-reacting or under-reacting.
+**期待結果:** 脅威の重大度に応じてスケールする防衛力。通常運用では最小限の防衛リソースを使用。脅威下でコロニーは過剰反応も反応不足もせず迅速に比例的防衛を動員できる。
 
-**失敗時:** If mobilization is too slow, pre-position guards closer to known threat vectors. If mobilization is too expensive, reduce the permanent guard force and rely more on worker-to-guard transitions. If role confusion occurs during mobilization, simplify to 3 roles (detect, respond, recover) instead of 5.
+**失敗時:** 動員が遅すぎる場合、既知の脅威ベクトルの近くにガードを事前配置する。動員コストが高すぎる場合、常設ガード兵力を減らしワーカーからガードへの移行により多く依存する。動員中に役割の混乱が生じる場合、5つから3つの役割（検知、対応、回復）に簡素化する。
 
-### ステップ4: Execute Immune Memory and Adaptation
+### ステップ4: 免疫記憶と適応の実行
 
-Learn from each threat encounter to improve future defense.
+各脅威遭遇から学び、将来の防衛を改善する。
 
-1. After each incident, create a threat signature:
-   - Attack pattern (how the threat was detected)
-   - Attack vector (where it entered)
-   - Effective response (what stopped it)
-   - Failed response (what didn't work)
-2. Store signatures in the colony's immune memory:
-   - Fast-lookup pattern library for sentinels
-   - Updated defender playbooks with known-effective responses
-   - Flagged false-positive patterns to reduce future alarm fatigue
-3. Implement adaptive immunity:
-   - New threat signatures are propagated to all sentinels (colony-wide learning)
-   - Sentinels that detected the threat get priority updates (local learning)
-   - Periodic review culls outdated signatures (threats that no longer apply)
-4. Stress test the immune memory:
-   - Re-simulate past threats periodically to verify defenses still work
-   - Red team exercises introduce novel threats to test adaptation
-   - Measure detection time for known vs. unknown threats
+1. 各インシデント後に脅威シグネチャを作成する:
+   - 攻撃パターン（脅威がどのように検知されたか）
+   - 攻撃ベクトル（どこから侵入したか）
+   - 効果的な対応（何が脅威を阻止したか）
+   - 失敗した対応（何が機能しなかったか）
+2. コロニーの免疫記憶にシグネチャを保存する:
+   - センチネル用の高速ルックアップパターンライブラリ
+   - 既知の効果的な対応を含む更新された防衛者プレイブック
+   - 将来のアラーム疲労を軽減するためのフラグ付き偽陽性パターン
+3. 適応免疫を実装する:
+   - 新しい脅威シグネチャをすべてのセンチネルに伝播（コロニー全体の学習）
+   - 脅威を検知したセンチネルが優先更新を受ける（ローカル学習）
+   - 定期的なレビューで古いシグネチャを整理（もはや該当しない脅威）
+4. 免疫記憶のストレステスト:
+   - 過去の脅威を定期的に再シミュレーションして防御がまだ機能することを確認
+   - レッドチーム演習で新規脅威を導入し適応をテスト
+   - 既知vs未知の脅威の検知時間を測定
 
-**期待結果:** A defense system that gets stronger with each encounter. Known threats are detected faster and responded to more effectively. Novel threats are handled by the graduated alarm system, and their resolution adds to the immune memory.
+**期待結果:** 各遭遇で強くなる防御システム。既知の脅威はより速く検知され、より効果的に対応される。未知の脅威は段階的アラームシステムで処理され、その解決が免疫記憶に追加される。
 
-**失敗時:** If immune memory grows too large and slows detection, prioritize signatures by frequency and severity, archiving rare/minor threats. If the defense becomes too specialized against known threats and misses novel ones, maintain a "general patrol" function that doesn't rely on pattern matching — pure anomaly detection as the baseline.
+**失敗時:** 免疫記憶が大きくなりすぎて検知が遅くなる場合、頻度と重大度でシグネチャに優先順位をつけ、まれな/軽微な脅威をアーカイブする。防御が既知の脅威に特化しすぎて新規脅威を見逃す場合、パターンマッチングに依存しない「一般パトロール」機能を維持する — ベースラインとしての純粋な異常検知。
 
-### ステップ5: Coordinate Post-Incident Recovery
+### ステップ5: インシデント後の復旧の調整
 
-Transition from defense mode back to normal operations with damage repair and resilience improvement.
+防衛モードから通常運用への移行を、損害修復と回復力の向上とともに行う。
 
-1. Threat elimination verification:
-   - Confirm the threat is neutralized (not just suppressed)
-   - Scan for secondary threats that may have entered during the primary incident
-   - Verify no compromised agents remain active
-2. Damage assessment:
-   - Catalog what was damaged, degraded, or lost
-   - Prioritize repair by criticality (core assets first)
-   - Estimate recovery time and resources needed
-3. Recovery execution:
-   - Deploy healers to damaged areas (see `repair-damage` for detailed recovery)
-   - Restore services in priority order
-   - Maintain elevated sentinel activity during recovery (vulnerable period)
-4. De-escalation protocol:
-   - Step down alert levels gradually (Red → Orange → Yellow → Normal)
-   - Return reassigned workers to their primary roles
-   - Stand down soldiers and return guards to patrol
-   - Post-incident review within 24 hours while memory is fresh
+1. 脅威排除の確認:
+   - 脅威が無力化されたことを確認する（単に抑制されただけではない）
+   - 一次インシデント中に侵入した可能性のある二次脅威をスキャン
+   - 侵害されたエージェントがアクティブでないことを確認
+2. 損害評価:
+   - 損傷、劣化、消失したものをカタログ化
+   - 重要度順に修復の優先順位をつける（コア資産が最優先）
+   - 復旧時間と必要なリソースを見積もる
+3. 復旧の実行:
+   - 損傷箇所にヒーラーを配備する（詳細な復旧は`repair-damage`を参照）
+   - 優先順位に従ってサービスを復旧
+   - 復旧中はセンチネル活動を強化して維持（脆弱な期間）
+4. デエスカレーションプロトコル:
+   - アラートレベルを段階的に引き下げる（レッド→オレンジ→イエロー→通常）
+   - 再配置されたワーカーを本来の役割に戻す
+   - ソルジャーを解散しガードをパトロールに戻す
+   - 記憶が新しいうちに24時間以内にインシデント後レビューを実施
 
-**期待結果:** A smooth transition from defense to recovery to normal operations. Elevated monitoring during recovery catches secondary threats. The post-incident review feeds learnings into immune memory.
+**期待結果:** 防衛から復旧、通常運用へのスムーズな移行。復旧中の強化モニタリングが二次脅威を捕捉する。インシデント後レビューが免疫記憶に学びをフィードバックする。
 
-**失敗時:** If recovery is too slow, pre-build recovery playbooks for the most likely damage scenarios. If secondary threats emerge during recovery, the de-escalation was too aggressive — maintain higher alert levels for longer. If post-incident review is skipped (common under time pressure), schedule it as a non-negotiable calendar event.
+**失敗時:** 復旧が遅すぎる場合、最も可能性の高い損害シナリオの復旧プレイブックを事前に構築する。復旧中に二次脅威が出現する場合、デエスカレーションが急激すぎた — より長く高アラートレベルを維持する。インシデント後レビューが省略される場合（時間的制約下でよくある）、交渉不可能なカレンダーイベントとしてスケジュールする。
 
 ## バリデーション
 
-- [ ] Critical assets are identified and prioritized
-- [ ] Threats are classified by type and severity
-- [ ] Defense perimeter has multiple layers with sentinels at each
-- [ ] Alarm signaling has graduated levels with multi-sentinel confirmation
-- [ ] Defender roles are defined with mobilization mapped to alert levels
-- [ ] Proportional response prevents over- and under-reaction
-- [ ] Immune memory captures and applies lessons from each incident
-- [ ] Post-incident recovery protocol restores normal operations safely
+- [ ] 重要資産が特定・優先順位付けされている
+- [ ] 脅威がタイプと重大度で分類されている
+- [ ] 防御境界が各層にセンチネルを持つ多層構造になっている
+- [ ] アラームシグナリングが複数センチネル確認付きの段階的レベルを持つ
+- [ ] 防衛者の役割が定義され、動員がアラートレベルにマッピングされている
+- [ ] 比例対応が過剰反応と反応不足を防いでいる
+- [ ] 免疫記憶が各インシデントからの教訓を捕捉・適用している
+- [ ] インシデント後の復旧プロトコルが通常運用を安全に回復する
 
 ## よくある落とし穴
 
-- **Maginot Line defense**: Over-investing in a single defense layer while leaving others unprotected. Defense must be layered — any single layer can be breached
-- **Alert fatigue**: Too many alarms with too few real threats degrades defender attention. Calibrate sentinels ruthlessly; a missed false positive is cheaper than a missed real threat
-- **Symmetric response**: Responding to every threat with the same intensity wastes resources and reveals your full capabilities. Match response to threat — escalate only when needed
-- **No immune memory**: Defending against the same threat type repeatedly without learning is expensive and fragile. Every incident must update the colony's defense knowledge
-- **Permanent war footing**: Sustained high-alert operations exhaust defenders and degrade normal colony function. De-escalate deliberately when the threat passes
+- **マジノ線防御**: 単一の防御層に過剰投資し、他を無防備にする。防御は多層でなければならない — 単一の層はいずれ突破される
+- **アラート疲労**: 本物の脅威が少ないのにアラームが多すぎると防衛者の注意力が低下する。センチネルを徹底的に調整する。見逃した偽陽性のコストは見逃した本物の脅威より安い
+- **対称的対応**: すべての脅威に同じ強度で対応するとリソースを浪費し全能力を露呈する。脅威に対応を一致させ、必要な場合のみエスカレーションする
+- **免疫記憶なし**: 学習なく同じタイプの脅威に繰り返し対応することは高コストで脆弱である。すべてのインシデントがコロニーの防衛知識を更新しなければならない
+- **恒常的臨戦態勢**: 高アラート運用の持続は防衛者を疲弊させ、通常のコロニー機能を劣化させる。脅威が過ぎたら意図的にデエスカレーションする
 
 ## 関連スキル
 
-- `coordinate-swarm` — foundational coordination patterns that support alarm signaling and mobilization
-- `build-consensus` — rapid consensus for collective defense decisions under time pressure
-- `scale-colony` — defense systems must scale with colony growth
-- `repair-damage` — morphic skill for regenerative recovery after defense incidents
-- `configure-alerting-rules` — practical alerting configuration that implements alarm signaling patterns
-- `conduct-post-mortem` — structured post-incident analysis for feeding immune memory
+- `coordinate-swarm` -- アラームシグナリングと動員を支える基礎的な連携パターン
+- `build-consensus` -- 時間的制約下での集団防衛判断のための迅速な合意形成
+- `scale-colony` -- 防衛システムはコロニーの成長に合わせてスケールする必要がある
+- `repair-damage` -- 防衛インシデント後の再生的回復のためのモルフィックスキル
+- `configure-alerting-rules` -- アラームシグナリングパターンを実装する実用的なアラート設定
+- `conduct-post-mortem` -- 免疫記憶にフィードする構造化されたインシデント後分析

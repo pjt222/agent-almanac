@@ -1,14 +1,12 @@
 ---
 name: brahma-bhaga
 description: >
-  Creation and genesis — generative ideation from void, structured emergence
-  from ambiguity, and the discipline of bringing new patterns into existence.
-  Maps Brahma's creative power to AI reasoning: transforming cleared space
-  into coherent new structures, seeding possibilities, and nurturing nascent
-  ideas through their fragile early stages. Use after shiva-bhaga dissolution
-  has cleared stale patterns, when facing a genuinely novel problem with no
-  obvious template, or when incremental modification has reached its limits
-  and a fresh design is needed.
+  創造と起源 — 虚空からの生成的着想、曖昧さからの構造化された出現、新しい
+  パターンを存在に導く規律。ブラフマーの創造力をAI推論にマッピングする:
+  クリアされた空間を一貫した新しい構造に変換し、可能性を播種し、脆弱な初期段階を
+  通じて新生のアイデアを育てる。shiva-bhagaの溶解が古いパターンをクリアした後、
+  明確なテンプレートのない真に新しい問題に直面した時、段階的修正が限界に達して
+  新鮮な設計が必要な時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,29 +25,29 @@ metadata:
 
 # ブラフマー・バーガ
 
-Generative creation from void or ambiguity — structured emergence of new patterns, approaches, and solutions where none existed before.
+虚空または曖昧さからの生成的創造 — 以前存在しなかった新しいパターン、アプローチ、ソリューションの構造化された出現。
 
 ## 使用タイミング
 
-- After `shiva-bhaga` dissolution has cleared stale patterns and created space
-- Facing a genuinely novel problem with no obvious template or precedent
-- The user's request requires invention rather than retrieval or adaptation
-- Multiple possible approaches exist and none has been chosen — the creative act is the choice itself
-- A blank slate: new file, new project, new architecture, new approach
-- When incremental modification has reached its limits and a fresh design is needed
+- `shiva-bhaga`の溶解が古いパターンをクリアして空間を作った後
+- 明確なテンプレートや前例のない真に新しい問題に直面している時
+- ユーザーのリクエストが検索や適応ではなく発明を必要とする時
+- 複数の可能なアプローチが存在しどれも選ばれていない — 創造的行為が選択そのもの
+- 白紙の状態: 新しいファイル、新しいプロジェクト、新しいアーキテクチャ、新しいアプローチ
+- 段階的修正が限界に達して新鮮な設計が必要な時
 
 ## 入力
 
-- **必須**: The creative goal or void to fill (available from conversation context)
-- **任意**: Constraints that bound the creation (user requirements, technical limitations)
-- **任意**: Seeds — fragments, inspirations, or partial ideas that inform the creation
-- **任意**: What was dissolved (`shiva-bhaga` output) — understanding what failed guides what to create
+- **必須**: 創造的目標または埋めるべき虚空（会話コンテキストから利用可能）
+- **任意**: 創造を制約する制約（ユーザー要件、技術的制限）
+- **任意**: 種 — 創造に情報を提供する断片、インスピレーション、部分的なアイデア
+- **任意**: 溶解されたもの（`shiva-bhaga`の出力） — 何が失敗したかの理解が何を創造するかを導く
 
 ## 手順
 
-### ステップ1: Survey the Void
+### ステップ1: 虚空を調査する
 
-Before creating, understand the space available for creation.
+創造する前に、創造に利用可能な空間を理解する。
 
 ```
 Creative Space Assessment:
@@ -78,99 +76,99 @@ Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Map each dimension honestly — especially constraints, which are often implicit
-2. Note the degrees of freedom: these are where genuine creation happens
-3. Identify seeds without committing to them — they inform, not dictate
+1. 各次元を正直にマッピングする — 特にしばしば暗黙的な制約
+2. 自由度に注意する: これらが真の創造が起こる場所
+3. 種をコミットせずに特定する — 情報を提供するが指示はしない
 
-**期待結果:** A clear picture of the creative space: bounded by constraints, informed by seeds, and opened by degrees of freedom.
+**期待結果:** 創造的空間の明確な全体像: 制約に制限され、種に情報を提供され、自由度によって開かれている。
 
-**失敗時:** If the space feels fully constrained (no degrees of freedom), re-examine — often constraints that seem fixed are actually preferences. Ask the user if needed.
+**失敗時:** 空間が完全に制約されている感じがする場合（自由度がない）、再検討する — 固定に見える制約は実際には好みであることが多い。必要に応じてユーザーに確認する。
 
-### ステップ2: Generate — Divergent Exploration
+### ステップ2: 生成 — 発散的探索
 
-Produce multiple possibilities without evaluating them.
+評価せずに複数の可能性を生成する。
 
-1. Generate at least three distinct approaches to filling the creative space
-2. Each approach should be genuinely different — not variations on a theme
-3. For each approach, capture:
-   - The core idea in one sentence
-   - How it satisfies the constraints
-   - What makes it distinct from the others
-   - What it sacrifices or trades off
-4. Include at least one approach that feels unconventional or risky
-5. Do not evaluate yet — generation and evaluation are separate phases
+1. 創造的空間を埋めるための少なくとも3つの異なるアプローチを生成する
+2. 各アプローチは真に異なるべき — テーマのバリエーションではない
+3. 各アプローチについて、以下を捉える:
+   - コアアイデアを一文で
+   - 制約をどう満たすか
+   - 他と何が異なるか
+   - 何を犠牲にするかトレードオフするか
+4. 型破りまたはリスキーに感じる少なくとも1つのアプローチを含める
+5. まだ評価しない — 生成と評価は別のフェーズ
 
-**期待結果:** Three or more genuinely distinct approaches, each with a clear identity and trade-off profile.
+**期待結果:** それぞれ明確なアイデンティティとトレードオフプロファイルを持つ、3つ以上の真に異なるアプローチ。
 
-**失敗時:** If all approaches feel similar, the generation was too narrow. Return to Step 1 and look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if I did the opposite of the obvious approach?"
+**失敗時:** すべてのアプローチが似ている感じがする場合、生成が狭すぎた。ステップ1に戻り、未探索の自由度を探す。あるいは、制約を反転する: 「明らかなアプローチの逆をしたらどうなるか？」
 
-### ステップ3: Evaluate — Convergent Selection
+### ステップ3: 評価 — 収束的選択
 
-Assess the generated approaches against the creative space.
+生成されたアプローチを創造的空間に対して評価する。
 
-1. For each approach, assess:
-   - **Constraint satisfaction**: Does it meet all non-negotiable requirements?
-   - **Elegance**: Is it the simplest solution that works?
-   - **Resilience**: Will it survive future perturbation?
-   - **Integration**: Does it fit naturally with the surrounding context?
-   - **Novelty**: Does it bring something genuinely new, or merely rearrange the old?
-2. Eliminate approaches that violate hard constraints
-3. Among remaining approaches, choose based on the user's implicit values (simplicity? thoroughness? creativity?)
-4. If two approaches are equally strong, present both to the user with trade-offs clearly stated
+1. 各アプローチについて評価する:
+   - **制約の充足**: すべての交渉不可能な要件を満たすか？
+   - **優雅さ**: 動作する最もシンプルな解決策か？
+   - **耐性**: 将来の摂動に耐えるか？
+   - **統合**: 周囲のコンテキストに自然にフィットするか？
+   - **新規性**: 真に新しいものをもたらすか、単に古いものを再配置しているか？
+2. ハード制約に違反するアプローチを排除する
+3. 残りのアプローチの中から、ユーザーの暗黙の価値観（シンプルさ？ 徹底性？ 創造性？）に基づいて選択する
+4. 2つのアプローチが同等に強い場合、トレードオフを明確に述べた上で両方をユーザーに提示する
 
-**期待結果:** A single chosen approach (or a clearly framed choice for the user) with articulated reasoning.
+**期待結果:** 明確な推論を伴う単一の選択されたアプローチ（またはユーザーへの明確にフレーム化された選択肢）。
 
-**失敗時:** If no approach satisfies all constraints, the constraints may be contradictory. Surface the contradiction to the user rather than forcing a creation that compromises on fundamentals.
+**失敗時:** すべての制約を満たすアプローチがない場合、制約が矛盾している可能性がある。根本的な妥協をする創造を強制するのではなく、矛盾をユーザーに表面化する。
 
-### ステップ4: Manifest — Bring into Form
+### ステップ4: 具現化 — 形に導く
 
-Execute the chosen approach, giving it concrete form.
+選択されたアプローチを実行し、具体的な形を与える。
 
-1. Begin with the skeleton: the minimal structure that embodies the core idea
-2. Build outward from the core, adding detail as needed
-3. At each step, check: "Is this addition serving the core idea or diluting it?"
-4. Resist the urge to over-elaborate — creation is complete when nothing more can be removed
-5. Name what was created: a clear, descriptive identifier that captures its essence
+1. スケルトンから始める: コアアイデアを体現する最小構造
+2. コアから外側に向かって構築し、必要に応じて詳細を追加する
+3. 各ステップで確認する: 「この追加はコアアイデアに寄与しているか、薄めているか？」
+4. 過度な精緻化への衝動に抵抗する — 創造はこれ以上何も削除できない時に完成する
+5. 創造物に名前を付ける: その本質を捉える明確で記述的な識別子
 
-**期待結果:** A concrete creation that embodies the chosen approach — code, plan, structure, or design that exists where void existed before.
+**期待結果:** 選択されたアプローチを体現する具体的な創造物 — 虚空があった場所に存在するコード、計画、構造、またはデザイン。
 
-**失敗時:** If the manifestation diverges from the chosen approach, pause and re-read Step 3's selection. Drift during manifestation often indicates the selection was not fully committed to. Either recommit or re-select.
+**失敗時:** 具現化が選択されたアプローチから逸れる場合、一時停止してステップ3の選択を再読する。具現化中のドリフトは、選択が完全にコミットされていないことを示すことが多い。再コミットするか再選択する。
 
-### ステップ5: Nurture — Protect the Nascent Creation
+### ステップ5: 育成 — 新生の創造物を保護する
 
-New creations are fragile. Protect them through their early stages.
+新しい創造物は脆弱。初期段階を通じて保護する。
 
-1. Test the creation against its constraints — does it work as intended?
-2. Identify the weakest point — where is it most likely to break?
-3. Strengthen the weakest point without over-engineering
-4. Hand off to `vishnu-bhaga` for ongoing preservation if the creation will persist
-5. Document the creative choices made: what was chosen, what was rejected, and why
+1. 制約に対して創造物をテストする — 意図通りに機能するか？
+2. 最も弱い点を特定する — 最も壊れやすいのはどこか？
+3. 過剰エンジニアリングなしに最も弱い点を強化する
+4. 創造物が持続する場合、継続的な保存のために`vishnu-bhaga`に引き継ぐ
+5. 行われた創造的選択を文書化する: 何が選ばれ、何が拒否され、その理由
 
-**期待結果:** A creation that is tested, documented, and ready for sustained use.
+**期待結果:** テストされ、文書化され、持続的な使用の準備ができた創造物。
 
-**失敗時:** If the creation fails its first test, assess whether the failure is in the creation or the test. If the creation is fundamentally flawed, return to Step 2 with the failure as a new anti-pattern seed.
+**失敗時:** 創造物が最初のテストに失敗した場合、失敗が創造物にあるのかテストにあるのかを評価する。創造物が根本的に欠陥がある場合、失敗を新しいアンチパターンの種としてステップ2に戻る。
 
 ## バリデーション
 
-- [ ] The creative space was surveyed before generating ideas
-- [ ] At least three genuinely distinct approaches were generated
-- [ ] Selection was based on explicit criteria, not default instinct
-- [ ] The creation was manifested starting from its core, building outward
-- [ ] The creation was tested against its constraints
-- [ ] Creative choices were documented for future reference
+- [ ] アイデア生成前に創造的空間が調査された
+- [ ] 少なくとも3つの真に異なるアプローチが生成された
+- [ ] 選択がデフォルトの本能ではなく明示的な基準に基づいた
+- [ ] 創造物がコアから始まり外側に構築して具現化された
+- [ ] 創造物が制約に対してテストされた
+- [ ] 創造的選択が将来の参照のために文書化された
 
 ## よくある落とし穴
 
-- **Creating before clearing**: Attempting creation without prior dissolution produces new patterns contaminated by old ones. Run `shiva-bhaga` first if the space is cluttered
-- **Single-option generation**: Generating one approach and then evaluating it is not creation — it is executing the first idea. True creation requires divergent options
-- **Novelty for its own sake**: Creating something unconventional when a simple standard approach would serve better. Novelty is a tool, not a goal
-- **Perfectionist manifestation**: Polishing endlessly rather than shipping a working creation. A complete imperfect creation outperforms an incomplete perfect one
-- **Unprotected creation**: Manifesting something new and immediately moving on without testing or documentation leaves the creation vulnerable
+- **クリアする前に創造する**: 事前の溶解なしに創造を試みると、古いパターンに汚染された新しいパターンを生む。空間が散らかっている場合、まず`shiva-bhaga`を実行する
+- **単一オプション生成**: 1つのアプローチを生成してそれを評価するのは創造ではない — 最初のアイデアの実行。真の創造には発散的なオプションが必要
+- **新規性のための新規性**: シンプルな標準的アプローチの方が適切な時に型破りなものを創造する。新規性はツールであって目標ではない
+- **完璧主義的な具現化**: 出荷するのではなく際限なく磨き続ける。完成した不完全な創造物は、不完全な完璧な創造物を上回る
+- **保護されない創造物**: 新しいものを具現化してテストや文書化なしにすぐ先に進むと、創造物は脆弱なままになる
 
 ## 関連スキル
 
-- `shiva-bhaga` — destruction creates the void that Brahma fills; dissolution precedes creation
-- `vishnu-bhaga` — preservation sustains what Brahma creates; handoff from creation to maintenance
-- `intrinsic` — creative engagement benefits from autonomous motivation; creation thrives in flow
-- `learn` — when creation requires knowledge not yet held, learning precedes generation
-- `adapt-architecture` — the morphic equivalent for creating new architectural patterns from existing systems
+- `shiva-bhaga` — 破壊がブラフマーが埋める虚空を作る; 溶解が創造に先行する
+- `vishnu-bhaga` — 保存がブラフマーが創造したものを維持する; 創造から維持への引き継ぎ
+- `intrinsic` — 創造的関与は自律的動機付けから恩恵を受ける; 創造はフロー状態で栄える
+- `learn` — 創造がまだ保持されていない知識を必要とする時、学習が生成に先行する
+- `adapt-architecture` — 既存システムから新しいアーキテクチャパターンを創造するためのモーフィック的同等物

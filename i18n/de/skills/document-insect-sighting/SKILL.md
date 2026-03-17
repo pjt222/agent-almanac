@@ -1,15 +1,15 @@
 ---
 name: document-insect-sighting
 description: >
-  Record insect sightings with location, date, habitat, photography, behavior
-  notes, preliminary identification, and citizen science submission. Covers
-  GPS coordinates, weather conditions, microhabitat description, macro
-  photography techniques, behavioral observations, preliminary identification
-  to order using body plan, and submission to citizen science platforms such
-  as iNaturalist. Use when encountering an insect you want to document,
-  contributing to citizen science biodiversity databases, building a personal
-  observation journal, or supporting ecological surveys with georeferenced
-  photographic records.
+  Insektensichtungen mit Standort, Datum, Lebensraum, Fotografie,
+  Verhaltensnotizen, vorlaeufiger Bestimmung und Citizen-Science-Meldung
+  erfassen. Umfasst GPS-Koordinaten, Wetterbedingungen, Mikrohabitatbeschreibung,
+  Makrofotografie-Techniken, Verhaltensbeobachtungen, vorlaeufige Bestimmung
+  bis zur Ordnung anhand des Koerperbaus und Meldung an Citizen-Science-
+  Plattformen wie iNaturalist. Verwenden beim Dokumentieren eines angetroffenen
+  Insekts, beim Beitragen zu Citizen-Science-Biodiversitaetsdatenbanken, beim
+  Fuehren eines persoenlichen Beobachtungstagebuchs oder beim Unterstuetzen
+  oekologischer Erhebungen mit georeferenzierten fotografischen Aufzeichnungen.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -28,31 +28,31 @@ metadata:
 
 # Insektensichtung dokumentieren
 
-Record insect sightings with structured data, quality photographs, and citizen science submission for biodiversity research.
+Insektensichtungen mit strukturierten Daten, Qualitaetsfotografien und Citizen-Science-Meldung fuer Biodiversitaetsforschung erfassen.
 
-## When to Use
+## Wann verwenden
 
-- You encounter an insect you want to document for personal records or research
-- You are contributing observations to citizen science platforms such as iNaturalist or BugGuide
-- You are building a systematic observation journal for a habitat or region
-- You want to support ecological surveys with georeferenced, photographed records
-- You are a beginner learning to notice and record insect diversity
+- Sie treffen ein Insekt an, das Sie fuer persoenliche Aufzeichnungen oder Forschung dokumentieren moechten
+- Sie tragen Beobachtungen zu Citizen-Science-Plattformen wie iNaturalist oder BugGuide bei
+- Sie fuehren ein systematisches Beobachtungstagebuch fuer einen Lebensraum oder eine Region
+- Sie moechten oekologische Erhebungen mit georeferenzierten, fotografierten Aufzeichnungen unterstuetzen
+- Sie sind Anfaenger und lernen, Insektenvielfalt wahrzunehmen und zu erfassen
 
-## Inputs
+## Eingaben
 
-- **Required**: An insect sighting (live insect in the field or recently encountered specimen)
-- **Required**: A camera or smartphone capable of close-up photography
-- **Optional**: GPS device or smartphone with location services enabled
-- **Optional**: Notebook or field journal for written observations
-- **Optional**: Hand lens (10x) for fine detail observation
-- **Optional**: Ruler or coin for photographic scale reference
-- **Optional**: iNaturalist account or equivalent citizen science platform account
+- **Erforderlich**: Eine Insektensichtung (lebendes Insekt im Feld oder kuerzlich angetroffenes Exemplar)
+- **Erforderlich**: Eine Kamera oder ein Smartphone mit Nahaufnahme-Faehigkeit
+- **Optional**: GPS-Geraet oder Smartphone mit aktivierten Standortdiensten
+- **Optional**: Notizbuch oder Feldtagebuch fuer schriftliche Beobachtungen
+- **Optional**: Handlupe (10x) fuer Feindetailbeobachtung
+- **Optional**: Lineal oder Muenze als fotografische Groessenreferenz
+- **Optional**: iNaturalist-Konto oder gleichwertiges Citizen-Science-Plattform-Konto
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Record Location, Date, and Weather
+### Schritt 1: Standort, Datum und Wetter erfassen
 
-Capture the context before approaching the insect. Many species are habitat-specific and seasonally active, so this metadata is as important as the photograph itself.
+Den Kontext erfassen, bevor man sich dem Insekt naehert. Viele Arten sind lebensraumspezifisch und saisonal aktiv, daher sind diese Metadaten ebenso wichtig wie das Foto selbst.
 
 ```
 Sighting Record — Context:
@@ -76,13 +76,13 @@ Sighting Record — Context:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete context record with date, time, precise location (ideally GPS coordinates), and weather conditions at the time of observation.
+**Erwartet:** Ein vollstaendiger Kontextdatensatz mit Datum, Uhrzeit, praezisem Standort (idealerweise GPS-Koordinaten) und Wetterbedingungen zum Zeitpunkt der Beobachtung.
 
-**On failure:** If GPS is unavailable, describe the location relative to landmarks (trail junctions, buildings, water features) with enough detail that the site could be relocated. If weather data is uncertain, estimate temperature range and note "overcast" or "clear" rather than leaving the field blank.
+**Bei Fehler:** Wenn GPS nicht verfuegbar ist, den Standort relativ zu Orientierungspunkten beschreiben (Wegkreuzungen, Gebaeude, Gewaesser) mit genug Detail, dass der Ort wiedergefunden werden koennte. Wenn Wetterdaten unsicher sind, Temperaturbereich schaetzen und "bewoelkt" oder "klar" notieren, anstatt das Feld leer zu lassen.
 
-### Step 2: Document Habitat and Microhabitat
+### Schritt 2: Lebensraum und Mikrohabitat dokumentieren
 
-Record where within the landscape the insect was found and what immediate substrate or structure it was using.
+Erfassen, wo innerhalb der Landschaft das Insekt gefunden wurde und welches unmittelbare Substrat oder welche Struktur es nutzte.
 
 ```
 Habitat Recording:
@@ -108,13 +108,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A description of the habitat that places the insect in ecological context, including both the broad landscape and the immediate microhabitat where the insect was found.
+**Erwartet:** Eine Beschreibung des Lebensraums, die das Insekt in einen oekologischen Kontext setzt, einschliesslich sowohl der breiten Landschaft als auch des unmittelbaren Mikrohabitats, in dem das Insekt gefunden wurde.
 
-**On failure:** If the microhabitat is difficult to characterize (e.g., insect in flight), note what it was flying near or what it landed on. Record "in flight, 1m above meadow grasses" rather than leaving the field blank.
+**Bei Fehler:** Wenn das Mikrohabitat schwer zu charakterisieren ist (z.B. Insekt im Flug), notieren, in der Naehe wovon es flog oder worauf es landete. "Im Flug, 1m ueber Wiesengraesern" erfassen, anstatt das Feld leer zu lassen.
 
-### Step 3: Photograph with Diagnostic Quality
+### Schritt 3: Mit diagnostischer Qualitaet fotografieren
 
-Good photographs are the single most important element of a sighting record. Citizen science identifications rely almost entirely on image quality.
+Gute Fotografien sind das einzelne wichtigste Element einer Sichtungsaufzeichnung. Citizen-Science-Bestimmungen stuetzen sich fast ausschliesslich auf Bildqualitaet.
 
 ```
 Photography Protocol:
@@ -140,13 +140,13 @@ Tips for quality macro photographs:
   wings close (especially butterflies and dragonflies)
 ```
 
-**Expected:** At least 3 usable photographs: one dorsal, one lateral, and one with scale reference. Ideally 5 or more images covering multiple angles.
+**Erwartet:** Mindestens 3 verwendbare Fotografien: eine dorsal, eine lateral und eine mit Groessenreferenz. Idealerweise 5 oder mehr Bilder aus mehreren Winkeln.
 
-**On failure:** If the insect moves before multiple angles are captured, prioritize the dorsal view (top-down) as it carries the most diagnostic information for identification. A single sharp dorsal photograph is better than multiple blurry images. If the insect flies away before any photograph, sketch the body shape and note colors from memory immediately.
+**Bei Fehler:** Wenn das Insekt sich bewegt, bevor mehrere Winkel eingefangen werden koennen, die Dorsalansicht (von oben) priorisieren, da sie die meisten diagnostischen Informationen fuer die Bestimmung traegt. Ein einzelnes scharfes Dorsalfoto ist besser als mehrere unscharfe Bilder. Wenn das Insekt wegfliegt, bevor ein Foto gemacht werden konnte, sofort die Koerperform skizzieren und Farben aus dem Gedaechtnis notieren.
 
-### Step 4: Note Behavior and Interactions
+### Schritt 4: Verhalten und Interaktionen notieren
 
-Behavioral observations add ecological value that photographs alone cannot capture.
+Verhaltensbeobachtungen fuegen oekologischen Wert hinzu, den Fotografien allein nicht erfassen koennen.
 
 ```
 Behavioral Notes:
@@ -176,13 +176,13 @@ Behavioral Notes:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** At least 3 behavioral observations recorded: activity, movement pattern, and abundance.
+**Erwartet:** Mindestens 3 Verhaltensbeobachtungen erfasst: Aktivitaet, Bewegungsmuster und Haeufigkeit.
 
-**On failure:** If the insect is encountered briefly (e.g., lands and immediately flies away), record what you did observe and note the observation duration. Even "resting on leaf surface, solitary, flew when approached, observation duration 5 seconds" is useful data.
+**Bei Fehler:** Wenn das Insekt nur kurz angetroffen wird (z.B. landet und sofort wegfliegt), erfassen, was beobachtet wurde, und die Beobachtungsdauer notieren. Selbst "ruhend auf Blattoberflaeche, einzeln, flog bei Annaeherung weg, Beobachtungsdauer 5 Sekunden" sind nuetzliche Daten.
 
-### Step 5: Preliminary Identification to Order
+### Schritt 5: Vorlaeufige Bestimmung bis zur Ordnung
 
-You do not need to identify the species. Placing the insect into its order narrows identification significantly and helps citizen science reviewers.
+Sie muessen die Art nicht bestimmen. Das Insekt in seine Ordnung einzuordnen grenzt die Bestimmung erheblich ein und hilft Citizen-Science-Gutachtern.
 
 ```
 Quick Key to Major Insect Orders:
@@ -207,13 +207,13 @@ Quick Key to Major Insect Orders:
 3. If unsure, note: "Order uncertain — resembles [description]"
 ```
 
-**Expected:** A preliminary identification to order (e.g., "Coleoptera — beetle") or an honest "order uncertain" with a physical description.
+**Erwartet:** Eine vorlaeufige Bestimmung bis zur Ordnung (z.B. "Coleoptera — Kaefer") oder ein ehrliches "Ordnung unsicher" mit einer physischen Beschreibung.
 
-**On failure:** If the insect does not clearly match any order in the quick key, record the body shape, wing type, and number of legs. Platforms like iNaturalist will accept "Insecta" as a starting identification, and community identifiers will refine it. An honest "unknown" is always better than a forced guess.
+**Bei Fehler:** Wenn das Insekt keiner Ordnung im Schnellschluessel eindeutig entspricht, Koerperform, Fluegeltyp und Beinzahl erfassen. Plattformen wie iNaturalist akzeptieren "Insecta" als Ausgangsbestimmung, und Gemeinschaftsbestimmer werden sie verfeinern. Ein ehrliches "unbekannt" ist immer besser als eine erzwungene Vermutung.
 
-### Step 6: Submit to Citizen Science Platform
+### Schritt 6: An Citizen-Science-Plattform melden
 
-Upload the sighting to a platform where experts and community identifiers can verify and refine the identification.
+Die Sichtung auf eine Plattform hochladen, auf der Experten und Gemeinschaftsbestimmer die Bestimmung verifizieren und verfeinern koennen.
 
 ```
 Submission Checklist for iNaturalist (or equivalent):
@@ -239,32 +239,32 @@ Data Quality Tips:
 - "Research Grade" status requires 2+ agreeing identifications at species level
 ```
 
-**Expected:** A complete observation submitted to a citizen science platform with photographs, location, date, and preliminary identification, ready for community review.
+**Erwartet:** Eine vollstaendige Beobachtung, gemeldet an eine Citizen-Science-Plattform mit Fotografien, Standort, Datum und vorlaeufiger Bestimmung, bereit fuer die Gemeinschaftsueberpruefung.
 
-**On failure:** If no internet access is available in the field, save all photographs and notes locally with the intention to upload later. Most platforms allow backdated submissions. If you do not have an account, store the record in your personal journal — the data still has value for your own learning and can be uploaded later.
+**Bei Fehler:** Wenn im Feld kein Internetzugang verfuegbar ist, alle Fotografien und Notizen lokal speichern mit der Absicht, spaeter hochzuladen. Die meisten Plattformen erlauben rueckdatierte Meldungen. Wenn Sie kein Konto haben, die Aufzeichnung in Ihrem persoenlichen Tagebuch speichern — die Daten haben dennoch Wert fuer Ihr eigenes Lernen und koennen spaeter hochgeladen werden.
 
-## Validation
+## Validierung
 
-- [ ] Date, time, and precise location were recorded before approaching the insect
-- [ ] Weather and habitat context were documented
-- [ ] At least 3 photographs were taken from different angles
-- [ ] At least one photograph includes a scale reference
-- [ ] Behavior and activity were noted
-- [ ] A preliminary identification to order was attempted (or honestly marked as unknown)
-- [ ] The observation was submitted to a citizen science platform or stored in a structured journal
+- [ ] Datum, Uhrzeit und praeziser Standort wurden vor Annaeherung an das Insekt erfasst
+- [ ] Wetter- und Lebensraumkontext wurden dokumentiert
+- [ ] Mindestens 3 Fotografien aus verschiedenen Winkeln wurden aufgenommen
+- [ ] Mindestens eine Fotografie enthaelt eine Groessenreferenz
+- [ ] Verhalten und Aktivitaet wurden notiert
+- [ ] Eine vorlaeufige Bestimmung bis zur Ordnung wurde versucht (oder ehrlich als unbekannt markiert)
+- [ ] Die Beobachtung wurde an eine Citizen-Science-Plattform gemeldet oder in einem strukturierten Tagebuch gespeichert
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Approaching too quickly**: Many insects flee when approached rapidly. Move slowly and avoid casting your shadow over the subject. Photograph from farther away first, then gradually close distance
-- **Ignoring habitat context**: A photograph of an insect on a white wall loses the ecological context. Always include at least one in-situ photograph showing the insect in its natural setting
-- **Relying on a single photograph**: One image is often insufficient for identification. Wing pattern, leg structure, and antennae may only be visible from specific angles
-- **Forgetting scale**: Without a size reference, a 5mm beetle and a 50mm beetle can look identical in photographs. Always include a coin, ruler, or finger for scale
-- **Forcing an identification**: Submitting a confident but incorrect identification on citizen science platforms creates noise for researchers. "Insecta" or "order unknown" is always acceptable and preferred over a wrong genus or species
-- **Not recording negatives**: "No insects observed on milkweed patch" is valuable absence data for surveys. Record what you checked, not just what you found
+- **Zu schnelles Annaeherung**: Viele Insekten fliehen bei schneller Annaeherung. Langsam bewegen und vermeiden, den eigenen Schatten ueber das Objekt zu werfen. Zuerst von weiter weg fotografieren, dann schrittweise naeher kommen
+- **Lebensraumkontext ignorieren**: Ein Foto eines Insekts auf einer weissen Wand verliert den oekologischen Kontext. Immer mindestens ein In-situ-Foto einschliessen, das das Insekt in seiner natuerlichen Umgebung zeigt
+- **Auf ein einzelnes Foto verlassen**: Ein Bild reicht oft nicht fuer die Bestimmung. Fluegelmuster, Beinstruktur und Fuehler sind moeglicherweise nur aus bestimmten Winkeln sichtbar
+- **Massstab vergessen**: Ohne Groessenreferenz koennen ein 5mm-Kaefer und ein 50mm-Kaefer auf Fotos identisch aussehen. Immer eine Muenze, ein Lineal oder einen Finger als Massstab einschliessen
+- **Bestimmung erzwingen**: Eine zuversichtliche aber falsche Bestimmung auf Citizen-Science-Plattformen einzureichen erzeugt Rauschen fuer Forscher. "Insecta" oder "Ordnung unbekannt" ist immer akzeptabel und gegenueber einer falschen Gattung oder Art vorzuziehen
+- **Negativbefunde nicht erfassen**: "Keine Insekten auf Seidenpflanzenbestand beobachtet" sind wertvolle Abwesenheitsdaten fuer Erhebungen. Erfassen, was geprueft wurde, nicht nur was gefunden wurde
 
-## Related Skills
+## Verwandte Skills
 
-- `identify-insect` — detailed morphological identification procedure when you need to go beyond preliminary order-level placement
-- `observe-insect-behavior` — structured ethological observation protocols for deeper behavioral study
-- `collect-preserve-specimens` — when a physical specimen is needed for definitive identification
-- `survey-insect-population` — scaling individual sightings into systematic population-level surveys
+- `identify-insect` — Detailliertes morphologisches Bestimmungsverfahren, wenn ueber die vorlaeufige Ordnungszuordnung hinausgegangen werden muss
+- `observe-insect-behavior` — Strukturierte ethologische Beobachtungsprotokolle fuer vertiefte Verhaltensstudien
+- `collect-preserve-specimens` — Wenn ein physisches Exemplar fuer definitive Bestimmung benoetigt wird
+- `survey-insect-population` — Einzelsichtungen zu systematischen populationsbezogenen Erhebungen skalieren

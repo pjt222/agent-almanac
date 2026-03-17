@@ -1,17 +1,20 @@
 ---
 name: observe-insect-behavior
 description: >
-  Conduct structured insect behavior observations using sampling protocols,
-  ethogram categories, event recording, interaction logging, environmental
-  context, and summary analysis. Covers focal animal sampling, scan sampling,
-  all-occurrences sampling, and instantaneous sampling methods. Defines a
-  standard insect ethogram with locomotion, feeding, grooming, mating,
-  defense, communication, and rest categories. Includes timestamped event
-  recording, intraspecific and interspecific interaction logging, environmental
-  covariate documentation, and time budget analysis. Use when studying insect
-  behavior for ecological research, documenting behavioral repertoires for
-  a species, observing pollinator activity or predator-prey dynamics, or
-  supporting conservation assessments with behavioral data.
+  Strukturierte Insektenverhaltensbeobachtungen unter Verwendung von
+  Stichprobenprotokollen, Ethogramm-Kategorien, Ereigniserfassung,
+  Interaktionsprotokollierung, Umweltkontext und zusammenfassender Analyse
+  durchfuehren. Umfasst Fokualtier-Stichproben, Scan-Stichproben,
+  Gesamterfassung und Momentaufnahme-Stichproben. Definiert ein Standard-
+  Insekten-Ethogramm mit Fortbewegung, Nahrungsaufnahme, Koerperpflege,
+  Paarung, Verteidigung, Kommunikation und Ruhekategorien. Beinhaltet
+  zeitgestempelte Ereigniserfassung, intraspezifische und interspezifische
+  Interaktionsprotokollierung, Dokumentation von Umweltkovariablen und
+  Zeitbudget-Analyse. Verwenden bei der Untersuchung von Insektenverhalten
+  fuer oekologische Forschung, bei der Dokumentation von Verhaltensrepertoires
+  einer Art, bei der Beobachtung von Bestaeberaktivitaet oder Raeuber-Beute-
+  Dynamik oder zur Unterstuetzung von Naturschutzbewertungen mit
+  Verhaltensdaten.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -30,33 +33,33 @@ metadata:
 
 # Insektenverhalten beobachten
 
-Conduct structured insect behavior observations using standardized sampling protocols, ethograms, and quantitative recording methods.
+Strukturierte Insektenverhaltensbeobachtungen unter Verwendung standardisierter Stichprobenprotokolle, Ethogramme und quantitativer Erfassungsmethoden durchfuehren.
 
-## When to Use
+## Wann verwenden
 
-- You are studying insect behavior for ecological or entomological research
-- You want to document the behavioral repertoire of a species at a site
-- You are observing pollinator activity on flowering plants
-- You are documenting predator-prey interactions or parasitoid behavior
-- You need behavioral data to support conservation or management decisions
-- You are building ethological skills through structured field practice
+- Sie untersuchen Insektenverhalten fuer oekologische oder entomologische Forschung
+- Sie moechten das Verhaltensrepertoire einer Art an einem Standort dokumentieren
+- Sie beobachten Bestaeberaktivitaet an Bluetenpflanzen
+- Sie dokumentieren Raeuber-Beute-Interaktionen oder Parasitoidenverhalten
+- Sie benoetigen Verhaltensdaten zur Unterstuetzung von Naturschutz- oder Managemententscheidungen
+- Sie bauen ethologische Faehigkeiten durch strukturierte Feldpraxis auf
 
-## Inputs
+## Eingaben
 
-- **Required**: A focal insect or insect aggregation to observe
-- **Required**: A timing device (watch, phone, or stopwatch)
-- **Required**: Recording method (notebook, voice recorder, or data entry device)
-- **Optional**: Hand lens (10x) for close behavioral observation
-- **Optional**: Binoculars for observing insects at distance (e.g., dragonflies on patrol)
-- **Optional**: Camera for video documentation of behavioral events
-- **Optional**: Thermometer, hygrometer, or weather station for environmental data
-- **Optional**: Pre-printed data sheets or ethogram templates
+- **Erforderlich**: Ein Fokaltier oder eine Insektenansammlung zur Beobachtung
+- **Erforderlich**: Ein Zeitmessgeraet (Uhr, Telefon oder Stoppuhr)
+- **Erforderlich**: Erfassungsmethode (Notizbuch, Sprachrekorder oder Dateneingabegeraet)
+- **Optional**: Handlupe (10x) fuer nahe Verhaltensbeobachtung
+- **Optional**: Fernglas fuer Insektenbeobachtung auf Distanz (z.B. Libellen auf Patrouille)
+- **Optional**: Kamera fuer Videodokumentation von Verhaltensereignissen
+- **Optional**: Thermometer, Hygrometer oder Wetterstation fuer Umweltdaten
+- **Optional**: Vorgedruckte Datenblaetter oder Ethogramm-Vorlagen
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Choose a Sampling Protocol
+### Schritt 1: Stichprobenprotokoll waehlen
 
-Select the protocol that matches your research question and the behavior of your target insect. Each protocol has specific strengths and biases.
+Das Protokoll auswaehlen, das zur Forschungsfrage und zum Verhalten des Zielinsekts passt. Jedes Protokoll hat spezifische Staerken und Verzerrungen.
 
 ```
 Sampling Protocols:
@@ -105,13 +108,13 @@ Choosing a Protocol:
 - "I want statistically rigorous time budgets" → instantaneous
 ```
 
-**Expected:** A sampling protocol selected and justified based on the research question, target taxon, and field conditions. Recording interval or focal bout duration defined before observation begins.
+**Erwartet:** Ein Stichprobenprotokoll ausgewaehlt und begruendet basierend auf der Forschungsfrage, dem Zieltaxon und den Feldbedingungen. Erfassungsintervall oder Fokalbeobachtungsdauer vor Beginn der Beobachtung festgelegt.
 
-**On failure:** If the target insect is too mobile for focal animal sampling (e.g., a fast-flying dragonfly), switch to all-occurrences sampling focused on specific events (territorial chases, perch returns). If you cannot distinguish individuals for focal sampling, use scan sampling on the group. Adapt the protocol to what is feasible rather than abandoning observation.
+**Bei Fehler:** Wenn das Zielinsekt zu mobil fuer Fokaltier-Stichproben ist (z.B. eine schnell fliegende Libelle), zu Gesamterfassung wechseln, fokussiert auf spezifische Ereignisse (Revierverteidigungsjagden, Sitzwarten-Rueckkehr). Wenn einzelne Individuen fuer Fokalstichproben nicht unterschieden werden koennen, Scan-Stichproben auf die Gruppe anwenden. Das Protokoll an das Machbare anpassen, statt die Beobachtung aufzugeben.
 
-### Step 2: Define the Ethogram
+### Schritt 2: Das Ethogramm definieren
 
-An ethogram is the catalog of all behaviors you will record. Define it before observation begins so you are not improvising categories in the field.
+Ein Ethogramm ist der Katalog aller Verhaltensweisen, die erfasst werden. Es vor Beginn der Beobachtung definieren, damit nicht im Feld Kategorien improvisiert werden.
 
 ```
 Standard Insect Ethogram:
@@ -157,13 +160,13 @@ Modifiers (append to any category):
 - Intensity: low (slow, intermittent), medium, high (rapid, sustained)
 ```
 
-**Expected:** A complete ethogram defined for the target taxon before observation begins. Categories should be mutually exclusive (any behavior fits in exactly one category) and exhaustive (every observed behavior can be classified).
+**Erwartet:** Ein vollstaendiges Ethogramm fuer das Zieltaxon vor Beginn der Beobachtung definiert. Kategorien sollten sich gegenseitig ausschliessen (jede Verhaltensweise passt in genau eine Kategorie) und erschoepfend sein (jede beobachtete Verhaltensweise kann klassifiziert werden).
 
-**On failure:** If an unexpected behavior occurs that does not fit the ethogram, record it verbatim (e.g., "rapid wing vibration while stationary, not matching any defined category") and add a new category in the post-observation ethogram revision. Do not force novel behaviors into ill-fitting categories.
+**Bei Fehler:** Wenn eine unerwartete Verhaltensweise auftritt, die nicht ins Ethogramm passt, sie woertlich erfassen (z.B. „schnelle Fluegelvibration im Stillstand, passt zu keiner definierten Kategorie") und eine neue Kategorie in der Ethogramm-Revision nach der Beobachtung ergaenzen. Neuartige Verhaltensweisen nicht in schlecht passende Kategorien zwingen.
 
-### Step 3: Record Behavioral Events with Timestamps
+### Schritt 3: Verhaltensereignisse mit Zeitstempeln erfassen
 
-Begin observation and record each behavioral event or state change with precise timing.
+Beobachtung beginnen und jedes Verhaltensereignis oder jeden Zustandswechsel mit praeziser Zeitmessung erfassen.
 
 ```
 Recording Format:
@@ -200,13 +203,13 @@ Rules:
 - Note when focal individual is lost and reason (flew away, obscured)
 ```
 
-**Expected:** A continuous or interval-based record of behavioral events with timestamps, covering the full observation period.
+**Erwartet:** Eine kontinuierliche oder intervallbasierte Erfassung von Verhaltensereignissen mit Zeitstempeln, die den gesamten Beobachtungszeitraum abdeckt.
 
-**On failure:** If the focal individual is lost mid-observation, record the time and reason. If it returns, resume recording. If not, the partial record is still valid data — note the actual observation duration. For scan sampling, if some individuals are obscured at the scan moment, record only those visible and note the count of unscored individuals.
+**Bei Fehler:** Wenn das Fokaltier waehrend der Beobachtung verloren geht, Zeitpunkt und Grund erfassen. Wenn es zurueckkehrt, die Erfassung fortsetzen. Wenn nicht, ist die Teilerfassung dennoch gueltige Daten — die tatsaechliche Beobachtungsdauer notieren. Bei Scan-Stichproben, wenn einige Individuen zum Scanzeitpunkt verdeckt sind, nur die sichtbaren erfassen und die Anzahl der nicht bewerteten Individuen notieren.
 
-### Step 4: Log Interactions
+### Schritt 4: Interaktionen protokollieren
 
-Record all interactions between the focal insect and other organisms. Interactions are behavioral events involving two or more individuals.
+Alle Interaktionen zwischen dem Fokaltier und anderen Organismen erfassen. Interaktionen sind Verhaltensereignisse, an denen zwei oder mehr Individuen beteiligt sind.
 
 ```
 Interaction Recording Format:
@@ -244,13 +247,13 @@ For each interaction record:
 - Distance at which interaction began
 ```
 
-**Expected:** All observed interactions recorded with initiator, partner identity (to lowest taxonomic level possible), behaviors of both parties, and outcome.
+**Erwartet:** Alle beobachteten Interaktionen erfasst mit Initiator, Partneridentitaet (bis zur niedrigstmoeglichen taxonomischen Ebene), Verhaltensweisen beider Parteien und Ausgang.
 
-**On failure:** If interactions happen too rapidly to record in full (e.g., a swarm of competing males), focus on the focal individual's behavior and note "multiple simultaneous interactions — details approximate." If partner identity is unknown, describe it (e.g., "small black hymenopteran, approximately 8mm").
+**Bei Fehler:** Wenn Interaktionen zu schnell ablaufen, um sie vollstaendig zu erfassen (z.B. ein Schwarm konkurrierender Maennchen), auf das Verhalten des Fokaltiers konzentrieren und „mehrere gleichzeitige Interaktionen — Details naeherungsweise" notieren. Wenn die Partneridentitaet unbekannt ist, beschreiben (z.B. „kleiner schwarzer Hautfluegler, ungefaehr 8mm").
 
-### Step 5: Record Environmental Context
+### Schritt 5: Umweltkontext erfassen
 
-Environmental conditions strongly influence insect behavior. Record covariates that allow your behavioral data to be interpreted in ecological context.
+Umweltbedingungen beeinflussen Insektenverhalten stark. Kovariablen erfassen, die es ermoeglichen, die Verhaltensdaten im oekologischen Kontext zu interpretieren.
 
 ```
 Environmental Context Record:
@@ -290,13 +293,13 @@ Environmental Context Record:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Environmental covariates recorded at the start and end of each observation session, with intermediate readings for sessions longer than 1 hour.
+**Erwartet:** Umweltkovariablen zu Beginn und Ende jeder Beobachtungssitzung erfasst, mit Zwischenmessungen fuer Sitzungen laenger als 1 Stunde.
 
-**On failure:** If instrumentation is unavailable, estimate temperature ("warm, approximately 25C"), humidity ("dry" or "humid"), and wind from sensory cues. Approximate environmental data is far more useful than no environmental data. At minimum, record time of day, cloud cover, and estimated temperature.
+**Bei Fehler:** Wenn keine Messgeraete verfuegbar sind, Temperatur schaetzen („warm, ungefaehr 25C"), Feuchtigkeit („trocken" oder „feucht") und Wind nach Sinneswahrnehmung. Naeherungsweise Umweltdaten sind weitaus nuetzlicher als keine Umweltdaten. Mindestens Tageszeit, Bewoelkung und geschaetzte Temperatur erfassen.
 
-### Step 6: Summarize Observations
+### Schritt 6: Beobachtungen zusammenfassen
 
-Analyze the recorded data to produce a structured summary with time budgets, behavioral frequencies, and observed patterns.
+Die erfassten Daten analysieren, um eine strukturierte Zusammenfassung mit Zeitbudgets, Verhaltenshaeufigkeiten und beobachteten Mustern zu erstellen.
 
 ```
 Summary Analysis:
@@ -337,32 +340,32 @@ Summary Analysis:
    may have affected behavior.
 ```
 
-**Expected:** A structured summary including time budget or behavioral frequencies (depending on sampling protocol), interaction summary, observed patterns, and explicit acknowledgment of limitations.
+**Erwartet:** Eine strukturierte Zusammenfassung einschliesslich Zeitbudget oder Verhaltenshaeufigkeiten (abhaengig vom Stichprobenprotokoll), Interaktionszusammenfassung, beobachtete Muster und explizite Anerkennung von Einschraenkungen.
 
-**On failure:** If the observation session was too short for meaningful time budgets (less than 10 minutes of continuous data), report raw event counts rather than proportions. Note the short duration as a limitation. Even brief observations contribute to understanding if they are honestly reported — a 5-minute observation documenting a rare behavior (e.g., parasitoid oviposition) can be more valuable than hours of resting behavior.
+**Bei Fehler:** Wenn die Beobachtungssitzung zu kurz fuer aussagekraeftige Zeitbudgets war (weniger als 10 Minuten kontinuierlicher Daten), rohe Ereigniszaehlungen statt Anteile berichten. Die kurze Dauer als Einschraenkung notieren. Selbst kurze Beobachtungen tragen zum Verstaendnis bei, wenn sie ehrlich berichtet werden — eine 5-Minuten-Beobachtung, die ein seltenes Verhalten dokumentiert (z.B. Parasitoid-Eiablage), kann wertvoller sein als Stunden von Ruheverhalten.
 
-## Validation
+## Validierung
 
-- [ ] A sampling protocol was selected and justified before observation began
-- [ ] An ethogram was defined with mutually exclusive and exhaustive categories
-- [ ] Behavioral events were recorded with timestamps throughout the observation
-- [ ] Interactions were logged with initiator, partner, behaviors, and outcomes
-- [ ] Environmental covariates were recorded at the start and end of observation
-- [ ] A summary analysis was produced with time budgets or behavioral frequencies
-- [ ] Limitations of the observation (duration, lost focal time, weather) were noted
+- [ ] Ein Stichprobenprotokoll wurde vor Beginn der Beobachtung ausgewaehlt und begruendet
+- [ ] Ein Ethogramm wurde mit sich gegenseitig ausschliessenden und erschoepfenden Kategorien definiert
+- [ ] Verhaltensereignisse wurden waehrend der gesamten Beobachtung mit Zeitstempeln erfasst
+- [ ] Interaktionen wurden mit Initiator, Partner, Verhaltensweisen und Ergebnis protokolliert
+- [ ] Umweltkovariablen wurden zu Beginn und Ende der Beobachtung erfasst
+- [ ] Eine zusammenfassende Analyse wurde mit Zeitbudgets oder Verhaltenshaeufigkeiten erstellt
+- [ ] Einschraenkungen der Beobachtung (Dauer, verlorene Fokalzeit, Wetter) wurden notiert
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Starting without an ethogram**: Improvising behavioral categories during observation leads to inconsistent recording. Define categories before the first observation, even if you revise them afterward
-- **Interpreting instead of describing**: Record "mandibles opening and closing rapidly on leaf margin" not "aggressive feeding." Interpretation comes in the analysis, not the field recording. Anthropomorphic labels ("angry," "happy," "confused") have no place in ethological data
-- **Observer fatigue**: Continuous focal animal sampling is cognitively demanding. Limit focal bouts to 15-30 minutes with breaks between. Tired observers miss events and make recording errors
-- **Disturbing the subject**: Your presence changes behavior. Maintain distance, minimize movement, avoid casting shadows on the insect, and allow a habituation period (2-5 minutes) before starting formal recording
-- **Ignoring "nothing happening"**: Rest and inactivity are valid behavioral states that must be recorded. An insect spending 60% of its time resting is an important ecological finding, not boring data to skip
-- **Confusing states and events**: A state has duration (feeding for 3 minutes). An event is instantaneous (a single wing flash). Record states with start and end times; record events with a single timestamp. Mixing them produces incoherent time budgets
+- **Ohne Ethogramm beginnen**: Verhaltenskategorien waehrend der Beobachtung improvisieren fuehrt zu inkonsistenter Erfassung. Kategorien vor der ersten Beobachtung definieren, auch wenn sie nachher revidiert werden
+- **Interpretieren statt beschreiben**: „Mandibeln oeffnen und schliessen sich schnell am Blattrand" erfassen, nicht „aggressives Fressen." Interpretation gehoert in die Analyse, nicht in die Felderfassung. Anthropomorphe Bezeichnungen („wuetend", „gluecklich", „verwirrt") haben keinen Platz in ethologischen Daten
+- **Beobachtermuedigkeit**: Kontinuierliche Fokaltier-Stichproben sind kognitiv anspruchsvoll. Fokalbeobachtungsphasen auf 15-30 Minuten mit Pausen dazwischen begrenzen. Muede Beobachter verpassen Ereignisse und machen Erfassungsfehler
+- **Das Subjekt stoeren**: Ihre Anwesenheit veraendert das Verhalten. Abstand halten, Bewegung minimieren, keine Schatten auf das Insekt werfen und eine Gewoehungsphase (2-5 Minuten) vor Beginn der formalen Erfassung einraeumen
+- **„Nichts passiert" ignorieren**: Ruhe und Inaktivitaet sind gueltige Verhaltenszustaende, die erfasst werden muessen. Ein Insekt, das 60% seiner Zeit ruhend verbringt, ist ein wichtiges oekologisches Ergebnis, keine langweiligen Daten zum Ueberspringen
+- **Zustaende und Ereignisse verwechseln**: Ein Zustand hat Dauer (Fressen fuer 3 Minuten). Ein Ereignis ist momentan (ein einzelner Fluegel-Blitz). Zustaende mit Start- und Endzeiten erfassen; Ereignisse mit einem einzelnen Zeitstempel erfassen. Vermischung erzeugt inkonsistente Zeitbudgets
 
-## Related Skills
+## Verwandte Skills
 
-- `document-insect-sighting` — record the sighting with photographs, location, and metadata as a complement to behavioral observations
-- `identify-insect` — identify the species being observed, which is essential for interpreting behavior in taxonomic context
-- `collect-preserve-specimens` — collect voucher specimens to confirm the identity of the species whose behavior was observed
-- `survey-insect-population` — scale behavioral observations across a population to understand community-level behavioral ecology
+- `document-insect-sighting` — Die Sichtung mit Fotos, Standort und Metadaten als Ergaenzung zu Verhaltensbeobachtungen dokumentieren
+- `identify-insect` — Die beobachtete Art identifizieren, was fuer die Interpretation des Verhaltens im taxonomischen Kontext wesentlich ist
+- `collect-preserve-specimens` — Belegexemplare sammeln, um die Identitaet der Art zu bestaetigen, deren Verhalten beobachtet wurde
+- `survey-insect-population` — Verhaltensbeobachtungen ueber eine Population skalieren, um Verhaltensoeokologie auf Gemeinschaftsebene zu verstehen

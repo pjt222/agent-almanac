@@ -1,12 +1,11 @@
 ---
 name: configure-mcp-server
 description: >
-  Configure MCP (Model Context Protocol) servers for Claude Code and
-  Claude Desktop. Covers mcptools setup, Hugging Face integration,
-  WSL path handling, and multi-client configuration. Use when setting up
-  Claude Code to connect to R via mcptools, configuring Claude Desktop
-  with MCP servers, adding Hugging Face or other remote MCP servers, or
-  troubleshooting MCP connectivity between clients and servers.
+  Claude CodeとClaude Desktop用のMCP（Model Context Protocol）サーバーを設定する。
+  mcptoolsのセットアップ、Hugging Face統合、WSLパス処理、マルチクライアント設定を
+  カバーする。Claude Codeをmcptools経由でRに接続する時、Claude DesktopにMCP
+  サーバーを設定する時、Hugging Faceやその他のリモートMCPサーバーを追加する時、
+  クライアントとサーバー間のMCP接続のトラブルシューティング時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,46 +24,46 @@ metadata:
 
 # MCPサーバーの設定
 
-Set up MCP server connections for Claude Code (WSL) and Claude Desktop (Windows).
+Claude Code（WSL）とClaude Desktop（Windows）用のMCPサーバー接続をセットアップする。
 
 ## 使用タイミング
 
-- Setting up Claude Code to connect to R via mcptools
-- Configuring Claude Desktop with MCP servers
-- Adding Hugging Face or other remote MCP servers
-- Troubleshooting MCP connectivity between tools
+- Claude Codeをmcptools経由でRに接続する時
+- Claude DesktopにMCPサーバーを設定する時
+- Hugging Faceやその他のリモートMCPサーバーを追加する時
+- ツール間のMCP接続のトラブルシューティング時
 
 ## 入力
 
-- **必須**: MCP server type (mcptools, Hugging Face, custom)
-- **必須**: Client (Claude Code, Claude Desktop, or both)
-- **任意**: Authentication tokens
-- **任意**: Custom server implementation
+- **必須**: MCPサーバータイプ（mcptools、Hugging Face、カスタム）
+- **必須**: クライアント（Claude Code、Claude Desktop、または両方）
+- **任意**: 認証トークン
+- **任意**: カスタムサーバー実装
 
 ## 手順
 
-### ステップ1: Install MCP Server Packages
+### ステップ1: MCPサーバーパッケージのインストール
 
-**For R (mcptools)**:
+**R（mcptools）の場合**:
 
 ```r
 install.packages("remotes")
 remotes::install_github("posit-dev/mcptools")
 ```
 
-**For Hugging Face**:
+**Hugging Faceの場合**:
 
 ```bash
 npm install -g mcp-remote
 ```
 
-**期待結果:** `mcptools` installs from GitHub and loads in R without errors. `mcp-remote` is available globally via `which mcp-remote` or `npm list -g mcp-remote`.
+**期待結果:** `mcptools`がGitHubからインストールされ、Rでエラーなくロードされる。`mcp-remote`が`which mcp-remote`または`npm list -g mcp-remote`でグローバルに利用可能。
 
-**失敗時:** For `mcptools`, ensure `remotes` is installed first. If GitHub rate-limits the install, set a `GITHUB_PAT` in `~/.Renviron`. For `mcp-remote`, verify Node.js and npm are installed and on PATH.
+**失敗時:** `mcptools`の場合、まず`remotes`がインストールされていることを確認する。GitHubがインストールをレート制限する場合、`~/.Renviron`に`GITHUB_PAT`を設定する。`mcp-remote`の場合、Node.jsとnpmがインストールされPATHに含まれていることを確認する。
 
-### ステップ2: Configure Claude Code (WSL)
+### ステップ2: Claude Code（WSL）の設定
 
-**R mcptools server**:
+**R mcptoolsサーバー**:
 
 ```bash
 claude mcp add r-mcptools stdio \
@@ -72,7 +71,7 @@ claude mcp add r-mcptools stdio \
   -- -e "mcptools::mcp_server()"
 ```
 
-**Hugging Face server**:
+**Hugging Faceサーバー**:
 
 ```bash
 claude mcp add hf-mcp-server \
@@ -80,20 +79,20 @@ claude mcp add hf-mcp-server \
   -- mcp-remote https://huggingface.co/mcp
 ```
 
-**Verify configuration**:
+**設定の確認**:
 
 ```bash
 claude mcp list
 claude mcp get r-mcptools
 ```
 
-**期待結果:** `claude mcp list` shows both `r-mcptools` and `hf-mcp-server` (or whichever servers were added). `claude mcp get r-mcptools` displays the correct command and arguments.
+**期待結果:** `claude mcp list`で`r-mcptools`と`hf-mcp-server`（または追加したサーバー）が表示される。`claude mcp get r-mcptools`で正しいコマンドと引数が表示される。
 
-**失敗時:** If the server does not appear in the list, verify `~/.claude.json` contains the correct entry. If the `claude` command is not found, add it to PATH: `export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`.
+**失敗時:** サーバーがリストに表示されない場合、`~/.claude.json`に正しいエントリが含まれているか確認する。`claude`コマンドが見つからない場合、PATHに追加する：`export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`。
 
-### ステップ3: Configure Claude Desktop (Windows)
+### ステップ3: Claude Desktop（Windows）の設定
 
-Edit `%APPDATA%\Claude\claude_desktop_config.json`:
+`%APPDATA%\Claude\claude_desktop_config.json`を編集する:
 
 ```json
 {
@@ -113,15 +112,15 @@ Edit `%APPDATA%\Claude\claude_desktop_config.json`:
 }
 ```
 
-**Important**: Use 8.3 short paths for Windows directories with spaces (`PROGRA~1` not `Program Files`). Use environment variables for tokens, not `--header` arguments.
+**重要**: スペースを含むWindowsディレクトリには8.3短縮パスを使用する（`Program Files`ではなく`PROGRA~1`）。トークンには`--header`引数ではなく環境変数を使用する。
 
-**期待結果:** The JSON config file at `%APPDATA%\Claude\claude_desktop_config.json` is valid JSON with the correct server entries. Claude Desktop shows MCP server indicators after restart.
+**期待結果:** `%APPDATA%\Claude\claude_desktop_config.json`のJSON設定ファイルが正しいサーバーエントリを持つ有効なJSON。再起動後にClaude DesktopがMCPサーバーインジケータを表示する。
 
-**失敗時:** Validate the JSON with a linter (e.g., `jq . < config.json`). Use 8.3 short paths (`PROGRA~1`) if Windows path spaces cause parsing errors. Ensure Claude Desktop is fully restarted (not just minimized).
+**失敗時:** リンターでJSONを検証する（例：`jq . < config.json`）。Windowsパスのスペースがパースエラーを引き起こす場合は8.3短縮パス（`PROGRA~1`）を使用する。Claude Desktopが完全に再起動されていることを確認する（最小化だけでなく）。
 
-### ステップ4: Configure R Session for MCP
+### ステップ4: MCP用のRセッション設定
 
-Add to project `.Rprofile`:
+プロジェクトの`.Rprofile`に追加する:
 
 ```r
 if (requireNamespace("mcptools", quietly = TRUE)) {
@@ -129,65 +128,65 @@ if (requireNamespace("mcptools", quietly = TRUE)) {
 }
 ```
 
-This starts the MCP session automatically when opening the project in RStudio.
+これにより、RStudioでプロジェクトを開いた時にMCPセッションが自動的に開始される。
 
-**期待結果:** The `.Rprofile` file conditionally starts `mcptools::mcp_session()` when the project is opened in RStudio, making MCP tools available automatically.
+**期待結果:** `.Rprofile`ファイルがRStudioでプロジェクトを開いた時に条件付きで`mcptools::mcp_session()`を開始し、MCPツールが自動的に利用可能になる。
 
-**失敗時:** If `mcptools` is not found at session start, verify it is installed in the library that RStudio uses (check `.libPaths()`). If using renv, ensure mcptools is in the renv library.
+**失敗時:** セッション開始時に`mcptools`が見つからない場合、RStudioが使用するライブラリにインストールされているか確認する（`.libPaths()`を確認）。renvを使用している場合、mcptoolsがrenvライブラリにあることを確認する。
 
-### ステップ5: Verify Connections
+### ステップ5: 接続の確認
 
-**Test R MCP from WSL**:
+**WSLからのR MCPテスト**:
 
 ```bash
 "/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe" -e "mcptools::mcp_server()"
 ```
 
-**Test from within Claude Code**:
+**Claude Code内からのテスト**:
 
-Start Claude Code and use MCP tools — they should appear in the tool list.
+Claude Codeを起動してMCPツールを使用する — ツールリストに表示されるはず。
 
-**Test Claude Desktop**:
+**Claude Desktopのテスト**:
 
-Restart Claude Desktop after configuration changes. Check for MCP server indicators in the UI.
+設定変更後にClaude Desktopを再起動する。UIでMCPサーバーインジケータを確認する。
 
-**期待結果:** Running Rscript with `mcptools::mcp_server()` produces output without errors. MCP tools appear in the Claude Code tool list during an active session. Claude Desktop shows server status after restart.
+**期待結果:** `mcptools::mcp_server()`でRscriptを実行するとエラーなく出力される。アクティブセッション中にClaude CodeのツールリストにMCPツールが表示される。再起動後にClaude Desktopがサーバーステータスを表示する。
 
-**失敗時:** If the Rscript command fails, check the full path is correct (`ls "/mnt/c/Program Files/R/"` to verify R version). If tools don't appear in Claude Code, restart the session. For Claude Desktop, check firewall settings.
+**失敗時:** Rscriptコマンドが失敗する場合、フルパスが正しいか確認する（`ls "/mnt/c/Program Files/R/"`でRバージョンを確認）。Claude Codeにツールが表示されない場合、セッションを再起動する。Claude Desktopの場合、ファイアウォール設定を確認する。
 
-### ステップ6: Multi-Server Configuration
+### ステップ6: マルチサーバー設定
 
-Both Claude Code and Claude Desktop support multiple MCP servers simultaneously:
+Claude CodeとClaude Desktopは複数のMCPサーバーを同時にサポートする:
 
 ```bash
-# Claude Code: add multiple servers
+# Claude Code: 複数のサーバーを追加
 claude mcp add r-mcptools stdio "/path/to/Rscript.exe" -- -e "mcptools::mcp_server()"
 claude mcp add hf-mcp-server -e HF_TOKEN=token -- mcp-remote https://huggingface.co/mcp
 claude mcp add custom-server stdio "/path/to/server" -- --port 3001
 ```
 
-**期待結果:** Multiple MCP servers configured and accessible simultaneously. `claude mcp list` shows all servers. Each server's tools are available in the same Claude Code session.
+**期待結果:** 複数のMCPサーバーが設定され同時にアクセス可能。`claude mcp list`ですべてのサーバーが表示される。各サーバーのツールが同じClaude Codeセッションで利用可能。
 
-**失敗時:** If servers conflict, check that each has a unique name in the configuration. If one server blocks others, verify servers use non-blocking I/O (stdio transport handles this automatically).
+**失敗時:** サーバーが競合する場合、設定で各サーバーが一意の名前を持っていることを確認する。あるサーバーが他をブロックする場合、サーバーがノンブロッキングI/Oを使用していることを確認する（stdioトランスポートはこれを自動的に処理する）。
 
 ## バリデーション
 
-- [ ] `claude mcp list` shows all configured servers
-- [ ] R MCP server responds to tool calls
-- [ ] Hugging Face MCP server authenticates and responds
-- [ ] Both Claude Code and Claude Desktop can connect (if both configured)
-- [ ] MCP tools appear in the tool list during sessions
+- [ ] `claude mcp list`ですべての設定済みサーバーが表示される
+- [ ] R MCPサーバーがツール呼び出しに応答する
+- [ ] Hugging Face MCPサーバーが認証し応答する
+- [ ] Claude CodeとClaude Desktopの両方が接続できる（両方設定した場合）
+- [ ] セッション中にツールリストにMCPツールが表示される
 
 ## よくある落とし穴
 
-- **Windows path spaces**: Use 8.3 short names or quote paths correctly. Different tools parse paths differently.
-- **Token in command args**: On Windows, `--header "Authorization: Bearer token"` fails due to parsing. Use environment variables instead.
-- **Confusing Claude Code and Claude Desktop configs**: These are separate tools with separate config files (`~/.claude.json` vs `%APPDATA%\Claude\`)
-- **npx vs global install**: `npx mcp-remote` may fail in Claude Desktop context. Install globally with `npm install -g mcp-remote`.
-- **mcptools version**: Ensure mcptools is up to date. It requires the `ellmer` package as a dependency.
+- **Windowsパスのスペース**: 8.3短縮名を使用するか、パスを正しくクォートする。ツールによってパスのパース方法が異なる
+- **コマンド引数にトークン**: Windowsでは`--header "Authorization: Bearer token"`がパースの問題で失敗する。代わりに環境変数を使用する
+- **Claude CodeとClaude Desktopの設定の混同**: これらは別々のツールで別々の設定ファイルを持つ（`~/.claude.json` vs `%APPDATA%\Claude\`）
+- **npx vs グローバルインストール**: `npx mcp-remote`はClaude Desktopのコンテキストで失敗する可能性がある。`npm install -g mcp-remote`でグローバルにインストールする
+- **mcptoolsのバージョン**: mcptoolsが最新であることを確認する。依存関係として`ellmer`パッケージが必要
 
 ## 関連スキル
 
-- `build-custom-mcp-server` - creating your own MCP server
-- `troubleshoot-mcp-connection` - debugging connection issues
-- `setup-wsl-dev-environment` - WSL setup prerequisite
+- `build-custom-mcp-server` -- 独自のMCPサーバーの作成
+- `troubleshoot-mcp-connection` -- 接続問題のデバッグ
+- `setup-wsl-dev-environment` -- WSLセットアップの前提条件

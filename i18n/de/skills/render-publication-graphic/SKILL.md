@@ -1,8 +1,8 @@
 ---
 name: render-publication-graphic
 description: >
-  Produce publication-ready 2D graphics with proper DPI, color profiles,
-  typography, and export formats for print and digital media. Use when
+  Erzeugen publication-ready 2D graphics with proper DPI, color profiles,
+  typography, and export formats for print and digital media. Verwenden wenn
   preparing figures for academic journal submission, creating graphics for
   print publications, ensuring graphics meet publisher technical specifications,
   exporting visualizations for web with proper optimization, or creating
@@ -25,9 +25,9 @@ metadata:
 
 # Publikationsgrafik rendern
 
-Produce publication-ready graphics that meet technical requirements for academic journals, books, presentations, and web publication. Covers DPI requirements, color space management, typography best practices, file format selection, and metadata embedding.
+Erzeugen publication-ready graphics that meet technical requirements for academic journals, books, presentations, and web publication. Umfasst DPI requirements, color space management, typography Best Practices, file format selection, and metadata embedding.
 
-## When to Use
+## Wann verwenden
 
 - Preparing figures for academic journal submission
 - Creating graphics for print publications (books, magazines)
@@ -37,7 +37,7 @@ Produce publication-ready graphics that meet technical requirements for academic
 - Archiving graphics with proper metadata
 - Creating multi-format exports from single source
 
-## Inputs
+## Eingaben
 
 | Input | Type | Description | Example |
 |-------|------|-------------|---------|
@@ -47,11 +47,11 @@ Produce publication-ready graphics that meet technical requirements for academic
 | Style guide | Document | Publisher typography and formatting rules | Font families, line widths, color palette |
 | Metadata | Information | Title, author, date, copyright, description | Figure caption, license info |
 
-## Procedure
+## Vorgehensweise
 
-### 1. Determine Output Requirements
+### 1. Bestimmen Output Requirements
 
-Identify technical specifications for target publication:
+Identifizieren technical specifications for target publication:
 
 ```yaml
 # Common publication requirements
@@ -89,12 +89,12 @@ print_book:
   fonts: Embedded
 ```
 
-**Expected:** Clear understanding of target requirements
-**On failure:** Contact publisher for specific guidelines, use conservative defaults
+**Erwartet:** Clear understanding of target requirements
+**Bei Fehler:** Contact publisher for specific guidelines, use conservative defaults
 
 ### 2. Set Correct DPI for Raster Graphics
 
-Configure resolution based on output medium:
+Konfigurieren resolution basierend auf output medium:
 
 ```python
 from PIL import Image
@@ -155,10 +155,10 @@ ggsave(
 )
 ```
 
-**Expected:** Graphics rendered at correct resolution for print quality
-**On failure:** Verify DPI metadata saved correctly, check file size appropriate
+**Erwartet:** Graphics rendered at correct resolution for print quality
+**Bei Fehler:** Verifizieren DPI metadata saved korrekt, check file size appropriate
 
-### 3. Configure Color Space
+### 3. Konfigurieren Color Space
 
 Set appropriate color profile:
 
@@ -204,12 +204,12 @@ convert input.png -colorspace CMYK output_cmyk.tiff
 identify -verbose image.png | grep -i colorspace
 ```
 
-**Expected:** Color space matches publication requirements
-**On failure:** Verify color profile embedded, test print preview
+**Erwartet:** Color space matches publication requirements
+**Bei Fehler:** Verifizieren color profile embedded, test print preview
 
-### 4. Configure Typography
+### 4. Konfigurieren Typography
 
-Ensure text is readable and properly formatted:
+Sicherstellen text is readable and ordnungsgemaess formatted:
 
 ```python
 from PIL import ImageFont
@@ -280,12 +280,12 @@ p <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   )
 ```
 
-**Expected:** Text readable at publication size, fonts embedded properly
-**On failure:** Increase font sizes, check font licensing, convert text to outlines
+**Erwartet:** Text readable at publication size, fonts embedded ordnungsgemaess
+**Bei Fehler:** Increase font sizes, check font licensing, convert text to outlines
 
-### 5. Select Appropriate File Format
+### 5. Auswaehlen Appropriate File Format
 
-Choose format based on use case:
+Waehlen format basierend auf Anwendungsfall:
 
 ```python
 def export_multi_format(source_path, output_base, formats=['png', 'pdf', 'tiff']):
@@ -365,12 +365,12 @@ format_guide = {
 }
 ```
 
-**Expected:** Appropriate format for publication channel
-**On failure:** Check publisher requirements, provide multiple formats
+**Erwartet:** Appropriate format for publication channel
+**Bei Fehler:** Check publisher requirements, provide multiple formats
 
-### 6. Optimize for Web
+### 6. Optimieren for Web
 
-Create web-optimized versions:
+Erstellen web-optimized versions:
 
 ```python
 def optimize_for_web(input_path, output_path, max_width=1200, quality=85):
@@ -422,12 +422,12 @@ def create_responsive_set(input_path, output_base):
             resized.save(output, format='JPEG', quality=85, optimize=True)
 ```
 
-**Expected:** Web-optimized images under 500KB, responsive sizes generated
-**On failure:** Reduce quality, resize further, consider WebP format
+**Erwartet:** Web-optimized images under 500KB, responsive sizes generated
+**Bei Fehler:** Reduzieren quality, resize further, consider WebP format
 
 ### 7. Embed Metadata
 
-Add descriptive metadata for archival:
+Hinzufuegen descriptive metadata for archival:
 
 ```python
 from PIL import Image
@@ -459,12 +459,12 @@ metadata = {
 embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 ```
 
-**Expected:** Metadata embedded and retrievable
-**On failure:** Check format supports metadata (PNG, TIFF, PDF yes; JPEG limited)
+**Erwartet:** Metadata embedded and retrievable
+**Bei Fehler:** Check format supports metadata (PNG, TIFF, PDF yes; JPEG limited)
 
 ## Validation Checklist
 
-- [ ] DPI meets publication requirements (typically 300+)
+- [ ] DPI meets publication requirements (typischerweise 300+)
 - [ ] Physical dimensions correct for publication
 - [ ] Color space appropriate (RGB for web, CMYK for print)
 - [ ] File format accepted by publisher
@@ -472,25 +472,25 @@ embed_metadata('figure1.png', 'figure1_with_metadata.png', metadata)
 - [ ] Fonts embedded or outlined
 - [ ] Line widths visible when printed
 - [ ] Color contrast sufficient for grayscale printing
-- [ ] File size within limits
+- [ ] File size innerhalb limits
 - [ ] Metadata embedded
 - [ ] Tested print preview or rendering
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
 1. **Insufficient resolution**: 72 DPI web graphics cannot be printed at quality
 2. **Wrong color space**: RGB graphics may print differently than displayed
 3. **Font substitution**: Non-embedded fonts replaced with defaults
-4. **Small text**: Fonts below 8pt may be illegible when printed
-5. **Thin lines**: Lines below 0.5pt may not print clearly
-6. **File size**: High DPI graphics can be very large, compress appropriately
+4. **Small text**: Fonts unter 8pt kann illegible when printed
+5. **Thin lines**: Lines unter 0.5pt may not print clearly
+6. **File size**: High DPI graphics kann very large, compress appropriately
 7. **Compression artifacts**: JPEG compression unsuitable for line art or text
 8. **Missing bleed**: Print graphics need 3-5mm bleed beyond trim
-9. **Transparency issues**: Some formats don't preserve transparency correctly
+9. **Transparency issues**: Some formats don't preserve transparency korrekt
 10. **Aspect ratio**: Distortion from incorrect dimension calculations
 
-## Related Skills
+## Verwandte Skills
 
-- **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating the source graphics
+- **[create-2d-composition](../create-2d-composition/SKILL.md)**: Creating die Quelle graphics
 - **[render-blender-output](../../blender/render-blender-output/SKILL.md)**: 3D rendering settings for publication
 - **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into documents

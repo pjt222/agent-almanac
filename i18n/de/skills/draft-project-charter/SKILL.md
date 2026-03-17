@@ -1,12 +1,18 @@
 ---
 name: draft-project-charter
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Einen Projektauftrag erstellen, der Umfang, Stakeholder, Erfolgskriterien
-  und ein erstes Risikoregister definiert. Umfasst Problemdarstellung, RACI-Matrix,
-  Meilensteinplanung und Scope-Grenzen fuer agile und klassische Methoden.
-  Verwenden beim Start eines neuen Projekts, beim Formalisieren des Umfangs nach
-  informellem Beginn, beim Ausrichten von Stakeholdern vor der Detailplanung
-  oder beim Uebergang von der Ideenfindung zur aktiven Projektarbeit.
+  Einen Projektauftrag erstellen der Umfang, Stakeholder, Erfolgskriterien
+  und ein erstes Risikoregister definiert. Behandelt Problemdarstellung,
+  RACI-Matrix, Meilensteinplanung und Umfangsgrenzen fuer agile und
+  klassische Methoden. Anwenden beim Start eines neuen Projekts oder einer
+  Initiative, bei der Formalisierung des Umfangs nach einem informellen
+  Beginn, bei der Abstimmung der Stakeholder vor Beginn der Detailplanung
+  oder beim Uebergang von der Erkundung zur aktiven Projektarbeit.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -16,171 +22,166 @@ metadata:
   complexity: basic
   language: multi
   tags: project-management, charter, scope, stakeholders, raci, risk-register
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude-opus-4-6
-  translation_date: "2026-03-16"
 ---
 
 # Projektauftrag erstellen
 
-Erstellt einen strukturierten Projektauftrag, der Projektgrenzen, Stakeholder-Vereinbarungen und Erfolgskriterien festlegt, bevor die Detailplanung beginnt. Produziert ein umfassendes Dokument zu Umfang, RACI-Zuweisungen, Meilensteinplanung und einem ersten Risikoregister, geeignet fuer agile, klassische oder hybride Projektmethoden.
+Erstellt einen strukturierten Projektauftrag der Projektgrenzen, Stakeholder-Vereinbarungen und Erfolgskriterien festlegt bevor die Detailplanung beginnt. Erzeugt ein umfassendes Dokument zu Umfang, RACI-Zuweisungen, Meilensteinplanung und einem anfaenglichen Risikoregister das fuer agile, klassische oder hybride Projektmethoden geeignet ist.
 
 ## Wann verwenden
 
 - Start eines neuen Projekts oder einer Initiative
-- Formalisieren des Umfangs nach einem informellen Projektstart
-- Ausrichten von Stakeholdern vor Beginn der Detailplanung
-- Erstellen eines Referenzdokuments fuer Umfangsentscheidungen waehrend der Durchfuehrung
-- Uebergang von Entdeckung/Ideenfindung zur aktiven Projektarbeit
+- Formalisierung des Umfangs nach einem informellen Projektbeginn
+- Abstimmung der Stakeholder vor Beginn der Detailplanung
+- Erstellung eines Referenzdokuments fuer Umfangsentscheidungen waehrend der Ausfuehrung
+- Uebergang von Erkundung/Ideenfindung zu aktiver Projektarbeit
 
 ## Eingaben
 
-- **Erforderlich**: Projektname und kurze Beschreibung
-- **Erforderlich**: Hauptstakeholder oder Auftraggeber
+- **Erforderlich**: Projektname und Kurzbeschreibung
+- **Erforderlich**: Primaerer Stakeholder oder Sponsor
 - **Optional**: Vorhandene Dokumentation (Vorschlaege, Briefings, E-Mails)
-- **Optional**: Bekannte Einschraenkungen (Budget, Deadline, Teamgroesse)
-- **Optional**: Methodenpraeferenz (agil, klassisch, hybrid)
+- **Optional**: Bekannte Einschraenkungen (Budget, Termin, Teamgroesse)
+- **Optional**: Methodenvorliebe (agil, klassisch, hybrid)
 
 ## Vorgehensweise
 
-### Schritt 1: Projektkontext erfassen und Charter-Vorlage erstellen
+### Schritt 1: Projektkontext sammeln und Auftragsvorlage erstellen
 
-Vorhandene Dokumentation (Vorschlaege, E-Mails, Briefings) lesen, um den Projekthintergrund zu verstehen. Das zentrale Problem oder die Chance identifizieren, die das Projekt adressiert. Die Charter-Datei mit einer strukturierten Vorlage erstellen, die in den folgenden Schritten ausgefuellt wird.
+Vorhandene Dokumentation (Vorschlaege, E-Mails, Briefings) lesen um den Projekthintergrund zu verstehen. Das Kernproblem oder die Kernchance identifizieren die das Projekt adressiert. Die Auftragsdatei mit einer strukturierten Vorlage erstellen die in den nachfolgenden Schritten bevoelkert wird.
 
 Eine Datei namens `PROJECT-CHARTER-[PROJECT-NAME].md` mit dieser Vorlage erstellen:
 
 ```markdown
-# Project Charter: [Project Name]
-## Document ID: PC-[PROJECT]-[YYYY]-[NNN]
+# Projektauftrag: [Projektname]
+## Dokument-ID: PA-[PROJEKT]-[JJJJ]-[NNN]
 
-### 1. Problem Statement
-[2-3 sentences describing the problem or opportunity this project addresses]
+### 1. Problemdarstellung
+[2-3 Saetze die das Problem oder die Chance beschreiben die dieses Projekt adressiert]
 
-### 2. Project Purpose
-[What the project will achieve and why it matters]
+### 2. Projektzweck
+[Was das Projekt erreichen wird und warum es wichtig ist]
 
-### 3. Scope
-#### In Scope
-- [Deliverable 1]
-- [Deliverable 2]
+### 3. Umfang
+#### Im Umfang
+- [Liefergegenstand 1]
+- [Liefergegenstand 2]
 
-#### Out of Scope
-- [Exclusion 1]
-- [Exclusion 2]
+#### Ausserhalb des Umfangs
+- [Ausschluss 1]
+- [Ausschluss 2]
 
-### 4. Deliverables
-| # | Deliverable | Acceptance Criteria | Target Date |
-|---|------------|---------------------|-------------|
+### 4. Liefergegenstaende
+| # | Liefergegenstand | Abnahmekriterien | Zieldatum |
+|---|------------------|------------------|-----------|
 | 1 | | | |
 
-### 5. Stakeholders & RACI
-| Stakeholder | Role | D1 | D2 | D3 |
-|-------------|------|----|----|-----|
+### 5. Stakeholder & RACI
+| Stakeholder | Rolle | L1 | L2 | L3 |
+|-------------|-------|----|----|----|
 | | | | | |
 
 *R=Responsible, A=Accountable, C=Consulted, I=Informed*
 
-### 6. Success Criteria
-| # | Criterion | Measure | Target |
-|---|-----------|---------|--------|
+### 6. Erfolgskriterien
+| # | Kriterium | Messung | Zielwert |
+|---|-----------|---------|----------|
 | 1 | | | |
 
-### 7. Milestones
-| Milestone | Target Date | Dependencies |
-|-----------|-------------|--------------|
+### 7. Meilensteine
+| Meilenstein | Zieldatum | Abhaengigkeiten |
+|-------------|-----------|-----------------|
 | | | |
 
-### 8. Risk Register
-| ID | Risk | Likelihood | Impact | Severity | Mitigation | Owner |
-|----|------|------------|--------|----------|------------|-------|
+### 8. Risikoregister
+| ID | Risiko | Wahrscheinlichkeit | Auswirkung | Schwere | Massnahme | Verantwortlich |
+|----|--------|---------------------|------------|---------|-----------|----------------|
 | R1 | | | | | | |
 
-*Likelihood/Impact: Low, Medium, High*
-*Severity = Likelihood × Impact*
+*Wahrscheinlichkeit/Auswirkung: Niedrig, Mittel, Hoch*
+*Schwere = Wahrscheinlichkeit x Auswirkung*
 
-### 9. Assumptions and Constraints
-#### Assumptions
-- [Key assumption 1]
+### 9. Annahmen und Einschraenkungen
+#### Annahmen
+- [Schluesselannahme 1]
 
-#### Constraints
-- [Key constraint 1]
+#### Einschraenkungen
+- [Schluesseleinschraenkung 1]
 
-### 10. Approval
-| Role | Name | Date |
-|------|------|------|
+### 10. Freigabe
+| Rolle | Name | Datum |
+|-------|------|-------|
 | Sponsor | | |
-| Project Lead | | |
+| Projektleiter | | |
 ```
 
-Die Dokument-ID im Format PC-[PROJECT]-[YYYY]-[NNN] (z.B. PC-WEBSITE-2026-001) ausfuellen. Eine Problemdarstellung (2-3 Saetze) schreiben, die die aktuelle Situation, die Luecke und die Auswirkung beschreibt. Eine Projektzweck-Aussage (1 Absatz) schreiben, die erklaert, was erreicht werden soll.
+Die Dokument-ID im Format PA-[PROJEKT]-[JJJJ]-[NNN] eintragen (z.B. PA-WEBSITE-2026-001). Eine Problemdarstellung (2-3 Saetze) verfassen die die aktuelle Situation, die Luecke und die Auswirkung beschreibt. Einen Projektzweck (1 Absatz) formulieren der erklaert was erreicht werden soll.
 
-**Erwartet:** Charter-Datei erstellt mit Dokument-ID, Problemdarstellung und Zweck ausgefuellt. Die Problemdarstellung ist spezifisch und beschreibt eine messbare Luecke.
+**Erwartet:** Auftragsdatei erstellt mit Dokument-ID, Problemdarstellung und Zweck. Die Problemdarstellung ist spezifisch und beschreibt eine messbare Luecke.
 
-**Bei Fehler:** Wenn der Projektkontext unklar ist, spezifische Fragen fuer den Auftraggeber in einem QUESTIONS-Abschnitt am Anfang der Charter dokumentieren. Wenn vorhandene Dokumente widersprechen, Widersprueche in einem OPEN ISSUES-Abschnitt vermerken und zur Stakeholder-Klaerung markieren.
+**Bei Fehler:** Wenn der Projektkontext unklar ist, spezifische Fragen an den Sponsor in einem FRAGEN-Abschnitt oben im Auftrag dokumentieren. Wenn vorhandene Dokumente sich widersprechen, Widersprueche in einem OFFENE PUNKTE-Abschnitt vermerken und zur Stakeholder-Klaerung kennzeichnen.
 
-### Schritt 2: Scope-Grenzen definieren
+### Schritt 2: Umfangsgrenzen definieren
 
-Explizite Listen erstellen, was im Projektumfang enthalten ist und was nicht. 3-5 In-Scope-Lieferergebnisse mit spezifischen Abnahmekriterien schreiben. 3-5 Out-of-Scope-Punkte schreiben, um Scope Creep zu verhindern. Die Lieferergebnisse-Tabelle mit jedem Lieferergebnis, seinen Abnahmekriterien und einem Zieldatum ausfuellen.
+Explizite Listen erstellen was im Projektumfang enthalten ist und was nicht. 3-5 Liefergegenstaende im Umfang mit spezifischen Abnahmekriterien fuer jeden formulieren. 3-5 Punkte ausserhalb des Umfangs formulieren um Umfangserweiterung zu verhindern. Die Liefergegenstandstabelle mit jedem Liefergegenstand, seinen Abnahmekriterien und einem Zieldatum bevoelkern.
 
-**Erwartet:** Der Scope-Abschnitt hat ausgewogene In-Scope- und Out-of-Scope-Listen. Die Lieferergebnisse-Tabelle enthaelt 3-5 Eintraege mit spezifischen, testbaren Abnahmekriterien. Zieldaten sind realistisch und logisch sequenziert.
+**Erwartet:** Umfangsabschnitt hat ausgewogene Listen fuer innerhalb und ausserhalb des Umfangs. Liefergegenstandstabelle enthaelt 3-5 Eintraege mit spezifischen, pruefbaren Abnahmekriterien. Zieldaten sind realistisch und logisch sequenziert.
 
-**Bei Fehler:** Wenn Lieferergebnisse vage sind, jedes in Teillieferergebnisse mit konkreten Outputs aufschluesseln. Wenn Abnahmekriterien fehlen, fragen: "Wie wuerden wir zeigen, dass dieses Lieferergebnis abgeschlossen ist?" Wenn Zieldaten nicht verfuegbar sind, als TBD markieren und fuer eine Meilenstein-Planungssitzung kennzeichnen.
+**Bei Fehler:** Wenn Liefergegenstaende vage sind, jeden in Teilliefergegenstaende mit konkreten Ergebnissen aufgliedern. Wenn Abnahmekriterien fehlen, fragen: "Wie wuerden wir nachweisen dass dieser Liefergegenstand vollstaendig ist?" Wenn Zieldaten nicht verfuegbar sind, als offen markieren und fuer eine Meilensteinplanungssitzung kennzeichnen.
 
 ### Schritt 3: Stakeholder identifizieren und RACI zuweisen
 
-Alle Personen oder Gruppen auflisten, die vom Projekt betroffen sind, dazu beitragen oder Entscheidungsbefugnis haben. Ihre Organisationsrolle einbeziehen. Eine RACI-Matrix erstellen, die jeden Stakeholder jedem Lieferergebnis zuordnet:
+Alle Personen oder Gruppen auflisten die vom Projekt betroffen sein werden, dazu beitragen oder Entscheidungsbefugnis darueber haben. Deren organisatorische Rolle angeben. Eine RACI-Matrix erstellen die jeden Stakeholder jedem Liefergegenstand zuordnet unter Verwendung von:
 - **R** (Responsible): Fuehrt die Arbeit aus
-- **A** (Accountable): Endgueltige Entscheidungsbefugnis (nur ein A pro Lieferergebnis)
-- **C** (Consulted): Gibt Feedback vor Entscheidungen
-- **I** (Informed): Wird ueber den Fortschritt informiert
+- **A** (Accountable): Endgueltige Entscheidungsbefugnis (nur ein A pro Liefergegenstand)
+- **C** (Consulted): Gibt vor Entscheidungen Input
+- **I** (Informed): Wird ueber den Fortschritt auf dem Laufenden gehalten
 
-Sicherstellen, dass jedes Lieferergebnis genau ein A und mindestens ein R hat.
+Sicherstellen dass jeder Liefergegenstand genau ein A und mindestens ein R hat.
 
-**Erwartet:** Die Stakeholder-Tabelle listet 5-10 Personen mit ihren Rollen. Die RACI-Matrix hat ein A pro Lieferergebnis-Spalte. Kein Lieferergebnis fehlt ein R oder hat mehrere As. Der Auftraggeber ist A fuer die endgueltige Genehmigung.
+**Erwartet:** Stakeholder-Tabelle listet 5-10 Personen mit ihren Rollen. RACI-Matrix hat ein A pro Liefergegenstandsspalte. Kein Liefergegenstand hat kein R oder mehrere As. Der Sponsor ist A fuer die endgueltige Freigabe.
 
-**Bei Fehler:** Wenn die Stakeholder-Liste unvollstaendig ist, Organigramm und Besprechungsteilnehmer aus der Entdeckungsphase abgleichen. Wenn mehrere As identifiziert werden, den Konflikt zur Klaerung der Entscheidungsbefugnis an den Auftraggeber eskalieren. Wenn kein R existiert, das Lieferergebnis als nicht zugewiesen markieren und Ressourcenzuweisung erfordern.
+**Bei Fehler:** Wenn die Stakeholder-Liste unvollstaendig ist, mit Organigramm und Teilnehmerlisten aus der Erkundungsphase abgleichen. Wenn mehrere As identifiziert werden, den Konflikt an den Sponsor zur Klaerung der Entscheidungsbefugnis eskalieren. Wenn kein R existiert, den Liefergegenstand als nicht zugewiesen kennzeichnen mit Bedarf an Ressourcenzuweisung.
 
 ### Schritt 4: Erfolgskriterien und Meilensteine definieren
 
-3-5 messbare Erfolgskriterien im SMART-Format schreiben (Spezifisch, Messbar, Erreichbar, Relevant, Termingebunden). Jedes Kriterium soll mit einem quantifizierbaren Massstab und Zielwert verknuepft sein. 4-6 Schluesselmeilensteine definieren, die wichtige Projektphasen oder Abschluesse von Lieferergebnissen repraesentieren, mit Zieldaten und Abhaengigkeiten zu vorherigen Meilensteinen.
+3-5 messbare Erfolgskriterien im SMART-Format formulieren (Spezifisch, Messbar, Erreichbar, Relevant, Terminiert). Jedes Kriterium sollte an einen quantifizierbaren Messwert und Zielwert gebunden sein. 4-6 Schluessel-Meilensteine definieren die grosse Projektphasen oder Liefergegenstandsabschluesse darstellen, mit Zieldaten und Abhaengigkeiten von vorherigen Meilensteinen.
 
-**Erwartet:** Die Erfolgskriterien-Tabelle hat 3-5 Eintraege mit spezifischen Massen (z.B. "Systemverfuegbarkeit" gemessen als "% Verfuegbarkeit" mit Ziel "99,5%"). Die Meilenstein-Tabelle zeigt logische Projektphasen mit realistischen Zieldaten. Abhaengigkeiten sind klar angegeben.
+**Erwartet:** Erfolgskriterientabelle hat 3-5 Eintraege mit spezifischen Messwerten (z.B. "Systemverfuegbarkeit" gemessen als "% Verfuegbarkeit" mit Zielwert "99,5%"). Meilensteintabelle zeigt logische Projektphasen mit realistischen Zieldaten. Abhaengigkeiten sind klar vermerkt.
 
-**Bei Fehler:** Wenn Erfolgskriterien vage sind (z.B. "Qualitaet verbessern"), als messbare Ergebnisse mit Ausgangs- und Zielwerten umformulieren. Wenn Meilenstein-Termine unrealistisch sind, vom Endtermin rueckwaerts arbeiten und Puffer einplanen. Wenn Abhaengigkeiten eine zirkulaere Logik erzeugen, die Meilenstein-Sequenz umstrukturieren oder konfligierende Meilensteine aufteilen.
+**Bei Fehler:** Wenn Erfolgskriterien vage sind (z.B. "Qualitaet verbessern"), als messbare Ergebnisse mit Basis- und Zielwerten umformulieren. Wenn Meilensteindaten unrealistisch sind, vom Endtermin rueckwaerts arbeiten mit geschaetzten Dauern und Puffern. Wenn Abhaengigkeiten zirkulaere Logik erzeugen, die Meilensteinreihenfolge umstrukturieren oder widerspruechliche Meilensteine aufteilen.
 
 ### Schritt 5: Erstes Risikoregister erstellen
 
-5-10 Risiken identifizieren, die den Projekterfolg beeinflussen koennten. Fuer jedes Risiko Wahrscheinlichkeit (Low/Medium/High) und Auswirkung (Low/Medium/High) bewerten, dann Schweregrad berechnen. Fuer jedes Risiko eine spezifische Minderungsstrategie definieren und einen Risikoverantwortlichen zuweisen. Mindestens ein Risiko in jeder Kategorie einbeziehen: Umfang, Zeitplan, Ressourcen, Technik und extern.
+5-10 Risiken identifizieren die den Projekterfolg beeintraechtigen koennten. Fuer jedes Risiko Wahrscheinlichkeit (Niedrig/Mittel/Hoch) und Auswirkung (Niedrig/Mittel/Hoch) bewerten, dann die Schwere berechnen. Eine spezifische Gegenmassnahme fuer jedes Risiko definieren und einen Risikoverantwortlichen fuer Ueberwachung und Reaktion zuweisen. Mindestens ein Risiko in jeder Kategorie einbeziehen: Umfang, Zeitplan, Ressourcen, Technik und Extern.
 
-**Erwartet:** Das Risikoregister hat 5-10 Eintraege, die Umfangs-, Zeitplan-, Ressourcen-, Technik- und externe Risiken abdecken. Jedes Risiko hat Wahrscheinlichkeit, Auswirkung und Schweregrad bewertet. Minderungsstrategien sind umsetzbar und spezifisch. Jedes Risiko hat einen zugewiesenen Verantwortlichen.
+**Erwartet:** Risikoregister hat 5-10 Eintraege die Umfang-, Zeitplan-, Ressourcen-, Technik- und Externrisiken abdecken. Jedes Risiko hat bewertete Wahrscheinlichkeit, Auswirkung und Schwere. Gegenmassnahmen sind umsetzbar und spezifisch. Jedes Risiko hat einen zugewiesenen Verantwortlichen.
 
-**Bei Fehler:** Wenn die Risikoliste unvollstaendig ist, Scope-Grenzen, Abhaengigkeiten, Stakeholder-Liste und Annahmen auf potenzielle Schwachstellen ueberpruefen. Wenn Minderungsstrategien generisch sind ("eng ueberwachen"), spezifizieren: Was wird ueberwacht? Wie oft? Was loest eine Massnahme aus? Wenn niemand die Risikouebernahme akzeptiert, dem Projektleiter vorlaeufig zuweisen und an den Auftraggeber eskalieren.
+**Bei Fehler:** Wenn die Risikoliste unvollstaendig ist, Umfangsgrenzen, Abhaengigkeiten, Stakeholder-Liste und Annahmen auf moegliche Fehlerpunkte ueberpruefen. Wenn Gegenmassnahmen generisch sind ("genau beobachten"), konkretisieren: Was wird ueberwacht? Wie oft? Was loest Handeln aus? Wenn niemand die Risikoverantwortung uebernimmt, voruebergehend dem Projektleiter zuweisen und an den Sponsor eskalieren.
 
 ## Validierung
 
-- [ ] Charter-Datei mit Dokument-ID erstellt
+- [ ] Auftragsdatei mit Dokument-ID erstellt
 - [ ] Problemdarstellung ist spezifisch und messbar
-- [ ] Scope hat sowohl In-Scope- als auch Out-of-Scope-Punkte
-- [ ] RACI-Matrix deckt alle Lieferergebnisse ab
+- [ ] Umfang hat sowohl Punkte innerhalb als auch ausserhalb des Umfangs
+- [ ] RACI-Matrix deckt alle Liefergegenstaende ab
 - [ ] Erfolgskriterien sind messbar (SMART)
-- [ ] Mindestens 5 Risiken mit Minderungsstrategien identifiziert
+- [ ] Mindestens 5 Risiken mit Gegenmassnahmen identifiziert
 - [ ] Meilensteine haben Zieldaten
-- [ ] Genehmigungsabschnitt enthalten
+- [ ] Freigabeabschnitt enthalten
 
 ## Haeufige Stolperfallen
 
-- **Umfang ohne Grenzen**: Das Auflisten von In-Scope-Punkten ohne explizite Out-of-Scope-Punkte fuehrt zu Scope Creep. Immer definieren, was nicht getan wird.
-- **Vage Erfolgskriterien**: "Performance verbessern" ist nicht messbar. Jedes Kriterium an eine Zahl mit Ausgangswert und Zielwert koppeln.
-- **Fehlende Stakeholder**: Uebersehene Stakeholder tauchen spaet auf und bringen das Projekt aus der Bahn. Organigramme und frueherer Projektkommunikation abgleichen.
-- **Risikoregister als Checkbox**: Risiken ohne umsetzbare Minderungsplaene aufzulisten schafft falsche Sicherheit. Jedes Risiko braucht eine spezifische Reaktionsstrategie.
-- **Zu detaillierter Projektauftrag**: Der Projektauftrag ist ein Kompass, keine Landkarte. Auf 2-4 Seiten beschraenken. Detailplanung erfolgt spaeter.
+- **Umfang ohne Grenzen**: Punkte im Umfang auflisten ohne explizite Punkte ausserhalb des Umfangs fuehrt zu Umfangserweiterung. Immer definieren was man nicht tun wird.
+- **Vage Erfolgskriterien**: "Performance verbessern" ist nicht messbar. Jedes Kriterium an eine Zahl mit Basis- und Zielwert binden.
+- **Fehlende Stakeholder**: Uebersehene Stakeholder tauchen spaet auf und bringen das Projekt aus der Bahn. Organigramme und fruehere Projektkommunikation gegenpruefen.
+- **Risikoregister als Pflichtpunkt**: Risiken auflisten ohne umsetzbare Gegenmassnahmenplaene vermittelt falsches Vertrauen. Jedes Risiko braucht eine spezifische Reaktionsstrategie.
+- **Ueberdetaillierter Auftrag**: Der Auftrag ist ein Kompass, keine Karte. Auf 2-4 Seiten halten. Detailplanung erfolgt spaeter.
 
 ## Verwandte Skills
 
-- `create-work-breakdown-structure` — Charter-Lieferergebnisse in Arbeitspakete zerlegen
-- `manage-backlog` — Charter-Umfang in einen priorisierten Backlog uebersetzen
-- `plan-sprint` — Den ersten Sprint aus Charter-Lieferergebnissen planen
-- `generate-status-report` — Fortschritt gegen Charter-Meilensteine berichten
-- `conduct-retrospective` — Charter-Annahmen nach der Durchfuehrung ueberpruefen
+- `create-work-breakdown-structure` -- Auftragsliefergegenstaende in Arbeitspakete zerlegen
+- `manage-backlog` -- Auftragsumfang in ein priorisiertes Backlog uebersetzen
+- `plan-sprint` -- Den ersten Sprint aus Auftragsliefergegenstaenden planen
+- `generate-status-report` -- Fortschritt gegen Auftragsmeilensteine berichten
+- `conduct-retrospective` -- Auftragsannahmen nach der Ausfuehrung ueberpruefen

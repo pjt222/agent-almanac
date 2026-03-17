@@ -1,14 +1,12 @@
 ---
 name: catalog-collection
 description: >
-  Catalog and classify materials using standard library systems. Covers
-  descriptive cataloging, subject headings, call number assignment using Dewey
-  Decimal and Library of Congress Classification, MARC record basics, shelf
-  organization, and authority control for consistent access points. Use when
-  organizing a personal, institutional, or community library from scratch,
-  assigning call numbers and subject headings to new acquisitions, reclassifying
-  a collection that has outgrown its original system, or establishing authority
-  control for authors, series, or subjects.
+  標準的な図書館システムを使用して資料を目録化・分類する。記述目録作成、件名標目、
+  デューイ十進分類法と米国議会図書館分類法を使用した請求記号の付与、MARCレコードの
+  基礎、書架整理、典拠コントロールをカバーする。個人、機関、またはコミュニティの
+  図書館をゼロから整理する時、新規受入資料に請求記号と件名標目を付与する時、
+  元のシステムでは対応しきれなくなったコレクションを再分類する時、著者・シリーズ・
+  主題の典拠コントロールを確立する時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -25,31 +23,31 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# コレクションのカタログ化
+# コレクションの目録化
 
-Catalog and classify library or archival materials using standard classification systems and descriptive cataloging practices.
+標準的な分類システムと記述目録作成の実務を用いて、図書館またはアーカイブ資料を目録化・分類する。
 
 ## 使用タイミング
 
-- You are organizing a personal, institutional, or community library from scratch
-- You need to assign call numbers and subject headings to new acquisitions
-- You want to create consistent catalog records for findability
-- You are reclassifying a collection that has outgrown its original system
-- You need to establish authority control for authors, series, or subjects
+- 個人、機関、またはコミュニティの図書館をゼロから整理する時
+- 新規受入資料に請求記号と件名標目を付与する必要がある時
+- 検索性のために一貫したカタログレコードを作成したい時
+- 元のシステムでは対応しきれなくなったコレクションを再分類する時
+- 著者、シリーズ、または主題の典拠コントロールを確立する必要がある時
 
 ## 入力
 
-- **必須**: Materials to catalog (books, serials, media, archival items)
-- **必須**: Chosen classification system (Dewey Decimal or Library of Congress)
-- **任意**: Existing catalog or inventory to integrate with
-- **任意**: Subject heading authority (LCSH, Sears, or custom thesaurus)
-- **任意**: MARC-compatible cataloging software (Koha, Evergreen, LibraryThing)
+- **必須**: 目録化する資料（書籍、逐次刊行物、メディア、アーカイブ資料）
+- **必須**: 選択した分類システム（デューイ十進分類法または米国議会図書館分類法）
+- **任意**: 統合対象の既存カタログまたはインベントリ
+- **任意**: 件名標目典拠（LCSH、Sears、またはカスタムシソーラス）
+- **任意**: MARC対応目録作成ソフトウェア（Koha、Evergreen、LibraryThing）
 
 ## 手順
 
-### ステップ1: Choose the Classification System
+### ステップ1: 分類システムの選択
 
-Select a system that matches the collection's size, scope, and audience.
+コレクションの規模、範囲、対象者に合ったシステムを選択する。
 
 ```
 Classification System Comparison:
@@ -78,13 +76,13 @@ Decision Rule:
 - Mixed or uncertain: Start with DDC; migrate to LCC if collection exceeds 10K
 ```
 
-**期待結果:** A classification system chosen that fits the collection's scale and purpose.
+**期待結果:** コレクションの規模と目的に合った分類システムが選択される。
 
-**失敗時:** If neither system fits (e.g., a highly specialized archive), consider a faceted classification or custom scheme, but document the mapping to DDC or LCC for interoperability.
+**失敗時:** どちらのシステムも適合しない場合（例：高度に専門化されたアーカイブ）、ファセット分類法またはカスタムスキームを検討するが、相互運用性のためにDDCまたはLCCへのマッピングを文書化する。
 
-### ステップ2: Perform Descriptive Cataloging
+### ステップ2: 記述目録作成の実施
 
-Create a bibliographic description for each item following standard practice.
+標準的な実務に従い、各資料の書誌記述を作成する。
 
 ```
 Descriptive Cataloging Elements (RDA-aligned):
@@ -121,13 +119,13 @@ Take information from the item itself (title page first,
 then cover, colophon, verso). Do not guess or embellish.
 ```
 
-**期待結果:** A consistent bibliographic record for each item with enough detail for unique identification and discovery.
+**期待結果:** 各資料について、一意の識別と発見に十分な詳細を持つ一貫した書誌レコード。
 
-**失敗時:** If publication information is missing (common in older or self-published works), use square brackets to indicate supplied information: `[ca. 1920]`, `[s.l.]` (no place), `[s.n.]` (no publisher).
+**失敗時:** 出版情報が欠落している場合（古い資料や自費出版の資料に多い）、角括弧を使用して補足情報を示す：`[ca. 1920]`、`[s.l.]`（出版地不明）、`[s.n.]`（出版者不明）。
 
-### ステップ3: Assign Subject Headings
+### ステップ3: 件名標目の付与
 
-Apply controlled vocabulary terms so users can find materials by topic.
+統制語彙用語を適用して、利用者がトピックで資料を検索できるようにする。
 
 ```
 Subject Heading Sources:
@@ -160,13 +158,13 @@ Assignment Rules:
 5. Be consistent: if you use "Automobiles" don't also use "Cars" as a heading
 ```
 
-**期待結果:** Each item has 1-3 subject headings from a controlled vocabulary, applied consistently across the collection.
+**期待結果:** 各資料に統制語彙から1〜3の件名標目が付与され、コレクション全体で一貫して適用される。
 
-**失敗時:** If no suitable heading exists in your authority, create a local heading and document it in a local authority file. Review periodically for alignment with the main authority.
+**失敗時:** 典拠に適切な標目が存在しない場合、ローカル標目を作成してローカル典拠ファイルに文書化する。メインの典拠との整合性を定期的にレビューする。
 
-### ステップ4: Assign Call Numbers
+### ステップ4: 請求記号の付与
 
-Build the shelf address using the chosen classification system.
+選択した分類システムを使用して書架アドレスを構築する。
 
 ```
 Dewey Decimal Call Number Construction:
@@ -199,13 +197,13 @@ segment by segment. Numbers sort numerically,
 letters sort alphabetically, Cutters sort as decimals.
 ```
 
-**期待結果:** Every cataloged item has a unique call number that determines its shelf position.
+**期待結果:** 目録化されたすべての資料が、書架上の位置を決定する一意の請求記号を持つ。
 
-**失敗時:** If two items generate the same call number, add a work mark (first letter of title, excluding articles) or a copy number to disambiguate.
+**失敗時:** 2つの資料が同じ請求記号を生成する場合、著作記号（冠詞を除くタイトルの最初の文字）または複本番号を追加して区別する。
 
-### ステップ5: Create or Update Catalog Records
+### ステップ5: カタログレコードの作成または更新
 
-Enter the cataloged information into your catalog system.
+目録化した情報をカタログシステムに入力する。
 
 ```
 Minimum Viable Catalog Record:
@@ -238,13 +236,13 @@ shared database before creating original records. Someone has
 likely already cataloged the same edition.
 ```
 
-**期待結果:** Each item has a catalog record in the system with all required fields populated. Records are searchable by author, title, subject, and call number.
+**期待結果:** 各資料がシステム内にカタログレコードを持ち、すべての必須フィールドが入力されている。レコードは著者、タイトル、件名、請求記号で検索可能。
 
-**失敗時:** If cataloging software is unavailable, a well-structured spreadsheet (with consistent column headings matching the fields above) serves as a functional catalog. Migrate to proper software when available.
+**失敗時:** 目録作成ソフトウェアが利用できない場合、上記のフィールドに一致する一貫した列見出しを持つ、構造化されたスプレッドシートが機能的なカタログとして代用できる。利用可能になった時に適切なソフトウェアに移行する。
 
-### ステップ6: Organize the Physical Shelf
+### ステップ6: 実際の書架の整理
 
-Arrange materials according to their call numbers.
+請求記号に従って資料を配置する。
 
 ```
 Shelf Organization Principles:
@@ -267,30 +265,30 @@ Shelf Reading (periodic verification):
 - Note damaged items for repair or replacement
 ```
 
-**期待結果:** Materials are physically arranged in call number order with clear spine labels and growth space.
+**期待結果:** 資料が請求記号順に物理的に配置され、明確な背ラベルと増加余地がある。
 
-**失敗時:** If space is insufficient, prioritize high-circulation items on accessible shelves and move low-use items to compact storage, noting the location change in catalog records.
+**失敗時:** スペースが不十分な場合、アクセスしやすい棚には利用頻度の高い資料を優先し、利用頻度の低い資料は集密書架に移動し、カタログレコードの所在変更を記載する。
 
 ## バリデーション
 
-- [ ] Classification system chosen and documented
-- [ ] Descriptive cataloging completed for all items with title, author, and publication data
-- [ ] Subject headings assigned from a controlled vocabulary (1-3 per item)
-- [ ] Call numbers assigned and unique for each item
-- [ ] Catalog records created in system or spreadsheet
-- [ ] Physical materials shelved in call number order with spine labels
-- [ ] Authority control established for consistent name and subject forms
+- [ ] 分類システムが選択され文書化されている
+- [ ] すべての資料について、タイトル、著者、出版データを含む記述目録が完了している
+- [ ] 統制語彙から件名標目が付与されている（1資料あたり1〜3件）
+- [ ] 各資料に一意の請求記号が付与されている
+- [ ] システムまたはスプレッドシートにカタログレコードが作成されている
+- [ ] 物理的な資料が背ラベル付きで請求記号順に配架されている
+- [ ] 名前と件名の形式の一貫性のために典拠コントロールが確立されている
 
 ## よくある落とし穴
 
-- **Inconsistent headings**: Using both "World War, 1939-1945" and "WWII" defeats the purpose of controlled vocabulary. Pick one authority and stick to it
-- **Over-classification**: Assigning a 15-digit DDC number to a small personal library adds complexity without benefit. Match granularity to collection size
-- **Ignoring copy cataloging**: Creating original records when copy records exist wastes time. Always check shared databases first
-- **Spine label neglect**: A cataloged book without a spine label will be misshelved. Label immediately after cataloging
-- **No growth space**: Packing shelves to 100% capacity means every new acquisition triggers a chain of shifting. Leave room
+- **一貫性のない標目**: 「World War, 1939-1945」と「WWII」の両方を使用すると統制語彙の目的が失われる。1つの典拠を選んで徹底する
+- **過度な分類**: 小規模な個人図書館に15桁のDDC番号を付与しても、利点なく複雑さが増すだけ。コレクション規模に合った粒度にする
+- **コピーカタログの無視**: コピーレコードが存在するのにオリジナルレコードを作成するのは時間の無駄。まず共有データベースを確認する
+- **背ラベルの放置**: 目録化された本に背ラベルがなければ配架ミスが起きる。目録化直後にラベルを貼る
+- **増加余地なし**: 棚を100%の容量で詰めると、新規受入のたびに連鎖的な移動が必要になる。余白を残す
 
 ## 関連スキル
 
-- `preserve-materials` — Conservation of cataloged materials to maintain their condition
-- `curate-collection` — Collection development decisions that determine what gets cataloged
-- `manage-memory` — Organizing persistent knowledge stores (digital parallel to physical cataloging)
+- `preserve-materials` -- 目録化された資料の状態を維持するための保存処理
+- `curate-collection` -- 何を目録化するかを決定するコレクション構築の意思決定
+- `manage-memory` -- 永続的な知識ストアの整理（物理的な目録作成のデジタル版）

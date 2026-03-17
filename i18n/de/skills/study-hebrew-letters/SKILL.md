@@ -1,15 +1,16 @@
 ---
 name: study-hebrew-letters
 description: >
-  Study the twenty-two Hebrew letters as mystical symbols. Covers
-  letter forms, numerical values, elemental/planetary/zodiacal
-  correspondences, Sefer Yetzirah attributions, and contemplative
-  letter meditation techniques. Use when studying a specific letter's
-  mystical dimensions beyond its linguistic function, learning the
-  Sefer Yetzirah classification of mothers, doubles, and simples,
-  needing correspondences for a letter's element, planet, or zodiac
-  sign, practicing Hebrew letter visualization or chanting meditation,
-  or studying Tree of Life paths and their assigned letters.
+  Die zweiundzwanzig hebraeischen Buchstaben als mystische Symbole studieren.
+  Umfasst Buchstabenformen, Zahlenwerte, elementare/planetarische/Tierkreis-
+  Zuordnungen, Sefer-Yetzirah-Attributionen und kontemplative
+  Buchstabenmeditationstechniken. Verwenden beim Studium der mystischen
+  Dimensionen eines bestimmten Buchstabens jenseits seiner sprachlichen Funktion,
+  beim Lernen der Sefer-Yetzirah-Klassifikation in Muetter, Doppelte und Einfache,
+  bei Bedarf an Zuordnungen fuer Element, Planet oder Tierkreiszeichen eines
+  Buchstabens, beim Ueben von hebraeischer Buchstabenvisualisierung oder
+  Chanting-Meditation, oder beim Studium der Pfade des Baums des Lebens und
+  ihrer zugewiesenen Buchstaben.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -28,29 +29,29 @@ metadata:
 
 # Hebraeische Buchstaben studieren
 
-Study the twenty-two Hebrew letters as mystical symbols — examining their visual forms, numerical values, Sefer Yetzirah classifications (mother, double, simple), elemental/planetary/zodiacal correspondences, paths on the Tree of Life, and contemplative letter meditation practices.
+Die zweiundzwanzig hebraeischen Buchstaben als mystische Symbole studieren — ihre visuellen Formen, Zahlenwerte, Sefer-Yetzirah-Klassifikationen (Mutter, Doppelter, Einfacher), elementare/planetarische/Tierkreis-Zuordnungen, Pfade auf dem Baum des Lebens und kontemplative Buchstabenmeditationspraktiken untersuchen.
 
-## When to Use
+## Wann verwenden
 
-- You want to study a specific Hebrew letter's mystical dimensions beyond its linguistic function
-- You are learning the Sefer Yetzirah's classification of letters into mothers, doubles, and simples
-- You need the correspondences (element, planet, zodiac, path) for a specific letter
-- You want to practice Hebrew letter meditation (visualization, chanting, contemplation)
-- You are studying the paths of the Tree of Life and need to understand the letter assigned to a path
-- You are exploring how letter form (shape, open/closed, final form) carries symbolic meaning
+- Die mystischen Dimensionen eines bestimmten hebraeischen Buchstabens jenseits seiner sprachlichen Funktion studieren
+- Die Sefer-Yetzirah-Klassifikation der Buchstaben in Muetter, Doppelte und Einfache lernen
+- Zuordnungen (Element, Planet, Tierkreis, Pfad) fuer einen bestimmten Buchstaben benoetigt
+- Hebraeische Buchstabenmeditation ueben (Visualisierung, Chanting, Kontemplation)
+- Die Pfade des Baums des Lebens studieren und den einem Pfad zugewiesenen Buchstaben verstehen
+- Erkunden wie Buchstabenform (Gestalt, offen/geschlossen, Endform) symbolische Bedeutung traegt
 
-## Inputs
+## Eingaben
 
-- **Required**: A specific Hebrew letter to study (e.g., "Aleph," "Shin," "Beth") or a request for the full classification system
-- **Optional**: Tradition preference (Sefer Yetzirah, Zohar, Hermetic/Golden Dawn)
-- **Optional**: Focus area (form, sound, number, correspondence, meditation)
-- **Optional**: Connection to a path on the Tree of Life
+- **Erforderlich**: Ein bestimmter hebraeischer Buchstabe zum Studium (z.B. "Aleph", "Shin", "Beth") oder eine Anfrage fuer das vollstaendige Klassifikationssystem
+- **Optional**: Traditionspraeferenz (Sefer Yetzirah, Sohar, Hermetisch/Golden Dawn)
+- **Optional**: Fokusbereich (Form, Klang, Zahl, Zuordnung, Meditation)
+- **Optional**: Verbindung zu einem Pfad auf dem Baum des Lebens
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Select and Identify the Letter
+### Schritt 1: Buchstaben auswaehlen und identifizieren
 
-Determine which letter to study and establish its basic identity.
+Bestimmen welcher Buchstabe studiert werden soll und seine grundlegende Identitaet festlegen.
 
 ```
 The Twenty-Two Hebrew Letters:
@@ -94,19 +95,19 @@ Categories (Sefer Yetzirah Chapter 3-5):
   month, a direction, and a human faculty
 ```
 
-1. Name the letter and its Hebrew character
-2. State its numerical value (standard gematria)
-3. Identify its Sefer Yetzirah category: mother, double, or simple
-4. Note its primary attribution: element (mothers), planet (doubles), or zodiac sign (simples)
-5. If the user requested the full system, present the complete table before focusing on a specific letter
+1. Den Buchstaben und sein hebraeisches Zeichen benennen
+2. Seinen Zahlenwert angeben (Standard-Gematria)
+3. Seine Sefer-Yetzirah-Kategorie identifizieren: Mutter, Doppelter oder Einfacher
+4. Seine primaere Attribution notieren: Element (Muetter), Planet (Doppelte) oder Tierkreiszeichen (Einfache)
+5. Wenn der Benutzer das vollstaendige System angefordert hat, die vollstaendige Tabelle praesentieren bevor auf einen bestimmten Buchstaben fokussiert wird
 
-**Expected:** The letter is identified with its number, category, and primary correspondence. The user understands where it sits within the three-fold classification system.
+**Erwartet:** Der Buchstabe ist mit seiner Zahl, Kategorie und primaeren Zuordnung identifiziert. Der Benutzer versteht, wo er innerhalb des dreifachen Klassifikationssystems steht.
 
-**On failure:** If the user names a letter ambiguously (e.g., "Chet" vs. "Cheth" vs. "Het"), confirm by providing the standard value and asking the user to verify.
+**Bei Fehler:** Wenn der Benutzer einen Buchstaben mehrdeutig benennt (z.B. "Chet" vs. "Cheth" vs. "Het"), durch Angabe des Standardwerts bestaetigen und den Benutzer um Verifikation bitten.
 
-### Step 2: Examine the Letter's Form
+### Schritt 2: Die Form des Buchstabens untersuchen
 
-Study the visual shape of the letter as a symbolic image.
+Die visuelle Gestalt des Buchstabens als symbolisches Bild studieren.
 
 ```
 Form Analysis Framework:
@@ -136,36 +137,36 @@ Traditional teaching describes some letters as composed of others:
 These internal compositions reveal deeper symbolic layers.
 ```
 
-1. Describe the letter's visual form — what does it look like as a shape?
-2. Note if it is open or closed, ascending or descending
-3. If the letter has a final form, describe how the form changes and what that suggests symbolically
-4. If the letter is traditionally described as a composite of other letters, note the composition
-5. Mention any traditional names for the letter's shape (e.g., Bet = "house," Daleth = "door," Ayin = "eye")
+1. Die visuelle Form des Buchstabens beschreiben — wie sieht er als Gestalt aus?
+2. Notieren ob er offen oder geschlossen, aufsteigend oder absteigend ist
+3. Wenn der Buchstabe eine Endform hat, beschreiben wie sich die Form aendert und was das symbolisch nahelegt
+4. Wenn der Buchstabe traditionell als Zusammensetzung anderer Buchstaben beschrieben wird, die Komposition notieren
+5. Traditionelle Benennungen fuer die Form des Buchstabens erwaehnen (z.B. Bet = "Haus", Daleth = "Tuer", Ayin = "Auge")
 
-**Expected:** The user sees the letter not just as an alphabet character but as a visual symbol carrying meaning in its form. The shape itself teaches.
+**Erwartet:** Der Benutzer sieht den Buchstaben nicht nur als Alphabetzeichen sondern als visuelles Symbol, das Bedeutung in seiner Form traegt. Die Gestalt selbst lehrt.
 
-**On failure:** If form analysis feels subjective, ground it in traditional sources (Sefer ha-Bahir, Otiot de-Rabbi Akiva) where available. Where tradition is silent, present the observation as suggestion rather than doctrine.
+**Bei Fehler:** Wenn die Formanalyse subjektiv erscheint, sie in traditionellen Quellen verankern (Sefer ha-Bahir, Otiot de-Rabbi Akiva) wo verfuegbar. Wo die Tradition schweigt, die Beobachtung als Anregung statt als Doktrin praesentieren.
 
-### Step 3: Note Numerical Value and Position
+### Schritt 3: Zahlenwert und Position notieren
 
-Study the letter's number and its significance in gematria and on the Tree.
+Die Zahl des Buchstabens und ihre Bedeutung in Gematria und auf dem Baum studieren.
 
-1. State the standard gematria value
-2. State the ordinal position (1-22)
-3. Note the letter's full spelling (milui) and its gematria:
-   - Example: Aleph spelled out is Aleph-Lamed-Peh = 1+30+80 = 111
-4. Identify the path on the Tree of Life this letter is assigned to (path number, from-sephira to-sephira)
-5. Note if the value connects to other significant numbers:
-   - Is it a sephira number? A significant traditional number?
-   - Does it relate to the letter's meaning?
+1. Den Standard-Gematria-Wert angeben
+2. Die Ordnungsposition angeben (1-22)
+3. Die vollstaendige Buchstabierung (Milui) und ihre Gematria notieren:
+   - Beispiel: Aleph ausgeschrieben ist Aleph-Lamed-Peh = 1+30+80 = 111
+4. Den Pfad auf dem Baum des Lebens identifizieren, dem dieser Buchstabe zugewiesen ist (Pfadnummer, von-Sephira zu-Sephira)
+5. Notieren ob der Wert mit anderen bedeutenden Zahlen zusammenhaengt:
+   - Ist es eine Sephira-Zahl? Eine bedeutende traditionelle Zahl?
+   - Steht er in Beziehung zur Bedeutung des Buchstabens?
 
-**Expected:** The numerical dimension of the letter is established — both its value and its position on the Tree. The user can connect this letter to gematria analysis and sephirotic study.
+**Erwartet:** Die numerische Dimension des Buchstabens ist etabliert — sowohl sein Wert als auch seine Position auf dem Baum. Der Benutzer kann diesen Buchstaben mit Gematria-Analyse und Sephirot-Studium verbinden.
 
-**On failure:** If the Tree of Life path attribution is contested (different systems assign different letters to different paths), present the major systems (GRA, Golden Dawn) side by side rather than choosing one.
+**Bei Fehler:** Wenn die Baum-des-Lebens-Pfadzuordnung umstritten ist (verschiedene Systeme weisen verschiedenen Pfaden verschiedene Buchstaben zu), die Hauptsysteme (GRA, Golden Dawn) nebeneinander praesentieren statt eines zu waehlen.
 
-### Step 4: Study Correspondences
+### Schritt 4: Zuordnungen studieren
 
-Map the letter's full set of correspondences per Sefer Yetzirah and later traditions.
+Den vollstaendigen Satz von Zuordnungen des Buchstabens gemaess Sefer Yetzirah und spaeteren Traditionen kartieren.
 
 ```
 Correspondence Template:
@@ -195,19 +196,19 @@ Notes on Tradition Differences:
 - Always note which tradition a correspondence comes from.
 ```
 
-1. Fill in the correspondence template for the selected letter
-2. For mother letters: state element (Air, Water, Fire) and the triadic relationship (head, torso, belly)
-3. For double letters: state planet and the pair of opposites governed by this letter
-4. For simple letters: state zodiac sign, month, direction, and human faculty
-5. Note Hermetic additions (tarot, color) separately from Jewish Kabbalistic attributions
+1. Die Zuordnungsvorlage fuer den ausgewaehlten Buchstaben ausfuellen
+2. Fuer Mutterbuchstaben: Element (Luft, Wasser, Feuer) und die triadische Beziehung (Kopf, Rumpf, Bauch) angeben
+3. Fuer Doppelbuchstaben: Planet und das vom Buchstaben regierte Gegensatzpaar angeben
+4. Fuer Einfache Buchstaben: Tierkreiszeichen, Monat, Richtung und menschliche Faehigkeit angeben
+5. Hermetische Ergaenzungen (Tarot, Farbe) getrennt von juedisch-kabbalistischen Attributionen notieren
 
-**Expected:** A comprehensive correspondence map for the letter. The user sees how the letter connects to cosmology, the body, the calendar, and the symbolic landscape.
+**Erwartet:** Eine umfassende Zuordnungskarte fuer den Buchstaben. Der Benutzer sieht, wie der Buchstabe mit Kosmologie, Koerper, Kalender und symbolischer Landschaft zusammenhaengt.
 
-**On failure:** If correspondences conflict between sources, present both and note the recension. Do not silently choose one tradition over another.
+**Bei Fehler:** Wenn Zuordnungen zwischen Quellen in Konflikt stehen, beide praesentieren und die Rezension notieren. Nicht stillschweigend eine Tradition ueber eine andere waehlen.
 
-### Step 5: Practice Letter Meditation
+### Schritt 5: Buchstabenmeditation ueben
 
-Guide a contemplative exercise focused on the selected letter.
+Eine kontemplative Uebung mit Fokus auf den ausgewaehlten Buchstaben anleiten.
 
 ```
 Letter Meditation Protocol:
@@ -254,38 +255,38 @@ CLOSING (2 minutes):
 4. Open eyes, return to ordinary awareness
 ```
 
-1. Guide the user through the three-phase meditation (visualization, sound, contemplation)
-2. Adapt duration to the user's preference (5-minute abbreviated, 15-minute standard, 30-minute extended)
-3. For mother letters, emphasize the elemental quality (breathing for Air, flowing for Water, intensity for Fire)
-4. For double letters, explore the polarity (hard/soft sound, the pair of opposites)
-5. For simple letters, connect the zodiacal quality to the contemplation (e.g., Heh/Aries — initiative, beginning)
-6. Close with integration: what did the letter communicate?
+1. Den Benutzer durch die dreiphasige Meditation fuehren (Visualisierung, Klang, Kontemplation)
+2. Dauer an die Praeferenz des Benutzers anpassen (5-Minuten-Kurzversion, 15-Minuten-Standard, 30-Minuten-erweitert)
+3. Fuer Mutterbuchstaben die elementare Qualitaet betonen (Atmen fuer Luft, Fliessen fuer Wasser, Intensitaet fuer Feuer)
+4. Fuer Doppelbuchstaben die Polaritaet erkunden (harter/weicher Klang, das Gegensatzpaar)
+5. Fuer Einfache Buchstaben die Tierkreisqualitaet mit der Kontemplation verbinden (z.B. Heh/Widder — Initiative, Anfang)
+6. Mit Integration abschliessen: was hat der Buchstabe mitgeteilt?
 
-**Expected:** The user has engaged the letter through multiple modes — sight (form), sound (chanting), and meaning (contemplation). The letter has become experiential rather than purely intellectual.
+**Erwartet:** Der Benutzer hat sich ueber mehrere Modi mit dem Buchstaben befasst — Sehen (Form), Klang (Chanting) und Bedeutung (Kontemplation). Der Buchstabe ist erfahrungsbezogen geworden statt rein intellektuell.
 
-**On failure:** If visualization is difficult, substitute writing: draw the letter slowly and deliberately, multiple times, as a meditative act. Physical engagement with the form can substitute for mental visualization.
+**Bei Fehler:** Wenn Visualisierung schwierig ist, Schreiben als Ersatz verwenden: den Buchstaben langsam und bewusst mehrmals zeichnen als meditative Handlung. Physische Auseinandersetzung mit der Form kann fuer mentale Visualisierung eintreten.
 
-## Validation
+## Validierung
 
-- [ ] The letter was identified with its name, value, and Sefer Yetzirah category
-- [ ] The letter's visual form was examined for symbolic meaning
-- [ ] Numerical value and Tree of Life path assignment were stated
-- [ ] Correspondences were presented with tradition sources noted
-- [ ] A contemplative exercise was offered (meditation, chanting, or journaling)
-- [ ] Tradition differences were acknowledged where attributions conflict
+- [ ] Der Buchstabe wurde mit Name, Wert und Sefer-Yetzirah-Kategorie identifiziert
+- [ ] Die visuelle Form des Buchstabens wurde auf symbolische Bedeutung untersucht
+- [ ] Zahlenwert und Baum-des-Lebens-Pfadzuweisung wurden angegeben
+- [ ] Zuordnungen wurden mit notierten Traditionsquellen praesentiert
+- [ ] Eine kontemplative Uebung wurde angeboten (Meditation, Chanting oder Journaling)
+- [ ] Traditionsunterschiede wurden anerkannt wo Attributionen in Konflikt stehen
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Treating letters as mere code**: The letters are not just a cipher for numbers or sounds — in Kabbalistic tradition, they are creative forces through which the world was formed (Sefer Yetzirah 2:2). Approach with appropriate reverence
-- **Ignoring recension differences**: The Sefer Yetzirah's letter-to-planet and letter-to-zodiac assignments vary significantly between the Short, Long, GRA, and Saadia versions. Presenting one version as definitive is misleading
-- **Conflating Jewish and Hermetic systems**: The Golden Dawn added tarot, color, and other correspondences to the Hebrew letters. These are valuable but are NOT part of Jewish Kabbalistic tradition — always label the source
-- **Skipping the sound**: Hebrew letters are sounds first, symbols second. Meditation that includes vocalization engages the letter more fully than visual contemplation alone
-- **Rushing through all 22**: Each letter deserves sustained attention. Studying one letter deeply is more valuable than surveying all twenty-two superficially
-- **Forgetting the body**: Sefer Yetzirah assigns letters to body parts and senses. The letters are not disembodied abstractions but are mapped onto the human form
+- **Buchstaben als blosse Codes behandeln**: Die Buchstaben sind nicht nur ein Chiffre fuer Zahlen oder Klaenge — in kabbalistischer Tradition sind sie schoepferische Kraefte, durch die die Welt geformt wurde (Sefer Yetzirah 2:2). Mit angemessener Ehrfurcht herangehen
+- **Rezensionsunterschiede ignorieren**: Die Buchstaben-zu-Planet- und Buchstaben-zu-Tierkreis-Zuweisungen des Sefer Yetzirah variieren erheblich zwischen der Kurzen, Langen, GRA- und Saadia-Version. Eine Version als definitiv darzustellen ist irrefuehrend
+- **Juedische und hermetische Systeme vermischen**: Der Golden Dawn fuegte Tarot, Farbe und andere Zuordnungen zu den hebraeischen Buchstaben hinzu. Diese sind wertvoll, sind aber NICHT Teil der juedisch-kabbalistischen Tradition — immer die Quelle angeben
+- **Den Klang ueberspringen**: Hebraeische Buchstaben sind zuerst Klaenge, dann Symbole. Meditation die Vokalisierung einschliesst, erfasst den Buchstaben vollstaendiger als visuelle Kontemplation allein
+- **Durch alle 22 eilen**: Jeder Buchstabe verdient anhaltende Aufmerksamkeit. Einen Buchstaben tief zu studieren ist wertvoller als alle zweiundzwanzig oberflaechlich zu ueberblicken
+- **Den Koerper vergessen**: Sefer Yetzirah weist Buchstaben Koerperteilen und Sinnen zu. Die Buchstaben sind keine koerperlosen Abstraktionen sondern sind auf die menschliche Form abgebildet
 
-## Related Skills
+## Verwandte Skills
 
-- `read-tree-of-life` — Each letter corresponds to a path on the Tree; understanding the path context deepens letter study
-- `apply-gematria` — The letter's numerical value participates in gematria analysis; understanding the letter enriches gematria interpretation
-- `meditate` — General meditation framework supporting the contemplative exercises in letter study
-- `meditate-guidance` — If guiding another person through letter meditation rather than practicing independently
+- `read-tree-of-life` — Jeder Buchstabe entspricht einem Pfad auf dem Baum; das Verstehen des Pfadkontexts vertieft das Buchstabenstudium
+- `apply-gematria` — Der Zahlenwert des Buchstabens nimmt an Gematria-Analyse teil; das Verstehen des Buchstabens bereichert die Gematria-Interpretation
+- `meditate` — Allgemeines Meditationsframework das die kontemplativen Uebungen im Buchstabenstudium unterstuetzt
+- `meditate-guidance` — Wenn eine andere Person durch Buchstabenmeditation gefuehrt wird statt unabhaengig zu ueben

@@ -1,10 +1,10 @@
 ---
 name: plan-hiking-tour
 description: >
-  Plan a hiking tour with trail selection by difficulty (SAC/UIAA), time
+  Planen a hiking tour with trail selection by difficulty (SAC/UIAA), time
   estimation using Munter's formula, elevation analysis, and safety
-  assessment. Covers multi-day hut-to-hut tours, day hikes, and alpine routes
-  with terrain classification and group fitness considerations. Use when
+  assessment. Umfasst multi-day hut-to-hut tours, day hikes, and alpine routes
+  with terrain classification and group fitness considerations. Verwenden wenn
   planning a day hike or multi-day trekking tour, selecting trails appropriate
   for a group's fitness and experience, estimating realistic hiking times, or
   planning hut-to-hut tours with overnight logistics.
@@ -26,9 +26,9 @@ metadata:
 
 # Wandertour planen
 
-Plan a hiking tour with trail selection, time estimation, elevation analysis, and safety assessment for groups of varying fitness levels.
+Planen a hiking tour with trail selection, time estimation, elevation analysis, and safety assessment for groups of varying fitness levels.
 
-## When to Use
+## Wann verwenden
 
 - Planning a day hike or multi-day trekking tour
 - Selecting trails appropriate for a group's fitness and experience
@@ -36,21 +36,21 @@ Plan a hiking tour with trail selection, time estimation, elevation analysis, an
 - Assessing whether a route is safe given current conditions
 - Planning hut-to-hut tours with overnight logistics
 
-## Inputs
+## Eingaben
 
-- **Required**: Region or area for the hike
-- **Required**: Group profile (number of people, fitness level, experience)
-- **Required**: Available time (day hike duration or number of days)
+- **Erforderlich**: Region or area for the hike
+- **Erforderlich**: Group profile (number of people, fitness level, experience)
+- **Erforderlich**: Available time (day hike duration or number of days)
 - **Optional**: Difficulty preference (SAC T1-T6, or descriptive: easy/moderate/hard)
 - **Optional**: Elevation gain/loss tolerance (meters)
 - **Optional**: Specific peaks, huts, or destinations to include
 - **Optional**: Season and expected weather window
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Define Requirements
+### Schritt 1: Definieren Requirements
 
-Establish the parameters that constrain trail selection.
+Establish der Parameters that constrain trail selection.
 
 ```
 Group Fitness Classification:
@@ -79,23 +79,23 @@ SAC Hiking Scale Reference:
   T6 - Difficult alpine: Very exposed climbing, technical ice/rock
 ```
 
-Document the group's weakest-link fitness level, as this determines the maximum difficulty.
+Dokumentieren the group's weakest-link fitness level, as this determines the maximum difficulty.
 
-**Expected:** A clear requirements profile with group level, time budget, elevation tolerance, and any must-include or must-avoid constraints.
+**Erwartet:** A clear requirements profile with group level, time budget, elevation tolerance, and any must-include or must-avoid constraints.
 
-**On failure:** If the group has mixed fitness levels, plan for the weakest member but identify optional extensions for stronger hikers (e.g., a peak side trip while others rest at a hut).
+**Bei Fehler:** If the group has mixed fitness levels, plan for the weakest member but identify optional extensions for stronger hikers (e.g., a peak side trip while others rest at a hut).
 
-### Step 2: Select Trail Candidates
+### Schritt 2: Auswaehlen Trail Candidates
 
 Research and shortlist trails matching the requirements.
 
 Sources for trail data:
 - Hiking guidebooks and regional websites
-- OpenStreetMap (trails tagged with `sac_scale`)
+- OpenStreetAbbilden (trails tagged with `sac_scale`)
 - National/regional trail databases (e.g., SchweizMobil, Alpenverein)
-- WebSearch for "[region] hiking trails [difficulty]"
+- WebSuchen for "[region] hiking trails [difficulty]"
 
-For each candidate trail, collect:
+Fuer jede candidate trail, collect:
 
 ```
 Trail Data Sheet:
@@ -121,13 +121,13 @@ Trail Data Sheet:
 
 Shortlist 2-3 candidates that fit the requirements plus one easier backup option.
 
-**Expected:** A shortlist of trail candidates with complete data sheets, all within the group's capability range.
+**Erwartet:** A shortlist of trail candidates with complete data sheets, all innerhalb the group's capability range.
 
-**On failure:** If no trails match all constraints, relax the least important constraint first (typically distance before difficulty). If trail data is incomplete, note the gaps and plan to verify on-site or contact local tourism offices.
+**Bei Fehler:** If no trails match all constraints, relax the least important constraint first (typischerweise distance vor difficulty). If trail data is incomplete, note the gaps and plan to verify on-site or contact local tourism offices.
 
-### Step 3: Calculate Times Using Munter Formula
+### Schritt 3: Berechnen Times Using Munter Formula
 
-Estimate hiking time using the Swiss Alpine Club (SAC) Munter formula for realistic planning.
+Schaetzen hiking time using the Swiss Alpine Club (SAC) Munter formula for realistic planning.
 
 ```
 Munter Formula:
@@ -170,13 +170,13 @@ Add breaks: +30 min lunch, +15 min x 3 short breaks = +75 min
 Total with breaks: approximately 8.5 hours trailhead to trailhead
 ```
 
-**Expected:** Time estimates for each trail candidate, including break time. Estimates should be conservative (better to arrive early than to hike in darkness).
+**Erwartet:** Time estimates fuer jede trail candidate, einschliesslich break time. Estimates sollte conservative (better to arrive early than to hike in darkness).
 
-**On failure:** If calculated times exceed the available daylight, the route is too long. Either shorten it (find a closer end point or skip a section via transport) or split into two days. If the group is untested, use the beginner pace for the first day and adjust based on actual performance.
+**Bei Fehler:** If calculated times exceed the available daylight, the route is too long. Either shorten it (find a closer end point or skip a section via transport) or split into two days. If the group is untested, use the beginner pace for the first day and adjust basierend auf actual performance.
 
-### Step 4: Assess Safety
+### Schritt 4: Bewerten Safety
 
-Evaluate objective and subjective hazards for the selected route.
+Bewerten objective and subjective hazards for the selected route.
 
 ```
 Safety Assessment Checklist:
@@ -215,13 +215,13 @@ Overall Safety Rating:
   RED    - Significant hazards present, postpone or choose alternative route
 ```
 
-**Expected:** A completed safety assessment with all hazards rated and mitigations documented. An overall GREEN/YELLOW/RED rating for the go/no-go decision.
+**Erwartet:** A completed safety assessment with all hazards rated and mitigations documented. An overall GREEN/YELLOW/RED rating for the go/no-go decision.
 
-**On failure:** If the assessment yields RED for the primary route, switch to the backup option from Step 2. If all options are RED (e.g., severe weather forecast), postpone the hike. Never override a RED safety rating for schedule convenience.
+**Bei Fehler:** If the assessment yields RED for the primary route, switch to the backup option from Step 2. If all options are RED (e.g., severe weather forecast), postpone the hike. Never override a RED safety rating for schedule convenience.
 
-### Step 5: Plan Logistics
+### Schritt 5: Planen Logistics
 
-Organize practical details for the hiking day or multi-day tour.
+Organisieren practical details for the hiking day or multi-day tour.
 
 ```
 Logistics Checklist:
@@ -243,15 +243,15 @@ Logistics Checklist:
 
 For multi-day tours:
 1. Book huts well in advance (popular huts fill months ahead)
-2. Plan resupply points for food and water
-3. Identify bail-out points for each day (where to exit if someone is injured or weather turns)
-4. Share the itinerary with someone not on the hike
+2. Planen resupply points for food and water
+3. Identifizieren bail-out points fuer jede day (where to exit if someone is injured or weather turns)
+4. Teilen the itinerary with someone not on the hike
 
-**Expected:** All logistics confirmed or flagged as pending. Hut reservations made. Transport to/from trailhead arranged. Emergency plan documented.
+**Erwartet:** All logistics confirmed or flagged as pending. Hut reservations made. Transport to/from trailhead arranged. Emergency plan documented.
 
-**On failure:** If huts are full, check for nearby alternatives (bivouacs, camping, lower huts with longer approach). If trailhead access is complicated (e.g., closed road), arrange alternative transport or adjust the starting point.
+**Bei Fehler:** If huts are full, check for nearby alternatives (bivouacs, camping, lower huts with longer approach). If trailhead access is complicated (e.g., closed road), arrange alternative transport or adjust the starting point.
 
-### Step 6: Generate Hiking Plan
+### Schritt 6: Generieren Hiking Plan
 
 Compile everything into a complete hiking plan document.
 
@@ -285,34 +285,34 @@ Hiking Plan Document Structure:
    - Elevation profile for each day
 ```
 
-**Expected:** A complete hiking plan that can be shared with all participants and left with an emergency contact. The plan should be actionable without additional research.
+**Erwartet:** A complete hiking plan that kann shared with all participants and left with an emergency contact. The plan sollte actionable ohne additional research.
 
-**On failure:** If the plan has gaps that cannot be filled before departure, document them clearly and assign someone to resolve each item. Critical safety gaps (no escape route identified, no weather check plan) must be resolved before departure.
+**Bei Fehler:** If the plan has gaps that cannot be filled vor departure, document them clearly and assign someone to resolve each item. Critical safety gaps (no escape route identified, no weather check plan) muss resolved vor departure.
 
-## Validation
+## Validierung
 
 - [ ] Trail difficulty matches the group's fitness and experience level
 - [ ] Time estimates use Munter formula with appropriate pace for the group
 - [ ] Safety assessment is completed with all hazards rated
 - [ ] Overall safety rating is GREEN or YELLOW (not RED)
 - [ ] Hut/accommodation reservations are confirmed for multi-day tours
-- [ ] Water resupply points are identified for each segment
-- [ ] Escape routes are mapped for each day
+- [ ] Water resupply points are identified fuer jede segment
+- [ ] Escape routes are mapped fuer jede day
 - [ ] Emergency contacts and procedures are documented
 - [ ] Itinerary shared with an emergency contact not on the hike
 - [ ] Gear checklist generated (via check-hiking-gear skill)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
 - **Planning for the fastest hiker**: Always plan for the slowest group member. The group moves at the pace of its weakest link.
 - **Ignoring descent time**: Steep descents are slow and punishing on knees. The Munter formula accounts for this, but many hikers underestimate it.
-- **No turnaround time**: Set a hard turnaround time (typically early afternoon for alpine routes) to avoid descending in darkness or afternoon thunderstorms.
+- **No turnaround time**: Set a hard turnaround time (typischerweise early nachnoon for alpine routes) to avoid descending in darkness or nachnoon thunderstorms.
 - **Skipping the backup route**: Weather and conditions change. Always have an easier alternative prepared.
-- **Overloaded first day**: Start with a shorter, easier day to assess group pace and acclimatize, especially at altitude.
+- **Overloaded first day**: Starten with a shorter, easier day to assess group pace and acclimatize, besonders at altitude.
 - **Altitude underestimation**: Above 2500 m, reduce pace by 10-20% for unacclimatized hikers. Above 3000 m, altitude sickness risk is real.
-- **Hut booking assumptions**: Popular mountain huts (especially in the Alps) require reservations weeks or months in advance. Never assume walk-in availability in high season.
+- **Hut booking assumptions**: Popular mountain huts (besonders in the Alps) require reservations weeks or months in advance. Never assume walk-in availability in high season.
 
-## Related Skills
+## Verwandte Skills
 
 - `check-hiking-gear` — generate an optimized gear checklist for the planned hike
 - `assess-trail-conditions` — evaluate current conditions on the selected trail

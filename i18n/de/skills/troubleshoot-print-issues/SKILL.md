@@ -1,13 +1,18 @@
 ---
 name: troubleshoot-print-issues
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Diagnose and fix common 3D printing failures through systematic symptom
-  analysis. Covers adhesion, stringing, layer shifts, warping, and
-  under/over-extrusion issues. Use when a print fails during the first layer
-  or partway through, finished prints have quality defects (stringing, blobs,
-  gaps), dimensional accuracy issues occur (warping, elephant foot), layer
-  adhesion fails, or new material or hardware changes are causing inconsistent
-  results.
+  Haeufige 3D-Druckfehler durch systematische Symptomanalyse diagnostizieren
+  und beheben. Umfasst Haftung, Fadenziehen, Schichtversatz, Verzug und
+  Unter-/Ueberextrusion. Anwenden wenn ein Druck in der ersten Schicht oder
+  mittendrin versagt, fertige Drucke Qualitaetsmaengel aufweisen (Fadenziehen,
+  Kleckse, Luecken), Massgenauigkeitsprobleme auftreten (Verzug, Elefantenfuss),
+  Schichthaftung versagt oder neues Material oder Hardwareaenderungen
+  inkonsistente Ergebnisse verursachen.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
@@ -17,387 +22,382 @@ metadata:
   complexity: intermediate
   language: multi
   tags: 3d-printing, troubleshooting, fdm, sla, print-quality, failures
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Druckprobleme beheben
 
-Diagnose and fix common 3D printing failures using systematic symptom analysis. This skill covers the most frequent FDM and SLA issues: poor bed adhesion, stringing, layer shifts, warping, under-extrusion, over-extrusion, and print quality defects. Uses a structured approach of symptom identification, root cause analysis, and iterative fixes.
+Haeufige 3D-Druckfehler durch systematische Symptomanalyse diagnostizieren und beheben. Dieser Skill deckt die haeufigsten FDM- und SLA-Probleme ab: schlechte Betthaftung, Fadenziehen, Schichtversatz, Verzug, Unterextrusion, Ueberextrusion und Druckqualitaetsmaengel. Verwendet einen strukturierten Ansatz aus Symptomidentifikation, Ursachenanalyse und iterativer Fehlerbehebung.
 
-## When to Use
+## Wann verwenden
 
-- Print fails during first layer or partway through
-- Finished prints have quality defects (stringing, blobs, gaps, rough surfaces)
-- Dimensional accuracy problems (over/undersized, warping, elephant foot)
-- Layer adhesion issues (delamination, splitting)
-- Support removal leaves damage or supports fail during print
-- Prints look different from slicer preview
-- Material behaves inconsistently across prints
-- New material, printer, or environmental conditions causing issues
+- Druck versagt waehrend der ersten Schicht oder mittendrin
+- Fertige Drucke haben Qualitaetsmaengel (Fadenziehen, Kleckse, Luecken, raue Oberflaechen)
+- Massgenauigkeitsprobleme (ueber-/unterdimensioniert, Verzug, Elefantenfuss)
+- Schichthaftungsprobleme (Delamination, Aufspaltung)
+- Stuetzstruktur-Entfernung hinterlaesst Schaeden oder Stuetzstrukturen versagen waehrend des Drucks
+- Drucke sehen anders aus als die Slicer-Vorschau
+- Material verhaelt sich inkonsistent ueber Drucke hinweg
+- Neues Material, neuer Drucker oder veraenderte Umgebungsbedingungen verursachen Probleme
 
-## Inputs
+## Eingaben
 
-- **failure_description**: What went wrong (failed first layer, stringing, warping, etc.)
-- **failure_timing**: When issue occurs (first layer, midprint, specific height, top layers)
-- **material**: Filament/resin type, brand, age, storage conditions
-- **printer**: Make/model, nozzle size, bed type, enclosure
-- **recent_changes**: New material, slicer settings, hardware modifications, environment
-- **print_history**: Does this model usually work? Did this material work before?
+- **failure_description**: Was schief ging (erste Schicht versagt, Fadenziehen, Verzug usw.)
+- **failure_timing**: Wann das Problem auftritt (erste Schicht, Druckmitte, bestimmte Hoehe, obere Schichten)
+- **material**: Filament-/Resin-Typ, Marke, Alter, Lagerbedingungen
+- **printer**: Hersteller/Modell, Duesengroesse, Betttyp, Einhausung
+- **recent_changes**: Neues Material, Slicer-Einstellungen, Hardwareaenderungen, Umgebung
+- **print_history**: Funktioniert dieses Modell normalerweise? Hat dieses Material vorher funktioniert?
 
-## Procedure
+## Vorgehensweise
 
-### 1. Collect Failure Symptoms
+### Schritt 1: Fehlersymptome erfassen
 
-Document observable symptoms with specificity:
+Beobachtbare Symptome mit Spezifitaet dokumentieren:
 
-**Visual inspection**:
-- Take photos of failure (overall, close-up, specific defect)
-- Note failure location (first layer, specific height, top surface)
-- Describe defect type: gaps, blobs, strings, shifts, cracks
+**Visuelle Inspektion**:
+- Fotos des Fehlers aufnehmen (Gesamtansicht, Nahaufnahme, spezifischer Defekt)
+- Fehlerposition notieren (erste Schicht, bestimmte Hoehe, obere Oberflaeche)
+- Defekttyp beschreiben: Luecken, Kleckse, Faeden, Versetzungen, Risse
 
-**Environmental data**:
-- Ambient temperature during print
-- Humidity level
-- Drafts or AC affecting printer
-- Time of day (temperature changes)
+**Umgebungsdaten**:
+- Umgebungstemperatur waehrend des Drucks
+- Luftfeuchtigkeit
+- Zugluft oder Klimaanlage die den Drucker beeinflussen
+- Tageszeit (Temperaturschwankungen)
 
-**Print parameters**:
+**Druckparameter**:
 ```bash
-# Extract from G-code metadata
-grep "^;MAXX\|^;MINX\|^;MAXZ" failed_print.gcode  # Print dimensions
-grep "^;PRINT_TIME:" failed_print.gcode  # Estimated time
-grep "^M104\|^M140" failed_print.gcode | head -5  # Temperatures
-grep "^;generated by" failed_print.gcode  # Slicer version
+# Aus G-Code-Metadaten extrahieren
+grep "^;MAXX\|^;MINX\|^;MAXZ" failed_print.gcode  # Druckabmessungen
+grep "^;PRINT_TIME:" failed_print.gcode  # Geschaetzte Zeit
+grep "^M104\|^M140" failed_print.gcode | head -5  # Temperaturen
+grep "^;generated by" failed_print.gcode  # Slicer-Version
 ```
 
-**Expected:** Detailed symptom description with photos, parameters, and environmental context.
+**Erwartet:** Detaillierte Symptombeschreibung mit Fotos, Parametern und Umgebungskontext.
 
-**On failure:** If symptoms unclear, print a calibration test (temperature tower, stringing test, or benchy) to reproduce and observe failure systematically.
+**Bei Fehler:** Wenn Symptome unklar, einen Kalibrierungstest drucken (Temperaturturm, Fadenzieh-Test oder Benchy) um den Fehler systematisch zu reproduzieren und zu beobachten.
 
-### 2. Classify Issue by Symptom Pattern
+### Schritt 2: Problem nach Symptommuster klassifizieren
 
-Match observed symptoms to common failure modes:
+Beobachtete Symptome gaengigen Fehlermodi zuordnen:
 
-## Diagnostic Reference Table
+## Diagnostische Referenztabelle
 
-| Symptom | Likely Causes | Quick Check | Priority Fix |
-|---------|--------------|-------------|--------------|
-| **Poor bed adhesion** | Dirty bed, wrong temp, too high Z | Wipe bed, level bed | Clean bed, adjust Z-offset down 0.05mm |
-| **Stringing** | Too hot, insufficient retraction | Check nozzle temp | Lower temp 5°C, increase retraction +0.5mm |
-| **Layer shifts** | Loose belts, too fast, collision | Check belt tension | Tighten belts, reduce speed 20% |
-| **Warping** | Poor adhesion, fast cooling | Check corners lifting | Add brim, enclose printer, increase bed temp |
-| **Under-extrusion** | Clog, low temp, wrong flow | Check extrusion consistency | Clean nozzle, increase temp 5°C, calibrate e-steps |
-| **Over-extrusion** | High flow rate, wrong e-steps | Check blob formation | Reduce flow 2-5%, calibrate e-steps |
-| **Elephant foot** | First layer squish, bed too hot | Measure base width | Raise Z-offset +0.05mm, lower bed temp 5°C |
-| **Gaps in walls** | Thin walls, under-extrusion | Check wall thickness | Enable thin wall detection, increase flow |
-| **Layer delamination** | Low temp, poor cooling, contamination | Check layer lines | Increase temp 5-10°C, check wet filament |
-| **Blobs/zits** | Retraction, coast settings | Check seam alignment | Tune retraction, enable coasting |
-| **Rough top surface** | Insufficient top layers, ironing | Count solid top layers | Add 2 top layers, enable ironing |
-| **Sagging overhangs** | Insufficient cooling, too hot | Check part cooling fan | Increase cooling, lower temp, add supports |
+| Symptom | Wahrscheinliche Ursachen | Schnellpruefung | Primaere Loesung |
+|---------|--------------------------|-----------------|------------------|
+| **Schlechte Betthaftung** | Verschmutztes Bett, falsche Temp., Z zu hoch | Bett reinigen, nivellieren | Bett reinigen, Z-Offset -0.05mm |
+| **Fadenziehen** | Zu heiss, unzureichender Einzug | Duesentemperatur pruefen | Temperatur -5 Grad C, Einzug +0.5mm |
+| **Schichtversatz** | Lose Riemen, zu schnell, Kollision | Riemenspannung pruefen | Riemen spannen, Geschwindigkeit -20% |
+| **Verzug** | Schlechte Haftung, schnelle Abkuehlung | Ecken auf Abloesen pruefen | Rand hinzufuegen, Drucker einhausen, Betttemp. erhoehen |
+| **Unterextrusion** | Verstopfung, niedrige Temp., falscher Durchfluss | Extrusionskonsistenz pruefen | Duese reinigen, Temp. +5 Grad C, E-Steps kalibrieren |
+| **Ueberextrusion** | Hohe Durchflussrate, falsche E-Steps | Klecksbildung pruefen | Durchfluss -2-5%, E-Steps kalibrieren |
+| **Elefantenfuss** | Erstschicht-Anpressung, Bett zu heiss | Basisbreite messen | Z-Offset +0.05mm, Betttemp. -5 Grad C |
+| **Luecken in Waenden** | Duenne Waende, Unterextrusion | Wandstaerke pruefen | Duennwand-Erkennung aktivieren, Durchfluss erhoehen |
+| **Schichtdelamination** | Niedrige Temp., schlechte Kuehlung, Kontamination | Schichtlinien pruefen | Temp. +5-10 Grad C, feuchtes Filament pruefen |
+| **Kleckse/Pickel** | Einzug, Coast-Einstellungen | Nahtausrichtung pruefen | Einzug tunen, Coasting aktivieren |
+| **Raue obere Oberflaeche** | Unzureichende obere Schichten, Buegeln | Obere Vollschichten zaehlen | 2 obere Schichten hinzufuegen, Buegeln aktivieren |
+| **Durchhaengende Ueberhaenge** | Unzureichende Kuehlung, zu heiss | Teileventilator pruefen | Kuehlung erhoehen, Temp. senken, Stuetzstrukturen |
 
-**Expected:** Failure classified into 1-3 most likely categories.
+**Erwartet:** Fehler in 1-3 wahrscheinlichste Kategorien klassifiziert.
 
-**On failure:** If symptoms match multiple categories, prioritize based on failure timing (first layer issues first, then midprint, then top surface).
+**Bei Fehler:** Wenn Symptome mehreren Kategorien entsprechen, nach Fehlerzeitpunkt priorisieren (zuerst Erstschicht-Probleme, dann Druckmitte, dann obere Oberflaeche).
 
-### 3. Perform Root Cause Analysis
+### Schritt 3: Ursachenanalyse durchfuehren
 
-Investigate underlying cause, not just symptoms:
+Zugrundeliegende Ursache untersuchen, nicht nur Symptome:
 
-**5 Whys technique**:
+**5-Warum-Technik**:
 ```
-Symptom: Print warping and lifting from bed
-Why? → Poor bed adhesion in corners
-Why? → Corners cooling faster than center
-Why? → Room draft from AC vent
-Why? → No enclosure to maintain stable temperature
-Why? → ABS requires heated chamber for uniform cooling
+Symptom: Druck verzieht sich und loest sich vom Bett
+Warum? → Schlechte Betthaftung an den Ecken
+Warum? → Ecken kuehlen schneller ab als die Mitte
+Warum? → Raumzugluft von Klimaanlagenauslass
+Warum? → Keine Einhausung fuer stabile Temperatur
+Warum? → ABS benoetigt beheizten Bauraum fuer gleichmaessige Abkuehlung
 
-Root cause: Material choice (ABS) incompatible with open printer in drafty room
+Grundursache: Materialwahl (ABS) inkompatibel mit offenem Drucker in zugigem Raum
 ```
 
-**Common root causes by category**:
+**Haeufige Grundursachen nach Kategorie**:
 
-**Mechanical**:
-- Loose belts, pulleys, or set screws
-- Worn/dirty linear bearings or rods
-- Z-axis binding or misalignment
-- Extruder gear worn or skipping
+**Mechanisch**:
+- Lose Riemen, Riemenscheiben oder Madenschrauben
+- Verschmutzte/abgenutzte Linearlager oder -stangen
+- Z-Achsen-Klemmen oder Fehlausrichtung
+- Extruderzahnrad abgenutzt oder springt ueber
 
-**Thermal**:
-- Temperature sensor drift or failure
-- Inadequate heated bed power/insulation
-- Insufficient part cooling
-- Environmental temperature swings
+**Thermisch**:
+- Temperatursensor-Drift oder -Ausfall
+- Unzureichende Heizbett-Leistung/-Isolierung
+- Unzureichende Teilekuehlung
+- Umgebungstemperaturschwankungen
 
 **Material**:
-- Wet filament (hygroscopic materials)
-- Old/degraded material
-- Contaminated filament (dust, oils)
-- Wrong material for application
+- Feuchtes Filament (hygroskopische Materialien)
+- Altes/degradiertes Material
+- Kontaminiertes Filament (Staub, Oele)
+- Falsches Material fuer Anwendung
 
-**Configuration**:
-- Incorrect e-steps calibration
-- Wrong flow rate multiplier
-- Slicer bug or wrong profile
-- Firmware acceleration/jerk too high
+**Konfiguration**:
+- Falsche E-Steps-Kalibrierung
+- Falscher Durchflussraten-Multiplikator
+- Slicer-Fehler oder falsches Profil
+- Firmware-Beschleunigung/-Ruck zu hoch
 
-**Expected:** Root cause identified with supporting evidence (measured temperatures, belt tension, visual inspection).
+**Erwartet:** Grundursache mit stuetzenden Belegen identifiziert (gemessene Temperaturen, Riemenspannung, visuelle Inspektion).
 
-**On failure:** If root cause unclear, use elimination method: fix most likely cause, re-test, repeat until resolved.
+**Bei Fehler:** Wenn Grundursache unklar, Ausschlussverfahren verwenden: wahrscheinlichste Ursache beheben, erneut testen, wiederholen bis behoben.
 
-### 4. Apply First-Level Fixes
+### Schritt 4: Erste-Stufe-Korrekturen anwenden
 
-Implement immediate solutions for common issues:
+Sofortloesungen fuer gaengige Probleme umsetzen:
 
-### Poor Bed Adhesion
+### Schlechte Betthaftung
 
-**Immediate fixes**:
+**Sofortkorrekturen**:
 ```bash
-# 1. Clean bed thoroughly
-# Glass/PEI: Isopropyl alcohol 90%+
-# BuildTak: Warm water and dish soap
+# 1. Bett gruendlich reinigen
+# Glas/PEI: Isopropylalkohol 90%+
+# BuildTak: Warmes Wasser und Spuelmittel
 
-# 2. Level bed (paper test at 4 corners + center)
-# Paper should drag slightly
+# 2. Bett nivellieren (Papiertest an 4 Ecken + Mitte)
+# Papier sollte leicht schleifen
 
-# 3. Adjust Z-offset down (squish first layer more)
-# Start: -0.05mm increments until lines fuse
+# 3. Z-Offset nach unten anpassen (erste Schicht staerker anpressen)
+# Start: -0.05mm Schritte bis Linien verschmelzen
 
-# 4. Increase bed temperature +5°C
+# 4. Betttemperatur +5 Grad C erhoehen
 
-# 5. Add adhesion aid:
-# - Glue stick (PLA/PETG)
-# - Hairspray (ABS)
-# - ABS juice (ABS) - ABS dissolved in acetone
-# - Magigoo/3D printing adhesive
+# 5. Haftmittel hinzufuegen:
+# - Klebestift (PLA/PETG)
+# - Haarspray (ABS)
+# - ABS-Saft (ABS) - ABS in Aceton aufgeloest
+# - Magigoo/3D-Druck-Haftmittel
 ```
 
-**Slicer settings**:
-- First layer height: 0.2-0.3mm (thicker = better squish)
-- First layer speed: 20mm/s (slower = better adhesion)
-- Add brim: 8-10mm for small footprint parts
-- Add raft: For very difficult materials (TPU, Nylon)
+**Slicer-Einstellungen**:
+- Erstschichthoehe: 0.2-0.3mm (dicker = bessere Anpressung)
+- Erstschichtgeschwindigkeit: 20mm/s (langsamer = bessere Haftung)
+- Rand hinzufuegen: 8-10mm fuer Teile mit kleiner Aufstandsflaeche
+- Raft hinzufuegen: Fuer sehr schwierige Materialien (TPU, Nylon)
 
-**Expected:** First layer adheres completely with no lifting.
+**Erwartet:** Erste Schicht haftet vollstaendig ohne Abloesen.
 
-**On failure:** Check bed flatness with feeler gauge or mesh leveling; warped bed requires glass/PEI sheet or mesh compensation.
+**Bei Fehler:** Bettebenheit mit Fuehlerblattlehre oder Mesh-Nivellierung pruefen; verzogenes Bett erfordert Glas-/PEI-Platte oder Mesh-Kompensation.
 
-### Stringing
+### Fadenziehen
 
-**Temperature-first approach**:
+**Temperatur-zuerst-Ansatz**:
 ```
-1. Print temperature tower (180-220°C in 5° steps for PLA)
-2. Identify lowest temperature that extrudes cleanly
-3. Use that temperature -5°C to minimize stringing
+1. Temperaturturm drucken (180-220 Grad C in 5-Grad-Schritten fuer PLA)
+2. Niedrigste Temperatur identifizieren die sauber extrudiert
+3. Diese Temperatur -5 Grad C verwenden um Fadenziehen zu minimieren
 ```
 
-**Retraction tuning**:
+**Einzugs-Tuning**:
 ```yaml
-# Direct drive extruder:
+# Direktantrieb-Extruder:
 retraction_distance: 1.0-2.0mm
 retraction_speed: 40-50mm/s
 
-# Bowden extruder:
+# Bowden-Extruder:
 retraction_distance: 4.0-6.0mm
 retraction_speed: 40-60mm/s
 
-# If stringing persists:
-- Enable z-hop: 0.2-0.4mm (lifts nozzle during travel)
-- Reduce travel speed (paradoxically helps)
-- Enable combing mode (travels within infill)
+# Wenn Fadenziehen bestehen bleibt:
+- Z-Hop aktivieren: 0.2-0.4mm (hebt Duese bei Fahrwegen an)
+- Fahrgeschwindigkeit reduzieren (hilft paradoxerweise)
+- Combing-Modus aktivieren (Fahrwege innerhalb der Fuellung)
 ```
 
-**Expected:** Minimal stringing, thin strings easily removed by hand.
+**Erwartet:** Minimales Fadenziehen, duenne Faeden leicht von Hand entfernbar.
 
-**On failure:** Check for nozzle partial clog or wet filament (both cause oozing).
+**Bei Fehler:** Auf teilweise Duesenverstopfung oder feuchtes Filament pruefen (beides verursacht Nachfliessen).
 
-### Layer Shifts
+### Schichtversatz
 
-**Mechanical checks**:
+**Mechanische Pruefungen**:
 ```bash
-# 1. Check belt tension (should twang like guitar string)
-# Tighten if loose
+# 1. Riemenspannung pruefen (sollte wie Gitarrensaite schwingen)
+# Nachspannen wenn locker
 
-# 2. Check pulley set screws (motor shafts)
-# Must align with flat on motor shaft
+# 2. Riemenscheiben-Madenschrauben pruefen (Motorwellen)
+# Muessen auf der Abflachung der Motorwelle sitzen
 
-# 3. Check for mechanical resistance
-# Manually move X/Y axes - should glide smoothly
-# Binding indicates dirty rods, worn bearings, or misalignment
+# 3. Auf mechanischen Widerstand pruefen
+# X/Y-Achsen manuell bewegen - sollten leichtgaengig gleiten
+# Klemmen deutet auf verschmutzte Stangen, abgenutzte Lager oder Fehlausrichtung hin
 
-# 4. Check stepper motor current (advanced)
-# Too low → skipping; too high → overheating
+# 4. Schrittmotorstrom pruefen (fortgeschritten)
+# Zu niedrig → Schritte ueberspringen; zu hoch → Ueberhitzung
 ```
 
-**Speed reduction**:
+**Geschwindigkeitsreduzierung**:
 ```yaml
-# Reduce these speeds:
-perimeter_speed: 40mm/s (from 50)
-travel_speed: 120mm/s (from 150)
-acceleration: 500mm/s² (from 1000)
-jerk: 8mm/s (from 15)
+# Diese Geschwindigkeiten reduzieren:
+perimeter_speed: 40mm/s (von 50)
+travel_speed: 120mm/s (von 150)
+acceleration: 500mm/s² (von 1000)
+jerk: 8mm/s (von 15)
 ```
 
-**Expected:** No layer shifts in re-print with tightened belts and reduced speeds.
+**Erwartet:** Keine Schichtversetzungen im Neudruck mit gespannten Riemen und reduzierten Geschwindigkeiten.
 
-**On failure:** Check for slicer-generated collisions (part cooling fan hitting model) or electrical issues (stepper driver overheating).
+**Bei Fehler:** Auf vom Slicer erzeugte Kollisionen pruefen (Teileventilator stoesst gegen Modell) oder elektrische Probleme (Schrittmotortreiber ueberhitzt).
 
-### Warping
+### Verzug
 
-**Thermal management**:
+**Waermemanagement**:
 ```yaml
-# Increase bed temperature:
+# Betttemperatur erhoehen:
 PLA: 60°C → 65°C
 PETG: 80°C → 85°C
 ABS: 100°C → 110°C
 
-# Disable/reduce part cooling:
+# Teilekuehlung deaktivieren/reduzieren:
 first_layer_fan: 0%
 regular_fan: 25% max (ABS), 50% (PETG), 100% (PLA)
 
-# Enclose printer (critical for ABS/ASA):
-- Cardboard box (temporary)
-- Acrylic panels (permanent)
-- Target chamber temp: 40-50°C
+# Drucker einhausen (kritisch fuer ABS/ASA):
+# - Karton (temporaer)
+# - Acrylplatten (permanent)
+# - Ziel-Bauraumtemperatur: 40-50 Grad C
 ```
 
-**Adhesion enhancement**:
-- Add brim: 10-15mm for corners
-- Add "mouse ears": 15mm diameter discs at sharp corners
-- Chamfer bottom edges in model (45° × 1mm removes stress concentrator)
+**Haftungsverbesserung**:
+- Rand hinzufuegen: 10-15mm an Ecken
+- "Mausohren" hinzufuegen: 15mm Durchmesser Scheiben an scharfen Ecken
+- Unterkanten im Modell anfasen (45 Grad x 1mm entfernt Spannungskonzentrator)
 
-**Expected:** Part stays flat with no corner lifting.
+**Erwartet:** Teil bleibt flach ohne Eckenabloesen.
 
-**On failure:** Material fundamentally unsuitable for printer (ABS on unenclosed printer)—switch to PETG or ASA.
+**Bei Fehler:** Material grundsaetzlich ungeeignet fuer Drucker (ABS auf offenem Drucker) — auf PETG oder ASA wechseln.
 
-### Under-Extrusion
+### Unterextrusion
 
-**Quick fixes**:
+**Schnellkorrekturen**:
 ```bash
-# 1. Check for nozzle clog
-# Heat to print temp, manually push filament
-# Should extrude smoothly
+# 1. Auf Duesenverstopfung pruefen
+# Auf Drucktemperatur aufheizen, Filament manuell durchschieben
+# Sollte gleichmaessig extrudieren
 
-# 2. Cold pull cleaning (if partial clog)
-# Heat to 220°C, push cleaning filament through
-# Cool to 90°C, pull sharply - should remove debris
+# 2. Cold-Pull-Reinigung (bei teilweiser Verstopfung)
+# Auf 220 Grad C aufheizen, Reinigungsfilament durchschieben
+# Auf 90 Grad C abkuehlen, ruckartig ziehen - sollte Ablagerungen entfernen
 
-# 3. Increase temperature +5-10°C
-# Higher temp = better flow
+# 3. Temperatur +5-10 Grad C erhoehen
+# Hoehere Temperatur = besserer Durchfluss
 
-# 4. Increase flow rate 2-5%
-# Slicer: Filament settings → Flow → 102-105%
+# 4. Durchflussrate 2-5% erhoehen
+# Slicer: Filament-Einstellungen → Durchfluss → 102-105%
 ```
 
-**E-steps calibration**:
+**E-Steps-Kalibrierung**:
 ```bash
-# 1. Mark filament 120mm above extruder
-# 2. Extrude 100mm: G1 E100 F100
-# 3. Measure remaining distance to mark
-# 4. Calculate: new_steps = current_steps × (100 / actual_extruded)
-# 5. Set: M92 E<new_steps>; M500 (save to EEPROM)
+# 1. Filament 120mm ueber Extruder markieren
+# 2. 100mm extrudieren: G1 E100 F100
+# 3. Verbleibende Distanz zur Markierung messen
+# 4. Berechnen: neue_steps = aktuelle_steps × (100 / tatsaechlich_extrudiert)
+# 5. Setzen: M92 E<neue_steps>; M500 (im EEPROM speichern)
 ```
 
-**Expected:** Consistent extrusion with no gaps in perimeters or infill.
+**Erwartet:** Konsistente Extrusion ohne Luecken in Perimetern oder Fuellung.
 
-**On failure:** Check for heat creep (cooling fan failure), worn extruder gear, or cracked extruder arm.
+**Bei Fehler:** Auf Heat Creep pruefen (Kuehlventilator-Ausfall), abgenutztes Extruderzahnrad oder gebrochenen Extruderarm.
 
-### Over-Extrusion
+### Ueberextrusion
 
-**Flow rate reduction**:
+**Durchflussraten-Reduzierung**:
 ```yaml
-# Reduce flow in 2% increments:
+# Durchfluss in 2%-Schritten reduzieren:
 extrusion_multiplier: 0.98 → 0.96 → 0.94
 
-# Signs of correct flow:
-- Smooth top surface (not overstuffed)
-- Perimeters don't bulge outward
-- Infill doesn't overfill and push layers apart
+# Zeichen fuer korrekten Durchfluss:
+- Glatte obere Oberflaeche (nicht uebergefuellt)
+- Perimeter woelben sich nicht nach aussen
+- Fuellung ueberfuellt nicht und drueckt Schichten nicht auseinander
 ```
 
-**Dimensional accuracy test**:
+**Massgenauigkeitstest**:
 ```bash
-# Print 20mm calibration cube
-# Measure with calipers:
-# X/Y dimensions should be 20.0mm ± 0.1mm
-# If consistently oversized → reduce flow
-# If undersized → increase flow
+# 20mm Kalibrierwuerfel drucken
+# Mit Messschieber messen:
+# X/Y-Masse sollten 20.0mm ± 0.1mm sein
+# Wenn konsistent uebergross → Durchfluss reduzieren
+# Wenn untergross → Durchfluss erhoehen
 ```
 
-**Expected:** Accurate dimensions, smooth surfaces, no bulging.
+**Erwartet:** Genaue Masse, glatte Oberflaechen, keine Woelbungen.
 
-**On failure:** Re-calibrate e-steps (may be set too high).
+**Bei Fehler:** E-Steps neu kalibrieren (moeglicherweise zu hoch eingestellt).
 
-### 5. Verify Fix with Test Print
+### Schritt 5: Korrektur mit Testdruck verifizieren
 
-Confirm resolution before attempting full print:
+Loesung vor vollem Druck bestaetigen:
 
-**Test print selection**:
-- **Adhesion issues**: 20mm square × 5 layers (fast first layer test)
-- **Stringing**: Stringing test model (dual towers with travels)
-- **Layer shifts**: Tall thin test (stress mechanical system)
-- **Warping**: Large flat surface (200mm × 200mm × 0.4mm)
-- **Extrusion**: 20mm calibration cube (dimensional accuracy)
+**Testdruck-Auswahl**:
+- **Haftungsprobleme**: 20mm Quadrat x 5 Schichten (schneller Erstschicht-Test)
+- **Fadenziehen**: Fadenzieh-Testmodell (Doppeltuerme mit Fahrwegen)
+- **Schichtversatz**: Hoher duenner Test (mechanisches System belasten)
+- **Verzug**: Grosse flache Oberflaeche (200mm x 200mm x 0.4mm)
+- **Extrusion**: 20mm Kalibrierwuerfel (Massgenauigkeit)
 
-**Expected:** Test print succeeds with issue resolved.
+**Erwartet:** Testdruck erfolgreich mit behobem Problem.
 
-**On failure:** If test fails, issue not fully resolved or multiple issues present—repeat diagnosis focusing on remaining symptoms.
+**Bei Fehler:** Wenn Test fehlschlaegt, Problem nicht vollstaendig behoben oder mehrere Probleme vorhanden — Diagnose mit Fokus auf verbleibende Symptome wiederholen.
 
-### 6. Document Solution
+### Schritt 6: Loesung dokumentieren
 
-Record successful fix for future reference:
+Erfolgreiche Korrektur fuer zukuenftige Referenz festhalten:
 
-**Issue log template**:
+**Problemprotokoll-Vorlage**:
 ```yaml
 date: 2026-02-16
-issue: "Layer shifts at 50mm height"
-symptoms: "X-axis shifts 10mm, happens consistently at same height"
+issue: "Schichtversatz bei 50mm Hoehe"
+symptoms: "X-Achse versetzt sich um 10mm, passiert konsistent bei gleicher Hoehe"
 printer: "Ender 3 V2"
 material: "PETG, PolyMaker PolyLite"
-root_cause: "Loose X-axis belt, pulley set screw not on flat"
+root_cause: "Loser X-Achsen-Riemen, Riemenscheiben-Madenschraube nicht auf Abflachung"
 solution:
-  - "Tightened X-axis belt to 120Hz resonance"
-  - "Realigned pulley set screw on motor shaft flat"
-  - "Reduced print speed to 40mm/s perimeter"
-verification: "Printed 100mm test cylinder - no shifts"
-notes: "Check belt tension monthly, pulley tends to slip"
+  - "X-Achsen-Riemen auf 120Hz Resonanz gespannt"
+  - "Riemenscheiben-Madenschraube auf Motorwellen-Abflachung ausgerichtet"
+  - "Druckgeschwindigkeit auf 40mm/s Perimeter reduziert"
+verification: "100mm Testzylinder gedruckt - keine Versetzungen"
+notes: "Riemenspannung monatlich pruefen, Riemenscheibe neigt zum Verrutschen"
 ```
 
-**Expected:** Issue documented with root cause and solution for knowledge base.
+**Erwartet:** Problem mit Grundursache und Loesung fuer Wissensdatenbank dokumentiert.
 
-**On failure:** Even unsuccessful troubleshooting attempts should be logged to avoid repeating failed solutions.
+**Bei Fehler:** Auch erfolglose Fehlerbehebungsversuche sollten protokolliert werden um wiederholte fehlgeschlagene Loesungen zu vermeiden.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Failure symptoms documented with photos and specific observations
-- [ ] Issue classified using diagnostic reference table
-- [ ] Root cause identified (mechanical, thermal, material, or configuration)
-- [ ] Appropriate fix applied based on root cause category
-- [ ] Fix verified with test print before attempting full print
-- [ ] Solution documented in issue log with date, cause, and resolution
-- [ ] Environmental factors recorded (temperature, humidity, drafts)
-- [ ] Material condition checked (dry, contamination-free, stored properly)
+- [ ] Fehlersymptome mit Fotos und spezifischen Beobachtungen dokumentiert
+- [ ] Problem anhand diagnostischer Referenztabelle klassifiziert
+- [ ] Grundursache identifiziert (mechanisch, thermisch, Material oder Konfiguration)
+- [ ] Geeignete Korrektur basierend auf Grundursache-Kategorie angewandt
+- [ ] Korrektur mit Testdruck vor vollem Druck verifiziert
+- [ ] Loesung im Problemprotokoll mit Datum, Ursache und Behebung dokumentiert
+- [ ] Umgebungsfaktoren erfasst (Temperatur, Luftfeuchtigkeit, Zugluft)
+- [ ] Materialzustand geprueft (trocken, kontaminationsfrei, korrekt gelagert)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Changing multiple variables**: Adjust one parameter at a time; otherwise you won't know what fixed it (or made it worse)
-2. **Ignoring wet filament**: Hygroscopic materials (Nylon, TPU, PETG) absorb moisture causing bubbling, stringing, poor adhesion—always suspect wet filament first
-3. **Skipping mechanical checks**: Loose belts and worn components cause issues no amount of slicer tuning can fix
-4. **Temperature from internet**: Every printer/material combination is unique—always run your own temperature tower
-5. **Over-tightening belts**: Too tight = premature bearing wear; aim for guitar string tension, not steel cable
-6. **Blaming slicer**: Slicer bugs are rare; 95% of issues are mechanical, thermal, or material-related
-7. **Not cleaning nozzle**: Partial clogs cause intermittent under-extrusion that looks like flow/e-step issues
-8. **Assuming bed is level**: Beds warp over time, springs compress, and adjustments slip—re-level weekly for reliable results
-9. **Wrong Z-offset**: Most first layer failures are Z-offset too high (not enough squish) or too low (nozzle scraping bed)
-10. **Environmental neglect**: ABS/ASA in 15°C garage with drafts will never print well—material requires stable warm environment
+1. **Mehrere Variablen gleichzeitig aendern**: Einen Parameter nach dem anderen anpassen; sonst weiss man nicht was geholfen hat (oder verschlechtert hat)
+2. **Feuchtes Filament ignorieren**: Hygroskopische Materialien (Nylon, TPU, PETG) absorbieren Feuchtigkeit und verursachen Blasenbildung, Fadenziehen, schlechte Haftung — feuchtes Filament immer zuerst verdaechtigen
+3. **Mechanische Pruefungen ueberspringen**: Lose Riemen und abgenutzte Komponenten verursachen Probleme die kein Slicer-Tuning beheben kann
+4. **Temperatur aus dem Internet**: Jede Drucker/Material-Kombination ist einzigartig — immer eigenen Temperaturturm drucken
+5. **Riemen ueberstraffen**: Zu straff = vorzeitiger Lagerverschleiss; Gitarrensaiten-Spannung anstreben, kein Stahlseil
+6. **Slicer beschuldigen**: Slicer-Fehler sind selten; 95% der Probleme sind mechanisch, thermisch oder materialbedingt
+7. **Duese nicht reinigen**: Teilweise Verstopfungen verursachen intermittierende Unterextrusion die wie Durchfluss-/E-Step-Probleme aussieht
+8. **Annehmen Bett ist nivelliert**: Betten verziehen sich mit der Zeit, Federn werden komprimiert und Einstellungen verrutschen — woechentlich neu nivellieren fuer zuverlaessige Ergebnisse
+9. **Falscher Z-Offset**: Die meisten Erstschicht-Fehler sind Z-Offset zu hoch (zu wenig Anpressung) oder zu niedrig (Duese kratzt ueber Bett)
+10. **Umgebung vernachlaessigen**: ABS/ASA in 15 Grad C-Garage mit Zugluft wird nie gut drucken — Material erfordert stabile warme Umgebung
 
-## Related Skills
+## Verwandte Skills
 
-- **[prepare-print-model](../prepare-print-model/SKILL.md)**: Ensure model is properly prepared to avoid printability issues
-- **[select-print-material](../select-print-material/SKILL.md)**: Choose material appropriate for printer capabilities and environment
-- **Calibrate 3D Printer** (future skill): E-steps, flow rate, temperature towers, PID tuning, and bed mesh leveling
-- **Maintain 3D Printer** (future skill): Belt tensioning, bearing lubrication, nozzle replacement, and preventive maintenance
+- **[prepare-print-model](../prepare-print-model/SKILL.md)**: Sicherstellen dass Modell korrekt vorbereitet ist um Druckbarkeitsprobleme zu vermeiden
+- **[select-print-material](../select-print-material/SKILL.md)**: Material passend zu Druckerfaehigkeiten und Umgebung waehlen
+- **3D-Drucker kalibrieren** (zukuenftiger Skill): E-Steps, Durchflussrate, Temperaturtuerme, PID-Tuning und Bett-Mesh-Nivellierung
+- **3D-Drucker warten** (zukuenftiger Skill): Riemenspannung, Lagerschmierung, Duesenwechsel und vorbeugende Wartung

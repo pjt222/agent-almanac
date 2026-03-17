@@ -1,14 +1,13 @@
 ---
 name: annotate-source-files
 description: >
-  Add PUT workflow annotations to source files using the correct
-  language-specific comment prefix. Covers annotation syntax, skeleton
-  generation via put_generate(), multiline annotations, .internal
-  variables, and validation. Supports 30+ languages with automatic
-  comment prefix detection. Use after analyzing a codebase and having an
-  annotation plan, when adding workflow documentation to new or existing
-  source files, or when documenting data pipelines, ETL processes, or
-  multi-step computations.
+  正しい言語固有のコメントプレフィックスを使用して、ソースファイルにPUTワークフロー
+  アノテーションを追加する。アノテーション構文、put_generate()によるスケルトン
+  生成、複数行アノテーション、.internal変数、バリデーションをカバーする。
+  30以上の言語をサポートし、自動コメントプレフィックス検出を備える。
+  コードベースを分析してアノテーション計画を持った後、新規または既存のソースファイルに
+  ワークフロードキュメントを追加する時、データパイプライン、ETLプロセス、
+  複数ステップの計算をドキュメント化する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -27,27 +26,27 @@ metadata:
 
 # ソースファイルのアノテーション
 
-Add PUT workflow annotations to source files so putior can extract structured workflow data and generate Mermaid diagrams.
+putiorが構造化ワークフローデータを抽出してMermaidダイアグラムを生成できるように、ソースファイルにPUTワークフローアノテーションを追加する。
 
 ## 使用タイミング
 
-- After analyzing a codebase with `analyze-codebase-workflow` and having an annotation plan
-- Adding workflow documentation to new or existing source files
-- Enriching auto-detected workflows with manual labels and connections
-- Documenting data pipelines, ETL processes, or multi-step computations
+- `analyze-codebase-workflow`でコードベースを分析してアノテーション計画を持った後
+- 新規または既存のソースファイルにワークフロードキュメントを追加する時
+- 自動検出されたワークフローを手動ラベルと接続で強化する時
+- データパイプライン、ETLプロセス、複数ステップの計算をドキュメント化する時
 
 ## 入力
 
-- **必須**: Source files to annotate
-- **必須**: Annotation plan or knowledge of the workflow steps
-- **任意**: Style preference: single-line or multiline (default: single-line)
-- **任意**: Whether to use `put_generate()` for skeleton generation (default: yes)
+- **必須**: アノテーションするソースファイル
+- **必須**: アノテーション計画またはワークフローステップの知識
+- **任意**: スタイルの好み: 単一行または複数行（デフォルト: 単一行）
+- **任意**: スケルトン生成に`put_generate()`を使用するかどうか（デフォルト: はい）
 
 ## 手順
 
-### ステップ1: Determine Comment Prefix
+### ステップ1: コメントプレフィックスを確認する
 
-Each language has a specific comment prefix for PUT annotations. Use `get_comment_prefix()` to find the correct one.
+各言語にはPUTアノテーション用の特定のコメントプレフィックスがある。正しいものを見つけるには`get_comment_prefix()`を使用する。
 
 ```r
 library(putior)
@@ -64,15 +63,15 @@ get_comment_prefix("m")    # "%"
 get_comment_prefix("lua")  # "--"
 ```
 
-**期待結果:** A string like `"#"`, `"--"`, `"//"`, or `"%"`.
+**期待結果:** `"#"`、`"--"`、`"//"`、`"%"`のような文字列。
 
-> **Line and block comments:** putior detects annotations in both line comments (`//`, `#`, `--`) and C-style block comments (`/* */`, `/** */`). For JS/TS, both `//` and `/* */` blocks are scanned. Python triple-quote strings (`''' '''`) are **not** detected — use `#` for Python annotations.
+> **行コメントとブロックコメント:** putiorは行コメント（`//`、`#`、`--`）とCスタイルのブロックコメント（`/* */`、`/** */`）の両方でアノテーションを検出する。JS/TSでは`//`と`/* */`ブロックの両方がスキャンされる。Pythonのトリプルクオート文字列（`''' '''`）は検出**されない** — Pythonアノテーションには`#`を使用する。
 
-**失敗時:** If the extension is not recognized, the file language may not be supported. Check `get_supported_extensions()` for the full list. For unsupported languages, use `#` as a conventional default.
+**失敗時:** 拡張子が認識されない場合、ファイルの言語がサポートされていない可能性がある。完全なリストは`get_supported_extensions()`で確認する。サポートされていない言語の場合、規約上のデフォルトとして`#`を使用する。
 
-### ステップ2: Generate Annotation Skeletons
+### ステップ2: アノテーションスケルトンを生成する
 
-Use `put_generate()` to create annotation templates based on auto-detected I/O.
+自動検出されたI/Oに基づいてアノテーションテンプレートを作成するために`put_generate()`を使用する。
 
 ```r
 # Print suggestions to console
@@ -88,51 +87,51 @@ put_generate("./src/etl/", style = "multiline")
 put_generate("./src/etl/", output = "clipboard")
 ```
 
-Example output for an R file:
+Rファイルの出力例:
 ```r
 # put id:'extract_data', label:'Extract Customer Data', input:'customers.csv', output:'raw_data.internal'
 ```
 
-Example output for SQL:
+SQLの出力例:
 ```sql
 -- put id:'load_data', label:'Load Customer Table', output:'customers'
 ```
 
-**期待結果:** One or more annotation comment lines per source file, pre-filled with detected function names and I/O.
+**期待結果:** ソースファイルごとに1つ以上のアノテーションコメント行、検出された関数名とI/Oで事前入力されている。
 
-**失敗時:** If no suggestions are generated, the file may not contain recognizable I/O patterns. Write annotations manually based on your understanding of the code.
+**失敗時:** 提案が生成されない場合、ファイルに認識可能なI/Oパターンが含まれていない可能性がある。コードの理解に基づいて手動でアノテーションを書く。
 
-### ステップ3: Refine Annotations
+### ステップ3: アノテーションを精緻化する
 
-Edit the generated skeletons to add accurate labels, connections, and metadata.
+生成されたスケルトンを編集して正確なラベル、接続、メタデータを追加する。
 
-**Annotation syntax reference:**
+**アノテーション構文リファレンス:**
 
 ```
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 
-Fields:
-- `id` (required): Unique identifier, used for node connections
-- `label` (required): Human-readable description shown in diagram
-- `input`: Comma-separated list of input files or variables
-- `output`: Comma-separated list of output files or variables
-- `.internal` extension: Marks in-memory variables (not persisted between scripts)
-- `node_type`: Controls Mermaid node shape and class styling. Values:
-  - `"input"` — stadium shape `([...])` for data sources and configuration
-  - `"output"` — subroutine shape `[[...]]` for generated artifacts
-  - `"process"` — rectangle `[...]` for processing steps (default)
-  - `"decision"` — diamond `{...}` for conditional logic
-  - `"start"` / `"end"` — stadium shape `([...])` for entry/terminal nodes
+フィールド:
+- `id`（必須）: 一意の識別子、ノード接続に使用
+- `label`（必須）: ダイアグラムに表示される人間可読な説明
+- `input`: カンマ区切りの入力ファイルまたは変数のリスト
+- `output`: カンマ区切りの出力ファイルまたは変数のリスト
+- `.internal`拡張子: メモリ内変数を示す（スクリプト間で永続化されない）
+- `node_type`: Mermaidノードの形状とクラススタイルを制御する。値:
+  - `"input"` — スタジアム形状`([...])`、データソースと設定用
+  - `"output"` — サブルーチン形状`[[...]]`、生成されたアーティファクト用
+  - `"process"` — 矩形`[...]`、処理ステップ用（デフォルト）
+  - `"decision"` — ダイヤモンド`{...}`、条件ロジック用
+  - `"start"` / `"end"` — スタジアム形状`([...])`、開始/終端ノード用
 
-Example with `node_type`:
+`node_type`の例:
 ```r
 # put id:'config', label:'Load Config', node_type:'input', output:'config.internal'
 # put id:'transform', label:'Apply Rules', node_type:'process', input:'config.internal', output:'result.rds'
 # put id:'report', label:'Generate Report', node_type:'output', input:'result.rds'
 ```
 
-**Multiline syntax** (for complex annotations):
+**複数行構文**（複雑なアノテーション用）:
 ```r
 # put id:'complex_step', \
 #   label:'Multi-line Label', \
@@ -140,7 +139,7 @@ Example with `node_type`:
 #   output:'result.parquet'
 ```
 
-**Cross-file data flow** (connecting scripts via file-based I/O):
+**ファイル間データフロー**（ファイルベースI/Oによるスクリプト間接続）:
 ```r
 # Script 1: extract.R
 # put id:'extract', label:'Extract Data', output:'raw_data.internal, raw_data.rds'
@@ -153,20 +152,20 @@ data <- readRDS("raw_data.rds")
 arrow::write_parquet(clean, "clean_data.parquet")
 ```
 
-**期待結果:** Annotations refined with accurate IDs, labels, and I/O fields that reflect actual data flow.
+**期待結果:** 実際のデータフローを反映する正確なID、ラベル、I/Oフィールドでアノテーションが精緻化される。
 
-**失敗時:** If unsure about I/O, use `.internal` extension for in-memory intermediates and explicit file names for persisted data.
+**失敗時:** I/Oが不確かな場合、メモリ内の中間物には`.internal`拡張子を使用し、永続化データには明示的なファイル名を使用する。
 
-### ステップ4: Insert Annotations into Files
+### ステップ4: ファイルにアノテーションを挿入する
 
-Place annotations at the top of each file or immediately above the relevant code block.
+各ファイルの先頭または関連するコードブロックの直上にアノテーションを配置する。
 
-**Placement conventions:**
-1. **File-level annotation**: Place at the top of the file, after any shebang line or file header comment
-2. **Block-level annotation**: Place immediately above the code block it describes
-3. **Multiple annotations per file**: Use for files with distinct workflow phases
+**配置規約:**
+1. **ファイルレベルアノテーション**: ファイルの先頭に配置、shebang行やファイルヘッダーコメントの後
+2. **ブロックレベルアノテーション**: 記述するコードブロックの直上に配置
+3. **ファイルあたり複数のアノテーション**: 異なるワークフローフェーズを持つファイルに使用
 
-Example placement in an R file:
+Rファイルでの配置例:
 ```r
 #!/usr/bin/env Rscript
 # ETL Extract Script
@@ -181,15 +180,15 @@ df_clean <- df[complete.cases(df), ]
 saveRDS(df_clean, "clean.rds")
 ```
 
-Use the Edit tool to insert annotations into existing files without disturbing surrounding code.
+Editツールを使用して、周囲のコードを乱さずに既存ファイルにアノテーションを挿入する。
 
-**期待結果:** Annotations inserted at appropriate locations in each source file.
+**期待結果:** 各ソースファイルの適切な場所にアノテーションが挿入される。
 
-**失敗時:** If annotations break syntax highlighting in the editor, ensure the comment prefix is correct for the language. PUT annotations are standard comments and should not affect code execution.
+**失敗時:** アノテーションがエディターのシンタックスハイライトを壊す場合、コメントプレフィックスが言語に対して正しいことを確認する。PUTアノテーションは標準コメントであり、コードの実行に影響しないはずである。
 
-### ステップ5: Validate Annotations
+### ステップ5: アノテーションを検証する
 
-Run putior's validation to check annotation syntax and connectivity.
+putiorのバリデーションを実行してアノテーション構文と接続性を確認する。
 
 ```r
 # Scan annotated files
@@ -213,37 +212,37 @@ merged <- put_merge("./src/", merge_strategy = "supplement")
 cat(put_diagram(merged, theme = "github"))
 ```
 
-**期待結果:** All annotations parse without errors. The diagram shows a connected workflow. `put_merge()` fills in any gaps from auto-detection.
+**期待結果:** すべてのアノテーションがエラーなくパースされる。ダイアグラムが接続されたワークフローを示す。`put_merge()`が自動検出からギャップを埋める。
 
-**失敗時:** Common validation issues:
-- Missing closing quote: `id:'name` → `id:'name'`
-- Using double quotes inside: `id:"name"` → `id:'name'`
-- Duplicate IDs across files: each `id` must be unique across the entire scanned directory
-- Backslash continuation on the wrong line: the `\` must be the last character before newline
+**失敗時:** よくあるバリデーションの問題:
+- 閉じクオートの欠落: `id:'name` → `id:'name'`
+- 内部でのダブルクオートの使用: `id:"name"` → `id:'name'`
+- ファイル間の重複ID: 各`id`はスキャンされたディレクトリ全体で一意でなければならない
+- 誤った行でのバックスラッシュ継続: `\`は改行前の最後の文字でなければならない
 
 ## バリデーション
 
-- [ ] Every annotated file has syntactically valid PUT annotations
-- [ ] `put("./src/")` returns a data frame with the expected number of nodes
-- [ ] No duplicate `id` values across the scanned directory
-- [ ] `put_diagram()` produces a connected flowchart (not all isolated nodes)
-- [ ] Multiline annotations (if used) parse correctly with backslash continuation
-- [ ] `.internal` variables appear only as outputs, never as cross-file inputs
+- [ ] アノテーションされたすべてのファイルが構文的に有効なPUTアノテーションを持つ
+- [ ] `put("./src/")`が期待されるノード数のデータフレームを返す
+- [ ] スキャンされたディレクトリ全体で`id`値の重複がない
+- [ ] `put_diagram()`が接続されたフローチャートを生成する（すべてが孤立ノードではない）
+- [ ] 複数行アノテーション（使用する場合）がバックスラッシュ継続で正しくパースされる
+- [ ] `.internal`変数が出力としてのみ現れ、ファイル間入力としては現れない
 
 ## よくある落とし穴
 
-- **Quote nesting errors**: PUT annotations use single quotes: `id:'name'`. Double quotes cause parsing issues when the annotation is inside a string context.
-- **Duplicate IDs**: Every `id` must be globally unique within the scanned scope. Use a naming convention like `<script>_<step>` (e.g., `extract_read`, `transform_clean`).
-- **.internal as cross-file input**: `.internal` variables exist only during script execution. To pass data between scripts, use a persisted file format (`.rds`, `.csv`, `.parquet`) as the output of one script and input of the next.
-- **Missing connections**: If the diagram shows disconnected nodes, check that output filenames in one annotation exactly match input filenames in another (including extensions).
-- **Wrong comment prefix**: Using `#` in a SQL file or `//` in Python will cause the annotation to be treated as code, not a comment. Always verify with `get_comment_prefix()`.
-- **Forgetting multiline continuation**: When using multiline annotations, every continued line must end with `\` and the next line must start with the comment prefix.
-- **Python triple-quote strings**: putior does not scan Python triple-quote strings (`''' '''`, `""" """`). Always use `#` for Python PUT annotations.
-- **Meta-pipeline annotations**: If you annotate a build script that also scans for annotations (e.g., a script that calls `put()` and `put_diagram()`), the script's own annotations will appear in the generated diagram. Either exclude the file from scanning (see `generate-workflow-diagram` Common Pitfalls) or avoid placing PUT annotations in the build script itself.
+- **クオートのネストエラー**: PUTアノテーションはシングルクオートを使用する: `id:'name'`。ダブルクオートはアノテーションが文字列コンテキスト内にある場合にパースの問題を引き起こす。
+- **重複ID**: すべての`id`はスキャンスコープ内でグローバルに一意でなければならない。`<script>_<step>`のような命名規約を使用する（例: `extract_read`、`transform_clean`）。
+- **ファイル間入力としての.internal**: `.internal`変数はスクリプト実行中のみ存在する。スクリプト間でデータを渡すには、1つのスクリプトの出力と次のスクリプトの入力として永続化ファイル形式（`.rds`、`.csv`、`.parquet`）を使用する。
+- **接続の欠落**: ダイアグラムが切断されたノードを示す場合、あるアノテーションの出力ファイル名が別のアノテーションの入力ファイル名と正確に一致しているか（拡張子を含めて）確認する。
+- **誤ったコメントプレフィックス**: SQLファイルで`#`を使用したりPythonで`//`を使用すると、アノテーションがコメントではなくコードとして扱われる。常に`get_comment_prefix()`で確認する。
+- **複数行継続の忘れ**: 複数行アノテーションを使用する時、継続されるすべての行は`\`で終わり、次の行はコメントプレフィックスで始まらなければならない。
+- **Pythonのトリプルクオート文字列**: putiorはPythonのトリプルクオート文字列（`''' '''`、`""" """`）をスキャンしない。Python PUTアノテーションには常に`#`を使用する。
+- **メタパイプラインアノテーション**: アノテーションもスキャンするビルドスクリプト（例: `put()`と`put_diagram()`を呼ぶスクリプト）にアノテーションする場合、そのスクリプト自身のアノテーションが生成されるダイアグラムに表示される。スキャンからファイルを除外する（`generate-workflow-diagram`のよくある落とし穴を参照）か、ビルドスクリプト自体にPUTアノテーションを配置しないようにする。
 
 ## 関連スキル
 
-- `analyze-codebase-workflow` — prerequisite: produces the annotation plan this skill follows
-- `generate-workflow-diagram` — next step: generate the final diagram from annotations
-- `install-putior` — putior must be installed before annotating
-- `configure-putior-mcp` — MCP tools provide interactive annotation assistance
+- `analyze-codebase-workflow` — 前提条件: このスキルが従うアノテーション計画を生成する
+- `generate-workflow-diagram` — 次のステップ: アノテーションから最終ダイアグラムを生成する
+- `install-putior` — アノテーション前にputiorをインストールする必要がある
+- `configure-putior-mcp` — MCPツールがインタラクティブなアノテーション支援を提供する

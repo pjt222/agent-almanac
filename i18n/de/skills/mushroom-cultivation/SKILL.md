@@ -1,13 +1,14 @@
 ---
 name: mushroom-cultivation
 description: >
-  Cultivate edible and medicinal mushrooms from spawn through fruiting.
-  Covers substrate preparation, inoculation methods, incubation conditions,
-  fruiting chamber management, harvest timing, and successive flushes for
-  oyster, shiitake, lion's mane, and other commonly cultivated species. Use
-  when growing edible mushrooms without the risks of wild foraging, when a
-  reliable supply of fresh culinary or medicinal mushrooms is needed, or when
-  exploring mycelial ecology through hands-on cultivation practice.
+  Speise- und Heilpilze vom Myzel bis zur Fruchtkoerperbildung zuechten.
+  Umfasst Substratvorbereitung, Beimpfungsmethoden, Inkubationsbedingungen,
+  Fruchtungskammer-Management, Erntezeitpunkt und aufeinanderfolgende
+  Erntewellen fuer Austernpilze, Shiitake, Igel-Stachelbart und andere
+  gaengig kultivierte Arten. Verwenden beim Zuechten essbarer Pilze ohne
+  die Risiken des Wildsammelns, wenn eine zuverlaessige Versorgung mit
+  frischen kulinarischen oder Heilpilzen benoetigt wird oder beim Erkunden
+  der Myzel-Oekologie durch praktische Zuchtpraxis.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,30 +27,30 @@ metadata:
 
 # Pilzzucht
 
-Cultivate edible and medicinal mushrooms from spawn through fruiting at home scale.
+Speise- und Heilpilze vom Myzel bis zur Fruchtkoerperbildung im Heimmassstab zuechten.
 
-## When to Use
+## Wann verwenden
 
-- You want to grow edible mushrooms without the risks of wild foraging
-- You have a suitable indoor or outdoor space for mushroom cultivation
-- You want to experiment with different species and substrates
-- You need a reliable supply of fresh mushrooms (culinary or medicinal)
-- You are interested in mycelial ecology and want hands-on experience
+- Sie moechten essbare Pilze ohne die Risiken des Wildsammelns zuechten
+- Sie haben einen geeigneten Innen- oder Aussenbereich fuer die Pilzzucht
+- Sie moechten mit verschiedenen Arten und Substraten experimentieren
+- Sie benoetigen eine zuverlaessige Versorgung mit frischen Pilzen (kulinarisch oder medizinisch)
+- Sie interessieren sich fuer Myzel-Oekologie und moechten praktische Erfahrung sammeln
 
-## Inputs
+## Eingaben
 
-- **Required**: Mushroom spawn (grain spawn, sawdust spawn, or plug spawn from a reputable supplier)
-- **Required**: Substrate material (straw, hardwood sawdust, logs, or supplemented sawdust)
-- **Optional**: Pressure cooker or large pot (for substrate sterilization/pasteurization)
-- **Optional**: Growing containers (bags, buckets, or logs)
-- **Optional**: Spray bottle and humidity gauge
-- **Optional**: Thermometer for monitoring temperature
+- **Erforderlich**: Pilzbrut (Getreidebrut, Saegemehbrut oder Duebelmyzel von einem serioesen Anbieter)
+- **Erforderlich**: Substratmaterial (Stroh, Laubholz-Saegemehl, Staemme oder supplementiertes Saegemehl)
+- **Optional**: Druckkochtopf oder grosser Topf (fuer Substratsterilisation/-pasteurisierung)
+- **Optional**: Zuchtbehaelter (Beutel, Eimer oder Staemme)
+- **Optional**: Spruehflasche und Feuchtigkeitsmesser
+- **Optional**: Thermometer zur Temperaturueberwachung
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Choose Your Species
+### Schritt 1: Art auswaehlen
 
-Match species to your environment and experience level.
+Art an Umgebung und Erfahrungsstufe anpassen.
 
 ```
 Beginner-Friendly Species:
@@ -75,13 +76,13 @@ Start with oyster mushrooms — they colonize fast, fruit reliably,
 and tolerate imperfect conditions.
 ```
 
-**Expected:** Species selected that matches your environment, substrate availability, and experience level.
+**Erwartet:** Art ausgewaehlt, die zur Umgebung, Substratverfuegbarkeit und Erfahrungsstufe passt.
 
-**On failure:** If unsure, start with blue oyster mushroom (Pleurotus ostreatus) on straw. It is the most forgiving species for beginners.
+**Bei Fehler:** Im Zweifelsfall mit Blauem Austernpilz (Pleurotus ostreatus) auf Stroh beginnen. Es ist die nachsichtigste Art fuer Anfaenger.
 
-### Step 2: Prepare the Substrate
+### Schritt 2: Substrat vorbereiten
 
-The substrate provides nutrition for the mycelium. It must be clean enough to give your mushroom a head start over competitors.
+Das Substrat liefert Nahrung fuer das Myzel. Es muss sauber genug sein, um dem Pilz einen Vorsprung vor Konkurrenten zu geben.
 
 ```
 Substrate Preparation Methods:
@@ -109,13 +110,13 @@ COLD WATER LIME BATH (alternative pasteurization):
 5. pH will neutralize as the straw dries
 ```
 
-**Expected:** Substrate is clean (pasteurized or sterilized), at correct moisture content, and cooled to room temperature.
+**Erwartet:** Substrat ist sauber (pasteurisiert oder sterilisiert), hat den korrekten Feuchtigkeitsgehalt und ist auf Raumtemperatur abgekuehlt.
 
-**On failure:** If contamination appears after inoculation (green mold within the first week), the substrate was insufficiently pasteurized or the inoculation environment was too dirty. Start fresh with more rigorous pasteurization.
+**Bei Fehler:** Wenn nach der Beimpfung Kontamination auftritt (Gruenschimmel innerhalb der ersten Woche), war das Substrat unzureichend pasteurisiert oder die Beimpfungsumgebung war zu unsauber. Neu beginnen mit rigoroserer Pasteurisierung.
 
-### Step 3: Inoculate
+### Schritt 3: Beimpfen
 
-Introduce spawn to the prepared substrate.
+Brut in das vorbereitete Substrat einbringen.
 
 ```
 Inoculation Protocol:
@@ -139,13 +140,13 @@ Hygiene Priorities:
 - If you touch a contaminated surface, re-clean before continuing
 ```
 
-**Expected:** Spawn is evenly distributed throughout the substrate in a clean container, ready for incubation.
+**Erwartet:** Brut ist gleichmaessig im Substrat in einem sauberen Behaelter verteilt, bereit fuer die Inkubation.
 
-**On failure:** If spawn does not seem to be colonizing after 7-10 days (no visible white growth), check temperature (too cold slows growth), substrate moisture (too dry inhibits growth), and spawn viability (old or heat-damaged spawn may be dead).
+**Bei Fehler:** Wenn die Brut nach 7-10 Tagen nicht zu kolonisieren scheint (kein sichtbares weisses Wachstum), Temperatur pruefen (zu kalt verlangsamt das Wachstum), Substratfeuchtigkeit (zu trocken hemmt das Wachstum) und Brutvitalitaet (alte oder hitzegeschaedigte Brut kann abgestorben sein).
 
-### Step 4: Incubate
+### Schritt 4: Inkubieren
 
-The mycelium colonizes the substrate during incubation.
+Das Myzel besiedelt das Substrat waehrend der Inkubation.
 
 ```
 Incubation Conditions:
@@ -176,13 +177,13 @@ Contamination Response:
 - Orange/pink: bacterial contamination from wet substrate. Discard.
 ```
 
-**Expected:** Full colonization — the substrate is uniformly white with mycelium and smells pleasantly mushroomy.
+**Erwartet:** Vollstaendige Besiedlung — das Substrat ist gleichmaessig weiss mit Myzel und riecht angenehm pilzig.
 
-**On failure:** Partial colonization with contamination means the race was lost. Start again with more spawn (higher ratio), better pasteurization, and cleaner inoculation practice.
+**Bei Fehler:** Teilweise Besiedlung mit Kontamination bedeutet, dass das Rennen verloren wurde. Erneut beginnen mit mehr Brut (hoeheres Verhaeltnis), besserer Pasteurisierung und saubererer Beimpfungstechnik.
 
-### Step 5: Initiate Fruiting
+### Schritt 5: Fruchtung einleiten
 
-Trigger the transition from vegetative growth to mushroom formation.
+Den Uebergang vom vegetativen Wachstum zur Pilzbildung ausloesen.
 
 ```
 Fruiting Triggers:
@@ -204,11 +205,11 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 - Fan fresh air in by waving the lid 2-3 times daily
 ```
 
-**Expected:** Primordia (tiny mushroom pins) appear within 5-14 days of fruiting initiation.
+**Erwartet:** Primordien (winzige Pilzanlagen) erscheinen innerhalb von 5-14 Tagen nach Fruchtungseinleitung.
 
-**On failure:** If no pins appear after 2 weeks: check humidity (too dry is the most common cause), light (some species need light to pin), and temperature (too warm delays pinning for many species).
+**Bei Fehler:** Wenn nach 2 Wochen keine Anlagen erscheinen: Feuchtigkeit pruefen (zu trocken ist die haeufigste Ursache), Licht (manche Arten benoetigen Licht zur Anlagebildung) und Temperatur (zu warm verzoegert die Anlagebildung bei vielen Arten).
 
-### Step 6: Harvest and Manage Successive Flushes
+### Schritt 6: Ernten und aufeinanderfolgende Erntewellen managen
 
 ```
 Harvest Timing:
@@ -231,31 +232,31 @@ Successive Flushes:
   for oyster mushrooms over all flushes
 ```
 
-**Expected:** Fresh mushrooms harvested at optimal timing, with successive flushes extending the productive life of the substrate.
+**Erwartet:** Frische Pilze zum optimalen Zeitpunkt geerntet, mit aufeinanderfolgenden Erntewellen, die die produktive Lebensdauer des Substrats verlaengern.
 
-**On failure:** If yields are poor (small, sparse mushrooms), the substrate may be depleted or contaminated. Supplemented substrates produce higher yields. If contamination appears between flushes, the block's productive life is over — compost it.
+**Bei Fehler:** Wenn die Ertraege schlecht sind (kleine, vereinzelte Pilze), kann das Substrat erschoepft oder kontaminiert sein. Supplementierte Substrate erzeugen hoehere Ertraege. Wenn Kontamination zwischen Erntewellen auftritt, ist die produktive Lebensdauer des Blocks vorbei — kompostieren.
 
-## Validation
+## Validierung
 
-- [ ] Species appropriate for environment and experience level
-- [ ] Substrate was properly pasteurized or sterilized
-- [ ] Spawn rate was 10-20% by weight
-- [ ] Inoculation was performed with clean technique
-- [ ] Full colonization was achieved before initiating fruiting
-- [ ] Fruiting conditions (humidity, temperature, air exchange, light) were maintained
-- [ ] Mushrooms were harvested at optimal timing
-- [ ] Successive flushes were managed through rehydration
+- [ ] Art ist fuer Umgebung und Erfahrungsstufe angemessen
+- [ ] Substrat wurde ordnungsgemaess pasteurisiert oder sterilisiert
+- [ ] Brutrate betrug 10-20% nach Gewicht
+- [ ] Beimpfung wurde mit sauberer Technik durchgefuehrt
+- [ ] Vollstaendige Besiedlung wurde vor Fruchtungseinleitung erreicht
+- [ ] Fruchtungsbedingungen (Feuchtigkeit, Temperatur, Luftaustausch, Licht) wurden eingehalten
+- [ ] Pilze wurden zum optimalen Zeitpunkt geerntet
+- [ ] Aufeinanderfolgende Erntewellen wurden durch Rehydrierung gemanagt
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Insufficient pasteurization**: The most common cause of failure. If contaminants appear within the first week, pasteurization was inadequate
-- **Too little spawn**: Low spawn rates mean slow colonization, giving competitors more time. Use the recommended 10-20% ratio
-- **Low humidity during fruiting**: Mushrooms are 90% water. If the air is dry, primordia abort (dry out before developing). Humidity below 80% during fruiting is too low
-- **No fresh air exchange**: High CO2 during fruiting produces long, thin stems and small caps. Increase air exchange if stems are elongated
-- **Harvesting too late**: Over-mature mushrooms drop spores (messy) and have shorter shelf life. Harvest on the early side
-- **Contamination panic**: A small spot of mold on an otherwise healthy block is not necessarily fatal. Isolate the block, remove the contaminated area, and monitor. Discard only if contamination is spreading
+- **Unzureichende Pasteurisierung**: Die haeufigste Ursache fuer Misserfolg. Wenn Kontaminanten innerhalb der ersten Woche auftreten, war die Pasteurisierung unzureichend
+- **Zu wenig Brut**: Niedrige Brutraten bedeuten langsame Besiedlung, was Konkurrenten mehr Zeit gibt. Das empfohlene 10-20%-Verhaeltnis verwenden
+- **Niedrige Feuchtigkeit waehrend der Fruchtung**: Pilze bestehen zu 90% aus Wasser. Wenn die Luft trocken ist, brechen Primordien ab (trocknen aus, bevor sie sich entwickeln). Feuchtigkeit unter 80% waehrend der Fruchtung ist zu niedrig
+- **Kein Frischluftaustausch**: Hoher CO2-Gehalt waehrend der Fruchtung erzeugt lange, duenne Stiele und kleine Huete. Luftaustausch erhoehen, wenn Stiele verlaengert sind
+- **Zu spaet ernten**: Ueberreife Pilze werfen Sporen ab (unordentlich) und haben kuerzere Haltbarkeit. Eher frueh ernten
+- **Kontaminationspanik**: Ein kleiner Schimmelfleck auf einem ansonsten gesunden Block ist nicht unbedingt fatal. Den Block isolieren, den kontaminierten Bereich entfernen und ueberwachen. Nur entsorgen, wenn sich die Kontamination ausbreitet
 
-## Related Skills
+## Verwandte Skills
 
-- `fungi-identification` — complementary skill; cultivation eliminates identification risk but understanding morphology aids in recognizing contamination species
-- `prepare-soil` — spent mushroom substrate is excellent garden amendment; the cultivation cycle connects to soil building
+- `fungi-identification` — Ergaenzender Skill; Zucht eliminiert das Bestimmungsrisiko, aber Verstaendnis der Morphologie hilft beim Erkennen von Kontaminationsarten
+- `prepare-soil` — Verbrauchtes Pilzsubstrat ist eine ausgezeichnete Gartenverbesserung; der Zuchtzyklus verbindet sich mit dem Bodenaufbau

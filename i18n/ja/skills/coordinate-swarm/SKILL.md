@@ -1,14 +1,12 @@
 ---
 name: coordinate-swarm
 description: >
-  Apply collective intelligence coordination patterns — stigmergy, local rules,
-  and quorum sensing — to organize distributed systems, teams, or workflows
-  without centralized control. Covers signal design, agent autonomy boundaries,
-  emergent behavior cultivation, and feedback loop tuning. Use when designing
-  distributed systems without a coordination bottleneck, organizing teams that
-  must self-coordinate, building event-driven architectures with shared state
-  communication, or replacing fragile centralized orchestration with resilient
-  emergent coordination.
+  集団知性の調整パターン — スティグマージー、ローカルルール、定足数感知 — を適用
+  して、集中制御なしに分散システム、チーム、またはワークフローを組織化する。
+  シグナル設計、エージェントの自律性境界、創発行動の育成、フィードバックループの
+  調整をカバーする。調整ボトルネックのない分散システムの設計時、自己調整が必要な
+  チームの組織化時、共有状態通信によるイベント駆動アーキテクチャの構築時、脆弱な
+  集中オーケストレーションを弾力的な創発調整に置き換える時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,66 +25,66 @@ metadata:
 
 # スウォームの調整
 
-Establish coordination across distributed agents using stigmergy (indirect communication through environment modification), local interaction rules, and quorum sensing — enabling coherent collective behavior without a central controller.
+スティグマージー（環境修正を通じた間接的コミュニケーション）、ローカル相互作用ルール、定足数感知を使用して、分散エージェント間の調整を確立する — 中央コントローラーなしで一貫した集合行動を実現する。
 
 ## 使用タイミング
 
-- Designing distributed systems where no single node should be a coordination bottleneck
-- Organizing teams or workflows that must self-coordinate without constant management oversight
-- Building event-driven architectures where components communicate through shared state rather than direct messaging
-- Scaling a process that works well with 3 agents but breaks down at 30
-- Bootstrapping coordination patterns for a new swarm-style domain (see `forage-resources`, `build-consensus`)
-- Replacing fragile centralized orchestration with resilient emergent coordination
+- 単一ノードが調整ボトルネックになるべきでない分散システムを設計する時
+- 絶え間ない管理監視なしに自己調整が必要なチームやワークフローを組織化する時
+- 直接メッセージングではなく共有状態を通じてコンポーネントが通信するイベント駆動アーキテクチャを構築する時
+- 3エージェントではうまく機能するが30では破綻するプロセスをスケーリングする時
+- 新しいスウォームスタイルドメインの調整パターンをブートストラップする時（`forage-resources`、`build-consensus`を参照）
+- 脆弱な集中オーケストレーションを弾力的な創発調整に置き換える時
 
 ## 入力
 
-- **必須**: Description of the agents (workers, services, team members) that need coordination
-- **必須**: The collective goal or desired emergent behavior
-- **任意**: Current coordination mechanism and its failure modes
-- **任意**: Number of agents (affects pattern selection — small swarms vs. large colonies)
-- **任意**: Latency tolerance (real-time vs. eventual coordination)
-- **任意**: Environmental constraints (shared state availability, communication bandwidth)
+- **必須**: 調整が必要なエージェント（ワーカー、サービス、チームメンバー）の説明
+- **必須**: 集合目標または望ましい創発行動
+- **任意**: 現在の調整メカニズムとその故障モード
+- **任意**: エージェント数（パターン選択に影響 — 小規模スウォーム vs 大規模コロニー）
+- **任意**: レイテンシ許容度（リアルタイム vs 結果的整合性の調整）
+- **任意**: 環境制約（共有状態の利用可能性、通信帯域幅）
 
 ## 手順
 
-### ステップ1: Identify the Coordination Problem Class
+### ステップ1: 調整問題クラスの特定
 
-Classify the coordination challenge to select appropriate patterns.
+調整課題を分類して適切なパターンを選択する。
 
-1. Map the current state: who are the agents, what do they do individually, where does coordination break down?
-2. Classify the problem:
-   - **Foraging** — agents search for and exploit distributed resources (see `forage-resources`)
-   - **Consensus** — agents must agree on a collective decision (see `build-consensus`)
-   - **Construction** — agents build or maintain a shared structure incrementally
-   - **Defense** — agents detect and respond to threats collectively (see `defend-colony`)
-   - **Division of labor** — agents must self-organize into specialized roles
-3. Identify the failure mode of current coordination:
-   - Single point of failure (centralized controller)
-   - Communication bottleneck (too many direct messages)
-   - Coherence loss (agents drift apart without feedback)
-   - Rigidity (cannot adapt to changing conditions)
+1. 現在の状態をマッピングする：エージェントは誰か、個別に何をするか、どこで調整が破綻するか？
+2. 問題を分類する：
+   - **フォレージング** — エージェントが分散リソースを探索・活用する（`forage-resources`を参照）
+   - **コンセンサス** — エージェントが集合的決定に合意する必要がある（`build-consensus`を参照）
+   - **コンストラクション** — エージェントが共有構造を漸進的に構築・維持する
+   - **ディフェンス** — エージェントが脅威を集合的に検出・対応する（`defend-colony`を参照）
+   - **分業** — エージェントが専門化された役割に自己組織化する必要がある
+3. 現在の調整の故障モードを特定する：
+   - 単一障害点（集中コントローラー）
+   - 通信ボトルネック（直接メッセージが多すぎる）
+   - 一貫性の喪失（フィードバックなしでエージェントがドリフトする）
+   - 硬直性（変化する条件に適応できない）
 
-**期待結果:** A clear classification of the coordination problem type and the specific failure mode to address. This determines which swarm patterns to apply.
+**期待結果:** 調整問題タイプと対処すべき具体的な故障モードの明確な分類。これがどのスウォームパターンを適用するかを決定する。
 
-**失敗時:** If the problem doesn't fit a single class, it may be a composite. Decompose into sub-problems and address each with the appropriate pattern. If agents are too heterogeneous for a single coordination model, consider layered coordination — homogeneous clusters coordinated via inter-cluster stigmergy.
+**失敗時:** 問題が単一クラスに適合しない場合、複合問題かもしれない。サブ問題に分解し、それぞれに適切なパターンで対処する。エージェントが単一の調整モデルには異質すぎる場合、レイヤード調整を検討する — 同質クラスター間のスティグマージーで調整される同質クラスター。
 
-### ステップ2: Design Stigmergic Signals
+### ステップ2: スティグマージックシグナルの設計
 
-Create the indirect communication channels through which agents influence each other's behavior.
+エージェントが互いの行動に影響を与える間接的コミュニケーションチャネルを作成する。
 
-1. Define the shared environment (database, message queue, file system, physical space, shared board)
-2. Design signals that agents deposit into the environment:
-   - **Trail signals**: markers that accumulate along successful paths (like ant pheromones)
-   - **Threshold signals**: counters that trigger behavior changes when they cross thresholds
-   - **Inhibition signals**: markers that repel agents from exhausted areas
-3. Define signal properties:
-   - **Decay rate**: how quickly signals fade (prevents stale state from dominating)
-   - **Reinforcement**: how successful outcomes strengthen signals
-   - **Visibility radius**: how far a signal propagates
-4. Map signals to agent behaviors:
-   - When an agent detects signal X above threshold T, it performs action A
-   - When an agent completes action A successfully, it deposits signal Y
-   - When no signal is detected, the agent follows its default exploration behavior
+1. 共有環境を定義する（データベース、メッセージキュー、ファイルシステム、物理空間、共有ボード）
+2. エージェントが環境に堆積するシグナルを設計する：
+   - **トレイルシグナル**: 成功した経路に沿って蓄積するマーカー（アリのフェロモンのように）
+   - **閾値シグナル**: 閾値を超えると行動変化をトリガーするカウンター
+   - **抑制シグナル**: 枯渇した領域からエージェントを遠ざけるマーカー
+3. シグナル特性を定義する：
+   - **減衰率**: シグナルがどれくらい速く消えるか（古い状態が支配するのを防ぐ）
+   - **強化**: 成功した結果がシグナルをどのように強化するか
+   - **可視半径**: シグナルがどれだけ遠くまで伝播するか
+4. シグナルをエージェント行動にマッピングする：
+   - エージェントが閾値Tを超えるシグナルXを検出すると、アクションAを実行する
+   - エージェントがアクションAを正常に完了すると、シグナルYを堆積する
+   - シグナルが検出されない場合、エージェントはデフォルトの探索行動に従う
 
 ```
 Signal Design Template:
@@ -100,99 +98,99 @@ Signal Design Template:
 └──────────────┴───────────────────┴──────────────┴────────────────────┘
 ```
 
-**期待結果:** A signal table mapping environmental markers to agent deposit conditions, decay rates, and response behaviors. Signals should be simple, composable, and independently meaningful.
+**期待結果:** 環境マーカーをエージェントの堆積条件、減衰率、応答行動にマッピングするシグナルテーブル。シグナルは単純で、組み合わせ可能で、独立して意味があるべき。
 
-**失敗時:** If signal design feels overly complex, reduce to two signals: one positive (success trail) and one negative (danger flag). Most coordination problems can be bootstrapped with attract/repel dynamics. Add nuance only after the basic system is functioning.
+**失敗時:** シグナル設計が過度に複雑に感じる場合、2つのシグナル（正のトレイルシグナルと負の危険フラグ）に削減する。ほとんどの調整問題は誘引/反発ダイナミクスでブートストラップできる。基本システムが機能してからニュアンスを追加する。
 
-### ステップ3: Define Local Interaction Rules
+### ステップ3: ローカル相互作用ルールの定義
 
-Specify the simple rules each agent follows, using only local information (their own state + nearby signals).
+各エージェントが従う単純なルールを、ローカル情報（自身の状態+近くのシグナル）のみを使用して指定する。
 
-1. Define the agent's perception radius (what can it sense?)
-2. Write 3-7 local rules in priority order:
-   - Rule 1 (safety): If danger-flag detected, move away
-   - Rule 2 (response): If help-signal detected and idle, move toward
-   - Rule 3 (exploitation): If success-trail detected, follow toward strongest signal
-   - Rule 4 (exploration): If no signals detected, move randomly with bias toward unexplored areas
-   - Rule 5 (deposit): After completing task, deposit success-trail at location
-3. Each rule must be:
-   - **Local**: depends only on what the individual agent can perceive
-   - **Simple**: expressible in one if-then statement
-   - **Stateless** (preferred): does not require the agent to remember past states
-4. Test rules mentally: if every agent follows these rules, does the desired collective behavior emerge?
+1. エージェントの知覚半径を定義する（何を感知できるか？）
+2. 優先順位順に3〜7のローカルルールを記述する：
+   - ルール1（安全）: danger-flagが検出されたら遠ざかる
+   - ルール2（応答）: help-signalが検出されアイドルなら近づく
+   - ルール3（活用）: success-trailが検出されたら最も強いシグナルに従う
+   - ルール4（探索）: シグナルが検出されない場合、未探索領域へのバイアスを持ってランダムに移動
+   - ルール5（堆積）: タスク完了後、その場所にsuccess-trailを堆積
+3. 各ルールは以下であるべき：
+   - **ローカル**: 個々のエージェントが知覚できるものにのみ依存
+   - **単純**: 1つのif-then文で表現可能
+   - **ステートレス**（推奨）: エージェントが過去の状態を記憶する必要がない
+4. ルールを頭の中でテストする：すべてのエージェントがこれらのルールに従う場合、望ましい集合行動が出現するか？
 
-**期待結果:** A prioritized rule set that each agent executes independently. When applied across the swarm, these local rules produce the target collective behavior (foraging, construction, defense, etc.).
+**期待結果:** 各エージェントが独立して実行する優先順位付きルールセット。スウォーム全体に適用されると、これらのローカルルールが目標の集合行動を生み出す（フォレージング、コンストラクション、ディフェンスなど）。
 
-**失敗時:** If mental simulation doesn't produce the desired emergent behavior, the rules likely need a feedback loop — agents must be able to observe the consequences of their collective actions. Add a signal that represents the collective state (e.g., "task completion rate") and a rule that adjusts behavior based on it.
+**失敗時:** メンタルシミュレーションが望ましい創発行動を生み出さない場合、ルールにフィードバックループが必要 — エージェントは集合行動の結果を観察できる必要がある。集合状態を表すシグナル（例：「タスク完了率」）と、それに基づいて行動を調整するルールを追加する。
 
-### ステップ4: Calibrate Quorum Sensing
+### ステップ4: 定足数感知の校正
 
-Set thresholds that trigger collective state changes when enough agents agree.
+十分なエージェントが同意した時に集合的状態変化をトリガーする閾値を設定する。
 
-1. Identify decisions that require collective agreement (not just individual response):
-   - Switching from exploration to exploitation mode
-   - Committing to a new work site or abandoning an old one
-   - Escalating from normal to emergency response
-2. For each collective decision, define:
-   - **Quorum threshold**: number or percentage of agents that must signal agreement
-   - **Sensing window**: time period over which signals are counted
-   - **Hysteresis**: different thresholds for activation vs. deactivation (prevents oscillation)
-3. Implement quorum as signal accumulation:
-   - Each agent that favors the decision deposits a vote-signal
-   - When accumulated votes exceed the quorum threshold within the sensing window, the decision activates
-   - When votes drop below the deactivation threshold, the decision reverses
+1. 集合的合意が必要な決定を特定する（個別応答だけでなく）：
+   - 探索モードから活用モードへの切り替え
+   - 新しい作業サイトへのコミットまたは古いサイトの放棄
+   - 通常から緊急対応へのエスカレーション
+2. 各集合的決定について定義する：
+   - **定足数閾値**: 合意をシグナルする必要のあるエージェントの数またはパーセンテージ
+   - **感知ウィンドウ**: シグナルがカウントされる期間
+   - **ヒステリシス**: 活性化と非活性化で異なる閾値（振動を防止）
+3. 定足数をシグナル蓄積として実装する：
+   - 決定に賛成する各エージェントがvote-signalを堆積
+   - 蓄積された投票が感知ウィンドウ内で定足数閾値を超えると、決定が活性化
+   - 投票が非活性化閾値を下回ると、決定が逆転
 
-**期待結果:** Quorum thresholds that allow the swarm to make collective decisions without a leader. The hysteresis gap prevents rapid oscillation between states.
+**期待結果:** リーダーなしでスウォームが集合的決定を行えるようにする定足数閾値。ヒステリシスギャップが状態間の急速な振動を防止する。
 
-**失敗時:** If the swarm oscillates between states, widen the hysteresis gap (e.g., activate at 70%, deactivate at 30%). If the swarm never reaches quorum, lower the threshold or increase the sensing window. If decisions are too slow, reduce the sensing window — but beware of premature consensus.
+**失敗時:** スウォームが状態間で振動する場合、ヒステリシスギャップを広げる（例：70%で活性化、30%で非活性化）。スウォームが定足数に到達しない場合、閾値を下げるか感知ウィンドウを増やす。決定が遅すぎる場合、感知ウィンドウを縮小する — ただし早すぎるコンセンサスに注意。
 
-### ステップ5: Test and Tune Emergent Behavior
+### ステップ5: 創発行動のテストとチューニング
 
-Validate that local rules produce the desired collective behavior, then tune parameters.
+ローカルルールが望ましい集合行動を生み出すことを検証し、パラメータを調整する。
 
-1. Run a simulation or pilot with a small number of agents (5-10)
-2. Observe:
-   - Does the swarm converge on the intended behavior?
-   - How long does convergence take?
-   - What happens when conditions change mid-task?
-   - What happens when agents fail or are added?
-3. Tune parameters:
-   - Signal decay rate: too fast → no coordination memory; too slow → stale signals dominate
-   - Quorum threshold: too low → premature collective decisions; too high → paralysis
-   - Exploration-exploitation balance: too much exploration → inefficient; too much exploitation → local optima
-4. Stress test:
-   - Remove 30% of agents suddenly — does the swarm recover?
-   - Double the agent count — does the swarm still coordinate?
-   - Introduce conflicting signals — does the swarm resolve or deadlock?
+1. 少数のエージェント（5〜10）でシミュレーションまたはパイロットを実行する
+2. 観察する：
+   - スウォームは意図した行動に収束するか？
+   - 収束にどれくらい時間がかかるか？
+   - タスク中に条件が変化するとどうなるか？
+   - エージェントが失敗または追加されるとどうなるか？
+3. パラメータを調整する：
+   - シグナル減衰率：速すぎ→調整メモリなし、遅すぎ→古いシグナルが支配
+   - 定足数閾値：低すぎ→早すぎる集合決定、高すぎ→麻痺
+   - 探索-活用バランス：探索多すぎ→非効率、活用多すぎ→局所最適
+4. ストレステスト：
+   - エージェントの30%を突然除去する — スウォームは回復するか？
+   - エージェント数を倍増する — スウォームはまだ調整されるか？
+   - 矛盾するシグナルを導入する — スウォームは解決するかデッドロックするか？
 
-**期待結果:** A tuned parameter set where the swarm self-organizes toward the target behavior, recovers from perturbations, and scales gracefully.
+**期待結果:** スウォームが目標行動に自己組織化し、摂動から回復し、優雅にスケールする調整されたパラメータセット。
 
-**失敗時:** If the swarm fails stress tests, the signal design is likely too tightly coupled. Simplify: reduce to fewer signals, increase decay rates (fresher information), and ensure agents have a robust default behavior when no signals are present. A swarm that does something reasonable with zero signals is more resilient than one that depends on signal availability.
+**失敗時:** スウォームがストレステストに失敗する場合、シグナル設計が密結合すぎる可能性がある。簡素化する：より少ないシグナルに削減し、減衰率を上げ（より新鮮な情報）、シグナルが存在しない場合にエージェントが堅牢なデフォルト行動を持つことを確認する。ゼロシグナルで合理的な行動をするスウォームは、シグナルの利用可能性に依存するものより弾力的。
 
 ## バリデーション
 
-- [ ] Coordination problem is classified into a recognized pattern (foraging, consensus, construction, defense, division of labor)
-- [ ] Stigmergic signal table is defined with deposit conditions, decay rates, and agent responses
-- [ ] Local interaction rules are simple, local, and prioritized (3-7 rules)
-- [ ] Quorum thresholds are set with hysteresis to prevent oscillation
-- [ ] Small-scale test shows emergent behavior matching the collective goal
-- [ ] Stress test (agent removal, addition, signal disruption) shows graceful degradation
+- [ ] 調整問題が認識されたパターンに分類された（フォレージング、コンセンサス、コンストラクション、ディフェンス、分業）
+- [ ] スティグマージックシグナルテーブルが堆積条件、減衰率、エージェント応答とともに定義された
+- [ ] ローカル相互作用ルールが単純、ローカル、優先順位付きである（3〜7ルール）
+- [ ] 振動を防止するためにヒステリシス付きの定足数閾値が設定された
+- [ ] 小規模テストで集合目標に一致する創発行動が示された
+- [ ] ストレステスト（エージェント除去、追加、シグナル妨害）で優雅な劣化が示された
 
 ## よくある落とし穴
 
-- **Over-engineering signals**: Starting with too many signal types creates confusion. Begin with 2 signals (attract/repel) and add only when proven necessary
-- **Centralized thinking in disguise**: If your "local rule" requires an agent to know the global state, it's not local. Refactor until each rule depends only on what the agent can directly perceive
-- **Ignoring decay**: Signals that never decay create fossilized coordination state. Every signal needs a half-life appropriate to the task's time scale
-- **Zero hysteresis**: Quorum thresholds without a gap between activation and deactivation cause rapid state oscillation. Always set deactivation lower than activation
-- **Assuming homogeneity**: If agents have different capabilities, a single rule set may not work. Consider role-differentiated rules (see `scale-colony`)
+- **シグナルの過剰設計**: 多すぎるシグナルタイプから始めると混乱を生む。2つのシグナル（誘引/反発）から始め、必要が証明された時にのみ追加する
+- **偽装された集中思考**: 「ローカルルール」がエージェントにグローバル状態を知ることを要求する場合、それはローカルではない。各ルールがエージェントが直接知覚できるものにのみ依存するまでリファクタリングする
+- **減衰の無視**: 決して減衰しないシグナルは化石化した調整状態を作る。すべてのシグナルにタスクの時間スケールに適した半減期が必要
+- **ゼロヒステリシス**: 活性化と非活性化の間にギャップのない定足数閾値は急速な状態振動を引き起こす。常に非活性化を活性化より低く設定する
+- **同質性の仮定**: エージェントの能力が異なる場合、単一のルールセットでは機能しないかもしれない。役割分化されたルールを検討する（`scale-colony`を参照）
 
 ## 関連スキル
 
-- `forage-resources` — applies swarm coordination specifically to resource search and explore-exploit tradeoffs
-- `build-consensus` — deep dive into distributed agreement mechanisms, extending the quorum sensing from this skill
-- `defend-colony` — collective defense patterns that build on the signal and rule framework here
-- `scale-colony` — scaling strategies for when the swarm outgrows its initial coordination design
-- `adapt-architecture` — morphic skill for transforming system architecture, complementary when swarm coordination triggers structural change
-- `deploy-to-kubernetes` — practical distributed system deployment where swarm coordination patterns apply
-- `plan-capacity` — capacity planning informed by swarm scaling dynamics
-- `coordinate-reasoning` — AI self-application variant; maps stigmergic signals to context management with information decay rates and local protocols
+- `forage-resources` -- スウォーム調整をリソース検索と探索-活用トレードオフに特化して適用
+- `build-consensus` -- このスキルの定足数感知を拡張した分散合意メカニズムの深堀り
+- `defend-colony` -- ここでのシグナルとルールフレームワークの上に構築される集合防御パターン
+- `scale-colony` -- スウォームが初期の調整設計を超えて成長した時のスケーリング戦略
+- `adapt-architecture` -- スウォーム調整が構造変化をトリガーする時に補完的なモーフィックスキル
+- `deploy-to-kubernetes` -- スウォーム調整パターンが適用される実用的な分散システムデプロイメント
+- `plan-capacity` -- スウォームスケーリングダイナミクスに基づくキャパシティプランニング
+- `coordinate-reasoning` -- AI自己適用バリアント; スティグマージックシグナルを情報減衰率とローカルプロトコルによるコンテキスト管理にマッピング

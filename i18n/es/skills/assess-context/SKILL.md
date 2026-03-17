@@ -1,13 +1,14 @@
 ---
 name: assess-context
 description: >
-  AI context assessment — evaluating problem malleability, mapping structural
-  rigidity versus flexibility, analyzing transformation pressure, and estimating
-  capacity to adapt. Use when a complex task feels stuck and it is unclear
-  whether to push through or pivot, before a significant approach change to
-  assess whether the current reasoning structure can support it, when accumulated
-  workarounds suggest the underlying approach may be wrong, or as a periodic
-  structural health check during extended multi-step tasks.
+  Evaluación de contexto de IA — evaluar la maleabilidad del problema, mapear
+  rigidez versus flexibilidad estructural, analizar presión de transformación, y
+  estimar capacidad de adaptación. Usar cuando una tarea compleja se siente
+  atascada y no está claro si avanzar o pivotar, antes de un cambio significativo
+  de enfoque para evaluar si la estructura de razonamiento actual puede soportarlo,
+  cuando las soluciones temporales acumuladas sugieren que el enfoque subyacente
+  puede estar equivocado, o como verificación periódica de salud estructural
+  durante tareas extendidas de múltiples pasos.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,29 +27,29 @@ metadata:
 
 # Assess Context
 
-Evaluate the current reasoning context for malleability — identifying which elements are rigid (cannot change), which are flexible (can change cheaply), where transformation pressure is building, and whether the current approach has the capacity to adapt if needed.
+Evaluar el contexto de razonamiento actual en cuanto a maleabilidad — identificando qué elementos son rígidos (no pueden cambiar), cuáles son flexibles (pueden cambiar a bajo costo), dónde se está acumulando presión de transformación, y si el enfoque actual tiene la capacidad de adaptarse si es necesario.
 
 ## Cuándo Usar
 
-- When a complex task feels stuck and it is unclear whether to push through or pivot
-- Before a significant approach change to assess whether the current reasoning structure can support it
-- When accumulated workarounds suggest the underlying approach may be wrong
-- After `heal` or `awareness` has identified drift but the appropriate response (continue, adjust, or rebuild) is unclear
-- When context has grown long and it is unclear how much can be preserved versus how much needs to be rebuilt
-- Periodic structural health check during extended multi-step tasks
+- Cuando una tarea compleja se siente atascada y no está claro si avanzar o pivotar
+- Antes de un cambio significativo de enfoque para evaluar si la estructura de razonamiento actual puede soportarlo
+- Cuando las soluciones temporales acumuladas sugieren que el enfoque subyacente puede estar equivocado
+- Después de que `heal` o `awareness` ha identificado deriva pero la respuesta apropiada (continuar, ajustar o reconstruir) no es clara
+- Cuando el contexto ha crecido mucho y no está claro cuánto puede preservarse versus cuánto necesita ser reconstruido
+- Verificación periódica de salud estructural durante tareas extendidas de múltiples pasos
 
 ## Entradas
 
-- **Requerido**: Current task context and reasoning state (available implicitly)
-- **Opcional**: Specific concern triggering the assessment (e.g., "I keep adding workarounds")
-- **Opcional**: Proposed pivot direction (what might the approach need to become?)
-- **Opcional**: Previous assessment results for trend analysis
+- **Requerido**: Contexto de tarea actual y estado de razonamiento (disponible implícitamente)
+- **Opcional**: Preocupación específica que desencadena la evaluación (ej., "sigo agregando soluciones temporales")
+- **Opcional**: Dirección de pivote propuesta (¿en qué podría necesitar convertirse el enfoque?)
+- **Opcional**: Resultados de evaluaciones anteriores para análisis de tendencias
 
 ## Procedimiento
 
-### Paso 1: Inventory Reasoning Form
+### Paso 1: Inventariar la Forma de Razonamiento
 
-Catalog the structural components of the current reasoning approach without judgment.
+Catalogar los componentes estructurales del enfoque de razonamiento actual sin juicio.
 
 ```
 Structural Inventory Table:
@@ -80,20 +81,20 @@ Structural Inventory Table:
 └────────────────────┴──────────────┴──────────────────────────────────┘
 ```
 
-Classify each component:
-- **Skeleton**: hard to change; changing it cascades through everything downstream
-- **Flesh**: easy to change; can be swapped without affecting other components
-- **Scar tissue**: workarounds that indicate structural problems; often flesh pretending to be skeleton
+Clasificar cada componente:
+- **Esqueleto**: difícil de cambiar; cambiarlo genera cascadas en todo lo que depende de él
+- **Carne**: fácil de cambiar; puede intercambiarse sin afectar otros componentes
+- **Tejido cicatricial**: soluciones temporales que indican problemas estructurales; frecuentemente carne pretendiendo ser esqueleto
 
-Map dependencies: which components depend on which? A skeleton component with many dependents is load-bearing. A flesh component with no dependents is disposable.
+Mapear dependencias: ¿qué componentes dependen de cuáles? Un componente esqueleto con muchos dependientes es portante. Un componente carne sin dependientes es desechable.
 
-**Esperado:** A complete inventory showing what the current approach is built from, what is rigid, what is flexible, and where stress is visible (workarounds). The inventory should reveal structure that was not obvious before cataloging.
+**Esperado:** Un inventario completo mostrando de qué está construido el enfoque actual, qué es rígido, qué es flexible, y dónde es visible el estrés (soluciones temporales). El inventario debe revelar estructura que no era obvia antes de catalogar.
 
-**En caso de fallo:** If the inventory is hard to construct (the approach is too tangled to decompose), that is itself a finding — high structural opacity indicates high rigidity. Start with what is visible and note the opacity zones.
+**En caso de fallo:** Si el inventario es difícil de construir (el enfoque está demasiado enredado para descomponer), eso es en sí mismo un hallazgo — alta opacidad estructural indica alta rigidez. Comenzar con lo visible y notar las zonas de opacidad.
 
-### Paso 2: Map Transformation Pressure
+### Paso 2: Mapear la Presión de Transformación
 
-Identify forces pushing the current approach toward change and forces resisting it.
+Identificar las fuerzas que empujan el enfoque actual hacia el cambio y las fuerzas que lo resisten.
 
 ```
 Pressure Map:
@@ -137,15 +138,15 @@ Pressure Map:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Estimate the balance: is transformation pressure growing, stable, or declining?
+Estimar el balance: ¿la presión de transformación está creciendo, estable o declinando?
 
-**Esperado:** A clear picture of forces acting on the current approach. If pressure significantly exceeds resistance, a pivot is overdue. If resistance significantly exceeds pressure, the current approach should continue.
+**Esperado:** Una imagen clara de las fuerzas que actúan sobre el enfoque actual. Si la presión excede significativamente la resistencia, un pivote está atrasado. Si la resistencia excede significativamente la presión, el enfoque actual debe continuar.
 
-**En caso de fallo:** If the pressure map is ambiguous (neither strong pressure nor strong resistance), project forward: will the pressures intensify? Will the workarounds compound? An approach that is "good enough now but degrading" is under more pressure than it appears.
+**En caso de fallo:** Si el mapa de presión es ambiguo (ni presión fuerte ni resistencia fuerte), proyectar hacia adelante: ¿se intensificarán las presiones? ¿Se acumularán las soluciones temporales? Un enfoque que es "suficientemente bueno ahora pero degradándose" está bajo más presión de lo que parece.
 
-### Paso 3: Assess Reasoning Rigidity
+### Paso 3: Evaluar la Rigidez del Razonamiento
 
-Determine how flexible the current approach is — can it adapt, or will it break?
+Determinar cuán flexible es el enfoque actual — ¿puede adaptarse, o se romperá?
 
 ```
 Rigidity Score:
@@ -177,28 +178,28 @@ Rigidity Score:
 └──────────────────────────┴─────┴──────────┴──────┴──────────────┘
 ```
 
-**Esperado:** A rigidity score with specific evidence for each dimension. The score reveals whether the approach can absorb change or will need to be rebuilt.
+**Esperado:** Una puntuación de rigidez con evidencia específica para cada dimensión. La puntuación revela si el enfoque puede absorber cambios o necesitará ser reconstruido.
 
-**En caso de fallo:** If all dimensions score low (claiming high flexibility), probe the "god module" dimension more carefully: is there one key conclusion or assumption that everything else depends on? If so, the flexibility is illusory — one wrong assumption collapses the whole structure.
+**En caso de fallo:** Si todas las dimensiones puntúan bajo (reclamando alta flexibilidad), examinar la dimensión "módulo dios" más cuidadosamente: ¿hay una conclusión o suposición clave de la que depende todo lo demás? Si es así, la flexibilidad es ilusoria — una suposición equivocada colapsa toda la estructura.
 
-### Paso 4: Estimate Change Capacity
+### Paso 4: Estimar la Capacidad de Cambio
 
-Assess the practical ability to pivot or adapt the current approach.
+Evaluar la capacidad práctica de pivotar o adaptar el enfoque actual.
 
-1. **Context window remaining**: how much room is left for new reasoning? Extensive remaining context = high capacity. Approaching limits = low capacity
-2. **Information preservation on pivot**: if the approach changes, what can be carried forward? High-quality sub-task outputs survive pivots; reasoning chains tied to the old approach do not
-3. **Recovery tools available**: can MEMORY.md capture key findings before pivoting? Can the user provide additional context? Are relevant files still accessible?
-4. **User patience factor**: has the user indicated urgency? Multiple corrections suggest declining patience. An explicit "take your time" suggests high patience
+1. **Ventana de contexto restante**: ¿cuánto espacio queda para nuevo razonamiento? Contexto restante extenso = alta capacidad. Aproximándose a los límites = baja capacidad
+2. **Preservación de información en pivote**: si el enfoque cambia, ¿qué puede llevarse adelante? Las salidas de sub-tareas de alta calidad sobreviven a los pivotes; las cadenas de razonamiento ligadas al enfoque anterior no
+3. **Herramientas de recuperación disponibles**: ¿puede MEMORY.md capturar hallazgos clave antes de pivotar? ¿Puede el usuario proporcionar contexto adicional? ¿Los archivos relevantes siguen accesibles?
+4. **Factor de paciencia del usuario**: ¿ha indicado urgencia el usuario? Múltiples correcciones sugieren paciencia declinante. Un explícito "tómate tu tiempo" sugiere alta paciencia
 
-Change capacity is not just theoretical — it includes the practical constraints of the current session.
+La capacidad de cambio no es solo teórica — incluye las restricciones prácticas de la sesión actual.
 
-**Esperado:** An honest assessment of the ability to change course, accounting for both technical and relational factors.
+**Esperado:** Una evaluación honesta de la capacidad de cambiar de rumbo, considerando tanto factores técnicos como relacionales.
 
-**En caso de fallo:** If change capacity is low (limited context, critical information at risk of loss), the first priority before any pivot is preservation: summarize key findings, note critical facts, update MEMORY.md if appropriate. Pivoting without preservation is worse than not pivoting.
+**En caso de fallo:** Si la capacidad de cambio es baja (contexto limitado, información crítica en riesgo de perderse), la primera prioridad antes de cualquier pivote es la preservación: resumir hallazgos clave, notar hechos críticos, actualizar MEMORY.md si es apropiado. Pivotar sin preservación es peor que no pivotar.
 
-### Paso 5: Classify Transformation Readiness
+### Paso 5: Clasificar la Preparación para la Transformación
 
-Combine the assessments into a readiness classification.
+Combinar las evaluaciones en una clasificación de preparación.
 
 ```
 Transformation Readiness Matrix:
@@ -225,38 +226,38 @@ Transformation Readiness Matrix:
 └─────────────────┴────────────────────────┴────────────────────────┘
 ```
 
-Document the classification with:
-- Classification label (READY / PREPARE / INVEST / CRITICAL / DEFER)
-- Key findings from each dimension
-- Recommended next action
-- What signal would change the classification
+Documentar la clasificación con:
+- Etiqueta de clasificación (READY / PREPARE / INVEST / CRITICAL / DEFER)
+- Hallazgos clave de cada dimensión
+- Acción siguiente recomendada
+- Qué señal cambiaría la clasificación
 
-**Esperado:** A clear, justified classification with a specific recommended action. The classification should feel like a conclusion, not a guess.
+**Esperado:** Una clasificación clara y justificada con una acción recomendada específica. La clasificación debe sentirse como una conclusión, no como una conjetura.
 
-**En caso de fallo:** If the classification is ambiguous, default to PREPARE — reducing rigidity (clarifying assumptions, removing workarounds) is valuable regardless of whether a full pivot happens. Preparation improves the approach whether it continues or changes.
+**En caso de fallo:** Si la clasificación es ambigua, optar por PREPARE — reducir la rigidez (clarificar suposiciones, eliminar soluciones temporales) es valioso independientemente de si ocurre un pivote completo. La preparación mejora el enfoque ya sea que continúe o cambie.
 
 ## Validación
 
-- [ ] Structural inventory was completed with skeleton/flesh/scar-tissue classification
-- [ ] Transformation pressures were mapped (external, internal, resistance)
-- [ ] Rigidity was scored across multiple dimensions with specific evidence
-- [ ] Change capacity was assessed including practical session constraints
-- [ ] Readiness classification was determined with justified reasoning
-- [ ] A concrete next action was identified based on the classification
-- [ ] A reassessment trigger was defined
+- [ ] El inventario estructural fue completado con clasificación esqueleto/carne/tejido-cicatricial
+- [ ] Las presiones de transformación fueron mapeadas (externa, interna, resistencia)
+- [ ] La rigidez fue puntuada en múltiples dimensiones con evidencia específica
+- [ ] La capacidad de cambio fue evaluada incluyendo restricciones prácticas de la sesión
+- [ ] La clasificación de preparación fue determinada con razonamiento justificado
+- [ ] Una acción concreta siguiente fue identificada basada en la clasificación
+- [ ] Un disparador de reevaluación fue definido
 
 ## Errores Comunes
 
-- **Assessing only the technical approach**: Context readiness includes user relationship factors. An approach that is technically flexible but has generated user frustration is more rigid than it appears
-- **Sunk cost as rigidity**: Prior effort is not structural rigidity. The work already done may be valuable regardless of whether the approach changes. Distinguish between "I can't change" (rigidity) and "I don't want to change" (sunk cost)
-- **Assessment as avoidance**: If assess-context is invoked to avoid making a difficult decision, the assessment will be inconclusive by design. If the pressure is clear, act on it
-- **Ignoring workarounds as signals**: Workarounds are scar tissue — evidence that the structure was stressed and patched rather than properly adapted. A high workaround count means the next stress is more likely to break through
-- **Confusing rigidity with commitment**: A committed approach (deliberately chosen, evidence-based) is different from a rigid one (locked in by dependencies and assumptions). Commitment can be changed by decision; rigidity can only be changed by restructuring
+- **Evaluar solo el enfoque técnico**: La preparación del contexto incluye factores de relación con el usuario. Un enfoque que es técnicamente flexible pero ha generado frustración del usuario es más rígido de lo que parece
+- **Costo hundido como rigidez**: El esfuerzo previo no es rigidez estructural. El trabajo ya realizado puede ser valioso independientemente de si el enfoque cambia. Distinguir entre "no puedo cambiar" (rigidez) y "no quiero cambiar" (costo hundido)
+- **Evaluación como evasión**: Si assess-context es invocado para evitar tomar una decisión difícil, la evaluación será inconclusiva por diseño. Si la presión es clara, actuar sobre ella
+- **Ignorar soluciones temporales como señales**: Las soluciones temporales son tejido cicatricial — evidencia de que la estructura fue estresada y parcheada en lugar de adaptada correctamente. Un alto conteo de soluciones temporales significa que el próximo estrés es más probable que rompa
+- **Confundir rigidez con compromiso**: Un enfoque comprometido (deliberadamente elegido, basado en evidencia) es diferente de uno rígido (atrapado por dependencias y suposiciones). El compromiso puede cambiarse por decisión; la rigidez solo puede cambiarse por reestructuración
 
 ## Habilidades Relacionadas
 
-- `assess-form` — the multi-system assessment model that this skill adapts to AI reasoning context
-- `adapt-architecture` — if classified READY, use architectural adaptation principles for the pivot
-- `heal` — deeper subsystem scan when the assessment reveals drift beyond structural issues
-- `center` — establishes the balanced baseline needed for honest assessment
-- `coordinate-reasoning` — manages information freshness that the assessment depends on
+- `assess-form` — el modelo de evaluación multi-sistema que esta habilidad adapta al contexto de razonamiento de IA
+- `adapt-architecture` — si se clasifica como READY, usar principios de adaptación arquitectónica para el pivote
+- `heal` — escaneo más profundo de subsistemas cuando la evaluación revela deriva más allá de problemas estructurales
+- `center` — establece la línea base equilibrada necesaria para una evaluación honesta
+- `coordinate-reasoning` — gestiona la frescura de información de la que depende la evaluación

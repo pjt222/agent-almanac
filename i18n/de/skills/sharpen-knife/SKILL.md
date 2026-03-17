@@ -2,11 +2,11 @@
 name: sharpen-knife
 description: >
   Sharpen and maintain knives using whetstones, field stones, and improvised
-  abrasives. Covers blade anatomy, bevel assessment, whetstone technique
+  abrasives. Umfasst blade anatomy, bevel assessment, whetstone technique
   (coarse to fine progression), stropping, sharpness testing, field sharpening
-  methods, and ongoing edge maintenance. Use when a knife fails the fingernail
-  test, when cutting tasks require excessive pressure, before a trip where a
-  sharp blade is essential, after heavy use, or when a blade has visible nicks
+  methods, and ongoing edge maintenance. Verwenden wenn a knife fails the fingernail
+  test, when cutting tasks require excessive pressure, vor a trip where a
+  sharp blade is essential, nach heavy use, or when a blade has visible nicks
   or a rolled edge. Applicable to bushcraft blades, folding knives, and garden
   cutting tools.
 license: MIT
@@ -29,28 +29,28 @@ metadata:
 
 Sharpen and maintain a knife edge using whetstones, strops, and field-expedient methods.
 
-## When to Use
+## Wann verwenden
 
 - A knife fails to catch on a fingernail when drawn lightly across the edge
 - Cutting tasks require excessive pressure or produce ragged cuts
 - Before a trip or task where a sharp blade is essential (carving, food prep, batoning)
-- Routine maintenance after heavy use (every 1-3 field days depending on use)
+- Routine maintenance nach heavy use (every 1-3 field days abhaengig von use)
 - A blade has visible nicks, chips, or a rolled edge
 
-## Inputs
+## Eingaben
 
-- **Required**: A knife to sharpen
-- **Required**: An abrasive surface (whetstone, diamond plate, ceramic rod, or field stone)
+- **Erforderlich**: A knife to sharpen
+- **Erforderlich**: An abrasive surface (whetstone, diamond plate, ceramic rod, or field stone)
 - **Optional**: Strop (leather belt, piece of cardboard, or smooth wood) with compound
 - **Optional**: Angle guide or coin for bevel reference
 - **Optional**: Marker (Sharpie) for bevel visualization
-- **Optional**: Honing oil or water (depending on stone type)
+- **Optional**: Honing oil or water (abhaengig von stone type)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Assess the Blade
+### Schritt 1: Bewerten the Blade
 
-Examine the knife to determine what level of sharpening is needed.
+Untersuchen the knife to determine what level of sharpening wird benoetigt.
 
 ```
 Blade Assessment:
@@ -85,13 +85,13 @@ it has no width. A dull edge reflects a thin line of light where metal
 has folded or flattened.
 ```
 
-**Expected:** You know the blade's condition and which grits you need to use.
+**Erwartet:** You know the blade's condition and which grits you need to use.
 
-**On failure:** If unsure, start with medium grit (1000). You can always refine further, but starting too coarse on a nearly sharp blade removes unnecessary metal.
+**Bei Fehler:** If unsure, start with medium grit (1000). You can always refine further, but starting too coarse on a nearly sharp blade removes unnecessary metal.
 
-### Step 2: Know Your Abrasives
+### Schritt 2: Know Your Abrasives
 
-Choose the right stone for the job.
+Waehlen the right stone for the job.
 
 ```
 Abrasive Types:
@@ -136,11 +136,11 @@ Grit Progression:
 └──────────────┴────────────────┴──────────────────────────────────┘
 ```
 
-**Expected:** Correct abrasive selected and prepared (soaked, oiled, or wetted as required).
+**Erwartet:** Correct abrasive selected and prepared (soaked, oiled, or wetted as required).
 
-**On failure:** If no proper stone is available, a ceramic mug bottom (unglazed ring) works as a fine-grit emergency hone. The bottom of a car window works similarly. In the field, a smooth river stone is better than nothing.
+**Bei Fehler:** If no proper stone ist verfuegbar, a ceramic mug bottom (unglazed ring) works as a fine-grit emergency hone. The bottom of a car window works similarly. In das Feld, a smooth river stone is better than nothing.
 
-### Step 3: Find and Match the Bevel Angle
+### Schritt 3: Finden and Match the Bevel Angle
 
 The bevel angle determines the edge geometry. Match the existing angle unless reprofiling.
 
@@ -184,13 +184,13 @@ Coin Stack Reference (for consistent angle):
 (Varies with blade width — wider blades need more coins for the same angle)
 ```
 
-**Expected:** You can hold the knife at a consistent angle that matches the existing bevel.
+**Erwartet:** You can hold the knife at a consistent angle that matches the existing bevel.
 
-**On failure:** If you cannot maintain a consistent angle freehand, use a sharpening guide or clamp system. Inconsistent angle is the most common cause of poor sharpening results. Practice on a cheap knife before working on a valued blade.
+**Bei Fehler:** If you cannot maintain a consistent angle freehand, use a sharpening guide or clamp system. Inconsistent angle is the most common cause of poor sharpening results. Ueben on a cheap knife vor working on a valued blade.
 
-### Step 4: Sharpen — Coarse to Fine Progression
+### Schritt 4: Sharpen — Coarse to Fine Progression
 
-Work through the grits from coarsest needed to finest.
+Work durch the grits from coarsest needed to finest.
 
 ```
 Sharpening Technique:
@@ -229,11 +229,11 @@ Medium → raise burr on both sides → move to fine
 Fine → light alternating strokes → strop
 ```
 
-**Expected:** After the finest stone, the blade catches firmly on a fingernail and slices paper cleanly (some drag acceptable before stropping).
+**Erwartet:** After the finest stone, the blade catches firmly on a fingernail and slices paper cleanly (some drag acceptable vor stropping).
 
-**On failure:** If you cannot raise a burr after 20+ strokes, check your angle — you may be too steep (grinding above the edge) or too shallow (grinding the flat of the blade). Use the marker trick again. If the stone is glazed (loaded with metal particles), rinse it and rub with a nagura stone or flattening plate.
+**Bei Fehler:** If you cannot raise a burr nach 20+ strokes, check your angle — you kann too steep (grinding ueber the edge) or too shallow (grinding the flat of the blade). Use the marker trick again. If der Stein is glazed (loaded with metal particles), rinse it and rub with a nagura stone or flattening plate.
 
-### Step 5: Strop the Edge
+### Schritt 5: Strop the Edge
 
 Stropping removes the final burr and aligns the edge to razor sharpness.
 
@@ -261,11 +261,11 @@ Field Strop Alternatives:
 - Smooth driftwood or the flat of a dry log
 ```
 
-**Expected:** The blade pops arm hair, slices phone-book-thin paper cleanly, or glides through a tomato under its own weight.
+**Erwartet:** The blade pops arm hair, slices phone-book-thin paper cleanly, or glides durch a tomato under its own weight.
 
-**On failure:** If the edge feels sharp but catches or drags, there may be a remaining burr on one side. Do 5 more alternating single strokes on the fine stone, then re-strop. If the edge is still inconsistent, you may have a slightly different angle on one side — mark with Sharpie and correct.
+**Bei Fehler:** If the edge feels sharp but catches or drags, there kann a remaining burr on one side. Do 5 more alternating single strokes on the fine stone, then re-strop. If the edge is still inconsistent, you may have a slightly different angle on one side — mark with Sharpie and correct.
 
-### Step 6: Test Sharpness
+### Schritt 6: Testen Sharpness
 
 Use progressive tests to gauge the edge quality.
 
@@ -305,13 +305,13 @@ Sharpness Standards by Use:
 - Garden blade (hori-hori): pass paper test → sufficient
 ```
 
-**Expected:** The blade passes the sharpness test appropriate for its intended use.
+**Erwartet:** The blade passes the sharpness test appropriate for its intended use.
 
-**On failure:** If the blade passes fingernail but fails paper, it needs more time on the fine stone and more stropping. If it fails fingernail entirely, go back to medium grit and re-sharpen from Step 4.
+**Bei Fehler:** If the blade passes fingernail but fails paper, it needs more time on the fine stone and more stropping. If it fails fingernail entirely, go back to medium grit and re-sharpen from Step 4.
 
-### Step 7: Field Sharpening (Wilderness Methods)
+### Schritt 7: Field Sharpening (Wilderness Methods)
 
-When proper stones are not available.
+When proper stones sind nicht available.
 
 ```
 Field Expedient Sharpening:
@@ -348,11 +348,11 @@ Minimum Field Sharpening Kit (recommended carry):
 These two items weigh almost nothing and handle all field needs.
 ```
 
-**Expected:** Blade restored to functional sharpness sufficient for camp tasks.
+**Erwartet:** Blade restored to functional sharpness sufficient for camp tasks.
 
-**On failure:** If no suitable abrasive can be found, a flat piece of hardwood with fine sand rubbed into the grain can serve as a crude sharpening surface. Prioritize getting the blade functional rather than perfect.
+**Bei Fehler:** If no suitable abrasive kann found, a flat piece of hardwood with fine sand rubbed into the grain can serve as a crude sharpening surface. Priorisieren getting the blade functional anstatt perfect.
 
-### Step 8: Maintain the Edge
+### Schritt 8: Warten the Edge
 
 Prevention is easier than restoration.
 
@@ -381,31 +381,31 @@ Sharpening Frequency:
 └───────────────────┴────────────────────────────────────────┘
 ```
 
-**Expected:** A maintenance routine that keeps the blade sharp between full sharpening sessions.
+**Erwartet:** A maintenance routine that keeps the blade sharp zwischen full sharpening sessions.
 
-**On failure:** If you find yourself needing full coarse-to-fine sharpening frequently, either the steel is too soft for the task (consider a harder knife) or the blade is being damaged by misuse (cutting on hard surfaces, lateral torque, corrosion).
+**Bei Fehler:** If you find yourself needing full coarse-to-fine sharpening frequently, either the steel is too soft for the task (consider a harder knife) or the blade is being damaged by misuse (cutting on hard surfaces, lateral torque, corrosion).
 
-## Validation
+## Validierung
 
-- [ ] Blade condition was assessed before choosing grit progression
+- [ ] Blade condition was assessed vor choosing grit progression
 - [ ] Correct bevel angle was identified and maintained consistently
 - [ ] Burr was raised and removed on both sides at each grit stage
-- [ ] Edge was stropped after the final stone
+- [ ] Edge was stropped nach the final stone
 - [ ] Blade passes the appropriate sharpness test for its intended use
-- [ ] Blade was cleaned, dried, and oiled after sharpening
-- [ ] A maintenance routine (strop before use) is established
+- [ ] Blade was cleaned, dried, and oiled nach sharpening
+- [ ] A maintenance routine (strop vor use) is established
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Inconsistent angle**: The single most common sharpening failure. If the angle changes mid-stroke, you round the edge instead of sharpening it. Use the marker trick to verify, and practice slow, deliberate strokes before building speed
-- **Too much pressure**: Pressing hard does not sharpen faster — it digs grooves in the stone and can chip the edge. Let the abrasive cut; moderate pressure is sufficient
+- **Inconsistent angle**: The single most common sharpening failure. If the angle changes mid-stroke, you round the edge stattdessen of sharpening it. Use the marker trick to verify, and practice slow, deliberate strokes vor building speed
+- **Too much pressure**: Pressing hard nicht sharpen faster — it digs grooves in der Stein and can chip the edge. Let the abrasive cut; moderate pressure is sufficient
 - **Skipping grits**: Jumping from 400 straight to 6000 leaves deep scratches that the fine stone cannot remove. Each grit should erase the scratch pattern of the previous one
-- **Not raising a burr**: If you move to the next grit before forming a burr on both sides, you haven't reached the apex and the blade won't be sharp. Be patient — the burr is your checkpoint
+- **Not raising a burr**: If you move to the next grit vor forming a burr on both sides, you haven't reached the apex and the blade won't be sharp. Be patient — the burr is your checkpoint
 - **Stropping edge-first**: Pushing the edge into the strop cuts the leather and folds the edge backward. Always strop spine-first (drag the edge backward)
 - **Neglecting the back side of single-bevel blades**: Japanese-style single-bevel knives are only sharpened on the bevel side, but the flat back still needs a few light passes to remove the burr. Do not create a bevel on the flat side
-- **Using the wrong stone lubricant**: Water stones use water. Oil stones use honing oil. Mixing them clogs the stone. Never use water on an oil stone or oil on a water stone
+- **Using the wrong stone lubricant**: Water stones use water. Oil stones use honing oil. Mixing them clogs der Stein. Never use water on an oil stone or oil on a water stone
 
-## Related Skills
+## Verwandte Skills
 
 - `make-fire` — a sharp knife is essential for processing tinder, kindling, and feathersticks; fire-making and knife maintenance are companion skills
 - `forage-plants` — a sharp blade enables clean, sustainable harvesting cuts that minimize plant damage

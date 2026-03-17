@@ -3,16 +3,13 @@ name: interpret-chromatogram
 locale: de
 source_locale: en
 source_commit: 6f65f316
-translator: claude-sonnet-4-6
-translation_date: 2026-03-16
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Interpretiere Chromatogramme aus GC, HPLC und CE zur qualitativen und
-  quantitativen Auswertung von Trennergebnissen. Analysiere Peakform,
-  Retentionszeiten, Aufloesung und Peakflaechensignal. Verwende diesen Skill
-  beim Zuordnen von Peaks zu Substanzen, beim Erkennen von
-  Trennproblemen aus Peakform und Retentionszeit, beim Quantifizieren von
-  Analyten durch Peakflaeche oder Peakhoehe oder beim Diagnostizieren
-  von Systemmerkmalen wie Totvolumen und Peakkapazitaet.
+  Ein Chromatogramm aus GC- oder HPLC-Analyse interpretieren: Systemeignungsparameter
+  verifizieren, Peaks anhand von Retentionszeit und Spektrenabgleich identifizieren,
+  genaue Peakintegration durchfuehren, chromatographische Kenngroessen berechnen
+  und die Gesamtpeakqualitaet fuer zuverlaessige Quantifizierung bewerten.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -21,156 +18,147 @@ metadata:
   domain: chromatography
   complexity: intermediate
   language: natural
-  tags: chromatography, peak-analysis, retention-time, resolution, quantification
+  tags: chromatography, peak-analysis, resolution, integration, system-suitability
 ---
 
 # Chromatogramm interpretieren
 
-Interpretiere chromatographische Trennungen durch systematische Analyse von Retentionszeiten, Peakformen und Aufloesung zur qualitativen Substanzzuordnung und quantitativen Auswertung.
+Systematische Interpretation von GC- und HPLC-Chromatogrammen umfassend Systemeignungsverifikation, Peakidentifikation, Integration, Berechnung chromatographischer Parameter und Bewertung der Peakqualitaet fuer zuverlaessige qualitative und quantitative Ergebnisse.
 
 ## Wann verwenden
 
-- Zuordnen von Chromatogramm-Peaks zu bekannten Substanzen
-- Bewerten der Trennleistung (Aufloesung, Bodenzahl, Peakform)
-- Quantifizieren von Analyten per Peakflaechenvergleich
-- Diagnostizieren von Trennproblemen (Tailing, Fronting, Peakverbreiterung)
-- Vergleichen von Chromatogrammen unterschiedlicher Proben oder Zeitpunkte
+- Chromatographische Daten vor der Ergebnisberichterstattung ueberpruefen
+- Verifizieren dass ein Systemeignungstest besteht bevor eine Probensequenz ausgefuehrt wird
+- Unbekannte Peaks identifizieren oder bekannte Analyten durch Retentionszeit oder Spektrendaten bestaetigen
+- Unerwartete Peaks, Basislinienanomalien oder Integrationsartefakte untersuchen
+- Analysten in der Interpretation chromatographischer Daten schulen
 
 ## Eingaben
 
-- **Erforderlich**: Chromatogramm (Rohdaten oder digitalisiertes Bild) mit Peakpositionen und Signalintensitaet
-- **Erforderlich**: Methode und Bedingungen (Saeulentyp, Eluent, Temperaturprogramm oder Gradient)
-- **Optional**: Referenzsubstanzen oder Retentionszeitdatenbank
-- **Optional**: Kalibrierloesungen fuer quantitative Auswertung
+### Erforderlich
+
+- **Chromatogrammdaten**: Digitales oder gedrucktes Chromatogramm mit Zeitachse und Detektorantwortachse
+- **Referenzstandarddaten**: Retentionszeiten und Detektorantworten bekannter Analyten unter denselben Methodenbedingungen
+- **Methodenparameter**: Saeule, mobile Phase/Traegergas, Temperatur-/Gradientenprogramm, Detektoreinstellungen
+
+### Optional
+
+- **Spektrendaten**: UV-Vis-Spektren (DAD), Massenspektren (MS) oder andere Spektralinformation zur Peakbestaetigung
+- **Fruehere Chromatogramme**: Historische Daten derselben Methode fuer Trendvergleich
+- **Systemeignungskriterien**: Akzeptanzgrenzen aus der Methode oder dem regulatorischen Standard
+- **Probenvorbereitungsdetails**: Verduennungsfaktoren, Extraktionsausbeute, Interne-Standard-Konzentration
 
 ## Vorgehensweise
 
-### Schritt 1: Chromatogramm sichten und Basislinie bewerten
+### Schritt 1: Systemeignung verifizieren
 
-Analysiere das Chromatogramm global bevor einzelne Peaks bewertet werden:
+Bestaetigen dass das chromatographische System innerhalb der Spezifikation arbeitet bevor Probendaten interpretiert werden.
 
-1. **Basislinie beurteilen**: Sollte flach und rauscharm sein. Ansteigendes Drift deutet auf Gradienteneffekte oder Columnausbluten hin.
-2. **Signal-Rausch-Verhaeltnis (S/N)**: S/N > 3 fuer Nachweis (LOD); S/N > 10 fuer Quantifizierung (LOQ).
-3. **Totzeit (t0) bestimmen**: Zeit des nicht-retenierten Peaks (Luft oder nicht-interagierendes Ion); Grundlage fuer Retentionsfaktor k'.
-4. **Gesamtlaufzeit bewerten**: Sind alle Analyten innerhalb der Laufzeit eluiert?
+| Parameter | Typische Spezifikation | Berechnung |
+|-----------|----------------------|------------|
+| Retentionszeit-RSD | <= 1.0% | RSD von tR ueber n >= 5 Injektionen |
+| Peakflaechen-RSD | <= 2.0% (Gehalt), <= 5.0% (Verunreinigung) | RSD der Flaeche ueber n >= 5 Injektionen |
+| Tailingfaktor (T) | 0.8-2.0 (USP), ideal 0.9-1.2 | T = W0.05 / (2 * f) |
+| Aufloesung (Rs) | >= 1.5 (Basislinie), >= 2.0 (reguliert) | Rs = 2(tR2 - tR1) / (w1 + w2) |
+| Theoretische Boeden (N) | Gemaess Saeulenspezifikation | N = 16(tR / w)^2 oder N = 5.54(tR / w0.5)^2 |
+| Kapazitaetsfaktor (k') | 2.0-10.0 fuer primaeren Analyten | k' = (tR - t0) / t0 |
 
-```markdown
-## Chromatogramm-Ueberblick
-- Basislinie: [stabil/Drift/verrauscht]
-- Gesamtlaufzeit: [min]
-- Totzeit t0: [min]
-- Anzahl sichtbarer Peaks: [n]
-- S/N des kleinsten Peaks: [wert]
-```
+1. Die Systemeignungsinjektionen finden (typischerweise 5-6 Replikate eines Referenzstandards zu Beginn der Sequenz).
+2. Jeden Parameter aus der obigen Tabelle berechnen.
+3. Berechnete Werte mit den Akzeptanzkriterien der Methode vergleichen.
+4. Wenn ein Parameter versagt, ist das System nicht geeignet -- nicht mit der Probeninterpretation fortfahren bis das Problem behoben ist.
+5. Alle Systemeignungsergebnisse im Chargenprotokoll dokumentieren.
 
-**Erwartet:** Erste Qualitaetsbewertung des Chromatogramms und Identifizierung potentieller Probleme.
+**Erwartet:** Alle Systemeignungsparameter innerhalb der Spezifikation, was bestaetigt dass das System fuer den Zweck geeignet ist.
 
-**Bei Fehler:** Falls die Basislinie stark driftet, pruefe Loesungsmittelstabilitaet, Saeulentemperatur und Detektorkalibrierung.
+**Bei Fehler:** Wenn Retentionszeit-RSD versagt, auf Temperaturinstabilitaet, Fehler bei der Mobil-Phasen-Herstellung oder Saeulendegradation pruefen. Wenn der Tailingfaktor versagt, den Einlassliner (GC) oder die Saeulenfritte (HPLC) inspizieren.
 
-### Schritt 2: Retentionszeiten bestimmen und Peaks zuordnen
+### Schritt 2: Peaks identifizieren
 
-Identifiziere und ordne jeden Peak einer Substanz zu:
+1. Die Retentionszeit (tR) jedes Peaks mit dem Referenzstandard-Chromatogramm vergleichen.
+   - Akzeptabler Retentionszeitabgleich: innerhalb +/- 2% der Referenz-tR.
+2. Fuer mehrdeutige Identifikationen Ko-Injektion (Spiken) verwenden: Referenzstandard zur Probe hinzufuegen und erneut injizieren.
+3. Fuer HPLC mit DAD: das UV-Vis-Spektrum jedes Peaks gegen eine Spektrenbibliothek vergleichen.
+   - Spektrenabgleichindex >= 990 (von 1000) fuer positive Identifikation.
+   - Spektrenreinheit ueber den Peak pruefen (Front-, Apex-, Endspektren sollten ueberlagern).
+4. Fuer MS-ausgeruestete Systeme: Molekuelion (m/z) und Schluesselfragement-Ionen gegen Referenzspektren bestaetigen.
+5. Jeden Peak kennzeichnen der nicht identifiziert werden kann -- als "unbekannt" mit Retentionszeit und relativer Antwort berichten.
 
-1. **Retentionszeit (tR)**: Zeit vom Injektionszeitpunkt bis zum Peakmaximum.
-2. **Retentionsfaktor (k')**: k' = (tR - t0) / t0; sollte fuer die meisten Analyten zwischen 1 und 10 liegen.
-3. **Peakzuordnung**:
-   - Vergleich mit Retentionszeiten aus Referenzloesungen oder Bibliotheken
-   - Kovatssche Retentionsindizes fuer GC (normiert auf n-Alkane)
-   - Co-Chromatographie: Spike der Probe mit bekannter Substanz; Peakvergroesserung bestaetigt Zuordnung
-4. **Unbekannte Peaks**: Notiere Retentionszeit, Peakflaeche und eventuelle Spektraldaten (UV/MS).
+**Erwartet:** Alle Zielanalyten durch Retentionszeitabgleich identifiziert, mit spektraler Bestaetigung wo verfuegbar. Unbekannte Peaks mit Retentionszeit und Flaeche gekennzeichnet.
 
-```markdown
-## Peakzuordnung
-| Peak-Nr. | Retentionszeit tR (min) | k' | Zuordnung | Bestaetigung |
-|----------|------------------------|------|-----------|-------------|
-| 1 | [wert] | [wert] | [Substanz] | [Methode] |
-```
+**Bei Fehler:** Wenn Retentionszeiten sich einheitlich verschoben haben, ist eine systematische Aenderung aufgetreten. Den Referenzstandard erneut injizieren um aktuelle Retentionszeiten festzustellen.
 
-**Erwartet:** Alle Peaks zugeordnet oder als unbekannt markiert; Retentionsfaktoren im erwarteten Bereich.
+### Schritt 3: Peakintegration durchfuehren
 
-**Bei Fehler:** Falls Peaks nicht zugeordnet werden koennen, fuehre MS-Kopplung oder Bibliothekssuche durch. Falls Retentionszeiten stark variieren (> 1% RSD), pruefe Systemdruckstabilitaet und Pufferqualitaet.
+1. Integrationsmodus waehlen:
+   - Automatische Integration mit Datensystem-Standardwerten als Ausgangspunkt
+   - Manuelle Anpassung nur wenn automatische Integration nachweislich Basislinie oder Peakgrenzen falsch platziert
+2. Integrationsparameter festlegen:
+   - Basislinienerkennung (Steigungsempfindlichkeit / Schwellenwert)
+   - Minimale Peakflaeche oder -hoehe zur Rauschunterdrueckung
+   - Peakbreitenparameter passend zum schmalsten erwarteten Peak
+3. Basislinienplatzierung verifizieren:
+   - Basislinie sollte Anfang und Ende jedes Peaks an der wahren chromatographischen Basislinie verbinden
+   - Fuer ueberlappende Peaks Tal-zu-Tal- oder Lotfuss-Methoden verwenden wie von der Methode spezifiziert
+4. Auf Integrationsfehler pruefen: geteilte Peaks, zusammengefuehrte Schulterpeaks, integrierte Rauschspikes, durch den Peak gezogene Basislinie
+5. Endgueltige Integrationsparameter und manuelle Anpassungen mit Begruendung im Audit Trail festhalten.
 
-### Schritt 3: Peakform analysieren
+**Erwartet:** Alle Zielpeaks mit korrekter Basislinienplatzierung integriert, keine Artefakte eingeschlossen, alle manuellen Anpassungen dokumentiert.
 
-Bewerte die Form jedes signifikanten Peaks:
+**Bei Fehler:** Wenn der automatische Integrator eine bestimmte Peakform durchgehend falsch behandelt, eine zeitgesteuerte Integrationsmethode mit benutzerdefinierten Parametern fuer das Retentionsfenster erstellen. Nie manuell anpassen um ein gewuenschtes Ergebnis zu erzielen.
 
-1. **Tailing-Faktor (As)**: As = b/a bei 10% der Peakhoehe; ideal 0,8-1,2; > 1,2 = Tailing.
-2. **Ursachen fuer Peaktailing**:
-   - Basische Verbindungen auf nicht-endgekappter C18-Saeule
-   - Inaktive Silanolgruppen auf Kieselgel
-   - Zu hohe Analytmenge (Saeulenueberlastung)
-   - Tovolumen in Verbindungskapillaren
-3. **Peakverbreiterung**: Breite Peaks deuten auf schlechte kinetische Effizienz; pruefe Flussrate, Temperatur, Partikelgroesse.
-4. **Fronting**: Peakfront breiter als Flanke; typisch bei Saeulenueberlastung.
-5. **Split-Peaks**: Zwei Maxima in einem Peak; deutet auf Phasentrennung, Matrixeffekte oder zwei Verbindungen.
+### Schritt 4: Chromatographische Parameter berechnen
 
-```markdown
-## Peakformanalyse
-| Peak | tR (min) | Peakbreite w (min) | Tailing-Faktor As | Diagnose |
-|------|----------|-------------------|-------------------|----------|
-| [n] | [wert] | [wert] | [wert] | [Normal/Tailing/Fronting] |
-```
+Folgendes fuer alle berichteten Peaks berechnen:
 
-**Erwartet:** Tailing-Faktoren zwischen 0,8 und 1,5; kein Split-Peak bei korrekt getrennten Analyten.
+1. **Aufloesung (Rs)** zwischen benachbarten Peaks: Rs = 2(tR2 - tR1) / (w1 + w2). Rs >= 1.5 zeigt Basisllientrennung an.
+2. **Tailingfaktor (T)** bei 5% Peakhoehe: T = 1.0 ist perfekt symmetrisch; T > 2.0 zeigt signifikantes Tailing an.
+3. **Theoretische Boeden (N)**: Hoeheres N bedeutet bessere Saeuleneffizienz.
+4. **Kapazitaetsfaktor (k')**: Idealer Bereich 2-10 fuer gute Trennung mit vernuenftiger Laufzeit.
+5. **Selektivitaetsfaktor (alpha)** zwischen kritischem Paar: alpha > 1.05 ist allgemein fuer adaequate Trennung noetig.
+6. Ergebnisse fuer alle Analyten tabellarisieren und mit Methodenspezifikationen vergleichen.
 
-**Bei Fehler:** Tailing bei Basen: Erhoeher pH oder C18-Phase mit endgekappten Silanolgruppen. Fronting bei hoher Konzentration: Probe verduennen.
+**Erwartet:** Alle chromatographischen Parameter berechnet, tabellarisiert und mit Akzeptanzkriterien verglichen.
 
-### Schritt 4: Trennleistung berechnen
+**Bei Fehler:** Wenn berechnete Boeden deutlich unter der Saeulenspezifikation liegen, koennte die Saeule degradiert sein -- mit frischem Standard testen und mit historischen Daten vergleichen.
 
-Berechne quantitative Leistungsparameter des Chromatogramms:
+### Schritt 5: Peakqualitaet bewerten
 
-1. **Bodenzahl (N)**: N = 5,545 * (tR / w_halbhoehe)^2; Effizienzmasszahl der Saeule.
-2. **Aufloesung (Rs)**: Rs = 2 * (tR2 - tR1) / (w1 + w2); Rs >= 1,5 = Basislinientrennung.
-3. **Selektivitaet (alpha)**: alpha = k'2 / k'1; alpha > 1 bedeutet Trennung; alpha nahe 1 erfordert hohe Bodenzahl.
-4. **Peakkapazitaet (nc)**: Anzahl peaks die in einem Gradienten getrennt werden koennen; nc = 1 + (Gradientenbreite / w_halbhoehe).
+1. **Symmetrie**: Peaks sollten gaussfoermig oder nahezu gaussfoermig sein. Signifikantes Fronting deutet auf Saeulenueberlastung; Tailing auf Sekundaerwechselwirkungen hin.
+2. **Basisllientrennung**: Fuer quantitative Arbeit muessen kritische Paare basisliniengetrennt sein.
+3. **Peakbreitenkonsistenz**: Deutlich breitere Peaks als erwartet koennen auf Saeulendegradation oder extrasaeulare Bandverbreiterung hinweisen.
+4. **Spektrale Reinheit** (DAD/MS): Wenn der Reinheitsindex spektrale Inhomogenitaet ueber den Peak anzeigt, ist eine koeluierende Verunreinigung wahrscheinlich.
+5. **Negative Peaks oder Basislinistoerungen**: Negative Peaks im UV zeigen an dass das Probensolvens bei der Detektionswellenlaenge mehr absorbiert als die mobile Phase.
+6. **Geisterpeaks**: Peaks in der Blindinjektion weisen auf Verschleppung, kontaminierte mobile Phase oder Saeulenbluten hin.
+7. Gesamte chromatographische Qualitaet zusammenfassen und Einschraenkungen der berichteten Ergebnisse vermerken.
 
-```markdown
-## Trennleistungsparameter
-| Parameter | Berechnung | Wert | Bewertung |
-|-----------|-----------|------|-----------|
-| N (Bodenzahl) | 5,545*(tR/w_0.5)^2 | [wert] | [gut/mittel/schlecht] |
-| Rs (Aufloesung) | 2*(tR2-tR1)/(w1+w2) | [wert] | [>=1.5: OK] |
-| alpha (Selektivitaet) | k'2/k'1 | [wert] | [>1.0: getrennt] |
-```
+**Erwartet:** Peakqualitaet fuer alle Zielanalyten bewertet; Anomalien mit ihren potenziellen Auswirkungen auf die Datenqualitaet dokumentiert.
 
-**Erwartet:** N > 5000 pro Meter fuer typische HPLC; Rs >= 1,5 fuer quantitative Auswertung.
-
-**Bei Fehler:** Falls N zu niedrig, pruefe Saeulenzustand (Verstopfung, Degradierung) oder Systemtovolumen. Falls Rs unzureichend, optimiere Bedingungen oder wechsle stationaere Phase.
-
-### Schritt 5: Quantitative Auswertung durchfuehren
-
-Berechne Analytkonzentrationen aus Peakflaechen oder -hoehen:
-
-1. **Kalibrierungsmethoden**:
-   - Externe Standardkalibrierung: Kalibrierkurve aus Standardloesungen; einfach, aber anfaellig fuer Volumenungenauigkeiten
-   - Interne Standardmethode: Bekannte Menge eines aehnlichen (nicht-interferierenden) Standards zugesetzt; kompensiert Volumenschwankungen
-   - Standardaddition: Fuer komplexe Matrizen; Analyt der Probe in bekannter Menge zugesetzt
-2. **Peakflaechenverhaeltnis**: Verhaeltnis Analyt/interner Standard fuer praezisere Quantifizierung.
-3. **Kalibrierbereich**: Sollte den Konzentrationsbereich der Proben abdecken; R2 > 0,999 fuer lineare Regression.
-4. **Wiederfindung**: Pruefe Wiederfindung mit dotierten Proben (Spike-Recovery); soll 80-120% sein.
-
-**Erwartet:** Konzentrationsangaben mit Unsicherheitsintervall und dokumentierter Kalibriermethode.
-
-**Bei Fehler:** Falls Kalibrierung nichtlinear ist, pruefe auf Detektorueberlastung, reduziere Konzentrationsbereich oder verwende quadratische Kurvenanpassung.
+**Bei Fehler:** Wenn erhebliche Qualitaetsprobleme gefunden werden (koeluierende Verunreinigung durch spektrale Unreinheit bestaetigt, Geisterpeaks bei Analyt-Retentionszeiten), sind die Daten moeglicherweise nicht berichtbar. Ergebnisse kennzeichnen, Grundursache untersuchen und nach Korrekturmassnahme erneut analysieren.
 
 ## Validierung
 
-- [ ] Basislinie beurteilt und Totzeit bestimmt
-- [ ] Alle Peaks mit Retentionszeit und Retentionsfaktor dokumentiert
-- [ ] Peakzuordnung durch Referenzsubstanz oder Co-Injektion bestaetigt
-- [ ] Tailing-Faktoren bestimmt und Auffaelligkeiten erklaert
-- [ ] Aufloesung Rs zwischen kritischen Peakpaaren berechnet
-- [ ] Quantitative Auswertung mit geeigneter Kalibriermethode
+- [ ] Systemeignungsparameter berechnet und innerhalb der Spezifikation
+- [ ] Alle Zielanalyten durch Retentionszeit (+/- spektrale Bestaetigung) identifiziert
+- [ ] Unbekannte Peaks mit Retentionszeit und Flaeche gekennzeichnet
+- [ ] Integration mit korrekter Basislinienplatzierung durchgefuehrt; manuelle Anpassungen dokumentiert
+- [ ] Aufloesung, Tailing, Boeden und Kapazitaetsfaktor fuer alle Peaks berechnet
+- [ ] Peakqualitaet bewertet -- keine ungeloesten Koelutionen die die Quantifizierung beeintraechtigen
+- [ ] Geisterpeaks und Verschleppung ueber Blindinjektion evaluiert
+- [ ] Ergebnisse tabellarisiert und mit Methoden-Akzeptanzkriterien verglichen
 
 ## Haeufige Stolperfallen
 
-- **Peakzuordnung nur nach Retentionszeit**: Retentionszeiten koennen durch Matrixeffekte, Temperaurschwankungen oder Systemdruck variieren; bestaetigung durch Spike oder Spektrum notwendig.
-- **Vernachlaessigung von Totvolumen**: Grosse Tovolumina im System verbreitern Peaks und verrinegern Aufloesung; besonders wichtig bei UHPLC.
-- **Saeulenueberlastung**: Zu hohe Analytenmengen fuehren zu Fronting und nichtlinearer Kalibrierkurve; immer Linearitaetstest durchfuehren.
-- **Basisliniendrift bei Quantifizierung**: Fehlerhafte Basislinienkorrektur durch Drift fuehrt zu falschen Peakflaechenwerten.
+- **Automatische Integration ohne Pruefung akzeptieren**: Datensysteme koennen Basislinien falsch platzieren, besonders bei Schultern und kleinen Peaks neben grossen. Jedes Chromatogramm muss visuell ueberprueft werden.
+- **Retentionszeitverschiebung mit neuem Peak verwechseln**: Einheitliche Retentionszeitverschiebungen (alle Peaks verschieben sich gemeinsam) zeigen eine systematische Aenderung an, keine neuen Verbindungen.
+- **Peaks unterhalb des Rauschniveaus berichten**: Peaks mit Signal-Rausch-Verhaeltnis unter 3 (Detektion) oder 10 (Quantifizierung) sollten nicht identifiziert oder quantifiziert werden.
+- **Manuelle Integration zum Erreichen eines Zielergebnisses**: Integration anpassen um ein Ergebnis die Spezifikation bestehen zu lassen ist Datenfaelschung. Alle Integrationsaenderungen muessen wissenschaftlich begruendet und im Audit Trail festgehalten sein.
+- **Spektrale Reinheitspruefungen vernachlaessigen**: Ein sauber aussehender Peak kann eine koeluierende Verunreinigung verbergen.
 
 ## Verwandte Skills
 
-- `develop-gc-method` -- GC-Methodenentwicklung
-- `develop-hplc-method` -- HPLC-Methodenentwicklung
-- `troubleshoot-separation` -- Trennprobleme diagnostizieren und beheben
+- `develop-gc-method` -- Methodenentwicklung fuer die GC-Technik die das Chromatogramm erzeugt
+- `develop-hplc-method` -- Methodenentwicklung fuer die HPLC-Technik die das Chromatogramm erzeugt
+- `troubleshoot-separation` -- Diagnose von Problemen die bei der Chromatogramminterpretation identifiziert wurden
+- `validate-analytical-method` -- formale Validierung der Methode die die chromatographischen Daten erzeugt
+- `interpret-mass-spectrum` -- detaillierte Interpretation von MS-Daten fuer GC-MS- und LC-MS-Peakbestaetigung

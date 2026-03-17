@@ -1,13 +1,14 @@
 ---
 name: cut-gemstone
 description: >
-  Cut gemstones using cabochon and faceting techniques. Covers rough
-  assessment, orientation for optimal color and yield, dopping, cutting
-  angles, and crown/pavilion geometry for standard brilliant cuts. Use when
-  you have rough gemstone material to cut into a cabochon or faceted stone,
-  planning cutting orientation for optimal colour or optical phenomena,
-  setting up a cabbing or faceting machine, or selecting the appropriate
-  cutting approach for a given material.
+  Edelsteine mit Cabochon- und Facettiertechniken schleifen. Umfasst
+  Rohsteinbewertung, Orientierung fuer optimale Farbe und Ausbeute, Doppen,
+  Schnittwinkel und Kronen-/Paviliongeometrie fuer Standard-Brillantschliffe.
+  Verwenden wenn rohes Edelsteinmaterial zu einem Cabochon oder facettierten
+  Stein geschliffen werden soll, die Schnittorientierung fuer optimale Farbe
+  oder optische Phaenomene geplant wird, eine Cabochon- oder Facettiermaschine
+  eingerichtet wird, oder der passende Schliffansatz fuer ein bestimmtes
+  Material ausgewaehlt werden soll.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,32 +27,32 @@ metadata:
 
 # Edelstein schleifen
 
-Cut gemstones from rough material using cabochon and faceting techniques, including rough assessment, orientation planning, dopping, grinding, and faceting geometry.
+Edelsteine aus Rohmaterial mit Cabochon- und Facettiertechniken schleifen, einschliesslich Rohsteinbewertung, Orientierungsplanung, Doppen, Schleifen und Facettiergeometrie.
 
-## When to Use
+## Wann verwenden
 
-- You have rough gemstone material and want to cut it into a finished cabochon or faceted stone
-- You need to plan cutting orientation for optimal colour, yield, or optical phenomena
-- You are setting up a cabbing machine or faceting machine for the first time
-- You want to understand crown and pavilion angles for standard brilliant cuts
-- You need to select the appropriate cutting approach for a given material
+- Sie haben rohes Edelsteinmaterial und moechten es zu einem fertigen Cabochon oder facettierten Stein schleifen
+- Sie muessen die Schnittorientierung fuer optimale Farbe, Ausbeute oder optische Phaenomene planen
+- Sie richten eine Cabochon- oder Facettiermaschine zum ersten Mal ein
+- Sie moechten Kronen- und Pavilionwinkel fuer Standard-Brillantschliffe verstehen
+- Sie muessen den passenden Schliffansatz fuer ein bestimmtes Material auswaehlen
 
-## Inputs
+## Eingaben
 
-- **Required**: Rough gemstone material (identified species — see `identify-gemstone`)
-- **Required**: Cutting approach decision: cabochon or faceting
-- **Required**: Target shape and approximate size
-- **Optional**: Trim saw with diamond blade
-- **Optional**: Cabbing machine with 80/220/600/1200/3000 grit wheels (for cabochons)
-- **Optional**: Faceting machine with index gear, mast, and lap set (for faceting)
-- **Optional**: Dop wax or epoxy, dop sticks, alcohol lamp
-- **Optional**: Templates (oval, round, marquise) in standard calibrated sizes
+- **Erforderlich**: Rohes Edelsteinmaterial (bestimmte Art — siehe `identify-gemstone`)
+- **Erforderlich**: Entscheidung zum Schliffansatz: Cabochon oder Facettierung
+- **Erforderlich**: Zielform und ungefaehre Groesse
+- **Optional**: Trimmsaege mit Diamantblatt
+- **Optional**: Cabochonmaschine mit 80/220/600/1200/3000 Korn-Scheiben (fuer Cabochons)
+- **Optional**: Facettiermaschine mit Indexgetriebe, Mast und Scheibenset (fuer Facettierung)
+- **Optional**: Doppwachs oder Epoxid, Doppstaebe, Spirituslampe
+- **Optional**: Schablonen (oval, rund, Marquise) in kalibrierten Standardgroessen
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Rough Assessment and Safety Check
+### Schritt 1: Rohsteinbewertung und Sicherheitspruefung
 
-Evaluate the rough material before any cutting begins.
+Das Rohmaterial bewerten, bevor mit dem Schleifen begonnen wird.
 
 ```
 Rough Assessment Checklist:
@@ -92,19 +93,19 @@ ALL stone cutting produces silica dust. Always use water cooling
 and never grind or cut dry without a dust extraction system.
 ```
 
-1. Confirm the species identification (if uncertain, run `identify-gemstone` first)
-2. Check for toxic dust risk — some materials require extra precautions
-3. Examine for fractures under strong transmitted light
-4. Map colour zones and inclusion locations
-5. Estimate what finished shapes the rough can yield
+1. Artbestimmung bestaetigen (bei Unsicherheit zuerst `identify-gemstone` ausfuehren)
+2. Auf toxisches Staubrisiko pruefen — einige Materialien erfordern zusaetzliche Vorsichtsmassnahmen
+3. Auf Risse unter starkem Durchlicht untersuchen
+4. Farbzonen und Einschlusslagen kartieren
+5. Abschaetzen, welche Fertigformen der Rohstein ergeben kann
 
-**Expected:** A documented rough assessment with species confirmed, fractures mapped, colour zones identified, and a cutting plan formed.
+**Erwartet:** Eine dokumentierte Rohsteinbewertung mit bestaetigter Art, kartierten Rissen, identifizierten Farbzonen und einem Schliffplan.
 
-**On failure:** If the rough has extensive fracturing, consider whether it can be stabilized (epoxy impregnation for porous material) or if the yield is too low to justify cutting. Some rough is better sold or traded as specimen material.
+**Bei Fehler:** Wenn der Rohstein umfangreiche Risse aufweist, abwaegen, ob er stabilisiert werden kann (Epoxid-Impaergnierung fuer poroeses Material) oder ob die Ausbeute zu gering ist, um das Schleifen zu rechtfertigen. Manches Rohmaterial wird besser als Sammlertueck verkauft oder getauscht.
 
-### Step 2: Orientation Planning
+### Schritt 2: Orientierungsplanung
 
-Determine the optimal cutting orientation for colour and phenomena.
+Die optimale Schnittorientierung fuer Farbe und Phaenomene bestimmen.
 
 ```
 Orientation Principles by Stone Type:
@@ -132,19 +133,19 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 - Or feature them intentionally (ametrine, watermelon tourmaline)
 ```
 
-1. Determine if the stone is pleochroic — view through the dichroscope from multiple directions
-2. For phenomenal stones (star, cat's eye), locate the inclusion pattern and orient accordingly
-3. For colour-zoned material, decide whether to hide or feature the zoning
-4. Mark the orientation on the rough with an aluminum pencil
-5. Plan the table position and depth to maximise yield at the chosen orientation
+1. Bestimmen, ob der Stein pleochroisch ist — durch das Dichroskop aus mehreren Richtungen betrachten
+2. Bei phaenomenalen Steinen (Stern, Katzenauge) das Einschlussmuster lokalisieren und entsprechend orientieren
+3. Bei farbzoniertem Material entscheiden, ob die Zonierung verborgen oder betont werden soll
+4. Die Orientierung auf dem Rohstein mit einem Aluminiumstift markieren
+5. Tafelposition und Tiefe planen, um die Ausbeute bei der gewaehlten Orientierung zu maximieren
 
-**Expected:** A marked rough stone with the table direction, orientation, and approximate outline indicated. The cutting plan optimises colour presentation and yield.
+**Erwartet:** Ein markierter Rohstein mit angegebener Tafelrichtung, Orientierung und ungefaehrem Umriss. Der Schliffplan optimiert Farbpraesentation und Ausbeute.
 
-**On failure:** If the best colour orientation conflicts with maximum yield, decide based on priority: colour quality almost always increases value more than additional carat weight. When in doubt, orient for colour.
+**Bei Fehler:** Wenn die beste Farborientierung mit der maximalen Ausbeute in Konflikt steht, nach Prioritaet entscheiden: Farbqualitaet steigert den Wert fast immer mehr als zusaetzliches Karatgewicht. Im Zweifelsfall nach Farbe orientieren.
 
-### Step 3: Cabochon Cutting
+### Schritt 3: Cabochonschliff
 
-Shape a gemstone into a domed cabochon on a cabbing machine.
+Einen Edelstein auf einer Cabochonmaschine zu einem gewoelbten Cabochon formen.
 
 ```
 Cabochon Cutting Sequence:
@@ -178,20 +179,20 @@ STEP-BY-STEP:
 10. POLISH: See polish-gemstone skill for final finishing
 ```
 
-1. Set up the cabbing machine with water flow on all wheels
-2. Put on safety glasses — no exceptions
-3. Cut a slab and mark the template outline
-4. Dop the stone securely — a loose stone during grinding is dangerous
-5. Grind to shape on 80 grit, dome on 220, smooth through 600 and 1200
-6. Maintain consistent dome curvature throughout — uneven domes show "flat spots" after polishing
+1. Cabochonmaschine mit Wasserfluss auf allen Scheiben einrichten
+2. Schutzbrille aufsetzen — ohne Ausnahme
+3. Platte schneiden und Schablonenumriss markieren
+4. Stein sicher doppen — ein loser Stein beim Schleifen ist gefaehrlich
+5. Auf 80er Korn formen, auf 220er woelben, durch 600er und 1200er glaetten
+6. Gleichmaessige Woelbungskruemmung durchgehend beibehalten — ungleichmaessige Woelbungen zeigen nach dem Polieren "flache Stellen"
 
-**Expected:** A smoothly domed cabochon ready for final polishing, with symmetrical outline, even dome height, and no visible scratches from the 1200-grit stage.
+**Erwartet:** Ein gleichmaessig gewoelbter Cabochon, bereit zum Endpolieren, mit symmetrischem Umriss, gleichmaessiger Woelbungshoehe und keinen sichtbaren Kratzern aus der 1200er-Korn-Phase.
 
-**On failure:** If the dome has flat spots or asymmetry, return to 220 grit and reshape. Better to lose a little material than to polish an uneven dome. If the stone comes off the dop during grinding, re-dop carefully and continue — check the stone for chips first.
+**Bei Fehler:** Wenn die Woelbung flache Stellen oder Asymmetrie aufweist, zum 220er Korn zurueckkehren und nachformen. Besser etwas Material verlieren als eine ungleichmaessige Woelbung zu polieren. Wenn der Stein beim Schleifen vom Dopp abfaellt, sorgfaeltig neu doppen und fortfahren — den Stein zuerst auf Abplatzer pruefen.
 
-### Step 4: Faceting
+### Schritt 4: Facettierung
 
-Cut precise geometric facets using a faceting machine.
+Praezise geometrische Facetten mit einer Facettiermaschine schleifen.
 
 ```
 Standard Round Brilliant Angles (quartz-family, RI ~1.54):
@@ -220,54 +221,54 @@ CRITICAL: Pavilion angles determine brilliance.
 - Correct angle → total internal reflection (brilliance)
 ```
 
-1. Select a published faceting diagram for the target shape and material RI
-2. Prepare the rough: flat the pavilion side (the pointed bottom will face down)
-3. Dop the stone — use a cone dop for round stones, flat dop for others
-4. Cut pavilion facets first at the published angles on the coarse lap (600 mesh diamond)
-5. Meet all pavilion facets to a precise point (the "culet meet")
-6. Transfer to a cone dop (or use a transfer jig) to cut the crown
-7. Cut crown mains, then breaks, then stars, establishing the table last
-8. Pre-polish and polish each tier (see `polish-gemstone` for lap and compound selection)
+1. Ein veroeffentlichtes Facettierdiagramm fuer die Zielform und den Material-Brechungsindex auswaehlen
+2. Den Rohstein vorbereiten: Pavilionseite planschleifen (die Spitze zeigt nach unten)
+3. Den Stein doppen — Kegeldopp fuer runde Steine, Flachdopp fuer andere
+4. Pavilion-Facetten zuerst bei den veroeffentlichten Winkeln auf der Grobscheibe (600er Mesh Diamant) schleifen
+5. Alle Pavilion-Facetten zu einem praezisen Punkt zusammenfuehren (der "Culet-Meet")
+6. Auf einen Kegeldopp uebertragen (oder eine Transfervorrichtung verwenden) um die Krone zu schleifen
+7. Kronen-Hauptfacetten, dann Bruchfacetten, dann Sternfacetten schleifen, die Tafel zuletzt anlegen
+8. Jede Stufe vorpolieren und polieren (siehe `polish-gemstone` fuer Scheiben- und Poliermittelauswahl)
 
-**Expected:** A faceted gemstone with precise meets (where facet edges converge to a single point), consistent facet sizes, good symmetry, and proper angles for the material's RI.
+**Erwartet:** Ein facettierter Edelstein mit praezisen Meets (wo Facettenkanten an einem einzigen Punkt zusammenlaufen), gleichmaessigen Facettengroessen, guter Symmetrie und korrekten Winkeln fuer den Brechungsindex des Materials.
 
-**On failure:** If facet meets are off, the angles or index settings are slightly wrong. Re-check the published diagram. "Chasing meets" (adjusting one facet to fix another) compounds errors — it is better to re-cut the tier if the error is large. Small meet errors are normal for beginners and do not significantly affect brilliance.
+**Bei Fehler:** Wenn Facetten-Meets nicht stimmen, sind die Winkel oder Indexeinstellungen leicht falsch. Das veroeffentlichte Diagramm erneut pruefen. "Meets jagen" (eine Facette anpassen, um eine andere zu korrigieren) verstaerkt Fehler — es ist besser, die Stufe neu zu schleifen, wenn der Fehler gross ist. Kleine Meet-Fehler sind fuer Anfaenger normal und beeintraechtigen die Brillanz nicht wesentlich.
 
-### Step 5: Post-Cut Inspection
+### Schritt 5: Nachschliffinspektion
 
-Evaluate the cut stone before proceeding to final polish.
+Den geschliffenen Stein bewerten, bevor zur Endpolitur uebergegangen wird.
 
-1. Clean the stone thoroughly
-2. Check symmetry: view from above (outline), from the side (proportions), and through the table (meet precision)
-3. For cabochons: verify dome evenness, check for flat spots, ensure consistent outline shape
-4. For faceted stones: check meets under 10x loupe, look for facet scratches remaining from cutting
-5. Measure final dimensions and weight
-6. If defects are found, return to the appropriate cutting step before polishing
+1. Den Stein gruendlich reinigen
+2. Symmetrie pruefen: von oben betrachten (Umriss), von der Seite (Proportionen) und durch die Tafel (Meet-Praezision)
+3. Bei Cabochons: Woelbungsgleichmaessigkeit verifizieren, auf flache Stellen pruefen, gleichmaessige Umrissform sicherstellen
+4. Bei facettierten Steinen: Meets unter 10x Lupe pruefen, auf verbliebene Facettenkratzer vom Schleifen achten
+5. Endmasse und Gewicht messen
+6. Wenn Maengel gefunden werden, zum entsprechenden Schliffschritt zurueckkehren vor dem Polieren
 
-**Expected:** A fully cut stone that meets quality standards for symmetry, meets, and surface preparation, ready for the polishing stage.
+**Erwartet:** Ein vollstaendig geschliffener Stein, der Qualitaetsstandards fuer Symmetrie, Meets und Oberflaechenvorbereitung erfuellt, bereit fuer die Polierphase.
 
-**On failure:** If significant defects are found (poor symmetry, bad meets, incorrect proportions), it is more time-efficient to re-cut now than to polish a defective stone and re-cut later. Document what went wrong for the next stone.
+**Bei Fehler:** Wenn signifikante Maengel gefunden werden (schlechte Symmetrie, fehlerhafte Meets, falsche Proportionen), ist es zeiteffizienter, jetzt neu zu schleifen als einen mangelhaften Stein zu polieren und spaeter neu zu schleifen. Dokumentieren, was schiefgelaufen ist, fuer den naechsten Stein.
 
-## Validation
+## Validierung
 
-- [ ] Species identified and toxic dust risk assessed before cutting
-- [ ] Safety equipment worn throughout (eye protection, dust/splash control)
-- [ ] Water cooling active on all grinding and cutting operations
-- [ ] Orientation planned for optimal colour or phenomena
-- [ ] Cabochon dome is symmetrical with no flat spots (cabochon path)
-- [ ] Facet meets converge to points without significant offset (faceting path)
-- [ ] Final dimensions measured and recorded
-- [ ] Stone is free of cutting-stage scratches and ready for polishing
+- [ ] Art bestimmt und toxisches Staubrisiko vor dem Schleifen bewertet
+- [ ] Schutzausruestung durchgehend getragen (Augenschutz, Staub-/Spritzschutz)
+- [ ] Wasserkuehlung bei allen Schleif- und Schneidvorgaengen aktiv
+- [ ] Orientierung fuer optimale Farbe oder Phaenomene geplant
+- [ ] Cabochon-Woelbung ist symmetrisch ohne flache Stellen (Cabochon-Pfad)
+- [ ] Facetten-Meets laufen ohne signifikanten Versatz in Punkten zusammen (Facettier-Pfad)
+- [ ] Endmasse gemessen und dokumentiert
+- [ ] Stein ist frei von Schliffkratzern und bereit zum Polieren
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **Cutting an unidentified stone**: Some materials produce toxic dust (malachite, cinnabar, chrysotile). Always identify before cutting. Always use water cooling regardless
-- **Skipping orientation planning**: Cutting a pleochroic stone without orienting for colour can produce a dull or off-colour finished gem that would have been beautiful with correct orientation
-- **Grinding dry**: Dry grinding produces silica dust (chronic health hazard) and overheats the stone (thermal shock can fracture it). Water must flow continuously on all wheels and laps
-- **Rushing through grits**: Skipping from 220 to 1200 grit leaves deep scratches that show after polishing. Each grit stage must fully remove the scratches from the previous stage
-- **Dopping failure**: Inadequate dop adhesion causes the stone to shift or fly off during grinding. Use enough wax, ensure the stone is warm (not cold), and let the dop cool completely before grinding
+- **Unidentifizierten Stein schleifen**: Manche Materialien erzeugen giftigen Staub (Malachit, Zinnober, Chrysotil). Immer vor dem Schleifen identifizieren. In jedem Fall Wasserkuehlung verwenden
+- **Orientierungsplanung ueberspringen**: Einen pleochroischen Stein ohne Farborientierung zu schleifen kann einen stumpfen oder fehlgefaerbten Stein ergeben, der mit korrekter Orientierung wunderschoen geworden waere
+- **Trocken schleifen**: Trockenschliff erzeugt Quarzfeinstaub (chronische Gesundheitsgefahr) und ueberhitzt den Stein (Thermoschock kann ihn brechen). Wasser muss auf allen Scheiben und Laeppen kontinuierlich fliessen
+- **Durch Koernungen hetzen**: Von 220er auf 1200er Korn zu springen hinterlaesst tiefe Kratzer, die nach dem Polieren sichtbar werden. Jede Koernstufe muss die Kratzer der vorherigen Stufe vollstaendig entfernen
+- **Doppversagen**: Ungenuegene Dopphaftung laesst den Stein sich verschieben oder beim Schleifen wegfliegen. Genuegend Wachs verwenden, sicherstellen, dass der Stein warm ist (nicht kalt), und den Dopp vor dem Schleifen vollstaendig abkuehlen lassen
 
-## Related Skills
+## Verwandte Skills
 
-- `identify-gemstone` — Species identification is required before cutting begins
-- `polish-gemstone` — The next step after cutting, covering lap selection, compound choice, and final finish
+- `identify-gemstone` — Artbestimmung ist vor Beginn des Schleifens erforderlich
+- `polish-gemstone` — Der naechste Schritt nach dem Schleifen, umfasst Scheibenauswahl, Poliermittelwahl und Endbearbeitung

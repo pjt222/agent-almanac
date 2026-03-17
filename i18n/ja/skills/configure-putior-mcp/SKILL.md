@@ -1,13 +1,12 @@
 ---
 name: configure-putior-mcp
 description: >
-  Configure the putior MCP server to expose 16 workflow visualization
-  tools to AI assistants. Covers Claude Code and Claude Desktop setup,
-  dependency installation (mcptools, ellmer), tool verification, and
-  optional ACP server configuration for agent-to-agent communication. Use
-  when enabling AI assistants to annotate and visualize workflows interactively,
-  setting up a new development environment with putior MCP integration, or
-  configuring agent-to-agent communication via ACP for automated pipelines.
+  putior MCPサーバーを設定して16のワークフロー可視化ツールをAIアシスタントに公開する。
+  Claude CodeとClaude Desktopのセットアップ、依存関係のインストール（mcptools、
+  ellmer）、ツールの検証、エージェント間通信用のオプションのACPサーバー設定をカバー
+  する。AIアシスタントがワークフローをインタラクティブにアノテーション・可視化できる
+  ようにする時、putior MCP統合で新しい開発環境をセットアップする時、自動化
+  パイプライン用のACP経由のエージェント間通信を設定する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,29 +23,29 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Putior MCPの設定
+# putior MCPサーバーの設定
 
-Set up the putior MCP server so AI assistants (Claude Code, Claude Desktop) can directly call workflow annotation and diagram generation tools.
+AIアシスタント（Claude Code、Claude Desktop）がワークフローのアノテーションとダイアグラム生成ツールを直接呼び出せるように、putior MCPサーバーをセットアップする。
 
 ## 使用タイミング
 
-- Enabling AI assistants to interactively annotate and visualize workflows
-- Setting up a new development environment with putior MCP integration
-- After installing putior and wanting AI-assisted workflow documentation
-- Configuring agent-to-agent communication via ACP for automated pipelines
+- AIアシスタントがワークフローをインタラクティブにアノテーション・可視化できるようにする時
+- putior MCP統合で新しい開発環境をセットアップする時
+- putiorをインストールした後にAI支援のワークフロードキュメンテーションが必要な時
+- 自動化パイプライン用のACP経由のエージェント間通信を設定する時
 
 ## 入力
 
-- **必須**: putior installed (see `install-putior`)
-- **必須**: Target client: Claude Code, Claude Desktop, or both
-- **任意**: Whether to also configure ACP server (default: no)
-- **任意**: Custom host/port for ACP server (default: localhost:8080)
+- **必須**: putiorがインストール済み（`install-putior`を参照）
+- **必須**: ターゲットクライアント: Claude Code、Claude Desktop、または両方
+- **任意**: ACPサーバーも設定するかどうか（デフォルト: いいえ）
+- **任意**: ACPサーバーのカスタムホスト/ポート（デフォルト: localhost:8080）
 
 ## 手順
 
-### ステップ1: Install MCP Dependencies
+### ステップ1: MCP依存関係のインストール
 
-Install the required packages for MCP server functionality.
+MCPサーバー機能に必要なパッケージをインストールする。
 
 ```r
 # Required: MCP framework
@@ -60,39 +59,39 @@ library(mcptools)
 library(ellmer)
 ```
 
-**期待結果:** Both packages install and load without errors.
+**期待結果:** 両方のパッケージがエラーなくインストール・ロードされる。
 
-**失敗時:** `mcptools` requires `remotes` package. Install it first: `install.packages("remotes")`. If GitHub rate-limits, configure a `GITHUB_PAT` in `~/.Renviron` (add the line `GITHUB_PAT=your_token_here` and restart R). Do **not** paste tokens into shell commands or commit them to version control.
+**失敗時:** `mcptools`には`remotes`パッケージが必要。まずインストールする：`install.packages("remotes")`。GitHubがレート制限する場合、`~/.Renviron`に`GITHUB_PAT`を設定する（`GITHUB_PAT=your_token_here`の行を追加してRを再起動）。トークンをシェルコマンドに貼り付けたりバージョン管理にコミットしたり**しない**。
 
-### ステップ2: Configure Claude Code (WSL/Linux/macOS)
+### ステップ2: Claude Code（WSL/Linux/macOS）の設定
 
-Add the putior MCP server to Claude Code's configuration.
+Claude Codeの設定にputior MCPサーバーを追加する。
 
 ```bash
 # One-line setup
 claude mcp add putior -- Rscript -e "putior::putior_mcp_server()"
 ```
 
-For WSL with Windows R:
+WSLでWindows Rを使用する場合:
 ```bash
 claude mcp add putior -- "/mnt/c/Program Files/R/R-4.5.2/bin/Rscript.exe" -e "putior::putior_mcp_server()"
 ```
 
-Verify the configuration:
+設定の確認:
 ```bash
 claude mcp list
 claude mcp get putior
 ```
 
-**期待結果:** `putior` appears in the MCP server list with status "configured".
+**期待結果:** MCPサーバーリストに`putior`がステータス「configured」で表示される。
 
-**失敗時:** If Claude Code is not in PATH, add it: `export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`. If the Rscript path is wrong, locate R with `which Rscript` or `ls "/mnt/c/Program Files/R/"`.
+**失敗時:** Claude CodeがPATHにない場合、追加する：`export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`。Rscriptのパスが間違っている場合、`which Rscript`または`ls "/mnt/c/Program Files/R/"`でRの場所を確認する。
 
-### ステップ3: Configure Claude Desktop (Windows)
+### ステップ3: Claude Desktop（Windows）の設定
 
-Add putior to Claude Desktop's MCP configuration file.
+Claude DesktopのMCP設定ファイルにputiorを追加する。
 
-Edit `%APPDATA%\Claude\claude_desktop_config.json`:
+`%APPDATA%\Claude\claude_desktop_config.json`を編集する:
 
 ```json
 {
@@ -105,7 +104,7 @@ Edit `%APPDATA%\Claude\claude_desktop_config.json`:
 }
 ```
 
-Or with the full path:
+またはフルパスで:
 ```json
 {
   "mcpServers": {
@@ -117,15 +116,15 @@ Or with the full path:
 }
 ```
 
-Restart Claude Desktop after editing the configuration.
+設定ファイル編集後にClaude Desktopを再起動する。
 
-**期待結果:** Claude Desktop shows putior in its MCP server list. Tools become available in conversation.
+**期待結果:** Claude DesktopのMCPサーバーリストにputiorが表示される。会話中にツールが利用可能になる。
 
-**失敗時:** Validate JSON syntax with a JSON linter. Check that the R path exists. Use 8.3 short names (`PROGRA~1`, `R-45~1.0`) if spaces in paths cause issues.
+**失敗時:** JSONリンターで構文を検証する。Rパスが存在することを確認する。パスのスペースが問題を引き起こす場合は8.3短縮名（`PROGRA~1`、`R-45~1.0`）を使用する。
 
-### ステップ4: Verify All 16 Tools
+### ステップ4: 全16ツールの検証
 
-Test that all MCP tools are accessible and functional.
+すべてのMCPツールがアクセス可能で機能することをテストする。
 
 ```r
 # Get tool definitions
@@ -136,46 +135,46 @@ cat(sprintf("Total tools: %d\n", length(tools)))
 vapply(tools, function(t) t$name, character(1))
 ```
 
-The 16 tools organized by category:
+カテゴリ別の16ツール:
 
-**Core Workflow (5):**
-- `put` — Scan files for PUT annotations (supports `exclude` parameter for regex-based file filtering)
-- `put_diagram` — Generate Mermaid diagrams
-- `put_auto` — Auto-detect workflow from code (supports `exclude` parameter)
-- `put_generate` — Generate annotation suggestions (supports `exclude` parameter)
-- `put_merge` — Merge manual + auto annotations (supports `exclude` parameter)
+**コアワークフロー（5）:**
+- `put` -- ファイルからPUTアノテーションをスキャン（正規表現ベースのファイルフィルタリング用の`exclude`パラメータをサポート）
+- `put_diagram` -- Mermaidダイアグラムを生成
+- `put_auto` -- コードからワークフローを自動検出（`exclude`パラメータをサポート）
+- `put_generate` -- アノテーション提案を生成（`exclude`パラメータをサポート）
+- `put_merge` -- 手動と自動のアノテーションをマージ（`exclude`パラメータをサポート）
 
-**Reference/Discovery (7):**
-- `get_comment_prefix` — Get comment prefix for extension
-- `get_supported_extensions` — List supported extensions
-- `list_supported_languages` — List supported languages
-- `get_detection_patterns` — Get auto-detection patterns
-- `get_diagram_themes` — List available themes
-- `putior_skills` — AI assistant documentation
-- `putior_help` — Quick reference help
+**リファレンス/ディスカバリ（7）:**
+- `get_comment_prefix` -- 拡張子のコメントプレフィックスを取得
+- `get_supported_extensions` -- サポートされる拡張子を一覧表示
+- `list_supported_languages` -- サポートされる言語を一覧表示
+- `get_detection_patterns` -- 自動検出パターンを取得
+- `get_diagram_themes` -- 利用可能なテーマを一覧表示
+- `putior_skills` -- AIアシスタントドキュメンテーション
+- `putior_help` -- クイックリファレンスヘルプ
 
-**Utilities (3):**
-- `is_valid_put_annotation` — Validate annotation syntax
-- `split_file_list` — Parse file lists
-- `ext_to_language` — Extension to language name
+**ユーティリティ（3）:**
+- `is_valid_put_annotation` -- アノテーション構文を検証
+- `split_file_list` -- ファイルリストをパース
+- `ext_to_language` -- 拡張子を言語名に変換
 
-**Configuration (1):**
-- `set_putior_log_level` — Configure logging verbosity
+**設定（1）:**
+- `set_putior_log_level` -- ログ詳細度を設定
 
-Test core tools from Claude Code:
+Claude Codeからコアツールをテスト:
 ```
 Use the putior_help tool to see available commands
 Use the put tool to scan ./R/ for annotations
 Use the put_diagram tool to generate a diagram
 ```
 
-**期待結果:** All 16 tools listed. Core tools return expected results when called with valid inputs.
+**期待結果:** 全16ツールがリストされる。有効な入力でコアツールが期待通りの結果を返す。
 
-**失敗時:** If tools are missing, check that putior version is current: `packageVersion("putior")`. Older versions may have fewer tools. Update with `remotes::install_github("pjt222/putior")`.
+**失敗時:** ツールが欠けている場合、putiorのバージョンが最新か確認する：`packageVersion("putior")`。古いバージョンではツールが少ない場合がある。`remotes::install_github("pjt222/putior")`で更新する。
 
-### ステップ5: Configure ACP Server (Optional)
+### ステップ5: ACPサーバーの設定（任意）
 
-Set up the ACP (Agent Communication Protocol) server for agent-to-agent communication.
+エージェント間通信用のACP（Agent Communication Protocol）サーバーをセットアップする。
 
 ```r
 # Install ACP dependency
@@ -188,7 +187,7 @@ putior::putior_acp_server()
 putior::putior_acp_server(host = "0.0.0.0", port = 9000)
 ```
 
-Test ACP endpoints:
+ACPエンドポイントのテスト:
 ```bash
 # Discover agent
 curl http://localhost:8080/agents
@@ -204,33 +203,33 @@ curl -X POST http://localhost:8080/runs \
   -d '{"input": [{"role": "user", "parts": [{"content": "generate diagram for ./R/"}]}]}'
 ```
 
-**期待結果:** ACP server starts on the configured port. `/agents` returns the putior agent manifest. `/runs` accepts natural language requests and returns workflow results.
+**期待結果:** ACPサーバーが設定されたポートで起動する。`/agents`がputiorエージェントマニフェストを返す。`/runs`が自然言語リクエストを受け付けワークフロー結果を返す。
 
-**失敗時:** If port 8080 is in use, specify a different port. If `plumber2` is not installed, the server function will print a helpful error message suggesting installation.
+**失敗時:** ポート8080が使用中の場合、別のポートを指定する。`plumber2`がインストールされていない場合、サーバー関数がインストールを提案する有用なエラーメッセージを表示する。
 
 ## バリデーション
 
-- [ ] `putior::putior_mcp_tools()` exposes the core tools (`put`, `put_diagram`, `put_auto`, `put_generate`, `put_merge`) and returns ~16 tools for the current version
-- [ ] Claude Code: `claude mcp list` shows `putior` configured
-- [ ] Claude Code: `putior_help` tool returns help text when invoked
-- [ ] Claude Desktop: putior appears in the MCP server list after restart
-- [ ] Core tools (`put`, `put_diagram`, `put_auto`) execute without errors
-- [ ] (Optional) ACP server responds to `curl http://localhost:8080/agents`
+- [ ] `putior::putior_mcp_tools()`がコアツール（`put`、`put_diagram`、`put_auto`、`put_generate`、`put_merge`）を公開し、現在のバージョンで約16ツールを返す
+- [ ] Claude Code: `claude mcp list`で`putior`が設定済みと表示される
+- [ ] Claude Code: 呼び出し時に`putior_help`ツールがヘルプテキストを返す
+- [ ] Claude Desktop: 再起動後にMCPサーバーリストにputiorが表示される
+- [ ] コアツール（`put`、`put_diagram`、`put_auto`）がエラーなく実行される
+- [ ] （任意）ACPサーバーが`curl http://localhost:8080/agents`に応答する
 
 ## よくある落とし穴
 
-- **mcptools not installed**: The MCP server requires `mcptools` (from GitHub) and `ellmer` (from CRAN). Both must be installed. putior checks and provides helpful messages if they're missing.
-- **Wrong R path in Claude Desktop**: Windows paths need escaping in JSON (`\\`). Use 8.3 short names to avoid spaces: `C:\\PROGRA~1\\R\\R-45~1.0\\bin\\x64\\Rscript.exe`.
-- **Forgetting to restart**: Claude Desktop must be restarted after editing the config file. Claude Code picks up changes on next session start.
-- **renv isolation**: If putior is installed in an renv library but Claude Code/Desktop launches R without renv, the packages won't be found. Ensure `mcptools` and `ellmer` are installed in the global library or configure renv activation in the MCP server command.
-- **Port conflicts for ACP**: The default ACP port (8080) is commonly used. Check with `lsof -i :8080` or `netstat -tlnp | grep 8080` before starting.
-- **Including only specific tools**: To expose a subset of tools, use `putior_mcp_tools(include = c("put", "put_diagram"))` when building custom MCP server wrappers.
-- **Custom palettes via MCP**: The `palette` parameter on `put_diagram` requires a `putior_theme` R object (created by `put_theme()`), which cannot be serialized through MCP's JSON interface. Use the built-in `theme` parameter string for MCP calls. For custom palettes, use R directly.
+- **mcptoolsがインストールされていない**: MCPサーバーには`mcptools`（GitHubから）と`ellmer`（CRANから）が必要。両方がインストールされている必要がある。putiorは不足している場合に有用なメッセージを表示する
+- **Claude DesktopのRパスが間違っている**: WindowsパスはJSON内でエスケープが必要（`\\`）。スペースを避けるために8.3短縮名を使用する：`C:\\PROGRA~1\\R\\R-45~1.0\\bin\\x64\\Rscript.exe`
+- **再起動の忘れ**: Claude Desktopは設定ファイル編集後に再起動が必要。Claude Codeは次のセッション開始時に変更を反映する
+- **renvの分離**: putiorがrenvライブラリにインストールされているがClaude Code/DesktopがRをrenvなしで起動する場合、パッケージが見つからない。`mcptools`と`ellmer`がグローバルライブラリにインストールされているか、MCPサーバーコマンドでrenvアクティベーションが設定されていることを確認する
+- **ACPのポート競合**: デフォルトACPポート（8080）はよく使用される。起動前に`lsof -i :8080`または`netstat -tlnp | grep 8080`で確認する
+- **特定のツールのみを含める**: ツールのサブセットを公開するには、カスタムMCPサーバーラッパーを構築する際に`putior_mcp_tools(include = c("put", "put_diagram"))`を使用する
+- **MCP経由のカスタムパレット**: `put_diagram`の`palette`パラメータには`putior_theme` Rオブジェクト（`put_theme()`で作成）が必要で、MCPのJSONインターフェース経由ではシリアライズできない。MCP呼び出しには組み込みの`theme`パラメータ文字列を使用する。カスタムパレットにはRを直接使用する
 
 ## 関連スキル
 
-- `install-putior` — prerequisite: putior and optional deps must be installed
-- `configure-mcp-server` — general MCP server configuration for Claude Code/Desktop
-- `troubleshoot-mcp-connection` — diagnose connection issues if tools don't appear
-- `build-custom-mcp-server` — build custom MCP servers that wrap putior tools
-- `analyze-codebase-workflow` — use MCP tools interactively for codebase analysis
+- `install-putior` -- 前提条件: putiorとオプションの依存関係がインストールされている必要がある
+- `configure-mcp-server` -- Claude Code/Desktop用の一般的なMCPサーバー設定
+- `troubleshoot-mcp-connection` -- ツールが表示されない場合の接続問題の診断
+- `build-custom-mcp-server` -- putiorツールをラップするカスタムMCPサーバーの構築
+- `analyze-codebase-workflow` -- コードベース分析にMCPツールをインタラクティブに使用

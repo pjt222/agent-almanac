@@ -1,12 +1,11 @@
 ---
 name: build-custom-mcp-server
 description: >
-  Build a custom MCP (Model Context Protocol) server that exposes
-  domain-specific tools to AI assistants. Covers server implementation
-  in Node.js or R, tool definitions, transport configuration, and testing
-  with Claude Code. Use when you need to expose custom functionality beyond
-  what mcptools provides, when building specialized domain-specific AI
-  integrations, or when wrapping existing APIs or services as MCP tools.
+  AIアシスタントにドメイン固有のツールを公開するカスタムMCP（Model Context Protocol）
+  サーバーを構築する。Node.jsまたはRでのサーバー実装、ツール定義、トランスポート
+  設定、Claude Codeでのテストをカバーする。mcptoolsが提供する以上のカスタム機能を
+  公開する必要がある時、特化したドメイン固有のAI統合を構築する時、既存のAPIや
+  サービスをMCPツールとしてラップする時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,28 +24,28 @@ metadata:
 
 # カスタムMCPサーバーの構築
 
-Create a custom MCP server that exposes domain-specific tools to AI assistants.
+AIアシスタントにドメイン固有のツールを公開するカスタムMCPサーバーを作成する。
 
 ## 使用タイミング
 
-- Need to expose custom functionality to Claude Code or Claude Desktop
-- Building specialized tools beyond what mcptools provides
-- Creating a domain-specific AI assistant integration
-- Wrapping existing APIs or services as MCP tools
+- Claude CodeまたはClaude Desktopにカスタム機能を公開する必要がある時
+- mcptoolsが提供する以上の特化したツールを構築する時
+- ドメイン固有のAIアシスタント統合を作成する時
+- 既存のAPIやサービスをMCPツールとしてラップする時
 
 ## 入力
 
-- **必須**: List of tools to expose (name, description, parameters, behavior)
-- **必須**: Implementation language (Node.js or R)
-- **必須**: Transport type (stdio or HTTP)
-- **任意**: Authentication requirements
-- **任意**: Docker packaging needs
+- **必須**: 公開するツールのリスト（名前、説明、パラメータ、動作）
+- **必須**: 実装言語（Node.jsまたはR）
+- **必須**: トランスポートタイプ（stdioまたはHTTP）
+- **任意**: 認証要件
+- **任意**: Dockerパッケージングのニーズ
 
 ## 手順
 
-### ステップ1: Define Tool Specifications
+### ステップ1: ツール仕様の定義
 
-Before writing code, define each tool:
+コードを書く前に、各ツールを定義する:
 
 ```yaml
 tools:
@@ -76,11 +75,11 @@ tools:
         required: true
 ```
 
-**期待結果:** A YAML or markdown specification for each tool with name, description, parameters (including types, defaults, and required flags), and return type documented before writing any code.
+**期待結果:** 各ツールのYAMLまたはmarkdown仕様。名前、説明、パラメータ（型、デフォルト、必須フラグを含む）、戻り値型がコードを書く前に文書化される。
 
-**失敗時:** If tool specifications are unclear, interview the domain expert or review the existing API documentation to determine parameter types and return formats.
+**失敗時:** ツール仕様が不明確な場合、ドメイン専門家にインタビューするか、既存のAPIドキュメントをレビューしてパラメータの型と戻り値フォーマットを判定する。
 
-### ステップ2: Implement in Node.js (Using MCP SDK)
+### ステップ2: Node.jsでの実装（MCP SDKを使用）
 
 ```javascript
 // server.js
@@ -137,11 +136,11 @@ const transport = new StdioServerTransport();
 await server.connect(transport);
 ```
 
-**期待結果:** A working `server.js` file that imports the MCP SDK, defines tools with Zod schemas, and connects via stdio transport. Running `node server.js` starts the server without errors.
+**期待結果:** MCP SDKをインポートし、Zodスキーマでツールを定義し、stdioトランスポートで接続する動作する`server.js`ファイル。`node server.js`を実行するとエラーなしでサーバーが起動する。
 
-**失敗時:** Verify that `@modelcontextprotocol/sdk` and `zod` are installed (`npm install`). Check that the import paths match the SDK version (the SDK reorganized exports between versions).
+**失敗時:** `@modelcontextprotocol/sdk`と`zod`がインストールされていることを確認する（`npm install`）。インポートパスがSDKバージョンと一致することを確認する（SDKはバージョン間でエクスポートを再構成した）。
 
-### ステップ3: Implement in R (Using mcptools)
+### ステップ3: Rでの実装（mcptoolsを使用）
 
 ```r
 # server.R
@@ -168,11 +167,11 @@ mcp_tool(
 mcptools::mcp_server()
 ```
 
-**期待結果:** A working `server.R` file that registers custom tools with `mcp_tool()` and starts the server with `mcp_server()`. Running `Rscript server.R` starts the MCP server.
+**期待結果:** `mcp_tool()`でカスタムツールを登録し、`mcp_server()`でサーバーを起動する動作する`server.R`ファイル。`Rscript server.R`を実行するとMCPサーバーが起動する。
 
-**失敗時:** Ensure `mcptools` is installed from GitHub (`remotes::install_github("posit-dev/mcptools")`). Check that the handler function signatures match the parameter definitions.
+**失敗時:** `mcptools`がGitHubからインストールされていることを確認する（`remotes::install_github("posit-dev/mcptools")`）。ハンドラー関数のシグネチャがパラメータ定義と一致していることを確認する。
 
-### ステップ4: Set Up Project Structure
+### ステップ4: プロジェクト構造のセットアップ
 
 ```
 my-mcp-server/
@@ -187,33 +186,33 @@ my-mcp-server/
 └── README.md             # Setup instructions
 ```
 
-**期待結果:** Project directory created with `server.js` (or `server.R`), `package.json`, `tools/` directory for modular tool implementations, and `test/` directory for tests.
+**期待結果:** `server.js`（または`server.R`）、`package.json`、モジュラーなツール実装のための`tools/`ディレクトリ、テスト用の`test/`ディレクトリを含むプロジェクトディレクトリが作成される。
 
-**失敗時:** If the directory structure doesn't match your implementation language, adjust accordingly. R servers may use `R/` instead of `tools/` and `tests/testthat/` instead of `test/`.
+**失敗時:** ディレクトリ構造が実装言語と一致しない場合、適切に調整する。Rサーバーは`tools/`の代わりに`R/`を、`test/`の代わりに`tests/testthat/`を使用する場合がある。
 
-### ステップ5: Test the Server
+### ステップ5: サーバーのテスト
 
-**Manual testing with stdio**:
+**stdioでの手動テスト**:
 
 ```bash
 echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | node server.js
 ```
 
-**Register with Claude Code**:
+**Claude Codeへの登録**:
 
 ```bash
 claude mcp add my-server stdio "node" "/path/to/server.js"
 ```
 
-**Verify tools appear**:
+**ツールの表示確認**:
 
-Start a Claude Code session and check that custom tools are listed and functional.
+Claude Codeセッションを開始し、カスタムツールがリストされ機能することを確認する。
 
-**期待結果:** The `tools/list` JSON-RPC call returns all defined tools with correct names and schemas. `claude mcp list` shows the server registered. Tools are callable from a Claude Code session.
+**期待結果:** `tools/list` JSON-RPC呼び出しが正しい名前とスキーマを持つすべての定義されたツールを返す。`claude mcp list`がサーバーの登録を表示する。Claude Codeセッションからツールが呼び出し可能。
 
-**失敗時:** If `tools/list` returns an empty array, the tools were not registered before `server.connect()`. If Claude Code cannot find the server, verify the command path in `claude mcp add` is absolute and the binary is executable.
+**失敗時:** `tools/list`が空の配列を返す場合、ツールが`server.connect()`の前に登録されていない。Claude Codeがサーバーを見つけられない場合、`claude mcp add`のコマンドパスが絶対パスでバイナリが実行可能であることを確認する。
 
-### ステップ6: Add Error Handling
+### ステップ6: エラーハンドリングの追加
 
 ```javascript
 server.tool("risky_operation", "...", schema, async (params) => {
@@ -231,13 +230,13 @@ server.tool("risky_operation", "...", schema, async (params) => {
 });
 ```
 
-**期待結果:** Each tool handler is wrapped in try/catch. Invalid inputs return `isError: true` with a descriptive message instead of crashing the server process.
+**期待結果:** 各ツールハンドラーがtry/catchでラップされている。無効な入力はサーバープロセスをクラッシュさせるのではなく、説明的なメッセージ付きの`isError: true`を返す。
 
-**失敗時:** If the server still crashes on bad input, check that the try/catch wraps the entire handler body including any async operations. Ensure promises are awaited within the try block.
+**失敗時:** 不正な入力でサーバーがまだクラッシュする場合、try/catchが非同期操作を含むハンドラー本体全体をラップしていることを確認する。promiseがtryブロック内でawaitされていることを確認する。
 
-### ステップ7: Package for Distribution
+### ステップ7: 配布用パッケージング
 
-Create a `package.json` with a bin entry:
+binエントリ付きの`package.json`を作成する:
 
 ```json
 {
@@ -253,36 +252,36 @@ Create a `package.json` with a bin entry:
 }
 ```
 
-Users can then install and configure:
+ユーザーはインストールと設定が可能:
 
 ```bash
 npm install -g my-mcp-server
 claude mcp add my-server stdio "my-mcp-server"
 ```
 
-**期待結果:** A `package.json` with a `bin` entry pointing to the server entry point. Users can install globally with `npm install -g` and register with `claude mcp add`.
+**期待結果:** サーバーエントリポイントを指す`bin`エントリ付きの`package.json`。ユーザーは`npm install -g`でグローバルインストールし、`claude mcp add`で登録できる。
 
-**失敗時:** If the bin entry doesn't work after global install, ensure `server.js` has a shebang line (`#!/usr/bin/env node`) and is marked executable. Verify the package name doesn't conflict with existing npm packages.
+**失敗時:** グローバルインストール後にbinエントリが動作しない場合、`server.js`にシバン行（`#!/usr/bin/env node`）があり実行可能としてマークされていることを確認する。パッケージ名が既存のnpmパッケージと競合しないことを確認する。
 
 ## バリデーション
 
-- [ ] Server starts without errors
-- [ ] `tools/list` returns all defined tools with correct schemas
-- [ ] Each tool executes correctly with valid input
-- [ ] Tools return appropriate errors for invalid input
-- [ ] Server works with Claude Code via stdio transport
-- [ ] Tools are discoverable and usable in Claude sessions
+- [ ] サーバーがエラーなしで起動する
+- [ ] `tools/list`が正しいスキーマを持つすべての定義されたツールを返す
+- [ ] 各ツールが有効な入力で正しく実行される
+- [ ] ツールが無効な入力に対して適切なエラーを返す
+- [ ] サーバーがstdioトランスポートでClaude Codeと動作する
+- [ ] ツールがClaudeセッションで検出可能かつ使用可能
 
 ## よくある落とし穴
 
-- **Blocking operations**: MCP servers should handle requests asynchronously. Long-running operations block other tool calls.
-- **Missing error handling**: Unhandled exceptions crash the server. Always wrap tool handlers in try/catch.
-- **Schema mismatches**: Tool parameter schemas must exactly match what the handler expects
-- **stdio buffering**: When using stdio transport, ensure output is flushed. Node.js buffers stdout by default.
-- **Security**: MCP servers have the same access as the process. Validate inputs carefully, especially for shell commands or database queries.
+- **ブロッキング操作**: MCPサーバーはリクエストを非同期で処理すべき。長時間実行される操作は他のツール呼び出しをブロックする
+- **エラーハンドリングの欠如**: 未処理の例外はサーバーをクラッシュさせる。常にツールハンドラーをtry/catchでラップする
+- **スキーマの不一致**: ツールパラメータスキーマはハンドラーが期待するものと正確に一致しなければならない
+- **stdioバッファリング**: stdioトランスポートを使用する時、出力がフラッシュされることを確認する。Node.jsはデフォルトでstdoutをバッファリングする
+- **セキュリティ**: MCPサーバーはプロセスと同じアクセス権を持つ。入力を慎重に検証する、特にシェルコマンドやデータベースクエリ
 
 ## 関連スキル
 
-- `configure-mcp-server` - connect the built server to clients
-- `troubleshoot-mcp-connection` - debug connectivity issues
-- `containerize-mcp-server` - package the server in Docker
+- `configure-mcp-server` -- 構築したサーバーをクライアントに接続する
+- `troubleshoot-mcp-connection` -- 接続性の問題をデバッグする
+- `containerize-mcp-server` -- サーバーをDockerでパッケージングする

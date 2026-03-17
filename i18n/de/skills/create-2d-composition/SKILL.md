@@ -1,12 +1,13 @@
 ---
 name: create-2d-composition
 description: >
-  Compose 2D graphics programmatically using SVG generation, diagram layout
-  algorithms, image compositing, and batch processing workflows. Use when
-  generating diagrams, flowcharts, or infographics programmatically, creating
-  reproducible scientific figures, automating production of badges or visual
-  assets, building custom chart types not in standard libraries, or batch
-  generating graphics with parameter variations.
+  2D-Grafiken programmatisch mit SVG-Generierung, Diagramm-Layout-Algorithmen,
+  Bildkomposition und Stapelverarbeitungs-Workflows erstellen. Verwenden beim
+  programmatischen Generieren von Diagrammen, Flussdiagrammen oder Infografiken,
+  beim Erstellen reproduzierbarer wissenschaftlicher Abbildungen, beim
+  Automatisieren der Produktion von Badges oder visuellen Assets, beim Erstellen
+  benutzerdefinierter Diagrammtypen ausserhalb von Standardbibliotheken oder
+  bei der Stapelgenerierung von Grafiken mit Parametervariationen.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,33 +26,33 @@ metadata:
 
 # 2D-Komposition erstellen
 
-Generate 2D graphics programmatically using SVG construction, diagram layout algorithms, image compositing, and batch processing workflows. Covers vector graphics generation, raster image manipulation, typography, and automated production of charts, diagrams, and infographics.
+2D-Grafiken programmatisch mit SVG-Konstruktion, Diagramm-Layout-Algorithmen, Bildkomposition und Stapelverarbeitungs-Workflows generieren. Umfasst Vektorgrafik-Generierung, Rasterbild-Manipulation, Typografie und automatisierte Produktion von Diagrammen, Schaubildern und Infografiken.
 
-## When to Use
+## Wann verwenden
 
-- Generating diagrams, flowcharts, or infographics programmatically
-- Creating reproducible scientific figures or publication graphics
-- Automating production of badges, icons, or visual assets
-- Compositing multiple images or data visualizations
-- Building custom chart types not available in standard libraries
-- Batch generating graphics with parameter variations
-- Creating SVG templates for web or print applications
+- Diagramme, Flussdiagramme oder Infografiken programmatisch generieren
+- Reproduzierbare wissenschaftliche Abbildungen oder Publikationsgrafiken erstellen
+- Produktion von Badges, Icons oder visuellen Assets automatisieren
+- Mehrere Bilder oder Datenvisualisierungen zusammensetzen
+- Benutzerdefinierte Diagrammtypen erstellen, die in Standardbibliotheken nicht verfuegbar sind
+- Grafiken mit Parametervariationen stapelweise generieren
+- SVG-Vorlagen fuer Web- oder Druckanwendungen erstellen
 
-## Inputs
+## Eingaben
 
-| Input | Type | Description | Example |
-|-------|------|-------------|---------|
-| Layout specification | Configuration | Dimensions, margins, grid layout | Canvas 800x600px, 20px margins |
-| Visual elements | Data/Assets | Shapes, text, images, data points | Rectangle coordinates, labels, icons |
-| Style parameters | CSS/Attributes | Colors, fonts, stroke widths, opacity | `fill="#3366cc"`, `stroke-width="2"` |
-| Data sources | Files/Arrays | Values to visualize or annotate | CSV data, JSON configuration |
-| Output format | String | SVG, PNG, PDF, composite formats | `output.svg`, 300 DPI PNG |
+| Eingabe | Typ | Beschreibung | Beispiel |
+|---------|-----|--------------|----------|
+| Layout-Spezifikation | Konfiguration | Abmessungen, Raender, Rasterlayout | Canvas 800x600px, 20px Raender |
+| Visuelle Elemente | Daten/Assets | Formen, Text, Bilder, Datenpunkte | Rechteckkoordinaten, Beschriftungen, Icons |
+| Stil-Parameter | CSS/Attribute | Farben, Schriften, Strichstaerken, Deckkraft | `fill="#3366cc"`, `stroke-width="2"` |
+| Datenquellen | Dateien/Arrays | Zu visualisierende oder annotierende Werte | CSV-Daten, JSON-Konfiguration |
+| Ausgabeformat | String | SVG, PNG, PDF, Komposit-Formate | `output.svg`, 300 DPI PNG |
 
-## Procedure
+## Vorgehensweise
 
-### 1. Set Up Python Environment
+### 1. Python-Umgebung einrichten
 
-Install required libraries for 2D composition:
+Erforderliche Bibliotheken fuer 2D-Komposition installieren:
 
 ```bash
 # Core libraries
@@ -64,12 +65,12 @@ pip install drawsvg reportlab pycairo
 pip install matplotlib numpy pandas
 ```
 
-**Expected:** Libraries installed successfully
-**On failure:** Check Python version (3.7+), use virtual environment to avoid conflicts
+**Erwartet:** Bibliotheken erfolgreich installiert
+**Bei Fehler:** Python-Version pruefen (3.7+), virtuelle Umgebung verwenden, um Konflikte zu vermeiden
 
-### 2. Create Basic SVG Graphics
+### 2. Grundlegende SVG-Grafiken erstellen
 
-Generate SVG using svgwrite:
+SVG mit svgwrite generieren:
 
 ```python
 import svgwrite
@@ -120,12 +121,12 @@ def create_basic_svg(output_path):
     print(f"Saved: {output_path}")
 ```
 
-**Expected:** SVG file generated with shapes and text
-**On failure:** Check svgwrite version, verify output directory writable
+**Erwartet:** SVG-Datei mit Formen und Text generiert
+**Bei Fehler:** svgwrite-Version pruefen, sicherstellen, dass das Ausgabeverzeichnis beschreibbar ist
 
-### 3. Build Diagrams with Layout Logic
+### 3. Diagramme mit Layout-Logik erstellen
 
-Create structured diagrams with calculated positioning:
+Strukturierte Diagramme mit berechneter Positionierung erstellen:
 
 ```python
 def create_flowchart(steps, output_path):
@@ -213,12 +214,12 @@ def wrap_text(text, max_width=20):
     return lines
 ```
 
-**Expected:** Flowchart with connected boxes and arrows
-**On failure:** Adjust layout calculations, verify arrow marker definitions
+**Erwartet:** Flussdiagramm mit verbundenen Kaesten und Pfeilen
+**Bei Fehler:** Layout-Berechnungen anpassen, Pfeilmarker-Definitionen verifizieren
 
-### 4. Composite Raster Images
+### 4. Rasterbilder zusammensetzen
 
-Combine multiple images using Pillow:
+Mehrere Bilder mit Pillow kombinieren:
 
 ```python
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -306,12 +307,12 @@ def add_annotations(image_path, annotations, output_path):
     img.save(output_path)
 ```
 
-**Expected:** Composite image created with proper layout
-**On failure:** Check all input images exist, verify image modes compatible
+**Erwartet:** Kompositbild mit korrektem Layout erstellt
+**Bei Fehler:** Pruefen, dass alle Eingabebilder existieren, Bildmodus-Kompatibilitaet verifizieren
 
-### 5. Generate Data-Driven Graphics
+### 5. Datengetriebene Grafiken generieren
 
-Create visualizations from data:
+Visualisierungen aus Daten erstellen:
 
 ```python
 import numpy as np
@@ -384,12 +385,12 @@ def create_bar_chart_svg(data, labels, output_path):
     dwg.save()
 ```
 
-**Expected:** SVG bar chart with scaled data
-**On failure:** Handle edge cases (empty data, negative values), add validation
+**Erwartet:** SVG-Balkendiagramm mit skalierten Daten
+**Bei Fehler:** Grenzfaelle behandeln (leere Daten, negative Werte), Validierung hinzufuegen
 
-### 6. Batch Generate Graphics
+### 6. Grafiken stapelweise generieren
 
-Automate creation of multiple graphics:
+Erstellung mehrerer Grafiken automatisieren:
 
 ```python
 def batch_generate_badges(users, template_path, output_dir):
@@ -433,12 +434,12 @@ def batch_generate_badges(users, template_path, output_dir):
         print(f"Generated badge: {output_path}")
 ```
 
-**Expected:** Individual graphic generated for each data item
-**On failure:** Check data structure, handle missing fields with defaults
+**Erwartet:** Individuelle Grafik fuer jedes Datenelement generiert
+**Bei Fehler:** Datenstruktur pruefen, fehlende Felder mit Standardwerten behandeln
 
-### 7. Convert SVG to Raster
+### 7. SVG in Raster konvertieren
 
-Export SVG to PNG/PDF for various uses:
+SVG nach PNG/PDF fuer verschiedene Verwendungen exportieren:
 
 ```python
 import cairosvg
@@ -467,37 +468,37 @@ def svg_to_pdf(svg_path, pdf_path):
     print(f"Converted to PDF: {pdf_path}")
 ```
 
-**Expected:** Raster output generated at specified resolution
-**On failure:** Install cairo system library if missing, check SVG validity
+**Erwartet:** Rasterausgabe in der angegebenen Aufloesung generiert
+**Bei Fehler:** cairo-Systembibliothek installieren, falls fehlend, SVG-Gueltigkeit pruefen
 
-## Validation Checklist
+## Validierung
 
-- [ ] Graphics render correctly in target applications
-- [ ] Text is readable and properly positioned
-- [ ] Colors match specifications (check hex codes)
-- [ ] Dimensions appropriate for use case
-- [ ] SVG validates against standard (if required)
-- [ ] Raster exports have correct DPI
-- [ ] Layout adapts to data variations
-- [ ] Batch processing completes without errors
-- [ ] Output files organized logically
-- [ ] Code includes error handling
+- [ ] Grafiken rendern korrekt in Zielanwendungen
+- [ ] Text ist lesbar und ordnungsgemaess positioniert
+- [ ] Farben entsprechen den Spezifikationen (Hex-Codes pruefen)
+- [ ] Abmessungen sind fuer den Anwendungsfall angemessen
+- [ ] SVG validiert gegen Standard (falls erforderlich)
+- [ ] Raster-Exporte haben korrekte DPI
+- [ ] Layout passt sich Datenvariationen an
+- [ ] Stapelverarbeitung wird ohne Fehler abgeschlossen
+- [ ] Ausgabedateien sind logisch organisiert
+- [ ] Code enthaelt Fehlerbehandlung
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
-2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
-3. **Font availability**: System fonts may differ, embed or use web-safe fonts
-4. **Coordinate calculations**: Off-by-one errors in grid layouts
-5. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
-6. **SVG validity**: Check XML structure, close all tags
-7. **File paths**: Handle special characters, spaces in filenames
-8. **Memory usage**: Large batch operations may require chunking
-9. **Aspect ratio**: Maintain proportions when resizing images
-10. **Transparency**: PNG supports alpha, JPEG does not
+1. **Einheitenverwirrung**: SVG-Einheiten (px, mm, cm) vs. Bildschirmpixel vs. Druck-DPI
+2. **Textueberlauf**: Text, der Formgrenzen ueberschreitet — Zeilenumbruch implementieren
+3. **Schriftverfuegbarkeit**: Systemschriften koennen variieren — einbetten oder websichere Schriften verwenden
+4. **Koordinatenberechnungen**: Off-by-one-Fehler bei Rasterlayouts
+5. **Farbformat**: SVG verwendet Hex-Strings (`#rrggbb`), keine Tupel
+6. **SVG-Gueltigkeit**: XML-Struktur pruefen, alle Tags schliessen
+7. **Dateipfade**: Sonderzeichen und Leerzeichen in Dateinamen behandeln
+8. **Speicherverbrauch**: Grosse Stapeloperationen erfordern moeglicherweise Chunking
+9. **Seitenverhaeltnis**: Proportionen beim Groessenaendern von Bildern beibehalten
+10. **Transparenz**: PNG unterstuetzt Alpha, JPEG nicht
 
-## Related Skills
+## Verwandte Skills
 
-- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication-specific output requirements
-- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into reports
+- `render-publication-graphic` — Publikationsspezifische Ausgabeanforderungen
+- `create-3d-scene` — Aehnlicher programmatischer Ansatz fuer 3D
+- `create-quarto-report` — Grafiken in Berichte integrieren

@@ -1,13 +1,15 @@
 ---
 name: formulate-herbal-remedy
 description: >
-  Prepare herbal remedies from Hildegard von Bingen's Physica. Covers plant
-  identification, preparation methods (tinctures, poultices, infusions, decoctions),
-  dosage guidance, contraindications, and safety review based on 12th-century
-  medieval pharmacopeia. Use when needing an herbal remedy for a specific
-  ailment using Hildegardian pharmacopeia, seeking guidance on preparation
-  methods and dosage, researching medieval herbal medicine, or integrating
-  Hildegard's plant wisdom into holistic health practice.
+  Kraeuterheilmittel nach Hildegard von Bingens Physica zubereiten. Umfasst
+  Pflanzenbestimmung, Zubereitungsmethoden (Tinkturen, Umschlaege, Aufguesse,
+  Abkochungen), Dosierungsanleitung, Kontraindikationen und Sicherheitspruefung
+  basierend auf mittelalterlicher Pharmakopoe des 12. Jahrhunderts. Verwenden
+  beim Benoetigen eines Kraeuterheilmittels fuer ein bestimmtes Leiden unter
+  Verwendung der hildegardischen Pharmakopoe, beim Suchen nach Anleitungen zu
+  Zubereitungsmethoden und Dosierung, beim Erforschen mittelalterlicher
+  Kraeutermedizin oder beim Integrieren von Hildegards Pflanzenwissen in
+  ganzheitliche Gesundheitspraxis.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,30 +28,30 @@ metadata:
 
 # Kraeuterheilmittel formulieren
 
-Prepare traditional herbal remedies following Hildegard von Bingen's *Physica*, integrating medieval plant knowledge with preparation techniques.
+Traditionelle Kraeuterheilmittel nach Hildegard von Bingens *Physica* zubereiten, wobei mittelalterliches Pflanzenwissen mit Zubereitungstechniken verbunden wird.
 
-## When to Use
+## Wann verwenden
 
-- You need an herbal remedy for a specific ailment using Hildegardian pharmacopeia
-- You want to understand a plant's properties from *Physica*'s perspective
-- You need guidance on preparation methods (tincture, poultice, infusion, decoction)
-- You require dosage and safety information for a traditional remedy
-- You are researching medieval herbal medicine practices
-- You want to integrate Hildegard's plant wisdom into holistic health practice
+- Sie benoetigen ein Kraeuterheilmittel fuer ein bestimmtes Leiden unter Verwendung der hildegardischen Pharmakopoe
+- Sie moechten die Eigenschaften einer Pflanze aus der Perspektive der *Physica* verstehen
+- Sie benoetigen Anleitung zu Zubereitungsmethoden (Tinktur, Umschlag, Aufguss, Abkochung)
+- Sie benoetigen Dosierungs- und Sicherheitsinformationen fuer ein traditionelles Heilmittel
+- Sie erforschen mittelalterliche Kraeutermedizin-Praktiken
+- Sie moechten Hildegards Pflanzenwissen in ganzheitliche Gesundheitspraxis integrieren
 
-## Inputs
+## Eingaben
 
-- **Required**: Ailment or condition to address (e.g., digestive upset, respiratory congestion, skin inflammation)
-- **Optional**: Known plant preferences or contraindications
-- **Optional**: Preparation preference (tincture for long-term use, infusion for acute, etc.)
-- **Optional**: User's temperament (sanguine, choleric, melancholic, phlegmatic) for tailored selection
-- **Optional**: Season and availability of fresh vs. dried herbs
+- **Erforderlich**: Leiden oder Zustand, der behandelt werden soll (z.B. Verdauungsbeschwerden, Atemwegsstauung, Hautentzuendung)
+- **Optional**: Bekannte Pflanzenpraeferenzen oder Kontraindikationen
+- **Optional**: Zubereitungspraeferenz (Tinktur fuer Langzeitanwendung, Aufguss fuer akute Faelle usw.)
+- **Optional**: Temperament des Anwenders (sanguinisch, cholerisch, melancholisch, phlegmatisch) fuer massgeschneiderte Auswahl
+- **Optional**: Jahreszeit und Verfuegbarkeit frischer vs. getrockneter Kraeuter
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Identify the Plant in Physica
+### Schritt 1: Die Pflanze in der Physica identifizieren
 
-Match the ailment to appropriate plants from Hildegard's *Physica* (Books I-IX: Plants, Elements, Trees, Stones, Fish, Birds, Animals, Reptiles, Metals).
+Das Leiden den passenden Pflanzen aus Hildegards *Physica* (Buecher I-IX: Pflanzen, Elemente, Baeume, Steine, Fische, Voegel, Tiere, Reptilien, Metalle) zuordnen.
 
 ```
 Common Ailments → Physica Plants:
@@ -83,13 +85,13 @@ Hildegard's Selection Principles:
 4. Seasonal availability: Fresh plants in growing season, dried in winter
 ```
 
-**Expected:** One to three plants identified that match the ailment's pattern (hot/cold, dry/damp) and are appropriate for the user's constitution.
+**Erwartet:** Ein bis drei Pflanzen identifiziert, die zum Muster des Leidens (heiss/kalt, trocken/feucht) passen und fuer die Konstitution des Anwenders geeignet sind.
 
-**On failure:** If unsure of the condition's pattern, default to balanced, gentle plants (fennel, chamomile, yarrow) which Hildegard describes as suitable for most constitutions.
+**Bei Fehler:** Wenn das Muster des Zustands unsicher ist, auf ausgewogene, sanfte Pflanzen (Fenchel, Kamille, Schafgarbe) zurueckgreifen, die Hildegard als fuer die meisten Konstitutionen geeignet beschreibt.
 
-### Step 2: Select Preparation Method
+### Schritt 2: Zubereitungsmethode waehlen
 
-Choose the appropriate extraction and delivery method based on the ailment's location, acuity, and plant properties.
+Die geeignete Extraktions- und Anwendungsmethode basierend auf Ort des Leidens, Akutheit und Pflanzeneigenschaften waehlen.
 
 ```
 Preparation Methods from Medieval Tradition:
@@ -120,13 +122,13 @@ Decision Tree:
 - External + Chronic → Oil infusion or salve
 ```
 
-**Expected:** Preparation method selected that matches plant part (aerial vs. root), use case (acute vs. chronic), and application route (internal vs. external).
+**Erwartet:** Zubereitungsmethode gewaehlt, die zum Pflanzenteil (oberirdisch vs. Wurzel), Anwendungsfall (akut vs. chronisch) und Anwendungsweg (innerlich vs. aeusserlich) passt.
 
-**On failure:** If uncertain, default to infusion — it is the safest and most forgiving method for beginners.
+**Bei Fehler:** Im Zweifelsfall auf Aufguss zurueckgreifen — es ist die sicherste und fehlerverzeihendste Methode fuer Anfaenger.
 
-### Step 3: Prepare the Remedy with Dosage
+### Schritt 3: Das Heilmittel mit Dosierung zubereiten
 
-Execute the preparation with precise measurements and technique.
+Die Zubereitung mit praezisen Messungen und Technik ausfuehren.
 
 ```
 INFUSION (for aerial parts: leaves, flowers):
@@ -167,13 +169,13 @@ OIL INFUSION (for external salves):
 5. Store in dark bottle; use within 6-12 months
 ```
 
-**Expected:** Remedy prepared according to method, with correct herb-to-menstruum ratio and appropriate steep/extraction time. Dosage guidelines clear for internal or external use.
+**Erwartet:** Heilmittel gemaess der Methode zubereitet, mit korrektem Kraut-zu-Menstruum-Verhaeltnis und angemessener Zieh-/Extraktionszeit. Dosierungsrichtlinien fuer innerliche oder aeusserliche Anwendung klar.
 
-**On failure:** If preparation seems too strong (bitter, burning sensation), dilute by half. If too weak (no noticeable effect after 3 days at proper dosage), increase herb quantity by 50% in next batch.
+**Bei Fehler:** Wenn die Zubereitung zu stark scheint (bitter, Brenngefuehl), um die Haelfte verduennen. Wenn zu schwach (keine spuerbare Wirkung nach 3 Tagen bei korrekter Dosierung), Krautmenge in der naechsten Charge um 50% erhoehen.
 
-### Step 4: Document Contraindications
+### Schritt 4: Kontraindikationen dokumentieren
 
-Identify safety concerns, drug interactions, and populations who should avoid the remedy.
+Sicherheitsbedenken, Arzneimittelwechselwirkungen und Personengruppen identifizieren, die das Heilmittel meiden sollten.
 
 ```
 Common Contraindications by Plant Category:
@@ -214,13 +216,13 @@ GENERAL CAUTIONS:
 - Surgery: Discontinue all herbs 2 weeks before scheduled surgery
 ```
 
-**Expected:** All relevant contraindications identified for the selected plant(s), with specific populations flagged (pregnancy, children, drug interactions).
+**Erwartet:** Alle relevanten Kontraindikationen fuer die ausgewaehlte(n) Pflanze(n) identifiziert, mit spezifischen Personengruppen gekennzeichnet (Schwangerschaft, Kinder, Arzneimittelwechselwirkungen).
 
-**On failure:** If uncertain about contraindications, advise the user to consult a qualified herbalist or healthcare provider before use. Default to "Not recommended during pregnancy, breastfeeding, or for children under 12 without professional guidance."
+**Bei Fehler:** Bei Unsicherheit ueber Kontraindikationen den Anwender anweisen, vor der Anwendung einen qualifizierten Kraeuterkundigen oder Gesundheitsdienstleister zu konsultieren. Standardmaessig "Nicht empfohlen waehrend Schwangerschaft, Stillzeit oder fuer Kinder unter 12 Jahren ohne professionelle Begleitung" angeben.
 
-### Step 5: Safety Review and Integration
+### Schritt 5: Sicherheitspruefung und Integration
 
-Final check and guidance for monitoring effects and integrating into health practice.
+Abschlusspruefung und Anleitung zur Wirkungsueberwachung und Integration in die Gesundheitspraxis.
 
 ```
 Safety Review Checklist:
@@ -252,35 +254,35 @@ Integration Notes:
   (warming herbs in winter, cooling herbs in summer)
 ```
 
-**Expected:** User has complete information: remedy preparation, dosage, contraindications, monitoring plan, and integration context. Safety disclaimers clear.
+**Erwartet:** Der Anwender hat vollstaendige Informationen: Heilmittelzubereitung, Dosierung, Kontraindikationen, Ueberwachungsplan und Integrationskontext. Sicherheitshinweise klar formuliert.
 
-**On failure:** If user expresses uncertainty about self-preparation, recommend consulting a trained herbalist for first preparation, then replicating at home once confident.
+**Bei Fehler:** Wenn der Anwender Unsicherheit bei der Selbstzubereitung aeussert, empfehlen, fuer die erste Zubereitung einen ausgebildeten Kraeuterkundigen zu konsultieren und dann zu Hause zu replizieren, sobald Vertrauen besteht.
 
-## Validation Checklist
+## Validierung
 
-- [ ] Plant identified from Physica with appropriate temperature/moisture properties
-- [ ] Preparation method matches plant part (aerial = infusion, root = decoction, etc.)
-- [ ] Dosage guidelines provided with frequency and duration
-- [ ] Contraindications documented (pregnancy, drug interactions, specific conditions)
-- [ ] Safety review completed with monitoring protocol
-- [ ] User informed this is historical folk medicine, not medical diagnosis or treatment
-- [ ] Expected timeline for effect communicated (acute vs. chronic)
+- [ ] Pflanze aus der Physica mit passenden Temperatur-/Feuchtigkeitseigenschaften identifiziert
+- [ ] Zubereitungsmethode passt zum Pflanzenteil (oberirdisch = Aufguss, Wurzel = Abkochung usw.)
+- [ ] Dosierungsrichtlinien mit Haeufigkeit und Dauer bereitgestellt
+- [ ] Kontraindikationen dokumentiert (Schwangerschaft, Arzneimittelwechselwirkungen, spezifische Erkrankungen)
+- [ ] Sicherheitspruefung mit Ueberwachungsprotokoll abgeschlossen
+- [ ] Anwender informiert, dass es sich um historische Volksmedizin handelt, nicht um medizinische Diagnose oder Behandlung
+- [ ] Erwarteter Zeithorizont fuer die Wirkung kommuniziert (akut vs. chronisch)
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-1. **Misidentification**: Using the wrong plant due to common name confusion. Always confirm botanical (Latin) name
-2. **Over-extraction**: Boiling delicate aerial parts destroys volatile oils. Use infusion (steeping), not decoction
-3. **Under-dosing**: Medieval preparations were often stronger than modern herbal teas. Follow traditional ratios
-4. **Ignoring Contraindications**: Pregnancy and drug interactions are serious. When in doubt, advise against use
-5. **Substituting Modern for Medieval**: Hildegard's plants reflect European medieval flora. Substitutions may not align with her temperament system
-6. **Expecting Pharmaceutical Speed**: Herbal medicine works gradually. Acute conditions: 1-3 days. Chronic: 2-4 weeks minimum
-7. **Solo Remedy Focus**: Hildegard's medicine is holistic. Remedies work best integrated with diet, prayer, rest, and seasonal rhythms
+1. **Fehlbestimmung**: Die falsche Pflanze aufgrund von Verwechslung des Trivialnamens verwenden. Immer den botanischen (lateinischen) Namen bestaetigen
+2. **Ueberextraktion**: Das Kochen empfindlicher oberirdischer Teile zerstoert aetherische Oele. Aufguss (Ziehen), nicht Abkochung verwenden
+3. **Unterdosierung**: Mittelalterliche Zubereitungen waren oft staerker als moderne Kraeutertees. Traditionelle Verhaeltnisse befolgen
+4. **Kontraindikationen ignorieren**: Schwangerschaft und Arzneimittelwechselwirkungen sind ernst zu nehmen. Im Zweifelsfall von der Anwendung abraten
+5. **Modern durch Mittelalterlich ersetzen**: Hildegards Pflanzen spiegeln die europaeische mittelalterliche Flora wider. Substitutionen passen moeglicherweise nicht zu ihrem Temperamentsystem
+6. **Pharmazeutische Geschwindigkeit erwarten**: Kraeutermedizin wirkt schrittweise. Akute Zustande: 1-3 Tage. Chronisch: mindestens 2-4 Wochen
+7. **Fokus auf Einzelmittel**: Hildegards Medizin ist ganzheitlich. Heilmittel wirken am besten integriert mit Ernaehrung, Gebet, Ruhe und saisonalen Rhythmen
 
-## Related Skills
+## Verwandte Skills
 
-- `assess-holistic-health` — Temperament assessment informs plant selection (cold constitution → warming plants)
-- `practice-viriditas` — Connecting to viriditas enhances receptivity to plant medicine
-- `consult-natural-history` — Broader context of plants in Physica's cosmology
-- `heal` (esoteric domain) — Post-remedy health assessment and recovery monitoring
-- `prepare-soil` (gardening domain) — If growing medicinal herbs
-- `maintain-hand-tools` (bushcraft domain) — For harvesting and processing herbs
+- `assess-holistic-health` — Temperamentbewertung informiert die Pflanzenauswahl (kalte Konstitution → waermende Pflanzen)
+- `practice-viriditas` — Verbindung mit Viriditas verstaerkt die Empfaenglichkeit fuer Pflanzenmedizin
+- `consult-natural-history` — Breiterer Kontext der Pflanzen in der Kosmologie der Physica
+- `heal` (esoterische Domaene) — Gesundheitsbewertung und Genesungsueberwachung nach dem Heilmittel
+- `prepare-soil` (Gartendomaene) — Wenn Heilkraeuter angebaut werden
+- `maintain-hand-tools` (Bushcraft-Domaene) — Fuer die Ernte und Verarbeitung von Kraeutern

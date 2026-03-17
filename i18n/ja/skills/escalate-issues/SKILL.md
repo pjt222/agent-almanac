@@ -1,12 +1,12 @@
 ---
 name: escalate-issues
 description: >
-  Triage maintenance problems by severity, document findings with context,
-  route to appropriate specialist agent or human, and create actionable issue
-  reports. Use when a maintenance task encounters problems beyond automated
-  cleanup: code that is unsafe to delete, configuration changes requiring domain
-  expertise, breaking changes detected during cleanup, complex refactoring needed,
-  or security-sensitive findings such as hardcoded secrets or vulnerabilities.
+  メンテナンス問題を重大度でトリアージし、コンテキスト付きで発見事項を文書化し、
+  適切な専門エージェントまたは人間にルーティングし、実行可能な課題レポートを作成する。
+  メンテナンスタスクが自動クリーンアップを超える問題に遭遇した時に使用する：
+  削除が安全でないコード、ドメイン専門知識を必要とする設定変更、クリーンアップ中に
+  検出された破壊的変更、必要な複雑リファクタリング、またはハードコードされた秘密情報や
+  脆弱性などのセキュリティに敏感な発見事項。
 license: MIT
 allowed-tools: Read Write Edit Grep Glob
 metadata:
@@ -23,61 +23,61 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 問題のエスカレーション
+# escalate-issues
 
 ## 使用タイミング
 
-Use this skill when a maintenance task encounters problems beyond automated cleanup:
+メンテナンスタスクが自動クリーンアップを超える問題に遭遇した時にこのスキルを使用する：
 
-- Uncertain whether code is safe to delete
-- Configuration changes require domain expertise (security, performance, architecture)
-- Breaking changes detected during cleanup
-- Complex refactoring needed (not just cleanup)
-- Security-sensitive findings (hardcoded secrets, vulnerabilities)
+- コードの削除が安全かどうか不確実な時
+- 設定変更がドメイン専門知識を必要とする時（セキュリティ、パフォーマンス、アーキテクチャ）
+- クリーンアップ中に破壊的変更が検出された時
+- 複雑なリファクタリングが必要な時（単なるクリーンアップではなく）
+- セキュリティに敏感な発見事項（ハードコードされた秘密情報、脆弱性）
 
-**Do NOT use** for simple issues with clear fixes. Escalate only when automated cleanup is risky or insufficient.
+明確な修正がある単純な問題には**使用しない**。自動クリーンアップがリスクがあるか不十分な場合にのみエスカレーションする。
 
 ## 入力
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
-| `issue_description` | string | Yes | Clear description of the problem |
-| `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
-| `context_files` | array | No | Paths to relevant files |
-| `specialist` | string | No | Target agent (auto-route if not specified) |
-| `blocking` | boolean | No | Whether issue blocks further cleanup (default: false) |
+| `issue_description` | string | はい | 問題の明確な説明 |
+| `severity` | enum | はい | `critical`, `high`, `medium`, `low` |
+| `context_files` | array | いいえ | 関連ファイルのパス |
+| `specialist` | string | いいえ | ターゲットエージェント（未指定の場合は自動ルーティング） |
+| `blocking` | boolean | いいえ | 課題がさらなるクリーンアップをブロックするか（デフォルト: false） |
 
 ## 手順
 
-### ステップ1: Assess Severity
+### ステップ1: 重大度の評価
 
-Classify the issue using standard severity levels.
+標準的な重大度レベルを使用して課題を分類する。
 
-**CRITICAL** — Blocks production functionality:
-- Broken imports in actively used code
-- Security vulnerabilities (exposed secrets, SQL injection)
-- Data loss risk from cleanup operation
-- Production service outages
+**CRITICAL** — 本番機能をブロック：
+- 活発に使用されているコードの壊れたインポート
+- セキュリティ脆弱性（露出した秘密情報、SQLインジェクション）
+- クリーンアップ操作によるデータ損失リスク
+- 本番サービスの停止
 
-**HIGH** — Impacts maintainability or developer productivity:
-- Significant dead code bloat (>1000 lines)
-- Broken CI/CD pipelines
-- Major configuration drift between environments
-- Unreferenced modules that might be dynamically loaded
+**HIGH** — 保守性または開発者の生産性に影響：
+- 重大なデッドコードの肥大化（1000行以上）
+- 壊れたCI/CDパイプライン
+- 環境間の主要な設定ドリフト
+- 動的にロードされる可能性のある参照されていないモジュール
 
-**MEDIUM** — Minor hygiene issues:
-- Unused helper functions (<100 lines)
-- Stale documentation requiring updates
-- Deprecated config files (no longer used but present)
-- Lint warnings in non-critical paths
+**MEDIUM** — 軽微な衛生上の問題：
+- 未使用のヘルパー関数（100行未満）
+- 更新が必要な古いドキュメント
+- 非推奨の設定ファイル（使用されなくなったが存在する）
+- 重要でないパスのリント警告
 
-**LOW** — Style inconsistencies:
-- Mixed indentation (works but inconsistent)
-- Trailing whitespace
-- Inconsistent naming (camelCase vs snake_case)
-- Minor formatting differences
+**LOW** — スタイルの不一致：
+- 混在するインデント（動作するが一貫しない）
+- 末尾の空白
+- 一貫しない命名（camelCase vs snake_case）
+- 軽微なフォーマットの違い
 
-**Severity Decision Tree**:
+**重大度判断ツリー**：
 ```
 Does it break production? → CRITICAL
 Does it block development? → HIGH
@@ -85,15 +85,15 @@ Does it impact code quality? → MEDIUM
 Is it purely cosmetic? → LOW
 ```
 
-**期待結果:** Issue classified with clear severity label
+**期待結果:** 明確な重大度ラベルで分類された課題
 
-**失敗時:** If uncertain, default to HIGH and escalate to human for re-triage
+**失敗時:** 不確実な場合はHIGHをデフォルトとし、再トリアージのために人間にエスカレーションする
 
-### ステップ2: Document Finding
+### ステップ2: 発見事項の文書化
 
-Capture all relevant context for the specialist to review.
+専門家がレビューするためのすべての関連コンテキストを記録する。
 
-**Issue Report Template**:
+**課題レポートテンプレート**：
 ```markdown
 # Issue: [Brief Title]
 
@@ -140,31 +140,31 @@ Clear description of the problem in 2-3 sentences.
 - [Link to similar past issues]
 ```
 
-**期待結果:** Issue documented with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
+**期待結果:** 完全なコンテキスト付きで`ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`に文書化された課題
 
-**失敗時:** (N/A — always document, even if incomplete)
+**失敗時:** （該当なし — 不完全でも常に文書化する）
 
-### ステップ3: Determine Routing
+### ステップ3: ルーティングの決定
 
-Match issue type to appropriate specialist agent or human reviewer.
+課題タイプを適切な専門エージェントまたは人間レビュアーにマッチングする。
 
-**Routing Table**:
+**ルーティングテーブル**：
 
-| Issue Type | Specialist | Reason |
+| 課題タイプ | 専門家 | 理由 |
 |------------|-----------|---------|
-| Security vulnerability | security-analyst | Security expertise required |
-| GxP compliance concern | gxp-validator | Regulatory knowledge needed |
-| Architecture decision | senior-software-developer | Design pattern expertise |
-| Config management | devops-engineer | Infrastructure knowledge |
-| Dependency conflicts | devops-engineer | Package management expertise |
-| Performance bottleneck | senior-data-scientist | Optimization knowledge |
-| Code style dispute | code-reviewer | Style guide authority |
-| Dead code uncertainty | r-developer (or lang-specific) | Language-specific knowledge |
-| Broken test unclear | code-reviewer | Test design expertise |
-| Documentation accuracy | senior-researcher | Domain knowledge required |
-| License compatibility | auditor | Legal/compliance expertise |
+| セキュリティ脆弱性 | security-analyst | セキュリティ専門知識が必要 |
+| GxPコンプライアンスの懸念 | gxp-validator | 規制知識が必要 |
+| アーキテクチャの決定 | senior-software-developer | 設計パターンの専門知識 |
+| 設定管理 | devops-engineer | インフラ知識 |
+| 依存関係の競合 | devops-engineer | パッケージ管理の専門知識 |
+| パフォーマンスのボトルネック | senior-data-scientist | 最適化知識 |
+| コードスタイルの論争 | code-reviewer | スタイルガイドの権限 |
+| デッドコードの不確実性 | r-developer（または言語固有） | 言語固有の知識 |
+| 壊れたテストが不明確 | code-reviewer | テスト設計の専門知識 |
+| ドキュメントの正確性 | senior-researcher | ドメイン知識が必要 |
+| ライセンス互換性 | auditor | 法律/コンプライアンスの専門知識 |
 
-**Automatic Routing Logic**:
+**自動ルーティングロジック**：
 ```python
 def route_issue(severity, issue_type):
     if severity == "CRITICAL":
@@ -187,15 +187,15 @@ def route_issue(severity, issue_type):
     return "code-reviewer"
 ```
 
-**期待結果:** Issue routed to appropriate specialist with justification
+**期待結果:** 正当性を伴い適切な専門家にルーティングされた課題
 
-**失敗時:** If no clear specialist, escalate to human for manual routing
+**失敗時:** 明確な専門家がいない場合、手動ルーティングのために人間にエスカレーションする
 
-### ステップ4: Create Actionable Issue Report
+### ステップ4: 実行可能な課題レポートの作成
 
-Generate a formatted report suitable for the target audience (agent or human).
+ターゲットオーディエンス（エージェントまたは人間）に適したフォーマットのレポートを生成する。
 
-**For Specialist Agents** (structured format for MCP tools):
+**専門エージェント向け**（MCPツール用の構造化フォーマット）：
 ```yaml
 ---
 type: escalation
@@ -216,7 +216,7 @@ If valid, recommend secure credential management strategy.
 **Context**: Discovered during config cleanup sweep.
 ```
 
-**For Human Reviewers** (detailed markdown):
+**人間レビュアー向け**（詳細なmarkdown）：
 ```markdown
 # Escalation Report: Uncertain Dead Code Removal
 
@@ -254,13 +254,13 @@ Request human review before deletion. If confirmed dead:
 Awaiting human confirmation before proceeding with cleanup.
 ```
 
-**期待結果:** Report formatted appropriately for target audience
+**期待結果:** ターゲットオーディエンスに適切にフォーマットされたレポート
 
-**失敗時:** (N/A — generate report in generic markdown if uncertain)
+**失敗時:** （該当なし — 不確実な場合は汎用markdownでレポートを生成する）
 
-### ステップ5: Track Escalation Status
+### ステップ5: エスカレーション状態の追跡
 
-Maintain a log of all escalations to prevent duplicate reports.
+重複レポートを防ぐため、すべてのエスカレーションのログを維持する。
 
 ```markdown
 # Escalation Log
@@ -272,20 +272,20 @@ Maintain a log of all escalations to prevent duplicate reports.
 | ESC-003 | 2026-02-16 | MEDIUM | Config drift | devops-engineer | In Progress |
 ```
 
-**期待結果:** `ESCALATION_LOG.md` updated with new entry
+**期待結果:** 新しいエントリで`ESCALATION_LOG.md`が更新される
 
-**失敗時:** If log doesn't exist, create it
+**失敗時:** ログが存在しない場合、作成する
 
-### ステップ6: Notify and Block (If Required)
+### ステップ6: 通知とブロック（必要な場合）
 
-If issue is blocking further maintenance, notify and pause cleanup.
+課題がさらなるメンテナンスをブロックする場合、通知してクリーンアップを一時停止する。
 
-**Blocking Logic**:
-- CRITICAL issues always block
-- HIGH issues block if in critical path
-- MEDIUM/LOW issues do not block
+**ブロッキングロジック**：
+- CRITICAL課題は常にブロックする
+- HIGH課題はクリティカルパスにある場合ブロックする
+- MEDIUM/LOW課題はブロックしない
 
-**Notification**:
+**通知**：
 ```markdown
 ⚠️ MAINTENANCE BLOCKED ⚠️
 
@@ -299,40 +299,39 @@ Issue ESC-002 (HIGH severity) requires human review before proceeding.
 Once resolved, re-run maintenance from Step 5.
 ```
 
-**期待結果:** Maintenance paused; clear notification generated
+**期待結果:** メンテナンスが一時停止され、明確な通知が生成される
 
-**失敗時:** If notification mechanism unavailable, document in report
+**失敗時:** 通知メカニズムが利用できない場合、レポートに文書化する
 
-## バリデーション Checklist
+## バリデーションチェックリスト
 
-After escalation:
+エスカレーション後：
 
-- [ ] Issue severity correctly assessed
-- [ ] Full context documented (files, evidence, attempts)
-- [ ] Appropriate specialist identified
-- [ ] Escalation report created in ESCALATION_REPORTS/
-- [ ] ESCALATION_LOG.md updated
-- [ ] Blocking status communicated if applicable
-- [ ] No sensitive information exposed in report
+- [ ] 課題の重大度が正しく評価された
+- [ ] 完全なコンテキストが文書化された（ファイル、証拠、試行）
+- [ ] 適切な専門家が特定された
+- [ ] ESCALATION_REPORTS/にエスカレーションレポートが作成された
+- [ ] ESCALATION_LOG.mdが更新された
+- [ ] 該当する場合ブロッキング状態が通知された
+- [ ] レポートにセンシティブな情報が露出していない
 
 ## よくある落とし穴
 
-1. **Over-Escalating**: Escalating simple issues wastes specialist time. Only escalate when truly uncertain or risky.
+1. **過剰エスカレーション**: 単純な課題のエスカレーションは専門家の時間を浪費する。本当に不確実またはリスクがある場合にのみエスカレーションする。
 
-2. **Under-Escalating**: Deleting code "just to see if tests pass" without escalation can cause production outages.
+2. **過少エスカレーション**: エスカレーションなしに「テストが通るか見てみよう」とコードを削除すると、本番停止を引き起こす可能性がある。
 
-3. **Insufficient Context**: Escalating without evidence forces specialists to re-investigate. Include file paths, line numbers, error messages.
+3. **コンテキスト不足**: 証拠なしにエスカレーションすると、専門家が再調査を強いられる。ファイルパス、行番号、エラーメッセージを含める。
 
-4. **Vague Descriptions**: "Something's wrong with config" is not actionable. Be specific: "Config drift: dev uses API v1, prod uses v2".
+4. **曖昧な説明**: 「設定に何かおかしい」は実行可能でない。具体的に：「設定ドリフト：devはAPI v1を使用、prodはv2を使用」。
 
-5. **Not Tracking Status**: Re-escalating already-reviewed issues. Check ESCALATION_LOG.md first.
+5. **状態の未追跡**: すでにレビューされた課題を再エスカレーションする。まずESCALATION_LOG.mdを確認する。
 
-6. **Exposing Secrets**: Including actual API keys or passwords in escalation reports. Redact sensitive values.
+6. **秘密情報の露出**: エスカレーションレポートに実際のAPIキーやパスワードを含める。センシティブな値はマスクする。
 
 ## 関連スキル
 
-- [clean-codebase](../clean-codebase/SKILL.md) — Often triggers escalations when uncertain
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — May discover complex organizational issues
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Escalate when unclear if reference should be fixed or removed
-- [compliance/security-scan](../../compliance/security-scan/SKILL.md) — Escalate security findings
-- [general/issue-triage](../../general/issue-triage/SKILL.md) — General issue classification patterns
+- `clean-codebase` — 不確実な場合にエスカレーションをトリガーすることが多い
+- `tidy-project-structure` — 複雑な組織上の問題を発見する可能性がある
+- `repair-broken-references` — 参照を修正すべきか削除すべきか不明な場合にエスカレーション
+- `security-audit-codebase` — セキュリティの発見事項をエスカレーション

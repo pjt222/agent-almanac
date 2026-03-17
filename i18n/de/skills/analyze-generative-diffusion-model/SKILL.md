@@ -1,7 +1,13 @@
 ---
 name: analyze-generative-diffusion-model
 description: >
-  Vortrainierte generative Diffusionsmodelle (Stable Diffusion, DALL-E, Flux) analysieren durch Berechnung von Qualitaetsmetriken (FID, IS, CLIP-Score, Precision/Recall), Inspektion von Noise-Schedules, Extraktion und Visualisierung von Attention-Maps und Untersuchung latenter Raeume. Verwenden bei der Bewertung der Ausgabequalitaet eines vortrainierten generativen Diffusionsmodells, beim Vergleich von Noise-Schedule-Varianten, bei der Analyse von Cross-Attention-Mustern fuer textbedingte Generierung, bei der Interpolation zwischen latenten Codes oder bei der Erkennung von Out-of-Distribution-Eingaben.
+  Analysieren pre-trained generative diffusion models (Stable Diffusion, DALL-E,
+  Flux) by computing quality metrics (FID, IS, CLIP score, precision/recall),
+  inspecting noise schedules, extracting and visualizing attention maps, and
+  probing latent spaces. Verwenden wenn evaluating a pre-trained generative diffusion
+  model's output quality, comparing noise schedule variants, analyzing
+  cross-attention patterns for text-conditioned generation, interpolating
+  zwischen latent codes, or detecting out-of-distribution inputs.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -20,33 +26,33 @@ metadata:
 
 # Generatives Diffusionsmodell analysieren
 
-Evaluate pre-trained generative diffusion models through quantitative quality metrics, noise schedule inspection, cross-attention map analysis, and latent space probing to understand model behavior, diagnose failure modes, and guide fine-tuning decisions.
+Bewerten pre-trained generative diffusion models durch quantitative quality metrics, noise schedule inspection, cross-attention map analysis, and latent space probing to understand model behavior, diagnose failure modes, and guide fine-tuning decisions.
 
-## When to Use
+## Wann verwenden
 
 - Evaluating a pre-trained generative diffusion model's output quality with standard metrics
 - Computing FID, IS, CLIP score, or precision/recall for generated image sets
 - Inspecting and comparing noise schedules (linear, cosine, learned) via SNR curves
 - Extracting cross-attention maps to understand text-to-image token-region correspondences
-- Interpolating between latent codes or discovering semantic directions in the latent space
+- Interpolating zwischen latent codes or discovering semantic directions in the latent space
 - Detecting out-of-distribution inputs for a diffusion model pipeline
 
-## Inputs
+## Eingaben
 
-- **Required**: Pre-trained model identifier or checkpoint path (e.g., `stabilityai/stable-diffusion-2-1`)
-- **Required**: Analysis mode — one or more of: `metrics`, `schedule`, `attention`, `latent`
-- **Required**: Reference dataset for metric computation (real images or dataset name)
+- **Erforderlich**: Pre-trained model identifier or checkpoint path (e.g., `stabilityai/stable-diffusion-2-1`)
+- **Erforderlich**: Analysis mode — one or more of: `metrics`, `schedule`, `attention`, `latent`
+- **Erforderlich**: Reference dataset for metric computation (real images or dataset name)
 - **Optional**: Text prompts for attention analysis (default: model-appropriate test prompts)
 - **Optional**: Number of generated samples for metric computation (default: 10000)
 - **Optional**: Device configuration (default: `cuda` if available, else `cpu`)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Quantitative Evaluation
+### Schritt 1: Quantitative Evaluation
 
-Compute standard generative quality metrics against a reference dataset.
+Berechnen standard generative quality metrics gegen a reference dataset.
 
-1. Set up the evaluation pipeline:
+1. Einrichten the evaluation pipeline:
 
 ```python
 import torch
@@ -73,7 +79,7 @@ for batch in DataLoader(real_dataset, batch_size=64):
     fid.update(imgs, real=True)
 ```
 
-3. Generate samples and accumulate fake statistics:
+3. Generieren samples and accumulate fake statistics:
 
 ```python
 prompts = load_evaluation_prompts("prompts.txt")  # one prompt per line
@@ -88,7 +94,7 @@ while n_generated < 10000:
     n_generated += len(images)
 ```
 
-4. Compute CLIP score for text-image alignment:
+4. Berechnen CLIP score for text-image alignment:
 
 ```python
 from torchmetrics.multimodal.clip_score import CLIPScore
@@ -102,7 +108,7 @@ print(f"IS:  {inception.compute()[0]:.2f} +/- {inception.compute()[1]:.2f}")
 print(f"CLIP: {clip_metric.compute():.2f}")
 ```
 
-5. Compute precision and recall for mode coverage:
+5. Berechnen precision and recall for mode coverage:
 
 ```python
 from torchmetrics.image import FrechetInceptionDistance
@@ -113,15 +119,15 @@ from torchmetrics.image import FrechetInceptionDistance
 # feature embeddings from the Inception network
 ```
 
-**Expected:** FID below 30 for a well-trained Stable Diffusion model on standard benchmarks. IS above 50 on ImageNet-class prompts. CLIP score above 25 for text-conditioned models. Precision and recall both above 0.6.
+**Erwartet:** FID unter 30 for a well-trained Stable Diffusion model on standard benchmarks. IS ueber 50 on ImageNet-class prompts. CLIP score ueber 25 for text-conditioned models. Precision and recall both ueber 0.6.
 
-**On failure:** If FID is above 100, verify that real and generated images share the same resolution and normalization. If CLIP score is low but FID is acceptable, the model generates plausible images that do not match the text prompt -- check the text encoder. Ensure at least 10,000 samples for stable FID estimates.
+**Bei Fehler:** If FID is ueber 100, verify that real and generated images share the same resolution and normalization. If CLIP score is low but FID is acceptable, das Modell generates plausible images that nicht match the text prompt -- check the text encoder. Sicherstellen mindestens 10,000 samples for stable FID estimates.
 
-### Step 2: Noise Schedule Inspection
+### Schritt 2: Noise Planen Inspection
 
 Visualize and compare the forward and reverse noise schedules.
 
-1. Extract schedule parameters from the model:
+1. Extrahieren schedule parameters from das Modell:
 
 ```python
 scheduler = pipe.scheduler
@@ -130,7 +136,7 @@ alphas_cumprod = torch.tensor(scheduler.alphas_cumprod)
 timesteps = torch.arange(len(alphas_cumprod))
 ```
 
-2. Compute the signal-to-noise ratio curve:
+2. Berechnen the signal-to-noise ratio curve:
 
 ```python
 import numpy as np
@@ -156,7 +162,7 @@ fig.tight_layout()
 fig.savefig("noise_schedule.png", dpi=150)
 ```
 
-3. Compare multiple schedule types:
+3. Vergleichen multiple schedule types:
 
 ```python
 from diffusers import DDPMScheduler
@@ -176,15 +182,15 @@ ax.set_title("Schedule Comparison"); ax.legend()
 fig.savefig("schedule_comparison.png", dpi=150)
 ```
 
-**Expected:** Cosine schedule shows a more gradual SNR decrease in mid-timesteps compared to linear. The log-SNR curve should span from approximately +10 (clean) to -10 (pure noise). Learned schedules should be monotonically decreasing.
+**Erwartet:** Cosine schedule shows a more gradual SNR decrease in mid-timesteps verglichen mit linear. The log-SNR curve should span from ungefaehr +10 (clean) to -10 (pure noise). Learned schedules sollte monotonically decreasing.
 
-**On failure:** If alphas_cumprod is not monotonically decreasing, the schedule is misconfigured. If values are constant, check that the scheduler was properly initialized with the model's config. For custom schedulers, verify that `set_timesteps()` has been called.
+**Bei Fehler:** If alphas_cumprod ist nicht monotonically decreasing, the schedule is misconfigured. If values are constant, check that the scheduler was ordnungsgemaess initialized with das Modell's config. For custom schedulers, verify that `set_timesteps()` wurde called.
 
-### Step 3: Attention Map Analysis
+### Schritt 3: Attention Abbilden Analysis
 
-Extract and visualize cross-attention maps from text-conditioned models.
+Extrahieren and visualize cross-attention maps from text-conditioned models.
 
-1. Register attention hooks on the U-Net cross-attention layers:
+1. Registrieren attention hooks on the U-Net cross-attention layers:
 
 ```python
 attention_maps = {}
@@ -201,7 +207,7 @@ for name, module in pipe.unet.named_modules():
         module.register_forward_hook(hook_fn(name))
 ```
 
-2. Run inference and collect attention at specific timesteps:
+2. Ausfuehren inference and collect attention at specific timesteps:
 
 ```python
 prompt = "a red car parked next to a blue house"
@@ -245,13 +251,13 @@ fig.tight_layout()
 fig.savefig("attention_maps.png", dpi=150)
 ```
 
-**Expected:** Content tokens ("car", "house") activate localized spatial regions. Style/color tokens ("red", "blue") activate regions overlapping with their associated object. Early timesteps (high noise) show diffuse attention; later timesteps show sharp, localized attention.
+**Erwartet:** Content tokens ("car", "house") activate localized spatial regions. Style/color tokens ("red", "blue") activate regions overlapping with their associated object. Early timesteps (high noise) show diffuse attention; later timesteps show sharp, localized attention.
 
-**On failure:** If all attention maps look uniform, the hook may be capturing self-attention instead of cross-attention -- verify the layer name contains `attn2` (cross) not `attn1` (self). If attention is captured but has wrong dimensions, check that the output tensor indexing matches the layer's head count and spatial resolution.
+**Bei Fehler:** If all attention maps look uniform, the hook kann capturing self-attention stattdessen of cross-attention -- verify the layer name contains `attn2` (cross) not `attn1` (self). If attention is captured but has wrong dimensions, check that die Ausgabe tensor indexing matches the layer's head count and spatial resolution.
 
-### Step 4: Latent Space Probing
+### Schritt 4: Latent Space Probing
 
-Explore the structure of the latent space through interpolation and direction discovery.
+Erkunden the structure of the latent space durch interpolation and direction discovery.
 
 1. Encode reference images into latent space:
 
@@ -297,7 +303,7 @@ for z in interpolated:
     decoded.append(img.cpu())
 ```
 
-3. Discover semantic directions via prompt-pair differences:
+3. Entdecken semantic directions via prompt-pair differences:
 
 ```python
 def get_text_embedding(prompt):
@@ -330,31 +336,31 @@ score = ood_score(test_z)
 print(f"OOD score: {score:.2f} (reference mean: {np.mean([ood_score(r) for r in ref_latents]):.2f})")
 ```
 
-**Expected:** Interpolated images show smooth, semantically meaningful transitions without artifacts. Semantic directions produce consistent attribute changes when added to diverse latent codes. OOD scores for in-distribution images cluster tightly; outliers score significantly higher.
+**Erwartet:** Interpolated images show smooth, semantically meaningful transitions ohne artifacts. Semantic directions produce consistent attribute changes when added to diverse latent codes. OOD scores for in-distribution images cluster tightly; outliers score erheblich higher.
 
-**On failure:** If interpolation produces blurry or incoherent midpoints, use slerp instead of linear interpolation -- linear interpolation traverses low-density regions in high-dimensional latent spaces. If semantic directions have no visible effect, increase the direction magnitude or verify the text encoder is the same one used during model training.
+**Bei Fehler:** If interpolation produces blurry or incoherent midpoints, use slerp stattdessen of linear interpolation -- linear interpolation traverses low-density regions in high-dimensional latent spaces. If semantic directions have no visible effect, increase the direction magnitude or verify the text encoder is the same one used waehrend model training.
 
-## Validation
+## Validierung
 
-- [ ] FID computed on at least 10,000 generated samples and matching real sample count
-- [ ] CLIP score computed with the same CLIP model used during training (if applicable)
+- [ ] FID computed on mindestens 10,000 generated samples and matching real sample count
+- [ ] CLIP score computed with the same CLIP model used waehrend training (if applicable)
 - [ ] Noise schedule visualization shows monotonically decreasing alphas_cumprod
-- [ ] Log-SNR spans approximately +10 to -10 across the full timestep range
+- [ ] Log-SNR spans ungefaehr +10 to -10 across the full timestep range
 - [ ] Attention maps resolve per-token spatial activations at mid-resolution layers
 - [ ] Attention sharpens from early (diffuse) to late (localized) timesteps
 - [ ] Latent interpolations are smooth with no sudden jumps or artifacts
-- [ ] OOD detection baseline established from at least 100 reference samples
+- [ ] OOD detection baseline established from mindestens 100 reference samples
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
-- **FID on mismatched resolutions**: Real and generated images must be the same resolution before feeding to Inception. Resize both sets identically or FID will be inflated.
+- **FID on mismatched resolutions**: Real and generated images muss the same resolution vor feeding to Inception. Resize both sets identically or FID wird inflated.
 - **Forgetting to normalize for torchmetrics**: `FrechetInceptionDistance(normalize=True)` expects [0, 1] float tensors. With `normalize=False` it expects [0, 255] uint8. Mixing conventions gives meaningless FID.
-- **Hooking self-attention instead of cross-attention**: U-Net layers named `attn1` are self-attention (image-to-image). Use `attn2` for cross-attention (text-to-image). Confusing them produces uninformative uniform maps.
-- **Linear interpolation in high dimensions**: Linear interpolation between two high-dimensional Gaussians passes through a low-density shell. Always use slerp for latent space interpolation in diffusion models.
-- **Ignoring the VAE scaling factor**: Stable Diffusion latents are scaled by `vae.config.scaling_factor` after encoding. Forgetting to apply or remove this factor produces garbled decoded images.
-- **Too few samples for precision/recall**: Precision and recall estimates from fewer than 5,000 samples per set are unreliable. Use at least 10,000 for stable estimates.
+- **Hooking self-attention stattdessen of cross-attention**: U-Net layers named `attn1` are self-attention (image-to-image). Use `attn2` for cross-attention (text-to-image). Confusing them produces uninformative uniform maps.
+- **Linear interpolation in high dimensions**: Linear interpolation zwischen two high-dimensional Gaussians passes durch a low-density shell. Always use slerp for latent space interpolation in diffusion models.
+- **Ignoring the VAE scaling factor**: Stable Diffusion latents are scaled by `vae.config.scaling_factor` nach encoding. Forgetting to apply or remove this factor produces garbled decoded images.
+- **Too few samples for precision/recall**: Precision and recall estimates from fewer than 5,000 samples per set are unreliable. Use mindestens 10,000 for stable estimates.
 
-## Related Skills
+## Verwandte Skills
 
 - `implement-diffusion-network` - building diffusion models that this skill evaluates
 - `analyze-diffusion-dynamics` - mathematical foundations of the noise processes inspected here

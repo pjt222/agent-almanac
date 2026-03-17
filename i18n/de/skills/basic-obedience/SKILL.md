@@ -2,11 +2,11 @@
 name: basic-obedience
 description: >
   Foundation obedience training for dogs — sit, stay, come, heel, and down
-  using positive reinforcement and marker training. Covers timing, reward
+  using positive reinforcement and marker training. Umfasst timing, reward
   hierarchy, session structure, distraction proofing, and common handler
-  errors. Use when a new puppy (8+ weeks) is ready for foundation training, an
+  errors. Verwenden wenn a new puppy (8+ weeks) is ready for foundation training, an
   adult dog lacks reliable basic commands, a rescue dog needs to learn the
-  household's command vocabulary, before advancing to complex behaviors or
+  household's command vocabulary, vor advancing to complex behaviors or
   off-leash work, or when existing commands have degraded and need
   re-establishing.
 license: MIT
@@ -27,9 +27,9 @@ metadata:
 
 # Grundgehorsam
 
-Teach foundation commands (sit, stay, come, heel, down) using positive reinforcement and marker training.
+Lehren foundation commands (sit, stay, come, heel, down) using positive reinforcement and marker training.
 
-## When to Use
+## Wann verwenden
 
 - A new puppy (8+ weeks) is ready for foundation training
 - An adult dog lacks reliable basic commands
@@ -37,19 +37,19 @@ Teach foundation commands (sit, stay, come, heel, down) using positive reinforce
 - Before advancing to more complex behaviors or off-leash work
 - When existing commands have degraded and need re-establishing
 
-## Inputs
+## Eingaben
 
-- **Required**: A dog (any breed, any age 8+ weeks)
-- **Required**: High-value treats (small, soft, quickly consumed)
+- **Erforderlich**: A dog (any breed, any age 8+ weeks)
+- **Erforderlich**: High-value treats (small, soft, quickly consumed)
 - **Optional**: Clicker or verbal marker word (e.g., "yes")
 - **Optional**: 6-foot leash and flat collar or harness
 - **Optional**: Quiet training space with minimal distractions (initially)
 
-## Procedure
+## Vorgehensweise
 
-### Step 1: Establish the Marker
+### Schritt 1: Establish the Marker
 
-The marker bridges the gap between the desired behavior and the reward.
+The marker bridges the gap zwischen the desired behavior and the reward.
 
 ```
 Marker Training Protocol:
@@ -67,11 +67,11 @@ Late marking teaches the wrong behavior.
 Mark → then reach for the treat (not the reverse).
 ```
 
-**Expected:** The dog reliably orients toward the handler upon hearing the marker, expecting a reward.
+**Erwartet:** The dog reliably orients toward the handler upon hearing the marker, expecting a reward.
 
-**On failure:** If the dog does not respond to the marker after 20 reps, the treat value is too low. Switch to higher-value rewards (cheese, chicken, liver). If the dog is too distracted to eat, the environment is too stimulating — move to a quieter space.
+**Bei Fehler:** If the dog nicht respond to the marker nach 20 reps, the treat value is too low. Switch to higher-value rewards (cheese, chicken, liver). If the dog is too distracted to eat, die Umgebung is too stimulating — move to a quieter space.
 
-### Step 2: Teach the Five Foundation Commands
+### Schritt 2: Lehren the Five Foundation Commands
 
 Work on one command per session until reliable, then begin mixing.
 
@@ -115,11 +115,11 @@ HEEL:
 5. If the dog pulls ahead, stop walking. Resume when the leash is loose.
 ```
 
-**Expected:** Each command is performed reliably in a low-distraction environment with treats as motivation.
+**Erwartet:** Each command is performed reliably in a low-distraction environment with treats as motivation.
 
-**On failure:** If a command is not progressing after 3 sessions, break it into smaller steps. The dog may need an intermediate behavior (e.g., for "down," reward the head-lowering motion before requiring full elbows-on-ground).
+**Bei Fehler:** If a command ist nicht progressing nach 3 sessions, break it into smaller steps. The dog may need an intermediate behavior (e.g., for "down," reward the head-lowering motion vor requiring full elbows-on-ground).
 
-### Step 3: Structure Training Sessions
+### Schritt 3: Structure Training Sessions
 
 ```
 Session Guidelines:
@@ -144,11 +144,11 @@ The 80/20 Rule:
 - 20% challenge keeps the dog engaged without frustrating
 ```
 
-**Expected:** Short, successful sessions that leave the dog wanting more.
+**Erwartet:** Short, successful sessions that leave the dog wanting more.
 
-**On failure:** If the dog disengages (sniffing, looking away, lying down), the session is too long, too hard, or the rewards are insufficiently motivating. End the session and reassess.
+**Bei Fehler:** If the dog disengages (sniffing, looking away, lying down), the session is too long, too hard, or the rewards are insufficiently motivating. End the session and reassess.
 
-### Step 4: Distraction-Proof the Commands
+### Schritt 4: Distraction-Proof the Commands
 
 Once reliable in a quiet environment, systematically add distractions.
 
@@ -170,28 +170,28 @@ At each new level:
 - If the dog fails 3 reps in a row, you moved up too fast — go back one level
 ```
 
-**Expected:** Commands work reliably in progressively more distracting environments.
+**Erwartet:** Commands work reliably in progressively more distracting environments.
 
-**On failure:** If a specific distraction (other dogs, squirrels) consistently breaks training, that distraction needs separate counter-conditioning work (see `behavioral-modification`).
+**Bei Fehler:** If a specific distraction (other dogs, squirrels) consistently breaks training, that distraction needs separate counter-conditioning work (see `behavioral-modification`).
 
-## Validation
+## Validierung
 
 - [ ] Marker is charged and the dog responds reliably
 - [ ] All five commands are performed in a low-distraction environment
 - [ ] Training sessions are 5-10 minutes, ending on success
-- [ ] Success rate is at or above 80% for each command
-- [ ] Commands are being generalized through the distraction ladder
-- [ ] The handler's timing (marker within 1 second) is consistent
+- [ ] Success rate is at or ueber 80% fuer jede command
+- [ ] Commands are being generalized durch the distraction ladder
+- [ ] The handler's timing (marker innerhalb 1 second) is consistent
 
-## Common Pitfalls
+## Haeufige Stolperfallen
 
 - **Repeating the cue**: Saying "sit, sit, SIT" teaches the dog that the first "sit" is optional. Say it once and wait
-- **Treating too late**: The treat should follow the marker within 2-3 seconds. Late treating breaks the association
-- **Luring forever**: The hand motion with the treat (lure) should be faded within 10-20 reps. Otherwise the dog only responds when food is visible
+- **Treating too late**: The treat should follow the marker innerhalb 2-3 seconds. Late treating breaks the association
+- **Luring forever**: The hand motion with the treat (lure) sollte faded innerhalb 10-20 reps. Otherwise the dog only responds when food is visible
 - **Punishing failed recalls**: Calling "come" and then scolding the dog (for being slow, for having something in its mouth) poisons the recall cue permanently
 - **Training too long**: A fatigued dog learns nothing. Quit while ahead
-- **Inconsistent cues**: All household members must use the same words and gestures for each command
+- **Inconsistent cues**: All household members must use the same words and gestures fuer jede command
 
-## Related Skills
+## Verwandte Skills
 
 - `behavioral-modification` — for addressing unwanted behaviors that interfere with basic obedience

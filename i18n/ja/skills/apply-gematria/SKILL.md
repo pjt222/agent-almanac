@@ -1,13 +1,11 @@
 ---
 name: apply-gematria
 description: >
-  Compute and analyze gematria (Hebrew numerical values) using standard,
-  ordinal, and reduced methods. Covers word-to-number conversion,
-  isopsephy comparisons, and interpretive frameworks. Use when computing
-  the numerical value of a Hebrew word or phrase, comparing two words for
-  shared gematria values, studying a biblical verse or divine name for
-  numerical correspondences, or connecting a numerical result to its
-  position on the Tree of Life.
+  標準、序数、還元方式を使用してゲマトリア（ヘブライ語の数値）を計算・分析する。
+  単語から数値への変換、等数値比較、解釈的フレームワークをカバーする。
+  ヘブライ語の単語やフレーズの数値を計算する時、共有ゲマトリア値を持つ2つの
+  単語を比較する時、聖書の節や神名の数値的対応を研究する時、数値結果を
+  生命の木上の位置に接続する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,29 +24,29 @@ metadata:
 
 # ゲマトリアの適用
 
-Compute and analyze gematria — the system of assigning numerical values to Hebrew letters and words. Covers standard (Mispar Hechrachi), ordinal (Mispar Siduri), and reduced (Mispar Katan) methods, isopsephy comparisons between words of equal value, and interpretive frameworks for contemplation.
+ゲマトリア — ヘブライ文字と単語に数値を割り当てるシステム — を計算・分析する。標準（ミスパル・ヘフラヒ）、序数（ミスパル・シドゥリ）、還元（ミスパル・カタン）方式、同値の単語間のイソプセフィー比較、瞑想のための解釈的フレームワークをカバーする。
 
 ## 使用タイミング
 
-- You want to compute the numerical value of a Hebrew word or phrase
-- You are comparing two words to determine if they share a gematria value (isopsephy)
-- You need to understand which gematria method is appropriate for a given analysis
-- You are studying a biblical verse or divine name and want to uncover numerical correspondences
-- You are exploring the relationship between a word's meaning and its numerical value
-- You want to connect a numerical result to its position on the Tree of Life
+- ヘブライ語の単語やフレーズの数値を計算したい時
+- 2つの単語がゲマトリア値を共有するか判定するために比較する時（イソプセフィー）
+- 特定の分析にどのゲマトリア方式が適切か理解する必要がある時
+- 聖書の節や神名を研究して数値的対応を明らかにしたい時
+- 単語の意味とその数値の関係を探索する時
+- 数値結果を生命の木上の位置に接続したい時
 
 ## 入力
 
-- **必須**: A Hebrew word, phrase, or divine name to analyze (in Hebrew script or transliteration)
-- **任意**: A second word/phrase for comparison (isopsephy)
-- **任意**: Preferred gematria method (standard, ordinal, reduced, or all three)
-- **任意**: Context or question guiding the analysis (e.g., "Why do these two words share a value?")
+- **必須**: 分析するヘブライ語の単語、フレーズ、または神名（ヘブライ文字またはローマ字転写）
+- **任意**: 比較用の2番目の単語/フレーズ（イソプセフィー）
+- **任意**: 好みのゲマトリア方式（標準、序数、還元、または3つすべて）
+- **任意**: 分析を導く文脈や質問（例: 「なぜこの2つの単語は値を共有するのか？」）
 
 ## 手順
 
-### ステップ1: Transliterate and Identify the Hebrew Source
+### ステップ1: ヘブライ語ソースの転写と特定
 
-Establish the exact Hebrew spelling of the word or phrase.
+単語やフレーズの正確なヘブライ語綴りを確定する。
 
 ```
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
@@ -77,36 +75,36 @@ same values for regular and final forms. The 500-900 values above
 follow the extended system (Mispar Gadol).
 ```
 
-1. If the input is in English transliteration, convert to Hebrew letter sequence
-2. Verify the spelling: Hebrew has multiple possible spellings for some words (plene vs. defective)
-3. Note if the word contains final-form letters (Kaf-sofit, Mem-sofit, Nun-sofit, Peh-sofit, Tzadi-sofit)
-4. State the source: is this a biblical word, a divine name, a modern Hebrew word, or a technical Kabbalistic term?
-5. If ambiguous, present both common spellings and compute gematria for each
+1. 入力が英語ローマ字転写の場合、ヘブライ文字列に変換する
+2. 綴りを確認する: ヘブライ語では一部の単語に複数の綴り方がある（完全綴りと欠損綴り）
+3. 単語に語末形文字（カフ・ソフィート、メム・ソフィート、ヌン・ソフィート、ペー・ソフィート、ツァディ・ソフィート）が含まれているか記録する
+4. 出典を明記する: これは聖書の単語、神名、現代ヘブライ語の単語、カバラの専門用語のいずれか？
+5. 曖昧な場合、一般的な両方の綴りを提示し、それぞれのゲマトリアを計算する
 
-**期待結果:** The Hebrew letter sequence is established with confidence. The user knows exactly which letters are being summed and can verify the spelling.
+**期待結果:** ヘブライ文字列が確信を持って確定される。ユーザーはどの文字が合計されているか正確に把握でき、綴りを確認できる。
 
-**失敗時:** If the transliteration is ambiguous (e.g., "chai" could be Chet-Yod or Chet-Yod-Yod in some contexts), present both options with their gematria values and let the user select.
+**失敗時:** ローマ字転写が曖昧な場合（例: 「chai」は文脈によりヘット-ヨッドまたはヘット-ヨッド-ヨッドの可能性がある）、両方の選択肢をゲマトリア値とともに提示し、ユーザーに選択させる。
 
-### ステップ2: Apply Standard Gematria (Mispar Hechrachi)
+### ステップ2: 標準ゲマトリア（ミスパル・ヘフラヒ）を適用する
 
-Sum the letter values using the standard Hebrew number table.
+標準ヘブライ数値表を使用して文字値を合計する。
 
-1. Write out each letter with its standard value
-2. Sum the values left to right (Hebrew reads right to left, but addition is commutative)
-3. State the total clearly
-4. Note if the total matches a significant number:
-   - A sephira number (1-10)
-   - A path number (11-32)
-   - A well-known gematria value (26 = YHVH, 18 = chai, 72 = Shem ha-Mephorash, 137 = Kabbalah)
-5. If the total exceeds 400, note that it requires summing multiple hundreds
+1. 各文字とその標準値を書き出す
+2. 左から右に値を合計する（ヘブライ語は右から左に読むが、加算は可換である）
+3. 合計を明確に示す
+4. 合計が重要な数と一致するか記録する:
+   - セフィラ番号（1-10）
+   - パス番号（11-32）
+   - よく知られたゲマトリア値（26 = YHVH、18 = chai、72 = シェム・ハ・メフォラシュ、137 = カバラ）
+5. 合計が400を超える場合、複数の百の合計が必要であることを記録する
 
-**期待結果:** A clear numerical result with the computation shown step by step. The user can verify each letter's value against the table.
+**期待結果:** 計算がステップバイステップで示された明確な数値結果。ユーザーは各文字の値を表と照合して確認できる。
 
-**失敗時:** If the user provides a word with uncertain Hebrew spelling, compute values for all plausible spellings and note the range. The "correct" spelling depends on the source text.
+**失敗時:** ユーザーがヘブライ語の綴りが不確かな単語を提供した場合、すべてのもっともらしい綴りの値を計算し、範囲を記録する。「正しい」綴りはソーステキストに依存する。
 
-### ステップ3: Apply Ordinal and Reduced Methods (Optional)
+### ステップ3: 序数および還元方式を適用する（任意）
 
-Compute alternative gematria values that reveal different patterns.
+異なるパターンを明らかにする代替ゲマトリア値を計算する。
 
 ```
 ORDINAL GEMATRIA (Mispar Siduri):
@@ -131,72 +129,72 @@ A substitution cipher: first letter ↔ last letter.
   "Sheshach" = Babel via Atbash).
 ```
 
-1. Compute ordinal gematria: sum each letter's position (1-22) in the alphabet
-2. Compute reduced gematria: reduce each standard value to single digit, then sum and reduce again
-3. Present all three values together for comparison
-4. Note which method reveals the most interesting connections for this particular word
+1. 序数ゲマトリアを計算する: アルファベットでの各文字の位置（1-22）を合計する
+2. 還元ゲマトリアを計算する: 各標準値を1桁に還元し、合計してさらに還元する
+3. 3つの値すべてを比較のために並べて提示する
+4. この特定の単語に対してどの方式が最も興味深い接続を明らかにするか記録する
 
-**期待結果:** Three numerical values (standard, ordinal, reduced) presented side by side. The reduced value often links to single-digit sephirotic numbers, making it useful for Tree of Life mapping.
+**期待結果:** 3つの数値（標準、序数、還元）が並べて提示される。還元値はしばしば1桁のセフィラ番号にリンクし、生命の木へのマッピングに有用である。
 
-**失敗時:** If the user only wants one method, provide that method and mention the others exist for future exploration. Do not overwhelm with calculations if a single method was requested.
+**失敗時:** ユーザーが1つの方式のみを求めている場合、その方式を提供し、他の方式が将来の探索のために存在することに言及する。1つの方式が要求された場合、計算で圧倒しない。
 
-### ステップ4: Search for Isopsephy Connections
+### ステップ4: イソプセフィー接続を検索する
 
-Identify other Hebrew words or phrases that share the same numerical value.
+同じ数値を共有する他のヘブライ語の単語やフレーズを特定する。
 
-1. Take the standard gematria value from Step 2
-2. Search for well-known words, divine names, or phrases with the same value
-3. Present 2-5 connections, prioritizing:
-   - Biblical words and phrases
-   - Divine names and sephirotic titles
-   - Traditional Kabbalistic connections documented in classical sources
-   - Surprising or illuminating connections
-4. For each connection, note the source tradition (Zohar, Talmud, later Kabbalistic commentary, Hermetic tradition)
-5. Note if no significant connections are found — not every number has rich isopsephy
+1. ステップ2の標準ゲマトリア値を取る
+2. 同じ値を持つよく知られた単語、神名、フレーズを検索する
+3. 以下を優先して2-5の接続を提示する:
+   - 聖書の単語とフレーズ
+   - 神名とセフィロト的称号
+   - 古典的な出典に文書化された伝統的カバラ的接続
+   - 驚くべきまたは啓発的な接続
+4. 各接続について、出典の伝統を記録する（ゾーハル、タルムード、後期カバラ注釈、ヘルメス伝統）
+5. 重要な接続が見つからない場合は記録する — すべての数が豊かなイソプセフィーを持つわけではない
 
-**期待結果:** A set of words sharing the same gematria value, each with a brief note on why the connection might be meaningful. The user has material for contemplation.
+**期待結果:** 同じゲマトリア値を共有する単語のセット、接続がなぜ意味深い可能性があるかについての簡単な注釈付き。ユーザーは瞑想のための素材を持つ。
 
-**失敗時:** If no well-known connections exist for the computed value, acknowledge this. Offer to compute the value's relationship to nearby significant numbers (e.g., "your value is 378, which is 2 more than shalom [376] — what does that suggest?").
+**失敗時:** 計算された値にはよく知られた接続が存在しない場合、これを認める。近くの重要な数との関係を計算することを提案する（例: 「あなたの値は378で、shalom [376]より2大きい — それは何を示唆するか？」）。
 
-### ステップ5: Interpret Connections and Correspondences
+### ステップ5: 接続と対応を解釈する
 
-Move from computation to contemplation — what do the numerical relationships suggest?
+計算から瞑想へ移行する — 数値的関係は何を示唆するか？
 
-1. State clearly: gematria reveals correspondences for contemplation, not proofs or predictions
-2. For each isopsephy connection found, pose a contemplative question:
-   - "Word A and Word B share the value N. How might their meanings illuminate each other?"
-   - "The reduced value points to sephira X. How does this word's meaning relate to that sephira's quality?"
-3. Note connections to the Tree of Life:
-   - Standard value 1-10 → direct sephirotic correspondence
-   - Reduced value 1-9 → sephirotic resonance
-   - Value = a path number (11-32) → resonance with that path's Hebrew letter
-4. If the user provided a guiding question (from Inputs), address it directly using the gematria results
-5. Close with one integrative statement connecting the numerical analysis to the word's meaning
+1. 明確に述べる: ゲマトリアは瞑想のための対応を明らかにするものであり、証明や予言ではない
+2. 見つかった各イソプセフィー接続について、瞑想的な質問を提起する:
+   - 「単語Aと単語Bは値Nを共有する。それらの意味はどのように互いを照らし合うか？」
+   - 「還元値はセフィラXを指す。この単語の意味はそのセフィラの性質にどう関係するか？」
+3. 生命の木との接続を記録する:
+   - 標準値1-10 → 直接的なセフィラ的対応
+   - 還元値1-9 → セフィラ的共鳴
+   - 値 = パス番号（11-32） → そのパスのヘブライ文字との共鳴
+4. ユーザーが導く質問を提供した場合（入力から）、ゲマトリア結果を使用して直接対処する
+5. 数値分析を単語の意味に接続する1つの統合的な声明で締めくくる
 
-**期待結果:** The numerical analysis has become meaningful — not just arithmetic but a lens for understanding the word's place in the symbolic network of Kabbalah.
+**期待結果:** 数値分析が意味あるものになった — 単なる算術ではなく、カバラの象徴ネットワークにおける単語の位置を理解するためのレンズ。
 
-**失敗時:** If interpretation feels forced or speculative, say so directly. Some gematria computations are more fruitful than others. Honest acknowledgment of thin connections is better than fabricating significance.
+**失敗時:** 解釈が強制的または投機的に感じられる場合、率直にそう述べる。一部のゲマトリア計算は他よりも実りがある。薄い接続に重要性を捏造するよりも、正直な認識の方が良い。
 
 ## バリデーション
 
-- [ ] The Hebrew spelling was established with confidence (or multiple spellings presented)
-- [ ] Standard gematria was computed with each letter's value shown
-- [ ] At least one additional method (ordinal or reduced) was applied
-- [ ] Isopsephy connections were searched and results presented with source notes
-- [ ] Interpretation was framed as contemplative, not demonstrative
-- [ ] The computation is verifiable — the user can check each letter against the value table
+- [ ] ヘブライ語の綴りが確信を持って確定された（または複数の綴りが提示された）
+- [ ] 標準ゲマトリアが各文字の値を示して計算された
+- [ ] 少なくとも1つの追加方式（序数または還元）が適用された
+- [ ] イソプセフィー接続が検索され、結果が出典注記付きで提示された
+- [ ] 解釈が実証的ではなく瞑想的なものとして枠組みされた
+- [ ] 計算が検証可能である — ユーザーは各文字を値表と照合して確認できる
 
 ## よくある落とし穴
 
-- **Spelling ambiguity**: Hebrew words can be spelled with or without vowel letters (matres lectionis). The gematria changes significantly — always confirm the spelling
-- **Final-form confusion**: Whether Mem-final = 40 or 600 depends on which gematria system is used. State the system explicitly
-- **Finding what you expect**: Gematria with enough methods will eventually connect any two words. Privileging connections that confirm a preexisting belief is confirmation bias, not analysis
-- **Ignoring tradition**: Classical Kabbalistic gematria connections (e.g., YHVH = 26, echad [one] = 13, ahavah [love] = 13, so love + unity = God) are documented in authoritative sources. Novel connections should be distinguished from traditional ones
-- **Treating gematria as proof**: Numerical equality between words suggests a correspondence to contemplate, not an identity or causal relationship
-- **Forgetting context**: The same word may have different gematria significance in a biblical verse vs. a liturgical text vs. a Kabbalistic meditation. Context shapes interpretation
+- **綴りの曖昧さ**: ヘブライ語の単語は母音文字（マトレス・レクティオーニス）の有無で綴ることができる。ゲマトリアは大幅に変わる — 常に綴りを確認する
+- **語末形の混同**: メム・ソフィート = 40か600かは使用するゲマトリアシステムに依存する。システムを明示的に述べる
+- **期待するものを見つける**: 十分な方式を使えばゲマトリアは最終的にどの2つの単語も接続する。既存の信念を確認する接続を優遇するのは確証バイアスであり、分析ではない
+- **伝統を無視する**: 古典的なカバラのゲマトリア接続（例: YHVH = 26、echad [一] = 13、ahavah [愛] = 13、つまり愛 + 統一 = 神）は権威ある出典に文書化されている。新しい接続は伝統的なものと区別すべきである
+- **ゲマトリアを証明として扱う**: 単語間の数値的等価は瞑想するための対応を示唆するのであり、同一性や因果関係ではない
+- **文脈を忘れる**: 同じ単語でも聖書の節、典礼テキスト、カバラ的瞑想ではゲマトリアの重要性が異なる可能性がある。文脈が解釈を形作る
 
 ## 関連スキル
 
-- `read-tree-of-life` — Map gematria values to sephirot and paths for structural context
-- `study-hebrew-letters` — Understanding individual letter symbolism deepens gematria interpretation
-- `observe` — Sustained neutral attention to patterns; gematria is a form of numerical pattern recognition
+- `read-tree-of-life` — ゲマトリア値をセフィロトとパスにマッピングして構造的文脈を得る
+- `study-hebrew-letters` — 個々の文字の象徴を理解することでゲマトリア解釈が深まる
+- `observe` — パターンへの持続的で中立的な注意; ゲマトリアは数値的パターン認識の一形態

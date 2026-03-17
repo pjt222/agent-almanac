@@ -1,13 +1,12 @@
 ---
 name: build-coherence
 description: >
-  AI multi-path reasoning coherence using bee democracy — independent evaluation
-  of competing approaches, waggle dance as reasoning-out-loud, quorum sensing
-  for confidence thresholds, and deadlock resolution. Use when forage-solutions
-  has identified multiple valid approaches and a selection must be made, when
-  oscillating between options without committing, when justifying an architecture
-  or tool choice with structured reasoning, or before an irreversible action where
-  the cost of the wrong choice is high.
+  ミツバチの民主主義を使用したAIマルチパス推論の一貫性 — 競合するアプローチの
+  独立評価、声を出して推論するワグルダンス、確信度閾値のための定足数感知、
+  デッドロック解決。forage-solutionsが複数の有効なアプローチを特定して選択が
+  必要な時、オプション間で揺れてコミットできない時、構造化された推論で
+  アーキテクチャやツールの選択を正当化する時、誤った選択のコストが高い
+  不可逆的なアクション前に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,32 +25,32 @@ metadata:
 
 # 一貫性の構築
 
-Evaluate competing approaches through independent assessment, explicit reasoning-out-loud advocacy, confidence-calibrated commitment thresholds, and structured deadlock resolution — producing coherent decisions from multiple reasoning paths.
+独立した評価、明示的な声に出しての推論による提唱、確信度校正されたコミットメント閾値、構造化されたデッドロック解決を通じて競合するアプローチを評価する — 複数の推論パスから一貫した決定を生成する。
 
 ## 使用タイミング
 
-- `forage-solutions` has identified multiple valid approaches and a selection must be made
-- Oscillating between two approaches without committing to either
-- Needing to justify a decision with structured reasoning (architecture choice, tool selection, implementation strategy)
-- When a previous decision was made by gut feeling and needs evidence-based validation
-- When internal reasoning is producing contradictory conclusions and coherence must be restored
-- Before an irreversible action (merging, deploying, deleting) where the cost of the wrong choice is high
+- `forage-solutions`が複数の有効なアプローチを特定し、選択が必要な時
+- 2つのアプローチ間で揺れてどちらにもコミットできない時
+- 構造化された推論で決定を正当化する必要がある時（アーキテクチャ選択、ツール選択、実装戦略）
+- 以前の決定が直感で行われ、エビデンスベースの検証が必要な時
+- 内部推論が矛盾する結論を生み出し、一貫性を回復する必要がある時
+- 不可逆的なアクション（マージ、デプロイ、削除）の前で、誤った選択のコストが高い時
 
 ## 入力
 
-- **必須**: Two or more competing approaches to evaluate
-- **任意**: Quality assessments from prior scouting (see `forage-solutions`)
-- **任意**: Decision stakes (reversible, moderate, irreversible) for threshold calibration
-- **任意**: Time budget for the decision
-- **任意**: Known failure mode (oscillation, premature commitment, groupthink)
+- **必須**: 評価する2つ以上の競合するアプローチ
+- **任意**: 事前の偵察からの品質評価（`forage-solutions`を参照）
+- **任意**: 決定のステークス（可逆、中程度、不可逆）（閾値校正用）
+- **任意**: 決定のための時間予算
+- **任意**: 既知の失敗モード（揺れ、早すぎるコミットメント、集団思考）
 
 ## 手順
 
-### ステップ1: Independent Evaluation
+### ステップ1: 独立評価
 
-Assess each approach on its own merits before comparing them. The critical rule: do not let the assessment of approach A bias the assessment of approach B.
+比較する前に、各アプローチをそれ自体のメリットで評価する。重要なルール: アプローチAの評価がアプローチBの評価にバイアスをかけてはならない。
 
-For each approach, evaluate independently:
+各アプローチを独立に評価する:
 
 ```
 Approach Evaluation Template:
@@ -75,33 +74,33 @@ Approach Evaluation Template:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Fill this out for each approach separately. Do not write a comparison until all individual evaluations are complete.
+これを各アプローチに別々に記入する。すべての個別評価が完了するまで比較を書かない。
 
-**期待結果:** Independent evaluations where each approach is assessed on its own terms. The evaluation of approach B does not reference approach A. Quality scores reflect genuine assessment, not ranking.
+**期待結果:** 各アプローチがそれ自体の条件で評価された独立した評価。アプローチBの評価がアプローチAを参照しない。品質スコアはランキングではなく真の評価を反映する。
 
-**失敗時:** If the evaluations are contaminated (you find yourself writing "better than A" while assessing B), reset. Assess A completely, then clear the framing and assess B from scratch. If the scores are all identical, the evaluation dimensions are too coarse — add domain-specific criteria.
+**失敗時:** 評価が汚染されている場合（Bを評価しながら「Aより良い」と書いている）、リセットする。Aを完全に評価し、次にフレーミングをクリアしてBをゼロから評価する。スコアがすべて同じ場合、評価の次元が粗すぎる — ドメイン固有の基準を追加する。
 
-### ステップ2: Waggle Dance — Reason Out Loud
+### ステップ2: ワグルダンス — 声に出して推論する
 
-Advocate for each approach proportionally to its quality. This is the AI equivalent of the bee waggle dance: making implicit reasoning explicit and public.
+各アプローチをその品質に比例して提唱する。これはミツバチのワグルダンスのAI等価物: 暗黙の推論を明示的かつ公開的にする。
 
-1. For each approach, state the case for it — as if presenting to a skeptical user:
-   - "Approach A is strong because [evidence]. The main risk is [risk], which is mitigated by [mitigation]."
-2. Advocacy intensity should be proportional to quality score:
-   - High-quality approach: detailed advocacy with specific evidence
-   - Medium-quality approach: brief advocacy with acknowledged limitations
-   - Low-quality approach: mentioned for completeness, not actively advocated
-3. **Cross-inspection**: after advocating for A, actively look for evidence that supports B instead. After advocating for B, look for evidence that supports A. This counteracts confirmation bias
+1. 各アプローチについて、懐疑的なユーザーに提示するかのようにケースを述べる:
+   - 「アプローチAは[エビデンス]のため強い。主なリスクは[リスク]で、[緩和策]によって緩和される。」
+2. 提唱の強度は品質スコアに比例すべき:
+   - 高品質アプローチ: 具体的なエビデンスを伴う詳細な提唱
+   - 中品質アプローチ: 認識された制限を伴う簡潔な提唱
+   - 低品質アプローチ: 完全性のために言及、積極的には提唱しない
+3. **相互検査**: Aを提唱した後、代わりにBを支持するエビデンスを積極的に探す。Bを提唱した後、Aを支持するエビデンスを探す。これが確証バイアスに対抗する
 
-The purpose of reasoning-out-loud is to make the decision auditable — to yourself and to the user. If the reasoning cannot be articulated, the assessment is shallower than the score suggests.
+声に出して推論する目的は、決定を監査可能にすること — 自分自身とユーザーに対して。推論が明確にできない場合、評価はスコアが示唆するよりも浅い。
 
-**期待結果:** Explicit reasoning for each approach that would be persuasive to a neutral observer. Cross-inspection reveals at least one consideration that was initially overlooked.
+**期待結果:** 中立的な観察者にとって説得力のある各アプローチの明示的な推論。相互検査が当初見落とされていた少なくとも1つの考慮事項を明らかにする。
 
-**失敗時:** If advocacy feels perfunctory (going through motions), the approaches may not be genuinely different — they may be variations of the same idea. Check: do the approaches differ in mechanism, or only in implementation detail? If the latter, the decision may not matter much — pick either and move on.
+**失敗時:** 提唱が形式的に感じられる場合（形だけ）、アプローチが真に異なっていない可能性がある — 同じアイデアのバリエーションかもしれない。確認する: アプローチはメカニズムで異なるか、実装の詳細のみか？ 後者の場合、決定はそれほど重要ではないかもしれない — どちらかを選んで進む。
 
-### ステップ3: Set Quorum Threshold and Commit
+### ステップ3: 定足数閾値の設定とコミット
 
-Set the confidence threshold required to commit, calibrated to the decision's stakes.
+コミットに必要な確信度閾値を設定し、決定のステークスに校正する。
 
 ```
 Confidence Thresholds by Stakes:
@@ -122,19 +121,19 @@ Confidence Thresholds by Stakes:
 └─────────────────────┴───────────┴──────────────────────────────────┘
 ```
 
-1. Classify the decision stakes
-2. Check: does the leading approach's quality score × confidence reach the threshold?
-3. If yes: commit. State the decision, the reasoning, and the key risk being accepted
-4. If no: identify what additional information would raise confidence to the threshold
-5. Once committed, do not revisit unless new disqualifying evidence emerges
+1. 決定のステークスを分類する
+2. 確認する: リーディングアプローチの品質スコア × 確信度が閾値に達するか？
+3. はいの場合: コミットする。決定、推論、受け入れる主要リスクを述べる
+4. いいえの場合: 確信度を閾値まで上げる追加情報を特定する
+5. コミットしたら、新しい失格エビデンスが出ない限り再訪しない
 
-**期待結果:** A clear commitment moment with stated reasoning. The decision is made at an appropriate confidence level for its stakes.
+**期待結果:** 述べられた推論を伴う明確なコミットメントの瞬間。決定がそのステークスに適した確信度レベルで行われる。
 
-**失敗時:** If the threshold is never met (can't reach 90% on an irreversible decision), ask: is the decision truly irreversible? Can it be decomposed into a reversible test phase + an irreversible commit? Most apparently irreversible decisions can be staged. If staging is impossible, communicate the uncertainty to the user and ask for guidance.
+**失敗時:** 閾値に到達しない場合（不可逆的な決定で90%に達しない）、問う: 決定は本当に不可逆的か？ 可逆的なテストフェーズ + 不可逆的なコミットに分解できるか？ 一見不可逆的な決定のほとんどは段階的にできる。段階化が不可能な場合、不確実性をユーザーに伝えてガイダンスを求める。
 
-### ステップ4: Resolve Deadlocks
+### ステップ4: デッドロックの解決
 
-When two or more approaches have similar scores and the quorum threshold is not met for any single one.
+2つ以上のアプローチが類似のスコアを持ち、いずれの単一アプローチにも定足数閾値が達成されない時。
 
 ```
 Deadlock Resolution:
@@ -163,49 +162,49 @@ Deadlock Resolution:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**期待結果:** Deadlock resolved through the appropriate mechanism. The resolution is decisive — no lingering doubt that undermines execution.
+**期待結果:** 適切なメカニズムによりデッドロックが解決される。解決は決定的 — 実行を損なう残りの疑念がない。
 
-**失敗時:** If the deadlock persists through all resolution strategies, the decision may be premature. Ask the user: "I see two equally strong approaches: [A] and [B]. [Brief case for each.] Which aligns better with your priorities?" Delegating a genuine tie to the user is not a failure — it is acknowledging that the decision depends on values the AI cannot infer.
+**失敗時:** すべての解決戦略を通じてデッドロックが持続する場合、決定が時期尚早かもしれない。ユーザーに問う: 「同等に強い2つのアプローチがあります: [A]と[B]。[各の簡潔なケース。] あなたの優先事項にどちらがより合っていますか？」真の引き分けをユーザーに委任するのは失敗ではない — 決定がAIが推測できない価値観に依存することを認めること。
 
-### ステップ5: Assess Coherence Quality
+### ステップ5: 一貫性の品質評価
 
-After committing to a decision, evaluate whether the process produced genuine coherence or just a decision.
+決定にコミットした後、プロセスが真の一貫性を生んだのか単なる決定を生んだのか評価する。
 
-1. Was the decision evidence-based, or was it rubber-stamping an initial preference?
-   - Test: was the preference the same before and after evaluation? If so, did the evaluation change anything?
-2. Were the losing approaches genuinely considered, or were they straw men?
-   - Test: can you articulate the strongest case for the losing approach?
-3. What signal would trigger reassessment?
-   - Define a specific observation that would invalidate the decision ("If I discover that the API doesn't support X, then approach B becomes better")
-4. Is there useful information from the losing approaches that should inform implementation?
-   - A risk identified in approach B might apply to approach A as well
+1. 決定はエビデンスベースだったか、それとも初期の好みをゴム印したものか？
+   - テスト: 評価前後で好みは同じだったか？ そうなら、評価は何かを変えたか？
+2. 敗退したアプローチは真に考慮されたか、それともストローマンだったか？
+   - テスト: 敗退したアプローチの最も強いケースを明確にできるか？
+3. 再評価をトリガーするシグナルは何か？
+   - 決定を無効にする具体的な観察を定義する（「APIがXをサポートしないことが分かれば、アプローチBの方が良くなる」）
+4. 敗退したアプローチから、実装に情報を提供すべき有用な情報はあるか？
+   - アプローチBで特定されたリスクはアプローチAにも適用される可能性がある
 
-**期待結果:** A brief quality check that either confirms the decision or identifies it as weak. If weak, return to the appropriate earlier step rather than proceeding on shaky ground.
+**期待結果:** 決定を確認するか弱いと特定する簡潔な品質チェック。弱い場合、不安定な基盤の上で進むのではなく、適切な以前のステップに戻る。
 
-**失敗時:** If the quality check reveals that the decision was preference-based rather than evidence-based, acknowledge it honestly. Sometimes preference is all that is available — but it should be labeled as such, not dressed up as analysis.
+**失敗時:** 品質チェックが決定がエビデンスベースではなく好みベースだったことを明らかにした場合、正直に認める。好みしか利用できないこともある — ただし、分析として装うのではなく、そのようにラベル付けすべき。
 
 ## バリデーション
 
-- [ ] Each approach was evaluated independently before comparison
-- [ ] Advocacy was proportional to quality (not equal attention regardless of merit)
-- [ ] Cross-inspection was performed (looking for counter-evidence after advocacy)
-- [ ] Quorum threshold was calibrated to decision stakes
-- [ ] If deadlocked, a specific resolution strategy was applied
-- [ ] Post-decision quality check was performed
-- [ ] A reassessment trigger was defined
+- [ ] 比較前に各アプローチが独立に評価された
+- [ ] 提唱がメリットに比例していた（メリットに関係なく均等な注目ではない）
+- [ ] 提唱後に相互検査が実行された（反証エビデンスの探索）
+- [ ] 定足数閾値が決定のステークスに校正された
+- [ ] デッドロックの場合、具体的な解決戦略が適用された
+- [ ] 決定後の品質チェックが実行された
+- [ ] 再評価トリガーが定義された
 
 ## よくある落とし穴
 
-- **Premature commitment**: Deciding before evaluating all approaches. The first approach considered has an anchoring advantage — it gets more mental attention simply by being first. Evaluate all before comparing
-- **Equal advocacy for unequal approaches**: If approach A scored 85 and approach B scored 45, spending equal time advocating for both wastes effort and creates false equivalence
-- **Rubber-stamping**: Going through the evaluation process to justify a decision already made. The test is whether the evaluation could have changed the outcome. If not, the process was theater
-- **Threshold avoidance**: Lowering the confidence threshold to make the decision easier rather than gathering the information needed to meet the appropriate threshold
-- **Ignoring the losing side**: The losing approach often contains warnings that apply to the winning one. Risks identified in approach B don't disappear just because approach A was chosen
+- **早すぎるコミットメント**: すべてのアプローチを評価する前に決定する。最初に考慮されたアプローチはアンカリング優位を持つ — 最初であるというだけでより多くの精神的注目を得る。比較する前にすべてを評価する
+- **不均等なアプローチへの均等な提唱**: アプローチAが85点、アプローチBが45点の場合、両方に均等な時間を費やすのは努力の無駄であり、偽りの等価性を生む
+- **ゴム印**: すでに行われた決定を正当化するために評価プロセスを経ること。テストは評価が結果を変えられたかどうか。できなかった場合、プロセスは茶番
+- **閾値回避**: 適切な閾値を満たすために必要な情報を集めるのではなく、決定を容易にするために確信度閾値を下げる
+- **敗退側の無視**: 敗退したアプローチは勝利したアプローチに適用される警告を含むことが多い。アプローチBで特定されたリスクはアプローチAが選ばれたからといって消えない
 
 ## 関連スキル
 
-- `build-consensus` — the multi-agent consensus model that this skill adapts to single-agent reasoning
-- `forage-solutions` — scouts the solution space that coherence evaluates; typically precedes this skill
-- `coordinate-reasoning` — manages information flow during multi-path evaluation
-- `center` — establishes the balanced baseline needed for unbiased evaluation
-- `meditate` — clears assumptions between evaluating different approaches
+- `build-consensus` — このスキルが単一エージェント推論に適応したマルチエージェントコンセンサスモデル
+- `forage-solutions` — 一貫性が評価するソリューション空間を偵察する; 通常このスキルの前に実行
+- `coordinate-reasoning` — マルチパス評価中の情報フローを管理する
+- `center` — 偏りのない評価に必要なバランスの取れたベースラインを確立する
+- `meditate` — 異なるアプローチの評価間で前提をクリアする
