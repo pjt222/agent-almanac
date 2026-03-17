@@ -1,9 +1,13 @@
 {
   "name": "agent-almanac",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Agentic development platform with skills, agents, and guides",
   "type": "module",
+  "bin": {
+    "agent-almanac": "./cli/index.js",
+    "almanac": "./cli/index.js"
+  },
   "scripts": {
     "update-readmes": "node scripts/generate-readmes.js",
     "check-readmes": "node scripts/generate-readmes.js --check",
@@ -11,9 +15,12 @@
     "validate:translations": "node scripts/check-translation-freshness.js",
     "translation:status": "node scripts/generate-translation-status.js",
     "translate:scaffold": "bash scripts/translate-content.sh",
-    "test": "npm run validate:integrity && npm run check-readmes"
+    "test": "npm run validate:integrity && npm run check-readmes",
+    "test:cli": "node --test cli/test/"
   },
-  "devDependencies": {
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
     "js-yaml": "^4.1.0"
   }
 }
