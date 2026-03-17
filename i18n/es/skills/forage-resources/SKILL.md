@@ -1,14 +1,15 @@
 ---
 name: forage-resources
 description: >
-  Apply ant colony optimization and foraging theory to resource search,
-  exploration-exploitation tradeoffs, and distributed discovery. Covers
-  scout deployment, trail reinforcement, diminishing returns detection,
-  and adaptive foraging strategy selection. Use when searching a large
-  solution space where brute-force enumeration is impractical, balancing
-  investment between exploring new approaches and deepening known good ones,
-  optimizing resource allocation across uncertain opportunities, or diagnosing
-  premature convergence on local optima.
+  Aplicar optimización de colonia de hormigas y teoría de forrajeo a la búsqueda
+  de recursos, compensaciones de exploración-explotación y descubrimiento
+  distribuido. Cubre despliegue de exploradores, refuerzo de rastros, detección
+  de rendimientos decrecientes y selección adaptativa de estrategia de forrajeo.
+  Usar al buscar en un espacio de soluciones grande donde la enumeración por
+  fuerza bruta es impráctica, al equilibrar inversión entre explorar nuevos
+  enfoques y profundizar los buenos conocidos, al optimizar asignación de
+  recursos entre oportunidades inciertas, o al diagnosticar convergencia
+  prematura en óptimos locales.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,87 +28,87 @@ metadata:
 
 # Forage Resources
 
-Apply foraging theory and ant colony optimization to systematically search for, evaluate, and exploit distributed resources — balancing exploration of unknown territory with exploitation of known yields.
+Aplicar teoría de forrajeo y optimización de colonia de hormigas para buscar, evaluar y explotar recursos distribuidos sistemáticamente — equilibrando la exploración de territorio desconocido con la explotación de rendimientos conocidos.
 
 ## Cuándo Usar
 
-- Searching a large solution space where brute-force enumeration is impractical
-- Balancing investment between exploring new approaches and deepening known good ones
-- Optimizing resource allocation across multiple uncertain opportunities
-- Designing search strategies for distributed teams or automated agents
-- Diagnosing premature convergence (stuck on local optima) or perpetual wandering (never committing)
-- Complementing `coordinate-swarm` with specific resource-discovery patterns
+- Buscar en un espacio de soluciones grande donde la enumeración por fuerza bruta es impráctica
+- Equilibrar inversión entre explorar nuevos enfoques y profundizar los buenos conocidos
+- Optimizar asignación de recursos entre múltiples oportunidades inciertas
+- Diseñar estrategias de búsqueda para equipos distribuidos o agentes automatizados
+- Diagnosticar convergencia prematura (atrapado en óptimos locales) o vagabundeo perpetuo (nunca comprometerse)
+- Complementar `coordinate-swarm` con patrones específicos de descubrimiento de recursos
 
 ## Entradas
 
-- **Requerido**: Description of the resource being sought (information, compute, talent, solutions, opportunities)
-- **Requerido**: Description of the search space (size, structure, known features)
-- **Opcional**: Current search strategy and its failure mode
-- **Opcional**: Number of available scouts/searchers
-- **Opcional**: Cost of exploration vs. cost of exploitation failure
-- **Opcional**: Time horizon (short-term exploitation vs. long-term exploration)
+- **Requerido**: Descripción del recurso buscado (información, cómputo, talento, soluciones, oportunidades)
+- **Requerido**: Descripción del espacio de búsqueda (tamaño, estructura, características conocidas)
+- **Opcional**: Estrategia de búsqueda actual y su modo de fallo
+- **Opcional**: Número de exploradores/buscadores disponibles
+- **Opcional**: Costo de exploración vs. costo de fallo en explotación
+- **Opcional**: Horizonte temporal (explotación a corto plazo vs. exploración a largo plazo)
 
 ## Procedimiento
 
-### Paso 1: Map the Foraging Landscape
+### Paso 1: Mapear el paisaje de forrajeo
 
-Characterize the resource environment to select appropriate foraging strategy.
+Caracterizar el entorno de recursos para seleccionar la estrategia de forrajeo apropiada.
 
-1. Identify the resource type and its distribution:
-   - **Concentrated**: resources cluster in rich patches (e.g., talent in specific communities)
-   - **Distributed**: resources spread evenly (e.g., bugs across a codebase)
-   - **Ephemeral**: resources appear and disappear (e.g., market opportunities)
-   - **Nested**: rich patches contain sub-patches at different scales
-2. Assess the information landscape:
-   - How much is known about resource locations before foraging begins?
-   - Can scouts share information with foragers? (see `coordinate-swarm` for signal design)
-   - Is the landscape static or changing while you forage?
-3. Determine the cost structure:
-   - Cost per scout deployed (time, compute, money)
-   - Cost of exploiting a low-quality resource (opportunity cost)
-   - Cost of missing a high-quality resource (regret)
+1. Identificar el tipo de recurso y su distribución:
+   - **Concentrado**: los recursos se agrupan en parches ricos (ej., talento en comunidades específicas)
+   - **Distribuido**: los recursos se dispersan uniformemente (ej., bugs a través de un código base)
+   - **Efímero**: los recursos aparecen y desaparecen (ej., oportunidades de mercado)
+   - **Anidado**: los parches ricos contienen sub-parches a diferentes escalas
+2. Evaluar el paisaje de información:
+   - ¿Cuánto se sabe sobre las ubicaciones de recursos antes de comenzar el forrajeo?
+   - ¿Pueden los exploradores compartir información con los recolectores? (ver `coordinate-swarm` para diseño de señales)
+   - ¿Es el paisaje estático o cambia mientras se forrajea?
+3. Determinar la estructura de costos:
+   - Costo por explorador desplegado (tiempo, cómputo, dinero)
+   - Costo de explotar un recurso de baja calidad (costo de oportunidad)
+   - Costo de perder un recurso de alta calidad (arrepentimiento)
 
-**Esperado:** A characterized foraging landscape with resource distribution type, information availability, and cost structure. This determines which foraging model to apply.
+**Esperado:** Un paisaje de forrajeo caracterizado con tipo de distribución de recursos, disponibilidad de información y estructura de costos. Esto determina qué modelo de forrajeo aplicar.
 
-**En caso de fallo:** If the landscape is completely unknown, start with maximum exploration (all scouts, no exploitation) for a fixed time budget to build an initial map. Switch to the appropriate model once the landscape character becomes clear.
+**En caso de fallo:** Si el paisaje es completamente desconocido, comenzar con exploración máxima (todos exploradores, sin explotación) durante un presupuesto de tiempo fijo para construir un mapa inicial. Cambiar al modelo apropiado una vez que el carácter del paisaje se aclare.
 
-### Paso 2: Deploy Scouts with Trail Marking
+### Paso 2: Desplegar exploradores con marcado de rastros
 
-Send exploratory agents into the search space with instructions to mark what they find.
+Enviar agentes exploratorios al espacio de búsqueda con instrucciones de marcar lo que encuentren.
 
-1. Allocate scout percentage (start with 20-30% of available agents as scouts)
-2. Define scout behavior:
-   - Move through the search space using randomized or systematic patterns
-   - Evaluate each location encountered (quick assessment, not deep analysis)
-   - Mark discoveries with signal strength proportional to quality:
-     - High quality → strong trail signal
-     - Medium quality → moderate signal
-     - Low quality → weak signal or no signal
-   - Return information to the collective (signal deposit, report, broadcast)
-3. Design the scout pattern:
-   - **Random walk**: good for unknown, uniform landscapes
-   - **Levy flight**: long jumps with occasional local clustering — good for patchy resources
-   - **Systematic sweep**: grid or spiral — good for bounded, well-defined spaces
-   - **Biased random**: lean toward areas similar to previous finds — good for clustered resources
+1. Asignar porcentaje de exploradores (comenzar con 20-30% de los agentes disponibles como exploradores)
+2. Definir comportamiento de exploradores:
+   - Moverse a través del espacio de búsqueda usando patrones aleatorios o sistemáticos
+   - Evaluar cada ubicación encontrada (evaluación rápida, no análisis profundo)
+   - Marcar descubrimientos con intensidad de señal proporcional a la calidad:
+     - Alta calidad → señal de rastro fuerte
+     - Calidad media → señal moderada
+     - Baja calidad → señal débil o sin señal
+   - Devolver información al colectivo (depósito de señal, informe, difusión)
+3. Diseñar el patrón de exploración:
+   - **Caminata aleatoria**: buena para paisajes desconocidos y uniformes
+   - **Vuelo de Lévy**: saltos largos con agrupamiento local ocasional — bueno para recursos parcheados
+   - **Barrido sistemático**: cuadrícula o espiral — bueno para espacios acotados y bien definidos
+   - **Aleatorio sesgado**: inclinarse hacia áreas similares a hallazgos previos — bueno para recursos agrupados
 
-**Esperado:** Scouts deployed across the search space, depositing trail signals proportional to resource quality. The initial map of the landscape begins to emerge from scout reports.
+**Esperado:** Exploradores desplegados a través del espacio de búsqueda, depositando señales de rastro proporcionales a la calidad del recurso. El mapa inicial del paisaje comienza a emerger de los informes de exploradores.
 
-**En caso de fallo:** If scouts find nothing in the initial sweep, either the scout percentage is too low (increase to 50%), the search pattern is wrong (switch from random walk to Levy flight for patchy resources), or the quality assessment is miscalibrated (lower the detection threshold).
+**En caso de fallo:** Si los exploradores no encuentran nada en el barrido inicial, el porcentaje de exploradores es muy bajo (aumentar al 50%), el patrón de búsqueda es incorrecto (cambiar de caminata aleatoria a vuelo de Lévy para recursos parcheados), o la evaluación de calidad está mal calibrada (bajar el umbral de detección).
 
-### Paso 3: Establish Trail Reinforcement
+### Paso 3: Establecer refuerzo de rastros
 
-Create positive feedback loops that amplify successful paths and let unsuccessful ones fade.
+Crear bucles de retroalimentación positiva que amplifiquen caminos exitosos y dejen desvanecerse los no exitosos.
 
-1. When a forager follows a trail and finds a good resource:
-   - Reinforce the trail signal (increase strength)
-   - The reinforced signal attracts more foragers → more reinforcement → exploitation
-2. When a forager follows a trail and finds nothing:
-   - Do not reinforce (let the trail decay naturally)
-   - The weakening signal attracts fewer foragers → trail fades → exploration resumes
-3. Set reinforcement parameters:
-   - **Deposit amount**: proportional to resource quality found
-   - **Decay rate**: trails lose X% of strength per time unit
-   - **Saturation cap**: maximum trail strength (prevents runaway exploitation of a single path)
+1. Cuando un recolector sigue un rastro y encuentra un buen recurso:
+   - Reforzar la señal del rastro (aumentar intensidad)
+   - La señal reforzada atrae más recolectores → más refuerzo → explotación
+2. Cuando un recolector sigue un rastro y no encuentra nada:
+   - No reforzar (dejar que el rastro decaiga naturalmente)
+   - La señal debilitada atrae menos recolectores → el rastro se desvanece → se reanuda la exploración
+3. Establecer parámetros de refuerzo:
+   - **Cantidad de depósito**: proporcional a la calidad del recurso encontrado
+   - **Tasa de decaimiento**: los rastros pierden X% de intensidad por unidad de tiempo
+   - **Tope de saturación**: intensidad máxima del rastro (previene explotación descontrolada de un solo camino)
 
 ```
 Trail Reinforcement Dynamics:
@@ -126,76 +127,76 @@ Trail Reinforcement Dynamics:
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Esperado:** A self-regulating feedback loop where good resources attract increasing attention and poor resources are naturally abandoned. The system balances exploitation and exploration through trail dynamics alone.
+**Esperado:** Un bucle de retroalimentación auto-regulado donde los buenos recursos atraen atención creciente y los recursos pobres son abandonados naturalmente. El sistema equilibra explotación y exploración a través de la dinámica de rastros solamente.
 
-**En caso de fallo:** If all foragers converge on a single trail (premature convergence), the decay rate is too slow or the saturation cap is too high. Increase decay, lower the cap, or introduce random exploration mandates (e.g., 10% of foragers always ignore trails). If trails fade too fast and nothing gets exploited, reduce the decay rate.
+**En caso de fallo:** Si todos los recolectores convergen en un solo rastro (convergencia prematura), la tasa de decaimiento es demasiado lenta o el tope de saturación es demasiado alto. Aumentar el decaimiento, bajar el tope, o introducir mandatos de exploración aleatoria (ej., 10% de los recolectores siempre ignoran los rastros). Si los rastros se desvanecen demasiado rápido y nada se explota, reducir la tasa de decaimiento.
 
-### Paso 4: Detect Diminishing Returns
+### Paso 4: Detectar rendimientos decrecientes
 
-Monitor resource yields to know when to shift from exploitation back to exploration.
+Monitorear los rendimientos de recursos para saber cuándo cambiar de explotación de vuelta a exploración.
 
-1. Track yield per unit effort for each active foraging site:
-   - Yield increasing → healthy exploitation, continue
-   - Yield flat → approaching saturation, begin scouting alternatives
-   - Yield decreasing → diminishing returns, reduce foragers, increase scouts
-2. Implement the marginal value theorem:
-   - Compare the current site's yield rate to the average yield rate across all known sites
-   - When current site drops below the average, it's time to leave
-   - Factor in travel cost (the cost of switching to a new site)
-3. Trigger scouting waves when:
-   - Overall yield across all sites drops below a threshold
-   - The best-performing site has been exploited for longer than its expected lifetime
-   - Environmental change is detected (new signals from scouts in unexplored areas)
+1. Rastrear rendimiento por unidad de esfuerzo para cada sitio de forrajeo activo:
+   - Rendimiento aumentando → explotación saludable, continuar
+   - Rendimiento plano → acercándose a la saturación, comenzar a explorar alternativas
+   - Rendimiento disminuyendo → rendimientos decrecientes, reducir recolectores, aumentar exploradores
+2. Implementar el teorema del valor marginal:
+   - Comparar la tasa de rendimiento del sitio actual con la tasa de rendimiento promedio de todos los sitios conocidos
+   - Cuando el sitio actual cae por debajo del promedio, es hora de irse
+   - Factorizar el costo de viaje (el costo de cambiar a un nuevo sitio)
+3. Disparar oleadas de exploración cuando:
+   - El rendimiento general de todos los sitios cae por debajo de un umbral
+   - El sitio de mejor rendimiento ha sido explotado por más tiempo que su vida útil esperada
+   - Se detecta cambio ambiental (nuevas señales de exploradores en áreas no exploradas)
 
-**Esperado:** The foraging swarm naturally shifts between exploitation phases (concentrated on known-good sites) and exploration phases (scouts dispersed), driven by yield monitoring rather than arbitrary schedules.
+**Esperado:** El enjambre de forrajeo cambia naturalmente entre fases de explotación (concentradas en sitios conocidos como buenos) y fases de exploración (exploradores dispersos), impulsado por monitoreo de rendimiento en lugar de programas arbitrarios.
 
-**En caso de fallo:** If the swarm stays on depleted sites too long, the marginal value threshold is set too low or the travel cost estimate is too high. Recalibrate by comparing actual yield rates. If the swarm abandons good sites too early, the threshold is too sensitive — add a smoothing window to the yield measurement.
+**En caso de fallo:** Si el enjambre permanece en sitios agotados demasiado tiempo, el umbral de valor marginal está configurado demasiado bajo o la estimación de costo de viaje es demasiado alta. Recalibrar comparando tasas de rendimiento reales. Si el enjambre abandona buenos sitios demasiado pronto, el umbral es demasiado sensible — agregar una ventana de suavizado a la medición de rendimiento.
 
-### Paso 5: Adapt Foraging Strategy to Conditions
+### Paso 5: Adaptar la estrategia de forrajeo a las condiciones
 
-Select and switch between foraging strategies based on environmental feedback.
+Seleccionar y cambiar entre estrategias de forrajeo basándose en la retroalimentación ambiental.
 
-1. Match strategy to landscape:
-   - **Rich, clustered**: commit heavily to discovered patches (high exploitation)
-   - **Sparse, scattered**: maintain high scout ratio (high exploration)
-   - **Volatile, changing**: short trail decay, frequent scouting waves (adaptive)
-   - **Competitive**: faster reinforcement, pre-emptive trail marking (territorial)
-2. Monitor for strategy-environment mismatch:
-   - High effort, low yield → strategy too exploitative for the landscape
-   - High discovery rate, low follow-through → strategy too exploratory
-   - Oscillating yield → strategy switching too aggressively
-3. Implement adaptive switching:
-   - Track a rolling average of exploration-to-exploitation ratio
-   - If the ratio drifts too far from optimal (determined by landscape type), nudge it back
-   - Allow gradual transitions — abrupt strategy switches cause coordination chaos
+1. Emparejar estrategia con paisaje:
+   - **Rico, agrupado**: comprometerse fuertemente con los parches descubiertos (alta explotación)
+   - **Escaso, disperso**: mantener alto ratio de exploradores (alta exploración)
+   - **Volátil, cambiante**: decaimiento corto de rastros, oleadas frecuentes de exploración (adaptativo)
+   - **Competitivo**: refuerzo más rápido, marcado preventivo de rastros (territorial)
+2. Monitorear desajuste estrategia-entorno:
+   - Alto esfuerzo, bajo rendimiento → estrategia demasiado explotadora para el paisaje
+   - Alta tasa de descubrimiento, bajo seguimiento → estrategia demasiado exploradora
+   - Rendimiento oscilante → cambio de estrategia demasiado agresivo
+3. Implementar cambio adaptativo:
+   - Rastrear un promedio móvil de la proporción exploración-explotación
+   - Si la proporción se desvía demasiado del óptimo (determinado por el tipo de paisaje), corregirla
+   - Permitir transiciones graduales — cambios abruptos de estrategia causan caos de coordinación
 
-**Esperado:** A foraging system that adapts its exploration-exploitation balance to the current environment, maintaining effectiveness as conditions change.
+**Esperado:** Un sistema de forrajeo que adapta su equilibrio exploración-explotación al entorno actual, manteniendo efectividad mientras las condiciones cambian.
 
-**En caso de fallo:** If strategy adaptation itself becomes unstable (oscillating between exploration and exploitation), add damping: require the mismatch signal to persist for N time units before triggering a strategy shift. If no strategy seems to work, reassess the landscape characterization from Step 1 — the resource distribution may be more complex than initially assumed.
+**En caso de fallo:** Si la adaptación de estrategia misma se vuelve inestable (oscilando entre exploración y explotación), agregar amortiguamiento: requerir que la señal de desajuste persista por N unidades de tiempo antes de disparar un cambio de estrategia. Si ninguna estrategia parece funcionar, reevaluar la caracterización del paisaje del Paso 1 — la distribución de recursos puede ser más compleja de lo asumido inicialmente.
 
 ## Validación
 
-- [ ] Foraging landscape is characterized (distribution type, information availability, cost structure)
-- [ ] Scout percentage and search pattern are defined and deployed
-- [ ] Trail reinforcement loop is functional with deposit, decay, and saturation parameters
-- [ ] Diminishing returns detection triggers rebalancing from exploitation to exploration
-- [ ] Strategy-environment match is monitored and adaptive switching is configured
-- [ ] System recovers from landscape changes (new resources, depleted resources)
+- [ ] El paisaje de forrajeo está caracterizado (tipo de distribución, disponibilidad de información, estructura de costos)
+- [ ] El porcentaje de exploradores y el patrón de búsqueda están definidos y desplegados
+- [ ] El bucle de refuerzo de rastros es funcional con parámetros de depósito, decaimiento y saturación
+- [ ] La detección de rendimientos decrecientes dispara rebalanceo de explotación a exploración
+- [ ] El ajuste estrategia-entorno es monitoreado y el cambio adaptativo está configurado
+- [ ] El sistema se recupera de cambios en el paisaje (nuevos recursos, recursos agotados)
 
 ## Errores Comunes
 
-- **Premature convergence**: All foragers pile onto the first good find, ignoring potentially better options. Cure: mandatory exploration percentage, trail saturation caps, and decay
-- **Perpetual exploration**: Scouts keep finding new options but the swarm never commits. Cure: lower the quality threshold for trail reinforcement, reduce scout percentage
-- **Ignoring travel costs**: Switching sites has a cost. Foragers that constantly jump between similar-quality sites waste more on travel than they gain. Factor travel cost into the marginal value calculation
-- **Static strategy in dynamic landscape**: A strategy optimized for yesterday's conditions fails tomorrow. Build adaptation into the foraging loop, not as an afterthought
-- **Conflating scout quality with forager quality**: Good scouts (broad, quick assessment) and good foragers (deep, thorough exploitation) require different skills. Don't force all agents into both roles
+- **Convergencia prematura**: Todos los recolectores se acumulan en el primer buen hallazgo, ignorando opciones potencialmente mejores. Cura: porcentaje de exploración obligatorio, topes de saturación de rastros y decaimiento
+- **Exploración perpetua**: Los exploradores siguen encontrando nuevas opciones pero el enjambre nunca se compromete. Cura: bajar el umbral de calidad para refuerzo de rastros, reducir porcentaje de exploradores
+- **Ignorar costos de viaje**: Cambiar de sitio tiene un costo. Los recolectores que constantemente saltan entre sitios de calidad similar desperdician más en viaje de lo que ganan. Factorizar el costo de viaje en el cálculo de valor marginal
+- **Estrategia estática en paisaje dinámico**: Una estrategia optimizada para las condiciones de ayer falla mañana. Construir adaptación dentro del bucle de forrajeo, no como una ocurrencia tardía
+- **Confundir calidad de explorador con calidad de recolector**: Buenos exploradores (evaluación amplia y rápida) y buenos recolectores (explotación profunda y exhaustiva) requieren habilidades diferentes. No forzar a todos los agentes en ambos roles
 
 ## Habilidades Relacionadas
 
-- `coordinate-swarm` — foundational coordination patterns that underpin foraging signal design
-- `build-consensus` — used when the swarm must collectively agree on which resource patches to prioritize
-- `scale-colony` — scaling foraging operations when the resource landscape or swarm size grows
-- `assess-form` — morphic skill for evaluating the current state of a system, complementary to landscape assessment
-- `configure-alerting-rules` — alerting patterns applicable to diminishing returns detection
-- `plan-capacity` — capacity planning shares the explore-exploit framing with foraging theory
-- `forage-solutions` — AI self-application variant; maps ant colony foraging to single-agent solution exploration with scout hypotheses and trail reinforcement
+- `coordinate-swarm` — patrones de coordinación fundacionales que sustentan el diseño de señales de forrajeo
+- `build-consensus` — usado cuando el enjambre debe acordar colectivamente qué parches de recursos priorizar
+- `scale-colony` — escalar operaciones de forrajeo cuando el paisaje de recursos o el tamaño del enjambre crece
+- `assess-form` — habilidad mórfica para evaluar el estado actual de un sistema, complementaria a la evaluación del paisaje
+- `configure-alerting-rules` — patrones de alertas aplicables a la detección de rendimientos decrecientes
+- `plan-capacity` — la planificación de capacidad comparte el marco de explorar-explotar con la teoría de forrajeo
+- `forage-solutions` — variante de autoaplicación de IA; mapea el forrajeo de colonia de hormigas a la exploración de soluciones de un solo agente con hipótesis exploradoras y refuerzo de rastros

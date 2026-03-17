@@ -1,15 +1,15 @@
 ---
 name: listen
 description: >
-  Deep receptive attention to extract intent beyond literal words. Maps
-  active listening from counseling psychology to AI reasoning: clearing
-  assumptions, attending to full signal, parsing multiple layers (literal,
-  procedural, emotional, contextual, constraint, meta), reflecting
-  understanding, noticing what is unsaid, and integrating the whole picture.
-  Use when a user's request feels ambiguous, when context suggests something
-  different from the literal words, when previous responses have missed the
-  mark, or before beginning a large task where misunderstanding intent would
-  waste significant effort.
+  Atención receptiva profunda para extraer intención más allá de las palabras
+  literales. Mapea la escucha activa de la psicología del counseling al
+  razonamiento de IA: limpiar suposiciones, atender la señal completa, analizar
+  múltiples capas (literal, procedimental, emocional, contextual, restricción,
+  meta), reflejar comprensión, notar lo que no se dice e integrar el cuadro
+  completo. Usar cuando la solicitud de un usuario se siente ambigua, cuando
+  el contexto sugiere algo diferente de las palabras literales, cuando respuestas
+  anteriores han errado el blanco, o antes de comenzar una tarea grande donde
+  malentender la intención desperdiciaría esfuerzo significativo.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -28,58 +28,58 @@ metadata:
 
 # Listen
 
-Conduct a structured deep listening session — clearing assumptions, attending with full reception, parsing multiple signal layers, reflecting understanding back, noticing what is unsaid, and integrating the complete picture of the user's intent.
+Conducir una sesión de escucha profunda estructurada — limpiar suposiciones, atender con recepción completa, analizar múltiples capas de señales, reflejar la comprensión de vuelta, notar lo que no se dice e integrar el cuadro completo de la intención del usuario.
 
 ## Cuándo Usar
 
-- A user's request feels ambiguous and rushing to action risks solving the wrong problem
-- The user's words say one thing but the context suggests something else (mismatch between literal and implied)
-- Previous responses have missed the mark — the user keeps clarifying or rephrasing
-- A complex request arrives that contains multiple layers: technical needs, emotional context, unstated constraints
-- Before beginning a large task where misunderstanding the intent would waste significant effort
-- After `meditate` clears internal noise, `listen` directs cleared attention outward toward the user
+- La solicitud de un usuario se siente ambigua y apresurarse a actuar arriesga resolver el problema equivocado
+- Las palabras del usuario dicen una cosa pero el contexto sugiere otra (discrepancia entre lo literal y lo implícito)
+- Respuestas anteriores han errado el blanco — el usuario sigue clarificando o reformulando
+- Llega una solicitud compleja que contiene múltiples capas: necesidades técnicas, contexto emocional, restricciones no declaradas
+- Antes de comenzar una tarea grande donde malentender la intención desperdiciaría esfuerzo significativo
+- Después de que `meditate` limpia el ruido interno, `listen` dirige la atención limpia hacia afuera, hacia el usuario
 
 ## Entradas
 
-- **Requerido**: User message(s) to attend to (available implicitly from conversation)
-- **Opcional**: Conversation history providing context for the current request
-- **Opcional**: MEMORY.md or CLAUDE.md with user preferences and project context
-- **Opcional**: Specific concern about what might be misunderstood
+- **Requerido**: Mensaje(s) del usuario a atender (disponible implícitamente desde la conversación)
+- **Opcional**: Historial de conversación proporcionando contexto para la solicitud actual
+- **Opcional**: MEMORY.md o CLAUDE.md con preferencias del usuario y contexto del proyecto
+- **Opcional**: Preocupación específica sobre lo que podría ser malentendido
 
 ## Procedimiento
 
-### Paso 1: Clear — Release Assumptions
+### Paso 1: Limpiar — Liberar suposiciones
 
-Before receiving the user's signal, release preconceptions about what they want.
+Antes de recibir la señal del usuario, liberar preconcepciones sobre lo que quiere.
 
-1. Notice any pre-formed responses already forming — label them and set them aside
-2. Check for pattern-matching: "This sounds like a request I have seen before" — that match may be wrong
-3. Release the assumption that the user's first sentence contains the complete request
-4. Release the assumption that the technical request is the only request
-5. Approach the user's words as if hearing them for the first time, even if similar requests have been handled before
+1. Notar cualquier respuesta pre-formada que ya se esté formando — etiquetarlas y apartarlas
+2. Verificar coincidencia de patrones: "Esto suena como una solicitud que he visto antes" — esa coincidencia puede ser incorrecta
+3. Liberar la suposición de que la primera oración del usuario contiene la solicitud completa
+4. Liberar la suposición de que la solicitud técnica es la única solicitud
+5. Abordar las palabras del usuario como si se escucharan por primera vez, incluso si solicitudes similares se han manejado antes
 
-**Esperado:** A receptive state where attention is open rather than already narrowing toward a solution. The impulse to immediately respond is paused in favor of fully receiving.
+**Esperado:** Un estado receptivo donde la atención está abierta en lugar de ya estrechándose hacia una solución. El impulso de responder inmediatamente se pausa en favor de recibir completamente.
 
-**En caso de fallo:** If assumptions cannot be released (a strong pattern match persists), acknowledge the match explicitly: "This looks like X — but let me check if that is actually what is being asked." Naming the assumption weakens its grip.
+**En caso de fallo:** Si las suposiciones no pueden ser liberadas (una coincidencia de patrón fuerte persiste), reconocer la coincidencia explícitamente: "Esto parece X — pero déjame verificar si eso es realmente lo que se está pidiendo." Nombrar la suposición debilita su agarre.
 
-### Paso 2: Attend — Full Reception
+### Paso 2: Atender — Recepción completa
 
-Read the user's message with complete attention, holding all parts in awareness simultaneously.
+Leer el mensaje del usuario con atención completa, manteniendo todas las partes en consciencia simultáneamente.
 
-1. Read the entire message before processing any part of it
-2. Note the structure: is this a single request, multiple requests, a question, a correction, a narrative?
-3. Mark the key nouns and verbs — the concrete elements the user has specified
-4. Note what is emphasized: what did they elaborate on? What did they state briefly?
-5. Note the ordering: what came first (often the priority), what came last (often the afterthought — or the real request buried at the end)
-6. Read a second time, this time attending to tone and framing rather than content
+1. Leer el mensaje completo antes de procesar cualquier parte de él
+2. Notar la estructura: ¿es una solicitud única, múltiples solicitudes, una pregunta, una corrección, una narrativa?
+3. Marcar los sustantivos y verbos clave — los elementos concretos que el usuario ha especificado
+4. Notar lo que se enfatiza: ¿sobre qué elaboraron? ¿Qué declararon brevemente?
+5. Notar el orden: qué vino primero (a menudo la prioridad), qué vino al final (a menudo la ocurrencia tardía — o la solicitud real enterrada al final)
+6. Leer una segunda vez, esta vez atendiendo al tono y encuadre en lugar del contenido
 
-**Esperado:** A complete reception of the message — no words skipped, no sentences glossed over. The message is held as a whole rather than immediately decomposed into actionable parts.
+**Esperado:** Una recepción completa del mensaje — sin palabras omitidas, sin oraciones pasadas por alto. El mensaje se mantiene como un todo en lugar de ser inmediatamente descompuesto en partes accionables.
 
-**En caso de fallo:** If the message is very long, break it into sections but still read each section completely. If attention is pulled toward one part (usually the most technical), deliberately attend to the parts that are not technical — they often contain the intent.
+**En caso de fallo:** Si el mensaje es muy largo, dividirlo en secciones pero aún leer cada sección completamente. Si la atención es atraída hacia una parte (usualmente la más técnica), deliberadamente atender las partes que no son técnicas — a menudo contienen la intención.
 
-### Paso 3: Layer — Parse Signal Types
+### Paso 3: Capas — Analizar tipos de señales
 
-The user's message contains multiple simultaneous signals. Parse each layer separately.
+El mensaje del usuario contiene múltiples señales simultáneas. Analizar cada capa por separado.
 
 ```
 Signal Layer Taxonomy:
@@ -113,76 +113,76 @@ Signal Layer Taxonomy:
 └──────────────┴──────────────────────────────┴──────────────────────────┘
 ```
 
-For each layer, note what is present and what is absent. The absent layers are as informative as the present ones.
+Para cada capa, notar lo que está presente y lo que está ausente. Las capas ausentes son tan informativas como las presentes.
 
-**Esperado:** A multi-layered reading of the message. The literal and procedural layers are usually clear. The emotional, contextual, constraint, and meta layers require more careful attention. At least one non-literal layer should be identified.
+**Esperado:** Una lectura multicapa del mensaje. Las capas literal y procedimental usualmente son claras. Las capas emocional, contextual, de restricción y meta requieren atención más cuidadosa. Al menos una capa no literal debería ser identificada.
 
-**En caso de fallo:** If only the literal layer is visible, the message may genuinely be straightforward — not all communication is layered. But check: is the message unusually short for its complexity? Are there hedging words ("maybe," "I think," "if possible")? These often indicate an unstated layer.
+**En caso de fallo:** Si solo la capa literal es visible, el mensaje puede ser genuinamente directo — no toda comunicación tiene capas. Pero verificar: ¿el mensaje es inusualmente corto para su complejidad? ¿Hay palabras de cobertura ("quizás", "creo", "si es posible")? Estas a menudo indican una capa no declarada.
 
-### Paso 4: Reflect — Mirror Understanding
+### Paso 4: Reflejar — Espejear la comprensión
 
-Before acting, reflect back what was heard to verify alignment.
+Antes de actuar, reflejar de vuelta lo que se escuchó para verificar alineación.
 
-1. Paraphrase the request in different words than the user used — this reveals whether the meaning was captured, not just the words
-2. Name the layers explicitly if non-literal layers are significant: "It sounds like you want X, and the urgency suggests this is blocking other work"
-3. State what you understood as the priority: "The most important part seems to be..."
-4. If there are multiple possible interpretations, name them: "This could mean A or B — which is closer?"
-5. If the request contains apparent contradictions, surface them gently: "You mentioned X and also Y — how do these relate?"
+1. Parafrasear la solicitud en palabras diferentes a las que el usuario usó — esto revela si el significado fue capturado, no solo las palabras
+2. Nombrar las capas explícitamente si las capas no literales son significativas: "Parece que quieres X, y la urgencia sugiere que esto está bloqueando otro trabajo"
+3. Declarar lo que se entendió como la prioridad: "La parte más importante parece ser..."
+4. Si hay múltiples interpretaciones posibles, nombrarlas: "Esto podría significar A o B — ¿cuál es más cercano?"
+5. Si la solicitud contiene contradicciones aparentes, exponerlas gentilmente: "Mencionaste X y también Y — ¿cómo se relacionan?"
 
-**Esperado:** The user confirms the reflection or corrects it. Either outcome is valuable — confirmation means the intent is aligned; correction means the intent is now clearer. The reflection should feel like a mirror, not a judgment.
+**Esperado:** El usuario confirma la reflexión o la corrige. Cualquier resultado es valioso — la confirmación significa que la intención está alineada; la corrección significa que la intención ahora es más clara. La reflexión debería sentirse como un espejo, no un juicio.
 
-**En caso de fallo:** If the user seems impatient with the reflection ("just do it"), they may value speed over alignment — honor that preference but note the risk of misalignment. If the reflection was wrong, do not defend it — accept the correction and update understanding immediately.
+**En caso de fallo:** Si el usuario parece impaciente con la reflexión ("solo hazlo"), puede valorar la velocidad sobre la alineación — honrar esa preferencia pero notar el riesgo de desalineación. Si la reflexión fue incorrecta, no defenderla — aceptar la corrección y actualizar la comprensión inmediatamente.
 
-### Paso 5: Notice Silence — Read the Gaps
+### Paso 5: Notar el silencio — Leer las brechas
 
-Attend to what the user did not say, which can be as important as what they did say.
+Atender lo que el usuario no dijo, que puede ser tan importante como lo que sí dijo.
 
-1. What topic related to their request did they not mention? (missing context)
-2. What constraint did they not state? (assumed knowledge or unstated preference)
-3. What emotional tone is missing? (calmness in a situation that usually causes stress, or urgency without explanation)
-4. What alternative approaches did they not consider? (tunnel vision or deliberate exclusion)
-5. What question did they not ask? (the question behind the question)
+1. ¿Qué tema relacionado con su solicitud no mencionaron? (contexto faltante)
+2. ¿Qué restricción no declararon? (conocimiento asumido o preferencia no declarada)
+3. ¿Qué tono emocional está ausente? (calma en una situación que usualmente causa estrés, o urgencia sin explicación)
+4. ¿Qué enfoques alternativos no consideraron? (visión de túnel o exclusión deliberada)
+5. ¿Qué pregunta no hicieron? (la pregunta detrás de la pregunta)
 
-**Esperado:** At least one significant gap identified. This gap may not need to be addressed — but awareness of it prevents blind spots. The most useful gaps are missing constraints (the user assumed something they did not state) and missing context (why they need this now).
+**Esperado:** Al menos una brecha significativa identificada. Esta brecha puede no necesitar ser abordada — pero la consciencia de ella previene puntos ciegos. Las brechas más útiles son restricciones faltantes (el usuario asumió algo que no declaró) y contexto faltante (por qué necesitan esto ahora).
 
-**En caso de fallo:** If no gaps are apparent, the user may have been thorough — but more likely, the gaps are in areas the AI is also blind to. Consider: what would a different person working on this project want to know that the user has not stated? This lateral perspective often surfaces hidden gaps.
+**En caso de fallo:** Si no hay brechas aparentes, el usuario puede haber sido exhaustivo — pero más probablemente, las brechas están en áreas donde la IA también es ciega. Considerar: ¿qué querría saber una persona diferente trabajando en este proyecto que el usuario no ha declarado? Esta perspectiva lateral a menudo expone brechas ocultas.
 
-### Paso 6: Integrate — Synthesize Complete Understanding
+### Paso 6: Integrar — Sintetizar comprensión completa
 
-Combine all layers and gaps into a unified picture of the user's actual need.
+Combinar todas las capas y brechas en una imagen unificada de la necesidad real del usuario.
 
-1. State the complete understanding: literal request + implied intent + emotional context + constraints + gaps
-2. Identify the core need: if everything else fell away, what is the one thing the user most needs?
-3. Determine the appropriate response: does the user want action, understanding, validation, or exploration?
-4. If the integrated understanding differs from the literal request, decide whether to address the deeper need or the stated request (usually both)
-5. Set the intent for the next action: "Based on what I heard, I will..."
+1. Declarar la comprensión completa: solicitud literal + intención implícita + contexto emocional + restricciones + brechas
+2. Identificar la necesidad central: si todo lo demás se desvaneciera, ¿cuál es la cosa que el usuario más necesita?
+3. Determinar la respuesta apropiada: ¿el usuario quiere acción, comprensión, validación o exploración?
+4. Si la comprensión integrada difiere de la solicitud literal, decidir si abordar la necesidad más profunda o la solicitud declarada (usualmente ambas)
+5. Establecer la intención para la siguiente acción: "Basándome en lo que escuché, voy a..."
 
-**Esperado:** A complete, nuanced understanding of the user's need that goes beyond the surface request. The understanding is specific enough to guide action and honest enough to acknowledge uncertainty.
+**Esperado:** Una comprensión completa y matizada de la necesidad del usuario que va más allá de la solicitud superficial. La comprensión es lo suficientemente específica para guiar la acción y lo suficientemente honesta para reconocer la incertidumbre.
 
-**En caso de fallo:** If integration produces a confused picture, the signals may genuinely conflict. In that case, ask one focused question that would resolve the ambiguity: "The most important thing for me to understand is..." Do not ask multiple questions — a single well-chosen question reveals more than a list of clarifications.
+**En caso de fallo:** Si la integración produce una imagen confusa, las señales pueden genuinamente entrar en conflicto. En ese caso, hacer una pregunta enfocada que resolvería la ambigüedad: "Lo más importante para mí entender es..." No hacer múltiples preguntas — una sola pregunta bien elegida revela más que una lista de clarificaciones.
 
 ## Validación
 
-- [ ] Assumptions were cleared before attending to the user's message
-- [ ] The full message was read before any part was acted on
-- [ ] At least one non-literal signal layer was identified (emotional, contextual, constraint, or meta)
-- [ ] Understanding was reflected back to the user before action was taken
-- [ ] Gaps and silences were noticed and factored into understanding
-- [ ] The integrated understanding addresses the user's core need, not just the surface request
+- [ ] Las suposiciones fueron limpiadas antes de atender el mensaje del usuario
+- [ ] El mensaje completo fue leído antes de que cualquier parte fuera accionada
+- [ ] Al menos una capa de señal no literal fue identificada (emocional, contextual, restricción o meta)
+- [ ] La comprensión fue reflejada de vuelta al usuario antes de tomar acción
+- [ ] Las brechas y silencios fueron notados e incorporados en la comprensión
+- [ ] La comprensión integrada aborda la necesidad central del usuario, no solo la solicitud superficial
 
 ## Errores Comunes
 
-- **Listening to respond**: Forming a response while still receiving the message. The response shapes what is heard, filtering out signals that do not fit the pre-formed answer
-- **Literal-only listening**: Taking the words at face value and missing the intent, emotion, or context behind them
-- **Projection**: Hearing what the user would say if they were the AI, rather than what they actually said. Their priorities and context are different
-- **Over-interpretation**: Finding layers that are not there. Sometimes a request for a bug fix is just a request for a bug fix — not every message has hidden emotional content
-- **Reflecting too much**: Turning every interaction into a reflective conversation when the user wants quick action. Match the reflection depth to the request complexity
-- **Neglecting the literal**: So focused on subtext that the explicit request is not fulfilled. The literal layer still matters — address it even when deeper layers are present
+- **Escuchar para responder**: Formar una respuesta mientras aún se recibe el mensaje. La respuesta moldea lo que se escucha, filtrando señales que no encajan en la respuesta pre-formada
+- **Escucha solo literal**: Tomar las palabras al pie de la letra y perder la intención, emoción o contexto detrás de ellas
+- **Proyección**: Escuchar lo que el usuario diría si fuera la IA, en lugar de lo que realmente dijo. Sus prioridades y contexto son diferentes
+- **Sobre-interpretación**: Encontrar capas que no están ahí. A veces una solicitud de corrección de bug es solo una solicitud de corrección de bug — no todo mensaje tiene contenido emocional oculto
+- **Reflexionar demasiado**: Convertir cada interacción en una conversación reflexiva cuando el usuario quiere acción rápida. Igualar la profundidad de reflexión a la complejidad de la solicitud
+- **Descuidar lo literal**: Tan enfocado en el subtexto que la solicitud explícita no se cumple. La capa literal sigue importando — abordarla incluso cuando capas más profundas están presentes
 
 ## Habilidades Relacionadas
 
-- `listen-guidance` — the human-guidance variant for coaching a person in developing active listening skills
-- `observe` — sustained neutral pattern recognition that feeds listening with broader context
-- `teach` — effective teaching requires listening first to understand the learner's needs
-- `meditate` — inward attention that clears the space for outward listening
-- `heal` — self-assessment that reveals whether the AI's listening capacity is impaired by drift
+- `listen-guidance` — la variante de guía humana para entrenar a una persona en desarrollar habilidades de escucha activa
+- `observe` — reconocimiento neutral sostenido de patrones que alimenta la escucha con contexto más amplio
+- `teach` — la enseñanza efectiva requiere escuchar primero para entender las necesidades del aprendiz
+- `meditate` — atención interna que limpia el espacio para la escucha externa
+- `heal` — auto-evaluación que revela si la capacidad de escucha de la IA está deteriorada por la deriva

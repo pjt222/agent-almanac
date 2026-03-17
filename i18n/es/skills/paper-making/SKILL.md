@@ -1,13 +1,13 @@
 ---
 name: paper-making
 description: >
-  Handcraft paper from plant fibres — fibre harvesting, pulping, sheet
-  forming with a mould and deckle, pressing, and drying. Covers fibre
-  sources (cotton, kozo, abaca, recycled paper), beating methods, sizing,
-  and decorative techniques. Use when making handmade paper for art,
-  stationery, or bookbinding, when creating unique textured or embedded paper
-  for special projects, or when learning traditional paper making as a craft
-  practice.
+  Fabricación artesanal de papel a partir de fibras vegetales — cosecha de
+  fibras, preparación de pulpa, formación de hojas con molde y marco, prensado
+  y secado. Cubre fuentes de fibra (algodón, kozo, abacá, papel reciclado),
+  métodos de batido, encolado y técnicas decorativas. Usar al hacer papel
+  artesanal para arte, papelería o encuadernación, al crear papel texturizado
+  o con inclusiones único para proyectos especiales, o al aprender la
+  fabricación tradicional de papel como práctica artesanal.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,31 +26,31 @@ metadata:
 
 # Paper Making
 
-Handcraft paper from plant fibres using traditional mould and deckle sheet-forming techniques.
+Fabricar papel artesanal a partir de fibras vegetales usando técnicas tradicionales de formación de hojas con molde y marco.
 
 ## Cuándo Usar
 
-- You want to make handmade paper for art, stationery, or bookbinding
-- You have plant fibres (cotton linters, kozo bark, recycled paper) to process
-- You want to create unique textured or embedded paper for special projects
-- You are teaching or learning traditional paper making as a craft practice
+- Quieres hacer papel artesanal para arte, papelería o encuadernación
+- Tienes fibras vegetales (linters de algodón, corteza de kozo, papel reciclado) para procesar
+- Quieres crear papel texturizado o con inclusiones único para proyectos especiales
+- Estás enseñando o aprendiendo la fabricación tradicional de papel como práctica artesanal
 
 ## Entradas
 
-- **Requerido**: Fibre source (cotton linters, recycled paper, kozo bark, or plant stalks)
-- **Requerido**: Mould and deckle (a flat screen frame with a removable top frame)
-- **Requerido**: Vat or tub large enough to submerge the mould (basin, plastic tub)
-- **Requerido**: Water (generous amounts)
-- **Opcional**: Blender for pulping (dedicated to paper making — not for food afterward)
-- **Opcional**: Pressing boards and felt sheets (couching felts)
-- **Opcional**: Sizing agent (gelatin, methylcellulose, or rice starch)
-- **Opcional**: Additives: flower petals, threads, pigments, plant material for embedding
+- **Requerido**: Fuente de fibra (linters de algodón, papel reciclado, corteza de kozo o tallos de plantas)
+- **Requerido**: Molde y marco (un bastidor plano con malla y un marco superior removible)
+- **Requerido**: Tina o recipiente lo suficientemente grande para sumergir el molde (palangana, recipiente plástico)
+- **Requerido**: Agua (cantidades generosas)
+- **Opcional**: Licuadora para preparar pulpa (dedicada a la fabricación de papel — no para alimentos después)
+- **Opcional**: Tablas de prensado y fieltros (fieltros de traspaso)
+- **Opcional**: Agente de encolado (gelatina, metilcelulosa o almidón de arroz)
+- **Opcional**: Aditivos: pétalos de flores, hilos, pigmentos, material vegetal para inclusiones
 
 ## Procedimiento
 
-### Paso 1: Prepare the Fibre
+### Paso 1: Preparar la Fibra
 
-Different fibre sources require different preparation.
+Diferentes fuentes de fibra requieren diferente preparación.
 
 ```
 Fibre Sources and Preparation:
@@ -85,13 +85,13 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 5. Results vary — experiment with fibre length and beating time
 ```
 
-**Esperado:** A slurry of prepared fibre (pulp) with the consistency of thin oatmeal.
+**Esperado:** Una suspensión de fibra preparada (pulpa) con la consistencia de avena líquida.
 
-**En caso de fallo:** If the pulp is too chunky, blend longer. If too thin and watery, add more fibre. The consistency should coat the back of a spoon lightly.
+**En caso de fallo:** Si la pulpa está demasiado grumosa, licuar más tiempo. Si está demasiado líquida y acuosa, agregar más fibra. La consistencia debería cubrir ligeramente el dorso de una cuchara.
 
-### Paso 2: Prepare the Vat
+### Paso 2: Preparar la Tina
 
-Set up the sheet-forming station.
+Montar la estación de formación de hojas.
 
 ```
 Vat Setup:
@@ -108,13 +108,13 @@ Test: dip your hand in the vat. The water should be milky/cloudy
 with evenly suspended fibres. If you can see clumps, stir more.
 ```
 
-**Esperado:** A vat of evenly suspended pulp ready for sheet forming.
+**Esperado:** Una tina con pulpa uniformemente suspendida lista para la formación de hojas.
 
-**En caso de fallo:** If fibres clump despite stirring, the fibre may be too long. Blend briefly to shorten the fibres, then re-suspend.
+**En caso de fallo:** Si las fibras se agrupan a pesar de revolver, la fibra puede ser demasiado larga. Licuar brevemente para acortar las fibras, luego volver a suspender.
 
-### Paso 3: Form the Sheet
+### Paso 3: Formar la Hoja
 
-The mould and deckle technique is the heart of paper making.
+La técnica de molde y marco es el corazón de la fabricación de papel.
 
 ```
 Sheet Forming Protocol:
@@ -148,13 +148,13 @@ THICKNESS CONTROL:
   smoothly and leveling before lifting
 ```
 
-**Esperado:** A wet sheet of paper sitting evenly on the mould screen with consistent thickness and no thin spots or holes.
+**Esperado:** Una hoja húmeda de papel asentada uniformemente sobre la malla del molde con grosor consistente y sin puntos delgados o agujeros.
 
-**En caso de fallo:** If the sheet has thin spots, the mould was not level during the lift. If the sheet is thick on one side, the mould was tilted during draining. Practice the lift motion: smooth, level, and confident.
+**En caso de fallo:** Si la hoja tiene puntos delgados, el molde no estaba nivelado durante el levantamiento. Si la hoja es gruesa en un lado, el molde estaba inclinado durante el drenaje. Practicar el movimiento de levantamiento: suave, nivelado y seguro.
 
-### Paso 4: Couch, Press, and Dry
+### Paso 4: Traspasar, Prensar y Secar
 
-Transfer the wet sheet and remove water.
+Transferir la hoja húmeda y eliminar el agua.
 
 ```
 COUCHING (transferring the sheet):
@@ -195,27 +195,27 @@ Option C — Iron dry (fast):
 3. Produces a smooth, flat sheet quickly
 ```
 
-**Esperado:** Finished sheets of handmade paper — dry, flat (if board-dried), with deckled edges and visible fibre texture.
+**Esperado:** Hojas terminadas de papel artesanal — secas, planas (si se secaron en tabla), con bordes barbados y textura de fibra visible.
 
-**En caso de fallo:** If sheets tear during couching, the mould was lifted before enough water drained. Let the mould drain longer before flipping. If sheets wrinkle during drying, they were not pressed firmly enough or the drying surface was not smooth.
+**En caso de fallo:** Si las hojas se rompen durante el traspaso, el molde fue levantado antes de que drenara suficiente agua. Dejar que el molde drene más tiempo antes de voltear. Si las hojas se arrugan durante el secado, no fueron prensadas con suficiente firmeza o la superficie de secado no era lisa.
 
 ## Validación
 
-- [ ] Fibre was prepared to an even, lump-free pulp
-- [ ] Pulp was evenly suspended in the vat before each sheet
-- [ ] Sheet forming included the interlocking shake in both directions
-- [ ] Sheets have consistent thickness without thin spots or holes
-- [ ] Pressing removed sufficient water before drying
-- [ ] Finished sheets are dry, intact, and suitable for their intended use
+- [ ] La fibra fue preparada hasta obtener una pulpa uniforme y sin grumos
+- [ ] La pulpa estaba uniformemente suspendida en la tina antes de cada hoja
+- [ ] La formación de hojas incluyó el sacudido de entrelazado en ambas direcciones
+- [ ] Las hojas tienen grosor consistente sin puntos delgados o agujeros
+- [ ] El prensado eliminó suficiente agua antes del secado
+- [ ] Las hojas terminadas están secas, intactas y aptas para su uso previsto
 
 ## Errores Comunes
 
-- **Not stirring before each sheet**: Fibres settle in seconds. Every sheet needs a fresh stir or the last sheets will be thin and sparse
-- **Tearing during couching**: Too much water still on the mould, or the couching motion was too slow. Drain longer and flip in one confident motion
-- **Uneven thickness**: The mould was not level during the lift and drain. Practice the motion slowly, focusing on keeping the frame horizontal
-- **Paper too fragile**: The fibres may not be beaten enough (too long, too stiff) or the sheet may be too thin. Beat longer or use more pulp
-- **Mould warps when wet**: Wooden moulds can warp. Use marine-grade wood or seal with waterproofing. Aluminium frames avoid this issue entirely
+- **No revolver antes de cada hoja**: Las fibras se asientan en segundos. Cada hoja necesita una mezcla fresca o las últimas hojas serán delgadas y escasas
+- **Desgarro durante el traspaso**: Demasiada agua todavía en el molde, o el movimiento de traspaso fue demasiado lento. Drenar más tiempo y voltear en un movimiento seguro y único
+- **Grosor desigual**: El molde no estaba nivelado durante el levantamiento y drenaje. Practicar el movimiento lentamente, enfocándose en mantener el bastidor horizontal
+- **Papel demasiado frágil**: Las fibras pueden no estar suficientemente batidas (demasiado largas, demasiado rígidas) o la hoja puede ser demasiado delgada. Batir más tiempo o usar más pulpa
+- **Deformación del molde al mojarse**: Los moldes de madera pueden deformarse. Usar madera de grado marino o sellar con impermeabilizante. Los bastidores de aluminio evitan este problema por completo
 
 ## Habilidades Relacionadas
 
-- `forage-plants` — fibre plants can be foraged in the wild; understanding plant anatomy helps identify suitable fibre sources
+- `forage-plants` — las plantas fibrosas pueden ser recolectadas en la naturaleza; entender la anatomía vegetal ayuda a identificar fuentes de fibra adecuadas

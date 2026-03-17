@@ -1,14 +1,15 @@
 ---
 name: sharpen-knife
 description: >
-  Sharpen and maintain knives using whetstones, field stones, and improvised
-  abrasives. Covers blade anatomy, bevel assessment, whetstone technique
-  (coarse to fine progression), stropping, sharpness testing, field sharpening
-  methods, and ongoing edge maintenance. Use when a knife fails the fingernail
-  test, when cutting tasks require excessive pressure, before a trip where a
-  sharp blade is essential, after heavy use, or when a blade has visible nicks
-  or a rolled edge. Applicable to bushcraft blades, folding knives, and garden
-  cutting tools.
+  Afilar y mantener cuchillos usando piedras de afilar, piedras de campo y
+  abrasivos improvisados. Cubre anatomía de la hoja, evaluación del bisel,
+  técnica de piedra de afilar (progresión de grueso a fino), asentado,
+  pruebas de filo, métodos de afilado en campo y mantenimiento continuo del
+  filo. Usar cuando un cuchillo no pasa la prueba de la uña, cuando las
+  tareas de corte requieren presión excesiva, antes de un viaje donde una
+  hoja afilada es esencial, después de uso intenso, o cuando una hoja tiene
+  mellas visibles o un filo doblado. Aplicable a cuchillos de bushcraft,
+  navajas plegables y herramientas de corte de jardín.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,30 +28,30 @@ metadata:
 
 # Sharpen Knife
 
-Sharpen and maintain a knife edge using whetstones, strops, and field-expedient methods.
+Afilar y mantener el filo de un cuchillo usando piedras de afilar, asentadores y métodos improvisados de campo.
 
 ## Cuándo Usar
 
-- A knife fails to catch on a fingernail when drawn lightly across the edge
-- Cutting tasks require excessive pressure or produce ragged cuts
-- Before a trip or task where a sharp blade is essential (carving, food prep, batoning)
-- Routine maintenance after heavy use (every 1-3 field days depending on use)
-- A blade has visible nicks, chips, or a rolled edge
+- Un cuchillo no se engancha en la uña cuando se pasa ligeramente por el filo
+- Las tareas de corte requieren presión excesiva o producen cortes irregulares
+- Antes de un viaje o tarea donde una hoja afilada es esencial (tallado, preparación de alimentos, batoning)
+- Mantenimiento rutinario después de uso intenso (cada 1-3 días de campo según el uso)
+- Una hoja tiene mellas visibles, astillas o un filo doblado
 
 ## Entradas
 
-- **Requerido**: A knife to sharpen
-- **Requerido**: An abrasive surface (whetstone, diamond plate, ceramic rod, or field stone)
-- **Opcional**: Strop (leather belt, piece of cardboard, or smooth wood) with compound
-- **Opcional**: Angle guide or coin for bevel reference
-- **Opcional**: Marker (Sharpie) for bevel visualization
-- **Opcional**: Honing oil or water (depending on stone type)
+- **Requerido**: Un cuchillo para afilar
+- **Requerido**: Una superficie abrasiva (piedra de afilar, placa de diamante, varilla cerámica o piedra de campo)
+- **Opcional**: Asentador (cinturón de cuero, trozo de cartón o madera lisa) con pasta de pulido
+- **Opcional**: Guía de ángulo o moneda para referencia del bisel
+- **Opcional**: Marcador (Sharpie) para visualización del bisel
+- **Opcional**: Aceite de afilado o agua (según el tipo de piedra)
 
 ## Procedimiento
 
-### Paso 1: Assess the Blade
+### Paso 1: Evaluar la Hoja
 
-Examine the knife to determine what level of sharpening is needed.
+Examinar el cuchillo para determinar qué nivel de afilado se necesita.
 
 ```
 Blade Assessment:
@@ -85,13 +86,13 @@ it has no width. A dull edge reflects a thin line of light where metal
 has folded or flattened.
 ```
 
-**Esperado:** You know the blade's condition and which grits you need to use.
+**Esperado:** Conoces la condición de la hoja y qué granos necesitas usar.
 
-**En caso de fallo:** If unsure, start with medium grit (1000). You can always refine further, but starting too coarse on a nearly sharp blade removes unnecessary metal.
+**En caso de fallo:** Si no estás seguro, comienza con grano medio (1000). Siempre puedes refinar más, pero comenzar demasiado grueso en una hoja casi afilada elimina metal innecesario.
 
-### Paso 2: Know Your Abrasives
+### Paso 2: Conocer los Abrasivos
 
-Choose the right stone for the job.
+Elegir la piedra adecuada para el trabajo.
 
 ```
 Abrasive Types:
@@ -136,13 +137,13 @@ Grit Progression:
 └──────────────┴────────────────┴──────────────────────────────────┘
 ```
 
-**Esperado:** Correct abrasive selected and prepared (soaked, oiled, or wetted as required).
+**Esperado:** Abrasivo correcto seleccionado y preparado (remojado, aceitado o humedecido según se requiera).
 
-**En caso de fallo:** If no proper stone is available, a ceramic mug bottom (unglazed ring) works as a fine-grit emergency hone. The bottom of a car window works similarly. In the field, a smooth river stone is better than nothing.
+**En caso de fallo:** Si no hay piedra adecuada disponible, el fondo de una taza de cerámica (anillo sin esmaltar) funciona como afinador de emergencia de grano fino. El borde de una ventanilla de carro funciona de manera similar. En campo, una piedra lisa de río es mejor que nada.
 
-### Paso 3: Find and Match the Bevel Angle
+### Paso 3: Encontrar y Ajustar el Ángulo del Bisel
 
-The bevel angle determines the edge geometry. Match the existing angle unless reprofiling.
+El ángulo del bisel determina la geometría del filo. Igualar el ángulo existente a menos que se esté reperfilando.
 
 ```
 Common Bevel Angles:
@@ -184,13 +185,13 @@ Coin Stack Reference (for consistent angle):
 (Varies with blade width — wider blades need more coins for the same angle)
 ```
 
-**Esperado:** You can hold the knife at a consistent angle that matches the existing bevel.
+**Esperado:** Puedes sostener el cuchillo en un ángulo consistente que coincida con el bisel existente.
 
-**En caso de fallo:** If you cannot maintain a consistent angle freehand, use a sharpening guide or clamp system. Inconsistent angle is the most common cause of poor sharpening results. Practice on a cheap knife before working on a valued blade.
+**En caso de fallo:** Si no puedes mantener un ángulo consistente a mano alzada, usa una guía de afilado o sistema de sujeción. El ángulo inconsistente es la causa más común de malos resultados de afilado. Practica con un cuchillo barato antes de trabajar en una hoja valiosa.
 
-### Paso 4: Sharpen — Coarse to Fine Progression
+### Paso 4: Afilar — Progresión de Grueso a Fino
 
-Work through the grits from coarsest needed to finest.
+Trabajar a través de los granos desde el más grueso necesario hasta el más fino.
 
 ```
 Sharpening Technique:
@@ -229,13 +230,13 @@ Medium → raise burr on both sides → move to fine
 Fine → light alternating strokes → strop
 ```
 
-**Esperado:** After the finest stone, the blade catches firmly on a fingernail and slices paper cleanly (some drag acceptable before stropping).
+**Esperado:** Después de la piedra más fina, la hoja se engancha firmemente en la uña y corta papel limpiamente (algo de resistencia es aceptable antes del asentado).
 
-**En caso de fallo:** If you cannot raise a burr after 20+ strokes, check your angle — you may be too steep (grinding above the edge) or too shallow (grinding the flat of the blade). Use the marker trick again. If the stone is glazed (loaded with metal particles), rinse it and rub with a nagura stone or flattening plate.
+**En caso de fallo:** Si no puedes levantar rebaba después de 20+ pasadas, verifica tu ángulo — puedes estar demasiado empinado (rectificando por encima del filo) o demasiado bajo (rectificando el plano de la hoja). Usa el truco del marcador nuevamente. Si la piedra está vidriada (cargada de partículas metálicas), enjuágala y frótala con una piedra nagura o placa de aplanado.
 
-### Paso 5: Strop the Edge
+### Paso 5: Asentar el Filo
 
-Stropping removes the final burr and aligns the edge to razor sharpness.
+El asentado elimina la rebaba final y alinea el filo hasta una nitidez de navaja.
 
 ```
 Stropping Protocol:
@@ -261,13 +262,13 @@ Field Strop Alternatives:
 - Smooth driftwood or the flat of a dry log
 ```
 
-**Esperado:** The blade pops arm hair, slices phone-book-thin paper cleanly, or glides through a tomato under its own weight.
+**Esperado:** La hoja corta el vello del brazo, rebanada papel fino de guía telefónica limpiamente, o desliza a través de un tomate bajo su propio peso.
 
-**En caso de fallo:** If the edge feels sharp but catches or drags, there may be a remaining burr on one side. Do 5 more alternating single strokes on the fine stone, then re-strop. If the edge is still inconsistent, you may have a slightly different angle on one side — mark with Sharpie and correct.
+**En caso de fallo:** Si el filo se siente afilado pero se engancha o arrastra, puede haber rebaba residual en un lado. Haz 5 pasadas simples más alternando en la piedra fina, luego vuelve a asentar. Si el filo sigue siendo inconsistente, puedes tener un ángulo ligeramente diferente en un lado — marca con Sharpie y corrige.
 
-### Paso 6: Test Sharpness
+### Paso 6: Probar el Filo
 
-Use progressive tests to gauge the edge quality.
+Usar pruebas progresivas para evaluar la calidad del filo.
 
 ```
 Sharpness Tests (from easiest to most demanding):
@@ -305,13 +306,13 @@ Sharpness Standards by Use:
 - Garden blade (hori-hori): pass paper test → sufficient
 ```
 
-**Esperado:** The blade passes the sharpness test appropriate for its intended use.
+**Esperado:** La hoja pasa la prueba de filo apropiada para su uso previsto.
 
-**En caso de fallo:** If the blade passes fingernail but fails paper, it needs more time on the fine stone and more stropping. If it fails fingernail entirely, go back to medium grit and re-sharpen from Step 4.
+**En caso de fallo:** Si la hoja pasa la prueba de la uña pero falla con el papel, necesita más tiempo en la piedra fina y más asentado. Si falla la prueba de la uña completamente, regresa al grano medio y vuelve a afilar desde el Paso 4.
 
-### Paso 7: Field Sharpening (Wilderness Methods)
+### Paso 7: Afilado en Campo (Métodos de Supervivencia)
 
-When proper stones are not available.
+Cuando no hay piedras adecuadas disponibles.
 
 ```
 Field Expedient Sharpening:
@@ -348,13 +349,13 @@ Minimum Field Sharpening Kit (recommended carry):
 These two items weigh almost nothing and handle all field needs.
 ```
 
-**Esperado:** Blade restored to functional sharpness sufficient for camp tasks.
+**Esperado:** Hoja restaurada a un filo funcional suficiente para tareas de campamento.
 
-**En caso de fallo:** If no suitable abrasive can be found, a flat piece of hardwood with fine sand rubbed into the grain can serve as a crude sharpening surface. Prioritize getting the blade functional rather than perfect.
+**En caso de fallo:** Si no se encuentra ningún abrasivo adecuado, un trozo plano de madera dura con arena fina frotada en la veta puede servir como superficie de afilado rudimentaria. Priorizar que la hoja sea funcional en lugar de perfecta.
 
-### Paso 8: Maintain the Edge
+### Paso 8: Mantener el Filo
 
-Prevention is easier than restoration.
+La prevención es más fácil que la restauración.
 
 ```
 Edge Maintenance Habits:
@@ -381,32 +382,32 @@ Sharpening Frequency:
 └───────────────────┴────────────────────────────────────────┘
 ```
 
-**Esperado:** A maintenance routine that keeps the blade sharp between full sharpening sessions.
+**Esperado:** Una rutina de mantenimiento que mantenga la hoja afilada entre sesiones completas de afilado.
 
-**En caso de fallo:** If you find yourself needing full coarse-to-fine sharpening frequently, either the steel is too soft for the task (consider a harder knife) or the blade is being damaged by misuse (cutting on hard surfaces, lateral torque, corrosion).
+**En caso de fallo:** Si te encuentras necesitando afilado completo de grueso a fino frecuentemente, o el acero es demasiado blando para la tarea (considerar un cuchillo más duro) o la hoja está siendo dañada por mal uso (cortar sobre superficies duras, torsión lateral, corrosión).
 
 ## Validación
 
-- [ ] Blade condition was assessed before choosing grit progression
-- [ ] Correct bevel angle was identified and maintained consistently
-- [ ] Burr was raised and removed on both sides at each grit stage
-- [ ] Edge was stropped after the final stone
-- [ ] Blade passes the appropriate sharpness test for its intended use
-- [ ] Blade was cleaned, dried, and oiled after sharpening
-- [ ] A maintenance routine (strop before use) is established
+- [ ] La condición de la hoja fue evaluada antes de elegir la progresión de granos
+- [ ] El ángulo correcto del bisel fue identificado y mantenido consistentemente
+- [ ] La rebaba fue levantada y removida en ambos lados en cada etapa de grano
+- [ ] El filo fue asentado después de la última piedra
+- [ ] La hoja pasa la prueba de filo apropiada para su uso previsto
+- [ ] La hoja fue limpiada, secada y aceitada después del afilado
+- [ ] Una rutina de mantenimiento (asentar antes de usar) está establecida
 
 ## Errores Comunes
 
-- **Inconsistent angle**: The single most common sharpening failure. If the angle changes mid-stroke, you round the edge instead of sharpening it. Use the marker trick to verify, and practice slow, deliberate strokes before building speed
-- **Too much pressure**: Pressing hard does not sharpen faster — it digs grooves in the stone and can chip the edge. Let the abrasive cut; moderate pressure is sufficient
-- **Skipping grits**: Jumping from 400 straight to 6000 leaves deep scratches that the fine stone cannot remove. Each grit should erase the scratch pattern of the previous one
-- **Not raising a burr**: If you move to the next grit before forming a burr on both sides, you haven't reached the apex and the blade won't be sharp. Be patient — the burr is your checkpoint
-- **Stropping edge-first**: Pushing the edge into the strop cuts the leather and folds the edge backward. Always strop spine-first (drag the edge backward)
-- **Neglecting the back side of single-bevel blades**: Japanese-style single-bevel knives are only sharpened on the bevel side, but the flat back still needs a few light passes to remove the burr. Do not create a bevel on the flat side
-- **Using the wrong stone lubricant**: Water stones use water. Oil stones use honing oil. Mixing them clogs the stone. Never use water on an oil stone or oil on a water stone
+- **Ángulo inconsistente**: El fallo de afilado más común. Si el ángulo cambia a mitad de pasada, redondeas el filo en lugar de afilarlo. Usa el truco del marcador para verificar, y practica pasadas lentas y deliberadas antes de aumentar la velocidad
+- **Demasiada presión**: Presionar fuerte no afila más rápido — cava surcos en la piedra y puede astillar el filo. Deja que el abrasivo corte; presión moderada es suficiente
+- **Saltarse granos**: Saltar de 400 directamente a 6000 deja rayaduras profundas que la piedra fina no puede eliminar. Cada grano debe borrar el patrón de rayaduras del anterior
+- **No levantar rebaba**: Si pasas al siguiente grano antes de formar rebaba en ambos lados, no has alcanzado el ápice y la hoja no estará afilada. Ten paciencia — la rebaba es tu punto de control
+- **Asentar con el filo primero**: Empujar el filo contra el asentador corta el cuero y dobla el filo hacia atrás. Siempre asentar con el lomo primero (arrastrar el filo hacia atrás)
+- **Descuidar el lado plano de hojas de bisel simple**: Los cuchillos japoneses de bisel simple solo se afilan por el lado del bisel, pero el lado plano aún necesita unas pocas pasadas ligeras para remover la rebaba. No crear un bisel en el lado plano
+- **Usar el lubricante de piedra incorrecto**: Las piedras de agua usan agua. Las piedras de aceite usan aceite de afilado. Mezclarlos obstruye la piedra. Nunca usar agua en una piedra de aceite ni aceite en una piedra de agua
 
 ## Habilidades Relacionadas
 
-- `make-fire` — a sharp knife is essential for processing tinder, kindling, and feathersticks; fire-making and knife maintenance are companion skills
-- `forage-plants` — a sharp blade enables clean, sustainable harvesting cuts that minimize plant damage
-- `maintain-hand-tools` — garden blades (hori-hori, secateurs) follow similar sharpening principles; this skill provides deeper knife-specific technique
+- `make-fire` — un cuchillo afilado es esencial para procesar yesca, astillas y plumas de madera; la habilidad de hacer fuego y el mantenimiento de cuchillos son habilidades complementarias
+- `forage-plants` — una hoja afilada permite cortes de cosecha limpios y sostenibles que minimizan el daño a las plantas
+- `maintain-hand-tools` — las hojas de jardín (hori-hori, tijeras de podar) siguen principios de afilado similares; esta habilidad proporciona técnica más profunda específica para cuchillos

@@ -1,11 +1,12 @@
 ---
 name: translate-content
 description: >
-  Translate agent-almanac content (skills, agents, teams, guides) into a target
-  locale while preserving code blocks, IDs, and technical structure. Covers
-  scaffolding, frontmatter setup, prose translation, code preservation, and
-  freshness tracking. Use when localizing content for a new language, updating
-  stale translations after source changes, or batch-translating a domain.
+  Traducir contenido de agent-almanac (habilidades, agentes, equipos, guías) a un
+  idioma objetivo preservando bloques de código, IDs y estructura técnica. Cubre
+  scaffolding, configuración de frontmatter, traducción de prosa, preservación de
+  código y seguimiento de frescura. Usar al localizar contenido para un nuevo
+  idioma, actualizar traducciones obsoletas después de cambios en la fuente, o
+  traducir por lotes un dominio.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,172 +25,172 @@ metadata:
 
 # Translate Content
 
-Translate English source content into a target locale, preserving technical accuracy and structural integrity.
+Traducir contenido fuente en inglés a un idioma objetivo, preservando la precisión técnica y la integridad estructural.
 
 ## Cuándo Usar
 
-- Localizing a skill, agent, team, or guide into a supported language
-- Updating a translation that has become stale after source changes
-- Batch-translating multiple items within a domain or content type
-- Creating initial translations for a new locale
+- Localizar una habilidad, agente, equipo o guía a un idioma soportado
+- Actualizar una traducción que se ha vuelto obsoleta después de cambios en la fuente
+- Traducir por lotes múltiples elementos dentro de un dominio o tipo de contenido
+- Crear traducciones iniciales para un nuevo idioma
 
 ## Entradas
 
-- **Requerido**: Content type — `skills`, `agents`, `teams`, or `guides`
-- **Requerido**: Item ID — the name/identifier of the content (e.g., `create-r-package`)
-- **Requerido**: Target locale — IETF BCP 47 code (e.g., `de`, `zh-CN`, `ja`, `es`)
-- **Opcional**: Batch list — multiple IDs to translate in sequence
+- **Requerido**: Tipo de contenido — `skills`, `agents`, `teams` o `guides`
+- **Requerido**: ID del elemento — el nombre/identificador del contenido (ej., `create-r-package`)
+- **Requerido**: Idioma objetivo — código IETF BCP 47 (ej., `de`, `zh-CN`, `ja`, `es`)
+- **Opcional**: Lista de lote — múltiples IDs para traducir en secuencia
 
 ## Procedimiento
 
-### Paso 1: Read the English source
+### Paso 1: Leer la fuente en inglés
 
-1.1. Determine the source file path:
+1.1. Determinar la ruta del archivo fuente:
    - Skills: `skills/<id>/SKILL.md`
    - Agents: `agents/<id>.md`
    - Teams: `teams/<id>.md`
    - Guides: `guides/<id>.md`
 
-1.2. Read the entire source file to understand context, structure, and content.
+1.2. Leer el archivo fuente completo para comprender el contexto, estructura y contenido.
 
-1.3. Identify sections that must stay in English:
-   - All code blocks (fenced with triple backticks)
-   - Inline code (backtick-wrapped)
-   - YAML frontmatter field names and technical values (`name`, `tools`, `model`, `priority`, `skills` list entries, `allowed-tools`, `tags`, `domain`, `language`)
-   - File paths, URLs, command examples
-   - `<!-- CONFIG:START -->` / `<!-- CONFIG:END -->` blocks in teams
+1.3. Identificar las secciones que deben permanecer en inglés:
+   - Todos los bloques de código (delimitados con triple comilla invertida)
+   - Código en línea (envuelto en comillas invertidas)
+   - Nombres de campos YAML del frontmatter y valores técnicos (`name`, `tools`, `model`, `priority`, entradas de lista `skills`, `allowed-tools`, `tags`, `domain`, `language`)
+   - Rutas de archivos, URLs, ejemplos de comandos
+   - Bloques `<!-- CONFIG:START -->` / `<!-- CONFIG:END -->` en equipos
 
-**Esperado:** Full understanding of source content with clear mental separation of translatable prose vs preserved technical content.
+**Esperado:** Comprensión completa del contenido fuente con separación mental clara entre prosa traducible y contenido técnico preservado.
 
-**En caso de fallo:** If source file is not found, verify the ID exists in the registry. Check for typos in the content type or ID.
+**En caso de fallo:** Si el archivo fuente no se encuentra, verificar que el ID existe en el registro. Verificar errores tipográficos en el tipo de contenido o ID.
 
-### Paso 2: Scaffold the translation file
+### Paso 2: Crear el scaffolding del archivo de traducción
 
-2.1. Run the scaffolding script:
+2.1. Ejecutar el script de scaffolding:
 ```bash
 npm run translate:scaffold -- <content-type> <id> <locale>
 ```
 
-2.2. If the file already exists, read it to check whether it needs updating (stale) or is already current.
+2.2. Si el archivo ya existe, leerlo para verificar si necesita actualización (obsoleto) o ya está actualizado.
 
-2.3. Verify the scaffolded file has translation frontmatter fields:
-   - `locale` — matches target locale
+2.3. Verificar que el archivo scaffolded tenga los campos de frontmatter de traducción:
+   - `locale` — coincide con el idioma objetivo
    - `source_locale` — `en`
-   - `source_commit` — current git short hash
-   - `translator` — attribution string
-   - `translation_date` — today's date
+   - `source_commit` — hash git corto actual
+   - `translator` — cadena de atribución
+   - `translation_date` — fecha de hoy
 
-**Esperado:** Scaffolded file at `i18n/<locale>/<content-type>/<id>/SKILL.md` (or `.md` for other types) with correct frontmatter.
+**Esperado:** Archivo scaffolded en `i18n/<locale>/<content-type>/<id>/SKILL.md` (o `.md` para otros tipos) con frontmatter correcto.
 
-**En caso de fallo:** If the scaffold script fails, create the directory manually with `mkdir -p` and copy the source file. Add frontmatter fields manually.
+**En caso de fallo:** Si el script de scaffold falla, crear el directorio manualmente con `mkdir -p` y copiar el archivo fuente. Agregar los campos de frontmatter manualmente.
 
-### Paso 3: Translate the description
+### Paso 3: Traducir la descripción
 
-3.1. Translate the `description` field in the YAML frontmatter into the target locale.
+3.1. Traducir el campo `description` en el frontmatter YAML al idioma objetivo.
 
-3.2. For skills, the description is inside the top-level frontmatter. For agents/teams/guides, it is also in the top-level frontmatter.
+3.2. Para habilidades, la descripción está dentro del frontmatter de nivel superior. Para agentes/equipos/guías, también está en el frontmatter de nivel superior.
 
-3.3. Keep the translation concise — match the length and style of the original.
+3.3. Mantener la traducción concisa — igualar la longitud y estilo del original.
 
-**Esperado:** Description field contains an idiomatic translation that accurately conveys the original meaning.
+**Esperado:** El campo de descripción contiene una traducción idiomática que transmite con precisión el significado original.
 
-**En caso de fallo:** If the description is ambiguous, keep it closer to literal translation rather than risk misinterpretation.
+**En caso de fallo:** Si la descripción es ambigua, mantenerla más cercana a la traducción literal en lugar de arriesgarse a una mala interpretación.
 
-### Paso 4: Translate prose sections
+### Paso 4: Traducir las secciones de prosa
 
-4.1. Translate all prose content section by section:
-   - Section headings (e.g., "## When to Use" → "## Wann verwenden" in German)
-   - Paragraph text
-   - List item text (but not list item code/paths)
-   - Table cell text (but not table cell code/values)
+4.1. Traducir todo el contenido de prosa sección por sección:
+   - Encabezados de sección (ej., "## When to Use" → "## Cuándo Usar" en español)
+   - Texto de párrafos
+   - Texto de elementos de lista (pero no código/rutas en elementos de lista)
+   - Texto de celdas de tabla (pero no código/valores en celdas de tabla)
 
-4.2. Preserve these elements exactly as-is:
-   - Code blocks (``` fenced and indented)
-   - Inline code (`backtick-wrapped`)
-   - File paths and URLs
-   - Skill/agent/team IDs in cross-references
-   - YAML/JSON configuration examples
-   - Command-line examples
-   - `**Esperado:**` and `**En caso de fallo:**` markers (translate the label, keep the structure)
+4.2. Preservar estos elementos exactamente como están:
+   - Bloques de código (delimitados con ``` e indentados)
+   - Código en línea (envuelto en `comillas invertidas`)
+   - Rutas de archivos y URLs
+   - IDs de habilidades/agentes/equipos en referencias cruzadas
+   - Ejemplos de configuración YAML/JSON
+   - Ejemplos de línea de comandos
+   - Marcadores `**Esperado:**` y `**En caso de fallo:**` (traducir la etiqueta, mantener la estructura)
 
-4.3. For skills, translate the standardized section names:
-   - "When to Use" → locale equivalent
-   - "Inputs" → locale equivalent
-   - "Procedure" → locale equivalent
-   - "Validation" → locale equivalent
-   - "Common Pitfalls" → locale equivalent
-   - "Related Skills" → locale equivalent
+4.3. Para habilidades, traducir los nombres de sección estandarizados:
+   - "When to Use" → equivalente en el idioma
+   - "Inputs" → equivalente en el idioma
+   - "Procedure" → equivalente en el idioma
+   - "Validation" → equivalente en el idioma
+   - "Common Pitfalls" → equivalente en el idioma
+   - "Related Skills" → equivalente en el idioma
 
-4.4. For agents, translate:
-   - Purpose, Capabilities, Available Skills (section name only — skill IDs stay English), Usage Scenarios, Best Practices, Examples, Limitations, See Also
+4.4. Para agentes, traducir:
+   - Purpose, Capabilities, Available Skills (solo el nombre de sección — los IDs de habilidades permanecen en inglés), Usage Scenarios, Best Practices, Examples, Limitations, See Also
 
-4.5. For teams, translate:
-   - Purpose, Team Composition (prose only — IDs stay English), Coordination Pattern, Task Decomposition, Usage Scenarios, Limitations
+4.5. Para equipos, traducir:
+   - Purpose, Team Composition (solo prosa — los IDs permanecen en inglés), Coordination Pattern, Task Decomposition, Usage Scenarios, Limitations
 
-4.6. For guides, translate:
-   - All prose sections, troubleshooting text, table descriptions
-   - Keep command examples, code blocks, and configuration snippets in English
+4.6. Para guías, traducir:
+   - Todas las secciones de prosa, texto de resolución de problemas, descripciones de tablas
+   - Mantener ejemplos de comandos, bloques de código y fragmentos de configuración en inglés
 
-**Esperado:** All prose sections translated idiomatically. Code blocks identical to English source. Cross-references use English IDs.
+**Esperado:** Todas las secciones de prosa traducidas idiomáticamente. Bloques de código idénticos a la fuente en inglés. Las referencias cruzadas usan IDs en inglés.
 
-**En caso de fallo:** If uncertain about a technical term, keep the English term with a parenthetical translation. Example: "Staging-Bereich (Staging Area)" in German.
+**En caso de fallo:** Si hay incertidumbre sobre un término técnico, mantener el término en inglés con una traducción entre paréntesis. Ejemplo: "Área de preparación (Staging Area)" en español.
 
-### Paso 5: Verify structural integrity
+### Paso 5: Verificar la integridad estructural
 
-5.1. Confirm the translated file has the same number of sections as the source.
+5.1. Confirmar que el archivo traducido tiene el mismo número de secciones que la fuente.
 
-5.2. For skills, verify all required sections are present:
-   - YAML frontmatter with `name`, `description`, `allowed-tools`, `metadata`
-   - When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills
+5.2. Para habilidades, verificar que todas las secciones requeridas están presentes:
+   - Frontmatter YAML con `name`, `description`, `allowed-tools`, `metadata`
+   - Cuándo Usar, Entradas, Procedimiento, Validación, Errores Comunes, Habilidades Relacionadas
 
-5.3. Verify code blocks are identical to the English source (diff the fenced blocks).
+5.3. Verificar que los bloques de código son idénticos a la fuente en inglés (hacer diff de los bloques delimitados).
 
-5.4. Check line count: skills must be ≤ 500 lines.
+5.4. Verificar el conteo de líneas: las habilidades deben ser de 500 líneas o menos.
 
-5.5. Verify `name` field matches the English source exactly (it is the ID, never translated).
+5.5. Verificar que el campo `name` coincide exactamente con la fuente en inglés (es el ID, nunca se traduce).
 
-**Esperado:** Structurally valid translated file that passes validation.
+**Esperado:** Archivo traducido estructuralmente válido que pasa la validación.
 
-**En caso de fallo:** Compare section-by-section with the English source. Restore any missing sections.
+**En caso de fallo:** Comparar sección por sección con la fuente en inglés. Restaurar cualquier sección faltante.
 
-### Paso 6: Write the translated file
+### Paso 6: Escribir el archivo traducido
 
-6.1. Write the complete translated content to the target path using the Write or Edit tool.
+6.1. Escribir el contenido traducido completo en la ruta objetivo usando la herramienta Write o Edit.
 
-6.2. Verify the file exists at the expected path:
+6.2. Verificar que el archivo existe en la ruta esperada:
    - Skills: `i18n/<locale>/skills/<id>/SKILL.md`
    - Agents: `i18n/<locale>/agents/<id>.md`
    - Teams: `i18n/<locale>/teams/<id>.md`
    - Guides: `i18n/<locale>/guides/<id>.md`
 
-**Esperado:** Translated file written to disk at the correct path.
+**Esperado:** Archivo traducido escrito en disco en la ruta correcta.
 
-**En caso de fallo:** Check directory exists. Create with `mkdir -p` if needed.
+**En caso de fallo:** Verificar que el directorio existe. Crear con `mkdir -p` si es necesario.
 
 ## Validación
 
-- [ ] Translated file exists at `i18n/<locale>/<type>/<id>`
-- [ ] `name` field matches English source exactly
-- [ ] `locale` field matches target locale
-- [ ] `source_commit` field is set to a valid git short hash
-- [ ] All code blocks are identical to English source
-- [ ] All cross-referenced IDs (skills, agents, teams) are in English
-- [ ] File is under 500 lines (for skills)
-- [ ] `npm run validate:translations` reports no issues for this file
-- [ ] Prose reads idiomatically in the target language
+- [ ] El archivo traducido existe en `i18n/<locale>/<type>/<id>`
+- [ ] El campo `name` coincide exactamente con la fuente en inglés
+- [ ] El campo `locale` coincide con el idioma objetivo
+- [ ] El campo `source_commit` está configurado con un hash git corto válido
+- [ ] Todos los bloques de código son idénticos a la fuente en inglés
+- [ ] Todos los IDs de referencias cruzadas (habilidades, agentes, equipos) están en inglés
+- [ ] El archivo tiene menos de 500 líneas (para habilidades)
+- [ ] `npm run validate:translations` no reporta problemas para este archivo
+- [ ] La prosa se lee idiomáticamente en el idioma objetivo
 
 ## Errores Comunes
 
-- **Translating code blocks**: Code, commands, and configuration must stay in English. Only translate surrounding prose.
-- **Translating the `name` field**: The `name` field is the canonical ID. Never translate it.
-- **Translating tag values**: Tags in `metadata.tags` stay in English for cross-locale consistency.
-- **Inconsistent terminology**: Use the same translation for a technical term throughout the file and across files in the same locale.
-- **Literal translation of idioms**: Translate the meaning, not the words. "Common Pitfalls" should become the locale's natural equivalent, not a word-for-word translation.
-- **Missing `source_commit`**: Without this field, freshness tracking breaks. Always include it.
-- **Exceeding 500 lines**: Translations may expand ~10-20% vs English. If near the limit, tighten prose rather than removing content.
+- **Traducir bloques de código**: El código, comandos y configuración deben permanecer en inglés. Solo traducir la prosa circundante.
+- **Traducir el campo `name`**: El campo `name` es el ID canónico. Nunca traducirlo.
+- **Traducir valores de etiquetas**: Las etiquetas en `metadata.tags` permanecen en inglés para consistencia entre idiomas.
+- **Terminología inconsistente**: Usar la misma traducción para un término técnico en todo el archivo y entre archivos del mismo idioma.
+- **Traducción literal de modismos**: Traducir el significado, no las palabras. "Common Pitfalls" debe convertirse en el equivalente natural del idioma, no una traducción palabra por palabra.
+- **Falta de `source_commit`**: Sin este campo, el seguimiento de frescura se rompe. Siempre incluirlo.
+- **Exceder 500 líneas**: Las traducciones pueden expandirse ~10-20% respecto al inglés. Si se acerca al límite, ajustar la prosa en lugar de eliminar contenido.
 
 ## Habilidades Relacionadas
 
-- [create-skill](../create-skill/SKILL.md) — understand the SKILL.md structure being translated
-- [review-skill-format](../review-skill-format/SKILL.md) — validate translated skill structure
-- [evolve-skill](../evolve-skill/SKILL.md) — update skills that have changed since translation
+- [create-skill](../create-skill/SKILL.md) — comprender la estructura SKILL.md que se está traduciendo
+- [review-skill-format](../review-skill-format/SKILL.md) — validar la estructura de la habilidad traducida
+- [evolve-skill](../evolve-skill/SKILL.md) — actualizar habilidades que han cambiado desde la traducción

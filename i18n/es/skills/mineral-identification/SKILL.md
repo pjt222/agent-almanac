@@ -1,14 +1,14 @@
 ---
 name: mineral-identification
 description: >
-  Field identification of minerals and ores using hardness, streak, luster,
-  cleavage, crystal habit, and simple chemical tests. Covers the systematic
-  elimination methodology, Mohs scale application, and common ore indicators
-  for precious metals, gemstones, and industrial minerals. Use when encountering
-  an unknown rock or mineral specimen, when prospecting and assessing whether a
-  site shows valuable mineral indicators, when distinguishing ore-bearing rock
-  from barren rock in the field, or when building geological literacy through
-  systematic observation.
+  Identificación de minerales y menas en campo usando dureza, raya, brillo,
+  clivaje, hábito cristalino y pruebas químicas simples. Cubre la metodología
+  de eliminación sistemática, aplicación de la escala de Mohs e indicadores
+  comunes de menas para metales preciosos, piedras preciosas y minerales
+  industriales. Usar al encontrar un espécimen de roca o mineral desconocido,
+  al prospectar y evaluar si un sitio muestra indicadores de minerales
+  valiosos, al distinguir roca portadora de mena de roca estéril en campo,
+  o al desarrollar alfabetización geológica mediante observación sistemática.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,30 +27,30 @@ metadata:
 
 # Mineral Identification
 
-Identify minerals in the field using physical properties, systematic elimination, and simple field tests.
+Identificar minerales en campo usando propiedades físicas, eliminación sistemática y pruebas de campo simples.
 
 ## Cuándo Usar
 
-- You find an unknown rock or mineral specimen and want to identify it
-- You are prospecting and need to assess whether a site shows indicators of valuable minerals
-- You want to distinguish ore-bearing rock from barren rock in the field
-- You are building geological literacy through systematic observation
+- Encuentras un espécimen de roca o mineral desconocido y quieres identificarlo
+- Estás prospectando y necesitas evaluar si un sitio muestra indicadores de minerales valiosos
+- Quieres distinguir roca portadora de mena de roca estéril en campo
+- Estás desarrollando alfabetización geológica mediante observación sistemática
 
 ## Entradas
 
-- **Requerido**: A mineral specimen or outcrop to examine
-- **Opcional**: Streak plate (unglazed porcelain tile or bathroom tile back)
-- **Opcional**: Steel nail or knife blade (hardness ~5.5)
-- **Opcional**: Glass plate (hardness ~5.5)
-- **Opcional**: Copper coin (hardness ~3.5)
-- **Opcional**: Hand lens (10x)
-- **Opcional**: Dilute hydrochloric acid (10% HCl) for carbonate test
+- **Requerido**: Un espécimen mineral o afloramiento para examinar
+- **Opcional**: Placa de raya (azulejo de porcelana sin esmaltar o reverso de azulejo de baño)
+- **Opcional**: Clavo de acero o hoja de cuchillo (dureza ~5.5)
+- **Opcional**: Placa de vidrio (dureza ~5.5)
+- **Opcional**: Moneda de cobre (dureza ~3.5)
+- **Opcional**: Lupa de mano (10x)
+- **Opcional**: Ácido clorhídrico diluido (10% HCl) para prueba de carbonatos
 
 ## Procedimiento
 
-### Paso 1: Observe Without Touching
+### Paso 1: Observar Sin Tocar
 
-Before handling, observe the specimen in context.
+Antes de manipular, observar el espécimen en contexto.
 
 ```
 Field Context:
@@ -72,13 +72,13 @@ Field Context:
 +--------------------+------------------------------------------+
 ```
 
-**Esperado:** Field context recorded before handling the specimen.
+**Esperado:** Contexto de campo registrado antes de manipular el espécimen.
 
-**En caso de fallo:** If geological context is unclear (loose specimen, urban find), proceed with physical properties only — context would have helped narrow candidates but is not strictly required.
+**En caso de fallo:** Si el contexto geológico no es claro (espécimen suelto, hallazgo urbano), proceder solo con las propiedades físicas — el contexto habría ayudado a reducir candidatos pero no es estrictamente requerido.
 
-### Paso 2: Test Physical Properties
+### Paso 2: Probar Propiedades Físicas
 
-Apply the diagnostic tests systematically.
+Aplicar las pruebas diagnósticas sistemáticamente.
 
 ```
 Diagnostic Property Tests:
@@ -131,13 +131,13 @@ SPECIFIC GRAVITY (heft test):
 - Light: possible pumice, sulfur, or organic material
 ```
 
-**Esperado:** A profile of the specimen: luster, hardness range, streak colour, cleavage/fracture type, and relative density.
+**Esperado:** Un perfil del espécimen: brillo, rango de dureza, color de raya, tipo de clivaje/fractura y densidad relativa.
 
-**En caso de fallo:** If a property is ambiguous (e.g., luster between metallic and vitreous — "sub-metallic"), record both options. Ambiguity reduces confidence but does not prevent identification.
+**En caso de fallo:** Si una propiedad es ambigua (ej., brillo entre metálico y vítreo — "sub-metálico"), registrar ambas opciones. La ambigüedad reduce la confianza pero no impide la identificación.
 
-### Paso 3: Apply Special Tests
+### Paso 3: Aplicar Pruebas Especiales
 
-Additional tests for specific mineral groups.
+Pruebas adicionales para grupos minerales específicos.
 
 ```
 Special Field Tests:
@@ -168,13 +168,13 @@ TENACITY:
 - Elastic: bends and springs back (muscovite mica)
 ```
 
-**Esperado:** Additional diagnostic data that narrows the identification further.
+**Esperado:** Datos diagnósticos adicionales que reducen aún más la identificación.
 
-**En caso de fallo:** If special tests are unavailable (no magnet, no acid), proceed with the basic properties — they are sufficient for most common minerals.
+**En caso de fallo:** Si las pruebas especiales no están disponibles (sin imán, sin ácido), proceder con las propiedades básicas — son suficientes para la mayoría de los minerales comunes.
 
-### Paso 4: Identify by Elimination
+### Paso 4: Identificar por Eliminación
 
-Cross-reference the property profile against known minerals.
+Verificar cruzadamente el perfil de propiedades contra minerales conocidos.
 
 ```
 Common Mineral Identification Key (simplified):
@@ -200,28 +200,28 @@ NON-METALLIC, DARK-COLORED:
 - Vitreous + soft (2.5-3) + 1 perfect cleavage + flexible = BIOTITE (mica)
 ```
 
-**Esperado:** A mineral identification or a shortlist of 2-3 candidates with the distinguishing test needed to differentiate them.
+**Esperado:** Una identificación mineral o una lista corta de 2-3 candidatos con la prueba diferenciadora necesaria para distinguirlos.
 
-**En caso de fallo:** If the specimen does not match any common mineral, it may be a rock (aggregate of minerals) rather than a single mineral, or it may require laboratory analysis (thin section, XRD).
+**En caso de fallo:** Si el espécimen no coincide con ningún mineral común, puede ser una roca (agregado de minerales) en lugar de un mineral único, o puede requerir análisis de laboratorio (sección delgada, DRX).
 
 ## Validación
 
-- [ ] Field context was recorded before handling
-- [ ] Luster was assessed under natural light
-- [ ] Hardness was tested against at least two reference materials
-- [ ] Streak colour was recorded (if specimen is softer than streak plate)
-- [ ] Cleavage or fracture pattern was noted
-- [ ] Identification was reached by systematic elimination, not guessing
-- [ ] Look-alike minerals were explicitly considered and differentiated
+- [ ] El contexto de campo fue registrado antes de la manipulación
+- [ ] El brillo fue evaluado bajo luz natural
+- [ ] La dureza fue probada contra al menos dos materiales de referencia
+- [ ] El color de raya fue registrado (si el espécimen es más blando que la placa de raya)
+- [ ] El patrón de clivaje o fractura fue anotado
+- [ ] La identificación fue alcanzada por eliminación sistemática, no adivinando
+- [ ] Los minerales similares fueron explícitamente considerados y diferenciados
 
 ## Errores Comunes
 
-- **Confusing pyrite with gold**: "Fool's gold" (pyrite) is harder (6 vs 2.5), brittle (gold is malleable), and streaks black (gold streaks gold). The tests are definitive — use them
-- **Ignoring streak**: Specimen colour is unreliable (hematite can be grey, red, or black). Streak colour is consistent and diagnostic
-- **Scratching with contaminated tools**: A steel nail with rust produces a false streak. Clean test tools before use
-- **Assuming crystal habit**: Many minerals rarely show well-formed crystals in the field. Massive or granular forms are more common — do not require visible crystals for identification
-- **Confusing weathered surface with true colour**: Break the specimen to expose a fresh surface before testing. Weathering rinds can completely disguise the mineral beneath
+- **Confundir pirita con oro**: El "oro de los tontos" (pirita) es más duro (6 vs 2.5), frágil (el oro es maleable) y raya negro (el oro raya dorado). Las pruebas son definitivas — úsalas
+- **Ignorar la raya**: El color del espécimen no es confiable (la hematita puede ser gris, roja o negra). El color de raya es consistente y diagnóstico
+- **Rayar con herramientas contaminadas**: Un clavo de acero con óxido produce una raya falsa. Limpiar las herramientas de prueba antes de usar
+- **Asumir hábito cristalino**: Muchos minerales raramente muestran cristales bien formados en campo. Las formas masivas o granulares son más comunes — no requerir cristales visibles para la identificación
+- **Confundir superficie meteorizada con color verdadero**: Romper el espécimen para exponer una superficie fresca antes de probar. Las costras de meteorización pueden disfrazar completamente el mineral debajo
 
 ## Habilidades Relacionadas
 
-- `gold-washing` — alluvial gold recovery uses mineral identification skills to read stream deposits and assess gold-bearing gravels
+- `gold-washing` — la recuperación de oro aluvial usa habilidades de identificación mineral para leer depósitos de arroyos y evaluar gravas auríferas

@@ -1,14 +1,15 @@
 ---
 name: basic-obedience
 description: >
-  Foundation obedience training for dogs — sit, stay, come, heel, and down
-  using positive reinforcement and marker training. Covers timing, reward
-  hierarchy, session structure, distraction proofing, and common handler
-  errors. Use when a new puppy (8+ weeks) is ready for foundation training, an
-  adult dog lacks reliable basic commands, a rescue dog needs to learn the
-  household's command vocabulary, before advancing to complex behaviors or
-  off-leash work, or when existing commands have degraded and need
-  re-establishing.
+  Entrenamiento de obediencia básica para perros — sentarse, quedarse, venir,
+  caminar junto y echarse usando refuerzo positivo y entrenamiento con marcador.
+  Cubre temporización, jerarquía de recompensas, estructura de sesiones,
+  prueba contra distracciones y errores comunes del guía. Usar cuando un cachorro
+  nuevo (8+ semanas) está listo para entrenamiento básico, un perro adulto carece
+  de comandos básicos confiables, un perro rescatado necesita aprender el
+  vocabulario de comandos del hogar, antes de avanzar a comportamientos complejos
+  o trabajo sin correa, o cuando los comandos existentes se han degradado y
+  necesitan restablecerse.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,29 +28,29 @@ metadata:
 
 # Basic Obedience
 
-Teach foundation commands (sit, stay, come, heel, down) using positive reinforcement and marker training.
+Enseñar comandos básicos (sentarse, quedarse, venir, caminar junto, echarse) usando refuerzo positivo y entrenamiento con marcador.
 
 ## Cuándo Usar
 
-- A new puppy (8+ weeks) is ready for foundation training
-- An adult dog lacks reliable basic commands
-- A rescue or rehomed dog needs to learn the household's command vocabulary
-- Before advancing to more complex behaviors or off-leash work
-- When existing commands have degraded and need re-establishing
+- Un cachorro nuevo (8+ semanas) está listo para entrenamiento básico
+- Un perro adulto carece de comandos básicos confiables
+- Un perro rescatado o reubicado necesita aprender el vocabulario de comandos del hogar
+- Antes de avanzar a comportamientos más complejos o trabajo sin correa
+- Cuando los comandos existentes se han degradado y necesitan restablecerse
 
 ## Entradas
 
-- **Requerido**: A dog (any breed, any age 8+ weeks)
-- **Requerido**: High-value treats (small, soft, quickly consumed)
-- **Opcional**: Clicker or verbal marker word (e.g., "yes")
-- **Opcional**: 6-foot leash and flat collar or harness
-- **Opcional**: Quiet training space with minimal distractions (initially)
+- **Requerido**: Un perro (cualquier raza, cualquier edad 8+ semanas)
+- **Requerido**: Premios de alto valor (pequeños, suaves, de consumo rápido)
+- **Opcional**: Clicker o palabra marcadora verbal (ej., "sí")
+- **Opcional**: Correa de 1.8 metros y collar plano o arnés
+- **Opcional**: Espacio de entrenamiento tranquilo con mínimas distracciones (inicialmente)
 
 ## Procedimiento
 
-### Paso 1: Establish the Marker
+### Paso 1: Establecer el marcador
 
-The marker bridges the gap between the desired behavior and the reward.
+El marcador cierra la brecha entre el comportamiento deseado y la recompensa.
 
 ```
 Marker Training Protocol:
@@ -67,13 +68,13 @@ Late marking teaches the wrong behavior.
 Mark → then reach for the treat (not the reverse).
 ```
 
-**Esperado:** The dog reliably orients toward the handler upon hearing the marker, expecting a reward.
+**Esperado:** El perro se orienta confiablemente hacia el guía al escuchar el marcador, esperando una recompensa.
 
-**En caso de fallo:** If the dog does not respond to the marker after 20 reps, the treat value is too low. Switch to higher-value rewards (cheese, chicken, liver). If the dog is too distracted to eat, the environment is too stimulating — move to a quieter space.
+**En caso de fallo:** Si el perro no responde al marcador después de 20 repeticiones, el valor del premio es demasiado bajo. Cambiar a recompensas de mayor valor (queso, pollo, hígado). Si el perro está demasiado distraído para comer, el ambiente es demasiado estimulante — moverse a un espacio más tranquilo.
 
-### Paso 2: Teach the Five Foundation Commands
+### Paso 2: Enseñar los cinco comandos básicos
 
-Work on one command per session until reliable, then begin mixing.
+Trabajar un comando por sesión hasta que sea confiable, luego comenzar a mezclar.
 
 ```
 Command Protocols:
@@ -115,11 +116,11 @@ HEEL:
 5. If the dog pulls ahead, stop walking. Resume when the leash is loose.
 ```
 
-**Esperado:** Each command is performed reliably in a low-distraction environment with treats as motivation.
+**Esperado:** Cada comando se ejecuta confiablemente en un ambiente de baja distracción con premios como motivación.
 
-**En caso de fallo:** If a command is not progressing after 3 sessions, break it into smaller steps. The dog may need an intermediate behavior (e.g., for "down," reward the head-lowering motion before requiring full elbows-on-ground).
+**En caso de fallo:** Si un comando no progresa después de 3 sesiones, dividirlo en pasos más pequeños. El perro puede necesitar un comportamiento intermedio (ej., para "echarse," recompensar el movimiento de bajar la cabeza antes de requerir los codos completamente en el suelo).
 
-### Paso 3: Structure Training Sessions
+### Paso 3: Estructurar las sesiones de entrenamiento
 
 ```
 Session Guidelines:
@@ -144,13 +145,13 @@ The 80/20 Rule:
 - 20% challenge keeps the dog engaged without frustrating
 ```
 
-**Esperado:** Short, successful sessions that leave the dog wanting more.
+**Esperado:** Sesiones cortas y exitosas que dejan al perro queriendo más.
 
-**En caso de fallo:** If the dog disengages (sniffing, looking away, lying down), the session is too long, too hard, or the rewards are insufficiently motivating. End the session and reassess.
+**En caso de fallo:** Si el perro se desconecta (olfateando, mirando a otro lado, echándose), la sesión es demasiado larga, demasiado difícil o las recompensas no son suficientemente motivadoras. Terminar la sesión y reevaluar.
 
-### Paso 4: Distraction-Proof the Commands
+### Paso 4: Probar los comandos contra distracciones
 
-Once reliable in a quiet environment, systematically add distractions.
+Una vez que sean confiables en un ambiente tranquilo, agregar distracciones sistemáticamente.
 
 ```
 Distraction Ladder (work through sequentially):
@@ -170,28 +171,28 @@ At each new level:
 - If the dog fails 3 reps in a row, you moved up too fast — go back one level
 ```
 
-**Esperado:** Commands work reliably in progressively more distracting environments.
+**Esperado:** Los comandos funcionan confiablemente en ambientes progresivamente más distractores.
 
-**En caso de fallo:** If a specific distraction (other dogs, squirrels) consistently breaks training, that distraction needs separate counter-conditioning work (see `behavioral-modification`).
+**En caso de fallo:** Si una distracción específica (otros perros, ardillas) rompe consistentemente el entrenamiento, esa distracción necesita trabajo de contracondicionamiento separado (ver `behavioral-modification`).
 
 ## Validación
 
-- [ ] Marker is charged and the dog responds reliably
-- [ ] All five commands are performed in a low-distraction environment
-- [ ] Training sessions are 5-10 minutes, ending on success
-- [ ] Success rate is at or above 80% for each command
-- [ ] Commands are being generalized through the distraction ladder
-- [ ] The handler's timing (marker within 1 second) is consistent
+- [ ] El marcador está cargado y el perro responde confiablemente
+- [ ] Los cinco comandos se ejecutan en un ambiente de baja distracción
+- [ ] Las sesiones de entrenamiento son de 5-10 minutos, terminando con éxito
+- [ ] La tasa de éxito está en o por encima del 80% para cada comando
+- [ ] Los comandos están siendo generalizados a través de la escalera de distracciones
+- [ ] La temporización del guía (marcador dentro de 1 segundo) es consistente
 
 ## Errores Comunes
 
-- **Repeating the cue**: Saying "sit, sit, SIT" teaches the dog that the first "sit" is optional. Say it once and wait
-- **Treating too late**: The treat should follow the marker within 2-3 seconds. Late treating breaks the association
-- **Luring forever**: The hand motion with the treat (lure) should be faded within 10-20 reps. Otherwise the dog only responds when food is visible
-- **Punishing failed recalls**: Calling "come" and then scolding the dog (for being slow, for having something in its mouth) poisons the recall cue permanently
-- **Training too long**: A fatigued dog learns nothing. Quit while ahead
-- **Inconsistent cues**: All household members must use the same words and gestures for each command
+- **Repetir la señal**: Decir "siéntate, siéntate, SIÉNTATE" le enseña al perro que el primer "siéntate" es opcional. Decirlo una vez y esperar
+- **Premiar demasiado tarde**: El premio debe seguir al marcador dentro de 2-3 segundos. Premiar tarde rompe la asociación
+- **Usar señuelo para siempre**: El movimiento de la mano con el premio (señuelo) debe desvanecerse dentro de 10-20 repeticiones. De lo contrario, el perro solo responde cuando la comida es visible
+- **Castigar llamadas fallidas**: Llamar "ven" y luego regañar al perro (por ser lento, por tener algo en la boca) envenena la señal de llamada permanentemente
+- **Entrenar demasiado tiempo**: Un perro fatigado no aprende nada. Dejar de entrenar mientras se va ganando
+- **Señales inconsistentes**: Todos los miembros del hogar deben usar las mismas palabras y gestos para cada comando
 
 ## Habilidades Relacionadas
 
-- `behavioral-modification` — for addressing unwanted behaviors that interfere with basic obedience
+- `behavioral-modification` — para abordar comportamientos no deseados que interfieren con la obediencia básica

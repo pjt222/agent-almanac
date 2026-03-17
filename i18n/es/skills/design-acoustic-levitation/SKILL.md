@@ -1,13 +1,13 @@
 ---
 name: design-acoustic-levitation
 description: >
-  Design an acoustic levitation system that uses standing waves to trap and
-  suspend small objects at pressure nodes. Covers ultrasonic transducer
-  selection, standing wave formation between a transducer and reflector,
-  node spacing and trapping position calculation, acoustic radiation pressure
-  analysis, and phased array configurations for multi-axis manipulation.
-  Use when designing contactless sample handling for chemistry, biology,
-  materials science, or demonstration purposes.
+  Diseñar un sistema de levitación acústica que utiliza ondas estacionarias para
+  atrapar y suspender objetos pequeños en nodos de presión. Cubre selección de
+  transductores ultrasónicos, formación de ondas estacionarias entre transductor
+  y reflector, cálculo de espaciado de nodos y posición de atrapamiento, análisis
+  de presión de radiación acústica, y configuraciones de arreglos de fase para
+  manipulación multi-eje. Usar al diseñar manipulación de muestras sin contacto
+  para química, biología, ciencia de materiales o propósitos demostrativos.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,38 +26,38 @@ metadata:
 
 # Design Acoustic Levitation
 
-Design and validate an acoustic levitation system by determining the acoustic radiation pressure required to balance gravity, selecting transducer and reflector geometry to form a stable standing wave, computing the positions and trapping strength of pressure nodes, and verifying that the trapped object is stable against lateral and axial perturbations.
+Diseñar y validar un sistema de levitación acústica determinando la presión de radiación acústica necesaria para equilibrar la gravedad, seleccionando la geometría del transductor y reflector para formar una onda estacionaria estable, calculando las posiciones y la fuerza de atrapamiento de los nodos de presión, y verificando que el objeto atrapado sea estable frente a perturbaciones laterales y axiales.
 
 ## Cuándo Usar
 
-- Designing a contactless sample holder for chemical or biological experiments
-- Building an acoustic levitation demonstrator for education or outreach
-- Evaluating whether a given object can be levitated acoustically (size, density, and frequency constraints)
-- Selecting between single-axis (transducer-reflector) and phased array configurations
-- Calculating the node positions and trapping forces for a given transducer frequency and geometry
-- Extending a single-axis levitator to multi-axis manipulation using phased arrays
+- Diseñar un portamuestras sin contacto para experimentos químicos o biológicos
+- Construir un demostrador de levitación acústica para educación o divulgación
+- Evaluar si un objeto dado puede ser levitado acústicamente (restricciones de tamaño, densidad y frecuencia)
+- Seleccionar entre configuraciones de eje único (transductor-reflector) y arreglo de fases
+- Calcular las posiciones de nodos y fuerzas de atrapamiento para una frecuencia y geometría de transductor dadas
+- Extender un levitador de eje único a manipulación multi-eje usando arreglos de fases
 
 ## Entradas
 
-- **Requerido**: Object properties (mass, density, radius or characteristic dimension, compressibility if known)
-- **Requerido**: Target levitation medium (air, water, inert gas) with its density and speed of sound
-- **Opcional**: Available transducer frequency (default: 40 kHz, common for hobbyist and lab systems)
-- **Opcional**: Transducer power or voltage rating
-- **Opcional**: Desired manipulation capability (static trapping only, or dynamic repositioning)
+- **Requerido**: Propiedades del objeto (masa, densidad, radio o dimensión característica, compresibilidad si se conoce)
+- **Requerido**: Medio de levitación objetivo (aire, agua, gas inerte) con su densidad y velocidad del sonido
+- **Opcional**: Frecuencia de transductor disponible (predeterminado: 40 kHz, común para sistemas de laboratorio y aficionados)
+- **Opcional**: Potencia o clasificación de voltaje del transductor
+- **Opcional**: Capacidad de manipulación deseada (solo atrapamiento estático, o reposicionamiento dinámico)
 
 ## Procedimiento
 
-### Paso 1: Determine Object Properties and Acoustic Contrast
+### Paso 1: Determinar propiedades del objeto y contraste acústico
 
-Characterize the object and the medium to establish the fundamental feasibility of acoustic levitation:
+Caracterizar el objeto y el medio para establecer la viabilidad fundamental de la levitación acústica:
 
-1. **Object parameters**: Record the mass m, density rho_p, radius a (or equivalent sphere radius for non-spherical objects), and bulk modulus K_p (compressibility kappa_p = 1/K_p). For rigid objects like metal spheres, K_p is effectively infinite.
-2. **Medium parameters**: Record the density rho_0, speed of sound c_0, and bulk modulus K_0 = rho_0 * c_0^2 for the host medium.
-3. **Acoustic contrast factor**: Compute the Gor'kov contrast factors that determine whether the object migrates to pressure nodes or antinodes:
-   - Monopole coefficient: f_1 = 1 - (K_0 / K_p) = 1 - (rho_0 * c_0^2) / (rho_p * c_p^2)
-   - Dipole coefficient: f_2 = 2 * (rho_p - rho_0) / (2 * rho_p + rho_0)
-   - For most solid objects in air, f_1 ~ 1 and f_2 ~ 1, so the object is trapped at pressure nodes (velocity antinodes).
-4. **Size constraint**: Verify that the object radius a is much smaller than the acoustic wavelength lambda = c_0 / f. The Gor'kov theory requires a << lambda (typically a < lambda/4). If this condition is not met, ray acoustics or full numerical simulation is needed.
+1. **Parámetros del objeto**: Registrar la masa m, densidad rho_p, radio a (o radio de esfera equivalente para objetos no esféricos), y módulo volumétrico K_p (compresibilidad kappa_p = 1/K_p). Para objetos rígidos como esferas metálicas, K_p es efectivamente infinito.
+2. **Parámetros del medio**: Registrar la densidad rho_0, velocidad del sonido c_0, y módulo volumétrico K_0 = rho_0 * c_0^2 para el medio huésped.
+3. **Factor de contraste acústico**: Calcular los factores de contraste de Gor'kov que determinan si el objeto migra hacia nodos de presión o antinodos:
+   - Coeficiente monopolar: f_1 = 1 - (K_0 / K_p) = 1 - (rho_0 * c_0^2) / (rho_p * c_p^2)
+   - Coeficiente dipolar: f_2 = 2 * (rho_p - rho_0) / (2 * rho_p + rho_0)
+   - Para la mayoría de objetos sólidos en aire, f_1 ~ 1 y f_2 ~ 1, por lo que el objeto queda atrapado en nodos de presión (antinodos de velocidad).
+4. **Restricción de tamaño**: Verificar que el radio del objeto a sea mucho menor que la longitud de onda acústica lambda = c_0 / f. La teoría de Gor'kov requiere a << lambda (típicamente a < lambda/4). Si esta condición no se cumple, se necesita acústica de rayos o simulación numérica completa.
 
 ```markdown
 ## Object and Medium Parameters
@@ -69,25 +69,25 @@ Characterize the object and the medium to establish the fundamental feasibility 
 - **Trapping location**: [pressure node / pressure antinode]
 ```
 
-**Esperado:** Complete characterization of the object and medium with contrast factors computed. The object should be confirmed to migrate toward pressure nodes (typical case for solids in air). The size constraint a << lambda is satisfied.
+**Esperado:** Caracterización completa del objeto y medio con factores de contraste calculados. Se debe confirmar que el objeto migra hacia nodos de presión (caso típico para sólidos en aire). La restricción de tamaño a << lambda se satisface.
 
-**En caso de fallo:** If a / lambda > 0.25, the Gor'kov point-particle theory breaks down. Use numerical methods (finite element acoustic simulation) or experimental calibration instead. If f_1 and f_2 have opposite signs, the object may be trapped at an intermediate position rather than a clean node or antinode -- this requires careful Gor'kov potential mapping.
+**En caso de fallo:** Si a / lambda > 0.25, la teoría de partícula puntual de Gor'kov deja de ser válida. Usar métodos numéricos (simulación acústica por elementos finitos) o calibración experimental en su lugar. Si f_1 y f_2 tienen signos opuestos, el objeto puede quedar atrapado en una posición intermedia en lugar de un nodo o antinodo limpio — esto requiere un mapeo cuidadoso del potencial de Gor'kov.
 
-### Paso 2: Calculate Required Acoustic Radiation Pressure
+### Paso 2: Calcular la presión de radiación acústica requerida
 
-Determine the acoustic field intensity needed to balance gravity:
+Determinar la intensidad del campo acústico necesaria para equilibrar la gravedad:
 
-1. **Acoustic radiation force**: For a small sphere at a pressure node in a one-dimensional standing wave, the time-averaged axial force is:
+1. **Fuerza de radiación acústica**: Para una esfera pequeña en un nodo de presión en una onda estacionaria unidimensional, la fuerza axial promediada en el tiempo es:
    - F_ax = -(4 * pi / 3) * a^3 * [f_1 * (1 / (2 * rho_0 * c_0^2)) * d(p^2)/dz - (3 * f_2 * rho_0 / 4) * d(v^2)/dz]
-   - In a plane standing wave p(z,t) = P_0 * cos(kz) * cos(omega*t), this simplifies near a node to:
+   - En una onda estacionaria plana p(z,t) = P_0 * cos(kz) * cos(omega*t), esto se simplifica cerca de un nodo a:
    - F_ax = (pi * a^3 * P_0^2 * k) / (3 * rho_0 * c_0^2) * Phi * sin(2kz)
-   - where Phi = f_1 + (3/2) * f_2 is the acoustic contrast factor and k = 2*pi/lambda.
-2. **Force balance**: Set the maximum radiation force (at sin(2kz) = 1, which occurs at lambda/8 from the node) equal to gravity:
+   - donde Phi = f_1 + (3/2) * f_2 es el factor de contraste acústico y k = 2*pi/lambda.
+2. **Balance de fuerzas**: Igualar la fuerza de radiación máxima (en sin(2kz) = 1, que ocurre a lambda/8 del nodo) con la gravedad:
    - F_ax_max = (pi * a^3 * P_0^2 * k) / (3 * rho_0 * c_0^2) * Phi = m * g = (4/3) * pi * a^3 * rho_p * g
-   - Solve for the required pressure amplitude:
+   - Resolver para la amplitud de presión requerida:
    - P_0 = sqrt(4 * rho_p * rho_0 * c_0^2 * g / (k * Phi))
-3. **Acoustic intensity**: Convert pressure amplitude to intensity: I = P_0^2 / (2 * rho_0 * c_0). Compare with the transducer's rated output.
-4. **Sound pressure level**: Express in dB SPL: L = 20 * log10(P_0 / 20e-6). Typical acoustic levitation in air requires 150-165 dB SPL.
+3. **Intensidad acústica**: Convertir amplitud de presión a intensidad: I = P_0^2 / (2 * rho_0 * c_0). Comparar con la salida nominal del transductor.
+4. **Nivel de presión sonora**: Expresar en dB SPL: L = 20 * log10(P_0 / 20e-6). La levitación acústica típica en aire requiere 150-165 dB SPL.
 
 ```markdown
 ## Acoustic Requirements
@@ -97,19 +97,19 @@ Determine the acoustic field intensity needed to balance gravity:
 - **Safety note**: [hearing protection required if > 120 dB at audible frequencies]
 ```
 
-**Esperado:** A quantitative determination of the minimum acoustic pressure amplitude to achieve levitation, expressed in Pa, W/m^2, and dB SPL. The required intensity should be achievable with the specified or a commercially available transducer.
+**Esperado:** Una determinación cuantitativa de la amplitud de presión acústica mínima para lograr la levitación, expresada en Pa, W/m^2 y dB SPL. La intensidad requerida debe ser alcanzable con el transductor especificado o uno disponible comercialmente.
 
-**En caso de fallo:** If the required pressure amplitude exceeds what available transducers can produce, reduce the object mass or density, use a lighter material, or switch to a medium with higher density (e.g., levitate in a dense gas like SF6 to increase the radiation force). Alternatively, use multiple transducers in a focused array to concentrate acoustic energy at the trapping point.
+**En caso de fallo:** Si la amplitud de presión requerida excede lo que los transductores disponibles pueden producir, reducir la masa o densidad del objeto, usar un material más ligero, o cambiar a un medio de mayor densidad (ej., levitar en un gas denso como SF6 para aumentar la fuerza de radiación). Alternativamente, usar múltiples transductores en un arreglo enfocado para concentrar la energía acústica en el punto de atrapamiento.
 
-### Paso 3: Design Transducer-Reflector Geometry
+### Paso 3: Diseñar la geometría transductor-reflector
 
-Configure the physical hardware to produce a stable standing wave:
+Configurar el hardware físico para producir una onda estacionaria estable:
 
-1. **Transducer selection**: Choose an ultrasonic transducer at frequency f (common: 28 kHz, 40 kHz, or 60-80 kHz piezoelectric transducers). Higher frequency gives smaller wavelength and tighter trapping, but reduces the maximum object size. Verify that the transducer can produce the required P_0 at the operating distance.
-2. **Reflector design**: Place a flat or concave reflector opposite the transducer. The reflector surface should be acoustically hard (high acoustic impedance mismatch with the medium). Metal or glass plates work well in air. A concave reflector concentrates the sound field and increases the pressure amplitude at the axis.
-3. **Cavity length**: Set the transducer-reflector distance L to an integer number of half-wavelengths: L = n * lambda/2, where n is a positive integer. This creates n pressure nodes between the transducer and reflector, spaced lambda/2 apart.
-4. **Node positions**: The pressure nodes are located at z_j = (2j - 1) * lambda/4 from the reflector surface, for j = 1, 2, ..., n. The node closest to the center of the cavity is typically the most stable trapping site.
-5. **Resonance tuning**: Fine-tune L by adjusting the transducer-reflector distance with a micrometer stage while monitoring the levitation force or the acoustic pressure with a microphone. The optimal distance produces the strongest standing wave.
+1. **Selección de transductor**: Elegir un transductor ultrasónico a frecuencia f (común: 28 kHz, 40 kHz, o 60-80 kHz transductores piezoeléctricos). Mayor frecuencia da menor longitud de onda y atrapamiento más ajustado, pero reduce el tamaño máximo del objeto. Verificar que el transductor puede producir el P_0 requerido a la distancia de operación.
+2. **Diseño del reflector**: Colocar un reflector plano o cóncavo opuesto al transductor. La superficie del reflector debe ser acústicamente dura (alta desadaptación de impedancia acústica con el medio). Placas de metal o vidrio funcionan bien en aire. Un reflector cóncavo concentra el campo sonoro y aumenta la amplitud de presión en el eje.
+3. **Longitud de cavidad**: Establecer la distancia transductor-reflector L a un número entero de medias longitudes de onda: L = n * lambda/2, donde n es un entero positivo. Esto crea n nodos de presión entre el transductor y reflector, espaciados lambda/2.
+4. **Posiciones de nodos**: Los nodos de presión se ubican en z_j = (2j - 1) * lambda/4 desde la superficie del reflector, para j = 1, 2, ..., n. El nodo más cercano al centro de la cavidad es típicamente el sitio de atrapamiento más estable.
+5. **Sintonización de resonancia**: Ajustar finamente L variando la distancia transductor-reflector con una platina micrométrica mientras se monitorea la fuerza de levitación o la presión acústica con un micrófono. La distancia óptima produce la onda estacionaria más fuerte.
 
 ```markdown
 ## Geometry Design
@@ -121,25 +121,25 @@ Configure the physical hardware to produce a stable standing wave:
 - **Selected trapping node**: z_[j] = [value]
 ```
 
-**Esperado:** A complete hardware specification with transducer, reflector, and cavity length determined. Node positions are computed and the trapping node is selected.
+**Esperado:** Una especificación de hardware completa con transductor, reflector y longitud de cavidad determinados. Las posiciones de nodos están calculadas y el nodo de atrapamiento está seleccionado.
 
-**En caso de fallo:** If no stable standing wave forms (common when L is not precisely n * lambda/2), adjust the cavity length in increments of 0.1 mm. Temperature changes shift c_0 and thus lambda, requiring re-tuning. If the transducer beam diverges too much for the cavity length, add a horn or waveguide to collimate the beam, or reduce L.
+**En caso de fallo:** Si no se forma una onda estacionaria estable (común cuando L no es precisamente n * lambda/2), ajustar la longitud de cavidad en incrementos de 0.1 mm. Los cambios de temperatura desplazan c_0 y por lo tanto lambda, requiriendo re-sintonización. Si el haz del transductor diverge demasiado para la longitud de cavidad, agregar una bocina o guía de onda para colimar el haz, o reducir L.
 
-### Paso 4: Compute Trapping Potential and Restoring Forces
+### Paso 4: Calcular el potencial de atrapamiento y fuerzas restauradoras
 
-Quantify the strength and spatial extent of the acoustic trap:
+Cuantificar la fuerza y extensión espacial de la trampa acústica:
 
-1. **Gor'kov potential**: For a small sphere in the standing wave field, compute the Gor'kov potential:
+1. **Potencial de Gor'kov**: Para una esfera pequeña en el campo de onda estacionaria, calcular el potencial de Gor'kov:
    - U(r) = (4/3) * pi * a^3 * [(f_1 / (2 * rho_0 * c_0^2)) * <p^2> - (3 * f_2 * rho_0 / 4) * <v^2>]
-   - where <p^2> and <v^2> are the time-averaged squared pressure and velocity fields.
-   - The object is trapped at the minimum of U(r) + m*g*z (including gravity).
-2. **Axial restoring force**: Near the trapping node, expand F_z to first order:
-   - F_z ~ -k_z * delta_z, where k_z = (2 * pi * a^3 * P_0^2 * k^2) / (3 * rho_0 * c_0^2) * Phi
-   - The axial natural frequency is omega_z = sqrt(k_z / m).
-3. **Lateral restoring force**: In a finite-width beam, the lateral radiation force arises from the transverse intensity gradient. For a Gaussian beam profile with waist w:
-   - k_r ~ k_z * (a / w)^2 (approximate, lateral stiffness is weaker than axial)
-   - Lateral trapping is weaker than axial; this is the limiting factor for stability.
-4. **Trapping depth**: The maximum displacement before the object escapes the trap is determined by the potential well depth. For the axial direction, the well depth is Delta_U = F_ax_max * lambda / (2 * pi). Express as a multiple of the thermal energy k_B * T if relevant (always relevant for micrometer-scale particles, negligible for millimeter-scale objects in air).
+   - donde <p^2> y <v^2> son los campos cuadráticos de presión y velocidad promediados en el tiempo.
+   - El objeto queda atrapado en el mínimo de U(r) + m*g*z (incluyendo gravedad).
+2. **Fuerza restauradora axial**: Cerca del nodo de atrapamiento, expandir F_z a primer orden:
+   - F_z ~ -k_z * delta_z, donde k_z = (2 * pi * a^3 * P_0^2 * k^2) / (3 * rho_0 * c_0^2) * Phi
+   - La frecuencia natural axial es omega_z = sqrt(k_z / m).
+3. **Fuerza restauradora lateral**: En un haz de ancho finito, la fuerza de radiación lateral surge del gradiente de intensidad transversal. Para un perfil de haz gaussiano con cintura w:
+   - k_r ~ k_z * (a / w)^2 (aproximado, la rigidez lateral es más débil que la axial)
+   - El atrapamiento lateral es más débil que el axial; este es el factor limitante para la estabilidad.
+4. **Profundidad de atrapamiento**: El desplazamiento máximo antes de que el objeto escape de la trampa está determinado por la profundidad del pozo de potencial. Para la dirección axial, la profundidad del pozo es Delta_U = F_ax_max * lambda / (2 * pi). Expresar como múltiplo de la energía térmica k_B * T si es relevante (siempre relevante para partículas de escala micrométrica, despreciable para objetos de escala milimétrica en aire).
 
 ```markdown
 ## Trapping Analysis
@@ -151,19 +151,19 @@ Quantify the strength and spatial extent of the acoustic trap:
 - **Stiffness ratio**: k_z / k_r = [value] (lateral is weaker)
 ```
 
-**Esperado:** Quantitative stiffness values for both axial and lateral directions, natural frequencies computed, and the trapping potential well depth determined. Lateral stiffness is confirmed to be positive (though weaker than axial).
+**Esperado:** Valores cuantitativos de rigidez para direcciones axial y lateral, frecuencias naturales calculadas, y profundidad del pozo de potencial de atrapamiento determinada. Se confirma que la rigidez lateral es positiva (aunque más débil que la axial).
 
-**En caso de fallo:** If the lateral stiffness is negative or negligibly small, the object will drift sideways out of the beam. Solutions include using a wider transducer (larger beam waist), adding lateral transducers, switching to a phased array configuration, or using a concave reflector to create a converging wavefront that provides stronger lateral confinement.
+**En caso de fallo:** Si la rigidez lateral es negativa o despreciablemente pequeña, el objeto se desplazará lateralmente fuera del haz. Las soluciones incluyen usar un transductor más ancho (mayor cintura de haz), agregar transductores laterales, cambiar a una configuración de arreglo de fases, o usar un reflector cóncavo para crear un frente de onda convergente que proporcione confinamiento lateral más fuerte.
 
-### Paso 5: Verify Stability Against Perturbations
+### Paso 5: Verificar estabilidad frente a perturbaciones
 
-Confirm that the designed system will reliably trap and hold the object:
+Confirmar que el sistema diseñado atrapará y sostendrá el objeto de manera fiable:
 
-1. **Gravity offset**: The equilibrium position is shifted below the pressure node by delta_z = m * g / k_z. Verify that delta_z << lambda/4 (the distance to the potential maximum). If delta_z approaches lambda/4, the object falls out of the trap.
-2. **Air current sensitivity**: Estimate the drag force from ambient air currents. For a sphere, F_drag = 6 * pi * eta * a * v_air (Stokes drag). Compare with the lateral restoring force: the maximum tolerable air speed is v_max = k_r * a / (6 * pi * eta * a) = k_r / (6 * pi * eta).
-3. **Acoustic streaming**: The standing wave drives steady circulatory flows (Rayleigh streaming) with velocity v_stream ~ P_0^2 / (4 * rho_0 * c_0^3 * eta) * lambda. These flows exert drag on the levitated object. Verify that the streaming drag is smaller than the lateral restoring force.
-4. **Thermal effects**: Acoustic absorption heats the medium, changing c_0 and shifting the node positions. For high-intensity operation (> 160 dB SPL), estimate the temperature rise and the resulting node drift over the operating time.
-5. **Phased array extension** (if manipulation is needed): For dynamic object repositioning, replace the single transducer-reflector pair with a phased array of transducers. By adjusting the relative phases, the pressure node positions can be moved continuously, carrying the trapped object with them. The phase resolution determines the positioning precision: delta_z ~ lambda / (2 * pi * N_phase_bits).
+1. **Desplazamiento gravitatorio**: La posición de equilibrio se desplaza por debajo del nodo de presión en delta_z = m * g / k_z. Verificar que delta_z << lambda/4 (la distancia al máximo del potencial). Si delta_z se acerca a lambda/4, el objeto cae fuera de la trampa.
+2. **Sensibilidad a corrientes de aire**: Estimar la fuerza de arrastre de corrientes de aire ambientales. Para una esfera, F_drag = 6 * pi * eta * a * v_air (arrastre de Stokes). Comparar con la fuerza restauradora lateral: la velocidad máxima de aire tolerable es v_max = k_r * a / (6 * pi * eta * a) = k_r / (6 * pi * eta).
+3. **Flujo acústico**: La onda estacionaria impulsa flujos circulatorios estacionarios (flujo de Rayleigh) con velocidad v_stream ~ P_0^2 / (4 * rho_0 * c_0^3 * eta) * lambda. Estos flujos ejercen arrastre sobre el objeto levitado. Verificar que el arrastre del flujo es menor que la fuerza restauradora lateral.
+4. **Efectos térmicos**: La absorción acústica calienta el medio, cambiando c_0 y desplazando las posiciones de los nodos. Para operación de alta intensidad (> 160 dB SPL), estimar el aumento de temperatura y el desplazamiento resultante de nodos durante el tiempo de operación.
+5. **Extensión de arreglo de fases** (si se necesita manipulación): Para reposicionamiento dinámico del objeto, reemplazar el par transductor-reflector único con un arreglo de fases de transductores. Ajustando las fases relativas, las posiciones de los nodos de presión pueden moverse continuamente, transportando el objeto atrapado con ellas. La resolución de fase determina la precisión de posicionamiento: delta_z ~ lambda / (2 * pi * N_phase_bits).
 
 ```markdown
 ## Stability Verification
@@ -175,33 +175,33 @@ Confirm that the designed system will reliably trap and hold the object:
 | Thermal drift | Delta_T = [val] K | Re-tune interval | [time] | [Acceptable/No] |
 ```
 
-**Esperado:** All perturbation sources are quantified and shown to be within the trapping margins. The gravity offset is a small fraction of lambda/4. Air current and streaming effects do not overwhelm the lateral trap.
+**Esperado:** Todas las fuentes de perturbación están cuantificadas y se demuestra que están dentro de los márgenes de atrapamiento. El desplazamiento gravitatorio es una fracción pequeña de lambda/4. Los efectos de corrientes de aire y flujo acústico no superan la trampa lateral.
 
-**En caso de fallo:** If the gravity offset is too large (heavy object, weak field), increase P_0 or use a higher frequency (stronger gradient per wavelength). If air currents are a problem, enclose the levitator in a draft shield. If acoustic streaming destabilizes the object, reduce the driving amplitude and use a reflector geometry that minimizes streaming vortices (e.g., a shallow concave reflector).
+**En caso de fallo:** Si el desplazamiento gravitatorio es demasiado grande (objeto pesado, campo débil), aumentar P_0 o usar una frecuencia más alta (gradiente más fuerte por longitud de onda). Si las corrientes de aire son un problema, encerrar el levitador en un escudo contra corrientes. Si el flujo acústico desestabiliza el objeto, reducir la amplitud de excitación y usar una geometría de reflector que minimice los vórtices de flujo (ej., un reflector cóncavo poco profundo).
 
 ## Validación
 
-- [ ] Object size satisfies a << lambda (Gor'kov theory applicable)
-- [ ] Acoustic contrast factors are computed and the trapping location (node/antinode) is identified
-- [ ] Required pressure amplitude P_0 is calculated and achievable with specified hardware
-- [ ] Transducer-reflector cavity length is set to n * lambda/2 with node positions computed
-- [ ] Axial and lateral stiffness are both positive
-- [ ] Gravity offset delta_z is a small fraction of lambda/4
-- [ ] Air current and acoustic streaming perturbations are within trapping margins
-- [ ] Safety considerations for high-SPL operation are documented
-- [ ] If phased array is used, phase control resolution and positioning precision are specified
+- [ ] El tamaño del objeto satisface a << lambda (teoría de Gor'kov aplicable)
+- [ ] Los factores de contraste acústico están calculados y la ubicación de atrapamiento (nodo/antinodo) está identificada
+- [ ] La amplitud de presión requerida P_0 está calculada y es alcanzable con el hardware especificado
+- [ ] La longitud de cavidad transductor-reflector está configurada a n * lambda/2 con posiciones de nodos calculadas
+- [ ] Las rigideces axial y lateral son ambas positivas
+- [ ] El desplazamiento gravitatorio delta_z es una fracción pequeña de lambda/4
+- [ ] Las perturbaciones por corrientes de aire y flujo acústico están dentro de los márgenes de atrapamiento
+- [ ] Las consideraciones de seguridad para operación de alto SPL están documentadas
+- [ ] Si se usa arreglo de fases, la resolución de control de fase y precisión de posicionamiento están especificadas
 
 ## Errores Comunes
 
-- **Violating the small-particle assumption**: The Gor'kov radiation force formula assumes a << lambda. For objects approaching lambda/4 in size, the point-particle approximation breaks down and the actual force can differ significantly (both in magnitude and direction) from the Gor'kov prediction. Use full-wave simulation for large objects.
-- **Ignoring lateral confinement**: Most introductory treatments focus on the axial (vertical) trapping force and neglect the much weaker lateral restoring force. In practice, lateral instability is the primary failure mode, especially for objects near the upper size limit.
-- **Forgetting acoustic streaming**: High-intensity standing waves always drive steady streaming flows. These flows exert drag on the levitated object that competes with the radiation force. Streaming is not a small effect -- it can be the dominant destabilizing influence at high SPL.
-- **Temperature sensitivity**: The speed of sound in air changes by about 0.6 m/s per degree Celsius. Over a 10-degree temperature swing, the wavelength shifts by about 2%, which moves the node positions by millimeters in a typical cavity. Long-running experiments need active length compensation or temperature control.
-- **Confusing pressure nodes with velocity nodes**: Pressure nodes are velocity antinodes and vice versa. Solid objects with positive contrast factors are trapped at pressure nodes (where the pressure oscillation is minimum and the velocity oscillation is maximum). Reversing this leads to trapping at the wrong position.
-- **Neglecting nonlinear effects at high amplitude**: Above approximately 155-160 dB SPL, nonlinear acoustic effects (harmonic generation, shock formation) become significant and reduce the effective trapping force compared to linear theory predictions.
+- **Violar la suposición de partícula pequeña**: La fórmula de fuerza de radiación de Gor'kov asume a << lambda. Para objetos que se acercan a lambda/4 en tamaño, la aproximación de partícula puntual deja de ser válida y la fuerza real puede diferir significativamente (tanto en magnitud como en dirección) de la predicción de Gor'kov. Usar simulación de onda completa para objetos grandes.
+- **Ignorar el confinamiento lateral**: La mayoría de tratamientos introductorios se enfocan en la fuerza de atrapamiento axial (vertical) y descuidan la fuerza restauradora lateral mucho más débil. En la práctica, la inestabilidad lateral es el modo de fallo primario, especialmente para objetos cerca del límite superior de tamaño.
+- **Olvidar el flujo acústico**: Las ondas estacionarias de alta intensidad siempre impulsan flujos estacionarios. Estos flujos ejercen arrastre sobre el objeto levitado que compite con la fuerza de radiación. El flujo no es un efecto pequeño — puede ser la influencia desestabilizadora dominante a alto SPL.
+- **Sensibilidad a la temperatura**: La velocidad del sonido en aire cambia aproximadamente 0.6 m/s por grado Celsius. En una variación de temperatura de 10 grados, la longitud de onda se desplaza aproximadamente 2%, lo que mueve las posiciones de los nodos milímetros en una cavidad típica. Experimentos de larga duración necesitan compensación activa de longitud o control de temperatura.
+- **Confundir nodos de presión con nodos de velocidad**: Los nodos de presión son antinodos de velocidad y viceversa. Los objetos sólidos con factores de contraste positivos quedan atrapados en nodos de presión (donde la oscilación de presión es mínima y la oscilación de velocidad es máxima). Invertir esto lleva a atrapar en la posición incorrecta.
+- **Descuidar efectos no lineales a alta amplitud**: Por encima de aproximadamente 155-160 dB SPL, los efectos acústicos no lineales (generación de armónicos, formación de choques) se vuelven significativos y reducen la fuerza de atrapamiento efectiva comparada con las predicciones de la teoría lineal.
 
 ## Habilidades Relacionadas
 
-- `evaluate-levitation-mechanism` -- compare acoustic levitation with magnetic, electrostatic, and aerodynamic alternatives
-- `analyze-magnetic-levitation` -- complementary magnetic levitation analysis for comparison
-- `derive-theoretical-result` -- derive acoustic radiation pressure from first principles
+- `evaluate-levitation-mechanism` -- comparar levitación acústica con alternativas magnéticas, electrostáticas y aerodinámicas
+- `analyze-magnetic-levitation` -- análisis complementario de levitación magnética para comparación
+- `derive-theoretical-result` -- derivar la presión de radiación acústica desde primeros principios

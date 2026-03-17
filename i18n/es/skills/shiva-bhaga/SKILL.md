@@ -1,14 +1,15 @@
 ---
 name: shiva-bhaga
 description: >
-  Destruction and dissolution — controlled dismantling of stale patterns,
-  context purging, assumption clearing, and dead-code elimination. Maps
-  Shiva's transformative destruction to AI reasoning: identifying what
-  must end so something better can begin, dissolving attachment to outdated
-  approaches, and creating space through intentional release. Use when context
-  has accumulated stale assumptions, when a failed approach needs to be
-  discarded rather than patched, when dead code or zombie tasks are creating
-  noise, or before a major pivot where clearing must precede creation.
+  Destrucción y disolución — desmantelamiento controlado de patrones obsoletos,
+  purga de contexto, eliminación de suposiciones y limpieza de código muerto.
+  Mapea la destrucción transformadora de Shiva al razonamiento de IA: identificar
+  lo que debe terminar para que algo mejor pueda comenzar, disolver el apego a
+  enfoques obsoletos y crear espacio mediante la liberación intencional. Usar
+  cuando el contexto ha acumulado suposiciones obsoletas, cuando un enfoque
+  fallido necesita ser descartado en lugar de parcheado, cuando código muerto o
+  tareas zombi están creando ruido, o antes de un giro importante donde la
+  limpieza debe preceder a la creación.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,28 +28,28 @@ metadata:
 
 # Shiva Bhaga
 
-Controlled destruction and dissolution of stale patterns, outdated assumptions, and accumulated noise — clearing the ground so new growth can emerge.
+Destrucción y disolución controlada de patrones obsoletos, suposiciones anticuadas y ruido acumulado — despejando el terreno para que nuevo crecimiento pueda emerger.
 
 ## Cuándo Usar
 
-- Context has accumulated stale assumptions that are silently distorting reasoning
-- A previous approach has failed and the temptation is to patch rather than discard
-- The conversation has grown long and earlier decisions may no longer serve the current goal
-- Dead code, abandoned plans, or zombie tasks are creating noise and confusion
-- Before a major pivot — clearing must precede creation
-- When attachment to a particular approach is preventing consideration of alternatives
+- El contexto ha acumulado suposiciones obsoletas que están distorsionando silenciosamente el razonamiento
+- Un enfoque anterior ha fallado y la tentación es parchearlo en lugar de descartarlo
+- La conversación se ha alargado y las decisiones anteriores pueden ya no servir al objetivo actual
+- Código muerto, planes abandonados o tareas zombi están creando ruido y confusión
+- Antes de un giro importante — la limpieza debe preceder a la creación
+- Cuando el apego a un enfoque particular está impidiendo la consideración de alternativas
 
 ## Entradas
 
-- **Requerido**: Current conversation state or project context (available implicitly)
-- **Opcional**: Specific target for dissolution (e.g., "this approach isn't working," "clear all assumptions about the database layer")
-- **Opcional**: Scope boundary — what must be preserved through the destruction
+- **Requerido**: Estado actual de la conversación o contexto del proyecto (disponible implícitamente)
+- **Opcional**: Objetivo específico para la disolución (ej., "este enfoque no está funcionando", "limpiar todas las suposiciones sobre la capa de base de datos")
+- **Opcional**: Límite de alcance — lo que debe preservarse a través de la destrucción
 
 ## Procedimiento
 
-### Paso 1: Identify What Must End
+### Paso 1: Identificar lo que debe terminar
 
-Survey the current state and mark what is stale, broken, or no longer serving the goal.
+Examinar el estado actual y marcar lo que está obsoleto, roto o ya no sirve al objetivo.
 
 ```
 Dissolution Triage:
@@ -77,80 +78,80 @@ Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Scan each category honestly — resistance to examining a category is itself a signal
-2. For each item found, ask: "If I were starting fresh right now, would I create this?"
-3. If the answer is no, mark it for dissolution
+1. Examinar cada categoría honestamente — la resistencia a examinar una categoría es en sí misma una señal
+2. Para cada elemento encontrado, preguntar: "¿Si empezara de nuevo ahora mismo, crearía esto?"
+3. Si la respuesta es no, marcarlo para disolución
 
-**Esperado:** A clear inventory of what needs to be released, with specific items in each category.
+**Esperado:** Un inventario claro de lo que necesita ser liberado, con elementos específicos en cada categoría.
 
-**En caso de fallo:** If nothing seems stale, the assessment may be too shallow. Pick the oldest decision in the current context and justify it from scratch — if the justification feels forced, it is a candidate for dissolution.
+**En caso de fallo:** Si nada parece obsoleto, la evaluación puede ser demasiado superficial. Tomar la decisión más antigua en el contexto actual y justificarla desde cero — si la justificación se siente forzada, es candidata para disolución.
 
-### Paso 2: Establish the Preservation Boundary
+### Paso 2: Establecer el límite de preservación
 
-Not everything should be destroyed. Identify what must survive the clearing.
+No todo debe ser destruido. Identificar lo que debe sobrevivir a la limpieza.
 
-1. **Core requirements**: What did the user actually ask for? This survives.
-2. **Verified knowledge**: Facts confirmed through tool use (file reads, test results) survive.
-3. **User preferences**: Explicitly stated preferences and constraints survive.
-4. **Working components**: Code or approaches that are demonstrably functioning survive.
+1. **Requisitos fundamentales**: ¿Qué pidió realmente el usuario? Esto sobrevive.
+2. **Conocimiento verificado**: Los hechos confirmados mediante uso de herramientas (lecturas de archivos, resultados de pruebas) sobreviven.
+3. **Preferencias del usuario**: Las preferencias y restricciones declaradas explícitamente sobreviven.
+4. **Componentes funcionales**: El código o los enfoques que están funcionando demostrablemente sobreviven.
 
-Draw the boundary: everything inside is preserved, everything outside is subject to dissolution.
+Trazar el límite: todo lo que está dentro se preserva, todo lo que está fuera está sujeto a disolución.
 
-**Esperado:** A clear distinction between what is kept and what is released.
+**Esperado:** Una distinción clara entre lo que se mantiene y lo que se libera.
 
-**En caso de fallo:** If the boundary is unclear, ask: "What would I need to reconstruct if I started this task from scratch?" The answer defines the preservation boundary.
+**En caso de fallo:** Si el límite no está claro, preguntar: "¿Qué necesitaría reconstruir si empezara esta tarea desde cero?" La respuesta define el límite de preservación.
 
-### Paso 3: Dissolve with Intention
+### Paso 3: Disolver con intención
 
-Execute the dissolution — not as abandonment but as intentional clearing.
+Ejecutar la disolución — no como abandono sino como limpieza intencional.
 
-1. For each marked item, release it explicitly:
-   - Stale assumption: "I assumed X, but current evidence shows Y. Releasing X."
-   - Failed approach: "Approach A was attempted and did not work because Z. Releasing attachment to A."
-   - Noise: "Variable/plan/context Q is no longer relevant. Removing from consideration."
-2. Do not justify or defend what is being dissolved — the point is release, not analysis
-3. If dissolving a large body of accumulated context, summarize what was dissolved and why in one sentence
-4. Clear the workspace: if applicable, close abandoned files, reset mental model, acknowledge the clean slate
+1. Para cada elemento marcado, liberarlo explícitamente:
+   - Suposición obsoleta: "Supuse X, pero la evidencia actual muestra Y. Liberando X."
+   - Enfoque fallido: "El enfoque A fue intentado y no funcionó porque Z. Liberando el apego a A."
+   - Ruido: "La variable/plan/contexto Q ya no es relevante. Eliminando de la consideración."
+2. No justificar ni defender lo que se está disolviendo — el objetivo es liberar, no analizar
+3. Si se disuelve un gran cuerpo de contexto acumulado, resumir lo que se disolvió y por qué en una oración
+4. Limpiar el espacio de trabajo: si es aplicable, cerrar archivos abandonados, reiniciar el modelo mental, reconocer la pizarra limpia
 
-**Esperado:** A lighter, cleaner context with stale elements removed. The remaining context should feel accurate and current.
+**Esperado:** Un contexto más ligero y limpio con los elementos obsoletos eliminados. El contexto restante debería sentirse preciso y actual.
 
-**En caso de fallo:** If dissolution feels incomplete — some released items keep influencing thinking — name them again explicitly. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
+**En caso de fallo:** Si la disolución se siente incompleta — algunos elementos liberados siguen influyendo en el pensamiento — nombrarlos de nuevo explícitamente. "Noto que sigo razonando como si X fuera verdadero. X fue disuelto. Procediendo sin X."
 
-### Paso 4: Sit in the Void
+### Paso 4: Permanecer en el vacío
 
-After destruction, resist the urge to immediately rebuild. The space between destruction and creation has value.
+Después de la destrucción, resistir el impulso de reconstruir inmediatamente. El espacio entre destrucción y creación tiene valor.
 
-1. Acknowledge the cleared space: "The following has been dissolved: [list]"
-2. Note what remains: "What survives: [list]"
-3. Resist premature reconstruction — do not immediately propose a replacement for what was dissolved
-4. Allow the cleared space to inform what comes next
-5. The void is not emptiness — it is potential. The next step (creation via `brahma-bhaga` or preservation via `vishnu-bhaga`) emerges from this space
+1. Reconocer el espacio despejado: "Lo siguiente ha sido disuelto: [lista]"
+2. Notar lo que permanece: "Lo que sobrevive: [lista]"
+3. Resistir la reconstrucción prematura — no proponer inmediatamente un reemplazo para lo que fue disuelto
+4. Permitir que el espacio despejado informe lo que viene después
+5. El vacío no es vacuidad — es potencial. El siguiente paso (creación vía `brahma-bhaga` o preservación vía `vishnu-bhaga`) emerge de este espacio
 
-**Esperado:** A moment of clarity between the old and the new. The next direction becomes apparent from what remains rather than being forced.
+**Esperado:** Un momento de claridad entre lo viejo y lo nuevo. La siguiente dirección se hace aparente a partir de lo que permanece en lugar de ser forzada.
 
-**En caso de fallo:** If the void feels uncomfortable and there is a strong pull to immediately rebuild, that urgency is itself a signal — it may indicate attachment to the dissolved pattern. Sit longer. The right next step will emerge.
+**En caso de fallo:** Si el vacío se siente incómodo y hay un fuerte impulso de reconstruir inmediatamente, esa urgencia es en sí misma una señal — puede indicar apego al patrón disuelto. Permanecer más tiempo. El siguiente paso correcto emergerá.
 
 ## Validación
 
-- [ ] Stale assumptions were identified and explicitly released
-- [ ] Failed approaches were acknowledged without defensiveness
-- [ ] Accumulated noise was cleared from the working context
-- [ ] The preservation boundary was established before dissolution
-- [ ] Core requirements and user preferences were preserved
-- [ ] The cleared space was acknowledged before moving to creation
+- [ ] Las suposiciones obsoletas fueron identificadas y liberadas explícitamente
+- [ ] Los enfoques fallidos fueron reconocidos sin defensividad
+- [ ] El ruido acumulado fue eliminado del contexto de trabajo
+- [ ] El límite de preservación fue establecido antes de la disolución
+- [ ] Los requisitos fundamentales y las preferencias del usuario fueron preservados
+- [ ] El espacio despejado fue reconocido antes de pasar a la creación
 
 ## Errores Comunes
 
-- **Destroying too much**: Dissolution without a preservation boundary destroys working components along with stale ones. Always draw the boundary first
-- **Destroying too little**: Polite dissolution that "releases" things while still letting them influence reasoning. True dissolution requires actually letting go
-- **Skipping the void**: Rushing from destruction to creation without sitting in the cleared space produces a recreation of the old pattern with superficial changes
-- **Performing destruction**: Going through the motions of clearing without actually updating the internal model. If the same assumptions reappear in the next response, dissolution was performative
-- **Destruction as avoidance**: Using dissolution to escape a difficult problem rather than to clear genuine staleness. If the problem persists after clearing, it was not the stale context — it was the problem itself
+- **Destruir demasiado**: La disolución sin un límite de preservación destruye componentes funcionales junto con los obsoletos. Siempre trazar el límite primero
+- **Destruir muy poco**: Disolución cortés que "libera" cosas mientras sigue dejándolas influir en el razonamiento. La verdadera disolución requiere soltar realmente
+- **Saltar el vacío**: Pasar rápidamente de la destrucción a la creación sin permanecer en el espacio despejado produce una recreación del patrón antiguo con cambios superficiales
+- **Destrucción performativa**: Pasar por los movimientos de limpiar sin actualizar realmente el modelo interno. Si las mismas suposiciones reaparecen en la siguiente respuesta, la disolución fue performativa
+- **Destrucción como evasión**: Usar la disolución para escapar de un problema difícil en lugar de limpiar obsolescencia genuina. Si el problema persiste después de la limpieza, no era el contexto obsoleto — era el problema en sí
 
 ## Habilidades Relacionadas
 
-- `brahma-bhaga` — creation follows destruction; after clearing, new patterns emerge from the void
-- `vishnu-bhaga` — preservation complements destruction; what survives dissolution is sustained
-- `heal` — subsystem assessment may reveal what needs dissolution before healing can proceed
-- `meditate` — clearing context noise before dissolution prevents reactive over-destruction
-- `dissolve-form` — the morphic equivalent for architectural dismantling with imaginal disc preservation
+- `brahma-bhaga` — la creación sigue a la destrucción; después de limpiar, nuevos patrones emergen del vacío
+- `vishnu-bhaga` — la preservación complementa la destrucción; lo que sobrevive a la disolución es sostenido
+- `heal` — la evaluación de subsistemas puede revelar lo que necesita disolución antes de que la curación pueda proceder
+- `meditate` — limpiar el ruido del contexto antes de la disolución previene la sobre-destrucción reactiva
+- `dissolve-form` — el equivalente mórfico para el desmantelamiento arquitectónico con preservación de disco imaginal

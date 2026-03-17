@@ -1,11 +1,12 @@
 ---
 name: build-sequential-circuit
 description: >
-  Build sequential (stateful) logic circuits including latches, flip-flops,
-  registers, counters, and finite state machines. Covers SR latch, D and JK
-  flip-flops, binary/BCD/ring counters, and Mealy/Moore FSM design with
-  clock signal and timing analysis. Use when a circuit must remember past
-  inputs, count events, or implement a state-dependent control sequence.
+  Construir circuitos lógicos secuenciales (con estado) incluyendo latches,
+  flip-flops, registros, contadores y máquinas de estados finitos. Cubre
+  latch SR, flip-flops D y JK, contadores binarios/BCD/anillo y diseño de
+  FSM Mealy/Moore con análisis de señal de reloj y temporización. Usar
+  cuando un circuito debe recordar entradas pasadas, contar eventos o
+  implementar una secuencia de control dependiente del estado.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,42 +25,42 @@ metadata:
 
 # Build Sequential Circuit
 
-Design a sequential logic circuit by identifying the required memory and state type, constructing a state diagram and transition table, deriving excitation equations for the chosen flip-flop type, implementing the circuit at the gate level using flip-flops and combinational logic, and verifying correctness through timing diagram analysis and state sequence simulation.
+Diseñar un circuito lógico secuencial identificando la memoria y el tipo de estado requeridos, construyendo un diagrama de estados y tabla de transiciones, derivando ecuaciones de excitación para el tipo de flip-flop elegido, implementando el circuito a nivel de compuertas usando flip-flops y lógica combinacional, y verificando la corrección mediante análisis de diagrama de temporización y simulación de secuencia de estados.
 
 ## Cuándo Usar
 
-- A circuit must remember past inputs or maintain internal state across clock cycles
-- Designing counters (binary, BCD, ring, Johnson), shift registers, or sequence detectors
-- Implementing a finite state machine (Mealy or Moore) from a state diagram or regular expression
-- Adding clocked storage elements to a combinational datapath (registers, pipeline stages)
-- Preparing stateful components for the simulate-cpu-architecture skill (register file, program counter, control FSM)
+- Un circuito debe recordar entradas pasadas o mantener estado interno entre ciclos de reloj
+- Diseñar contadores (binario, BCD, anillo, Johnson), registros de desplazamiento o detectores de secuencia
+- Implementar una máquina de estados finitos (Mealy o Moore) a partir de un diagrama de estados o expresión regular
+- Agregar elementos de almacenamiento con reloj a un camino de datos combinacional (registros, etapas de pipeline)
+- Preparar componentes con estado para la habilidad simulate-cpu-architecture (archivo de registros, contador de programa, FSM de control)
 
 ## Entradas
 
-- **Requerido**: Behavioral specification -- one of: state diagram, state table, timing diagram, regular expression to detect, or verbal description of the desired sequential behavior
-- **Requerido**: Clock characteristics -- edge-triggered (rising/falling) or level-sensitive; single clock or multi-phase
-- **Opcional**: Flip-flop type preference (D, JK, T, or SR)
-- **Opcional**: Reset type -- synchronous, asynchronous, or none
-- **Opcional**: Maximum state count or bit width constraint
-- **Opcional**: Timing constraints (setup time, hold time, maximum clock frequency)
+- **Requerido**: Especificación de comportamiento -- una de: diagrama de estados, tabla de estados, diagrama de temporización, expresión regular a detectar, o descripción verbal del comportamiento secuencial deseado
+- **Requerido**: Características del reloj -- disparado por flanco (subida/bajada) o sensible a nivel; reloj único o multifase
+- **Opcional**: Preferencia de tipo de flip-flop (D, JK, T o SR)
+- **Opcional**: Tipo de reset -- síncrono, asíncrono o ninguno
+- **Opcional**: Conteo máximo de estados o restricción de ancho de bits
+- **Opcional**: Restricciones de temporización (tiempo de setup, tiempo de hold, frecuencia máxima de reloj)
 
 ## Procedimiento
 
-### Paso 1: Identify Memory and State Requirements
+### Paso 1: Identificar Requisitos de Memoria y Estado
 
-Determine what the circuit needs to remember and how many distinct states it requires:
+Determinar qué necesita recordar el circuito y cuántos estados distintos requiere:
 
-1. **State enumeration**: List all distinct states the circuit must be in. For a sequence detector, each state represents the progress through the target sequence. For a counter, each state is a count value.
-2. **State encoding**: Choose a binary encoding for the states.
-   - **Binary encoding**: Uses ceil(log2(N)) flip-flops for N states. Minimizes flip-flop count.
-   - **One-hot encoding**: Uses N flip-flops, one per state. Simplifies next-state logic at the cost of more flip-flops.
-   - **Gray code encoding**: Adjacent states differ in exactly one bit. Minimizes transient glitches during transitions.
-3. **Input and output classification**: Identify primary inputs (external signals), primary outputs, and internal state variables (flip-flop outputs). For Mealy machines, outputs depend on both state and input. For Moore machines, outputs depend only on state.
-4. **Flip-flop type selection**: Choose based on the design's needs.
-   - **D flip-flop**: Simplest -- next state equals the D input. Best default choice.
-   - **JK flip-flop**: Most flexible -- J=K=1 toggles. Good for counters.
-   - **T flip-flop**: Toggle type -- changes state when T=1. Natural for binary counters.
-   - **SR latch/flip-flop**: Set-Reset -- avoid the S=R=1 condition. Rarely preferred for new designs.
+1. **Enumeración de estados**: Listar todos los estados distintos en los que debe estar el circuito. Para un detector de secuencia, cada estado representa el progreso a través de la secuencia objetivo. Para un contador, cada estado es un valor de cuenta.
+2. **Codificación de estados**: Elegir una codificación binaria para los estados.
+   - **Codificación binaria**: Usa ceil(log2(N)) flip-flops para N estados. Minimiza el conteo de flip-flops.
+   - **Codificación one-hot**: Usa N flip-flops, uno por estado. Simplifica la lógica de próximo estado a costa de más flip-flops.
+   - **Codificación Gray**: Los estados adyacentes difieren en exactamente un bit. Minimiza glitches transitorios durante las transiciones.
+3. **Clasificación de entradas y salidas**: Identificar entradas primarias (señales externas), salidas primarias y variables de estado internas (salidas de flip-flops). Para máquinas Mealy, las salidas dependen tanto del estado como de la entrada. Para máquinas Moore, las salidas dependen solo del estado.
+4. **Selección de tipo de flip-flop**: Elegir basado en las necesidades del diseño.
+   - **Flip-flop D**: El más simple -- el próximo estado iguala la entrada D. Mejor opción por defecto.
+   - **Flip-flop JK**: El más flexible -- J=K=1 conmuta. Bueno para contadores.
+   - **Flip-flop T**: Tipo conmutación -- cambia de estado cuando T=1. Natural para contadores binarios.
+   - **Latch/flip-flop SR**: Set-Reset -- evitar la condición S=R=1. Raramente preferido para diseños nuevos.
 
 ```markdown
 ## State Requirements
@@ -72,21 +73,21 @@ Determine what the circuit needs to remember and how many distinct states it req
 - **Reset behavior**: [synchronous / asynchronous / none]
 ```
 
-**Esperado:** A complete state inventory with encoding chosen, flip-flop type selected, and the machine classified as Mealy or Moore.
+**Esperado:** Un inventario de estados completo con codificación elegida, tipo de flip-flop seleccionado y la máquina clasificada como Mealy o Moore.
 
-**En caso de fallo:** If the state count is unclear from the specification, enumerate states by tracing through all possible input sequences up to the memory depth of the circuit. If the count exceeds practical limits (more than 16 states for manual design), consider decomposing into smaller interacting FSMs.
+**En caso de fallo:** Si el conteo de estados no es claro desde la especificación, enumerar estados trazando todas las secuencias de entrada posibles hasta la profundidad de memoria del circuito. Si el conteo excede los límites prácticos (más de 16 estados para diseño manual), considerar descomponer en FSMs más pequeñas que interactúen.
 
-### Paso 2: Construct State Diagram and Transition Table
+### Paso 2: Construir Diagrama de Estados y Tabla de Transiciones
 
-Formalize the circuit's behavior as a state diagram and equivalent tabular form:
+Formalizar el comportamiento del circuito como un diagrama de estados y forma tabular equivalente:
 
-1. **State diagram**: Draw a directed graph where:
-   - Each node is a state, labeled with the state name and (for Moore machines) the output value.
-   - Each edge is a transition, labeled with the input condition and (for Mealy machines) the output value.
-   - Every state must have an outgoing edge for every possible input combination -- no implicit "stay" transitions.
-2. **Transition table**: Convert the diagram to a table with columns for present state, input(s), next state, and output(s).
-3. **Reachability check**: Starting from the initial/reset state, verify that all states are reachable through some input sequence. Unreachable states indicate a design error or should be treated as don't-cares.
-4. **State minimization** (optional): Check for equivalent states -- two states are equivalent if they produce the same output for every input and transition to equivalent next states. Merge equivalent states to reduce flip-flop count.
+1. **Diagrama de estados**: Dibujar un grafo dirigido donde:
+   - Cada nodo es un estado, etiquetado con el nombre del estado y (para máquinas Moore) el valor de salida.
+   - Cada arista es una transición, etiquetada con la condición de entrada y (para máquinas Mealy) el valor de salida.
+   - Cada estado debe tener una arista saliente para cada combinación de entrada posible -- sin transiciones implícitas de "permanecer".
+2. **Tabla de transiciones**: Convertir el diagrama a una tabla con columnas para estado presente, entrada(s), próximo estado y salida(s).
+3. **Verificación de alcanzabilidad**: Comenzando desde el estado inicial/reset, verificar que todos los estados son alcanzables a través de alguna secuencia de entrada. Los estados inalcanzables indican un error de diseño o deben tratarse como condiciones indiferentes.
+4. **Minimización de estados** (opcional): Verificar estados equivalentes -- dos estados son equivalentes si producen la misma salida para cada entrada y transicionan a próximos estados equivalentes. Fusionar estados equivalentes para reducir el conteo de flip-flops.
 
 ```markdown
 ## State Transition Table
@@ -102,21 +103,21 @@ Formalize the circuit's behavior as a state diagram and equivalent tabular form:
 - **Equivalent state pairs**: [list, or "none"]
 ```
 
-**Esperado:** A complete state transition table covering every present-state/input combination, with all states reachable from the initial state.
+**Esperado:** Una tabla de transición de estados completa cubriendo cada combinación de estado presente/entrada, con todos los estados alcanzables desde el estado inicial.
 
-**En caso de fallo:** If the transition table has missing entries, the specification is incomplete. Return to the requirements and resolve the ambiguity. If unreachable states exist, either add transitions to reach them or remove them and reduce the state encoding.
+**En caso de fallo:** Si la tabla de transiciones tiene entradas faltantes, la especificación está incompleta. Volver a los requisitos y resolver la ambigüedad. Si existen estados inalcanzables, agregar transiciones para alcanzarlos o eliminarlos y reducir la codificación de estados.
 
-### Paso 3: Derive Excitation Equations
+### Paso 3: Derivar Ecuaciones de Excitación
 
-Compute the flip-flop input equations (excitation equations) from the transition table:
+Calcular las ecuaciones de entrada de los flip-flops (ecuaciones de excitación) a partir de la tabla de transiciones:
 
-1. **Encode states**: Replace state names with their binary encoding in the transition table. Each bit position corresponds to one flip-flop.
-2. **Build per-flip-flop truth table**: For each flip-flop, create a truth table with present-state bits and inputs as the input columns and the required flip-flop input as the output column.
-   - **D flip-flop**: D = next state bit (the simplest case).
-   - **JK flip-flop**: Use the excitation table: 0->0 requires J=0,K=X; 0->1 requires J=1,K=X; 1->0 requires J=X,K=1; 1->1 requires J=X,K=0.
-   - **T flip-flop**: T = present state XOR next state (T=1 when the bit must change).
-3. **Minimize each equation**: Apply evaluate-boolean-expression (K-map or algebraic simplification) to each flip-flop input function. Don't-care conditions from unreachable states and JK excitation table X-entries can reduce the expressions significantly.
-4. **Derive output equations**: For Moore machines, express each output as a function of present state bits only. For Mealy machines, express each output as a function of present state bits and inputs.
+1. **Codificar estados**: Reemplazar los nombres de estados con su codificación binaria en la tabla de transiciones. Cada posición de bit corresponde a un flip-flop.
+2. **Construir tabla de verdad por flip-flop**: Para cada flip-flop, crear una tabla de verdad con los bits del estado presente y las entradas como columnas de entrada y la entrada requerida del flip-flop como columna de salida.
+   - **Flip-flop D**: D = bit del próximo estado (el caso más simple).
+   - **Flip-flop JK**: Usar la tabla de excitación: 0->0 requiere J=0,K=X; 0->1 requiere J=1,K=X; 1->0 requiere J=X,K=1; 1->1 requiere J=X,K=0.
+   - **Flip-flop T**: T = estado presente XOR próximo estado (T=1 cuando el bit debe cambiar).
+3. **Minimizar cada ecuación**: Aplicar evaluate-boolean-expression (mapa de Karnaugh o simplificación algebraica) a cada función de entrada de flip-flop. Las condiciones indiferentes de estados inalcanzables y las entradas X de la tabla de excitación JK pueden reducir significativamente las expresiones.
+4. **Derivar ecuaciones de salida**: Para máquinas Moore, expresar cada salida como función solo de los bits del estado presente. Para máquinas Mealy, expresar cada salida como función de los bits del estado presente y las entradas.
 
 ```markdown
 ## Excitation Equations
@@ -134,19 +135,19 @@ Compute the flip-flop input equations (excitation equations) from the transition
 | Y      | [minimized expression]       |
 ```
 
-**Esperado:** Minimized excitation equations for each flip-flop and output equations for each primary output, with all don't-cares exploited.
+**Esperado:** Ecuaciones de excitación minimizadas para cada flip-flop y ecuaciones de salida para cada salida primaria, con todas las condiciones indiferentes explotadas.
 
-**En caso de fallo:** If the excitation equations seem overly complex, reconsider the state encoding. A different encoding (e.g., switching from binary to one-hot, or reassigning state codes) can dramatically simplify the combinational logic. Try at least two encodings and compare literal counts.
+**En caso de fallo:** Si las ecuaciones de excitación parecen demasiado complejas, reconsiderar la codificación de estados. Una codificación diferente (ej., cambiar de binaria a one-hot, o reasignar códigos de estado) puede simplificar dramáticamente la lógica combinacional. Probar al menos dos codificaciones y comparar los conteos de literales.
 
-### Paso 4: Implement at Gate Level
+### Paso 4: Implementar a Nivel de Compuertas
 
-Build the complete circuit from flip-flops and combinational logic gates:
+Construir el circuito completo a partir de flip-flops y compuertas lógicas combinacionales:
 
-1. **Place flip-flops**: Instantiate one flip-flop per state bit. Connect all clock inputs to the system clock. Connect reset inputs if specified (asynchronous reset goes directly to the flip-flop's CLR/PRE pin; synchronous reset is part of the excitation logic).
-2. **Build excitation logic**: Implement each excitation equation as a combinational circuit using the design-logic-circuit skill. The inputs to this logic are the present-state flip-flop outputs (Q, Q') and primary inputs.
-3. **Build output logic**: Implement each output equation as combinational logic. For Moore machines, this logic takes only state bits. For Mealy machines, it takes state bits and primary inputs.
-4. **Connect the circuit**: Wire the excitation logic outputs to the flip-flop D/JK/T inputs. Wire the output logic to the primary outputs.
-5. **Add initialization**: Ensure the circuit reaches a known initial state on power-up. This typically means an asynchronous reset that forces all flip-flops to 0 (or the encoded initial state).
+1. **Colocar flip-flops**: Instanciar un flip-flop por bit de estado. Conectar todas las entradas de reloj al reloj del sistema. Conectar entradas de reset si se especifica (reset asíncrono va directamente al pin CLR/PRE del flip-flop; reset síncrono es parte de la lógica de excitación).
+2. **Construir lógica de excitación**: Implementar cada ecuación de excitación como un circuito combinacional usando la habilidad design-logic-circuit. Las entradas a esta lógica son las salidas de los flip-flops del estado presente (Q, Q') y las entradas primarias.
+3. **Construir lógica de salida**: Implementar cada ecuación de salida como lógica combinacional. Para máquinas Moore, esta lógica toma solo bits de estado. Para máquinas Mealy, toma bits de estado y entradas primarias.
+4. **Conectar el circuito**: Cablear las salidas de la lógica de excitación a las entradas D/JK/T de los flip-flops. Cablear la lógica de salida a las salidas primarias.
+5. **Agregar inicialización**: Asegurar que el circuito alcance un estado inicial conocido al encenderse. Esto típicamente significa un reset asíncrono que fuerza todos los flip-flops a 0 (o al estado inicial codificado).
 
 ```markdown
 ## Circuit Implementation
@@ -157,27 +158,27 @@ Build the complete circuit from flip-flops and combinational logic gates:
 - **Reset mechanism**: [asynchronous CLR / synchronous mux / none]
 ```
 
-**Esperado:** A complete gate-level netlist with flip-flops, excitation logic, output logic, clock distribution, and reset mechanism, where every signal has exactly one driver.
+**Esperado:** Un netlist completo a nivel de compuertas con flip-flops, lógica de excitación, lógica de salida, distribución de reloj y mecanismo de reset, donde cada señal tiene exactamente un controlador.
 
-**En caso de fallo:** If the implementation has feedback outside of the flip-flops, a combinational loop has been introduced. All feedback in a synchronous sequential circuit must pass through a flip-flop. Trace the offending path and reroute it through a register.
+**En caso de fallo:** Si la implementación tiene realimentación fuera de los flip-flops, se ha introducido un lazo combinacional. Toda realimentación en un circuito secuencial síncrono debe pasar a través de un flip-flop. Rastrear la ruta ofensora y redirigirla a través de un registro.
 
-### Paso 5: Verify via Timing Diagram and State Sequence Simulation
+### Paso 5: Verificar mediante Diagrama de Temporización y Simulación de Secuencia de Estados
 
-Confirm the circuit behaves correctly across multiple clock cycles:
+Confirmar que el circuito se comporta correctamente a través de múltiples ciclos de reloj:
 
-1. **Choose test sequence**: Select an input sequence that exercises every state transition at least once. For sequence detectors, include the target sequence, partial matches, overlapping matches, and non-matching runs.
-2. **Draw timing diagram**: For each clock cycle, record:
-   - Clock edge (rising/falling)
-   - Primary input values (sampled at the active clock edge)
-   - Present state (flip-flop outputs before the clock edge)
-   - Next state (flip-flop outputs after the clock edge)
-   - Output values (valid after the output logic settles)
-3. **Trace state sequence**: Verify that the sequence of states matches the state diagram from Step 2. Every transition should follow an edge in the diagram.
-4. **Check timing constraints**: Verify that:
-   - **Setup time**: Inputs are stable for at least t_setup before the active clock edge.
-   - **Hold time**: Inputs remain stable for at least t_hold after the active clock edge.
-   - **Clock-to-output delay**: Outputs settle within the clock period minus the setup time of downstream logic.
-5. **Reset verification**: Confirm that applying reset drives the circuit to the initial state regardless of the current state.
+1. **Elegir secuencia de prueba**: Seleccionar una secuencia de entrada que ejercite cada transición de estado al menos una vez. Para detectores de secuencia, incluir la secuencia objetivo, coincidencias parciales, coincidencias superpuestas y ejecuciones sin coincidencia.
+2. **Dibujar diagrama de temporización**: Para cada ciclo de reloj, registrar:
+   - Flanco de reloj (subida/bajada)
+   - Valores de entrada primaria (muestreados en el flanco activo del reloj)
+   - Estado presente (salidas de flip-flops antes del flanco de reloj)
+   - Próximo estado (salidas de flip-flops después del flanco de reloj)
+   - Valores de salida (válidos después de que la lógica de salida se estabiliza)
+3. **Trazar secuencia de estados**: Verificar que la secuencia de estados coincide con el diagrama de estados del Paso 2. Cada transición debe seguir una arista en el diagrama.
+4. **Verificar restricciones de temporización**: Verificar que:
+   - **Tiempo de setup**: Las entradas son estables durante al menos t_setup antes del flanco activo del reloj.
+   - **Tiempo de hold**: Las entradas permanecen estables durante al menos t_hold después del flanco activo del reloj.
+   - **Retardo reloj-a-salida**: Las salidas se estabilizan dentro del período de reloj menos el tiempo de setup de la lógica descendente.
+5. **Verificación de reset**: Confirmar que aplicar reset lleva el circuito al estado inicial independientemente del estado actual.
 
 ```markdown
 ## Timing Verification
@@ -193,34 +194,34 @@ Confirm the circuit behaves correctly across multiple clock cycles:
 - **Reset verified**: [Yes / No]
 ```
 
-**Esperado:** Every cycle in the timing diagram matches the state transition table, outputs are correct for every cycle, and no timing violations are present.
+**Esperado:** Cada ciclo en el diagrama de temporización coincide con la tabla de transición de estados, las salidas son correctas para cada ciclo y no hay violaciones de temporización presentes.
 
-**En caso de fallo:** If a state transition is wrong, trace the excitation logic for that specific present-state and input combination. If outputs are wrong but transitions are correct, the error is in the output logic. If the circuit enters an unintended state, check for incomplete reset or missing transitions from unused state codes.
+**En caso de fallo:** Si una transición de estado es incorrecta, rastrear la lógica de excitación para esa combinación específica de estado presente y entrada. Si las salidas son incorrectas pero las transiciones son correctas, el error está en la lógica de salida. Si el circuito entra en un estado no intencional, verificar reset incompleto o transiciones faltantes desde códigos de estado no utilizados.
 
 ## Validación
 
-- [ ] All states are enumerated and reachable from the initial state
-- [ ] State encoding is documented with the assignment table
-- [ ] Transition table covers every present-state/input combination
-- [ ] Excitation equations are minimized with don't-cares exploited
-- [ ] Output equations correctly implement Mealy or Moore semantics
-- [ ] Every flip-flop has clock, reset, and excitation inputs connected
-- [ ] No combinational feedback loops exist outside of flip-flops
-- [ ] Timing diagram covers all state transitions at least once
-- [ ] Reset drives the circuit to the documented initial state
-- [ ] Setup and hold time constraints are satisfied
+- [ ] Todos los estados están enumerados y son alcanzables desde el estado inicial
+- [ ] La codificación de estados está documentada con la tabla de asignación
+- [ ] La tabla de transiciones cubre cada combinación de estado presente/entrada
+- [ ] Las ecuaciones de excitación están minimizadas con condiciones indiferentes explotadas
+- [ ] Las ecuaciones de salida implementan correctamente la semántica Mealy o Moore
+- [ ] Cada flip-flop tiene entradas de reloj, reset y excitación conectadas
+- [ ] No existen lazos de realimentación combinacional fuera de los flip-flops
+- [ ] El diagrama de temporización cubre todas las transiciones de estado al menos una vez
+- [ ] El reset lleva el circuito al estado inicial documentado
+- [ ] Las restricciones de tiempo de setup y hold se satisfacen
 
 ## Errores Comunes
 
-- **Incomplete state transitions**: Forgetting to specify what happens for every input in every state. Missing transitions often cause the circuit to enter an undefined or unintended state. Always define behavior for all input combinations.
-- **Unused state codes**: With N flip-flops, there are 2^N possible codes but perhaps fewer valid states. If the circuit accidentally enters an unused code (due to noise or power-on), it may lock up. Always add transitions from unused codes to the reset state or prove they are unreachable.
-- **Confusing Mealy and Moore outputs**: In a Mealy machine, outputs change immediately when inputs change (combinational path from input to output). In a Moore machine, outputs change only on clock edges. Mixing the two models in one design leads to timing hazards.
-- **Asynchronous inputs to synchronous circuits**: External signals not synchronized to the clock can violate setup/hold times, causing metastability. Always pass asynchronous inputs through a two-flip-flop synchronizer before using them in state logic.
-- **SR latch S=R=1 hazard**: Driving both Set and Reset high simultaneously puts the SR latch in an undefined state. If using SR elements, add logic to guarantee this combination never occurs, or switch to D or JK flip-flops.
-- **Clock skew in multi-flip-flop designs**: If the clock arrives at different flip-flops at different times, one flip-flop may sample stale data from another. For introductory designs, assume zero skew; for real hardware, use clock tree synthesis.
+- **Transiciones de estado incompletas**: Olvidar especificar qué sucede para cada entrada en cada estado. Las transiciones faltantes a menudo causan que el circuito entre en un estado indefinido o no intencional. Siempre definir el comportamiento para todas las combinaciones de entrada.
+- **Códigos de estado no utilizados**: Con N flip-flops, hay 2^N códigos posibles pero quizás menos estados válidos. Si el circuito accidentalmente entra en un código no utilizado (por ruido o encendido), puede bloquearse. Siempre agregar transiciones desde códigos no utilizados al estado de reset o demostrar que son inalcanzables.
+- **Confundir salidas Mealy y Moore**: En una máquina Mealy, las salidas cambian inmediatamente cuando las entradas cambian (ruta combinacional de entrada a salida). En una máquina Moore, las salidas cambian solo en los flancos de reloj. Mezclar los dos modelos en un diseño conduce a riesgos de temporización.
+- **Entradas asíncronas a circuitos síncronos**: Las señales externas no sincronizadas al reloj pueden violar tiempos de setup/hold, causando metaestabilidad. Siempre pasar las entradas asíncronas a través de un sincronizador de dos flip-flops antes de usarlas en la lógica de estado.
+- **Riesgo S=R=1 del latch SR**: Activar simultáneamente Set y Reset pone al latch SR en un estado indefinido. Si se usan elementos SR, agregar lógica para garantizar que esta combinación nunca ocurra, o cambiar a flip-flops D o JK.
+- **Desviación de reloj en diseños multi-flip-flop**: Si el reloj llega a diferentes flip-flops en diferentes momentos, un flip-flop puede muestrear datos obsoletos de otro. Para diseños introductorios, asumir desviación cero; para hardware real, usar síntesis de árbol de reloj.
 
 ## Habilidades Relacionadas
 
-- `design-logic-circuit` -- design the combinational excitation and output logic blocks
-- `simulate-cpu-architecture` -- use sequential blocks (registers, counters, control FSMs) in a CPU datapath
-- `model-markov-chain` -- finite state machines share the formal framework of discrete-time Markov chains
+- `design-logic-circuit` -- diseñar los bloques de lógica combinacional de excitación y salida
+- `simulate-cpu-architecture` -- usar bloques secuenciales (registros, contadores, FSMs de control) en un camino de datos de CPU
+- `model-markov-chain` -- las máquinas de estados finitos comparten el marco formal de las cadenas de Markov de tiempo discreto

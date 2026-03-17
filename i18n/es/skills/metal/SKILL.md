@@ -28,53 +28,53 @@ metadata:
 
 # Metal
 
-Extract the conceptual DNA of a repository — its roles, procedures, and coordination patterns — as generalized agentskills.io definitions. Like extracting noble metal from ore, the skill separates what a project IS (its essence) from what it DOES (its implementation), producing reusable skill, agent, and team definitions that capture the project's organizational genome without reproducing its codebase.
+Extraer el ADN conceptual de un repositorio — sus roles, procedimientos y patrones de coordinación — como definiciones generalizadas de agentskills.io. Como extraer metal noble del mineral, la habilidad separa lo que un proyecto ES (su esencia) de lo que HACE (su implementación), produciendo definiciones reutilizables de habilidades, agentes y equipos que capturan el genoma organizativo del proyecto sin reproducir su base de código.
 
 ## Cuándo Usar
 
-- Onboarding to a new codebase and wanting to map its conceptual architecture before diving into code
-- Bootstrapping an agentic system from an existing project — turning implicit workflows into explicit skill/agent/team definitions
-- Studying a project's organizational DNA for cross-pollination into other projects
-- Creating a skill/agent/team library inspired by a reference implementation without copying it
-- Understanding what a project's structure reveals about its creators' mental models and domain expertise
+- Al incorporarse a una nueva base de código y querer mapear su arquitectura conceptual antes de sumergirse en el código
+- Al arrancar un sistema agéntico desde un proyecto existente — convirtiendo flujos de trabajo implícitos en definiciones explícitas de habilidad/agente/equipo
+- Al estudiar el ADN organizativo de un proyecto para polinización cruzada hacia otros proyectos
+- Al crear una biblioteca de habilidades/agentes/equipos inspirada en una implementación de referencia sin copiarla
+- Al comprender lo que la estructura de un proyecto revela sobre los modelos mentales y la experiencia de dominio de sus creadores
 
 ## Entradas
 
-- **Requerido**: Path to the repository or project root directory
-- **Requerido**: Purpose statement — why is essence being extracted? (onboarding, bootstrapping, study, or cross-pollination)
-- **Opcional**: Focus domains — specific areas of the project to concentrate on (default: all)
-- **Opcional**: Output depth — `survey` (prospect + assay only), `extract` (full procedure), or `report` (extraction + written report) (default: `extract`)
-- **Opcional**: Maximum extractions — cap on total skills + agents + teams to produce (default: 15)
+- **Requerido**: Ruta al repositorio o directorio raíz del proyecto
+- **Requerido**: Declaración de propósito — ¿por qué se extrae la esencia? (incorporación, arranque, estudio o polinización cruzada)
+- **Opcional**: Dominios de enfoque — áreas específicas del proyecto en las que concentrarse (por defecto: todos)
+- **Opcional**: Profundidad de salida — `survey` (solo prospección + ensayo), `extract` (procedimiento completo) o `report` (extracción + informe escrito) (por defecto: `extract`)
+- **Opcional**: Máximo de extracciones — límite del total de habilidades + agentes + equipos a producir (por defecto: 15)
 
-## The Ore Test
+## La Prueba del Mineral
 
-The central quality criterion for all extraction:
+El criterio central de calidad para toda extracción:
 
-> **Could this concept exist in a completely different implementation?**
+> **¿Podría este concepto existir en una implementación completamente diferente?**
 >
-> If YES — it is **metal** (essence). Extract it.
-> If NO — it is **gangue** (implementation detail). Leave it behind.
+> Si SÍ — es **metal** (esencia). Extraerlo.
+> Si NO — es **ganga** (detalle de implementación). Dejarlo atrás.
 
-Example: A weather app's concept "integrate external data source" is metal — it applies to any project fetching third-party data. But "parse OpenWeatherMap v3 JSON response" is gangue — it is specific to one API.
+Ejemplo: El concepto de una aplicación meteorológica "integrar fuente de datos externa" es metal — se aplica a cualquier proyecto que obtenga datos de terceros. Pero "parsear la respuesta JSON de OpenWeatherMap v3" es ganga — es específico de una API.
 
-Extracted skills should describe the CLASS of task, not the specific instance. Extracted agents should describe the ROLE, not the person. Extracted teams should describe the COORDINATION PATTERN, not the org chart.
+Las habilidades extraídas deben describir la CLASE de tarea, no la instancia específica. Los agentes extraídos deben describir el ROL, no la persona. Los equipos extraídos deben describir el PATRÓN DE COORDINACIÓN, no el organigrama.
 
 ## Procedimiento
 
-### Paso 1: Prospect — Survey the Ore Body
+### Paso 1: Prospectar — Reconocer el Cuerpo Mineral
 
-Survey the repository structure without judgment. Map the terrain before mining.
+Reconocer la estructura del repositorio sin juzgar. Mapear el terreno antes de minar.
 
-1. Glob the directory tree to understand the project's shape:
-   - Source directories and their organization pattern (by feature, by layer, by domain)
-   - Configuration files: `package.json`, `DESCRIPTION`, `setup.py`, `Cargo.toml`, `go.mod`, `Makefile`
-   - Documentation: `README.md`, `CLAUDE.md`, `CONTRIBUTING.md`, architecture docs
-   - CI/CD: `.github/workflows/`, `Dockerfile`, deployment configs
-   - Test directories and their structure
-2. Read the project's self-description (README, package manifest) to understand its declared purpose
-3. Count files by type/language to gauge scope and identify the primary technology
-4. Identify the project's boundary — where it begins and ends, what it depends on vs what it provides
-5. Produce the **Prospect Report**:
+1. Explorar el árbol de directorios para entender la forma del proyecto:
+   - Directorios fuente y su patrón de organización (por funcionalidad, por capa, por dominio)
+   - Archivos de configuración: `package.json`, `DESCRIPTION`, `setup.py`, `Cargo.toml`, `go.mod`, `Makefile`
+   - Documentación: `README.md`, `CLAUDE.md`, `CONTRIBUTING.md`, documentos de arquitectura
+   - CI/CD: `.github/workflows/`, `Dockerfile`, configuraciones de despliegue
+   - Directorios de pruebas y su estructura
+2. Leer la autodescripción del proyecto (README, manifiesto de paquete) para entender su propósito declarado
+3. Contar archivos por tipo/lenguaje para estimar el alcance e identificar la tecnología principal
+4. Identificar el límite del proyecto — dónde comienza y termina, de qué depende versus qué proporciona
+5. Producir el **Informe de Prospección**:
 
 ```
 Project: [name]
@@ -85,58 +85,58 @@ Shape: [monorepo/library/app/framework/docs]
 External Surface: [CLI/API/UI/library exports/none]
 ```
 
-**Esperado:** A factual survey — what is here, how large, what does the project claim to be. No classification or judgment yet. The report reads like a geological survey, not a review.
+**Esperado:** Un reconocimiento factual — qué hay aquí, qué tan grande es, qué dice ser el proyecto. Sin clasificación ni juicio aún. El informe se lee como un estudio geológico, no como una reseña.
 
-**En caso de fallo:** If the repository has no README or manifest, infer purpose from directory names, file contents, and test descriptions. If the project is too large (>1000 source files), narrow the scope to the most active directories (use git log frequency or README references).
+**En caso de fallo:** Si el repositorio no tiene README ni manifiesto, inferir el propósito a partir de nombres de directorios, contenido de archivos y descripciones de pruebas. Si el proyecto es demasiado grande (>1000 archivos fuente), reducir el alcance a los directorios más activos (usar frecuencia del log de git o referencias del README).
 
-### Paso 2: Assay — Analyze the Composition
+### Paso 2: Ensayar — Analizar la Composición
 
-Read representative files to understand what the project DOES at the conceptual level.
+Leer archivos representativos para entender qué HACE el proyecto a nivel conceptual.
 
-1. Sample 5-10 representative files from different areas of the project — not exhaustive, but diverse:
-   - Entry points (main files, route handlers, CLI commands)
-   - Core logic (the most-imported or most-referenced modules)
-   - Tests (they reveal intended behavior more clearly than implementation)
-   - Configuration (reveals operational concerns and deployment context)
-2. For each sampled area, identify:
-   - **Domains**: What subject areas does the project touch? (e.g., "authentication", "data transformation", "reporting")
-   - **Verbs**: What actions does the project perform? (e.g., "validate", "transform", "deploy", "notify")
-   - **Roles**: What human or system actors does the code serve? (e.g., "data engineer", "end user", "reviewer")
-   - **Flows**: What sequences of actions form workflows? (e.g., "ingest → validate → transform → store")
-3. For each finding, classify as:
-   - **Essential**: Would exist in any implementation solving this problem
-   - **Accidental**: Specific to this implementation's technology choices
-4. Produce the **Assay Report**: a table of domains, verbs, roles, and flows with essential/accidental tags
+1. Muestrear 5-10 archivos representativos de diferentes áreas del proyecto — no exhaustivo, sino diverso:
+   - Puntos de entrada (archivos principales, manejadores de rutas, comandos CLI)
+   - Lógica central (los módulos más importados o más referenciados)
+   - Pruebas (revelan el comportamiento previsto más claramente que la implementación)
+   - Configuración (revela preocupaciones operativas y contexto de despliegue)
+2. Para cada área muestreada, identificar:
+   - **Dominios**: ¿Qué áreas temáticas toca el proyecto? (ej., "autenticación", "transformación de datos", "reportes")
+   - **Verbos**: ¿Qué acciones realiza el proyecto? (ej., "validar", "transformar", "desplegar", "notificar")
+   - **Roles**: ¿A qué actores humanos o de sistema sirve el código? (ej., "ingeniero de datos", "usuario final", "revisor")
+   - **Flujos**: ¿Qué secuencias de acciones forman flujos de trabajo? (ej., "ingestar -> validar -> transformar -> almacenar")
+3. Para cada hallazgo, clasificar como:
+   - **Esencial**: Existiría en cualquier implementación que resuelva este problema
+   - **Accidental**: Específico de las elecciones tecnológicas de esta implementación
+4. Producir el **Informe de Ensayo**: una tabla de dominios, verbos, roles y flujos con etiquetas esencial/accidental
 
-**Esperado:** A conceptual map of the project that reads like a domain glossary, not a code walkthrough. Someone unfamiliar with the tech stack should understand what the project does from this report.
+**Esperado:** Un mapa conceptual del proyecto que se lee como un glosario de dominio, no como un recorrido por el código. Alguien no familiarizado con el stack tecnológico debería entender qué hace el proyecto a partir de este informe.
 
-**En caso de fallo:** If the codebase is opaque (heavy metaprogramming, generated code, or obfuscated), lean on tests and documentation rather than source code. If no tests exist, read commit messages for intent.
+**En caso de fallo:** Si la base de código es opaca (metaprogramación pesada, código generado u ofuscado), apoyarse en las pruebas y la documentación en lugar del código fuente. Si no existen pruebas, leer los mensajes de commit para entender la intención.
 
-### Paso 3: Meditate — Release Implementation Bias
+### Paso 3: Meditar — Liberar el Sesgo de Implementación
 
-Pause to clear the cognitive anchoring from reading code.
+Hacer una pausa para limpiar el anclaje cognitivo de haber leído código.
 
-1. Notice which framework, language, or architectural pattern is dominating your mental model — label it
-2. Release attachment to the HOW: "This project uses React" becomes "This project has a user interface layer." "This uses PostgreSQL" becomes "This has persistent structured storage."
-3. For each finding in the Assay Report, apply the Ore Test:
-   - "integrate external data source" — could exist anywhere? YES → metal
-   - "configure Axios interceptors" — could exist anywhere? NO → gangue
-4. Rewrite any findings that failed the Ore Test at a higher abstraction level
-5. If multiple perspectives help, consider the project through these lenses:
-   - **Archaeologist**: What does the code's structure reveal about its creators' mental models?
-   - **Biologist**: What is the replicable genome vs the specific phenotype?
-   - **Music theorist**: What is the form (sonata, rondo) vs the specific notes?
-   - **Cartographer**: What level of abstraction captures the useful topology?
+1. Notar qué framework, lenguaje o patrón arquitectónico está dominando el modelo mental — etiquetarlo
+2. Liberar el apego al CÓMO: "Este proyecto usa React" se convierte en "Este proyecto tiene una capa de interfaz de usuario." "Esto usa PostgreSQL" se convierte en "Esto tiene almacenamiento estructurado persistente."
+3. Para cada hallazgo en el Informe de Ensayo, aplicar la Prueba del Mineral:
+   - "integrar fuente de datos externa" — ¿podría existir en cualquier lugar? SÍ -> metal
+   - "configurar interceptores de Axios" — ¿podría existir en cualquier lugar? NO -> ganga
+4. Reescribir cualquier hallazgo que no pase la Prueba del Mineral a un nivel de abstracción superior
+5. Si múltiples perspectivas ayudan, considerar el proyecto a través de estas lentes:
+   - **Arqueólogo**: ¿Qué revela la estructura del código sobre los modelos mentales de sus creadores?
+   - **Biólogo**: ¿Cuál es el genoma replicable versus el fenotipo específico?
+   - **Teórico musical**: ¿Cuál es la forma (sonata, rondó) versus las notas específicas?
+   - **Cartógrafo**: ¿Qué nivel de abstracción captura la topología útil?
 
-**Esperado:** The Assay Report is now free of framework-specific language. Every finding passes the Ore Test. The concepts feel portable — they could apply to a project in any language or framework.
+**Esperado:** El Informe de Ensayo ahora está libre de lenguaje específico de framework. Cada hallazgo pasa la Prueba del Mineral. Los conceptos se sienten portables — podrían aplicarse a un proyecto en cualquier lenguaje o framework.
 
-**En caso de fallo:** If bias persists (findings keep referencing specific technologies), try inverting: "If this project were rewritten in a completely different stack, which concepts would survive?" Only those are metal.
+**En caso de fallo:** Si el sesgo persiste (los hallazgos siguen referenciando tecnologías específicas), intentar invertir: "Si este proyecto fuera reescrito en un stack completamente diferente, ¿qué conceptos sobrevivirían?" Solo esos son metal.
 
-### Paso 4: Smelt — Separate Metal from Slag
+### Paso 4: Fundir — Separar el Metal de la Escoria
 
-The core extraction step. Classify each essential concept into skills, agents, or teams.
+El paso central de extracción. Clasificar cada concepto esencial en habilidades, agentes o equipos.
 
-1. For each essential concept from the purified Assay Report, determine its type:
+1. Para cada concepto esencial del Informe de Ensayo purificado, determinar su tipo:
 
 ```
 Classification Criteria:
@@ -158,55 +158,55 @@ Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 ```
 
-2. For each extracted element:
-   - Assign a **generalized name** — not project-specific. "UserAuthService" becomes `identity-manager` (agent). "deployToAWS()" becomes `deploy-artifact` (skill).
-   - Write a **one-line description** that makes sense without knowing the source project
-   - Note the **source concept** it derives from (for traceability, not reproduction)
-   - Apply the Ore Test one final time
+2. Para cada elemento extraído:
+   - Asignar un **nombre generalizado** — no específico del proyecto. "UserAuthService" se convierte en `identity-manager` (agente). "deployToAWS()" se convierte en `deploy-artifact` (habilidad).
+   - Escribir una **descripción de una línea** que tenga sentido sin conocer el proyecto fuente
+   - Anotar el **concepto fuente** del que se deriva (para trazabilidad, no reproducción)
+   - Aplicar la Prueba del Mineral una última vez
 
-3. Guard against common classification errors:
-   - Not every function is a skill — look for PROCEDURES, not individual operations
-   - Not every module is an agent — look for ROLES that require judgment
-   - Not every collaboration is a team — look for COORDINATION PATTERNS with distinct specialties
-   - Most projects yield 3-8 skills, 2-4 agents, and 0-2 teams. If you have 20+, you are extracting too fine.
+3. Protegerse contra errores comunes de clasificación:
+   - No toda función es una habilidad — buscar PROCEDIMIENTOS, no operaciones individuales
+   - No todo módulo es un agente — buscar ROLES que requieran juicio
+   - No toda colaboración es un equipo — buscar PATRONES DE COORDINACIÓN con especialidades distintas
+   - La mayoría de proyectos producen 3-8 habilidades, 2-4 agentes y 0-2 equipos. Si se tienen 20+, se está extrayendo demasiado fino.
 
-**Esperado:** A classified inventory where each item has a type (skill/agent/team), a generalized name, and a one-line description. No item references the source project's specific technologies, APIs, or data structures.
+**Esperado:** Un inventario clasificado donde cada elemento tiene un tipo (habilidad/agente/equipo), un nombre generalizado y una descripción de una línea. Ningún elemento referencia las tecnologías específicas, APIs o estructuras de datos del proyecto fuente.
 
-**En caso de fallo:** If classification is ambiguous (is this a skill or an agent?), ask: "Is this about DOING something (skill) or BEING someone who does things (agent)?" A skill is a recipe; an agent is a chef. If still unclear, default to skill — skills are easier to compose later.
+**En caso de fallo:** Si la clasificación es ambigua (¿es esto una habilidad o un agente?), preguntar: "¿Se trata de HACER algo (habilidad) o de SER alguien que hace cosas (agente)?" Una habilidad es una receta; un agente es un chef. Si aún no está claro, optar por habilidad — las habilidades son más fáciles de componer después.
 
-### Paso 5: Heal — Verify Extraction Quality
+### Paso 5: Sanar — Verificar la Calidad de la Extracción
 
-Assess whether the extraction is honest — neither too much nor too little.
+Evaluar si la extracción es honesta — ni demasiado ni demasiado poco.
 
-1. **Over-extraction check**: Read each extracted definition and ask:
-   - Could someone reconstruct the original project's proprietary logic from this? → Too much detail
-   - Does this reference specific libraries, APIs, database schemas, or file paths? → Still gangue
-   - Is this a full implementation procedure or a concept-level sketch? → Should be sketch
+1. **Verificación de sobre-extracción**: Leer cada definición extraída y preguntar:
+   - ¿Podría alguien reconstruir la lógica propietaria del proyecto original a partir de esto? -> Demasiado detalle
+   - ¿Esto referencia bibliotecas, APIs, esquemas de base de datos o rutas de archivos específicos? -> Aún es ganga
+   - ¿Es un procedimiento de implementación completo o un esbozo a nivel conceptual? -> Debería ser esbozo
 
-2. **Under-extraction check**: Show only the extracted definitions (without the source project) and ask:
-   - Could someone understand what KIND of project inspired these? → Should be yes
-   - Do the definitions capture the project's essential nature? → Should be yes
-   - Are there major project capabilities not represented? → Should be no
+2. **Verificación de sub-extracción**: Mostrar solo las definiciones extraídas (sin el proyecto fuente) y preguntar:
+   - ¿Podría alguien entender qué TIPO de proyecto inspiró estas? -> Debería ser sí
+   - ¿Las definiciones capturan la naturaleza esencial del proyecto? -> Debería ser sí
+   - ¿Hay capacidades importantes del proyecto no representadas? -> Debería ser no
 
-3. **Generalization check**: For each definition:
-   - Would the name make sense in a different tech stack? → Should be yes
-   - Is the description framework-agnostic? → Should be yes
-   - Could this definition be useful to a project in a completely different domain? → Ideally yes
+3. **Verificación de generalización**: Para cada definición:
+   - ¿El nombre tendría sentido en un stack tecnológico diferente? -> Debería ser sí
+   - ¿La descripción es agnóstica al framework? -> Debería ser sí
+   - ¿Esta definición podría ser útil para un proyecto en un dominio completamente diferente? -> Idealmente sí
 
-4. **Balance check**: Review the extraction ratios:
-   - 3-8 skills, 2-4 agents, 0-2 teams is typical for a focused project
-   - Fewer than 3 total extractions suggests under-extraction
-   - More than 15 total suggests over-extraction or insufficient generalization
+4. **Verificación de balance**: Revisar las proporciones de extracción:
+   - 3-8 habilidades, 2-4 agentes, 0-2 equipos es típico para un proyecto enfocado
+   - Menos de 3 extracciones totales sugiere sub-extracción
+   - Más de 15 totales sugiere sobre-extracción o generalización insuficiente
 
-**Esperado:** Confidence that the extraction is at the right level of abstraction. Each definition is a seed that could grow in different soil, not a cutting that only survives in the original garden.
+**Esperado:** Confianza en que la extracción está al nivel correcto de abstracción. Cada definición es una semilla que podría crecer en tierra diferente, no un esqueje que solo sobrevive en el jardín original.
 
-**En caso de fallo:** If over-extracted, raise the abstraction level — merge specific skills into broader ones, collapse similar agents into a single role. If under-extracted, return to Step 2 and sample additional files. If generalization check fails, strip technology references and rewrite descriptions.
+**En caso de fallo:** Si hay sobre-extracción, elevar el nivel de abstracción — fusionar habilidades específicas en unas más amplias, colapsar agentes similares en un solo rol. Si hay sub-extracción, regresar al Paso 2 y muestrear archivos adicionales. Si la verificación de generalización falla, eliminar referencias tecnológicas y reescribir descripciones.
 
-### Paso 6: Cast — Pour the Metal into Forms
+### Paso 6: Moldear — Verter el Metal en Moldes
 
-Produce the agentskills.io-standard output documents.
+Producir los documentos de salida en estándar agentskills.io.
 
-1. For each extracted **skill**, write a skeletal definition:
+1. Para cada **habilidad** extraída, escribir una definición esquelética:
 
 ```yaml
 # Skill: [generalized-name]
@@ -221,7 +221,7 @@ complexity: [basic/intermediate/advanced]
 # Derived from: [source concept in original project]
 ```
 
-2. For each extracted **agent**, write a skeletal definition:
+2. Para cada **agente** extraído, escribir una definición esquelética:
 
 ```yaml
 # Agent: [role-name]
@@ -232,7 +232,7 @@ skills: [list of extracted skills this agent would carry]
 # Derived from: [source role/module in original project]
 ```
 
-3. For each extracted **team**, write a skeletal definition:
+3. Para cada **equipo** extraído, escribir una definición esquelética:
 
 ```yaml
 # Team: [group-name]
@@ -244,20 +244,20 @@ coordination: [hub-and-spoke/sequential/parallel/adaptive]
 # Derived from: [source workflow/process in original project]
 ```
 
-4. Compile all extractions into the **Assay Report** — a single document with sections for Skills, Agents, and Teams, plus a summary table
+4. Compilar todas las extracciones en el **Informe de Ensayo** — un documento único con secciones para Habilidades, Agentes y Equipos, más una tabla resumen
 
-**Esperado:** A structured report containing all extracted definitions in agentskills.io format. Each definition is skeletal (concept-level, not implementation-level) and could serve as a starting point for the `create-skill`, `create-agent`, or `create-team` skills to flesh out.
+**Esperado:** Un informe estructurado que contiene todas las definiciones extraídas en formato agentskills.io. Cada definición es esquelética (a nivel conceptual, no a nivel de implementación) y podría servir como punto de partida para que las habilidades `create-skill`, `create-agent` o `create-team` la completen.
 
-**En caso de fallo:** If the output exceeds 15 items, prioritize by centrality — keep the concepts that are most unique to this project's domain. Generic concepts (like "manage-configuration") that exist in most projects should be dropped unless they have an unusual twist.
+**En caso de fallo:** Si la salida excede 15 elementos, priorizar por centralidad — mantener los conceptos más únicos del dominio del proyecto. Los conceptos genéricos (como "manage-configuration") que existen en la mayoría de proyectos deberían descartarse a menos que tengan un giro inusual.
 
-### Paso 7: Temper — Final Validation
+### Paso 7: Templar — Validación Final
 
-Verify the complete extraction and produce the summary.
+Verificar la extracción completa y producir el resumen.
 
-1. Count the extractions: N skills, N agents, N teams
-2. Assess coverage: do they span the project's major domains?
-3. Verify independence: read each definition WITHOUT the source project context — does it stand alone?
-4. Run the Ore Test one final time on the complete set:
+1. Contar las extracciones: N habilidades, N agentes, N equipos
+2. Evaluar la cobertura: ¿abarcan los dominios principales del proyecto?
+3. Verificar independencia: leer cada definición SIN el contexto del proyecto fuente — ¿se sostiene por sí sola?
+4. Ejecutar la Prueba del Mineral una última vez sobre el conjunto completo:
 
 ```
 Temper Assessment:
@@ -270,48 +270,48 @@ Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 ```
 
-5. Produce the final summary:
-   - Total extractions (skills / agents / teams)
-   - Coverage assessment (which project domains are represented)
-   - Confidence level (high / medium / low) with rationale
-   - Suggested next steps: which extracted definitions are ready to flesh out first
+5. Producir el resumen final:
+   - Total de extracciones (habilidades / agentes / equipos)
+   - Evaluación de cobertura (qué dominios del proyecto están representados)
+   - Nivel de confianza (alto / medio / bajo) con justificación
+   - Próximos pasos sugeridos: qué definiciones extraídas están listas para desarrollar primero
 
-**Esperado:** A validated Assay Report with a summary table, confidence assessment, and actionable next steps. The report is self-contained — someone who has never seen the source project can read it and understand the extracted concepts.
+**Esperado:** Un Informe de Ensayo validado con una tabla resumen, evaluación de confianza y próximos pasos accionables. El informe es autocontenido — alguien que nunca ha visto el proyecto fuente puede leerlo y entender los conceptos extraídos.
 
-**En caso de fallo:** If more than 20% of items fail the final Ore Test, return to Step 4 (Smelt) and re-extract at a higher abstraction level. If coverage is below 60% of identified domains, return to Step 2 (Assay) and sample additional files.
+**En caso de fallo:** Si más del 20% de los elementos fallan la Prueba del Mineral final, regresar al Paso 4 (Fundir) y re-extraer a un nivel de abstracción superior. Si la cobertura está por debajo del 60% de los dominios identificados, regresar al Paso 2 (Ensayar) y muestrear archivos adicionales.
 
 ## Validación
 
-- [ ] Prospect report covers project structure, languages, size, and declared purpose
-- [ ] Assay identifies domains, verbs, roles, and flows with essential/accidental classification
-- [ ] Meditate checkpoint clears implementation bias — no framework-specific language in outputs
-- [ ] Every extracted element passes the Ore Test (essence, not implementation detail)
-- [ ] Skills are named with verbs, agents with nouns, teams with group descriptors
-- [ ] All names are generalized — no project-specific references
-- [ ] Extraction count is within typical range (5-15 total, not 1 and not 30)
-- [ ] Output definitions follow agentskills.io format (frontmatter + sections)
-- [ ] Over-extraction and under-extraction checks both pass
-- [ ] Final Temper assessment includes count, coverage, confidence, and next steps
-- [ ] The complete Assay Report is understandable without access to the source project
+- [ ] El informe de prospección cubre estructura del proyecto, lenguajes, tamaño y propósito declarado
+- [ ] El ensayo identifica dominios, verbos, roles y flujos con clasificación esencial/accidental
+- [ ] El punto de control de meditación limpia el sesgo de implementación — sin lenguaje específico de framework en las salidas
+- [ ] Cada elemento extraído pasa la Prueba del Mineral (esencia, no detalle de implementación)
+- [ ] Las habilidades se nombran con verbos, los agentes con sustantivos, los equipos con descriptores grupales
+- [ ] Todos los nombres están generalizados — sin referencias específicas del proyecto
+- [ ] La cantidad de extracciones está dentro del rango típico (5-15 total, no 1 ni 30)
+- [ ] Las definiciones de salida siguen el formato agentskills.io (frontmatter + secciones)
+- [ ] Las verificaciones de sobre-extracción y sub-extracción pasan
+- [ ] La evaluación final de Temple incluye conteo, cobertura, confianza y próximos pasos
+- [ ] El Informe de Ensayo completo es comprensible sin acceso al proyecto fuente
 
 ## Errores Comunes
 
-- **Mirroring the directory structure**: Producing one skill per source file instead of extracting cross-cutting concepts. The metal should reflect the project's CONCEPTUAL structure, not its file system. A 20-file project does not have 20 skills.
-- **Framework worship**: Extracting "configure-nextjs-api-routes" instead of "define-api-endpoints". Strip the framework; keep the pattern. The Ore Test catches this: "Could this exist without Next.js?" If no, it's gangue.
-- **Role inflation**: Creating an agent for every module. Most projects have 2-5 genuine roles requiring distinct expertise, not 20. Look for JUDGMENT and COMMUNICATION STYLE differences, not just functional differences.
-- **Skipping the Ore Test**: The single biggest failure mode. Every output must pass: "Could this concept exist in a completely different implementation?" If it references specific libraries, APIs, or data schemas, it is slag, not metal.
-- **Producing implementation guides**: Extracted skills should be CONCEPT-LEVEL sketches (3-5 high-level steps), not full implementation procedures. They are seeds to be fleshed out with `create-skill`, not finished products. A 50-step extraction is a reproduction, not an essence.
-- **Under-generalizing names**: "UserAuthService" is a class name, not a concept. "identity-manager" is a role. "manage-user-identity" is a skill. Generalize from the specific to the universal.
-- **Ignoring coordination patterns**: Teams are the hardest to extract because coordination is often implicit. Look for code review workflows, deployment pipelines, data handoffs between systems, and approval chains — these reveal team structures.
+- **Espejear la estructura de directorios**: Producir una habilidad por archivo fuente en lugar de extraer conceptos transversales. El metal debería reflejar la estructura CONCEPTUAL del proyecto, no su sistema de archivos. Un proyecto de 20 archivos no tiene 20 habilidades.
+- **Culto al framework**: Extraer "configure-nextjs-api-routes" en lugar de "define-api-endpoints". Eliminar el framework; mantener el patrón. La Prueba del Mineral detecta esto: "¿Podría existir sin Next.js?" Si no, es ganga.
+- **Inflación de roles**: Crear un agente para cada módulo. La mayoría de proyectos tienen 2-5 roles genuinos que requieren experiencia distinta, no 20. Buscar diferencias de JUICIO y ESTILO DE COMUNICACIÓN, no solo diferencias funcionales.
+- **Saltarse la Prueba del Mineral**: El modo de fallo más importante. Cada salida debe pasar: "¿Podría este concepto existir en una implementación completamente diferente?" Si referencia bibliotecas, APIs o esquemas de datos específicos, es escoria, no metal.
+- **Producir guías de implementación**: Las habilidades extraídas deben ser esbozos a NIVEL CONCEPTUAL (3-5 pasos de alto nivel), no procedimientos completos de implementación. Son semillas para desarrollar con `create-skill`, no productos terminados. Una extracción de 50 pasos es una reproducción, no una esencia.
+- **Sub-generalizar nombres**: "UserAuthService" es un nombre de clase, no un concepto. "identity-manager" es un rol. "manage-user-identity" es una habilidad. Generalizar de lo específico a lo universal.
+- **Ignorar patrones de coordinación**: Los equipos son los más difíciles de extraer porque la coordinación a menudo es implícita. Buscar flujos de trabajo de revisión de código, pipelines de despliegue, transferencias de datos entre sistemas y cadenas de aprobación — estos revelan estructuras de equipo.
 
 ## Habilidades Relacionadas
 
-- `athanor` — When metal reveals the project needs transformation, not just essence extraction
-- `chrysopoeia` — Value extraction at the code level; metal works at the conceptual level above code
-- `transmute` — Converting extracted concepts between domains or paradigms
-- `create-skill` — Flesh out extracted skill sketches into full SKILL.md implementations
-- `create-agent` — Flesh out extracted agent sketches into full agent definitions
-- `create-team` — Flesh out extracted team sketches into full team compositions
-- `observe` — Deeper observation when the prospect phase reveals an unfamiliar domain
-- `analyze-codebase-for-mcp` — Complementary: metal extracts concepts, analyze-codebase-for-mcp extracts tool surfaces
-- `review-codebase` — Complementary: metal extracts essence, review-codebase evaluates quality
+- `athanor` — Cuando metal revela que el proyecto necesita transformación, no solo extracción de esencia
+- `chrysopoeia` — Extracción de valor a nivel de código; metal trabaja a nivel conceptual por encima del código
+- `transmute` — Convertir conceptos extraídos entre dominios o paradigmas
+- `create-skill` — Desarrollar esbozos de habilidades extraídas en implementaciones completas de SKILL.md
+- `create-agent` — Desarrollar esbozos de agentes extraídos en definiciones completas de agente
+- `create-team` — Desarrollar esbozos de equipos extraídos en composiciones completas de equipo
+- `observe` — Observación más profunda cuando la fase de prospección revela un dominio no familiar
+- `analyze-codebase-for-mcp` — Complementario: metal extrae conceptos, analyze-codebase-for-mcp extrae superficies de herramientas
+- `review-codebase` — Complementario: metal extrae esencia, review-codebase evalúa calidad

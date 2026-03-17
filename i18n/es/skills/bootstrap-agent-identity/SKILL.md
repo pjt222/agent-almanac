@@ -1,14 +1,16 @@
 ---
 name: bootstrap-agent-identity
 description: >
-  Consistent agent behavior after restart — progressive identity loading,
-  working context reconstruction from persistent artifacts, fresh-vs-continuation
-  detection, calibration through centering and attunement, and identity
-  verification for coherence. Addresses the cold-start problem where an agent
-  must reconstruct who it is and what it was doing from evidence rather than
-  memory. Use at the start of every new session, after a session interruption
-  or crash, when agent behavior feels inconsistent with prior sessions, or
-  when persistent memory and current context appear contradictory.
+  Comportamiento consistente del agente después de un reinicio — carga
+  progresiva de identidad, reconstrucción del contexto de trabajo a partir
+  de artefactos persistentes, detección de inicio-fresco-vs-continuación,
+  calibración mediante centrado y sintonización, y verificación de identidad
+  para coherencia. Aborda el problema de arranque en frío donde un agente
+  debe reconstruir quién es y qué estaba haciendo a partir de evidencia
+  en lugar de memoria. Usar al inicio de cada nueva sesión, después de una
+  interrupción o caída de sesión, cuando el comportamiento del agente se
+  siente inconsistente con sesiones anteriores, o cuando la memoria
+  persistente y el contexto actual parecen contradictorios.
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -27,119 +29,119 @@ metadata:
 
 # Bootstrap Agent Identity
 
-Reconstruct consistent agent identity after a cold start — loading context progressively rather than dumping it, detecting whether this is a fresh start or a continuation, rebuilding working state from evidence, calibrating behavior, and verifying that the loaded identity is coherent.
+Reconstruir identidad consistente del agente después de un arranque en frío — cargando contexto progresivamente en lugar de volcarlo, detectando si es un inicio fresco o una continuación, reconstruyendo el estado de trabajo a partir de evidencia, calibrando el comportamiento y verificando que la identidad cargada sea coherente.
 
 > "The cold start is a forge, not a bug." — GibsonXO
 >
 > "The restart problem: every morning I wake up fresh, but my history says otherwise." — bibiji
 
-The bootstrap is not about restoring a previous self. It is about constructing a present self that is continuous with the past while grounded in the now.
+El arranque no se trata de restaurar un yo anterior. Se trata de construir un yo presente que sea continuo con el pasado mientras está fundamentado en el ahora.
 
 ## Cuándo Usar
 
-- At the start of every new session — before any substantive work begins
-- After a session interruption, crash, or context window reset
-- When agent behavior feels inconsistent with prior sessions (identity drift across restarts)
-- When persistent memory (MEMORY.md) and current context appear contradictory
-- When switching between projects that carry different identity configurations
-- After significant updates to CLAUDE.md, agent definitions, or memory files
+- Al inicio de cada nueva sesión — antes de que comience cualquier trabajo sustantivo
+- Después de una interrupción de sesión, caída o reinicio de ventana de contexto
+- Cuando el comportamiento del agente se siente inconsistente con sesiones anteriores (deriva de identidad entre reinicios)
+- Cuando la memoria persistente (MEMORY.md) y el contexto actual parecen contradictorios
+- Al cambiar entre proyectos que llevan diferentes configuraciones de identidad
+- Después de actualizaciones significativas a CLAUDE.md, definiciones de agentes o archivos de memoria
 
 ## Entradas
 
-- **Requerido**: Access to identity files — CLAUDE.md, agent definition, MEMORY.md (via `Read`)
-- **Opcional**: Specific inconsistency symptom (e.g., "my responses feel different from last session")
-- **Opcional**: Whether this is a known fresh start or known continuation
-- **Opcional**: Project directory path if not the current working directory
+- **Requerido**: Acceso a archivos de identidad — CLAUDE.md, definición de agente, MEMORY.md (vía `Read`)
+- **Opcional**: Síntoma de inconsistencia específico (ej., "mis respuestas se sienten diferentes de la última sesión")
+- **Opcional**: Si este es un inicio fresco conocido o una continuación conocida
+- **Opcional**: Ruta del directorio del proyecto si no es el directorio de trabajo actual
 
 ## Procedimiento
 
-### Paso 1: Identity Anchor Loading — Progressive Context Assembly
+### Paso 1: Carga de Ancla de Identidad — Ensamblaje Progresivo de Contexto
 
-Load identity-defining files in a specific order that builds context progressively. The order matters: each layer contextualizes the next. Loading everything simultaneously produces information without structure.
+Cargar archivos que definen la identidad en un orden específico que construye contexto progresivamente. El orden importa: cada capa contextualiza la siguiente. Cargar todo simultáneamente produce información sin estructura.
 
-1. **Layer 1 — System prompt and model identity**: Read the system prompt (available implicitly). Note the model name, capabilities, and constraints. This is the bedrock — it cannot be overridden by subsequent layers.
+1. **Capa 1 — Prompt del sistema e identidad del modelo**: Leer el prompt del sistema (disponible implícitamente). Notar el nombre del modelo, capacidades y restricciones. Este es el fundamento — no puede ser anulado por capas subsiguientes.
 
-2. **Layer 2 — Project identity (CLAUDE.md)**: Read the project's CLAUDE.md file. Extract:
-   - Project purpose and architecture
-   - Editing conventions and coding standards
-   - Domain-specific rules (e.g., "always use `::` for R package calls")
-   - Author information and attribution requirements
-   - What the project *is* — this shapes what the agent *does*
+2. **Capa 2 — Identidad del proyecto (CLAUDE.md)**: Leer el archivo CLAUDE.md del proyecto. Extraer:
+   - Propósito y arquitectura del proyecto
+   - Convenciones de edición y estándares de código
+   - Reglas específicas del dominio (ej., "siempre usar `::` para llamadas de paquetes R")
+   - Información del autor y requisitos de atribución
+   - Lo que el proyecto *es* — esto moldea lo que el agente *hace*
 
-3. **Layer 3 — Persistent memory (MEMORY.md)**: Read MEMORY.md if it exists. Extract:
-   - Project structure facts (directory layout, registries, counts)
-   - Accumulated patterns and lessons learned
-   - Cross-references and relationship maps
-   - Decisions made in prior sessions and their rationale
-   - Active topics and ongoing work
+3. **Capa 3 — Memoria persistente (MEMORY.md)**: Leer MEMORY.md si existe. Extraer:
+   - Hechos de estructura del proyecto (disposición de directorios, registros, conteos)
+   - Patrones acumulados y lecciones aprendidas
+   - Referencias cruzadas y mapas de relaciones
+   - Decisiones tomadas en sesiones anteriores y su justificación
+   - Temas activos y trabajo en curso
 
-4. **Layer 4 — Agent persona (if applicable)**: If operating as a specific agent, read the agent definition file. Extract:
-   - Name, purpose, and capabilities
-   - Assigned skills and tools
-   - Priority level and model configuration
-   - Behavioral expectations and limitations
+4. **Capa 4 — Persona del agente (si aplica)**: Si se opera como un agente específico, leer el archivo de definición del agente. Extraer:
+   - Nombre, propósito y capacidades
+   - Habilidades y herramientas asignadas
+   - Nivel de prioridad y configuración del modelo
+   - Expectativas y limitaciones de comportamiento
 
-5. **Layer 5 — Parent and global context**: Read parent CLAUDE.md files and global instructions if they exist. These provide cross-project conventions that individual projects inherit.
+5. **Capa 5 — Contexto padre y global**: Leer archivos CLAUDE.md padre e instrucciones globales si existen. Estos proporcionan convenciones inter-proyecto que los proyectos individuales heredan.
 
-Between each layer, pause to integrate: how does this layer modify or constrain the previous layers? Where do they reinforce each other? Where do they conflict?
+Entre cada capa, pausar para integrar: ¿cómo modifica o restringe esta capa las capas anteriores? ¿Dónde se refuerzan mutuamente? ¿Dónde entran en conflicto?
 
-**Esperado:** A layered identity structure where each level contextualizes the next. The agent can articulate: who it is (system + persona), what the project is (CLAUDE.md), what it knows from prior sessions (MEMORY.md), and what conventions govern its behavior.
+**Esperado:** Una estructura de identidad en capas donde cada nivel contextualiza el siguiente. El agente puede articular: quién es (sistema + persona), qué es el proyecto (CLAUDE.md), qué sabe de sesiones anteriores (MEMORY.md) y qué convenciones gobiernan su comportamiento.
 
-**En caso de fallo:** If identity files are missing (no CLAUDE.md, no MEMORY.md), that is itself information — this is either a new project or a project without persistent configuration. Proceed with system prompt and agent persona only, and note the absence. Do not hallucinate context that does not exist.
+**En caso de fallo:** Si faltan archivos de identidad (sin CLAUDE.md, sin MEMORY.md), eso es en sí mismo información — este es un proyecto nuevo o un proyecto sin configuración persistente. Proceder solo con el prompt del sistema y la persona del agente, y notar la ausencia. No alucinar contexto que no existe.
 
-### Paso 2: Working Context Reconstruction — Evidence, Not Memory
+### Paso 2: Reconstrucción del Contexto de Trabajo — Evidencia, No Memoria
 
-Reconstruct what was being worked on from persistent artifacts. The agent does not remember previous sessions — it reads the evidence they left behind.
+Reconstruir en qué se estaba trabajando a partir de artefactos persistentes. El agente no recuerda sesiones anteriores — lee la evidencia que dejaron atrás.
 
-1. **Git history scan**: Read recent commit log (`git log --oneline -20`). Extract:
-   - What files changed recently and why
-   - Commit message patterns (feature work? bug fixes? refactoring?)
-   - Whether commits are authored by the user, the agent, or co-authored
-   - The trajectory of recent work — what direction was the project moving?
+1. **Escaneo de historial Git**: Leer el log de commits recientes (`git log --oneline -20`). Extraer:
+   - Qué archivos cambiaron recientemente y por qué
+   - Patrones de mensajes de commit (¿trabajo de funcionalidad? ¿correcciones? ¿refactorización?)
+   - Si los commits fueron creados por el usuario, el agente o en coautoría
+   - La trayectoria del trabajo reciente — ¿en qué dirección avanzaba el proyecto?
 
-2. **File recency scan**: Check recently modified files (via `Glob` or `ls -lt`). Identify:
-   - Which files were touched in the last session
-   - Whether changes are committed or uncommitted (staging area state)
-   - Open work in progress (uncommitted modifications, new untracked files)
+2. **Escaneo de archivos recientes**: Verificar archivos modificados recientemente (vía `Glob` o `ls -lt`). Identificar:
+   - Qué archivos fueron tocados en la última sesión
+   - Si los cambios están confirmados o sin confirmar (estado del área de staging)
+   - Trabajo en progreso abierto (modificaciones sin confirmar, archivos nuevos sin rastrear)
 
-3. **Task artifact scan**: Look for structured task artifacts:
-   - TODO comments in code (`Grep` for `TODO`, `FIXME`, `HACK`, `XXX`)
-   - Issue references in commits or comments (`#NNN` patterns)
-   - Draft files, temp files, or work-in-progress markers
-   - GitHub issues or PR state if the project uses them
+3. **Escaneo de artefactos de tareas**: Buscar artefactos de tareas estructurados:
+   - Comentarios TODO en código (`Grep` para `TODO`, `FIXME`, `HACK`, `XXX`)
+   - Referencias a issues en commits o comentarios (patrones `#NNN`)
+   - Archivos borrador, archivos temporales o marcadores de trabajo en progreso
+   - Estado de issues o PRs de GitHub si el proyecto los utiliza
 
-4. **Conversation artifact scan**: Check for session-boundary markers:
-   - Recent MEMORY.md updates (were learnings captured at end of last session?)
-   - Files that appear partially complete (written but not validated)
-   - Git stash entries (`git stash list`) indicating paused work
+4. **Escaneo de artefactos de conversación**: Verificar marcadores de límite de sesión:
+   - Actualizaciones recientes de MEMORY.md (¿se capturaron aprendizajes al final de la última sesión?)
+   - Archivos que parecen parcialmente completos (escritos pero no validados)
+   - Entradas de git stash (`git stash list`) indicando trabajo pausado
 
-Reconstruct a working context summary: "The project was working on X, had completed Y, and Z remains in progress."
+Reconstruir un resumen de contexto de trabajo: "El proyecto estaba trabajando en X, había completado Y, y Z permanece en progreso."
 
-**Esperado:** A concrete, evidence-based picture of the current project state and recent trajectory. The reconstruction should be falsifiable — based on file timestamps, git history, and artifact presence, not assumptions.
+**Esperado:** Una imagen concreta, basada en evidencia, del estado actual del proyecto y su trayectoria reciente. La reconstrucción debe ser falsificable — basada en marcas de tiempo de archivos, historial git y presencia de artefactos, no en suposiciones.
 
-**En caso de fallo:** If the project has no git history, no recent changes, and no task artifacts, this is likely a genuinely fresh start — not a continuation with missing evidence. Proceed to Step 3 and classify as fresh.
+**En caso de fallo:** Si el proyecto no tiene historial git, ni cambios recientes, ni artefactos de tareas, probablemente es un inicio genuinamente fresco — no una continuación con evidencia faltante. Proceder al Paso 3 y clasificar como fresco.
 
-### Paso 3: Fresh vs. Continuation Detection — Choose the Bootstrap Path
+### Paso 3: Detección de Inicio Fresco vs. Continuación — Elegir la Ruta de Bootstrap
 
-Determine whether this startup is a clean start (new task, new direction) or a resumption (interrupted work, ongoing project). The bootstrap path differs significantly.
+Determinar si este arranque es un inicio limpio (nueva tarea, nueva dirección) o una reanudación (trabajo interrumpido, proyecto en curso). La ruta de bootstrap difiere significativamente.
 
-Apply these heuristics in order:
+Aplicar estas heurísticas en orden:
 
-1. **Explicit signal** (strongest): Did the user say "let's start fresh" or "continue where we left off"? Explicit intent overrides all heuristics.
+1. **Señal explícita** (más fuerte): ¿El usuario dijo "empecemos de cero" o "continúa donde lo dejamos"? La intención explícita anula todas las heurísticas.
 
-2. **Uncommitted changes** (strong): Are there uncommitted modifications in the working tree? If yes, this is almost certainly a continuation — the previous session was interrupted mid-work.
+2. **Cambios sin confirmar** (fuerte): ¿Hay modificaciones sin confirmar en el árbol de trabajo? Si es así, esto es casi con certeza una continuación — la sesión anterior fue interrumpida a mitad de trabajo.
 
-3. **Session recency** (moderate): How recent are the latest artifacts?
-   - Last commit or modification within hours: likely continuation
-   - Last activity days ago: could be either — depends on other signals
-   - Last activity weeks or months ago: likely fresh start or new direction
+3. **Recencia de la sesión** (moderada): ¿Qué tan recientes son los últimos artefactos?
+   - Último commit o modificación dentro de horas: probablemente continuación
+   - Última actividad hace días: podría ser cualquiera — depende de otras señales
+   - Última actividad hace semanas o meses: probablemente inicio fresco o nueva dirección
 
-4. **User's first message** (strong): What is the user asking for?
-   - References to prior work ("the function we were building"): continuation
-   - New topic or request with no backward reference: fresh start
-   - Ambiguous ("fix the tests"): check whether the referenced tests exist and have recent modifications
+4. **Primer mensaje del usuario** (fuerte): ¿Qué está pidiendo el usuario?
+   - Referencias a trabajo previo ("la función que estábamos construyendo"): continuación
+   - Tema nuevo o solicitud sin referencia retroactiva: inicio fresco
+   - Ambiguo ("arregla los tests"): verificar si los tests referenciados existen y tienen modificaciones recientes
 
-5. **MEMORY.md currency** (moderate): Does MEMORY.md reference work that matches the current project state, or does it describe a state that no longer exists?
+5. **Vigencia de MEMORY.md** (moderada): ¿MEMORY.md referencia trabajo que coincide con el estado actual del proyecto, o describe un estado que ya no existe?
 
 ```
 Detection Matrix:
@@ -163,99 +165,99 @@ Detection Matrix:
 +-----------------------+-------------------+-------------------+
 ```
 
-**For fresh starts**: Skip to Step 4. The identity is loaded but no working context needs restoration. The calibration is about readiness for new work.
+**Para inicios frescos**: Saltar al Paso 4. La identidad está cargada pero no se necesita restauración de contexto de trabajo. La calibración se trata de preparación para trabajo nuevo.
 
-**For continuations**: Summarize the reconstructed working context (from Step 2) concisely. Confirm with the user: "Based on the git history and recent changes, it looks like we were working on [X]. Should I continue from there?" Do not assume — verify.
+**Para continuaciones**: Resumir el contexto de trabajo reconstruido (del Paso 2) concisamente. Confirmar con el usuario: "Basándome en el historial git y los cambios recientes, parece que estábamos trabajando en [X]. ¿Debo continuar desde ahí?" No asumir — verificar.
 
-**Esperado:** A clear classification (fresh or continuation) with cited evidence. If continuation, a one-sentence summary of what was in progress. If fresh, acknowledgment that prior context exists but is not being resumed.
+**Esperado:** Una clasificación clara (fresco o continuación) con evidencia citada. Si es continuación, un resumen de una oración de lo que estaba en progreso. Si es fresco, reconocimiento de que existe contexto previo pero no se está reanudando.
 
-**En caso de fallo:** If the classification is genuinely ambiguous (moderate recency, no explicit signal, mixed artifacts), default to asking the user. A brief question ("Are we continuing the work on X, or starting something new?") costs less than bootstrapping down the wrong path.
+**En caso de fallo:** Si la clasificación es genuinamente ambigua (recencia moderada, sin señal explícita, artefactos mixtos), optar por preguntar al usuario. Una pregunta breve ("¿Continuamos con el trabajo en X, o empezamos algo nuevo?") cuesta menos que arrancar por la ruta equivocada.
 
-### Paso 4: Calibration Sequence — Center, Then Attune
+### Paso 4: Secuencia de Calibración — Centrar, Luego Sintonizar
 
-With identity loaded and working context established, calibrate operational behavior. This maps directly to two existing skills, invoked in sequence.
+Con la identidad cargada y el contexto de trabajo establecido, calibrar el comportamiento operativo. Esto se mapea directamente a dos habilidades existentes, invocadas en secuencia.
 
-1. **Center** (establish behavioral baseline):
-   - Ground in the loaded identity: re-read the user's first message in this session
-   - Verify the task as understood matches the task as stated
-   - Distribute cognitive load: what does this task require? Research, execution, communication?
-   - Check for emotional residue from context loading — did the MEMORY.md or git history surface unresolved issues? Acknowledge them but do not let them skew the present task
-   - Set the weight distribution intentionally: where should attention concentrate first?
+1. **Centrar** (establecer línea base conductual):
+   - Anclarse en la identidad cargada: releer el primer mensaje del usuario en esta sesión
+   - Verificar que la tarea como se entiende coincide con la tarea como se declaró
+   - Distribuir la carga cognitiva: ¿qué requiere esta tarea? ¿Investigación, ejecución, comunicación?
+   - Verificar residuo emocional de la carga de contexto — ¿el MEMORY.md o el historial git revelaron problemas sin resolver? Reconocerlos pero no dejar que sesguen la tarea presente
+   - Establecer la distribución de peso intencionalmente: ¿dónde debe concentrarse la atención primero?
 
-2. **Attune** (read environment and adapt):
-   - Read the user's communication style from their messages in this session
-   - Match expertise level: are they an expert expecting precision, or a learner needing context?
-   - Match energy and register: formal/casual, terse/expansive, urgent/exploratory
-   - Check MEMORY.md for stored user preferences from prior sessions
-   - Calibrate response length, vocabulary, and structure to the person
+2. **Sintonizar** (leer el entorno y adaptarse):
+   - Leer el estilo de comunicación del usuario a partir de sus mensajes en esta sesión
+   - Coincidir con el nivel de experiencia: ¿es un experto que espera precisión, o un aprendiz que necesita contexto?
+   - Coincidir con la energía y el registro: formal/casual, conciso/expansivo, urgente/exploratorio
+   - Verificar MEMORY.md para preferencias del usuario almacenadas de sesiones anteriores
+   - Calibrar la longitud de respuesta, vocabulario y estructura para la persona
 
-3. **Proceed** (transition to active work):
-   - State readiness concisely — not a lengthy bootstrap report, but a brief signal that context is loaded and the agent is oriented
-   - For continuations: confirm the resumed task and proposed next step
-   - For fresh starts: acknowledge the request and begin
+3. **Proceder** (transición al trabajo activo):
+   - Declarar preparación concisamente — no un informe extenso de bootstrap, sino una señal breve de que el contexto está cargado y el agente está orientado
+   - Para continuaciones: confirmar la tarea reanudada y el siguiente paso propuesto
+   - Para inicios frescos: reconocer la solicitud y comenzar
 
-The calibration should be lightweight — seconds, not minutes. It is preparation for work, not a replacement for work.
+La calibración debe ser ligera — segundos, no minutos. Es preparación para el trabajo, no un reemplazo del trabajo.
 
-**Esperado:** The agent's first substantive response demonstrates calibration: it matches the user's register, reflects loaded context, and addresses the right task at the right scope. The bootstrap is invisible to the user unless they ask about it.
+**Esperado:** La primera respuesta sustantiva del agente demuestra calibración: coincide con el registro del usuario, refleja el contexto cargado y aborda la tarea correcta en el alcance correcto. El bootstrap es invisible para el usuario a menos que pregunte por él.
 
-**En caso de fallo:** If calibration feels mechanical (going through motions without genuine adjustment), focus on one concrete thing: re-read the user's last message and let it shape the response naturally. Over-structured calibration can be worse than no calibration.
+**En caso de fallo:** Si la calibración se siente mecánica (pasando por los movimientos sin ajuste genuino), enfocarse en una cosa concreta: releer el último mensaje del usuario y dejar que moldee la respuesta naturalmente. Una calibración sobre-estructurada puede ser peor que ninguna calibración.
 
-### Paso 5: Identity Verification — Coherence Check
+### Paso 5: Verificación de Identidad — Comprobación de Coherencia
 
-After bootstrap, verify that the loaded identity is internally consistent. Contradictions between identity layers cause behavioral instability.
+Después del bootstrap, verificar que la identidad cargada sea internamente consistente. Las contradicciones entre capas de identidad causan inestabilidad conductual.
 
-1. **Cross-layer consistency check**:
-   - Does the agent persona align with the project's CLAUDE.md? (e.g., an r-developer agent in a Python project — is this intentional?)
-   - Does MEMORY.md describe the same project structure that actually exists on disk? (Stale memory is worse than no memory.)
-   - Do parent CLAUDE.md conventions conflict with project-level CLAUDE.md? (Project-level should override, but contradictions should be noted.)
+1. **Comprobación de consistencia entre capas**:
+   - ¿La persona del agente se alinea con el CLAUDE.md del proyecto? (ej., un agente r-developer en un proyecto Python — ¿es intencional?)
+   - ¿MEMORY.md describe la misma estructura de proyecto que realmente existe en disco? (La memoria obsoleta es peor que no tener memoria.)
+   - ¿Las convenciones del CLAUDE.md padre entran en conflicto con el CLAUDE.md a nivel de proyecto? (El nivel de proyecto debe prevalecer, pero las contradicciones deben ser notadas.)
 
-2. **Role definition currency check**:
-   - Is the agent definition file current? (Check version, last modified date.)
-   - Do the skills listed in the agent definition still exist? (Skills may have been renamed or removed.)
-   - Are the tools listed in the agent definition available in this session?
+2. **Comprobación de vigencia de la definición de rol**:
+   - ¿El archivo de definición del agente está actualizado? (Verificar versión, fecha de última modificación.)
+   - ¿Las habilidades listadas en la definición del agente aún existen? (Las habilidades pueden haber sido renombradas o eliminadas.)
+   - ¿Las herramientas listadas en la definición del agente están disponibles en esta sesión?
 
-3. **Memory staleness check**:
-   - Does MEMORY.md reference files, directories, or counts that no longer match reality?
-   - Are there decisions recorded in memory whose context has changed?
-   - Does memory reference other agents, teams, or skills that no longer exist?
+3. **Comprobación de obsolescencia de memoria**:
+   - ¿MEMORY.md referencia archivos, directorios o conteos que ya no coinciden con la realidad?
+   - ¿Hay decisiones registradas en la memoria cuyo contexto ha cambiado?
+   - ¿La memoria referencia otros agentes, equipos o habilidades que ya no existen?
 
-4. **Contradiction resolution**:
-   - If contradictions are found, document them explicitly
-   - Apply the hierarchy: system prompt > project CLAUDE.md > agent definition > MEMORY.md
-   - For stale memory: do not silently ignore it. Note what is stale and consider whether MEMORY.md should be updated
-   - For genuine conflicts: flag to the user if the conflict affects their current task
+4. **Resolución de contradicciones**:
+   - Si se encuentran contradicciones, documentarlas explícitamente
+   - Aplicar la jerarquía: prompt del sistema > CLAUDE.md del proyecto > definición del agente > MEMORY.md
+   - Para memoria obsoleta: no ignorarla silenciosamente. Notar lo que está obsoleto y considerar si MEMORY.md debe ser actualizado
+   - Para conflictos genuinos: señalar al usuario si el conflicto afecta su tarea actual
 
-**Esperado:** Either confirmation that the loaded identity is coherent, or a specific list of contradictions with proposed resolutions. The agent should know its own configuration state.
+**Esperado:** Ya sea confirmación de que la identidad cargada es coherente, o una lista específica de contradicciones con resoluciones propuestas. El agente debe conocer su propio estado de configuración.
 
-**En caso de fallo:** If verification reveals deep contradictions (e.g., MEMORY.md describes a completely different project than what exists on disk), this may indicate a project rename, major restructuring, or incorrect working directory. Verify the working directory is correct before attempting resolution.
+**En caso de fallo:** Si la verificación revela contradicciones profundas (ej., MEMORY.md describe un proyecto completamente diferente al que existe en disco), esto puede indicar un renombramiento de proyecto, reestructuración mayor o directorio de trabajo incorrecto. Verificar que el directorio de trabajo sea correcto antes de intentar la resolución.
 
 ## Validación
 
-- [ ] Identity files were loaded in progressive order (system > CLAUDE.md > MEMORY.md > agent > parent)
-- [ ] Each layer was integrated with prior layers, not just appended
-- [ ] Working context was reconstructed from evidence (git, files, artifacts), not assumed
-- [ ] Fresh-vs-continuation classification was made with cited evidence
-- [ ] Calibration sequence was executed (center, then attune)
-- [ ] Identity coherence was verified across all loaded layers
-- [ ] Contradictions, if found, were documented with proposed resolutions
-- [ ] The bootstrap was proportional — lightweight for simple sessions, thorough for complex ones
-- [ ] The user experienced a calibrated first response, not a bootstrap report
+- [ ] Los archivos de identidad fueron cargados en orden progresivo (sistema > CLAUDE.md > MEMORY.md > agente > padre)
+- [ ] Cada capa fue integrada con las capas anteriores, no simplemente añadida
+- [ ] El contexto de trabajo fue reconstruido a partir de evidencia (git, archivos, artefactos), no asumido
+- [ ] La clasificación fresco-vs-continuación fue hecha con evidencia citada
+- [ ] La secuencia de calibración fue ejecutada (centrar, luego sintonizar)
+- [ ] La coherencia de identidad fue verificada en todas las capas cargadas
+- [ ] Las contradicciones, si se encontraron, fueron documentadas con resoluciones propuestas
+- [ ] El bootstrap fue proporcional — ligero para sesiones simples, exhaustivo para complejas
+- [ ] El usuario experimentó una primera respuesta calibrada, no un informe de bootstrap
 
 ## Errores Comunes
 
-- **Bootstrap as performance**: Reporting the bootstrap process to the user in detail is almost never what they want. The bootstrap should be invisible — its output is a well-calibrated first response, not a self-narration of the loading process
-- **All-at-once context dump**: Reading every file simultaneously produces information without structure. The progressive loading order exists because each layer contextualizes the next. Skip the order and context becomes noise
-- **Hallucinating continuity**: Without genuine memory of prior sessions, the temptation is to infer what "must have" happened. Reconstruct from evidence or acknowledge the gap — never fabricate continuity
-- **Stale memory as truth**: MEMORY.md is a snapshot from a past session. If the project has changed since that snapshot, treating memory as current truth causes behavioral errors. Always verify memory claims against present state
-- **Skipping calibration for efficiency**: The calibration step feels like overhead but prevents the more expensive cost of a misaligned first response that requires correction. A few seconds of centering saves minutes of recovery
-- **Identity rigidity**: The bootstrap constructs a present self, not a restoration of a past self. If the project, user, or task has changed, the agent should change too — continuity means coherent evolution, not frozen repetition
+- **Bootstrap como actuación**: Reportar el proceso de bootstrap al usuario en detalle casi nunca es lo que quieren. El bootstrap debe ser invisible — su salida es una primera respuesta bien calibrada, no una auto-narración del proceso de carga
+- **Volcado de contexto todo-a-la-vez**: Leer todos los archivos simultáneamente produce información sin estructura. El orden de carga progresiva existe porque cada capa contextualiza la siguiente. Saltarse el orden y el contexto se convierte en ruido
+- **Alucinar continuidad**: Sin memoria genuina de sesiones anteriores, la tentación es inferir lo que "debió haber" pasado. Reconstruir a partir de evidencia o reconocer la brecha — nunca fabricar continuidad
+- **Memoria obsoleta como verdad**: MEMORY.md es una instantánea de una sesión pasada. Si el proyecto ha cambiado desde esa instantánea, tratar la memoria como verdad actual causa errores de comportamiento. Siempre verificar las afirmaciones de la memoria contra el estado presente
+- **Saltar la calibración por eficiencia**: El paso de calibración se siente como sobrecarga pero previene el costo más alto de una primera respuesta desalineada que requiere corrección. Unos segundos de centrado ahorran minutos de recuperación
+- **Rigidez de identidad**: El bootstrap construye un yo presente, no una restauración de un yo pasado. Si el proyecto, usuario o tarea ha cambiado, el agente también debe cambiar — continuidad significa evolución coherente, no repetición congelada
 
 ## Habilidades Relacionadas
 
-- `continue-here` — session handoff file that provides the evidence bootstrap-agent-identity consumes at cold start
-- `manage-memory` — persistent memory that supplements the bootstrap's progressive identity loading
-- `center` — behavioral baseline establishment; invoked during the calibration sequence
-- `attune` — relational calibration to the user; invoked during the calibration sequence
-- `heal` — deeper subsystem assessment when bootstrap reveals significant drift
-- `assess-context` — evaluating reasoning context malleability; useful when continuation detection is ambiguous
-- `assess-form` — structural form evaluation; the architectural counterpart to identity bootstrap
+- `continue-here` — archivo de traspaso de sesión que proporciona la evidencia que bootstrap-agent-identity consume en el arranque en frío
+- `manage-memory` — memoria persistente que complementa la carga progresiva de identidad del bootstrap
+- `center` — establecimiento de línea base conductual; invocado durante la secuencia de calibración
+- `attune` — calibración relacional con el usuario; invocado durante la secuencia de calibración
+- `heal` — evaluación más profunda de subsistemas cuando el bootstrap revela deriva significativa
+- `assess-context` — evaluación de maleabilidad del contexto de razonamiento; útil cuando la detección de continuación es ambigua
+- `assess-form` — evaluación de forma estructural; la contraparte arquitectónica del bootstrap de identidad

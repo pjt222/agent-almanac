@@ -1,13 +1,15 @@
 ---
 name: grade-tcg-card
 description: >
-  Grade a trading card using PSA, BGS, or CGC standards. Covers observation-first
-  assessment (adapted from meditate's unbiased observation), centering measurement,
-  surface analysis, edge and corner evaluation, and final grade assignment with
-  confidence interval. Supports Pokemon, MTG, Flesh and Blood, and Kayou cards.
-  Use when evaluating a card before professional grading submission, pre-screening
-  a collection for high-grade candidates, settling condition disputes between
-  buyers and sellers, or estimating the grade-dependent value spread for a card.
+  Calificar una carta coleccionable usando estándares PSA, BGS o CGC. Cubre
+  evaluación con observación primero (adaptada de la observación sin sesgo de
+  meditate), medición de centrado, análisis de superficie, evaluación de bordes
+  y esquinas, y asignación de calificación final con intervalo de confianza.
+  Soporta cartas de Pokemon, MTG, Flesh and Blood y Kayou. Usar al evaluar
+  una carta antes de enviarla a calificación profesional, al pre-filtrar una
+  colección para candidatos de alta calificación, al resolver disputas de
+  condición entre compradores y vendedores, o al estimar el rango de valor
+  dependiente de la calificación para una carta.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,52 +28,52 @@ metadata:
 
 # Grade TCG Card
 
-Assess and grade a trading card following professional grading standards (PSA, BGS, CGC). Uses an observation-first protocol adapted from the `meditate` skill to prevent grade anchoring — the most common grading bias.
+Evaluar y calificar una carta coleccionable siguiendo estándares de calificación profesional (PSA, BGS, CGC). Usa un protocolo de observación primero adaptado de la habilidad `meditate` para prevenir el anclaje de calificación — el sesgo de calificación más común.
 
 ## Cuándo Usar
 
-- Evaluating a card before submission to a professional grading service
-- Pre-screening a collection to identify high-grade candidates worth submitting
-- Settling disputes about card condition between buyers and sellers
-- Learning to grade consistently by following a structured assessment protocol
-- Estimating the grade-dependent value spread for a specific card
+- Evaluar una carta antes de enviarla a un servicio de calificación profesional
+- Pre-filtrar una colección para identificar candidatos de alta calificación que valga la pena enviar
+- Resolver disputas sobre la condición de una carta entre compradores y vendedores
+- Aprender a calificar consistentemente siguiendo un protocolo de evaluación estructurado
+- Estimar el rango de valor dependiente de la calificación para una carta específica
 
 ## Entradas
 
-- **Requerido**: Card identification (set, number, name, variant/edition)
-- **Requerido**: Card images or physical description (front and back)
-- **Requerido**: Grading standard to apply (PSA 1-10, BGS 1-10 with subgrades, CGC 1-10)
-- **Opcional**: Known market value at different grades (for grade-value analysis)
-- **Opcional**: Card game (Pokemon, Magic: The Gathering, Flesh and Blood, Kayou)
+- **Requerido**: Identificación de la carta (set, número, nombre, variante/edición)
+- **Requerido**: Imágenes de la carta o descripción física (anverso y reverso)
+- **Requerido**: Estándar de calificación a aplicar (PSA 1-10, BGS 1-10 con sub-calificaciones, CGC 1-10)
+- **Opcional**: Valor de mercado conocido en diferentes calificaciones (para análisis calificación-valor)
+- **Opcional**: Juego de cartas (Pokemon, Magic: The Gathering, Flesh and Blood, Kayou)
 
 ## Procedimiento
 
-### Paso 1: Clear Bias — Observation Without Prejudgment
+### Paso 1: Eliminar sesgo — Observación sin prejuicio
 
-Adapted from `meditate` Step 2-3: observe the card without anchoring to expected grade or market value.
+Adaptado de `meditate` Pasos 2-3: observar la carta sin anclarse a la calificación esperada o el valor de mercado.
 
-1. Set aside any knowledge of the card's market value
-2. Do NOT look up recent sales or population reports before grading
-3. If you know the card is "valuable," acknowledge that bias explicitly:
-   - "I know this card is worth $X in PSA 10. I am setting that aside."
-4. Examine the card as a physical object first, not as a collectible
-5. Note your initial gut impression but do NOT let it anchor the assessment
-6. Label any premature grade thoughts as "anchoring" and return to observation
+1. Dejar de lado cualquier conocimiento del valor de mercado de la carta
+2. NO buscar ventas recientes o informes de población antes de calificar
+3. Si sabes que la carta es "valiosa," reconocer ese sesgo explícitamente:
+   - "Sé que esta carta vale $X en PSA 10. Estoy dejando eso de lado."
+4. Examinar la carta como un objeto físico primero, no como un coleccionable
+5. Notar tu impresión inicial instintiva pero NO dejar que ancle la evaluación
+6. Etiquetar cualquier pensamiento prematuro de calificación como "anclaje" y volver a la observación
 
-**Esperado:** A neutral starting state where the card is assessed purely on physical condition, not market expectations. Grade anchoring (knowing the value before grading) is the #1 source of grading inconsistency.
+**Esperado:** Un estado inicial neutral donde la carta se evalúa puramente por su condición física, no por expectativas de mercado. El anclaje de calificación (conocer el valor antes de calificar) es la fuente #1 de inconsistencia en la calificación.
 
-**En caso de fallo:** If bias feels sticky (a high-value card makes you want to see a 10), write down the bias explicitly. Externalizing it reduces its influence. Proceed only when you can examine the card as a physical object.
+**En caso de fallo:** Si el sesgo se siente pegajoso (una carta de alto valor te hace querer ver un 10), escribir el sesgo explícitamente. Externalizarlo reduce su influencia. Proceder solo cuando puedas examinar la carta como un objeto físico.
 
-### Paso 2: Centering Assessment
+### Paso 2: Evaluación de centrado
 
-Measure the card's print centering on both faces.
+Medir el centrado de impresión de la carta en ambas caras.
 
-1. Measure the border width on all four sides of the front face:
-   - Left vs. right border (horizontal centering)
-   - Top vs. bottom border (vertical centering)
-   - Express as ratio: e.g., 55/45 left-right, 60/40 top-bottom
-2. Repeat for the back face
-3. Apply the grading standard's centering thresholds:
+1. Medir el ancho del borde en los cuatro lados de la cara frontal:
+   - Borde izquierdo vs. derecho (centrado horizontal)
+   - Borde superior vs. inferior (centrado vertical)
+   - Expresar como ratio: ej., 55/45 izquierda-derecha, 60/40 arriba-abajo
+2. Repetir para la cara posterior
+3. Aplicar los umbrales de centrado del estándar de calificación:
 
 ```
 PSA Centering Thresholds:
@@ -95,104 +97,104 @@ BGS Centering Subgrade:
 +------+-------------------+-------------------+
 ```
 
-4. Record the centering score for each axis and the applicable subgrade
+4. Registrar la puntuación de centrado para cada eje y la sub-calificación aplicable
 
-**Esperado:** Numeric centering ratios for both faces with the corresponding grade/subgrade identified. This is the most objective measurement in the grading process.
+**Esperado:** Ratios numéricos de centrado para ambas caras con la calificación/sub-calificación correspondiente identificada. Esta es la medición más objetiva en el proceso de calificación.
 
-**En caso de fallo:** If borders are too narrow to measure accurately (full-art cards, borderless prints), note "centering N/A — borderless" and skip to Step 3. Some grading services apply different standards for borderless cards.
+**En caso de fallo:** Si los bordes son demasiado estrechos para medir con precisión (cartas de arte completo, impresiones sin borde), anotar "centrado N/A — sin borde" y saltar al Paso 3. Algunos servicios de calificación aplican estándares diferentes para cartas sin borde.
 
-### Paso 3: Surface Analysis
+### Paso 3: Análisis de superficie
 
-Examine the card's surface for defects.
+Examinar la superficie de la carta en busca de defectos.
 
-1. Examine the front surface under good lighting:
-   - **Print defects**: ink spots, missing ink, print lines, color inconsistency
-   - **Surface scratches**: visible under direct and angled light
-   - **Whitening on surface**: haze or clouding of the surface layer
-   - **Indentations or impressions**: dents visible under raking light
-   - **Staining or discoloration**: yellowing, water marks, chemical damage
-2. Examine the back surface with the same criteria
-3. Check for factory defects vs. handling damage:
-   - Factory: print lines, miscut, crimping — may be less penalized
-   - Handling: scratches, dents, stains — always penalized
-4. Rate surface condition:
-   - Pristine (10): flawless under magnification
-   - Near-pristine (9-9.5): minor imperfections visible only under magnification
-   - Excellent (8-8.5): minor wear visible to naked eye
-   - Good (6-7): moderate wear, multiple minor defects
-   - Fair or below (1-5): significant damage visible
+1. Examinar la superficie frontal bajo buena iluminación:
+   - **Defectos de impresión**: manchas de tinta, falta de tinta, líneas de impresión, inconsistencia de color
+   - **Rayaduras de superficie**: visibles bajo luz directa y angular
+   - **Blanqueamiento en superficie**: neblina o nubosidad de la capa superficial
+   - **Hendiduras o impresiones**: abolladuras visibles bajo luz rasante
+   - **Manchas o decoloración**: amarillamiento, marcas de agua, daño químico
+2. Examinar la superficie posterior con los mismos criterios
+3. Verificar defectos de fábrica vs. daño por manipulación:
+   - Fábrica: líneas de impresión, mal corte, ondulado — puede ser menos penalizado
+   - Manipulación: rayaduras, abolladuras, manchas — siempre penalizado
+4. Calificar la condición de superficie:
+   - Prístina (10): impecable bajo magnificación
+   - Casi prístina (9-9.5): imperfecciones menores visibles solo bajo magnificación
+   - Excelente (8-8.5): desgaste menor visible a simple vista
+   - Buena (6-7): desgaste moderado, múltiples defectos menores
+   - Regular o inferior (1-5): daño significativo visible
 
-**Esperado:** A detailed surface inventory with each defect located, described, and severity-rated. Factory vs. handling defects distinguished.
+**Esperado:** Un inventario detallado de la superficie con cada defecto localizado, descrito y clasificado por severidad. Defectos de fábrica vs. de manipulación distinguidos.
 
-**En caso de fallo:** If images are too low-resolution for surface analysis, note the limitation and provide a grade range rather than a point grade. Recommend physical inspection.
+**En caso de fallo:** Si las imágenes son de muy baja resolución para el análisis de superficie, anotar la limitación y proporcionar un rango de calificación en lugar de una calificación puntual. Recomendar inspección física.
 
-### Paso 4: Edge and Corner Evaluation
+### Paso 4: Evaluación de bordes y esquinas
 
-Assess the card's edges and corners for wear.
+Evaluar los bordes y esquinas de la carta por desgaste.
 
-1. Examine all four edges:
-   - **Whitening**: white spots or lines along colored edges (the most common defect)
-   - **Chipping**: small pieces of the edge layer missing
-   - **Roughness**: edge feels uneven or has micro-tears
-   - **Foil separation**: on holofoil cards, check for delamination at edges
-2. Examine all four corners:
-   - **Sharpness**: corner tip is crisp and pointed
-   - **Rounding**: corner tip is worn to a curve (slight, moderate, heavy)
-   - **Splitting**: layer separation visible at corner (dings)
-   - **Bending**: corner turned or creased
-3. Rate edge and corner condition using the same scale as surface
-4. Note which specific corners/edges have the worst condition
+1. Examinar los cuatro bordes:
+   - **Blanqueamiento**: puntos o líneas blancas a lo largo de bordes coloreados (el defecto más común)
+   - **Astillado**: pequeños fragmentos de la capa del borde faltantes
+   - **Rugosidad**: el borde se siente irregular o tiene micro-desgarros
+   - **Separación del foil**: en cartas holofoil, verificar delaminación en los bordes
+2. Examinar las cuatro esquinas:
+   - **Nitidez**: la punta de la esquina es nítida y puntiaguda
+   - **Redondeado**: la punta de la esquina está desgastada en una curva (leve, moderado, severo)
+   - **Separación de capas**: separación de capas visible en la esquina (golpes)
+   - **Doblado**: esquina volteada o con pliegue
+3. Calificar la condición de bordes y esquinas usando la misma escala que la superficie
+4. Anotar qué esquinas/bordes específicos tienen la peor condición
 
-**Esperado:** Per-edge and per-corner condition assessment. The worst individual corner/edge typically limits the overall grade.
+**Esperado:** Evaluación de condición por borde y por esquina. La peor esquina/borde individual típicamente limita la calificación general.
 
-**En caso de fallo:** If the card is in a sleeve or toploader that obscures edges, note which areas couldn't be fully assessed.
+**En caso de fallo:** Si la carta está en una funda o toploader que oscurece los bordes, anotar qué áreas no pudieron ser completamente evaluadas.
 
-### Paso 5: Assign Final Grade
+### Paso 5: Asignar calificación final
 
-Combine sub-assessments into the final grade.
+Combinar las sub-evaluaciones en la calificación final.
 
-1. For **PSA grading** (single number 1-10):
-   - The final grade is limited by the weakest sub-assessment
-   - A card with perfect surface but 65/35 centering caps at PSA 8
-   - Apply the "lowest limits" principle, then adjust up if other areas are exceptional
-2. For **BGS grading** (four subgrades → overall):
-   - Assign subgrades: Centering, Edges, Corners, Surface (each 1-10 in 0.5 steps)
-   - Overall = weighted average, but the lowest subgrade limits the overall
-   - BGS 10 Pristine requires all four subgrades at 10
-   - BGS 9.5 Gem Mint requires average of 9.5+ with no subgrade below 9
-3. For **CGC grading** (similar to PSA with subgrades on label):
-   - Assign Centering, Surface, Edges, Corners
-   - Overall follows CGC's proprietary weighting
-4. State the final grade with confidence:
-   - "PSA 8 (confident)" — clear grade, unlikely to be higher or lower
-   - "PSA 8-9 (borderline)" — could go either way at the grading service
-   - "PSA 7-8 (uncertain)" — limited assessment data
+1. Para **calificación PSA** (número único 1-10):
+   - La calificación final está limitada por la sub-evaluación más débil
+   - Una carta con superficie perfecta pero centrado 65/35 tiene tope en PSA 8
+   - Aplicar el principio de "lo más bajo limita", luego ajustar hacia arriba si otras áreas son excepcionales
+2. Para **calificación BGS** (cuatro sub-calificaciones → general):
+   - Asignar sub-calificaciones: Centrado, Bordes, Esquinas, Superficie (cada una 1-10 en pasos de 0.5)
+   - General = promedio ponderado, pero la sub-calificación más baja limita el general
+   - BGS 10 Pristine requiere las cuatro sub-calificaciones en 10
+   - BGS 9.5 Gem Mint requiere promedio de 9.5+ sin sub-calificación por debajo de 9
+3. Para **calificación CGC** (similar a PSA con sub-calificaciones en la etiqueta):
+   - Asignar Centrado, Superficie, Bordes, Esquinas
+   - El general sigue la ponderación propietaria de CGC
+4. Declarar la calificación final con confianza:
+   - "PSA 8 (confiado)" — calificación clara, improbable que sea mayor o menor
+   - "PSA 8-9 (límite)" — podría ir en cualquier dirección en el servicio de calificación
+   - "PSA 7-8 (incierto)" — datos de evaluación limitados
 
-**Esperado:** A final grade with confidence level. For BGS, all four subgrades reported. The grade is supported by evidence from Steps 2-4.
+**Esperado:** Una calificación final con nivel de confianza. Para BGS, las cuatro sub-calificaciones reportadas. La calificación está respaldada por evidencia de los Pasos 2-4.
 
-**En caso de fallo:** If the assessment is inconclusive (e.g., can't tell if a surface mark is a scratch or dirt), provide a grade range and recommend professional grading. Never assign a confident grade with insufficient data.
+**En caso de fallo:** Si la evaluación no es concluyente (ej., no se puede determinar si una marca de superficie es una rayadura o suciedad), proporcionar un rango de calificación y recomendar calificación profesional. Nunca asignar una calificación con confianza con datos insuficientes.
 
 ## Validación
 
-- [ ] Bias check completed before grading (no grade anchoring)
-- [ ] Centering measured on both faces with ratios recorded
-- [ ] Surface examined for scratches, print defects, staining, indentations
-- [ ] All four edges and corners individually assessed
-- [ ] Factory vs. handling defects distinguished
-- [ ] Final grade supported by evidence from each sub-assessment
-- [ ] Confidence level stated (confident, borderline, uncertain)
-- [ ] Grading standard correctly applied (PSA/BGS/CGC thresholds)
+- [ ] Verificación de sesgo completada antes de calificar (sin anclaje de calificación)
+- [ ] Centrado medido en ambas caras con ratios registrados
+- [ ] Superficie examinada para rayaduras, defectos de impresión, manchas, hendiduras
+- [ ] Los cuatro bordes y esquinas evaluados individualmente
+- [ ] Defectos de fábrica vs. de manipulación distinguidos
+- [ ] Calificación final respaldada por evidencia de cada sub-evaluación
+- [ ] Nivel de confianza declarado (confiado, límite, incierto)
+- [ ] Estándar de calificación correctamente aplicado (umbrales PSA/BGS/CGC)
 
 ## Errores Comunes
 
-- **Grade anchoring**: Knowing a card's value before grading biases the assessment toward the "hoped-for" grade. Always assess physically first
-- **Ignoring the back**: The back surface and back centering count. Many graders over-focus on the front
-- **Confusing factory with handling defects**: A factory print line is different from a scratch, but both affect the grade
-- **Over-grading holofoils**: Holographic and foil cards hide surface scratches until viewed at the right angle. Use multiple light angles
-- **Centering optical illusions**: Art placement can make centering appear better or worse than it is. Measure the borders, not the art
+- **Anclaje de calificación**: Conocer el valor de una carta antes de calificar sesga la evaluación hacia la calificación "esperada". Siempre evaluar físicamente primero
+- **Ignorar el reverso**: La superficie posterior y el centrado posterior cuentan. Muchos calificadores se enfocan excesivamente en el anverso
+- **Confundir defectos de fábrica con daño por manipulación**: Una línea de impresión de fábrica es diferente de una rayadura, pero ambas afectan la calificación
+- **Sobre-calificar holofoils**: Las cartas holográficas y de foil ocultan rayaduras de superficie hasta que se ven desde el ángulo correcto. Usar múltiples ángulos de luz
+- **Ilusiones ópticas de centrado**: La ubicación del arte puede hacer que el centrado parezca mejor o peor de lo que es. Medir los bordes, no el arte
 
 ## Habilidades Relacionadas
 
-- `build-tcg-deck` — Deck building where card condition affects tournament legality
-- `manage-tcg-collection` — Collection management with grade-based valuation
-- `meditate` — Source of the observation-without-prejudgment technique adapted for grading bias prevention
+- `build-tcg-deck` — construcción de mazos donde la condición de la carta afecta la legalidad en torneos
+- `manage-tcg-collection` — gestión de colección con valoración basada en calificación
+- `meditate` — fuente de la técnica de observación sin prejuicio adaptada para la prevención del sesgo de calificación

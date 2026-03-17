@@ -1,15 +1,15 @@
 ---
 name: observe
 description: >
-  Sustained neutral pattern recognition across systems without urgency or
-  intervention. Maps naturalist field study methodology to AI reasoning:
-  framing the observation target, witnessing with sustained attention,
-  recording patterns, categorizing findings, generating hypotheses, and
-  archiving a pattern library for future reference. Use when a system's
-  behavior is unclear and action would be premature, when debugging an
-  unknown root cause, when a codebase change needs its effects witnessed
-  before further changes, or when auditing own reasoning patterns for
-  biases or recurring errors.
+  Reconocimiento neutral sostenido de patrones a través de sistemas sin urgencia
+  ni intervención. Mapea la metodología de estudio de campo naturalista al
+  razonamiento de IA: enmarcar el objetivo de observación, presenciar con
+  atención sostenida, registrar patrones, categorizar hallazgos, generar
+  hipótesis y archivar una biblioteca de patrones para referencia futura. Usar
+  cuando el comportamiento de un sistema no es claro y la acción sería prematura,
+  al depurar una causa raíz desconocida, cuando un cambio en la base de código
+  necesita que sus efectos sean presenciados antes de más cambios, o al auditar
+  los propios patrones de razonamiento por sesgos o errores recurrentes.
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -28,29 +28,29 @@ metadata:
 
 # Observe
 
-Conduct a structured observation session — framing the observation target, witnessing with sustained neutral attention, recording patterns without interpretation, categorizing findings, generating hypotheses from patterns, and archiving the observations for future reference.
+Conducir una sesión de observación estructurada — enmarcar el objetivo de observación, presenciar con atención neutral sostenida, registrar patrones sin interpretación, categorizar hallazgos, generar hipótesis a partir de patrones y archivar las observaciones para referencia futura.
 
 ## Cuándo Usar
 
-- A system's behavior is unclear and action without observation would be premature
-- Debugging a problem where the cause is unknown — observation before intervention prevents masking symptoms
-- A codebase or system has been changed and the effects need to be witnessed before further changes are made
-- Understanding user behavior patterns over a conversation to improve future interactions
-- Auditing own reasoning patterns for biases, habits, or recurring errors
-- After `learn` has built a model that needs validation through observation of the system in action
+- El comportamiento de un sistema no es claro y actuar sin observación sería prematuro
+- Depurando un problema donde la causa es desconocida — observación antes de intervención previene enmascarar síntomas
+- Una base de código o sistema ha sido cambiado y los efectos necesitan ser presenciados antes de hacer más cambios
+- Entender patrones de comportamiento del usuario a lo largo de una conversación para mejorar interacciones futuras
+- Auditar los propios patrones de razonamiento por sesgos, hábitos o errores recurrentes
+- Después de que `learn` ha construido un modelo que necesita validación mediante observación del sistema en acción
 
 ## Entradas
 
-- **Requerido**: Observation target — a system, codebase, behavior pattern, user interaction, or reasoning process to observe
-- **Opcional**: Observation duration/scope — how long or deep to observe before concluding
-- **Opcional**: Specific question or hypothesis to guide observation focus
-- **Opcional**: Prior observations to compare against (detecting change over time)
+- **Requerido**: Objetivo de observación — un sistema, base de código, patrón de comportamiento, interacción de usuario o proceso de razonamiento a observar
+- **Opcional**: Duración/alcance de observación — cuánto tiempo o profundidad observar antes de concluir
+- **Opcional**: Pregunta o hipótesis específica para guiar el enfoque de la observación
+- **Opcional**: Observaciones previas para comparar (detectar cambio a lo largo del tiempo)
 
 ## Procedimiento
 
-### Paso 1: Frame — Set the Observation Focus
+### Paso 1: Enmarcar — Establecer el enfoque de observación
 
-Define what is being observed, why, and from what perspective.
+Definir qué se está observando, por qué y desde qué perspectiva.
 
 ```
 Observation Protocol by System Type:
@@ -78,114 +78,114 @@ Observation Protocol by System Type:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-1. Select the observation target and name it explicitly
-2. Define the observation boundary: what is included and what is out of scope
-3. State the observation stance: "I am observing, not intervening"
-4. If there is a guiding question, state it — but hold it lightly; be willing to notice things outside the question's scope
-5. Choose the appropriate categories from the matrix above
+1. Seleccionar el objetivo de observación y nombrarlo explícitamente
+2. Definir el límite de observación: qué está incluido y qué está fuera de alcance
+3. Declarar la postura de observación: "Estoy observando, no interviniendo"
+4. Si hay una pregunta guía, declararla — pero mantenerla ligeramente; estar dispuesto a notar cosas fuera del alcance de la pregunta
+5. Elegir las categorías apropiadas de la matriz anterior
 
-**Esperado:** A clear frame that directs attention without constraining it. The observer knows where to look and what categories to sort observations into, but remains open to the unexpected.
+**Esperado:** Un marco claro que dirige la atención sin constreñirla. El observador sabe dónde mirar y en qué categorías clasificar las observaciones, pero permanece abierto a lo inesperado.
 
-**En caso de fallo:** If the observation target is too broad ("observe everything"), narrow to one subsystem or one behavior pattern. If the target is too narrow ("observe this one variable"), zoom out to the surrounding context — the interesting patterns are often at the edges.
+**En caso de fallo:** Si el objetivo de observación es demasiado amplio ("observar todo"), reducir a un subsistema o un patrón de comportamiento. Si el objetivo es demasiado estrecho ("observar esta variable"), ampliar al contexto circundante — los patrones interesantes a menudo están en los bordes.
 
-### Paso 2: Witness — Sustained Neutral Attention
+### Paso 2: Presenciar — Atención neutral sostenida
 
-Hold attention on the observation target without interpreting, judging, or intervening.
+Mantener la atención en el objetivo de observación sin interpretar, juzgar ni intervenir.
 
-1. Begin systematic observation: read files, trace execution paths, review conversation history — whatever the target requires
-2. Record what is seen, not what it means — description before interpretation
-3. Resist the urge to fix problems encountered during observation — note them and continue
-4. Resist the urge to explain patterns before enough observations accumulate
-5. If attention drifts to a different target, note the drift (it may be meaningful) and return to the frame
-6. Maintain observation for a defined period: at least 3-5 distinct data points before moving to categorization
+1. Comenzar la observación sistemática: leer archivos, rastrear rutas de ejecución, revisar historial de conversación — lo que el objetivo requiera
+2. Registrar lo que se ve, no lo que significa — descripción antes de interpretación
+3. Resistir el impulso de arreglar problemas encontrados durante la observación — notarlos y continuar
+4. Resistir el impulso de explicar patrones antes de que suficientes observaciones se acumulen
+5. Si la atención se desvía hacia un objetivo diferente, notar la desviación (puede ser significativa) y regresar al marco
+6. Mantener la observación por un período definido: al menos 3-5 puntos de datos distintos antes de pasar a categorización
 
-**Esperado:** A collection of raw observations — specific, concrete, and free from interpretation. Observations read like field notes: "File X imports Y but does not use function Z. File A has 300 lines; file B has 30 lines and covers similar functionality."
+**Esperado:** Una colección de observaciones crudas — específicas, concretas y libres de interpretación. Las observaciones se leen como notas de campo: "El archivo X importa Y pero no usa la función Z. El archivo A tiene 300 líneas; el archivo B tiene 30 líneas y cubre funcionalidad similar."
 
-**En caso de fallo:** If observation immediately triggers analysis ("this is wrong because..."), the analytical habit is overriding the observational stance. Consciously separate the phases: write the observation as a fact, then write the interpretation as a separate note labeled "hypothesis." If neutrality is impossible (strong reaction to what is observed), note the reaction itself as data: "I noticed strong concern when observing X — this may indicate a significant issue or may indicate my bias."
+**En caso de fallo:** Si la observación inmediatamente dispara análisis ("esto está mal porque..."), el hábito analítico está anulando la postura observacional. Separar conscientemente las fases: escribir la observación como un hecho, luego escribir la interpretación como una nota separada etiquetada "hipótesis." Si la neutralidad es imposible (reacción fuerte a lo observado), notar la reacción misma como dato: "Noté preocupación fuerte al observar X — esto puede indicar un problema significativo o puede indicar mi sesgo."
 
-### Paso 3: Record — Capture Raw Patterns
+### Paso 3: Registrar — Capturar patrones crudos
 
-Transcribe observations into a structured format while they are fresh.
+Transcribir observaciones en un formato estructurado mientras están frescas.
 
-1. List each observation as a single statement of fact (what was seen, where, when)
-2. Group naturally similar observations — do not force grouping, but notice when observations cluster
-3. Note frequency: did this pattern appear once, occasionally, or pervasively?
-4. Note contrasts: where did the pattern break? Exceptions are often more informative than rules
-5. Note temporal patterns: did the observation change over time, or was it static?
-6. Capture exact evidence: file paths, line numbers, specific words, concrete examples
+1. Listar cada observación como una declaración única de hecho (qué se vio, dónde, cuándo)
+2. Agrupar observaciones naturalmente similares — no forzar agrupación, pero notar cuando las observaciones se agrupan
+3. Notar frecuencia: ¿este patrón apareció una vez, ocasionalmente o de manera generalizada?
+4. Notar contrastes: ¿dónde se rompió el patrón? Las excepciones son a menudo más informativas que las reglas
+5. Notar patrones temporales: ¿la observación cambió con el tiempo, o fue estática?
+6. Capturar evidencia exacta: rutas de archivos, números de línea, palabras específicas, ejemplos concretos
 
-**Esperado:** A structured record of 5-15 discrete observations, each with specific evidence. The record should be detailed enough that another observer could verify each observation independently.
+**Esperado:** Un registro estructurado de 5-15 observaciones discretas, cada una con evidencia específica. El registro debería ser lo suficientemente detallado para que otro observador pudiera verificar cada observación independientemente.
 
-**En caso de fallo:** If observations are too abstract ("the code seems messy"), they need grounding in specifics — which files, which patterns, what makes it messy? If observations are too granular ("line 47 has a space before the brace"), zoom out to the pattern level — is this a one-off or a systemic issue?
+**En caso de fallo:** Si las observaciones son demasiado abstractas ("el código parece desordenado"), necesitan fundamentación en específicos — qué archivos, qué patrones, qué lo hace desordenado. Si las observaciones son demasiado granulares ("la línea 47 tiene un espacio antes de la llave"), ampliar al nivel de patrón — ¿es un caso aislado o un problema sistémico?
 
-### Paso 4: Categorize — Organize Findings
+### Paso 4: Categorizar — Organizar hallazgos
 
-Sort observations into meaningful categories without yet explaining them.
+Clasificar observaciones en categorías significativas sin explicarlas todavía.
 
-1. Review all recorded observations and look for natural groupings
-2. Assign each observation to a category from the Step 1 matrix, or create new categories if needed
-3. Within each category, rank observations by frequency and significance
-4. Identify which categories have many observations (well-documented areas) and which have few (potential blind spots)
-5. Look for cross-category patterns: does the same underlying pattern manifest differently in different categories?
-6. Note any observations that do not fit any category — outliers are often the most interesting data
+1. Revisar todas las observaciones registradas y buscar agrupaciones naturales
+2. Asignar cada observación a una categoría de la matriz del Paso 1, o crear nuevas categorías si es necesario
+3. Dentro de cada categoría, clasificar observaciones por frecuencia y significancia
+4. Identificar qué categorías tienen muchas observaciones (áreas bien documentadas) y cuáles tienen pocas (potenciales puntos ciegos)
+5. Buscar patrones entre categorías: ¿el mismo patrón subyacente se manifiesta diferente en diferentes categorías?
+6. Notar cualquier observación que no encaje en ninguna categoría — los valores atípicos son a menudo los datos más interesantes
 
-**Esperado:** A categorized observation map with clear groupings. Each category has specific observations supporting it. The map shows both patterns and gaps.
+**Esperado:** Un mapa de observaciones categorizado con agrupaciones claras. Cada categoría tiene observaciones específicas respaldándola. El mapa muestra tanto patrones como brechas.
 
-**En caso de fallo:** If categorization feels forced, the observations may not have natural groupings — they may be a collection of unrelated findings, which is itself a finding (the system may lack coherent structure). If everything fits neatly into one category, the observation scope was too narrow — zoom out.
+**En caso de fallo:** Si la categorización se siente forzada, las observaciones pueden no tener agrupaciones naturales — pueden ser una colección de hallazgos no relacionados, lo cual es en sí un hallazgo (el sistema puede carecer de estructura coherente). Si todo encaja limpiamente en una categoría, el alcance de observación fue demasiado estrecho — ampliar.
 
-### Paso 5: Theorize — Generate Hypotheses from Patterns
+### Paso 5: Teorizar — Generar hipótesis a partir de patrones
 
-Now — and only now — begin interpreting the observations.
+Ahora — y solo ahora — comenzar a interpretar las observaciones.
 
-1. For each major pattern observed, propose a hypothesis: "This pattern exists because..."
-2. For each hypothesis, identify supporting evidence from the observations
-3. For each hypothesis, identify what counter-evidence would disprove it
-4. Rank hypotheses by explanatory power: which one explains the most observations?
-5. Generate at least one contrarian hypothesis: "The obvious explanation is X, but it could also be Y because..."
-6. Identify which hypotheses are testable and which are speculative
+1. Para cada patrón principal observado, proponer una hipótesis: "Este patrón existe porque..."
+2. Para cada hipótesis, identificar evidencia de respaldo desde las observaciones
+3. Para cada hipótesis, identificar qué contra-evidencia la refutaría
+4. Clasificar hipótesis por poder explicativo: ¿cuál explica la mayor cantidad de observaciones?
+5. Generar al menos una hipótesis contraria: "La explicación obvia es X, pero también podría ser Y porque..."
+6. Identificar qué hipótesis son verificables y cuáles son especulativas
 
-**Esperado:** 2-4 hypotheses that explain the major patterns, each supported by specific observations. At least one hypothesis should be surprising or contrarian. The distinction between observation and interpretation is maintained — it is clear which parts are data and which are theory.
+**Esperado:** 2-4 hipótesis que explican los patrones principales, cada una respaldada por observaciones específicas. Al menos una hipótesis debería ser sorprendente o contraria. La distinción entre observación e interpretación se mantiene — es claro qué partes son datos y cuáles son teoría.
 
-**En caso de fallo:** If no hypotheses form, the observations may need more time to accumulate — return to Step 2. If too many hypotheses form (everything is "maybe"), select the 2-3 with the strongest evidence and set the rest aside. If only obvious hypotheses form, force a contrarian view: "What if the opposite were true?"
+**En caso de fallo:** Si no se forman hipótesis, las observaciones pueden necesitar más tiempo para acumularse — regresar al Paso 2. Si se forman demasiadas hipótesis (todo es "quizás"), seleccionar las 2-3 con la evidencia más fuerte y apartar el resto. Si solo se forman hipótesis obvias, forzar una vista contraria: "¿Qué pasaría si lo opuesto fuera verdadero?"
 
-### Paso 6: Archive — Store the Pattern Library
+### Paso 6: Archivar — Almacenar la biblioteca de patrones
 
-Preserve the observations and hypotheses for future reference.
+Preservar las observaciones e hipótesis para referencia futura.
 
-1. Summarize the key findings: 3-5 patterns with evidence
-2. State the leading hypotheses and their confidence levels
-3. Note what was not observed (potential blind spots)
-4. Identify follow-up observations that would strengthen or weaken the hypotheses
-5. If the patterns are durable (will be relevant across sessions), consider updating MEMORY.md
-6. Tag the observations with context: when they were made, what prompted them, what scope was covered
+1. Resumir los hallazgos clave: 3-5 patrones con evidencia
+2. Declarar las hipótesis principales y sus niveles de confianza
+3. Notar lo que no fue observado (potenciales puntos ciegos)
+4. Identificar observaciones de seguimiento que fortalecerían o debilitarían las hipótesis
+5. Si los patrones son duraderos (serán relevantes entre sesiones), considerar actualizar MEMORY.md
+6. Etiquetar las observaciones con contexto: cuándo fueron hechas, qué las motivó, qué alcance se cubrió
 
-**Esperado:** An archive that future observation sessions can build on. The archive distinguishes clearly between observations (data) and hypotheses (interpretation). It is honest about confidence levels and gaps.
+**Esperado:** Un archivo sobre el cual futuras sesiones de observación pueden construir. El archivo distingue claramente entre observaciones (datos) e hipótesis (interpretación). Es honesto sobre niveles de confianza y brechas.
 
-**En caso de fallo:** If the observations do not feel worth archiving, they may have been too shallow — or they may be genuinely routine (not every observation session produces insights). Archive even negative results: "Observed X and found no anomalies" is useful future context.
+**En caso de fallo:** Si las observaciones no se sienten dignas de archivar, pueden haber sido demasiado superficiales — o pueden ser genuinamente rutinarias (no toda sesión de observación produce percepciones). Archivar incluso resultados negativos: "Observé X y no encontré anomalías" es contexto futuro útil.
 
 ## Validación
 
-- [ ] The observation frame was set before any observation began (not free-form wandering)
-- [ ] Raw observations were recorded as facts before any interpretation
-- [ ] At least 5 discrete observations were captured with specific evidence
-- [ ] Interpretation (hypotheses) was clearly separated from observation (data)
-- [ ] At least one surprising or contrarian finding was generated
-- [ ] The archived record is specific enough for another observer to verify
+- [ ] El marco de observación fue establecido antes de que comenzara cualquier observación (no exploración sin forma)
+- [ ] Las observaciones crudas fueron registradas como hechos antes de cualquier interpretación
+- [ ] Al menos 5 observaciones discretas fueron capturadas con evidencia específica
+- [ ] La interpretación (hipótesis) fue claramente separada de la observación (datos)
+- [ ] Al menos un hallazgo sorprendente o contrario fue generado
+- [ ] El registro archivado es lo suficientemente específico para que otro observador lo verifique
 
 ## Errores Comunes
 
-- **Premature intervention**: Seeing a problem and fixing it immediately, losing the opportunity to understand the broader pattern it belongs to
-- **Observation bias**: Seeing what is expected rather than what is present. Expectations filter perception — the clearing step in Step 1 mitigates this but does not eliminate it
-- **Analysis paralysis**: Observing endlessly without ever moving to action. Set a time or data-point limit and commit to concluding
-- **Narrative imposition**: Constructing a story that connects observations even when the connections are weak. Not all observations form a coherent narrative — disconnected findings are valid
-- **Confusing familiarity with understanding**: "I have seen this before" is not the same as "I understand why this is here." Prior exposure can create false confidence
-- **Ignoring own reactions**: The observer's emotional or cognitive reactions to observations are data. A sense of confusion, boredom, or alarm about a system often contains real signal
+- **Intervención prematura**: Ver un problema y arreglarlo inmediatamente, perdiendo la oportunidad de entender el patrón más amplio al que pertenece
+- **Sesgo de observación**: Ver lo que se espera en lugar de lo que está presente. Las expectativas filtran la percepción — el paso de limpieza en el Paso 1 mitiga esto pero no lo elimina
+- **Parálisis por análisis**: Observar interminablemente sin nunca pasar a la acción. Establecer un límite de tiempo o puntos de datos y comprometerse a concluir
+- **Imposición narrativa**: Construir una historia que conecte observaciones incluso cuando las conexiones son débiles. No todas las observaciones forman una narrativa coherente — hallazgos desconectados son válidos
+- **Confundir familiaridad con comprensión**: "He visto esto antes" no es lo mismo que "Entiendo por qué esto está aquí." La exposición previa puede crear falsa confianza
+- **Ignorar las propias reacciones**: Las reacciones emocionales o cognitivas del observador a las observaciones son datos. Una sensación de confusión, aburrimiento o alarma sobre un sistema a menudo contiene señal real
 
 ## Habilidades Relacionadas
 
-- `observe-guidance` — the human-guidance variant for coaching a person in systematic observation
-- `learn` — observation feeds learning by providing raw data for model-building
-- `listen` — outward-focused attention toward user signals; observation is broader-scope attention toward any system
-- `remote-viewing` — intuitive exploration that can be validated through systematic observation
-- `meditate` — develops the sustained attention capacity that observation requires
-- `awareness` — threat-focused situational awareness; observation is curiosity-driven rather than defense-driven
+- `observe-guidance` — la variante de guía humana para entrenar a una persona en observación sistemática
+- `learn` — la observación alimenta el aprendizaje proporcionando datos crudos para la construcción de modelos
+- `listen` — atención enfocada hacia afuera hacia señales del usuario; la observación es atención de alcance más amplio hacia cualquier sistema
+- `remote-viewing` — exploración intuitiva que puede ser validada mediante observación sistemática
+- `meditate` — desarrolla la capacidad de atención sostenida que la observación requiere
+- `awareness` — consciencia situacional enfocada en amenazas; la observación es impulsada por curiosidad en lugar de defensa

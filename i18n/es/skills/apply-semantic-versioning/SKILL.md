@@ -1,13 +1,14 @@
 ---
 name: apply-semantic-versioning
 description: >
-  Apply semantic versioning (SemVer 2.0.0) to determine the correct
-  version bump based on change analysis. Covers major/minor/patch
-  classification, pre-release identifiers, build metadata, and
-  breaking change detection. Use when preparing a new release to determine
-  the correct version number, after merging changes before tagging, evaluating
-  whether a change constitutes a breaking change, adding pre-release identifiers,
-  or resolving disagreement about what version bump is appropriate.
+  Aplicar versionado semántico (SemVer 2.0.0) para determinar el incremento de
+  versión correcto basado en análisis de cambios. Cubre clasificación
+  mayor/menor/parche, identificadores de pre-lanzamiento, metadatos de
+  compilación y detección de cambios incompatibles. Usar al preparar un nuevo
+  lanzamiento para determinar el número de versión correcto, después de fusionar
+  cambios antes de etiquetar, al evaluar si un cambio constituye un cambio
+  incompatible, al agregar identificadores de pre-lanzamiento, o al resolver
+  desacuerdos sobre qué incremento de versión es apropiado.
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -26,29 +27,29 @@ metadata:
 
 # Apply Semantic Versioning
 
-Determine and apply the correct semantic version bump by analyzing changes since the last release. This skill reads version files, classifies changes as breaking (major), feature (minor), or fix (patch), computes the new version number, and updates the appropriate files. Follows [SemVer 2.0.0](https://semver.org/) specification.
+Determinar y aplicar el incremento de versión semántico correcto analizando los cambios desde el último lanzamiento. Esta habilidad lee archivos de versión, clasifica cambios como incompatibles (mayor), funcionalidad (menor) o corrección (parche), calcula el nuevo número de versión y actualiza los archivos apropiados. Sigue la especificación [SemVer 2.0.0](https://semver.org/).
 
 ## Cuándo Usar
 
-- Preparing a new release and need to determine the correct version number
-- After merging a set of changes and before tagging a release
-- Evaluating whether a change constitutes a breaking change
-- Adding pre-release identifiers (alpha, beta, rc) to a version
-- Resolving disagreement about what version bump is appropriate
+- Preparar un nuevo lanzamiento y necesitar determinar el número de versión correcto
+- Después de fusionar un conjunto de cambios y antes de etiquetar un lanzamiento
+- Evaluar si un cambio constituye un cambio incompatible
+- Agregar identificadores de pre-lanzamiento (alpha, beta, rc) a una versión
+- Resolver desacuerdos sobre qué incremento de versión es apropiado
 
 ## Entradas
 
-- **Requerido**: Project root directory containing a version file (DESCRIPTION, package.json, Cargo.toml, pyproject.toml, or VERSION)
-- **Requerido**: Git history since the last release (tag or commit)
-- **Opcional**: Commit convention in use (Conventional Commits, free-form)
-- **Opcional**: Pre-release label to apply (alpha, beta, rc)
-- **Opcional**: Previous version if not readable from files
+- **Requerido**: Directorio raíz del proyecto que contiene un archivo de versión (DESCRIPTION, package.json, Cargo.toml, pyproject.toml o VERSION)
+- **Requerido**: Historial de Git desde el último lanzamiento (etiqueta o commit)
+- **Opcional**: Convención de commits en uso (Conventional Commits, forma libre)
+- **Opcional**: Etiqueta de pre-lanzamiento a aplicar (alpha, beta, rc)
+- **Opcional**: Versión anterior si no es legible desde los archivos
 
 ## Procedimiento
 
-### Paso 1: Read Current Version
+### Paso 1: Leer la Versión Actual
 
-Locate and read the version file in the project root.
+Localizar y leer el archivo de versión en la raíz del proyecto.
 
 ```bash
 # R packages
@@ -67,15 +68,15 @@ grep 'version' pyproject.toml
 cat VERSION
 ```
 
-Parse the current version into major.minor.patch components. If the version contains a pre-release suffix (e.g., `1.2.0-beta.1`), note it separately.
+Analizar la versión actual en componentes mayor.menor.parche. Si la versión contiene un sufijo de pre-lanzamiento (ej., `1.2.0-beta.1`), anotarlo por separado.
 
-**Esperado:** Current version identified as `MAJOR.MINOR.PATCH[-PRERELEASE]`.
+**Esperado:** Versión actual identificada como `MAYOR.MENOR.PARCHE[-PRELANZAMIENTO]`.
 
-**En caso de fallo:** If no version file is found, check for a VERSION file or git tags (`git describe --tags --abbrev=0`). If no version exists at all, start at `0.1.0` for initial development or `1.0.0` if the project has a stable public API.
+**En caso de fallo:** Si no se encuentra un archivo de versión, buscar un archivo VERSION o etiquetas de git (`git describe --tags --abbrev=0`). Si no existe ninguna versión, comenzar en `0.1.0` para desarrollo inicial o `1.0.0` si el proyecto tiene una API pública estable.
 
-### Paso 2: Analyze Changes Since Last Release
+### Paso 2: Analizar los Cambios Desde el Último Lanzamiento
 
-Retrieve the list of changes since the last tagged release.
+Obtener la lista de cambios desde el último lanzamiento etiquetado.
 
 ```bash
 # Find the last version tag
@@ -88,62 +89,62 @@ git log --oneline v1.2.3..HEAD
 git log --oneline v1.2.3..HEAD | grep -E "^[a-f0-9]+ (feat|fix|BREAKING)"
 ```
 
-If no tags exist, compare against the initial commit or a known baseline.
+Si no existen etiquetas, comparar contra el commit inicial o una línea base conocida.
 
-**Esperado:** A list of commits with messages that can be classified by change type.
+**Esperado:** Una lista de commits con mensajes que pueden clasificarse por tipo de cambio.
 
-**En caso de fallo:** If git history is unavailable or tags are missing, ask the developer to describe the changes manually. Classify based on their description.
+**En caso de fallo:** Si el historial de git no está disponible o faltan etiquetas, pedir al desarrollador que describa los cambios manualmente. Clasificar basándose en su descripción.
 
-### Paso 3: Classify Changes
+### Paso 3: Clasificar los Cambios
 
-Apply the SemVer classification rules:
+Aplicar las reglas de clasificación SemVer:
 
-| Change Type | Version Bump | Examples |
+| Tipo de Cambio | Incremento de Versión | Ejemplos |
 |---|---|---|
-| **Breaking** (incompatible API change) | MAJOR | Renamed/removed public function, changed return type, removed parameter, changed default behavior |
-| **Feature** (new backwards-compatible functionality) | MINOR | New exported function, new parameter with default, new file format support |
-| **Fix** (backwards-compatible bug fix) | PATCH | Bug fix, documentation correction, performance improvement with same API |
+| **Incompatible** (cambio de API incompatible) | MAYOR | Función pública renombrada/eliminada, tipo de retorno cambiado, parámetro eliminado, comportamiento predeterminado cambiado |
+| **Funcionalidad** (nueva funcionalidad retrocompatible) | MENOR | Nueva función exportada, nuevo parámetro con valor predeterminado, soporte de nuevo formato de archivo |
+| **Corrección** (corrección de error retrocompatible) | PARCHE | Corrección de error, corrección de documentación, mejora de rendimiento con la misma API |
 
-Classification rules:
-1. If ANY change is breaking, the bump is MAJOR (resets minor and patch to 0)
-2. If no breaking changes but ANY new features, the bump is MINOR (resets patch to 0)
-3. If only fixes, the bump is PATCH
+Reglas de clasificación:
+1. Si CUALQUIER cambio es incompatible, el incremento es MAYOR (reinicia menor y parche a 0)
+2. Si no hay cambios incompatibles pero HAY nuevas funcionalidades, el incremento es MENOR (reinicia parche a 0)
+3. Si solo hay correcciones, el incremento es PARCHE
 
-Special cases:
-- **Pre-1.0.0**: During initial development (`0.x.y`), minor bumps may contain breaking changes. Document clearly.
-- **Deprecation**: Deprecating a function is a MINOR change (it still works). Removing it is MAJOR.
-- **Internal changes**: Refactoring that does not change the public API is PATCH.
+Casos especiales:
+- **Pre-1.0.0**: Durante el desarrollo inicial (`0.x.y`), los incrementos menores pueden contener cambios incompatibles. Documentar claramente.
+- **Deprecación**: Deprecar una función es un cambio MENOR (aún funciona). Eliminarla es MAYOR.
+- **Cambios internos**: Refactorización que no cambia la API pública es PARCHE.
 
-**Esperado:** Each change classified as breaking/feature/fix, and the overall bump level determined.
+**Esperado:** Cada cambio clasificado como incompatible/funcionalidad/corrección, y el nivel de incremento general determinado.
 
-**En caso de fallo:** If changes are ambiguous, err on the side of a higher bump. A conservative major bump is better than a minor bump that breaks downstream code.
+**En caso de fallo:** Si los cambios son ambiguos, errar hacia un incremento mayor. Un incremento mayor conservador es mejor que un incremento menor que rompe código dependiente.
 
-### Paso 4: Compute New Version
+### Paso 4: Calcular la Nueva Versión
 
-Apply the bump to the current version:
+Aplicar el incremento a la versión actual:
 
-| Current | Bump | New Version |
+| Actual | Incremento | Nueva Versión |
 |---|---|---|
-| 1.2.3 | MAJOR | 2.0.0 |
-| 1.2.3 | MINOR | 1.3.0 |
-| 1.2.3 | PATCH | 1.2.4 |
-| 0.9.5 | MINOR | 0.10.0 |
-| 2.0.0-rc.1 | (release) | 2.0.0 |
+| 1.2.3 | MAYOR | 2.0.0 |
+| 1.2.3 | MENOR | 1.3.0 |
+| 1.2.3 | PARCHE | 1.2.4 |
+| 0.9.5 | MENOR | 0.10.0 |
+| 2.0.0-rc.1 | (lanzamiento) | 2.0.0 |
 
-If a pre-release label is requested:
-- `1.3.0-alpha.1` for first alpha of upcoming 1.3.0
-- `1.3.0-beta.1` for first beta
-- `1.3.0-rc.1` for first release candidate
+Si se solicita una etiqueta de pre-lanzamiento:
+- `1.3.0-alpha.1` para la primera alpha del próximo 1.3.0
+- `1.3.0-beta.1` para la primera beta
+- `1.3.0-rc.1` para el primer candidato a lanzamiento
 
-Pre-release precedence: `alpha < beta < rc < (release)`.
+Precedencia de pre-lanzamiento: `alpha < beta < rc < (lanzamiento)`.
 
-**Esperado:** New version number computed following SemVer rules.
+**Esperado:** Nuevo número de versión calculado siguiendo las reglas de SemVer.
 
-**En caso de fallo:** If the current version is malformed or non-SemVer, normalize it first. For example, `1.2` becomes `1.2.0`.
+**En caso de fallo:** Si la versión actual tiene formato incorrecto o no es SemVer, normalizarla primero. Por ejemplo, `1.2` se convierte en `1.2.0`.
 
-### Paso 5: Update Version Files
+### Paso 5: Actualizar los Archivos de Versión
 
-Write the new version to the appropriate file(s).
+Escribir la nueva versión en el o los archivos apropiados.
 
 ```r
 # R: Update DESCRIPTION
@@ -161,15 +162,15 @@ Write the new version to the appropriate file(s).
 # Change version = "1.2.3" to version = "1.3.0"
 ```
 
-If the project has multiple files that reference the version (e.g., `_pkgdown.yml`, `CITATION`, `codemeta.json`), update all of them.
+Si el proyecto tiene múltiples archivos que referencian la versión (ej., `_pkgdown.yml`, `CITATION`, `codemeta.json`), actualizar todos.
 
-**Esperado:** All version files updated consistently to the new version number.
+**Esperado:** Todos los archivos de versión actualizados consistentemente al nuevo número de versión.
 
-**En caso de fallo:** If a file update fails, revert all changes to maintain consistency. Never leave version files in a partially updated state.
+**En caso de fallo:** Si la actualización de un archivo falla, revertir todos los cambios para mantener la consistencia. Nunca dejar archivos de versión en un estado parcialmente actualizado.
 
-### Paso 6: Create Version Tag
+### Paso 6: Crear la Etiqueta de Versión
 
-After committing the version bump, create a git tag.
+Después de hacer commit del incremento de versión, crear una etiqueta de git.
 
 ```bash
 # Annotated tag (preferred)
@@ -179,40 +180,40 @@ git tag -a v1.3.0 -m "Release v1.3.0"
 git tag v1.3.0
 ```
 
-Use the project's established tag format:
-- `v1.3.0` (most common)
-- `1.3.0` (no prefix)
+Usar el formato de etiqueta establecido del proyecto:
+- `v1.3.0` (más común)
+- `1.3.0` (sin prefijo)
 - `package-name@1.3.0` (monorepo)
 
-**Esperado:** Git tag created matching the new version.
+**Esperado:** Etiqueta de Git creada coincidiendo con la nueva versión.
 
-**En caso de fallo:** If the tag already exists, the version was not properly bumped. Check for duplicate tags with `git tag -l "v1.3*"` and resolve before proceeding.
+**En caso de fallo:** Si la etiqueta ya existe, la versión no se incrementó correctamente. Verificar etiquetas duplicadas con `git tag -l "v1.3*"` y resolver antes de continuar.
 
 ## Validación
 
-- [ ] Current version was read from the correct version file
-- [ ] All commits since the last release were analyzed
-- [ ] Each change is classified as breaking, feature, or fix
-- [ ] The bump level matches the highest-severity change (breaking > feature > fix)
-- [ ] New version follows SemVer 2.0.0 format: `MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`
-- [ ] All version files in the project are updated consistently
-- [ ] No version was skipped (e.g., 1.2.3 to 1.4.0 without 1.3.0 being released)
-- [ ] Git tag matches the new version and project's tag format convention
-- [ ] Pre-release suffix, if used, follows correct precedence (alpha < beta < rc)
+- [ ] La versión actual se leyó del archivo de versión correcto
+- [ ] Todos los commits desde el último lanzamiento fueron analizados
+- [ ] Cada cambio se clasifica como incompatible, funcionalidad o corrección
+- [ ] El nivel de incremento coincide con el cambio de mayor severidad (incompatible > funcionalidad > corrección)
+- [ ] La nueva versión sigue el formato SemVer 2.0.0: `MAYOR.MENOR.PARCHE[-PRELANZAMIENTO][+COMPILACIÓN]`
+- [ ] Todos los archivos de versión en el proyecto están actualizados consistentemente
+- [ ] No se saltó ninguna versión (ej., 1.2.3 a 1.4.0 sin que 1.3.0 fuera lanzada)
+- [ ] La etiqueta de Git coincide con la nueva versión y la convención de formato de etiqueta del proyecto
+- [ ] El sufijo de pre-lanzamiento, si se usa, sigue la precedencia correcta (alpha < beta < rc)
 
 ## Errores Comunes
 
-- **Skipping minor versions**: Going from 1.2.3 directly to 1.4.0 because "we added two features." Each release gets one bump; the number of features does not determine the version.
-- **Treating deprecation as breaking**: Deprecating a function (adding a warning) is a minor change. Only removing it is a breaking change.
-- **Forgetting pre-1.0.0 rules**: Before 1.0.0, the API is considered unstable. Some projects bump minor for breaking changes during this phase, but it should be documented.
-- **Inconsistent version files**: Updating package.json but not package-lock.json, or updating DESCRIPTION but not CITATION. All version references must stay in sync.
-- **Build metadata confusion**: Build metadata (`+build.123`) does not affect version precedence. `1.0.0+build.1` and `1.0.0+build.2` have the same precedence.
-- **Not tagging releases**: Without git tags, future version bumps cannot determine the baseline for change analysis.
+- **Saltar versiones menores**: Ir de 1.2.3 directamente a 1.4.0 porque "agregamos dos funcionalidades." Cada lanzamiento obtiene un incremento; el número de funcionalidades no determina la versión.
+- **Tratar la deprecación como incompatible**: Deprecar una función (agregar una advertencia) es un cambio menor. Solo eliminarla es un cambio incompatible.
+- **Olvidar las reglas pre-1.0.0**: Antes de 1.0.0, la API se considera inestable. Algunos proyectos incrementan menor para cambios incompatibles durante esta fase, pero debería documentarse.
+- **Archivos de versión inconsistentes**: Actualizar package.json pero no package-lock.json, o actualizar DESCRIPTION pero no CITATION. Todas las referencias de versión deben mantenerse sincronizadas.
+- **Confusión de metadatos de compilación**: Los metadatos de compilación (`+build.123`) no afectan la precedencia de versión. `1.0.0+build.1` y `1.0.0+build.2` tienen la misma precedencia.
+- **No etiquetar lanzamientos**: Sin etiquetas de git, los futuros incrementos de versión no pueden determinar la línea base para el análisis de cambios.
 
 ## Habilidades Relacionadas
 
-- `manage-changelog` -- Maintain changelog entries that pair with version bumps
-- `plan-release-cycle` -- Plan release milestones that determine when version bumps occur
-- `release-package-version` -- R-specific release workflow that includes version bumping
-- `commit-changes` -- Commit the version bump with a proper message
-- `create-github-release` -- Create a GitHub release from the version tag
+- `manage-changelog` -- Mantener entradas de registro de cambios que se emparejan con incrementos de versión
+- `plan-release-cycle` -- Planificar hitos de lanzamiento que determinan cuándo ocurren los incrementos de versión
+- `release-package-version` -- Flujo de trabajo de lanzamiento específico de R que incluye incremento de versión
+- `commit-changes` -- Hacer commit del incremento de versión con un mensaje apropiado
+- `create-github-release` -- Crear un lanzamiento de GitHub desde la etiqueta de versión

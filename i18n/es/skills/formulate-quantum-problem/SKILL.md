@@ -1,13 +1,13 @@
 ---
 name: formulate-quantum-problem
 description: >
-  Formulate a quantum mechanics or quantum chemistry problem with proper
-  mathematical framework including Hilbert space, operators, boundary conditions,
-  and approximation method selection. Use when setting up a quantum mechanics
-  problem for analytic or numerical solution, formulating a quantum chemistry
-  calculation, translating a physical scenario into the Schrodinger or Dirac
-  formalism, or choosing between perturbation theory, variational methods,
-  DFT, and exact diagonalization.
+  Formular un problema de mecánica cuántica o química cuántica con el marco
+  matemático apropiado incluyendo espacio de Hilbert, operadores, condiciones
+  de frontera, y selección de método de aproximación. Usar al plantear un
+  problema de mecánica cuántica para solución analítica o numérica, al formular
+  un cálculo de química cuántica, al traducir un escenario físico al formalismo
+  de Schrodinger o Dirac, o al elegir entre teoría de perturbaciones, métodos
+  variacionales, DFT y diagonalización exacta.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,34 +26,34 @@ metadata:
 
 # Formulate Quantum Problem
 
-Translate a physical system into a well-posed quantum mechanical problem by identifying the relevant degrees of freedom, constructing the Hamiltonian and state space, specifying boundary conditions, selecting an appropriate approximation method, and validating the formulation against known limits.
+Traducir un sistema físico en un problema cuántico bien planteado identificando los grados de libertad relevantes, construyendo el Hamiltoniano y el espacio de estados, especificando condiciones de frontera, seleccionando un método de aproximación apropiado, y validando la formulación contra límites conocidos.
 
 ## Cuándo Usar
 
-- Setting up a quantum mechanics problem for analytic or numerical solution
-- Formulating a quantum chemistry calculation (molecular orbitals, electronic structure)
-- Translating a physical scenario into the Dirac or Schrodinger formalism
-- Choosing between perturbation theory, variational methods, DFT, or exact diagonalization
-- Preparing a theoretical model for comparison with experimental spectroscopic or scattering data
+- Plantear un problema de mecánica cuántica para solución analítica o numérica
+- Formular un cálculo de química cuántica (orbitales moleculares, estructura electrónica)
+- Traducir un escenario físico al formalismo de Dirac o Schrodinger
+- Elegir entre teoría de perturbaciones, métodos variacionales, DFT o diagonalización exacta
+- Preparar un modelo teórico para comparación con datos experimentales espectroscópicos o de dispersión
 
 ## Entradas
 
-- **Requerido**: Description of the physical system (atom, molecule, solid, field, etc.)
-- **Requerido**: Observable(s) of interest (energy spectrum, transition rates, ground state properties)
-- **Opcional**: Experimental constraints or data to match (spectral lines, binding energies)
-- **Opcional**: Desired accuracy level or computational budget
-- **Opcional**: Preferred formalism (wave mechanics, matrix mechanics, second quantization, path integral)
+- **Requerido**: Descripción del sistema físico (átomo, molécula, sólido, campo, etc.)
+- **Requerido**: Observable(s) de interés (espectro de energía, tasas de transición, propiedades del estado fundamental)
+- **Opcional**: Restricciones experimentales o datos a reproducir (líneas espectrales, energías de enlace)
+- **Opcional**: Nivel de precisión deseado o presupuesto computacional
+- **Opcional**: Formalismo preferido (mecánica ondulatoria, mecánica matricial, segunda cuantización, integral de camino)
 
 ## Procedimiento
 
-### Paso 1: Identify Physical System and Relevant Degrees of Freedom
+### Paso 1: Identificar el sistema físico y grados de libertad relevantes
 
-Characterize the system completely before writing any equations:
+Caracterizar el sistema completamente antes de escribir cualquier ecuación:
 
-1. **Particle content**: List all particles (electrons, nuclei, photons, phonons) and their quantum numbers (spin, charge, mass).
-2. **Symmetries**: Identify spatial symmetries (spherical, cylindrical, translational, crystal group), internal symmetries (spin rotation, gauge), and discrete symmetries (parity, time reversal).
-3. **Energy scales**: Determine the relevant energy scales to decide which degrees of freedom are active and which can be frozen or treated adiabatically.
-4. **Degrees of freedom reduction**: Apply the Born-Oppenheimer approximation if nuclear and electronic timescales separate. Identify collective coordinates if many-body simplifications apply.
+1. **Contenido de partículas**: Listar todas las partículas (electrones, núcleos, fotones, fonones) y sus números cuánticos (espín, carga, masa).
+2. **Simetrías**: Identificar simetrías espaciales (esférica, cilíndrica, traslacional, grupo cristalino), simetrías internas (rotación de espín, gauge), y simetrías discretas (paridad, inversión temporal).
+3. **Escalas de energía**: Determinar las escalas de energía relevantes para decidir qué grados de libertad están activos y cuáles pueden congelarse o tratarse adiabáticamente.
+4. **Reducción de grados de libertad**: Aplicar la aproximación de Born-Oppenheimer si las escalas temporales nucleares y electrónicas se separan. Identificar coordenadas colectivas si aplican simplificaciones de muchos cuerpos.
 
 ```markdown
 ## System Characterization
@@ -64,19 +64,19 @@ Characterize the system completely before writing any equations:
 - **Energy scale hierarchy**: [e.g., electronic >> vibrational >> rotational]
 ```
 
-**Esperado:** A complete inventory of particles, quantum numbers, symmetries, and a justified selection of active versus frozen degrees of freedom.
+**Esperado:** Un inventario completo de partículas, números cuánticos, simetrías, y una selección justificada de grados de libertad activos versus congelados.
 
-**En caso de fallo:** If the energy scale hierarchy is unclear, retain all degrees of freedom initially and flag the need for a scale analysis. Premature truncation leads to qualitatively wrong physics.
+**En caso de fallo:** Si la jerarquía de escalas de energía no es clara, retener todos los grados de libertad inicialmente y marcar la necesidad de un análisis de escala. La truncación prematura conduce a física cualitativamente incorrecta.
 
-### Paso 2: Construct Hamiltonian and State Space
+### Paso 2: Construir el Hamiltoniano y el espacio de estados
 
-Build the mathematical framework from the degrees of freedom identified in Step 1:
+Construir el marco matemático a partir de los grados de libertad identificados en el Paso 1:
 
-1. **Hilbert space**: Define the state space. For finite-dimensional systems, specify the basis (e.g., spin-1/2 basis |up>, |down>). For infinite-dimensional systems, specify the function space (e.g., L2(R^3) for a single particle in 3D).
-2. **Kinetic terms**: Write the kinetic energy operator for each particle. In position representation, T = -hbar^2/(2m) nabla^2.
-3. **Potential terms**: Write all interaction potentials (Coulomb, harmonic, spin-orbit, external fields). Be explicit about functional form and coupling constants.
-4. **Composite Hamiltonian**: Assemble H = T + V, grouping terms by interaction type. For multi-particle systems, include exchange and correlation terms or note where they will enter via approximation.
-5. **Operator algebra**: Verify that the Hamiltonian is Hermitian. Identify constants of motion ([H, O] = 0) that can be used to block-diagonalize the problem.
+1. **Espacio de Hilbert**: Definir el espacio de estados. Para sistemas de dimensión finita, especificar la base (ej., base de espín-1/2 |arriba>, |abajo>). Para sistemas de dimensión infinita, especificar el espacio funcional (ej., L2(R^3) para una partícula individual en 3D).
+2. **Términos cinéticos**: Escribir el operador de energía cinética para cada partícula. En representación de posición, T = -hbar^2/(2m) nabla^2.
+3. **Términos de potencial**: Escribir todos los potenciales de interacción (Coulomb, armónico, espín-órbita, campos externos). Ser explícito sobre la forma funcional y las constantes de acoplamiento.
+4. **Hamiltoniano compuesto**: Ensamblar H = T + V, agrupando términos por tipo de interacción. Para sistemas de múltiples partículas, incluir términos de intercambio y correlación o notar dónde entrarán vía aproximación.
+5. **Álgebra de operadores**: Verificar que el Hamiltoniano es Hermítico. Identificar constantes de movimiento ([H, O] = 0) que pueden usarse para diagonalizar por bloques el problema.
 
 ```markdown
 ## Hamiltonian Structure
@@ -88,18 +88,18 @@ Build the mathematical framework from the degrees of freedom identified in Step 
 - **Symmetry-adapted basis**: [if block diagonalization is possible]
 ```
 
-**Esperado:** A complete, Hermitian Hamiltonian with all terms explicitly written, the Hilbert space defined, and constants of motion identified.
+**Esperado:** Un Hamiltoniano completo y Hermítico con todos los términos escritos explícitamente, el espacio de Hilbert definido, y las constantes de movimiento identificadas.
 
-**En caso de fallo:** If the Hamiltonian is not manifestly Hermitian, check for missing conjugate terms or gauge-dependent phases. If the Hilbert space is ambiguous (e.g., for relativistic particles), specify the formalism explicitly and note the issue.
+**En caso de fallo:** Si el Hamiltoniano no es manifiestamente Hermítico, verificar si faltan términos conjugados o fases dependientes del gauge. Si el espacio de Hilbert es ambiguo (ej., para partículas relativistas), especificar el formalismo explícitamente y notar el problema.
 
-### Paso 3: Specify Boundary and Initial Conditions
+### Paso 3: Especificar condiciones de frontera e iniciales
 
-Constrain the problem to have a unique solution:
+Restringir el problema para que tenga una solución única:
 
-1. **Boundary conditions**: For bound state problems, require normalizability (psi -> 0 at infinity). For scattering problems, specify incoming wave boundary conditions. For periodic systems, apply Bloch or Born-von Karman conditions.
-2. **Domain restrictions**: Specify the spatial domain. For a particle in a box, define the walls. For a hydrogen atom, define the radial and angular domains. For lattice models, define the lattice and its topology.
-3. **Initial state** (time-dependent problems): Define the state at t=0 as an expansion in the energy eigenbasis or as a wave packet with specified center and width.
-4. **Constraint equations**: For indistinguishable particles, enforce symmetrization (bosons) or antisymmetrization (fermions). For gauge theories, impose gauge-fixing conditions.
+1. **Condiciones de frontera**: Para problemas de estados ligados, requerir normalizabilidad (psi -> 0 en el infinito). Para problemas de dispersión, especificar condiciones de frontera de onda entrante. Para sistemas periódicos, aplicar condiciones de Bloch o Born-von Karman.
+2. **Restricciones de dominio**: Especificar el dominio espacial. Para una partícula en una caja, definir las paredes. Para un átomo de hidrógeno, definir los dominios radial y angular. Para modelos de red, definir la red y su topología.
+3. **Estado inicial** (problemas dependientes del tiempo): Definir el estado en t=0 como una expansión en la base de eigenestados de energía o como un paquete de ondas con centro y ancho especificados.
+4. **Ecuaciones de restricción**: Para partículas indistinguibles, imponer simetrización (bosones) o antisimetrización (fermiones). Para teorías gauge, imponer condiciones de fijación de gauge.
 
 ```markdown
 ## Boundary and Initial Conditions
@@ -110,37 +110,37 @@ Constrain the problem to have a unique solution:
 - **Initial state** (if time-dependent): [specification]
 ```
 
-**Esperado:** Boundary conditions that are physically motivated, mathematically consistent with the Hamiltonian's domain, and sufficient to determine a unique solution (or a well-defined scattering matrix).
+**Esperado:** Condiciones de frontera que son físicamente motivadas, matemáticamente consistentes con el dominio del Hamiltoniano, y suficientes para determinar una solución única (o una matriz de dispersión bien definida).
 
-**En caso de fallo:** If boundary conditions are over- or under-determined, check the self-adjointness of the Hamiltonian on the chosen domain. Non-self-adjoint Hamiltonians require careful treatment of deficiency indices.
+**En caso de fallo:** Si las condiciones de frontera están sobre- o sub-determinadas, verificar la auto-adjunción del Hamiltoniano en el dominio elegido. Los Hamiltonianos no auto-adjuntos requieren tratamiento cuidadoso de índices de deficiencia.
 
-### Paso 4: Select Approximation Method
+### Paso 4: Seleccionar método de aproximación
 
-Choose a solution strategy appropriate to the problem's structure:
+Elegir una estrategia de solución apropiada a la estructura del problema:
 
-1. **Assess exact solvability**: Check if the problem reduces to a known exactly solvable model (harmonic oscillator, hydrogen atom, Ising model, etc.). If yes, use the exact solution as the primary result and perturbation theory for corrections.
+1. **Evaluar solubilidad exacta**: Verificar si el problema se reduce a un modelo exactamente soluble conocido (oscilador armónico, átomo de hidrógeno, modelo de Ising, etc.). Si es así, usar la solución exacta como resultado principal y teoría de perturbaciones para correcciones.
 
-2. **Perturbation theory** (weak coupling):
-   - Split H = H0 + lambda V where H0 is exactly solvable
-   - Verify that lambda V is small compared to the level spacing of H0
-   - Check for degeneracy; use degenerate perturbation theory if needed
-   - Suitable when: interaction is weak, few-body system, analytic results needed
+2. **Teoría de perturbaciones** (acoplamiento débil):
+   - Dividir H = H0 + lambda V donde H0 es exactamente soluble
+   - Verificar que lambda V es pequeño comparado con el espaciado de niveles de H0
+   - Verificar degeneración; usar teoría de perturbaciones degenerada si es necesario
+   - Adecuada cuando: la interacción es débil, sistema de pocos cuerpos, se necesitan resultados analíticos
 
-3. **Variational methods** (ground state focus):
-   - Choose a trial wave function with adjustable parameters
-   - Ensure the trial function satisfies boundary conditions and symmetry
-   - Suitable when: ground state energy is the primary target, many-body system
+3. **Métodos variacionales** (enfoque en estado fundamental):
+   - Elegir una función de onda de prueba con parámetros ajustables
+   - Asegurar que la función de prueba satisface condiciones de frontera y simetría
+   - Adecuada cuando: la energía del estado fundamental es el objetivo principal, sistema de muchos cuerpos
 
-4. **Density Functional Theory** (many-electron systems):
-   - Choose the exchange-correlation functional (LDA, GGA, hybrid)
-   - Define the basis set (plane waves, Gaussian, numerical atomic orbitals)
-   - Suitable when: many-electron system, ground state density and energy needed
+4. **Teoría del Funcional de la Densidad** (sistemas de muchos electrones):
+   - Elegir el funcional de intercambio-correlación (LDA, GGA, híbrido)
+   - Definir el conjunto de bases (ondas planas, gaussianas, orbitales atómicos numéricos)
+   - Adecuada cuando: sistema de muchos electrones, se necesitan densidad y energía del estado fundamental
 
-5. **Numerical exact methods** (small systems, benchmarking):
-   - Exact diagonalization for small Hilbert spaces
-   - Quantum Monte Carlo for ground state sampling
-   - DMRG for one-dimensional or quasi-one-dimensional systems
-   - Suitable when: high accuracy is needed and the system is small enough
+5. **Métodos numéricos exactos** (sistemas pequeños, benchmarking):
+   - Diagonalización exacta para espacios de Hilbert pequeños
+   - Monte Carlo cuántico para muestreo del estado fundamental
+   - DMRG para sistemas unidimensionales o cuasi-unidimensionales
+   - Adecuada cuando: se necesita alta precisión y el sistema es suficientemente pequeño
 
 ```markdown
 ## Approximation Method Selection
@@ -151,22 +151,22 @@ Choose a solution strategy appropriate to the problem's structure:
 - **Alternatives considered**: [and why they were rejected]
 ```
 
-**Esperado:** A justified choice of approximation method with a clear statement of expected accuracy and computational cost, plus documentation of alternatives considered.
+**Esperado:** Una elección justificada de método de aproximación con una declaración clara de precisión esperada y costo computacional, más documentación de alternativas consideradas.
 
-**En caso de fallo:** If no single method is clearly appropriate, formulate the problem for two methods and compare results. Disagreement between methods reveals the problem's difficulty and guides further refinement.
+**En caso de fallo:** Si ningún método individual es claramente apropiado, formular el problema para dos métodos y comparar resultados. El desacuerdo entre métodos revela la dificultad del problema y guía el refinamiento posterior.
 
-### Paso 5: Validate Formulation Against Known Limits
+### Paso 5: Validar la formulación contra límites conocidos
 
-Before solving, verify the formulation reproduces known physics:
+Antes de resolver, verificar que la formulación reproduce física conocida:
 
-1. **Classical limit**: Take hbar -> 0 (or large quantum numbers) and verify that the Hamiltonian reduces to the correct classical mechanics.
-2. **Non-interacting limit**: Set coupling constants to zero and verify the solution is a product of single-particle states.
-3. **Symmetry limits**: Verify that the formulation respects all identified symmetries. Check that the Hamiltonian transforms correctly under the symmetry group.
-4. **Dimensional analysis**: Verify that every term in the Hamiltonian has units of energy. Check that the characteristic length, energy, and time scales are physically reasonable.
-5. **Known exact results**: If the system has known exact solutions in special cases (e.g., hydrogen atom for Z=1, harmonic oscillator for quadratic potential), verify the formulation reproduces them.
+1. **Límite clásico**: Tomar hbar -> 0 (o números cuánticos grandes) y verificar que el Hamiltoniano se reduce a la mecánica clásica correcta.
+2. **Límite sin interacción**: Poner las constantes de acoplamiento a cero y verificar que la solución es un producto de estados de una partícula.
+3. **Límites de simetría**: Verificar que la formulación respeta todas las simetrías identificadas. Comprobar que el Hamiltoniano se transforma correctamente bajo el grupo de simetría.
+4. **Análisis dimensional**: Verificar que cada término en el Hamiltoniano tiene unidades de energía. Comprobar que las escalas características de longitud, energía y tiempo son físicamente razonables.
+5. **Resultados exactos conocidos**: Si el sistema tiene soluciones exactas conocidas en casos especiales (ej., átomo de hidrógeno para Z=1, oscilador armónico para potencial cuadrático), verificar que la formulación los reproduce.
 
 ```markdown
-## Validación
+## Validation Checks
 | Check | Expected Result | Status |
 |-------|----------------|--------|
 | Classical limit (hbar -> 0) | [classical Hamiltonian] | [Pass/Fail] |
@@ -176,33 +176,33 @@ Before solving, verify the formulation reproduces known physics:
 | Known exact case | [reproduced result] | [Pass/Fail] |
 ```
 
-**Esperado:** All validation checks pass. The formulation is self-consistent and ready for solution.
+**Esperado:** Todas las verificaciones de validación pasan. La formulación es autoconsistente y está lista para resolver.
 
-**En caso de fallo:** A failing validation check indicates an error in the Hamiltonian construction or boundary conditions. Trace the failure back to the specific term or condition and correct it before proceeding to solve.
+**En caso de fallo:** Una verificación de validación que falla indica un error en la construcción del Hamiltoniano o las condiciones de frontera. Rastrear la falla hasta el término o condición específica y corregirla antes de proceder a resolver.
 
 ## Validación
 
-- [ ] All particles and quantum numbers are explicitly listed
-- [ ] The Hilbert space is defined with a clear basis
-- [ ] The Hamiltonian is Hermitian and all terms have correct units
-- [ ] Constants of motion are identified and used for simplification
-- [ ] Boundary conditions are physically motivated and mathematically sufficient
-- [ ] Particle statistics (bosonic/fermionic) are correctly enforced
-- [ ] Approximation method choice is justified with expected accuracy stated
-- [ ] Classical, non-interacting, and symmetry limits are checked
-- [ ] Known exact results are reproduced in special cases
-- [ ] The formulation is complete enough for another researcher to implement
+- [ ] Todas las partículas y números cuánticos están listados explícitamente
+- [ ] El espacio de Hilbert está definido con una base clara
+- [ ] El Hamiltoniano es Hermítico y todos los términos tienen unidades correctas
+- [ ] Las constantes de movimiento están identificadas y usadas para simplificación
+- [ ] Las condiciones de frontera son físicamente motivadas y matemáticamente suficientes
+- [ ] La estadística de partículas (bosónica/fermiónica) se impone correctamente
+- [ ] La elección del método de aproximación está justificada con precisión esperada declarada
+- [ ] Los límites clásico, sin interacción y de simetría están verificados
+- [ ] Los resultados exactos conocidos se reproducen en casos especiales
+- [ ] La formulación es suficientemente completa para que otro investigador la implemente
 
 ## Errores Comunes
 
-- **Omitting degrees of freedom prematurely**: Freezing a degree of freedom without checking the energy scale hierarchy can miss qualitatively important physics. Always justify every reduction with an energy scale argument.
-- **Non-Hermitian Hamiltonian**: Forgetting conjugate terms in spin-orbit coupling or complex potentials. Always verify H = H-dagger explicitly.
-- **Wrong boundary conditions for scattering**: Using bound-state boundary conditions (normalizability) for a scattering problem discards the continuous spectrum entirely. Match boundary conditions to the physical question.
-- **Ignoring degeneracy in perturbation theory**: Applying non-degenerate perturbation theory to a degenerate level produces divergent corrections. Always check for degeneracy before expanding.
-- **Over-reliance on a single approximation**: Different methods have complementary failure modes. Variational methods give upper bounds but can miss excited states. Perturbation theory diverges at strong coupling. Cross-validate when possible.
-- **Dimensional inconsistency**: Mixing natural units (hbar = 1) with SI units in the same expression. Adopt a consistent unit system at the start and state it explicitly.
+- **Omitir grados de libertad prematuramente**: Congelar un grado de libertad sin verificar la jerarquía de escalas de energía puede perder física cualitativamente importante. Siempre justificar cada reducción con un argumento de escala de energía.
+- **Hamiltoniano no Hermítico**: Olvidar términos conjugados en acoplamiento espín-órbita o potenciales complejos. Siempre verificar H = H-daga explícitamente.
+- **Condiciones de frontera incorrectas para dispersión**: Usar condiciones de frontera de estados ligados (normalizabilidad) para un problema de dispersión descarta el espectro continuo por completo. Hacer coincidir las condiciones de frontera con la pregunta física.
+- **Ignorar degeneración en teoría de perturbaciones**: Aplicar teoría de perturbaciones no degenerada a un nivel degenerado produce correcciones divergentes. Siempre verificar degeneración antes de expandir.
+- **Dependencia excesiva de una sola aproximación**: Diferentes métodos tienen modos de fallo complementarios. Los métodos variacionales dan cotas superiores pero pueden perder estados excitados. La teoría de perturbaciones diverge a acoplamiento fuerte. Validar cruzando cuando sea posible.
+- **Inconsistencia dimensional**: Mezclar unidades naturales (hbar = 1) con unidades SI en la misma expresión. Adoptar un sistema de unidades consistente al inicio y declararlo explícitamente.
 
 ## Habilidades Relacionadas
 
-- `derive-theoretical-result` -- derive analytic results from the formulated problem
-- `survey-theoretical-literature` -- find prior work on similar quantum systems
+- `derive-theoretical-result` -- derivar resultados analíticos del problema formulado
+- `survey-theoretical-literature` -- encontrar trabajo previo sobre sistemas cuánticos similares

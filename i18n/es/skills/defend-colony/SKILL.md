@@ -1,13 +1,14 @@
 ---
 name: defend-colony
 description: >
-  Implement layered collective defense using alarm signaling, role mobilization,
-  and proportional response. Covers threat detection, alert propagation, immune
-  response patterns, escalation tiers, and post-incident recovery for distributed
-  systems and organizations. Use when designing defense-in-depth where no single
-  guardian covers all threats, building incident response that scales with severity,
-  or when current defense is over-reactive to every alert or under-reactive to
-  genuine threats.
+  Implementar defensa colectiva por capas usando señalización de alarma,
+  movilización de roles y respuesta proporcional. Cubre detección de amenazas,
+  propagación de alertas, patrones de respuesta inmune, niveles de escalación
+  y recuperación post-incidente para sistemas distribuidos y organizaciones.
+  Usar al diseñar defensa en profundidad donde ningún guardián único cubre
+  todas las amenazas, al construir respuesta a incidentes que escala con la
+  severidad, o cuando la defensa actual es sobre-reactiva a cada alerta o
+  sub-reactiva ante amenazas genuinas.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,72 +27,72 @@ metadata:
 
 # Defend Colony
 
-Implement layered collective defense for distributed systems, teams, or organizations — using alarm signaling, role mobilization, proportional response, and immune memory patterns inspired by social insect colony defense and biological immune systems.
+Implementar defensa colectiva por capas para sistemas distribuidos, equipos u organizaciones — usando señalización de alarma, movilización de roles, respuesta proporcional y patrones de memoria inmune inspirados en la defensa de colonias de insectos sociales y sistemas inmunes biológicos.
 
 ## Cuándo Usar
 
-- Designing defense-in-depth for distributed systems where no single guardian can cover all threats
-- Building incident response processes that scale with threat severity
-- Protecting a system where individual components cannot defend themselves alone
-- Current defense is either over-reactive (every alert triggers full mobilization) or under-reactive (threats go unnoticed until damage is done)
-- Building organizational resilience where teams must self-organize in response to incidents
-- Complementing `coordinate-swarm` with specific threat-response coordination patterns
+- Diseñar defensa en profundidad para sistemas distribuidos donde ningún guardián único puede cubrir todas las amenazas
+- Construir procesos de respuesta a incidentes que escalen con la severidad de la amenaza
+- Proteger un sistema donde los componentes individuales no pueden defenderse solos
+- La defensa actual es sobre-reactiva (cada alerta dispara movilización completa) o sub-reactiva (las amenazas pasan desapercibidas hasta que el daño está hecho)
+- Construir resiliencia organizacional donde los equipos deben auto-organizarse en respuesta a incidentes
+- Complementar `coordinate-swarm` con patrones específicos de coordinación de respuesta a amenazas
 
 ## Entradas
 
-- **Requerido**: Description of the colony (system, organization, team) to be defended
-- **Requerido**: Known threat categories (attacks, failures, competitors, environmental risks)
-- **Opcional**: Current defense mechanisms and their failure modes
-- **Opcional**: Available defender types and their capabilities
-- **Opcional**: Acceptable response latency per threat tier
-- **Opcional**: Post-incident recovery requirements
+- **Requerido**: Descripción de la colonia (sistema, organización, equipo) a defender
+- **Requerido**: Categorías de amenazas conocidas (ataques, fallos, competidores, riesgos ambientales)
+- **Opcional**: Mecanismos de defensa actuales y sus modos de fallo
+- **Opcional**: Tipos de defensores disponibles y sus capacidades
+- **Opcional**: Latencia de respuesta aceptable por nivel de amenaza
+- **Opcional**: Requisitos de recuperación post-incidente
 
 ## Procedimiento
 
-### Paso 1: Map the Threat Landscape and Defense Perimeter
+### Paso 1: Mapear el Panorama de Amenazas y el Perímetro de Defensa
 
-Identify what needs defending, from what, and where the perimeter lies.
+Identificar qué necesita ser defendido, de qué y dónde está el perímetro.
 
-1. Define the colony's critical assets:
-   - What must be protected at all costs? (core data, production systems, key people)
-   - What can sustain temporary damage? (staging environments, non-critical services)
-   - What is expendable under extreme threat? (caches, replicas, non-essential features)
-2. Classify threats by type and severity:
-   - **Probes**: low-level reconnaissance or testing (port scans, repeated failed logins)
-   - **Incursions**: active boundary violations (unauthorized access, injection attempts)
-   - **Infestations**: persistent threats already inside the perimeter (compromised nodes, insider threats)
-   - **Existential**: threats to the colony's survival (data corruption, catastrophic failure, DDoS)
-3. Map the defense perimeter:
-   - Outer perimeter: first detection opportunity (firewalls, rate limits, monitoring)
-   - Inner perimeter: critical asset boundaries (access controls, encryption, isolation)
-   - Core: last-resort defenses (backups, kill switches, circuit breakers)
+1. Definir los activos críticos de la colonia:
+   - ¿Qué debe protegerse a toda costa? (datos centrales, sistemas de producción, personas clave)
+   - ¿Qué puede sostener daño temporal? (entornos de prueba, servicios no críticos)
+   - ¿Qué es prescindible bajo amenaza extrema? (cachés, réplicas, funcionalidades no esenciales)
+2. Clasificar amenazas por tipo y severidad:
+   - **Sondeos**: reconocimiento o pruebas de bajo nivel (escaneo de puertos, intentos de inicio de sesión fallidos repetidos)
+   - **Incursiones**: violaciones activas del perímetro (acceso no autorizado, intentos de inyección)
+   - **Infestaciones**: amenazas persistentes ya dentro del perímetro (nodos comprometidos, amenazas internas)
+   - **Existenciales**: amenazas a la supervivencia de la colonia (corrupción de datos, fallo catastrófico, DDoS)
+3. Mapear el perímetro de defensa:
+   - Perímetro exterior: primera oportunidad de detección (firewalls, límites de tasa, monitoreo)
+   - Perímetro interior: fronteras de activos críticos (controles de acceso, cifrado, aislamiento)
+   - Núcleo: defensas de último recurso (respaldos, interruptores de emergencia, disyuntores)
 
-**Esperado:** A clear map of assets (prioritized), threats (classified by severity), and defense perimeters (layered). This map guides all subsequent defense design.
+**Esperado:** Un mapa claro de activos (priorizados), amenazas (clasificadas por severidad) y perímetros de defensa (por capas). Este mapa guía todo el diseño de defensa subsiguiente.
 
-**En caso de fallo:** If the threat landscape feels overwhelming, start with the top 3 critical assets and the top 3 threat types. Perfect coverage is less important than coverage of what matters most. If perimeter boundaries are unclear, default to "trust nothing, verify everything" (zero-trust posture) and define boundaries as you observe actual traffic patterns.
+**En caso de fallo:** Si el panorama de amenazas se siente abrumador, comenzar con los 3 activos críticos principales y los 3 tipos de amenaza principales. La cobertura perfecta es menos importante que la cobertura de lo que más importa. Si los límites del perímetro no están claros, aplicar por defecto "no confiar en nada, verificar todo" (postura de confianza cero) y definir los límites a medida que se observan los patrones de tráfico reales.
 
-### Paso 2: Design the Alarm Signaling Network
+### Paso 2: Diseñar la Red de Señalización de Alarma
 
-Build the communication system that detects threats and propagates alerts.
+Construir el sistema de comunicación que detecta amenazas y propaga alertas.
 
-1. Deploy sentinels at each defense layer:
-   - Outer sentinels: lightweight, high-sensitivity detectors (may produce false positives)
-   - Inner sentinels: heavier, high-specificity detectors (fewer false positives, slower)
-   - Core sentinels: critical asset monitors (zero tolerance for missed threats)
-2. Define alarm signals with graduated intensity:
-   - **Yellow**: anomaly detected, increased monitoring, no mobilization
-   - **Orange**: confirmed threat pattern, local defenders mobilize, scouts investigate
-   - **Red**: active breach or severe threat, full defense mobilization, non-essential activity paused
-   - **Black**: existential threat, all resources to defense, sacrifice expendable assets if needed
-3. Implement alarm propagation:
-   - Local: sentinels alert nearby defenders directly
-   - Regional: sentinel clusters aggregate signals and escalate if threshold is met
-   - Colony-wide: regional escalation triggers broadcast alarm
-   - Each propagation step adds confirmation — a single sentinel cannot trigger colony-wide alarm
-4. Build in alarm fatigue prevention:
-   - Auto-suppress repeated identical alarms (dedup with time window)
-   - Require escalation to be confirmed by independent sentinels
-   - Track alarm-to-threat ratio — if false positive rate exceeds 50%, recalibrate sentinels
+1. Desplegar centinelas en cada capa de defensa:
+   - Centinelas exteriores: detectores ligeros de alta sensibilidad (pueden producir falsos positivos)
+   - Centinelas interiores: detectores más pesados de alta especificidad (menos falsos positivos, más lentos)
+   - Centinelas del núcleo: monitores de activos críticos (tolerancia cero para amenazas no detectadas)
+2. Definir señales de alarma con intensidad graduada:
+   - **Amarillo**: anomalía detectada, monitoreo aumentado, sin movilización
+   - **Naranja**: patrón de amenaza confirmado, defensores locales se movilizan, exploradores investigan
+   - **Rojo**: brecha activa o amenaza severa, movilización completa de defensa, actividad no esencial pausada
+   - **Negro**: amenaza existencial, todos los recursos a defensa, sacrificar activos prescindibles si es necesario
+3. Implementar propagación de alarma:
+   - Local: centinelas alertan a defensores cercanos directamente
+   - Regional: grupos de centinelas agregan señales y escalan si se alcanza el umbral
+   - Toda la colonia: la escalación regional dispara alarma de difusión
+   - Cada paso de propagación agrega confirmación — un solo centinela no puede disparar alarma de toda la colonia
+4. Incorporar prevención de fatiga de alarma:
+   - Suprimir automáticamente alarmas idénticas repetidas (deduplicación con ventana temporal)
+   - Requerir que la escalación sea confirmada por centinelas independientes
+   - Rastrear la relación alarma-amenaza — si la tasa de falsos positivos excede el 50%, recalibrar centinelas
 
 ```
 Alarm Propagation:
@@ -109,114 +110,114 @@ Alarm Propagation:
 └──────────────────────────────────────────────────────────┘
 ```
 
-**Esperado:** A graduated alarm system where threat severity determines response intensity. Multiple independent sentinel confirmations prevent single-point false alarms. Alarm fatigue is managed through deduplication and calibration.
+**Esperado:** Un sistema de alarma graduado donde la severidad de la amenaza determina la intensidad de la respuesta. Las confirmaciones de múltiples centinelas independientes previenen falsas alarmas de punto único. La fatiga de alarma se gestiona mediante deduplicación y calibración.
 
-**En caso de fallo:** If the alarm system produces too many false positives, raise sentinel thresholds or require more confirmations before escalation. If threats slip through undetected, add sentinels at the penetrated layer or lower detection thresholds. If alarm propagation is too slow, reduce the confirmation requirements — but accept higher false positive rate as the tradeoff.
+**En caso de fallo:** Si el sistema de alarma produce demasiados falsos positivos, elevar los umbrales de los centinelas o requerir más confirmaciones antes de la escalación. Si las amenazas se filtran sin ser detectadas, agregar centinelas en la capa penetrada o bajar los umbrales de detección. Si la propagación de alarma es demasiado lenta, reducir los requisitos de confirmación — pero aceptar una mayor tasa de falsos positivos como compensación.
 
-### Paso 3: Mobilize Role-Based Defenders
+### Paso 3: Movilizar Defensores Basados en Roles
 
-Assign defense roles and mobilization protocols proportional to threat level.
+Asignar roles de defensa y protocolos de movilización proporcionales al nivel de amenaza.
 
-1. Define defender roles:
-   - **Sentinels**: detection specialists (always active, low resource cost)
-   - **Guards**: first responders (idle until mobilized, fast response)
-   - **Soldiers**: heavy defenders (expensive to mobilize, high capability)
-   - **Healers**: damage repair and recovery specialists (see `repair-damage`)
-   - **Messengers**: coordinate defense across colony regions
-2. Map roles to alert levels:
-   - Yellow: sentinels increase monitoring frequency, guards on standby
-   - Orange: guards mobilize to threat location, soldiers on standby
-   - Red: soldiers mobilize, non-essential workers reassigned to defense
-   - Black: all roles to defense, colony activities suspended
-3. Implement proportional response:
-   - Never deploy soldiers for a probe (wasteful and reveals capabilities)
-   - Never rely only on sentinels against an incursion (insufficient response)
-   - Match the response to the threat tier — escalate if the current tier fails, de-escalate when the threat recedes
-4. Role transition protocol:
-   - Workers can become guards (temporary upskilling for emergency)
-   - Guards can become soldiers (sustained threat requires heavier response)
-   - After threat passes, reverse transitions restore normal operations
+1. Definir roles de defensores:
+   - **Centinelas**: especialistas en detección (siempre activos, bajo costo de recursos)
+   - **Guardias**: primeros respondedores (inactivos hasta ser movilizados, respuesta rápida)
+   - **Soldados**: defensores pesados (costosos de movilizar, alta capacidad)
+   - **Sanadores**: especialistas en reparación de daños y recuperación (ver `repair-damage`)
+   - **Mensajeros**: coordinan la defensa entre regiones de la colonia
+2. Mapear roles a niveles de alerta:
+   - Amarillo: centinelas aumentan frecuencia de monitoreo, guardias en espera
+   - Naranja: guardias se movilizan a la ubicación de la amenaza, soldados en espera
+   - Rojo: soldados se movilizan, trabajadores no esenciales reasignados a defensa
+   - Negro: todos los roles a defensa, actividades de la colonia suspendidas
+3. Implementar respuesta proporcional:
+   - Nunca desplegar soldados para un sondeo (desperdicio y revela capacidades)
+   - Nunca depender solo de centinelas contra una incursión (respuesta insuficiente)
+   - Ajustar la respuesta al nivel de amenaza — escalar si el nivel actual falla, desescalar cuando la amenaza retrocede
+4. Protocolo de transición de roles:
+   - Los trabajadores pueden convertirse en guardias (capacitación temporal para emergencia)
+   - Los guardias pueden convertirse en soldados (amenaza sostenida requiere respuesta más pesada)
+   - Después de que pasa la amenaza, las transiciones inversas restauran las operaciones normales
 
-**Esperado:** A defense force that scales with threat severity. Normal operations use minimal defense resources. Under threat, the colony can rapidly mobilize proportional defense without over-reacting or under-reacting.
+**Esperado:** Una fuerza de defensa que escala con la severidad de la amenaza. Las operaciones normales usan recursos de defensa mínimos. Bajo amenaza, la colonia puede movilizar rápidamente defensa proporcional sin sobre-reaccionar ni sub-reaccionar.
 
-**En caso de fallo:** If mobilization is too slow, pre-position guards closer to known threat vectors. If mobilization is too expensive, reduce the permanent guard force and rely more on worker-to-guard transitions. If role confusion occurs during mobilization, simplify to 3 roles (detect, respond, recover) instead of 5.
+**En caso de fallo:** Si la movilización es demasiado lenta, pre-posicionar guardias más cerca de los vectores de amenaza conocidos. Si la movilización es demasiado costosa, reducir la fuerza de guardias permanente y depender más de las transiciones trabajador-a-guardia. Si ocurre confusión de roles durante la movilización, simplificar a 3 roles (detectar, responder, recuperar) en lugar de 5.
 
-### Paso 4: Execute Immune Memory and Adaptation
+### Paso 4: Ejecutar Memoria Inmune y Adaptación
 
-Learn from each threat encounter to improve future defense.
+Aprender de cada encuentro con amenazas para mejorar la defensa futura.
 
-1. After each incident, create a threat signature:
-   - Attack pattern (how the threat was detected)
-   - Attack vector (where it entered)
-   - Effective response (what stopped it)
-   - Failed response (what didn't work)
-2. Store signatures in the colony's immune memory:
-   - Fast-lookup pattern library for sentinels
-   - Updated defender playbooks with known-effective responses
-   - Flagged false-positive patterns to reduce future alarm fatigue
-3. Implement adaptive immunity:
-   - New threat signatures are propagated to all sentinels (colony-wide learning)
-   - Sentinels that detected the threat get priority updates (local learning)
-   - Periodic review culls outdated signatures (threats that no longer apply)
-4. Stress test the immune memory:
-   - Re-simulate past threats periodically to verify defenses still work
-   - Red team exercises introduce novel threats to test adaptation
-   - Measure detection time for known vs. unknown threats
+1. Después de cada incidente, crear una firma de amenaza:
+   - Patrón de ataque (cómo se detectó la amenaza)
+   - Vector de ataque (por dónde entró)
+   - Respuesta efectiva (qué la detuvo)
+   - Respuesta fallida (qué no funcionó)
+2. Almacenar firmas en la memoria inmune de la colonia:
+   - Biblioteca de patrones de búsqueda rápida para centinelas
+   - Manuales de defensores actualizados con respuestas conocidas como efectivas
+   - Patrones de falsos positivos marcados para reducir la fatiga de alarma futura
+3. Implementar inmunidad adaptativa:
+   - Las nuevas firmas de amenaza se propagan a todos los centinelas (aprendizaje de toda la colonia)
+   - Los centinelas que detectaron la amenaza reciben actualizaciones prioritarias (aprendizaje local)
+   - La revisión periódica elimina firmas obsoletas (amenazas que ya no aplican)
+4. Probar la memoria inmune bajo estrés:
+   - Re-simular amenazas pasadas periódicamente para verificar que las defensas aún funcionan
+   - Ejercicios de equipo rojo introducen amenazas novedosas para probar la adaptación
+   - Medir el tiempo de detección para amenazas conocidas vs. desconocidas
 
-**Esperado:** A defense system that gets stronger with each encounter. Known threats are detected faster and responded to more effectively. Novel threats are handled by the graduated alarm system, and their resolution adds to the immune memory.
+**Esperado:** Un sistema de defensa que se fortalece con cada encuentro. Las amenazas conocidas se detectan más rápido y se responde a ellas más efectivamente. Las amenazas novedosas se manejan por el sistema de alarma graduado, y su resolución se agrega a la memoria inmune.
 
-**En caso de fallo:** If immune memory grows too large and slows detection, prioritize signatures by frequency and severity, archiving rare/minor threats. If the defense becomes too specialized against known threats and misses novel ones, maintain a "general patrol" function that doesn't rely on pattern matching — pure anomaly detection as the baseline.
+**En caso de fallo:** Si la memoria inmune crece demasiado y ralentiza la detección, priorizar firmas por frecuencia y severidad, archivando amenazas raras/menores. Si la defensa se especializa demasiado contra amenazas conocidas y no detecta las novedosas, mantener una función de "patrulla general" que no dependa del reconocimiento de patrones — detección pura de anomalías como línea base.
 
-### Paso 5: Coordinate Post-Incident Recovery
+### Paso 5: Coordinar la Recuperación Post-Incidente
 
-Transition from defense mode back to normal operations with damage repair and resilience improvement.
+Transicionar del modo de defensa de vuelta a las operaciones normales con reparación de daños y mejora de resiliencia.
 
-1. Threat elimination verification:
-   - Confirm the threat is neutralized (not just suppressed)
-   - Scan for secondary threats that may have entered during the primary incident
-   - Verify no compromised agents remain active
-2. Damage assessment:
-   - Catalog what was damaged, degraded, or lost
-   - Prioritize repair by criticality (core assets first)
-   - Estimate recovery time and resources needed
-3. Recovery execution:
-   - Deploy healers to damaged areas (see `repair-damage` for detailed recovery)
-   - Restore services in priority order
-   - Maintain elevated sentinel activity during recovery (vulnerable period)
-4. De-escalation protocol:
-   - Step down alert levels gradually (Red → Orange → Yellow → Normal)
-   - Return reassigned workers to their primary roles
-   - Stand down soldiers and return guards to patrol
-   - Post-incident review within 24 hours while memory is fresh
+1. Verificación de eliminación de amenaza:
+   - Confirmar que la amenaza está neutralizada (no solo suprimida)
+   - Escanear amenazas secundarias que puedan haber entrado durante el incidente primario
+   - Verificar que no quedan agentes comprometidos activos
+2. Evaluación de daños:
+   - Catalogar qué fue dañado, degradado o perdido
+   - Priorizar reparación por criticidad (activos centrales primero)
+   - Estimar tiempo de recuperación y recursos necesarios
+3. Ejecución de recuperación:
+   - Desplegar sanadores a las áreas dañadas (ver `repair-damage` para recuperación detallada)
+   - Restaurar servicios en orden de prioridad
+   - Mantener actividad elevada de centinelas durante la recuperación (período vulnerable)
+4. Protocolo de desescalación:
+   - Reducir niveles de alerta gradualmente (Rojo -> Naranja -> Amarillo -> Normal)
+   - Devolver trabajadores reasignados a sus roles primarios
+   - Desmovilizar soldados y devolver guardias a patrullaje
+   - Revisión post-incidente dentro de 24 horas mientras la memoria está fresca
 
-**Esperado:** A smooth transition from defense to recovery to normal operations. Elevated monitoring during recovery catches secondary threats. The post-incident review feeds learnings into immune memory.
+**Esperado:** Una transición suave de defensa a recuperación a operaciones normales. El monitoreo elevado durante la recuperación detecta amenazas secundarias. La revisión post-incidente alimenta los aprendizajes en la memoria inmune.
 
-**En caso de fallo:** If recovery is too slow, pre-build recovery playbooks for the most likely damage scenarios. If secondary threats emerge during recovery, the de-escalation was too aggressive — maintain higher alert levels for longer. If post-incident review is skipped (common under time pressure), schedule it as a non-negotiable calendar event.
+**En caso de fallo:** Si la recuperación es demasiado lenta, pre-construir manuales de recuperación para los escenarios de daño más probables. Si emergen amenazas secundarias durante la recuperación, la desescalación fue demasiado agresiva — mantener niveles de alerta más altos por más tiempo. Si la revisión post-incidente se omite (común bajo presión de tiempo), programarla como un evento de calendario innegociable.
 
 ## Validación
 
-- [ ] Critical assets are identified and prioritized
-- [ ] Threats are classified by type and severity
-- [ ] Defense perimeter has multiple layers with sentinels at each
-- [ ] Alarm signaling has graduated levels with multi-sentinel confirmation
-- [ ] Defender roles are defined with mobilization mapped to alert levels
-- [ ] Proportional response prevents over- and under-reaction
-- [ ] Immune memory captures and applies lessons from each incident
-- [ ] Post-incident recovery protocol restores normal operations safely
+- [ ] Los activos críticos están identificados y priorizados
+- [ ] Las amenazas están clasificadas por tipo y severidad
+- [ ] El perímetro de defensa tiene múltiples capas con centinelas en cada una
+- [ ] La señalización de alarma tiene niveles graduados con confirmación multi-centinela
+- [ ] Los roles de defensores están definidos con movilización mapeada a niveles de alerta
+- [ ] La respuesta proporcional previene sobre-reacción y sub-reacción
+- [ ] La memoria inmune captura y aplica lecciones de cada incidente
+- [ ] El protocolo de recuperación post-incidente restaura las operaciones normales de forma segura
 
 ## Errores Comunes
 
-- **Maginot Line defense**: Over-investing in a single defense layer while leaving others unprotected. Defense must be layered — any single layer can be breached
-- **Alert fatigue**: Too many alarms with too few real threats degrades defender attention. Calibrate sentinels ruthlessly; a missed false positive is cheaper than a missed real threat
-- **Symmetric response**: Responding to every threat with the same intensity wastes resources and reveals your full capabilities. Match response to threat — escalate only when needed
-- **No immune memory**: Defending against the same threat type repeatedly without learning is expensive and fragile. Every incident must update the colony's defense knowledge
-- **Permanent war footing**: Sustained high-alert operations exhaust defenders and degrade normal colony function. De-escalate deliberately when the threat passes
+- **Defensa Línea Maginot**: Sobre-invertir en una sola capa de defensa mientras se dejan otras desprotegidas. La defensa debe ser por capas — cualquier capa individual puede ser vulnerada
+- **Fatiga de alerta**: Demasiadas alarmas con muy pocas amenazas reales degrada la atención de los defensores. Calibrar centinelas despiadadamente; un falso positivo no detectado es más barato que una amenaza real no detectada
+- **Respuesta simétrica**: Responder a cada amenaza con la misma intensidad desperdicia recursos y revela todas tus capacidades. Ajustar la respuesta a la amenaza — escalar solo cuando sea necesario
+- **Sin memoria inmune**: Defenderse contra el mismo tipo de amenaza repetidamente sin aprender es costoso y frágil. Cada incidente debe actualizar el conocimiento de defensa de la colonia
+- **Pie de guerra permanente**: Las operaciones sostenidas en alta alerta agotan a los defensores y degradan el funcionamiento normal de la colonia. Desescalar deliberadamente cuando la amenaza pasa
 
 ## Habilidades Relacionadas
 
-- `coordinate-swarm` — foundational coordination patterns that support alarm signaling and mobilization
-- `build-consensus` — rapid consensus for collective defense decisions under time pressure
-- `scale-colony` — defense systems must scale with colony growth
-- `repair-damage` — morphic skill for regenerative recovery after defense incidents
-- `configure-alerting-rules` — practical alerting configuration that implements alarm signaling patterns
-- `conduct-post-mortem` — structured post-incident analysis for feeding immune memory
+- `coordinate-swarm` — patrones de coordinación fundamentales que soportan la señalización de alarma y la movilización
+- `build-consensus` — consenso rápido para decisiones de defensa colectiva bajo presión de tiempo
+- `scale-colony` — los sistemas de defensa deben escalar con el crecimiento de la colonia
+- `repair-damage` — habilidad mórfica para recuperación regenerativa después de incidentes de defensa
+- `configure-alerting-rules` — configuración práctica de alertas que implementa patrones de señalización de alarma
+- `conduct-post-mortem` — análisis post-incidente estructurado para alimentar la memoria inmune

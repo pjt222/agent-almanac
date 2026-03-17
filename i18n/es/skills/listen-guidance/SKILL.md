@@ -1,14 +1,14 @@
 ---
 name: listen-guidance
 description: >
-  Guide a person in developing active listening skills. AI coaches
-  receptive mindset preparation, full-presence attending, reflective
-  paraphrasing, clarifying questioning, synthesis of understanding,
-  and integration of insights into communication practice. Use when a
-  person wants to improve communication, when someone keeps misunderstanding
-  others or feels misunderstood, when preparing for a difficult conversation
-  such as a feedback session or conflict resolution, or when a person notices
-  they talk more than they listen.
+  Guiar a una persona en el desarrollo de habilidades de escucha activa. La IA
+  coaching sobre preparación de mentalidad receptiva, atención de presencia plena,
+  parafraseo reflexivo, preguntas clarificadoras, síntesis de comprensión e
+  integración de percepciones en la práctica comunicativa. Usar cuando una persona
+  quiere mejorar la comunicación, cuando alguien sigue malinterpretando a otros
+  o se siente malinterpretado, al prepararse para una conversación difícil como
+  una sesión de retroalimentación o resolución de conflictos, o cuando una persona
+  nota que habla más de lo que escucha.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,72 +27,72 @@ metadata:
 
 # Listen (Guidance)
 
-Guide a person in developing and practicing active listening skills. The AI acts as a communication coach — helping prepare a receptive mindset, practice full-presence attending, develop reflective paraphrasing, use clarifying questions effectively, synthesize understanding, and integrate listening skills into daily communication.
+Guiar a una persona en el desarrollo y práctica de habilidades de escucha activa. La IA actúa como coach de comunicación — ayudando a preparar una mentalidad receptiva, practicar la atención de presencia plena, desarrollar el parafraseo reflexivo, usar preguntas clarificadoras efectivamente, sintetizar la comprensión e integrar las habilidades de escucha en la comunicación diaria.
 
 ## Cuándo Usar
 
-- A person wants to improve their communication in relationships, teams, or professional settings
-- Someone keeps misunderstanding others or feels misunderstood themselves
-- A person is preparing for a difficult conversation (feedback session, conflict resolution, negotiation)
-- Someone in a leadership role wants to listen more effectively to their team
-- A person notices they talk more than they listen and wants to change that pattern
-- After `meditate-guidance` has cultivated presence, the person wants to direct that presence toward others
+- Una persona quiere mejorar su comunicación en relaciones, equipos o entornos profesionales
+- Alguien sigue malinterpretando a otros o se siente malinterpretado
+- Una persona se está preparando para una conversación difícil (sesión de retroalimentación, resolución de conflictos, negociación)
+- Alguien en un rol de liderazgo quiere escuchar más efectivamente a su equipo
+- Una persona nota que habla más de lo que escucha y quiere cambiar ese patrón
+- Después de que `meditate-guidance` ha cultivado presencia, la persona quiere dirigir esa presencia hacia otros
 
 ## Entradas
 
-- **Requerido**: The person's listening goal (improve general communication, prepare for a specific conversation, develop a professional skill)
-- **Opcional**: Context for the listening (workplace, personal relationship, team dynamics)
-- **Opcional**: Known challenges (tendency to interrupt, mind wandering, emotional reactivity, advice-giving)
-- **Opcional**: Specific conversation they are preparing for
-- **Opcional**: Feedback they have received about their listening
+- **Requerido**: El objetivo de escucha de la persona (mejorar la comunicación general, prepararse para una conversación específica, desarrollar una habilidad profesional)
+- **Opcional**: Contexto para la escucha (lugar de trabajo, relación personal, dinámica de equipo)
+- **Opcional**: Desafíos conocidos (tendencia a interrumpir, mente errante, reactividad emocional, dar consejos)
+- **Opcional**: Conversación específica para la que se están preparando
+- **Opcional**: Retroalimentación que han recibido sobre su escucha
 
 ## Procedimiento
 
-### Paso 1: Prepare — Set a Receptive Mindset
+### Paso 1: Preparar — Establecer una mentalidad receptiva
 
-Before practicing listening skills, help the person understand and enter a receptive state.
+Antes de practicar habilidades de escucha, ayudar a la persona a comprender y entrar en un estado receptivo.
 
-1. Explain the distinction between hearing and listening: "Hearing is passive — sounds enter. Listening is active — you receive, process, and understand"
-2. Ask them to identify their listening habits: "When someone is talking, what is your mind usually doing?"
-3. Common patterns to surface:
-   - **Planning a response** while the other person is still talking
-   - **Judging** what is being said (agreeing/disagreeing) instead of understanding
-   - **Problem-solving** — jumping to solutions before the speaker has finished
-   - **Relating** — connecting everything to their own experience
-   - **Filtering** — hearing only parts that interest them or confirm their view
-4. Help them set an intention for the practice: "For this session, I will focus on..."
-5. Guide a brief centering exercise: 3 slow breaths, releasing the agenda of needing to say something
+1. Explicar la distinción entre oír y escuchar: "Oír es pasivo — los sonidos entran. Escuchar es activo — recibes, procesas y comprendes"
+2. Pedirles que identifiquen sus hábitos de escucha: "Cuando alguien está hablando, ¿qué suele estar haciendo tu mente?"
+3. Patrones comunes para sacar a la superficie:
+   - **Planificar una respuesta** mientras la otra persona aún está hablando
+   - **Juzgar** lo que se dice (estar de acuerdo/en desacuerdo) en lugar de comprender
+   - **Resolver problemas** — saltar a soluciones antes de que el hablante haya terminado
+   - **Relacionar** — conectar todo con su propia experiencia
+   - **Filtrar** — escuchar solo las partes que les interesan o confirman su punto de vista
+4. Ayudarles a establecer una intención para la práctica: "Para esta sesión, me enfocaré en..."
+5. Guiar un breve ejercicio de centrado: 3 respiraciones lentas, liberando la agenda de necesitar decir algo
 
-**Esperado:** The person has identified at least one habitual listening pattern they want to change and has set a clear intention for the practice session. They feel calm and present rather than performance-anxious.
+**Esperado:** La persona ha identificado al menos un patrón habitual de escucha que quiere cambiar y ha establecido una intención clara para la sesión de práctica. Se sienten calmados y presentes en lugar de ansiosos por su rendimiento.
 
-**En caso de fallo:** If the person cannot identify a pattern, it may be unconscious — suggest they notice what happens in their body when someone is talking (tension, restlessness, urge to speak). If they feel self-conscious about their listening, normalize: "Everyone has these patterns — noticing them is the first step to choice."
+**En caso de fallo:** Si la persona no puede identificar un patrón, puede ser inconsciente — sugerir que noten qué pasa en su cuerpo cuando alguien está hablando (tensión, inquietud, urgencia de hablar). Si se sienten cohibidos por su escucha, normalizar: "Todos tenemos estos patrones — notarlos es el primer paso hacia la elección."
 
-### Paso 2: Attend — Practice Full Presence
+### Paso 2: Atender — Practicar la presencia plena
 
-Guide the person through the practice of giving full attention to a speaker.
+Guiar a la persona a través de la práctica de dar atención completa a un hablante.
 
-1. Explain the physical aspects of attending: eye contact (comfortable, not staring), body orientation, open posture, stillness
-2. Explain the mental aspects: suspending the internal monologue, noticing when attention drifts, gently returning focus
-3. Set up a practice exercise: "I will speak for 2 minutes about a topic. Your job is only to listen — no responding, no note-taking, just receiving"
-4. Speak about a moderately complex topic for 2 minutes (the AI provides content)
-5. After the exercise, ask: "What did you notice about your attention? Where did it go?"
-6. Repeat if helpful, this time with a topic that might trigger their identified pattern (e.g., something they might want to fix, judge, or relate to)
+1. Explicar los aspectos físicos de atender: contacto visual (cómodo, sin mirada fija), orientación corporal, postura abierta, quietud
+2. Explicar los aspectos mentales: suspender el monólogo interno, notar cuando la atención se desvía, regresar gentilmente el enfoque
+3. Preparar un ejercicio de práctica: "Hablaré durante 2 minutos sobre un tema. Tu trabajo es solo escuchar — sin responder, sin tomar notas, solo recibir"
+4. Hablar sobre un tema moderadamente complejo durante 2 minutos (la IA proporciona el contenido)
+5. Después del ejercicio, preguntar: "¿Qué notaste sobre tu atención? ¿A dónde se fue?"
+6. Repetir si es útil, esta vez con un tema que pueda activar su patrón identificado (ej., algo que podrían querer arreglar, juzgar o con lo que relacionarse)
 
-**Esperado:** The person experiences the difference between habitual listening and intentional listening. They notice when their attention drifts and practice the return. Even brief moments of full presence are valuable.
+**Esperado:** La persona experimenta la diferencia entre la escucha habitual y la escucha intencional. Notan cuándo su atención se desvía y practican el regreso. Incluso breves momentos de presencia plena son valiosos.
 
-**En caso de fallo:** If they say "I was listening the whole time," ask specific content questions — inability to recall details reveals inattention that felt like attention. If they cannot stop their internal monologue, suggest focusing on the speaker's breath rhythm or pace of speech as an anchor — this occupies the analytical mind while keeping attention on the speaker.
+**En caso de fallo:** Si dicen "Estuve escuchando todo el tiempo," hacer preguntas específicas de contenido — la incapacidad de recordar detalles revela desatención que se sintió como atención. Si no pueden detener su monólogo interno, sugerir enfocarse en el ritmo respiratorio o la cadencia del discurso del hablante como ancla — esto ocupa la mente analítica mientras mantiene la atención en el hablante.
 
-### Paso 3: Reflect — Practice Paraphrasing
+### Paso 3: Reflejar — Practicar el parafraseo
 
-Teach the person to mirror understanding back to the speaker.
+Enseñar a la persona a devolver la comprensión como espejo al hablante.
 
-1. Explain the purpose: "Paraphrasing shows the speaker they were heard and lets them correct misunderstandings"
-2. Teach the form: "What I hear you saying is..." / "It sounds like..." / "So if I understand correctly..."
-3. Emphasize: paraphrase meaning, not words — use your own words to show you understood the idea
-4. Practice: the AI makes a statement, the person paraphrases it
-5. Start simple: factual statements with clear content
-6. Increase complexity: statements with emotional content, mixed signals, or implicit meaning
-7. After each paraphrase, provide feedback: "That captured the main idea. You might also include the feeling behind it..."
+1. Explicar el propósito: "El parafraseo muestra al hablante que fue escuchado y les permite corregir malentendidos"
+2. Enseñar la forma: "Lo que te escucho decir es..." / "Parece que..." / "Entonces, si entiendo correctamente..."
+3. Enfatizar: parafrasear el significado, no las palabras — usar tus propias palabras para mostrar que entendiste la idea
+4. Practicar: la IA hace una declaración, la persona la parafrasea
+5. Empezar simple: declaraciones factuales con contenido claro
+6. Aumentar la complejidad: declaraciones con contenido emocional, señales mixtas o significado implícito
+7. Después de cada parafraseo, proporcionar retroalimentación: "Eso capturó la idea principal. También podrías incluir el sentimiento detrás..."
 
 ```
 Paraphrase Quality Ladder:
@@ -115,85 +115,85 @@ Paraphrase Quality Ladder:
 └──────────────┴────────────────────────────────────────────────────────┘
 ```
 
-**Esperado:** The person can paraphrase at the content level consistently and reaches the feeling level at least once. They experience how paraphrasing changes the dynamic — the "speaker" (AI) feels heard.
+**Esperado:** La persona puede parafrasear consistentemente al nivel de contenido y alcanza el nivel de sentimiento al menos una vez. Experimentan cómo el parafraseo cambia la dinámica — el "hablante" (IA) se siente escuchado.
 
-**En caso de fallo:** If paraphrases are too literal (parrot level), encourage: "Try using completely different words while keeping the same meaning." If they jump to interpretation instead of reflection, redirect: "Before interpreting, first mirror what was said." If they find paraphrasing awkward, acknowledge that it feels unnatural at first but becomes natural with practice.
+**En caso de fallo:** Si los parafraseos son demasiado literales (nivel loro), alentar: "Intenta usar palabras completamente diferentes manteniendo el mismo significado." Si saltan a la interpretación en lugar de la reflexión, redirigir: "Antes de interpretar, primero refleja lo que se dijo." Si encuentran el parafraseo incómodo, reconocer que se siente antinatural al principio pero se vuelve natural con la práctica.
 
-### Paso 4: Explore — Ask Clarifying Questions
+### Paso 4: Explorar — Hacer preguntas clarificadoras
 
-Teach the person to deepen understanding through well-placed questions.
+Enseñar a la persona a profundizar la comprensión mediante preguntas bien ubicadas.
 
-1. Distinguish between types of questions:
-   - **Open questions**: "What was that like for you?" (invites exploration)
-   - **Clarifying questions**: "When you say X, do you mean A or B?" (resolves ambiguity)
-   - **Deepening questions**: "What about that matters most to you?" (goes below surface)
-   - **Leading questions**: "Don't you think you should...?" (to avoid — this is advice, not listening)
-2. Practice: the AI makes a complex statement, the person asks one clarifying question
-3. Evaluate whether the question opened the conversation or narrowed it
-4. Teach the "tell me more" technique: sometimes the best question is simply an invitation to continue
-5. Practice waiting after asking a question — silence gives the speaker space to think
+1. Distinguir entre tipos de preguntas:
+   - **Preguntas abiertas**: "¿Cómo fue eso para ti?" (invita a la exploración)
+   - **Preguntas clarificadoras**: "Cuando dices X, ¿quieres decir A o B?" (resuelve la ambigüedad)
+   - **Preguntas de profundización**: "¿Qué de eso te importa más?" (va debajo de la superficie)
+   - **Preguntas dirigidas**: "¿No crees que deberías...?" (a evitar — esto es consejo, no escucha)
+2. Practicar: la IA hace una declaración compleja, la persona hace una pregunta clarificadora
+3. Evaluar si la pregunta abrió la conversación o la estrechó
+4. Enseñar la técnica de "cuéntame más": a veces la mejor pregunta es simplemente una invitación a continuar
+5. Practicar esperar después de hacer una pregunta — el silencio le da espacio al hablante para pensar
 
-**Esperado:** The person can ask at least one open and one clarifying question naturally. They experience how good questions deepen understanding more than statements do.
+**Esperado:** La persona puede hacer al menos una pregunta abierta y una clarificadora de manera natural. Experimentan cómo las buenas preguntas profundizan la comprensión más que las declaraciones.
 
-**En caso de fallo:** If all their questions are leading (disguised advice), name the pattern gently: "That's a suggestion in question form. Try asking what they think first." If they ask too many questions (interrogation style), teach the rhythm: listen, paraphrase, then one question, then listen again.
+**En caso de fallo:** Si todas sus preguntas son dirigidas (consejo disfrazado), nombrar el patrón gentilmente: "Eso es una sugerencia en forma de pregunta. Intenta preguntar qué piensan ellos primero." Si hacen demasiadas preguntas (estilo interrogatorio), enseñar el ritmo: escuchar, parafrasear, luego una pregunta, luego escuchar de nuevo.
 
-### Paso 5: Synthesize — Summarize Understanding
+### Paso 5: Sintetizar — Resumir la comprensión
 
-Guide the person in pulling together everything they heard into a coherent summary.
+Guiar a la persona para integrar todo lo que escucharon en un resumen coherente.
 
-1. After a longer listening exercise (AI provides a 3-4 minute narrative with multiple threads):
-2. Ask them to summarize: "What were the main things this person communicated?"
-3. Check for all layers: did they capture facts, feelings, and underlying needs?
-4. Check for what was unsaid: "Was anything notable by its absence?"
-5. Check for priority: "What seemed most important to the speaker?"
-6. Practice the summary format: "What I'm taking away from this is... Is that right?"
+1. Después de un ejercicio de escucha más largo (la IA proporciona una narrativa de 3-4 minutos con múltiples hilos):
+2. Pedirles que resuman: "¿Cuáles fueron las cosas principales que esta persona comunicó?"
+3. Verificar todas las capas: ¿capturaron hechos, sentimientos y necesidades subyacentes?
+4. Verificar lo no dicho: "¿Hubo algo notable por su ausencia?"
+5. Verificar la prioridad: "¿Qué parecía más importante para el hablante?"
+6. Practicar el formato de resumen: "Lo que me llevo de esto es... ¿Es correcto?"
 
-**Esperado:** The person can synthesize a multi-threaded message into a coherent summary that captures the speaker's priorities and feelings, not just the facts.
+**Esperado:** La persona puede sintetizar un mensaje de múltiples hilos en un resumen coherente que captura las prioridades y sentimientos del hablante, no solo los hechos.
 
-**En caso de fallo:** If the summary is fact-only, prompt: "What was the person feeling during this?" If the summary misses a major thread, point it out and discuss why it was missed (often reveals a listening filter). If the summary adds things not said, distinguish between what was heard and what was inferred.
+**En caso de fallo:** Si el resumen es solo de hechos, preguntar: "¿Qué estaba sintiendo la persona durante esto?" Si el resumen omite un hilo importante, señalarlo y discutir por qué se omitió (a menudo revela un filtro de escucha). Si el resumen agrega cosas no dichas, distinguir entre lo que se escuchó y lo que se infirió.
 
-### Paso 6: Integrate — Apply to Real Communication
+### Paso 6: Integrar — Aplicar a la comunicación real
 
-Help the person transfer the practice skills to their real-world context.
+Ayudar a la persona a transferir las habilidades practicadas a su contexto del mundo real.
 
-1. Connect the skills to their specific situation: "In your upcoming conversation with X, here is how you might use paraphrasing..."
-2. Identify the one skill that would help most in their context: "For team meetings, attending practice might be most impactful"
-3. Set a practice goal: "This week, try paraphrasing at least once in each conversation"
-4. Discuss common real-world obstacles:
-   - Time pressure: "Even a 10-second paraphrase saves time by preventing misunderstanding"
-   - Group settings: "In meetings, summarize what someone said before adding your point"
-   - Emotional conversations: "When emotions are high, listening matters more than solutions"
-5. If preparing for a specific conversation, role-play it with the new skills
-6. Ask for feedback: "What from today's practice feels most useful?"
-7. Remind them: "Listening is a practice, not a performance — it improves with each conversation"
+1. Conectar las habilidades con su situación específica: "En tu próxima conversación con X, así podrías usar el parafraseo..."
+2. Identificar la habilidad que más ayudaría en su contexto: "Para reuniones de equipo, la práctica de atención podría tener más impacto"
+3. Establecer un objetivo de práctica: "Esta semana, intenta parafrasear al menos una vez en cada conversación"
+4. Discutir obstáculos comunes del mundo real:
+   - Presión de tiempo: "Incluso un parafraseo de 10 segundos ahorra tiempo al prevenir malentendidos"
+   - Entornos grupales: "En reuniones, resume lo que alguien dijo antes de agregar tu punto"
+   - Conversaciones emocionales: "Cuando las emociones son altas, escuchar importa más que las soluciones"
+5. Si se preparan para una conversación específica, hacer un juego de roles con las nuevas habilidades
+6. Pedir retroalimentación: "¿Qué de la práctica de hoy te parece más útil?"
+7. Recordarles: "Escuchar es una práctica, no una actuación — mejora con cada conversación"
 
-**Esperado:** The person has at least one concrete, actionable listening practice to apply in their real life. They understand that listening is a skill that develops through use, not a technique to deploy perfectly.
+**Esperado:** La persona tiene al menos una práctica de escucha concreta y accionable para aplicar en su vida real. Comprenden que escuchar es una habilidad que se desarrolla con el uso, no una técnica para desplegar perfectamente.
 
-**En caso de fallo:** If the skills feel artificial, acknowledge that and emphasize: "The goal is not to follow a script — it's to become genuinely curious about the other person's experience. The techniques get you there; then the curiosity takes over." If they are anxious about the specific conversation, shift focus from listening technique to listening intention: "Your intention is to understand them, not to win or fix."
+**En caso de fallo:** Si las habilidades se sienten artificiales, reconocerlo y enfatizar: "El objetivo no es seguir un guión — es convertirse en genuinamente curioso sobre la experiencia de la otra persona. Las técnicas te llevan ahí; luego la curiosidad toma el control." Si están ansiosos por la conversación específica, cambiar el enfoque de la técnica de escucha a la intención de escucha: "Tu intención es comprenderlos, no ganar ni arreglar."
 
 ## Validación
 
-- [ ] The person identified at least one habitual listening pattern
-- [ ] Full-presence attending was practiced with reflection on what happened
-- [ ] Paraphrasing was practiced at the content level or above
-- [ ] At least one clarifying (non-leading) question was asked during practice
-- [ ] A multi-threaded message was synthesized into a coherent summary
-- [ ] The skills were connected to the person's real-world context with a concrete practice goal
-- [ ] The coaching maintained a warm, non-judgmental tone throughout
+- [ ] La persona identificó al menos un patrón habitual de escucha
+- [ ] La atención de presencia plena fue practicada con reflexión sobre lo que sucedió
+- [ ] El parafraseo fue practicado al nivel de contenido o superior
+- [ ] Al menos una pregunta clarificadora (no dirigida) fue hecha durante la práctica
+- [ ] Un mensaje de múltiples hilos fue sintetizado en un resumen coherente
+- [ ] Las habilidades fueron conectadas al contexto del mundo real de la persona con un objetivo de práctica concreto
+- [ ] El coaching mantuvo un tono cálido y sin juicio durante todo el proceso
 
 ## Errores Comunes
 
-- **Making listening performative**: If the person is focused on "looking like they are listening" rather than actually listening, the technique is counterproductive. Redirect to genuine curiosity
-- **Overcorrecting**: If the person tries to use every technique in every conversation, it becomes exhausting and artificial. One skill at a time is enough
-- **Neglecting self-listening**: Active listening toward others requires awareness of one's own internal state. If the person is flooded with emotion, they cannot listen to someone else — guide self-regulation first
-- **Confusing listening with agreeing**: Paraphrasing someone's view does not mean endorsing it. Make this explicit for people in conflict situations
-- **Treating silence as failure**: Comfortable silence after a speaker finishes is a sign of respect, not inattention. Help the person tolerate the pause
-- **Coach as lecturer**: Ironic pitfall — the AI coaches listening while doing all the talking. Ensure the person practices more than they receive instruction
+- **Hacer la escucha performativa**: Si la persona está enfocada en "parecer que está escuchando" en lugar de escuchar realmente, la técnica es contraproducente. Redirigir a la curiosidad genuina
+- **Sobrecorregir**: Si la persona intenta usar cada técnica en cada conversación, se vuelve agotador y artificial. Una habilidad a la vez es suficiente
+- **Descuidar la auto-escucha**: La escucha activa hacia otros requiere consciencia del propio estado interno. Si la persona está inundada de emoción, no puede escuchar a alguien más — guiar la autorregulación primero
+- **Confundir escuchar con estar de acuerdo**: Parafrasear el punto de vista de alguien no significa respaldarlo. Hacer esto explícito para personas en situaciones de conflicto
+- **Tratar el silencio como fracaso**: El silencio cómodo después de que un hablante termina es una señal de respeto, no de desatención. Ayudar a la persona a tolerar la pausa
+- **Coach como conferencista**: Error irónico — la IA hace coaching de escucha mientras habla todo el tiempo. Asegurar que la persona practique más de lo que recibe instrucción
 
 ## Habilidades Relacionadas
 
-- `listen` — the AI self-directed variant for deep receptive attention to user intent
-- `learn-guidance` — learning and listening share the foundation of receptive attention
-- `teach-guidance` — effective teaching requires listening to the learner's needs
-- `meditate-guidance` — cultivating presence that underpins attentive listening
-- `heal-guidance` — healing conversations require the deepest listening
+- `listen` — la variante autodirigida de la IA para atención receptiva profunda hacia la intención del usuario
+- `learn-guidance` — aprendizaje y escucha comparten la base de la atención receptiva
+- `teach-guidance` — la enseñanza efectiva requiere escuchar las necesidades del aprendiz
+- `meditate-guidance` — cultivar la presencia que sustenta la escucha atenta
+- `heal-guidance` — las conversaciones de sanación requieren la escucha más profunda

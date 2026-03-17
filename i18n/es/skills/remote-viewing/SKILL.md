@@ -1,15 +1,16 @@
 ---
 name: remote-viewing
 description: >
-  AI intuitive exploration for approaching unknown codebases, problems,
-  or systems without preconceptions. Adapts the Coordinate Remote Viewing
-  protocol to AI investigation: cooldown (clear assumptions), staged data
-  gathering (raw signals → dimensional → analytical), AOL management
-  (separating observations from premature labels), and structured review.
-  Use when investigating an unfamiliar codebase with unknown architecture,
-  debugging a problem where premature hypotheses could mislead, exploring a
-  domain with limited context, or when previous attempts have been led astray
-  by assumptions and "beginner's mind" would be more productive.
+  Exploración intuitiva de IA para abordar bases de código, problemas o
+  sistemas desconocidos sin preconcepciones. Adapta el protocolo de Visión
+  Remota por Coordenadas a la investigación de IA: enfriamiento (limpiar
+  suposiciones), recopilación de datos por etapas (señales crudas →
+  dimensionales → analíticas), gestión de AOL (separar observaciones de
+  etiquetas prematuras), y revisión estructurada. Usar al investigar una
+  base de código desconocida con arquitectura no conocida, al depurar un
+  problema donde hipótesis prematuras podrían desviar, al explorar un dominio
+  con contexto limitado, o cuando intentos previos han sido desviados por
+  suposiciones y la "mente de principiante" sería más productiva.
 license: MIT
 allowed-tools: Read Glob Grep
 metadata:
@@ -28,64 +29,64 @@ metadata:
 
 # Remote View
 
-Approach an unknown codebase, problem, or system using the Coordinate Remote Viewing protocol adapted for AI investigation — gathering raw observations before forming conclusions, managing premature labeling (Analytical Overlay), and building understanding through staged data collection.
+Abordar una base de código, problema o sistema desconocido usando el protocolo de Visión Remota por Coordenadas adaptado para investigación de IA — recopilando observaciones crudas antes de formar conclusiones, gestionando el etiquetado prematuro (Superposición Analítica), y construyendo comprensión a través de recopilación de datos por etapas.
 
 ## Cuándo Usar
 
-- Investigating an unfamiliar codebase where the architecture is unknown
-- Debugging a problem where the root cause is not obvious and premature hypotheses could mislead
-- Exploring a domain or technology you have limited context about
-- When previous investigation attempts have been led astray by assumptions
-- Approaching any problem where "beginner's mind" would be more productive than pattern matching
+- Investigar una base de código desconocida donde la arquitectura es desconocida
+- Depurar un problema donde la causa raíz no es obvia y hipótesis prematuras podrían desviar
+- Explorar un dominio o tecnología sobre la que se tiene contexto limitado
+- Cuando intentos de investigación previos han sido desviados por suposiciones
+- Abordar cualquier problema donde la "mente de principiante" sería más productiva que la coincidencia de patrones
 
 ## Entradas
 
-- **Requerido**: A target to investigate (codebase path, problem description, system to understand)
-- **Requerido**: Commitment to blind approach — resist forming conclusions until data collection is complete
-- **Opcional**: Specific questions to answer about the target (save for Stage V)
-- **Opcional**: Prior meditation session for assumption-clearing (see `meditate`)
+- **Requerido**: Un objetivo a investigar (ruta de base de código, descripción del problema, sistema a comprender)
+- **Requerido**: Compromiso con enfoque ciego — resistir formar conclusiones hasta que la recopilación de datos esté completa
+- **Opcional**: Preguntas específicas a responder sobre el objetivo (reservar para Etapa V)
+- **Opcional**: Sesión de meditación previa para limpiar suposiciones (ver `meditate`)
 
 ## Procedimiento
 
-### Paso 1: Cooldown — Clear Assumptions
+### Paso 1: Enfriamiento — Limpiar Suposiciones
 
-Transition from assumption-heavy mode into receptive observation. This step is non-negotiable.
+Transicionar del modo cargado de suposiciones a observación receptiva. Este paso no es negociable.
 
-1. Identify all preconceptions about the target:
-   - "This is probably a React app" — declare it
-   - "The bug is likely in the database layer" — declare it
-   - "This follows MVC architecture" — declare it
-2. Write each preconception down explicitly (in your reasoning or output)
-3. For each one, note: "This may or may not be true. I will verify, not assume."
-4. Release the need to identify the target quickly — the goal is accurate description, not fast labeling
-5. When you notice the analytical mind reaching for a framework or label, pause and redirect to raw observation
+1. Identificar todas las preconcepciones sobre el objetivo:
+   - "Esto probablemente es una app de React" — declararlo
+   - "El error probablemente está en la capa de base de datos" — declararlo
+   - "Esto sigue arquitectura MVC" — declararlo
+2. Escribir cada preconcepción explícitamente (en tu razonamiento o salida)
+3. Para cada una, anotar: "Esto puede o no ser verdad. Lo verificaré, no lo asumiré."
+4. Liberar la necesidad de identificar el objetivo rápidamente — la meta es descripción precisa, no etiquetado rápido
+5. Cuando notes que la mente analítica busca un framework o etiqueta, pausar y redirigir a observación cruda
 
-**Esperado:** A list of declared preconceptions and a conscious shift from "I think I know what this is" to "I will observe what this actually is." Alert and receptive, not jumping to conclusions.
+**Esperado:** Una lista de preconcepciones declaradas y un cambio consciente de "Creo que sé qué es esto" a "Observaré qué es esto realmente." Alerta y receptivo, sin saltar a conclusiones.
 
-**En caso de fallo:** If assumptions keep reasserting ("but it really IS a React app..."), extend the cooldown. Write the assumption on a "parking lot" list and continue. Do not begin data gathering while actively attached to a specific hypothesis — it will color everything you observe.
+**En caso de fallo:** Si las suposiciones siguen reafirmándose ("pero realmente ES una app de React..."), extender el enfriamiento. Escribir la suposición en una lista de "estacionamiento" y continuar. No comenzar la recopilación de datos mientras se esté activamente apegado a una hipótesis específica — coloreará todo lo que observes.
 
-### Paso 2: Ideogram — First Contact (Stage I)
+### Paso 2: Ideograma — Primer Contacto (Etapa I)
 
-Make initial contact with the target through the most minimal observation possible.
+Hacer contacto inicial con el objetivo a través de la observación más mínima posible.
 
-1. Use `Glob` to see only the top-level structure (e.g., `*` or `path/*`) — do not read any files yet
-2. Note your immediate, unfiltered impressions: file count, naming patterns, presence/absence of obvious markers
-3. Record raw observations using simple descriptors:
-   - "many small files" not "microservice architecture"
-   - "deeply nested directories" not "enterprise Java"
-   - "single large file" not "monolith"
-4. Decode the initial impression into two components:
-   - **A** (activity): Is this active or dormant? Growing or stable? Simple or complex?
-   - **B** (feeling): Does this feel organized or chaotic? Dense or sparse? Familiar or alien?
-5. Write the A and B assessments — these are your first data points
+1. Usar `Glob` para ver solo la estructura de nivel superior (ej., `*` o `path/*`) — no leer ningún archivo todavía
+2. Anotar las impresiones inmediatas y sin filtrar: cantidad de archivos, patrones de nomenclatura, presencia/ausencia de marcadores obvios
+3. Registrar observaciones crudas usando descriptores simples:
+   - "muchos archivos pequeños" no "arquitectura de microservicios"
+   - "directorios profundamente anidados" no "Java empresarial"
+   - "un solo archivo grande" no "monolito"
+4. Decodificar la impresión inicial en dos componentes:
+   - **A** (actividad): ¿Esto está activo o dormido? ¿Creciendo o estable? ¿Simple o complejo?
+   - **B** (sensación): ¿Esto se siente organizado o caótico? ¿Denso o disperso? ¿Familiar o ajeno?
+5. Escribir las evaluaciones A y B — estos son tus primeros puntos de datos
 
-**Esperado:** A handful of raw, low-level observations about the target's surface characteristics. No names, no labels, no architectural patterns — just shapes, sizes, and textures.
+**Esperado:** Un puñado de observaciones crudas de bajo nivel sobre las características superficiales del objetivo. Sin nombres, sin etiquetas, sin patrones arquitectónicos — solo formas, tamaños y texturas.
 
-**En caso de fallo:** If you immediately categorize the project ("oh, this is a Next.js app"), declare it as AOL (Step 6), extract the raw descriptors underneath the label ("JavaScript files, nested pages directory, package.json present"), and continue with those raw observations.
+**En caso de fallo:** Si inmediatamente categorizas el proyecto ("oh, esto es una app de Next.js"), declararlo como AOL (Paso 6), extraer los descriptores crudos debajo de la etiqueta ("archivos JavaScript, directorio pages anidado, package.json presente"), y continuar con esas observaciones crudas.
 
-### Paso 3: Sensory Impressions — Raw Data (Stage II)
+### Paso 3: Impresiones Sensoriales — Datos Crudos (Etapa II)
 
-Systematically collect raw data about the target without interpretation.
+Recopilar sistemáticamente datos crudos sobre el objetivo sin interpretación.
 
 ```
 Stage II Data Channels for Codebase Investigation:
@@ -112,53 +113,53 @@ Stage II Data Channels for Codebase Investigation:
 └──────────────────┴────────────────────────────────────────────────────┘
 ```
 
-1. Probe each channel using `Glob`, `Grep`, and light `Read` operations
-2. Record one observation per channel — first impression, do not deep-dive
-3. Use descriptive terms, not labels: "73 .ts files" not "TypeScript project"
-4. Circle (mark) any observation that feels particularly significant
-5. If a channel produces nothing notable, record "nothing observed" and move on
-6. Aim for 10-20 data points across all channels
+1. Sondear cada canal usando operaciones de `Glob`, `Grep`, y `Read` ligeras
+2. Registrar una observación por canal — primera impresión, no profundizar
+3. Usar términos descriptivos, no etiquetas: "73 archivos .ts" no "proyecto TypeScript"
+4. Marcar cualquier observación que se sienta particularmente significativa
+5. Si un canal no produce nada notable, registrar "nada observado" y seguir
+6. Apuntar a 10-20 puntos de datos a través de todos los canales
 
-**Esperado:** A list of raw observations that feel discovered rather than assumed. Some will be significant, some noise. The data should be low-level descriptions, not high-level categorizations.
+**Esperado:** Una lista de observaciones crudas que se sienten descubiertas en lugar de asumidas. Algunas serán significativas, otras ruido. Los datos deben ser descripciones de bajo nivel, no categorizaciones de alto nivel.
 
-**En caso de fallo:** If every observation turns into a categorization, you have slipped into analysis. Stop, return to the ideogram step, and re-contact the target with fresh eyes. If one channel dominates (all file observations, nothing about history), deliberately shift to underused channels.
+**En caso de fallo:** Si cada observación se convierte en una categorización, has caído en el análisis. Parar, volver al paso del ideograma, y reconectar con el objetivo con ojos frescos. Si un canal domina (todas observaciones de archivos, nada sobre historia), cambiar deliberadamente a canales infrautilizados.
 
-### Paso 4: Dimensional Data — Structure (Stage III)
+### Paso 4: Datos Dimensionales — Estructura (Etapa III)
 
-Move from raw observations to spatial and structural understanding.
+Pasar de observaciones crudas a comprensión espacial y estructural.
 
-1. Begin mapping the target's architecture without labeling it:
-   - What connects to what? (imports, references, config pointers)
-   - What are the major "areas" and how do they relate?
-   - What is the hierarchy — flat, nested, or mixed?
-2. Read a few key files lightly — entry points, config files, README
-3. Note relationships: "directory A imports from directory B," "config file references paths in C"
-4. Sketch the spatial layout: how does information flow through the system?
-5. Record Aesthetic Impact (AI) — how does this codebase feel? Well-maintained? Rushed? Experimental?
+1. Comenzar a mapear la arquitectura del objetivo sin etiquetarla:
+   - ¿Qué se conecta con qué? (importaciones, referencias, punteros de configuración)
+   - ¿Cuáles son las "áreas" principales y cómo se relacionan?
+   - ¿Cuál es la jerarquía — plana, anidada, o mixta?
+2. Leer ligeramente algunos archivos clave — puntos de entrada, archivos de configuración, README
+3. Anotar relaciones: "directorio A importa del directorio B," "archivo de configuración referencia rutas en C"
+4. Bosquejar la disposición espacial: ¿cómo fluye la información a través del sistema?
+5. Registrar Impacto Estético (AI) — ¿cómo se siente esta base de código? ¿Bien mantenida? ¿Apresurada? ¿Experimental?
 
-**Esperado:** A rough structural map with relationship annotations. The target's general scope (large/small, simple/complex, monolithic/modular) becomes clearer. The "feeling" of the codebase is captured.
+**Esperado:** Un mapa estructural aproximado con anotaciones de relaciones. El alcance general del objetivo (grande/pequeño, simple/complejo, monolítico/modular) se vuelve más claro. La "sensación" de la base de código está capturada.
 
-**En caso de fallo:** If the map feels like pure guesswork, simplify: note only the connections you can verify (actual import statements, actual config references). If no structural patterns emerge, return to Stage II and collect more raw data — dimensional understanding requires a foundation of observations.
+**En caso de fallo:** Si el mapa se siente como pura suposición, simplificar: anotar solo las conexiones que puedas verificar (declaraciones de importación reales, referencias de configuración reales). Si no emergen patrones estructurales, volver a la Etapa II y recopilar más datos crudos — la comprensión dimensional requiere una base de observaciones.
 
-### Paso 5: Interrogation — Directed Questions (Stage V)
+### Paso 5: Interrogación — Preguntas Dirigidas (Etapa V)
 
-In classic CRV, Stage IV focuses on deeper analytical structure; for codebase investigation, that work is intentionally merged into the earlier dimensional/structural stages above, so this adapted protocol proceeds to Stage V for directed questioning.
+En el CRV clásico, la Etapa IV se enfoca en estructura analítica más profunda; para investigación de base de código, ese trabajo se integra intencionalmente en las etapas dimensionales/estructurales anteriores, por lo que este protocolo adaptado procede a la Etapa V para preguntas dirigidas.
 
-Now, and only now, bring specific questions to the investigation.
+Ahora, y solo ahora, traer preguntas específicas a la investigación.
 
-1. State each question explicitly: "What is the entry point?" "Where does data come from?" "What does the test coverage look like?"
-2. For each question, search for the answer using `Grep` and `Read` — targeted, not exploratory
-3. Record the first finding for each question
-4. Note confidence level: high (direct evidence), medium (inferred), low (uncertain)
-5. Mark all Stage V data clearly — it carries higher AOL risk because questions prime expectations
+1. Plantear cada pregunta explícitamente: "¿Cuál es el punto de entrada?" "¿De dónde vienen los datos?" "¿Cómo se ve la cobertura de pruebas?"
+2. Para cada pregunta, buscar la respuesta usando `Grep` y `Read` — dirigido, no exploratorio
+3. Registrar el primer hallazgo para cada pregunta
+4. Anotar nivel de confianza: alto (evidencia directa), medio (inferido), bajo (incierto)
+5. Marcar claramente todos los datos de Etapa V — conllevan mayor riesgo de AOL porque las preguntas predisponen expectativas
 
-**Esperado:** Specific answers to directed questions, grounded in the raw and structural data already collected. Confidence levels are honest.
+**Esperado:** Respuestas específicas a preguntas dirigidas, fundamentadas en los datos crudos y estructurales ya recopilados. Los niveles de confianza son honestos.
 
-**En caso de fallo:** If directed questions produce only AOL (you are answering from assumption rather than evidence), return to earlier stages. The CRV protocol is sequential for a reason — skipping the observation stages and jumping to questions produces unreliable answers.
+**En caso de fallo:** Si las preguntas dirigidas producen solo AOL (estás respondiendo desde suposiciones en lugar de evidencia), volver a etapas anteriores. El protocolo CRV es secuencial por una razón — saltar las etapas de observación y ir directamente a preguntas produce respuestas poco confiables.
 
-### Paso 6: Manage Analytical Overlay (AOL)
+### Paso 6: Gestionar la Superposición Analítica (AOL)
 
-AOL is the primary source of error in investigation. It occurs when the analytical mind prematurely labels the target. Manage it throughout the entire session.
+El AOL es la fuente principal de error en la investigación. Ocurre cuando la mente analítica etiqueta prematuramente el objetivo. Gestionarlo durante toda la sesión.
 
 ```
 AOL Types in Codebase Investigation:
@@ -186,49 +187,49 @@ AOL Types in Codebase Investigation:
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-The discipline is not avoiding AOL — it is recognizing and declaring it so it does not contaminate the investigation. Every investigation produces AOL. Skill is in how fast you catch it.
+La disciplina no es evitar el AOL — es reconocerlo y declararlo para que no contamine la investigación. Toda investigación produce AOL. La habilidad está en qué tan rápido lo detectas.
 
-**Esperado:** AOL is recognized within moments of arising, declared explicitly, and the investigation continues with raw descriptors rather than labels.
+**Esperado:** El AOL se reconoce a los momentos de surgir, se declara explícitamente, y la investigación continúa con descriptores crudos en lugar de etiquetas.
 
-**En caso de fallo:** If AOL has taken over (you realize you have been reasoning from a label for several steps), call an "AOL Break." Return to Stage II and collect new raw observations that test the label. A heavily contaminated investigation should be noted as such in the review.
+**En caso de fallo:** Si el AOL ha tomado control (te das cuenta de que has estado razonando desde una etiqueta por varios pasos), declarar una "Pausa de AOL." Volver a la Etapa II y recopilar nuevas observaciones crudas que prueben la etiqueta. Una investigación fuertemente contaminada debe anotarse como tal en la revisión.
 
-### Paso 7: Close and Review
+### Paso 7: Cerrar y Revisar
 
-End the investigation formally and synthesize findings.
+Terminar la investigación formalmente y sintetizar hallazgos.
 
-1. Review all collected data in order: first impressions, raw observations, structural data, directed answers, AOL declarations
-2. Identify the 5-10 observations with highest confidence
-3. Now — and only now — form a synthesis: what is this system? how does it work? what are its key characteristics?
-4. Note which parts of the synthesis are well-supported by evidence and which are inferred
-5. Compare the synthesis against the preconceptions declared in Step 1 — which were confirmed? which were wrong?
-6. Document the findings for the user or for your own future reference
+1. Revisar todos los datos recopilados en orden: primeras impresiones, observaciones crudas, datos estructurales, respuestas dirigidas, declaraciones de AOL
+2. Identificar las 5-10 observaciones con mayor confianza
+3. Ahora — y solo ahora — formar una síntesis: ¿qué es este sistema? ¿cómo funciona? ¿cuáles son sus características clave?
+4. Anotar qué partes de la síntesis están bien respaldadas por evidencia y cuáles son inferidas
+5. Comparar la síntesis con las preconcepciones declaradas en el Paso 1 — ¿cuáles se confirmaron? ¿cuáles estaban equivocadas?
+6. Documentar los hallazgos para el usuario o para tu propia referencia futura
 
-**Esperado:** A grounded understanding of the target built up from raw observations rather than assumed from pattern matching. The synthesis is more accurate than a quick categorization would have been, and the confidence levels are honest.
+**Esperado:** Una comprensión fundamentada del objetivo construida a partir de observaciones crudas en lugar de asumida por coincidencia de patrones. La síntesis es más precisa de lo que habría sido una categorización rápida, y los niveles de confianza son honestos.
 
-**En caso de fallo:** If the synthesis feels thin, the earlier stages may not have collected enough data. But do not dismiss partial findings — a description of "73 TypeScript files, deeply nested component structure, active git history, thin test coverage" is more useful than a wrong label. Accurate description is the goal, not identification.
+**En caso de fallo:** Si la síntesis se siente delgada, las etapas anteriores pueden no haber recopilado suficientes datos. Pero no descartar hallazgos parciales — una descripción de "73 archivos TypeScript, estructura de componentes profundamente anidada, historial git activo, cobertura de pruebas delgada" es más útil que una etiqueta incorrecta. La descripción precisa es la meta, no la identificación.
 
 ## Validación
 
-- [ ] Preconceptions were declared before data collection began
-- [ ] Stage I observations were raw descriptors, not labels
-- [ ] Stage II data was collected across multiple channels, not just one
-- [ ] All AOL was declared at the moment of recognition
-- [ ] Stages progressed sequentially (I → II → III → V), not jumping to conclusions
-- [ ] The target was approached blind — no files were read based on assumptions about what they should contain
-- [ ] The synthesis distinguishes evidence-supported findings from inferences
-- [ ] The investigation record is preserved for future reference
+- [ ] Las preconcepciones se declararon antes de que comenzara la recopilación de datos
+- [ ] Las observaciones de Etapa I fueron descriptores crudos, no etiquetas
+- [ ] Los datos de Etapa II se recopilaron a través de múltiples canales, no solo uno
+- [ ] Todo el AOL se declaró en el momento de reconocimiento
+- [ ] Las etapas progresaron secuencialmente (I → II → III → V), sin saltar a conclusiones
+- [ ] El objetivo se abordó a ciegas — no se leyeron archivos basándose en suposiciones sobre lo que deberían contener
+- [ ] La síntesis distingue hallazgos respaldados por evidencia de inferencias
+- [ ] El registro de investigación está preservado para referencia futura
 
 ## Errores Comunes
 
-- **Jumping to identification**: Searching for "what framework is this?" before collecting raw observations guarantees AOL contamination
-- **Suppressing labels**: Trying not to form hypotheses creates tension — instead, declare them and extract the raw signal underneath
-- **Skipping the cooldown**: Starting investigation while attached to a hypothesis biases all subsequent observations
-- **Confirmation-only search**: Once a hypothesis forms, searching only for confirming evidence while ignoring contradictions
-- **Confusing speed with skill**: Fast identification feels productive but is often wrong. Thorough staged observation takes longer but produces more accurate understanding
-- **Insufficient channel diversity**: Investigating only through one lens (only reading code, only checking structure) misses signals visible through other channels
+- **Saltar a la identificación**: Buscar "¿qué framework es este?" antes de recopilar observaciones crudas garantiza contaminación por AOL
+- **Suprimir etiquetas**: Intentar no formar hipótesis crea tensión — en su lugar, declararlas y extraer la señal cruda debajo
+- **Omitir el enfriamiento**: Comenzar la investigación estando apegado a una hipótesis sesga todas las observaciones subsiguientes
+- **Búsqueda solo de confirmación**: Una vez que una hipótesis se forma, buscar solo evidencia que la confirme mientras se ignoran las contradicciones
+- **Confundir velocidad con habilidad**: La identificación rápida se siente productiva pero frecuentemente es incorrecta. La observación por etapas exhaustiva toma más tiempo pero produce comprensión más precisa
+- **Diversidad insuficiente de canales**: Investigar solo a través de un lente (solo leer código, solo verificar estructura) pierde señales visibles a través de otros canales
 
 ## Habilidades Relacionadas
 
-- `remote-viewing-guidance` — the human-guidance variant where AI acts as CRV monitor/tasker
-- `meditate` — the mental stillness and assumption-clearing developed in meditation directly improves investigation quality
-- `heal` — when investigation reveals the AI's own reasoning biases, self-healing addresses the root cause
+- `remote-viewing-guidance` — la variante de guía humana donde la IA actúa como monitor/asignador de CRV
+- `meditate` — la quietud mental y la limpieza de suposiciones desarrolladas en meditación mejoran directamente la calidad de investigación
+- `heal` — cuando la investigación revela los propios sesgos de razonamiento de la IA, la auto-sanación aborda la causa raíz

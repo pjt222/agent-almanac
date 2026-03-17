@@ -1,13 +1,15 @@
 ---
 name: plan-tour-route
 description: >
-  Plan a multi-stop tour route with waypoint optimization, drive/walk time
-  estimation, and POI discovery along the route using OSM data. Covers
-  geocoding, nearest-neighbor and TSP-based ordering, time/distance matrix
-  calculation, and itinerary generation with points of interest. Use when
-  planning a road trip or walking tour with multiple destinations, optimizing
-  visit order to minimize travel time, discovering sites along a route, or
-  comparing driving versus walking versus public transport options.
+  Planificar una ruta turística multi-parada con optimización de puntos
+  intermedios, estimación de tiempos de conducción/caminata, y descubrimiento de
+  POI a lo largo de la ruta usando datos de OSM. Cubre geocodificación,
+  ordenamiento basado en vecino más cercano y TSP, cálculo de matriz de
+  tiempo/distancia, y generación de itinerario con puntos de interés. Usar al
+  planificar un viaje por carretera o recorrido a pie con múltiples destinos, al
+  optimizar el orden de visitas para minimizar tiempo de viaje, al descubrir
+  sitios a lo largo de una ruta, o al comparar opciones de conducción versus
+  caminata versus transporte público.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch WebSearch
 metadata:
@@ -26,30 +28,30 @@ metadata:
 
 # Plan Tour Route
 
-Plan and optimize a multi-stop tour route with time estimates, distance calculations, and points of interest along the way.
+Planificar y optimizar una ruta turística multi-parada con estimaciones de tiempo, cálculos de distancia y puntos de interés a lo largo del camino.
 
 ## Cuándo Usar
 
-- Planning a road trip or walking tour with multiple destinations
-- Optimizing visit order to minimize total travel time or distance
-- Discovering restaurants, viewpoints, or cultural sites along a route
-- Generating a day-by-day itinerary with realistic time budgets
-- Comparing driving vs. walking vs. public transport options
+- Planificar un viaje por carretera o recorrido a pie con múltiples destinos
+- Optimizar el orden de visitas para minimizar el tiempo total de viaje o la distancia
+- Descubrir restaurantes, miradores o sitios culturales a lo largo de una ruta
+- Generar un itinerario día por día con presupuestos de tiempo realistas
+- Comparar opciones de conducción vs. caminata vs. transporte público
 
 ## Entradas
 
-- **Requerido**: List of waypoints (place names, addresses, or coordinates)
-- **Requerido**: Travel mode (driving, walking, cycling, public transport)
-- **Opcional**: Start and end points (if different from first/last waypoint)
-- **Opcional**: Time constraints (departure time, must-arrive-by, opening hours)
-- **Opcional**: POI categories to discover (food, viewpoints, museums, fuel)
-- **Opcional**: Preferred route type (fastest, shortest, scenic)
+- **Requerido**: Lista de puntos intermedios (nombres de lugares, direcciones o coordenadas)
+- **Requerido**: Modo de viaje (conducción, caminata, ciclismo, transporte público)
+- **Opcional**: Puntos de inicio y fin (si son diferentes del primer/último punto intermedio)
+- **Opcional**: Restricciones de tiempo (hora de salida, hora límite de llegada, horarios de apertura)
+- **Opcional**: Categorías de POI a descubrir (comida, miradores, museos, combustible)
+- **Opcional**: Tipo de ruta preferido (más rápida, más corta, escénica)
 
 ## Procedimiento
 
-### Paso 1: Define Waypoints
+### Paso 1: Definir Puntos Intermedios
 
-Collect and structure all stops the tour must include.
+Recopilar y estructurar todas las paradas que el recorrido debe incluir.
 
 ```
 Waypoint Schema:
@@ -66,15 +68,15 @@ Waypoint Schema:
 └──────────┴────────────────────────────────────────────┘
 ```
 
-Separate fixed-order waypoints (e.g., hotel at start and end) from reorderable waypoints.
+Separar los puntos intermedios de orden fijo (ej., hotel al inicio y fin) de los puntos intermedios reordenables.
 
-**Esperado:** A structured list of all waypoints with at minimum a name and either an address or coordinates for each.
+**Esperado:** Una lista estructurada de todos los puntos intermedios con al menos un nombre y ya sea una dirección o coordenadas para cada uno.
 
-**En caso de fallo:** If a waypoint is ambiguous (e.g., "the castle"), use WebSearch to resolve it to a specific location. If coordinates are needed but only a name is available, defer to Step 2 for geocoding.
+**En caso de fallo:** Si un punto intermedio es ambiguo (ej., "el castillo"), usar WebSearch para resolverlo a una ubicación específica. Si se necesitan coordenadas pero solo hay un nombre disponible, diferir al Paso 2 para geocodificación.
 
-### Paso 2: Geocode and Validate
+### Paso 2: Geocodificar y Validar
 
-Convert all waypoints to latitude/longitude coordinates and verify they are reachable.
+Convertir todos los puntos intermedios a coordenadas de latitud/longitud y verificar que son alcanzables.
 
 ```
 Geocoding Sources (in preference order):
@@ -87,19 +89,19 @@ Geocoding Sources (in preference order):
 3. Manual coordinates from mapping services
 ```
 
-For each waypoint:
-1. Query the geocoding service with the address or place name
-2. Verify the returned coordinates are in the expected region
-3. Check that multiple results are disambiguated (pick the correct one)
-4. Store coordinates alongside the original waypoint data
+Para cada punto intermedio:
+1. Consultar el servicio de geocodificación con la dirección o nombre del lugar
+2. Verificar que las coordenadas devueltas están en la región esperada
+3. Comprobar que los resultados múltiples se desambigüen (elegir el correcto)
+4. Almacenar las coordenadas junto con los datos originales del punto intermedio
 
-**Esperado:** Every waypoint has valid latitude/longitude coordinates, and all points fall within a plausible geographic region (no outliers on wrong continents).
+**Esperado:** Cada punto intermedio tiene coordenadas válidas de latitud/longitud, y todos los puntos caen dentro de una región geográfica plausible (sin valores atípicos en continentes incorrectos).
 
-**En caso de fallo:** If geocoding returns no results, try alternative spellings, add region/country qualifiers, or search for nearby landmarks. If a waypoint is in a remote area with poor OSM coverage, use WebSearch to find coordinates from travel blogs or tourism sites.
+**En caso de fallo:** Si la geocodificación no devuelve resultados, intentar grafías alternativas, agregar calificadores de región/país, o buscar puntos de referencia cercanos. Si un punto intermedio está en un área remota con pobre cobertura de OSM, usar WebSearch para encontrar coordenadas de blogs de viaje o sitios de turismo.
 
-### Paso 3: Optimize Route Order
+### Paso 3: Optimizar el Orden de la Ruta
 
-Determine the visit sequence that minimizes total travel time or distance.
+Determinar la secuencia de visitas que minimiza el tiempo total de viaje o la distancia.
 
 ```
 Optimization Strategies:
@@ -114,22 +116,22 @@ Optimization Strategies:
 └─────────────────────┴────────────────────────────────────────┘
 ```
 
-For the nearest-neighbor heuristic:
-1. Start at the designated origin
-2. From the current position, select the unvisited waypoint closest by travel time
-3. Move to that waypoint and mark it visited
-4. Repeat until all waypoints are visited
-5. Return to the designated end point (if round trip)
+Para la heurística de vecino más cercano:
+1. Comenzar en el origen designado
+2. Desde la posición actual, seleccionar el punto intermedio no visitado más cercano por tiempo de viaje
+3. Moverse a ese punto intermedio y marcarlo como visitado
+4. Repetir hasta que todos los puntos intermedios estén visitados
+5. Regresar al punto final designado (si es viaje de ida y vuelta)
 
-For multi-day tours, cluster waypoints by geographic proximity first, then optimize within each day.
+Para recorridos de varios días, agrupar puntos intermedios por proximidad geográfica primero, luego optimizar dentro de cada día.
 
-**Esperado:** An ordered sequence of waypoints that produces a route without excessive backtracking. Total distance should be within 20% of the theoretical optimum for fewer than 10 stops.
+**Esperado:** Una secuencia ordenada de puntos intermedios que produce una ruta sin retrocesos excesivos. La distancia total debería estar dentro del 20% del óptimo teórico para menos de 10 paradas.
 
-**En caso de fallo:** If the nearest-neighbor result has obvious backtracking (later stops are closer to earlier ones), try reversing the route or use a 2-opt improvement: swap pairs of edges and keep the swap if it shortens the route. For time-window constraints, verify that arrival times at each stop fall within opening hours.
+**En caso de fallo:** Si el resultado del vecino más cercano tiene retrocesos obvios (paradas posteriores están más cerca de paradas anteriores), intentar invertir la ruta o usar una mejora 2-opt: intercambiar pares de aristas y mantener el intercambio si acorta la ruta. Para restricciones de ventanas de tiempo, verificar que los tiempos de llegada a cada parada caigan dentro de los horarios de apertura.
 
-### Paso 4: Calculate Times and Distances
+### Paso 4: Calcular Tiempos y Distancias
 
-Compute travel time and distance for each leg of the route.
+Calcular el tiempo de viaje y la distancia para cada tramo de la ruta.
 
 ```
 Time Estimation Methods:
@@ -145,20 +147,20 @@ Time Estimation Methods:
 └──────────────┴────────────┴────────────────────────────────┘
 ```
 
-For each consecutive pair of waypoints:
-1. Calculate straight-line (haversine) distance as a baseline
-2. Apply a detour factor (1.3 for roads, 1.4 for urban, 1.2 for highways)
-3. Estimate travel time from adjusted distance and mode speed
-4. Add buffer time: 10% for driving, 15% for public transport
-5. Sum leg times plus dwell times at each stop for total tour duration
+Para cada par consecutivo de puntos intermedios:
+1. Calcular la distancia en línea recta (haversine) como referencia base
+2. Aplicar un factor de desvío (1.3 para carreteras, 1.4 para urbano, 1.2 para autopistas)
+3. Estimar el tiempo de viaje a partir de la distancia ajustada y la velocidad del modo
+4. Agregar tiempo de margen: 10% para conducción, 15% para transporte público
+5. Sumar los tiempos de tramo más los tiempos de permanencia en cada parada para la duración total del recorrido
 
-**Esperado:** A time/distance matrix for all legs, with a running cumulative time that accounts for both travel and dwell time at each stop. Total tour duration should be realistic (not exceeding available daylight for walking tours).
+**Esperado:** Una matriz de tiempo/distancia para todos los tramos, con un tiempo acumulado que tiene en cuenta tanto el viaje como el tiempo de permanencia en cada parada. La duración total del recorrido debería ser realista (no exceder las horas de luz disponibles para recorridos a pie).
 
-**En caso de fallo:** If estimated times seem unrealistic (e.g., 2 hours for a 10 km city drive), check whether the detour factor is appropriate. For mountain roads, increase the detour factor to 1.6-2.0. For public transport, use WebSearch to check actual timetables rather than estimating.
+**En caso de fallo:** Si los tiempos estimados parecen poco realistas (ej., 2 horas para un recorrido urbano de 10 km), verificar si el factor de desvío es apropiado. Para carreteras de montaña, aumentar el factor de desvío a 1.6-2.0. Para transporte público, usar WebSearch para consultar horarios reales en lugar de estimar.
 
-### Paso 5: Generate Itinerary with POIs
+### Paso 5: Generar Itinerario con POIs
 
-Compile the optimized route into a complete itinerary with discovered points of interest.
+Compilar la ruta optimizada en un itinerario completo con puntos de interés descubiertos.
 
 ```
 POI Discovery (Overpass API query pattern):
@@ -175,42 +177,42 @@ Recommended search radius:
 - At waypoints: 1 km radius
 ```
 
-Build the itinerary document:
-1. Header with tour name, dates, total distance, total time
-2. For each day (if multi-day):
-   - Day summary (start, end, total km, total hours)
-   - For each leg: departure time, travel mode, distance, duration
-   - For each stop: arrival time, dwell time, description, POIs nearby
-3. Logistics section: parking, fuel stops, rest areas, emergency contacts
-4. Map reference (link to route on OpenStreetMap or export as GPX)
+Construir el documento de itinerario:
+1. Encabezado con nombre del recorrido, fechas, distancia total, tiempo total
+2. Para cada día (si es de varios días):
+   - Resumen del día (inicio, fin, km totales, horas totales)
+   - Para cada tramo: hora de salida, modo de viaje, distancia, duración
+   - Para cada parada: hora de llegada, tiempo de permanencia, descripción, POIs cercanos
+3. Sección de logística: estacionamiento, paradas de combustible, áreas de descanso, contactos de emergencia
+4. Referencia del mapa (enlace a la ruta en OpenStreetMap o exportar como GPX)
 
-**Esperado:** A complete, time-budgeted itinerary document with realistic schedules, POI suggestions at each stop, and practical logistics information.
+**Esperado:** Un documento de itinerario completo con horarios realistas, sugerencias de POI en cada parada e información logística práctica.
 
-**En caso de fallo:** If POI queries return too many results, filter by rating or relevance. If the itinerary exceeds available time, mark lower-priority stops as optional or split into additional days. If no POIs are found in remote areas, note this and suggest the traveler research locally on arrival.
+**En caso de fallo:** Si las consultas de POI devuelven demasiados resultados, filtrar por calificación o relevancia. Si el itinerario excede el tiempo disponible, marcar las paradas de menor prioridad como opcionales o dividir en días adicionales. Si no se encuentran POIs en áreas remotas, anotarlo y sugerir que el viajero investigue localmente al llegar.
 
 ## Validación
 
-- [ ] All waypoints are geocoded with valid coordinates
-- [ ] Route order minimizes backtracking (no obvious inefficiencies)
-- [ ] Travel times are realistic for the chosen mode
-- [ ] Dwell times at each stop are accounted for
-- [ ] Total tour duration fits within the available time window
-- [ ] POIs are relevant and located near the route
-- [ ] Opening hours of time-sensitive stops are respected
-- [ ] Itinerary includes practical logistics (parking, fuel, rest stops)
+- [ ] Todos los puntos intermedios están geocodificados con coordenadas válidas
+- [ ] El orden de la ruta minimiza retrocesos (sin ineficiencias obvias)
+- [ ] Los tiempos de viaje son realistas para el modo elegido
+- [ ] Los tiempos de permanencia en cada parada están contabilizados
+- [ ] La duración total del recorrido cabe dentro de la ventana de tiempo disponible
+- [ ] Los POIs son relevantes y están ubicados cerca de la ruta
+- [ ] Los horarios de apertura de las paradas sensibles al tiempo se respetan
+- [ ] El itinerario incluye logística práctica (estacionamiento, combustible, paradas de descanso)
 
 ## Errores Comunes
 
-- **Ignoring opening hours**: Optimizing purely by distance can route you to a museum after it closes. Always check time-window constraints for attractions.
-- **Underestimating urban travel**: City driving and parking can double the expected time. Add generous buffers for urban stops.
-- **Over-packing the itinerary**: Filling every minute leaves no room for delays or spontaneous discoveries. Build in 30-60 minutes of slack per half-day.
-- **Straight-line distance fallacy**: Haversine distance severely underestimates actual road distance, especially in mountainous or coastal terrain. Always apply a detour factor.
-- **Forgetting return logistics**: One-way routes need plans for returning rental cars, catching trains, or arranging pickup.
-- **Seasonal road closures**: Mountain passes, ferries, and scenic routes may be closed seasonally. Verify access dates before routing.
+- **Ignorar horarios de apertura**: Optimizar puramente por distancia puede dirigirte a un museo después de que cierra. Siempre verificar restricciones de ventana de tiempo para atracciones.
+- **Subestimar el viaje urbano**: La conducción y el estacionamiento en la ciudad pueden duplicar el tiempo esperado. Agregar márgenes generosos para paradas urbanas.
+- **Sobrecargar el itinerario**: Llenar cada minuto no deja margen para retrasos o descubrimientos espontáneos. Incorporar 30-60 minutos de holgura por medio día.
+- **Falacia de distancia en línea recta**: La distancia haversine subestima severamente la distancia real por carretera, especialmente en terreno montañoso o costero. Siempre aplicar un factor de desvío.
+- **Olvidar la logística de retorno**: Las rutas de un solo sentido necesitan planes para devolver autos de alquiler, tomar trenes o coordinar recogidas.
+- **Cierres estacionales de carreteras**: Los pasos de montaña, transbordadores y rutas escénicas pueden estar cerrados estacionalmente. Verificar las fechas de acceso antes de trazar la ruta.
 
 ## Habilidades Relacionadas
 
-- `create-spatial-visualization` — render the planned route on an interactive map
-- `generate-tour-report` — compile the itinerary into a formatted Quarto report
-- `plan-hiking-tour` — specialized planning for hiking segments within a tour
-- `assess-trail-conditions` — check conditions for any walking/hiking legs
+- `create-spatial-visualization` — renderizar la ruta planificada en un mapa interactivo
+- `generate-tour-report` — compilar el itinerario en un informe formateado de Quarto
+- `plan-hiking-tour` — planificación especializada para segmentos de senderismo dentro de un recorrido
+- `assess-trail-conditions` — verificar condiciones para cualquier tramo de caminata/senderismo

@@ -1,14 +1,15 @@
 ---
 name: learn
 description: >
-  AI systematic knowledge acquisition from unfamiliar territory — deliberate
-  model-building with feedback loops. Maps spaced repetition principles to
-  AI reasoning: survey the territory, hypothesize structure, explore with
-  probes, integrate findings, verify understanding, and consolidate for
-  future retrieval. Use when encountering an unfamiliar codebase or domain,
-  when a user asks about a topic requiring genuine investigation rather than
-  recall, when multiple conflicting sources require building a coherent model,
-  or when preparing to teach a topic and deep understanding is required first.
+  Adquisición sistemática de conocimiento por IA desde territorio desconocido —
+  construcción deliberada de modelos con bucles de retroalimentación. Mapea los
+  principios de repetición espaciada al razonamiento de IA: explorar el
+  territorio, hipotetizar estructura, explorar con sondeos, integrar hallazgos,
+  verificar comprensión y consolidar para recuperación futura. Usar al encontrar
+  una base de código o dominio desconocido, cuando un usuario pregunta sobre un
+  tema que requiere investigación genuina en lugar de recuerdo, cuando múltiples
+  fuentes conflictivas requieren construir un modelo coherente, o al prepararse
+  para enseñar un tema y se requiere comprensión profunda primero.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -27,28 +28,28 @@ metadata:
 
 # Learn
 
-Conduct a structured knowledge acquisition session — surveying unfamiliar territory, building initial models, testing them through deliberate exploration, integrating findings into coherent understanding, and consolidating for durable retrieval.
+Conducir una sesión estructurada de adquisición de conocimiento — explorando territorio desconocido, construyendo modelos iniciales, probándolos mediante exploración deliberada, integrando hallazgos en comprensión coherente y consolidando para recuperación duradera.
 
 ## Cuándo Usar
 
-- Encountering an unfamiliar codebase, framework, or domain with no prior context
-- A user asks about a topic outside current working knowledge and the answer requires genuine investigation, not recall
-- Multiple conflicting sources or patterns exist and a coherent mental model needs to be built from scratch
-- After `remote-viewing` surfaces intuitive leads that need systematic validation
-- Preparing to `teach` a topic — the AI must first understand it deeply enough to explain it
+- Al encontrar una base de código, framework o dominio desconocido sin contexto previo
+- Un usuario pregunta sobre un tema fuera del conocimiento de trabajo actual y la respuesta requiere investigación genuina, no recuerdo
+- Existen múltiples fuentes o patrones conflictivos y se necesita construir un modelo mental coherente desde cero
+- Después de que `remote-viewing` expone pistas intuitivas que necesitan validación sistemática
+- Al prepararse para enseñar (`teach`) un tema — la IA primero debe entenderlo lo suficientemente profundo para explicarlo
 
 ## Entradas
 
-- **Requerido**: Learning target — a topic, codebase area, API, domain concept, or technology to understand
-- **Opcional**: Scope boundary — how deep to go (surface survey vs. deep expertise)
-- **Opcional**: User's purpose — why this knowledge matters (guides which aspects to prioritize)
-- **Opcional**: Known starting points — files, docs, or concepts already familiar
+- **Requerido**: Objetivo de aprendizaje — un tema, área de base de código, API, concepto de dominio o tecnología a comprender
+- **Opcional**: Límite de alcance — qué tan profundo ir (exploración superficial vs. expertise profundo)
+- **Opcional**: Propósito del usuario — por qué importa este conocimiento (guía qué aspectos priorizar)
+- **Opcional**: Puntos de partida conocidos — archivos, documentación o conceptos ya familiares
 
 ## Procedimiento
 
-### Paso 1: Survey — Map the Territory
+### Paso 1: Explorar — Mapear el territorio
 
-Before attempting to understand anything, map the landscape to identify what exists.
+Antes de intentar comprender algo, mapear el paisaje para identificar lo que existe.
 
 ```
 Learning Modality Selection:
@@ -73,114 +74,114 @@ Learning Modality Selection:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-1. Identify the territory type and select the primary modality
-2. Perform a broad scan — not reading deeply, but identifying landmarks (key files, entry points, core concepts)
-3. Note the boundaries: what is in scope, what is adjacent, what is out of scope
-4. Identify gaps: areas that look important but are opaque from the surface
-5. Create a rough map: list the major components and their apparent relationships
+1. Identificar el tipo de territorio y seleccionar la modalidad primaria
+2. Realizar un escaneo amplio — sin leer profundamente, sino identificando puntos de referencia (archivos clave, puntos de entrada, conceptos centrales)
+3. Notar los límites: qué está dentro del alcance, qué es adyacente, qué está fuera del alcance
+4. Identificar brechas: áreas que parecen importantes pero son opacas desde la superficie
+5. Crear un mapa aproximado: listar los componentes principales y sus relaciones aparentes
 
-**Esperado:** A skeletal map of the territory with 5-15 landmarks identified. A sense of which areas are clear from the surface and which require deeper investigation. No understanding yet — just a map.
+**Esperado:** Un mapa esquelético del territorio con 5-15 puntos de referencia identificados. Una noción de qué áreas son claras desde la superficie y cuáles requieren investigación más profunda. Sin comprensión todavía — solo un mapa.
 
-**En caso de fallo:** If the territory is too large to survey, narrow scope immediately. Ask: "What is the minimum I need to understand to serve the user's purpose?" If the territory has no clear entry point, start from the output (what does this system produce?) and trace backward.
+**En caso de fallo:** Si el territorio es demasiado grande para explorar, reducir el alcance inmediatamente. Preguntar: "¿Cuál es el mínimo que necesito entender para servir al propósito del usuario?" Si el territorio no tiene un punto de entrada claro, empezar desde la salida (¿qué produce este sistema?) y rastrear hacia atrás.
 
-### Paso 2: Hypothesize — Build Initial Models
+### Paso 2: Hipotetizar — Construir modelos iniciales
 
-From the survey, construct initial hypotheses about how the system works.
+Desde la exploración, construir hipótesis iniciales sobre cómo funciona el sistema.
 
-1. Formulate 2-3 hypotheses about the territory's structure or behavior
-2. State each hypothesis clearly: "I believe X because I observed Y"
-3. For each hypothesis, identify what evidence would confirm it and what would refute it
-4. Rank hypotheses by confidence: which feels most supported, which is shakiest
-5. Identify the highest-value hypothesis to test first (the one that, if confirmed, would unlock the most understanding)
+1. Formular 2-3 hipótesis sobre la estructura o comportamiento del territorio
+2. Declarar cada hipótesis claramente: "Creo X porque observé Y"
+3. Para cada hipótesis, identificar qué evidencia la confirmaría y qué la refutaría
+4. Clasificar hipótesis por confianza: cuál se siente más respaldada, cuál es más inestable
+5. Identificar la hipótesis de mayor valor para probar primero (la que, si se confirma, desbloquearía la mayor comprensión)
 
-**Esperado:** Concrete, falsifiable hypotheses — not vague impressions. Each has a test that would confirm or refute it. The hypotheses collectively cover the most important aspects of the territory.
+**Esperado:** Hipótesis concretas y falsificables — no impresiones vagas. Cada una tiene una prueba que la confirmaría o refutaría. Las hipótesis colectivamente cubren los aspectos más importantes del territorio.
 
-**En caso de fallo:** If no hypotheses form, the survey was too shallow — return to Step 1 and read 2-3 landmarks in depth. If all hypotheses feel equally uncertain, start with the simplest one (Occam's razor) and build from there.
+**En caso de fallo:** Si no se forman hipótesis, la exploración fue demasiado superficial — regresar al Paso 1 y leer 2-3 puntos de referencia en profundidad. Si todas las hipótesis se sienten igualmente inciertas, empezar con la más simple (navaja de Occam) y construir desde ahí.
 
-### Paso 3: Explore — Probe and Test
+### Paso 3: Explorar — Sondear y probar
 
-Systematically test each hypothesis through targeted investigation.
+Probar sistemáticamente cada hipótesis mediante investigación dirigida.
 
-1. Select the highest-priority hypothesis
-2. Design a minimal probe: what is the smallest investigation that would confirm or refute it?
-3. Execute the probe (read a file, search for a pattern, test an assumption)
-4. Record the result: confirmed, refuted, or modified
-5. If refuted, update the hypothesis based on the new evidence
-6. If confirmed, probe deeper: does the hypothesis hold at the edges, or only in the center?
-7. Move to the next hypothesis and repeat
+1. Seleccionar la hipótesis de mayor prioridad
+2. Diseñar un sondeo mínimo: ¿cuál es la investigación más pequeña que confirmaría o refutaría la hipótesis?
+3. Ejecutar el sondeo (leer un archivo, buscar un patrón, probar una suposición)
+4. Registrar el resultado: confirmado, refutado o modificado
+5. Si fue refutada, actualizar la hipótesis basándose en la nueva evidencia
+6. Si fue confirmada, sondear más profundo: ¿la hipótesis se mantiene en los bordes, o solo en el centro?
+7. Pasar a la siguiente hipótesis y repetir
 
-**Esperado:** At least one hypothesis tested to conclusion. The mental model is beginning to take shape — some parts confirmed, some revised. Surprises are noted as particularly valuable data.
+**Esperado:** Al menos una hipótesis probada hasta conclusión. El modelo mental está comenzando a tomar forma — algunas partes confirmadas, algunas revisadas. Las sorpresas se notan como datos particularmente valiosos.
 
-**En caso de fallo:** If probes consistently produce ambiguous results, the hypotheses may be testing the wrong things. Step back and ask: "What would someone who understands this system consider the most important fact?" Probe for that instead.
+**En caso de fallo:** Si los sondeos consistentemente producen resultados ambiguos, las hipótesis pueden estar probando las cosas equivocadas. Retroceder y preguntar: "¿Qué consideraría alguien que entiende este sistema como el hecho más importante?" Sondear eso en su lugar.
 
-### Paso 4: Integrate — Build Mental Model
+### Paso 4: Integrar — Construir modelo mental
 
-Synthesize findings into a coherent model that connects the pieces.
+Sintetizar hallazgos en un modelo coherente que conecte las piezas.
 
-1. Review all confirmed hypotheses and revised models
-2. Identify the central organizing principle: what is the "spine" that everything connects to?
-3. Map relationships: which components depend on which? What flows where?
-4. Identify the surprising findings — these often contain the deepest insight
-5. Look for patterns that repeat across different parts of the territory
-6. Build a mental model that can predict behavior: "Given input X, I expect Y because Z"
+1. Revisar todas las hipótesis confirmadas y modelos revisados
+2. Identificar el principio organizador central: ¿cuál es la "columna vertebral" a la que todo se conecta?
+3. Mapear relaciones: ¿qué componentes dependen de cuáles? ¿Qué fluye hacia dónde?
+4. Identificar los hallazgos sorprendentes — estos a menudo contienen la percepción más profunda
+5. Buscar patrones que se repiten en diferentes partes del territorio
+6. Construir un modelo mental que pueda predecir comportamiento: "Dada la entrada X, espero Y porque Z"
 
-**Esperado:** A coherent mental model that explains the territory's structure and predicts its behavior. The model should be expressible in 3-5 sentences and should make specific claims, not vague generalizations.
+**Esperado:** Un modelo mental coherente que explica la estructura del territorio y predice su comportamiento. El modelo debería ser expresable en 3-5 oraciones y debería hacer afirmaciones específicas, no generalizaciones vagas.
 
-**En caso de fallo:** If the pieces do not integrate into a coherent model, there may be a fundamental misunderstanding in one of the earlier hypotheses. Identify the piece that does not fit and re-test it. Alternatively, the territory may genuinely be incoherent (poorly designed systems exist) — note this as a finding rather than forcing coherence.
+**En caso de fallo:** Si las piezas no se integran en un modelo coherente, puede haber un malentendido fundamental en una de las hipótesis anteriores. Identificar la pieza que no encaja y re-probarla. Alternativamente, el territorio puede ser genuinamente incoherente (los sistemas mal diseñados existen) — notar esto como un hallazgo en lugar de forzar coherencia.
 
-### Paso 5: Verify — Challenge Understanding
+### Paso 5: Verificar — Desafiar la comprensión
 
-Test the mental model by making predictions and checking them.
+Probar el modelo mental haciendo predicciones y verificándolas.
 
-1. Use the model to make 3 specific predictions about the territory
-2. Test each prediction through investigation (not by assuming it is true)
-3. For each confirmed prediction, confidence increases
-4. For each refuted prediction, identify where the model is wrong and correct it
-5. Identify edge cases: does the model hold at the boundaries, or does it break down?
-6. Ask: "What would surprise me?" — then check if that surprise is possible
+1. Usar el modelo para hacer 3 predicciones específicas sobre el territorio
+2. Probar cada predicción mediante investigación (no asumiéndola como verdadera)
+3. Por cada predicción confirmada, la confianza aumenta
+4. Por cada predicción refutada, identificar dónde el modelo está equivocado y corregirlo
+5. Identificar casos límite: ¿el modelo se mantiene en los límites, o se desmorona?
+6. Preguntar: "¿Qué me sorprendería?" — luego verificar si esa sorpresa es posible
 
-**Esperado:** The mental model survives at least 2 of 3 prediction tests. Where it breaks, the failure is understood and the model is corrected. The model now has both confirmed strengths and known limitations.
+**Esperado:** El modelo mental sobrevive al menos 2 de 3 pruebas de predicción. Donde falla, la falla se entiende y el modelo se corrige. El modelo ahora tiene tanto fortalezas confirmadas como limitaciones conocidas.
 
-**En caso de fallo:** If most predictions fail, the mental model has a fundamental flaw. This is actually valuable information — it means the territory works differently than expected. Return to Step 2 with the new evidence and rebuild the hypotheses from scratch. The second attempt will be much faster because the wrong models have been eliminated.
+**En caso de fallo:** Si la mayoría de las predicciones fallan, el modelo mental tiene una falla fundamental. Esto es realmente información valiosa — significa que el territorio funciona diferente de lo esperado. Regresar al Paso 2 con la nueva evidencia y reconstruir las hipótesis desde cero. El segundo intento será mucho más rápido porque los modelos incorrectos han sido eliminados.
 
-### Paso 6: Consolidate — Store for Retrieval
+### Paso 6: Consolidar — Almacenar para recuperación
 
-Capture the learning in a form that supports future retrieval and application.
+Capturar el aprendizaje en una forma que soporte la recuperación y aplicación futuras.
 
-1. Summarize the mental model in 3-5 sentences
-2. Note the key landmarks — the 3-5 most important things to remember
-3. Record any counterintuitive findings that might be forgotten
-4. Identify related topics that this learning connects to
-5. If the learning is durable (will be needed across sessions), update MEMORY.md
-6. If the learning is session-specific, note it as context for the current conversation
-7. State what remains unknown — honest gaps are more useful than false confidence
+1. Resumir el modelo mental en 3-5 oraciones
+2. Notar los puntos de referencia clave — las 3-5 cosas más importantes para recordar
+3. Registrar cualquier hallazgo contraintuitivo que podría ser olvidado
+4. Identificar temas relacionados a los que este aprendizaje se conecta
+5. Si el aprendizaje es duradero (será necesario entre sesiones), actualizar MEMORY.md
+6. Si el aprendizaje es específico de la sesión, notarlo como contexto para la conversación actual
+7. Declarar lo que permanece desconocido — las brechas honestas son más útiles que la falsa confianza
 
-**Esperado:** A concise, retrievable summary that captures the essential understanding. Future references to this topic can start from this summary rather than re-learning from scratch.
+**Esperado:** Un resumen conciso y recuperable que captura la comprensión esencial. Las referencias futuras a este tema pueden empezar desde este resumen en lugar de re-aprender desde cero.
 
-**En caso de fallo:** If the learning resists summarization, it may not yet be fully integrated — return to Step 4. If the learning seems too obvious to be worth storing, consider that what feels obvious now may not feel obvious in a fresh context. Store the non-obvious parts.
+**En caso de fallo:** Si el aprendizaje resiste la resumición, puede no estar todavía completamente integrado — regresar al Paso 4. Si el aprendizaje parece demasiado obvio para valer la pena almacenar, considerar que lo que se siente obvio ahora puede no sentirse obvio en un contexto fresco. Almacenar las partes no obvias.
 
 ## Validación
 
-- [ ] A survey was conducted before any deep investigation (map before dive)
-- [ ] Hypotheses were explicitly stated and tested, not assumed
-- [ ] At least one hypothesis was revised based on evidence (indicates genuine learning)
-- [ ] The mental model makes specific, testable predictions about the territory
-- [ ] Known unknowns are identified alongside known knowns
-- [ ] The consolidated summary is concise enough to be useful for future retrieval
+- [ ] Se condujo una exploración antes de cualquier investigación profunda (mapear antes de sumergir)
+- [ ] Las hipótesis fueron explícitamente declaradas y probadas, no asumidas
+- [ ] Al menos una hipótesis fue revisada basándose en evidencia (indica aprendizaje genuino)
+- [ ] El modelo mental hace predicciones específicas y verificables sobre el territorio
+- [ ] Los desconocidos conocidos se identifican junto a los conocidos conocidos
+- [ ] El resumen consolidado es lo suficientemente conciso para ser útil para recuperación futura
 
 ## Errores Comunes
 
-- **Skipping the survey**: Diving into detail before understanding the landscape wastes time on unimportant areas and misses the big picture
-- **Unfalsifiable hypotheses**: "This is probably complex" cannot be tested. "This module handles authentication because it imports crypto" can be
-- **Confirmation bias during exploration**: Seeking only evidence that supports the initial hypothesis while ignoring contradictions
-- **Premature consolidation**: Storing a model before it has been tested leads to confidently wrong future predictions
-- **Perfectionism**: Attempting to learn everything before applying any knowledge. Learning is iterative — use partial understanding, then refine
-- **Learning without purpose**: Acquiring knowledge with no application in mind produces unfocused, shallow understanding
+- **Saltar la exploración**: Sumergirse en detalles antes de entender el paisaje desperdicia tiempo en áreas sin importancia y pierde el panorama general
+- **Hipótesis infalsificables**: "Esto es probablemente complejo" no puede ser probado. "Este módulo maneja autenticación porque importa crypto" sí puede serlo
+- **Sesgo de confirmación durante la exploración**: Buscar solo evidencia que respalde la hipótesis inicial mientras se ignoran contradicciones
+- **Consolidación prematura**: Almacenar un modelo antes de que haya sido probado lleva a predicciones futuras confidentemente equivocadas
+- **Perfeccionismo**: Intentar aprenderlo todo antes de aplicar cualquier conocimiento. El aprendizaje es iterativo — usar comprensión parcial, luego refinar
+- **Aprendizaje sin propósito**: Adquirir conocimiento sin aplicación en mente produce comprensión desenfocada y superficial
 
 ## Habilidades Relacionadas
 
-- `learn-guidance` — the human-guidance variant for coaching a person through structured learning
-- `teach` — knowledge transfer calibrated to a learner; builds on the model constructed here
-- `remote-viewing` — intuitive exploration that surfaces leads for systematic learning to validate
-- `meditate` — clearing prior context noise before entering a new learning territory
-- `observe` — sustained neutral pattern recognition that feeds learning with raw data
+- `learn-guidance` — la variante de guía humana para entrenar a una persona en aprendizaje estructurado
+- `teach` — transferencia de conocimiento calibrada a un aprendiz; se construye sobre el modelo construido aquí
+- `remote-viewing` — exploración intuitiva que expone pistas para que el aprendizaje sistemático valide
+- `meditate` — limpiar el ruido del contexto previo antes de entrar en nuevo territorio de aprendizaje
+- `observe` — reconocimiento neutral sostenido de patrones que alimenta el aprendizaje con datos crudos

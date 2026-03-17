@@ -1,12 +1,13 @@
 ---
 name: explore-diophantine-equations
 description: >
-  Solve Diophantine equations (integer-only solutions) including linear,
-  quadratic, and Pell equations. Covers the extended Euclidean algorithm,
-  descent methods, and existence proofs. Use when finding all integer
-  solutions to ax + by = c, solving Pell's equation, generating Pythagorean
-  triples, proving no integer solutions exist via modular constraints, or
-  finding the fundamental solution from which all others are generated.
+  Resolver ecuaciones diofánticas (soluciones solo enteras) incluyendo lineales,
+  cuadráticas y ecuaciones de Pell. Cubre el algoritmo euclidiano extendido,
+  métodos de descenso y pruebas de existencia. Usar al encontrar todas las
+  soluciones enteras de ax + by = c, resolver la ecuación de Pell, generar
+  tripletas pitagóricas, demostrar que no existen soluciones enteras mediante
+  restricciones modulares, o encontrar la solución fundamental a partir de la
+  cual se generan todas las demás.
 license: MIT
 allowed-tools: Read Bash
 metadata:
@@ -25,77 +26,77 @@ metadata:
 
 # Explore Diophantine Equations
 
-Solve Diophantine equations -- polynomial equations where only integer solutions are sought. Classify the equation by type, test for solvability, find particular and general solutions, and generate solution families. Covers linear equations, Pell equations, Pythagorean triples, and general quadratic forms.
+Resolver ecuaciones diofánticas — ecuaciones polinomiales donde solo se buscan soluciones enteras. Clasificar la ecuación por tipo, probar la solubilidad, encontrar soluciones particulares y generales, y generar familias de soluciones. Cubre ecuaciones lineales, ecuaciones de Pell, tripletas pitagóricas y formas cuadráticas generales.
 
 ## Cuándo Usar
 
-- Finding all integer solutions to a linear equation ax + by = c
-- Solving Pell's equation x^2 - Dy^2 = 1 (or = -1)
-- Generating Pythagorean triples or other parametric integer families
-- Proving that a given equation has no integer solutions (via modular constraints)
-- Testing solvability of a general quadratic Diophantine equation
-- Finding the fundamental solution from which all others are generated
+- Encontrar todas las soluciones enteras de una ecuación lineal ax + by = c
+- Resolver la ecuación de Pell x^2 - Dy^2 = 1 (o = -1)
+- Generar tripletas pitagóricas u otras familias enteras paramétricas
+- Demostrar que una ecuación dada no tiene soluciones enteras (mediante restricciones modulares)
+- Probar la solubilidad de una ecuación diofántica cuadrática general
+- Encontrar la solución fundamental a partir de la cual se generan todas las demás
 
 ## Entradas
 
-- **Requerido**: The Diophantine equation to solve (in explicit form, e.g., 3x + 5y = 17 or x^2 - 7y^2 = 1)
-- **Opcional**: Whether to find all solutions, just one particular solution, or prove non-existence
-- **Opcional**: Constraints on variable ranges (e.g., positive integers only)
-- **Opcional**: Whether to express the general solution parametrically
-- **Opcional**: Preferred proof technique (constructive, descent, modular obstruction)
+- **Requerido**: La ecuación diofántica a resolver (en forma explícita, ej., 3x + 5y = 17 o x^2 - 7y^2 = 1)
+- **Opcional**: Si encontrar todas las soluciones, solo una solución particular, o demostrar la no existencia
+- **Opcional**: Restricciones en los rangos de variables (ej., solo enteros positivos)
+- **Opcional**: Si expresar la solución general paramétricamente
+- **Opcional**: Técnica de demostración preferida (constructiva, descenso, obstrucción modular)
 
 ## Procedimiento
 
-### Paso 1: Classify the Equation Type
+### Paso 1: Clasificar el Tipo de Ecuación
 
-Determine the structure of the Diophantine equation to select the appropriate solving method.
+Determinar la estructura de la ecuación diofántica para seleccionar el método de resolución apropiado.
 
-1. **Linear**: ax + by = c where a, b, c are given integers and x, y are unknowns.
-   - Solving method: Extended Euclidean algorithm.
+1. **Lineal**: ax + by = c donde a, b, c son enteros dados y x, y son incógnitas.
+   - Método de resolución: Algoritmo euclidiano extendido.
 
-2. **Pell equation**: x^2 - Dy^2 = 1 (or = -1, or = N) where D is a positive non-square integer.
-   - Solving method: Continued fraction expansion of sqrt(D).
+2. **Ecuación de Pell**: x^2 - Dy^2 = 1 (o = -1, o = N) donde D es un entero positivo no cuadrado perfecto.
+   - Método de resolución: Expansión en fracción continua de sqrt(D).
 
-3. **Pythagorean**: x^2 + y^2 = z^2.
-   - Solving method: Parametric family x = m^2 - n^2, y = 2mn, z = m^2 + n^2.
+3. **Pitagórica**: x^2 + y^2 = z^2.
+   - Método de resolución: Familia paramétrica x = m^2 - n^2, y = 2mn, z = m^2 + n^2.
 
-4. **General quadratic**: ax^2 + bxy + cy^2 + dx + ey + f = 0.
-   - Solving method: Complete the square, reduce to Pell or simpler form, or apply modular constraints.
+4. **Cuadrática general**: ax^2 + bxy + cy^2 + dx + ey + f = 0.
+   - Método de resolución: Completar el cuadrado, reducir a Pell o forma más simple, o aplicar restricciones modulares.
 
-5. **Higher-order or special**: Fermat-type (x^n + y^n = z^n for n > 2), sum of squares, or other.
-   - Solving method: Modular obstruction, descent, or known impossibility results.
+5. **Orden superior o especial**: Tipo Fermat (x^n + y^n = z^n para n > 2), suma de cuadrados, u otros.
+   - Método de resolución: Obstrucción modular, descenso, o resultados de imposibilidad conocidos.
 
-Record the classification and chosen method.
+Registrar la clasificación y el método elegido.
 
-**Esperado:** A precise classification with the solving strategy identified.
+**Esperado:** Una clasificación precisa con la estrategia de resolución identificada.
 
-**En caso de fallo:** If the equation does not fit a standard type, try substitution or transformation to reduce it to a known form. For example, x^2 + y^2 + z^2 = n can be approached via Legendre's three-square theorem. If no reduction is apparent, apply modular constraints (Step 4) to test for obstructions.
+**En caso de fallo:** Si la ecuación no encaja en un tipo estándar, intentar sustitución o transformación para reducirla a una forma conocida. Por ejemplo, x^2 + y^2 + z^2 = n puede abordarse mediante el teorema de los tres cuadrados de Legendre. Si no hay reducción aparente, aplicar restricciones modulares (Paso 4) para probar obstrucciones.
 
-### Paso 2: Solve Linear Diophantine Equations (if type = linear)
+### Paso 2: Resolver Ecuaciones Diofánticas Lineales (si tipo = lineal)
 
-Solve ax + by = c for integer x, y.
+Resolver ax + by = c para enteros x, y.
 
-1. **Compute g = gcd(a, b)** using the Euclidean algorithm.
+1. **Calcular g = mcd(a, b)** usando el algoritmo euclidiano.
 
-2. **Test solvability**: Solutions exist if and only if g | c.
-   - If g does not divide c, prove non-existence: "Since gcd(a, b) = g and g does not divide c, the equation ax + by = c has no integer solutions."
-   - Stop if no solution exists.
+2. **Probar solubilidad**: Existen soluciones si y solo si g | c.
+   - Si g no divide a c, demostrar no existencia: "Dado que mcd(a, b) = g y g no divide a c, la ecuación ax + by = c no tiene soluciones enteras."
+   - Detenerse si no existe solución.
 
-3. **Simplify**: Divide through by g to get (a/g)x + (b/g)y = c/g, where now gcd(a/g, b/g) = 1.
+3. **Simplificar**: Dividir todo por g para obtener (a/g)x + (b/g)y = c/g, donde ahora mcd(a/g, b/g) = 1.
 
-4. **Find a particular solution** using the extended Euclidean algorithm:
-   - Express 1 = (a/g)*s + (b/g)*t via back-substitution.
-   - Multiply by c/g: (c/g) = (a/g)*(s*c/g) + (b/g)*(t*c/g).
-   - Particular solution: x0 = s * (c/g), y0 = t * (c/g).
+4. **Encontrar una solución particular** usando el algoritmo euclidiano extendido:
+   - Expresar 1 = (a/g)*s + (b/g)*t mediante retro-sustitución.
+   - Multiplicar por c/g: (c/g) = (a/g)*(s*c/g) + (b/g)*(t*c/g).
+   - Solución particular: x0 = s * (c/g), y0 = t * (c/g).
 
-5. **Write the general solution**:
+5. **Escribir la solución general**:
    - x = x0 + (b/g)*k
    - y = y0 - (a/g)*k
-   - for all integers k.
+   - para todos los enteros k.
 
-6. **Apply constraints** (if positive solutions required):
-   - Solve x0 + (b/g)*k > 0 and y0 - (a/g)*k > 0 for k.
-   - Report the range of valid k values or state that no positive solution exists.
+6. **Aplicar restricciones** (si se requieren soluciones positivas):
+   - Resolver x0 + (b/g)*k > 0 y y0 - (a/g)*k > 0 para k.
+   - Reportar el rango de valores válidos de k o declarar que no existe solución positiva.
 
 **Example (15x + 21y = 39):**
 ```
@@ -108,33 +109,33 @@ General: x = 39 + 7k, y = -26 - 5k, k in Z.
 Check (k=0): 5*39 + 7*(-26) = 195 - 182 = 13. Correct.
 ```
 
-**Esperado:** The general solution family (x, y) parameterized by an integer k, with verification of the particular solution.
+**Esperado:** La familia de solución general (x, y) parametrizada por un entero k, con verificación de la solución particular.
 
-**En caso de fallo:** If the particular solution is wrong, re-check the extended Euclidean back-substitution step by step. The most common error is a sign mistake. Verify: a * x0 + b * y0 should equal c exactly (not just modulo something).
+**En caso de fallo:** Si la solución particular es incorrecta, re-verificar la retro-sustitución euclidiana extendida paso a paso. El error más común es un error de signo. Verificar: a * x0 + b * y0 debe ser igual a c exactamente (no solo módulo algo).
 
-### Paso 3: Solve Pell Equations (if type = Pell)
+### Paso 3: Resolver Ecuaciones de Pell (si tipo = Pell)
 
-Solve x^2 - Dy^2 = 1 where D is a positive non-square integer.
+Resolver x^2 - Dy^2 = 1 donde D es un entero positivo no cuadrado perfecto.
 
-1. **Verify D is not a perfect square**: If D = k^2, then x^2 - k^2*y^2 = (x - ky)(x + ky) = 1, which forces x - ky = x + ky = +/-1, giving y = 0, x = +/-1 (trivial). The equation is interesting only for non-square D.
+1. **Verificar que D no es un cuadrado perfecto**: Si D = k^2, entonces x^2 - k^2*y^2 = (x - ky)(x + ky) = 1, lo que obliga a x - ky = x + ky = +/-1, dando y = 0, x = +/-1 (trivial). La ecuación es interesante solo para D no cuadrado.
 
-2. **Compute the continued fraction expansion of sqrt(D)**:
-   - Initialize: a0 = floor(sqrt(D)), m0 = 0, d0 = 1.
-   - Iterate: m_{i+1} = d_i * a_i - m_i, d_{i+1} = (D - m_{i+1}^2) / d_i, a_{i+1} = floor((a0 + m_{i+1}) / d_{i+1}).
-   - Continue until the sequence of a_i repeats (the expansion is periodic after a0).
-   - Record the period length r.
+2. **Calcular la expansión en fracción continua de sqrt(D)**:
+   - Inicializar: a0 = floor(sqrt(D)), m0 = 0, d0 = 1.
+   - Iterar: m_{i+1} = d_i * a_i - m_i, d_{i+1} = (D - m_{i+1}^2) / d_i, a_{i+1} = floor((a0 + m_{i+1}) / d_{i+1}).
+   - Continuar hasta que la secuencia de a_i se repita (la expansión es periódica después de a0).
+   - Registrar la longitud del período r.
 
-3. **Extract the fundamental solution from convergents**:
-   - Compute the convergents p_i / q_i of the continued fraction.
-   - The convergent p_{r-1} / q_{r-1} (at the end of the first period) gives the fundamental solution:
-     - If r is even: (x1, y1) = (p_{r-1}, q_{r-1}) solves x^2 - Dy^2 = 1.
-     - If r is odd: (p_{r-1}, q_{r-1}) solves x^2 - Dy^2 = -1 (the negative Pell equation). Then (p_{2r-1}, q_{2r-1}) solves the positive equation.
+3. **Extraer la solución fundamental de los convergentes**:
+   - Calcular los convergentes p_i / q_i de la fracción continua.
+   - El convergente p_{r-1} / q_{r-1} (al final del primer período) da la solución fundamental:
+     - Si r es par: (x1, y1) = (p_{r-1}, q_{r-1}) resuelve x^2 - Dy^2 = 1.
+     - Si r es impar: (p_{r-1}, q_{r-1}) resuelve x^2 - Dy^2 = -1 (la ecuación de Pell negativa). Entonces (p_{2r-1}, q_{2r-1}) resuelve la ecuación positiva.
 
-4. **Generate further solutions** from the fundamental solution (x1, y1):
-   - The recurrence: x_{n+1} + y_{n+1} * sqrt(D) = (x1 + y1 * sqrt(D))^{n+1}.
-   - Equivalently: x_{n+1} = x1 * x_n + D * y1 * y_n, y_{n+1} = x1 * y_n + y1 * x_n.
+4. **Generar soluciones adicionales** a partir de la solución fundamental (x1, y1):
+   - La recurrencia: x_{n+1} + y_{n+1} * sqrt(D) = (x1 + y1 * sqrt(D))^{n+1}.
+   - Equivalentemente: x_{n+1} = x1 * x_n + D * y1 * y_n, y_{n+1} = x1 * y_n + y1 * x_n.
 
-5. **Present** the fundamental solution and the recurrence for generating all solutions.
+5. **Presentar** la solución fundamental y la recurrencia para generar todas las soluciones.
 
 **Fundamental solutions for small D:**
 
@@ -145,27 +146,27 @@ Solve x^2 - Dy^2 = 1 where D is a positive non-square integer.
 | 5  | (9, 4)   | 10 | (19, 6)     | 15 | (4, 1)      |
 | 6  | (5, 2)   | 11 | (10, 3)     | 17 | (33, 8)     |
 
-**Esperado:** The fundamental solution (x1, y1) verified by substitution, plus the recurrence for generating all positive solutions.
+**Esperado:** La solución fundamental (x1, y1) verificada por sustitución, más la recurrencia para generar todas las soluciones positivas.
 
-**En caso de fallo:** If the continued fraction computation does not converge to a period, check the iteration formula. The period length r can be large (e.g., D = 61 has r = 11 and fundamental solution (1766319049, 226153980)). For large D, use computational tools rather than manual computation.
+**En caso de fallo:** Si el cálculo de fracción continua no converge a un período, verificar la fórmula de iteración. La longitud del período r puede ser grande (ej., D = 61 tiene r = 11 y solución fundamental (1766319049, 226153980)). Para D grande, usar herramientas computacionales en lugar de cálculo manual.
 
-### Paso 4: Apply Modular Constraints for Existence/Non-Existence (if type = general quadratic or higher)
+### Paso 4: Aplicar Restricciones Modulares para Existencia/No Existencia (si tipo = cuadrática general o superior)
 
-Prove that an equation has no integer solutions by showing a modular obstruction.
+Demostrar que una ecuación no tiene soluciones enteras mostrando una obstrucción modular.
 
-1. **Choose a modulus m** (typically m = 2, 3, 4, 5, 7, 8, or 16).
+1. **Elegir un módulo m** (típicamente m = 2, 3, 4, 5, 7, 8, o 16).
 
-2. **Enumerate all residues**: Compute the left-hand side modulo m for all possible residues of the variables.
+2. **Enumerar todos los residuos**: Calcular el lado izquierdo módulo m para todos los residuos posibles de las variables.
 
-3. **Check if any combination gives the required right-hand side modulo m**.
-   - If no combination works, the equation has no solution (modular obstruction).
+3. **Verificar si alguna combinación da el lado derecho requerido módulo m**.
+   - Si ninguna combinación funciona, la ecuación no tiene solución (obstrucción modular).
 
-4. **Common obstructions**:
-   - **Squares mod 4**: n^2 = 0 or 1 (mod 4). So x^2 + y^2 = c has no solution if c = 3 (mod 4).
-   - **Squares mod 8**: n^2 = 0, 1, or 4 (mod 8). So x^2 + y^2 + z^2 = c has no solution if c = 7 (mod 8).
-   - **Cubes mod 9**: n^3 = 0, 1, or 8 (mod 9). So x^3 + y^3 + z^3 = c may be obstructed for certain c mod 9.
+4. **Obstrucciones comunes**:
+   - **Cuadrados mod 4**: n^2 = 0 o 1 (mod 4). Entonces x^2 + y^2 = c no tiene solución si c = 3 (mod 4).
+   - **Cuadrados mod 8**: n^2 = 0, 1, o 4 (mod 8). Entonces x^2 + y^2 + z^2 = c no tiene solución si c = 7 (mod 8).
+   - **Cubos mod 9**: n^3 = 0, 1, u 8 (mod 9). Entonces x^3 + y^3 + z^3 = c puede estar obstruida para ciertos c mod 9.
 
-5. **If no obstruction is found**, a modular approach cannot prove non-existence. Solutions may or may not exist; try constructive methods or descent.
+5. **Si no se encuentra obstrucción**, un enfoque modular no puede demostrar la no existencia. Las soluciones pueden o no existir; intentar métodos constructivos o descenso.
 
 **Quadratic residues reference:**
 
@@ -180,29 +181,29 @@ Prove that an equation has no integer solutions by showing a modular obstruction
 | 13  | {0, 1, 3, 4, 9, 10, 12}  |
 | 16  | {0, 1, 4, 9}             |
 
-**Esperado:** Either a proof of non-existence via modular obstruction, or a statement that no obstruction was found at the tested moduli.
+**Esperado:** Ya sea una demostración de no existencia mediante obstrucción modular, o una declaración de que no se encontró obstrucción en los módulos probados.
 
-**En caso de fallo:** If modular methods are inconclusive, try infinite descent: assume a solution exists, derive a strictly smaller solution, and repeat until a contradiction with positivity is reached. This technique is classical for proving x^4 + y^4 = z^2 has no non-trivial solutions.
+**En caso de fallo:** Si los métodos modulares son inconclusos, intentar descenso infinito: asumir que existe una solución, derivar una solución estrictamente menor, y repetir hasta alcanzar una contradicción con la positividad. Esta técnica es clásica para demostrar que x^4 + y^4 = z^2 no tiene soluciones no triviales.
 
-### Paso 5: Generate Solution Families from Fundamental Solution
+### Paso 5: Generar Familias de Soluciones a partir de la Solución Fundamental
 
-Express all solutions in terms of the fundamental solution and integer parameters.
+Expresar todas las soluciones en términos de la solución fundamental y parámetros enteros.
 
-1. **For linear equations**: The family is x = x0 + (b/g)*k, y = y0 - (a/g)*k (from Step 2).
+1. **Para ecuaciones lineales**: La familia es x = x0 + (b/g)*k, y = y0 - (a/g)*k (del Paso 2).
 
-2. **For Pell equations**: Use the recurrence from Step 3 to generate the first several solutions:
+2. **Para ecuaciones de Pell**: Usar la recurrencia del Paso 3 para generar las primeras varias soluciones:
    ```
    (x1, y1), (x2, y2), (x3, y3), ...
    ```
-   List at least 3-5 solutions as a sanity check.
+   Listar al menos 3-5 soluciones como verificación de cordura.
 
-3. **For Pythagorean triples**: Generate primitive triples from parameters m > n > 0, gcd(m, n) = 1, m - n odd:
+3. **Para tripletas pitagóricas**: Generar tripletas primitivas a partir de parámetros m > n > 0, mcd(m, n) = 1, m - n impar:
    - a = m^2 - n^2, b = 2mn, c = m^2 + n^2.
-   - All primitive triples arise this way (up to swapping a and b).
+   - Todas las tripletas primitivas surgen de esta manera (hasta intercambiar a y b).
 
-4. **For general families**: Express solutions in parametric form if possible. If the equation defines a curve of genus 0, a rational parametrization exists. If genus >= 1, there may be finitely many solutions (Faltings' theorem for genus >= 2).
+4. **Para familias generales**: Expresar soluciones en forma paramétrica si es posible. Si la ecuación define una curva de género 0, existe una parametrización racional. Si género >= 1, puede haber finitamente muchas soluciones (teorema de Faltings para género >= 2).
 
-5. **Verify** at least 3 members of the family by substitution into the original equation.
+5. **Verificar** al menos 3 miembros de la familia por sustitución en la ecuación original.
 
 **Example (Pell, D = 2):**
 ```
@@ -211,41 +212,41 @@ Fundamental: (x1, y1) = (3, 2). Check: 9 - 2*4 = 1. Correct.
 (x3, y3) = (3*17 + 2*2*12, 3*12 + 2*17) = (99, 70). Check: 9801 - 2*4900 = 1.
 ```
 
-**Esperado:** A parametric or recursive description of all solutions, with at least 3 solutions verified.
+**Esperado:** Una descripción paramétrica o recursiva de todas las soluciones, con al menos 3 soluciones verificadas.
 
-**En caso de fallo:** If generated solutions fail verification, the fundamental solution or the recurrence formula is wrong. For Pell equations, re-derive the fundamental solution from the continued fraction. For linear equations, re-check the extended Euclidean computation.
+**En caso de fallo:** Si las soluciones generadas fallan la verificación, la solución fundamental o la fórmula de recurrencia es incorrecta. Para ecuaciones de Pell, re-derivar la solución fundamental de la fracción continua. Para ecuaciones lineales, re-verificar el cálculo euclidiano extendido.
 
 ## Validación
 
-- [ ] Equation is correctly classified by type (linear, Pell, Pythagorean, general quadratic, higher-order)
-- [ ] For linear equations: gcd(a, b) | c is checked before solving
-- [ ] Extended Euclidean back-substitution is verified: a*x0 + b*y0 = c exactly
-- [ ] General solution includes all solutions (parameterized by integer k or recurrence)
-- [ ] For Pell: D is verified as non-square before applying continued fraction method
-- [ ] For Pell: fundamental solution satisfies x1^2 - D*y1^2 = 1 by direct computation
-- [ ] Modular obstruction proofs enumerate all residue combinations, not just some
-- [ ] At least 3 members of any solution family are verified by substitution
-- [ ] Constraints (positive integers, bounded range) are applied after finding the general solution
-- [ ] Non-existence claims are justified either by gcd condition or modular obstruction
+- [ ] La ecuación está correctamente clasificada por tipo (lineal, Pell, pitagórica, cuadrática general, orden superior)
+- [ ] Para ecuaciones lineales: mcd(a, b) | c se verifica antes de resolver
+- [ ] La retro-sustitución euclidiana extendida está verificada: a*x0 + b*y0 = c exactamente
+- [ ] La solución general incluye todas las soluciones (parametrizada por entero k o recurrencia)
+- [ ] Para Pell: D se verifica como no cuadrado antes de aplicar el método de fracción continua
+- [ ] Para Pell: la solución fundamental satisface x1^2 - D*y1^2 = 1 por cálculo directo
+- [ ] Las demostraciones de obstrucción modular enumeran todas las combinaciones de residuos, no solo algunas
+- [ ] Al menos 3 miembros de cualquier familia de soluciones se verifican por sustitución
+- [ ] Las restricciones (enteros positivos, rango acotado) se aplican después de encontrar la solución general
+- [ ] Las afirmaciones de no existencia se justifican ya sea por condición de mcd u obstrucción modular
 
 ## Errores Comunes
 
-- **Assuming all equations with gcd | c have positive solutions**: The general solution x = x0 + (b/g)*k includes negative values. Positive solutions may not exist even when the equation is solvable over all integers.
+- **Asumir que todas las ecuaciones con mcd | c tienen soluciones positivas**: La solución general x = x0 + (b/g)*k incluye valores negativos. Las soluciones positivas pueden no existir incluso cuando la ecuación es resoluble sobre todos los enteros.
 
-- **Confusing x^2 - Dy^2 = 1 with x^2 - Dy^2 = -1**: The negative Pell equation has solutions only when the continued fraction period length is odd. Applying the positive equation formula to a negative equation target gives the wrong result.
+- **Confundir x^2 - Dy^2 = 1 con x^2 - Dy^2 = -1**: La ecuación de Pell negativa tiene soluciones solo cuando la longitud del período de fracción continua es impar. Aplicar la fórmula de la ecuación positiva a un objetivo de ecuación negativa da un resultado incorrecto.
 
-- **Forgetting the trivial solution of Pell's equation**: (x, y) = (1, 0) always satisfies x^2 - Dy^2 = 1 but is not useful for generating non-trivial solutions. The fundamental solution is the *smallest* solution with y > 0.
+- **Olvidar la solución trivial de la ecuación de Pell**: (x, y) = (1, 0) siempre satisface x^2 - Dy^2 = 1 pero no es útil para generar soluciones no triviales. La solución fundamental es la solución *más pequeña* con y > 0.
 
-- **Incomplete modular obstruction**: Checking only mod 2 or mod 4 may miss obstructions visible at higher moduli. If the first few moduli show no obstruction, try mod 8, 9, 16, or the discriminant of the quadratic form.
+- **Obstrucción modular incompleta**: Verificar solo mod 2 o mod 4 puede omitir obstrucciones visibles en módulos más altos. Si los primeros módulos no muestran obstrucción, intentar mod 8, 9, 16, o el discriminante de la forma cuadrática.
 
-- **Off-by-one in continued fraction period**: The convergent indices must be carefully tracked. The fundamental solution comes from p_{r-1}/q_{r-1} where r is the period length, not from p_r/q_r.
+- **Error de uno en el período de fracción continua**: Los índices de convergentes deben rastrearse cuidadosamente. La solución fundamental viene de p_{r-1}/q_{r-1} donde r es la longitud del período, no de p_r/q_r.
 
-- **Infinite descent without a base case**: When using descent to prove non-existence, you must show that the descent terminates at a contradiction (e.g., x = 0 contradicts x > 0). Without this base case, the argument is incomplete.
+- **Descenso infinito sin caso base**: Al usar descenso para demostrar no existencia, se debe mostrar que el descenso termina en una contradicción (ej., x = 0 contradice x > 0). Sin este caso base, el argumento está incompleto.
 
-- **Applying Fermat's Last Theorem incorrectly**: x^n + y^n = z^n has no non-trivial integer solutions for n > 2 (Wiles, 1995), but this does not apply to equations with different coefficients like 2x^3 + 3y^3 = z^3.
+- **Aplicar incorrectamente el Último Teorema de Fermat**: x^n + y^n = z^n no tiene soluciones enteras no triviales para n > 2 (Wiles, 1995), pero esto no aplica a ecuaciones con coeficientes diferentes como 2x^3 + 3y^3 = z^3.
 
 ## Habilidades Relacionadas
 
-- `analyze-prime-numbers` -- Factorization and gcd computation are prerequisites for Diophantine solving
-- `solve-modular-arithmetic` -- Linear congruences ax = c (mod b) are equivalent to linear Diophantine equations
-- `derive-theoretical-result` -- Formal derivation techniques for proving Diophantine impossibility results
+- `analyze-prime-numbers` -- La factorización y el cálculo de mcd son prerrequisitos para resolver ecuaciones diofánticas
+- `solve-modular-arithmetic` -- Las congruencias lineales ax = c (mod b) son equivalentes a ecuaciones diofánticas lineales
+- `derive-theoretical-result` -- Técnicas de derivación formal para demostrar resultados de imposibilidad diofántica

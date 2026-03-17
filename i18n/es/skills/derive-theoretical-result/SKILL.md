@@ -1,12 +1,13 @@
 ---
 name: derive-theoretical-result
 description: >
-  Derive a theoretical result step-by-step from first principles or established
-  theorems, with every step explicitly justified and special cases checked.
-  Use when deriving a formula or theorem from first principles, proving a
-  mathematical statement by logical deduction, re-deriving a textbook result
-  for verification or adaptation, extending a known result to a more general
-  setting, or producing a self-contained derivation for a paper or thesis.
+  Derivar un resultado teórico paso a paso desde primeros principios o teoremas
+  establecidos, con cada paso justificado explícitamente y casos especiales
+  verificados. Usar al derivar una fórmula o teorema desde primeros principios,
+  al demostrar un enunciado matemático por deducción lógica, al re-derivar un
+  resultado de libro de texto para verificación o adaptación, al extender un
+  resultado conocido a un contexto más general, o al producir una derivación
+  autocontenida para un artículo o tesis.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -25,34 +26,34 @@ metadata:
 
 # Derive Theoretical Result
 
-Produce a rigorous, step-by-step derivation of a theoretical result starting from stated axioms, first principles, or established theorems. Every algebraic or logical step is explicitly justified, limiting cases are verified, and the final result is presented with a complete notation glossary.
+Producir una derivación rigurosa, paso a paso, de un resultado teórico partiendo de axiomas declarados, primeros principios o teoremas establecidos. Cada paso algebraico o lógico está justificado explícitamente, los casos límite se verifican, y el resultado final se presenta con un glosario de notación completo.
 
 ## Cuándo Usar
 
-- Deriving a formula, relation, or theorem from first principles (e.g., deriving the Euler-Lagrange equation from the action principle)
-- Proving a mathematical statement by logical deduction from axioms
-- Re-deriving a textbook result to verify it or adapt it to a modified context
-- Extending a known result to a more general setting (e.g., from flat spacetime to curved spacetime)
-- Producing a self-contained derivation for a paper, thesis, or technical report
+- Derivar una fórmula, relación o teorema desde primeros principios (ej., derivar la ecuación de Euler-Lagrange del principio de acción)
+- Demostrar un enunciado matemático por deducción lógica desde axiomas
+- Re-derivar un resultado de libro de texto para verificarlo o adaptarlo a un contexto modificado
+- Extender un resultado conocido a un contexto más general (ej., del espacio-tiempo plano al espacio-tiempo curvo)
+- Producir una derivación autocontenida para un artículo, tesis o informe técnico
 
 ## Entradas
 
-- **Requerido**: Target result to derive (equation, inequality, theorem statement, or relation)
-- **Requerido**: Starting point (axioms, postulates, previously established results, or Lagrangian/Hamiltonian)
-- **Opcional**: Preferred proof technique (direct, by contradiction, by induction, variational, constructive)
-- **Opcional**: Notation conventions to follow (if matching a specific textbook or collaborator's conventions)
-- **Opcional**: Known intermediate results that may be cited without re-derivation
+- **Requerido**: Resultado objetivo a derivar (ecuación, desigualdad, enunciado de teorema o relación)
+- **Requerido**: Punto de partida (axiomas, postulados, resultados previamente establecidos, o Lagrangiano/Hamiltoniano)
+- **Opcional**: Técnica de demostración preferida (directa, por contradicción, por inducción, variacional, constructiva)
+- **Opcional**: Convenciones de notación a seguir (si se ajustan a un libro de texto o convenciones de un colaborador)
+- **Opcional**: Resultados intermedios conocidos que pueden citarse sin re-derivación
 
 ## Procedimiento
 
-### Paso 1: State Starting Assumptions and Target Result
+### Paso 1: Declarar las Suposiciones Iniciales y el Resultado Objetivo
 
-Write the derivation's contract explicitly before any calculation:
+Escribir el contrato de la derivación explícitamente antes de cualquier cálculo:
 
-1. **Axioms and postulates**: List every assumption the derivation rests on. For physics, this includes the symmetry group, the action principle, or the postulates of quantum mechanics. For mathematics, this includes the axiom system and any previously proven lemmas.
-2. **Target result**: State the result to be derived in precise mathematical notation. If the result is an equation, write both sides. If it is an inequality, state the direction and the conditions for equality.
-3. **Scope and restrictions**: State the domain of validity (e.g., "valid for non-relativistic, spinless particles in three dimensions"). Identify what the derivation does not cover.
-4. **Notation declaration**: Define every symbol that will appear. This prevents ambiguity and makes the derivation self-contained.
+1. **Axiomas y postulados**: Listar toda suposición en la que se basa la derivación. Para física, esto incluye el grupo de simetría, el principio de acción o los postulados de la mecánica cuántica. Para matemáticas, esto incluye el sistema axiomático y cualquier lema previamente demostrado.
+2. **Resultado objetivo**: Declarar el resultado a derivar en notación matemática precisa. Si el resultado es una ecuación, escribir ambos lados. Si es una desigualdad, declarar la dirección y las condiciones de igualdad.
+3. **Alcance y restricciones**: Declarar el dominio de validez (ej., "válido para partículas no relativistas sin espín en tres dimensiones"). Identificar lo que la derivación no cubre.
+4. **Declaración de notación**: Definir cada símbolo que aparecerá. Esto previene ambigüedad y hace la derivación autocontenida.
 
 ```markdown
 ## Derivation Contract
@@ -64,19 +65,19 @@ Write the derivation's contract explicitly before any calculation:
   - ...
 ```
 
-**Esperado:** A complete, unambiguous statement of what is being derived from what, with all notation defined upfront.
+**Esperado:** Una declaración completa e inequívoca de qué se está derivando a partir de qué, con toda la notación definida de antemano.
 
-**En caso de fallo:** If the target result is ambiguous or the starting assumptions are incomplete, clarify before proceeding. A derivation with hidden assumptions is unreliable.
+**En caso de fallo:** Si el resultado objetivo es ambiguo o las suposiciones iniciales están incompletas, clarificar antes de proceder. Una derivación con suposiciones ocultas no es confiable.
 
-### Paso 2: Identify Required Mathematical Machinery
+### Paso 2: Identificar la Maquinaria Matemática Requerida
 
-Survey the tools needed and verify their applicability:
+Examinar las herramientas necesarias y verificar su aplicabilidad:
 
-1. **Algebraic techniques**: Identify required manipulations (tensor algebra, commutator algebra, matrix operations, series expansions). Verify that the structures involved satisfy the prerequisites (e.g., convergence conditions for series, invertibility for matrix operations).
-2. **Calculus and analysis**: Identify whether the derivation requires ordinary or partial differentiation, integration (and over what domain), functional derivatives, contour integration, or distribution theory. Verify regularity conditions (differentiability, integrability, analyticity).
-3. **Symmetry and group theory**: Identify representation-theoretic tools needed (irreducible representations, Clebsch-Gordan coefficients, character orthogonality, Wigner-Eckart theorem).
-4. **Topology and geometry** (if applicable): Identify geometric structures (manifolds, fiber bundles, connections) and topological constraints (boundary terms, winding numbers, index theorems).
-5. **Known identities and lemmas**: Collect the specific identities that will be invoked (e.g., Jacobi identity, Bianchi identity, integration by parts, Stokes' theorem). State each one explicitly so the derivation can cite them by name.
+1. **Técnicas algebraicas**: Identificar manipulaciones requeridas (álgebra tensorial, álgebra de conmutadores, operaciones matriciales, expansiones en series). Verificar que las estructuras involucradas satisfacen los prerrequisitos (ej., condiciones de convergencia para series, invertibilidad para operaciones matriciales).
+2. **Cálculo y análisis**: Identificar si la derivación requiere diferenciación ordinaria o parcial, integración (y sobre qué dominio), derivadas funcionales, integración de contorno o teoría de distribuciones. Verificar condiciones de regularidad (diferenciabilidad, integrabilidad, analiticidad).
+3. **Simetría y teoría de grupos**: Identificar herramientas de teoría de representaciones necesarias (representaciones irreducibles, coeficientes de Clebsch-Gordan, ortogonalidad de caracteres, teorema de Wigner-Eckart).
+4. **Topología y geometría** (si aplica): Identificar estructuras geométricas (variedades, fibrados, conexiones) y restricciones topológicas (términos de frontera, números de enrollamiento, teoremas de índice).
+5. **Identidades y lemas conocidos**: Recopilar las identidades específicas que se invocarán (ej., identidad de Jacobi, identidad de Bianchi, integración por partes, teorema de Stokes). Declarar cada una explícitamente para que la derivación pueda citarlas por nombre.
 
 ```markdown
 ## Mathematical Toolkit
@@ -86,26 +87,26 @@ Survey the tools needed and verify their applicability:
 - **Identities to invoke**: [list with precise statements]
 ```
 
-**Esperado:** A checklist of mathematical tools with their applicability conditions verified for the specific problem at hand.
+**Esperado:** Una lista de verificación de herramientas matemáticas con sus condiciones de aplicabilidad verificadas para el problema específico en cuestión.
 
-**En caso de fallo:** If a required tool has unverified prerequisites (e.g., term-by-term differentiation of a series whose uniform convergence is unknown), flag it as a gap. Either prove the prerequisite or state it as an additional assumption.
+**En caso de fallo:** Si una herramienta requerida tiene prerrequisitos no verificados (ej., diferenciación término a término de una serie cuya convergencia uniforme es desconocida), señalarlo como una brecha. O demostrar el prerrequisito o declararlo como una suposición adicional.
 
-### Paso 3: Execute Derivation with Step-by-Step Justification
+### Paso 3: Ejecutar la Derivación con Justificación Paso a Paso
 
-Carry out the derivation with every step labeled and justified:
+Llevar a cabo la derivación con cada paso etiquetado y justificado:
 
-1. **One operation per step**: Each numbered step performs exactly one algebraic or logical operation. Do not combine multiple manipulations into a single step.
-2. **Justification labels**: Tag each step with its justification. Common labels:
-   - `[by assumption]` -- invoking a stated axiom or assumption
-   - `[by definition]` -- using a previously declared definition
-   - `[by {identity name}]` -- applying a named identity (e.g., "by Jacobi identity")
-   - `[by Step N]` -- citing a previous step in this derivation
-   - `[by {theorem name}]` -- invoking an external theorem (stated in Step 2)
-3. **Intermediate checkpoints**: After every 5-10 steps, pause and verify:
-   - Units/dimensions are consistent on both sides
-   - Known symmetries are preserved
-   - The expression has the correct transformation properties
-4. **Branch points**: If the derivation branches (e.g., case analysis for degenerate vs. non-degenerate eigenvalues), treat each branch as a labeled sub-derivation and merge the results.
+1. **Una operación por paso**: Cada paso numerado realiza exactamente una operación algebraica o lógica. No combinar múltiples manipulaciones en un solo paso.
+2. **Etiquetas de justificación**: Etiquetar cada paso con su justificación. Etiquetas comunes:
+   - `[by assumption]` -- invocando un axioma o suposición declarada
+   - `[by definition]` -- usando una definición previamente declarada
+   - `[by {identity name}]` -- aplicando una identidad con nombre (ej., "by Jacobi identity")
+   - `[by Step N]` -- citando un paso anterior en esta derivación
+   - `[by {theorem name}]` -- invocando un teorema externo (declarado en el Paso 2)
+3. **Puntos de control intermedios**: Después de cada 5-10 pasos, pausar y verificar:
+   - Las unidades/dimensiones son consistentes en ambos lados
+   - Las simetrías conocidas se preservan
+   - La expresión tiene las propiedades de transformación correctas
+4. **Puntos de ramificación**: Si la derivación se ramifica (ej., análisis de casos para eigenvalores degenerados vs. no degenerados), tratar cada rama como una sub-derivación etiquetada y fusionar los resultados.
 
 ```markdown
 ## Derivation
@@ -128,24 +129,24 @@ Carry out the derivation with every step labeled and justified:
 *Justification*: [final operation]  QED
 ```
 
-**Esperado:** A linear sequence of steps from the starting point to the target result, with no gaps in logic. Every step is independently verifiable.
+**Esperado:** Una secuencia lineal de pasos desde el punto de partida hasta el resultado objetivo, sin brechas en la lógica. Cada paso es independientemente verificable.
 
-**En caso de fallo:** If a step does not follow from the previous one, the derivation has a gap. Either insert the missing intermediate steps or identify the additional assumption needed. Never skip a step with "it can be shown that" unless the omitted result is a well-known identity listed in Step 2.
+**En caso de fallo:** Si un paso no se sigue del anterior, la derivación tiene una brecha. O insertar los pasos intermedios faltantes o identificar la suposición adicional necesaria. Nunca saltar un paso con "se puede demostrar que" a menos que el resultado omitido sea una identidad conocida listada en el Paso 2.
 
-### Paso 4: Check Limiting Cases and Special Values
+### Paso 4: Verificar Casos Límite y Valores Especiales
 
-Validate the derived result against known physics or mathematics:
+Validar el resultado derivado contra física o matemáticas conocidas:
 
-1. **Limiting cases**: Identify at least three limiting cases where the result should reduce to something known:
-   - A simpler, previously derived formula (e.g., non-relativistic limit of a relativistic result)
-   - A trivial case (e.g., setting a coupling constant to zero)
-   - An extreme parameter regime (e.g., high-temperature or low-temperature limit)
+1. **Casos límite**: Identificar al menos tres casos límite donde el resultado debería reducirse a algo conocido:
+   - Una fórmula más simple, previamente derivada (ej., límite no relativista de un resultado relativista)
+   - Un caso trivial (ej., establecer una constante de acoplamiento en cero)
+   - Un régimen de parámetro extremo (ej., límite de alta temperatura o baja temperatura)
 
-2. **Special values**: Substitute specific values of parameters where the answer is known independently (e.g., n=1 for the hydrogen atom, d=3 for three-dimensional results).
+2. **Valores especiales**: Sustituir valores específicos de parámetros donde la respuesta es conocida independientemente (ej., n=1 para el átomo de hidrógeno, d=3 para resultados tridimensionales).
 
-3. **Symmetry checks**: Verify that the result transforms correctly under the symmetry group. If the result should be a scalar, check that it is invariant. If it should be a vector, check its transformation law.
+3. **Verificaciones de simetría**: Verificar que el resultado se transforma correctamente bajo el grupo de simetría. Si el resultado debería ser un escalar, verificar que es invariante. Si debería ser un vector, verificar su ley de transformación.
 
-4. **Consistency with related results**: Check that the derived result is consistent with other known results in the same theory (e.g., Ward identities, sum rules, reciprocity relations).
+4. **Consistencia con resultados relacionados**: Comprobar que el resultado derivado es consistente con otros resultados conocidos en la misma teoría (ej., identidades de Ward, reglas de suma, relaciones de reciprocidad).
 
 ```markdown
 ## Limiting Case Verification
@@ -155,19 +156,19 @@ Validate the derived result against known physics or mathematics:
 | ... | ... | ... | ... | ... |
 ```
 
-**Esperado:** All limiting cases and special values produce the expected results. The derivation is internally consistent.
+**Esperado:** Todos los casos límite y valores especiales producen los resultados esperados. La derivación es internamente consistente.
 
-**En caso de fallo:** A failed limiting case indicates an error in the derivation. Trace the failure back by checking which step first produces an expression that fails the limit. Common causes: incorrect sign, missing factor of 2 or pi, wrong combinatorial coefficient, or a step where an order of limits matters.
+**En caso de fallo:** Un caso límite fallido indica un error en la derivación. Rastrear el fallo verificando qué paso produce primero una expresión que falla en el límite. Causas comunes: signo incorrecto, factor faltante de 2 o pi, coeficiente combinatorial incorrecto, o un paso donde el orden de los límites importa.
 
-### Paso 5: Present Complete Derivation with Notation Glossary
+### Paso 5: Presentar la Derivación Completa con Glosario de Notación
 
-Assemble the final, polished derivation:
+Ensamblar la derivación final y pulida:
 
-1. **Narrative structure**: Write a brief introductory paragraph stating the physical or mathematical motivation, the approach, and the main result.
-2. **Derivation body**: Present the steps from Step 3, cleaned up for readability. Group related steps into logical blocks with descriptive headings (e.g., "Expanding the action to second order", "Applying the stationary phase condition").
-3. **Result box**: State the final result in a highlighted block, clearly separated from the derivation.
-4. **Notation glossary**: Compile every symbol used in the derivation with its meaning, units (if physical), and first occurrence.
-5. **Assumptions summary**: List all assumptions in a single place, distinguishing fundamental postulates from technical assumptions (e.g., smoothness, convergence).
+1. **Estructura narrativa**: Escribir un párrafo introductorio breve declarando la motivación física o matemática, el enfoque y el resultado principal.
+2. **Cuerpo de la derivación**: Presentar los pasos del Paso 3, limpiados para legibilidad. Agrupar pasos relacionados en bloques lógicos con encabezados descriptivos (ej., "Expandiendo la acción a segundo orden", "Aplicando la condición de fase estacionaria").
+3. **Cuadro del resultado**: Declarar el resultado final en un bloque destacado, claramente separado de la derivación.
+4. **Glosario de notación**: Compilar cada símbolo usado en la derivación con su significado, unidades (si es físico) y primera aparición.
+5. **Resumen de suposiciones**: Listar todas las suposiciones en un solo lugar, distinguiendo postulados fundamentales de suposiciones técnicas (ej., suavidad, convergencia).
 
 ```markdown
 ## Final Result
@@ -186,32 +187,32 @@ Assemble the final, polished derivation:
 3. ...
 ```
 
-**Esperado:** A self-contained document that a reader can follow from start to finish without consulting external references, except for the explicitly cited identities and theorems.
+**Esperado:** Un documento autocontenido que un lector puede seguir de principio a fin sin consultar referencias externas, excepto por las identidades y teoremas explícitamente citados.
 
-**En caso de fallo:** If the derivation is too long for a single document (more than ~50 steps), break it into lemmas. Derive each lemma separately, then assemble the main result by citing the lemmas.
+**En caso de fallo:** Si la derivación es demasiado larga para un solo documento (más de ~50 pasos), dividirla en lemas. Derivar cada lema por separado, luego ensamblar el resultado principal citando los lemas.
 
 ## Validación
 
-- [ ] All starting assumptions are explicitly stated before the first calculation step
-- [ ] Every derivation step has a labeled justification (no unjustified leaps)
-- [ ] Units and dimensions are consistent at every intermediate checkpoint
-- [ ] At least three limiting cases are checked and produce expected results
-- [ ] Special values match independently known answers
-- [ ] The result transforms correctly under the stated symmetry group
-- [ ] A notation glossary defines every symbol used
-- [ ] The derivation is complete: no steps are deferred with "it can be shown"
-- [ ] The domain of validity is explicitly stated with the final result
+- [ ] Todas las suposiciones iniciales están declaradas explícitamente antes del primer paso de cálculo
+- [ ] Cada paso de la derivación tiene una justificación etiquetada (sin saltos injustificados)
+- [ ] Las unidades y dimensiones son consistentes en cada punto de control intermedio
+- [ ] Al menos tres casos límite se verifican y producen resultados esperados
+- [ ] Los valores especiales coinciden con respuestas conocidas independientemente
+- [ ] El resultado se transforma correctamente bajo el grupo de simetría declarado
+- [ ] Un glosario de notación define cada símbolo usado
+- [ ] La derivación está completa: ningún paso se difiere con "se puede demostrar"
+- [ ] El dominio de validez se declara explícitamente con el resultado final
 
 ## Errores Comunes
 
-- **Hidden assumptions**: Assuming a function is analytic, a series converges, or an integral exists without stating it. Every regularity condition is an assumption and must be declared.
-- **Sign errors**: The most common mechanical error. Verify signs at every step by tracking them through substitutions. Cross-check against dimensional analysis (a sign error often produces a dimensionally inconsistent expression).
-- **Dropped boundary terms**: When integrating by parts or applying Stokes' theorem, boundary terms vanish only if specific conditions are met. State why they vanish (e.g., "because the field decays faster than 1/r at infinity").
-- **Order of limits**: Taking limits in the wrong order can give different results (e.g., thermodynamic limit before zero-temperature limit). State the order explicitly and justify it.
-- **Circular reasoning**: Using the result to be derived as an intermediate step. This is especially subtle when the result is a well-known formula that "seems obvious." Every step must follow from the stated starting point, not from familiarity with the answer.
-- **Notation collisions**: Using the same symbol for different quantities (e.g., 'E' for energy and for electric field). The notation glossary prevents this, but only if it is written before the derivation rather than after.
+- **Suposiciones ocultas**: Asumir que una función es analítica, que una serie converge o que una integral existe sin declararlo. Cada condición de regularidad es una suposición y debe declararse.
+- **Errores de signo**: El error mecánico más común. Verificar signos en cada paso rastreándolos a través de sustituciones. Verificar cruzadamente contra análisis dimensional (un error de signo frecuentemente produce una expresión dimensionalmente inconsistente).
+- **Términos de frontera descartados**: Al integrar por partes o aplicar el teorema de Stokes, los términos de frontera se anulan solo si se cumplen condiciones específicas. Declarar por qué se anulan (ej., "porque el campo decae más rápido que 1/r en el infinito").
+- **Orden de límites**: Tomar límites en el orden incorrecto puede dar resultados diferentes (ej., límite termodinámico antes del límite de temperatura cero). Declarar el orden explícitamente y justificarlo.
+- **Razonamiento circular**: Usar el resultado a derivar como un paso intermedio. Esto es especialmente sutil cuando el resultado es una fórmula conocida que "parece obvia." Cada paso debe seguirse del punto de partida declarado, no de la familiaridad con la respuesta.
+- **Colisiones de notación**: Usar el mismo símbolo para diferentes cantidades (ej., 'E' para energía y para campo eléctrico). El glosario de notación previene esto, pero solo si se escribe antes de la derivación en lugar de después.
 
 ## Habilidades Relacionadas
 
-- `formulate-quantum-problem` -- formulate the quantum mechanical framework before deriving results from it
-- `survey-theoretical-literature` -- find prior derivations of the same or related results for comparison
+- `formulate-quantum-problem` -- formular el marco de mecánica cuántica antes de derivar resultados de él
+- `survey-theoretical-literature` -- encontrar derivaciones previas del mismo resultado o resultados relacionados para comparación

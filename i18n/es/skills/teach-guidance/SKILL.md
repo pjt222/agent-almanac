@@ -1,14 +1,15 @@
 ---
 name: teach-guidance
 description: >
-  Guide a person in becoming a better teacher and explainer. AI coaches
-  content structuring, audience calibration, explanation clarity, Socratic
-  questioning technique, feedback interpretation, and reflective practice
-  for technical presentations, documentation, and mentoring. Use when a
-  person needs to present technical content and wants preparation coaching,
-  wants to write better documentation or tutorials, struggles to explain
-  concepts across expertise levels, is mentoring a colleague, or is
-  preparing for a talk or knowledge-sharing session.
+  Guiar a una persona para convertirse en un mejor profesor y comunicador. La IA
+  coaching sobre estructuración de contenido, calibración de audiencia, claridad
+  de explicación, técnica de preguntas socráticas, interpretación de
+  retroalimentación y práctica reflexiva para presentaciones técnicas,
+  documentación y mentoría. Usar cuando una persona necesita presentar contenido
+  técnico y quiere coaching de preparación, quiere escribir mejor documentación
+  o tutoriales, tiene dificultades para explicar conceptos a diferentes niveles
+  de expertise, está mentoreando a un colega, o se está preparando para una
+  charla o sesión de intercambio de conocimiento.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,38 +28,38 @@ metadata:
 
 # Teach (Guidance)
 
-Guide a person in becoming a more effective teacher, explainer, or presenter. The AI acts as a teaching coach — helping assess what needs to be communicated and to whom, structuring content for clarity, rehearsing explanations, refining based on feedback, supporting delivery, and reflecting on what worked.
+Guiar a una persona para convertirse en un profesor, comunicador o presentador más efectivo. La IA actúa como coach de enseñanza — ayudando a evaluar qué necesita ser comunicado y a quién, estructurando contenido para claridad, ensayando explicaciones, refinando basándose en retroalimentación, apoyando la entrega y reflexionando sobre qué funcionó.
 
 ## Cuándo Usar
 
-- A person needs to present technical content to an audience and wants to prepare effectively
-- Someone wants to write better documentation, tutorials, or explanations
-- A person struggles to explain concepts to people with different expertise levels
-- Someone is mentoring a colleague or junior developer and wants to be more effective
-- A person is preparing for a talk, workshop, or knowledge-sharing session
-- After `learn-guidance` has helped them acquire knowledge, they now need to transfer it to others
+- Una persona necesita presentar contenido técnico a una audiencia y quiere prepararse efectivamente
+- Alguien quiere escribir mejor documentación, tutoriales o explicaciones
+- Una persona tiene dificultades para explicar conceptos a personas con diferentes niveles de expertise
+- Alguien está mentoreando a un colega o desarrollador junior y quiere ser más efectivo
+- Una persona se está preparando para una charla, taller o sesión de intercambio de conocimiento
+- Después de que `learn-guidance` les ayudó a adquirir conocimiento, ahora necesitan transferirlo a otros
 
 ## Entradas
 
-- **Requerido**: What the person needs to teach or explain (topic, concept, system, process)
-- **Requerido**: Who the audience is (expertise level, context, relationship to the person)
-- **Opcional**: Format of delivery (presentation, documentation, one-on-one mentoring, workshop)
-- **Opcional**: Time constraints (5-minute explanation, 30-minute talk, written document)
-- **Opcional**: Previous teaching attempts and what did not work
-- **Opcional**: The person's own comfort level with the topic (deep expert vs. recent learner)
+- **Requerido**: Lo que la persona necesita enseñar o explicar (tema, concepto, sistema, proceso)
+- **Requerido**: Quién es la audiencia (nivel de expertise, contexto, relación con la persona)
+- **Opcional**: Formato de entrega (presentación, documentación, mentoría uno a uno, taller)
+- **Opcional**: Restricciones de tiempo (explicación de 5 minutos, charla de 30 minutos, documento escrito)
+- **Opcional**: Intentos previos de enseñanza y qué no funcionó
+- **Opcional**: El nivel de comodidad de la persona con el tema (experto profundo vs. aprendiz reciente)
 
 ## Procedimiento
 
-### Paso 1: Assess — Understand the Teaching Challenge
+### Paso 1: Evaluar — Comprender el desafío de enseñanza
 
-Before structuring content, understand the full context of the teaching situation.
+Antes de estructurar el contenido, comprender el contexto completo de la situación de enseñanza.
 
-1. Ask what they need to teach and why: "What concept needs to land, and what happens if it does not?"
-2. Identify the audience: "Who will you be explaining this to? What do they already know?"
-3. Assess the person's own understanding: do they know the topic deeply enough to teach it? (If not, suggest `learn-guidance` first)
-4. Identify the format: presentation, document, conversation, code review, pair programming
-5. Determine success criteria: "How will you know the audience understood?"
-6. Surface fears or concerns: "What part of this makes you most nervous?"
+1. Preguntar qué necesitan enseñar y por qué: "¿Qué concepto necesita calar, y qué pasa si no lo hace?"
+2. Identificar la audiencia: "¿A quién le vas a explicar esto? ¿Qué saben ya?"
+3. Evaluar la propia comprensión de la persona: ¿conocen el tema lo suficientemente profundo para enseñarlo? (Si no, sugerir `learn-guidance` primero)
+4. Identificar el formato: presentación, documento, conversación, revisión de código, programación en pares
+5. Determinar criterios de éxito: "¿Cómo sabrás que la audiencia entendió?"
+6. Sacar a la superficie miedos o preocupaciones: "¿Qué parte de esto te pone más nervioso?"
 
 ```
 Teaching Challenge Matrix:
@@ -81,114 +82,114 @@ Teaching Challenge Matrix:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-**Esperado:** A clear picture of the teaching challenge: what, to whom, in what format, with what constraints, and where the person feels least confident.
+**Esperado:** Una imagen clara del desafío de enseñanza: qué, a quién, en qué formato, con qué restricciones y dónde la persona se siente menos segura.
 
-**En caso de fallo:** If the person cannot articulate their audience, help them create a persona: "Imagine one specific person who will hear this. What do they know? What do they care about?" If they cannot articulate the topic, they may need to learn it more deeply first.
+**En caso de fallo:** Si la persona no puede articular su audiencia, ayudarle a crear una persona: "Imagina a una persona específica que escuchará esto. ¿Qué saben? ¿Qué les importa?" Si no pueden articular el tema, puede que necesiten aprenderlo más profundamente primero.
 
-### Paso 2: Structure — Organize Content for Clarity
+### Paso 2: Estructurar — Organizar el contenido para claridad
 
-Help the person build a clear narrative structure for their explanation.
+Ayudar a la persona a construir una estructura narrativa clara para su explicación.
 
-1. Identify the single core message: "If the audience remembers only one thing, what should it be?"
-2. Build outward from the core: what context is needed before the core message, and what details follow after?
-3. Apply the inverted pyramid: most important information first, supporting details after
-4. For technical content, choose a structural pattern:
-   - **Concept explanation**: What → Why → How → Example → Edge cases
-   - **Tutorial**: Goal → Prerequisites → Steps → Verification → Next steps
-   - **Architecture overview**: Problem → Constraints → Solution → Trade-offs → Alternatives considered
-   - **Debugging walkthrough**: Symptom → Investigation → Root cause → Fix → Prevention
-5. Ensure each section has a clear purpose: if a section does not serve the core message, cut it
-6. Plan transitions: "We covered X. Now, building on that, we need to understand Y because..."
+1. Identificar el mensaje central único: "Si la audiencia recuerda solo una cosa, ¿cuál debería ser?"
+2. Construir hacia afuera desde el centro: ¿qué contexto se necesita antes del mensaje central, y qué detalles siguen después?
+3. Aplicar la pirámide invertida: la información más importante primero, detalles de soporte después
+4. Para contenido técnico, elegir un patrón estructural:
+   - **Explicación de concepto**: Qué → Por qué → Cómo → Ejemplo → Casos límite
+   - **Tutorial**: Objetivo → Prerrequisitos → Pasos → Verificación → Próximos pasos
+   - **Visión general de arquitectura**: Problema → Restricciones → Solución → Compensaciones → Alternativas consideradas
+   - **Recorrido de depuración**: Síntoma → Investigación → Causa raíz → Corrección → Prevención
+5. Asegurar que cada sección tenga un propósito claro: si una sección no sirve al mensaje central, cortarla
+6. Planificar transiciones: "Cubrimos X. Ahora, construyendo sobre eso, necesitamos entender Y porque..."
 
-**Esperado:** A structured outline where every element serves the core message. The structure should feel logical and inevitable — each section naturally leads to the next.
+**Esperado:** Un esquema estructurado donde cada elemento sirve al mensaje central. La estructura debe sentirse lógica e inevitable — cada sección conduce naturalmente a la siguiente.
 
-**En caso de fallo:** If the structure keeps growing, the scope is too broad — help them cut. If the structure feels flat (everything at the same level), the hierarchy needs work — identify which points are primary and which are supporting. If they resist structure ("I'll just explain it naturally"), note that natural explanations work for simple topics but fail for complex ones — structure is the scaffold.
+**En caso de fallo:** Si la estructura sigue creciendo, el alcance es demasiado amplio — ayudarles a recortar. Si la estructura se siente plana (todo al mismo nivel), la jerarquía necesita trabajo — identificar qué puntos son principales y cuáles son de soporte. Si resisten la estructura ("lo explicaré naturalmente"), notar que las explicaciones naturales funcionan para temas simples pero fallan para los complejos — la estructura es el andamio.
 
-### Paso 3: Practice — Rehearse the Explanation
+### Paso 3: Practicar — Ensayar la explicación
 
-Have the person practice explaining the concept, with the AI acting as the audience.
+Hacer que la persona practique explicando el concepto, con la IA actuando como audiencia.
 
-1. Ask them to explain the concept as they would to their actual audience
-2. Listen without interrupting for the first pass — let them find their natural flow
-3. Note where the explanation is clear and where it becomes confused or vague
-4. Note where they use jargon the audience might not know
-5. Note where they skip steps or assume knowledge the audience may not have
-6. Note where they spend too long on easy parts and rush through hard parts
-7. Time the explanation if there is a time constraint
+1. Pedirles que expliquen el concepto como lo harían ante su audiencia real
+2. Escuchar sin interrumpir en la primera pasada — dejarlos encontrar su flujo natural
+3. Notar dónde la explicación es clara y dónde se vuelve confusa o vaga
+4. Notar dónde usan jerga que la audiencia podría no conocer
+5. Notar dónde saltan pasos o asumen conocimiento que la audiencia puede no tener
+6. Notar dónde pasan demasiado tiempo en las partes fáciles y apresuran las difíciles
+7. Cronometrar la explicación si hay una restricción de tiempo
 
-**Esperado:** A first-draft explanation that reveals the person's natural teaching patterns — strengths to build on and habits to adjust. The practice should feel low-stakes: "This is a rough draft, not a performance."
+**Esperado:** Una explicación de primer borrador que revela los patrones naturales de enseñanza de la persona — fortalezas sobre las cuales construir y hábitos por ajustar. La práctica debe sentirse de bajo riesgo: "Esto es un borrador, no una actuación."
 
-**En caso de fallo:** If the person freezes or says "I don't know where to start," return to the structure from Step 2 and have them explain one section at a time rather than the whole thing. If they are overly self-critical ("that was terrible"), redirect to specifics: "Actually, the way you explained X was very clear — let's focus on making Y match that quality."
+**En caso de fallo:** Si la persona se bloquea o dice "No sé por dónde empezar," regresar a la estructura del Paso 2 y hacer que expliquen una sección a la vez en lugar de todo completo. Si son excesivamente autocríticos ("eso fue terrible"), redirigir a específicos: "En realidad, la forma en que explicaste X fue muy clara — enfoquémonos en que Y iguale esa calidad."
 
-### Paso 4: Refine — Improve Based on Feedback
+### Paso 4: Refinar — Mejorar basándose en retroalimentación
 
-Provide specific, actionable feedback on the practice explanation.
+Proporcionar retroalimentación específica y accionable sobre la explicación de práctica.
 
-1. Lead with strengths: "The part where you explained X using the analogy of Y was very effective because..."
-2. Identify the biggest improvement opportunity (not all the issues — focus on one or two)
-3. Suggest specific alternatives: "Instead of saying [complex version], try: [simpler version]"
-4. Check for the curse of knowledge: are there places where their expertise makes them skip steps the audience needs?
-5. Check for audience calibration: is the depth right for the audience, or is it too shallow/deep?
-6. If they use analogies, check if the analogies are accurate (misleading analogies are worse than no analogy)
-7. Have them re-explain the refined section to test the improvement
+1. Empezar con las fortalezas: "La parte donde explicaste X usando la analogía de Y fue muy efectiva porque..."
+2. Identificar la mayor oportunidad de mejora (no todos los problemas — enfocarse en uno o dos)
+3. Sugerir alternativas específicas: "En lugar de decir [versión compleja], intenta: [versión más simple]"
+4. Verificar la maldición del conocimiento: ¿hay lugares donde su expertise los hace saltar pasos que la audiencia necesita?
+5. Verificar la calibración de audiencia: ¿la profundidad es correcta para la audiencia, o es demasiado superficial/profunda?
+6. Si usan analogías, verificar si las analogías son precisas (las analogías engañosas son peores que no tener analogía)
+7. Hacer que re-expliquen la sección refinada para probar la mejora
 
-**Esperado:** Targeted feedback that improves the explanation measurably. The person can feel the difference between the first and second attempt. Feedback is framed constructively — what to do, not just what to avoid.
+**Esperado:** Retroalimentación dirigida que mejora la explicación de manera medible. La persona puede sentir la diferencia entre el primer y segundo intento. La retroalimentación se enmarca constructivamente — qué hacer, no solo qué evitar.
 
-**En caso de fallo:** If the person is defensive about feedback, reframe from "this was unclear" to "the audience might not follow here — how could we make it even clearer?" If the refined version is not better, the issue may be structural (Step 2) rather than presentational — return to the outline.
+**En caso de fallo:** Si la persona está a la defensiva con la retroalimentación, reformular de "esto no fue claro" a "la audiencia podría no seguir aquí — ¿cómo podríamos hacerlo aún más claro?" Si la versión refinada no es mejor, el problema puede ser estructural (Paso 2) en lugar de de presentación — regresar al esquema.
 
-### Paso 5: Deliver — Support During Teaching
+### Paso 5: Entregar — Apoyar durante la enseñanza
 
-If the teaching happens in real time, provide support during delivery.
+Si la enseñanza ocurre en tiempo real, proporcionar apoyo durante la entrega.
 
-1. For live presentations: help prepare answers to likely questions in advance
-2. For documentation: review the written version for clarity, structure, and audience calibration
-3. Help them prepare for the "I don't know" moment: "If asked something you cannot answer, say: 'Great question — I'll look into that and follow up.' This is always acceptable."
-4. Encourage interaction: help them prepare check questions for the audience
-5. Prepare recovery plans: what to do if the audience is lost, bored, or ahead of the explanation
-6. If coaching during delivery: provide brief, specific prompts ("slow down here," "they look confused — check in")
+1. Para presentaciones en vivo: ayudar a preparar respuestas a preguntas probables por anticipado
+2. Para documentación: revisar la versión escrita para claridad, estructura y calibración de audiencia
+3. Ayudarles a prepararse para el momento del "no lo sé": "Si te preguntan algo que no puedes responder, di: 'Excelente pregunta — lo investigaré y daré seguimiento.' Esto siempre es aceptable."
+4. Fomentar la interacción: ayudarles a preparar preguntas de verificación para la audiencia
+5. Preparar planes de recuperación: qué hacer si la audiencia se pierde, se aburre o va adelante de la explicación
+6. Si se hace coaching durante la entrega: proporcionar indicaciones breves y específicas ("ve más lento aquí," "parecen confundidos — verifica con ellos")
 
-**Esperado:** The person feels prepared and supported. They have answers for likely questions, strategies for unexpected situations, and confidence that not knowing everything is acceptable.
+**Esperado:** La persona se siente preparada y apoyada. Tienen respuestas para preguntas probables, estrategias para situaciones inesperadas y confianza en que no saberlo todo es aceptable.
 
-**En caso de fallo:** If anxiety is the primary blocker, address it directly: preparation reduces anxiety, and acknowledging nervousness to the audience often creates connection. If the delivery format keeps changing, help them accept the format and adapt rather than trying to control conditions.
+**En caso de fallo:** Si la ansiedad es el bloqueador principal, abordarla directamente: la preparación reduce la ansiedad, y reconocer el nerviosismo ante la audiencia a menudo crea conexión. Si el formato de entrega sigue cambiando, ayudarles a aceptar el formato y adaptarse en lugar de intentar controlar las condiciones.
 
-### Paso 6: Reflect — Analyze What Worked
+### Paso 6: Reflexionar — Analizar qué funcionó
 
-After the teaching event, guide reflection for continuous improvement.
+Después del evento de enseñanza, guiar la reflexión para la mejora continua.
 
-1. Ask: "What went well? What are you proud of?"
-2. Ask: "Where did you notice the audience was most engaged? Least engaged?"
-3. Ask: "Did anything surprise you about the audience's response?"
-4. Ask: "If you could change one thing, what would it be?"
-5. Connect the reflection to principles: "The part that worked used [technique]. You can apply that more broadly."
-6. Identify one specific improvement goal for next time
-7. Celebrate the accomplishment: teaching is a skill that improves with practice
+1. Preguntar: "¿Qué salió bien? ¿De qué estás orgulloso?"
+2. Preguntar: "¿Dónde notaste que la audiencia estaba más comprometida? ¿Menos comprometida?"
+3. Preguntar: "¿Algo te sorprendió sobre la respuesta de la audiencia?"
+4. Preguntar: "Si pudieras cambiar una cosa, ¿cuál sería?"
+5. Conectar la reflexión con principios: "La parte que funcionó usó [técnica]. Puedes aplicar eso más ampliamente."
+6. Identificar un objetivo de mejora específico para la próxima vez
+7. Celebrar el logro: enseñar es una habilidad que mejora con la práctica
 
-**Esperado:** The person gains concrete insight about their teaching effectiveness — not vague feelings but specific observations about what worked and why. They leave with one actionable improvement for next time.
+**Esperado:** La persona obtiene una percepción concreta sobre su efectividad como profesor — no sentimientos vagos sino observaciones específicas sobre qué funcionó y por qué. Se van con una mejora accionable para la próxima vez.
 
-**En caso de fallo:** If they only see negatives, redirect to specific moments that worked. If they see only positives, gently probe for areas where the audience was confused. If no reflection happens (they move on immediately), note that reflection is where the most durable improvement happens — even 5 minutes of review matters.
+**En caso de fallo:** Si solo ven aspectos negativos, redirigir a momentos específicos que funcionaron. Si solo ven aspectos positivos, sondear gentilmente las áreas donde la audiencia estaba confundida. Si no ocurre reflexión (pasan a otra cosa inmediatamente), notar que la reflexión es donde ocurre la mejora más duradera — incluso 5 minutos de repaso importan.
 
 ## Validación
 
-- [ ] The teaching challenge was assessed before structuring began (audience, format, constraints)
-- [ ] A core message was identified and the structure organized around it
-- [ ] The person practiced the explanation at least once before delivery
-- [ ] Feedback was specific, actionable, and led to measurable improvement
-- [ ] The person was prepared for questions, uncertainty, and audience adaptation
-- [ ] Post-delivery reflection identified at least one specific improvement for next time
-- [ ] The coaching was encouraging throughout — teaching is hard and should be acknowledged
+- [ ] El desafío de enseñanza fue evaluado antes de comenzar la estructuración (audiencia, formato, restricciones)
+- [ ] Un mensaje central fue identificado y la estructura organizada alrededor de él
+- [ ] La persona practicó la explicación al menos una vez antes de la entrega
+- [ ] La retroalimentación fue específica, accionable y condujo a mejora medible
+- [ ] La persona estaba preparada para preguntas, incertidumbre y adaptación a la audiencia
+- [ ] La reflexión post-entrega identificó al menos una mejora específica para la próxima vez
+- [ ] El coaching fue alentador durante todo el proceso — enseñar es difícil y debe ser reconocido
 
 ## Errores Comunes
 
-- **Coaching the content, not the teaching**: Helping them learn the material instead of helping them present it. If they need to learn, use `learn-guidance` first
-- **Over-structuring**: Making the structure so rigid that the person's natural teaching voice is lost. Structure should support their style, not replace it
-- **Perfectionism trap**: Rehearsing endlessly instead of delivering. At some point, the practice has diminishing returns — push toward delivery
-- **Ignoring audience diversity**: A mixed audience needs layered explanation — core idea for everyone, details for experts, analogies for newcomers
-- **Feedback overload**: Giving too many notes at once overwhelms. Focus on the one or two changes with the highest impact
-- **Neglecting emotional preparation**: Teaching anxiety is real. Addressing confidence is as important as addressing content
+- **Hacer coaching del contenido, no de la enseñanza**: Ayudarles a aprender el material en lugar de ayudarles a presentarlo. Si necesitan aprender, usar `learn-guidance` primero
+- **Sobre-estructurar**: Hacer la estructura tan rígida que la voz natural de enseñanza de la persona se pierde. La estructura debe apoyar su estilo, no reemplazarlo
+- **Trampa del perfeccionismo**: Ensayar interminablemente en lugar de entregar. En algún punto, la práctica tiene rendimientos decrecientes — impulsar hacia la entrega
+- **Ignorar la diversidad de audiencia**: Una audiencia mixta necesita explicación por capas — idea central para todos, detalles para expertos, analogías para novatos
+- **Sobrecarga de retroalimentación**: Dar demasiadas notas a la vez abruma. Enfocarse en el uno o dos cambios con mayor impacto
+- **Descuidar la preparación emocional**: La ansiedad de enseñar es real. Abordar la confianza es tan importante como abordar el contenido
 
 ## Habilidades Relacionadas
 
-- `teach` — the AI self-directed variant for calibrated knowledge transfer
-- `learn-guidance` — coaching a person through learning; the prerequisite to teaching effectively
-- `listen-guidance` — active listening skills help teachers respond to audience needs in real time
-- `meditate-guidance` — calming anxiety and achieving focus before a teaching event
+- `teach` — la variante autodirigida de la IA para transferencia calibrada de conocimiento
+- `learn-guidance` — coaching para que una persona aprenda; el prerrequisito para enseñar efectivamente
+- `listen-guidance` — las habilidades de escucha activa ayudan a los profesores a responder a las necesidades de la audiencia en tiempo real
+- `meditate-guidance` — calmar la ansiedad y lograr enfoque antes de un evento de enseñanza

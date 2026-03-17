@@ -1,14 +1,15 @@
 ---
 name: fungi-identification
 description: >
-  Field identification of fungi using morphological features, spore prints,
-  habitat analysis, and seasonal context with a safety-first approach. Covers
-  cap, gill, stem, and spore characteristics, look-alike differentiation,
-  toxicity risk assessment, and the critical rule of absolute certainty before
-  consumption. Use when encountering an unknown fungus, foraging for edible
-  mushrooms and needing to confirm species before consumption, assessing whether
-  fungi in a garden or property are harmful, or differentiating an edible
-  species from a dangerous look-alike.
+  Identificación de hongos en campo usando características morfológicas,
+  impresiones de esporas, análisis de hábitat y contexto estacional con un
+  enfoque de seguridad primero. Cubre características de sombrero, láminas,
+  pie y esporas, diferenciación de similares, evaluación de riesgo de
+  toxicidad, y la regla crítica de certeza absoluta antes del consumo. Usar
+  al encontrar un hongo desconocido, al recolectar setas comestibles y
+  necesitar confirmar la especie antes del consumo, al evaluar si los hongos
+  en un jardín o propiedad son dañinos, o al diferenciar una especie
+  comestible de un similar peligroso.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,30 +28,30 @@ metadata:
 
 # Fungi Identification
 
-Identify fungi in the field using morphological features, spore prints, habitat, and season with an absolute safety-first approach.
+Identificar hongos en campo usando características morfológicas, impresiones de esporas, hábitat y estación con un enfoque absoluto de seguridad primero.
 
 ## Cuándo Usar
 
-- You encounter an unknown fungus and need to identify it
-- You are foraging for edible mushrooms and need to confirm species before consumption
-- You want to assess whether fungi in your garden or property are harmful
-- You are building field identification skills through structured observation practice
-- You need to differentiate an edible species from a dangerous look-alike
+- Encuentras un hongo desconocido y necesitas identificarlo
+- Estás recolectando setas comestibles y necesitas confirmar la especie antes del consumo
+- Quieres evaluar si los hongos en tu jardín o propiedad son dañinos
+- Estás desarrollando habilidades de identificación en campo mediante práctica de observación estructurada
+- Necesitas diferenciar una especie comestible de un similar peligroso
 
 ## Entradas
 
-- **Requerido**: A fungus specimen or clear observation of one in situ
-- **Requerido**: Ability to observe fine morphological details (cap, gills, stem, base)
-- **Opcional**: Field guide or reference material for the region
-- **Opcional**: Paper and glass for spore prints
-- **Opcional**: Knife for cross-section examination
-- **Opcional**: Hand lens (10x) for fine detail
+- **Requerido**: Un espécimen de hongo o una observación clara de uno in situ
+- **Requerido**: Capacidad de observar detalles morfológicos finos (sombrero, láminas, pie, base)
+- **Opcional**: Guía de campo o material de referencia para la región
+- **Opcional**: Papel y vidrio para impresiones de esporas
+- **Opcional**: Cuchillo para examen de sección transversal
+- **Opcional**: Lupa de mano (10x) para detalles finos
 
 ## Procedimiento
 
-### Paso 1: The Cardinal Rule
+### Paso 1: La Regla Cardinal
 
-Before any identification work, internalize the absolute rule of mycology.
+Antes de cualquier trabajo de identificación, internalizar la regla absoluta de la micología.
 
 ```
 CARDINAL RULE:
@@ -68,13 +69,13 @@ edible mushroom) is a missed meal.
 ALWAYS ERR TOWARD CAUTION.
 ```
 
-**Esperado:** The cardinal rule is internalized before proceeding with identification.
+**Esperado:** La regla cardinal está internalizada antes de proceder con la identificación.
 
-**En caso de fallo:** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
+**En caso de fallo:** No hay modo de fallo para este paso. Si la regla no está internalizada, no proceder a la identificación en campo con fines de consumo.
 
-### Paso 2: Document the Habitat
+### Paso 2: Documentar el Hábitat
 
-Context narrows identification before touching the specimen.
+El contexto reduce las posibilidades de identificación antes de tocar el espécimen.
 
 ```
 Habitat Recording:
@@ -101,13 +102,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Esperado:** A complete habitat record that provides context for species-level identification.
+**Esperado:** Un registro de hábitat completo que proporciona contexto para la identificación a nivel de especie.
 
-**En caso de fallo:** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
+**En caso de fallo:** Si el hábitat no está claro (ej., jardín urbano con plantaciones mixtas), registrar lo que sea visible. Los datos de hábitat incompletos reducen la confianza de identificación — tener esto en cuenta en la evaluación de seguridad.
 
-### Paso 3: Examine Morphological Features
+### Paso 3: Examinar las Características Morfológicas
 
-Systematic examination of the specimen itself.
+Examen sistemático del espécimen mismo.
 
 ```
 Morphological Checklist:
@@ -152,13 +153,13 @@ SPORE PRINT:
   black, rust-orange
 ```
 
-**Esperado:** A complete morphological description covering all major features.
+**Esperado:** Una descripción morfológica completa cubriendo todas las características principales.
 
-**En caso de fallo:** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
+**En caso de fallo:** Si una característica no puede observarse (ej., no se ve anillo pero puede haberse perdido), registrarla como "no observado" en lugar de "ausente." La distinción importa para la identificación.
 
-### Paso 4: Identify Using Multiple Confirmations
+### Paso 4: Identificar Usando Confirmaciones Múltiples
 
-Cross-reference all data against reference material.
+Verificar cruzadamente todos los datos contra material de referencia.
 
 ```
 Identification Protocol:
@@ -191,31 +192,31 @@ Confidence Levels:
 +----------+---------------------------+---------------------------+
 ```
 
-**Esperado:** A species-level identification with explicit confidence level and look-alike assessment.
+**Esperado:** Una identificación a nivel de especie con nivel de confianza explícito y evaluación de similares.
 
-**En caso de fallo:** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
+**En caso de fallo:** Si la identificación se estanca a nivel de género, eso es aceptable para fines de aprendizaje. Para consumo, solo la identificación a nivel de especie con nivel "Certero" es aceptable.
 
 ## Validación
 
-- [ ] The cardinal rule was acknowledged before starting identification
-- [ ] Habitat was documented before examining the specimen
-- [ ] All morphological features were examined systematically
-- [ ] The base was excavated to check for a volva
-- [ ] A spore print was taken (if time allows)
-- [ ] Dangerous look-alikes were explicitly checked and eliminated
-- [ ] Confidence level was honestly assessed
-- [ ] Only "Certain" identifications were considered for consumption
+- [ ] La regla cardinal fue reconocida antes de comenzar la identificación
+- [ ] El hábitat fue documentado antes de examinar el espécimen
+- [ ] Todas las características morfológicas fueron examinadas sistemáticamente
+- [ ] La base fue excavada para verificar la presencia de volva
+- [ ] Se tomó una impresión de esporas (si el tiempo lo permite)
+- [ ] Los similares peligrosos fueron verificados y eliminados explícitamente
+- [ ] El nivel de confianza fue evaluado honestamente
+- [ ] Solo identificaciones "Certeras" fueron consideradas para consumo
 
 ## Errores Comunes
 
-- **Relying on a single feature**: "It looks like a chanterelle" based on colour alone. True chanterelles have false gills (ridges), grow from soil near trees, and have a specific apricot smell. False chanterelles and Jack-o'-lanterns share the colour but differ in every other feature
-- **Skipping the base examination**: Failing to dig up the base misses the volva — the single most important feature for identifying deadly Amanita species (death cap, destroying angel)
-- **Trusting apps blindly**: AI-based mushroom identification apps have significant error rates for look-alike species. Use them as a starting point, never as confirmation
-- **Assuming "common = safe"**: Abundance does not indicate edibility. Deadly species can be locally abundant
-- **Tasting unknown species**: Some mycologists use taste as a diagnostic tool, but this requires expert-level knowledge of which species are safe to taste. For non-experts, do not taste unknown fungi
-- **Ignoring temporal toxins**: Some species (e.g., Amanita phalloides) have pleasant taste and delayed symptoms. By the time symptoms appear (24-48 hours), liver damage is severe
+- **Confiar en una sola característica**: "Se parece a un rebozuelo" basado solo en el color. Los rebozuelos verdaderos tienen láminas falsas (pliegues), crecen del suelo cerca de árboles, y tienen un olor específico a albaricoque. Los falsos rebozuelos y las setas de Jack-o'-lantern comparten el color pero difieren en todas las demás características
+- **Saltarse el examen de la base**: No desenterrar la base omite la volva — la característica más importante para identificar las especies mortales de Amanita (oronja mortal, amanita verna)
+- **Confiar ciegamente en aplicaciones**: Las aplicaciones de identificación de setas basadas en IA tienen tasas de error significativas para especies similares. Usarlas como punto de partida, nunca como confirmación
+- **Asumir que "común = seguro"**: La abundancia no indica comestibilidad. Las especies mortales pueden ser localmente abundantes
+- **Probar especies desconocidas**: Algunos micólogos usan el sabor como herramienta diagnóstica, pero esto requiere conocimiento a nivel de experto de qué especies son seguras para probar. Para no expertos, no probar hongos desconocidos
+- **Ignorar toxinas temporales**: Algunas especies (ej., Amanita phalloides) tienen sabor agradable y síntomas retrasados. Para cuando los síntomas aparecen (24-48 horas), el daño hepático es severo
 
 ## Habilidades Relacionadas
 
-- `mushroom-cultivation` — growing known species eliminates identification risk entirely
-- `forage-plants` — complementary field identification skill; shares the multi-feature confirmation methodology
+- `mushroom-cultivation` — cultivar especies conocidas elimina el riesgo de identificación por completo
+- `forage-plants` — habilidad complementaria de identificación en campo; comparte la metodología de confirmación por múltiples características

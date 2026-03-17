@@ -1,14 +1,15 @@
 ---
 name: brahma-bhaga
 description: >
-  Creation and genesis — generative ideation from void, structured emergence
-  from ambiguity, and the discipline of bringing new patterns into existence.
-  Maps Brahma's creative power to AI reasoning: transforming cleared space
-  into coherent new structures, seeding possibilities, and nurturing nascent
-  ideas through their fragile early stages. Use after shiva-bhaga dissolution
-  has cleared stale patterns, when facing a genuinely novel problem with no
-  obvious template, or when incremental modification has reached its limits
-  and a fresh design is needed.
+  Creación y génesis — ideación generativa desde el vacío, emergencia
+  estructurada desde la ambigüedad y la disciplina de traer nuevos patrones
+  a la existencia. Mapea el poder creativo de Brahma al razonamiento de IA:
+  transformar espacio despejado en nuevas estructuras coherentes, sembrar
+  posibilidades y nutrir ideas nacientes a través de sus frágiles etapas
+  iniciales. Usar después de que la disolución de shiva-bhaga haya limpiado
+  patrones obsoletos, cuando se enfrenta un problema genuinamente novedoso
+  sin plantilla obvia, o cuando la modificación incremental ha alcanzado
+  sus límites y se necesita un diseño fresco.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,29 +28,29 @@ metadata:
 
 # Brahma Bhaga
 
-Generative creation from void or ambiguity — structured emergence of new patterns, approaches, and solutions where none existed before.
+Creación generativa desde el vacío o la ambigüedad — emergencia estructurada de nuevos patrones, enfoques y soluciones donde antes no existía ninguno.
 
 ## Cuándo Usar
 
-- After `shiva-bhaga` dissolution has cleared stale patterns and created space
-- Facing a genuinely novel problem with no obvious template or precedent
-- The user's request requires invention rather than retrieval or adaptation
-- Multiple possible approaches exist and none has been chosen — the creative act is the choice itself
-- A blank slate: new file, new project, new architecture, new approach
-- When incremental modification has reached its limits and a fresh design is needed
+- Después de que la disolución de `shiva-bhaga` haya limpiado patrones obsoletos y creado espacio
+- Al enfrentar un problema genuinamente novedoso sin plantilla o precedente obvio
+- La solicitud del usuario requiere invención en lugar de recuperación o adaptación
+- Existen múltiples enfoques posibles y ninguno ha sido elegido — el acto creativo es la elección misma
+- Una pizarra en blanco: nuevo archivo, nuevo proyecto, nueva arquitectura, nuevo enfoque
+- Cuando la modificación incremental ha alcanzado sus límites y se necesita un diseño fresco
 
 ## Entradas
 
-- **Requerido**: The creative goal or void to fill (available from conversation context)
-- **Opcional**: Constraints that bound the creation (user requirements, technical limitations)
-- **Opcional**: Seeds — fragments, inspirations, or partial ideas that inform the creation
-- **Opcional**: What was dissolved (`shiva-bhaga` output) — understanding what failed guides what to create
+- **Requerido**: El objetivo creativo o vacío a llenar (disponible desde el contexto de la conversación)
+- **Opcional**: Restricciones que limitan la creación (requisitos del usuario, limitaciones técnicas)
+- **Opcional**: Semillas — fragmentos, inspiraciones o ideas parciales que informan la creación
+- **Opcional**: Lo que fue disuelto (salida de `shiva-bhaga`) — entender lo que falló guía lo que se debe crear
 
 ## Procedimiento
 
-### Paso 1: Survey the Void
+### Paso 1: Examinar el vacío
 
-Before creating, understand the space available for creation.
+Antes de crear, entender el espacio disponible para la creación.
 
 ```
 Creative Space Assessment:
@@ -78,99 +79,99 @@ Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Map each dimension honestly — especially constraints, which are often implicit
-2. Note the degrees of freedom: these are where genuine creation happens
-3. Identify seeds without committing to them — they inform, not dictate
+1. Mapear cada dimensión honestamente — especialmente las restricciones, que a menudo son implícitas
+2. Notar los grados de libertad: ahí es donde ocurre la creación genuina
+3. Identificar semillas sin comprometerse con ellas — informan, no dictan
 
-**Esperado:** A clear picture of the creative space: bounded by constraints, informed by seeds, and opened by degrees of freedom.
+**Esperado:** Una imagen clara del espacio creativo: limitado por restricciones, informado por semillas y abierto por grados de libertad.
 
-**En caso de fallo:** If the space feels fully constrained (no degrees of freedom), re-examine — often constraints that seem fixed are actually preferences. Ask the user if needed.
+**En caso de fallo:** Si el espacio se siente completamente restringido (sin grados de libertad), re-examinar — a menudo las restricciones que parecen fijas son en realidad preferencias. Preguntar al usuario si es necesario.
 
-### Paso 2: Generate — Divergent Exploration
+### Paso 2: Generar — Exploración divergente
 
-Produce multiple possibilities without evaluating them.
+Producir múltiples posibilidades sin evaluarlas.
 
-1. Generate at least three distinct approaches to filling the creative space
-2. Each approach should be genuinely different — not variations on a theme
-3. For each approach, capture:
-   - The core idea in one sentence
-   - How it satisfies the constraints
-   - What makes it distinct from the others
-   - What it sacrifices or trades off
-4. Include at least one approach that feels unconventional or risky
-5. Do not evaluate yet — generation and evaluation are separate phases
+1. Generar al menos tres enfoques distintos para llenar el espacio creativo
+2. Cada enfoque debe ser genuinamente diferente — no variaciones sobre un tema
+3. Para cada enfoque, capturar:
+   - La idea central en una oración
+   - Cómo satisface las restricciones
+   - Qué lo hace distinto de los demás
+   - Qué sacrifica o intercambia
+4. Incluir al menos un enfoque que se sienta no convencional o arriesgado
+5. No evaluar todavía — generación y evaluación son fases separadas
 
-**Esperado:** Three or more genuinely distinct approaches, each with a clear identity and trade-off profile.
+**Esperado:** Tres o más enfoques genuinamente distintos, cada uno con una identidad clara y perfil de compensaciones.
 
-**En caso de fallo:** If all approaches feel similar, the generation was too narrow. Return to Step 1 and look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if I did the opposite of the obvious approach?"
+**En caso de fallo:** Si todos los enfoques se sienten similares, la generación fue demasiado estrecha. Regresar al Paso 1 y buscar grados de libertad inexplorados. Alternativamente, invertir una restricción: "¿Qué pasaría si hiciera lo opuesto al enfoque obvio?"
 
-### Paso 3: Evaluate — Convergent Selection
+### Paso 3: Evaluar — Selección convergente
 
-Assess the generated approaches against the creative space.
+Evaluar los enfoques generados contra el espacio creativo.
 
-1. For each approach, assess:
-   - **Constraint satisfaction**: Does it meet all non-negotiable requirements?
-   - **Elegance**: Is it the simplest solution that works?
-   - **Resilience**: Will it survive future perturbation?
-   - **Integration**: Does it fit naturally with the surrounding context?
-   - **Novelty**: Does it bring something genuinely new, or merely rearrange the old?
-2. Eliminate approaches that violate hard constraints
-3. Among remaining approaches, choose based on the user's implicit values (simplicity? thoroughness? creativity?)
-4. If two approaches are equally strong, present both to the user with trade-offs clearly stated
+1. Para cada enfoque, evaluar:
+   - **Satisfacción de restricciones**: ¿Cumple con todos los requisitos no negociables?
+   - **Elegancia**: ¿Es la solución más simple que funciona?
+   - **Resiliencia**: ¿Sobrevivirá a futuras perturbaciones?
+   - **Integración**: ¿Encaja naturalmente con el contexto circundante?
+   - **Novedad**: ¿Aporta algo genuinamente nuevo, o simplemente reorganiza lo antiguo?
+2. Eliminar enfoques que violan restricciones duras
+3. Entre los enfoques restantes, elegir basándose en los valores implícitos del usuario (¿simplicidad? ¿exhaustividad? ¿creatividad?)
+4. Si dos enfoques son igualmente fuertes, presentar ambos al usuario con las compensaciones claramente indicadas
 
-**Esperado:** A single chosen approach (or a clearly framed choice for the user) with articulated reasoning.
+**Esperado:** Un único enfoque elegido (o una elección claramente enmarcada para el usuario) con razonamiento articulado.
 
-**En caso de fallo:** If no approach satisfies all constraints, the constraints may be contradictory. Surface the contradiction to the user rather than forcing a creation that compromises on fundamentals.
+**En caso de fallo:** Si ningún enfoque satisface todas las restricciones, las restricciones pueden ser contradictorias. Exponer la contradicción al usuario en lugar de forzar una creación que comprometa los fundamentos.
 
-### Paso 4: Manifest — Bring into Form
+### Paso 4: Manifestar — Dar forma concreta
 
-Execute the chosen approach, giving it concrete form.
+Ejecutar el enfoque elegido, dándole forma concreta.
 
-1. Begin with the skeleton: the minimal structure that embodies the core idea
-2. Build outward from the core, adding detail as needed
-3. At each step, check: "Is this addition serving the core idea or diluting it?"
-4. Resist the urge to over-elaborate — creation is complete when nothing more can be removed
-5. Name what was created: a clear, descriptive identifier that captures its essence
+1. Comenzar con el esqueleto: la estructura mínima que encarna la idea central
+2. Construir hacia afuera desde el núcleo, añadiendo detalle según sea necesario
+3. En cada paso, verificar: "¿Esta adición sirve a la idea central o la diluye?"
+4. Resistir el impulso de sobre-elaborar — la creación está completa cuando nada más puede ser eliminado
+5. Nombrar lo que fue creado: un identificador claro y descriptivo que capture su esencia
 
-**Esperado:** A concrete creation that embodies the chosen approach — code, plan, structure, or design that exists where void existed before.
+**Esperado:** Una creación concreta que encarna el enfoque elegido — código, plan, estructura o diseño que existe donde antes existía vacío.
 
-**En caso de fallo:** If the manifestation diverges from the chosen approach, pause and re-read Step 3's selection. Drift during manifestation often indicates the selection was not fully committed to. Either recommit or re-select.
+**En caso de fallo:** Si la manifestación diverge del enfoque elegido, pausar y re-leer la selección del Paso 3. La deriva durante la manifestación a menudo indica que la selección no fue completamente comprometida. Ya sea re-comprometerse o re-seleccionar.
 
-### Paso 5: Nurture — Protect the Nascent Creation
+### Paso 5: Nutrir — Proteger la creación naciente
 
-New creations are fragile. Protect them through their early stages.
+Las nuevas creaciones son frágiles. Protegerlas a través de sus etapas tempranas.
 
-1. Test the creation against its constraints — does it work as intended?
-2. Identify the weakest point — where is it most likely to break?
-3. Strengthen the weakest point without over-engineering
-4. Hand off to `vishnu-bhaga` for ongoing preservation if the creation will persist
-5. Document the creative choices made: what was chosen, what was rejected, and why
+1. Probar la creación contra sus restricciones — ¿funciona como se pretendió?
+2. Identificar el punto más débil — ¿dónde es más probable que se rompa?
+3. Fortalecer el punto más débil sin sobre-ingeniería
+4. Entregar a `vishnu-bhaga` para preservación continua si la creación va a persistir
+5. Documentar las elecciones creativas hechas: qué se eligió, qué se rechazó y por qué
 
-**Esperado:** A creation that is tested, documented, and ready for sustained use.
+**Esperado:** Una creación que está probada, documentada y lista para uso sostenido.
 
-**En caso de fallo:** If the creation fails its first test, assess whether the failure is in the creation or the test. If the creation is fundamentally flawed, return to Step 2 with the failure as a new anti-pattern seed.
+**En caso de fallo:** Si la creación falla su primera prueba, evaluar si la falla está en la creación o en la prueba. Si la creación tiene fallas fundamentales, regresar al Paso 2 con la falla como nueva semilla de anti-patrón.
 
 ## Validación
 
-- [ ] The creative space was surveyed before generating ideas
-- [ ] At least three genuinely distinct approaches were generated
-- [ ] Selection was based on explicit criteria, not default instinct
-- [ ] The creation was manifested starting from its core, building outward
-- [ ] The creation was tested against its constraints
-- [ ] Creative choices were documented for future reference
+- [ ] El espacio creativo fue examinado antes de generar ideas
+- [ ] Al menos tres enfoques genuinamente distintos fueron generados
+- [ ] La selección se basó en criterios explícitos, no en instinto predeterminado
+- [ ] La creación fue manifestada comenzando desde su núcleo, construyendo hacia afuera
+- [ ] La creación fue probada contra sus restricciones
+- [ ] Las elecciones creativas fueron documentadas para referencia futura
 
 ## Errores Comunes
 
-- **Creating before clearing**: Attempting creation without prior dissolution produces new patterns contaminated by old ones. Run `shiva-bhaga` first if the space is cluttered
-- **Single-option generation**: Generating one approach and then evaluating it is not creation — it is executing the first idea. True creation requires divergent options
-- **Novelty for its own sake**: Creating something unconventional when a simple standard approach would serve better. Novelty is a tool, not a goal
-- **Perfectionist manifestation**: Polishing endlessly rather than shipping a working creation. A complete imperfect creation outperforms an incomplete perfect one
-- **Unprotected creation**: Manifesting something new and immediately moving on without testing or documentation leaves the creation vulnerable
+- **Crear antes de limpiar**: Intentar la creación sin disolución previa produce nuevos patrones contaminados por los antiguos. Ejecutar `shiva-bhaga` primero si el espacio está desordenado
+- **Generación de opción única**: Generar un enfoque y luego evaluarlo no es creación — es ejecutar la primera idea. La verdadera creación requiere opciones divergentes
+- **Novedad por sí misma**: Crear algo no convencional cuando un enfoque estándar simple serviría mejor. La novedad es una herramienta, no un objetivo
+- **Manifestación perfeccionista**: Pulir interminablemente en lugar de entregar una creación funcional. Una creación completa imperfecta supera a una incompleta perfecta
+- **Creación desprotegida**: Manifestar algo nuevo e inmediatamente seguir adelante sin probar o documentar deja la creación vulnerable
 
 ## Habilidades Relacionadas
 
-- `shiva-bhaga` — destruction creates the void that Brahma fills; dissolution precedes creation
-- `vishnu-bhaga` — preservation sustains what Brahma creates; handoff from creation to maintenance
-- `intrinsic` — creative engagement benefits from autonomous motivation; creation thrives in flow
-- `learn` — when creation requires knowledge not yet held, learning precedes generation
-- `adapt-architecture` — the morphic equivalent for creating new architectural patterns from existing systems
+- `shiva-bhaga` — la destrucción crea el vacío que Brahma llena; la disolución precede a la creación
+- `vishnu-bhaga` — la preservación sostiene lo que Brahma crea; entrega de la creación al mantenimiento
+- `intrinsic` — el compromiso creativo se beneficia de la motivación autónoma; la creación prospera en el flujo
+- `learn` — cuando la creación requiere conocimiento aún no adquirido, el aprendizaje precede a la generación
+- `adapt-architecture` — el equivalente mórfico para crear nuevos patrones arquitectónicos a partir de sistemas existentes

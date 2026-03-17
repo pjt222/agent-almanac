@@ -1,14 +1,15 @@
 ---
 name: aikido
 description: >
-  Practice aikido as a defensive martial art emphasizing harmony, redirection,
-  and controlled resolution. Covers centering and grounding, ukemi (safe
-  falling and rolling), core techniques (irimi-nage, shiho-nage, kote-gaeshi,
-  ikkyo), blending and tai sabaki (body movement), randori (multiple attacker
-  practice), weapons awareness, and applying principles off the mat. Use when
-  learning a defensive martial art that prioritizes de-escalation, developing
-  the ability to redirect aggression without causing unnecessary harm, building
-  safe falling skills, or cultivating calm centeredness under physical pressure.
+  Practicar aikido como arte marcial defensivo que enfatiza la armonía, la
+  redirección y la resolución controlada. Cubre centrado y enraizamiento, ukemi
+  (caídas y rodamientos seguros), técnicas centrales (irimi-nage, shiho-nage,
+  kote-gaeshi, ikkyo), mezcla y tai sabaki (movimiento corporal), randori
+  (práctica con múltiples atacantes), conciencia de armas, y aplicación de
+  principios fuera del tatami. Usar al aprender un arte marcial defensivo que
+  prioriza la desescalada, al desarrollar la capacidad de redirigir la agresión
+  sin causar daño innecesario, al construir habilidades de caída segura, o al
+  cultivar un centrado calmado bajo presión física.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,51 +26,51 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Practice Aikido
+# Practicar Aikido
 
-Develop an aikido practice rooted in centering, blending with incoming force, and resolving conflict through controlled technique rather than opposing strength with strength.
+Desarrollar una práctica de aikido enraizada en el centrado, la mezcla con la fuerza entrante y la resolución de conflictos mediante técnica controlada en lugar de oponer fuerza con fuerza.
 
 ## Cuándo Usar
 
-- Learning a defensive martial art that prioritizes de-escalation and controlled resolution
-- Developing the ability to redirect aggression without causing unnecessary harm
-- Building safe falling skills (ukemi) applicable to any physical activity or emergency
-- Cultivating calm centeredness under physical pressure or confrontation
-- Complementing tai chi or meditation with a partner-based martial practice (see `tai-chi`, `meditate`)
-- Training awareness and response to multiple simultaneous threats
+- Aprender un arte marcial defensivo que prioriza la desescalada y la resolución controlada
+- Desarrollar la capacidad de redirigir la agresión sin causar daño innecesario
+- Construir habilidades de caída segura (ukemi) aplicables a cualquier actividad física o emergencia
+- Cultivar un centrado calmado bajo presión física o confrontación
+- Complementar tai chi o meditación con una práctica marcial en pareja (ver `tai-chi`, `meditate`)
+- Entrenar conciencia y respuesta ante múltiples amenazas simultáneas
 
 ## Entradas
 
-- **Requerido**: Practice space with a padded or yielding surface (tatami, judo mats, grass; avoid concrete)
-- **Requerido**: Comfortable clothing allowing full range of motion (gi preferred; loose exercise clothing acceptable)
-- **Opcional**: Training partner (essential for techniques; solo practice covers centering, ukemi, and movement)
-- **Opcional**: Practice weapons (wooden: jo staff ~128cm, bokken sword ~102cm, tanto knife ~30cm)
-- **Opcional**: Experience level (beginner, intermediate, advanced; default: beginner)
-- **Opcional**: Available practice time (minimum 20 minutes; recommended 60-90 minutes)
+- **Requerido**: Espacio de práctica con superficie acolchada o flexible (tatami, colchonetas de judo, césped; evitar concreto)
+- **Requerido**: Ropa cómoda que permita rango completo de movimiento (gi preferido; ropa de ejercicio holgada aceptable)
+- **Opcional**: Compañero de entrenamiento (esencial para técnicas; la práctica en solitario cubre centrado, ukemi y movimiento)
+- **Opcional**: Armas de práctica (de madera: jo bastón ~128cm, bokken espada ~102cm, tanto cuchillo ~30cm)
+- **Opcional**: Nivel de experiencia (principiante, intermedio, avanzado; por defecto: principiante)
+- **Opcional**: Tiempo de práctica disponible (mínimo 20 minutos; recomendado 60-90 minutos)
 
 ## Procedimiento
 
-### Paso 1: Ground and Center
+### Paso 1: Enraizar y Centrar
 
-Every aikido technique begins from a centered state. Without center, technique becomes muscular struggle.
+Toda técnica de aikido comienza desde un estado centrado. Sin centro, la técnica se convierte en lucha muscular.
 
-1. Stand in hanmi (half-facing stance): one foot forward, feet roughly shoulder-width apart at 60-degree angle
-2. Bend knees slightly — weight sinks toward the one-point (seika tanden), located 5cm below the navel
-3. Relax the shoulders completely — let them drop away from the ears
-4. Extend awareness outward while keeping attention anchored at the one-point
-5. Test your center: have a partner push gently on your chest
-   - If you resist with upper body, you are not centered — relax and sink lower
-   - If you maintain stability without effort, center is established
-6. Practice weight underside: imagine that the heavy part of each arm is the underside; let the upper surface feel light and buoyant
-7. Extend ki: project calm, positive energy forward through the fingertips — not tension, but focused intention
+1. Pararse en hanmi (postura semi-frontal): un pie adelante, pies aproximadamente al ancho de los hombros en ángulo de 60 grados
+2. Flexionar ligeramente las rodillas — el peso desciende hacia el punto único (seika tanden), ubicado 5cm debajo del ombligo
+3. Relajar los hombros completamente — dejarlos caer lejos de las orejas
+4. Extender la conciencia hacia afuera manteniendo la atención anclada en el punto único
+5. Probar el centro: hacer que un compañero empuje suavemente el pecho
+   - Si se resiste con la parte superior del cuerpo, no se está centrado — relajarse y descender más
+   - Si se mantiene la estabilidad sin esfuerzo, el centro está establecido
+6. Practicar peso inferior: imaginar que la parte pesada de cada brazo es la inferior; dejar que la superficie superior se sienta ligera y flotante
+7. Extender ki: proyectar energía calmada y positiva hacia adelante a través de las puntas de los dedos — no tensión, sino intención enfocada
 
-**Esperado:** A stable, relaxed stance where pushes are absorbed through the structure into the ground rather than resisted by muscles. A quiet mind with broad awareness.
+**Esperado:** Una postura estable y relajada donde los empujes se absorben a través de la estructura hacia el suelo en lugar de ser resistidos por los músculos. Una mente tranquila con conciencia amplia.
 
-**En caso de fallo:** If the stance feels rigid, you are holding tension. Shake out the arms and legs, take 5 deep breaths, and re-establish from scratch. If pushes easily displace you, lower your center of gravity (bend knees more) and focus on the one-point. Centering is a skill that deepens over months — initial wobbliness is normal.
+**En caso de fallo:** Si la postura se siente rígida, se está reteniendo tensión. Sacudir brazos y piernas, tomar 5 respiraciones profundas y re-establecer desde cero. Si los empujes desplazan fácilmente, bajar el centro de gravedad (flexionar más las rodillas) y enfocarse en el punto único. El centrado es una habilidad que se profundiza durante meses — el tambaleo inicial es normal.
 
-### Paso 2: Master Ukemi (Falling and Rolling)
+### Paso 2: Dominar Ukemi (Caídas y Rodamientos)
 
-Ukemi is the art of receiving technique safely. It is the most important skill in aikido — you will fall thousands of times.
+Ukemi es el arte de recibir técnica de forma segura. Es la habilidad más importante en aikido — caerás miles de veces.
 
 ```
 Ukemi Progression:
@@ -95,20 +96,20 @@ Ukemi Progression:
 └────────────────────┴──────────────────────────┴───────────────────────────┘
 ```
 
-Key principles:
-1. The slap absorbs impact by spreading force across the arm surface — time it to land just before the body
-2. Tuck the chin on every fall — the head never contacts the ground
-3. Exhale on impact; holding the breath creates rigidity and increases injury risk
-4. Forward rolls should be round and smooth — if there are thuds or flat spots, the body is not curved enough
-5. Practice both sides: right shoulder forward and left shoulder forward
+Principios clave:
+1. El golpe absorbe el impacto distribuyendo la fuerza sobre la superficie del brazo — temporizarlo para que aterrice justo antes del cuerpo
+2. Meter la barbilla en cada caída — la cabeza nunca contacta el suelo
+3. Exhalar al impacto; contener la respiración crea rigidez y aumenta el riesgo de lesión
+4. Los rodamientos hacia adelante deben ser redondos y suaves — si hay golpes o puntos planos, el cuerpo no está lo suficientemente curvado
+5. Practicar ambos lados: hombro derecho adelante y hombro izquierdo adelante
 
-**Esperado:** After 2-3 months of regular practice, forward rolls are smooth and quiet on both sides. Backward falls are automatic (no fear response). You can be thrown at moderate speed without hesitation.
+**Esperado:** Después de 2-3 meses de práctica regular, los rodamientos hacia adelante son suaves y silenciosos en ambos lados. Las caídas hacia atrás son automáticas (sin respuesta de miedo). Se puede ser lanzado a velocidad moderada sin vacilación.
 
-**En caso de fallo:** If forward rolls cause shoulder pain, the angle is likely too steep (going over the top of the shoulder instead of across the back diagonally). Have a partner or instructor check the line. If fear prevents commitment to the roll, return to the kneeling version and build up gradually. Never force a breakfall before the forward roll is second nature.
+**En caso de fallo:** Si los rodamientos hacia adelante causan dolor de hombro, el ángulo probablemente es demasiado empinado (pasando por encima del hombro en lugar de diagonalmente por la espalda). Hacer que un compañero o instructor verifique la línea. Si el miedo impide comprometerse con el rodamiento, volver a la versión de rodillas y construir gradualmente. Nunca forzar una caída de altura antes de que el rodamiento hacia adelante sea segunda naturaleza.
 
-### Paso 3: Practice Basic Techniques
+### Paso 3: Practicar Técnicas Básicas
 
-The four foundational techniques address the most common attack scenarios and embody aikido's core principles.
+Las cuatro técnicas fundamentales abordan los escenarios de ataque más comunes y encarnan los principios centrales del aikido.
 
 ```
 Technique Selection by Attack:
@@ -132,117 +133,117 @@ Technique Selection by Attack:
 └─────────────────┴──────────────────┴──────────────────────────────────────┘
 ```
 
-For each technique:
-1. Begin with the attack at slow, cooperative speed
-2. Blend first: move your body off the attack line (never block head-on)
-3. Connect: make contact with the attacker's arm or body to feel their balance
-4. Redirect: use circular motion to guide the attacker's energy into the technique
-5. Complete: throw or pin with control — the goal is to end the encounter, not to injure
-6. Practice 10-20 repetitions per side, alternating roles (nage/tori throws, uke attacks and falls)
-7. Gradually increase speed and resistance as both partners gain proficiency
+Para cada técnica:
+1. Comenzar con el ataque a velocidad lenta y cooperativa
+2. Mezclar primero: mover el cuerpo fuera de la línea de ataque (nunca bloquear de frente)
+3. Conectar: hacer contacto con el brazo o cuerpo del atacante para sentir su equilibrio
+4. Redirigir: usar movimiento circular para guiar la energía del atacante hacia la técnica
+5. Completar: lanzar o inmovilizar con control — el objetivo es terminar el encuentro, no lesionar
+6. Practicar 10-20 repeticiones por lado, alternando roles (nage/tori lanza, uke ataca y cae)
+7. Aumentar gradualmente la velocidad y resistencia a medida que ambos compañeros ganan competencia
 
-**Esperado:** Techniques feel smooth and circular. The attacker is led rather than forced. At cooperative speed, both partners finish the exchange safely and without strain.
+**Esperado:** Las técnicas se sienten suaves y circulares. El atacante es guiado en lugar de forzado. A velocidad cooperativa, ambos compañeros terminan el intercambio de forma segura y sin esfuerzo.
 
-**En caso de fallo:** If a technique requires significant muscular effort, the blending is incomplete — the defender is fighting the attack instead of redirecting it. Return to the moment of contact and practice the initial blend in isolation. If the attacker feels yanked or wrenched, slow down and focus on leading with the center, not pulling with the hands.
+**En caso de fallo:** Si una técnica requiere esfuerzo muscular significativo, la mezcla es incompleta — el defensor está peleando contra el ataque en lugar de redirigirlo. Volver al momento del contacto y practicar la mezcla inicial de forma aislada. Si el atacante se siente jalado o torcido, reducir la velocidad y enfocarse en guiar con el centro, no jalar con las manos.
 
-### Paso 4: Develop Blending (Tai Sabaki)
+### Paso 4: Desarrollar la Mezcla (Tai Sabaki)
 
-Tai sabaki — body movement — is the engine of aikido. Technique without movement is just wrestling.
+Tai sabaki — movimiento corporal — es el motor del aikido. La técnica sin movimiento es solo lucha.
 
-1. **Irimi (entering)**: Step directly forward and past the attacker, moving inside their reach
-   - Practice: partner extends a punch; step past it so you end behind their shoulder
-2. **Tenkan (turning)**: Pivot 180 degrees on the front foot, redirecting the attacker's line
-   - Practice: partner grabs your wrist; pivot smoothly so you face the same direction they do
-3. **Irimi-tenkan (enter and turn)**: Combine entering with a pivot — the most common movement
-   - Practice: enter past the attack, then pivot to control the attacker from behind
-4. **Kaiten (rotation)**: Full body rotation to generate circular force for throws
-   - Practice: combined with shiho-nage and other rotational techniques
-5. Practice all movements solo first: step-pivot, step-pivot, step-pivot across the mat
-6. Then with a partner: focus on matching timing to the attack — move as they commit, not before or after
+1. **Irimi (entrada)**: Dar un paso directamente hacia adelante y más allá del atacante, moviéndose dentro de su alcance
+   - Práctica: el compañero extiende un puñetazo; pasar más allá para terminar detrás de su hombro
+2. **Tenkan (giro)**: Pivotar 180 grados sobre el pie delantero, redirigiendo la línea del atacante
+   - Práctica: el compañero agarra la muñeca; pivotar suavemente para quedar mirando en la misma dirección que ellos
+3. **Irimi-tenkan (entrar y girar)**: Combinar la entrada con un pivote — el movimiento más común
+   - Práctica: entrar más allá del ataque, luego pivotar para controlar al atacante desde atrás
+4. **Kaiten (rotación)**: Rotación corporal completa para generar fuerza circular para lanzamientos
+   - Práctica: combinado con shiho-nage y otras técnicas rotacionales
+5. Practicar todos los movimientos en solitario primero: paso-pivote, paso-pivote, paso-pivote a través del tatami
+6. Luego con un compañero: enfocarse en sincronizar el tiempo con el ataque — moverse cuando se comprometen, no antes ni después
 
-**Esperado:** Movement is fluid, centered, and timed to the attack. The defender is never squared up facing the attack force — always angled off the line.
+**Esperado:** El movimiento es fluido, centrado y temporizado con el ataque. El defensor nunca está cuadrado frente a la fuerza del ataque — siempre en ángulo fuera de la línea.
 
-**En caso de fallo:** If timing is off (arriving too early or too late), practice with a very slow, telegraphed attack. The defender should move at the same moment the attack commits — this is the "aiki" timing. If turns feel clumsy, practice tenkan as a standalone drill: 100 pivots per session builds smooth, automatic rotation.
+**En caso de fallo:** Si el timing está desajustado (llegar demasiado temprano o demasiado tarde), practicar con un ataque muy lento y telegrafiado. El defensor debe moverse en el mismo momento en que el ataque se compromete — este es el timing "aiki". Si los giros se sienten torpes, practicar tenkan como un ejercicio independiente: 100 pivotes por sesión construye una rotación suave y automática.
 
-### Paso 5: Train Randori (Multiple Attackers)
+### Paso 5: Entrenar Randori (Múltiples Atacantes)
 
-Randori develops the awareness and decisiveness needed when overwhelmed. It is where principles are truly tested.
+El randori desarrolla la conciencia y decisión necesarias cuando se está abrumado. Es donde los principios son verdaderamente probados.
 
-1. Begin with two attackers at slow speed — they take turns (not simultaneous)
-2. Core principle: never stop moving. Stationary means surrounded
-3. Use each attacker as a shield against the others: redirect one into the path of another
-4. Move to open space — never back into a corner or wall
-5. Extend awareness in all directions; do not fixate on one attacker (see `mindfulness`)
-6. Apply simple, reliable techniques — complex techniques fail under pressure
-7. Progress to three attackers, then four, increasing speed gradually
-8. Randori is not about defeating every attacker — it is about maintaining center and freedom of movement
+1. Comenzar con dos atacantes a velocidad lenta — se turnan (no simultáneos)
+2. Principio central: nunca dejar de moverse. Estacionario significa rodeado
+3. Usar cada atacante como escudo contra los otros: redirigir a uno en el camino de otro
+4. Moverse hacia espacio abierto — nunca retroceder hacia una esquina o pared
+5. Extender la conciencia en todas direcciones; no fijarse en un atacante (ver `mindfulness`)
+6. Aplicar técnicas simples y confiables — las técnicas complejas fallan bajo presión
+7. Progresar a tres atacantes, luego cuatro, aumentando la velocidad gradualmente
+8. El randori no se trata de derrotar a cada atacante — se trata de mantener el centro y la libertad de movimiento
 
-**Esperado:** The ability to stay calm and mobile while being approached from multiple angles. Techniques are applied fluidly without freezing or tunnel vision.
+**Esperado:** La capacidad de permanecer calmado y móvil mientras se es abordado desde múltiples ángulos. Las técnicas se aplican fluidamente sin congelarse ni tener visión de túnel.
 
-**En caso de fallo:** If panic sets in, return to two slow attackers. Randori anxiety is normal and decreases with exposure. If techniques collapse under pressure, simplify: focus on irimi (entering) and tenkan (turning) only, ignoring throws entirely. Movement and positioning are more important than technique execution in randori.
+**En caso de fallo:** Si el pánico se instala, volver a dos atacantes lentos. La ansiedad del randori es normal y disminuye con la exposición. Si las técnicas colapsan bajo presión, simplificar: enfocarse solo en irimi (entrada) y tenkan (giro), ignorando los lanzamientos completamente. El movimiento y el posicionamiento son más importantes que la ejecución técnica en el randori.
 
-### Paso 6: Integrate Weapons Awareness
+### Paso 6: Integrar la Conciencia de Armas
 
-Weapons training deepens understanding of distance, timing, and line — principles that improve empty-hand technique.
+El entrenamiento con armas profundiza la comprensión de distancia, timing y línea — principios que mejoran la técnica a mano vacía.
 
-1. **Jo (staff)**: Practice 31-count jo kata for line and extension
-   - The jo teaches maintaining distance and controlling space
-   - Partner practice: jo-dori (staff taking) — disarm a staff attack with empty hands
-2. **Bokken (wooden sword)**: Practice suburi (cutting exercises) for precision and center line awareness
-   - The sword teaches commitment: every cut must follow a precise line
-   - Partner practice: kumitachi (paired sword forms) for timing and distance
-3. **Tanto (wooden knife)**: Practice tanto-dori (knife defense)
-   - The knife teaches respect for close-range danger
-   - Always redirect the weapon hand — never reach for the blade
-4. Weapons principles that transfer to empty-hand:
-   - Ma-ai (proper distance): too close invites the weapon; too far wastes the response
-   - Shomen (center line): all attacks and defenses relate to the vertical center line
-   - Zanshin (continuing awareness): remain alert after the technique completes
+1. **Jo (bastón)**: Practicar el kata de 31 movimientos de jo para línea y extensión
+   - El jo enseña a mantener distancia y controlar el espacio
+   - Práctica en pareja: jo-dori (toma de bastón) — desarmar un ataque de bastón con manos vacías
+2. **Bokken (espada de madera)**: Practicar suburi (ejercicios de corte) para precisión y conciencia de línea central
+   - La espada enseña compromiso: cada corte debe seguir una línea precisa
+   - Práctica en pareja: kumitachi (formas de espada pareadas) para timing y distancia
+3. **Tanto (cuchillo de madera)**: Practicar tanto-dori (defensa contra cuchillo)
+   - El cuchillo enseña respeto por el peligro a corta distancia
+   - Siempre redirigir la mano del arma — nunca alcanzar la hoja
+4. Principios de armas que se transfieren a mano vacía:
+   - Ma-ai (distancia apropiada): demasiado cerca invita al arma; demasiado lejos desperdicia la respuesta
+   - Shomen (línea central): todos los ataques y defensas se relacionan con la línea central vertical
+   - Zanshin (conciencia continua): permanecer alerta después de que la técnica se completa
 
-**Esperado:** Weapons practice clarifies why tai sabaki, timing, and distance matter. Empty-hand technique improves as body movement becomes more precise.
+**Esperado:** La práctica con armas clarifica por qué tai sabaki, timing y distancia importan. La técnica a mano vacía mejora a medida que el movimiento corporal se vuelve más preciso.
 
-**En caso de fallo:** If weapons feel awkward or disconnected from empty-hand practice, focus on suburi (solo cutting exercises) for one month before adding partner work. If a partner practice becomes competitive or dangerous, slow down immediately — wooden weapons can cause real injury at speed.
+**En caso de fallo:** Si las armas se sienten incómodas o desconectadas de la práctica a mano vacía, enfocarse en suburi (ejercicios de corte en solitario) durante un mes antes de agregar trabajo en pareja. Si una práctica en pareja se vuelve competitiva o peligrosa, reducir la velocidad inmediatamente — las armas de madera pueden causar lesiones reales a velocidad.
 
-### Paso 7: Apply Principles Off the Mat
+### Paso 7: Aplicar Principios Fuera del Tatami
 
-Aikido's value extends beyond the dojo into daily interaction and conflict resolution.
+El valor del aikido se extiende más allá del dojo hacia la interacción diaria y la resolución de conflictos.
 
-1. In confrontation, apply irimi-tenkan mentally: move toward the person's concern (enter), then redirect the conversation to common ground (turn)
-2. In physical space, maintain awareness of position, exits, and others' body language (see `mindfulness`)
-3. Practice "receiving" criticism or aggression without resistance — acknowledge the energy, then redirect
-4. Cultivate the habit of centering before stressful situations: drop awareness to the one-point, relax shoulders, extend calm intention
-5. Regular practice schedule:
-   - Solo (daily, 15-30 min): centering, ukemi rolls, tai sabaki, weapons suburi
-   - Partner (2-3x weekly, 60-90 min): techniques, randori, weapons partner work
-6. Complement with tai chi for internal energy development (see `tai-chi`)
-7. Complement with meditation for mental stillness and equanimity (see `meditate`)
+1. En confrontación, aplicar irimi-tenkan mentalmente: moverse hacia la preocupación de la persona (entrar), luego redirigir la conversación hacia un terreno común (girar)
+2. En el espacio físico, mantener conciencia de posición, salidas y lenguaje corporal de otros (ver `mindfulness`)
+3. Practicar "recibir" críticas o agresión sin resistencia — reconocer la energía, luego redirigir
+4. Cultivar el hábito de centrarse antes de situaciones estresantes: bajar la conciencia al punto único, relajar hombros, extender intención calmada
+5. Horario de práctica regular:
+   - Solo (diario, 15-30 min): centrado, rodamientos ukemi, tai sabaki, suburi con armas
+   - En pareja (2-3x por semana, 60-90 min): técnicas, randori, trabajo con armas en pareja
+6. Complementar con tai chi para desarrollo de energía interna (ver `tai-chi`)
+7. Complementar con meditación para quietud mental y ecuanimidad (ver `meditate`)
 
-**Esperado:** Aikido principles — blending, redirecting, centering — become natural responses to conflict in daily life. Physical practice maintains and deepens martial skill.
+**Esperado:** Los principios del aikido — mezclar, redirigir, centrar — se convierten en respuestas naturales al conflicto en la vida diaria. La práctica física mantiene y profundiza la habilidad marcial.
 
-**En caso de fallo:** If daily practice lapses, focus on the smallest unit: 5 minutes of centering and 20 forward rolls. Consistency matters more than duration. If the martial aspects feel disconnected from daily life, reflect on how each technique is a metaphor: irimi is facing a problem directly; tenkan is changing perspective; ukemi is recovering from setbacks.
+**En caso de fallo:** Si la práctica diaria decae, enfocarse en la unidad más pequeña: 5 minutos de centrado y 20 rodamientos hacia adelante. La consistencia importa más que la duración. Si los aspectos marciales se sienten desconectados de la vida diaria, reflexionar sobre cómo cada técnica es una metáfora: irimi es enfrentar un problema directamente; tenkan es cambiar de perspectiva; ukemi es recuperarse de los contratiempos.
 
 ## Validación
 
-- [ ] Centered stance absorbs moderate pushes without muscular resistance
-- [ ] Forward rolls are smooth, quiet, and practiced on both sides
-- [ ] At least four basic techniques can be performed cooperatively with a partner
-- [ ] Tai sabaki (irimi, tenkan, irimi-tenkan) is practiced both solo and with a partner
-- [ ] Randori with two slow attackers can be sustained for 60 seconds without freezing
-- [ ] At least one weapon (jo, bokken, or tanto) has been practiced in solo kata
-- [ ] Practice includes both solo and partner components regularly
+- [ ] La postura centrada absorbe empujes moderados sin resistencia muscular
+- [ ] Los rodamientos hacia adelante son suaves, silenciosos y practicados en ambos lados
+- [ ] Al menos cuatro técnicas básicas pueden realizarse cooperativamente con un compañero
+- [ ] Tai sabaki (irimi, tenkan, irimi-tenkan) se practica tanto en solitario como con compañero
+- [ ] El randori con dos atacantes lentos puede sostenerse durante 60 segundos sin congelarse
+- [ ] Al menos un arma (jo, bokken o tanto) ha sido practicada en kata en solitario
+- [ ] La práctica incluye componentes tanto en solitario como en pareja regularmente
 
 ## Errores Comunes
 
-- **Using muscle instead of blending**: If a technique requires strength, the timing or angle is wrong. Relax, re-enter, and let the attacker's energy do the work. Aikido's power comes from redirecting force, not generating it
-- **Neglecting ukemi**: Students who avoid falling avoid learning. Ukemi IS aikido — the ability to receive force safely. Practice it every session, especially at the start
-- **Fear of commitment**: Half-hearted entering (irimi) puts you in the worst position — too close to evade, too far to control. Once you decide to enter, commit fully to moving past the attack
-- **Fixating on one attacker**: In randori and in life, tunnel vision is dangerous. Keep soft, wide awareness. Peripheral vision detects motion before focused vision does
-- **Training only with compliant partners**: While beginners need cooperation, intermediate students should gradually increase resistance. Technique that only works on a cooperative partner is incomplete
+- **Usar músculo en lugar de mezclar**: Si una técnica requiere fuerza, el timing o el ángulo están mal. Relajarse, re-entrar y dejar que la energía del atacante haga el trabajo. El poder del aikido viene de redirigir fuerza, no de generarla
+- **Descuidar ukemi**: Los estudiantes que evitan caer evitan aprender. Ukemi ES aikido — la capacidad de recibir fuerza de forma segura. Practicarlo cada sesión, especialmente al inicio
+- **Miedo al compromiso**: Una entrada (irimi) a medias pone en la peor posición — demasiado cerca para evadir, demasiado lejos para controlar. Una vez que se decide entrar, comprometerse completamente a moverse más allá del ataque
+- **Fijarse en un atacante**: En el randori y en la vida, la visión de túnel es peligrosa. Mantener conciencia suave y amplia. La visión periférica detecta movimiento antes que la visión enfocada
+- **Entrenar solo con compañeros complacientes**: Aunque los principiantes necesitan cooperación, los estudiantes intermedios deben aumentar gradualmente la resistencia. La técnica que solo funciona con un compañero cooperativo está incompleta
 
 ## Habilidades Relacionadas
 
-- `tai-chi` — complementary internal martial art; shares the principle of yielding to overcome force, with emphasis on solo cultivation
-- `mindfulness` — defensive situational awareness provides the perceptual foundation for martial readiness and conflict avoidance
-- `meditate` — seated meditation develops the centered, equanimous mind state that aikido requires under pressure
-- `heal` — understanding body mechanics from aikido practice informs first aid and bodywork approaches
-- `redirect` — AI self-application variant; maps aikido blending and redirection to handling conflicting demands and tool failures
+- `tai-chi` — arte marcial interno complementario; comparte el principio de ceder para superar la fuerza, con énfasis en el cultivo en solitario
+- `mindfulness` — la conciencia situacional defensiva proporciona la base perceptual para la preparación marcial y la evitación de conflictos
+- `meditate` — la meditación sentada desarrolla el estado mental centrado y ecuánime que el aikido requiere bajo presión
+- `heal` — la comprensión de la mecánica corporal de la práctica de aikido informa los enfoques de primeros auxilios y trabajo corporal
+- `redirect` — variante de auto-aplicación IA; mapea la mezcla y redirección del aikido al manejo de demandas conflictivas y fallos de herramientas

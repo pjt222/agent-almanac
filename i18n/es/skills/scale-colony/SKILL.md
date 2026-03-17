@@ -1,14 +1,16 @@
 ---
 name: scale-colony
 description: >
-  Scale distributed systems and organizations through colony budding, role
-  differentiation, and growth-triggered architectural transitions. Covers
-  growth phase recognition, age polyethism, fission protocols, inter-colony
-  coordination, and scaling limit detection. Use when a team or system that
-  worked at 10 agents breaks down at 50, when communication overhead grows
-  faster than productive output, when planning a growth phase proactively, or
-  when coordination failures correlate with size such as lost messages, duplicated
-  work, or unclear ownership.
+  Escalar sistemas distribuidos y organizaciones a través de gemación de
+  colonias, diferenciación de roles y transiciones arquitectónicas activadas
+  por crecimiento. Cubre reconocimiento de fases de crecimiento, polietismo
+  de edad, protocolos de fisión, coordinación entre colonias y detección de
+  límites de escalado. Usar cuando un equipo o sistema que funcionaba con 10
+  agentes se descompone con 50, cuando la sobrecarga de comunicación crece
+  más rápido que la producción productiva, cuando se planifica una fase de
+  crecimiento proactivamente, o cuando los fallos de coordinación se
+  correlacionan con el tamaño como mensajes perdidos, trabajo duplicado o
+  propiedad poco clara.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,33 +29,33 @@ metadata:
 
 # Scale Colony
 
-Scale distributed systems, teams, or organizations through colony budding (splitting), role differentiation (age polyethism), and growth-triggered architectural transitions — maintaining coordination quality as the colony grows beyond its initial design capacity.
+Escalar sistemas distribuidos, equipos u organizaciones a través de gemación de colonias (división), diferenciación de roles (polietismo de edad) y transiciones arquitectónicas activadas por crecimiento — manteniendo la calidad de coordinación mientras la colonia crece más allá de su capacidad de diseño inicial.
 
 ## Cuándo Usar
 
-- A team or system that worked at 10 agents is breaking down at 50
-- Communication overhead is growing faster than productive output
-- Coordination patterns that were implicit need to become explicit
-- Planning a growth phase and wanting to scale proactively rather than reactively
-- Observing coordination failures that correlate with size (lost messages, duplicated work, unclear ownership)
-- The existing system needs to split into semi-autonomous sub-colonies
+- Un equipo o sistema que funcionaba con 10 agentes se está descomponiendo con 50
+- La sobrecarga de comunicación crece más rápido que la producción productiva
+- Los patrones de coordinación que eran implícitos necesitan volverse explícitos
+- Planificando una fase de crecimiento y queriendo escalar proactivamente en lugar de reactivamente
+- Observando fallos de coordinación que se correlacionan con el tamaño (mensajes perdidos, trabajo duplicado, propiedad poco clara)
+- El sistema existente necesita dividirse en sub-colonias semiautónomas
 
 ## Entradas
 
-- **Requerido**: Current colony size and target growth (or growth rate)
-- **Requerido**: Current coordination mechanisms and their stress points
-- **Opcional**: Colony structure (flat, hierarchical, clustered)
-- **Opcional**: Role differentiation already in place
-- **Opcional**: Growth timeline and constraints
-- **Opcional**: Inter-colony coordination needs (if splitting)
+- **Requerido**: Tamaño actual de la colonia y crecimiento objetivo (o tasa de crecimiento)
+- **Requerido**: Mecanismos de coordinación actuales y sus puntos de estrés
+- **Opcional**: Estructura de la colonia (plana, jerárquica, agrupada)
+- **Opcional**: Diferenciación de roles ya implementada
+- **Opcional**: Cronograma de crecimiento y restricciones
+- **Opcional**: Necesidades de coordinación entre colonias (si se divide)
 
 ## Procedimiento
 
-### Paso 1: Recognize the Growth Phase
+### Paso 1: Reconocer la Fase de Crecimiento
 
-Identify which scaling phase the colony is in to apply appropriate strategies.
+Identificar en qué fase de escalado se encuentra la colonia para aplicar las estrategias apropiadas.
 
-1. Classify the current growth phase:
+1. Clasificar la fase de crecimiento actual:
 
 ```
 Colony Growth Phases:
@@ -74,144 +76,144 @@ Colony Growth Phases:
 └───────────┴──────────────┴───────────────────────────────────────────┘
 ```
 
-2. Identify growth stress signals:
-   - **Communication overload**: messages per agent per day increasing faster than colony size
-   - **Decision latency**: time from proposal to decision increasing
-   - **Coordination failures**: duplicated work, dropped tasks, conflicting actions increasing
-   - **Knowledge dilution**: new agents take longer to become productive
-   - **Identity loss**: agents can't describe the colony's purpose consistently
-3. Determine if the colony is about to cross a phase boundary or has already crossed it
+2. Identificar señales de estrés de crecimiento:
+   - **Sobrecarga de comunicación**: los mensajes por agente por día aumentan más rápido que el tamaño de la colonia
+   - **Latencia de decisión**: el tiempo desde propuesta hasta decisión va en aumento
+   - **Fallos de coordinación**: trabajo duplicado, tareas abandonadas, acciones conflictivas en aumento
+   - **Dilución de conocimiento**: los nuevos agentes tardan más en ser productivos
+   - **Pérdida de identidad**: los agentes no pueden describir consistentemente el propósito de la colonia
+3. Determinar si la colonia está a punto de cruzar una frontera de fase o ya la ha cruzado
 
-**Esperado:** Clear identification of the current growth phase and the specific stress signals indicating the colony is approaching or has crossed a phase boundary.
+**Esperado:** Identificación clara de la fase de crecimiento actual y las señales de estrés específicas que indican que la colonia se acerca o ha cruzado una frontera de fase.
 
-**En caso de fallo:** If the phase isn't clear, measure three concrete metrics: communication volume per agent, decision latency, and coordination failure rate. Plot them over time. The inflection points reveal phase transitions. If metrics aren't available, the colony is likely in the Founding phase (where metrics aren't yet needed).
+**En caso de fallo:** Si la fase no está clara, medir tres métricas concretas: volumen de comunicación por agente, latencia de decisión y tasa de fallos de coordinación. Graficarlos en el tiempo. Los puntos de inflexión revelan transiciones de fase. Si las métricas no están disponibles, la colonia probablemente está en la fase de Fundación (donde las métricas aún no son necesarias).
 
-### Paso 2: Implement Role Differentiation (Age Polyethism)
+### Paso 2: Implementar Diferenciación de Roles (Polietismo de Edad)
 
-Introduce progressive specialization where agents take on different roles based on experience and colony needs.
+Introducir especialización progresiva donde los agentes asumen diferentes roles basados en experiencia y necesidades de la colonia.
 
-1. Define the role progression path:
-   - **Newcomers**: observation, learning, simple tasks (low autonomy, high guidance)
-   - **Workers**: standard task execution, signal following (moderate autonomy)
-   - **Specialists**: domain expertise, complex tasks, mentoring newcomers (high autonomy)
-   - **Foragers/Scouts**: exploration, innovation, external interface (see `forage-resources`)
-   - **Coordinators**: inter-group communication, conflict resolution, quorum management
-2. Implement role transitions:
-   - Transitions are triggered by experience thresholds, not appointment
-   - An agent that has completed a threshold number of tasks successfully transitions to the next role (calibrate the threshold based on task complexity and colony growth rate — e.g., 5-10 tasks for simple roles, 20-30 for specialist roles)
-   - Reverse transitions are possible (specialist returns to worker role in a new domain)
-   - The colony's role distribution adapts to current needs:
-     - Growing colony → more newcomer slots, active mentoring
-     - Stable colony → balanced distribution across all roles
-     - Threatened colony → more defenders, fewer scouts (see `defend-colony`)
-3. Preserve role flexibility:
-   - No agent is permanently locked into a role
-   - Emergency protocols can temporarily reassign any agent to any role
-   - Cross-training ensures agents can cover adjacent roles
+1. Definir la ruta de progresión de roles:
+   - **Novatos**: observación, aprendizaje, tareas simples (baja autonomía, alta guía)
+   - **Trabajadores**: ejecución estándar de tareas, seguimiento de señales (autonomía moderada)
+   - **Especialistas**: experiencia de dominio, tareas complejas, mentoría de novatos (alta autonomía)
+   - **Recolectores/Exploradores**: exploración, innovación, interfaz externa (ver `forage-resources`)
+   - **Coordinadores**: comunicación intergrupal, resolución de conflictos, gestión de quórum
+2. Implementar transiciones de roles:
+   - Las transiciones se activan por umbrales de experiencia, no por designación
+   - Un agente que ha completado exitosamente un número umbral de tareas transiciona al siguiente rol (calibrar el umbral basado en complejidad de tareas y tasa de crecimiento de la colonia — ej., 5-10 tareas para roles simples, 20-30 para roles de especialista)
+   - Las transiciones inversas son posibles (un especialista regresa al rol de trabajador en un nuevo dominio)
+   - La distribución de roles de la colonia se adapta a las necesidades actuales:
+     - Colonia en crecimiento -> más plazas de novatos, mentoría activa
+     - Colonia estable -> distribución equilibrada entre todos los roles
+     - Colonia amenazada -> más defensores, menos exploradores (ver `defend-colony`)
+3. Preservar la flexibilidad de roles:
+   - Ningún agente queda permanentemente bloqueado en un rol
+   - Los protocolos de emergencia pueden reasignar temporalmente cualquier agente a cualquier rol
+   - La capacitación cruzada asegura que los agentes puedan cubrir roles adyacentes
 
-**Esperado:** A role structure where agents naturally progress from simple to complex responsibilities, with the colony's role distribution reflecting its current needs and phase.
+**Esperado:** Una estructura de roles donde los agentes progresan naturalmente de responsabilidades simples a complejas, con la distribución de roles de la colonia reflejando sus necesidades y fase actuales.
 
-**En caso de fallo:** If role differentiation creates rigid silos, increase cross-training requirements and rotation frequency. If newcomers struggle to progress, the mentoring system is insufficient — pair each newcomer with a specialist for their first N tasks. If too many agents cluster in one role, the transition triggers are miscalibrated — adjust thresholds based on colony-wide role demand.
+**En caso de fallo:** Si la diferenciación de roles crea silos rígidos, aumentar los requisitos de capacitación cruzada y la frecuencia de rotación. Si los novatos luchan por progresar, el sistema de mentoría es insuficiente — emparejar cada novato con un especialista para sus primeras N tareas. Si demasiados agentes se agrupan en un rol, los activadores de transición están mal calibrados — ajustar umbrales basados en la demanda de roles de toda la colonia.
 
-### Paso 3: Restructure Coordination for Scale
+### Paso 3: Reestructurar la Coordinación para la Escala
 
-Adapt the coordination mechanisms from `coordinate-swarm` to handle increased colony size.
+Adaptar los mecanismos de coordinación de `coordinate-swarm` para manejar el aumento del tamaño de la colonia.
 
-1. Replace direct communication with layered signaling:
-   - Founding phase: everyone talks to everyone (N×N communication)
-   - Growth phase: cluster into squads of 5-8; direct communication within squads, signal-based between squads
-   - Maturity phase: squads form departments; intra-squad direct, inter-squad signal, inter-department broadcast
-2. Implement coordination layers:
-   - **Local coordination**: within a squad, direct signal exchange (stigmergy)
-   - **Regional coordination**: between squads in the same department, aggregated signals
-   - **Colony coordination**: between departments, broadcast signals only for colony-wide decisions
-3. Design inter-layer interfaces:
-   - Each squad has one designated communicator who aggregates and relays signals
-   - Communicators filter noise: not every local signal gets relayed upward
-   - Colony-wide broadcasts are rare and reserved for quorum decisions, alarm escalation, or major state changes
-4. Communication overhead budget:
-   - Target: each agent spends <20% of capacity on coordination
-   - Measure actual overhead; if it exceeds the budget, add another coordination layer or split the oversized squad
+1. Reemplazar la comunicación directa con señalización por capas:
+   - Fase de fundación: todos hablan con todos (comunicación N x N)
+   - Fase de crecimiento: agrupar en escuadrones de 5-8; comunicación directa dentro de escuadrones, basada en señales entre escuadrones
+   - Fase de madurez: los escuadrones forman departamentos; directa intra-escuadrón, señal inter-escuadrón, transmisión inter-departamento
+2. Implementar capas de coordinación:
+   - **Coordinación local**: dentro de un escuadrón, intercambio directo de señales (estigmergia)
+   - **Coordinación regional**: entre escuadrones del mismo departamento, señales agregadas
+   - **Coordinación de colonia**: entre departamentos, señales de transmisión solo para decisiones de toda la colonia
+3. Diseñar interfaces entre capas:
+   - Cada escuadrón tiene un comunicador designado que agrega y retransmite señales
+   - Los comunicadores filtran el ruido: no toda señal local se retransmite hacia arriba
+   - Las transmisiones de toda la colonia son raras y reservadas para decisiones de quórum, escalación de alarmas o cambios de estado importantes
+4. Presupuesto de sobrecarga de comunicación:
+   - Objetivo: cada agente gasta <20% de capacidad en coordinación
+   - Medir la sobrecarga real; si excede el presupuesto, agregar otra capa de coordinación o dividir el escuadrón sobredimensionado
 
-**Esperado:** A layered coordination structure where communication overhead grows logarithmically (not linearly) with colony size. Local coordination is fast and direct; colony-wide coordination is slower but still functional.
+**Esperado:** Una estructura de coordinación por capas donde la sobrecarga de comunicación crece logarítmicamente (no linealmente) con el tamaño de la colonia. La coordinación local es rápida y directa; la coordinación de toda la colonia es más lenta pero aún funcional.
 
-**En caso de fallo:** If coordination layers create information bottlenecks (communicators become overloaded), add redundant communicators or reduce the relay frequency. If layers create isolation (squads don't know what other squads are doing), increase the inter-layer signal frequency or create cross-squad liaison roles.
+**En caso de fallo:** Si las capas de coordinación crean cuellos de botella de información (los comunicadores se sobrecargan), agregar comunicadores redundantes o reducir la frecuencia de retransmisión. Si las capas crean aislamiento (los escuadrones no saben lo que otros escuadrones hacen), aumentar la frecuencia de señales entre capas o crear roles de enlace entre escuadrones.
 
-### Paso 4: Execute Colony Budding (Fission)
+### Paso 4: Ejecutar la Gemación de Colonia (Fisión)
 
-Split the colony into semi-autonomous sub-colonies when it exceeds single-coordination capacity.
+Dividir la colonia en sub-colonias semiautónomas cuando excede la capacidad de coordinación única.
 
-1. Recognize fission triggers:
-   - Colony exceeds 100 agents (or the coordination layer count exceeds 3)
-   - Communication overhead exceeds 30% of agent capacity despite layering
-   - Decision latency exceeds acceptable thresholds for time-sensitive operations
-   - Subgroups have developed distinct identities and can operate independently
-2. Plan the fission:
-   - Identify natural split lines (existing clusters, domain boundaries, geographic separation)
-   - Ensure each daughter colony has a viable role distribution (can't split all specialists into one colony)
-   - Each daughter colony must have: at least one coordinator, sufficient workers, and access to shared resources
-   - Define the inter-colony interface: what information is shared, what is independent
-3. Execute the split:
-   - Announce the fission plan and timeline (consensus required — see `build-consensus`)
-   - Transfer agents to daughter colonies based on existing cluster membership
-   - Establish inter-colony communication channels (lightweight, asynchronous)
-   - Each daughter colony bootstraps its own local coordination (inheriting patterns from the parent)
-4. Post-fission stabilization:
-   - Monitor each daughter colony for viability (can it sustain itself?)
-   - Inter-colony coordination should be minimal (quarterly sync, not daily)
-   - If a daughter colony fails, reabsorb it into the nearest viable colony
+1. Reconocer los activadores de fisión:
+   - La colonia excede 100 agentes (o el número de capas de coordinación excede 3)
+   - La sobrecarga de comunicación excede el 30% de la capacidad de los agentes a pesar de las capas
+   - La latencia de decisión excede umbrales aceptables para operaciones sensibles al tiempo
+   - Los subgrupos han desarrollado identidades distintas y pueden operar independientemente
+2. Planificar la fisión:
+   - Identificar líneas de división naturales (agrupaciones existentes, fronteras de dominio, separación geográfica)
+   - Asegurar que cada colonia hija tenga una distribución de roles viable (no se puede dividir todos los especialistas en una colonia)
+   - Cada colonia hija debe tener: al menos un coordinador, suficientes trabajadores y acceso a recursos compartidos
+   - Definir la interfaz entre colonias: qué información se comparte, qué es independiente
+3. Ejecutar la división:
+   - Anunciar el plan de fisión y el cronograma (se requiere consenso — ver `build-consensus`)
+   - Transferir agentes a colonias hijas basado en la membresía de agrupaciones existentes
+   - Establecer canales de comunicación entre colonias (ligeros, asíncronos)
+   - Cada colonia hija arranca su propia coordinación local (heredando patrones de la madre)
+4. Estabilización post-fisión:
+   - Monitorear la viabilidad de cada colonia hija (¿puede sostenerse?)
+   - La coordinación entre colonias debe ser mínima (sincronización trimestral, no diaria)
+   - Si una colonia hija falla, reabsorberla en la colonia viable más cercana
 
-**Esperado:** Two or more viable daughter colonies, each operating semi-autonomously with their own coordination, connected by lightweight inter-colony interfaces.
+**Esperado:** Dos o más colonias hijas viables, cada una operando semiautónomamente con su propia coordinación, conectadas por interfaces ligeras entre colonias.
 
-**En caso de fallo:** If daughter colonies are too small to be viable, the fission was premature — remerge and try again at a larger size. If inter-colony coordination becomes as heavy as pre-fission single-colony coordination, the split lines were wrong — the colonies are too interdependent. Re-draw boundaries along natural independence lines.
+**En caso de fallo:** Si las colonias hijas son demasiado pequeñas para ser viables, la fisión fue prematura — refusionarse e intentar de nuevo a un tamaño mayor. Si la coordinación entre colonias se vuelve tan pesada como la coordinación pre-fisión de colonia única, las líneas de división eran incorrectas — las colonias son demasiado interdependientes. Redibujar las fronteras a lo largo de líneas de independencia naturales.
 
-### Paso 5: Monitor Scaling Limits and Adapt
+### Paso 5: Monitorear Límites de Escalado y Adaptar
 
-Continuously assess whether the current structure matches the colony's size and needs.
+Evaluar continuamente si la estructura actual coincide con el tamaño y las necesidades de la colonia.
 
-1. Track scaling health metrics:
-   - **Coordination overhead ratio**: time spent coordinating / time spent producing
-   - **Decision throughput**: decisions per time unit (should increase or hold steady with growth)
-   - **Agent satisfaction**: engagement, retention, sense of purpose (drops when scaling fails)
-   - **Error rate**: coordination failures per time unit (should not increase linearly with growth)
-2. Identify scaling limit indicators:
-   - Overhead ratio exceeding 25% → need more automation or another coordination layer
-   - Decision throughput declining → governance structure needs revision
-   - Agent turnover spiking → cultural or structural issues from scaling
-   - Error rate accelerating → coordination mechanisms are failing
-3. Trigger adaptation:
-   - Phase transition detected → apply the appropriate phase strategy from Step 1
-   - Scaling limit reached → escalate to the next structural intervention (role differentiation → coordination restructure → fission)
-   - External change (market shift, tech disruption) → may require colony transformation (see `adapt-architecture`)
+1. Rastrear métricas de salud de escalado:
+   - **Ratio de sobrecarga de coordinación**: tiempo gastado coordinando / tiempo gastado produciendo
+   - **Rendimiento de decisiones**: decisiones por unidad de tiempo (debería aumentar o mantenerse estable con el crecimiento)
+   - **Satisfacción de agentes**: compromiso, retención, sentido de propósito (baja cuando el escalado falla)
+   - **Tasa de errores**: fallos de coordinación por unidad de tiempo (no debería aumentar linealmente con el crecimiento)
+2. Identificar indicadores de límite de escalado:
+   - Ratio de sobrecarga excediendo 25% -> se necesita más automatización u otra capa de coordinación
+   - Rendimiento de decisiones en declive -> la estructura de gobernanza necesita revisión
+   - Rotación de agentes en aumento -> problemas culturales o estructurales del escalado
+   - Tasa de errores acelerándose -> los mecanismos de coordinación están fallando
+3. Activar adaptación:
+   - Transición de fase detectada -> aplicar la estrategia de fase apropiada del Paso 1
+   - Límite de escalado alcanzado -> escalar a la siguiente intervención estructural (diferenciación de roles -> reestructuración de coordinación -> fisión)
+   - Cambio externo (cambio de mercado, disrupción tecnológica) -> puede requerir transformación de colonia (ver `adapt-architecture`)
 
-**Esperado:** A colony that monitors its own scaling health and proactively adapts its structure before scaling stress becomes scaling failure.
+**Esperado:** Una colonia que monitorea su propia salud de escalado y adapta proactivamente su estructura antes de que el estrés de escalado se convierta en fallo de escalado.
 
-**En caso de fallo:** If scaling health metrics are not available, the colony lacks observability — build measurement before building more structure. If metrics show problems but the colony can't adapt, the resistance is cultural, not technical — address the human factors (fear of change, ownership attachment, trust deficits) before restructuring.
+**En caso de fallo:** Si las métricas de salud de escalado no están disponibles, la colonia carece de observabilidad — construir medición antes de construir más estructura. Si las métricas muestran problemas pero la colonia no puede adaptarse, la resistencia es cultural, no técnica — abordar los factores humanos (miedo al cambio, apego a la propiedad, déficits de confianza) antes de reestructurar.
 
 ## Validación
 
-- [ ] Current growth phase is identified with specific stress signals
-- [ ] Role differentiation is defined with progressive specialization
-- [ ] Coordination is layered appropriately for colony size
-- [ ] Communication overhead stays below 20-25% of agent capacity
-- [ ] Fission plan exists for when the colony exceeds single-coordination capacity
-- [ ] Scaling health metrics are tracked and thresholds trigger adaptation
-- [ ] Each daughter colony (post-fission) has viable role distribution
+- [ ] La fase de crecimiento actual se identifica con señales de estrés específicas
+- [ ] La diferenciación de roles se define con especialización progresiva
+- [ ] La coordinación está organizada por capas apropiadamente para el tamaño de la colonia
+- [ ] La sobrecarga de comunicación se mantiene por debajo del 20-25% de la capacidad de los agentes
+- [ ] Existe un plan de fisión para cuando la colonia exceda la capacidad de coordinación única
+- [ ] Las métricas de salud de escalado se rastrean y los umbrales activan la adaptación
+- [ ] Cada colonia hija (post-fisión) tiene una distribución de roles viable
 
 ## Errores Comunes
 
-- **Scaling structure before needed**: Premature layering adds overhead without benefit. A 10-person team doesn't need department coordinators. Let stress signals guide structural changes
-- **Preserving founding culture at all costs**: What worked at 5 agents won't work at 50. Scaling requires structural evolution; nostalgia for the founding phase prevents necessary adaptation
-- **Fission without independence**: Splitting a colony into sub-colonies that still depend on each other for daily operations creates the worst of both worlds — overhead of coordination plus overhead of separation
-- **Uniform role distribution**: Not every sub-colony needs the same role ratios. A research colony needs more scouts; a production colony needs more workers. Adapt role distribution to mission
-- **Ignoring remerge as an option**: Sometimes fission fails and the best move is to remerge. Treating fission as irreversible prevents recovery from bad splits
+- **Escalar la estructura antes de lo necesario**: La organización por capas prematura agrega sobrecarga sin beneficio. Un equipo de 10 personas no necesita coordinadores de departamento. Dejar que las señales de estrés guíen los cambios estructurales
+- **Preservar la cultura fundacional a toda costa**: Lo que funcionaba con 5 agentes no funcionará con 50. El escalado requiere evolución estructural; la nostalgia por la fase de fundación impide la adaptación necesaria
+- **Fisión sin independencia**: Dividir una colonia en sub-colonias que aún dependen una de otra para operaciones diarias crea lo peor de ambos mundos — sobrecarga de coordinación más sobrecarga de separación
+- **Distribución uniforme de roles**: No toda sub-colonia necesita las mismas proporciones de roles. Una colonia de investigación necesita más exploradores; una colonia de producción necesita más trabajadores. Adaptar la distribución de roles a la misión
+- **Ignorar la refusión como opción**: A veces la fisión falla y la mejor opción es refusionarse. Tratar la fisión como irreversible impide la recuperación de malas divisiones
 
 ## Habilidades Relacionadas
 
-- `coordinate-swarm` — foundational coordination patterns that this skill scales
-- `forage-resources` — foraging scales differently than production; role differentiation affects scout allocation
-- `build-consensus` — consensus mechanisms must adapt for larger groups
-- `defend-colony` — defense must scale with the colony
-- `adapt-architecture` — morphic skill for structural transformation, triggered by growth pressure
-- `plan-capacity` — capacity planning for growth projections
-- `conduct-retrospective` — retrospectives help identify scaling stress before it becomes failure
+- `coordinate-swarm` — patrones de coordinación fundamentales que esta habilidad escala
+- `forage-resources` — la recolección escala de manera diferente a la producción; la diferenciación de roles afecta la asignación de exploradores
+- `build-consensus` — los mecanismos de consenso deben adaptarse para grupos más grandes
+- `defend-colony` — la defensa debe escalar con la colonia
+- `adapt-architecture` — habilidad mórfica para transformación estructural, activada por presión de crecimiento
+- `plan-capacity` — planificación de capacidad para proyecciones de crecimiento
+- `conduct-retrospective` — las retrospectivas ayudan a identificar el estrés de escalado antes de que se convierta en fallo

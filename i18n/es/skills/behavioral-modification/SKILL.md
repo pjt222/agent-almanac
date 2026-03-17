@@ -1,14 +1,15 @@
 ---
 name: behavioral-modification
 description: >
-  Address unwanted dog behaviors through desensitization, counter-conditioning,
-  and management. Covers reactivity (to dogs, people, sounds), separation
-  anxiety, resource guarding, excessive barking, and leash pulling using
-  force-free methods with systematic threshold management. Use when a dog shows
-  reactivity toward other dogs, people, or stimuli; when separation anxiety
-  causes destructive behavior or vocalization; when resource guarding is present;
-  or when behaviors like excessive barking or leash pulling interfere with
-  daily life — after basic obedience is established.
+  Abordar comportamientos caninos no deseados mediante desensibilización,
+  contracondicionamiento y gestión ambiental. Cubre reactividad (hacia perros,
+  personas, sonidos), ansiedad por separación, protección de recursos, ladrido
+  excesivo y tirar de la correa usando métodos libres de fuerza con gestión
+  sistemática del umbral. Usar cuando un perro muestra reactividad hacia otros
+  perros, personas o estímulos; cuando la ansiedad por separación causa
+  comportamiento destructivo o vocalización; cuando hay protección de recursos;
+  o cuando comportamientos como ladrido excesivo o tirar de la correa interfieren
+  con la vida diaria — después de que la obediencia básica esté establecida.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,29 +28,29 @@ metadata:
 
 # Behavioral Modification
 
-Address unwanted dog behaviors through desensitization, counter-conditioning, and environmental management.
+Abordar comportamientos caninos no deseados mediante desensibilización, contracondicionamiento y gestión ambiental.
 
 ## Cuándo Usar
 
-- A dog shows reactivity (lunging, barking, growling) toward other dogs, people, or stimuli
-- Separation anxiety manifests as destructive behavior, vocalization, or house soiling when left alone
-- Resource guarding: the dog stiffens, growls, or snaps when approached while eating or holding an object
-- Excessive barking, jumping, pulling on leash, or other behaviors that interfere with daily life
-- After basic obedience is established — behavioral modification builds on foundation commands
+- Un perro muestra reactividad (embestidas, ladridos, gruñidos) hacia otros perros, personas o estímulos
+- La ansiedad por separación se manifiesta como comportamiento destructivo, vocalización o ensuciar la casa cuando se queda solo
+- Protección de recursos: el perro se tensa, gruñe o intenta morder cuando se le acercan mientras come o sostiene un objeto
+- Ladrido excesivo, saltar, tirar de la correa u otros comportamientos que interfieren con la vida diaria
+- Después de que la obediencia básica esté establecida — la modificación conductual se construye sobre los comandos fundamentales
 
 ## Entradas
 
-- **Requerido**: A specific unwanted behavior to address (not "the dog is bad" but "the dog lunges at other dogs on leash")
-- **Requerido**: The dog's threshold distance or trigger level (how close/intense before the behavior starts)
-- **Opcional**: History of the behavior (when it started, what triggers it, what makes it worse)
-- **Opcional**: High-value treats that the dog will eat even when mildly stressed
-- **Opcional**: Veterinary clearance (rule out pain or medical causes for behavior changes)
+- **Requerido**: Un comportamiento no deseado específico a abordar (no "el perro es malo" sino "el perro embiste a otros perros con correa")
+- **Requerido**: La distancia umbral del perro o nivel de activación (qué tan cerca/intenso antes de que comience el comportamiento)
+- **Opcional**: Historia del comportamiento (cuándo comenzó, qué lo desencadena, qué lo empeora)
+- **Opcional**: Premios de alto valor que el perro comerá incluso cuando está levemente estresado
+- **Opcional**: Autorización veterinaria (descartar dolor o causas médicas para cambios de comportamiento)
 
 ## Procedimiento
 
-### Paso 1: Identify and Define the Behavior
+### Paso 1: Identificar y definir el comportamiento
 
-Precision matters — vague descriptions lead to vague interventions.
+La precisión importa — descripciones vagas llevan a intervenciones vagas.
 
 ```
 Behavior Analysis (ABC Model):
@@ -75,11 +76,11 @@ Threshold Mapping:
 - The working zone is BELOW threshold — where the dog notices but can still think
 ```
 
-**Esperado:** A precise behavior definition with identified trigger, threshold distance, and current consequence pattern.
+**Esperado:** Una definición precisa del comportamiento con desencadenante identificado, distancia umbral y patrón de consecuencia actual.
 
-**En caso de fallo:** If the behavior seems to have no consistent trigger, keep a log for one week: date, time, context, behavior, consequence. Patterns often emerge that are not obvious in the moment.
+**En caso de fallo:** Si el comportamiento parece no tener un desencadenante consistente, mantener un registro durante una semana: fecha, hora, contexto, comportamiento, consecuencia. Los patrones a menudo emergen y no son obvios en el momento.
 
-### Paso 2: Choose the Intervention Strategy
+### Paso 2: Elegir la estrategia de intervención
 
 ```
 Strategy Selection:
@@ -103,13 +104,13 @@ Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 ```
 
-**Esperado:** A specific strategy selected for the identified behavior.
+**Esperado:** Una estrategia específica seleccionada para el comportamiento identificado.
 
-**En caso de fallo:** If the behavior is severe (biting with contact, extreme panic, self-harm), refer to a certified applied animal behaviorist (CAAB) or veterinary behaviorist (DACVB). This skill covers moderate behavioral issues, not clinical cases.
+**En caso de fallo:** Si el comportamiento es severo (mordida con contacto, pánico extremo, autolesión), referir a un conductista aplicado certificado (CAAB) o conductista veterinario (DACVB). Esta habilidad cubre problemas conductuales moderados, no casos clínicos.
 
-### Paso 3: Execute Desensitization and Counter-Conditioning
+### Paso 3: Ejecutar desensibilización y contracondicionamiento
 
-The core protocol for reactivity and fear-based behaviors.
+El protocolo central para reactividad y comportamientos basados en miedo.
 
 ```
 DS/CC Protocol:
@@ -145,13 +146,13 @@ DS/CC Protocol:
    - Dog's body language at threshold becomes more relaxed
 ```
 
-**Esperado:** Over weeks, the dog's threshold distance decreases and emotional response to the trigger shifts from fear/aggression to neutral or positive.
+**Esperado:** A lo largo de semanas, la distancia umbral del perro disminuye y la respuesta emocional al desencadenante cambia de miedo/agresión a neutral o positiva.
 
-**En caso de fallo:** If no progress after 3-4 weeks of consistent sessions, reassess: (1) are you working below threshold? (2) are the treats high-value enough? (3) is the trigger exposure too frequent outside of training (flooding undoes DS/CC)? (4) consider consulting a professional.
+**En caso de fallo:** Si no hay progreso después de 3-4 semanas de sesiones consistentes, reevaluar: (1) ¿estás trabajando por debajo del umbral? (2) ¿los premios son de suficiente valor? (3) ¿la exposición al desencadenante es demasiado frecuente fuera del entrenamiento (la inundación deshace la DS/CC)? (4) considerar consultar a un profesional.
 
-### Paso 4: Manage the Environment
+### Paso 4: Gestionar el entorno
 
-Training changes behavior over time. Management prevents rehearsal now.
+El entrenamiento cambia el comportamiento con el tiempo. La gestión previene el ensayo ahora.
 
 ```
 Management Strategies:
@@ -179,29 +180,29 @@ Every rehearsal of the unwanted behavior strengthens it.
 Management prevents rehearsal while training builds the new response.
 ```
 
-**Esperado:** The unwanted behavior is not being practiced outside of controlled training sessions.
+**Esperado:** El comportamiento no deseado no se está practicando fuera de las sesiones de entrenamiento controladas.
 
-**En caso de fallo:** If management is impossible (e.g., cannot avoid all dog encounters), reduce training criteria to match reality. Some environmental exposure is unavoidable; ensure training sessions provide a strong enough counter-experience.
+**En caso de fallo:** Si la gestión es imposible (ej., no se pueden evitar todos los encuentros con perros), reducir los criterios de entrenamiento para ajustarse a la realidad. Cierta exposición ambiental es inevitable; asegurar que las sesiones de entrenamiento proporcionen una contra-experiencia suficientemente fuerte.
 
 ## Validación
 
-- [ ] The behavior was defined precisely using the ABC model
-- [ ] Threshold distance was identified before starting DS/CC
-- [ ] Training was conducted consistently below threshold
-- [ ] Treats were high-value enough for the dog to eat in the presence of the trigger
-- [ ] Sessions were 5-15 minutes, ending before the dog went over threshold
-- [ ] Environmental management prevented behavior rehearsal outside training
-- [ ] Progress indicators (check-ins, reduced threshold distance) are being tracked
+- [ ] El comportamiento fue definido con precisión usando el modelo ABC
+- [ ] La distancia umbral fue identificada antes de comenzar la DS/CC
+- [ ] El entrenamiento se condujo consistentemente por debajo del umbral
+- [ ] Los premios fueron de suficiente valor para que el perro los comiera en presencia del desencadenante
+- [ ] Las sesiones fueron de 5-15 minutos, terminando antes de que el perro superara el umbral
+- [ ] La gestión ambiental previno el ensayo del comportamiento fuera del entrenamiento
+- [ ] Los indicadores de progreso (check-ins, distancia umbral reducida) se están rastreando
 
 ## Errores Comunes
 
-- **Working over threshold**: The single most common error. If the dog cannot eat treats, you are too close. Move back
-- **Inconsistency**: DS/CC requires regular sessions (3-5 per week minimum). Sporadic training produces sporadic results
-- **Flooding**: Forcing the dog to endure the trigger at close range does not "get them used to it" — it traumatizes and worsens the behavior
-- **Punishment**: Correcting a reactive dog (leash pop, yelling "no") suppresses the warning signals but increases the underlying emotion. The dog learns to bite without warning
-- **Expecting linear progress**: Behavioral modification has plateaus and regressions. A bad session does not erase prior progress. Zoom out and look at the trend over weeks
-- **Ignoring medical causes**: Pain, thyroid disorders, and neurological issues can all present as behavioral problems. Veterinary clearance is not optional for sudden-onset behavior changes
+- **Trabajar sobre el umbral**: El error más común. Si el perro no puede comer premios, estás demasiado cerca. Retrocede
+- **Inconsistencia**: La DS/CC requiere sesiones regulares (3-5 por semana mínimo). Entrenamiento esporádico produce resultados esporádicos
+- **Inundación**: Forzar al perro a soportar el desencadenante a corta distancia no lo "acostumbra" — lo traumatiza y empeora el comportamiento
+- **Castigo**: Corregir a un perro reactivo (tirón de correa, gritar "no") suprime las señales de advertencia pero aumenta la emoción subyacente. El perro aprende a morder sin avisar
+- **Esperar progreso lineal**: La modificación conductual tiene mesetas y regresiones. Una mala sesión no borra el progreso previo. Alejar la vista y mirar la tendencia a lo largo de semanas
+- **Ignorar causas médicas**: Dolor, trastornos tiroideos y problemas neurológicos pueden todos presentarse como problemas conductuales. La autorización veterinaria no es opcional para cambios de comportamiento de aparición repentina
 
 ## Habilidades Relacionadas
 
-- `basic-obedience` — foundation commands that behavioral modification builds upon; reliable recall is essential for safety
+- `basic-obedience` — comandos fundamentales sobre los que se construye la modificación conductual; una llamada fiable es esencial para la seguridad

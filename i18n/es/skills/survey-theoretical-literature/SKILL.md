@@ -1,12 +1,13 @@
 ---
 name: survey-theoretical-literature
 description: >
-  Survey and synthesize theoretical literature on a specific topic, identifying
-  seminal papers, key results, open problems, and cross-domain connections.
-  Use when starting research on an unfamiliar theoretical topic, writing a
-  literature review for a paper or thesis, identifying open problems and
-  research gaps, finding cross-domain connections, or evaluating the novelty
-  of a proposed theoretical contribution against existing work.
+  Realizar un relevamiento y síntesis de la literatura teórica sobre un tema
+  específico, identificando artículos seminales, resultados clave, problemas
+  abiertos y conexiones entre dominios. Usar al comenzar investigación sobre
+  un tema teórico desconocido, al escribir una revisión de literatura para un
+  artículo o tesis, al identificar problemas abiertos y brechas de investigación,
+  al encontrar conexiones entre dominios, o al evaluar la novedad de una
+  contribución teórica propuesta contra el trabajo existente.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -25,37 +26,37 @@ metadata:
 
 # Survey Theoretical Literature
 
-Conduct a structured survey of theoretical literature on a defined topic, producing a synthesis that maps seminal contributions, traces the chronological development of key ideas, identifies open problems and active research frontiers, and highlights cross-domain connections.
+Realizar un relevamiento estructurado de la literatura teórica sobre un tema definido, produciendo una síntesis que mapee las contribuciones seminales, trace el desarrollo cronológico de las ideas clave, identifique problemas abiertos y fronteras de investigación activas, y destaque conexiones entre dominios.
 
 ## Cuándo Usar
 
-- Starting research on an unfamiliar theoretical topic and needing to map the landscape
-- Writing a literature review section for a paper, thesis, or grant proposal
-- Identifying open problems and gaps in a theoretical field
-- Finding connections between a theoretical result and work in adjacent fields
-- Evaluating the novelty of a proposed theoretical contribution against existing work
+- Comenzar investigación sobre un tema teórico desconocido y necesitar mapear el panorama
+- Escribir una sección de revisión de literatura para un artículo, tesis o propuesta de subvención
+- Identificar problemas abiertos y brechas en un campo teórico
+- Encontrar conexiones entre un resultado teórico y trabajo en campos adyacentes
+- Evaluar la novedad de una contribución teórica propuesta contra el trabajo existente
 
 ## Entradas
 
-- **Requerido**: Topic description (specific enough to bound the search; e.g., "topological phases in non-Hermitian systems" not just "topology")
-- **Requerido**: Scope constraints (time period, subfields to include/exclude, theoretical vs. experimental focus)
-- **Opcional**: Known seed papers (papers the requester already knows, to anchor the search)
-- **Opcional**: Target audience and depth (introductory overview vs. expert-level survey)
-- **Opcional**: Desired output format (annotated bibliography, narrative review, concept map)
+- **Requerido**: Descripción del tema (lo suficientemente específica para acotar la búsqueda; ej., "fases topológicas en sistemas no hermitianos" no solo "topología")
+- **Requerido**: Restricciones de alcance (período temporal, subcampos a incluir/excluir, enfoque teórico vs. experimental)
+- **Opcional**: Artículos semilla conocidos (artículos que el solicitante ya conoce, para anclar la búsqueda)
+- **Opcional**: Audiencia objetivo y profundidad (panorama introductorio vs. relevamiento de nivel experto)
+- **Opcional**: Formato de salida deseado (bibliografía anotada, revisión narrativa, mapa conceptual)
 
 ## Procedimiento
 
-### Paso 1: Define Scope and Search Terms
+### Paso 1: Definir Alcance y Términos de Búsqueda
 
-Bound the survey precisely before searching:
+Acotar el relevamiento con precisión antes de buscar:
 
-1. **Core topic statement**: Write a single sentence defining what the survey covers. This sentence is the acceptance criterion for whether a paper belongs in the survey.
-2. **Search terms**: Generate primary and secondary search terms:
-   - Primary terms: the exact technical phrases used by practitioners (e.g., "Kohn-Sham equations", "Berry phase", "renormalization group")
-   - Secondary terms: broader or adjacent phrases that might capture relevant work from other communities (e.g., "geometric phase" as a synonym for "Berry phase")
-   - Exclusion terms: phrases that would pull in irrelevant results (e.g., excluding "Berry" in the botanical sense)
-3. **Temporal scope**: Define the time window. For a mature field, the seminal papers may be decades old but recent advances may narrow to the last 5-10 years. For an emerging field, the entire history may span only a few years.
-4. **Domain boundaries**: Explicitly state which subfields are in scope and which are out. For example, a survey on quantum error correction might include topological codes but exclude classical coding theory.
+1. **Declaración del tema central**: Escribir una sola oración que defina lo que cubre el relevamiento. Esta oración es el criterio de aceptación para determinar si un artículo pertenece al relevamiento.
+2. **Términos de búsqueda**: Generar términos de búsqueda primarios y secundarios:
+   - Términos primarios: las frases técnicas exactas usadas por los practicantes (ej., "ecuaciones de Kohn-Sham", "fase de Berry", "grupo de renormalización")
+   - Términos secundarios: frases más amplias o adyacentes que podrían capturar trabajo relevante de otras comunidades (ej., "fase geométrica" como sinónimo de "fase de Berry")
+   - Términos de exclusión: frases que atraerían resultados irrelevantes (ej., excluir "Berry" en el sentido botánico)
+3. **Alcance temporal**: Definir la ventana de tiempo. Para un campo maduro, los artículos seminales pueden tener décadas pero los avances recientes pueden acotarse a los últimos 5-10 años. Para un campo emergente, toda la historia puede abarcar solo unos pocos años.
+4. **Límites del dominio**: Declarar explícitamente qué subcampos están dentro del alcance y cuáles no. Por ejemplo, un relevamiento sobre corrección cuántica de errores podría incluir códigos topológicos pero excluir la teoría de codificación clásica.
 
 ```markdown
 ## Survey Scope
@@ -68,25 +69,25 @@ Bound the survey precisely before searching:
 - **Out of scope**: [subfields]
 ```
 
-**Esperado:** A scope definition tight enough that two researchers would independently agree on whether a given paper belongs in the survey.
+**Esperado:** Una definición de alcance lo suficientemente ajustada para que dos investigadores independientemente acuerden si un artículo dado pertenece al relevamiento.
 
-**En caso de fallo:** If the scope is too broad (more than ~200 potentially relevant papers), narrow by adding subfield constraints or tightening the time window. If too narrow (fewer than ~10 papers), broaden the secondary search terms or extend the time window.
+**En caso de fallo:** Si el alcance es demasiado amplio (más de ~200 artículos potencialmente relevantes), acotar agregando restricciones de subcampo o ajustando la ventana temporal. Si es demasiado estrecho (menos de ~10 artículos), ampliar los términos de búsqueda secundarios o extender la ventana temporal.
 
-### Paso 2: Identify Seminal Papers and Key Results
+### Paso 2: Identificar Artículos Seminales y Resultados Clave
 
-Build the backbone of the survey from the most influential contributions:
+Construir la columna vertebral del relevamiento a partir de las contribuciones más influyentes:
 
-1. **Seed-based discovery**: Start from the seed papers (if provided) or from the most recent review article on the topic. Trace references backward and citations forward to identify the papers that appear repeatedly.
-2. **Citation-count heuristic**: Use citation counts as a rough proxy for influence, but weight recent papers (last 5 years) more heavily since they have had less time to accumulate citations.
-3. **Seminal paper criteria**: A paper qualifies as seminal if it meets at least one of:
-   - Introduced a foundational concept, formalism, or method
-   - Proved a result that redirected the field
-   - Unified previously disparate strands of work
-   - Is cited by a majority of subsequent papers in the field
-4. **Key result extraction**: For each seminal paper, extract:
-   - The main result (theorem, equation, prediction, or method)
-   - The assumptions or approximations required
-   - The impact on subsequent work
+1. **Descubrimiento basado en semillas**: Comenzar desde los artículos semilla (si se proporcionan) o desde el artículo de revisión más reciente sobre el tema. Rastrear referencias hacia atrás y citas hacia adelante para identificar los artículos que aparecen repetidamente.
+2. **Heurística de conteo de citas**: Usar conteos de citas como proxy aproximado de influencia, pero ponderar más los artículos recientes (últimos 5 años) ya que han tenido menos tiempo para acumular citas.
+3. **Criterios de artículo seminal**: Un artículo califica como seminal si cumple al menos uno de:
+   - Introdujo un concepto, formalismo o método fundacional
+   - Demostró un resultado que redirigió el campo
+   - Unificó hebras de trabajo previamente dispares
+   - Es citado por la mayoría de artículos subsiguientes en el campo
+4. **Extracción de resultados clave**: Para cada artículo seminal, extraer:
+   - El resultado principal (teorema, ecuación, predicción o método)
+   - Las suposiciones o aproximaciones requeridas
+   - El impacto en el trabajo subsiguiente
 
 ```markdown
 ## Seminal Papers
@@ -96,19 +97,19 @@ Build the backbone of the survey from the most influential contributions:
 | 2 | ... | ... | ... | ... |
 ```
 
-**Esperado:** A table of 5-15 seminal papers that form the intellectual backbone of the topic, with each paper's main result and impact clearly stated.
+**Esperado:** Una tabla de 5-15 artículos seminales que forman la columna vertebral intelectual del tema, con el resultado principal e impacto de cada artículo claramente declarados.
 
-**En caso de fallo:** If the search yields no clear seminal papers, the topic may be too new or too niche. In that case, identify the earliest papers and the most-cited papers as anchors, and note that the field's canonical references have not yet emerged.
+**En caso de fallo:** Si la búsqueda no produce artículos seminales claros, el tema puede ser demasiado nuevo o demasiado nicho. En ese caso, identificar los artículos más tempranos y los más citados como anclas, y notar que las referencias canónicas del campo aún no han emergido.
 
-### Paso 3: Map the Development of Ideas Chronologically
+### Paso 3: Mapear el Desarrollo de Ideas Cronológicamente
 
-Trace how the field evolved from its origins to the present:
+Rastrear cómo evolucionó el campo desde sus orígenes hasta el presente:
 
-1. **Origin phase**: Identify when and where the core ideas first appeared. Note whether the ideas originated within the target field or were imported from another domain.
-2. **Growth phase**: Trace how the initial results were generalized, applied, or challenged. Identify key turning points where the field's direction changed (e.g., a new proof technique, an unexpected counterexample, an experimental confirmation).
-3. **Branching points**: Map where the literature branches into sub-topics. For each branch, briefly characterize its focus and its relationship to the main trunk.
-4. **Current state**: Characterize where the field stands today. Is it mature (results are consolidating), active (rapid development), or stagnant (few recent papers)?
-5. **Timeline construction**: Build a chronological timeline of the most important developments.
+1. **Fase de origen**: Identificar cuándo y dónde aparecieron las ideas centrales por primera vez. Notar si las ideas se originaron dentro del campo objetivo o fueron importadas de otro dominio.
+2. **Fase de crecimiento**: Rastrear cómo los resultados iniciales fueron generalizados, aplicados o cuestionados. Identificar puntos de inflexión clave donde la dirección del campo cambió (ej., una nueva técnica de demostración, un contraejemplo inesperado, una confirmación experimental).
+3. **Puntos de ramificación**: Mapear dónde la literatura se ramifica en subtemas. Para cada rama, caracterizar brevemente su enfoque y su relación con el tronco principal.
+4. **Estado actual**: Caracterizar dónde se encuentra el campo hoy. ¿Está maduro (los resultados se están consolidando), activo (desarrollo rápido), o estancado (pocos artículos recientes)?
+5. **Construcción de línea temporal**: Construir una línea temporal cronológica de los desarrollos más importantes.
 
 ```markdown
 ## Chronological Development
@@ -132,19 +133,19 @@ Trace how the field evolved from its origins to the present:
 - **Recent trend**: [direction of latest work]
 ```
 
-**Esperado:** A narrative timeline that a newcomer could read to understand how the field arrived at its current state, including the intellectual lineage of key ideas.
+**Esperado:** Una línea temporal narrativa que un recién llegado podría leer para comprender cómo el campo llegó a su estado actual, incluyendo el linaje intelectual de las ideas clave.
 
-**En caso de fallo:** If the chronology is unclear (e.g., multiple independent discoveries, disputed priority), document the ambiguity rather than imposing a false linear narrative. Parallel timelines are acceptable.
+**En caso de fallo:** Si la cronología no es clara (ej., múltiples descubrimientos independientes, prioridad disputada), documentar la ambigüedad en lugar de imponer una narrativa lineal falsa. Las líneas temporales paralelas son aceptables.
 
-### Paso 4: Identify Open Problems and Active Frontiers
+### Paso 4: Identificar Problemas Abiertos y Fronteras Activas
 
-Catalog what is not yet known or resolved:
+Catalogar lo que aún no se conoce o está resuelto:
 
-1. **Explicitly stated open problems**: Search for review articles, problem lists, and survey papers that explicitly list open questions. Many fields maintain canonical lists (e.g., the Clay Millennium Problems, Hilbert's problems, open problems in quantum information).
-2. **Implicitly open problems**: Identify results that are conjectured but not proven, numerical observations without theoretical explanation, or discrepancies between theory and experiment.
-3. **Active frontiers**: Identify the topics that are receiving the most attention in the last 2-3 years. These are characterized by a high rate of new preprints, conference sessions, and funding calls.
-4. **Barriers to progress**: For each major open problem, briefly describe why it is hard. What mathematical or conceptual obstacle stands in the way?
-5. **Potential impact**: For each open problem, estimate the impact of its resolution. Would it be incremental (filling in a gap) or transformative (changing how the field thinks)?
+1. **Problemas abiertos declarados explícitamente**: Buscar artículos de revisión, listas de problemas y artículos de relevamiento que listen explícitamente preguntas abiertas. Muchos campos mantienen listas canónicas (ej., los Problemas del Milenio de Clay, los problemas de Hilbert, problemas abiertos en información cuántica).
+2. **Problemas implícitamente abiertos**: Identificar resultados que están conjeturados pero no demostrados, observaciones numéricas sin explicación teórica, o discrepancias entre teoría y experimento.
+3. **Fronteras activas**: Identificar los temas que están recibiendo más atención en los últimos 2-3 años. Estos se caracterizan por una alta tasa de nuevos preprints, sesiones de conferencias y convocatorias de financiamiento.
+4. **Barreras al progreso**: Para cada problema abierto importante, describir brevemente por qué es difícil. ¿Qué obstáculo matemático o conceptual se interpone?
+5. **Impacto potencial**: Para cada problema abierto, estimar el impacto de su resolución. ¿Sería incremental (llenar una brecha) o transformador (cambiar cómo piensa el campo)?
 
 ```markdown
 ## Open Problems and Frontiers
@@ -165,35 +166,35 @@ Catalog what is not yet known or resolved:
 - ...
 ```
 
-**Esperado:** A structured catalog of at least 3-5 open problems with difficulty assessments, plus a characterization of the most active research frontiers.
+**Esperado:** Un catálogo estructurado de al menos 3-5 problemas abiertos con evaluaciones de dificultad, más una caracterización de las fronteras de investigación más activas.
 
-**En caso de fallo:** If no open problems are apparent, the survey scope may be too narrow (the sub-topic is solved) or the literature search missed the relevant review articles. Broaden the scope or specifically search for "open problems in [topic]" and "future directions in [topic]."
+**En caso de fallo:** Si no hay problemas abiertos aparentes, el alcance del relevamiento puede ser demasiado estrecho (el subtema está resuelto) o la búsqueda de literatura omitió los artículos de revisión relevantes. Ampliar el alcance o buscar específicamente "problemas abiertos en [tema]" y "direcciones futuras en [tema]."
 
-### Paso 5: Synthesize Cross-Domain Connections and Produce Structured Survey
+### Paso 5: Sintetizar Conexiones entre Dominios y Producir Relevamiento Estructurado
 
-Connect the surveyed field to adjacent areas and assemble the final output:
+Conectar el campo relevado con áreas adyacentes y ensamblar la salida final:
 
-1. **Cross-domain connections**: Identify where the surveyed topic connects to other fields:
-   - Shared mathematical structures (e.g., the same equation appearing in optics and quantum mechanics)
-   - Analogies and dualities (e.g., AdS/CFT connecting gravity and field theory)
-   - Methodological imports (e.g., machine learning techniques applied to theoretical physics)
-   - Experimental connections (e.g., predictions testable in cold-atom or photonic systems)
+1. **Conexiones entre dominios**: Identificar dónde el tema relevado conecta con otros campos:
+   - Estructuras matemáticas compartidas (ej., la misma ecuación apareciendo en óptica y mecánica cuántica)
+   - Analogías y dualidades (ej., AdS/CFT conectando gravedad y teoría de campos)
+   - Importaciones metodológicas (ej., técnicas de aprendizaje automático aplicadas a física teórica)
+   - Conexiones experimentales (ej., predicciones verificables en sistemas de átomos fríos o fotónicos)
 
-2. **Connection quality assessment**: For each connection, assess whether it is:
-   - Deep (structural equivalence, proven duality)
-   - Promising (suggestive analogy, active investigation)
-   - Superficial (surface similarity, no proven relationship)
+2. **Evaluación de calidad de conexiones**: Para cada conexión, evaluar si es:
+   - Profunda (equivalencia estructural, dualidad demostrada)
+   - Prometedora (analogía sugestiva, investigación activa)
+   - Superficial (similitud de superficie, sin relación demostrada)
 
-3. **Gap analysis**: Identify connections that should exist but have not been explored. These are potential research opportunities.
+3. **Análisis de brechas**: Identificar conexiones que deberían existir pero no han sido exploradas. Estas son oportunidades potenciales de investigación.
 
-4. **Survey assembly**: Compile the outputs from Steps 1-5 into a structured document:
-   - Executive summary (1 paragraph)
-   - Scope and methodology (from Step 1)
-   - Historical development (from Step 3)
-   - Key results and seminal papers (from Step 2)
-   - Open problems and frontiers (from Step 4)
-   - Cross-domain connections (from this step)
-   - Bibliography
+4. **Ensamblaje del relevamiento**: Compilar las salidas de los Pasos 1-5 en un documento estructurado:
+   - Resumen ejecutivo (1 párrafo)
+   - Alcance y metodología (del Paso 1)
+   - Desarrollo histórico (del Paso 3)
+   - Resultados clave y artículos seminales (del Paso 2)
+   - Problemas abiertos y fronteras (del Paso 4)
+   - Conexiones entre dominios (de este paso)
+   - Bibliografía
 
 ```markdown
 ## Cross-Domain Connections
@@ -207,33 +208,33 @@ Connect the surveyed field to adjacent areas and assemble the final output:
 - ...
 ```
 
-**Esperado:** A complete, structured survey document that maps the topic from origins through current frontiers, with cross-domain connections identified and assessed.
+**Esperado:** Un documento de relevamiento completo y estructurado que mapea el tema desde sus orígenes hasta las fronteras actuales, con conexiones entre dominios identificadas y evaluadas.
 
-**En caso de fallo:** If the survey feels disjointed, revisit the chronological timeline (Step 3) and use it as the organizing spine. Every seminal paper, open problem, and cross-domain connection should be locatable on the timeline.
+**En caso de fallo:** Si el relevamiento se siente desarticulado, revisar la línea temporal cronológica (Paso 3) y usarla como columna organizativa. Cada artículo seminal, problema abierto y conexión entre dominios debería ser localizable en la línea temporal.
 
 ## Validación
 
-- [ ] The survey scope is precisely defined with inclusion and exclusion criteria
-- [ ] Seminal papers are identified with main results and impact stated
-- [ ] The chronological development is traced with key milestones
-- [ ] At least 3-5 open problems are cataloged with difficulty and impact assessments
-- [ ] Cross-domain connections are identified and their depth is assessed
-- [ ] The bibliography includes all cited papers with complete reference information
-- [ ] A newcomer to the field could read the survey and understand the landscape
-- [ ] The survey distinguishes established results from conjectures and open questions
-- [ ] The survey's time of writing is stated so readers can assess currency
+- [ ] El alcance del relevamiento está definido con precisión con criterios de inclusión y exclusión
+- [ ] Los artículos seminales están identificados con resultados principales e impacto declarados
+- [ ] El desarrollo cronológico está rastreado con hitos clave
+- [ ] Al menos 3-5 problemas abiertos están catalogados con evaluaciones de dificultad e impacto
+- [ ] Las conexiones entre dominios están identificadas y su profundidad está evaluada
+- [ ] La bibliografía incluye todos los artículos citados con información de referencia completa
+- [ ] Un recién llegado al campo podría leer el relevamiento y comprender el panorama
+- [ ] El relevamiento distingue resultados establecidos de conjeturas y preguntas abiertas
+- [ ] La fecha de escritura del relevamiento está declarada para que los lectores puedan evaluar la vigencia
 
 ## Errores Comunes
 
-- **Scope creep**: Starting with a focused topic and gradually expanding to include everything tangentially related. The core topic sentence from Step 1 is the acceptance criterion; enforce it ruthlessly.
-- **Recency bias**: Over-representing recent work at the expense of foundational contributions. A 2024 paper with 10 citations may be less important than a 1980 paper with 5,000 citations. Weight influence, not novelty.
-- **Citation count worship**: Using citation counts as the sole measure of importance. Highly cited papers can be methodological tools (widely used but not conceptually deep) while transformative papers in niche fields may be less cited.
-- **Missing the negative results**: Failed attempts and disproven conjectures are part of the field's history. Omitting them gives a misleadingly smooth narrative.
-- **Superficial cross-domain connections**: Claiming a connection between two fields because they use the same word (e.g., "entropy" in thermodynamics and information theory are related, but "gauge" in physics and knitting are not). Assess depth before including.
-- **Presentism**: Judging historical papers by modern standards. A paper from 1960 should be evaluated for its contribution given what was known in 1960, not for what it failed to anticipate.
+- **Desviación de alcance**: Comenzar con un tema enfocado y expandirse gradualmente para incluir todo lo tangencialmente relacionado. La oración del tema central del Paso 1 es el criterio de aceptación; aplicarlo sin piedad.
+- **Sesgo de recencia**: Sobre-representar trabajo reciente a expensas de contribuciones fundacionales. Un artículo de 2024 con 10 citas puede ser menos importante que uno de 1980 con 5,000 citas. Ponderar influencia, no novedad.
+- **Culto al conteo de citas**: Usar conteos de citas como la única medida de importancia. Los artículos altamente citados pueden ser herramientas metodológicas (ampliamente usadas pero no conceptualmente profundas) mientras que artículos transformadores en campos nicho pueden ser menos citados.
+- **Omitir los resultados negativos**: Los intentos fallidos y las conjeturas refutadas son parte de la historia del campo. Omitirlos da una narrativa engañosamente suave.
+- **Conexiones superficiales entre dominios**: Afirmar una conexión entre dos campos porque usan la misma palabra (ej., "entropía" en termodinámica y teoría de la información están relacionadas, pero "calibre" en física y tejido no lo están). Evaluar la profundidad antes de incluir.
+- **Presentismo**: Juzgar artículos históricos por estándares modernos. Un artículo de 1960 debería evaluarse por su contribución dado lo que se conocía en 1960, no por lo que falló en anticipar.
 
 ## Habilidades Relacionadas
 
-- `formulate-quantum-problem` -- formulate specific problems identified during the literature survey
-- `derive-theoretical-result` -- derive or re-derive key results found in the surveyed literature
-- `review-research` -- evaluate individual papers encountered during the survey
+- `formulate-quantum-problem` -- formular problemas específicos identificados durante el relevamiento de literatura
+- `derive-theoretical-result` -- derivar o re-derivar resultados clave encontrados en la literatura relevada
+- `review-research` -- evaluar artículos individuales encontrados durante el relevamiento

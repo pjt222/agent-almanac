@@ -26,45 +26,45 @@ metadata:
 
 # Assess Form
 
-Evaluate a system's current structural form — its architecture, rigidity, pressure points, and capacity for change — to determine transformation readiness before initiating metamorphosis.
+Evaluar la forma estructural actual de un sistema — su arquitectura, rigidez, puntos de presión y capacidad de cambio — para determinar la preparación para la transformación antes de iniciar la metamorfosis.
 
 ## Cuándo Usar
 
-- Before any significant architectural change to understand the starting point
-- When a system feels "stuck" but the reasons are unclear
-- When external pressure (growth, market shift, tech debt) is mounting but the response is uncertain
-- Assessing whether a proposed transformation is feasible given the current form
-- Periodic health checks for long-lived systems (annual form assessment)
-- Complementing `adapt-architecture` — assess first, then transform
+- Antes de cualquier cambio arquitectónico significativo para comprender el punto de partida
+- Cuando un sistema se siente "atascado" pero las razones no están claras
+- Cuando la presión externa (crecimiento, cambio de mercado, deuda técnica) está aumentando pero la respuesta es incierta
+- Al evaluar si una transformación propuesta es factible dada la forma actual
+- Verificaciones periódicas de salud para sistemas de larga vida (evaluación de forma anual)
+- Complementando `adapt-architecture` — evaluar primero, luego transformar
 
 ## Entradas
 
-- **Requerido**: The system to assess (codebase, organization, infrastructure, process)
-- **Opcional**: Proposed transformation direction (what might the system need to become?)
-- **Opcional**: Known pain points or pressure sources
-- **Opcional**: Previous transformation attempts and their outcomes
-- **Opcional**: Time horizon for potential transformation
-- **Opcional**: Available resources for transformation effort
+- **Requerido**: El sistema a evaluar (base de código, organización, infraestructura, proceso)
+- **Opcional**: Dirección de transformación propuesta (¿en qué podría necesitar convertirse el sistema?)
+- **Opcional**: Puntos de dolor conocidos o fuentes de presión
+- **Opcional**: Intentos previos de transformación y sus resultados
+- **Opcional**: Horizonte temporal para la transformación potencial
+- **Opcional**: Recursos disponibles para el esfuerzo de transformación
 
 ## Procedimiento
 
-### Paso 1: Inventory the Current Form
+### Paso 1: Inventariar la Forma Actual
 
-Catalog the system's structural elements without judgment — understand what exists before evaluating it.
+Catalogar los elementos estructurales del sistema sin juicio — entender lo que existe antes de evaluarlo.
 
-1. Map the structural components:
-   - **Modules**: distinct functional units (services, teams, packages, departments)
-   - **Interfaces**: how modules connect (APIs, protocols, contracts, reporting lines)
-   - **Data flows**: how information moves through the system
-   - **Dependencies**: what depends on what (direct, transitive, circular)
-   - **Load-bearing structures**: components that everything else relies on
-2. Document the form's age and history:
-   - When was each major component introduced?
-   - Which components have changed recently vs. remained static?
-   - What is the "geological layer" structure (old core, newer additions, recent patches)?
-3. Identify the form's "skeleton" vs. "flesh":
-   - Skeleton: structural decisions that are extremely costly to change (language, database, deployment model)
-   - Flesh: functional decisions that can change more easily (business logic, UI, configuration)
+1. Mapear los componentes estructurales:
+   - **Módulos**: unidades funcionales distintas (servicios, equipos, paquetes, departamentos)
+   - **Interfaces**: cómo se conectan los módulos (APIs, protocolos, contratos, líneas de reporte)
+   - **Flujos de datos**: cómo se mueve la información a través del sistema
+   - **Dependencias**: qué depende de qué (directa, transitiva, circular)
+   - **Estructuras portantes**: componentes de los que todo lo demás depende
+2. Documentar la edad e historia de la forma:
+   - ¿Cuándo se introdujo cada componente principal?
+   - ¿Qué componentes han cambiado recientemente vs. permanecido estáticos?
+   - ¿Cuál es la estructura de "capas geológicas" (núcleo antiguo, adiciones más nuevas, parches recientes)?
+3. Identificar el "esqueleto" vs. "carne" de la forma:
+   - Esqueleto: decisiones estructurales que son extremadamente costosas de cambiar (lenguaje, base de datos, modelo de despliegue)
+   - Carne: decisiones funcionales que pueden cambiar más fácilmente (lógica de negocio, UI, configuración)
 
 ```
 Structural Inventory Template:
@@ -79,53 +79,53 @@ Structural Inventory Template:
 └──────────────┴──────────┴────────────┴───────────────────┴──────────┘
 ```
 
-**Esperado:** A complete structural inventory showing components, their ages, modification recency, dependency profiles, and classification as skeleton or flesh. This is the "X-ray" of the current form.
+**Esperado:** Un inventario estructural completo mostrando componentes, sus edades, recencia de modificación, perfiles de dependencia y clasificación como esqueleto o carne. Esta es la "radiografía" de la forma actual.
 
-**En caso de fallo:** If the inventory is incomplete (components are unknown or undocumented), that itself is a finding — the form has opacity, which is a transformation risk. Document what you can, flag unknowns, and plan discovery for the gaps.
+**En caso de fallo:** Si el inventario está incompleto (componentes desconocidos o no documentados), eso en sí mismo es un hallazgo — la forma tiene opacidad, lo cual es un riesgo de transformación. Documentar lo que se pueda, marcar las incógnitas y planificar descubrimiento para las brechas.
 
-### Paso 2: Map Transformation Pressure
+### Paso 2: Mapear la Presión de Transformación
 
-Identify the forces pushing the system toward change and the forces resisting it.
+Identificar las fuerzas que empujan al sistema hacia el cambio y las fuerzas que lo resisten.
 
-1. Catalog external pressures (forces demanding change):
-   - Growth pressure: current form can't handle increasing load
-   - Market pressure: competitors or users demand capabilities the current form can't support
-   - Technology pressure: underlying technology is becoming obsolete or unsupported
-   - Regulatory pressure: compliance requirements the current form doesn't meet
-   - Integration pressure: must connect with systems the current form wasn't designed for
-2. Catalog internal pressures (forces demanding change from within):
-   - Technical debt: accumulated shortcuts that slow development
-   - Knowledge concentration: critical knowledge held by too few people
-   - Morale pressure: team frustration with the current form
-   - Operational burden: maintenance cost consuming resources that should go to development
-3. Catalog resistance forces (forces opposing change):
-   - Inertia: the existing form works "well enough"
-   - Dependency lock-in: too many things depend on the current form
-   - Knowledge loss risk: transformation might destroy institutional knowledge
-   - Cost: transformation requires investment with uncertain return
-   - Fear: previous transformation attempts failed
+1. Catalogar presiones externas (fuerzas que demandan cambio):
+   - Presión de crecimiento: la forma actual no puede manejar la carga creciente
+   - Presión de mercado: competidores o usuarios demandan capacidades que la forma actual no puede soportar
+   - Presión tecnológica: la tecnología subyacente se está volviendo obsoleta o sin soporte
+   - Presión regulatoria: requisitos de cumplimiento que la forma actual no satisface
+   - Presión de integración: debe conectarse con sistemas para los que la forma actual no fue diseñada
+2. Catalogar presiones internas (fuerzas que demandan cambio desde dentro):
+   - Deuda técnica: atajos acumulados que ralentizan el desarrollo
+   - Concentración de conocimiento: conocimiento crítico en manos de muy pocas personas
+   - Presión moral: frustración del equipo con la forma actual
+   - Carga operacional: costo de mantenimiento consumiendo recursos que deberían ir al desarrollo
+3. Catalogar fuerzas de resistencia (fuerzas que se oponen al cambio):
+   - Inercia: la forma existente funciona "suficientemente bien"
+   - Bloqueo por dependencias: demasiadas cosas dependen de la forma actual
+   - Riesgo de pérdida de conocimiento: la transformación podría destruir conocimiento institucional
+   - Costo: la transformación requiere inversión con retorno incierto
+   - Miedo: intentos previos de transformación fallaron
 
-**Esperado:** A pressure map showing the direction and magnitude of forces acting on the system. If transformation pressure significantly exceeds resistance, transformation is overdue. If resistance significantly exceeds pressure, transformation will fail without first reducing resistance.
+**Esperado:** Un mapa de presión mostrando la dirección y magnitud de las fuerzas que actúan sobre el sistema. Si la presión de transformación excede significativamente la resistencia, la transformación está atrasada. Si la resistencia excede significativamente la presión, la transformación fallará sin reducir primero la resistencia.
 
-**En caso de fallo:** If pressure mapping produces a balanced picture (neither strong pressure nor strong resistance), the system may not need transformation — or the analysis is surface-level. Dig deeper: interview stakeholders, measure specific pain points, project forward 12-18 months. What pressures will intensify?
+**En caso de fallo:** Si el mapeo de presión produce un panorama equilibrado (ni presión fuerte ni resistencia fuerte), el sistema puede no necesitar transformación — o el análisis es superficial. Profundizar: entrevistar a las partes interesadas, medir puntos de dolor específicos, proyectar 12-18 meses hacia adelante. ¿Qué presiones se intensificarán?
 
-### Paso 3: Assess Structural Rigidity
+### Paso 3: Evaluar la Rigidez Estructural
 
-Determine how flexible or rigid the current form is — can it bend, or will it break?
+Determinar qué tan flexible o rígida es la forma actual — ¿puede doblarse, o se romperá?
 
-1. Test interface flexibility:
-   - Can modules be replaced without cascading changes? (loose coupling = flexible)
-   - Are interfaces well-defined and stable? (contract clarity = flexible)
-   - How many "god modules" exist (modules that everything depends on)? (concentration = rigid)
-2. Test data flexibility:
-   - Is data migration straightforward? (schema evolution tools, versioning)
-   - Are data formats standardized or bespoke? (bespoke = rigid)
-   - How entangled is business logic with data structure? (entangled = rigid)
-3. Test process flexibility:
-   - Can the team ship changes quickly? (deployment pipeline health)
-   - Is the test suite comprehensive? (safety net for change)
-   - How many "don't touch" components exist? (forbidden zones = rigid)
-4. Calculate the rigidity score:
+1. Probar flexibilidad de interfaces:
+   - ¿Se pueden reemplazar módulos sin cambios en cascada? (acoplamiento débil = flexible)
+   - ¿Las interfaces están bien definidas y son estables? (claridad de contrato = flexible)
+   - ¿Cuántos "módulos dios" existen (módulos de los que todo depende)? (concentración = rígido)
+2. Probar flexibilidad de datos:
+   - ¿Es sencilla la migración de datos? (herramientas de evolución de esquema, versionado)
+   - ¿Los formatos de datos son estandarizados o a medida? (a medida = rígido)
+   - ¿Qué tan enredada está la lógica de negocio con la estructura de datos? (enredada = rígido)
+3. Probar flexibilidad de procesos:
+   - ¿Puede el equipo enviar cambios rápidamente? (salud del pipeline de despliegue)
+   - ¿Es la suite de pruebas completa? (red de seguridad para el cambio)
+   - ¿Cuántos componentes "no tocar" existen? (zonas prohibidas = rígido)
+4. Calcular la puntuación de rigidez:
 
 ```
 Rigidity Assessment:
@@ -145,40 +145,40 @@ Rigidity Assessment:
 └──────────────────────┴───────────────────────┴──────────────────────┘
 ```
 
-**Esperado:** A rigidity score that quantifies how much structural resistance transformation will encounter. Flexible systems (6-9) can transform incrementally. Rigid systems (14-18) need dissolution before reconstruction (see `dissolve-form`).
+**Esperado:** Una puntuación de rigidez que cuantifica cuánta resistencia estructural encontrará la transformación. Los sistemas flexibles (6-9) pueden transformarse incrementalmente. Los sistemas rígidos (14-18) necesitan disolución antes de reconstrucción (ver `dissolve-form`).
 
-**En caso de fallo:** If the rigidity assessment is inconclusive (moderate score but unclear where the real problems are), focus on the highest-scoring dimensions. A system can be flexible overall but have one extremely rigid component that blocks transformation. Target that component specifically.
+**En caso de fallo:** Si la evaluación de rigidez es inconclusa (puntuación moderada pero no está claro dónde están los problemas reales), enfocarse en las dimensiones con puntuación más alta. Un sistema puede ser flexible en general pero tener un componente extremadamente rígido que bloquea la transformación. Abordar ese componente específicamente.
 
-### Paso 4: Estimate Change Capacity
+### Paso 4: Estimar la Capacidad de Cambio
 
-Assess the system's (and team's) ability to absorb and execute transformation.
+Evaluar la capacidad del sistema (y del equipo) para absorber y ejecutar la transformación.
 
-1. Available transformation energy:
-   - What percentage of team capacity can be allocated to transformation?
-   - Is there organizational support (budget, mandate, patience)?
-   - Are the right skills available (architecture, migration, testing)?
-2. Change absorption rate:
-   - How many changes can the system absorb per time unit without destabilizing?
-   - What is the recovery time after a significant change?
-   - Is there a staging/canary mechanism for incremental transformation?
-3. Transformation experience:
-   - Has the team successfully transformed similar systems before?
-   - Are there transformation tools and practices in place (feature flags, strangler fig, blue-green)?
-   - What is the team's risk tolerance?
-4. Calculate change capacity:
-   - High capacity: dedicated team, strong tooling, prior experience, organizational support
-   - Moderate capacity: part-time allocation, some tooling, limited experience
-   - Low capacity: no dedicated resources, no tooling, no experience, resistant organization
+1. Energía de transformación disponible:
+   - ¿Qué porcentaje de la capacidad del equipo puede asignarse a la transformación?
+   - ¿Hay soporte organizacional (presupuesto, mandato, paciencia)?
+   - ¿Están disponibles las habilidades correctas (arquitectura, migración, pruebas)?
+2. Tasa de absorción de cambios:
+   - ¿Cuántos cambios puede absorber el sistema por unidad de tiempo sin desestabilizarse?
+   - ¿Cuál es el tiempo de recuperación después de un cambio significativo?
+   - ¿Existe un mecanismo de staging/canary para transformación incremental?
+3. Experiencia en transformación:
+   - ¿Ha transformado el equipo sistemas similares exitosamente antes?
+   - ¿Existen herramientas y prácticas de transformación (feature flags, strangler fig, blue-green)?
+   - ¿Cuál es la tolerancia al riesgo del equipo?
+4. Calcular capacidad de cambio:
+   - Alta capacidad: equipo dedicado, herramientas sólidas, experiencia previa, soporte organizacional
+   - Capacidad moderada: asignación a tiempo parcial, algunas herramientas, experiencia limitada
+   - Baja capacidad: sin recursos dedicados, sin herramientas, sin experiencia, organización resistente
 
-**Esperado:** A change capacity assessment that indicates whether the system/team can execute the proposed transformation given current resources, skills, and organizational support.
+**Esperado:** Una evaluación de capacidad de cambio que indica si el sistema/equipo puede ejecutar la transformación propuesta dados los recursos, habilidades y soporte organizacional actuales.
 
-**En caso de fallo:** If change capacity is low but transformation pressure is high, the first transformation isn't the system — it's the team's capability. Invest in tooling, training, and organizational buy-in before attempting the architectural transformation.
+**En caso de fallo:** Si la capacidad de cambio es baja pero la presión de transformación es alta, la primera transformación no es del sistema — es de la capacidad del equipo. Invertir en herramientas, capacitación y aceptación organizacional antes de intentar la transformación arquitectónica.
 
-### Paso 5: Classify Transformation Readiness
+### Paso 5: Clasificar la Preparación para la Transformación
 
-Combine pressure, rigidity, and capacity assessments into a readiness classification.
+Combinar las evaluaciones de presión, rigidez y capacidad en una clasificación de preparación.
 
-1. Plot the system on the readiness matrix:
+1. Ubicar el sistema en la matriz de preparación:
 
 ```
 Transformation Readiness Matrix:
@@ -199,45 +199,45 @@ Transformation Readiness Matrix:
 └─────────────────┴────────────────────────┴────────────────────────┘
 ```
 
-2. Document the readiness classification with:
-   - Classification label (READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER)
-   - Key findings from each assessment dimension
-   - Recommended next step
-   - Risk factors that could change the classification
-3. If READY: proceed to `adapt-architecture`
-4. If PREPARE: proceed to `dissolve-form` to reduce rigidity
-5. If INVEST: build capacity (training, tooling, organizational support), then reassess
-6. If CRITICAL: address capacity and rigidity simultaneously (may require external help)
-7. If OPTIONAL/DEFER: document the assessment and set a reassessment date
+2. Documentar la clasificación de preparación con:
+   - Etiqueta de clasificación (READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER)
+   - Hallazgos clave de cada dimensión de evaluación
+   - Siguiente paso recomendado
+   - Factores de riesgo que podrían cambiar la clasificación
+3. Si READY: proceder a `adapt-architecture`
+4. Si PREPARE: proceder a `dissolve-form` para reducir rigidez
+5. Si INVEST: construir capacidad (capacitación, herramientas, soporte organizacional), luego re-evaluar
+6. Si CRITICAL: abordar capacidad y rigidez simultáneamente (puede requerir ayuda externa)
+7. Si OPTIONAL/DEFER: documentar la evaluación y establecer una fecha de re-evaluación
 
-**Esperado:** A clear, justified transformation readiness classification with specific next steps. The classification enables informed decision-making about when and how to transform.
+**Esperado:** Una clasificación clara y justificada de preparación para la transformación con pasos siguientes específicos. La clasificación permite la toma de decisiones informada sobre cuándo y cómo transformar.
 
-**En caso de fallo:** If the classification is ambiguous (e.g., moderate pressure, moderate rigidity, moderate capacity), default to PREPARE — reduce rigidity incrementally while monitoring pressure. This builds capability and reduces risk whether or not full transformation is eventually needed.
+**En caso de fallo:** Si la clasificación es ambigua (ej., presión moderada, rigidez moderada, capacidad moderada), recurrir a PREPARE — reducir rigidez incrementalmente mientras se monitorea la presión. Esto construye capacidad y reduce riesgo independientemente de si la transformación completa se necesita eventualmente.
 
 ## Validación
 
-- [ ] Structural inventory is complete with components, ages, dependencies, and types
-- [ ] Transformation pressure is mapped (external, internal, resistance forces)
-- [ ] Rigidity score is calculated across all dimensions
-- [ ] Change capacity is assessed (resources, absorption rate, experience)
-- [ ] Readiness classification is determined with justified reasoning
-- [ ] Next steps are documented based on the classification
-- [ ] Reassessment date is set (even if currently READY)
+- [ ] El inventario estructural está completo con componentes, edades, dependencias y tipos
+- [ ] La presión de transformación está mapeada (fuerzas externas, internas, de resistencia)
+- [ ] La puntuación de rigidez está calculada en todas las dimensiones
+- [ ] La capacidad de cambio está evaluada (recursos, tasa de absorción, experiencia)
+- [ ] La clasificación de preparación está determinada con razonamiento justificado
+- [ ] Los pasos siguientes están documentados basándose en la clasificación
+- [ ] La fecha de re-evaluación está establecida (incluso si actualmente es READY)
 
 ## Errores Comunes
 
-- **Assessing only the technical system**: Transformation readiness includes organizational readiness. A technically flexible system with an organizationally rigid team will still fail to transform
-- **Optimistic capacity estimation**: Teams consistently overestimate their capacity for change while maintaining normal operations. Use 50% of stated capacity as the realistic estimate
-- **Ignoring resistance forces**: Pressure mapping that only catalogs change forces misses the resistance that will slow or stop transformation. Resistance is often stronger than it appears
-- **Assessment paralysis**: The form assessment should take hours to days, not weeks. If it's taking too long, the system is too complex to assess fully — assess at a higher abstraction level and drill into problem areas
-- **Confusing rigidity with stability**: A rigid system is not the same as a stable system. Stability comes from well-designed flexibility; rigidity is the absence of designed flexibility
+- **Evaluar solo el sistema técnico**: La preparación para la transformación incluye la preparación organizacional. Un sistema técnicamente flexible con un equipo organizacionalmente rígido aún fallará en transformarse
+- **Estimación optimista de capacidad**: Los equipos consistentemente sobreestiman su capacidad de cambio mientras mantienen operaciones normales. Usar el 50% de la capacidad declarada como estimación realista
+- **Ignorar las fuerzas de resistencia**: El mapeo de presión que solo cataloga fuerzas de cambio pierde la resistencia que ralentizará o detendrá la transformación. La resistencia a menudo es más fuerte de lo que parece
+- **Parálisis de evaluación**: La evaluación de forma debería tomar horas a días, no semanas. Si está tomando demasiado tiempo, el sistema es demasiado complejo para evaluar completamente — evaluar a un nivel de abstracción más alto y profundizar en áreas problemáticas
+- **Confundir rigidez con estabilidad**: Un sistema rígido no es lo mismo que un sistema estable. La estabilidad proviene de flexibilidad bien diseñada; la rigidez es la ausencia de flexibilidad diseñada
 
 ## Habilidades Relacionadas
 
-- `adapt-architecture` — the primary transformation skill; assess-form determines readiness for it
-- `dissolve-form` — for systems classified as PREPARE or CRITICAL, rigidity reduction before transformation
-- `repair-damage` — for systems that need repair before assessment can be meaningful
-- `shift-camouflage` — surface-level adaptation that may resolve pressure without full transformation
-- `forage-resources` — resource exploration informs form assessment when the question is "what should we become?"
-- `review-software-architecture` — complementary skill for detailed technical architecture evaluation
-- `assess-context` — AI self-application variant; maps structural assessment to reasoning context malleability, rigidity mapping, and transformation readiness
+- `adapt-architecture` — la habilidad de transformación principal; assess-form determina la preparación para ella
+- `dissolve-form` — para sistemas clasificados como PREPARE o CRITICAL, reducción de rigidez antes de la transformación
+- `repair-damage` — para sistemas que necesitan reparación antes de que la evaluación pueda ser significativa
+- `shift-camouflage` — adaptación a nivel superficial que puede resolver la presión sin transformación completa
+- `forage-resources` — la exploración de recursos informa la evaluación de forma cuando la pregunta es "¿en qué deberíamos convertirnos?"
+- `review-software-architecture` — habilidad complementaria para evaluación detallada de arquitectura técnica
+- `assess-context` — variante de autoaplicación de IA; mapea la evaluación estructural a la maleabilidad del contexto de razonamiento, mapeo de rigidez y preparación para la transformación

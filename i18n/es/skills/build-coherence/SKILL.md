@@ -1,13 +1,14 @@
 ---
 name: build-coherence
 description: >
-  AI multi-path reasoning coherence using bee democracy — independent evaluation
-  of competing approaches, waggle dance as reasoning-out-loud, quorum sensing
-  for confidence thresholds, and deadlock resolution. Use when forage-solutions
-  has identified multiple valid approaches and a selection must be made, when
-  oscillating between options without committing, when justifying an architecture
-  or tool choice with structured reasoning, or before an irreversible action where
-  the cost of the wrong choice is high.
+  Coherencia de razonamiento multi-camino de IA usando democracia de abejas —
+  evaluación independiente de enfoques competidores, danza de meneo como
+  razonamiento en voz alta, detección de quórum para umbrales de confianza, y
+  resolución de bloqueos. Usar cuando forage-solutions ha identificado múltiples
+  enfoques válidos y debe hacerse una selección, cuando se oscila entre opciones
+  sin comprometerse, cuando se justifica una elección de arquitectura o
+  herramienta con razonamiento estructurado, o antes de una acción irreversible
+  donde el costo de la elección incorrecta es alto.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,32 +27,32 @@ metadata:
 
 # Build Coherence
 
-Evaluate competing approaches through independent assessment, explicit reasoning-out-loud advocacy, confidence-calibrated commitment thresholds, and structured deadlock resolution — producing coherent decisions from multiple reasoning paths.
+Evaluar enfoques competidores mediante evaluación independiente, defensa explícita de razonamiento en voz alta, umbrales de compromiso calibrados por confianza y resolución estructurada de bloqueos — produciendo decisiones coherentes a partir de múltiples caminos de razonamiento.
 
 ## Cuándo Usar
 
-- `forage-solutions` has identified multiple valid approaches and a selection must be made
-- Oscillating between two approaches without committing to either
-- Needing to justify a decision with structured reasoning (architecture choice, tool selection, implementation strategy)
-- When a previous decision was made by gut feeling and needs evidence-based validation
-- When internal reasoning is producing contradictory conclusions and coherence must be restored
-- Before an irreversible action (merging, deploying, deleting) where the cost of the wrong choice is high
+- `forage-solutions` ha identificado múltiples enfoques válidos y debe hacerse una selección
+- Oscilando entre dos enfoques sin comprometerse con ninguno
+- Necesidad de justificar una decisión con razonamiento estructurado (elección de arquitectura, selección de herramienta, estrategia de implementación)
+- Cuando una decisión previa se tomó por instinto y necesita validación basada en evidencia
+- Cuando el razonamiento interno produce conclusiones contradictorias y debe restaurarse la coherencia
+- Antes de una acción irreversible (fusionar, desplegar, eliminar) donde el costo de la elección incorrecta es alto
 
 ## Entradas
 
-- **Requerido**: Two or more competing approaches to evaluate
-- **Opcional**: Quality assessments from prior scouting (see `forage-solutions`)
-- **Opcional**: Decision stakes (reversible, moderate, irreversible) for threshold calibration
-- **Opcional**: Time budget for the decision
-- **Opcional**: Known failure mode (oscillation, premature commitment, groupthink)
+- **Requerido**: Dos o más enfoques competidores a evaluar
+- **Opcional**: Evaluaciones de calidad de exploración previa (ver `forage-solutions`)
+- **Opcional**: Riesgo de la decisión (reversible, moderado, irreversible) para calibración de umbral
+- **Opcional**: Presupuesto de tiempo para la decisión
+- **Opcional**: Modo de fallo conocido (oscilación, compromiso prematuro, pensamiento grupal)
 
 ## Procedimiento
 
-### Paso 1: Independent Evaluation
+### Paso 1: Evaluación Independiente
 
-Assess each approach on its own merits before comparing them. The critical rule: do not let the assessment of approach A bias the assessment of approach B.
+Evaluar cada enfoque por sus propios méritos antes de compararlos. La regla crítica: no permitir que la evaluación del enfoque A sesgue la evaluación del enfoque B.
 
-For each approach, evaluate independently:
+Para cada enfoque, evaluar independientemente:
 
 ```
 Approach Evaluation Template:
@@ -75,33 +76,33 @@ Approach Evaluation Template:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Fill this out for each approach separately. Do not write a comparison until all individual evaluations are complete.
+Completar esto para cada enfoque por separado. No escribir una comparación hasta que todas las evaluaciones individuales estén completas.
 
-**Esperado:** Independent evaluations where each approach is assessed on its own terms. The evaluation of approach B does not reference approach A. Quality scores reflect genuine assessment, not ranking.
+**Esperado:** Evaluaciones independientes donde cada enfoque se evalúa en sus propios términos. La evaluación del enfoque B no hace referencia al enfoque A. Las puntuaciones de calidad reflejan una evaluación genuina, no un ranking.
 
-**En caso de fallo:** If the evaluations are contaminated (you find yourself writing "better than A" while assessing B), reset. Assess A completely, then clear the framing and assess B from scratch. If the scores are all identical, the evaluation dimensions are too coarse — add domain-specific criteria.
+**En caso de fallo:** Si las evaluaciones están contaminadas (te encuentras escribiendo "mejor que A" mientras evalúas B), reiniciar. Evaluar A completamente, luego limpiar el marco y evaluar B desde cero. Si las puntuaciones son todas idénticas, las dimensiones de evaluación son demasiado gruesas — agregar criterios específicos del dominio.
 
-### Paso 2: Waggle Dance — Reason Out Loud
+### Paso 2: Danza de Meneo — Razonar en Voz Alta
 
-Advocate for each approach proportionally to its quality. This is the AI equivalent of the bee waggle dance: making implicit reasoning explicit and public.
+Defender cada enfoque proporcionalmente a su calidad. Este es el equivalente de IA de la danza de meneo de las abejas: hacer explícito y público el razonamiento implícito.
 
-1. For each approach, state the case for it — as if presenting to a skeptical user:
-   - "Approach A is strong because [evidence]. The main risk is [risk], which is mitigated by [mitigation]."
-2. Advocacy intensity should be proportional to quality score:
-   - High-quality approach: detailed advocacy with specific evidence
-   - Medium-quality approach: brief advocacy with acknowledged limitations
-   - Low-quality approach: mentioned for completeness, not actively advocated
-3. **Cross-inspection**: after advocating for A, actively look for evidence that supports B instead. After advocating for B, look for evidence that supports A. This counteracts confirmation bias
+1. Para cada enfoque, presentar el caso a su favor — como si se presentara a un usuario escéptico:
+   - "El enfoque A es fuerte porque [evidencia]. El riesgo principal es [riesgo], que se mitiga con [mitigación]."
+2. La intensidad de la defensa debe ser proporcional a la puntuación de calidad:
+   - Enfoque de alta calidad: defensa detallada con evidencia específica
+   - Enfoque de calidad media: defensa breve con limitaciones reconocidas
+   - Enfoque de baja calidad: mencionado por completitud, no defendido activamente
+3. **Inspección cruzada**: después de defender A, buscar activamente evidencia que apoye B en su lugar. Después de defender B, buscar evidencia que apoye A. Esto contrarresta el sesgo de confirmación
 
-The purpose of reasoning-out-loud is to make the decision auditable — to yourself and to the user. If the reasoning cannot be articulated, the assessment is shallower than the score suggests.
+El propósito de razonar en voz alta es hacer la decisión auditable — para ti mismo y para el usuario. Si el razonamiento no puede articularse, la evaluación es más superficial de lo que sugiere la puntuación.
 
-**Esperado:** Explicit reasoning for each approach that would be persuasive to a neutral observer. Cross-inspection reveals at least one consideration that was initially overlooked.
+**Esperado:** Razonamiento explícito para cada enfoque que sería persuasivo para un observador neutral. La inspección cruzada revela al menos una consideración que inicialmente se pasó por alto.
 
-**En caso de fallo:** If advocacy feels perfunctory (going through motions), the approaches may not be genuinely different — they may be variations of the same idea. Check: do the approaches differ in mechanism, or only in implementation detail? If the latter, the decision may not matter much — pick either and move on.
+**En caso de fallo:** Si la defensa se siente superficial (cumpliendo con el proceso), los enfoques pueden no ser genuinamente diferentes — pueden ser variaciones de la misma idea. Verificar: ¿los enfoques difieren en mecanismo, o solo en detalle de implementación? Si es lo segundo, la decisión puede no importar mucho — elegir cualquiera y avanzar.
 
-### Paso 3: Set Quorum Threshold and Commit
+### Paso 3: Establecer Umbral de Quórum y Comprometerse
 
-Set the confidence threshold required to commit, calibrated to the decision's stakes.
+Establecer el umbral de confianza requerido para comprometerse, calibrado al riesgo de la decisión.
 
 ```
 Confidence Thresholds by Stakes:
@@ -122,19 +123,19 @@ Confidence Thresholds by Stakes:
 └─────────────────────┴───────────┴──────────────────────────────────┘
 ```
 
-1. Classify the decision stakes
-2. Check: does the leading approach's quality score × confidence reach the threshold?
-3. If yes: commit. State the decision, the reasoning, and the key risk being accepted
-4. If no: identify what additional information would raise confidence to the threshold
-5. Once committed, do not revisit unless new disqualifying evidence emerges
+1. Clasificar el riesgo de la decisión
+2. Verificar: ¿la puntuación de calidad del enfoque líder multiplicada por la confianza alcanza el umbral?
+3. Si sí: comprometerse. Declarar la decisión, el razonamiento y el riesgo clave que se acepta
+4. Si no: identificar qué información adicional elevaría la confianza al umbral
+5. Una vez comprometido, no revisitar a menos que surja nueva evidencia descalificadora
 
-**Esperado:** A clear commitment moment with stated reasoning. The decision is made at an appropriate confidence level for its stakes.
+**Esperado:** Un momento de compromiso claro con razonamiento declarado. La decisión se toma a un nivel de confianza apropiado para su riesgo.
 
-**En caso de fallo:** If the threshold is never met (can't reach 90% on an irreversible decision), ask: is the decision truly irreversible? Can it be decomposed into a reversible test phase + an irreversible commit? Most apparently irreversible decisions can be staged. If staging is impossible, communicate the uncertainty to the user and ask for guidance.
+**En caso de fallo:** Si el umbral nunca se alcanza (no se puede llegar al 90% en una decisión irreversible), preguntar: ¿la decisión es verdaderamente irreversible? ¿Puede descomponerse en una fase de prueba reversible + un compromiso irreversible? La mayoría de las decisiones aparentemente irreversibles pueden escalonarse. Si el escalonamiento es imposible, comunicar la incertidumbre al usuario y pedir orientación.
 
-### Paso 4: Resolve Deadlocks
+### Paso 4: Resolver Bloqueos
 
-When two or more approaches have similar scores and the quorum threshold is not met for any single one.
+Cuando dos o más enfoques tienen puntuaciones similares y el umbral de quórum no se alcanza para ninguno.
 
 ```
 Deadlock Resolution:
@@ -163,49 +164,49 @@ Deadlock Resolution:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**Esperado:** Deadlock resolved through the appropriate mechanism. The resolution is decisive — no lingering doubt that undermines execution.
+**Esperado:** Bloqueo resuelto a través del mecanismo apropiado. La resolución es decisiva — sin duda persistente que socave la ejecución.
 
-**En caso de fallo:** If the deadlock persists through all resolution strategies, the decision may be premature. Ask the user: "I see two equally strong approaches: [A] and [B]. [Brief case for each.] Which aligns better with your priorities?" Delegating a genuine tie to the user is not a failure — it is acknowledging that the decision depends on values the AI cannot infer.
+**En caso de fallo:** Si el bloqueo persiste a través de todas las estrategias de resolución, la decisión puede ser prematura. Preguntar al usuario: "Veo dos enfoques igualmente fuertes: [A] y [B]. [Caso breve para cada uno.] ¿Cuál se alinea mejor con tus prioridades?" Delegar un empate genuino al usuario no es un fracaso — es reconocer que la decisión depende de valores que la IA no puede inferir.
 
-### Paso 5: Assess Coherence Quality
+### Paso 5: Evaluar la Calidad de Coherencia
 
-After committing to a decision, evaluate whether the process produced genuine coherence or just a decision.
+Después de comprometerse con una decisión, evaluar si el proceso produjo coherencia genuina o solo una decisión.
 
-1. Was the decision evidence-based, or was it rubber-stamping an initial preference?
-   - Test: was the preference the same before and after evaluation? If so, did the evaluation change anything?
-2. Were the losing approaches genuinely considered, or were they straw men?
-   - Test: can you articulate the strongest case for the losing approach?
-3. What signal would trigger reassessment?
-   - Define a specific observation that would invalidate the decision ("If I discover that the API doesn't support X, then approach B becomes better")
-4. Is there useful information from the losing approaches that should inform implementation?
-   - A risk identified in approach B might apply to approach A as well
+1. ¿La decisión se basó en evidencia, o fue una validación superficial de una preferencia inicial?
+   - Prueba: ¿la preferencia era la misma antes y después de la evaluación? Si es así, ¿la evaluación cambió algo?
+2. ¿Los enfoques perdedores fueron genuinamente considerados, o fueron argumentos de paja?
+   - Prueba: ¿puedes articular el caso más fuerte para el enfoque perdedor?
+3. ¿Qué señal desencadenaría una reevaluación?
+   - Definir una observación específica que invalidaría la decisión ("Si descubro que la API no soporta X, entonces el enfoque B se vuelve mejor")
+4. ¿Hay información útil de los enfoques perdedores que debería informar la implementación?
+   - Un riesgo identificado en el enfoque B podría aplicarse también al enfoque A
 
-**Esperado:** A brief quality check that either confirms the decision or identifies it as weak. If weak, return to the appropriate earlier step rather than proceeding on shaky ground.
+**Esperado:** Una verificación breve de calidad que confirma la decisión o la identifica como débil. Si es débil, volver al paso anterior apropiado en lugar de proceder sobre terreno inestable.
 
-**En caso de fallo:** If the quality check reveals that the decision was preference-based rather than evidence-based, acknowledge it honestly. Sometimes preference is all that is available — but it should be labeled as such, not dressed up as analysis.
+**En caso de fallo:** Si la verificación de calidad revela que la decisión fue basada en preferencia en lugar de evidencia, reconocerlo honestamente. A veces la preferencia es todo lo que está disponible — pero debe etiquetarse como tal, no disfrazarse de análisis.
 
 ## Validación
 
-- [ ] Each approach was evaluated independently before comparison
-- [ ] Advocacy was proportional to quality (not equal attention regardless of merit)
-- [ ] Cross-inspection was performed (looking for counter-evidence after advocacy)
-- [ ] Quorum threshold was calibrated to decision stakes
-- [ ] If deadlocked, a specific resolution strategy was applied
-- [ ] Post-decision quality check was performed
-- [ ] A reassessment trigger was defined
+- [ ] Cada enfoque fue evaluado independientemente antes de la comparación
+- [ ] La defensa fue proporcional a la calidad (no atención igual independientemente del mérito)
+- [ ] Se realizó inspección cruzada (buscando contra-evidencia después de la defensa)
+- [ ] El umbral de quórum se calibró al riesgo de la decisión
+- [ ] Si hubo bloqueo, se aplicó una estrategia de resolución específica
+- [ ] Se realizó verificación de calidad post-decisión
+- [ ] Se definió un desencadenante de reevaluación
 
 ## Errores Comunes
 
-- **Premature commitment**: Deciding before evaluating all approaches. The first approach considered has an anchoring advantage — it gets more mental attention simply by being first. Evaluate all before comparing
-- **Equal advocacy for unequal approaches**: If approach A scored 85 and approach B scored 45, spending equal time advocating for both wastes effort and creates false equivalence
-- **Rubber-stamping**: Going through the evaluation process to justify a decision already made. The test is whether the evaluation could have changed the outcome. If not, the process was theater
-- **Threshold avoidance**: Lowering the confidence threshold to make the decision easier rather than gathering the information needed to meet the appropriate threshold
-- **Ignoring the losing side**: The losing approach often contains warnings that apply to the winning one. Risks identified in approach B don't disappear just because approach A was chosen
+- **Compromiso prematuro**: Decidir antes de evaluar todos los enfoques. El primer enfoque considerado tiene una ventaja de anclaje — recibe más atención mental simplemente por ser primero. Evaluar todos antes de comparar
+- **Defensa igual para enfoques desiguales**: Si el enfoque A obtuvo 85 y el enfoque B obtuvo 45, dedicar tiempo igual a defender ambos desperdicia esfuerzo y crea falsa equivalencia
+- **Validación superficial**: Pasar por el proceso de evaluación para justificar una decisión ya tomada. La prueba es si la evaluación podría haber cambiado el resultado. Si no, el proceso fue teatro
+- **Evasión de umbral**: Bajar el umbral de confianza para facilitar la decisión en lugar de recopilar la información necesaria para alcanzar el umbral apropiado
+- **Ignorar el lado perdedor**: El enfoque perdedor a menudo contiene advertencias que aplican al ganador. Los riesgos identificados en el enfoque B no desaparecen solo porque se eligió el enfoque A
 
 ## Habilidades Relacionadas
 
-- `build-consensus` — the multi-agent consensus model that this skill adapts to single-agent reasoning
-- `forage-solutions` — scouts the solution space that coherence evaluates; typically precedes this skill
-- `coordinate-reasoning` — manages information flow during multi-path evaluation
-- `center` — establishes the balanced baseline needed for unbiased evaluation
-- `meditate` — clears assumptions between evaluating different approaches
+- `build-consensus` — el modelo de consenso multi-agente que esta habilidad adapta al razonamiento de un solo agente
+- `forage-solutions` — explora el espacio de soluciones que la coherencia evalúa; típicamente precede a esta habilidad
+- `coordinate-reasoning` — gestiona el flujo de información durante la evaluación multi-camino
+- `center` — establece la línea base equilibrada necesaria para la evaluación imparcial
+- `meditate` — limpia suposiciones entre la evaluación de diferentes enfoques

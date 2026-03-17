@@ -1,13 +1,14 @@
 ---
 name: check-relocation-documents
 description: >
-  Verify document completeness for each bureaucratic step of an EU/DACH
-  relocation, flagging missing items and translation requirements. Use after
-  creating a relocation plan and before beginning bureaucratic procedures, when
-  preparing for a specific appointment (Buergeramt, Finanzamt), when unsure
-  which documents need certified translation or apostille, after receiving a
-  rejection or request for additional documents, or as a periodic check during
-  the relocation process to ensure nothing has been overlooked.
+  Verificar la completitud de documentos para cada paso burocrático de una
+  reubicación UE/DACH, señalando elementos faltantes y requisitos de traducción.
+  Usar después de crear un plan de reubicación y antes de comenzar procedimientos
+  burocráticos, al prepararse para una cita específica (Buergeramt, Finanzamt),
+  cuando no se está seguro de qué documentos necesitan traducción certificada o
+  apostilla, después de recibir un rechazo o solicitud de documentos adicionales,
+  o como verificación periódica durante el proceso de reubicación para asegurar
+  que nada se haya pasado por alto.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,221 +27,221 @@ metadata:
 
 # Check Relocation Documents
 
-Verify that all required documents are present, valid, and properly prepared for each bureaucratic step of an EU/DACH relocation, generating an actionable list of missing items and translation needs.
+Verificar que todos los documentos requeridos estén presentes, vigentes y debidamente preparados para cada paso burocrático de una reubicación UE/DACH, generando una lista accionable de elementos faltantes y necesidades de traducción.
 
 ## Cuándo Usar
 
-- After creating a relocation plan and before beginning bureaucratic procedures
-- When preparing for a specific appointment (Buergeramt, Finanzamt, insurance office)
-- When unsure which documents need certified translation or apostille
-- After receiving a rejection or request for additional documents from an authority
-- When a household member has a different nationality requiring separate document tracks
-- As a periodic check during the relocation process to ensure nothing has been overlooked
+- Después de crear un plan de reubicación y antes de comenzar procedimientos burocráticos
+- Al prepararse para una cita específica (Buergeramt, Finanzamt, oficina de seguros)
+- Cuando no se está seguro de qué documentos necesitan traducción certificada o apostilla
+- Después de recibir un rechazo o solicitud de documentos adicionales de una autoridad
+- Cuando un miembro del hogar tiene una nacionalidad diferente que requiere pistas documentales separadas
+- Como verificación periódica durante el proceso de reubicación para asegurar que nada se haya pasado por alto
 
 ## Entradas
 
-### Required
+### Requerido
 
-- **Relocation plan**: Output from the plan-eu-relocation skill or equivalent, listing all bureaucratic steps
-- **Destination country**: Germany, Austria, Switzerland, or other EU country
-- **Nationality/nationalities**: For all household members
-- **Document inventory**: List of documents currently in possession (originals and copies)
+- **Plan de reubicación**: Salida de la habilidad plan-eu-relocation o equivalente, listando todos los pasos burocráticos
+- **País de destino**: Alemania, Austria, Suiza u otro país de la UE
+- **Nacionalidad(es)**: Para todos los miembros del hogar
+- **Inventario de documentos**: Lista de documentos actualmente en posesión (originales y copias)
 
-### Optional
+### Opcional
 
-- **Origin country**: For determining which documents need apostille or Hague Convention legalization
-- **Employment contract**: To determine employer-provided documents (e.g., Arbeitgeberbescheinigung)
-- **Language of existing documents**: To identify translation needs
-- **Previous relocation experience**: Prior EU registrations that may simplify requirements
-- **Special circumstances**: Recognized refugees, EU Blue Card holders, posted workers (different document requirements)
+- **País de origen**: Para determinar qué documentos necesitan apostilla o legalización según la Convención de La Haya
+- **Contrato de empleo**: Para determinar documentos proporcionados por el empleador (ej., Arbeitgeberbescheinigung)
+- **Idioma de documentos existentes**: Para identificar necesidades de traducción
+- **Experiencia previa de reubicación**: Registros previos en la UE que pueden simplificar requisitos
+- **Circunstancias especiales**: Refugiados reconocidos, titulares de Tarjeta Azul UE, trabajadores desplazados (requisitos documentales diferentes)
 
 ## Procedimiento
 
-### Paso 1: List All Bureaucratic Steps
+### Paso 1: Listar Todos los Pasos Burocráticos
 
-Extract every registration, application, and notification step from the relocation plan.
+Extraer cada paso de registro, solicitud y notificación del plan de reubicación.
 
-1. Parse the relocation plan for all action items requiring document submission
-2. Categorize steps by authority type:
-   - Municipal registration offices (Buergeramt, Meldeamt, Einwohnerkontrolle)
-   - Tax authorities (Finanzamt)
-   - Health insurance providers (Krankenkasse, OeGK, Swiss insurer)
-   - Social security offices (Rentenversicherung, Sozialversicherung, AHV)
-   - Immigration/foreigners office (Auslaenderbehorde) if applicable
-   - Banks and financial institutions
-   - Schools and childcare facilities
-   - Vehicle registration (Kfz-Zulassungsstelle)
-   - Other (pet import, professional license recognition)
-3. Order steps according to the dependency chain from the relocation plan
-4. Note which steps share the same documents (to avoid redundant preparation)
+1. Analizar el plan de reubicación para todos los elementos de acción que requieren envío de documentos
+2. Categorizar pasos por tipo de autoridad:
+   - Oficinas de registro municipal (Buergeramt, Meldeamt, Einwohnerkontrolle)
+   - Autoridades fiscales (Finanzamt)
+   - Proveedores de seguro de salud (Krankenkasse, OeGK, aseguradora suiza)
+   - Oficinas de seguridad social (Rentenversicherung, Sozialversicherung, AHV)
+   - Oficina de inmigración/extranjería (Auslaenderbehorde) si aplica
+   - Bancos e instituciones financieras
+   - Escuelas e instalaciones de cuidado infantil
+   - Registro de vehículos (Kfz-Zulassungsstelle)
+   - Otros (importación de mascotas, reconocimiento de licencia profesional)
+3. Ordenar pasos según la cadena de dependencias del plan de reubicación
+4. Anotar qué pasos comparten los mismos documentos (para evitar preparación redundante)
 
-**Esperado:** A numbered list of all bureaucratic steps, categorized and ordered, with notes on shared document requirements.
+**Esperado:** Una lista numerada de todos los pasos burocráticos, categorizados y ordenados, con notas sobre requisitos documentales compartidos.
 
-**En caso de fallo:** If the relocation plan is incomplete or unavailable, build the step list from the destination country's official relocation checklist (e.g., Germany: make-it-in-germany.com, Austria: migration.gv.at, Switzerland: ch.ch/en/moving-switzerland).
+**En caso de fallo:** Si el plan de reubicación es incompleto o no está disponible, construir la lista de pasos desde el checklist oficial de reubicación del país de destino (ej., Alemania: make-it-in-germany.com, Austria: migration.gv.at, Suiza: ch.ch/en/moving-switzerland).
 
-### Paso 2: Map Required Documents per Step
+### Paso 2: Mapear Documentos Requeridos por Paso
 
-For each bureaucratic step, identify every document the authority requires.
+Para cada paso burocrático, identificar cada documento que la autoridad requiere.
 
-1. For municipal registration (Anmeldung/Meldezettel):
-   - Valid passport or national ID card (all household members)
-   - Wohnungsgeberbestaetigung / rental contract / property deed
-   - Marriage certificate (if registering as a couple)
-   - Birth certificates (for children)
-   - Previous registration confirmation (if moving within the country)
-2. For tax registration:
-   - Residence registration confirmation (Meldebestaetigung/Meldezettel)
-   - Employment contract or business registration
-   - Tax ID from origin country (for cross-border coordination)
-   - Marriage certificate (for tax class assignment in Germany)
-3. For health insurance enrollment:
-   - Employment contract or proof of self-employment
-   - Previous insurance confirmation or EHIC (European Health Insurance Card)
-   - S1 form (for posted workers or cross-border situations)
-   - Residence registration confirmation
-4. For social security coordination:
-   - A1 portable document (for posted workers)
-   - E-forms or S-forms for benefit transfers
-   - Employment history documentation
-   - Social security number from origin country
-5. For bank account opening:
-   - Valid passport or national ID
-   - Residence registration confirmation
-   - Proof of income (employment contract or recent payslips)
-   - Tax ID or Steueridentifikationsnummer (Germany)
-6. For immigration/residence permits (non-EU nationals):
-   - Valid passport with at least 6 months remaining validity
-   - Biometric photos (specific format per country)
-   - Employment contract or job offer letter
-   - Proof of financial means
-   - Health insurance confirmation
-   - University degree with recognition (for EU Blue Card)
-   - Criminal background check (may require apostille)
-7. For vehicle re-registration:
-   - Vehicle registration document (Fahrzeugbrief/Zulassungsbescheinigung Teil II)
-   - Proof of insurance (eVB number in Germany)
-   - TUeV/Pickerl/MFK inspection certificate
-   - Residence registration confirmation
-8. For school/childcare enrollment:
-   - Birth certificates
-   - Vaccination records (Impfpass)
-   - Previous school reports with translations
-   - Residence registration confirmation
+1. Para registro municipal (Anmeldung/Meldezettel):
+   - Pasaporte válido o documento nacional de identidad (todos los miembros del hogar)
+   - Wohnungsgeberbestaetigung / contrato de alquiler / escritura de propiedad
+   - Certificado de matrimonio (si se registra como pareja)
+   - Partidas de nacimiento (para hijos)
+   - Confirmación de registro previo (si se muda dentro del país)
+2. Para registro fiscal:
+   - Confirmación de registro de residencia (Meldebestaetigung/Meldezettel)
+   - Contrato de empleo o registro de empresa
+   - ID fiscal del país de origen (para coordinación transfronteriza)
+   - Certificado de matrimonio (para asignación de clase fiscal en Alemania)
+3. Para inscripción en seguro de salud:
+   - Contrato de empleo o prueba de trabajo autónomo
+   - Confirmación de seguro previo o EHIC (Tarjeta Sanitaria Europea)
+   - Formulario S1 (para trabajadores desplazados o situaciones transfronterizas)
+   - Confirmación de registro de residencia
+4. Para coordinación de seguridad social:
+   - Documento portátil A1 (para trabajadores desplazados)
+   - Formularios E o formularios S para transferencia de beneficios
+   - Documentación de historial laboral
+   - Número de seguridad social del país de origen
+5. Para apertura de cuenta bancaria:
+   - Pasaporte válido o documento nacional de identidad
+   - Confirmación de registro de residencia
+   - Prueba de ingresos (contrato de empleo o nóminas recientes)
+   - ID fiscal o Steueridentifikationsnummer (Alemania)
+6. Para permisos de inmigración/residencia (nacionales no-UE):
+   - Pasaporte válido con al menos 6 meses de validez restante
+   - Fotos biométricas (formato específico por país)
+   - Contrato de empleo o carta de oferta de trabajo
+   - Prueba de medios financieros
+   - Confirmación de seguro de salud
+   - Título universitario con reconocimiento (para Tarjeta Azul UE)
+   - Certificado de antecedentes penales (puede requerir apostilla)
+7. Para re-matriculación de vehículo:
+   - Documento de registro del vehículo (Fahrzeugbrief/Zulassungsbescheinigung Teil II)
+   - Prueba de seguro (número eVB en Alemania)
+   - Certificado de inspección TUeV/Pickerl/MFK
+   - Confirmación de registro de residencia
+8. Para inscripción escolar/guardería:
+   - Partidas de nacimiento
+   - Registros de vacunación (Impfpass)
+   - Informes escolares previos con traducciones
+   - Confirmación de registro de residencia
 
-**Esperado:** A matrix mapping each bureaucratic step to its required documents, with document specifications (original required, copy acceptable, certified translation needed).
+**Esperado:** Una matriz que mapea cada paso burocrático a sus documentos requeridos, con especificaciones del documento (original requerido, copia aceptable, traducción certificada necesaria).
 
-**En caso de fallo:** If requirements for a specific step are unclear, check the authority's website directly or call their service line. Requirements can change; do not rely solely on third-party guides older than 12 months.
+**En caso de fallo:** Si los requisitos para un paso específico no son claros, verificar el sitio web de la autoridad directamente o llamar a su línea de servicio. Los requisitos pueden cambiar; no confiar únicamente en guías de terceros con más de 12 meses de antigüedad.
 
-### Paso 3: Check Current Document Status
+### Paso 3: Verificar el Estado Actual de Documentos
 
-Compare the required documents against the current inventory to identify gaps.
+Comparar los documentos requeridos contra el inventario actual para identificar brechas.
 
-1. For each required document, check:
-   - **Have (original)**: Original document is in possession and accessible
-   - **Have (copy only)**: Only a copy exists; original may need to be ordered
-   - **Expired**: Document exists but validity period has passed
-   - **Missing**: Document does not exist and must be obtained
-   - **Not applicable**: Document is not needed for this specific case
-2. For documents that are "Have (original)", verify:
-   - The document is not damaged or illegible
-   - Names match across all documents (watch for transliteration differences, maiden names, middle names)
-   - The document will still be valid at the time it will be used (passports, ID cards, insurance cards)
-3. For expired documents, determine:
-   - Renewal processing time at issuing authority
-   - Whether an expired document is accepted temporarily (some are, most are not)
-   - Cost of renewal
-4. For missing documents, determine:
-   - Issuing authority and their processing time
-   - Required supporting documents to obtain the missing document (recursive check)
-   - Cost and payment method
-   - Whether it can be ordered remotely or requires in-person appearance
-5. Flag any documents where names do not match (e.g., passport has maiden name, marriage certificate has married name) -- these will likely require explanation or additional proof of name change
+1. Para cada documento requerido, verificar:
+   - **Tiene (original)**: El documento original está en posesión y accesible
+   - **Tiene (solo copia)**: Solo existe una copia; puede ser necesario solicitar el original
+   - **Vencido**: El documento existe pero el período de validez ha expirado
+   - **Faltante**: El documento no existe y debe obtenerse
+   - **No aplica**: El documento no es necesario para este caso específico
+2. Para documentos que están en "Tiene (original)", verificar:
+   - El documento no está dañado ni es ilegible
+   - Los nombres coinciden en todos los documentos (atención a diferencias de transliteración, apellidos de soltera, segundos nombres)
+   - El documento seguirá siendo válido al momento de su uso (pasaportes, documentos de identidad, tarjetas de seguro)
+3. Para documentos vencidos, determinar:
+   - Tiempo de procesamiento de renovación en la autoridad emisora
+   - Si un documento vencido es aceptado temporalmente (algunos sí, la mayoría no)
+   - Costo de renovación
+4. Para documentos faltantes, determinar:
+   - Autoridad emisora y su tiempo de procesamiento
+   - Documentos de respaldo requeridos para obtener el documento faltante (verificación recursiva)
+   - Costo y método de pago
+   - Si puede solicitarse remotamente o requiere presencia en persona
+5. Señalar cualquier documento donde los nombres no coincidan (ej., pasaporte tiene apellido de soltera, certificado de matrimonio tiene apellido de casada) — estos probablemente requerirán explicación o prueba adicional de cambio de nombre
 
-**Esperado:** A status table for every required document: status (have/copy-only/expired/missing/N-A), validity date, and notes on any issues.
+**Esperado:** Una tabla de estado para cada documento requerido: estado (tiene/solo-copia/vencido/faltante/N-A), fecha de validez, y notas sobre cualquier problema.
 
-**En caso de fallo:** If document status cannot be confirmed (e.g., documents are in storage or with another party), mark as "unconfirmed" and treat as potentially missing for planning purposes.
+**En caso de fallo:** Si el estado del documento no puede confirmarse (ej., documentos están en almacenamiento o con otra persona), marcar como "sin confirmar" y tratar como potencialmente faltante para propósitos de planificación.
 
-### Paso 4: Identify Translation and Apostille Requirements
+### Paso 4: Identificar Requisitos de Traducción y Apostilla
 
-Determine which documents need certified translation, apostille, or other legalization.
+Determinar qué documentos necesitan traducción certificada, apostilla u otra legalización.
 
-1. Check destination country language requirements:
-   - Germany: Documents must generally be in German or accompanied by certified translation
-   - Austria: Same as Germany; some offices accept English for EU documents
-   - Switzerland: Depends on canton (German, French, Italian, or Romansh area)
-2. Identify which documents are exempt from translation:
-   - EU multilingual standard forms (Regulation 2016/1191) for birth, marriage, death, and other civil status documents between EU member states
-   - Passports and national ID cards (universally accepted without translation)
-   - EHIC (European Health Insurance Card)
-3. For documents requiring translation:
-   - Must be done by a sworn/certified translator (beeidigter Uebersetzer)
-   - The translator must be certified in the destination country (not the origin country)
-   - Typical turnaround: 3-10 business days
-   - Cost: 30-80 EUR per page depending on language pair and complexity
-4. Determine apostille or legalization requirements:
-   - Documents from Hague Convention countries: apostille from issuing country's competent authority
-   - Documents from non-Hague countries: full legalization chain (local notary, foreign ministry, embassy)
-   - EU-internal documents: often exempt from apostille under EU regulations, but verify per document type
-   - Switzerland is a Hague Convention member but not an EU member; rules differ
-5. Check if the destination country accepts digital or electronic apostilles
-6. Note that some documents require both apostille AND certified translation (the apostille itself may also need translation)
+1. Verificar requisitos de idioma del país de destino:
+   - Alemania: Los documentos generalmente deben estar en alemán o acompañados de traducción certificada
+   - Austria: Igual que Alemania; algunas oficinas aceptan inglés para documentos de la UE
+   - Suiza: Depende del cantón (área de alemán, francés, italiano o romanche)
+2. Identificar qué documentos están exentos de traducción:
+   - Formularios estándar multilingües de la UE (Regulación 2016/1191) para nacimiento, matrimonio, defunción y otros documentos de estado civil entre estados miembros de la UE
+   - Pasaportes y documentos nacionales de identidad (universalmente aceptados sin traducción)
+   - EHIC (Tarjeta Sanitaria Europea)
+3. Para documentos que requieren traducción:
+   - Debe ser realizada por un traductor jurado/certificado (beeidigter Uebersetzer)
+   - El traductor debe estar certificado en el país de destino (no el país de origen)
+   - Tiempo de entrega típico: 3-10 días hábiles
+   - Costo: 30-80 EUR por página dependiendo del par de idiomas y la complejidad
+4. Determinar requisitos de apostilla o legalización:
+   - Documentos de países de la Convención de La Haya: apostilla de la autoridad competente del país emisor
+   - Documentos de países no-Haya: cadena completa de legalización (notario local, ministerio de asuntos exteriores, embajada)
+   - Documentos intra-UE: frecuentemente exentos de apostilla bajo regulaciones de la UE, pero verificar por tipo de documento
+   - Suiza es miembro de la Convención de La Haya pero no miembro de la UE; las reglas difieren
+5. Verificar si el país de destino acepta apostillas digitales o electrónicas
+6. Notar que algunos documentos requieren tanto apostilla COMO traducción certificada (la apostilla misma puede también necesitar traducción)
 
-**Esperado:** A translation/legalization matrix showing for each document: translation needed (yes/no), apostille needed (yes/no), estimated cost, and estimated processing time.
+**Esperado:** Una matriz de traducción/legalización mostrando para cada documento: traducción necesaria (sí/no), apostilla necesaria (sí/no), costo estimado y tiempo de procesamiento estimado.
 
-**En caso de fallo:** If uncertain whether a specific document needs apostille, contact the destination authority directly. Over-preparing (getting an unnecessary apostille) is better than under-preparing (being turned away at the appointment).
+**En caso de fallo:** Si hay incertidumbre sobre si un documento específico necesita apostilla, contactar a la autoridad de destino directamente. Sobre-prepararse (obtener una apostilla innecesaria) es mejor que sub-prepararse (ser rechazado en la cita).
 
-### Paso 5: Generate Action List
+### Paso 5: Generar Lista de Acciones
 
-Compile all findings into a prioritized, deadline-aware action list.
+Compilar todos los hallazgos en una lista de acciones priorizada y consciente de plazos.
 
-1. Merge all gaps (missing, expired, translation needed, apostille needed) into a single action list
-2. For each action item, include:
-   - Document name
-   - Action required (obtain, renew, translate, apostille, replace)
-   - Issuing authority or service provider
-   - Estimated processing time
-   - Estimated cost
-   - Deadline (derived from when the document is first needed in the relocation timeline)
-   - Priority (critical / high / medium / low)
-3. Assign priority based on:
-   - **Critical**: Blocks the first bureaucratic step (e.g., passport for Anmeldung) or has a non-negotiable deadline
-   - **High**: Needed within the first 2 weeks after arrival; long processing time
-   - **Medium**: Needed within the first month; reasonable processing time
-   - **Low**: Needed eventually; no immediate deadline pressure
-4. Order the list by:
-   - First: Critical items sorted by longest processing time (start these first)
-   - Then: High items sorted by deadline
-   - Then: Medium and low items
-5. Calculate total estimated cost for all document preparation
-6. Add a "document folder" checklist for the day of each appointment, listing exactly which originals, copies, and translations to bring
+1. Fusionar todas las brechas (faltantes, vencidos, traducción necesaria, apostilla necesaria) en una única lista de acciones
+2. Para cada elemento de acción, incluir:
+   - Nombre del documento
+   - Acción requerida (obtener, renovar, traducir, apostillar, reemplazar)
+   - Autoridad emisora o proveedor de servicio
+   - Tiempo de procesamiento estimado
+   - Costo estimado
+   - Plazo (derivado de cuándo el documento se necesita primero en el cronograma de reubicación)
+   - Prioridad (crítica / alta / media / baja)
+3. Asignar prioridad basada en:
+   - **Crítica**: Bloquea el primer paso burocrático (ej., pasaporte para Anmeldung) o tiene un plazo no negociable
+   - **Alta**: Necesario dentro de las primeras 2 semanas después de la llegada; largo tiempo de procesamiento
+   - **Media**: Necesario dentro del primer mes; tiempo de procesamiento razonable
+   - **Baja**: Necesario eventualmente; sin presión de plazo inmediata
+4. Ordenar la lista por:
+   - Primero: Elementos críticos ordenados por mayor tiempo de procesamiento (comenzar estos primero)
+   - Luego: Elementos altos ordenados por plazo
+   - Luego: Elementos medios y bajos
+5. Calcular costo total estimado para toda la preparación de documentos
+6. Agregar un checklist de "carpeta de documentos" para el día de cada cita, listando exactamente qué originales, copias y traducciones llevar
 
-**Esperado:** A prioritized action list with deadlines, costs, and processing times, plus per-appointment packing lists for documents.
+**Esperado:** Una lista de acciones priorizada con plazos, costos y tiempos de procesamiento, más listas de empaque por cita para documentos.
 
-**En caso de fallo:** If processing times are uncertain (common for documents from countries with slower bureaucracies), use worst-case estimates and start the process as early as possible. Flag items where expedited processing is available at additional cost.
+**En caso de fallo:** Si los tiempos de procesamiento son inciertos (común para documentos de países con burocracias más lentas), usar estimaciones de peor caso y comenzar el proceso lo antes posible. Señalar elementos donde el procesamiento acelerado está disponible a costo adicional.
 
 ## Validación
 
-- Every bureaucratic step from the relocation plan has at least one document mapped to it
-- No document is listed as "status unknown" -- all must be confirmed as have/missing/expired/N-A
-- Translation requirements reference the destination country's official language requirements
-- Apostille requirements are verified against Hague Convention membership of the issuing country
-- Deadlines in the action list align with the relocation timeline from plan-eu-relocation
-- Priority assignments are consistent (no "low" priority item that blocks a "critical" step)
-- The total cost estimate is calculated and presented
-- Per-appointment document checklists are generated for at least the first three bureaucratic steps
+- Cada paso burocrático del plan de reubicación tiene al menos un documento mapeado
+- Ningún documento está listado como "estado desconocido" -- todos deben estar confirmados como tiene/faltante/vencido/N-A
+- Los requisitos de traducción referencian los requisitos oficiales de idioma del país de destino
+- Los requisitos de apostilla están verificados contra la membresía en la Convención de La Haya del país emisor
+- Los plazos en la lista de acciones se alinean con el cronograma de reubicación de plan-eu-relocation
+- Las asignaciones de prioridad son consistentes (ningún elemento de prioridad "baja" que bloquee un paso "crítico")
+- El costo total estimado está calculado y presentado
+- Los checklists de documentos por cita están generados para al menos los primeros tres pasos burocráticos
 
 ## Errores Comunes
 
-- **Assuming EU documents need no preparation**: While EU regulations simplify cross-border document acceptance, most offices still require translations and some require apostilles even between EU states
-- **Name mismatches across documents**: Transliteration from non-Latin scripts, use of maiden vs. married names, and middle name inconsistencies are the most common reason for rejection at appointments
-- **Relying on photocopies**: Most DACH authorities require original documents for inspection and keep certified copies; bring originals even if you think copies will suffice
-- **Ordering translations too late**: Sworn translators often have 1-2 week backlogs, and this extends during peak relocation season (August-September)
-- **Forgetting the apostille on the translation**: Some authorities require the apostille on the original document AND a separate certified translation of the apostilled document
-- **Not checking document validity periods**: A passport valid for 2 more months may be rejected if the authority requires 6 months remaining validity
-- **Ignoring the multilingual EU forms**: For civil status documents between EU countries, multilingual standard forms (available from the issuing authority) can eliminate the need for translation entirely -- but you must request them explicitly
-- **Assuming digital documents are accepted**: Most DACH government offices still require physical documents; PDF printouts of digital-only documents may not be accepted without additional verification
+- **Asumir que los documentos de la UE no necesitan preparación**: Aunque las regulaciones de la UE simplifican la aceptación transfronteriza de documentos, la mayoría de oficinas aún requieren traducciones y algunas requieren apostillas incluso entre estados de la UE
+- **Discrepancias de nombre entre documentos**: La transliteración de escrituras no latinas, el uso de apellido de soltera vs. de casada, e inconsistencias de segundo nombre son la razón más común de rechazo en citas
+- **Confiar en fotocopias**: La mayoría de autoridades DACH requieren documentos originales para inspección y conservan copias certificadas; llevar originales incluso si se piensa que las copias serán suficientes
+- **Solicitar traducciones demasiado tarde**: Los traductores jurados frecuentemente tienen retrasos de 1-2 semanas, y esto se extiende durante la temporada alta de reubicación (agosto-septiembre)
+- **Olvidar la apostilla en la traducción**: Algunas autoridades requieren la apostilla en el documento original Y una traducción certificada separada del documento apostillado
+- **No verificar períodos de validez de documentos**: Un pasaporte válido por 2 meses más puede ser rechazado si la autoridad requiere 6 meses de validez restante
+- **Ignorar los formularios multilingües de la UE**: Para documentos de estado civil entre países de la UE, los formularios estándar multilingües (disponibles en la autoridad emisora) pueden eliminar la necesidad de traducción completamente — pero deben solicitarse explícitamente
+- **Asumir que los documentos digitales son aceptados**: La mayoría de oficinas gubernamentales DACH aún requieren documentos físicos; las impresiones PDF de documentos exclusivamente digitales pueden no ser aceptadas sin verificación adicional
 
 ## Habilidades Relacionadas
 
-- [plan-eu-relocation](../plan-eu-relocation/SKILL.md) -- Create the relocation plan that feeds into this document check
-- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- Detailed guidance for the procedures these documents are needed for
+- [plan-eu-relocation](../plan-eu-relocation/SKILL.md) -- Crear el plan de reubicación que alimenta esta verificación de documentos
+- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- Guía detallada para los procedimientos para los cuales estos documentos son necesarios

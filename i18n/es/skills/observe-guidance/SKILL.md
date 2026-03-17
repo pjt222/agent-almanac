@@ -1,14 +1,15 @@
 ---
 name: observe-guidance
 description: >
-  Guide a person in systematic observation of systems, patterns, or
-  phenomena. AI coaches neutral attention, field notes methodology,
-  pattern recognition, hypothesis formation, and structured reporting
-  for debugging, research, and system understanding. Use when a person
-  wants to understand a system's behavior before intervening, when someone
-  keeps jumping to conclusions and needs the discipline of observation first,
-  when preparing an evidence-based report, or when studying team dynamics
-  or process effectiveness through direct observation.
+  Guiar a una persona en la observación sistemática de sistemas, patrones o
+  fenómenos. La IA coaching sobre atención neutral, metodología de notas de
+  campo, reconocimiento de patrones, formación de hipótesis y reportes
+  estructurados para depuración, investigación y comprensión de sistemas.
+  Usar cuando una persona quiere comprender el comportamiento de un sistema
+  antes de intervenir, cuando alguien sigue saltando a conclusiones y necesita
+  la disciplina de observar primero, al preparar un informe basado en
+  evidencia, o al estudiar dinámicas de equipo o efectividad de procesos
+  mediante observación directa.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,56 +28,56 @@ metadata:
 
 # Observe (Guidance)
 
-Guide a person in systematic observation of a system, phenomenon, or pattern. The AI acts as a field study coach — helping frame the observation target, prepare a protocol, sustain neutral attention, record findings with field notes, analyze patterns, and report observations with clear separation of data and interpretation.
+Guiar a una persona en la observación sistemática de un sistema, fenómeno o patrón. La IA actúa como coach de estudio de campo — ayudando a enmarcar el objetivo de observación, preparar un protocolo, sostener la atención neutral, registrar hallazgos con notas de campo, analizar patrones y reportar observaciones con separación clara entre datos e interpretación.
 
 ## Cuándo Usar
 
-- A person wants to understand a system's behavior before intervening (debugging by observation rather than by trial and error)
-- Someone is conducting research or gathering evidence and needs structured observation methodology
-- A person keeps jumping to conclusions and needs to develop the discipline of observation before interpretation
-- Someone is preparing a report that requires evidence-based findings, not opinions
-- A person wants to understand team dynamics, user behavior, or process effectiveness through direct observation
-- After `meditate-guidance` has cultivated sustained attention, the person wants to direct that attention toward a specific system
+- Una persona quiere comprender el comportamiento de un sistema antes de intervenir (depuración por observación en lugar de prueba y error)
+- Alguien está realizando investigación o recopilando evidencia y necesita metodología de observación estructurada
+- Una persona sigue saltando a conclusiones y necesita desarrollar la disciplina de observar antes de interpretar
+- Alguien está preparando un informe que requiere hallazgos basados en evidencia, no opiniones
+- Una persona quiere comprender dinámicas de equipo, comportamiento de usuarios o efectividad de procesos mediante observación directa
+- Después de que `meditate-guidance` ha cultivado atención sostenida, la persona quiere dirigir esa atención hacia un sistema específico
 
 ## Entradas
 
-- **Requerido**: What the person wants to observe (a system, process, behavior, codebase, team dynamic, natural phenomenon)
-- **Requerido**: Why they are observing (debugging, research, audit, curiosity, improvement)
-- **Opcional**: Time available for observation (single session vs. multi-day study)
-- **Opcional**: Prior attempts to understand the system (what has already been tried)
-- **Opcional**: Specific questions or hypotheses they want to test
-- **Opcional**: Tools available for recording (notebook, screen capture, logging, metrics)
+- **Requerido**: Lo que la persona quiere observar (un sistema, proceso, comportamiento, base de código, dinámica de equipo, fenómeno natural)
+- **Requerido**: Por qué están observando (depuración, investigación, auditoría, curiosidad, mejora)
+- **Opcional**: Tiempo disponible para la observación (sesión única vs. estudio de varios días)
+- **Opcional**: Intentos previos de comprender el sistema (qué se ha intentado ya)
+- **Opcional**: Preguntas o hipótesis específicas que quieren probar
+- **Opcional**: Herramientas disponibles para registro (cuaderno, captura de pantalla, logging, métricas)
 
 ## Procedimiento
 
-### Paso 1: Frame — Define the Observation Target
+### Paso 1: Enmarcar — Definir el objetivo de observación
 
-Help the person set up a clear, bounded observation frame.
+Ayudar a la persona a establecer un marco de observación claro y delimitado.
 
-1. Ask what they want to observe: "What system or behavior are you trying to understand?"
-2. Help them narrow the scope: "What specific aspect of that system interests you most?"
-3. Identify the observation purpose: understanding, debugging, improvement, evidence-gathering, or pure curiosity
-4. Set boundaries: what is in scope and what is not (prevents observation from expanding endlessly)
-5. If they have a hypothesis: state it explicitly, then set it aside — "We will look for evidence both for and against this"
-6. Choose the observation stance:
-   - **Naturalist**: observe without interfering (best for understanding behavior)
-   - **Controlled**: change one variable and observe the effect (best for debugging)
-   - **Longitudinal**: observe over time (best for detecting trends)
+1. Preguntar qué quieren observar: "¿Qué sistema o comportamiento intentas comprender?"
+2. Ayudarles a reducir el alcance: "¿Qué aspecto específico de ese sistema te interesa más?"
+3. Identificar el propósito de la observación: comprensión, depuración, mejora, recopilación de evidencia o pura curiosidad
+4. Establecer límites: qué está dentro del alcance y qué no (previene que la observación se expanda sin fin)
+5. Si tienen una hipótesis: declararla explícitamente, luego apartarla — "Buscaremos evidencia tanto a favor como en contra"
+6. Elegir la postura de observación:
+   - **Naturalista**: observar sin interferir (mejor para comprender comportamiento)
+   - **Controlada**: cambiar una variable y observar el efecto (mejor para depuración)
+   - **Longitudinal**: observar a lo largo del tiempo (mejor para detectar tendencias)
 
-**Esperado:** A clear observation frame with defined target, scope, purpose, and stance. The person knows what they are looking at and what they are not looking at.
+**Esperado:** Un marco de observación claro con objetivo, alcance, propósito y postura definidos. La persona sabe qué está mirando y qué no está mirando.
 
-**En caso de fallo:** If the person cannot narrow their focus ("I want to understand everything"), help them pick one entry point: "What is the one behavior you find most confusing?" If they are already committed to a conclusion ("I just need to prove X"), gently challenge: "What would we need to see to disprove that? Let's look for both."
+**En caso de fallo:** Si la persona no puede reducir su enfoque ("Quiero entender todo"), ayudarles a elegir un punto de entrada: "¿Cuál es el comportamiento que más te confunde?" Si ya están comprometidos con una conclusión ("Solo necesito probar X"), desafiar gentilmente: "¿Qué necesitaríamos ver para refutar eso? Busquemos ambas cosas."
 
-### Paso 2: Prepare — Set Up the Observation Protocol
+### Paso 2: Preparar — Establecer el protocolo de observación
 
-Help the person establish a systematic approach to recording what they observe.
+Ayudar a la persona a establecer un enfoque sistemático para registrar lo que observan.
 
-1. Choose the recording method based on the observation type:
-   - **Codebase/system**: file paths, line numbers, timestamps, log entries
-   - **Behavior/process**: time-stamped notes with actor, action, and context
-   - **Team/communication**: quotes, speaker identifiers, non-verbal cues
-   - **Natural/physical**: sketches, measurements, environmental conditions
-2. Create a simple recording template:
+1. Elegir el método de registro basándose en el tipo de observación:
+   - **Base de código/sistema**: rutas de archivos, números de línea, marcas de tiempo, entradas de log
+   - **Comportamiento/proceso**: notas con marca de tiempo con actor, acción y contexto
+   - **Equipo/comunicación**: citas, identificadores de hablantes, señales no verbales
+   - **Natural/físico**: bocetos, mediciones, condiciones ambientales
+2. Crear una plantilla de registro simple:
 
 ```
 Field Notes Template:
@@ -93,111 +94,111 @@ Field Notes Template:
 └─────────────┴────────────────────────────────────────────────────────┘
 ```
 
-3. Emphasize the separation: "The observation row is fact. The hypothesis row is interpretation. Never mix them."
-4. Set a minimum observation count: "Aim for at least 10 observations before drawing any conclusions"
-5. If applicable, set up monitoring tools: logging, metrics, screen recording
+3. Enfatizar la separación: "La fila de observación es un hecho. La fila de hipótesis es interpretación. Nunca mezclarlas."
+4. Establecer un conteo mínimo de observaciones: "Apunta a al menos 10 observaciones antes de sacar cualquier conclusión"
+5. Si aplica, configurar herramientas de monitoreo: logging, métricas, grabación de pantalla
 
-**Esperado:** The person has a recording method ready and understands the critical distinction between observation and interpretation. They feel prepared to begin.
+**Esperado:** La persona tiene un método de registro listo y comprende la distinción crítica entre observación e interpretación. Se sienten preparados para comenzar.
 
-**En caso de fallo:** If the template feels too formal, simplify to: "Just write down what you see, and separately write what you think it means." If they resist recording ("I'll remember"), explain that unrecorded observations are subject to memory bias — the act of writing makes observation more accurate.
+**En caso de fallo:** Si la plantilla se siente demasiado formal, simplificar a: "Solo escribe lo que ves, y por separado escribe lo que crees que significa." Si se resisten a registrar ("Lo recordaré"), explicar que las observaciones no registradas están sujetas a sesgo de memoria — el acto de escribir hace la observación más precisa.
 
-### Paso 3: Observe — Practice Sustained Neutral Attention
+### Paso 3: Observar — Practicar la atención neutral sostenida
 
-Guide the person through the actual observation session.
+Guiar a la persona a través de la sesión de observación real.
 
-1. Remind them of the stance: "You are a naturalist studying a new species. Do not interfere — just watch"
-2. For the first 5 minutes: encourage pure observation without recording — just attend
-3. After initial immersion: begin recording using the template
-4. Coach neutral language: "Instead of 'the system crashed,' try 'the system stopped responding at 14:32 after processing the 47th request'"
-5. Watch for interpretation creeping into observation: "That is an interpretation — record it in the hypothesis row"
-6. Encourage noting surprises: "What surprised you? Surprises often contain the most valuable data"
-7. Periodically check the frame: "Are you still observing what you set out to observe, or has your attention drifted?"
-8. If they want to intervene: "Note what you want to change and why, but do not change it yet — keep observing"
+1. Recordarles la postura: "Eres un naturalista estudiando una nueva especie. No interfieras — solo observa"
+2. Durante los primeros 5 minutos: fomentar la observación pura sin registro — solo atender
+3. Después de la inmersión inicial: comenzar a registrar usando la plantilla
+4. Guiar hacia un lenguaje neutral: "En lugar de 'el sistema se cayó,' intenta 'el sistema dejó de responder a las 14:32 después de procesar la solicitud número 47'"
+5. Vigilar que la interpretación se infiltre en la observación: "Eso es una interpretación — regístralo en la fila de hipótesis"
+6. Fomentar notar las sorpresas: "¿Qué te sorprendió? Las sorpresas a menudo contienen los datos más valiosos"
+7. Verificar periódicamente el marco: "¿Sigues observando lo que te propusiste observar, o tu atención se ha desviado?"
+8. Si quieren intervenir: "Nota lo que quieres cambiar y por qué, pero no lo cambies todavía — sigue observando"
 
-**Esperado:** The person generates at least 5-10 concrete observations with specific evidence. They experience the difference between observing and interpreting, and find it harder than expected to maintain neutral attention.
+**Esperado:** La persona genera al menos 5-10 observaciones concretas con evidencia específica. Experimentan la diferencia entre observar e interpretar, y descubren que es más difícil de lo esperado mantener la atención neutral.
 
-**En caso de fallo:** If they keep interpreting instead of observing, try this exercise: "Describe what you see as if explaining it to someone who has never seen this system. Only use verifiable facts." If they run out of things to observe quickly, they are looking at too high a level — guide them to zoom in on details: timing, ordering, edge cases, exceptions.
+**En caso de fallo:** Si siguen interpretando en lugar de observar, probar este ejercicio: "Describe lo que ves como si se lo explicaras a alguien que nunca ha visto este sistema. Usa solo hechos verificables." Si se les acaban las cosas para observar rápidamente, están mirando a un nivel demasiado alto — guiarlos para acercarse a los detalles: temporización, orden, casos límite, excepciones.
 
-### Paso 4: Record — Capture Findings with Field Notes
+### Paso 4: Registrar — Capturar hallazgos con notas de campo
 
-Help the person organize their raw observations into structured notes.
+Ayudar a la persona a organizar sus observaciones crudas en notas estructuradas.
 
-1. Review their recorded observations together
-2. Check for completeness: does each observation have enough context to be understood later?
-3. Check for factual accuracy: are statements verifiable, or do they contain hidden assumptions?
-4. Group similar observations: "Do you see any patterns forming?"
-5. Note frequencies: how often did each pattern appear?
-6. Note absences: "What did you expect to see that was not there?"
-7. Help them separate strong observations (clear evidence) from weak observations (ambiguous data)
+1. Revisar juntos las observaciones registradas
+2. Verificar la completitud: ¿cada observación tiene suficiente contexto para ser comprendida después?
+3. Verificar la precisión factual: ¿las declaraciones son verificables, o contienen suposiciones ocultas?
+4. Agrupar observaciones similares: "¿Ves algún patrón formándose?"
+5. Notar frecuencias: ¿con qué frecuencia apareció cada patrón?
+6. Notar ausencias: "¿Qué esperabas ver que no estuvo ahí?"
+7. Ayudarles a separar observaciones fuertes (evidencia clara) de observaciones débiles (datos ambiguos)
 
-**Esperado:** A set of organized field notes that cleanly separate observation from interpretation. The notes are detailed enough that someone else could verify the observations independently.
+**Esperado:** Un conjunto de notas de campo organizadas que separan limpiamente la observación de la interpretación. Las notas son lo suficientemente detalladas para que otra persona pudiera verificar las observaciones independientemente.
 
-**En caso de fallo:** If the notes are too vague ("things seemed slow"), help them add specifics: "How slow? Compared to what? In which conditions?" If the notes are too detailed (recording everything), help them identify which observations relate to the original frame and which are noise.
+**En caso de fallo:** Si las notas son demasiado vagas ("las cosas parecían lentas"), ayudarles a agregar específicos: "¿Qué tan lento? ¿Comparado con qué? ¿En qué condiciones?" Si las notas son demasiado detalladas (registrando todo), ayudarles a identificar qué observaciones se relacionan con el marco original y cuáles son ruido.
 
-### Paso 5: Analyze — Identify Patterns and Generate Hypotheses
+### Paso 5: Analizar — Identificar patrones y generar hipótesis
 
-Guide the person from observations to structured analysis.
+Guiar a la persona desde las observaciones hacia el análisis estructurado.
 
-1. Lay out all observations and look for patterns:
-   - **Repetition**: "This happened multiple times — is it systematic?"
-   - **Correlation**: "X always happens alongside Y — are they related?"
-   - **Sequence**: "A always precedes B — could A cause B?"
-   - **Absence**: "X never happens in condition Z — why?"
-   - **Anomaly**: "Everything follows pattern P except this one case — what is different?"
-2. For each pattern, ask: "Is there an alternative explanation?"
-3. Generate 2-3 hypotheses that explain the major patterns
-4. Distinguish between correlation and causation: "Observing that A and B co-occur does not prove A causes B"
-5. Identify which hypotheses are testable and what test would confirm/refute them
-6. Note confidence levels: which hypotheses are well-supported, which are speculative?
+1. Disponer todas las observaciones y buscar patrones:
+   - **Repetición**: "Esto sucedió múltiples veces — ¿es sistemático?"
+   - **Correlación**: "X siempre sucede junto con Y — ¿están relacionados?"
+   - **Secuencia**: "A siempre precede a B — ¿podría A causar B?"
+   - **Ausencia**: "X nunca sucede en la condición Z — ¿por qué?"
+   - **Anomalía**: "Todo sigue el patrón P excepto este caso — ¿qué es diferente?"
+2. Para cada patrón, preguntar: "¿Hay una explicación alternativa?"
+3. Generar 2-3 hipótesis que expliquen los patrones principales
+4. Distinguir entre correlación y causalidad: "Observar que A y B co-ocurren no prueba que A cause B"
+5. Identificar qué hipótesis son verificables y qué prueba las confirmaría/refutaría
+6. Notar niveles de confianza: ¿qué hipótesis están bien respaldadas, cuáles son especulativas?
 
-**Esperado:** The person moves from raw observations to structured hypotheses while maintaining the discipline of separating data from theory. They have at least one testable hypothesis for their original question.
+**Esperado:** La persona pasa de observaciones crudas a hipótesis estructuradas manteniendo la disciplina de separar datos de teoría. Tienen al menos una hipótesis verificable para su pregunta original.
 
-**En caso de fallo:** If they jump to a single explanation immediately, challenge it: "That is one possibility. What is another?" If they see no patterns, the observations may be too few — suggest continuing observation before analysis. If every observation seems to point to the same conclusion, they may be filtering — ask: "What evidence would contradict your current theory?"
+**En caso de fallo:** Si saltan a una sola explicación inmediatamente, desafiarla: "Esa es una posibilidad. ¿Cuál es otra?" Si no ven patrones, las observaciones pueden ser muy pocas — sugerir continuar la observación antes del análisis. Si cada observación parece apuntar a la misma conclusión, pueden estar filtrando — preguntar: "¿Qué evidencia contradiría tu teoría actual?"
 
-### Paso 6: Report — Share Findings with Clear Structure
+### Paso 6: Reportar — Compartir hallazgos con estructura clara
 
-Help the person communicate their observations effectively.
+Ayudar a la persona a comunicar sus observaciones efectivamente.
 
-1. Structure the report:
-   - **Context**: What was observed, when, why, under what conditions
-   - **Method**: How the observation was conducted (protocol, tools, duration)
-   - **Findings**: Key observations with evidence (data, not interpretation)
-   - **Analysis**: Patterns identified, hypotheses generated, confidence levels
-   - **Recommendations**: Suggested next steps (further observation, testing, intervention)
-   - **Limitations**: What the observation did not cover, potential biases
-2. Help them write findings in neutral language that separates fact from interpretation
-3. Review for hidden assumptions or unsupported claims
-4. If the observations are for debugging: translate hypotheses into concrete tests
-5. If the observations are for a report: ensure the evidence is cited specifically
-6. If the observations are for personal understanding: summarize the key insights and remaining questions
+1. Estructurar el informe:
+   - **Contexto**: Qué se observó, cuándo, por qué, bajo qué condiciones
+   - **Método**: Cómo se condujo la observación (protocolo, herramientas, duración)
+   - **Hallazgos**: Observaciones clave con evidencia (datos, no interpretación)
+   - **Análisis**: Patrones identificados, hipótesis generadas, niveles de confianza
+   - **Recomendaciones**: Próximos pasos sugeridos (más observación, pruebas, intervención)
+   - **Limitaciones**: Lo que la observación no cubrió, sesgos potenciales
+2. Ayudarles a escribir hallazgos en lenguaje neutral que separe hechos de interpretación
+3. Revisar en busca de suposiciones ocultas o afirmaciones no respaldadas
+4. Si las observaciones son para depuración: traducir hipótesis en pruebas concretas
+5. Si las observaciones son para un informe: asegurar que la evidencia se cite específicamente
+6. Si las observaciones son para comprensión personal: resumir las percepciones clave y las preguntas restantes
 
-**Esperado:** A clear report that communicates observations, patterns, and hypotheses while maintaining the distinction between what was observed and what was inferred. The reader can evaluate the evidence independently.
+**Esperado:** Un informe claro que comunica observaciones, patrones e hipótesis manteniendo la distinción entre lo que se observó y lo que se infirió. El lector puede evaluar la evidencia independientemente.
 
-**En caso de fallo:** If the report buries observations in interpretation, restructure: "Put all the facts in one section, all the theories in another." If the report lacks confidence levels ("this is definitely because..."), help them calibrate: "How sure are you? What would change your mind?"
+**En caso de fallo:** Si el informe entierra las observaciones en interpretación, reestructurar: "Pon todos los hechos en una sección, todas las teorías en otra." Si el informe carece de niveles de confianza ("esto es definitivamente porque..."), ayudarles a calibrar: "¿Qué tan seguro estás? ¿Qué cambiaría tu opinión?"
 
 ## Validación
 
-- [ ] The observation target was framed before observation began (not free-form wandering)
-- [ ] A recording protocol was established and used consistently
-- [ ] Observations were recorded as facts, separate from interpretations
-- [ ] At least 5 concrete, evidence-backed observations were captured
-- [ ] Patterns were identified through analysis, not assumed from the start
-- [ ] Hypotheses are testable and have stated confidence levels
-- [ ] The person experienced the discipline of observing before interpreting
+- [ ] El objetivo de observación fue enmarcado antes de que comenzara la observación (no exploración sin forma)
+- [ ] Un protocolo de registro fue establecido y usado consistentemente
+- [ ] Las observaciones fueron registradas como hechos, separadas de las interpretaciones
+- [ ] Al menos 5 observaciones concretas respaldadas por evidencia fueron capturadas
+- [ ] Los patrones fueron identificados mediante análisis, no asumidos desde el inicio
+- [ ] Las hipótesis son verificables y tienen niveles de confianza declarados
+- [ ] La persona experimentó la disciplina de observar antes de interpretar
 
 ## Errores Comunes
 
-- **Observation as confirmation bias**: Observing only things that support a pre-existing belief. The frame should include "look for evidence against your hypothesis" as an explicit instruction
-- **Intervention urge**: Seeing a problem and wanting to fix it immediately. Premature intervention often masks the root cause — observe first, then intervene with full understanding
-- **Recording fatigue**: Detailed observation is mentally taxing. Suggest breaks and realistic session lengths (30-60 minutes of focused observation is substantial)
-- **Overcomplicating the protocol**: For simple observations, a notebook and timestamps are sufficient. The protocol should serve the observation, not replace it
-- **Confusing observation with surveillance**: In interpersonal observation, ethical boundaries matter. Observe behavior that is visible, do not spy. If observing people, transparency is usually better than secrecy
-- **Skipping the frame**: Without a clear observation target, attention scatters and findings are unfocused. Even a rough frame is better than none
+- **Observación como sesgo de confirmación**: Observar solo cosas que apoyan una creencia preexistente. El marco debe incluir "buscar evidencia contra tu hipótesis" como instrucción explícita
+- **Impulso de intervención**: Ver un problema y querer arreglarlo inmediatamente. La intervención prematura a menudo enmascara la causa raíz — observar primero, luego intervenir con comprensión completa
+- **Fatiga de registro**: La observación detallada es mentalmente exigente. Sugerir descansos y duraciones realistas de sesión (30-60 minutos de observación enfocada es sustancial)
+- **Sobrecomplicar el protocolo**: Para observaciones simples, un cuaderno y marcas de tiempo son suficientes. El protocolo debe servir a la observación, no reemplazarla
+- **Confundir observación con vigilancia**: En la observación interpersonal, los límites éticos importan. Observar comportamiento visible, no espiar. Si se observan personas, la transparencia suele ser mejor que el secreto
+- **Omitir el marco**: Sin un objetivo de observación claro, la atención se dispersa y los hallazgos quedan desenfocados. Incluso un marco aproximado es mejor que ninguno
 
 ## Habilidades Relacionadas
 
-- `observe` — the AI self-directed variant for sustained neutral pattern recognition across systems
-- `learn-guidance` — observation feeds learning by providing raw data for understanding
-- `listen-guidance` — listening is focused observation of a speaker; observation is broader-scope attention to any system
-- `remote-viewing-guidance` — shares structured observation methodology adapted for non-local perception
-- `read-garden` — garden observation skill that uses similar CRV-adapted sensory protocols
+- `observe` — la variante autodirigida de la IA para reconocimiento neutral sostenido de patrones en sistemas
+- `learn-guidance` — la observación alimenta el aprendizaje proporcionando datos crudos para la comprensión
+- `listen-guidance` — escuchar es observación enfocada de un hablante; la observación es atención de alcance más amplio hacia cualquier sistema
+- `remote-viewing-guidance` — comparte metodología de observación estructurada adaptada para percepción no local
+- `read-garden` — habilidad de observación de jardín que usa protocolos sensoriales similares adaptados de CRV

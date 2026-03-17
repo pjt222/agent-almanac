@@ -1,13 +1,13 @@
 ---
 name: analyze-prime-numbers
 description: >
-  Analyze prime numbers using primality tests, factorization algorithms,
-  prime distribution analysis, and sieve methods. Covers trial division,
-  Miller-Rabin, Sieve of Eratosthenes, and the Prime Number Theorem.
-  Use when determining whether an integer is prime or composite, finding
-  prime factorizations, counting or listing primes up to a bound, or
-  investigating prime properties within a number-theoretic proof or
-  computation.
+  Analizar números primos usando pruebas de primalidad, algoritmos de
+  factorización, análisis de distribución de primos y métodos de criba.
+  Cubre división por tentativa, Miller-Rabin, Criba de Eratóstenes y el
+  Teorema de los Números Primos. Usar al determinar si un entero es primo
+  o compuesto, al encontrar factorizaciones primas, al contar o listar
+  primos hasta un límite, o al investigar propiedades de primos dentro
+  de una demostración o cómputo de teoría de números.
 license: MIT
 allowed-tools: Read Bash
 metadata:
@@ -26,61 +26,61 @@ metadata:
 
 # Analyze Prime Numbers
 
-Analyze prime numbers by selecting and applying the appropriate algorithm for the task at hand: primality testing, integer factorization, or prime distribution analysis. Verify results computationally and relate findings to the Prime Number Theorem.
+Analizar números primos seleccionando y aplicando el algoritmo apropiado para la tarea en cuestión: prueba de primalidad, factorización de enteros, o análisis de distribución de primos. Verificar resultados computacionalmente y relacionar los hallazgos con el Teorema de los Números Primos.
 
 ## Cuándo Usar
 
-- Determining whether a given integer is prime or composite
-- Finding the complete prime factorization of an integer
-- Counting or listing primes up to a given bound
-- Verifying the Prime Number Theorem approximation for a specific range
-- Investigating properties of primes in a number-theoretic proof or computation
+- Determinar si un entero dado es primo o compuesto
+- Encontrar la factorización prima completa de un entero
+- Contar o listar primos hasta un límite dado
+- Verificar la aproximación del Teorema de los Números Primos para un rango específico
+- Investigar propiedades de primos en una demostración o cómputo de teoría de números
 
 ## Entradas
 
-- **Requerido**: The integer(s) to analyze, or a bound for distribution analysis
-- **Requerido**: Task type -- one of: primality test, factorization, or distribution analysis
-- **Opcional**: Preferred algorithm (trial division, Miller-Rabin, Sieve of Eratosthenes, Pollard's rho)
-- **Opcional**: Whether to produce a formal proof of primality or just a computational verdict
-- **Opcional**: Output format (factor tree, prime list, count, table)
+- **Requerido**: El/los entero(s) a analizar, o un límite para análisis de distribución
+- **Requerido**: Tipo de tarea -- uno de: prueba de primalidad, factorización, o análisis de distribución
+- **Opcional**: Algoritmo preferido (división por tentativa, Miller-Rabin, Criba de Eratóstenes, rho de Pollard)
+- **Opcional**: Si producir una demostración formal de primalidad o solo un veredicto computacional
+- **Opcional**: Formato de salida (árbol de factores, lista de primos, conteo, tabla)
 
 ## Procedimiento
 
-### Paso 1: Determine the Task Type
+### Paso 1: Determinar el Tipo de Tarea
 
-Classify the request into one of three categories and select the appropriate algorithmic path.
+Clasificar la solicitud en una de tres categorías y seleccionar la ruta algorítmica apropiada.
 
-1. **Primality test**: Given a single integer n, determine whether n is prime.
-2. **Factorization**: Given a composite integer n, find its complete prime factorization.
-3. **Distribution analysis**: Given a bound N, analyze the primes up to N (count, list, gaps, density).
+1. **Prueba de primalidad**: Dado un entero n, determinar si n es primo.
+2. **Factorización**: Dado un entero compuesto n, encontrar su factorización prima completa.
+3. **Análisis de distribución**: Dado un límite N, analizar los primos hasta N (conteo, lista, brechas, densidad).
 
-Record the task type and the input value(s).
+Registrar el tipo de tarea y el/los valor(es) de entrada.
 
-**Esperado:** A clear classification with the input values recorded.
+**Esperado:** Una clasificación clara con los valores de entrada registrados.
 
-**En caso de fallo:** If the input is ambiguous (e.g., "analyze 60"), ask the user to clarify whether they want a primality test, factorization, or distribution analysis. Default to factorization for composite numbers and primality confirmation for suspected primes.
+**En caso de fallo:** Si la entrada es ambigua (ej., "analiza 60"), pedir al usuario que clarifique si quiere una prueba de primalidad, factorización, o análisis de distribución. Por defecto usar factorización para números compuestos y confirmación de primalidad para primos sospechados.
 
-### Paso 2: Apply Primality Testing (if task = primality)
+### Paso 2: Aplicar Prueba de Primalidad (si tarea = primalidad)
 
-Test whether n is prime using an algorithm matched to the size of n.
+Probar si n es primo usando un algoritmo ajustado al tamaño de n.
 
-1. **Handle trivial cases**: n < 2 is not prime. n = 2 or n = 3 is prime. If n is even and n > 2, it is composite.
+1. **Manejar casos triviales**: n < 2 no es primo. n = 2 o n = 3 es primo. Si n es par y n > 2, es compuesto.
 
-2. **Small n (n < 10^6)**: Use trial division.
-   - Test divisibility by all primes p up to floor(sqrt(n)).
-   - Optimization: test 2, then odd numbers 3, 5, 7, ... or use a 6k +/- 1 wheel.
-   - If no divisor found, n is prime.
+2. **n pequeño (n < 10^6)**: Usar división por tentativa.
+   - Probar divisibilidad por todos los primos p hasta floor(sqrt(n)).
+   - Optimización: probar 2, luego impares 3, 5, 7, ... o usar una rueda 6k +/- 1.
+   - Si no se encuentra divisor, n es primo.
 
-3. **Large n (n >= 10^6)**: Use Miller-Rabin probabilistic test.
-   - Write n - 1 = 2^s * d where d is odd.
-   - For each witness a in {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}:
-     - Compute x = a^d mod n.
-     - If x = 1 or x = n - 1, this witness passes.
-     - Otherwise, square x up to s - 1 times. If x ever equals n - 1, pass.
-     - If no pass, n is composite (a is a witness).
-   - For n < 3.317 * 10^24, the witnesses {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37} give a deterministic result.
+3. **n grande (n >= 10^6)**: Usar prueba probabilística de Miller-Rabin.
+   - Escribir n - 1 = 2^s * d donde d es impar.
+   - Para cada testigo a en {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}:
+     - Calcular x = a^d mod n.
+     - Si x = 1 o x = n - 1, este testigo pasa.
+     - De lo contrario, elevar al cuadrado x hasta s - 1 veces. Si x alguna vez es igual a n - 1, pasa.
+     - Si no pasa, n es compuesto (a es un testigo).
+   - Para n < 3.317 * 10^24, los testigos {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37} dan un resultado determinista.
 
-4. **Record the verdict**: prime or composite, with the witness or certificate.
+4. **Registrar el veredicto**: primo o compuesto, con el testigo o certificado.
 
 **Small primes reference (first 25):**
 
@@ -96,31 +96,31 @@ Test whether n is prime using an algorithm matched to the size of n.
 | 8     | 19    | 17    | 59    |       |       |
 | 9     | 23    | 18    | 61    |       |       |
 
-**Esperado:** A definitive answer (prime or composite) with the algorithm used and any witnesses or divisors found.
+**Esperado:** Una respuesta definitiva (primo o compuesto) con el algoritmo usado y cualquier testigo o divisor encontrado.
 
-**En caso de fallo:** If Miller-Rabin reports "probably prime" but certainty is required, escalate to a deterministic test (e.g., AKS or ECPP). For trial division, if computation is too slow, switch to Miller-Rabin.
+**En caso de fallo:** Si Miller-Rabin reporta "probablemente primo" pero se requiere certeza, escalar a una prueba determinista (ej., AKS o ECPP). Para división por tentativa, si el cómputo es demasiado lento, cambiar a Miller-Rabin.
 
-### Paso 3: Apply Factorization (if task = factorization)
+### Paso 3: Aplicar Factorización (si tarea = factorización)
 
-Factor n completely into its prime power decomposition.
+Factorizar n completamente en su descomposición en potencias de primos.
 
-1. **Extract small factors by trial division**:
-   - Divide out 2 as many times as possible, recording the exponent.
-   - Divide out odd primes 3, 5, 7, 11, ... up to a cutoff (e.g., 10^4 or sqrt(n) if n is small).
-   - After each division, update n to the remaining cofactor.
+1. **Extraer factores pequeños por división por tentativa**:
+   - Dividir por 2 tantas veces como sea posible, registrando el exponente.
+   - Dividir por primos impares 3, 5, 7, 11, ... hasta un corte (ej., 10^4 o sqrt(n) si n es pequeño).
+   - Después de cada división, actualizar n al cofactor restante.
 
-2. **If cofactor > 1 and cofactor < 10^12**: Continue trial division up to sqrt(cofactor).
+2. **Si cofactor > 1 y cofactor < 10^12**: Continuar división por tentativa hasta sqrt(cofactor).
 
-3. **If cofactor > 1 and cofactor >= 10^12**: Apply Pollard's rho algorithm.
-   - Choose f(x) = x^2 + c (mod n) with random c.
-   - Use Floyd's cycle detection: x = f(x), y = f(f(y)).
-   - Compute d = gcd(|x - y|, n) at each step.
-   - If 1 < d < n, d is a non-trivial factor. Recurse on d and n/d.
-   - If d = n, retry with a different c.
+3. **Si cofactor > 1 y cofactor >= 10^12**: Aplicar el algoritmo rho de Pollard.
+   - Elegir f(x) = x^2 + c (mod n) con c aleatorio.
+   - Usar detección de ciclos de Floyd: x = f(x), y = f(f(y)).
+   - Calcular d = mcd(|x - y|, n) en cada paso.
+   - Si 1 < d < n, d es un factor no trivial. Recursar sobre d y n/d.
+   - Si d = n, reintentar con un c diferente.
 
-4. **Verify**: Multiply all found prime factors (with exponents) and confirm the product equals the original n. Test each factor for primality.
+4. **Verificar**: Multiplicar todos los factores primos encontrados (con exponentes) y confirmar que el producto es igual al n original. Probar la primalidad de cada factor.
 
-5. **Present the result** in standard form: n = p1^a1 * p2^a2 * ... * pk^ak with p1 < p2 < ... < pk.
+5. **Presentar el resultado** en forma estándar: n = p1^a1 * p2^a2 * ... * pk^ak con p1 < p2 < ... < pk.
 
 **Algorithm complexity notes:**
 
@@ -135,30 +135,30 @@ Factor n completely into its prime power decomposition.
 
 **En caso de fallo:** If Pollard's rho fails to find a factor after many iterations (cycle detected without a non-trivial gcd), try different values of c (at least 5 attempts). If all fail, the cofactor may be prime -- confirm with a primality test.
 
-### Paso 4: Apply Distribution Analysis (if task = distribution)
+### Paso 4: Aplicar Análisis de Distribución (si tarea = distribución)
 
-Analyze the distribution of primes up to a given bound N.
+Analizar la distribución de primos hasta un límite dado N.
 
-1. **Generate primes using the Sieve of Eratosthenes**:
-   - Create a boolean array of size N + 1, initialized to true.
-   - Set indices 0 and 1 to false (not prime).
-   - For each p from 2 to floor(sqrt(N)):
-     - If p is still marked true, mark all multiples p^2, p^2 + p, p^2 + 2p, ... as false.
-   - Collect all indices still marked true.
+1. **Generar primos usando la Criba de Eratóstenes**:
+   - Crear un arreglo booleano de tamaño N + 1, inicializado en verdadero.
+   - Establecer los índices 0 y 1 en falso (no primos).
+   - Para cada p desde 2 hasta floor(sqrt(N)):
+     - Si p sigue marcado como verdadero, marcar todos los múltiplos p^2, p^2 + p, p^2 + 2p, ... como falsos.
+   - Recopilar todos los índices que siguen marcados como verdaderos.
 
-2. **Count primes**: Compute pi(N) = number of primes up to N.
+2. **Contar primos**: Calcular pi(N) = número de primos hasta N.
 
-3. **Compare with the Prime Number Theorem**:
-   - PNT approximation: pi(N) ~ N / ln(N).
-   - Logarithmic integral approximation: Li(N) = integral from 2 to N of 1/ln(t) dt.
-   - Compute the relative error: |pi(N) - N/ln(N)| / pi(N).
+3. **Comparar con el Teorema de los Números Primos**:
+   - Aproximación del TNP: pi(N) ~ N / ln(N).
+   - Aproximación por integral logarítmica: Li(N) = integral de 2 a N de 1/ln(t) dt.
+   - Calcular el error relativo: |pi(N) - N/ln(N)| / pi(N).
 
-4. **Analyze prime gaps** (optional):
-   - Compute gaps between consecutive primes.
-   - Report the maximum gap, average gap, and any twin primes (gap = 2).
-   - Average gap near N is approximately ln(N).
+4. **Analizar brechas entre primos** (opcional):
+   - Calcular las brechas entre primos consecutivos.
+   - Reportar la brecha máxima, la brecha promedio y cualquier primo gemelo (brecha = 2).
+   - La brecha promedio cerca de N es aproximadamente ln(N).
 
-5. **Present findings** in a summary table:
+5. **Presentar hallazgos** en una tabla resumen:
 
 ```
 Bound N:       1,000,000
@@ -171,19 +171,19 @@ Max prime gap:  148 (between 492113 and 492227)
 Twin primes:    8,169 pairs
 ```
 
-**Esperado:** A count of primes with PNT comparison and optional gap analysis.
+**Esperado:** Un conteo de primos con comparación del TNP y análisis de brechas opcional.
 
-**En caso de fallo:** If N is too large for in-memory sieving (N > 10^9), use a segmented sieve that processes the range in blocks. If only a count is needed (not a list), use the Meissel-Lehmer algorithm for pi(N) directly.
+**En caso de fallo:** Si N es demasiado grande para cribar en memoria (N > 10^9), usar una criba segmentada que procese el rango en bloques. Si solo se necesita un conteo (no una lista), usar el algoritmo de Meissel-Lehmer para pi(N) directamente.
 
-### Paso 5: Verify Results Computationally
+### Paso 5: Verificar Resultados Computacionalmente
 
-Cross-check all results using an independent computation method.
+Verificar cruzadamente todos los resultados usando un método de cómputo independiente.
 
-1. **For primality**: If trial division was used, verify with a quick Miller-Rabin pass (or vice versa). For known primes, check against published prime tables or OEIS sequences.
+1. **Para primalidad**: Si se usó división por tentativa, verificar con un pase rápido de Miller-Rabin (o viceversa). Para primos conocidos, contrastar con tablas de primos publicadas o secuencias de OEIS.
 
-2. **For factorization**: Multiply all factors and confirm equality with the original input. Independently test each claimed prime factor for primality.
+2. **Para factorización**: Multiplicar todos los factores y confirmar la igualdad con la entrada original. Probar independientemente la primalidad de cada factor primo declarado.
 
-3. **For distribution**: Spot-check by testing 3-5 individual numbers from the sieve output for primality. Compare pi(N) against published values for standard benchmarks (pi(10^k) for k = 1, ..., 9).
+3. **Para distribución**: Verificar por muestreo probando la primalidad de 3-5 números individuales de la salida de la criba. Comparar pi(N) contra valores publicados para referencias estándar (pi(10^k) para k = 1, ..., 9).
 
 **Published values of pi(N):**
 
@@ -199,41 +199,41 @@ Cross-check all results using an independent computation method.
 | 10^8    | 5,761,455   |
 | 10^9    | 50,847,534  |
 
-4. **Document the verification** with the method used and the outcome.
+4. **Documentar la verificación** con el método usado y el resultado.
 
-**Esperado:** All results independently verified with no discrepancies.
+**Esperado:** Todos los resultados verificados independientemente sin discrepancias.
 
-**En caso de fallo:** If verification reveals a discrepancy, re-run the original computation with extra checks enabled (e.g., verbose trial division logging). The most common errors are off-by-one in sieve bounds, integer overflow in modular arithmetic, and mistaking a pseudoprime for a prime.
+**En caso de fallo:** Si la verificación revela una discrepancia, re-ejecutar el cómputo original con verificaciones extra habilitadas (ej., registro detallado de división por tentativa). Los errores más comunes son errores de uno en los límites de la criba, desbordamiento de enteros en aritmética modular y confundir un pseudoprimo con un primo.
 
 ## Validación
 
-- [ ] Task type is correctly classified (primality, factorization, or distribution)
-- [ ] Algorithm is appropriate for the input size
-- [ ] Trivial cases (n < 2, n = 2, even n) are handled before general algorithms
-- [ ] Primality verdicts are definitive (not "probably prime" without qualification)
-- [ ] Factorizations multiply back to the original number
-- [ ] Every claimed prime factor has been tested for primality
-- [ ] Sieve bounds include sqrt(N) coverage for marking composites
-- [ ] PNT comparison uses the correct formula (N/ln(N) or Li(N))
-- [ ] Results are verified by an independent method or against published values
-- [ ] Edge cases (n = 0, 1, 2, negative inputs) are addressed
+- [ ] El tipo de tarea está correctamente clasificado (primalidad, factorización o distribución)
+- [ ] El algoritmo es apropiado para el tamaño de la entrada
+- [ ] Los casos triviales (n < 2, n = 2, n par) se manejan antes de los algoritmos generales
+- [ ] Los veredictos de primalidad son definitivos (no "probablemente primo" sin calificación)
+- [ ] Las factorizaciones multiplican de vuelta al número original
+- [ ] Cada factor primo declarado ha sido probado para primalidad
+- [ ] Los límites de la criba incluyen cobertura de sqrt(N) para marcar compuestos
+- [ ] La comparación con el TNP usa la fórmula correcta (N/ln(N) o Li(N))
+- [ ] Los resultados están verificados por un método independiente o contra valores publicados
+- [ ] Los casos extremos (n = 0, 1, 2, entradas negativas) están abordados
 
 ## Errores Comunes
 
-- **Forgetting n = 1 is not prime**: By convention, 1 is neither prime nor composite. Many algorithms silently misclassify it.
+- **Olvidar que n = 1 no es primo**: Por convención, 1 no es primo ni compuesto. Muchos algoritmos lo clasifican erróneamente de forma silenciosa.
 
-- **Integer overflow in modular exponentiation**: When computing a^d mod n for Miller-Rabin, naive exponentiation overflows. Use modular exponentiation (repeated squaring with mod at each step).
+- **Desbordamiento de enteros en exponenciación modular**: Al calcular a^d mod n para Miller-Rabin, la exponenciación ingenua desborda. Usar exponenciación modular (cuadrado repetido con mod en cada paso).
 
-- **Sieve off-by-one errors**: The sieve must mark composites starting from p^2, not from 2p. Starting from 2p wastes time but is correct; starting from p+1 is wrong.
+- **Errores de uno en la criba**: La criba debe marcar compuestos comenzando desde p^2, no desde 2p. Comenzar desde 2p desperdicia tiempo pero es correcto; comenzar desde p+1 es incorrecto.
 
-- **Pollard's rho cycle with d = n**: If gcd(|x - y|, n) = n, the algorithm has found the trivial factor. Retry with a different polynomial constant c, not just a different starting point.
+- **Ciclo de rho de Pollard con d = n**: Si mcd(|x - y|, n) = n, el algoritmo encontró el factor trivial. Reintentar con una constante polinómica c diferente, no solo un punto de partida diferente.
 
-- **Carmichael numbers fooling Fermat's test**: Numbers like 561 = 3 * 11 * 17 pass Fermat's primality test for all coprime bases. Always use Miller-Rabin, not plain Fermat.
+- **Números de Carmichael engañando la prueba de Fermat**: Números como 561 = 3 * 11 * 17 pasan la prueba de primalidad de Fermat para todas las bases coprimas. Usar siempre Miller-Rabin, no Fermat simple.
 
-- **Confusing pi(n) with the constant pi**: The prime counting function pi(n) and the circle constant 3.14159... share notation. Context must be unambiguous.
+- **Confundir pi(n) con la constante pi**: La función contadora de primos pi(n) y la constante del círculo 3.14159... comparten notación. El contexto debe ser inequívoco.
 
 ## Habilidades Relacionadas
 
-- `solve-modular-arithmetic` -- Modular arithmetic underpins Miller-Rabin and many factorization methods
-- `explore-diophantine-equations` -- Prime factorization is a prerequisite for solving many Diophantine equations
-- `formulate-quantum-problem` -- Shor's algorithm for integer factorization connects primes to quantum computing
+- `solve-modular-arithmetic` -- La aritmética modular sustenta Miller-Rabin y muchos métodos de factorización
+- `explore-diophantine-equations` -- La factorización prima es un prerrequisito para resolver muchas ecuaciones diofánticas
+- `formulate-quantum-problem` -- El algoritmo de Shor para factorización de enteros conecta los primos con la computación cuántica

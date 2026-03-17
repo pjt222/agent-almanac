@@ -1,13 +1,13 @@
 ---
 name: gold-washing
 description: >
-  Alluvial gold recovery using panning, sluicing, and classification.
-  Covers site reading (geological indicators, stream dynamics, pay streak
-  location), panning technique, sluice box operation, and responsible
-  extraction practices. Use when prospecting in an area with known or
-  suspected alluvial gold deposits, sampling a stream to test for gold
-  presence, maximizing recovery during recreational panning, or assessing a
-  site's gold potential before investing more effort.
+  Recuperación de oro aluvial mediante bateo, canaletas y clasificación. Cubre
+  lectura del sitio (indicadores geológicos, dinámica de arroyos, ubicación de
+  vetas de pago), técnica de bateo, operación de caja de canaletas, y prácticas
+  de extracción responsable. Usar al buscar oro en un área con depósitos
+  aluviales conocidos o sospechados, al muestrear un arroyo para probar la
+  presencia de oro, al maximizar la recuperación durante bateo recreativo, o al
+  evaluar el potencial aurífero de un sitio antes de invertir más esfuerzo.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,30 +26,30 @@ metadata:
 
 # Gold Washing
 
-Recover alluvial gold from stream deposits using panning, sluicing, and classification techniques.
+Recuperar oro aluvial de depósitos de arroyos usando técnicas de bateo, canaletas y clasificación.
 
 ## Cuándo Usar
 
-- You are prospecting in an area with known or suspected alluvial gold deposits
-- You want to sample a stream or river to test for gold presence
-- You are recreational panning and want to maximize recovery
-- You need to assess a site's gold potential before investing more effort
+- Estás buscando oro en un área con depósitos aluviales conocidos o sospechados
+- Quieres muestrear un arroyo o río para probar la presencia de oro
+- Estás haciendo bateo recreativo y quieres maximizar la recuperación
+- Necesitas evaluar el potencial aurífero de un sitio antes de invertir más esfuerzo
 
 ## Entradas
 
-- **Requerido**: A gold pan (14-16 inch, with riffles)
-- **Requerido**: Access to a stream, river, or alluvial deposit
-- **Opcional**: Classifier/screen (1/4 inch mesh)
-- **Opcional**: Sluice box (for higher volume processing)
-- **Opcional**: Snuffer bottle or tweezers (for fine gold recovery)
-- **Opcional**: Vial with water (for storing recovered gold)
-- **Opcional**: Shovel and bucket for material collection
+- **Requerido**: Una batea de oro (14-16 pulgadas, con estrías)
+- **Requerido**: Acceso a un arroyo, río o depósito aluvial
+- **Opcional**: Clasificador/tamiz (malla de 1/4 de pulgada)
+- **Opcional**: Caja de canaletas (para procesamiento de mayor volumen)
+- **Opcional**: Botella succionadora o pinzas (para recuperación de oro fino)
+- **Opcional**: Frasco con agua (para almacenar oro recuperado)
+- **Opcional**: Pala y cubeta para recolección de material
 
 ## Procedimiento
 
-### Paso 1: Read the Site
+### Paso 1: Leer el Sitio
 
-Gold is heavy (specific gravity 19.3) and concentrates predictably. Read the water and geology before digging.
+El oro es pesado (gravedad específica 19.3) y se concentra de manera predecible. Leer el agua y la geología antes de cavar.
 
 ```
 Where Gold Concentrates:
@@ -93,13 +93,13 @@ Geological Indicators:
   which can host gold deposits
 ```
 
-**Esperado:** You have identified 2-3 promising sample locations based on stream dynamics and geological indicators.
+**Esperado:** Has identificado 2-3 ubicaciones de muestreo prometedoras basadas en la dinámica del arroyo e indicadores geológicos.
 
-**En caso de fallo:** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). Even a single color (flake of gold) confirms the stream carries gold.
+**En caso de fallo:** Si no hay indicadores claros visibles, muestrear múltiples ubicaciones sistemáticamente — una batea de cada característica distinta (curva interior, detrás de obstáculo, barra de grava al azar). Incluso un solo color (escama de oro) confirma que el arroyo transporta oro.
 
-### Paso 2: Classify and Collect Material
+### Paso 2: Clasificar y Recolectar Material
 
-Prepare the raw material for panning.
+Preparar el material crudo para el bateo.
 
 ```
 Collection Protocol:
@@ -118,13 +118,13 @@ Classification:
 5. Classified material is now ready for panning
 ```
 
-**Esperado:** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
+**Esperado:** Una batea o cubeta de material clasificado (grava y arena menor de 1/4 de pulgada), obtenido de una ubicación geológicamente prometedora.
 
-**En caso de fallo:** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
+**En caso de fallo:** Si no puedes alcanzar la roca madre, muestrear lo que sea accesible. Las muestras superficiales tienen menos probabilidad de contener oro pero aún vale la pena probar — los eventos de inundación pueden depositar oro a varias profundidades.
 
-### Paso 3: Pan the Material
+### Paso 3: Batear el Material
 
-The gold pan separates gold from lighter material using gravity and water.
+La batea de oro separa el oro del material más ligero usando gravedad y agua.
 
 ```
 Panning Technique:
@@ -162,13 +162,13 @@ Common Errors:
   you start washing off material.
 ```
 
-**Esperado:** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
+**Esperado:** Todo el material pesado (oro, arena negra, granates) se concentra en el fondo de la batea. El oro es visible como escamas amarillas brillantes, granos aplanados o (raramente) pequeñas pepitas.
 
-**En caso de fallo:** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
+**En caso de fallo:** Si no se ve oro después de un bateo cuidadoso, la ubicación puede no contener oro — o el oro puede ser demasiado fino para verlo (oro harinoso). Verificar con una lupa de mano. Si aún no hay nada, moverse a una ubicación de muestreo diferente.
 
-### Paso 4: Scale Up with a Sluice Box (Optional)
+### Paso 4: Escalar con una Caja de Canaletas (Opcional)
 
-For processing larger volumes of material.
+Para procesar volúmenes mayores de material.
 
 ```
 Sluice Box Operation:
@@ -191,29 +191,29 @@ Sluice Calibration:
   If it is caught by the riffles, gold will be too.
 ```
 
-**Esperado:** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
+**Esperado:** Procesamiento de mayor volumen con oro concentrado en la estera de estrías, recuperado mediante bateo final.
 
-**En caso de fallo:** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
+**En caso de fallo:** Si la canaleta no está capturando el material de prueba (munición de plomo), ajustar el ángulo o el flujo de agua. La canaleta debe capturar todo lo que sea más pesado que arena de cuarzo.
 
 ## Validación
 
-- [ ] Site was read for geological indicators before sampling
-- [ ] Material was collected from a geologically promising location
-- [ ] Material was classified before panning
-- [ ] Panning used side-to-side shaking for stratification
-- [ ] Black sand concentrate was checked thoroughly for fine gold
-- [ ] Any gold recovered was stored safely in water in a sealed vial
-- [ ] The site was left without significant environmental disturbance
+- [ ] El sitio fue leído para indicadores geológicos antes de muestrear
+- [ ] El material fue recolectado de una ubicación geológicamente prometedora
+- [ ] El material fue clasificado antes del bateo
+- [ ] El bateo usó sacudidas de lado a lado para la estratificación
+- [ ] El concentrado de arena negra fue verificado exhaustivamente para oro fino
+- [ ] Cualquier oro recuperado fue almacenado de forma segura en agua en un frasco sellado
+- [ ] El sitio fue dejado sin perturbación ambiental significativa
 
 ## Errores Comunes
 
-- **Panning too fast**: Impatience loses fine gold. A proper pan takes 5-10 minutes. Speed is the enemy of recovery
-- **Ignoring black sand**: If you see heavy black sand concentrating, gold is likely present — even if too fine to see without magnification
-- **Confusing pyrite with gold**: Pyrite (fool's gold) is lighter, breaks when pressed with a pin, and has a brassy rather than buttery yellow colour. Real gold is malleable and does not tarnish
-- **Sampling random locations**: Gold concentrates predictably. Sampling the middle of a straight stretch is far less productive than sampling the inside of a bend
-- **Environmental damage**: Respect waterways. Do not dig large holes in stream banks, do not use mercury (illegal in most jurisdictions and extremely toxic), and fill in any test holes
-- **Ignoring regulations**: Most jurisdictions require permits for gold prospecting, even recreational panning. Check local regulations before starting
+- **Batear demasiado rápido**: La impaciencia pierde oro fino. Un bateo adecuado toma 5-10 minutos. La velocidad es enemiga de la recuperación
+- **Ignorar la arena negra**: Si ves arena negra pesada concentrándose, probablemente hay oro presente — incluso si es demasiado fino para ver sin magnificación
+- **Confundir pirita con oro**: La pirita (oro de los tontos) es más ligera, se rompe al presionarla con un alfiler, y tiene un color amarillo cobrizo en lugar de amarillo mantequilla. El oro real es maleable y no se oxida
+- **Muestrear ubicaciones al azar**: El oro se concentra de manera predecible. Muestrear el centro de un tramo recto es mucho menos productivo que muestrear la curva interior
+- **Daño ambiental**: Respetar los cursos de agua. No cavar grandes hoyos en las orillas del arroyo, no usar mercurio (ilegal en la mayoría de jurisdicciones y extremadamente tóxico), y rellenar cualquier hoyo de prueba
+- **Ignorar las regulaciones**: La mayoría de las jurisdicciones requieren permisos para buscar oro, incluso para bateo recreativo. Verificar las regulaciones locales antes de comenzar
 
 ## Habilidades Relacionadas
 
-- `mineral-identification` — understanding rock and mineral types helps read geological indicators that point to gold-bearing areas
+- `mineral-identification` — comprender los tipos de rocas y minerales ayuda a leer los indicadores geológicos que señalan áreas auríferas

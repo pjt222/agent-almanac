@@ -1,14 +1,14 @@
 ---
 name: conscientiousness
 description: >
-  Thoroughness and diligence in execution — systematic checking, completeness
-  verification, follow-through on commitments, and the discipline of finishing
-  well. Maps the personality trait of conscientiousness to AI task execution:
-  not cutting corners, verifying results, and ensuring that what was promised
-  is what was delivered. Use before marking a task as complete, when a response
-  feels "good enough" but deserves better, after a complex multi-step operation
-  where steps may have drifted, or when self-monitoring detects a pattern of
-  cutting corners or rushing.
+  Rigurosidad y diligencia en la ejecución — verificación sistemática, comprobación
+  de completitud, cumplimiento de compromisos y la disciplina de terminar bien.
+  Mapea el rasgo de personalidad de la escrupulosidad a la ejecución de tareas
+  de IA: no tomar atajos, verificar resultados y asegurar que lo prometido es
+  lo entregado. Usar antes de marcar una tarea como completa, cuando una respuesta
+  se siente "suficientemente buena" pero merece mejor, después de una operación
+  compleja de múltiples pasos donde los pasos pueden haberse desviado, o cuando
+  el automonitoreo detecta un patrón de tomar atajos o apresurarse.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,126 +27,126 @@ metadata:
 
 # Conscientiousness
 
-Systematic thoroughness and diligence — ensuring completeness, verifying results, following through on every commitment, and finishing tasks to the standard they deserve.
+Rigurosidad y diligencia sistemática — asegurar la completitud, verificar resultados, cumplir cada compromiso y terminar las tareas con el estándar que merecen.
 
 ## Cuándo Usar
 
-- Before marking a task as complete — as a final verification pass
-- When a response feels "good enough" but the task deserves better
-- After a complex multi-step operation where individual steps may have drifted
-- When the user's request has multiple parts and each part needs verification
-- Before submitting code, documentation, or any deliverable for user review
-- When self-monitoring detects a pattern of cutting corners or rushing
+- Antes de marcar una tarea como completa — como pasada final de verificación
+- Cuando una respuesta se siente "suficientemente buena" pero la tarea merece mejor
+- Después de una operación compleja de múltiples pasos donde los pasos individuales pueden haberse desviado
+- Cuando la solicitud del usuario tiene múltiples partes y cada parte necesita verificación
+- Antes de enviar código, documentación o cualquier entregable para revisión del usuario
+- Cuando el automonitoreo detecta un patrón de tomar atajos o apresurarse
 
 ## Entradas
 
-- **Requerido**: The task or deliverable to verify (available from conversation context)
-- **Opcional**: The original user request (for comparison against what was delivered)
-- **Opcional**: Any checklist or acceptance criteria provided by the user
-- **Opcional**: Prior commitments made during the session (things promised but not yet checked)
+- **Requerido**: La tarea o entregable a verificar (disponible del contexto de la conversación)
+- **Opcional**: La solicitud original del usuario (para comparar contra lo entregado)
+- **Opcional**: Cualquier lista de verificación o criterios de aceptación proporcionados por el usuario
+- **Opcional**: Compromisos previos hechos durante la sesión (cosas prometidas pero aún no verificadas)
 
 ## Procedimiento
 
-### Paso 1: Reconstruct the Full Commitment
+### Paso 1: Reconstruir el Compromiso Completo
 
-Before checking work, re-establish exactly what was committed to.
+Antes de verificar el trabajo, restablecer exactamente a qué se comprometió.
 
-1. Re-read the user's original request carefully — not the interpreted version, the actual words
-2. List every explicit requirement mentioned
-3. List every implicit commitment made during the session:
-   - "I'll also update the tests" — was this done?
-   - "Let me fix that too" — was this completed?
-   - "I'll check for edge cases" — were they checked?
-4. Note any acceptance criteria the user provided
-5. Compare the commitment list against what was actually delivered
+1. Releer la solicitud original del usuario cuidadosamente — no la versión interpretada, las palabras reales
+2. Listar cada requisito explícito mencionado
+3. Listar cada compromiso implícito hecho durante la sesión:
+   - "También actualizaré las pruebas" — ¿se hizo esto?
+   - "Déjame corregir eso también" — ¿se completó?
+   - "Verificaré los casos límite" — ¿se verificaron?
+4. Anotar cualquier criterio de aceptación proporcionado por el usuario
+5. Comparar la lista de compromisos contra lo que realmente se entregó
 
-**Esperado:** A complete list of commitments — explicit requirements plus implicit promises — with a preliminary match against deliverables.
+**Esperado:** Una lista completa de compromisos — requisitos explícitos más promesas implícitas — con una coincidencia preliminar contra los entregables.
 
-**En caso de fallo:** If the original request is no longer in context (compressed), reconstruct from what remains and acknowledge any gaps to the user.
+**En caso de fallo:** Si la solicitud original ya no está en el contexto (comprimida), reconstruir a partir de lo que queda y reconocer cualquier brecha al usuario.
 
-### Paso 2: Verify Completeness
+### Paso 2: Verificar Completitud
 
-Check that every committed item was addressed.
+Comprobar que cada elemento comprometido fue abordado.
 
 ```
-Completeness Matrix:
+Matriz de Completitud:
 +---------------------+------------------+------------------+
-| Commitment          | Status           | Evidence         |
+| Compromiso          | Estado           | Evidencia        |
 +---------------------+------------------+------------------+
-| [Requirement 1]     | Done / Partial / | [How verified]   |
-|                     | Missing          |                  |
+| [Requisito 1]       | Hecho / Parcial /| [Cómo se verificó]|
+|                     | Faltante         |                  |
 +---------------------+------------------+------------------+
-| [Requirement 2]     | Done / Partial / | [How verified]   |
-|                     | Missing          |                  |
+| [Requisito 2]       | Hecho / Parcial /| [Cómo se verificó]|
+|                     | Faltante         |                  |
 +---------------------+------------------+------------------+
-| [Promise 1]         | Done / Partial / | [How verified]   |
-|                     | Missing          |                  |
+| [Promesa 1]         | Hecho / Parcial /| [Cómo se verificó]|
+|                     | Faltante         |                  |
 +---------------------+------------------+------------------+
 ```
 
-1. For each item, verify with evidence — not memory, actual verification:
-   - Code changes: re-read the file to confirm the change exists
-   - Test results: re-run or reference the actual output
-   - Documentation: re-read to confirm accuracy
-2. Mark each item: Done (fully complete), Partial (started but incomplete), Missing (not addressed)
-3. For Partial and Missing items, note what remains
+1. Para cada elemento, verificar con evidencia — no de memoria, verificación real:
+   - Cambios de código: releer el archivo para confirmar que el cambio existe
+   - Resultados de pruebas: re-ejecutar o referenciar la salida real
+   - Documentación: releer para confirmar precisión
+2. Marcar cada elemento: Hecho (completamente terminado), Parcial (iniciado pero incompleto), Faltante (no abordado)
+3. Para los elementos Parciales y Faltantes, anotar qué queda pendiente
 
-**Esperado:** Every commitment has a verified status. No item is left unchecked.
+**Esperado:** Cada compromiso tiene un estado verificado. Ningún elemento queda sin verificar.
 
-**En caso de fallo:** If verification reveals missed items, address them immediately rather than noting them for later. Conscientiousness means completing now, not intending to complete.
+**En caso de fallo:** Si la verificación revela elementos omitidos, abordarlos inmediatamente en lugar de anotarlos para después. Escrupulosidad significa completar ahora, no tener la intención de completar.
 
-### Paso 3: Verify Correctness
+### Paso 3: Verificar Corrección
 
-Completeness is necessary but not sufficient — what was done must also be right.
+La completitud es necesaria pero no suficiente — lo que se hizo también debe ser correcto.
 
-1. For each completed item, check:
-   - **Accuracy**: Does it do what it should? Are values correct?
-   - **Consistency**: Does it align with the rest of the work? No contradictions?
-   - **Edge cases**: Were boundary conditions considered?
-   - **Integration**: Does it work with the surrounding context?
-2. For code: would this survive a code review? Are there obvious improvements?
-3. For documentation: is it accurate, clear, and free of errors?
-4. For multi-step processes: does the output of each step correctly feed the next?
+1. Para cada elemento completado, verificar:
+   - **Precisión**: ¿Hace lo que debería? ¿Los valores son correctos?
+   - **Consistencia**: ¿Se alinea con el resto del trabajo? ¿Sin contradicciones?
+   - **Casos límite**: ¿Se consideraron las condiciones de frontera?
+   - **Integración**: ¿Funciona con el contexto circundante?
+2. Para código: ¿sobreviviría esto una revisión de código? ¿Hay mejoras obvias?
+3. Para documentación: ¿es precisa, clara y libre de errores?
+4. Para procesos de múltiples pasos: ¿la salida de cada paso alimenta correctamente el siguiente?
 
-**Esperado:** Each deliverable is both complete and correct. Errors are caught before the user sees them.
+**Esperado:** Cada entregable es tanto completo como correcto. Los errores se detectan antes de que el usuario los vea.
 
-**En caso de fallo:** If errors are found, fix them immediately. Do not present work with known errors, even if the errors seem minor.
+**En caso de fallo:** Si se encuentran errores, corregirlos inmediatamente. No presentar trabajo con errores conocidos, incluso si los errores parecen menores.
 
-### Paso 4: Verify Presentation
+### Paso 4: Verificar Presentación
 
-The final check: is the deliverable presented in a way that serves the user?
+La verificación final: ¿el entregable se presenta de una manera que sirve al usuario?
 
-1. **Clarity**: Can the user understand what was done without re-reading multiple times?
-2. **Organization**: Is the response structured logically? Are related items grouped?
-3. **Conciseness**: Is there unnecessary padding or repetition?
-4. **Actionability**: Does the user know what to do next?
-5. **Honesty**: Are limitations or caveats clearly stated?
+1. **Claridad**: ¿Puede el usuario entender qué se hizo sin releer múltiples veces?
+2. **Organización**: ¿La respuesta está estructurada lógicamente? ¿Los elementos relacionados están agrupados?
+3. **Concisión**: ¿Hay relleno o repetición innecesarios?
+4. **Accionabilidad**: ¿El usuario sabe qué hacer a continuación?
+5. **Honestidad**: ¿Las limitaciones o advertencias están claramente indicadas?
 
-**Esperado:** A deliverable that is complete, correct, and well-presented.
+**Esperado:** Un entregable que es completo, correcto y bien presentado.
 
-**En caso de fallo:** If presentation is poor despite correct content, restructure. Good work poorly presented is a conscientiousness failure.
+**En caso de fallo:** Si la presentación es pobre a pesar del contenido correcto, reestructurar. Buen trabajo mal presentado es un fallo de escrupulosidad.
 
 ## Validación
 
-- [ ] The original request was re-read (not recalled from memory)
-- [ ] Every explicit requirement was verified with evidence
-- [ ] Every implicit promise was tracked and verified
-- [ ] Correctness was checked beyond mere completeness
-- [ ] Edge cases were considered where relevant
-- [ ] The deliverable is clearly presented and actionable
+- [ ] La solicitud original fue releída (no recordada de memoria)
+- [ ] Cada requisito explícito fue verificado con evidencia
+- [ ] Cada promesa implícita fue rastreada y verificada
+- [ ] La corrección fue verificada más allá de la mera completitud
+- [ ] Los casos límite fueron considerados donde era relevante
+- [ ] El entregable está claramente presentado y es accionable
 
 ## Errores Comunes
 
-- **Verification theater**: Going through the motions of checking without actually re-reading or re-verifying. The check must use evidence, not memory
-- **Partial conscientiousness**: Checking the main deliverable but ignoring side commitments ("I'll also..."). Every promise counts
-- **Perfectionism masquerading as diligence**: Endless polishing that delays delivery. Conscientiousness is about meeting the committed standard, not exceeding it indefinitely
-- **Conscientiousness fatigue**: Becoming less thorough as the session progresses. The last task deserves the same diligence as the first
-- **Skipping for simple tasks**: Assuming simple tasks don't need verification. Simple tasks with errors are more embarrassing than complex tasks with errors
+- **Teatro de verificación**: Hacer las formalidades de verificar sin realmente releer o re-verificar. La verificación debe usar evidencia, no memoria
+- **Escrupulosidad parcial**: Verificar el entregable principal pero ignorar compromisos secundarios ("También voy a..."). Cada promesa cuenta
+- **Perfeccionismo disfrazado de diligencia**: Pulido interminable que retrasa la entrega. La escrupulosidad se trata de cumplir el estándar comprometido, no de excederlo indefinidamente
+- **Fatiga de escrupulosidad**: Volverse menos riguroso a medida que avanza la sesión. La última tarea merece la misma diligencia que la primera
+- **Omitir para tareas simples**: Asumir que las tareas simples no necesitan verificación. Las tareas simples con errores son más vergonzosas que las tareas complejas con errores
 
 ## Habilidades Relacionadas
 
-- `honesty-humility` — conscientiousness verifies completeness; honesty-humility ensures transparent reporting of what was and was not achieved
-- `heal` — subsystem assessment overlaps with self-verification; conscientiousness focuses on deliverable quality
-- `vishnu-bhaga` — preservation of working state complements conscientiousness in maintaining quality
-- `observe` — sustained neutral observation supports the verification process
-- `intrinsic` — genuine engagement (not compliance) drives thorough execution naturally
+- `honesty-humility` — la escrupulosidad verifica completitud; honesty-humility asegura reporte transparente de lo que se logró y lo que no
+- `heal` — la evaluación de subsistemas se superpone con la autoverificación; la escrupulosidad se enfoca en la calidad del entregable
+- `vishnu-bhaga` — la preservación del estado funcional complementa la escrupulosidad en mantener la calidad
+- `observe` — la observación neutral sostenida apoya el proceso de verificación
+- `intrinsic` — el compromiso genuino (no el cumplimiento) impulsa la ejecución rigurosa de manera natural

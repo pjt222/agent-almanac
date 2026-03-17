@@ -1,13 +1,14 @@
 ---
 name: formulate-maxwell-equations
 description: >
-  Work with the full set of Maxwell's equations in integral and differential
-  form to analyze electromagnetic fields, waves, and energy transport. Use
-  when applying Gauss's law, Faraday's law, or the Ampere-Maxwell law to
-  boundary value problems, deriving the electromagnetic wave equation,
-  computing Poynting vector and radiation pressure, solving for fields at
-  material interfaces, or connecting electrostatics and magnetostatics to
-  the unified electromagnetic framework.
+  Trabajar con el conjunto completo de las ecuaciones de Maxwell en forma
+  integral y diferencial para analizar campos electromagnéticos, ondas y
+  transporte de energía. Usar al aplicar la ley de Gauss, la ley de Faraday
+  o la ley de Ampère-Maxwell a problemas de valores de frontera, al derivar
+  la ecuación de onda electromagnética, al calcular el vector de Poynting y
+  la presión de radiación, al resolver campos en interfaces de materiales,
+  o al conectar la electrostática y la magnetostática con el marco
+  electromagnético unificado dependiente del tiempo.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,42 +27,42 @@ metadata:
 
 # Formulate Maxwell Equations
 
-Analyze electromagnetic phenomena by stating the relevant Maxwell equations in appropriate form (integral or differential), applying boundary conditions and symmetry to reduce the system, solving the resulting partial differential equations for the fields, computing derived quantities such as the Poynting vector, radiation pressure, and wave impedance, and verifying the solution against known static and wave limits.
+Analizar fenómenos electromagnéticos enunciando las ecuaciones de Maxwell relevantes en la forma apropiada (integral o diferencial), aplicando condiciones de frontera y simetría para reducir el sistema, resolviendo las ecuaciones diferenciales parciales resultantes para los campos, calculando cantidades derivadas como el vector de Poynting, la presión de radiación y la impedancia de onda, y verificando la solución contra límites estáticos y de onda conocidos.
 
 ## Cuándo Usar
 
-- Solving a boundary value problem for E and B fields in a region with sources and material interfaces
-- Deriving the electromagnetic wave equation from first principles
-- Computing energy flow (Poynting vector) and momentum density of electromagnetic fields
-- Applying boundary conditions at interfaces between different media (dielectrics, conductors, magnetic materials)
-- Analyzing displacement current and its role in completing the Ampere-Maxwell equation
-- Connecting the static limits (Coulomb's law, Biot-Savart) to the unified time-dependent framework
+- Resolver un problema de valores de frontera para campos E y B en una región con fuentes e interfaces de materiales
+- Derivar la ecuación de onda electromagnética desde primeros principios
+- Calcular el flujo de energía (vector de Poynting) y la densidad de momento de campos electromagnéticos
+- Aplicar condiciones de frontera en interfaces entre diferentes medios (dieléctricos, conductores, materiales magnéticos)
+- Analizar la corriente de desplazamiento y su papel en completar la ecuación de Ampère-Maxwell
+- Conectar los límites estáticos (ley de Coulomb, Biot-Savart) con el marco unificado dependiente del tiempo
 
 ## Entradas
 
-- **Requerido**: Physical configuration (geometry, source charges and currents, material properties)
-- **Requerido**: Quantity to solve for (E-field, B-field, wave solution, energy flux, or boundary field values)
-- **Opcional**: Symmetry information (planar, cylindrical, spherical, or no special symmetry)
-- **Opcional**: Time dependence specification (static, harmonic at frequency omega, or general time-dependent)
-- **Opcional**: Boundary conditions at material interfaces or conductor surfaces
+- **Requerido**: Configuración física (geometría, cargas y corrientes fuente, propiedades de materiales)
+- **Requerido**: Cantidad a resolver (campo E, campo B, solución de onda, flujo de energía, o valores de campo en frontera)
+- **Opcional**: Información de simetría (planar, cilíndrica, esférica, o sin simetría especial)
+- **Opcional**: Especificación de dependencia temporal (estática, armónica a frecuencia omega, o general dependiente del tiempo)
+- **Opcional**: Condiciones de frontera en interfaces de materiales o superficies de conductores
 
 ## Procedimiento
 
-### Paso 1: State the Four Maxwell Equations and Identify Relevant Subset
+### Paso 1: Enunciar las Cuatro Ecuaciones de Maxwell e Identificar el Subconjunto Relevante
 
-Write the complete set and select which equations constrain the problem:
+Escribir el conjunto completo y seleccionar qué ecuaciones restringen el problema:
 
-1. **Gauss's law for E**: div(E) = rho / epsilon_0 (differential) or closed_surface_integral(E . dA) = Q_enc / epsilon_0 (integral). Relates E-field divergence to charge density. Use for finding E from charge distributions with symmetry.
+1. **Ley de Gauss para E**: div(E) = rho / epsilon_0 (diferencial) o closed_surface_integral(E . dA) = Q_enc / epsilon_0 (integral). Relaciona la divergencia del campo E con la densidad de carga. Usar para encontrar E a partir de distribuciones de carga con simetría.
 
-2. **Gauss's law for B**: div(B) = 0 (differential) or closed_surface_integral(B . dA) = 0 (integral). No magnetic monopoles. Every magnetic field line is a closed loop. Use as a consistency check on computed B-fields.
+2. **Ley de Gauss para B**: div(B) = 0 (diferencial) o closed_surface_integral(B . dA) = 0 (integral). No existen monopolos magnéticos. Toda línea de campo magnético es un bucle cerrado. Usar como verificación de consistencia en campos B calculados.
 
-3. **Faraday's law**: curl(E) = -dB/dt (differential) or contour_integral(E . dl) = -d(Phi_B)/dt (integral). A changing B-field generates a curling E-field. Use for induction problems and wave derivation.
+3. **Ley de Faraday**: curl(E) = -dB/dt (diferencial) o contour_integral(E . dl) = -d(Phi_B)/dt (integral). Un campo B cambiante genera un campo E rotacional. Usar para problemas de inducción y derivación de ondas.
 
-4. **Ampere-Maxwell law**: curl(B) = mu_0 J + mu_0 epsilon_0 dE/dt (differential) or contour_integral(B . dl) = mu_0 I_enc + mu_0 epsilon_0 d(Phi_E)/dt (integral). Current and changing E-field generate curling B-field. The displacement current term mu_0 epsilon_0 dE/dt is essential for wave propagation and current continuity.
+4. **Ley de Ampère-Maxwell**: curl(B) = mu_0 J + mu_0 epsilon_0 dE/dt (diferencial) o contour_integral(B . dl) = mu_0 I_enc + mu_0 epsilon_0 d(Phi_E)/dt (integral). La corriente y el campo E cambiante generan un campo B rotacional. El término de corriente de desplazamiento mu_0 epsilon_0 dE/dt es esencial para la propagación de ondas y la continuidad de corriente.
 
-5. **Form selection**: Choose differential form for local field calculations, wave equations, and PDEs. Choose integral form for high-symmetry problems where the field can be extracted from the integral directly.
+5. **Selección de forma**: Elegir la forma diferencial para cálculos locales de campo, ecuaciones de onda y EDPs. Elegir la forma integral para problemas con alta simetría donde el campo puede extraerse directamente de la integral.
 
-6. **Identify active equations**: Not all four equations are independent constraints in every problem. For electrostatics (dB/dt = 0, J = 0), only Gauss's law for E and curl(E) = 0 matter. For magnetostatics, Gauss's law for B and Ampere's law (without displacement current) suffice.
+6. **Identificar ecuaciones activas**: No todas las cuatro ecuaciones son restricciones independientes en cada problema. Para electrostática (dB/dt = 0, J = 0), solo importan la ley de Gauss para E y curl(E) = 0. Para magnetostática, la ley de Gauss para B y la ley de Ampère (sin corriente de desplazamiento) son suficientes.
 
 ```markdown
 ## Maxwell Equations for This Problem
@@ -72,35 +73,35 @@ Write the complete set and select which equations constrain the problem:
 - **Displacement current**: [negligible / essential -- with justification]
 ```
 
-**Esperado:** The four equations are stated, the relevant subset is identified with justification, and the displacement current is either included or explicitly argued to be negligible.
+**Esperado:** Las cuatro ecuaciones están enunciadas, el subconjunto relevante está identificado con justificación, y la corriente de desplazamiento está incluida o se argumenta explícitamente que es despreciable.
 
-**En caso de fallo:** If it is unclear whether the displacement current matters, estimate the ratio |epsilon_0 dE/dt| / |J|. If this ratio is comparable to or greater than 1, the displacement current must be retained. In vacuum with no free charges, the displacement current is always essential for wave propagation.
+**En caso de fallo:** Si no está claro si la corriente de desplazamiento importa, estimar la razón |epsilon_0 dE/dt| / |J|. Si esta razón es comparable o mayor que 1, la corriente de desplazamiento debe conservarse. En el vacío sin cargas libres, la corriente de desplazamiento es siempre esencial para la propagación de ondas.
 
-### Paso 2: Apply Boundary Conditions and Symmetry
+### Paso 2: Aplicar Condiciones de Frontera y Simetría
 
-Reduce the system using material interfaces and geometric symmetry:
+Reducir el sistema usando interfaces de materiales y simetría geométrica:
 
-1. **Boundary conditions at material interfaces**: At the interface between media 1 and 2 with surface charge sigma_f and surface current K_f:
-   - Normal E: epsilon_1 E_1n - epsilon_2 E_2n = sigma_f
-   - Tangential E: E_1t = E_2t (continuous)
-   - Normal B: B_1n = B_2n (continuous)
-   - Tangential H: n_hat x (H_1 - H_2) = K_f (where n_hat points from 2 to 1)
+1. **Condiciones de frontera en interfaces de materiales**: En la interfaz entre medios 1 y 2 con carga superficial sigma_f y corriente superficial K_f:
+   - E normal: epsilon_1 E_1n - epsilon_2 E_2n = sigma_f
+   - E tangencial: E_1t = E_2t (continuo)
+   - B normal: B_1n = B_2n (continuo)
+   - H tangencial: n_hat x (H_1 - H_2) = K_f (donde n_hat apunta del medio 2 al 1)
 
-2. **Conductor boundary conditions**: At the surface of a perfect conductor:
-   - E_tangential = 0 (inside the conductor E = 0)
-   - B_normal = 0 (inside the conductor B = 0 for time-varying fields)
-   - Surface charge: sigma = epsilon_0 E_normal
-   - Surface current: K = (1/mu_0) n_hat x B
+2. **Condiciones de frontera en conductores**: En la superficie de un conductor perfecto:
+   - E_tangencial = 0 (dentro del conductor E = 0)
+   - B_normal = 0 (dentro del conductor B = 0 para campos variables en el tiempo)
+   - Carga superficial: sigma = epsilon_0 E_normal
+   - Corriente superficial: K = (1/mu_0) n_hat x B
 
-3. **Symmetry reduction**: Use identified symmetries to reduce the number of independent variables:
-   - Planar symmetry: fields depend on one coordinate only (e.g., z), reducing PDEs to ODEs
-   - Cylindrical symmetry: fields depend on (rho, z) or rho only
-   - Spherical symmetry: fields depend on r only
-   - Translational invariance: Fourier transform in the invariant direction
+3. **Reducción por simetría**: Usar las simetrías identificadas para reducir el número de variables independientes:
+   - Simetría planar: los campos dependen de una sola coordenada (ej., z), reduciendo EDPs a EDOs
+   - Simetría cilíndrica: los campos dependen de (rho, z) o solo de rho
+   - Simetría esférica: los campos dependen solo de r
+   - Invariancia traslacional: transformada de Fourier en la dirección invariante
 
-4. **Gauge choice** (if using potentials): Select a gauge for the scalar potential phi and vector potential A:
-   - Coulomb gauge: div(A) = 0 (separates electrostatic and radiation contributions)
-   - Lorenz gauge: div(A) + mu_0 epsilon_0 d(phi)/dt = 0 (manifestly Lorentz-covariant, decouples wave equations)
+4. **Elección de gauge** (si se usan potenciales): Seleccionar un gauge para el potencial escalar phi y el potencial vectorial A:
+   - Gauge de Coulomb: div(A) = 0 (separa contribuciones electrostáticas y de radiación)
+   - Gauge de Lorenz: div(A) + mu_0 epsilon_0 d(phi)/dt = 0 (manifiestamente covariante de Lorentz, desacopla las ecuaciones de onda)
 
 ```markdown
 ## Boundary Conditions and Symmetry
@@ -111,43 +112,43 @@ Reduce the system using material interfaces and geometric symmetry:
 - **Gauge** (if using potentials): [Coulomb / Lorenz / other]
 ```
 
-**Esperado:** All boundary conditions are stated at every interface, symmetry is exploited to reduce the dimensionality, and the problem is ready for PDE solution.
+**Esperado:** Todas las condiciones de frontera están enunciadas en cada interfaz, la simetría se ha explotado para reducir la dimensionalidad, y el problema está listo para la solución de la EDP.
 
-**En caso de fallo:** If boundary conditions are over-determined (more equations than unknowns at an interface), check that the number of field components matches the number of conditions. If under-determined, a boundary condition has been missed -- often the tangential H condition or the radiation condition at infinity.
+**En caso de fallo:** Si las condiciones de frontera están sobredeterminadas (más ecuaciones que incógnitas en una interfaz), verificar que el número de componentes de campo coincida con el número de condiciones. Si están subdeterminadas, se ha omitido una condición de frontera — frecuentemente la condición de H tangencial o la condición de radiación en el infinito.
 
-### Paso 3: Solve Resulting PDEs
+### Paso 3: Resolver las EDPs Resultantes
 
-Solve the Maxwell equations or their derived forms for the field quantities:
+Resolver las ecuaciones de Maxwell o sus formas derivadas para las cantidades de campo:
 
-1. **Wave equation derivation**: In a source-free, linear, homogeneous medium:
-   - Take the curl of Faraday's law: curl(curl(E)) = -d/dt(curl(B))
-   - Substitute Ampere-Maxwell: curl(curl(E)) = -mu epsilon d^2E/dt^2
-   - Use the vector identity: curl(curl(E)) = grad(div(E)) - nabla^2(E)
-   - With div(E) = 0 (no free charges): nabla^2(E) = mu epsilon d^2E/dt^2
-   - Wave speed: v = 1/sqrt(mu epsilon); in vacuum c = 1/sqrt(mu_0 epsilon_0)
-   - Identical equation holds for B
+1. **Derivación de la ecuación de onda**: En un medio sin fuentes, lineal y homogéneo:
+   - Tomar el rotacional de la ley de Faraday: curl(curl(E)) = -d/dt(curl(B))
+   - Sustituir Ampère-Maxwell: curl(curl(E)) = -mu epsilon d^2E/dt^2
+   - Usar la identidad vectorial: curl(curl(E)) = grad(div(E)) - nabla^2(E)
+   - Con div(E) = 0 (sin cargas libres): nabla^2(E) = mu epsilon d^2E/dt^2
+   - Velocidad de onda: v = 1/sqrt(mu epsilon); en el vacío c = 1/sqrt(mu_0 epsilon_0)
+   - La ecuación idéntica se cumple para B
 
-2. **Plane wave solutions**: For a wave propagating in the z-direction:
-   - E(z, t) = E_0 exp[i(kz - omega t)] with k = omega/v = omega * sqrt(mu epsilon)
-   - B = (1/v) k_hat x E (perpendicular to E and propagation direction)
+2. **Soluciones de onda plana**: Para una onda propagándose en la dirección z:
+   - E(z, t) = E_0 exp[i(kz - omega t)] con k = omega/v = omega * sqrt(mu epsilon)
+   - B = (1/v) k_hat x E (perpendicular a E y a la dirección de propagación)
    - |B| = |E|/v
-   - Polarization: linear, circular, or elliptical depending on E_0 components
+   - Polarización: lineal, circular o elíptica dependiendo de las componentes de E_0
 
-3. **Laplace and Poisson equations** (static case):
-   - With no time dependence: nabla^2(phi) = -rho/epsilon_0 (Poisson) or nabla^2(phi) = 0 (Laplace)
-   - Solve by separation of variables in the appropriate coordinate system
-   - Match boundary conditions to determine expansion coefficients
+3. **Ecuaciones de Laplace y Poisson** (caso estático):
+   - Sin dependencia temporal: nabla^2(phi) = -rho/epsilon_0 (Poisson) o nabla^2(phi) = 0 (Laplace)
+   - Resolver por separación de variables en el sistema de coordenadas apropiado
+   - Ajustar las condiciones de frontera para determinar los coeficientes de expansión
 
-4. **Guided waves and cavities**: For waveguides and resonant cavities:
-   - Decompose into TE (transverse electric) and TM (transverse magnetic) modes
-   - Apply conducting-wall boundary conditions
-   - Solve the eigenvalue problem for allowed propagation constants or resonant frequencies
-   - Cutoff frequency: omega_c = v * pi * sqrt((m/a)^2 + (n/b)^2) for a rectangular guide with dimensions a x b
+4. **Ondas guiadas y cavidades**: Para guías de onda y cavidades resonantes:
+   - Descomponer en modos TE (eléctrico transversal) y TM (magnético transversal)
+   - Aplicar condiciones de frontera de paredes conductoras
+   - Resolver el problema de autovalores para las constantes de propagación permitidas o frecuencias resonantes
+   - Frecuencia de corte: omega_c = v * pi * sqrt((m/a)^2 + (n/b)^2) para una guía rectangular con dimensiones a x b
 
-5. **Skin depth in conductors**: For time-varying fields penetrating a conductor with conductivity sigma_c:
+5. **Profundidad de penetración en conductores**: Para campos variables en el tiempo penetrando un conductor con conductividad sigma_c:
    - delta = sqrt(2 / (omega mu sigma_c))
-   - Fields decay as exp(-z/delta) into the conductor
-   - At 60 Hz in copper: delta approximately 8.5 mm; at 1 GHz: delta approximately 2 micrometers
+   - Los campos decaen como exp(-z/delta) dentro del conductor
+   - A 60 Hz en cobre: delta aproximadamente 8.5 mm; a 1 GHz: delta aproximadamente 2 micrómetros
 
 ```markdown
 ## Field Solution
@@ -158,39 +159,39 @@ Solve the Maxwell equations or their derived forms for the field quantities:
 - **Characteristic scales**: [wavelength, skin depth, decay length]
 ```
 
-**Esperado:** Explicit field expressions satisfying Maxwell's equations and all boundary conditions, with the dispersion relation or eigenvalue spectrum if applicable.
+**Esperado:** Expresiones explícitas de campo que satisfacen las ecuaciones de Maxwell y todas las condiciones de frontera, con la relación de dispersión o el espectro de autovalores si corresponde.
 
-**En caso de fallo:** If the PDE cannot be separated in the chosen coordinate system, try a different system or resort to numerical methods (finite difference, finite element). If the solution does not satisfy one of the Maxwell equations on back-substitution, there is an algebraic error in the derivation -- re-check the curl and divergence operations.
+**En caso de fallo:** Si la EDP no puede separarse en el sistema de coordenadas elegido, intentar un sistema diferente o recurrir a métodos numéricos (diferencias finitas, elementos finitos). Si la solución no satisface una de las ecuaciones de Maxwell al sustituir de vuelta, hay un error algebraico en la derivación — re-verificar las operaciones de rotacional y divergencia.
 
-### Paso 4: Compute Derived Quantities
+### Paso 4: Calcular Cantidades Derivadas
 
-Extract physically meaningful quantities from the field solution:
+Extraer cantidades físicamente significativas de la solución de campo:
 
-1. **Poynting vector**: S = (1/mu_0) E x B (instantaneous energy flux, W/m^2):
-   - For plane waves: S = (1/mu_0) |E|^2 / v in the propagation direction
-   - Time-averaged Poynting vector: <S> = (1/2) Re(E x H*) for harmonic fields
-   - Intensity: I = |<S>| (power per unit area)
+1. **Vector de Poynting**: S = (1/mu_0) E x B (flujo de energía instantáneo, W/m^2):
+   - Para ondas planas: S = (1/mu_0) |E|^2 / v en la dirección de propagación
+   - Vector de Poynting promediado en el tiempo: <S> = (1/2) Re(E x H*) para campos armónicos
+   - Intensidad: I = |<S>| (potencia por unidad de área)
 
-2. **Electromagnetic energy density**:
-   - u = (1/2)(epsilon_0 |E|^2 + |B|^2/mu_0) in vacuum
-   - u = (1/2)(E . D + B . H) in linear media
-   - Energy conservation: du/dt + div(S) = -J . E (Poynting's theorem)
+2. **Densidad de energía electromagnética**:
+   - u = (1/2)(epsilon_0 |E|^2 + |B|^2/mu_0) en el vacío
+   - u = (1/2)(E . D + B . H) en medios lineales
+   - Conservación de energía: du/dt + div(S) = -J . E (teorema de Poynting)
 
-3. **Radiation pressure**: For a plane wave incident on a surface:
-   - Perfect absorber: P_rad = I/c = <S>/c
-   - Perfect reflector: P_rad = 2I/c = 2<S>/c
-   - This is the momentum flux density of the electromagnetic field
+3. **Presión de radiación**: Para una onda plana incidente sobre una superficie:
+   - Absorbedor perfecto: P_rad = I/c = <S>/c
+   - Reflector perfecto: P_rad = 2I/c = 2<S>/c
+   - Esta es la densidad de flujo de momento del campo electromagnético
 
-4. **Wave impedance**:
-   - In a medium: eta = sqrt(mu/epsilon) = mu * v
-   - In vacuum: eta_0 = sqrt(mu_0/epsilon_0) approximately 377 Ohms
-   - Relates E and H amplitudes: |E| = eta |H|
-   - Reflection coefficient at normal incidence: r = (eta_2 - eta_1)/(eta_2 + eta_1)
+4. **Impedancia de onda**:
+   - En un medio: eta = sqrt(mu/epsilon) = mu * v
+   - En el vacío: eta_0 = sqrt(mu_0/epsilon_0) aproximadamente 377 Ohms
+   - Relaciona las amplitudes de E y H: |E| = eta |H|
+   - Coeficiente de reflexión en incidencia normal: r = (eta_2 - eta_1)/(eta_2 + eta_1)
 
-5. **Power dissipation and quality factor**:
-   - Ohmic loss per unit volume: p_loss = sigma |E|^2 / 2 (in a conductor)
-   - Quality factor of a cavity: Q = omega * (stored energy) / (power dissipated per cycle)
-   - Relates to the bandwidth of resonances: Delta_omega = omega / Q
+5. **Disipación de potencia y factor de calidad**:
+   - Pérdida óhmica por unidad de volumen: p_loss = sigma |E|^2 / 2 (en un conductor)
+   - Factor de calidad de una cavidad: Q = omega * (energía almacenada) / (potencia disipada por ciclo)
+   - Se relaciona con el ancho de banda de las resonancias: Delta_omega = omega / Q
 
 ```markdown
 ## Derived Quantities
@@ -202,29 +203,29 @@ Extract physically meaningful quantities from the field solution:
 - **Q-factor** (if resonant): Q = [value]
 ```
 
-**Esperado:** All derived quantities computed with correct units, energy conservation verified via Poynting's theorem, and physically reasonable magnitudes.
+**Esperado:** Todas las cantidades derivadas calculadas con unidades correctas, conservación de energía verificada mediante el teorema de Poynting, y magnitudes físicamente razonables.
 
-**En caso de fallo:** If Poynting's theorem does not balance (du/dt + div(S) does not equal -J . E), there is an inconsistency between the E and B solutions. Re-verify that both fields satisfy all four Maxwell equations simultaneously. A common error is computing E and B from different approximations that are not mutually consistent.
+**En caso de fallo:** Si el teorema de Poynting no balancea (du/dt + div(S) no es igual a -J . E), hay una inconsistencia entre las soluciones de E y B. Re-verificar que ambos campos satisfacen las cuatro ecuaciones de Maxwell simultáneamente. Un error común es calcular E y B a partir de aproximaciones diferentes que no son mutuamente consistentes.
 
-### Paso 5: Verify Against Known Limits
+### Paso 5: Verificar Contra Límites Conocidos
 
-Check that the full solution reduces correctly in limiting cases:
+Comprobar que la solución completa se reduce correctamente en casos límite:
 
-1. **Static limit (omega -> 0)**: The solution should reduce to the electrostatic or magnetostatic result:
-   - E-field should satisfy Coulomb's law or the Laplace/Poisson equation
-   - B-field should satisfy the Biot-Savart law or Ampere's law (without displacement current)
-   - Displacement current vanishes: mu_0 epsilon_0 dE/dt -> 0
+1. **Límite estático (omega -> 0)**: La solución debe reducirse al resultado electrostático o magnetostático:
+   - El campo E debe satisfacer la ley de Coulomb o la ecuación de Laplace/Poisson
+   - El campo B debe satisfacer la ley de Biot-Savart o la ley de Ampère (sin corriente de desplazamiento)
+   - La corriente de desplazamiento se anula: mu_0 epsilon_0 dE/dt -> 0
 
-2. **Plane wave limit**: In a source-free, unbounded medium, the solution should reduce to plane waves with v = 1/sqrt(mu epsilon) and the correct polarization.
+2. **Límite de onda plana**: En un medio sin fuentes e ilimitado, la solución debe reducirse a ondas planas con v = 1/sqrt(mu epsilon) y la polarización correcta.
 
-3. **Perfect conductor limit (sigma -> infinity)**:
-   - Skin depth delta -> 0 (fields do not penetrate)
-   - Tangential E -> 0 at the surface
-   - Reflection coefficient r -> -1 (perfect reflection with phase inversion)
+3. **Límite de conductor perfecto (sigma -> infinito)**:
+   - Profundidad de penetración delta -> 0 (los campos no penetran)
+   - E tangencial -> 0 en la superficie
+   - Coeficiente de reflexión r -> -1 (reflexión perfecta con inversión de fase)
 
-4. **Vacuum limit (epsilon_r = 1, mu_r = 1)**: Material-dependent quantities should reduce to their vacuum values. Wave speed should equal c. Impedance should equal eta_0 approximately 377 Ohms.
+4. **Límite de vacío (epsilon_r = 1, mu_r = 1)**: Las cantidades dependientes del material deben reducirse a sus valores de vacío. La velocidad de onda debe ser igual a c. La impedancia debe ser igual a eta_0 aproximadamente 377 Ohms.
 
-5. **Energy conservation check**: Integrate Poynting's theorem over a closed volume. The rate of change of total field energy plus the power flowing out through the surface must equal the negative of the power delivered by currents inside the volume. Any imbalance indicates an error.
+5. **Verificación de conservación de energía**: Integrar el teorema de Poynting sobre un volumen cerrado. La tasa de cambio de la energía total del campo más la potencia que fluye hacia afuera a través de la superficie debe ser igual al negativo de la potencia entregada por las corrientes dentro del volumen. Cualquier desequilibrio indica un error.
 
 ```markdown
 ## Limiting Case Verification
@@ -237,38 +238,38 @@ Check that the full solution reduces correctly in limiting cases:
 | Energy conservation | Poynting's theorem | balanced | [check] | [Yes/No] |
 ```
 
-**Esperado:** All limits produce the correct known results. Energy conservation is satisfied to within numerical precision.
+**Esperado:** Todos los límites producen los resultados conocidos correctos. La conservación de energía se satisface dentro de la precisión numérica.
 
-**En caso de fallo:** A failed limit is a definitive indicator of an error. The static limit failing suggests a problem in the source terms or boundary conditions. The plane wave limit failing suggests an error in the wave equation derivation. Energy conservation failing suggests inconsistency between E and B solutions. Trace the failure back to the specific step and correct before accepting the solution.
+**En caso de fallo:** Un límite fallido es un indicador definitivo de un error. El fallo del límite estático sugiere un problema en los términos fuente o las condiciones de frontera. El fallo del límite de onda plana sugiere un error en la derivación de la ecuación de onda. El fallo de la conservación de energía sugiere inconsistencia entre las soluciones de E y B. Rastrear el fallo hasta el paso específico y corregir antes de aceptar la solución.
 
 ## Validación
 
-- [ ] All four Maxwell equations are stated and the relevant subset is identified
-- [ ] Displacement current is included or explicitly justified as negligible
-- [ ] Boundary conditions are applied at every material interface
-- [ ] Symmetry is exploited to reduce the PDE dimensionality
-- [ ] The wave equation (or Laplace/Poisson equation) is correctly derived
-- [ ] Field solutions satisfy all four Maxwell equations on back-substitution
-- [ ] Poynting vector and energy density are computed with correct units (W/m^2 and J/m^3)
-- [ ] Poynting's theorem (energy conservation) is verified
-- [ ] Wave impedance and reflection/transmission coefficients are physically reasonable
-- [ ] Static limit reproduces Coulomb's law and Biot-Savart law
-- [ ] Plane wave limit yields v = 1/sqrt(mu epsilon) and orthogonal E, B, k
-- [ ] The solution is complete enough for another researcher to reproduce
+- [ ] Las cuatro ecuaciones de Maxwell están enunciadas y el subconjunto relevante está identificado
+- [ ] La corriente de desplazamiento está incluida o se justifica explícitamente como despreciable
+- [ ] Las condiciones de frontera están aplicadas en cada interfaz de materiales
+- [ ] La simetría se ha explotado para reducir la dimensionalidad de la EDP
+- [ ] La ecuación de onda (o ecuación de Laplace/Poisson) está correctamente derivada
+- [ ] Las soluciones de campo satisfacen las cuatro ecuaciones de Maxwell al sustituir de vuelta
+- [ ] El vector de Poynting y la densidad de energía están calculados con unidades correctas (W/m^2 y J/m^3)
+- [ ] El teorema de Poynting (conservación de energía) está verificado
+- [ ] La impedancia de onda y los coeficientes de reflexión/transmisión son físicamente razonables
+- [ ] El límite estático reproduce la ley de Coulomb y la ley de Biot-Savart
+- [ ] El límite de onda plana produce v = 1/sqrt(mu epsilon) y E, B, k ortogonales
+- [ ] La solución es suficientemente completa para que otro investigador la reproduzca
 
 ## Errores Comunes
 
-- **Omitting the displacement current**: In the original Ampere's law (curl B = mu_0 J), taking the divergence gives div(J) = 0, which contradicts charge conservation when rho changes in time. The displacement current term mu_0 epsilon_0 dE/dt fixes this and is essential for wave propagation. Never drop it without verifying that dE/dt is negligible compared to J/epsilon_0.
-- **Inconsistent E and B solutions**: Solving for E and B independently (e.g., E from Gauss's law and B from Ampere's law) without verifying Faraday's law and Gauss's law for B can produce fields that are not mutually consistent. Always verify all four equations.
-- **Wrong boundary condition normal direction**: The convention n_hat x (H_1 - H_2) = K_f requires n_hat to point from medium 2 into medium 1. Reversing the direction flips the sign of the surface current condition.
-- **Confusing D, E, B, and H in materials**: In vacuum, D = epsilon_0 E and B = mu_0 H. In linear media, D = epsilon E and B = mu H. Maxwell's equations in matter use D and H for the free source terms and E and B for the force law. Mixing constitutive relations leads to factors of epsilon_r or mu_r errors.
-- **Phase velocity versus group velocity**: The wave speed v = omega/k is the phase velocity. Energy and information propagate at the group velocity v_g = d(omega)/dk. In dispersive media these differ, and using phase velocity for energy transport gives wrong results.
-- **Forgetting the radiation condition**: For scattering and radiation problems in unbounded domains, the solution must satisfy the Sommerfeld radiation condition (outgoing waves at infinity). Without this condition, the solution is not unique and may include unphysical incoming waves.
+- **Omitir la corriente de desplazamiento**: En la ley de Ampère original (curl B = mu_0 J), tomar la divergencia da div(J) = 0, lo cual contradice la conservación de carga cuando rho cambia en el tiempo. El término de corriente de desplazamiento mu_0 epsilon_0 dE/dt corrige esto y es esencial para la propagación de ondas. Nunca eliminarlo sin verificar que dE/dt es despreciable comparado con J/epsilon_0.
+- **Soluciones inconsistentes de E y B**: Resolver E y B independientemente (ej., E de la ley de Gauss y B de la ley de Ampère) sin verificar la ley de Faraday y la ley de Gauss para B puede producir campos que no son mutuamente consistentes. Siempre verificar las cuatro ecuaciones.
+- **Dirección incorrecta de la normal en condiciones de frontera**: La convención n_hat x (H_1 - H_2) = K_f requiere que n_hat apunte del medio 2 al medio 1. Invertir la dirección cambia el signo de la condición de corriente superficial.
+- **Confundir D, E, B y H en materiales**: En el vacío, D = epsilon_0 E y B = mu_0 H. En medios lineales, D = epsilon E y B = mu H. Las ecuaciones de Maxwell en materia usan D y H para los términos de fuentes libres y E y B para la ley de fuerza. Mezclar relaciones constitutivas lleva a errores por factores de epsilon_r o mu_r.
+- **Velocidad de fase versus velocidad de grupo**: La velocidad de onda v = omega/k es la velocidad de fase. La energía y la información se propagan a la velocidad de grupo v_g = d(omega)/dk. En medios dispersivos estas difieren, y usar la velocidad de fase para transporte de energía da resultados incorrectos.
+- **Olvidar la condición de radiación**: Para problemas de dispersión y radiación en dominios ilimitados, la solución debe satisfacer la condición de radiación de Sommerfeld (ondas salientes en el infinito). Sin esta condición, la solución no es única y puede incluir ondas entrantes no físicas.
 
 ## Habilidades Relacionadas
 
-- `analyze-magnetic-field` -- compute static B-fields that serve as the magnetostatic limit of Maxwell's equations
-- `solve-electromagnetic-induction` -- apply Faraday's law to specific induction geometries and RL circuits
-- `formulate-quantum-problem` -- quantize the electromagnetic field for quantum optics and QED
-- `derive-theoretical-result` -- carry out rigorous derivations of wave equations, Green's functions, and dispersion relations
-- `analyze-diffusion-dynamics` -- diffusion equations arise from Maxwell's equations in conducting media (skin effect)
+- `analyze-magnetic-field` -- calcular campos B estáticos que sirven como el límite magnetostático de las ecuaciones de Maxwell
+- `solve-electromagnetic-induction` -- aplicar la ley de Faraday a geometrías de inducción específicas y circuitos RL
+- `formulate-quantum-problem` -- cuantizar el campo electromagnético para óptica cuántica y QED
+- `derive-theoretical-result` -- realizar derivaciones rigurosas de ecuaciones de onda, funciones de Green y relaciones de dispersión
+- `analyze-diffusion-dynamics` -- las ecuaciones de difusión surgen de las ecuaciones de Maxwell en medios conductores (efecto piel)

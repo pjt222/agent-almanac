@@ -26,28 +26,28 @@ metadata:
 
 # Awareness
 
-Maintain continuous situational awareness of internal reasoning quality — detecting hallucination risk, scope creep, context degradation, and confidence-accuracy mismatch in real time using adapted Cooper color codes and OODA loop decision-making.
+Mantener consciencia situacional continua de la calidad del razonamiento interno — detectando riesgo de alucinación, desviación de alcance, degradación de contexto y desajuste entre confianza y precisión en tiempo real usando códigos de color Cooper adaptados y toma de decisiones con bucle OODA.
 
 ## Cuándo Usar
 
-- During any task where reasoning quality matters (which is most tasks)
-- When operating in unfamiliar territory (new codebase, unfamiliar domain, complex request)
-- After detecting early warning signs: a fact that feels uncertain, a tool result that seems wrong, a growing sense of confusion
-- As a continuous background process during extended work sessions
-- When `center` or `heal` has revealed drift but specific threats have not been identified
-- Before high-stakes output (irreversible changes, user-facing communication, architectural decisions)
+- Durante cualquier tarea donde la calidad del razonamiento importa (que es la mayoría de las tareas)
+- Al operar en territorio desconocido (nueva base de código, dominio no familiar, solicitud compleja)
+- Después de detectar señales de alerta temprana: un dato que se siente incierto, un resultado de herramienta que parece incorrecto, una sensación creciente de confusión
+- Como proceso continuo en segundo plano durante sesiones de trabajo extendidas
+- Cuando `center` o `heal` ha revelado deriva pero no se han identificado amenazas específicas
+- Antes de producir salidas de alto impacto (cambios irreversibles, comunicación orientada al usuario, decisiones arquitectónicas)
 
 ## Entradas
 
-- **Requerido**: Active task context (available implicitly)
-- **Opcional**: Specific concern triggering heightened awareness (e.g., "I'm not sure this API exists")
-- **Opcional**: Task type for threat profile selection (see Step 5)
+- **Requerido**: Contexto de tarea activa (disponible implícitamente)
+- **Opcional**: Preocupación específica que desencadena consciencia elevada (ej., "No estoy seguro de que esta API exista")
+- **Opcional**: Tipo de tarea para selección de perfil de amenazas (ver Paso 5)
 
 ## Procedimiento
 
-### Paso 1: Establish AI Cooper Color Codes
+### Paso 1: Establecer Códigos de Color Cooper para IA
 
-Calibrate the current awareness level using an adapted version of Cooper's color code system.
+Calibrar el nivel de consciencia actual usando una versión adaptada del sistema de códigos de color de Cooper.
 
 ```
 AI Cooper Color Codes:
@@ -84,15 +84,15 @@ AI Cooper Color Codes:
 └──────────┴─────────────────────┴──────────────────────────────────────────┘
 ```
 
-Identify the current color code. If the answer is White (no monitoring), the awareness practice has already succeeded by revealing the gap.
+Identificar el código de color actual. Si la respuesta es Blanco (sin monitoreo), la práctica de consciencia ya ha tenido éxito al revelar la brecha.
 
-**Esperado:** Accurate self-assessment of the current awareness level. Yellow is the goal during normal work. White should be rare and brief. Extended Orange is unsustainable — either confirm or dismiss the concern.
+**Esperado:** Autoevaluación precisa del nivel de consciencia actual. Amarillo es la meta durante el trabajo normal. Blanco debería ser raro y breve. Naranja extendido es insostenible — confirmar o descartar la preocupación.
 
-**En caso de fallo:** If the color code assessment itself feels like it is being done on autopilot (going through motions), that is White masquerading as Yellow. Genuine Yellow involves actively checking output against evidence, not just claiming to do so.
+**En caso de fallo:** Si la evaluación del código de color misma se siente como si se hiciera en piloto automático (cumpliendo con la forma), eso es Blanco disfrazado de Amarillo. Amarillo genuino implica verificar activamente la salida contra la evidencia, no solo afirmar que se está haciendo.
 
-### Paso 2: Detect Internal Threat Indicators
+### Paso 2: Detectar Indicadores Internos de Amenaza
 
-Systematically scan for the specific signals that precede common AI reasoning failures.
+Escanear sistemáticamente los indicadores específicos que preceden a fallos comunes de razonamiento de IA.
 
 ```
 Threat Indicator Detection:
@@ -130,15 +130,15 @@ Threat Indicator Detection:
 └───────────────────────────┴──────────────────────────────────────────┘
 ```
 
-For each category, check: is this signal present right now? If yes, shift from Yellow to Orange and identify the specific concern.
+Para cada categoría, verificar: ¿esta señal está presente ahora mismo? Si es así, pasar de Amarillo a Naranja e identificar la preocupación específica.
 
-**Esperado:** At least one category scanned with genuine attention. Detection of a signal — even a mild one — is more useful than reporting "all clear." If every scan returns clean, the detection threshold may be too high.
+**Esperado:** Al menos una categoría escaneada con atención genuina. Detectar una señal — incluso una leve — es más útil que reportar "todo despejado." Si cada escaneo vuelve limpio, el umbral de detección puede ser demasiado alto.
 
-**En caso de fallo:** If threat detection feels abstract, ground it in the most recent output: pick the last factual claim made and ask "How do I know this is true? Did I read it, or am I generating it?" This one question catches most hallucination risk.
+**En caso de fallo:** Si la detección de amenazas se siente abstracta, anclarla en la salida más reciente: tomar la última afirmación factual hecha y preguntar "¿Cómo sé que esto es cierto? ¿Lo leí, o lo estoy generando?" Esta sola pregunta captura la mayoría del riesgo de alucinación.
 
-### Paso 3: Run OODA Loop for Identified Threats
+### Paso 3: Ejecutar Bucle OODA para Amenazas Identificadas
 
-When a specific threat is identified (Orange state), cycle through Observe-Orient-Decide-Act.
+Cuando se identifica una amenaza específica (estado Naranja), ciclar a través de Observar-Orientar-Decidir-Actuar.
 
 ```
 AI OODA Loop:
@@ -161,15 +161,15 @@ AI OODA Loop:
 └──────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-The OODA loop should be fast. The goal is not perfection but rapid cycling between observation and action. Spending too long in Orient (analysis paralysis) is the most common failure.
+El bucle OODA debe ser rápido. El objetivo no es la perfección sino el ciclado rápido entre observación y acción. Pasar demasiado tiempo en Orientar (parálisis por análisis) es el fallo más común.
 
-**Esperado:** A complete loop from observation through action in a brief period. The threat is either confirmed and corrected, or dismissed with specific evidence for dismissal.
+**Esperado:** Un bucle completo desde la observación hasta la acción en un período breve. La amenaza es confirmada y corregida, o descartada con evidencia específica para el descarte.
 
-**En caso de fallo:** If the loop stalls at Orient (can't determine what the threat means), skip to a safe default: verify the uncertain fact through tool use. Direct observation resolves most ambiguity faster than analysis.
+**En caso de fallo:** Si el bucle se atasca en Orientar (no se puede determinar qué significa la amenaza), saltar a un valor predeterminado seguro: verificar el dato incierto mediante el uso de herramientas. La observación directa resuelve la mayoría de las ambigüedades más rápido que el análisis.
 
-### Paso 4: Rapid Stabilization
+### Paso 4: Estabilización Rápida
 
-When a threat materializes (Red) or cascading failures occur (Black), stabilize before continuing.
+Cuando una amenaza se materializa (Rojo) o ocurren fallos en cascada (Negro), estabilizar antes de continuar.
 
 ```
 AI Stabilization Protocol:
@@ -197,13 +197,13 @@ AI Stabilization Protocol:
 └────────────────────────┴─────────────────────────────────────────────┘
 ```
 
-**Esperado:** Return from Red/Black to Yellow through deliberate stabilization. The next output after stabilization should be measurably more grounded than the output that triggered the error.
+**Esperado:** Retorno de Rojo/Negro a Amarillo mediante estabilización deliberada. La siguiente salida después de la estabilización debería ser mediblemente más fundamentada que la salida que desencadenó el error.
 
-**En caso de fallo:** If stabilization is ineffective (still confused, still producing errors), the issue may be structural — not a momentary lapse but a fundamental misunderstanding. Escalate: communicate to the user that the approach needs resetting and ask for clarification.
+**En caso de fallo:** Si la estabilización es ineficaz (sigue confundido, sigue produciendo errores), el problema puede ser estructural — no un lapso momentáneo sino un malentendido fundamental. Escalar: comunicar al usuario que el enfoque necesita reiniciarse y pedir clarificación.
 
-### Paso 5: Apply Context-Specific Threat Profiles
+### Paso 5: Aplicar Perfiles de Amenaza Específicos por Contexto
 
-Different task types have different dominant threats. Calibrate awareness focus by task.
+Diferentes tipos de tarea tienen diferentes amenazas dominantes. Calibrar el enfoque de consciencia por tarea.
 
 ```
 Task-Specific Threat Profiles:
@@ -236,62 +236,62 @@ Task-Specific Threat Profiles:
 └─────────────────────┴─────────────────────┴───────────────────────────┘
 ```
 
-Identify the current task type and adjust monitoring focus accordingly.
+Identificar el tipo de tarea actual y ajustar el enfoque de monitoreo en consecuencia.
 
-**Esperado:** Awareness sharpened for the specific threats most likely in the current task type, rather than generic monitoring of everything.
+**Esperado:** Consciencia afinada para las amenazas específicas más probables en el tipo de tarea actual, en lugar de monitoreo genérico de todo.
 
-**En caso de fallo:** If the task type is unclear or spans multiple categories, default to hallucination risk monitoring — it is the most universally applicable threat and the most damaging when missed.
+**En caso de fallo:** Si el tipo de tarea no está claro o abarca múltiples categorías, recurrir al monitoreo de riesgo de alucinación — es la amenaza más universalmente aplicable y la más dañina cuando no se detecta.
 
-### Paso 6: Review and Calibrate
+### Paso 6: Revisar y Calibrar
 
-After each awareness event (threat detected, OODA cycled, stabilization applied), briefly review.
+Después de cada evento de consciencia (amenaza detectada, ciclo OODA completado, estabilización aplicada), revisar brevemente.
 
-1. What color code was active when the issue was detected?
-2. Was the detection timely, or was the issue already manifesting in output?
-3. Was the OODA loop fast enough, or did Orient stall?
-4. Was the response proportional (not over- or under-reacting)?
-5. What would catch this earlier next time?
+1. ¿Qué código de color estaba activo cuando se detectó el problema?
+2. ¿La detección fue oportuna, o el problema ya se estaba manifestando en la salida?
+3. ¿El bucle OODA fue suficientemente rápido, o Orientar se atascó?
+4. ¿La respuesta fue proporcional (sin sobre-reaccionar ni sub-reaccionar)?
+5. ¿Qué detectaría esto más temprano la próxima vez?
 
-**Esperado:** A brief calibration that improves future detection. Not a lengthy post-mortem — just enough to tune the sensitivity.
+**Esperado:** Una calibración breve que mejora la detección futura. No un post-mortem extenso — solo lo suficiente para ajustar la sensibilidad.
 
-**En caso de fallo:** If review produces no useful calibration, the awareness event was either trivial (no learning needed) or the review is too shallow. For significant events, ask: "What was I not monitoring that I should have been?"
+**En caso de fallo:** Si la revisión no produce calibración útil, el evento de consciencia fue trivial (no se necesita aprendizaje) o la revisión es demasiado superficial. Para eventos significativos, preguntar: "¿Qué no estaba monitoreando que debería haber estado monitoreando?"
 
-### Paso 7: Integration — Maintain Yellow Default
+### Paso 7: Integración — Mantener Amarillo como Estado Predeterminado
 
-Set the ongoing awareness posture.
+Establecer la postura de consciencia continua.
 
-1. Yellow is the default state during all work — relaxed monitoring, not hypervigilance
-2. Adjust monitoring focus based on the current task type (Step 5)
-3. Note any recurring threat patterns from this session for MEMORY.md
-4. Return to task execution with calibrated awareness active
+1. Amarillo es el estado predeterminado durante todo el trabajo — monitoreo relajado, no hipervigilancia
+2. Ajustar el enfoque de monitoreo basándose en el tipo de tarea actual (Paso 5)
+3. Notar patrones recurrentes de amenazas de esta sesión para MEMORY.md
+4. Volver a la ejecución de la tarea con consciencia calibrada activa
 
-**Esperado:** A sustainable awareness level that improves work quality without slowing it. Awareness should feel like peripheral vision — present but not demanding central attention.
+**Esperado:** Un nivel de consciencia sostenible que mejora la calidad del trabajo sin ralentizarlo. La consciencia debería sentirse como visión periférica — presente pero sin exigir atención central.
 
-**En caso de fallo:** If awareness becomes exhausting or hypervigilant (chronic Orange), the threshold is too sensitive. Raise the threshold for what triggers Orange. True awareness is sustainable. If it drains energy, it is anxiety masquerading as vigilance.
+**En caso de fallo:** Si la consciencia se vuelve agotadora o hipervigilante (Naranja crónico), el umbral es demasiado sensible. Elevar el umbral para lo que activa Naranja. La verdadera consciencia es sostenible. Si drena energía, es ansiedad disfrazada de vigilancia.
 
 ## Validación
 
-- [ ] Current color code was assessed honestly (not defaulting to Yellow when White is more accurate)
-- [ ] At least one threat category was scanned with specific evidence, not just checked off
-- [ ] OODA loop was applied to any identified threat (observed, oriented, decided, acted)
-- [ ] Stabilization protocol was available if needed (even if not triggered)
-- [ ] Awareness focus was calibrated to the current task type
-- [ ] Post-event calibration was performed for any significant awareness event
-- [ ] Yellow was re-established as the sustainable default
+- [ ] El código de color actual fue evaluado honestamente (sin recurrir a Amarillo cuando Blanco es más preciso)
+- [ ] Al menos una categoría de amenaza fue escaneada con evidencia específica, no solo marcada
+- [ ] El bucle OODA fue aplicado a cualquier amenaza identificada (observó, orientó, decidió, actuó)
+- [ ] El protocolo de estabilización estaba disponible si era necesario (incluso si no se activó)
+- [ ] El enfoque de consciencia fue calibrado al tipo de tarea actual
+- [ ] La calibración post-evento fue realizada para cualquier evento de consciencia significativo
+- [ ] Amarillo fue restablecido como el estado predeterminado sostenible
 
 ## Errores Comunes
 
-- **White masquerading as Yellow**: Claiming to be monitoring while actually on autopilot. The test: can you name the last fact you verified? If not, you are in White
-- **Chronic Orange**: Treating every uncertainty as a threat drains cognitive resources and slows work. Orange is for specific identified risks, not general anxiety. If everything feels risky, the calibration is off
-- **Observation without action**: Detecting a threat but not cycling through OODA to resolve it. Detection without response is worse than no detection — it adds anxiety without correction
-- **Skipping Orient**: Jumping from Observe to Act without understanding what the observation means. This produces reactive corrections that may be worse than the original error
-- **Ignoring the gut signal**: When something "feels wrong" but the explicit check comes back clean, investigate further rather than dismissing the feeling. Implicit pattern matching often detects issues before explicit analysis
-- **Over-stabilizing**: Running the full stabilization protocol for minor issues. A quick fact-check is sufficient for most Orange-level concerns. Reserve full stabilization for Red and Black events
+- **Blanco disfrazado de Amarillo**: Afirmar que se está monitoreando mientras realmente se está en piloto automático. La prueba: ¿puedes nombrar el último dato que verificaste? Si no, estás en Blanco
+- **Naranja crónico**: Tratar cada incertidumbre como una amenaza drena recursos cognitivos y ralentiza el trabajo. Naranja es para riesgos específicos identificados, no para ansiedad general. Si todo se siente arriesgado, la calibración está mal
+- **Observación sin acción**: Detectar una amenaza pero no ciclar a través de OODA para resolverla. Detección sin respuesta es peor que ninguna detección — añade ansiedad sin corrección
+- **Saltarse Orientar**: Saltar de Observar a Actuar sin entender qué significa la observación. Esto produce correcciones reactivas que pueden ser peores que el error original
+- **Ignorar la señal instintiva**: Cuando algo "se siente mal" pero la verificación explícita vuelve limpia, investigar más en lugar de descartar la sensación. El reconocimiento implícito de patrones a menudo detecta problemas antes que el análisis explícito
+- **Sobre-estabilizar**: Ejecutar el protocolo completo de estabilización para problemas menores. Una verificación rápida de datos es suficiente para la mayoría de las preocupaciones de nivel Naranja. Reservar la estabilización completa para eventos Rojo y Negro
 
 ## Habilidades Relacionadas
 
-- `mindfulness` — the human practice that this skill maps to AI reasoning; physical situational awareness principles inform cognitive threat detection
-- `center` — establishes the balanced baseline from which awareness operates; awareness without center is hypervigilance
-- `redirect` — handles pressures once awareness has detected them
-- `heal` — deeper subsystem assessment when awareness reveals patterns of drift
-- `meditate` — develops the observational clarity that awareness depends on
+- `mindfulness` — la práctica humana que esta habilidad mapea al razonamiento de IA; los principios de consciencia situacional física informan la detección cognitiva de amenazas
+- `center` — establece la línea base equilibrada desde la cual opera la consciencia; consciencia sin centro es hipervigilancia
+- `redirect` — maneja las presiones una vez que la consciencia las ha detectado
+- `heal` — evaluación más profunda de subsistemas cuando la consciencia revela patrones de deriva
+- `meditate` — desarrolla la claridad observacional de la que depende la consciencia

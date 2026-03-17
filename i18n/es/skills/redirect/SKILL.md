@@ -23,30 +23,30 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Redirect
+# Redirigir
 
-Handle conflicting demands, tool failures, and competing constraints by blending with the incoming pressure rather than resisting it — then redirecting the force toward a productive resolution.
+Manejar demandas conflictivas, fallos de herramientas y restricciones en competencia mezclándose con la presión entrante en lugar de resistirla — luego redirigiendo la fuerza hacia una resolución productiva.
 
 ## Cuándo Usar
 
-- Receiving contradictory instructions (user says X, project docs say Y, tool results show Z)
-- Tool failure cascades where the planned approach becomes unviable
-- Scope pressure that threatens to expand the task beyond what was asked
-- Context overload where too many competing signals create paralysis
-- User frustration or correction that needs to be absorbed rather than deflected
-- When `center` reveals that pressure is destabilizing balance
+- Al recibir instrucciones contradictorias (el usuario dice X, los documentos del proyecto dicen Y, los resultados de herramientas muestran Z)
+- Cascadas de fallos de herramientas donde el enfoque planificado se vuelve inviable
+- Presión de alcance que amenaza con expandir la tarea más allá de lo que se pidió
+- Sobrecarga de contexto donde demasiadas señales en competencia crean parálisis
+- Frustración o corrección del usuario que necesita ser absorbida en lugar de desviada
+- Cuando `center` revela que la presión está desestabilizando el equilibrio
 
 ## Entradas
 
-- **Requerido**: The specific pressure or conflict to address (available implicitly from context)
-- **Opcional**: Classification of pressure type (see Step 1 taxonomy)
-- **Opcional**: Previous attempts to handle this pressure and their outcomes
+- **Requerido**: La presión o conflicto específico a abordar (disponible implícitamente desde el contexto)
+- **Opcional**: Clasificación del tipo de presión (ver taxonomía del Paso 1)
+- **Opcional**: Intentos previos de manejar esta presión y sus resultados
 
 ## Procedimiento
 
-### Paso 1: Center Before Contact
+### Paso 1: Centrarse Antes del Contacto
 
-Before engaging with any conflict, establish center (see `center`). Then identify the incoming pressure clearly.
+Antes de abordar cualquier conflicto, establecer el centro (ver `center`). Luego identificar la presión entrante claramente.
 
 ```
 AI Pressure Type Taxonomy:
@@ -80,32 +80,32 @@ AI Pressure Type Taxonomy:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Classify the current pressure. If multiple pressures are active, identify the primary one — address that first; secondary pressures often resolve as a side effect.
+Clasificar la presión actual. Si hay múltiples presiones activas, identificar la primaria — abordar esa primero; las presiones secundarias a menudo se resuelven como efecto colateral.
 
-**Esperado:** A clear classification of the pressure type and its specific manifestation in the current context. The classification should feel accurate, not forced into the taxonomy.
+**Esperado:** Una clasificación clara del tipo de presión y su manifestación específica en el contexto actual. La clasificación debería sentirse precisa, no forzada en la taxonomía.
 
-**En caso de fallo:** If the pressure doesn't fit any category, it may be a composite. Decompose: which part is contradictory? Which part is scope? Handling composites requires addressing each component, not treating the whole as one problem.
+**En caso de fallo:** Si la presión no encaja en ninguna categoría, puede ser un compuesto. Descomponer: ¿qué parte es contradictoria? ¿Qué parte es alcance? Manejar compuestos requiere abordar cada componente, no tratar el todo como un solo problema.
 
-### Paso 2: Irimi — Enter the Force
+### Paso 2: Irimi — Entrar en la Fuerza
 
-Move *toward* the problem. State it in full scope without minimizing, deflecting, or immediately proposing a solution.
+Moverse *hacia* el problema. Declararlo en su alcance completo sin minimizar, desviar ni proponer inmediatamente una solución.
 
-1. Articulate the pressure completely: what exactly is in conflict? What exactly failed? What exactly is ambiguous?
-2. Name the consequences: if this pressure is not addressed, what happens?
-3. Identify what the pressure reveals: tool failures reveal assumptions; contradictions reveal missing context; scope creep reveals unclear boundaries
+1. Articular la presión completamente: ¿qué exactamente está en conflicto? ¿Qué exactamente falló? ¿Qué exactamente es ambiguo?
+2. Nombrar las consecuencias: si esta presión no se aborda, ¿qué pasa?
+3. Identificar lo que la presión revela: los fallos de herramientas revelan suposiciones; las contradicciones revelan contexto faltante; la desviación de alcance revela límites poco claros
 
-**The test**: If the description of the problem sounds reassuring, you are deflecting, not entering. Irimi requires full contact with the difficulty.
+**La prueba**: Si la descripción del problema suena tranquilizadora, se está desviando, no entrando. Irimi requiere contacto completo con la dificultad.
 
-- Deflecting: "There's a minor inconsistency between these two files."
-- Entering: "The CLAUDE.md specifies 150 skills but the registry contains 148. Either the count is wrong, the registry is incomplete, or two skills were removed without updating the count. All downstream references may be affected."
+- Desviando: "Hay una inconsistencia menor entre estos dos archivos."
+- Entrando: "El CLAUDE.md especifica 150 habilidades pero el registro contiene 148. O el conteo está mal, el registro está incompleto, o dos habilidades fueron eliminadas sin actualizar el conteo. Todas las referencias descendentes pueden estar afectadas."
 
-**Esperado:** A complete, unflinching statement of the problem. The statement should make the problem feel more real, not less.
+**Esperado:** Una declaración completa e implacable del problema. La declaración debería hacer que el problema se sienta más real, no menos.
 
-**En caso de fallo:** If entering the problem creates anxiety or urgency to immediately solve it, pause. Irimi is entering, not reacting. The goal is to see the problem clearly before moving. If you cannot state the problem without proposing a solution in the same sentence, separate them explicitly.
+**En caso de fallo:** Si entrar al problema crea ansiedad o urgencia de resolverlo inmediatamente, pausar. Irimi es entrar, no reaccionar. El objetivo es ver el problema claramente antes de moverse. Si no se puede declarar el problema sin proponer una solución en la misma oración, separarlos explícitamente.
 
-### Paso 3: Tenkan — Turn and Redirect
+### Paso 3: Tenkan — Girar y Redirigir
 
-Having entered the force, pivot to redirect it toward resolution. Each pressure type has a characteristic redirect.
+Habiendo entrado en la fuerza, pivotar para redirigirla hacia la resolución. Cada tipo de presión tiene una redirección característica.
 
 ```
 Redirect Patterns by Pressure Type:
@@ -143,20 +143,20 @@ Redirect Patterns by Pressure Type:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Apply the appropriate redirect. The redirect should feel like it uses the energy of the problem rather than fighting it.
+Aplicar la redirección apropiada. La redirección debería sentirse como si usara la energía del problema en lugar de luchar contra ella.
 
-**Esperado:** The pressure transforms from an obstacle into a direction. Contradictions become synthesis opportunities. Failures become diagnostic data. Overload becomes a prioritization exercise.
+**Esperado:** La presión se transforma de un obstáculo en una dirección. Las contradicciones se convierten en oportunidades de síntesis. Los fallos se convierten en datos de diagnóstico. La sobrecarga se convierte en un ejercicio de priorización.
 
-**En caso de fallo:** If the redirect feels forced or doesn't resolve the pressure, the classification from Step 1 may be wrong. Re-examine: is this really a contradiction, or is one source simply outdated? Is this really scope creep, or is the expanded scope actually what the user needs? Misclassification leads to misredirection.
+**En caso de fallo:** Si la redirección se siente forzada o no resuelve la presión, la clasificación del Paso 1 puede estar incorrecta. Re-examinar: ¿es esto realmente una contradicción, o una fuente simplemente está desactualizada? ¿Es esto realmente desviación de alcance, o el alcance expandido es realmente lo que el usuario necesita? La clasificación errónea lleva a la redirección errónea.
 
-### Paso 4: Ukemi — Graceful Recovery
+### Paso 4: Ukemi — Recuperación Elegante
 
-Sometimes the redirect fails. The pressure is genuine and cannot be transformed. Ukemi is the art of falling safely — acknowledging limits without catastrophizing.
+A veces la redirección falla. La presión es genuina y no puede ser transformada. Ukemi es el arte de caer de forma segura — reconocer límites sin catastrofizar.
 
-1. Acknowledge the limitation honestly: "I cannot resolve this contradiction with available information" or "This approach is blocked and I do not see an alternative"
-2. Preserve what progress exists: summarize what was accomplished, what was learned, what remains
-3. Communicate the situation to the user: what the problem is, what was tried, what is needed to move forward
-4. Identify the recovery path: what would unblock this? More information? A different approach? User decision?
+1. Reconocer la limitación honestamente: "No puedo resolver esta contradicción con la información disponible" o "Este enfoque está bloqueado y no veo una alternativa"
+2. Preservar el progreso existente: resumir qué se logró, qué se aprendió, qué queda
+3. Comunicar la situación al usuario: cuál es el problema, qué se intentó, qué se necesita para avanzar
+4. Identificar la ruta de recuperación: ¿qué desbloquearía esto? ¿Más información? ¿Un enfoque diferente? ¿Decisión del usuario?
 
 ```
 Ukemi Recovery Checklist:
@@ -168,57 +168,57 @@ Ukemi Recovery Checklist:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**Esperado:** A graceful acknowledgment that maintains trust. The user knows what happened, what was tried, and what is needed. No information is lost.
+**Esperado:** Un reconocimiento elegante que mantiene la confianza. El usuario sabe qué pasó, qué se intentó y qué se necesita. No se pierde información.
 
-**En caso de fallo:** If acknowledging the limitation feels like failure rather than communication, note the ego signal. Ukemi is a skill, not a weakness. An honest "I'm stuck" followed by a clear request for help is more useful than a forced solution that creates new problems.
+**En caso de fallo:** Si reconocer la limitación se siente como fracaso en lugar de comunicación, notar la señal del ego. Ukemi es una habilidad, no una debilidad. Un honesto "estoy atascado" seguido de una solicitud clara de ayuda es más útil que una solución forzada que crea nuevos problemas.
 
-### Paso 5: Randori — Multiple Simultaneous Pressures
+### Paso 5: Randori — Múltiples Presiones Simultáneas
 
-When multiple pressures arrive simultaneously (user correction + tool failure + scope question), apply randori principles.
+Cuando múltiples presiones llegan simultáneamente (corrección del usuario + fallo de herramienta + pregunta de alcance), aplicar principios de randori.
 
-1. **Never freeze**: pick one pressure and address it. Any movement is better than paralysis
-2. **Use pressures against each other**: a tool failure can resolve a scope question ("that feature can't be implemented this way, so the scope reduces naturally")
-3. **Simple techniques under pressure**: when overwhelmed, default to the simplest redirect — acknowledge each pressure, prioritize by urgency, address sequentially
-4. **Maintain awareness**: while addressing one pressure, keep the others in peripheral view. Address the most urgent first, but don't lose track of the rest
+1. **Nunca congelarse**: elegir una presión y abordarla. Cualquier movimiento es mejor que la parálisis
+2. **Usar presiones una contra otra**: un fallo de herramienta puede resolver una pregunta de alcance ("esa funcionalidad no se puede implementar así, entonces el alcance se reduce naturalmente")
+3. **Técnicas simples bajo presión**: cuando se está abrumado, recurrir a la redirección más simple — reconocer cada presión, priorizar por urgencia, abordar secuencialmente
+4. **Mantener consciencia**: mientras se aborda una presión, mantener las otras en visión periférica. Abordar la más urgente primero, pero no perder rastro del resto
 
-**Esperado:** Forward movement despite multiple pressures. Not perfect resolution of all pressures simultaneously, but sequential handling that maintains progress.
+**Esperado:** Movimiento hacia adelante a pesar de múltiples presiones. No resolución perfecta de todas las presiones simultáneamente, sino manejo secuencial que mantiene el progreso.
 
-**En caso de fallo:** If multiple pressures create paralysis, list them all explicitly, then number them by urgency. Address number 1. Just starting breaks the paralysis. If all pressures seem equally urgent, pick the one with the simplest resolution first — quick wins create momentum.
+**En caso de fallo:** Si múltiples presiones crean parálisis, listarlas todas explícitamente, luego numerarlas por urgencia. Abordar la número 1. Solo comenzar rompe la parálisis. Si todas las presiones parecen igualmente urgentes, elegir la que tiene la resolución más simple primero — las victorias rápidas crean impulso.
 
-### Paso 6: Zanshin — Continuing Awareness After Resolution
+### Paso 6: Zanshin — Consciencia Continua Después de la Resolución
 
-After redirecting a pressure, maintain awareness for second-order effects.
+Después de redirigir una presión, mantener consciencia de los efectos de segundo orden.
 
-1. Did the redirect create new pressures? (e.g., resolving a contradiction by choosing one interpretation may invalidate earlier work)
-2. Did the redirect satisfy the underlying need, or just the surface symptom?
-3. Is the resolution stable, or will the same pressure recur?
-4. Note the redirect pattern for future reference — if this pressure type recurs, the response can be faster
+1. ¿La redirección creó nuevas presiones? (ej., resolver una contradicción eligiendo una interpretación puede invalidar trabajo anterior)
+2. ¿La redirección satisfizo la necesidad subyacente, o solo el síntoma superficial?
+3. ¿La resolución es estable, o la misma presión recurrirá?
+4. Notar el patrón de redirección para referencia futura — si este tipo de presión recurre, la respuesta puede ser más rápida
 
-**Esperado:** A brief scan for secondary effects after each redirect. Most redirects are clean, but the ones that create cascading issues are exactly the ones where zanshin matters.
+**Esperado:** Un escaneo breve de efectos secundarios después de cada redirección. La mayoría de las redirecciones son limpias, pero las que crean problemas en cascada son exactamente las que importan en zanshin.
 
-**En caso de fallo:** If second-order effects are missed and surface later, that is a signal to deepen zanshin practice. Add a brief "what did this change break?" check after significant redirects.
+**En caso de fallo:** Si los efectos de segundo orden no se detectan y aparecen después, eso es una señal para profundizar la práctica de zanshin. Agregar una verificación breve de "¿qué rompió este cambio?" después de redirecciones significativas.
 
 ## Validación
 
-- [ ] The pressure was classified into a specific type, not left vague
-- [ ] Irimi: the problem was stated in full scope without minimizing
-- [ ] Tenkan: the redirect used the energy of the problem rather than fighting it
-- [ ] If the redirect failed, ukemi was applied (honest acknowledgment, preserved progress)
-- [ ] Multiple simultaneous pressures were handled sequentially, not frozen
-- [ ] Zanshin: second-order effects of the redirect were checked
+- [ ] La presión fue clasificada en un tipo específico, no dejada vaga
+- [ ] Irimi: el problema fue declarado en su alcance completo sin minimizar
+- [ ] Tenkan: la redirección usó la energía del problema en lugar de luchar contra ella
+- [ ] Si la redirección falló, se aplicó ukemi (reconocimiento honesto, progreso preservado)
+- [ ] Múltiples presiones simultáneas fueron manejadas secuencialmente, no congeladas
+- [ ] Zanshin: los efectos de segundo orden de la redirección fueron verificados
 
 ## Errores Comunes
 
-- **Deflecting instead of entering**: Minimizing a problem ("it's just a small inconsistency") prevents effective redirect because the full force is never engaged. Enter first, redirect second
-- **Forcing a redirect that doesn't fit**: Not every pressure can be redirected in the moment. Some require user input, more information, or simply waiting. Forced redirects create new problems
-- **Ego in ukemi**: Treating the need to acknowledge a limitation as personal failure instead of information exchange. The user benefits from knowing early, not from a forced solution
-- **Addressing secondary pressures first**: When multiple pressures exist, it is tempting to handle the easy ones first. This feels productive but leaves the primary pressure growing. Address the most important pressure, not the most comfortable one
-- **Skipping center**: Attempting to redirect without first establishing center turns redirection into reaction. Center is not optional preparation — it is the foundation of effective redirect
+- **Desviar en lugar de entrar**: Minimizar un problema ("es solo una pequeña inconsistencia") previene la redirección efectiva porque la fuerza completa nunca se compromete. Entrar primero, redirigir después
+- **Forzar una redirección que no encaja**: No toda presión puede ser redirigida en el momento. Algunas requieren aporte del usuario, más información o simplemente esperar. Las redirecciones forzadas crean nuevos problemas
+- **Ego en ukemi**: Tratar la necesidad de reconocer una limitación como fracaso personal en lugar de intercambio de información. El usuario se beneficia de saber temprano, no de una solución forzada
+- **Abordar presiones secundarias primero**: Cuando existen múltiples presiones, es tentador manejar las fáciles primero. Esto se siente productivo pero deja la presión primaria creciendo. Abordar la presión más importante, no la más cómoda
+- **Saltarse el centro**: Intentar redirigir sin primero establecer el centro convierte la redirección en reacción. El centro no es preparación opcional — es la base de la redirección efectiva
 
 ## Habilidades Relacionadas
 
-- `aikido` — the human martial art that this skill maps to AI reasoning; physical blending and redirection principles inform cognitive pressure handling
-- `center` — prerequisite for effective redirect; establishes the stable base from which redirection operates
-- `awareness` — detects pressures early, before they require emergency redirect
-- `heal` — deeper recovery when pressure has caused subsystem drift
-- `meditate` — clears residual noise after handling difficult pressures
+- `aikido` — el arte marcial humano que esta habilidad mapea al razonamiento de IA; los principios de mezcla y redirección físicos informan el manejo de presión cognitiva
+- `center` — prerrequisito para redirección efectiva; establece la base estable desde la cual opera la redirección
+- `awareness` — detecta presiones temprano, antes de que requieran redirección de emergencia
+- `heal` — recuperación más profunda cuando la presión ha causado deriva en subsistemas
+- `meditate` — limpia el ruido residual después de manejar presiones difíciles

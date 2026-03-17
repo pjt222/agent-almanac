@@ -1,10 +1,11 @@
 ---
 name: validate-analytical-method
 description: >
-  Validate a chromatographic analytical method per ICH Q2(R2) guidelines:
-  define the validation scope by method category, establish specificity through
-  forced degradation, determine linearity and range, assess accuracy and precision,
-  and establish detection limits and robustness for regulatory submission.
+  Validar un método analítico cromatográfico según las directrices ICH Q2(R2):
+  definir el alcance de validación por categoría de método, establecer especificidad
+  mediante degradación forzada, determinar linealidad y rango, evaluar exactitud
+  y precisión, y establecer límites de detección y robustez para presentación
+  regulatoria.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -23,37 +24,37 @@ metadata:
 
 # Validate an Analytical Method
 
-Formal validation of a chromatographic analytical method following ICH Q2(R2) guidelines, covering validation scope definition by method category, specificity/selectivity establishment, linearity and range determination, accuracy and precision assessment, and LOD/LOQ and robustness studies for regulatory compliance.
+Validación formal de un método analítico cromatográfico siguiendo las directrices ICH Q2(R2), cubriendo la definición del alcance de validación por categoría de método, establecimiento de especificidad/selectividad, determinación de linealidad y rango, evaluación de exactitud y precisión, y estudios de LOD/LOQ y robustez para cumplimiento regulatorio.
 
 ## Cuándo Usar
 
-- A new chromatographic method has been developed and must be validated before routine use
-- A compendial method is being verified for suitability in a specific laboratory
-- An existing validated method has undergone significant changes requiring partial or full re-validation
-- Preparing a validation package for regulatory submission (NDA, ANDA, MAA, IND)
-- Transferring a method to a new laboratory or instrument platform
+- Se ha desarrollado un nuevo método cromatográfico y debe validarse antes del uso rutinario
+- Se está verificando un método compendial para su idoneidad en un laboratorio específico
+- Un método validado existente ha sufrido cambios significativos que requieren re-validación parcial o completa
+- Preparar un paquete de validación para presentación regulatoria (NDA, ANDA, MAA, IND)
+- Transferir un método a un nuevo laboratorio o plataforma instrumental
 
 ## Entradas
 
-### Required
+### Requerido
 
-- **Developed method**: Fully optimized and documented chromatographic method (column, mobile phase, gradient, detector, etc.)
-- **Method category**: Assay of active ingredient, quantitative impurity test, limit test for impurities, or identification test
-- **Analyte reference standards**: Primary reference standards with certificates of analysis and assigned purity
-- **Sample matrix**: Representative samples including placebo/blank matrix for specificity studies
+- **Método desarrollado**: Método cromatográfico completamente optimizado y documentado (columna, fase móvil, gradiente, detector, etc.)
+- **Categoría del método**: Ensayo de ingrediente activo, prueba cuantitativa de impurezas, prueba límite de impurezas, o prueba de identificación
+- **Estándares de referencia del analito**: Estándares de referencia primarios con certificados de análisis y pureza asignada
+- **Matriz de muestra**: Muestras representativas incluyendo matriz placebo/blanco para estudios de especificidad
 
-### Optional
+### Opcional
 
-- **Regulatory guidance**: Specific regulatory requirements beyond ICH Q2 (e.g., USP <1225>, FDA guidance, EMA guidelines)
-- **Forced degradation samples**: Pre-stressed samples (acid, base, oxidation, heat, light) if not yet prepared
-- **Validation protocol**: Pre-approved protocol specifying acceptance criteria (required in GMP environments)
-- **Transfer package**: If validating as part of a method transfer, the originating lab's validation report
+- **Guía regulatoria**: Requisitos regulatorios específicos más allá de ICH Q2 (ej., USP <1225>, guías FDA, directrices EMA)
+- **Muestras de degradación forzada**: Muestras pre-estresadas (ácido, base, oxidación, calor, luz) si aún no están preparadas
+- **Protocolo de validación**: Protocolo pre-aprobado especificando criterios de aceptación (requerido en entornos GMP)
+- **Paquete de transferencia**: Si se valida como parte de una transferencia de método, el informe de validación del laboratorio de origen
 
 ## Procedimiento
 
-### Paso 1: Define Validation Scope per ICH Q2(R2)
+### Paso 1: Definir el Alcance de Validación según ICH Q2(R2)
 
-Identify the method category and determine which validation parameters are required.
+Identificar la categoría del método y determinar qué parámetros de validación son requeridos.
 
 | Parameter | Cat I: Assay | Cat II: Impurity (Quant) | Cat III: Impurity (Limit) | Cat IV: Identification |
 |---|---|---|---|---|
@@ -67,29 +68,29 @@ Identify the method category and determine which validation parameters are requi
 | LOQ | No | Yes | No | No |
 | Robustness | Yes | Yes | Yes | No |
 
-1. Classify the method into one of the four ICH categories based on its intended purpose.
-2. From the table, identify all required validation parameters.
-3. Define acceptance criteria for each parameter before beginning experimental work. Typical criteria:
-   - Linearity: R^2 >= 0.999 (assay), >= 0.99 (impurity)
-   - Accuracy: recovery 98.0-102.0% (assay), 80-120% at LOQ level
-   - Repeatability: RSD <= 2.0% (assay), <= 10% at LOQ level
-   - Intermediate precision: RSD <= 3.0% (assay)
-4. Draft a validation protocol documenting all parameters, experimental designs, and acceptance criteria.
-5. Obtain protocol approval (in GMP environments) before beginning experimental work.
+1. Clasificar el método en una de las cuatro categorías ICH según su propósito previsto.
+2. De la tabla, identificar todos los parámetros de validación requeridos.
+3. Definir criterios de aceptación para cada parámetro antes de comenzar el trabajo experimental. Criterios típicos:
+   - Linealidad: R^2 >= 0.999 (ensayo), >= 0.99 (impurezas)
+   - Exactitud: recuperación 98.0-102.0% (ensayo), 80-120% a nivel de LOQ
+   - Repetibilidad: RSD <= 2.0% (ensayo), <= 10% a nivel de LOQ
+   - Precisión intermedia: RSD <= 3.0% (ensayo)
+4. Redactar un protocolo de validación documentando todos los parámetros, diseños experimentales y criterios de aceptación.
+5. Obtener aprobación del protocolo (en entornos GMP) antes de comenzar el trabajo experimental.
 
-**Esperado:** Approved validation protocol specifying method category, required parameters, experimental designs, and pre-defined acceptance criteria.
+**Esperado:** Protocolo de validación aprobado especificando categoría del método, parámetros requeridos, diseños experimentales y criterios de aceptación predefinidos.
 
-**En caso de fallo:** If the method category is ambiguous (e.g., a combined assay and impurity method), validate for the most stringent category that applies. Consult the regulatory guidance specific to the submission type.
+**En caso de fallo:** Si la categoría del método es ambigua (ej., un método combinado de ensayo e impurezas), validar para la categoría más estricta que aplique. Consultar la guía regulatoria específica para el tipo de presentación.
 
-### Paso 2: Establish Specificity and Selectivity
+### Paso 2: Establecer Especificidad y Selectividad
 
-1. Prepare the following solutions:
-   - Blank (solvent/diluent only)
-   - Placebo (matrix without analyte, e.g., excipients for a drug product)
-   - Reference standard at working concentration
-   - Spiked placebo (matrix + reference standard)
-   - Forced degradation samples (if not already available)
-2. Perform forced degradation to generate potential degradation products:
+1. Preparar las siguientes soluciones:
+   - Blanco (solo solvente/diluyente)
+   - Placebo (matriz sin analito, ej., excipientes para un producto farmacéutico)
+   - Estándar de referencia a concentración de trabajo
+   - Placebo dopado (matriz + estándar de referencia)
+   - Muestras de degradación forzada (si aún no están disponibles)
+2. Realizar degradación forzada para generar posibles productos de degradación:
 
 | Stress Condition | Typical Treatment | Target Degradation |
 |---|---|---|
@@ -99,48 +100,48 @@ Identify the method category and determine which validation parameters are requi
 | Thermal | 60-80 C, solid state, 1-7 days | 5-20% |
 | Photolytic | ICH Q1B (1.2M lux-hours, 200 Wh/m^2 UV) | 5-20% |
 
-3. Inject all solutions and evaluate:
-   - No interfering peaks from blank or placebo at analyte retention time
-   - Degradation products resolved from the main analyte peak (Rs >= 1.5)
-   - Peak purity confirmed by DAD spectral purity index or MS
-4. Calculate mass balance: assay + impurities + degradation products should account for 95-105% of initial content.
-5. Document specificity results with chromatograms from all conditions.
+3. Inyectar todas las soluciones y evaluar:
+   - Sin picos interferentes del blanco o placebo al tiempo de retención del analito
+   - Productos de degradación resueltos del pico principal del analito (Rs >= 1.5)
+   - Pureza de pico confirmada por índice de pureza espectral DAD o MS
+4. Calcular balance de masa: ensayo + impurezas + productos de degradación deben representar 95-105% del contenido inicial.
+5. Documentar resultados de especificidad con cromatogramas de todas las condiciones.
 
-**Esperado:** Method demonstrated to be specific: no interferences from blank/placebo, degradation products resolved from analyte, peak purity confirmed, mass balance within 95-105%.
+**Esperado:** Método demostrado como específico: sin interferencias de blanco/placebo, productos de degradación resueltos del analito, pureza de pico confirmada, balance de masa dentro de 95-105%.
 
-**En caso de fallo:** If degradation products co-elute with the analyte, the method is not stability-indicating. Return to method development to improve selectivity (adjust pH, gradient, column chemistry) before proceeding with validation.
+**En caso de fallo:** Si los productos de degradación co-eluyen con el analito, el método no es indicador de estabilidad. Regresar al desarrollo del método para mejorar la selectividad (ajustar pH, gradiente, química de columna) antes de proceder con la validación.
 
-### Paso 3: Determine Linearity and Range
+### Paso 3: Determinar Linealidad y Rango
 
-1. Prepare at least 5 concentration levels spanning the intended range:
-   - Assay methods: typically 80-120% of the target concentration
-   - Impurity methods: from LOQ to 120-200% of the specification limit
-   - Dissolution: from 10-120% of the label claim (or as needed for the dissolution profile)
-2. Prepare each concentration level independently (not by serial dilution) for best practice.
-3. Inject each level in triplicate (minimum duplicate).
-4. Perform linear regression of response (area or height) vs. concentration:
-   - Report slope, intercept, and correlation coefficient (R^2)
-   - R^2 >= 0.999 for assay; R^2 >= 0.99 for impurity quantitation
-5. Evaluate residual plots:
-   - Residuals should be randomly distributed around zero with no systematic pattern
-   - A curved residual pattern indicates non-linearity -- consider a quadratic fit or narrower range
-6. Calculate the y-intercept as a percentage of the response at 100% concentration:
-   - Intercept should be <= 2% of the 100% response for assay methods
-7. Establish the validated range as the interval between the lowest and highest concentrations for which linearity, accuracy, and precision have been demonstrated.
+1. Preparar al menos 5 niveles de concentración abarcando el rango previsto:
+   - Métodos de ensayo: típicamente 80-120% de la concentración objetivo
+   - Métodos de impurezas: desde LOQ hasta 120-200% del límite de especificación
+   - Disolución: desde 10-120% de la declaración en etiqueta (o según necesite el perfil de disolución)
+2. Preparar cada nivel de concentración independientemente (no por dilución seriada) como mejor práctica.
+3. Inyectar cada nivel por triplicado (mínimo duplicado).
+4. Realizar regresión lineal de respuesta (área o altura) vs. concentración:
+   - Reportar pendiente, intercepto y coeficiente de correlación (R^2)
+   - R^2 >= 0.999 para ensayo; R^2 >= 0.99 para cuantificación de impurezas
+5. Evaluar gráficos de residuales:
+   - Los residuales deben estar distribuidos aleatoriamente alrededor de cero sin patrón sistemático
+   - Un patrón de residuales curvado indica no linealidad -- considerar un ajuste cuadrático o rango más estrecho
+6. Calcular el intercepto y como porcentaje de la respuesta al 100% de concentración:
+   - El intercepto debe ser <= 2% de la respuesta al 100% para métodos de ensayo
+7. Establecer el rango validado como el intervalo entre las concentraciones más baja y más alta para las cuales se han demostrado linealidad, exactitud y precisión.
 
-**Esperado:** Linear regression with R^2 >= 0.999 (assay) or >= 0.99 (impurity), random residual distribution, intercept <= 2% of target response, and validated range clearly defined.
+**Esperado:** Regresión lineal con R^2 >= 0.999 (ensayo) o >= 0.99 (impurezas), distribución aleatoria de residuales, intercepto <= 2% de la respuesta objetivo, y rango validado claramente definido.
 
-**En caso de fallo:** If R^2 is below the criterion, check for preparation errors, detector non-linearity (too high concentration), or analyte instability. Repeat with fresh preparations. If non-linearity is inherent, use a polynomial calibration or narrow the range.
+**En caso de fallo:** Si R^2 está por debajo del criterio, verificar errores de preparación, no linealidad del detector (concentración demasiado alta), o inestabilidad del analito. Repetir con preparaciones frescas. Si la no linealidad es inherente, usar una calibración polinómica o estrechar el rango.
 
-### Paso 4: Assess Accuracy
+### Paso 4: Evaluar Exactitud
 
-1. Prepare accuracy samples at 3 concentration levels (typically 80%, 100%, 120% of target for assay; LOQ, mid, and high for impurity methods).
-2. At each level, prepare 3 independent replicates (minimum 9 determinations total).
-3. For drug substance: compare found concentration to known (gravimetric) amount.
-4. For drug product: use the spiked placebo approach -- add known amounts of analyte to the placebo matrix and measure recovery.
-5. Calculate percent recovery at each level:
-   - Recovery (%) = (found amount / added amount) x 100
-6. Acceptance criteria:
+1. Preparar muestras de exactitud a 3 niveles de concentración (típicamente 80%, 100%, 120% del objetivo para ensayo; LOQ, medio y alto para métodos de impurezas).
+2. En cada nivel, preparar 3 réplicas independientes (mínimo 9 determinaciones totales).
+3. Para sustancia farmacéutica: comparar la concentración encontrada con la cantidad conocida (gravimétrica).
+4. Para producto farmacéutico: usar el enfoque de placebo dopado -- añadir cantidades conocidas de analito a la matriz placebo y medir la recuperación.
+5. Calcular el porcentaje de recuperación en cada nivel:
+   - Recuperación (%) = (cantidad encontrada / cantidad añadida) x 100
+6. Criterios de aceptación:
 
 | Method Type | Recovery Range | RSD at Each Level |
 |---|---|---|
@@ -149,29 +150,29 @@ Identify the method category and determine which validation parameters are requi
 | Impurity (quantitation) | 80-120% at LOQ, 90-110% at higher levels | <= 10% at LOQ, <= 5% at higher |
 | Cleaning validation | 70-130% (or tighter per company SOP) | <= 15% |
 
-7. Report individual recoveries, mean recovery, and RSD at each level.
+7. Reportar recuperaciones individuales, recuperación media y RSD en cada nivel.
 
-**Esperado:** Mean recovery within acceptance criteria at all concentration levels, with RSD within limits.
+**Esperado:** Recuperación media dentro de los criterios de aceptación en todos los niveles de concentración, con RSD dentro de los límites.
 
-**En caso de fallo:** If recovery is consistently high or low across all levels, suspect a systematic error in the reference standard, sample preparation, or method (e.g., matrix effect causing ion suppression in LC-MS). If recovery varies erratically, investigate sample preparation technique and analyte stability.
+**En caso de fallo:** Si la recuperación es consistentemente alta o baja en todos los niveles, sospechar de un error sistemático en el estándar de referencia, preparación de muestra, o método (ej., efecto de matriz causando supresión iónica en LC-MS). Si la recuperación varía erráticamente, investigar la técnica de preparación de muestra y la estabilidad del analito.
 
-### Paso 5: Determine Precision
+### Paso 5: Determinar Precisión
 
-Evaluate three levels of precision:
+Evaluar tres niveles de precisión:
 
-1. **Repeatability (intra-day)**:
-   - One analyst, one instrument, one day
-   - Inject 6 determinations at 100% or 3 levels x 3 replicates (same data as accuracy)
-   - Calculate RSD of results: <= 2.0% for assay, <= 10% at LOQ for impurity
-2. **Intermediate precision (inter-day / inter-analyst)**:
-   - Repeat the repeatability study with a different analyst, different day, and (if available) different instrument
-   - Calculate overall RSD combining both data sets
-   - Overall RSD <= 3.0% for assay
-   - If intermediate precision is significantly worse than repeatability, investigate the source of variation (analyst technique, instrument calibration, environmental conditions)
-3. **Reproducibility** (for method transfer or multi-site validation):
-   - Performed at the receiving laboratory following the same protocol
-   - Compare results between laboratories
-   - Evaluated by F-test (variance comparison) and t-test (mean comparison) or equivalence testing
+1. **Repetibilidad (intra-día)**:
+   - Un analista, un instrumento, un día
+   - Inyectar 6 determinaciones al 100% o 3 niveles x 3 réplicas (mismos datos que exactitud)
+   - Calcular RSD de resultados: <= 2.0% para ensayo, <= 10% al LOQ para impurezas
+2. **Precisión intermedia (inter-día / inter-analista)**:
+   - Repetir el estudio de repetibilidad con un analista diferente, día diferente, y (si está disponible) instrumento diferente
+   - Calcular RSD general combinando ambos conjuntos de datos
+   - RSD general <= 3.0% para ensayo
+   - Si la precisión intermedia es significativamente peor que la repetibilidad, investigar la fuente de variación (técnica del analista, calibración del instrumento, condiciones ambientales)
+3. **Reproducibilidad** (para transferencia de método o validación multi-sitio):
+   - Realizada en el laboratorio receptor siguiendo el mismo protocolo
+   - Comparar resultados entre laboratorios
+   - Evaluada mediante prueba F (comparación de varianzas) y prueba t (comparación de medias) o prueba de equivalencia
 
 | Precision Level | Design | Acceptance (Assay) | Acceptance (Impurity Quant) |
 |---|---|---|---|
@@ -179,70 +180,70 @@ Evaluate three levels of precision:
 | Intermediate | 2 analysts, 2 days (or 2 instruments) | RSD <= 3.0% | RSD <= 15% at LOQ, <= 10% above |
 | Reproducibility | Multi-laboratory | Per protocol / transfer criteria | Per protocol / transfer criteria |
 
-**Esperado:** Repeatability and intermediate precision RSDs within acceptance criteria. No statistically significant difference between analysts/days/instruments beyond the allowed RSD.
+**Esperado:** RSDs de repetibilidad y precisión intermedia dentro de los criterios de aceptación. Sin diferencia estadísticamente significativa entre analistas/días/instrumentos más allá del RSD permitido.
 
-**En caso de fallo:** If intermediate precision is much worse than repeatability, identify the variable driving the additional variance (analyst preparation technique, ambient temperature, instrument calibration drift) and control it before repeating.
+**En caso de fallo:** Si la precisión intermedia es mucho peor que la repetibilidad, identificar la variable que impulsa la varianza adicional (técnica de preparación del analista, temperatura ambiente, deriva de calibración del instrumento) y controlarla antes de repetir.
 
-### Paso 6: Establish LOD, LOQ, and Robustness
+### Paso 6: Establecer LOD, LOQ y Robustez
 
-**Limit of Detection (LOD)** and **Limit of Quantitation (LOQ)**:
+**Límite de Detección (LOD)** y **Límite de Cuantificación (LOQ)**:
 
-1. Calculate LOD and LOQ using the signal-to-noise approach or the standard deviation approach:
-   - LOD = 3.3 x (sigma / S) where sigma = standard deviation of response at low concentration, S = slope of calibration
+1. Calcular LOD y LOQ usando el enfoque de señal-ruido o el enfoque de desviación estándar:
+   - LOD = 3.3 x (sigma / S) donde sigma = desviación estándar de la respuesta a baja concentración, S = pendiente de calibración
    - LOQ = 10 x (sigma / S)
-   - Alternative: S/N approach -- LOD corresponds to S/N >= 3, LOQ to S/N >= 10
-2. Confirm experimentally: prepare solutions at the calculated LOD and LOQ concentrations and inject.
-   - At LOD: the peak should be detectable but not necessarily quantifiable with acceptable precision
-   - At LOQ: inject 6 replicates and confirm RSD <= 10% and accuracy within 80-120%
-3. Report LOD and LOQ with the method used for determination.
+   - Alternativa: enfoque S/N -- LOD corresponde a S/N >= 3, LOQ a S/N >= 10
+2. Confirmar experimentalmente: preparar soluciones a las concentraciones calculadas de LOD y LOQ e inyectar.
+   - Al LOD: el pico debe ser detectable pero no necesariamente cuantificable con precisión aceptable
+   - Al LOQ: inyectar 6 réplicas y confirmar RSD <= 10% y exactitud dentro de 80-120%
+3. Reportar LOD y LOQ con el método utilizado para su determinación.
 
-**Robustness**:
+**Robustez**:
 
-4. Identify critical method parameters (typically 5-7 factors):
-   - Mobile phase composition (+/- 2% organic)
-   - Mobile phase pH (+/- 0.2 units)
-   - Column temperature (+/- 5 C)
-   - Flow rate (+/- 10%)
-   - Detection wavelength (+/- 2 nm)
-   - Column lot/batch (if available)
-5. Vary each parameter deliberately within the specified range while holding others constant (or use a fractional factorial design for efficiency).
-6. Evaluate the impact on system suitability parameters (retention time, resolution, tailing, area).
-7. Parameters that cause system suitability failure within the tested range must be tightly controlled and documented as critical method parameters.
-8. Summarize robustness results in a table showing each varied parameter, the range tested, and the impact on key responses.
+4. Identificar parámetros críticos del método (típicamente 5-7 factores):
+   - Composición de fase móvil (+/- 2% orgánico)
+   - pH de fase móvil (+/- 0.2 unidades)
+   - Temperatura de columna (+/- 5 C)
+   - Velocidad de flujo (+/- 10%)
+   - Longitud de onda de detección (+/- 2 nm)
+   - Lote/partida de columna (si está disponible)
+5. Variar cada parámetro deliberadamente dentro del rango especificado manteniendo los demás constantes (o usar un diseño factorial fraccionado para eficiencia).
+6. Evaluar el impacto en los parámetros de aptitud del sistema (tiempo de retención, resolución, asimetría, área).
+7. Los parámetros que causen fallo de aptitud del sistema dentro del rango probado deben controlarse estrictamente y documentarse como parámetros críticos del método.
+8. Resumir los resultados de robustez en una tabla mostrando cada parámetro variado, el rango probado, y el impacto en las respuestas clave.
 
-**Esperado:** LOD and LOQ experimentally confirmed. Robustness study completed with critical method parameters identified and control limits established.
+**Esperado:** LOD y LOQ confirmados experimentalmente. Estudio de robustez completado con parámetros críticos del método identificados y límites de control establecidos.
 
-**En caso de fallo:** If LOQ precision exceeds 10% RSD, the method sensitivity is insufficient at that concentration. Options: increase injection volume, concentrate the sample, improve sample cleanup, or use a more sensitive detector. If a parameter shows the method is not robust (fails SST with small deliberate variation), tighten the control of that parameter in the method and flag it during method transfer.
+**En caso de fallo:** Si la precisión del LOQ excede 10% RSD, la sensibilidad del método es insuficiente a esa concentración. Opciones: aumentar el volumen de inyección, concentrar la muestra, mejorar la limpieza de muestra, o usar un detector más sensible. Si un parámetro muestra que el método no es robusto (falla SST con variación deliberada pequeña), ajustar el control de ese parámetro en el método y señalarlo durante la transferencia del método.
 
 ## Validación
 
-- [ ] Method category identified and all required parameters determined per ICH Q2(R2)
-- [ ] Validation protocol written with pre-defined acceptance criteria
-- [ ] Specificity demonstrated: no interferences, degradation products resolved, peak purity confirmed
-- [ ] Mass balance within 95-105% for forced degradation study
-- [ ] Linearity established with R^2 >= 0.999 (assay) or >= 0.99 (impurity), residuals random
-- [ ] Accuracy demonstrated at 3 levels with recovery within acceptance criteria
-- [ ] Repeatability RSD within limits (e.g., <= 2.0% for assay)
-- [ ] Intermediate precision RSD within limits (e.g., <= 3.0% for assay)
-- [ ] LOD and LOQ experimentally confirmed (LOQ precision <= 10% RSD)
-- [ ] Robustness study completed with critical method parameters identified
-- [ ] All raw data, calculations, and chromatograms compiled into the validation report
+- [ ] Categoría del método identificada y todos los parámetros requeridos determinados según ICH Q2(R2)
+- [ ] Protocolo de validación escrito con criterios de aceptación predefinidos
+- [ ] Especificidad demostrada: sin interferencias, productos de degradación resueltos, pureza de pico confirmada
+- [ ] Balance de masa dentro de 95-105% para el estudio de degradación forzada
+- [ ] Linealidad establecida con R^2 >= 0.999 (ensayo) o >= 0.99 (impurezas), residuales aleatorios
+- [ ] Exactitud demostrada a 3 niveles con recuperación dentro de los criterios de aceptación
+- [ ] RSD de repetibilidad dentro de los límites (ej., <= 2.0% para ensayo)
+- [ ] RSD de precisión intermedia dentro de los límites (ej., <= 3.0% para ensayo)
+- [ ] LOD y LOQ confirmados experimentalmente (precisión del LOQ <= 10% RSD)
+- [ ] Estudio de robustez completado con parámetros críticos del método identificados
+- [ ] Todos los datos crudos, cálculos y cromatogramas compilados en el informe de validación
 
 ## Errores Comunes
 
-- **Starting experiments before protocol approval**: In GMP environments, validation data generated before protocol approval may not be acceptable to regulators. Always obtain approval first.
-- **Using serial dilutions for linearity**: Serial dilutions propagate pipetting errors. Prepare each concentration level independently from a common stock for the most accurate linearity assessment.
-- **Insufficient forced degradation**: Generating too little degradation (< 5%) may miss important degradation products. Generating too much (> 30%) produces secondary degradation products that complicate interpretation. Target 5-20% degradation per condition.
-- **Confusing repeatability with intermediate precision**: Repeatability is same-day, same-analyst, same-instrument. Intermediate precision must vary at least one of these factors. Both are required for Category I and II methods.
-- **Neglecting the LOQ verification step**: Calculating LOQ from the calibration curve is not sufficient. The calculated LOQ must be experimentally confirmed by demonstrating acceptable precision and accuracy at that concentration.
-- **Omitting robustness until late in validation**: Discovering that the method is not robust after accuracy and precision studies wastes time and materials. Perform a quick robustness screen early in validation to catch fragile parameters.
-- **Incomplete validation reports**: Regulatory reviewers expect to see all raw data, chromatograms (not just tabulated numbers), statistical analysis, and explicit pass/fail conclusions for each parameter. Missing data leads to deficiency letters.
+- **Comenzar experimentos antes de la aprobación del protocolo**: En entornos GMP, los datos de validación generados antes de la aprobación del protocolo pueden no ser aceptables para los reguladores. Obtener siempre la aprobación primero.
+- **Usar diluciones seriadas para linealidad**: Las diluciones seriadas propagan errores de pipeteo. Preparar cada nivel de concentración independientemente desde una solución madre común para la evaluación de linealidad más precisa.
+- **Degradación forzada insuficiente**: Generar muy poca degradación (< 5%) puede omitir productos de degradación importantes. Generar demasiada (> 30%) produce productos de degradación secundarios que complican la interpretación. Apuntar a 5-20% de degradación por condición.
+- **Confundir repetibilidad con precisión intermedia**: La repetibilidad es mismo día, mismo analista, mismo instrumento. La precisión intermedia debe variar al menos uno de estos factores. Ambas son requeridas para métodos de Categoría I y II.
+- **Descuidar el paso de verificación del LOQ**: Calcular el LOQ desde la curva de calibración no es suficiente. El LOQ calculado debe confirmarse experimentalmente demostrando precisión y exactitud aceptables a esa concentración.
+- **Omitir robustez hasta tarde en la validación**: Descubrir que el método no es robusto después de los estudios de exactitud y precisión desperdicia tiempo y materiales. Realizar un cribado rápido de robustez temprano en la validación para detectar parámetros frágiles.
+- **Informes de validación incompletos**: Los revisores regulatorios esperan ver todos los datos crudos, cromatogramas (no solo números tabulados), análisis estadístico, y conclusiones explícitas de aprobado/no aprobado para cada parámetro. Los datos faltantes conducen a cartas de deficiencia.
 
 ## Habilidades Relacionadas
 
-- `develop-gc-method` -- GC method development that precedes validation
-- `develop-hplc-method` -- HPLC method development that precedes validation
-- `interpret-chromatogram` -- reading chromatograms generated during validation experiments
-- `troubleshoot-separation` -- resolving issues discovered during validation studies
-- `conduct-gxp-audit` -- auditing the completed validation for GxP compliance
-- `write-standard-operating-procedure` -- documenting the validated method as an SOP
+- `develop-gc-method` -- Desarrollo de método de GC que precede a la validación
+- `develop-hplc-method` -- Desarrollo de método de HPLC que precede a la validación
+- `interpret-chromatogram` -- Lectura de cromatogramas generados durante los experimentos de validación
+- `troubleshoot-separation` -- Resolución de problemas descubiertos durante los estudios de validación
+- `conduct-gxp-audit` -- Auditoría de la validación completada para cumplimiento GxP
+- `write-standard-operating-procedure` -- Documentación del método validado como un SOP

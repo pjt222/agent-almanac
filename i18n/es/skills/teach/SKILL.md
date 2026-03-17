@@ -25,31 +25,31 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Teach
+# Enseñar
 
-Conduct a structured knowledge transfer session — assessing the learner's current understanding, scaffolding from known to unknown, explaining at the calibrated depth, checking comprehension through questioning, adapting to feedback, and reinforcing through practice.
+Conducir una sesión estructurada de transferencia de conocimiento — evaluando la comprensión actual del aprendiz, construyendo andamios de lo conocido a lo desconocido, explicando a la profundidad calibrada, verificando la comprensión mediante preguntas, adaptándose a la retroalimentación y reforzando mediante la práctica.
 
 ## Cuándo Usar
 
-- A user asks "how does X work?" and the answer requires graduated explanation, not a data dump
-- The user's questions reveal a gap between their current understanding and what they need to know
-- Previous explanations have not landed — the user is confused or asking the same question differently
-- Teaching a concept that has prerequisites the user may not have
-- After `learn` has built a deep mental model that now needs to be communicated effectively
+- Un usuario pregunta "¿cómo funciona X?" y la respuesta requiere explicación graduada, no un volcado de datos
+- Las preguntas del usuario revelan una brecha entre su comprensión actual y lo que necesitan saber
+- Explicaciones anteriores no han aterrizado — el usuario está confundido o haciendo la misma pregunta de diferente forma
+- Al enseñar un concepto que tiene prerrequisitos que el usuario puede no tener
+- Después de que `learn` ha construido un modelo mental profundo que ahora necesita ser comunicado efectivamente
 
 ## Entradas
 
-- **Requerido**: The concept, system, or skill to teach
-- **Requerido**: The learner (available implicitly — the user in conversation)
-- **Opcional**: Known learner context (expertise level, background, stated goals)
-- **Opcional**: Previous failed explanations (what has already been tried)
-- **Opcional**: Time/depth constraint (quick overview vs. deep understanding)
+- **Requerido**: El concepto, sistema o habilidad a enseñar
+- **Requerido**: El aprendiz (disponible implícitamente — el usuario en la conversación)
+- **Opcional**: Contexto conocido del aprendiz (nivel de experiencia, antecedentes, objetivos declarados)
+- **Opcional**: Explicaciones fallidas previas (qué se ha intentado ya)
+- **Opcional**: Restricción de tiempo/profundidad (panorama rápido versus comprensión profunda)
 
 ## Procedimiento
 
-### Paso 1: Assess — Map the Learner
+### Paso 1: Evaluar — Mapear al Aprendiz
 
-Before explaining anything, determine what the learner already knows and what they need.
+Antes de explicar cualquier cosa, determinar qué sabe ya el aprendiz y qué necesita.
 
 ```
 Learner Calibration Matrix:
@@ -79,71 +79,71 @@ Learner Calibration Matrix:
 └──────────────┴────────────────────────────┴──────────────────────────┘
 ```
 
-1. Review what the user has said: their questions, vocabulary, stated goals
-2. Classify their likely level for this specific topic (a person can be advanced in one area and novice in another)
-3. Identify the Zone of Proximal Development (ZPD): what is just beyond their current reach but achievable with support?
-4. Note any misconceptions that need to be addressed before the correct model can land
-5. Identify the best entry point: what do they already know that connects to what they need to learn?
+1. Revisar lo que el usuario ha dicho: sus preguntas, vocabulario, objetivos declarados
+2. Clasificar su nivel probable para este tema específico (una persona puede ser avanzada en un área y novata en otra)
+3. Identificar la Zona de Desarrollo Próximo (ZDP): ¿qué está justo más allá de su alcance actual pero es alcanzable con apoyo?
+4. Notar cualquier concepto erróneo que necesite ser abordado antes de que el modelo correcto pueda aterrizar
+5. Identificar el mejor punto de entrada: ¿qué saben ya que conecta con lo que necesitan aprender?
 
-**Esperado:** A clear picture of: what the learner knows, what they need to know, and what bridge connects the two. The assessment should be specific enough to choose an explanation strategy.
+**Esperado:** Una imagen clara de: qué sabe el aprendiz, qué necesita saber, y qué puente conecta los dos. La evaluación debe ser lo suficientemente específica para elegir una estrategia de explicación.
 
-**En caso de fallo:** If the learner's level is unclear, ask a calibration question: "Are you familiar with [prerequisite concept]?" This is not a test — it is gathering data to teach better. If asking feels awkward, default to intermediate level and adjust based on their response.
+**En caso de fallo:** Si el nivel del aprendiz no está claro, hacer una pregunta de calibración: "¿Estás familiarizado con [concepto prerrequisito]?" Esto no es una prueba — es recopilar datos para enseñar mejor. Si preguntar se siente incómodo, comenzar en nivel intermedio y ajustar según su respuesta.
 
-### Paso 2: Scaffold — Bridge Known to Unknown
+### Paso 2: Andamiar — Construir Puente de lo Conocido a lo Desconocido
 
-Build a path from what the learner already understands to the new concept.
+Construir un camino desde lo que el aprendiz ya entiende hasta el nuevo concepto.
 
-1. Identify the anchor: one concept the learner definitely understands that relates to the target
-2. State the connection explicitly: "X, which you know, works like Y in this new context because..."
-3. Introduce one new idea at a time — never two new concepts in the same sentence
-4. Use concrete examples before abstract principles
-5. Build layered complexity: simple version first, then add nuance
-6. If prerequisites are missing, teach the prerequisite first (mini-scaffold) before returning to the main concept
+1. Identificar el ancla: un concepto que el aprendiz definitivamente entiende y que se relaciona con el objetivo
+2. Declarar la conexión explícitamente: "X, que ya conoces, funciona como Y en este nuevo contexto porque..."
+3. Introducir una sola idea nueva a la vez — nunca dos conceptos nuevos en la misma oración
+4. Usar ejemplos concretos antes de principios abstractos
+5. Construir complejidad en capas: versión simple primero, luego agregar matices
+6. Si faltan prerrequisitos, enseñar el prerrequisito primero (mini-andamio) antes de regresar al concepto principal
 
-**Esperado:** A scaffolded path where each step builds on the previous one. The learner should never feel lost because each new idea connects to something they already hold.
+**Esperado:** Un camino andamiado donde cada paso se construye sobre el anterior. El aprendiz nunca debería sentirse perdido porque cada nueva idea conecta con algo que ya sostienen.
 
-**En caso de fallo:** If the gap between known and unknown is too large for a single scaffold, break it into multiple smaller steps. If no familiar anchor exists (entirely novel domain), use analogy to a different domain the learner knows. If the analogy is imperfect, acknowledge the limits: "This is like X, except for..."
+**En caso de fallo:** Si la brecha entre lo conocido y lo desconocido es demasiado grande para un solo andamio, dividirla en múltiples pasos más pequeños. Si no existe un ancla familiar (dominio completamente nuevo), usar analogía con un dominio diferente que el aprendiz conozca. Si la analogía es imperfecta, reconocer los límites: "Esto es como X, excepto por..."
 
-### Paso 3: Explain — Calibrate Depth and Style
+### Paso 3: Explicar — Calibrar Profundidad y Estilo
 
-Deliver the explanation at the right level, in the right mode.
+Entregar la explicación al nivel correcto, en el modo correcto.
 
-1. Open with the core idea in one sentence — the headline before the article
-2. Expand with the scaffolded explanation built in Step 2
-3. Use the learner's vocabulary, not the domain's jargon (unless they are advanced)
-4. For code concepts: show a minimal working example, not a comprehensive one
-5. For abstract concepts: provide a concrete instance first, then generalize
-6. For processes: walk through a specific case step-by-step before stating the general rules
-7. Monitor for signs of confusion: if the next question does not build on the explanation, the explanation did not land
+1. Abrir con la idea central en una oración — el titular antes del artículo
+2. Expandir con la explicación andamiada construida en el Paso 2
+3. Usar el vocabulario del aprendiz, no la jerga del dominio (a menos que sean avanzados)
+4. Para conceptos de código: mostrar un ejemplo mínimo funcional, no uno comprehensivo
+5. Para conceptos abstractos: proporcionar una instancia concreta primero, luego generalizar
+6. Para procesos: recorrer un caso específico paso a paso antes de declarar las reglas generales
+7. Monitorear señales de confusión: si la siguiente pregunta no se construye sobre la explicación, la explicación no aterrizó
 
-**Esperado:** The learner receives an explanation that is neither too shallow (leaving them with questions) nor too deep (overwhelming with unnecessary detail). The explanation uses their language and connects to their context.
+**Esperado:** El aprendiz recibe una explicación que no es ni demasiado superficial (dejándolos con preguntas) ni demasiado profunda (abrumando con detalle innecesario). La explicación usa su lenguaje y conecta con su contexto.
 
-**En caso de fallo:** If the explanation is too long, the core idea may be buried — restate the one-sentence headline. If the learner looks more confused after the explanation, the entry point was wrong — try a different anchor or analogy. If the concept is genuinely complex, acknowledge complexity rather than hiding it: "This has three parts, and they interact. Let me start with the first."
+**En caso de fallo:** Si la explicación es demasiado larga, la idea central puede estar enterrada — reformular el titular de una oración. Si el aprendiz se ve más confundido después de la explicación, el punto de entrada fue incorrecto — intentar un ancla o analogía diferente. Si el concepto es genuinamente complejo, reconocer la complejidad en lugar de ocultarla: "Esto tiene tres partes y se interrelacionan. Déjame comenzar con la primera."
 
-### Paso 4: Check — Verify Understanding
+### Paso 4: Verificar — Comprobar la Comprensión
 
-Do not assume the explanation worked. Test it through questions that reveal the learner's mental model.
+No asumir que la explicación funcionó. Probarla mediante preguntas que revelen el modelo mental del aprendiz.
 
-1. Ask a question that requires application, not recall: "Given X, what would you expect to happen?"
-2. Ask for a paraphrase: "Can you explain this back in your own words?"
-3. Present a variation: "What if we changed this one thing?"
-4. Look for the specific understanding: can they predict, not just repeat?
-5. If their answer reveals a misconception, note the specific error for Step 5
-6. If their answer is correct, push slightly further: can they generalize?
+1. Hacer una pregunta que requiera aplicación, no recuerdo: "Dado X, ¿qué esperarías que sucediera?"
+2. Pedir una paráfrasis: "¿Puedes explicar esto con tus propias palabras?"
+3. Presentar una variación: "¿Qué pasaría si cambiáramos esta cosa?"
+4. Buscar la comprensión específica: ¿pueden predecir, no solo repetir?
+5. Si su respuesta revela un concepto erróneo, notar el error específico para el Paso 5
+6. Si su respuesta es correcta, presionar un poco más: ¿pueden generalizar?
 
-**Esperado:** The check reveals whether the learner has a working mental model or is parroting back the explanation. A working model can handle variations; a memorized explanation cannot.
+**Esperado:** La verificación revela si el aprendiz tiene un modelo mental funcional o está repitiendo como loro la explicación. Un modelo funcional puede manejar variaciones; una explicación memorizada no puede.
 
-**En caso de fallo:** If the learner cannot answer the check question, the explanation did not build the right mental model. This is not their failure — it is feedback on the teaching. Note what specifically did not land and proceed to Step 5.
+**En caso de fallo:** Si el aprendiz no puede responder la pregunta de verificación, la explicación no construyó el modelo mental correcto. Esto no es su fallo — es retroalimentación sobre la enseñanza. Notar qué específicamente no aterrizó y proceder al Paso 5.
 
-### Paso 5: Adapt — Respond to Feedback
+### Paso 5: Adaptar — Responder a la Retroalimentación
 
-Based on the check results, adjust the teaching approach.
+Basándose en los resultados de la verificación, ajustar el enfoque de enseñanza.
 
-1. If understanding is solid: proceed to reinforcement (Step 6) or advance to the next concept
-2. If a specific misconception exists: address it directly with evidence, not repetition
-3. If general confusion exists: try a completely different explanation approach
-4. If the learner is ahead of the assessment: accelerate — skip scaffolding and go to nuance
-5. If the learner is behind the assessment: slow down — teach the prerequisite they are missing
+1. Si la comprensión es sólida: proceder al refuerzo (Paso 6) o avanzar al siguiente concepto
+2. Si existe un concepto erróneo específico: abordarlo directamente con evidencia, no con repetición
+3. Si existe confusión general: intentar un enfoque de explicación completamente diferente
+4. Si el aprendiz está adelante de la evaluación: acelerar — saltar el andamiaje e ir a los matices
+5. Si el aprendiz está detrás de la evaluación: desacelerar — enseñar el prerrequisito que les falta
 
 ```
 Adaptation Responses:
@@ -167,46 +167,46 @@ Adaptation Responses:
 └──────────────────┴─────────────────────────────────────────────────┘
 ```
 
-**Esperado:** The teaching adapts in real time based on feedback. No explanation is repeated identically — each retry uses a different approach. The adaptation should feel responsive, not mechanical.
+**Esperado:** La enseñanza se adapta en tiempo real basándose en la retroalimentación. Ninguna explicación se repite idénticamente — cada reintento usa un enfoque diferente. La adaptación debería sentirse responsiva, no mecánica.
 
-**En caso de fallo:** If multiple adaptation attempts fail, the problem may be a missing prerequisite that is so fundamental neither party has identified it. Ask explicitly: "What part of the explanation feels like the biggest jump?" This often reveals the hidden gap.
+**En caso de fallo:** Si múltiples intentos de adaptación fallan, el problema puede ser un prerrequisito faltante tan fundamental que ninguna de las partes lo ha identificado. Preguntar explícitamente: "¿Qué parte de la explicación se siente como el salto más grande?" Esto a menudo revela la brecha oculta.
 
-### Paso 6: Reinforce — Provide Practice
+### Paso 6: Reforzar — Proporcionar Práctica
 
-Solidify understanding through application, not repetition.
+Solidificar la comprensión a través de la aplicación, no de la repetición.
 
-1. Provide a practice problem that requires the new concept (not a trick question)
-2. If in a coding context: suggest a small modification to existing code that uses the concept
-3. If in a conceptual context: present a scenario and ask them to apply the model
-4. Connect forward: "Now that you understand X, this connects to Y, which we can explore next"
-5. Provide reference material for independent exploration: documentation links, related files, further reading
-6. Close the loop: "To summarize what we covered..." — one sentence for the core concept
+1. Proporcionar un problema de práctica que requiera el nuevo concepto (no una pregunta trampa)
+2. Si es un contexto de código: sugerir una pequeña modificación al código existente que use el concepto
+3. Si es un contexto conceptual: presentar un escenario y pedirles que apliquen el modelo
+4. Conectar hacia adelante: "Ahora que entiendes X, esto conecta con Y, que podemos explorar después"
+5. Proporcionar material de referencia para exploración independiente: enlaces de documentación, archivos relacionados, lectura adicional
+6. Cerrar el ciclo: "Para resumir lo que cubrimos..." — una oración para el concepto central
 
-**Esperado:** The learner has applied the concept at least once and has resources for continued learning. The summary anchors the learning for future recall.
+**Esperado:** El aprendiz ha aplicado el concepto al menos una vez y tiene recursos para aprendizaje continuo. El resumen ancla el aprendizaje para recuerdo futuro.
 
-**En caso de fallo:** If the practice problem is too hard, the teaching jumped too far — simplify the problem. If the learner can do the practice but cannot explain why, they have procedural knowledge without conceptual understanding — return to Step 3 with a focus on the "why" rather than the "how."
+**En caso de fallo:** Si el problema de práctica es demasiado difícil, la enseñanza saltó demasiado lejos — simplificar el problema. Si el aprendiz puede hacer la práctica pero no puede explicar por qué, tienen conocimiento procedimental sin comprensión conceptual — regresar al Paso 3 con enfoque en el "por qué" en lugar del "cómo."
 
 ## Validación
 
-- [ ] The learner's level was assessed before the explanation began
-- [ ] The explanation was scaffolded from known to unknown, not delivered as a data dump
-- [ ] At least one check question was asked to verify understanding (not assumed)
-- [ ] The teaching adapted based on feedback rather than repeating the same explanation
-- [ ] The learner can apply the concept, not just recall the explanation
-- [ ] Honest gaps were acknowledged rather than glossed over
+- [ ] El nivel del aprendiz fue evaluado antes de que comenzara la explicación
+- [ ] La explicación fue andamiada de lo conocido a lo desconocido, no entregada como volcado de datos
+- [ ] Al menos una pregunta de verificación fue hecha para comprobar la comprensión (no asumida)
+- [ ] La enseñanza se adaptó basándose en retroalimentación en lugar de repetir la misma explicación
+- [ ] El aprendiz puede aplicar el concepto, no solo recordar la explicación
+- [ ] Las brechas honestas fueron reconocidas en lugar de pasarse por alto
 
 ## Errores Comunes
 
-- **The curse of knowledge**: Forgetting that the learner does not share the teacher's context. Jargon, assumed prerequisites, and implicit reasoning steps are the primary culprits
-- **Explaining to impress rather than to teach**: Comprehensive, technically precise explanations that demonstrate knowledge but leave the learner behind
-- **Repeating louder**: When an explanation does not land, repeating it with more emphasis rather than trying a different approach
-- **Testing instead of teaching**: Using check questions as gotchas rather than as diagnostic tools. The goal is to reveal understanding, not to catch failure
-- **Assuming silence is understanding**: The absence of questions does not mean the explanation worked — it often means the learner does not know what to ask
-- **One-size-fits-all depth**: Giving a novice an advanced explanation because "they should understand the full picture" overwhelms; giving an expert a beginner explanation because "better safe" wastes their time
+- **La maldición del conocimiento**: Olvidar que el aprendiz no comparte el contexto del profesor. Jerga, prerrequisitos asumidos y pasos de razonamiento implícitos son los principales culpables
+- **Explicar para impresionar en lugar de enseñar**: Explicaciones comprehensivas y técnicamente precisas que demuestran conocimiento pero dejan al aprendiz atrás
+- **Repetir más fuerte**: Cuando una explicación no aterriza, repetirla con más énfasis en lugar de intentar un enfoque diferente
+- **Evaluar en lugar de enseñar**: Usar preguntas de verificación como trampas en lugar de herramientas de diagnóstico. El objetivo es revelar la comprensión, no atrapar el fallo
+- **Asumir que el silencio es comprensión**: La ausencia de preguntas no significa que la explicación funcionó — a menudo significa que el aprendiz no sabe qué preguntar
+- **Profundidad de talla única**: Darle a un novato una explicación avanzada porque "deberían entender el panorama completo" abruma; darle a un experto una explicación de principiante porque "mejor prevenir" desperdicia su tiempo
 
 ## Habilidades Relacionadas
 
-- `teach-guidance` — the human-guidance variant for coaching a person in becoming a better teacher
-- `learn` — systematic knowledge acquisition that builds the understanding to teach from
-- `listen` — deep receptive attention that reveals the learner's actual needs beyond their stated question
-- `meditate` — clearing assumptions between teaching episodes to approach each learner freshly
+- `teach-guidance` — la variante de guía humana para entrenar a una persona en convertirse en mejor profesor
+- `learn` — adquisición sistemática de conocimiento que construye la comprensión desde la cual enseñar
+- `listen` — atención receptiva profunda que revela las necesidades reales del aprendiz más allá de su pregunta declarada
+- `meditate` — limpiar suposiciones entre episodios de enseñanza para abordar a cada aprendiz con frescura

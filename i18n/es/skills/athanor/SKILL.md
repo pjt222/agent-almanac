@@ -1,14 +1,15 @@
 ---
 name: athanor
 description: >
-  Four-stage alchemical code transmutation — nigredo (decomposition), albedo
-  (purification), citrinitas (illumination), rubedo (synthesis) — with meditate
-  and heal checkpoints between stages. Transforms tangled or legacy code into
-  optimized, well-structured output through systematic material analysis. Use
-  when transforming legacy code into modern equivalents, refactoring deeply
-  tangled modules where incremental fixes keep failing, converting a codebase
-  between paradigms, or when simpler refactoring approaches have stalled and a
-  full-cycle transformation is needed.
+  Transmutación alquímica de código en cuatro etapas — nigredo (descomposición),
+  albedo (purificación), citrinitas (iluminación), rubedo (síntesis) — con puntos
+  de control de meditate y heal entre etapas. Transforma código enredado o
+  heredado en salida optimizada y bien estructurada mediante análisis sistemático
+  de material. Usar al transformar código heredado en equivalentes modernos, al
+  refactorizar módulos profundamente enredados donde las correcciones incrementales
+  siguen fallando, al convertir una base de código entre paradigmas, o cuando
+  enfoques de refactorización más simples se han estancado y se necesita una
+  transformación de ciclo completo.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -27,182 +28,182 @@ metadata:
 
 # Athanor
 
-Execute a four-stage alchemical transmutation of code or data — decomposing the prima materia, purifying its essence, illuminating its target form, and synthesizing the refined output. The athanor is the furnace that maintains steady heat across all stages.
+Ejecutar una transmutación alquímica de código o datos en cuatro etapas — descomponiendo la prima materia, purificando su esencia, iluminando su forma objetivo, y sintetizando la salida refinada. El athanor es el horno que mantiene calor constante a lo largo de todas las etapas.
 
 ## Cuándo Usar
 
-- Transforming legacy code into modern, well-structured equivalents
-- Refactoring deeply tangled modules where incremental fixes keep failing
-- Converting a codebase from one paradigm to another (procedural to functional, monolith to modular)
-- Processing raw, messy data into clean analytical datasets
-- When simpler refactoring approaches have stalled and a full-cycle transformation is needed
+- Transformar código heredado en equivalentes modernos y bien estructurados
+- Refactorizar módulos profundamente enredados donde las correcciones incrementales siguen fallando
+- Convertir una base de código de un paradigma a otro (procedimental a funcional, monolito a modular)
+- Procesar datos crudos y desordenados en conjuntos de datos analíticos limpios
+- Cuando enfoques de refactorización más simples se han estancado y se necesita una transformación de ciclo completo
 
 ## Entradas
 
-- **Requerido**: The material to transform (file paths, module names, or data sources)
-- **Requerido**: The desired end state (target architecture, paradigm, or format)
-- **Opcional**: Known constraints (must preserve API, can't change database schema, etc.)
-- **Opcional**: Prior failed transformation attempts and why they stalled
+- **Requerido**: El material a transformar (rutas de archivos, nombres de módulos o fuentes de datos)
+- **Requerido**: El estado final deseado (arquitectura objetivo, paradigma o formato)
+- **Opcional**: Restricciones conocidas (debe preservar API, no puede cambiar esquema de base de datos, etc.)
+- **Opcional**: Intentos de transformación previos fallidos y por qué se estancaron
 
 ## Procedimiento
 
-### Paso 1: Nigredo — Decomposition
+### Paso 1: Nigredo — Descomposición
 
-Break the prima materia into its constituent elements. Nothing is sacred; everything is cataloged.
+Descomponer la prima materia en sus elementos constituyentes. Nada es sagrado; todo se cataloga.
 
-1. Inventory the material completely:
-   - List every function, class, module, or data entity
-   - Map all dependencies (imports, calls, data flows)
-   - Identify hidden coupling (shared globals, implicit state, side effects)
-2. Surface hidden assumptions:
-   - What undocumented behaviors does the code rely on?
-   - What error conditions are silently swallowed?
-   - What ordering dependencies exist?
-3. Catalog anti-patterns and technical debt:
-   - God objects, circular dependencies, copy-paste duplication
-   - Dead code paths, unreachable branches, vestigial features
-   - Hardcoded values, magic numbers, embedded configuration
-4. Produce the **Nigredo Inventory**: a structured catalog of every element, dependency, assumption, and anti-pattern
+1. Inventariar el material completamente:
+   - Listar cada función, clase, módulo o entidad de datos
+   - Mapear todas las dependencias (importaciones, llamadas, flujos de datos)
+   - Identificar acoplamiento oculto (variables globales compartidas, estado implícito, efectos secundarios)
+2. Hacer explícitas las suposiciones ocultas:
+   - ¿En qué comportamientos no documentados se apoya el código?
+   - ¿Qué condiciones de error se tragan silenciosamente?
+   - ¿Qué dependencias de orden existen?
+3. Catalogar anti-patrones y deuda técnica:
+   - Objetos dios, dependencias circulares, duplicación de copiar y pegar
+   - Caminos de código muerto, ramas inalcanzables, características vestigiales
+   - Valores codificados en duro, números mágicos, configuración embebida
+4. Producir el **Inventario Nigredo**: un catálogo estructurado de cada elemento, dependencia, suposición y anti-patrón
 
-**Esperado:** A complete, unflinching inventory of the material. The inventory should feel uncomfortable — if it doesn't, the decomposition isn't thorough enough. Every hidden assumption is now explicit.
+**Esperado:** Un inventario completo e implacable del material. El inventario debe sentirse incómodo — si no lo hace, la descomposición no es suficientemente profunda. Cada suposición oculta es ahora explícita.
 
-**En caso de fallo:** If the material is too large to inventory fully, decompose by module boundary and treat each module as a separate athanor run. If dependencies are too tangled to map, use `grep`/`Grep` to trace actual call sites rather than relying on documentation.
+**En caso de fallo:** Si el material es demasiado grande para inventariar completamente, descomponer por límite de módulo y tratar cada módulo como una ejecución separada del athanor. Si las dependencias están demasiado enredadas para mapear, usar `grep`/`Grep` para rastrear los sitios de llamada reales en lugar de confiar en la documentación.
 
-### Paso 2: Meditate — Calcination Checkpoint
+### Paso 2: Meditate — Punto de control de calcinación
 
-Run the `meditate` skill to clear assumptions accumulated during nigredo.
+Ejecutar la habilidad `meditate` para limpiar las suposiciones acumuladas durante el nigredo.
 
-1. Set aside the nigredo inventory and clear mental context
-2. Anchor on the transformation goal stated in Inputs
-3. Observe what biases nigredo introduced — did the decomposition make certain approaches seem inevitable?
-4. Label any premature solution ideas as "tangent" and return to the goal
+1. Dejar de lado el inventario nigredo y limpiar el contexto mental
+2. Anclarse en el objetivo de transformación declarado en las Entradas
+3. Observar qué sesgos introdujo el nigredo — ¿la descomposición hizo que ciertos enfoques parecieran inevitables?
+4. Etiquetar cualquier idea de solución prematura como "tangente" y volver al objetivo
 
-**Esperado:** A clear, unbiased state ready to evaluate the material without being anchored to its current form. The goal feels fresh rather than constrained by what was found.
+**Esperado:** Un estado claro y sin sesgos listo para evaluar el material sin estar anclado a su forma actual. El objetivo se siente fresco en lugar de restringido por lo que se encontró.
 
-**En caso de fallo:** If the nigredo findings keep pulling attention (a particularly bad anti-pattern, a clever hack that's tempting to preserve), write it down and explicitly set it aside. Proceed only when the goal is clearer than the current form.
+**En caso de fallo:** Si los hallazgos del nigredo siguen atrayendo la atención (un anti-patrón particularmente malo, un hack ingenioso que es tentador preservar), escribirlo y dejarlo de lado explícitamente. Proceder solo cuando el objetivo sea más claro que la forma actual.
 
-### Paso 3: Albedo — Purification
+### Paso 3: Albedo — Purificación
 
-Separate the essential from the accidental. Strip away everything that doesn't serve the target form.
+Separar lo esencial de lo accidental. Eliminar todo lo que no sirva a la forma objetivo.
 
-1. From the nigredo inventory, classify each element:
-   - **Essential**: Core business logic, irreplaceable algorithms, critical data transformations
-   - **Accidental**: Framework boilerplate, workarounds for old bugs, compatibility shims
-   - **Toxic**: Anti-patterns, security vulnerabilities, dead code
-2. Extract the essential elements into isolation:
-   - Pull core logic out of framework wrappers
-   - Separate data transformation from I/O
-   - Extract interfaces from implementations
-3. Remove toxic elements entirely — document what was removed and why
-4. For accidental elements, determine if equivalents exist in the target form
-5. Produce the **Albedo Extract**: purified essential logic with clean interfaces
+1. Del inventario nigredo, clasificar cada elemento:
+   - **Esencial**: Lógica de negocio central, algoritmos irremplazables, transformaciones de datos críticas
+   - **Accidental**: Boilerplate de framework, soluciones alternativas para bugs antiguos, shims de compatibilidad
+   - **Tóxico**: Anti-patrones, vulnerabilidades de seguridad, código muerto
+2. Extraer los elementos esenciales en aislamiento:
+   - Extraer la lógica central de los wrappers del framework
+   - Separar la transformación de datos de la E/S
+   - Extraer interfaces de las implementaciones
+3. Eliminar los elementos tóxicos completamente — documentar lo que se eliminó y por qué
+4. Para elementos accidentales, determinar si existen equivalentes en la forma objetivo
+5. Producir el **Extracto Albedo**: lógica esencial purificada con interfaces limpias
 
-**Esperado:** A set of pure, isolated functions/modules that represent the core value of the original material. Each piece is testable in isolation. The extract is significantly smaller than the original.
+**Esperado:** Un conjunto de funciones/módulos puros y aislados que representan el valor central del material original. Cada pieza es testeable en aislamiento. El extracto es significativamente más pequeño que el original.
 
-**En caso de fallo:** If essential and accidental are too intertwined to separate, introduce seam points (interfaces) first. If the material resists purification, it may need `dissolve-form` before the athanor can continue.
+**En caso de fallo:** Si lo esencial y lo accidental están demasiado entrelazados para separar, introducir puntos de costura (interfaces) primero. Si el material resiste la purificación, puede necesitar `dissolve-form` antes de que el athanor pueda continuar.
 
-### Paso 4: Heal — Purification Assessment
+### Paso 4: Heal — Evaluación de purificación
 
-Run the `heal` skill to assess whether the purification was thorough.
+Ejecutar la habilidad `heal` para evaluar si la purificación fue minuciosa.
 
-1. Triage the albedo extract: is anything still carrying toxic residue?
-2. Check for drift: has the purification drifted from the original transformation goal?
-3. Assess completeness: are all essential elements accounted for, or were some discarded prematurely?
-4. Rebalance if needed: restore any essential elements that were incorrectly classified as accidental
+1. Triaje del extracto albedo: ¿algo todavía lleva residuo tóxico?
+2. Verificar desviación: ¿la purificación se desvió del objetivo de transformación original?
+3. Evaluar completitud: ¿todos los elementos esenciales están contabilizados, o algunos fueron descartados prematuramente?
+4. Reequilibrar si es necesario: restaurar cualquier elemento esencial que fue clasificado incorrectamente como accidental
 
-**Esperado:** Confidence that the albedo extract is complete, clean, and ready for illumination. No essential logic was lost; no toxic patterns remain.
+**Esperado:** Confianza en que el extracto albedo está completo, limpio y listo para la iluminación. Ninguna lógica esencial se perdió; ningún patrón tóxico permanece.
 
-**En caso de fallo:** If the assessment reveals significant gaps, return to Step 3 with the specific gaps identified. Do not proceed to citrinitas with incomplete material.
+**En caso de fallo:** Si la evaluación revela brechas significativas, volver al Paso 3 con las brechas específicas identificadas. No proceder al citrinitas con material incompleto.
 
-### Paso 5: Citrinitas — Illumination
+### Paso 5: Citrinitas — Iluminación
 
-See the target form. Map the purified elements to their optimal structure.
+Ver la forma objetivo. Mapear los elementos purificados a su estructura óptima.
 
-1. Pattern recognition: identify which design patterns serve the purified elements
-   - Does the data flow suggest pipes/filters, event sourcing, CQRS?
-   - Do the interfaces suggest strategy, adapter, facade?
-   - Does the module structure suggest hexagonal, layered, micro-kernel?
-2. Design the target architecture:
-   - Map each essential element to its new location
-   - Define the interfaces between components
-   - Specify the data flow through the new structure
-3. Identify what must be created new (has no equivalent in the original):
-   - New abstractions that unify duplicated logic
-   - New interfaces that replace implicit coupling
-   - New error handling that replaces silent failures
-4. Produce the **Citrinitas Blueprint**: a complete mapping from albedo extract to target form
+1. Reconocimiento de patrones: identificar qué patrones de diseño sirven a los elementos purificados
+   - ¿El flujo de datos sugiere pipes/filters, event sourcing, CQRS?
+   - ¿Las interfaces sugieren strategy, adapter, facade?
+   - ¿La estructura de módulos sugiere hexagonal, por capas, micro-kernel?
+2. Diseñar la arquitectura objetivo:
+   - Mapear cada elemento esencial a su nueva ubicación
+   - Definir las interfaces entre componentes
+   - Especificar el flujo de datos a través de la nueva estructura
+3. Identificar lo que debe crearse nuevo (no tiene equivalente en el original):
+   - Nuevas abstracciones que unifican lógica duplicada
+   - Nuevas interfaces que reemplazan acoplamiento implícito
+   - Nuevo manejo de errores que reemplaza fallos silenciosos
+4. Producir el **Plano Citrinitas**: un mapeo completo del extracto albedo a la forma objetivo
 
-**Esperado:** A clear, detailed blueprint where every essential element has a home and every interface is defined. The blueprint should feel inevitable — given the purified elements, this structure is the natural fit.
+**Esperado:** Un plano claro y detallado donde cada elemento esencial tiene un hogar y cada interfaz está definida. El plano debe sentirse inevitable — dados los elementos purificados, esta estructura es el ajuste natural.
 
-**En caso de fallo:** If multiple valid architectures compete, evaluate each against the constraints from Inputs. If no clear winner emerges, prefer the simplest option and document the alternatives as future options.
+**En caso de fallo:** Si múltiples arquitecturas válidas compiten, evaluar cada una contra las restricciones de las Entradas. Si no emerge un claro ganador, preferir la opción más simple y documentar las alternativas como opciones futuras.
 
-### Paso 6: Meditate — Pre-Synthesis Checkpoint
+### Paso 6: Meditate — Punto de control pre-síntesis
 
-Run the `meditate` skill to prepare for the final synthesis.
+Ejecutar la habilidad `meditate` para prepararse para la síntesis final.
 
-1. Clear the analytical context from citrinitas
-2. Anchor on the citrinitas blueprint as the synthesis guide
-3. Observe any anxiety about the transformation — is anything being rushed?
-4. Confirm readiness: the blueprint is clear, the material is purified, the constraints are known
+1. Limpiar el contexto analítico del citrinitas
+2. Anclarse en el plano citrinitas como guía de síntesis
+3. Observar cualquier ansiedad sobre la transformación — ¿se está apresurando algo?
+4. Confirmar preparación: el plano es claro, el material está purificado, las restricciones son conocidas
 
-**Esperado:** Calm clarity about what needs to be built. The synthesis phase should be execution, not design.
+**Esperado:** Claridad tranquila sobre lo que necesita construirse. La fase de síntesis debe ser ejecución, no diseño.
 
-**En caso de fallo:** If doubt persists about the blueprint, revisit Step 5 with the specific concerns. Better to refine the blueprint than to begin synthesis with uncertainty.
+**En caso de fallo:** Si la duda persiste sobre el plano, revisitar el Paso 5 con las preocupaciones específicas. Es mejor refinar el plano que comenzar la síntesis con incertidumbre.
 
-### Paso 7: Rubedo — Synthesis
+### Paso 7: Rubedo — Síntesis
 
-Compose the purified elements into their target form. The philosopher's stone: working, optimized code.
+Componer los elementos purificados en su forma objetivo. La piedra filosofal: código funcional y optimizado.
 
-1. Build the new structure following the citrinitas blueprint:
-   - Create files, modules, and interfaces as specified
-   - Migrate each essential element to its new location
-   - Implement new abstractions and interfaces
-2. Wire the components together:
-   - Connect data flows as designed
-   - Implement error propagation through new paths
-   - Configure dependency injection or module loading
-3. Verify the synthesis:
-   - Does each component work in isolation? (unit tests)
-   - Do the components compose correctly? (integration tests)
-   - Does the full system produce the same outputs as the original? (regression tests)
-4. Remove scaffolding:
-   - Delete temporary compatibility shims
-   - Remove migration aids
-   - Clean up any remaining references to the old structure
-5. Produce the **Rubedo Output**: the transmuted code, fully functional in its new form
+1. Construir la nueva estructura siguiendo el plano citrinitas:
+   - Crear archivos, módulos e interfaces según lo especificado
+   - Migrar cada elemento esencial a su nueva ubicación
+   - Implementar nuevas abstracciones e interfaces
+2. Conectar los componentes:
+   - Conectar flujos de datos según el diseño
+   - Implementar propagación de errores a través de nuevos caminos
+   - Configurar inyección de dependencias o carga de módulos
+3. Verificar la síntesis:
+   - ¿Cada componente funciona en aislamiento? (pruebas unitarias)
+   - ¿Los componentes se componen correctamente? (pruebas de integración)
+   - ¿El sistema completo produce las mismas salidas que el original? (pruebas de regresión)
+4. Remover andamiaje:
+   - Eliminar shims de compatibilidad temporales
+   - Remover ayudas de migración
+   - Limpiar cualquier referencia restante a la estructura antigua
+5. Producir la **Salida Rubedo**: el código transmutado, completamente funcional en su nueva forma
 
-**Esperado:** Working code that is measurably better than the original: fewer lines, clearer structure, better test coverage, fewer dependencies. The transformation is complete and the old form can be retired.
+**Esperado:** Código funcional que es mediblemente mejor que el original: menos líneas, estructura más clara, mejor cobertura de pruebas, menos dependencias. La transformación está completa y la forma antigua puede retirarse.
 
-**En caso de fallo:** If synthesis reveals gaps in the blueprint, do not patch — return to Step 5 (citrinitas) to revise the design. If individual components fail, isolate and fix them before attempting full integration. The rubedo must not produce a half-transformed chimera.
+**En caso de fallo:** Si la síntesis revela brechas en el plano, no parchear — volver al Paso 5 (citrinitas) para revisar el diseño. Si componentes individuales fallan, aislarlos y corregirlos antes de intentar la integración completa. El rubedo no debe producir una quimera a medio transformar.
 
 ## Validación
 
-- [ ] Nigredo inventory is complete (all elements, dependencies, assumptions cataloged)
-- [ ] Meditate checkpoint passed between nigredo/albedo (assumptions cleared)
-- [ ] Albedo extract contains only essential elements with clean interfaces
-- [ ] Heal assessment confirms purification completeness
-- [ ] Citrinitas blueprint maps every essential element to target form
-- [ ] Meditate checkpoint passed between citrinitas/rubedo (ready for synthesis)
-- [ ] Rubedo output passes regression tests against original behavior
-- [ ] Rubedo output is measurably improved (complexity, coupling, test coverage)
-- [ ] No toxic elements survived into the final output
-- [ ] Transformation constraints from Inputs are satisfied
+- [ ] El inventario nigredo está completo (todos los elementos, dependencias, suposiciones catalogadas)
+- [ ] El punto de control meditate pasó entre nigredo/albedo (suposiciones limpiadas)
+- [ ] El extracto albedo contiene solo elementos esenciales con interfaces limpias
+- [ ] La evaluación heal confirma completitud de purificación
+- [ ] El plano citrinitas mapea cada elemento esencial a la forma objetivo
+- [ ] El punto de control meditate pasó entre citrinitas/rubedo (listo para síntesis)
+- [ ] La salida rubedo pasa pruebas de regresión contra el comportamiento original
+- [ ] La salida rubedo está mediblemente mejorada (complejidad, acoplamiento, cobertura de pruebas)
+- [ ] Ningún elemento tóxico sobrevivió en la salida final
+- [ ] Las restricciones de transformación de las Entradas se satisfacen
 
 ## Errores Comunes
 
-- **Skipping nigredo depth**: Rushing decomposition means hidden coupling surfaces during synthesis. Invest fully in the inventory
-- **Preserving accidental complexity**: Attachment to clever workarounds or "it works, don't touch it" code. If it's not essential, it goes
-- **Skipping meditate checkpoints**: Cognitive momentum from one stage biases the next. The pauses are structural, not optional
-- **Blueprint-less synthesis**: Starting to code before citrinitas is complete produces patchwork, not transmutation
-- **Incomplete regression testing**: The rubedo must reproduce original behavior. Untested paths will break silently
-- **Scope creep during citrinitas**: The illumination phase reveals opportunities for improvement beyond the original goal. Note them but don't pursue them — the athanor serves the stated transformation, not a hypothetical ideal
+- **Saltarse la profundidad del nigredo**: Apurar la descomposición significa que el acoplamiento oculto surge durante la síntesis. Invertir completamente en el inventario
+- **Preservar complejidad accidental**: Apego a soluciones alternativas ingeniosas o código "funciona, no lo toques". Si no es esencial, se va
+- **Saltarse los puntos de control meditate**: El impulso cognitivo de una etapa sesga la siguiente. Las pausas son estructurales, no opcionales
+- **Síntesis sin plano**: Comenzar a codificar antes de que el citrinitas esté completo produce remiendo, no transmutación
+- **Pruebas de regresión incompletas**: El rubedo debe reproducir el comportamiento original. Los caminos no probados fallarán silenciosamente
+- **Expansión del alcance durante citrinitas**: La fase de iluminación revela oportunidades de mejora más allá del objetivo original. Anotarlas pero no perseguirlas — el athanor sirve la transformación declarada, no un ideal hipotético
 
 ## Habilidades Relacionadas
 
-- `transmute` — Lighter-weight transformation for single functions or small modules
-- `chrysopoeia` — Value extraction and optimization (turning base code into gold)
-- `meditate` — Meta-cognitive clearing used as stage-gate checkpoints
-- `heal` — Subsystem assessment used for purification validation
-- `dissolve-form` — When material is too rigid for the athanor, dissolve first
-- `adapt-architecture` — Complementary approach for system-level migration patterns
-- `review-software-architecture` — Post-synthesis architecture review
+- `transmute` — Transformación de menor peso para funciones individuales o módulos pequeños
+- `chrysopoeia` — Extracción y optimización de valor (convertir código base en oro)
+- `meditate` — Limpieza meta-cognitiva usada como puntos de control entre etapas
+- `heal` — Evaluación de subsistemas usada para validación de purificación
+- `dissolve-form` — Cuando el material es demasiado rígido para el athanor, disolver primero
+- `adapt-architecture` — Enfoque complementario para patrones de migración a nivel de sistema
+- `review-software-architecture` — Revisión de arquitectura post-síntesis

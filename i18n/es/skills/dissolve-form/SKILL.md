@@ -27,70 +27,70 @@ metadata:
 
 # Dissolve Form
 
-Perform controlled dismantling of rigid system structures — dissolving calcified architecture, accumulated technical debt, and organizational rigidity while preserving the essential capabilities ("imaginal discs") that will seed the new form.
+Realizar desmantelamiento controlado de estructuras rígidas del sistema — disolviendo arquitectura calcificada, deuda técnica acumulada y rigidez organizacional mientras se preservan las capacidades esenciales ("discos imaginales") que sembrarán la nueva forma.
 
 ## Cuándo Usar
 
-- Form assessment (see `assess-form`) classified the system as PREPARE or CRITICAL (too rigid to transform directly)
-- A system is so calcified that incremental change is impossible
-- Technical debt has compounded to the point where it blocks all forward progress
-- An organizational structure has become so rigid that it can't adapt to new requirements
-- Before `adapt-architecture` when the current form must be softened before it can be reshaped
-- Legacy system decommissioning where value must be extracted before shutdown
+- La evaluación de forma (ver `assess-form`) clasificó el sistema como PREPARE o CRITICAL (demasiado rígido para transformarse directamente)
+- Un sistema está tan calcificado que el cambio incremental es imposible
+- La deuda técnica se ha acumulado hasta el punto donde bloquea todo avance
+- Una estructura organizacional se ha vuelto tan rígida que no puede adaptarse a nuevos requisitos
+- Antes de `adapt-architecture` cuando la forma actual debe ablandarse antes de poder ser remodelada
+- Desmantelamiento de sistemas heredados donde se debe extraer valor antes del cierre
 
 ## Entradas
 
-- **Requerido**: Form assessment showing high rigidity (from `assess-form`)
-- **Requerido**: Identification of essential capabilities to preserve (imaginal discs)
-- **Opcional**: Target form (what should emerge after dissolution; may be unknown)
-- **Opcional**: Dissolution timeline and constraints
-- **Opcional**: Stakeholder concerns about specific components
-- **Opcional**: Previous dissolution attempts and their outcomes
+- **Requerido**: Evaluación de forma mostrando alta rigidez (de `assess-form`)
+- **Requerido**: Identificación de capacidades esenciales a preservar (discos imaginales)
+- **Opcional**: Forma objetivo (lo que debería emerger después de la disolución; puede ser desconocido)
+- **Opcional**: Cronograma y restricciones de disolución
+- **Opcional**: Preocupaciones de las partes interesadas sobre componentes específicos
+- **Opcional**: Intentos previos de disolución y sus resultados
 
 ## Procedimiento
 
-### Paso 1: Identify Imaginal Discs
+### Paso 1: Identificar Discos Imaginales
 
-In biological metamorphosis, imaginal discs are clusters of cells within the caterpillar that survive dissolution and become the butterfly's organs. Identify the essential capabilities that must survive.
+En la metamorfosis biológica, los discos imaginales son grupos de células dentro de la oruga que sobreviven a la disolución y se convierten en los órganos de la mariposa. Identificar las capacidades esenciales que deben sobrevivir.
 
-1. Catalog every capability the current system provides:
-   - User-facing features
-   - Data processing functions
-   - Integration points with external systems
-   - Institutional knowledge embedded in the code/process
-   - Business rules (often implicit, undocumented)
-2. Classify each capability:
-   - **Imaginal disc** (must survive): core business logic, critical integrations, irreplaceable data
-   - **Replaceable tissue** (can be rebuilt): UI, infrastructure, standard algorithms
-   - **Dead tissue** (should not survive): workarounds for bugs that no longer exist, compatibility shims for dead systems, features nobody uses
-3. Extract imaginal discs into portable form:
-   - Document business rules explicitly (they may only exist as code comments or tribal knowledge)
-   - Extract critical algorithms into standalone, tested modules
-   - Export essential data in format-independent representations
-   - Record integration contracts and their actual (not documented) behavior
+1. Catalogar cada capacidad que el sistema actual proporciona:
+   - Funcionalidades orientadas al usuario
+   - Funciones de procesamiento de datos
+   - Puntos de integración con sistemas externos
+   - Conocimiento institucional incorporado en el código/proceso
+   - Reglas de negocio (a menudo implícitas, no documentadas)
+2. Clasificar cada capacidad:
+   - **Disco imaginal** (debe sobrevivir): lógica de negocio central, integraciones críticas, datos irremplazables
+   - **Tejido reemplazable** (puede reconstruirse): UI, infraestructura, algoritmos estándar
+   - **Tejido muerto** (no debería sobrevivir): soluciones temporales para bugs que ya no existen, adaptadores de compatibilidad para sistemas extintos, funcionalidades que nadie usa
+3. Extraer discos imaginales a formato portátil:
+   - Documentar reglas de negocio explícitamente (pueden existir solo como comentarios de código o conocimiento tribal)
+   - Extraer algoritmos críticos en módulos independientes y probados
+   - Exportar datos esenciales en representaciones independientes del formato
+   - Registrar contratos de integración y su comportamiento real (no documentado)
 
-**Esperado:** A clear inventory of capabilities classified as essential (preserve), replaceable (rebuild), or dead (discard). Essential capabilities are extracted into portable form before dissolution begins.
+**Esperado:** Un inventario claro de capacidades clasificadas como esenciales (preservar), reemplazables (reconstruir) o muertas (descartar). Las capacidades esenciales se extraen en formato portátil antes de que comience la disolución.
 
-**En caso de fallo:** If imaginal disc identification is uncertain (stakeholders disagree on what's essential), err on the side of preservation. Extract more capabilities than you think you'll need — discarding after dissolution is easy; recovering lost knowledge is often impossible.
+**En caso de fallo:** Si la identificación de discos imaginales es incierta (las partes interesadas no están de acuerdo sobre qué es esencial), errar hacia el lado de la preservación. Extraer más capacidades de las que se cree necesitar — descartar después de la disolución es fácil; recuperar conocimiento perdido es a menudo imposible.
 
-### Paso 2: Map Dissolution Sequence
+### Paso 2: Mapear Secuencia de Disolución
 
-Determine the order in which structural elements will be dissolved — outer layers first, core last.
+Determinar el orden en el que los elementos estructurales serán disueltos — capas externas primero, núcleo al final.
 
-1. Order by dependency depth:
-   - Layer 1 (outermost): components with no dependents — nothing breaks when they're removed
-   - Layer 2: components whose dependents are only Layer 1 items (already dissolved)
-   - Layer 3: components with deeper dependencies — removing these requires careful interface management
-   - Layer N (core): load-bearing components that everything depends on — dissolved last
-2. For each layer, define:
-   - What is dissolved (removed, decommissioned, archived)
-   - What replaces it (new component, nothing, or temporary stub)
-   - What interfaces must be maintained for the remaining layers
-   - How to verify the system still functions after this layer is dissolved
-3. Create dissolution checkpoints:
-   - After each layer, the remaining system must be tested and verified operational
-   - Each checkpoint is a stable state from which dissolution can pause
-   - If a layer's dissolution causes unexpected breakage, restore from the previous checkpoint
+1. Ordenar por profundidad de dependencia:
+   - Capa 1 (más externa): componentes sin dependientes — nada se rompe cuando se eliminan
+   - Capa 2: componentes cuyos dependientes son solo elementos de Capa 1 (ya disueltos)
+   - Capa 3: componentes con dependencias más profundas — eliminarlos requiere gestión cuidadosa de interfaces
+   - Capa N (núcleo): componentes portantes de los que todo depende — se disuelven al final
+2. Para cada capa, definir:
+   - Qué se disuelve (elimina, descomisiona, archiva)
+   - Qué lo reemplaza (nuevo componente, nada, o stub temporal)
+   - Qué interfaces deben mantenerse para las capas restantes
+   - Cómo verificar que el sistema aún funciona después de disolver esta capa
+3. Crear puntos de control de disolución:
+   - Después de cada capa, el sistema restante debe probarse y verificarse operacional
+   - Cada punto de control es un estado estable desde el cual la disolución puede pausarse
+   - Si la disolución de una capa causa roturas inesperadas, restaurar desde el punto de control anterior
 
 ```
 Dissolution Sequence (outside in):
@@ -109,108 +109,108 @@ Dissolution Sequence (outside in):
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Esperado:** A layer-ordered dissolution sequence where each step is safe (checkpoint verified) and reversible (previous checkpoint is restorable). The most critical components are dissolved last when the team has the most experience and confidence.
+**Esperado:** Una secuencia de disolución ordenada por capas donde cada paso es seguro (punto de control verificado) y reversible (punto de control anterior es restaurable). Los componentes más críticos se disuelven al final cuando el equipo tiene más experiencia y confianza.
 
-**En caso de fallo:** If dependency mapping reveals circular dependencies (A depends on B depends on A), these cycles must be broken before sequenced dissolution is possible. Introduce an interface between A and B, break the cycle, then proceed with the sequence.
+**En caso de fallo:** Si el mapeo de dependencias revela dependencias circulares (A depende de B depende de A), estos ciclos deben romperse antes de que la disolución secuenciada sea posible. Introducir una interfaz entre A y B, romper el ciclo, luego proceder con la secuencia.
 
-### Paso 3: Perform Interface Archaeology
+### Paso 3: Realizar Arqueología de Interfaces
 
-Before dissolving rigid structures, excavate and document their actual interfaces — not what's documented, but what's actually in use.
+Antes de disolver estructuras rígidas, excavar y documentar sus interfaces reales — no lo que está documentado, sino lo que realmente se usa.
 
-1. Instrument current interfaces:
-   - Log every call, message, or data exchange at each interface
-   - Run for at least one full business cycle (daily, weekly, monthly — whatever is relevant)
-   - Capture actual payload shapes, not just documented schemas
-2. Compare actual vs. documented behavior:
-   - What documented interfaces are never called? (candidates for Layer 1 dissolution)
-   - What undocumented interfaces are actively used? (hidden dependencies — must be preserved or explicitly replaced)
-   - What edge cases does the actual traffic reveal that documentation doesn't mention?
-3. Build an interface contract from actual behavior:
-   - This contract becomes the specification for any replacement
-   - Include real examples of inputs and outputs
-   - Document error handling behavior (what actually happens, not what should happen)
+1. Instrumentar interfaces actuales:
+   - Registrar cada llamada, mensaje o intercambio de datos en cada interfaz
+   - Ejecutar durante al menos un ciclo de negocio completo (diario, semanal, mensual — lo que sea relevante)
+   - Capturar formas reales de carga útil, no solo esquemas documentados
+2. Comparar comportamiento real vs. documentado:
+   - ¿Qué interfaces documentadas nunca se llaman? (candidatas para disolución de Capa 1)
+   - ¿Qué interfaces no documentadas se usan activamente? (dependencias ocultas — deben preservarse o reemplazarse explícitamente)
+   - ¿Qué casos límite revela el tráfico real que la documentación no menciona?
+3. Construir un contrato de interfaz a partir del comportamiento real:
+   - Este contrato se convierte en la especificación para cualquier reemplazo
+   - Incluir ejemplos reales de entradas y salidas
+   - Documentar el comportamiento de manejo de errores (lo que realmente sucede, no lo que debería suceder)
 
-**Esperado:** An empirically-derived interface contract that accurately represents how the system actually communicates, including undocumented behaviors and hidden dependencies.
+**Esperado:** Un contrato de interfaz derivado empíricamente que represente con precisión cómo se comunica realmente el sistema, incluyendo comportamientos no documentados y dependencias ocultas.
 
-**En caso de fallo:** If instrumentation is too invasive (impacts performance or requires code changes), sample traffic instead of capturing everything. If the business cycle is too long to wait, use the available data supplemented by stakeholder interviews about "what calls what in which situations."
+**En caso de fallo:** Si la instrumentación es demasiado invasiva (impacta el rendimiento o requiere cambios de código), muestrear el tráfico en lugar de capturarlo todo. Si el ciclo de negocio es demasiado largo para esperar, usar los datos disponibles complementados con entrevistas a las partes interesadas sobre "qué llama a qué en qué situaciones."
 
-### Paso 4: Execute Controlled Dissolution
+### Paso 4: Ejecutar Disolución Controlada
 
-Systematically remove structural elements while maintaining imaginal disc viability.
+Eliminar sistemáticamente elementos estructurales mientras se mantiene la viabilidad de los discos imaginales.
 
-1. Begin with Layer 1 (outermost, no dependents):
-   - Remove dead features and unused code
-   - Archive (don't delete) for reference
-   - Verify: system still passes all tests, no runtime errors
-2. Progress through each layer:
-   - For each component being dissolved:
-     a. Verify imaginal discs have been extracted (Step 1)
-     b. Install replacement or stub (if dependents remain)
-     c. Remove the component
-     d. Run validation suite
-     e. Monitor for unexpected side effects
-   - At each checkpoint: document the current system state, verify operational status
-3. Handle dissolution resistance:
-   - Some components resist dissolution (hidden dependencies surface)
-   - When a removal causes unexpected breakage:
-     a. Restore from checkpoint
-     b. Investigate the hidden dependency
-     c. Add it to the interface archaeology (Step 3)
-     d. Create an explicit stub for the dependency
-     e. Re-attempt dissolution
-4. Track dissolution progress:
-   - Components remaining vs. dissolved
-   - Imaginal discs extracted and verified portable
-   - Unexpected dependencies discovered and handled
+1. Comenzar con la Capa 1 (más externa, sin dependientes):
+   - Eliminar funcionalidades muertas y código no utilizado
+   - Archivar (no eliminar) para referencia
+   - Verificar: el sistema aún pasa todas las pruebas, sin errores en tiempo de ejecución
+2. Progresar a través de cada capa:
+   - Para cada componente que se disuelve:
+     a. Verificar que los discos imaginales han sido extraídos (Paso 1)
+     b. Instalar reemplazo o stub (si quedan dependientes)
+     c. Eliminar el componente
+     d. Ejecutar suite de validación
+     e. Monitorear efectos secundarios inesperados
+   - En cada punto de control: documentar el estado actual del sistema, verificar estado operacional
+3. Manejar resistencia a la disolución:
+   - Algunos componentes resisten la disolución (emergen dependencias ocultas)
+   - Cuando una eliminación causa roturas inesperadas:
+     a. Restaurar desde el punto de control
+     b. Investigar la dependencia oculta
+     c. Agregarla a la arqueología de interfaces (Paso 3)
+     d. Crear un stub explícito para la dependencia
+     e. Re-intentar la disolución
+4. Rastrear el progreso de la disolución:
+   - Componentes restantes vs. disueltos
+   - Discos imaginales extraídos y verificados como portátiles
+   - Dependencias inesperadas descubiertas y manejadas
 
-**Esperado:** Systematic, verified dissolution of non-essential structure. After each layer, the remaining system is smaller, simpler, and still operational. Imaginal discs are preserved in portable form.
+**Esperado:** Disolución sistemática y verificada de estructura no esencial. Después de cada capa, el sistema restante es más pequeño, más simple y aún operacional. Los discos imaginales se preservan en formato portátil.
 
-**En caso de fallo:** If dissolution causes cascading failures, the layer ordering is wrong — there are hidden dependencies deeper than expected. Stop, restore, remap dependencies, and re-sequence. If dissolution reveals that an "imaginal disc" is more complex than expected, allocate more extraction time for that capability.
+**En caso de fallo:** Si la disolución causa fallos en cascada, el ordenamiento de capas está mal — hay dependencias ocultas más profundas de lo esperado. Detenerse, restaurar, remapear dependencias y re-secuenciar. Si la disolución revela que un "disco imaginal" es más complejo de lo esperado, asignar más tiempo de extracción para esa capacidad.
 
-### Paso 5: Prepare the Foundation for Reconstruction
+### Paso 5: Preparar la Base para la Reconstrucción
 
-After dissolution, the remaining system should be a minimal viable core plus extracted imaginal discs ready for reconstruction.
+Después de la disolución, el sistema restante debería ser un núcleo mínimo viable más discos imaginales extraídos listos para la reconstrucción.
 
-1. Assess the post-dissolution state:
-   - What remains? (minimal operational core + extracted capabilities)
-   - Is the remaining system maintainable? (can the team understand and modify it)
-   - Are all imaginal discs accessible and verified? (portable, tested, documented)
-2. Create the reconstruction manifest:
-   - List each imaginal disc with its contract, data, and test suite
-   - Specify the target architecture for reconstruction (or mark as "to be determined")
-   - Identify gaps: capabilities that were partially extracted or have quality concerns
-3. Handoff to reconstruction:
-   - If the target form is known: proceed to `adapt-architecture` with the minimal core as starting point
-   - If the target form is unknown: operate on the minimal core while the target is designed
-   - Either way: the system is now flexible enough to be reshaped
+1. Evaluar el estado post-disolución:
+   - ¿Qué queda? (núcleo operacional mínimo + capacidades extraídas)
+   - ¿Es mantenible el sistema restante? (¿puede el equipo entenderlo y modificarlo?)
+   - ¿Todos los discos imaginales son accesibles y están verificados? (portátiles, probados, documentados)
+2. Crear el manifiesto de reconstrucción:
+   - Listar cada disco imaginal con su contrato, datos y suite de pruebas
+   - Especificar la arquitectura objetivo para la reconstrucción (o marcar como "por determinar")
+   - Identificar brechas: capacidades que se extrajeron parcialmente o tienen preocupaciones de calidad
+3. Transferir a la reconstrucción:
+   - Si la forma objetivo es conocida: proceder a `adapt-architecture` con el núcleo mínimo como punto de partida
+   - Si la forma objetivo es desconocida: operar sobre el núcleo mínimo mientras se diseña el objetivo
+   - En cualquier caso: el sistema ahora es suficientemente flexible para ser remodelado
 
-**Esperado:** A minimal, maintainable system with clearly documented extracted capabilities. The foundation is clean and ready for reconstruction in whatever form is chosen.
+**Esperado:** Un sistema mínimo y mantenible con capacidades extraídas claramente documentadas. La base está limpia y lista para la reconstrucción en cualquier forma que se elija.
 
-**En caso de fallo:** If the post-dissolution system is less maintainable than expected, some essential structure was dissolved that should have been preserved. Check the imaginal disc inventory — if a critical capability is missing, it may still be recoverable from the archive. If the minimal core is too minimal to operate, some "replaceable tissue" was actually essential — restore it from the checkpoint.
+**En caso de fallo:** Si el sistema post-disolución es menos mantenible de lo esperado, alguna estructura esencial fue disuelta que debería haberse preservado. Verificar el inventario de discos imaginales — si falta una capacidad crítica, puede aún ser recuperable del archivo. Si el núcleo mínimo es demasiado mínimo para operar, algún "tejido reemplazable" era realmente esencial — restaurarlo desde el punto de control.
 
 ## Validación
 
-- [ ] Imaginal discs are identified, extracted, and verified in portable form
-- [ ] Dissolution sequence is layered from outermost (no dependents) to core
-- [ ] Interface archaeology has captured actual (not just documented) behavior
-- [ ] Each dissolution layer has a verified checkpoint
-- [ ] No essential capability was lost during dissolution
-- [ ] Post-dissolution system is minimal, maintainable, and operational
-- [ ] Reconstruction manifest documents extracted capabilities and gaps
+- [ ] Los discos imaginales están identificados, extraídos y verificados en formato portátil
+- [ ] La secuencia de disolución está ordenada por capas desde la más externa (sin dependientes) hasta el núcleo
+- [ ] La arqueología de interfaces ha capturado el comportamiento real (no solo documentado)
+- [ ] Cada capa de disolución tiene un punto de control verificado
+- [ ] Ninguna capacidad esencial se perdió durante la disolución
+- [ ] El sistema post-disolución es mínimo, mantenible y operacional
+- [ ] El manifiesto de reconstrucción documenta las capacidades extraídas y las brechas
 
 ## Errores Comunes
 
-- **Dissolving without extracting**: Removing a rigid component before its essential capabilities are extracted destroys irreplaceable knowledge. Always extract imaginal discs first
-- **Trusting documentation over observation**: Documented interfaces often diverge from actual behavior. Interface archaeology (Step 3) reveals the truth; documentation shows the intent
-- **Dissolving the core first**: Removing load-bearing structures before their dependents are dissolved causes cascading failure. Always work outside-in
-- **Complete dissolution**: Dissolving everything to start from scratch sounds clean but loses institutional knowledge, battle-tested edge case handling, and operational continuity. Preserve imaginal discs
-- **Dissolution as punishment**: Dissolving a system "because it's bad" without a reconstruction plan creates a vacuum. Dissolution is the preparation for reconstruction, not an end in itself
+- **Disolver sin extraer**: Eliminar un componente rígido antes de que se extraigan sus capacidades esenciales destruye conocimiento irremplazable. Siempre extraer los discos imaginales primero
+- **Confiar en la documentación sobre la observación**: Las interfaces documentadas a menudo divergen del comportamiento real. La arqueología de interfaces (Paso 3) revela la verdad; la documentación muestra la intención
+- **Disolver el núcleo primero**: Eliminar estructuras portantes antes de que sus dependientes se disuelvan causa fallos en cascada. Siempre trabajar de afuera hacia adentro
+- **Disolución completa**: Disolver todo para empezar de cero suena limpio pero pierde conocimiento institucional, manejo de casos límite probado en batalla y continuidad operacional. Preservar los discos imaginales
+- **Disolución como castigo**: Disolver un sistema "porque es malo" sin un plan de reconstrucción crea un vacío. La disolución es la preparación para la reconstrucción, no un fin en sí mismo
 
 ## Habilidades Relacionadas
 
-- `assess-form` — prerequisite assessment that identifies rigidity and triggers dissolution
-- `adapt-architecture` — the reconstruction skill that follows dissolution
-- `repair-damage` — for systems that need targeted repair rather than full dissolution
-- `build-consensus` — consensus before major dissolution prevents team fragmentation
-- `decommission-validated-system` — formal decommissioning process for regulated systems
-- `conduct-post-mortem` — post-mortem analysis shares the investigative rigor of dissolution
+- `assess-form` — evaluación prerrequisito que identifica la rigidez y activa la disolución
+- `adapt-architecture` — la habilidad de reconstrucción que sigue a la disolución
+- `repair-damage` — para sistemas que necesitan reparación dirigida en lugar de disolución completa
+- `build-consensus` — el consenso antes de una disolución mayor previene la fragmentación del equipo
+- `decommission-validated-system` — proceso formal de desmantelamiento para sistemas regulados
+- `conduct-post-mortem` — el análisis post-mortem comparte el rigor investigativo de la disolución

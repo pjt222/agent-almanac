@@ -1,14 +1,14 @@
 ---
 name: coordinate-swarm
 description: >
-  Apply collective intelligence coordination patterns — stigmergy, local rules,
-  and quorum sensing — to organize distributed systems, teams, or workflows
-  without centralized control. Covers signal design, agent autonomy boundaries,
-  emergent behavior cultivation, and feedback loop tuning. Use when designing
-  distributed systems without a coordination bottleneck, organizing teams that
-  must self-coordinate, building event-driven architectures with shared state
-  communication, or replacing fragile centralized orchestration with resilient
-  emergent coordination.
+  Aplicar patrones de coordinación de inteligencia colectiva — estigmergia, reglas
+  locales y detección de quórum — para organizar sistemas distribuidos, equipos o
+  flujos de trabajo sin control centralizado. Cubre diseño de señales, límites de
+  autonomía de agentes, cultivo de comportamiento emergente y ajuste de bucles de
+  retroalimentación. Usar al diseñar sistemas distribuidos sin cuello de botella
+  de coordinación, al organizar equipos que deben auto-coordinarse, al construir
+  arquitecturas dirigidas por eventos con comunicación de estado compartido, o al
+  reemplazar orquestación centralizada frágil con coordinación emergente resiliente.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,66 +27,66 @@ metadata:
 
 # Coordinate Swarm
 
-Establish coordination across distributed agents using stigmergy (indirect communication through environment modification), local interaction rules, and quorum sensing — enabling coherent collective behavior without a central controller.
+Establecer coordinación entre agentes distribuidos usando estigmergia (comunicación indirecta a través de modificación del entorno), reglas de interacción local y detección de quórum — permitiendo comportamiento colectivo coherente sin un controlador central.
 
 ## Cuándo Usar
 
-- Designing distributed systems where no single node should be a coordination bottleneck
-- Organizing teams or workflows that must self-coordinate without constant management oversight
-- Building event-driven architectures where components communicate through shared state rather than direct messaging
-- Scaling a process that works well with 3 agents but breaks down at 30
-- Bootstrapping coordination patterns for a new swarm-style domain (see `forage-resources`, `build-consensus`)
-- Replacing fragile centralized orchestration with resilient emergent coordination
+- Al diseñar sistemas distribuidos donde ningún nodo individual debería ser un cuello de botella de coordinación
+- Al organizar equipos o flujos de trabajo que deben auto-coordinarse sin supervisión constante de gestión
+- Al construir arquitecturas dirigidas por eventos donde los componentes se comunican a través de estado compartido en lugar de mensajería directa
+- Al escalar un proceso que funciona bien con 3 agentes pero se rompe con 30
+- Al inicializar patrones de coordinación para un nuevo dominio estilo enjambre (ver `forage-resources`, `build-consensus`)
+- Al reemplazar orquestación centralizada frágil con coordinación emergente resiliente
 
 ## Entradas
 
-- **Requerido**: Description of the agents (workers, services, team members) that need coordination
-- **Requerido**: The collective goal or desired emergent behavior
-- **Opcional**: Current coordination mechanism and its failure modes
-- **Opcional**: Number of agents (affects pattern selection — small swarms vs. large colonies)
-- **Opcional**: Latency tolerance (real-time vs. eventual coordination)
-- **Opcional**: Environmental constraints (shared state availability, communication bandwidth)
+- **Requerido**: Descripción de los agentes (trabajadores, servicios, miembros del equipo) que necesitan coordinación
+- **Requerido**: El objetivo colectivo o comportamiento emergente deseado
+- **Opcional**: Mecanismo de coordinación actual y sus modos de fallo
+- **Opcional**: Número de agentes (afecta la selección de patrón — enjambres pequeños vs. colonias grandes)
+- **Opcional**: Tolerancia a la latencia (coordinación en tiempo real vs. eventual)
+- **Opcional**: Restricciones ambientales (disponibilidad de estado compartido, ancho de banda de comunicación)
 
 ## Procedimiento
 
-### Paso 1: Identify the Coordination Problem Class
+### Paso 1: Identificar la clase de problema de coordinación
 
-Classify the coordination challenge to select appropriate patterns.
+Clasificar el desafío de coordinación para seleccionar los patrones apropiados.
 
-1. Map the current state: who are the agents, what do they do individually, where does coordination break down?
-2. Classify the problem:
-   - **Foraging** — agents search for and exploit distributed resources (see `forage-resources`)
-   - **Consensus** — agents must agree on a collective decision (see `build-consensus`)
-   - **Construction** — agents build or maintain a shared structure incrementally
-   - **Defense** — agents detect and respond to threats collectively (see `defend-colony`)
-   - **Division of labor** — agents must self-organize into specialized roles
-3. Identify the failure mode of current coordination:
-   - Single point of failure (centralized controller)
-   - Communication bottleneck (too many direct messages)
-   - Coherence loss (agents drift apart without feedback)
-   - Rigidity (cannot adapt to changing conditions)
+1. Mapear el estado actual: ¿quiénes son los agentes, qué hacen individualmente, dónde se rompe la coordinación?
+2. Clasificar el problema:
+   - **Forrajeo** — los agentes buscan y explotan recursos distribuidos (ver `forage-resources`)
+   - **Consenso** — los agentes deben acordar una decisión colectiva (ver `build-consensus`)
+   - **Construcción** — los agentes construyen o mantienen una estructura compartida incrementalmente
+   - **Defensa** — los agentes detectan y responden a amenazas colectivamente (ver `defend-colony`)
+   - **División del trabajo** — los agentes deben auto-organizarse en roles especializados
+3. Identificar el modo de fallo de la coordinación actual:
+   - Punto único de fallo (controlador centralizado)
+   - Cuello de botella de comunicación (demasiados mensajes directos)
+   - Pérdida de coherencia (los agentes se desincronizan sin retroalimentación)
+   - Rigidez (no puede adaptarse a condiciones cambiantes)
 
-**Esperado:** A clear classification of the coordination problem type and the specific failure mode to address. This determines which swarm patterns to apply.
+**Esperado:** Una clasificación clara del tipo de problema de coordinación y el modo de fallo específico a abordar. Esto determina qué patrones de enjambre aplicar.
 
-**En caso de fallo:** If the problem doesn't fit a single class, it may be a composite. Decompose into sub-problems and address each with the appropriate pattern. If agents are too heterogeneous for a single coordination model, consider layered coordination — homogeneous clusters coordinated via inter-cluster stigmergy.
+**En caso de fallo:** Si el problema no encaja en una sola clase, puede ser compuesto. Descomponer en subproblemas y abordar cada uno con el patrón apropiado. Si los agentes son demasiado heterogéneos para un solo modelo de coordinación, considerar coordinación en capas — clusters homogéneos coordinados mediante estigmergia inter-cluster.
 
-### Paso 2: Design Stigmergic Signals
+### Paso 2: Diseñar señales estigmérgicas
 
-Create the indirect communication channels through which agents influence each other's behavior.
+Crear los canales de comunicación indirecta a través de los cuales los agentes influyen en el comportamiento de los demás.
 
-1. Define the shared environment (database, message queue, file system, physical space, shared board)
-2. Design signals that agents deposit into the environment:
-   - **Trail signals**: markers that accumulate along successful paths (like ant pheromones)
-   - **Threshold signals**: counters that trigger behavior changes when they cross thresholds
-   - **Inhibition signals**: markers that repel agents from exhausted areas
-3. Define signal properties:
-   - **Decay rate**: how quickly signals fade (prevents stale state from dominating)
-   - **Reinforcement**: how successful outcomes strengthen signals
-   - **Visibility radius**: how far a signal propagates
-4. Map signals to agent behaviors:
-   - When an agent detects signal X above threshold T, it performs action A
-   - When an agent completes action A successfully, it deposits signal Y
-   - When no signal is detected, the agent follows its default exploration behavior
+1. Definir el entorno compartido (base de datos, cola de mensajes, sistema de archivos, espacio físico, tablero compartido)
+2. Diseñar señales que los agentes depositan en el entorno:
+   - **Señales de rastro**: marcadores que se acumulan a lo largo de caminos exitosos (como feromonas de hormigas)
+   - **Señales de umbral**: contadores que disparan cambios de comportamiento cuando cruzan umbrales
+   - **Señales de inhibición**: marcadores que repelen a los agentes de áreas agotadas
+3. Definir propiedades de las señales:
+   - **Tasa de decaimiento**: qué tan rápido se desvanecen las señales (previene que el estado obsoleto domine)
+   - **Refuerzo**: cómo los resultados exitosos fortalecen las señales
+   - **Radio de visibilidad**: qué tan lejos se propaga una señal
+4. Mapear señales a comportamientos de agentes:
+   - Cuando un agente detecta la señal X por encima del umbral T, realiza la acción A
+   - Cuando un agente completa la acción A exitosamente, deposita la señal Y
+   - Cuando no se detecta señal, el agente sigue su comportamiento de exploración por defecto
 
 ```
 Signal Design Template:
@@ -100,99 +100,99 @@ Signal Design Template:
 └──────────────┴───────────────────┴──────────────┴────────────────────┘
 ```
 
-**Esperado:** A signal table mapping environmental markers to agent deposit conditions, decay rates, and response behaviors. Signals should be simple, composable, and independently meaningful.
+**Esperado:** Una tabla de señales que mapea marcadores ambientales a condiciones de depósito de agentes, tasas de decaimiento y comportamientos de respuesta. Las señales deben ser simples, componibles e independientemente significativas.
 
-**En caso de fallo:** If signal design feels overly complex, reduce to two signals: one positive (success trail) and one negative (danger flag). Most coordination problems can be bootstrapped with attract/repel dynamics. Add nuance only after the basic system is functioning.
+**En caso de fallo:** Si el diseño de señales se siente excesivamente complejo, reducir a dos señales: una positiva (rastro de éxito) y una negativa (señal de peligro). La mayoría de los problemas de coordinación pueden inicializarse con dinámicas de atracción/repulsión. Agregar matices solo después de que el sistema básico esté funcionando.
 
-### Paso 3: Define Local Interaction Rules
+### Paso 3: Definir reglas de interacción local
 
-Specify the simple rules each agent follows, using only local information (their own state + nearby signals).
+Especificar las reglas simples que cada agente sigue, usando solo información local (su propio estado + señales cercanas).
 
-1. Define the agent's perception radius (what can it sense?)
-2. Write 3-7 local rules in priority order:
-   - Rule 1 (safety): If danger-flag detected, move away
-   - Rule 2 (response): If help-signal detected and idle, move toward
-   - Rule 3 (exploitation): If success-trail detected, follow toward strongest signal
-   - Rule 4 (exploration): If no signals detected, move randomly with bias toward unexplored areas
-   - Rule 5 (deposit): After completing task, deposit success-trail at location
-3. Each rule must be:
-   - **Local**: depends only on what the individual agent can perceive
-   - **Simple**: expressible in one if-then statement
-   - **Stateless** (preferred): does not require the agent to remember past states
-4. Test rules mentally: if every agent follows these rules, does the desired collective behavior emerge?
+1. Definir el radio de percepción del agente (¿qué puede percibir?)
+2. Escribir 3-7 reglas locales en orden de prioridad:
+   - Regla 1 (seguridad): Si se detecta señal de peligro, alejarse
+   - Regla 2 (respuesta): Si se detecta señal de ayuda y está inactivo, acercarse
+   - Regla 3 (explotación): Si se detecta rastro de éxito, seguir hacia la señal más fuerte
+   - Regla 4 (exploración): Si no se detectan señales, moverse aleatoriamente con sesgo hacia áreas no exploradas
+   - Regla 5 (depósito): Después de completar tarea, depositar rastro de éxito en la ubicación
+3. Cada regla debe ser:
+   - **Local**: depende solo de lo que el agente individual puede percibir
+   - **Simple**: expresable en una declaración si-entonces
+   - **Sin estado** (preferiblemente): no requiere que el agente recuerde estados pasados
+4. Probar las reglas mentalmente: si cada agente sigue estas reglas, ¿emerge el comportamiento colectivo deseado?
 
-**Esperado:** A prioritized rule set that each agent executes independently. When applied across the swarm, these local rules produce the target collective behavior (foraging, construction, defense, etc.).
+**Esperado:** Un conjunto de reglas priorizado que cada agente ejecuta independientemente. Cuando se aplican a través del enjambre, estas reglas locales producen el comportamiento colectivo objetivo (forrajeo, construcción, defensa, etc.).
 
-**En caso de fallo:** If mental simulation doesn't produce the desired emergent behavior, the rules likely need a feedback loop — agents must be able to observe the consequences of their collective actions. Add a signal that represents the collective state (e.g., "task completion rate") and a rule that adjusts behavior based on it.
+**En caso de fallo:** Si la simulación mental no produce el comportamiento emergente deseado, las reglas probablemente necesitan un bucle de retroalimentación — los agentes deben poder observar las consecuencias de sus acciones colectivas. Agregar una señal que represente el estado colectivo (ej., "tasa de completación de tareas") y una regla que ajuste el comportamiento basándose en ella.
 
-### Paso 4: Calibrate Quorum Sensing
+### Paso 4: Calibrar la detección de quórum
 
-Set thresholds that trigger collective state changes when enough agents agree.
+Establecer umbrales que disparen cambios de estado colectivo cuando suficientes agentes estén de acuerdo.
 
-1. Identify decisions that require collective agreement (not just individual response):
-   - Switching from exploration to exploitation mode
-   - Committing to a new work site or abandoning an old one
-   - Escalating from normal to emergency response
-2. For each collective decision, define:
-   - **Quorum threshold**: number or percentage of agents that must signal agreement
-   - **Sensing window**: time period over which signals are counted
-   - **Hysteresis**: different thresholds for activation vs. deactivation (prevents oscillation)
-3. Implement quorum as signal accumulation:
-   - Each agent that favors the decision deposits a vote-signal
-   - When accumulated votes exceed the quorum threshold within the sensing window, the decision activates
-   - When votes drop below the deactivation threshold, the decision reverses
+1. Identificar decisiones que requieren acuerdo colectivo (no solo respuesta individual):
+   - Cambiar del modo de exploración al de explotación
+   - Comprometerse con un nuevo sitio de trabajo o abandonar uno antiguo
+   - Escalar de respuesta normal a respuesta de emergencia
+2. Para cada decisión colectiva, definir:
+   - **Umbral de quórum**: número o porcentaje de agentes que deben señalar acuerdo
+   - **Ventana de detección**: período de tiempo durante el cual se cuentan las señales
+   - **Histéresis**: umbrales diferentes para activación vs. desactivación (previene oscilación)
+3. Implementar el quórum como acumulación de señales:
+   - Cada agente que favorece la decisión deposita una señal de voto
+   - Cuando los votos acumulados exceden el umbral de quórum dentro de la ventana de detección, la decisión se activa
+   - Cuando los votos caen por debajo del umbral de desactivación, la decisión se revierte
 
-**Esperado:** Quorum thresholds that allow the swarm to make collective decisions without a leader. The hysteresis gap prevents rapid oscillation between states.
+**Esperado:** Umbrales de quórum que permiten al enjambre tomar decisiones colectivas sin un líder. La brecha de histéresis previene la oscilación rápida entre estados.
 
-**En caso de fallo:** If the swarm oscillates between states, widen the hysteresis gap (e.g., activate at 70%, deactivate at 30%). If the swarm never reaches quorum, lower the threshold or increase the sensing window. If decisions are too slow, reduce the sensing window — but beware of premature consensus.
+**En caso de fallo:** Si el enjambre oscila entre estados, ampliar la brecha de histéresis (ej., activar al 70%, desactivar al 30%). Si el enjambre nunca alcanza el quórum, bajar el umbral o aumentar la ventana de detección. Si las decisiones son demasiado lentas, reducir la ventana de detección — pero cuidado con el consenso prematuro.
 
-### Paso 5: Test and Tune Emergent Behavior
+### Paso 5: Probar y ajustar el comportamiento emergente
 
-Validate that local rules produce the desired collective behavior, then tune parameters.
+Validar que las reglas locales producen el comportamiento colectivo deseado, luego ajustar parámetros.
 
-1. Run a simulation or pilot with a small number of agents (5-10)
-2. Observe:
-   - Does the swarm converge on the intended behavior?
-   - How long does convergence take?
-   - What happens when conditions change mid-task?
-   - What happens when agents fail or are added?
-3. Tune parameters:
-   - Signal decay rate: too fast → no coordination memory; too slow → stale signals dominate
-   - Quorum threshold: too low → premature collective decisions; too high → paralysis
-   - Exploration-exploitation balance: too much exploration → inefficient; too much exploitation → local optima
-4. Stress test:
-   - Remove 30% of agents suddenly — does the swarm recover?
-   - Double the agent count — does the swarm still coordinate?
-   - Introduce conflicting signals — does the swarm resolve or deadlock?
+1. Ejecutar una simulación o piloto con un número pequeño de agentes (5-10)
+2. Observar:
+   - ¿Converge el enjambre hacia el comportamiento previsto?
+   - ¿Cuánto tiempo toma la convergencia?
+   - ¿Qué sucede cuando las condiciones cambian a mitad de tarea?
+   - ¿Qué sucede cuando los agentes fallan o se agregan?
+3. Ajustar parámetros:
+   - Tasa de decaimiento de señales: demasiado rápida → sin memoria de coordinación; demasiado lenta → señales obsoletas dominan
+   - Umbral de quórum: demasiado bajo → decisiones colectivas prematuras; demasiado alto → parálisis
+   - Balance exploración-explotación: demasiada exploración → ineficiente; demasiada explotación → óptimos locales
+4. Prueba de estrés:
+   - Remover el 30% de los agentes repentinamente — ¿se recupera el enjambre?
+   - Duplicar la cantidad de agentes — ¿sigue coordinándose el enjambre?
+   - Introducir señales conflictivas — ¿resuelve el enjambre o se bloquea?
 
-**Esperado:** A tuned parameter set where the swarm self-organizes toward the target behavior, recovers from perturbations, and scales gracefully.
+**Esperado:** Un conjunto de parámetros ajustado donde el enjambre se auto-organiza hacia el comportamiento objetivo, se recupera de perturbaciones y escala con gracia.
 
-**En caso de fallo:** If the swarm fails stress tests, the signal design is likely too tightly coupled. Simplify: reduce to fewer signals, increase decay rates (fresher information), and ensure agents have a robust default behavior when no signals are present. A swarm that does something reasonable with zero signals is more resilient than one that depends on signal availability.
+**En caso de fallo:** Si el enjambre falla las pruebas de estrés, el diseño de señales probablemente está demasiado acoplado. Simplificar: reducir a menos señales, aumentar las tasas de decaimiento (información más fresca) y asegurar que los agentes tengan un comportamiento por defecto robusto cuando no hay señales presentes. Un enjambre que hace algo razonable con cero señales es más resiliente que uno que depende de la disponibilidad de señales.
 
 ## Validación
 
-- [ ] Coordination problem is classified into a recognized pattern (foraging, consensus, construction, defense, division of labor)
-- [ ] Stigmergic signal table is defined with deposit conditions, decay rates, and agent responses
-- [ ] Local interaction rules are simple, local, and prioritized (3-7 rules)
-- [ ] Quorum thresholds are set with hysteresis to prevent oscillation
-- [ ] Small-scale test shows emergent behavior matching the collective goal
-- [ ] Stress test (agent removal, addition, signal disruption) shows graceful degradation
+- [ ] El problema de coordinación está clasificado en un patrón reconocido (forrajeo, consenso, construcción, defensa, división del trabajo)
+- [ ] La tabla de señales estigmérgicas está definida con condiciones de depósito, tasas de decaimiento y respuestas de agentes
+- [ ] Las reglas de interacción local son simples, locales y priorizadas (3-7 reglas)
+- [ ] Los umbrales de quórum están establecidos con histéresis para prevenir oscilación
+- [ ] La prueba a pequeña escala muestra comportamiento emergente que coincide con el objetivo colectivo
+- [ ] La prueba de estrés (remoción de agentes, adición, interrupción de señales) muestra degradación gradual
 
 ## Errores Comunes
 
-- **Over-engineering signals**: Starting with too many signal types creates confusion. Begin with 2 signals (attract/repel) and add only when proven necessary
-- **Centralized thinking in disguise**: If your "local rule" requires an agent to know the global state, it's not local. Refactor until each rule depends only on what the agent can directly perceive
-- **Ignoring decay**: Signals that never decay create fossilized coordination state. Every signal needs a half-life appropriate to the task's time scale
-- **Zero hysteresis**: Quorum thresholds without a gap between activation and deactivation cause rapid state oscillation. Always set deactivation lower than activation
-- **Assuming homogeneity**: If agents have different capabilities, a single rule set may not work. Consider role-differentiated rules (see `scale-colony`)
+- **Sobre-ingeniería de señales**: Comenzar con demasiados tipos de señales crea confusión. Empezar con 2 señales (atraer/repeler) y agregar solo cuando esté probadamente necesario
+- **Pensamiento centralizado disfrazado**: Si tu "regla local" requiere que un agente conozca el estado global, no es local. Refactorizar hasta que cada regla dependa solo de lo que el agente puede percibir directamente
+- **Ignorar el decaimiento**: Las señales que nunca decaen crean un estado de coordinación fosilizado. Cada señal necesita una vida media apropiada a la escala temporal de la tarea
+- **Histéresis cero**: Umbrales de quórum sin brecha entre activación y desactivación causan oscilación rápida de estado. Siempre establecer la desactivación más baja que la activación
+- **Asumir homogeneidad**: Si los agentes tienen diferentes capacidades, un único conjunto de reglas puede no funcionar. Considerar reglas diferenciadas por rol (ver `scale-colony`)
 
 ## Habilidades Relacionadas
 
-- `forage-resources` — applies swarm coordination specifically to resource search and explore-exploit tradeoffs
-- `build-consensus` — deep dive into distributed agreement mechanisms, extending the quorum sensing from this skill
-- `defend-colony` — collective defense patterns that build on the signal and rule framework here
-- `scale-colony` — scaling strategies for when the swarm outgrows its initial coordination design
-- `adapt-architecture` — morphic skill for transforming system architecture, complementary when swarm coordination triggers structural change
-- `deploy-to-kubernetes` — practical distributed system deployment where swarm coordination patterns apply
-- `plan-capacity` — capacity planning informed by swarm scaling dynamics
-- `coordinate-reasoning` — AI self-application variant; maps stigmergic signals to context management with information decay rates and local protocols
+- `forage-resources` — aplica la coordinación de enjambre específicamente a la búsqueda de recursos y compensaciones de exploración-explotación
+- `build-consensus` — profundización en mecanismos de acuerdo distribuido, extendiendo la detección de quórum de esta habilidad
+- `defend-colony` — patrones de defensa colectiva que se construyen sobre el marco de señales y reglas de aquí
+- `scale-colony` — estrategias de escalamiento para cuando el enjambre supera su diseño de coordinación inicial
+- `adapt-architecture` — habilidad mórfica para transformar la arquitectura del sistema, complementaria cuando la coordinación de enjambre dispara cambios estructurales
+- `deploy-to-kubernetes` — despliegue práctico de sistemas distribuidos donde aplican los patrones de coordinación de enjambre
+- `plan-capacity` — planificación de capacidad informada por dinámicas de escalamiento de enjambre
+- `coordinate-reasoning` — variante de autoaplicación de IA; mapea señales estigmérgicas a gestión de contexto con tasas de decaimiento de información y protocolos locales

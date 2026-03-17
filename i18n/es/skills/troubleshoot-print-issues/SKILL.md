@@ -1,13 +1,13 @@
 ---
 name: troubleshoot-print-issues
 description: >
-  Diagnose and fix common 3D printing failures through systematic symptom
-  analysis. Covers adhesion, stringing, layer shifts, warping, and
-  under/over-extrusion issues. Use when a print fails during the first layer
-  or partway through, finished prints have quality defects (stringing, blobs,
-  gaps), dimensional accuracy issues occur (warping, elephant foot), layer
-  adhesion fails, or new material or hardware changes are causing inconsistent
-  results.
+  Diagnosticar y corregir fallos comunes de impresión 3D mediante análisis
+  sistemático de síntomas. Cubre adhesión, hilos, desplazamientos de capa,
+  deformación y problemas de sub/sobre-extrusión. Usar cuando una impresión
+  falla durante la primera capa o a mitad de proceso, las impresiones terminadas
+  tienen defectos de calidad (hilos, gotas, huecos), ocurren problemas de
+  precisión dimensional (deformación, pie de elefante), falla la adhesión entre
+  capas, o cambios de material o hardware nuevos causan resultados inconsistentes.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob WebFetch
 metadata:
@@ -26,46 +26,46 @@ metadata:
 
 # Troubleshoot Print Issues
 
-Diagnose and fix common 3D printing failures using systematic symptom analysis. This skill covers the most frequent FDM and SLA issues: poor bed adhesion, stringing, layer shifts, warping, under-extrusion, over-extrusion, and print quality defects. Uses a structured approach of symptom identification, root cause analysis, and iterative fixes.
+Diagnosticar y corregir fallos comunes de impresión 3D usando análisis sistemático de síntomas. Esta habilidad cubre los problemas más frecuentes de FDM y SLA: mala adhesión a la cama, hilos, desplazamientos de capa, deformación, sub-extrusión, sobre-extrusión y defectos de calidad de impresión. Utiliza un enfoque estructurado de identificación de síntomas, análisis de causa raíz y correcciones iterativas.
 
 ## Cuándo Usar
 
-- Print fails during first layer or partway through
-- Finished prints have quality defects (stringing, blobs, gaps, rough surfaces)
-- Dimensional accuracy problems (over/undersized, warping, elephant foot)
-- Layer adhesion issues (delamination, splitting)
-- Support removal leaves damage or supports fail during print
-- Prints look different from slicer preview
-- Material behaves inconsistently across prints
-- New material, printer, or environmental conditions causing issues
+- La impresión falla durante la primera capa o a mitad del proceso
+- Las impresiones terminadas tienen defectos de calidad (hilos, gotas, huecos, superficies rugosas)
+- Problemas de precisión dimensional (sobredimensionado/subdimensionado, deformación, pie de elefante)
+- Problemas de adhesión entre capas (delaminación, separación)
+- La eliminación de soportes deja daños o los soportes fallan durante la impresión
+- Las impresiones se ven diferentes a la vista previa del slicer
+- El material se comporta de manera inconsistente entre impresiones
+- Nuevo material, impresora o condiciones ambientales causan problemas
 
 ## Entradas
 
-- **failure_description**: What went wrong (failed first layer, stringing, warping, etc.)
-- **failure_timing**: When issue occurs (first layer, midprint, specific height, top layers)
-- **material**: Filament/resin type, brand, age, storage conditions
-- **printer**: Make/model, nozzle size, bed type, enclosure
-- **recent_changes**: New material, slicer settings, hardware modifications, environment
-- **print_history**: Does this model usually work? Did this material work before?
+- **Requerido**: **failure_description** — Qué salió mal (primera capa fallida, hilos, deformación, etc.)
+- **Requerido**: **failure_timing** — Cuándo ocurre el problema (primera capa, mitad de impresión, altura específica, capas superiores)
+- **Requerido**: **material** — Tipo de filamento/resina, marca, antigüedad, condiciones de almacenamiento
+- **Requerido**: **printer** — Marca/modelo, tamaño de boquilla, tipo de cama, cerramiento
+- **Opcional**: **recent_changes** — Nuevo material, configuraciones del slicer, modificaciones de hardware, entorno
+- **Opcional**: **print_history** — ¿Este modelo usualmente funciona? ¿Este material funcionó antes?
 
 ## Procedimiento
 
-### 1. Collect Failure Symptoms
+### 1. Recopilar Síntomas de Fallo
 
-Document observable symptoms with specificity:
+Documentar síntomas observables con especificidad:
 
-**Visual inspection**:
-- Take photos of failure (overall, close-up, specific defect)
-- Note failure location (first layer, specific height, top surface)
-- Describe defect type: gaps, blobs, strings, shifts, cracks
+**Inspección visual**:
+- Tomar fotos del fallo (general, primer plano, defecto específico)
+- Notar la ubicación del fallo (primera capa, altura específica, superficie superior)
+- Describir el tipo de defecto: huecos, gotas, hilos, desplazamientos, grietas
 
-**Environmental data**:
-- Ambient temperature during print
-- Humidity level
-- Drafts or AC affecting printer
-- Time of day (temperature changes)
+**Datos ambientales**:
+- Temperatura ambiente durante la impresión
+- Nivel de humedad
+- Corrientes de aire o aire acondicionado afectando la impresora
+- Hora del día (cambios de temperatura)
 
-**Print parameters**:
+**Parámetros de impresión**:
 ```bash
 # Extract from G-code metadata
 grep "^;MAXX\|^;MINX\|^;MAXZ" failed_print.gcode  # Print dimensions
@@ -74,13 +74,13 @@ grep "^M104\|^M140" failed_print.gcode | head -5  # Temperatures
 grep "^;generated by" failed_print.gcode  # Slicer version
 ```
 
-**Esperado:** Detailed symptom description with photos, parameters, and environmental context.
+**Esperado:** Descripción detallada de síntomas con fotos, parámetros y contexto ambiental.
 
-**En caso de fallo:** If symptoms unclear, print a calibration test (temperature tower, stringing test, or benchy) to reproduce and observe failure systematically.
+**En caso de fallo:** Si los síntomas no son claros, imprimir una prueba de calibración (torre de temperatura, prueba de hilos o benchy) para reproducir y observar el fallo sistemáticamente.
 
-### 2. Classify Issue by Symptom Pattern
+### 2. Clasificar el Problema por Patrón de Síntomas
 
-Match observed symptoms to common failure modes:
+Emparejar los síntomas observados con modos de fallo comunes:
 
 ## Diagnostic Reference Table
 
@@ -99,15 +99,15 @@ Match observed symptoms to common failure modes:
 | **Rough top surface** | Insufficient top layers, ironing | Count solid top layers | Add 2 top layers, enable ironing |
 | **Sagging overhangs** | Insufficient cooling, too hot | Check part cooling fan | Increase cooling, lower temp, add supports |
 
-**Esperado:** Failure classified into 1-3 most likely categories.
+**Esperado:** Fallo clasificado en 1-3 categorías más probables.
 
-**En caso de fallo:** If symptoms match multiple categories, prioritize based on failure timing (first layer issues first, then midprint, then top surface).
+**En caso de fallo:** Si los síntomas coinciden con múltiples categorías, priorizar según el momento del fallo (problemas de primera capa primero, luego mitad de impresión, luego superficie superior).
 
-### 3. Perform Root Cause Analysis
+### 3. Realizar Análisis de Causa Raíz
 
-Investigate underlying cause, not just symptoms:
+Investigar la causa subyacente, no solo los síntomas:
 
-**5 Whys technique**:
+**Técnica de los 5 por qué**:
 ```
 Symptom: Print warping and lifting from bed
 Why? → Poor bed adhesion in corners
@@ -119,43 +119,43 @@ Why? → ABS requires heated chamber for uniform cooling
 Root cause: Material choice (ABS) incompatible with open printer in drafty room
 ```
 
-**Common root causes by category**:
+**Causas raíz comunes por categoría**:
 
-**Mechanical**:
-- Loose belts, pulleys, or set screws
-- Worn/dirty linear bearings or rods
-- Z-axis binding or misalignment
-- Extruder gear worn or skipping
+**Mecánicas**:
+- Correas, poleas o tornillos de ajuste flojos
+- Rodamientos lineales o varillas desgastados/sucios
+- Eje Z atascado o desalineado
+- Engranaje del extrusor desgastado o saltando
 
-**Thermal**:
-- Temperature sensor drift or failure
-- Inadequate heated bed power/insulation
-- Insufficient part cooling
-- Environmental temperature swings
+**Térmicas**:
+- Deriva o fallo del sensor de temperatura
+- Potencia/aislamiento insuficiente de la cama caliente
+- Enfriamiento insuficiente de la pieza
+- Fluctuaciones de temperatura ambiental
 
 **Material**:
-- Wet filament (hygroscopic materials)
-- Old/degraded material
-- Contaminated filament (dust, oils)
-- Wrong material for application
+- Filamento húmedo (materiales higroscópicos)
+- Material viejo/degradado
+- Filamento contaminado (polvo, aceites)
+- Material incorrecto para la aplicación
 
-**Configuration**:
-- Incorrect e-steps calibration
-- Wrong flow rate multiplier
-- Slicer bug or wrong profile
-- Firmware acceleration/jerk too high
+**Configuración**:
+- Calibración incorrecta de e-steps
+- Multiplicador de flujo incorrecto
+- Error del slicer o perfil equivocado
+- Aceleración/jerk del firmware demasiado alto
 
-**Esperado:** Root cause identified with supporting evidence (measured temperatures, belt tension, visual inspection).
+**Esperado:** Causa raíz identificada con evidencia de soporte (temperaturas medidas, tensión de correas, inspección visual).
 
-**En caso de fallo:** If root cause unclear, use elimination method: fix most likely cause, re-test, repeat until resolved.
+**En caso de fallo:** Si la causa raíz no es clara, usar el método de eliminación: corregir la causa más probable, re-probar, repetir hasta resolver.
 
-### 4. Apply First-Level Fixes
+### 4. Aplicar Correcciones de Primer Nivel
 
-Implement immediate solutions for common issues:
+Implementar soluciones inmediatas para problemas comunes:
 
-### Poor Bed Adhesion
+### Mala Adhesión a la Cama
 
-**Immediate fixes**:
+**Correcciones inmediatas**:
 ```bash
 # 1. Clean bed thoroughly
 # Glass/PEI: Isopropyl alcohol 90%+
@@ -176,26 +176,26 @@ Implement immediate solutions for common issues:
 # - Magigoo/3D printing adhesive
 ```
 
-**Slicer settings**:
-- First layer height: 0.2-0.3mm (thicker = better squish)
-- First layer speed: 20mm/s (slower = better adhesion)
-- Add brim: 8-10mm for small footprint parts
-- Add raft: For very difficult materials (TPU, Nylon)
+**Configuraciones del slicer**:
+- Altura de primera capa: 0.2-0.3mm (más gruesa = mejor aplastamiento)
+- Velocidad de primera capa: 20mm/s (más lenta = mejor adhesión)
+- Agregar brim: 8-10mm para piezas con huella pequeña
+- Agregar raft: Para materiales muy difíciles (TPU, Nylon)
 
-**Esperado:** First layer adheres completely with no lifting.
+**Esperado:** La primera capa se adhiere completamente sin levantamiento.
 
-**En caso de fallo:** Check bed flatness with feeler gauge or mesh leveling; warped bed requires glass/PEI sheet or mesh compensation.
+**En caso de fallo:** Verificar la planitud de la cama con galga de espesores o nivelación por malla; una cama deformada requiere placa de vidrio/PEI o compensación por malla.
 
-### Stringing
+### Hilos (Stringing)
 
-**Temperature-first approach**:
+**Enfoque de temperatura primero**:
 ```
 1. Print temperature tower (180-220°C in 5° steps for PLA)
 2. Identify lowest temperature that extrudes cleanly
 3. Use that temperature -5°C to minimize stringing
 ```
 
-**Retraction tuning**:
+**Ajuste de retracción**:
 ```yaml
 # Direct drive extruder:
 retraction_distance: 1.0-2.0mm
@@ -211,13 +211,13 @@ retraction_speed: 40-60mm/s
 - Enable combing mode (travels within infill)
 ```
 
-**Esperado:** Minimal stringing, thin strings easily removed by hand.
+**Esperado:** Hilos mínimos, hilos delgados fácilmente removibles a mano.
 
-**En caso de fallo:** Check for nozzle partial clog or wet filament (both cause oozing).
+**En caso de fallo:** Verificar obstrucción parcial de la boquilla o filamento húmedo (ambos causan goteo).
 
-### Layer Shifts
+### Desplazamientos de Capa
 
-**Mechanical checks**:
+**Verificaciones mecánicas**:
 ```bash
 # 1. Check belt tension (should twang like guitar string)
 # Tighten if loose
@@ -233,7 +233,7 @@ retraction_speed: 40-60mm/s
 # Too low → skipping; too high → overheating
 ```
 
-**Speed reduction**:
+**Reducción de velocidad**:
 ```yaml
 # Reduce these speeds:
 perimeter_speed: 40mm/s (from 50)
@@ -242,13 +242,13 @@ acceleration: 500mm/s² (from 1000)
 jerk: 8mm/s (from 15)
 ```
 
-**Esperado:** No layer shifts in re-print with tightened belts and reduced speeds.
+**Esperado:** Sin desplazamientos de capa en la reimpresión con correas tensadas y velocidades reducidas.
 
-**En caso de fallo:** Check for slicer-generated collisions (part cooling fan hitting model) or electrical issues (stepper driver overheating).
+**En caso de fallo:** Verificar colisiones generadas por el slicer (ventilador de enfriamiento de pieza golpeando el modelo) o problemas eléctricos (driver del motor paso a paso sobrecalentándose).
 
-### Warping
+### Deformación (Warping)
 
-**Thermal management**:
+**Gestión térmica**:
 ```yaml
 # Increase bed temperature:
 PLA: 60°C → 65°C
@@ -265,18 +265,18 @@ regular_fan: 25% max (ABS), 50% (PETG), 100% (PLA)
 - Target chamber temp: 40-50°C
 ```
 
-**Adhesion enhancement**:
-- Add brim: 10-15mm for corners
-- Add "mouse ears": 15mm diameter discs at sharp corners
-- Chamfer bottom edges in model (45° × 1mm removes stress concentrator)
+**Mejora de adhesión**:
+- Agregar brim: 10-15mm para esquinas
+- Agregar "orejas de ratón": discos de 15mm de diámetro en esquinas agudas
+- Achaflanar bordes inferiores en el modelo (45° × 1mm elimina el concentrador de esfuerzo)
 
-**Esperado:** Part stays flat with no corner lifting.
+**Esperado:** La pieza permanece plana sin levantamiento de esquinas.
 
-**En caso de fallo:** Material fundamentally unsuitable for printer (ABS on unenclosed printer)—switch to PETG or ASA.
+**En caso de fallo:** Material fundamentalmente inadecuado para la impresora (ABS en impresora sin cerramiento) — cambiar a PETG o ASA.
 
-### Under-Extrusion
+### Sub-Extrusión
 
-**Quick fixes**:
+**Correcciones rápidas**:
 ```bash
 # 1. Check for nozzle clog
 # Heat to print temp, manually push filament
@@ -293,7 +293,7 @@ regular_fan: 25% max (ABS), 50% (PETG), 100% (PLA)
 # Slicer: Filament settings → Flow → 102-105%
 ```
 
-**E-steps calibration**:
+**Calibración de e-steps**:
 ```bash
 # 1. Mark filament 120mm above extruder
 # 2. Extrude 100mm: G1 E100 F100
@@ -302,13 +302,13 @@ regular_fan: 25% max (ABS), 50% (PETG), 100% (PLA)
 # 5. Set: M92 E<new_steps>; M500 (save to EEPROM)
 ```
 
-**Esperado:** Consistent extrusion with no gaps in perimeters or infill.
+**Esperado:** Extrusión consistente sin huecos en perímetros o relleno.
 
-**En caso de fallo:** Check for heat creep (cooling fan failure), worn extruder gear, or cracked extruder arm.
+**En caso de fallo:** Verificar infiltración de calor (fallo del ventilador de enfriamiento), engranaje del extrusor desgastado o brazo del extrusor agrietado.
 
-### Over-Extrusion
+### Sobre-Extrusión
 
-**Flow rate reduction**:
+**Reducción de tasa de flujo**:
 ```yaml
 # Reduce flow in 2% increments:
 extrusion_multiplier: 0.98 → 0.96 → 0.94
@@ -319,7 +319,7 @@ extrusion_multiplier: 0.98 → 0.96 → 0.94
 - Infill doesn't overfill and push layers apart
 ```
 
-**Dimensional accuracy test**:
+**Prueba de precisión dimensional**:
 ```bash
 # Print 20mm calibration cube
 # Measure with calipers:
@@ -328,30 +328,30 @@ extrusion_multiplier: 0.98 → 0.96 → 0.94
 # If undersized → increase flow
 ```
 
-**Esperado:** Accurate dimensions, smooth surfaces, no bulging.
+**Esperado:** Dimensiones precisas, superficies lisas, sin abultamiento.
 
-**En caso de fallo:** Re-calibrate e-steps (may be set too high).
+**En caso de fallo:** Recalibrar e-steps (pueden estar configurados demasiado alto).
 
-### 5. Verify Fix with Test Print
+### 5. Verificar la Corrección con Impresión de Prueba
 
-Confirm resolution before attempting full print:
+Confirmar la resolución antes de intentar la impresión completa:
 
-**Test print selection**:
-- **Adhesion issues**: 20mm square × 5 layers (fast first layer test)
-- **Stringing**: Stringing test model (dual towers with travels)
-- **Layer shifts**: Tall thin test (stress mechanical system)
-- **Warping**: Large flat surface (200mm × 200mm × 0.4mm)
-- **Extrusion**: 20mm calibration cube (dimensional accuracy)
+**Selección de impresión de prueba**:
+- **Problemas de adhesión**: Cuadrado de 20mm × 5 capas (prueba rápida de primera capa)
+- **Hilos**: Modelo de prueba de hilos (torres dobles con desplazamientos)
+- **Desplazamientos de capa**: Prueba alta y delgada (estrés del sistema mecánico)
+- **Deformación**: Superficie plana grande (200mm × 200mm × 0.4mm)
+- **Extrusión**: Cubo de calibración de 20mm (precisión dimensional)
 
-**Esperado:** Test print succeeds with issue resolved.
+**Esperado:** La impresión de prueba tiene éxito con el problema resuelto.
 
-**En caso de fallo:** If test fails, issue not fully resolved or multiple issues present—repeat diagnosis focusing on remaining symptoms.
+**En caso de fallo:** Si la prueba falla, el problema no está completamente resuelto o hay múltiples problemas presentes — repetir el diagnóstico enfocándose en los síntomas restantes.
 
-### 6. Document Solution
+### 6. Documentar la Solución
 
-Record successful fix for future reference:
+Registrar la corrección exitosa para referencia futura:
 
-**Issue log template**:
+**Plantilla de registro de problemas**:
 ```yaml
 date: 2026-02-16
 issue: "Layer shifts at 50mm height"
@@ -367,37 +367,37 @@ verification: "Printed 100mm test cylinder - no shifts"
 notes: "Check belt tension monthly, pulley tends to slip"
 ```
 
-**Esperado:** Issue documented with root cause and solution for knowledge base.
+**Esperado:** Problema documentado con causa raíz y solución para la base de conocimiento.
 
-**En caso de fallo:** Even unsuccessful troubleshooting attempts should be logged to avoid repeating failed solutions.
+**En caso de fallo:** Incluso los intentos de solución de problemas fallidos deben registrarse para evitar repetir soluciones que no funcionaron.
 
 ## Validación
 
-- [ ] Failure symptoms documented with photos and specific observations
-- [ ] Issue classified using diagnostic reference table
-- [ ] Root cause identified (mechanical, thermal, material, or configuration)
-- [ ] Appropriate fix applied based on root cause category
-- [ ] Fix verified with test print before attempting full print
-- [ ] Solution documented in issue log with date, cause, and resolution
-- [ ] Environmental factors recorded (temperature, humidity, drafts)
-- [ ] Material condition checked (dry, contamination-free, stored properly)
+- [ ] Síntomas de fallo documentados con fotos y observaciones específicas
+- [ ] Problema clasificado usando la tabla de referencia diagnóstica
+- [ ] Causa raíz identificada (mecánica, térmica, material o configuración)
+- [ ] Corrección apropiada aplicada según la categoría de causa raíz
+- [ ] Corrección verificada con impresión de prueba antes de intentar la impresión completa
+- [ ] Solución documentada en el registro de problemas con fecha, causa y resolución
+- [ ] Factores ambientales registrados (temperatura, humedad, corrientes de aire)
+- [ ] Condición del material verificada (seco, libre de contaminación, almacenado correctamente)
 
 ## Errores Comunes
 
-1. **Changing multiple variables**: Adjust one parameter at a time; otherwise you won't know what fixed it (or made it worse)
-2. **Ignoring wet filament**: Hygroscopic materials (Nylon, TPU, PETG) absorb moisture causing bubbling, stringing, poor adhesion—always suspect wet filament first
-3. **Skipping mechanical checks**: Loose belts and worn components cause issues no amount of slicer tuning can fix
-4. **Temperature from internet**: Every printer/material combination is unique—always run your own temperature tower
-5. **Over-tightening belts**: Too tight = premature bearing wear; aim for guitar string tension, not steel cable
-6. **Blaming slicer**: Slicer bugs are rare; 95% of issues are mechanical, thermal, or material-related
-7. **Not cleaning nozzle**: Partial clogs cause intermittent under-extrusion that looks like flow/e-step issues
-8. **Assuming bed is level**: Beds warp over time, springs compress, and adjustments slip—re-level weekly for reliable results
-9. **Wrong Z-offset**: Most first layer failures are Z-offset too high (not enough squish) or too low (nozzle scraping bed)
-10. **Environmental neglect**: ABS/ASA in 15°C garage with drafts will never print well—material requires stable warm environment
+1. **Cambiar múltiples variables**: Ajustar un parámetro a la vez; de lo contrario no sabrás qué lo arregló (o lo empeoró)
+2. **Ignorar filamento húmedo**: Los materiales higroscópicos (Nylon, TPU, PETG) absorben humedad causando burbujas, hilos, mala adhesión — siempre sospechar del filamento húmedo primero
+3. **Saltarse verificaciones mecánicas**: Correas flojas y componentes desgastados causan problemas que ningún ajuste del slicer puede arreglar
+4. **Temperatura de internet**: Cada combinación impresora/material es única — siempre ejecutar tu propia torre de temperatura
+5. **Sobre-tensar correas**: Demasiado tensas = desgaste prematuro de rodamientos; apuntar a tensión de cuerda de guitarra, no de cable de acero
+6. **Culpar al slicer**: Los errores del slicer son raros; 95% de los problemas son mecánicos, térmicos o relacionados con el material
+7. **No limpiar la boquilla**: Obstrucciones parciales causan sub-extrusión intermitente que parece problemas de flujo/e-steps
+8. **Asumir que la cama está nivelada**: Las camas se deforman con el tiempo, los resortes se comprimen y los ajustes se deslizan — re-nivelar semanalmente para resultados confiables
+9. **Z-offset incorrecto**: La mayoría de fallos de primera capa son Z-offset demasiado alto (insuficiente aplastamiento) o demasiado bajo (boquilla raspando la cama)
+10. **Descuido ambiental**: ABS/ASA en garaje a 15°C con corrientes de aire nunca imprimirá bien — el material requiere un ambiente cálido y estable
 
 ## Habilidades Relacionadas
 
-- **[prepare-print-model](../prepare-print-model/SKILL.md)**: Ensure model is properly prepared to avoid printability issues
-- **[select-print-material](../select-print-material/SKILL.md)**: Choose material appropriate for printer capabilities and environment
-- **Calibrate 3D Printer** (future skill): E-steps, flow rate, temperature towers, PID tuning, and bed mesh leveling
-- **Maintain 3D Printer** (future skill): Belt tensioning, bearing lubrication, nozzle replacement, and preventive maintenance
+- **[prepare-print-model](../prepare-print-model/SKILL.md)**: Asegurar que el modelo esté correctamente preparado para evitar problemas de imprimibilidad
+- **[select-print-material](../select-print-material/SKILL.md)**: Elegir material apropiado para las capacidades de la impresora y el entorno
+- **Calibrate 3D Printer** (habilidad futura): E-steps, tasa de flujo, torres de temperatura, ajuste PID y nivelación por malla de la cama
+- **Maintain 3D Printer** (habilidad futura): Tensado de correas, lubricación de rodamientos, reemplazo de boquilla y mantenimiento preventivo

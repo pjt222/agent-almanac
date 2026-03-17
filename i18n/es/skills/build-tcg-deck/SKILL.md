@@ -1,13 +1,14 @@
 ---
 name: build-tcg-deck
 description: >
-  Build a competitive or casual trading card game deck. Covers archetype
-  selection, mana/energy curve analysis, win condition identification,
-  meta-game positioning, and sideboard construction for Pokemon TCG, Magic:
-  The Gathering, Flesh and Blood, and other TCGs. Use when building a new deck
-  for a tournament format or casual play, adapting an existing deck to a changed
-  meta-game, evaluating whether a new set warrants a deck change, or converting
-  a deck concept into a tournament-ready list.
+  Construir un mazo competitivo o casual de juego de cartas coleccionables.
+  Cubre selección de arquetipo, análisis de curva de maná/energía, identificación
+  de condición de victoria, posicionamiento en el meta-juego y construcción de
+  sideboard para Pokemon TCG, Magic: The Gathering, Flesh and Blood y otros
+  TCGs. Usar al construir un nuevo mazo para un formato de torneo o juego
+  casual, adaptar un mazo existente a un meta-juego cambiado, evaluar si un
+  nuevo set justifica un cambio de mazo, o convertir un concepto de mazo en
+  una lista lista para torneo.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,161 +27,161 @@ metadata:
 
 # Build TCG Deck
 
-Construct a trading card game deck from archetype selection through final optimization, following a structured process that works across Pokemon TCG, Magic: The Gathering, Flesh and Blood, and other major TCGs.
+Construir un mazo de juego de cartas coleccionables desde la selección de arquetipo hasta la optimización final, siguiendo un proceso estructurado que funciona para Pokemon TCG, Magic: The Gathering, Flesh and Blood y otros TCGs principales.
 
 ## Cuándo Usar
 
-- Building a new deck for a specific tournament format or casual play
-- Adapting an existing deck to a changed meta-game
-- Evaluating whether a new card or set release warrants a deck change
-- Teaching someone the principles of deck construction
-- Converting a deck concept into a tournament-ready list
+- Construir un nuevo mazo para un formato de torneo específico o juego casual
+- Adaptar un mazo existente a un meta-juego cambiado
+- Evaluar si una nueva carta o lanzamiento de set justifica un cambio de mazo
+- Enseñar a alguien los principios de construcción de mazos
+- Convertir un concepto de mazo en una lista lista para torneo
 
 ## Entradas
 
-- **Requerido**: Card game (Pokemon TCG, MTG, FaB, etc.)
-- **Requerido**: Format (Standard, Expanded, Modern, Legacy, Blitz, etc.)
-- **Requerido**: Goal (competitive tournament, casual play, budget build)
-- **Opcional**: Preferred archetype or strategy (aggro, control, combo, midrange)
-- **Opcional**: Budget constraints (maximum spend, cards already owned)
-- **Opcional**: Current meta-game snapshot (top decks, expected field)
+- **Requerido**: Juego de cartas (Pokemon TCG, MTG, FaB, etc.)
+- **Requerido**: Formato (Standard, Expanded, Modern, Legacy, Blitz, etc.)
+- **Requerido**: Objetivo (torneo competitivo, juego casual, construcción con presupuesto)
+- **Opcional**: Arquetipo o estrategia preferida (aggro, control, combo, midrange)
+- **Opcional**: Restricciones de presupuesto (gasto máximo, cartas ya poseídas)
+- **Opcional**: Instantánea del meta-juego actual (mazos top, campo esperado)
 
 ## Procedimiento
 
-### Paso 1: Define the Archetype
+### Paso 1: Definir el arquetipo
 
-Choose the deck's strategic identity.
+Elegir la identidad estratégica del mazo.
 
-1. Identify the available archetypes in the current format:
-   - **Aggro**: Win quickly through early pressure and efficient attackers
-   - **Control**: Answer threats efficiently, win in the late game with card advantage
-   - **Combo**: Assemble specific card combinations for powerful synergy or instant wins
-   - **Midrange**: Flexible strategy that shifts between aggro and control as needed
-   - **Tempo**: Gain resource advantage through efficient timing and disruption
-2. Select an archetype based on:
-   - Player preference and playstyle
-   - Meta-game positioning (what beats the top decks?)
-   - Budget constraints (combo decks often need specific expensive cards)
-   - Format legality (check ban lists and rotation status)
-3. Identify 1-2 primary win conditions:
-   - How does this deck actually win the game?
-   - What is the ideal game state this deck is trying to reach?
-4. State the archetype selection and win condition clearly
+1. Identificar los arquetipos disponibles en el formato actual:
+   - **Aggro**: Ganar rápidamente mediante presión temprana y atacantes eficientes
+   - **Control**: Responder amenazas eficientemente, ganar en el juego tardío con ventaja de cartas
+   - **Combo**: Ensamblar combinaciones específicas de cartas para sinergia poderosa o victorias instantáneas
+   - **Midrange**: Estrategia flexible que cambia entre aggro y control según sea necesario
+   - **Tempo**: Obtener ventaja de recursos mediante timing eficiente e interrupción
+2. Seleccionar un arquetipo basándose en:
+   - Preferencia y estilo de juego del jugador
+   - Posicionamiento en el meta-juego (¿qué vence a los mazos top?)
+   - Restricciones de presupuesto (los mazos combo a menudo necesitan cartas específicas costosas)
+   - Legalidad del formato (verificar listas de prohibición y estado de rotación)
+3. Identificar 1-2 condiciones de victoria primarias:
+   - ¿Cómo gana realmente el juego este mazo?
+   - ¿Cuál es el estado ideal del juego que este mazo intenta alcanzar?
+4. Declarar la selección de arquetipo y condición de victoria claramente
 
-**Esperado:** A clear archetype with defined win conditions. The strategy is specific enough to guide card selection but flexible enough to adapt.
+**Esperado:** Un arquetipo claro con condiciones de victoria definidas. La estrategia es lo suficientemente específica para guiar la selección de cartas pero lo suficientemente flexible para adaptarse.
 
-**En caso de fallo:** If no archetype feels right, start with the strongest individual cards available and let the archetype emerge from the card pool. Sometimes the best deck is built around a card, not a concept.
+**En caso de fallo:** Si ningún arquetipo se siente correcto, empezar con las cartas individuales más fuertes disponibles y dejar que el arquetipo emerja del pool de cartas. A veces el mejor mazo se construye alrededor de una carta, no de un concepto.
 
-### Paso 2: Build the Core
+### Paso 2: Construir el núcleo
 
-Select the cards that define the deck's strategy.
+Seleccionar las cartas que definen la estrategia del mazo.
 
-1. Identify the **core engine** (12-20 cards depending on game):
-   - The cards that directly enable the win condition
-   - Maximum legal copies of each core card
-   - These are non-negotiable — the deck doesn't function without them
-2. Add **support cards** (8-15 cards):
-   - Cards that find or protect the core engine
-   - Draw/search effects to improve consistency
-   - Protection for key pieces (counters, shields, removal)
-3. Add **interaction** (8-12 cards):
-   - Removal for opponent's threats
-   - Disruption for opponent's strategy
-   - Defensive options appropriate to the format
-4. Fill the **resource base** (game-specific):
-   - MTG: Lands (typically 24-26 for 60-card, 16-17 for 40-card)
-   - Pokemon: Energy cards (8-12 basic + special)
-   - FaB: Pitch value distribution (balance red/yellow/blue)
+1. Identificar el **motor central** (12-20 cartas dependiendo del juego):
+   - Las cartas que directamente habilitan la condición de victoria
+   - Copias máximas legales de cada carta central
+   - Estas son no negociables — el mazo no funciona sin ellas
+2. Añadir **cartas de soporte** (8-15 cartas):
+   - Cartas que encuentran o protegen el motor central
+   - Efectos de robo/búsqueda para mejorar la consistencia
+   - Protección para piezas clave (contrahechizos, escudos, remoción)
+3. Añadir **interacción** (8-12 cartas):
+   - Remoción para las amenazas del oponente
+   - Interrupción para la estrategia del oponente
+   - Opciones defensivas apropiadas para el formato
+4. Llenar la **base de recursos** (específica del juego):
+   - MTG: Tierras (típicamente 24-26 para 60 cartas, 16-17 para 40 cartas)
+   - Pokemon: Cartas de Energía (8-12 básicas + especiales)
+   - FaB: Distribución de valor de pitch (balancear rojo/amarillo/azul)
 
-**Esperado:** A complete deck list at or near the minimum deck size for the format. Every card has a clear role (core, support, interaction, or resource).
+**Esperado:** Una lista de mazo completa en o cerca del tamaño mínimo de mazo para el formato. Cada carta tiene un rol claro (núcleo, soporte, interacción o recurso).
 
-**En caso de fallo:** If the deck list exceeds the format size, cut the weakest support cards first. If the core engine requires too many cards (>25), the strategy may be too fragile — simplify the win condition.
+**En caso de fallo:** Si la lista del mazo excede el tamaño del formato, cortar las cartas de soporte más débiles primero. Si el motor central requiere demasiadas cartas (>25), la estrategia puede ser demasiado frágil — simplificar la condición de victoria.
 
-### Paso 3: Analyze the Curve
+### Paso 3: Analizar la curva
 
-Verify the deck's resource distribution supports its strategy.
+Verificar que la distribución de recursos del mazo soporte su estrategia.
 
-1. Plot the **mana/energy/cost curve**:
-   - Count cards at each cost point (0, 1, 2, 3, 4, 5+)
-   - Verify the curve matches the archetype:
-     - Aggro: peaks at 1-2, drops sharply after 3
-     - Midrange: peaks at 2-3, moderate presence at 4-5
-     - Control: flatter curve, more high-cost finishers
-     - Combo: concentrated at combo-piece costs
-2. Check **color/type distribution** (MTG: color balance; Pokemon: energy type coverage):
-   - Can the resource base reliably cast cards on curve?
-   - Are there color-intensive cards that need dedicated resource support?
-3. Verify **card type balance**:
-   - Sufficient creatures/attackers to apply pressure
-   - Sufficient spells/trainers for interaction and consistency
-   - No critical category completely missing
-4. Adjust if the curve doesn't support the strategy
+1. Graficar la **curva de maná/energía/costo**:
+   - Contar cartas en cada punto de costo (0, 1, 2, 3, 4, 5+)
+   - Verificar que la curva coincida con el arquetipo:
+     - Aggro: pico en 1-2, cae abruptamente después de 3
+     - Midrange: pico en 2-3, presencia moderada en 4-5
+     - Control: curva más plana, más finalizadores de alto costo
+     - Combo: concentrada en los costos de las piezas de combo
+2. Verificar **distribución de color/tipo** (MTG: balance de color; Pokemon: cobertura de tipo de energía):
+   - ¿Puede la base de recursos confiablemente lanzar cartas en curva?
+   - ¿Hay cartas intensivas en color que necesiten soporte dedicado de recursos?
+3. Verificar **balance de tipo de carta**:
+   - Suficientes criaturas/atacantes para aplicar presión
+   - Suficientes hechizos/entrenadores para interacción y consistencia
+   - Ninguna categoría crítica completamente ausente
+4. Ajustar si la curva no soporta la estrategia
 
-**Esperado:** A smooth curve that lets the deck execute its strategy on time. Aggro plays out fast, control survives early, combo assembles on schedule.
+**Esperado:** Una curva suave que permita al mazo ejecutar su estrategia a tiempo. Aggro juega rápido, control sobrevive temprano, combo ensambla a tiempo.
 
-**En caso de fallo:** If the curve is lumpy (too many expensive cards, not enough early plays), swap expensive support cards for cheaper alternatives. The curve is more important than any individual card.
+**En caso de fallo:** Si la curva es irregular (demasiadas cartas costosas, insuficientes jugadas tempranas), intercambiar cartas de soporte costosas por alternativas más baratas. La curva es más importante que cualquier carta individual.
 
-### Paso 4: Meta-Game Positioning
+### Paso 4: Posicionamiento en el meta-juego
 
-Evaluate the deck against the expected field.
+Evaluar el mazo contra el campo esperado.
 
-1. Identify the top 5 decks in the current meta (use tournament results, tier lists)
-2. For each top deck, evaluate:
-   - **Favorable**: Your strategy naturally counters theirs (score: +1)
-   - **Even**: Neither deck has a structural advantage (score: 0)
-   - **Unfavorable**: Their strategy naturally counters yours (score: -1)
-3. Calculate the expected win rate against the field:
-   - Weight matchups by the opponent's meta share
-   - A deck with 60%+ expected win rate against the top 5 is well-positioned
-4. If positioning is poor, consider:
-   - Switching interaction cards to target the worst matchups
-   - Adding sideboard (if the format allows) for unfavorable matchups
-   - Whether a different archetype is better positioned
+1. Identificar los 5 mazos top en el meta actual (usar resultados de torneos, listas de tiers)
+2. Para cada mazo top, evaluar:
+   - **Favorable**: Tu estrategia naturalmente contrarresta la suya (puntaje: +1)
+   - **Parejo**: Ningún mazo tiene ventaja estructural (puntaje: 0)
+   - **Desfavorable**: Su estrategia naturalmente contrarresta la tuya (puntaje: -1)
+3. Calcular la tasa de victoria esperada contra el campo:
+   - Ponderar los enfrentamientos por la cuota de meta del oponente
+   - Un mazo con 60%+ de tasa de victoria esperada contra el top 5 está bien posicionado
+4. Si el posicionamiento es pobre, considerar:
+   - Cambiar cartas de interacción para apuntar a los peores enfrentamientos
+   - Añadir sideboard (si el formato lo permite) para enfrentamientos desfavorables
+   - Si un arquetipo diferente está mejor posicionado
 
-**Esperado:** A clear picture of where the deck sits in the meta. Favorable and unfavorable matchups identified with specific reasons.
+**Esperado:** Una imagen clara de dónde se sitúa el mazo en el meta. Enfrentamientos favorables y desfavorables identificados con razones específicas.
 
-**En caso de fallo:** If meta data isn't available, focus on versatility — ensure the deck can interact with multiple strategies rather than being optimized for one matchup.
+**En caso de fallo:** Si los datos del meta no están disponibles, enfocarse en versatilidad — asegurar que el mazo pueda interactuar con múltiples estrategias en lugar de estar optimizado para un enfrentamiento.
 
-### Paso 5: Build the Sideboard
+### Paso 5: Construir el sideboard
 
-Construct sideboard/side deck for format-specific adaptation (if applicable).
+Construir sideboard/mazo lateral para adaptación específica del formato (si aplica).
 
-1. For each unfavorable matchup from Step 4:
-   - Identify 2-4 cards that improve the matchup significantly
-   - These should be high-impact cards, not marginal improvements
-2. For each card in the sideboard, know:
-   - What matchup(s) it comes in against
-   - What it replaces from the main deck
-   - Whether bringing it in changes the deck's curve significantly
-3. Verify sideboard doesn't exceed format limits (MTG: 15 cards, FaB: varies)
-4. Ensure no sideboard card is only relevant against one fringe deck
-   - Each sideboard slot should cover at least 2 matchups if possible
+1. Para cada enfrentamiento desfavorable del Paso 4:
+   - Identificar 2-4 cartas que mejoren el enfrentamiento significativamente
+   - Estas deben ser cartas de alto impacto, no mejoras marginales
+2. Para cada carta en el sideboard, saber:
+   - Contra qué enfrentamiento(s) entra
+   - Qué reemplaza del mazo principal
+   - Si traerla cambia la curva del mazo significativamente
+3. Verificar que el sideboard no exceda los límites del formato (MTG: 15 cartas, FaB: varía)
+4. Asegurar que ninguna carta del sideboard sea solo relevante contra un mazo marginal
+   - Cada espacio del sideboard debería cubrir al menos 2 enfrentamientos si es posible
 
-**Esperado:** A focused sideboard that meaningfully improves the worst matchups without diluting the main strategy.
+**Esperado:** Un sideboard enfocado que mejore significativamente los peores enfrentamientos sin diluir la estrategia principal.
 
-**En caso de fallo:** If the sideboard can't fix the worst matchups, the deck may be poorly positioned in the current meta. Consider whether the core strategy needs adjustment rather than sideboard patches.
+**En caso de fallo:** Si el sideboard no puede arreglar los peores enfrentamientos, el mazo puede estar mal posicionado en el meta actual. Considerar si la estrategia central necesita ajuste en lugar de parches de sideboard.
 
 ## Validación
 
-- [ ] Archetype and win conditions clearly defined
-- [ ] Deck meets format legality (ban list, rotation, card count)
-- [ ] Every card has a defined role (core, support, interaction, resource)
-- [ ] Mana/energy curve supports the strategy's speed
-- [ ] Resource base can reliably cast cards on curve
-- [ ] Meta matchups evaluated with specific reasoning
-- [ ] Sideboard targets the worst matchups with clear swap plans
-- [ ] Budget constraints satisfied (if applicable)
+- [ ] Arquetipo y condiciones de victoria claramente definidos
+- [ ] El mazo cumple la legalidad del formato (lista de prohibición, rotación, conteo de cartas)
+- [ ] Cada carta tiene un rol definido (núcleo, soporte, interacción, recurso)
+- [ ] La curva de maná/energía soporta la velocidad de la estrategia
+- [ ] La base de recursos puede confiablemente lanzar cartas en curva
+- [ ] Enfrentamientos del meta evaluados con razonamiento específico
+- [ ] El sideboard apunta a los peores enfrentamientos con planes de intercambio claros
+- [ ] Restricciones de presupuesto satisfechas (si aplica)
 
 ## Errores Comunes
 
-- **Too many win conditions**: A deck with 3 different ways to win usually does none of them well. Focus on 1-2
-- **Curve blindness**: Adding powerful expensive cards without checking if the deck can cast them on time
-- **Ignoring the meta**: Building in a vacuum. The best deck in theory loses to the most common deck in practice
-- **Emotional card inclusion**: Keeping a pet card that doesn't serve the strategy. Every slot must earn its place
-- **Sideboard afterthought**: Building the sideboard last with leftover cards. The sideboard is part of the deck, not an appendix
-- **Over-teching**: Filling the deck with narrow answers to specific decks instead of proactive strategy
+- **Demasiadas condiciones de victoria**: Un mazo con 3 formas diferentes de ganar usualmente no hace ninguna bien. Enfocarse en 1-2
+- **Ceguera de curva**: Añadir cartas poderosas costosas sin verificar si el mazo puede lanzarlas a tiempo
+- **Ignorar el meta**: Construir en un vacío. El mejor mazo en teoría pierde contra el mazo más común en la práctica
+- **Inclusión emocional de cartas**: Mantener una carta favorita que no sirve a la estrategia. Cada espacio debe ganarse su lugar
+- **Sideboard como ocurrencia tardía**: Construir el sideboard al final con cartas sobrantes. El sideboard es parte del mazo, no un apéndice
+- **Sobre-tecnificar**: Llenar el mazo con respuestas estrechas a mazos específicos en lugar de estrategia proactiva
 
 ## Habilidades Relacionadas
 
-- `grade-tcg-card` — Card condition assessment for tournament legality and collection value
-- `manage-tcg-collection` — Inventory management for tracking which cards are available for deck building
+- `grade-tcg-card` — Evaluación de condición de cartas para legalidad en torneos y valor de colección
+- `manage-tcg-collection` — Gestión de inventario para rastrear qué cartas están disponibles para construcción de mazos

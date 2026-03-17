@@ -1,19 +1,21 @@
 ---
 name: survey-insect-population
 description: >
-  Design and execute insect population surveys covering survey design, sampling
-  methods, field execution, specimen identification, diversity index calculation
-  including Shannon-Wiener and Simpson indices, statistical analysis, and
-  reporting. Covers defining survey objectives, selecting study sites, determining
-  sampling intensity and replication, choosing sampling methods appropriate to
-  target taxa, standardizing collection effort, recording environmental covariates,
-  identifying specimens to the lowest practical taxonomic level, calculating species
-  richness, Shannon-Wiener diversity (H'), Simpson diversity (1-D), evenness,
-  rarefaction curves, multivariate ordination, and producing survey reports with
-  species lists and conservation implications. Use when conducting baseline
-  biodiversity assessments, monitoring insect populations over time, comparing
-  insect communities across habitats or treatments, assessing environmental
-  impact, or supporting conservation planning with quantitative ecological data.
+  Diseñar y ejecutar muestreos poblacionales de insectos cubriendo diseño de
+  muestreo, métodos de recolección, ejecución en campo, identificación de
+  especímenes, cálculo de índices de diversidad incluyendo Shannon-Wiener y
+  Simpson, análisis estadístico y elaboración de informes. Cubre definición de
+  objetivos, selección de sitios de estudio, determinación de intensidad de
+  muestreo y replicación, elección de métodos apropiados para los taxones
+  objetivo, estandarización del esfuerzo de recolección, registro de covariables
+  ambientales, identificación de especímenes al nivel taxonómico práctico más
+  bajo, cálculo de riqueza de especies, diversidad Shannon-Wiener (H'),
+  diversidad Simpson (1-D), equitatividad, curvas de rarefacción, ordenación
+  multivariada, y producción de informes con listas de especies e implicaciones
+  de conservación. Usar al realizar evaluaciones de biodiversidad de línea base,
+  monitorear poblaciones de insectos a lo largo del tiempo, comparar comunidades
+  de insectos entre hábitats o tratamientos, evaluar impacto ambiental, o apoyar
+  la planificación de conservación con datos ecológicos cuantitativos.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -32,33 +34,33 @@ metadata:
 
 # Survey Insect Population
 
-Design and execute systematic insect population surveys with standardized sampling, diversity analysis, and quantitative reporting.
+Diseñar y ejecutar muestreos sistemáticos de poblaciones de insectos con recolección estandarizada, análisis de diversidad e informes cuantitativos.
 
 ## Cuándo Usar
 
-- You are conducting a baseline biodiversity assessment of an area
-- You need to monitor insect population changes over time (annual surveys, before-after studies)
-- You are comparing insect communities across habitats, treatments, or gradients
-- You are assessing environmental impact (construction, pesticide use, habitat restoration)
-- You need quantitative ecological data to support conservation planning or management decisions
-- You are contributing to regional or national biodiversity monitoring programs
+- Se está realizando una evaluación de biodiversidad de línea base de un área
+- Se necesita monitorear cambios en las poblaciones de insectos a lo largo del tiempo (muestreos anuales, estudios antes-después)
+- Se están comparando comunidades de insectos entre hábitats, tratamientos o gradientes
+- Se está evaluando impacto ambiental (construcción, uso de pesticidas, restauración de hábitat)
+- Se necesitan datos ecológicos cuantitativos para apoyar la planificación de conservación o decisiones de manejo
+- Se está contribuyendo a programas regionales o nacionales de monitoreo de biodiversidad
 
 ## Entradas
 
-- **Requerido**: Defined study objectives (what question is the survey answering?)
-- **Requerido**: Study site(s) with legal access for collection (see `collect-preserve-specimens`)
-- **Requerido**: Sampling equipment appropriate to target taxa and habitat
-- **Requerido**: Identification resources (keys, guides, or access to taxonomic specialists)
-- **Opcional**: GPS device for georeferencing sampling points
-- **Opcional**: Environmental monitoring equipment (thermometer, hygrometer, anemometer)
-- **Opcional**: Statistical software for diversity analysis (R, PAST, EstimateS)
-- **Opcional**: Previous survey data for the site (baseline for comparison)
+- **Requerido**: Objetivos de estudio definidos (¿qué pregunta responde el muestreo?)
+- **Requerido**: Sitio(s) de estudio con acceso legal para recolección (ver `collect-preserve-specimens`)
+- **Requerido**: Equipo de muestreo apropiado para los taxones objetivo y el hábitat
+- **Requerido**: Recursos de identificación (claves, guías o acceso a especialistas taxonómicos)
+- **Opcional**: Dispositivo GPS para georreferenciar puntos de muestreo
+- **Opcional**: Equipo de monitoreo ambiental (termómetro, higrómetro, anemómetro)
+- **Opcional**: Software estadístico para análisis de diversidad (R, PAST, EstimateS)
+- **Opcional**: Datos de muestreos anteriores del sitio (línea base para comparación)
 
 ## Procedimiento
 
-### Paso 1: Design the Survey
+### Paso 1: Diseñar el Muestreo
 
-Define what you want to learn, where you will sample, and how much effort you will invest. Survey design determines the statistical power and ecological validity of everything that follows.
+Definir qué se quiere aprender, dónde se muestreará y cuánto esfuerzo se invertirá. El diseño del muestreo determina el poder estadístico y la validez ecológica de todo lo que sigue.
 
 ```
 Survey Design Framework:
@@ -111,13 +113,13 @@ Survey Design Framework:
 +--------------------+------------------------------------------+
 ```
 
-**Esperado:** A written survey protocol specifying objectives, target taxa, site description, sampling design (random/stratified/systematic), number of replicates, temporal scope, and standardized effort per sample.
+**Esperado:** Un protocolo de muestreo escrito especificando objetivos, taxones objetivo, descripción del sitio, diseño de muestreo (aleatorio/estratificado/sistemático), número de réplicas, alcance temporal y esfuerzo estandarizado por muestra.
 
-**En caso de fallo:** If the survey objectives are vague ("see what insects are here"), refine them into a testable question before proceeding. A survey without clear objectives cannot be properly designed, and the resulting data may not answer any question well. If site access is restricted, modify the design to work within constraints rather than reducing replication below 3 per comparison group.
+**En caso de fallo:** Si los objetivos del muestreo son vagos ("ver qué insectos hay aquí"), refinarlos en una pregunta comprobable antes de proceder. Un muestreo sin objetivos claros no puede diseñarse correctamente, y los datos resultantes pueden no responder bien ninguna pregunta. Si el acceso al sitio está restringido, modificar el diseño para funcionar dentro de las restricciones en lugar de reducir la replicación por debajo de 3 por grupo de comparación.
 
-### Paso 2: Choose Sampling Methods
+### Paso 2: Elegir Métodos de Muestreo
 
-Select methods appropriate to the target taxa, habitat, and survey objectives. Different methods have different capture biases.
+Seleccionar métodos apropiados para los taxones objetivo, el hábitat y los objetivos del muestreo. Diferentes métodos tienen diferentes sesgos de captura.
 
 ```
 Method Selection by Target Taxa:
@@ -165,13 +167,13 @@ Standardization Rules:
   above activity threshold for target taxa)
 ```
 
-**Esperado:** One or more sampling methods selected and justified for the target taxa, with effort standardized across all replicates and sample points.
+**Esperado:** Uno o más métodos de muestreo seleccionados y justificados para los taxones objetivo, con esfuerzo estandarizado en todas las réplicas y puntos de muestreo.
 
-**En caso de fallo:** If a single method produces too few specimens for meaningful analysis, consider adding a complementary method. However, data from different methods should be analyzed separately — do not pool pitfall trap data with sweep net data in the same diversity analysis, as they sample different portions of the community with different capture probabilities.
+**En caso de fallo:** Si un solo método produce muy pocos especímenes para un análisis significativo, considerar agregar un método complementario. Sin embargo, los datos de diferentes métodos deben analizarse por separado — no mezclar datos de trampas de caída con datos de red de barrido en el mismo análisis de diversidad, ya que muestrean diferentes porciones de la comunidad con diferentes probabilidades de captura.
 
-### Paso 3: Execute Fieldwork
+### Paso 3: Ejecutar el Trabajo de Campo
 
-Deploy sampling equipment, conduct collections, and record all metadata needed for analysis.
+Desplegar equipo de muestreo, realizar recolecciones y registrar todos los metadatos necesarios para el análisis.
 
 ```
 Field Execution Checklist:

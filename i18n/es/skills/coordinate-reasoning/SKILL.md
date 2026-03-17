@@ -1,13 +1,13 @@
 ---
 name: coordinate-reasoning
 description: >
-  AI internal coordination using stigmergic signals — managing information
-  freshness in context and memory, decay rates for assumption staleness,
-  and emergent coherent behavior from simple local protocols. Use during
-  complex tasks where multiple sub-tasks must coordinate, when context has
-  grown long and information freshness is uncertain, after context compression
-  when information may have been lost, or when sub-task outputs need to feed
-  into each other cleanly without degradation.
+  Coordinación interna de IA usando señales estigmérgicas — gestionar la frescura
+  de información en contexto y memoria, tasas de decaimiento para obsolescencia de
+  suposiciones, y comportamiento coherente emergente a partir de protocolos locales
+  simples. Usar durante tareas complejas donde múltiples sub-tareas deben coordinarse,
+  cuando el contexto ha crecido largo y la frescura de información es incierta,
+  después de compresión de contexto cuando información puede haberse perdido, o
+  cuando las salidas de sub-tareas necesitan alimentarse mutuamente sin degradación.
 license: MIT
 allowed-tools: Read Write
 metadata:
@@ -26,29 +26,29 @@ metadata:
 
 # Coordinate Reasoning
 
-Manage the internal coordination of reasoning processes using stigmergic principles — treating context as an environment where information signals have freshness, decay rates, and interaction rules that produce coherent behavior from simple local protocols.
+Gestionar la coordinación interna de procesos de razonamiento usando principios estigmérgicos — tratando el contexto como un entorno donde las señales de información tienen frescura, tasas de decaimiento y reglas de interacción que producen comportamiento coherente a partir de protocolos locales simples.
 
 ## Cuándo Usar
 
-- During complex tasks where multiple sub-tasks must coordinate (multi-file edits, multi-step refactoring)
-- When context has grown long and information freshness is uncertain
-- After context compression when some information may have been lost
-- When sub-task outputs need to feed into each other cleanly
-- When earlier reasoning results need to be carried forward without degradation
-- Complementing `forage-solutions` (exploration) and `build-coherence` (decision) with execution coordination
+- Durante tareas complejas donde múltiples sub-tareas deben coordinarse (ediciones multi-archivo, refactorizaciones multi-paso)
+- Cuando el contexto ha crecido largo y la frescura de información es incierta
+- Después de compresión de contexto cuando alguna información puede haberse perdido
+- Cuando las salidas de sub-tareas necesitan alimentarse mutuamente de forma limpia
+- Cuando resultados de razonamiento anteriores necesitan ser trasladados sin degradación
+- Complementando `forage-solutions` (exploración) y `build-coherence` (decisión) con coordinación de ejecución
 
 ## Entradas
 
-- **Requerido**: Current task decomposition (what sub-tasks exist and how do they relate?)
-- **Opcional**: Known information freshness concerns (e.g., "I read that file 20 messages ago")
-- **Opcional**: Sub-task dependency map (which sub-tasks feed into which?)
-- **Opcional**: Available coordination tools (MEMORY.md, task list, inline notes)
+- **Requerido**: Descomposición actual de la tarea (qué sub-tareas existen y cómo se relacionan)
+- **Opcional**: Preocupaciones conocidas de frescura de información (ej., "Leí ese archivo hace 20 mensajes")
+- **Opcional**: Mapa de dependencias de sub-tareas (qué sub-tareas alimentan a cuáles)
+- **Opcional**: Herramientas de coordinación disponibles (MEMORY.md, lista de tareas, notas en línea)
 
 ## Procedimiento
 
-### Paso 1: Classify the Coordination Problem
+### Paso 1: Clasificar el Problema de Coordinación
 
-Different coordination challenges require different signal designs.
+Diferentes desafíos de coordinación requieren diferentes diseños de señales.
 
 ```
 AI Coordination Problem Types:
@@ -80,15 +80,15 @@ AI Coordination Problem Types:
 └─────────────────────┴──────────────────────────────────────────────────┘
 ```
 
-Classify the current task. Most complex tasks are Construction or Division of Labor; most debugging tasks are Foraging; most design decisions are Consensus.
+Clasificar la tarea actual. La mayoría de tareas complejas son Construcción o División de Trabajo; la mayoría de tareas de depuración son Búsqueda; la mayoría de decisiones de diseño son Consenso.
 
-**Esperado:** A clear classification that determines which coordination signals to use. The classification should match how the task actually feels, not how it was described.
+**Esperado:** Una clasificación clara que determine qué señales de coordinación usar. La clasificación debe coincidir con cómo se siente realmente la tarea, no con cómo fue descrita.
 
-**En caso de fallo:** If the task spans multiple types (common for large tasks), identify the dominant type for the current phase. Construction during implementation, Foraging during debugging, Consensus during design. The type can change as the task progresses.
+**En caso de fallo:** Si la tarea abarca múltiples tipos (común para tareas grandes), identificar el tipo dominante para la fase actual. Construcción durante implementación, Búsqueda durante depuración, Consenso durante diseño. El tipo puede cambiar a medida que la tarea progresa.
 
-### Paso 2: Design Context Signals
+### Paso 2: Diseñar Señales de Contexto
 
-Treat information in the conversation context as signals with freshness and decay properties.
+Tratar la información en el contexto de conversación como señales con propiedades de frescura y decaimiento.
 
 ```
 Information Decay Rate Table:
@@ -116,19 +116,19 @@ Information Decay Rate Table:
 └───────────────────────────┴──────────┴──────────────────────────────┘
 ```
 
-Additionally, design inhibition signals — markers for tried-and-failed approaches:
+Adicionalmente, diseñar señales de inhibición — marcadores para enfoques intentados y fallidos:
 
-- After a tool call fails: note the failure mode (prevents retrying the same call)
-- After an approach is abandoned: note why (prevents revisiting without new evidence)
-- After a user correction: note what was wrong (prevents repeating the error)
+- Después de que una llamada a herramienta falla: anotar el modo de falla (previene reintentar la misma llamada)
+- Después de que un enfoque es abandonado: anotar por qué (previene revisitarlo sin nueva evidencia)
+- Después de una corrección del usuario: anotar qué estaba mal (previene repetir el error)
 
-**Esperado:** A mental model of information freshness across the current context. Identification of which information is fresh and which needs refreshing before reliance.
+**Esperado:** Un modelo mental de frescura de información a lo largo del contexto actual. Identificación de qué información está fresca y cuál necesita actualización antes de ser utilizada.
 
-**En caso de fallo:** If information freshness is hard to assess, default to "re-read before relying on" for anything not verified in the last 5-10 actions. Over-refreshing wastes some effort but prevents stale-information errors.
+**En caso de fallo:** Si la frescura de información es difícil de evaluar, usar por defecto "releer antes de depender" para cualquier cosa no verificada en las últimas 5-10 acciones. Re-actualizar en exceso desperdicia algo de esfuerzo pero previene errores por información obsoleta.
 
-### Paso 3: Define Local Protocols
+### Paso 3: Definir Protocolos Locales
 
-Establish simple rules for how reasoning should proceed at each step, using only locally available information.
+Establecer reglas simples para cómo el razonamiento debe proceder en cada paso, usando solo información disponible localmente.
 
 ```
 Local Protocol Rules:
@@ -162,21 +162,21 @@ Local Protocol Rules:
 └──────────────────────┴────────────────────────────────────────────────┘
 ```
 
-These protocols are simple enough to apply at every step without significant overhead.
+Estos protocolos son lo suficientemente simples para aplicar en cada paso sin sobrecarga significativa.
 
-**Esperado:** A set of lightweight rules that improve coordination quality without slowing execution. The rules should feel helpful, not burdensome.
+**Esperado:** Un conjunto de reglas ligeras que mejoran la calidad de coordinación sin ralentizar la ejecución. Las reglas deben sentirse útiles, no gravosas.
 
-**En caso de fallo:** If the protocols feel like overhead, reduce to the two most important for the current task type: Safety + Deposit for Construction, Safety + Exploration for Foraging, Safety + Response for tasks with active user feedback.
+**En caso de fallo:** Si los protocolos se sienten como sobrecarga, reducir a los dos más importantes para el tipo de tarea actual: Seguridad + Depósito para Construcción, Seguridad + Exploración para Búsqueda, Seguridad + Respuesta para tareas con retroalimentación activa del usuario.
 
-### Paso 4: Calibrate Information Freshness
+### Paso 4: Calibrar la Frescura de Información
 
-Perform an active audit of information staleness in the current context.
+Realizar una auditoría activa de obsolescencia de información en el contexto actual.
 
-1. What facts were established more than N messages ago? List them
-2. For each: has it been updated, contradicted, or rendered irrelevant since?
-3. Check for context compression losses: is there information you remember having but can no longer find in the visible context?
-4. Check for drift between early plans and current execution: has the approach changed without updating the plan?
-5. Re-verify the 2-3 most critical facts (the ones that the most downstream reasoning depends on)
+1. ¿Qué hechos fueron establecidos hace más de N mensajes? Listarlos
+2. Para cada uno: ¿ha sido actualizado, contradicho o vuelto irrelevante desde entonces?
+3. Verificar pérdidas por compresión de contexto: ¿hay información que recuerdas haber tenido pero ya no puedes encontrar en el contexto visible?
+4. Verificar la deriva entre planes tempranos y ejecución actual: ¿ha cambiado el enfoque sin actualizar el plan?
+5. Re-verificar los 2-3 hechos más críticos (aquellos de los que depende la mayor cantidad de razonamiento posterior)
 
 ```
 Freshness Audit Template:
@@ -188,18 +188,18 @@ Freshness Audit Template:
 └────────────────────────┴──────────┴──────────────┴─────────────────┘
 ```
 
-**Esperado:** A concrete inventory of information freshness with stale items identified for refresh. At least one fact re-verified — if nothing needed refreshing, the audit was too shallow or the context is genuinely fresh.
+**Esperado:** Un inventario concreto de frescura de información con elementos obsoletos identificados para actualización. Al menos un hecho re-verificado — si nada necesitaba actualización, la auditoría fue demasiado superficial o el contexto está genuinamente fresco.
 
-**En caso de fallo:** If the audit reveals significant information loss (multiple facts with "Lost" or "Unknown" status), this is a signal to run `heal` for a full subsystem assessment. Information loss beyond a threshold means coordination is compromised at the foundation level.
+**En caso de fallo:** Si la auditoría revela pérdida significativa de información (múltiples hechos con estado "Perdido" o "Desconocido"), esta es una señal para ejecutar `heal` para una evaluación completa de subsistemas. La pérdida de información más allá de un umbral significa que la coordinación está comprometida a nivel fundamental.
 
-### Paso 5: Test Emergent Coherence
+### Paso 5: Probar la Coherencia Emergente
 
-Verify that the sub-tasks, when combined, produce a coherent whole.
+Verificar que las sub-tareas, al combinarse, producen un todo coherente.
 
-1. Does each sub-task's output feed cleanly into the next? Or are there gaps, contradictions, or mismatched assumptions?
-2. Are tool calls building toward the goal, or are they repetitive (re-reading the same file, re-running the same search)?
-3. Is the overall direction still aligned with the user's request? Or has incremental drift accumulated into significant misalignment?
-4. Stress test: if one key assumption is wrong, how much of the work cascades? High cascade = fragile coordination. Low cascade = robust coordination
+1. ¿La salida de cada sub-tarea alimenta limpiamente a la siguiente? ¿O hay brechas, contradicciones o suposiciones incompatibles?
+2. ¿Las llamadas a herramientas construyen hacia el objetivo, o son repetitivas (re-leyendo el mismo archivo, re-ejecutando la misma búsqueda)?
+3. ¿La dirección general sigue alineada con la solicitud del usuario? ¿O la deriva incremental ha acumulado una desalineación significativa?
+4. Prueba de estrés: si una suposición clave es incorrecta, ¿cuánto del trabajo se propaga en cascada? Alta cascada = coordinación frágil. Baja cascada = coordinación robusta
 
 ```
 Coherence Test:
@@ -213,31 +213,31 @@ Coherence Test:
 └────────────────────────────────────┴─────────────────────────────────┘
 ```
 
-**Esperado:** A concrete assessment of overall coherence with specific issues identified. Coherent coordination should feel like parts clicking together; incoherent coordination feels like forcing puzzle pieces.
+**Esperado:** Una evaluación concreta de la coherencia general con problemas específicos identificados. La coordinación coherente debe sentirse como piezas encajando; la coordinación incoherente se siente como forzar piezas de rompecabezas.
 
-**En caso de fallo:** If coherence is poor, identify the specific point where sub-tasks diverge. Often it is a single stale assumption or an unprocessed user correction that propagated through downstream work. Fix the point of divergence, then re-verify downstream outputs.
+**En caso de fallo:** Si la coherencia es pobre, identificar el punto específico donde las sub-tareas divergen. A menudo es una sola suposición obsoleta o una corrección del usuario no procesada que se propagó a través del trabajo posterior. Corregir el punto de divergencia, luego re-verificar las salidas posteriores.
 
 ## Validación
 
-- [ ] Coordination problem was classified by type
-- [ ] Information decay rates were considered for facts relied upon
-- [ ] Local protocols were applied (especially Safety and Deposit)
-- [ ] Freshness audit identified stale information (or confirmed freshness with evidence)
-- [ ] Emergent coherence was tested across sub-tasks
-- [ ] Inhibition signals were respected (tried-and-failed approaches not repeated)
+- [ ] El problema de coordinación fue clasificado por tipo
+- [ ] Las tasas de decaimiento de información fueron consideradas para los hechos utilizados
+- [ ] Los protocolos locales fueron aplicados (especialmente Seguridad y Depósito)
+- [ ] La auditoría de frescura identificó información obsoleta (o confirmó frescura con evidencia)
+- [ ] La coherencia emergente fue probada entre sub-tareas
+- [ ] Las señales de inhibición fueron respetadas (enfoques intentados y fallidos no repetidos)
 
 ## Errores Comunes
 
-- **Over-engineering signals**: Complex coordination protocols slow work more than they help. Start with Safety + Deposit; add others only when problems emerge
-- **Trusting stale context**: The most common coordination failure is relying on information that was true 20 messages ago but has since been updated or invalidated. When in doubt, re-read
-- **Ignoring inhibition signals**: Retrying a failed approach without changing anything is not persistence — it is ignoring the failure signal. Something must be different for a retry to succeed
-- **No deposits**: Completing sub-tasks without noting their outputs forces later sub-tasks to re-derive or re-read. Brief summaries save significant re-work
-- **Assuming coherence**: Not testing whether sub-tasks actually combine into a coherent whole. Each sub-task can be correct independently but incoherent collectively — the integration is where coordination fails
+- **Sobre-ingeniería de señales**: Protocolos de coordinación complejos ralentizan el trabajo más de lo que ayudan. Comenzar con Seguridad + Depósito; agregar otros solo cuando surjan problemas
+- **Confiar en contexto obsoleto**: El fallo de coordinación más común es depender de información que era verdadera hace 20 mensajes pero que desde entonces ha sido actualizada o invalidada. Cuando haya duda, releer
+- **Ignorar señales de inhibición**: Reintentar un enfoque fallido sin cambiar nada no es persistencia — es ignorar la señal de fallo. Algo debe ser diferente para que un reintento tenga éxito
+- **Sin depósitos**: Completar sub-tareas sin anotar sus salidas obliga a las sub-tareas posteriores a re-derivar o re-leer. Resúmenes breves ahorran re-trabajo significativo
+- **Asumir coherencia**: No probar si las sub-tareas realmente se combinan en un todo coherente. Cada sub-tarea puede ser correcta independientemente pero incoherente colectivamente — la integración es donde la coordinación falla
 
 ## Habilidades Relacionadas
 
-- `coordinate-swarm` — the multi-agent coordination model that this skill adapts to single-agent reasoning
-- `forage-solutions` — coordinates exploration across multiple hypotheses
-- `build-coherence` — coordinates evaluation across competing approaches
-- `heal` — deeper assessment when coordination failures reveal subsystem drift
-- `awareness` — monitors for coordination breakdown signals during execution
+- `coordinate-swarm` — el modelo de coordinación multi-agente que esta habilidad adapta al razonamiento de agente único
+- `forage-solutions` — coordina la exploración a través de múltiples hipótesis
+- `build-coherence` — coordina la evaluación a través de enfoques competidores
+- `heal` — evaluación más profunda cuando los fallos de coordinación revelan deriva de subsistemas
+- `awareness` — monitorea señales de ruptura de coordinación durante la ejecución

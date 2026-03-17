@@ -1,13 +1,14 @@
 ---
 name: build-consensus
 description: >
-  Achieve distributed agreement without central authority using bee democracy,
-  threshold voting, and quorum sensing. Covers proposal generation, advocacy
-  dynamics, commitment thresholds, deadlock resolution, and consensus quality
-  assessment. Use when a group must decide between options without a designated
-  leader, when centralized decision-making is a bottleneck, when stakeholders
-  have different perspectives to integrate, or when designing automated systems
-  that must reach consensus such as distributed databases or multi-agent AI.
+  Lograr acuerdo distribuido sin autoridad central usando democracia de abejas,
+  votación por umbral y detección de quórum. Cubre generación de propuestas,
+  dinámicas de defensa, umbrales de compromiso, resolución de bloqueos y
+  evaluación de calidad del consenso. Usar cuando un grupo debe decidir entre
+  opciones sin un líder designado, cuando la toma de decisiones centralizada es
+  un cuello de botella, cuando las partes interesadas tienen diferentes
+  perspectivas para integrar, o al diseñar sistemas automatizados que deben
+  alcanzar consenso como bases de datos distribuidas o IA multi-agente.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,63 +27,63 @@ metadata:
 
 # Build Consensus
 
-Achieve collective agreement across distributed agents without a central authority — using scout advocacy, threshold quorum sensing, and commitment dynamics modeled on honeybee swarm decision-making.
+Lograr acuerdo colectivo entre agentes distribuidos sin una autoridad central — usando defensa de exploradores, detección de quórum por umbral y dinámicas de compromiso modeladas en la toma de decisiones de enjambre de abejas melíferas.
 
 ## Cuándo Usar
 
-- A group must collectively decide between multiple options without a designated leader
-- Centralized decision-making is a bottleneck or a single point of failure
-- Stakeholders have different information and perspectives that must be integrated
-- Past decisions suffered from groupthink (premature convergence) or analysis paralysis (no convergence)
-- Designing automated systems that must reach consensus (distributed databases, multi-agent AI)
-- Complementing `coordinate-swarm` when the coordination requires explicit collective decisions
+- Un grupo debe decidir colectivamente entre múltiples opciones sin un líder designado
+- La toma de decisiones centralizada es un cuello de botella o un punto único de fallo
+- Las partes interesadas tienen información y perspectivas diferentes que deben integrarse
+- Decisiones pasadas sufrieron de pensamiento grupal (convergencia prematura) o parálisis por análisis (sin convergencia)
+- Diseñar sistemas automatizados que deben alcanzar consenso (bases de datos distribuidas, IA multi-agente)
+- Complementar `coordinate-swarm` cuando la coordinación requiere decisiones colectivas explícitas
 
 ## Entradas
 
-- **Requerido**: The decision to be made (binary choice, selection from N options, parameter setting)
-- **Requerido**: The participating agents (team members, services, voters)
-- **Opcional**: Known options with preliminary quality assessments
-- **Opcional**: Decision urgency (time budget)
-- **Opcional**: Acceptable error rate (can the group occasionally pick the second-best option?)
-- **Opcional**: Current decision-making failure mode (groupthink, deadlock, flip-flopping)
+- **Requerido**: La decisión a tomar (elección binaria, selección entre N opciones, configuración de parámetro)
+- **Requerido**: Los agentes participantes (miembros del equipo, servicios, votantes)
+- **Opcional**: Opciones conocidas con evaluaciones preliminares de calidad
+- **Opcional**: Urgencia de la decisión (presupuesto de tiempo)
+- **Opcional**: Tasa de error aceptable (¿puede el grupo ocasionalmente elegir la segunda mejor opción?)
+- **Opcional**: Modo de fallo actual de la toma de decisiones (pensamiento grupal, bloqueo, indecisión)
 
 ## Procedimiento
 
-### Paso 1: Generate Proposals Through Independent Scouting
+### Paso 1: Generar propuestas mediante exploración independiente
 
-Ensure the decision space is adequately explored before any advocacy begins.
+Asegurar que el espacio de decisión se explore adecuadamente antes de que comience cualquier defensa.
 
-1. Assign scouts to independently explore the option space:
-   - Each scout evaluates options without knowing other scouts' findings
-   - Independent evaluation prevents early herding toward popular-but-mediocre options
-   - Scout count: at minimum, 3 scouts per serious option (for reliability)
-2. Scouts produce structured assessments:
-   - Option identifier
-   - Quality score (normalized 0-100 or categorical: poor/fair/good/excellent)
-   - Key strengths and risks identified
-   - Confidence level (how thoroughly was this option evaluated?)
-3. Aggregate scout reports without filtering — all options above a minimum quality threshold enter the advocacy phase
+1. Asignar exploradores para investigar independientemente el espacio de opciones:
+   - Cada explorador evalúa opciones sin conocer los hallazgos de otros exploradores
+   - La evaluación independiente previene el arrastre temprano hacia opciones populares pero mediocres
+   - Conteo de exploradores: al mínimo, 3 exploradores por opción seria (para confiabilidad)
+2. Los exploradores producen evaluaciones estructuradas:
+   - Identificador de la opción
+   - Puntuación de calidad (normalizada 0-100 o categórica: pobre/regular/buena/excelente)
+   - Fortalezas clave y riesgos identificados
+   - Nivel de confianza (¿qué tan exhaustivamente fue evaluada esta opción?)
+3. Agregar los informes de los exploradores sin filtrar — todas las opciones por encima de un umbral mínimo de calidad entran en la fase de defensa
 
-**Esperado:** A set of independently evaluated proposals with quality scores and assessments. No option has been eliminated by a single evaluator; diversity of perspective is preserved.
+**Esperado:** Un conjunto de propuestas evaluadas independientemente con puntuaciones de calidad y evaluaciones. Ninguna opción ha sido eliminada por un solo evaluador; la diversidad de perspectiva se preserva.
 
-**En caso de fallo:** If scouts converge on the same option without independent evaluation, the scouting was not truly independent. Rerun with explicit information barriers. If too many options survive to the advocacy phase, raise the minimum quality threshold. If too few survive, lower it or add more scouts.
+**En caso de fallo:** Si los exploradores convergen en la misma opción sin evaluación independiente, la exploración no fue verdaderamente independiente. Repetir con barreras de información explícitas. Si demasiadas opciones sobreviven a la fase de defensa, elevar el umbral mínimo de calidad. Si muy pocas sobreviven, bajarlo o agregar más exploradores.
 
-### Paso 2: Run Advocacy Dynamics (Waggle Dance)
+### Paso 2: Ejecutar dinámicas de defensa (danza waggle)
 
-Allow scouts to advocate for their preferred options, with advocacy intensity proportional to quality.
+Permitir que los exploradores defiendan sus opciones preferidas, con intensidad de defensa proporcional a la calidad.
 
-1. Each scout advocates for their top-rated option:
-   - Advocacy intensity is proportional to the quality score (better options get more vigorous advocacy)
-   - Advocacy is public — all agents observe all advocacy signals
-   - Advocates present evidence and quality assessment, not just preference
-2. Uncommitted agents observe advocacy and evaluate:
-   - Follow up on advocated options by inspecting them independently
-   - If an agent's own inspection confirms the quality, they join the advocacy
-   - If inspection reveals lower quality than advertised, they do not join
-3. Cross-inspection dynamics:
-   - Advocates for weaker options naturally lose followers as agents independently verify
-   - Advocates for stronger options gain followers through confirmed quality
-   - The process is self-correcting: exaggerated advocacy fails the verification step
+1. Cada explorador defiende su opción mejor calificada:
+   - La intensidad de defensa es proporcional a la puntuación de calidad (mejores opciones reciben defensa más vigorosa)
+   - La defensa es pública — todos los agentes observan todas las señales de defensa
+   - Los defensores presentan evidencia y evaluación de calidad, no solo preferencia
+2. Los agentes no comprometidos observan la defensa y evalúan:
+   - Dan seguimiento a las opciones defendidas inspeccionándolas independientemente
+   - Si la inspección propia del agente confirma la calidad, se unen a la defensa
+   - Si la inspección revela menor calidad de la anunciada, no se unen
+3. Dinámicas de inspección cruzada:
+   - Los defensores de opciones más débiles pierden seguidores naturalmente cuando los agentes verifican independientemente
+   - Los defensores de opciones más fuertes ganan seguidores a través de calidad confirmada
+   - El proceso es autocorrectivo: la defensa exagerada falla en el paso de verificación
 
 ```
 Advocacy Dynamics:
@@ -101,98 +102,98 @@ Advocacy Dynamics:
 └─────────────────────────────────────────────────────────┘
 ```
 
-**Esperado:** Advocacy for the best option(s) grows over time as agents independently verify quality. Advocacy for weaker options fades as verification fails. The group naturally converges toward the strongest option without any agent dictating the choice.
+**Esperado:** La defensa de la(s) mejor(es) opción(es) crece con el tiempo a medida que los agentes verifican independientemente la calidad. La defensa de opciones más débiles se desvanece cuando la verificación falla. El grupo converge naturalmente hacia la opción más fuerte sin que ningún agente dicte la elección.
 
-**En caso de fallo:** If advocacy doesn't converge (two options remain neck-and-neck), the options may be genuinely equivalent — proceed to quorum with either, or use a tiebreaker rule. If advocacy converges too fast on a mediocre option, increase the independence of evaluation (more scouts, stricter information barriers) and add a mandatory cross-inspection step.
+**En caso de fallo:** Si la defensa no converge (dos opciones permanecen empatadas), las opciones pueden ser genuinamente equivalentes — proceder al quórum con cualquiera, o usar una regla de desempate. Si la defensa converge demasiado rápido en una opción mediocre, aumentar la independencia de la evaluación (más exploradores, barreras de información más estrictas) y agregar un paso obligatorio de inspección cruzada.
 
-### Paso 3: Set Quorum Threshold and Commit
+### Paso 3: Establecer umbral de quórum y comprometerse
 
-Define the commitment threshold that triggers collective action.
+Definir el umbral de compromiso que dispara la acción colectiva.
 
-1. Set the quorum threshold:
-   - **Simple decisions**: 50% + 1 of agents committed to one option
-   - **Important decisions**: 66-75% committed to one option
-   - **Critical/irreversible decisions**: 80%+ committed to one option
-   - Rule of thumb: higher stakes → higher quorum → slower but more reliable consensus
-2. Monitor commitment accumulation:
-   - Track how many agents have committed to each option over time
-   - Display commitment levels transparently (all agents can see the current state)
-   - Do not allow commitment withdrawal mid-cycle (prevents oscillation)
-3. When quorum is reached:
-   - The winning option is adopted as the collective decision
-   - Advocates for losing options acknowledge the decision (no rogue agents)
-   - Implementation begins immediately — delay after consensus erodes commitment
+1. Establecer el umbral de quórum:
+   - **Decisiones simples**: 50% + 1 de agentes comprometidos con una opción
+   - **Decisiones importantes**: 66-75% comprometidos con una opción
+   - **Decisiones críticas/irreversibles**: 80%+ comprometidos con una opción
+   - Regla general: mayor riesgo → mayor quórum → consenso más lento pero más confiable
+2. Monitorear la acumulación de compromisos:
+   - Rastrear cuántos agentes se han comprometido con cada opción a lo largo del tiempo
+   - Mostrar los niveles de compromiso de manera transparente (todos los agentes pueden ver el estado actual)
+   - No permitir retiro de compromiso a mitad de ciclo (previene la oscilación)
+3. Cuando se alcanza el quórum:
+   - La opción ganadora se adopta como la decisión colectiva
+   - Los defensores de las opciones perdedoras reconocen la decisión (sin agentes rebeldes)
+   - La implementación comienza inmediatamente — la demora después del consenso erosiona el compromiso
 
-**Esperado:** A clear quorum moment where enough agents have independently committed to one option. The decision is legitimate because it emerged from independent evaluation, not authority or coercion.
+**Esperado:** Un momento de quórum claro donde suficientes agentes se han comprometido independientemente con una opción. La decisión es legítima porque surgió de evaluación independiente, no de autoridad o coerción.
 
-**En caso de fallo:** If quorum is never reached within the time budget, escalate to Step 4 (deadlock resolution). If quorum is reached but agents are unhappy, the advocacy phase was too short — agents committed without adequate evaluation. If the consensus was wrong (discovered after the fact), the independent scouting was insufficient — increase scout diversity and evaluation thoroughness in the next cycle.
+**En caso de fallo:** Si el quórum nunca se alcanza dentro del presupuesto de tiempo, escalar al Paso 4 (resolución de bloqueos). Si el quórum se alcanza pero los agentes están descontentos, la fase de defensa fue demasiado corta — los agentes se comprometieron sin evaluación adecuada. Si el consenso fue incorrecto (descubierto después del hecho), la exploración independiente fue insuficiente — aumentar la diversidad de exploradores y la exhaustividad de evaluación en el siguiente ciclo.
 
-### Paso 4: Resolve Deadlocks
+### Paso 4: Resolver bloqueos
 
-Break decision gridlock when the natural consensus process stalls.
+Romper el estancamiento de decisión cuando el proceso natural de consenso se detiene.
 
-1. Diagnose the deadlock type:
-   - **Genuine tie**: two options are equally good → flip a coin; the cost of delay exceeds the cost of picking the "wrong" equal option
-   - **Information deficit**: agents can't evaluate options well enough → invest in more scouting before re-running advocacy
-   - **Faction formation**: entrenched subgroups refuse to cross-inspect → introduce mandatory rotation where advocates must inspect the opposing option
-   - **Option proliferation**: too many options fragment commitment → eliminate the bottom 50% and re-run advocacy
-2. Apply the appropriate resolution:
-   - Genuine tie: random selection or merge options if compatible
-   - Information deficit: time-boxed scouting extension
-   - Faction formation: forced cross-inspection round
-   - Option proliferation: ranked elimination tournament
-3. After resolution, reset the quorum clock and re-run Step 3
+1. Diagnosticar el tipo de bloqueo:
+   - **Empate genuino**: dos opciones son igualmente buenas → lanzar una moneda; el costo de la demora excede el costo de elegir la opción "equivocada" entre iguales
+   - **Déficit de información**: los agentes no pueden evaluar las opciones suficientemente bien → invertir en más exploración antes de volver a ejecutar la defensa
+   - **Formación de facciones**: subgrupos arraigados se niegan a inspeccionar cruzadamente → introducir rotación obligatoria donde los defensores deben inspeccionar la opción opuesta
+   - **Proliferación de opciones**: demasiadas opciones fragmentan el compromiso → eliminar el 50% inferior y volver a ejecutar la defensa
+2. Aplicar la resolución apropiada:
+   - Empate genuino: selección aleatoria o fusionar opciones si son compatibles
+   - Déficit de información: extensión de exploración con tiempo limitado
+   - Formación de facciones: ronda de inspección cruzada forzada
+   - Proliferación de opciones: torneo de eliminación por ranking
+3. Después de la resolución, reiniciar el reloj de quórum y volver a ejecutar el Paso 3
 
-**Esperado:** Deadlock resolved through the appropriate intervention. The resolution is visible and accepted by the group as fair process, even if individual agents preferred a different outcome.
+**Esperado:** Bloqueo resuelto mediante la intervención apropiada. La resolución es visible y aceptada por el grupo como proceso justo, incluso si agentes individuales preferían un resultado diferente.
 
-**En caso de fallo:** If deadlocks recur on the same decision, the decision framing may be wrong. Step back and ask: can the decision be decomposed into smaller, independent decisions? Can the scope be reduced? Is there a "try both and see" option? Sometimes the best consensus is "we'll run a time-boxed experiment."
+**En caso de fallo:** Si los bloqueos recurren en la misma decisión, el encuadre de la decisión puede ser incorrecto. Retroceder y preguntar: ¿puede la decisión descomponerse en decisiones más pequeñas e independientes? ¿Puede reducirse el alcance? ¿Hay una opción de "probar ambas y ver"? A veces el mejor consenso es "ejecutaremos un experimento con tiempo limitado."
 
-### Paso 5: Assess Consensus Quality
+### Paso 5: Evaluar la calidad del consenso
 
-Evaluate whether the consensus process produced a good decision, not just a decision.
+Evaluar si el proceso de consenso produjo una buena decisión, no solo una decisión.
 
-1. Post-decision assessment:
-   - Was the winning option independently verified by at least N agents?
-   - Was the decision speed appropriate (not too fast/groupthink, not too slow/paralysis)?
-   - Did the process surface information that would have been missed by a single decision-maker?
-   - Are agents committed to implementation, or merely compliant?
-2. Track consensus health metrics:
-   - **Time to quorum**: decreasing over successive decisions indicates learning; increasing indicates growing complexity or dysfunction
-   - **Scout-to-commit ratio**: how much scouting was needed per commitment? High ratio = difficult decision or low trust
-   - **Post-decision regret rate**: how often does the group wish it had chosen differently?
-3. Feed learnings back into the process:
-   - Adjust quorum thresholds based on decision importance and past accuracy
-   - Adjust scout count based on option complexity
-   - Adjust time budgets based on historical time-to-quorum
+1. Evaluación post-decisión:
+   - ¿Fue la opción ganadora verificada independientemente por al menos N agentes?
+   - ¿Fue la velocidad de decisión apropiada (no demasiado rápida/pensamiento grupal, no demasiado lenta/parálisis)?
+   - ¿El proceso sacó a la superficie información que habría sido perdida por un solo tomador de decisiones?
+   - ¿Los agentes están comprometidos con la implementación, o meramente cumpliendo?
+2. Rastrear métricas de salud del consenso:
+   - **Tiempo hasta el quórum**: disminuyendo en decisiones sucesivas indica aprendizaje; aumentando indica complejidad creciente o disfunción
+   - **Ratio exploración-compromiso**: ¿cuánta exploración se necesitó por compromiso? Ratio alto = decisión difícil o baja confianza
+   - **Tasa de arrepentimiento post-decisión**: ¿con qué frecuencia el grupo desea haber elegido diferente?
+3. Retroalimentar los aprendizajes al proceso:
+   - Ajustar umbrales de quórum basándose en la importancia de la decisión y precisión pasada
+   - Ajustar el conteo de exploradores basándose en la complejidad de las opciones
+   - Ajustar presupuestos de tiempo basándose en el historial de tiempo-hasta-quórum
 
-**Esperado:** A feedback loop that improves consensus quality over time. The group learns to scout more effectively, advocate more honestly, and commit more confidently.
+**Esperado:** Un ciclo de retroalimentación que mejora la calidad del consenso con el tiempo. El grupo aprende a explorar más efectivamente, defender más honestamente y comprometerse más confiadamente.
 
-**En caso de fallo:** If consensus quality metrics are poor (high regret, slow decisions), audit the process for structural failures: insufficient scouting diversity, advocacy without verification, or thresholds set too low for the decision type. Rebuild the specific failing stage rather than overhauling the entire process.
+**En caso de fallo:** Si las métricas de calidad del consenso son pobres (alto arrepentimiento, decisiones lentas), auditar el proceso en busca de fallas estructurales: diversidad de exploración insuficiente, defensa sin verificación, o umbrales configurados demasiado bajos para el tipo de decisión. Reconstruir la etapa específica que falla en lugar de revisar todo el proceso.
 
 ## Validación
 
-- [ ] Proposals were generated through independent scouting (no herding)
-- [ ] Advocacy intensity was proportional to assessed quality
-- [ ] Uncommitted agents independently verified advocated options
-- [ ] Quorum threshold was appropriate for the decision's importance
-- [ ] Quorum was reached and the decision was implemented promptly
-- [ ] Deadlock resolution mechanism was available (even if unused)
-- [ ] Post-decision quality assessment was conducted
+- [ ] Las propuestas fueron generadas mediante exploración independiente (sin arrastre)
+- [ ] La intensidad de defensa fue proporcional a la calidad evaluada
+- [ ] Los agentes no comprometidos verificaron independientemente las opciones defendidas
+- [ ] El umbral de quórum fue apropiado para la importancia de la decisión
+- [ ] El quórum fue alcanzado y la decisión fue implementada prontamente
+- [ ] El mecanismo de resolución de bloqueos estaba disponible (incluso si no fue usado)
+- [ ] La evaluación de calidad post-decisión fue conducida
 
 ## Errores Comunes
 
-- **Skipping independent scouting**: Jumping directly to advocacy produces groupthink. The quality of consensus depends entirely on the quality of independent evaluation
-- **Equal advocacy for unequal options**: If every option gets the same advocacy regardless of quality, the process degenerates into random selection. Advocacy must be proportional to assessed quality
-- **Commitment withdrawal**: Allowing agents to un-commit creates oscillation. Once committed in a cycle, agents stay committed until the cycle resolves
-- **Confusing consensus with unanimity**: Consensus requires sufficient agreement, not total agreement. Waiting for 100% creates permanent deadlock
-- **Ignoring the losing side**: Agents who advocated for the losing option have information the group needs. Their concerns should inform implementation, even if they don't block the decision
+- **Omitir la exploración independiente**: Saltar directamente a la defensa produce pensamiento grupal. La calidad del consenso depende enteramente de la calidad de la evaluación independiente
+- **Defensa igual para opciones desiguales**: Si cada opción recibe la misma defensa independientemente de la calidad, el proceso degenera en selección aleatoria. La defensa debe ser proporcional a la calidad evaluada
+- **Retiro de compromiso**: Permitir que los agentes retiren su compromiso crea oscilación. Una vez comprometidos en un ciclo, los agentes permanecen comprometidos hasta que el ciclo se resuelva
+- **Confundir consenso con unanimidad**: El consenso requiere acuerdo suficiente, no acuerdo total. Esperar el 100% crea bloqueo permanente
+- **Ignorar al lado perdedor**: Los agentes que defendieron la opción perdedora tienen información que el grupo necesita. Sus preocupaciones deben informar la implementación, incluso si no bloquean la decisión
 
 ## Habilidades Relacionadas
 
-- `coordinate-swarm` — foundational coordination framework that supports the signal-based consensus mechanism
-- `defend-colony` — collective defense decisions often require rapid consensus under threat
-- `scale-colony` — consensus mechanisms must adapt when the group size changes significantly
-- `dissolve-form` — morphic skill for controlled dismantling, where consensus before dissolution is critical
-- `plan-sprint` — sprint planning involves team consensus on commitment scope
-- `conduct-retrospective` — retrospectives are a form of consensus-building about process improvement
-- `build-coherence` — AI self-application variant; maps bee democracy to single-agent multi-path reasoning with confidence thresholds and deadlock resolution
+- `coordinate-swarm` — marco de coordinación fundacional que soporta el mecanismo de consenso basado en señales
+- `defend-colony` — las decisiones de defensa colectiva a menudo requieren consenso rápido bajo amenaza
+- `scale-colony` — los mecanismos de consenso deben adaptarse cuando el tamaño del grupo cambia significativamente
+- `dissolve-form` — habilidad mórfica para desmantelamiento controlado, donde el consenso antes de la disolución es crítico
+- `plan-sprint` — la planificación de sprint involucra consenso del equipo sobre el alcance del compromiso
+- `conduct-retrospective` — las retrospectivas son una forma de construcción de consenso sobre mejora de procesos
+- `build-coherence` — variante de autoaplicación de IA; mapea la democracia de abejas al razonamiento de múltiples caminos de un solo agente con umbrales de confianza y resolución de bloqueos

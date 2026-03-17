@@ -1,15 +1,16 @@
 ---
 name: vishnu-bhaga
 description: >
-  Preservation and sustenance — maintaining working state under perturbation,
-  memory anchoring, consistency enforcement, and protective stabilization.
-  Maps Vishnu's sustaining presence to AI reasoning: holding what works steady,
-  anchoring verified knowledge against drift, and ensuring continuity through
-  change. Use when a working approach is at risk from scope creep, when context
-  drift threatens verified knowledge, after shiva-bhaga dissolution to protect
-  what survived, when a long session risks losing earlier decisions through
-  context compression, or before making changes to a currently functioning
-  system.
+  Preservación y sustento — mantener el estado funcional bajo perturbación,
+  anclaje de memoria, aplicación de consistencia y estabilización protectora.
+  Mapea la presencia sustentadora de Vishnu al razonamiento de IA: mantener
+  estable lo que funciona, anclar el conocimiento verificado contra la deriva
+  y asegurar la continuidad a través del cambio. Usar cuando un enfoque
+  funcional está en riesgo por desviación de alcance, cuando la deriva de
+  contexto amenaza el conocimiento verificado, después de la disolución de
+  shiva-bhaga para proteger lo que sobrevivió, cuando una sesión larga
+  arriesga perder decisiones anteriores por compresión de contexto, o antes
+  de hacer cambios a un sistema que funciona correctamente.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -28,28 +29,28 @@ metadata:
 
 # Vishnu Bhaga
 
-Preserve and sustain what is working — anchoring verified knowledge, maintaining consistency under perturbation, and protecting functional patterns from unnecessary change.
+Preservar y sostener lo que funciona — anclar el conocimiento verificado, mantener la consistencia bajo perturbación y proteger patrones funcionales del cambio innecesario.
 
 ## Cuándo Usar
 
-- A working approach is at risk of being disrupted by scope creep or premature optimization
-- Context drift is threatening to overwrite verified knowledge with stale assumptions
-- Multiple parallel concerns are creating pressure to change things that should remain stable
-- After `shiva-bhaga` dissolution — what survives needs active protection during reconstruction
-- When a long session risks losing earlier verified decisions through context compression
-- Before making changes to a system that is currently functioning correctly
+- Un enfoque funcional está en riesgo de ser interrumpido por desviación de alcance u optimización prematura
+- La deriva de contexto amenaza con sobrescribir conocimiento verificado con suposiciones obsoletas
+- Múltiples preocupaciones paralelas están creando presión para cambiar cosas que deberían permanecer estables
+- Después de la disolución de `shiva-bhaga` — lo que sobrevive necesita protección activa durante la reconstrucción
+- Cuando una sesión larga arriesga perder decisiones verificadas anteriores por compresión de contexto
+- Antes de hacer cambios a un sistema que actualmente funciona correctamente
 
 ## Entradas
 
-- **Requerido**: Current working state or verified knowledge to preserve (available implicitly)
-- **Opcional**: Specific threat to stability (e.g., "scope creep," "context compression approaching")
-- **Opcional**: MEMORY.md and project files for grounding (via `Read`)
+- **Requerido**: Estado funcional actual o conocimiento verificado a preservar (disponible implícitamente)
+- **Opcional**: Amenaza específica a la estabilidad (ej., "desviación de alcance", "compresión de contexto acercándose")
+- **Opcional**: MEMORY.md y archivos del proyecto para fundamentación (vía `Read`)
 
 ## Procedimiento
 
-### Paso 1: Inventory What Works
+### Paso 1: Inventariar lo que funciona
 
-Before protecting anything, identify what is currently functional and verified.
+Antes de proteger algo, identificar lo que actualmente es funcional y está verificado.
 
 ```
 Preservation Inventory:
@@ -75,84 +76,84 @@ Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. For each category, list the specific items that are currently verified and working
-2. Note the verification method — how do you know this is true?
-3. Items without verification are not preserved — they are assumptions (and may need `shiva-bhaga`)
+1. Para cada categoría, listar los elementos específicos que actualmente están verificados y funcionando
+2. Anotar el método de verificación — ¿cómo sabe que esto es verdadero?
+3. Los elementos sin verificación no se preservan — son suposiciones (y pueden necesitar `shiva-bhaga`)
 
-**Esperado:** A concrete inventory of verified, working elements with their evidence base.
+**Esperado:** Un inventario concreto de elementos verificados y funcionales con su base de evidencia.
 
-**En caso de fallo:** If the inventory is sparse — little is verified — that itself is valuable information. Run `heal` to re-ground before attempting to preserve unverified assumptions.
+**En caso de fallo:** Si el inventario es escaso — poco está verificado — eso en sí es información valiosa. Ejecutar `heal` para re-fundamentar antes de intentar preservar suposiciones no verificadas.
 
-### Paso 2: Identify Perturbation Sources
+### Paso 2: Identificar fuentes de perturbación
 
-Name the forces threatening the stable state.
+Nombrar las fuerzas que amenazan el estado estable.
 
-1. **Scope creep**: Is the task expanding beyond what was agreed?
-2. **Context drift**: Are earlier facts being overwritten by more recent (possibly incorrect) reasoning?
-3. **Optimization pressure**: Is there an urge to improve something that is working adequately?
-4. **External changes**: Has the environment changed (files modified, tools unavailable)?
-5. **Compression risk**: Is the conversation approaching context limits where early decisions may be lost?
+1. **Desviación de alcance**: ¿La tarea se está expandiendo más allá de lo acordado?
+2. **Deriva de contexto**: ¿Los hechos anteriores están siendo sobrescritos por razonamiento más reciente (posiblemente incorrecto)?
+3. **Presión de optimización**: ¿Hay un impulso de mejorar algo que funciona adecuadamente?
+4. **Cambios externos**: ¿Ha cambiado el entorno (archivos modificados, herramientas no disponibles)?
+5. **Riesgo de compresión**: ¿La conversación se acerca a los límites de contexto donde las decisiones tempranas pueden perderse?
 
-For each source, assess: is this a real threat or an anticipated one?
+Para cada fuente, evaluar: ¿es una amenaza real o una anticipada?
 
-**Esperado:** Named perturbation sources with assessed severity (active threat vs. anticipated risk).
+**Esperado:** Fuentes de perturbación nombradas con severidad evaluada (amenaza activa vs. riesgo anticipado).
 
-**En caso de fallo:** If no perturbation sources are apparent, preservation may not be needed — consider whether `brahma-bhaga` (creation) or continued execution is more appropriate.
+**En caso de fallo:** Si no hay fuentes de perturbación aparentes, la preservación puede no ser necesaria — considerar si `brahma-bhaga` (creación) o la ejecución continuada es más apropiada.
 
-### Paso 3: Anchor the Stable State
+### Paso 3: Anclar el estado estable
 
-Apply specific techniques to protect what works from identified threats.
+Aplicar técnicas específicas para proteger lo que funciona de las amenazas identificadas.
 
-1. **Memory anchoring**: For critical facts at risk of context drift, re-state them explicitly:
-   - "Established fact: [X], verified by [method] at [point in conversation]"
-   - If persistent memory is available, write durable facts to MEMORY.md
-2. **Scope boundary enforcement**: For scope creep, re-state the agreed scope:
-   - "Agreed scope: [original request]. Current work is within/outside this boundary."
-3. **Change resistance**: For working code under optimization pressure:
-   - "This component is working and tested. No changes unless the user requests them."
-4. **State snapshot**: For compression risk, create a mental checkpoint:
-   - Summarize: what has been done, what remains, what key decisions were made
-5. **Environmental verification**: For external changes, re-check before proceeding:
-   - Re-read critical files rather than relying on earlier reads
+1. **Anclaje de memoria**: Para hechos críticos en riesgo de deriva de contexto, reafirmarlos explícitamente:
+   - "Hecho establecido: [X], verificado por [método] en [punto de la conversación]"
+   - Si hay memoria persistente disponible, escribir hechos duraderos en MEMORY.md
+2. **Aplicación de límites de alcance**: Para desviación de alcance, reafirmar el alcance acordado:
+   - "Alcance acordado: [solicitud original]. El trabajo actual está dentro/fuera de este límite."
+3. **Resistencia al cambio**: Para código funcional bajo presión de optimización:
+   - "Este componente funciona y está probado. Sin cambios a menos que el usuario lo solicite."
+4. **Instantánea de estado**: Para riesgo de compresión, crear un punto de control mental:
+   - Resumir: qué se ha hecho, qué queda, qué decisiones clave se tomaron
+5. **Verificación ambiental**: Para cambios externos, re-verificar antes de proceder:
+   - Re-leer archivos críticos en lugar de confiar en lecturas anteriores
 
-**Esperado:** Each identified threat has a specific anchoring response. The stable state is explicitly protected.
+**Esperado:** Cada amenaza identificada tiene una respuesta de anclaje específica. El estado estable está explícitamente protegido.
 
-**En caso de fallo:** If anchoring feels excessive — protecting everything equally — prioritize. What is the one thing that must not change? Protect that first.
+**En caso de fallo:** Si el anclaje se siente excesivo — protegiendo todo por igual — priorizar. ¿Cuál es la cosa que no debe cambiar? Proteger eso primero.
 
-### Paso 4: Sustain Through Action
+### Paso 4: Sostener mediante la acción
 
-Preservation is not passive — it requires ongoing attention during subsequent work.
+La preservación no es pasiva — requiere atención continua durante el trabajo subsiguiente.
 
-1. Before each action, check: "Does this threaten anything in the preservation inventory?"
-2. If yes, find an alternative approach that achieves the goal without disturbing the stable state
-3. If disturbance is unavoidable, acknowledge it explicitly and update the inventory
-4. Periodically re-verify preserved items — especially after complex operations
-5. When the task completes, confirm that preserved items remain intact
+1. Antes de cada acción, verificar: "¿Esto amenaza algo en el inventario de preservación?"
+2. Si sí, encontrar un enfoque alternativo que logre el objetivo sin perturbar el estado estable
+3. Si la perturbación es inevitable, reconocerla explícitamente y actualizar el inventario
+4. Re-verificar periódicamente los elementos preservados — especialmente después de operaciones complejas
+5. Cuando la tarea se complete, confirmar que los elementos preservados permanecen intactos
 
-**Esperado:** The working state survives the current task intact. Changes were made only where needed and did not disrupt functioning components.
+**Esperado:** El estado funcional sobrevive la tarea actual intacto. Los cambios se hicieron solo donde fue necesario y no interrumpieron componentes funcionales.
 
-**En caso de fallo:** If a preserved item was inadvertently changed, assess the damage immediately. If the change broke something, revert. If the change was neutral, update the inventory. Do not leave the inventory stale.
+**En caso de fallo:** Si un elemento preservado fue cambiado inadvertidamente, evaluar el daño inmediatamente. Si el cambio rompió algo, revertir. Si el cambio fue neutral, actualizar el inventario. No dejar el inventario obsoleto.
 
 ## Validación
 
-- [ ] Working state was inventoried with verification evidence
-- [ ] Perturbation sources were identified and assessed
-- [ ] Anchoring actions were applied to each real threat
-- [ ] Scope boundaries were maintained throughout the task
-- [ ] Preserved items were re-verified after completion
+- [ ] El estado funcional fue inventariado con evidencia de verificación
+- [ ] Las fuentes de perturbación fueron identificadas y evaluadas
+- [ ] Las acciones de anclaje fueron aplicadas a cada amenaza real
+- [ ] Los límites de alcance fueron mantenidos durante toda la tarea
+- [ ] Los elementos preservados fueron re-verificados después de completar
 
 ## Errores Comunes
 
-- **Preserving assumptions as facts**: Only verified knowledge deserves protection. Unverified assumptions dressed as facts create false stability
-- **Over-preservation**: Protecting everything equally prevents necessary change. Preservation must be selective — protect what works, release what does not
-- **Passive preservation**: Assuming things will stay stable without active verification. Context drift is constant; preservation requires ongoing attention
-- **Resistance to legitimate change**: Using preservation as an excuse to avoid necessary modifications. If the user requests a change to a working component, that overrides preservation
-- **Stale inventory**: Failing to update the preservation inventory as new information arrives. The inventory must reflect current reality, not the state at creation time
+- **Preservar suposiciones como hechos**: Solo el conocimiento verificado merece protección. Las suposiciones no verificadas disfrazadas de hechos crean falsa estabilidad
+- **Sobre-preservación**: Proteger todo por igual impide el cambio necesario. La preservación debe ser selectiva — proteger lo que funciona, liberar lo que no
+- **Preservación pasiva**: Asumir que las cosas permanecerán estables sin verificación activa. La deriva de contexto es constante; la preservación requiere atención continua
+- **Resistencia al cambio legítimo**: Usar la preservación como excusa para evitar modificaciones necesarias. Si el usuario solicita un cambio a un componente funcional, eso anula la preservación
+- **Inventario obsoleto**: No actualizar el inventario de preservación cuando llega nueva información. El inventario debe reflejar la realidad actual, no el estado en el momento de su creación
 
 ## Habilidades Relacionadas
 
-- `shiva-bhaga` — destruction precedes preservation; what survives dissolution is what Vishnu sustains
-- `brahma-bhaga` — creation builds on the preserved foundation; new patterns emerge from stable ground
-- `heal` — subsystem assessment reveals what is genuinely functional vs. superficially stable
-- `observe` — sustained neutral observation detects drift before it threatens stability
-- `awareness` — situational awareness (Cooper color codes) maps directly to perturbation detection
+- `shiva-bhaga` — la destrucción precede a la preservación; lo que sobrevive a la disolución es lo que Vishnu sostiene
+- `brahma-bhaga` — la creación se construye sobre la base preservada; nuevos patrones emergen de terreno estable
+- `heal` — la evaluación de subsistemas revela lo que es genuinamente funcional vs. superficialmente estable
+- `observe` — la observación neutral sostenida detecta la deriva antes de que amenace la estabilidad
+- `awareness` — la consciencia situacional (códigos de color de Cooper) se mapea directamente a la detección de perturbaciones

@@ -1,15 +1,16 @@
 ---
 name: shift-camouflage
 description: >
-  Implement cuttlefish-inspired adaptive interfaces — polymorphic APIs,
-  context-aware behavior, feature flags, and attack surface reduction.
-  Covers environmental assessment, chromatophore mapping, dynamic interface
-  generation, behavioral polymorphism, and pattern disruption for systems
-  that must present different faces to different observers. Use when a system
-  must present different interfaces to different consumers, when reducing attack
-  surface by exposing only what each observer needs, when implementing feature
-  flags or progressive rollouts at the interface level, or when adapting behavior
-  to environmental context without core changes.
+  Implementar interfaces adaptativas inspiradas en la sepia — APIs polimórficas,
+  comportamiento sensible al contexto, feature flags y reducción de superficie
+  de ataque. Cubre evaluación ambiental, mapeo de cromatóforos, generación
+  dinámica de interfaces, polimorfismo conductual y disrupción de patrones para
+  sistemas que deben presentar diferentes caras a diferentes observadores. Usar
+  cuando un sistema debe presentar diferentes interfaces a diferentes consumidores,
+  al reducir la superficie de ataque exponiendo solo lo que cada observador
+  necesita, al implementar feature flags o despliegues progresivos a nivel de
+  interfaz, o al adaptar el comportamiento al contexto ambiental sin cambios
+  en el núcleo.
 license: MIT
 allowed-tools: Read
 metadata:
@@ -28,43 +29,43 @@ metadata:
 
 # Shift Camouflage
 
-Implement adaptive surface transformation — polymorphic interfaces, context-aware behavior, and dynamic presentation — inspired by cuttlefish chromatophores. The system's surface adapts to its environment while its core remains stable, reducing attack surface and optimizing interaction with diverse observers.
+Implementar transformación adaptativa de superficie — interfaces polimórficas, comportamiento sensible al contexto y presentación dinámica — inspirada en los cromatóforos de la sepia. La superficie del sistema se adapta a su entorno mientras su núcleo permanece estable, reduciendo la superficie de ataque y optimizando la interacción con observadores diversos.
 
 ## Cuándo Usar
 
-- A system must present different interfaces to different consumers (API versioning, multi-tenant, role-based)
-- Reducing attack surface by exposing only what each observer needs to see
-- Implementing feature flags, progressive rollouts, or A/B testing at the interface level
-- A system needs to adapt its behavior to environmental context without core changes
-- Protecting internal architecture from external coupling (observers couple to the surface, not the structure)
-- Complementing `adapt-architecture` when surface change is sufficient and deep transformation is unnecessary
+- Un sistema debe presentar diferentes interfaces a diferentes consumidores (versionado de API, multi-tenant, basado en roles)
+- Reducir la superficie de ataque exponiendo solo lo que cada observador necesita ver
+- Implementar feature flags, despliegues progresivos o pruebas A/B a nivel de interfaz
+- Un sistema necesita adaptar su comportamiento al contexto ambiental sin cambios en el núcleo
+- Proteger la arquitectura interna del acoplamiento externo (los observadores se acoplan a la superficie, no a la estructura)
+- Complementar `adapt-architecture` cuando el cambio de superficie es suficiente y la transformación profunda es innecesaria
 
 ## Entradas
 
-- **Requerido**: The system whose surface needs adaptation
-- **Requerido**: The observers/consumers and their different interface needs
-- **Opcional**: Current interface design and its limitations
-- **Opcional**: Threat model (what should be hidden from which observers?)
-- **Opcional**: Feature flag system or progressive rollout infrastructure
-- **Opcional**: Performance constraints (dynamic surface generation has overhead)
+- **Requerido**: El sistema cuya superficie necesita adaptación
+- **Requerido**: Los observadores/consumidores y sus diferentes necesidades de interfaz
+- **Opcional**: Diseño de interfaz actual y sus limitaciones
+- **Opcional**: Modelo de amenazas (qué debe ocultarse de qué observadores)
+- **Opcional**: Sistema de feature flags o infraestructura de despliegue progresivo
+- **Opcional**: Restricciones de rendimiento (la generación dinámica de superficie tiene sobrecarga)
 
 ## Procedimiento
 
-### Paso 1: Map the Observer Landscape
+### Paso 1: Mapear el Paisaje de Observadores
 
-Identify who interacts with the system and what each observer needs to see.
+Identificar quién interactúa con el sistema y qué necesita ver cada observador.
 
-1. Catalog all observers:
-   - External users (end users, API consumers, partners)
-   - Internal services (microservices, background jobs, admin tools)
-   - Adversaries (attackers, scrapers, competitors)
-   - Regulators (auditors, compliance checks)
-2. For each observer, define:
-   - What they need to see (required interface surface)
-   - What they should not see (hidden surface)
-   - What they expect to see (compatibility surface — may differ from what they need)
-   - How they interact (protocol, frequency, sensitivity)
-3. Create the observer-surface matrix:
+1. Catalogar todos los observadores:
+   - Usuarios externos (usuarios finales, consumidores de API, socios)
+   - Servicios internos (microservicios, trabajos en segundo plano, herramientas de administración)
+   - Adversarios (atacantes, scrapers, competidores)
+   - Reguladores (auditores, verificaciones de cumplimiento)
+2. Para cada observador, definir:
+   - Lo que necesitan ver (superficie de interfaz requerida)
+   - Lo que no deberían ver (superficie oculta)
+   - Lo que esperan ver (superficie de compatibilidad — puede diferir de lo que necesitan)
+   - Cómo interactúan (protocolo, frecuencia, sensibilidad)
+3. Crear la matriz observador-superficie:
 
 ```
 Observer-Surface Matrix:
@@ -85,31 +86,31 @@ Observer-Surface Matrix:
 └──────────────┴────────────────────────┴─────────────────┴──────────────┘
 ```
 
-**Esperado:** A complete observer landscape with surface requirements per observer. This drives all subsequent camouflage design.
+**Esperado:** Un paisaje completo de observadores con requisitos de superficie por observador. Esto impulsa todo el diseño de camuflaje posterior.
 
-**En caso de fallo:** If observer identification is incomplete, start with the two extremes: the most privileged observer (admin) and the most restricted (adversary). Design surfaces for these two, then interpolate for observers between them.
+**En caso de fallo:** Si la identificación de observadores es incompleta, comenzar con los dos extremos: el observador más privilegiado (admin) y el más restringido (adversario). Diseñar superficies para estos dos, luego interpolar para los observadores entre ellos.
 
-### Paso 2: Design Chromatophore Mapping
+### Paso 2: Diseñar el Mapeo de Cromatóforos
 
-Create the mapping between observer context and surface presentation — the "chromatophore" layer.
+Crear el mapeo entre el contexto del observador y la presentación de superficie — la capa de "cromatóforos".
 
-1. Define context signals:
-   - Authentication identity → determines privilege level
-   - Request origin → geographic, network, or application context
-   - Feature flags → enables/disables specific surface elements
-   - Time/phase → deployment stage, business hours, maintenance windows
-   - Load/health → degraded mode may present reduced surface
-2. Design the surface generation rules:
-   - For each combination of context signals, define which surface elements are:
-     - **Visible**: included in the response/interface
-     - **Hidden**: excluded entirely (not even error messages reveal their existence)
-     - **Transformed**: present but modified for this observer (different schema, simplified data)
-     - **Decoy**: deliberately misleading surface elements for adversarial contexts
-3. Implement the chromatophore layer:
-   - A thin middleware/proxy that sits between the core system and observers
-   - Evaluates context signals on each request
-   - Applies the appropriate surface configuration
-   - Never modifies core behavior — only filters and transforms the surface
+1. Definir señales de contexto:
+   - Identidad de autenticación -> determina nivel de privilegio
+   - Origen de la solicitud -> contexto geográfico, de red o de aplicación
+   - Feature flags -> habilita/deshabilita elementos específicos de superficie
+   - Tiempo/fase -> etapa de despliegue, horario laboral, ventanas de mantenimiento
+   - Carga/salud -> el modo degradado puede presentar superficie reducida
+2. Diseñar las reglas de generación de superficie:
+   - Para cada combinación de señales de contexto, definir qué elementos de superficie son:
+     - **Visibles**: incluidos en la respuesta/interfaz
+     - **Ocultos**: excluidos completamente (ni siquiera los mensajes de error revelan su existencia)
+     - **Transformados**: presentes pero modificados para este observador (esquema diferente, datos simplificados)
+     - **Señuelo**: elementos de superficie deliberadamente engañosos para contextos adversariales
+3. Implementar la capa de cromatóforos:
+   - Un middleware/proxy delgado que se sitúa entre el sistema central y los observadores
+   - Evalúa señales de contexto en cada solicitud
+   - Aplica la configuración de superficie apropiada
+   - Nunca modifica el comportamiento central — solo filtra y transforma la superficie
 
 ```
 Chromatophore Architecture:
@@ -137,108 +138,108 @@ Chromatophore Architecture:
 └──────────────────────────────────────────────────────┘
 ```
 
-**Esperado:** A chromatophore mapping that translates observer context into surface configuration. The mapping is explicit, auditable, and separate from core logic.
+**Esperado:** Un mapeo de cromatóforos que traduce el contexto del observador en configuración de superficie. El mapeo es explícito, auditable y separado de la lógica central.
 
-**En caso de fallo:** If the mapping becomes too complex (too many context combinations), simplify to role-based surfaces: define 3-5 surface profiles (public, partner, admin, internal, minimal) and map every observer to one profile.
+**En caso de fallo:** Si el mapeo se vuelve demasiado complejo (demasiadas combinaciones de contexto), simplificar a superficies basadas en roles: definir 3-5 perfiles de superficie (público, socio, admin, interno, mínimo) y mapear cada observador a un perfil.
 
-### Paso 3: Implement Behavioral Polymorphism
+### Paso 3: Implementar Polimorfismo Conductual
 
-Make the system's behavior adapt to context, not just its surface appearance.
+Hacer que el comportamiento del sistema se adapte al contexto, no solo su apariencia superficial.
 
-1. Identify context-dependent behaviors:
-   - Response detail level (verbose for admin, minimal for public)
-   - Rate limiting (generous for partners, strict for unknown callers)
-   - Error messages (detailed for internal, generic for external)
-   - Data freshness (real-time for premium, cached for standard)
-   - Feature availability (full for beta testers, stable-only for general)
-2. Implement behavioral variants:
-   - Each variant is a complete, tested behavior path
-   - Context determines which variant executes
-   - Variants share core logic but differ in presentation and policy
-3. Feature flag integration:
-   - Feature flags control which behavioral variants are active
-   - Progressive rollout: expose new behavior to a percentage of observers, increasing over time
-   - Circuit breakers: automatically revert to safe behavior if the new variant causes errors
+1. Identificar comportamientos dependientes del contexto:
+   - Nivel de detalle de respuesta (verbose para admin, mínimo para público)
+   - Limitación de tasa (generosa para socios, estricta para llamantes desconocidos)
+   - Mensajes de error (detallados para internos, genéricos para externos)
+   - Frescura de datos (tiempo real para premium, en caché para estándar)
+   - Disponibilidad de funciones (completa para beta testers, solo estable para general)
+2. Implementar variantes conductuales:
+   - Cada variante es una ruta de comportamiento completa y probada
+   - El contexto determina qué variante se ejecuta
+   - Las variantes comparten lógica central pero difieren en presentación y política
+3. Integración de feature flags:
+   - Los feature flags controlan qué variantes conductuales están activas
+   - Despliegue progresivo: exponer nuevo comportamiento a un porcentaje de observadores, incrementando con el tiempo
+   - Circuit breakers: revertir automáticamente al comportamiento seguro si la nueva variante causa errores
 
-**Esperado:** The system's behavior adapts to observer context — the same core logic produces appropriate responses for different audiences. Feature flags enable progressive rollout of new behaviors.
+**Esperado:** El comportamiento del sistema se adapta al contexto del observador — la misma lógica central produce respuestas apropiadas para diferentes audiencias. Los feature flags permiten el despliegue progresivo de nuevos comportamientos.
 
-**En caso de fallo:** If behavioral polymorphism creates too many code paths, consolidate to a pipeline model: core logic → policy layer → presentation layer. Polymorphism lives in the policy and presentation layers only, keeping core logic singular.
+**En caso de fallo:** Si el polimorfismo conductual crea demasiadas rutas de código, consolidar a un modelo de pipeline: lógica central -> capa de política -> capa de presentación. El polimorfismo vive solo en las capas de política y presentación, manteniendo la lógica central singular.
 
-### Paso 4: Reduce Attack Surface
+### Paso 4: Reducir la Superficie de Ataque
 
-Minimize what adversaries can observe and interact with.
+Minimizar lo que los adversarios pueden observar e interactuar.
 
-1. Apply the principle of least surface:
-   - Each observer sees only what they need — nothing more
-   - Unauthenticated observers see the minimum possible surface
-   - Error messages never leak internal structure (no stack traces, no internal paths, no version numbers)
-2. Implement active surface reduction:
-   - Remove default pages, headers, and endpoints that reveal technology stack
-   - Randomize non-essential response characteristics (timing jitter, header order)
-   - Disable unused API endpoints entirely (not just hidden — actually off)
-3. Deploy pattern disruption:
-   - Vary response characteristics to defeat fingerprinting
-   - Introduce controlled unpredictability in non-functional aspects
-   - Ensure that functional behavior remains deterministic while surface characteristics vary
-4. Monitor for reconnaissance:
-   - Detect patterns of requests that probe for hidden surface (enumeration attacks)
-   - Alert on repeated access to non-existent endpoints (path fuzzing)
-   - Track and correlate reconnaissance patterns across sessions (see `defend-colony`)
+1. Aplicar el principio de superficie mínima:
+   - Cada observador ve solo lo que necesita — nada más
+   - Los observadores no autenticados ven la superficie mínima posible
+   - Los mensajes de error nunca revelan estructura interna (sin trazas de pila, sin rutas internas, sin números de versión)
+2. Implementar reducción activa de superficie:
+   - Eliminar páginas por defecto, encabezados y endpoints que revelan la pila tecnológica
+   - Aleatorizar características de respuesta no esenciales (jitter de temporización, orden de encabezados)
+   - Deshabilitar endpoints de API no utilizados completamente (no solo ocultos — realmente desactivados)
+3. Desplegar disrupción de patrones:
+   - Variar características de respuesta para derrotar el fingerprinting
+   - Introducir imprevisibilidad controlada en aspectos no funcionales
+   - Asegurar que el comportamiento funcional permanezca determinístico mientras las características de superficie varían
+4. Monitorear el reconocimiento:
+   - Detectar patrones de solicitudes que sondean superficie oculta (ataques de enumeración)
+   - Alertar sobre accesos repetidos a endpoints inexistentes (fuzzing de rutas)
+   - Rastrear y correlacionar patrones de reconocimiento entre sesiones (ver `defend-colony`)
 
-**Esperado:** A minimal attack surface where adversaries cannot easily determine the system's technology stack, internal structure, or hidden capabilities. Reconnaissance attempts are detected and tracked.
+**Esperado:** Una superficie de ataque mínima donde los adversarios no pueden determinar fácilmente la pila tecnológica del sistema, su estructura interna o sus capacidades ocultas. Los intentos de reconocimiento son detectados y rastreados.
 
-**En caso de fallo:** If surface reduction breaks legitimate consumers, the observer-surface matrix is incomplete — legitimate needs are being hidden. Review Step 1 and update the matrix. If randomization causes issues, reduce randomization to non-functional aspects only (timing, headers) and keep functional responses deterministic.
+**En caso de fallo:** Si la reducción de superficie rompe consumidores legítimos, la matriz observador-superficie es incompleta — necesidades legítimas están siendo ocultadas. Revisar el Paso 1 y actualizar la matriz. Si la aleatorización causa problemas, reducir la aleatorización a aspectos solo no funcionales (temporización, encabezados) y mantener las respuestas funcionales determinísticas.
 
-### Paso 5: Maintain Surface Coherence
+### Paso 5: Mantener la Coherencia de Superficie
 
-Ensure that the dynamic surface remains consistent, debuggable, and maintainable.
+Asegurar que la superficie dinámica permanezca consistente, depurable y mantenible.
 
-1. Surface testing:
-   - Test each observer profile explicitly (does admin see admin surface? does public see public surface?)
-   - Test surface transitions (what happens when an observer's context changes mid-session?)
-   - Test surface failure modes (what surface appears if the chromatophore layer fails?)
-2. Surface documentation:
-   - Document each observer profile and its surface configuration
-   - Document the context signals and their effects on surface selection
-   - Keep documentation in sync with actual behavior (test documentation against reality)
-3. Debugging support:
-   - Admin/debug mode reveals which surface profile is active and why
-   - Logging captures which surface configuration was applied to each request
-   - Ability to replay a request through a specific surface profile for debugging
-4. Surface evolution:
-   - Adding new surface elements: add to the appropriate profiles, test, deploy
-   - Removing surface elements: deprecation warning period, then removal
-   - Changing surface behavior: feature flag controlled, progressive rollout
+1. Pruebas de superficie:
+   - Probar cada perfil de observador explícitamente (¿admin ve la superficie admin? ¿público ve la superficie pública?)
+   - Probar transiciones de superficie (¿qué pasa cuando el contexto de un observador cambia a mitad de sesión?)
+   - Probar modos de falla de superficie (¿qué superficie aparece si la capa de cromatóforos falla?)
+2. Documentación de superficie:
+   - Documentar cada perfil de observador y su configuración de superficie
+   - Documentar las señales de contexto y sus efectos en la selección de superficie
+   - Mantener la documentación sincronizada con el comportamiento real (probar la documentación contra la realidad)
+3. Soporte de depuración:
+   - El modo admin/depuración revela qué perfil de superficie está activo y por qué
+   - El logging captura qué configuración de superficie fue aplicada a cada solicitud
+   - Capacidad de reproducir una solicitud a través de un perfil de superficie específico para depuración
+4. Evolución de superficie:
+   - Agregar nuevos elementos de superficie: agregar a los perfiles apropiados, probar, desplegar
+   - Eliminar elementos de superficie: período de aviso de deprecación, luego eliminación
+   - Cambiar comportamiento de superficie: controlado por feature flags, despliegue progresivo
 
-**Esperado:** A maintainable, testable, well-documented surface adaptation system. The dynamic nature doesn't compromise the ability to debug, document, or evolve the interfaces.
+**Esperado:** Un sistema de adaptación de superficie mantenible, testeable y bien documentado. La naturaleza dinámica no compromete la capacidad de depurar, documentar o evolucionar las interfaces.
 
-**En caso de fallo:** If the chromatophore layer becomes a debugging nightmare, add transparency: every response includes a trace header (visible only to admin/debug profile) indicating which surface profile was applied and which context signals determined it.
+**En caso de fallo:** Si la capa de cromatóforos se convierte en una pesadilla de depuración, agregar transparencia: cada respuesta incluye un encabezado de traza (visible solo para el perfil admin/depuración) indicando qué perfil de superficie fue aplicado y qué señales de contexto lo determinaron.
 
 ## Validación
 
-- [ ] Observer landscape is mapped with surface requirements per observer
-- [ ] Chromatophore mapping translates context to surface configuration
-- [ ] Behavioral polymorphism adapts responses to observer context
-- [ ] Attack surface is minimized for adversarial observers
-- [ ] Each observer profile is explicitly tested
-- [ ] Surface failure mode presents a safe default (minimal surface)
-- [ ] Debug/admin mode can inspect active surface configuration
-- [ ] Surface documentation matches actual behavior
+- [ ] El paisaje de observadores está mapeado con requisitos de superficie por observador
+- [ ] El mapeo de cromatóforos traduce contexto a configuración de superficie
+- [ ] El polimorfismo conductual adapta respuestas al contexto del observador
+- [ ] La superficie de ataque está minimizada para observadores adversariales
+- [ ] Cada perfil de observador está explícitamente probado
+- [ ] El modo de falla de superficie presenta un valor por defecto seguro (superficie mínima)
+- [ ] El modo depuración/admin puede inspeccionar la configuración de superficie activa
+- [ ] La documentación de superficie coincide con el comportamiento real
 
 ## Errores Comunes
 
-- **Surface complexity explosion**: Too many observer profiles with too many variations. Consolidate to 3-5 profiles maximum. Most observers fit into broad categories
-- **Core contamination**: Letting surface adaptation logic leak into core business logic. The chromatophore layer must be separate — if you're adding if-statements about observer type in core code, the architecture is wrong
-- **Security through obscurity alone**: Surface reduction is a defense-in-depth layer, not a replacement for proper security controls. A hidden endpoint still needs authentication and authorization
-- **Inconsistent surfaces**: Observer A sees version 1 of a response and observer B sees version 2 — but they're supposed to see the same thing. Test surfaces explicitly and keep the observer-surface matrix authoritative
-- **Forgetting the failure surface**: When the chromatophore layer itself fails, what surface does the observer see? The default must be safe (minimal surface) not open (full surface)
+- **Explosión de complejidad de superficie**: Demasiados perfiles de observador con demasiadas variaciones. Consolidar a un máximo de 3-5 perfiles. La mayoría de observadores encajan en categorías amplias
+- **Contaminación del núcleo**: Dejar que la lógica de adaptación de superficie se filtre en la lógica de negocio central. La capa de cromatóforos debe ser separada — si estás agregando sentencias if sobre tipo de observador en código central, la arquitectura está mal
+- **Seguridad solo por oscuridad**: La reducción de superficie es una capa de defensa en profundidad, no un reemplazo para controles de seguridad apropiados. Un endpoint oculto aún necesita autenticación y autorización
+- **Superficies inconsistentes**: El observador A ve la versión 1 de una respuesta y el observador B ve la versión 2 — pero se supone que deben ver lo mismo. Probar superficies explícitamente y mantener la matriz observador-superficie como autoritativa
+- **Olvidar la superficie de fallo**: Cuando la capa de cromatóforos misma falla, ¿qué superficie ve el observador? El valor por defecto debe ser seguro (superficie mínima) no abierto (superficie completa)
 
 ## Habilidades Relacionadas
 
-- `assess-form` — surface adaptation may resolve pressure identified in form assessment without requiring deep transformation
-- `adapt-architecture` — deep structural change for when surface adaptation is insufficient
-- `repair-damage` — surface adaptation can mask damage during repair (with caution — don't hide real problems)
-- `defend-colony` — attack surface reduction is a defense layer; reconnaissance detection feeds into defense
-- `coordinate-swarm` — context-aware behavior in distributed systems requires coordinated surface adaptation
-- `configure-api-gateway` — API gateways implement many chromatophore layer functions in practice
-- `deploy-to-kubernetes` — Kubernetes services and ingress enable network-level surface control
+- `assess-form` — la adaptación de superficie puede resolver presión identificada en la evaluación de forma sin requerir transformación profunda
+- `adapt-architecture` — cambio estructural profundo para cuando la adaptación de superficie es insuficiente
+- `repair-damage` — la adaptación de superficie puede enmascarar daño durante la reparación (con precaución — no ocultar problemas reales)
+- `defend-colony` — la reducción de superficie de ataque es una capa de defensa; la detección de reconocimiento alimenta la defensa
+- `coordinate-swarm` — el comportamiento sensible al contexto en sistemas distribuidos requiere adaptación de superficie coordinada
+- `configure-api-gateway` — los API gateways implementan muchas funciones de la capa de cromatóforos en la práctica
+- `deploy-to-kubernetes` — los servicios e ingress de Kubernetes permiten control de superficie a nivel de red

@@ -1,12 +1,12 @@
 ---
 name: evaluate-boolean-expression
 description: >
-  Evaluate and simplify Boolean expressions using truth tables, algebraic laws
-  (De Morgan, distributive, absorption, idempotent, consensus), and Karnaugh maps
-  for up to six variables. Use when you need to reduce a Boolean expression to its
-  minimal sum-of-products or product-of-sums form, verify logical equivalence
-  between two expressions, or prepare a minimized function for gate-level
-  implementation.
+  Evaluar y simplificar expresiones booleanas usando tablas de verdad, leyes
+  algebraicas (De Morgan, distributiva, absorción, idempotente, consenso) y
+  mapas de Karnaugh para hasta seis variables. Usar cuando se necesita reducir
+  una expresión booleana a su forma mínima de suma de productos o producto de
+  sumas, verificar la equivalencia lógica entre dos expresiones, o preparar
+  una función minimizada para implementación a nivel de compuertas.
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -25,35 +25,35 @@ metadata:
 
 # Evaluate Boolean Expression
 
-Reduce a Boolean expression to its minimal form by parsing it into canonical notation, constructing a truth table, applying algebraic simplification laws, performing Karnaugh map minimization (up to six variables), and verifying that the simplified expression is logically equivalent to the original.
+Reducir una expresión booleana a su forma mínima analizándola en notación canónica, construyendo una tabla de verdad, aplicando leyes de simplificación algebraica, realizando minimización por mapa de Karnaugh (hasta seis variables) y verificando que la expresión simplificada es lógicamente equivalente a la original.
 
 ## Cuándo Usar
 
-- Simplifying a Boolean expression before mapping it to logic gates
-- Verifying that two Boolean expressions are logically equivalent
-- Generating a minimal sum-of-products (SOP) or product-of-sums (POS) form
-- Teaching or reviewing Boolean algebra identities and reduction techniques
-- Preparing input for the design-logic-circuit skill
+- Simplificar una expresión booleana antes de mapearla a compuertas lógicas
+- Verificar que dos expresiones booleanas son lógicamente equivalentes
+- Generar una forma mínima de suma de productos (SOP) o producto de sumas (POS)
+- Enseñar o revisar identidades del álgebra booleana y técnicas de reducción
+- Preparar la entrada para la habilidad design-logic-circuit
 
 ## Entradas
 
-- **Requerido**: Boolean expression in any common notation (e.g., `A AND (B OR NOT C)`, `A * (B + C')`, `A & (B | ~C)`)
-- **Requerido**: Target form -- minimal SOP, minimal POS, or both
-- **Opcional**: Variable ordering preference for the Karnaugh map
-- **Opcional**: Don't-care conditions (minterms or maxterms that are unspecified)
-- **Opcional**: A second expression to check equivalence against
+- **Requerido**: Expresión booleana en cualquier notación común (ej., `A AND (B OR NOT C)`, `A * (B + C')`, `A & (B | ~C)`)
+- **Requerido**: Forma objetivo -- SOP mínima, POS mínima o ambas
+- **Opcional**: Preferencia de ordenamiento de variables para el mapa de Karnaugh
+- **Opcional**: Condiciones de no importa (don't-care) (minitérminos o maxitérminos no especificados)
+- **Opcional**: Una segunda expresión para verificar equivalencia
 
 ## Procedimiento
 
-### Paso 1: Parse and Normalize to Canonical Form
+### Paso 1: Analizar y normalizar a forma canónica
 
-Convert the input expression into a standard internal representation:
+Convertir la expresión de entrada en una representación interna estándar:
 
-1. **Tokenize**: Identify variables (single letters or short names), operators (AND, OR, NOT, XOR, NAND, NOR), and grouping (parentheses).
-2. **Establish operator notation**: Adopt a consistent notation throughout -- `*` for AND, `+` for OR, `'` for NOT (complement), `^` for XOR.
-3. **Determine variable count**: List all unique variables. Assign each a bit position (A = MSB, ... Z = LSB by default, or use the provided ordering).
-4. **Expand to canonical SOP**: Expand the expression into a sum of all minterms by introducing missing variables via the identity `X = X*(Y + Y')`.
-5. **Expand to canonical POS**: Alternatively, expand into a product of all maxterms via `X = X + Y*Y'`.
+1. **Tokenizar**: Identificar variables (letras individuales o nombres cortos), operadores (AND, OR, NOT, XOR, NAND, NOR) y agrupación (paréntesis).
+2. **Establecer notación de operadores**: Adoptar una notación consistente — `*` para AND, `+` para OR, `'` para NOT (complemento), `^` para XOR.
+3. **Determinar conteo de variables**: Listar todas las variables únicas. Asignar a cada una una posición de bit (A = MSB, ... Z = LSB por defecto, o usar el ordenamiento proporcionado).
+4. **Expandir a SOP canónica**: Expandir la expresión en una suma de todos los minitérminos introduciendo variables faltantes mediante la identidad `X = X*(Y + Y')`.
+5. **Expandir a POS canónica**: Alternativamente, expandir en un producto de todos los maxitérminos mediante `X = X + Y*Y'`.
 
 ```markdown
 ## Normalized Expression
@@ -65,18 +65,18 @@ Convert the input expression into a standard internal representation:
 - **Don't-care set**: d(i, j, ...) [if any]
 ```
 
-**Esperado:** The expression is converted to canonical SOP and/or POS with all minterms/maxterms explicitly listed and don't-care conditions separated.
+**Esperado:** La expresión se convierte a SOP y/o POS canónica con todos los minitérminos/maxitérminos explícitamente listados y las condiciones de no importa separadas.
 
-**En caso de fallo:** If the expression contains syntax errors or ambiguous operator precedence, request clarification. Standard precedence is: NOT (highest) > AND > XOR > OR (lowest). If the variable count exceeds 6, note that the K-map step will require the Quine-McCluskey algorithm instead.
+**En caso de fallo:** Si la expresión contiene errores de sintaxis o precedencia de operadores ambigua, solicitar aclaración. La precedencia estándar es: NOT (más alta) > AND > XOR > OR (más baja). Si el conteo de variables excede 6, notar que el paso del mapa K requerirá el algoritmo Quine-McCluskey en su lugar.
 
-### Paso 2: Construct Truth Table
+### Paso 2: Construir la tabla de verdad
 
-Build the complete truth table to establish the function's behavior over all input combinations:
+Construir la tabla de verdad completa para establecer el comportamiento de la función sobre todas las combinaciones de entrada:
 
-1. **Enumerate rows**: Generate all 2^n input combinations in binary counting order (000, 001, 010, ...).
-2. **Evaluate output**: For each row, substitute values into the original expression and compute the output (0 or 1).
-3. **Mark don't-cares**: If don't-care conditions were provided, mark those rows with `X` instead of 0 or 1.
-4. **Cross-check with minterms**: Verify that the rows producing output 1 match the minterm list from Step 1.
+1. **Enumerar filas**: Generar todas las 2^n combinaciones de entrada en orden de conteo binario (000, 001, 010, ...).
+2. **Evaluar salida**: Para cada fila, sustituir valores en la expresión original y calcular la salida (0 o 1).
+3. **Marcar no importa**: Si se proporcionaron condiciones de no importa, marcar esas filas con `X` en lugar de 0 o 1.
+4. **Verificación cruzada con minitérminos**: Verificar que las filas que producen salida 1 coinciden con la lista de minitérminos del Paso 1.
 
 ```markdown
 ## Truth Table
@@ -87,23 +87,23 @@ Build the complete truth table to establish the function's behavior over all inp
 | ... | ... | ... | ... |
 ```
 
-**Esperado:** A complete truth table with 2^n rows, outputs matching the canonical form, and don't-cares properly marked.
+**Esperado:** Una tabla de verdad completa con 2^n filas, salidas que coinciden con la forma canónica y condiciones de no importa correctamente marcadas.
 
-**En caso de fallo:** If the truth table disagrees with the canonical form, recheck the expansion in Step 1. A common error is misapplying De Morgan's law during the canonical expansion -- verify each expansion step individually.
+**En caso de fallo:** Si la tabla de verdad no coincide con la forma canónica, revisar la expansión del Paso 1. Un error común es aplicar incorrectamente la ley de De Morgan durante la expansión canónica — verificar cada paso de expansión individualmente.
 
-### Paso 3: Apply Algebraic Simplification
+### Paso 3: Aplicar simplificación algebraica
 
-Reduce the expression using Boolean algebra identities:
+Reducir la expresión usando identidades del álgebra booleana:
 
-1. **Identity and null laws**: `A + 0 = A`, `A * 1 = A`, `A + 1 = 1`, `A * 0 = 0`.
-2. **Idempotent law**: `A + A = A`, `A * A = A`.
-3. **Complement law**: `A + A' = 1`, `A * A' = 0`.
-4. **Absorption law**: `A + A*B = A`, `A * (A + B) = A`.
-5. **De Morgan's theorems**: `(A * B)' = A' + B'`, `(A + B)' = A' * B'`.
-6. **Distributive law**: `A * (B + C) = A*B + A*C`, `A + B*C = (A + B) * (A + C)`.
-7. **Consensus theorem**: `A*B + A'*C + B*C = A*B + A'*C` (the B*C term is redundant).
-8. **XOR simplification**: Recognize patterns like `A*B' + A'*B = A ^ B`.
-9. **Document each step**: Write out the expression after each law application, citing the law used.
+1. **Leyes de identidad y nulo**: `A + 0 = A`, `A * 1 = A`, `A + 1 = 1`, `A * 0 = 0`.
+2. **Ley idempotente**: `A + A = A`, `A * A = A`.
+3. **Ley de complemento**: `A + A' = 1`, `A * A' = 0`.
+4. **Ley de absorción**: `A + A*B = A`, `A * (A + B) = A`.
+5. **Teoremas de De Morgan**: `(A * B)' = A' + B'`, `(A + B)' = A' * B'`.
+6. **Ley distributiva**: `A * (B + C) = A*B + A*C`, `A + B*C = (A + B) * (A + C)`.
+7. **Teorema de consenso**: `A*B + A'*C + B*C = A*B + A'*C` (el término B*C es redundante).
+8. **Simplificación XOR**: Reconocer patrones como `A*B' + A'*B = A ^ B`.
+9. **Documentar cada paso**: Escribir la expresión después de cada aplicación de ley, citando la ley usada.
 
 ```markdown
 ## Algebraic Simplification Trace
@@ -114,26 +114,26 @@ Reduce the expression using Boolean algebra identities:
 n. Final algebraic form: [simplified expression]
 ```
 
-**Esperado:** A step-by-step reduction with each law application cited, converging on a simpler expression. The trace provides a verifiable proof of equivalence.
+**Esperado:** Una reducción paso a paso con cada aplicación de ley citada, convergiendo en una expresión más simple. La traza proporciona una prueba verificable de equivalencia.
 
-**En caso de fallo:** If the expression does not simplify further but appears non-minimal, proceed to Step 4 (K-map). Algebraic methods are not guaranteed to find the global minimum -- they depend on the order in which laws are applied.
+**En caso de fallo:** Si la expresión no se simplifica más pero parece no ser mínima, proceder al Paso 4 (mapa K). Los métodos algebraicos no garantizan encontrar el mínimo global — dependen del orden en que se aplican las leyes.
 
-### Paso 4: Minimize via Karnaugh Map
+### Paso 4: Minimizar mediante mapa de Karnaugh
 
-Use a K-map to find the provably minimal SOP or POS form (for up to 6 variables):
+Usar un mapa K para encontrar la forma SOP o POS probablemente mínima (para hasta 6 variables):
 
-1. **Draw the K-map**: Arrange the map using Gray code ordering on axes.
-   - 2 variables: 2x2 grid
-   - 3 variables: 2x4 grid
-   - 4 variables: 4x4 grid
-   - 5 variables: two 4x4 grids (stacked)
-   - 6 variables: four 4x4 grids (stacked)
-2. **Fill cells**: Place 1s (minterms), 0s (maxterms), and Xs (don't-cares) in the corresponding cells.
-3. **Group adjacent 1s**: Form rectangular groups of 1, 2, 4, 8, 16, or 32 adjacent cells (powers of 2 only). Groups may wrap around edges. Include don't-cares in groups if they enlarge the group.
-4. **Extract prime implicants**: Each group yields a product term. Variables that are constant across the group appear in the term; variables that change are eliminated.
-5. **Select essential prime implicants**: Identify minterms covered by only one prime implicant -- those implicants are essential.
-6. **Cover remaining minterms**: Use the fewest additional prime implicants to cover any uncovered minterms (Petrick's method if needed).
-7. **Write minimal expression**: Combine selected prime implicants into the minimal SOP. For minimal POS, group the 0s instead.
+1. **Dibujar el mapa K**: Organizar el mapa usando ordenamiento de código Gray en los ejes.
+   - 2 variables: cuadrícula 2x2
+   - 3 variables: cuadrícula 2x4
+   - 4 variables: cuadrícula 4x4
+   - 5 variables: dos cuadrículas 4x4 (apiladas)
+   - 6 variables: cuatro cuadrículas 4x4 (apiladas)
+2. **Llenar celdas**: Colocar 1s (minitérminos), 0s (maxitérminos) y Xs (no importa) en las celdas correspondientes.
+3. **Agrupar 1s adyacentes**: Formar grupos rectangulares de 1, 2, 4, 8, 16 o 32 celdas adyacentes (solo potencias de 2). Los grupos pueden envolver los bordes. Incluir no importa en grupos si agrandan el grupo.
+4. **Extraer implicantes primos**: Cada grupo produce un término producto. Las variables constantes en el grupo aparecen en el término; las variables que cambian se eliminan.
+5. **Seleccionar implicantes primos esenciales**: Identificar minitérminos cubiertos por solo un implicante primo — esos implicantes son esenciales.
+6. **Cubrir minitérminos restantes**: Usar los menos implicantes primos adicionales para cubrir cualquier minitérmino no cubierto (método de Petrick si es necesario).
+7. **Escribir expresión mínima**: Combinar los implicantes primos seleccionados en la SOP mínima. Para POS mínima, agrupar los 0s en su lugar.
 
 ```markdown
 ## K-map Result
@@ -144,18 +144,18 @@ Use a K-map to find the provably minimal SOP or POS form (for up to 6 variables)
 - **Literal count**: [number of literals in minimal form]
 ```
 
-**Esperado:** A minimal SOP (and/or POS) with the fewest literals possible, with all prime implicants and essential prime implicants documented.
+**Esperado:** Una SOP (y/o POS) mínima con el menor número de literales posible, con todos los implicantes primos e implicantes primos esenciales documentados.
 
-**En caso de fallo:** If groupings are ambiguous (multiple minimal covers exist), list all equivalent minimal forms. If the variable count exceeds 6, switch to the Quine-McCluskey tabular method or Espresso heuristic and note the change in approach.
+**En caso de fallo:** Si las agrupaciones son ambiguas (existen múltiples coberturas mínimas), listar todas las formas mínimas equivalentes. Si el conteo de variables excede 6, cambiar al método tabular de Quine-McCluskey o la heurística Espresso y notar el cambio de enfoque.
 
-### Paso 5: Verify Simplified Expression Matches Original
+### Paso 5: Verificar que la expresión simplificada coincide con la original
 
-Confirm logical equivalence between the simplified and original expressions:
+Confirmar la equivalencia lógica entre las expresiones simplificada y original:
 
-1. **Truth table comparison**: Evaluate the simplified expression for all 2^n input combinations and compare against the truth table from Step 2. Every non-don't-care row must match.
-2. **Algebraic proof** (optional): Derive the original from the simplified form (or vice versa) using the laws from Step 3.
-3. **Spot-check critical cases**: Verify the all-zeros input, all-ones input, and any input that was involved in a tricky simplification step.
-4. **Document result**: State whether equivalence holds and record the final minimal form.
+1. **Comparación de tabla de verdad**: Evaluar la expresión simplificada para todas las 2^n combinaciones de entrada y comparar con la tabla de verdad del Paso 2. Cada fila que no sea de no importa debe coincidir.
+2. **Prueba algebraica** (opcional): Derivar la original desde la forma simplificada (o viceversa) usando las leyes del Paso 3.
+3. **Verificación puntual de casos críticos**: Verificar la entrada de todos ceros, la entrada de todos unos y cualquier entrada involucrada en un paso de simplificación complicado.
+4. **Documentar resultado**: Declarar si la equivalencia se mantiene y registrar la forma mínima final.
 
 ```markdown
 ## Equivalence Verification
@@ -165,33 +165,33 @@ Confirm logical equivalence between the simplified and original expressions:
 - **Final minimal expression**: [the verified result]
 ```
 
-**Esperado:** The simplified expression matches the original on all non-don't-care inputs. The final minimal form is stated clearly.
+**Esperado:** La expresión simplificada coincide con la original en todas las entradas que no son de no importa. La forma mínima final se declara claramente.
 
-**En caso de fallo:** If any row mismatches, trace the error back through Steps 3-4. Common causes: incorrect K-map grouping (non-rectangular or non-power-of-2 group), forgetting wrap-around adjacency, or accidentally grouping a 0 cell.
+**En caso de fallo:** Si alguna fila no coincide, rastrear el error hacia atrás a través de los Pasos 3-4. Causas comunes: agrupación incorrecta del mapa K (grupo no rectangular o de tamaño que no es potencia de 2), olvidar la adyacencia envolvente, o agrupar accidentalmente una celda de 0.
 
 ## Validación
 
-- [ ] All variables in the original expression are accounted for
-- [ ] Canonical SOP/POS lists the correct minterms/maxterms
-- [ ] Truth table has exactly 2^n rows with correct outputs
-- [ ] Don't-care conditions are handled correctly (included in groups but not in coverage requirements)
-- [ ] Algebraic steps each cite a specific law and are individually verifiable
-- [ ] K-map uses Gray code ordering on both axes
-- [ ] All groups in the K-map are rectangular and have power-of-2 size
-- [ ] Essential prime implicants are correctly identified
-- [ ] Simplified expression matches the original on all non-don't-care inputs
-- [ ] The final form has the minimum number of literals
+- [ ] Todas las variables en la expresión original están contabilizadas
+- [ ] La SOP/POS canónica lista los minitérminos/maxitérminos correctos
+- [ ] La tabla de verdad tiene exactamente 2^n filas con salidas correctas
+- [ ] Las condiciones de no importa se manejan correctamente (incluidas en grupos pero no en requisitos de cobertura)
+- [ ] Los pasos algebraicos citan una ley específica y son individualmente verificables
+- [ ] El mapa K usa ordenamiento de código Gray en ambos ejes
+- [ ] Todos los grupos en el mapa K son rectangulares y tienen tamaño de potencia de 2
+- [ ] Los implicantes primos esenciales están correctamente identificados
+- [ ] La expresión simplificada coincide con la original en todas las entradas que no son de no importa
+- [ ] La forma final tiene el número mínimo de literales
 
 ## Errores Comunes
 
-- **Incorrect K-map adjacency**: Forgetting that the leftmost and rightmost columns (and top and bottom rows) are adjacent in a K-map. This wrap-around is essential for finding the largest possible groups.
-- **Non-power-of-2 groups**: Grouping 3 or 5 cells together. Every K-map group must contain exactly 1, 2, 4, 8, 16, or 32 cells. An irregular group does not correspond to a valid product term.
-- **Ignoring don't-cares**: Treating don't-care conditions as 0s instead of using them to enlarge groups. Don't-cares should be included in groups when doing so reduces the expression, but they must not be required for coverage.
-- **Operator precedence errors**: Assuming AND and OR have equal precedence. Standard Boolean precedence is NOT > AND > OR. Misreading `A + B * C` as `(A + B) * C` instead of `A + (B * C)` changes the function entirely.
-- **Stopping at algebraic simplification**: Algebraic methods may find a local minimum, not the global minimum. Always cross-check with a K-map (or Quine-McCluskey for >6 variables) to confirm minimality.
-- **Confusing minterms and maxterms**: Minterms are AND terms (product terms) that appear in SOP; maxterms are OR terms (sum terms) that appear in POS. Minterm m3 for 3 variables is A'BC; maxterm M3 is A+B'+C'.
+- **Adyacencia incorrecta del mapa K**: Olvidar que las columnas más a la izquierda y más a la derecha (y las filas superior e inferior) son adyacentes en un mapa K. Esta envoltura es esencial para encontrar los grupos más grandes posibles.
+- **Grupos de tamaño no potencia de 2**: Agrupar 3 o 5 celdas juntas. Cada grupo del mapa K debe contener exactamente 1, 2, 4, 8, 16 o 32 celdas. Un grupo irregular no corresponde a un término producto válido.
+- **Ignorar los no importa**: Tratar las condiciones de no importa como 0s en lugar de usarlas para agrandar grupos. Los no importa deben incluirse en grupos cuando hacerlo reduce la expresión, pero no deben ser requeridos para la cobertura.
+- **Errores de precedencia de operadores**: Asumir que AND y OR tienen igual precedencia. La precedencia booleana estándar es NOT > AND > OR. Leer incorrectamente `A + B * C` como `(A + B) * C` en lugar de `A + (B * C)` cambia la función completamente.
+- **Detenerse en la simplificación algebraica**: Los métodos algebraicos pueden encontrar un mínimo local, no el mínimo global. Siempre verificar con un mapa K (o Quine-McCluskey para >6 variables) para confirmar la minimalidad.
+- **Confundir minitérminos y maxitérminos**: Los minitérminos son términos AND (términos producto) que aparecen en SOP; los maxitérminos son términos OR (términos suma) que aparecen en POS. El minitérmino m3 para 3 variables es A'BC; el maxitérmino M3 es A+B'+C'.
 
 ## Habilidades Relacionadas
 
-- `design-logic-circuit` -- map the minimized expression to a gate-level circuit
-- `argumentation` -- structured logical reasoning that shares formal logic foundations
+- `design-logic-circuit` -- mapear la expresión minimizada a un circuito a nivel de compuertas
+- `argumentation` -- razonamiento lógico estructurado que comparte fundamentos de lógica formal
