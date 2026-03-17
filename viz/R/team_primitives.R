@@ -641,3 +641,101 @@ glyph_team_physical_computing <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── glyph_team_synoptic_mind: shared-workspace all-to-all mesh ───────────────
+glyph_team_synoptic_mind <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  # Large outer circle (shared workspace boundary)
+  workspace <- data.frame(x0 = cx, y0 = cy, r = 26 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = workspace,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(col, 0.06), color = hex_with_alpha(bright, 0.4),
+    linewidth = .lw(s, 1.8))
+
+  # 4 nodes evenly positioned inside the workspace
+  # Node 1 (top, slightly larger = adaptic lead / integrator)
+  inner_r <- 15 * s
+  angles <- c(pi / 2, 7 * pi / 6, 11 * pi / 6, 0)
+  node_radii <- c(6, 4.5, 4.5, 4.5)
+  node_xs <- cx + inner_r * cos(angles)
+  node_ys <- cy + inner_r * sin(angles)
+  # Shift node 4 (angle=0) inward to keep it inside workspace
+
+  # All-to-all connection lines (every pair)
+  for (i in 1:3) {
+    for (j in (i + 1):4) {
+      edge <- data.frame(
+        x = c(node_xs[i], node_xs[j]),
+        y = c(node_ys[i], node_ys[j])
+      )
+      layers[[length(layers) + 1]] <- ggplot2::geom_path(data = edge, .aes(x, y),
+        color = hex_with_alpha(bright, 0.35), linewidth = .lw(s, 1.2))
+    }
+  }
+
+  # Draw nodes on top of lines
+  for (i in seq_along(angles)) {
+    nd <- data.frame(x0 = node_xs[i], y0 = node_ys[i], r = node_radii[i] * s)
+    fill_alpha <- if (i == 1) 0.35 else 0.18
+    lw <- if (i == 1) .lw(s, 2.5) else .lw(s, 1.8)
+    layers[[length(layers) + 1]] <- ggforce::geom_circle(data = nd,
+      .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(bright, fill_alpha), color = bright, linewidth = lw)
+  }
+
+  # Central awareness glow (the shared field)
+  glow <- data.frame(x0 = cx, y0 = cy, r = 4 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = glow,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(bright, 0.25), color = hex_with_alpha(bright, 0.5),
+    linewidth = .lw(s, 1.5))
+
+  layers
+}
+
+# ── glyph_team_translation_campaign: wave-parallel grid (3 waves x 4 locales) ──
+glyph_team_translation_campaign <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  # 3 rows (waves) x 4 columns (locales)
+  wave_ys <- cy + c(14, 0, -14) * s
+  locale_xs <- cx + c(-18, -6, 6, 18) * s
+  dot_r <- 3 * s
+
+  # Vertical arrows between waves (wave dependency: top -> middle -> bottom)
+  for (j in seq_along(locale_xs)) {
+    for (w in 1:2) {
+      arrow_line <- data.frame(
+        x = c(locale_xs[j], locale_xs[j]),
+        y = c(wave_ys[w] - dot_r - 1 * s, wave_ys[w + 1] + dot_r + 1 * s)
+      )
+      layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arrow_line, .aes(x, y),
+        color = hex_with_alpha(col, 0.45), linewidth = .lw(s, 1.2),
+        arrow = ggplot2::arrow(length = ggplot2::unit(2.5 * s, "pt"), type = "closed"))
+    }
+  }
+
+  # Horizontal lines connecting dots within each wave row
+  for (w in seq_along(wave_ys)) {
+    row_line <- data.frame(
+      x = c(locale_xs[1], locale_xs[4]),
+      y = c(wave_ys[w], wave_ys[w])
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = row_line, .aes(x, y),
+      color = hex_with_alpha(bright, 0.3), linewidth = .lw(s, 1.2))
+  }
+
+  # Dots for each wave x locale cell
+  for (w in seq_along(wave_ys)) {
+    for (j in seq_along(locale_xs)) {
+      dot <- data.frame(x0 = locale_xs[j], y0 = wave_ys[w], r = dot_r)
+      layers[[length(layers) + 1]] <- ggforce::geom_circle(data = dot,
+        .aes(x0 = x0, y0 = y0, r = r),
+        fill = hex_with_alpha(bright, 0.25), color = bright,
+        linewidth = .lw(s, 1.5))
+    }
+  }
+
+  layers
+}

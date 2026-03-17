@@ -2802,3 +2802,48 @@ glyph_agent_physicist <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── glyph_agent_adaptic: panoramic eye with multi-domain lens ────────────────
+glyph_agent_adaptic <- function(cx, cy, s, col, bright) {
+  layers <- list()
+
+  # Almond / vesica eye outline — two arcs (top and bottom)
+  t_arc <- seq(0, pi, length.out = 50)
+  eye_w <- 26 * s   # half-width of the almond
+  eye_h <- 14 * s   # half-height at centre
+
+  # Upper arc (convex upward)
+  upper <- data.frame(
+    x = cx + eye_w * cos(t_arc),
+    y = cy + eye_h * sin(t_arc)
+  )
+  # Lower arc (convex downward, mirror)
+  lower <- data.frame(
+    x = cx + eye_w * cos(t_arc),
+    y = cy - eye_h * sin(t_arc)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = upper, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2.5))
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = lower, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2.5))
+
+  # 3 overlapping domain-lens circles inside the eye
+  offsets <- c(-8, 0, 8)
+  radii   <- c(7, 8, 7)
+  alphas  <- c(0.12, 0.18, 0.12)
+  for (i in seq_along(offsets)) {
+    lens <- data.frame(x0 = cx + offsets[i] * s, y0 = cy, r = radii[i] * s)
+    layers[[length(layers) + 1]] <- ggforce::geom_circle(data = lens,
+      .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(col, alphas[i]),
+      color = hex_with_alpha(bright, 0.5), linewidth = .lw(s, 1.5))
+  }
+
+  # Central bright integrating-awareness point
+  core <- data.frame(x0 = cx, y0 = cy, r = 3 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = core,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(bright, 0.7), color = bright, linewidth = .lw(s, 2))
+
+  layers
+}

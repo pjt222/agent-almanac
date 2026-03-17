@@ -141,6 +141,10 @@
     "levitation": {
       "basePrompt": "Floating object, standing wave, magnetic suspension",
       "glow": "hover-blue"
+    },
+    "synoptic": {
+      "basePrompt": "Panoramic eye, expanding awareness circles, gestalt integration",
+      "glow": "teal-green"
     }
   },
   "icons": [
@@ -1461,24 +1465,48 @@
       "domain": "i18n",
       "prompt": "Glowing icon, Translate, Content, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 260001,
-      "path": "public/icons/cyberpunk/i18n/translate-content.webp",
-      "status": "done"
+      "path": "public/icons/i18n/translate-content.webp",
+      "status": "pending"
     },
     {
       "skillId": "assess-ip-landscape",
       "domain": "intellectual-property",
       "prompt": "Glowing icon, Assess, Landscape, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 270001,
-      "path": "public/icons/intellectual-property/assess-ip-landscape.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/intellectual-property/assess-ip-landscape.webp",
+      "status": "done"
     },
     {
       "skillId": "search-prior-art",
       "domain": "intellectual-property",
       "prompt": "Glowing icon, Search, Prior, Art, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 270002,
-      "path": "public/icons/intellectual-property/search-prior-art.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/intellectual-property/search-prior-art.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "screen-trademark",
+      "domain": "intellectual-property",
+      "prompt": "Glowing icon, Screen, Trademark, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 270003,
+      "path": "public/icons/cyberpunk/intellectual-property/screen-trademark.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "file-trademark",
+      "domain": "intellectual-property",
+      "prompt": "Glowing icon, File, Trademark, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 270004,
+      "path": "public/icons/cyberpunk/intellectual-property/file-trademark.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "headless-web-scraping",
+      "domain": "intellectual-property",
+      "prompt": "Glowing icon, Headless, Web, Scraping, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 270005,
+      "path": "public/icons/cyberpunk/intellectual-property/headless-web-scraping.webp",
+      "status": "done"
     },
     {
       "skillId": "generate-puzzle",
@@ -1633,10 +1661,18 @@
       "status": "pending"
     },
     {
+      "skillId": "audit-discovery-symlinks",
+      "domain": "maintenance",
+      "prompt": "Broom and mop, tidy workspace, cleanup tools, audit, discovery, symlinks, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 330004,
+      "path": "public/icons/maintenance/audit-discovery-symlinks.webp",
+      "status": "pending"
+    },
+    {
       "skillId": "escalate-issues",
       "domain": "maintenance",
       "prompt": "Broom and mop, tidy workspace, cleanup tools, priority arrow, severity triage, escalation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 330004,
+      "seed": 330005,
       "path": "public/icons/maintenance/escalate-issues.webp",
       "status": "pending"
     },
@@ -2457,10 +2493,42 @@
       "status": "pending"
     },
     {
+      "skillId": "expand-awareness",
+      "domain": "synoptic",
+      "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Expand, Awareness, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 500001,
+      "path": "public/icons/cyberpunk/synoptic/expand-awareness.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "integrate-gestalt",
+      "domain": "synoptic",
+      "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Integrate, Gestalt, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 500002,
+      "path": "public/icons/cyberpunk/synoptic/integrate-gestalt.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "express-insight",
+      "domain": "synoptic",
+      "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Express, Insight, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 500003,
+      "path": "public/icons/cyberpunk/synoptic/express-insight.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "adaptic",
+      "domain": "synoptic",
+      "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Adaptic, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 500004,
+      "path": "public/icons/cyberpunk/synoptic/adaptic.webp",
+      "status": "done"
+    },
+    {
       "skillId": "grade-tcg-card",
       "domain": "tcg",
       "prompt": "Glowing icon, Grade, TCG, Card, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500001,
+      "seed": 510001,
       "path": "public/icons/tcg/grade-tcg-card.webp",
       "status": "pending"
     },
@@ -2468,7 +2536,7 @@
       "skillId": "build-tcg-deck",
       "domain": "tcg",
       "prompt": "Glowing icon, Build, TCG, Deck, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500002,
+      "seed": 510002,
       "path": "public/icons/tcg/build-tcg-deck.webp",
       "status": "pending"
     },
@@ -2476,7 +2544,7 @@
       "skillId": "manage-tcg-collection",
       "domain": "tcg",
       "prompt": "Glowing icon, Manage, TCG, Collection, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500003,
+      "seed": 510003,
       "path": "public/icons/tcg/manage-tcg-collection.webp",
       "status": "pending"
     },
@@ -2484,7 +2552,7 @@
       "skillId": "formulate-quantum-problem",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, psi wave function, quantum bracket, Hamiltonian, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510001,
+      "seed": 520001,
       "path": "public/icons/theoretical-science/formulate-quantum-problem.webp",
       "status": "pending"
     },
@@ -2492,7 +2560,7 @@
       "skillId": "derive-theoretical-result",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, derivation steps, proof chain, first principles, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510002,
+      "seed": 520002,
       "path": "public/icons/theoretical-science/derive-theoretical-result.webp",
       "status": "pending"
     },
@@ -2500,7 +2568,7 @@
       "skillId": "survey-theoretical-literature",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, papers stack, literature synthesis, survey, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510003,
+      "seed": 520003,
       "path": "public/icons/theoretical-science/survey-theoretical-literature.webp",
       "status": "pending"
     },
@@ -2508,7 +2576,7 @@
       "skillId": "plan-tour-route",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, route path, waypoints, map optimization, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520001,
+      "seed": 530001,
       "path": "public/icons/travel/plan-tour-route.webp",
       "status": "pending"
     },
@@ -2516,7 +2584,7 @@
       "skillId": "create-spatial-visualization",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, interactive map, elevation profile, spatial data, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520002,
+      "seed": 530002,
       "path": "public/icons/travel/create-spatial-visualization.webp",
       "status": "pending"
     },
@@ -2524,7 +2592,7 @@
       "skillId": "generate-tour-report",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, tour document, map insert, itinerary, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520003,
+      "seed": 530003,
       "path": "public/icons/travel/generate-tour-report.webp",
       "status": "pending"
     },
@@ -2532,7 +2600,7 @@
       "skillId": "plan-hiking-tour",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, mountain trail, hiking path, elevation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520004,
+      "seed": 530004,
       "path": "public/icons/travel/plan-hiking-tour.webp",
       "status": "pending"
     },
@@ -2540,7 +2608,7 @@
       "skillId": "check-hiking-gear",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, backpack, gear checklist, equipment, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520005,
+      "seed": 530005,
       "path": "public/icons/travel/check-hiking-gear.webp",
       "status": "pending"
     },
@@ -2548,7 +2616,7 @@
       "skillId": "assess-trail-conditions",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, trail weather, condition assessment, safety, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520006,
+      "seed": 530006,
       "path": "public/icons/travel/assess-trail-conditions.webp",
       "status": "pending"
     },
@@ -2556,7 +2624,7 @@
       "skillId": "apply-semantic-versioning",
       "domain": "versioning",
       "prompt": "Glowing icon, Apply, Semantic, Versioning, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530001,
+      "seed": 540001,
       "path": "public/icons/versioning/apply-semantic-versioning.webp",
       "status": "pending"
     },
@@ -2564,7 +2632,7 @@
       "skillId": "manage-changelog",
       "domain": "versioning",
       "prompt": "Glowing icon, Manage, Changelog, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530002,
+      "seed": 540002,
       "path": "public/icons/versioning/manage-changelog.webp",
       "status": "pending"
     },
@@ -2572,7 +2640,7 @@
       "skillId": "plan-release-cycle",
       "domain": "versioning",
       "prompt": "Glowing icon, Plan, Release, Cycle, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530003,
+      "seed": 540003,
       "path": "public/icons/versioning/plan-release-cycle.webp",
       "status": "pending"
     },
@@ -2580,7 +2648,7 @@
       "skillId": "audit-dependency-versions",
       "domain": "versioning",
       "prompt": "Glowing icon, Audit, Dependency, Versions, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530004,
+      "seed": 540004,
       "path": "public/icons/versioning/audit-dependency-versions.webp",
       "status": "pending"
     },
@@ -2588,7 +2656,7 @@
       "skillId": "create-2d-composition",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, SVG canvas, 2D layers, diagram layout, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 540001,
+      "seed": 550001,
       "path": "public/icons/visualization/create-2d-composition.webp",
       "status": "pending"
     },
@@ -2596,7 +2664,7 @@
       "skillId": "render-publication-graphic",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, publication chart, DPI, typography, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 540002,
+      "seed": 550002,
       "path": "public/icons/visualization/render-publication-graphic.webp",
       "status": "pending"
     },
@@ -2604,7 +2672,7 @@
       "skillId": "scaffold-nextjs-app",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Next.js logo, app scaffold, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550001,
+      "seed": 560001,
       "path": "public/icons/web-dev/scaffold-nextjs-app.webp",
       "status": "pending"
     },
@@ -2612,7 +2680,7 @@
       "skillId": "setup-tailwind-typescript",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Tailwind wind, TypeScript logo, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550002,
+      "seed": 560002,
       "path": "public/icons/web-dev/setup-tailwind-typescript.webp",
       "status": "pending"
     },
@@ -2620,7 +2688,7 @@
       "skillId": "deploy-to-vercel",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Vercel triangle, deployment rocket, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550003,
+      "seed": 560003,
       "path": "public/icons/web-dev/deploy-to-vercel.webp",
       "status": "pending"
     },
@@ -2628,7 +2696,7 @@
       "skillId": "use-graphql-api",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Use, GraphQL, API, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550004,
+      "seed": 560004,
       "path": "public/icons/web-dev/use-graphql-api.webp",
       "status": "pending"
     },
@@ -2636,7 +2704,7 @@
       "skillId": "install-putior",
       "domain": "workflow-visualization",
       "prompt": "Glowing icon, Install, putior, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560001,
+      "seed": 570001,
       "path": "public/icons/workflow-visualization/install-putior.webp",
       "status": "pending"
     },
@@ -2644,7 +2712,7 @@
       "skillId": "analyze-codebase-workflow",
       "domain": "workflow-visualization",
       "prompt": "Glowing icon, Analyze, Codebase, Workflow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560002,
+      "seed": 570002,
       "path": "public/icons/workflow-visualization/analyze-codebase-workflow.webp",
       "status": "pending"
     },
@@ -2652,7 +2720,7 @@
       "skillId": "annotate-source-files",
       "domain": "workflow-visualization",
       "prompt": "Glowing icon, Annotate, Source, Files, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560003,
+      "seed": 570003,
       "path": "public/icons/workflow-visualization/annotate-source-files.webp",
       "status": "pending"
     },
@@ -2660,7 +2728,7 @@
       "skillId": "generate-workflow-diagram",
       "domain": "workflow-visualization",
       "prompt": "Glowing icon, Generate, Workflow, Diagram, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560004,
+      "seed": 570004,
       "path": "public/icons/workflow-visualization/generate-workflow-diagram.webp",
       "status": "pending"
     },
@@ -2668,7 +2736,7 @@
       "skillId": "setup-putior-ci",
       "domain": "workflow-visualization",
       "prompt": "Glowing icon, Set, putior, CI/CD, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560005,
+      "seed": 570005,
       "path": "public/icons/workflow-visualization/setup-putior-ci.webp",
       "status": "pending"
     },
@@ -2676,7 +2744,7 @@
       "skillId": "configure-putior-mcp",
       "domain": "workflow-visualization",
       "prompt": "Glowing icon, Configure, putior, MCP, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560006,
+      "seed": 570006,
       "path": "public/icons/workflow-visualization/configure-putior-mcp.webp",
       "status": "pending"
     }

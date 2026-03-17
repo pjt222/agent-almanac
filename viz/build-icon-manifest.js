@@ -61,6 +61,7 @@ const DOMAIN_STYLES = {
   'digital-logic':       { basePrompt: 'Logic gate symbol, binary truth table, circuit diagram',            glow: 'electric-cyan' },
   'electromagnetism':    { basePrompt: 'Magnetic field lines, solenoid coil, electromagnetic wave',         glow: 'copper-orange' },
   'levitation':          { basePrompt: 'Floating object, standing wave, magnetic suspension',               glow: 'hover-blue' },
+  'synoptic':            { basePrompt: 'Panoramic eye, expanding awareness circles, gestalt integration',    glow: 'teal-green' },
 };
 
 // ── Per-skill keyword extraction ────────────────────────────────────

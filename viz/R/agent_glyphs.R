@@ -118,5 +118,8 @@ AGENT_GLYPHS <- list(
 
   # ── Physics & Logic ────────────────────────────────────────────────
   "logician"                    = "glyph_agent_logician",
-  "physicist"                   = "glyph_agent_physicist"
+  "physicist"                   = "glyph_agent_physicist",
+
+  # ── Synoptic ──────────────────────────────────────────────────────
+  "adaptic"                     = "glyph_agent_adaptic"
 )

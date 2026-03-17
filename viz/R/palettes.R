@@ -19,14 +19,14 @@ PALETTE_DOMAIN_ORDER <- c(
   "jigsawr", "lapidary", "levitation", "library-science", "linguistics", "maintenance",
   "mcp-integration", "mlops", "morphic", "mycology", "number-theory",
   "observability", "project-management", "prospecting", "r-packages", "relocation",
-  "reporting", "review", "shiny", "spectroscopy", "stochastic-processes", "swarm", "tcg",
-  "theoretical-science", "travel", "versioning", "visualization", "web-dev",
+  "reporting", "review", "shiny", "spectroscopy", "stochastic-processes", "swarm", "synoptic",
+  "tcg", "theoretical-science", "travel", "versioning", "visualization", "web-dev",
   "workflow-visualization"
 )
 
-# ── Agent order (alphabetical, 64 agents) ─────────────────────────────────
+# ── Agent order (alphabetical, 65 agents) ─────────────────────────────────
 PALETTE_AGENT_ORDER <- c(
-  "acp-developer", "advocatus-diaboli", "alchemist", "apa-specialist",
+  "acp-developer", "adaptic", "advocatus-diaboli", "alchemist", "apa-specialist",
   "auditor", "blender-artist", "chromatographer", "citizen-entomologist", "code-reviewer",
   "contemplative", "conservation-entomologist", "designer", "devops-engineer",
   "diffusion-specialist", "dog-trainer", "etymologist", "fabricator",
@@ -43,13 +43,13 @@ PALETTE_AGENT_ORDER <- c(
   "tour-planner", "version-manager", "web-developer"
 )
 
-# ── Team order (alphabetical, 13 teams) ───────────────────────────────────
+# ── Team order (alphabetical, 15 teams) ───────────────────────────────────
 PALETTE_TEAM_ORDER <- c(
   "analytical-chemistry", "agentskills-alignment", "devops-platform-engineering", "dyad",
   "entomology", "fullstack-web-dev", "gxp-compliance-validation",
   "ml-data-science-review", "opaque-team", "physical-computing",
-  "r-package-review", "scrum-team",
-  "tending"
+  "r-package-review", "scrum-team", "synoptic-mind",
+  "tending", "translation-campaign"
 )
 
 # ── viridisLite option mapping ────────────────────────────────────────────
@@ -133,6 +133,7 @@ get_cyberpunk_colors <- function() {
     "spectroscopy"           = "#dd88ff",   # violet -- electromagnetic spectrum
     "stochastic-processes"   = "#77aaff",
     "swarm"                  = "#aadd44",
+    "synoptic"               = "#44ffcc",   # panoramic teal-green -- simultaneous multi-domain awareness
     "tcg"                    = "#ff5577",
     "theoretical-science"    = "#ddbb55",
     "travel"                 = "#66cc99",
@@ -144,6 +145,7 @@ get_cyberpunk_colors <- function() {
 
   agents <- list(
     "acp-developer"             = "#55ddbb",
+    "adaptic"                   = "#44ffcc",   # matches synoptic domain
     "advocatus-diaboli"         = "#ff4433",
     "alchemist"                 = "#ffaa33",
     "apa-specialist"            = "#77aadd",
@@ -222,7 +224,9 @@ get_cyberpunk_colors <- function() {
     "opaque-team"                 = "#bb88ff",   # lavender (shapeshifter)
     "physical-computing"          = "#44ccff",   # cool blue (computation meets physics)
     "r-package-review"            = "#00ccff",   # bright cyan
-    "scrum-team"                  = "#ff8844"    # warm orange (PM)
+    "scrum-team"                  = "#ff8844",   # warm orange (PM)
+    "synoptic-mind"               = "#44ffcc",   # panoramic teal-green (adaptic)
+    "translation-campaign"        = "#55bbcc"    # teal (i18n)
   )
 
   list(domains = domains, agents = agents, teams = teams)

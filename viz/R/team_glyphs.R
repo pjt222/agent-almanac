@@ -18,5 +18,7 @@ TEAM_GLYPHS <- list(
   "opaque-team"                 = "glyph_team_opaque",
   "entomology"                  = "glyph_team_entomology",
   "analytical-chemistry"        = "glyph_team_analytical_chemistry",
-  "physical-computing"          = "glyph_team_physical_computing"
+  "physical-computing"          = "glyph_team_physical_computing",
+  "synoptic-mind"               = "glyph_team_synoptic_mind",
+  "translation-campaign"        = "glyph_team_translation_campaign"
 )

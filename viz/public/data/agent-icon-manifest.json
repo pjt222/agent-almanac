@@ -4,7 +4,7 @@
     "pipeline": "R/ggplot2 + ggfx neon glow",
     "resolution": "1024x1024",
     "format": "webp",
-    "total_agents": 64,
+    "total_agents": 65,
     "palettes": [
       "cyberpunk",
       "viridis",
@@ -218,6 +218,11 @@
       "description": "Agent-to-Agent protocol developer for interoperable systems",
       "glow": "teal-aqua",
       "concept": "Two agent circles with bidirectional arrows"
+    },
+    "adaptic": {
+      "description": "Panoramic synthesis through simultaneous multi-domain awareness",
+      "glow": "teal-green",
+      "concept": "Panoramic eye with overlapping lens circles"
     },
     "geometrist": {
       "description": "Classical and computational geometry specialist",
@@ -524,6 +529,11 @@
     {
       "agentId": "acp-developer",
       "path": "public/icons/cyberpunk/agents/acp-developer.webp",
+      "status": "done"
+    },
+    {
+      "agentId": "adaptic",
+      "path": "public/icons/cyberpunk/agents/adaptic.webp",
       "status": "done"
     },
     {

@@ -150,9 +150,12 @@ SKILL_GLYPHS <- list(
   "create-github-release"          = "glyph_tag_release",
   "create-github-issues"           = "glyph_issue_create",
 
-  # ── intellectual-property (2) ──────────────────────────────────────────
+  # ── intellectual-property (5) ──────────────────────────────────────────
   "assess-ip-landscape"            = "glyph_patent_landscape",
   "search-prior-art"               = "glyph_prior_art_search",
+  "screen-trademark"               = "glyph_trademark_screen",
+  "file-trademark"                 = "glyph_trademark_file",
+  "headless-web-scraping"          = "glyph_headless_scraper",
 
   # ── library-science (3) ──────────────────────────────────────────────
   "catalog-collection"         = "glyph_card_catalog",
@@ -264,6 +267,12 @@ SKILL_GLYPHS <- list(
   "shift-camouflage"               = "glyph_camo_grid",
   "assess-context"                 = "glyph_assess_context_lens",
   "bootstrap-agent-identity"       = "glyph_identity_boot",
+
+  # ── synoptic (4) ────────────────────────────────────────────────────────
+  "expand-awareness"               = "glyph_expand_awareness",
+  "integrate-gestalt"              = "glyph_integrate_gestalt",
+  "express-insight"                = "glyph_express_insight",
+  "adaptic"                        = "glyph_adaptic",
 
   # ── tcg (3) ────────────────────────────────────────────────────────────
   "grade-tcg-card"                 = "glyph_card_grade",
