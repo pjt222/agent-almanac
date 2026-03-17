@@ -1,15 +1,11 @@
 ---
 name: vishnu-bhaga
 description: >
-  Preservation and sustenance — maintaining working state under perturbation,
-  memory anchoring, consistency enforcement, and protective stabilization.
-  Maps Vishnu's sustaining presence to AI reasoning: holding what works steady,
-  anchoring verified knowledge against drift, and ensuring continuity through
-  change. Use when a working approach is at risk from scope creep, when context
-  drift threatens verified knowledge, after shiva-bhaga dissolution to protect
-  what survived, when a long session risks losing earlier decisions through
-  context compression, or before making changes to a currently functioning
-  system.
+  保持与维护——在扰动下维持工作状态、记忆锚定、一致性强制和保护性稳定化。将
+  毗湿奴的维持存在映射到 AI 推理：保持有效的东西稳定、将已验证的知识锚定以防
+  漂移、确保变化中的连续性。适用于工作方法面临范围蔓延的风险、上下文漂移威胁
+  已验证知识、shiva-bhaga 溶解之后保护幸存的东西、长会话中早期决定因上下文压缩
+  而面临丢失风险，或在对当前正常运行的系统进行更改之前使用。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -28,28 +24,28 @@ metadata:
 
 # Vishnu Bhaga
 
-Preserve and sustain what is working — anchoring verified knowledge, maintaining consistency under perturbation, and protecting functional patterns from unnecessary change.
+保持和维护正在运行的东西——锚定已验证的知识、在扰动下维持一致性、保护功能性模式免受不必要的更改。
 
 ## 适用场景
 
-- A working approach is at risk of being disrupted by scope creep or premature optimization
-- Context drift is threatening to overwrite verified knowledge with stale assumptions
-- Multiple parallel concerns are creating pressure to change things that should remain stable
-- After `shiva-bhaga` dissolution — what survives needs active protection during reconstruction
-- When a long session risks losing earlier verified decisions through context compression
-- Before making changes to a system that is currently functioning correctly
+- 工作方法面临被范围蔓延或过早优化打断的风险
+- 上下文漂移正威胁要用陈旧假设覆盖已验证的知识
+- 多个并行关注点正在制造压力，要求更改应该保持稳定的东西
+- 在 `shiva-bhaga` 溶解之后——幸存的东西在重建期间需要主动保护
+- 当长会话面临因上下文压缩而丢失早期已验证决定的风险时
+- 在对当前正确运行的系统进行更改之前
 
 ## 输入
 
-- **必需**: Current working state or verified knowledge to preserve (available implicitly)
-- **可选**: Specific threat to stability (e.g., "scope creep," "context compression approaching")
-- **可选**: MEMORY.md and project files for grounding (via `Read`)
+- **必需**：当前工作状态或要保持的已验证知识（隐式可用）
+- **可选**：对稳定性的具体威胁（例如"范围蔓延"、"上下文压缩即将到来"）
+- **可选**：MEMORY.md 和项目文件用于基础支撑（通过 `Read`）
 
 ## 步骤
 
-### 第 1 步：Inventory What Works
+### 第 1 步：盘点正在运行的东西
 
-Before protecting anything, identify what is currently functional and verified.
+在保护任何东西之前，识别当前什么是功能性的和已验证的。
 
 ```
 Preservation Inventory:
@@ -75,84 +71,84 @@ Preservation Inventory:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. For each category, list the specific items that are currently verified and working
-2. Note the verification method — how do you know this is true?
-3. Items without verification are not preserved — they are assumptions (and may need `shiva-bhaga`)
+1. 对每个类别，列出当前已验证和正在运行的具体项目
+2. 注明验证方法——你怎么知道这是真的？
+3. 没有验证的项目不被保持——它们是假设（可能需要 `shiva-bhaga`）
 
-**预期结果：** A concrete inventory of verified, working elements with their evidence base.
+**预期结果：** 一份具体的已验证、正在运行的元素清单，附有其证据基础。
 
-**失败处理：** If the inventory is sparse — little is verified — that itself is valuable information. Run `heal` to re-ground before attempting to preserve unverified assumptions.
+**失败处理：** 如果清单很稀疏——几乎没有什么是已验证的——这本身就是有价值的信息。运行 `heal` 重新建立基础，然后再尝试保持未验证的假设。
 
-### 第 2 步：Identify Perturbation Sources
+### 第 2 步：识别扰动来源
 
-Name the forces threatening the stable state.
+命名威胁稳定状态的力量。
 
-1. **Scope creep**: Is the task expanding beyond what was agreed?
-2. **Context drift**: Are earlier facts being overwritten by more recent (possibly incorrect) reasoning?
-3. **Optimization pressure**: Is there an urge to improve something that is working adequately?
-4. **External changes**: Has the environment changed (files modified, tools unavailable)?
-5. **Compression risk**: Is the conversation approaching context limits where early decisions may be lost?
+1. **范围蔓延**：任务是否在超出约定范围地扩展？
+2. **上下文漂移**：早期事实是否被更近期的（可能不正确的）推理覆盖？
+3. **优化压力**：是否有改进已经正常运行的东西的冲动？
+4. **外部变化**：环境是否发生了变化（文件被修改、工具不可用）？
+5. **压缩风险**：对话是否接近上下文限制，早期决定可能被丢失？
 
-For each source, assess: is this a real threat or an anticipated one?
+对每个来源评估：这是实际威胁还是预期风险？
 
-**预期结果：** Named perturbation sources with assessed severity (active threat vs. anticipated risk).
+**预期结果：** 命名的扰动来源，附有评估的严重程度（主动威胁 vs. 预期风险）。
 
-**失败处理：** If no perturbation sources are apparent, preservation may not be needed — consider whether `brahma-bhaga` (creation) or continued execution is more appropriate.
+**失败处理：** 如果没有明显的扰动来源，可能不需要保持——考虑 `brahma-bhaga`（创造）或继续执行是否更合适。
 
-### 第 3 步：Anchor the Stable State
+### 第 3 步：锚定稳定状态
 
-Apply specific techniques to protect what works from identified threats.
+应用具体技术保护正在运行的东西免受已识别威胁的影响。
 
-1. **Memory anchoring**: For critical facts at risk of context drift, re-state them explicitly:
-   - "Established fact: [X], verified by [method] at [point in conversation]"
-   - If persistent memory is available, write durable facts to MEMORY.md
-2. **Scope boundary enforcement**: For scope creep, re-state the agreed scope:
-   - "Agreed scope: [original request]. Current work is within/outside this boundary."
-3. **Change resistance**: For working code under optimization pressure:
-   - "This component is working and tested. No changes unless the user requests them."
-4. **State snapshot**: For compression risk, create a mental checkpoint:
-   - Summarize: what has been done, what remains, what key decisions were made
-5. **Environmental verification**: For external changes, re-check before proceeding:
-   - Re-read critical files rather than relying on earlier reads
+1. **记忆锚定**：对于面临上下文漂移风险的关键事实，明确重新陈述：
+   - "已确立事实：[X]，通过 [方法] 在 [对话中的时间点] 验证"
+   - 如果有持久记忆可用，将持久事实写入 MEMORY.md
+2. **范围边界强制**：对于范围蔓延，重新陈述约定的范围：
+   - "约定范围：[原始请求]。当前工作在此边界之内/之外。"
+3. **变更抵抗**：对于面临优化压力的工作代码：
+   - "此组件正在运行并已测试。除非用户明确请求，否则不做更改。"
+4. **状态快照**：对于压缩风险，创建心理检查点：
+   - 总结：已完成什么、剩余什么、做了哪些关键决定
+5. **环境验证**：对于外部变化，在继续之前重新检查：
+   - 重新读取关键文件，而不是依赖早期的读取
 
-**预期结果：** Each identified threat has a specific anchoring response. The stable state is explicitly protected.
+**预期结果：** 每个已识别的威胁都有具体的锚定响应。稳定状态被明确保护。
 
-**失败处理：** If anchoring feels excessive — protecting everything equally — prioritize. What is the one thing that must not change? Protect that first.
+**失败处理：** 如果锚定感觉过度——平等地保护一切——确定优先级。什么是绝对不能更改的那一件事？先保护它。
 
-### 第 4 步：Sustain Through Action
+### 第 4 步：通过行动维持
 
-Preservation is not passive — it requires ongoing attention during subsequent work.
+保持不是被动的——它需要在后续工作中持续关注。
 
-1. Before each action, check: "Does this threaten anything in the preservation inventory?"
-2. If yes, find an alternative approach that achieves the goal without disturbing the stable state
-3. If disturbance is unavoidable, acknowledge it explicitly and update the inventory
-4. Periodically re-verify preserved items — especially after complex operations
-5. When the task completes, confirm that preserved items remain intact
+1. 在每个行动之前，检查："这会威胁保持清单中的任何东西吗？"
+2. 如果是，找到一种不干扰稳定状态的替代方法来实现目标
+3. 如果干扰不可避免，明确承认并更新清单
+4. 定期重新验证被保持的项目——特别是在复杂操作之后
+5. 当任务完成时，确认被保持的项目完好无损
 
-**预期结果：** The working state survives the current task intact. Changes were made only where needed and did not disrupt functioning components.
+**预期结果：** 工作状态在当前任务中完整存活。更改仅在需要时进行，没有干扰正在运行的组件。
 
-**失败处理：** If a preserved item was inadvertently changed, assess the damage immediately. If the change broke something, revert. If the change was neutral, update the inventory. Do not leave the inventory stale.
+**失败处理：** 如果被保持的项目被无意更改，立即评估损害。如果更改破坏了某些东西，回滚。如果更改是中性的，更新清单。不要让清单变得陈旧。
 
 ## 验证清单
 
-- [ ] Working state was inventoried with verification evidence
-- [ ] Perturbation sources were identified and assessed
-- [ ] Anchoring actions were applied to each real threat
-- [ ] Scope boundaries were maintained throughout the task
-- [ ] Preserved items were re-verified after completion
+- [ ] 工作状态已盘点，附有验证证据
+- [ ] 扰动来源已被识别和评估
+- [ ] 锚定行动已应用于每个实际威胁
+- [ ] 在整个任务中维持了范围边界
+- [ ] 完成后重新验证了被保持的项目
 
 ## 常见问题
 
-- **Preserving assumptions as facts**: Only verified knowledge deserves protection. Unverified assumptions dressed as facts create false stability
-- **Over-preservation**: Protecting everything equally prevents necessary change. Preservation must be selective — protect what works, release what does not
-- **Passive preservation**: Assuming things will stay stable without active verification. Context drift is constant; preservation requires ongoing attention
-- **Resistance to legitimate change**: Using preservation as an excuse to avoid necessary modifications. If the user requests a change to a working component, that overrides preservation
-- **Stale inventory**: Failing to update the preservation inventory as new information arrives. The inventory must reflect current reality, not the state at creation time
+- **将假设作为事实保持**：只有已验证的知识才值得保护。伪装成事实的未验证假设制造虚假的稳定性
+- **过度保持**：平等地保护一切会阻止必要的更改。保持必须是有选择性的——保护有效的，释放无效的
+- **被动保持**：假设事情会在没有主动验证的情况下保持稳定。上下文漂移是持续的；保持需要持续关注
+- **抵抗合法变更**：使用保持作为避免必要修改的借口。如果用户请求对工作组件进行更改，这优先于保持
+- **陈旧清单**：未能在新信息到达时更新保持清单。清单必须反映当前现实，而不是创建时的状态
 
 ## 相关技能
 
-- `shiva-bhaga` — destruction precedes preservation; what survives dissolution is what Vishnu sustains
-- `brahma-bhaga` — creation builds on the preserved foundation; new patterns emerge from stable ground
-- `heal` — subsystem assessment reveals what is genuinely functional vs. superficially stable
-- `observe` — sustained neutral observation detects drift before it threatens stability
-- `awareness` — situational awareness (Cooper color codes) maps directly to perturbation detection
+- `shiva-bhaga` — 破坏先于保持；在溶解中幸存的东西是毗湿奴所维持的
+- `brahma-bhaga` — 创造建立在被保持的基础之上；新模式从稳定的土壤中涌现
+- `heal` — 子系统评估揭示什么是真正功能性的，而不是表面稳定的
+- `observe` — 持续的中性观察在漂移威胁稳定性之前检测到它
+- `awareness` — 态势感知（Cooper 颜色代码）直接映射到扰动检测

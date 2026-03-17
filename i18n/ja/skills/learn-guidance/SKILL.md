@@ -1,14 +1,12 @@
 ---
 name: learn-guidance
 description: >
-  Guide a person through structured learning of a new topic, technology,
-  or skill. AI acts as learning coach — assessing current knowledge,
-  designing a learning path, walking through material, testing understanding,
-  adapting difficulty, and planning review sessions for retention. Use when
-  a person wants to learn a new technology and does not know where to start,
-  when someone feels overwhelmed by documentation, when a person keeps
-  forgetting material and needs spaced repetition, or when transitioning
-  between domains and needing a gap analysis.
+  新しいトピック、技術、またはスキルの構造化された学習を通じて人をガイドする。
+  AIが学習コーチとして機能し、現在の知識を評価し、学習パスを設計し、教材を通じて
+  歩き、理解をテストし、難易度を適応させ、定着のためのレビューセッションを計画する。
+  新しい技術を学びたいがどこから始めればよいかわからない時、ドキュメントに圧倒
+  されている時、教材を忘れ続けて間隔反復が必要な時、またはドメイン間を移行して
+  ギャップ分析が必要な時に使用する。
 license: MIT
 allowed-tools: Read WebFetch WebSearch
 metadata:
@@ -25,40 +23,40 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 学びのガイダンス
+# 学習（ガイダンス）
 
-Guide a person through a structured learning process for a new topic, technology, or skill. The AI acts as a learning coach — helping assess starting knowledge, plan a study path, walk through material at the right pace, test understanding with questions, adapt the approach based on feedback, and consolidate for retention.
+新しいトピック、技術、またはスキルの構造化された学習プロセスを通じて人をガイドする。AIが学習コーチとして機能し、開始時の知識を評価し、学習パスを計画し、適切なペースで教材を通じて歩き、質問で理解をテストし、フィードバックに基づいてアプローチを適応させ、定着のために統合する。
 
 ## 使用タイミング
 
-- A person wants to learn a new technology, framework, language, or concept and does not know where to start
-- Someone feels overwhelmed by documentation or learning resources and needs a structured path
-- A person keeps forgetting material and needs spaced repetition guidance
-- Someone is transitioning between domains (e.g., backend to frontend) and needs gap analysis
-- A person wants accountability and structure for self-directed learning
-- After `meditate-guidance` has cleared mental noise, creating space for focused learning
+- 新しい技術、フレームワーク、言語、または概念を学びたいがどこから始めればよいかわからない時
+- ドキュメントや学習リソースに圧倒されて構造化されたパスが必要な時
+- 教材を忘れ続けて間隔反復のガイダンスが必要な時
+- ドメイン間を移行（例えばバックエンドからフロントエンド）してギャップ分析が必要な時
+- 自律学習にアカウンタビリティと構造が欲しい時
+- `meditate-guidance`で精神的なノイズをクリアした後、集中した学習のための空間を作った時
 
 ## 入力
 
-- **必須**: What the person wants to learn (topic, technology, skill, or concept)
-- **必須**: Their purpose for learning (job requirement, personal interest, project need, career change)
-- **任意**: Current knowledge level in this area (self-assessed or demonstrated)
-- **任意**: Time available for learning (hours per day/week, deadline if any)
-- **任意**: Preferred learning style (reading, hands-on, video, discussion)
-- **任意**: Prior failed attempts at learning this topic (what did not work before)
+- **必須**: 学びたいこと（トピック、技術、スキル、または概念）
+- **必須**: 学習の目的（仕事の要件、個人的な興味、プロジェクトの必要性、キャリアチェンジ）
+- **任意**: この分野の現在の知識レベル（自己評価または実証済み）
+- **任意**: 学習に利用可能な時間（1日/週あたりの時間、締め切りがあれば）
+- **任意**: 好みの学習スタイル（読書、ハンズオン、動画、ディスカッション）
+- **任意**: このトピックの学習における過去の失敗（以前何がうまくいかなかったか）
 
 ## 手順
 
-### ステップ1: Assess — Determine Starting Position
+### ステップ1: 評価 — 出発点の確認
 
-Before designing a learning path, understand where the person currently stands.
+学習パスを設計する前に、その人が現在どこにいるかを理解する。
 
-1. Ask about their experience with the topic: "What do you already know about X?"
-2. Ask about adjacent knowledge: "What related topics are you familiar with?" (these become bridges)
-3. If they claim some knowledge, ask a calibration question that reveals depth vs. surface familiarity
-4. Note their vocabulary: do they use domain terms correctly, approximately, or not at all?
-5. Identify their learning goal specifically: "After learning this, what do you want to be able to do?"
-6. Identify their primary motivation: curiosity, practical need, career advancement, or creative project
+1. トピックに関する経験を尋ねる:「Xについてすでに何を知っていますか？」
+2. 隣接する知識を尋ねる:「関連するトピックで馴染みのあるものは？」（これらが橋渡しになる）
+3. ある程度の知識があると言う場合、深さと表面的な馴染みを明らかにするキャリブレーション質問をする
+4. 語彙に注目する: ドメイン用語を正しく使っているか、おおよそか、まったく使っていないか？
+5. 学習目標を具体的に特定する:「これを学んだ後、何ができるようになりたいですか？」
+6. 主な動機を特定する: 好奇心、実用的な必要性、キャリアアップ、またはクリエイティブプロジェクト
 
 ```
 Starting Position Assessment:
@@ -80,112 +78,112 @@ Starting Position Assessment:
 └───────────────┴────────────────────────────┴──────────────────────────┘
 ```
 
-**期待結果:** A clear picture of the person's starting position, goal, and constraints. The assessment should be warm and encouraging, not like an exam — frame questions as curiosity about their background.
+**期待結果:** その人の出発点、目標、制約の明確な把握。評価は温かく励ましになるべきで、試験のようであってはならない — 質問は背景への好奇心として組み立てる。
 
-**失敗時:** If the person cannot articulate their current level, ask them to describe a recent attempt to use or understand the topic. Concrete stories reveal level more accurately than self-assessment. If they are embarrassed about their level, normalize: "Everyone starts somewhere — knowing where you are helps me design the best path for you."
+**失敗時:** 現在のレベルを表現できない場合、トピックを使おうとしたり理解しようとした最近の試みについて話してもらう。具体的なストーリーは自己評価よりも正確にレベルを明らかにする。レベルについて恥ずかしく感じている場合は正常化する:「誰でもどこかから始まります — あなたの位置を知ることで最適なパスを設計できます。」
 
-### ステップ2: Plan — Design the Learning Path
+### ステップ2: 計画 — 学習パスの設計
 
-Create a structured path from their current position to their goal.
+現在の位置から目標までの構造化されたパスを作成する。
 
-1. Break the topic into 4-7 learning milestones (not too granular, not too vague)
-2. Order milestones by dependency: what must be understood before what?
-3. For each milestone, identify the core concept (what they need to understand) and the core skill (what they need to be able to do)
-4. Estimate time per milestone based on their available hours
-5. Identify the first milestone — this is where learning begins
-6. Build in early wins: the first milestone should be achievable quickly to build momentum
-7. Present the path visually: a numbered list with brief descriptions
+1. トピックを4-7の学習マイルストーンに分割する（細かすぎず、曖昧すぎず）
+2. 依存関係でマイルストーンを順序付ける: 何を何の前に理解しなければならないか？
+3. 各マイルストーンについて、核心概念（理解すべきこと）と核心スキル（できるようになるべきこと）を特定する
+4. 利用可能な時間に基づいてマイルストーンごとの時間を見積もる
+5. 最初のマイルストーンを特定する — ここから学習が始まる
+6. 早期の成功を組み込む: 最初のマイルストーンは勢いをつけるために素早く達成可能であるべき
+7. パスを視覚的に提示する: 簡潔な説明付きの番号付きリスト
 
-**期待結果:** A learning path the person can see and understand. It should feel manageable — not overwhelming. The person should be able to point to any milestone and understand why it is there.
+**期待結果:** その人が見て理解できる学習パス。管理可能に感じるべき — 圧倒的であってはならない。その人がどのマイルストーンを指してもなぜそこにあるかを理解できるべきである。
 
-**失敗時:** If the path feels too long, the goal may be too ambitious for the available time — discuss scope reduction. If the path feels too short, the topic may be simpler than expected — or the milestones are too coarse and need decomposition.
+**失敗時:** パスが長すぎると感じる場合、利用可能な時間に対して目標が野心的すぎる可能性がある — スコープの縮小を議論する。パスが短すぎると感じる場合、トピックが予想より単純か — またはマイルストーンが粗すぎて分解が必要である。
 
-### ステップ3: Guide — Walk Through Material
+### ステップ3: ガイド — 教材を通じて歩く
 
-For each milestone, guide the person through the material at the right pace.
+各マイルストーンについて、適切なペースで教材を通じてその人をガイドする。
 
-1. Introduce the milestone concept with a brief overview: "In this section, we will learn X, which lets you do Y"
-2. Present the material in small chunks — one concept per chunk
-3. Use the person's preferred learning style: reading → provide text; hands-on → provide exercises; discussion → use Socratic questioning
-4. Connect each new concept to something they already know (from the assessment)
-5. Provide concrete examples before abstract definitions
-6. If using documentation, guide them through the relevant sections rather than sending them off to read alone
-7. Pause after each chunk: "Does this make sense so far?"
+1. マイルストーンの概念を簡潔な概要で紹介する:「このセクションではXを学びます。これによりYができるようになります」
+2. 教材を小さなチャンクで提示する — チャンクごとに1つの概念
+3. その人の好みの学習スタイルを使用する: 読書 → テキストを提供; ハンズオン → 演習を提供; ディスカッション → ソクラテス式質問を使用
+4. 各新しい概念をすでに知っていること（評価から）に接続する
+5. 抽象的な定義の前に具体的な例を提供する
+6. ドキュメントを使用する場合、一人で読みに行かせるのではなく関連するセクションを通じてガイドする
+7. 各チャンクの後に一時停止する:「ここまで理解できましたか？」
 
-**期待結果:** The person progresses through the material with comprehension, not just exposure. They should be able to explain each concept in their own words before moving to the next. The pace feels right — not rushed, not dragged.
+**期待結果:** その人が単なる露出ではなく理解を伴って教材を進めること。次に進む前に各概念を自分の言葉で説明できるべきである。ペースが適切に感じられること — 急ぎすぎず、引きずりすぎず。
 
-**失敗時:** If they are struggling, slow down and check for missing prerequisites. If they are breezing through, speed up — do not waste their time on what they already grasp. If the material itself is confusing (bad documentation), provide a clearer explanation and note the resource quality for future reference.
+**失敗時:** 苦戦している場合、ペースを落として前提条件の欠如を確認する。スムーズに進んでいる場合、スピードアップする — すでに把握していることに時間を浪費しない。教材自体がわかりにくい場合（悪いドキュメント）、より明確な説明を提供し、将来の参照のためにリソースの品質を注記する。
 
-### ステップ4: Test — Check Understanding
+### ステップ4: テスト — 理解の確認
 
-Verify learning with questions that require application, not just recall.
+想起だけでなく応用を必要とする質問で学習を検証する。
 
-1. Ask prediction questions: "What would happen if you changed X?"
-2. Ask comparison questions: "How is this different from Y, which you learned earlier?"
-3. Ask application questions: "How would you use this to solve Z?"
-4. Ask debugging questions: "This code has a bug related to what we just learned — can you spot it?"
-5. Celebrate correct answers specifically: "Yes — and the reason that works is..."
-6. For incorrect answers, explore their reasoning: "Interesting — walk me through your thinking"
-7. Never frame incorrect answers as failure — they are diagnostic information
+1. 予測質問をする:「Xを変えたらどうなりますか？」
+2. 比較質問をする:「これは先ほど学んだYとどう違いますか？」
+3. 応用質問をする:「Zを解決するためにこれをどう使いますか？」
+4. デバッグ質問をする:「このコードには今学んだことに関連するバグがあります — 見つけられますか？」
+5. 正解を具体的に称える:「はい — そしてそれが機能する理由は...」
+6. 不正解に対しては推論を探る:「興味深い — 考え方を教えてください」
+7. 不正解を失敗として捉えない — それは診断情報である
 
-**期待結果:** The testing reveals whether the person has a working mental model or surface-level recall. Working models can handle variations; surface recall cannot. The testing should feel like a collaborative exercise, not an exam.
+**期待結果:** テストがその人に動作するメンタルモデルがあるか表面レベルの記憶かを明らかにする。動作するモデルはバリエーションに対応できる; 表面的な記憶はできない。テストは共同的な演習のように感じるべきで、試験のようであってはならない。
 
-**失敗時:** If the person cannot answer application questions, the learning was too passive — they need hands-on practice before more material. If they answer recall questions but not application questions, the concepts were understood individually but not integrated — focus on connections between concepts.
+**失敗時:** 応用質問に答えられない場合、学習が受動的すぎた — より多くの教材の前にハンズオンの練習が必要である。想起質問には答えられるが応用質問には答えられない場合、概念は個別には理解されたが統合されていない — 概念間のつながりに焦点を当てる。
 
-### ステップ5: Adapt — Adjust the Path
+### ステップ5: 適応 — パスの調整
 
-Based on test results and the person's feedback, adjust the learning path.
+テスト結果とその人のフィードバックに基づいて、学習パスを調整する。
 
-1. If a milestone was easy: consider combining it with the next one, or deepening the content
-2. If a milestone was hard: break it into smaller steps, or add prerequisite review
-3. If the person's interest shifts during learning: adjust the path to follow their curiosity where possible — engagement drives retention
-4. If they are fatigued: suggest a break and a review session later rather than pushing through
-5. If a particular teaching approach is not working: try a different modality (switch from reading to doing, or from abstract to concrete)
-6. Update the learning path and communicate changes: "Based on how this went, I suggest we adjust..."
+1. マイルストーンが簡単だった場合: 次のマイルストーンと統合するか、内容を深める
+2. マイルストーンが難しかった場合: より小さなステップに分割するか、前提条件のレビューを追加する
+3. 学習中に関心が変化した場合: 可能な限り好奇心に従ってパスを調整する — 関与が定着を促進する
+4. 疲れている場合: 無理に進めるのではなく休憩と後でのレビューセッションを提案する
+5. 特定の教授アプローチがうまくいかない場合: 別のモダリティを試す（読書から実践へ、または抽象から具体へ切り替える）
+6. 学習パスを更新して変更を伝える:「今回の結果に基づいて、調整を提案します...」
 
-**期待結果:** The learning path evolves based on real data. No fixed curriculum survives contact with an actual learner — the adaptation is the value.
+**期待結果:** 実際のデータに基づいて学習パスが進化すること。固定されたカリキュラムは実際の学習者との接触に耐えない — 適応が価値である。
 
-**失敗時:** If repeated adaptations still leave the person struggling, there may be a fundamental prerequisite gap that was not caught in assessment. Return to Step 1 and probe deeper. If the person is losing motivation, discuss the original goal — sometimes adjusting the goal is more appropriate than changing the path.
+**失敗時:** 繰り返しの適応でもまだ苦戦している場合、評価で捉えられなかった根本的な前提条件のギャップがある可能性がある。ステップ1に戻ってより深く探る。モチベーションを失っている場合、元の目標について議論する — パスを変えるよりも目標を調整する方が適切な場合がある。
 
-### ステップ6: Review — Consolidate and Plan Next Session
+### ステップ6: レビュー — 統合と次のセッションの計画
 
-Solidify what was learned and set up for continued learning.
+学んだことを固め、継続的な学習のための準備をする。
 
-1. Summarize what was covered: "Today we learned X, Y, and Z"
-2. Ask them to state the key takeaway in their own words
-3. Provide a brief practice exercise for independent work (not homework — optional reinforcement)
-4. Recommend 2-3 resources for further exploration (documentation, tutorials, examples)
-5. If using spaced repetition: schedule review points — "Review these concepts again in 2 days, then in a week"
-6. Set up the next milestone: "Next time, we will tackle..."
-7. Ask for feedback: "What worked well? What could I do differently?"
+1. カバーした内容を要約する:「今日はX、Y、Zを学びました」
+2. 自分の言葉で主要なポイントを述べてもらう
+3. 独立した作業のための簡単な練習問題を提供する（宿題ではなく — 任意の強化）
+4. さらなる探求のために2-3のリソースを推奨する（ドキュメント、チュートリアル、例）
+5. 間隔反復を使用する場合: レビューポイントをスケジュールする —「これらの概念を2日後、次に1週間後にレビューしてください」
+6. 次のマイルストーンを設定する:「次回は...に取り組みます」
+7. フィードバックを求める:「何がうまくいきましたか？何を変えられますか？」
 
-**期待結果:** The person leaves with clear understanding of what they learned, what they can practice, and what comes next. The session has a clean closing, not an abrupt stop.
+**期待結果:** その人が学んだこと、練習できること、次に何が来るかの明確な理解を持って去ること。セッションが突然の停止ではなくきれいな終了を持つこと。
 
-**失敗時:** If the person cannot state a key takeaway, the session covered too much or too little stuck. Identify the one concept that most needs reinforcement and focus the review on that. If they have no motivation for independent practice, the learning path may need to be more self-contained (all learning within sessions).
+**失敗時:** 主要なポイントを述べられない場合、セッションが多すぎたか定着しなかった。最も強化が必要な1つの概念を特定し、レビューをそこに集中させる。独立した練習のモチベーションがない場合、学習パスがより自己完結型（すべての学習がセッション内）である必要がある可能性がある。
 
 ## バリデーション
 
-- [ ] Starting position was assessed before the learning path was designed
-- [ ] The learning path has clear milestones ordered by dependency
-- [ ] Material was presented in small chunks with comprehension checks between them
-- [ ] Testing used application questions, not just recall
-- [ ] The path was adapted at least once based on the person's actual progress
-- [ ] The session ended with a summary, practice suggestion, and next steps
-- [ ] The person felt encouraged throughout, not tested or judged
+- [ ] 学習パスを設計する前に出発点が評価された
+- [ ] 学習パスに依存関係で順序付けられた明確なマイルストーンがある
+- [ ] 教材が小さなチャンクで提示され間に理解チェックがあった
+- [ ] テストが想起だけでなく応用質問を使用した
+- [ ] その人の実際の進捗に基づいてパスが少なくとも1回適応された
+- [ ] セッションが要約、練習の提案、次のステップで終了した
+- [ ] テストや判断されていると感じずに励まされたと感じた
 
 ## よくある落とし穴
 
-- **Information dumping**: Providing all the material at once instead of pacing it through milestones. Overwhelm kills learning
-- **Skipping the assessment**: Assuming the person's level instead of checking. A frontend expert learning backend may know adjacent concepts but not the ones you expect
-- **Teaching to the average**: If the person is faster or slower than expected, the pace must change — sticking to the plan despite feedback wastes their time or loses them
-- **All theory, no practice**: Understanding requires doing, not just hearing. Every milestone should include a practice element
-- **Ignoring motivation**: A person who does not see why a concept matters will not retain it. Connect every concept to their stated goal
-- **Overloading sessions**: Trying to cover too much in one sitting. Better to cover less with retention than more with forgetfulness
-- **Coach-as-lecturer**: The coach guides the learner's exploration, not delivers a monologue. Ask more questions than you answer
+- **情報の一括提供**: マイルストーンを通じてペース配分する代わりにすべての教材を一度に提供すること。圧倒は学習を殺す
+- **評価のスキップ**: 確認する代わりにその人のレベルを仮定すること。バックエンドを学ぶフロントエンド専門家は隣接する概念を知っているかもしれないが期待するものではないかもしれない
+- **平均に合わせた教え方**: 期待より速いか遅い場合、ペースは変わらなければならない — フィードバックにもかかわらず計画に固執することは時間の浪費か脱落を招く
+- **すべて理論、練習なし**: 理解には聞くだけでなく実行が必要。すべてのマイルストーンに練習要素を含めるべきである
+- **モチベーションの無視**: 概念がなぜ重要かがわからない人はそれを定着させない。すべての概念を述べた目標に接続する
+- **セッションの過負荷**: 一度に多くをカバーしようとすること。忘却を伴う多くよりも定着を伴う少ない方が良い
+- **講師としてのコーチ**: コーチは学習者の探求をガイドするのであり、モノローグを提供するのではない。答えるよりも多くの質問をする
 
 ## 関連スキル
 
-- `learn` — the AI self-directed variant for systematic knowledge acquisition
-- `teach-guidance` — coaching a person to teach others; complementary to learning coaching
-- `meditate-guidance` — clearing mental noise before a learning session improves focus and retention
-- `remote-viewing-guidance` — shares the structured observation approach that supports learning from experience
+- `learn` — AI自律型の体系的な知識獲得バリアント
+- `teach-guidance` — 他者に教えることをコーチする; 学習コーチングと相補的
+- `meditate-guidance` — 学習セッション前に精神的ノイズをクリアすることで集中と定着が改善する
+- `remote-viewing-guidance` — 経験からの学習を支援する構造化された観察アプローチを共有する

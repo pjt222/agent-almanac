@@ -1,14 +1,10 @@
 ---
 name: transmute
 description: >
-  Transform a single function, module, or data structure from one form to
-  another while preserving its essential behavior. Lighter-weight than the full
-  athanor cycle, suitable for targeted conversions where the input and output
-  forms are well-understood. Use when converting a function between languages,
-  shifting a module between paradigms, migrating an API consumer to a new
-  version, converting data formats, or replacing a dependency — when the
-  transformation scope is a single function, class, or module rather than a
-  full system.
+  将单个函数、模块或数据结构从一种形式转换为另一种形式，同时保持其本质行为。
+  比完整的 athanor 周期更轻量，适用于输入和输出形式都明确理解的定向转换。
+  适用于在语言之间转换函数、在范式之间转换模块、将 API 消费者迁移到新版本、
+  转换数据格式或替换依赖——当转换范围是单个函数、类或模块而非完整系统时。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,125 +21,125 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Transmute
+# 嬗变
 
-Transform a specific piece of code or data from one form to another — language translation, paradigm shift, format conversion, or API migration — while preserving essential behavior and semantics.
+将特定的代码或数据从一种形式转换为另一种——语言翻译、范式转换、格式转换或 API 迁移——同时保持本质行为和语义。
 
 ## 适用场景
 
-- Converting a function from one language to another (Python to R, JavaScript to TypeScript)
-- Shifting a module from one paradigm (class-based to functional, callbacks to async/await)
-- Migrating an API consumer from v1 to v2 of an external service
-- Converting data between formats (CSV to Parquet, REST to GraphQL schema)
-- Replacing a dependency with an equivalent (moment.js to date-fns, jQuery to vanilla JS)
-- When the transformation scope is a single function, class, or module (not a full system)
+- 将函数从一种语言转换为另一种（Python 到 R，JavaScript 到 TypeScript）
+- 将模块从一种范式转换为另一种（基于类到函数式，回调到 async/await）
+- 将 API 消费者从外部服务的 v1 迁移到 v2
+- 在格式之间转换数据（CSV 到 Parquet，REST 到 GraphQL 模式）
+- 用等价物替换依赖（moment.js 到 date-fns，jQuery 到原生 JS）
+- 当转换范围是单个函数、类或模块（而非完整系统）时
 
 ## 输入
 
-- **必需**: Source material (file path, function name, or data sample)
-- **必需**: Target form (language, paradigm, format, or API version)
-- **可选**: Behavioral contract (tests, type signatures, or expected I/O pairs)
-- **可选**: Constraints (must maintain backward compatibility, performance budget)
+- **必需**：源材料（文件路径、函数名或数据样本）
+- **必需**：目标形式（语言、范式、格式或 API 版本）
+- **可选**：行为契约（测试、类型签名或预期的输入/输出对）
+- **可选**：约束（必须保持向后兼容性、性能预算）
 
 ## 步骤
 
-### 第 1 步：Analyze the Source Material
+### 第 1 步：分析源材料
 
-Understand exactly what the source does before attempting transformation.
+在尝试转换之前，确切理解源代码做了什么。
 
-1. Read the source completely — every branch, edge case, and error path
-2. Identify the **behavioral contract**:
-   - What inputs does it accept? (types, ranges, edge cases)
-   - What outputs does it produce? (return values, side effects, error signals)
-   - What invariants does it maintain? (ordering, uniqueness, referential integrity)
-3. Catalog dependencies: what does the source import, call, or rely on?
-4. If tests exist, read them to understand expected behavior
-5. If no tests exist, write behavioral characterization tests before transmuting
+1. 完整阅读源代码——每个分支、边界情况和错误路径
+2. 识别**行为契约**：
+   - 它接受什么输入？（类型、范围、边界情况）
+   - 它产生什么输出？（返回值、副作用、错误信号）
+   - 它维护什么不变量？（排序、唯一性、引用完整性）
+3. 编目依赖：源代码导入、调用或依赖什么？
+4. 如果存在测试，阅读它们以理解预期行为
+5. 如果没有测试，在嬗变之前编写行为特征测试
 
-**预期结果：** A complete understanding of what the source does (not how it does it). The behavioral contract is explicit and testable.
+**预期结果：** 完全理解源代码做了什么（而非它如何做）。行为契约是明确的且可测试的。
 
-**失败处理：** If the source is too complex for a single transmute, consider breaking it into smaller pieces or escalating to the full `athanor` procedure. If behavior is ambiguous, ask for clarification rather than guessing.
+**失败处理：** 如果源代码对于单次嬗变来说太复杂，考虑将其分成更小的部分或升级到完整的 `athanor` 流程。如果行为模糊，请求澄清而不是猜测。
 
-### 第 2 步：Map Source to Target Form
+### 第 2 步：映射源到目标形式
 
-Design the transformation mapping.
+设计转换映射。
 
-1. For each element in the source, identify the target equivalent:
-   - Language constructs: loops → map/filter, classes → closures, etc.
-   - API calls: old endpoint → new endpoint, request/response shape changes
-   - Data types: data frame columns → schema fields, nested JSON → flat tables
-2. Identify elements with **no direct equivalent**:
-   - Source features missing in target (e.g., pattern matching in a language without it)
-   - Target idioms that don't exist in source (e.g., R's vectorization vs. Python loops)
-3. For each gap, choose an adaptation strategy:
-   - Emulate: reproduce the behavior with target-native constructs
-   - Simplify: if the source construct was a workaround, use the target's native solution
-   - Document: if behavior changes slightly, note the difference explicitly
-4. Write the **transformation map**: source element → target element, for every piece
+1. 对源中的每个元素，识别目标等价物：
+   - 语言构造：循环 → map/filter，类 → 闭包等
+   - API 调用：旧端点 → 新端点，请求/响应形状变化
+   - 数据类型：数据框列 → 模式字段，嵌套 JSON → 平面表
+2. 识别**没有直接等价物**的元素：
+   - 目标中缺失的源特性（例如在没有模式匹配的语言中进行模式匹配）
+   - 源中不存在的目标惯用法（例如 R 的向量化 vs. Python 循环）
+3. 对每个差距，选择适应策略：
+   - 仿真：用目标原生构造重现行为
+   - 简化：如果源构造是一个变通方案，使用目标的原生解决方案
+   - 记录：如果行为略有变化，明确注明差异
+4. 编写**转换映射**：源元素 → 目标元素，涵盖每个部分
 
-**预期结果：** A complete mapping where every source element has a target destination. Gaps are identified and adaptation strategies chosen.
+**预期结果：** 一个完整的映射，其中每个源元素都有目标去处。差距被识别且适应策略已选定。
 
-**失败处理：** If too many elements lack direct equivalents, the transformation may be inappropriate (e.g., transmuting a highly object-oriented design into a language without classes). Reconsider the target form or escalate to `athanor`.
+**失败处理：** 如果太多元素缺乏直接等价物，转换可能不合适（例如将高度面向对象的设计嬗变为没有类的语言）。重新考虑目标形式或升级到 `athanor`。
 
-### 第 3 步：Execute the Transformation
+### 第 3 步：执行转换
 
-Write the target form following the map.
+按照映射编写目标形式。
 
-1. Create the target file(s) with appropriate structure and boilerplate
-2. Transmute each element following the map from Step 2:
-   - Preserve the behavioral contract — same inputs produce same outputs
-   - Use target-native idioms rather than literal translations
-   - Maintain or improve error handling
-3. Handle dependencies:
-   - Replace source dependencies with target equivalents
-   - If a dependency has no equivalent, implement a minimal adapter
-4. Add inline comments only where the transformation was non-obvious
+1. 创建具有适当结构和样板的目标文件
+2. 按照第 2 步的映射嬗变每个元素：
+   - 保持行为契约——相同输入产生相同输出
+   - 使用目标原生惯用法而非字面翻译
+   - 维护或改进错误处理
+3. 处理依赖：
+   - 用目标等价物替换源依赖
+   - 如果依赖没有等价物，实现一个最小适配器
+4. 仅在转换不明显处添加行内注释
 
-**预期结果：** A complete target implementation that follows the transformation map. The code reads like it was written natively in the target form, not mechanically translated.
+**预期结果：** 一个遵循转换映射的完整目标实现。代码读起来像是用目标形式原生编写的，而不是机械翻译的。
 
-**失败处理：** If a specific element resists transformation, isolate it. Transform everything else first, then tackle the resistant element with focused attention. If it truly cannot be transmuted, document why and provide a workaround.
+**失败处理：** 如果特定元素抵抗转换，将其隔离。先转换其他所有内容，然后集中注意力处理抵抗的元素。如果它真的无法嬗变，记录原因并提供变通方案。
 
-### 第 4 步：Verify Behavioral Equivalence
+### 第 4 步：验证行为等价性
 
-Confirm the transmuted form preserves the original's behavior.
+确认嬗变后的形式保持了原始的行为。
 
-1. Run the behavioral contract tests against the target implementation
-2. For each test case, verify:
-   - Same inputs → same outputs (within acceptable tolerance for numeric conversions)
-   - Same error conditions → equivalent error signals
-   - Side effects (if any) are preserved or documented as changed
-3. Check edge cases explicitly:
-   - Null/NA/undefined handling
-   - Empty collections
-   - Boundary values (max int, empty string, zero-length arrays)
-4. If the target form adds capabilities (e.g., type safety), verify those too
+1. 对目标实现运行行为契约测试
+2. 对每个测试用例，验证：
+   - 相同输入 → 相同输出（数值转换在可接受容差范围内）
+   - 相同错误条件 → 等价的错误信号
+   - 副作用（如有）被保留或记录为已变更
+3. 明确检查边界情况：
+   - Null/NA/undefined 处理
+   - 空集合
+   - 边界值（最大整数、空字符串、零长度数组）
+4. 如果目标形式增加了能力（例如类型安全），也验证这些
 
-**预期结果：** All behavioral contract tests pass. Edge cases are handled equivalently. Any behavioral differences are documented and intentional.
+**预期结果：** 所有行为契约测试通过。边界情况被等价处理。任何行为差异都被记录且是有意为之的。
 
-**失败处理：** If tests fail, diff the source and target behavior to find the divergence. Fix the target to match the source contract. If the divergence is intentional (e.g., fixing a bug in the original), document it explicitly.
+**失败处理：** 如果测试失败，对比源和目标行为以找到分歧。修复目标以匹配源契约。如果分歧是有意的（例如修复原始中的错误），明确记录。
 
-## Validation Checklist
+## 验证清单
 
-- [ ] Source material fully analyzed with explicit behavioral contract
-- [ ] Transformation map covers every source element
-- [ ] Gaps identified with adaptation strategies documented
-- [ ] Target implementation uses native idioms (not literal translation)
-- [ ] All behavioral contract tests pass against target
-- [ ] Edge cases verified (null, empty, boundary values)
-- [ ] Dependencies resolved with target equivalents
-- [ ] Any behavioral differences documented and intentional
+- [ ] 源材料已完全分析，行为契约明确
+- [ ] 转换映射覆盖每个源元素
+- [ ] 差距已识别并记录了适应策略
+- [ ] 目标实现使用原生惯用法（非字面翻译）
+- [ ] 所有行为契约测试对目标通过
+- [ ] 边界情况已验证（null、空、边界值）
+- [ ] 依赖已用目标等价物解决
+- [ ] 任何行为差异都已记录且是有意为之的
 
 ## 常见问题
 
-- **Literal translation**: Writing Python-in-R or Java-in-JavaScript instead of using target idioms. The result should look native
-- **Skipping behavioral tests**: Transmuting without tests means you can't verify equivalence. Write characterization tests first
-- **Ignoring edge cases**: The happy path transmutes easily; edge cases are where bugs hide
-- **Over-engineering the adapter**: If a dependency needs a 200-line adapter, the transmutation scope is too large
-- **Transmuting comments verbatim**: Comments should explain the target code, not echo the source. Rewrite them
+- **字面翻译**：写出 Python 风格的 R 或 Java 风格的 JavaScript，而不是使用目标惯用法。结果应该看起来是原生的
+- **跳过行为测试**：没有测试的嬗变意味着无法验证等价性。先编写特征测试
+- **忽略边界情况**：快乐路径容易嬗变；边界情况是错误潜藏之处
+- **过度工程化适配器**：如果一个依赖需要 200 行适配器，嬗变范围太大了
+- **逐字嬗变注释**：注释应该解释目标代码，而不是回显源代码。重写它们
 
 ## 相关技能
 
-- `athanor` — Full four-stage transformation for systems too large for a single transmute
-- `chrysopoeia` — Optimizing transmuted code for maximum value extraction
-- `review-software-architecture` — Post-transmutation architecture review for larger conversions
-- `serialize-data-formats` — Specialized data format conversion procedures
+- `athanor` — 对于单次嬗变过大的系统的完整四阶段转换
+- `chrysopoeia` — 优化嬗变后的代码以获取最大价值
+- `review-software-architecture` — 用于较大转换的嬗变后架构审查
+- `serialize-data-formats` — 专门的数据格式转换流程

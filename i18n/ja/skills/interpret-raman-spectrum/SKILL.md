@@ -1,11 +1,9 @@
 ---
 name: interpret-raman-spectrum
 description: >
-  Systematically interpret Raman spectra to identify molecular vibrations,
-  assess polarizability-driven selection rules, compare with complementary
-  IR data, and evaluate depolarization ratios for symmetry assignment. Covers
-  Raman-active mode identification, fluorescence interference mitigation,
-  and reference spectrum matching.
+  ラマンスペクトルを体系的に解釈して分子振動を特定し、分極率駆動の選択則を評価し、
+  相補的なIRデータと比較し、対称性割り当てのために偏光解消比を評価する。ラマン活性
+  モードの特定、蛍光干渉の緩和、参照スペクトルとの照合を網羅する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,64 +22,64 @@ metadata:
 
 # ラマンスペクトルの解釈
 
-Analyze Raman scattering spectra to identify molecular vibrations, apply selection rules complementary to infrared absorption, and integrate Raman data with IR results for a comprehensive vibrational analysis.
+ラマン散乱スペクトルを解析して分子振動を特定し、赤外吸収と相補的な選択則を適用し、包括的な振動解析のためにラマンデータとIR結果を統合する。
 
 ## 使用タイミング
 
-- Analyzing samples that are difficult for IR (aqueous solutions, sealed containers, remote sensing)
-- Identifying symmetric vibrations that are weak or inactive in IR
-- Complementing IR data using the mutual exclusion principle for centrosymmetric molecules
-- Characterizing carbon materials (graphene, carbon nanotubes, diamond) via characteristic Raman bands
-- Analyzing inorganic compounds, minerals, or crystalline phases where Raman is often more informative than IR
-- Performing non-destructive, in situ analysis (no sample preparation required for many Raman measurements)
+- IRでは困難なサンプル（水溶液、密封容器、リモートセンシング）を分析する時
+- IRでは弱いか不活性な対称振動を特定する時
+- 中心対称分子の相互排除原理を使用してIRデータを補完する時
+- 炭素材料（グラフェン、カーボンナノチューブ、ダイヤモンド）を特徴的なラマンバンドで特性化する時
+- ラマンがIRよりも情報量が多いことが多い無機化合物、鉱物、または結晶相を分析する時
+- 非破壊的なその場分析を行う時（多くのラマン測定ではサンプル調製が不要）
 
 ## 入力
 
-- **必須**: Raman spectrum data (Raman shift in cm-1 vs. intensity)
-- **必須**: Excitation laser wavelength (e.g., 532 nm, 633 nm, 785 nm, 1064 nm)
-- **任意**: IR spectrum of the same sample for complementary analysis
-- **任意**: Polarization data (parallel and perpendicular spectra for depolarization ratios)
-- **任意**: Known molecular formula or compound class
-- **任意**: Sample physical state (solid, liquid, solution, gas, thin film)
+- **必須**: ラマンスペクトルデータ（ラマンシフトcm-1 vs. 強度）
+- **必須**: 励起レーザー波長（例: 532 nm、633 nm、785 nm、1064 nm）
+- **任意**: 相補的分析のための同一サンプルのIRスペクトル
+- **任意**: 偏光データ（偏光解消比のための平行および垂直スペクトル）
+- **任意**: 既知の分子式または化合物クラス
+- **任意**: サンプルの物理状態（固体、液体、溶液、気体、薄膜）
 
 ## 手順
 
-### ステップ1: Assess Spectrum Quality and Identify Artifacts
+### ステップ1: スペクトル品質の評価とアーティファクトの特定
 
-Evaluate the Raman spectrum for reliability before analyzing peaks:
+ピークを分析する前にラマンスペクトルの信頼性を評価する:
 
-1. **Laser wavelength and fluorescence**: Fluorescence is the most common interference in Raman spectroscopy. It produces a broad, intense background that can obscure Raman peaks. Shorter-wavelength lasers (532 nm) excite more fluorescence; longer-wavelength lasers (785 nm, 1064 nm) reduce it at the cost of weaker Raman signal (intensity scales as lambda^-4).
-2. **Signal-to-noise ratio**: Evaluate whether Raman peaks are clearly distinguishable from noise. Weak Raman scatterers may require longer acquisition times or higher laser power.
-3. **Cosmic ray spikes**: Sharp, narrow spikes at random positions are cosmic ray artifacts, not Raman peaks. They appear in only one spectrum of a time-averaged set and can be removed by spike filters.
-4. **Baseline correction**: A sloping or curved baseline (from fluorescence or thermal emission) should be subtracted before measuring peak positions and intensities.
-5. **Photodegradation**: High laser power can damage or transform the sample. Check for spectral changes between successive acquisitions at the same spot. Reduce power if degradation is observed.
-6. **Spectral range**: Standard Raman spectra cover 100--4000 cm-1 Raman shift. The low-frequency cutoff depends on the edge or notch filter used to block the Rayleigh line. Note if any region is truncated.
+1. **レーザー波長と蛍光**: 蛍光はラマン分光法で最も一般的な干渉である。ラマンピークを覆い隠す可能性のある広く強いバックグラウンドを生成する。短波長レーザー（532 nm）はより多くの蛍光を励起する; 長波長レーザー（785 nm、1064 nm）はラマン信号が弱くなる代わりに蛍光を減らす（強度はlambda^-4にスケールする）。
+2. **信号対雑音比**: ラマンピークがノイズから明確に区別できるかを評価する。弱いラマン散乱体ではより長い取得時間またはより高いレーザーパワーが必要な場合がある。
+3. **宇宙線スパイク**: ランダムな位置に現れる鋭く狭いスパイクは宇宙線アーティファクトであり、ラマンピークではない。時間平均されたセットの1つのスペクトルにのみ現れ、スパイクフィルターで除去できる。
+4. **ベースライン補正**: 傾斜または湾曲したベースライン（蛍光または熱放射による）は、ピーク位置と強度を測定する前に差し引くべきである。
+5. **光分解**: 高いレーザーパワーはサンプルを損傷または変質させる可能性がある。同じスポットでの連続取得間のスペクトル変化を確認する。分解が観察された場合はパワーを下げる。
+6. **スペクトル範囲**: 標準的なラマンスペクトルはラマンシフト100--4000 cm-1をカバーする。低周波数カットオフはレイリー線をブロックするために使用されるエッジまたはノッチフィルターに依存する。いずれかの領域が切り詰められている場合は注記する。
 
-**期待結果:** Spectrum quality assessed, fluorescence level documented, artifacts (cosmic rays, baseline drift) identified or corrected, and the usable spectral range confirmed.
+**期待結果:** スペクトル品質が評価され、蛍光レベルが文書化され、アーティファクト（宇宙線、ベースラインドリフト）が特定または補正され、使用可能なスペクトル範囲が確認されること。
 
-**失敗時:** If fluorescence dominates the spectrum (broad background >> Raman peaks), recommend re-measurement with a longer-wavelength laser (785 or 1064 nm) or surface-enhanced Raman spectroscopy (SERS). If the sample degrades, reduce laser power or use a rotating sample stage.
+**失敗時:** 蛍光がスペクトルを支配する場合（広いバックグラウンド >> ラマンピーク）、長波長レーザー（785または1064 nm）での再測定または表面増強ラマン分光法（SERS）を推奨する。サンプルが分解する場合、レーザーパワーを下げるか回転サンプルステージを使用する。
 
-### ステップ2: Identify Raman-Active Modes and Apply Selection Rules
+### ステップ2: ラマン活性モードの特定と選択則の適用
 
-Determine which vibrations are Raman-active and how they complement IR data:
+どの振動がラマン活性であるか、およびIRデータをどのように補完するかを決定する:
 
-1. **Raman selection rule**: A vibration is Raman-active if it involves a change in the polarizability of the molecule. Symmetric stretches (which often change the molecular volume) are typically strong in Raman.
-2. **IR selection rule (for comparison)**: A vibration is IR-active if it involves a change in the dipole moment. Asymmetric stretches are typically strong in IR.
-3. **Mutual exclusion principle**: For molecules with a center of inversion (centrosymmetric), no vibration can be both Raman-active and IR-active. If a band appears in both spectra, the molecule lacks a center of symmetry.
-4. **General complementarity**: Even for non-centrosymmetric molecules, vibrations that are strong in Raman tend to be weak in IR, and vice versa. This complementarity makes the combined Raman + IR dataset more informative than either alone.
-5. **Identify Raman-favored modes**: Symmetric stretches (C-C, C=C, S-S, N=N), breathing modes of rings, and stretches of homonuclear bonds (which have no dipole change and are IR-inactive) are typically strong in Raman.
+1. **ラマン選択則**: 分子の分極率の変化を伴う振動がラマン活性である。対称伸縮（分子体積を変化させることが多い）は一般にラマンで強い。
+2. **IR選択則（比較用）**: 双極子モーメントの変化を伴う振動がIR活性である。非対称伸縮は一般にIRで強い。
+3. **相互排除原理**: 反転中心を持つ分子（中心対称）では、ラマン活性かつIR活性である振動は存在しない。バンドが両方のスペクトルに現れる場合、分子は対称中心を持たない。
+4. **一般的な相補性**: 非中心対称分子でも、ラマンで強い振動はIRで弱い傾向があり、逆もまた同様である。この相補性により、ラマン+IRの組み合わせデータセットはどちらか単独よりも情報量が多い。
+5. **ラマンが有利なモードの特定**: 対称伸縮（C-C、C=C、S-S、N=N）、環の呼吸モード、等核結合の伸縮（双極子変化がなくIR不活性）は一般にラマンで強い。
 
-**期待結果:** Selection rules applied, Raman-active vs. IR-active modes distinguished, and mutual exclusion tested if the molecule is centrosymmetric.
+**期待結果:** 選択則が適用され、ラマン活性モードとIR活性モードが区別され、分子が中心対称の場合は相互排除がテストされること。
 
-**失敗時:** If the molecular symmetry is unknown, use the combined Raman and IR data to infer it. If a band appears in both spectra with comparable intensity, the molecule is not centrosymmetric.
+**失敗時:** 分子の対称性が未知の場合、ラマンとIRの組み合わせデータを使用して推測する。バンドが同等の強度で両方のスペクトルに現れる場合、分子は中心対称ではない。
 
-### ステップ3: Analyze Raman Shift Positions
+### ステップ3: ラマンシフト位置の分析
 
-Assign observed Raman bands to specific vibrational modes using characteristic frequencies:
+特徴的な周波数を使用して、観察されたラマンバンドを特定の振動モードに割り当てる:
 
-1. **C-H stretching region (2800--3100 cm-1)**: Similar to IR, but Raman intensities differ. Aromatic and olefinic C-H (3000--3100 cm-1) are often stronger in Raman than aliphatic C-H.
-2. **Triple bonds (2100--2260 cm-1)**: C triple-bond C symmetric stretch is strong in Raman and often weak or absent in IR. C triple-bond N is active in both.
-3. **Double bond stretches**:
+1. **C-H伸縮領域（2800--3100 cm-1）**: IRと同様だが、ラマン強度が異なる。芳香族およびオレフィンC-H（3000--3100 cm-1）は脂肪族C-Hよりもラマンで強いことが多い。
+2. **三重結合（2100--2260 cm-1）**: C三重結合C対称伸縮はラマンで強く、IRでは弱いかまたは不在のことが多い。C三重結合Nは両方で活性。
+3. **二重結合伸縮**:
 
 | Shift (cm-1) | Assignment | Raman Intensity |
 |---------------|------------|-----------------|
@@ -89,7 +87,7 @@ Assign observed Raman bands to specific vibrational modes using characteristic f
 | 1650--1800 | C=O stretch | Medium (weaker than IR) |
 | 1500--1600 | Aromatic C=C | Medium to strong |
 
-4. **Aromatic ring modes**:
+4. **芳香環モード**:
 
 | Shift (cm-1) | Assignment | Notes |
 |---------------|------------|-------|
@@ -98,7 +96,7 @@ Assign observed Raman bands to specific vibrational modes using characteristic f
 | 1580--1600 | Ring stretch | Medium |
 | 3050--3070 | Aromatic C-H stretch | Medium |
 
-5. **Other characteristic Raman bands**:
+5. **その他の特徴的なラマンバンド**:
 
 | Shift (cm-1) | Assignment |
 |---------------|------------|
@@ -109,71 +107,71 @@ Assign observed Raman bands to specific vibrational modes using characteristic f
 | 500--680 | C-Br stretch |
 | 200--400 | Metal-ligand stretch |
 
-6. **Carbon materials**: The G band (~1580 cm-1, graphitic sp2) and D band (~1350 cm-1, defect/disorder) are diagnostic for carbon allotropes. The 2D band (~2700 cm-1) characterizes graphene layer count. Diamond shows a sharp peak at 1332 cm-1.
+6. **炭素材料**: Gバンド（~1580 cm-1、グラファイトsp2）とDバンド（~1350 cm-1、欠陥/無秩序）は炭素同素体の診断に使用される。2Dバンド（~2700 cm-1）はグラフェンの層数を特性化する。ダイヤモンドは1332 cm-1に鋭いピークを示す。
 
-**期待結果:** All significant Raman bands assigned to vibrational modes with reference to characteristic frequency ranges.
+**期待結果:** すべての重要なラマンバンドが特徴的な周波数範囲を参照して振動モードに割り当てられること。
 
-**失敗時:** If a band cannot be assigned from the tables above, consult spectral databases (RRUFF for minerals, SDBS for organics). Unassigned bands may belong to combination modes, overtones, or lattice vibrations in crystalline samples.
+**失敗時:** 上記の表からバンドが割り当てられない場合、スペクトルデータベース（鉱物のRRUFF、有機物のSDBSなど）を参照する。未割り当てバンドは結合モード、倍音、または結晶性サンプルの格子振動に属する可能性がある。
 
-### ステップ4: Compare Raman with IR Data
+### ステップ4: ラマンとIRデータの比較
 
-Integrate the two complementary vibrational techniques:
+2つの相補的な振動技術を統合する:
 
-1. **Tabulate corresponding bands**: Create a comparison table listing each vibrational mode with its Raman shift, IR frequency, and relative intensity in each technique.
-2. **Identify modes observed in only one technique**: Modes present in Raman but absent in IR (or vice versa) provide symmetry information. Symmetric stretches of non-polar bonds (S-S, C=C in symmetric environments) appear only in Raman.
-3. **Resolve ambiguities**: Where IR assignments were tentative (e.g., overlapping C-O and C-N stretches in the fingerprint region), check whether Raman provides a clearer picture due to different relative intensities.
-4. **Functional group confirmation**: Confirm IR-identified functional groups via their Raman counterparts. For example, an ester should show C=O in IR (~1735 cm-1) and C-O-C in Raman. A carboxylic acid should show broad O-H in IR and C=O in both techniques.
-5. **Assess overall consistency**: The Raman and IR data should be mutually consistent. Any contradictions (e.g., a band assigned as a symmetric stretch that appears strong in both spectra for an allegedly centrosymmetric molecule) indicate an error in assignment or symmetry assumption.
+1. **対応するバンドの表化**: 各振動モードについてラマンシフト、IR周波数、各技術での相対強度を列挙する比較表を作成する。
+2. **一方の技術でのみ観察されるモードの特定**: ラマンに存在するがIRに不在のモード（またはその逆）は対称性情報を提供する。非極性結合の対称伸縮（S-S、対称環境でのC=C）はラマンのみに現れる。
+3. **曖昧さの解決**: IR割り当てが暫定的だった場合（例えばフィンガープリント領域でのC-OとC-N伸縮の重なり）、異なる相対強度によりラマンがより明確な像を提供するかを確認する。
+4. **官能基の確認**: IRで特定された官能基をそのラマン対応物で確認する。例えば、エステルはIRでC=O（~1735 cm-1）、ラマンでC-O-Cを示すべきである。カルボン酸はIRで広いO-Hと両方の技術でC=Oを示すべきである。
+5. **全体的な整合性の評価**: ラマンとIRデータは相互に整合するべきである。矛盾がある場合（例えば、中心対称と主張される分子の対称伸縮と割り当てられたバンドが両方のスペクトルで強い）は、割り当てまたは対称性の仮定の誤りを示す。
 
-**期待結果:** A unified vibrational analysis table combining Raman and IR data, with functional group assignments confirmed or refined by the complementary information.
+**期待結果:** ラマンとIRデータを組み合わせた統一振動解析表。官能基割り当てが相補的情報により確認または改良されること。
 
-**失敗時:** If IR data is unavailable, the Raman spectrum alone still provides useful information but with reduced certainty. Note which assignments would benefit from IR confirmation.
+**失敗時:** IRデータが利用できない場合、ラマンスペクトル単独でも有用な情報を提供するが確実性は低下する。どの割り当てがIR確認の恩恵を受けるかを注記する。
 
-### ステップ5: Evaluate Polarization Data and Document Results
+### ステップ5: 偏光データの評価と結果の文書化
 
-Use depolarization ratios for symmetry assignment and compile the final analysis:
+対称性割り当てのために偏光解消比を使用し、最終分析をまとめる:
 
-1. **Depolarization ratio (rho)**: rho = I_perpendicular / I_parallel, measured from polarized Raman experiments.
-   - **rho = 0 to 0.75**: Polarized band (rho < 0.75). Totally symmetric vibrations (A-type) are polarized.
-   - **rho = 0.75**: Depolarized band. Non-totally-symmetric vibrations give rho = 0.75.
-2. **Symmetry assignment**: Polarized bands must belong to the totally symmetric irreducible representation of the molecular point group. This helps distinguish between modes of different symmetry that appear at similar frequencies.
-3. **Compile results**: Assemble a complete table of all observed Raman bands with:
-   - Raman shift (cm-1)
-   - Relative intensity (strong/medium/weak)
-   - Depolarization ratio (if measured)
-   - Assignment (vibrational mode)
-   - Corresponding IR band (if observed)
-4. **Compare with reference spectra**: If the compound is known, compare the observed Raman spectrum with published reference spectra (databases such as RRUFF, SDBS, or NIST). Agreement in peak positions within +/- 3 cm-1 and matching relative intensities confirms identity.
-5. **Report uncertainties**: Flag any assignments that remain tentative, and note which additional experiments (temperature-dependent Raman, resonance Raman, SERS) could resolve ambiguities.
+1. **偏光解消比（rho）**: rho = I_垂直 / I_平行、偏光ラマン実験から測定。
+   - **rho = 0から0.75**: 偏光バンド（rho < 0.75）。完全対称振動（A型）は偏光している。
+   - **rho = 0.75**: 偏光解消バンド。非完全対称振動はrho = 0.75を与える。
+2. **対称性割り当て**: 偏光バンドは分子の点群の完全対称既約表現に属さなければならない。これにより類似の周波数に現れる異なる対称性のモードを区別するのに役立つ。
+3. **結果のまとめ**: 観察されたすべてのラマンバンドの完全な表を組み立てる:
+   - ラマンシフト（cm-1）
+   - 相対強度（強/中/弱）
+   - 偏光解消比（測定された場合）
+   - 割り当て（振動モード）
+   - 対応するIRバンド（観察された場合）
+4. **参照スペクトルとの比較**: 化合物が既知の場合、観察されたラマンスペクトルを公開された参照スペクトル（RRUFF、SDBS、NISTなどのデータベース）と比較する。ピーク位置の+/- 3 cm-1以内の一致と一致する相対強度は同一性を確認する。
+5. **不確実性の報告**: 暫定的なままの割り当てにフラグを立て、曖昧さを解決できる追加実験（温度依存ラマン、共鳴ラマン、SERS）を注記する。
 
-**期待結果:** Complete Raman analysis with all bands assigned, polarization data interpreted for symmetry, and results integrated with IR and other spectroscopic data.
+**期待結果:** すべてのバンドが割り当てられ、偏光データが対称性について解釈され、結果がIRおよび他の分光データと統合された完全なラマン分析。
 
-**失敗時:** If polarization data is unavailable, symmetry assignment relies on frequency and intensity patterns alone. Note the limitation and recommend polarized measurements if symmetry information is critical.
+**失敗時:** 偏光データが利用できない場合、対称性割り当ては周波数と強度パターンのみに依存する。制限を注記し、対称性情報が重要な場合は偏光測定を推奨する。
 
 ## バリデーション
 
-- [ ] Spectrum quality assessed (fluorescence, cosmic rays, baseline, photodegradation)
-- [ ] Raman selection rules applied and Raman-active modes identified
-- [ ] Mutual exclusion principle tested if the molecule is centrosymmetric
-- [ ] All significant Raman bands assigned to vibrational modes
-- [ ] Raman data compared and integrated with IR data where available
-- [ ] Depolarization ratios interpreted for symmetry assignment (if polarization data available)
-- [ ] Assignments consistent with known molecular structure or proposed structure from other techniques
-- [ ] Results compared with reference spectra where possible
+- [ ] スペクトル品質が評価された（蛍光、宇宙線、ベースライン、光分解）
+- [ ] ラマン選択則が適用されラマン活性モードが特定された
+- [ ] 分子が中心対称の場合、相互排除原理がテストされた
+- [ ] すべての重要なラマンバンドが振動モードに割り当てられた
+- [ ] ラマンデータが利用可能なIRデータと比較・統合された
+- [ ] 偏光解消比が対称性割り当てのために解釈された（偏光データが利用可能な場合）
+- [ ] 割り当てが既知の分子構造または他の技術から提案された構造と整合している
+- [ ] 可能な場合、結果が参照スペクトルと比較された
 
 ## よくある落とし穴
 
-- **Fluorescence overwhelming the Raman signal**: This is the single most common problem. Switch to a longer-wavelength laser or use time-gated detection. Do not attempt to interpret broad fluorescent humps as Raman bands.
-- **Confusing cosmic ray spikes with real peaks**: Cosmic rays produce sharp, intense spikes that appear at random positions. They are present in single acquisitions but disappear in averaged spectra. Always check for reproducibility.
-- **Neglecting the polarizability selection rule**: Modes that are strong in IR (asymmetric stretches of polar bonds) may be weak or absent in Raman, and vice versa. Do not expect the same intensity pattern as IR.
-- **Ignoring sample degradation**: High laser power can char, polymerize, or phase-transform the sample. Spectrum changes between successive measurements at the same spot indicate degradation.
-- **Assuming all Raman bands are fundamentals**: Overtones (2x fundamental frequency) and combination bands can appear in Raman spectra. These are typically weaker than fundamentals but can cause confusion if not considered.
-- **Overlooking low-frequency modes**: Lattice vibrations, torsional modes, and metal-ligand stretches appear below 400 cm-1. Many conventional Raman setups do not access this region. Verify that the instrument's notch/edge filter allows measurement in the low-frequency range if these modes are relevant.
+- **蛍光によるラマン信号の圧倒**: これは最も一般的な問題である。長波長レーザーに切り替えるか時間ゲート検出を使用する。広い蛍光のハンプをラマンバンドとして解釈しようとしない。
+- **宇宙線スパイクと実ピークの混同**: 宇宙線はランダムな位置に現れる鋭く強いスパイクを生成する。単一取得には存在するが平均化されたスペクトルでは消える。常に再現性を確認する。
+- **分極率選択則の軽視**: IRで強いモード（極性結合の非対称伸縮）はラマンでは弱いか不在の場合があり、逆もまた同様。IRと同じ強度パターンを期待しない。
+- **サンプル分解の無視**: 高いレーザーパワーはサンプルを炭化、重合、または相変態させる可能性がある。同じスポットでの連続測定間のスペクトル変化は分解を示す。
+- **すべてのラマンバンドが基本振動であるという仮定**: 倍音（基本周波数の2倍）と結合バンドがラマンスペクトルに現れることがある。これらは通常基本振動より弱いが、考慮しないと混乱を引き起こす可能性がある。
+- **低周波モードの見落とし**: 格子振動、ねじれモード、金属-配位子伸縮は400 cm-1未満に現れる。多くの従来のラマン装置はこの領域にアクセスしない。これらのモードが関連する場合、装置のノッチ/エッジフィルターが低周波範囲での測定を許可していることを確認する。
 
 ## 関連スキル
 
-- `interpret-ir-spectrum` -- complementary vibrational technique for dipole-active modes
-- `interpret-nmr-spectrum` -- determine molecular connectivity for complete structure assignment
-- `interpret-mass-spectrum` -- establish molecular formula and fragmentation
-- `interpret-uv-vis-spectrum` -- characterize electronic transitions and chromophores
-- `plan-spectroscopic-analysis` -- select and sequence analytical techniques before data acquisition
+- `interpret-ir-spectrum` -- 双極子活性モードのための相補的振動技術
+- `interpret-nmr-spectrum` -- 完全な構造割り当てのための分子接続性の決定
+- `interpret-mass-spectrum` -- 分子式とフラグメンテーションの確立
+- `interpret-uv-vis-spectrum` -- 電子遷移と発色団の特性化
+- `plan-spectroscopic-analysis` -- データ取得前の分析技術の選択と順序付け

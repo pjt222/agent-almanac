@@ -1,13 +1,12 @@
 ---
 name: implement-diffusion-network
 description: >
-  Implement a generative diffusion model (DDPM or score-based) with noise
-  scheduling, U-Net architecture, training loop, and sampling procedures
-  including DDIM acceleration. Use when building a generative model for
-  image, audio, or molecular synthesis; implementing DDPM from a research
-  paper; adding a custom noise schedule or conditioning mechanism; replacing
-  a GAN-based generator with a diffusion alternative; or prototyping before
-  scaling with production frameworks like diffusers.
+  ノイズスケジューリング、U-Netアーキテクチャ、訓練ループ、およびDDIM加速を含む
+  サンプリング手順を備えた生成的拡散モデル（DDPMまたはスコアベース）を実装する。
+  画像、音声、または分子合成の生成モデルを構築する時、研究論文からDDPMを実装する時、
+  カスタムノイズスケジュールまたは条件付けメカニズムを追加する時、GANベースの
+  ジェネレータを拡散ベースの代替に置き換える時、またはdiffusersのようなプロダクション
+  フレームワークでスケーリングする前にプロトタイピングする時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,33 +25,33 @@ metadata:
 
 # 拡散ネットワークの実装
 
-Build a denoising diffusion probabilistic model (DDPM) or score-based generative model from scratch, including the forward noising process, U-Net denoiser, training objective, reverse sampling procedure, and accelerated inference via DDIM or DPM-Solver.
+順方向ノイジングプロセス、U-Netデノイザー、訓練目的関数、逆サンプリング手順、およびDDIMまたはDPM-Solverによる加速推論を含む、ノイズ除去拡散確率モデル（DDPM）またはスコアベース生成モデルをゼロから構築する。
 
 ## 使用タイミング
 
-- Building a generative model for image, audio, or molecular synthesis
-- Implementing DDPM or score-based diffusion from a research paper
-- Adding a custom noise schedule or conditioning mechanism to a diffusion pipeline
-- Replacing a GAN-based generator with a diffusion-based alternative
-- Prototyping a diffusion model before scaling to production with frameworks like diffusers
+- 画像、音声、または分子合成の生成モデルを構築する時
+- 研究論文からDDPMまたはスコアベース拡散を実装する時
+- 拡散パイプラインにカスタムノイズスケジュールまたは条件付けメカニズムを追加する時
+- GANベースのジェネレータを拡散ベースの代替に置き換える時
+- diffusersのようなフレームワークでプロダクションにスケーリングする前に拡散モデルをプロトタイピングする時
 
 ## 入力
 
-- **必須**: Training dataset (images, spectrograms, point clouds, or other continuous data)
-- **必須**: Target resolution and number of channels
-- **必須**: Compute budget (GPU type and count, training time limit)
-- **任意**: Noise schedule type (default: cosine)
-- **任意**: Number of diffusion timesteps T (default: 1000)
-- **任意**: Conditioning signal (class labels, text embeddings, or other guidance)
-- **任意**: Sampling acceleration method (default: DDIM with 50 steps)
+- **必須**: 訓練データセット（画像、スペクトログラム、点群、またはその他の連続データ）
+- **必須**: 目標解像度とチャネル数
+- **必須**: 計算予算（GPUの種類と数、訓練時間の制限）
+- **任意**: ノイズスケジュールの種類（デフォルト: cosine）
+- **任意**: 拡散タイムステップ数T（デフォルト: 1000）
+- **任意**: 条件付け信号（クラスラベル、テキスト埋め込み、またはその他のガイダンス）
+- **任意**: サンプリング加速方法（デフォルト: 50ステップのDDIM）
 
 ## 手順
 
-### ステップ1: Define the Forward Process (Noise Schedule)
+### ステップ1: 順方向プロセスの定義（ノイズスケジュール）
 
-Configure the variance schedule that controls how data is progressively noised.
+データが段階的にノイズ化される方法を制御する分散スケジュールを設定する。
 
-1. Define the beta schedule (linear, cosine, or learned):
+1. ベータスケジュール（線形、cosine、または学習型）を定義する:
 
 ```python
 import torch
@@ -72,7 +71,7 @@ def linear_beta_schedule(timesteps, beta_start=1e-4, beta_end=0.02):
     return torch.linspace(beta_start, beta_end, timesteps)
 ```
 
-2. Pre-compute the derived quantities used during training and sampling:
+2. 訓練とサンプリング中に使用される導出量を事前計算する:
 
 ```python
 class DiffusionSchedule:
@@ -88,7 +87,7 @@ class DiffusionSchedule:
         )
 ```
 
-3. Implement the forward noising function (q-sample):
+3. 順方向ノイジング関数（q-sample）を実装する:
 
 ```python
     def q_sample(self, x_0, t, noise=None):
@@ -100,7 +99,7 @@ class DiffusionSchedule:
         return sqrt_alpha * x_0 + sqrt_one_minus_alpha * noise
 ```
 
-4. Verify the schedule visually:
+4. スケジュールを視覚的に検証する:
 
 ```python
 schedule = DiffusionSchedule(cosine_beta_schedule(1000))
@@ -109,15 +108,15 @@ print(f"alpha_cumprod at t=500: {schedule.alphas_cumprod[500]:.4f}")   # ~0.5 (h
 print(f"alpha_cumprod at t=999: {schedule.alphas_cumprod[999]:.4f}")   # ~0.0 (pure noise)
 ```
 
-**期待結果:** `alphas_cumprod` decreases monotonically from near 1.0 to near 0.0. The cosine schedule should decrease more gradually than linear in the middle timesteps.
+**期待結果:** `alphas_cumprod`が1.0付近から0.0付近まで単調に減少すること。cosineスケジュールは中間のタイムステップで線形よりも緩やかに減少するべきである。
 
-**失敗時:** If `alphas_cumprod` does not reach near zero at t=T, the model will not learn to generate from pure noise. Increase T or adjust the schedule. If values go negative, check the clipping bounds on betas.
+**失敗時:** `alphas_cumprod`がt=Tで0付近に到達しない場合、モデルは純粋なノイズからの生成を学習しない。Tを増やすかスケジュールを調整する。値が負になる場合、ベータのクリッピング境界を確認する。
 
-### ステップ2: Design the Denoising Network Architecture
+### ステップ2: デノイジングネットワークアーキテクチャの設計
 
-Build a U-Net with time conditioning that predicts noise given a noisy input.
+ノイズ入力が与えられた時にノイズを予測する、時間条件付きのU-Netを構築する。
 
-1. Define the time embedding module:
+1. 時間埋め込みモジュールを定義する:
 
 ```python
 import torch.nn as nn
@@ -136,7 +135,7 @@ class SinusoidalTimeEmbedding(nn.Module):
         return torch.cat([emb.sin(), emb.cos()], dim=-1)
 ```
 
-2. Define a residual block with time conditioning:
+2. 時間条件付きの残差ブロックを定義する:
 
 ```python
 class ResBlock(nn.Module):
@@ -156,7 +155,7 @@ class ResBlock(nn.Module):
         return h + self.skip(x)
 ```
 
-3. Assemble the U-Net with encoder, bottleneck, and decoder:
+3. エンコーダ、ボトルネック、デコーダでU-Netを組み立てる:
 
 ```python
 class UNet(nn.Module):
@@ -174,7 +173,7 @@ class UNet(nn.Module):
         # (full implementation depends on resolution and channel config)
 ```
 
-4. Verify the architecture accepts inputs of the target resolution:
+4. アーキテクチャが目標解像度の入力を受け入れることを検証する:
 
 ```python
 model = UNet(in_channels=3, base_channels=64)
@@ -185,15 +184,15 @@ assert out.shape == x_test.shape, f"Output shape {out.shape} != input shape {x_t
 print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
 ```
 
-**期待結果:** The model outputs a tensor with the same shape as the input (predicting noise of matching dimensions). Parameter count should be proportional to resolution: approximately 30-60M for 64x64, 100-300M for 256x256.
+**期待結果:** モデルが入力と同じ形状のテンソルを出力すること（一致する次元のノイズを予測）。パラメータ数は解像度に比例するべき: 64x64で約30-60M、256x256で100-300M。
 
-**失敗時:** Shape mismatches usually indicate incorrect downsampling/upsampling ratios. Verify that each encoder stage halves spatial dimensions and each decoder stage doubles them. GroupNorm requires channels to be divisible by the group count.
+**失敗時:** 形状の不一致は通常、ダウンサンプリング/アップサンプリング比率の誤りを示す。各エンコーダステージが空間次元を半分にし、各デコーダステージが倍にしていることを検証する。GroupNormではチャネル数がグループ数で割り切れる必要がある。
 
-### ステップ3: Implement the Training Loop
+### ステップ3: 訓練ループの実装
 
-Train the denoiser to predict the noise added at each timestep.
+各タイムステップで追加されたノイズを予測するようにデノイザーを訓練する。
 
-1. Set up the training objective (simplified DDPM loss):
+1. 訓練目的関数を設定する（簡略化されたDDPM損失）:
 
 ```python
 def training_loss(model, schedule, x_0):
@@ -206,14 +205,14 @@ def training_loss(model, schedule, x_0):
     return loss
 ```
 
-2. Configure the optimizer and learning rate schedule:
+2. オプティマイザと学習率スケジュールを設定する:
 
 ```python
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=0.01)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100000)
 ```
 
-3. Run the training loop with logging:
+3. ロギング付きの訓練ループを実行する:
 
 ```python
 from torch.utils.data import DataLoader
@@ -236,7 +235,7 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch}: loss={avg_loss:.4f}, lr={scheduler.get_last_lr()[0]:.6f}")
 ```
 
-4. Save checkpoints periodically:
+4. チェックポイントを定期的に保存する:
 
 ```python
     if (epoch + 1) % 10 == 0:
@@ -248,15 +247,15 @@ for epoch in range(num_epochs):
         }, f"checkpoint_epoch_{epoch+1}.pt")
 ```
 
-**期待結果:** Loss decreases steadily over training. For image data normalized to [-1, 1], initial loss should be near 1.0 (predicting random noise). After convergence, loss should be in the range 0.01-0.10 depending on data complexity.
+**期待結果:** 訓練全体を通じて損失が着実に減少すること。[-1, 1]に正規化された画像データの場合、初期損失は1.0付近（ランダムノイズの予測）であるべきである。収束後、損失はデータの複雑さに応じて0.01-0.10の範囲であるべきである。
 
-**失敗時:** If loss plateaus early (> 0.5), check: (a) data normalization (must be [-1, 1] or [0, 1] with matching final activation), (b) learning rate (try 3e-4 or 5e-5), (c) gradient clipping (1.0 is standard). If loss is NaN, reduce learning rate and check for division by zero in the schedule.
+**失敗時:** 損失が早期に停滞する場合（> 0.5）、以下を確認する: (a) データの正規化（[-1, 1]または[0, 1]で最終活性化と一致する必要がある）、(b) 学習率（3e-4または5e-5を試す）、(c) 勾配クリッピング（1.0が標準）。損失がNaNの場合、学習率を下げ、スケジュール内のゼロ除算を確認する。
 
-### ステップ4: Implement Sampling (Reverse Process)
+### ステップ4: サンプリングの実装（逆プロセス）
 
-Generate new samples by iteratively denoising from pure Gaussian noise.
+純粋なガウスノイズから反復的にデノイジングして新しいサンプルを生成する。
 
-1. Implement the standard DDPM sampling loop:
+1. 標準DDPMサンプリングループを実装する:
 
 ```python
 @torch.no_grad()
@@ -287,22 +286,22 @@ def ddpm_sample(model, schedule, shape, device):
     return x
 ```
 
-2. Generate and visualize samples:
+2. サンプルを生成して可視化する:
 
 ```python
 samples = ddpm_sample(model, schedule, shape=(16, 3, 64, 64), device=device)
 samples = (samples.clamp(-1, 1) + 1) / 2  # rescale to [0, 1]
 ```
 
-**期待結果:** Generated samples show recognizable structure (not pure noise or uniform color). At 64x64 resolution with 100K+ training steps, outputs should visually resemble the training distribution.
+**期待結果:** 生成されたサンプルが認識可能な構造を示すこと（純粋なノイズや均一な色ではない）。100K以上の訓練ステップによる64x64解像度では、出力が訓練分布に視覚的に似ているべきである。
 
-**失敗時:** If samples are blurry, train longer or increase model capacity. If samples are noisy, the reverse process may have a bug -- verify that the schedule indexing matches training. If all samples look identical, check for mode collapse (try different random seeds).
+**失敗時:** サンプルがぼやけている場合、より長く訓練するかモデル容量を増やす。サンプルがノイズっぽい場合、逆プロセスにバグがある可能性がある — スケジュールのインデックスが訓練と一致していることを検証する。すべてのサンプルが同一に見える場合、モード崩壊を確認する（異なるランダムシードを試す）。
 
-### ステップ5: Add Sampling Acceleration
+### ステップ5: サンプリング加速の追加
 
-Reduce the number of sampling steps using DDIM or DPM-Solver.
+DDIMまたはDPM-Solverを使用してサンプリングステップ数を減らす。
 
-1. Implement DDIM sampling (deterministic, fewer steps):
+1. DDIMサンプリングを実装する（決定論的、ステップ数削減）:
 
 ```python
 @torch.no_grad()
@@ -334,7 +333,7 @@ def ddim_sample(model, schedule, shape, device, num_steps=50, eta=0.0):
     return x
 ```
 
-2. Compare sample quality across step counts:
+2. ステップ数間でサンプル品質を比較する:
 
 ```python
 for n_steps in [10, 25, 50, 100, 250]:
@@ -343,7 +342,7 @@ for n_steps in [10, 25, 50, 100, 250]:
     # Save grid for visual comparison
 ```
 
-3. Benchmark sampling speed:
+3. サンプリング速度をベンチマークする:
 
 ```python
 import time
@@ -355,15 +354,15 @@ for method, n_steps in [("DDPM", 1000), ("DDIM-50", 50), ("DDIM-25", 25)]:
     print(f"{method}: {elapsed:.2f}s per sample")
 ```
 
-**期待結果:** DDIM with 50 steps produces samples visually comparable to DDPM with 1000 steps at 20x speed improvement. Quality degrades gracefully down to approximately 20-25 steps.
+**期待結果:** 50ステップのDDIMが1000ステップのDDPMと視覚的に同等のサンプルを20倍の速度改善で生成すること。品質は約20-25ステップまで緩やかに劣化する。
 
-**失敗時:** If DDIM samples are worse than DDPM at the same step count, verify the alpha indexing. DDIM uses `alphas_cumprod` directly, not `alphas`. If samples at low step counts are very noisy, try eta=0.0 (fully deterministic) first.
+**失敗時:** DDIMサンプルが同じステップ数のDDPMより悪い場合、アルファのインデックスを検証する。DDIMは`alphas`ではなく`alphas_cumprod`を直接使用する。低ステップ数でサンプルが非常にノイズっぽい場合、まずeta=0.0（完全に決定論的）を試す。
 
-### ステップ6: Evaluate Sample Quality
+### ステップ6: サンプル品質の評価
 
-Quantify generation quality using standard metrics.
+標準的なメトリクスを使用して生成品質を定量化する。
 
-1. Compute FID (Frechet Inception Distance):
+1. FID（Frechet Inception Distance）を計算する:
 
 ```python
 from torchmetrics.image.fid import FrechetInceptionDistance
@@ -386,7 +385,7 @@ fid_score = fid_metric.compute()
 print(f"FID: {fid_score:.2f}")
 ```
 
-2. Assess sample diversity (check for mode collapse):
+2. サンプルの多様性を評価する（モード崩壊の確認）:
 
 ```python
 # Compute pairwise LPIPS distances among generated samples
@@ -403,7 +402,7 @@ for i in range(n_pairs):
 print(f"Mean pairwise LPIPS: {np.mean(diversity_scores):.4f} (higher = more diverse)")
 ```
 
-3. Log results:
+3. 結果をログする:
 
 ```python
 results = {
@@ -416,33 +415,33 @@ results = {
 print("Evaluation results:", results)
 ```
 
-**期待結果:** FID below 50 for a well-trained model on standard benchmarks (CIFAR-10, CelebA). LPIPS diversity above 0.4 indicates no mode collapse. State-of-the-art models achieve FID 2-10 on CIFAR-10.
+**期待結果:** 標準ベンチマーク（CIFAR-10、CelebA）で十分に訓練されたモデルのFIDが50未満。LPIPS多様性が0.4以上であればモード崩壊なしを示す。最先端のモデルはCIFAR-10でFID 2-10を達成する。
 
-**失敗時:** High FID (>100) indicates training issues or insufficient epochs. Low diversity (LPIPS < 0.2) suggests mode collapse -- increase model capacity, check data augmentation, or train longer. Compute FID on at least 10K samples for stable estimates.
+**失敗時:** 高いFID（>100）は訓練の問題またはエポック不足を示す。低い多様性（LPIPS < 0.2）はモード崩壊を示唆する — モデル容量を増やす、データ拡張を確認する、またはより長く訓練する。安定したFID推定のために少なくとも10Kサンプルで計算する。
 
 ## バリデーション
 
-- [ ] Forward process produces pure noise at t=T (visual check and numeric: mean near 0, std near 1)
-- [ ] U-Net output shape matches input shape for all target resolutions
-- [ ] Training loss decreases monotonically over the first 1000 steps
-- [ ] DDPM sampling produces recognizable outputs after sufficient training
-- [ ] DDIM with 50 steps produces quality comparable to DDPM with 1000 steps
-- [ ] FID score is below 50 on the target dataset (adjust threshold for domain)
-- [ ] Sample diversity (LPIPS) confirms no mode collapse
-- [ ] Checkpoints are saved and loadable without errors
+- [ ] 順方向プロセスがt=Tで純粋なノイズを生成する（視覚的確認と数値: 平均が0付近、標準偏差が1付近）
+- [ ] U-Netの出力形状がすべての目標解像度で入力形状と一致する
+- [ ] 訓練損失が最初の1000ステップで単調に減少する
+- [ ] DDPMサンプリングが十分な訓練後に認識可能な出力を生成する
+- [ ] 50ステップのDDIMが1000ステップのDDPMと同等の品質を生成する
+- [ ] 目標データセットでFIDスコアが50未満（ドメインに応じて閾値を調整）
+- [ ] サンプルの多様性（LPIPS）がモード崩壊なしを確認する
+- [ ] チェックポイントが保存されエラーなしで読み込み可能
 
 ## よくある落とし穴
 
-- **Wrong data normalization**: DDPM assumes data in [-1, 1]. If your images are in [0, 255], the loss will be enormous and training will diverge. Normalize before training and denormalize after sampling.
-- **Schedule indexing off by one**: The forward process uses `alphas_cumprod[t]` for the noised sample at step t. Off-by-one errors in sampling (using t+1 or t-1) produce visibly degraded samples.
-- **Forgetting gradient clipping**: Without `clip_grad_norm_(1.0)`, training is unstable for large models. This is especially critical in the early epochs.
-- **Too few sampling steps for DDIM**: Below 20 steps, DDIM quality degrades rapidly. Use at least 25 steps for acceptable results; 50 steps for near-DDPM quality.
-- **Evaluating FID on too few samples**: FID estimates are biased with small sample sizes. Use at least 10,000 generated images and 10,000 real images for stable FID computation.
-- **Ignoring EMA**: Exponential moving average of model weights significantly improves sample quality. Use a decay rate of 0.9999 and sample from the EMA model, not the training model.
+- **データ正規化の誤り**: DDPMは[-1, 1]のデータを前提とする。画像が[0, 255]の場合、損失が巨大になり訓練が発散する。訓練前に正規化し、サンプリング後に逆正規化する。
+- **スケジュールインデックスのオフバイワン**: 順方向プロセスはステップtでのノイズ化サンプルに`alphas_cumprod[t]`を使用する。サンプリングでのオフバイワンエラー（t+1またはt-1の使用）は視覚的に劣化したサンプルを生成する。
+- **勾配クリッピングの忘却**: `clip_grad_norm_(1.0)`なしでは、大きなモデルの訓練が不安定になる。初期エポックでは特に重要。
+- **DDIMのステップ数が少なすぎる**: 20ステップ未満ではDDIMの品質が急速に劣化する。許容可能な結果には少なくとも25ステップ、DDPMに近い品質には50ステップを使用する。
+- **少なすぎるサンプルでのFID評価**: FID推定は小さなサンプルサイズではバイアスがかかる。安定したFID計算には少なくとも10,000の生成画像と10,000の実画像を使用する。
+- **EMAの無視**: モデル重みの指数移動平均はサンプル品質を大幅に改善する。減衰率0.9999を使用し、訓練モデルではなくEMAモデルからサンプリングする。
 
 ## 関連スキル
 
-- `analyze-diffusion-dynamics` - mathematical foundations of the diffusion SDE that DDPM discretizes
-- `fit-drift-diffusion-model` - a different application of diffusion processes to cognitive modeling
-- `setup-gpu-training` - configuring GPU environments for diffusion model training
-- `containerize-application` - packaging diffusion inference pipelines in Docker
+- `analyze-diffusion-dynamics` - DDPMが離散化する拡散SDEの数学的基礎
+- `fit-drift-diffusion-model` - 認知モデリングへの拡散プロセスの異なる応用
+- `setup-gpu-training` - 拡散モデル訓練のためのGPU環境の設定
+- `containerize-application` - 拡散推論パイプラインのDockerパッケージング

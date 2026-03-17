@@ -1,12 +1,12 @@
 ---
 name: label-training-data
 description: >
-  Set up systematic data labeling workflows using Label Studio or similar tools. Implement
-  quality controls, measure inter-annotator agreement, manage labeler teams, and integrate
-  labeled data into ML training pipelines. Use when starting a supervised ML project that
-  requires labeled training data, when model performance is limited by insufficient labeled
-  examples, when labeling text, images, audio, or video, or when implementing active learning
-  to prioritize the most valuable examples.
+  Label Studioまたは同様のツールを使用して体系的なデータラベリングワークフローを設定する。
+  品質管理を実装し、アノテーター間一致度を測定し、ラベラーチームを管理し、ラベル付き
+  データをML訓練パイプラインに統合する。ラベル付き訓練データを必要とする教師あり
+  MLプロジェクトを開始する時、モデル性能がラベル付き例の不足により制限されている時、
+  テキスト・画像・音声・動画のラベリングを行う時、または能動学習を実装して最も
+  価値のある例を優先する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -23,39 +23,39 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 学習データのラベリング
+# 訓練データのラベリング
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完全な設定ファイルとテンプレートについては[拡張例](references/EXAMPLES.md)を参照。
 
-Systematically label data for supervised ML with quality controls and efficient workflows.
+品質管理と効率的なワークフローで教師ありMLのためにデータを体系的にラベリングする。
 
 ## 使用タイミング
 
-- Starting supervised ML project that requires labeled training data
-- Current model performance limited by insufficient labeled examples
-- Need to label text, images, audio, or video data
-- Want to measure and improve annotation quality
-- Managing team of annotators with different expertise levels
-- Implementing active learning to prioritize valuable examples
-- Need to track labeling progress and costs
-- Ensuring consistent labels across multiple annotators
+- ラベル付き訓練データを必要とする教師ありMLプロジェクトを開始する時
+- 現在のモデル性能がラベル付き例の不足により制限されている時
+- テキスト、画像、音声、動画データのラベリングが必要な時
+- アノテーション品質を測定・改善したい時
+- 異なる専門レベルのアノテーターチームを管理する時
+- 能動学習を実装して価値の高い例を優先したい時
+- ラベリングの進捗とコストを追跡する必要がある時
+- 複数のアノテーター間でラベルの一貫性を確保する時
 
 ## 入力
 
-- **必須**: Unlabeled dataset (images, text, audio, video)
-- **必須**: Label schema (classes, attributes, or annotation types)
-- **必須**: Labeling guidelines document
-- **任意**: Pre-existing labels (for quality comparison)
-- **任意**: Model predictions for pre-annotation
-- **任意**: Budget and timeline constraints
-- **任意**: Domain expert availability for difficult examples
+- **必須**: ラベルなしデータセット（画像、テキスト、音声、動画）
+- **必須**: ラベルスキーマ（クラス、属性、またはアノテーションタイプ）
+- **必須**: ラベリングガイドライン文書
+- **任意**: 既存のラベル（品質比較用）
+- **任意**: 事前アノテーション用のモデル予測
+- **任意**: 予算とタイムラインの制約
+- **任意**: 困難な例に対するドメイン専門家の利用可能性
 
 ## 手順
 
-### ステップ1: Install and Configure Label Studio
+### ステップ1: Label Studioのインストールと設定
 
-Set up Label Studio as the labeling platform.
+Label Studioをラベリングプラットフォームとして設定する。
 
 ```bash
 # Install Label Studio
@@ -75,9 +75,9 @@ label-studio init my_project
 label-studio start my_project --port 8080
 ```
 
-Access at `http://localhost:8080` (default credentials: create on first visit).
+`http://localhost:8080`でアクセス（デフォルト認証情報: 初回アクセス時に作成）。
 
-For production deployment with Docker:
+プロダクションデプロイメントにはDockerを使用:
 
 ```bash
 # docker-compose.yml
@@ -95,13 +95,13 @@ services:
 docker-compose up -d
 ```
 
-**期待結果:** Label Studio running and accessible, PostgreSQL database initialized for production use.
+**期待結果:** Label Studioが起動しアクセス可能であること。PostgreSQLデータベースがプロダクション使用のために初期化されていること。
 
-**失敗時:** If port 8080 already in use, change port in config, if Docker fails check Docker daemon is running, ensure sufficient disk space for data volumes, check firewall allows port 8080.
+**失敗時:** ポート8080が既に使用中の場合、設定でポートを変更する。Dockerが失敗する場合、Dockerデーモンが起動しているか確認する。データボリュームに十分なディスク容量があることを確認する。ファイアウォールがポート8080を許可していることを確認する。
 
-### ステップ2: Design Labeling Interface and Schema
+### ステップ2: ラベリングインターフェースとスキーマの設計
 
-Create labeling configuration for your task type.
+タスクタイプに応じたラベリング設定を作成する。
 
 ```python
 # labeling-project/config/labeling_config.py
@@ -115,13 +115,13 @@ TEXT_CLASSIFICATION = """
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Labeling interface configured with appropriate controls for task type, data imported successfully, interface accessible to annotators.
+**期待結果:** タスクタイプに適切なコントロールでラベリングインターフェースが設定され、データが正常にインポートされ、アノテーターがインターフェースにアクセスできること。
 
-**失敗時:** Validate XML config with Label Studio's config validator, check data file format (JSON or CSV), ensure image/audio URLs are accessible if using external storage, verify API key has correct permissions.
+**失敗時:** Label Studioの設定バリデーターでXML設定を検証する。データファイル形式（JSONまたはCSV）を確認する。外部ストレージを使用している場合、画像/音声URLがアクセス可能であることを確認する。APIキーが正しい権限を持っていることを検証する。
 
-### ステップ3: Prepare Data and Implement Sampling Strategy
+### ステップ3: データの準備とサンプリング戦略の実装
 
-Format data for import and prioritize examples for labeling.
+インポート用にデータをフォーマットし、ラベリングの例に優先順位を付ける。
 
 ```python
 # labeling-project/prepare_data.py
@@ -135,13 +135,13 @@ import numpy as np
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Data formatted correctly for Label Studio import, sampling strategy prioritizes informative examples, tasks include metadata for tracking.
+**期待結果:** Label Studioインポート用にデータが正しくフォーマットされ、サンプリング戦略が情報量の多い例を優先し、タスクに追跡用のメタデータが含まれること。
 
-**失敗時:** Verify JSON format with `jq` or Python json.load(), check that URLs are accessible if using remote images, ensure no special characters break JSON encoding, validate column names match config.
+**失敗時:** `jq`またはPythonのjson.load()でJSON形式を検証する。リモート画像を使用している場合、URLがアクセス可能であることを確認する。特殊文字がJSONエンコーディングを壊していないことを確認する。カラム名が設定と一致していることを検証する。
 
-### ステップ4: Implement Quality Control and IAA Measurement
+### ステップ4: 品質管理とIAA測定の実装
 
-Set up processes to measure and improve annotation quality.
+アノテーション品質を測定・改善するプロセスを設定する。
 
 ```python
 # labeling-project/quality_control.py
@@ -155,13 +155,13 @@ logging.basicConfig(level=logging.INFO)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Inter-annotator agreement measured (Cohen's Kappa > 0.6 is moderate, >0.8 is good), difficult tasks identified for review, annotator performance tracked.
+**期待結果:** アノテーター間一致度が測定されること（Cohenのκ > 0.6は中程度、> 0.8は良好）。困難なタスクがレビュー用に特定されること。アノテーターのパフォーマンスが追跡されること。
 
-**失敗時:** If Kappa very low (<0.4), review labeling guidelines for clarity, retrain annotators, simplify label schema, check for ambiguous examples, consider using expert annotators for gold standard.
+**失敗時:** κが非常に低い場合（< 0.4）、ラベリングガイドラインの明確さを見直す。アノテーターを再訓練する。ラベルスキーマを簡素化する。曖昧な例を確認する。ゴールドスタンダードに専門家アノテーターの使用を検討する。
 
-### ステップ5: Export and Integrate Labeled Data
+### ステップ5: ラベル付きデータのエクスポートと統合
 
-Export labels and prepare for ML training.
+ラベルをエクスポートしML訓練用に準備する。
 
 ```python
 # labeling-project/export_labels.py
@@ -175,13 +175,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Annotations exported in training-ready format, label distribution balanced or documented, data quality validated before training.
+**期待結果:** アノテーションが訓練可能な形式でエクスポートされること。ラベル分布がバランスしているか文書化されていること。訓練前にデータ品質が検証されること。
 
-**失敗時:** Verify API key permissions, check export format compatibility with your ML framework, handle missing annotations gracefully, validate JSON structure matches expected format.
+**失敗時:** APIキーの権限を検証する。エクスポート形式のMLフレームワークとの互換性を確認する。欠落したアノテーションを適切に処理する。JSON構造が期待される形式と一致していることを検証する。
 
-### ステップ6: Set Up Continuous Labeling Pipeline
+### ステップ6: 継続的ラベリングパイプラインの設定
 
-Automate labeling workflow with active learning integration.
+能動学習統合を含むラベリングワークフローを自動化する。
 
 ```python
 # labeling-project/active_learning_pipeline.py
@@ -195,34 +195,34 @@ import pandas as pd
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Active learning selects informative examples automatically, labeling batches prepared weekly, model retrained when sufficient new labels available.
+**期待結果:** 能動学習が情報量の多い例を自動的に選択すること。ラベリングバッチが毎週準備されること。十分な新しいラベルが利用可能になった時にモデルが再訓練されること。
 
-**失敗時:** If uncertainty sampling doesn't improve model, try diversity sampling, if annotators can't keep up reduce batch size, monitor labeling queue length, implement backpressure if queue grows too large.
+**失敗時:** 不確実性サンプリングがモデルを改善しない場合、多様性サンプリングを試す。アノテーターが追いつけない場合、バッチサイズを減らす。ラベリングキューの長さを監視する。キューが大きくなりすぎた場合、バックプレッシャーを実装する。
 
 ## バリデーション
 
-- [ ] Label Studio accessible and responsive
-- [ ] Labeling interface intuitive (test with sample annotator)
-- [ ] Data import successful with correct format
-- [ ] Inter-annotator agreement (Cohen's Kappa) > 0.6
-- [ ] Quality control identifies problematic tasks
-- [ ] Labels export in training-ready format
-- [ ] Label distribution matches expected (or intentionally imbalanced)
-- [ ] Active learning pipeline runs without manual intervention
-- [ ] Annotation throughput meets project timeline
+- [ ] Label Studioがアクセス可能で応答性がある
+- [ ] ラベリングインターフェースが直感的である（サンプルアノテーターでテスト）
+- [ ] データインポートが正しい形式で成功した
+- [ ] アノテーター間一致度（Cohenのκ）> 0.6
+- [ ] 品質管理が問題のあるタスクを特定する
+- [ ] ラベルが訓練可能な形式でエクスポートされる
+- [ ] ラベル分布が期待通り（または意図的に不均衡）
+- [ ] 能動学習パイプラインが手動介入なしで実行される
+- [ ] アノテーションのスループットがプロジェクトタイムラインを満たす
 
 ## よくある落とし穴
 
-- **Unclear guidelines**: Ambiguous instructions cause inconsistent labels; invest in detailed guidelines with examples
-- **Insufficient overlap**: Can't measure IAA without multiple annotators per task; use 10-20% overlap
-- **Ignoring difficult cases**: Edge cases often skipped but critical for model robustness; flag for expert review
-- **Batch effects**: Annotator fatigue or learning causes temporal inconsistency; randomize task order
-- **No quality feedback**: Annotators don't improve without feedback; provide regular accuracy reports
-- **Wrong sampling strategy**: Random sampling wastes budget on easy examples; use uncertainty or diversity sampling
-- **Labeling in isolation**: Domain experts needed for complex tasks; pair novices with experts initially
-- **Not tracking costs**: Labeling expensive; monitor time per task and total budget consumption
+- **不明確なガイドライン**: 曖昧な指示は一貫性のないラベルを引き起こす; 例を含む詳細なガイドラインに投資する
+- **不十分なオーバーラップ**: タスクごとに複数のアノテーターがいなければIAAを測定できない; 10-20%のオーバーラップを使用する
+- **困難なケースの無視**: エッジケースはスキップされがちだがモデルの堅牢性に重要; 専門家レビュー用にフラグを立てる
+- **バッチ効果**: アノテーターの疲労や学習が時間的な不整合を引き起こす; タスク順序をランダム化する
+- **品質フィードバックの欠如**: フィードバックなしではアノテーターは改善しない; 定期的な精度レポートを提供する
+- **誤ったサンプリング戦略**: ランダムサンプリングは簡単な例に予算を浪費する; 不確実性または多様性サンプリングを使用する
+- **孤立したラベリング**: 複雑なタスクにはドメイン専門家が必要; 最初は初心者と専門家をペアにする
+- **コスト追跡の欠如**: ラベリングは高価; タスクあたりの時間と総予算消費を監視する
 
 ## 関連スキル
 
-- `version-ml-data` - Version control for labeled datasets
-- `track-ml-experiments` - Track model performance as labels added
+- `version-ml-data` - ラベル付きデータセットのバージョン管理
+- `track-ml-experiments` - ラベル追加に伴うモデル性能の追跡

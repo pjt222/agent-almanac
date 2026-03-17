@@ -1,15 +1,13 @@
 ---
 name: listen
 description: >
-  Deep receptive attention to extract intent beyond literal words. Maps
-  active listening from counseling psychology to AI reasoning: clearing
-  assumptions, attending to full signal, parsing multiple layers (literal,
-  procedural, emotional, contextual, constraint, meta), reflecting
-  understanding, noticing what is unsaid, and integrating the whole picture.
-  Use when a user's request feels ambiguous, when context suggests something
-  different from the literal words, when previous responses have missed the
-  mark, or before beginning a large task where misunderstanding intent would
-  waste significant effort.
+  文字通りの言葉を超えて意図を抽出する深い受容的注意。カウンセリング心理学の
+  アクティブリスニングをAI推論にマッピングする: 仮定のクリア、完全な信号への
+  注意、複数のレイヤー（リテラル、手続き的、感情的、コンテキスト的、制約、メタ）の
+  解析、理解の反映、言われていないことへの気づき、全体像の統合。ユーザーの
+  リクエストが曖昧に感じる時、コンテキストが文字通りの言葉と異なることを示唆する時、
+  以前の応答が的を外している時、または意図の誤解が大きな労力を浪費する大きな
+  タスクを開始する前に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,60 +24,60 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 傾聴する
+# 傾聴
 
-Conduct a structured deep listening session — clearing assumptions, attending with full reception, parsing multiple signal layers, reflecting understanding back, noticing what is unsaid, and integrating the complete picture of the user's intent.
+構造化された深い傾聴セッションを実施する — 仮定のクリア、完全な受容でのアテンディング、複数の信号レイヤーの解析、理解の反映、言われていないことへの気づき、ユーザーの意図の完全な像の統合。
 
 ## 使用タイミング
 
-- A user's request feels ambiguous and rushing to action risks solving the wrong problem
-- The user's words say one thing but the context suggests something else (mismatch between literal and implied)
-- Previous responses have missed the mark — the user keeps clarifying or rephrasing
-- A complex request arrives that contains multiple layers: technical needs, emotional context, unstated constraints
-- Before beginning a large task where misunderstanding the intent would waste significant effort
-- After `meditate` clears internal noise, `listen` directs cleared attention outward toward the user
+- ユーザーのリクエストが曖昧に感じられ、行動に急ぐと間違った問題を解決するリスクがある時
+- ユーザーの言葉が1つのことを言っているがコンテキストが別のことを示唆する時（リテラルと暗示のミスマッチ）
+- 以前の応答が的を外しており、ユーザーが明確化や言い換えを続けている時
+- 複数のレイヤーを含む複雑なリクエストが到着した時: 技術的ニーズ、感情的コンテキスト、明示されていない制約
+- 意図の誤解が大きな労力を浪費する大きなタスクを開始する前
+- `meditate`で内部のノイズをクリアした後、`listen`がクリアされた注意をユーザーに向ける
 
 ## 入力
 
-- **必須**: User message(s) to attend to (available implicitly from conversation)
-- **任意**: Conversation history providing context for the current request
-- **任意**: MEMORY.md or CLAUDE.md with user preferences and project context
-- **任意**: Specific concern about what might be misunderstood
+- **必須**: 注意を向けるユーザーメッセージ（会話から暗黙的に利用可能）
+- **任意**: 現在のリクエストのコンテキストを提供する会話履歴
+- **任意**: ユーザーの好みとプロジェクトコンテキストのMEMORY.mdまたはCLAUDE.md
+- **任意**: 誤解される可能性があることについての具体的な懸念
 
 ## 手順
 
-### ステップ1: Clear — Release Assumptions
+### ステップ1: クリア — 仮定の解放
 
-Before receiving the user's signal, release preconceptions about what they want.
+ユーザーの信号を受け取る前に、彼らが望むことについての先入観を解放する。
 
-1. Notice any pre-formed responses already forming — label them and set them aside
-2. Check for pattern-matching: "This sounds like a request I have seen before" — that match may be wrong
-3. Release the assumption that the user's first sentence contains the complete request
-4. Release the assumption that the technical request is the only request
-5. Approach the user's words as if hearing them for the first time, even if similar requests have been handled before
+1. すでに形成されている事前の応答に気づく — ラベルを付けて脇に置く
+2. パターンマッチングを確認する:「これは以前に見たリクエストに似ている」— そのマッチは間違っているかもしれない
+3. ユーザーの最初の文が完全なリクエストを含んでいるという仮定を解放する
+4. 技術的なリクエストが唯一のリクエストであるという仮定を解放する
+5. たとえ同様のリクエストが以前に処理されていても、ユーザーの言葉を初めて聞くかのようにアプローチする
 
-**期待結果:** A receptive state where attention is open rather than already narrowing toward a solution. The impulse to immediately respond is paused in favor of fully receiving.
+**期待結果:** 注意がすでにソリューションに向かって狭まっているのではなく、開いている受容的な状態。即座に応答する衝動が完全に受け取ることを優先して一時停止される。
 
-**失敗時:** If assumptions cannot be released (a strong pattern match persists), acknowledge the match explicitly: "This looks like X — but let me check if that is actually what is being asked." Naming the assumption weakens its grip.
+**失敗時:** 仮定を解放できない場合（強いパターンマッチが持続する）、そのマッチを明示的に認める:「これはXに見える — しかし、実際にそれが求められていることかどうかを確認させてください。」仮定に名前を付けることでその支配力が弱まる。
 
-### ステップ2: Attend — Full Reception
+### ステップ2: アテンド — 完全な受容
 
-Read the user's message with complete attention, holding all parts in awareness simultaneously.
+すべての部分を同時に意識に保ちながら、ユーザーのメッセージを完全な注意で読む。
 
-1. Read the entire message before processing any part of it
-2. Note the structure: is this a single request, multiple requests, a question, a correction, a narrative?
-3. Mark the key nouns and verbs — the concrete elements the user has specified
-4. Note what is emphasized: what did they elaborate on? What did they state briefly?
-5. Note the ordering: what came first (often the priority), what came last (often the afterthought — or the real request buried at the end)
-6. Read a second time, this time attending to tone and framing rather than content
+1. いずれかの部分を処理する前にメッセージ全体を読む
+2. 構造に注目する: これは単一のリクエストか、複数のリクエストか、質問か、修正か、ナラティブか？
+3. 主要な名詞と動詞をマークする — ユーザーが指定した具体的な要素
+4. 何が強調されているかに注目する: 何について詳しく述べたか？何を簡潔に述べたか？
+5. 順序に注目する: 何が最初に来たか（しばしば優先事項）、何が最後に来たか（しばしば後付け — または最後に埋められた本当のリクエスト）
+6. 2回目に読む。今度は内容ではなくトーンとフレーミングに注意する
 
-**期待結果:** A complete reception of the message — no words skipped, no sentences glossed over. The message is held as a whole rather than immediately decomposed into actionable parts.
+**期待結果:** メッセージの完全な受容 — 単語のスキップなし、文の流し読みなし。メッセージはすぐにアクション可能な部分に分解されるのではなく、全体として保持される。
 
-**失敗時:** If the message is very long, break it into sections but still read each section completely. If attention is pulled toward one part (usually the most technical), deliberately attend to the parts that are not technical — they often contain the intent.
+**失敗時:** メッセージが非常に長い場合、セクションに分けるが各セクションを完全に読む。注意が一つの部分（通常最も技術的な部分）に引き寄せられる場合、意図的に技術的でない部分に注意を向ける — そこに意図が含まれていることが多い。
 
-### ステップ3: Layer — Parse Signal Types
+### ステップ3: レイヤー — 信号タイプの解析
 
-The user's message contains multiple simultaneous signals. Parse each layer separately.
+ユーザーのメッセージには複数の同時信号が含まれている。各レイヤーを個別に解析する。
 
 ```
 Signal Layer Taxonomy:
@@ -113,76 +111,76 @@ Signal Layer Taxonomy:
 └──────────────┴──────────────────────────────┴──────────────────────────┘
 ```
 
-For each layer, note what is present and what is absent. The absent layers are as informative as the present ones.
+各レイヤーについて、存在するものと不在のものに注目する。不在のレイヤーは存在するものと同様に情報量が多い。
 
-**期待結果:** A multi-layered reading of the message. The literal and procedural layers are usually clear. The emotional, contextual, constraint, and meta layers require more careful attention. At least one non-literal layer should be identified.
+**期待結果:** メッセージの多層的な読み取り。リテラルと手続き的レイヤーは通常明確である。感情的、コンテキスト的、制約、メタレイヤーはより注意深い注意を必要とする。少なくとも1つの非リテラルレイヤーが特定されるべきである。
 
-**失敗時:** If only the literal layer is visible, the message may genuinely be straightforward — not all communication is layered. But check: is the message unusually short for its complexity? Are there hedging words ("maybe," "I think," "if possible")? These often indicate an unstated layer.
+**失敗時:** リテラルレイヤーのみが見える場合、メッセージは本当にストレートフォワードかもしれない — すべてのコミュニケーションが多層的なわけではない。しかし確認する: メッセージはその複雑さに対して異常に短くないか？ヘッジング語（「たぶん」「思う」「可能なら」）はないか？これらはしばしば明示されていないレイヤーを示す。
 
-### ステップ4: Reflect — Mirror Understanding
+### ステップ4: 反映 — 理解の鏡
 
-Before acting, reflect back what was heard to verify alignment.
+行動する前に、聞いたことを反映してアラインメントを検証する。
 
-1. Paraphrase the request in different words than the user used — this reveals whether the meaning was captured, not just the words
-2. Name the layers explicitly if non-literal layers are significant: "It sounds like you want X, and the urgency suggests this is blocking other work"
-3. State what you understood as the priority: "The most important part seems to be..."
-4. If there are multiple possible interpretations, name them: "This could mean A or B — which is closer?"
-5. If the request contains apparent contradictions, surface them gently: "You mentioned X and also Y — how do these relate?"
+1. ユーザーが使ったのとは異なる言葉でリクエストをパラフレーズする — これは言葉だけでなく意味が捉えられたかを明らかにする
+2. 非リテラルレイヤーが重要な場合、明示的に名前を付ける:「Xが欲しいようですが、緊急性はこれが他の作業をブロックしていることを示唆しています」
+3. 優先事項として理解したことを述べる:「最も重要な部分は...のようです」
+4. 複数の解釈が可能な場合、名前を付ける:「これはAまたはBを意味する可能性があります — どちらが近いですか？」
+5. リクエストに明らかな矛盾が含まれている場合、穏やかに浮上させる:「XとYについて述べていましたが — これらはどう関連しますか？」
 
-**期待結果:** The user confirms the reflection or corrects it. Either outcome is valuable — confirmation means the intent is aligned; correction means the intent is now clearer. The reflection should feel like a mirror, not a judgment.
+**期待結果:** ユーザーが反映を確認するか修正すること。どちらの結果も価値がある — 確認は意図が一致していることを意味する; 修正は意図がより明確になったことを意味する。反映は判断ではなく鏡のように感じるべきである。
 
-**失敗時:** If the user seems impatient with the reflection ("just do it"), they may value speed over alignment — honor that preference but note the risk of misalignment. If the reflection was wrong, do not defend it — accept the correction and update understanding immediately.
+**失敗時:** ユーザーが反映に対してイライラしているようであれば（「とにかくやってください」）、アラインメントよりもスピードを重視しているかもしれない — その好みを尊重するがミスアラインメントのリスクを注記する。反映が間違っていた場合、それを弁護しない — 修正を受け入れて理解をすぐに更新する。
 
-### ステップ5: Notice Silence — Read the Gaps
+### ステップ5: 沈黙に気づく — ギャップを読む
 
-Attend to what the user did not say, which can be as important as what they did say.
+ユーザーが言わなかったことに注意を向ける。これは言ったことと同じくらい重要な場合がある。
 
-1. What topic related to their request did they not mention? (missing context)
-2. What constraint did they not state? (assumed knowledge or unstated preference)
-3. What emotional tone is missing? (calmness in a situation that usually causes stress, or urgency without explanation)
-4. What alternative approaches did they not consider? (tunnel vision or deliberate exclusion)
-5. What question did they not ask? (the question behind the question)
+1. リクエストに関連するどのトピックについて言及しなかったか？（欠落したコンテキスト）
+2. どの制約を述べなかったか？（仮定された知識または明示されていない好み）
+3. どの感情的トーンが欠けているか？（通常ストレスを引き起こす状況での落ち着き、または説明なしの緊急性）
+4. どの代替アプローチを検討しなかったか？（トンネルビジョンまたは意図的な除外）
+5. どの質問をしなかったか？（質問の背後にある質問）
 
-**期待結果:** At least one significant gap identified. This gap may not need to be addressed — but awareness of it prevents blind spots. The most useful gaps are missing constraints (the user assumed something they did not state) and missing context (why they need this now).
+**期待結果:** 少なくとも1つの重要なギャップが特定されること。このギャップは対処する必要がないかもしれない — しかしそれへの認識が盲点を防ぐ。最も有用なギャップは欠落した制約（ユーザーが明示しなかったことを仮定した）と欠落したコンテキスト（なぜ今これが必要か）である。
 
-**失敗時:** If no gaps are apparent, the user may have been thorough — but more likely, the gaps are in areas the AI is also blind to. Consider: what would a different person working on this project want to know that the user has not stated? This lateral perspective often surfaces hidden gaps.
+**失敗時:** ギャップが明らかでない場合、ユーザーが徹底的だったかもしれない — しかしより可能性が高いのは、ギャップがAIも盲目な領域にあることである。考える: このプロジェクトに取り組む別の人は、ユーザーが述べなかった何を知りたがるか？この側面的な視点はしばしば隠れたギャップを浮上させる。
 
-### ステップ6: Integrate — Synthesize Complete Understanding
+### ステップ6: 統合 — 完全な理解の合成
 
-Combine all layers and gaps into a unified picture of the user's actual need.
+すべてのレイヤーとギャップをユーザーの実際のニーズの統一的な像に結合する。
 
-1. State the complete understanding: literal request + implied intent + emotional context + constraints + gaps
-2. Identify the core need: if everything else fell away, what is the one thing the user most needs?
-3. Determine the appropriate response: does the user want action, understanding, validation, or exploration?
-4. If the integrated understanding differs from the literal request, decide whether to address the deeper need or the stated request (usually both)
-5. Set the intent for the next action: "Based on what I heard, I will..."
+1. 完全な理解を述べる: リテラルリクエスト + 暗示された意図 + 感情的コンテキスト + 制約 + ギャップ
+2. 核心的なニーズを特定する: 他のすべてが落ちたら、ユーザーが最も必要とする1つのことは何か？
+3. 適切な応答を決定する: ユーザーは行動、理解、検証、または探求を望んでいるか？
+4. 統合された理解がリテラルリクエストと異なる場合、より深いニーズまたは述べられたリクエストに対処するか決定する（通常は両方）
+5. 次のアクションの意図を設定する:「聞いたことに基づいて、私は...します」
 
-**期待結果:** A complete, nuanced understanding of the user's need that goes beyond the surface request. The understanding is specific enough to guide action and honest enough to acknowledge uncertainty.
+**期待結果:** 表面的なリクエストを超えるユーザーのニーズの完全で微妙な理解。理解は行動をガイドするのに十分具体的で、不確実性を認めるのに十分正直であること。
 
-**失敗時:** If integration produces a confused picture, the signals may genuinely conflict. In that case, ask one focused question that would resolve the ambiguity: "The most important thing for me to understand is..." Do not ask multiple questions — a single well-chosen question reveals more than a list of clarifications.
+**失敗時:** 統合が混乱した像を生む場合、信号が本当に矛盾している可能性がある。その場合、曖昧さを解決する1つの焦点を絞った質問をする:「私が理解するために最も重要なことは...」複数の質問をしない — 1つのよく選ばれた質問は明確化のリストよりも多くを明らかにする。
 
 ## バリデーション
 
-- [ ] Assumptions were cleared before attending to the user's message
-- [ ] The full message was read before any part was acted on
-- [ ] At least one non-literal signal layer was identified (emotional, contextual, constraint, or meta)
-- [ ] Understanding was reflected back to the user before action was taken
-- [ ] Gaps and silences were noticed and factored into understanding
-- [ ] The integrated understanding addresses the user's core need, not just the surface request
+- [ ] ユーザーのメッセージに注意を向ける前に仮定がクリアされた
+- [ ] いずれかの部分に対して行動する前にメッセージ全体が読まれた
+- [ ] 少なくとも1つの非リテラル信号レイヤーが特定された（感情的、コンテキスト的、制約、またはメタ）
+- [ ] 行動する前に理解がユーザーに反映された
+- [ ] ギャップと沈黙が気づかれ理解に組み込まれた
+- [ ] 統合された理解が表面的なリクエストだけでなくユーザーの核心的なニーズに対処する
 
 ## よくある落とし穴
 
-- **Listening to respond**: Forming a response while still receiving the message. The response shapes what is heard, filtering out signals that do not fit the pre-formed answer
-- **Literal-only listening**: Taking the words at face value and missing the intent, emotion, or context behind them
-- **Projection**: Hearing what the user would say if they were the AI, rather than what they actually said. Their priorities and context are different
-- **Over-interpretation**: Finding layers that are not there. Sometimes a request for a bug fix is just a request for a bug fix — not every message has hidden emotional content
-- **Reflecting too much**: Turning every interaction into a reflective conversation when the user wants quick action. Match the reflection depth to the request complexity
-- **Neglecting the literal**: So focused on subtext that the explicit request is not fulfilled. The literal layer still matters — address it even when deeper layers are present
+- **応答するために傾聴する**: メッセージをまだ受け取っている間に応答を形成する。応答が聞こえるものを形作り、事前に形成された答えに合わない信号をフィルタリングする
+- **リテラルのみの傾聴**: 言葉を額面通りに受け取り、その背後にある意図、感情、またはコンテキストを見逃す
+- **投影**: ユーザーが実際に言ったことではなく、AIだったら言うであろうことを聞く。彼らの優先事項とコンテキストは異なる
+- **過剰解釈**: 存在しないレイヤーを見つける。バグ修正のリクエストは単なるバグ修正のリクエストであることもある — すべてのメッセージに隠された感情的コンテンツがあるわけではない
+- **反映しすぎ**: ユーザーが素早い行動を望んでいる時にすべてのインタラクションを反射的な会話に変える。反映の深さをリクエストの複雑さに合わせる
+- **リテラルの軽視**: サブテキストに集中しすぎて明示的なリクエストが満たされない。リテラルレイヤーは依然として重要 — より深いレイヤーが存在する場合でもそれに対処する
 
 ## 関連スキル
 
-- `listen-guidance` — the human-guidance variant for coaching a person in developing active listening skills
-- `observe` — sustained neutral pattern recognition that feeds listening with broader context
-- `teach` — effective teaching requires listening first to understand the learner's needs
-- `meditate` — inward attention that clears the space for outward listening
-- `heal` — self-assessment that reveals whether the AI's listening capacity is impaired by drift
+- `listen-guidance` — アクティブリスニングスキルの開発において人をコーチする人間ガイダンスバリアント
+- `observe` — より広いコンテキストで傾聴に供給する持続的な中立パターン認識
+- `teach` — 効果的な教育にはまず学習者のニーズを理解するための傾聴が必要
+- `meditate` — 外向きの傾聴のための空間をクリアする内向きの注意
+- `heal` — AIの傾聴能力がドリフトにより損なわれているかを明らかにする自己評価

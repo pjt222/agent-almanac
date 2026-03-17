@@ -1,13 +1,11 @@
 ---
 name: formulate-quantum-problem
 description: >
-  Formulate a quantum mechanics or quantum chemistry problem with proper
-  mathematical framework including Hilbert space, operators, boundary conditions,
-  and approximation method selection. Use when setting up a quantum mechanics
-  problem for analytic or numerical solution, formulating a quantum chemistry
-  calculation, translating a physical scenario into the Schrodinger or Dirac
-  formalism, or choosing between perturbation theory, variational methods,
-  DFT, and exact diagonalization.
+  ヒルベルト空間、演算子、境界条件、近似法の選択を含む適切な数学的枠組みで
+  量子力学または量子化学の問題を定式化する。量子力学の問題を解析的または数値的に
+  解くために設定する時、量子化学計算を定式化する時、物理的シナリオをシュレーディンガー
+  またはディラック形式に変換する時、または摂動論、変分法、DFT、厳密対角化の中から
+  選択する時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,34 +24,34 @@ metadata:
 
 # 量子問題の定式化
 
-Translate a physical system into a well-posed quantum mechanical problem by identifying the relevant degrees of freedom, constructing the Hamiltonian and state space, specifying boundary conditions, selecting an appropriate approximation method, and validating the formulation against known limits.
+関連する自由度を特定し、ハミルトニアンと状態空間を構築し、境界条件を指定し、適切な近似法を選択し、既知の極限に対して定式化を検証することで、物理系を適切に定式化された量子力学の問題に変換する。
 
 ## 使用タイミング
 
-- Setting up a quantum mechanics problem for analytic or numerical solution
-- Formulating a quantum chemistry calculation (molecular orbitals, electronic structure)
-- Translating a physical scenario into the Dirac or Schrodinger formalism
-- Choosing between perturbation theory, variational methods, DFT, or exact diagonalization
-- Preparing a theoretical model for comparison with experimental spectroscopic or scattering data
+- 量子力学の問題を解析的または数値的な解法のために設定する時
+- 量子化学計算（分子軌道、電子構造）を定式化する時
+- 物理的シナリオをディラックまたはシュレーディンガー形式に変換する時
+- 摂動論、変分法、DFT、または厳密対角化の中から選択する時
+- 実験的な分光データまたは散乱データとの比較のために理論モデルを準備する時
 
 ## 入力
 
-- **必須**: Description of the physical system (atom, molecule, solid, field, etc.)
-- **必須**: Observable(s) of interest (energy spectrum, transition rates, ground state properties)
-- **任意**: Experimental constraints or data to match (spectral lines, binding energies)
-- **任意**: Desired accuracy level or computational budget
-- **任意**: Preferred formalism (wave mechanics, matrix mechanics, second quantization, path integral)
+- **必須**: 物理系の説明（原子、分子、固体、場など）
+- **必須**: 関心のある観測量（エネルギースペクトル、遷移率、基底状態の性質）
+- **任意**: 一致させるべき実験的制約またはデータ（スペクトル線、束縛エネルギー）
+- **任意**: 望ましい精度レベルまたは計算予算
+- **任意**: 好みの形式（波動力学、行列力学、第二量子化、経路積分）
 
 ## 手順
 
-### ステップ1: Identify Physical System and Relevant Degrees of Freedom
+### ステップ1: 物理系と関連する自由度の特定
 
-Characterize the system completely before writing any equations:
+方程式を書く前に系を完全に特性化する:
 
-1. **Particle content**: List all particles (electrons, nuclei, photons, phonons) and their quantum numbers (spin, charge, mass).
-2. **Symmetries**: Identify spatial symmetries (spherical, cylindrical, translational, crystal group), internal symmetries (spin rotation, gauge), and discrete symmetries (parity, time reversal).
-3. **Energy scales**: Determine the relevant energy scales to decide which degrees of freedom are active and which can be frozen or treated adiabatically.
-4. **Degrees of freedom reduction**: Apply the Born-Oppenheimer approximation if nuclear and electronic timescales separate. Identify collective coordinates if many-body simplifications apply.
+1. **粒子内容**: すべての粒子（電子、原子核、光子、フォノン）とその量子数（スピン、電荷、質量）をリストアップする。
+2. **対称性**: 空間対称性（球、円筒、並進、結晶群）、内部対称性（スピン回転、ゲージ）、離散対称性（パリティ、時間反転）を特定する。
+3. **エネルギースケール**: 関連するエネルギースケールを決定し、どの自由度が活性でどれを凍結または断熱的に扱えるかを判断する。
+4. **自由度の縮約**: 原子核と電子のタイムスケールが分離する場合、ボルン-オッペンハイマー近似を適用する。多体簡約化が適用可能な場合、集団座標を特定する。
 
 ```markdown
 ## System Characterization
@@ -64,19 +62,19 @@ Characterize the system completely before writing any equations:
 - **Energy scale hierarchy**: [e.g., electronic >> vibrational >> rotational]
 ```
 
-**期待結果:** A complete inventory of particles, quantum numbers, symmetries, and a justified selection of active versus frozen degrees of freedom.
+**期待結果:** 粒子、量子数、対称性の完全な目録と、活性自由度と凍結自由度の根拠のある選択。
 
-**失敗時:** If the energy scale hierarchy is unclear, retain all degrees of freedom initially and flag the need for a scale analysis. Premature truncation leads to qualitatively wrong physics.
+**失敗時:** エネルギースケールの階層が不明な場合、最初にすべての自由度を保持し、スケール解析の必要性をフラグする。早期の切り捨ては定性的に誤った物理につながる。
 
-### ステップ2: Construct Hamiltonian and State Space
+### ステップ2: ハミルトニアンと状態空間の構築
 
-Build the mathematical framework from the degrees of freedom identified in Step 1:
+ステップ1で特定された自由度から数学的枠組みを構築する:
 
-1. **Hilbert space**: Define the state space. For finite-dimensional systems, specify the basis (e.g., spin-1/2 basis |up>, |down>). For infinite-dimensional systems, specify the function space (e.g., L2(R^3) for a single particle in 3D).
-2. **Kinetic terms**: Write the kinetic energy operator for each particle. In position representation, T = -hbar^2/(2m) nabla^2.
-3. **Potential terms**: Write all interaction potentials (Coulomb, harmonic, spin-orbit, external fields). Be explicit about functional form and coupling constants.
-4. **Composite Hamiltonian**: Assemble H = T + V, grouping terms by interaction type. For multi-particle systems, include exchange and correlation terms or note where they will enter via approximation.
-5. **Operator algebra**: Verify that the Hamiltonian is Hermitian. Identify constants of motion ([H, O] = 0) that can be used to block-diagonalize the problem.
+1. **ヒルベルト空間**: 状態空間を定義する。有限次元系では基底を指定する（例えばスピン1/2基底|up>、|down>）。無限次元系では関数空間を指定する（例えば3Dの単一粒子にL2(R^3)）。
+2. **運動項**: 各粒子の運動エネルギー演算子を書く。位置表示ではT = -hbar^2/(2m) nabla^2。
+3. **ポテンシャル項**: すべての相互作用ポテンシャル（クーロン、調和、スピン-軌道、外部場）を書く。関数形式と結合定数を明示する。
+4. **合成ハミルトニアン**: H = T + Vを組み立て、相互作用の種類ごとにグループ化する。多粒子系では交換項と相関項を含めるか、近似を通じてどこで導入されるかを注記する。
+5. **演算子代数**: ハミルトニアンがエルミートであることを検証する。問題をブロック対角化するために使用できる運動の定数（[H, O] = 0）を特定する。
 
 ```markdown
 ## Hamiltonian Structure
@@ -88,18 +86,18 @@ Build the mathematical framework from the degrees of freedom identified in Step 
 - **Symmetry-adapted basis**: [if block diagonalization is possible]
 ```
 
-**期待結果:** A complete, Hermitian Hamiltonian with all terms explicitly written, the Hilbert space defined, and constants of motion identified.
+**期待結果:** すべての項が明示的に記述された完全なエルミートハミルトニアン、定義されたヒルベルト空間、特定された運動の定数。
 
-**失敗時:** If the Hamiltonian is not manifestly Hermitian, check for missing conjugate terms or gauge-dependent phases. If the Hilbert space is ambiguous (e.g., for relativistic particles), specify the formalism explicitly and note the issue.
+**失敗時:** ハミルトニアンが明らかにエルミートでない場合、欠落した共役項やゲージ依存の位相を確認する。ヒルベルト空間が曖昧な場合（例えば相対論的粒子の場合）、形式を明示的に指定し問題点を注記する。
 
-### ステップ3: Specify Boundary and Initial Conditions
+### ステップ3: 境界条件と初期条件の指定
 
-Constrain the problem to have a unique solution:
+一意の解を持つように問題を制約する:
 
-1. **Boundary conditions**: For bound state problems, require normalizability (psi -> 0 at infinity). For scattering problems, specify incoming wave boundary conditions. For periodic systems, apply Bloch or Born-von Karman conditions.
-2. **Domain restrictions**: Specify the spatial domain. For a particle in a box, define the walls. For a hydrogen atom, define the radial and angular domains. For lattice models, define the lattice and its topology.
-3. **Initial state** (time-dependent problems): Define the state at t=0 as an expansion in the energy eigenbasis or as a wave packet with specified center and width.
-4. **Constraint equations**: For indistinguishable particles, enforce symmetrization (bosons) or antisymmetrization (fermions). For gauge theories, impose gauge-fixing conditions.
+1. **境界条件**: 束縛状態の問題では規格化可能性を要求する（無限遠でpsi -> 0）。散乱問題では入射波の境界条件を指定する。周期系ではブロッホ条件またはボルン-フォン・カルマン条件を適用する。
+2. **領域の制限**: 空間領域を指定する。箱の中の粒子では壁を定義する。水素原子では動径と角度の領域を定義する。格子モデルでは格子とそのトポロジーを定義する。
+3. **初期状態**（時間依存問題）: t=0での状態をエネルギー固有基底での展開として、または指定された中心と幅を持つ波束として定義する。
+4. **制約方程式**: 不可分粒子では対称化（ボソン）または反対称化（フェルミオン）を強制する。ゲージ理論ではゲージ固定条件を課す。
 
 ```markdown
 ## Boundary and Initial Conditions
@@ -110,37 +108,37 @@ Constrain the problem to have a unique solution:
 - **Initial state** (if time-dependent): [specification]
 ```
 
-**期待結果:** Boundary conditions that are physically motivated, mathematically consistent with the Hamiltonian's domain, and sufficient to determine a unique solution (or a well-defined scattering matrix).
+**期待結果:** 物理的に動機付けされ、ハミルトニアンの定義域と数学的に整合し、一意の解（または明確に定義された散乱行列）を決定するのに十分な境界条件。
 
-**失敗時:** If boundary conditions are over- or under-determined, check the self-adjointness of the Hamiltonian on the chosen domain. Non-self-adjoint Hamiltonians require careful treatment of deficiency indices.
+**失敗時:** 境界条件が過剰決定または不足決定の場合、選択された定義域上でのハミルトニアンの自己共役性を確認する。非自己共役なハミルトニアンでは不足指数の慎重な取り扱いが必要である。
 
-### ステップ4: Select Approximation Method
+### ステップ4: 近似法の選択
 
-Choose a solution strategy appropriate to the problem's structure:
+問題の構造に適した解法戦略を選択する:
 
-1. **Assess exact solvability**: Check if the problem reduces to a known exactly solvable model (harmonic oscillator, hydrogen atom, Ising model, etc.). If yes, use the exact solution as the primary result and perturbation theory for corrections.
+1. **厳密可解性の評価**: 問題が既知の厳密に解ける模型（調和振動子、水素原子、イジング模型など）に簡約されるか確認する。該当する場合、厳密解を主要な結果として使用し、補正に摂動論を用いる。
 
-2. **Perturbation theory** (weak coupling):
-   - Split H = H0 + lambda V where H0 is exactly solvable
-   - Verify that lambda V is small compared to the level spacing of H0
-   - Check for degeneracy; use degenerate perturbation theory if needed
-   - Suitable when: interaction is weak, few-body system, analytic results needed
+2. **摂動論**（弱結合）:
+   - H = H0 + lambda Vに分割する（H0は厳密に解ける）
+   - lambda VがH0のレベル間隔に比べて小さいことを検証する
+   - 縮退を確認する; 必要に応じて縮退摂動論を使用する
+   - 適する場合: 相互作用が弱い、少数体系、解析的結果が必要
 
-3. **Variational methods** (ground state focus):
-   - Choose a trial wave function with adjustable parameters
-   - Ensure the trial function satisfies boundary conditions and symmetry
-   - Suitable when: ground state energy is the primary target, many-body system
+3. **変分法**（基底状態に焦点）:
+   - 調整可能なパラメータを持つ試行波動関数を選択する
+   - 試行関数が境界条件と対称性を満たすことを確認する
+   - 適する場合: 基底状態エネルギーが主要な目標、多体系
 
-4. **Density Functional Theory** (many-electron systems):
-   - Choose the exchange-correlation functional (LDA, GGA, hybrid)
-   - Define the basis set (plane waves, Gaussian, numerical atomic orbitals)
-   - Suitable when: many-electron system, ground state density and energy needed
+4. **密度汎関数理論**（多電子系）:
+   - 交換相関汎関数を選択する（LDA、GGA、ハイブリッド）
+   - 基底セットを定義する（平面波、ガウス型、数値原子軌道）
+   - 適する場合: 多電子系、基底状態の密度とエネルギーが必要
 
-5. **Numerical exact methods** (small systems, benchmarking):
-   - Exact diagonalization for small Hilbert spaces
-   - Quantum Monte Carlo for ground state sampling
-   - DMRG for one-dimensional or quasi-one-dimensional systems
-   - Suitable when: high accuracy is needed and the system is small enough
+5. **数値的厳密法**（小さな系、ベンチマーク）:
+   - 小さなヒルベルト空間に対する厳密対角化
+   - 基底状態サンプリングのための量子モンテカルロ
+   - 1次元または擬1次元系に対するDMRG
+   - 適する場合: 高精度が必要で系が十分小さい
 
 ```markdown
 ## Approximation Method Selection
@@ -151,19 +149,19 @@ Choose a solution strategy appropriate to the problem's structure:
 - **Alternatives considered**: [and why they were rejected]
 ```
 
-**期待結果:** A justified choice of approximation method with a clear statement of expected accuracy and computational cost, plus documentation of alternatives considered.
+**期待結果:** 期待される精度と計算コストの明確な記述、および検討した代替案の文書化を伴う、根拠のある近似法の選択。
 
-**失敗時:** If no single method is clearly appropriate, formulate the problem for two methods and compare results. Disagreement between methods reveals the problem's difficulty and guides further refinement.
+**失敗時:** 単一の方法が明確に適切でない場合、2つの方法で問題を定式化し結果を比較する。方法間の不一致は問題の困難さを明らかにし、さらなる改良を導く。
 
-### ステップ5: Validate Formulation Against Known Limits
+### ステップ5: 既知の極限に対する定式化の検証
 
-Before solving, verify the formulation reproduces known physics:
+解く前に、定式化が既知の物理を再現することを検証する:
 
-1. **Classical limit**: Take hbar -> 0 (or large quantum numbers) and verify that the Hamiltonian reduces to the correct classical mechanics.
-2. **Non-interacting limit**: Set coupling constants to zero and verify the solution is a product of single-particle states.
-3. **Symmetry limits**: Verify that the formulation respects all identified symmetries. Check that the Hamiltonian transforms correctly under the symmetry group.
-4. **Dimensional analysis**: Verify that every term in the Hamiltonian has units of energy. Check that the characteristic length, energy, and time scales are physically reasonable.
-5. **Known exact results**: If the system has known exact solutions in special cases (e.g., hydrogen atom for Z=1, harmonic oscillator for quadratic potential), verify the formulation reproduces them.
+1. **古典極限**: hbar -> 0（または大きな量子数）を取り、ハミルトニアンが正しい古典力学に簡約されることを検証する。
+2. **非相互作用極限**: 結合定数をゼロに設定し、解が単一粒子状態の直積であることを検証する。
+3. **対称性の極限**: 定式化が特定されたすべての対称性を尊重していることを検証する。ハミルトニアンが対称群の下で正しく変換されることを確認する。
+4. **次元解析**: ハミルトニアンのすべての項がエネルギーの単位を持つことを検証する。特性長さ、エネルギー、時間スケールが物理的に妥当であることを確認する。
+5. **既知の厳密結果**: 系が特殊な場合に既知の厳密解を持つ場合（例えばZ=1の水素原子、二次ポテンシャルの調和振動子）、定式化がそれらを再現することを検証する。
 
 ```markdown
 ## Validation Checks
@@ -176,33 +174,33 @@ Before solving, verify the formulation reproduces known physics:
 | Known exact case | [reproduced result] | [Pass/Fail] |
 ```
 
-**期待結果:** All validation checks pass. The formulation is self-consistent and ready for solution.
+**期待結果:** すべての検証チェックが合格すること。定式化が自己整合的で解法の準備ができていること。
 
-**失敗時:** A failing validation check indicates an error in the Hamiltonian construction or boundary conditions. Trace the failure back to the specific term or condition and correct it before proceeding to solve.
+**失敗時:** 検証チェックの失敗は、ハミルトニアンの構築または境界条件の誤りを示す。特定の項または条件まで失敗を遡り、解法に進む前に修正する。
 
 ## バリデーション
 
-- [ ] All particles and quantum numbers are explicitly listed
-- [ ] The Hilbert space is defined with a clear basis
-- [ ] The Hamiltonian is Hermitian and all terms have correct units
-- [ ] Constants of motion are identified and used for simplification
-- [ ] Boundary conditions are physically motivated and mathematically sufficient
-- [ ] Particle statistics (bosonic/fermionic) are correctly enforced
-- [ ] Approximation method choice is justified with expected accuracy stated
-- [ ] Classical, non-interacting, and symmetry limits are checked
-- [ ] Known exact results are reproduced in special cases
-- [ ] The formulation is complete enough for another researcher to implement
+- [ ] すべての粒子と量子数が明示的にリストされた
+- [ ] 明確な基底を持つヒルベルト空間が定義された
+- [ ] ハミルトニアンがエルミートですべての項が正しい単位を持つ
+- [ ] 運動の定数が特定され簡約化に使用された
+- [ ] 境界条件が物理的に動機付けされ数学的に十分である
+- [ ] 粒子統計（ボソン的/フェルミオン的）が正しく強制された
+- [ ] 近似法の選択が期待精度の記述とともに根拠が示された
+- [ ] 古典極限、非相互作用極限、対称性の極限が確認された
+- [ ] 特殊な場合に既知の厳密結果が再現された
+- [ ] 定式化が他の研究者が実装できるほど完全である
 
 ## よくある落とし穴
 
-- **Omitting degrees of freedom prematurely**: Freezing a degree of freedom without checking the energy scale hierarchy can miss qualitatively important physics. Always justify every reduction with an energy scale argument.
-- **Non-Hermitian Hamiltonian**: Forgetting conjugate terms in spin-orbit coupling or complex potentials. Always verify H = H-dagger explicitly.
-- **Wrong boundary conditions for scattering**: Using bound-state boundary conditions (normalizability) for a scattering problem discards the continuous spectrum entirely. Match boundary conditions to the physical question.
-- **Ignoring degeneracy in perturbation theory**: Applying non-degenerate perturbation theory to a degenerate level produces divergent corrections. Always check for degeneracy before expanding.
-- **Over-reliance on a single approximation**: Different methods have complementary failure modes. Variational methods give upper bounds but can miss excited states. Perturbation theory diverges at strong coupling. Cross-validate when possible.
-- **Dimensional inconsistency**: Mixing natural units (hbar = 1) with SI units in the same expression. Adopt a consistent unit system at the start and state it explicitly.
+- **自由度の早期省略**: エネルギースケールの階層を確認せずに自由度を凍結すると、定性的に重要な物理を見逃す可能性がある。常にエネルギースケールの議論ですべての簡約を正当化する。
+- **非エルミートなハミルトニアン**: スピン-軌道結合や複素ポテンシャルでの共役項の忘却。常にH = H-daggerを明示的に検証する。
+- **散乱の境界条件の誤り**: 散乱問題に束縛状態の境界条件（規格化可能性）を使用すると、連続スペクトルが完全に失われる。物理的な問題に境界条件を一致させる。
+- **摂動論での縮退の無視**: 縮退レベルに非縮退摂動論を適用すると発散する補正が生じる。展開の前に常に縮退を確認する。
+- **単一の近似法への過度の依存**: 異なる方法は相補的な失敗モードを持つ。変分法は上界を与えるが励起状態を見逃す可能性がある。摂動論は強結合で発散する。可能な場合はクロスバリデーションを行う。
+- **次元の不整合**: 自然単位（hbar = 1）とSI単位を同じ表現で混在させること。最初に一貫した単位系を採用し明示的に述べる。
 
 ## 関連スキル
 
-- `derive-theoretical-result` -- derive analytic results from the formulated problem
-- `survey-theoretical-literature` -- find prior work on similar quantum systems
+- `derive-theoretical-result` -- 定式化された問題から解析的結果を導出する
+- `survey-theoretical-literature` -- 類似の量子系に関する先行研究を見つける
