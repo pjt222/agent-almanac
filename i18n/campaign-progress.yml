@@ -4,8 +4,9 @@
 campaign:
   name: full-skills-translation
   started: "2026-03-16"
-  target_translations: 1248
-  completed_translations: 20
+  completed: "2026-03-17"
+  target_translations: 1268
+  completed_translations: 1268
   locales: [de, zh-CN, ja, es]
   pilot_skills: [commit-changes, create-pull-request, create-r-package, meditate, security-audit-codebase]
 
@@ -17,9 +18,9 @@ waves:
     already_translated: 5
     new_skills: 63
     new_translations: 252
-    status: pending
-    started: null
-    completed: null
+    status: completed
+    started: "2026-03-17"
+    completed: "2026-03-17"
     notes: "Most-referenced domains. Establishes core terminology for all later waves."
 
   - wave: 2
@@ -29,9 +30,9 @@ waves:
     already_translated: 0
     new_skills: 53
     new_translations: 212
-    status: pending
-    started: null
-    completed: null
+    status: completed
+    started: "2026-03-17"
+    completed: "2026-03-17"
     notes: "Builds on git/general terminology from Wave 1."
 
   - wave: 3
@@ -41,9 +42,9 @@ waves:
     already_translated: 0
     new_skills: 32
     new_translations: 128
-    status: pending
-    started: null
-    completed: null
+    status: completed
+    started: "2026-03-17"
+    completed: "2026-03-17"
     notes: "Frontend and visualization domains."
 
   - wave: 4
@@ -53,10 +54,10 @@ waves:
     already_translated: 0
     new_skills: 41
     new_translations: 164
-    status: pending
-    started: null
-    completed: null
-    notes: "Technical scientific terminology. May need domain-specific glossary updates."
+    status: completed
+    started: "2026-03-17"
+    completed: "2026-03-17"
+    notes: "Technical scientific terminology."
 
   - wave: 5
     name: Esoteric & Meta-Cognitive
@@ -65,9 +66,9 @@ waves:
     already_translated: 1
     new_skills: 47
     new_translations: 188
-    status: pending
-    started: null
-    completed: null
+    status: completed
+    started: "2026-03-17"
+    completed: "2026-03-17"
     notes: "Prose-heavy, philosophical content. meditate already translated."
 
   - wave: 6
@@ -77,9 +78,9 @@ waves:
     already_translated: 0
     new_skills: 46
     new_translations: 184
-    status: pending
-    started: null
-    completed: null
+    status: completed
+    started: "2026-03-17"
+    completed: "2026-03-17"
     notes: "Diverse specialty domains with unique terminology per domain."
 
   - wave: 7
@@ -89,9 +90,9 @@ waves:
     already_translated: 0
     new_skills: 29
     new_translations: 116
-    status: pending
-    started: null
-    completed: null
+    status: completed
+    started: "2026-03-17"
+    completed: "2026-03-17"
     notes: "Remaining specialty domains. Campaign completion wave."
 
 quality_gates:
