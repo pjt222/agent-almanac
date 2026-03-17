@@ -792,6 +792,47 @@ glyph_escalation_arrow <- function(cx, cy, s, col, bright) {
   )
 }
 
+glyph_symlink_audit <- function(cx, cy, s, col, bright) {
+  # Bent arrow (symlink) with magnifying glass (audit)
+  # Arrow: right-angle bend from left to right-down
+  arrow_path <- data.frame(
+    x = c(cx - 16 * s, cx - 16 * s, cx + 4 * s),
+    y = c(cy + 14 * s, cy - 2 * s, cy - 2 * s))
+  arrow_head <- data.frame(
+    x = c(cx + 0 * s, cx + 8 * s, cx + 0 * s),
+    y = c(cy + 3 * s, cy - 2 * s, cy - 7 * s))
+  # Dashed second arrow (broken/missing symlink)
+  dash_segs <- data.frame(
+    x    = cx + c(-16, -10, -4) * s,
+    y    = rep(cy + 14 * s, 3),
+    xend = cx + c(-12, -6, 0) * s,
+    yend = rep(cy + 14 * s, 3))
+  # Magnifying glass (audit) — lower right
+  lens <- data.frame(x0 = cx + 10 * s, y0 = cy - 10 * s, r = 8 * s)
+  handle <- data.frame(
+    x = c(cx + 15 * s, cx + 20 * s),
+    y = c(cy - 15 * s, cy - 20 * s))
+  # Checkmark inside lens
+  check <- data.frame(
+    x = c(cx + 6 * s, cx + 9 * s, cx + 14 * s),
+    y = c(cy - 11 * s, cy - 14 * s, cy - 6 * s))
+  list(
+    ggplot2::geom_path(data = arrow_path, .aes(x, y),
+      color = col, linewidth = .lw(s, 2)),
+    ggplot2::geom_polygon(data = arrow_head, .aes(x, y),
+      fill = col, color = col, linewidth = .lw(s, 1)),
+    ggplot2::geom_segment(data = dash_segs,
+      .aes(x = x, y = y, xend = xend, yend = yend),
+      color = hex_with_alpha(col, 0.5), linewidth = .lw(s, 1.5)),
+    ggforce::geom_circle(data = lens, .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(bright, 0.08), color = bright, linewidth = .lw(s, 1.5)),
+    ggplot2::geom_path(data = handle, .aes(x, y),
+      color = bright, linewidth = .lw(s, 3)),
+    ggplot2::geom_path(data = check, .aes(x, y),
+      color = bright, linewidth = .lw(s, 2))
+  )
+}
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Blender (3)
 # ══════════════════════════════════════════════════════════════════════════════

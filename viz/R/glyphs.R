@@ -365,11 +365,12 @@ SKILL_GLYPHS <- list(
   "practice-viriditas"             = "glyph_viriditas_spiral",
   "consult-natural-history"        = "glyph_physica_book",
 
-  # ── maintenance (4) ─────────────────────────────────────────────
+  # ── maintenance (5) ─────────────────────────────────────────────
   "clean-codebase"                 = "glyph_broom_clean",
   "tidy-project-structure"         = "glyph_tidy_folders",
   "repair-broken-references"       = "glyph_repair_link",
   "escalate-issues"                = "glyph_escalation_arrow",
+  "audit-discovery-symlinks"       = "glyph_symlink_audit",
 
   # ── blender (3) ─────────────────────────────────────────────────
   "create-3d-scene"                = "glyph_3d_cube",
