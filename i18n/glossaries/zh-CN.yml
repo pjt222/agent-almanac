@@ -1,0 +1,74 @@
+# Simplified Chinese (zh-CN) Translation Glossary
+# Seeded from pilot translations (commit-changes, create-pull-request, create-r-package, meditate, security-audit-codebase)
+# Update after each wave to capture new terminology
+
+version: "1.0"
+locale: zh-CN
+last_updated: "2026-03-16"
+
+section_headings:
+  "When to Use": "适用场景"
+  "Inputs": "输入"
+  "Procedure": "步骤"
+  "Step": "第 N 步"
+  "Validation": "验证清单"
+  "Common Pitfalls": "常见问题"
+  "Related Skills": "相关技能"
+  "Examples": "示例"
+
+markers:
+  "Expected:": "预期结果："
+  "On failure:": "失败处理："
+  "Required": "必需"
+  "Optional": "可选"
+
+common_terms:
+  # Technical terms kept in English
+  "commit": "提交 (commit)"
+  "pull request": "Pull Request"
+  "branch": "分支 (branch)"
+  "merge": "合并 (merge)"
+  "rebase": "变基 (rebase)"
+  "push": "推送 (push)"
+  "deploy": "部署"
+  "staging": "暂存"
+  "repository": "仓库"
+  "pre-commit hook": "pre-commit 钩子"
+  "CI/CD": "CI/CD"
+  "API": "API"
+  "token": "令牌 (token)"
+  "debug": "调试"
+  "scaffold": "搭建脚手架"
+  "package": "包"
+  "skill": "技能"
+  "agent": "代理"
+  "team": "团队"
+  "workflow": "工作流"
+  "pipeline": "流水线"
+
+  # Translated terms
+  "codebase": "代码库"
+  "vulnerability": "漏洞"
+  "credentials": "凭证"
+  "secrets": "密钥"
+  "dependencies": "依赖"
+  "configuration": "配置"
+  "authentication": "认证"
+  "authorization": "授权"
+  "injection": "注入"
+  "audit": "审计"
+  "report": "报告"
+  "checklist": "检查清单"
+  "edge case": "边界情况"
+  "anchor": "锚点"
+  "distraction": "干扰"
+  "focus": "专注"
+  "pattern": "模式"
+  "observation": "观察"
+  "bias": "偏差"
+  "scope creep": "范围蔓延"
+  "file": "文件"
+  "directory": "目录"
+  "test": "测试"
+  "documentation": "文档"
+  "version control": "版本控制"

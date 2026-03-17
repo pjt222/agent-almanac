@@ -1,0 +1,74 @@
+# German (de) Translation Glossary
+# Seeded from pilot translations (commit-changes, create-pull-request, create-r-package, meditate, security-audit-codebase)
+# Update after each wave to capture new terminology
+
+version: "1.0"
+locale: de
+last_updated: "2026-03-16"
+
+section_headings:
+  "When to Use": "Wann verwenden"
+  "Inputs": "Eingaben"
+  "Procedure": "Vorgehensweise"
+  "Step": "Schritt"
+  "Validation": "Validierung"
+  "Common Pitfalls": "Haeufige Stolperfallen"
+  "Related Skills": "Verwandte Skills"
+  "Examples": "Beispiele"
+
+markers:
+  "Expected:": "Erwartet:"
+  "On failure:": "Bei Fehler:"
+  "Required": "Erforderlich"
+  "Optional": "Optional"
+
+common_terms:
+  # Technical terms kept in English
+  "commit": "Commit"
+  "pull request": "Pull Request"
+  "branch": "Branch"
+  "merge": "Merge"
+  "rebase": "Rebase"
+  "push": "Push"
+  "deploy": "Bereitstellen"
+  "staging": "Bereitstellen"
+  "repository": "Repository"
+  "pre-commit hook": "Pre-Commit-Hook"
+  "CI/CD": "CI/CD"
+  "API": "API"
+  "token": "Token"
+  "debug": "Debug"
+  "scaffold": "Geruest aufsetzen"
+  "package": "Paket"
+  "skill": "Skill"
+  "agent": "Agent"
+  "team": "Team"
+  "workflow": "Workflow"
+  "pipeline": "Pipeline"
+
+  # Translated terms
+  "codebase": "Codebasis"
+  "vulnerability": "Schwachstelle"
+  "credentials": "Zugangsdaten"
+  "secrets": "Geheimnisse"
+  "dependencies": "Abhaengigkeiten"
+  "configuration": "Konfiguration"
+  "authentication": "Authentifizierung"
+  "authorization": "Autorisierung"
+  "injection": "Injection"
+  "audit": "Audit"
+  "report": "Bericht"
+  "checklist": "Checkliste"
+  "edge case": "Grenzfall"
+  "anchor": "Anker"
+  "distraction": "Ablenkung"
+  "focus": "Fokus"
+  "pattern": "Muster"
+  "observation": "Beobachtung"
+  "bias": "Verzerrung"
+  "scope creep": "Scope-Creep"
+  "file": "Datei"
+  "directory": "Verzeichnis"
+  "test": "Test"
+  "documentation": "Dokumentation"
+  "version control": "Versionskontrolle"

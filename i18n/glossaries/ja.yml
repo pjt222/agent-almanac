@@ -1,0 +1,74 @@
+# Japanese (ja) Translation Glossary
+# Seeded from pilot translations (commit-changes, create-pull-request, create-r-package, meditate, security-audit-codebase)
+# Update after each wave to capture new terminology
+
+version: "1.0"
+locale: ja
+last_updated: "2026-03-16"
+
+section_headings:
+  "When to Use": "使用タイミング"
+  "Inputs": "入力"
+  "Procedure": "手順"
+  "Step": "ステップN"
+  "Validation": "バリデーション"
+  "Common Pitfalls": "よくある落とし穴"
+  "Related Skills": "関連スキル"
+  "Examples": "例"
+
+markers:
+  "Expected:": "期待結果："
+  "On failure:": "失敗時："
+  "Required": "必須"
+  "Optional": "任意"
+
+common_terms:
+  # Technical terms kept in English (katakana where natural)
+  "commit": "コミット"
+  "pull request": "プルリクエスト"
+  "branch": "ブランチ"
+  "merge": "マージ"
+  "rebase": "リベース"
+  "push": "プッシュ"
+  "deploy": "デプロイ"
+  "staging": "ステージング"
+  "repository": "リポジトリ"
+  "pre-commit hook": "pre-commitフック"
+  "CI/CD": "CI/CD"
+  "API": "API"
+  "token": "トークン"
+  "debug": "デバッグ"
+  "scaffold": "スキャフォールド"
+  "package": "パッケージ"
+  "skill": "スキル"
+  "agent": "エージェント"
+  "team": "チーム"
+  "workflow": "ワークフロー"
+  "pipeline": "パイプライン"
+
+  # Translated terms
+  "codebase": "コードベース"
+  "vulnerability": "脆弱性"
+  "credentials": "認証情報"
+  "secrets": "シークレット"
+  "dependencies": "依存関係"
+  "configuration": "設定"
+  "authentication": "認証"
+  "authorization": "認可"
+  "injection": "インジェクション"
+  "audit": "監査"
+  "report": "レポート"
+  "checklist": "チェックリスト"
+  "edge case": "エッジケース"
+  "anchor": "アンカー"
+  "distraction": "注意散漫"
+  "focus": "集中"
+  "pattern": "パターン"
+  "observation": "観察"
+  "bias": "バイアス"
+  "scope creep": "スコープクリープ"
+  "file": "ファイル"
+  "directory": "ディレクトリ"
+  "test": "テスト"
+  "documentation": "ドキュメント"
+  "version control": "バージョン管理"

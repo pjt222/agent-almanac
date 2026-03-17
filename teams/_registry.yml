@@ -2,7 +2,7 @@
 # Machine-readable catalog of all team definitions in this library.
 # Keep in sync with the actual team files on disk.
 
-total_teams: 13
+total_teams: 14
 version: "1.2"
 last_updated: "2026-02-25"
 
@@ -110,3 +110,11 @@ teams:
     members: [logician, physicist, theoretical-researcher]
     coordination: sequential
     tags: [digital-logic, electromagnetism, cpu, computer-architecture, cross-disciplinary, physics]
+
+  - id: translation-campaign
+    path: teams/translation-campaign.md
+    description: Wave-parallel translation team for systematic localization of all skills into supported locales (de, zh-CN, ja, es)
+    lead: project-manager
+    members: [project-manager, translator, skill-reviewer, librarian]
+    coordination: wave-parallel
+    tags: [i18n, translation, localization, wave-parallel, campaign]

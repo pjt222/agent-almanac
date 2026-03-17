@@ -1,0 +1,74 @@
+# Spanish (es) Translation Glossary
+# Seeded from pilot translations (commit-changes, create-pull-request, create-r-package, meditate, security-audit-codebase)
+# Update after each wave to capture new terminology
+
+version: "1.0"
+locale: es
+last_updated: "2026-03-16"
+
+section_headings:
+  "When to Use": "Cuándo Usar"
+  "Inputs": "Entradas"
+  "Procedure": "Procedimiento"
+  "Step": "Paso N"
+  "Validation": "Validación"
+  "Common Pitfalls": "Errores Comunes"
+  "Related Skills": "Habilidades Relacionadas"
+  "Examples": "Ejemplos"
+
+markers:
+  "Expected:": "Esperado:"
+  "On failure:": "En caso de fallo:"
+  "Required": "Requerido"
+  "Optional": "Opcional"
+
+common_terms:
+  # Technical terms kept in English
+  "commit": "commit"
+  "pull request": "pull request"
+  "branch": "rama (branch)"
+  "merge": "fusionar (merge)"
+  "rebase": "rebase"
+  "push": "enviar (push)"
+  "deploy": "desplegar"
+  "staging": "preparar"
+  "repository": "repositorio"
+  "pre-commit hook": "hook de pre-commit"
+  "CI/CD": "CI/CD"
+  "API": "API"
+  "token": "token"
+  "debug": "depuración"
+  "scaffold": "crear estructura"
+  "package": "paquete"
+  "skill": "habilidad"
+  "agent": "agente"
+  "team": "equipo"
+  "workflow": "flujo de trabajo"
+  "pipeline": "pipeline"
+
+  # Translated terms
+  "codebase": "base de código"
+  "vulnerability": "vulnerabilidad"
+  "credentials": "credenciales"
+  "secrets": "secretos"
+  "dependencies": "dependencias"
+  "configuration": "configuración"
+  "authentication": "autenticación"
+  "authorization": "autorización"
+  "injection": "inyección"
+  "audit": "auditoría"
+  "report": "informe"
+  "checklist": "lista de verificación"
+  "edge case": "caso límite"
+  "anchor": "ancla"
+  "distraction": "distracción"
+  "focus": "enfoque"
+  "pattern": "patrón"
+  "observation": "observación"
+  "bias": "sesgo"
+  "scope creep": "desviación de alcance"
+  "file": "archivo"
+  "directory": "directorio"
+  "test": "prueba"
+  "documentation": "documentación"
+  "version control": "control de versiones"
