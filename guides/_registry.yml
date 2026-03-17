@@ -2,9 +2,9 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 17
+total_guides: 18
 version: "1.0"
-last_updated: "2026-02-19"
+last_updated: "2026-03-17"
 
 categories:
   workflow:
@@ -80,6 +80,15 @@ guides:
     agents: [mystic, alchemist, gardener, shaman, contemplative]
     teams: [tending]
     skills: [meditate, heal, center, shine, intrinsic, athanor, transmute, chrysopoeia, read-garden, remote-viewing-guidance, meditate-guidance, heal-guidance]
+
+  - id: running-a-translation-campaign
+    path: guides/running-a-translation-campaign.md
+    title: "Running a Translation Campaign"
+    description: "End-to-end guide for translating all skills, agents, teams, and guides into supported locales using the translation-campaign team"
+    category: workflow
+    agents: [translator, project-manager, skill-reviewer, librarian]
+    teams: [translation-campaign]
+    skills: [translate-content, review-skill-format]
 
   - id: production-coordination-patterns
     path: guides/production-coordination-patterns.md

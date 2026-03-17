@@ -16,8 +16,8 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 <!-- AUTO:START:stats -->
 - **317 skills** across 56 domains — structured, executable procedures
 - **65 agents** — specialized Claude Code personas covering development, review, compliance, and more
-- **13 teams** — predefined multi-agent compositions for complex workflows
-- **17 guides** — human-readable workflow, infrastructure, and reference documentation
+- **14 teams** — predefined multi-agent compositions for complex workflows
+- **18 guides** — human-readable workflow, infrastructure, and reference documentation
 - **Interactive visualization** — force-graph explorer with 317 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
@@ -80,6 +80,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Managing a Scrum Sprint](guides/managing-a-scrum-sprint.md) — Running Scrum sprints with the scrum-team: planning, dailies, review, and retro
 - [Visualizing Workflows with putior](guides/visualizing-workflows-with-putior.md) — End-to-end putior workflow visualization from annotation to themed Mermaid diagrams
 - [Running Tending](guides/running-tending.md) — AI meta-cognitive tending sessions with the tending team
+- [Running a Translation Campaign](guides/running-a-translation-campaign.md) — End-to-end guide for translating all skills, agents, teams, and guides into supported locales using the translation-campaign team
 - [Production Coordination Patterns](guides/production-coordination-patterns.md) — Real-world multi-agent orchestration patterns: barrier synchronization, silence budgets, health checks, degraded-wave policies, and cost-aware scheduling
 - [AgentSkills Alignment](guides/agentskills-alignment.md) — Standards compliance audits using the agentskills-alignment team for format validation, spec drift detection, and registry integrity
 
@@ -106,10 +107,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 5/316 | 3/65 | 1/13 | 1/17 | 10/411 (2.4%) |
-| zh-CN | 简体中文 | 5/316 | 3/65 | 1/13 | 1/17 | 10/411 (2.4%) |
-| ja | 日本語 | 5/316 | 3/65 | 1/13 | 1/17 | 10/411 (2.4%) |
-| es | Español | 5/316 | 3/65 | 1/13 | 1/17 | 10/411 (2.4%) |
+| de | Deutsch | 317/316 | 3/65 | 1/13 | 1/17 | 322/411 (78.3%) |
+| zh-CN | 简体中文 | 317/316 | 3/65 | 1/13 | 1/17 | 322/411 (78.3%) |
+| ja | 日本語 | 317/316 | 3/65 | 1/13 | 1/17 | 322/411 (78.3%) |
+| es | Español | 317/316 | 3/65 | 1/13 | 1/17 | 322/411 (78.3%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.

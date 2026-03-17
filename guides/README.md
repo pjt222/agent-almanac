@@ -1,6 +1,6 @@
 # Guides
 
-17 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+18 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -26,6 +26,9 @@ End-to-end putior workflow visualization from annotation to themed Mermaid diagr
 
 ### [Running Tending](running-tending.md)
 AI meta-cognitive tending sessions with the tending team.
+
+### [Running a Translation Campaign](running-a-translation-campaign.md)
+End-to-end guide for translating all skills, agents, teams, and guides into supported locales using the translation-campaign team.
 
 ### [Production Coordination Patterns](production-coordination-patterns.md)
 Real-world multi-agent orchestration patterns: barrier synchronization, silence budgets, health checks, degraded-wave policies, and cost-aware scheduling.
