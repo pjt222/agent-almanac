@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 317 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 318 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -64,7 +64,7 @@ Browse by domain:
 | [Theoretical Science](theoretical-science/) | 3 | Quantum physics, quantum chemistry, and theoretical mathematics |
 | [Diffusion](diffusion/) | 4 | Cognitive drift-diffusion models and generative AI diffusion models |
 | [Hildegard](hildegard/) | 5 | Hildegard von Bingen medieval polymath knowledge — herbal medicine, holistic health, sacred music, viriditas, and natural history |
-| [Maintenance](maintenance/) | 4 | Codebase cleanup, project tidying, broken reference repair, and issue triage |
+| [Maintenance](maintenance/) | 5 | Codebase cleanup, project tidying, broken reference repair, and issue triage |
 | [Blender](blender/) | 3 | Blender Python API scripting for 3D modeling, scene creation, and rendering |
 | [Visualization](visualization/) | 2 | 2D visualization, image composition, and publication-ready graphics |
 | [3d Printing](3d-printing/) | 3 | Additive manufacturing from model preparation through troubleshooting |
