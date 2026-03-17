@@ -1,17 +1,15 @@
 ---
 name: observe-insect-behavior
 description: >
-  Conduct structured insect behavior observations using sampling protocols,
-  ethogram categories, event recording, interaction logging, environmental
-  context, and summary analysis. Covers focal animal sampling, scan sampling,
-  all-occurrences sampling, and instantaneous sampling methods. Defines a
-  standard insect ethogram with locomotion, feeding, grooming, mating,
-  defense, communication, and rest categories. Includes timestamped event
-  recording, intraspecific and interspecific interaction logging, environmental
-  covariate documentation, and time budget analysis. Use when studying insect
-  behavior for ecological research, documenting behavioral repertoires for
-  a species, observing pollinator activity or predator-prey dynamics, or
-  supporting conservation assessments with behavioral data.
+  サンプリングプロトコル、エソグラムカテゴリ、イベント記録、インタラクション
+  ロギング、環境コンテキスト、サマリー分析を使用した構造化された昆虫行動観察の
+  実施。焦点個体サンプリング、スキャンサンプリング、全事象サンプリング、瞬間
+  サンプリング方法を網羅する。移動、採餌、グルーミング、繁殖、防御、コミュニ
+  ケーション、休息カテゴリを含む標準昆虫エソグラムを定義する。タイムスタンプ付き
+  イベント記録、種内・種間インタラクションロギング、環境共変量の文書化、時間
+  配分分析を含む。生態学的研究のために昆虫行動を研究する時、種の行動レパートリー
+  を文書化する時、花粉媒介者の活動や捕食-被食関係を観察する時、または行動データ
+  で保全評価を支援する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -30,33 +28,33 @@ metadata:
 
 # 昆虫行動の観察
 
-Conduct structured insect behavior observations using standardized sampling protocols, ethograms, and quantitative recording methods.
+標準化されたサンプリングプロトコル、エソグラム、定量的記録方法を使用して構造化された昆虫行動観察を実施する。
 
 ## 使用タイミング
 
-- You are studying insect behavior for ecological or entomological research
-- You want to document the behavioral repertoire of a species at a site
-- You are observing pollinator activity on flowering plants
-- You are documenting predator-prey interactions or parasitoid behavior
-- You need behavioral data to support conservation or management decisions
-- You are building ethological skills through structured field practice
+- 生態学的または昆虫学的研究のために昆虫の行動を研究している時
+- サイトにおける種の行動レパートリーを文書化したい時
+- 開花植物上の花粉媒介者の活動を観察している時
+- 捕食-被食のインタラクションまたは寄生蜂の行動を文書化している時
+- 保全または管理の意思決定を支援する行動データが必要な時
+- 構造化されたフィールド実践を通じて行動学的スキルを構築している時
 
 ## 入力
 
-- **必須**: A focal insect or insect aggregation to observe
-- **必須**: A timing device (watch, phone, or stopwatch)
-- **必須**: Recording method (notebook, voice recorder, or data entry device)
-- **任意**: Hand lens (10x) for close behavioral observation
-- **任意**: Binoculars for observing insects at distance (e.g., dragonflies on patrol)
-- **任意**: Camera for video documentation of behavioral events
-- **任意**: Thermometer, hygrometer, or weather station for environmental data
-- **任意**: Pre-printed data sheets or ethogram templates
+- **必須**: 観察対象の焦点昆虫または昆虫集団
+- **必須**: 計時デバイス（時計、電話、またはストップウォッチ）
+- **必須**: 記録方法（ノート、ボイスレコーダー、またはデータ入力デバイス）
+- **任意**: ハンドレンズ（10倍）近接行動観察用
+- **任意**: 双眼鏡（遠距離での昆虫観察用、例: パトロール中のトンボ）
+- **任意**: 行動イベントの動画記録用カメラ
+- **任意**: 環境データ用の温度計、湿度計、または気象ステーション
+- **任意**: 印刷済みデータシートまたはエソグラムテンプレート
 
 ## 手順
 
-### ステップ1: Choose a Sampling Protocol
+### ステップ1: サンプリングプロトコルの選択
 
-Select the protocol that matches your research question and the behavior of your target insect. Each protocol has specific strengths and biases.
+研究上の質問と対象昆虫の行動に合ったプロトコルを選択する。各プロトコルには特定の強みとバイアスがある。
 
 ```
 Sampling Protocols:
@@ -105,13 +103,13 @@ Choosing a Protocol:
 - "I want statistically rigorous time budgets" → instantaneous
 ```
 
-**期待結果:** A sampling protocol selected and justified based on the research question, target taxon, and field conditions. Recording interval or focal bout duration defined before observation begins.
+**期待結果:** 研究上の質問、対象分類群、フィールド条件に基づいて選択・正当化されたサンプリングプロトコル。観察開始前に記録間隔または焦点個体観察時間が定義されていること。
 
-**失敗時:** If the target insect is too mobile for focal animal sampling (e.g., a fast-flying dragonfly), switch to all-occurrences sampling focused on specific events (territorial chases, perch returns). If you cannot distinguish individuals for focal sampling, use scan sampling on the group. Adapt the protocol to what is feasible rather than abandoning observation.
+**失敗時:** 対象昆虫が焦点個体サンプリングには動きが速すぎる場合（例: 高速で飛ぶトンボ）、特定のイベント（縄張り追跡、止まり木への帰還）に焦点を当てた全事象サンプリングに切り替える。焦点サンプリングのために個体を区別できない場合、グループのスキャンサンプリングを使用する。観察を放棄するのではなく、実行可能なものにプロトコルを適応する。
 
-### ステップ2: Define the Ethogram
+### ステップ2: エソグラムの定義
 
-An ethogram is the catalog of all behaviors you will record. Define it before observation begins so you are not improvising categories in the field.
+エソグラムは記録するすべての行動のカタログである。フィールドでカテゴリを即興しないよう、観察開始前に定義する。
 
 ```
 Standard Insect Ethogram:
@@ -157,13 +155,13 @@ Modifiers (append to any category):
 - Intensity: low (slow, intermittent), medium, high (rapid, sustained)
 ```
 
-**期待結果:** A complete ethogram defined for the target taxon before observation begins. Categories should be mutually exclusive (any behavior fits in exactly one category) and exhaustive (every observed behavior can be classified).
+**期待結果:** 観察開始前に対象分類群に対する完全なエソグラムが定義されていること。カテゴリは相互排他的（どの行動もちょうど1つのカテゴリに適合する）かつ網羅的（観察されたすべての行動が分類可能）であるべきである。
 
-**失敗時:** If an unexpected behavior occurs that does not fit the ethogram, record it verbatim (e.g., "rapid wing vibration while stationary, not matching any defined category") and add a new category in the post-observation ethogram revision. Do not force novel behaviors into ill-fitting categories.
+**失敗時:** エソグラムに当てはまらない予期しない行動が発生した場合、そのまま記録する（例:「静止中の急速な翼振動、定義されたカテゴリに一致しない」）、観察後のエソグラム改訂で新しいカテゴリを追加する。新規の行動を不適切なカテゴリに無理に当てはめない。
 
-### ステップ3: Record Behavioral Events with Timestamps
+### ステップ3: タイムスタンプ付き行動イベントの記録
 
-Begin observation and record each behavioral event or state change with precise timing.
+観察を開始し、各行動イベントまたは状態変化を正確なタイミングで記録する。
 
 ```
 Recording Format:
@@ -200,13 +198,13 @@ Rules:
 - Note when focal individual is lost and reason (flew away, obscured)
 ```
 
-**期待結果:** A continuous or interval-based record of behavioral events with timestamps, covering the full observation period.
+**期待結果:** 観察期間全体をカバーする、タイムスタンプ付きの連続的またはインターバルベースの行動イベント記録。
 
-**失敗時:** If the focal individual is lost mid-observation, record the time and reason. If it returns, resume recording. If not, the partial record is still valid data — note the actual observation duration. For scan sampling, if some individuals are obscured at the scan moment, record only those visible and note the count of unscored individuals.
+**失敗時:** 観察中に焦点個体を見失った場合、時刻と理由を記録する。戻ってきた場合、記録を再開する。戻らない場合、部分的な記録もまだ有効なデータである — 実際の観察時間を記録する。スキャンサンプリングでは、スキャンの瞬間に一部の個体が見えない場合、見えるものだけを記録し、スコアできなかった個体数を記録する。
 
-### ステップ4: Log Interactions
+### ステップ4: インタラクションの記録
 
-Record all interactions between the focal insect and other organisms. Interactions are behavioral events involving two or more individuals.
+焦点昆虫と他の生物間のすべてのインタラクションを記録する。インタラクションは2つ以上の個体を含む行動イベントである。
 
 ```
 Interaction Recording Format:
@@ -244,13 +242,13 @@ For each interaction record:
 - Distance at which interaction began
 ```
 
-**期待結果:** All observed interactions recorded with initiator, partner identity (to lowest taxonomic level possible), behaviors of both parties, and outcome.
+**期待結果:** すべての観察されたインタラクションが、開始者、パートナーの同定（可能な限り低い分類レベル）、双方の行動、結果と共に記録されていること。
 
-**失敗時:** If interactions happen too rapidly to record in full (e.g., a swarm of competing males), focus on the focal individual's behavior and note "multiple simultaneous interactions — details approximate." If partner identity is unknown, describe it (e.g., "small black hymenopteran, approximately 8mm").
+**失敗時:** インタラクションが速すぎて完全に記録できない場合（例: 競合するオスの群れ）、焦点個体の行動に集中し、「複数の同時インタラクション — 詳細は概略」と記録する。パートナーの同定が不明な場合、記述する（例:「小さな黒い膜翅目、約8mm」）。
 
-### ステップ5: Record Environmental Context
+### ステップ5: 環境コンテキストの記録
 
-Environmental conditions strongly influence insect behavior. Record covariates that allow your behavioral data to be interpreted in ecological context.
+環境条件は昆虫の行動に強く影響する。行動データを生態学的コンテキストで解釈できるよう共変量を記録する。
 
 ```
 Environmental Context Record:
@@ -290,13 +288,13 @@ Environmental Context Record:
 +--------------------+------------------------------------------+
 ```
 
-**期待結果:** Environmental covariates recorded at the start and end of each observation session, with intermediate readings for sessions longer than 1 hour.
+**期待結果:** 各観察セッションの開始と終了時に環境共変量が記録され、1時間を超えるセッションでは中間読み取りがあること。
 
-**失敗時:** If instrumentation is unavailable, estimate temperature ("warm, approximately 25C"), humidity ("dry" or "humid"), and wind from sensory cues. Approximate environmental data is far more useful than no environmental data. At minimum, record time of day, cloud cover, and estimated temperature.
+**失敗時:** 計器が利用できない場合、温度（「暖かい、約25C」）、湿度（「乾燥」または「多湿」）、風を感覚的手がかりから推定する。概算の環境データは環境データなしよりもはるかに有用である。最低限、時刻、雲量、推定温度を記録する。
 
-### ステップ6: Summarize Observations
+### ステップ6: 観察の要約
 
-Analyze the recorded data to produce a structured summary with time budgets, behavioral frequencies, and observed patterns.
+記録されたデータを分析し、時間配分、行動頻度、観察されたパターンを含む構造化された要約を作成する。
 
 ```
 Summary Analysis:
@@ -337,32 +335,32 @@ Summary Analysis:
    may have affected behavior.
 ```
 
-**期待結果:** A structured summary including time budget or behavioral frequencies (depending on sampling protocol), interaction summary, observed patterns, and explicit acknowledgment of limitations.
+**期待結果:** 時間配分または行動頻度（サンプリングプロトコルに応じて）、インタラクションサマリー、観察されたパターン、制限事項の明示的な認識を含む構造化された要約。
 
-**失敗時:** If the observation session was too short for meaningful time budgets (less than 10 minutes of continuous data), report raw event counts rather than proportions. Note the short duration as a limitation. Even brief observations contribute to understanding if they are honestly reported — a 5-minute observation documenting a rare behavior (e.g., parasitoid oviposition) can be more valuable than hours of resting behavior.
+**失敗時:** 観察セッションが意味のある時間配分には短すぎる場合（連続データ10分未満）、割合ではなく生のイベントカウントを報告する。短い時間を制限として記録する。短い観察でも正直に報告されれば理解に貢献する — まれな行動（例: 寄生蜂の産卵）を文書化した5分間の観察は、数時間の休息行動よりも価値がある場合がある。
 
 ## バリデーション
 
-- [ ] A sampling protocol was selected and justified before observation began
-- [ ] An ethogram was defined with mutually exclusive and exhaustive categories
-- [ ] Behavioral events were recorded with timestamps throughout the observation
-- [ ] Interactions were logged with initiator, partner, behaviors, and outcomes
-- [ ] Environmental covariates were recorded at the start and end of observation
-- [ ] A summary analysis was produced with time budgets or behavioral frequencies
-- [ ] Limitations of the observation (duration, lost focal time, weather) were noted
+- [ ] 観察開始前にサンプリングプロトコルが選択・正当化された
+- [ ] 相互排他的かつ網羅的なカテゴリを持つエソグラムが定義された
+- [ ] 観察中にタイムスタンプ付きで行動イベントが記録された
+- [ ] インタラクションが開始者、パートナー、行動、結果と共にログされた
+- [ ] 観察の開始と終了時に環境共変量が記録された
+- [ ] 時間配分または行動頻度を含む要約分析が作成された
+- [ ] 観察の制限事項（時間、焦点個体喪失時間、天候）が記録された
 
 ## よくある落とし穴
 
-- **Starting without an ethogram**: Improvising behavioral categories during observation leads to inconsistent recording. Define categories before the first observation, even if you revise them afterward
-- **Interpreting instead of describing**: Record "mandibles opening and closing rapidly on leaf margin" not "aggressive feeding." Interpretation comes in the analysis, not the field recording. Anthropomorphic labels ("angry," "happy," "confused") have no place in ethological data
-- **Observer fatigue**: Continuous focal animal sampling is cognitively demanding. Limit focal bouts to 15-30 minutes with breaks between. Tired observers miss events and make recording errors
-- **Disturbing the subject**: Your presence changes behavior. Maintain distance, minimize movement, avoid casting shadows on the insect, and allow a habituation period (2-5 minutes) before starting formal recording
-- **Ignoring "nothing happening"**: Rest and inactivity are valid behavioral states that must be recorded. An insect spending 60% of its time resting is an important ecological finding, not boring data to skip
-- **Confusing states and events**: A state has duration (feeding for 3 minutes). An event is instantaneous (a single wing flash). Record states with start and end times; record events with a single timestamp. Mixing them produces incoherent time budgets
+- **エソグラムなしの開始**: 観察中に行動カテゴリを即興すると一貫性のない記録になる。後で改訂するとしても、最初の観察前にカテゴリを定義する
+- **記述の代わりに解釈**: 「葉の縁で大顎が急速に開閉」と記録し、「攻撃的な採餌」とは記録しない。解釈は分析で行い、フィールド記録では行わない。擬人化ラベル（「怒っている」「幸せ」「混乱している」）は行動学データには不適切である
+- **観察者疲労**: 連続的な焦点個体サンプリングは認知的に負担が大きい。焦点観察を15-30分に制限し、間に休憩を取る。疲労した観察者はイベントを見逃し記録エラーを犯す
+- **対象の妨害**: あなたの存在が行動を変える。距離を保ち、動きを最小限にし、昆虫に影を落とさないようにし、正式な記録開始前に馴化期間（2-5分）を設ける
+- **「何も起きていない」の無視**: 休息と不活動は記録すべき有効な行動状態である。時間の60%を休息に費やす昆虫は重要な生態学的発見であり、スキップすべき退屈なデータではない
+- **状態とイベントの混同**: 状態は持続時間を持つ（3分間の採餌）。イベントは瞬間的である（1回の翼フラッシュ）。状態は開始時間と終了時間で記録し、イベントは単一のタイムスタンプで記録する。混ぜると一貫性のない時間配分を生む
 
 ## 関連スキル
 
-- `document-insect-sighting` — record the sighting with photographs, location, and metadata as a complement to behavioral observations
-- `identify-insect` — identify the species being observed, which is essential for interpreting behavior in taxonomic context
-- `collect-preserve-specimens` — collect voucher specimens to confirm the identity of the species whose behavior was observed
-- `survey-insect-population` — scale behavioral observations across a population to understand community-level behavioral ecology
+- `document-insect-sighting` — 行動観察の補完として写真、場所、メタデータで目撃を記録する
+- `identify-insect` — 観察対象の種を同定する。分類学的コンテキストで行動を解釈するために不可欠
+- `collect-preserve-specimens` — 行動が観察された種の同定を確認するための証拠標本を収集する
+- `survey-insect-population` — 行動観察を個体群全体にスケールアップし、群集レベルの行動生態学を理解する

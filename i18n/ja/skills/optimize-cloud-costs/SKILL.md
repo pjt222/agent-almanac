@@ -1,13 +1,13 @@
 ---
 name: optimize-cloud-costs
 description: >
-  Implement cloud cost optimization strategies for Kubernetes workloads using tools like
-  Kubecost for visibility, right-sizing recommendations, horizontal and vertical pod
-  autoscaling, spot/preemptible instances, and resource quotas. Covers cost allocation,
-  showback reporting, and continuous optimization practices. Use when cloud costs are
-  growing without proportional business value, when resource requests are misaligned with
-  actual usage, when manual scaling leads to over-provisioning, or when implementing
-  showback and chargeback for internal cost accountability.
+  Kubecostを使用した可視化、ライトサイジング推奨、水平および垂直ポッドオートスケーリング、
+  スポット/プリエンプティブルインスタンス、リソースクォータなどのツールを活用した、
+  Kubernetesワークロードのクラウドコスト最適化戦略の実装。コスト配分、ショーバック
+  レポート、継続的な最適化プラクティスを網羅する。クラウドコストがビジネス価値に比例せず
+  増大している時、リソースリクエストが実際の使用量と一致していない時、手動スケーリングが
+  過剰プロビジョニングにつながる時、または内部コスト説明責任のためにショーバックと
+  チャージバックを実装する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,38 +26,38 @@ metadata:
 
 # クラウドコストの最適化
 
-Implement comprehensive cost optimization strategies for Kubernetes clusters to reduce cloud spending.
+クラウド支出を削減するためのKubernetesクラスターの包括的なコスト最適化戦略を実装する。
 
 ## 使用タイミング
 
-- Cloud infrastructure costs growing without corresponding business value increase
-- Need visibility into cost allocation by team, application, or environment
-- Resource requests/limits not aligned with actual usage patterns
-- Manual scaling leading to over-provisioning and waste
-- Want to leverage spot/preemptible instances for non-critical workloads
-- Need to implement showback or chargeback for internal cost allocation
-- Seeking to establish FinOps culture with cost awareness and accountability
+- クラウドインフラストラクチャコストがビジネス価値の対応する増加なしに増大している時
+- チーム、アプリケーション、または環境別のコスト配分の可視性が必要な時
+- リソースリクエスト/リミットが実際の使用パターンと一致していない時
+- 手動スケーリングが過剰プロビジョニングと無駄につながっている時
+- 非クリティカルなワークロードにスポット/プリエンプティブルインスタンスを活用したい時
+- 内部コスト配分のためにショーバックまたはチャージバックを実装する必要がある時
+- コスト意識と説明責任を持つFinOps文化を確立したい時
 
 ## 入力
 
-- **必須**: Kubernetes cluster with workloads running
-- **必須**: Cloud provider billing API access
-- **必須**: Metrics server or Prometheus for resource metrics
-- **任意**: Historical usage data for trend analysis
-- **任意**: Cost allocation requirements (by namespace, label, team)
-- **任意**: Service level objectives (SLOs) for performance constraints
-- **任意**: Budget limits or cost reduction targets
+- **必須**: ワークロードが実行中のKubernetesクラスター
+- **必須**: クラウドプロバイダーの課金APIアクセス
+- **必須**: リソースメトリクス用のメトリクスサーバーまたはPrometheus
+- **任意**: トレンド分析用の過去の使用データ
+- **任意**: コスト配分要件（ネームスペース、ラベル、チーム別）
+- **任意**: パフォーマンス制約用のサービスレベル目標（SLO）
+- **任意**: 予算制限またはコスト削減目標
 
 ## 手順
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完全な設定ファイルとテンプレートについては[Extended Examples](references/EXAMPLES.md)を参照。
 
 
-### ステップ1: Deploy Cost Visibility Tools
+### ステップ1: コスト可視化ツールのデプロイ
 
-Install Kubecost or OpenCost for cost monitoring and allocation.
+コストモニタリングと配分のためにKubecostまたはOpenCostをインストールする。
 
-**Install Kubecost:**
+**Kubecostのインストール:**
 ```bash
 # Add Kubecost Helm repository
 helm repo add kubecost https://kubecost.github.io/cost-analyzer/
@@ -89,7 +89,7 @@ kubectl port-forward -n kubecost svc/kubecost-cost-analyzer 9090:9090
 # Open http://localhost:9090
 ```
 
-**Configure cloud provider integration:**
+**クラウドプロバイダー統合の設定:**
 ```yaml
 # kubecost-cloud-integration.yaml
 apiVersion: v1
@@ -142,7 +142,7 @@ data:
     }
 ```
 
-Apply cloud integration:
+クラウド統合を適用する:
 ```bash
 kubectl apply -f kubecost-cloud-integration.yaml
 
@@ -154,20 +154,20 @@ kubectl port-forward -n kubecost svc/kubecost-cost-analyzer 9090:9090 &
 curl http://localhost:9090/model/allocation\?window\=7d | jq .
 ```
 
-**期待結果:** Kubecost pods running successfully. UI accessible showing cost breakdown by namespace, deployment, pod. Cloud provider costs importing (may take 24-48 hours for initial sync). API returning allocation data.
+**期待結果:** Kubecostポッドが正常に実行されている。ネームスペース、デプロイメント、ポッド別のコスト内訳を表示するUIにアクセスできる。クラウドプロバイダーコストがインポートされている（初回同期には24-48時間かかる場合がある）。APIがアロケーションデータを返している。
 
 **失敗時:**
-- Check Prometheus is running and accessible: `kubectl get svc -n monitoring prometheus-server`
-- Verify cloud credentials have billing API access
-- Review cost-model logs: `kubectl logs -n kubecost -l app=cost-analyzer -c cost-model`
-- Ensure metrics-server or Prometheus node-exporter collecting resource metrics
-- Check for network policies blocking access to cloud billing APIs
+- Prometheusが実行中でアクセス可能か確認する: `kubectl get svc -n monitoring prometheus-server`
+- クラウド認証情報に課金APIアクセスがあるか確認する
+- cost-modelのログをレビューする: `kubectl logs -n kubecost -l app=cost-analyzer -c cost-model`
+- メトリクスサーバーまたはPrometheusのnode-exporterがリソースメトリクスを収集していることを確認する
+- クラウド課金APIへのアクセスをブロックしているネットワークポリシーがないか確認する
 
-### ステップ2: Analyze Current Resource Utilization
+### ステップ2: 現在のリソース使用率を分析する
 
-Identify over-provisioned resources and optimization opportunities.
+過剰プロビジョニングされたリソースと最適化の機会を特定する。
 
-**Query resource utilization:**
+**リソース使用率を照会する:**
 ```bash
 # Get resource requests vs usage for all pods
 kubectl top pods --all-namespaces --containers | \
@@ -205,7 +205,7 @@ chmod +x analyze-utilization.sh
 kubectl top pods --all-namespaces --containers > actual-usage.txt
 ```
 
-**Use Kubecost recommendations:**
+**Kubecostの推奨を使用する:**
 ```bash
 # Get right-sizing recommendations via API
 curl "http://localhost:9090/model/savings/requestSizing?window=7d" | jq . > recommendations.json
@@ -216,7 +216,7 @@ jq '.data[] | select(.totalRecommendedSavings > 10) | {
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Create utilization dashboard:**
+**使用率ダッシュボードを作成する:**
 ```yaml
 # grafana-utilization-dashboard.yaml
 apiVersion: v1
@@ -227,20 +227,20 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**期待結果:** Clear view of current resource requests vs actual usage. Identification of pods with <30% utilization (over-provisioned). List of optimization opportunities with estimated savings. Dashboard showing utilization trends over time.
+**期待結果:** 現在のリソースリクエストと実際の使用量の明確なビュー。使用率30%未満のポッド（過剰プロビジョニング）の特定。推定節約額付きの最適化機会のリスト。時系列の使用率トレンドを表示するダッシュボード。
 
 **失敗時:**
-- Ensure metrics-server is running: `kubectl get deployment metrics-server -n kube-system`
-- Check if Prometheus has node-exporter metrics: `curl http://prometheus:9090/api/v1/query?query=node_cpu_seconds_total`
-- Verify pods have been running long enough for meaningful data (at least 24 hours)
-- Check for gaps in metrics collection: review Prometheus retention and scrape intervals
-- For Kubecost, ensure it has collected at least 48 hours of data
+- メトリクスサーバーが実行中か確認する: `kubectl get deployment metrics-server -n kube-system`
+- Prometheusにnode-exporterメトリクスがあるか確認する: `curl http://prometheus:9090/api/v1/query?query=node_cpu_seconds_total`
+- 有意なデータのためにポッドが十分な時間実行されていることを確認する（少なくとも24時間）
+- メトリクス収集のギャップを確認する: Prometheusの保持期間とスクレイプ間隔をレビューする
+- Kubecostの場合、少なくとも48時間のデータが収集されていることを確認する
 
-### ステップ3: Implement Horizontal Pod Autoscaling (HPA)
+### ステップ3: 水平ポッドオートスケーリング（HPA）の実装
 
-Configure automatic scaling based on CPU, memory, or custom metrics.
+CPU、メモリ、またはカスタムメトリクスに基づく自動スケーリングを設定する。
 
-**Create HPA for CPU-based scaling:**
+**CPUベースのスケーリング用HPAを作成する:**
 ```yaml
 # hpa-cpu.yaml
 apiVersion: autoscaling/v2
@@ -251,7 +251,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Deploy and verify HPA:**
+**HPAのデプロイと検証:**
 ```bash
 kubectl apply -f hpa-cpu.yaml
 
@@ -270,21 +270,21 @@ kubectl run load-generator --rm -it --image=busybox -- /bin/sh -c \
 watch kubectl get hpa,deployment -n production
 ```
 
-**期待結果:** HPA created and showing current/target metrics. Pods scale up under load. Pods scale down when load decreases (after stabilization window). Scaling events logged. No thrashing (rapid scale up/down cycles).
+**期待結果:** HPAが作成され、現在/目標メトリクスを表示している。負荷時にポッドがスケールアップする。負荷が減少するとポッドがスケールダウンする（安定化ウィンドウ後）。スケーリングイベントがログに記録される。スラッシング（急速なスケールアップ/ダウンサイクル）がない。
 
 **失敗時:**
-- Verify metrics-server is running: `kubectl get apiservice v1beta1.metrics.k8s.io`
-- Check if deployment has resource requests set (HPA requires this)
-- Review HPA events: `kubectl describe hpa api-server-hpa -n production`
-- Ensure target deployment is not at max replicas
-- For custom metrics, verify metrics adapter installed and configured
-- Check HPA controller logs: `kubectl logs -n kube-system -l app=kube-controller-manager | grep horizontal-pod-autoscaler`
+- メトリクスサーバーが実行中か確認する: `kubectl get apiservice v1beta1.metrics.k8s.io`
+- デプロイメントにリソースリクエストが設定されているか確認する（HPAにはこれが必要）
+- HPAイベントをレビューする: `kubectl describe hpa api-server-hpa -n production`
+- ターゲットデプロイメントが最大レプリカに達していないか確認する
+- カスタムメトリクスの場合、メトリクスアダプターがインストールされ設定されているか確認する
+- HPAコントローラーのログを確認する: `kubectl logs -n kube-system -l app=kube-controller-manager | grep horizontal-pod-autoscaler`
 
-### ステップ4: Configure Vertical Pod Autoscaling (VPA)
+### ステップ4: 垂直ポッドオートスケーリング（VPA）の設定
 
-Automatically adjust resource requests based on actual usage patterns.
+実際の使用パターンに基づいてリソースリクエストを自動調整する。
 
-**Install VPA:**
+**VPAのインストール:**
 ```bash
 # Clone VPA repository
 git clone https://github.com/kubernetes/autoscaler.git
@@ -300,7 +300,7 @@ kubectl get pods -n kube-system | grep vpa
 kubectl get crd | grep verticalpodautoscaler
 ```
 
-**Create VPA policies:**
+**VPAポリシーを作成する:**
 ```yaml
 # vpa-policies.yaml
 apiVersion: autoscaling.k8s.io/v1
@@ -311,7 +311,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Deploy and monitor VPA:**
+**VPAのデプロイとモニタリング:**
 ```bash
 kubectl apply -f vpa-policies.yaml
 
@@ -330,21 +330,21 @@ kubectl get deployment api-server -n production -o json | \
   jq '.spec.template.spec.containers[].resources.requests'
 ```
 
-**期待結果:** VPA providing recommendations or automatically updating resource requests. Recommendations based on percentile usage patterns (typically P95). Pods restarted with new requests when using Auto/Recreate mode. No conflicts between HPA and VPA (use HPA for replicas, VPA for resources per pod).
+**期待結果:** VPAが推奨を提供するか、リソースリクエストを自動更新している。推奨がパーセンタイル使用パターン（通常P95）に基づいている。Auto/Recreateモードを使用している場合、ポッドが新しいリクエストで再起動される。HPAとVPAの間に競合がない（HPAはレプリカ用、VPAはポッドごとのリソース用に使用する）。
 
 **失敗時:**
-- Ensure metrics-server has sufficient data (VPA needs several days for accurate recommendations)
-- Check VPA components running: `kubectl get pods -n kube-system | grep vpa`
-- Review VPA admission controller logs: `kubectl logs -n kube-system -l app=vpa-admission-controller`
-- Verify webhook is registered: `kubectl get mutatingwebhookconfigurations vpa-webhook-config`
-- Don't use VPA and HPA on same metric (CPU/memory) - causes conflicts
-- Start with "Off" mode to review recommendations before enabling automatic updates
+- メトリクスサーバーに十分なデータがあることを確認する（VPAは正確な推奨のために数日必要）
+- VPAコンポーネントが実行中か確認する: `kubectl get pods -n kube-system | grep vpa`
+- VPAアドミッションコントローラーのログをレビューする: `kubectl logs -n kube-system -l app=vpa-admission-controller`
+- Webhookが登録されているか確認する: `kubectl get mutatingwebhookconfigurations vpa-webhook-config`
+- 同じメトリクス（CPU/メモリ）でVPAとHPAを使用しない — 競合が発生する
+- 自動更新を有効にする前に「Off」モードで推奨をレビューすることから始める
 
-### ステップ5: Leverage Spot/Preemptible Instances
+### ステップ5: スポット/プリエンプティブルインスタンスの活用
 
-Configure workload scheduling on cost-effective spot instances.
+コスト効率の高いスポットインスタンスでのワークロードスケジューリングを設定する。
 
-**Create node pools with spot instances:**
+**スポットインスタンスでノードプールを作成する:**
 ```yaml
 # For AWS (via Karpenter)
 apiVersion: karpenter.sh/v1alpha5
@@ -355,7 +355,7 @@ spec:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Configure workloads for spot instances:**
+**スポットインスタンス用にワークロードを設定する:**
 ```yaml
 # spot-workload.yaml
 apiVersion: apps/v1
@@ -366,7 +366,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Deploy and monitor spot usage:**
+**スポット使用状況のデプロイとモニタリング:**
 ```bash
 kubectl apply -f spot-workload.yaml
 
@@ -377,21 +377,21 @@ kubectl get nodes -l node-type=spot
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**期待結果:** Workloads scheduled on spot nodes successfully. Significant cost reduction (typically 60-90% vs on-demand). Graceful handling of spot interruptions with pod rescheduling. Monitoring shows spot interruption rate and successful recovery.
+**期待結果:** ワークロードがスポットノードに正常にスケジュールされている。大幅なコスト削減（通常オンデマンドと比較して60-90%）。スポット中断のポッド再スケジューリングによる優雅な処理。モニタリングがスポット中断率と正常な復旧を示している。
 
 **失敗時:**
-- Verify spot instance availability in your region/zones
-- Check node labels and taints match workload tolerations
-- Review Karpenter logs: `kubectl logs -n karpenter -l app.kubernetes.io/name=karpenter`
-- Ensure workloads are stateless or have proper state management for interruptions
-- Test interruption handling: manually cordon and drain spot node
-- Monitor interruption rate - if too high, consider fallback to on-demand nodes
+- リージョン/ゾーンでのスポットインスタンスの利用可能性を確認する
+- ノードラベルとテイントがワークロードのトレレーションと一致しているか確認する
+- Karpenterのログをレビューする: `kubectl logs -n karpenter -l app.kubernetes.io/name=karpenter`
+- ワークロードがステートレスであるか、中断に対する適切な状態管理があることを確認する
+- 中断処理をテストする: 手動でスポットノードをcordonしdrainする
+- 中断率をモニタリングする — 高すぎる場合、オンデマンドノードへのフォールバックを検討する
 
-### ステップ6: Implement Resource Quotas and Budget Alerts
+### ステップ6: リソースクォータと予算アラートの実装
 
-Set hard limits and alerting for cost control.
+コスト制御のためのハードリミットとアラートを設定する。
 
-**Create resource quotas:**
+**リソースクォータを作成する:**
 ```yaml
 # resource-quotas.yaml
 apiVersion: v1
@@ -402,7 +402,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Configure budget alerts:**
+**予算アラートを設定する:**
 ```yaml
 # kubecost-budget-alerts.yaml
 apiVersion: v1
@@ -413,7 +413,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Apply and monitor:
+適用とモニタリング:
 ```bash
 kubectl apply -f resource-quotas.yaml
 kubectl apply -f kubecost-budget-alerts.yaml
@@ -424,57 +424,57 @@ kubectl describe resourcequota production-quota -n production
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**期待結果:** Resource quotas enforcing limits per namespace. Pod creation blocked when quota exceeded. Budget alerts firing when thresholds breached. Cost spike detection working. Regular reports sent to stakeholders.
+**期待結果:** リソースクォータがネームスペースごとの制限を強制している。クォータ超過時にポッド作成がブロックされる。閾値を超えた時に予算アラートが発火する。コストスパイク検出が機能している。ステークホルダーに定期的なレポートが送信される。
 
 **失敗時:**
-- Verify ResourceQuota and LimitRange applied correctly: `kubectl get resourcequota,limitrange -A`
-- Check for pods failing due to quota: `kubectl get events -n production | grep quota`
-- Review Kubecost alert configuration: `kubectl logs -n kubecost -l app=cost-analyzer | grep alert`
-- Ensure Prometheus has Kubecost metrics: `curl http://prometheus:9090/api/v1/query?query=kubecost_monthly_cost`
-- Test alert routing: verify email/Slack webhook configuration
+- ResourceQuotaとLimitRangeが正しく適用されているか確認する: `kubectl get resourcequota,limitrange -A`
+- クォータによるポッドの失敗がないか確認する: `kubectl get events -n production | grep quota`
+- Kubecostのアラート設定をレビューする: `kubectl logs -n kubecost -l app=cost-analyzer | grep alert`
+- PrometheusにKubecostメトリクスがあるか確認する: `curl http://prometheus:9090/api/v1/query?query=kubecost_monthly_cost`
+- アラートルーティングをテストする: メール/Slack Webhook設定を確認する
 
 ## バリデーション
 
-- [ ] Kubecost or OpenCost deployed and showing accurate cost data
-- [ ] Cloud provider billing integration working (costs match actual bills)
-- [ ] Resource utilization analysis identifies over-provisioned workloads
-- [ ] HPA scaling pods based on load (verified with load test)
-- [ ] VPA providing recommendations or auto-adjusting resource requests
-- [ ] Spot instances handling interruptions gracefully
-- [ ] Resource quotas enforcing limits per namespace
-- [ ] Budget alerts firing when thresholds exceeded
-- [ ] Monthly cost trending downward or staying within budget
-- [ ] Showback reports generated for teams/projects
-- [ ] No performance degradation from cost optimizations
-- [ ] Documentation updated with optimization practices
+- [ ] KubecostまたはOpenCostがデプロイされ、正確なコストデータを表示している
+- [ ] クラウドプロバイダーの課金統合が機能している（コストが実際の請求書と一致）
+- [ ] リソース使用率分析が過剰プロビジョニングされたワークロードを特定している
+- [ ] HPAが負荷に基づいてポッドをスケーリングしている（負荷テストで検証済み）
+- [ ] VPAが推奨を提供するかリソースリクエストを自動調整している
+- [ ] スポットインスタンスが中断を優雅に処理している
+- [ ] リソースクォータがネームスペースごとの制限を強制している
+- [ ] 閾値超過時に予算アラートが発火している
+- [ ] 月次コストが下降傾向にあるか予算内に収まっている
+- [ ] チーム/プロジェクト向けのショーバックレポートが生成されている
+- [ ] コスト最適化によるパフォーマンス劣化がない
+- [ ] 最適化プラクティスでドキュメントが更新されている
 
 ## よくある落とし穴
 
-- **Aggressive Right-Sizing**: Don't immediately apply VPA recommendations. Start with "Off" mode, review suggestions for a week, then gradually apply. Sudden changes can cause OOMKills or CPU throttling.
+- **積極的すぎるライトサイジング**: VPAの推奨をすぐに適用しない。「Off」モードで開始し、1週間推奨をレビューしてから徐々に適用する。急激な変更はOOMKillやCPUスロットリングを引き起こす可能性がある。
 
-- **HPA + VPA Conflict**: Never use HPA and VPA on same metric (CPU/memory). Use HPA for horizontal scaling, VPA for per-pod resource tuning, or HPA on custom metrics + VPA on resources.
+- **HPAとVPAの競合**: 同じメトリクス（CPU/メモリ）でHPAとVPAを同時に使用しない。水平スケーリングにはHPAを、ポッドごとのリソースチューニングにはVPAを使用するか、カスタムメトリクスのHPA + リソースのVPAを使用する。
 
-- **Spot Without Fault Tolerance**: Only run fault-tolerant, stateless workloads on spot. Never databases, stateful services, or single-replica critical services. Always use PodDisruptionBudgets.
+- **フォールトトレランスなしのスポット**: フォールトトレラントでステートレスなワークロードのみをスポットで実行する。データベース、ステートフルサービス、または単一レプリカのクリティカルサービスは不可。常にPodDisruptionBudgetを使用する。
 
-- **Insufficient Monitoring Period**: Cost optimization decisions need historical data. Wait at least 7 days before making changes, 30 days for VPA recommendations, 90 days for trend analysis.
+- **不十分なモニタリング期間**: コスト最適化の決定には過去データが必要。変更前に少なくとも7日、VPA推奨には30日、トレンド分析には90日待つ。
 
-- **Ignoring Burst Requirements**: Setting limits too low based on average usage causes throttling during traffic spikes. Use P95 or P99 percentiles, not average, for capacity planning.
+- **バースト要件の無視**: 平均使用量に基づいて制限を低く設定しすぎると、トラフィックスパイク時にスロットリングが発生する。キャパシティプランニングには平均ではなくP95またはP99パーセンタイルを使用する。
 
-- **Network Egress Costs**: Compute costs visible in Kubecost, but egress (data transfer) can be significant. Monitor cross-AZ traffic, use topology-aware routing, consider data transfer costs in architecture.
+- **ネットワークエグレスコスト**: Kubecostではコンピュートコストが可視化されるが、エグレス（データ転送）も大きくなる可能性がある。クロスAZトラフィックをモニタリングし、トポロジー対応ルーティングを使用し、アーキテクチャでデータ転送コストを考慮する。
 
-- **Storage Overlooked**: PersistentVolume costs often forgotten. Audit unused PVCs, right-size volumes, use volume expansion instead of over-provisioning, implement PV cleanup policies.
+- **ストレージの見落とし**: PersistentVolumeコストが忘れられがち。未使用のPVCを監査し、ボリュームをライトサイジングし、過剰プロビジョニングの代わりにボリューム拡張を使用し、PVクリーンアップポリシーを実装する。
 
-- **Quota Too Restrictive**: Setting quotas too low blocks legitimate growth. Review quota usage monthly, adjust based on actual needs, communicate limits to teams before enforcement.
+- **制限的すぎるクォータ**: クォータを低く設定しすぎると正当な成長がブロックされる。クォータ使用量を月次でレビューし、実際のニーズに基づいて調整し、強制前にチームに制限を伝える。
 
-- **False Savings from Wrong Metrics**: Using CPU/memory as sole optimization metric misses I/O, network, storage costs. Consider total cost of ownership, not just compute.
+- **間違ったメトリクスからの偽りの節約**: CPU/メモリのみを最適化メトリクスとして使用すると、I/O、ネットワーク、ストレージコストを見逃す。コンピュートだけでなく、総所有コストを考慮する。
 
-- **Chargeback Before Trust**: Implementing chargeback before teams understand and trust cost data causes friction. Start with showback (informational), build culture of cost awareness, then move to chargeback.
+- **信頼前のチャージバック**: チームがコストデータを理解し信頼する前にチャージバックを実装すると摩擦が生じる。ショーバック（情報提供）から始め、コスト意識の文化を構築してからチャージバックに移行する。
 
 ## 関連スキル
 
-- `deploy-to-kubernetes` - Application deployment with appropriate resource requests
-- `setup-prometheus-monitoring` - Monitoring infrastructure for cost metrics
-- `plan-capacity` - Capacity planning based on cost and performance
-- `setup-local-kubernetes` - Local development to avoid cloud costs
-- `write-helm-chart` - Templating resource requests and limits
-- `implement-gitops-workflow` - GitOps for cost-optimized configurations
+- `deploy-to-kubernetes` — 適切なリソースリクエストを持つアプリケーションデプロイメント
+- `setup-prometheus-monitoring` — コストメトリクス用のモニタリングインフラストラクチャ
+- `plan-capacity` — コストとパフォーマンスに基づくキャパシティプランニング
+- `setup-local-kubernetes` — クラウドコストを回避するためのローカル開発
+- `write-helm-chart` — リソースリクエストとリミットのテンプレート化
+- `implement-gitops-workflow` — コスト最適化された設定のためのGitOps

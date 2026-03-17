@@ -1,14 +1,11 @@
 ---
 name: mineral-identification
 description: >
-  Field identification of minerals and ores using hardness, streak, luster,
-  cleavage, crystal habit, and simple chemical tests. Covers the systematic
-  elimination methodology, Mohs scale application, and common ore indicators
-  for precious metals, gemstones, and industrial minerals. Use when encountering
-  an unknown rock or mineral specimen, when prospecting and assessing whether a
-  site shows valuable mineral indicators, when distinguishing ore-bearing rock
-  from barren rock in the field, or when building geological literacy through
-  systematic observation.
+  硬度、条痕、光沢、劈開、結晶癖、簡易化学テストを用いた鉱物と鉱石のフィールド
+  同定。体系的消去法、モース硬度計の適用、貴金属・宝石・工業用鉱物の一般的な
+  鉱石指標を網羅する。未知の岩石や鉱物標本に遭遇した時、探鉱中にサイトが価値ある
+  鉱物指標を示すかどうかを評価する時、フィールドで鉱石を含む岩石を不毛の岩石と
+  区別する時、または体系的な観察を通じて地質学的リテラシーを構築する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,32 +22,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 鉱物の同定
+# 鉱物同定
 
-Identify minerals in the field using physical properties, systematic elimination, and simple field tests.
+物理的性質、体系的消去法、簡易フィールドテストを用いてフィールドで鉱物を同定する。
 
 ## 使用タイミング
 
-- You find an unknown rock or mineral specimen and want to identify it
-- You are prospecting and need to assess whether a site shows indicators of valuable minerals
-- You want to distinguish ore-bearing rock from barren rock in the field
-- You are building geological literacy through systematic observation
+- 未知の岩石や鉱物標本を見つけて同定したい時
+- 探鉱中に、サイトが価値ある鉱物の指標を示すかどうか評価する必要がある時
+- フィールドで鉱石を含む岩石を不毛の岩石と区別したい時
+- 体系的な観察を通じて地質学的リテラシーを構築する時
 
 ## 入力
 
-- **必須**: A mineral specimen or outcrop to examine
-- **任意**: Streak plate (unglazed porcelain tile or bathroom tile back)
-- **任意**: Steel nail or knife blade (hardness ~5.5)
-- **任意**: Glass plate (hardness ~5.5)
-- **任意**: Copper coin (hardness ~3.5)
-- **任意**: Hand lens (10x)
-- **任意**: Dilute hydrochloric acid (10% HCl) for carbonate test
+- **必須**: 調査する鉱物標本または露頭
+- **任意**: 条痕板（無釉の磁器タイルまたはバスルームタイルの裏面）
+- **任意**: 鉄釘またはナイフの刃（硬度 ~5.5）
+- **任意**: ガラス板（硬度 ~5.5）
+- **任意**: 銅貨（硬度 ~3.5）
+- **任意**: ハンドレンズ（10倍）
+- **任意**: 希塩酸（10% HCl）炭酸塩テスト用
 
 ## 手順
 
-### ステップ1: Observe Without Touching
+### ステップ1: 触れずに観察する
 
-Before handling, observe the specimen in context.
+取り扱う前に、標本を文脈の中で観察する。
 
 ```
 Field Context:
@@ -72,13 +69,13 @@ Field Context:
 +--------------------+------------------------------------------+
 ```
 
-**期待結果:** Field context recorded before handling the specimen.
+**期待結果:** 標本を取り扱う前にフィールドコンテキストが記録されていること。
 
-**失敗時:** If geological context is unclear (loose specimen, urban find), proceed with physical properties only — context would have helped narrow candidates but is not strictly required.
+**失敗時:** 地質学的コンテキストが不明な場合（遊離標本、都市部での発見）、物理的性質のみで進める — コンテキストは候補を絞るのに役立つが、厳密には必須ではない。
 
-### ステップ2: Test Physical Properties
+### ステップ2: 物理的性質のテスト
 
-Apply the diagnostic tests systematically.
+診断テストを体系的に適用する。
 
 ```
 Diagnostic Property Tests:
@@ -131,13 +128,13 @@ SPECIFIC GRAVITY (heft test):
 - Light: possible pumice, sulfur, or organic material
 ```
 
-**期待結果:** A profile of the specimen: luster, hardness range, streak colour, cleavage/fracture type, and relative density.
+**期待結果:** 標本のプロファイル: 光沢、硬度範囲、条痕色、劈開/断口タイプ、相対密度。
 
-**失敗時:** If a property is ambiguous (e.g., luster between metallic and vitreous — "sub-metallic"), record both options. Ambiguity reduces confidence but does not prevent identification.
+**失敗時:** 性質が曖昧な場合（例: 金属光沢とガラス光沢の間 — 「亜金属」）、両方の選択肢を記録する。曖昧さは確信度を下げるが、同定を妨げない。
 
-### ステップ3: Apply Special Tests
+### ステップ3: 特殊テストの適用
 
-Additional tests for specific mineral groups.
+特定の鉱物グループに対する追加テスト。
 
 ```
 Special Field Tests:
@@ -168,13 +165,13 @@ TENACITY:
 - Elastic: bends and springs back (muscovite mica)
 ```
 
-**期待結果:** Additional diagnostic data that narrows the identification further.
+**期待結果:** 同定をさらに絞り込む追加の診断データ。
 
-**失敗時:** If special tests are unavailable (no magnet, no acid), proceed with the basic properties — they are sufficient for most common minerals.
+**失敗時:** 特殊テストが利用できない場合（磁石がない、酸がない）、基本的な性質で進める — ほとんどの一般的な鉱物にはそれで十分である。
 
-### ステップ4: Identify by Elimination
+### ステップ4: 消去法による同定
 
-Cross-reference the property profile against known minerals.
+性質プロファイルを既知の鉱物と照合する。
 
 ```
 Common Mineral Identification Key (simplified):
@@ -200,28 +197,28 @@ NON-METALLIC, DARK-COLORED:
 - Vitreous + soft (2.5-3) + 1 perfect cleavage + flexible = BIOTITE (mica)
 ```
 
-**期待結果:** A mineral identification or a shortlist of 2-3 candidates with the distinguishing test needed to differentiate them.
+**期待結果:** 鉱物の同定、または2-3の候補のショートリストと、それらを区別するために必要な判別テスト。
 
-**失敗時:** If the specimen does not match any common mineral, it may be a rock (aggregate of minerals) rather than a single mineral, or it may require laboratory analysis (thin section, XRD).
+**失敗時:** 標本が一般的な鉱物のいずれとも一致しない場合、単一の鉱物ではなく岩石（鉱物の集合体）である可能性があるか、実験室分析（薄片、XRD）が必要な場合がある。
 
 ## バリデーション
 
-- [ ] Field context was recorded before handling
-- [ ] Luster was assessed under natural light
-- [ ] Hardness was tested against at least two reference materials
-- [ ] Streak colour was recorded (if specimen is softer than streak plate)
-- [ ] Cleavage or fracture pattern was noted
-- [ ] Identification was reached by systematic elimination, not guessing
-- [ ] Look-alike minerals were explicitly considered and differentiated
+- [ ] 取り扱い前にフィールドコンテキストが記録された
+- [ ] 自然光下で光沢が評価された
+- [ ] 少なくとも2つの基準物質に対して硬度がテストされた
+- [ ] 条痕色が記録された（標本が条痕板より柔らかい場合）
+- [ ] 劈開または断口パターンが記録された
+- [ ] 推測ではなく体系的消去法で同定に至った
+- [ ] 類似鉱物が明示的に考慮され区別された
 
 ## よくある落とし穴
 
-- **Confusing pyrite with gold**: "Fool's gold" (pyrite) is harder (6 vs 2.5), brittle (gold is malleable), and streaks black (gold streaks gold). The tests are definitive — use them
-- **Ignoring streak**: Specimen colour is unreliable (hematite can be grey, red, or black). Streak colour is consistent and diagnostic
-- **Scratching with contaminated tools**: A steel nail with rust produces a false streak. Clean test tools before use
-- **Assuming crystal habit**: Many minerals rarely show well-formed crystals in the field. Massive or granular forms are more common — do not require visible crystals for identification
-- **Confusing weathered surface with true colour**: Break the specimen to expose a fresh surface before testing. Weathering rinds can completely disguise the mineral beneath
+- **黄鉄鉱と金の混同**:「愚者の金」（黄鉄鉱）はより硬く（6 vs 2.5）、脆く（金は可鍛性）、条痕は黒い（金は金色の条痕）。テストは決定的である — 使用すること
+- **条痕の無視**: 標本の色は信頼性がない（赤鉄鉱は灰色、赤、または黒になりうる）。条痕色は一貫しており診断的である
+- **汚染されたツールでの引っかき**: 錆びた鉄釘は偽の条痕を生む。使用前にテストツールを清掃する
+- **結晶癖の仮定**: 多くの鉱物はフィールドで良く形成された結晶をめったに示さない。塊状または粒状の形態がより一般的である — 同定に目に見える結晶を要求しない
+- **風化した表面と真の色の混同**: テスト前に標本を割って新鮮な面を露出させる。風化皮殻は下の鉱物を完全に隠すことがある
 
 ## 関連スキル
 
-- `gold-washing` — alluvial gold recovery uses mineral identification skills to read stream deposits and assess gold-bearing gravels
+- `gold-washing` — 沖積金の回収は、河川堆積物を読み取り金を含む砂利を評価するために鉱物同定スキルを使用する

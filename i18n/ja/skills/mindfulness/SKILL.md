@@ -1,15 +1,13 @@
 ---
 name: mindfulness
 description: >
-  Cultivate defensive situational awareness, threat assessment, and mental
-  clarity under pressure. Covers the Cooper color code awareness system,
-  body language reading and intent detection, verbal de-escalation, moving
-  mindfulness in public spaces, combat focus and the OODA loop, rapid
-  grounding techniques for acute stress, context-specific integration, and
-  ongoing review and refinement of awareness skills. Use when entering
-  unfamiliar or potentially hostile environments, needing to assess a situation
-  for safety, de-escalating a verbal confrontation, or integrating awareness
-  practice into daily movement.
+  防御的な状況認識、脅威評価、プレッシャー下での精神的明晰さを養う。Cooperカラー
+  コード認識システム、ボディランゲージの読み取りと意図検出、言語的エスカレーション
+  解除、公共空間での動的マインドフルネス、戦闘的集中力とOODAループ、急性ストレスの
+  ための迅速なグラウンディング技法、文脈固有の統合、認識スキルの継続的な見直しと
+  改善を網羅する。馴染みのない環境や潜在的に敵対的な環境に入る時、安全のために
+  状況を評価する必要がある時、言語的対立をエスカレーション解除する時、または認識
+  の実践を日常の移動に統合する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,33 +24,33 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# マインドフルネス
+# 防御的マインドフルネスの養成
 
-Develop applied situational awareness, de-escalation skill, and the ability to maintain mental clarity under threat — a practical complement to seated meditation that operates in dynamic, real-world environments.
+応用的な状況認識、エスカレーション解除スキル、脅威下での精神的明晰さを維持する能力を発展させる — 動的で現実世界の環境で機能する、座禅の補完的な実践。
 
 ## 使用タイミング
 
-- Entering unfamiliar or potentially hostile environments
-- Needing to assess a social or physical situation for safety
-- De-escalating a verbal confrontation before it becomes physical
-- Maintaining calm focus during a high-pressure or dangerous event
-- Grounding rapidly after a shock, surprise, or adrenaline dump
-- Integrating awareness practice into daily movement (walking, commuting, traveling)
-- Preparing the mental component before martial arts training (see `tai-chi`, `aikido`)
+- 馴染みのない環境や潜在的に敵対的な環境に入る時
+- 社会的または物理的状況の安全性を評価する必要がある時
+- 言語的対立が身体的になる前にエスカレーション解除する時
+- 高圧的または危険な出来事の最中に冷静な集中力を維持する時
+- ショック、驚き、またはアドレナリン放出後に迅速にグラウンディングする時
+- 認識の実践を日常の移動に統合する時（歩行、通勤、旅行）
+- 武術トレーニングの前にメンタルコンポーネントを準備する時（`tai-chi`、`aikido`を参照）
 
 ## 入力
 
-- **必須**: A willingness to practice sustained outward attention (this is the opposite of internal meditation)
-- **必須**: Access to public or semi-public environments for practice (streets, transit, events)
-- **任意**: Prior meditation experience (see `meditate`; helpful but not required)
-- **任意**: Martial arts training background (see `tai-chi`, `aikido`; enhances physical response options)
-- **任意**: Practice partner for de-escalation role-play scenarios
+- **必須**: 持続的な外向きの注意を実践する意志（これは内的瞑想の反対である）
+- **必須**: 実践のための公共または準公共環境へのアクセス（街路、交通機関、イベント）
+- **任意**: 以前の瞑想経験（`meditate`を参照; 有用だが必須ではない）
+- **任意**: 武術トレーニングの背景（`tai-chi`、`aikido`を参照; 身体的対応の選択肢を強化する）
+- **任意**: エスカレーション解除ロールプレイシナリオの練習パートナー
 
 ## 手順
 
-### ステップ1: Assess Situational Awareness (Cooper Color Codes)
+### ステップ1: 状況認識の評価（Cooperカラーコード）
 
-The Cooper color code system provides a framework for calibrating your awareness level to the environment.
+Cooperカラーコードシステムは、環境に応じて認識レベルを調整するためのフレームワークを提供する。
 
 ```
 Cooper Color Code Awareness Levels:
@@ -82,39 +80,39 @@ Cooper Color Code Awareness Levels:
 └──────────┴─────────────────────┴──────────────────────────────────────────┘
 ```
 
-Practice protocol:
-1. When leaving your home, consciously shift from White to Yellow
-2. In Yellow, scan: Who is around? Where are the exits? What is baseline behavior here?
-3. When something draws attention, shift to Orange: identify the specific concern and form a contingency
-4. If the concern resolves, return to Yellow — do not stay in Orange unnecessarily (it drains energy)
-5. Practice the White-to-Yellow transition until it becomes automatic (2-4 weeks of daily practice)
+練習プロトコル:
+1. 家を出る時、意識的にWhiteからYellowに切り替える
+2. Yellowでは、スキャンする: 周りに誰がいるか？ 出口はどこか？ ここでのベースライン行動は何か？
+3. 何かが注意を引いた時、Orangeに切り替える: 具体的な懸念を特定し、偶発的計画を立てる
+4. 懸念が解消された場合、Yellowに戻る — 不必要にOrangeに留まらない（エネルギーを消耗する）
+5. 自動的になるまでWhiteからYellowへの移行を練習する（毎日の実践で2-4週間）
 
-**期待結果:** After consistent practice, Yellow becomes the natural default in public spaces. Anomalies register immediately without conscious searching. Exits and positioning become habitual considerations.
+**期待結果:** 一貫した練習の後、Yellowが公共空間での自然なデフォルトになること。異常が意識的な探索なしにすぐに登録される。出口とポジショニングが習慣的な考慮事項になること。
 
-**失敗時:** If Yellow feels exhausting or paranoid, the attention is too focused. Yellow is relaxed and wide — like peripheral vision, not a spotlight. If you find yourself constantly in Orange, you may be over-calibrating threat. Practice in safe, familiar environments first to establish a baseline "Yellow" that feels sustainable and calm.
+**失敗時:** Yellowが疲れるまたはパラノイアに感じる場合、注意が集中しすぎている。Yellowはリラックスして広い — スポットライトではなく周辺視野のように。常にOrangeにいる場合、脅威を過大評価している可能性がある。まず安全で馴染みのある環境で練習し、持続可能で穏やかに感じられるベースラインの「Yellow」を確立する。
 
-### ステップ2: Read Body Language and Intent
+### ステップ2: ボディランゲージと意図の読み取り
 
-Most threats broadcast intention through body language before they act. Learn to read the pre-attack indicators.
+ほとんどの脅威は行動する前にボディランゲージを通じて意図を放送する。攻撃前の指標を読み取ることを学ぶ。
 
-1. **Baseline observation**: In any new environment, note what normal behavior looks like — pace, posture, eye contact patterns, group dynamics
-2. **Deviation detection**: Flag behaviors that deviate from baseline:
-   - Someone scanning the crowd while standing still (target selection)
-   - Clenched fists, squared shoulders, bladed stance (pre-fight posturing)
-   - Avoiding eye contact while closing distance (predatory approach)
-   - Exaggerated calm or unnatural stillness in a dynamic environment
-3. **Eye patterns**: Direct, locked eye contact from a stranger can indicate challenge or predatory focus. Repeated glancing at you, then away, may indicate surveillance or target assessment
-4. **Proxemics (distance)**: People who close distance without social reason (not in a queue, not passing through) warrant attention. Trust the instinct that says "that person is too close"
-5. **Group dynamics**: Watch for one person holding attention (distraction) while another maneuvers (setup). Pre-arranged signals between members of a group (nods, gestures)
-6. **Gut response**: The limbic system processes threat faster than the conscious mind. If something feels wrong, honor that signal and increase awareness before rationalizing it away
+1. **ベースライン観察**: 新しい環境では、通常の行動がどのように見えるかを注目する — ペース、姿勢、アイコンタクトのパターン、グループダイナミクス
+2. **逸脱検出**: ベースラインから逸脱する行動にフラグを立てる:
+   - 立ち止まったまま群衆をスキャンしている人（ターゲット選択）
+   - 握り拳、肩を四角にする、ブレードスタンス（攻撃前の姿勢）
+   - 距離を詰めながらアイコンタクトを避ける（捕食的アプローチ）
+   - ダイナミックな環境での誇張された冷静さまたは不自然な静止
+3. **視線パターン**: 見知らぬ人からの直接的なロックされたアイコンタクトは、挑戦または捕食的な集中を示す可能性がある。あなたを繰り返し見てから目をそらすことは、監視またはターゲット評価を示す可能性がある
+4. **プロクセミクス（距離）**: 社会的理由なく距離を詰める人（列に並んでいない、通過していない）は注意に値する。「あの人は近すぎる」という直感を信頼する
+5. **グループダイナミクス**: 一人が注意を引き（気をそらし）、もう一人が動く（セットアップ）ことに注意する。グループメンバー間の事前に決められた合図（うなずき、ジェスチャー）
+6. **直感的反応**: 大脳辺縁系は意識的な心よりも速く脅威を処理する。何かが間違っていると感じたら、合理化する前にそのシグナルを尊重し認識を高める
 
-**期待結果:** The ability to notice pre-attack indicators in real time and shift from Yellow to Orange with a specific concern identified. A general sense of when someone's behavior does not match the social context.
+**期待結果:** リアルタイムで攻撃前の指標に気づき、具体的な懸念を特定してYellowからOrangeに切り替える能力。誰かの行動が社会的コンテキストと一致しない時の一般的な感覚。
 
-**失敗時:** If body language reading feels like guesswork, practice in safe environments first: observe interactions at a cafe, on public transit, or in a park. Note postures, distances, and energy levels without any threat component. Reading people is a skill built through volume of observation. If you become hypervigilant (seeing threats everywhere), ground yourself with Step 6 techniques and recalibrate with the reminder that most people are not threats.
+**失敗時:** ボディランゲージの読み取りが推測に感じられる場合、まず安全な環境で練習する: カフェ、公共交通機関、または公園でインタラクションを観察する。脅威の要素なしに姿勢、距離、エネルギーレベルを記録する。人を読むことは観察の量を通じて構築されるスキルである。過度に警戒するようになった場合（どこにでも脅威を見る）、ステップ6のテクニックでグラウンディングし、ほとんどの人は脅威ではないというリマインダーで再調整する。
 
-### ステップ3: De-escalate Verbal Confrontation
+### ステップ3: 言語的対立のエスカレーション解除
 
-When a situation escalates verbally, de-escalation is the highest-value skill. Most violence can be prevented with words and positioning.
+状況が言語的にエスカレートした場合、エスカレーション解除は最高価値のスキルである。ほとんどの暴力は言葉とポジショニングで防止できる。
 
 ```
 De-escalation Framework:
@@ -147,35 +145,35 @@ De-escalation Framework:
 └──────────────────┴──────────────────────────────────────────────────────┘
 ```
 
-Critical rules:
-- Never tell an angry person to "calm down" — this escalates
-- Hands visible and open (non-threatening) but positioned to protect (fence position)
-- Do not match their energy: if they escalate, you de-escalate harder
-- An ego-driven need to "win" the argument is the most common cause of avoidable violence
+重要なルール:
+- 怒っている人に「落ち着いて」と決して言わない — これはエスカレートする
+- 手を見えるように開く（非脅威的）が、保護する位置に置く（フェンスポジション）
+- 相手のエネルギーに合わせない: 相手がエスカレートしたら、より強くエスカレーション解除する
+- 議論に「勝つ」というエゴ主導の欲求が回避可能な暴力の最も一般的な原因である
 
-**期待結果:** The ability to lower the emotional temperature of a confrontation through voice, positioning, and verbal technique. Most verbal confrontations de-escalate within 60-90 seconds of effective technique.
+**期待結果:** 声、ポジショニング、言語テクニックを通じて対立の感情的温度を下げる能力。ほとんどの言語的対立は効果的なテクニックの60-90秒以内にエスカレーション解除される。
 
-**失敗時:** If the person becomes physically threatening despite de-escalation, the priority shifts from de-escalation to escape or, if escape is impossible, to physical defense (see `aikido`, `tai-chi`). Not every situation can be talked down. Recognize when de-escalation has failed and transition to action without hesitation.
+**失敗時:** エスカレーション解除にもかかわらず相手が身体的に脅威的になった場合、優先順位がエスカレーション解除から逃避に、逃避が不可能な場合は身体的防御に切り替わる（`aikido`、`tai-chi`を参照）。すべての状況が話し合いで解決できるわけではない。エスカレーション解除が失敗した時を認識し、ためらわずに行動に移行する。
 
-### ステップ4: Practice Moving Mindfulness
+### ステップ4: 動的マインドフルネスの実践
 
-Moving mindfulness applies meditation awareness to walking, commuting, and navigating public spaces.
+動的マインドフルネスは瞑想的認識を歩行、通勤、公共空間のナビゲーションに適用する。
 
-1. When walking, practice panoramic awareness: soften the eyes and take in the full visual field rather than focusing on one point
-2. Feel the ground contact with each step — this anchors awareness in the body while the eyes scan the environment
-3. Maintain awareness of the space behind you: changes in sound (footsteps speeding up, conversation stopping) carry information
-4. At transitions (entering a building, rounding a corner, stepping off transit), briefly pause and scan the new environment before committing
-5. In crowded spaces, track 2-3 people in your peripheral awareness without fixating on any one
-6. Practice "mirroring walk": match the pace and rhythm of the environment to blend in; deliberately varying your pace to test whether anyone matches your changes
-7. Periodically check: "If something happened right now, where would I go?" This is Yellow-state maintenance
+1. 歩行時、パノラマ認識を練習する: 目を柔らかくし、一点に集中するのではなく視野全体を取り込む
+2. 各歩みで地面との接触を感じる — これは目が環境をスキャンする間、認識を体に固定する
+3. 背後の空間の認識を維持する: 音の変化（足音が速くなる、会話が止まる）は情報を運ぶ
+4. 移行時（建物に入る、角を曲がる、交通機関を降りる）、コミットする前に一瞬停止して新しい環境をスキャンする
+5. 混雑した空間では、いずれにも固執せずに2-3人を周辺認識で追跡する
+6. 「ミラーリングウォーク」を練習する: 環境のペースとリズムに合わせて溶け込む; 誰かがあなたの変化に合わせるかどうかテストするために意図的にペースを変える
+7. 定期的に確認する:「今何かが起きたら、どこに行くか？」これはYellow状態の維持である
 
-**期待結果:** Walking becomes an active awareness practice rather than passive transportation. Transitions (doorways, corners, platform edges) become natural scan points. Environmental baseline is maintained without effort.
+**期待結果:** 歩行が受動的な移動ではなく能動的な認識の実践になること。移行（ドアウェイ、角、プラットフォームの端）が自然なスキャンポイントになる。環境のベースラインが努力なしに維持されること。
 
-**失敗時:** If moving mindfulness feels tiring or distracting, you are likely gripping too tightly. The awareness should feel like listening to background music — present but not demanding. If you cannot maintain it while also thinking or conversing, practice in simple environments first (quiet neighborhood walk) before adding complexity (busy street, transit).
+**失敗時:** 動的マインドフルネスが疲れるまたは気が散ると感じる場合、おそらく力を入れすぎている。認識はバックグラウンドミュージックを聴くように感じるべきである — 存在するが要求的ではない。思考や会話をしながら維持できない場合、まずシンプルな環境で練習し（静かな近所の散歩）、複雑さを追加する前に（にぎやかな通り、交通機関）。
 
-### ステップ5: Cultivate Combat Mindfulness (OODA Loop)
+### ステップ5: 戦闘的マインドフルネスの養成（OODAループ）
 
-The OODA loop (Observe-Orient-Decide-Act) is a decision cycle for operating under pressure. Speed through this loop determines who controls an encounter.
+OODAループ（Observe-Orient-Decide-Act）はプレッシャー下での運用のための意思決定サイクルである。このループを通過する速度が誰が遭遇をコントロールするかを決定する。
 
 ```
 OODA Loop Application:
@@ -202,20 +200,20 @@ OODA Loop Application:
 └──────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-Training the OODA loop:
-1. In daily life, practice rapid scenario assessment: enter a room and within 5 seconds identify exits, cover, and the most concerning person
-2. Play "what if" games: "If someone entered that door aggressively right now, what would I do?" Form the plan (Orange), then release (return to Yellow)
-3. In martial arts practice, train pre-set responses to specific attacks — this accelerates the Orient phase
-4. Practice decision-making under artificial stress: timed drills, cold water exposure while problem-solving, physical exercise combined with cognitive tasks
-5. After any real or simulated event, debrief: "What did I observe? What did I miss? Where did I hesitate?"
+OODAループのトレーニング:
+1. 日常生活で迅速な状況評価を練習する: 部屋に入って5秒以内に出口、遮蔽物、最も気になる人を特定する
+2. 「もしも」ゲームをする:「今あのドアから攻撃的に誰かが入ってきたら、どうするか？」計画を立て（Orange）、次に解放する（Yellowに戻る）
+3. 武術の練習では、特定の攻撃に対する事前設定された応答をトレーニングする — これがOrientフェーズを加速する
+4. 人工的ストレス下での意思決定を練習する: タイム制限付きドリル、問題解決中の冷水曝露、認知タスクと組み合わせた身体運動
+5. 実際のまたはシミュレートされたイベントの後、振り返り:「何を観察したか？ 何を見逃したか？ どこでためらったか？」
 
-**期待結果:** The OODA loop becomes increasingly automatic. Observation is broad and rapid. Orientation draws on trained patterns. Decisions are made in Orange so that Red-state action is immediate.
+**期待結果:** OODAループがますます自動的になること。観察は広く迅速である。方向づけはトレーニングされたパターンに基づく。決定はOrangeで行われるため、Red状態の行動は即座である。
 
-**失敗時:** If you freeze under simulated pressure (the Black state), the stimulus has bypassed your OODA loop. This means the gap between White and Red was too large. Return to Step 1 and reinforce Yellow-state maintenance so that unexpected events meet an already-alert mind. Freezing is a normal survival response — it can be retrained through gradual stress inoculation, not by forcing yourself into extreme scenarios.
+**失敗時:** シミュレートされたプレッシャー下でフリーズする場合（Black状態）、刺激がOODAループをバイパスしている。これはWhiteとRedの間のギャップが大きすぎることを意味する。ステップ1に戻り、Yellow状態の維持を強化することで、予期しないイベントがすでに警戒状態にある心に出会うようにする。フリーズは正常な生存反応であり、極端なシナリオに無理に身を置くのではなく、段階的なストレス接種を通じて再トレーニングできる。
 
-### ステップ6: Deploy Rapid Grounding Techniques
+### ステップ6: 迅速なグラウンディング技法の展開
 
-When stress, shock, or adrenaline disrupts clarity, these techniques restore functional awareness within seconds.
+ストレス、ショック、またはアドレナリンが明晰さを乱した時、これらの技法は数秒以内に機能的な認識を回復する。
 
 ```
 Grounding Techniques Quick Reference:
@@ -253,74 +251,74 @@ Grounding Techniques Quick Reference:
 └──────────────────────┴─────────────────────────────────────────────────┘
 ```
 
-1. Practice these techniques when NOT under stress so they are available when needed
-2. Tactical breathing is the single most effective rapid intervention — practice it daily
-3. After any adrenaline event (near-miss, confrontation, shock), run box breathing before making any decisions
-4. Combine techniques: physical anchor + tactical breathing is effective for strong reactions
+1. ストレス下にない時にこれらの技法を練習し、必要な時に利用できるようにする
+2. 戦術的呼吸は最も効果的な単一の迅速な介入である — 毎日練習する
+3. アドレナリンイベント（ニアミス、対立、ショック）の後、何らかの決定を下す前にボックスブリージングを行う
+4. 技法を組み合わせる: フィジカルアンカー+戦術的呼吸は強い反応に効果的
 
-**期待結果:** The ability to downregulate from acute stress to functional clarity within 60-120 seconds. Techniques are practiced enough to be recalled under pressure without conscious effort.
+**期待結果:** 急性ストレスから機能的な明晰さへ60-120秒以内にダウンレギュレートする能力。技法はプレッシャー下で意識的な努力なしに想起できるほど練習されていること。
 
-**失敗時:** If a technique does not bring relief within 2 minutes, switch to a different one — not all techniques work for all people or all situations. If grounding is ineffective because the stressor is ongoing (you are still in danger), grounding is premature — address the situation first using OODA (Step 5), then ground afterward. Persistent inability to downregulate after events may indicate a need for professional support.
+**失敗時:** 技法が2分以内に効果がない場合、別のものに切り替える — すべての技法がすべての人やすべての状況に効くわけではない。グラウンディングが効果がないのはストレッサーが継続中（まだ危険にいる）のためである場合、グラウンディングは時期尚早である — まずOODA（ステップ5）を使って状況に対処し、その後グラウンディングする。イベント後に持続的にダウンレギュレートできない場合、専門家のサポートが必要かもしれない。
 
-### ステップ7: Integrate Across Contexts
+### ステップ7: コンテキスト間での統合
 
-Apply defensive mindfulness consistently across different environments and situations.
+異なる環境と状況にわたって防御的マインドフルネスを一貫して適用する。
 
-1. **Urban**: Higher baseline alertness (solid Yellow). Track blind spots (alleys, stairwells, parking structures). Maintain awareness at ATMs, transit platforms, and when entering/exiting vehicles
-2. **Wilderness**: Different threat profile — terrain hazards, weather, wildlife, getting lost. Awareness shifts from people to environment. Navigation and shelter assessment replace social threat reading (see bushcraft skills)
-3. **Social events**: Identify exits on arrival. Monitor alcohol levels in others (impaired people are unpredictable). Stay closer to exits than to the center of crowds
-4. **Travel**: Heightened awareness in unfamiliar environments. Know the emergency number for the country. Keep documents and valuables distributed, not in one bag. Note your route to/from accommodation
-5. **Digital**: Awareness extends to information security — who is observing your device, what you share publicly, physical security of your devices
-6. **With others**: Your awareness protects the people with you. Position yourself between potential threats and those you are with. Brief companions on basic awareness without causing anxiety
+1. **都市部**: より高いベースライン警戒（しっかりしたYellow）。死角を追跡する（路地、階段の吹き抜け、駐車場構造）。ATM、交通機関のプラットフォーム、車両の乗降時に認識を維持する
+2. **野外**: 異なる脅威プロファイル — 地形の危険、天候、野生動物、道に迷うこと。認識が人から環境にシフトする。ナビゲーションとシェルター評価が社会的脅威の読み取りに取って代わる（ブッシュクラフトスキルを参照）
+3. **社交イベント**: 到着時に出口を特定する。他者のアルコールレベルを監視する（酔った人は予測不可能）。群衆の中心よりも出口の近くにいる
+4. **旅行**: 馴染みのない環境での高められた認識。その国の緊急番号を知っておく。書類と貴重品を分散させる、1つのバッグにまとめない。宿泊先への/からのルートを記録する
+5. **デジタル**: 認識は情報セキュリティにも及ぶ — 誰がデバイスを観察しているか、何を公開で共有するか、デバイスの物理的セキュリティ
+6. **他者と一緒の場合**: あなたの認識は一緒にいる人々を守る。潜在的な脅威と一緒にいる人の間に自分を配置する。不安を引き起こさずに基本的な認識について同行者に簡潔に伝える
 
-**期待結果:** A consistent, sustainable baseline awareness that adapts to context without becoming paranoid or exhausting. Yellow state maintained across environments with appropriate Orange-state responses to genuine anomalies.
+**期待結果:** パラノイアや疲労にならずにコンテキストに適応する、一貫した持続可能なベースライン認識。環境全体でYellow状態が維持され、本物の異常に対する適切なOrange状態の反応があること。
 
-**失敗時:** If awareness practice creates anxiety or hypervigilance, the calibration is too high. Return to Step 1 and practice Yellow in familiar, safe environments. The goal is relaxed alertness, not perpetual threat scanning. If awareness practice interferes with enjoyment of life, consult with a mental health professional — particularly if there is a trauma history that makes threat assessment unreliable.
+**失敗時:** 認識の実践が不安や過度の警戒を生む場合、較正が高すぎる。ステップ1に戻り、馴染みのある安全な環境でYellowを練習する。目標はリラックスした警戒であり、永続的な脅威スキャンではない。認識の実践が人生の楽しみを妨げる場合、メンタルヘルスの専門家に相談する — 特に脅威評価を信頼性のないものにするトラウマの歴史がある場合。
 
-### ステップ8: Review and Refine
+### ステップ8: 見直しと改善
 
-Like any skill, defensive mindfulness improves through deliberate review and honest self-assessment.
+他のスキルと同様に、防御的マインドフルネスは意図的な見直しと正直な自己評価を通じて向上する。
 
-1. After any notable awareness event (a successful detection, a de-escalation, a missed cue, a freeze), journal the details:
-   - What happened?
-   - What color code was I in when it started?
-   - What did I observe? What did I miss?
-   - What worked? What would I do differently?
-2. Monthly review: scan journal entries for patterns — recurring blind spots, environments where awareness drops, emotional states that interfere
-3. Seek training: de-escalation workshops, scenario-based self-defense courses, first aid certification
-4. Practice with a partner: role-play confrontation scenarios, practice verbal de-escalation, critique each other's positioning
-5. Cross-train: martial arts (see `aikido`, `tai-chi`) build physical response options; meditation (see `meditate`) builds the calm baseline that awareness operates from
-6. Maintain physical fitness: the body's stress response performs better when the cardiovascular system is conditioned
+1. 注目すべき認識イベント（成功した検出、エスカレーション解除、見逃した手がかり、フリーズ）の後、詳細をジャーナリングする:
+   - 何が起きたか？
+   - 始まった時どのカラーコードにいたか？
+   - 何を観察したか？ 何を見逃したか？
+   - 何がうまくいったか？ 何を違うようにするか？
+2. 月次レビュー: ジャーナルエントリをスキャンしてパターンを探す — 繰り返される死角、認識が低下する環境、干渉する感情状態
+3. トレーニングを探す: エスカレーション解除ワークショップ、シナリオベースの自己防衛コース、応急手当の認定
+4. パートナーと練習する: 対立シナリオのロールプレイ、言語的エスカレーション解除の練習、互いのポジショニングの批評
+5. クロストレーニング: 武術（`aikido`、`tai-chi`を参照）は身体的対応の選択肢を構築する; 瞑想（`meditate`を参照）は認識が動作する穏やかなベースラインを構築する
+6. 体力を維持する: 心血管系が鍛えられている時、体のストレス反応はより良く機能する
 
-**期待結果:** Measurable improvement over time: faster anomaly detection, calmer response to stressors, better positioning habits, and more effective de-escalation.
+**期待結果:** 時間の経過に伴う測定可能な改善: より速い異常検出、ストレッサーへのより穏やかな反応、より良いポジショニングの習慣、より効果的なエスカレーション解除。
 
-**失敗時:** If skills plateau, introduce novel environments or training partners. If motivation wanes, recall that awareness is an investment that pays off in the one moment it is needed. If self-assessment reveals persistent weaknesses (e.g., always freezing, never noticing approaches from behind), target those specifically rather than continuing general practice.
+**失敗時:** スキルが停滞した場合、新しい環境やトレーニングパートナーを導入する。モチベーションが衰えた場合、認識はそれが必要な一瞬に報いる投資であることを思い出す。自己評価が持続的な弱点を明らかにする場合（例: 常にフリーズする、背後からのアプローチに決して気づかない）、一般的な練習を続けるのではなく、それらを具体的にターゲットにする。
 
 ## バリデーション
 
-- [ ] Cooper color codes can be identified and applied in real time
-- [ ] At least 3 pre-attack body language indicators can be named and recognized
-- [ ] De-escalation framework can be articulated and has been practiced (at minimum in role-play)
-- [ ] Moving mindfulness is practiced during daily commute or walking for at least 1 week
-- [ ] Tactical breathing (box breathing) can be performed from memory and has been practiced daily
-- [ ] At least 2 rapid grounding techniques have been tested and one preferred method identified
-- [ ] OODA loop has been applied to at least 3 "what if" scenarios
-- [ ] Awareness journal has at least 3 entries documenting real observations
+- [ ] Cooperカラーコードがリアルタイムで識別・適用できる
+- [ ] 少なくとも3つの攻撃前のボディランゲージ指標を命名・認識できる
+- [ ] エスカレーション解除フレームワークを説明でき、練習済みである（少なくともロールプレイで）
+- [ ] 動的マインドフルネスが毎日の通勤または歩行中に少なくとも1週間練習されている
+- [ ] 戦術的呼吸（ボックスブリージング）を記憶から実行でき、毎日練習されている
+- [ ] 少なくとも2つの迅速なグラウンディング技法がテスト済みで、1つの好みの方法が特定されている
+- [ ] OODAループが少なくとも3つの「もしも」シナリオに適用されている
+- [ ] 認識ジャーナルに実際の観察を文書化した少なくとも3つのエントリがある
 
 ## よくある落とし穴
 
-- **Hypervigilance masquerading as awareness**: True awareness is relaxed and sustainable. If you are exhausted, anxious, or seeing threats everywhere, you are in chronic Orange — this is counterproductive and unsustainable. Yellow is the goal, not Orange
-- **Tunnel vision on the obvious threat**: The person yelling may be the distraction. Train yourself to scan the periphery when something grabs central attention. Multiple-threat awareness is the purpose of randori training (see `aikido`)
-- **Telling an angry person to calm down**: This is the single most common de-escalation error. It communicates that their feelings are invalid and you are in control — both escalatory. Acknowledge their emotional state instead
-- **Neglecting the verbal before the physical**: Most violence is preceded by verbal escalation. Effective de-escalation prevents the vast majority of physical confrontations. Investing in verbal skills has higher return than physical technique alone
-- **Skipping grounding after events**: Adrenaline impairs judgment for 20-45 minutes after an event. Making decisions (especially aggressive ones) during this window is unreliable. Ground first, decide second
-- **Training in isolation**: Awareness and de-escalation are social skills. Solo practice builds the foundation, but partner drills and real-world practice are essential for realistic competence
+- **認識を装った過度の警戒**: 真の認識はリラックスして持続可能である。疲労、不安、またはどこにでも脅威を見る場合、慢性的なOrangeにいる — これは非生産的で持続不可能。Yellowが目標であり、Orangeではない
+- **明白な脅威へのトンネルビジョン**: 叫んでいる人は気をそらすものかもしれない。何かが中心的な注意を引いた時、周辺をスキャンするよう訓練する。複数脅威の認識が乱取り訓練の目的である（`aikido`を参照）
+- **怒っている人に落ち着くよう言うこと**: これは最も一般的なエスカレーション解除エラーである。それは彼らの感情が無効であり、あなたがコントロールしていると伝える — どちらもエスカレート的。代わりに彼らの感情状態を認める
+- **身体的の前に言語的を怠ること**: ほとんどの暴力は言語的エスカレーションに先行される。効果的なエスカレーション解除はほとんどの身体的対立を防止する。言語スキルへの投資は身体的テクニック単独よりも高いリターンを持つ
+- **イベント後のグラウンディングのスキップ**: アドレナリンはイベント後20-45分間判断を損なう。このウィンドウ中の決定（特に攻撃的なもの）は信頼性がない。まずグラウンディングし、次に決定する
+- **孤立した訓練**: 認識とエスカレーション解除は社会的スキルである。ソロの練習は基礎を構築するが、パートナードリルと現実世界の練習がリアルな能力に不可欠である
 
 ## 関連スキル
 
-- `aikido` — physical techniques for when de-escalation fails; blending and redirection principles mirror verbal de-escalation
-- `tai-chi` — develops rooted calm and body awareness that supports both physical readiness and emotional regulation
-- `meditate` — builds the baseline mental stillness from which awareness operates; seated practice complements the active, outward focus of defensive mindfulness
-- `heal` — first aid knowledge and stress management are direct applications of defensive mindfulness
-- `remote-viewing` — shares perceptual acuity training; non-local awareness exercises complement environmental scanning skills
-- `awareness` — AI self-application variant; maps Cooper color codes and OODA loop to internal threat detection for hallucination risk and context degradation
+- `aikido` — エスカレーション解除が失敗した場合の身体的テクニック; ブレンディングとリダイレクションの原則は言語的エスカレーション解除を反映する
+- `tai-chi` — 身体的準備と感情的調整の両方をサポートする根を張った穏やかさと体の認識を発達させる
+- `meditate` — 認識が動作するベースラインの精神的静けさを構築する; 座禅の実践は防御的マインドフルネスの能動的で外向きのフォーカスを補完する
+- `heal` — 応急手当の知識とストレス管理は防御的マインドフルネスの直接的な応用である
+- `remote-viewing` — 知覚的鋭敏さのトレーニングを共有する; 非局所的認識の演習が環境スキャンスキルを補完する
+- `awareness` — AI自己適用バリアント; Cooperカラーコードと OODAループを幻覚リスクとコンテキスト劣化の内部脅威検出にマッピングする

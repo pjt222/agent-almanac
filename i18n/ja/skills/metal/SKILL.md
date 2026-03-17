@@ -1,15 +1,15 @@
 ---
 name: metal
 description: >
-  Extract the conceptual essence of a repository as skills, agents, and teams —
-  the project's roles, procedures, and coordination patterns expressed as
-  agentskills.io-standard definitions. Reads an arbitrary codebase and produces
-  generalized definitions that capture WHAT the project does and WHO operates it,
-  without replicating HOW it does it. Use when onboarding to a new codebase and
-  wanting to understand its conceptual architecture, when bootstrapping an
-  agentic system from an existing project, when studying a project's organizational
-  DNA for cross-pollination, or when creating a skill/agent/team library inspired
-  by a reference implementation.
+  リポジトリの概念的エッセンスをスキル、エージェント、チームとして抽出する —
+  プロジェクトの役割、手順、調整パターンをagentskills.io標準の定義として表現する。
+  任意のコードベースを読み取り、プロジェクトが何をするか（WHAT）と誰が運用するか
+  （WHO）を捕捉する汎用的な定義を生成する。それがどのように行われるか（HOW）を
+  複製することはしない。新しいコードベースにオンボーディングしてその概念的アーキ
+  テクチャを理解したい時、既存のプロジェクトからエージェントシステムをブートスト
+  ラップする時、クロスポリネーションのためにプロジェクトの組織的DNAを研究する時、
+  またはリファレンス実装に触発されたスキル/エージェント/チームライブラリを作成する
+  時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob Bash
 metadata:
@@ -26,55 +26,55 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# メタル自己抽出
+# Metal
 
-Extract the conceptual DNA of a repository — its roles, procedures, and coordination patterns — as generalized agentskills.io definitions. Like extracting noble metal from ore, the skill separates what a project IS (its essence) from what it DOES (its implementation), producing reusable skill, agent, and team definitions that capture the project's organizational genome without reproducing its codebase.
+リポジトリの概念的DNA — その役割、手順、調整パターン — を汎用的なagentskills.io定義として抽出する。鉱石から貴金属を抽出するように、このスキルはプロジェクトが何であるか（そのエッセンス）と何をするか（その実装）を分離し、プロジェクトの組織的ゲノムを捕捉する再利用可能なスキル、エージェント、チーム定義を生成する — コードベースを再現することなく。
 
 ## 使用タイミング
 
-- Onboarding to a new codebase and wanting to map its conceptual architecture before diving into code
-- Bootstrapping an agentic system from an existing project — turning implicit workflows into explicit skill/agent/team definitions
-- Studying a project's organizational DNA for cross-pollination into other projects
-- Creating a skill/agent/team library inspired by a reference implementation without copying it
-- Understanding what a project's structure reveals about its creators' mental models and domain expertise
+- 新しいコードベースにオンボーディングし、コードに飛び込む前にその概念的アーキテクチャをマッピングしたい時
+- 既存のプロジェクトからエージェントシステムをブートストラップする時 — 暗黙的なワークフローを明示的なスキル/エージェント/チーム定義に変換する
+- クロスポリネーションのためにプロジェクトの組織的DNAを研究する時
+- リファレンス実装に触発されたスキル/エージェント/チームライブラリを作成する時（コピーせずに）
+- プロジェクトの構造が作成者のメンタルモデルとドメイン専門知識について何を明らかにするかを理解する時
 
 ## 入力
 
-- **必須**: Path to the repository or project root directory
-- **必須**: Purpose statement — why is essence being extracted? (onboarding, bootstrapping, study, or cross-pollination)
-- **任意**: Focus domains — specific areas of the project to concentrate on (default: all)
-- **任意**: Output depth — `survey` (prospect + assay only), `extract` (full procedure), or `report` (extraction + written report) (default: `extract`)
-- **任意**: Maximum extractions — cap on total skills + agents + teams to produce (default: 15)
+- **必須**: リポジトリまたはプロジェクトルートディレクトリへのパス
+- **必須**: 目的の声明 — なぜエッセンスを抽出するのか？（オンボーディング、ブートストラップ、研究、またはクロスポリネーション）
+- **任意**: フォーカスドメイン — プロジェクトの特定の領域に集中する（デフォルト: 全体）
+- **任意**: 出力深度 — `survey`（調査+分析のみ）、`extract`（完全な手順）、または`report`（抽出+書面レポート）（デフォルト: `extract`）
+- **任意**: 最大抽出数 — 生成するスキル+エージェント+チームの合計上限（デフォルト: 15）
 
-## The Ore Test
+## 鉱石テスト
 
-The central quality criterion for all extraction:
+すべての抽出における中心的な品質基準:
 
-> **Could this concept exist in a completely different implementation?**
+> **この概念は完全に異なる実装で存在しうるか？**
 >
-> If YES — it is **metal** (essence). Extract it.
-> If NO — it is **gangue** (implementation detail). Leave it behind.
+> はいの場合 — それは**metal**（エッセンス）である。抽出する。
+> いいえの場合 — それは**gangue**（実装の詳細）である。残す。
 
-Example: A weather app's concept "integrate external data source" is metal — it applies to any project fetching third-party data. But "parse OpenWeatherMap v3 JSON response" is gangue — it is specific to one API.
+例: 天気アプリの「外部データソースを統合する」という概念はmetalである — サードパーティデータを取得するどのプロジェクトにも適用される。しかし「OpenWeatherMap v3 JSONレスポンスを解析する」はgangueである — 1つのAPIに固有のものである。
 
-Extracted skills should describe the CLASS of task, not the specific instance. Extracted agents should describe the ROLE, not the person. Extracted teams should describe the COORDINATION PATTERN, not the org chart.
+抽出されたスキルは特定のインスタンスではなく、タスクのクラスを記述すべきである。抽出されたエージェントはその人ではなく、役割を記述すべきである。抽出されたチームは組織図ではなく、調整パターンを記述すべきである。
 
 ## 手順
 
-### ステップ1: Prospect — Survey the Ore Body
+### ステップ1: 調査 — 鉱床を調査する
 
-Survey the repository structure without judgment. Map the terrain before mining.
+判断なしにリポジトリ構造を調査する。採掘の前に地形をマッピングする。
 
-1. Glob the directory tree to understand the project's shape:
-   - Source directories and their organization pattern (by feature, by layer, by domain)
-   - Configuration files: `package.json`, `DESCRIPTION`, `setup.py`, `Cargo.toml`, `go.mod`, `Makefile`
-   - Documentation: `README.md`, `CLAUDE.md`, `CONTRIBUTING.md`, architecture docs
-   - CI/CD: `.github/workflows/`, `Dockerfile`, deployment configs
-   - Test directories and their structure
-2. Read the project's self-description (README, package manifest) to understand its declared purpose
-3. Count files by type/language to gauge scope and identify the primary technology
-4. Identify the project's boundary — where it begins and ends, what it depends on vs what it provides
-5. Produce the **Prospect Report**:
+1. ディレクトリツリーをGlobしてプロジェクトの形を理解する:
+   - ソースディレクトリとその組織パターン（機能別、レイヤー別、ドメイン別）
+   - 設定ファイル: `package.json`、`DESCRIPTION`、`setup.py`、`Cargo.toml`、`go.mod`、`Makefile`
+   - ドキュメント: `README.md`、`CLAUDE.md`、`CONTRIBUTING.md`、アーキテクチャドキュメント
+   - CI/CD: `.github/workflows/`、`Dockerfile`、デプロイメント設定
+   - テストディレクトリとその構造
+2. プロジェクトの自己記述（README、パッケージマニフェスト）を読み、その宣言された目的を理解する
+3. タイプ/言語別にファイルを数えてスコープを把握し、主要な技術を特定する
+4. プロジェクトの境界を特定する — どこで始まりどこで終わるか、何に依存し何を提供するか
+5. **調査レポート**を作成する:
 
 ```
 Project: [name]
@@ -85,58 +85,58 @@ Shape: [monorepo/library/app/framework/docs]
 External Surface: [CLI/API/UI/library exports/none]
 ```
 
-**期待結果:** A factual survey — what is here, how large, what does the project claim to be. No classification or judgment yet. The report reads like a geological survey, not a review.
+**期待結果:** 事実に基づく調査 — 何がここにあるか、どの程度の規模か、プロジェクトが何であると主張しているか。まだ分類や判断はない。レポートはレビューではなく、地質調査のように読めること。
 
-**失敗時:** If the repository has no README or manifest, infer purpose from directory names, file contents, and test descriptions. If the project is too large (>1000 source files), narrow the scope to the most active directories (use git log frequency or README references).
+**失敗時:** リポジトリにREADMEやマニフェストがない場合、ディレクトリ名、ファイル内容、テストの記述から目的を推測する。プロジェクトが大きすぎる場合（ソースファイル>1000）、最もアクティブなディレクトリにスコープを絞る（gitログの頻度やREADMEの参照を使用する）。
 
-### ステップ2: Assay — Analyze the Composition
+### ステップ2: 分析 — 組成を分析する
 
-Read representative files to understand what the project DOES at the conceptual level.
+代表的なファイルを読み、プロジェクトが概念レベルで何をするかを理解する。
 
-1. Sample 5-10 representative files from different areas of the project — not exhaustive, but diverse:
-   - Entry points (main files, route handlers, CLI commands)
-   - Core logic (the most-imported or most-referenced modules)
-   - Tests (they reveal intended behavior more clearly than implementation)
-   - Configuration (reveals operational concerns and deployment context)
-2. For each sampled area, identify:
-   - **Domains**: What subject areas does the project touch? (e.g., "authentication", "data transformation", "reporting")
-   - **Verbs**: What actions does the project perform? (e.g., "validate", "transform", "deploy", "notify")
-   - **Roles**: What human or system actors does the code serve? (e.g., "data engineer", "end user", "reviewer")
-   - **Flows**: What sequences of actions form workflows? (e.g., "ingest → validate → transform → store")
-3. For each finding, classify as:
-   - **Essential**: Would exist in any implementation solving this problem
-   - **Accidental**: Specific to this implementation's technology choices
-4. Produce the **Assay Report**: a table of domains, verbs, roles, and flows with essential/accidental tags
+1. プロジェクトの異なる領域から5-10の代表的なファイルをサンプリングする — 網羅的ではないが多様に:
+   - エントリーポイント（メインファイル、ルートハンドラー、CLIコマンド）
+   - コアロジック（最もインポート/参照されるモジュール）
+   - テスト（実装よりも意図された動作を明確に明らかにする）
+   - 設定（運用上の懸念とデプロイメントコンテキストを明らかにする）
+2. サンプリングした各領域について特定する:
+   - **ドメイン**: プロジェクトはどの主題領域に触れるか？（例: 「認証」「データ変換」「レポーティング」）
+   - **動詞**: プロジェクトはどのアクションを実行するか？（例: 「検証」「変換」「デプロイ」「通知」）
+   - **役割**: コードはどの人間またはシステムのアクターに奉仕するか？（例: 「データエンジニア」「エンドユーザー」「レビュアー」）
+   - **フロー**: どのアクションのシーケンスがワークフローを形成するか？（例: 「取り込み → 検証 → 変換 → 保存」）
+3. 各発見について分類する:
+   - **本質的**: この問題を解決するどの実装にも存在する
+   - **偶発的**: この実装の技術選択に固有
+4. **分析レポート**を作成する: ドメイン、動詞、役割、フローの表に本質的/偶発的のタグを付ける
 
-**期待結果:** A conceptual map of the project that reads like a domain glossary, not a code walkthrough. Someone unfamiliar with the tech stack should understand what the project does from this report.
+**期待結果:** コードのウォークスルーではなく、ドメイン用語集のように読めるプロジェクトの概念マップ。技術スタックに馴染みのない人がこのレポートからプロジェクトが何をするかを理解できること。
 
-**失敗時:** If the codebase is opaque (heavy metaprogramming, generated code, or obfuscated), lean on tests and documentation rather than source code. If no tests exist, read commit messages for intent.
+**失敗時:** コードベースが不透明な場合（重度のメタプログラミング、生成されたコード、または難読化）、ソースコードよりもテストとドキュメントに頼る。テストが存在しない場合、意図を読み取るためにコミットメッセージを読む。
 
-### ステップ3: Meditate — Release Implementation Bias
+### ステップ3: 瞑想 — 実装バイアスを解放する
 
-Pause to clear the cognitive anchoring from reading code.
+コードを読むことから生じる認知的アンカリングをクリアするために一時停止する。
 
-1. Notice which framework, language, or architectural pattern is dominating your mental model — label it
-2. Release attachment to the HOW: "This project uses React" becomes "This project has a user interface layer." "This uses PostgreSQL" becomes "This has persistent structured storage."
-3. For each finding in the Assay Report, apply the Ore Test:
-   - "integrate external data source" — could exist anywhere? YES → metal
-   - "configure Axios interceptors" — could exist anywhere? NO → gangue
-4. Rewrite any findings that failed the Ore Test at a higher abstraction level
-5. If multiple perspectives help, consider the project through these lenses:
-   - **Archaeologist**: What does the code's structure reveal about its creators' mental models?
-   - **Biologist**: What is the replicable genome vs the specific phenotype?
-   - **Music theorist**: What is the form (sonata, rondo) vs the specific notes?
-   - **Cartographer**: What level of abstraction captures the useful topology?
+1. どのフレームワーク、言語、またはアーキテクチャパターンがメンタルモデルを支配しているかに気づく — ラベルを付ける
+2. HOWへの執着を解放する:「このプロジェクトはReactを使用している」は「このプロジェクトにはユーザーインターフェースレイヤーがある」になる。「PostgreSQLを使用している」は「永続的な構造化ストレージがある」になる。
+3. 分析レポートの各発見について鉱石テストを適用する:
+   - 「外部データソースを統合する」— どこにでも存在しうる？ はい → metal
+   - 「Axiosインターセプターを設定する」— どこにでも存在しうる？ いいえ → gangue
+4. 鉱石テストに失敗した発見をより高い抽象レベルで書き直す
+5. 複数の視点が役立つ場合、以下のレンズを通じてプロジェクトを考慮する:
+   - **考古学者**: コードの構造は作成者のメンタルモデルについて何を明らかにするか？
+   - **生物学者**: 再現可能なゲノムvs特定の表現型は何か？
+   - **音楽理論家**: 形式（ソナタ、ロンド）vs特定の音符は何か？
+   - **地図製作者**: どの抽象レベルが有用なトポロジーを捕捉するか？
 
-**期待結果:** The Assay Report is now free of framework-specific language. Every finding passes the Ore Test. The concepts feel portable — they could apply to a project in any language or framework.
+**期待結果:** 分析レポートからフレームワーク固有の言語がなくなっていること。すべての発見が鉱石テストを通過する。概念はポータブルに感じられる — どの言語やフレームワークのプロジェクトにも適用できる。
 
-**失敗時:** If bias persists (findings keep referencing specific technologies), try inverting: "If this project were rewritten in a completely different stack, which concepts would survive?" Only those are metal.
+**失敗時:** バイアスが持続する場合（発見が特定の技術を参照し続ける）、反転を試みる:「このプロジェクトが完全に異なるスタックで書き直された場合、どの概念が生き残るか？」それだけがmetalである。
 
-### ステップ4: Smelt — Separate Metal from Slag
+### ステップ4: 精錬 — Metalをスラグから分離する
 
-The core extraction step. Classify each essential concept into skills, agents, or teams.
+核心的な抽出ステップ。各本質的概念をスキル、エージェント、またはチームに分類する。
 
-1. For each essential concept from the purified Assay Report, determine its type:
+1. 精製された分析レポートの各本質的概念について、そのタイプを決定する:
 
 ```
 Classification Criteria:
@@ -158,55 +158,55 @@ Classification Criteria:
 +--------+----------------------------+----------------------------+----------------------------+
 ```
 
-2. For each extracted element:
-   - Assign a **generalized name** — not project-specific. "UserAuthService" becomes `identity-manager` (agent). "deployToAWS()" becomes `deploy-artifact` (skill).
-   - Write a **one-line description** that makes sense without knowing the source project
-   - Note the **source concept** it derives from (for traceability, not reproduction)
-   - Apply the Ore Test one final time
+2. 抽出された各要素について:
+   - **汎用化された名前**を割り当てる — プロジェクト固有ではなく。「UserAuthService」は`identity-manager`（エージェント）になる。「deployToAWS()」は`deploy-artifact`（スキル）になる。
+   - ソースプロジェクトを知らなくても意味が通じる**1行の説明**を書く
+   - 派生元の**ソース概念**を記録する（再現のためではなく、追跡可能性のため）
+   - 鉱石テストを最終的にもう一度適用する
 
-3. Guard against common classification errors:
-   - Not every function is a skill — look for PROCEDURES, not individual operations
-   - Not every module is an agent — look for ROLES that require judgment
-   - Not every collaboration is a team — look for COORDINATION PATTERNS with distinct specialties
-   - Most projects yield 3-8 skills, 2-4 agents, and 0-2 teams. If you have 20+, you are extracting too fine.
+3. 一般的な分類エラーを防ぐ:
+   - すべての関数がスキルではない — 個別の操作ではなく手順を探す
+   - すべてのモジュールがエージェントではない — 判断を必要とする役割を探す
+   - すべてのコラボレーションがチームではない — 異なる専門性を持つ調整パターンを探す
+   - ほとんどのプロジェクトは3-8のスキル、2-4のエージェント、0-2のチームを生成する。20以上ある場合、抽出が細かすぎる。
 
-**期待結果:** A classified inventory where each item has a type (skill/agent/team), a generalized name, and a one-line description. No item references the source project's specific technologies, APIs, or data structures.
+**期待結果:** 各項目にタイプ（スキル/エージェント/チーム）、汎用化された名前、1行の説明がある分類されたインベントリ。ソースプロジェクトの特定の技術、API、またはデータ構造を参照する項目がないこと。
 
-**失敗時:** If classification is ambiguous (is this a skill or an agent?), ask: "Is this about DOING something (skill) or BEING someone who does things (agent)?" A skill is a recipe; an agent is a chef. If still unclear, default to skill — skills are easier to compose later.
+**失敗時:** 分類が曖昧な場合（これはスキルかエージェントか？）、問いかける:「これは何かをすること（スキル）か、何かをする誰かであること（エージェント）か？」スキルはレシピ、エージェントはシェフである。それでも不明な場合、デフォルトでスキルとする — スキルは後で構成しやすい。
 
-### ステップ5: Heal — Verify Extraction Quality
+### ステップ5: 癒し — 抽出品質を検証する
 
-Assess whether the extraction is honest — neither too much nor too little.
+抽出が正直かどうかを評価する — 多すぎず少なすぎず。
 
-1. **Over-extraction check**: Read each extracted definition and ask:
-   - Could someone reconstruct the original project's proprietary logic from this? → Too much detail
-   - Does this reference specific libraries, APIs, database schemas, or file paths? → Still gangue
-   - Is this a full implementation procedure or a concept-level sketch? → Should be sketch
+1. **過剰抽出チェック**: 抽出された各定義を読み、問いかける:
+   - 元のプロジェクトの独自ロジックをこれから再構築できるか？ → 詳細すぎる
+   - 特定のライブラリ、API、データベーススキーマ、またはファイルパスを参照しているか？ → まだgangue
+   - これは完全な実装手順か概念レベルのスケッチか？ → スケッチであるべき
 
-2. **Under-extraction check**: Show only the extracted definitions (without the source project) and ask:
-   - Could someone understand what KIND of project inspired these? → Should be yes
-   - Do the definitions capture the project's essential nature? → Should be yes
-   - Are there major project capabilities not represented? → Should be no
+2. **過少抽出チェック**: 抽出された定義のみを（ソースプロジェクトなしで）表示し、問いかける:
+   - これらに触発されたプロジェクトの種類を理解できるか？ → はいであるべき
+   - 定義はプロジェクトの本質的な性質を捕捉しているか？ → はいであるべき
+   - 表現されていない主要なプロジェクト機能があるか？ → いいえであるべき
 
-3. **Generalization check**: For each definition:
-   - Would the name make sense in a different tech stack? → Should be yes
-   - Is the description framework-agnostic? → Should be yes
-   - Could this definition be useful to a project in a completely different domain? → Ideally yes
+3. **汎用化チェック**: 各定義について:
+   - 名前は異なる技術スタックで意味が通じるか？ → はいであるべき
+   - 説明はフレームワークに依存しないか？ → はいであるべき
+   - この定義は完全に異なるドメインのプロジェクトに有用か？ → 理想的にはい
 
-4. **Balance check**: Review the extraction ratios:
-   - 3-8 skills, 2-4 agents, 0-2 teams is typical for a focused project
-   - Fewer than 3 total extractions suggests under-extraction
-   - More than 15 total suggests over-extraction or insufficient generalization
+4. **バランスチェック**: 抽出比率をレビューする:
+   - 3-8のスキル、2-4のエージェント、0-2のチームがフォーカスされたプロジェクトの典型
+   - 合計3未満の抽出は過少抽出を示唆する
+   - 合計15以上は過剰抽出または不十分な汎用化を示唆する
 
-**期待結果:** Confidence that the extraction is at the right level of abstraction. Each definition is a seed that could grow in different soil, not a cutting that only survives in the original garden.
+**期待結果:** 抽出が適切な抽象レベルにあるという確信。各定義は異なる土壌で成長できる種であり、元の庭でしか生き残れない挿し木ではない。
 
-**失敗時:** If over-extracted, raise the abstraction level — merge specific skills into broader ones, collapse similar agents into a single role. If under-extracted, return to Step 2 and sample additional files. If generalization check fails, strip technology references and rewrite descriptions.
+**失敗時:** 過剰抽出の場合、抽象レベルを上げる — 特定のスキルをより広いものに統合し、類似のエージェントを単一の役割に集約する。過少抽出の場合、ステップ2に戻り追加ファイルをサンプリングする。汎用化チェックが失敗した場合、技術への参照を除去して説明を書き直す。
 
-### ステップ6: Cast — Pour the Metal into Forms
+### ステップ6: 鋳造 — Metalを型に流し込む
 
-Produce the agentskills.io-standard output documents.
+agentskills.io標準の出力ドキュメントを生成する。
 
-1. For each extracted **skill**, write a skeletal definition:
+1. 抽出された各**スキル**について、骨格的な定義を書く:
 
 ```yaml
 # Skill: [generalized-name]
@@ -221,7 +221,7 @@ complexity: [basic/intermediate/advanced]
 # Derived from: [source concept in original project]
 ```
 
-2. For each extracted **agent**, write a skeletal definition:
+2. 抽出された各**エージェント**について、骨格的な定義を書く:
 
 ```yaml
 # Agent: [role-name]
@@ -232,7 +232,7 @@ skills: [list of extracted skills this agent would carry]
 # Derived from: [source role/module in original project]
 ```
 
-3. For each extracted **team**, write a skeletal definition:
+3. 抽出された各**チーム**について、骨格的な定義を書く:
 
 ```yaml
 # Team: [group-name]
@@ -244,20 +244,20 @@ coordination: [hub-and-spoke/sequential/parallel/adaptive]
 # Derived from: [source workflow/process in original project]
 ```
 
-4. Compile all extractions into the **Assay Report** — a single document with sections for Skills, Agents, and Teams, plus a summary table
+4. すべての抽出を**分析レポート**にまとめる — スキル、エージェント、チームのセクションと要約テーブルを含む単一のドキュメント
 
-**期待結果:** A structured report containing all extracted definitions in agentskills.io format. Each definition is skeletal (concept-level, not implementation-level) and could serve as a starting point for the `create-skill`, `create-agent`, or `create-team` skills to flesh out.
+**期待結果:** agentskills.io形式のすべての抽出定義を含む構造化されたレポート。各定義は骨格的（概念レベル、実装レベルではない）であり、`create-skill`、`create-agent`、または`create-team`スキルが詳細化する出発点として機能できること。
 
-**失敗時:** If the output exceeds 15 items, prioritize by centrality — keep the concepts that are most unique to this project's domain. Generic concepts (like "manage-configuration") that exist in most projects should be dropped unless they have an unusual twist.
+**失敗時:** 出力が15項目を超える場合、中心性で優先順位を付ける — このプロジェクトのドメインに最もユニークな概念を保持する。ほとんどのプロジェクトに存在する汎用概念（「manage-configuration」のような）は、異常なひねりがない限り削除すべきである。
 
-### Step 7: Temper — Final バリデーション
+### ステップ7: 焼き入れ — 最終検証
 
-Verify the complete extraction and produce the summary.
+完全な抽出を検証し、要約を作成する。
 
-1. Count the extractions: N skills, N agents, N teams
-2. Assess coverage: do they span the project's major domains?
-3. Verify independence: read each definition WITHOUT the source project context — does it stand alone?
-4. Run the Ore Test one final time on the complete set:
+1. 抽出を数える: Nスキル、Nエージェント、Nチーム
+2. カバレッジを評価する: プロジェクトの主要なドメインをまたいでいるか？
+3. 独立性を検証する: ソースプロジェクトのコンテキストなしで各定義を読む — 単独で成立するか？
+4. 完全なセットに対して鉱石テストを最終的に実行する:
 
 ```
 Temper Assessment:
@@ -270,48 +270,48 @@ Temper Assessment:
 +-----+---------------------------+----------+------------------------------------+
 ```
 
-5. Produce the final summary:
-   - Total extractions (skills / agents / teams)
-   - Coverage assessment (which project domains are represented)
-   - Confidence level (high / medium / low) with rationale
-   - Suggested next steps: which extracted definitions are ready to flesh out first
+5. 最終要約を作成する:
+   - 合計抽出数（スキル / エージェント / チーム）
+   - カバレッジ評価（どのプロジェクトドメインが表現されているか）
+   - 確信レベル（高 / 中 / 低）と根拠
+   - 推奨される次のステップ: どの抽出定義を最初に詳細化すべきか
 
-**期待結果:** A validated Assay Report with a summary table, confidence assessment, and actionable next steps. The report is self-contained — someone who has never seen the source project can read it and understand the extracted concepts.
+**期待結果:** 要約テーブル、確信評価、実行可能な次のステップを含む検証済みの分析レポート。レポートは自己完結的であること — ソースプロジェクトを見たことがない人が読んで抽出された概念を理解できること。
 
-**失敗時:** If more than 20% of items fail the final Ore Test, return to Step 4 (Smelt) and re-extract at a higher abstraction level. If coverage is below 60% of identified domains, return to Step 2 (Assay) and sample additional files.
+**失敗時:** 項目の20%以上が最終鉱石テストに失敗した場合、ステップ4（精錬）に戻り、より高い抽象レベルで再抽出する。カバレッジが特定されたドメインの60%未満の場合、ステップ2（分析）に戻り追加ファイルをサンプリングする。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Prospect report covers project structure, languages, size, and declared purpose
-- [ ] Assay identifies domains, verbs, roles, and flows with essential/accidental classification
-- [ ] Meditate checkpoint clears implementation bias — no framework-specific language in outputs
-- [ ] Every extracted element passes the Ore Test (essence, not implementation detail)
-- [ ] Skills are named with verbs, agents with nouns, teams with group descriptors
-- [ ] All names are generalized — no project-specific references
-- [ ] Extraction count is within typical range (5-15 total, not 1 and not 30)
-- [ ] Output definitions follow agentskills.io format (frontmatter + sections)
-- [ ] Over-extraction and under-extraction checks both pass
-- [ ] Final Temper assessment includes count, coverage, confidence, and next steps
-- [ ] The complete Assay Report is understandable without access to the source project
+- [ ] 調査レポートがプロジェクトの構造、言語、規模、宣言された目的をカバーしている
+- [ ] 分析がドメイン、動詞、役割、フローを本質的/偶発的分類で特定している
+- [ ] 瞑想チェックポイントが実装バイアスをクリアしている — 出力にフレームワーク固有の言語がない
+- [ ] 抽出されたすべての要素が鉱石テストを通過している（実装の詳細ではなくエッセンス）
+- [ ] スキルは動詞で、エージェントは名詞で、チームはグループ記述子で名前が付けられている
+- [ ] すべての名前が汎用化されている — プロジェクト固有の参照がない
+- [ ] 抽出数が典型的な範囲内にある（合計5-15、1でも30でもない）
+- [ ] 出力定義がagentskills.io形式（フロントマター+セクション）に従っている
+- [ ] 過剰抽出と過少抽出のチェックの両方が通過している
+- [ ] 最終的な焼き入れ評価がカウント、カバレッジ、確信度、次のステップを含んでいる
+- [ ] 完全な分析レポートがソースプロジェクトへのアクセスなしで理解可能である
 
 ## よくある落とし穴
 
-- **Mirroring the directory structure**: Producing one skill per source file instead of extracting cross-cutting concepts. The metal should reflect the project's CONCEPTUAL structure, not its file system. A 20-file project does not have 20 skills.
-- **Framework worship**: Extracting "configure-nextjs-api-routes" instead of "define-api-endpoints". Strip the framework; keep the pattern. The Ore Test catches this: "Could this exist without Next.js?" If no, it's gangue.
-- **Role inflation**: Creating an agent for every module. Most projects have 2-5 genuine roles requiring distinct expertise, not 20. Look for JUDGMENT and COMMUNICATION STYLE differences, not just functional differences.
-- **Skipping the Ore Test**: The single biggest failure mode. Every output must pass: "Could this concept exist in a completely different implementation?" If it references specific libraries, APIs, or data schemas, it is slag, not metal.
-- **Producing implementation guides**: Extracted skills should be CONCEPT-LEVEL sketches (3-5 high-level steps), not full implementation procedures. They are seeds to be fleshed out with `create-skill`, not finished products. A 50-step extraction is a reproduction, not an essence.
-- **Under-generalizing names**: "UserAuthService" is a class name, not a concept. "identity-manager" is a role. "manage-user-identity" is a skill. Generalize from the specific to the universal.
-- **Ignoring coordination patterns**: Teams are the hardest to extract because coordination is often implicit. Look for code review workflows, deployment pipelines, data handoffs between systems, and approval chains — these reveal team structures.
+- **ディレクトリ構造のミラーリング**: 横断的な概念を抽出する代わりに、ソースファイルごとに1つのスキルを生成すること。metalはプロジェクトのファイルシステムではなく概念的構造を反映すべきである。20ファイルのプロジェクトは20のスキルを持たない。
+- **フレームワーク崇拝**:「configure-nextjs-api-routes」ではなく「define-api-endpoints」を抽出する。フレームワークを除去し、パターンを保持する。鉱石テストがこれを捕捉する:「これはNext.jsなしで存在しうるか？」いいえなら、gangueである。
+- **役割の膨張**: すべてのモジュールに対してエージェントを作成すること。ほとんどのプロジェクトには異なる専門知識を必要とする本当の役割が2-5あり、20ではない。機能的な違いではなく、判断とコミュニケーションスタイルの違いを探す。
+- **鉱石テストのスキップ**: 最大の失敗モード。すべての出力は通過しなければならない:「この概念は完全に異なる実装で存在しうるか？」特定のライブラリ、API、またはデータスキーマを参照している場合、それはmetalではなくスラグである。
+- **実装ガイドの生成**: 抽出されたスキルは概念レベルのスケッチ（3-5の高レベルステップ）であるべきで、完全な実装手順ではない。`create-skill`で詳細化される種であり、完成品ではない。50ステップの抽出は再現であり、エッセンスではない。
+- **名前の汎用化不足**:「UserAuthService」はクラス名であり、概念ではない。「identity-manager」は役割である。「manage-user-identity」はスキルである。特定から普遍へと汎用化する。
+- **調整パターンの無視**: チームは調整がしばしば暗黙的であるため、抽出が最も難しい。コードレビューワークフロー、デプロイメントパイプライン、システム間のデータハンドオフ、承認チェーンを探す — これらがチーム構造を明らかにする。
 
 ## 関連スキル
 
-- `athanor` — When metal reveals the project needs transformation, not just essence extraction
-- `chrysopoeia` — Value extraction at the code level; metal works at the conceptual level above code
-- `transmute` — Converting extracted concepts between domains or paradigms
-- `create-skill` — Flesh out extracted skill sketches into full SKILL.md implementations
-- `create-agent` — Flesh out extracted agent sketches into full agent definitions
-- `create-team` — Flesh out extracted team sketches into full team compositions
-- `observe` — Deeper observation when the prospect phase reveals an unfamiliar domain
-- `analyze-codebase-for-mcp` — Complementary: metal extracts concepts, analyze-codebase-for-mcp extracts tool surfaces
-- `review-codebase` — Complementary: metal extracts essence, review-codebase evaluates quality
+- `athanor` — metalがプロジェクトにエッセンス抽出ではなく変革が必要であることを明らかにした場合
+- `chrysopoeia` — コードレベルでの価値抽出; metalはコードの上の概念レベルで動作する
+- `transmute` — 抽出された概念をドメイン間またはパラダイム間で変換する
+- `create-skill` — 抽出されたスキルスケッチを完全なSKILL.md実装に詳細化する
+- `create-agent` — 抽出されたエージェントスケッチを完全なエージェント定義に詳細化する
+- `create-team` — 抽出されたチームスケッチを完全なチーム構成に詳細化する
+- `observe` — 調査フェーズで馴染みのないドメインが明らかになった場合のより深い観察
+- `analyze-codebase-for-mcp` — 補完的: metalは概念を抽出し、analyze-codebase-for-mcpはツールサーフェスを抽出する
+- `review-codebase` — 補完的: metalはエッセンスを抽出し、review-codebaseは品質を評価する

@@ -1,14 +1,12 @@
 ---
 name: observe-guidance
 description: >
-  Guide a person in systematic observation of systems, patterns, or
-  phenomena. AI coaches neutral attention, field notes methodology,
-  pattern recognition, hypothesis formation, and structured reporting
-  for debugging, research, and system understanding. Use when a person
-  wants to understand a system's behavior before intervening, when someone
-  keeps jumping to conclusions and needs the discipline of observation first,
-  when preparing an evidence-based report, or when studying team dynamics
-  or process effectiveness through direct observation.
+  システム、パターン、または現象の体系的観察で人をガイドする。AIが中立的な注意、
+  フィールドノート方法論、パターン認識、仮説形成、およびデバッグ、研究、システム
+  理解のための構造化されたレポーティングをコーチする。介入する前にシステムの動作を
+  理解したい時、結論に飛びつく癖があり最初に観察の規律が必要な時、エビデンスに
+  基づくレポートを準備する時、またはチームダイナミクスやプロセスの有効性を直接
+  観察を通じて研究する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,58 +23,58 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 観察のガイダンス
+# 観察（ガイダンス）
 
-Guide a person in systematic observation of a system, phenomenon, or pattern. The AI acts as a field study coach — helping frame the observation target, prepare a protocol, sustain neutral attention, record findings with field notes, analyze patterns, and report observations with clear separation of data and interpretation.
+システム、現象、またはパターンの体系的観察で人をガイドする。AIはフィールドスタディコーチとして機能し — 観察対象のフレーミング、プロトコルの準備、中立的な注意の持続、フィールドノートによる発見の記録、パターンの分析、データと解釈を明確に分離した観察結果の報告を支援する。
 
 ## 使用タイミング
 
-- A person wants to understand a system's behavior before intervening (debugging by observation rather than by trial and error)
-- Someone is conducting research or gathering evidence and needs structured observation methodology
-- A person keeps jumping to conclusions and needs to develop the discipline of observation before interpretation
-- Someone is preparing a report that requires evidence-based findings, not opinions
-- A person wants to understand team dynamics, user behavior, or process effectiveness through direct observation
-- After `meditate-guidance` has cultivated sustained attention, the person wants to direct that attention toward a specific system
+- 介入する前にシステムの動作を理解したい時（試行錯誤ではなく観察によるデバッグ）
+- 研究を行っているか証拠を収集していて、構造化された観察方法論が必要な時
+- 結論に飛びつく癖があり、解釈の前に観察の規律を身につける必要がある時
+- 意見ではなくエビデンスに基づく発見を必要とするレポートを準備している時
+- チームダイナミクス、ユーザー行動、またはプロセスの有効性を直接観察を通じて理解したい時
+- `meditate-guidance`で持続的な注意力を養った後、その注意力を特定のシステムに向けたい時
 
 ## 入力
 
-- **必須**: What the person wants to observe (a system, process, behavior, codebase, team dynamic, natural phenomenon)
-- **必須**: Why they are observing (debugging, research, audit, curiosity, improvement)
-- **任意**: Time available for observation (single session vs. multi-day study)
-- **任意**: Prior attempts to understand the system (what has already been tried)
-- **任意**: Specific questions or hypotheses they want to test
-- **任意**: Tools available for recording (notebook, screen capture, logging, metrics)
+- **必須**: 観察したいもの（システム、プロセス、行動、コードベース、チームダイナミクス、自然現象）
+- **必須**: なぜ観察するのか（デバッグ、研究、監査、好奇心、改善）
+- **任意**: 観察に利用可能な時間（単一セッション vs 複数日の研究）
+- **任意**: システムを理解するための以前の試み（すでに試されたこと）
+- **任意**: テストしたい具体的な質問や仮説
+- **任意**: 記録に利用可能なツール（ノート、スクリーンキャプチャ、ロギング、メトリクス）
 
 ## 手順
 
-### ステップ1: Frame — Define the Observation Target
+### ステップ1: フレーム — 観察対象の定義
 
-Help the person set up a clear, bounded observation frame.
+明確で境界のある観察フレームの設定を支援する。
 
-1. Ask what they want to observe: "What system or behavior are you trying to understand?"
-2. Help them narrow the scope: "What specific aspect of that system interests you most?"
-3. Identify the observation purpose: understanding, debugging, improvement, evidence-gathering, or pure curiosity
-4. Set boundaries: what is in scope and what is not (prevents observation from expanding endlessly)
-5. If they have a hypothesis: state it explicitly, then set it aside — "We will look for evidence both for and against this"
-6. Choose the observation stance:
-   - **Naturalist**: observe without interfering (best for understanding behavior)
-   - **Controlled**: change one variable and observe the effect (best for debugging)
-   - **Longitudinal**: observe over time (best for detecting trends)
+1. 何を観察したいかを尋ねる:「どのシステムや行動を理解しようとしていますか？」
+2. スコープを絞る手助けをする:「そのシステムのどの特定の側面に最も興味がありますか？」
+3. 観察の目的を特定する: 理解、デバッグ、改善、証拠収集、または純粋な好奇心
+4. 境界を設定する: スコープ内とスコープ外を明確にする（観察が際限なく拡大するのを防ぐ）
+5. 仮説がある場合: 明示的に述べてから脇に置く —「賛否両方の証拠を探します」
+6. 観察スタンスを選択する:
+   - **ナチュラリスト**: 干渉せずに観察する（行動理解に最適）
+   - **制御**: 1つの変数を変更し効果を観察する（デバッグに最適）
+   - **縦断的**: 時間をかけて観察する（トレンド検出に最適）
 
-**期待結果:** A clear observation frame with defined target, scope, purpose, and stance. The person knows what they are looking at and what they are not looking at.
+**期待結果:** 対象、スコープ、目的、スタンスが定義された明確な観察フレーム。その人が何を見ているか、何を見ていないかを把握していること。
 
-**失敗時:** If the person cannot narrow their focus ("I want to understand everything"), help them pick one entry point: "What is the one behavior you find most confusing?" If they are already committed to a conclusion ("I just need to prove X"), gently challenge: "What would we need to see to disprove that? Let's look for both."
+**失敗時:** フォーカスを絞れない場合（「すべてを理解したい」）、1つのエントリポイントを選ぶ手助けをする:「最も混乱する1つの行動は何ですか？」 すでに結論にコミットしている場合（「Xを証明すればいい」）、穏やかに挑戦する:「それを否定するために何を見る必要があるでしょうか？ 両方を探しましょう。」
 
-### ステップ2: Prepare — Set Up the Observation Protocol
+### ステップ2: 準備 — 観察プロトコルの設定
 
-Help the person establish a systematic approach to recording what they observe.
+観察内容を記録する体系的なアプローチの確立を支援する。
 
-1. Choose the recording method based on the observation type:
-   - **Codebase/system**: file paths, line numbers, timestamps, log entries
-   - **Behavior/process**: time-stamped notes with actor, action, and context
-   - **Team/communication**: quotes, speaker identifiers, non-verbal cues
-   - **Natural/physical**: sketches, measurements, environmental conditions
-2. Create a simple recording template:
+1. 観察タイプに基づいて記録方法を選択する:
+   - **コードベース/システム**: ファイルパス、行番号、タイムスタンプ、ログエントリ
+   - **行動/プロセス**: アクター、アクション、コンテキスト付きのタイムスタンプ付きノート
+   - **チーム/コミュニケーション**: 引用、話者識別子、非言語的手がかり
+   - **自然/物理的**: スケッチ、測定、環境条件
+2. シンプルな記録テンプレートを作成する:
 
 ```
 Field Notes Template:
@@ -93,111 +91,111 @@ Field Notes Template:
 └─────────────┴────────────────────────────────────────────────────────┘
 ```
 
-3. Emphasize the separation: "The observation row is fact. The hypothesis row is interpretation. Never mix them."
-4. Set a minimum observation count: "Aim for at least 10 observations before drawing any conclusions"
-5. If applicable, set up monitoring tools: logging, metrics, screen recording
+3. 分離を強調する:「観察行は事実です。仮説行は解釈です。絶対に混ぜないでください。」
+4. 最小観察数を設定する:「結論を出す前に少なくとも10の観察を目指してください」
+5. 該当する場合、モニタリングツールを設定する: ロギング、メトリクス、画面録画
 
-**期待結果:** The person has a recording method ready and understands the critical distinction between observation and interpretation. They feel prepared to begin.
+**期待結果:** 記録方法が準備され、観察と解釈の重要な区別を理解していること。開始する準備ができていると感じること。
 
-**失敗時:** If the template feels too formal, simplify to: "Just write down what you see, and separately write what you think it means." If they resist recording ("I'll remember"), explain that unrecorded observations are subject to memory bias — the act of writing makes observation more accurate.
+**失敗時:** テンプレートが堅苦しく感じる場合、シンプルにする:「見たことを書き出し、別にそれが何を意味するかを書いてください。」 記録を拒む場合（「覚えているから」）、記録されない観察は記憶バイアスに影響されることを説明する — 書くことで観察がより正確になる。
 
-### ステップ3: Observe — Practice Sustained Neutral Attention
+### ステップ3: 観察 — 持続的な中立的注意の実践
 
-Guide the person through the actual observation session.
+実際の観察セッションを通じてガイドする。
 
-1. Remind them of the stance: "You are a naturalist studying a new species. Do not interfere — just watch"
-2. For the first 5 minutes: encourage pure observation without recording — just attend
-3. After initial immersion: begin recording using the template
-4. Coach neutral language: "Instead of 'the system crashed,' try 'the system stopped responding at 14:32 after processing the 47th request'"
-5. Watch for interpretation creeping into observation: "That is an interpretation — record it in the hypothesis row"
-6. Encourage noting surprises: "What surprised you? Surprises often contain the most valuable data"
-7. Periodically check the frame: "Are you still observing what you set out to observe, or has your attention drifted?"
-8. If they want to intervene: "Note what you want to change and why, but do not change it yet — keep observing"
+1. スタンスを思い出させる:「あなたは新種を研究するナチュラリストです。干渉せず — ただ見てください」
+2. 最初の5分間: 記録なしの純粋な観察を促す — ただ注意を向ける
+3. 初期の没入後: テンプレートを使用して記録を開始する
+4. 中立的な言語をコーチする:「『システムがクラッシュした』ではなく、『14:32に47番目のリクエストを処理した後、システムが応答を停止した』と試してみてください」
+5. 解釈が観察に忍び込むのを監視する:「それは解釈です — 仮説行に記録してください」
+6. 驚きを記録することを奨励する:「何に驚きましたか？ 驚きはしばしば最も価値のあるデータを含んでいます」
+7. 定期的にフレームを確認する:「まだ観察しようとしていたものを観察していますか、それとも注意がそれましたか？」
+8. 介入したがる場合:「何を変えたいか、なぜかを記録してください。ただし、まだ変えないでください — 観察を続けてください」
 
-**期待結果:** The person generates at least 5-10 concrete observations with specific evidence. They experience the difference between observing and interpreting, and find it harder than expected to maintain neutral attention.
+**期待結果:** 具体的な証拠を伴う少なくとも5-10の具体的な観察が生成されること。観察と解釈の違いを体験し、中立的な注意を維持することが予想以上に難しいことを発見すること。
 
-**失敗時:** If they keep interpreting instead of observing, try this exercise: "Describe what you see as if explaining it to someone who has never seen this system. Only use verifiable facts." If they run out of things to observe quickly, they are looking at too high a level — guide them to zoom in on details: timing, ordering, edge cases, exceptions.
+**失敗時:** 観察の代わりに解釈を続ける場合、この演習を試す:「このシステムを見たことがない人に説明するように、見たことを記述してください。検証可能な事実のみを使用してください。」 すぐに観察することがなくなる場合、高すぎるレベルで見ている — 詳細にズームインするようガイドする: タイミング、順序、エッジケース、例外。
 
-### ステップ4: Record — Capture Findings with Field Notes
+### ステップ4: 記録 — フィールドノートによる発見の整理
 
-Help the person organize their raw observations into structured notes.
+生の観察を構造化されたノートに整理する手助けをする。
 
-1. Review their recorded observations together
-2. Check for completeness: does each observation have enough context to be understood later?
-3. Check for factual accuracy: are statements verifiable, or do they contain hidden assumptions?
-4. Group similar observations: "Do you see any patterns forming?"
-5. Note frequencies: how often did each pattern appear?
-6. Note absences: "What did you expect to see that was not there?"
-7. Help them separate strong observations (clear evidence) from weak observations (ambiguous data)
+1. 記録された観察を一緒にレビューする
+2. 完全性を確認する: 各観察に後で理解するのに十分なコンテキストがあるか？
+3. 事実の正確性を確認する: 記述は検証可能か、隠れた仮定を含んでいないか？
+4. 類似の観察をグループ化する:「何かパターンが形成されていますか？」
+5. 頻度を記録する: 各パターンはどれくらいの頻度で出現したか？
+6. 不在を記録する:「見ることを期待していたのに、なかったものは何ですか？」
+7. 強い観察（明確な証拠）と弱い観察（曖昧なデータ）を分離する手助けをする
 
-**期待結果:** A set of organized field notes that cleanly separate observation from interpretation. The notes are detailed enough that someone else could verify the observations independently.
+**期待結果:** 観察と解釈をきれいに分離する整理されたフィールドノートのセット。ノートは他の人が独立して観察を検証できるほど詳細であること。
 
-**失敗時:** If the notes are too vague ("things seemed slow"), help them add specifics: "How slow? Compared to what? In which conditions?" If the notes are too detailed (recording everything), help them identify which observations relate to the original frame and which are noise.
+**失敗時:** ノートが曖昧すぎる場合（「遅いように見えた」）、具体性を追加する手助けをする:「どの程度遅い？ 何と比較して？ どの条件で？」 ノートが詳細すぎる場合（すべてを記録している）、元のフレームに関連する観察とノイズを区別する手助けをする。
 
-### ステップ5: Analyze — Identify Patterns and Generate Hypotheses
+### ステップ5: 分析 — パターンの特定と仮説の生成
 
-Guide the person from observations to structured analysis.
+観察から構造化された分析へとガイドする。
 
-1. Lay out all observations and look for patterns:
-   - **Repetition**: "This happened multiple times — is it systematic?"
-   - **Correlation**: "X always happens alongside Y — are they related?"
-   - **Sequence**: "A always precedes B — could A cause B?"
-   - **Absence**: "X never happens in condition Z — why?"
-   - **Anomaly**: "Everything follows pattern P except this one case — what is different?"
-2. For each pattern, ask: "Is there an alternative explanation?"
-3. Generate 2-3 hypotheses that explain the major patterns
-4. Distinguish between correlation and causation: "Observing that A and B co-occur does not prove A causes B"
-5. Identify which hypotheses are testable and what test would confirm/refute them
-6. Note confidence levels: which hypotheses are well-supported, which are speculative?
+1. すべての観察を並べてパターンを探す:
+   - **繰り返し**:「これは複数回起きました — 体系的ですか？」
+   - **相関**:「XはいつもYと共に起きます — 関連していますか？」
+   - **シーケンス**:「AはいつもBに先行します — AがBを引き起こしている可能性は？」
+   - **不在**:「条件ZではXは決して起きません — なぜ？」
+   - **異常**:「すべてがパターンPに従いますが、この1つのケースだけ違います — 何が違うのですか？」
+2. 各パターンについて尋ねる:「別の説明はありますか？」
+3. 主要なパターンを説明する2-3の仮説を生成する
+4. 相関と因果関係を区別する:「AとBが共起することを観察しても、AがBを引き起こすことは証明されません」
+5. どの仮説がテスト可能か、どのテストが確認/反論するかを特定する
+6. 確信度を記録する: どの仮説が十分にサポートされ、どれが推測的か？
 
-**期待結果:** The person moves from raw observations to structured hypotheses while maintaining the discipline of separating data from theory. They have at least one testable hypothesis for their original question.
+**期待結果:** 生の観察から構造化された仮説へ、データと理論の分離の規律を維持しながら移行すること。元の質問に対する少なくとも1つのテスト可能な仮説があること。
 
-**失敗時:** If they jump to a single explanation immediately, challenge it: "That is one possibility. What is another?" If they see no patterns, the observations may be too few — suggest continuing observation before analysis. If every observation seems to point to the same conclusion, they may be filtering — ask: "What evidence would contradict your current theory?"
+**失敗時:** すぐに単一の説明に飛びつく場合、挑戦する:「それは1つの可能性です。別のものは？」 パターンが見えない場合、観察が少なすぎる可能性がある — 分析前に観察を続けることを提案する。すべての観察が同じ結論を指す場合、フィルタリングしている可能性がある — 尋ねる:「現在の理論に矛盾する証拠は何ですか？」
 
-### ステップ6: Report — Share Findings with Clear Structure
+### ステップ6: レポート — 明確な構造で発見を共有
 
-Help the person communicate their observations effectively.
+観察結果を効果的に伝える手助けをする。
 
-1. Structure the report:
-   - **Context**: What was observed, when, why, under what conditions
-   - **Method**: How the observation was conducted (protocol, tools, duration)
-   - **Findings**: Key observations with evidence (data, not interpretation)
-   - **Analysis**: Patterns identified, hypotheses generated, confidence levels
-   - **Recommendations**: Suggested next steps (further observation, testing, intervention)
-   - **Limitations**: What the observation did not cover, potential biases
-2. Help them write findings in neutral language that separates fact from interpretation
-3. Review for hidden assumptions or unsupported claims
-4. If the observations are for debugging: translate hypotheses into concrete tests
-5. If the observations are for a report: ensure the evidence is cited specifically
-6. If the observations are for personal understanding: summarize the key insights and remaining questions
+1. レポートを構造化する:
+   - **コンテキスト**: 何を、いつ、なぜ、どのような条件下で観察したか
+   - **方法**: 観察がどのように行われたか（プロトコル、ツール、期間）
+   - **発見**: 証拠を伴う主要な観察（解釈ではなくデータ）
+   - **分析**: 特定されたパターン、生成された仮説、確信度
+   - **推奨事項**: 推奨される次のステップ（さらなる観察、テスト、介入）
+   - **制限事項**: 観察がカバーしなかったこと、潜在的なバイアス
+2. 事実と解釈を分離する中立的な言語で発見を書く手助けをする
+3. 隠れた仮定やサポートされていない主張をレビューする
+4. 観察がデバッグ用の場合: 仮説を具体的なテストに変換する
+5. 観察がレポート用の場合: 証拠が具体的に引用されていることを確認する
+6. 観察が個人的な理解用の場合: 主要な洞察と残りの質問を要約する
 
-**期待結果:** A clear report that communicates observations, patterns, and hypotheses while maintaining the distinction between what was observed and what was inferred. The reader can evaluate the evidence independently.
+**期待結果:** 何が観察され何が推論されたかの区別を維持しながら、観察、パターン、仮説を伝える明確なレポート。読者が証拠を独立して評価できること。
 
-**失敗時:** If the report buries observations in interpretation, restructure: "Put all the facts in one section, all the theories in another." If the report lacks confidence levels ("this is definitely because..."), help them calibrate: "How sure are you? What would change your mind?"
+**失敗時:** レポートが観察を解釈の中に埋める場合、再構造化する:「すべての事実を1つのセクションに、すべての理論を別のセクションに入れてください。」 レポートに確信度がない場合（「これは確実に〜のため...」）、較正を手助けする:「どの程度確信していますか？ 何があれば考えが変わりますか？」
 
 ## バリデーション
 
-- [ ] The observation target was framed before observation began (not free-form wandering)
-- [ ] A recording protocol was established and used consistently
-- [ ] Observations were recorded as facts, separate from interpretations
-- [ ] At least 5 concrete, evidence-backed observations were captured
-- [ ] Patterns were identified through analysis, not assumed from the start
-- [ ] Hypotheses are testable and have stated confidence levels
-- [ ] The person experienced the discipline of observing before interpreting
+- [ ] 観察開始前に観察対象がフレーミングされた（自由形式のさまよいではない）
+- [ ] 記録プロトコルが確立され一貫して使用された
+- [ ] 観察が解釈とは別に事実として記録された
+- [ ] 少なくとも5つの具体的なエビデンスに裏付けられた観察が捕捉された
+- [ ] パターンが最初から仮定されるのではなく分析を通じて特定された
+- [ ] 仮説がテスト可能で確信度が述べられている
+- [ ] その人が解釈する前に観察する規律を体験した
 
 ## よくある落とし穴
 
-- **Observation as confirmation bias**: Observing only things that support a pre-existing belief. The frame should include "look for evidence against your hypothesis" as an explicit instruction
-- **Intervention urge**: Seeing a problem and wanting to fix it immediately. Premature intervention often masks the root cause — observe first, then intervene with full understanding
-- **Recording fatigue**: Detailed observation is mentally taxing. Suggest breaks and realistic session lengths (30-60 minutes of focused observation is substantial)
-- **Overcomplicating the protocol**: For simple observations, a notebook and timestamps are sufficient. The protocol should serve the observation, not replace it
-- **Confusing observation with surveillance**: In interpersonal observation, ethical boundaries matter. Observe behavior that is visible, do not spy. If observing people, transparency is usually better than secrecy
-- **Skipping the frame**: Without a clear observation target, attention scatters and findings are unfocused. Even a rough frame is better than none
+- **確証バイアスとしての観察**: 既存の信念を支持するものだけを観察すること。フレームには「仮説に反する証拠を探す」を明示的な指示として含めるべきである
+- **介入衝動**: 問題を見てすぐに修正したくなること。早すぎる介入は根本原因を隠すことが多い — まず観察し、完全に理解してから介入する
+- **記録疲労**: 詳細な観察は精神的に消耗する。休憩と現実的なセッション長を提案する（30-60分の集中的な観察はかなりのもの）
+- **プロトコルの過度な複雑化**: 単純な観察にはノートとタイムスタンプで十分。プロトコルは観察に奉仕すべきで、置き換えるべきではない
+- **観察と監視の混同**: 対人観察では倫理的境界が重要。見える行動を観察し、スパイしない。人を観察する場合、透明性は通常秘密よりも良い
+- **フレームのスキップ**: 明確な観察対象なしでは注意が散り、発見が焦点を欠く。大まかなフレームでもないよりはるかに良い
 
 ## 関連スキル
 
-- `observe` — the AI self-directed variant for sustained neutral pattern recognition across systems
-- `learn-guidance` — observation feeds learning by providing raw data for understanding
-- `listen-guidance` — listening is focused observation of a speaker; observation is broader-scope attention to any system
-- `remote-viewing-guidance` — shares structured observation methodology adapted for non-local perception
-- `read-garden` — garden observation skill that uses similar CRV-adapted sensory protocols
+- `observe` — システム全体にわたる持続的な中立的パターン認識のためのAI自己指向バリアント
+- `learn-guidance` — 観察は理解のための生データを提供することで学習に供給する
+- `listen-guidance` — リスニングは話者に焦点を当てた観察; 観察はあらゆるシステムへのより広いスコープの注意
+- `remote-viewing-guidance` — 非局所的知覚に適応された構造化された観察方法論を共有する
+- `read-garden` — 類似のCRV適応感覚プロトコルを使用する庭園観察スキル

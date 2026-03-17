@@ -1,13 +1,11 @@
 ---
 name: model-markov-chain
 description: >
-  Build and analyze discrete or continuous Markov chains including transition
-  matrix construction, state classification, stationary distribution computation,
-  and mean first passage times. Use when modeling a memoryless system with
-  observed transition counts or rates, computing long-run steady-state
-  probabilities, determining expected hitting times or absorption probabilities,
-  classifying states as transient or recurrent, or building a foundation for
-  hidden Markov models or reinforcement learning MDPs.
+  遷移行列の構築、状態分類、定常分布の計算、平均初到達時間を含む離散または連続
+  マルコフ連鎖の構築と分析。観測された遷移カウントまたはレートを持つ記憶のない
+  システムをモデル化する時、長期的な定常状態確率を計算する時、期待到達時間また
+  は吸収確率を決定する時、状態を一時的または再帰的に分類する時、または隠れ
+  マルコフモデルや強化学習MDPの基礎を構築する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,184 +24,184 @@ metadata:
 
 # マルコフ連鎖のモデリング
 
-Construct, classify, and analyze discrete-time or continuous-time Markov chains from raw transition data or domain specifications, producing stationary distributions, mean first passage times, and simulation-based validation. Covers both DTMC and CTMC workflows end-to-end.
+生の遷移データまたはドメイン仕様から離散時間または連続時間マルコフ連鎖を構築、分類、分析し、定常分布、平均初到達時間、シミュレーションベースの検証を生成する。DTMCとCTMCの両方のワークフローをエンドツーエンドで網羅する。
 
 ## 使用タイミング
 
-- You need to model a system whose future state depends only on its current state (memoryless property)
-- You have observed transition counts or rates between a finite set of states
-- You want to compute long-run steady-state probabilities for a process
-- You need to determine expected hitting times or absorption probabilities
-- You are classifying states as transient, recurrent, or absorbing for structural analysis
-- You want to compare alternative Markov models for the same system
-- You are building a foundation for more advanced models (hidden Markov models, reinforcement learning MDPs)
+- 将来の状態が現在の状態のみに依存するシステム（記憶なし性質）をモデル化する必要がある時
+- 有限の状態集合間の遷移カウントまたはレートが観測されている時
+- プロセスの長期的な定常状態確率を計算したい時
+- 期待到達時間または吸収確率を決定する必要がある時
+- 構造分析のために状態を一時的、再帰的、または吸収的に分類する時
+- 同じシステムに対する代替マルコフモデルを比較したい時
+- より高度なモデル（隠れマルコフモデル、強化学習MDP）の基礎を構築する時
 
 ## 入力
 
-### Required
+### 必須
 
-| Input | Type | Description |
+| 入力 | 型 | 説明 |
 |-------|------|-------------|
-| `state_space` | list/vector | Exhaustive enumeration of all states in the chain |
-| `transition_data` | matrix, data frame, or edge list | Raw transition counts, a probability matrix, or a rate matrix (for CTMC) |
-| `chain_type` | string | Either `"discrete"` (DTMC) or `"continuous"` (CTMC) |
+| `state_space` | list/vector | 連鎖内のすべての状態の網羅的列挙 |
+| `transition_data` | matrix, data frame, or edge list | 生の遷移カウント、確率行列、またはレート行列（CTMCの場合） |
+| `chain_type` | string | `"discrete"`（DTMC）または`"continuous"`（CTMC） |
 
-### Optional
+### 任意
 
-| Input | Type | Default | Description |
+| 入力 | 型 | デフォルト | 説明 |
 |-------|------|---------|-------------|
-| `initial_distribution` | vector | uniform | Starting state probabilities |
-| `time_horizon` | integer/float | 100 | Number of steps (DTMC) or time units (CTMC) for simulation |
-| `tolerance` | float | 1e-10 | Convergence tolerance for iterative computations |
-| `absorbing_states` | list | auto-detect | States explicitly marked as absorbing |
-| `labels` | list | state indices | Human-readable names for each state |
-| `method` | string | `"eigen"` | Solver method: `"eigen"`, `"power"`, or `"linear_system"` |
+| `initial_distribution` | vector | uniform | 開始状態確率 |
+| `time_horizon` | integer/float | 100 | シミュレーションのステップ数（DTMC）または時間単位（CTMC） |
+| `tolerance` | float | 1e-10 | 反復計算の収束許容度 |
+| `absorbing_states` | list | auto-detect | 吸収的と明示的にマークされた状態 |
+| `labels` | list | state indices | 各状態の人間が読める名前 |
+| `method` | string | `"eigen"` | ソルバー方法: `"eigen"`、`"power"`、または`"linear_system"` |
 
 ## 手順
 
-### ステップ1: Define State Space and Transitions
+### ステップ1: 状態空間と遷移の定義
 
-1.1. Enumerate all distinct states. Confirm the list is exhaustive and mutually exclusive.
+1.1. すべての異なる状態を列挙する。リストが網羅的かつ排他的であることを確認する。
 
-1.2. If working from raw observations, tabulate transition counts into an `n x n` count matrix `C` where `C[i,j]` is the number of observed transitions from state `i` to state `j`.
+1.2. 生の観測から作業する場合、遷移カウントを`n x n`のカウント行列`C`に集計する。ここで`C[i,j]`は状態`i`から状態`j`への観測された遷移数である。
 
-1.3. For continuous-time chains, collect holding times in each state alongside transition destinations.
+1.3. 連続時間連鎖の場合、遷移先と共に各状態での滞在時間を収集する。
 
-1.4. Verify no state is missing from the enumeration by checking that every observed origin and destination appears in the state space.
+1.4. すべての観測された起点と目的地が状態空間に含まれることを確認し、列挙から欠落している状態がないか検証する。
 
-1.5. Document the data source, observation period, and any filtering applied. This provenance record is essential for reproducing the analysis and explaining anomalies.
+1.5. データソース、観測期間、適用されたフィルタリングを文書化する。この来歴記録は分析の再現と異常の説明に不可欠である。
 
-**期待結果:** A well-defined state space of size `n` and either a count matrix or a list of (origin, destination, rate/count) tuples covering all observed transitions. The state space should be small enough for matrix operations (typically `n < 10000` for dense methods).
+**期待結果:** サイズ`n`の明確に定義された状態空間と、すべての観測された遷移をカバーするカウント行列または（起点、目的地、レート/カウント）タプルのリスト。状態空間は行列演算に十分小さくあるべきである（密な方法では通常`n < 10000`）。
 
-**失敗時:** If states are missing, re-examine the source data and expand the enumeration. If the state space is too large for matrix methods, consider lumping rare states into an aggregate "other" state or switching to simulation-based analysis. If the count matrix is extremely sparse, verify the observation period is long enough to capture typical transitions.
+**失敗時:** 状態が欠落している場合、ソースデータを再調査し列挙を拡張する。状態空間が行列方法には大きすぎる場合、まれな状態を集約「その他」状態にまとめるか、シミュレーションベースの分析に切り替えることを検討する。カウント行列が極度にスパースな場合、観測期間が典型的な遷移を捕捉するのに十分長いか検証する。
 
-### ステップ2: Construct Transition Matrix or Generator
+### ステップ2: 遷移行列または生成子の構築
 
-2.1. **Discrete-time (DTMC):** Normalize each row of the count matrix to obtain the transition probability matrix `P`:
+2.1. **離散時間（DTMC）:** カウント行列の各行を正規化して遷移確率行列`P`を取得する:
    - `P[i,j] = C[i,j] / sum(C[i,])`
-   - Verify every row sums to 1 (within tolerance).
+   - すべての行の和が1であることを検証する（許容度内で）。
 
-2.2. **Continuous-time (CTMC):** Construct the rate (generator) matrix `Q`:
-   - Off-diagonal: `Q[i,j] = rate of transition from i to j`
-   - Diagonal: `Q[i,i] = -sum(Q[i,j] for j != i)`
-   - Verify every row sums to 0 (within tolerance).
+2.2. **連続時間（CTMC）:** レート（生成子）行列`Q`を構築する:
+   - 非対角: `Q[i,j] = iからjへの遷移レート`
+   - 対角: `Q[i,i] = -sum(Q[i,j] for j != i)`
+   - すべての行の和が0であることを検証する（許容度内で）。
 
-2.3. Handle zero-count rows (states never observed as origins) by deciding on a smoothing strategy: Laplace smoothing, absorbing convention, or flagging for review.
+2.3. ゼロカウント行（起点として一度も観測されなかった状態）をスムージング戦略で処理する: ラプラススムージング、吸収規約、またはレビュー用のフラグ立て。
 
-2.4. Store the matrix in a format suitable for downstream computation (dense for small chains, sparse for large ones).
+2.4. 下流の計算に適した形式で行列を保存する（小さな連鎖には密、大きなものにはスパース）。
 
-**期待結果:** A valid stochastic matrix `P` (rows sum to 1) or generator matrix `Q` (rows sum to 0) with no negative off-diagonal entries in `P` and no positive diagonal entries in `Q`.
+**期待結果:** 有効な確率的行列`P`（行の和が1）または生成子行列`Q`（行の和が0）。`P`に負の非対角要素がなく、`Q`に正の対角要素がないこと。
 
-**失敗時:** If row sums deviate beyond tolerance, check for data corruption or floating-point issues. Re-normalize or re-examine source data.
+**失敗時:** 行の和が許容度を超えて逸脱する場合、データの破損または浮動小数点の問題を確認する。再正規化またはソースデータの再調査を行う。
 
-### ステップ3: Classify States
+### ステップ3: 状態の分類
 
-3.1. Compute the communication classes by finding strongly connected components of the directed graph induced by the transition matrix (only edges with positive probability).
+3.1. 遷移行列によって誘導される有向グラフの強連結成分を見つけることにより、通信クラスを計算する（正の確率を持つ辺のみ）。
 
-3.2. For each communication class, determine:
-   - **Recurrent** if the class has no outgoing edges to other classes.
-   - **Transient** if it does have outgoing edges.
-   - **Absorbing** if the class consists of a single state with `P[i,i] = 1`.
+3.2. 各通信クラスについて決定する:
+   - 他のクラスへの出発辺がない場合は**再帰的**。
+   - 出発辺がある場合は**一時的**。
+   - クラスが`P[i,i] = 1`の単一状態で構成される場合は**吸収的**。
 
-3.3. Check periodicity for each recurrent class by computing the GCD of all cycle lengths reachable from any state in the class.
-   - Period = 1 means aperiodic.
+3.3. クラス内の任意の状態から到達可能なすべてのサイクル長のGCDを計算して、各再帰クラスの周期性を確認する。
+   - 周期 = 1は非周期的を意味する。
 
-3.4. Determine if the chain is **irreducible** (single communication class) or **reducible** (multiple classes).
+3.4. 連鎖が**既約**（単一通信クラス）か**可約**（複数クラス）かを決定する。
 
-3.5. Summarize: list each class, its type (transient/recurrent), its period, and whether any absorbing states exist.
+3.5. 要約する: 各クラスとそのタイプ（一時的/再帰的）、周期、吸収状態の有無をリストする。
 
-**期待結果:** A complete classification: every state assigned to a communication class with labels (transient, positive recurrent, null recurrent, absorbing) and periodicity.
+**期待結果:** 完全な分類: すべての状態が通信クラスに割り当てられ、ラベル（一時的、正再帰的、零再帰的、吸収的）と周期性が付与されていること。
 
-**失敗時:** If the graph analysis is inconsistent, verify the transition matrix has no negative entries and rows sum correctly. For very large chains, use iterative graph algorithms instead of full matrix powers.
+**失敗時:** グラフ分析が矛盾する場合、遷移行列に負のエントリがなく、行の和が正しいことを検証する。非常に大きな連鎖の場合、完全な行列べき乗の代わりに反復グラフアルゴリズムを使用する。
 
-### ステップ4: Compute Stationary Distribution
+### ステップ4: 定常分布の計算
 
-4.1. **Irreducible aperiodic chain:** Solve `pi * P = pi` subject to `sum(pi) = 1`.
-   - Reformulate as `pi * (P - I) = 0` with the normalization constraint.
-   - Use eigenvalue decomposition: `pi` is the left eigenvector of `P` corresponding to eigenvalue 1, normalized to sum to 1.
+4.1. **既約非周期連鎖:** `sum(pi) = 1`の制約の下で`pi * P = pi`を解く。
+   - `pi * (P - I) = 0`に正規化制約を加えて再定式化する。
+   - 固有値分解を使用する: `pi`は固有値1に対応する`P`の左固有ベクトルであり、和が1になるよう正規化する。
 
-4.2. **Irreducible periodic chain:** The stationary distribution still exists but the chain does not converge to it from arbitrary initial states. Compute it the same way as 4.1.
+4.2. **既約周期連鎖:** 定常分布は存在するが、連鎖は任意の初期状態からそれに収束しない。4.1と同じ方法で計算する。
 
-4.3. **Reducible chain:** Compute the stationary distribution for each recurrent class independently. The overall stationary distribution is a convex combination depending on absorption probabilities from transient states.
+4.3. **可約連鎖:** 各再帰クラスの定常分布を独立に計算する。全体の定常分布は一時的状態からの吸収確率に依存する凸結合である。
 
-4.4. **CTMC:** Solve `pi * Q = 0` with `sum(pi) = 1`.
+4.4. **CTMC:** `sum(pi) = 1`の下で`pi * Q = 0`を解く。
 
-4.5. Verify: multiply the computed `pi` by `P` (or `Q`) and confirm the result equals `pi` within tolerance.
+4.5. 検証: 計算された`pi`を`P`（または`Q`）に乗じ、結果が許容度内で`pi`に等しいことを確認する。
 
-4.6. For reducible chains, compute the absorption probabilities from each transient state to each recurrent class. These probabilities, combined with the per-class stationary distributions, give the long-run behavior conditional on starting state.
+4.6. 可約連鎖の場合、各一時的状態から各再帰クラスへの吸収確率を計算する。これらの確率をクラス別定常分布と組み合わせることで、開始状態に条件付けた長期的な挙動が得られる。
 
-4.7. Record the spectral gap (difference between the largest and second-largest eigenvalue magnitudes). This quantity governs the rate of convergence to stationarity and is useful for determining how many simulation steps are needed in Step 6.
+4.7. スペクトルギャップ（最大と2番目に大きい固有値の大きさの差）を記録する。この量は定常状態への収束率を支配し、ステップ6で必要なシミュレーションステップ数の決定に有用である。
 
-**期待結果:** A probability vector `pi` of length `n` with all entries non-negative, summing to 1, satisfying the balance equations within tolerance. The spectral gap should be positive for aperiodic irreducible chains.
+**期待結果:** 長さ`n`の確率ベクトル`pi`。すべてのエントリが非負、和が1、許容度内で平衡方程式を満たすこと。非周期既約連鎖ではスペクトルギャップが正であるべきである。
 
-**失敗時:** If the eigensolver fails to converge, try iterative power method (`pi_k+1 = pi_k * P` until convergence). If multiple eigenvalues equal 1, the chain is reducible -- handle per Step 4.3. If the spectral gap is extremely small, the chain mixes slowly and will require very long simulations for validation.
+**失敗時:** 固有値ソルバーが収束しない場合、反復べき乗法（`pi_k+1 = pi_k * P`を収束まで）を試みる。複数の固有値が1に等しい場合、連鎖は可約である — ステップ4.3に従って処理する。スペクトルギャップが極めて小さい場合、連鎖の混合が遅く、検証に非常に長いシミュレーションが必要になる。
 
-### ステップ5: Calculate Mean First Passage Times
+### ステップ5: 平均初到達時間の計算
 
-5.1. Define the mean first passage time `m[i,j]` as the expected number of steps to reach state `j` starting from state `i`.
+5.1. 平均初到達時間`m[i,j]`を、状態`i`から開始して状態`j`に到達するまでの期待ステップ数として定義する。
 
-5.2. For an irreducible chain, solve the system of linear equations:
-   - `m[i,j] = 1 + sum(P[i,k] * m[k,j] for k != j)` for all `i != j`
-   - `m[j,j] = 1 / pi[j]` (mean recurrence time)
+5.2. 既約連鎖の場合、線形方程式系を解く:
+   - `m[i,j] = 1 + sum(P[i,k] * m[k,j] for k != j)` すべての`i != j`に対して
+   - `m[j,j] = 1 / pi[j]`（平均再帰時間）
 
-5.3. For absorbing chains, compute absorption probabilities and expected times to absorption:
-   - Partition `P` into transient (`Q_t`) and absorbing blocks.
-   - Fundamental matrix: `N = (I - Q_t)^{-1}`
-   - Expected steps to absorption: `N * 1` (column vector of ones)
-   - Absorption probabilities: `N * R` where `R` is the transient-to-absorbing block.
+5.3. 吸収連鎖の場合、吸収確率と吸収までの期待時間を計算する:
+   - `P`を一時的（`Q_t`）ブロックと吸収ブロックに分割する。
+   - 基本行列: `N = (I - Q_t)^{-1}`
+   - 吸収までの期待ステップ: `N * 1`（1の列ベクトル）
+   - 吸収確率: `N * R` ここで`R`は一時的から吸収的へのブロック。
 
-5.4. For CTMC, replace step counts with expected holding times using the generator matrix.
+5.4. CTMCの場合、生成子行列を使用してステップカウントを期待滞在時間で置換する。
 
-5.5. Present results as a matrix or table of pairwise first passage times for key state pairs.
+5.5. 主要な状態ペアのペアワイズ初到達時間の行列またはテーブルとして結果を提示する。
 
-**期待結果:** A matrix of mean first passage times where diagonal entries equal mean recurrence times (`1/pi[j]`) and off-diagonal entries are finite for communicating state pairs.
+**期待結果:** 対角エントリが平均再帰時間（`1/pi[j]`）に等しく、通信する状態ペアの非対角エントリが有限である平均初到達時間の行列。
 
-**失敗時:** If the linear system is singular, the chain has transient states that cannot reach the target. Report unreachable pairs as infinite. Verify the chain structure from Step 3.
+**失敗時:** 線形系が特異な場合、連鎖にターゲットに到達できない一時的状態がある。到達不可能なペアを無限大として報告する。ステップ3の連鎖構造を検証する。
 
-### ステップ6: Validate with Simulation
+### ステップ6: シミュレーションによる検証
 
-6.1. Simulate `K` independent sample paths of the chain for `T` steps each, starting from the initial distribution.
+6.1. 初期分布から開始して、連鎖の`K`本の独立なサンプルパスを各`T`ステップシミュレートする。
 
-6.2. Estimate the stationary distribution empirically by counting state occupancy frequencies across all paths after discarding a burn-in period.
+6.2. バーンイン期間を除外した後、すべてのパスにわたる状態占有頻度をカウントして、定常分布を経験的に推定する。
 
-6.3. Compare simulated frequencies to the analytical stationary distribution. Compute the total variation distance or chi-squared statistic.
+6.3. シミュレートされた頻度を解析的定常分布と比較する。全変動距離またはカイ二乗統計量を計算する。
 
-6.4. Estimate mean first passage times empirically by recording the first hitting time for each target state across replications.
+6.4. 反復にわたって各ターゲット状態の初到達時間を記録し、平均初到達時間を経験的に推定する。
 
-6.5. Report agreement metrics:
-   - Max absolute deviation between analytical and simulated stationary probabilities.
-   - 95% confidence intervals for simulated first passage times vs. analytical values.
+6.5. 一致の指標を報告する:
+   - 解析的とシミュレートされた定常確率間の最大絶対偏差。
+   - シミュレートされた初到達時間の95%信頼区間 vs 解析値。
 
-6.6. If discrepancies exceed tolerance, re-examine the transition matrix construction and classification steps.
+6.6. 不一致が許容度を超える場合、遷移行列の構築と分類ステップを再調査する。
 
-**期待結果:** Simulated stationary distribution within 0.01 total variation distance of the analytical solution (for sufficiently long runs). Simulated mean first passage times within 10% of analytical values.
+**期待結果:** シミュレートされた定常分布が解析解の全変動距離0.01以内にあること（十分に長い実行の場合）。シミュレートされた平均初到達時間が解析値の10%以内にあること。
 
-**失敗時:** Increase simulation length `T` or number of replications `K`. If discrepancies persist, the analytical solution may have numerical errors -- recompute with higher precision.
+**失敗時:** シミュレーション長`T`または反復数`K`を増加する。不一致が持続する場合、解析解に数値エラーがある可能性がある — より高い精度で再計算する。
 
 ## バリデーション
 
-- The transition matrix `P` has all non-negative entries and each row sums to 1 (or `Q` rows sum to 0 for CTMC)
-- The stationary distribution `pi` is a valid probability vector satisfying `pi * P = pi`
-- Mean recurrence times equal `1/pi[j]` for each recurrent state `j`
-- Simulated state frequencies converge to the analytical stationary distribution
-- State classification is consistent: no recurrent state has edges leaving its communication class
-- All eigenvalues of `P` have magnitude at most 1, with exactly one eigenvalue equal to 1 per recurrent class
-- For absorbing chains: absorption probabilities from each transient state sum to 1 across all absorbing classes
-- The fundamental matrix `N = (I - Q_t)^{-1}` has all positive entries (expected visit counts are positive)
-- Detailed balance holds if and only if the chain is reversible: `pi[i] * P[i,j] = pi[j] * P[j,i]` for all `i,j`
+- 遷移行列`P`のすべてのエントリが非負で、各行の和が1であること（CTMCの場合`Q`の行の和が0）
+- 定常分布`pi`が`pi * P = pi`を満たす有効な確率ベクトルであること
+- 各再帰状態`j`について平均再帰時間が`1/pi[j]`に等しいこと
+- シミュレートされた状態頻度が解析的定常分布に収束すること
+- 状態分類が一貫していること: 再帰状態がその通信クラスを離れる辺を持たないこと
+- `P`のすべての固有値の大きさが最大1で、再帰クラスごとにちょうど1つの固有値が1に等しいこと
+- 吸収連鎖の場合: 各一時的状態からの吸収確率がすべての吸収クラスにわたって1に合計すること
+- 基本行列`N = (I - Q_t)^{-1}`のすべてのエントリが正であること（期待訪問カウントは正）
+- 連鎖が可逆である場合かつその場合に限り詳細バランスが成り立つ: すべての`i,j`に対して`pi[i] * P[i,j] = pi[j] * P[j,i]`
 
 ## よくある落とし穴
 
-- **Non-exhaustive state space**: Missing states produce a sub-stochastic matrix (rows sum to less than 1). Always verify row sums before analysis.
-- **Confusing DTMC and CTMC**: A rate matrix must have non-positive diagonal and rows summing to 0. Applying DTMC formulas to a rate matrix produces nonsense.
-- **Ignoring periodicity**: A periodic chain has a valid stationary distribution but does not converge to it in the usual sense. Mixing time analysis must account for period.
-- **Numerical instability for large chains**: Eigenvalue decomposition of large dense matrices is expensive and can lose precision. Use sparse solvers or iterative methods for chains with more than a few hundred states.
-- **Zero-probability transitions**: Structural zeros in the transition matrix can make the chain reducible. Verify irreducibility before computing a single stationary distribution.
-- **Insufficient simulation length**: Short simulations with poor mixing produce biased estimates. Always compute effective sample size and check trace plots.
-- **Assuming reversibility without checking**: Many analytical shortcuts (e.g., detailed balance) apply only to reversible chains. Verify `pi[i] * P[i,j] = pi[j] * P[j,i]` before using reversibility-dependent results.
-- **Floating-point accumulation in power method**: Iterating `pi * P` many times accumulates rounding errors. Periodically re-normalize `pi` to sum to 1 during power iteration.
+- **非網羅的状態空間**: 欠落した状態は部分確率的行列（行の和が1未満）を生成する。分析前に常に行の和を検証すること。
+- **DTMCとCTMCの混同**: レート行列は非正の対角と行の和が0でなければならない。レート行列にDTMC公式を適用すると無意味な結果を生む。
+- **周期性の無視**: 周期連鎖は有効な定常分布を持つが、通常の意味ではそれに収束しない。混合時間分析は周期を考慮しなければならない。
+- **大きな連鎖での数値不安定性**: 大きな密行列の固有値分解は計算コストが高く精度を失う可能性がある。数百以上の状態の連鎖にはスパースソルバーまたは反復法を使用する。
+- **ゼロ確率遷移**: 遷移行列の構造的ゼロは連鎖を可約にする可能性がある。単一の定常分布を計算する前に既約性を検証すること。
+- **不十分なシミュレーション長**: 混合が不良な短いシミュレーションはバイアスのある推定を生む。常に有効サンプルサイズを計算し、トレースプロットを確認すること。
+- **検証なしの可逆性の仮定**: 多くの解析的ショートカット（例: 詳細バランス）は可逆連鎖にのみ適用される。可逆性に依存する結果を使用する前に`pi[i] * P[i,j] = pi[j] * P[j,i]`を検証すること。
+- **べき乗法での浮動小数点蓄積**: `pi * P`を多数回反復すると丸め誤差が蓄積する。べき乗反復中に定期的に`pi`を和が1になるよう再正規化すること。
 
 ## 関連スキル
 
-- [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) -- extends Markov chains to latent-state models with observed emissions
-- [Simulate Stochastic Process](../simulate-stochastic-process/SKILL.md) -- general simulation framework applicable to Markov chain sample paths and Monte Carlo validation
+- [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) -- マルコフ連鎖を観測された放出を持つ潜在状態モデルに拡張する
+- [Simulate Stochastic Process](../simulate-stochastic-process/SKILL.md) -- マルコフ連鎖のサンプルパスとモンテカルロ検証に適用可能な一般的なシミュレーションフレームワーク

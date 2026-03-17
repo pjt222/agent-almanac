@@ -1,13 +1,11 @@
 ---
 name: mushroom-cultivation
 description: >
-  Cultivate edible and medicinal mushrooms from spawn through fruiting.
-  Covers substrate preparation, inoculation methods, incubation conditions,
-  fruiting chamber management, harvest timing, and successive flushes for
-  oyster, shiitake, lion's mane, and other commonly cultivated species. Use
-  when growing edible mushrooms without the risks of wild foraging, when a
-  reliable supply of fresh culinary or medicinal mushrooms is needed, or when
-  exploring mycelial ecology through hands-on cultivation practice.
+  種菌から子実体形成まで、食用および薬用キノコを栽培する。基質の準備、接種方法、
+  インキュベーション条件、子実体室の管理、収穫タイミング、ヒラタケ、シイタケ、
+  ヤマブシタケ、その他の一般的に栽培される種の連続フラッシュを網羅する。野生
+  採取のリスクなしに食用キノコを栽培する時、新鮮な料理用または薬用キノコの安定
+  供給が必要な時、または実践的な栽培を通じて菌糸生態学を探求する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,32 +22,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# キノコの栽培
+# キノコ栽培
 
-Cultivate edible and medicinal mushrooms from spawn through fruiting at home scale.
+家庭規模で種菌から子実体形成まで食用および薬用キノコを栽培する。
 
 ## 使用タイミング
 
-- You want to grow edible mushrooms without the risks of wild foraging
-- You have a suitable indoor or outdoor space for mushroom cultivation
-- You want to experiment with different species and substrates
-- You need a reliable supply of fresh mushrooms (culinary or medicinal)
-- You are interested in mycelial ecology and want hands-on experience
+- 野生採取のリスクなしに食用キノコを栽培したい時
+- キノコ栽培に適した屋内または屋外のスペースがある時
+- さまざまな種と基質を試したい時
+- 新鮮なキノコ（料理用または薬用）の安定供給が必要な時
+- 菌糸生態学に興味があり実践経験を得たい時
 
 ## 入力
 
-- **必須**: Mushroom spawn (grain spawn, sawdust spawn, or plug spawn from a reputable supplier)
-- **必須**: Substrate material (straw, hardwood sawdust, logs, or supplemented sawdust)
-- **任意**: Pressure cooker or large pot (for substrate sterilization/pasteurization)
-- **任意**: Growing containers (bags, buckets, or logs)
-- **任意**: Spray bottle and humidity gauge
-- **任意**: Thermometer for monitoring temperature
+- **必須**: キノコ種菌（穀物種菌、おが屑種菌、またはプラグ種菌。信頼できる供給元から）
+- **必須**: 基質材料（わら、広葉樹おが屑、丸太、または栄養補助おが屑）
+- **任意**: 圧力鍋または大鍋（基質の殺菌/低温殺菌用）
+- **任意**: 栽培容器（袋、バケツ、または丸太）
+- **任意**: スプレーボトルと湿度計
+- **任意**: 温度モニタリング用の温度計
 
 ## 手順
 
-### ステップ1: Choose Your Species
+### ステップ1: 種の選択
 
-Match species to your environment and experience level.
+環境と経験レベルに合った種を選択する。
 
 ```
 Beginner-Friendly Species:
@@ -75,13 +73,13 @@ Start with oyster mushrooms — they colonize fast, fruit reliably,
 and tolerate imperfect conditions.
 ```
 
-**期待結果:** Species selected that matches your environment, substrate availability, and experience level.
+**期待結果:** 環境、基質の入手可能性、経験レベルに合った種が選択されていること。
 
-**失敗時:** If unsure, start with blue oyster mushroom (Pleurotus ostreatus) on straw. It is the most forgiving species for beginners.
+**失敗時:** 迷ったら、わらの上のブルーオイスターマッシュルーム（Pleurotus ostreatus）から始める。初心者にとって最も寛容な種である。
 
-### ステップ2: Prepare the Substrate
+### ステップ2: 基質の準備
 
-The substrate provides nutrition for the mycelium. It must be clean enough to give your mushroom a head start over competitors.
+基質は菌糸体に栄養を提供する。競合者に対してキノコに有利なスタートを与えるために十分にクリーンでなければならない。
 
 ```
 Substrate Preparation Methods:
@@ -109,13 +107,13 @@ COLD WATER LIME BATH (alternative pasteurization):
 5. pH will neutralize as the straw dries
 ```
 
-**期待結果:** Substrate is clean (pasteurized or sterilized), at correct moisture content, and cooled to room temperature.
+**期待結果:** 基質がクリーン（低温殺菌または殺菌済み）で、正しい水分含量で、室温まで冷却されていること。
 
-**失敗時:** If contamination appears after inoculation (green mold within the first week), the substrate was insufficiently pasteurized or the inoculation environment was too dirty. Start fresh with more rigorous pasteurization.
+**失敗時:** 接種後に汚染が現れた場合（最初の1週間に緑色カビ）、基質の低温殺菌が不十分であったか、接種環境が汚すぎた。より厳格な低温殺菌でやり直す。
 
-### ステップ3: Inoculate
+### ステップ3: 接種
 
-Introduce spawn to the prepared substrate.
+準備した基質に種菌を導入する。
 
 ```
 Inoculation Protocol:
@@ -139,13 +137,13 @@ Hygiene Priorities:
 - If you touch a contaminated surface, re-clean before continuing
 ```
 
-**期待結果:** Spawn is evenly distributed throughout the substrate in a clean container, ready for incubation.
+**期待結果:** 種菌がクリーンな容器内の基質全体に均一に分布し、インキュベーションの準備ができていること。
 
-**失敗時:** If spawn does not seem to be colonizing after 7-10 days (no visible white growth), check temperature (too cold slows growth), substrate moisture (too dry inhibits growth), and spawn viability (old or heat-damaged spawn may be dead).
+**失敗時:** 7-10日後に種菌がコロニー化していない場合（白い成長が見えない）、温度（寒すぎると成長が遅くなる）、基質の水分（乾燥しすぎると成長が阻害される）、種菌の生存能力（古いまたは熱損傷した種菌は死んでいる可能性がある）を確認する。
 
-### ステップ4: Incubate
+### ステップ4: インキュベーション
 
-The mycelium colonizes the substrate during incubation.
+インキュベーション中に菌糸体が基質をコロニー化する。
 
 ```
 Incubation Conditions:
@@ -176,13 +174,13 @@ Contamination Response:
 - Orange/pink: bacterial contamination from wet substrate. Discard.
 ```
 
-**期待結果:** Full colonization — the substrate is uniformly white with mycelium and smells pleasantly mushroomy.
+**期待結果:** 完全なコロニー化 — 基質が菌糸体で均一に白くなり、心地よいキノコの匂いがすること。
 
-**失敗時:** Partial colonization with contamination means the race was lost. Start again with more spawn (higher ratio), better pasteurization, and cleaner inoculation practice.
+**失敗時:** 汚染を伴う部分的なコロニー化は、競争に負けたことを意味する。より多くの種菌（高い比率）、より良い低温殺菌、よりクリーンな接種環境でやり直す。
 
-### ステップ5: Initiate Fruiting
+### ステップ5: 子実体形成の開始
 
-Trigger the transition from vegetative growth to mushroom formation.
+栄養成長からキノコ形成への移行をトリガーする。
 
 ```
 Fruiting Triggers:
@@ -204,11 +202,11 @@ Fruiting Chamber (Simple SGFC — Shotgun Fruiting Chamber):
 - Fan fresh air in by waving the lid 2-3 times daily
 ```
 
-**期待結果:** Primordia (tiny mushroom pins) appear within 5-14 days of fruiting initiation.
+**期待結果:** 子実体形成開始後5-14日以内に原基（小さなキノコのピン）が出現すること。
 
-**失敗時:** If no pins appear after 2 weeks: check humidity (too dry is the most common cause), light (some species need light to pin), and temperature (too warm delays pinning for many species).
+**失敗時:** 2週間後にピンが現れない場合: 湿度を確認する（乾燥しすぎが最も一般的な原因）、光を確認する（一部の種はピンニングに光が必要）、温度を確認する（暖かすぎると多くの種でピンニングが遅れる）。
 
-### ステップ6: Harvest and Manage Successive Flushes
+### ステップ6: 収穫と連続フラッシュの管理
 
 ```
 Harvest Timing:
@@ -231,31 +229,31 @@ Successive Flushes:
   for oyster mushrooms over all flushes
 ```
 
-**期待結果:** Fresh mushrooms harvested at optimal timing, with successive flushes extending the productive life of the substrate.
+**期待結果:** 最適なタイミングで新鮮なキノコが収穫され、連続フラッシュが基質の生産的な寿命を延長すること。
 
-**失敗時:** If yields are poor (small, sparse mushrooms), the substrate may be depleted or contaminated. Supplemented substrates produce higher yields. If contamination appears between flushes, the block's productive life is over — compost it.
+**失敗時:** 収量が少ない場合（小さくまばらなキノコ）、基質が枯渇しているか汚染されている可能性がある。栄養補助された基質はより高い収量を生む。フラッシュ間に汚染が現れた場合、ブロックの生産的な寿命は終わっている — コンポストにする。
 
 ## バリデーション
 
-- [ ] Species appropriate for environment and experience level
-- [ ] Substrate was properly pasteurized or sterilized
-- [ ] Spawn rate was 10-20% by weight
-- [ ] Inoculation was performed with clean technique
-- [ ] Full colonization was achieved before initiating fruiting
-- [ ] Fruiting conditions (humidity, temperature, air exchange, light) were maintained
-- [ ] Mushrooms were harvested at optimal timing
-- [ ] Successive flushes were managed through rehydration
+- [ ] 環境と経験レベルに適した種が選択された
+- [ ] 基質が適切に低温殺菌または殺菌された
+- [ ] 種菌率が重量で10-20%であった
+- [ ] クリーンな技術で接種が行われた
+- [ ] 子実体形成を開始する前に完全なコロニー化が達成された
+- [ ] 子実体形成条件（湿度、温度、換気、光）が維持された
+- [ ] 最適なタイミングでキノコが収穫された
+- [ ] 再水和による連続フラッシュが管理された
 
 ## よくある落とし穴
 
-- **Insufficient pasteurization**: The most common cause of failure. If contaminants appear within the first week, pasteurization was inadequate
-- **Too little spawn**: Low spawn rates mean slow colonization, giving competitors more time. Use the recommended 10-20% ratio
-- **Low humidity during fruiting**: Mushrooms are 90% water. If the air is dry, primordia abort (dry out before developing). Humidity below 80% during fruiting is too low
-- **No fresh air exchange**: High CO2 during fruiting produces long, thin stems and small caps. Increase air exchange if stems are elongated
-- **Harvesting too late**: Over-mature mushrooms drop spores (messy) and have shorter shelf life. Harvest on the early side
-- **Contamination panic**: A small spot of mold on an otherwise healthy block is not necessarily fatal. Isolate the block, remove the contaminated area, and monitor. Discard only if contamination is spreading
+- **不十分な低温殺菌**: 失敗の最も一般的な原因。最初の1週間に汚染物が現れた場合、低温殺菌が不十分であった
+- **種菌が少なすぎる**: 低い種菌率は遅いコロニー化を意味し、競合者により多くの時間を与える。推奨される10-20%の比率を使用すること
+- **子実体形成中の低湿度**: キノコは90%が水分である。空気が乾燥していると、原基が中止される（発達前に乾燥する）。子実体形成中の80%未満の湿度は低すぎる
+- **換気不足**: 子実体形成中の高いCO2は長く細い茎と小さなカサを生む。茎が伸びている場合は換気を増やす
+- **収穫が遅すぎる**: 過熟のキノコは胞子を放出し（散らかる）、保存期間が短い。早めに収穫する
+- **汚染パニック**: 他は健全なブロック上の小さなカビのスポットは必ずしも致命的ではない。ブロックを隔離し、汚染された部分を除去し、モニタリングする。汚染が広がっている場合のみ廃棄する
 
 ## 関連スキル
 
-- `fungi-identification` — complementary skill; cultivation eliminates identification risk but understanding morphology aids in recognizing contamination species
-- `prepare-soil` — spent mushroom substrate is excellent garden amendment; the cultivation cycle connects to soil building
+- `fungi-identification` — 補完的スキル; 栽培は同定リスクを排除するが、形態学の理解は汚染種の認識に役立つ
+- `prepare-soil` — 使用済みキノコ基質は優れた園芸用土壌改良材である; 栽培サイクルは土壌構築につながる

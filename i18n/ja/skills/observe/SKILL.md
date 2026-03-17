@@ -1,15 +1,12 @@
 ---
 name: observe
 description: >
-  Sustained neutral pattern recognition across systems without urgency or
-  intervention. Maps naturalist field study methodology to AI reasoning:
-  framing the observation target, witnessing with sustained attention,
-  recording patterns, categorizing findings, generating hypotheses, and
-  archiving a pattern library for future reference. Use when a system's
-  behavior is unclear and action would be premature, when debugging an
-  unknown root cause, when a codebase change needs its effects witnessed
-  before further changes, or when auditing own reasoning patterns for
-  biases or recurring errors.
+  緊急性や介入なしにシステム全体にわたる持続的な中立的パターン認識。博物学者のフィールド
+  スタディ手法をAI推論にマッピングする：観察対象のフレーミング、持続的注意による目撃、
+  パターンの記録、発見の分類、仮説の生成、将来の参照のためのパターンライブラリのアーカイブ。
+  システムの挙動が不明確で行動が時期尚早な時、未知の根本原因をデバッグする時、コードベース
+  の変更がさらなる変更前にその影響を目撃される必要がある時、またはバイアスや繰り返しの
+  エラーについて自身の推論パターンを監査する時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob
 metadata:
@@ -26,31 +23,31 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 観察する
+# 観察
 
-Conduct a structured observation session — framing the observation target, witnessing with sustained neutral attention, recording patterns without interpretation, categorizing findings, generating hypotheses from patterns, and archiving the observations for future reference.
+構造化された観察セッションを実施する — 観察対象のフレーミング、持続的な中立的注意による目撃、解釈なしのパターン記録、発見の分類、パターンからの仮説生成、将来の参照のための観察のアーカイブ。
 
 ## 使用タイミング
 
-- A system's behavior is unclear and action without observation would be premature
-- Debugging a problem where the cause is unknown — observation before intervention prevents masking symptoms
-- A codebase or system has been changed and the effects need to be witnessed before further changes are made
-- Understanding user behavior patterns over a conversation to improve future interactions
-- Auditing own reasoning patterns for biases, habits, or recurring errors
-- After `learn` has built a model that needs validation through observation of the system in action
+- システムの挙動が不明確で、観察なしの行動が時期尚早な時
+- 原因不明の問題をデバッグする時 — 介入前の観察が症状の隠蔽を防ぐ
+- コードベースやシステムが変更され、さらなる変更前にその影響を目撃する必要がある時
+- 将来のインタラクションを改善するために会話を通じてユーザーの行動パターンを理解する時
+- バイアス、習慣、または繰り返しのエラーについて自身の推論パターンを監査する時
+- `learn`がモデルを構築した後、実際のシステムの観察を通じてそのモデルを検証する必要がある時
 
 ## 入力
 
-- **必須**: Observation target — a system, codebase, behavior pattern, user interaction, or reasoning process to observe
-- **任意**: Observation duration/scope — how long or deep to observe before concluding
-- **任意**: Specific question or hypothesis to guide observation focus
-- **任意**: Prior observations to compare against (detecting change over time)
+- **必須**: 観察対象 — 観察するシステム、コードベース、行動パターン、ユーザーインタラクション、または推論プロセス
+- **任意**: 観察の期間/範囲 — 結論を出すまでにどのくらいの時間または深さで観察するか
+- **任意**: 観察の焦点を導く特定の質問または仮説
+- **任意**: 比較のための過去の観察（時間経過による変化の検出）
 
 ## 手順
 
-### ステップ1: Frame — Set the Observation Focus
+### ステップ1: フレーム — 観察の焦点を設定する
 
-Define what is being observed, why, and from what perspective.
+何を観察しているか、なぜか、どの視点からかを定義する。
 
 ```
 Observation Protocol by System Type:
@@ -78,114 +75,114 @@ Observation Protocol by System Type:
 └──────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-1. Select the observation target and name it explicitly
-2. Define the observation boundary: what is included and what is out of scope
-3. State the observation stance: "I am observing, not intervening"
-4. If there is a guiding question, state it — but hold it lightly; be willing to notice things outside the question's scope
-5. Choose the appropriate categories from the matrix above
+1. 観察対象を選択し、明示的に名前を付ける
+2. 観察の境界を定義する：何が含まれ、何が範囲外か
+3. 観察の姿勢を宣言する：「私は観察しているのであり、介入しているのではない」
+4. 導く質問がある場合は述べる — ただし軽く保持する；質問の範囲外のことに気づく意思を持つ
+5. 上記のマトリクスから適切なカテゴリーを選択する
 
-**期待結果:** A clear frame that directs attention without constraining it. The observer knows where to look and what categories to sort observations into, but remains open to the unexpected.
+**期待結果:** 注意を制約せずに方向付ける明確なフレーム。観察者はどこを見るべきか、観察をどのカテゴリーに分類するかを知っているが、予想外のことに対して開かれている。
 
-**失敗時:** If the observation target is too broad ("observe everything"), narrow to one subsystem or one behavior pattern. If the target is too narrow ("observe this one variable"), zoom out to the surrounding context — the interesting patterns are often at the edges.
+**失敗時:** 観察対象が広すぎる場合（「すべてを観察する」）、1つのサブシステムまたは1つの行動パターンに絞る。対象が狭すぎる場合（「この1つの変数を観察する」）、周囲のコンテキストにズームアウトする — 興味深いパターンは多くの場合、端にある。
 
-### ステップ2: Witness — Sustained Neutral Attention
+### ステップ2: 目撃 — 持続的な中立的注意
 
-Hold attention on the observation target without interpreting, judging, or intervening.
+解釈、判断、介入なしに観察対象に注意を向け続ける。
 
-1. Begin systematic observation: read files, trace execution paths, review conversation history — whatever the target requires
-2. Record what is seen, not what it means — description before interpretation
-3. Resist the urge to fix problems encountered during observation — note them and continue
-4. Resist the urge to explain patterns before enough observations accumulate
-5. If attention drifts to a different target, note the drift (it may be meaningful) and return to the frame
-6. Maintain observation for a defined period: at least 3-5 distinct data points before moving to categorization
+1. 体系的な観察を開始する：ファイルを読む、実行パスを追跡する、会話履歴をレビューする — 対象が必要とするものを行う
+2. 見えたものを記録する。それが何を意味するかではない — 解釈の前に記述
+3. 観察中に遭遇した問題をすぐに修正したい衝動に抵抗する — メモして続ける
+4. 十分な観察が蓄積される前にパターンを説明したい衝動に抵抗する
+5. 注意が別の対象に逸れた場合、その逸れを記録し（意味があるかもしれない）、フレームに戻る
+6. 定義された期間、観察を維持する：分類に移る前に少なくとも3-5の異なるデータポイント
 
-**期待結果:** A collection of raw observations — specific, concrete, and free from interpretation. Observations read like field notes: "File X imports Y but does not use function Z. File A has 300 lines; file B has 30 lines and covers similar functionality."
+**期待結果:** 生の観察の集合 — 具体的で、具象的で、解釈を含まない。観察はフィールドノートのように読める：「ファイルXはYをインポートしているが関数Zを使用していない。ファイルAは300行；ファイルBは30行で同様の機能をカバーしている。」
 
-**失敗時:** If observation immediately triggers analysis ("this is wrong because..."), the analytical habit is overriding the observational stance. Consciously separate the phases: write the observation as a fact, then write the interpretation as a separate note labeled "hypothesis." If neutrality is impossible (strong reaction to what is observed), note the reaction itself as data: "I noticed strong concern when observing X — this may indicate a significant issue or may indicate my bias."
+**失敗時:** 観察がすぐに分析を引き起こす場合（「これは…だから間違っている」）、分析的習慣が観察の姿勢を上書きしている。意識的にフェーズを分離する：観察を事実として書き、次に解釈を「仮説」とラベル付けした別のメモとして書く。中立性が不可能な場合（観察したものに対する強い反応）、反応自体をデータとして記録する：「Xを観察した時に強い懸念を感じた — これは重大な問題を示しているかもしれないし、私のバイアスを示しているかもしれない。」
 
-### ステップ3: Record — Capture Raw Patterns
+### ステップ3: 記録 — 生のパターンをキャプチャする
 
-Transcribe observations into a structured format while they are fresh.
+観察が新鮮なうちに構造化された形式に書き写す。
 
-1. List each observation as a single statement of fact (what was seen, where, when)
-2. Group naturally similar observations — do not force grouping, but notice when observations cluster
-3. Note frequency: did this pattern appear once, occasionally, or pervasively?
-4. Note contrasts: where did the pattern break? Exceptions are often more informative than rules
-5. Note temporal patterns: did the observation change over time, or was it static?
-6. Capture exact evidence: file paths, line numbers, specific words, concrete examples
+1. 各観察を事実の単一の文として列挙する（何が見えたか、どこで、いつ）
+2. 自然に類似した観察をグループ化する — グループ化を強制せず、観察がクラスター化する時に気づく
+3. 頻度を記録する：このパターンは1回、時々、それとも広範に出現したか？
+4. 対比を記録する：パターンはどこで破れたか？例外は多くの場合、ルールよりも有益である
+5. 時間的パターンを記録する：観察は時間とともに変化したか、それとも静的だったか？
+6. 正確な証拠をキャプチャする：ファイルパス、行番号、具体的な言葉、具体例
 
-**期待結果:** A structured record of 5-15 discrete observations, each with specific evidence. The record should be detailed enough that another observer could verify each observation independently.
+**期待結果:** 5-15の個別の観察の構造化された記録で、それぞれに具体的な証拠がある。記録は、別の観察者が各観察を独立して検証できるほど詳細であるべき。
 
-**失敗時:** If observations are too abstract ("the code seems messy"), they need grounding in specifics — which files, which patterns, what makes it messy? If observations are too granular ("line 47 has a space before the brace"), zoom out to the pattern level — is this a one-off or a systemic issue?
+**失敗時:** 観察が抽象的すぎる場合（「コードが散らかっているように見える」）、具体性で根拠付ける必要がある — どのファイル、どのパターン、何が散らかっているのか？観察が粒度が細かすぎる場合（「47行目でブレースの前にスペースがある」）、パターンレベルにズームアウトする — これは1回限りか、体系的な問題か？
 
-### ステップ4: Categorize — Organize Findings
+### ステップ4: 分類 — 発見を整理する
 
-Sort observations into meaningful categories without yet explaining them.
+まだ説明せずに、観察を意味のあるカテゴリーに分類する。
 
-1. Review all recorded observations and look for natural groupings
-2. Assign each observation to a category from the Step 1 matrix, or create new categories if needed
-3. Within each category, rank observations by frequency and significance
-4. Identify which categories have many observations (well-documented areas) and which have few (potential blind spots)
-5. Look for cross-category patterns: does the same underlying pattern manifest differently in different categories?
-6. Note any observations that do not fit any category — outliers are often the most interesting data
+1. 記録されたすべての観察をレビューし、自然なグループを探す
+2. 各観察をステップ1のマトリクスのカテゴリーに割り当てるか、必要に応じて新しいカテゴリーを作成する
+3. 各カテゴリー内で、頻度と重要性によって観察をランク付けする
+4. 多くの観察があるカテゴリー（十分に文書化された領域）と少ないカテゴリー（潜在的な盲点）を特定する
+5. カテゴリー横断のパターンを探す：同じ根本的なパターンが異なるカテゴリーで異なる形で現れているか？
+6. どのカテゴリーにも当てはまらない観察を記録する — 外れ値は多くの場合、最も興味深いデータである
 
-**期待結果:** A categorized observation map with clear groupings. Each category has specific observations supporting it. The map shows both patterns and gaps.
+**期待結果:** 明確なグループを持つ分類された観察マップ。各カテゴリーにはそれを裏付ける具体的な観察がある。マップはパターンとギャップの両方を示す。
 
-**失敗時:** If categorization feels forced, the observations may not have natural groupings — they may be a collection of unrelated findings, which is itself a finding (the system may lack coherent structure). If everything fits neatly into one category, the observation scope was too narrow — zoom out.
+**失敗時:** 分類が無理やりに感じる場合、観察には自然なグループがないかもしれない — それ自体が発見である（システムに一貫した構造が欠けているかもしれない）。すべてが1つのカテゴリーにきれいに収まる場合、観察の範囲が狭すぎた — ズームアウトする。
 
-### ステップ5: Theorize — Generate Hypotheses from Patterns
+### ステップ5: 理論化 — パターンから仮説を生成する
 
-Now — and only now — begin interpreting the observations.
+ここで — そしてここで初めて — 観察の解釈を始める。
 
-1. For each major pattern observed, propose a hypothesis: "This pattern exists because..."
-2. For each hypothesis, identify supporting evidence from the observations
-3. For each hypothesis, identify what counter-evidence would disprove it
-4. Rank hypotheses by explanatory power: which one explains the most observations?
-5. Generate at least one contrarian hypothesis: "The obvious explanation is X, but it could also be Y because..."
-6. Identify which hypotheses are testable and which are speculative
+1. 観察された各主要パターンについて、仮説を提案する：「このパターンが存在するのは…だからである」
+2. 各仮説について、観察からの裏付け証拠を特定する
+3. 各仮説について、それを反証する反証がどのようなものかを特定する
+4. 説明力によって仮説をランク付けする：どれが最も多くの観察を説明するか？
+5. 少なくとも1つの逆張り仮説を生成する：「明白な説明はXだが、Yである可能性もある。なぜなら…」
+6. どの仮説が検証可能で、どれが推測的かを特定する
 
-**期待結果:** 2-4 hypotheses that explain the major patterns, each supported by specific observations. At least one hypothesis should be surprising or contrarian. The distinction between observation and interpretation is maintained — it is clear which parts are data and which are theory.
+**期待結果:** 主要パターンを説明する2-4の仮説で、それぞれが具体的な観察で裏付けられている。少なくとも1つの仮説は驚くべき、または逆張りであるべき。観察と解釈の区別が維持されている — どの部分がデータでどの部分が理論かが明確。
 
-**失敗時:** If no hypotheses form, the observations may need more time to accumulate — return to Step 2. If too many hypotheses form (everything is "maybe"), select the 2-3 with the strongest evidence and set the rest aside. If only obvious hypotheses form, force a contrarian view: "What if the opposite were true?"
+**失敗時:** 仮説が形成されない場合、観察にはさらに蓄積する時間が必要かもしれない — ステップ2に戻る。仮説が多すぎる場合（すべてが「おそらく」）、最も強い証拠を持つ2-3を選択し、残りを保留にする。明白な仮説のみが形成される場合、逆張りの見方を強制する：「逆が真だとしたら？」
 
-### ステップ6: Archive — Store the Pattern Library
+### ステップ6: アーカイブ — パターンライブラリを保存する
 
-Preserve the observations and hypotheses for future reference.
+将来の参照のために観察と仮説を保存する。
 
-1. Summarize the key findings: 3-5 patterns with evidence
-2. State the leading hypotheses and their confidence levels
-3. Note what was not observed (potential blind spots)
-4. Identify follow-up observations that would strengthen or weaken the hypotheses
-5. If the patterns are durable (will be relevant across sessions), consider updating MEMORY.md
-6. Tag the observations with context: when they were made, what prompted them, what scope was covered
+1. 主要な発見を要約する：証拠付きの3-5のパターン
+2. 主要な仮説とその信頼度を述べる
+3. 観察されなかったもの（潜在的な盲点）を記録する
+4. 仮説を強化または弱化するフォローアップ観察を特定する
+5. パターンが永続的な場合（セッション間で関連性がある）、MEMORY.mdの更新を検討する
+6. 観察にコンテキストをタグ付けする：いつ行われたか、何がきっかけだったか、どの範囲がカバーされたか
 
-**期待結果:** An archive that future observation sessions can build on. The archive distinguishes clearly between observations (data) and hypotheses (interpretation). It is honest about confidence levels and gaps.
+**期待結果:** 将来の観察セッションが積み重ねることができるアーカイブ。アーカイブは観察（データ）と仮説（解釈）を明確に区別する。信頼度とギャップについて正直である。
 
-**失敗時:** If the observations do not feel worth archiving, they may have been too shallow — or they may be genuinely routine (not every observation session produces insights). Archive even negative results: "Observed X and found no anomalies" is useful future context.
+**失敗時:** 観察がアーカイブに値しないと感じる場合、浅すぎたかもしれない — または本当にルーチン的なものかもしれない（すべての観察セッションが洞察を生むわけではない）。ネガティブな結果もアーカイブする：「Xを観察し異常は見つからなかった」は有用な将来のコンテキストである。
 
 ## バリデーション
 
-- [ ] The observation frame was set before any observation began (not free-form wandering)
-- [ ] Raw observations were recorded as facts before any interpretation
-- [ ] At least 5 discrete observations were captured with specific evidence
-- [ ] Interpretation (hypotheses) was clearly separated from observation (data)
-- [ ] At least one surprising or contrarian finding was generated
-- [ ] The archived record is specific enough for another observer to verify
+- [ ] 観察が始まる前に観察フレームが設定された（自由形式の探索ではない）
+- [ ] 生の観察が解釈の前に事実として記録された
+- [ ] 具体的な証拠を持つ少なくとも5つの個別の観察がキャプチャされた
+- [ ] 解釈（仮説）が観察（データ）から明確に分離された
+- [ ] 少なくとも1つの驚くべき、または逆張りの発見が生成された
+- [ ] アーカイブされた記録は、別の観察者が検証できるほど具体的である
 
 ## よくある落とし穴
 
-- **Premature intervention**: Seeing a problem and fixing it immediately, losing the opportunity to understand the broader pattern it belongs to
-- **Observation bias**: Seeing what is expected rather than what is present. Expectations filter perception — the clearing step in Step 1 mitigates this but does not eliminate it
-- **Analysis paralysis**: Observing endlessly without ever moving to action. Set a time or data-point limit and commit to concluding
-- **Narrative imposition**: Constructing a story that connects observations even when the connections are weak. Not all observations form a coherent narrative — disconnected findings are valid
-- **Confusing familiarity with understanding**: "I have seen this before" is not the same as "I understand why this is here." Prior exposure can create false confidence
-- **Ignoring own reactions**: The observer's emotional or cognitive reactions to observations are data. A sense of confusion, boredom, or alarm about a system often contains real signal
+- **早すぎる介入**: 問題を見つけてすぐに修正し、それが属するより広いパターンを理解する機会を失う
+- **観察バイアス**: 存在するものではなく期待されるものを見る。期待は知覚をフィルタリングする — ステップ1のクリアリングステップはこれを軽減するが排除はしない
+- **分析麻痺**: 行動に移ることなく際限なく観察し続ける。時間またはデータポイントの制限を設定し、結論を出すことにコミットする
+- **物語の押し付け**: つながりが弱い場合でも観察をつなぐストーリーを構築する。すべての観察が一貫したナラティブを形成するわけではない — 断片的な発見は有効である
+- **馴染みと理解の混同**: 「これを前に見たことがある」は「これがなぜここにあるか理解している」と同じではない。以前の接触は偽りの確信を生み出す可能性がある
+- **自身の反応の無視**: 観察に対する観察者の感情的または認知的反応はデータである。システムに対する混乱、退屈、または警戒の感覚には多くの場合、本当のシグナルが含まれている
 
 ## 関連スキル
 
-- `observe-guidance` — the human-guidance variant for coaching a person in systematic observation
-- `learn` — observation feeds learning by providing raw data for model-building
-- `listen` — outward-focused attention toward user signals; observation is broader-scope attention toward any system
-- `remote-viewing` — intuitive exploration that can be validated through systematic observation
-- `meditate` — develops the sustained attention capacity that observation requires
-- `awareness` — threat-focused situational awareness; observation is curiosity-driven rather than defense-driven
+- `observe-guidance` — 体系的な観察を人にコーチングするための人間ガイダンスのバリアント
+- `learn` — 観察はモデル構築のための生データを提供することで学習に供給する
+- `listen` — ユーザーシグナルへの外向きの注意；観察はあらゆるシステムへのより広い範囲の注意
+- `remote-viewing` — 体系的な観察を通じて検証できる直感的探索
+- `meditate` — 観察が必要とする持続的注意力を発達させる
+- `awareness` — 脅威に焦点を当てた状況認識；観察は防御駆動ではなく好奇心駆動

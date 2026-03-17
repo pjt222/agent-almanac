@@ -1,12 +1,12 @@
 ---
 name: monitor-model-drift
 description: >
-  Implement comprehensive model drift monitoring using Evidently AI, statistical tests (PSI, KS),
-  and custom metrics to detect data drift and concept drift in production ML systems. Set up
-  automated alerting and reporting workflows to catch degradation before it impacts business
-  metrics. Use when production models show unexplained performance degradation, when new data
-  distributions differ from training data, when seasonal shifts affect input features, or when
-  regulatory requirements mandate model monitoring.
+  Evidently AI、統計テスト（PSI、KS）、カスタムメトリクスを使用した包括的なモデル
+  ドリフトモニタリングの実装。本番MLシステムのデータドリフトとコンセプトドリフトを
+  検出する。ビジネスメトリクスに影響する前に劣化を検出するための自動アラートと
+  レポートワークフローを設定する。本番モデルが原因不明のパフォーマンス劣化を示す
+  時、新しいデータ分布がトレーニングデータと異なる時、季節的シフトが入力特徴に
+  影響する時、または規制要件がモデルモニタリングを義務付ける時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -23,36 +23,36 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# モデルドリフトの監視
+# モデルドリフトのモニタリング
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完全な設定ファイルとテンプレートについては[Extended Examples](references/EXAMPLES.md)を参照。
 
-Detect and alert on data drift and concept drift in production ML models using statistical tests and automated monitoring.
+統計テストと自動化されたモニタリングを使用して、本番MLモデルのデータドリフトとコンセプトドリフトを検出し、アラートを発報する。
 
 ## 使用タイミング
 
-- Production ML models experiencing unexplained performance degradation
-- New data distributions differ from training data
-- Seasonal or temporal shifts in input features
-- Need proactive alerts before business metrics are impacted
-- Regulatory requirements for model monitoring (e.g., SR 11-7, EU AI Act)
-- Multiple model versions deployed requiring drift comparison
+- 本番MLモデルが原因不明のパフォーマンス劣化を経験している時
+- 新しいデータ分布がトレーニングデータと異なる時
+- 入力特徴に季節的または時間的なシフトがある時
+- ビジネスメトリクスに影響する前にプロアクティブなアラートが必要な時
+- モデルモニタリングの規制要件がある時（例: SR 11-7、EU AI Act）
+- ドリフト比較が必要な複数のモデルバージョンがデプロイされている時
 
 ## 入力
 
-- **必須**: Production model predictions and features (last 30-90 days)
-- **必須**: Reference dataset (training or validation data)
-- **必須**: Ground truth labels (may be delayed)
-- **任意**: Feature importance scores or SHAP values
-- **任意**: Business metric thresholds for alerting
-- **任意**: Historical drift reports for trend analysis
+- **必須**: 本番モデルの予測と特徴（直近30-90日分）
+- **必須**: リファレンスデータセット（トレーニングまたはバリデーションデータ）
+- **必須**: グランドトゥルースラベル（遅延がある場合がある）
+- **任意**: 特徴重要度スコアまたはSHAP値
+- **任意**: アラート用のビジネスメトリクス閾値
+- **任意**: トレンド分析用の過去のドリフトレポート
 
 ## 手順
 
-### ステップ1: Install and Configure Evidently AI
+### ステップ1: Evidently AIのインストールと設定
 
-Set up the monitoring framework with appropriate dependencies.
+適切な依存関係を持つモニタリングフレームワークを設定する。
 
 ```bash
 # Create virtual environment
@@ -66,7 +66,7 @@ pip install evidently pandas scikit-learn prometheus-client
 mkdir -p monitoring/{reports,config,alerts}
 ```
 
-Create configuration file:
+設定ファイルを作成する:
 
 ```python
 # monitoring/config/drift_config.py
@@ -80,13 +80,13 @@ from evidently.metrics import (
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Configuration file created with thresholds matching your model's tolerance.
+**期待結果:** モデルの許容度に一致する閾値を持つ設定ファイルが作成されていること。
 
-**失敗時:** Start with conservative thresholds (PSI > 0.2, KS p-value < 0.01) and tune based on false positive rate.
+**失敗時:** 保守的な閾値（PSI > 0.2、KS p値 < 0.01）から始め、偽陽性率に基づいてチューニングする。
 
-### ステップ2: Implement Data Drift Detection
+### ステップ2: データドリフト検出の実装
 
-Create drift detection pipeline with multiple statistical tests.
+複数の統計テストを使用したドリフト検出パイプラインを作成する。
 
 ```python
 # monitoring/drift_detector.py
@@ -100,13 +100,13 @@ from datetime import datetime, timedelta
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Drift detection runs successfully, produces JSON report with per-feature statistics, and identifies drifted features.
+**期待結果:** ドリフト検出が正常に実行され、特徴ごとの統計を含むJSONレポートを生成し、ドリフトした特徴を特定すること。
 
-**失敗時:** Check for missing values (impute or drop), ensure reference and current data have same columns, verify data types match between datasets.
+**失敗時:** 欠損値を確認する（補完または除去）、リファレンスと現在のデータが同じカラムを持つことを確認する、データセット間でデータ型が一致することを検証する。
 
-### ステップ3: Generate Evidently Reports
+### ステップ3: Evidentlyレポートの生成
 
-Create visual HTML reports for human review and debugging.
+人間のレビューとデバッグのための視覚的なHTMLレポートを作成する。
 
 ```python
 # monitoring/generate_reports.py
@@ -120,13 +120,13 @@ from evidently.metrics import (
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** HTML reports generated in `monitoring/reports/`, viewable in browser with interactive charts showing distribution comparisons.
+**期待結果:** `monitoring/reports/`にHTMLレポートが生成され、分布比較を示すインタラクティブなチャートと共にブラウザで閲覧可能であること。
 
-**失敗時:** Verify write permissions to output directory, check that Evidently version is >= 0.4.0, ensure data frames have sufficient rows (>100 recommended).
+**失敗時:** 出力ディレクトリへの書き込み権限を確認し、Evidentlyバージョンが >= 0.4.0であることを確認し、データフレームに十分な行（100以上を推奨）があることを確認する。
 
-### ステップ4: Implement Concept Drift Detection
+### ステップ4: コンセプトドリフト検出の実装
 
-Monitor prediction performance to detect concept drift (relationship between features and target changes).
+コンセプトドリフト（特徴とターゲット間の関係の変化）を検出するための予測パフォーマンスのモニタリング。
 
 ```python
 # monitoring/concept_drift.py
@@ -140,13 +140,13 @@ import json
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Performance monitoring detects when model accuracy/AUC drops below threshold, signaling potential concept drift.
+**期待結果:** モデルの精度/AUCが閾値を下回った時にパフォーマンスモニタリングが検出し、潜在的なコンセプトドリフトを通知すること。
 
-**失敗時:** Ensure ground truth labels are available (may require delayed validation batch job), verify prediction scores are properly calibrated (0-1 range for classification), check for label leakage in features.
+**失敗時:** グランドトゥルースラベルが利用可能であることを確認する（遅延検証バッチジョブが必要な場合がある）、予測スコアが適切にキャリブレーションされていることを検証する（分類の場合0-1の範囲）、特徴のラベルリーケージを確認する。
 
-### ステップ5: Set Up Automated Alerting
+### ステップ5: 自動アラートの設定
 
-Integrate drift detection with alerting systems (Slack, PagerDuty, email).
+ドリフト検出をアラートシステム（Slack、PagerDuty、メール）と統合する。
 
 ```python
 # monitoring/alerting.py
@@ -160,13 +160,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Alerts sent to Slack/PagerDuty when drift detected, with severity based on drift share and critical feature involvement.
+**期待結果:** ドリフトが検出された時にSlack/PagerDutyにアラートが送信され、ドリフトシェアとクリティカル特徴の関与に基づく重大度が設定されること。
 
-**失敗時:** Test webhook URLs with curl first, verify PagerDuty integration key has correct permissions, check firewall rules for outbound HTTPS, implement retry logic for transient network failures.
+**失敗時:** まずcurlでWebhook URLをテストし、PagerDuty統合キーに正しい権限があることを検証し、送信HTTPSのファイアウォールルールを確認し、一時的なネットワーク障害のためのリトライロジックを実装する。
 
-### ステップ6: Schedule Monitoring Jobs
+### ステップ6: モニタリングジョブのスケジューリング
 
-Automate drift detection to run on schedule (daily or weekly).
+ドリフト検出をスケジュール（毎日または毎週）で自動実行する。
 
 ```python
 # monitoring/scheduler.py
@@ -180,7 +180,7 @@ logging.basicConfig(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Alternatively, use cron:
+代替として、cronを使用:
 
 ```bash
 # Add to crontab (crontab -e)
@@ -188,7 +188,7 @@ Alternatively, use cron:
 0 2 * * * cd /path/to/monitoring && /path/to/venv/bin/python scheduler.py >> logs/cron.log 2>&1
 ```
 
-Or use Airflow DAG:
+またはAirflow DAGを使用:
 
 ```python
 # airflow/dags/drift_monitoring_dag.py
@@ -202,35 +202,35 @@ default_args = {
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Monitoring runs automatically on schedule, generates reports, sends alerts only when drift exceeds thresholds, logs all activity.
+**期待結果:** モニタリングがスケジュール通りに自動実行され、レポートを生成し、ドリフトが閾値を超えた場合のみアラートを送信し、すべてのアクティビティをログに記録すること。
 
-**失敗時:** Check scheduler process is running (`ps aux | grep scheduler`), verify cron service is active, ensure data sources are accessible, review logs for exceptions, set up dead man's switch alert if job doesn't run.
+**失敗時:** スケジューラープロセスが実行中であることを確認する（`ps aux | grep scheduler`）、cronサービスがアクティブであることを検証する、データソースがアクセス可能であることを確認する、例外についてログを確認する、ジョブが実行されない場合のデッドマンズスイッチアラートを設定する。
 
 ## バリデーション
 
-- [ ] PSI and KS test calculations produce expected values for known drift scenarios
-- [ ] Evidently HTML reports render correctly and show distribution overlays
-- [ ] Critical feature drift triggers alerts immediately
-- [ ] Concept drift detector identifies performance degradation within 3 days
-- [ ] Alerts delivered to all configured channels (Slack, email, PagerDuty)
-- [ ] Scheduled job runs without manual intervention for 7+ days
-- [ ] False positive rate < 5% (tune thresholds if higher)
-- [ ] Drift detection completes in < 5 minutes for 1M rows
+- [ ] PSIとKSテストの計算が既知のドリフトシナリオに対して期待値を生成する
+- [ ] Evidently HTMLレポートが正しくレンダリングされ、分布のオーバーレイを表示する
+- [ ] クリティカル特徴のドリフトが即座にアラートをトリガーする
+- [ ] コンセプトドリフト検出器が3日以内にパフォーマンス劣化を識別する
+- [ ] すべての設定チャネル（Slack、メール、PagerDuty）にアラートが配信される
+- [ ] スケジュールされたジョブが手動介入なしで7日以上実行される
+- [ ] 偽陽性率が < 5%（高い場合は閾値をチューニングする）
+- [ ] 100万行に対してドリフト検出が5分以内に完了する
 
 ## よくある落とし穴
 
-- **Stale reference data**: Update reference dataset quarterly or after model retraining to reflect natural data evolution
-- **Sample size mismatch**: Ensure current and reference datasets have similar sizes (>1000 rows each) for reliable statistics
-- **Missing ground truth**: Concept drift requires labels; implement delayed labeling pipeline if real-time labels unavailable
-- **Seasonality confusion**: Weekly/monthly patterns may trigger false positives; use time-aligned reference windows or deseasonalize features
-- **Alert fatigue**: Start with high thresholds and gradually lower based on actual model retraining cadence
-- **Ignoring data quality drift**: Monitor missing values, outliers, and encoding errors separately from distribution drift
-- **Over-reliance on aggregate metrics**: Per-feature analysis crucial; aggregate drift may mask critical individual feature shifts
-- **Neglecting prediction distribution**: Even without ground truth, sudden prediction distribution shifts signal issues
+- **古いリファレンスデータ**: リファレンスデータセットを四半期ごとまたはモデル再トレーニング後に更新し、自然なデータの進化を反映する
+- **サンプルサイズの不一致**: 信頼性の高い統計のために、現在とリファレンスのデータセットが同様のサイズ（各1000行以上）であることを確認する
+- **グランドトゥルースの欠如**: コンセプトドリフトにはラベルが必要; リアルタイムラベルが利用できない場合は遅延ラベリングパイプラインを実装する
+- **季節性の混同**: 週次/月次パターンが偽陽性をトリガーする可能性がある; 時間整列されたリファレンスウィンドウを使用するか、特徴の季節性を除去する
+- **アラート疲労**: 高い閾値から始めて、実際のモデル再トレーニング頻度に基づいて徐々に下げる
+- **データ品質ドリフトの無視**: 欠損値、外れ値、エンコーディングエラーを分布ドリフトとは別にモニタリングする
+- **集約メトリクスへの過度の依存**: 特徴ごとの分析が重要; 集約ドリフトは個別の重要な特徴のシフトを隠す可能性がある
+- **予測分布の無視**: グランドトゥルースなしでも、突然の予測分布のシフトは問題を示す
 
 ## 関連スキル
 
-- `detect-anomalies-aiops` - Time series anomaly detection for operational metrics
-- `deploy-ml-model-serving` - Model deployment patterns and versioning
-- `setup-prometheus-monitoring` - Infrastructure metrics collection
-- `review-data-analysis` - Statistical analysis validation and peer review
+- `detect-anomalies-aiops` - 運用メトリクスの時系列異常検出
+- `deploy-ml-model-serving` - モデルデプロイメントパターンとバージョニング
+- `setup-prometheus-monitoring` - インフラストラクチャメトリクスの収集
+- `review-data-analysis` - 統計分析の検証とピアレビュー

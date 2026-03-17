@@ -1,13 +1,13 @@
 ---
 name: manage-tcg-collection
 description: >
-  Organize, track, and value a trading card game collection. Covers inventory
-  methods, storage best practices, grade-based valuation, want-list management,
-  and collection analytics for Pokemon, MTG, Flesh and Blood, and Kayou cards.
-  Use when starting a new collection and setting up inventory tracking, cataloging
-  an existing collection that has grown beyond casual knowledge, valuing a
-  collection for insurance or sale, or deciding which cards to submit for
-  professional grading based on value potential.
+  トレーディングカードゲームのコレクションを整理、追跡、評価する。インベントリ
+  方法、保管のベストプラクティス、グレードに基づく評価、ウォントリスト管理、
+  Pokemon、MTG、Flesh and Blood、Kayouカードのコレクション分析を網羅する。
+  新しいコレクションを始めてインベントリ追跡を設定する時、カジュアルな知識を
+  超えて成長した既存のコレクションをカタログ化する時、保険や売却のためにコレクション
+  を評価する時、または価値の可能性に基づいてプロフェッショナルグレーディングに
+  提出するカードを決定する時に使用する。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -26,31 +26,31 @@ metadata:
 
 # TCGコレクションの管理
 
-Organize, inventory, and value a trading card game collection with structured tracking, proper storage, and data-driven valuation.
+構造化された追跡、適切な保管、データ駆動型の評価でトレーディングカードゲームのコレクションを整理、棚卸し、評価する。
 
 ## 使用タイミング
 
-- Starting a new collection and setting up inventory tracking from the beginning
-- Cataloging an existing collection that has grown beyond casual knowledge
-- Valuing a collection for insurance, sale, or estate purposes
-- Managing want-lists and trade binders for acquiring specific cards
-- Deciding which cards to submit for professional grading based on value potential
+- 新しいコレクションを始めて最初からインベントリ追跡を設定する時
+- カジュアルな知識を超えて成長した既存のコレクションをカタログ化する時
+- 保険、売却、または遺産の目的でコレクションを評価する時
+- 特定のカードを取得するためのウォントリストとトレードバインダーを管理する時
+- 価値の可能性に基づいてプロフェッショナルグレーディングに提出するカードを決定する時
 
 ## 入力
 
-- **必須**: Card game(s) in the collection (Pokemon, MTG, FaB, Kayou, etc.)
-- **必須**: Collection scope (entire collection, specific sets, or specific cards)
-- **任意**: Current inventory system (spreadsheet, app, physical binder organization)
-- **任意**: Collection goal (complete sets, competitive play, investment, nostalgia)
-- **任意**: Budget for storage and grading supplies
+- **必須**: コレクション内のカードゲーム（Pokemon、MTG、FaB、Kayouなど）
+- **必須**: コレクションの範囲（全コレクション、特定のセット、または特定のカード）
+- **任意**: 現在のインベントリシステム（スプレッドシート、アプリ、物理バインダーの整理）
+- **任意**: コレクションの目標（セット完成、競技プレイ、投資、ノスタルジア）
+- **任意**: 保管とグレーディング用品の予算
 
 ## 手順
 
-### ステップ1: Establish the Inventory System
+### ステップ1: インベントリシステムの確立
 
-Set up a tracking system appropriate to the collection's size.
+コレクションのサイズに適した追跡システムを設定する。
 
-1. Choose an inventory method based on collection size:
+1. コレクションサイズに基づいてインベントリ方法を選択する:
 
 ```
 Collection Size Guide:
@@ -64,47 +64,47 @@ Collection Size Guide:
 +-----------+-------+-------------------------------------------+
 ```
 
-2. Define the data fields to track for each card:
-   - **Identity**: Set, card number, name, variant (holo, reverse, full art)
-   - **Condition**: Raw grade estimate (NM, LP, MP, HP, DMG) or numeric grade
-   - **Quantity**: How many copies owned
-   - **Location**: Where the card is stored (binder page, box label, graded slab)
-   - **Acquisition**: Date acquired, price paid, source (pack, purchase, trade)
-   - **Value**: Current market value at condition, last updated date
-3. Set up the chosen system with these fields
-4. Establish an update cadence (weekly for active collectors, monthly for stable collections)
+2. 各カードについて追跡するデータフィールドを定義する:
+   - **アイデンティティ**: セット、カード番号、名前、バリアント（ホロ、リバース、フルアート）
+   - **コンディション**: 未グレーディング状態の推定（NM、LP、MP、HP、DMG）または数値グレード
+   - **数量**: 所有枚数
+   - **場所**: カードの保管場所（バインダーページ、ボックスラベル、グレーディングスラブ）
+   - **取得**: 取得日、支払い価格、入手元（パック、購入、トレード）
+   - **価値**: コンディションでの現在の市場価値、最終更新日
+3. 選択したシステムをこれらのフィールドで設定する
+4. 更新頻度を確立する（アクティブなコレクターは毎週、安定したコレクションは毎月）
 
-**期待結果:** A functional inventory system with defined fields, ready for data entry. The system matches the collection's scale — not over-engineered for a small collection, not under-powered for a large one.
+**期待結果:** 定義されたフィールドを持つ機能的なインベントリシステムがデータ入力の準備ができていること。システムがコレクションの規模に合っていること — 小さなコレクションに対して過剰設計でなく、大きなコレクションに対して能力不足でないこと。
 
-**失敗時:** If the ideal app isn't available for your game/platform, use a spreadsheet. The format matters less than consistency. A simple spreadsheet updated regularly beats a sophisticated app abandoned after a week.
+**失敗時:** 理想的なアプリがゲーム/プラットフォームで利用できない場合、スプレッドシートを使用する。形式よりも一貫性が重要である。定期的に更新されるシンプルなスプレッドシートは、1週間後に放棄される洗練されたアプリに勝る。
 
-### ステップ2: Catalog the Collection
+### ステップ2: コレクションのカタログ化
 
-Enter existing cards into the inventory system.
+既存のカードをインベントリシステムに入力する。
 
-1. Sort cards physically before entering digitally:
-   - By set (all cards from one set together)
-   - Within set, by card number (ascending)
-   - Variants grouped with their base card
-2. Enter cards into the system:
-   - Use bulk entry where available (barcode scanning, set checklists)
-   - Record condition honestly — over-grading your own cards leads to valuation errors
-   - Note any cards with special provenance (signed, first edition, tournament prizes)
-3. For large collections, work in sessions:
-   - Process one set or one storage box per session
-   - Mark progress clearly (which boxes/binders are done)
-   - Verify a random sample from each session for accuracy
-4. Cross-reference against set checklists to identify completion percentages
+1. デジタル入力の前にカードを物理的にソートする:
+   - セット別（1つのセットのすべてのカードをまとめる）
+   - セット内でカード番号順（昇順）
+   - バリアントはベースカードとグループ化
+2. カードをシステムに入力する:
+   - 利用可能な場合はバルク入力を使用する（バーコードスキャン、セットチェックリスト）
+   - コンディションを正直に記録する — 自分のカードの過大評価は評価の誤りにつながる
+   - 特別な来歴を持つカードに注記する（サイン入り、ファーストエディション、トーナメント賞品）
+3. 大きなコレクションの場合、セッションに分けて作業する:
+   - セッションごとに1つのセットまたは1つの収納ボックスを処理する
+   - 進捗を明確にマークする（どのボックス/バインダーが完了したか）
+   - 各セッションからランダムサンプルで正確性を検証する
+4. セットチェックリストとクロスリファレンスしてコンプリート率を特定する
 
-**期待結果:** Every card in the collection entered with accurate condition and location data. Completion percentages known for each set being collected.
+**期待結果:** コレクション内のすべてのカードが正確なコンディションと場所データで入力されること。収集中の各セットのコンプリート率が把握されていること。
 
-**失敗時:** If the collection is too large for manual entry, prioritize: enter all rare/valuable cards first, then bulk-enter commons by set with estimated quantities. An 80% accurate inventory is far better than no inventory.
+**失敗時:** コレクションが手動入力には大きすぎる場合、優先順位を付ける: まずすべてのレア/高価値カードを入力し、次にコモンをセット別に推定数量でバルク入力する。80%正確なインベントリはインベントリなしよりもはるかに良い。
 
-### ステップ3: Organize Physical Storage
+### ステップ3: 物理的保管の整理
 
-Store cards appropriately for their value and use.
+カードを価値と用途に応じて適切に保管する。
 
-1. Apply the **storage tier system**:
+1. **保管ティアシステム**を適用する:
 
 ```
 Storage Tiers:
@@ -121,32 +121,32 @@ Storage Tiers:
 +----------+---------------+----------------------------------------------+
 ```
 
-2. Environmental controls:
-   - Store in a cool, dry, dark location (not attic, not basement)
-   - Avoid direct sunlight, humidity, and temperature swings
-   - Use silica gel packets in storage boxes for moisture control
-3. Label everything:
-   - Each box labeled with contents (set name, card range, date stored)
-   - Each binder page corresponds to inventory location codes
-   - Graded cards labeled with inventory ID matching digital system
-4. Update the inventory system with storage locations
+2. 環境管理:
+   - 涼しく乾燥した暗い場所に保管する（屋根裏や地下室ではない）
+   - 直射日光、湿度、温度変動を避ける
+   - 収納ボックス内に乾燥剤パケットを入れて湿度管理する
+3. すべてにラベルを貼る:
+   - 各ボックスに内容のラベル（セット名、カード範囲、保管日）
+   - 各バインダーページがインベントリの場所コードに対応する
+   - グレーディング済みカードにデジタルシステムと一致するインベントリIDのラベル
+4. インベントリシステムを保管場所で更新する
 
-**期待結果:** Every card stored appropriately for its value with location data in the inventory. Premium cards are protected, bulk cards are organized and accessible.
+**期待結果:** すべてのカードが価値に応じて適切に保管され、インベントリに場所データがあること。プレミアムカードは保護され、バルクカードは整理されてアクセス可能であること。
 
-**失敗時:** If premium storage supplies aren't available immediately, penny sleeves + top-loaders are always the minimum for any card worth >$10. Upgrade storage as supplies become available; the priority is getting valuable cards into some form of protection.
+**失敗時:** プレミアム保管用品がすぐに入手できない場合、ペニースリーブ+トップローダーが$10以上のカードの最低限である。用品が利用可能になったら保管をアップグレードする; 優先事項は価値のあるカードを何らかの保護に入れることである。
 
-### ステップ4: Value the Collection
+### ステップ4: コレクションの評価
 
-Calculate current market values.
+現在の市場価値を計算する。
 
-1. Choose a pricing source:
-   - **TCGPlayer Market Price**: Most common for US market (MTG, Pokemon)
-   - **CardMarket**: Standard for European market
-   - **eBay Sold Listings**: Best for rare/unique items without standard pricing
-   - **PSA/BGS Price Guide**: For graded cards specifically
-2. Update values for all Standard and Premium tier cards
-3. For bulk cards, use per-set bulk pricing rather than individual lookups
-4. Calculate collection summary:
+1. 価格ソースを選択する:
+   - **TCGPlayer Market Price**: 米国市場で最も一般的（MTG、Pokemon）
+   - **CardMarket**: ヨーロッパ市場の標準
+   - **eBay Sold Listings**: 標準価格のないレア/ユニークアイテムに最適
+   - **PSA/BGS Price Guide**: グレーディング済みカード専用
+2. すべてのStandardおよびPremiumティアカードの価値を更新する
+3. バルクカードには個別検索ではなくセットごとのバルク価格を使用する
+4. コレクションサマリーを計算する:
 
 ```
 Collection Value Summary:
@@ -162,58 +162,58 @@ Collection Value Summary:
 +------------------+--------+--------+
 ```
 
-5. Identify grading candidates: cards where the grade-premium exceeds grading costs
-   - Rule of thumb: grade if (expected graded value - raw value) > 2x grading cost
+5. グレーディング候補を特定する: グレードプレミアムがグレーディングコストを超えるカード
+   - 目安: （期待されるグレーディング後の価値 - 未グレーディング価値）> グレーディングコストの2倍の場合にグレーディングする
 
-**期待結果:** A current valuation of the collection with per-card values for significant cards and aggregate values for bulk. Grading candidates identified.
+**期待結果:** 重要なカードのカード別価値とバルクの集計価値を含むコレクションの現在の評価。グレーディング候補が特定されていること。
 
-**失敗時:** If pricing data is stale or unavailable, note the pricing date and source. For very rare cards, check multiple sources and use the median. Never rely on a single outlier sale.
+**失敗時:** 価格データが古いまたは利用できない場合、価格日とソースを注記する。非常にレアなカードについては複数のソースを確認し中央値を使用する。単一の外れ値の販売に依存しない。
 
-### ステップ5: Maintain and Optimize
+### ステップ5: 維持と最適化
 
-Establish ongoing collection management routines.
+継続的なコレクション管理ルーチンを確立する。
 
-1. **Regular updates** (match cadence from Step 1):
-   - Enter new acquisitions immediately
-   - Update values for Premium tier quarterly, Standard tier semi-annually
-   - Re-assess storage tier as values change
-2. **Want-list management**:
-   - Maintain a list of desired cards with maximum prices
-   - Cross-reference want-list against trade binder inventory
-   - Set price alerts where supported by the inventory app
-3. **Collection analytics**:
-   - Track total value over time (monthly snapshots)
-   - Monitor set completion percentages
-   - Identify concentration risk (too much value in one card/set)
-4. **Periodic audit** (annually):
-   - Physical count vs. inventory count for a random sample
-   - Verify storage conditions (check for humidity, pest damage)
-   - Review and update grading candidates based on current values
+1. **定期的な更新**（ステップ1の頻度に合わせる）:
+   - 新しい取得物を即座に入力する
+   - Premiumティアの価値を四半期ごとに、Standardティアを半年ごとに更新する
+   - 価値の変化に応じて保管ティアを再評価する
+2. **ウォントリスト管理**:
+   - 最大価格付きの希望カードリストを維持する
+   - ウォントリストとトレードバインダーインベントリをクロスリファレンスする
+   - インベントリアプリでサポートされている場合、価格アラートを設定する
+3. **コレクション分析**:
+   - 総価値を経時的に追跡する（月次スナップショット）
+   - セットコンプリート率を監視する
+   - 集中リスクを特定する（1枚のカード/セットに価値が集中しすぎ）
+4. **定期監査**（年次）:
+   - ランダムサンプルの物理カウントとインベントリカウントの照合
+   - 保管条件の確認（湿度、害虫被害のチェック）
+   - 現在の価値に基づくグレーディング候補の見直しと更新
 
-**期待結果:** A living collection management system that stays current and supports informed decisions about buying, selling, grading, and trading.
+**期待結果:** 最新の状態を維持し、購入、売却、グレーディング、トレードについての情報に基づいた判断を支援する生きたコレクション管理システム。
 
-**失敗時:** If maintenance lapses, prioritize: update Premium tier values first, then catch up on new acquisitions. The most important thing is knowing what your most valuable cards are worth today.
+**失敗時:** メンテナンスが途切れた場合、優先順位を付ける: まずPremiumティアの価値を更新し、次に新しい取得物に追いつく。最も重要なことは、最も価値のあるカードが今日いくらの価値があるかを知ることである。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Inventory system established with appropriate data fields
-- [ ] All cards cataloged with condition and location data
-- [ ] Physical storage matches card value tiers
-- [ ] Environmental controls in place (cool, dry, dark)
-- [ ] Collection valued with current market prices and dates
-- [ ] Grading candidates identified with cost/benefit analysis
-- [ ] Maintenance cadence established and followed
-- [ ] Want-list maintained for acquisition targets
+- [ ] 適切なデータフィールドを持つインベントリシステムが確立された
+- [ ] すべてのカードがコンディションと場所データでカタログ化された
+- [ ] 物理的保管がカードの価値ティアに合っている
+- [ ] 環境管理が整っている（涼しく、乾燥、暗い）
+- [ ] コレクションが現在の市場価格と日付で評価された
+- [ ] グレーディング候補がコスト/ベネフィット分析で特定された
+- [ ] メンテナンス頻度が確立され遵守されている
+- [ ] 取得目標のウォントリストが維持されている
 
 ## よくある落とし穴
 
-- **Over-grading own cards**: Collectors consistently rate their own cards 1-2 grades higher than reality. Be honest or use `grade-tcg-card` for structured assessment
-- **Ignoring bulk**: Bulk cards accumulate value collectively. A box of 800 commons at $0.10 each is $80 — worth tracking
-- **Poor storage environment**: Humidity and temperature swings damage cards faster than handling. Environment matters more than sleeves
-- **Stale valuations**: Card markets move. A valuation from 6 months ago may be wildly inaccurate, especially around set releases or ban announcements
-- **No backup**: Digital inventory without backup is fragile. Export to CSV monthly. Photograph premium cards for insurance
+- **自分のカードの過大グレーディング**: コレクターは自分のカードを一貫して実際より1-2グレード高く評価する。正直に評価するか、構造化された評価のために`grade-tcg-card`を使用する
+- **バルクの無視**: バルクカードは集合的に価値を蓄積する。$0.10のコモン800枚のボックスは$80 — 追跡する価値がある
+- **悪い保管環境**: 湿度と温度変動はハンドリングよりも速くカードを損傷する。環境はスリーブよりも重要
+- **古い評価**: カード市場は動く。6ヶ月前の評価は大幅に不正確な可能性がある、特にセットリリースや禁止アナウンスの前後で
+- **バックアップなし**: バックアップなしのデジタルインベントリは脆弱である。月次でCSVにエクスポートする。保険のためにプレミアムカードを撮影する
 
 ## 関連スキル
 
-- `grade-tcg-card` — Structured card grading for accurate condition assessment
-- `build-tcg-deck` — Deck construction using the collection inventory
+- `grade-tcg-card` — 正確なコンディション評価のための構造化されたカードグレーディング
+- `build-tcg-deck` — コレクションインベントリを使用したデッキ構築

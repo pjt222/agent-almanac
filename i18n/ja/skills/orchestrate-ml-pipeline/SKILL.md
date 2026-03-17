@@ -1,12 +1,12 @@
 ---
 name: orchestrate-ml-pipeline
 description: >
-  Orchestrate end-to-end machine learning pipelines using Prefect or Airflow with
-  DAG construction, task dependencies, retry logic, scheduling, monitoring, and
-  integration with MLflow, DVC, and feature stores for production ML workflows. Use
-  when automating multi-step ML workflows from data ingestion to deployment, scheduling
-  periodic model retraining, coordinating distributed training tasks, or managing retry
-  logic and failure recovery across pipeline stages.
+  DAG構築、タスク依存関係、リトライロジック、スケジューリング、モニタリング、および
+  本番MLワークフロー用のMLflow、DVC、フィーチャーストアとの統合を備えた、PrefectまたはAirflow
+  を使用したエンドツーエンドの機械学習パイプラインのオーケストレーション。データ取り込みから
+  デプロイまでの複数ステップのMLワークフローを自動化する時、定期的なモデル再トレーニングを
+  スケジュールする時、分散トレーニングタスクを調整する時、またはパイプラインステージ間の
+  リトライロジックと障害復旧を管理する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -26,37 +26,37 @@ metadata:
 # MLパイプラインのオーケストレーション
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完全な設定ファイルとテンプレートについては[Extended Examples](references/EXAMPLES.md)を参照。
 
-Build and orchestrate end-to-end machine learning pipelines with dependency management, scheduling, and monitoring.
+依存関係管理、スケジューリング、モニタリングを備えたエンドツーエンドの機械学習パイプラインを構築しオーケストレーションする。
 
 ## 使用タイミング
 
-- Automating multi-step ML workflows from data ingestion to deployment
-- Scheduling periodic model retraining on fresh data
-- Coordinating distributed data processing and training tasks
-- Implementing complex dependencies between ML pipeline stages
-- Managing retry logic and failure recovery
-- Monitoring pipeline execution and alerting on failures
-- Orchestrating feature engineering, training, evaluation, and deployment
-- Building reproducible ML workflows across environments
+- データ取り込みからデプロイまでの複数ステップのMLワークフローを自動化する時
+- 新しいデータでの定期的なモデル再トレーニングをスケジュールする時
+- 分散データ処理とトレーニングタスクを調整する時
+- MLパイプラインステージ間の複雑な依存関係を実装する時
+- リトライロジックと障害復旧を管理する時
+- パイプライン実行のモニタリングと障害時のアラートを行う時
+- 特徴エンジニアリング、トレーニング、評価、デプロイをオーケストレーションする時
+- 環境間で再現可能なMLワークフローを構築する時
 
 ## 入力
 
-- **必須**: ML pipeline components (data ingestion, preprocessing, training, evaluation)
-- **必須**: Orchestration framework choice (Prefect, Airflow, Kubeflow)
-- **必須**: Python environment with orchestration library installed
-- **任意**: Kubernetes cluster for distributed execution
-- **任意**: MLflow tracking server for experiment logging
-- **任意**: DVC for data versioning
-- **任意**: Slack/email for alerting
-- **任意**: Monitoring infrastructure (Prometheus, Grafana)
+- **必須**: MLパイプラインコンポーネント（データ取り込み、前処理、トレーニング、評価）
+- **必須**: オーケストレーションフレームワークの選択（Prefect、Airflow、Kubeflow）
+- **必須**: オーケストレーションライブラリがインストールされたPython環境
+- **任意**: 分散実行用のKubernetesクラスター
+- **任意**: 実験ログ用のMLflowトラッキングサーバー
+- **任意**: データバージョニング用のDVC
+- **任意**: アラート用のSlack/メール
+- **任意**: モニタリングインフラストラクチャ（Prometheus、Grafana）
 
 ## 手順
 
-### ステップ1: Choose and Install Orchestration Framework
+### ステップ1: オーケストレーションフレームワークの選択とインストール
 
-Select appropriate framework and set up infrastructure.
+適切なフレームワークを選択し、インフラストラクチャをセットアップする。
 
 ```bash
 # Option 1: Prefect (modern, Pythonic, simpler)
@@ -70,7 +70,7 @@ prefect server start
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Docker Compose for Airflow:
+Airflow用のDocker Compose:
 
 ```yaml
 # docker-compose.airflow.yml
@@ -84,13 +84,13 @@ x-airflow-common: &airflow-common
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Orchestration framework installed, web UI accessible (Prefect at http://localhost:4200, Airflow at http://localhost:8080), database initialized, scheduler running.
+**期待結果:** オーケストレーションフレームワークがインストールされ、Web UI（Prefectは http://localhost:4200、Airflowは http://localhost:8080）にアクセスでき、データベースが初期化され、スケジューラーが実行されていること。
 
-**失敗時:** Check port availability (`netstat -tulpn | grep 8080`), verify database connection, ensure Redis running for Celery, check Python version compatibility (Airflow requires ≥3.8), verify Docker daemon for containerized setup, inspect logs for initialization errors.
+**失敗時:** ポートの利用可能性を確認する（`netstat -tulpn | grep 8080`）、データベース接続を確認する、CeleryにRedisが実行中であることを確認する、Pythonバージョンの互換性を確認する（Airflowは≥3.8が必要）、コンテナ化セットアップ用にDockerデーモンを確認する、初期化エラーのログを検査する。
 
-### ステップ2: Build ML Pipeline with Prefect
+### ステップ2: PrefectでMLパイプラインを構築する
 
-Create Prefect flow with tasks for each pipeline stage.
+各パイプラインステージのタスクを持つPrefectフローを作成する。
 
 ```python
 # prefect_ml_pipeline.py
@@ -104,7 +104,7 @@ from sklearn.model_selection import train_test_split
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy and schedule:
+デプロイとスケジュール:
 
 ```python
 # deploy_prefect.py
@@ -118,13 +118,13 @@ deployment = Deployment.build_from_flow(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Prefect flow executes all tasks in correct order, task failures trigger retries automatically, successful runs show green in UI, MLflow logs experiments, model registered and deployed.
+**期待結果:** Prefectフローがすべてのタスクを正しい順序で実行し、タスクの失敗が自動的にリトライをトリガーし、成功した実行がUIでグリーンに表示され、MLflowが実験をログし、モデルが登録されデプロイされること。
 
-**失敗時:** Check task dependencies defined correctly, verify MLflow server accessible, ensure data source paths correct, check for circular dependencies, verify task timeout limits, inspect Prefect logs for detailed errors, check resource availability (memory/CPU).
+**失敗時:** タスク依存関係が正しく定義されているか確認する、MLflowサーバーにアクセスできるか確認する、データソースパスが正しいか確認する、循環依存関係がないか確認する、タスクタイムアウト制限を確認する、詳細なエラーのためにPrefectログを検査する、リソースの利用可能性（メモリ/CPU）を確認する。
 
-### ステップ3: Build ML Pipeline with Airflow
+### ステップ3: AirflowでMLパイプラインを構築する
 
-Create Airflow DAG for production ML workflow.
+本番MLワークフロー用のAirflow DAGを作成する。
 
 ```python
 # dags/ml_training_dag.py
@@ -138,13 +138,13 @@ import pandas as pd
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** DAG appears in Airflow UI, scheduled runs execute on time, task failures trigger retries and alerts, XCom passes data between tasks, MLflow integration logs experiments.
+**期待結果:** DAGがAirflow UIに表示され、スケジュールされた実行が時間通りに実行され、タスクの失敗がリトライとアラートをトリガーし、XComがタスク間でデータを渡し、MLflow統合が実験をログすること。
 
-**失敗時:** Check DAG file syntax (`python dags/ml_training_dag.py`), verify imports available in Airflow environment, ensure XCom not exceeding size limits (use file paths for large data), check email configuration for alerts, verify scheduler running, inspect task logs in Airflow UI.
+**失敗時:** DAGファイルの構文を確認する（`python dags/ml_training_dag.py`）、Airflow環境でインポートが利用可能か確認する、XComがサイズ制限を超えていないか確認する（大きなデータにはファイルパスを使用する）、アラートのメール設定を確認する、スケジューラーが実行中か確認する、Airflow UIでタスクログを検査する。
 
-### ステップ4: Implement Advanced Features
+### ステップ4: 高度な機能の実装
 
-Add dynamic DAGs, branching, and parallel execution.
+動的DAG、分岐、並列実行を追加する。
 
 ```python
 # advanced_pipeline.py (Prefect)
@@ -158,7 +158,7 @@ def process_shard(shard_id: int, data: list) -> dict:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Airflow branching:
+Airflowの分岐:
 
 ```python
 # Airflow branching with BranchPythonOperator
@@ -172,13 +172,13 @@ def check_data_quality(**context):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Parallel tasks execute concurrently (faster pipeline), conditional branches execute based on logic, dynamic task generation works, Dask cluster distributes work.
+**期待結果:** 並列タスクが同時に実行される（より高速なパイプライン）、条件分岐がロジックに基づいて実行される、動的タスク生成が機能する、Daskクラスターが作業を分散すること。
 
-**失敗時:** Check Dask cluster configured and accessible, verify task_runner specified, ensure branching returns valid task IDs, check for resource contention with parallel tasks, verify conditional logic correctness.
+**失敗時:** Daskクラスターが設定されアクセス可能か確認する、task_runnerが指定されているか確認する、分岐が有効なタスクIDを返すか確認する、並列タスクのリソース競合を確認する、条件ロジックの正確性を確認する。
 
-### ステップ5: Integrate Monitoring and Alerting
+### ステップ5: モニタリングとアラートの統合
 
-Add comprehensive monitoring and failure notifications.
+包括的なモニタリングと障害通知を追加する。
 
 ```python
 # monitoring_integration.py
@@ -192,7 +192,7 @@ def critical_task():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Airflow monitoring with sensors:
+センサーを使用したAirflowモニタリング:
 
 ```python
 # Airflow SLA and monitoring
@@ -206,13 +206,13 @@ default_args = {
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Slack/email notifications sent on failures, SLA violations trigger alerts, custom metrics tracked, logs aggregated in monitoring system.
+**期待結果:** 障害時にSlack/メール通知が送信される、SLA違反がアラートをトリガーする、カスタムメトリクスが追跡される、ログがモニタリングシステムに集約されること。
 
-**失敗時:** Verify Slack webhook configured correctly, check email SMTP settings, ensure notification blocks loaded properly, verify SLA values reasonable, check for network issues blocking notifications.
+**失敗時:** Slack Webhookが正しく設定されているか確認する、メールSMTP設定を確認する、通知ブロックが適切にロードされているか確認する、SLA値が合理的か確認する、通知をブロックしているネットワーク問題がないか確認する。
 
-### ステップ6: Implement CI/CD for Pipelines
+### ステップ6: パイプライン用CI/CDの実装
 
-Version control and automate pipeline deployments.
+パイプラインデプロイメントのバージョン管理と自動化を行う。
 
 ```yaml
 # .github/workflows/deploy-pipeline.yml
@@ -226,42 +226,42 @@ on:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**期待結果:** Pipeline tests pass before deployment, automated deployment to production, team notified on successful deployment, pipeline versioning tracked in Git.
+**期待結果:** デプロイ前にパイプラインテストが合格する、本番への自動デプロイ、成功したデプロイ時にチームに通知、パイプラインのバージョニングがGitで追跡されること。
 
-**失敗時:** Check test coverage and failures, verify Prefect Cloud credentials, ensure deployment script handles errors, check Slack webhook configuration, inspect CI logs for deployment errors.
+**失敗時:** テストカバレッジと失敗を確認する、Prefect Cloudの認証情報を確認する、デプロイスクリプトがエラーを処理しているか確認する、Slack Webhook設定を確認する、デプロイエラーのCIログを検査する。
 
 ## バリデーション
 
-- [ ] Orchestration framework installed and running
-- [ ] Pipeline DAG defined with correct dependencies
-- [ ] All tasks execute in proper order
-- [ ] Retry logic functions correctly on failures
-- [ ] Scheduled runs execute on time
-- [ ] MLflow integration logs experiments
-- [ ] DVC integration versions data
-- [ ] Parallel tasks execute concurrently
-- [ ] Conditional branches work correctly
-- [ ] Monitoring and alerting functional
-- [ ] CI/CD pipeline deploys automatically
-- [ ] Pipeline reproducible across environments
+- [ ] オーケストレーションフレームワークがインストールされ実行されている
+- [ ] パイプラインDAGが正しい依存関係で定義されている
+- [ ] すべてのタスクが適切な順序で実行される
+- [ ] 障害時にリトライロジックが正しく機能する
+- [ ] スケジュールされた実行が時間通りに実行される
+- [ ] MLflow統合が実験をログする
+- [ ] DVC統合がデータをバージョン管理する
+- [ ] 並列タスクが同時に実行される
+- [ ] 条件分岐が正しく動作する
+- [ ] モニタリングとアラートが機能している
+- [ ] CI/CDパイプラインが自動的にデプロイする
+- [ ] パイプラインが環境間で再現可能である
 
 ## よくある落とし穴
 
-- **Circular dependencies**: Task A depends on B, B depends on A - carefully design DAG structure, use Airflow/Prefect validators
-- **Memory leaks**: Long-running tasks accumulate memory - set task timeouts, monitor resource usage, restart workers periodically
-- **XCom size limits**: Passing large data via XCom - use file paths or external storage (S3) instead of direct serialization
-- **Timezone confusion**: Schedule runs at wrong times - always use UTC, explicitly set timezone in schedule
-- **Missing retries**: Tasks fail permanently on transient errors - configure retries with exponential backoff
-- **Tight coupling**: Tasks directly depend on implementation details - use clear interfaces, pass parameters explicitly
-- **No idempotency**: Re-running tasks causes duplicates or errors - design tasks to be idempotent (safe to retry)
-- **Poor error handling**: Failures don't provide useful context - add detailed logging, capture exceptions properly
-- **Resource contention**: Parallel tasks overwhelm resources - limit concurrency, set resource quotas
-- **Version conflicts**: Different tasks need incompatible dependencies - use Docker containers for task isolation
+- **循環依存関係**: タスクAがBに依存し、BがAに依存する — DAG構造を慎重に設計し、Airflow/Prefectのバリデーターを使用する
+- **メモリリーク**: 長時間実行されるタスクがメモリを蓄積する — タスクタイムアウトを設定し、リソース使用量をモニタリングし、ワーカーを定期的に再起動する
+- **XComサイズ制限**: XCom経由で大きなデータを渡す — 直接シリアライゼーションの代わりにファイルパスまたは外部ストレージ（S3）を使用する
+- **タイムゾーンの混乱**: 間違った時間に実行がスケジュールされる — 常にUTCを使用し、スケジュールにタイムゾーンを明示的に設定する
+- **リトライの欠如**: 一時的なエラーでタスクが永続的に失敗する — 指数バックオフ付きのリトライを設定する
+- **密結合**: タスクが実装の詳細に直接依存する — 明確なインターフェースを使用し、パラメータを明示的に渡す
+- **冪等性の欠如**: タスクの再実行が重複やエラーを引き起こす — タスクを冪等に設計する（リトライしても安全）
+- **不十分なエラー処理**: 障害が有用なコンテキストを提供しない — 詳細なログを追加し、例外を適切にキャプチャする
+- **リソース競合**: 並列タスクがリソースを圧迫する — 同時実行数を制限し、リソースクォータを設定する
+- **バージョン競合**: 異なるタスクが互換性のない依存関係を必要とする — タスクの分離にDockerコンテナを使用する
 
 ## 関連スキル
 
-- `track-ml-experiments` - Integrate MLflow tracking into pipeline tasks
-- `version-ml-data` - Use DVC for data versioning in pipelines
-- `build-feature-store` - Materialize features as pipeline task
-- `deploy-ml-model-serving` - Add deployment as final pipeline stage
-- `deploy-to-kubernetes` - Run orchestrated pipelines on Kubernetes
+- `track-ml-experiments` — パイプラインタスクにMLflowトラッキングを統合する
+- `version-ml-data` — パイプラインでデータバージョニングにDVCを使用する
+- `build-feature-store` — パイプラインタスクとして特徴を具現化する
+- `deploy-ml-model-serving` — 最終パイプラインステージとしてデプロイメントを追加する
+- `deploy-to-kubernetes` — Kubernetes上でオーケストレーションされたパイプラインを実行する
