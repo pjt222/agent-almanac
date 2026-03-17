@@ -196,6 +196,9 @@ members:
 | **Parallel** | Members work independently, lead merges | Independent subtasks that can run concurrently | `devops-platform-engineering` |
 | **Timeboxed** | Fixed-duration iterative cycles | Ongoing projects with inspect-and-adapt cadence | `scrum-team` |
 | **Adaptive** | Self-organizing, no fixed structure | Exploratory tasks where work shape is unknown | `opaque-team` |
+| **Wave-parallel** | Dependency waves; parallel within, sequential between | Batch work where later waves depend on earlier wave terminology | `translation-campaign` |
+| **Reciprocal** | Two agents alternate — one acts, one holds space | Deep dyadic work requiring a witness | `dyad` |
+| **Synoptic** | All members perceive shared workspace simultaneously | Cross-domain synthesis where interactions matter more than individual depth | `synoptic-mind` |
 
 Visual patterns:
 

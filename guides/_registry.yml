@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 18
+total_guides: 19
 version: "1.0"
 last_updated: "2026-03-17"
 
@@ -182,3 +182,12 @@ guides:
     agents: [senior-researcher, advocatus-diaboli]
     teams: []
     skills: [review-research, format-citations]
+
+  - id: understanding-the-synoptic-mind
+    path: guides/understanding-the-synoptic-mind.md
+    title: "Understanding the Synoptic Mind"
+    description: "The adaptic concept — panoramic synthesis through simultaneous multi-domain awareness, theoretical foundations, and practical use"
+    category: design
+    agents: [adaptic, polymath, contemplative]
+    teams: [synoptic-mind, tending, dyad, opaque-team]
+    skills: [adaptic, expand-awareness, integrate-gestalt, express-insight, meditate, observe, awareness]

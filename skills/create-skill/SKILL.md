@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
@@ -176,6 +176,11 @@ concrete_code("that the agent can execute")
 - 5-10 steps is the sweet spot. Under 5 may be too vague; over 12 should be split into multiple skills.
 - Reference real tools and real commands, not abstract descriptions
 
+**Writing for translation**:
+- Target ~400 lines maximum for English skills. German expands 10-20%, and some CJK translations expand further — a 400-line English source stays under 500 after translation.
+- Avoid idioms and culturally-specific examples that translate poorly.
+- Keep prose concise and direct — shorter sentences translate better.
+
 **Expected:** Procedure section contains 5-12 numbered steps, each with concrete code, an `**Expected:**` outcome, and an `**On failure:**` recovery action.
 
 **On failure:** If a step lacks code, add the actual command or configuration. If Expected/On failure is missing, write it now — every step that can fail needs both.
@@ -285,6 +290,8 @@ References underpinning the **skill-name** skill.
 
 Citations are optional — add them when provenance tracking matters (academic methods, published standards, regulatory frameworks).
 
+**Handling `references/` in translations**: Prose descriptions in `references/EXAMPLES.md` should be translated. `references/CITATIONS.bib` stays in English (BibTeX is language-neutral). Translations may symlink to the English `references/` directory if its content is code-only.
+
 **Expected:** Both files exist and `.bib` parses as valid BibTeX.
 
 **On failure:** Validate BibTeX syntax with `bibtool -d references/CITATIONS.bib` or an online validator.
@@ -341,6 +348,7 @@ ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-nam
 - [ ] Skill is listed in `_registry.yml` with correct path
 - [ ] `total_skills` count in registry is updated
 - [ ] SKILL.md is ≤500 lines (extract to `references/EXAMPLES.md` if over)
+- [ ] Estimated translation expansion is acceptable (English source ≤~400 lines so translations stay <500)
 - [ ] Citations added to `references/CITATIONS.bib` + `CITATIONS.md` if skill is based on published methods
 - [ ] Symlink exists at `.claude/skills/<skill-name>` pointing to skill directory
 - [ ] Global symlink exists at `~/.claude/skills/<skill-name>` (if globally available)
@@ -353,6 +361,7 @@ ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-nam
 - **Untestable validation**: "Code quality is good" can't be verified. "Linter passes with 0 warnings" can.
 - **Stale cross-references**: When renaming or removing skills, grep for the old name in all Related Skills sections.
 - **Description too long**: The description field is what agents read to decide activation. Keep it under 1024 characters and front-load the key information.
+- **Authoring at 500-line limit for single language**: An English skill at 490 lines will exceed 500 when translated to German (~10-20% expansion) or CJK languages. Target ~400 lines for the English source and use progressive disclosure (`references/EXAMPLES.md`) for the rest.
 - **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
 
 ## Examples

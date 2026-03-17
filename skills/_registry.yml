@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 318
+total_skills: 325
 
 domains:
   r-packages:
@@ -1172,6 +1172,21 @@ domains:
         complexity: intermediate
         language: natural
         description: Search patent and non-patent literature for novelty, invalidity, and FTO analysis
+      - id: screen-trademark
+        path: screen-trademark/SKILL.md
+        complexity: intermediate
+        language: natural
+        description: Trademark conflict screening, distinctiveness analysis, and likelihood-of-confusion assessment
+      - id: file-trademark
+        path: file-trademark/SKILL.md
+        complexity: advanced
+        language: natural
+        description: Trademark filing procedures for EUIPO, USPTO, and Madrid Protocol
+      - id: headless-web-scraping
+        path: headless-web-scraping/SKILL.md
+        complexity: intermediate
+        language: Python
+        description: Headless web browsing and data extraction using scrapling for JS-rendered pages and anti-bot sites
 
   gardening:
     description: Plant cultivation, soil preparation, garden observation, and hand tool care
@@ -1817,3 +1832,27 @@ domains:
         complexity: intermediate
         language: multi
         description: Translate agent-almanac content into target locales while preserving code and IDs
+
+  synoptic:
+    description: Panoramic awareness, cross-domain integration, and simultaneous multi-perspective cognition
+    skills:
+      - id: expand-awareness
+        path: expand-awareness/SKILL.md
+        complexity: intermediate
+        language: natural
+        description: Open attention from focused to panoramic mode for simultaneous multi-domain awareness
+      - id: integrate-gestalt
+        path: integrate-gestalt/SKILL.md
+        complexity: advanced
+        language: natural
+        description: Form emergent whole from multi-domain perception using tension-resonance mapping
+      - id: express-insight
+        path: express-insight/SKILL.md
+        complexity: intermediate
+        language: natural
+        description: Communicate integrated understanding preserving multi-domain nature
+      - id: adaptic
+        path: adaptic/SKILL.md
+        complexity: advanced
+        language: natural
+        description: The full synoptic cycle for panoramic synthesis — clear, open, perceive, integrate, express

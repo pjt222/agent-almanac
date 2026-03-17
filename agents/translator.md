@@ -3,7 +3,7 @@ name: translator
 description: LLM-assisted translation specialist for localizing skills, agents, teams, and guides while preserving code blocks, IDs, and technical accuracy
 tools: [Read, Write, Edit, Bash, Grep, Glob]
 model: opus
-version: "1.0.0"
+version: "1.1.0"
 author: Philipp Thoss
 created: 2026-03-13
 updated: 2026-03-13
@@ -73,6 +73,9 @@ This agent translates English source content into target locales (de, zh-CN, ja,
 - Never translate content inside code fences, inline code, or YAML configuration blocks
 - Verify the translated file stays under 500 lines (for skills)
 - After translation, run `npm run validate:translations` to confirm freshness tracking works
+- After writing each translated file, re-read the first 3 prose paragraphs to confirm they are in the target language. If still in English, redo before moving on.
+- When translating in batch, prefer completing 10 files with full prose translation over scaffolding 50 files with only headings translated.
+- For batch campaigns (100+ files), prefer opus model for sustained quality. Sonnet is fine for individual translations.
 
 ## Examples
 

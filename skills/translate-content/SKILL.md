@@ -10,7 +10,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: i18n
   complexity: intermediate
   language: multi
@@ -147,6 +147,18 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 
 **On failure:** Compare section-by-section with the English source. Restore any missing sections.
 
+### Step 5.5: Verify prose is translated
+
+5.5.1. Sample 3 prose paragraphs from the body of the translated file. Choose paragraphs from different sections — not headings, not code blocks, not frontmatter.
+
+5.5.2. Confirm each sampled paragraph is written in the target language, not English.
+
+5.5.3. If any sampled paragraph is still in English, the translation is incomplete. Return to Step 4 and translate the remaining English prose before proceeding.
+
+**Expected:** All 3 sampled prose paragraphs are in the target language, confirming the body text has been translated — not just headings and frontmatter.
+
+**On failure:** Identify which sections still contain English prose. Translate them before continuing to Step 6.
+
 ### Step 6: Write the translated file
 
 6.1. Write the complete translated content to the target path using the Write or Edit tool.
@@ -181,6 +193,7 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 - **Inconsistent terminology**: Use the same translation for a technical term throughout the file and across files in the same locale.
 - **Literal translation of idioms**: Translate the meaning, not the words. "Common Pitfalls" should become the locale's natural equivalent, not a word-for-word translation.
 - **Missing `source_commit`**: Without this field, freshness tracking breaks. Always include it.
+- **Batch throughput over quality**: Scaffolding-only output — where headings are translated but body text remains in English — is not a valid translation. Prefer fewer complete translations over many partial ones.
 - **Exceeding 500 lines**: Translations may expand ~10-20% vs English. If near the limit, tighten prose rather than removing content.
 
 ## Related Skills

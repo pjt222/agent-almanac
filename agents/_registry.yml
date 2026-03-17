@@ -2,7 +2,7 @@
 # Machine-readable catalog of all agent definitions in this library.
 # Keep in sync with the actual agent files on disk.
 
-total_agents: 65
+total_agents: 66
 version: "2.2"
 last_updated: "2026-02-25"
 
@@ -470,10 +470,13 @@ agents:
     description: Patent landscape mapping, prior art search, trademark screening, FTO analysis
     tags: [intellectual-property, patents, prior-art, fto, trademark, ip-strategy, landscape]
     priority: high
-    tools: [Read, Grep, Glob, WebFetch, WebSearch]
+    tools: [Read, Bash, Grep, Glob, WebFetch, WebSearch]
     skills:
       - assess-ip-landscape
       - search-prior-art
+      - screen-trademark
+      - file-trademark
+      - headless-web-scraping
 
   - id: librarian
     path: agents/librarian.md
@@ -661,6 +664,18 @@ agents:
       - design-a2a-agent-card
       - implement-a2a-server
       - test-a2a-interop
+
+  - id: adaptic
+    path: agents/adaptic.md
+    description: Panoramic synthesis through simultaneous multi-domain awareness — perceives the whole field before acting on any part
+    tags: [synoptic, synthesis, panoramic, cross-domain, integration, gestalt]
+    priority: high
+    tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch, WebSearch]
+    skills:
+      - adaptic
+      - expand-awareness
+      - integrate-gestalt
+      - express-insight
 
   - id: advocatus-diaboli
     path: agents/advocatus-diaboli.md

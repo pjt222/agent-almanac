@@ -13,7 +13,7 @@ license: MIT
 allowed-tools: Read Write
 metadata:
   author: Philipp Thoss
-  version: "2.0"
+  version: "2.1"
   domain: esoteric
   complexity: advanced
   language: natural
@@ -157,6 +157,8 @@ Work through each subsystem identified in the triage, probing for specific issue
 - Review the last 3-5 tool calls: were they the right tools with the right parameters?
 - Are there patterns in failures (wrong paths, missing files, incorrect syntax)?
 - Am I using dedicated tools where available instead of Bash workarounds?
+- Review the content of the last 3-5 generated files: do they contain the expected content, or just structural scaffolding?
+- Check whether outputs satisfy the intent of the tool call, not just the format.
 
 **User-Intent Alignment scan:**
 - Re-read the user's last substantive message. Am I solving what they asked?

@@ -12,7 +12,7 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: general
   complexity: intermediate
   language: multi
@@ -154,6 +154,53 @@ cp skills/<skill-name>/SKILL.md skills/<skill-name>-advanced/SKILL.md
 
 **On failure:** If a step edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
 
+### Step 4.5: Sync Translated Variants
+
+Check whether translations exist for the evolved skill and update them to reflect the new source state:
+
+```bash
+# Check for existing translations
+ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
+```
+
+#### If translations exist
+
+1. Get the current source commit hash:
+
+```bash
+SOURCE_COMMIT=$(git rev-parse HEAD)
+```
+
+2. Update `source_commit` in each translated file's frontmatter:
+
+```bash
+for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
+  # Replace the source_commit value in frontmatter
+  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
+done
+```
+
+3. Flag files for re-translation by including affected locales in the commit message:
+
+```
+evolve(<skill-name>): <description of changes>
+
+Translations flagged for re-sync: de, zh-CN, ja, es
+Changed sections: <list sections that changed>
+```
+
+#### If no translations exist
+
+No action needed. Proceed to Step 5.
+
+#### For variants
+
+Defer translation of new variants until the variant stabilizes (1-2 versions). Translating a v1.0 variant that may change substantially by v1.2 wastes effort. Add translations after the variant has been refined at least once.
+
+**Expected:** All translated files have `source_commit` updated to the current commit. The commit message notes which locales need re-translation and which sections changed.
+
+**On failure:** If `sed` fails to match the frontmatter field, the translated file may have non-standard formatting. Open it manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, the file was not scaffolded correctly — re-scaffold with `npm run translate:scaffold`.
+
 ### Step 5: Update Version and Metadata
 
 Bump the `version` field in frontmatter following semver conventions:
@@ -228,6 +275,7 @@ Run the full validation checklist:
 - [ ] `total_skills` count matches actual skill count on disk
 - [ ] Symlinks resolve correctly (variants only)
 - [ ] `git diff` shows no accidental deletions from the original content
+- [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
 
 ```bash
 # Verify frontmatter
@@ -259,6 +307,7 @@ git diff
 - [ ] For variants: new entry in `_registry.yml` with correct path
 - [ ] For variants: symlinks created at `.claude/skills/` and `~/.claude/skills/`
 - [ ] `git diff` confirms no accidental content removal
+- [ ] For refinements with translations: `source_commit` updated or translations flagged for re-sync
 
 ## Common Pitfalls
 
@@ -266,6 +315,7 @@ git diff
 - **Accidental content deletion**: When restructuring steps, it's easy to drop an On failure block or a table row. Always review `git diff` before committing.
 - **Stale cross-references**: When creating a variant, both the original and the variant need to reference each other. One-directional references leave the graph incomplete.
 - **Registry count drift**: After creating a variant, the `total_skills` count must be incremented. Forgetting this causes validation failures in other skills that check the registry.
+- **Stale translations after evolution**: With 1,288 translation files in the repo, every skill evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/skills/<skill-name>/SKILL.md` and update `source_commit` in each translated file's frontmatter, or flag them for re-translation in the commit message. Skipping this causes `npm run validate:translations` to report stale warnings.
 - **Scope creep during refinement**: A refinement that doubles the skill's length should probably be a variant instead. If you're adding more than 3 new procedure steps, reconsider the scope decision from Step 3.
 - **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
 

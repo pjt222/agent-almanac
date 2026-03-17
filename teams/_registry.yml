@@ -2,7 +2,7 @@
 # Machine-readable catalog of all team definitions in this library.
 # Keep in sync with the actual team files on disk.
 
-total_teams: 14
+total_teams: 15
 version: "1.2"
 last_updated: "2026-02-25"
 
@@ -118,3 +118,11 @@ teams:
     members: [project-manager, translator, skill-reviewer, librarian]
     coordination: wave-parallel
     tags: [i18n, translation, localization, wave-parallel, campaign]
+
+  - id: synoptic-mind
+    path: teams/synoptic-mind.md
+    description: Shared-workspace panoramic synthesis team using synoptic coordination for cross-domain gestalt integration
+    lead: adaptic
+    members: [adaptic, contemplative, polymath]
+    coordination: synoptic
+    tags: [synoptic, synthesis, panoramic, cross-domain, gestalt, integration]

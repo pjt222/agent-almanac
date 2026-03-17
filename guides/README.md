@@ -1,6 +1,6 @@
 # Guides
 
-18 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+19 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -71,3 +71,6 @@ Multi-perspective framework for extracting skills, agents, and teams from any co
 
 ### [Epigenetics-Inspired Activation Control](epigenetics-activation-control.md)
 Runtime activation profiles controlling which agents, skills, and teams are expressed, grounded in molecular epigenetics.
+
+### [Understanding the Synoptic Mind](understanding-the-synoptic-mind.md)
+The adaptic concept — panoramic synthesis through simultaneous multi-domain awareness, theoretical foundations, and practical use.

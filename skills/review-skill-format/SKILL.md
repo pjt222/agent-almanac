@@ -11,7 +11,7 @@ license: MIT
 allowed-tools: Read Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.1"
+  version: "1.2"
   domain: review
   complexity: intermediate
   language: multi
@@ -84,7 +84,34 @@ head -30 skills/<skill-name>/SKILL.md | grep -q '^allowed-tools:' && echo "allow
 
 **On failure:** Report each missing field as BLOCKING. If `name` does not match directory name, report as BLOCKING with the expected value. If `description` exceeds 1024 characters, report as SUGGEST with current length.
 
-### Step 3: Check Required Sections
+### Step 3: Locale-Specific Validation (Translations Only)
+
+If the frontmatter contains a `locale` field, the file is a translated SKILL.md. Perform these additional checks. If no `locale` field is present, skip this step.
+
+1. **Translation frontmatter fields** — Verify these five fields are present:
+   - `locale` — target locale code (e.g., `de`, `ja`, `zh-CN`, `es`)
+   - `source_locale` — origin locale (typically `en`)
+   - `source_commit` — commit hash of the English source used for translation
+   - `translator` — who or what produced the translation
+   - `translation_date` — ISO 8601 date of translation
+
+2. **Prose language scan** — Sample 3-5 body paragraphs (outside code blocks, frontmatter, and headings). Verify the prose is written in the target locale, not English. Ignore: code blocks, inline code, tool names, field names, file paths, and English terms that have no standard translation in the target language.
+
+3. **Code block identity check** — Compare code blocks in the translated file against the English source at `skills/<skill-name>/SKILL.md`. Code blocks must be identical (code is never translated). Flag any code block whose content differs from the English source.
+
+```bash
+# Check translation frontmatter fields
+for field in "locale:" "source_locale:" "source_commit:" "translator:" "translation_date:"; do
+  grep -q "^${field}\|^  ${field}" i18n/<locale>/skills/<skill-name>/SKILL.md \
+    && echo "$field OK" || echo "$field MISSING"
+done
+```
+
+**Expected:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
+
+**On failure:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING — the file has untranslated prose. If code blocks differ from the English source, report as BLOCKING — code must not be translated or modified.
+
+### Step 4: Check Required Sections
 
 Verify all six required sections are present in the skill body (after frontmatter).
 
@@ -110,7 +137,7 @@ grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Vali
 
 **On failure:** Report each missing section as BLOCKING. A skill without all six sections is non-compliant with the agentskills.io standard. Provide the section template from the `create-skill` meta-skill.
 
-### Step 4: Check Procedure Step Format
+### Step 5: Check Procedure Step Format
 
 Verify each procedure step follows the required pattern: numbered step title, context, code block(s), and **Expected:**/**On failure:** blocks.
 
@@ -124,7 +151,7 @@ For each `### Step N:` sub-section, check:
 
 **On failure:** Report each step missing Expected/On failure as BLOCKING. If steps contain only vague instructions ("configure the system appropriately"), report as SUGGEST with a note to add concrete commands.
 
-### Step 5: Verify Line Count
+### Step 6: Verify Line Count
 
 Check that the SKILL.md is within the 500-line limit.
 
@@ -137,7 +164,7 @@ lines=$(wc -l < skills/<skill-name>/SKILL.md)
 
 **On failure:** If over 500 lines, report as BLOCKING. Recommend using the `refactor-skill-structure` skill to extract code blocks >15 lines to `references/EXAMPLES.md`. Typical reduction: 20-40% by extracting extended examples.
 
-### Step 6: Check Registry Synchronization
+### Step 7: Check Registry Synchronization
 
 Verify the skill is listed in `skills/_registry.yml` under the correct domain with matching metadata.
 
@@ -180,6 +207,9 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - [ ] Line count is 500 or fewer
 - [ ] Skill is listed in `_registry.yml` with correct domain, path, and metadata
 - [ ] `total_skills` count in registry is accurate
+- [ ] (Translations only) All five translation frontmatter fields present (`locale`, `source_locale`, `source_commit`, `translator`, `translation_date`)
+- [ ] (Translations only) Body paragraphs are in the target locale, not English
+- [ ] (Translations only) Code blocks are identical to the English source
 
 ## Common Pitfalls
 
@@ -188,6 +218,7 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - **Forgetting registry total count**: After adding a skill to the registry, the `total_skills` number at the top must also be incremented. This is a common miss in PRs.
 - **Name vs. title confusion**: The `name` field must be kebab-case matching the directory name. The `# Title` heading is human-readable and can differ (e.g., name: `review-skill-format`, title: `# Review Skill Format`).
 - **Lenient mode skipping blockers**: Even in lenient mode, missing required sections and frontmatter fields should still be flagged. Lenient mode only relaxes style and metadata recommendations.
+- **Translated skills with English prose**: A file with non-English frontmatter, non-English headings, and English body paragraphs passes all structural checks. Always verify body text language for translated skills — the `locale` field in frontmatter signals that prose must be in the target language, not English.
 
 ## Related Skills
 

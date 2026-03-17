@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 318 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 325 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -46,7 +46,7 @@ Browse by domain:
 | [Morphic](morphic/) | 7 | Adaptive transformation, structural metamorphosis, and reconfiguration strategies |
 | [Alchemy](alchemy/) | 4 | Code and data transmutation through systematic decomposition, purification, and synthesis |
 | [Tcg](tcg/) | 3 | Trading card game grading, deck building, and collection management |
-| [Intellectual Property](intellectual-property/) | 2 | Patent landscape analysis, prior art search, and IP strategy |
+| [Intellectual Property](intellectual-property/) | 5 | Patent landscape analysis, prior art search, and IP strategy |
 | [Gardening](gardening/) | 5 | Plant cultivation, soil preparation, garden observation, and hand tool care |
 | [Shiny](shiny/) | 7 | Shiny web application development, modules, testing, and deployment |
 | [Animal Training](animal-training/) | 2 | Canine behavior and obedience training skills |
@@ -77,6 +77,7 @@ Browse by domain:
 | [Electromagnetism](electromagnetism/) | 4 | Electric and magnetic fields, Maxwell's equations, electromagnetic induction, and practical electromagnetic devices |
 | [Levitation](levitation/) | 3 | Physical levitation mechanisms including magnetic, acoustic, aerodynamic, and electrostatic |
 | [I18n](i18n/) | 1 | Internationalization and translation workflow skills |
+| [Synoptic](synoptic/) | 4 | Panoramic awareness, cross-domain integration, and simultaneous multi-perspective cognition |
 <!-- AUTO:END:skills-table -->
 
 ## SKILL.md Format

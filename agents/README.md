@@ -1,7 +1,7 @@
 # Agents Library for Claude Code
 
 <!-- AUTO:START:agents-intro -->
-A collection of 65 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
+A collection of 66 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
 
 All agents inherit **default skills**: meditate, heal.
 <!-- AUTO:END:agents-intro -->
@@ -22,6 +22,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | Agent | Priority | Description |
 |-------|----------|-------------|
 | [security-analyst](security-analyst.md) | critical | Specialized agent for security auditing, vulnerability assessment, and defensive security practices |
+| [adaptic](adaptic.md) | high | Panoramic synthesis through simultaneous multi-domain awareness — perceives the whole field before acting on any part |
 | [auditor](auditor.md) | high | GxP audit and investigation specialist for audit planning, execution, finding classification, CAPA root cause analysis, inspection readiness, data integrity monitoring, and vendor qualification |
 | [code-reviewer](code-reviewer.md) | high | Reviews code changes, pull requests, and provides detailed feedback on code quality, security, and best practices |
 | [devops-engineer](devops-engineer.md) | high | Infrastructure and platform engineering agent for CI/CD, Kubernetes, GitOps, service mesh, observability, and chaos engineering |

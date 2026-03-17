@@ -2,10 +2,10 @@
 name: translation-campaign
 description: Wave-parallel translation team for systematic localization of all skills into supported locales (de, zh-CN, ja, es)
 lead: project-manager
-version: "1.0.0"
+version: "1.1.0"
 author: Philipp Thoss
 created: 2026-03-16
-updated: 2026-03-16
+updated: 2026-03-17
 tags: [i18n, translation, localization, wave-parallel, campaign]
 coordination: wave-parallel
 members:
@@ -82,15 +82,26 @@ The agent-almanac has 317 skills but only 5 are translated per locale (1.6% cove
 | 6 | defensive, bushcraft, gardening, hildegard, entomology, maintenance, animal-training, mycology, prospecting, crafting, library-science, 3d-printing, lapidary | ~46 | Specialty I |
 | 7 | tcg, intellectual-property, travel, relocation, a2a-protocol, versioning, data-serialization, jigsawr, linguistics | ~29 | Specialty II |
 
+The coordinator must refuse to start Wave N+1 until Wave N passes its quality gate. Simultaneous wave execution loses terminology consistency and skips quality gates.
+
 ## Task Decomposition
+
+### Pre-Wave Checklist
+
+Before starting any wave, the coordinator verifies:
+
+- [ ] Previous wave quality gate passed (or this is Wave 1)
+- [ ] Glossary updated with terms from previous wave
+- [ ] Campaign progress file (`i18n/campaign-progress.yml`) updated
 
 ### Per-Wave Workflow
 
-1. **Coordinator** identifies skill IDs from registry for wave domains, distributes to translators
+1. **Coordinator** verifies the pre-wave checklist, then identifies skill IDs from registry for wave domains and distributes to translators
 2. **4 Translators** process domains in parallel (one per locale), each following the `translate-content` skill per file
 3. **QA Reviewer** runs `review-skill-format` on every translated file after all locales complete
-4. **Registry Auditor** runs `npm run validate:translations` + `npm run translation:status` to verify freshness and coverage
-5. **Coordinator** reviews results, updates `i18n/campaign-progress.yml`, approves wave completion
+4. **QA Reviewer** samples 5 random files per locale and verifies body paragraphs are in the target language (not English scaffolding)
+5. **Registry Auditor** runs `npm run validate:translations` + `npm run translation:status` to verify freshness and coverage
+6. **Coordinator** reviews results, updates `i18n/campaign-progress.yml`, approves wave completion
 
 ### Per-File Translation Steps
 
@@ -105,6 +116,7 @@ Each translator follows the `translate-content` skill:
 ### Quality Gate (between waves)
 
 - `review-skill-format` on all new files in the wave
+- Prose language check: sample 5 random files per locale, verify body paragraphs are in the target language (not English scaffolding)
 - `npm run validate:translations` — 0 stale translations
 - `npm run translation:status` — coverage % matches expected
 - Glossary consistency check: grep section headings across all files in each locale
@@ -206,6 +218,7 @@ QA review, status update.
 - Cannot validate domain-specific terminology accuracy (e.g., chromatography terms in Japanese)
 - Large domains (>15 skills) may need sub-batching to avoid context overflow
 - Source changes during the campaign will cause freshness tracking to flag stale translations — re-translate only changed files
+- Wave sequencing is enforced by the coordinator, not by tooling. Simultaneous wave execution loses terminology consistency and skips quality gates
 - Does not handle right-to-left languages
 
 ## See Also

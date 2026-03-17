@@ -202,6 +202,7 @@ Package the landscape assessment for decision-makers.
 ## Related Skills
 
 - `search-prior-art` — Detailed prior art search for specific inventions or patent validity challenges
+- `screen-trademark` — Trademark conflict screening and distinctiveness analysis for the trademark side of IP landscapes
+- `file-trademark` — Trademark filing procedures for EUIPO, USPTO, and Madrid Protocol
 - `security-audit-codebase` — Risk assessment methodology parallels IP risk screening
 - `review-research` — Literature review skills apply to prior art analysis
-- `conduct-gxp-audit` — Audit methodology parallels systematic IP landscape documentation

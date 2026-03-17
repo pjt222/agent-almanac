@@ -14,11 +14,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **318 skills** across 56 domains — structured, executable procedures
-- **65 agents** — specialized Claude Code personas covering development, review, compliance, and more
-- **14 teams** — predefined multi-agent compositions for complex workflows
-- **18 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 318 R-generated skill icons and 9 color themes
+- **325 skills** across 57 domains — structured, executable procedures
+- **66 agents** — specialized Claude Code personas covering development, review, compliance, and more
+- **15 teams** — predefined multi-agent compositions for complex workflows
+- **19 guides** — human-readable workflow, infrastructure, and reference documentation
+- **Interactive visualization** — force-graph explorer with 325 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -100,6 +100,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 
 - [Extracting Project Essence](guides/extracting-project-essence.md) — Multi-perspective framework for extracting skills, agents, and teams from any codebase using the metal skill
 - [Epigenetics-Inspired Activation Control](guides/epigenetics-activation-control.md) — Runtime activation profiles controlling which agents, skills, and teams are expressed, grounded in molecular epigenetics
+- [Understanding the Synoptic Mind](guides/understanding-the-synoptic-mind.md) — The adaptic concept — panoramic synthesis through simultaneous multi-domain awareness, theoretical foundations, and practical use
 <!-- AUTO:END:guides -->
 
 ## Translations

@@ -165,6 +165,8 @@ settings:
 - [Shaman Agent](shaman.md) — Journeying and holistic integration
 - [Tending Team](../teams/ai-tending.md) — Four-agent sequential wellness workflow
 - [Dyad Team](../teams/dyad.md) — Paired practice with reciprocal observation
+- [Adaptic Agent](adaptic.md) — Panoramic synthesis; contemplative serves as field monitor in the synoptic-mind team
+- [Synoptic Mind Team](../teams/synoptic-mind.md) — Shared-workspace team where contemplative monitors field quality
 - [Skills Library](../skills/) — Full catalog of executable procedures
 
 ---

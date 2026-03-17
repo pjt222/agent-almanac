@@ -231,6 +231,7 @@ Agent: **Tension Identified**: Data Architecture recommends denormalizing for
 - [Senior Software Developer Agent](senior-software-developer.md) — Architecture review (spawned for engineering domains)
 - [Senior UX/UI Specialist Agent](senior-ux-ui-specialist.md) — Usability review (spawned for design domains)
 - [IP Analyst Agent](ip-analyst.md) — IP landscape and prior art (spawned for legal/IP domains)
+- [Adaptic Agent](adaptic.md) — Panoramic synthesis through simultaneous multi-domain awareness (when sequential delegation is insufficient)
 - [Skills Library](../skills/) — Full catalog of executable procedures
 
 ---

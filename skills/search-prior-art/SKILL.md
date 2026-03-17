@@ -224,5 +224,7 @@ Package the search results for their intended use.
 ## Related Skills
 
 - `assess-ip-landscape` — Broader landscape mapping that contextualizes specific prior art searches
+- `screen-trademark` — Trademark-specific conflict screening (different databases, different legal framework than patent prior art)
+- `file-trademark` — Trademark filing procedures for when screening is complete
 - `review-research` — Literature review methodology overlaps significantly with prior art search
 - `security-audit-codebase` — Systematic search methodology parallels (thoroughness, documentation, reproducibility)

@@ -110,6 +110,7 @@ There are currently 12 teams using 7 coordination patterns:
 | adaptive | Team self-organizes dynamically based on the task | opaque-team |
 | wave-parallel | Tasks grouped into dependency waves; agents work in parallel within each wave, waves execute sequentially | *(ad hoc teams)* |
 | reciprocal | Two agents alternate focus — one acts, the other holds space | dyad |
+| synoptic | All members perceive shared workspace simultaneously; lead integrates into gestalt | synoptic-mind |
 
 ### 4. Guides -- the *context*
 
