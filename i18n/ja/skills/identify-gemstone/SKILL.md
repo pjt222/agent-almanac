@@ -1,13 +1,11 @@
 ---
 name: identify-gemstone
 description: >
-  Identify gemstones using optical properties, physical tests, and
-  inclusion analysis. Covers refractive index, specific gravity,
-  pleochroism, spectroscopy indicators, and common simulant detection.
-  Use when identifying an unknown gemstone, verifying a seller's claim about
-  species identity, distinguishing natural stones from simulants or synthetics,
-  building gemological literacy through structured observation, or identifying
-  rough material before cutting to ensure safe handling.
+  光学特性、物理テスト、インクルージョン分析を使用した宝石の同定。屈折率、
+  比重、多色性、分光指標、一般的なシミュラント検出を網羅する。未知の宝石を
+  同定する時、販売者の種の同定に関する主張を検証する時、天然石をシミュラントや
+  合成石と区別する時、構造化された観察を通じて宝石学的リテラシーを構築する時、
+  または安全な取り扱いを確保するためにカット前の原石を同定する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -26,32 +24,32 @@ metadata:
 
 # 宝石の同定
 
-Identify gemstones using systematic physical and optical property testing, inclusion analysis, and elimination against known species profiles.
+体系的な物理・光学特性テスト、インクルージョン分析、既知の種プロファイルとの消去法による宝石の同定。
 
 ## 使用タイミング
 
-- You have an unknown gemstone or suspect gemstone and want to identify the species
-- You need to verify a seller's claim about a gemstone's identity
-- You want to distinguish a natural gemstone from a common simulant or synthetic
-- You are building gemological literacy through structured observation and testing
-- You need to identify rough material before cutting to ensure safe handling
+- 未知の宝石または宝石と思われる石を持っており種を同定したい時
+- 販売者の宝石の同一性に関する主張を検証する必要がある時
+- 天然宝石を一般的なシミュラントや合成石と区別したい時
+- 構造化された観察とテストを通じて宝石学的リテラシーを構築している時
+- 安全な取り扱いを確保するためにカット前の原石を同定する必要がある時
 
 ## 入力
 
-- **必須**: A gemstone specimen (loose stone preferred; mounted stones limit testing)
-- **任意**: Refractometer with contact liquid (RI fluid, 1.81 standard)
-- **任意**: Dichroscope (for pleochroism testing)
-- **任意**: Chelsea colour filter
-- **任意**: Specific gravity balance or heavy liquids
-- **任意**: 10x loupe or gemological microscope
-- **任意**: UV lamp (long-wave 365nm and short-wave 254nm)
-- **任意**: Polariscope (for optic character determination)
+- **必須**: 宝石標本（ルースストーン推奨; マウントされた石はテストが制限される）
+- **任意**: 屈折計とコンタクトリキッド（RI液、1.81標準）
+- **任意**: ダイクロスコープ（多色性テスト用）
+- **任意**: チェルシーカラーフィルター
+- **任意**: 比重天秤または重液
+- **任意**: 10倍ルーペまたは宝石学用顕微鏡
+- **任意**: UVランプ（長波365nmおよび短波254nm）
+- **任意**: 偏光器（光学特性の判定用）
 
 ## 手順
 
-### ステップ1: Visual Inspection
+### ステップ1: 視覚的検査
 
-Examine the specimen with the unaided eye and then under 10x magnification.
+裸眼で標本を検査し、次に10倍の拡大下で検査する。
 
 ```
 Visual Inspection Checklist:
@@ -79,19 +77,19 @@ Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 ```
 
-1. Note the body colour under daylight-equivalent lighting (5500-6500K)
-2. Check for colour zoning by viewing through the stone from different angles
-3. Assess transparency and luster — these narrow the candidate list immediately
-4. Look for optical phenomena (star, cat's eye, play of colour)
-5. Record any visible inclusions without magnification
+1. 昼光等価照明（5500-6500K）下でボディカラーを記録する
+2. 異なる角度から石を通して見てカラーゾーニングを確認する
+3. 透明度と光沢を評価する — これだけで候補リストが管理可能な範囲に絞られる
+4. 光学現象（スター、キャッツアイ、遊色効果）を探す
+5. 拡大なしで見えるインクルージョンを記録する
 
-**期待結果:** A complete visual profile including colour, transparency, luster, and any phenomena. This alone narrows candidates to a manageable shortlist.
+**期待結果:** 色、透明度、光沢、現象を含む完全な視覚的プロファイル。これだけで候補が管理可能なショートリストに絞られる。
 
-**失敗時:** If lighting is poor (yellowish indoor light), note the limitation. Daylight or daylight-equivalent bulbs are strongly preferred. Incandescent light shifts colour perception and can cause misidentification of colour-change stones.
+**失敗時:** 照明が不良な場合（黄色がかった室内光）、制限を記録する。昼光または昼光等価電球が強く推奨される。白熱光は色の知覚を変え、カラーチェンジストーンの誤同定を引き起こす可能性がある。
 
-### ステップ2: Physical Property Testing
+### ステップ2: 物理特性テスト
 
-Test measurable physical properties to narrow the identification.
+測定可能な物理特性をテストして同定を絞り込む。
 
 ```
 Key Physical Properties:
@@ -123,18 +121,18 @@ Key Physical Properties:
 +--------------------+------------------------------------------+
 ```
 
-1. For rough material: test hardness using Mohs scale reference points
-2. For cut stones: measure specific gravity using hydrostatic method
-3. Assess heft — experienced handlers can distinguish CZ from diamond by weight alone
-4. Note any cleavage planes visible on the surface
+1. 原石の場合: モース硬度スケールの参照点を使用して硬度をテスト
+2. カットストーンの場合: 水中秤量法を使用して比重を測定
+3. 重さの感覚を評価する — 経験豊富な取り扱い者はCZとダイヤモンドを重さだけで区別できる
+4. 表面に見えるへき開面を記録する
 
-**期待結果:** Hardness range (for rough) or SG value (for cut stones) that differentiates between candidate species. SG is often the most powerful single diagnostic for cut stones.
+**期待結果:** 候補種間を区別する硬度範囲（原石用）またはSG値（カットストーン用）。SGはカットストーンに対する最も強力な単一の診断法であることが多い。
 
-**失敗時:** If hydrostatic balance is unavailable, use the heft test as a rough guide. Stones that feel "too heavy for their size" likely have high SG (>3.5). If hardness testing would damage a cut stone, skip to optical tests.
+**失敗時:** 水中天秤が利用できない場合、重さの感覚テストをおおまかなガイドとして使用する。「サイズに対して重すぎる」と感じる石は高いSG（>3.5）を持つ可能性が高い。硬度テストがカットストーンを損傷する場合、光学テストに進む。
 
-### ステップ3: Optical Tests
+### ステップ3: 光学テスト
 
-Apply gemological optical instruments for definitive properties.
+決定的な特性のために宝石学用光学機器を適用する。
 
 ```
 Optical Property Tests:
@@ -179,19 +177,19 @@ Optical Property Tests:
 +--------------------+------------------------------------------+
 ```
 
-1. Measure RI on refractometer — take both high and low readings for birefringence
-2. Test pleochroism with dichroscope — rotate slowly and note colour changes
-3. Check optic character on polariscope (SR vs DR vs AGG)
-4. Test UV fluorescence under both long-wave and short-wave
-5. Use Chelsea filter if chromium-coloured stones are suspected
+1. 屈折計でRIを測定する — 複屈折のために高と低の両方の読み取りを行う
+2. ダイクロスコープで多色性をテストする — ゆっくり回転させて色の変化を記録する
+3. 偏光器で光学特性を確認する（SR vs DR vs AGG）
+4. 長波と短波の両方でUV蛍光をテストする
+5. クロムによる着色が疑われる場合はチェルシーフィルターを使用する
 
-**期待結果:** RI value (to 0.001), birefringence, optic character, pleochroism description, and UV response. Combined with Step 2, this identifies most gemstone species definitively.
+**期待結果:** RI値（0.001まで）、複屈折、光学特性、多色性の説明、UV応答。ステップ2と組み合わせて、ほとんどの宝石種を決定的に同定する。
 
-**失敗時:** If RI is over-the-limit (OTL, >1.81), the stone is likely diamond, CZ, zircon (high-type), or a high-RI synthetic. Use SG and thermal conductivity to differentiate. If no refractometer is available, rely on SG + visual properties + inclusions.
+**失敗時:** RIがオーバーザリミット（OTL、>1.81）の場合、石はダイヤモンド、CZ、ジルコン（高型）、または高RIの合成石である可能性が高い。SGと熱伝導率を使用して区別する。屈折計が利用できない場合、SG＋視覚的特性＋インクルージョンに依存する。
 
-### ステップ4: Inclusion Analysis
+### ステップ4: インクルージョン分析
 
-Examine internal features under magnification for species confirmation and natural vs. synthetic determination.
+種の確認と天然 vs. 合成の判定のために拡大下で内部特徴を検査する。
 
 ```
 Diagnostic Inclusions by Species:
@@ -233,60 +231,60 @@ Synthetic Indicators:
 +------------------+------------------------------------------+
 ```
 
-1. Examine the stone under darkfield illumination (gemological microscope) or oblique lighting through a 10x loupe
-2. Look for species-diagnostic inclusions first
-3. Check for synthetic indicators — curved striae and gas bubbles are definitive for flame-fusion synthetics
-4. Note the inclusion type, location, and frequency
-5. Photograph inclusions if possible for records
+1. 暗視野照明（宝石学用顕微鏡）または10倍ルーペを通した斜照明で石を検査する
+2. 最初に種の診断的インクルージョンを探す
+3. 合成の指標を確認する — 湾曲した条線と気泡はフレームフュージョン合成石の決定的証拠
+4. インクルージョンの種類、位置、頻度を記録する
+5. 可能であれば記録のためにインクルージョンを撮影する
 
-**期待結果:** Species-confirming inclusion pattern and natural/synthetic determination. Some species are identified more by their inclusions than by optical properties (e.g., emerald's jardin).
+**期待結果:** 種を確認するインクルージョンパターンと天然/合成の判定。一部の種は光学特性よりもインクルージョンによって同定される（例：エメラルドのジャルダン）。
 
-**失敗時:** If the stone is eye-clean and no inclusions are visible at 10x, it may be a very clean natural stone or a synthetic. Lack of inclusions raises the synthetic probability — refer to optical and physical tests for confirmation. Laboratory analysis (FTIR, Raman) may be needed.
+**失敗時:** 石がアイクリーンで10倍でインクルージョンが見えない場合、非常にきれいな天然石または合成石の可能性がある。インクルージョンの欠如は合成の確率を高める — 確認のために光学・物理テストを参照する。ラボ分析（FTIR、ラマン）が必要な場合がある。
 
-### ステップ5: Identification by Elimination
+### ステップ5: 消去法による同定
 
-Cross-reference all collected data to reach a final identification.
+収集したすべてのデータを照合して最終的な同定に到達する。
 
-1. Compile the property profile:
-   - Colour + transparency + luster
-   - Hardness or SG
-   - RI + birefringence + optic character
-   - Pleochroism + UV fluorescence
-   - Inclusion pattern
-2. Compare against reference tables for candidate species
-3. Eliminate species that conflict with any measured property
-4. If two or more candidates remain, identify the distinguishing test:
-   - Example: blue topaz vs. aquamarine — SG is definitive (3.53 vs. 2.70)
-5. State the identification with confidence level:
-   - **Definitive**: Multiple properties confirm a single species
-   - **Probable**: Properties consistent with one species, but one test missing
-   - **Uncertain**: Conflicting data or insufficient testing — laboratory referral recommended
+1. 特性プロファイルをまとめる:
+   - 色＋透明度＋光沢
+   - 硬度またはSG
+   - RI＋複屈折＋光学特性
+   - 多色性＋UV蛍光
+   - インクルージョンパターン
+2. 候補種の参照テーブルと比較する
+3. 測定された特性と矛盾する種を除外する
+4. 2つ以上の候補が残る場合、区別するテストを特定する:
+   - 例：ブルートパーズ vs. アクアマリン — SGが決定的（3.53 vs. 2.70）
+5. 信頼度レベルを付けて同定を表明する:
+   - **決定的**: 複数の特性が単一の種を確認
+   - **可能性高**: 特性が1つの種と一致するが、1つのテストが欠落
+   - **不確実**: データの矛盾または不十分なテスト — ラボ鑑定を推奨
 
-**期待結果:** A final species identification (e.g., "Natural sapphire, blue, heat-treated") with supporting evidence from each test category. Or a clear recommendation for laboratory analysis if field tests are insufficient.
+**期待結果:** 各テストカテゴリからの裏付け証拠を伴う最終的な種の同定（例：「天然サファイア、ブルー、加熱処理済み」）。またはフィールドテストが不十分な場合のラボ分析の明確な推奨。
 
-**失敗時:** If the stone cannot be identified with available equipment, document all measured properties and refer to a gemological laboratory. Provide the measured data to the lab — it accelerates their analysis.
+**失敗時:** 利用可能な機器で石を同定できない場合、測定されたすべての特性を文書化し、宝石学ラボに依頼する。測定データをラボに提供する — 分析が加速される。
 
 ## バリデーション
 
-- [ ] Visual inspection completed under daylight-equivalent lighting
-- [ ] At least two physical properties measured (hardness/SG + one other)
-- [ ] RI measured and birefringence calculated (if refractometer available)
-- [ ] Pleochroism tested (if dichroscope available)
-- [ ] Inclusions examined under at least 10x magnification
-- [ ] Identification reached by systematic elimination, not assumption
-- [ ] Common simulants explicitly considered and ruled out
-- [ ] Natural vs. synthetic determination made (or flagged as uncertain)
+- [ ] 昼光等価照明下で視覚的検査が完了した
+- [ ] 少なくとも2つの物理特性が測定された（硬度/SG＋もう1つ）
+- [ ] RIが測定され複屈折が計算された（屈折計が利用可能な場合）
+- [ ] 多色性がテストされた（ダイクロスコープが利用可能な場合）
+- [ ] 少なくとも10倍の拡大下でインクルージョンが検査された
+- [ ] 体系的な消去法による同定であり、推測ではない
+- [ ] 一般的なシミュラントが明示的に検討され除外された
+- [ ] 天然 vs. 合成の判定が行われた（または不確実としてフラグ付けされた）
 
 ## よくある落とし穴
 
-- **Trusting colour alone**: Colour is the least reliable identification property. Blue stones include sapphire, topaz, aquamarine, tanzanite, iolite, spinel, glass, and CZ. Always confirm with measurable properties
-- **Skipping SG on mounted stones**: Mounted stones limit testing, but you can still check RI, pleochroism, inclusions, and UV. Document the limitation rather than guessing
-- **Confusing high-RI synthetics with naturals**: Flame-fusion rubies and sapphires have identical RI and SG to natural stones. Only inclusions (curved striae vs. straight growth) differentiate them
-- **Assuming expensive = natural**: Commercial jewellery frequently contains treated, synthetic, or simulant stones. Test every stone regardless of provenance claims
-- **Damaging the specimen**: Never hardness-test a faceted gemstone — it will leave visible scratches. Use non-destructive tests (RI, SG, inclusions) for cut stones
+- **色のみの信頼**: 色は最も信頼性の低い同定特性。青い石にはサファイア、トパーズ、アクアマリン、タンザナイト、アイオライト、スピネル、ガラス、CZが含まれる。常に測定可能な特性で確認する
+- **マウントされた石でのSG省略**: マウントされた石はテストを制限するが、RI、多色性、インクルージョン、UVは確認できる。推測するのではなく制限を文書化する
+- **高RI合成石と天然石の混同**: フレームフュージョンルビーとサファイアは天然石と同一のRIとSGを持つ。インクルージョン（湾曲した条線 vs. 直線的な成長）のみが区別する
+- **高価＝天然の想定**: 商業宝飾品には処理石、合成石、シミュラントが頻繁に含まれる。来歴の主張に関わらずすべての石をテストする
+- **標本の損傷**: ファセットされた宝石に硬度テストを行わない — 目に見える傷が残る。カットストーンには非破壊テスト（RI、SG、インクルージョン）を使用する
 
 ## 関連スキル
 
-- `cut-gemstone` — Identification determines safe cutting parameters and orientation requirements for the species
-- `appraise-gemstone` — Positive identification is the prerequisite for any meaningful valuation
-- `mineral-identification` — Field mineral identification methodology using physical properties (prospecting domain) shares the systematic elimination approach
+- `cut-gemstone` — 同定により種に対する安全なカットパラメータと方向要件が決定される
+- `appraise-gemstone` — 正確な同定はあらゆる意味のある鑑定の前提条件
+- `mineral-identification` — 物理特性を使用したフィールド鉱物同定の方法論（探鉱ドメイン）は体系的消去法のアプローチを共有する

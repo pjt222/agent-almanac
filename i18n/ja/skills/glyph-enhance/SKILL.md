@@ -1,13 +1,12 @@
 ---
 name: glyph-enhance
 description: >
-  Improve an existing R-based pictogram glyph for the visualization layer.
-  Covers visual audit of the current glyph, diagnosis of specific issues
-  (proportions, readability, glow balance), targeted modifications to the
-  glyph function, re-rendering, and before/after comparison. Use when a glyph
-  renders poorly at small sizes, its visual metaphor is unclear, it has
-  proportion issues, the neon glow effect is unbalanced, or after adding new
-  palettes or changing the rendering pipeline.
+  可視化レイヤー用の既存のRベースピクトグラムグリフを改善する。現在のグリフの
+  視覚的監査、具体的な問題（プロポーション、可読性、グローバランス）の診断、
+  グリフ関数への的を絞った修正、再レンダリング、ビフォー/アフターの比較を
+  網羅する。グリフが小さいサイズでうまくレンダリングされない時、視覚的メタファーが
+  不明瞭な時、プロポーションの問題がある時、ネオングロー効果のバランスが悪い時、
+  または新しいパレットの追加やレンダリングパイプラインの変更後に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,44 +23,44 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# グリフの強化
+# グリフの改善
 
-Improve an existing pictogram glyph in the `viz/` visualization layer — audit its current rendering, diagnose visual issues, apply targeted modifications, re-render, and compare before/after.
+`viz/` 可視化レイヤーの既存ピクトグラムグリフを改善する — 現在のレンダリングを監査し、視覚的な問題を診断し、的を絞った修正を適用し、再レンダリングし、ビフォー/アフターを比較する。
 
 ## 使用タイミング
 
-- A glyph renders poorly at small sizes (details lost, shapes merge)
-- A glyph's visual metaphor is unclear or doesn't match the skill it represents
-- A glyph has proportion issues (too large, too small, off-center)
-- The neon glow effect overpowers or underwhelms the glyph
-- A glyph looks good in one palette but poor in others
-- Batch improvement after adding new palettes or changing the rendering pipeline
+- グリフが小さいサイズでうまくレンダリングされない時（詳細が失われる、形状が統合される）
+- グリフの視覚的メタファーが不明瞭、またはそれが表すスキルと一致しない時
+- グリフにプロポーションの問題がある時（大きすぎる、小さすぎる、中心からずれている）
+- ネオングロー効果がグリフを圧倒するか物足りない時
+- グリフがあるパレットでは良く見えるが他のパレットでは悪い時
+- 新しいパレットの追加やレンダリングパイプラインの変更後のバッチ改善
 
 ## 入力
 
-- **必須**: Skill ID of the glyph to enhance (e.g., `commit-changes`)
-- **必須**: Specific issue to address (readability, proportions, glow, palette compat)
-- **任意**: Reference glyph that demonstrates the desired quality level
-- **任意**: Target palette(s) to optimize for (default: all palettes)
+- **必須**: 改善するグリフのスキルID（例：`commit-changes`）
+- **必須**: 対処する具体的な問題（可読性、プロポーション、グロー、パレット互換性）
+- **任意**: 望ましい品質レベルを示す参照グリフ
+- **任意**: 最適化対象のパレット（デフォルト：すべてのパレット）
 
 ## 手順
 
-### ステップ1: Audit — Assess Current State
+### ステップ1: 監査 — 現状の評価
 
-Examine the current glyph and identify specific issues.
+現在のグリフを検査し、具体的な問題を特定する。
 
-1. Locate the glyph function:
-   - Skill glyphs: `viz/R/primitives*.R` and mapped in `viz/R/glyphs.R`
-   - Agent glyphs: `viz/R/agent_primitives.R` and mapped in `viz/R/agent_glyphs.R`
-2. Read the glyph function to understand its structure:
-   - How many layers does it use?
-   - What primitives does it call (from `primitives.R`, `primitives_2.R`, etc.)?
-   - What are the scale factors and positioning?
-3. View the rendered output:
-   - Check `viz/public/icons/cyberpunk/<domain>/<skillId>.webp` as the reference palette
-   - If available, check 2-3 other palettes for cross-palette rendering
-   - View at both icon size (~48px in the graph) and panel size (~160px in the detail panel)
-4. Score the glyph on the **quality dimensions**:
+1. グリフ関数を見つける:
+   - スキルグリフ: `viz/R/primitives*.R` にあり `viz/R/glyphs.R` でマッピング
+   - エージェントグリフ: `viz/R/agent_primitives.R` にあり `viz/R/agent_glyphs.R` でマッピング
+2. グリフ関数を読んで構造を理解する:
+   - 何レイヤー使用しているか？
+   - どのプリミティブを呼び出しているか（`primitives.R`、`primitives_2.R` など）？
+   - スケールファクターとポジショニングは？
+3. レンダリング出力を確認する:
+   - 参照パレットとして `viz/public/icons/cyberpunk/<domain>/<skillId>.webp` を確認
+   - 可能であれば、クロスパレットレンダリングのために2-3の他のパレットも確認
+   - アイコンサイズ（グラフ内で～48px）とパネルサイズ（詳細パネルで～160px）の両方で表示
+4. **品質次元**でグリフをスコアリングする:
 
 ```
 Glyph Quality Dimensions:
@@ -77,51 +76,51 @@ Glyph Quality Dimensions:
 +----------------+------+-----------------------------------------------+
 ```
 
-5. Identify the 1-2 dimensions with the lowest scores — these are the enhancement targets
+5. 最もスコアの低い1-2の次元を特定する — これらが改善ターゲットとなる
 
-**期待結果:** A clear diagnosis of what's wrong with the glyph and which dimensions to improve. The audit should be specific: "proportions: glyph uses only 40% of canvas" not "looks bad."
+**期待結果:** グリフの何が問題かの明確な診断と改善すべき次元。監査は具体的であるべき：「見た目が悪い」ではなく「プロポーション：グリフがキャンバスの40%しか使用していない」。
 
-**失敗時:** If the glyph function is missing or the skill isn't in `glyphs.R`, the glyph may not have been created yet — use `create-skill-glyph` instead.
+**失敗時:** グリフ関数が見つからない、またはスキルが `glyphs.R` にない場合、グリフがまだ作成されていない可能性がある — 代わりに `create-skill-glyph` を使用する。
 
-### ステップ2: Diagnose — Root Cause Analysis
+### ステップ2: 診断 — 根本原因分析
 
-Determine why the identified issues exist.
+特定された問題がなぜ存在するかを判断する。
 
-1. For **readability** issues:
-   - Too many fine details that merge at small sizes?
-   - Insufficient contrast between glyph elements?
-   - Lines too thin (< 1.5 `size` at s=1.0)?
-   - Elements too close together?
-2. For **proportion** issues:
-   - Scale factor `s` too small or too large?
-   - Center offset from (50, 50)?
-   - Elements extending beyond the safe area (10-90 range)?
-3. For **glow** issues:
-   - Glyph stroke width interacts with `ggfx::with_outer_glow()`:
-     - Thin lines: glow makes them fuzzy
-     - Thick fills: glow adds excessive bloom
-   - Multiple overlapping elements: compound glow creates hot spots
-4. For **palette compatibility** issues:
-   - Glyph uses hardcoded colors instead of `col`/`bright` parameters?
-   - Low-contrast palettes (cividis, mako) make the glyph invisible?
-   - The glyph relies on color variation that some palettes don't provide?
-5. Document the specific root cause for each issue
+1. **可読性**の問題:
+   - 小さいサイズで統合される細かい詳細が多すぎるか？
+   - グリフ要素間のコントラストが不十分か？
+   - ラインが細すぎるか（s=1.0で `size` < 1.5）？
+   - 要素が近すぎるか？
+2. **プロポーション**の問題:
+   - スケールファクター `s` が小さすぎるか大きすぎるか？
+   - (50, 50)からの中心オフセットは？
+   - セーフエリア（10-90範囲）を超えて要素が伸びているか？
+3. **グロー**の問題:
+   - グリフのストローク幅が `ggfx::with_outer_glow()` と相互作用する:
+     - 細いライン: グローがぼやけさせる
+     - 太いフィル: グローが過剰なブルームを追加する
+   - 重なり合う複数の要素: 複合グローがホットスポットを作成する
+4. **パレット互換性**の問題:
+   - グリフが `col`/`bright` パラメータの代わりにハードコードされた色を使用しているか？
+   - 低コントラストパレット（cividis、mako）でグリフが見えなくなるか？
+   - 一部のパレットが提供しない色のバリエーションにグリフが依存しているか？
+5. 各問題の具体的な根本原因を文書化する
 
-**期待結果:** Root causes that directly point to code changes. "The glyph is too small" → "scale factor is 0.6 but should be 0.8." "Glow overwhelms" → "three overlapping filled polygons each generate glow."
+**期待結果:** コード変更を直接示す根本原因。「グリフが小さすぎる」→「スケールファクターが0.6だが0.8であるべき」。「グローが圧倒する」→「3つの重なり合うフィルドポリゴンがそれぞれグローを生成」。
 
-**失敗時:** If the root cause isn't obvious from code inspection, render the glyph in isolation with different parameters to isolate the issue. Use `render_glyph()` with a single glyph to test.
+**失敗時:** コード検査から根本原因が明らかでない場合、問題を特定するために異なるパラメータでグリフを分離してレンダリングする。単一グリフでテストするために `render_glyph()` を使用する。
 
-### ステップ3: Modify — Apply Targeted Fixes
+### ステップ3: 修正 — 的を絞った修正の適用
 
-Edit the glyph function to address the diagnosed issues.
+診断された問題に対処するためにグリフ関数を編集する。
 
-1. Open the file containing the glyph function
-2. Apply modifications specific to the diagnosis:
-   - **Scale/proportion**: Adjust `s` multiplier or element offsets
-   - **Readability**: Simplify complex elements, increase stroke width, add spacing
-   - **Glow balance**: Reduce overlapping filled areas, use outlines where fills create bloom
-   - **Palette compat**: Ensure all colors derive from `col`/`bright` parameters, add alpha for depth
-3. Follow the **glyph function contract**:
+1. グリフ関数を含むファイルを開く
+2. 診断に固有の修正を適用する:
+   - **スケール/プロポーション**: `s` 乗数または要素オフセットを調整
+   - **可読性**: 複雑な要素を簡素化、ストローク幅を増加、スペーシングを追加
+   - **グローバランス**: 重なり合うフィルエリアを減らし、フィルがブルームを作成する場所ではアウトラインを使用
+   - **パレット互換性**: すべての色が `col`/`bright` パラメータから派生していることを確認、深度のためにアルファを追加
+3. **グリフ関数コントラクト**に従う:
    ```r
    glyph_name <- function(cx, cy, s, col, bright) {
      # cx, cy = center (50, 50)
@@ -130,78 +129,78 @@ Edit the glyph function to address the diagnosed issues.
      # Returns: list() of ggplot2 layers
    }
    ```
-4. Preserve the function signature — do not change parameters
-5. Keep modifications minimal: fix the diagnosed issues, don't redesign the entire glyph
+4. 関数シグネチャを保持する — パラメータを変更しない
+5. 修正を最小限に保つ: 診断された問題を修正し、グリフ全体を再デザインしない
 
-**期待結果:** A modified glyph function that addresses the specific issues identified in Steps 1-2. Changes are targeted and minimal — enhance, don't redesign.
+**期待結果:** ステップ1-2で特定された具体的な問題に対処する修正されたグリフ関数。変更は的を絞った最小限のもの — 再デザインではなく改善。
 
-**失敗時:** If the modifications make other dimensions worse (e.g., fixing proportions breaks readability), revert and try a different approach. If the glyph needs a complete redesign, use `create-skill-glyph` instead.
+**失敗時:** 修正が他の次元を悪化させる場合（例：プロポーションの修正が可読性を壊す）、変更を元に戻して別のアプローチを試す。グリフに完全な再デザインが必要な場合、代わりに `create-skill-glyph` を使用する。
 
-### ステップ4: Re-render — Generate Updated Icons
+### ステップ4: 再レンダリング — 更新されたアイコンの生成
 
-Render the modified glyph and verify the fix.
+修正されたグリフをレンダリングして修正を検証する。
 
-1. Re-render the specific glyph using the build pipeline:
+1. ビルドパイプラインを使用して特定のグリフを再レンダリングする:
    ```bash
    cd /mnt/d/dev/p/agent-almanac/viz
    Rscript build-icons.R --only <domain> --no-cache
    ```
-   For agent glyphs:
+   エージェントグリフの場合:
    ```bash
    Rscript build-agent-icons.R --only <agent-id> --no-cache
    ```
-2. Verify the output files exist:
-   - `viz/public/icons/<palette>/<domain>/<skillId>.webp` for each palette
-3. Check file sizes — icons should be 2-15 KB (WebP):
-   - Under 2 KB: glyph may be too simple or rendering failed
-   - Over 15 KB: glyph may be too complex (too many layers)
+2. 出力ファイルの存在を確認する:
+   - 各パレットの `viz/public/icons/<palette>/<domain>/<skillId>.webp`
+3. ファイルサイズを確認する — アイコンは2-15 KB（WebP）であるべき:
+   - 2 KB未満: グリフが単純すぎるかレンダリングが失敗した可能性
+   - 15 KB超: グリフが複雑すぎる可能性（レイヤーが多すぎる）
 
-**期待結果:** Fresh icon files generated for all palettes. File sizes are in the expected range.
+**期待結果:** すべてのパレットの新しいアイコンファイルが生成されること。ファイルサイズが期待範囲内であること。
 
-**失敗時:** If `build-icons.R` errors, check the R console output for the specific error. Common causes: missing closing parenthesis in the glyph function, referencing undefined primitives, or returning non-list from the function. If rendering succeeds but output is blank, the glyph layers may be outside the canvas bounds.
+**失敗時:** `build-icons.R` がエラーになる場合、具体的なエラーについてRコンソール出力を確認する。一般的な原因: グリフ関数の閉じ括弧の欠落、未定義のプリミティブの参照、または関数からリスト以外を返すこと。レンダリングが成功するが出力が空白の場合、グリフレイヤーがキャンバス境界外にある可能性がある。
 
-### ステップ5: Compare — Before/After Verification
+### ステップ5: 比較 — ビフォー/アフターの検証
 
-Verify the enhancement improved the target dimensions.
+改善がターゲット次元を向上させたことを確認する。
 
-1. Compare old and new renderings:
-   - View the cyberpunk palette version at both icon (48px) and panel (160px) sizes
-   - View at least 2 other palettes (one light like turbo, one dark like mako)
-2. Re-score the quality dimensions from Step 1:
-   - Target dimensions should improve by at least 1 point
-   - Non-target dimensions should not decrease
-3. If the glyph is used in the force-graph, test it there:
-   - Start the HTTP server: `python3 -m http.server 8080` from `viz/`
-   - Load the graph and find the skill node
-   - Verify the icon renders correctly at default zoom and when zoomed in
-4. Document the changes made and the improvement achieved
+1. 旧と新のレンダリングを比較する:
+   - cyberpunkパレット版をアイコン（48px）とパネル（160px）の両サイズで表示
+   - 少なくとも2つの他のパレット（turboのような明るいもの、makoのような暗いもの）で表示
+2. ステップ1の品質次元を再スコアリングする:
+   - ターゲット次元は少なくとも1ポイント改善されるべき
+   - 非ターゲット次元は低下してはならない
+3. グリフがフォースグラフで使用されている場合、そこでテストする:
+   - HTTPサーバーを起動: `viz/` から `python3 -m http.server 8080`
+   - グラフを読み込んでスキルノードを見つける
+   - デフォルトズームとズームイン時にアイコンが正しくレンダリングされることを確認
+4. 行った変更と達成された改善を文書化する
 
-**期待結果:** Measurable improvement on the target dimensions with no regression on others. The glyph looks better at both sizes and across palettes.
+**期待結果:** ターゲット次元の測定可能な改善と他の次元の回帰がないこと。グリフが両サイズとパレット全体でより良く見えること。
 
-**失敗時:** If improvement is marginal or regression occurs, revert the changes and reconsider the diagnosis. Sometimes the original glyph's limitations are inherent to the metaphor, not the implementation — in that case, the metaphor itself may need to change (escalate to `create-skill-glyph`).
+**失敗時:** 改善がわずかか回帰が発生する場合、変更を元に戻して診断を再検討する。元のグリフの限界がメタファーに固有であり実装に固有でない場合もある — その場合、メタファー自体を変更する必要がある可能性がある（`create-skill-glyph` にエスカレート）。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Current glyph audited with specific issue diagnosis
-- [ ] Root cause identified for each issue
-- [ ] Modifications targeted to diagnosed issues (not over-edited)
-- [ ] Glyph function contract preserved (signature unchanged)
-- [ ] Icons re-rendered for all palettes
-- [ ] Before/after comparison shows improvement on target dimensions
-- [ ] No regression on non-target dimensions
-- [ ] File sizes in expected range (2-15 KB WebP)
-- [ ] Glyph renders correctly in force-graph context (if applicable)
+- [ ] 現在のグリフが具体的な問題診断で監査された
+- [ ] 各問題の根本原因が特定された
+- [ ] 修正が診断された問題に的を絞っている（過度に編集していない）
+- [ ] グリフ関数コントラクトが保持されている（シグネチャ変更なし）
+- [ ] すべてのパレットでアイコンが再レンダリングされた
+- [ ] ビフォー/アフターの比較がターゲット次元の改善を示す
+- [ ] 非ターゲット次元の回帰がない
+- [ ] ファイルサイズが期待範囲内（2-15 KB WebP）
+- [ ] フォースグラフコンテキストでグリフが正しくレンダリングされる（該当する場合）
 
 ## よくある落とし穴
 
-- **Over-enhancement**: Fixing one issue and then tweaking everything else. Stick to the diagnosed issues
-- **Breaking the contract**: Changing the function signature breaks the rendering pipeline. The 5-parameter contract is immutable
-- **Palette-specific optimization**: Making the glyph perfect for cyberpunk but poor for viridis. Always check 3+ palettes
-- **Ignoring small-size rendering**: A beautiful 160px icon that becomes a blob at 48px is a failed enhancement
-- **Forgetting to re-render**: Editing the function without running `build-icons.R` means the changes aren't visible
+- **過度な改善**: 1つの問題を修正してから他のすべてを調整すること。診断された問題に集中する
+- **コントラクトの破壊**: 関数シグネチャを変更するとレンダリングパイプラインが壊れる。5パラメータのコントラクトは不変
+- **パレット固有の最適化**: cyberpunkで完璧にしてviridisで悪くすること。常に3つ以上のパレットを確認する
+- **小サイズレンダリングの無視**: 160pxでは美しいが48pxでぼやけになるアイコンは改善の失敗
+- **再レンダリングの忘却**: `build-icons.R` を実行せずに関数を編集しても変更が表示されない
 
 ## 関連スキル
 
-- `create-skill-glyph` — Create a new glyph from scratch (use when enhancement isn't enough)
-- `ornament-style-mono` — Visual design principles that apply to glyph composition
-- `chrysopoeia` — Value extraction methodology parallels glyph optimization (amplify gold, remove dross)
+- `create-skill-glyph` — ゼロから新しいグリフを作成する（改善では不十分な場合に使用）
+- `ornament-style-mono` — グリフ構成に適用される視覚デザインの原則
+- `chrysopoeia` — 価値抽出の方法論がグリフ最適化と並行する（金を増幅し、滓を除去する）

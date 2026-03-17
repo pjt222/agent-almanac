@@ -1,13 +1,10 @@
 ---
 name: coordinate-reasoning
 description: >
-  AI internal coordination using stigmergic signals — managing information
-  freshness in context and memory, decay rates for assumption staleness,
-  and emergent coherent behavior from simple local protocols. Use during
-  complex tasks where multiple sub-tasks must coordinate, when context has
-  grown long and information freshness is uncertain, after context compression
-  when information may have been lost, or when sub-task outputs need to feed
-  into each other cleanly without degradation.
+  AI 内部协调，使用趋化信号——管理上下文和记忆中的信息新鲜度、假设过时的衰减率，
+  以及从简单的局部协议中产生的涌现一致行为。适用于多个子任务需要协调的复杂任务中、
+  上下文变长且信息新鲜度不确定时、上下文压缩后信息可能已丢失时，或子任务输出需要
+  在不降质的情况下清晰地衔接时。
 license: MIT
 allowed-tools: Read Write
 metadata:
@@ -24,31 +21,31 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Coordinate Reasoning
+# 协调推理
 
-Manage the internal coordination of reasoning processes using stigmergic principles — treating context as an environment where information signals have freshness, decay rates, and interaction rules that produce coherent behavior from simple local protocols.
+使用趋化原则管理推理过程的内部协调——将上下文视为一个环境，其中信息信号具有新鲜度、衰减率和交互规则，从简单的局部协议中产生一致行为。
 
 ## 适用场景
 
-- During complex tasks where multiple sub-tasks must coordinate (multi-file edits, multi-step refactoring)
-- When context has grown long and information freshness is uncertain
-- After context compression when some information may have been lost
-- When sub-task outputs need to feed into each other cleanly
-- When earlier reasoning results need to be carried forward without degradation
-- Complementing `forage-solutions` (exploration) and `build-coherence` (decision) with execution coordination
+- 在多个子任务需要协调的复杂任务中（多文件编辑、多步骤重构）
+- 当上下文变长且信息新鲜度不确定时
+- 上下文压缩后某些信息可能已丢失时
+- 子任务输出需要清晰地衔接到下一个时
+- 需要将早期推理结果向前传递而不降质时
+- 与 `forage-solutions`（探索）和 `build-coherence`（决策）配合进行执行协调时
 
 ## 输入
 
-- **必需**: Current task decomposition (what sub-tasks exist and how do they relate?)
-- **可选**: Known information freshness concerns (e.g., "I read that file 20 messages ago")
-- **可选**: Sub-task dependency map (which sub-tasks feed into which?)
-- **可选**: Available coordination tools (MEMORY.md, task list, inline notes)
+- **必需**：当前任务分解（存在哪些子任务以及它们如何关联？）
+- **可选**：已知的信息新鲜度顾虑（如"我在 20 条消息前读了那个文件"）
+- **可选**：子任务依赖图（哪些子任务输入给哪些？）
+- **可选**：可用的协调工具（MEMORY.md、任务列表、内联注释）
 
 ## 步骤
 
-### 第 1 步：Classify the Coordination Problem
+### 第 1 步：分类协调问题
 
-Different coordination challenges require different signal designs.
+不同的协调挑战需要不同的信号设计。
 
 ```
 AI Coordination Problem Types:
@@ -80,15 +77,15 @@ AI Coordination Problem Types:
 └─────────────────────┴──────────────────────────────────────────────────┘
 ```
 
-Classify the current task. Most complex tasks are Construction or Division of Labor; most debugging tasks are Foraging; most design decisions are Consensus.
+分类当前任务。大多数复杂任务属于构建型或分工型；大多数调试任务属于觅食型；大多数设计决策属于共识型。
 
-**预期结果：** A clear classification that determines which coordination signals to use. The classification should match how the task actually feels, not how it was described.
+**预期结果：** 明确的分类，确定使用哪种协调信号。分类应匹配任务的实际感受，而非其描述方式。
 
-**失败处理：** If the task spans multiple types (common for large tasks), identify the dominant type for the current phase. Construction during implementation, Foraging during debugging, Consensus during design. The type can change as the task progresses.
+**失败处理：** 如果任务跨越多个类型（大型任务中常见），识别当前阶段的主导类型。实施阶段为构建型，调试阶段为觅食型，设计阶段为共识型。类型可以随任务进展而变化。
 
-### 第 2 步：Design Context Signals
+### 第 2 步：设计上下文信号
 
-Treat information in the conversation context as signals with freshness and decay properties.
+将对话上下文中的信息视为具有新鲜度和衰减属性的信号。
 
 ```
 Information Decay Rate Table:
@@ -116,19 +113,19 @@ Information Decay Rate Table:
 └───────────────────────────┴──────────┴──────────────────────────────┘
 ```
 
-Additionally, design inhibition signals — markers for tried-and-failed approaches:
+此外，设计抑制信号——标记已尝试但失败的方法：
 
-- After a tool call fails: note the failure mode (prevents retrying the same call)
-- After an approach is abandoned: note why (prevents revisiting without new evidence)
-- After a user correction: note what was wrong (prevents repeating the error)
+- 工具调用失败后：记录失败模式（防止重试相同的调用）
+- 放弃某方法后：记录原因（防止在没有新证据的情况下重新访问）
+- 用户纠正后：记录错误内容（防止重复错误）
 
-**预期结果：** A mental model of information freshness across the current context. Identification of which information is fresh and which needs refreshing before reliance.
+**预期结果：** 对当前上下文中信息新鲜度的心理模型。识别哪些信息是新鲜的，哪些在依赖前需要刷新。
 
-**失败处理：** If information freshness is hard to assess, default to "re-read before relying on" for anything not verified in the last 5-10 actions. Over-refreshing wastes some effort but prevents stale-information errors.
+**失败处理：** 如果难以评估信息新鲜度，默认对最近 5-10 个操作中未验证的任何信息采取"依赖前重新读取"策略。过度刷新会浪费一些精力，但能防止过时信息错误。
 
-### 第 3 步：Define Local Protocols
+### 第 3 步：定义局部协议
 
-Establish simple rules for how reasoning should proceed at each step, using only locally available information.
+建立简单规则，规定推理在每一步应如何进行，仅使用局部可用信息。
 
 ```
 Local Protocol Rules:
@@ -162,21 +159,21 @@ Local Protocol Rules:
 └──────────────────────┴────────────────────────────────────────────────┘
 ```
 
-These protocols are simple enough to apply at every step without significant overhead.
+这些协议足够简单，可以在每一步应用而不会产生显著开销。
 
-**预期结果：** A set of lightweight rules that improve coordination quality without slowing execution. The rules should feel helpful, not burdensome.
+**预期结果：** 一组轻量级规则，在不减慢执行速度的情况下提高协调质量。规则应感觉有帮助，而不是负担。
 
-**失败处理：** If the protocols feel like overhead, reduce to the two most important for the current task type: Safety + Deposit for Construction, Safety + Exploration for Foraging, Safety + Response for tasks with active user feedback.
+**失败处理：** 如果协议感觉像是额外负担，精简为当前任务类型最重要的两个：构建型用安全+沉淀，觅食型用安全+探索，有用户积极反馈的任务用安全+响应。
 
-### 第 4 步：Calibrate Information Freshness
+### 第 4 步：校准信息新鲜度
 
-Perform an active audit of information staleness in the current context.
+对当前上下文中的信息过时状态执行主动审计。
 
-1. What facts were established more than N messages ago? List them
-2. For each: has it been updated, contradicted, or rendered irrelevant since?
-3. Check for context compression losses: is there information you remember having but can no longer find in the visible context?
-4. Check for drift between early plans and current execution: has the approach changed without updating the plan?
-5. Re-verify the 2-3 most critical facts (the ones that the most downstream reasoning depends on)
+1. 哪些事实是在 N 条消息之前建立的？列出它们
+2. 对于每个：自那以后是否已被更新、反驳或变得无关？
+3. 检查上下文压缩损失：是否有你记得有但在可见上下文中再也找不到的信息？
+4. 检查早期计划和当前执行之间的偏移：方法是否在没有更新计划的情况下发生了变化？
+5. 重新验证 2-3 个最关键的事实（最多下游推理依赖的那些）
 
 ```
 Freshness Audit Template:
@@ -188,18 +185,18 @@ Freshness Audit Template:
 └────────────────────────┴──────────┴──────────────┴─────────────────┘
 ```
 
-**预期结果：** A concrete inventory of information freshness with stale items identified for refresh. At least one fact re-verified — if nothing needed refreshing, the audit was too shallow or the context is genuinely fresh.
+**预期结果：** 信息新鲜度的具体清单，已识别需要刷新的过时项目。至少有一个事实被重新验证——如果没有需要刷新的内容，审计太浅或上下文确实是新鲜的。
 
-**失败处理：** If the audit reveals significant information loss (multiple facts with "Lost" or "Unknown" status), this is a signal to run `heal` for a full subsystem assessment. Information loss beyond a threshold means coordination is compromised at the foundation level.
+**失败处理：** 如果审计揭示了重大信息损失（多个事实状态为"已丢失"或"未知"），这是运行 `heal` 进行完整子系统评估的信号。超出阈值的信息损失意味着协调在基础层面已经受损。
 
-### 第 5 步：Test Emergent Coherence
+### 第 5 步：测试涌现一致性
 
-Verify that the sub-tasks, when combined, produce a coherent whole.
+验证子任务组合后是否产生一致的整体。
 
-1. Does each sub-task's output feed cleanly into the next? Or are there gaps, contradictions, or mismatched assumptions?
-2. Are tool calls building toward the goal, or are they repetitive (re-reading the same file, re-running the same search)?
-3. Is the overall direction still aligned with the user's request? Or has incremental drift accumulated into significant misalignment?
-4. Stress test: if one key assumption is wrong, how much of the work cascades? High cascade = fragile coordination. Low cascade = robust coordination
+1. 每个子任务的输出是否干净地流入下一个？还是存在差距、矛盾或不匹配的假设？
+2. 工具调用是否在向目标推进，还是重复的（重新读取同一文件、重新运行同一搜索）？
+3. 总体方向是否仍与用户请求一致？还是增量偏移累积成了显著的不对齐？
+4. 压力测试：如果一个关键假设错误，有多少工作会级联？高级联=脆弱协调。低级联=稳健协调
 
 ```
 Coherence Test:
@@ -213,31 +210,31 @@ Coherence Test:
 └────────────────────────────────────┴─────────────────────────────────┘
 ```
 
-**预期结果：** A concrete assessment of overall coherence with specific issues identified. Coherent coordination should feel like parts clicking together; incoherent coordination feels like forcing puzzle pieces.
+**预期结果：** 对整体一致性的具体评估，已识别具体问题。一致的协调应感觉像部件咔嗒拼合在一起；不一致的协调感觉像强行拼凑拼图。
 
-**失败处理：** If coherence is poor, identify the specific point where sub-tasks diverge. Often it is a single stale assumption or an unprocessed user correction that propagated through downstream work. Fix the point of divergence, then re-verify downstream outputs.
+**失败处理：** 如果一致性差，找出子任务分叉的具体点。通常是一个过时的假设或一个未处理的用户纠正在下游工作中传播。修复分叉点，然后重新验证下游输出。
 
 ## 验证清单
 
-- [ ] Coordination problem was classified by type
-- [ ] Information decay rates were considered for facts relied upon
-- [ ] Local protocols were applied (especially Safety and Deposit)
-- [ ] Freshness audit identified stale information (or confirmed freshness with evidence)
-- [ ] Emergent coherence was tested across sub-tasks
-- [ ] Inhibition signals were respected (tried-and-failed approaches not repeated)
+- [ ] 协调问题已按类型分类
+- [ ] 对依赖的事实考虑了信息衰减率
+- [ ] 应用了局部协议（特别是安全和沉淀）
+- [ ] 新鲜度审计识别了过时信息（或用证据确认了新鲜度）
+- [ ] 跨子任务测试了涌现一致性
+- [ ] 尊重了抑制信号（未重复已尝试失败的方法）
 
 ## 常见问题
 
-- **Over-engineering signals**: Complex coordination protocols slow work more than they help. Start with Safety + Deposit; add others only when problems emerge
-- **Trusting stale context**: The most common coordination failure is relying on information that was true 20 messages ago but has since been updated or invalidated. When in doubt, re-read
-- **Ignoring inhibition signals**: Retrying a failed approach without changing anything is not persistence — it is ignoring the failure signal. Something must be different for a retry to succeed
-- **No deposits**: Completing sub-tasks without noting their outputs forces later sub-tasks to re-derive or re-read. Brief summaries save significant re-work
-- **Assuming coherence**: Not testing whether sub-tasks actually combine into a coherent whole. Each sub-task can be correct independently but incoherent collectively — the integration is where coordination fails
+- **过度设计信号**：复杂的协调协议阻碍工作多于帮助。从安全+沉淀开始；仅在问题出现时添加其他
+- **信任过时上下文**：最常见的协调失败是依赖 20 条消息前正确但此后已更新或失效的信息。有疑问时重新读取
+- **忽视抑制信号**：在不改变任何条件的情况下重试失败方法不是坚持——而是忽视失败信号。重试成功需要有不同的条件
+- **没有沉淀**：完成子任务而不记录其输出会迫使后续子任务重新推导或重新读取。简短的摘要可节省大量返工
+- **假设一致性**：不测试子任务是否真正组合成一致的整体。每个子任务可以独立正确但集体不一致——集成是协调失败的地方
 
 ## 相关技能
 
-- `coordinate-swarm` — the multi-agent coordination model that this skill adapts to single-agent reasoning
-- `forage-solutions` — coordinates exploration across multiple hypotheses
-- `build-coherence` — coordinates evaluation across competing approaches
-- `heal` — deeper assessment when coordination failures reveal subsystem drift
-- `awareness` — monitors for coordination breakdown signals during execution
+- `coordinate-swarm` — 本技能适配为单代理推理的多代理协调模型
+- `forage-solutions` — 协调跨多个假设的探索
+- `build-coherence` — 协调跨竞争方法的评估
+- `heal` — 协调失败揭示子系统偏移时的深度评估
+- `awareness` — 在执行期间监控协调故障信号

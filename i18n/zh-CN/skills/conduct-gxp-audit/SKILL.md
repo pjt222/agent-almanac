@@ -1,16 +1,10 @@
 ---
 name: conduct-gxp-audit
 description: >
-  对计算机化系统和流程执行 GxP 审计。涵盖审计计划、首次会议、
-  证据收集、发现分类（关键/重大/轻微）、CAPA 生成、末次会议、
-  报告编写和后续验证。适用于定期内部审计、供应商资质审计、
-  检查前准备评估、由偏差或数据完整性问题引发的专因审计，
-  或对已验证系统合规状态的定期审核时使用。
-locale: zh-CN
-source_locale: en
-source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
+  对计算机化系统和流程执行 GxP 审计。涵盖审计计划、首次会议、证据收集、
+  发现分类（关键/重大/轻微）、CAPA 生成、末次会议、报告编写和后续验证。
+  适用于定期内部审计、供应商资质审计、监管检查前的就绪评估、由偏差或数据
+  完整性问题触发的原因审计，或已验证系统的定期合规状态评审。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -20,255 +14,260 @@ metadata:
   complexity: advanced
   language: multi
   tags: gxp, audit, capa, inspection, compliance, quality-assurance
+  locale: zh-CN
+  source_locale: en
+  source_commit: 6f65f316
+  translator: claude
+  translation_date: "2026-03-17"
 ---
 
 # 执行 GxP 审计
 
-计划和执行针对计算机化系统、数据完整性实践或受监管流程的 GxP 审计。
+计划并执行计算机化系统、数据完整性实践或受监管流程的 GxP 审计。
 
 ## 适用场景
 
-- 对已验证计算机化系统进行定期内部审计
-- 对 GxP 相关软件进行供应商/供货商资质审计
-- 在法规审计前进行检查准备评估
-- 由偏差、投诉或数据完整性问题引发的专因审计
-- 对已验证系统合规状态进行定期审核
+- 已验证计算机化系统的定期内部审计
+- GxP 相关软件的供应商/承包商资质审计
+- 监管审计前的检查就绪评估
+- 由偏差、投诉或数据完整性问题触发的原因审计
+- 已验证系统合规状态的定期评审
 
 ## 输入
 
-- **必填**：审计范围（待审计的系统、流程或场所）
-- **必填**：适用法规（21 CFR Part 11、EU Annex 11、GMP、GLP、GCP）
-- **必填**：以往审计报告和未解决的 CAPA 项
-- **可选**：系统验证文档（URS、VP、IQ/OQ/PQ、追溯矩阵）
+- **必需**：审计范围（待审计的系统、流程或场所）
+- **必需**：适用法规（21 CFR Part 11、EU Annex 11、GMP、GLP、GCP）
+- **必需**：以往审计报告和未关闭的 CAPA 项
+- **可选**：系统验证文件（URS、VP、IQ/OQ/PQ、追溯矩阵）
 - **可选**：SOP、培训记录、变更控制日志
-- **可选**：触发审计的具体风险领域或问题
+- **可选**：触发审计的特定风险领域或问题
 
 ## 步骤
 
 ### 第 1 步：制定审计计划
 
 ```markdown
-# 审计计划
-## 文档 ID：AP-[SYS]-[YYYY]-[NNN]
+# Audit Plan
+## Document ID: AP-[SYS]-[YYYY]-[NNN]
 
-### 1. 目标
-[说明目的：定期、专因、供应商资质审计、检查前准备]
+### 1. Objective
+[State the purpose: scheduled, for-cause, supplier qualification, pre-inspection]
 
-### 2. 范围
-- **系统/流程**：[名称和版本]
-- **法规**：[21 CFR Part 11、EU Annex 11、ICH Q7 等]
-- **时间段**：[审核记录的日期范围]
-- **排除项**：[任何明确不在范围内的区域]
+### 2. Scope
+- **System/Process**: [Name and version]
+- **Regulations**: [21 CFR Part 11, EU Annex 11, ICH Q7, etc.]
+- **Period**: [Date range of records under review]
+- **Exclusions**: [Any areas explicitly out of scope]
 
-### 3. 审计标准
-| 领域 | 法规参考 | 关键要求 |
-|------|---------|---------|
-| 电子记录 | 21 CFR 11.10 | 封闭系统控制措施 |
-| 审计追踪 | 21 CFR 11.10(e) | 安全、计算机生成、带时间戳 |
-| 电子签名 | 21 CFR 11.50 | 表现形式、具有法律约束力 |
-| 访问控制 | EU Annex 11, §12 | 基于角色、有记录 |
-| 数据完整性 | MHRA 指南 | ALCOA+ 原则 |
-| 变更控制 | ICH Q10 | 有记录、已评估、已批准 |
+### 3. Audit Criteria
+| Area | Regulatory Reference | Key Requirements |
+|------|---------------------|------------------|
+| Electronic records | 21 CFR 11.10 | Controls for closed systems |
+| Audit trail | 21 CFR 11.10(e) | Secure, computer-generated, time-stamped |
+| Electronic signatures | 21 CFR 11.50 | Manifestation, legally binding |
+| Access controls | EU Annex 11, §12 | Role-based, documented |
+| Data integrity | MHRA guidance | ALCOA+ principles |
+| Change control | ICH Q10 | Documented, assessed, approved |
 
-### 4. 日程安排
-| 日期 | 时间 | 活动 | 参与人员 |
-|------|------|------|---------|
-| 第 1 天上午 | 09:00 | 首次会议 | 全体 |
-| 第 1 天上午 | 10:00 | 文件审查 | 审计员 + QA |
-| 第 1 天下午 | 13:00 | 系统现场查看 | 审计员 + IT + 系统负责人 |
-| 第 2 天上午 | 09:00 | 访谈 + 证据收集 | 审计员 + 用户 |
-| 第 2 天下午 | 14:00 | 发现整合 | 审计员 |
-| 第 2 天下午 | 16:00 | 末次会议 | 全体 |
+### 4. Schedule
+| Date | Time | Activity | Participants |
+|------|------|----------|-------------|
+| Day 1 AM | 09:00 | Opening meeting | All |
+| Day 1 AM | 10:00 | Document review | Auditor + QA |
+| Day 1 PM | 13:00 | System walkthrough | Auditor + IT + System Owner |
+| Day 2 AM | 09:00 | Interviews + evidence collection | Auditor + Users |
+| Day 2 PM | 14:00 | Finding consolidation | Auditor |
+| Day 2 PM | 16:00 | Closing meeting | All |
 
-### 5. 审计团队
-| 角色 | 姓名 | 职责 |
-|------|------|------|
-| 主审计员 | [姓名] | 计划、执行、报告 |
-| 主题专家 | [姓名] | 技术评估 |
-| 被审计方代表 | [姓名] | 协助获取材料和信息 |
+### 5. Audit Team
+| Role | Name | Responsibility |
+|------|------|---------------|
+| Lead Auditor | [Name] | Plan, execute, report |
+| Subject Matter Expert | [Name] | Technical assessment |
+| Auditee Representative | [Name] | Facilitate access and information |
 ```
 
-**预期结果：** 审计计划由质量管理层批准，并在审计前至少 2 周通知被审计方。
-**失败处理：** 若被审计方无法提供所需文件或人员，重新安排审计时间。
+**预期结果：** 审计计划经质量管理部门批准，并在审计前至少 2 周通知被审计方。
+**失败处理：** 如果被审计方无法提供所需文件或人员，则重新安排。
 
 ### 第 2 步：召开首次会议
 
 议程：
-1. 介绍审计团队和角色
+1. 介绍审计团队及角色
 2. 确认范围、日程和后勤安排
-3. 解释发现分类系统（关键/重大/轻微）
+3. 解释发现分类体系（关键/重大/轻微）
 4. 确认保密协议
-5. 确认被审计方陪同人员和文件保管人
-6. 处理提问
+5. 确定被审计方陪同人员和文件保管人
+6. 解答问题
 
-**预期结果：** 首次会议已记录并附有出席记录。
-**失败处理：** 若关键人员缺席，重新安排受影响的审计活动。
+**预期结果：** 首次会议有文档记录和出席记录。
+**失败处理：** 如果关键人员无法到场，重新安排受影响的审计活动。
 
 ### 第 3 步：收集和审查证据
 
 根据审计标准审查文件和记录：
 
-#### 3a. 验证文档审查
-- [ ] URS 已存在且已批准
-- [ ] 验证计划与系统类别和风险匹配
-- [ ] IQ/OQ/PQ 协议已执行并记录了结果
+#### 3a. 验证文件审查
+- [ ] URS 存在且已批准
+- [ ] 验证计划与系统类别和风险相匹配
+- [ ] IQ/OQ/PQ 方案已执行并有结果记录
 - [ ] 追溯矩阵将需求链接到测试结果
-- [ ] 偏差已记录和解决
-- [ ] 验证摘要报告已批准
+- [ ] 偏差已记录并解决
+- [ ] 验证总结报告已批准
 
-#### 3b. 操作控制审查
-- [ ] SOP 为最新版本且已批准
-- [ ] 培训记录证明所有用户具备相应能力
+#### 3b. 运营控制审查
+- [ ] SOP 为最新且已批准
+- [ ] 培训记录证明所有用户具备能力
 - [ ] 变更控制记录完整（申请、评估、批准、验证）
-- [ ] 事故/偏差报告按 SOP 处理
-- [ ] 已按计划进行定期审核
+- [ ] 事件/偏差报告按 SOP 处理
+- [ ] 定期审查按计划执行
 
 #### 3c. 数据完整性评估
-- [ ] 审计追踪已启用且用户无法修改
-- [ ] 电子签名满足法规要求
-- [ ] 备份和恢复程序已记录且经过测试
+- [ ] 审计追踪已启用且用户不可修改
+- [ ] 电子签名符合监管要求
+- [ ] 备份和恢复程序已记录并经过测试
 - [ ] 访问控制执行基于角色的权限
-- [ ] 数据可归因、清晰、及时、原始、准确（ALCOA+）
+- [ ] 数据具有可归属性、可辨识性、同步性、原始性、准确性（ALCOA+）
 
 #### 3d. 系统配置审查
 - [ ] 生产配置与已验证状态一致
-- [ ] 用户账户已审核——无共享账户，非活跃账户已禁用
+- [ ] 用户账户已审查——无共享账户，非活跃账户已禁用
 - [ ] 系统时钟已同步且准确
-- [ ] 安全补丁已通过已批准的变更控制程序应用
+- [ ] 安全补丁按批准的变更控制应用
 
-**预期结果：** 证据已以截图、文件副本、带时间戳的访谈记录形式收集。
-**失败处理：** 记录"无法验证"作为观察，并注明原因。
+**预期结果：** 证据以截图、文件副本、带时间戳的访谈记录形式收集。
+**失败处理：** 将"无法验证"记录为观察结果并注明原因。
 
-### 第 4 步：对发现进行分类
+### 第 4 步：分类发现
 
-按严重性对每个发现进行分类：
+按严重程度分类每项发现：
 
-| 分类 | 定义 | 所需响应 |
-|------|------|---------|
-| **关键** | 对产品质量、患者安全或数据完整性有直接影响；关键控制措施系统性失效 | 立即采取措施 + 15 个工作日内完成 CAPA |
-| **重大** | 与 GxP 要求存在重大偏差，若不纠正可能影响数据完整性 | 30 个工作日内完成 CAPA |
-| **轻微** | 与程序的孤立偏差，对数据完整性或产品质量无直接影响 | 60 个工作日内纠正 |
-| **观察** | 改进机会，非法规要求 | 可选——追踪趋势分析 |
+| 分类 | 定义 | 要求的响应 |
+|------|------|-----------|
+| **关键** | 直接影响产品质量、患者安全或数据完整性。关键控制的系统性失败。 | 立即遏制 + 15 个工作日内提交 CAPA |
+| **重大** | 严重偏离 GxP 要求。如不纠正可能影响数据完整性。 | 30 个工作日内提交 CAPA |
+| **轻微** | 程序的个别偏差。对数据完整性或产品质量无直接影响。 | 60 个工作日内纠正 |
+| **观察** | 改进机会。非监管要求。 | 可选——用于趋势分析跟踪 |
 
-记录每个发现：
+记录每项发现：
 
 ```markdown
-## 发现 F-[NNN]
-**分类：** [关键 / 重大 / 轻微 / 观察]
-**领域：** [审计追踪 / 访问控制 / 变更控制 / 等]
-**参考：** [法规条款，如 21 CFR 11.10(e)]
+## Finding F-[NNN]
+**Classification:** [Critical / Major / Minor / Observation]
+**Area:** [Audit trail / Access control / Change control / etc.]
+**Reference:** [Regulatory clause, e.g., 21 CFR 11.10(e)]
 
-**观察内容：**
-[客观描述发现的情况]
+**Observation:**
+[Objective description of what was found]
 
-**证据：**
-[文档 ID、截图引用、访谈记录]
+**Evidence:**
+[Document ID, screenshot reference, interview notes]
 
-**法规期望：**
-[法规要求的内容]
+**Regulatory Expectation:**
+[What the regulation requires]
 
-**风险：**
-[对数据完整性、产品质量或患者安全的影响]
+**Risk:**
+[Impact on data integrity, product quality, or patient safety]
 ```
 
-**预期结果：** 每个发现均有分类、证据和法规参考。
-**失败处理：** 若分类存在争议，升级至审计项目经理进行裁决。
+**预期结果：** 每项发现都有分类、证据和法规参考。
+**失败处理：** 如果分类有争议，上报给审计项目经理进行裁决。
 
 ### 第 5 步：召开末次会议
 
 议程：
-1. 展示发现摘要（不应提出新发现）
+1. 呈现发现摘要（不应提出新发现）
 2. 审查发现分类
-3. 讨论初步 CAPA 期望和时间表
+3. 讨论初步的 CAPA 期望和时间表
 4. 确认后续步骤和报告时间表
 5. 感谢被审计方的配合
 
-**预期结果：** 末次会议已记录并附有出席记录，被审计方确认发现（确认 ≠ 同意）。
-**失败处理：** 若被审计方对某一发现提出异议，记录分歧并按 SOP 升级处理。
+**预期结果：** 末次会议有文档记录和出席名单。被审计方确认发现（确认不等于同意）。
+**失败处理：** 如果被审计方对发现有异议，记录分歧并按 SOP 上报。
 
 ### 第 6 步：编写审计报告
 
 ```markdown
-# 审计报告
-## 文档 ID：AR-[SYS]-[YYYY]-[NNN]
+# Audit Report
+## Document ID: AR-[SYS]-[YYYY]-[NNN]
 
-### 1. 执行摘要
-对 [系统/流程] 的审计于 [日期] 按照 [法规] 进行。
-共发现 [N] 项：[n] 项关键，[n] 项重大，[n] 项轻微，[n] 项观察。
+### 1. Executive Summary
+An audit of [System/Process] was conducted on [dates] against [regulations].
+[N] findings were identified: [n] critical, [n] major, [n] minor, [n] observations.
 
-### 2. 范围和方法
-[总结审计计划范围、标准和使用的方法]
+### 2. Scope and Methodology
+[Summarize audit plan scope, criteria, and methods used]
 
-### 3. 发现摘要
-| 发现 ID | 分类 | 领域 | 简要描述 |
-|--------|------|------|---------|
-| F-001 | 重大 | 审计追踪 | 批记录模块审计追踪已禁用 |
-| F-002 | 轻微 | 培训 | 两名用户缺少年度 GxP 培训 |
-| F-003 | 观察 | 文档 | SOP 格式不一致 |
+### 3. Findings Summary
+| Finding ID | Classification | Area | Brief Description |
+|-----------|---------------|------|-------------------|
+| F-001 | Major | Audit trail | Audit trail disabled for batch record module |
+| F-002 | Minor | Training | Two users missing annual GxP training |
+| F-003 | Observation | Documentation | SOP formatting inconsistencies |
 
-### 4. 详细发现
-[包含第 4 步中每个发现的完整详情]
+### 4. Detailed Findings
+[Include full finding details from Step 4 for each finding]
 
-### 5. 正面观察
-[记录审计期间观察到的良好实践]
+### 5. Positive Observations
+[Document areas of good practice observed during the audit]
 
-### 6. 结论
-总体合规状态评估为[令人满意 / 需要改进 / 不令人满意]。
+### 6. Conclusion
+The overall compliance status is assessed as [Satisfactory / Needs Improvement / Unsatisfactory].
 
-### 7. 分发
-| 接收人 | 角色 |
-|--------|------|
-| [姓名] | 系统负责人 |
-| [姓名] | QA 总监 |
-| [姓名] | IT 经理 |
+### 7. Distribution
+| Recipient | Role |
+|-----------|------|
+| [Name] | System Owner |
+| [Name] | QA Director |
+| [Name] | IT Manager |
 
-### 批准
-| 角色 | 姓名 | 签名 | 日期 |
-|------|------|------|------|
-| 主审计员 | | | |
-| QA 总监 | | | |
+### Approval
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| Lead Auditor | | | |
+| QA Director | | | |
 ```
 
-**预期结果：** 报告在末次会议后 15 个工作日内发出。
-**失败处理：** 若超过 15 天，通知利益相关方并记录原因。
+**预期结果：** 报告在末次会议后 15 个工作日内发布。
+**失败处理：** 如果延迟超过 15 天，通知利益相关者并记录原因。
 
-### 第 7 步：追踪 CAPA 并验证有效性
+### 第 7 步：跟踪 CAPA 并验证有效性
 
-对每个需要 CAPA 的发现：
+对每项需要 CAPA 的发现：
 
 ```markdown
-## CAPA 追踪
-| 发现 ID | CAPA ID | 根本原因 | 纠正措施 | 截止日期 | 状态 | 有效性检查 |
-|--------|--------|---------|---------|---------|------|----------|
-| F-001 | CAPA-2025-042 | 升级期间配置疏漏 | 启用审计追踪，验证所有模块 | 2025-04-15 | 开放 | 计划于 2025-07-15 |
-| F-002 | CAPA-2025-043 | 培训矩阵未更新 | 完成培训，更新追踪系统 | 2025-05-01 | 开放 | 计划于 2025-08-01 |
+## CAPA Tracking
+| Finding ID | CAPA ID | Root Cause | Corrective Action | Due Date | Status | Effectiveness Check |
+|-----------|---------|------------|-------------------|----------|--------|-------------------|
+| F-001 | CAPA-2025-042 | Configuration oversight during upgrade | Enable audit trail, verify all modules | 2025-04-15 | Open | Scheduled 2025-07-15 |
+| F-002 | CAPA-2025-043 | Training matrix not updated | Complete training, update tracking | 2025-05-01 | Open | Scheduled 2025-08-01 |
 ```
 
-**预期结果：** CAPA 已分配、追踪，并按规定时间表验证有效性。
-**失败处理：** 未解决的 CAPA 升级至 QA 管理层，并在下一个审计周期中标记。
+**预期结果：** CAPA 已分配、跟踪，并在规定时间内验证有效性。
+**失败处理：** 未解决的 CAPA 上报至 QA 管理层，并在下一个审计周期中标记。
 
 ## 验证清单
 
-- [ ] 审计计划已在审计前批准并传达
-- [ ] 首次会议和末次会议已记录并附有出席记录
-- [ ] 证据收集带有时间戳和来源引用
-- [ ] 每个发现均有分类、证据和法规参考
-- [ ] 审计报告在 15 个工作日内发出
-- [ ] 所有关键和重大发现均已分配带截止日期的 CAPA
-- [ ] 前次审计 CAPA 已验证关闭有效性
+- [ ] 审计计划在审计前已批准并传达
+- [ ] 首次会议和末次会议有文档记录和出席名单
+- [ ] 证据附有时间戳和来源参考
+- [ ] 每项发现都有分类、证据和法规参考
+- [ ] 审计报告在 15 个工作日内发布
+- [ ] 所有关键和重大发现都已分配有截止日期的 CAPA
+- [ ] 以往审计的 CAPA 已验证关闭有效性
 
 ## 常见问题
 
-- **范围蔓延**：未经正式协议擅自扩大审计范围会导致覆盖不完整和争议
-- **基于意见的发现**：发现必须引用具体法规要求，而非个人偏好
-- **对抗性语气**：审计是协作式质量改进活动，而非审讯
-- **忽视正面发现**：只报告发现而不承认良好实践会破坏互信
-- **无有效性检查**：在不验证修复是否有效的情况下关闭 CAPA，是法规机构反复引用的问题
+- **范围蔓延**：在执行过程中未经正式同意扩大审计范围，导致覆盖不完整和争议
+- **基于意见的发现**：发现必须引用具体的法规要求，而非个人偏好
+- **对抗性语气**：审计是协作性的质量改进活动，而非审讯
+- **忽视正面观察**：仅报告发现而不承认良好实践会损害信任
+- **缺少有效性检查**：在未验证修复是否确实有效的情况下关闭 CAPA 是反复出现的监管引用
 
 ## 相关技能
 
-- `perform-csv-assessment` — 完整的 CSV 全生命周期评估（从 URS 到验证摘要）
+- `perform-csv-assessment` — 完整的 CSV 生命周期评估（从 URS 到验证总结）
 - `setup-gxp-r-project` — 已验证 R 环境的项目结构
-- `implement-audit-trail` — 电子记录的审计追踪实施
-- `write-validation-documentation` — IQ/OQ/PQ 协议和报告编写
-- `security-audit-codebase` — 安全侧重的代码审计（互补视角）
+- `implement-audit-trail` — 电子记录的审计追踪实现
+- `write-validation-documentation` — IQ/OQ/PQ 方案和报告编写
+- `security-audit-codebase` — 安全导向的代码审计（互补视角）

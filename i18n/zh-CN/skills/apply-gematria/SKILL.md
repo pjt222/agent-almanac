@@ -1,13 +1,10 @@
 ---
 name: apply-gematria
 description: >
-  Compute and analyze gematria (Hebrew numerical values) using standard,
-  ordinal, and reduced methods. Covers word-to-number conversion,
-  isopsephy comparisons, and interpretive frameworks. Use when computing
-  the numerical value of a Hebrew word or phrase, comparing two words for
-  shared gematria values, studying a biblical verse or divine name for
-  numerical correspondences, or connecting a numerical result to its
-  position on the Tree of Life.
+  使用标准、序数和简化方法计算和分析格玛特里亚（希伯来字母数值）。涵盖词到数字的
+  转换、等值比较和诠释框架。适用于计算希伯来词或短语的数值、比较两个词是否共享
+  格玛特里亚值、研究圣经经文或神名的数值对应关系，或将数值结果与生命之树的位置
+  联系起来时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,31 +21,31 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Apply Gematria
+# 应用格玛特里亚
 
-Compute and analyze gematria — the system of assigning numerical values to Hebrew letters and words. Covers standard (Mispar Hechrachi), ordinal (Mispar Siduri), and reduced (Mispar Katan) methods, isopsephy comparisons between words of equal value, and interpretive frameworks for contemplation.
+计算和分析格玛特里亚——为希伯来字母和词语赋予数值的系统。涵盖标准法（Mispar Hechrachi）、序数法（Mispar Siduri）和简化法（Mispar Katan），等值词比较（isopsephy），以及用于冥想的诠释框架。
 
 ## 适用场景
 
-- You want to compute the numerical value of a Hebrew word or phrase
-- You are comparing two words to determine if they share a gematria value (isopsephy)
-- You need to understand which gematria method is appropriate for a given analysis
-- You are studying a biblical verse or divine name and want to uncover numerical correspondences
-- You are exploring the relationship between a word's meaning and its numerical value
-- You want to connect a numerical result to its position on the Tree of Life
+- 想要计算希伯来词或短语的数值
+- 比较两个词以确定它们是否共享格玛特里亚值（等值）
+- 需要理解哪种格玛特里亚方法适合特定分析
+- 研究圣经经文或神名，想要发现数值对应关系
+- 探索词义与其数值之间的关系
+- 想要将数值结果与其在生命之树上的位置联系起来
 
 ## 输入
 
-- **必需**: A Hebrew word, phrase, or divine name to analyze (in Hebrew script or transliteration)
-- **可选**: A second word/phrase for comparison (isopsephy)
-- **可选**: Preferred gematria method (standard, ordinal, reduced, or all three)
-- **可选**: Context or question guiding the analysis (e.g., "Why do these two words share a value?")
+- **必需**：要分析的希伯来词、短语或神名（希伯来文字或音译）
+- **可选**：用于比较的第二个词/短语（等值比较）
+- **可选**：偏好的格玛特里亚方法（标准、序数、简化或三者全部）
+- **可选**：指导分析的背景或问题（例如"为什么这两个词共享一个值？"）
 
 ## 步骤
 
-### 第 1 步：Transliterate and Identify the Hebrew Source
+### 第 1 步：音译并识别希伯来源文
 
-Establish the exact Hebrew spelling of the word or phrase.
+确立词或短语的确切希伯来拼写。
 
 ```
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
@@ -77,36 +74,36 @@ same values for regular and final forms. The 500-900 values above
 follow the extended system (Mispar Gadol).
 ```
 
-1. If the input is in English transliteration, convert to Hebrew letter sequence
-2. Verify the spelling: Hebrew has multiple possible spellings for some words (plene vs. defective)
-3. Note if the word contains final-form letters (Kaf-sofit, Mem-sofit, Nun-sofit, Peh-sofit, Tzadi-sofit)
-4. State the source: is this a biblical word, a divine name, a modern Hebrew word, or a technical Kabbalistic term?
-5. If ambiguous, present both common spellings and compute gematria for each
+1. 如果输入是英文音译，转换为希伯来字母序列
+2. 验证拼写：希伯来语中某些词有多种可能的拼写（完全拼写 vs. 缺省拼写）
+3. 注意词是否包含词尾形式字母（Kaf-sofit、Mem-sofit、Nun-sofit、Peh-sofit、Tzadi-sofit）
+4. 说明来源：这是圣经词汇、神名、现代希伯来语词汇还是卡巴拉术语？
+5. 如有歧义，呈现两种常见拼写并为每种计算格玛特里亚
 
-**预期结果：** The Hebrew letter sequence is established with confidence. The user knows exactly which letters are being summed and can verify the spelling.
+**预期结果：** 希伯来字母序列已有信心地确立。用户确切知道哪些字母正在被求和，并可以验证拼写。
 
-**失败处理：** If the transliteration is ambiguous (e.g., "chai" could be Chet-Yod or Chet-Yod-Yod in some contexts), present both options with their gematria values and let the user select.
+**失败处理：** 如果音译有歧义（例如"chai"在某些语境中可能是 Chet-Yod 或 Chet-Yod-Yod），呈现两个选项及其格玛特里亚值，让用户选择。
 
-### 第 2 步：Apply Standard Gematria (Mispar Hechrachi)
+### 第 2 步：应用标准格玛特里亚（Mispar Hechrachi）
 
-Sum the letter values using the standard Hebrew number table.
+使用标准希伯来数字表求和字母值。
 
-1. Write out each letter with its standard value
-2. Sum the values left to right (Hebrew reads right to left, but addition is commutative)
-3. State the total clearly
-4. Note if the total matches a significant number:
-   - A sephira number (1-10)
-   - A path number (11-32)
-   - A well-known gematria value (26 = YHVH, 18 = chai, 72 = Shem ha-Mephorash, 137 = Kabbalah)
-5. If the total exceeds 400, note that it requires summing multiple hundreds
+1. 写出每个字母及其标准值
+2. 从左到右求和（希伯来语从右到左读，但加法是交换的）
+3. 清楚地说明总数
+4. 注意总数是否匹配一个重要数字：
+   - 一个质点数（1-10）
+   - 一个路径数（11-32）
+   - 一个知名的格玛特里亚值（26 = YHVH，18 = chai，72 = Shem ha-Mephorash，137 = Kabbalah）
+5. 如果总数超过 400，注意需要累加多个百位数
 
-**预期结果：** A clear numerical result with the computation shown step by step. The user can verify each letter's value against the table.
+**预期结果：** 一个清楚的数值结果，逐步展示计算过程。用户可以根据表格验证每个字母的值。
 
-**失败处理：** If the user provides a word with uncertain Hebrew spelling, compute values for all plausible spellings and note the range. The "correct" spelling depends on the source text.
+**失败处理：** 如果用户提供了拼写不确定的词，为所有合理拼写计算值并注明范围。"正确"拼写取决于源文本。
 
-### 第 3 步：Apply Ordinal and Reduced Methods (Optional)
+### 第 3 步：应用序数法和简化法（可选）
 
-Compute alternative gematria values that reveal different patterns.
+计算揭示不同模式的替代格玛特里亚值。
 
 ```
 ORDINAL GEMATRIA (Mispar Siduri):
@@ -131,72 +128,72 @@ A substitution cipher: first letter ↔ last letter.
   "Sheshach" = Babel via Atbash).
 ```
 
-1. Compute ordinal gematria: sum each letter's position (1-22) in the alphabet
-2. Compute reduced gematria: reduce each standard value to single digit, then sum and reduce again
-3. Present all three values together for comparison
-4. Note which method reveals the most interesting connections for this particular word
+1. 计算序数格玛特里亚：将每个字母在字母表中的位置（1-22）求和
+2. 计算简化格玛特里亚：将每个标准值缩减为个位数，然后求和并再次缩减
+3. 将三个值并排呈现以供比较
+4. 注意哪种方法对这个特定词揭示了最有趣的联系
 
-**预期结果：** Three numerical values (standard, ordinal, reduced) presented side by side. The reduced value often links to single-digit sephirotic numbers, making it useful for Tree of Life mapping.
+**预期结果：** 三个数值（标准、序数、简化）并排呈现。简化值通常与单位数的质点数相关联，使其在生命之树映射中很有用。
 
-**失败处理：** If the user only wants one method, provide that method and mention the others exist for future exploration. Do not overwhelm with calculations if a single method was requested.
+**失败处理：** 如果用户只想要一种方法，提供该方法并提及其他方法存在以供未来探索。如果只请求了单一方法，不要用过多计算淹没用户。
 
-### 第 4 步：Search for Isopsephy Connections
+### 第 4 步：搜索等值联系
 
-Identify other Hebrew words or phrases that share the same numerical value.
+识别具有相同数值的其他希伯来词或短语。
 
-1. Take the standard gematria value from Step 2
-2. Search for well-known words, divine names, or phrases with the same value
-3. Present 2-5 connections, prioritizing:
-   - Biblical words and phrases
-   - Divine names and sephirotic titles
-   - Traditional Kabbalistic connections documented in classical sources
-   - Surprising or illuminating connections
-4. For each connection, note the source tradition (Zohar, Talmud, later Kabbalistic commentary, Hermetic tradition)
-5. Note if no significant connections are found — not every number has rich isopsephy
+1. 取第 2 步的标准格玛特里亚值
+2. 搜索具有相同值的知名词汇、神名或短语
+3. 呈现 2-5 个联系，优先考虑：
+   - 圣经词汇和短语
+   - 神名和质点称号
+   - 经典来源中记录的传统卡巴拉联系
+   - 令人惊讶或富有启发性的联系
+4. 对于每个联系，注明来源传统（佐哈尔、塔木德、后期卡巴拉评注、赫尔墨斯传统）
+5. 如果没有找到重要联系，请注明——不是每个数字都有丰富的等值关系
 
-**预期结果：** A set of words sharing the same gematria value, each with a brief note on why the connection might be meaningful. The user has material for contemplation.
+**预期结果：** 一组共享相同格玛特里亚值的词，每个都附有关于该联系可能有意义的原因的简短说明。用户有冥想的素材。
 
-**失败处理：** If no well-known connections exist for the computed value, acknowledge this. Offer to compute the value's relationship to nearby significant numbers (e.g., "your value is 378, which is 2 more than shalom [376] — what does that suggest?").
+**失败处理：** 如果计算值不存在已知联系，承认这一点。可以提供计算该值与附近重要数字关系的服务（例如"你的值是 378，比 shalom [376] 多 2——这暗示了什么？"）。
 
-### 第 5 步：Interpret Connections and Correspondences
+### 第 5 步：诠释联系和对应关系
 
-Move from computation to contemplation — what do the numerical relationships suggest?
+从计算转向冥想——数值关系暗示了什么？
 
-1. State clearly: gematria reveals correspondences for contemplation, not proofs or predictions
-2. For each isopsephy connection found, pose a contemplative question:
-   - "Word A and Word B share the value N. How might their meanings illuminate each other?"
-   - "The reduced value points to sephira X. How does this word's meaning relate to that sephira's quality?"
-3. Note connections to the Tree of Life:
-   - Standard value 1-10 → direct sephirotic correspondence
-   - Reduced value 1-9 → sephirotic resonance
-   - Value = a path number (11-32) → resonance with that path's Hebrew letter
-4. If the user provided a guiding question (from Inputs), address it directly using the gematria results
-5. Close with one integrative statement connecting the numerical analysis to the word's meaning
+1. 清楚说明：格玛特里亚揭示的是供冥想的对应关系，不是证明或预测
+2. 对于找到的每个等值联系，提出一个冥想问题：
+   - "词 A 和词 B 共享值 N。它们的含义如何相互阐明？"
+   - "简化值指向质点 X。这个词的含义如何与该质点的品质相关？"
+3. 注明与生命之树的联系：
+   - 标准值 1-10 -> 直接的质点对应
+   - 简化值 1-9 -> 质点共鸣
+   - 值 = 路径数（11-32）-> 与该路径的希伯来字母的共鸣
+4. 如果用户提供了指导问题（来自输入），使用格玛特里亚结果直接回答
+5. 以一个整合性陈述收尾，将数值分析与词义联系起来
 
-**预期结果：** The numerical analysis has become meaningful — not just arithmetic but a lens for understanding the word's place in the symbolic network of Kabbalah.
+**预期结果：** 数值分析已变得有意义——不仅是算术，而是理解词在卡巴拉象征网络中位置的透镜。
 
-**失败处理：** If interpretation feels forced or speculative, say so directly. Some gematria computations are more fruitful than others. Honest acknowledgment of thin connections is better than fabricating significance.
+**失败处理：** 如果诠释感觉勉强或猜测性的，直接说明。有些格玛特里亚计算比其他的更富成果。诚实承认薄弱的联系好于制造意义。
 
 ## 验证清单
 
-- [ ] The Hebrew spelling was established with confidence (or multiple spellings presented)
-- [ ] Standard gematria was computed with each letter's value shown
-- [ ] At least one additional method (ordinal or reduced) was applied
-- [ ] Isopsephy connections were searched and results presented with source notes
-- [ ] Interpretation was framed as contemplative, not demonstrative
-- [ ] The computation is verifiable — the user can check each letter against the value table
+- [ ] 希伯来拼写已有信心地确立（或呈现了多种拼写）
+- [ ] 标准格玛特里亚已计算，展示了每个字母的值
+- [ ] 至少应用了一种额外方法（序数或简化）
+- [ ] 搜索了等值联系并附带来源说明呈现结果
+- [ ] 诠释以冥想方式框架，而非论证方式
+- [ ] 计算是可验证的——用户可以根据值表检查每个字母
 
 ## 常见问题
 
-- **Spelling ambiguity**: Hebrew words can be spelled with or without vowel letters (matres lectionis). The gematria changes significantly — always confirm the spelling
-- **Final-form confusion**: Whether Mem-final = 40 or 600 depends on which gematria system is used. State the system explicitly
-- **Finding what you expect**: Gematria with enough methods will eventually connect any two words. Privileging connections that confirm a preexisting belief is confirmation bias, not analysis
-- **Ignoring tradition**: Classical Kabbalistic gematria connections (e.g., YHVH = 26, echad [one] = 13, ahavah [love] = 13, so love + unity = God) are documented in authoritative sources. Novel connections should be distinguished from traditional ones
-- **Treating gematria as proof**: Numerical equality between words suggests a correspondence to contemplate, not an identity or causal relationship
-- **Forgetting context**: The same word may have different gematria significance in a biblical verse vs. a liturgical text vs. a Kabbalistic meditation. Context shapes interpretation
+- **拼写歧义**：希伯来词可以带或不带元音字母（matres lectionis）拼写。格玛特里亚变化显著——始终确认拼写
+- **词尾形式混淆**：Mem-final = 40 还是 600 取决于使用的格玛特里亚系统。明确说明系统
+- **找到你期望的**：使用足够多的方法，格玛特里亚最终会将任何两个词联系起来。偏好确认先入之见的联系是确认偏误，不是分析
+- **忽视传统**：经典的卡巴拉格玛特里亚联系（例如 YHVH = 26，echad [一] = 13，ahavah [爱] = 13，因此爱 + 统一 = 神）在权威来源中有记录。新的联系应与传统联系区分开
+- **将格玛特里亚视为证明**：词之间的数值相等暗示了需要冥想的对应关系，而非同一性或因果关系
+- **忘记语境**：同一个词在圣经经文、礼拜文本和卡巴拉冥想中可能有不同的格玛特里亚意义。语境塑造诠释
 
 ## 相关技能
 
-- `read-tree-of-life` — Map gematria values to sephirot and paths for structural context
-- `study-hebrew-letters` — Understanding individual letter symbolism deepens gematria interpretation
-- `observe` — Sustained neutral attention to patterns; gematria is a form of numerical pattern recognition
+- `read-tree-of-life` — 将格玛特里亚值映射到质点和路径以获得结构性背景
+- `study-hebrew-letters` — 理解个别字母的象征意义能深化格玛特里亚诠释
+- `observe` — 对模式的持续中性关注；格玛特里亚是一种数值模式识别的形式

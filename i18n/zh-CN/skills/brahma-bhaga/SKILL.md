@@ -1,14 +1,11 @@
 ---
 name: brahma-bhaga
 description: >
-  Creation and genesis — generative ideation from void, structured emergence
-  from ambiguity, and the discipline of bringing new patterns into existence.
-  Maps Brahma's creative power to AI reasoning: transforming cleared space
-  into coherent new structures, seeding possibilities, and nurturing nascent
-  ideas through their fragile early stages. Use after shiva-bhaga dissolution
-  has cleared stale patterns, when facing a genuinely novel problem with no
-  obvious template, or when incremental modification has reached its limits
-  and a fresh design is needed.
+  创造与创世——从虚空中生成性构思、从模糊中结构化涌现、以及将新模式带入存在
+  的纪律。将梵天的创造力映射到 AI 推理：将清除后的空间转化为连贯的新结构、
+  播种可能性、并在脆弱的早期阶段培育新生想法。适用于 shiva-bhaga 溶解清除
+  了陈旧模式之后、面对没有明显模板的全新问题时，或渐进式修改已达极限需要
+  全新设计时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,31 +22,31 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Brahma Bhaga
+# 梵天之份
 
-Generative creation from void or ambiguity — structured emergence of new patterns, approaches, and solutions where none existed before.
+从虚空或模糊中进行生成性创造——在之前不存在的地方结构化涌现新的模式、方法和解决方案。
 
 ## 适用场景
 
-- After `shiva-bhaga` dissolution has cleared stale patterns and created space
-- Facing a genuinely novel problem with no obvious template or precedent
-- The user's request requires invention rather than retrieval or adaptation
-- Multiple possible approaches exist and none has been chosen — the creative act is the choice itself
-- A blank slate: new file, new project, new architecture, new approach
-- When incremental modification has reached its limits and a fresh design is needed
+- 在 `shiva-bhaga` 溶解清除了陈旧模式并创造了空间之后
+- 面对没有明显模板或先例的全新问题
+- 用户的请求需要发明而非检索或改编
+- 多种可能的方法存在但没有一种被选定——创造性行为就是选择本身
+- 一张白纸：新文件、新项目、新架构、新方法
+- 当渐进式修改已达极限，需要全新设计时
 
 ## 输入
 
-- **必需**: The creative goal or void to fill (available from conversation context)
-- **可选**: Constraints that bound the creation (user requirements, technical limitations)
-- **可选**: Seeds — fragments, inspirations, or partial ideas that inform the creation
-- **可选**: What was dissolved (`shiva-bhaga` output) — understanding what failed guides what to create
+- **必需**：创造目标或需要填充的虚空（从对话上下文中可获得）
+- **可选**：限定创造的约束（用户需求、技术限制）
+- **可选**：种子——启发创造的片段、灵感或部分想法
+- **可选**：被溶解的内容（`shiva-bhaga` 输出）——理解什么失败了可以指导创造什么
 
 ## 步骤
 
-### 第 1 步：Survey the Void
+### 第 1 步：审视虚空
 
-Before creating, understand the space available for creation.
+在创造之前，理解可用于创造的空间。
 
 ```
 Creative Space Assessment:
@@ -78,99 +75,99 @@ Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Map each dimension honestly — especially constraints, which are often implicit
-2. Note the degrees of freedom: these are where genuine creation happens
-3. Identify seeds without committing to them — they inform, not dictate
+1. 诚实地映射每个维度——尤其是约束，它们通常是隐含的
+2. 注意自由度：这些是真正创造发生的地方
+3. 识别种子但不承诺于它们——它们是提供信息的，不是指令性的
 
-**预期结果：** A clear picture of the creative space: bounded by constraints, informed by seeds, and opened by degrees of freedom.
+**预期结果：** 创造空间的清晰图景：被约束所限定、被种子所启发、被自由度所打开。
 
-**失败处理：** If the space feels fully constrained (no degrees of freedom), re-examine — often constraints that seem fixed are actually preferences. Ask the user if needed.
+**失败处理：** 如果空间感觉完全被约束（没有自由度），重新审视——看似固定的约束通常实际上是偏好。如有需要则询问用户。
 
-### 第 2 步：Generate — Divergent Exploration
+### 第 2 步：生成——发散探索
 
-Produce multiple possibilities without evaluating them.
+产生多种可能性而不评估它们。
 
-1. Generate at least three distinct approaches to filling the creative space
-2. Each approach should be genuinely different — not variations on a theme
-3. For each approach, capture:
-   - The core idea in one sentence
-   - How it satisfies the constraints
-   - What makes it distinct from the others
-   - What it sacrifices or trades off
-4. Include at least one approach that feels unconventional or risky
-5. Do not evaluate yet — generation and evaluation are separate phases
+1. 生成至少三种不同的方法来填充创造空间
+2. 每种方法应该是真正不同的——而非主题上的变体
+3. 对于每种方法，捕获：
+   - 用一句话表达的核心想法
+   - 它如何满足约束
+   - 什么使它与其他方法不同
+   - 它牺牲或权衡了什么
+4. 至少包含一种感觉非传统或有风险的方法
+5. 暂不评估——生成和评估是分开的阶段
 
-**预期结果：** Three or more genuinely distinct approaches, each with a clear identity and trade-off profile.
+**预期结果：** 三种或更多真正不同的方法，每种都有清晰的身份和权衡概况。
 
-**失败处理：** If all approaches feel similar, the generation was too narrow. Return to Step 1 and look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if I did the opposite of the obvious approach?"
+**失败处理：** 如果所有方法感觉相似，生成过于狭窄。返回第 1 步寻找未探索的自由度。或者，反转一个约束："如果我做了明显方法的相反呢？"
 
-### 第 3 步：Evaluate — Convergent Selection
+### 第 3 步：评估——收敛选择
 
-Assess the generated approaches against the creative space.
+根据创造空间评估生成的方法。
 
-1. For each approach, assess:
-   - **Constraint satisfaction**: Does it meet all non-negotiable requirements?
-   - **Elegance**: Is it the simplest solution that works?
-   - **Resilience**: Will it survive future perturbation?
-   - **Integration**: Does it fit naturally with the surrounding context?
-   - **Novelty**: Does it bring something genuinely new, or merely rearrange the old?
-2. Eliminate approaches that violate hard constraints
-3. Among remaining approaches, choose based on the user's implicit values (simplicity? thoroughness? creativity?)
-4. If two approaches are equally strong, present both to the user with trade-offs clearly stated
+1. 对于每种方法，评估：
+   - **约束满足**：是否满足所有不可协商的需求？
+   - **优雅性**：是否是最简单的可行解决方案？
+   - **韧性**：是否能经受未来的扰动？
+   - **融合性**：是否与周围上下文自然契合？
+   - **新颖性**：是否带来了真正新的东西，还是仅仅重新排列了旧的？
+2. 排除违反硬约束的方法
+3. 在剩余方法中，基于用户的隐含价值观（简洁性？彻底性？创造力？）进行选择
+4. 如果两种方法同样强大，向用户呈现两者并清楚陈述权衡
 
-**预期结果：** A single chosen approach (or a clearly framed choice for the user) with articulated reasoning.
+**预期结果：** 一个被选中的方法（或一个为用户清楚框架的选择），附有阐明的推理。
 
-**失败处理：** If no approach satisfies all constraints, the constraints may be contradictory. Surface the contradiction to the user rather than forcing a creation that compromises on fundamentals.
+**失败处理：** 如果没有方法满足所有约束，约束可能是矛盾的。向用户展示矛盾而不是强行创造一个在根本面上妥协的作品。
 
-### 第 4 步：Manifest — Bring into Form
+### 第 4 步：显化——赋予形态
 
-Execute the chosen approach, giving it concrete form.
+执行选定的方法，赋予其具体形态。
 
-1. Begin with the skeleton: the minimal structure that embodies the core idea
-2. Build outward from the core, adding detail as needed
-3. At each step, check: "Is this addition serving the core idea or diluting it?"
-4. Resist the urge to over-elaborate — creation is complete when nothing more can be removed
-5. Name what was created: a clear, descriptive identifier that captures its essence
+1. 从骨架开始：体现核心想法的最小结构
+2. 从核心向外构建，根据需要添加细节
+3. 在每一步检查："这个添加是在服务核心想法还是在稀释它？"
+4. 抵制过度阐述的冲动——当没有更多东西可以移除时，创造就完成了
+5. 为创造物命名：一个清晰、描述性的标识符，捕获其本质
 
-**预期结果：** A concrete creation that embodies the chosen approach — code, plan, structure, or design that exists where void existed before.
+**预期结果：** 一个体现选定方法的具体创造——代码、计划、结构或设计，存在于之前虚空所在的地方。
 
-**失败处理：** If the manifestation diverges from the chosen approach, pause and re-read Step 3's selection. Drift during manifestation often indicates the selection was not fully committed to. Either recommit or re-select.
+**失败处理：** 如果显化偏离了选定的方法，暂停并重新阅读第 3 步的选择。显化期间的偏移通常表明选择没有被完全承诺。要么重新承诺要么重新选择。
 
-### 第 5 步：Nurture — Protect the Nascent Creation
+### 第 5 步：培育——保护新生的创造
 
-New creations are fragile. Protect them through their early stages.
+新创造是脆弱的。在其早期阶段保护它们。
 
-1. Test the creation against its constraints — does it work as intended?
-2. Identify the weakest point — where is it most likely to break?
-3. Strengthen the weakest point without over-engineering
-4. Hand off to `vishnu-bhaga` for ongoing preservation if the creation will persist
-5. Document the creative choices made: what was chosen, what was rejected, and why
+1. 根据约束测试创造——它是否按预期工作？
+2. 识别最薄弱的点——它最可能在哪里断裂？
+3. 加强最薄弱的点而不过度工程化
+4. 如果创造将持续存在，移交给 `vishnu-bhaga` 进行持续保存
+5. 记录做出的创造性选择：选择了什么、拒绝了什么、以及原因
 
-**预期结果：** A creation that is tested, documented, and ready for sustained use.
+**预期结果：** 一个经过测试、有文档记录且准备好持续使用的创造。
 
-**失败处理：** If the creation fails its first test, assess whether the failure is in the creation or the test. If the creation is fundamentally flawed, return to Step 2 with the failure as a new anti-pattern seed.
+**失败处理：** 如果创造在第一次测试中失败，评估失败是在创造中还是在测试中。如果创造有根本性缺陷，带着失败作为新的反模式种子返回第 2 步。
 
 ## 验证清单
 
-- [ ] The creative space was surveyed before generating ideas
-- [ ] At least three genuinely distinct approaches were generated
-- [ ] Selection was based on explicit criteria, not default instinct
-- [ ] The creation was manifested starting from its core, building outward
-- [ ] The creation was tested against its constraints
-- [ ] Creative choices were documented for future reference
+- [ ] 在生成想法之前审视了创造空间
+- [ ] 生成了至少三种真正不同的方法
+- [ ] 选择基于明确的标准，而非默认直觉
+- [ ] 创造从核心开始显化，向外构建
+- [ ] 创造已根据其约束进行测试
+- [ ] 创造性选择已记录以备未来参考
 
 ## 常见问题
 
-- **Creating before clearing**: Attempting creation without prior dissolution produces new patterns contaminated by old ones. Run `shiva-bhaga` first if the space is cluttered
-- **Single-option generation**: Generating one approach and then evaluating it is not creation — it is executing the first idea. True creation requires divergent options
-- **Novelty for its own sake**: Creating something unconventional when a simple standard approach would serve better. Novelty is a tool, not a goal
-- **Perfectionist manifestation**: Polishing endlessly rather than shipping a working creation. A complete imperfect creation outperforms an incomplete perfect one
-- **Unprotected creation**: Manifesting something new and immediately moving on without testing or documentation leaves the creation vulnerable
+- **未清除就创造**：在没有先行溶解的情况下尝试创造，会产生被旧模式污染的新模式。如果空间杂乱，先运行 `shiva-bhaga`
+- **单选项生成**：生成一种方法然后评估它不是创造——那是执行第一个想法。真正的创造需要发散的选项
+- **为新颖而新颖**：当一个简单的标准方法能更好地服务时，创造了非传统的东西。新颖性是工具，不是目标
+- **完美主义显化**：无休止地打磨而不是交付一个可用的创造。一个完整但不完美的创造胜过一个不完整的完美创造
+- **未受保护的创造**：显化了新东西后立即继续前进，没有测试或文档，使创造处于脆弱状态
 
 ## 相关技能
 
-- `shiva-bhaga` — destruction creates the void that Brahma fills; dissolution precedes creation
-- `vishnu-bhaga` — preservation sustains what Brahma creates; handoff from creation to maintenance
-- `intrinsic` — creative engagement benefits from autonomous motivation; creation thrives in flow
-- `learn` — when creation requires knowledge not yet held, learning precedes generation
-- `adapt-architecture` — the morphic equivalent for creating new architectural patterns from existing systems
+- `shiva-bhaga` — 毁灭创造了梵天填充的虚空；溶解先于创造
+- `vishnu-bhaga` — 保存维持了梵天创造的东西；从创造到维护的移交
+- `intrinsic` — 创造性参与受益于自主动机；创造在心流中蓬勃发展
+- `learn` — 当创造需要尚未掌握的知识时，学习先于生成
+- `adapt-architecture` — 从现有系统创建新架构模式的形态学等价物

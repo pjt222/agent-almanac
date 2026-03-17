@@ -1,14 +1,10 @@
 ---
 name: mineral-identification
 description: >
-  Field identification of minerals and ores using hardness, streak, luster,
-  cleavage, crystal habit, and simple chemical tests. Covers the systematic
-  elimination methodology, Mohs scale application, and common ore indicators
-  for precious metals, gemstones, and industrial minerals. Use when encountering
-  an unknown rock or mineral specimen, when prospecting and assessing whether a
-  site shows valuable mineral indicators, when distinguishing ore-bearing rock
-  from barren rock in the field, or when building geological literacy through
-  systematic observation.
+  使用硬度、条痕、光泽、解理、晶体形态和简单化学测试进行矿物和矿石的野外鉴定。
+  涵盖系统排除法、莫氏硬度标尺应用，以及贵金属、宝石和工业矿物的常见矿石指标。
+  适用于遇到未知岩石或矿物标本时、探矿评估场地是否显示有价值的矿物指标时、在
+  野外区分含矿岩石与贫矿岩石时，或通过系统观察建立地质素养时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,32 +21,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Mineral Identification
+# 矿物鉴定
 
-Identify minerals in the field using physical properties, systematic elimination, and simple field tests.
+使用物理性质、系统排除法和简单的野外测试在野外鉴定矿物。
 
 ## 适用场景
 
-- You find an unknown rock or mineral specimen and want to identify it
-- You are prospecting and need to assess whether a site shows indicators of valuable minerals
-- You want to distinguish ore-bearing rock from barren rock in the field
-- You are building geological literacy through systematic observation
+- 发现未知岩石或矿物标本并想要鉴定
+- 探矿时需要评估场地是否显示有价值矿物的指标
+- 想要在野外区分含矿岩石与贫矿岩石
+- 通过系统观察建立地质素养
 
 ## 输入
 
-- **必需**: A mineral specimen or outcrop to examine
-- **可选**: Streak plate (unglazed porcelain tile or bathroom tile back)
-- **可选**: Steel nail or knife blade (hardness ~5.5)
-- **可选**: Glass plate (hardness ~5.5)
-- **可选**: Copper coin (hardness ~3.5)
-- **可选**: Hand lens (10x)
-- **可选**: Dilute hydrochloric acid (10% HCl) for carbonate test
+- **必需**：矿物标本或露头用于检查
+- **可选**：条痕板（未上釉的瓷砖或浴室瓷砖背面）
+- **可选**：钢钉或刀片（硬度约 5.5）
+- **可选**：玻璃板（硬度约 5.5）
+- **可选**：铜币（硬度约 3.5）
+- **可选**：手持放大镜（10倍）
+- **可选**：稀盐酸（10% HCl）用于碳酸盐测试
 
 ## 步骤
 
-### 第 1 步：Observe Without Touching
+### 第 1 步：不触碰地观察
 
-Before handling, observe the specimen in context.
+在拿取之前，在环境中观察标本。
 
 ```
 Field Context:
@@ -72,13 +68,13 @@ Field Context:
 +--------------------+------------------------------------------+
 ```
 
-**预期结果：** Field context recorded before handling the specimen.
+**预期结果：** 在拿取标本之前已记录野外环境。
 
-**失败处理：** If geological context is unclear (loose specimen, urban find), proceed with physical properties only — context would have helped narrow candidates but is not strictly required.
+**失败处理：** 如果地质环境不明确（散落标本、城市中发现），仅通过物理性质继续——环境本可帮助缩小候选范围但不是严格必需的。
 
-### 第 2 步：Test Physical Properties
+### 第 2 步：测试物理性质
 
-Apply the diagnostic tests systematically.
+系统地应用诊断测试。
 
 ```
 Diagnostic Property Tests:
@@ -131,13 +127,13 @@ SPECIFIC GRAVITY (heft test):
 - Light: possible pumice, sulfur, or organic material
 ```
 
-**预期结果：** A profile of the specimen: luster, hardness range, streak colour, cleavage/fracture type, and relative density.
+**预期结果：** 标本的特征概要：光泽、硬度范围、条痕颜色、解理/断口类型和相对密度。
 
-**失败处理：** If a property is ambiguous (e.g., luster between metallic and vitreous — "sub-metallic"), record both options. Ambiguity reduces confidence but does not prevent identification.
+**失败处理：** 如果某个性质模棱两可（如光泽介于金属和玻璃之间——"亚金属"），记录两个选项。模棱两可降低可信度但不阻止鉴定。
 
-### 第 3 步：Apply Special Tests
+### 第 3 步：应用特殊测试
 
-Additional tests for specific mineral groups.
+针对特定矿物组的附加测试。
 
 ```
 Special Field Tests:
@@ -168,13 +164,13 @@ TENACITY:
 - Elastic: bends and springs back (muscovite mica)
 ```
 
-**预期结果：** Additional diagnostic data that narrows the identification further.
+**预期结果：** 进一步缩小鉴定范围的附加诊断数据。
 
-**失败处理：** If special tests are unavailable (no magnet, no acid), proceed with the basic properties — they are sufficient for most common minerals.
+**失败处理：** 如果特殊测试不可用（无磁铁、无酸），仅凭基本性质继续——它们对大多数常见矿物已经足够。
 
-### 第 4 步：Identify by Elimination
+### 第 4 步：通过排除法鉴定
 
-Cross-reference the property profile against known minerals.
+将性质概要与已知矿物交叉对照。
 
 ```
 Common Mineral Identification Key (simplified):
@@ -200,28 +196,28 @@ NON-METALLIC, DARK-COLORED:
 - Vitreous + soft (2.5-3) + 1 perfect cleavage + flexible = BIOTITE (mica)
 ```
 
-**预期结果：** A mineral identification or a shortlist of 2-3 candidates with the distinguishing test needed to differentiate them.
+**预期结果：** 矿物鉴定结果或 2-3 个候选的简短列表，以及区分它们所需的鉴别测试。
 
-**失败处理：** If the specimen does not match any common mineral, it may be a rock (aggregate of minerals) rather than a single mineral, or it may require laboratory analysis (thin section, XRD).
+**失败处理：** 如果标本不匹配任何常见矿物，它可能是岩石（矿物集合体）而非单一矿物，或者可能需要实验室分析（薄片、XRD）。
 
 ## 验证清单
 
-- [ ] Field context was recorded before handling
-- [ ] Luster was assessed under natural light
-- [ ] Hardness was tested against at least two reference materials
-- [ ] Streak colour was recorded (if specimen is softer than streak plate)
-- [ ] Cleavage or fracture pattern was noted
-- [ ] Identification was reached by systematic elimination, not guessing
-- [ ] Look-alike minerals were explicitly considered and differentiated
+- [ ] 在拿取前已记录野外环境
+- [ ] 在自然光下评估了光泽
+- [ ] 至少用两种参考材料测试了硬度
+- [ ] 已记录条痕颜色（如标本比条痕板软）
+- [ ] 已注意解理或断口模式
+- [ ] 通过系统排除法而非猜测得出鉴定结果
+- [ ] 已明确考虑并区分相似矿物
 
 ## 常见问题
 
-- **Confusing pyrite with gold**: "Fool's gold" (pyrite) is harder (6 vs 2.5), brittle (gold is malleable), and streaks black (gold streaks gold). The tests are definitive — use them
-- **Ignoring streak**: Specimen colour is unreliable (hematite can be grey, red, or black). Streak colour is consistent and diagnostic
-- **Scratching with contaminated tools**: A steel nail with rust produces a false streak. Clean test tools before use
-- **Assuming crystal habit**: Many minerals rarely show well-formed crystals in the field. Massive or granular forms are more common — do not require visible crystals for identification
-- **Confusing weathered surface with true colour**: Break the specimen to expose a fresh surface before testing. Weathering rinds can completely disguise the mineral beneath
+- **将黄铁矿与金混淆**："愚人金"（黄铁矿）更硬（6 vs 2.5）、脆性（金是可锻的），条痕为黑色（金的条痕为金色）。测试是决定性的——使用它们
+- **忽视条痕**：标本颜色不可靠（赤铁矿可以是灰色、红色或黑色）。条痕颜色是一致的和诊断性的
+- **用污染的工具刮擦**：生锈的钢钉会产生错误的条痕。使用前清洁测试工具
+- **假设晶体形态**：许多矿物在野外很少展示完好的晶体。块状或粒状形式更常见——不要要求可见晶体来进行鉴定
+- **将风化表面与真实颜色混淆**：在测试前打碎标本以露出新鲜表面。风化外壳可能完全掩盖下面的矿物
 
 ## 相关技能
 
-- `gold-washing` — alluvial gold recovery uses mineral identification skills to read stream deposits and assess gold-bearing gravels
+- `gold-washing` — 冲积金回收使用矿物鉴定技能来解读溪流沉积物并评估含金砂砾

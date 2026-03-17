@@ -1,13 +1,10 @@
 ---
 name: paper-making
 description: >
-  Handcraft paper from plant fibres — fibre harvesting, pulping, sheet
-  forming with a mould and deckle, pressing, and drying. Covers fibre
-  sources (cotton, kozo, abaca, recycled paper), beating methods, sizing,
-  and decorative techniques. Use when making handmade paper for art,
-  stationery, or bookbinding, when creating unique textured or embedded paper
-  for special projects, or when learning traditional paper making as a craft
-  practice.
+  从植物纤维手工制纸——纤维采集、制浆、使用纸模和边框成型、压制和干燥。涵盖
+  纤维来源（棉、楮、蕉麻、再生纸）、打浆方法、施胶和装饰技术。适用于制作
+  手工纸用于艺术、文具或装订、为特殊项目创造独特纹理或嵌入式纸张，或作为
+  手工实践学习传统造纸术时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,33 +21,33 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Paper Making
+# 手工造纸
 
-Handcraft paper from plant fibres using traditional mould and deckle sheet-forming techniques.
+使用传统纸模和边框抄纸技术，从植物纤维手工制作纸张。
 
 ## 适用场景
 
-- You want to make handmade paper for art, stationery, or bookbinding
-- You have plant fibres (cotton linters, kozo bark, recycled paper) to process
-- You want to create unique textured or embedded paper for special projects
-- You are teaching or learning traditional paper making as a craft practice
+- 想要制作手工纸用于艺术、文具或装订
+- 有植物纤维（棉绒、楮树皮、再生纸）需要加工
+- 想要为特殊项目创造独特纹理或嵌入式纸张
+- 作为手工实践教授或学习传统造纸术
 
 ## 输入
 
-- **必需**: Fibre source (cotton linters, recycled paper, kozo bark, or plant stalks)
-- **必需**: Mould and deckle (a flat screen frame with a removable top frame)
-- **必需**: Vat or tub large enough to submerge the mould (basin, plastic tub)
-- **必需**: Water (generous amounts)
-- **可选**: Blender for pulping (dedicated to paper making — not for food afterward)
-- **可选**: Pressing boards and felt sheets (couching felts)
-- **可选**: Sizing agent (gelatin, methylcellulose, or rice starch)
-- **可选**: Additives: flower petals, threads, pigments, plant material for embedding
+- **必需**：纤维来源（棉绒、再生纸、楮树皮或植物茎秆）
+- **必需**：纸模和边框（带有可拆卸顶框的平面筛网框）
+- **必需**：足够大的容器或水槽以浸没纸模（水盆、塑料桶）
+- **必需**：水（大量）
+- **可选**：搅拌机用于制浆（专用于造纸——之后不再用于食物）
+- **可选**：压板和毛毡（倒纸毛毡）
+- **可选**：施胶剂（明胶、甲基纤维素或米淀粉）
+- **可选**：添加物：花瓣、线、颜料、用于嵌入的植物材料
 
 ## 步骤
 
-### 第 1 步：Prepare the Fibre
+### 第 1 步：准备纤维
 
-Different fibre sources require different preparation.
+不同的纤维来源需要不同的准备方法。
 
 ```
 Fibre Sources and Preparation:
@@ -85,13 +82,13 @@ PLANT STALKS (experimental — iris, daylily, corn husk):
 5. Results vary — experiment with fibre length and beating time
 ```
 
-**预期结果：** A slurry of prepared fibre (pulp) with the consistency of thin oatmeal.
+**预期结果：** 稀薄燕麦粥般稠度的纤维浆料（纸浆）。
 
-**失败处理：** If the pulp is too chunky, blend longer. If too thin and watery, add more fibre. The consistency should coat the back of a spoon lightly.
+**失败处理：** 如果纸浆太粗糙，搅拌更长时间。如果太稀太水，添加更多纤维。稠度应能轻轻挂在勺背上。
 
-### 第 2 步：Prepare the Vat
+### 第 2 步：准备水槽
 
-Set up the sheet-forming station.
+设置抄纸工作台。
 
 ```
 Vat Setup:
@@ -108,13 +105,13 @@ Test: dip your hand in the vat. The water should be milky/cloudy
 with evenly suspended fibres. If you can see clumps, stir more.
 ```
 
-**预期结果：** A vat of evenly suspended pulp ready for sheet forming.
+**预期结果：** 纤维均匀悬浮的水槽，准备好进行抄纸。
 
-**失败处理：** If fibres clump despite stirring, the fibre may be too long. Blend briefly to shorten the fibres, then re-suspend.
+**失败处理：** 如果尽管搅拌纤维仍然结块，纤维可能太长。短暂搅拌以缩短纤维，然后重新悬浮。
 
-### 第 3 步：Form the Sheet
+### 第 3 步：抄纸成型
 
-The mould and deckle technique is the heart of paper making.
+纸模和边框技术是造纸的核心。
 
 ```
 Sheet Forming Protocol:
@@ -148,13 +145,13 @@ THICKNESS CONTROL:
   smoothly and leveling before lifting
 ```
 
-**预期结果：** A wet sheet of paper sitting evenly on the mould screen with consistent thickness and no thin spots or holes.
+**预期结果：** 一张均匀地铺在纸模筛网上的湿纸，厚度一致，没有薄点或孔洞。
 
-**失败处理：** If the sheet has thin spots, the mould was not level during the lift. If the sheet is thick on one side, the mould was tilted during draining. Practice the lift motion: smooth, level, and confident.
+**失败处理：** 如果纸张有薄点，纸模在提起时没有保持水平。如果纸张一侧较厚，纸模在沥水时倾斜了。练习提起动作：平稳、水平、自信。
 
-### 第 4 步：Couch, Press, and Dry
+### 第 4 步：倒纸、压制和干燥
 
-Transfer the wet sheet and remove water.
+转移湿纸并去除水分。
 
 ```
 COUCHING (transferring the sheet):
@@ -195,27 +192,27 @@ Option C — Iron dry (fast):
 3. Produces a smooth, flat sheet quickly
 ```
 
-**预期结果：** Finished sheets of handmade paper — dry, flat (if board-dried), with deckled edges and visible fibre texture.
+**预期结果：** 成品手工纸——干燥、平整（如果板上干燥）、有毛边和可见的纤维纹理。
 
-**失败处理：** If sheets tear during couching, the mould was lifted before enough water drained. Let the mould drain longer before flipping. If sheets wrinkle during drying, they were not pressed firmly enough or the drying surface was not smooth.
+**失败处理：** 如果纸张在倒纸时撕裂，纸模在翻转前水还没有沥干足够。翻转前让纸模沥水更长时间。如果纸张在干燥时起皱，说明压制不够充分或干燥表面不够平滑。
 
 ## 验证清单
 
-- [ ] Fibre was prepared to an even, lump-free pulp
-- [ ] Pulp was evenly suspended in the vat before each sheet
-- [ ] Sheet forming included the interlocking shake in both directions
-- [ ] Sheets have consistent thickness without thin spots or holes
-- [ ] Pressing removed sufficient water before drying
-- [ ] Finished sheets are dry, intact, and suitable for their intended use
+- [ ] 纤维已准备成均匀、无结块的纸浆
+- [ ] 每张纸抄取前纸浆在水槽中均匀悬浮
+- [ ] 抄纸包括了两个方向的交织摇晃
+- [ ] 纸张厚度一致，无薄点或孔洞
+- [ ] 压制在干燥前去除了足够的水分
+- [ ] 成品纸张干燥、完整、适合其预定用途
 
 ## 常见问题
 
-- **Not stirring before each sheet**: Fibres settle in seconds. Every sheet needs a fresh stir or the last sheets will be thin and sparse
-- **Tearing during couching**: Too much water still on the mould, or the couching motion was too slow. Drain longer and flip in one confident motion
-- **Uneven thickness**: The mould was not level during the lift and drain. Practice the motion slowly, focusing on keeping the frame horizontal
-- **Paper too fragile**: The fibres may not be beaten enough (too long, too stiff) or the sheet may be too thin. Beat longer or use more pulp
-- **Mould warps when wet**: Wooden moulds can warp. Use marine-grade wood or seal with waterproofing. Aluminium frames avoid this issue entirely
+- **每张纸前不搅拌**：纤维在几秒钟内就会沉降。每张纸都需要重新搅拌，否则最后几张会又薄又稀
+- **倒纸时撕裂**：纸模上水分还太多，或者倒纸动作太慢。沥水更长时间并用一个果断的动作翻转
+- **厚度不均**：纸模在提起和沥水时不水平。慢慢练习这个动作，重点保持框架水平
+- **纸张太脆弱**：纤维可能打浆不够（太长、太硬）或纸张太薄。打浆更长时间或使用更多纸浆
+- **纸模浸湿后变形**：木质纸模可能变形。使用船用级木材或进行防水密封处理。铝框完全避免了这个问题
 
 ## 相关技能
 
-- `forage-plants` — fibre plants can be foraged in the wild; understanding plant anatomy helps identify suitable fibre sources
+- `forage-plants` — 纤维植物可以在野外采集；了解植物解剖学有助于识别合适的纤维来源

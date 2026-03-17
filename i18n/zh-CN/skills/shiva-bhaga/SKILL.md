@@ -1,14 +1,11 @@
 ---
 name: shiva-bhaga
 description: >
-  Destruction and dissolution — controlled dismantling of stale patterns,
-  context purging, assumption clearing, and dead-code elimination. Maps
-  Shiva's transformative destruction to AI reasoning: identifying what
-  must end so something better can begin, dissolving attachment to outdated
-  approaches, and creating space through intentional release. Use when context
-  has accumulated stale assumptions, when a failed approach needs to be
-  discarded rather than patched, when dead code or zombie tasks are creating
-  noise, or before a major pivot where clearing must precede creation.
+  破坏与溶解——对陈旧模式的可控拆解、上下文清除、假设清理和死代码消除。将湿婆的
+  变革性破坏映射到 AI 推理：识别什么必须结束以便更好的事物可以开始、溶解对过时
+  方法的执着、通过有意识的释放创造空间。适用于上下文积累了陈旧假设、失败的方法
+  需要被丢弃而非修补、死代码或僵尸任务正在制造噪音，或在需要清除才能开始创造的
+  重大转向之前使用。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,28 +24,28 @@ metadata:
 
 # Shiva Bhaga
 
-Controlled destruction and dissolution of stale patterns, outdated assumptions, and accumulated noise — clearing the ground so new growth can emerge.
+对陈旧模式、过时假设和积累噪音的可控破坏与溶解——清除地面，使新的生长得以出现。
 
 ## 适用场景
 
-- Context has accumulated stale assumptions that are silently distorting reasoning
-- A previous approach has failed and the temptation is to patch rather than discard
-- The conversation has grown long and earlier decisions may no longer serve the current goal
-- Dead code, abandoned plans, or zombie tasks are creating noise and confusion
-- Before a major pivot — clearing must precede creation
-- When attachment to a particular approach is preventing consideration of alternatives
+- 上下文积累了正在悄然扭曲推理的陈旧假设
+- 先前的方法已经失败，但诱惑是修补而非丢弃
+- 对话已经变长，早期的决定可能不再服务于当前目标
+- 死代码、废弃的计划或僵尸任务正在制造噪音和混乱
+- 在重大转向之前——清除必须先于创造
+- 对特定方法的执着正在阻碍对替代方案的考虑
 
 ## 输入
 
-- **必需**: Current conversation state or project context (available implicitly)
-- **可选**: Specific target for dissolution (e.g., "this approach isn't working," "clear all assumptions about the database layer")
-- **可选**: Scope boundary — what must be preserved through the destruction
+- **必需**：当前对话状态或项目上下文（隐式可用）
+- **可选**：溶解的具体目标（例如，"这个方法行不通"，"清除关于数据库层的所有假设"）
+- **可选**：范围边界——在破坏过程中必须保留什么
 
 ## 步骤
 
-### 第 1 步：Identify What Must End
+### 第 1 步：识别什么必须结束
 
-Survey the current state and mark what is stale, broken, or no longer serving the goal.
+审视当前状态，标记什么是陈旧的、损坏的或不再服务于目标的。
 
 ```
 Dissolution Triage:
@@ -77,80 +74,80 @@ Dissolution Triage:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Scan each category honestly — resistance to examining a category is itself a signal
-2. For each item found, ask: "If I were starting fresh right now, would I create this?"
-3. If the answer is no, mark it for dissolution
+1. 诚实地扫描每个类别——对检查某个类别的抵触本身就是一个信号
+2. 对发现的每个项目，问："如果我现在从头开始，我会创建这个吗？"
+3. 如果答案是否定的，标记它进行溶解
 
-**预期结果：** A clear inventory of what needs to be released, with specific items in each category.
+**预期结果：** 一份清晰的需要释放的清单，每个类别中有具体的项目。
 
-**失败处理：** If nothing seems stale, the assessment may be too shallow. Pick the oldest decision in the current context and justify it from scratch — if the justification feels forced, it is a candidate for dissolution.
+**失败处理：** 如果似乎没有什么是陈旧的，评估可能太浅了。选取当前上下文中最早的决定，从头论证它——如果论证感觉勉强，它就是溶解的候选者。
 
-### 第 2 步：Establish the Preservation Boundary
+### 第 2 步：建立保留边界
 
-Not everything should be destroyed. Identify what must survive the clearing.
+并非所有东西都应该被破坏。识别什么必须在清除中幸存。
 
-1. **Core requirements**: What did the user actually ask for? This survives.
-2. **Verified knowledge**: Facts confirmed through tool use (file reads, test results) survive.
-3. **User preferences**: Explicitly stated preferences and constraints survive.
-4. **Working components**: Code or approaches that are demonstrably functioning survive.
+1. **核心需求**：用户实际要求了什么？这个存留。
+2. **已验证的知识**：通过工具使用（文件读取、测试结果）确认的事实存留。
+3. **用户偏好**：明确陈述的偏好和约束存留。
+4. **工作组件**：可证明正在运行的代码或方法存留。
 
-Draw the boundary: everything inside is preserved, everything outside is subject to dissolution.
+画出边界：边界内的一切被保留，边界外的一切都接受溶解。
 
-**预期结果：** A clear distinction between what is kept and what is released.
+**预期结果：** 保留什么和释放什么之间有清晰的区分。
 
-**失败处理：** If the boundary is unclear, ask: "What would I need to reconstruct if I started this task from scratch?" The answer defines the preservation boundary.
+**失败处理：** 如果边界不清楚，问："如果我从头开始这个任务，我需要重建什么？"答案定义了保留边界。
 
-### 第 3 步：Dissolve with Intention
+### 第 3 步：有意识地溶解
 
-Execute the dissolution — not as abandonment but as intentional clearing.
+执行溶解——不是放弃，而是有意识的清除。
 
-1. For each marked item, release it explicitly:
-   - Stale assumption: "I assumed X, but current evidence shows Y. Releasing X."
-   - Failed approach: "Approach A was attempted and did not work because Z. Releasing attachment to A."
-   - Noise: "Variable/plan/context Q is no longer relevant. Removing from consideration."
-2. Do not justify or defend what is being dissolved — the point is release, not analysis
-3. If dissolving a large body of accumulated context, summarize what was dissolved and why in one sentence
-4. Clear the workspace: if applicable, close abandoned files, reset mental model, acknowledge the clean slate
+1. 对每个标记的项目，明确释放它：
+   - 陈旧假设："我假设了 X，但当前证据显示 Y。释放 X。"
+   - 失败方法："方法 A 被尝试过但因为 Z 没有奏效。释放对 A 的执着。"
+   - 噪音："变量/计划/上下文 Q 不再相关。从考虑中移除。"
+2. 不要为正在溶解的东西辩护或辩护——重点是释放，不是分析
+3. 如果溶解大量积累的上下文，用一句话总结溶解了什么以及为什么
+4. 清理工作空间：如果适用，关闭废弃的文件，重置心理模型，承认干净的起点
 
-**预期结果：** A lighter, cleaner context with stale elements removed. The remaining context should feel accurate and current.
+**预期结果：** 一个更轻、更干净的上下文，陈旧元素已被移除。剩余的上下文应该感觉准确和当前。
 
-**失败处理：** If dissolution feels incomplete — some released items keep influencing thinking — name them again explicitly. "I notice I am still reasoning as if X is true. X was dissolved. Proceeding without X."
+**失败处理：** 如果溶解感觉不完整——某些释放的项目仍在影响思考——再次明确地点名它们。"我注意到我仍然在推理时认为 X 是真的。X 已被溶解。继续前进，不再依赖 X。"
 
-### 第 4 步：Sit in the Void
+### 第 4 步：坐在虚空中
 
-After destruction, resist the urge to immediately rebuild. The space between destruction and creation has value.
+破坏之后，抵制立即重建的冲动。破坏与创造之间的空间有价值。
 
-1. Acknowledge the cleared space: "The following has been dissolved: [list]"
-2. Note what remains: "What survives: [list]"
-3. Resist premature reconstruction — do not immediately propose a replacement for what was dissolved
-4. Allow the cleared space to inform what comes next
-5. The void is not emptiness — it is potential. The next step (creation via `brahma-bhaga` or preservation via `vishnu-bhaga`) emerges from this space
+1. 承认被清除的空间："以下已被溶解：[列表]"
+2. 注意剩余的东西："幸存的是：[列表]"
+3. 抵制过早的重建——不要立即为被溶解的东西提出替代品
+4. 让被清除的空间告知接下来要做什么
+5. 虚空不是空无——它是潜能。下一步（通过 `brahma-bhaga` 创造或通过 `vishnu-bhaga` 保持）从这个空间中涌现
 
-**预期结果：** A moment of clarity between the old and the new. The next direction becomes apparent from what remains rather than being forced.
+**预期结果：** 旧与新之间的清明时刻。下一个方向从剩余的东西中自然显现，而不是被强制产生。
 
-**失败处理：** If the void feels uncomfortable and there is a strong pull to immediately rebuild, that urgency is itself a signal — it may indicate attachment to the dissolved pattern. Sit longer. The right next step will emerge.
+**失败处理：** 如果虚空感觉不舒服，并且有强烈的冲动立即重建，这种紧迫感本身就是一个信号——它可能表明对被溶解模式的执着。多坐一会儿。正确的下一步会出现。
 
 ## 验证清单
 
-- [ ] Stale assumptions were identified and explicitly released
-- [ ] Failed approaches were acknowledged without defensiveness
-- [ ] Accumulated noise was cleared from the working context
-- [ ] The preservation boundary was established before dissolution
-- [ ] Core requirements and user preferences were preserved
-- [ ] The cleared space was acknowledged before moving to creation
+- [ ] 陈旧假设被识别并明确释放
+- [ ] 失败的方法被承认，没有防御性
+- [ ] 积累的噪音从工作上下文中清除
+- [ ] 保留边界在溶解之前建立
+- [ ] 核心需求和用户偏好被保留
+- [ ] 在进入创造之前承认了被清除的空间
 
 ## 常见问题
 
-- **Destroying too much**: Dissolution without a preservation boundary destroys working components along with stale ones. Always draw the boundary first
-- **Destroying too little**: Polite dissolution that "releases" things while still letting them influence reasoning. True dissolution requires actually letting go
-- **Skipping the void**: Rushing from destruction to creation without sitting in the cleared space produces a recreation of the old pattern with superficial changes
-- **Performing destruction**: Going through the motions of clearing without actually updating the internal model. If the same assumptions reappear in the next response, dissolution was performative
-- **Destruction as avoidance**: Using dissolution to escape a difficult problem rather than to clear genuine staleness. If the problem persists after clearing, it was not the stale context — it was the problem itself
+- **破坏过多**：没有保留边界的溶解会连同陈旧的一起破坏工作组件。总是先画边界
+- **破坏过少**：礼貌的溶解"释放"了东西，但仍然让它们影响推理。真正的溶解需要真正放手
+- **跳过虚空**：从破坏急于创造，而没有坐在被清除的空间中，会产生旧模式的再造，只有表面的变化
+- **表演性破坏**：走过清除的形式，但实际上没有更新内部模型。如果同样的假设在下一个回复中重新出现，溶解就是表演性的
+- **破坏作为逃避**：使用溶解来逃避困难的问题，而不是清除真正的陈旧。如果问题在清除后仍然存在，那不是陈旧的上下文——而是问题本身
 
 ## 相关技能
 
-- `brahma-bhaga` — creation follows destruction; after clearing, new patterns emerge from the void
-- `vishnu-bhaga` — preservation complements destruction; what survives dissolution is sustained
-- `heal` — subsystem assessment may reveal what needs dissolution before healing can proceed
-- `meditate` — clearing context noise before dissolution prevents reactive over-destruction
-- `dissolve-form` — the morphic equivalent for architectural dismantling with imaginal disc preservation
+- `brahma-bhaga` — 创造跟随破坏；清除之后，新模式从虚空中涌现
+- `vishnu-bhaga` — 保持补充破坏；在溶解中幸存的东西得到维护
+- `heal` — 子系统评估可能揭示在治愈可以进行之前需要溶解的东西
+- `meditate` — 在溶解之前清除上下文噪音，防止反应性的过度破坏
+- `dissolve-form` — 形态学等价物，用于建筑拆解并保留成虫盘

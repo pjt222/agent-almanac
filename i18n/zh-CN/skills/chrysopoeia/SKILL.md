@@ -1,13 +1,10 @@
 ---
 name: chrysopoeia
 description: >
-  Extract maximum value from existing code — performance optimization, API
-  surface refinement, and dead weight elimination. The art of turning base code
-  into gold through systematic identification and amplification of value-bearing
-  patterns. Use when optimizing a working but sluggish codebase, refining an
-  API surface that has accumulated cruft, reducing bundle size or memory
-  footprint, or preparing code for open-source release — when code works
-  correctly but doesn't shine and needs polish rather than a full rewrite.
+  从现有代码中提取最大价值——性能优化、API 表面精炼和死代码消除。将基础代码通过
+  系统性识别和放大有价值模式来点石成金的艺术。适用于优化运行正常但缓慢的代码库、
+  精炼积累了冗余的 API 表面、减少包体积或内存占用、或为开源发布准备代码——当代码
+  正确运行但不够出色，需要打磨而非完全重写时。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,35 +21,35 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Chrysopoeia
+# 点金术
 
-Systematically extract maximum value from existing code — identify what's golden (high-value, well-designed), what's lead (resource-heavy, poorly optimized), and what's dross (dead weight). Then amplify the gold, transmute the lead, and remove the dross.
+系统性地从现有代码中提取最大价值——识别什么是黄金（高价值、设计良好）、什么是铅（资源密集、优化不佳）、什么是渣滓（死代码）。然后放大黄金、转化铅块、清除渣滓。
 
 ## 适用场景
 
-- Optimizing a working but sluggish codebase for performance
-- Refining an API surface that has accumulated cruft over iterations
-- Reducing bundle size, memory footprint, or startup time
-- Preparing code for open-source release (extracting the valuable core)
-- When code works correctly but doesn't shine — it needs polish, not rewrite
+- 优化运行正常但缓慢的代码库以提升性能
+- 精炼经过多次迭代积累了冗余的 API 表面
+- 减少包体积、内存占用或启动时间
+- 为开源发布准备代码（提取有价值的核心）
+- 当代码正确运行但不够出色——需要打磨，而非重写
 
 ## 输入
 
-- **必需**: Codebase or module to optimize (file paths)
-- **必需**: Value metric (performance, API clarity, bundle size, readability)
-- **可选**: Profiling data or benchmarks showing current performance
-- **可选**: Budget or target (e.g., "reduce bundle by 40%", "sub-100ms response")
-- **可选**: Constraints (can't change public API, must maintain backward compat)
+- **必需**：需要优化的代码库或模块（文件路径）
+- **必需**：价值度量标准（性能、API 清晰度、包体积、可读性）
+- **可选**：显示当前性能的分析数据或基准测试
+- **可选**：预算或目标（例如"减少 40% 的包体积"、"响应时间低于 100ms"）
+- **可选**：约束条件（不能更改公共 API、必须保持向后兼容）
 
 ## 步骤
 
-### 第 1 步：Assay — Classify the Material
+### 第 1 步：化验——分类材料
 
-Systematically classify every element by its value contribution.
+系统性地按价值贡献对每个元素进行分类。
 
-1. Define the value metric from Inputs (performance, clarity, size, etc.)
-2. Inventory the codebase elements (functions, modules, exports, dependencies)
-3. Classify each element:
+1. 从输入中定义价值度量标准（性能、清晰度、体积等）
+2. 盘点代码库元素（函数、模块、导出、依赖）
+3. 对每个元素进行分类：
 
 ```
 Value Classification:
@@ -66,112 +63,112 @@ Value Classification:
 +--------+---------------------------------------------------------+
 ```
 
-4. For performance optimization, profile first:
-   - Identify hot paths (where time is spent)
-   - Identify cold paths (rarely executed code that may be dross)
-   - Measure memory allocation patterns
-5. Produce the **Assay Report**: element-by-element classification with evidence
+4. 对于性能优化，先进行分析：
+   - 识别热路径（时间花费在哪里）
+   - 识别冷路径（很少执行的代码，可能是渣滓）
+   - 测量内存分配模式
+5. 生成**化验报告**：逐元素分类并附带证据
 
-**预期结果：** Every significant element classified with evidence. Gold elements are identified for protection during optimization. Lead elements are prioritized by impact.
+**预期结果：** 每个重要元素都有证据支持的分类。黄金元素已被识别，在优化过程中予以保护。铅元素按影响程度排列优先级。
 
-**失败处理：** If profiling tools aren't available, use static analysis: function complexity (cyclomatic), dependency count, and code size as proxies. If the codebase is too large, focus on the critical path first.
+**失败处理：** 如果没有可用的分析工具，使用静态分析：函数复杂度（圈复杂度）、依赖计数和代码体积作为替代指标。如果代码库太大，先关注关键路径。
 
-### 第 2 步：Refine — Amplify the Gold
+### 第 2 步：精炼——放大黄金
 
-Protect and enhance the highest-value elements.
+保护和增强最高价值的元素。
 
-1. For each Gold element:
-   - Ensure it has comprehensive tests (these are your most valuable assets)
-   - Document its interface clearly if not already done
-   - Consider whether it could be extracted as a reusable module
-2. For each Silver element:
-   - Apply targeted improvements (better naming, clearer types, minor optimizations)
-   - Bring test coverage to Gold-level
-   - Resolve minor code smells without restructuring
-3. Do not modify Gold/Silver behavior — only improve their polish and protection
+1. 对每个黄金元素：
+   - 确保它有全面的测试（这些是你最有价值的资产）
+   - 如果尚未完成，清晰地记录其接口
+   - 考虑是否可以将其提取为可复用模块
+2. 对每个白银元素：
+   - 应用有针对性的改进（更好的命名、更清晰的类型、微小的优化）
+   - 将测试覆盖率提升到黄金级别
+   - 解决轻微的代码异味，不进行重构
+3. 不修改黄金/白银的行为——只改善其打磨和保护
 
-**预期结果：** Gold and Silver elements are better tested, documented, and protected. No behavioral changes, only quality improvements.
+**预期结果：** 黄金和白银元素经过更好的测试、文档和保护。没有行为变更，仅有质量改进。
 
-**失败处理：** If a "Gold" element reveals hidden problems during closer inspection, reclassify it. Better to be honest about value than to protect flawed code.
+**失败处理：** 如果"黄金"元素在更仔细检查后暴露出隐藏问题，重新分类它。诚实面对价值比保护有缺陷的代码更好。
 
-### 第 3 步：Transmute — Convert Lead to Gold
+### 第 3 步：转化——将铅变为金
 
-Transform heavy, inefficient elements into optimized equivalents.
+将笨重、低效的元素转化为优化的等价物。
 
-1. Prioritize Lead elements by impact (highest resource consumption first)
-2. For each Lead element, choose a transmutation strategy:
-   - **Algorithm optimization**: Replace O(n^2) with O(n log n), eliminate redundant computation
-   - **Caching/memoization**: Store expensive results that are requested repeatedly
-   - **Lazy evaluation**: Defer computation until results are actually needed
-   - **Batch processing**: Combine many small operations into fewer large ones
-   - **Structural simplification**: Reduce cyclomatic complexity, flatten deep nesting
-3. Apply the strategy and measure the improvement:
-   - Before/after benchmarks for performance changes
-   - Before/after line counts for complexity changes
-   - Before/after dependency counts for coupling changes
-4. Verify behavioral equivalence after each transmutation
+1. 按影响排列铅元素的优先级（最高资源消耗优先）
+2. 对每个铅元素，选择转化策略：
+   - **算法优化**：用 O(n log n) 替换 O(n^2)，消除冗余计算
+   - **缓存/记忆化**：存储被重复请求的昂贵结果
+   - **惰性求值**：将计算推迟到结果实际需要时
+   - **批处理**：将许多小操作合并为更少的大操作
+   - **结构简化**：降低圈复杂度，展平深层嵌套
+3. 应用策略并测量改进：
+   - 性能变化的前后基准测试
+   - 复杂度变化的前后行数统计
+   - 耦合变化的前后依赖计数
+4. 在每次转化后验证行为等价性
 
-**预期结果：** Measurable improvement on the target value metric. Each transmuted element performs better than its Lead predecessor while maintaining identical behavior.
+**预期结果：** 目标价值度量标准上的可测量改进。每个被转化的元素在保持相同行为的同时，性能优于其铅前身。
 
-**失败处理：** If a Lead element resists optimization within its current interface, consider whether the interface itself is the problem. Sometimes the transmutation requires changing how the element is called, not just how it's implemented.
+**失败处理：** 如果铅元素在其当前接口内抵抗优化，考虑接口本身是否是问题。有时转化需要改变元素的调用方式，而不仅仅是其实现方式。
 
-### 第 4 步：Purge — Remove the Dross
+### 第 4 步：清除——去除渣滓
 
-Eliminate dead weight systematically.
+系统性地消除死代码。
 
-1. For each Dross element, verify it's truly unused:
-   - Search for all references (grep, IDE find-usages)
-   - Check for dynamic references (string-based dispatch, reflection)
-   - Check for external consumers (if the code is a library)
-2. Remove confirmed dross:
-   - Delete dead code, unused exports, vestigial features
-   - Remove unused dependencies from package manifests
-   - Clean up configuration for removed features
-3. Verify nothing breaks after each removal (run tests)
-4. Document what was removed and why (in commit messages, not in code)
+1. 对每个渣滓元素，验证它确实未被使用：
+   - 搜索所有引用（grep、IDE 查找用法）
+   - 检查动态引用（基于字符串的调度、反射）
+   - 检查外部消费者（如果代码是库）
+2. 移除确认的渣滓：
+   - 删除死代码、未使用的导出、残留功能
+   - 从包清单中移除未使用的依赖
+   - 清理已移除功能的配置
+3. 在每次移除后验证没有破坏（运行测试）
+4. 记录移除了什么以及原因（在提交信息中，而非代码中）
 
-**预期结果：** The codebase is lighter. Bundle size, dependency count, or code volume measurably reduced. All tests still pass.
+**预期结果：** 代码库更轻量。包体积、依赖计数或代码量可测量地减少。所有测试仍然通过。
 
-**失败处理：** If removing an element breaks something, it wasn't dross — reclassify it. If dynamic references make it hard to verify usage, add temporary logging before deletion to confirm no runtime access.
+**失败处理：** 如果移除某个元素破坏了什么，它不是渣滓——重新分类它。如果动态引用使验证使用情况困难，在删除前添加临时日志以确认没有运行时访问。
 
-### 第 5 步：Verify — Weigh the Gold
+### 第 5 步：验证——称量黄金
 
-Measure the overall improvement.
+测量整体改进。
 
-1. Run the same benchmarks/metrics used in Step 1
-2. Compare before/after on the target value metric
-3. Document the chrysopoeia results:
-   - Elements refined (Gold/Silver improvements)
-   - Elements transmuted (Lead → Gold conversions with measurements)
-   - Elements purged (Dross removed with size/count impact)
-   - Overall metric improvement (e.g., "47% faster", "32% smaller bundle")
+1. 运行与第 1 步相同的基准测试/指标
+2. 比较目标价值度量标准的前后数据
+3. 记录点金术的结果：
+   - 精炼的元素（黄金/白银改进）
+   - 转化的元素（铅到金的转换及测量数据）
+   - 清除的元素（渣滓移除及体积/计数影响）
+   - 整体指标改进（例如"快 47%"、"包体积小 32%"）
 
-**预期结果：** Measurable, documented improvement on the target value metric. The codebase is demonstrably more valuable than before.
+**预期结果：** 目标价值度量标准上可测量、有文档的改进。代码库明显比之前更有价值。
 
-**失败处理：** If overall improvement is marginal, the original code may have been better than assumed. Document what was learned — knowing that code is already near-optimal is itself valuable.
+**失败处理：** 如果整体改进微乎其微，原始代码可能比假设的更好。记录学到了什么——知道代码已经接近最优本身就是有价值的。
 
-## Validation Checklist
+## 验证清单
 
-- [ ] Assay report classifies all significant elements with evidence
-- [ ] Gold elements have comprehensive tests and documentation
-- [ ] Lead transmutations show measurable before/after improvement
-- [ ] Dross removal verified with reference checks before deletion
-- [ ] All tests pass after each stage
-- [ ] Overall improvement measured and documented
-- [ ] No behavioral regressions introduced
-- [ ] Constraints from Inputs are satisfied
+- [ ] 化验报告对所有重要元素进行了有证据的分类
+- [ ] 黄金元素有全面的测试和文档
+- [ ] 铅转化显示了可测量的前后改进
+- [ ] 渣滓移除在删除前经过引用检查验证
+- [ ] 每个阶段后所有测试通过
+- [ ] 整体改进已测量和记录
+- [ ] 未引入行为回归
+- [ ] 满足输入中的约束条件
 
 ## 常见问题
 
-- **Premature optimization**: Optimizing without profiling. Always measure first, optimize the hot paths
-- **Polishing dross**: Spending effort improving code that should be deleted. Classify before refining
-- **Breaking Gold**: Optimization that degrades the best code. Gold elements should only get better, never worse
-- **Unmeasured claims**: "It feels faster" is not chrysopoeia. Every improvement must be quantified
-- **Optimizing cold paths**: Spending effort on code that runs once at startup when the bottleneck is the request loop
+- **过早优化**：不分析就优化。始终先测量，优化热路径
+- **打磨渣滓**：花精力改进应该被删除的代码。先分类再精炼
+- **破坏黄金**：优化降级了最好的代码。黄金元素应该只变更好，绝不变差
+- **未量化的声明**："感觉更快了"不是点金术。每个改进都必须量化
+- **优化冷路径**：在启动时只运行一次的代码上花精力，而瓶颈在请求循环中
 
 ## 相关技能
 
-- `athanor` — Full four-stage transformation when chrysopoeia reveals the code needs restructuring, not just optimization
-- `transmute` — Targeted conversion when a Lead element needs a paradigm shift
-- `review-software-architecture` — Architecture-level evaluation that complements code-level chrysopoeia
-- `review-data-analysis` — Data pipeline optimization parallels code optimization
+- `athanor` — 当点金术揭示代码需要重构而非仅优化时的完整四阶段转化
+- `transmute` — 当铅元素需要范式转变时的定向转换
+- `review-software-architecture` — 架构级别的评估，与代码级别的点金术互补
+- `review-data-analysis` — 数据流水线优化与代码优化并行

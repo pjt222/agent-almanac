@@ -1,10 +1,10 @@
 locale: es
-last_updated: '2026-03-13'
+last_updated: '2026-03-17'
 coverage:
   skills:
-    translated: 5
+    translated: 317
     total: 316
-    pct: 1.6
+    pct: 100.3
     stale: 0
   agents:
     translated: 3
@@ -22,7 +22,7 @@ coverage:
     pct: 5.9
     stale: 0
   total:
-    translated: 10
+    translated: 322
     total: 411
-    pct: 2.4
+    pct: 78.3
     stale: 0

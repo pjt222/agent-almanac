@@ -1,13 +1,12 @@
 ---
 name: formulate-herbal-remedy
 description: >
-  Prepare herbal remedies from Hildegard von Bingen's Physica. Covers plant
-  identification, preparation methods (tinctures, poultices, infusions, decoctions),
-  dosage guidance, contraindications, and safety review based on 12th-century
-  medieval pharmacopeia. Use when needing an herbal remedy for a specific
-  ailment using Hildegardian pharmacopeia, seeking guidance on preparation
-  methods and dosage, researching medieval herbal medicine, or integrating
-  Hildegard's plant wisdom into holistic health practice.
+  ヒルデガルト・フォン・ビンゲンのPhysicaからハーブ療法を調製する。植物の同定、
+  調製方法（チンキ剤、湿布、浸出液、煎じ薬）、用量ガイダンス、禁忌、12世紀の
+  中世薬局方に基づく安全性レビューを網羅する。ヒルデガルト薬局方を使用して
+  特定の疾患にハーブ療法が必要な時、調製方法と用量のガイダンスを求める時、
+  中世のハーブ医学を研究する時、またはヒルデガルトの植物の知恵をホリスティック
+  ヘルスの実践に統合する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,32 +23,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# ハーブ療法の調合
+# ハーブ療法の処方
 
-Prepare traditional herbal remedies following Hildegard von Bingen's *Physica*, integrating medieval plant knowledge with preparation techniques.
+ヒルデガルト・フォン・ビンゲンの*Physica*に従い、中世の植物知識と調製技術を統合して伝統的なハーブ療法を調製する。
 
 ## 使用タイミング
 
-- You need an herbal remedy for a specific ailment using Hildegardian pharmacopeia
-- You want to understand a plant's properties from *Physica*'s perspective
-- You need guidance on preparation methods (tincture, poultice, infusion, decoction)
-- You require dosage and safety information for a traditional remedy
-- You are researching medieval herbal medicine practices
-- You want to integrate Hildegard's plant wisdom into holistic health practice
+- ヒルデガルト薬局方を使用して特定の疾患にハーブ療法が必要な時
+- *Physica*の観点から植物の性質を理解したい時
+- 調製方法（チンキ剤、湿布、浸出液、煎じ薬）のガイダンスが必要な時
+- 伝統的な療法の用量と安全性情報が必要な時
+- 中世のハーブ医学の実践を研究する時
+- ヒルデガルトの植物の知恵をホリスティックヘルスの実践に統合したい時
 
 ## 入力
 
-- **必須**: Ailment or condition to address (e.g., digestive upset, respiratory congestion, skin inflammation)
-- **任意**: Known plant preferences or contraindications
-- **任意**: Preparation preference (tincture for long-term use, infusion for acute, etc.)
-- **任意**: User's temperament (sanguine, choleric, melancholic, phlegmatic) for tailored selection
-- **任意**: Season and availability of fresh vs. dried herbs
+- **必須**: 対処する疾患または状態（例：消化不良、呼吸器の鬱血、皮膚の炎症）
+- **任意**: 既知の植物の好みまたは禁忌
+- **任意**: 調製の好み（長期使用にはチンキ剤、急性にはは浸出液など）
+- **任意**: 使用者の気質（多血質、胆汁質、憂鬱質、粘液質）に合わせた選択のため
+- **任意**: 季節と生鮮ハーブ vs. 乾燥ハーブの入手可能性
 
 ## 手順
 
-### ステップ1: Identify the Plant in Physica
+### ステップ1: Physicaでの植物の同定
 
-Match the ailment to appropriate plants from Hildegard's *Physica* (Books I-IX: Plants, Elements, Trees, Stones, Fish, Birds, Animals, Reptiles, Metals).
+疾患をヒルデガルトの*Physica*（第I-IX巻：植物、元素、樹木、石、魚、鳥、動物、爬虫類、金属）から適切な植物と照合する。
 
 ```
 Common Ailments → Physica Plants:
@@ -83,13 +82,13 @@ Hildegard's Selection Principles:
 4. Seasonal availability: Fresh plants in growing season, dried in winter
 ```
 
-**期待結果:** One to three plants identified that match the ailment's pattern (hot/cold, dry/damp) and are appropriate for the user's constitution.
+**期待結果:** 疾患のパターン（温/冷、乾/湿）に合致し、使用者の体質に適した1～3種の植物が同定されること。
 
-**失敗時:** If unsure of the condition's pattern, default to balanced, gentle plants (fennel, chamomile, yarrow) which Hildegard describes as suitable for most constitutions.
+**失敗時:** 状態のパターンが不確かな場合、バランスが取れた穏やかな植物（フェンネル、カモミール、ヤロウ）をデフォルトとする。ヒルデガルトがほとんどの体質に適すると記述している植物である。
 
-### ステップ2: Select Preparation Method
+### ステップ2: 調製方法の選択
 
-Choose the appropriate extraction and delivery method based on the ailment's location, acuity, and plant properties.
+疾患の部位、急性度、植物の性質に基づいて適切な抽出・投与方法を選択する。
 
 ```
 Preparation Methods from Medieval Tradition:
@@ -120,13 +119,13 @@ Decision Tree:
 - External + Chronic → Oil infusion or salve
 ```
 
-**期待結果:** Preparation method selected that matches plant part (aerial vs. root), use case (acute vs. chronic), and application route (internal vs. external).
+**期待結果:** 植物の部位（地上部 vs. 根）、用途（急性 vs. 慢性）、投与経路（内用 vs. 外用）に合致した調製方法が選択されること。
 
-**失敗時:** If uncertain, default to infusion — it is the safest and most forgiving method for beginners.
+**失敗時:** 不確かな場合、浸出液をデフォルトとする — 初心者にとって最も安全で寛容な方法である。
 
-### ステップ3: Prepare the Remedy with Dosage
+### ステップ3: 用量を含む療法の調製
 
-Execute the preparation with precise measurements and technique.
+正確な計量と技術で調製を実行する。
 
 ```
 INFUSION (for aerial parts: leaves, flowers):
@@ -167,13 +166,13 @@ OIL INFUSION (for external salves):
 5. Store in dark bottle; use within 6-12 months
 ```
 
-**期待結果:** Remedy prepared according to method, with correct herb-to-menstruum ratio and appropriate steep/extraction time. Dosage guidelines clear for internal or external use.
+**期待結果:** 方法に従って療法が調製され、正しいハーブ対溶媒比と適切な浸漬/抽出時間が守られていること。内用または外用の用量ガイドラインが明確であること。
 
-**失敗時:** If preparation seems too strong (bitter, burning sensation), dilute by half. If too weak (no noticeable effect after 3 days at proper dosage), increase herb quantity by 50% in next batch.
+**失敗時:** 調製が強すぎると思われる場合（苦味、灼熱感）、半分に希釈する。弱すぎる場合（適切な用量で3日後も効果が感じられない）、次のバッチでハーブの量を50%増やす。
 
-### ステップ4: Document Contraindications
+### ステップ4: 禁忌の文書化
 
-Identify safety concerns, drug interactions, and populations who should avoid the remedy.
+安全上の懸念、薬物相互作用、療法を避けるべき集団を特定する。
 
 ```
 Common Contraindications by Plant Category:
@@ -214,13 +213,13 @@ GENERAL CAUTIONS:
 - Surgery: Discontinue all herbs 2 weeks before scheduled surgery
 ```
 
-**期待結果:** All relevant contraindications identified for the selected plant(s), with specific populations flagged (pregnancy, children, drug interactions).
+**期待結果:** 選択した植物に関連するすべての禁忌が特定され、特定の集団（妊娠、小児、薬物相互作用）がフラグ付けされること。
 
-**失敗時:** If uncertain about contraindications, advise the user to consult a qualified herbalist or healthcare provider before use. Default to "Not recommended during pregnancy, breastfeeding, or for children under 12 without professional guidance."
+**失敗時:** 禁忌が不確かな場合、使用前に資格のあるハーバリストまたは医療提供者に相談するよう助言する。デフォルトとして「専門家の指導なしに妊娠中、授乳中、または12歳未満の小児には推奨されません」とする。
 
-### ステップ5: Safety Review and Integration
+### ステップ5: 安全性レビューと統合
 
-Final check and guidance for monitoring effects and integrating into health practice.
+最終確認と効果のモニタリングおよびヘルスプラクティスへの統合のガイダンス。
 
 ```
 Safety Review Checklist:
@@ -252,35 +251,35 @@ Integration Notes:
   (warming herbs in winter, cooling herbs in summer)
 ```
 
-**期待結果:** User has complete information: remedy preparation, dosage, contraindications, monitoring plan, and integration context. Safety disclaimers clear.
+**期待結果:** 使用者が完全な情報を持つこと：療法の調製、用量、禁忌、モニタリング計画、統合の文脈。安全上の免責事項が明確であること。
 
-**失敗時:** If user expresses uncertainty about self-preparation, recommend consulting a trained herbalist for first preparation, then replicating at home once confident.
+**失敗時:** 使用者が自己調製に不安を示す場合、最初の調製には訓練を受けたハーバリストに相談し、自信がついたら自宅で複製することを推奨する。
 
-## バリデーション Checklist
+## バリデーション
 
-- [ ] Plant identified from Physica with appropriate temperature/moisture properties
-- [ ] Preparation method matches plant part (aerial = infusion, root = decoction, etc.)
-- [ ] Dosage guidelines provided with frequency and duration
-- [ ] Contraindications documented (pregnancy, drug interactions, specific conditions)
-- [ ] Safety review completed with monitoring protocol
-- [ ] User informed this is historical folk medicine, not medical diagnosis or treatment
-- [ ] Expected timeline for effect communicated (acute vs. chronic)
+- [ ] 適切な温度/湿度特性を持つ植物がPhysicaから同定されている
+- [ ] 調製方法が植物の部位に合致している（地上部＝浸出液、根＝煎じ薬など）
+- [ ] 頻度と期間を含む用量ガイドラインが提供されている
+- [ ] 禁忌が文書化されている（妊娠、薬物相互作用、特定の状態）
+- [ ] モニタリングプロトコルを含む安全性レビューが完了している
+- [ ] これが歴史的な民間療法であり、医学的な診断や治療ではないことが使用者に通知されている
+- [ ] 効果の期待タイムラインが伝えられている（急性 vs. 慢性）
 
 ## よくある落とし穴
 
-1. **Misidentification**: Using the wrong plant due to common name confusion. Always confirm botanical (Latin) name
-2. **Over-extraction**: Boiling delicate aerial parts destroys volatile oils. Use infusion (steeping), not decoction
-3. **Under-dosing**: Medieval preparations were often stronger than modern herbal teas. Follow traditional ratios
-4. **Ignoring Contraindications**: Pregnancy and drug interactions are serious. When in doubt, advise against use
-5. **Substituting Modern for Medieval**: Hildegard's plants reflect European medieval flora. Substitutions may not align with her temperament system
-6. **Expecting Pharmaceutical Speed**: Herbal medicine works gradually. Acute conditions: 1-3 days. Chronic: 2-4 weeks minimum
-7. **Solo Remedy Focus**: Hildegard's medicine is holistic. Remedies work best integrated with diet, prayer, rest, and seasonal rhythms
+1. **誤同定**: 一般名の混同による誤った植物の使用。常に植物学的（ラテン語）名称を確認する
+2. **過度の抽出**: 繊細な地上部を煮沸すると揮発性オイルが破壊される。煎じ薬（煮沸）ではなく浸出液（浸漬）を使用する
+3. **用量不足**: 中世の調製は現代のハーブティーより強いことが多い。伝統的な比率に従う
+4. **禁忌の無視**: 妊娠と薬物相互作用は深刻である。疑わしい場合は使用を控えるよう助言する
+5. **現代の代替と中世の混同**: ヒルデガルトの植物はヨーロッパの中世植物相を反映している。代替品は彼女の気質体系と一致しない場合がある
+6. **薬理学的速度の期待**: ハーブ医学は段階的に作用する。急性状態：1-3日。慢性：最低2-4週間
+7. **単独療法への集中**: ヒルデガルトの医学はホリスティックである。療法は食事、祈り、休息、季節のリズムと統合されて最も効果的に機能する
 
 ## 関連スキル
 
-- `assess-holistic-health` — Temperament assessment informs plant selection (cold constitution → warming plants)
-- `practice-viriditas` — Connecting to viriditas enhances receptivity to plant medicine
-- `consult-natural-history` — Broader context of plants in Physica's cosmology
-- `heal` (esoteric domain) — Post-remedy health assessment and recovery monitoring
-- `prepare-soil` (gardening domain) — If growing medicinal herbs
-- `maintain-hand-tools` (bushcraft domain) — For harvesting and processing herbs
+- `assess-holistic-health` — 気質評価が植物選択に情報を提供する（冷えた体質 → 温める植物）
+- `practice-viriditas` — viriditas（緑の力）との接続が植物療法への受容性を高める
+- `consult-natural-history` — Physicaの宇宙論における植物のより広い文脈
+- `heal`（esotericドメイン） — 療法後の健康評価と回復モニタリング
+- `prepare-soil`（gardeningドメイン） — 薬用ハーブの栽培
+- `maintain-hand-tools`（bushcraftドメイン） — ハーブの収穫と加工用

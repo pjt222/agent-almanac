@@ -1,12 +1,12 @@
 ---
 name: forecast-operational-metrics
 description: >
-  Forecast infrastructure and application metrics using Prophet or statsmodels for capacity
-  planning, cost optimization, and proactive scaling. Visualize predictions in Grafana and
-  set up alerts for projected resource exhaustion. Use when forecasting infrastructure
-  capacity needs for CPU, memory, or disk, planning hardware procurement for next quarter,
-  predicting cost trends to optimize cloud spending, or setting up proactive scaling policies
-  based on predicted load.
+  キャパシティプランニング、コスト最適化、プロアクティブなスケーリングのためにProphetまたは
+  statsmodelsを使用してインフラおよびアプリケーションメトリクスを予測する。Grafanaで予測を
+  可視化し、予測されるリソース枯渇のアラートを設定する。インフラキャパシティ需要（CPU、
+  メモリ、ディスク）の予測時、次の四半期のハードウェア調達計画時、コストトレンドの予測に
+  よるクラウド支出最適化時、または予測負荷に基づくプロアクティブなスケーリングポリシー
+  設定時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,34 +25,34 @@ metadata:
 
 # 運用メトリクスの予測
 
-Predict future resource usage and system metrics for capacity planning and cost optimization.
+キャパシティプランニングとコスト最適化のために将来のリソース使用量とシステムメトリクスを予測する。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完全な設定ファイルとテンプレートについては[拡張例](references/EXAMPLES.md)を参照。
 
 ## 使用タイミング
 
-- Need to forecast infrastructure capacity needs (CPU, memory, disk, network)
-- Planning hardware/cloud resource procurement for next quarter
-- Want to predict cost trends and optimize cloud spending
-- Need to set up proactive scaling policies based on predicted load
-- Forecasting user traffic for event planning
-- Predicting database storage growth for backup planning
-- Estimating API usage for rate limiting configuration
+- インフラキャパシティ需要（CPU、メモリ、ディスク、ネットワーク）を予測する必要がある時
+- 次の四半期のハードウェア/クラウドリソース調達を計画する時
+- コストトレンドを予測してクラウド支出を最適化したい時
+- 予測負荷に基づくプロアクティブなスケーリングポリシーを設定する必要がある時
+- イベント計画のためのユーザートラフィック予測時
+- バックアップ計画のためのデータベースストレージ成長予測時
+- レート制限設定のためのAPI使用量推定時
 
 ## 入力
 
-- **必須**: Historical time series metrics (3-12 months minimum)
-- **必須**: Metric type (CPU, memory, requests/sec, costs, etc.)
-- **必須**: Forecast horizon (days, weeks, or months ahead)
-- **任意**: Known future events (deployments, marketing campaigns, holidays)
-- **任意**: Seasonality information (daily, weekly, yearly patterns)
-- **任意**: External regressors (e.g., marketing spend, user signups)
+- **必須**: 過去の時系列メトリクス（最低3〜12ヶ月）
+- **必須**: メトリクスタイプ（CPU、メモリ、リクエスト/秒、コストなど）
+- **必須**: 予測期間（日、週、または月先）
+- **任意**: 既知の将来イベント（デプロイメント、マーケティングキャンペーン、祝日）
+- **任意**: 季節性情報（日次、週次、年次パターン）
+- **任意**: 外部リグレッサー（例：マーケティング支出、ユーザー登録数）
 
 ## 手順
 
-### ステップ1: Set Up Environment and Load Data
+### ステップ1: 環境セットアップとデータロード
 
-Install forecasting libraries and prepare time series data.
+予測ライブラリをインストールし、時系列データを準備する。
 
 ```bash
 # Create virtual environment
@@ -66,7 +66,7 @@ pip install prometheus-api-client influxdb-client
 pip install grafana-api
 ```
 
-Load and prepare data with MetricsLoader:
+MetricsLoaderでデータをロードし準備する：
 
 ```python
 # forecasting/data_loader.py (abbreviated)
@@ -91,15 +91,15 @@ df = loader.load_from_prometheus(
 df_daily = loader.resample_and_aggregate(df, freq="1D")
 ```
 
-See [EXAMPLES.md Step 1](references/EXAMPLES.md#step-1-data-loading--complete-metricsloader-class) for the complete MetricsLoader implementation.
+完全なMetricsLoader実装については[EXAMPLES.md ステップ1](references/EXAMPLES.md#step-1-data-loading--complete-metricsloader-class)を参照。
 
-**期待結果:** Time series data loaded with regular intervals, missing values filled, ready for forecasting.
+**期待結果:** 定期的な間隔で時系列データがロードされ、欠損値が補完され、予測の準備ができている。
 
-**失敗時:** If data gaps exist, use forward-fill or interpolation, ensure lookback period has sufficient data (90+ days recommended), verify timestamp timezone consistency, check for outliers (>5 sigma) that may skew forecasts.
+**失敗時:** データギャップがある場合は前方フィルまたは補間を使用、ルックバック期間に十分なデータがあることを確認（90日以上推奨）、タイムスタンプのタイムゾーン一貫性を確認、予測を歪める外れ値（5シグマ超）を確認。
 
-### ステップ2: Implement Prophet Forecasting
+### ステップ2: Prophet予測の実装
 
-Use Facebook Prophet for automatic seasonality detection and forecasting.
+Facebook Prophetを使用して自動的な季節性検出と予測を行う。
 
 ```python
 # forecasting/prophet_forecaster.py (abbreviated)
@@ -129,15 +129,15 @@ forecast = forecaster.forecast(periods=30, freq="D")
 forecaster.plot_forecast(forecast, save_path="results/cpu_forecast.png")
 ```
 
-See [EXAMPLES.md Step 2](references/EXAMPLES.md#step-2-prophet-forecasting--complete-prophetforecaster-class) for the complete ProphetForecaster implementation.
+完全なProphetForecaster実装については[EXAMPLES.md ステップ2](references/EXAMPLES.md#step-2-prophet-forecasting--complete-prophetforecaster-class)を参照。
 
-**期待結果:** Forecast generated for 30+ days ahead with confidence intervals, seasonal patterns captured in components plot, cross-validation MAPE < 15%.
+**期待結果:** 信頼区間付きの30日以上先の予測が生成され、コンポーネントプロットで季節パターンが捕捉され、交差検証MAPE < 15%。
 
-**失敗時:** If forecast looks unrealistic, try different growth model (linear vs logistic), if seasonality missing adjust seasonality_mode, if accuracy poor (<70% MAPE) add more historical data or external regressors, check for data quality issues.
+**失敗時:** 予測が非現実的に見える場合は異なる成長モデル（linear vs logistic）を試す、季節性が欠如する場合はseasonality_modeを調整、精度が低い場合（MAPE 70%超）はより多くの過去データまたは外部リグレッサーを追加、データ品質の問題を確認。
 
-### ステップ3: Implement ARIMA/SARIMAX Forecasting (Alternative)
+### ステップ3: ARIMA/SARIMAX予測の実装（代替）
 
-Use statsmodels for traditional time series forecasting.
+statsmodelsを使用した伝統的な時系列予測。
 
 ```python
 # forecasting/arima_forecaster.py (abbreviated)
@@ -166,15 +166,15 @@ forecaster.fit(df_hourly)
 forecast = forecaster.forecast(steps=168)  # 7 days
 ```
 
-See [EXAMPLES.md Step 3](references/EXAMPLES.md#step-3-arima-forecasting--complete-arimaforecaster-class) for the complete ARIMAForecaster implementation and auto_arima function.
+完全なARIMAForecaster実装とauto_arima関数については[EXAMPLES.md ステップ3](references/EXAMPLES.md#step-3-arima-forecasting--complete-arimaforecaster-class)を参照。
 
-**期待結果:** ARIMA model fitted with optimal parameters, forecast generated with confidence intervals, diagnostic plots show white noise residuals.
+**期待結果:** 最適パラメータで適合したARIMAモデル、信頼区間付き予測が生成、診断プロットがホワイトノイズ残差を示す。
 
-**失敗時:** If model doesn't converge, simplify parameters (reduce p, q, P, Q), if forecast has wrong trend check differencing order (d, D), if residuals not white noise add more AR/MA terms, ensure series length >2x seasonal period.
+**失敗時:** モデルが収束しない場合はパラメータを簡約化（p, q, P, Qを減らす）、予測のトレンドが誤っている場合は差分次数（d, D）を確認、残差がホワイトノイズでない場合はAR/MA項を追加、系列長が季節周期の2倍以上であることを確認。
 
-### ステップ4: Identify Capacity Thresholds and Alerts
+### ステップ4: キャパシティ閾値とアラートの特定
 
-Analyze forecast to predict when resources will be exhausted.
+リソース枯渇時期を予測するために予測を分析する。
 
 ```python
 # forecasting/capacity_planning.py (abbreviated)
@@ -202,15 +202,15 @@ print(f"Exhaustion Date: {report['exhaustion_date']}")
 recommendation = planner.recommend_scaling_action(report)
 ```
 
-See [EXAMPLES.md Step 4](references/EXAMPLES.md#step-4-capacity-planning--complete-capacityplanner-class) for the complete CapacityPlanner implementation.
+完全なCapacityPlanner実装については[EXAMPLES.md ステップ4](references/EXAMPLES.md#step-4-capacity-planning--complete-capacityplanner-class)を参照。
 
-**期待結果:** Report shows when capacity limits will be reached, recommendations provided with urgency levels, growth rates calculated.
+**期待結果:** キャパシティ制限に達する時期を示すレポート、緊急度レベル付きの推奨事項、成長率が計算されている。
 
-**失敗時:** If exhaustion date unrealistic, verify capacity_limit is correct, if growth rate too high check for outliers in historical data, consider non-linear growth models for mature systems.
+**失敗時:** 枯渇日が非現実的な場合はcapacity_limitが正しいことを確認、成長率が高すぎる場合は過去データの外れ値を確認、成熟システムには非線形成長モデルを検討。
 
-### ステップ5: Visualize Forecasts in Grafana
+### ステップ5: Grafanaでの予測可視化
 
-Push forecast data to Grafana for real-time monitoring.
+リアルタイムモニタリングのために予測データをGrafanaにプッシュする。
 
 ```python
 # forecasting/grafana_integration.py (abbreviated)
@@ -245,15 +245,15 @@ grafana.create_capacity_alert_annotation(report)
 export_forecast_to_csv(forecast, "grafana/forecasts/cpu_forecast.csv")
 ```
 
-See [EXAMPLES.md Step 5](references/EXAMPLES.md#step-5-grafana-integration--complete-grafanaforecaster-class) for the complete GrafanaForecaster implementation.
+完全なGrafanaForecaster実装については[EXAMPLES.md ステップ5](references/EXAMPLES.md#step-5-grafana-integration--complete-grafanaforecaster-class)を参照。
 
-**期待結果:** Forecast annotations appear in Grafana dashboards, capacity warnings visible as vertical markers, forecast data accessible via CSV datasource.
+**期待結果:** Grafanaダッシュボードに予測アノテーションが表示され、キャパシティ警告が垂直マーカーとして可視、CSVデータソース経由で予測データにアクセス可能。
 
-**失敗時:** Verify Grafana API key has correct permissions, check dashboard UID is correct, ensure timestamps in milliseconds for annotations, test API with curl before integrating.
+**失敗時:** Grafana APIキーに正しい権限があることを確認、ダッシュボードUIDが正しいことを確認、アノテーションのタイムスタンプがミリ秒であることを確認、統合前にcurlでAPIをテスト。
 
-### ステップ6: Automate Forecast Generation
+### ステップ6: 予測生成の自動化
 
-Set up scheduled jobs to generate forecasts regularly.
+定期的に予測を生成するスケジュールジョブを設定する。
 
 ```python
 # forecasting/scheduler.py (abbreviated)
@@ -292,36 +292,36 @@ while True:
     time.sleep(60)
 ```
 
-See [EXAMPLES.md Step 6](references/EXAMPLES.md#step-6-automation-scheduler--complete-implementation) for the complete scheduler implementation.
+完全なスケジューラ実装については[EXAMPLES.md ステップ6](references/EXAMPLES.md#step-6-automation-scheduler--complete-implementation)を参照。
 
-**期待結果:** Forecasts generated daily for all metrics, capacity reports logged, CSV files exported for Grafana, alerts sent for critical capacity warnings.
+**期待結果:** すべてのメトリクスについて予測が毎日生成され、キャパシティレポートがログされ、CSVファイルがGrafana用にエクスポートされ、重大なキャパシティ警告にアラートが送信される。
 
-**失敗時:** Verify scheduler process runs continuously (use systemd/supervisor), check Prometheus connectivity, ensure sufficient disk space for forecast exports, implement retry logic for transient failures, set up monitoring for scheduler itself.
+**失敗時:** スケジューラプロセスが継続的に実行されることを確認（systemd/supervisorを使用）、Prometheus接続性を確認、予測エクスポートの十分なディスク容量を確認、一時的障害のリトライロジックを実装、スケジューラ自体のモニタリングを設定。
 
 ## バリデーション
 
-- [ ] Historical data loaded with 90+ days of continuous metrics
-- [ ] Prophet forecast captures daily/weekly seasonality in components plot
-- [ ] Forecast confidence intervals contain 85-95% of actual values in validation
-- [ ] Capacity exhaustion dates calculated correctly for known scenarios
-- [ ] ARIMA model residuals appear as white noise in diagnostic plots
-- [ ] Grafana annotations appear at predicted warning/exhaustion dates
-- [ ] Automated forecasting runs daily without manual intervention
-- [ ] Forecast accuracy (MAPE) < 15% on validation set
+- [ ] 90日以上の連続メトリクスで過去データがロードされている
+- [ ] Prophet予測がコンポーネントプロットで日次/週次の季節性を捕捉
+- [ ] 予測の信頼区間がバリデーションで実測値の85-95%を含む
+- [ ] 既知のシナリオでキャパシティ枯渇日が正しく計算されている
+- [ ] ARIMAモデルの残差が診断プロットでホワイトノイズとして表示される
+- [ ] 予測された警告/枯渇日にGrafanaアノテーションが表示される
+- [ ] 自動予測が手動介入なしで毎日実行される
+- [ ] バリデーションセットでの予測精度（MAPE）< 15%
 
 ## よくある落とし穴
 
-- **Insufficient historical data**: Need 3-12 months for reliable seasonality detection; avoid forecasting with <60 days
-- **Ignoring known events**: Holidays, deployments, marketing campaigns skew forecasts; add as external regressors or holidays
-- **Overconfidence in long-term forecasts**: Accuracy degrades beyond 30-90 days; use as directional guidance, not exact predictions
-- **Static capacity limits**: Infrastructure changes over time; update capacity_limit when adding resources
-- **Forecasting anomalies**: Outliers in training data propagate to forecast; clean data or use robust methods
-- **Not updating models**: Forecasts stale after system changes; retrain weekly or after significant architecture changes
-- **Ignoring confidence intervals**: Point forecasts misleading; always use lower/upper bounds for planning
-- **Wrong seasonality period**: Daily for hourly data, weekly for daily data; mismatch causes poor forecasts
+- **過去データの不足**: 信頼できる季節性検出には3〜12ヶ月が必要；60日未満での予測を避ける
+- **既知イベントの無視**: 祝日、デプロイメント、マーケティングキャンペーンが予測を歪める；外部リグレッサーまたはholidaysとして追加する
+- **長期予測への過信**: 30〜90日を超えると精度が低下する；正確な予測ではなく方向性のガイダンスとして使用する
+- **静的なキャパシティ制限**: インフラは時間とともに変化する；リソース追加時にcapacity_limitを更新する
+- **異常値の予測**: 学習データの外れ値が予測に伝播する；データをクリーニングするかロバストな方法を使用する
+- **モデルの未更新**: システム変更後に予測が陳腐化する；週次または重大なアーキテクチャ変更後に再学習する
+- **信頼区間の無視**: ポイント予測は誤解を招く；計画には常に下限/上限を使用する
+- **間違った季節性周期**: 時間データには日次、日次データには週次；不一致は予測不良を引き起こす
 
 ## 関連スキル
 
-- `detect-anomalies-aiops` - Anomaly detection complements forecasting for proactive monitoring
-- `plan-capacity` - Infrastructure capacity planning workflows
-- `build-grafana-dashboards` - Visualize forecasts and capacity trends
+- `detect-anomalies-aiops` - 異常検知がプロアクティブなモニタリングのために予測を補完する
+- `plan-capacity` - インフラキャパシティプランニングのワークフロー
+- `build-grafana-dashboards` - 予測とキャパシティトレンドの可視化

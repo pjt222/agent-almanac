@@ -1,13 +1,10 @@
 ---
 name: build-coherence
 description: >
-  AI multi-path reasoning coherence using bee democracy — independent evaluation
-  of competing approaches, waggle dance as reasoning-out-loud, quorum sensing
-  for confidence thresholds, and deadlock resolution. Use when forage-solutions
-  has identified multiple valid approaches and a selection must be made, when
-  oscillating between options without committing, when justifying an architecture
-  or tool choice with structured reasoning, or before an irreversible action where
-  the cost of the wrong choice is high.
+  AI 多路径推理一致性构建，使用蜜蜂民主机制——独立评估竞争方案、摇摆舞作为大声推理、
+  群体感知作为置信阈值、以及僵局解决。适用于 forage-solutions 已识别多个有效方案
+  需要选择时、在选项间摇摆不定时、需要用结构化推理论证架构或工具选择时，或在不可逆
+  行动之前且错误选择代价高昂时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,34 +21,34 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Build Coherence
+# 构建一致性
 
-Evaluate competing approaches through independent assessment, explicit reasoning-out-loud advocacy, confidence-calibrated commitment thresholds, and structured deadlock resolution — producing coherent decisions from multiple reasoning paths.
+通过独立评估、显式的大声推理倡导、置信度校准的承诺阈值和结构化僵局解决，从多条推理路径中产生一致的决策。
 
 ## 适用场景
 
-- `forage-solutions` has identified multiple valid approaches and a selection must be made
-- Oscillating between two approaches without committing to either
-- Needing to justify a decision with structured reasoning (architecture choice, tool selection, implementation strategy)
-- When a previous decision was made by gut feeling and needs evidence-based validation
-- When internal reasoning is producing contradictory conclusions and coherence must be restored
-- Before an irreversible action (merging, deploying, deleting) where the cost of the wrong choice is high
+- `forage-solutions` 已识别多个有效方案，需要做出选择
+- 在两种方案之间摇摆不定，无法做出承诺
+- 需要用结构化推理论证决策（架构选择、工具选择、实现策略）
+- 先前的决策基于直觉，需要基于证据的验证
+- 内部推理产生矛盾结论，需要恢复一致性
+- 在不可逆行动（合并、部署、删除）之前，错误选择的代价很高
 
 ## 输入
 
-- **必需**: Two or more competing approaches to evaluate
-- **可选**: Quality assessments from prior scouting (see `forage-solutions`)
-- **可选**: Decision stakes (reversible, moderate, irreversible) for threshold calibration
-- **可选**: Time budget for the decision
-- **可选**: Known failure mode (oscillation, premature commitment, groupthink)
+- **必需**：两个或更多需要评估的竞争方案
+- **可选**：先前侦察的质量评估（参见 `forage-solutions`）
+- **可选**：决策风险等级（可逆、中等、不可逆）用于阈值校准
+- **可选**：决策的时间预算
+- **可选**：已知的失败模式（摇摆不定、过早承诺、群体思维）
 
 ## 步骤
 
-### 第 1 步：Independent Evaluation
+### 第 1 步：独立评估
 
-Assess each approach on its own merits before comparing them. The critical rule: do not let the assessment of approach A bias the assessment of approach B.
+在比较之前，基于各自优点评估每个方案。关键规则：不要让对方案 A 的评估影响对方案 B 的评估。
 
-For each approach, evaluate independently:
+对每个方案独立评估：
 
 ```
 Approach Evaluation Template:
@@ -75,33 +72,33 @@ Approach Evaluation Template:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Fill this out for each approach separately. Do not write a comparison until all individual evaluations are complete.
+为每个方案分别填写此表。在所有独立评估完成之前，不要进行比较。
 
-**预期结果：** Independent evaluations where each approach is assessed on its own terms. The evaluation of approach B does not reference approach A. Quality scores reflect genuine assessment, not ranking.
+**预期结果：** 每个方案都按自身条件被评估的独立评估。对方案 B 的评估不引用方案 A。质量分数反映真实评估，而非排名。
 
-**失败处理：** If the evaluations are contaminated (you find yourself writing "better than A" while assessing B), reset. Assess A completely, then clear the framing and assess B from scratch. If the scores are all identical, the evaluation dimensions are too coarse — add domain-specific criteria.
+**失败处理：** 如果评估被污染（在评估 B 时发现自己在写"比 A 好"），重置。先完整评估 A，然后清除框架，从头评估 B。如果分数全部相同，说明评估维度太粗——添加特定领域的标准。
 
-### 第 2 步：Waggle Dance — Reason Out Loud
+### 第 2 步：摇摆舞——大声推理
 
-Advocate for each approach proportionally to its quality. This is the AI equivalent of the bee waggle dance: making implicit reasoning explicit and public.
+按质量比例为每个方案进行倡导。这是蜜蜂摇摆舞的 AI 等价物：使隐式推理变得显式和公开。
 
-1. For each approach, state the case for it — as if presenting to a skeptical user:
-   - "Approach A is strong because [evidence]. The main risk is [risk], which is mitigated by [mitigation]."
-2. Advocacy intensity should be proportional to quality score:
-   - High-quality approach: detailed advocacy with specific evidence
-   - Medium-quality approach: brief advocacy with acknowledged limitations
-   - Low-quality approach: mentioned for completeness, not actively advocated
-3. **Cross-inspection**: after advocating for A, actively look for evidence that supports B instead. After advocating for B, look for evidence that supports A. This counteracts confirmation bias
+1. 对每个方案，陈述支持它的理由——如同向一个持怀疑态度的用户做演示：
+   - "方案 A 很强，因为[证据]。主要风险是[风险]，可通过[缓解措施]减轻。"
+2. 倡导强度应与质量分数成正比：
+   - 高质量方案：带有具体证据的详细倡导
+   - 中等质量方案：承认局限性的简要倡导
+   - 低质量方案：为完整性而提及，但不积极倡导
+3. **交叉检验**：在为 A 倡导后，积极寻找支持 B 的证据。在为 B 倡导后，寻找支持 A 的证据。这可以抵消确认偏见
 
-The purpose of reasoning-out-loud is to make the decision auditable — to yourself and to the user. If the reasoning cannot be articulated, the assessment is shallower than the score suggests.
+大声推理的目的是使决策可审计——对你自己和对用户都是如此。如果推理无法被阐述，说明评估比分数所暗示的要浅薄。
 
-**预期结果：** Explicit reasoning for each approach that would be persuasive to a neutral observer. Cross-inspection reveals at least one consideration that was initially overlooked.
+**预期结果：** 对每个方案的显式推理，能够说服中立的观察者。交叉检验至少揭示一个最初被忽略的考虑因素。
 
-**失败处理：** If advocacy feels perfunctory (going through motions), the approaches may not be genuinely different — they may be variations of the same idea. Check: do the approaches differ in mechanism, or only in implementation detail? If the latter, the decision may not matter much — pick either and move on.
+**失败处理：** 如果倡导感觉敷衍（走过场），方案可能并非真正不同——它们可能是同一想法的变体。检查：方案在机制上不同，还是仅在实现细节上不同？如果是后者，决策可能不太重要——选择任一个然后继续。
 
-### 第 3 步：Set Quorum Threshold and Commit
+### 第 3 步：设定群体阈值并承诺
 
-Set the confidence threshold required to commit, calibrated to the decision's stakes.
+设定承诺所需的置信度阈值，根据决策的风险等级进行校准。
 
 ```
 Confidence Thresholds by Stakes:
@@ -122,19 +119,19 @@ Confidence Thresholds by Stakes:
 └─────────────────────┴───────────┴──────────────────────────────────┘
 ```
 
-1. Classify the decision stakes
-2. Check: does the leading approach's quality score × confidence reach the threshold?
-3. If yes: commit. State the decision, the reasoning, and the key risk being accepted
-4. If no: identify what additional information would raise confidence to the threshold
-5. Once committed, do not revisit unless new disqualifying evidence emerges
+1. 分类决策的风险等级
+2. 检查：领先方案的质量分数乘以置信度是否达到阈值？
+3. 如果是：承诺。陈述决策、推理和正在接受的主要风险
+4. 如果否：确定什么额外信息能将置信度提高到阈值
+5. 一旦承诺，除非出现新的否定证据，否则不要重新审视
 
-**预期结果：** A clear commitment moment with stated reasoning. The decision is made at an appropriate confidence level for its stakes.
+**预期结果：** 清晰的承诺时刻，附带陈述的推理。决策在与其风险等级相匹配的适当置信水平上做出。
 
-**失败处理：** If the threshold is never met (can't reach 90% on an irreversible decision), ask: is the decision truly irreversible? Can it be decomposed into a reversible test phase + an irreversible commit? Most apparently irreversible decisions can be staged. If staging is impossible, communicate the uncertainty to the user and ask for guidance.
+**失败处理：** 如果阈值永远无法达到（对不可逆决策无法达到 90%），问：决策真的是不可逆的吗？能否将其分解为可逆的测试阶段加不可逆的提交阶段？大多数看似不可逆的决策可以分阶段进行。如果无法分阶段，向用户传达不确定性并寻求指导。
 
-### 第 4 步：Resolve Deadlocks
+### 第 4 步：解决僵局
 
-When two or more approaches have similar scores and the quorum threshold is not met for any single one.
+当两个或更多方案的分数相近，且没有任何单个方案达到群体阈值时。
 
 ```
 Deadlock Resolution:
@@ -163,49 +160,49 @@ Deadlock Resolution:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**预期结果：** Deadlock resolved through the appropriate mechanism. The resolution is decisive — no lingering doubt that undermines execution.
+**预期结果：** 僵局通过适当的机制得到解决。解决方案是果断的——没有损害执行的残留疑虑。
 
-**失败处理：** If the deadlock persists through all resolution strategies, the decision may be premature. Ask the user: "I see two equally strong approaches: [A] and [B]. [Brief case for each.] Which aligns better with your priorities?" Delegating a genuine tie to the user is not a failure — it is acknowledging that the decision depends on values the AI cannot infer.
+**失败处理：** 如果僵局在所有解决策略后仍然存在，决策可能为时尚早。询问用户："我看到两个同样强大的方案：[A] 和 [B]。[简要阐述各自的理由。] 哪个更符合你的优先级？"将真正的平局委托给用户不是失败——而是承认决策取决于 AI 无法推断的价值观。
 
-### 第 5 步：Assess Coherence Quality
+### 第 5 步：评估一致性质量
 
-After committing to a decision, evaluate whether the process produced genuine coherence or just a decision.
+在承诺决策后，评估过程是否产生了真正的一致性还是仅仅是一个决策。
 
-1. Was the decision evidence-based, or was it rubber-stamping an initial preference?
-   - Test: was the preference the same before and after evaluation? If so, did the evaluation change anything?
-2. Were the losing approaches genuinely considered, or were they straw men?
-   - Test: can you articulate the strongest case for the losing approach?
-3. What signal would trigger reassessment?
-   - Define a specific observation that would invalidate the decision ("If I discover that the API doesn't support X, then approach B becomes better")
-4. Is there useful information from the losing approaches that should inform implementation?
-   - A risk identified in approach B might apply to approach A as well
+1. 决策是基于证据的，还是对初始偏好的橡皮图章？
+   - 测试：评估前后的偏好是否相同？如果是，评估改变了什么？
+2. 落选方案是否被真正考虑，还是它们是稻草人？
+   - 测试：你能阐述落选方案的最强理由吗？
+3. 什么信号会触发重新评估？
+   - 定义一个会使决策失效的具体观察（"如果我发现 API 不支持 X，那么方案 B 变得更好"）
+4. 落选方案中是否有应该影响实施的有用信息？
+   - 在方案 B 中识别的风险可能同样适用于方案 A
 
-**预期结果：** A brief quality check that either confirms the decision or identifies it as weak. If weak, return to the appropriate earlier step rather than proceeding on shaky ground.
+**预期结果：** 简要的质量检查，确认决策或将其识别为薄弱。如果薄弱，返回适当的早期步骤而非在不稳固的基础上继续。
 
-**失败处理：** If the quality check reveals that the decision was preference-based rather than evidence-based, acknowledge it honestly. Sometimes preference is all that is available — but it should be labeled as such, not dressed up as analysis.
+**失败处理：** 如果质量检查揭示决策是基于偏好而非基于证据的，坦诚承认。有时偏好是唯一可用的——但它应该被标记为偏好，而不是被包装成分析。
 
 ## 验证清单
 
-- [ ] Each approach was evaluated independently before comparison
-- [ ] Advocacy was proportional to quality (not equal attention regardless of merit)
-- [ ] Cross-inspection was performed (looking for counter-evidence after advocacy)
-- [ ] Quorum threshold was calibrated to decision stakes
-- [ ] If deadlocked, a specific resolution strategy was applied
-- [ ] Post-decision quality check was performed
-- [ ] A reassessment trigger was defined
+- [ ] 每个方案在比较之前被独立评估
+- [ ] 倡导与质量成正比（而非不论优劣给予同等关注）
+- [ ] 执行了交叉检验（倡导后寻找反面证据）
+- [ ] 群体阈值根据决策风险等级进行了校准
+- [ ] 如果出现僵局，应用了具体的解决策略
+- [ ] 执行了决策后质量检查
+- [ ] 定义了重新评估触发条件
 
 ## 常见问题
 
-- **Premature commitment**: Deciding before evaluating all approaches. The first approach considered has an anchoring advantage — it gets more mental attention simply by being first. Evaluate all before comparing
-- **Equal advocacy for unequal approaches**: If approach A scored 85 and approach B scored 45, spending equal time advocating for both wastes effort and creates false equivalence
-- **Rubber-stamping**: Going through the evaluation process to justify a decision already made. The test is whether the evaluation could have changed the outcome. If not, the process was theater
-- **Threshold avoidance**: Lowering the confidence threshold to make the decision easier rather than gathering the information needed to meet the appropriate threshold
-- **Ignoring the losing side**: The losing approach often contains warnings that apply to the winning one. Risks identified in approach B don't disappear just because approach A was chosen
+- **过早承诺**：在评估所有方案之前就做出决策。首先考虑的方案具有锚定优势——仅因为是第一个被考虑的就获得更多关注。先评估全部再比较
+- **对不等方案给予同等倡导**：如果方案 A 得 85 分而方案 B 得 45 分，花费同等时间为两者倡导是浪费精力且制造虚假等价
+- **橡皮图章**：走过评估流程以论证一个已经做出的决策。测试标准是评估是否能改变结果。如果不能，过程就是表演
+- **阈值回避**：降低置信度阈值以使决策更容易，而不是收集达到适当阈值所需的信息
+- **忽视落选方**：落选方案通常包含适用于获胜方案的警告。在方案 B 中识别的风险不会因为选择了方案 A 就消失
 
 ## 相关技能
 
-- `build-consensus` — the multi-agent consensus model that this skill adapts to single-agent reasoning
-- `forage-solutions` — scouts the solution space that coherence evaluates; typically precedes this skill
-- `coordinate-reasoning` — manages information flow during multi-path evaluation
-- `center` — establishes the balanced baseline needed for unbiased evaluation
-- `meditate` — clears assumptions between evaluating different approaches
+- `build-consensus` — 本技能改编自多代理共识模型，适用于单代理推理
+- `forage-solutions` — 侦察一致性评估的解决方案空间；通常在本技能之前执行
+- `coordinate-reasoning` — 管理多路径评估期间的信息流
+- `center` — 建立无偏评估所需的平衡基线
+- `meditate` — 清除评估不同方案之间的假设

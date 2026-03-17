@@ -1,13 +1,10 @@
 ---
 name: appraise-gemstone
 description: >
-  Appraise gemstone value using the four Cs (color, clarity, cut, carat),
-  origin assessment, treatment detection, and market factor analysis.
-  Advisory educational guidance only — not a certified appraisal. Use when
-  understanding factors that determine a gemstone's value, pre-screening
-  stones before a professional appraisal, evaluating whether a seller's asking
-  price is reasonable, learning gemstone grading methodology, or understanding
-  how treatment status affects value.
+  使用四C标准（颜色、净度、切工、克拉重量）、产地评估、处理检测和市场因素分析来
+  评估宝石价值。仅为教育咨询指导——非认证鉴定。适用于了解决定宝石价值的因素、
+  在专业鉴定前预筛宝石、评估卖家要价是否合理、学习宝石分级方法论，或了解处理
+  状态如何影响价值时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,35 +21,35 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Appraise Gemstone
+# 评估宝石
 
-Appraise gemstone value using the four Cs (colour, clarity, cut, carat weight), treatment detection, origin assessment, and market factor analysis. This is educational advisory guidance only and does not constitute a certified gemological appraisal.
+使用四C标准（颜色、净度、切工、克拉重量）、处理检测、产地评估和市场因素分析来评估宝石价值。本程序仅为教育咨询指导，不构成认证宝石学鉴定。
 
-> **DISCLAIMER**: This procedure provides educational guidance on gemstone valuation methodology. It is NOT a certified appraisal. For insurance, estate, sale, or legal purposes, always obtain a formal appraisal from a certified gemologist (GIA Graduate Gemologist, FGA, or equivalent). Gemstone values can vary enormously based on factors that require hands-on professional assessment.
+> **免责声明**：本程序提供关于宝石估值方法论的教育指导。这不是认证鉴定。对于保险、遗产、销售或法律用途，请始终获取来自认证宝石学家（GIA 宝石学研究生、FGA 或同等资质）的正式鉴定。宝石价值可能因需要实际专业评估的因素而有巨大差异。
 
 ## 适用场景
 
-- You want to understand the factors that determine a gemstone's value
-- You are pre-screening stones before paying for a professional appraisal
-- You need to evaluate whether a seller's asking price is within a reasonable range
-- You are learning gemstone grading methodology for educational purposes
-- You want to understand how treatment status affects value
+- 想要了解决定宝石价值的因素
+- 在支付专业鉴定费用之前预筛宝石
+- 需要评估卖家的要价是否在合理范围内
+- 出于教育目的学习宝石分级方法论
+- 想要了解处理状态如何影响价值
 
 ## 输入
 
-- **必需**: Identified gemstone (species confirmed — see `identify-gemstone`)
-- **必需**: Access to the stone (loose preferred; mounted stones limit assessment)
-- **可选**: Carat scale (accurate to 0.01 ct)
-- **可选**: 10x loupe or gemological microscope
-- **可选**: Daylight-equivalent light source (5500-6500K)
-- **可选**: Colour grading master stones or reference images (GIA system)
-- **可选**: Refractometer and Chelsea filter (for treatment detection)
+- **必需**：已鉴定的宝石（品种已确认——见 `identify-gemstone`）
+- **必需**：接触宝石（裸石优先；镶嵌宝石会限制评估）
+- **可选**：克拉秤（精度至 0.01 ct）
+- **可选**：10 倍放大镜或宝石学显微镜
+- **可选**：日光等效光源（5500-6500K）
+- **可选**：颜色分级标准石或参考图像（GIA 系统）
+- **可选**：折射仪和切尔西滤光片（用于处理检测）
 
 ## 步骤
 
-### 第 1 步：Colour Grading
+### 第 1 步：颜色分级
 
-Assess the stone's colour using the three components: hue, saturation, and tone.
+使用三个组成部分评估宝石颜色：色调、饱和度和明度。
 
 ```
 Colour Assessment Framework:
@@ -104,20 +101,20 @@ IDEAL COLOUR RANGES (highest value):
 - Aquamarine: medium, strong blue (not greenish)
 ```
 
-1. View the stone face-up under daylight-equivalent lighting
-2. Identify the primary hue and any secondary modifiers
-3. Assess saturation — vivid and strong command the highest premiums
-4. Assess tone — medium is generally optimal; too dark or too light reduces value
-5. Compare to reference images or master stones if available
-6. Note any colour zoning visible face-up (reduces value)
+1. 在日光等效光照下从正面观察宝石
+2. 识别主色调和任何次级修饰色
+3. 评估饱和度——鲜艳和浓郁的颜色获得最高溢价
+4. 评估明度——中等通常最理想；过深或过浅都会降低价值
+5. 如有参考图像或标准石可用，进行比较
+6. 注意正面可见的任何颜色分区（会降低价值）
 
-**预期结果：** A three-component colour grade (e.g., "medium vivid blue with slight violetish modifier") that positions the stone on the colour quality spectrum for its species.
+**预期结果：** 一个三组分颜色等级（例如"中等鲜艳蓝色，带轻微紫色修饰"），将宝石定位在其品种的颜色质量光谱上。
 
-**失败处理：** If lighting conditions are not ideal (yellowish indoor light), note the limitation. Colour grading under incorrect lighting produces unreliable results. If colour-change is suspected (alexandrite, some sapphires, some garnets), assess under both daylight and incandescent light.
+**失败处理：** 如果光照条件不理想（偏黄的室内光），注明这一限制。在不正确的光照下进行颜色分级会产生不可靠的结果。如果怀疑有变色效应（亚历山大变石、某些蓝宝石、某些石榴石），需在日光和白炽灯光下分别评估。
 
-### 第 2 步：Clarity Grading
+### 第 2 步：净度分级
 
-Evaluate the stone's internal characteristics under 10x magnification.
+在 10 倍放大下评估宝石的内部特征。
 
 ```
 Coloured Gemstone Clarity Scale (GIA-based):
@@ -155,20 +152,20 @@ Different species have different "normal" clarity levels:
   → Eye-clean examples are extremely rare and valuable
 ```
 
-1. Examine the stone face-up first — does the unaided eye see any inclusions?
-2. Examine under 10x magnification, focusing through the table
-3. Note inclusion type (crystal, feather, fingerprint, silk, needle), size, location, and number
-4. Assess whether inclusions affect transparency, brilliance, or durability
-5. Assign a clarity grade based on the visibility and impact of inclusions
-6. Consider species expectations — an SI1 emerald is excellent; an SI1 aquamarine is average
+1. 首先从正面检查宝石——肉眼能否看到任何内含物？
+2. 在 10 倍放大下检查，通过台面聚焦
+3. 记录内含物类型（晶体、羽裂、指纹状、丝状、针状）、大小、位置和数量
+4. 评估内含物是否影响透明度、光彩或耐久性
+5. 根据内含物的可见度和影响程度分配净度等级
+6. 考虑品种预期——SI1 级祖母绿是优秀的；SI1 级海蓝宝石则是一般的
 
-**预期结果：** A clarity grade with description of key inclusions, their location, and their impact on beauty and durability. Grade is calibrated to species-specific expectations.
+**预期结果：** 一个净度等级，附有主要内含物的描述、位置及其对美观和耐久性的影响。等级已根据品种特定预期进行校准。
 
-**失败处理：** If magnification is insufficient (no loupe available), perform an eye-clean/not-eye-clean assessment only. Note the limitation. If the stone is mounted and pavilion inclusions are hidden, note which areas could not be assessed.
+**失败处理：** 如果放大倍数不够（没有放大镜），仅进行肉眼洁净/非肉眼洁净的评估。注明此限制。如果宝石已镶嵌且亭部内含物被遮挡，注明哪些区域无法评估。
 
-### 第 3 步：Cut Quality Assessment
+### 第 3 步：切工质量评估
 
-Evaluate the quality of the cut based on proportions, symmetry, and light performance.
+根据比例、对称性和光学性能评估切工质量。
 
 ```
 Cut Quality Factors:
@@ -209,38 +206,38 @@ SYMMETRY AND FINISH:
 - Girdle consistency (even thickness)
 ```
 
-1. View the stone face-up and rock it gently — observe brilliance, windowing, and extinction
-2. Check proportions: table size, crown height, pavilion depth
-3. Assess symmetry: outline shape, facet alignment, meet precision
-4. Evaluate surface polish: scratches, polish lines, orange peel under 10x
-5. Check girdle: even thickness, not too thin (chipping risk) or too thick (dead weight)
-6. Rate the cut from Excellent to Poor
+1. 从正面观察宝石并轻轻摇动——观察光彩、窗口效应和暗区
+2. 检查比例：台面大小、冠部高度、亭部深度
+3. 评估对称性：轮廓形状、刻面对齐、交汇精度
+4. 评估表面抛光：划痕、抛光线、10 倍下的橘皮效应
+5. 检查腰棱：厚度均匀，不宜过薄（崩裂风险）或过厚（死重）
+6. 从优秀到差评定切工等级
 
-**预期结果：** A cut quality assessment covering proportions, light performance, symmetry, and surface finish. The cut grade significantly affects value — a well-cut stone of moderate quality can outperform a poorly-cut stone of higher colour and clarity.
+**预期结果：** 一份涵盖比例、光学性能、对称性和表面质量的切工质量评估。切工等级显著影响价值——一颗切工精良的中等品质宝石可能胜过一颗切工粗糙的高颜色高净度宝石。
 
-**失败处理：** If the stone is mounted and proportions cannot be fully measured, assess what is visible (face-up light performance, symmetry, polish) and note that proportions could not be verified. Mounted stones always have assessment limitations.
+**失败处理：** 如果宝石已镶嵌且比例无法完全测量，评估可见部分（正面光学性能、对称性、抛光），并注明比例无法验证。镶嵌宝石始终存在评估限制。
 
-### 第 4 步：Carat Weight and Measurements
+### 第 4 步：克拉重量和尺寸
 
-Record the stone's weight and dimensions.
+记录宝石的重量和尺寸。
 
-1. Weigh the stone on a carat scale (1 carat = 0.2 grams)
-2. Record weight to two decimal places (e.g., 2.37 ct)
-3. Measure dimensions: length x width x depth in millimetres
-4. For mounted stones, estimate weight from dimensions using species-specific formulas:
-   - Round: diameter^2 x depth x SG factor
-   - Oval: length x width x depth x SG factor x 0.0020
-5. Note that per-carat value increases at commercially significant weight thresholds:
-   - 0.50 ct, 1.00 ct, 2.00 ct, 3.00 ct, 5.00 ct, 10.00 ct
-   - A 1.02 ct stone commands a premium over a 0.98 ct stone of equal quality
+1. 在克拉秤上称重（1 克拉 = 0.2 克）
+2. 记录精确到两位小数的重量（例如 2.37 ct）
+3. 测量尺寸：长 x 宽 x 深，单位为毫米
+4. 对于镶嵌宝石，使用品种特定公式从尺寸估算重量：
+   - 圆形：直径^2 x 深度 x 比重系数
+   - 椭圆形：长 x 宽 x 深 x 比重系数 x 0.0020
+5. 注意每克拉价值在商业上重要的重量阈值处会增加：
+   - 0.50 ct、1.00 ct、2.00 ct、3.00 ct、5.00 ct、10.00 ct
+   - 一颗 1.02 ct 的宝石比同等品质的 0.98 ct 宝石价格更高
 
-**预期结果：** Accurate carat weight (to 0.01 ct) and millimetre dimensions. For mounted stones, a weight estimate with stated margin of error.
+**预期结果：** 精确的克拉重量（到 0.01 ct）和毫米尺寸。对于镶嵌宝石，需注明误差范围的重量估算。
 
-**失败处理：** If no carat scale is available, measure dimensions and estimate weight using standard formulas. Note that the weight is estimated. For valuable stones, always verify weight on a calibrated scale.
+**失败处理：** 如果没有克拉秤，测量尺寸并使用标准公式估算重量。注明重量为估算值。对于贵重宝石，始终在校准过的秤上验证重量。
 
-### 第 5 步：Treatment Detection
+### 第 5 步：处理检测
 
-Assess whether the stone has been treated to enhance its appearance.
+评估宝石是否经过处理以增强外观。
 
 ```
 Common Gemstone Treatments:
@@ -282,19 +279,19 @@ TREATMENT IMPACT ON VALUE:
 - Requires disclosure at point of sale in all jurisdictions
 ```
 
-1. Examine inclusions for signs of heat treatment (dissolved silk, stress halos)
-2. Use fibre-optic light to check for fracture filling (flash effect)
-3. Check for surface coatings by examining edges and scratches
-4. For high-value stones, note that laboratory certification is essential for treatment status
-5. Record treatment assessment: untreated, heated, filled, coated, diffused, or unknown
+1. 检查内含物是否有热处理迹象（溶解的丝状物、应力晕）
+2. 使用光纤灯检查裂隙充填（闪光效应）
+3. 通过检查边缘和划痕来检查表面涂层
+4. 对于高价值宝石，注明实验室认证对处理状态至关重要
+5. 记录处理评估：未处理、加热、充填、涂层、扩散处理或未知
 
-**预期结果：** A treatment assessment with supporting observations. For stones above $500, recommend laboratory certification (GIA, GRS, SSEF, Gubelin) for authoritative treatment determination.
+**预期结果：** 一份附有支持性观察的处理评估。对于价值超过 $500 的宝石，建议获取实验室认证（GIA、GRS、SSEF、Gubelin）以进行权威的处理状态确定。
 
-**失败处理：** Many treatments (especially mild heat treatment and some irradiation) cannot be detected without laboratory instruments (FTIR spectroscopy, UV-Vis, Raman). If treatment status is uncertain, record "unknown — laboratory testing recommended" rather than guessing.
+**失败处理：** 许多处理（特别是轻度热处理和某些辐照）在没有实验室仪器（FTIR 光谱、UV-Vis、拉曼光谱）的情况下无法检测。如果处理状态不确定，记录"未知——建议实验室检测"，而不是猜测。
 
-### 第 6 步：Market Factor Analysis
+### 第 6 步：市场因素分析
 
-Consider external factors that affect market value beyond the four Cs.
+考虑四C之外影响市场价值的外部因素。
 
 ```
 Market Factors:
@@ -327,37 +324,37 @@ Market Factors:
 +-------------------+------------------------------------------+
 ```
 
-1. Research the stone's likely origin if known or certifiable
-2. Consider the species' current market position (trending up, stable, declining)
-3. Assess whether laboratory certification would add value (generally yes for stones >1 ct and >$500)
-4. Note any provenance or historical significance
-5. Compile the complete assessment into a value range (not a single price point)
+1. 如果已知或可认证，研究宝石的可能产地
+2. 考虑该品种当前的市场地位（上升趋势、稳定、下降）
+3. 评估实验室认证是否会增加价值（对于 >1 ct 和 >$500 的宝石通常是肯定的）
+4. 注明任何来源或历史意义
+5. 将完整评估汇编成一个价值范围（不是单一价格点）
 
-**预期结果：** A contextualised value range that accounts for the four Cs, treatment status, origin, and market factors. Expressed as a range with stated assumptions.
+**预期结果：** 一个将四C、处理状态、产地和市场因素纳入考量的情境化价值范围。以范围表示并附有声明的假设条件。
 
-**失败处理：** Gemstone pricing requires market expertise that evolves continuously. If market data is unavailable, provide the quality assessment (four Cs + treatment) without a price estimate and recommend consultation with a dealer or certified appraiser.
+**失败处理：** 宝石定价需要持续更新的市场专业知识。如果市场数据不可用，提供质量评估（四C + 处理）而不提供价格估算，并建议咨询经销商或认证鉴定师。
 
 ## 验证清单
 
-- [ ] Species positively identified before appraisal began
-- [ ] Colour assessed under daylight-equivalent lighting with hue, saturation, and tone
-- [ ] Clarity graded under 10x magnification with inclusion inventory
-- [ ] Cut quality evaluated for proportions, light performance, symmetry, and finish
-- [ ] Carat weight measured (or estimated with stated margin)
-- [ ] Treatment status assessed with supporting observations
-- [ ] Market factors considered (origin, rarity, certification value)
-- [ ] Value expressed as a range, not a single number
-- [ ] Disclaimer included: this is educational guidance, not a certified appraisal
+- [ ] 鉴定开始前已积极确认宝石品种
+- [ ] 在日光等效光照下评估了颜色的色调、饱和度和明度
+- [ ] 在 10 倍放大下进行了净度分级并编制了内含物清单
+- [ ] 评估了切工质量的比例、光学性能、对称性和表面质量
+- [ ] 测量了克拉重量（或进行了附有声明误差范围的估算）
+- [ ] 评估了处理状态并附有支持性观察
+- [ ] 考虑了市场因素（产地、稀有性、认证价值）
+- [ ] 价值以范围表示，而非单一数字
+- [ ] 包含免责声明：这是教育指导，非认证鉴定
 
 ## 常见问题
 
-- **Omitting the disclaimer**: This procedure provides educational guidance only. Formal appraisals for insurance, sale, or legal purposes require a certified gemologist. Always state this clearly
-- **Grading colour under incorrect lighting**: Fluorescent, incandescent, and LED lights all shift colour perception. Use daylight-equivalent (5500-6500K) or natural north-facing daylight
-- **Ignoring species-specific clarity expectations**: An SI1 emerald is a fine stone; an SI1 aquamarine is below average. Clarity must be graded relative to what is normal for the species
-- **Overvaluing carat weight**: A large, poorly-cut, included stone is worth less per carat than a smaller, well-cut, clean stone. The four Cs interact — weight alone does not determine value
-- **Assuming untreated without evidence**: The majority of rubies and sapphires on the market are heat-treated. Assume treatment unless laboratory certification confirms otherwise
+- **遗漏免责声明**：本程序仅提供教育指导。用于保险、销售或法律目的的正式鉴定需要认证宝石学家。始终清楚说明这一点
+- **在不正确的光照下进行颜色分级**：荧光灯、白炽灯和 LED 灯都会改变颜色感知。使用日光等效光源（5500-6500K）或自然的朝北日光
+- **忽视品种特定的净度预期**：SI1 级祖母绿是一颗好石头；SI1 级海蓝宝石则低于平均水平。净度必须相对于该品种的正常水平来分级
+- **过度重视克拉重量**：一颗大而切工差、含内含物的宝石每克拉价值低于一颗更小但切工精良、洁净的宝石。四C相互作用——重量本身不决定价值
+- **在没有证据的情况下假定未处理**：市场上大多数红宝石和蓝宝石都经过热处理。除非实验室认证确认，否则应假定已处理
 
 ## 相关技能
 
-- `identify-gemstone` — Positive species identification is the prerequisite for appraisal; misidentification invalidates the entire assessment
-- `grade-tcg-card` — The observation-first, bias-prevention methodology parallels the discipline needed to avoid "wishful grading" in gemstone appraisal
+- `identify-gemstone` — 正确的品种鉴定是评估的前提；错误鉴定将使整个评估无效
+- `grade-tcg-card` — 观察优先、防偏见的方法论与宝石鉴定中避免"愿望分级"所需的纪律性相呼应

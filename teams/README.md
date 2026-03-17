@@ -5,7 +5,7 @@ Predefined multi-agent team compositions for coordinated workflows in [Claude Co
 ## Overview
 
 <!-- AUTO:START:teams-intro -->
-A collection of 13 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
+A collection of 14 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
 <!-- AUTO:END:teams-intro -->
 
 Teams complement agents and skills:
@@ -31,6 +31,7 @@ Teams complement agents and skills:
 | [entomology](entomology.md) | conservation-entomologist | 3 | hub-and-spoke | Multi-agent entomology team combining conservation ecology, systematic taxonomy, and citizen science for comprehensive insect study |
 | [analytical-chemistry](analytical-chemistry.md) | spectroscopist | 3 | hub-and-spoke | Multi-agent analytical chemistry team for spectroscopic and chromatographic analysis with research synthesis |
 | [physical-computing](physical-computing.md) | logician | 3 | sequential | Cross-disciplinary team for digital logic design and physical implementation — from Boolean gates to complete computing systems |
+| [translation-campaign](translation-campaign.md) | project-manager | 4 | wave-parallel | Wave-parallel translation team for systematic localization of all skills into supported locales (de, zh-CN, ja, es) |
 <!-- AUTO:END:teams-table -->
 
 ## Creating a New Team

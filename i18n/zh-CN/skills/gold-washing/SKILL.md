@@ -1,13 +1,10 @@
 ---
 name: gold-washing
 description: >
-  Alluvial gold recovery using panning, sluicing, and classification.
-  Covers site reading (geological indicators, stream dynamics, pay streak
-  location), panning technique, sluice box operation, and responsible
-  extraction practices. Use when prospecting in an area with known or
-  suspected alluvial gold deposits, sampling a stream to test for gold
-  presence, maximizing recovery during recreational panning, or assessing a
-  site's gold potential before investing more effort.
+  使用淘金、溜槽和分级技术进行冲积金回收。涵盖场地解读（地质指标、溪流动态、
+  富矿带定位）、淘金技术、溜槽箱操作和负责任的开采实践。适用于在已知或疑似
+  冲积金矿床地区探矿、采样溪流以测试含金量、在休闲淘金中最大化回收率，或在
+  投入更多精力之前评估场地的含金潜力。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,32 +21,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Gold Washing
+# 淘金
 
-Recover alluvial gold from stream deposits using panning, sluicing, and classification techniques.
+使用淘金、溜槽和分级技术从溪流沉积物中回收冲积金。
 
 ## 适用场景
 
-- You are prospecting in an area with known or suspected alluvial gold deposits
-- You want to sample a stream or river to test for gold presence
-- You are recreational panning and want to maximize recovery
-- You need to assess a site's gold potential before investing more effort
+- 在已知或疑似冲积金矿床地区探矿
+- 采样溪流或河流以测试含金量
+- 休闲淘金并希望最大化回收率
+- 在投入更多精力之前评估场地的含金潜力
 
 ## 输入
 
-- **必需**: A gold pan (14-16 inch, with riffles)
-- **必需**: Access to a stream, river, or alluvial deposit
-- **可选**: Classifier/screen (1/4 inch mesh)
-- **可选**: Sluice box (for higher volume processing)
-- **可选**: Snuffer bottle or tweezers (for fine gold recovery)
-- **可选**: Vial with water (for storing recovered gold)
-- **可选**: Shovel and bucket for material collection
+- **必需**：淘金盘（14-16 英寸，带挡板）
+- **必需**：可以进入溪流、河流或冲积矿床
+- **可选**：分级筛（1/4 英寸网孔）
+- **可选**：溜槽箱（用于处理更大量的材料）
+- **可选**：吸管瓶或镊子（用于回收细金）
+- **可选**：装水的小瓶（用于储存回收的金子）
+- **可选**：铲子和水桶用于材料收集
 
 ## 步骤
 
-### 第 1 步：Read the Site
+### 第 1 步：解读场地
 
-Gold is heavy (specific gravity 19.3) and concentrates predictably. Read the water and geology before digging.
+金的比重很大（19.3），会以可预测的方式集中。在挖掘之前先解读水文和地质。
 
 ```
 Where Gold Concentrates:
@@ -93,13 +90,13 @@ Geological Indicators:
   which can host gold deposits
 ```
 
-**预期结果：** You have identified 2-3 promising sample locations based on stream dynamics and geological indicators.
+**预期结果：** 根据溪流动态和地质指标确定了 2-3 个有希望的采样地点。
 
-**失败处理：** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). Even a single color (flake of gold) confirms the stream carries gold.
+**失败处理：** 如果没有明显的指标可见，系统地在多个位置采样——从每个不同特征（内弯、障碍物后方、随机砂砾滩）取一盘。即使一个色点（金片）也能确认溪流含金。
 
-### 第 2 步：Classify and Collect Material
+### 第 2 步：分级和收集材料
 
-Prepare the raw material for panning.
+准备用于淘洗的原始材料。
 
 ```
 Collection Protocol:
@@ -118,13 +115,13 @@ Classification:
 5. Classified material is now ready for panning
 ```
 
-**预期结果：** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
+**预期结果：** 一盘或一桶分级后的材料（小于 1/4 英寸的砂砾），来源于地质上有希望的位置。
 
-**失败处理：** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
+**失败处理：** 如果无法到达基岩，采样可获取的材料。浅层样本含金可能性较低，但仍值得测试——洪水事件可以在不同深度沉积金子。
 
-### 第 3 步：Pan the Material
+### 第 3 步：淘洗材料
 
-The gold pan separates gold from lighter material using gravity and water.
+淘金盘利用重力和水将金子从较轻的材料中分离出来。
 
 ```
 Panning Technique:
@@ -162,13 +159,13 @@ Common Errors:
   you start washing off material.
 ```
 
-**预期结果：** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
+**预期结果：** 所有重质材料（金、黑砂、石榴石）集中在淘金盘底部。金子以明亮的黄色薄片、扁平颗粒或（罕见的）小金块形式可见。
 
-**失败处理：** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
+**失败处理：** 如果仔细淘洗后没有金子可见，该位置可能不含金——或者金子可能太细而无法看到（面粉金）。用放大镜检查。如果仍然没有，移至不同的采样地点。
 
-### 第 4 步：Scale Up with a Sluice Box (Optional)
+### 第 4 步：使用溜槽箱扩大规模（可选）
 
-For processing larger volumes of material.
+用于处理更大量的材料。
 
 ```
 Sluice Box Operation:
@@ -191,29 +188,29 @@ Sluice Calibration:
   If it is caught by the riffles, gold will be too.
 ```
 
-**预期结果：** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
+**预期结果：** 更大量的处理，金子集中在挡板垫中，通过最终淘洗回收。
 
-**失败处理：** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
+**失败处理：** 如果溜槽未能捕获测试材料（铅丸），调整角度或水流。溜槽应该能捕获所有比石英砂重的物质。
 
 ## 验证清单
 
-- [ ] Site was read for geological indicators before sampling
-- [ ] Material was collected from a geologically promising location
-- [ ] Material was classified before panning
-- [ ] Panning used side-to-side shaking for stratification
-- [ ] Black sand concentrate was checked thoroughly for fine gold
-- [ ] Any gold recovered was stored safely in water in a sealed vial
-- [ ] The site was left without significant environmental disturbance
+- [ ] 在采样前已解读场地的地质指标
+- [ ] 从地质上有希望的位置收集了材料
+- [ ] 在淘洗前对材料进行了分级
+- [ ] 淘洗使用了左右摇晃进行分层
+- [ ] 已仔细检查黑砂精矿中的细金
+- [ ] 回收的金子已安全储存在密封小瓶的水中
+- [ ] 离开场地时未造成重大环境干扰
 
 ## 常见问题
 
-- **Panning too fast**: Impatience loses fine gold. A proper pan takes 5-10 minutes. Speed is the enemy of recovery
-- **Ignoring black sand**: If you see heavy black sand concentrating, gold is likely present — even if too fine to see without magnification
-- **Confusing pyrite with gold**: Pyrite (fool's gold) is lighter, breaks when pressed with a pin, and has a brassy rather than buttery yellow colour. Real gold is malleable and does not tarnish
-- **Sampling random locations**: Gold concentrates predictably. Sampling the middle of a straight stretch is far less productive than sampling the inside of a bend
-- **Environmental damage**: Respect waterways. Do not dig large holes in stream banks, do not use mercury (illegal in most jurisdictions and extremely toxic), and fill in any test holes
-- **Ignoring regulations**: Most jurisdictions require permits for gold prospecting, even recreational panning. Check local regulations before starting
+- **淘洗太快**：急躁会丢失细金。一盘正确的淘洗需要 5-10 分钟。速度是回收率的敌人
+- **忽视黑砂**：如果看到重质黑砂集中，金子很可能存在——即使细到没有放大镜看不到
+- **将黄铁矿与金混淆**：黄铁矿（愚人金）更轻，用针压会碎裂，呈黄铜色而非奶油黄色。真金是可锻的且不会变色
+- **随机采样位置**：金以可预测的方式集中。在直线段中间采样远不如在弯道内侧采样有效
+- **环境破坏**：尊重水道。不要在溪岸挖大坑，不要使用汞（在大多数管辖区违法且剧毒），填回任何测试坑
+- **忽视法规**：大多数管辖区要求探矿许可证，即使是休闲淘金。开始前检查当地法规
 
 ## 相关技能
 
-- `mineral-identification` — understanding rock and mineral types helps read geological indicators that point to gold-bearing areas
+- `mineral-identification` — 了解岩石和矿物类型有助于解读指向含金区域的地质指标

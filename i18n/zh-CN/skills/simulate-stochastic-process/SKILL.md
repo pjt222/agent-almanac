@@ -1,12 +1,10 @@
 ---
 name: simulate-stochastic-process
 description: >
-  Simulate stochastic processes (Markov chains, random walks, SDEs, MCMC) with
-  convergence diagnostics, variance reduction, and visualization. Use when
-  generating sample paths for estimation, prediction, or visualization;
-  when analytical solutions are intractable; running Monte Carlo estimation
-  needing convergence guarantees; validating analytical results against
-  empirical simulation; or sampling from complex posteriors via MCMC.
+  模拟随机过程（马尔可夫链、随机游走、随机微分方程、MCMC），包括收敛诊断、方差
+  缩减和可视化。适用于生成用于估计、预测或可视化的样本路径；当解析解不可得时；
+  运行需要收敛保证的蒙特卡洛估计；对比解析结果与经验模拟进行验证；或通过 MCMC
+  从复杂后验分布中采样时。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -23,240 +21,240 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Simulate Stochastic Process
+# 随机过程模拟
 
-Simulate sample paths from stochastic processes -- including discrete Markov chains, continuous-time processes, stochastic differential equations, and MCMC samplers -- with convergence diagnostics, variance reduction techniques, and trajectory visualization.
+模拟随机过程的样本路径——包括离散马尔可夫链、连续时间过程、随机微分方程和 MCMC 采样器——并进行收敛诊断、方差缩减技术和轨迹可视化。
 
 ## 适用场景
 
-- You need to generate sample paths from a stochastic process for estimation, prediction, or visualization
-- Analytical solutions are intractable and simulation is the only feasible approach
-- You are running Monte Carlo estimation and need convergence guarantees and uncertainty quantification
-- You want to validate analytical results (stationary distributions, hitting times) against empirical simulation
-- You need to sample from a complex posterior distribution using MCMC
-- You are prototyping a stochastic model before committing to full analytical treatment
+- 需要从随机过程生成用于估计、预测或可视化的样本路径
+- 解析解不可得，模拟是唯一可行的方法
+- 正在运行蒙特卡洛估计，需要收敛保证和不确定性量化
+- 想要对比解析结果（平稳分布、命中时间）与经验模拟进行验证
+- 需要使用 MCMC 从复杂后验分布中采样
+- 在承诺进行完整解析处理之前对随机模型进行原型验证
 
 ## 输入
 
-### Required
+### 必需
 
-| Input | Type | Description |
-|-------|------|-------------|
-| `process_type` | string | Type of process: `"dtmc"`, `"ctmc"`, `"random_walk"`, `"brownian_motion"`, `"sde"`, `"mcmc"` |
-| `parameters` | dict | Process-specific parameters (transition matrix, drift/diffusion coefficients, target density, etc.) |
-| `n_paths` | integer | Number of independent sample paths to simulate |
-| `n_steps` | integer | Number of time steps per path (or total MCMC iterations) |
+| 输入 | 类型 | 描述 |
+|------|------|------|
+| `process_type` | string | 过程类型：`"dtmc"`、`"ctmc"`、`"random_walk"`、`"brownian_motion"`、`"sde"`、`"mcmc"` |
+| `parameters` | dict | 过程特定参数（转移矩阵、漂移/扩散系数、目标密度等） |
+| `n_paths` | integer | 独立样本路径数量 |
+| `n_steps` | integer | 每条路径的时间步数（或 MCMC 总迭代数） |
 
-### Optional
+### 可选
 
-| Input | Type | Default | Description |
-|-------|------|---------|-------------|
-| `initial_state` | scalar/vector | process-specific | Starting state or distribution for each path |
-| `dt` | float | 0.01 | Time step size for continuous-time discretization |
-| `seed` | integer | random | Random seed for reproducibility |
-| `burn_in` | integer | `n_steps / 10` | Number of initial steps to discard (MCMC) |
-| `thinning` | integer | 1 | Keep every k-th sample to reduce autocorrelation |
-| `variance_reduction` | string | `"none"` | Method: `"none"`, `"antithetic"`, `"stratified"`, `"control_variate"` |
-| `target_function` | callable | none | Function to evaluate along paths for Monte Carlo estimation |
+| 输入 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `initial_state` | scalar/vector | 过程特定 | 每条路径的起始状态或分布 |
+| `dt` | float | 0.01 | 连续时间离散化的时间步长 |
+| `seed` | integer | random | 用于可重复性的随机种子 |
+| `burn_in` | integer | `n_steps / 10` | 要丢弃的初始步数（MCMC） |
+| `thinning` | integer | 1 | 保留每第 k 个样本以减少自相关 |
+| `variance_reduction` | string | `"none"` | 方法：`"none"`、`"antithetic"`、`"stratified"`、`"control_variate"` |
+| `target_function` | callable | none | 沿路径评估的用于蒙特卡洛估计的函数 |
 
 ## 步骤
 
-### 第 1 步：Define Process Model and Parameters
+### 第 1 步：定义过程模型和参数
 
-1.1. Identify the process type and gather all required parameters:
-   - **DTMC**: Transition matrix `P` and state space. Validate `P` is row-stochastic.
-   - **CTMC**: Rate matrix `Q`. Validate rows sum to 0 and off-diagonal entries are non-negative.
-   - **Random walk**: Step distribution (e.g., `{-1, +1}` with equal probability), boundaries if any.
-   - **Brownian motion**: Drift `mu`, volatility `sigma`, dimension `d`.
-   - **SDE (Ito)**: Drift function `a(x,t)`, diffusion function `b(x,t)`.
-   - **MCMC**: Target log-density, proposal mechanism (random walk Metropolis, Hamiltonian, Gibbs components).
+1.1. 识别过程类型并收集所有必需参数：
+   - **DTMC**：转移矩阵 `P` 和状态空间。验证 `P` 是行随机的。
+   - **CTMC**：速率矩阵 `Q`。验证行和为 0 且非对角线元素非负。
+   - **随机游走**：步长分布（例如 `{-1, +1}` 等概率），边界（如有）。
+   - **布朗运动**：漂移 `mu`，波动率 `sigma`，维度 `d`。
+   - **SDE（伊藤）**：漂移函数 `a(x,t)`，扩散函数 `b(x,t)`。
+   - **MCMC**：目标对数密度，提议机制（随机游走 Metropolis、Hamilton、Gibbs 分量）。
 
-1.2. Validate parameter consistency:
-   - Matrix dimensions match state space size.
-   - SDE coefficients satisfy growth and Lipschitz conditions (at least informally) for the chosen solver.
-   - MCMC proposal is well-defined for the support of the target distribution.
+1.2. 验证参数一致性：
+   - 矩阵维度与状态空间大小匹配。
+   - SDE 系数满足增长和 Lipschitz 条件（至少非正式地）以适应所选求解器。
+   - MCMC 提议在目标分布的支撑上有良好定义。
 
-1.3. Set the random seed for reproducibility.
+1.3. 设置随机种子以确保可重复性。
 
-**预期结果：** A fully specified stochastic model with validated parameters and a reproducible random state.
+**预期结果：** 一个完全指定的随机模型，参数已验证，随机状态可重复。
 
-**失败处理：** If parameters are inconsistent (e.g., non-stochastic matrix), correct them before proceeding. If SDE coefficients are pathological, consider a different discretization scheme.
+**失败处理：** 如果参数不一致（例如非随机矩阵），在继续之前修正。如果 SDE 系数具有病理性，考虑使用不同的离散化方案。
 
-### 第 2 步：Select Simulation Method
+### 第 2 步：选择模拟方法
 
-2.1. Choose the appropriate algorithm based on process type:
+2.1. 根据过程类型选择适当的算法：
 
-| Process | Method | Key Property |
-|---------|--------|-------------|
-| DTMC | Direct sampling from transition row | Exact |
-| CTMC | Gillespie algorithm (SSA) | Exact, event-driven |
-| CTMC (approx.) | Tau-leaping | Approximate, faster for high rates |
-| Random walk | Direct sampling of increments | Exact |
-| Brownian motion | Cumulative sum of Gaussian increments | Exact for fixed `dt` |
-| SDE (general) | Euler-Maruyama | Order 0.5 strong, order 1.0 weak |
-| SDE (higher order) | Milstein | Order 1.0 strong (scalar noise) |
-| SDE (stiff) | Implicit Euler-Maruyama | Stable for stiff drift |
-| MCMC (general) | Metropolis-Hastings | Asymptotically exact |
-| MCMC (gradient) | Hamiltonian Monte Carlo (HMC) | Better mixing for high dimensions |
-| MCMC (conditional) | Gibbs sampler | Exact conditionals when available |
+| 过程 | 方法 | 关键性质 |
+|------|------|----------|
+| DTMC | 从转移行直接采样 | 精确 |
+| CTMC | Gillespie 算法 (SSA) | 精确，事件驱动 |
+| CTMC（近似） | Tau-leaping | 近似，高速率时更快 |
+| 随机游走 | 直接采样增量 | 精确 |
+| 布朗运动 | 高斯增量的累积和 | 固定 `dt` 时精确 |
+| SDE（一般） | Euler-Maruyama | 强收敛 0.5 阶，弱收敛 1.0 阶 |
+| SDE（高阶） | Milstein | 强收敛 1.0 阶（标量噪声） |
+| SDE（刚性） | 隐式 Euler-Maruyama | 刚性漂移稳定 |
+| MCMC（一般） | Metropolis-Hastings | 渐近精确 |
+| MCMC（梯度） | Hamilton 蒙特卡洛 (HMC) | 高维混合更好 |
+| MCMC（条件） | Gibbs 采样器 | 条件分布可得时精确 |
 
-2.2. For SDE methods, choose `dt` small enough for numerical stability. A useful heuristic: start with `dt = 0.01` and halve it until results stabilize.
+2.2. 对于 SDE 方法，选择足够小的 `dt` 以确保数值稳定性。一个有用的启发式方法：从 `dt = 0.01` 开始，减半直到结果稳定。
 
-2.3. For MCMC, tune the proposal scale to achieve an acceptance rate of approximately:
-   - 23.4% for high-dimensional random walk Metropolis
-   - 57.4% for one-dimensional targets
-   - 65-90% for HMC (depends on trajectory length)
+2.3. 对于 MCMC，调整提议尺度以达到大约以下接受率：
+   - 高维随机游走 Metropolis：23.4%
+   - 一维目标：57.4%
+   - HMC：65-90%（取决于轨迹长度）
 
-2.4. If variance reduction is requested, configure it:
-   - **Antithetic variates**: For each path with random increments `Z`, also simulate with `-Z`.
-   - **Stratified sampling**: Partition the probability space and sample within each stratum.
-   - **Control variates**: Identify a correlated quantity with known expectation to reduce variance.
+2.4. 如果请求方差缩减，进行配置：
+   - **对偶变量**：对于每条具有随机增量 `Z` 的路径，同时模拟 `-Z`。
+   - **分层采样**：将概率空间分区并在每层中采样。
+   - **控制变量**：识别一个具有已知期望的相关量以减少方差。
 
-**预期结果：** A selected simulation algorithm matched to the process type with appropriate tuning parameters.
+**预期结果：** 选定的模拟算法匹配过程类型，具有适当的调参。
 
-**失败处理：** If the chosen method is unstable (e.g., Euler-Maruyama diverging), switch to an implicit method or reduce `dt`.
+**失败处理：** 如果所选方法不稳定（例如 Euler-Maruyama 发散），切换到隐式方法或减小 `dt`。
 
-### 第 3 步：Implement and Run Simulation
+### 第 3 步：实现并运行模拟
 
-3.1. Allocate storage for `n_paths` trajectories, each of length `n_steps` (or dynamically for event-driven methods like Gillespie).
+3.1. 为 `n_paths` 条轨迹分配存储，每条长度为 `n_steps`（或对事件驱动方法如 Gillespie 动态分配）。
 
-3.2. For each path `i = 1, ..., n_paths`:
+3.2. 对每条路径 `i = 1, ..., n_paths`：
 
-   **DTMC / Random Walk:**
-   - Set `x[0] = initial_state`
-   - For `t = 1, ..., n_steps`: sample `x[t]` from the transition distribution given `x[t-1]`
+   **DTMC / 随机游走：**
+   - 设置 `x[0] = initial_state`
+   - 对 `t = 1, ..., n_steps`：根据 `x[t-1]` 从转移分布中采样 `x[t]`
 
-   **CTMC (Gillespie):**
-   - Set `x[0] = initial_state`, `time = 0`
-   - While `time < T_max`:
-     - Compute total rate `lambda = -Q[x, x]`
-     - Sample holding time `tau ~ Exp(lambda)`
-     - Sample next state from transition probabilities `Q[x, j] / lambda` for `j != x`
-     - Update `time += tau`, record transition
+   **CTMC (Gillespie)：**
+   - 设置 `x[0] = initial_state`，`time = 0`
+   - 当 `time < T_max` 时：
+     - 计算总速率 `lambda = -Q[x, x]`
+     - 采样停留时间 `tau ~ Exp(lambda)`
+     - 从转移概率 `Q[x, j] / lambda`（`j != x`）采样下一状态
+     - 更新 `time += tau`，记录转移
 
-   **SDE (Euler-Maruyama):**
-   - Set `x[0] = initial_state`
-   - For `t = 1, ..., n_steps`:
-     - `dW = sqrt(dt) * N(0, I)` (Wiener increment)
+   **SDE (Euler-Maruyama)：**
+   - 设置 `x[0] = initial_state`
+   - 对 `t = 1, ..., n_steps`：
+     - `dW = sqrt(dt) * N(0, I)`（Wiener 增量）
      - `x[t] = x[t-1] + a(x[t-1], t*dt) * dt + b(x[t-1], t*dt) * dW`
 
-   **MCMC (Metropolis-Hastings):**
-   - Set `x[0] = initial_state`
-   - For `t = 1, ..., n_steps`:
-     - Propose `x' ~ q(x' | x[t-1])`
-     - Compute acceptance ratio `alpha = min(1, p(x') * q(x[t-1]|x') / (p(x[t-1]) * q(x'|x[t-1])))`
-     - Accept with probability `alpha`: `x[t] = x'` if accepted, else `x[t] = x[t-1]`
-     - Record acceptance decision
+   **MCMC (Metropolis-Hastings)：**
+   - 设置 `x[0] = initial_state`
+   - 对 `t = 1, ..., n_steps`：
+     - 提议 `x' ~ q(x' | x[t-1])`
+     - 计算接受率 `alpha = min(1, p(x') * q(x[t-1]|x') / (p(x[t-1]) * q(x'|x[t-1])))`
+     - 以概率 `alpha` 接受：如果接受则 `x[t] = x'`，否则 `x[t] = x[t-1]`
+     - 记录接受决策
 
-3.3. If `target_function` is provided, evaluate it at each state along each path and store the values.
+3.3. 如果提供了 `target_function`，在每条路径的每个状态上评估它并存储结果。
 
-3.4. Apply thinning: keep every `thinning`-th sample.
+3.4. 应用稀疏化：保留每第 `thinning` 个样本。
 
-3.5. Discard `burn_in` samples from the beginning of each path (primarily for MCMC).
+3.5. 丢弃每条路径开头的 `burn_in` 个样本（主要用于 MCMC）。
 
-**预期结果：** `n_paths` complete trajectories stored in memory, with optional function evaluations. MCMC acceptance rate is within the target range.
+**预期结果：** `n_paths` 条完整轨迹存储在内存中，带有可选的函数评估。MCMC 接受率在目标范围内。
 
-**失败处理：** If simulation produces NaN or Inf values, reduce `dt` for SDE methods or check parameter validity. If MCMC acceptance rate is near 0% or 100%, adjust proposal scale.
+**失败处理：** 如果模拟产生 NaN 或 Inf 值，对 SDE 方法减小 `dt` 或检查参数有效性。如果 MCMC 接受率接近 0% 或 100%，调整提议尺度。
 
-### 第 4 步：Apply Convergence Diagnostics
+### 第 4 步：应用收敛诊断
 
-4.1. **Trace plots**: Plot the value of each component over time for a subset of paths. Visual inspection for stationarity (no trends, stable variance).
+4.1. **轨迹图**：为路径子集绘制每个分量随时间的值。对平稳性进行目视检查（无趋势、方差稳定）。
 
-4.2. **Gelman-Rubin diagnostic (R-hat)**: For MCMC with multiple chains:
-   - Compute within-chain variance `W` and between-chain variance `B`.
+4.2. **Gelman-Rubin 诊断 (R-hat)**：对于多链 MCMC：
+   - 计算链内方差 `W` 和链间方差 `B`。
    - `R_hat = sqrt((n-1)/n + B/(n*W))`
-   - Convergence indicated by `R_hat < 1.01` (strict) or `R_hat < 1.1` (lenient).
+   - `R_hat < 1.01`（严格）或 `R_hat < 1.1`（宽松）表示收敛。
 
-4.3. **Effective sample size (ESS)**:
-   - Estimate autocorrelation at increasing lags.
+4.3. **有效样本量 (ESS)**：
+   - 估计递增滞后处的自相关。
    - `ESS = n_samples / (1 + 2 * sum(autocorrelations))`
-   - Rule of thumb: `ESS > 400` for reliable posterior summaries.
+   - 经验法则：`ESS > 400` 用于可靠的后验总结。
 
-4.4. **Geweke diagnostic**: Compare the mean of the first 10% and last 50% of each chain. The z-score should be within [-2, 2] for convergence.
+4.4. **Geweke 诊断**：比较每条链前 10% 和后 50% 的均值。z 分数应在 [-2, 2] 范围内表示收敛。
 
-4.5. **For non-MCMC processes**: Verify that time-averaged statistics (mean, variance) stabilize as path length increases. Plot running averages.
+4.5. **非 MCMC 过程**：验证时间平均统计量（均值、方差）随路径长度增加而稳定。绘制运行平均值。
 
-4.6. Report a summary table:
+4.6. 报告汇总表：
 
-| Diagnostic | Value | Threshold | Status |
-|-----------|-------|-----------|--------|
-| R-hat (max) | ... | < 1.01 | ... |
-| ESS (min) | ... | > 400 | ... |
-| Geweke z (max abs) | ... | < 2.0 | ... |
-| Acceptance rate | ... | 0.15-0.50 | ... |
+| 诊断指标 | 值 | 阈值 | 状态 |
+|----------|-----|------|------|
+| R-hat（最大） | ... | < 1.01 | ... |
+| ESS（最小） | ... | > 400 | ... |
+| Geweke z（最大绝对值） | ... | < 2.0 | ... |
+| 接受率 | ... | 0.15-0.50 | ... |
 
-**预期结果：** All convergence diagnostics pass their thresholds. Trace plots show stable, well-mixing chains.
+**预期结果：** 所有收敛诊断通过其阈值。轨迹图显示稳定、良好混合的链。
 
-**失败处理：** If R-hat > 1.1, run longer chains or improve the proposal. If ESS is very low, increase thinning or switch to a better sampler (e.g., HMC). If Geweke fails, extend burn-in.
+**失败处理：** 如果 R-hat > 1.1，运行更长的链或改进提议。如果 ESS 非常低，增加稀疏化或切换到更好的采样器（例如 HMC）。如果 Geweke 失败，延长预热期。
 
-### 第 5 步：Compute Summary Statistics with Confidence Intervals
+### 第 5 步：计算带置信区间的汇总统计量
 
-5.1. For each quantity of interest (state occupancy, function expectation, hitting times):
-   - Compute the point estimate as the sample mean across paths (after burn-in and thinning).
-   - Compute the standard error using the effective sample size: `SE = SD / sqrt(ESS)`.
+5.1. 对每个感兴趣的量（状态占用、函数期望、命中时间）：
+   - 计算点估计为路径间的样本均值（预热和稀疏化之后）。
+   - 使用有效样本量计算标准误：`SE = SD / sqrt(ESS)`。
 
-5.2. Construct confidence intervals:
-   - Normal approximation: `estimate +/- z_{alpha/2} * SE`
-   - For skewed distributions, use percentile bootstrap or batch means.
+5.2. 构造置信区间：
+   - 正态近似：`estimate +/- z_{alpha/2} * SE`
+   - 对偏斜分布，使用百分位 bootstrap 或批次均值。
 
-5.3. If variance reduction was applied, compute the variance reduction factor:
-   - `VRF = Var(naive estimator) / Var(reduced estimator)`
-   - Report the effective speedup.
+5.3. 如果应用了方差缩减，计算方差缩减因子：
+   - `VRF = Var(朴素估计量) / Var(缩减估计量)`
+   - 报告有效加速比。
 
-5.4. For Monte Carlo integration estimates:
-   - Report the estimate, standard error, 95% CI, ESS, and number of function evaluations.
+5.4. 对蒙特卡洛积分估计：
+   - 报告估计值、标准误、95% CI、ESS 和函数评估次数。
 
-5.5. For distribution estimates:
-   - Compute empirical quantiles (median, 2.5th, 97.5th percentiles).
-   - Kernel density estimates for continuous quantities.
+5.5. 对分布估计：
+   - 计算经验分位数（中位数、2.5 百分位、97.5 百分位）。
+   - 连续量的核密度估计。
 
-5.6. Tabulate all summary statistics with their uncertainties.
+5.6. 将所有汇总统计量及其不确定性制表。
 
-**预期结果：** Point estimates with associated standard errors and confidence intervals. Variance reduction (if applied) yields a VRF > 1.
+**预期结果：** 点估计及其标准误和置信区间。方差缩减（如已应用）产生 VRF > 1。
 
-**失败处理：** If confidence intervals are too wide, increase `n_paths` or `n_steps`. If variance reduction worsens estimates (VRF < 1), disable it -- the control variate or antithetic scheme may not suit the problem.
+**失败处理：** 如果置信区间太宽，增加 `n_paths` 或 `n_steps`。如果方差缩减恶化了估计（VRF < 1），禁用它——控制变量或对偶方案可能不适合该问题。
 
-### 第 6 步：Visualize Trajectories and Distributions
+### 第 6 步：可视化轨迹和分布
 
-6.1. **Trajectory plots**: Plot a representative subset of sample paths (5-20 paths) over time. Use transparency for overlapping paths.
+6.1. **轨迹图**：绘制样本路径的代表性子集（5-20 条路径）随时间的变化。使用透明度处理重叠路径。
 
-6.2. **Ensemble statistics**: Overlay the mean trajectory and pointwise 95% confidence bands across all paths.
+6.2. **集合统计**：叠加所有路径的平均轨迹和逐点 95% 置信带。
 
-6.3. **Marginal distributions**: At selected time points, plot histograms or density estimates of the state distribution across paths.
+6.3. **边际分布**：在选定的时间点，绘制跨路径的状态分布直方图或密度估计。
 
-6.4. **Stationary distribution comparison**: If an analytical stationary distribution is available, overlay it on the empirical histogram from the final time slice.
+6.4. **平稳分布比较**：如果有解析平稳分布可用，将其叠加在最终时间切片的经验直方图上。
 
-6.5. **Autocorrelation plots**: For MCMC, plot the autocorrelation function (ACF) for each component up to a reasonable lag.
+6.5. **自相关图**：对 MCMC，绘制每个分量到合理滞后的自相关函数 (ACF)。
 
-6.6. **Diagnostic dashboard**: Combine trace plots, ACF plots, running mean plots, and marginal densities into a single multi-panel figure for comprehensive assessment.
+6.6. **诊断仪表板**：将轨迹图、ACF 图、运行均值图和边际密度组合成单一多面板图形，进行综合评估。
 
-6.7. Save all figures in both vector (PDF/SVG) and raster (PNG) formats for documentation.
+6.7. 将所有图形保存为矢量格式（PDF/SVG）和光栅格式（PNG），用于文档记录。
 
-**预期结果：** Publication-quality figures showing trajectory behavior, distributional convergence, and diagnostic summaries. Analytical solutions (where available) match empirical results.
+**预期结果：** 出版质量的图形，展示轨迹行为、分布收敛和诊断摘要。解析解（如可用）与经验结果匹配。
 
-**失败处理：** If visualizations reveal non-stationarity or multimodality not expected from the model, revisit Steps 1-2 for parameter or method errors. If plots are cluttered, reduce the number of displayed paths or increase figure size.
+**失败处理：** 如果可视化揭示了模型未预期的非平稳性或多模态，回到第 1-2 步检查参数或方法错误。如果图形杂乱，减少显示的路径数量或增加图形尺寸。
 
 ## 验证清单
 
-- All simulated trajectories remain in the valid state space (no out-of-bounds values, no NaN/Inf)
-- For DTMC/CTMC: empirical stationary distribution converges to the analytical one (within expected Monte Carlo error)
-- For SDE: halving `dt` does not qualitatively change the results (convergence order check)
-- For MCMC: R-hat < 1.01, ESS > 400, Geweke z-scores within [-2, 2]
-- Confidence interval widths decrease proportionally to `1/sqrt(n_paths)` (central limit theorem)
-- Variance reduction techniques yield VRF > 1 (estimates improve, not worsen)
-- Reproducibility: re-running with the same seed produces identical results
+- 所有模拟轨迹保持在有效状态空间内（无越界值、无 NaN/Inf）
+- 对 DTMC/CTMC：经验平稳分布收敛到解析分布（在预期蒙特卡洛误差范围内）
+- 对 SDE：将 `dt` 减半不会定性地改变结果（收敛阶检查）
+- 对 MCMC：R-hat < 1.01，ESS > 400，Geweke z 分数在 [-2, 2] 范围内
+- 置信区间宽度按 `1/sqrt(n_paths)` 比例减小（中心极限定理）
+- 方差缩减技术产生 VRF > 1（估计改善而非恶化）
+- 可重复性：使用相同种子重新运行产生相同结果
 
 ## 常见问题
 
-- **Insufficient burn-in for MCMC**: Starting from a poor initial state requires a long burn-in before samples represent the target distribution. Always inspect trace plots and use convergence diagnostics rather than guessing the burn-in length.
-- **Euler-Maruyama instability for stiff SDEs**: If the drift term has large gradients, explicit Euler-Maruyama can diverge. Switch to implicit methods or use adaptive step sizing.
-- **Confusing strong and weak convergence for SDEs**: Strong convergence measures pathwise error (important for individual trajectories); weak convergence measures distributional error (sufficient for expectations). Euler-Maruyama has weak order 1.0 but strong order 0.5.
-- **Pseudorandom number generator quality**: For very long simulations, low-quality RNGs can produce correlated samples. Use a well-tested generator (Mersenne Twister, PCG, or Xoshiro) and verify independence.
-- **Ignoring autocorrelation in MCMC**: Treating autocorrelated MCMC samples as independent underestimates uncertainty. Always use effective sample size, not raw sample count, for standard errors.
-- **Antithetic variates for non-monotone functions**: Antithetic sampling reduces variance only when the estimand is a monotone function of the underlying uniforms. For non-monotone functions, it can increase variance.
-- **Memory for large simulations**: Storing all time steps of many long paths can exhaust memory. Use online statistics (running mean, variance) when full trajectories are not needed for visualization.
+- **MCMC 预热不足**：从不良初始状态开始需要长时间预热，样本才能代表目标分布。始终检查轨迹图并使用收敛诊断，而不是猜测预热长度
+- **刚性 SDE 的 Euler-Maruyama 不稳定性**：如果漂移项有大梯度，显式 Euler-Maruyama 可能发散。切换到隐式方法或使用自适应步长
+- **混淆 SDE 的强收敛和弱收敛**：强收敛衡量逐路径误差（对单个轨迹重要）；弱收敛衡量分布误差（对期望足够）。Euler-Maruyama 弱阶 1.0 但强阶 0.5
+- **伪随机数生成器质量**：对于非常长的模拟，低质量 RNG 可能产生相关样本。使用经过良好测试的生成器（Mersenne Twister、PCG 或 Xoshiro）并验证独立性
+- **忽略 MCMC 中的自相关**：将自相关的 MCMC 样本视为独立会低估不确定性。始终使用有效样本量而非原始样本数来计算标准误
+- **非单调函数的对偶变量**：对偶采样仅在估计量是底层均匀分布的单调函数时减少方差。对非单调函数，它可能增加方差
+- **大规模模拟的内存**：存储许多长路径的所有时间步可能耗尽内存。当不需要完整轨迹用于可视化时，使用在线统计（运行均值、方差）
 
 ## 相关技能
 
-- [Model Markov Chain](../model-markov-chain/SKILL.md) -- provides the transition matrices and analytical solutions that simulation validates
-- [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) -- simulation from fitted HMMs enables posterior predictive checking and synthetic data generation
+- [马尔可夫链建模](../model-markov-chain/SKILL.md) — 提供模拟验证的转移矩阵和解析解
+- [拟合隐马尔可夫模型](../fit-hidden-markov-model/SKILL.md) — 从拟合的 HMM 进行模拟实现后验预测检验和合成数据生成

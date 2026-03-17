@@ -1,12 +1,10 @@
 ---
 name: format-apa-report
 description: >
-  Format a Quarto or R Markdown report following APA 7th edition style.
-  Covers apaquarto/papaja packages, title page, abstracts, citations,
-  tables, figures, and reference formatting. Use when writing an academic
-  paper in APA format, creating a psychology or social science research
-  report, generating reproducible manuscripts with embedded analysis,
-  or preparing a thesis or dissertation chapter.
+  Quarto または R Markdown レポートを APA 第7版スタイルでフォーマットする。apaquarto/papaja
+  パッケージ、タイトルページ、要約、引用、表、図、参考文献のフォーマットを網羅する。
+  APA形式で学術論文を執筆する時、心理学や社会科学の研究報告を作成する時、
+  分析が埋め込まれた再現可能な原稿を生成する時、または学位論文の章を準備する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,46 +23,46 @@ metadata:
 
 # APAレポートのフォーマット
 
-Create an APA 7th edition formatted report using Quarto (apaquarto) or R Markdown (papaja).
+Quarto（apaquarto）または R Markdown（papaja）を使用して APA 第7版形式のレポートを作成する。
 
 ## 使用タイミング
 
-- Writing an academic paper in APA format
-- Creating a psychology or social science research report
-- Generating reproducible manuscripts with embedded analysis
-- Preparing a thesis or dissertation chapter
+- APA形式で学術論文を執筆する時
+- 心理学や社会科学の研究報告を作成する時
+- 分析が埋め込まれた再現可能な原稿を生成する時
+- 学位論文の章を準備する時
 
 ## 入力
 
-- **必須**: Analysis code and results
-- **必須**: Bibliography file (.bib)
-- **任意**: Co-authors and affiliations
-- **任意**: Manuscript type (journal article, student paper)
+- **必須**: 分析コードと結果
+- **必須**: 参考文献ファイル（.bib）
+- **任意**: 共著者と所属
+- **任意**: 原稿タイプ（雑誌論文、学生論文）
 
 ## 手順
 
-### ステップ1: Choose Framework
+### ステップ1: フレームワークの選択
 
-**Option A: apaquarto (Quarto, recommended)**
+**オプションA: apaquarto（Quarto、推奨）**
 
 ```r
 install.packages("remotes")
 remotes::install_github("wjschne/apaquarto")
 ```
 
-**Option B: papaja (R Markdown)**
+**オプションB: papaja（R Markdown）**
 
 ```r
 remotes::install_github("crsh/papaja")
 ```
 
-**期待結果:** The chosen framework package installs successfully and is loadable with `library(apaquarto)` or `library(papaja)`.
+**期待結果:** 選択したフレームワークパッケージが正常にインストールされ、`library(apaquarto)` または `library(papaja)` で読み込めること。
 
-**失敗時:** If installation fails due to missing system dependencies (e.g., LaTeX for PDF output), install TinyTeX first with `quarto install tinytex`. For GitHub installation failures, check that the `remotes` package is installed and that GitHub is accessible.
+**失敗時:** システム依存関係の不足（例：PDF出力用のLaTeX）によりインストールが失敗する場合、まず `quarto install tinytex` で TinyTeX をインストールする。GitHubからのインストールが失敗する場合、`remotes` パッケージがインストールされていること、GitHubにアクセス可能であることを確認する。
 
-### ステップ2: Create Document (apaquarto)
+### ステップ2: ドキュメントの作成（apaquarto）
 
-Create `manuscript.qmd`:
+`manuscript.qmd` を作成する:
 
 ```yaml
 ---
@@ -94,11 +92,11 @@ format:
 ---
 ```
 
-**期待結果:** File `manuscript.qmd` exists with valid YAML frontmatter containing title, shorttitle, author affiliations, abstract, keywords, bibliography reference, and APA-specific format options.
+**期待結果:** `manuscript.qmd` ファイルが存在し、タイトル、短縮タイトル、著者所属、要約、キーワード、参考文献の参照、APA固有のフォーマットオプションを含む有効なYAMLフロントマターを持つこと。
 
-**失敗時:** Verify YAML indentation is consistent (2 spaces) and that `author:` entries use the list format with `name:`, `affiliations:`, and `corresponding:` fields. Check that `bibliography:` points to an existing `.bib` file.
+**失敗時:** YAMLのインデントが一貫している（2スペース）こと、`author:` エントリが `name:`、`affiliations:`、`corresponding:` フィールドを含むリスト形式を使用していることを確認する。`bibliography:` が既存の `.bib` ファイルを指していることを確認する。
 
-### ステップ3: Write APA Content
+### ステップ3: APAコンテンツの執筆
 
 ````markdown
 # Introduction
@@ -146,11 +144,11 @@ The findings support the hypothesis that...
 # References
 ````
 
-**期待結果:** Content follows APA section structure (Introduction, Method, Results, Discussion, References) with inline R code for statistics and proper cross-references using `@fig-` and `@tbl-` prefixes.
+**期待結果:** コンテンツがAPAのセクション構造（Introduction、Method、Results、Discussion、References）に従い、統計のためのインラインRコードと `@fig-` および `@tbl-` プレフィックスを使用した適切なクロスリファレンスを含むこと。
 
-**失敗時:** If inline R code does not render, verify backtick-r syntax is correct (`` `r expression` ``). If cross-references show as literal text, check that the referenced chunk labels use the correct prefix and that the chunk has a corresponding caption option.
+**失敗時:** インラインRコードがレンダリングされない場合、バッククォート-r構文が正しいか（`` `r expression` ``）確認する。クロスリファレンスがリテラルテキストとして表示される場合、参照先のチャンクラベルが正しいプレフィックスを使用し、チャンクに対応するキャプションオプションがあることを確認する。
 
-### ステップ4: Format Tables in APA Style
+### ステップ4: APA形式の表のフォーマット
 
 ```r
 #| label: tbl-descriptives
@@ -176,13 +174,13 @@ gt(descriptive_table) |>
   )
 ```
 
-**期待結果:** Tables render with APA formatting: italicized column headers for statistical symbols, proper decimal alignment, and a descriptive caption above the table.
+**期待結果:** 表がAPAフォーマットでレンダリングされること：統計記号のイタリック体の列ヘッダー、適切な小数点揃え、表の上部に記述的なキャプション。
 
-**失敗時:** If `gt` table does not render in APA style, ensure `gt` package is installed and that `cols_label()` uses markdown-style italics (`*M*`, `*SD*`). For papaja users, use `apa_table()` instead of `gt()`.
+**失敗時:** `gt` テーブルがAPAスタイルでレンダリングされない場合、`gt` パッケージがインストールされていること、`cols_label()` がマークダウンスタイルのイタリック（`*M*`、`*SD*`）を使用していることを確認する。papajaユーザーは `gt()` の代わりに `apa_table()` を使用する。
 
-### ステップ5: Manage Citations
+### ステップ5: 引用の管理
 
-Create `references.bib`:
+`references.bib` を作成する:
 
 ```bibtex
 @article{smith2023,
@@ -196,49 +194,49 @@ Create `references.bib`:
 }
 ```
 
-APA citation styles:
-- Parenthetical: `[@smith2023]` -> (Smith & Jones, 2023)
-- Narrative: `@smith2023` -> Smith and Jones (2023)
-- Multiple: `[@smith2023; @jones2022]` -> (Jones, 2022; Smith & Jones, 2023)
+APA引用スタイル:
+- 括弧内引用: `[@smith2023]` -> (Smith & Jones, 2023)
+- 叙述的引用: `@smith2023` -> Smith and Jones (2023)
+- 複数引用: `[@smith2023; @jones2022]` -> (Jones, 2022; Smith & Jones, 2023)
 
-**期待結果:** `references.bib` contains valid BibTeX entries with all required fields (author, title, year, journal) and citation keys match those used in the manuscript text.
+**期待結果:** `references.bib` が必須フィールド（author、title、year、journal）をすべて含む有効なBibTeXエントリを持ち、引用キーが原稿テキストで使用されているものと一致すること。
 
-**失敗時:** Validate BibTeX syntax with an online validator or `bibtool -d references.bib`. Ensure citation keys in the text exactly match `.bib` keys (case-sensitive).
+**失敗時:** オンラインバリデータまたは `bibtool -d references.bib` でBibTeX構文を検証する。テキスト内の引用キーが `.bib` のキーと完全に一致していることを確認する（大文字小文字を区別）。
 
-### ステップ6: Render
+### ステップ6: レンダリング
 
 ```bash
-# Word document (common for journal submission)
+# Word文書（雑誌投稿によく使用）
 quarto render manuscript.qmd --to apaquarto-docx
 
-# PDF (for preprint or review)
+# PDF（プレプリントまたはレビュー用）
 quarto render manuscript.qmd --to apaquarto-pdf
 ```
 
-**期待結果:** Properly formatted APA document with title page, running head, and correctly formatted references section.
+**期待結果:** タイトルページ、柱見出し、正しくフォーマットされた参考文献セクションを持つ適切にフォーマットされたAPAドキュメント。
 
-**失敗時:** For PDF rendering failures, verify TinyTeX is installed (`quarto install tinytex`). For DOCX output issues, check that apaquarto's Word template is accessible. If references do not appear, ensure the `# References` heading is present at the end of the document.
+**失敗時:** PDFレンダリングの失敗には、TinyTeXがインストールされていることを確認する（`quarto install tinytex`）。DOCX出力の問題には、apaquartoのWordテンプレートがアクセス可能であることを確認する。参考文献が表示されない場合、ドキュメントの末尾に `# References` 見出しがあることを確認する。
 
 ## バリデーション
 
-- [ ] Title page formatted correctly (title, authors, affiliations, author note)
-- [ ] Abstract present with keywords
-- [ ] In-text citations match reference list
-- [ ] Tables and figures numbered correctly
-- [ ] Statistics formatted per APA (italicized, proper symbols)
-- [ ] References in APA 7th edition format
-- [ ] Page numbers and running head present (PDF)
+- [ ] タイトルページが正しくフォーマットされている（タイトル、著者、所属、著者注）
+- [ ] 要約がキーワード付きで存在する
+- [ ] 本文中の引用が参考文献リストと一致する
+- [ ] 表と図が正しく番号付けされている
+- [ ] 統計がAPA形式でフォーマットされている（イタリック体、適切な記号）
+- [ ] 参考文献がAPA第7版形式である
+- [ ] ページ番号と柱見出しが存在する（PDF）
 
 ## よくある落とし穴
 
-- **Inline R code formatting**: Use backtick-r syntax for inline statistics, not hardcoded values
-- **Citation key mismatches**: Ensure .bib keys match exactly in the text
-- **Figure placement**: APA manuscripts typically place figures at the end; set `documentmode: man`
-- **Missing CSL file**: apaquarto includes the APA CSL; papaja users may need to specify `csl: apa.csl`
-- **Special characters in abstracts**: Avoid markdown formatting in the YAML abstract block
+- **インラインRコードのフォーマット**: インライン統計にはバッククォート-r構文を使用し、ハードコードされた値は使用しない
+- **引用キーの不一致**: .bibのキーがテキスト内で完全に一致していることを確認する
+- **図の配置**: APA原稿は通常、図を末尾に配置する; `documentmode: man` を設定する
+- **CSLファイルの欠落**: apaquartoにはAPA CSLが含まれている; papajaユーザーは `csl: apa.csl` の指定が必要な場合がある
+- **要約内の特殊文字**: YAML要約ブロック内でマークダウンフォーマットを避ける
 
 ## 関連スキル
 
-- `create-quarto-report` - general Quarto document creation
-- `generate-statistical-tables` - publication-ready tables
-- `build-parameterized-report` - batch report generation
+- `create-quarto-report` — 一般的なQuartoドキュメント作成
+- `generate-statistical-tables` — 出版対応の表
+- `build-parameterized-report` — バッチレポート生成

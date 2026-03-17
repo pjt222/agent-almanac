@@ -1,12 +1,19 @@
 ---
 name: render-blender-output
+locale: de
+source_locale: en
+source_commit: 6f65f316
+translator: claude
+translation_date: "2026-03-17"
 description: >
-  Konfigurieren render settings, compositing nodes, output formats, and execute
-  renders via Cycles or EEVEE engines using Python API or command-line
-  interface. Verwenden wenn automating render execution for batch processing,
-  configuring quality and performance trade-offs, setting up compositing
-  pipelines for post-processing, generating multiple output formats from a
-  single render, or producing final output for publication or presentation.
+  Rendereinstellungen, Compositing-Knoten, Ausgabeformate konfigurieren und
+  Renders ueber Cycles- oder EEVEE-Engines mit Python-API oder
+  Kommandozeilenschnittstelle ausfuehren. Anwenden bei automatisierter
+  Render-Ausfuehrung fuer Stapelverarbeitung, Konfiguration von Qualitaets-
+  und Leistungskompromissen, Einrichtung von Compositing-Pipelines fuer
+  Nachbearbeitung, Erzeugung mehrerer Ausgabeformate aus einem einzelnen
+  Render oder Produktion der Endausgabe fuer Veroeffentlichung oder
+  Praesentation.
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -16,65 +23,60 @@ metadata:
   complexity: intermediate
   language: Python
   tags: blender, bpy, rendering, cycles, eevee, compositing, output
-  locale: de
-  source_locale: en
-  source_commit: 6f65f316
-  translator: claude
-  translation_date: "2026-03-17"
 ---
 
 # Blender-Ausgabe rendern
 
-Konfigurieren render engines (Cycles, EEVEE), set output parameters, build compositing node graphs, and execute renders via Python API or command-line interface. Umfasst render settings optimization, file format selection, and post-processing workflows.
+Render-Engines (Cycles, EEVEE) konfigurieren, Ausgabeparameter festlegen, Compositing-Knotengraphen erstellen und Renders ueber Python-API oder Kommandozeilenschnittstelle ausfuehren. Umfasst Rendereinstellungs-Optimierung, Dateiformatwahl und Nachbearbeitungs-Workflows.
 
 ## Wann verwenden
 
-- Automating render execution for batch processing
-- Configuring render quality and performance trade-offs
-- Setting up compositing pipelines for post-processing
-- Generating multiple output formats from single render
-- Optimizing render settings for different hardware
-- Creating command-line rendering workflows
-- Producing final output for publication or presentation
+- Render-Ausfuehrung fuer Stapelverarbeitung automatisieren
+- Renderqualitaet und Leistungskompromisse konfigurieren
+- Compositing-Pipelines fuer Nachbearbeitung einrichten
+- Mehrere Ausgabeformate aus einem einzelnen Render erzeugen
+- Rendereinstellungen fuer verschiedene Hardware optimieren
+- Kommandozeilen-Rendering-Workflows erstellen
+- Endausgabe fuer Veroeffentlichung oder Praesentation produzieren
 
 ## Eingaben
 
-| Input | Type | Description | Example |
-|-------|------|-------------|---------|
-| Scene file | .blend file | Blender scene to render | `scene.blend` |
-| Rendern engine | String | Cycles, EEVEE, or Workbench | `CYCLES` |
-| Quality settings | Parameters | Samples, resolution, denoising | 128 samples, 1920x1080, OptiX denoiser |
-| Output format | String | PNG, EXR, JPEG, TIFF | `OPEN_EXR`, 16-bit, ZIP compression |
-| Compositing setup | Node graph | Post-processing effects | Color grading, glare, vignette |
-| Output path | File path | Rendern destination | `/renders/output_####.png` |
+| Eingabe | Typ | Beschreibung | Beispiel |
+|---------|-----|-------------|---------|
+| Szenendatei | .blend-Datei | Zu rendernde Blender-Szene | `scene.blend` |
+| Render-Engine | String | Cycles, EEVEE oder Workbench | `CYCLES` |
+| Qualitaetseinstellungen | Parameter | Samples, Aufloesung, Entrauschen | 128 Samples, 1920x1080, OptiX-Entrauscher |
+| Ausgabeformat | String | PNG, EXR, JPEG, TIFF | `OPEN_EXR`, 16-Bit, ZIP-Kompression |
+| Compositing-Setup | Knotengraph | Nachbearbeitungseffekte | Farbkorrektur, Glanz, Vignette |
+| Ausgabepfad | Dateipfad | Renderziel | `/renders/output_####.png` |
 
 ## Vorgehensweise
 
-### 1. Konfigurieren Rendern Engine
+### Schritt 1: Render-Engine konfigurieren
 
-Set render engine and basic parameters:
+Render-Engine und Grundparameter festlegen:
 
 ```python
 import bpy
 
 def setup_cycles_engine():
-    """Configure Cycles render engine."""
+    """Cycles-Render-Engine konfigurieren."""
     scene = bpy.context.scene
     scene.render.engine = 'CYCLES'
 
-    # Device settings
-    scene.cycles.device = 'GPU'  # or 'CPU'
+    # Geraeteeinstellungen
+    scene.cycles.device = 'GPU'  # oder 'CPU'
 
     # Sampling
-    scene.cycles.samples = 128  # Viewport: fewer samples
+    scene.cycles.samples = 128
     scene.cycles.use_adaptive_sampling = True
     scene.cycles.adaptive_threshold = 0.01
 
-    # Denoising
+    # Entrauschen
     scene.cycles.use_denoising = True
-    scene.cycles.denoiser = 'OPTIX'  # or 'OPENIMAGEDENOISE', 'NLM'
+    scene.cycles.denoiser = 'OPTIX'  # oder 'OPENIMAGEDENOISE', 'NLM'
 
-    # Light paths
+    # Lichtpfade
     scene.cycles.max_bounces = 12
     scene.cycles.diffuse_bounces = 4
     scene.cycles.glossy_bounces = 4
@@ -82,62 +84,62 @@ def setup_cycles_engine():
     scene.cycles.volume_bounces = 0
 
 def setup_eevee_engine():
-    """Configure EEVEE render engine."""
+    """EEVEE-Render-Engine konfigurieren."""
     scene = bpy.context.scene
     scene.render.engine = 'BLENDER_EEVEE'
 
     # Sampling
     scene.eevee.taa_render_samples = 64
 
-    # Effects
+    # Effekte
     scene.eevee.use_bloom = True
     scene.eevee.bloom_threshold = 0.8
     scene.eevee.bloom_intensity = 0.1
 
-    scene.eevee.use_gtao = True  # Ambient occlusion
+    scene.eevee.use_gtao = True  # Umgebungsverdeckung
     scene.eevee.gtao_distance = 0.2
 
-    scene.eevee.use_ssr = True  # Screen space reflections
+    scene.eevee.use_ssr = True  # Bildschirmraum-Reflexionen
     scene.eevee.ssr_quality = 0.5
 
-    # Shadows
+    # Schatten
     scene.eevee.shadow_cube_size = '1024'
     scene.eevee.shadow_cascade_size = '1024'
 ```
 
-**Erwartet:** Rendern engine configured with appropriate quality settings
-**Bei Fehler:** Check engine name spelling, verify GPU availability for GPU rendering
+**Erwartet:** Render-Engine mit geeigneten Qualitaetseinstellungen konfiguriert
+**Bei Fehler:** Engine-Namensbuchstabierung pruefen, GPU-Verfuegbarkeit fuer GPU-Rendering verifizieren
 
-### 2. Set Resolution and Output Format
+### Schritt 2: Aufloesung und Ausgabeformat festlegen
 
-Konfigurieren output dimensions and file format:
+Ausgabedimensionen und Dateiformat konfigurieren:
 
 ```python
 def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16'):
-    """Set output resolution and format."""
+    """Ausgabeaufloesung und -format festlegen."""
     scene = bpy.context.scene
 
-    # Resolution
+    # Aufloesung
     scene.render.resolution_x = width
     scene.render.resolution_y = height
     scene.render.resolution_percentage = 100
 
-    # Aspect ratio
+    # Seitenverhaeltnis
     scene.render.pixel_aspect_x = 1.0
     scene.render.pixel_aspect_y = 1.0
 
-    # File format
+    # Dateiformat
     scene.render.image_settings.file_format = file_format
 
     if file_format == 'PNG':
         scene.render.image_settings.color_mode = 'RGBA'
-        scene.render.image_settings.color_depth = color_depth  # '8' or '16'
+        scene.render.image_settings.color_depth = color_depth  # '8' oder '16'
         scene.render.image_settings.compression = 15  # 0-100
 
     elif file_format == 'OPEN_EXR':
         scene.render.image_settings.color_mode = 'RGBA'
-        scene.render.image_settings.color_depth = '32'  # or '16'
-        scene.render.image_settings.exr_codec = 'ZIP'  # or 'DWAA', 'PIZ'
+        scene.render.image_settings.color_depth = '32'  # oder '16'
+        scene.render.image_settings.exr_codec = 'ZIP'  # oder 'DWAA', 'PIZ'
 
     elif file_format == 'JPEG':
         scene.render.image_settings.color_mode = 'RGB'
@@ -148,22 +150,22 @@ def configure_output(width=1920, height=1080, file_format='PNG', color_depth='16
         scene.render.image_settings.color_depth = color_depth
         scene.render.image_settings.tiff_codec = 'DEFLATE'
 
-    # Frame range (for animations)
+    # Bildbereich (fuer Animationen)
     scene.frame_start = 1
     scene.frame_end = 250
     scene.frame_step = 1
 ```
 
-**Erwartet:** Output format and resolution configured korrekt
-**Bei Fehler:** Check format names are valid, verify color depth compatible with format
+**Erwartet:** Ausgabeformat und Aufloesung korrekt konfiguriert
+**Bei Fehler:** Formatnamen auf Gueltigkeit pruefen, Farbtiefe-Kompatibilitaet mit Format verifizieren
 
-### 3. Konfigurieren Compositing
+### Schritt 3: Compositing konfigurieren
 
-Einrichten compositing node graph:
+Compositing-Knotengraph einrichten:
 
 ```python
 def setup_compositing():
-    """Create compositing node setup."""
+    """Compositing-Knoten-Setup erstellen."""
     scene = bpy.context.scene
     scene.use_nodes = True
 
@@ -171,24 +173,20 @@ def setup_compositing():
     nodes = tree.nodes
     links = tree.links
 
-    # Clear default nodes
+    # Standardknoten loeschen
     nodes.clear()
 
-    # Render Layers input
+    # Render-Ebenen-Eingabe
     render_layers = nodes.new(type='CompositorNodeRLayers')
     render_layers.location = (-400, 300)
 
-    # Denoise (if not using Cycles denoiser)
-    # denoise = nodes.new(type='CompositorNodeDenoise')
-    # denoise.location = (-200, 300)
-
-    # Color correction
+    # Farbkorrektur
     color_correct = nodes.new(type='CompositorNodeColorCorrection')
     color_correct.location = (0, 300)
     color_correct.master_saturation = 1.1
     color_correct.master_gain = 1.05
 
-    # Glare effect
+    # Glanz-Effekt
     glare = nodes.new(type='CompositorNodeGlare')
     glare.location = (200, 200)
     glare.glare_type = 'FOG_GLOW'
@@ -201,21 +199,21 @@ def setup_compositing():
     lens_distortion.inputs['Dispersion'].default_value = 0.0
     lens_distortion.inputs['Distortion'].default_value = -0.02
 
-    # Mix nodes
+    # Mischknoten
     mix1 = nodes.new(type='CompositorNodeMixRGB')
     mix1.location = (400, 250)
     mix1.blend_type = 'ADD'
     mix1.inputs['Fac'].default_value = 0.3
 
-    # Composite output
+    # Composite-Ausgabe
     composite = nodes.new(type='CompositorNodeComposite')
     composite.location = (600, 300)
 
-    # Viewer output (for preview)
+    # Betrachter-Ausgabe (fuer Vorschau)
     viewer = nodes.new(type='CompositorNodeViewer')
     viewer.location = (600, 100)
 
-    # Link nodes
+    # Knoten verbinden
     links.new(render_layers.outputs['Image'], color_correct.inputs['Image'])
     links.new(color_correct.outputs['Image'], mix1.inputs[1])
     links.new(color_correct.outputs['Image'], glare.inputs['Image'])
@@ -224,61 +222,57 @@ def setup_compositing():
     links.new(mix1.outputs['Image'], viewer.inputs['Image'])
 ```
 
-**Erwartet:** Compositing nodes configured with post-processing effects
-**Bei Fehler:** Check node type names, verify inputs exist, ensure link connections valid
+**Erwartet:** Compositing-Knoten mit Nachbearbeitungseffekten konfiguriert
+**Bei Fehler:** Knotentyp-Namen pruefen, Eingaenge verifizieren, Verbindungsgueltigkeit sicherstellen
 
-### 4. Set Output File Paths
+### Schritt 4: Ausgabedateipfade festlegen
 
-Konfigurieren output file naming with frame numbers:
+Ausgabedatei-Benennung mit Bildnummern konfigurieren:
 
 ```python
 import os
 from pathlib import Path
 
 def set_output_path(base_dir, project_name, use_frame_number=True):
-    """Configure output file path."""
+    """Ausgabedateipfad konfigurieren."""
     scene = bpy.context.scene
 
-    # Create output directory
+    # Ausgabeverzeichnis erstellen
     output_dir = Path(base_dir) / project_name / "renders"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Set filepath
+    # Dateipfad festlegen
     if use_frame_number:
-        # #### is replaced with frame number (0001, 0002, etc.)
+        # #### wird durch Bildnummer ersetzt (0001, 0002, usw.)
         filename = f"{project_name}_####"
     else:
         filename = project_name
 
     scene.render.filepath = str(output_dir / filename)
-
-    # Optional: Set file extension explicitly
-    # Extension added automatically based on file_format
-    # But can override: scene.render.file_extension = '.png'
 ```
 
-**Erwartet:** Output directory created, filepath configured with frame numbering
-**Bei Fehler:** Check directory Berechtigungs, verify path syntax for OS
+**Erwartet:** Ausgabeverzeichnis erstellt, Dateipfad mit Bildnummerierung konfiguriert
+**Bei Fehler:** Verzeichnisberechtigungen pruefen, Pfadsyntax fuer Betriebssystem verifizieren
 
-### 5. Konfigurieren View Layers and Passes
+### Schritt 5: Ansichtsebenen und Paesse konfigurieren
 
-Einrichten render passes for compositing:
+Render-Paesse fuer Compositing einrichten:
 
 ```python
 def configure_view_layers():
-    """Enable render passes."""
+    """Render-Paesse aktivieren."""
     scene = bpy.context.scene
     view_layer = scene.view_layers['ViewLayer']
 
-    # Enable passes
+    # Paesse aktivieren
     view_layer.use_pass_combined = True
-    view_layer.use_pass_z = True  # Depth
+    view_layer.use_pass_z = True  # Tiefe
     view_layer.use_pass_mist = False
     view_layer.use_pass_normal = True
-    view_layer.use_pass_vector = True  # Motion vectors
+    view_layer.use_pass_vector = True  # Bewegungsvektoren
     view_layer.use_pass_ambient_occlusion = True
 
-    # Cycles-specific passes
+    # Cycles-spezifische Paesse
     cycles = view_layer.cycles
     cycles.use_pass_diffuse_direct = True
     cycles.use_pass_diffuse_indirect = True
@@ -287,96 +281,96 @@ def configure_view_layers():
     cycles.use_pass_emission = True
     cycles.use_pass_environment = True
 
-    # Cryptomatte passes (for post-production)
+    # Cryptomatte-Paesse (fuer Postproduktion)
     cycles.use_pass_crypto_object = True
     cycles.use_pass_crypto_material = True
     cycles.use_pass_crypto_asset = True
 ```
 
-**Erwartet:** Rendern passes enabled for advanced compositing
-**Bei Fehler:** Pruefen, ob passes available for current engine, verify view layer name
+**Erwartet:** Render-Paesse fuer erweitertes Compositing aktiviert
+**Bei Fehler:** Verfuegbarkeit der Paesse fuer aktuelle Engine pruefen, Ansichtsebenen-Namen verifizieren
 
-### 6. Ausfuehren Render
+### Schritt 6: Render ausfuehren
 
-Rendern via Python API or Kommandozeile:
+Ueber Python-API oder Kommandozeile rendern:
 
 ```python
 def render_still():
-    """Render current frame."""
+    """Aktuelles Bild rendern."""
     bpy.ops.render.render(write_still=True)
 
 def render_animation():
-    """Render animation frame range."""
+    """Animations-Bildbereich rendern."""
     bpy.ops.render.render(animation=True)
 
 def render_frame(frame_number):
-    """Render specific frame."""
+    """Bestimmtes Bild rendern."""
     scene = bpy.context.scene
     scene.frame_set(frame_number)
     bpy.ops.render.render(write_still=True)
 
-# Command-line rendering (run from terminal)
-# Single frame:
+# Kommandozeilen-Rendering (vom Terminal ausfuehren)
+# Einzelbild:
 # blender scene.blend --background --render-frame 1
 
 # Animation:
 # blender scene.blend --background --render-anim
 
-# Specific frame range:
+# Bestimmter Bildbereich:
 # blender scene.blend --background --frame-start 10 --frame-end 20 --render-anim
 
-# Override output path:
+# Ausgabepfad ueberschreiben:
 # blender scene.blend --background --render-output /tmp/render_#### --render-anim
 
-# Use Python script:
+# Python-Skript verwenden:
 # blender scene.blend --background --python render_script.py
 ```
 
-**Erwartet:** Rendern executes, output files written to specified location
-**Bei Fehler:** Check scene setup, verify camera exists, ensure output directory writable
+**Erwartet:** Render wird ausgefuehrt, Ausgabedateien an angegebenen Ort geschrieben
+**Bei Fehler:** Szenen-Setup pruefen, Kamera-Existenz verifizieren, Schreibberechtigung des Ausgabeverzeichnisses sicherstellen
 
-### 7. Batch Rendern Multiple Cameras
+### Schritt 7: Stapelrender aus mehreren Kameras
 
-Rendern from multiple camera angles:
+Aus mehreren Kamerawinkeln rendern:
 
 ```python
 def render_all_cameras(output_dir):
-    """Render scene from all cameras."""
+    """Szene aus allen Kameras rendern."""
     scene = bpy.context.scene
     original_camera = scene.camera
 
     cameras = [obj for obj in bpy.data.objects if obj.type == 'CAMERA']
 
     for camera in cameras:
-        # Set active camera
+        # Aktive Kamera setzen
         scene.camera = camera
 
-        # Update output path
+        # Ausgabepfad aktualisieren
         camera_name = camera.name.replace(' ', '_')
         scene.render.filepath = os.path.join(output_dir, f"{camera_name}_####")
 
-        # Render
+        # Rendern
         bpy.ops.render.render(write_still=True)
-        print(f"Rendered from camera: {camera.name}")
+        print(f"Gerendert von Kamera: {camera.name}")
 
-    # Restore original camera
+    # Urspruengliche Kamera wiederherstellen
     scene.camera = original_camera
 ```
 
-**Erwartet:** Renders generated fuer jede camera in scene
-**Bei Fehler:** Check cameras exist, verify each camera positioned korrekt
+**Erwartet:** Renders fuer jede Kamera in der Szene erzeugt
+**Bei Fehler:** Kamera-Existenz pruefen, korrekte Positionierung jeder Kamera verifizieren
 
-### 8. Optimieren Rendern Performance
+### Schritt 8: Renderleistung optimieren
 
-Konfigurieren performance settings:
+Leistungseinstellungen konfigurieren:
 
 ```python
 def optimize_performance():
-    """Optimize render settings for speed."""
+    """Rendereinstellungen fuer Geschwindigkeit optimieren."""
     scene = bpy.context.scene
 
     if scene.render.engine == 'CYCLES':
-        # Tile size (GPU: larger tiles, CPU: smaller tiles)
+        # Kachelgroesse (GPU: groessere Kacheln, CPU: kleinere Kacheln)
         if scene.cycles.device == 'GPU':
             scene.render.tile_x = 256
             scene.render.tile_y = 256
@@ -384,59 +378,59 @@ def optimize_performance():
             scene.render.tile_x = 32
             scene.render.tile_y = 32
 
-        # Performance settings
+        # Leistungseinstellungen
         scene.cycles.use_adaptive_sampling = True
-        scene.render.use_persistent_data = True  # Keep scene in memory
+        scene.render.use_persistent_data = True  # Szene im Speicher halten
 
-        # Reduce light path complexity for preview
+        # Lichtpfad-Komplexitaet fuer Vorschau reduzieren
         scene.cycles.max_bounces = 4
         scene.cycles.diffuse_bounces = 2
         scene.cycles.glossy_bounces = 2
 
-        # Progressive refine (for viewport)
+        # Progressives Verfeinern (fuer Viewport)
         scene.cycles.use_progressive_refine = True
 
     elif scene.render.engine == 'BLENDER_EEVEE':
-        # Simplify settings for preview
+        # Vereinfachungseinstellungen fuer Vorschau
         scene.render.use_simplify = True
         scene.render.simplify_subdivision = 2
 
-        # Reduce sampling
+        # Sampling reduzieren
         scene.eevee.taa_render_samples = 32
 ```
 
-**Erwartet:** Rendern settings optimized for target hardware
-**Bei Fehler:** Testen with lower quality first, monitor memory usage
+**Erwartet:** Rendereinstellungen fuer Zielhardware optimiert
+**Bei Fehler:** Zuerst mit niedrigerer Qualitaet testen, Speicherverbrauch ueberwachen
 
-## Validation Checklist
+## Validierung
 
-- [ ] Rendern engine configured korrekt (Cycles/EEVEE)
-- [ ] Resolution and aspect ratio match requirements
-- [ ] Output format appropriate for Anwendungsfall
-- [ ] Color depth and compression settings verified
-- [ ] Compositing nodes connected ordnungsgemaess
-- [ ] Output directory exists and is writable
-- [ ] Filename includes frame numbering if needed
-- [ ] Rendern passes enabled as required
-- [ ] Camera positioned korrekt in scene
-- [ ] Testen render completes ohne errors
-- [ ] Output files have correct format and quality
+- [ ] Render-Engine korrekt konfiguriert (Cycles/EEVEE)
+- [ ] Aufloesung und Seitenverhaeltnis entsprechen Anforderungen
+- [ ] Ausgabeformat fuer Anwendungsfall geeignet
+- [ ] Farbtiefe und Kompressionseinstellungen verifiziert
+- [ ] Compositing-Knoten korrekt verbunden
+- [ ] Ausgabeverzeichnis existiert und ist beschreibbar
+- [ ] Dateiname enthaelt Bildnummerierung falls noetig
+- [ ] Render-Paesse wie erforderlich aktiviert
+- [ ] Kamera korrekt in Szene positioniert
+- [ ] Testrender wird fehlerfrei abgeschlossen
+- [ ] Ausgabedateien haben korrektes Format und Qualitaet
 
 ## Haeufige Stolperfallen
 
-1. **Missing camera**: Scene must have active camera set for rendering
-2. **Output path not set**: Always specify `scene.render.filepath` vor rendering
-3. **Insufficient samples**: Low sample counts cause noise in Cycles renders
-4. **Wrong color space**: Check color management settings for correct display
-5. **File format incompatibility**: Not all formats support all color depths
-6. **Memory overflow**: Large resolutions or complex scenes may exceed RAM
-7. **GPU out of memory**: Reduzieren tile size or switch to CPU for large scenes
-8. **Background mode output**: In background mode, must use --render-output flag or set filepath
-9. **Frame number formatting**: Use #### for automatic frame padding
-10. **Compositing disabled**: Aktivieren `scene.use_nodes` to use compositing
+1. **Fehlende Kamera**: Szene muss aktive Kamera fuer Rendering gesetzt haben
+2. **Ausgabepfad nicht gesetzt**: Immer `scene.render.filepath` vor dem Rendern angeben
+3. **Unzureichende Samples**: Niedrige Sample-Anzahlen verursachen Rauschen in Cycles-Renders
+4. **Falscher Farbraum**: Farbmanagement-Einstellungen fuer korrekte Anzeige pruefen
+5. **Dateiformat-Inkompatibilitaet**: Nicht alle Formate unterstuetzen alle Farbtiefen
+6. **Speicherueberlauf**: Grosse Aufloesungen oder komplexe Szenen koennen RAM ueberschreiten
+7. **GPU-Speichermangel**: Kachelgroesse reduzieren oder fuer grosse Szenen auf CPU wechseln
+8. **Hintergrundmodus-Ausgabe**: Im Hintergrundmodus muss --render-output Flag oder filepath gesetzt werden
+9. **Bildnummer-Formatierung**: #### fuer automatische Bildnummer-Auffuellung verwenden
+10. **Compositing deaktiviert**: `scene.use_nodes` aktivieren um Compositing zu verwenden
 
 ## Verwandte Skills
 
-- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Scene setup required vor rendering
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Batch rendering automation patterns
-- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Publication output requirements and formatting
+- **[create-3d-scene](../create-3d-scene/SKILL.md)**: Szenen-Setup vor dem Rendern erforderlich
+- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Stapelrender-Automatisierungsmuster
+- **[render-publication-graphic](../../visualization/render-publication-graphic/SKILL.md)**: Veroeffentlichungs-Ausgabeanforderungen und Formatierung

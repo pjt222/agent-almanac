@@ -1,12 +1,12 @@
 ---
 name: generate-tour-report
 description: >
-  Generate a Quarto-based tour report with embedded maps, daily itineraries,
-  logistics tables, and accommodation/transport details. Produces a
-  self-contained HTML or PDF document suitable for offline use during travel.
-  Use when compiling a planned tour into a shareable document, creating an
-  offline-accessible travel guide, documenting a completed trip with photos and
-  statistics, or producing a professional tour proposal for a group or client.
+  埋め込みマップ、日別旅程、ロジスティクス表、宿泊・交通の詳細を含むQuartoベースの
+  旅行レポートを生成する。旅行中のオフライン使用に適した自己完結型のHTMLまたはPDF
+  ドキュメントを生成する。計画した旅程を共有可能なドキュメントにまとめる時、
+  オフラインアクセス可能な旅行ガイドを作成する時、写真と統計を含む完了した旅行を
+  記録する時、またはグループやクライアント向けのプロフェッショナルな旅行提案を
+  作成する時に使用する。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -23,33 +23,33 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# ツアーレポートの生成
+# 旅行レポートの生成
 
-Generate a formatted tour report with embedded maps, daily itineraries, logistics tables, and practical travel information.
+埋め込みマップ、日別旅程、ロジスティクス表、実用的な旅行情報を含むフォーマットされた旅行レポートを生成する。
 
 ## 使用タイミング
 
-- Compiling a planned tour into a shareable document
-- Creating an offline-accessible travel guide for a trip
-- Documenting a completed trip with photos, maps, and statistics
-- Producing a professional tour proposal for a group or client
-- Consolidating route, accommodation, and transport data into one document
+- 計画した旅程を共有可能なドキュメントにまとめる時
+- 旅行用のオフラインアクセス可能な旅行ガイドを作成する時
+- 写真、マップ、統計を含む完了した旅行を記録する時
+- グループやクライアント向けのプロフェッショナルな旅行提案を作成する時
+- ルート、宿泊、交通データを1つのドキュメントに統合する時
 
 ## 入力
 
-- **必須**: Route data (waypoints, legs, distances, times)
-- **必須**: Tour dates and duration
-- **任意**: Accommodation details (name, address, confirmation numbers)
-- **任意**: Transport bookings (flights, trains, car rental)
-- **任意**: GPX tracks or spatial data for map embedding
-- **任意**: Budget information (costs per category)
-- **任意**: Photos or images to include
+- **必須**: ルートデータ（ウェイポイント、区間、距離、時間）
+- **必須**: 旅行日程と期間
+- **任意**: 宿泊詳細（名称、住所、確認番号）
+- **任意**: 交通予約（フライト、列車、レンタカー）
+- **任意**: マップ埋め込み用のGPXトラックまたは空間データ
+- **任意**: 予算情報（カテゴリ別のコスト）
+- **任意**: 含める写真や画像
 
 ## 手順
 
-### ステップ1: Compile Route and POI Data
+### ステップ1: ルートとPOIデータの収集
 
-Gather all tour data into a structured format before building the report.
+レポートの構築前にすべての旅行データを構造化された形式に収集する。
 
 ```
 Data Sources to Compile:
@@ -66,19 +66,19 @@ Data Sources to Compile:
 └────────────────────┴──────────────────────────────────────────┘
 ```
 
-Organize data by day to support the daily section structure:
-1. Group waypoints and activities by date
-2. Assign each transport leg to a day
-3. Match accommodations to overnight dates
-4. Calculate daily totals (distance, time, cost)
+日別のセクション構造を支援するためにデータを日ごとに整理する:
+1. ウェイポイントとアクティビティを日付ごとにグループ化
+2. 各交通区間を日に割り当て
+3. 宿泊を宿泊日に合わせる
+4. 日別合計を計算（距離、時間、コスト）
 
-**期待結果:** A complete data collection organized by day, with no gaps in the schedule (every night has accommodation, every leg has transport).
+**期待結果:** 日ごとに整理された完全なデータ収集。スケジュールにギャップがないこと（毎晩宿泊がある、すべての区間に交通手段がある）。
 
-**失敗時:** If data is incomplete, mark missing items with `[TBD]` placeholders and add them to a follow-up checklist at the end of the report. If dates don't align (e.g., arrival at accommodation before departure from previous stop), flag the conflict and adjust times.
+**失敗時:** データが不完全な場合、欠落している項目を `[TBD]` プレースホルダーでマークし、レポート末尾のフォローアップチェックリストに追加する。日付が合わない場合（例：前の場所からの出発前に宿泊先への到着）、競合をフラグ付けして時間を調整する。
 
-### ステップ2: Structure Daily Sections
+### ステップ2: 日別セクションの構造化
 
-Create the Quarto document skeleton with daily sections.
+日別セクションを持つQuartoドキュメントのスケルトンを作成する。
 
 ```yaml
 ---
@@ -104,7 +104,7 @@ execute:
 ---
 ```
 
-Structure the document as follows:
+ドキュメントを以下のように構造化する:
 
 ```
 Report Structure:
@@ -131,15 +131,15 @@ N. Logistics Appendix
    - Budget summary
 ```
 
-**期待結果:** A complete .qmd file skeleton with YAML header, all daily sections as H2 headings, and placeholder content for each section.
+**期待結果:** YAMLヘッダー、すべての日別セクションをH2見出しとして、各セクションのプレースホルダーコンテンツを含む完全な .qmd ファイルスケルトン。
 
-**失敗時:** If the tour is too long for a single document (more than 14 days), consider splitting into weekly parts or using a tabset layout (`{.tabset}`) to keep the document navigable. If PDF output is required, ensure no interactive widgets are included (use static maps instead).
+**失敗時:** 旅行が単一ドキュメントには長すぎる場合（14日以上）、週ごとのパートに分割するか、タブセットレイアウト（`{.tabset}`）を使用してドキュメントをナビゲート可能に保つことを検討する。PDF出力が必要な場合、インタラクティブウィジェットが含まれていないことを確認する（代わりに静的マップを使用）。
 
-### ステップ3: Embed Maps and Charts
+### ステップ3: マップとチャートの埋め込み
 
-Add spatial visualizations to each section.
+各セクションに空間的な可視化を追加する。
 
-**Overview map:**
+**概要マップ:**
 
 ```r
 #| label: fig-overview-map
@@ -151,7 +151,7 @@ leaflet::leaflet() |>
   leaflet::addMarkers(data = stops, popup = ~paste(name, "<br>", date))
 ```
 
-**Daily route map:**
+**日別ルートマップ:**
 
 ```r
 #| label: fig-day1-map
@@ -164,7 +164,7 @@ leaflet::leaflet() |>
   leaflet::addCircleMarkers(data = day1_stops, radius = 6, popup = ~name)
 ```
 
-**Elevation profile (for hiking/cycling days):**
+**標高プロファイル（ハイキング/サイクリング日用）:**
 
 ```r
 #| label: fig-day3-elevation
@@ -177,15 +177,15 @@ ggplot2::ggplot(day3_elevation, ggplot2::aes(x = dist_km, y = elev_m)) +
   ggplot2::labs(x = "Distance (km)", y = "Elevation (m)")
 ```
 
-**期待結果:** Each daily section has at minimum a route map. Multi-modal days (driving + hiking) have both a road map and an elevation profile. Overview section has a map showing the complete tour.
+**期待結果:** 各日別セクションに最低限ルートマップがあること。マルチモーダルの日（ドライブ＋ハイキング）にはロードマップと標高プロファイルの両方があること。概要セクションには完全な旅程を示すマップがあること。
 
-**失敗時:** If leaflet maps fail to render (common in PDF mode), fall back to static maps using `tmap::tmap_mode("plot")` or `ggplot2` with `ggspatial::annotation_map_tile()`. If spatial data is not available for a day, include a simple text description of the route instead.
+**失敗時:** leafletマップのレンダリングに失敗する場合（PDFモードで一般的）、`tmap::tmap_mode("plot")` または `ggplot2` と `ggspatial::annotation_map_tile()` を使用した静的マップにフォールバックする。空間データがある日に利用できない場合、代わりにルートの簡単なテキスト説明を含める。
 
-### ステップ4: Add Logistics Tables
+### ステップ4: ロジスティクス表の追加
 
-Insert structured tables for accommodations, transport, and budget.
+宿泊、交通、予算の構造化された表を挿入する。
 
-**Accommodation table:**
+**宿泊表:**
 
 ```markdown
 | Night | Date       | Accommodation      | Address            | Check-in | Cost   | Conf# |
@@ -195,7 +195,7 @@ Insert structured tables for accommodations, transport, and budget.
 | 3     | 2025-07-03 | Pension Edelweiss  | Dorfplatz 3        | 14:00    | EUR 72 | CD456 |
 ```
 
-**Transport table:**
+**交通表:**
 
 ```markdown
 | Date       | Type  | From          | To            | Depart | Arrive | Ref#   |
@@ -205,7 +205,7 @@ Insert structured tables for accommodations, transport, and budget.
 | 2025-07-04 | Train | Innsbruck     | Munich Hbf    | 16:45  | 18:30  | OBB567 |
 ```
 
-**Budget summary:**
+**予算概要:**
 
 ```markdown
 | Category        | Estimated | Actual | Notes                   |
@@ -217,61 +217,61 @@ Insert structured tables for accommodations, transport, and budget.
 | **Total**       | **EUR 507** |      |                         |
 ```
 
-**期待結果:** Complete logistics tables with all bookings listed chronologically. No missing dates in the accommodation table. Budget totals are calculated correctly.
+**期待結果:** すべての予約が時系列に記載された完全なロジスティクス表。宿泊表に欠落した日付がないこと。予算合計が正しく計算されていること。
 
-**失敗時:** If booking details are not yet confirmed, use `[TBD]` and highlight the row. If the tour involves multiple currencies, add a currency column and include exchange rates in a footnote.
+**失敗時:** 予約の詳細がまだ確定していない場合、`[TBD]` を使用して行をハイライトする。旅行が複数の通貨を含む場合、通貨列を追加し脚注に為替レートを含める。
 
-### ステップ5: Render Report
+### ステップ5: レポートのレンダリング
 
-Compile the Quarto document into the final output format.
+Quartoドキュメントを最終出力形式にコンパイルする。
 
 ```bash
-# Render to self-contained HTML (best for offline use)
+# 自己完結型HTMLにレンダリング（オフライン使用に最適）
 quarto render tour-report.qmd --to html
 
-# Render to PDF (for printing)
+# PDFにレンダリング（印刷用）
 quarto render tour-report.qmd --to pdf
 
-# Preview with live reload during editing
+# 編集中のライブリロード付きプレビュー
 quarto preview tour-report.qmd
 ```
 
-Post-rendering checks:
-1. Open the HTML file and verify all maps load correctly
-2. Test that the table of contents links work
-3. Verify all images and charts render at appropriate sizes
-4. Check that the self-contained HTML works offline (disconnect and reload)
-5. For PDF: verify page breaks fall at logical points (between days)
+レンダリング後のチェック:
+1. HTMLファイルを開き、すべてのマップが正しく読み込まれることを確認
+2. 目次のリンクが機能することをテスト
+3. すべての画像とチャートが適切なサイズでレンダリングされることを確認
+4. 自己完結型HTMLがオフラインで動作することを確認（切断してリロード）
+5. PDFの場合：ページブレークが論理的な位置（日の間）に来ることを確認
 
-**期待結果:** A complete, self-contained document that works offline and contains all tour information in a navigable format.
+**期待結果:** オフラインで動作し、ナビゲート可能な形式ですべての旅行情報を含む完全な自己完結型ドキュメント。
 
-**失敗時:** If rendering fails, check the R console for package errors (missing sf, leaflet, or ggplot2). If self-contained HTML is too large (over 20 MB), reduce map tile resolution or use PNG screenshots instead of interactive maps. If PDF rendering fails with LaTeX errors, install TinyTeX with `quarto install tinytex`.
+**失敗時:** レンダリングが失敗する場合、パッケージエラー（sf、leaflet、ggplot2の欠落）をRコンソールで確認する。自己完結型HTMLが大きすぎる場合（20 MB超）、マップタイルの解像度を下げるかインタラクティブマップの代わりにPNGスクリーンショットを使用する。PDFレンダリングがLaTeXエラーで失敗する場合、`quarto install tinytex` でTinyTeXをインストールする。
 
 ## バリデーション
 
-- [ ] Report renders without errors in the target format
-- [ ] Overview map shows the complete route with all stops
-- [ ] Each day has a route map and schedule
-- [ ] Accommodation table covers every night of the trip
-- [ ] Transport table includes all legs
-- [ ] Budget totals are accurate
-- [ ] Self-contained HTML works offline
-- [ ] Table of contents navigates correctly to all sections
-- [ ] No [TBD] placeholders remain (or they are intentionally flagged)
+- [ ] レポートがターゲット形式でエラーなくレンダリングされる
+- [ ] 概要マップがすべてのストップを含む完全なルートを表示する
+- [ ] 各日にルートマップとスケジュールがある
+- [ ] 宿泊表が旅行の毎晩をカバーしている
+- [ ] 交通表がすべての区間を含む
+- [ ] 予算合計が正確である
+- [ ] 自己完結型HTMLがオフラインで動作する
+- [ ] 目次がすべてのセクションに正しくナビゲートする
+- [ ] [TBD]プレースホルダーが残っていない（意図的にフラグ付けされている場合を除く）
 
 ## よくある落とし穴
 
-- **Interactive maps in PDF**: Leaflet and other HTML widgets cannot render in PDF. Always provide static map alternatives for PDF output.
-- **Oversized self-contained HTML**: Embedding many map tiles creates very large files. Limit zoom levels or use static map screenshots for tile-heavy maps.
-- **Missing time zones**: International tours cross time zones. Always specify the time zone for departure and arrival times to avoid confusion.
-- **Stale booking references**: Confirmation numbers and times can change. Include a "last updated" date and remind users to verify before travel.
-- **No offline fallback**: If the report relies on web-loaded map tiles, it will be blank offline. Use `self-contained: true` or pre-render maps as images.
-- **Inconsistent date formats**: Mix of DD/MM and MM/DD causes confusion. Use ISO 8601 (YYYY-MM-DD) consistently throughout.
+- **PDFでのインタラクティブマップ**: Leafletやその他のHTMLウィジェットはPDFでレンダリングできない。PDF出力には常に静的マップの代替を提供する
+- **大きすぎる自己完結型HTML**: 多くのマップタイルの埋め込みは非常に大きなファイルを作成する。ズームレベルを制限するか、タイルが多いマップには静的マップのスクリーンショットを使用する
+- **タイムゾーンの欠落**: 国際旅行はタイムゾーンを越える。混乱を避けるため、出発・到着時刻に常にタイムゾーンを指定する
+- **古い予約参照**: 確認番号と時刻は変更される可能性がある。「最終更新日」を含め、旅行前に確認するようユーザーに通知する
+- **オフラインフォールバックなし**: レポートがWebロードのマップタイルに依存している場合、オフラインでは空白になる。`self-contained: true` を使用するかマップを画像として事前レンダリングする
+- **日付形式の不一致**: DD/MMとMM/DDの混在は混乱を引き起こす。ドキュメント全体を通じてISO 8601（YYYY-MM-DD）を一貫して使用する
 
 ## 関連スキル
 
-- `plan-tour-route` — generates the route data compiled into this report
-- `create-spatial-visualization` — creates the maps and charts embedded in the report
-- `create-quarto-report` — general Quarto document creation and configuration
-- `plan-hiking-tour` — provides hiking-specific data for mountain tour reports
-- `check-hiking-gear` — generates packing checklists for the logistics appendix
+- `plan-tour-route` — このレポートにコンパイルされるルートデータを生成する
+- `create-spatial-visualization` — レポートに埋め込むマップとチャートを作成する
+- `create-quarto-report` — 一般的なQuartoドキュメントの作成と設定
+- `plan-hiking-tour` — 山岳旅行レポート用のハイキング固有のデータを提供する
+- `check-hiking-gear` — ロジスティクス付録用のパッキングチェックリストを生成する

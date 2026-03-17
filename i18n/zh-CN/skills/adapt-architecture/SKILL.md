@@ -1,14 +1,10 @@
 ---
 name: adapt-architecture
 description: >
-  Execute structural metamorphosis using strangler fig migration, chrysalis
-  phases, and interface preservation. Covers transformation planning, parallel
-  running, progressive cutover, rollback design, and post-metamorphosis
-  stabilization for system architecture evolution. Use when assess-form has
-  classified the system as READY for transformation, when migrating from
-  monolith to microservices, when replacing a core subsystem while dependents
-  continue operating, or when any architectural change must be gradual rather
-  than big-bang.
+  使用绞杀者无花果迁移、蛹化阶段和接口保持执行结构性蜕变。涵盖转型规划、
+  并行运行、渐进式切换、回滚设计和蜕变后稳定化，用于系统架构演进。适用于
+  assess-form 已将系统分类为 READY 准备转型时、从单体迁移到微服务时、在依赖
+  方继续运行的同时替换核心子系统时，或任何架构变更必须渐进而非一步到位时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,51 +21,51 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Adapt Architecture
+# 架构适配
 
-Execute structural metamorphosis — transforming a system's architecture from its current form to a target form while maintaining operational continuity. Uses strangler fig migration, chrysalis phases, and interface preservation to ensure the system never stops functioning during transformation.
+执行结构性蜕变——将系统架构从当前形态转变为目标形态，同时维持运行连续性。使用绞杀者无花果迁移、蛹化阶段和接口保持，确保系统在转型期间始终正常运行。
 
 ## 适用场景
 
-- Form assessment (see `assess-form`) classified the system as READY
-- A system must evolve its architecture to meet new requirements without downtime
-- Migrating from monolith to microservices (or the reverse)
-- Replacing a core subsystem while dependent systems continue operating
-- Evolving a data model while maintaining backward compatibility
-- Any architectural change that must be gradual rather than big-bang
+- 形态评估（参见 `assess-form`）已将系统分类为 READY
+- 系统必须在不停机的情况下演进架构以满足新需求
+- 从单体迁移到微服务（或反向迁移）
+- 在依赖系统继续运行的同时替换核心子系统
+- 在保持向后兼容的同时演进数据模型
+- 任何必须渐进而非一步到位的架构变更
 
 ## 输入
 
-- **必需**: Current form assessment (from `assess-form` or equivalent analysis)
-- **必需**: Target architecture (what the system should become)
-- **必需**: Operational continuity requirements (what must not break during transformation)
-- **可选**: Available transformation budget (time, people, compute)
-- **可选**: Rollback requirements (how far back must we be able to retreat?)
-- **可选**: Parallel running duration (how long to run old and new simultaneously)
+- **必需**：当前形态评估（来自 `assess-form` 或等效分析）
+- **必需**：目标架构（系统应当变成什么样）
+- **必需**：运行连续性要求（在转型过程中什么不能中断）
+- **可选**：可用的转型预算（时间、人力、算力）
+- **可选**：回滚要求（需要能够回退到多远？）
+- **可选**：并行运行时长（新旧系统同时运行多久）
 
 ## 步骤
 
-### 第 1 步：Design the Transformation Blueprint
+### 第 1 步：设计转型蓝图
 
-Plan the metamorphosis path from current form to target form.
+规划从当前形态到目标形态的蜕变路径。
 
-1. Map the transformation as a sequence of intermediate forms:
-   - Current form → Intermediate form 1 → ... → Target form
-   - Each intermediate form must be operationally viable (can serve traffic, pass tests)
-   - No intermediate form should be harder to maintain than the current form
-2. Identify the transformation seams:
-   - Where can the current form be "cut" to insert the new architecture?
-   - Natural seams: existing interfaces, module boundaries, data partitions
-   - Artificial seams: interfaces created specifically to enable the cut (anti-corruption layers)
-3. Choose the metamorphosis pattern:
-   - **Strangler fig**: new system grows around the old, gradually replacing it
-   - **Chrysalis**: old system is wrapped in a new shell; internals replaced while shell preserves external interface
-   - **Budding**: new system grows alongside the old; traffic gradually shifts (see `scale-colony` for colony budding)
-   - **Metamorphic migration**: phased replacement of components in dependency order (leaves first, roots last)
-4. Design the interface preservation layer:
-   - External consumers must not experience disruption
-   - API versioning, backward-compatible contracts, adapter patterns
-   - The preservation layer is temporary scaffolding — plan its removal
+1. 将转型映射为一系列中间形态：
+   - 当前形态 → 中间形态 1 → ... → 目标形态
+   - 每个中间形态必须在运行上可行（能处理流量、通过测试）
+   - 任何中间形态都不应比当前形态更难维护
+2. 识别转型接缝：
+   - 当前形态可以在哪里"切割"以插入新架构？
+   - 自然接缝：现有接口、模块边界、数据分区
+   - 人工接缝：专门为实现切割而创建的接口（防腐蚀层）
+3. 选择蜕变模式：
+   - **绞杀者无花果**：新系统围绕旧系统生长，逐步替换
+   - **蛹化**：旧系统被包裹在新外壳中；在外壳保持外部接口的同时替换内部
+   - **萌芽**：新系统与旧系统并行生长；流量逐步转移（参见 `scale-colony` 了解集群萌芽）
+   - **蜕变式迁移**：按依赖顺序分阶段替换组件（先叶后根）
+4. 设计接口保持层：
+   - 外部消费者不得感受到中断
+   - API 版本控制、向后兼容的契约、适配器模式
+   - 保持层是临时脚手架——规划其移除
 
 ```
 Metamorphosis Patterns:
@@ -94,139 +90,139 @@ Metamorphosis Patterns:
 └───────────────┴───────────────────────────────────────────────────┘
 ```
 
-**预期结果：** A transformation blueprint showing intermediate forms, seams, the chosen metamorphosis pattern, and the interface preservation strategy. Each step is concrete and testable.
+**预期结果：** 一份转型蓝图，展示中间形态、接缝、所选蜕变模式和接口保持策略。每个步骤都是具体且可测试的。
 
-**失败处理：** If no clean seam can be found, the system may need preliminary dissolution (see `dissolve-form`) to create seams before transformation. If the intermediate forms aren't operationally viable, the transformation steps are too large — decompose into smaller increments.
+**失败处理：** 如果找不到干净的接缝，系统可能需要先进行初步解体（参见 `dissolve-form`）以创建接缝。如果中间形态在运行上不可行，则转型步骤太大——分解为更小的增量。
 
-### 第 2 步：Build the Scaffolding
+### 第 2 步：搭建脚手架
 
-Construct the temporary infrastructure that supports metamorphosis.
+构建支持蜕变的临时基础设施。
 
-1. Create the anti-corruption layer:
-   - A thin translation layer between the old and new systems
-   - Routes requests to the appropriate system (old or new) based on migration state
-   - Translates data formats between old and new representations
-   - This layer is the "cocoon" that protects the transformation
-2. Set up parallel running infrastructure:
-   - Both old and new systems must be deployable simultaneously
-   - Feature flags control which system handles which traffic
-   - Comparison mechanisms validate that old and new produce equivalent results
-3. Establish rollback checkpoints:
-   - At each intermediate form, verify that rollback to the previous form is possible
-   - Rollback must be faster than the forward transformation step
-   - Data migration must be reversible (or data must be dual-written during transition)
-4. Build the validation harness:
-   - Automated tests that verify operational continuity at each intermediate form
-   - Performance benchmarks that detect regression
-   - Data integrity checks that catch migration errors
+1. 创建防腐蚀层：
+   - 新旧系统之间的薄转换层
+   - 根据迁移状态将请求路由到适当的系统（新或旧）
+   - 在新旧数据表示之间进行格式转换
+   - 该层是保护转型的"茧"
+2. 搭建并行运行基础设施：
+   - 新旧系统必须能同时部署
+   - 功能开关控制哪个系统处理哪些流量
+   - 比较机制验证新旧系统产生等价结果
+3. 建立回滚检查点：
+   - 在每个中间形态，验证是否可以回滚到前一个形态
+   - 回滚必须比正向转型步骤更快
+   - 数据迁移必须可逆（或在过渡期间数据必须双写）
+4. 构建验证工具：
+   - 自动化测试在每个中间形态验证运行连续性
+   - 性能基准检测回归
+   - 数据完整性检查捕获迁移错误
 
-**预期结果：** Scaffolding infrastructure (anti-corruption layer, parallel running, rollback, validation) is in place before any transformation begins. The scaffolding itself is tested and verified.
+**预期结果：** 脚手架基础设施（防腐蚀层、并行运行、回滚、验证）在任何转型开始之前就已就位。脚手架本身已经过测试和验证。
 
-**失败处理：** If scaffolding is too expensive, simplify: the minimum viable scaffolding is a feature flag and a rollback procedure. Anti-corruption layers and parallel running add safety but are not always necessary for smaller transformations.
+**失败处理：** 如果脚手架成本过高，可以简化：最小可行脚手架是一个功能开关和一个回滚程序。防腐蚀层和并行运行增加了安全性，但对于较小的转型并非总是必需的。
 
-### 第 3 步：Execute Progressive Cutover
+### 第 3 步：执行渐进式切换
 
-Migrate functionality from old form to new form incrementally.
+将功能从旧形态增量迁移到新形态。
 
-1. Order components for migration:
-   - Start with the least-coupled, lowest-risk component (build confidence)
-   - Progress toward more critical, more coupled components
-   - Save the most coupled/critical component for last (by which point the team has experience)
-2. For each component:
-   a. Implement the new version behind the anti-corruption layer
-   b. Run parallel: both old and new process the same inputs
-   c. Compare outputs — they should be equivalent (or the differences should be expected and documented)
-   d. When confident, switch traffic to the new version (feature flag flip)
-   e. Monitor for anomalies (increase monitoring sensitivity post-cutover)
-   f. After a stability period, decommission the old version of this component
-3. Maintain continuous delivery throughout:
-   - Each cutover step is a normal deployment, not a special event
-   - The system is always in a known, tested, operational state
-   - If a cutover causes issues, roll back to the previous state (which is still operational)
+1. 排列组件迁移顺序：
+   - 从耦合最松、风险最低的组件开始（建立信心）
+   - 向更关键、更紧密耦合的组件推进
+   - 将耦合最紧/最关键的组件留到最后（届时团队已有经验）
+2. 对每个组件：
+   a. 在防腐蚀层后面实现新版本
+   b. 并行运行：新旧两者处理相同的输入
+   c. 比较输出——它们应该等价（或差异应是预期的并已记录）
+   d. 确信后，将流量切换到新版本（功能开关翻转）
+   e. 监控异常（切换后提高监控灵敏度）
+   f. 经过稳定期后，下线该组件的旧版本
+3. 全程维持持续交付：
+   - 每次切换都是常规部署，不是特殊事件
+   - 系统始终处于已知、已测试、可运行的状态
+   - 如果切换引起问题，回滚到前一个状态（该状态仍然可运行）
 
-**预期结果：** Functionality migrates component by component with validation at each step. The system is always operational. Each cutover builds confidence for the next.
+**预期结果：** 功能逐组件迁移，每步都有验证。系统始终保持运行。每次切换都为下一次建立信心。
 
-**失败处理：** If parallel running reveals discrepancies, the new implementation has a bug — fix it before cutting over. If a cutover causes performance degradation, the new component may need optimization or the anti-corruption layer is adding too much overhead. If the team loses confidence mid-migration, pause and stabilize — a half-migrated system in a known state is far better than a rushed full migration.
+**失败处理：** 如果并行运行发现差异，说明新实现有 bug——在切换之前修复。如果切换导致性能下降，新组件可能需要优化，或防腐蚀层增加了过多开销。如果团队在迁移中途失去信心，暂停并稳定——处于已知状态的半迁移系统远好于仓促完成的全量迁移。
 
-### 第 4 步：Manage the Chrysalis Phase
+### 第 4 步：管理蛹化阶段
 
-Navigate the most vulnerable period — when the system is between forms.
+驾驭最脆弱的时期——系统处于新旧形态之间。
 
-1. Acknowledge the chrysalis reality:
-   - During migration, the system is partly old and partly new
-   - This hybrid state is inherently more complex than either pure state
-   - Complexity peaks at the midpoint of migration, then decreases
-2. Chrysalis discipline:
-   - No new features during the chrysalis phase (transformation only)
-   - Minimal external changes (freeze non-essential deployments)
-   - Increased monitoring and on-call coverage
-   - Daily check-ins on migration progress and system health
-3. Mid-chrysalis assessment:
-   - At the halfway point, assess: is the target form still the right goal?
-   - Has anything changed (market, requirements, team) that affects the target?
-   - Should the transformation continue, pause, or redirect?
-4. Protect the chrysalis:
-   - Keep the rollback path clear at all times
-   - Document the current hybrid state thoroughly (future debuggers will need it)
-   - Resist the temptation to "clean up" temporary scaffolding before migration is complete
+1. 承认蛹化现实：
+   - 迁移期间，系统部分是旧的，部分是新的
+   - 这种混合状态本质上比任一纯粹状态更复杂
+   - 复杂度在迁移中点达到峰值，然后下降
+2. 蛹化纪律：
+   - 蛹化阶段不添加新功能（仅进行转型）
+   - 最少的外部变更（冻结非必要部署）
+   - 增加监控和值班覆盖
+   - 每日检查迁移进度和系统健康状况
+3. 中期蛹化评估：
+   - 在中途评估：目标形态仍然是正确的目标吗？
+   - 是否有任何变化（市场、需求、团队）影响了目标？
+   - 转型应该继续、暂停还是重新定向？
+4. 保护蛹化：
+   - 始终保持回滚路径畅通
+   - 彻底记录当前混合状态（未来的调试者会需要它）
+   - 抵制在迁移完成前"清理"临时脚手架的诱惑
 
-**预期结果：** The chrysalis phase is managed as a deliberate, time-bounded period with increased discipline and monitoring. The team understands that temporary complexity is the cost of safe transformation.
+**预期结果：** 蛹化阶段被作为一个刻意的、有时间限制的时期来管理，具有更高的纪律和监控。团队理解临时复杂性是安全转型的代价。
 
-**失败处理：** If the chrysalis phase drags on too long, the hybrid state becomes the new normal — which is worse than either old or new. Set a time limit. If the limit is reached, either accelerate the remaining migration or accept the hybrid state as the "new form" and stabilize it.
+**失败处理：** 如果蛹化阶段拖延太久，混合状态就会变成新常态——这比新旧任一状态都更糟。设定时间限制。如果达到限制，要么加速剩余迁移，要么接受混合状态作为"新形态"并使其稳定。
 
-### 第 5 步：Complete Metamorphosis and Stabilize
+### 第 5 步：完成蜕变并稳定
 
-Finish the transformation and remove scaffolding.
+完成转型并移除脚手架。
 
-1. Final cutover:
-   - Migrate the last component(s) to the new form
-   - Run full validation suite against the complete new system
-   - Performance test under production-equivalent load
-2. Remove scaffolding:
-   - Decommission the anti-corruption layer (it's no longer needed)
-   - Remove feature flags related to the migration
-   - Clean up parallel running infrastructure
-   - Archive (don't delete) the old system code for reference
-3. Post-metamorphosis stabilization:
-   - Run in the new form for 2-4 weeks with enhanced monitoring
-   - Address any issues that emerge under real-world conditions
-   - Update documentation to reflect the new architecture
-4. Retrospective:
-   - What went well in the transformation?
-   - What was harder than expected?
-   - What would we do differently next time?
-   - Update the team's transformation playbook
+1. 最终切换：
+   - 将最后的组件迁移到新形态
+   - 针对完整的新系统运行全套验证
+   - 在等效生产负载下进行性能测试
+2. 移除脚手架：
+   - 下线防腐蚀层（不再需要）
+   - 移除与迁移相关的功能开关
+   - 清理并行运行基础设施
+   - 归档（不要删除）旧系统代码以供参考
+3. 蜕变后稳定化：
+   - 以新形态运行 2-4 周，增强监控
+   - 处理在真实条件下出现的任何问题
+   - 更新文档以反映新架构
+4. 回顾：
+   - 转型中什么做得好？
+   - 什么比预期更困难？
+   - 下次我们会有什么不同的做法？
+   - 更新团队的转型手册
 
-**预期结果：** The transformation is complete. The system operates in its new form. Scaffolding is removed. Documentation is updated. The team has captured learnings for future transformations.
+**预期结果：** 转型完成。系统以新形态运行。脚手架已移除。文档已更新。团队已为未来的转型积累了经验。
 
-**失败处理：** If the new form is unstable after cutover, maintain the rollback path and continue stabilization. If stabilization takes more than the planned period, there may be a design issue in the new architecture — consider whether targeted fixes or a partial rollback of the most problematic component is appropriate.
+**失败处理：** 如果新形态在切换后不稳定，维持回滚路径并继续稳定化。如果稳定化超过计划时间，可能是新架构存在设计问题——考虑是进行针对性修复还是对最有问题的组件进行部分回滚。
 
 ## 验证清单
 
-- [ ] Transformation blueprint shows viable intermediate forms
-- [ ] Scaffolding (anti-corruption layer, rollback, validation harness) is in place before migration starts
-- [ ] Components migrate in order from lowest to highest risk
-- [ ] Parallel running validates equivalence at each step
-- [ ] Chrysalis phase is time-bounded with feature freeze discipline
-- [ ] All scaffolding is removed after transformation completes
-- [ ] Post-metamorphosis stabilization period passes without critical issues
-- [ ] Retrospective captures learnings
+- [ ] 转型蓝图展示了可行的中间形态
+- [ ] 脚手架（防腐蚀层、回滚、验证工具）在迁移开始前已就位
+- [ ] 组件按从最低到最高风险的顺序迁移
+- [ ] 并行运行在每步验证等价性
+- [ ] 蛹化阶段有时间限制且遵守功能冻结纪律
+- [ ] 转型完成后所有脚手架已移除
+- [ ] 蜕变后稳定期无严重问题
+- [ ] 回顾总结了经验教训
 
 ## 常见问题
 
-- **Big-bang migration**: Attempting to transform everything at once. This abandons the safety of incremental cutover and maximizes blast radius. Always migrate incrementally
-- **Permanent scaffolding**: Anti-corruption layers and feature flags that are never removed become technical debt. Plan scaffolding removal as part of the transformation, not as an afterthought
-- **Chrysalis denial**: Pretending the hybrid state is normal leads to feature development on unstable foundations. Acknowledge the chrysalis phase and enforce its discipline
-- **Target fixation**: Becoming so committed to the target architecture that signs of a better alternative are ignored. The mid-chrysalis assessment exists for this reason
-- **Transformation fatigue**: Long migrations exhaust teams. Keep each transformation step small enough to complete in days, not weeks. Celebrate milestones to maintain momentum
+- **一步到位的迁移**：试图一次性转型所有内容。这放弃了增量切换的安全性，最大化了影响范围。始终增量迁移
+- **永久性脚手架**：从不移除的防腐蚀层和功能开关会变成技术债务。将脚手架移除作为转型的一部分来规划，而非事后才考虑
+- **蛹化否认**：假装混合状态是正常的，会导致在不稳定基础上进行功能开发。承认蛹化阶段并执行其纪律
+- **目标固着**：过于执着目标架构，以至于忽略了更好替代方案的迹象。中期蛹化评估就是为此而存在的
+- **转型疲劳**：漫长的迁移会耗尽团队。保持每个转型步骤小到可以在数天而非数周内完成。庆祝里程碑以保持动力
 
 ## 相关技能
 
-- `assess-form` — prerequisite assessment that determines if the system is ready for transformation
-- `dissolve-form` — for systems too rigid to transform directly; dissolution creates the seams needed here
-- `repair-damage` — recovery skill for when transformation introduces damage
-- `shift-camouflage` — surface adaptation that may suffice without deep architectural change
-- `coordinate-swarm` — swarm coordination informs the sequencing of transformation across distributed systems
-- `scale-colony` — growth pressure is a common trigger for architectural adaptation
-- `implement-gitops-workflow` — GitOps provides the deployment infrastructure for progressive cutover
-- `review-software-architecture` — complementary review skill for evaluating the target architecture
+- `assess-form` — 前置评估，确定系统是否准备好进行转型
+- `dissolve-form` — 对于过于僵化无法直接转型的系统；解体创建此处所需的接缝
+- `repair-damage` — 当转型引入损害时的恢复技能
+- `shift-camouflage` — 表面适配，可能无需深层架构变更即可满足需求
+- `coordinate-swarm` — 群体协调为分布式系统的转型排序提供参考
+- `scale-colony` — 增长压力是架构适配的常见触发因素
+- `implement-gitops-workflow` — GitOps 为渐进式切换提供部署基础设施
+- `review-software-architecture` — 用于评估目标架构的互补审查技能

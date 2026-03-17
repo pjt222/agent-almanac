@@ -1,14 +1,11 @@
 ---
 name: forage-resources
 description: >
-  Apply ant colony optimization and foraging theory to resource search,
-  exploration-exploitation tradeoffs, and distributed discovery. Covers
-  scout deployment, trail reinforcement, diminishing returns detection,
-  and adaptive foraging strategy selection. Use when searching a large
-  solution space where brute-force enumeration is impractical, balancing
-  investment between exploring new approaches and deepening known good ones,
-  optimizing resource allocation across uncertain opportunities, or diagnosing
-  premature convergence on local optima.
+  リソース探索、探索-活用トレードオフ、分散型発見にアリのコロニー最適化と採餌理論を
+  適用する。スカウト配置、トレイル強化、収穫逓減の検出、適応的採餌戦略選択を網羅する。
+  総当たり列挙が実用的でない大きな解空間を探索する時、新しいアプローチの探索と既知の
+  良好なものの深掘りの間で投資をバランスする時、不確実な機会にわたるリソース配分を
+  最適化する時、または局所最適への早期収束を診断する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,89 +22,89 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# リソースの探索
+# リソースの採餌
 
-Apply foraging theory and ant colony optimization to systematically search for, evaluate, and exploit distributed resources — balancing exploration of unknown territory with exploitation of known yields.
+採餌理論とアリのコロニー最適化を適用して、分散リソースを体系的に探索、評価、活用する — 未知の領域の探索と既知の収穫の活用をバランスさせる。
 
 ## 使用タイミング
 
-- Searching a large solution space where brute-force enumeration is impractical
-- Balancing investment between exploring new approaches and deepening known good ones
-- Optimizing resource allocation across multiple uncertain opportunities
-- Designing search strategies for distributed teams or automated agents
-- Diagnosing premature convergence (stuck on local optima) or perpetual wandering (never committing)
-- Complementing `coordinate-swarm` with specific resource-discovery patterns
+- 総当たり列挙が実用的でない大きな解空間を探索する時
+- 新しいアプローチの探索と既知の良好なものの深掘りの間で投資をバランスする時
+- 複数の不確実な機会にわたるリソース配分を最適化する時
+- 分散チームまたは自動エージェントの探索戦略を設計する時
+- 早期収束（局所最適に固着）または永続的な放浪（コミットしない）を診断する時
+- `coordinate-swarm`を特定のリソース発見パターンで補完する時
 
 ## 入力
 
-- **必須**: Description of the resource being sought (information, compute, talent, solutions, opportunities)
-- **必須**: Description of the search space (size, structure, known features)
-- **任意**: Current search strategy and its failure mode
-- **任意**: Number of available scouts/searchers
-- **任意**: Cost of exploration vs. cost of exploitation failure
-- **任意**: Time horizon (short-term exploitation vs. long-term exploration)
+- **必須**: 探索するリソースの説明（情報、計算資源、人材、ソリューション、機会）
+- **必須**: 探索空間の説明（サイズ、構造、既知の特徴）
+- **任意**: 現在の探索戦略とその失敗モード
+- **任意**: 利用可能なスカウト/探索者の数
+- **任意**: 探索コスト vs. 活用失敗のコスト
+- **任意**: 時間軸（短期的活用 vs. 長期的探索）
 
 ## 手順
 
-### ステップ1: Map the Foraging Landscape
+### ステップ1: 採餌景観のマッピング
 
-Characterize the resource environment to select appropriate foraging strategy.
+適切な採餌戦略を選択するためにリソース環境を特性化する。
 
-1. Identify the resource type and its distribution:
-   - **Concentrated**: resources cluster in rich patches (e.g., talent in specific communities)
-   - **Distributed**: resources spread evenly (e.g., bugs across a codebase)
-   - **Ephemeral**: resources appear and disappear (e.g., market opportunities)
-   - **Nested**: rich patches contain sub-patches at different scales
-2. Assess the information landscape:
-   - How much is known about resource locations before foraging begins?
-   - Can scouts share information with foragers? (see `coordinate-swarm` for signal design)
-   - Is the landscape static or changing while you forage?
-3. Determine the cost structure:
-   - Cost per scout deployed (time, compute, money)
-   - Cost of exploiting a low-quality resource (opportunity cost)
-   - Cost of missing a high-quality resource (regret)
+1. リソースタイプとその分布を特定する：
+   - **集中型**: リソースが豊富なパッチに集まる（例：特定のコミュニティの人材）
+   - **分散型**: リソースが均等に広がる（例：コードベース全体のバグ）
+   - **一時的**: リソースが出現し消失する（例：市場機会）
+   - **入れ子型**: 豊富なパッチが異なるスケールのサブパッチを含む
+2. 情報景観を評価する：
+   - 採餌開始前にリソースの位置についてどの程度わかっているか？
+   - スカウトは採餌者と情報を共有できるか？（シグナル設計については`coordinate-swarm`参照）
+   - 採餌中に景観は静的か変化しているか？
+3. コスト構造を決定する：
+   - スカウト1体あたりの配置コスト（時間、計算資源、費用）
+   - 低品質リソースを活用するコスト（機会費用）
+   - 高品質リソースを見逃すコスト（後悔）
 
-**期待結果:** A characterized foraging landscape with resource distribution type, information availability, and cost structure. This determines which foraging model to apply.
+**期待結果:** リソース分布タイプ、情報の利用可能性、コスト構造が特性化された採餌景観。これがどの採餌モデルを適用するかを決定する。
 
-**失敗時:** If the landscape is completely unknown, start with maximum exploration (all scouts, no exploitation) for a fixed time budget to build an initial map. Switch to the appropriate model once the landscape character becomes clear.
+**失敗時:** 景観が完全に未知の場合、初期マップを構築するために固定時間予算で最大探索（全スカウト、活用なし）から始める。景観の特性が明らかになったら適切なモデルに切り替える。
 
-### ステップ2: Deploy Scouts with Trail Marking
+### ステップ2: トレイルマーキング付きスカウトの配置
 
-Send exploratory agents into the search space with instructions to mark what they find.
+発見物をマークする指示を持つ探索エージェントを探索空間に送る。
 
-1. Allocate scout percentage (start with 20-30% of available agents as scouts)
-2. Define scout behavior:
-   - Move through the search space using randomized or systematic patterns
-   - Evaluate each location encountered (quick assessment, not deep analysis)
-   - Mark discoveries with signal strength proportional to quality:
-     - High quality → strong trail signal
-     - Medium quality → moderate signal
-     - Low quality → weak signal or no signal
-   - Return information to the collective (signal deposit, report, broadcast)
-3. Design the scout pattern:
-   - **Random walk**: good for unknown, uniform landscapes
-   - **Levy flight**: long jumps with occasional local clustering — good for patchy resources
-   - **Systematic sweep**: grid or spiral — good for bounded, well-defined spaces
-   - **Biased random**: lean toward areas similar to previous finds — good for clustered resources
+1. スカウト割合を配分する（利用可能なエージェントの20-30%をスカウトとして開始）
+2. スカウト行動を定義する：
+   - ランダム化または体系的パターンで探索空間を移動する
+   - 遭遇した各場所を評価する（簡易評価、深い分析ではない）
+   - 品質に比例したシグナル強度で発見をマークする：
+     - 高品質 → 強いトレイルシグナル
+     - 中品質 → 中程度のシグナル
+     - 低品質 → 弱いシグナルまたはシグナルなし
+   - 情報を集団に返す（シグナル蓄積、レポート、ブロードキャスト）
+3. スカウトパターンを設計する：
+   - **ランダムウォーク**: 未知の均一景観に適する
+   - **レヴィフライト**: 時折の局所クラスタリングを伴う長距離ジャンプ — パッチ状リソースに適する
+   - **体系的スイープ**: グリッドまたはスパイラル — 限定された明確な空間に適する
+   - **バイアスランダム**: 以前の発見に類似した領域に傾く — クラスタ化リソースに適する
 
-**期待結果:** Scouts deployed across the search space, depositing trail signals proportional to resource quality. The initial map of the landscape begins to emerge from scout reports.
+**期待結果:** 探索空間全体にスカウトが配置され、リソース品質に比例したトレイルシグナルを蓄積。スカウト報告から景観の初期マップが出現し始める。
 
-**失敗時:** If scouts find nothing in the initial sweep, either the scout percentage is too low (increase to 50%), the search pattern is wrong (switch from random walk to Levy flight for patchy resources), or the quality assessment is miscalibrated (lower the detection threshold).
+**失敗時:** 初期スイープでスカウトが何も見つからない場合、スカウト割合が低すぎるか（50%に増加）、探索パターンが誤っているか（パッチ状リソースにはランダムウォークからレヴィフライトに切り替え）、品質評価のキャリブレーションが誤っている（検出閾値を下げる）。
 
-### ステップ3: Establish Trail Reinforcement
+### ステップ3: トレイル強化の確立
 
-Create positive feedback loops that amplify successful paths and let unsuccessful ones fade.
+成功したパスを増幅し、失敗したものを減衰させる正のフィードバックループを作成する。
 
-1. When a forager follows a trail and finds a good resource:
-   - Reinforce the trail signal (increase strength)
-   - The reinforced signal attracts more foragers → more reinforcement → exploitation
-2. When a forager follows a trail and finds nothing:
-   - Do not reinforce (let the trail decay naturally)
-   - The weakening signal attracts fewer foragers → trail fades → exploration resumes
-3. Set reinforcement parameters:
-   - **Deposit amount**: proportional to resource quality found
-   - **Decay rate**: trails lose X% of strength per time unit
-   - **Saturation cap**: maximum trail strength (prevents runaway exploitation of a single path)
+1. 採餌者がトレイルに従い良いリソースを見つけた場合：
+   - トレイルシグナルを強化する（強度を増加）
+   - 強化されたシグナルがより多くの採餌者を引きつける → さらなる強化 → 活用
+2. 採餌者がトレイルに従い何も見つからなかった場合：
+   - 強化しない（トレイルを自然に減衰させる）
+   - 弱まるシグナルがより少ない採餌者を引きつける → トレイルが消える → 探索が再開
+3. 強化パラメータを設定する：
+   - **蓄積量**: 見つかったリソース品質に比例
+   - **減衰率**: トレイルが時間単位あたりX%の強度を失う
+   - **飽和上限**: 最大トレイル強度（単一パスの暴走的活用を防ぐ）
 
 ```
 Trail Reinforcement Dynamics:
@@ -126,76 +123,76 @@ Trail Reinforcement Dynamics:
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**期待結果:** A self-regulating feedback loop where good resources attract increasing attention and poor resources are naturally abandoned. The system balances exploitation and exploration through trail dynamics alone.
+**期待結果:** 良いリソースが注目を集め、貧弱なリソースが自然に放棄される自己調整フィードバックループ。システムがトレイルダイナミクスだけで活用と探索をバランスする。
 
-**失敗時:** If all foragers converge on a single trail (premature convergence), the decay rate is too slow or the saturation cap is too high. Increase decay, lower the cap, or introduce random exploration mandates (e.g., 10% of foragers always ignore trails). If trails fade too fast and nothing gets exploited, reduce the decay rate.
+**失敗時:** すべての採餌者が単一のトレイルに収束する場合（早期収束）、減衰率が遅すぎるか飽和上限が高すぎる。減衰を増加、上限を下げる、またはランダム探索の義務を導入する（例：採餌者の10%が常にトレイルを無視）。トレイルが速く消えすぎて何も活用されない場合、減衰率を下げる。
 
-### ステップ4: Detect Diminishing Returns
+### ステップ4: 収穫逓減の検出
 
-Monitor resource yields to know when to shift from exploitation back to exploration.
+活用から探索に戻すタイミングを知るためにリソース収穫を監視する。
 
-1. Track yield per unit effort for each active foraging site:
-   - Yield increasing → healthy exploitation, continue
-   - Yield flat → approaching saturation, begin scouting alternatives
-   - Yield decreasing → diminishing returns, reduce foragers, increase scouts
-2. Implement the marginal value theorem:
-   - Compare the current site's yield rate to the average yield rate across all known sites
-   - When current site drops below the average, it's time to leave
-   - Factor in travel cost (the cost of switching to a new site)
-3. Trigger scouting waves when:
-   - Overall yield across all sites drops below a threshold
-   - The best-performing site has been exploited for longer than its expected lifetime
-   - Environmental change is detected (new signals from scouts in unexplored areas)
+1. 各アクティブな採餌サイトの努力単位あたりの収穫を追跡する：
+   - 収穫増加 → 健全な活用、継続
+   - 収穫横ばい → 飽和に近づいている、代替のスカウティングを開始
+   - 収穫減少 → 収穫逓減、採餌者を減らしスカウトを増やす
+2. 限界値定理を実装する：
+   - 現在のサイトの収穫率を全既知サイトの平均収穫率と比較
+   - 現在のサイトが平均を下回ったら、離れる時
+   - 移動コスト（新しいサイトへの切り替えコスト）を考慮する
+3. 以下の場合にスカウティングウェーブをトリガーする：
+   - 全サイトの全体的な収穫が閾値を下回った
+   - 最もパフォーマンスの良いサイトの活用が予想寿命を超えて続いている
+   - 環境変化が検出された（未探索領域のスカウトからの新しいシグナル）
 
-**期待結果:** The foraging swarm naturally shifts between exploitation phases (concentrated on known-good sites) and exploration phases (scouts dispersed), driven by yield monitoring rather than arbitrary schedules.
+**期待結果:** 採餌群が任意のスケジュールではなく収穫モニタリングに基づいて、活用フェーズ（既知の良好なサイトに集中）と探索フェーズ（スカウト分散）を自然に切り替える。
 
-**失敗時:** If the swarm stays on depleted sites too long, the marginal value threshold is set too low or the travel cost estimate is too high. Recalibrate by comparing actual yield rates. If the swarm abandons good sites too early, the threshold is too sensitive — add a smoothing window to the yield measurement.
+**失敗時:** 群が枯渇したサイトに長く留まりすぎる場合、限界値閾値が低すぎるか移動コスト推定が高すぎる。実際の収穫率を比較して再キャリブレーションする。群が良いサイトを早く放棄しすぎる場合、閾値が敏感すぎる — 収穫測定にスムージングウィンドウを追加する。
 
-### ステップ5: Adapt Foraging Strategy to Conditions
+### ステップ5: 条件に応じた採餌戦略の適応
 
-Select and switch between foraging strategies based on environmental feedback.
+環境フィードバックに基づいて採餌戦略を選択し切り替える。
 
-1. Match strategy to landscape:
-   - **Rich, clustered**: commit heavily to discovered patches (high exploitation)
-   - **Sparse, scattered**: maintain high scout ratio (high exploration)
-   - **Volatile, changing**: short trail decay, frequent scouting waves (adaptive)
-   - **Competitive**: faster reinforcement, pre-emptive trail marking (territorial)
-2. Monitor for strategy-environment mismatch:
-   - High effort, low yield → strategy too exploitative for the landscape
-   - High discovery rate, low follow-through → strategy too exploratory
-   - Oscillating yield → strategy switching too aggressively
-3. Implement adaptive switching:
-   - Track a rolling average of exploration-to-exploitation ratio
-   - If the ratio drifts too far from optimal (determined by landscape type), nudge it back
-   - Allow gradual transitions — abrupt strategy switches cause coordination chaos
+1. 戦略を景観に合わせる：
+   - **豊富でクラスタ化**: 発見されたパッチに大量にコミット（高活用）
+   - **疎でまばら**: 高いスカウト比率を維持（高探索）
+   - **変動的で変化する**: 短いトレイル減衰、頻繁なスカウティングウェーブ（適応型）
+   - **競争的**: 速い強化、先制的トレイルマーキング（縄張り型）
+2. 戦略-環境の不一致を監視する：
+   - 高努力、低収穫 → 景観に対して戦略が活用的すぎる
+   - 高発見率、低フォロースルー → 戦略が探索的すぎる
+   - 収穫の振動 → 戦略の切り替えが攻撃的すぎる
+3. 適応的切り替えを実装する：
+   - 探索対活用比率のローリング平均を追跡する
+   - 比率が最適値（景観タイプにより決定）から大きくずれた場合、押し戻す
+   - 段階的な移行を許容する — 急な戦略切り替えは調整の混乱を引き起こす
 
-**期待結果:** A foraging system that adapts its exploration-exploitation balance to the current environment, maintaining effectiveness as conditions change.
+**期待結果:** 条件が変化しても効果を維持しながら、現在の環境に探索-活用バランスを適応させる採餌システム。
 
-**失敗時:** If strategy adaptation itself becomes unstable (oscillating between exploration and exploitation), add damping: require the mismatch signal to persist for N time units before triggering a strategy shift. If no strategy seems to work, reassess the landscape characterization from Step 1 — the resource distribution may be more complex than initially assumed.
+**失敗時:** 戦略適応自体が不安定になる場合（探索と活用の間で振動）、ダンピングを追加する：戦略シフトをトリガーする前に不一致シグナルがN時間単位持続することを要求する。どの戦略もうまくいかない場合、ステップ1の景観特性を再評価する — リソース分布が当初の想定より複雑かもしれない。
 
 ## バリデーション
 
-- [ ] Foraging landscape is characterized (distribution type, information availability, cost structure)
-- [ ] Scout percentage and search pattern are defined and deployed
-- [ ] Trail reinforcement loop is functional with deposit, decay, and saturation parameters
-- [ ] Diminishing returns detection triggers rebalancing from exploitation to exploration
-- [ ] Strategy-environment match is monitored and adaptive switching is configured
-- [ ] System recovers from landscape changes (new resources, depleted resources)
+- [ ] 採餌景観が特性化されている（分布タイプ、情報の利用可能性、コスト構造）
+- [ ] スカウト割合と探索パターンが定義され配置されている
+- [ ] トレイル強化ループが蓄積、減衰、飽和パラメータで機能している
+- [ ] 収穫逓減の検出が活用から探索への再バランスをトリガーする
+- [ ] 戦略-環境の適合が監視され適応的切り替えが設定されている
+- [ ] システムが景観の変化（新しいリソース、枯渇したリソース）から回復する
 
 ## よくある落とし穴
 
-- **Premature convergence**: All foragers pile onto the first good find, ignoring potentially better options. Cure: mandatory exploration percentage, trail saturation caps, and decay
-- **Perpetual exploration**: Scouts keep finding new options but the swarm never commits. Cure: lower the quality threshold for trail reinforcement, reduce scout percentage
-- **Ignoring travel costs**: Switching sites has a cost. Foragers that constantly jump between similar-quality sites waste more on travel than they gain. Factor travel cost into the marginal value calculation
-- **Static strategy in dynamic landscape**: A strategy optimized for yesterday's conditions fails tomorrow. Build adaptation into the foraging loop, not as an afterthought
-- **Conflating scout quality with forager quality**: Good scouts (broad, quick assessment) and good foragers (deep, thorough exploitation) require different skills. Don't force all agents into both roles
+- **早期収束**: すべての採餌者が最初の良い発見に群がり、潜在的により良い選択肢を無視する。対策：必須探索割合、トレイル飽和上限、減衰
+- **永続的探索**: スカウトが新しい選択肢を見つけ続けるが群がコミットしない。対策：トレイル強化の品質閾値を下げる、スカウト割合を減らす
+- **移動コストの無視**: サイト切り替えにはコストがある。類似品質のサイト間を常にジャンプする採餌者は獲得以上を移動に浪費する。限界値計算に移動コストを組み込む
+- **動的景観での静的戦略**: 昨日の条件に最適化された戦略は明日失敗する。適応を後付けではなく採餌ループに組み込む
+- **スカウト品質と採餌者品質の混同**: 良いスカウト（広く、迅速な評価）と良い採餌者（深く、徹底的な活用）は異なるスキルを必要とする。すべてのエージェントに両方の役割を強制しない
 
 ## 関連スキル
 
-- `coordinate-swarm` — foundational coordination patterns that underpin foraging signal design
-- `build-consensus` — used when the swarm must collectively agree on which resource patches to prioritize
-- `scale-colony` — scaling foraging operations when the resource landscape or swarm size grows
-- `assess-form` — morphic skill for evaluating the current state of a system, complementary to landscape assessment
-- `configure-alerting-rules` — alerting patterns applicable to diminishing returns detection
-- `plan-capacity` — capacity planning shares the explore-exploit framing with foraging theory
-- `forage-solutions` — AI self-application variant; maps ant colony foraging to single-agent solution exploration with scout hypotheses and trail reinforcement
+- `coordinate-swarm` — 採餌シグナル設計を支える基礎的な調整パターン
+- `build-consensus` — 群がどのリソースパッチを優先するか集団的に合意する必要がある時に使用
+- `scale-colony` — リソース景観または群のサイズが拡大した時の採餌操作のスケーリング
+- `assess-form` — システムの現状を評価するmorphicスキル、景観評価を補完
+- `configure-alerting-rules` — 収穫逓減検出に適用可能なアラートパターン
+- `plan-capacity` — キャパシティプランニングは採餌理論と探索-活用のフレーミングを共有
+- `forage-solutions` — AI自己適用バリアント；アリのコロニー採餌を単一エージェントのソリューション探索にマッピングし、スカウト仮説とトレイル強化を使用

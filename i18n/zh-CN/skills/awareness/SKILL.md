@@ -1,13 +1,10 @@
 ---
 name: awareness
 description: >
-  AI situational awareness — internal threat detection for hallucination risk,
-  scope creep, and context degradation. Maps Cooper color codes to reasoning
-  states and OODA loop to real-time decisions. Use during any task where
-  reasoning quality matters, when operating in unfamiliar territory, after
-  detecting early warning signs such as an uncertain fact or suspicious tool
-  result, or before high-stakes output like irreversible changes or architectural
-  decisions.
+  AI 态势感知——针对幻觉风险、范围蔓延和上下文退化的内部威胁检测。将库珀颜色
+  代码映射到推理状态，将 OODA 循环映射到实时决策。适用于任何推理质量重要的
+  任务中、在不熟悉的领域操作时、检测到早期预警信号（如不确定的事实或可疑的
+  工具结果）后，或在高风险输出（如不可逆变更或架构决策）之前。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,30 +21,30 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Awareness
+# 态势感知
 
-Maintain continuous situational awareness of internal reasoning quality — detecting hallucination risk, scope creep, context degradation, and confidence-accuracy mismatch in real time using adapted Cooper color codes and OODA loop decision-making.
+持续维护对内部推理质量的态势感知——使用改编的库珀颜色代码和 OODA 循环决策实时检测幻觉风险、范围蔓延、上下文退化和信心-准确度不匹配。
 
 ## 适用场景
 
-- During any task where reasoning quality matters (which is most tasks)
-- When operating in unfamiliar territory (new codebase, unfamiliar domain, complex request)
-- After detecting early warning signs: a fact that feels uncertain, a tool result that seems wrong, a growing sense of confusion
-- As a continuous background process during extended work sessions
-- When `center` or `heal` has revealed drift but specific threats have not been identified
-- Before high-stakes output (irreversible changes, user-facing communication, architectural decisions)
+- 在任何推理质量重要的任务中（即大多数任务）
+- 在不熟悉的领域操作时（新代码库、不熟悉的领域、复杂请求）
+- 检测到早期预警信号后：一个感觉不确定的事实、一个看起来有误的工具结果、日益增长的困惑感
+- 作为长时间工作会话中的持续后台进程
+- 当 `center` 或 `heal` 揭示了偏移但尚未识别出具体威胁时
+- 在高风险输出之前（不可逆变更、面向用户的沟通、架构决策）
 
 ## 输入
 
-- **必需**: Active task context (available implicitly)
-- **可选**: Specific concern triggering heightened awareness (e.g., "I'm not sure this API exists")
-- **可选**: Task type for threat profile selection (see Step 5)
+- **必需**：活跃的任务上下文（隐式可用）
+- **可选**：触发提升感知的具体关切（例如"我不确定这个 API 是否存在"）
+- **可选**：用于威胁配置文件选择的任务类型（见第 5 步）
 
 ## 步骤
 
-### 第 1 步：Establish AI Cooper Color Codes
+### 第 1 步：建立 AI 库珀颜色代码
 
-Calibrate the current awareness level using an adapted version of Cooper's color code system.
+使用改编版的库珀颜色代码系统校准当前的感知水平。
 
 ```
 AI Cooper Color Codes:
@@ -84,15 +81,15 @@ AI Cooper Color Codes:
 └──────────┴─────────────────────┴──────────────────────────────────────────┘
 ```
 
-Identify the current color code. If the answer is White (no monitoring), the awareness practice has already succeeded by revealing the gap.
+识别当前的颜色代码。如果答案是白色（无监控），感知练习已经通过揭示这个差距而成功了。
 
-**预期结果：** Accurate self-assessment of the current awareness level. Yellow is the goal during normal work. White should be rare and brief. Extended Orange is unsustainable — either confirm or dismiss the concern.
+**预期结果：** 对当前感知水平的准确自我评估。正常工作期间的目标是黄色。白色应该罕见且短暂。持续橙色是不可持续的——要么确认要么消除关切。
 
-**失败处理：** If the color code assessment itself feels like it is being done on autopilot (going through motions), that is White masquerading as Yellow. Genuine Yellow involves actively checking output against evidence, not just claiming to do so.
+**失败处理：** 如果颜色代码评估本身感觉是在自动驾驶中进行的（走过场），那就是伪装成黄色的白色。真正的黄色涉及主动将输出与证据对照检查，而不仅仅是声称在这样做。
 
-### 第 2 步：Detect Internal Threat Indicators
+### 第 2 步：检测内部威胁指标
 
-Systematically scan for the specific signals that precede common AI reasoning failures.
+系统地扫描先于常见 AI 推理失败的特定信号。
 
 ```
 Threat Indicator Detection:
@@ -130,15 +127,15 @@ Threat Indicator Detection:
 └───────────────────────────┴──────────────────────────────────────────┘
 ```
 
-For each category, check: is this signal present right now? If yes, shift from Yellow to Orange and identify the specific concern.
+对每个类别检查：这个信号现在存在吗？如果是，从黄色转移到橙色并识别具体的关切。
 
-**预期结果：** At least one category scanned with genuine attention. Detection of a signal — even a mild one — is more useful than reporting "all clear." If every scan returns clean, the detection threshold may be too high.
+**预期结果：** 至少对一个类别进行了真正关注的扫描。检测到一个信号——即使是轻微的——比报告"一切正常"更有用。如果每次扫描都返回干净结果，检测阈值可能过高。
 
-**失败处理：** If threat detection feels abstract, ground it in the most recent output: pick the last factual claim made and ask "How do I know this is true? Did I read it, or am I generating it?" This one question catches most hallucination risk.
+**失败处理：** 如果威胁检测感觉抽象，将其落实到最近的输出：选取最后一个事实性声明并问"我怎么知道这是真的？我读到了它，还是我在生成它？"这一个问题就能捕获大多数幻觉风险。
 
-### 第 3 步：Run OODA Loop for Identified Threats
+### 第 3 步：对已识别威胁运行 OODA 循环
 
-When a specific threat is identified (Orange state), cycle through Observe-Orient-Decide-Act.
+当识别出特定威胁（橙色状态）时，循环执行观察-定向-决策-行动。
 
 ```
 AI OODA Loop:
@@ -161,15 +158,15 @@ AI OODA Loop:
 └──────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-The OODA loop should be fast. The goal is not perfection but rapid cycling between observation and action. Spending too long in Orient (analysis paralysis) is the most common failure.
+OODA 循环应该是快速的。目标不是完美，而是在观察和行动之间快速循环。在定向阶段花费太长时间（分析瘫痪）是最常见的失败。
 
-**预期结果：** A complete loop from observation through action in a brief period. The threat is either confirmed and corrected, or dismissed with specific evidence for dismissal.
+**预期结果：** 在短时间内从观察到行动的完整循环。威胁要么被确认并纠正，要么被以具体证据消除。
 
-**失败处理：** If the loop stalls at Orient (can't determine what the threat means), skip to a safe default: verify the uncertain fact through tool use. Direct observation resolves most ambiguity faster than analysis.
+**失败处理：** 如果循环在定向阶段停滞（无法确定威胁的含义），跳转到安全默认值：通过工具使用验证不确定的事实。直接观察比分析更快地解决大多数模糊性。
 
-### 第 4 步：Rapid Stabilization
+### 第 4 步：快速稳定化
 
-When a threat materializes (Red) or cascading failures occur (Black), stabilize before continuing.
+当威胁实现（红色）或发生级联故障（黑色）时，在继续之前先稳定。
 
 ```
 AI Stabilization Protocol:
@@ -197,13 +194,13 @@ AI Stabilization Protocol:
 └────────────────────────┴─────────────────────────────────────────────┘
 ```
 
-**预期结果：** Return from Red/Black to Yellow through deliberate stabilization. The next output after stabilization should be measurably more grounded than the output that triggered the error.
+**预期结果：** 通过刻意的稳定化从红色/黑色返回到黄色。稳定化后的下一个输出应该比触发错误的输出更加扎实。
 
-**失败处理：** If stabilization is ineffective (still confused, still producing errors), the issue may be structural — not a momentary lapse but a fundamental misunderstanding. Escalate: communicate to the user that the approach needs resetting and ask for clarification.
+**失败处理：** 如果稳定化无效（仍然困惑，仍然产生错误），问题可能是结构性的——不是一时的失误而是根本性的误解。升级：向用户沟通方法需要重置并请求澄清。
 
-### 第 5 步：Apply Context-Specific Threat Profiles
+### 第 5 步：应用上下文特定的威胁配置文件
 
-Different task types have different dominant threats. Calibrate awareness focus by task.
+不同的任务类型有不同的主导威胁。按任务校准感知焦点。
 
 ```
 Task-Specific Threat Profiles:
@@ -236,62 +233,62 @@ Task-Specific Threat Profiles:
 └─────────────────────┴─────────────────────┴───────────────────────────┘
 ```
 
-Identify the current task type and adjust monitoring focus accordingly.
+识别当前任务类型并相应地调整监控焦点。
 
-**预期结果：** Awareness sharpened for the specific threats most likely in the current task type, rather than generic monitoring of everything.
+**预期结果：** 感知针对当前任务类型中最可能的特定威胁进行了锐化，而不是对所有事物的泛泛监控。
 
-**失败处理：** If the task type is unclear or spans multiple categories, default to hallucination risk monitoring — it is the most universally applicable threat and the most damaging when missed.
+**失败处理：** 如果任务类型不清楚或跨越多个类别，默认为幻觉风险监控——它是最普遍适用的威胁，被遗漏时也是最具破坏性的。
 
-### 第 6 步：Review and Calibrate
+### 第 6 步：回顾和校准
 
-After each awareness event (threat detected, OODA cycled, stabilization applied), briefly review.
+在每次感知事件（检测到威胁、完成 OODA 循环、应用了稳定化）之后，进行简短回顾。
 
-1. What color code was active when the issue was detected?
-2. Was the detection timely, or was the issue already manifesting in output?
-3. Was the OODA loop fast enough, or did Orient stall?
-4. Was the response proportional (not over- or under-reacting)?
-5. What would catch this earlier next time?
+1. 当问题被检测到时，哪个颜色代码是活跃的？
+2. 检测是否及时，还是问题已经在输出中体现？
+3. OODA 循环是否足够快，还是定向阶段停滞了？
+4. 响应是否适度（没有过度或不足反应）？
+5. 下次什么能更早捕获这个问题？
 
-**预期结果：** A brief calibration that improves future detection. Not a lengthy post-mortem — just enough to tune the sensitivity.
+**预期结果：** 一个能改善未来检测的简短校准。不是冗长的事后分析——只是足够调整灵敏度。
 
-**失败处理：** If review produces no useful calibration, the awareness event was either trivial (no learning needed) or the review is too shallow. For significant events, ask: "What was I not monitoring that I should have been?"
+**失败处理：** 如果回顾没有产生有用的校准，说明感知事件要么是微不足道的（不需要学习），要么回顾过于浅薄。对于重大事件，问："我没有监控什么是我应该监控的？"
 
-### 第 7 步：Integration — Maintain Yellow Default
+### 第 7 步：整合——维持黄色默认状态
 
-Set the ongoing awareness posture.
+设定持续的感知姿态。
 
-1. Yellow is the default state during all work — relaxed monitoring, not hypervigilance
-2. Adjust monitoring focus based on the current task type (Step 5)
-3. Note any recurring threat patterns from this session for MEMORY.md
-4. Return to task execution with calibrated awareness active
+1. 黄色是所有工作期间的默认状态——放松的监控，不是过度警觉
+2. 根据当前任务类型调整监控焦点（第 5 步）
+3. 在 MEMORY.md 中记录本次会话中的任何反复出现的威胁模式
+4. 带着校准的感知回到任务执行
 
-**预期结果：** A sustainable awareness level that improves work quality without slowing it. Awareness should feel like peripheral vision — present but not demanding central attention.
+**预期结果：** 一个可持续的感知水平，在不减慢工作的情况下提高工作质量。感知应该像周边视觉一样——存在但不要求中心注意力。
 
-**失败处理：** If awareness becomes exhausting or hypervigilant (chronic Orange), the threshold is too sensitive. Raise the threshold for what triggers Orange. True awareness is sustainable. If it drains energy, it is anxiety masquerading as vigilance.
+**失败处理：** 如果感知变得令人疲惫或过度警觉（慢性橙色），阈值过于敏感。提高触发橙色的阈值。真正的感知是可持续的。如果它消耗能量，那是伪装成警觉的焦虑。
 
 ## 验证清单
 
-- [ ] Current color code was assessed honestly (not defaulting to Yellow when White is more accurate)
-- [ ] At least one threat category was scanned with specific evidence, not just checked off
-- [ ] OODA loop was applied to any identified threat (observed, oriented, decided, acted)
-- [ ] Stabilization protocol was available if needed (even if not triggered)
-- [ ] Awareness focus was calibrated to the current task type
-- [ ] Post-event calibration was performed for any significant awareness event
-- [ ] Yellow was re-established as the sustainable default
+- [ ] 当前颜色代码被诚实评估（不是在白色更准确时默认为黄色）
+- [ ] 至少一个威胁类别以具体证据进行了扫描，而不仅仅是打钩
+- [ ] OODA 循环已应用于任何已识别的威胁（观察、定向、决策、行动）
+- [ ] 稳定化协议在需要时可用（即使未触发）
+- [ ] 感知焦点已针对当前任务类型进行校准
+- [ ] 对任何重大感知事件进行了事后校准
+- [ ] 黄色已重新建立为可持续的默认状态
 
 ## 常见问题
 
-- **White masquerading as Yellow**: Claiming to be monitoring while actually on autopilot. The test: can you name the last fact you verified? If not, you are in White
-- **Chronic Orange**: Treating every uncertainty as a threat drains cognitive resources and slows work. Orange is for specific identified risks, not general anxiety. If everything feels risky, the calibration is off
-- **Observation without action**: Detecting a threat but not cycling through OODA to resolve it. Detection without response is worse than no detection — it adds anxiety without correction
-- **Skipping Orient**: Jumping from Observe to Act without understanding what the observation means. This produces reactive corrections that may be worse than the original error
-- **Ignoring the gut signal**: When something "feels wrong" but the explicit check comes back clean, investigate further rather than dismissing the feeling. Implicit pattern matching often detects issues before explicit analysis
-- **Over-stabilizing**: Running the full stabilization protocol for minor issues. A quick fact-check is sufficient for most Orange-level concerns. Reserve full stabilization for Red and Black events
+- **白色伪装成黄色**：声称在监控但实际上在自动驾驶。测试：你能说出最后验证的事实吗？如果不能，你处于白色
+- **慢性橙色**：将每个不确定性都视为威胁会消耗认知资源并减慢工作。橙色用于特定已识别的风险，不是一般焦虑。如果一切都感觉有风险，校准偏离了
+- **无行动的观察**：检测到威胁但不循环 OODA 来解决它。没有响应的检测比没有检测更糟——它增加焦虑而不纠正
+- **跳过定向**：从观察跳到行动而不理解观察的含义。这会产生可能比原始错误更糟的反应性纠正
+- **忽视直觉信号**：当某些东西"感觉不对"但显式检查返回干净时，进一步调查而不是忽略这种感觉。隐式模式匹配通常在显式分析之前检测到问题
+- **过度稳定化**：对次要问题运行完整的稳定化协议。快速事实检查对大多数橙色级别的关切就足够了。将完整稳定化保留给红色和黑色事件
 
 ## 相关技能
 
-- `mindfulness` — the human practice that this skill maps to AI reasoning; physical situational awareness principles inform cognitive threat detection
-- `center` — establishes the balanced baseline from which awareness operates; awareness without center is hypervigilance
-- `redirect` — handles pressures once awareness has detected them
-- `heal` — deeper subsystem assessment when awareness reveals patterns of drift
-- `meditate` — develops the observational clarity that awareness depends on
+- `mindfulness` — 本技能映射到 AI 推理的人类实践；物理态势感知原则为认知威胁检测提供信息
+- `center` — 建立感知运行的平衡基线；没有中心的感知就是过度警觉
+- `redirect` — 在感知检测到压力后处理压力
+- `heal` — 当感知揭示出偏移模式时进行更深层的子系统评估
+- `meditate` — 发展感知所依赖的观察清晰度

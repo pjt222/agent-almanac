@@ -1,13 +1,10 @@
 ---
 name: model-markov-chain
 description: >
-  Build and analyze discrete or continuous Markov chains including transition
-  matrix construction, state classification, stationary distribution computation,
-  and mean first passage times. Use when modeling a memoryless system with
-  observed transition counts or rates, computing long-run steady-state
-  probabilities, determining expected hitting times or absorption probabilities,
-  classifying states as transient or recurrent, or building a foundation for
-  hidden Markov models or reinforcement learning MDPs.
+  构建和分析离散或连续马尔可夫链，包括转移矩阵构建、状态分类、平稳分布计算
+  和平均首达时间。适用于对无记忆系统建模观测到的转移计数或速率、计算长期稳态
+  概率、确定期望命中时间或吸收概率、将状态分类为瞬态或常返态，或为隐马尔可夫
+  模型或强化学习 MDP 建立基础时。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,186 +21,186 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Model Markov Chain
+# 马尔可夫链建模
 
-Construct, classify, and analyze discrete-time or continuous-time Markov chains from raw transition data or domain specifications, producing stationary distributions, mean first passage times, and simulation-based validation. Covers both DTMC and CTMC workflows end-to-end.
+从原始转移数据或领域规格构建、分类和分析离散时间或连续时间马尔可夫链，生成平稳分布、平均首达时间和基于模拟的验证。涵盖 DTMC 和 CTMC 端到端工作流。
 
 ## 适用场景
 
-- You need to model a system whose future state depends only on its current state (memoryless property)
-- You have observed transition counts or rates between a finite set of states
-- You want to compute long-run steady-state probabilities for a process
-- You need to determine expected hitting times or absorption probabilities
-- You are classifying states as transient, recurrent, or absorbing for structural analysis
-- You want to compare alternative Markov models for the same system
-- You are building a foundation for more advanced models (hidden Markov models, reinforcement learning MDPs)
+- 需要对未来状态仅取决于当前状态（无记忆性质）的系统建模
+- 拥有有限状态集之间的观测转移计数或速率
+- 想要计算过程的长期稳态概率
+- 需要确定期望命中时间或吸收概率
+- 为结构分析将状态分类为瞬态、常返态或吸收态
+- 想要比较同一系统的替代马尔可夫模型
+- 为更高级的模型（隐马尔可夫模型、强化学习 MDP）建立基础
 
 ## 输入
 
-### Required
+### 必需
 
-| Input | Type | Description |
-|-------|------|-------------|
-| `state_space` | list/vector | Exhaustive enumeration of all states in the chain |
-| `transition_data` | matrix, data frame, or edge list | Raw transition counts, a probability matrix, or a rate matrix (for CTMC) |
-| `chain_type` | string | Either `"discrete"` (DTMC) or `"continuous"` (CTMC) |
+| 输入 | 类型 | 描述 |
+|------|------|------|
+| `state_space` | list/vector | 链中所有状态的穷举枚举 |
+| `transition_data` | matrix, data frame, or edge list | 原始转移计数、概率矩阵或速率矩阵（CTMC） |
+| `chain_type` | string | `"discrete"`（DTMC）或 `"continuous"`（CTMC） |
 
-### Optional
+### 可选
 
-| Input | Type | Default | Description |
-|-------|------|---------|-------------|
-| `initial_distribution` | vector | uniform | Starting state probabilities |
-| `time_horizon` | integer/float | 100 | Number of steps (DTMC) or time units (CTMC) for simulation |
-| `tolerance` | float | 1e-10 | Convergence tolerance for iterative computations |
-| `absorbing_states` | list | auto-detect | States explicitly marked as absorbing |
-| `labels` | list | state indices | Human-readable names for each state |
-| `method` | string | `"eigen"` | Solver method: `"eigen"`, `"power"`, or `"linear_system"` |
+| 输入 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `initial_distribution` | vector | uniform | 起始状态概率 |
+| `time_horizon` | integer/float | 100 | 步数（DTMC）或时间单位（CTMC）用于模拟 |
+| `tolerance` | float | 1e-10 | 迭代计算的收敛容差 |
+| `absorbing_states` | list | auto-detect | 明确标记为吸收的状态 |
+| `labels` | list | state indices | 每个状态的可读名称 |
+| `method` | string | `"eigen"` | 求解方法：`"eigen"`、`"power"` 或 `"linear_system"` |
 
 ## 步骤
 
-### 第 1 步：Define State Space and Transitions
+### 第 1 步：定义状态空间和转移
 
-1.1. Enumerate all distinct states. Confirm the list is exhaustive and mutually exclusive.
+1.1. 枚举所有不同的状态。确认列表是穷举的且互斥的。
 
-1.2. If working from raw observations, tabulate transition counts into an `n x n` count matrix `C` where `C[i,j]` is the number of observed transitions from state `i` to state `j`.
+1.2. 如果从原始观测数据工作，将转移计数制表为 `n x n` 计数矩阵 `C`，其中 `C[i,j]` 是从状态 `i` 到状态 `j` 的观测转移次数。
 
-1.3. For continuous-time chains, collect holding times in each state alongside transition destinations.
+1.3. 对于连续时间链，收集每个状态的停留时间以及转移目的地。
 
-1.4. Verify no state is missing from the enumeration by checking that every observed origin and destination appears in the state space.
+1.4. 通过检查每个观测到的起点和终点是否出现在状态空间中，验证没有遗漏状态。
 
-1.5. Document the data source, observation period, and any filtering applied. This provenance record is essential for reproducing the analysis and explaining anomalies.
+1.5. 记录数据来源、观测期间和应用的任何过滤。此来源记录对于重现分析和解释异常至关重要。
 
-**预期结果：** A well-defined state space of size `n` and either a count matrix or a list of (origin, destination, rate/count) tuples covering all observed transitions. The state space should be small enough for matrix operations (typically `n < 10000` for dense methods).
+**预期结果：** 大小为 `n` 的定义良好的状态空间，以及覆盖所有观测转移的计数矩阵或（起点、终点、速率/计数）元组列表。状态空间应足够小以进行矩阵运算（稠密方法通常 `n < 10000`）。
 
-**失败处理：** If states are missing, re-examine the source data and expand the enumeration. If the state space is too large for matrix methods, consider lumping rare states into an aggregate "other" state or switching to simulation-based analysis. If the count matrix is extremely sparse, verify the observation period is long enough to capture typical transitions.
+**失败处理：** 如果状态缺失，重新检查源数据并扩展枚举。如果状态空间对矩阵方法太大，考虑将稀有状态合并为聚合"其他"状态或转向基于模拟的分析。如果计数矩阵极其稀疏，验证观测期间是否足够长以捕获典型转移。
 
-### 第 2 步：Construct Transition Matrix or Generator
+### 第 2 步：构建转移矩阵或生成元
 
-2.1. **Discrete-time (DTMC):** Normalize each row of the count matrix to obtain the transition probability matrix `P`:
+2.1. **离散时间（DTMC）：** 对计数矩阵的每一行进行归一化以获得转移概率矩阵 `P`：
    - `P[i,j] = C[i,j] / sum(C[i,])`
-   - Verify every row sums to 1 (within tolerance).
+   - 验证每一行的和为 1（在容差范围内）。
 
-2.2. **Continuous-time (CTMC):** Construct the rate (generator) matrix `Q`:
-   - Off-diagonal: `Q[i,j] = rate of transition from i to j`
-   - Diagonal: `Q[i,i] = -sum(Q[i,j] for j != i)`
-   - Verify every row sums to 0 (within tolerance).
+2.2. **连续时间（CTMC）：** 构建速率（生成元）矩阵 `Q`：
+   - 非对角线：`Q[i,j] = rate of transition from i to j`
+   - 对角线：`Q[i,i] = -sum(Q[i,j] for j != i)`
+   - 验证每一行的和为 0（在容差范围内）。
 
-2.3. Handle zero-count rows (states never observed as origins) by deciding on a smoothing strategy: Laplace smoothing, absorbing convention, or flagging for review.
+2.3. 处理零计数行（从未作为起点观测到的状态），决定平滑策略：拉普拉斯平滑、吸收约定或标记待审查。
 
-2.4. Store the matrix in a format suitable for downstream computation (dense for small chains, sparse for large ones).
+2.4. 以适合下游计算的格式存储矩阵（小链用稠密格式，大链用稀疏格式）。
 
-**预期结果：** A valid stochastic matrix `P` (rows sum to 1) or generator matrix `Q` (rows sum to 0) with no negative off-diagonal entries in `P` and no positive diagonal entries in `Q`.
+**预期结果：** 有效的随机矩阵 `P`（行和为 1）或生成元矩阵 `Q`（行和为 0），`P` 中无负的非对角线元素，`Q` 中无正的对角线元素。
 
-**失败处理：** If row sums deviate beyond tolerance, check for data corruption or floating-point issues. Re-normalize or re-examine source data.
+**失败处理：** 如果行和偏离超出容差，检查数据损坏或浮点问题。重新归一化或重新检查源数据。
 
-### 第 3 步：Classify States
+### 第 3 步：状态分类
 
-3.1. Compute the communication classes by finding strongly connected components of the directed graph induced by the transition matrix (only edges with positive probability).
+3.1. 通过找到由转移矩阵诱导的有向图（仅正概率边）的强连通分量来计算通信类。
 
-3.2. For each communication class, determine:
-   - **Recurrent** if the class has no outgoing edges to other classes.
-   - **Transient** if it does have outgoing edges.
-   - **Absorbing** if the class consists of a single state with `P[i,i] = 1`.
+3.2. 对每个通信类，确定：
+   - **常返的**：如果该类没有通往其他类的出边。
+   - **瞬态的**：如果有通往其他类的出边。
+   - **吸收的**：如果该类由单个状态组成且 `P[i,i] = 1`。
 
-3.3. Check periodicity for each recurrent class by computing the GCD of all cycle lengths reachable from any state in the class.
-   - Period = 1 means aperiodic.
+3.3. 通过计算从该类中任何状态可达的所有循环长度的最大公约数来检查每个常返类的周期性。
+   - 周期 = 1 表示非周期。
 
-3.4. Determine if the chain is **irreducible** (single communication class) or **reducible** (multiple classes).
+3.4. 确定链是**不可约的**（单一通信类）还是**可约的**（多个类）。
 
-3.5. Summarize: list each class, its type (transient/recurrent), its period, and whether any absorbing states exist.
+3.5. 总结：列出每个类、其类型（瞬态/常返）、其周期，以及是否存在吸收态。
 
-**预期结果：** A complete classification: every state assigned to a communication class with labels (transient, positive recurrent, null recurrent, absorbing) and periodicity.
+**预期结果：** 完整的分类：每个状态被分配到一个通信类，带有标签（瞬态、正常返、零常返、吸收）和周期性。
 
-**失败处理：** If the graph analysis is inconsistent, verify the transition matrix has no negative entries and rows sum correctly. For very large chains, use iterative graph algorithms instead of full matrix powers.
+**失败处理：** 如果图分析不一致，验证转移矩阵没有负元素且行和正确。对于非常大的链，使用迭代图算法而非完整矩阵幂。
 
-### 第 4 步：Compute Stationary Distribution
+### 第 4 步：计算平稳分布
 
-4.1. **Irreducible aperiodic chain:** Solve `pi * P = pi` subject to `sum(pi) = 1`.
-   - Reformulate as `pi * (P - I) = 0` with the normalization constraint.
-   - Use eigenvalue decomposition: `pi` is the left eigenvector of `P` corresponding to eigenvalue 1, normalized to sum to 1.
+4.1. **不可约非周期链：** 求解 `pi * P = pi`，约束 `sum(pi) = 1`。
+   - 改写为 `pi * (P - I) = 0` 加归一化约束。
+   - 使用特征值分解：`pi` 是 `P` 对应特征值 1 的左特征向量，归一化使其和为 1。
 
-4.2. **Irreducible periodic chain:** The stationary distribution still exists but the chain does not converge to it from arbitrary initial states. Compute it the same way as 4.1.
+4.2. **不可约周期链：** 平稳分布仍然存在，但链不会从任意初始状态收敛到它。使用与 4.1 相同的方法计算。
 
-4.3. **Reducible chain:** Compute the stationary distribution for each recurrent class independently. The overall stationary distribution is a convex combination depending on absorption probabilities from transient states.
+4.3. **可约链：** 独立计算每个常返类的平稳分布。总体平稳分布是依赖于瞬态状态吸收概率的凸组合。
 
-4.4. **CTMC:** Solve `pi * Q = 0` with `sum(pi) = 1`.
+4.4. **CTMC：** 求解 `pi * Q = 0`，约束 `sum(pi) = 1`。
 
-4.5. Verify: multiply the computed `pi` by `P` (or `Q`) and confirm the result equals `pi` within tolerance.
+4.5. 验证：将计算的 `pi` 乘以 `P`（或 `Q`），确认结果在容差范围内等于 `pi`。
 
-4.6. For reducible chains, compute the absorption probabilities from each transient state to each recurrent class. These probabilities, combined with the per-class stationary distributions, give the long-run behavior conditional on starting state.
+4.6. 对于可约链，计算从每个瞬态状态到每个常返类的吸收概率。这些概率与每类平稳分布相结合，给出取决于初始状态的长期行为。
 
-4.7. Record the spectral gap (difference between the largest and second-largest eigenvalue magnitudes). This quantity governs the rate of convergence to stationarity and is useful for determining how many simulation steps are needed in Step 6.
+4.7. 记录谱间隙（最大和第二大特征值幅度之差）。此量控制收敛到平稳性的速率，有助于确定第 6 步中需要多少模拟步骤。
 
-**预期结果：** A probability vector `pi` of length `n` with all entries non-negative, summing to 1, satisfying the balance equations within tolerance. The spectral gap should be positive for aperiodic irreducible chains.
+**预期结果：** 长度为 `n` 的概率向量 `pi`，所有元素非负，和为 1，在容差范围内满足平衡方程。对于非周期不可约链，谱间隙应为正。
 
-**失败处理：** If the eigensolver fails to converge, try iterative power method (`pi_k+1 = pi_k * P` until convergence). If multiple eigenvalues equal 1, the chain is reducible -- handle per Step 4.3. If the spectral gap is extremely small, the chain mixes slowly and will require very long simulations for validation.
+**失败处理：** 如果特征值求解器未能收敛，尝试迭代幂方法（`pi_k+1 = pi_k * P` 直到收敛）。如果多个特征值等于 1，则链是可约的——按第 4.3 步处理。如果谱间隙极小，链混合缓慢，验证需要非常长的模拟。
 
-### 第 5 步：Calculate Mean First Passage Times
+### 第 5 步：计算平均首达时间
 
-5.1. Define the mean first passage time `m[i,j]` as the expected number of steps to reach state `j` starting from state `i`.
+5.1. 定义平均首达时间 `m[i,j]` 为从状态 `i` 出发到达状态 `j` 的期望步数。
 
-5.2. For an irreducible chain, solve the system of linear equations:
-   - `m[i,j] = 1 + sum(P[i,k] * m[k,j] for k != j)` for all `i != j`
-   - `m[j,j] = 1 / pi[j]` (mean recurrence time)
+5.2. 对于不可约链，求解线性方程组：
+   - `m[i,j] = 1 + sum(P[i,k] * m[k,j] for k != j)` 对所有 `i != j`
+   - `m[j,j] = 1 / pi[j]`（平均回返时间）
 
-5.3. For absorbing chains, compute absorption probabilities and expected times to absorption:
-   - Partition `P` into transient (`Q_t`) and absorbing blocks.
-   - Fundamental matrix: `N = (I - Q_t)^{-1}`
-   - Expected steps to absorption: `N * 1` (column vector of ones)
-   - Absorption probabilities: `N * R` where `R` is the transient-to-absorbing block.
+5.3. 对于吸收链，计算吸收概率和期望吸收时间：
+   - 将 `P` 划分为瞬态（`Q_t`）和吸收块。
+   - 基本矩阵：`N = (I - Q_t)^{-1}`
+   - 期望吸收步数：`N * 1`（全 1 列向量）
+   - 吸收概率：`N * R`，其中 `R` 是瞬态到吸收块。
 
-5.4. For CTMC, replace step counts with expected holding times using the generator matrix.
+5.4. 对于 CTMC，使用生成元矩阵将步数替换为期望停留时间。
 
-5.5. Present results as a matrix or table of pairwise first passage times for key state pairs.
+5.5. 以矩阵或关键状态对的配对首达时间表呈现结果。
 
-**预期结果：** A matrix of mean first passage times where diagonal entries equal mean recurrence times (`1/pi[j]`) and off-diagonal entries are finite for communicating state pairs.
+**预期结果：** 平均首达时间矩阵，其中对角线元素等于平均回返时间（`1/pi[j]`），通信状态对的非对角线元素有限。
 
-**失败处理：** If the linear system is singular, the chain has transient states that cannot reach the target. Report unreachable pairs as infinite. Verify the chain structure from Step 3.
+**失败处理：** 如果线性系统奇异，链中有瞬态状态无法到达目标。报告不可达的对为无穷大。验证第 3 步的链结构。
 
-### 第 6 步：Validate with Simulation
+### 第 6 步：模拟验证
 
-6.1. Simulate `K` independent sample paths of the chain for `T` steps each, starting from the initial distribution.
+6.1. 从初始分布出发，模拟 `K` 条独立的链样本路径，每条 `T` 步。
 
-6.2. Estimate the stationary distribution empirically by counting state occupancy frequencies across all paths after discarding a burn-in period.
+6.2. 通过计算丢弃预热期后所有路径的状态占用频率，经验估计平稳分布。
 
-6.3. Compare simulated frequencies to the analytical stationary distribution. Compute the total variation distance or chi-squared statistic.
+6.3. 比较模拟频率与解析平稳分布。计算总变差距离或卡方统计量。
 
-6.4. Estimate mean first passage times empirically by recording the first hitting time for each target state across replications.
+6.4. 通过记录跨重复的每个目标状态的首次命中时间，经验估计平均首达时间。
 
-6.5. Report agreement metrics:
-   - Max absolute deviation between analytical and simulated stationary probabilities.
-   - 95% confidence intervals for simulated first passage times vs. analytical values.
+6.5. 报告一致性指标：
+   - 解析和模拟平稳概率之间的最大绝对偏差。
+   - 模拟首达时间与解析值的 95% 置信区间。
 
-6.6. If discrepancies exceed tolerance, re-examine the transition matrix construction and classification steps.
+6.6. 如果差异超出容差，重新检查转移矩阵构建和分类步骤。
 
-**预期结果：** Simulated stationary distribution within 0.01 total variation distance of the analytical solution (for sufficiently long runs). Simulated mean first passage times within 10% of analytical values.
+**预期结果：** 模拟平稳分布与解析解的总变差距离在 0.01 以内（对于足够长的运行）。模拟平均首达时间在解析值的 10% 以内。
 
-**失败处理：** Increase simulation length `T` or number of replications `K`. If discrepancies persist, the analytical solution may have numerical errors -- recompute with higher precision.
+**失败处理：** 增加模拟长度 `T` 或重复次数 `K`。如果差异持续存在，解析解可能有数值误差——用更高精度重新计算。
 
 ## 验证清单
 
-- The transition matrix `P` has all non-negative entries and each row sums to 1 (or `Q` rows sum to 0 for CTMC)
-- The stationary distribution `pi` is a valid probability vector satisfying `pi * P = pi`
-- Mean recurrence times equal `1/pi[j]` for each recurrent state `j`
-- Simulated state frequencies converge to the analytical stationary distribution
-- State classification is consistent: no recurrent state has edges leaving its communication class
-- All eigenvalues of `P` have magnitude at most 1, with exactly one eigenvalue equal to 1 per recurrent class
-- For absorbing chains: absorption probabilities from each transient state sum to 1 across all absorbing classes
-- The fundamental matrix `N = (I - Q_t)^{-1}` has all positive entries (expected visit counts are positive)
-- Detailed balance holds if and only if the chain is reversible: `pi[i] * P[i,j] = pi[j] * P[j,i]` for all `i,j`
+- 转移矩阵 `P` 所有元素非负且每行和为 1（CTMC 的 `Q` 行和为 0）
+- 平稳分布 `pi` 是满足 `pi * P = pi` 的有效概率向量
+- 每个常返状态 `j` 的平均回返时间等于 `1/pi[j]`
+- 模拟状态频率收敛到解析平稳分布
+- 状态分类一致：没有常返状态有离开其通信类的边
+- `P` 的所有特征值幅度至多为 1，每个常返类恰好有一个特征值等于 1
+- 对于吸收链：每个瞬态状态的吸收概率在所有吸收类上的和为 1
+- 基本矩阵 `N = (I - Q_t)^{-1}` 所有元素为正（期望访问次数为正）
+- 细致平衡成立当且仅当链是可逆的：`pi[i] * P[i,j] = pi[j] * P[j,i]` 对所有 `i,j`
 
 ## 常见问题
 
-- **Non-exhaustive state space**: Missing states produce a sub-stochastic matrix (rows sum to less than 1). Always verify row sums before analysis.
-- **Confusing DTMC and CTMC**: A rate matrix must have non-positive diagonal and rows summing to 0. Applying DTMC formulas to a rate matrix produces nonsense.
-- **Ignoring periodicity**: A periodic chain has a valid stationary distribution but does not converge to it in the usual sense. Mixing time analysis must account for period.
-- **Numerical instability for large chains**: Eigenvalue decomposition of large dense matrices is expensive and can lose precision. Use sparse solvers or iterative methods for chains with more than a few hundred states.
-- **Zero-probability transitions**: Structural zeros in the transition matrix can make the chain reducible. Verify irreducibility before computing a single stationary distribution.
-- **Insufficient simulation length**: Short simulations with poor mixing produce biased estimates. Always compute effective sample size and check trace plots.
-- **Assuming reversibility without checking**: Many analytical shortcuts (e.g., detailed balance) apply only to reversible chains. Verify `pi[i] * P[i,j] = pi[j] * P[j,i]` before using reversibility-dependent results.
-- **Floating-point accumulation in power method**: Iterating `pi * P` many times accumulates rounding errors. Periodically re-normalize `pi` to sum to 1 during power iteration.
+- **非穷举状态空间**：缺失状态产生次随机矩阵（行和小于 1）。在分析前始终验证行和
+- **混淆 DTMC 和 CTMC**：速率矩阵必须有非正对角线且行和为 0。对速率矩阵应用 DTMC 公式会产生无意义的结果
+- **忽视周期性**：周期链有有效的平稳分布，但不会在通常意义上收敛到它。混合时间分析必须考虑周期
+- **大链的数值不稳定性**：大型稠密矩阵的特征值分解开销大且可能丢失精度。对于超过几百个状态的链，使用稀疏求解器或迭代方法
+- **零概率转移**：转移矩阵中的结构零可能使链可约。在计算单一平稳分布之前验证不可约性
+- **模拟长度不足**：混合差的短模拟产生有偏估计。始终计算有效样本量并检查轨迹图
+- **未经检验假设可逆性**：许多分析捷径（如细致平衡）仅适用于可逆链。使用依赖可逆性的结果前，验证 `pi[i] * P[i,j] = pi[j] * P[j,i]`
+- **幂方法中浮点误差积累**：多次迭代 `pi * P` 会积累舍入误差。在幂迭代过程中定期将 `pi` 重新归一化使其和为 1
 
 ## 相关技能
 
-- [Fit Hidden Markov Model](../fit-hidden-markov-model/SKILL.md) -- extends Markov chains to latent-state models with observed emissions
-- [Simulate Stochastic Process](../simulate-stochastic-process/SKILL.md) -- general simulation framework applicable to Markov chain sample paths and Monte Carlo validation
+- `fit-hidden-markov-model` — 将马尔可夫链扩展为具有观测发射的潜在状态模型
+- `simulate-stochastic-process` — 适用于马尔可夫链样本路径和蒙特卡洛验证的通用模拟框架

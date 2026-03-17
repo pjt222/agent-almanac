@@ -1,14 +1,11 @@
 ---
 name: basic-obedience
 description: >
-  Foundation obedience training for dogs — sit, stay, come, heel, and down
-  using positive reinforcement and marker training. Covers timing, reward
-  hierarchy, session structure, distraction proofing, and common handler
-  errors. Use when a new puppy (8+ weeks) is ready for foundation training, an
-  adult dog lacks reliable basic commands, a rescue dog needs to learn the
-  household's command vocabulary, before advancing to complex behaviors or
-  off-leash work, or when existing commands have degraded and need
-  re-establishing.
+  犬只基础服从训练——使用正向强化和标记训练教授坐下、等待、过来、随行和趴下。
+  涵盖时机把握、奖励层次、训练课程结构、抗干扰训练和常见处理者错误。适用于
+  新幼犬（8+ 周龄）准备进行基础训练时、成年犬缺乏可靠的基本指令时、救助犬
+  需要学习家庭指令词汇时、进阶到复杂行为或脱绳训练之前，或现有指令已退化
+  需要重新建立时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,31 +22,31 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Basic Obedience
+# 基础服从训练
 
-Teach foundation commands (sit, stay, come, heel, down) using positive reinforcement and marker training.
+使用正向强化和标记训练教授基础指令（坐下、等待、过来、随行、趴下）。
 
 ## 适用场景
 
-- A new puppy (8+ weeks) is ready for foundation training
-- An adult dog lacks reliable basic commands
-- A rescue or rehomed dog needs to learn the household's command vocabulary
-- Before advancing to more complex behaviors or off-leash work
-- When existing commands have degraded and need re-establishing
+- 新幼犬（8+ 周龄）准备进行基础训练
+- 成年犬缺乏可靠的基本指令
+- 救助或转让的犬只需要学习家庭的指令词汇
+- 进阶到更复杂的行为或脱绳训练之前
+- 现有指令已退化需要重新建立时
 
 ## 输入
 
-- **必需**: A dog (any breed, any age 8+ weeks)
-- **必需**: High-value treats (small, soft, quickly consumed)
-- **可选**: Clicker or verbal marker word (e.g., "yes")
-- **可选**: 6-foot leash and flat collar or harness
-- **可选**: Quiet training space with minimal distractions (initially)
+- **必需**：一只犬（任何品种，8+ 周龄）
+- **必需**：高价值零食（小块、软质、可快速食用）
+- **可选**：响片或口头标记词（例如"好"）
+- **可选**：1.8 米牵绳和平扣项圈或胸背带
+- **可选**：干扰最小的安静训练空间（初始阶段）
 
 ## 步骤
 
-### 第 1 步：Establish the Marker
+### 第 1 步：建立标记
 
-The marker bridges the gap between the desired behavior and the reward.
+标记桥接了期望行为和奖励之间的间隔。
 
 ```
 Marker Training Protocol:
@@ -67,13 +64,13 @@ Late marking teaches the wrong behavior.
 Mark → then reach for the treat (not the reverse).
 ```
 
-**预期结果：** The dog reliably orients toward the handler upon hearing the marker, expecting a reward.
+**预期结果：** 犬只在听到标记时可靠地转向处理者，期待奖励。
 
-**失败处理：** If the dog does not respond to the marker after 20 reps, the treat value is too low. Switch to higher-value rewards (cheese, chicken, liver). If the dog is too distracted to eat, the environment is too stimulating — move to a quieter space.
+**失败处理：** 如果犬只在 20 次重复后仍不响应标记，零食价值太低。换用更高价值的奖励（奶酪、鸡肉、肝脏）。如果犬只太分心而不吃东西，环境刺激太强——移到更安静的空间。
 
-### 第 2 步：Teach the Five Foundation Commands
+### 第 2 步：教授五个基础指令
 
-Work on one command per session until reliable, then begin mixing.
+每次训练课专注一个指令直到可靠，然后开始混合练习。
 
 ```
 Command Protocols:
@@ -115,11 +112,11 @@ HEEL:
 5. If the dog pulls ahead, stop walking. Resume when the leash is loose.
 ```
 
-**预期结果：** Each command is performed reliably in a low-distraction environment with treats as motivation.
+**预期结果：** 在低干扰环境中，每个指令都能以零食作为动力可靠执行。
 
-**失败处理：** If a command is not progressing after 3 sessions, break it into smaller steps. The dog may need an intermediate behavior (e.g., for "down," reward the head-lowering motion before requiring full elbows-on-ground).
+**失败处理：** 如果一个指令在 3 次课程后没有进步，将其分解为更小的步骤。犬只可能需要一个中间行为（例如对于"趴下"，在要求完全肘部着地之前先奖励低头动作）。
 
-### 第 3 步：Structure Training Sessions
+### 第 3 步：组织训练课程
 
 ```
 Session Guidelines:
@@ -144,13 +141,13 @@ The 80/20 Rule:
 - 20% challenge keeps the dog engaged without frustrating
 ```
 
-**预期结果：** Short, successful sessions that leave the dog wanting more.
+**预期结果：** 简短、成功的训练课程，让犬只意犹未尽。
 
-**失败处理：** If the dog disengages (sniffing, looking away, lying down), the session is too long, too hard, or the rewards are insufficiently motivating. End the session and reassess.
+**失败处理：** 如果犬只脱离参与（嗅地、四处张望、趴下），训练课程太长、太难或奖励不够有吸引力。结束课程并重新评估。
 
-### 第 4 步：Distraction-Proof the Commands
+### 第 4 步：指令抗干扰训练
 
-Once reliable in a quiet environment, systematically add distractions.
+在安静环境中可靠后，系统地增加干扰。
 
 ```
 Distraction Ladder (work through sequentially):
@@ -170,28 +167,28 @@ At each new level:
 - If the dog fails 3 reps in a row, you moved up too fast — go back one level
 ```
 
-**预期结果：** Commands work reliably in progressively more distracting environments.
+**预期结果：** 指令在逐渐增加干扰的环境中可靠执行。
 
-**失败处理：** If a specific distraction (other dogs, squirrels) consistently breaks training, that distraction needs separate counter-conditioning work (see `behavioral-modification`).
+**失败处理：** 如果特定干扰（其他犬、松鼠）持续破坏训练，该干扰需要单独的反条件化训练（见 `behavioral-modification`）。
 
 ## 验证清单
 
-- [ ] Marker is charged and the dog responds reliably
-- [ ] All five commands are performed in a low-distraction environment
-- [ ] Training sessions are 5-10 minutes, ending on success
-- [ ] Success rate is at or above 80% for each command
-- [ ] Commands are being generalized through the distraction ladder
-- [ ] The handler's timing (marker within 1 second) is consistent
+- [ ] 标记已充值且犬只可靠响应
+- [ ] 所有五个指令在低干扰环境中都能执行
+- [ ] 训练课程为 5-10 分钟，在成功时结束
+- [ ] 每个指令的成功率在 80% 或以上
+- [ ] 指令正在通过干扰阶梯进行泛化
+- [ ] 处理者的时机（标记在 1 秒内）保持一致
 
 ## 常见问题
 
-- **Repeating the cue**: Saying "sit, sit, SIT" teaches the dog that the first "sit" is optional. Say it once and wait
-- **Treating too late**: The treat should follow the marker within 2-3 seconds. Late treating breaks the association
-- **Luring forever**: The hand motion with the treat (lure) should be faded within 10-20 reps. Otherwise the dog only responds when food is visible
-- **Punishing failed recalls**: Calling "come" and then scolding the dog (for being slow, for having something in its mouth) poisons the recall cue permanently
-- **Training too long**: A fatigued dog learns nothing. Quit while ahead
-- **Inconsistent cues**: All household members must use the same words and gestures for each command
+- **重复指令**：说"坐，坐，坐！"教会犬只第一个"坐"是可选的。说一次然后等待
+- **给食太迟**：零食应在标记后 2-3 秒内给出。迟给零食会破坏关联
+- **永远使用引导**：用零食做手势引导应在 10-20 次重复内逐渐消除。否则犬只只在看到食物时才响应
+- **惩罚失败的召回**：叫"过来"然后斥责犬只（因为太慢、因为嘴里叼着东西）会永久性地毒化召回指令
+- **训练时间过长**：疲劳的犬只什么也学不会。在领先时退出
+- **不一致的指令**：所有家庭成员必须对每个指令使用相同的词语和手势
 
 ## 相关技能
 
-- `behavioral-modification` — for addressing unwanted behaviors that interfere with basic obedience
+- `behavioral-modification` — 用于解决干扰基础服从训练的不良行为

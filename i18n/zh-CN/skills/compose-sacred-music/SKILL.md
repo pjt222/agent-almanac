@@ -1,13 +1,10 @@
 ---
 name: compose-sacred-music
 description: >
-  Compose or analyze sacred music in Hildegard von Bingen's distinctive modal
-  style. Covers modal selection, melodic contour (wide-range melodies),
-  text-setting (syllabic and melismatic), neumatic notation, and liturgical
-  context for antiphons, sequences, and responsories. Use when composing a
-  new piece in Hildegardian style, analyzing an existing chant for structure
-  and mode, researching medieval modal music, preparing to perform or teach
-  Hildegard's music, or setting Latin sacred texts.
+  以希尔德加德·冯·宾根独特的调式风格创作或分析圣乐。涵盖调式选择、旋律轮廓
+  （宽音域旋律）、歌词配曲（音节式和花腔式）、纽姆记谱法和礼仪背景，包括
+  对唱、续唱和应答。适用于以希尔德加德风格创作新作品、分析现有圣咏的结构和
+  调式、研究中世纪调式音乐、准备演出或教授希尔德加德的音乐，或为拉丁圣诗配曲。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,34 +21,34 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Compose Sacred Music
+# 创作圣乐
 
-Compose or analyze sacred music in Hildegard von Bingen's distinctive style, following her *Symphonia harmoniae caelestium revelationum* and modal composition principles.
+以希尔德加德·冯·宾根的独特风格创作或分析圣乐，遵循她的《天启和谐交响曲》（*Symphonia harmoniae caelestium revelationum*）和调式作曲原则。
 
 ## 适用场景
 
-- You want to compose a new piece of sacred music in Hildegardian style
-- You need to analyze an existing Hildegard chant for structure, mode, and text-setting
-- You are researching medieval modal music and neumatic notation
-- You want to understand the liturgical context of Hildegard's compositions
-- You are preparing to perform or teach Hildegard's music
-- You need guidance on text-setting for Latin sacred texts
+- 以希尔德加德风格创作新的圣乐作品
+- 分析现有希尔德加德圣咏的结构、调式和歌词配曲
+- 研究中世纪调式音乐和纽姆记谱法
+- 了解希尔德加德作品的礼仪背景
+- 准备演出或教授希尔德加德的音乐
+- 需要拉丁圣诗配曲的指导
 
 ## 输入
 
-- **必需**: Purpose (compose new piece OR analyze existing piece)
-- **Required for composition**: Sacred text (Latin preferred, English acceptable for study)
-- **Required for composition**: Liturgical context (antiphon, sequence, responsory, hymn)
-- **Required for analysis**: Title of Hildegard piece to analyze (e.g., "O vis aeternitatis")
-- **可选**: Feast day or liturgical season (influences modal choice)
-- **可选**: Intended performer experience level (simple syllabic vs. virtuosic melismatic)
-- **可选**: Mode preference (if composing)
+- **必需**：目的（创作新作品或分析现有作品）
+- **创作必需**：圣诗文本（优先拉丁文，英文可用于学习）
+- **创作必需**：礼仪背景（对唱、续唱、应答、赞美诗）
+- **分析必需**：希尔德加德作品标题（如"O vis aeternitatis"）
+- **可选**：节日或礼仪季节（影响调式选择）
+- **可选**：预期演出者经验水平（简单音节式 vs 技巧性花腔式）
+- **可选**：调式偏好（如创作）
 
 ## 步骤
 
-### 第 1 步：Modal Selection (if composing) or Identification (if analyzing)
+### 第 1 步：调式选择（创作时）或识别（分析时）
 
-Choose or identify the liturgical mode that governs the melodic structure.
+选择或识别支配旋律结构的礼仪调式。
 
 ```
 The Eight Church Modes (Medieval System):
@@ -101,13 +98,13 @@ Modal Selection by Liturgical Context:
 - General saints → Mode 1 or Mode 8
 ```
 
-**预期结果：** Mode identified (if analyzing) or selected (if composing) with final note and characteristic range established.
+**预期结果：** 调式已识别（分析时）或已选择（创作时），终止音和特征音域已确定。
 
-**失败处理：** If uncertain, default to Mode 1 (Dorian authentic, final on D). This is Hildegard's most frequent choice and offers wide melodic range.
+**失败处理：** 如果不确定，默认选择第 1 调式（多利安正格调式，终止音 D）。这是希尔德加德最常用的选择，提供宽广的旋律范围。
 
-### 第 2 步：Melodic Contour and Range
+### 第 2 步：旋律轮廓和音域
 
-Establish the distinctive wide-range, soaring melodic contour characteristic of Hildegard's style.
+建立希尔德加德风格特有的宽音域、翱翔式旋律轮廓。
 
 ```
 Hildegard's Melodic Signature:
@@ -138,13 +135,13 @@ Hildegard's Melismatic Technique:
   - Example: "aeternitatis" may carry 15-30 notes across the word
 ```
 
-**预期结果：** Melodic contour sketched with identified climax point, wide range planned (minimum 9th, preferably 10th-12th), and syllabic/melismatic distribution determined.
+**预期结果：** 旋律轮廓草图已完成，高潮点已确定，宽音域已规划（最少九度，最好十度到十二度），音节式/花腔式分配已确定。
 
-**失败处理：** If melodic range feels too wide for performers, reduce climax by one step (e.g., from high D to C). Maintain the arch shape but compress the range.
+**失败处理：** 如果旋律音域对演出者来说太宽，将高潮降低一个音级（例如从高 D 降到 C）。保持拱形形状但压缩音域。
 
-### 第 3 步：Text-Setting — Syllabic and Melismatic
+### 第 3 步：歌词配曲——音节式和花腔式
 
-Map the sacred text to melody with appropriate syllabic, neumatic, and melismatic distribution.
+将圣诗文本映射到旋律，采用适当的音节式、纽姆式和花腔式分配。
 
 ```
 Hildegard's Text-Setting Principles:
@@ -171,38 +168,15 @@ Text-Setting Decision Tree:
 2. Is this word structural (conjunction, article)? → SYLLABIC
 3. Is this word transitional or building tension? → NEUMATIC
 4. Where does the phrase need to breathe? → Insert syllabic section for clarity
-
-Example Analysis: "O vis aeternitatis" (Antiphon for Trinity)
-O        → Syllabic (1 note) — opening invocation
-vis      → Syllabic (1-2 notes) — short, clear
-aeter-   → Neumatic (3-4 notes) — building
--ni-     → Neumatic (2-3 notes) — continuing
--ta-     → MELISMATIC (20+ notes) — CLIMAX on theological term
--tis     → Neumatic-syllabic resolution (3-4 notes) → final note D
-
-Liturgical Form Conventions:
-ANTIPHON (short, before/after psalm):
-- Simple, moderate melisma, clear final cadence
-- Example: "O vis aeternitatis" — 1 phrase, moderate range
-
-SEQUENCE (long, paired stanzas):
-- Each stanza pair shares same melody
-- More elaborate melismas than antiphons
-- Example: "O viridissima virga" — multi-stanza, extended form
-
-RESPONSORY (call-and-response structure):
-- Soloist sings verse (melismatic), choir responds (simpler)
-- Most virtuosic of Hildegard's forms
-- Example: "O ignis Spiritus" — highly melismatic solo sections
 ```
 
-**预期结果：** Text fully mapped to melody with syllabic/neumatic/melismatic choices marked. Key theological terms receive melismatic treatment. Text remains intelligible despite ornamentation.
+**预期结果：** 文本完全映射到旋律，音节式/纽姆式/花腔式的选择已标注。关键神学术语获得花腔处理。文本在装饰尽管丰富的情况下仍可理解。
 
-**失败处理：** If text becomes unintelligible (too much melisma), simplify non-essential words to syllabic. Retain melisma ONLY on 1-2 most important words per phrase.
+**失败处理：** 如果文本变得难以理解（花腔过多），将非核心词简化为音节式。仅在每个乐句中最重要的 1-2 个词上保留花腔。
 
-### 第 4 步：Neumatic Notation (Optional — for authenticity)
+### 第 4 步：纽姆记谱法（可选——追求真实性）
 
-Notate using medieval square-note neumes on a 4-line staff (if desired for historical accuracy).
+使用四线谱上的中世纪方形音符纽姆记谱（如需要历史准确性）。
 
 ```
 Medieval Neumatic Notation Basics:
@@ -214,19 +188,12 @@ STAFF: 4 lines (not modern 5-line)
 NEUME SHAPES (square notation):
 - PUNCTUM: Single square note (1 syllable, 1 pitch)
 - VIRGA: Single note with ascending tail (emphasis)
-- PODATUS (PES): Two notes ascending (◡ shape)
-- CLIVIS: Two notes descending (⌢ shape)
+- PODATUS (PES): Two notes ascending
+- CLIVIS: Two notes descending
 - SCANDICUS: Three notes ascending
 - CLIMACUS: Three notes descending
-- PORRECTUS: Down-up motion (⌣ shape)
-- TORCULUS: Up-down motion (◡⌣ shape)
-
-Notation Example for "O vis aeternitatis":
-(Simplified — actual notation would be on 4-line staff with square neumes)
-
-O     vis   ae-ter-ni-ta-----------------tis
-│     │     │  │   │  └── Extended melisma ──┘
-Punctum Podatus Scandicus → Climacus chain → Virga (final D)
+- PORRECTUS: Down-up motion
+- TORCULUS: Up-down motion
 
 Modern Alternative:
 - Use modern 5-line staff with stemless noteheads
@@ -234,13 +201,13 @@ Modern Alternative:
 - Mark text syllables clearly under each neume group
 ```
 
-**预期结果：** (Optional) Neumatic notation sketch provided if user requests historical authenticity. Modern staff notation acceptable for performance preparation.
+**预期结果：**（可选）如果用户要求历史真实性，提供纽姆记谱草图。现代五线谱记谱对演出准备同样可接受。
 
-**失败处理：** If neumatic notation is too complex, provide modern staff notation with clear phrasing marks. Hildegard's music can be performed from modern notation without loss of essential character.
+**失败处理：** 如果纽姆记谱过于复杂，提供带有清晰乐句标记的现代五线谱记谱。希尔德加德的音乐可以从现代记谱演出而不失其本质特征。
 
-### 第 5 步：Liturgical Context and Performance Notes
+### 第 5 步：礼仪背景和演出注释
 
-Situate the composition or analysis within liturgical use and provide performance guidance.
+将作品或分析置于礼仪用途中，并提供演出指导。
 
 ```
 Liturgical Context by Form:
@@ -249,83 +216,65 @@ ANTIPHON:
 - Use: Before and after psalms in Divine Office (Lauds, Vespers, etc.)
 - Timing: Sung once before psalm, repeated after psalm
 - Performers: Choir or solo cantor
-- Hildegard examples: "O vis aeternitatis", "O quam mirabilis"
 
 SEQUENCE:
 - Use: After the Alleluia before the Gospel (Mass)
 - Timing: Feast days, major liturgical celebrations
 - Structure: Paired stanzas (1a-1b, 2a-2b, etc.) — same melody for each pair
-- Hildegard examples: "O viridissima virga" (for Virgin Mary)
 
 RESPONSORY:
 - Use: After readings in Matins (early morning Office)
 - Structure: Solo verse → Choir response → Doxology
 - Performers: Trained cantor for verses (melismatic), full choir for response
-- Hildegard examples: "O ignis Spiritus Paracliti"
-
-HYMN (rare in Hildegard):
-- Use: Specific hours of Divine Office
-- Structure: Strophic (same melody for each stanza)
-- Hildegard composed few hymns; focused on antiphons, sequences, responsories
 
 Performance Guidance:
 TEMPO:
 - Slow to moderate — allow melismas to unfold without rushing
-- Hildegard's music is contemplative, not rhythmically driven
 - Approximately ♩= 60-72 for modern performance
 
 DYNAMICS:
 - Subtle swells on climactic melismas
 - No strong accents — smooth, flowing line
-- Natural decay at phrase ends (not clipped)
-
-ORNAMENTATION:
-- Historical practice: Small ornaments (liquescence) on certain neumes
-- Modern practice: Minimal ornamentation; let the written melisma suffice
-- Breath marks: Marked by scribe or singer at natural phrase breaks
 
 PRONUNCIATION:
 - Ecclesiastical Latin (Italian-style: "ae" = "ay", "ti" = "tee")
 - OR restored classical Latin (for historically informed performance)
-- Vowels pure and sustained; consonants clear but not harsh
 
 ENSEMBLE:
 - Women's voices (Hildegard's nuns sang these)
 - Unaccompanied (a cappella) OR drone (sustained low note on final)
-- Modern performances sometimes add harp or medieval fiddle (not historical
-  for Hildegard's convent, but aesthetically compatible)
 ```
 
-**预期结果：** Liturgical use identified (when/where the piece is sung), performance notes provided (tempo, dynamics, pronunciation), and historical context clarified.
+**预期结果：** 礼仪用途已确定（何时/何处演唱该作品），演出注释已提供（速度、力度、发音），历史背景已阐明。
 
-**失败处理：** If liturgical context is unclear, focus on performance notes only. Hildegard's music can be performed in concert settings without strict liturgical adherence.
+**失败处理：** 如果礼仪背景不明确，仅关注演出注释。希尔德加德的音乐可以在音乐会场景中演出，不需要严格遵守礼仪规范。
 
-## Validation Checklist
+## 验证清单
 
-- [ ] Mode identified or selected (1-8, with final note)
-- [ ] Melodic range spans at least a 9th (preferably 10th-12th)
-- [ ] Key theological terms receive melismatic treatment
-- [ ] Climax placed on most important word in text
-- [ ] Phrase begins low (near final) and ends on final note
-- [ ] Text intelligible despite ornamentation (not over-melismatic on every word)
-- [ ] Liturgical context noted (antiphon/sequence/responsory)
-- [ ] Performance notes provided (tempo, dynamics, pronunciation)
-- [ ] If analyzing: Comparison to Hildegard's authentic works cited
+- [ ] 调式已识别或已选择（1-8，带终止音）
+- [ ] 旋律音域至少跨越九度（最好十度到十二度）
+- [ ] 关键神学术语获得花腔处理
+- [ ] 高潮点放置在文本中最重要的词上
+- [ ] 乐句从低处（接近终止音）开始并在终止音上结束
+- [ ] 文本在装饰丰富的情况下仍可理解（不是每个词都过度花腔化）
+- [ ] 礼仪背景已标注（对唱/续唱/应答）
+- [ ] 演出注释已提供（速度、力度、发音）
+- [ ] 如分析：引用了与希尔德加德真实作品的比较
 
 ## 常见问题
 
-1. **Over-melisma**: Adding melismas to every syllable obscures text. Reserve for key words
-2. **Ignoring Mode**: Hildegard respects modal boundaries. Don't drift to unrelated pitches
-3. **Modern Rhythm**: Medieval chant is non-metrical. Avoid imposing 4/4 time signatures
-4. **Narrow Range**: Hildegard's signature is WIDE range. Less than a 9th is not Hildegardian
-5. **Premature Climax**: Placing highest note too early leaves nowhere to build. Save for key word
-6. **Monotone Sections**: Long syllabic sections without melodic interest sound flat. Mix syllabic with neumatic
-7. **Ignoring Text Meaning**: Melody must serve theological meaning. Random melisma placement is anti-Hildegardian
+1. **花腔过多**：在每个音节上添加花腔会模糊文本。留给关键词使用
+2. **忽视调式**：希尔德加德遵守调式边界。不要漂移到无关的音高
+3. **现代节奏**：中世纪圣咏是非节拍的。避免强加 4/4 拍号
+4. **音域狭窄**：希尔德加德的标志是宽音域。少于九度不是希尔德加德风格
+5. **高潮过早**：将最高音放得太早，后面就没有构建空间。留给关键词
+6. **单调段落**：没有旋律趣味的长音节式段落听起来平淡。将音节式与纽姆式混合使用
+7. **忽视文本含义**：旋律必须服务于神学含义。随意放置花腔是反希尔德加德式的
 
 ## 相关技能
 
-- `practice-viriditas` — Hildegard's music is an expression of viriditas (greening life force)
-- `consult-natural-history` — Many chants reference plants, stones, elements from *Physica*
-- `assess-holistic-health` — Music as healing modality in Hildegard's holistic system
-- `meditate` (esoteric domain) — Singing Hildegard's music can be meditative practice
-- `formulate-herbal-remedy` — Some chants reference herbs with healing properties
+- `practice-viriditas` — 希尔德加德的音乐是活力（viriditas，生命绿力）的表达
+- `consult-natural-history` — 许多圣咏引用了《自然学》（*Physica*）中的植物、矿石和元素
+- `assess-holistic-health` — 音乐作为希尔德加德整体系统中的治疗方式
+- `meditate`（esoteric 领域） — 演唱希尔德加德的音乐可作为冥想练习
+- `formulate-herbal-remedy` — 一些圣咏引用了具有治疗特性的草药

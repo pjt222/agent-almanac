@@ -1,14 +1,11 @@
 ---
 name: athanor
 description: >
-  Four-stage alchemical code transmutation — nigredo (decomposition), albedo
-  (purification), citrinitas (illumination), rubedo (synthesis) — with meditate
-  and heal checkpoints between stages. Transforms tangled or legacy code into
-  optimized, well-structured output through systematic material analysis. Use
-  when transforming legacy code into modern equivalents, refactoring deeply
-  tangled modules where incremental fixes keep failing, converting a codebase
-  between paradigms, or when simpler refactoring approaches have stalled and a
-  full-cycle transformation is needed.
+  四阶段炼金术代码嬗变——黑化（分解）、白化（净化）、黄化（照明）、赤化（合成）——
+  阶段之间设有 meditate 和 heal 检查点。通过系统化的材料分析，将纠缠或遗留
+  代码转化为优化、结构良好的输出。适用于将遗留代码转化为现代等价物、重构渐进
+  式修复不断失败的深度纠缠模块、在范式之间转换代码库，或更简单的重构方法已
+  停滞需要全周期转化时。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -25,184 +22,184 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Athanor
+# 炼金炉
 
-Execute a four-stage alchemical transmutation of code or data — decomposing the prima materia, purifying its essence, illuminating its target form, and synthesizing the refined output. The athanor is the furnace that maintains steady heat across all stages.
+执行代码或数据的四阶段炼金术嬗变——分解原始材料、净化其精华、照亮其目标形态、合成精炼的输出。炼金炉（athanor）是在所有阶段维持稳定热量的熔炉。
 
 ## 适用场景
 
-- Transforming legacy code into modern, well-structured equivalents
-- Refactoring deeply tangled modules where incremental fixes keep failing
-- Converting a codebase from one paradigm to another (procedural to functional, monolith to modular)
-- Processing raw, messy data into clean analytical datasets
-- When simpler refactoring approaches have stalled and a full-cycle transformation is needed
+- 将遗留代码转化为现代、结构良好的等价物
+- 重构渐进式修复不断失败的深度纠缠模块
+- 将代码库从一种范式转换为另一种（过程式到函数式、单体到模块化）
+- 将原始、混乱的数据处理成干净的分析数据集
+- 当更简单的重构方法已停滞，需要全周期转化时
 
 ## 输入
 
-- **必需**: The material to transform (file paths, module names, or data sources)
-- **必需**: The desired end state (target architecture, paradigm, or format)
-- **可选**: Known constraints (must preserve API, can't change database schema, etc.)
-- **可选**: Prior failed transformation attempts and why they stalled
+- **必需**：要转化的材料（文件路径、模块名称或数据源）
+- **必需**：期望的最终状态（目标架构、范式或格式）
+- **可选**：已知约束（必须保留 API、不能更改数据库模式等）
+- **可选**：先前失败的转化尝试及其停滞原因
 
 ## 步骤
 
-### 第 1 步：Nigredo — Decomposition
+### 第 1 步：黑化（Nigredo）——分解
 
-Break the prima materia into its constituent elements. Nothing is sacred; everything is cataloged.
+将原始材料分解为其组成元素。没有什么是神圣的；一切都需要编目。
 
-1. Inventory the material completely:
-   - List every function, class, module, or data entity
-   - Map all dependencies (imports, calls, data flows)
-   - Identify hidden coupling (shared globals, implicit state, side effects)
-2. Surface hidden assumptions:
-   - What undocumented behaviors does the code rely on?
-   - What error conditions are silently swallowed?
-   - What ordering dependencies exist?
-3. Catalog anti-patterns and technical debt:
-   - God objects, circular dependencies, copy-paste duplication
-   - Dead code paths, unreachable branches, vestigial features
-   - Hardcoded values, magic numbers, embedded configuration
-4. Produce the **Nigredo Inventory**: a structured catalog of every element, dependency, assumption, and anti-pattern
+1. 完整清点材料：
+   - 列出每个函数、类、模块或数据实体
+   - 映射所有依赖关系（导入、调用、数据流）
+   - 识别隐藏的耦合（共享全局变量、隐式状态、副作用）
+2. 浮现隐藏的假设：
+   - 代码依赖哪些未记录的行为？
+   - 哪些错误条件被静默吞噬？
+   - 存在哪些排序依赖？
+3. 编目反模式和技术债务：
+   - 上帝对象、循环依赖、复制粘贴重复
+   - 死代码路径、不可达分支、残余功能
+   - 硬编码值、魔术数字、嵌入式配置
+4. 产出**黑化清单**：每个元素、依赖关系、假设和反模式的结构化目录
 
-**预期结果：** A complete, unflinching inventory of the material. The inventory should feel uncomfortable — if it doesn't, the decomposition isn't thorough enough. Every hidden assumption is now explicit.
+**预期结果：** 一份完整、毫不留情的材料清单。清单应该令人不适——如果不是，分解就不够彻底。每个隐藏的假设现在都是显式的。
 
-**失败处理：** If the material is too large to inventory fully, decompose by module boundary and treat each module as a separate athanor run. If dependencies are too tangled to map, use `grep`/`Grep` to trace actual call sites rather than relying on documentation.
+**失败处理：** 如果材料太大无法完全清点，按模块边界分解，将每个模块作为单独的炼金炉运行。如果依赖关系过于纠缠无法映射，使用 `grep`/`Grep` 追踪实际调用点，而不是依赖文档。
 
-### 第 2 步：Meditate — Calcination Checkpoint
+### 第 2 步：冥想（Meditate）——煅烧检查点
 
-Run the `meditate` skill to clear assumptions accumulated during nigredo.
+运行 `meditate` 技能以清除黑化阶段积累的假设。
 
-1. Set aside the nigredo inventory and clear mental context
-2. Anchor on the transformation goal stated in Inputs
-3. Observe what biases nigredo introduced — did the decomposition make certain approaches seem inevitable?
-4. Label any premature solution ideas as "tangent" and return to the goal
+1. 放下黑化清单，清除心理上下文
+2. 锚定在输入中声明的转化目标
+3. 观察黑化引入了什么偏见——分解是否使某些方法看起来不可避免？
+4. 将任何过早的解决方案想法标记为"切线"并回到目标
 
-**预期结果：** A clear, unbiased state ready to evaluate the material without being anchored to its current form. The goal feels fresh rather than constrained by what was found.
+**预期结果：** 一种清晰、无偏见的状态，准备在不被锚定到当前形态的情况下评估材料。目标感觉新鲜而非被发现所约束。
 
-**失败处理：** If the nigredo findings keep pulling attention (a particularly bad anti-pattern, a clever hack that's tempting to preserve), write it down and explicitly set it aside. Proceed only when the goal is clearer than the current form.
+**失败处理：** 如果黑化的发现持续吸引注意力（一个特别糟糕的反模式、一个诱人想要保留的巧妙技巧），写下来并明确搁置。只有当目标比当前形态更清晰时才继续。
 
-### 第 3 步：Albedo — Purification
+### 第 3 步：白化（Albedo）——净化
 
-Separate the essential from the accidental. Strip away everything that doesn't serve the target form.
+将本质的与偶然的分离。剥离一切不服务于目标形态的东西。
 
-1. From the nigredo inventory, classify each element:
-   - **Essential**: Core business logic, irreplaceable algorithms, critical data transformations
-   - **Accidental**: Framework boilerplate, workarounds for old bugs, compatibility shims
-   - **Toxic**: Anti-patterns, security vulnerabilities, dead code
-2. Extract the essential elements into isolation:
-   - Pull core logic out of framework wrappers
-   - Separate data transformation from I/O
-   - Extract interfaces from implementations
-3. Remove toxic elements entirely — document what was removed and why
-4. For accidental elements, determine if equivalents exist in the target form
-5. Produce the **Albedo Extract**: purified essential logic with clean interfaces
+1. 从黑化清单中，对每个元素分类：
+   - **本质的**：核心业务逻辑、不可替代的算法、关键数据转换
+   - **偶然的**：框架样板代码、旧错误的变通方案、兼容性垫片
+   - **有毒的**：反模式、安全漏洞、死代码
+2. 将本质元素提取到隔离状态：
+   - 从框架包装器中提取核心逻辑
+   - 将数据转换与 I/O 分离
+   - 从实现中提取接口
+3. 完全移除有毒元素——记录什么被移除以及原因
+4. 对于偶然元素，确定目标形态中是否存在等价物
+5. 产出**白化提取物**：具有干净接口的净化本质逻辑
 
-**预期结果：** A set of pure, isolated functions/modules that represent the core value of the original material. Each piece is testable in isolation. The extract is significantly smaller than the original.
+**预期结果：** 一组代表原始材料核心价值的纯净、隔离的函数/模块。每个部分都可以独立测试。提取物应明显小于原始材料。
 
-**失败处理：** If essential and accidental are too intertwined to separate, introduce seam points (interfaces) first. If the material resists purification, it may need `dissolve-form` before the athanor can continue.
+**失败处理：** 如果本质与偶然过于交织无法分离，先引入接缝点（接口）。如果材料抗拒净化，可能需要先用 `dissolve-form` 处理后才能继续炼金炉流程。
 
-### 第 4 步：Heal — Purification Assessment
+### 第 4 步：修复（Heal）——净化评估
 
-Run the `heal` skill to assess whether the purification was thorough.
+运行 `heal` 技能以评估净化是否彻底。
 
-1. Triage the albedo extract: is anything still carrying toxic residue?
-2. Check for drift: has the purification drifted from the original transformation goal?
-3. Assess completeness: are all essential elements accounted for, or were some discarded prematurely?
-4. Rebalance if needed: restore any essential elements that were incorrectly classified as accidental
+1. 分诊白化提取物：是否还有任何东西携带有毒残留？
+2. 检查偏移：净化是否偏离了原始转化目标？
+3. 评估完整性：所有本质元素是否都已计入，还是有些被过早丢弃？
+4. 如需要则重新平衡：恢复被错误分类为偶然的本质元素
 
-**预期结果：** Confidence that the albedo extract is complete, clean, and ready for illumination. No essential logic was lost; no toxic patterns remain.
+**预期结果：** 确信白化提取物是完整、干净的，且已准备好进入照明阶段。没有本质逻辑丢失；没有有毒模式残留。
 
-**失败处理：** If the assessment reveals significant gaps, return to Step 3 with the specific gaps identified. Do not proceed to citrinitas with incomplete material.
+**失败处理：** 如果评估揭示出重大缺口，带着具体缺口返回第 3 步。不要在材料不完整的情况下进入黄化阶段。
 
-### 第 5 步：Citrinitas — Illumination
+### 第 5 步：黄化（Citrinitas）——照明
 
-See the target form. Map the purified elements to their optimal structure.
+看见目标形态。将净化的元素映射到其最优结构。
 
-1. Pattern recognition: identify which design patterns serve the purified elements
-   - Does the data flow suggest pipes/filters, event sourcing, CQRS?
-   - Do the interfaces suggest strategy, adapter, facade?
-   - Does the module structure suggest hexagonal, layered, micro-kernel?
-2. Design the target architecture:
-   - Map each essential element to its new location
-   - Define the interfaces between components
-   - Specify the data flow through the new structure
-3. Identify what must be created new (has no equivalent in the original):
-   - New abstractions that unify duplicated logic
-   - New interfaces that replace implicit coupling
-   - New error handling that replaces silent failures
-4. Produce the **Citrinitas Blueprint**: a complete mapping from albedo extract to target form
+1. 模式识别：识别哪些设计模式服务于净化的元素
+   - 数据流是否暗示管道/过滤器、事件溯源、CQRS？
+   - 接口是否暗示策略、适配器、外观模式？
+   - 模块结构是否暗示六角形、分层、微内核？
+2. 设计目标架构：
+   - 将每个本质元素映射到其新位置
+   - 定义组件间的接口
+   - 指定数据通过新结构的流动方式
+3. 识别必须新创建的内容（在原始材料中没有等价物）：
+   - 统一重复逻辑的新抽象
+   - 替代隐式耦合的新接口
+   - 替代静默失败的新错误处理
+4. 产出**黄化蓝图**：从白化提取物到目标形态的完整映射
 
-**预期结果：** A clear, detailed blueprint where every essential element has a home and every interface is defined. The blueprint should feel inevitable — given the purified elements, this structure is the natural fit.
+**预期结果：** 一份清晰、详细的蓝图，其中每个本质元素都有归属，每个接口都有定义。蓝图应该感觉不可避免——给定净化的元素，这个结构是自然的匹配。
 
-**失败处理：** If multiple valid architectures compete, evaluate each against the constraints from Inputs. If no clear winner emerges, prefer the simplest option and document the alternatives as future options.
+**失败处理：** 如果多个有效架构相互竞争，根据输入中的约束评估每个。如果没有明确的赢家，优先选择最简单的方案并将替代方案记录为未来选项。
 
-### 第 6 步：Meditate — Pre-Synthesis Checkpoint
+### 第 6 步：冥想（Meditate）——合成前检查点
 
-Run the `meditate` skill to prepare for the final synthesis.
+运行 `meditate` 技能以准备最终合成。
 
-1. Clear the analytical context from citrinitas
-2. Anchor on the citrinitas blueprint as the synthesis guide
-3. Observe any anxiety about the transformation — is anything being rushed?
-4. Confirm readiness: the blueprint is clear, the material is purified, the constraints are known
+1. 清除黄化阶段的分析上下文
+2. 锚定在黄化蓝图作为合成指南
+3. 观察对转化的任何焦虑——有什么被赶着做吗？
+4. 确认准备就绪：蓝图清晰，材料已净化，约束已知
 
-**预期结果：** Calm clarity about what needs to be built. The synthesis phase should be execution, not design.
+**预期结果：** 对需要构建什么的平静清晰。合成阶段应该是执行，而非设计。
 
-**失败处理：** If doubt persists about the blueprint, revisit Step 5 with the specific concerns. Better to refine the blueprint than to begin synthesis with uncertainty.
+**失败处理：** 如果对蓝图的疑虑持续存在，带着具体关切重访第 5 步。精炼蓝图好于在不确定中开始合成。
 
-### 第 7 步：Rubedo — Synthesis
+### 第 7 步：赤化（Rubedo）——合成
 
-Compose the purified elements into their target form. The philosopher's stone: working, optimized code.
+将净化的元素组合为其目标形态。贤者之石：运行的、优化的代码。
 
-1. Build the new structure following the citrinitas blueprint:
-   - Create files, modules, and interfaces as specified
-   - Migrate each essential element to its new location
-   - Implement new abstractions and interfaces
-2. Wire the components together:
-   - Connect data flows as designed
-   - Implement error propagation through new paths
-   - Configure dependency injection or module loading
-3. Verify the synthesis:
-   - Does each component work in isolation? (unit tests)
-   - Do the components compose correctly? (integration tests)
-   - Does the full system produce the same outputs as the original? (regression tests)
-4. Remove scaffolding:
-   - Delete temporary compatibility shims
-   - Remove migration aids
-   - Clean up any remaining references to the old structure
-5. Produce the **Rubedo Output**: the transmuted code, fully functional in its new form
+1. 按黄化蓝图构建新结构：
+   - 按指定创建文件、模块和接口
+   - 将每个本质元素迁移到其新位置
+   - 实现新的抽象和接口
+2. 连接组件：
+   - 按设计连接数据流
+   - 通过新路径实现错误传播
+   - 配置依赖注入或模块加载
+3. 验证合成：
+   - 每个组件是否独立工作？（单元测试）
+   - 组件是否正确组合？（集成测试）
+   - 完整系统是否产生与原始相同的输出？（回归测试）
+4. 移除脚手架：
+   - 删除临时兼容性垫片
+   - 移除迁移辅助工具
+   - 清理对旧结构的任何剩余引用
+5. 产出**赤化输出**：嬗变后的代码，在新形态中完全运行
 
-**预期结果：** Working code that is measurably better than the original: fewer lines, clearer structure, better test coverage, fewer dependencies. The transformation is complete and the old form can be retired.
+**预期结果：** 可衡量地优于原始代码的可工作代码：更少的行数、更清晰的结构、更好的测试覆盖率、更少的依赖。转化完成，旧形态可以退役。
 
-**失败处理：** If synthesis reveals gaps in the blueprint, do not patch — return to Step 5 (citrinitas) to revise the design. If individual components fail, isolate and fix them before attempting full integration. The rubedo must not produce a half-transformed chimera.
+**失败处理：** 如果合成揭示了蓝图中的缺口，不要打补丁——返回第 5 步（黄化）修改设计。如果个别组件失败，在尝试全面集成之前隔离并修复它们。赤化不能产出一个半转化的嵌合体。
 
-## Validation Checklist
+## 验证清单
 
-- [ ] Nigredo inventory is complete (all elements, dependencies, assumptions cataloged)
-- [ ] Meditate checkpoint passed between nigredo/albedo (assumptions cleared)
-- [ ] Albedo extract contains only essential elements with clean interfaces
-- [ ] Heal assessment confirms purification completeness
-- [ ] Citrinitas blueprint maps every essential element to target form
-- [ ] Meditate checkpoint passed between citrinitas/rubedo (ready for synthesis)
-- [ ] Rubedo output passes regression tests against original behavior
-- [ ] Rubedo output is measurably improved (complexity, coupling, test coverage)
-- [ ] No toxic elements survived into the final output
-- [ ] Transformation constraints from Inputs are satisfied
+- [ ] 黑化清单完整（所有元素、依赖关系、假设已编目）
+- [ ] 黑化/白化之间通过了冥想检查点（假设已清除）
+- [ ] 白化提取物仅包含具有干净接口的本质元素
+- [ ] 修复评估确认了净化的完整性
+- [ ] 黄化蓝图将每个本质元素映射到目标形态
+- [ ] 黄化/赤化之间通过了冥想检查点（已准备好合成）
+- [ ] 赤化输出通过了与原始行为的回归测试
+- [ ] 赤化输出可衡量地改进了（复杂度、耦合度、测试覆盖率）
+- [ ] 没有有毒元素存活到最终输出
+- [ ] 输入中的转化约束已满足
 
 ## 常见问题
 
-- **Skipping nigredo depth**: Rushing decomposition means hidden coupling surfaces during synthesis. Invest fully in the inventory
-- **Preserving accidental complexity**: Attachment to clever workarounds or "it works, don't touch it" code. If it's not essential, it goes
-- **Skipping meditate checkpoints**: Cognitive momentum from one stage biases the next. The pauses are structural, not optional
-- **Blueprint-less synthesis**: Starting to code before citrinitas is complete produces patchwork, not transmutation
-- **Incomplete regression testing**: The rubedo must reproduce original behavior. Untested paths will break silently
-- **Scope creep during citrinitas**: The illumination phase reveals opportunities for improvement beyond the original goal. Note them but don't pursue them — the athanor serves the stated transformation, not a hypothetical ideal
+- **跳过黑化深度**：仓促的分解意味着隐藏的耦合会在合成期间浮现。要充分投入清点工作
+- **保留偶然复杂性**：对巧妙变通方案或"能用就别动"代码的依恋。如果不是本质的，就去掉
+- **跳过冥想检查点**：从一个阶段到下一个阶段的认知惯性会产生偏见。暂停是结构性的，不是可选的
+- **无蓝图的合成**：在黄化完成之前开始编码会产生拼凑物，而不是嬗变
+- **不完整的回归测试**：赤化必须重现原始行为。未测试的路径会静默中断
+- **黄化期间的范围蔓延**：照明阶段揭示了超出原始目标的改进机会。记下它们但不要追求——炼金炉服务于声明的转化，而不是假设的理想
 
 ## 相关技能
 
-- `transmute` — Lighter-weight transformation for single functions or small modules
-- `chrysopoeia` — Value extraction and optimization (turning base code into gold)
-- `meditate` — Meta-cognitive clearing used as stage-gate checkpoints
-- `heal` — Subsystem assessment used for purification validation
-- `dissolve-form` — When material is too rigid for the athanor, dissolve first
-- `adapt-architecture` — Complementary approach for system-level migration patterns
-- `review-software-architecture` — Post-synthesis architecture review
+- `transmute` — 用于单个函数或小模块的更轻量级转化
+- `chrysopoeia` — 价值提取和优化（将基础代码变成黄金）
+- `meditate` — 作为阶段门检查点使用的元认知清理
+- `heal` — 用于净化验证的子系统评估
+- `dissolve-form` — 当材料对炼金炉来说过于刚性时，先溶解
+- `adapt-architecture` — 系统级迁移模式的互补方法
+- `review-software-architecture` — 合成后的架构审查

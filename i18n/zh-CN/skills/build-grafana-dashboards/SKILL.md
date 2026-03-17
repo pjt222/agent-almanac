@@ -3,12 +3,7 @@ name: build-grafana-dashboards
 description: >
   创建生产级 Grafana 仪表板，包含可复用面板、模板变量、注解及版本控制部署的预置配置。
   适用于为 Prometheus、Loki 等数据源创建可视化图表、为 SRE 团队构建运营仪表板、
-  将手动创建的仪表板迁移到版本控制的预置方案，或建立面向管理层的 SLO 合规报告。
-locale: zh-CN
-source_locale: en
-source_commit: 6f65f316
-translator: claude-opus-4-6
-translation_date: 2026-03-16
+  从手动创建仪表板迁移到版本控制预置配置，或建立高管级别的 SLO 合规报告。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -18,36 +13,42 @@ metadata:
   complexity: intermediate
   language: multi
   tags: grafana, dashboards, visualization, panels, provisioning
+  locale: zh-CN
+  source_locale: en
+  source_commit: 6f65f316
+  translator: claude
+  translation_date: "2026-03-17"
 ---
 
-# Build Grafana Dashboards
+# 构建 Grafana 仪表板
 
-按照可维护性、可复用性和版本控制最佳实践，设计并部署 Grafana 仪表板。
+设计和部署 Grafana 仪表板，遵循可维护性、可复用性和版本控制的最佳实践。
 
 ## 适用场景
 
-- 为 Prometheus、Loki 或其他数据源的指标创建可视化图表
-- 为 SRE 团队和事故响应人员构建运营仪表板
-- 为管理层建立 SLO 合规报告仪表板
-- 将仪表板从手动创建迁移到版本控制的预置方案
-- 使用模板变量跨团队标准化仪表板布局
+- 为 Prometheus、Loki 或其他数据源指标创建可视化展示
+- 为 SRE 团队和事件响应者构建运营仪表板
+- 建立高管级别的 SLO 合规报告仪表板
+- 从手动创建仪表板迁移到版本控制的预置配置
+- 使用模板变量在团队间标准化仪表板布局
 - 创建从高层概览到详细指标的下钻体验
 
 ## 输入
 
-- **必填**：数据源配置（Prometheus、Loki、Tempo 等）
-- **必填**：待可视化的指标或日志及其查询模式
+- **必需**：数据源配置（Prometheus、Loki、Tempo 等）
+- **必需**：需要可视化的指标或日志及其查询模式
 - **可选**：用于多服务或多环境视图的模板变量
 - **可选**：用于迁移或修改的现有仪表板 JSON
-- **可选**：用于事件关联的注解查询（部署、事故）
+- **可选**：用于事件关联的注解查询（部署、事件）
 
 ## 步骤
 
-> 完整配置文件和模板请参阅 [Extended Examples](references/EXAMPLES.md)。
+> 参见 [Extended Examples](references/EXAMPLES.md) 获取完整配置文件和模板。
+
 
 ### 第 1 步：设计仪表板结构
 
-在构建面板之前，规划仪表板布局和组织方式。
+在构建面板之前规划仪表板布局和组织。
 
 创建仪表板规格文档：
 
@@ -83,23 +84,23 @@ Real-time operational view for on-call engineers monitoring the API service.
 ```
 
 关键设计原则：
-- **最重要的指标优先**：关键指标置顶，详细信息居后
-- **一致的时间范围**：所有面板时间同步
-- **下钻路径**：从高层仪表板链接到详细仪表板
-- **响应式布局**：使用适应不同屏幕的行和面板宽度
+- **最重要的指标在最前面**：关键指标在顶部，详细信息在下方
+- **一致的时间范围**：在所有面板间同步时间
+- **下钻路径**：从高层链接到详细仪表板
+- **响应式布局**：使用在各种屏幕上都能工作的行和面板宽度
 
-**预期结果：** 仪表板结构文档清晰，利益相关方就指标和布局优先级达成一致。
+**预期结果：** 仪表板结构文档清晰，利益相关者对指标和布局优先级达成一致。
 
 **失败处理：**
-- 与最终用户（SRE、开发人员）开展仪表板设计评审
-- 对照行业标准进行基准测试（USE 方法、RED 方法、Four Golden Signals）
-- 查看团队现有仪表板的一致性模式
+- 与最终用户（SRE、开发者）进行仪表板设计评审
+- 参照行业标准（USE 方法、RED 方法、四个黄金信号）进行对标
+- 审查团队中现有的仪表板以保持一致性
 
 ### 第 2 步：创建带模板变量的仪表板
 
-以可复用变量为基础构建仪表板，用于过滤。
+使用可复用变量构建仪表板基础以实现过滤。
 
-创建仪表板 JSON 结构（或使用 UI 后导出）：
+创建仪表板 JSON 结构（或使用 UI 创建后导出）：
 
 ```json
 {
@@ -181,24 +182,24 @@ Real-time operational view for on-call engineers monitoring the API service.
 }
 ```
 
-变量类型及使用场景：
+变量类型和用例：
 - **查询变量**：来自数据源的动态列表（`label_values()`、`query_result()`）
-- **区间变量**：查询的聚合窗口
+- **间隔变量**：查询的聚合窗口
 - **自定义变量**：非指标选项的静态列表
-- **常量变量**：面板间共享值（数据源名称、阈值）
-- **文本框变量**：自由格式输入过滤条件
+- **常量变量**：面板间共享的值（数据源名称、阈值）
+- **文本框变量**：用于过滤的自由格式输入
 
-**预期结果：** 变量从数据源正确填充，级联过滤有效（环境过滤实例），默认选项合适。
+**预期结果：** 变量从数据源正确填充，级联过滤器正常工作（环境过滤实例），默认选择适当。
 
 **失败处理：**
 - 在 Prometheus UI 中独立测试变量查询
-- 检查循环依赖（变量 A 依赖 B，B 又依赖 A）
-- 验证多选变量 `allValue` 字段的正则表达式
+- 检查循环依赖（变量 A 依赖 B，B 依赖 A）
+- 验证多选变量 `allValue` 字段中的正则表达式模式
 - 检查变量刷新设置（仪表板加载时 vs 时间范围变更时）
 
 ### 第 3 步：构建可视化面板
 
-为各指标创建采用合适可视化类型的面板。
+为每个指标创建具有适当可视化类型的面板。
 
 **时间序列面板**（请求速率）：
 
@@ -278,23 +279,23 @@ Real-time operational view for on-call engineers monitoring the API service.
 - **时间序列**：随时间变化的趋势（速率、计数、持续时间）
 - **统计**：带阈值着色的单个当前值
 - **仪表盘**：百分比值（CPU、内存、磁盘使用率）
-- **条形仪表盘**：在某一时间点比较多个值
-- **热力图**：随时间变化的值分布（延迟百分位数）
+- **条形仪表**：在某个时间点比较多个值
+- **热力图**：值随时间的分布（延迟百分位数）
 - **表格**：多个指标的详细分解
-- **日志**：来自 Loki 的原始日志行（带过滤）
+- **日志**：来自 Loki 的带过滤功能的原始日志行
 
-**预期结果：** 面板正确渲染数据，可视化类型匹配指标类型，图例描述清晰，阈值高亮显示问题。
+**预期结果：** 面板正确渲染数据，可视化匹配预期指标类型，图例描述清晰，阈值突出显示问题。
 
 **失败处理：**
 - 在 Explore 视图中使用相同时间范围和变量测试查询
-- 检查指标名称拼写错误或标签过滤器不正确
-- 验证聚合函数与指标类型匹配（计数器用 rate，仪表盘用 avg）
+- 检查指标名称拼写错误或不正确的标签过滤器
+- 验证聚合函数是否匹配指标类型（计数器用 rate，仪表用 avg）
 - 检查单位配置（字节、秒、每秒请求数）
 - 启用"Show query inspector"调试空结果
 
 ### 第 4 步：配置行和布局
 
-将面板组织成可折叠的行，便于逻辑分组。
+将面板组织到可折叠的行中以实现逻辑分组。
 
 ```json
 {
@@ -308,24 +309,24 @@ Real-time operational view for on-call engineers monitoring the API service.
 
 布局最佳实践：
 - 网格宽度为 24 个单位，每个面板指定 `w`（宽度）和 `h`（高度）
-- 使用行对相关面板分组，默认折叠不太关键的部分
+- 使用行分组相关面板，默认折叠不太关键的部分
 - 将最关键的指标放在首个可见区域（y=0-8）
-- 保持行内面板高度一致（通常为 4、8 或 12 个单位）
-- 时间序列使用全宽（24），对比使用半宽（12）
+- 在行内保持一致的面板高度（通常为 4、8 或 12 个单位）
+- 时间序列使用全宽（24），比较使用半宽（12）
 
-**预期结果：** 仪表板布局逻辑清晰，行可正确折叠/展开，面板视觉对齐无间隙。
+**预期结果：** 仪表板布局逻辑有序，行正确折叠/展开，面板视觉对齐无间隙。
 
 **失败处理：**
 - 验证 gridPos 坐标不重叠
-- 检查行面板数组包含面板（非 null）
-- 验证 y 坐标沿页面方向递增
+- 检查行面板数组是否包含面板（非 null）
+- 验证 y 坐标在页面下方逻辑递增
 - 使用 Grafana UI 的"Edit JSON"检查网格位置
 
 ### 第 5 步：添加链接和下钻
 
 在相关仪表板之间创建导航路径。
 
-JSON 中的仪表板级链接：
+仪表板级别链接的 JSON：
 
 ```json
 {
@@ -337,7 +338,7 @@ JSON 中的仪表板级链接：
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-面板级数据链接：
+面板级别数据链接：
 
 ```json
 {
@@ -351,29 +352,29 @@ JSON 中的仪表板级链接：
 
 链接变量：
 - `$service`、`$environment`：仪表板模板变量
-- `${__field.labels.instance}`：点击数据点的标签值
+- `${__field.labels.instance}`：来自点击数据点的标签值
 - `${__from}`、`${__to}`：当前仪表板时间范围
 - `$__url_time_range`：URL 编码的时间范围
 
-**预期结果：** 点击面板元素或仪表板链接后，导航到相关视图并保留上下文（时间范围、变量）。
+**预期结果：** 点击面板元素或仪表板链接导航到相关视图，上下文保持不变（时间范围、变量）。
 
 **失败处理：**
-- 对查询参数中的特殊字符进行 URL 编码
-- 测试各种变量选择下的链接（All vs 特定值）
+- URL 编码查询参数中的特殊字符
+- 使用各种变量选择（全部 vs 特定值）测试链接
 - 验证目标仪表板 UID 存在且可访问
 - 检查 `includeVars` 和 `keepTime` 标志是否按预期工作
 
-### 第 6 步：设置仪表板预置
+### 第 6 步：设置仪表板预置配置
 
-将仪表板版本控制为代码，实现可重现部署。
+将仪表板作为代码进行版本控制以实现可重现的部署。
 
-创建预置目录结构：
+创建预置配置目录结构：
 
 ```bash
 mkdir -p /etc/grafana/provisioning/{dashboards,datasources}
 ```
 
-数据源预置（`/etc/grafana/provisioning/datasources/prometheus.yml`）：
+数据源预置配置（`/etc/grafana/provisioning/datasources/prometheus.yml`）：
 
 ```yaml
 apiVersion: 1
@@ -385,7 +386,7 @@ datasources:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-仪表板预置（`/etc/grafana/provisioning/dashboards/default.yml`）：
+仪表板预置配置（`/etc/grafana/provisioning/dashboards/default.yml`）：
 
 ```yaml
 apiVersion: 1
@@ -403,7 +404,7 @@ providers:
       foldersFromFilesStructure: true
 ```
 
-将仪表板 JSON 文件存储在 `/var/lib/grafana/dashboards/` 中：
+在 `/var/lib/grafana/dashboards/` 中存储仪表板 JSON 文件：
 
 ```bash
 /var/lib/grafana/dashboards/
@@ -436,44 +437,44 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
 ```
 
-**预期结果：** Grafana 启动时自动加载仪表板，JSON 文件更改在更新间隔后反映，版本控制追踪仪表板变更。
+**预期结果：** 仪表板在 Grafana 启动时自动加载，JSON 文件的更改在更新间隔后反映出来，版本控制跟踪仪表板更改。
 
 **失败处理：**
 - 检查 Grafana 日志：`docker logs grafana | grep -i provisioning`
 - 验证 JSON 语法：`python -m json.tool dashboard.json`
-- 确保 Grafana 有读取权限：`chmod 644 *.json`
+- 确保文件权限允许 Grafana 读取：`chmod 644 *.json`
 - 使用 `allowUiUpdates: false` 测试以防止 UI 修改
 - 验证预置配置：`curl http://localhost:3000/api/admin/provisioning/dashboards/reload -X POST -H "Authorization: Bearer $GRAFANA_API_KEY"`
 
 ## 验证清单
 
-- [ ] 仪表板在 Grafana UI 中无错误加载
-- [ ] 所有模板变量填充了预期值
-- [ ] 变量级联有效（选择环境过滤实例）
-- [ ] 面板显示配置时间范围内的数据
+- [ ] 仪表板在 Grafana UI 中加载无错误
+- [ ] 所有模板变量以预期值填充
+- [ ] 变量级联正常工作（选择环境过滤实例）
+- [ ] 面板在配置的时间范围内显示数据
 - [ ] 面板查询正确使用变量（无硬编码值）
-- [ ] 阈值适当高亮显示问题状态
-- [ ] 图例格式描述清晰，不杂乱
-- [ ] 注解在相关事件时显示
-- [ ] 链接导航到正确的仪表板并保留上下文
-- [ ] 仪表板从 JSON 文件预置（版本控制）
-- [ ] 响应式布局在不同屏幕尺寸下有效
-- [ ] 工具提示和悬停交互提供有用上下文
+- [ ] 阈值适当地突出显示问题状态
+- [ ] 图例格式描述清晰且不杂乱
+- [ ] 注解在相关事件时出现
+- [ ] 链接导航到正确的仪表板并保持上下文
+- [ ] 仪表板从 JSON 文件预置配置（版本控制）
+- [ ] 响应式布局在不同屏幕尺寸上工作
+- [ ] 工具提示和悬停交互提供有用的上下文
 
 ## 常见问题
 
-- **变量不更新面板**：确保查询使用 `$variable` 语法，不含硬编码值。检查变量刷新设置。
-- **查询正确但面板为空**：验证时间范围包含数据点。检查抓取间隔与聚合窗口（5m rate 需要超过 5m 的数据）。
-- **图例过于冗长**：使用 `legendFormat` 只显示相关标签，而非完整指标名称。示例：`{{method}} - {{status}}` 而非默认值。
-- **时间范围不一致**：设置仪表板时间同步，使所有面板共享同一时间窗口。使用"Sync cursor"进行关联调查。
-- **性能问题**：避免返回高基数序列（>1000）的查询。使用记录规则或预聚合。限制高代价查询的时间范围。
-- **仪表板漂移**：不使用预置时，手动 UI 更改会产生版本控制冲突。在生产环境中使用 `allowUiUpdates: false`。
-- **缺少数据链接**：数据链接需要精确的标签名称。谨慎使用 `${__field.labels.labelname}`，验证标签存在于查询结果中。
-- **注解过多**：过多注解会使视图杂乱。按重要性过滤注解或使用单独的注解轨道。
+- **变量未更新面板**：确保查询使用 `$variable` 语法而非硬编码值。检查变量刷新设置
+- **查询正确但面板为空**：验证时间范围包含数据点。检查抓取间隔与聚合窗口的关系（5m 的 rate 需要 >5m 的数据）
+- **图例过于冗长**：使用 `legendFormat` 仅显示相关标签，而非完整指标名称。示例：用 `{{method}} - {{status}}` 代替默认值
+- **时间范围不一致**：设置仪表板时间同步以使所有面板共享相同的时间窗口。使用"Sync cursor"进行关联调查
+- **性能问题**：避免查询返回高基数序列（>1000）。使用记录规则或预聚合。限制昂贵查询的时间范围
+- **仪表板漂移**：没有预置配置时，手动 UI 更改会造成版本控制冲突。在生产环境中使用 `allowUiUpdates: false`
+- **缺少数据链接**：数据链接需要精确的标签名称。谨慎使用 `${__field.labels.labelname}`，验证标签是否存在于查询结果中
+- **注解过载**：过多的注解会使视图杂乱。按重要性过滤注解或使用独立的注解轨道
 
 ## 相关技能
 
-- `setup-prometheus-monitoring` - 配置为 Grafana 仪表板提供数据的 Prometheus 数据源
-- `configure-log-aggregation` - 设置 Loki 用于日志面板查询和基于日志的注解
-- `define-slo-sli-sla` - 使用 Grafana 统计和仪表盘面板可视化 SLO 合规性和错误预算
-- `instrument-distributed-tracing` - 从指标面板添加追踪 ID 链接到 Tempo 追踪视图
+- `setup-prometheus-monitoring` — 配置为 Grafana 仪表板提供数据的 Prometheus 数据源
+- `configure-log-aggregation` — 设置 Loki 用于日志面板查询和基于日志的注解
+- `define-slo-sli-sla` — 使用 Grafana 统计面板和仪表面板可视化 SLO 合规性和错误预算
+- `instrument-distributed-tracing` — 添加从指标面板到 Tempo 追踪视图的追踪 ID 链接

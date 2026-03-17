@@ -2,10 +2,10 @@
 name: build-ci-cd-pipeline
 description: >
   使用 GitHub Actions 设计和实现多阶段 CI/CD 流水线，支持矩阵构建、依赖缓存、
-  制品管理和密钥处理。创建涵盖代码检查、测试、构建和部署阶段的工作流，
-  支持并行执行和条件逻辑。适用于为新项目设置自动化测试和部署、从 Jenkins 或
-  CircleCI 迁移至 GitHub Actions、实现跨平台矩阵构建、添加构建缓存，
-  或创建包含安全扫描和质量门禁的多阶段流水线。
+  制品管理和密钥处理。创建涵盖代码检查、测试、构建和部署阶段的工作流，支持并行执行
+  和条件逻辑。适用于为新项目设置自动化测试和部署、从 Jenkins 或 CircleCI 迁移到
+  GitHub Actions、实现跨平台矩阵构建、添加构建缓存，或创建包含安全扫描和质量门禁
+  的多阶段流水线。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -18,36 +18,36 @@ metadata:
   locale: zh-CN
   source_locale: en
   source_commit: 6f65f316
-  translator: claude-opus-4-6
-  translation_date: "2026-03-16"
+  translator: claude
+  translation_date: "2026-03-17"
 ---
 
 # 构建 CI/CD 流水线
 
-使用 GitHub Actions 设计并实现生产级持续集成和持续部署流水线。
+使用 GitHub Actions 设计和实现生产级持续集成和部署流水线。
 
 ## 适用场景
 
 - 为新项目设置自动化测试和部署
-- 从 Jenkins、Travis CI 或 CircleCI 迁移至 GitHub Actions
-- 实现跨多平台或多语言版本的矩阵构建
-- 添加构建缓存以加快 CI/CD 执行速度
-- 创建针对不同环境的多阶段流水线
+- 从 Jenkins、Travis CI 或 CircleCI 迁移到 GitHub Actions
+- 实现跨多个平台或语言版本的矩阵构建
+- 添加构建缓存以加速 CI/CD 执行时间
+- 创建具有环境特定部署的多阶段流水线
 - 实现安全扫描和代码质量门禁
 
 ## 输入
 
-- **必填**：包含待测试/构建/部署代码的代码库
-- **必填**：GitHub Actions 工作流目录（`.github/workflows/`）
-- **可选**：部署目标的密钥（AWS、Azure、Docker 镜像仓库）
-- **可选**：针对特殊构建的自托管 runner 配置
-- **可选**：分支保护规则和必须通过的状态检查
+- **必需**：包含需要测试/构建/部署代码的仓库
+- **必需**：GitHub Actions 工作流目录（`.github/workflows/`）
+- **可选**：部署目标的密钥（AWS、Azure、Docker 仓库）
+- **可选**：用于特殊构建的自托管运行器配置
+- **可选**：分支保护规则和必需的状态检查
 
 ## 步骤
 
-### 第 1 步：创建基础工作流结构
+### 第 1 步：创建基本工作流结构
 
-创建 `.github/workflows/ci.yml`，配置触发条件和基本作业结构。
+创建 `.github/workflows/ci.yml`，包含触发器配置和基本任务结构。
 
 ```yaml
 name: CI Pipeline
@@ -88,13 +88,13 @@ jobs:
         run: npm run format:check
 ```
 
-**预期结果：** 工作流文件使用正确的 YAML 语法创建，触发条件已配置，基本代码检查作业已定义。
+**预期结果：** 工作流文件以正确的 YAML 语法创建，触发器已配置，基本的代码检查任务已定义。
 
-**失败处理：** 使用 `yamllint .github/workflows/ci.yml` 验证 YAML 语法。检查缩进（使用空格而非制表符）。通过 GitHub Marketplace 验证 action 版本是否为最新。
+**失败处理：** 使用 `yamllint .github/workflows/ci.yml` 验证 YAML 语法。检查缩进（使用空格而非制表符）。通过 GitHub Marketplace 检查 action 版本是否为最新。
 
 ### 第 2 步：实现矩阵构建策略
 
-添加矩阵构建，跨多个平台、语言版本或配置进行测试。
+添加矩阵构建以在多个平台、语言版本或配置间进行测试。
 
 ```yaml
   test:
@@ -134,13 +134,13 @@ jobs:
           fail_ci_if_error: true
 ```
 
-**预期结果：** 矩阵生成 8 个并行作业（3 个操作系统 × 3 个 Node 版本 - 1 个排除项）。所有测试跨平台通过。覆盖率报告从单一规范作业上传。
+**预期结果：** 矩阵生成 8 个并行任务（3 个操作系统 x 3 个 Node 版本 - 1 个排除项）。所有测试跨平台通过。覆盖率报告从单个规范任务上传。
 
-**失败处理：** 如果出现矩阵语法错误，验证正确的缩进和数组表示法。对于不稳定的测试，使用 `uses: nick-invision/retry@v2` 添加重试逻辑。对于特定平台的失败，添加操作系统条件或扩展排除项。
+**失败处理：** 如果矩阵语法出错，验证缩进和数组表示法是否正确。对于不稳定的测试，使用 `uses: nick-invision/retry@v2` 添加重试逻辑。对于平台特定的失败，添加操作系统条件或扩展排除项。
 
 ### 第 3 步：配置依赖缓存和制品管理
 
-通过智能缓存优化构建速度并保留构建制品。
+通过智能缓存优化构建速度，并保留构建制品。
 
 ```yaml
   build:
@@ -187,9 +187,9 @@ jobs:
           if-no-files-found: error
 ```
 
-**预期结果：** 首次运行下载依赖（较慢），后续运行从缓存恢复（较快）。构建制品以唯一的基于 SHA 的命名方式成功上传。
+**预期结果：** 首次运行下载依赖（较慢），后续运行从缓存恢复（较快）。构建制品以基于 SHA 的唯一命名成功上传。
 
-**失败处理：** 如果缓存经常未命中，验证缓存键是否包含所有相关文件的哈希值。对于上传失败，检查路径是否存在，glob 模式是否与实际构建输出匹配。验证 `retention-days` 是否符合组织策略。
+**失败处理：** 如果缓存频繁未命中，验证缓存键是否包含所有相关文件的哈希值。对于上传失败，检查路径是否存在以及通配符模式是否匹配实际构建输出。验证 `retention-days` 是否符合组织策略。
 
 ### 第 4 步：实现安全扫描和质量门禁
 
@@ -232,13 +232,13 @@ jobs:
           head: HEAD
 ```
 
-**预期结果：** 安全扫描完成，结果上传至 GitHub Security 选项卡。如果配置了分支保护，严重漏洞将阻止合并。未检测到提交中的密钥。
+**预期结果：** 安全扫描完成，结果上传到 GitHub 安全选项卡。如果配置了分支保护，关键漏洞将阻止合并。提交中未检测到泄露的密钥。
 
-**失败处理：** 对于误报，创建包含 CVE ID 和理由的 `.trivyignore` 文件。对于审计失败，查看 `npm audit fix` 建议。对于密钥检测误报，将模式添加至 `.trufflehog.yml` 排除列表。
+**失败处理：** 对于误报，创建 `.trivyignore` 文件并附上 CVE ID 和说明。对于审计失败，查看 `npm audit fix` 的建议。对于密钥检测的误报，将模式添加到 `.trufflehog.yml` 的排除列表中。
 
-### 第 5 步：配置特定环境的部署
+### 第 5 步：配置环境特定部署
 
-设置带有环境保护规则和审批门禁的部署阶段。
+设置具有环境保护规则和审批门禁的部署阶段。
 
 ```yaml
   deploy-staging:
@@ -307,13 +307,13 @@ jobs:
           generate_release_notes: true
 ```
 
-**预期结果：** 暂存环境在 develop 分支时自动部署。生产环境需要手动审批（在 GitHub 环境设置中配置）。CloudFront 失效清除 CDN 缓存。为带标签的提交创建 Release。
+**预期结果：** 预发布环境在 develop 分支上自动部署。生产环境需要手动审批（在 GitHub 环境设置中配置）。CloudFront 失效清除 CDN 缓存。带标签的提交创建发布版本。
 
-**失败处理：** 对于 AWS 凭证错误，验证 OIDC 信任关系是否允许 `role-to-assume`。对于 S3 同步失败，检查存储桶策略和 IAM 权限。对于环境审批问题，在"设置 > 环境"中验证保护规则。
+**失败处理：** 对于 AWS 凭证错误，验证 OIDC 信任关系允许 `role-to-assume`。对于 S3 同步失败，检查存储桶策略和 IAM 权限。对于环境审批问题，验证设置 > 环境中的保护规则。
 
 ### 第 6 步：添加通知和监控集成
 
-集成 Slack 通知、部署跟踪和性能监控。
+集成 Slack 通知、部署追踪和性能监控。
 
 ```yaml
   notify:
@@ -344,7 +344,7 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "🚀 Deployment Status: ${{ steps.status.outputs.status }}"
+                    "text": "Deployment Status: ${{ steps.status.outputs.status }}"
                   }
                 },
                 {
@@ -388,45 +388,45 @@ jobs:
           EOF
 ```
 
-**预期结果：** Slack 收到包含部署状态、仓库详情和可点击工作流链接的格式化通知。成功的生产部署在 Datadog 中记录事件并附带适当标签。
+**预期结果：** Slack 收到格式化的通知，包含部署状态、仓库详情和可点击的工作流链接。Datadog 为成功的生产部署记录事件并附带适当的标签。
 
-**失败处理：** 对于 Slack 失败，验证 Webhook URL 是否有效，工作区是否允许传入 Webhooks。使用 `curl -X POST $SLACK_WEBHOOK_URL -d '{"text":"test"}'` 测试。对于 Datadog 失败，验证 API 密钥是否具有事件提交权限。
+**失败处理：** 对于 Slack 失败，验证 webhook URL 是否有效以及工作区是否允许传入 webhook。使用 `curl -X POST $SLACK_WEBHOOK_URL -d '{"text":"test"}'` 进行测试。对于 Datadog 失败，验证 API 密钥是否具有事件提交权限。
 
 ## 验证清单
 
 - [ ] 工作流语法通过 `yamllint` 或 GitHub 工作流编辑器验证
-- [ ] 所有作业都有明确的依赖关系（`needs:`）以控制执行顺序
+- [ ] 所有任务都有显式依赖关系（`needs:`）以控制执行顺序
 - [ ] 矩阵构建覆盖所有目标平台和版本
-- [ ] 缓存在后续运行中将构建时间减少超过 50%
+- [ ] 缓存使后续运行的构建时间减少 >50%
 - [ ] 密钥存储在 GitHub Secrets 中，从不硬编码在工作流文件中
-- [ ] 安全扫描将结果上传至 GitHub Security 选项卡
-- [ ] 环境保护规则要求审批才能进行生产部署
-- [ ] 部署失败不会使系统处于不一致状态
+- [ ] 安全扫描结果上传到 GitHub 安全选项卡
+- [ ] 环境保护规则要求生产部署审批
+- [ ] 失败的部署不会使系统处于不一致状态
 - [ ] 通知到达适当的渠道（Slack、邮件、监控工具）
-- [ ] 工作流在典型变更下 10 分钟内完成
+- [ ] 工作流对典型变更在 10 分钟内完成
 
 ## 常见问题
 
-- **缓存键过宽**：使用 `${{ runner.os }}-build-` 作为缓存键会在依赖变更时产生错误命中。在键中包含 `hashFiles('**/package-lock.json')`。
+- **缓存键过于宽泛**：使用 `${{ runner.os }}-build-` 作为缓存键会导致依赖变更时的误命中。在键中包含 `hashFiles('**/package-lock.json')`
 
-- **制品名称冲突**：使用静态制品名称（如 `dist`）会在并发构建中导致覆盖。在名称中包含 `${{ github.sha }}` 或 `${{ matrix.os }}-${{ matrix.node }}`。
+- **制品名称冲突**：使用静态制品名称如 `dist` 会导致并发构建时的覆盖。在名称中包含 `${{ github.sha }}` 或 `${{ matrix.os }}-${{ matrix.node }}`
 
-- **日志中暴露密钥**：避免 `echo $SECRET` 等命令。GitHub 会屏蔽注册的密钥，但派生值可能泄露。对动态密钥使用 `::add-mask::`。
+- **日志中暴露密钥**：避免 `echo $SECRET` 或类似命令。GitHub 会遮蔽已注册的密钥，但派生值可能泄露。对动态密钥使用 `::add-mask::`
 
-- **权限不足**：默认 `GITHUB_TOKEN` 权限有限。为安全事件、包、Issues 等添加明确的 `permissions:` 块。
+- **权限不足**：默认 `GITHUB_TOKEN` 权限有限。为安全事件、包、问题等添加显式 `permissions:` 块
 
-- **缺少 if 条件**：除非使用 `if: github.ref == 'refs/heads/main'` 保护，否则作业会在所有触发条件下运行。防止 PR 意外触发生产部署。
+- **缺少 if 条件**：任务在所有触发器上运行，除非使用 `if: github.ref == 'refs/heads/main'` 进行保护。防止 PR 意外触发生产部署
 
-- **无回滚策略**：部署失败使系统处于损坏状态。实现蓝绿或金丝雀部署，并在健康检查失败时自动回滚。
+- **缺少回滚策略**：部署失败使系统处于损坏状态。实现蓝绿部署或金丝雀部署，在健康检查失败时自动回滚
 
-- **硬编码值**：工作流包含特定环境的 URL、存储桶名称或 API 端点。使用环境变量和 GitHub Secrets。
+- **硬编码值**：工作流包含环境特定的 URL、存储桶名称或 API 端点。使用环境变量和 GitHub Secrets
 
-- **无超时限制**：作业在网络问题或无限循环时无限期挂起。为所有作业添加 `timeout-minutes: 15`。
+- **缺少超时限制**：任务在网络问题或无限循环时无限期挂起。为所有任务添加 `timeout-minutes: 15`
 
 ## 相关技能
 
-- `setup-github-actions-ci` - R 包和基本项目的 GitHub Actions 初始配置
-- `commit-changes` - 与 CI/CD 触发器集成的正确 Git 工作流
-- `configure-git-repository` - 仓库设置和分支保护规则
-- `setup-container-registry` - CI/CD 流水线中的 Docker 镜像构建
-- `implement-gitops-workflow` - ArgoCD/Flux 与 CI/CD 集成
+- `setup-github-actions-ci` — R 包和基础项目的初始 GitHub Actions 配置
+- `commit-changes` — 与 CI/CD 触发器的正确 Git 工作流集成
+- `configure-git-repository` — 仓库设置和分支保护规则
+- `setup-container-registry` — CI/CD 流水线中的 Docker 镜像构建
+- `implement-gitops-workflow` — ArgoCD/Flux 与 CI/CD 的集成

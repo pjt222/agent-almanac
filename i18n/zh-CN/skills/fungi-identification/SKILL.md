@@ -1,14 +1,10 @@
 ---
 name: fungi-identification
 description: >
-  Field identification of fungi using morphological features, spore prints,
-  habitat analysis, and seasonal context with a safety-first approach. Covers
-  cap, gill, stem, and spore characteristics, look-alike differentiation,
-  toxicity risk assessment, and the critical rule of absolute certainty before
-  consumption. Use when encountering an unknown fungus, foraging for edible
-  mushrooms and needing to confirm species before consumption, assessing whether
-  fungi in a garden or property are harmful, or differentiating an edible
-  species from a dangerous look-alike.
+  使用形态特征、孢子印迹、栖息地分析和季节背景进行真菌的野外鉴定，采用安全第一
+  的方法。涵盖菌盖、菌褶、菌柄和孢子特征、相似种区分、毒性风险评估，以及食用前
+  必须绝对确定的关键规则。适用于遇到未知真菌时、采集食用蘑菇需要在食用前确认物种时、
+  评估花园或房产中的真菌是否有害时，或区分可食用物种与危险的相似种时。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -25,32 +21,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Fungi Identification
+# 真菌鉴定
 
-Identify fungi in the field using morphological features, spore prints, habitat, and season with an absolute safety-first approach.
+使用形态特征、孢子印迹、栖息地和季节，以绝对安全第一的方法在野外鉴定真菌。
 
 ## 适用场景
 
-- You encounter an unknown fungus and need to identify it
-- You are foraging for edible mushrooms and need to confirm species before consumption
-- You want to assess whether fungi in your garden or property are harmful
-- You are building field identification skills through structured observation practice
-- You need to differentiate an edible species from a dangerous look-alike
+- 遇到未知真菌，需要鉴定
+- 采集食用蘑菇，需要在食用前确认物种
+- 想要评估花园或房产中的真菌是否有害
+- 通过结构化的观察练习来建立野外鉴定技能
+- 需要区分可食用物种与危险的相似种
 
 ## 输入
 
-- **必需**: A fungus specimen or clear observation of one in situ
-- **必需**: Ability to observe fine morphological details (cap, gills, stem, base)
-- **可选**: Field guide or reference material for the region
-- **可选**: Paper and glass for spore prints
-- **可选**: Knife for cross-section examination
-- **可选**: Hand lens (10x) for fine detail
+- **必需**：真菌标本或原位清晰观察
+- **必需**：能够观察精细的形态细节（菌盖、菌褶、菌柄、基部）
+- **可选**：该地区的野外指南或参考资料
+- **可选**：用于孢子印迹的纸和玻璃
+- **可选**：用于横截面检查的刀
+- **可选**：手持放大镜（10倍）用于细节观察
 
 ## 步骤
 
-### 第 1 步：The Cardinal Rule
+### 第 1 步：基本规则
 
-Before any identification work, internalize the absolute rule of mycology.
+在进行任何鉴定工作之前，内化真菌学的绝对规则。
 
 ```
 CARDINAL RULE:
@@ -68,13 +64,13 @@ edible mushroom) is a missed meal.
 ALWAYS ERR TOWARD CAUTION.
 ```
 
-**预期结果：** The cardinal rule is internalized before proceeding with identification.
+**预期结果：** 在继续鉴定之前已内化基本规则。
 
-**失败处理：** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
+**失败处理：** 此步骤没有失败模式。如果规则未被内化，不要为食用目的进行野外鉴定。
 
-### 第 2 步：Document the Habitat
+### 第 2 步：记录栖息地
 
-Context narrows identification before touching the specimen.
+在触碰标本之前，通过环境信息缩小鉴定范围。
 
 ```
 Habitat Recording:
@@ -101,13 +97,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**预期结果：** A complete habitat record that provides context for species-level identification.
+**预期结果：** 完整的栖息地记录，为物种级别的鉴定提供背景。
 
-**失败处理：** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
+**失败处理：** 如果栖息地不明确（如混合种植的城市花园），记录可见信息。不完整的栖息地数据会降低鉴定可信度——将此纳入安全评估。
 
-### 第 3 步：Examine Morphological Features
+### 第 3 步：检查形态特征
 
-Systematic examination of the specimen itself.
+对标本本身进行系统性检查。
 
 ```
 Morphological Checklist:
@@ -152,13 +148,13 @@ SPORE PRINT:
   black, rust-orange
 ```
 
-**预期结果：** A complete morphological description covering all major features.
+**预期结果：** 涵盖所有主要特征的完整形态描述。
 
-**失败处理：** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
+**失败处理：** 如果某个特征无法观察到（如菌环不可见但可能已脱落），记录为"未观察到"而非"不存在"。这个区别对鉴定很重要。
 
-### 第 4 步：Identify Using Multiple Confirmations
+### 第 4 步：使用多重确认进行鉴定
 
-Cross-reference all data against reference material.
+将所有数据与参考资料交叉对照。
 
 ```
 Identification Protocol:
@@ -191,31 +187,31 @@ Confidence Levels:
 +----------+---------------------------+---------------------------+
 ```
 
-**预期结果：** A species-level identification with explicit confidence level and look-alike assessment.
+**预期结果：** 物种级别的鉴定，带有明确的信心等级和相似种评估。
 
-**失败处理：** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
+**失败处理：** 如果鉴定停留在属级别，这对于学习目的是可以接受的。对于食用，只有物种级别"确定"的鉴定才是可接受的。
 
 ## 验证清单
 
-- [ ] The cardinal rule was acknowledged before starting identification
-- [ ] Habitat was documented before examining the specimen
-- [ ] All morphological features were examined systematically
-- [ ] The base was excavated to check for a volva
-- [ ] A spore print was taken (if time allows)
-- [ ] Dangerous look-alikes were explicitly checked and eliminated
-- [ ] Confidence level was honestly assessed
-- [ ] Only "Certain" identifications were considered for consumption
+- [ ] 在开始鉴定前已确认基本规则
+- [ ] 在检查标本前已记录栖息地
+- [ ] 所有形态特征已系统地检查
+- [ ] 已挖掘基部检查是否有菌托
+- [ ] 已制作孢子印迹（如时间允许）
+- [ ] 已明确检查并排除危险的相似种
+- [ ] 已诚实评估信心等级
+- [ ] 只有"确定"的鉴定才被考虑用于食用
 
 ## 常见问题
 
-- **Relying on a single feature**: "It looks like a chanterelle" based on colour alone. True chanterelles have false gills (ridges), grow from soil near trees, and have a specific apricot smell. False chanterelles and Jack-o'-lanterns share the colour but differ in every other feature
-- **Skipping the base examination**: Failing to dig up the base misses the volva — the single most important feature for identifying deadly Amanita species (death cap, destroying angel)
-- **Trusting apps blindly**: AI-based mushroom identification apps have significant error rates for look-alike species. Use them as a starting point, never as confirmation
-- **Assuming "common = safe"**: Abundance does not indicate edibility. Deadly species can be locally abundant
-- **Tasting unknown species**: Some mycologists use taste as a diagnostic tool, but this requires expert-level knowledge of which species are safe to taste. For non-experts, do not taste unknown fungi
-- **Ignoring temporal toxins**: Some species (e.g., Amanita phalloides) have pleasant taste and delayed symptoms. By the time symptoms appear (24-48 hours), liver damage is severe
+- **依赖单一特征**："它看起来像鸡油菌"仅基于颜色。真正的鸡油菌具有假褶（脊状），从树木附近的土壤中生长，并有特殊的杏子气味。假鸡油菌和南瓜灯蘑菇共享颜色但其他所有特征都不同
+- **跳过基部检查**：未挖掘基部会错过菌托——这是鉴定致命鹅膏属物种（毒鹅膏、毁灭天使）最重要的特征
+- **盲目信任应用程序**：基于 AI 的蘑菇鉴定应用对相似种的错误率很高。将它们用作起点，绝不用作确认
+- **假设"常见=安全"**：丰度不等于可食性。致命物种可能在局部地区很丰富
+- **品尝未知物种**：一些真菌学家使用味道作为诊断工具，但这需要专家级别的知识来判断哪些物种可以安全品尝。对于非专家，不要品尝未知真菌
+- **忽视延迟毒素**：某些物种（如毒鹅膏 *Amanita phalloides*）味道宜人且症状延迟。到症状出现时（24-48小时），肝损伤已经很严重
 
 ## 相关技能
 
-- `mushroom-cultivation` — growing known species eliminates identification risk entirely
-- `forage-plants` — complementary field identification skill; shares the multi-feature confirmation methodology
+- `mushroom-cultivation` — 栽培已知物种完全消除了鉴定风险
+- `forage-plants` — 互补的野外鉴定技能；共享多特征确认方法论

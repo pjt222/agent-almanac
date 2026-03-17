@@ -1,12 +1,10 @@
 ---
 name: escalate-issues
 description: >
-  Triage maintenance problems by severity, document findings with context,
-  route to appropriate specialist agent or human, and create actionable issue
-  reports. Use when a maintenance task encounters problems beyond automated
-  cleanup: code that is unsafe to delete, configuration changes requiring domain
-  expertise, breaking changes detected during cleanup, complex refactoring needed,
-  or security-sensitive findings such as hardcoded secrets or vulnerabilities.
+  按严重程度对维护问题进行分类，带上下文记录发现，路由到适当的专家代理或人工，
+  并创建可操作的问题报告。适用于维护任务遇到超出自动清理范围的问题时：不安全
+  删除的代码、需要领域专业知识的配置变更、清理过程中检测到的破坏性变更、需要
+  复杂重构，或安全敏感的发现（如硬编码密钥或漏洞）。
 license: MIT
 allowed-tools: Read Write Edit Grep Glob
 metadata:
@@ -23,61 +21,61 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# escalate-issues
+# 升级问题
 
 ## 适用场景
 
-Use this skill when a maintenance task encounters problems beyond automated cleanup:
+当维护任务遇到超出自动清理范围的问题时使用此技能：
 
-- Uncertain whether code is safe to delete
-- Configuration changes require domain expertise (security, performance, architecture)
-- Breaking changes detected during cleanup
-- Complex refactoring needed (not just cleanup)
-- Security-sensitive findings (hardcoded secrets, vulnerabilities)
+- 不确定代码是否可以安全删除
+- 配置变更需要领域专业知识（安全、性能、架构）
+- 清理过程中检测到破坏性变更
+- 需要复杂重构（不仅仅是清理）
+- 安全敏感的发现（硬编码密钥、漏洞）
 
-**Do NOT use** for simple issues with clear fixes. Escalate only when automated cleanup is risky or insufficient.
+**不要**用于有明确修复方案的简单问题。仅在自动清理有风险或不充分时才升级。
 
 ## 输入
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `issue_description` | string | Yes | Clear description of the problem |
-| `severity` | enum | Yes | `critical`, `high`, `medium`, `low` |
-| `context_files` | array | No | Paths to relevant files |
-| `specialist` | string | No | Target agent (auto-route if not specified) |
-| `blocking` | boolean | No | Whether issue blocks further cleanup (default: false) |
+| 参数 | 类型 | 必需 | 描述 |
+|------|------|------|------|
+| `issue_description` | string | 是 | 问题的清晰描述 |
+| `severity` | enum | 是 | `critical`、`high`、`medium`、`low` |
+| `context_files` | array | 否 | 相关文件路径 |
+| `specialist` | string | 否 | 目标代理（未指定则自动路由） |
+| `blocking` | boolean | 否 | 问题是否阻塞进一步清理（默认：false） |
 
 ## 步骤
 
-### 第 1 步：Assess Severity
+### 第 1 步：评估严重程度
 
-Classify the issue using standard severity levels.
+使用标准严重程度级别分类问题。
 
-**CRITICAL** — Blocks production functionality:
-- Broken imports in actively used code
-- Security vulnerabilities (exposed secrets, SQL injection)
-- Data loss risk from cleanup operation
-- Production service outages
+**关键（CRITICAL）** — 阻塞生产功能：
+- 在活跃使用的代码中的损坏导入
+- 安全漏洞（暴露的密钥、SQL 注入）
+- 清理操作导致的数据丢失风险
+- 生产服务中断
 
-**HIGH** — Impacts maintainability or developer productivity:
-- Significant dead code bloat (>1000 lines)
-- Broken CI/CD pipelines
-- Major configuration drift between environments
-- Unreferenced modules that might be dynamically loaded
+**高（HIGH）** — 影响可维护性或开发人员生产力：
+- 大量死代码膨胀（>1000 行）
+- 损坏的 CI/CD 流水线
+- 环境之间的重大配置偏移
+- 可能被动态加载的未引用模块
 
-**MEDIUM** — Minor hygiene issues:
-- Unused helper functions (<100 lines)
-- Stale documentation requiring updates
-- Deprecated config files (no longer used but present)
-- Lint warnings in non-critical paths
+**中（MEDIUM）** — 轻微的卫生问题：
+- 未使用的辅助函数（<100 行）
+- 需要更新的过时文档
+- 已弃用的配置文件（不再使用但仍存在）
+- 非关键路径中的 lint 警告
 
-**LOW** — Style inconsistencies:
-- Mixed indentation (works but inconsistent)
-- Trailing whitespace
-- Inconsistent naming (camelCase vs snake_case)
-- Minor formatting differences
+**低（LOW）** — 风格不一致：
+- 混合缩进（可用但不一致）
+- 尾部空白
+- 命名不一致（camelCase vs snake_case）
+- 轻微的格式差异
 
-**Severity Decision Tree**:
+**严重程度决策树**：
 ```
 Does it break production? → CRITICAL
 Does it block development? → HIGH
@@ -85,15 +83,15 @@ Does it impact code quality? → MEDIUM
 Is it purely cosmetic? → LOW
 ```
 
-**预期结果：** Issue classified with clear severity label
+**预期结果：** 问题已分类并带有明确的严重程度标签
 
-**失败处理：** If uncertain, default to HIGH and escalate to human for re-triage
+**失败处理：** 如果不确定，默认为 HIGH 并升级给人工重新分类
 
-### 第 2 步：Document Finding
+### 第 2 步：记录发现
 
-Capture all relevant context for the specialist to review.
+为专家审查捕获所有相关上下文。
 
-**Issue Report Template**:
+**问题报告模板**：
 ```markdown
 # Issue: [Brief Title]
 
@@ -140,31 +138,31 @@ Clear description of the problem in 2-3 sentences.
 - [Link to similar past issues]
 ```
 
-**预期结果：** Issue documented with full context in `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md`
+**预期结果：** 问题已在 `ESCALATION_REPORTS/issue_YYYYMMDD_HHMM.md` 中完整记录上下文
 
-**失败处理：** (N/A — always document, even if incomplete)
+**失败处理：**（不适用——始终记录，即使不完整）
 
-### 第 3 步：Determine Routing
+### 第 3 步：确定路由
 
-Match issue type to appropriate specialist agent or human reviewer.
+将问题类型匹配到适当的专家代理或人工审查者。
 
-**Routing Table**:
+**路由表**：
 
-| Issue Type | Specialist | Reason |
-|------------|-----------|---------|
-| Security vulnerability | security-analyst | Security expertise required |
-| GxP compliance concern | gxp-validator | Regulatory knowledge needed |
-| Architecture decision | senior-software-developer | Design pattern expertise |
-| Config management | devops-engineer | Infrastructure knowledge |
-| Dependency conflicts | devops-engineer | Package management expertise |
-| Performance bottleneck | senior-data-scientist | Optimization knowledge |
-| Code style dispute | code-reviewer | Style guide authority |
-| Dead code uncertainty | r-developer (or lang-specific) | Language-specific knowledge |
-| Broken test unclear | code-reviewer | Test design expertise |
-| Documentation accuracy | senior-researcher | Domain knowledge required |
-| License compatibility | auditor | Legal/compliance expertise |
+| 问题类型 | 专家 | 原因 |
+|----------|------|------|
+| 安全漏洞 | security-analyst | 需要安全专业知识 |
+| GxP 合规问题 | gxp-validator | 需要法规知识 |
+| 架构决策 | senior-software-developer | 设计模式专业知识 |
+| 配置管理 | devops-engineer | 基础设施知识 |
+| 依赖冲突 | devops-engineer | 包管理专业知识 |
+| 性能瓶颈 | senior-data-scientist | 优化知识 |
+| 代码风格争议 | code-reviewer | 风格指南权威 |
+| 死代码不确定性 | r-developer（或特定语言） | 语言特定知识 |
+| 不明确的损坏测试 | code-reviewer | 测试设计专业知识 |
+| 文档准确性 | senior-researcher | 需要领域知识 |
+| 许可证兼容性 | auditor | 法律/合规专业知识 |
 
-**Automatic Routing Logic**:
+**自动路由逻辑**：
 ```python
 def route_issue(severity, issue_type):
     if severity == "CRITICAL":
@@ -187,15 +185,15 @@ def route_issue(severity, issue_type):
     return "code-reviewer"
 ```
 
-**预期结果：** Issue routed to appropriate specialist with justification
+**预期结果：** 问题已路由到适当的专家并附有理由
 
-**失败处理：** If no clear specialist, escalate to human for manual routing
+**失败处理：** 如果没有明确的专家，升级给人工手动路由
 
-### 第 4 步：Create Actionable Issue Report
+### 第 4 步：创建可操作的问题报告
 
-Generate a formatted report suitable for the target audience (agent or human).
+生成适合目标受众（代理或人工）的格式化报告。
 
-**For Specialist Agents** (structured format for MCP tools):
+**面向专家代理**（MCP 工具的结构化格式）：
 ```yaml
 ---
 type: escalation
@@ -216,7 +214,7 @@ If valid, recommend secure credential management strategy.
 **Context**: Discovered during config cleanup sweep.
 ```
 
-**For Human Reviewers** (detailed markdown):
+**面向人工审查者**（详细 markdown）：
 ```markdown
 # Escalation Report: Uncertain Dead Code Removal
 
@@ -254,13 +252,13 @@ Request human review before deletion. If confirmed dead:
 Awaiting human confirmation before proceeding with cleanup.
 ```
 
-**预期结果：** Report formatted appropriately for target audience
+**预期结果：** 报告已为目标受众适当格式化
 
-**失败处理：** (N/A — generate report in generic markdown if uncertain)
+**失败处理：**（不适用——如不确定则生成通用 markdown 报告）
 
-### 第 5 步：Track Escalation Status
+### 第 5 步：跟踪升级状态
 
-Maintain a log of all escalations to prevent duplicate reports.
+维护所有升级的日志以防止重复报告。
 
 ```markdown
 # Escalation Log
@@ -272,22 +270,22 @@ Maintain a log of all escalations to prevent duplicate reports.
 | ESC-003 | 2026-02-16 | MEDIUM | Config drift | devops-engineer | In Progress |
 ```
 
-**预期结果：** `ESCALATION_LOG.md` updated with new entry
+**预期结果：** `ESCALATION_LOG.md` 已更新新条目
 
-**失败处理：** If log doesn't exist, create it
+**失败处理：** 如果日志不存在，创建它
 
-### 第 6 步：Notify and Block (If Required)
+### 第 6 步：通知和阻塞（如需要）
 
-If issue is blocking further maintenance, notify and pause cleanup.
+如果问题阻塞进一步的维护，通知并暂停清理。
 
-**Blocking Logic**:
-- CRITICAL issues always block
-- HIGH issues block if in critical path
-- MEDIUM/LOW issues do not block
+**阻塞逻辑**：
+- 关键问题始终阻塞
+- 高级问题在关键路径中阻塞
+- 中/低级问题不阻塞
 
-**Notification**:
+**通知**：
 ```markdown
-⚠️ MAINTENANCE BLOCKED ⚠️
+MAINTENANCE BLOCKED
 
 Issue ESC-002 (HIGH severity) requires human review before proceeding.
 
@@ -299,40 +297,40 @@ Issue ESC-002 (HIGH severity) requires human review before proceeding.
 Once resolved, re-run maintenance from Step 5.
 ```
 
-**预期结果：** Maintenance paused; clear notification generated
+**预期结果：** 维护已暂停；已生成清晰的通知
 
-**失败处理：** If notification mechanism unavailable, document in report
+**失败处理：** 如果通知机制不可用，在报告中记录
 
-## Validation Checklist
+## 验证清单
 
-After escalation:
+升级后：
 
-- [ ] Issue severity correctly assessed
-- [ ] Full context documented (files, evidence, attempts)
-- [ ] Appropriate specialist identified
-- [ ] Escalation report created in ESCALATION_REPORTS/
-- [ ] ESCALATION_LOG.md updated
-- [ ] Blocking status communicated if applicable
-- [ ] No sensitive information exposed in report
+- [ ] 问题严重程度正确评估
+- [ ] 完整上下文已记录（文件、证据、尝试）
+- [ ] 已确定适当的专家
+- [ ] 升级报告已在 ESCALATION_REPORTS/ 中创建
+- [ ] ESCALATION_LOG.md 已更新
+- [ ] 阻塞状态已沟通（如适用）
+- [ ] 报告中未暴露敏感信息
 
 ## 常见问题
 
-1. **Over-Escalating**: Escalating simple issues wastes specialist time. Only escalate when truly uncertain or risky.
+1. **过度升级**：升级简单问题浪费专家时间。仅在真正不确定或有风险时才升级
 
-2. **Under-Escalating**: Deleting code "just to see if tests pass" without escalation can cause production outages.
+2. **升级不足**：在没有升级的情况下删除代码"看看测试是否通过"可能导致生产中断
 
-3. **Insufficient Context**: Escalating without evidence forces specialists to re-investigate. Include file paths, line numbers, error messages.
+3. **上下文不足**：没有证据的升级迫使专家重新调查。包含文件路径、行号、错误消息
 
-4. **Vague Descriptions**: "Something's wrong with config" is not actionable. Be specific: "Config drift: dev uses API v1, prod uses v2".
+4. **描述模糊**："配置有问题"不可操作。要具体："配置偏移：开发环境使用 API v1，生产使用 v2"
 
-5. **Not Tracking Status**: Re-escalating already-reviewed issues. Check ESCALATION_LOG.md first.
+5. **不跟踪状态**：重复升级已审查的问题。先检查 ESCALATION_LOG.md
 
-6. **Exposing Secrets**: Including actual API keys or passwords in escalation reports. Redact sensitive values.
+6. **暴露密钥**：在升级报告中包含实际的 API 密钥或密码。脱敏敏感值
 
 ## 相关技能
 
-- [clean-codebase](../clean-codebase/SKILL.md) — Often triggers escalations when uncertain
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — May discover complex organizational issues
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Escalate when unclear if reference should be fixed or removed
-- [compliance/security-scan](../../compliance/security-scan/SKILL.md) — Escalate security findings
-- [general/issue-triage](../../general/issue-triage/SKILL.md) — General issue classification patterns
+- [clean-codebase](../clean-codebase/SKILL.md) — 不确定时经常触发升级
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — 可能发现复杂的组织问题
+- [repair-broken-references](../repair-broken-references/SKILL.md) — 不清楚引用应修复还是删除时升级
+- [compliance/security-scan](../../compliance/security-scan/SKILL.md) — 升级安全发现
+- [general/issue-triage](../../general/issue-triage/SKILL.md) — 通用问题分类模式

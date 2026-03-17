@@ -1,13 +1,10 @@
 ---
 name: check-relocation-documents
 description: >
-  Verify document completeness for each bureaucratic step of an EU/DACH
-  relocation, flagging missing items and translation requirements. Use after
-  creating a relocation plan and before beginning bureaucratic procedures, when
-  preparing for a specific appointment (Buergeramt, Finanzamt), when unsure
-  which documents need certified translation or apostille, after receiving a
-  rejection or request for additional documents, or as a periodic check during
-  the relocation process to ensure nothing has been overlooked.
+  验证 EU/DACH 搬迁每个行政步骤的文件完整性，标记缺失项和翻译要求。适用于创建
+  搬迁计划之后和开始行政程序之前、准备特定预约（市民办公室、税务局）时、不确定
+  哪些文件需要公证翻译或海牙认证时、收到拒绝或补件要求后，或在搬迁过程中定期检查
+  以确保没有遗漏。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,223 +21,223 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Check Relocation Documents
+# 检查搬迁文件
 
-Verify that all required documents are present, valid, and properly prepared for each bureaucratic step of an EU/DACH relocation, generating an actionable list of missing items and translation needs.
+验证 EU/DACH 搬迁每个行政步骤所需的所有文件是否齐全、有效且准备充分，生成缺失项和翻译需求的可操作列表。
 
 ## 适用场景
 
-- After creating a relocation plan and before beginning bureaucratic procedures
-- When preparing for a specific appointment (Buergeramt, Finanzamt, insurance office)
-- When unsure which documents need certified translation or apostille
-- After receiving a rejection or request for additional documents from an authority
-- When a household member has a different nationality requiring separate document tracks
-- As a periodic check during the relocation process to ensure nothing has been overlooked
+- 创建搬迁计划之后、开始行政程序之前
+- 准备特定预约（市民办公室 Buergeramt、税务局 Finanzamt、保险办公室）时
+- 不确定哪些文件需要公证翻译或海牙认证时
+- 收到官方机构的拒绝或补件要求后
+- 家庭成员持有不同国籍，需要单独的文件处理流程时
+- 在搬迁过程中定期检查以确保没有遗漏
 
 ## 输入
 
-### Required
+### 必需
 
-- **Relocation plan**: Output from the plan-eu-relocation skill or equivalent, listing all bureaucratic steps
-- **Destination country**: Germany, Austria, Switzerland, or other EU country
-- **Nationality/nationalities**: For all household members
-- **Document inventory**: List of documents currently in possession (originals and copies)
+- **搬迁计划**：plan-eu-relocation 技能的输出或等效文件，列出所有行政步骤
+- **目的地国家**：德国、奥地利、瑞士或其他 EU 国家
+- **国籍**：所有家庭成员的国籍
+- **文件清单**：当前持有的文件列表（原件和副本）
 
-### Optional
+### 可选
 
-- **Origin country**: For determining which documents need apostille or Hague Convention legalization
-- **Employment contract**: To determine employer-provided documents (e.g., Arbeitgeberbescheinigung)
-- **Language of existing documents**: To identify translation needs
-- **Previous relocation experience**: Prior EU registrations that may simplify requirements
-- **Special circumstances**: Recognized refugees, EU Blue Card holders, posted workers (different document requirements)
+- **来源国**：用于确定哪些文件需要海牙认证或公证
+- **劳动合同**：用于确定雇主提供的文件（如雇主证明 Arbeitgeberbescheinigung）
+- **现有文件的语言**：用于确定翻译需求
+- **以往搬迁经验**：之前的 EU 注册可能简化要求
+- **特殊情况**：获认可的难民、欧盟蓝卡持有者、派遣工人（不同的文件要求）
 
 ## 步骤
 
-### 第 1 步：List All Bureaucratic Steps
+### 第 1 步：列出所有行政步骤
 
-Extract every registration, application, and notification step from the relocation plan.
+从搬迁计划中提取每个需要提交文件的注册、申请和通知步骤。
 
-1. Parse the relocation plan for all action items requiring document submission
-2. Categorize steps by authority type:
-   - Municipal registration offices (Buergeramt, Meldeamt, Einwohnerkontrolle)
-   - Tax authorities (Finanzamt)
-   - Health insurance providers (Krankenkasse, OeGK, Swiss insurer)
-   - Social security offices (Rentenversicherung, Sozialversicherung, AHV)
-   - Immigration/foreigners office (Auslaenderbehorde) if applicable
-   - Banks and financial institutions
-   - Schools and childcare facilities
-   - Vehicle registration (Kfz-Zulassungsstelle)
-   - Other (pet import, professional license recognition)
-3. Order steps according to the dependency chain from the relocation plan
-4. Note which steps share the same documents (to avoid redundant preparation)
+1. 解析搬迁计划中所有需要提交文件的行动项
+2. 按机构类型分类：
+   - 市政注册办公室（Buergeramt、Meldeamt、Einwohnerkontrolle）
+   - 税务机构（Finanzamt）
+   - 健康保险提供者（Krankenkasse、OeGK、瑞士保险公司）
+   - 社会保障办公室（Rentenversicherung、Sozialversicherung、AHV）
+   - 移民/外国人办公室（Auslaenderbehorde），如适用
+   - 银行和金融机构
+   - 学校和托儿设施
+   - 车辆注册（Kfz-Zulassungsstelle）
+   - 其他（宠物进口、专业执照认可）
+3. 按搬迁计划的依赖链排序
+4. 记录哪些步骤共享相同文件（避免重复准备）
 
-**预期结果：** A numbered list of all bureaucratic steps, categorized and ordered, with notes on shared document requirements.
+**预期结果：** 所有行政步骤的编号列表，按类别分类和排序，附带共享文件要求的注释。
 
-**失败处理：** If the relocation plan is incomplete or unavailable, build the step list from the destination country's official relocation checklist (e.g., Germany: make-it-in-germany.com, Austria: migration.gv.at, Switzerland: ch.ch/en/moving-switzerland).
+**失败处理：** 如果搬迁计划不完整或不可用，从目的地国家的官方搬迁清单构建步骤列表（如德国：make-it-in-germany.com，奥地利：migration.gv.at，瑞士：ch.ch/en/moving-switzerland）。
 
-### 第 2 步：Map Required Documents per Step
+### 第 2 步：映射每步所需文件
 
-For each bureaucratic step, identify every document the authority requires.
+对每个行政步骤，确定该机构要求的每份文件。
 
-1. For municipal registration (Anmeldung/Meldezettel):
-   - Valid passport or national ID card (all household members)
-   - Wohnungsgeberbestaetigung / rental contract / property deed
-   - Marriage certificate (if registering as a couple)
-   - Birth certificates (for children)
-   - Previous registration confirmation (if moving within the country)
-2. For tax registration:
-   - Residence registration confirmation (Meldebestaetigung/Meldezettel)
-   - Employment contract or business registration
-   - Tax ID from origin country (for cross-border coordination)
-   - Marriage certificate (for tax class assignment in Germany)
-3. For health insurance enrollment:
-   - Employment contract or proof of self-employment
-   - Previous insurance confirmation or EHIC (European Health Insurance Card)
-   - S1 form (for posted workers or cross-border situations)
-   - Residence registration confirmation
-4. For social security coordination:
-   - A1 portable document (for posted workers)
-   - E-forms or S-forms for benefit transfers
-   - Employment history documentation
-   - Social security number from origin country
-5. For bank account opening:
-   - Valid passport or national ID
-   - Residence registration confirmation
-   - Proof of income (employment contract or recent payslips)
-   - Tax ID or Steueridentifikationsnummer (Germany)
-6. For immigration/residence permits (non-EU nationals):
-   - Valid passport with at least 6 months remaining validity
-   - Biometric photos (specific format per country)
-   - Employment contract or job offer letter
-   - Proof of financial means
-   - Health insurance confirmation
-   - University degree with recognition (for EU Blue Card)
-   - Criminal background check (may require apostille)
-7. For vehicle re-registration:
-   - Vehicle registration document (Fahrzeugbrief/Zulassungsbescheinigung Teil II)
-   - Proof of insurance (eVB number in Germany)
-   - TUeV/Pickerl/MFK inspection certificate
-   - Residence registration confirmation
-8. For school/childcare enrollment:
-   - Birth certificates
-   - Vaccination records (Impfpass)
-   - Previous school reports with translations
-   - Residence registration confirmation
+1. 市政注册（Anmeldung/Meldezettel）：
+   - 有效护照或国民身份证（所有家庭成员）
+   - 住房提供者确认 Wohnungsgeberbestaetigung / 租赁合同 / 产权证明
+   - 结婚证（如以夫妻身份注册）
+   - 出生证明（用于儿童）
+   - 之前的注册确认（如在国内搬迁）
+2. 税务注册：
+   - 居住注册确认（Meldebestaetigung/Meldezettel）
+   - 劳动合同或营业登记
+   - 来源国税号（用于跨境协调）
+   - 结婚证（用于德国的税级分配）
+3. 健康保险登记：
+   - 劳动合同或自雇证明
+   - 之前的保险确认或 EHIC（欧洲健康保险卡）
+   - S1 表格（用于派遣工人或跨境情况）
+   - 居住注册确认
+4. 社会保障协调：
+   - A1 便携文件（用于派遣工人）
+   - 福利转移的 E 表格或 S 表格
+   - 就业历史文件
+   - 来源国的社保号码
+5. 银行开户：
+   - 有效护照或国民身份证
+   - 居住注册确认
+   - 收入证明（劳动合同或近期工资单）
+   - 税号或 Steueridentifikationsnummer（德国）
+6. 移民/居留许可（非 EU 公民）：
+   - 有效护照，剩余有效期至少 6 个月
+   - 生物识别照片（每个国家有特定格式）
+   - 劳动合同或工作录取通知
+   - 经济能力证明
+   - 健康保险确认
+   - 大学学位及认可证明（用于欧盟蓝卡）
+   - 无犯罪记录证明（可能需要海牙认证）
+7. 车辆重新注册：
+   - 车辆注册文件（Fahrzeugbrief/Zulassungsbescheinigung Teil II）
+   - 保险证明（德国的 eVB 号码）
+   - TUeV/Pickerl/MFK 检验证书
+   - 居住注册确认
+8. 学校/托儿登记：
+   - 出生证明
+   - 疫苗接种记录（Impfpass）
+   - 附带翻译的之前学校成绩报告
+   - 居住注册确认
 
-**预期结果：** A matrix mapping each bureaucratic step to its required documents, with document specifications (original required, copy acceptable, certified translation needed).
+**预期结果：** 将每个行政步骤映射到其所需文件的矩阵，附带文件规格（需要原件、副本可接受、需要公证翻译）。
 
-**失败处理：** If requirements for a specific step are unclear, check the authority's website directly or call their service line. Requirements can change; do not rely solely on third-party guides older than 12 months.
+**失败处理：** 如果特定步骤的要求不明确，直接查看该机构的网站或致电其服务热线。要求可能会变更；不要仅依赖超过 12 个月的第三方指南。
 
-### 第 3 步：Check Current Document Status
+### 第 3 步：检查当前文件状态
 
-Compare the required documents against the current inventory to identify gaps.
+将所需文件与当前清单进行比较以确定差距。
 
-1. For each required document, check:
-   - **Have (original)**: Original document is in possession and accessible
-   - **Have (copy only)**: Only a copy exists; original may need to be ordered
-   - **Expired**: Document exists but validity period has passed
-   - **Missing**: Document does not exist and must be obtained
-   - **Not applicable**: Document is not needed for this specific case
-2. For documents that are "Have (original)", verify:
-   - The document is not damaged or illegible
-   - Names match across all documents (watch for transliteration differences, maiden names, middle names)
-   - The document will still be valid at the time it will be used (passports, ID cards, insurance cards)
-3. For expired documents, determine:
-   - Renewal processing time at issuing authority
-   - Whether an expired document is accepted temporarily (some are, most are not)
-   - Cost of renewal
-4. For missing documents, determine:
-   - Issuing authority and their processing time
-   - Required supporting documents to obtain the missing document (recursive check)
-   - Cost and payment method
-   - Whether it can be ordered remotely or requires in-person appearance
-5. Flag any documents where names do not match (e.g., passport has maiden name, marriage certificate has married name) -- these will likely require explanation or additional proof of name change
+1. 对每份所需文件，检查：
+   - **持有（原件）**：原件文件在手且可获取
+   - **持有（仅副本）**：仅有副本；原件可能需要申请
+   - **已过期**：文件存在但有效期已过
+   - **缺失**：文件不存在，必须获取
+   - **不适用**：文件在此特定情况下不需要
+2. 对"持有（原件）"的文件，验证：
+   - 文件未损坏或不可辨认
+   - 所有文件间的姓名一致（注意非拉丁文字的音译差异、婚前姓 vs 婚后姓、中间名）
+   - 文件在使用时仍然有效（护照、身份证、保险卡）
+3. 对已过期文件，确定：
+   - 签发机构的更新处理时间
+   - 是否暂时接受过期文件（少数可以，多数不行）
+   - 更新费用
+4. 对缺失文件，确定：
+   - 签发机构及其处理时间
+   - 获取缺失文件所需的支持文件（递归检查）
+   - 费用和付款方式
+   - 是否可以远程申请或需要亲自到场
+5. 标记姓名不一致的文件（如护照上有婚前姓，结婚证上有婚后姓）——这些可能需要解释或额外的姓名变更证明
 
-**预期结果：** A status table for every required document: status (have/copy-only/expired/missing/N-A), validity date, and notes on any issues.
+**预期结果：** 每份所需文件的状态表：状态（持有/仅副本/已过期/缺失/不适用）、有效日期和任何问题的注释。
 
-**失败处理：** If document status cannot be confirmed (e.g., documents are in storage or with another party), mark as "unconfirmed" and treat as potentially missing for planning purposes.
+**失败处理：** 如果无法确认文件状态（如文件在仓库中或他人处），标记为"未确认"并在规划中视为可能缺失。
 
-### 第 4 步：Identify Translation and Apostille Requirements
+### 第 4 步：确定翻译和海牙认证要求
 
-Determine which documents need certified translation, apostille, or other legalization.
+确定哪些文件需要公证翻译、海牙认证或其他合法化。
 
-1. Check destination country language requirements:
-   - Germany: Documents must generally be in German or accompanied by certified translation
-   - Austria: Same as Germany; some offices accept English for EU documents
-   - Switzerland: Depends on canton (German, French, Italian, or Romansh area)
-2. Identify which documents are exempt from translation:
-   - EU multilingual standard forms (Regulation 2016/1191) for birth, marriage, death, and other civil status documents between EU member states
-   - Passports and national ID cards (universally accepted without translation)
-   - EHIC (European Health Insurance Card)
-3. For documents requiring translation:
-   - Must be done by a sworn/certified translator (beeidigter Uebersetzer)
-   - The translator must be certified in the destination country (not the origin country)
-   - Typical turnaround: 3-10 business days
-   - Cost: 30-80 EUR per page depending on language pair and complexity
-4. Determine apostille or legalization requirements:
-   - Documents from Hague Convention countries: apostille from issuing country's competent authority
-   - Documents from non-Hague countries: full legalization chain (local notary, foreign ministry, embassy)
-   - EU-internal documents: often exempt from apostille under EU regulations, but verify per document type
-   - Switzerland is a Hague Convention member but not an EU member; rules differ
-5. Check if the destination country accepts digital or electronic apostilles
-6. Note that some documents require both apostille AND certified translation (the apostille itself may also need translation)
+1. 检查目的地国家的语言要求：
+   - 德国：文件通常必须为德语或附带公证翻译
+   - 奥地利：与德国相同；某些办公室接受 EU 文件的英语
+   - 瑞士：取决于州（德语区、法语区、意大利语区或罗曼什语区）
+2. 确定哪些文件免于翻译：
+   - EU 多语言标准表格（第 2016/1191 号条例），用于 EU 成员国之间的出生、结婚、死亡等民事状态文件
+   - 护照和国民身份证（普遍接受，无需翻译）
+   - EHIC（欧洲健康保险卡）
+3. 对需要翻译的文件：
+   - 必须由宣誓/认证翻译人员（beeidigter Uebersetzer）完成
+   - 翻译人员必须在目的地国家获得认证（而非来源国）
+   - 典型交付时间：3-10 个工作日
+   - 费用：每页 30-80 欧元，取决于语言对和复杂度
+4. 确定海牙认证或合法化要求：
+   - 来自海牙公约国家的文件：由签发国的主管机构提供海牙认证
+   - 来自非海牙国家的文件：完整合法化链（当地公证人、外交部、大使馆）
+   - EU 内部文件：通常根据 EU 法规免于海牙认证，但需按文件类型验证
+   - 瑞士是海牙公约成员但非 EU 成员；规则有所不同
+5. 检查目的地国家是否接受数字或电子海牙认证
+6. 注意某些文件需要海牙认证和公证翻译两者（海牙认证本身可能也需要翻译）
 
-**预期结果：** A translation/legalization matrix showing for each document: translation needed (yes/no), apostille needed (yes/no), estimated cost, and estimated processing time.
+**预期结果：** 翻译/合法化矩阵，显示每份文件：是否需要翻译（是/否）、是否需要海牙认证（是/否）、估计费用和估计处理时间。
 
-**失败处理：** If uncertain whether a specific document needs apostille, contact the destination authority directly. Over-preparing (getting an unnecessary apostille) is better than under-preparing (being turned away at the appointment).
+**失败处理：** 如果不确定特定文件是否需要海牙认证，直接联系目的地机构。过度准备（获得不必要的海牙认证）比准备不足（在预约时被拒绝）要好。
 
-### 第 5 步：Generate Action List
+### 第 5 步：生成行动列表
 
-Compile all findings into a prioritized, deadline-aware action list.
+将所有发现汇编为优先级排序、截止日期明确的行动列表。
 
-1. Merge all gaps (missing, expired, translation needed, apostille needed) into a single action list
-2. For each action item, include:
-   - Document name
-   - Action required (obtain, renew, translate, apostille, replace)
-   - Issuing authority or service provider
-   - Estimated processing time
-   - Estimated cost
-   - Deadline (derived from when the document is first needed in the relocation timeline)
-   - Priority (critical / high / medium / low)
-3. Assign priority based on:
-   - **Critical**: Blocks the first bureaucratic step (e.g., passport for Anmeldung) or has a non-negotiable deadline
-   - **High**: Needed within the first 2 weeks after arrival; long processing time
-   - **Medium**: Needed within the first month; reasonable processing time
-   - **Low**: Needed eventually; no immediate deadline pressure
-4. Order the list by:
-   - First: Critical items sorted by longest processing time (start these first)
-   - Then: High items sorted by deadline
-   - Then: Medium and low items
-5. Calculate total estimated cost for all document preparation
-6. Add a "document folder" checklist for the day of each appointment, listing exactly which originals, copies, and translations to bring
+1. 将所有差距（缺失、过期、需要翻译、需要海牙认证）合并为单一行动列表
+2. 对每个行动项，包括：
+   - 文件名称
+   - 所需行动（获取、更新、翻译、海牙认证、替换）
+   - 签发机构或服务提供者
+   - 估计处理时间
+   - 估计费用
+   - 截止日期（根据文件在搬迁时间线中首次需要的时间推导）
+   - 优先级（关键/高/中/低）
+3. 根据以下标准分配优先级：
+   - **关键**：阻塞第一个行政步骤（如用于 Anmeldung 的护照）或有不可延期的截止日期
+   - **高**：抵达后前 2 周内需要；处理时间长
+   - **中**：第一个月内需要；处理时间合理
+   - **低**：最终需要；没有即时截止日期压力
+4. 排序方式：
+   - 首先：关键项按最长处理时间排序（最先开始这些）
+   - 然后：高优先级项按截止日期排序
+   - 然后：中等和低优先级项
+5. 计算所有文件准备的总估计费用
+6. 为每次预约添加"文件夹"清单，精确列出需要携带的原件、副本和翻译
 
-**预期结果：** A prioritized action list with deadlines, costs, and processing times, plus per-appointment packing lists for documents.
+**预期结果：** 具有截止日期、费用和处理时间的优先级行动列表，以及每次预约的文件打包清单。
 
-**失败处理：** If processing times are uncertain (common for documents from countries with slower bureaucracies), use worst-case estimates and start the process as early as possible. Flag items where expedited processing is available at additional cost.
+**失败处理：** 如果处理时间不确定（来自行政效率较低国家的文件常见），使用最坏情况估计并尽早开始流程。标记可以加急处理但需额外费用的项目。
 
 ## 验证清单
 
-- Every bureaucratic step from the relocation plan has at least one document mapped to it
-- No document is listed as "status unknown" -- all must be confirmed as have/missing/expired/N-A
-- Translation requirements reference the destination country's official language requirements
-- Apostille requirements are verified against Hague Convention membership of the issuing country
-- Deadlines in the action list align with the relocation timeline from plan-eu-relocation
-- Priority assignments are consistent (no "low" priority item that blocks a "critical" step)
-- The total cost estimate is calculated and presented
-- Per-appointment document checklists are generated for at least the first three bureaucratic steps
+- 搬迁计划中的每个行政步骤都至少有一份文件映射到它
+- 没有文件状态为"未知"——所有文件必须确认为持有/缺失/过期/不适用
+- 翻译要求参考目的地国家的官方语言要求
+- 海牙认证要求根据签发国的海牙公约成员身份进行验证
+- 行动列表中的截止日期与 plan-eu-relocation 的搬迁时间线一致
+- 优先级分配一致（没有"低"优先级项阻塞"关键"步骤）
+- 总费用估计已计算并呈现
+- 至少为前三个行政步骤生成了每次预约的文件清单
 
 ## 常见问题
 
-- **Assuming EU documents need no preparation**: While EU regulations simplify cross-border document acceptance, most offices still require translations and some require apostilles even between EU states
-- **Name mismatches across documents**: Transliteration from non-Latin scripts, use of maiden vs. married names, and middle name inconsistencies are the most common reason for rejection at appointments
-- **Relying on photocopies**: Most DACH authorities require original documents for inspection and keep certified copies; bring originals even if you think copies will suffice
-- **Ordering translations too late**: Sworn translators often have 1-2 week backlogs, and this extends during peak relocation season (August-September)
-- **Forgetting the apostille on the translation**: Some authorities require the apostille on the original document AND a separate certified translation of the apostilled document
-- **Not checking document validity periods**: A passport valid for 2 more months may be rejected if the authority requires 6 months remaining validity
-- **Ignoring the multilingual EU forms**: For civil status documents between EU countries, multilingual standard forms (available from the issuing authority) can eliminate the need for translation entirely -- but you must request them explicitly
-- **Assuming digital documents are accepted**: Most DACH government offices still require physical documents; PDF printouts of digital-only documents may not be accepted without additional verification
+- **假设 EU 文件不需要准备**：虽然 EU 法规简化了跨境文件接受，但大多数办公室仍要求翻译，即使在 EU 成员国之间，某些也要求海牙认证
+- **文件间的姓名不一致**：非拉丁文字的音译、婚前姓 vs 婚后姓的使用以及中间名的不一致是预约被拒绝的最常见原因
+- **依赖复印件**：大多数 DACH 机构要求检查原件并保留公证副本；即使你认为副本就够了也带上原件
+- **翻译订购太晚**：宣誓翻译人员通常有 1-2 周的积压，在搬迁高峰季节（8-9 月）更长
+- **忘记翻译上的海牙认证**：某些机构要求原始文件上的海牙认证和海牙认证文件的单独公证翻译
+- **不检查文件有效期**：剩余有效期仅 2 个月的护照可能被拒绝，如果机构要求 6 个月的剩余有效期
+- **忽视 EU 多语言表格**：对于 EU 国家之间的民事状态文件，多语言标准表格（可向签发机构申请）可以完全免除翻译需求——但你必须明确申请
+- **假设数字文件被接受**：大多数 DACH 政府办公室仍要求实体文件；纯数字文件的 PDF 打印件可能不被接受，需要额外验证
 
 ## 相关技能
 
-- [plan-eu-relocation](../plan-eu-relocation/SKILL.md) -- Create the relocation plan that feeds into this document check
-- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- Detailed guidance for the procedures these documents are needed for
+- [plan-eu-relocation](../plan-eu-relocation/SKILL.md) — 创建本文件检查所依赖的搬迁计划
+- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) — 这些文件所需程序的详细指导

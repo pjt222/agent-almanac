@@ -1,14 +1,11 @@
 ---
 name: fungi-identification
 description: >
-  Field identification of fungi using morphological features, spore prints,
-  habitat analysis, and seasonal context with a safety-first approach. Covers
-  cap, gill, stem, and spore characteristics, look-alike differentiation,
-  toxicity risk assessment, and the critical rule of absolute certainty before
-  consumption. Use when encountering an unknown fungus, foraging for edible
-  mushrooms and needing to confirm species before consumption, assessing whether
-  fungi in a garden or property are harmful, or differentiating an edible
-  species from a dangerous look-alike.
+  形態学的特徴、胞子紋、生息地分析、季節的文脈を使用した安全第一アプローチによる
+  菌類のフィールド同定。傘、ひだ、柄、胞子の特徴、類似種の区別、毒性リスク評価、
+  消費前の絶対的確実性の重要ルールを網羅する。未知の菌類に遭遇した時、食用キノコを
+  採集して消費前に種の確認が必要な時、庭や敷地の菌類が有害かどうかを評価する時、
+  または食用種と危険な類似種を区別する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -27,30 +24,30 @@ metadata:
 
 # 菌類の同定
 
-Identify fungi in the field using morphological features, spore prints, habitat, and season with an absolute safety-first approach.
+形態学的特徴、胞子紋、生息地、季節を使用して、絶対的な安全第一アプローチでフィールドにおける菌類を同定する。
 
 ## 使用タイミング
 
-- You encounter an unknown fungus and need to identify it
-- You are foraging for edible mushrooms and need to confirm species before consumption
-- You want to assess whether fungi in your garden or property are harmful
-- You are building field identification skills through structured observation practice
-- You need to differentiate an edible species from a dangerous look-alike
+- 未知の菌類に遭遇し、同定が必要な時
+- 食用キノコを採集しており、消費前に種の確認が必要な時
+- 庭や敷地の菌類が有害かどうかを評価したい時
+- 構造化された観察練習を通じてフィールド同定スキルを構築している時
+- 食用種と危険な類似種を区別する必要がある時
 
 ## 入力
 
-- **必須**: A fungus specimen or clear observation of one in situ
-- **必須**: Ability to observe fine morphological details (cap, gills, stem, base)
-- **任意**: Field guide or reference material for the region
-- **任意**: Paper and glass for spore prints
-- **任意**: Knife for cross-section examination
-- **任意**: Hand lens (10x) for fine detail
+- **必須**: 菌類の標本またはその場での明瞭な観察
+- **必須**: 微細な形態学的詳細（傘、ひだ、柄、基部）を観察する能力
+- **任意**: 地域のフィールドガイドまたは参考資料
+- **任意**: 胞子紋用の紙とガラス
+- **任意**: 断面観察用のナイフ
+- **任意**: 微細な詳細用のハンドレンズ（10倍）
 
 ## 手順
 
-### ステップ1: The Cardinal Rule
+### ステップ1: 基本ルール
 
-Before any identification work, internalize the absolute rule of mycology.
+同定作業の前に、菌類学の絶対的ルールを内面化する。
 
 ```
 CARDINAL RULE:
@@ -68,13 +65,13 @@ edible mushroom) is a missed meal.
 ALWAYS ERR TOWARD CAUTION.
 ```
 
-**期待結果:** The cardinal rule is internalized before proceeding with identification.
+**期待結果:** 同定に進む前に基本ルールが内面化されていること。
 
-**失敗時:** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
+**失敗時:** このステップに失敗モードはない。ルールが内面化されていない場合、消費目的のフィールド同定に進まない。
 
-### ステップ2: Document the Habitat
+### ステップ2: 生息地の記録
 
-Context narrows identification before touching the specimen.
+標本に触れる前に文脈を記録して同定の範囲を絞る。
 
 ```
 Habitat Recording:
@@ -101,13 +98,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**期待結果:** A complete habitat record that provides context for species-level identification.
+**期待結果:** 種レベルの同定に文脈を提供する完全な生息地記録。
 
-**失敗時:** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
+**失敗時:** 生息地が不明瞭な場合（例：混植の都市庭園）、見えるものを記録する。不完全な生息地データは同定の信頼度を下げる — これを安全性評価に反映させる。
 
-### ステップ3: Examine Morphological Features
+### ステップ3: 形態学的特徴の検査
 
-Systematic examination of the specimen itself.
+標本自体の体系的な検査。
 
 ```
 Morphological Checklist:
@@ -152,13 +149,13 @@ SPORE PRINT:
   black, rust-orange
 ```
 
-**期待結果:** A complete morphological description covering all major features.
+**期待結果:** すべての主要な特徴を網羅する完全な形態学的記述。
 
-**失敗時:** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
+**失敗時:** 特徴が観察できない場合（例：リングが見えないが失われた可能性がある）、「不在」ではなく「観察されず」と記録する。この区別は同定に重要である。
 
-### ステップ4: Identify Using Multiple Confirmations
+### ステップ4: 複数確認による同定
 
-Cross-reference all data against reference material.
+すべてのデータを参考資料と照合する。
 
 ```
 Identification Protocol:
@@ -191,31 +188,31 @@ Confidence Levels:
 +----------+---------------------------+---------------------------+
 ```
 
-**期待結果:** A species-level identification with explicit confidence level and look-alike assessment.
+**期待結果:** 明示的な信頼度レベルと類似種評価を伴う種レベルの同定。
 
-**失敗時:** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
+**失敗時:** 同定が属レベルで止まる場合、学習目的としては許容される。消費目的には、種レベルの「確実」な同定のみが許容される。
 
 ## バリデーション
 
-- [ ] The cardinal rule was acknowledged before starting identification
-- [ ] Habitat was documented before examining the specimen
-- [ ] All morphological features were examined systematically
-- [ ] The base was excavated to check for a volva
-- [ ] A spore print was taken (if time allows)
-- [ ] Dangerous look-alikes were explicitly checked and eliminated
-- [ ] Confidence level was honestly assessed
-- [ ] Only "Certain" identifications were considered for consumption
+- [ ] 同定開始前に基本ルールが確認された
+- [ ] 標本の検査前に生息地が記録された
+- [ ] すべての形態学的特徴が体系的に検査された
+- [ ] つぼ（volva）を確認するために基部が掘り出された
+- [ ] 胞子紋が採取された（時間が許す場合）
+- [ ] 危険な類似種が明示的に確認され除外された
+- [ ] 信頼度レベルが正直に評価された
+- [ ] 「確実」な同定のみが消費の対象とされた
 
 ## よくある落とし穴
 
-- **Relying on a single feature**: "It looks like a chanterelle" based on colour alone. True chanterelles have false gills (ridges), grow from soil near trees, and have a specific apricot smell. False chanterelles and Jack-o'-lanterns share the colour but differ in every other feature
-- **Skipping the base examination**: Failing to dig up the base misses the volva — the single most important feature for identifying deadly Amanita species (death cap, destroying angel)
-- **Trusting apps blindly**: AI-based mushroom identification apps have significant error rates for look-alike species. Use them as a starting point, never as confirmation
-- **Assuming "common = safe"**: Abundance does not indicate edibility. Deadly species can be locally abundant
-- **Tasting unknown species**: Some mycologists use taste as a diagnostic tool, but this requires expert-level knowledge of which species are safe to taste. For non-experts, do not taste unknown fungi
-- **Ignoring temporal toxins**: Some species (e.g., Amanita phalloides) have pleasant taste and delayed symptoms. By the time symptoms appear (24-48 hours), liver damage is severe
+- **単一の特徴への依存**: 色だけで「アンズタケに見える」と判断すること。真のアンズタケは偽ひだ（隆起）を持ち、樹木の近くの土壌から生え、特有のアプリコットの香りがある。ニセアンズタケやツキヨタケは色を共有するが他のすべての特徴で異なる
+- **基部検査の省略**: 基部を掘り出さないとつぼ（volva）を見逃す — 致死的なテングタケ属（タマゴテングタケ、シロタマゴテングタケ）を同定するための最も重要な単一の特徴
+- **アプリの盲信**: AIベースのキノコ同定アプリは類似種に対して重大なエラー率がある。出発点として使用し、確認手段としては決して使用しない
+- **「一般的＝安全」の想定**: 豊富さは食用性を示さない。致死種が局所的に豊富な場合がある
+- **未知種の味見**: 一部の菌類学者は味を診断ツールとして使用するが、これはどの種が味見しても安全かについての専門家レベルの知識を必要とする。非専門家は未知の菌類を味見してはならない
+- **時間差毒素の無視**: 一部の種（例：テングタケ）は快適な味を持ち症状が遅れて出現する。症状が現れた時には（24-48時間後）、肝臓の損傷が重篤になっている
 
 ## 関連スキル
 
-- `mushroom-cultivation` — growing known species eliminates identification risk entirely
-- `forage-plants` — complementary field identification skill; shares the multi-feature confirmation methodology
+- `mushroom-cultivation` — 既知の種の栽培により同定リスクを完全に排除する
+- `forage-plants` — 補完的なフィールド同定スキル；複数特徴確認の方法論を共有する

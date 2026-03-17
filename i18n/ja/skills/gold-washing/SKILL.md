@@ -1,13 +1,12 @@
 ---
 name: gold-washing
 description: >
-  Alluvial gold recovery using panning, sluicing, and classification.
-  Covers site reading (geological indicators, stream dynamics, pay streak
-  location), panning technique, sluice box operation, and responsible
-  extraction practices. Use when prospecting in an area with known or
-  suspected alluvial gold deposits, sampling a stream to test for gold
-  presence, maximizing recovery during recreational panning, or assessing a
-  site's gold potential before investing more effort.
+  パンニング、スルーシング、分級を使用した沖積金の回収。サイトリーディング
+  （地質指標、河川力学、ペイストリークの位置）、パンニング技術、スルースボックスの
+  操作、責任ある採取方法を網羅する。既知または疑われる沖積金鉱床のある地域で
+  探鉱する時、河川を試料採取して金の存在を試験する時、レクリエーションパンニングで
+  回収を最大化する時、またはより多くの労力を投資する前にサイトの金の可能性を
+  評価する時に使用する。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,32 +23,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# 砂金採り
+# 砂金採取
 
-Recover alluvial gold from stream deposits using panning, sluicing, and classification techniques.
+パンニング、スルーシング、分級技術を使用して河川堆積物から沖積金を回収する。
 
 ## 使用タイミング
 
-- You are prospecting in an area with known or suspected alluvial gold deposits
-- You want to sample a stream or river to test for gold presence
-- You are recreational panning and want to maximize recovery
-- You need to assess a site's gold potential before investing more effort
+- 既知または疑われる沖積金鉱床のある地域で探鉱する時
+- 河川を試料採取して金の存在を試験したい時
+- レクリエーションパンニングで回収を最大化したい時
+- より多くの労力を投資する前にサイトの金の可能性を評価する必要がある時
 
 ## 入力
 
-- **必須**: A gold pan (14-16 inch, with riffles)
-- **必須**: Access to a stream, river, or alluvial deposit
-- **任意**: Classifier/screen (1/4 inch mesh)
-- **任意**: Sluice box (for higher volume processing)
-- **任意**: Snuffer bottle or tweezers (for fine gold recovery)
-- **任意**: Vial with water (for storing recovered gold)
-- **任意**: Shovel and bucket for material collection
+- **必須**: ゴールドパン（14-16インチ、リッフル付き）
+- **必須**: 河川、小川、または沖積堆積物へのアクセス
+- **任意**: クラシファイアー/スクリーン（1/4インチメッシュ）
+- **任意**: スルースボックス（大量処理用）
+- **任意**: スナッファーボトルまたはピンセット（微細金の回収用）
+- **任意**: 水入りバイアル（回収した金の保管用）
+- **任意**: シャベルとバケツ（材料採取用）
 
 ## 手順
 
-### ステップ1: Read the Site
+### ステップ1: サイトのリーディング
 
-Gold is heavy (specific gravity 19.3) and concentrates predictably. Read the water and geology before digging.
+金は重い（比重19.3）ため予測可能なパターンで濃集する。掘る前に水と地質を読む。
 
 ```
 Where Gold Concentrates:
@@ -93,13 +92,13 @@ Geological Indicators:
   which can host gold deposits
 ```
 
-**期待結果:** You have identified 2-3 promising sample locations based on stream dynamics and geological indicators.
+**期待結果:** 河川力学と地質指標に基づいて2-3の有望な試料採取場所が特定されていること。
 
-**失敗時:** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). Even a single color (flake of gold) confirms the stream carries gold.
+**失敗時:** 明確な指標が見えない場合、複数の場所を体系的に試料採取する — 各特徴（内側カーブ、障害物の背後、ランダムな砂利州）から1パンずつ。1つの色（金のフレーク）でもその河川が金を運んでいることを確認できる。
 
-### ステップ2: Classify and Collect Material
+### ステップ2: 材料の分級と採取
 
-Prepare the raw material for panning.
+パンニング用の原材料を準備する。
 
 ```
 Collection Protocol:
@@ -118,13 +117,13 @@ Classification:
 5. Classified material is now ready for panning
 ```
 
-**期待結果:** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
+**期待結果:** 地質的に有望な場所から採取された分級済み材料（1/4インチより小さい砂利と砂）のパンまたはバケツ。
 
-**失敗時:** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
+**失敗時:** 岩盤に到達できない場合、アクセス可能なものを試料採取する。浅い試料は金を含む可能性が低いが、テストする価値はある — 洪水イベントは様々な深度に金を堆積させることがある。
 
-### ステップ3: Pan the Material
+### ステップ3: 材料のパンニング
 
-The gold pan separates gold from lighter material using gravity and water.
+ゴールドパンは重力と水を使用して金をより軽い材料から分離する。
 
 ```
 Panning Technique:
@@ -162,13 +161,13 @@ Common Errors:
   you start washing off material.
 ```
 
-**期待結果:** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
+**期待結果:** すべての重い材料（金、砂鉄、ガーネット）がパンの底に濃集すること。金は明るい黄色のフレーク、平らな粒、または（まれに）小さなナゲットとして見えること。
 
-**失敗時:** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
+**失敗時:** 注意深くパンニングしても金が見えない場合、その場所に金がない可能性がある — または金が見えないほど微細（粉状金）の場合がある。ハンドレンズで確認する。それでも何もなければ、別の試料採取場所に移動する。
 
-### ステップ4: Scale Up with a Sluice Box (Optional)
+### ステップ4: スルースボックスでのスケールアップ（任意）
 
-For processing larger volumes of material.
+より大量の材料を処理するため。
 
 ```
 Sluice Box Operation:
@@ -191,29 +190,29 @@ Sluice Calibration:
   If it is caught by the riffles, gold will be too.
 ```
 
-**期待結果:** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
+**期待結果:** リッフルマットに金が濃集し、最終パンニングで回収されるより大量の処理。
 
-**失敗時:** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
+**失敗時:** スルースがテスト材料（鉛のスプリットショット）を捕捉しない場合、角度または水流を調整する。スルースは石英砂より重いすべてのものを捕捉すべきである。
 
 ## バリデーション
 
-- [ ] Site was read for geological indicators before sampling
-- [ ] Material was collected from a geologically promising location
-- [ ] Material was classified before panning
-- [ ] Panning used side-to-side shaking for stratification
-- [ ] Black sand concentrate was checked thoroughly for fine gold
-- [ ] Any gold recovered was stored safely in water in a sealed vial
-- [ ] The site was left without significant environmental disturbance
+- [ ] 試料採取前に地質指標についてサイトがリーディングされた
+- [ ] 地質的に有望な場所から材料が採取された
+- [ ] パンニング前に材料が分級された
+- [ ] パンニングが成層化のために左右の振動を使用した
+- [ ] 砂鉄の濃集物が微細金について徹底的に確認された
+- [ ] 回収された金が密封バイアルの水中に安全に保管された
+- [ ] サイトが重大な環境撹乱なく残された
 
 ## よくある落とし穴
 
-- **Panning too fast**: Impatience loses fine gold. A proper pan takes 5-10 minutes. Speed is the enemy of recovery
-- **Ignoring black sand**: If you see heavy black sand concentrating, gold is likely present — even if too fine to see without magnification
-- **Confusing pyrite with gold**: Pyrite (fool's gold) is lighter, breaks when pressed with a pin, and has a brassy rather than buttery yellow colour. Real gold is malleable and does not tarnish
-- **Sampling random locations**: Gold concentrates predictably. Sampling the middle of a straight stretch is far less productive than sampling the inside of a bend
-- **Environmental damage**: Respect waterways. Do not dig large holes in stream banks, do not use mercury (illegal in most jurisdictions and extremely toxic), and fill in any test holes
-- **Ignoring regulations**: Most jurisdictions require permits for gold prospecting, even recreational panning. Check local regulations before starting
+- **パンニングが速すぎる**: 焦りは微細金を失う。適切なパンニングには5-10分かかる。速度は回収の敵
+- **砂鉄の無視**: 重い砂鉄が濃集しているのが見える場合、金も存在する可能性が高い — 拡大なしでは見えないほど微細な場合でも
+- **黄鉄鉱と金の混同**: 黄鉄鉱（愚者の金）はより軽く、ピンで押すと割れ、バター色の黄色ではなく真鍮色をしている。本物の金は可鍛性があり変色しない
+- **ランダムな場所の試料採取**: 金は予測可能に濃集する。直線区間の中間の試料採取は、カーブの内側の試料採取よりはるかに生産性が低い
+- **環境破壊**: 水路を尊重する。河岸に大きな穴を掘らない、水銀を使用しない（ほとんどの管轄区域で違法であり極めて有毒）、テスト穴は埋め戻す
+- **規制の無視**: ほとんどの管轄区域ではレクリエーションパンニングを含め金の探鉱に許可が必要。開始前に地方の規制を確認する
 
 ## 関連スキル
 
-- `mineral-identification` — understanding rock and mineral types helps read geological indicators that point to gold-bearing areas
+- `mineral-identification` — 岩石と鉱物の種類を理解することで、金を含む地域を示す地質指標を読む助けになる

@@ -1,13 +1,10 @@
 ---
 name: analyze-generative-diffusion-model
 description: >
-  Analyze pre-trained generative diffusion models (Stable Diffusion, DALL-E,
-  Flux) by computing quality metrics (FID, IS, CLIP score, precision/recall),
-  inspecting noise schedules, extracting and visualizing attention maps, and
-  probing latent spaces. Use when evaluating a pre-trained generative diffusion
-  model's output quality, comparing noise schedule variants, analyzing
-  cross-attention patterns for text-conditioned generation, interpolating
-  between latent codes, or detecting out-of-distribution inputs.
+  分析预训练的生成式扩散模型（Stable Diffusion、DALL-E、Flux），通过计算质量指标
+  （FID、IS、CLIP 分数、精确率/召回率）、检查噪声调度、提取和可视化注意力图以及
+  探测潜在空间。适用于评估预训练生成式扩散模型的输出质量、比较噪声调度变体、
+  分析文本条件生成的交叉注意力模式、在潜在编码之间进行插值，或检测分布外输入时。
 license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
@@ -24,35 +21,35 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Analyze a Generative Diffusion Model
+# 分析生成式扩散模型
 
-Evaluate pre-trained generative diffusion models through quantitative quality metrics, noise schedule inspection, cross-attention map analysis, and latent space probing to understand model behavior, diagnose failure modes, and guide fine-tuning decisions.
+通过定量质量指标、噪声调度检查、交叉注意力图分析和潜在空间探测来评估预训练的生成式扩散模型，以理解模型行为、诊断失败模式并指导微调决策。
 
 ## 适用场景
 
-- Evaluating a pre-trained generative diffusion model's output quality with standard metrics
-- Computing FID, IS, CLIP score, or precision/recall for generated image sets
-- Inspecting and comparing noise schedules (linear, cosine, learned) via SNR curves
-- Extracting cross-attention maps to understand text-to-image token-region correspondences
-- Interpolating between latent codes or discovering semantic directions in the latent space
-- Detecting out-of-distribution inputs for a diffusion model pipeline
+- 使用标准指标评估预训练生成式扩散模型的输出质量
+- 为生成的图像集计算 FID、IS、CLIP 分数或精确率/召回率
+- 通过 SNR 曲线检查和比较噪声调度（线性、余弦、学习型）
+- 提取交叉注意力图以理解文本到图像的词元-区域对应关系
+- 在潜在编码之间进行插值或在潜在空间中发现语义方向
+- 检测扩散模型管道的分布外输入
 
 ## 输入
 
-- **必需**: Pre-trained model identifier or checkpoint path (e.g., `stabilityai/stable-diffusion-2-1`)
-- **必需**: Analysis mode — one or more of: `metrics`, `schedule`, `attention`, `latent`
-- **必需**: Reference dataset for metric computation (real images or dataset name)
-- **可选**: Text prompts for attention analysis (default: model-appropriate test prompts)
-- **可选**: Number of generated samples for metric computation (default: 10000)
-- **可选**: Device configuration (default: `cuda` if available, else `cpu`)
+- **必需**：预训练模型标识符或检查点路径（例如 `stabilityai/stable-diffusion-2-1`）
+- **必需**：分析模式——以下一种或多种：`metrics`、`schedule`、`attention`、`latent`
+- **必需**：用于指标计算的参考数据集（真实图像或数据集名称）
+- **可选**：用于注意力分析的文本提示词（默认：适合模型的测试提示词）
+- **可选**：用于指标计算的生成样本数量（默认：10000）
+- **可选**：设备配置（默认：如有 `cuda` 则使用，否则使用 `cpu`）
 
 ## 步骤
 
-### 第 1 步：Quantitative Evaluation
+### 第 1 步：定量评估
 
-Compute standard generative quality metrics against a reference dataset.
+针对参考数据集计算标准生成质量指标。
 
-1. Set up the evaluation pipeline:
+1. 设置评估管道：
 
 ```python
 import torch
@@ -69,7 +66,7 @@ fid = FrechetInceptionDistance(feature=2048, normalize=True).to(device)
 inception = InceptionScore(normalize=True).to(device)
 ```
 
-2. Feed real images into the metric accumulators:
+2. 将真实图像送入指标累加器：
 
 ```python
 from torch.utils.data import DataLoader
@@ -79,7 +76,7 @@ for batch in DataLoader(real_dataset, batch_size=64):
     fid.update(imgs, real=True)
 ```
 
-3. Generate samples and accumulate fake statistics:
+3. 生成样本并累加伪统计量：
 
 ```python
 prompts = load_evaluation_prompts("prompts.txt")  # one prompt per line
@@ -94,7 +91,7 @@ while n_generated < 10000:
     n_generated += len(images)
 ```
 
-4. Compute CLIP score for text-image alignment:
+4. 计算 CLIP 分数以衡量文本-图像对齐度：
 
 ```python
 from torchmetrics.multimodal.clip_score import CLIPScore
@@ -108,7 +105,7 @@ print(f"IS:  {inception.compute()[0]:.2f} +/- {inception.compute()[1]:.2f}")
 print(f"CLIP: {clip_metric.compute():.2f}")
 ```
 
-5. Compute precision and recall for mode coverage:
+5. 计算精确率和召回率以衡量模式覆盖：
 
 ```python
 from torchmetrics.image import FrechetInceptionDistance
@@ -119,15 +116,15 @@ from torchmetrics.image import FrechetInceptionDistance
 # feature embeddings from the Inception network
 ```
 
-**预期结果：** FID below 30 for a well-trained Stable Diffusion model on standard benchmarks. IS above 50 on ImageNet-class prompts. CLIP score above 25 for text-conditioned models. Precision and recall both above 0.6.
+**预期结果：** 对于在标准基准上训练良好的 Stable Diffusion 模型，FID 低于 30。在 ImageNet 类提示词上 IS 高于 50。文本条件模型的 CLIP 分数高于 25。精确率和召回率均高于 0.6。
 
-**失败处理：** If FID is above 100, verify that real and generated images share the same resolution and normalization. If CLIP score is low but FID is acceptable, the model generates plausible images that do not match the text prompt -- check the text encoder. Ensure at least 10,000 samples for stable FID estimates.
+**失败处理：** 如果 FID 高于 100，验证真实图像和生成图像是否共享相同的分辨率和归一化方式。如果 CLIP 分数低但 FID 可接受，说明模型生成了合理的图像但不匹配文本提示词——检查文本编码器。确保至少 10,000 个样本以获得稳定的 FID 估计值。
 
-### 第 2 步：Noise Schedule Inspection
+### 第 2 步：噪声调度检查
 
-Visualize and compare the forward and reverse noise schedules.
+可视化并比较前向和反向噪声调度。
 
-1. Extract schedule parameters from the model:
+1. 从模型中提取调度参数：
 
 ```python
 scheduler = pipe.scheduler
@@ -136,7 +133,7 @@ alphas_cumprod = torch.tensor(scheduler.alphas_cumprod)
 timesteps = torch.arange(len(alphas_cumprod))
 ```
 
-2. Compute the signal-to-noise ratio curve:
+2. 计算信噪比曲线：
 
 ```python
 import numpy as np
@@ -162,7 +159,7 @@ fig.tight_layout()
 fig.savefig("noise_schedule.png", dpi=150)
 ```
 
-3. Compare multiple schedule types:
+3. 比较多种调度类型：
 
 ```python
 from diffusers import DDPMScheduler
@@ -182,15 +179,15 @@ ax.set_title("Schedule Comparison"); ax.legend()
 fig.savefig("schedule_comparison.png", dpi=150)
 ```
 
-**预期结果：** Cosine schedule shows a more gradual SNR decrease in mid-timesteps compared to linear. The log-SNR curve should span from approximately +10 (clean) to -10 (pure noise). Learned schedules should be monotonically decreasing.
+**预期结果：** 余弦调度在中间时间步显示比线性调度更平缓的 SNR 下降。log-SNR 曲线应从大约 +10（干净）跨越到 -10（纯噪声）。学习型调度应单调递减。
 
-**失败处理：** If alphas_cumprod is not monotonically decreasing, the schedule is misconfigured. If values are constant, check that the scheduler was properly initialized with the model's config. For custom schedulers, verify that `set_timesteps()` has been called.
+**失败处理：** 如果 alphas_cumprod 不是单调递减的，说明调度配置错误。如果值是常数，检查调度器是否使用模型的配置正确初始化。对于自定义调度器，验证是否已调用 `set_timesteps()`。
 
-### 第 3 步：Attention Map Analysis
+### 第 3 步：注意力图分析
 
-Extract and visualize cross-attention maps from text-conditioned models.
+从文本条件模型中提取和可视化交叉注意力图。
 
-1. Register attention hooks on the U-Net cross-attention layers:
+1. 在 U-Net 交叉注意力层上注册注意力钩子：
 
 ```python
 attention_maps = {}
@@ -207,7 +204,7 @@ for name, module in pipe.unet.named_modules():
         module.register_forward_hook(hook_fn(name))
 ```
 
-2. Run inference and collect attention at specific timesteps:
+2. 运行推理并在特定时间步收集注意力：
 
 ```python
 prompt = "a red car parked next to a blue house"
@@ -224,7 +221,7 @@ def callback_fn(pipe, step_index, timestep, callback_kwargs):
 output = pipe(prompt, num_inference_steps=50, callback_on_step_end=callback_fn)
 ```
 
-3. Visualize token-region correspondences:
+3. 可视化词元-区域对应关系：
 
 ```python
 tokenizer = pipe.tokenizer
@@ -251,15 +248,15 @@ fig.tight_layout()
 fig.savefig("attention_maps.png", dpi=150)
 ```
 
-**预期结果：** Content tokens ("car", "house") activate localized spatial regions. Style/color tokens ("red", "blue") activate regions overlapping with their associated object. Early timesteps (high noise) show diffuse attention; later timesteps show sharp, localized attention.
+**预期结果：** 内容词元（"car"、"house"）激活局部化的空间区域。风格/颜色词元（"red"、"blue"）激活与其关联对象重叠的区域。早期时间步（高噪声）显示分散的注意力；后期时间步显示尖锐、局部化的注意力。
 
-**失败处理：** If all attention maps look uniform, the hook may be capturing self-attention instead of cross-attention -- verify the layer name contains `attn2` (cross) not `attn1` (self). If attention is captured but has wrong dimensions, check that the output tensor indexing matches the layer's head count and spatial resolution.
+**失败处理：** 如果所有注意力图看起来均匀，钩子可能捕获的是自注意力而非交叉注意力——验证层名称包含 `attn2`（交叉注意力）而非 `attn1`（自注意力）。如果注意力被捕获但维度错误，检查输出张量索引是否与层的头数和空间分辨率匹配。
 
-### 第 4 步：Latent Space Probing
+### 第 4 步：潜在空间探测
 
-Explore the structure of the latent space through interpolation and direction discovery.
+通过插值和方向发现探索潜在空间的结构。
 
-1. Encode reference images into latent space:
+1. 将参考图像编码到潜在空间：
 
 ```python
 from diffusers import AutoencoderKL
@@ -280,7 +277,7 @@ z1 = encode_image("image_a.png")
 z2 = encode_image("image_b.png")
 ```
 
-2. Perform spherical linear interpolation (slerp):
+2. 执行球面线性插值（slerp）：
 
 ```python
 def slerp(z1, z2, alpha):
@@ -303,7 +300,7 @@ for z in interpolated:
     decoded.append(img.cpu())
 ```
 
-3. Discover semantic directions via prompt-pair differences:
+3. 通过提示词对差异发现语义方向：
 
 ```python
 def get_text_embedding(prompt):
@@ -318,7 +315,7 @@ neg_emb = get_text_embedding("a sad person frowning")
 direction = pos_emb - neg_emb  # semantic direction in text embedding space
 ```
 
-4. Detect out-of-distribution latents:
+4. 检测分布外潜在编码：
 
 ```python
 # Compute latent space statistics from a reference set
@@ -336,32 +333,32 @@ score = ood_score(test_z)
 print(f"OOD score: {score:.2f} (reference mean: {np.mean([ood_score(r) for r in ref_latents]):.2f})")
 ```
 
-**预期结果：** Interpolated images show smooth, semantically meaningful transitions without artifacts. Semantic directions produce consistent attribute changes when added to diverse latent codes. OOD scores for in-distribution images cluster tightly; outliers score significantly higher.
+**预期结果：** 插值图像显示平滑、语义有意义的过渡，无伪影。语义方向在添加到不同潜在编码时产生一致的属性变化。分布内图像的 OOD 分数紧密聚集；异常值的分数明显更高。
 
-**失败处理：** If interpolation produces blurry or incoherent midpoints, use slerp instead of linear interpolation -- linear interpolation traverses low-density regions in high-dimensional latent spaces. If semantic directions have no visible effect, increase the direction magnitude or verify the text encoder is the same one used during model training.
+**失败处理：** 如果插值产生模糊或不连贯的中间点，使用 slerp 代替线性插值——线性插值在高维潜在空间中穿越低密度区域。如果语义方向没有可见效果，增加方向幅度或验证文本编码器与模型训练时使用的是否相同。
 
 ## 验证清单
 
-- [ ] FID computed on at least 10,000 generated samples and matching real sample count
-- [ ] CLIP score computed with the same CLIP model used during training (if applicable)
-- [ ] Noise schedule visualization shows monotonically decreasing alphas_cumprod
-- [ ] Log-SNR spans approximately +10 to -10 across the full timestep range
-- [ ] Attention maps resolve per-token spatial activations at mid-resolution layers
-- [ ] Attention sharpens from early (diffuse) to late (localized) timesteps
-- [ ] Latent interpolations are smooth with no sudden jumps or artifacts
-- [ ] OOD detection baseline established from at least 100 reference samples
+- [ ] FID 在至少 10,000 个生成样本和匹配的真实样本数量上计算
+- [ ] CLIP 分数使用与训练期间相同的 CLIP 模型计算（如适用）
+- [ ] 噪声调度可视化显示单调递减的 alphas_cumprod
+- [ ] Log-SNR 在整个时间步范围内大约跨越 +10 到 -10
+- [ ] 注意力图在中分辨率层解析每个词元的空间激活
+- [ ] 注意力从早期（分散）到后期（局部化）时间步变得更尖锐
+- [ ] 潜在插值平滑，无突然跳变或伪影
+- [ ] OOD 检测基线从至少 100 个参考样本建立
 
 ## 常见问题
 
-- **FID on mismatched resolutions**: Real and generated images must be the same resolution before feeding to Inception. Resize both sets identically or FID will be inflated.
-- **Forgetting to normalize for torchmetrics**: `FrechetInceptionDistance(normalize=True)` expects [0, 1] float tensors. With `normalize=False` it expects [0, 255] uint8. Mixing conventions gives meaningless FID.
-- **Hooking self-attention instead of cross-attention**: U-Net layers named `attn1` are self-attention (image-to-image). Use `attn2` for cross-attention (text-to-image). Confusing them produces uninformative uniform maps.
-- **Linear interpolation in high dimensions**: Linear interpolation between two high-dimensional Gaussians passes through a low-density shell. Always use slerp for latent space interpolation in diffusion models.
-- **Ignoring the VAE scaling factor**: Stable Diffusion latents are scaled by `vae.config.scaling_factor` after encoding. Forgetting to apply or remove this factor produces garbled decoded images.
-- **Too few samples for precision/recall**: Precision and recall estimates from fewer than 5,000 samples per set are unreliable. Use at least 10,000 for stable estimates.
+- **分辨率不匹配的 FID**：真实图像和生成图像在送入 Inception 之前必须具有相同分辨率。对两组进行相同的缩放，否则 FID 将被人为抬高
+- **忘记为 torchmetrics 归一化**：`FrechetInceptionDistance(normalize=True)` 期望 [0, 1] 的浮点张量。`normalize=False` 期望 [0, 255] 的 uint8。混用约定会得到无意义的 FID
+- **钩取自注意力而非交叉注意力**：U-Net 中名为 `attn1` 的层是自注意力（图像到图像）。使用 `attn2` 获取交叉注意力（文本到图像）。混淆两者会产生无信息的均匀注意力图
+- **高维空间中的线性插值**：两个高维高斯分布之间的线性插值穿过低密度壳层。在扩散模型中始终使用 slerp 进行潜在空间插值
+- **忽略 VAE 缩放因子**：Stable Diffusion 的潜在编码在编码后按 `vae.config.scaling_factor` 缩放。忘记应用或移除此因子会产生乱码解码图像
+- **精确率/召回率样本太少**：少于 5,000 个样本的精确率和召回率估计不可靠。使用至少 10,000 个以获得稳定估计
 
 ## 相关技能
 
-- `implement-diffusion-network` - building diffusion models that this skill evaluates
-- `analyze-diffusion-dynamics` - mathematical foundations of the noise processes inspected here
-- `fit-drift-diffusion-model` - a different diffusion model family sharing SDE foundations
+- `implement-diffusion-network` -- 构建本技能所评估的扩散模型
+- `analyze-diffusion-dynamics` -- 此处检查的噪声过程的数学基础
+- `fit-drift-diffusion-model` -- 共享 SDE 基础的不同扩散模型族

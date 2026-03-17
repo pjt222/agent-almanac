@@ -1,13 +1,10 @@
 ---
 name: assess-form
 description: >
-  Evaluate a system's current structural form, identify transformation pressure,
-  and classify transformation readiness. Covers structural inventory, pressure
-  mapping, rigidity assessment, change capacity estimation, and readiness
-  classification for architectural metamorphosis. Use before any significant
-  architectural change to understand the starting point, when a system feels
-  stuck without clear reasons, when external pressure from growth or tech debt
-  is mounting, or as periodic health checks for long-lived systems.
+  评估系统当前的结构形态，识别转型压力，并分类转型准备度。涵盖结构清点、
+  压力映射、刚性评估、变化容量估算和架构变形的准备度分类。适用于在任何重大
+  架构变更前了解起点、系统感觉卡住但原因不明、增长或技术债务带来的外部压力
+  不断增加时，或作为长期系统的周期性健康检查。
 license: MIT
 allowed-tools: Read
 metadata:
@@ -24,47 +21,47 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Assess Form
+# 评估形态
 
-Evaluate a system's current structural form — its architecture, rigidity, pressure points, and capacity for change — to determine transformation readiness before initiating metamorphosis.
+评估系统当前的结构形态——其架构、刚性、压力点和变化容量——以在启动变形之前确定转型准备度。
 
 ## 适用场景
 
-- Before any significant architectural change to understand the starting point
-- When a system feels "stuck" but the reasons are unclear
-- When external pressure (growth, market shift, tech debt) is mounting but the response is uncertain
-- Assessing whether a proposed transformation is feasible given the current form
-- Periodic health checks for long-lived systems (annual form assessment)
-- Complementing `adapt-architecture` — assess first, then transform
+- 在任何重大架构变更之前，了解起点
+- 当系统感觉"卡住"但原因不明时
+- 当外部压力（增长、市场变化、技术债务）不断增加但响应方式不确定时
+- 评估在当前形态下提议的转型是否可行
+- 长期系统的周期性健康检查（年度形态评估）
+- 与 `adapt-architecture` 配合使用——先评估，再转型
 
 ## 输入
 
-- **必需**: The system to assess (codebase, organization, infrastructure, process)
-- **可选**: Proposed transformation direction (what might the system need to become?)
-- **可选**: Known pain points or pressure sources
-- **可选**: Previous transformation attempts and their outcomes
-- **可选**: Time horizon for potential transformation
-- **可选**: Available resources for transformation effort
+- **必需**：要评估的系统（代码库、组织、基础设施、流程）
+- **可选**：提议的转型方向（系统可能需要变成什么？）
+- **可选**：已知的痛点或压力来源
+- **可选**：之前的转型尝试及其结果
+- **可选**：潜在转型的时间范围
+- **可选**：可用于转型工作的资源
 
 ## 步骤
 
-### 第 1 步：Inventory the Current Form
+### 第 1 步：清点当前形态
 
-Catalog the system's structural elements without judgment — understand what exists before evaluating it.
+不带判断地编目系统的结构要素——在评估之前先了解存在什么。
 
-1. Map the structural components:
-   - **Modules**: distinct functional units (services, teams, packages, departments)
-   - **Interfaces**: how modules connect (APIs, protocols, contracts, reporting lines)
-   - **Data flows**: how information moves through the system
-   - **Dependencies**: what depends on what (direct, transitive, circular)
-   - **Load-bearing structures**: components that everything else relies on
-2. Document the form's age and history:
-   - When was each major component introduced?
-   - Which components have changed recently vs. remained static?
-   - What is the "geological layer" structure (old core, newer additions, recent patches)?
-3. Identify the form's "skeleton" vs. "flesh":
-   - Skeleton: structural decisions that are extremely costly to change (language, database, deployment model)
-   - Flesh: functional decisions that can change more easily (business logic, UI, configuration)
+1. 映射结构组件：
+   - **模块**：不同的功能单元（服务、团队、包、部门）
+   - **接口**：模块如何连接（API、协议、合约、汇报关系）
+   - **数据流**：信息如何在系统中流动
+   - **依赖关系**：什么依赖什么（直接、传递、循环）
+   - **承重结构**：其他一切都依赖的组件
+2. 记录形态的年龄和历史：
+   - 每个主要组件是什么时候引入的？
+   - 哪些组件最近发生了变化，哪些保持不变？
+   - "地质层"结构是什么（旧核心、较新的添加、近期的补丁）？
+3. 识别形态的"骨架"与"血肉"：
+   - 骨架：改变代价极高的结构性决策（语言、数据库、部署模型）
+   - 血肉：更容易改变的功能性决策（业务逻辑、UI、配置）
 
 ```
 Structural Inventory Template:
@@ -79,53 +76,53 @@ Structural Inventory Template:
 └──────────────┴──────────┴────────────┴───────────────────┴──────────┘
 ```
 
-**预期结果：** A complete structural inventory showing components, their ages, modification recency, dependency profiles, and classification as skeleton or flesh. This is the "X-ray" of the current form.
+**预期结果：** 一份完整的结构清单，展示组件、年龄、修改时间、依赖关系概况，以及骨架或血肉的分类。这是当前形态的"X光片"。
 
-**失败处理：** If the inventory is incomplete (components are unknown or undocumented), that itself is a finding — the form has opacity, which is a transformation risk. Document what you can, flag unknowns, and plan discovery for the gaps.
+**失败处理：** 如果清单不完整（组件未知或未记录），这本身就是一个发现——形态具有不透明性，这是一种转型风险。记录你能记录的，标记未知项，并为缺口规划发现工作。
 
-### 第 2 步：Map Transformation Pressure
+### 第 2 步：映射转型压力
 
-Identify the forces pushing the system toward change and the forces resisting it.
+识别推动系统变化的力量和抵抗变化的力量。
 
-1. Catalog external pressures (forces demanding change):
-   - Growth pressure: current form can't handle increasing load
-   - Market pressure: competitors or users demand capabilities the current form can't support
-   - Technology pressure: underlying technology is becoming obsolete or unsupported
-   - Regulatory pressure: compliance requirements the current form doesn't meet
-   - Integration pressure: must connect with systems the current form wasn't designed for
-2. Catalog internal pressures (forces demanding change from within):
-   - Technical debt: accumulated shortcuts that slow development
-   - Knowledge concentration: critical knowledge held by too few people
-   - Morale pressure: team frustration with the current form
-   - Operational burden: maintenance cost consuming resources that should go to development
-3. Catalog resistance forces (forces opposing change):
-   - Inertia: the existing form works "well enough"
-   - Dependency lock-in: too many things depend on the current form
-   - Knowledge loss risk: transformation might destroy institutional knowledge
-   - Cost: transformation requires investment with uncertain return
-   - Fear: previous transformation attempts failed
+1. 编目外部压力（要求变化的力量）：
+   - 增长压力：当前形态无法处理不断增加的负载
+   - 市场压力：竞争对手或用户要求当前形态不支持的能力
+   - 技术压力：底层技术正在变得过时或不受支持
+   - 监管压力：当前形态不满足的合规要求
+   - 集成压力：必须与当前形态设计时未考虑的系统连接
+2. 编目内部压力（来自内部要求变化的力量）：
+   - 技术债务：拖慢开发速度的累积捷径
+   - 知识集中：关键知识由太少的人掌握
+   - 士气压力：团队对当前形态的挫败感
+   - 运营负担：维护成本消耗了本应用于开发的资源
+3. 编目阻力（反对变化的力量）：
+   - 惯性：现有形态"够用"
+   - 依赖锁定：太多东西依赖当前形态
+   - 知识损失风险：转型可能摧毁机构知识
+   - 成本：转型需要不确定回报的投资
+   - 恐惧：之前的转型尝试失败了
 
-**预期结果：** A pressure map showing the direction and magnitude of forces acting on the system. If transformation pressure significantly exceeds resistance, transformation is overdue. If resistance significantly exceeds pressure, transformation will fail without first reducing resistance.
+**预期结果：** 一幅展示作用在系统上的力量方向和大小的压力图。如果转型压力显著超过阻力，转型已经过迟。如果阻力显著超过压力，在首先降低阻力之前转型将会失败。
 
-**失败处理：** If pressure mapping produces a balanced picture (neither strong pressure nor strong resistance), the system may not need transformation — or the analysis is surface-level. Dig deeper: interview stakeholders, measure specific pain points, project forward 12-18 months. What pressures will intensify?
+**失败处理：** 如果压力映射产生了平衡的图景（既没有强压力也没有强阻力），系统可能不需要转型——或者分析过于表面。深入挖掘：访谈利益相关者，测量具体痛点，向前投射 12-18 个月。哪些压力会加剧？
 
-### 第 3 步：Assess Structural Rigidity
+### 第 3 步：评估结构刚性
 
-Determine how flexible or rigid the current form is — can it bend, or will it break?
+确定当前形态有多灵活或刚性——它能弯曲，还是会断裂？
 
-1. Test interface flexibility:
-   - Can modules be replaced without cascading changes? (loose coupling = flexible)
-   - Are interfaces well-defined and stable? (contract clarity = flexible)
-   - How many "god modules" exist (modules that everything depends on)? (concentration = rigid)
-2. Test data flexibility:
-   - Is data migration straightforward? (schema evolution tools, versioning)
-   - Are data formats standardized or bespoke? (bespoke = rigid)
-   - How entangled is business logic with data structure? (entangled = rigid)
-3. Test process flexibility:
-   - Can the team ship changes quickly? (deployment pipeline health)
-   - Is the test suite comprehensive? (safety net for change)
-   - How many "don't touch" components exist? (forbidden zones = rigid)
-4. Calculate the rigidity score:
+1. 测试接口灵活性：
+   - 模块能否在不引起级联变更的情况下被替换？（松耦合 = 灵活）
+   - 接口是否定义良好且稳定？（合约清晰度 = 灵活）
+   - 存在多少"上帝模块"（所有东西都依赖的模块）？（集中度 = 刚性）
+2. 测试数据灵活性：
+   - 数据迁移是否简单直接？（模式演化工具、版本控制）
+   - 数据格式是标准化的还是定制的？（定制 = 刚性）
+   - 业务逻辑与数据结构的纠缠程度？（纠缠 = 刚性）
+3. 测试流程灵活性：
+   - 团队能否快速发布变更？（部署管道健康度）
+   - 测试套件是否全面？（变更的安全网）
+   - 存在多少"不要碰"的组件？（禁区 = 刚性）
+4. 计算刚性评分：
 
 ```
 Rigidity Assessment:
@@ -145,40 +142,40 @@ Rigidity Assessment:
 └──────────────────────┴───────────────────────┴──────────────────────┘
 ```
 
-**预期结果：** A rigidity score that quantifies how much structural resistance transformation will encounter. Flexible systems (6-9) can transform incrementally. Rigid systems (14-18) need dissolution before reconstruction (see `dissolve-form`).
+**预期结果：** 一个量化转型将遭遇多少结构性阻力的刚性评分。灵活的系统（6-9）可以渐进式转型。刚性的系统（14-18）在重建之前需要先溶解（见 `dissolve-form`）。
 
-**失败处理：** If the rigidity assessment is inconclusive (moderate score but unclear where the real problems are), focus on the highest-scoring dimensions. A system can be flexible overall but have one extremely rigid component that blocks transformation. Target that component specifically.
+**失败处理：** 如果刚性评估不确定（中等评分但不清楚真正的问题在哪里），关注评分最高的维度。一个系统可能整体灵活，但有一个极其刚性的组件阻碍了转型。专门针对该组件。
 
-### 第 4 步：Estimate Change Capacity
+### 第 4 步：估算变化容量
 
-Assess the system's (and team's) ability to absorb and execute transformation.
+评估系统（和团队）吸收和执行转型的能力。
 
-1. Available transformation energy:
-   - What percentage of team capacity can be allocated to transformation?
-   - Is there organizational support (budget, mandate, patience)?
-   - Are the right skills available (architecture, migration, testing)?
-2. Change absorption rate:
-   - How many changes can the system absorb per time unit without destabilizing?
-   - What is the recovery time after a significant change?
-   - Is there a staging/canary mechanism for incremental transformation?
-3. Transformation experience:
-   - Has the team successfully transformed similar systems before?
-   - Are there transformation tools and practices in place (feature flags, strangler fig, blue-green)?
-   - What is the team's risk tolerance?
-4. Calculate change capacity:
-   - High capacity: dedicated team, strong tooling, prior experience, organizational support
-   - Moderate capacity: part-time allocation, some tooling, limited experience
-   - Low capacity: no dedicated resources, no tooling, no experience, resistant organization
+1. 可用的转型能量：
+   - 团队容量的百分之多少可以分配给转型？
+   - 是否有组织支持（预算、授权、耐心）？
+   - 是否具备正确的技能（架构、迁移、测试）？
+2. 变化吸收率：
+   - 系统在不失稳的情况下每个时间单位能吸收多少变化？
+   - 重大变更后的恢复时间是多少？
+   - 是否有用于渐进式转型的暂存/金丝雀机制？
+3. 转型经验：
+   - 团队之前是否成功转型过类似系统？
+   - 是否有转型工具和实践（特性开关、绞杀者模式、蓝绿部署）？
+   - 团队的风险容忍度是多少？
+4. 计算变化容量：
+   - 高容量：专职团队、强工具链、先前经验、组织支持
+   - 中等容量：兼职分配、部分工具、有限经验
+   - 低容量：无专职资源、无工具、无经验、组织抵抗
 
-**预期结果：** A change capacity assessment that indicates whether the system/team can execute the proposed transformation given current resources, skills, and organizational support.
+**预期结果：** 一份变化容量评估，指出系统/团队在当前资源、技能和组织支持下能否执行提议的转型。
 
-**失败处理：** If change capacity is low but transformation pressure is high, the first transformation isn't the system — it's the team's capability. Invest in tooling, training, and organizational buy-in before attempting the architectural transformation.
+**失败处理：** 如果变化容量低但转型压力高，首先需要转型的不是系统——而是团队的能力。在尝试架构转型之前，投资于工具、培训和组织认同。
 
-### 第 5 步：Classify Transformation Readiness
+### 第 5 步：分类转型准备度
 
-Combine pressure, rigidity, and capacity assessments into a readiness classification.
+将压力、刚性和容量评估合并为一个准备度分类。
 
-1. Plot the system on the readiness matrix:
+1. 在准备度矩阵上定位系统：
 
 ```
 Transformation Readiness Matrix:
@@ -199,45 +196,45 @@ Transformation Readiness Matrix:
 └─────────────────┴────────────────────────┴────────────────────────┘
 ```
 
-2. Document the readiness classification with:
-   - Classification label (READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER)
-   - Key findings from each assessment dimension
-   - Recommended next step
-   - Risk factors that could change the classification
-3. If READY: proceed to `adapt-architecture`
-4. If PREPARE: proceed to `dissolve-form` to reduce rigidity
-5. If INVEST: build capacity (training, tooling, organizational support), then reassess
-6. If CRITICAL: address capacity and rigidity simultaneously (may require external help)
-7. If OPTIONAL/DEFER: document the assessment and set a reassessment date
+2. 记录准备度分类，包括：
+   - 分类标签（READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER）
+   - 每个评估维度的关键发现
+   - 建议的下一步
+   - 可能改变分类结果的风险因素
+3. 如果 READY：继续使用 `adapt-architecture`
+4. 如果 PREPARE：继续使用 `dissolve-form` 降低刚性
+5. 如果 INVEST：构建能力（培训、工具、组织支持），然后重新评估
+6. 如果 CRITICAL：同时解决容量和刚性问题（可能需要外部帮助）
+7. 如果 OPTIONAL/DEFER：记录评估结果并设定重新评估日期
 
-**预期结果：** A clear, justified transformation readiness classification with specific next steps. The classification enables informed decision-making about when and how to transform.
+**预期结果：** 一个清晰、有据可依的转型准备度分类，附有具体的下一步。分类结果使得关于何时以及如何转型的知情决策成为可能。
 
-**失败处理：** If the classification is ambiguous (e.g., moderate pressure, moderate rigidity, moderate capacity), default to PREPARE — reduce rigidity incrementally while monitoring pressure. This builds capability and reduces risk whether or not full transformation is eventually needed.
+**失败处理：** 如果分类不明确（例如中等压力、中等刚性、中等容量），默认为 PREPARE——在监控压力的同时渐进式降低刚性。这无论最终是否需要完全转型，都能构建能力并降低风险。
 
 ## 验证清单
 
-- [ ] Structural inventory is complete with components, ages, dependencies, and types
-- [ ] Transformation pressure is mapped (external, internal, resistance forces)
-- [ ] Rigidity score is calculated across all dimensions
-- [ ] Change capacity is assessed (resources, absorption rate, experience)
-- [ ] Readiness classification is determined with justified reasoning
-- [ ] Next steps are documented based on the classification
-- [ ] Reassessment date is set (even if currently READY)
+- [ ] 结构清单已完成，包含组件、年龄、依赖关系和类型
+- [ ] 转型压力已映射（外部、内部、阻力）
+- [ ] 刚性评分已在所有维度上计算
+- [ ] 变化容量已评估（资源、吸收率、经验）
+- [ ] 准备度分类已确定并附有合理推理
+- [ ] 已根据分类结果记录下一步
+- [ ] 已设定重新评估日期（即使当前为 READY）
 
 ## 常见问题
 
-- **Assessing only the technical system**: Transformation readiness includes organizational readiness. A technically flexible system with an organizationally rigid team will still fail to transform
-- **Optimistic capacity estimation**: Teams consistently overestimate their capacity for change while maintaining normal operations. Use 50% of stated capacity as the realistic estimate
-- **Ignoring resistance forces**: Pressure mapping that only catalogs change forces misses the resistance that will slow or stop transformation. Resistance is often stronger than it appears
-- **Assessment paralysis**: The form assessment should take hours to days, not weeks. If it's taking too long, the system is too complex to assess fully — assess at a higher abstraction level and drill into problem areas
-- **Confusing rigidity with stability**: A rigid system is not the same as a stable system. Stability comes from well-designed flexibility; rigidity is the absence of designed flexibility
+- **仅评估技术系统**：转型准备度包括组织准备度。一个技术上灵活但团队组织上刚性的系统仍然会转型失败
+- **过于乐观的容量估算**：团队在维持正常运营的同时，一贯高估其变化容量。使用声称容量的 50% 作为现实估算
+- **忽视阻力**：仅编目变化力量的压力映射会遗漏将减缓或阻止转型的阻力。阻力通常比看起来更强
+- **评估瘫痪**：形态评估应该花费数小时到数天，而不是数周。如果花费太长时间，说明系统过于复杂而无法完全评估——在更高的抽象层次评估并深入问题区域
+- **混淆刚性与稳定性**：刚性系统不等于稳定系统。稳定性来自精心设计的灵活性；刚性是设计灵活性的缺失
 
 ## 相关技能
 
-- `adapt-architecture` — the primary transformation skill; assess-form determines readiness for it
-- `dissolve-form` — for systems classified as PREPARE or CRITICAL, rigidity reduction before transformation
-- `repair-damage` — for systems that need repair before assessment can be meaningful
-- `shift-camouflage` — surface-level adaptation that may resolve pressure without full transformation
-- `forage-resources` — resource exploration informs form assessment when the question is "what should we become?"
-- `review-software-architecture` — complementary skill for detailed technical architecture evaluation
-- `assess-context` — AI self-application variant; maps structural assessment to reasoning context malleability, rigidity mapping, and transformation readiness
+- `adapt-architecture` — 主要转型技能；assess-form 确定对其的准备度
+- `dissolve-form` — 对于分类为 PREPARE 或 CRITICAL 的系统，在转型前降低刚性
+- `repair-damage` — 对于需要在评估有意义之前先修复的系统
+- `shift-camouflage` — 表面层适应，可能无需完全转型即可缓解压力
+- `forage-resources` — 当问题是"我们应该变成什么"时，资源探索为形态评估提供信息
+- `review-software-architecture` — 用于详细技术架构评估的互补技能
+- `assess-context` — AI 自我应用变体；将结构评估映射到推理上下文的可塑性、刚性映射和转型准备度

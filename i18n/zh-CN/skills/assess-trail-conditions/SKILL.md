@@ -1,13 +1,10 @@
 ---
 name: assess-trail-conditions
 description: >
-  Evaluate current trail conditions including weather, snow line, river
-  crossings, exposure, and trail maintenance status for safety decision-making.
-  Produces a GREEN/YELLOW/RED safety rating with actionable go/no-go
-  recommendations. Use the day before or morning of a planned hike, during tour
-  planning to assess seasonal viability, after unexpected weather changes on a
-  multi-day tour, when reports suggest trail damage or closures, or before
-  committing to an alpine or exposed route.
+  评估当前步道状况，包括天气、雪线、过河点、暴露段和步道维护状态，用于安全
+  决策。生成 GREEN/YELLOW/RED 安全评级和可操作的行/不行建议。适用于计划
+  徒步前一天或当天早晨、旅行规划中评估季节可行性、多日旅行中天气突变后、
+  报告显示步道损坏或关闭时，或承诺走一条高山或暴露路线之前。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,32 +21,32 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Assess Trail Conditions
+# 评估步道状况
 
-Evaluate current trail conditions for safety decision-making before a planned hike or during tour planning.
+在计划的徒步旅行之前或旅行规划中，评估当前步道状况以进行安全决策。
 
 ## 适用场景
 
-- The day before or morning of a planned hike to make a go/no-go decision
-- During tour planning to assess seasonal viability of a route
-- After unexpected weather changes during a multi-day tour
-- When reports suggest trail damage, closures, or unusual hazards
-- Before committing to an alpine or exposed route
+- 计划徒步的前一天或当天早晨，用于做出行/不行决定
+- 旅行规划中评估路线的季节可行性
+- 多日旅行中天气突然变化后
+- 报告显示步道损坏、关闭或异常危险时
+- 承诺走一条高山或暴露路线之前
 
 ## 输入
 
-- **必需**: Trail name, region, and approximate coordinates or waypoints
-- **必需**: Planned date(s) of the hike
-- **可选**: Trail difficulty rating (SAC T1-T6)
-- **可选**: Maximum elevation on the route
-- **可选**: Known hazard points (river crossings, exposed ridges, glaciers)
-- **可选**: Group experience level (affects risk tolerance thresholds)
+- **必需**：步道名称、区域和大致坐标或航点
+- **必需**：计划的徒步日期
+- **可选**：步道难度等级（SAC T1-T6）
+- **可选**：路线最高海拔
+- **可选**：已知危险点（过河点、暴露山脊、冰川）
+- **可选**：团队经验水平（影响风险容忍阈值）
 
 ## 步骤
 
-### 第 1 步：Gather Weather Data
+### 第 1 步：收集天气数据
 
-Collect weather forecasts from multiple sources for the trail's elevation range.
+从多个来源收集步道海拔范围的天气预报。
 
 ```
 Weather Data Sources (in preference order):
@@ -73,7 +70,7 @@ Weather Data Sources (in preference order):
 └────────────────────────┴──────────────────────────────────────┘
 ```
 
-Collect the following data points:
+收集以下数据点：
 
 ```
 Weather Assessment:
@@ -94,13 +91,13 @@ Weather Assessment:
 └─────────────────────┴───────────────┴───────────────────────────┘
 ```
 
-**预期结果：** Weather data from at least 2 independent sources, with altitude-specific information for both the lowest and highest points of the route.
+**预期结果：** 来自至少 2 个独立来源的天气数据，包含路线最低点和最高点的海拔特定信息。
 
-**失败处理：** If detailed mountain forecasts are unavailable for the specific region, use general forecasts with altitude adjustments: temperature drops approximately 6.5 C per 1000 m of elevation gain, wind speed increases with altitude and exposure. If forecasts disagree, plan for the worse prediction.
+**失败处理：** 如果特定区域没有详细的山地预报，使用一般预报配合海拔调整：温度每升高 1000 米大约下降 6.5°C，风速随海拔和暴露程度增加。如果预报相互矛盾，按最差预测规划。
 
-### 第 2 步：Assess Terrain Conditions
+### 第 2 步：评估地形状况
 
-Evaluate the current state of the trail surface, snow, water, and exposure hazards.
+评估步道路面、积雪、水文和暴露危险的当前状态。
 
 ```
 Terrain Condition Factors:
@@ -134,20 +131,20 @@ Terrain Condition Factors:
 └──────────────────────┴─────────────────────────────────────────┘
 ```
 
-Data sources for terrain conditions:
-- Recent trip reports (hiking forums, mountain club sites)
-- Hut warden reports (call the nearest hut)
-- Webcams at or near the trail
-- Avalanche bulletins (include snow and terrain info even in summer)
-- Trail maintenance authorities (national park offices, Alpenverein sections)
+地形状况数据来源：
+- 近期行程报告（徒步论坛、登山俱乐部网站）
+- 小屋管理员报告（致电最近的山间小屋）
+- 步道上或附近的摄像头
+- 雪崩公报（即使在夏季也包含积雪和地形信息）
+- 步道维护部门（国家公园办公室、阿尔卑斯山协会分部）
 
-**预期结果：** A terrain assessment for each significant hazard point on the route, based on current data no more than 48 hours old.
+**预期结果：** 对路线上每个重要危险点的地形评估，基于不超过 48 小时的当前数据。
 
-**失败处理：** If current condition data is unavailable (remote area, no recent reports), assume conditions are worse than average for the season. Contact the nearest staffed hut or mountain rescue station for local knowledge.
+**失败处理：** 如果当前状况数据不可用（偏远地区、无近期报告），假设状况比该季节的平均水平更差。联系最近的有人值守小屋或山地救援站获取当地知识。
 
-### 第 3 步：Evaluate Trail Status
+### 第 3 步：评估步道状态
 
-Check for closures, diversions, and maintenance issues on the planned route.
+检查计划路线上的关闭、改道和维护问题。
 
 ```
 Trail Status Sources:
@@ -168,20 +165,20 @@ Trail Status Sources:
 └────────────────────────┴──────────────────────────────────────┘
 ```
 
-Check for:
-1. **Full closures**: Trail impassable or legally closed (wildlife protection, construction)
-2. **Partial closures**: Sections closed with official diversions
-3. **Seasonal closures**: Trail not yet open for the season (snow, hut not staffed)
-4. **Damage reports**: Landslides, bridge washouts, trail erosion
-5. **Event impacts**: Races, military exercises, hunting seasons
+检查以下事项：
+1. **完全关闭**：步道不可通行或被法律关闭（野生动物保护、施工）
+2. **部分关闭**：路段关闭并有官方改道
+3. **季节性关闭**：步道尚未为该季节开放（积雪、小屋未配备人员）
+4. **损坏报告**：山体滑坡、桥梁冲毁、步道侵蚀
+5. **活动影响**：比赛、军事演习、狩猎季节
 
-**预期结果：** Confirmed trail status (open, partially closed, closed) with any diversions mapped and time impact estimated.
+**预期结果：** 已确认的步道状态（开放、部分关闭、关闭），任何改道已映射并估算了时间影响。
 
-**失败处理：** If trail status cannot be confirmed, plan for potential diversions. Carry a detailed map (not just the trail app route) so that alternatives can be navigated on the spot. If a trail is listed as closed, respect the closure even if it appears passable.
+**失败处理：** 如果步道状态无法确认，为潜在改道做计划。携带详细地图（不仅仅是步道应用路线），以便在现场导航替代路线。如果步道被标记为关闭，即使看起来可以通行也要遵守关闭规定。
 
-### 第 4 步：Rate Safety Level
+### 第 4 步：评定安全等级
 
-Combine all assessment data into an overall safety rating.
+将所有评估数据合并为一个总体安全评级。
 
 ```
 Safety Rating Criteria:
@@ -218,19 +215,19 @@ Safety Rating Criteria:
 └─────────┴────────────────────────────────────────────────────┘
 ```
 
-For YELLOW ratings, define specific mitigation actions:
-- Early start to beat afternoon weather
-- Turnaround time if conditions worsen
-- Specific sections to monitor closely
-- Communication plan if group separates
+对于 YELLOW 评级，定义具体的缓解措施：
+- 早出发以赶在下午天气之前
+- 如果状况恶化的折返时间
+- 需要密切监控的具体路段
+- 团队分散时的通信计划
 
-**预期结果：** A clear GREEN, YELLOW, or RED rating with specific justification. YELLOW ratings include actionable mitigation steps and defined trigger points for abort.
+**预期结果：** 一个清晰的 GREEN、YELLOW 或 RED 评级，附有具体理由。YELLOW 评级包含可操作的缓解步骤和定义的中止触发点。
 
-**失败处理：** If the assessment is inconclusive (insufficient data to rate confidently), treat it as YELLOW at minimum. Uncertainty should increase caution, not decrease it. If any single factor is RED, the overall rating is RED regardless of other factors.
+**失败处理：** 如果评估不确定（数据不足无法自信评级），最低按 YELLOW 对待。不确定性应增加谨慎，而非减少谨慎。如果任何单一因素为 RED，无论其他因素如何，总体评级即为 RED。
 
-### 第 5 步：Generate Conditions Report
+### 第 5 步：生成状况报告
 
-Compile the assessment into a concise, actionable report.
+将评估汇编成一份简洁、可操作的报告。
 
 ```
 Conditions Report Template:
@@ -272,35 +269,35 @@ DECISION
 ═══════════════════════════════════════════════
 ```
 
-**预期结果：** A complete, dated conditions report that enables an informed go/no-go decision. The report should be shareable with all group members and understandable without additional context.
+**预期结果：** 一份完整的、标注日期的状况报告，使知情的行/不行决定成为可能。报告应可与所有团队成员共享，且无需额外上下文即可理解。
 
-**失败处理：** If the report cannot be completed (e.g., key data unavailable), state what is unknown and how it affects the decision. An incomplete assessment with acknowledged gaps is safer than a false sense of certainty.
+**失败处理：** 如果报告无法完成（例如关键数据不可用），说明什么是未知的以及它如何影响决定。一份承认有缺口的不完整评估比虚假的确定感更安全。
 
 ## 验证清单
 
-- [ ] Weather data collected from at least 2 independent sources
-- [ ] Altitude-specific forecasts obtained (not just valley weather)
-- [ ] Terrain conditions assessed for all key hazard points on the route
-- [ ] Trail status verified (open/closed/diversions)
-- [ ] Safety rating assigned with clear justification
-- [ ] Mitigations defined for YELLOW ratings
-- [ ] Conditions report is complete and dated
-- [ ] Report shared with all group members
-- [ ] Assessment is no more than 24 hours old at time of departure
+- [ ] 从至少 2 个独立来源收集了天气数据
+- [ ] 获取了海拔特定的预报（不仅仅是山谷天气）
+- [ ] 评估了路线上所有关键危险点的地形状况
+- [ ] 验证了步道状态（开放/关闭/改道）
+- [ ] 分配了安全评级并附有明确理由
+- [ ] 为 YELLOW 评级定义了缓解措施
+- [ ] 状况报告完整且标注了日期
+- [ ] 报告已与所有团队成员共享
+- [ ] 出发时评估不超过 24 小时
 
 ## 常见问题
 
-- **Valley weather bias**: Clear skies in the valley mean nothing at altitude. Always check summit-level forecasts; conditions can be dramatically different 1000 m higher.
-- **Stale data**: A report from 3 days ago is unreliable. Mountain conditions change rapidly. Reassess on the morning of the hike.
-- **Optimism bias**: The desire to hike a planned route makes people rationalize marginal conditions. If you have to argue the case for going, the conditions are probably not good enough.
-- **Single-source reliance**: One forecast can be wrong. Cross-check with at least two sources, and weight local/mountain-specific sources over general ones.
-- **Ignoring trend**: Current conditions may be acceptable but deteriorating. A deteriorating trend requires more caution than the snapshot suggests.
-- **Social pressure override**: Never proceed because the group is eager or because you drove a long way. The mountain will be there next week; you might not be.
-- **Snow line miscalculation**: The reported snow line is an average. North-facing slopes can hold snow 200-500 m below the reported line.
+- **山谷天气偏差**：山谷晴空对海拔处毫无意义。始终检查山顶级预报；1000 米以上的条件可能截然不同
+- **过时数据**：3 天前的报告不可靠。山地条件变化迅速。在徒步当天早晨重新评估
+- **乐观偏差**：想要走计划路线的愿望使人合理化边际条件。如果你必须为出发辩护，条件可能不够好
+- **单源依赖**：一个预报可能是错误的。至少交叉检查两个来源，并将本地/山地特定来源的权重高于一般来源
+- **忽视趋势**：当前条件可能可接受但在恶化。恶化趋势需要比快照暗示的更多谨慎
+- **社交压力压倒判断**：永远不要因为团队热情高涨或因为你开了很远的车而继续前进。山下周还在那里；你可能不在了
+- **雪线误算**：报告的雪线是平均值。朝北的斜面可以在报告线以下 200-500 米保持积雪
 
 ## 相关技能
 
-- `plan-hiking-tour` — uses this assessment as input for the safety evaluation step
-- `check-hiking-gear` — gear adjustments based on assessed conditions (add microspikes, extra layers)
-- `plan-tour-route` — trail condition awareness for broader tour planning
-- `create-spatial-visualization` — visualize hazard zones on a map overlay
+- `plan-hiking-tour` — 使用本评估作为安全评估步骤的输入
+- `check-hiking-gear` — 基于评估的状况调整装备（添加冰爪、额外保暖层）
+- `plan-tour-route` — 更广泛旅行规划中的步道状况意识
+- `create-spatial-visualization` — 在地图叠加层上可视化危险区域

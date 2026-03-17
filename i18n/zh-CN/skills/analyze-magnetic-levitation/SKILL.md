@@ -1,13 +1,10 @@
 ---
 name: analyze-magnetic-levitation
 description: >
-  Analyze magnetic levitation systems by applying Earnshaw's theorem to determine
-  whether passive static levitation is possible, then identifying the appropriate
-  circumvention mechanism (diamagnetic, superconducting, active feedback, or
-  spin-stabilized). Use when evaluating maglev transport, magnetic bearings,
-  superconducting levitation, diamagnetic suspension, or Levitron-type devices.
-  Covers force balance calculations, stability analysis in all spatial and
-  tilting modes, and Meissner effect versus flux pinning distinctions.
+  通过应用恩绍定理来确定被动静态悬浮是否可能，然后识别适当的规避机制（抗磁性、
+  超导、主动反馈或自旋稳定），来分析磁悬浮系统。适用于评估磁悬浮运输、磁轴承、
+  超导悬浮、抗磁悬浮或 Levitron 型装置时。涵盖力平衡计算、所有空间和倾斜模式
+  的稳定性分析，以及迈斯纳效应与磁通钉扎的区别。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,37 +21,37 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Analyze Magnetic Levitation
+# 分析磁悬浮
 
-Determine whether a given magnetic system can achieve stable levitation, identify which physical mechanism enables or forbids it, calculate the conditions for force balance and stability, and verify that the levitation is stable against perturbations in all spatial degrees of freedom including tilting modes.
+确定给定磁系统是否能实现稳定悬浮，识别哪种物理机制使其成为可能或禁止其实现，计算力平衡和稳定性条件，并验证悬浮在所有空间自由度（包括倾斜模式）的扰动下是否稳定。
 
 ## 适用场景
 
-- Evaluating whether a proposed magnetic levitation design is physically viable
-- Determining why a permanent magnet arrangement fails to levitate and identifying a workaround
-- Analyzing superconducting levitation systems (Meissner effect, flux pinning, mixed-state trapping)
-- Designing or troubleshooting active electromagnetic feedback levitation (maglev trains, magnetic bearings)
-- Assessing diamagnetic levitation feasibility for a given material and field strength
-- Understanding spin-stabilized magnetic levitation (Levitron) dynamics
+- 评估提出的磁悬浮设计是否在物理上可行
+- 确定永磁体排列悬浮失败的原因并识别解决方案
+- 分析超导悬浮系统（迈斯纳效应、磁通钉扎、混合态俘获）
+- 设计或排查主动电磁反馈悬浮（磁悬浮列车、磁轴承）
+- 评估给定材料和场强下抗磁悬浮的可行性
+- 理解自旋稳定磁悬浮（Levitron）动力学
 
 ## 输入
 
-- **必需**: Description of the levitated object (mass, geometry, magnetic moment or susceptibility)
-- **必需**: Description of the field source (permanent magnets, electromagnets, superconducting coils, arrangement geometry)
-- **可选**: Operating environment (temperature, vacuum, vibration constraints)
-- **可选**: Desired levitation height or gap
-- **可选**: Stability requirements (stiffness, damping, bandwidth for active systems)
+- **必需**：被悬浮物体的描述（质量、几何形状、磁矩或磁化率）
+- **必需**：场源的描述（永磁体、电磁铁、超导线圈、排列几何）
+- **可选**：运行环境（温度、真空、振动约束）
+- **可选**：期望的悬浮高度或间隙
+- **可选**：稳定性要求（刚度、阻尼、主动系统的带宽）
 
 ## 步骤
 
-### 第 1 步：Characterize the System
+### 第 1 步：表征系统
 
-Establish the complete physical description of the object and field source before any analysis:
+在任何分析之前，建立物体和场源的完整物理描述：
 
-1. **Object properties**: Record the mass m, geometry (sphere, disk, rod), magnetic moment mu (for permanent magnet objects), volume magnetic susceptibility chi_v (for paramagnetic, diamagnetic, or ferromagnetic materials), and electrical conductivity sigma (relevant for eddy current effects).
-2. **Field source properties**: Describe the source configuration -- permanent magnet array (Halbach, dipole, quadrupole), electromagnet with coil parameters (turns, current, core material), or superconducting coil (critical current, critical field).
-3. **Field geometry**: Determine the spatial profile of the magnetic field B(r). Identify the field gradient dB/dz along the levitation axis and the curvature d^2B/dz^2 that governs stability.
-4. **Environmental constraints**: Note temperature range (cryogenic for superconductors), atmosphere (vacuum reduces damping), and vibration spectrum.
+1. **物体属性**：记录质量 m、几何形状（球、盘、棒）、磁矩 mu（对于永磁体物体）、体积磁化率 chi_v（对于顺磁、抗磁或铁磁材料）以及电导率 sigma（与涡流效应相关）。
+2. **场源属性**：描述源配置——永磁体阵列（Halbach、偶极、四极）、带线圈参数（匝数、电流、芯材料）的电磁铁，或超导线圈（临界电流、临界磁场）。
+3. **场几何**：确定磁场 B(r) 的空间分布。识别沿悬浮轴的场梯度 dB/dz 以及控制稳定性的曲率 d^2B/dz^2。
+4. **环境约束**：记录温度范围（超导体需低温）、大气（真空减少阻尼）和振动频谱。
 
 ```markdown
 ## System Characterization
@@ -65,21 +62,21 @@ Establish the complete physical description of the object and field source befor
 - **Environment**: [temperature, pressure, vibration]
 ```
 
-**预期结果：** A complete specification of the object and field source sufficient to determine forces and stability without further assumptions.
+**预期结果：** 物体和场源的完整规格说明，足以在无需进一步假设的情况下确定力和稳定性。
 
-**失败处理：** If the magnetic susceptibility or moment is unknown, measure or estimate it from material data tables. Without this quantity, force calculations are impossible. For composite objects, compute an effective susceptibility from the volume-weighted average.
+**失败处理：** 如果磁化率或磁矩未知，从材料数据表中测量或估计。没有此量值，力计算不可能。对于复合物体，从体积加权平均值计算等效磁化率。
 
-### 第 2 步：Apply Earnshaw's Theorem
+### 第 2 步：应用恩绍定理
 
-Determine whether passive static levitation is possible for the given system:
+确定给定系统是否可能实现被动静态悬浮：
 
-1. **State Earnshaw's theorem**: In a region free of currents and time-varying fields, no static arrangement of charges or permanent magnets can produce a point of stable equilibrium for a paramagnetic or ferromagnetic body. Mathematically, the Laplacian of the magnetic potential energy satisfies nabla^2 U >= 0 (for paramagnetic/ferromagnetic), so U has no local minimum.
-2. **Classify the object's response**: Determine whether the levitated object is paramagnetic (chi_v > 0), diamagnetic (chi_v < 0), ferromagnetic (chi_v >> 0, nonlinear), superconducting (perfect diamagnet, chi_v = -1), or a permanent magnet (fixed mu).
-3. **Apply the theorem**:
-   - For paramagnetic, ferromagnetic, or permanent magnet objects in a static field from permanent magnets or fixed currents: Earnshaw forbids stable levitation. At least one spatial direction will be unstable.
-   - For diamagnetic objects: Earnshaw does NOT forbid levitation. nabla^2 U <= 0 allows a local energy minimum. Passive static levitation is permitted.
-   - For superconductors: The Meissner effect provides perfect diamagnetism, and flux pinning can provide both levitation and lateral stability.
-4. **Document the verdict**: State clearly whether the system is Earnshaw-forbidden or Earnshaw-permitted, and which material property determines the classification.
+1. **陈述恩绍定理**：在无电流和时变场的区域内，没有任何电荷或永磁体的静态排列能为顺磁或铁磁体产生稳定平衡点。数学上，磁势能的拉普拉斯算子满足 nabla^2 U >= 0（对于顺磁/铁磁），因此 U 没有局部最小值。
+2. **分类物体的响应**：确定被悬浮物体是顺磁性（chi_v > 0）、抗磁性（chi_v < 0）、铁磁性（chi_v >> 0，非线性）、超导（完全抗磁体，chi_v = -1）还是永磁体（固定 mu）。
+3. **应用定理**：
+   - 对于永磁体或固定电流产生的静态场中的顺磁、铁磁或永磁体物体：恩绍定理禁止稳定悬浮。至少一个空间方向将不稳定。
+   - 对于抗磁性物体：恩绍定理不禁止悬浮。nabla^2 U <= 0 允许局部能量最小值。被动静态悬浮是被允许的。
+   - 对于超导体：迈斯纳效应提供完全抗磁性，磁通钉扎可以同时提供悬浮和横向稳定性。
+4. **记录结论**：清楚说明系统是恩绍禁止的还是恩绍允许的，以及哪种材料属性决定了分类。
 
 ```markdown
 ## Earnshaw Analysis
@@ -89,23 +86,23 @@ Determine whether passive static levitation is possible for the given system:
 - **Reasoning**: [which condition of the theorem applies or fails]
 ```
 
-**预期结果：** A definitive classification of whether the proposed levitation is Earnshaw-forbidden or Earnshaw-permitted, with the specific physical reasoning documented.
+**预期结果：** 关于提出的悬浮是恩绍禁止还是恩绍允许的明确分类，并记录了具体的物理推理。
 
-**失败处理：** If the object has mixed magnetic character (e.g., a ferromagnetic core with a diamagnetic shell), analyze each component separately. The overall stability depends on the net energy landscape, which may require numerical field computation.
+**失败处理：** 如果物体具有混合磁性特征（例如铁磁芯带抗磁壳），分别分析每个组件。整体稳定性取决于净能量景观，可能需要数值场计算。
 
-### 第 3 步：Identify Circumvention Mechanism
+### 第 3 步：识别规避机制
 
-If Earnshaw's theorem forbids passive static levitation, identify which of the four standard circumvention mechanisms applies:
+如果恩绍定理禁止被动静态悬浮，识别四种标准规避机制中哪种适用：
 
-1. **Diamagnetic levitation**: The levitated object itself is diamagnetic (chi_v < 0). Examples: pyrolytic graphite over NdFeB magnets, water droplets and frogs in 16 T Bitter magnets. Requires strong field gradients; the condition is (chi_v / mu_0) * B * (dB/dz) >= rho * g, where rho is density.
+1. **抗磁悬浮**：被悬浮物体本身是抗磁性的（chi_v < 0）。例如：NdFeB 磁铁上方的热解石墨，16 T 苦磁铁中的水滴和青蛙。需要强场梯度；条件是 (chi_v / mu_0) * B * (dB/dz) >= rho * g，其中 rho 是密度。
 
-2. **Superconducting levitation**: The object is a type-I or type-II superconductor below T_c.
-   - **Meissner levitation**: Complete flux expulsion provides a repulsive force. Stable but has limited load capacity and requires the superconductor to remain in the Meissner state (B < B_c1).
-   - **Flux pinning** (type-II superconductors): Magnetic flux vortices are pinned at defect sites in the material. This provides both vertical levitation force and lateral restoring force, allowing the superconductor to be suspended below or above the magnet. The object is locked in 3D position relative to the field source.
+2. **超导悬浮**：物体是低于 T_c 的 I 型或 II 型超导体。
+   - **迈斯纳悬浮**：完全磁通排斥提供排斥力。稳定但承载能力有限，需要超导体保持在迈斯纳态（B < B_c1）。
+   - **磁通钉扎**（II 型超导体）：磁通涡旋在材料的缺陷处被钉扎。这同时提供垂直悬浮力和横向恢复力，允许超导体悬浮在磁铁下方或上方。物体被锁定在相对于场源的 3D 位置。
 
-3. **Active electromagnetic feedback**: Sensors measure the object's position, and a controller adjusts electromagnet currents to maintain the equilibrium. Examples: EMS maglev trains (Transrapid), active magnetic bearings. Requires power supply, sensors, and a control system with bandwidth exceeding the mechanical resonance frequency.
+3. **主动电磁反馈**：传感器测量物体位置，控制器调整电磁铁电流以维持平衡。例如：EMS 磁悬浮列车（Transrapid）、主动磁轴承。需要电源、传感器和带宽超过机械共振频率的控制系统。
 
-4. **Spin-stabilized levitation**: A spinning permanent magnet (Levitron) achieves a gyroscopic stabilization of the tilting mode that Earnshaw's theorem otherwise makes unstable. The spin must exceed a critical frequency omega_c for gyroscopic stiffness to overcome the magnetic torque. The object must also remain within a narrow mass window.
+4. **自旋稳定悬浮**：旋转的永磁体（Levitron）通过陀螺仪稳定来实现恩绍定理使其不稳定的倾斜模式的稳定。自旋必须超过临界频率 omega_c，使陀螺刚度克服磁力矩。物体还必须保持在狭窄的质量窗口内。
 
 ```markdown
 ## Circumvention Mechanism
@@ -115,27 +112,27 @@ If Earnshaw's theorem forbids passive static levitation, identify which of the f
 - **Limitations**: [load capacity, power consumption, cryogenics, mass window]
 ```
 
-**预期结果：** Identification of the specific mechanism with its physical basis clearly explained, including quantitative requirements for the mechanism to function.
+**预期结果：** 识别具体机制并清楚解释其物理基础，包括机制运行的定量要求。
 
-**失败处理：** If the system does not clearly fit any of the four mechanisms, check for hybrid approaches (e.g., permanent magnets for the primary force with eddy current damping for stability, or diamagnetic stabilization of a paramagnetic system). Also consider whether the system uses electrodynamic levitation (moving conductors in a magnetic field), which is a distinct mechanism based on Lenz's law.
+**失败处理：** 如果系统不明确属于四种机制中的任何一种，检查混合方法（例如永磁体提供主要力加涡流阻尼以确保稳定性，或顺磁系统的抗磁稳定化）。也考虑系统是否使用电动力悬浮（磁场中的运动导体），这是基于楞次定律的不同机制。
 
-### 第 4 步：Calculate Levitation Conditions
+### 第 4 步：计算悬浮条件
 
-Compute the force balance and quantitative conditions for stable levitation:
+计算稳定悬浮的力平衡和定量条件：
 
-1. **Vertical force balance**: The magnetic force must equal gravity.
-   - For a magnetic dipole in a field gradient: F_z = mu * (dB/dz) = m * g.
-   - For a diamagnetic object: F_z = (chi_v * V / mu_0) * B * (dB/dz) = m * g.
-   - For a superconductor (image method): Model the superconductor as a mirror and compute the repulsion between the magnet and its image.
-   - For active feedback: F_z = k_coil * I(t), where I(t) is the feedback-controlled current.
+1. **垂直力平衡**：磁力必须等于重力。
+   - 对于场梯度中的磁偶极子：F_z = mu * (dB/dz) = m * g。
+   - 对于抗磁性物体：F_z = (chi_v * V / mu_0) * B * (dB/dz) = m * g。
+   - 对于超导体（镜像法）：将超导体建模为镜像，计算磁铁与其镜像之间的排斥力。
+   - 对于主动反馈：F_z = k_coil * I(t)，其中 I(t) 是反馈控制的电流。
 
-2. **Solve for levitation height**: The force balance equation F_z(z) = m * g determines the equilibrium height z_0. For analytic field profiles, solve algebraically. For measured or numerically computed fields, solve graphically or numerically.
+2. **求解悬浮高度**：力平衡方程 F_z(z) = m * g 确定平衡高度 z_0。对于解析场分布，代数求解。对于测量或数值计算的场，图形或数值求解。
 
-3. **Restoring force gradient (stiffness)**: Compute k_z = -dF_z/dz evaluated at z_0. For stable levitation, k_z > 0 (force decreases with increasing height). The natural frequency of vertical oscillation is omega_z = sqrt(k_z / m).
+3. **恢复力梯度（刚度）**：计算 k_z = -dF_z/dz 在 z_0 处的值。对于稳定悬浮，k_z > 0（力随高度增加而减小）。垂直振荡的固有频率为 omega_z = sqrt(k_z / m)。
 
-4. **Lateral stiffness**: Compute the restoring force gradient in the horizontal plane, k_x = -dF_x/dx. For Earnshaw-permitted systems (diamagnetic, superconducting), this should be positive. For feedback systems, it depends on the sensor-actuator geometry.
+4. **横向刚度**：计算水平面内的恢复力梯度 k_x = -dF_x/dx。对于恩绍允许的系统（抗磁、超导），应为正值。对于反馈系统，取决于传感器-执行器几何。
 
-5. **Load capacity**: Determine the maximum mass that can be levitated by finding the field gradient at which the equilibrium becomes marginally stable (k_z -> 0 at the maximum displacement).
+5. **承载能力**：通过找到平衡变为边界稳定（k_z -> 0 在最大位移处）时的场梯度来确定可悬浮的最大质量。
 
 ```markdown
 ## Levitation Conditions
@@ -147,23 +144,23 @@ Compute the force balance and quantitative conditions for stable levitation:
 - **Maximum load**: m_max = [value, units kg]
 ```
 
-**预期结果：** A complete force balance with the equilibrium position determined, stiffness values computed for vertical and lateral directions, and the load capacity estimated.
+**预期结果：** 完整的力平衡，确定了平衡位置，计算了垂直和横向方向的刚度值，并估算了承载能力。
 
-**失败处理：** If the force balance has no solution (magnetic force too weak to overcome gravity), the system cannot levitate the specified object. Either increase the field gradient (stronger magnets, closer spacing), reduce the object mass, or switch to a material with higher susceptibility. If stiffness is negative in any direction, the equilibrium is unstable in that direction -- return to Step 3 to identify an appropriate stabilization mechanism.
+**失败处理：** 如果力平衡无解（磁力太弱无法克服重力），系统无法悬浮指定物体。要么增加场梯度（更强的磁铁、更近的间距），减小物体质量，要么换用更高磁化率的材料。如果刚度在任何方向为负，该方向的平衡不稳定——返回第 3 步识别适当的稳定机制。
 
-### 第 5 步：Verify Stability in All Degrees of Freedom
+### 第 5 步：验证所有自由度的稳定性
 
-Confirm that the levitation is stable against perturbations in all six rigid-body degrees of freedom (three translations, three rotations):
+确认悬浮在所有六个刚体自由度（三个平移、三个旋转）的扰动下稳定：
 
-1. **Translational stability**: Verify k_z > 0, k_x > 0, k_y > 0. For axially symmetric systems, k_x = k_y by symmetry. Compute the restoring force for small displacements delta_x, delta_y, delta_z from equilibrium.
+1. **平移稳定性**：验证 k_z > 0、k_x > 0、k_y > 0。对于轴对称系统，由对称性 k_x = k_y。计算从平衡位置小位移 delta_x、delta_y、delta_z 的恢复力。
 
-2. **Tilting stability**: Compute the restoring torque for small angular deflections theta_x, theta_y about the horizontal axes. For a magnetic dipole, the torque depends on the field curvature and the object's moment of inertia. Tilting instability is the primary failure mode of passive permanent magnet levitation (and the mode that spin stabilization in the Levitron addresses).
+2. **倾斜稳定性**：计算绕水平轴小角偏转 theta_x、theta_y 的恢复力矩。对于磁偶极子，力矩取决于场曲率和物体的转动惯量。倾斜不稳定性是被动永磁体悬浮的主要失效模式（也是 Levitron 中自旋稳定所解决的模式）。
 
-3. **Spin stability** (if applicable): For spin-stabilized systems, verify that the spin rate exceeds the critical frequency omega > omega_c. The critical frequency is determined by the ratio of magnetic torque to angular momentum. Below omega_c, precession leads to tilting instability.
+3. **自旋稳定性**（如适用）：对于自旋稳定系统，验证自旋速率超过临界频率 omega > omega_c。临界频率由磁力矩与角动量之比决定。低于 omega_c 时，进动导致倾斜不稳定。
 
-4. **Dynamic stability**: For active feedback systems, verify that the control loop has sufficient phase margin (> 30 degrees) and gain margin (> 6 dB) at all resonance frequencies. Check that sensor noise does not excite instability.
+4. **动态稳定性**：对于主动反馈系统，验证控制环路在所有共振频率处具有足够的相位裕度（> 30 度）和增益裕度（> 6 dB）。检查传感器噪声是否会激发不稳定性。
 
-5. **Thermal and external perturbations**: Assess the effect of temperature fluctuations (critical for superconductors near T_c), air currents (significant for diamagnetic levitation of light objects), and mechanical vibration (transmitted through the field source mounting).
+5. **热和外部扰动**：评估温度波动（对于接近 T_c 的超导体至关重要）、气流（对轻物体的抗磁悬浮显著）和机械振动（通过场源安装传递）的影响。
 
 ```markdown
 ## Stability Analysis
@@ -177,36 +174,36 @@ Confirm that the levitation is stable against perturbations in all six rigid-bod
 | Spin (theta_z)    | [N/A or value]       | [Yes/No] | [only relevant for spin-stabilized] |
 ```
 
-**预期结果：** All six degrees of freedom are either inherently stable (positive restoring force/torque) or stabilized by an identified mechanism (feedback, gyroscopic, flux pinning). The system is confirmed viable for levitation.
+**预期结果：** 所有六个自由度要么固有稳定（正恢复力/力矩），要么由已识别的机制（反馈、陀螺、磁通钉扎）稳定。系统确认可行于悬浮。
 
-**失败处理：** If any degree of freedom is unstable and no stabilization mechanism is identified, the levitation design is not viable as specified. The most common fix is adding an active feedback loop for the unstable direction, adding diamagnetic material for passive stabilization of a lateral mode, or increasing spin rate for gyroscopic stabilization. Return to Step 3 to incorporate the additional mechanism.
+**失败处理：** 如果任何自由度不稳定且未识别稳定机制，悬浮设计按指定不可行。最常见的修复方法是为不稳定方向添加主动反馈环路、添加抗磁材料以被动稳定横向模式，或增加自旋速率以实现陀螺稳定。返回第 3 步以纳入额外机制。
 
 ## 验证清单
 
-- [ ] Object properties (mass, susceptibility or magnetic moment, geometry) are fully specified
-- [ ] Field source and spatial profile are characterized with gradients computed
-- [ ] Earnshaw's theorem is correctly applied to the object's magnetic classification
-- [ ] The circumvention mechanism is identified with its physical basis explained
-- [ ] Force balance is solved with equilibrium position determined
-- [ ] Stiffness is computed for all three translational directions
-- [ ] Tilting stability is analyzed for both horizontal tilt axes
-- [ ] For spin-stabilized systems, the critical spin rate is computed and verified
-- [ ] For active systems, control bandwidth and stability margins are checked
-- [ ] Load capacity limits are estimated
+- [ ] 物体属性（质量、磁化率或磁矩、几何形状）完全指定
+- [ ] 场源和空间分布已表征并计算了梯度
+- [ ] 恩绍定理正确应用于物体的磁分类
+- [ ] 已识别规避机制并解释了其物理基础
+- [ ] 求解了力平衡并确定了平衡位置
+- [ ] 计算了所有三个平移方向的刚度
+- [ ] 分析了两个水平倾斜轴的倾斜稳定性
+- [ ] 对于自旋稳定系统，计算并验证了临界自旋速率
+- [ ] 对于主动系统，检查了控制带宽和稳定裕度
+- [ ] 估算了承载能力极限
 
 ## 常见问题
 
-- **Assuming permanent magnets can levitate each other statically**: Earnshaw's theorem forbids this for paramagnetic and ferromagnetic objects, yet it is the most common misconception. The attraction or repulsion along one axis always produces instability along a perpendicular axis. Always apply the theorem before attempting force balance calculations.
-- **Confusing Meissner levitation with flux pinning**: Meissner effect (type-I) produces pure repulsion and only works with the superconductor below the magnet. Flux pinning (type-II) locks the superconductor at a fixed position relative to the field, allowing suspension in any orientation. The physics and the design implications are fundamentally different.
-- **Ignoring tilting modes**: Many analyses check only translational stability and declare the system stable. Tilting instability is the primary failure mode for passive magnetic levitation and requires separate analysis. A system can have positive translational stiffness in all directions while being tilt-unstable.
-- **Underestimating diamagnetic levitation field requirements**: Diamagnetic susceptibilities are very small (chi_v ~ -10^-5 for most materials, -4.5 x 10^-4 for pyrolytic graphite). Levitating even milligram-scale objects requires strong field gradients, typically B * dB/dz > 1000 T^2/m for non-graphite materials.
-- **Neglecting eddy current effects**: Time-varying fields or moving conductors generate eddy currents that produce both forces and heating. In active feedback systems, eddy currents in the levitated object create phase lag that can destabilize the control loop.
-- **Treating superconductors as perfect diamagnets in all conditions**: Type-II superconductors in the mixed state (B_c1 < B < B_c2) have partial flux penetration. The levitation force depends on the magnetization history (hysteresis), not just the instantaneous field.
+- **假设永磁体可以相互静态悬浮**：恩绍定理禁止顺磁和铁磁物体这样做，但这是最常见的误解。沿一个轴的吸引或排斥总会在垂直轴上产生不稳定性。在尝试力平衡计算之前始终应用该定理
+- **混淆迈斯纳悬浮与磁通钉扎**：迈斯纳效应（I 型）产生纯排斥力，仅在超导体位于磁铁下方时起作用。磁通钉扎（II 型）将超导体锁定在相对于场的固定位置，允许在任何方向悬浮。物理原理和设计含义根本不同
+- **忽略倾斜模式**：许多分析仅检查平移稳定性就宣布系统稳定。倾斜不稳定性是被动磁悬浮的主要失效模式，需要单独分析。系统可以在所有方向上具有正的平移刚度同时倾斜不稳定
+- **低估抗磁悬浮的场要求**：抗磁磁化率非常小（大多数材料 chi_v ~ -10^-5，热解石墨 -4.5 x 10^-4）。即使悬浮毫克级物体也需要强场梯度，非石墨材料通常需要 B * dB/dz > 1000 T^2/m
+- **忽略涡流效应**：时变场或运动导体产生涡流，这些涡流同时产生力和热。在主动反馈系统中，被悬浮物体中的涡流产生相位滞后，可能使控制环路不稳定
+- **在所有条件下将超导体视为完美抗磁体**：混合态中的 II 型超导体（B_c1 < B < B_c2）具有部分磁通穿透。悬浮力取决于磁化历史（磁滞），而不仅仅是瞬时场
 
 ## 相关技能
 
-- `evaluate-levitation-mechanism` -- comparative analysis to select the best levitation approach for an application
-- `analyze-magnetic-field` -- detailed computation of magnetic field profiles needed as input to this skill
-- `formulate-maxwell-equations` -- derive the electromagnetic field equations governing the levitation system
-- `design-acoustic-levitation` -- alternative non-magnetic levitation approach for comparison
-- `formulate-quantum-problem` -- quantum mechanical treatment for superconducting levitation (BCS theory, Ginzburg-Landau)
+- `evaluate-levitation-mechanism` -- 比较分析以选择应用的最佳悬浮方法
+- `analyze-magnetic-field` -- 详细计算作为本技能输入所需的磁场分布
+- `formulate-maxwell-equations` -- 推导控制悬浮系统的电磁场方程
+- `design-acoustic-levitation` -- 用于比较的替代非磁性悬浮方法
+- `formulate-quantum-problem` -- 超导悬浮的量子力学处理（BCS 理论、Ginzburg-Landau）

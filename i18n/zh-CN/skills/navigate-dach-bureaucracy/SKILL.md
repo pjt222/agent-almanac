@@ -1,13 +1,10 @@
 ---
 name: navigate-dach-bureaucracy
 description: >
-  Step-by-step guidance for DACH-specific governmental procedures including
-  Anmeldung, Finanzamt registration, health insurance enrollment, and social
-  security coordination. Use after arriving in a DACH country and needing to
-  complete mandatory registrations, before a specific appointment to understand
-  what to expect, when an initial registration attempt was rejected, when
-  transitioning between DACH countries, or when handling registrations for
-  dependents alongside your own.
+  DACH 地区特定政府程序的逐步指导，包括户籍登记（Anmeldung）、税务局注册、
+  医疗保险登记和社会保障协调。适用于抵达 DACH 国家后需要完成强制性注册登记时、
+  在特定预约前了解预期流程时、初次注册尝试被拒绝时、在 DACH 国家之间转移时，
+  或为家属同时办理注册时。
 license: MIT
 allowed-tools: Read Grep Glob WebFetch WebSearch
 metadata:
@@ -24,319 +21,319 @@ metadata:
   translation_date: "2026-03-17"
 ---
 
-# Navigate DACH Bureaucracy
+# DACH 官僚程序导航
 
-Provide step-by-step guidance for completing governmental procedures in Germany, Austria, and Switzerland, covering residence registration, tax setup, health insurance enrollment, social security coordination, and essential additional registrations.
+提供在德国、奥地利和瑞士完成政府程序的逐步指导，涵盖户籍登记、税务设置、医疗保险登记、社会保障协调和其他必要的附加注册。
 
 ## 适用场景
 
-- After arriving in a DACH country and needing to complete mandatory registrations
-- Before a specific appointment to understand what to expect and how to prepare
-- When an initial registration attempt was rejected and you need to understand why and how to fix it
-- When transitioning between DACH countries (e.g., Germany to Switzerland) and needing to understand the differences
-- When an employer's HR department provides incomplete guidance on mandatory registrations
-- When handling registrations for dependents (spouse, children) alongside your own
+- 抵达 DACH 国家后需要完成强制性注册登记
+- 在特定预约前了解预期流程和如何准备
+- 初次注册尝试被拒绝，需要了解原因和如何解决
+- 在 DACH 国家之间转移（如从德国到瑞士），需要了解差异
+- 雇主人力资源部门对强制性注册提供的指导不完整
+- 为家属（配偶、子女）同时办理注册
 
 ## 输入
 
-### Required
+### 必需
 
-- **Destination country**: Germany, Austria, or Switzerland
-- **City/municipality**: Specific location (procedures vary, especially in Switzerland by canton)
-- **Nationality**: EU/EEA citizen, Swiss citizen, or non-EU national (determines permit requirements)
-- **Employment status**: Employed, self-employed, freelance, student, retired, or unemployed
-- **Housing confirmation**: Signed lease, sublease agreement, or property ownership proof
+- **目的地国家**：德国、奥地利或瑞士
+- **城市/市镇**：具体地点（程序因地而异，瑞士尤其按州不同）
+- **国籍**：EU/EEA 公民、瑞士公民或非 EU 国民（决定许可证要求）
+- **就业状况**：受雇、自雇、自由职业、学生、退休或失业
+- **住房证明**：已签署的租约、转租协议或产权证明
 
-### Optional
+### 可选
 
-- **Relocation plan**: Output from plan-eu-relocation for timeline alignment
-- **Document checklist**: Output from check-relocation-documents for preparation verification
-- **Employer HR contact**: For employer-assisted registration steps
-- **German/French/Italian language level**: Affects which communication channels and forms to use
-- **Previous DACH residence**: Prior registrations that may simplify procedures
-- **Canton (Switzerland only)**: Required for Switzerland; determines many procedural details
-- **Specific appointment date**: If already booked, to tailor preparation to that date
+- **搬迁计划**：plan-eu-relocation 的输出用于时间线对齐
+- **文件清单**：check-relocation-documents 的输出用于准备验证
+- **雇主人力资源联系人**：用于雇主协助的注册步骤
+- **德语/法语/意大利语水平**：影响使用哪些沟通渠道和表格
+- **之前的 DACH 居住经历**：可能简化程序的先前注册
+- **州（仅瑞士）**：瑞士必需；决定许多程序细节
+- **具体预约日期**：如已预约，用于针对该日期定制准备
 
 ## 步骤
 
-### 第 1 步：Identify Applicable Procedures
+### 第 1 步：确定适用程序
 
-Determine exactly which governmental procedures apply based on destination country, nationality, and personal situation.
+根据目的地国家、国籍和个人情况确定适用的具体政府程序。
 
-1. For Germany, the standard procedure set includes:
-   - Anmeldung (residence registration) at Buergeramt/Einwohnermeldeamt -- mandatory
-   - Steueridentifikationsnummer (tax ID) assignment -- automatic after Anmeldung
-   - Steuerklasse (tax class) selection -- if married, otherwise auto-assigned
-   - Krankenversicherung (health insurance) enrollment -- mandatory
-   - Sozialversicherung (social security) registration -- through employer or self
-   - Rundfunkbeitrag (broadcasting fee) registration -- mandatory per household
-   - Bank account opening -- practically mandatory for daily life
-2. For Austria, the standard set includes:
-   - Meldezettel (registration form) submission at Meldeamt -- mandatory within 3 days
-   - Anmeldebescheinigung (EU citizens) or Aufenthaltstitel (non-EU) -- within 4 months
-   - Steuernummer from Finanzamt -- for employment or self-employment
-   - e-card registration through Sozialversicherung -- via employer or self
-   - GIS (broadcasting fee) registration -- mandatory per household
-   - Bank account opening
-3. For Switzerland, the standard set includes:
-   - Anmeldung at Einwohnerkontrolle/Kreisbuero -- mandatory within 14 days
-   - Aufenthaltsbewilligung (residence permit B or L) -- through employer or canton
-   - AHV-Nummer (social security number) assignment
-   - Krankenversicherung (mandatory basic health insurance) -- within 3 months
-   - Quellensteuer or regular tax arrangement -- depends on permit and income
-   - Bank/PostFinance account opening
-   - Serafe (broadcasting fee) registration -- mandatory per household
-4. Add conditional procedures:
-   - Vehicle owners: re-registration at Kfz-Zulassungsstelle / Strassenverkehrsamt
-   - Pet owners: registration with local authority, veterinary check
-   - Families: Kindergeld/Familienbeihilfe/Kinderzulage application
-   - Freelancers/self-employed: Gewerbeanmeldung / trade registration
-   - Non-EU nationals: Aufenthaltstitel/Niederlassungsbewilligung application
-5. Create a checklist of applicable procedures with their statutory deadlines
+1. 德国的标准程序集包括：
+   - Anmeldung（户籍登记）在 Buergeramt/Einwohnermeldeamt——强制性
+   - Steueridentifikationsnummer（税号）分配——Anmeldung 后自动
+   - Steuerklasse（税级）选择——已婚者需要，否则自动分配
+   - Krankenversicherung（医疗保险）登记——强制性
+   - Sozialversicherung（社会保障）注册——通过雇主或自行
+   - Rundfunkbeitrag（广播费）注册——每户强制
+   - 银行账户开户——日常生活实际上必需
+2. 奥地利的标准程序集包括：
+   - Meldezettel（登记表）在 Meldeamt 提交——3 天内强制
+   - Anmeldebescheinigung（EU 公民）或 Aufenthaltstitel（非 EU）——4 个月内
+   - Finanzamt 的 Steuernummer——用于就业或自雇
+   - 通过 Sozialversicherung 的 e-card 注册——通过雇主或自行
+   - GIS（广播费）注册——每户强制
+   - 银行账户开户
+3. 瑞士的标准程序集包括：
+   - Einwohnerkontrolle/Kreisbuero 的 Anmeldung——14 天内强制
+   - Aufenthaltsbewilligung（B 或 L 居留许可）——通过雇主或州
+   - AHV-Nummer（社会保障号码）分配
+   - Krankenversicherung（强制基本医疗保险）——3 个月内
+   - Quellensteuer 或常规税务安排——取决于许可证和收入
+   - 银行/PostFinance 账户开户
+   - Serafe（广播费）注册——每户强制
+4. 添加条件性程序：
+   - 车辆所有者：在 Kfz-Zulassungsstelle / Strassenverkehrsamt 重新注册
+   - 宠物主人：在当地主管机构注册，兽医检查
+   - 家庭：Kindergeld/Familienbeihilfe/Kinderzulage 申请
+   - 自由职业者/自雇者：Gewerbeanmeldung / 营业登记
+   - 非 EU 国民：Aufenthaltstitel/Niederlassungsbewilligung 申请
+5. 创建适用程序清单及其法定期限
 
-**预期结果：** A personalized checklist of all required procedures for the specific country, city, nationality, and employment combination, with deadlines noted.
+**预期结果：** 针对特定国家、城市、国籍和就业组合的所有必需程序的个性化清单，标注截止日期。
 
-**失败处理：** If the combination of factors creates an unusual case (e.g., self-employed non-EU national in a Swiss canton with special bilateral agreements), consult the cantonal migration office or Auslaenderbehorde directly before proceeding.
+**失败处理：** 如果因素组合创建了不寻常的案例（如瑞士某州有特殊双边协议的自雇非 EU 国民），在继续之前直接咨询州移民局或外国人管理局。
 
-### 第 2 步：Prepare for Anmeldung / Meldeamt Registration
+### 第 2 步：准备户籍登记
 
-Complete the residence registration, which is the foundational step that unlocks most subsequent procedures.
+完成户籍登记，这是解锁大多数后续程序的基础步骤。
 
-1. **Germany (Anmeldung at Buergeramt)**:
-   - Book an appointment online at the city's Buergeramt website (Berlin: service.berlin.de; Munich: muenchen.de/rathaus; others: check city website)
-   - If no appointments available, check for walk-in hours (Buergeramt ohne Termin) or try smaller satellite offices
-   - Prepare documents:
-     - Valid passport or national ID card (original)
-     - Wohnungsgeberbestaetigung (landlord confirmation form -- the landlord must complete and sign this)
-     - Completed Anmeldeformular (registration form, available online or at the office)
-     - Marriage certificate if registering a spouse (with certified German translation if needed)
-     - Birth certificates for children (with certified German translation if needed)
-   - At the appointment:
-     - Arrive 10 minutes early with all originals
-     - The clerk will process the registration and issue a Meldebestaetigung (registration confirmation)
-     - Request additional certified copies of the Meldebestaetigung (you will need them for bank, insurance, etc.)
-     - Ask about Steueridentifikationsnummer -- it will be mailed to your registered address within 2-4 weeks
-   - Deadline: within 14 days of moving in (Einzugsdatum on the lease, not the arrival date in Germany)
+1. **德国（Buergeramt 的 Anmeldung）**：
+   - 在城市 Buergeramt 网站在线预约（柏林：service.berlin.de；慕尼黑：muenchen.de/rathaus；其他：查看城市网站）
+   - 如果没有可用预约，检查无预约时段（Buergeramt ohne Termin）或尝试较小的卫星办公室
+   - 准备文件：
+     - 有效护照或国民身份证（原件）
+     - Wohnungsgeberbestaetigung（房东确认表——房东必须填写并签署）
+     - 填好的 Anmeldeformular（登记表，可在网上或办公室获取）
+     - 如登记配偶需要结婚证（如需要附经认证的德语翻译）
+     - 子女出生证明（如需要附经认证的德语翻译）
+   - 预约当天：
+     - 提前 10 分钟到达，携带所有原件
+     - 工作人员将处理登记并签发 Meldebestaetigung（登记确认）
+     - 要求额外的 Meldebestaetigung 认证副本（银行、保险等需要）
+     - 询问 Steueridentifikationsnummer——将在 2-4 周内邮寄到注册地址
+   - 截止日期：入住后 14 天内（以租约上的 Einzugsdatum 为准，非抵达德国日期）
 
-2. **Austria (Meldezettel at Meldeamt)**:
-   - No appointment needed in most cities; walk in during office hours
-   - Prepare documents:
-     - Valid passport or national ID card (original)
-     - Completed Meldezettel form (downloadable from help.gv.at or available at the office)
-     - The Meldezettel must be signed by the landlord/accommodation provider (Unterkunftgeber)
-   - At the office:
-     - Submit the form; processing is usually immediate
-     - You receive a stamped Meldebestaetigung
-   - Deadline: within 3 days of moving in (Bezug der Unterkunft)
-   - For EU citizens: apply for Anmeldebescheinigung within 4 months at the MA 35 (Vienna) or BH (other regions)
+2. **奥地利（Meldeamt 的 Meldezettel）**：
+   - 大多数城市无需预约；在办公时间内直接前往
+   - 准备文件：
+     - 有效护照或国民身份证（原件）
+     - 填好的 Meldezettel 表格（可从 help.gv.at 下载或在办公室获取）
+     - Meldezettel 必须由房东/住宿提供者（Unterkunftgeber）签署
+   - 在办公室：
+     - 提交表格；处理通常即时完成
+     - 收到盖章的 Meldebestaetigung
+   - 截止日期：入住后 3 天内（Bezug der Unterkunft）
+   - EU 公民：在 MA 35（维也纳）或 BH（其他地区）4 个月内申请 Anmeldebescheinigung
 
-3. **Switzerland (Anmeldung at Einwohnerkontrolle)**:
-   - Check your Gemeinde (municipality) website for office hours and whether appointments are needed
-   - Prepare documents:
-     - Valid passport (original)
-     - Rental contract or proof of housing
-     - Employment contract or proof of financial means
-     - Biometric passport photos (for the residence permit application processed simultaneously)
-     - Marriage/birth certificates if applicable
-     - Health insurance confirmation (if already enrolled)
-   - At the office:
-     - Register your residence and simultaneously apply for your residence permit (Aufenthaltsbewilligung)
-     - EU/EFTA citizens: typically receive B permit (Aufenthaltsbewilligung B) for employment
-     - You will receive a confirmation and information about your AHV number
-   - Deadline: within 14 days (varies by canton; some require registration before starting work)
+3. **瑞士（Einwohnerkontrolle 的 Anmeldung）**：
+   - 查看您所在 Gemeinde（市镇）的网站了解办公时间和是否需要预约
+   - 准备文件：
+     - 有效护照（原件）
+     - 租房合同或住房证明
+     - 劳动合同或财力证明
+     - 生物识别护照照片（用于同时处理的居留许可申请）
+     - 如适用的结婚/出生证明
+     - 医疗保险确认（如已登记）
+   - 在办公室：
+     - 注册住所并同时申请居留许可（Aufenthaltsbewilligung）
+     - EU/EFTA 公民：通常获得 B 许可（Aufenthaltsbewilligung B）用于就业
+     - 您将收到确认和关于 AHV 号码的信息
+   - 截止日期：14 天内（各州不同；有些要求在开始工作前注册）
 
-**预期结果：** Completed residence registration with a Meldebestaetigung/Meldezettel in hand and knowledge of next steps. Tax ID process initiated (Germany: automatic; Austria/Switzerland: next step).
+**预期结果：** 完成户籍登记，手持 Meldebestaetigung/Meldezettel 并了解后续步骤。税号流程已启动（德国：自动；奥地利/瑞士：下一步）。
 
-**失败处理：** Common rejection reasons and fixes:
-- Missing Wohnungsgeberbestaetigung: Contact landlord immediately; some offices provide the form on-site for the landlord to complete later (rare)
-- Landlord refuses to sign: This is illegal in Germany (Section 19 BMG); cite the law and request compliance; as a last resort, inform the Buergeramt
-- No appointments available: Try neighboring districts/municipalities, early morning walk-in queues, or online cancellation waitlists
-- Name mismatch between passport and lease: Bring additional ID or a declaration explaining the discrepancy
+**失败处理：** 常见拒绝原因及修复方法：
+- 缺少 Wohnungsgeberbestaetigung：立即联系房东；某些办公室提供表格供房东稍后填写（罕见）
+- 房东拒绝签署：在德国这是违法的（BMG 第 19 条）；引用法律要求合规；最后手段通知 Buergeramt
+- 没有可用预约：尝试相邻区/市镇、清晨排队窗口或在线取消等候名单
+- 护照和租约之间姓名不匹配：携带额外身份证件或解释差异的声明
 
-### 第 3 步：Navigate Tax Registration
+### 第 3 步：完成税务注册
 
-Set up tax identification and, where applicable, select tax class or arrange tax withholding.
+设置税务识别，并在适用时选择税级或安排预扣税。
 
-1. **Germany (Finanzamt / Steuer-ID)**:
-   - After Anmeldung, the Steueridentifikationsnummer (tax ID) is automatically generated and mailed within 2-4 weeks
-   - If it does not arrive, contact the Bundeszentralamt fuer Steuern (BZSt) online or by phone
-   - For employment: provide the Steuer-ID to your employer for payroll tax withholding (Lohnsteuer)
-   - For married couples: visit the Finanzamt to select Steuerklasse combination (III/V or IV/IV)
-   - For self-employed/freelancers: register with the local Finanzamt using the Fragebogen zur steuerlichen Erfassung (tax registration questionnaire, available via ELSTER online portal)
-   - Timeline: employer can use an emergency tax procedure (Pauschalbesteuerung) until the Steuer-ID arrives
+1. **德国（Finanzamt / Steuer-ID）**：
+   - Anmeldung 后，Steueridentifikationsnummer（税号）自动生成并在 2-4 周内邮寄
+   - 如未收到，在线或电话联系 Bundeszentralamt fuer Steuern（BZSt）
+   - 就业者：向雇主提供 Steuer-ID 用于工资税预扣（Lohnsteuer）
+   - 已婚夫妇：到 Finanzamt 选择 Steuerklasse 组合（III/V 或 IV/IV）
+   - 自雇/自由职业者：使用 Fragebogen zur steuerlichen Erfassung（税务登记问卷，可通过 ELSTER 在线门户获取）在当地 Finanzamt 注册
+   - 时间线：Steuer-ID 到达前雇主可使用紧急税务程序（Pauschalbesteuerung）
 
-2. **Austria (Finanzamt / Steuernummer)**:
-   - For employees: the employer handles tax registration; you receive a Steuernummer through the employer's payroll process
-   - For self-employed: register at the responsible Finanzamt using the Erklaerung zur Vergabe einer Steuernummer form
-   - Austrian tax number is different from the Sozialversicherungsnummer
-   - FinanzOnline portal (finanzonline.bmf.gv.at) provides online access once registered
+2. **奥地利（Finanzamt / Steuernummer）**：
+   - 雇员：雇主处理税务注册；通过雇主工资流程获得 Steuernummer
+   - 自雇者：使用 Erklaerung zur Vergabe einer Steuernummer 表格在相关 Finanzamt 注册
+   - 奥地利税号与 Sozialversicherungsnummer 不同
+   - FinanzOnline 门户（finanzonline.bmf.gv.at）注册后提供在线访问
 
-3. **Switzerland (Quellensteuer or ordentliche Besteuerung)**:
-   - B-permit holders earning below CHF 120,000: subject to Quellensteuer (withholding tax at source)
-   - B-permit holders earning above CHF 120,000 or C-permit holders: ordentliche Besteuerung (regular tax assessment)
-   - The employer withholds Quellensteuer automatically
-   - You may need to file a Steuererklaerung (tax return) depending on canton and income
-   - Register with the cantonal Steueramt if you are self-employed
-   - Cross-border workers: special rules apply based on bilateral tax treaties (especially France and Germany border regions)
+3. **瑞士（Quellensteuer 或 ordentliche Besteuerung）**：
+   - B 许可持有者年收入低于 CHF 120,000：适用 Quellensteuer（源头预扣税）
+   - B 许可持有者年收入高于 CHF 120,000 或 C 许可持有者：ordentliche Besteuerung（常规税务评估）
+   - 雇主自动预扣 Quellensteuer
+   - 可能需要根据州和收入提交 Steuererklaerung（纳税申报表）
+   - 自雇者：在州 Steueramt 注册
+   - 跨境工作者：根据双边税收协定适用特殊规则（特别是法国和德国边境地区）
 
-4. For all countries: notify the origin country tax authority of your departure and new tax residency to avoid double taxation issues
+4. 所有国家：通知原籍国税务机关您的离开和新的税务居住地，以避免双重征税问题
 
-**预期结果：** Tax ID obtained or process initiated, employer notified, and any required tax office registrations completed.
+**预期结果：** 税号已获得或流程已启动，雇主已通知，所有必需的税务局注册已完成。
 
-**失败处理：** If the tax ID is delayed (Germany) or the employer cannot process payroll without it, contact the Finanzamt/BZSt directly and request expedited processing. Employers have emergency withholding procedures but these result in higher initial deductions that are corrected later.
+**失败处理：** 如果税号延迟（德国）或雇主无法在没有税号的情况下处理工资，直接联系 Finanzamt/BZSt 要求加急处理。雇主有紧急预扣程序，但会导致较高的初始扣款，之后会更正。
 
-### 第 4 步：Enroll in Health Insurance
+### 第 4 步：登记医疗保险
 
-Complete mandatory health insurance enrollment in the destination country.
+在目的地国家完成强制性医疗保险登记。
 
-1. **Germany (Krankenversicherung)**:
-   - Health insurance is mandatory from day one of employment or residence
-   - Two systems: gesetzliche Krankenversicherung (GKV, public/statutory) or private Krankenversicherung (PKV)
-   - GKV: choose a Krankenkasse (e.g., TK, AOK, Barmer, DAK); enrollment is straightforward with employment contract
-   - PKV: only available above the Versicherungspflichtgrenze (income threshold, approx. 69,300 EUR/year in 2025) or for self-employed/civil servants
-   - Documents needed: employment contract, passport, Meldebestaetigung, possibly EU health insurance form (S1 or EHIC)
-   - The Krankenkasse issues an electronic health card (eGK) within 2-4 weeks; interim coverage confirmation is immediate
-   - Family members without their own income are covered free under Familienversicherung in GKV
+1. **德国（Krankenversicherung）**：
+   - 从就业或居住第一天起医疗保险即为强制性
+   - 两个系统：gesetzliche Krankenversicherung（GKV，公共/法定）或 private Krankenversicherung（PKV）
+   - GKV：选择 Krankenkasse（如 TK、AOK、Barmer、DAK）；凭劳动合同即可直接登记
+   - PKV：仅在收入超过 Versicherungspflichtgrenze（收入门槛，2025 年约 69,300 欧元/年）或自雇/公务员时可用
+   - 所需文件：劳动合同、护照、Meldebestaetigung，可能需要 EU 医疗保险表格（S1 或 EHIC）
+   - Krankenkasse 在 2-4 周内签发电子健康卡（eGK）；临时保险确认立即生效
+   - 无自身收入的家庭成员在 GKV 中免费享有 Familienversicherung 覆盖
 
-2. **Austria (Krankenversicherung / e-card)**:
-   - Employees are automatically insured through Sozialversicherung upon employment registration
-   - The employer registers you with the competent insurance carrier (usually OeGK -- Oesterreichische Gesundheitskasse)
-   - You receive an e-card (insurance card) by mail within 2-3 weeks
-   - Self-employed: register with SVS (Sozialversicherungsanstalt der Selbstaendigen)
-   - Non-employed EU citizens: must demonstrate health insurance coverage for the Anmeldebescheinigung
+2. **奥地利（Krankenversicherung / e-card）**：
+   - 雇员在就业登记时自动通过 Sozialversicherung 获得保险
+   - 雇主向相关保险机构（通常为 OeGK——Oesterreichische Gesundheitskasse）注册
+   - 2-3 周内通过邮件收到 e-card（保险卡）
+   - 自雇者：在 SVS（Sozialversicherungsanstalt der Selbstaendigen）注册
+   - 非就业的 EU 公民：必须证明有医疗保险覆盖才能获得 Anmeldebescheinigung
 
-3. **Switzerland (obligatorische Krankenversicherung)**:
-   - Basic health insurance (Grundversicherung/OKP) is mandatory for all residents
-   - You have 3 months from registration to choose an insurer; coverage is retroactive to the registration date
-   - Compare premiums at priminfo.admin.ch (official premium comparison tool)
-   - Choose your deductible (Franchise): CHF 300 to CHF 2,500; higher deductible = lower premium
-   - Basic insurance is identical across all providers by law; only premiums and service differ
-   - Optional: supplementary insurance (Zusatzversicherung) for dental, alternative medicine, private hospital rooms
-   - Documents: residence permit confirmation, possibly a medical questionnaire for supplementary insurance only
+3. **瑞士（obligatorische Krankenversicherung）**：
+   - 基本医疗保险（Grundversicherung/OKP）对所有居民强制
+   - 从注册起 3 个月内选择保险公司；覆盖追溯到注册日期
+   - 在 priminfo.admin.ch（官方保费比较工具）比较保费
+   - 选择免赔额（Franchise）：CHF 300 至 CHF 2,500；更高免赔额 = 更低保费
+   - 基本保险在所有提供商之间依法相同；仅保费和服务不同
+   - 可选：补充保险（Zusatzversicherung）用于牙科、替代医学、私人病房
+   - 文件：居留许可确认，补充保险可能需要健康问卷
 
-4. For all countries: if you have an S1 form from your origin country (e.g., posted workers), present it to the destination insurer for cost coordination between countries
+4. 所有国家：如果您持有原籍国的 S1 表格（如外派工作者），向目的地保险机构出示以进行跨国费用协调
 
-**预期结果：** Health insurance enrollment confirmed, interim coverage documentation in hand, and health card ordered/received.
+**预期结果：** 医疗保险登记已确认，临时保险文件在手，健康卡已订购/收到。
 
-**失败处理：** If enrollment is delayed or rejected:
-- Gap coverage: use EHIC from origin country for emergency care, or purchase short-term international health insurance
-- Rejection by PKV (Germany): GKV cannot reject you; switch to GKV enrollment
-- Late enrollment (Switzerland): retroactive premiums plus a surcharge (Praemienzuschlag) of up to 50% for up to 3 years; enroll immediately regardless of lateness
+**失败处理：** 如果登记延迟或被拒绝：
+- 缺口保障：使用原籍国的 EHIC 获取紧急医疗，或购买短期国际医疗保险
+- PKV 拒绝（德国）：GKV 不能拒绝您；转向 GKV 登记
+- 延迟登记（瑞士）：追溯保费加上最高 50% 的附加费（Praemienzuschlag），最长 3 年；无论多晚都立即登记
 
-### 第 5 步：Set Up Social Security Coordination
+### 第 5 步：设置社会保障协调
 
-Ensure social security contributions and entitlements are properly coordinated between origin and destination countries.
+确保社会保障缴费和权利在原籍国和目的地国之间得到妥善协调。
 
-1. **Determine applicable social security system**:
-   - EU Regulation 883/2004 governs social security coordination between EU/EEA/Switzerland
-   - General rule: you are insured in the country where you work (lex loci laboris)
-   - Exceptions: posted workers (remain in origin system with A1 form), multi-state workers, frontier workers
-   - Switzerland participates in EU social security coordination through bilateral agreements
+1. **确定适用的社会保障体系**：
+   - EU 法规 883/2004 管理 EU/EEA/瑞士之间的社会保障协调
+   - 一般规则：在工作所在国投保（lex loci laboris）
+   - 例外：外派工作者（持 A1 表格留在原籍系统）、多国工作者、边境工作者
+   - 瑞士通过双边协议参与 EU 社会保障协调
 
-2. **For standard employment in the destination country**:
-   - Registration happens automatically through the employer's payroll system
-   - Germany: contributions to Rentenversicherung (pension), Arbeitslosenversicherung (unemployment), Pflegeversicherung (long-term care), Krankenversicherung (health)
-   - Austria: contributions to Pensionsversicherung, Arbeitslosenversicherung, Krankenversicherung, Unfallversicherung (accident)
-   - Switzerland: contributions to AHV/IV/EO (first pillar pension), BVG (second pillar occupational pension), ALV (unemployment)
+2. **在目的地国标准就业**：
+   - 通过雇主工资系统自动注册
+   - 德国：缴纳 Rentenversicherung（养老金）、Arbeitslosenversicherung（失业）、Pflegeversicherung（长期护理）、Krankenversicherung（医疗）
+   - 奥地利：缴纳 Pensionsversicherung、Arbeitslosenversicherung、Krankenversicherung、Unfallversicherung（意外）
+   - 瑞士：缴纳 AHV/IV/EO（第一支柱养老金）、BVG（第二支柱职业养老金）、ALV（失业）
 
-3. **For posted workers (continuing in origin country system)**:
-   - Obtain A1 portable document from origin country social security institution BEFORE starting work
-   - Present A1 to destination country employer and authorities
-   - A1 is valid for up to 24 months; extensions possible in exceptional circumstances
-   - Without A1, the destination country may require full social security contributions
+3. **外派工作者（继续留在原籍国系统）**：
+   - 在开始工作之前从原籍国社会保障机构获取 A1 便携式文件
+   - 向目的地国雇主和当局出示 A1
+   - A1 有效期最长 24 个月；特殊情况可延期
+   - 没有 A1，目的地国可能要求全额社会保障缴费
 
-4. **For periods to be aggregated (combining insurance periods from multiple countries)**:
-   - Request a statement of insurance periods from your origin country (use form P1/E205)
-   - These periods count toward pension entitlements in the destination country
-   - Each country pays its proportional share of the pension (pro-rata calculation)
+4. **合并保险期间（合并多国保险年限）**：
+   - 向原籍国申请保险期间证明（使用表格 P1/E205）
+   - 这些期间计入目的地国的养老金权利
+   - 每个国家按比例支付其份额的养老金（按比例计算）
 
-5. **For self-employed individuals**:
-   - Germany: voluntary Rentenversicherung or mandatory for certain professions; private pension alternatives
-   - Austria: mandatory SVS registration covers pension, health, and accident
-   - Switzerland: mandatory AHV contributions; BVG voluntary for self-employed
+5. **自雇个人**：
+   - 德国：自愿 Rentenversicherung 或某些职业强制；私人养老金替代方案
+   - 奥地利：强制 SVS 注册涵盖养老金、医疗和意外
+   - 瑞士：强制 AHV 缴费；BVG 对自雇者为自愿
 
-6. **Contact points for cross-border social security questions**:
-   - Germany: Deutsche Rentenversicherung (DRV), specifically their international department
-   - Austria: Dachverband der Sozialversicherungstraeger
-   - Switzerland: Zentrale Ausgleichsstelle (ZAS) in Geneva
-   - Origin country: the competent social security institution
+6. **跨境社会保障问题联系点**：
+   - 德国：Deutsche Rentenversicherung（DRV），特别是其国际部门
+   - 奥地利：Dachverband der Sozialversicherungstraeger
+   - 瑞士：日内瓦的 Zentrale Ausgleichsstelle（ZAS）
+   - 原籍国：主管社会保障机构
 
-**预期结果：** Social security registration confirmed through employer or self-registration, A1 form obtained if applicable, and prior insurance periods documented for future aggregation.
+**预期结果：** 通过雇主或自行注册确认社会保障注册，如适用已获取 A1 表格，先前保险期间已记录以备将来合并。
 
-**失败处理：** If the A1 form is not obtained before starting work abroad, apply retroactively (possible but complicated). If social security obligations are unclear due to multi-state work, request a formal determination from the competent authority using the Article 16 procedure of Regulation 883/2004.
+**失败处理：** 如果在国外开始工作前未获得 A1 表格，追溯申请（可能但复杂）。如果因多国工作导致社会保障义务不明确，使用法规 883/2004 第 16 条程序向主管机构申请正式裁定。
 
-### 第 6 步：Handle Additional Registrations
+### 第 6 步：处理附加注册
 
-Complete remaining mandatory and practical registrations for daily life.
+完成日常生活所需的其余强制性和实用性注册。
 
-1. **Bank account**:
-   - Germany: most traditional banks require Meldebestaetigung; online banks (N26, Vivid, etc.) may not
-   - Austria: similar requirements; Erste Bank, Raiffeisen, and others require Meldezettel
-   - Switzerland: PostFinance is accessible; traditional banks may require residence permit
-   - For all: bring passport, Meldebestaetigung, employment contract, and tax ID (if already received)
-   - Consider opening an account with a bank that has English-language support if language is a barrier
+1. **银行账户**：
+   - 德国：大多数传统银行需要 Meldebestaetigung；在线银行（N26、Vivid 等）可能不需要
+   - 奥地利：类似要求；Erste Bank、Raiffeisen 等需要 Meldezettel
+   - 瑞士：PostFinance 较容易；传统银行可能需要居留许可
+   - 所有国家：携带护照、Meldebestaetigung、劳动合同和税号（如已收到）
+   - 如果语言是障碍，考虑在提供英语服务的银行开户
 
-2. **Broadcasting fee (Rundfunkbeitrag / GIS / Serafe)**:
-   - Germany: register at rundfunkbeitrag.de; 18.36 EUR/month per household; mandatory regardless of device ownership
-   - Austria: register with GIS (gis.at); varies by Bundesland; mandatory if you have a broadcast-capable device
-   - Switzerland: register with Serafe (serafe.ch); mandatory per household regardless of devices
-   - Registration is typically triggered automatically by residence registration but verify
+2. **广播费（Rundfunkbeitrag / GIS / Serafe）**：
+   - 德国：在 rundfunkbeitrag.de 注册；每户 18.36 欧元/月；不论是否拥有设备均为强制
+   - 奥地利：在 GIS（gis.at）注册；按联邦州不同；拥有可接收广播的设备即为强制
+   - 瑞士：在 Serafe（serafe.ch）注册；不论设备每户强制
+   - 注册通常在户籍登记后自动触发，但请验证
 
-3. **Mobile phone / internet**:
-   - Prepaid SIM: available immediately at electronics stores or supermarkets; requires passport for activation (due to EU registration requirements)
-   - Contract: usually requires bank account and Meldebestaetigung; better rates but 12-24 month commitment
-   - Internet/broadband: order early as installation can take 2-6 weeks; check local providers
+3. **手机/互联网**：
+   - 预付费 SIM 卡：在电子商店或超市可立即购买；激活需要护照（EU 注册要求）
+   - 合约：通常需要银行账户和 Meldebestaetigung；费率更优但需 12-24 个月承诺
+   - 宽带/互联网：尽早订购，安装可能需要 2-6 周；查看当地运营商
 
-4. **Driving license**:
-   - EU licenses: valid without conversion in Germany and Austria; Switzerland requires conversion within 12 months
-   - Non-EU licenses: Germany allows use for 6 months, then requires conversion or new exam; Austria and Switzerland similar but timelines vary
-   - Conversion: theoretical and/or practical exam may be required depending on origin country bilateral agreements
-   - Apply at the Fuehrerscheinstelle / Strassenverkehrsamt
+4. **驾驶执照**：
+   - EU 执照：在德国和奥地利无需转换即可使用；瑞士要求 12 个月内转换
+   - 非 EU 执照：德国允许使用 6 个月，之后需要转换或重新考试；奥地利和瑞士类似但时间线不同
+   - 转换：可能需要理论和/或实际考试，取决于原籍国的双边协议
+   - 在 Fuehrerscheinstelle / Strassenverkehrsamt 申请
 
-5. **Pet registration (if applicable)**:
-   - Germany: register dogs with the local Steueramt (Hundesteuer); rates vary by city; some breeds restricted
-   - Austria: register dogs with the Magistrat; Hundehaltung rules vary by Bundesland
-   - Switzerland: register dogs with the cantonal veterinary office; mandatory dog training course for first-time owners
+5. **宠物注册（如适用）**：
+   - 德国：在当地 Steueramt 注册狗（Hundesteuer）；费率因城市而异；某些品种受限
+   - 奥地利：在 Magistrat 注册狗；Hundehaltung 规则按联邦州不同
+   - 瑞士：在州兽医办公室注册狗；首次养狗者需强制参加犬类训练课程
 
-6. **Church tax (Germany and parts of Switzerland)**:
-   - Germany: if you are registered as Catholic, Protestant, or Jewish, Kirchensteuer (8-9% of income tax) is automatically deducted
-   - To avoid: officially leave the church (Kirchenaustritt) at the Amtsgericht or Standesamt (fee: 20-35 EUR depending on Bundesland)
-   - Austria: church contribution is collected separately by the church (not through tax office)
+6. **教会税（德国和瑞士部分地区）**：
+   - 德国：如果您在 Anmeldung 时登记为天主教、新教或犹太教，Kirchensteuer（所得税的 8-9%）将自动扣除
+   - 避免方式：在 Amtsgericht 或 Standesamt 正式退出教会（Kirchenaustritt）（费用：20-35 欧元，取决于联邦州）
+   - 奥地利：教会捐款由教会单独收取（不通过税务局）
 
-7. **Kindergeld / Familienbeihilfe / Kinderzulage (if applicable)**:
-   - Germany: apply at the Familienkasse (part of Bundesagentur fuer Arbeit); currently 250 EUR per child per month
-   - Austria: apply at the Finanzamt; Familienbeihilfe varies by child's age
-   - Switzerland: apply through employer; Kinderzulage varies by canton (min. CHF 200/month)
+7. **Kindergeld / Familienbeihilfe / Kinderzulage（如适用）**：
+   - 德国：在 Familienkasse（属于 Bundesagentur fuer Arbeit）申请；目前每个孩子每月 250 欧元
+   - 奥地利：在 Finanzamt 申请；Familienbeihilfe 根据孩子年龄变化
+   - 瑞士：通过雇主申请；Kinderzulage 按州不同（最低 CHF 200/月）
 
-**预期结果：** All additional registrations completed or initiated, with confirmation documents filed and follow-up dates noted for any pending items.
+**预期结果：** 所有附加注册已完成或已启动，确认文件已归档，待办事项已标注跟进日期。
 
-**失败处理：** Most additional registrations are not time-critical (except broadcasting fee registration, which can result in backdated charges). Prioritize bank account and mobile phone as they are needed for daily life. Other items can be completed within the first 1-3 months.
+**失败处理：** 大多数附加注册没有严格的时间限制（广播费注册除外，可能导致追溯收费）。优先处理银行账户和手机，因为日常生活需要。其他事项可在头 1-3 个月内完成。
 
 ## 验证清单
 
-- Residence registration (Anmeldung/Meldezettel) is completed within the statutory deadline for the specific country
-- A Meldebestaetigung or equivalent confirmation document is in hand
-- Tax registration is initiated (automatic in Germany, employer-driven in Austria, canton-dependent in Switzerland)
-- Health insurance enrollment is confirmed with at least interim coverage documentation
-- Social security status is clarified (destination country system or A1-covered origin country system)
-- All mandatory household registrations (broadcasting fee) are completed or scheduled
-- Each completed step has a dated confirmation document stored in a dedicated relocation folder
-- Any rejected or incomplete registrations have a documented follow-up plan with a specific next action and date
+- 户籍登记（Anmeldung/Meldezettel）在特定国家的法定期限内完成
+- 手持 Meldebestaetigung 或同等确认文件
+- 税务注册已启动（德国：自动；奥地利：雇主驱动；瑞士：按州不同）
+- 医疗保险登记已确认，至少有临时保险文件
+- 社会保障状态已明确（目的地国系统或 A1 覆盖的原籍国系统）
+- 所有强制性家庭注册（广播费）已完成或已安排
+- 每个已完成步骤都有标注日期的确认文件存储在专用的搬迁文件夹中
+- 任何被拒绝或未完成的注册都有记录的跟进计划，包括具体的下一步行动和日期
 
 ## 常见问题
 
-- **Showing up without an appointment in Germany**: Many German Buergeraemter are appointment-only; always check online first and book ahead
-- **Missing the 3-day deadline in Austria**: The Meldezettel deadline is extremely tight; submit it the day you move in if possible
-- **Choosing health insurance under time pressure**: In Germany, the choice of Krankenkasse matters (supplementary benefits vary); in Switzerland, premiums vary widely between insurers for identical basic coverage; take time to compare
-- **Ignoring the Quellensteuer/ordentliche Besteuerung distinction in Switzerland**: Getting this wrong affects how you file taxes and may result in underpayment or overpayment
-- **Not carrying documents in the first weeks**: Keep originals of passport, Meldebestaetigung, employment contract, and insurance confirmation with you during the first month; you will need them repeatedly
-- **Assuming the employer handles everything**: Employers typically handle payroll registration, social security, and sometimes health insurance, but residence registration, bank accounts, broadcasting fees, and most other steps are your responsibility
-- **Forgetting church tax opt-out in Germany**: Many newcomers are unaware that declaring a religion during Anmeldung triggers automatic Kirchensteuer; this can be 8-9% of your income tax
-- **Delaying bank account opening**: Without a local bank account, salary payment, rent direct debit, and insurance premium payment are all problematic; open an account within the first week
-- **Not saving confirmation numbers and reference IDs**: Every office interaction generates a reference number (Aktenzeichen, Geschaeftszahl, Dossiernummer); record these immediately as they are needed for follow-up inquiries
-- **Applying Swiss health insurance rules in Germany or vice versa**: The three DACH countries have fundamentally different health insurance systems; do not assume transferability
+- **在德国不预约就出现**：许多德国 Buergeraemter 仅接受预约；始终先在线查看并提前预约
+- **错过奥地利的 3 天期限**：Meldezettel 期限极为紧迫；如可能在入住当天就提交
+- **在时间压力下选择医疗保险**：在德国，Krankenkasse 的选择很重要（附加福利各异）；在瑞士，相同基本保障的保费在各保险公司之间差异很大；花时间比较
+- **忽视瑞士的 Quellensteuer/ordentliche Besteuerung 区别**：搞错这一点会影响报税方式，可能导致少缴或多缴
+- **头几周不携带文件**：第一个月随身携带护照、Meldebestaetigung、劳动合同和保险确认的原件；您会反复需要它们
+- **假设雇主处理一切**：雇主通常处理工资注册、社会保障，有时处理医疗保险，但户籍登记、银行账户、广播费和大多数其他步骤是您自己的责任
+- **忘记德国的教会税退出**：许多新来者不知道在 Anmeldung 时申报宗教会触发自动的 Kirchensteuer；这可能是所得税的 8-9%
+- **延迟开立银行账户**：没有本地银行账户，工资支付、房租直接扣款和保险费支付都会成问题；在第一周内开户
+- **不保存确认号码和参考编号**：每次与办公室的互动都会生成参考号码（Aktenzeichen、Geschaeftszahl、Dossiernummer）；立即记录，因为后续查询需要它们
+- **将瑞士的医疗保险规则应用于德国或反之**：三个 DACH 国家的医疗保险系统根本不同；不要假设可转移性
 
 ## 相关技能
 
-- [plan-eu-relocation](../plan-eu-relocation/SKILL.md) -- Create the overall relocation plan and timeline
-- [check-relocation-documents](../check-relocation-documents/SKILL.md) -- Verify all documents are ready before starting procedures
+- `plan-eu-relocation` — 创建总体搬迁计划和时间线
+- `check-relocation-documents` — 在开始程序前验证所有文件已准备就绪
