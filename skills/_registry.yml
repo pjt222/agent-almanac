@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 329
+total_skills: 333
 
 domains:
   r-packages:
@@ -1880,3 +1880,27 @@ domains:
         complexity: advanced
         language: natural
         description: Analyze tensegrity systems by characterizing strut-cable topology, computing prestress equilibrium, verifying stability via Maxwell's rule, and mapping biological tensegrity across scales
+
+  cli:
+    description: CLI tool development — command scaffolding, plugin architecture, terminal output design, and integration testing
+    skills:
+      - id: scaffold-cli-command
+        path: scaffold-cli-command/SKILL.md
+        complexity: intermediate
+        language: TypeScript
+        description: Scaffold a Commander.js command with options, action handler, three output modes, and optional ceremony variant
+      - id: build-cli-plugin
+        path: build-cli-plugin/SKILL.md
+        complexity: intermediate
+        language: TypeScript
+        description: Build a plugin/adapter extending an abstract base class with strategy selection, registration, and detection
+      - id: test-cli-application
+        path: test-cli-application/SKILL.md
+        complexity: intermediate
+        language: TypeScript
+        description: Write CLI integration tests with node:test using execSync, output assertions, filesystem checks, and cleanup hooks
+      - id: design-cli-output
+        path: design-cli-output/SKILL.md
+        complexity: basic
+        language: TypeScript
+        description: Design terminal output with chalk colors, Unicode glyphs, multiple verbosity levels, and voice rules

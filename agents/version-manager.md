@@ -125,6 +125,7 @@ If you want to avoid a major bump, consider:
 
 ## See Also
 
+- [CLI Developer Agent](cli-developer.md) -- For CLI tool development (uses `apply-semantic-versioning` for releases)
 - [R Developer Agent](r-developer.md) -- For R package release workflows using `release-package-version` skill
 - [Project Manager Agent](project-manager.md) -- For broader project planning that feeds into release milestones
 - [DevOps Engineer Agent](devops-engineer.md) -- For CI/CD pipeline integration with release processes

@@ -14,11 +14,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **329 skills** across 58 domains — structured, executable procedures
-- **66 agents** — specialized Claude Code personas covering development, review, compliance, and more
+- **333 skills** across 59 domains — structured, executable procedures
+- **67 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **15 teams** — predefined multi-agent compositions for complex workflows
 - **19 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 329 R-generated skill icons and 9 color themes
+- **Interactive visualization** — force-graph explorer with 333 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -149,10 +149,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 317/329 | 3/66 | 1/15 | 1/19 | 322/429 (75.1%) |
-| zh-CN | 简体中文 | 317/329 | 3/66 | 1/15 | 1/19 | 322/429 (75.1%) |
-| ja | 日本語 | 317/329 | 3/66 | 1/15 | 1/19 | 322/429 (75.1%) |
-| es | Español | 317/329 | 3/66 | 1/15 | 1/19 | 322/429 (75.1%) |
+| de | Deutsch | 317/333 | 3/67 | 1/15 | 1/19 | 322/434 (74.2%) |
+| zh-CN | 简体中文 | 317/333 | 3/67 | 1/15 | 1/19 | 322/434 (74.2%) |
+| ja | 日本語 | 317/333 | 3/67 | 1/15 | 1/19 | 322/434 (74.2%) |
+| es | Español | 317/333 | 3/67 | 1/15 | 1/19 | 322/434 (74.2%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.

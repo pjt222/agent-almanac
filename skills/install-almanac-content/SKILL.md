@@ -15,7 +15,7 @@ allowed-tools:
   - Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: general
   complexity: basic
   language: multi
@@ -186,6 +186,42 @@ agent-almanac sync --dry-run  # Preview first
 
 **On failure:** If `sync` reports "No agent-almanac.yml found", run `agent-almanac init` first. If the manifest resolves to 0 items, check that skill/agent/team IDs match the registry entries exactly. Comment lines starting with `#` are ignored.
 
+### Step 6: Manage Teams as Campfires (Optional)
+
+The campfire commands provide a warm, team-oriented alternative to `install --team`:
+
+```bash
+# Browse all available team circles
+agent-almanac campfire --all
+
+# Inspect a specific circle (members, practices, pattern)
+agent-almanac campfire tending
+
+# See shared agents between teams (hearth-keepers)
+agent-almanac campfire --map
+
+# Gather a team (install with arrival ceremony)
+agent-almanac gather tending
+agent-almanac gather tending --ceremonial    # Show each skill arriving
+agent-almanac gather tending --only mystic,gardener  # Partial gathering
+
+# Check fire health (burning / embers / cold)
+agent-almanac tend
+
+# Scatter a team (uninstall with farewell)
+agent-almanac scatter tending
+```
+
+Campfire state is tracked in `.agent-almanac/state.json` (git-ignored, local to the project). Fires have thermal states: **burning** (used within 7 days), **embers** (within 30 days), **cold** (30+ days). Running `tend` warms all fires and reports their health.
+
+Shared skills are protected during scatter — if a skill is needed by another gathered fire, it remains installed. Shared agents walk between fires rather than being duplicated.
+
+All campfire commands support `--quiet` (standard reporter output) and `--json` (machine-parseable) for scripting.
+
+**Expected:** Teams are gathered and managed with state tracking. `campfire --all` shows fire states. `tend` reports health.
+
+**On failure:** If campfire state is corrupted, delete `.agent-almanac/state.json` and re-gather teams. If `gather` fails, check that the team name matches an entry in `teams/_registry.yml`.
+
 ## Validation
 
 - [ ] `agent-almanac detect` shows expected frameworks
@@ -201,6 +237,7 @@ agent-almanac sync --dry-run  # Preview first
 - **Scope confusion (project vs global)**: Content installed with `--global` goes to `~/.claude/skills/` (or equivalent), while project-scope content goes to `.claude/skills/` in the current directory. If a skill is not found, check whether it was installed in the wrong scope.
 - **Stale source path**: If the agent-almanac repository is moved or renamed, the `--source` path in manifests and auto-detection will break. Update the `source` field in `agent-almanac.yml` or re-run `agent-almanac init`.
 - **Framework not detected**: The detector looks for specific files and directories. A freshly initialized project may not have these yet. Use `--framework <id>` explicitly until the project has the expected structure, or rely on the universal adapter.
+- **Campfire thermal state confusion**: Fires go cold after 30 days without use. Running `agent-almanac tend` resets the timer for all gathered fires. If a fire shows as "cold," it is still fully installed — the thermal state reflects recency of use, not installation health.
 
 ## Related Skills
 
@@ -208,3 +245,4 @@ agent-almanac sync --dry-run  # Preview first
 - `configure-mcp-server` -- set up MCP servers that agents may need after installation
 - `write-claude-md` -- configure CLAUDE.md to reference installed skills
 - `audit-discovery-symlinks` -- diagnose symlink issues for Claude Code skill discovery
+- `design-cli-output` -- terminal output patterns used by the CLI's reporter and campfire ceremony

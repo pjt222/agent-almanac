@@ -191,6 +191,7 @@ Agent: Deploying to production:
 
 - [R Developer Agent](r-developer.md) - For R-specific development
 - [Code Reviewer Agent](code-reviewer.md) - For code quality review
+- [CLI Developer Agent](cli-developer.md) - For terminal tool development (complementary: CLI builds tools, web-developer builds frontends)
 - [Skills Library](../skills/) - Full catalog of executable procedures
 
 ---

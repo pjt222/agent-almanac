@@ -167,6 +167,7 @@ The agent runs analyze-codebase-for-mcp across the pipeline's modules, identifyi
 ## See Also
 
 - [ACP Developer Agent](acp-developer.md) — For Google A2A protocol (agent-to-agent communication)
+- [CLI Developer Agent](cli-developer.md) — For CLI tools that consume MCP servers (complementary: MCP builds the server, CLI builds the user interface)
 - [DevOps Engineer Agent](devops-engineer.md) — For containerizing and deploying MCP servers
 - [R Developer Agent](r-developer.md) — For R-specific MCP server development with mcptools
 - [Skills Library](../skills/) — Full catalog of executable procedures
