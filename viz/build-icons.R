@@ -60,6 +60,7 @@ source(file.path(script_dir, "R", "primitives_17.R"))
 source(file.path(script_dir, "R", "primitives_18.R"))
 source(file.path(script_dir, "R", "primitives_19.R"))
 source(file.path(script_dir, "R", "primitives_20.R"))
+source(file.path(script_dir, "R", "primitives_21.R"))
 source(file.path(script_dir, "R", "glyphs.R"))
 source(file.path(script_dir, "R", "render.R"))
 source(file.path(script_dir, "R", "palettes.R"))
@@ -93,15 +94,34 @@ if (opts$palette == "all") {
 }
 
 # ── Resolve render passes (standard, and optionally HD) ──────────────────
+# When called from orchestrator with explicit --hd or --no-hd, do a single pass.
+# When run standalone (no explicit flag), use config default and do dual-pass.
 cfg_mult <- tryCatch(get_config()$hd_multiplier, error = function(e) 2)
-render_passes <- list(
-  list(label = "standard", output_dir = "icons",
-       size_px = opts$size_px, glow_sigma = opts$glow_sigma)
-)
-if (opts$hd) {
-  render_passes[[2]] <- list(label = "HD", output_dir = "icons-hd",
-       size_px = opts$size_px * cfg_mult,
-       glow_sigma = opts$glow_sigma * cfg_mult)
+
+if (opts$hd_explicit) {
+  # Orchestrated mode: single pass, direction set by --hd / --no-hd
+  if (opts$hd) {
+    render_passes <- list(
+      list(label = "HD", output_dir = "icons-hd",
+           size_px = opts$size_px, glow_sigma = opts$glow_sigma)
+    )
+  } else {
+    render_passes <- list(
+      list(label = "standard", output_dir = "icons",
+           size_px = opts$size_px, glow_sigma = opts$glow_sigma)
+    )
+  }
+} else {
+  # Standalone mode: standard pass, then HD if config says hd: true
+  render_passes <- list(
+    list(label = "standard", output_dir = "icons",
+         size_px = opts$size_px, glow_sigma = opts$glow_sigma)
+  )
+  if (opts$hd) {
+    render_passes[[2]] <- list(label = "HD", output_dir = "icons-hd",
+         size_px = opts$size_px * cfg_mult,
+         glow_sigma = opts$glow_sigma * cfg_mult)
+  }
 }
 # For backward compat: set icon_output_dir to the primary output for manifest updates
 icon_output_dir <- "icons"

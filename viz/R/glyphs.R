@@ -121,7 +121,7 @@ SKILL_GLYPHS <- list(
   "prepare-soil"                       = "glyph_soil_layers",
   "read-garden"                        = "glyph_garden_eye",
 
-  # ── general (17) ───────────────────────────────────────────────────────
+  # ── general (18) ───────────────────────────────────────────────────────
   "setup-wsl-dev-environment"      = "glyph_terminal",
   "write-claude-md"                = "glyph_robot_doc",
   "security-audit-codebase"        = "glyph_shield_scan",
@@ -139,6 +139,7 @@ SKILL_GLYPHS <- list(
   "circuit-breaker-pattern"        = "glyph_circuit_breaker",
   "verify-agent-output"            = "glyph_verify_checkmark",
   "continue-here"                  = "glyph_continue_here",
+  "install-almanac-content"        = "glyph_almanac_install",
 
   # ── git (7) ────────────────────────────────────────────────────────────
   "configure-git-repository"       = "glyph_git_config",
@@ -450,5 +451,11 @@ SKILL_GLYPHS <- list(
   "evaluate-levitation-mechanism"   = "glyph_levitation_compare",
 
   # ── tensegrity (1) ─────────────────────────────────────────────────────
-  "analyze-tensegrity-system"      = "glyph_tensegrity"
+  "analyze-tensegrity-system"      = "glyph_tensegrity",
+
+  # ── cli (4) ──────────────────────────────────────────────────────────
+  "scaffold-cli-command"           = "glyph_cli_scaffold",
+  "build-cli-plugin"               = "glyph_cli_plugin",
+  "test-cli-application"           = "glyph_cli_test",
+  "design-cli-output"              = "glyph_cli_output"
 )

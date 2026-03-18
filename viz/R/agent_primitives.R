@@ -2926,3 +2926,77 @@ glyph_agent_translator <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# -- glyph_agent_cli_dev: terminal with wrench overlay -------------------------
+glyph_agent_cli_dev <- function(cx, cy, s, col, bright) {
+  # A terminal window with a small wrench/tool overlay — the CLI developer
+  # who builds command-line tools.
+  layers <- list()
+
+  # Terminal frame
+  frame <- data.frame(
+    xmin = cx - 20 * s, xmax = cx + 20 * s,
+    ymin = cy - 16 * s, ymax = cy + 16 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = frame,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.1), color = bright, linewidth = .lw(s, 2))
+
+  # Title bar
+  bar <- data.frame(
+    x = c(cx - 20 * s, cx + 20 * s),
+    y = c(cy + 10 * s, cy + 10 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = bar, .aes(x, y),
+    color = hex_with_alpha(bright, 0.4), linewidth = .lw(s, 1))
+
+  # Three dots in title bar
+  for (i in 1:3) {
+    dot <- data.frame(x0 = cx + (-14 + (i - 1) * 5) * s, y0 = cy + 13 * s, r = 1.5 * s)
+    layers[[length(layers) + 1]] <- ggforce::geom_circle(data = dot,
+      .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(bright, 0.4), color = "transparent", linewidth = 0)
+  }
+
+  # Prompt chevron
+  chevron <- data.frame(
+    x = cx + c(-14, -10, -14) * s,
+    y = cy + c(4, 1, -2) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = chevron, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2))
+
+  # Cursor block (blinking cursor)
+  cursor <- data.frame(
+    xmin = cx - 6 * s, xmax = cx - 4 * s,
+    ymin = cy - 2 * s, ymax = cy + 4 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = cursor,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(bright, 0.6), color = "transparent", linewidth = 0)
+
+  # Output line
+  out_line <- data.frame(
+    x = c(cx - 14 * s, cx + 6 * s),
+    y = c(cy - 6 * s, cy - 6 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = out_line, .aes(x, y),
+    color = hex_with_alpha(bright, 0.35), linewidth = .lw(s, 1.8))
+
+  # Wrench overlay (bottom-right corner)
+  wrench_cx <- cx + 14 * s
+  wrench_cy <- cy - 10 * s
+  handle <- data.frame(
+    x = c(wrench_cx - 2 * s, wrench_cx + 6 * s),
+    y = c(wrench_cy + 6 * s, wrench_cy - 2 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = handle, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2.5))
+
+  head <- data.frame(x0 = wrench_cx - 3 * s, y0 = wrench_cy + 7 * s, r = 2.5 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = head,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(col, 0.15), color = bright, linewidth = .lw(s, 1.5))
+
+  layers
+}

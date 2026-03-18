@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-03-18T10:18:49.728Z",
-    "totalSkills": 328,
-    "totalAgents": 66,
+    "generated": "2026-03-18T17:50:52.277Z",
+    "totalSkills": 333,
+    "totalAgents": 67,
     "totalTeams": 15,
-    "totalNodes": 409,
-    "totalLinks": 1784,
-    "totalAgentLinks": 397,
+    "totalNodes": 415,
+    "totalLinks": 1809,
+    "totalAgentLinks": 404,
     "totalTeamLinks": 49,
-    "totalDomains": 58,
+    "totalDomains": 59,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -51,7 +51,7 @@
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
-      "count": 17
+      "count": 18
     },
     "citations": {
       "description": "Academic and software citation management with R and BibTeX",
@@ -248,6 +248,10 @@
     "tensegrity": {
       "description": "Tensional integrity systems — force balance, prestress stability, and cross-scale structural analysis from cytoskeleton to architecture",
       "count": 1
+    },
+    "cli": {
+      "description": "CLI tool development — command scaffolding, plugin architecture, terminal output design, and integration testing",
+      "count": 4
     }
   },
   "nodes": [
@@ -2578,6 +2582,25 @@
         "ja",
         "es"
       ]
+    },
+    {
+      "id": "install-almanac-content",
+      "type": "skill",
+      "title": "Install Almanac Content",
+      "domain": "general",
+      "complexity": "basic",
+      "language": "multi",
+      "description": "Install skills, agents, and teams from agent-almanac into any supported agentic framework using the CLI",
+      "tags": [],
+      "related": [
+        "create-skill",
+        "configure-mcp-server",
+        "write-claude-md",
+        "audit-discovery-symlinks",
+        "design-cli-output"
+      ],
+      "path": "install-almanac-content/SKILL.md",
+      "locales": []
     },
     {
       "id": "manage-bibliography",
@@ -9976,6 +9999,75 @@
       "locales": []
     },
     {
+      "id": "scaffold-cli-command",
+      "type": "skill",
+      "title": "Scaffold a CLI Command",
+      "domain": "cli",
+      "complexity": "intermediate",
+      "language": "TypeScript",
+      "description": "Scaffold a Commander.js command with options, action handler, three output modes, and optional ceremony variant",
+      "tags": [],
+      "related": [
+        "build-cli-plugin",
+        "test-cli-application",
+        "design-cli-output",
+        "install-almanac-content"
+      ],
+      "path": "scaffold-cli-command/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "build-cli-plugin",
+      "type": "skill",
+      "title": "Build a CLI Plugin",
+      "domain": "cli",
+      "complexity": "intermediate",
+      "language": "TypeScript",
+      "description": "Build a plugin/adapter extending an abstract base class with strategy selection, registration, and detection",
+      "tags": [],
+      "related": [
+        "scaffold-cli-command",
+        "test-cli-application",
+        "design-cli-output"
+      ],
+      "path": "build-cli-plugin/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "test-cli-application",
+      "type": "skill",
+      "title": "Test a CLI Application",
+      "domain": "cli",
+      "complexity": "intermediate",
+      "language": "TypeScript",
+      "description": "Write CLI integration tests with node:test using execSync, output assertions, filesystem checks, and cleanup hooks",
+      "tags": [],
+      "related": [
+        "scaffold-cli-command",
+        "build-cli-plugin",
+        "design-cli-output"
+      ],
+      "path": "test-cli-application/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "design-cli-output",
+      "type": "skill",
+      "title": "Design CLI Output",
+      "domain": "cli",
+      "complexity": "basic",
+      "language": "TypeScript",
+      "description": "Design terminal output with chalk colors, Unicode glyphs, multiple verbosity levels, and voice rules",
+      "tags": [],
+      "related": [
+        "scaffold-cli-command",
+        "test-cli-application",
+        "build-cli-plugin"
+      ],
+      "path": "design-cli-output/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "agent:r-developer",
       "type": "agent",
       "title": "R Developer",
@@ -12252,6 +12344,42 @@
       "locales": []
     },
     {
+      "id": "agent:cli-developer",
+      "type": "agent",
+      "title": "Cli Developer",
+      "priority": "normal",
+      "description": "CLI and terminal tool development specialist for Commander.js applications, plugin architectures, terminal UX, and integration testing",
+      "tags": [
+        "cli",
+        "commander",
+        "nodejs",
+        "terminal",
+        "adapter-pattern",
+        "testing",
+        "chalk"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Grep",
+        "Glob"
+      ],
+      "mcp_servers": [],
+      "skills": [
+        "scaffold-cli-command",
+        "build-cli-plugin",
+        "test-cli-application",
+        "design-cli-output",
+        "install-almanac-content",
+        "create-github-release",
+        "apply-semantic-versioning"
+      ],
+      "path": "agents/cli-developer.md",
+      "locales": []
+    },
+    {
       "id": "team:r-package-review",
       "type": "team",
       "title": "R Package Review",
@@ -14216,6 +14344,31 @@
     {
       "source": "continue-here",
       "target": "write-claude-md",
+      "type": "skill"
+    },
+    {
+      "source": "install-almanac-content",
+      "target": "create-skill",
+      "type": "skill"
+    },
+    {
+      "source": "install-almanac-content",
+      "target": "configure-mcp-server",
+      "type": "skill"
+    },
+    {
+      "source": "install-almanac-content",
+      "target": "write-claude-md",
+      "type": "skill"
+    },
+    {
+      "source": "install-almanac-content",
+      "target": "audit-discovery-symlinks",
+      "type": "skill"
+    },
+    {
+      "source": "install-almanac-content",
+      "target": "design-cli-output",
       "type": "skill"
     },
     {
@@ -19294,6 +19447,71 @@
       "type": "skill"
     },
     {
+      "source": "scaffold-cli-command",
+      "target": "build-cli-plugin",
+      "type": "skill"
+    },
+    {
+      "source": "scaffold-cli-command",
+      "target": "test-cli-application",
+      "type": "skill"
+    },
+    {
+      "source": "scaffold-cli-command",
+      "target": "design-cli-output",
+      "type": "skill"
+    },
+    {
+      "source": "scaffold-cli-command",
+      "target": "install-almanac-content",
+      "type": "skill"
+    },
+    {
+      "source": "build-cli-plugin",
+      "target": "scaffold-cli-command",
+      "type": "skill"
+    },
+    {
+      "source": "build-cli-plugin",
+      "target": "test-cli-application",
+      "type": "skill"
+    },
+    {
+      "source": "build-cli-plugin",
+      "target": "design-cli-output",
+      "type": "skill"
+    },
+    {
+      "source": "test-cli-application",
+      "target": "scaffold-cli-command",
+      "type": "skill"
+    },
+    {
+      "source": "test-cli-application",
+      "target": "build-cli-plugin",
+      "type": "skill"
+    },
+    {
+      "source": "test-cli-application",
+      "target": "design-cli-output",
+      "type": "skill"
+    },
+    {
+      "source": "design-cli-output",
+      "target": "scaffold-cli-command",
+      "type": "skill"
+    },
+    {
+      "source": "design-cli-output",
+      "target": "test-cli-application",
+      "type": "skill"
+    },
+    {
+      "source": "design-cli-output",
+      "target": "build-cli-plugin",
+      "type": "skill"
+    },
+    {
       "source": "agent:r-developer",
       "target": "create-r-package",
       "type": "agent"
@@ -21276,6 +21494,41 @@
     {
       "source": "agent:physicist",
       "target": "evaluate-levitation-mechanism",
+      "type": "agent"
+    },
+    {
+      "source": "agent:cli-developer",
+      "target": "scaffold-cli-command",
+      "type": "agent"
+    },
+    {
+      "source": "agent:cli-developer",
+      "target": "build-cli-plugin",
+      "type": "agent"
+    },
+    {
+      "source": "agent:cli-developer",
+      "target": "test-cli-application",
+      "type": "agent"
+    },
+    {
+      "source": "agent:cli-developer",
+      "target": "design-cli-output",
+      "type": "agent"
+    },
+    {
+      "source": "agent:cli-developer",
+      "target": "install-almanac-content",
+      "type": "agent"
+    },
+    {
+      "source": "agent:cli-developer",
+      "target": "create-github-release",
+      "type": "agent"
+    },
+    {
+      "source": "agent:cli-developer",
+      "target": "apply-semantic-versioning",
       "type": "agent"
     },
     {

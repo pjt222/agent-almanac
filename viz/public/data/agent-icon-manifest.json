@@ -4,7 +4,7 @@
     "pipeline": "R/ggplot2 + ggfx neon glow",
     "resolution": "1024x1024",
     "format": "webp",
-    "total_agents": 66,
+    "total_agents": 67,
     "palettes": [
       "cyberpunk",
       "viridis",
@@ -63,6 +63,11 @@
       "concept": "Magnifying glass over insect with iNaturalist notebook",
       "description": "Curiosity-driven insect guide for citizen science",
       "glow": "leaf-green"
+    },
+    "cli-developer": {
+      "description": "CLI and terminal tool development specialist for Commander.js applications, plugin architectures, terminal UX, and integration testing",
+      "glow": "white",
+      "concept": "cli-developer agent persona icon"
     },
     "code-reviewer": {
       "concept": "Magnifying glass over diff lines",
@@ -395,6 +400,11 @@
       "agentId": "citizen-entomologist",
       "path": "public/icons/cyberpunk/agents/citizen-entomologist.webp",
       "status": "pending"
+    },
+    {
+      "agentId": "cli-developer",
+      "path": "public/icons/cyberpunk/agents/cli-developer.webp",
+      "status": "done"
     },
     {
       "agentId": "code-reviewer",
