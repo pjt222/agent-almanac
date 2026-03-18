@@ -14,8 +14,8 @@ cd /app/viz
 
 export DOCKER_CONTAINER=1
 
-# Read R path from config
-R_CMD=$(Rscript --vanilla -e "cat(config::get('r_path', file='config.yml'))" 2>/dev/null || echo "Rscript")
+# Read R path from config (yaml12 replaces config package)
+R_CMD=$(Rscript --vanilla -e "cfg <- yaml12::read_yaml('config.yml'); cat(cfg[['docker']][['r_path']] %||% cfg[['default']][['r_path']] %||% 'Rscript')" 2>/dev/null || echo "Rscript")
 
 # ── Build R icon flags from environment ─────────────────────────────────
 build_flags=()

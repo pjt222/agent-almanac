@@ -33,6 +33,9 @@ get_script_dir <- function() {
 script_dir <- get_script_dir()
 setwd(script_dir)     # Ensure CWD is viz/ for child process stability
 
+# ── Source shared utilities (for get_config, %||%) ─────────────────────────
+source(file.path(script_dir, "R", "utils.R"))
+
 # ── Parse --type and --help from args ────────────────────────────────────
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -42,7 +45,8 @@ if ("--help" %in% args || "-h" %in% args) {
   cat("Options:\n")
   cat("  --type <types>      Comma-separated types to build: all, skill, agent, team\n")
   cat("                      (default: all)\n")
-  cat("  --hd                Build both standard (512px) and high-res (1024px) icons\n")
+  cat("  --hd                Build both standard + high-res icons (default: from config.yml)\n")
+  cat("  --no-hd             Build standard icons only, skip high-res\n")
   cat("  --strict            Exit immediately if any sub-script fails (non-zero exit)\n")
   cat("  All other flags are passed through to individual build scripts.\n")
   cat("  Run Rscript build-icons.R --help for full option list.\n")
@@ -74,9 +78,13 @@ if (strict_mode) {
   args <- args[args != "--strict"]
 }
 
-# Extract --hd flag (dual-pass: standard + high-res)
-hd_mode <- "--hd" %in% args
-if (hd_mode) {
+# Extract HD mode: default from config.yml, overridable by --hd / --no-hd
+hd_mode <- tryCatch(get_config()$hd %||% TRUE, error = function(e) TRUE)
+if ("--no-hd" %in% args) {
+  hd_mode <- FALSE
+  args <- args[args != "--no-hd"]
+} else if ("--hd" %in% args) {
+  hd_mode <- TRUE
   args <- args[args != "--hd"]
 }
 
@@ -95,7 +103,7 @@ cfg_mult    <- tryCatch(get_config()$hd_multiplier, error = function(e) 2)
 
 passes <- list(
   list(label = "standard", size = as.character(cfg_size),
-       sigma = as.character(cfg_sigma), extra_args = character(0))
+       sigma = as.character(cfg_sigma), extra_args = c("--no-hd"))
 )
 if (hd_mode) {
   passes[[2]] <- list(label = "high-res",
@@ -136,6 +144,7 @@ if (file.exists(manifest_path) && file.exists(registry_path)) {
 }
 
 overall_start <- proc.time()
+rscript_bin <- file.path(R.home("bin"), "Rscript")
 
 for (pass in passes) {
   if (length(passes) > 1) {
@@ -157,7 +166,7 @@ for (pass in passes) {
     pass_args <- c(args, "--size", pass$size, "--glow-sigma", pass$sigma,
                    pass$extra_args)
     arg_str <- paste(shQuote(pass_args), collapse = " ")
-    cmd <- sprintf("Rscript %s %s", shQuote(script_path), arg_str)
+    cmd <- sprintf("%s %s %s", shQuote(rscript_bin), shQuote(script_path), arg_str)
     message(sprintf("Running: %s", cmd))
     exit_code <- system(cmd)
     if (exit_code != 0) {

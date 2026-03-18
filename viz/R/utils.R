@@ -38,6 +38,7 @@ blend_hex <- function(hexes) {
 
 # ── CLI argument parsing ─────────────────────────────────────────────────
 parse_cli_args <- function(args = commandArgs(trailingOnly = TRUE)) {
+  cfg_hd <- tryCatch(get_config()$hd %||% TRUE, error = function(e) TRUE)
   opts <- list(
     only          = NULL,
     palette       = "all",
@@ -48,7 +49,8 @@ parse_cli_args <- function(args = commandArgs(trailingOnly = TRUE)) {
     size_px       = 512,
     workers       = max(1, parallel::detectCores() - 1),
     no_cache      = FALSE,
-    hd            = TRUE,
+    hd            = cfg_hd,
+    hd_explicit   = FALSE,
     help          = FALSE
   )
 
@@ -80,8 +82,10 @@ parse_cli_args <- function(args = commandArgs(trailingOnly = TRUE)) {
       opts$no_cache <- TRUE
     } else if (arg == "--hd") {
       opts$hd <- TRUE
+      opts$hd_explicit <- TRUE
     } else if (arg == "--no-hd") {
       opts$hd <- FALSE
+      opts$hd_explicit <- TRUE
     } else if (arg %in% c("--help", "-h")) {
       opts$help <- TRUE
     }
@@ -106,7 +110,7 @@ print_usage <- function(script_name = "build-icons.R",
   cat(sprintf("  --workers <n>       Parallel workers (default: %d = detectCores()-1)\n",
               max(1, parallel::detectCores() - 1)))
   cat("  --no-cache          Ignore content-hash cache, re-render everything\n")
-  cat("  --hd                Output to icons-hd/ directory (default: enabled)\n")
+  cat("  --hd                Output to icons-hd/ directory (default: from config.yml)\n")
   cat("  --no-hd             Skip HD variant (output standard size only)\n")
   cat("  --help, -h          Show this help message\n")
 }
@@ -123,7 +127,7 @@ write_manifest <- function(manifest, path) {
 # ── Dependency check ─────────────────────────────────────────────────────
 check_dependencies <- function() {
   required <- c("ggplot2", "ggforce", "ggfx", "ragg", "jsonlite", "magick",
-                 "future", "furrr", "digest", "yaml")
+                 "future", "furrr", "digest", "yaml12")
   missing <- required[!vapply(required, requireNamespace, logical(1),
                               quietly = TRUE)]
   if (length(missing) > 0) {
@@ -205,6 +209,8 @@ write_icon_cache <- function(cache, cache_path) {
 
 # ── Platform detection and configuration ──────────────────────────────
 detect_platform <- function() {
+  env_config <- Sys.getenv("R_CONFIG_ACTIVE", "")
+  if (nzchar(env_config)) return(env_config)
   if (nzchar(Sys.getenv("DOCKER_CONTAINER"))) return("docker")
   if (.Platform$OS.type == "unix") {
     if (grepl("microsoft|WSL", Sys.info()["release"], ignore.case = TRUE)) {
@@ -220,8 +226,8 @@ get_config <- function(platform = detect_platform()) {
     get_script_dir_cached(),
     "config.yml"
   )
-  if (!file.exists(config_path) || !requireNamespace("config", quietly = TRUE)) {
-    warning("config.yml or config package not available, using defaults",
+  if (!file.exists(config_path) || !requireNamespace("yaml12", quietly = TRUE)) {
+    warning("config.yml or yaml12 package not available, using defaults",
             call. = FALSE)
     return(list(
       r_path = "Rscript",
@@ -232,7 +238,27 @@ get_config <- function(platform = detect_platform()) {
       )
     ))
   }
-  config::get(config = platform, file = config_path)
+  all_configs <- yaml12::read_yaml(config_path)
+  cfg <- all_configs[[platform]] %||% all_configs[["default"]] %||% list()
+
+  # Resolve inherits chain (one level, matching config::get behavior)
+  if (!is.null(cfg[["inherits"]])) {
+    parent <- all_configs[[cfg[["inherits"]]]] %||% list()
+    cfg[["inherits"]] <- NULL
+    cfg <- modifyList(parent, cfg)
+  }
+
+  # Evaluate !expr tagged values (config pkg did this automatically)
+  eval_expr <- function(x) {
+    if (is.character(x) && length(x) == 1 && !is.null(attr(x, "yaml_tag")) &&
+        attr(x, "yaml_tag") == "!expr") {
+      return(eval(parse(text = x)))
+    }
+    if (is.list(x)) return(lapply(x, eval_expr))
+    x
+  }
+  cfg <- eval_expr(cfg)
+  cfg
 }
 
 # Cached script dir for use in get_config (avoids re-parsing args)
