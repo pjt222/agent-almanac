@@ -9,6 +9,13 @@ on:
       - 'skills/**'
       - 'scripts/**'
       - '.claude/**'
+      - 'viz/R/glyphs.R'
+      - 'viz/R/agent_glyphs.R'
+      - 'viz/R/palettes.R'
+      - 'viz/domain-styles.yml'
+      - 'viz/agent-styles.yml'
+      - 'viz/team-styles.yml'
+      - 'viz/build-icon-manifest.js'
   pull_request:
     paths:
       - 'agents/**'
@@ -17,6 +24,13 @@ on:
       - 'skills/**'
       - 'scripts/**'
       - '.claude/**'
+      - 'viz/R/glyphs.R'
+      - 'viz/R/agent_glyphs.R'
+      - 'viz/R/palettes.R'
+      - 'viz/domain-styles.yml'
+      - 'viz/agent-styles.yml'
+      - 'viz/team-styles.yml'
+      - 'viz/build-icon-manifest.js'
   workflow_dispatch:
 
 permissions:
@@ -28,136 +42,5 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Validate agent frontmatter (A1)
-        run: |
-          failed=0
-          for f in agents/*.md; do
-            name=$(basename "$f")
-            [[ "$name" == "_template.md" || "$name" == "README.md" ]] && continue
-            for field in name description tools priority; do
-              if ! grep -q "^${field}:" "$f"; then
-                echo "FAIL: $f missing required field: $field"
-                failed=1
-              fi
-            done
-          done
-          exit $failed
-
-      - name: Validate team frontmatter (A2)
-        run: |
-          failed=0
-          for f in teams/*.md; do
-            name=$(basename "$f")
-            [[ "$name" == "_template.md" || "$name" == "README.md" ]] && continue
-            for field in name description lead members coordination; do
-              if ! grep -q "^${field}:" "$f"; then
-                echo "FAIL: $f missing required field: $field"
-                failed=1
-              fi
-            done
-          done
-          exit $failed
-
-      - name: Validate guide frontmatter (A3)
-        run: |
-          failed=0
-          for f in guides/*.md; do
-            name=$(basename "$f")
-            [[ "$name" == "_template.md" || "$name" == "README.md" ]] && continue
-            for field in title description category; do
-              if ! grep -q "^${field}:" "$f"; then
-                echo "FAIL: $f missing required field: $field"
-                failed=1
-              fi
-            done
-          done
-          exit $failed
-
-      - name: Verify agent registry count (A4)
-        run: |
-          disk_count=$(find agents -maxdepth 1 -name '*.md' -not -name '_template.md' -not -name 'README.md' | wc -l)
-          reg_count=$(grep 'total_agents:' agents/_registry.yml | tr -d '\r' | awk '{print $2}')
-          if [ "$disk_count" != "$reg_count" ]; then
-            echo "FAIL: agents disk=$disk_count registry=$reg_count"
-            exit 1
-          fi
-          echo "OK: $disk_count agents on disk match registry"
-
-      - name: Verify team registry count (A5)
-        run: |
-          disk_count=$(find teams -maxdepth 1 -name '*.md' -not -name '_template.md' -not -name 'README.md' | wc -l)
-          reg_count=$(grep 'total_teams:' teams/_registry.yml | tr -d '\r' | awk '{print $2}')
-          if [ "$disk_count" != "$reg_count" ]; then
-            echo "FAIL: teams disk=$disk_count registry=$reg_count"
-            exit 1
-          fi
-          echo "OK: $disk_count teams on disk match registry"
-
-      - name: Verify skill symlinks (B1)
-        run: |
-          failed=0
-          for dir in skills/*/; do
-            skill_name=$(basename "$dir")
-            [[ "$skill_name" == "_template" ]] && continue
-            [ ! -f "$dir/SKILL.md" ] && continue
-            if [ ! -L ".claude/skills/$skill_name" ]; then
-              echo "FAIL: missing symlink .claude/skills/$skill_name"
-              failed=1
-            fi
-          done
-          exit $failed
-
-      - name: Verify agents symlink (B2)
-        run: |
-          if [ -L ".claude/agents" ] && [ -d ".claude/agents" ]; then
-            echo "OK: .claude/agents symlink is valid"
-          else
-            echo "FAIL: .claude/agents symlink is broken or missing"
-            exit 1
-          fi
-
-      - name: Verify team member agents exist (B3)
-        run: |
-          failed=0
-          for f in teams/*.md; do
-            name=$(basename "$f")
-            [[ "$name" == "_template.md" || "$name" == "README.md" ]] && continue
-            while IFS= read -r line; do
-              member=$(echo "$line" | sed -n 's/^  - id: *//p' | tr -d '\r' | xargs)
-              if [ -n "$member" ]; then
-                [[ "$member" == "any" ]] && continue
-                if [ ! -f "agents/${member}.md" ]; then
-                  echo "FAIL: $f references agent '$member' but agents/${member}.md not found"
-                  failed=1
-                fi
-              fi
-            done < "$f"
-          done
-          exit $failed
-
-      - name: Verify agent skill references exist (B4)
-        run: |
-          failed=0
-          for f in agents/*.md; do
-            name=$(basename "$f")
-            [[ "$name" == "_template.md" || "$name" == "README.md" ]] && continue
-            in_skills=0
-            while IFS= read -r line; do
-              if echo "$line" | grep -q '^skills:'; then
-                in_skills=1
-                continue
-              fi
-              if [ "$in_skills" -eq 1 ]; then
-                if echo "$line" | grep -q '^  - '; then
-                  skill_id=$(echo "$line" | sed 's/^  - //' | tr -d '\r' | xargs)
-                  if [ ! -d "skills/${skill_id}" ]; then
-                    echo "FAIL: $f references skill '$skill_id' but skills/${skill_id}/ not found"
-                    failed=1
-                  fi
-                else
-                  in_skills=0
-                fi
-              fi
-            done < "$f"
-          done
-          exit $failed
+      - name: Run integrity checks
+        run: bash scripts/validate-integrity.sh

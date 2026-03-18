@@ -237,7 +237,7 @@ echo "=== Category C: Pipeline Sync Validation ==="
 echo "--- B7: Palette domain coverage ---"
 b7_warn=0
 reg_domains=$(grep '^\s\+[a-z0-9_-]\+:$' skills/_registry.yml | grep -v 'skills:' | sed 's/://;s/^ *//' | sort)
-palette_domains=$(grep -oP '^\s+"[a-z0-9-]+"' viz/R/palettes.R | head -60 | sed 's/[" ]//g' | sort)
+palette_domains=$(sed -n '/hand_domains.*list/,/hand_agents.*list/p' viz/R/palettes.R | grep -oP '^\s+"[a-z0-9-]+"' | sed 's/[" ]//g' | sort)
 b7_missing=$(comm -23 <(echo "$reg_domains") <(echo "$palette_domains"))
 if [ -n "$b7_missing" ]; then
   b7_count=$(echo "$b7_missing" | wc -l)
@@ -281,7 +281,12 @@ fi
 # B10: DOMAIN_STYLES coverage (registry domains vs build-icon-manifest.js DOMAIN_STYLES)
 echo "--- B10: DOMAIN_STYLES coverage ---"
 b10_warn=0
-style_domains=$(grep -oP "'[a-z0-9-]+'" viz/build-icon-manifest.js | head -60 | sed "s/'//g" | sort -u)
+if [ -f "viz/domain-styles.yml" ]; then
+  style_domains=$(grep '^[a-z0-9-]\+:' viz/domain-styles.yml | sed 's/:.*//' | sort)
+else
+  # Fallback: parse JS if YAML not yet extracted
+  style_domains=$(grep -oP "'[a-z0-9-]+'" viz/build-icon-manifest.js | head -60 | sed "s/'//g" | sort -u)
+fi
 b10_missing=$(comm -23 <(echo "$reg_domains") <(echo "$style_domains"))
 if [ -n "$b10_missing" ]; then
   b10_count=$(echo "$b10_missing" | wc -l)
