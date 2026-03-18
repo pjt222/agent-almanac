@@ -472,7 +472,6 @@ def svg_to_pdf(svg_path, pdf_path):
 **Bei Fehler:** cairo-Systembibliothek installieren, falls fehlend, SVG-Gueltigkeit pruefen
 
 ## Validierung
-
 - [ ] Grafiken rendern korrekt in Zielanwendungen
 - [ ] Text ist lesbar und ordnungsgemaess positioniert
 - [ ] Farben entsprechen den Spezifikationen (Hex-Codes pruefen)
@@ -485,7 +484,6 @@ def svg_to_pdf(svg_path, pdf_path):
 - [ ] Code enthaelt Fehlerbehandlung
 
 ## Haeufige Stolperfallen
-
 1. **Einheitenverwirrung**: SVG-Einheiten (px, mm, cm) vs. Bildschirmpixel vs. Druck-DPI
 2. **Textueberlauf**: Text, der Formgrenzen ueberschreitet — Zeilenumbruch implementieren
 3. **Schriftverfuegbarkeit**: Systemschriften koennen variieren — einbetten oder websichere Schriften verwenden
@@ -496,9 +494,7 @@ def svg_to_pdf(svg_path, pdf_path):
 8. **Speicherverbrauch**: Grosse Stapeloperationen erfordern moeglicherweise Chunking
 9. **Seitenverhaeltnis**: Proportionen beim Groessenaendern von Bildern beibehalten
 10. **Transparenz**: PNG unterstuetzt Alpha, JPEG nicht
-
 ## Verwandte Skills
-
 - `render-publication-graphic` — Publikationsspezifische Ausgabeanforderungen
 - `create-3d-scene` — Aehnlicher programmatischer Ansatz fuer 3D
 - `create-quarto-report` — Grafiken in Berichte integrieren

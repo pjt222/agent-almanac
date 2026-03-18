@@ -475,7 +475,6 @@ Database Standards:
 **失败处理：** If a full database is not feasible, maintain at minimum a handwritten catalog or spreadsheet with catalog numbers corresponding to specimens. The catalog number links the specimen to its data — without it, the specimen and its data become disconnected if labels are lost. Even a simple numbered list is better than no catalog at all.
 
 ## 验证清单
-
 - [ ] Legal requirements were verified and permits obtained before collecting
 - [ ] Collection methods were appropriate for the target taxa and habitat
 - [ ] Specimens were dispatched humanely and promptly
@@ -486,20 +485,16 @@ Database Standards:
 - [ ] Wet specimen labels are written in pencil or laser-printed and placed inside the vial
 - [ ] Storage includes pest deterrents and stable environmental conditions
 - [ ] Specimens are cataloged in a database or notebook with unique identifiers
-
 ## 常见问题
-
 - **Collecting without permits**: A specimen collected illegally cannot be used in published research, deposited in a museum, or transferred across borders. Always obtain authorization first
 - **Over-collecting**: Taking more specimens than needed depletes populations without scientific benefit. Collect the minimum required for identification (often 5-10 individuals per morphospecies per site)
 - **Mixing specimens from different sites in one container**: This makes locality data uncertain for all specimens in the batch. Keep each collecting event in a separate container with its own temporary label
 - **Using the wrong pin position**: Pinning a beetle through the center of the thorax instead of the right elytron obscures ventral diagnostic features. Always check the order-specific pin position
-- **Ethanol concentration too low for DNA work**: Specimens for molecular analysis require 95%+ ethanol with a change after 24 hours to remove body fluid dilution. Standard 70% ethanol preserves morphology but degrades DNA over time
-- **Forgetting to label wet specimens internally**: A label taped to the outside of a vial can detach. The label inside the vial is the permanent record. Always place a pencil-written or laser-printed label inside with the specimen
-- **Neglecting pest management**: Dermestid beetles (museum beetles) can destroy an entire drawer of specimens in weeks. Regular pest monitoring and fumigant replacement are not optional for any collection stored longer than a few months
-
+- **Ethanol concentration too low for DNA work**: Specimens for molecular analysis require 95%+ ethanol with a change after 24 hours. Standard 70% preserves morphology but degrades DNA
+- **Forgetting internal labels**: External vial labels can detach. Always place a pencil or laser-printed label inside with the specimen
+- **Neglecting pest management**: Dermestid beetles can destroy a drawer of specimens in weeks. Regular pest monitoring is not optional
 ## 相关技能
-
-- `identify-insect` — morphological identification of collected specimens using dichotomous keys, wing venation, mouthparts, and antennae
-- `document-insect-sighting` — photographic and contextual documentation of sightings that may supplement or replace physical collecting
-- `observe-insect-behavior` — behavioral observation protocols for live insects before or instead of collecting
-- `survey-insect-population` — systematic population surveys that typically require specimen collection for identification and voucher purposes
+- `identify-insect` — morphological identification using dichotomous keys and wing venation
+- `document-insect-sighting` — photographic documentation that may supplement or replace collecting
+- `observe-insect-behavior` — behavioral observation protocols for live insects
+- `survey-insect-population` — systematic population surveys requiring specimen collection

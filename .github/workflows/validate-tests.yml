@@ -62,7 +62,7 @@ jobs:
           failed=0
           for f in tests/scenarios/teams/*.md; do
             [ ! -f "$f" ] && continue
-            target=$(grep '^target:' "$f" | head -1 | awk '{print $2}')
+            target=$(grep '^target:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
             if [ -n "$target" ]; then
               if [ ! -f "teams/${target}.md" ]; then
                 echo "FAIL: $f targets team '${target}' but teams/${target}.md not found"
@@ -72,7 +72,7 @@ jobs:
           done
           for f in tests/scenarios/agents/*.md 2>/dev/null; do
             [ ! -f "$f" ] && continue
-            target=$(grep '^target:' "$f" | head -1 | awk '{print $2}')
+            target=$(grep '^target:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
             if [ -n "$target" ]; then
               if [ ! -f "agents/${target}.md" ]; then
                 echo "FAIL: $f targets agent '${target}' but agents/${target}.md not found"
@@ -82,7 +82,7 @@ jobs:
           done
           for f in tests/scenarios/skills/*.md 2>/dev/null; do
             [ ! -f "$f" ] && continue
-            target=$(grep '^target:' "$f" | head -1 | awk '{print $2}')
+            target=$(grep '^target:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
             if [ -n "$target" ]; then
               if [ ! -d "skills/${target}" ]; then
                 echo "FAIL: $f targets skill '${target}' but skills/${target}/ not found"
@@ -92,8 +92,8 @@ jobs:
           done
           for f in tests/scenarios/negative/*.md tests/scenarios/integration/*.md 2>/dev/null; do
             [ ! -f "$f" ] && continue
-            target=$(grep '^target:' "$f" | head -1 | awk '{print $2}')
-            level=$(grep '^test-level:' "$f" | head -1 | awk '{print $2}')
+            target=$(grep '^target:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
+            level=$(grep '^test-level:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
             if [ -n "$target" ]; then
               case "$level" in
                 team) [ ! -f "teams/${target}.md" ] && echo "FAIL: $f targets team '${target}' not found" && failed=1 ;;

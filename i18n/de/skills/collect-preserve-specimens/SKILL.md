@@ -473,9 +473,7 @@ Database Standards:
 **Erwartet:** All specimens cataloged in a database with unique identifiers, taxonomy, locality, date, collector, and storage location. Collection is on a regular inspection and maintenance schedule.
 
 **Bei Fehler:** If a full database ist nicht feasible, maintain at minimum a handwritten catalog or spreadsheet with catalog numbers corresponding to specimens. The catalog number links the specimen to its data — ohne it, the specimen and its data become disconnected if labels are lost. Even a simple numbered list is better than no catalog at all.
-
 ## Validierung
-
 - [ ] Legal requirements were verified and permits obtained vor collecting
 - [ ] Collection methods were appropriate for das Ziel taxa and habitat
 - [ ] Specimens were dispatched humanely and promptly
@@ -488,7 +486,6 @@ Database Standards:
 - [ ] Specimens are cataloged in a database or notebook with unique identifiers
 
 ## Haeufige Stolperfallen
-
 - **Collecting ohne permits**: A specimen collected illegally cannot be used in published research, deposited in a museum, or transferred across borders. Always obtain Autorisierung first
 - **Over-collecting**: Taking more specimens than needed depletes populations ohne scientific benefit. Sammeln the minimum required for identification (often 5-10 individuals per morphospecies per site)
 - **Mixing specimens from different sites in one container**: This makes locality data uncertain for all specimens in the batch. Keep each collecting event in a separate container with its own temporary label
@@ -496,10 +493,8 @@ Database Standards:
 - **Ethanol concentration too low for DNA work**: Specimens for molecular analysis require 95%+ ethanol with a change nach 24 hours to remove body fluid dilution. Standard 70% ethanol preserves morphology but degrades DNA over time
 - **Forgetting to label wet specimens internally**: A label taped to the outside of a vial can detach. The label inside the vial is the permanent record. Always place a pencil-written or laser-printed label inside with the specimen
 - **Neglecting pest management**: Dermestid beetles (museum beetles) can destroy an entire drawer of specimens in weeks. Regular pest monitoring and fumigant replacement sind nicht optional for any collection stored longer than a few months
-
 ## Verwandte Skills
-
-- `identify-insect` — morphological identification of collected specimens using dichotomous keys, wing venation, mouthparts, and antennae
-- `document-insect-sighting` — photographic and contextual documentation of sightings that may supplement or replace physical collecting
+- `identify-insect` — morphological identification using dichotomous keys, wing venation, mouthparts, and antennae
+- `document-insect-sighting` — photographic documentation of sightings that may supplement or replace collecting
 - `observe-insect-behavior` — behavioral observation protocols for live insects vor or stattdessen of collecting
-- `survey-insect-population` — systematic population surveys that typischerweise require specimen collection for identification and voucher purposes
+- `survey-insect-population` — systematic population surveys requiring specimen collection for identification

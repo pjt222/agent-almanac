@@ -484,7 +484,6 @@ def svg_to_pdf(svg_path, pdf_path):
 - [ ] Code includes error handling
 
 ## Errores Comunes
-
 1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
 2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
 3. **Font availability**: System fonts may differ, embed or use web-safe fonts
@@ -495,9 +494,7 @@ def svg_to_pdf(svg_path, pdf_path):
 8. **Memory usage**: Large batch operations may require chunking
 9. **Aspect ratio**: Maintain proportions when resizing images
 10. **Transparency**: PNG supports alpha, JPEG does not
-
 ## Habilidades Relacionadas
-
 - **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication-specific output requirements
 - **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
 - **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into reports

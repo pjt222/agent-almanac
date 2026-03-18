@@ -484,20 +484,15 @@ def svg_to_pdf(svg_path, pdf_path):
 - [ ] Code includes error handling
 
 ## 常见问题
-
 1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
 2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
 3. **Font availability**: System fonts may differ, embed or use web-safe fonts
 4. **Coordinate calculations**: Off-by-one errors in grid layouts
 5. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
 6. **SVG validity**: Check XML structure, close all tags
-7. **File paths**: Handle special characters, spaces in filenames
-8. **Memory usage**: Large batch operations may require chunking
-9. **Aspect ratio**: Maintain proportions when resizing images
-10. **Transparency**: PNG supports alpha, JPEG does not
-
+7. **File paths**: Handle special characters and spaces in filenames
+8. **Memory/aspect ratio**: Chunk large batches; maintain proportions when resizing; PNG supports alpha, JPEG does not
 ## 相关技能
-
 - **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication-specific output requirements
 - **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
 - **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into reports
