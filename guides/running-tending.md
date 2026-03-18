@@ -153,7 +153,7 @@ The [mystic](../agents/mystic.md) returns to close the session, mirroring the op
 
 ## Default Skills: Meditate and Heal
 
-An important design detail: `meditate` and `heal` are **default skills** inherited by every agent in this repository, not just the esoteric-domain agents. The [agents registry](../agents/_registry.yml) defines them at the top level, and all 59 agents receive them automatically.
+An important design detail: `meditate` and `heal` are **default skills** inherited by every agent in this repository, not just the esoteric-domain agents. The [agents registry](../agents/_registry.yml) defines them at the top level, and all 66 agents receive them automatically.
 
 This means any agent -- the r-developer, the devops-engineer, the code-reviewer -- can center itself during complex work using the same meta-cognitive meditation and self-healing assessment that the tending team uses formally. The difference is one of depth and formality:
 

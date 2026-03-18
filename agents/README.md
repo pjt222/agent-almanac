@@ -89,7 +89,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [web-developer](web-developer.md) | normal | Full-stack web development agent for Next.js, TypeScript, and Tailwind CSS projects with deployment and environment setup |
 <!-- AUTO:END:agents-table -->
 
-Each agent lists the skills it can execute in its `skills` frontmatter field and `## Available Skills` section. The devops-engineer agent covers the most ground (35 skills across 5 domains). Together, the 29 agents cover 161 of the 177 skills in the library. The sixteen uncovered skills are the two meta-skills (`create-skill` and `evolve-skill`), the two visualization utilities (`create-skill-glyph`, `glyph-enhance`), the four AI meta-cognitive skills (`learn`, `teach`, `listen`, `observe`), the seven human-guidance skills (`heal-guidance`, `meditate-guidance`, `remote-viewing-guidance`, `learn-guidance`, `teach-guidance`, `listen-guidance`, `observe-guidance`), and the memory utility (`manage-memory`).
+Each agent lists the skills it can execute in its `skills` frontmatter field and `## Available Skills` section. Agents span development, review, compliance, DevOps/MLOps, project management, specialty domains (gardening, entomology, lapidary), and meta-cognitive practices. Skills not assigned to any specific agent (meta-skills like `create-skill`, human-guidance variants, and utility skills) can still be invoked directly as slash commands.
 
 ## Using Agents in Claude Code
 
@@ -153,7 +153,7 @@ Each agent is a markdown file with YAML frontmatter:
 name: agent-name           # kebab-case identifier
 description: Brief purpose  # 1-2 sentences
 tools: [Read, Write, ...]  # Required Claude Code tools
-model: claude-3-5-sonnet-20241022
+model: sonnet
 version: "1.0"
 author: Author Name
 tags: [domain, capability]
@@ -177,6 +177,16 @@ See [agent-best-practices.md](../guides/agent-best-practices.md) for detailed gu
 ## Registry
 
 `_registry.yml` provides machine-readable metadata for all agents. Keep it in sync when adding or removing agents.
+
+## See Also
+
+- [Understanding the System](../guides/understanding-the-system.md) -- how skills, agents, and teams compose
+- [Creating Agents and Teams](../guides/creating-agents-and-teams.md) -- designing agent personas
+- [Agent Best Practices](../guides/agent-best-practices.md) -- design principles and quality assurance
+- [Agent Configuration Schema](../guides/agent-configuration-schema.md) -- YAML frontmatter fields and validation
+- [Skills Library](../skills/README.md) -- executable procedures agents follow
+- [Teams Library](../teams/README.md) -- multi-agent compositions
+- [Root README](../README.md) -- project overview
 
 ## License
 

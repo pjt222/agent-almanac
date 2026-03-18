@@ -32,17 +32,39 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 
 Ask Claude Code to review your R package, and the [r-package-review](teams/r-package-review.md) team activates 4 agents — each following specialized skills for code quality, architecture, security, and best practices — then synthesizes their findings into a single report.
 
+### Works with
+
+Skills follow the [Agent Skills open standard](https://agentskills.io) and work with any tool that reads markdown:
+
+| Tool | Integration | Details |
+|------|-------------|---------|
+| **Claude Code** | Full (skills, agents, teams) | Native discovery via `.claude/` symlinks |
+| **Codex (OpenAI)** | Skills | Symlink into `.agents/skills/` |
+| **Cursor** | Skills | Map to `.cursor/rules/*.mdc` files |
+| **Gemini CLI, Aider, etc.** | Skills | Point context to any `SKILL.md` file |
+
+Agents and teams use Claude Code's subagent architecture. For other tools, skills are the primary integration surface. See [skills/README.md](skills/README.md#consuming-skills-from-different-systems) for setup instructions.
+
 ## Quick Start
 
-### Prerequisites
+### 60-second path
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed
-- This repository cloned: `git clone https://github.com/pjt222/agent-almanac.git`
-- Node.js (for README generation and the visualization)
+No setup needed — reference any skill by path in Claude Code:
 
-### Try it
+```
+> "Follow skills/commit-changes/SKILL.md to stage and commit my changes"
+```
 
-In Claude Code, from this repository directory:
+### Full setup
+
+**Prerequisites:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed, Node.js (for README generation and the visualization).
+
+```bash
+git clone https://github.com/pjt222/agent-almanac.git
+cd agent-almanac
+```
+
+Then in Claude Code:
 
 ```
 > "Use the code-reviewer agent to review my latest changes"
@@ -53,18 +75,37 @@ In Claude Code, from this repository directory:
 ### Make skills available as slash commands
 
 ```bash
+# From the repository root:
 ln -s ../../skills/commit-changes .claude/skills/commit-changes
 # Then invoke with /commit-changes in Claude Code
 ```
 
+See [Symlink Architecture](guides/symlink-architecture.md) for details. All 328 skills are already symlinked in this repository.
+
 ### Explore visually
 
 ```bash
-cd viz && npx vite
+cd viz && npm install && npm run dev
 # Open http://localhost:5173 for the interactive force-graph explorer
 ```
 
 See [viz/README.md](viz/README.md) for full build instructions.
+
+## Directory Map
+
+```
+agent-almanac/
+  skills/      328 executable procedures across 58 domains
+  agents/       66 specialist personas
+  teams/        15 multi-agent compositions with 8 coordination patterns
+  guides/       19 human-readable reference docs
+  viz/          Interactive force-graph explorer with R-generated icons
+  tests/        30 test scenarios for validation
+  i18n/         Translations (4 locales: de, zh-CN, ja, es)
+  cli/          Universal installer tool (Phase 1)
+  scripts/      Build and CI automation
+  sessions/     Tending session archives
+```
 
 ## Guides
 
@@ -108,10 +149,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 317/316 | 3/65 | 1/13 | 1/17 | 322/411 (78.3%) |
-| zh-CN | 简体中文 | 317/316 | 3/65 | 1/13 | 1/17 | 322/411 (78.3%) |
-| ja | 日本語 | 317/316 | 3/65 | 1/13 | 1/17 | 322/411 (78.3%) |
-| es | Español | 317/316 | 3/65 | 1/13 | 1/17 | 322/411 (78.3%) |
+| de | Deutsch | 317/328 | 3/66 | 1/15 | 1/19 | 322/428 (75.2%) |
+| zh-CN | 简体中文 | 317/328 | 3/66 | 1/15 | 1/19 | 322/428 (75.2%) |
+| ja | 日本語 | 317/328 | 3/66 | 1/15 | 1/19 | 322/428 (75.2%) |
+| es | Español | 317/328 | 3/66 | 1/15 | 1/19 | 322/428 (75.2%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.

@@ -298,34 +298,46 @@ function generateGuidesReadme() {
 function generateVizReadme() {
   return `# Interactive Skills Visualization
 
-Force-graph explorer for the ${totalSkills}-skill, ${totalAgents}-agent, ${totalTeams}-team development platform. Built with [force-graph](https://github.com/vasturiano/force-graph), R/ggplot2 icon rendering, and 9 color themes.
+Force-graph explorer for the ${totalSkills}-skill, ${totalAgents}-agent, ${totalTeams}-team agent-almanac platform. Nodes are skills, agents, and teams; edges express domain membership and cross-references. Each node renders a domain-colored WebP pictogram produced by an R/ggplot2 icon pipeline. Built with [force-graph](https://github.com/vasturiano/force-graph), 9 color themes, and 5 locales.
 
-## Architecture
+## Quick Start
 
-- **Force-graph** (\`js/graph.js\`): 2D canvas rendering with zoom, pan, and click-to-inspect
-- **R icon pipeline** (\`R/\`): ggplot2 + ggfx neon glow pictograms rendered per-skill as transparent WebP icons
-- **${totalSkills} skill icons** (\`icons/<domain>/\`): one glyph per skill, domain-colored
-- **9 color themes**: cyberpunk, viridis, magma, inferno, plasma, cividis, mako, rocket, turbo
-- **Data pipeline**: \`build-data.js\` reads all three registries and generates \`data/skills.json\`
+\`\`\`bash
+cd viz
+npm install
+npm run dev        # starts Vite dev server
+\`\`\`
+
+The dev server runs at \`http://localhost:5173\`. For a production build:
+
+\`\`\`bash
+npm run build      # outputs to viz/dist/
+npm run preview    # serves dist/ locally
+\`\`\`
 
 ## Build Pipeline
 
+The data and icon pipeline is separate from the Vite frontend build. Run it whenever registry content changes:
+
 \`\`\`bash
-# Generate skills.json from registries
-node build-data.js
-
-# Render R-based pictogram icons (requires R with ggplot2, ggfx)
-Rscript build-icons.R
-
-# Build icon manifest and convert to WebP
-node build-icons.js
+npm run pipeline   # runs build.sh — the single entry point
 \`\`\`
 
-## Run Locally
+\`build.sh\` executes four steps:
+
+| Step | Command | What it does |
+|------|---------|--------------|
+| 1 | \`Rscript generate-palette-colors.R\` | Generates palette JSON and JS color data |
+| 2 | \`node build-data.js\` | Reads all registries, writes \`public/data/skills.json\` |
+| 3 | \`node build-icon-manifest.js\` | Produces icon manifests for skills, agents, and teams |
+| 4 | \`Rscript build-all-icons.R\` | Renders standard and HD WebP icons |
+
+Individual stages can be run separately:
 
 \`\`\`bash
-cd viz && python3 -m http.server 8080
-# Open http://localhost:8080
+npm run build-data      # step 2 only
+npm run build-manifest  # step 3 only
+npm run build-favicon   # regenerate favicon assets
 \`\`\`
 
 ## Docker
@@ -335,24 +347,22 @@ docker compose up --build
 # Open http://localhost:8080
 \`\`\`
 
-## Directory Layout
+## Configuration
 
-\`\`\`
-viz/
-\u251c\u2500\u2500 index.html                 # Force-graph explorer
-\u251c\u2500\u2500 build-data.js              # Registry \u2192 skills.json pipeline
-\u251c\u2500\u2500 build-icons.R              # R icon rendering orchestrator
-\u251c\u2500\u2500 build-icons.js             # WebP conversion + manifest
-\u251c\u2500\u2500 build-icon-manifest.js     # Icon manifest generator
-\u251c\u2500\u2500 generate-palette-colors.R  # Domain color palette generator
-\u251c\u2500\u2500 Dockerfile                 # Container build
-\u251c\u2500\u2500 docker-compose.yml         # Compose configuration
-\u251c\u2500\u2500 js/                        # Graph, filters, panel, color themes
-\u251c\u2500\u2500 css/                       # Styles
-\u251c\u2500\u2500 R/                         # Glyph primitives, render, utilities
-\u251c\u2500\u2500 data/                      # skills.json, icon-manifest.json, palette-colors.json
-\u2514\u2500\u2500 icons/                     # WebP skill icons by domain
-\`\`\`
+\`config.yml\` holds platform-specific settings (R path, parallel strategy). Four profiles: default, wsl, windows, docker. Set \`R_CONFIG_ACTIVE=wsl\` to use a non-default profile.
+
+## Related Skills
+
+- [\`audit-icon-pipeline\`](../skills/audit-icon-pipeline/SKILL.md) — verify icon coverage and detect missing glyphs
+- [\`create-glyph\`](../skills/create-glyph/SKILL.md) — author a new glyph for a skill, agent, or team icon
+- [\`enhance-glyph\`](../skills/enhance-glyph/SKILL.md) — improve an existing glyph's visual quality
+- [\`render-icon-pipeline\`](../skills/render-icon-pipeline/SKILL.md) — run the full pipeline end-to-end
+
+## See Also
+
+- [Root README](../README.md) — project overview
+- [Understanding the System](../guides/understanding-the-system.md) — how skills, agents, and teams compose
+- [Setting Up Your Environment](../guides/setting-up-your-environment.md) — R, Node.js, and WSL2 setup
 `;
 }
 
@@ -391,14 +401,27 @@ ${generateTeamsTable('')}
 
 | Pattern | Description | Best For |
 |---------|-------------|----------|
-| **Hub-and-spoke** | Lead distributes tasks and collects results | Review teams, audit teams |
-| **Sequential** | Each member processes in order | Pipeline workflows |
-| **Parallel** | Members work independently, lead merges | Independent subtasks |
-| **Consensus** | Members deliberate and reach agreement | Decision-making teams |
+| **Hub-and-spoke** | Lead distributes tasks, collects results, synthesizes | Review teams, audit teams |
+| **Sequential** | Agents work in a defined order, each building on previous output | Pipeline workflows |
+| **Parallel** | All agents work simultaneously on independent subtasks | Independent subtasks |
+| **Timeboxed** | Work organized into fixed-length iterations (sprints) | Agile project management |
+| **Adaptive** | Team self-organizes dynamically based on the task | Unknown or variable tasks |
+| **Wave-parallel** | Tasks grouped into dependency waves; parallel within each wave | Translation campaigns, staged rollouts |
+| **Reciprocal** | Two agents alternate focus — one acts, the other holds space | Paired practice, deep review |
+| **Synoptic** | All members perceive shared workspace simultaneously; lead integrates into gestalt | Cross-domain synthesis |
 
 ## Machine-Readable Configuration
 
 Each team definition includes an embedded configuration block between \`<!-- CONFIG:START -->\` and \`<!-- CONFIG:END -->\` markers. Tooling can extract this YAML to auto-create teams via Claude Code's TeamCreate/SendMessage infrastructure.
+
+## See Also
+
+- [Understanding the System](../guides/understanding-the-system.md) -- how skills, agents, and teams compose
+- [Creating Agents and Teams](../guides/creating-agents-and-teams.md) -- designing team compositions and coordination patterns
+- [Production Coordination Patterns](../guides/production-coordination-patterns.md) -- real-world multi-agent orchestration
+- [Agents Library](../agents/README.md) -- specialist personas that form teams
+- [Skills Library](../skills/README.md) -- executable procedures teams follow
+- [Root README](../README.md) -- project overview
 
 ## Registry
 
@@ -418,7 +441,9 @@ function generateTestsReadme() {
   const lines = [
     '# Tests',
     '',
-    `${totalTests} test scenario(s) for validating team coordination, agent behavior, and skill execution.`,
+    `${totalTests} test scenarios for validating team coordination, agent behavior, and skill execution. The framework covers 7 categories: static validation (CI-automated), structural integrity (CI-automated), coordination patterns, agent behavior, skill execution, negative/edge cases, and integration/composition. Each scenario is evaluated on a 5-dimension rubric (max 25 points) covering accuracy, completeness, coordination fidelity, persona adherence, and actionability.`,
+    '',
+    'CI workflows (\`validate-skills.yml\`, \`validate-tests.yml\`, \`validate-integrity.yml\`) automate the static checks. The remaining scenarios are executed manually via Claude Code and produce structured results in \`tests/results/\`.',
     '',
     '## Test Scenarios',
     '',
@@ -444,6 +469,12 @@ function generateTestsReadme() {
   lines.push('## Registry');
   lines.push('');
   lines.push('The `_registry.yml` file catalogs all test scenarios and defines coordination pattern key behaviors used during evaluation.');
+  lines.push('');
+  lines.push('## See Also');
+  lines.push('');
+  lines.push('- [Understanding the System](../guides/understanding-the-system.md) -- how skills, agents, and teams compose');
+  lines.push('- [test-team-coordination](../skills/test-team-coordination/SKILL.md) -- skill for executing test scenarios');
+  lines.push('- [Root README](../README.md) -- project overview');
   return lines.join('\n');
 }
 
@@ -459,7 +490,15 @@ function generateTranslationsSection() {
   const i18nConfig = yaml.load(readFileSync(configPath, 'utf8'));
   const locales = i18nConfig.supported_locales || [];
   const contentTypes = ['skills', 'agents', 'teams', 'guides'];
-  const sourceCounts = i18nConfig.source_counts || {};
+  // Derive source counts from registries (single source of truth)
+  // instead of manually-maintained i18n/_config.yml source_counts
+  const sourceCounts = {
+    skills: totalSkills,
+    agents: totalAgents,
+    teams: totalTeams,
+    guides: totalGuides,
+    total: totalSkills + totalAgents + totalTeams + totalGuides
+  };
 
   if (locales.length === 0) {
     return '*No translations configured yet.*';

@@ -9,7 +9,7 @@ skills: [create-skill]
 
 # Understanding the System
 
-This repository provides 278 skills, 59 agents, and 10 teams following the [Agent Skills open standard](https://agentskills.io). Together they form a composable system for AI-assisted development: skills define *how* to do something, agents define *who* does it, teams define *who works together*, and guides supply the background knowledge humans and agents both draw from. This guide explains each component type, how the types relate, and how you interact with them through Claude Code.
+This repository provides 328 skills, 66 agents, and 15 teams following the [Agent Skills open standard](https://agentskills.io). Together they form a composable system for AI-assisted development: skills define *how* to do something, agents define *who* does it, teams define *who works together*, and guides supply the background knowledge humans and agents both draw from. This guide explains each component type, how the types relate, and how you interact with them through Claude Code.
 
 ## When to Use This Guide
 
@@ -33,14 +33,14 @@ agent-almanac/
 │   ├── _registry.yml    # Catalog of all guides
 │   └── *.md             # Individual guide files
 ├── skills/              # Machine-consumable procedures
-│   ├── _registry.yml    # Catalog of all 278 skills
-│   └── <skill-name>/    # 278 skill directories
+│   ├── _registry.yml    # Catalog of all 328 skills
+│   └── <skill-name>/    # 328 skill directories
 │       └── SKILL.md
 ├── agents/              # Persona definitions for Claude Code subagents
-│   ├── _registry.yml    # Catalog of all 59 agents
+│   ├── _registry.yml    # Catalog of all 66 agents
 │   └── *.md             # Individual agent files
 ├── teams/               # Multi-agent compositions
-│   ├── _registry.yml    # Catalog of all 10 teams
+│   ├── _registry.yml    # Catalog of all 15 teams
 │   └── *.md             # Individual team files
 ├── .claude/
 │   ├── agents -> ../agents   # Symlink for Claude Code discovery
@@ -66,7 +66,7 @@ A skill is a machine-consumable procedure. It tells an agent exactly how to acco
 - **Common Pitfalls** -- frequent mistakes and how to avoid them.
 - **Related Skills** -- cross-references to complementary skills.
 
-The library currently contains 278 skills spanning 50 domains (as tagged in their metadata), ranging from `r-packages` and `containerization` to `esoteric` and `gardening`. Skills are kept under 500 lines; extended examples go into a `references/EXAMPLES.md` subdirectory following the progressive disclosure pattern.
+The library currently contains 328 skills spanning 58 domains (as tagged in their metadata), ranging from `r-packages` and `containerization` to `esoteric` and `gardening`. Skills are kept under 500 lines; extended examples go into a `references/EXAMPLES.md` subdirectory following the progressive disclosure pattern.
 
 ### 2. Agents -- the *who*
 
@@ -81,7 +81,7 @@ An agent is a persona definition for a Claude Code subagent. It specifies who ha
 - **Examples** -- sample invocations.
 - **Limitations** -- what the agent cannot or should not do.
 
-There are currently 59 agents. Examples include `r-developer` (R package development), `security-analyst` (security auditing), `mystic` (meta-cognitive meditation), and `shapeshifter` (adaptive role assumption). Two default skills -- `meditate` and `heal` -- are inherited by every agent automatically through the agents registry; individual agents do not need to list them.
+There are currently 66 agents. Examples include `r-developer` (R package development), `security-analyst` (security auditing), `mystic` (meta-cognitive meditation), and `shapeshifter` (adaptive role assumption). Two default skills -- `meditate` and `heal` -- are inherited by every agent automatically through the agents registry; individual agents do not need to list them.
 
 Claude Code discovers agents from the `.claude/agents/` directory, which in this repository is a symlink to `agents/`.
 
@@ -99,16 +99,16 @@ A team is a multi-agent composition. It defines a group of agents with assigned 
 - **Configuration** -- a machine-readable YAML block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers.
 - **Usage Scenarios** and **Limitations**.
 
-There are currently 12 teams using 7 coordination patterns:
+There are currently 15 teams using 8 coordination patterns:
 
 | Pattern | Description | Used by |
 |---------|-------------|---------|
-| hub-and-spoke | Lead distributes tasks, collects results, synthesizes | r-package-review, gxp-compliance-validation, ml-data-science-review, agentskills-alignment, entomology |
-| sequential | Agents work in a defined order, each building on the previous output | fullstack-web-dev, tending |
+| hub-and-spoke | Lead distributes tasks, collects results, synthesizes | r-package-review, gxp-compliance-validation, ml-data-science-review, agentskills-alignment, entomology, analytical-chemistry |
+| sequential | Agents work in a defined order, each building on the previous output | fullstack-web-dev, tending, physical-computing |
 | parallel | All agents work simultaneously on independent subtasks | devops-platform-engineering |
 | timeboxed | Work is organized into fixed-length iterations (sprints) | scrum-team |
 | adaptive | Team self-organizes dynamically based on the task | opaque-team |
-| wave-parallel | Tasks grouped into dependency waves; agents work in parallel within each wave, waves execute sequentially | *(ad hoc teams)* |
+| wave-parallel | Tasks grouped into dependency waves; agents work in parallel within each wave, waves execute sequentially | translation-campaign |
 | reciprocal | Two agents alternate focus — one acts, the other holds space | dyad |
 | synoptic | All members perceive shared workspace simultaneously; lead integrates into gestalt | synoptic-mind |
 
@@ -118,7 +118,7 @@ There are currently 12 teams using 7 coordination patterns:
 
 A guide is a human-readable reference document. Guides provide the background knowledge that agents and skills draw from: environment setup, development best practices, workflow walkthroughs, and design rationale. Guides use YAML frontmatter with `title`, `description`, `category`, and cross-references to related `agents`, `teams`, and `skills`.
 
-There are currently 14 guides across 4 categories: workflow, infrastructure, reference, and design.
+There are currently 19 guides across 4 categories: workflow, infrastructure, reference, and design.
 
 ## How They Compose
 
@@ -166,7 +166,7 @@ For example, the `submit-to-cran` skill is linked as:
 .claude/skills/submit-to-cran -> ../../skills/submit-to-cran
 ```
 
-You can then invoke it in Claude Code by typing `/submit-to-cran`. All 278 skills in this repository are already symlinked and ready to use.
+You can then invoke it in Claude Code by typing `/submit-to-cran`. All 328 skills in this repository are already symlinked and ready to use.
 
 ### By asking Claude Code directly
 
@@ -271,7 +271,7 @@ Use this decision matrix to pick the right level of composition for your task:
 |---------|-------|----------|
 | Slash command not recognized | Skill not symlinked to `.claude/skills/` | Create the symlink: `ln -s ../../skills/<name> .claude/skills/<name>` |
 | Agent not found | `.claude/agents/` symlink broken or missing | Verify: `ls -la .claude/agents/` should point to `../agents` |
-| Team coordination feels wrong | Wrong coordination pattern for the task | Review the 5 patterns in the Teams section above and pick a better fit |
+| Team coordination feels wrong | Wrong coordination pattern for the task | Review the 8 patterns in the Teams section above and pick a better fit |
 | Registry out of sync | Skill/agent/team added without registry update | Update `_registry.yml` and `total_*` count, then run `npm run update-readmes` |
 | Skill too long for agent to follow | SKILL.md exceeds 500 lines | Extract examples to `references/EXAMPLES.md` per the progressive disclosure pattern |
 
@@ -281,7 +281,7 @@ Use this decision matrix to pick the right level of composition for your task:
 - [Creating Agents and Teams](creating-agents-and-teams.md) -- how to design agent personas and compose teams
 - [Quick Reference](quick-reference.md) -- command cheat sheet for daily operations
 - [Skill Creation Meta-Skill](../skills/create-skill/SKILL.md) -- the skill that teaches you how to create skills
-- [Skills Library README](../skills/README.md) -- browsable catalog of all 278 skills
-- [Agents Library README](../agents/README.md) -- browsable catalog of all 59 agents
-- [Teams Library README](../teams/README.md) -- browsable catalog of all 10 teams
+- [Skills Library README](../skills/README.md) -- browsable catalog of all 328 skills
+- [Agents Library README](../agents/README.md) -- browsable catalog of all 66 agents
+- [Teams Library README](../teams/README.md) -- browsable catalog of all 15 teams
 - [Agent Skills Open Standard](https://agentskills.io) -- the specification this system follows

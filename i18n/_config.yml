@@ -19,8 +19,8 @@ supported_locales:
     status: active
 content_types: [skills, agents, teams, guides]
 source_counts:
-  skills: 316
-  agents: 65
-  teams: 13
-  guides: 17
-  total: 411
+  skills: 328
+  agents: 66
+  teams: 15
+  guides: 19
+  total: 428

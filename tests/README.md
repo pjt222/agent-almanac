@@ -1,6 +1,8 @@
 # Tests
 
-30 test scenario(s) for validating team coordination, agent behavior, and skill execution.
+30 test scenarios for validating team coordination, agent behavior, and skill execution. The framework covers 7 categories: static validation (CI-automated), structural integrity (CI-automated), coordination patterns, agent behavior, skill execution, negative/edge cases, and integration/composition. Each scenario is evaluated on a 5-dimension rubric (max 25 points) covering accuracy, completeness, coordination fidelity, persona adherence, and actionability.
+
+CI workflows (`validate-skills.yml`, `validate-tests.yml`, `validate-integrity.yml`) automate the static checks. The remaining scenarios are executed manually via Claude Code and produce structured results in `tests/results/`.
 
 ## Test Scenarios
 
@@ -50,3 +52,9 @@ Results are stored in `tests/results/YYYY-MM-DD-<target>-NNN/RESULT.md`.
 ## Registry
 
 The `_registry.yml` file catalogs all test scenarios and defines coordination pattern key behaviors used during evaluation.
+
+## See Also
+
+- [Understanding the System](../guides/understanding-the-system.md) -- how skills, agents, and teams compose
+- [test-team-coordination](../skills/test-team-coordination/SKILL.md) -- skill for executing test scenarios
+- [Root README](../README.md) -- project overview

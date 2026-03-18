@@ -4,12 +4,12 @@ This directory contains translations of agent-almanac content into multiple lang
 
 ## Supported Locales
 
-| Code | Language | Status |
-|------|----------|--------|
-| de | Deutsch (German) | Active |
-| zh-CN | 简体中文 (Simplified Chinese) | Active |
-| ja | 日本語 (Japanese) | Active |
-| es | Español (Spanish) | Active |
+| Code | Language | Skills | Agents | Teams | Guides | Status |
+|------|----------|--------|--------|-------|--------|--------|
+| de | Deutsch (German) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
+| zh-CN | 简体中文 (Simplified Chinese) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
+| ja | 日本語 (Japanese) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
+| es | Español (Spanish) | 317/328 | 3/66 | 1/15 | 1/19 | Active |
 
 ## Directory Structure
 
@@ -50,9 +50,13 @@ These fields enable freshness tracking: when the English source changes after th
 
 ## Contributing a Translation
 
+### Using the translation-campaign team
+
+For large-scale translation work, use the [translation-campaign](../teams/translation-campaign.md) team with wave-parallel coordination. See [Running a Translation Campaign](../guides/running-a-translation-campaign.md) for the end-to-end guide.
+
 ### Using the translator agent
 
-The recommended workflow uses the `translator` agent and `translate-content` skill:
+For individual translations, use the `translator` agent and `translate-content` skill:
 
 ```
 "Use the translator agent to translate create-r-package into German"
@@ -104,3 +108,11 @@ npm run translation:status
 ```
 
 Each `translation_status.yml` shows coverage percentages and stale counts per content type.
+
+## See Also
+
+- [Running a Translation Campaign](../guides/running-a-translation-campaign.md) -- end-to-end guide for large-scale translation
+- [translation-campaign](../teams/translation-campaign.md) -- wave-parallel team for systematic localization
+- [translator](../agents/translator.md) -- agent for individual translations
+- [translate-content](../skills/translate-content/SKILL.md) -- skill for content translation
+- [Root README](../README.md) -- project overview

@@ -130,7 +130,7 @@ The report uses three severity levels:
 
 ```
 ## Alignment Audit Report
-Scope: Full library (278 skills, 59 agents, 10 teams)
+Scope: Full library (328 skills, 66 agents, 15 teams)
 Date: 2026-02-20
 Reviewers: senior-researcher, senior-software-developer, librarian
 

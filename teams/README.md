@@ -48,14 +48,27 @@ Teams complement agents and skills:
 
 | Pattern | Description | Best For |
 |---------|-------------|----------|
-| **Hub-and-spoke** | Lead distributes tasks and collects results | Review teams, audit teams |
-| **Sequential** | Each member processes in order | Pipeline workflows |
-| **Parallel** | Members work independently, lead merges | Independent subtasks |
-| **Consensus** | Members deliberate and reach agreement | Decision-making teams |
+| **Hub-and-spoke** | Lead distributes tasks, collects results, synthesizes | Review teams, audit teams |
+| **Sequential** | Agents work in a defined order, each building on previous output | Pipeline workflows |
+| **Parallel** | All agents work simultaneously on independent subtasks | Independent subtasks |
+| **Timeboxed** | Work organized into fixed-length iterations (sprints) | Agile project management |
+| **Adaptive** | Team self-organizes dynamically based on the task | Unknown or variable tasks |
+| **Wave-parallel** | Tasks grouped into dependency waves; parallel within each wave | Translation campaigns, staged rollouts |
+| **Reciprocal** | Two agents alternate focus — one acts, the other holds space | Paired practice, deep review |
+| **Synoptic** | All members perceive shared workspace simultaneously; lead integrates into gestalt | Cross-domain synthesis |
 
 ## Machine-Readable Configuration
 
 Each team definition includes an embedded configuration block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers. Tooling can extract this YAML to auto-create teams via Claude Code's TeamCreate/SendMessage infrastructure.
+
+## See Also
+
+- [Understanding the System](../guides/understanding-the-system.md) -- how skills, agents, and teams compose
+- [Creating Agents and Teams](../guides/creating-agents-and-teams.md) -- designing team compositions and coordination patterns
+- [Production Coordination Patterns](../guides/production-coordination-patterns.md) -- real-world multi-agent orchestration
+- [Agents Library](../agents/README.md) -- specialist personas that form teams
+- [Skills Library](../skills/README.md) -- executable procedures teams follow
+- [Root README](../README.md) -- project overview
 
 ## Registry
 

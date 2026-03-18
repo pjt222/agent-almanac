@@ -86,7 +86,7 @@ Browse by domain:
 Each skill lives in its own directory with a `SKILL.md` file:
 
 ```
-skills/domain/skill-name/
+skills/skill-name/
 ├── SKILL.md          # Required: skill definition
 ├── references/       # Optional: reference materials
 ├── scripts/          # Optional: automation scripts
@@ -179,6 +179,14 @@ When performing package development tasks, follow procedures from:
 3. Add the skill to `_registry.yml`
 4. Ensure frontmatter includes required fields: `name`, `description`, `allowed-tools`
 5. Include at minimum: When to Use, Procedure, and Validation sections
+
+## See Also
+
+- [Understanding the System](../guides/understanding-the-system.md) -- how skills, agents, and teams compose
+- [Creating Skills](../guides/creating-skills.md) -- authoring, evolving, and reviewing skills
+- [Agents Library](../agents/README.md) -- specialist personas that execute skills
+- [Teams Library](../teams/README.md) -- multi-agent compositions
+- [Root README](../README.md) -- project overview
 
 ## License
 

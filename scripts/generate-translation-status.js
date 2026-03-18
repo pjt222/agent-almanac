@@ -27,8 +27,26 @@ if (!existsSync(configPath)) {
 }
 const config = yaml.load(readFileSync(configPath, 'utf8'));
 
-// Source counts from config
-const sourceCounts = config.source_counts;
+// Derive source counts from registries (single source of truth)
+const skillsRegistry = yaml.load(readFileSync(resolve(ROOT, 'skills/_registry.yml'), 'utf8'));
+const agentsRegistry = yaml.load(readFileSync(resolve(ROOT, 'agents/_registry.yml'), 'utf8'));
+const teamsRegistryPath = resolve(ROOT, 'teams/_registry.yml');
+const teamsRegistry = existsSync(teamsRegistryPath)
+  ? yaml.load(readFileSync(teamsRegistryPath, 'utf8'))
+  : { total_teams: 0 };
+const guidesRegistryPath = resolve(ROOT, 'guides/_registry.yml');
+const guidesRegistry = existsSync(guidesRegistryPath)
+  ? yaml.load(readFileSync(guidesRegistryPath, 'utf8'))
+  : { total_guides: 0 };
+
+const sourceCounts = {
+  skills: skillsRegistry.total_skills,
+  agents: agentsRegistry.total_agents,
+  teams: teamsRegistry.total_teams || 0,
+  guides: guidesRegistry.total_guides || 0,
+  total: skillsRegistry.total_skills + agentsRegistry.total_agents
+    + (teamsRegistry.total_teams || 0) + (guidesRegistry.total_guides || 0)
+};
 
 /**
  * Extract source_commit from translation frontmatter.
