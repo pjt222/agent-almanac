@@ -17,6 +17,24 @@ const DATA_URL = 'data/skills.json';
 const LAYOUT_SETTLE_MS = 3500;
 const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
 
+// ── Loading spinner ─────────────────────────────────────────────────
+
+function showLoading(message) {
+  const el = document.getElementById('loading');
+  if (!el) return;
+  el.style.display = 'flex';
+  el.classList.remove('hidden');
+  const textEl = document.getElementById('loading-text');
+  if (textEl) textEl.textContent = message || 'Loading...';
+}
+
+function hideLoading() {
+  const el = document.getElementById('loading');
+  if (!el) return;
+  el.classList.add('hidden');
+  setTimeout(() => { el.style.display = 'none'; }, 500);
+}
+
 // ── Dynamic favicon switching ───────────────────────────────────────
 function switchFavicon(palette) {
   if (!getThemeNames().includes(palette)) return;
@@ -188,6 +206,7 @@ async function switchMode(newModeName) {
   }
 
   const container = document.getElementById('graph-container');
+  showLoading(t('loading.mode'));
 
   try {
     // Load the target mode module (lazy)
@@ -222,6 +241,7 @@ async function switchMode(newModeName) {
     activeMode.setVisibleAgents(getFilteredAgentIds());
     activeMode.setVisibleTeams(getFilteredTeamIds());
     activeMode.setSkillVisibility(getVisibleSkillIds());
+    hideLoading();
 
     logEvent('app', { event: 'modeSwitch', mode: newModeName });
     setActiveMode(newModeName);
@@ -289,6 +309,7 @@ async function switchMode(newModeName) {
       }, LAYOUT_SETTLE_MS);
     }
   } catch (err) {
+    hideLoading();
     console.error(`Failed to switch to ${newModeName}:`, err);
     if (newModeName !== '2d') {
       switchMode('2d');
@@ -319,12 +340,14 @@ async function main() {
   }
 
   // ── Load data ──
+  showLoading(t('loading.data'));
   let data;
   try {
     const res = await fetch(DATA_URL);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     data = await res.json();
   } catch (err) {
+    hideLoading();
     const errContainer = document.getElementById('graph-container');
     const errDiv = document.createElement('div');
     errDiv.className = 'load-error';
@@ -419,6 +442,7 @@ async function main() {
   // ── Init graph ──
   const container = document.getElementById('graph-container');
   initGraph(container, data, modeCallbacks());
+  hideLoading();
 
   // ── Preload icons ──
   preloadIcons(data.nodes, getCurrentThemeName());

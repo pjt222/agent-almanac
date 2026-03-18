@@ -98,6 +98,10 @@
     "domainTooltip": "{domain}：{count} スキル、{connections} 件のクロスドメイン接続",
     "chordTooltip": "{source} \u2194 {target}：{weight} 接続ウェイト"
   },
+  "loading": {
+    "data": "ネットワークデータを読み込み中\u2026",
+    "mode": "ビジュアライゼーションを切り替え中\u2026"
+  },
   "error": {
     "noWebGL": "お使いのブラウザは WebGL をサポートしていません。3D モードには WebGL が必要です。",
     "dataNotFound": "データが見つかりません",

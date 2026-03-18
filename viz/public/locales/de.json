@@ -98,6 +98,10 @@
     "domainTooltip": "{domain}: {count} Skills, {connections} domänenübergreifende Verbindungen",
     "chordTooltip": "{source} \u2194 {target}: {weight} Verbindungsgewicht"
   },
+  "loading": {
+    "data": "Netzwerkdaten werden geladen\u2026",
+    "mode": "Visualisierung wird gewechselt\u2026"
+  },
   "error": {
     "noWebGL": "WebGL wird von Ihrem Browser nicht unterstützt. Der 3D-Modus erfordert WebGL.",
     "dataNotFound": "Daten nicht gefunden",

@@ -98,6 +98,10 @@
     "domainTooltip": "{domain}：{count} 个技能，{connections} 个跨领域连接",
     "chordTooltip": "{source} \u2194 {target}：{weight} 连接权重"
   },
+  "loading": {
+    "data": "正在加载网络数据\u2026",
+    "mode": "正在切换可视化\u2026"
+  },
   "error": {
     "noWebGL": "您的浏览器不支持 WebGL。3D 模式需要 WebGL 支持。",
     "dataNotFound": "未找到数据",
