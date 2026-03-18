@@ -18,6 +18,8 @@ let onNodeHover = null;
 let containerEl = null;
 let resizeHandler = null;
 let hoveredIndex = null;
+let zoomBehavior = null;
+let resizeTimer = null;
 
 // ── Derived data ──────────────────────────────────────────────────
 let domainList = [];         // sorted domain names
@@ -36,20 +38,34 @@ export function initChordGraph(container, data, callbacks = {}) {
   buildMatrix();
   render();
 
-  resizeHandler = () => render();
+  // Resize handler — debounced, animates zoom-to-fit instead of rebuilding DOM
+  resizeHandler = () => {
+    if (!svg || !containerEl) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const newWidth = containerEl.clientWidth || window.innerWidth;
+      const newHeight = containerEl.clientHeight || (window.innerHeight - 48);
+      svg.attr('width', newWidth).attr('height', newHeight);
+      svg.select('rect.chord-bg').attr('width', newWidth).attr('height', newHeight);
+      zoomToFitChord(300);
+    }, 100);
+  };
   window.addEventListener('resize', resizeHandler);
 }
 
 export function destroyChordGraph() {
+  clearTimeout(resizeTimer);
+  resizeTimer = null;
   if (svg) {
     svg.remove();
     svg = null;
-    rootG = null;
   }
+  rootG = null;
   if (resizeHandler) {
     window.removeEventListener('resize', resizeHandler);
     resizeHandler = null;
   }
+  zoomBehavior = null;
   containerEl = null;
   hoveredIndex = null;
 }
@@ -65,18 +81,44 @@ export function setVisibleTeamsChord() {}
 export function getVisibleAgentIdsChord() { return null; }
 export function focusNodeChord() {}
 export function resetViewChord() {
-  if (svg && rootG) {
-    svg.transition().duration(500).call(
-      d3.zoom().transform,
-      d3.zoomIdentity
-    );
-  }
+  zoomToFitChord(500);
 }
 export function zoomInChord() {
-  if (svg) svg.transition().duration(300).call(d3.zoom().scaleBy, 1.3);
+  if (!svg || !zoomBehavior) return;
+  svg.transition().duration(300).call(zoomBehavior.scaleBy, 1.3);
 }
 export function zoomOutChord() {
-  if (svg) svg.transition().duration(300).call(d3.zoom().scaleBy, 0.7);
+  if (!svg || !zoomBehavior) return;
+  svg.transition().duration(300).call(zoomBehavior.scaleBy, 0.7);
+}
+
+// ── Zoom to fit ─────────────────────────────────────────────────
+
+function zoomToFitChord(duration = 500) {
+  if (!svg || !rootG || !zoomBehavior || !containerEl) return;
+  const bbox = rootG.node().getBBox();
+  if (!bbox.width || !bbox.height) return;
+
+  const width = containerEl.clientWidth || window.innerWidth;
+  const height = containerEl.clientHeight || (window.innerHeight - 48);
+  const padding = 40;
+
+  const fitScale = Math.min(
+    (width - padding * 2) / bbox.width,
+    (height - padding * 2) / bbox.height
+  );
+  const cx = bbox.x + bbox.width / 2;
+  const cy = bbox.y + bbox.height / 2;
+
+  const transform = d3.zoomIdentity
+    .translate(width / 2 - cx * fitScale, height / 2 - cy * fitScale)
+    .scale(fitScale);
+
+  if (duration > 0) {
+    svg.transition().duration(duration).call(zoomBehavior.transform, transform);
+  } else {
+    svg.call(zoomBehavior.transform, transform);
+  }
 }
 
 // ── Build connection matrix ───────────────────────────────────────
@@ -189,6 +231,7 @@ function render() {
 
   // Background rect for click-to-deselect
   svg.append('rect')
+    .attr('class', 'chord-bg')
     .attr('width', width)
     .attr('height', height)
     .attr('fill', 'transparent')
@@ -198,15 +241,18 @@ function render() {
       if (onNodeClick) onNodeClick(null);
     });
 
-  const zoomBehavior = d3.zoom()
+  rootG = svg.append('g');
+
+  zoomBehavior = d3.zoom()
     .scaleExtent([0.3, 5])
     .on('zoom', (event) => {
       rootG.attr('transform', event.transform);
     });
-  svg.call(zoomBehavior);
 
-  rootG = svg.append('g')
-    .attr('transform', `translate(${width / 2},${height / 2})`);
+  // Attach zoom. Initial positioning is handled by zoomToFitChord(0) after
+  // content is drawn — using the zoom transform (not a static attr) keeps
+  // centering and user interaction in a single coordinate system.
+  svg.call(zoomBehavior);
 
   // D3 chord layout
   const chord = d3.chord()
@@ -319,6 +365,9 @@ function render() {
   // Store references for highlight updates
   svg._chordPaths = chordPaths;
   svg._groupG = groupG;
+
+  // Fit content to viewport (instant on initial render)
+  zoomToFitChord(0);
 
   logEvent('chord', { event: 'render', domains: domainList.length });
 }

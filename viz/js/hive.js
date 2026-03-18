@@ -24,6 +24,7 @@ let onNodeClick = null;
 let onNodeHover = null;
 let containerEl = null;
 let resizeHandler = null;
+let resizeTimer = null;
 let hoveredNodeId = null;
 let selectedNodeId = null;
 let adjacencyByLinkType = null; // { team: Map, agent: Map, skill: Map }
@@ -599,13 +600,16 @@ export function initHiveGraph(container, data, { onClick, onHover } = {}) {
 
   svg.call(zoomBehavior);
 
-  // Resize handler
+  // Resize handler — debounced, animates zoom-to-fit instead of rebuilding DOM
   resizeHandler = () => {
     if (!svg || !containerEl) return;
-    const nw = containerEl.clientWidth || window.innerWidth;
-    const nh = containerEl.clientHeight || (window.innerHeight - 48);
-    svg.attr('width', nw).attr('height', nh);
-    render();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const nw = containerEl.clientWidth || window.innerWidth;
+      const nh = containerEl.clientHeight || (window.innerHeight - 48);
+      svg.attr('width', nw).attr('height', nh);
+      zoomToFitHive(300);
+    }, 100);
   };
   window.addEventListener('resize', resizeHandler);
 
@@ -613,6 +617,8 @@ export function initHiveGraph(container, data, { onClick, onHover } = {}) {
 }
 
 export function destroyHiveGraph() {
+  clearTimeout(resizeTimer);
+  resizeTimer = null;
   if (resizeHandler) {
     window.removeEventListener('resize', resizeHandler);
     resizeHandler = null;
