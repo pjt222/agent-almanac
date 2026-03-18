@@ -20,151 +20,156 @@
   },
   "teamStyles": {
     "agentskills-alignment": {
+      "concept": "Magnifier over SKILL.md with alignment grid and 4 member nodes",
       "description": "Skill quality review team with alignment verification across agents",
-      "glow": "review-pink",
-      "concept": "Magnifier over SKILL.md with alignment grid and 4 member nodes"
-    },
-    "r-package-review": {
-      "description": "R package review team with coordinated multi-agent workflow",
-      "glow": "bright-cyan",
-      "concept": "Hub-and-spoke hexagon (R hex sticker) with 4 member nodes and coordination lines"
-    },
-    "gxp-compliance-validation": {
-      "description": "GxP compliance team with regulatory shield and audit nodes",
-      "glow": "hot-pink",
-      "concept": "Shield with checkmark and 4 audit nodes at corners"
-    },
-    "fullstack-web-dev": {
-      "description": "Full-stack web dev team with sequential pipeline chevrons",
-      "glow": "golden-yellow",
-      "concept": "Stacked chevrons (sequential pipeline) with 4 member nodes"
-    },
-    "ml-data-science-review": {
-      "description": "ML/data science review team with neural network hub",
-      "glow": "slate-blue",
-      "concept": "Neural network triangle with 4 outer review nodes"
-    },
-    "devops-platform-engineering": {
-      "description": "DevOps platform team with infrastructure gear",
-      "glow": "orange-red",
-      "concept": "Gear/cog with central hole and 4 platform nodes at cardinal directions"
-    },
-    "dyad": {
-      "description": "Reciprocal practitioner-witness pair for contemplative practice",
-      "glow": "wisteria-purple",
-      "concept": "Two overlapping circles, one filled one outlined, with shared center point"
-    },
-    "tending": {
-      "description": "Tending team with spiral mandala and modality nodes",
-      "glow": "orchid-purple",
-      "concept": "Archimedean spiral with 4 sequential modality nodes"
-    },
-    "scrum-team": {
-      "description": "Scrum team with sprint board and timeboxed coordination",
-      "glow": "sprint-green",
-      "concept": "Sprint board with 3 core nodes and flex slots at edges"
-    },
-    "opaque-team": {
-      "description": "Adaptive shapeshifter collective with emergent structure",
-      "glow": "obsidian-silver",
-      "concept": "Amorphous cluster of N identical nodes with shifting connections"
-    },
-    "entomology": {
-      "description": "Entomology team with hub-spoke insect research coordination",
-      "glow": "leaf-green",
-      "concept": "Hub-spoke insect icon with 3 specialist nodes at vertices"
+      "glow": "review-pink"
     },
     "analytical-chemistry": {
+      "concept": "Three-part hub: prism (spectroscopist) + column (chromatographer) + magnifier (researcher)",
       "description": "Analytical chemistry team with spectroscopy and chromatography specialists",
-      "glow": "analytical-teal",
-      "concept": "Three-part hub: prism (spectroscopist) + column (chromatographer) + magnifier (researcher)"
+      "glow": "analytical-teal"
+    },
+    "devops-platform-engineering": {
+      "concept": "Gear/cog with central hole and 4 platform nodes at cardinal directions",
+      "description": "DevOps platform team with infrastructure gear",
+      "glow": "orange-red"
+    },
+    "dyad": {
+      "concept": "Two overlapping circles, one filled one outlined, with shared center point",
+      "description": "Reciprocal practitioner-witness pair for contemplative practice",
+      "glow": "wisteria-purple"
+    },
+    "entomology": {
+      "concept": "Hub-spoke insect icon with 3 specialist nodes at vertices",
+      "description": "Entomology team with hub-spoke insect research coordination",
+      "glow": "leaf-green"
+    },
+    "fullstack-web-dev": {
+      "concept": "Stacked chevrons (sequential pipeline) with 4 member nodes",
+      "description": "Full-stack web dev team with sequential pipeline chevrons",
+      "glow": "golden-yellow"
+    },
+    "gxp-compliance-validation": {
+      "concept": "Shield with checkmark and 4 audit nodes at corners",
+      "description": "GxP compliance team with regulatory shield and audit nodes",
+      "glow": "hot-pink"
+    },
+    "ml-data-science-review": {
+      "concept": "Neural network triangle with 4 outer review nodes",
+      "description": "ML/data science review team with neural network hub",
+      "glow": "slate-blue"
+    },
+    "opaque-team": {
+      "concept": "Amorphous cluster of N identical nodes with shifting connections",
+      "description": "Adaptive shapeshifter collective with emergent structure",
+      "glow": "obsidian-silver"
+    },
+    "physical-computing": {
+      "description": "Cross-disciplinary team for digital logic design and physical implementation — from Boolean gates to complete computing systems",
+      "glow": "white",
+      "concept": "physical-computing team composition icon"
+    },
+    "r-package-review": {
+      "concept": "Hub-and-spoke hexagon (R hex sticker) with 4 member nodes and coordination lines",
+      "description": "R package review team with coordinated multi-agent workflow",
+      "glow": "bright-cyan"
+    },
+    "scrum-team": {
+      "concept": "Sprint board with 3 core nodes and flex slots at edges",
+      "description": "Scrum team with sprint board and timeboxed coordination",
+      "glow": "sprint-green"
     },
     "synoptic-mind": {
+      "concept": "Large workspace circle with fully-connected inner nodes — all see all",
       "description": "Shared-workspace panoramic synthesis team using synoptic coordination",
-      "glow": "teal-green",
-      "concept": "Large workspace circle with fully-connected inner nodes — all see all"
+      "glow": "teal-green"
+    },
+    "tending": {
+      "concept": "Archimedean spiral with 4 sequential modality nodes",
+      "description": "Tending team with spiral mandala and modality nodes",
+      "glow": "orchid-purple"
     },
     "translation-campaign": {
+      "concept": "Three horizontal waves with 4 parallel nodes per wave",
       "description": "Wave-parallel translation team for systematic localization across 4 locales",
-      "glow": "teal",
-      "concept": "Three horizontal waves with 4 parallel nodes per wave"
+      "glow": "teal"
     }
   },
   "icons": [
     {
       "teamId": "agentskills-alignment",
       "path": "public/icons/cyberpunk/teams/agentskills-alignment.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "tending",
-      "path": "public/icons/cyberpunk/teams/tending.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "devops-platform-engineering",
-      "path": "public/icons/cyberpunk/teams/devops-platform-engineering.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "fullstack-web-dev",
-      "path": "public/icons/cyberpunk/teams/fullstack-web-dev.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "gxp-compliance-validation",
-      "path": "public/icons/cyberpunk/teams/gxp-compliance-validation.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "ml-data-science-review",
-      "path": "public/icons/cyberpunk/teams/ml-data-science-review.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "r-package-review",
-      "path": "public/icons/cyberpunk/teams/r-package-review.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "scrum-team",
-      "path": "public/icons/cyberpunk/teams/scrum-team.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "opaque-team",
-      "path": "public/icons/cyberpunk/teams/opaque-team.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "entomology",
-      "path": "public/icons/cyberpunk/teams/entomology.webp",
-      "status": "done"
-    },
-    {
-      "teamId": "dyad",
-      "path": "public/icons/cyberpunk/teams/dyad.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "analytical-chemistry",
       "path": "public/icons/cyberpunk/teams/analytical-chemistry.webp",
-      "status": "done"
+      "status": "pending"
+    },
+    {
+      "teamId": "devops-platform-engineering",
+      "path": "public/icons/cyberpunk/teams/devops-platform-engineering.webp",
+      "status": "pending"
+    },
+    {
+      "teamId": "dyad",
+      "path": "public/icons/cyberpunk/teams/dyad.webp",
+      "status": "pending"
+    },
+    {
+      "teamId": "entomology",
+      "path": "public/icons/cyberpunk/teams/entomology.webp",
+      "status": "pending"
+    },
+    {
+      "teamId": "fullstack-web-dev",
+      "path": "public/icons/cyberpunk/teams/fullstack-web-dev.webp",
+      "status": "pending"
+    },
+    {
+      "teamId": "gxp-compliance-validation",
+      "path": "public/icons/cyberpunk/teams/gxp-compliance-validation.webp",
+      "status": "pending"
+    },
+    {
+      "teamId": "ml-data-science-review",
+      "path": "public/icons/cyberpunk/teams/ml-data-science-review.webp",
+      "status": "pending"
+    },
+    {
+      "teamId": "opaque-team",
+      "path": "public/icons/cyberpunk/teams/opaque-team.webp",
+      "status": "pending"
     },
     {
       "teamId": "physical-computing",
       "path": "public/icons/cyberpunk/teams/physical-computing.webp",
-      "status": "done"
+      "status": "pending"
+    },
+    {
+      "teamId": "r-package-review",
+      "path": "public/icons/cyberpunk/teams/r-package-review.webp",
+      "status": "pending"
+    },
+    {
+      "teamId": "scrum-team",
+      "path": "public/icons/cyberpunk/teams/scrum-team.webp",
+      "status": "pending"
     },
     {
       "teamId": "synoptic-mind",
       "path": "public/icons/cyberpunk/teams/synoptic-mind.webp",
-      "status": "done"
+      "status": "pending"
+    },
+    {
+      "teamId": "tending",
+      "path": "public/icons/cyberpunk/teams/tending.webp",
+      "status": "pending"
     },
     {
       "teamId": "translation-campaign",
       "path": "public/icons/cyberpunk/teams/translation-campaign.webp",
-      "status": "done"
+      "status": "pending"
     }
   ]
 }

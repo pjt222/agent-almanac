@@ -49,6 +49,7 @@ COPY agents/ /app/agents/
 COPY viz/R/ R/
 
 # Copy top-level build scripts
+COPY viz/config.yml config.yml
 COPY viz/generate-palette-colors.R viz/build-icons.R viz/build-agent-icons.R \
      viz/build-all-icons.R viz/build-team-icons.R ./
 COPY viz/build-data.js viz/build-icons.js viz/build-icon-manifest.js ./

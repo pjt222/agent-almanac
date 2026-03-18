@@ -231,12 +231,74 @@ else
 fi
 
 echo ""
+echo "=== Category C: Pipeline Sync Validation ==="
+
+# B7: Palette domain coverage (registry domains vs cyberpunk color map)
+echo "--- B7: Palette domain coverage ---"
+b7_warn=0
+reg_domains=$(grep '^\s\+[a-z0-9_-]\+:$' skills/_registry.yml | grep -v 'skills:' | sed 's/://;s/^ *//' | sort)
+palette_domains=$(grep -oP '^\s+"[a-z0-9-]+"' viz/R/palettes.R | head -60 | sed 's/[" ]//g' | sort)
+b7_missing=$(comm -23 <(echo "$reg_domains") <(echo "$palette_domains"))
+if [ -n "$b7_missing" ]; then
+  b7_count=$(echo "$b7_missing" | wc -l)
+  echo "WARN: $b7_count domain(s) in registry without hand-tuned cyberpunk color (will use auto-fallback):"
+  echo "$b7_missing" | sed 's/^/  - /'
+  warn_count=$((warn_count + b7_count))
+  b7_warn=$b7_count
+fi
+[ "$b7_warn" -eq 0 ] && echo "OK: All registry domains have hand-tuned cyberpunk colors"
+
+# B8: Glyph mapping coverage (registry skill IDs vs SKILL_GLYPHS keys)
+echo "--- B8: Glyph mapping coverage ---"
+b8_warn=0
+reg_skills=$(grep '^      - id: ' skills/_registry.yml | sed 's/.*- id: //' | tr -d '\r' | sort)
+glyph_skills=$(grep -oP '^\s+"[a-z0-9-]+"' viz/R/glyphs.R | sed 's/[" ]//g' | sort)
+b8_missing=$(comm -23 <(echo "$reg_skills") <(echo "$glyph_skills"))
+if [ -n "$b8_missing" ]; then
+  b8_count=$(echo "$b8_missing" | wc -l)
+  echo "WARN: $b8_count skill(s) in registry without glyph mapping (will render with fallback):"
+  echo "$b8_missing" | sed 's/^/  - /'
+  warn_count=$((warn_count + b8_count))
+  b8_warn=$b8_count
+fi
+[ "$b8_warn" -eq 0 ] && echo "OK: All registry skills have glyph mappings"
+
+# B9: Agent glyph coverage (registry agent IDs vs AGENT_GLYPHS keys)
+echo "--- B9: Agent glyph coverage ---"
+b9_warn=0
+reg_agents=$(sed -n '/^agents:/,$ { /^  - id: /p }' agents/_registry.yml | sed 's/.*- id: //' | tr -d '\r' | sort)
+glyph_agents=$(grep -oP '^\s+"[a-z0-9-]+"' viz/R/agent_glyphs.R | sed 's/[" ]//g' | sort)
+b9_missing=$(comm -23 <(echo "$reg_agents") <(echo "$glyph_agents"))
+if [ -n "$b9_missing" ]; then
+  b9_count=$(echo "$b9_missing" | wc -l)
+  echo "WARN: $b9_count agent(s) in registry without glyph mapping:"
+  echo "$b9_missing" | sed 's/^/  - /'
+  warn_count=$((warn_count + b9_count))
+  b9_warn=$b9_count
+fi
+[ "$b9_warn" -eq 0 ] && echo "OK: All registry agents have glyph mappings"
+
+# B10: DOMAIN_STYLES coverage (registry domains vs build-icon-manifest.js DOMAIN_STYLES)
+echo "--- B10: DOMAIN_STYLES coverage ---"
+b10_warn=0
+style_domains=$(grep -oP "'[a-z0-9-]+'" viz/build-icon-manifest.js | head -60 | sed "s/'//g" | sort -u)
+b10_missing=$(comm -23 <(echo "$reg_domains") <(echo "$style_domains"))
+if [ -n "$b10_missing" ]; then
+  b10_count=$(echo "$b10_missing" | wc -l)
+  echo "WARN: $b10_count domain(s) in registry without DOMAIN_STYLES entry (will use generic prompt):"
+  echo "$b10_missing" | sed 's/^/  - /'
+  warn_count=$((warn_count + b10_count))
+  b10_warn=$b10_count
+fi
+[ "$b10_warn" -eq 0 ] && echo "OK: All registry domains have DOMAIN_STYLES entries"
+
+echo ""
 echo "=== Summary ==="
 if [ "$failed" -ne 0 ]; then
   echo "FAILED: One or more checks failed"
   exit 1
 else
   echo "PASSED: All integrity checks passed"
-  [ "$warn_count" -gt 0 ] && echo "WARNINGS: $warn_count orphan(s) detected"
+  [ "$warn_count" -gt 0 ] && echo "WARNINGS: $warn_count warning(s) detected"
   exit 0
 fi

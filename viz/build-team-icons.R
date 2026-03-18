@@ -122,14 +122,8 @@ suppressWarnings({
 })
 
 # ── Setup parallel workers ───────────────────────────────────────────────
-if (.Platform$OS.type == "unix") {
-  future::plan(future::multicore, workers = opts$workers)
-} else {
-  future::plan(future::multisession, workers = opts$workers)
-}
+setup_parallel(opts$workers)
 on.exit(future::plan(future::sequential), add = TRUE)
-log_msg(sprintf("Using %d parallel workers (%s)",
-                opts$workers, if (.Platform$OS.type == "unix") "multicore" else "multisession"))
 
 # ── Pre-compute all palette colors ───────────────────────────────────────
 all_pal_colors <- lapply(

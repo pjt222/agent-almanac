@@ -26,7 +26,8 @@
 #' @return Invisible TRUE on success
 render_glyph <- function(color, glyph_fn_name, entity_id, out_path,
                          glow_sigma = 4, size_px = 512, glyph_fn = NULL,
-                         webp_quality = 80) {
+                         webp_quality = 80, dpi = 150, expand = 3,
+                         canvas_size = 100) {
   bright_color <- brighten_hex(color, 1.4)
 
   # Resolve glyph function (use pre-resolved function if provided)
@@ -40,13 +41,15 @@ render_glyph <- function(color, glyph_fn_name, entity_id, out_path,
     )
   }
 
-  # Draw the glyph centered on a 100x100 canvas
-  glyph_layers <- glyph_fn(cx = 50, cy = 50, s = 1.0,
+  # Draw the glyph centered on canvas
+  half <- canvas_size / 2
+  glyph_layers <- glyph_fn(cx = half, cy = half, s = 1.0,
                             col = color, bright = bright_color)
 
   # Build the ggplot
   p <- ggplot2::ggplot() +
-    ggplot2::coord_fixed(xlim = c(0, 100), ylim = c(0, 100), expand = FALSE) +
+    ggplot2::coord_fixed(xlim = c(0, canvas_size), ylim = c(0, canvas_size),
+                         expand = FALSE) +
     ggplot2::theme_void() +
     ggplot2::theme(
       plot.background = ggplot2::element_rect(fill = "transparent",
@@ -70,14 +73,15 @@ render_glyph <- function(color, glyph_fn_name, entity_id, out_path,
   for (layer in flat_layers) {
     p <- p + layer
   }
-  p <- ggfx::with_outer_glow(p, colour = color, sigma = glow_sigma, expand = 3)
+  p <- ggfx::with_outer_glow(p, colour = color, sigma = glow_sigma,
+                             expand = expand)
 
   # Render to temp PNG
   tmp_png <- tempfile(fileext = ".png")
   on.exit(unlink(tmp_png), add = TRUE)
 
   ragg::agg_png(tmp_png, width = size_px, height = size_px,
-                background = "transparent", res = 150)
+                background = "transparent", res = dpi)
   print(p)
   grDevices::dev.off()
 
@@ -111,7 +115,8 @@ render_glyph <- function(color, glyph_fn_name, entity_id, out_path,
 #' @return Invisible TRUE on success
 render_glyph_template <- function(glyph_fn_name, entity_id, out_png,
                                   glow_sigma = 4, size_px = 512,
-                                  glyph_fn = NULL) {
+                                  glyph_fn = NULL, dpi = 150, expand = 3,
+                                  canvas_size = 100) {
   template_color <- "#FFFFFF"
 
   if (is.null(glyph_fn)) {
@@ -124,11 +129,13 @@ render_glyph_template <- function(glyph_fn_name, entity_id, out_png,
     )
   }
 
-  glyph_layers <- glyph_fn(cx = 50, cy = 50, s = 1.0,
+  half <- canvas_size / 2
+  glyph_layers <- glyph_fn(cx = half, cy = half, s = 1.0,
                             col = template_color, bright = template_color)
 
   p <- ggplot2::ggplot() +
-    ggplot2::coord_fixed(xlim = c(0, 100), ylim = c(0, 100), expand = FALSE) +
+    ggplot2::coord_fixed(xlim = c(0, canvas_size), ylim = c(0, canvas_size),
+                         expand = FALSE) +
     ggplot2::theme_void() +
     ggplot2::theme(
       plot.background = ggplot2::element_rect(fill = "transparent",
@@ -152,12 +159,12 @@ render_glyph_template <- function(glyph_fn_name, entity_id, out_png,
     p <- p + layer
   }
   p <- ggfx::with_outer_glow(p, colour = template_color,
-                              sigma = glow_sigma, expand = 3)
+                              sigma = glow_sigma, expand = expand)
 
   dir.create(dirname(out_png), recursive = TRUE, showWarnings = FALSE)
 
   ragg::agg_png(out_png, width = size_px, height = size_px,
-                background = "transparent", res = 150)
+                background = "transparent", res = dpi)
   print(p)
   grDevices::dev.off()
 

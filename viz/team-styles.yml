@@ -1,0 +1,63 @@
+# team-styles.yml - Creative metadata for team icon generation
+# Hand-tuned descriptions, glow colors, and visual concepts.
+# New teams without entries here get defaults from the registry description.
+
+agentskills-alignment:
+  concept: Magnifier over SKILL.md with alignment grid and 4 member nodes
+  description: Skill quality review team with alignment verification across agents
+  glow: review-pink
+analytical-chemistry:
+  concept: 'Three-part hub: prism (spectroscopist) + column (chromatographer) + magnifier
+    (researcher)'
+  description: Analytical chemistry team with spectroscopy and chromatography specialists
+  glow: analytical-teal
+devops-platform-engineering:
+  concept: Gear/cog with central hole and 4 platform nodes at cardinal directions
+  description: DevOps platform team with infrastructure gear
+  glow: orange-red
+dyad:
+  concept: Two overlapping circles, one filled one outlined, with shared center point
+  description: Reciprocal practitioner-witness pair for contemplative practice
+  glow: wisteria-purple
+entomology:
+  concept: Hub-spoke insect icon with 3 specialist nodes at vertices
+  description: Entomology team with hub-spoke insect research coordination
+  glow: leaf-green
+fullstack-web-dev:
+  concept: Stacked chevrons (sequential pipeline) with 4 member nodes
+  description: Full-stack web dev team with sequential pipeline chevrons
+  glow: golden-yellow
+gxp-compliance-validation:
+  concept: Shield with checkmark and 4 audit nodes at corners
+  description: GxP compliance team with regulatory shield and audit nodes
+  glow: hot-pink
+ml-data-science-review:
+  concept: Neural network triangle with 4 outer review nodes
+  description: ML/data science review team with neural network hub
+  glow: slate-blue
+opaque-team:
+  concept: Amorphous cluster of N identical nodes with shifting connections
+  description: Adaptive shapeshifter collective with emergent structure
+  glow: obsidian-silver
+r-package-review:
+  concept: Hub-and-spoke hexagon (R hex sticker) with 4 member nodes and coordination
+    lines
+  description: R package review team with coordinated multi-agent workflow
+  glow: bright-cyan
+scrum-team:
+  concept: Sprint board with 3 core nodes and flex slots at edges
+  description: Scrum team with sprint board and timeboxed coordination
+  glow: sprint-green
+synoptic-mind:
+  concept: Large workspace circle with fully-connected inner nodes — all see all
+  description: Shared-workspace panoramic synthesis team using synoptic coordination
+  glow: teal-green
+tending:
+  concept: Archimedean spiral with 4 sequential modality nodes
+  description: Tending team with spiral mandala and modality nodes
+  glow: orchid-purple
+translation-campaign:
+  concept: Three horizontal waves with 4 parallel nodes per wave
+  description: Wave-parallel translation team for systematic localization across 4
+    locales
+  glow: teal

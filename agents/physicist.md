@@ -18,6 +18,7 @@ skills:
   - analyze-magnetic-levitation
   - design-acoustic-levitation
   - evaluate-levitation-mechanism
+  - analyze-tensegrity-system
 ---
 
 # Physicist Agent

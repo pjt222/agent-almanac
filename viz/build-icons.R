@@ -59,6 +59,7 @@ source(file.path(script_dir, "R", "primitives_16.R"))
 source(file.path(script_dir, "R", "primitives_17.R"))
 source(file.path(script_dir, "R", "primitives_18.R"))
 source(file.path(script_dir, "R", "primitives_19.R"))
+source(file.path(script_dir, "R", "primitives_20.R"))
 source(file.path(script_dir, "R", "glyphs.R"))
 source(file.path(script_dir, "R", "render.R"))
 source(file.path(script_dir, "R", "palettes.R"))
@@ -91,8 +92,19 @@ if (opts$palette == "all") {
   palettes_to_render <- opts$palette
 }
 
-# ── Resolve output directory (icons vs icons-hd) ─────────────────────────
-icon_output_dir <- if (opts$hd) "icons-hd" else "icons"
+# ── Resolve render passes (standard, and optionally HD) ──────────────────
+cfg_mult <- tryCatch(get_config()$hd_multiplier, error = function(e) 2)
+render_passes <- list(
+  list(label = "standard", output_dir = "icons",
+       size_px = opts$size_px, glow_sigma = opts$glow_sigma)
+)
+if (opts$hd) {
+  render_passes[[2]] <- list(label = "HD", output_dir = "icons-hd",
+       size_px = opts$size_px * cfg_mult,
+       glow_sigma = opts$glow_sigma * cfg_mult)
+}
+# For backward compat: set icon_output_dir to the primary output for manifest updates
+icon_output_dir <- "icons"
 
 # ── Load manifest ────────────────────────────────────────────────────────
 manifest_path <- file.path(script_dir, "public", "data", "icon-manifest.json")
@@ -137,14 +149,8 @@ suppressWarnings({
 })
 
 # ── Setup parallel workers ───────────────────────────────────────────────
-if (.Platform$OS.type == "unix") {
-  future::plan(future::multicore, workers = opts$workers)
-} else {
-  future::plan(future::multisession, workers = opts$workers)
-}
+setup_parallel(opts$workers)
 on.exit(future::plan(future::sequential), add = TRUE)
-log_msg(sprintf("Using %d parallel workers (%s)",
-                opts$workers, if (.Platform$OS.type == "unix") "multicore" else "multisession"))
 
 # ── Pre-compute all palette colors ───────────────────────────────────────
 all_pal_colors <- lapply(
@@ -157,176 +163,200 @@ cache_path <- file.path(script_dir, ".icon-cache.json")
 icon_cache <- if (opts$no_cache) list() else read_icon_cache(cache_path)
 new_cache <- icon_cache  # will be updated with new hashes
 
-# ── Phase 1: Render white templates (one per unique glyph) ──────────────
-template_dir <- file.path(tempdir(), "icon-templates")
-dir.create(template_dir, recursive = TRUE, showWarnings = FALSE)
+grand_total_rendered <- 0
+grand_total_errors <- 0
+grand_start <- proc.time()
 
-# Build unique glyph list from queue
-unique_glyphs <- list()
-for (ic in queue) {
-  glyph_fn_name <- SKILL_GLYPHS[[ic$skillId]]
-  if (is.null(glyph_fn_name)) glyph_fn_name <- "unknown"
-  cache_key <- paste0("skill:", ic$skillId, if (opts$hd) "@hd" else "")
+# ── Loop over render passes (standard, then HD if enabled) ───────────────
+for (pass in render_passes) {
+  pass_size   <- pass$size_px
+  pass_sigma  <- pass$glow_sigma
+  pass_outdir <- pass$output_dir
 
-  # Check content hash
-  current_hash <- compute_render_hash(glyph_fn_name, opts$glow_sigma,
-                                       opts$size_px)
+  log_msg(sprintf("=== Pass: %s (%dpx, sigma=%d) ===", pass$label,
+                  pass_size, pass_sigma))
 
-  if (!opts$no_cache && identical(icon_cache[[cache_key]], current_hash)) {
-    # Glyph unchanged, but we still need the template for recoloring
-    # Check if all palette outputs exist
-    all_exist <- all(vapply(palettes_to_render, function(pal) {
-      out_path <- file.path(script_dir, "public", icon_output_dir, pal, ic$domain,
-                            paste0(ic$skillId, ".webp"))
-      file.exists(out_path)
-    }, logical(1)))
-    if (all_exist && !opts$skip_existing) {
-      next  # skip entirely — hash matches and all outputs exist
-    }
-  }
+  # ── Phase 1: Render white templates (one per unique glyph) ──────────────
+  template_dir <- file.path(tempdir(), paste0("icon-templates-", pass$label))
+  dir.create(template_dir, recursive = TRUE, showWarnings = FALSE)
 
-  new_cache[[cache_key]] <- current_hash
+  # Build unique glyph list from queue
+  unique_glyphs <- list()
+  for (ic in queue) {
+    glyph_fn_name <- SKILL_GLYPHS[[ic$skillId]]
+    if (is.null(glyph_fn_name)) glyph_fn_name <- "unknown"
+    cache_key <- paste0("skill:", ic$skillId,
+                        if (pass$label != "standard") paste0("@", pass$label) else "")
 
-  if (is.null(unique_glyphs[[glyph_fn_name]])) {
-    glyph_fn <- tryCatch(match.fun(glyph_fn_name), error = function(e) NULL)
-    unique_glyphs[[glyph_fn_name]] <- list(
-      fn_name  = glyph_fn_name,
-      fn       = glyph_fn,
-      skills   = list()
-    )
-  }
-  unique_glyphs[[glyph_fn_name]]$skills[[length(
-    unique_glyphs[[glyph_fn_name]]$skills
-  ) + 1]] <- ic
-}
+    # Check content hash
+    current_hash <- compute_render_hash(glyph_fn_name, pass_sigma, pass_size)
 
-log_msg(sprintf("Rendering %d unique glyph templates", length(unique_glyphs)))
-
-# Render templates in parallel
-template_tasks <- lapply(names(unique_glyphs), function(fn_name) {
-  list(
-    fn_name      = fn_name,
-    fn           = unique_glyphs[[fn_name]]$fn,
-    template_png = file.path(template_dir, paste0(fn_name, ".png"))
-  )
-})
-
-template_results <- furrr::future_map(template_tasks, function(task) {
-  t0 <- proc.time()
-  tryCatch({
-    render_glyph_template(
-      glyph_fn_name = task$fn_name,
-      entity_id     = task$fn_name,
-      out_png       = task$template_png,
-      glow_sigma    = opts$glow_sigma,
-      size_px       = opts$size_px,
-      glyph_fn      = task$fn
-    )
-    elapsed <- (proc.time() - t0)["elapsed"]
-    list(status = "ok", fn_name = task$fn_name, elapsed = elapsed)
-  }, error = function(e) {
-    elapsed <- (proc.time() - t0)["elapsed"]
-    list(status = "error", fn_name = task$fn_name,
-         message = conditionMessage(e), elapsed = elapsed)
-  })
-}, .options = furrr::furrr_options(seed = TRUE))
-
-# Check for template errors
-template_ok <- vapply(template_results, function(r) r$status == "ok",
-                       logical(1))
-if (!all(template_ok)) {
-  for (r in template_results[!template_ok]) {
-    log_msg(sprintf("TEMPLATE ERROR: %s: %s", r$fn_name, r$message))
-  }
-}
-log_msg(sprintf("Templates rendered: %d ok, %d errors",
-                sum(template_ok), sum(!template_ok)))
-
-# ── Phase 2: Recolor templates per palette ───────────────────────────────
-recolor_tasks <- list()
-skipped_color <- 0
-for (pal in palettes_to_render) {
-  pal_colors <- all_pal_colors[[pal]]
-  for (fn_name in names(unique_glyphs)) {
-    template_png <- file.path(template_dir, paste0(fn_name, ".png"))
-    if (!file.exists(template_png)) next
-
-    for (ic in unique_glyphs[[fn_name]]$skills) {
-      out_path <- file.path(script_dir, "public", icon_output_dir, pal, ic$domain,
-                            paste0(ic$skillId, ".webp"))
-
-      if (opts$skip_existing && file.exists(out_path)) next
-
-      domain_color <- pal_colors$domains[[ic$domain]]
-      if (is.null(domain_color)) {
-        log_error(ic$domain, ic$skillId,
-                  paste("No color for domain in palette", pal))
-        skipped_color <- skipped_color + 1
-        next
+    if (!opts$no_cache && identical(icon_cache[[cache_key]], current_hash)) {
+      # Glyph unchanged — check if all palette outputs exist
+      all_exist <- all(vapply(palettes_to_render, function(pal) {
+        out_path <- file.path(script_dir, "public", pass_outdir, pal, ic$domain,
+                              paste0(ic$skillId, ".webp"))
+        file.exists(out_path)
+      }, logical(1)))
+      if (all_exist && !opts$skip_existing) {
+        next  # skip entirely — hash matches and all outputs exist
       }
+    }
 
-      recolor_tasks[[length(recolor_tasks) + 1]] <- list(
-        palette      = pal,
-        domain       = ic$domain,
-        skill_id     = ic$skillId,
-        seed         = ic$seed,
-        out_path     = out_path,
-        color        = domain_color,
-        template_png = template_png
+    new_cache[[cache_key]] <- current_hash
+
+    if (is.null(unique_glyphs[[glyph_fn_name]])) {
+      glyph_fn <- tryCatch(match.fun(glyph_fn_name), error = function(e) NULL)
+      unique_glyphs[[glyph_fn_name]] <- list(
+        fn_name  = glyph_fn_name,
+        fn       = glyph_fn,
+        skills   = list()
       )
     }
+    unique_glyphs[[glyph_fn_name]]$skills[[length(
+      unique_glyphs[[glyph_fn_name]]$skills
+    ) + 1]] <- ic
   }
-}
 
-log_msg(sprintf("Queued %d recolor tasks across %d palettes (%d skipped for missing color)",
-                length(recolor_tasks), length(palettes_to_render), skipped_color))
+  log_msg(sprintf("Rendering %d unique glyph templates", length(unique_glyphs)))
 
-# ── Parallel recolor ─────────────────────────────────────────────────────
-start_time <- proc.time()
-
-results <- furrr::future_map(recolor_tasks, function(task) {
-  t0 <- proc.time()
-  tryCatch({
-    dir.create(dirname(task$out_path), recursive = TRUE, showWarnings = FALSE)
-
-    recolor_template(
-      template_png = task$template_png,
-      color        = task$color,
-      out_path     = task$out_path
+  # Render templates in parallel
+  template_tasks <- lapply(names(unique_glyphs), function(fn_name) {
+    list(
+      fn_name      = fn_name,
+      fn           = unique_glyphs[[fn_name]]$fn,
+      template_png = file.path(template_dir, paste0(fn_name, ".png"))
     )
-
-    kb <- file_size_kb(task$out_path)
-    elapsed <- (proc.time() - t0)["elapsed"]
-    list(status = "ok", palette = task$palette, domain = task$domain,
-         skill_id = task$skill_id, kb = kb, elapsed = elapsed)
-
-  }, error = function(e) {
-    elapsed <- (proc.time() - t0)["elapsed"]
-    list(status = "error", palette = task$palette, domain = task$domain,
-         skill_id = task$skill_id, message = conditionMessage(e),
-         elapsed = elapsed)
   })
-}, .options = furrr::furrr_options(seed = TRUE))
 
-# ── Aggregate results ────────────────────────────────────────────────────
-total_rendered <- 0
-total_errors <- 0
-for (res in results) {
-  if (res$status == "ok") {
-    log_ok(res$domain, res$skill_id, 0, res$kb)
-    total_rendered <- total_rendered + 1
-  } else {
-    log_error(res$domain, res$skill_id, res$message)
-    total_errors <- total_errors + 1
+  template_results <- furrr::future_map(template_tasks, function(task) {
+    t0 <- proc.time()
+    tryCatch({
+      render_glyph_template(
+        glyph_fn_name = task$fn_name,
+        entity_id     = task$fn_name,
+        out_png       = task$template_png,
+        glow_sigma    = pass_sigma,
+        size_px       = pass_size,
+        glyph_fn      = task$fn
+      )
+      elapsed <- (proc.time() - t0)["elapsed"]
+      list(status = "ok", fn_name = task$fn_name, elapsed = elapsed)
+    }, error = function(e) {
+      elapsed <- (proc.time() - t0)["elapsed"]
+      list(status = "error", fn_name = task$fn_name,
+           message = conditionMessage(e), elapsed = elapsed)
+    })
+  }, .options = furrr::furrr_options(seed = TRUE))
+
+  # Check for template errors
+  template_ok <- vapply(template_results, function(r) r$status == "ok",
+                         logical(1))
+  if (!all(template_ok)) {
+    for (r in template_results[!template_ok]) {
+      log_msg(sprintf("TEMPLATE ERROR: %s: %s", r$fn_name, r$message))
+    }
   }
-}
-total_errors <- total_errors + skipped_color
+  log_msg(sprintf("Templates rendered: %d ok, %d errors",
+                  sum(template_ok), sum(!template_ok)))
 
-# Update manifest status for cyberpunk palette (primary palette for manifest tracking)
-# Only update manifest for standard resolution builds (not HD)
-if ("cyberpunk" %in% palettes_to_render && !opts$hd) {
+  # ── Phase 2: Recolor templates per palette ───────────────────────────────
+  recolor_tasks <- list()
+  skipped_color <- 0
+  for (pal in palettes_to_render) {
+    pal_colors <- all_pal_colors[[pal]]
+    for (fn_name in names(unique_glyphs)) {
+      template_png <- file.path(template_dir, paste0(fn_name, ".png"))
+      if (!file.exists(template_png)) next
+
+      for (ic in unique_glyphs[[fn_name]]$skills) {
+        out_path <- file.path(script_dir, "public", pass_outdir, pal, ic$domain,
+                              paste0(ic$skillId, ".webp"))
+
+        if (opts$skip_existing && file.exists(out_path)) next
+
+        domain_color <- pal_colors$domains[[ic$domain]]
+        if (is.null(domain_color)) {
+          log_error(ic$domain, ic$skillId,
+                    paste("No color for domain in palette", pal))
+          skipped_color <- skipped_color + 1
+          next
+        }
+
+        recolor_tasks[[length(recolor_tasks) + 1]] <- list(
+          palette      = pal,
+          domain       = ic$domain,
+          skill_id     = ic$skillId,
+          seed         = ic$seed,
+          out_path     = out_path,
+          color        = domain_color,
+          template_png = template_png
+        )
+      }
+    }
+  }
+
+  log_msg(sprintf("Queued %d recolor tasks across %d palettes (%d skipped for missing color)",
+                  length(recolor_tasks), length(palettes_to_render), skipped_color))
+
+  # ── Parallel recolor ─────────────────────────────────────────────────────
+  start_time <- proc.time()
+
+  results <- furrr::future_map(recolor_tasks, function(task) {
+    t0 <- proc.time()
+    tryCatch({
+      dir.create(dirname(task$out_path), recursive = TRUE, showWarnings = FALSE)
+
+      recolor_template(
+        template_png = task$template_png,
+        color        = task$color,
+        out_path     = task$out_path
+      )
+
+      kb <- file_size_kb(task$out_path)
+      elapsed <- (proc.time() - t0)["elapsed"]
+      list(status = "ok", palette = task$palette, domain = task$domain,
+           skill_id = task$skill_id, kb = kb, elapsed = elapsed)
+
+    }, error = function(e) {
+      elapsed <- (proc.time() - t0)["elapsed"]
+      list(status = "error", palette = task$palette, domain = task$domain,
+           skill_id = task$skill_id, message = conditionMessage(e),
+           elapsed = elapsed)
+    })
+  }, .options = furrr::furrr_options(seed = TRUE))
+
+  # ── Aggregate pass results ─────────────────────────────────────────────
+  pass_rendered <- 0
+  pass_errors <- 0
+  for (res in results) {
+    if (res$status == "ok") {
+      log_ok(res$domain, res$skill_id, 0, res$kb)
+      pass_rendered <- pass_rendered + 1
+    } else {
+      log_error(res$domain, res$skill_id, res$message)
+      pass_errors <- pass_errors + 1
+    }
+  }
+  pass_errors <- pass_errors + skipped_color
+
+  elapsed <- (proc.time() - start_time)["elapsed"]
+  log_msg(sprintf("[%s] %d rendered, %d errors across %d palettes in %.1fs",
+                  pass$label, pass_rendered, pass_errors,
+                  length(palettes_to_render), elapsed))
+
+  grand_total_rendered <- grand_total_rendered + pass_rendered
+  grand_total_errors   <- grand_total_errors + pass_errors
+
+  # Clean up templates for this pass
+  unlink(template_dir, recursive = TRUE)
+}
+
+# ── Post-loop: manifest update + cache write ─────────────────────────────
+# Update manifest status for cyberpunk palette (standard resolution only)
+if ("cyberpunk" %in% palettes_to_render) {
   for (ic in queue) {
-    out_path <- file.path(script_dir, "public", icon_output_dir, "cyberpunk", ic$domain,
+    out_path <- file.path(script_dir, "public", "icons", "cyberpunk", ic$domain,
                           paste0(ic$skillId, ".webp"))
     for (j in seq_along(manifest$icons)) {
       if (manifest$icons[[j]]$skillId == ic$skillId &&
@@ -335,7 +365,6 @@ if ("cyberpunk" %in% palettes_to_render && !opts$hd) {
           manifest$icons[[j]]$status <- "done"
           manifest$icons[[j]]$lastError <- NULL
         }
-        # Update path to palette-aware format
         manifest$icons[[j]]$path <- sprintf("public/icons/cyberpunk/%s/%s.webp",
                                              ic$domain, ic$skillId)
         break
@@ -348,9 +377,7 @@ if ("cyberpunk" %in% palettes_to_render && !opts$hd) {
 # Write updated cache
 write_icon_cache(new_cache, cache_path)
 
-# Clean up templates
-unlink(template_dir, recursive = TRUE)
-
-elapsed <- (proc.time() - start_time)["elapsed"]
-log_msg(sprintf("All done: %d rendered, %d errors across %d palettes in %.1fs",
-                total_rendered, total_errors, length(palettes_to_render), elapsed))
+grand_elapsed <- (proc.time() - grand_start)["elapsed"]
+log_msg(sprintf("All done: %d rendered, %d errors across %d pass(es) in %.1fs",
+                grand_total_rendered, grand_total_errors,
+                length(render_passes), grand_elapsed))

@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-03-17T18:27:12.658Z",
-    "totalSkills": 325,
+    "generated": "2026-03-18T10:18:49.728Z",
+    "totalSkills": 328,
     "totalAgents": 66,
     "totalTeams": 15,
-    "totalNodes": 406,
-    "totalLinks": 1767,
+    "totalNodes": 409,
+    "totalLinks": 1784,
     "totalAgentLinks": 397,
     "totalTeamLinks": 49,
-    "totalDomains": 57,
+    "totalDomains": 58,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -199,7 +199,7 @@
     },
     "visualization": {
       "description": "2D visualization, image composition, and publication-ready graphics",
-      "count": 2
+      "count": 4
     },
     "3d-printing": {
       "description": "Additive manufacturing from model preparation through troubleshooting",
@@ -244,6 +244,10 @@
     "synoptic": {
       "description": "Panoramic awareness, cross-domain integration, and simultaneous multi-perspective cognition",
       "count": 4
+    },
+    "tensegrity": {
+      "description": "Tensional integrity systems — force balance, prestress stability, and cross-scale structural analysis from cytoskeleton to architecture",
+      "count": 1
     }
   },
   "nodes": [
@@ -4163,13 +4167,13 @@
       ]
     },
     {
-      "id": "create-skill-glyph",
+      "id": "create-glyph",
       "type": "skill",
-      "title": "Create Skill Glyph",
+      "title": "Create Glyph",
       "domain": "design",
       "complexity": "intermediate",
       "language": "R",
-      "description": "Create R-based pictogram glyphs for skill icons using ggplot2 and the primitives library",
+      "description": "Create R-based pictogram glyphs for skill, agent, or team icons using ggplot2",
       "tags": [
         "design",
         "glyph",
@@ -4180,23 +4184,20 @@
         "neon"
       ],
       "related": [
-        "glyph-enhance",
+        "enhance-glyph",
+        "audit-icon-pipeline",
+        "render-icon-pipeline",
         "ornament-style-mono",
         "ornament-style-color",
         "create-skill"
       ],
-      "path": "create-skill-glyph/SKILL.md",
-      "locales": [
-        "de",
-        "zh-CN",
-        "ja",
-        "es"
-      ]
+      "path": "create-glyph/SKILL.md",
+      "locales": []
     },
     {
-      "id": "glyph-enhance",
+      "id": "enhance-glyph",
       "type": "skill",
-      "title": "Glyph Enhance",
+      "title": "Enhance Glyph",
       "domain": "design",
       "complexity": "intermediate",
       "language": "R",
@@ -4211,17 +4212,14 @@
         "refinement"
       ],
       "related": [
-        "create-skill-glyph",
+        "create-glyph",
+        "audit-icon-pipeline",
+        "render-icon-pipeline",
         "ornament-style-mono",
         "chrysopoeia"
       ],
-      "path": "glyph-enhance/SKILL.md",
-      "locales": [
-        "de",
-        "zh-CN",
-        "ja",
-        "es"
-      ]
+      "path": "enhance-glyph/SKILL.md",
+      "locales": []
     },
     {
       "id": "tai-chi",
@@ -8661,6 +8659,54 @@
       ]
     },
     {
+      "id": "audit-icon-pipeline",
+      "type": "skill",
+      "title": "Audit Icon Pipeline",
+      "domain": "visualization",
+      "complexity": "basic",
+      "language": "R",
+      "description": "Detect missing glyphs, icons, and HD variants across the icon pipeline",
+      "tags": [
+        "visualization",
+        "audit",
+        "icons",
+        "glyphs",
+        "pipeline",
+        "gap-analysis"
+      ],
+      "related": [
+        "create-glyph",
+        "enhance-glyph",
+        "render-icon-pipeline"
+      ],
+      "path": "audit-icon-pipeline/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "render-icon-pipeline",
+      "type": "skill",
+      "title": "Render Icon Pipeline",
+      "domain": "visualization",
+      "complexity": "basic",
+      "language": "multi",
+      "description": "Run the viz pipeline to render icons from existing glyphs",
+      "tags": [
+        "visualization",
+        "rendering",
+        "pipeline",
+        "icons",
+        "glyphs",
+        "build"
+      ],
+      "related": [
+        "audit-icon-pipeline",
+        "create-glyph",
+        "enhance-glyph"
+      ],
+      "path": "render-icon-pipeline/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "prepare-print-model",
       "type": "skill",
       "title": "Prepare Print Model",
@@ -9899,6 +9945,34 @@
         "express-insight"
       ],
       "path": "adaptic/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "analyze-tensegrity-system",
+      "type": "skill",
+      "title": "Analyze Tensegrity System",
+      "domain": "tensegrity",
+      "complexity": "advanced",
+      "language": "natural",
+      "description": "Analyze tensegrity systems by characterizing strut-cable topology, computing prestress equilibrium, verifying stability via Maxwell's rule, and mapping biological tensegrity across scales",
+      "tags": [
+        "tensegrity",
+        "structural-integrity",
+        "prestress",
+        "biomechanics",
+        "cytoskeleton",
+        "force-balance"
+      ],
+      "related": [
+        "assess-form",
+        "adapt-architecture",
+        "repair-damage",
+        "center",
+        "integrate-gestalt",
+        "analyze-magnetic-levitation",
+        "construct-geometric-figure"
+      ],
+      "path": "analyze-tensegrity-system/SKILL.md",
       "locales": []
     },
     {
@@ -15225,37 +15299,57 @@
       "type": "skill"
     },
     {
-      "source": "create-skill-glyph",
-      "target": "glyph-enhance",
+      "source": "create-glyph",
+      "target": "enhance-glyph",
       "type": "skill"
     },
     {
-      "source": "create-skill-glyph",
+      "source": "create-glyph",
+      "target": "audit-icon-pipeline",
+      "type": "skill"
+    },
+    {
+      "source": "create-glyph",
+      "target": "render-icon-pipeline",
+      "type": "skill"
+    },
+    {
+      "source": "create-glyph",
       "target": "ornament-style-mono",
       "type": "skill"
     },
     {
-      "source": "create-skill-glyph",
+      "source": "create-glyph",
       "target": "ornament-style-color",
       "type": "skill"
     },
     {
-      "source": "create-skill-glyph",
+      "source": "create-glyph",
       "target": "create-skill",
       "type": "skill"
     },
     {
-      "source": "glyph-enhance",
-      "target": "create-skill-glyph",
+      "source": "enhance-glyph",
+      "target": "create-glyph",
       "type": "skill"
     },
     {
-      "source": "glyph-enhance",
+      "source": "enhance-glyph",
+      "target": "audit-icon-pipeline",
+      "type": "skill"
+    },
+    {
+      "source": "enhance-glyph",
+      "target": "render-icon-pipeline",
+      "type": "skill"
+    },
+    {
+      "source": "enhance-glyph",
       "target": "ornament-style-mono",
       "type": "skill"
     },
     {
-      "source": "glyph-enhance",
+      "source": "enhance-glyph",
       "target": "chrysopoeia",
       "type": "skill"
     },
@@ -18265,6 +18359,36 @@
       "type": "skill"
     },
     {
+      "source": "audit-icon-pipeline",
+      "target": "create-glyph",
+      "type": "skill"
+    },
+    {
+      "source": "audit-icon-pipeline",
+      "target": "enhance-glyph",
+      "type": "skill"
+    },
+    {
+      "source": "audit-icon-pipeline",
+      "target": "render-icon-pipeline",
+      "type": "skill"
+    },
+    {
+      "source": "render-icon-pipeline",
+      "target": "audit-icon-pipeline",
+      "type": "skill"
+    },
+    {
+      "source": "render-icon-pipeline",
+      "target": "create-glyph",
+      "type": "skill"
+    },
+    {
+      "source": "render-icon-pipeline",
+      "target": "enhance-glyph",
+      "type": "skill"
+    },
+    {
       "source": "identify-gemstone",
       "target": "cut-gemstone",
       "type": "skill"
@@ -19132,6 +19256,41 @@
     {
       "source": "adaptic",
       "target": "express-insight",
+      "type": "skill"
+    },
+    {
+      "source": "analyze-tensegrity-system",
+      "target": "assess-form",
+      "type": "skill"
+    },
+    {
+      "source": "analyze-tensegrity-system",
+      "target": "adapt-architecture",
+      "type": "skill"
+    },
+    {
+      "source": "analyze-tensegrity-system",
+      "target": "repair-damage",
+      "type": "skill"
+    },
+    {
+      "source": "analyze-tensegrity-system",
+      "target": "center",
+      "type": "skill"
+    },
+    {
+      "source": "analyze-tensegrity-system",
+      "target": "integrate-gestalt",
+      "type": "skill"
+    },
+    {
+      "source": "analyze-tensegrity-system",
+      "target": "analyze-magnetic-levitation",
+      "type": "skill"
+    },
+    {
+      "source": "analyze-tensegrity-system",
+      "target": "construct-geometric-figure",
       "type": "skill"
     },
     {

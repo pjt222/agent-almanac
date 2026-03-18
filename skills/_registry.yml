@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 325
+total_skills: 328
 
 domains:
   r-packages:
@@ -718,13 +718,13 @@ domains:
         complexity: intermediate
         language: natural
         description: Design ornamental patterns in modern/speculative genres with colorblind-accessible color scales using Z-Image
-      - id: create-skill-glyph
-        path: create-skill-glyph/SKILL.md
+      - id: create-glyph
+        path: create-glyph/SKILL.md
         complexity: intermediate
         language: R
-        description: Create R-based pictogram glyphs for skill icons using ggplot2 and the primitives library
-      - id: glyph-enhance
-        path: glyph-enhance/SKILL.md
+        description: Create R-based pictogram glyphs for skill, agent, or team icons using ggplot2
+      - id: enhance-glyph
+        path: enhance-glyph/SKILL.md
         complexity: intermediate
         language: R
         description: Improve existing R-based pictogram glyphs through audit, diagnosis, and targeted modification
@@ -1597,6 +1597,16 @@ domains:
         complexity: intermediate
         language: multi
         description: Produce publication-ready 2D graphics with proper DPI, color profiles, and typography
+      - id: audit-icon-pipeline
+        path: audit-icon-pipeline/SKILL.md
+        complexity: basic
+        language: R
+        description: Detect missing glyphs, icons, and HD variants across the icon pipeline
+      - id: render-icon-pipeline
+        path: render-icon-pipeline/SKILL.md
+        complexity: basic
+        language: multi
+        description: Run the viz pipeline to render icons from existing glyphs
 
   3d-printing:
     description: Additive manufacturing from model preparation through troubleshooting
@@ -1856,3 +1866,12 @@ domains:
         complexity: advanced
         language: natural
         description: The full synoptic cycle for panoramic synthesis — clear, open, perceive, integrate, express
+
+  tensegrity:
+    description: Tensional integrity systems — force balance, prestress stability, and cross-scale structural analysis from cytoskeleton to architecture
+    skills:
+      - id: analyze-tensegrity-system
+        path: analyze-tensegrity-system/SKILL.md
+        complexity: advanced
+        language: natural
+        description: Analyze tensegrity systems by characterizing strut-cable topology, computing prestress equilibrium, verifying stability via Maxwell's rule, and mapping biological tensegrity across scales

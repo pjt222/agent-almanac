@@ -1,0 +1,113 @@
+# domain-styles.yml - Per-domain visual style for icon generation
+# basePrompt: visual keywords for Z-Image AI icon generation
+# glow: named glow color for the domain
+# New domains without entries here get defaults from registry description.
+
+3d-printing:
+  basePrompt: Layer-by-layer print, FDM nozzle, 3D model
+  glow: filament-blue
+a2a-protocol:
+  basePrompt: Neon agent handshake, protocol arrows, JSON-RPC
+  glow: electric-blue
+blender:
+  basePrompt: 3D wireframe cube, Blender viewport, rendering light
+  glow: blender-orange
+bushcraft:
+  basePrompt: Neon campfire flame, leaf, compass rose
+  glow: olive
+compliance:
+  basePrompt: Neon shield seal, regulatory checkmark
+  glow: pink
+containerization:
+  basePrompt: Neon container box, whale silhouette
+  glow: sky
+data-serialization:
+  basePrompt: Neon binary stream, schema tree brackets
+  glow: blue
+defensive:
+  basePrompt: Neon flowing water circle, yin-yang shield
+  glow: red
+design:
+  basePrompt: Glowing compass, golden spiral ornament
+  glow: rose-gold
+devops:
+  basePrompt: Neon pipeline, gear mechanism, infinity loop
+  glow: green
+diffusion:
+  basePrompt: Diffusion gradient, noise-to-signal, spreading pattern
+  glow: misty-pink
+digital-logic:
+  basePrompt: Logic gate symbol, binary truth table, circuit diagram
+  glow: electric-cyan
+electromagnetism:
+  basePrompt: Magnetic field lines, solenoid coil, electromagnetic wave
+  glow: copper-orange
+entomology:
+  basePrompt: Insect specimen, magnifying lens, field notebook, entomological pin
+  glow: leaf-green
+esoteric:
+  basePrompt: Glowing third eye, mandala spiral
+  glow: magenta
+general:
+  basePrompt: Glowing terminal prompt, wrench tool
+  glow: lavender
+geometry:
+  basePrompt: Ruler and compass, Euclidean circle, geometric proof
+  glow: golden
+git:
+  basePrompt: Glowing branch tree, commit graph nodes
+  glow: mint
+hildegard:
+  basePrompt: Medieval manuscript, herbal illustration, sacred music
+  glow: emerald
+levitation:
+  basePrompt: Floating object, standing wave, magnetic suspension
+  glow: hover-blue
+maintenance:
+  basePrompt: Broom and mop, tidy workspace, cleanup tools
+  glow: utility-gray
+mcp-integration:
+  basePrompt: Glowing server nodes, connection plug
+  glow: teal
+mlops:
+  basePrompt: Neural network nodes, brain circuit
+  glow: violet
+observability:
+  basePrompt: Neon radar eye, signal wave pulse
+  glow: amber
+project-management:
+  basePrompt: Glowing Gantt chart, milestone markers
+  glow: orange
+r-packages:
+  basePrompt: Glowing hexagonal R logo, circuit board traces
+  glow: cyan
+relocation:
+  basePrompt: Glowing moving box, passport stamp, border crossing
+  glow: slate-teal
+reporting:
+  basePrompt: Glowing chart, document with data
+  glow: yellow
+review:
+  basePrompt: Glowing magnifying glass, code lens
+  glow: rose
+stochastic-processes:
+  basePrompt: Random walk path, probability distribution, Markov chain
+  glow: deep-purple
+synoptic:
+  basePrompt: Panoramic eye, expanding awareness circles, gestalt integration
+  glow: teal-green
+tensegrity:
+  basePrompt: Compression strut, tension cable, geodesic node, structural balance
+  glow: steel-blue
+theoretical-science:
+  basePrompt: Quantum wave function, mathematical derivation, proof
+  glow: astral-blue
+travel:
+  basePrompt: Neon compass rose, map route trail, wanderlust path
+  glow: sand-gold
+visualization:
+  basePrompt: Data chart, plot grid, color palette, graph axis
+  glow: chart-green
+web-dev:
+  basePrompt: Neon browser window, HTML angle brackets
+  glow: coral

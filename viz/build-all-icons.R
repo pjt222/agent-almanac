@@ -87,12 +87,20 @@ scripts <- list(
   team  = file.path(script_dir, "build-team-icons.R")
 )
 
-# Define passes: standard always runs; HD pass added when --hd is set
+# Define passes from config: standard always runs; HD pass added when --hd is set
+# Read config for base values (fall back to defaults if config package unavailable)
+cfg_size    <- tryCatch(get_config()$size_px,       error = function(e) 512)
+cfg_sigma   <- tryCatch(get_config()$glow_sigma,    error = function(e) 4)
+cfg_mult    <- tryCatch(get_config()$hd_multiplier, error = function(e) 2)
+
 passes <- list(
-  list(label = "standard", size = "512", sigma = "4", extra_args = character(0))
+  list(label = "standard", size = as.character(cfg_size),
+       sigma = as.character(cfg_sigma), extra_args = character(0))
 )
 if (hd_mode) {
-  passes[[2]] <- list(label = "high-res", size = "1024", sigma = "8",
+  passes[[2]] <- list(label = "high-res",
+                      size = as.character(cfg_size * cfg_mult),
+                      sigma = as.character(cfg_sigma * cfg_mult),
                       extra_args = c("--hd"))
 }
 

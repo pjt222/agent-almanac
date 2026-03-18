@@ -1,55 +1,14 @@
 # palettes.R - Multi-palette color generation using viridisLite
 # Generates domain and agent colors for 9 palettes: cyberpunk + 8 viridis variants.
 # Single source of truth for palette colors shared by R rendering and JS themes.
+#
+# Domain/agent/team order is derived from YAML registries at runtime.
+# Hand-tuned cyberpunk colors are defined here; new entities get auto-fallback colors.
 
 # ── Palette names ─────────────────────────────────────────────────────────
 PALETTE_NAMES <- c(
   "cyberpunk", "viridis", "magma", "inferno",
   "plasma", "cividis", "mako", "rocket", "turbo"
-)
-
-# ── Domain order (alphabetical, 56 domains) ──────────────────────────────
-PALETTE_DOMAIN_ORDER <- c(
-  "3d-printing", "a2a-protocol", "alchemy", "animal-training", "blender",
-  "bushcraft", "chromatography", "citations", "compliance", "containerization", "crafting",
-  "data-serialization", "defensive", "design", "devops", "diffusion", "digital-logic",
-  "electromagnetism", "entomology",
-  "esoteric", "gardening", "general", "geometry", "git", "hildegard", "i18n",
-  "intellectual-property",
-  "jigsawr", "lapidary", "levitation", "library-science", "linguistics", "maintenance",
-  "mcp-integration", "mlops", "morphic", "mycology", "number-theory",
-  "observability", "project-management", "prospecting", "r-packages", "relocation",
-  "reporting", "review", "shiny", "spectroscopy", "stochastic-processes", "swarm", "synoptic",
-  "tcg", "theoretical-science", "travel", "versioning", "visualization", "web-dev",
-  "workflow-visualization"
-)
-
-# ── Agent order (alphabetical, 65 agents) ─────────────────────────────────
-PALETTE_AGENT_ORDER <- c(
-  "acp-developer", "adaptic", "advocatus-diaboli", "alchemist", "apa-specialist",
-  "auditor", "blender-artist", "chromatographer", "citizen-entomologist", "code-reviewer",
-  "contemplative", "conservation-entomologist", "designer", "devops-engineer",
-  "diffusion-specialist", "dog-trainer", "etymologist", "fabricator",
-  "gardener", "geometrist", "gxp-validator", "hiking-guide", "hildegard",
-  "ip-analyst", "janitor", "jigsawr-developer", "kabalist", "lapidary",
-  "librarian", "logician", "markovian", "martial-artist", "mcp-developer", "mlops-engineer",
-  "mycologist", "mystic", "nlp-specialist", "number-theorist", "physicist", "polymath",
-  "project-manager", "prospector", "putior-integrator", "quarto-developer",
-  "r-developer", "relocation-expert", "security-analyst",
-  "senior-data-scientist", "senior-researcher", "senior-software-developer",
-  "senior-ux-ui-specialist", "senior-web-designer", "shaman", "shapeshifter",
-  "shiny-developer", "skill-reviewer", "spectroscopist", "survivalist", "swarm-strategist",
-  "taxonomic-entomologist", "tcg-specialist", "theoretical-researcher",
-  "tour-planner", "version-manager", "web-developer"
-)
-
-# ── Team order (alphabetical, 15 teams) ───────────────────────────────────
-PALETTE_TEAM_ORDER <- c(
-  "analytical-chemistry", "agentskills-alignment", "devops-platform-engineering", "dyad",
-  "entomology", "fullstack-web-dev", "gxp-compliance-validation",
-  "ml-data-science-review", "opaque-team", "physical-computing",
-  "r-package-review", "scrum-team", "synoptic-mind",
-  "tending", "translation-campaign"
 )
 
 # ── viridisLite option mapping ────────────────────────────────────────────
@@ -63,6 +22,87 @@ VIRIDIS_OPTIONS <- list(
   rocket  = "G",
   turbo   = "H"
 )
+
+# ── Registry-derived entity orders ────────────────────────────────────────
+# Reads domain/agent/team IDs from YAML registries, sorted alphabetically.
+# Cached after first load to avoid repeated I/O within a session.
+
+.palette_env <- new.env(parent = emptyenv())
+
+#' Resolve the project root directory (parent of viz/)
+#' @return Absolute path to the project root
+resolve_project_root <- function() {
+  # Try script_dir first (set by sourcing scripts)
+  if (exists("script_dir", envir = globalenv())) {
+    root <- normalizePath(file.path(get("script_dir", envir = globalenv()), ".."),
+                          mustWork = FALSE)
+    if (file.exists(file.path(root, "skills", "_registry.yml"))) return(root)
+  }
+  # Try common relative paths
+  candidates <- c(
+    "..",                               # running from viz/
+    ".",                                # running from project root
+    file.path(getwd(), ".."),           # absolute fallback
+    normalizePath("../..", mustWork = FALSE)  # running from viz/R/
+  )
+  for (path in candidates) {
+    if (file.exists(file.path(path, "skills", "_registry.yml"))) {
+      return(normalizePath(path))
+    }
+  }
+  NULL
+}
+
+#' Load entity orders from YAML registries
+#' @return List with $domains, $agents, $teams (character vectors, sorted)
+load_registry_orders <- function() {
+  if (!is.null(.palette_env$orders)) return(.palette_env$orders)
+
+  root <- resolve_project_root()
+  if (is.null(root)) {
+    warning("Cannot find project root with registries. ",
+            "Using empty entity orders — palette generation will be incomplete.",
+            call. = FALSE)
+    .palette_env$orders <- list(domains = character(0),
+                                 agents = character(0),
+                                 teams = character(0))
+    return(.palette_env$orders)
+  }
+
+  skills_reg <- yaml::yaml.load_file(file.path(root, "skills", "_registry.yml"))
+  agents_reg <- yaml::yaml.load_file(file.path(root, "agents", "_registry.yml"))
+  teams_reg  <- yaml::yaml.load_file(file.path(root, "teams", "_registry.yml"))
+
+  # Extract sorted domain names from skills registry
+  domain_names <- sort(names(skills_reg$domains))
+
+  # Extract sorted agent IDs
+  agent_ids <- sort(vapply(agents_reg$agents, function(a) a$id, character(1)))
+
+  # Extract sorted team IDs
+  team_ids <- sort(vapply(teams_reg$teams, function(t) t$id, character(1)))
+
+  .palette_env$orders <- list(domains = domain_names,
+                               agents = agent_ids,
+                               teams = team_ids)
+  .palette_env$orders
+}
+
+#' Get the palette order vectors (convenience accessors)
+get_domain_order <- function() load_registry_orders()$domains
+get_agent_order  <- function() load_registry_orders()$agents
+get_team_order   <- function() load_registry_orders()$teams
+
+#' Generate a deterministic fallback color for an entity not in the hand-tuned map
+#' Uses HCL color space for perceptually uniform, vibrant neon-ish colors.
+#' @param id Entity identifier string
+#' @return Hex color string
+auto_fallback_color <- function(id) {
+  hue <- (digest::digest2int(id) %% 360)
+  grDevices::hcl(h = hue, c = 80, l = 70)
+}
+
+# ── Palette color generation ──────────────────────────────────────────────
 
 #' Get palette colors for a given palette name
 #'
@@ -81,9 +121,13 @@ get_palette_colors <- function(name) {
   get_viridis_colors(name)
 }
 
-#' Get cyberpunk palette (hand-tuned neon colors)
+#' Get cyberpunk palette (hand-tuned neon colors with auto-fallback)
+#'
+#' Hand-tuned hex values are the primary source. Any entity in the registry
+#' but missing from the hand-tuned map gets an auto-generated fallback color.
 get_cyberpunk_colors <- function() {
-  domains <- list(
+  # ── Hand-tuned domain colors ──
+  hand_domains <- list(
     "3d-printing"            = "#55aadd",
     "a2a-protocol"           = "#44bbaa",
     "alchemy"                = "#ffaa33",
@@ -133,8 +177,9 @@ get_cyberpunk_colors <- function() {
     "spectroscopy"           = "#dd88ff",   # violet -- electromagnetic spectrum
     "stochastic-processes"   = "#77aaff",
     "swarm"                  = "#aadd44",
-    "synoptic"               = "#44ffcc",   # panoramic teal-green -- simultaneous multi-domain awareness
+    "synoptic"               = "#44ffcc",   # panoramic teal-green
     "tcg"                    = "#ff5577",
+    "tensegrity"             = "#6699cc",   # steel-blue -- structural metal
     "theoretical-science"    = "#ddbb55",
     "travel"                 = "#66cc99",
     "versioning"             = "#44ddaa",
@@ -143,7 +188,8 @@ get_cyberpunk_colors <- function() {
     "workflow-visualization" = "#66dd88"
   )
 
-  agents <- list(
+  # ── Hand-tuned agent colors ──
+  hand_agents <- list(
     "acp-developer"             = "#55ddbb",
     "adaptic"                   = "#44ffcc",   # matches synoptic domain
     "advocatus-diaboli"         = "#ff4433",
@@ -154,8 +200,8 @@ get_cyberpunk_colors <- function() {
     "citizen-entomologist"      = "#88dd55",
     "chromatographer"           = "#44ccdd",   # matches chromatography domain
     "code-reviewer"             = "#ff66aa",
-    "contemplative"              = "#c4b5fd",
-    "conservation-entomologist"  = "#66cc33",
+    "contemplative"             = "#c4b5fd",
+    "conservation-entomologist" = "#66cc33",
     "designer"                  = "#ff88dd",
     "devops-engineer"           = "#00ff88",
     "diffusion-specialist"      = "#cc77ff",
@@ -207,29 +253,53 @@ get_cyberpunk_colors <- function() {
     "tcg-specialist"            = "#ff5577",
     "theoretical-researcher"    = "#aabbff",
     "tour-planner"              = "#ffaa55",
+    "translator"                = "#55bbcc",   # teal -- matches i18n domain
     "version-manager"           = "#44ddaa",
     "web-developer"             = "#ff6633"
   )
 
-  teams <- list(
+  # ── Hand-tuned team colors ──
+  hand_teams <- list(
     "analytical-chemistry"       = "#55bbdd",   # analytical blue-teal
-    "agentskills-alignment"       = "#ff66bb",   # review pink
-    "dyad"                        = "#b794f4",   # wisteria purple
-    "tending"                     = "#da70d6",   # orchid purple
-    "devops-platform-engineering" = "#ff4500",   # orange-red
-    "entomology"                  = "#77dd44",   # leaf green
-    "fullstack-web-dev"           = "#ffcc00",   # golden yellow
-    "gxp-compliance-validation"   = "#ff6ec7",   # hot pink
-    "ml-data-science-review"      = "#7b68ee",   # medium slate blue
-    "opaque-team"                 = "#bb88ff",   # lavender (shapeshifter)
-    "physical-computing"          = "#44ccff",   # cool blue (computation meets physics)
-    "r-package-review"            = "#00ccff",   # bright cyan
-    "scrum-team"                  = "#ff8844",   # warm orange (PM)
-    "synoptic-mind"               = "#44ffcc",   # panoramic teal-green (adaptic)
-    "translation-campaign"        = "#55bbcc"    # teal (i18n)
+    "agentskills-alignment"      = "#ff66bb",   # review pink
+    "dyad"                       = "#b794f4",   # wisteria purple
+    "tending"                    = "#da70d6",   # orchid purple
+    "devops-platform-engineering" = "#ff4500",  # orange-red
+    "entomology"                 = "#77dd44",   # leaf green
+    "fullstack-web-dev"          = "#ffcc00",   # golden yellow
+    "gxp-compliance-validation"  = "#ff6ec7",   # hot pink
+    "ml-data-science-review"     = "#7b68ee",   # medium slate blue
+    "opaque-team"                = "#bb88ff",   # lavender (shapeshifter)
+    "physical-computing"         = "#44ccff",   # cool blue
+    "r-package-review"           = "#00ccff",   # bright cyan
+    "scrum-team"                 = "#ff8844",   # warm orange (PM)
+    "synoptic-mind"              = "#44ffcc",   # panoramic teal-green
+    "translation-campaign"       = "#55bbcc"    # teal (i18n)
   )
 
+  # ── Merge hand-tuned colors with auto-fallback for registry entities ──
+  domains <- fill_with_fallback(hand_domains, get_domain_order())
+  agents  <- fill_with_fallback(hand_agents,  get_agent_order())
+  teams   <- fill_with_fallback(hand_teams,   get_team_order())
+
   list(domains = domains, agents = agents, teams = teams)
+}
+
+#' Merge a hand-tuned color map with auto-fallback for missing entities
+#' @param hand_map Named list of id -> hex (hand-tuned)
+#' @param order Character vector of all entity IDs from registry
+#' @return Named list with all IDs in order, hand-tuned where available, fallback otherwise
+fill_with_fallback <- function(hand_map, order) {
+  result <- vector("list", length(order))
+  names(result) <- order
+  for (id in order) {
+    if (!is.null(hand_map[[id]])) {
+      result[[id]] <- hand_map[[id]]
+    } else {
+      result[[id]] <- auto_fallback_color(id)
+    }
+  }
+  result
 }
 
 #' Get viridis-family palette colors
@@ -238,16 +308,18 @@ get_viridis_colors <- function(name) {
   opt <- VIRIDIS_OPTIONS[[name]]
   if (is.null(opt)) stop("Not a viridis palette: ", name, call. = FALSE)
 
-  n_domains <- length(PALETTE_DOMAIN_ORDER)
-  n_agents <- length(PALETTE_AGENT_ORDER)
-  n_teams <- length(PALETTE_TEAM_ORDER)
+  domain_order <- get_domain_order()
+  agent_order  <- get_agent_order()
+  team_order   <- get_team_order()
+
+  n_domains <- length(domain_order)
+  n_agents  <- length(agent_order)
+  n_teams   <- length(team_order)
 
   # Generate domain colors evenly spaced across the colormap
-
   domain_hexes <- viridisLite::viridis(n_domains, option = opt)
 
   # Generate agent colors with an offset to distinguish from domain colors
-  # Use 80% of the range starting at 10% to avoid extremes
   agent_hexes <- viridisLite::viridis(n_agents, option = opt,
                                        begin = 0.1, end = 0.9)
 
@@ -255,10 +327,10 @@ get_viridis_colors <- function(name) {
   team_hexes <- viridisLite::viridis(max(n_teams, 3), option = opt,
                                       begin = 0.3, end = 0.7)
 
-  domains <- setNames(as.list(substr(domain_hexes, 1, 7)), PALETTE_DOMAIN_ORDER)
-  agents <- setNames(as.list(substr(agent_hexes, 1, 7)), PALETTE_AGENT_ORDER)
-  teams <- setNames(as.list(substr(team_hexes[seq_len(n_teams)], 1, 7)),
-                    PALETTE_TEAM_ORDER)
+  domains <- setNames(as.list(substr(domain_hexes, 1, 7)), domain_order)
+  agents  <- setNames(as.list(substr(agent_hexes, 1, 7)),  agent_order)
+  teams   <- setNames(as.list(substr(team_hexes[seq_len(n_teams)], 1, 7)),
+                      team_order)
 
   list(domains = domains, agents = agents, teams = teams)
 }
@@ -301,13 +373,13 @@ export_palette_json <- function(out_path) {
     meta = list(
       generated = format(Sys.time(), "%Y-%m-%dT%H:%M:%S"),
       palette_count = length(PALETTE_NAMES),
-      domain_count = length(PALETTE_DOMAIN_ORDER),
-      agent_count = length(PALETTE_AGENT_ORDER),
-      team_count = length(PALETTE_TEAM_ORDER),
+      domain_count = length(get_domain_order()),
+      agent_count = length(get_agent_order()),
+      team_count = length(get_team_order()),
       palettes = PALETTE_NAMES,
-      domains = PALETTE_DOMAIN_ORDER,
-      agents = PALETTE_AGENT_ORDER,
-      teams = PALETTE_TEAM_ORDER
+      domains = get_domain_order(),
+      agents = get_agent_order(),
+      teams = get_team_order()
     ),
     palettes = palettes
   )
@@ -326,18 +398,22 @@ export_palette_json <- function(out_path) {
 #'
 #' @param out_path Output JS file path
 export_palette_js <- function(out_path) {
+  domain_order <- get_domain_order()
+  agent_order  <- get_agent_order()
+  team_order   <- get_team_order()
+
   lines <- character()
   add <- function(...) lines <<- c(lines, paste0(...))
   timestamp <- format(Sys.time(), "%Y-%m-%dT%H:%M:%S")
 
   add("// Auto-generated by Rscript generate-palette-colors.R")
-  add("// Source of truth: viz/R/palettes.R — DO NOT EDIT BY HAND")
+  add("// Source of truth: YAML registries + viz/R/palettes.R — DO NOT EDIT BY HAND")
   add("// Generated: ", timestamp)
   add("")
 
   # ── DOMAIN_ORDER ──
   add("export const DOMAIN_ORDER = [")
-  for (d in PALETTE_DOMAIN_ORDER) {
+  for (d in domain_order) {
     add("  '", d, "',")
   }
   add("];")
@@ -361,9 +437,9 @@ export_palette_js <- function(out_path) {
     add("")
   }
 
-  emit_palette_block("PALETTES", PALETTE_DOMAIN_ORDER, "domains")
-  emit_palette_block("AGENT_PALETTE_COLORS", PALETTE_AGENT_ORDER, "agents")
-  emit_palette_block("TEAM_PALETTE_COLORS", PALETTE_TEAM_ORDER, "teams")
+  emit_palette_block("PALETTES", domain_order, "domains")
+  emit_palette_block("AGENT_PALETTE_COLORS", agent_order, "agents")
+  emit_palette_block("TEAM_PALETTE_COLORS", team_order, "teams")
 
   dir.create(dirname(out_path), recursive = TRUE, showWarnings = FALSE)
   writeLines(lines, out_path)

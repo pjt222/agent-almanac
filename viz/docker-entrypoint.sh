@@ -12,6 +12,11 @@ set -euo pipefail
 
 cd /app/viz
 
+export DOCKER_CONTAINER=1
+
+# Read R path from config
+R_CMD=$(Rscript --vanilla -e "cat(config::get('r_path', file='config.yml'))" 2>/dev/null || echo "Rscript")
+
 # ── Build R icon flags from environment ─────────────────────────────────
 build_flags=()
 if [[ "${SKIP_EXISTING:-1}" == "1" ]]; then
@@ -38,7 +43,7 @@ total=5
 
 step=$((step + 1))
 echo "[$step/$total] Generating palette colors (JSON + JS)..."
-Rscript generate-palette-colors.R
+"$R_CMD" generate-palette-colors.R
 
 step=$((step + 1))
 echo "[$step/$total] Building skills data..."
@@ -51,7 +56,7 @@ node build-icon-manifest.js
 if [[ "${SKIP_ICONS:-0}" != "1" ]]; then
   step=$((step + 1))
   echo "[$step/$total] Building all icons — standard + HD (flags: ${build_flags[*]:-none})..."
-  Rscript build-all-icons.R --hd "${build_flags[@]}"
+  "$R_CMD" build-all-icons.R "${build_flags[@]}"
 else
   step=$((step + 1))
   echo "[$step/$total] Skipping icon generation (SKIP_ICONS=1)"

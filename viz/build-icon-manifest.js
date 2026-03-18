@@ -2,18 +2,33 @@
 /**
  * build-icon-manifest.js
  *
- * Reads viz/data/skills.json and generates viz/data/icon-manifest.json
- * with per-skill prompts, seeds, and paths for Z-Image icon generation.
+ * Generates icon manifests for skills, agents, and teams.
+ * Reads viz/data/skills.json + YAML style configs and produces:
+ *   - viz/data/icon-manifest.json (skills)
+ *   - viz/data/agent-icon-manifest.json (agents)
+ *   - viz/data/team-icon-manifest.json (teams)
+ *
+ * Usage:
+ *   node build-icon-manifest.js              # skills only (default)
+ *   node build-icon-manifest.js --type all   # skills + agents + teams
+ *   node build-icon-manifest.js --type agent # agents only
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import YAML from 'js-yaml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SKILLS_PATH = resolve(__dirname, 'public', 'data', 'skills.json');
-const OUTPUT_PATH = resolve(__dirname, 'public', 'data', 'icon-manifest.json');
 const ICONS_DIR = resolve(__dirname, 'public', 'icons');
+
+// ── Parse CLI args ──────────────────────────────────────────────────
+const args = process.argv.slice(2);
+const typeIdx = args.indexOf('--type');
+const buildTypes = typeIdx >= 0
+  ? args[typeIdx + 1].split(',').map(s => s.trim())
+  : ['skill'];
 
 // ── Generation config ───────────────────────────────────────────────
 const META = {
@@ -25,44 +40,15 @@ const META = {
 
 const SHARED_SUFFIX = 'dark background, vector art, clean edges, single centered icon, no text';
 
-// ── Per-domain base motifs ──────────────────────────────────────────
-const DOMAIN_STYLES = {
-  'r-packages':         { basePrompt: 'Glowing hexagonal R logo, circuit board traces',          glow: 'cyan' },
-  'git':                { basePrompt: 'Glowing branch tree, commit graph nodes',                 glow: 'mint' },
-  'compliance':         { basePrompt: 'Neon shield seal, regulatory checkmark',                  glow: 'pink' },
-  'project-management': { basePrompt: 'Glowing Gantt chart, milestone markers',                  glow: 'orange' },
-  'devops':             { basePrompt: 'Neon pipeline, gear mechanism, infinity loop',             glow: 'green' },
-  'general':            { basePrompt: 'Glowing terminal prompt, wrench tool',                    glow: 'lavender' },
-  'observability':      { basePrompt: 'Neon radar eye, signal wave pulse',                       glow: 'amber' },
-  'review':             { basePrompt: 'Glowing magnifying glass, code lens',                     glow: 'rose' },
-  'mlops':              { basePrompt: 'Neural network nodes, brain circuit',                     glow: 'violet' },
-  'containerization':   { basePrompt: 'Neon container box, whale silhouette',                    glow: 'sky' },
-  'reporting':          { basePrompt: 'Glowing chart, document with data',                       glow: 'yellow' },
-  'web-dev':            { basePrompt: 'Neon browser window, HTML angle brackets',                glow: 'coral' },
-  'mcp-integration':    { basePrompt: 'Glowing server nodes, connection plug',                   glow: 'teal' },
-  'bushcraft':          { basePrompt: 'Neon campfire flame, leaf, compass rose',                  glow: 'olive' },
-  'esoteric':           { basePrompt: 'Glowing third eye, mandala spiral',                       glow: 'magenta' },
-  'defensive':          { basePrompt: 'Neon flowing water circle, yin-yang shield',              glow: 'red' },
-  'design':             { basePrompt: 'Glowing compass, golden spiral ornament',                 glow: 'rose-gold' },
-  'data-serialization': { basePrompt: 'Neon binary stream, schema tree brackets',                glow: 'blue' },
-  'travel':              { basePrompt: 'Neon compass rose, map route trail, wanderlust path',        glow: 'sand-gold' },
-  'relocation':          { basePrompt: 'Glowing moving box, passport stamp, border crossing',        glow: 'slate-teal' },
-  'a2a-protocol':        { basePrompt: 'Neon agent handshake, protocol arrows, JSON-RPC',            glow: 'electric-blue' },
-  'geometry':            { basePrompt: 'Ruler and compass, Euclidean circle, geometric proof',        glow: 'golden' },
-  'stochastic-processes':{ basePrompt: 'Random walk path, probability distribution, Markov chain',   glow: 'deep-purple' },
-  'theoretical-science': { basePrompt: 'Quantum wave function, mathematical derivation, proof',      glow: 'astral-blue' },
-  'diffusion':           { basePrompt: 'Diffusion gradient, noise-to-signal, spreading pattern',     glow: 'misty-pink' },
-  'hildegard':           { basePrompt: 'Medieval manuscript, herbal illustration, sacred music',      glow: 'emerald' },
-  'maintenance':         { basePrompt: 'Broom and mop, tidy workspace, cleanup tools',               glow: 'utility-gray' },
-  'blender':             { basePrompt: '3D wireframe cube, Blender viewport, rendering light',        glow: 'blender-orange' },
-  'visualization':       { basePrompt: 'Data chart, plot grid, color palette, graph axis',            glow: 'chart-green' },
-  '3d-printing':         { basePrompt: 'Layer-by-layer print, FDM nozzle, 3D model',                 glow: 'filament-blue' },
-  'entomology':          { basePrompt: 'Insect specimen, magnifying lens, field notebook, entomological pin', glow: 'leaf-green' },
-  'digital-logic':       { basePrompt: 'Logic gate symbol, binary truth table, circuit diagram',            glow: 'electric-cyan' },
-  'electromagnetism':    { basePrompt: 'Magnetic field lines, solenoid coil, electromagnetic wave',         glow: 'copper-orange' },
-  'levitation':          { basePrompt: 'Floating object, standing wave, magnetic suspension',               glow: 'hover-blue' },
-  'synoptic':            { basePrompt: 'Panoramic eye, expanding awareness circles, gestalt integration',    glow: 'teal-green' },
-};
+// ── Load YAML configs ───────────────────────────────────────────────
+function loadYaml(path) {
+  if (!existsSync(path)) return {};
+  return YAML.load(readFileSync(path, 'utf8')) || {};
+}
+
+const DOMAIN_STYLES = loadYaml(resolve(__dirname, 'domain-styles.yml'));
+const AGENT_STYLES  = loadYaml(resolve(__dirname, 'agent-styles.yml'));
+const TEAM_STYLES   = loadYaml(resolve(__dirname, 'team-styles.yml'));
 
 // ── Per-skill keyword extraction ────────────────────────────────────
 // Extract 2-3 descriptive keywords from the skill title/id
@@ -144,7 +130,6 @@ function skillKeywords(id, title) {
     'plan-sprint':                   'sprint board, velocity chart',
     'manage-backlog':                'backlog list, priority stack',
     'create-work-breakdown-structure':'WBS tree, hierarchical boxes',
-    'generate-status-report':        'progress dashboard, status gauge',
     'conduct-retrospective':         'retro board, team reflection mirror',
     'conduct-post-mortem':           'timeline reconstruction, incident analysis',
     'build-ci-cd-pipeline':          'pipeline stages, continuous flow',
@@ -184,96 +169,83 @@ function skillKeywords(id, title) {
     'setup-automl-pipeline':         'AutoML optimizer, hyperparameter grid',
     'run-ab-test-models':            'A/B split, model comparison',
     'monitor-model-drift':           'drift curve, distribution shift',
-    // mcp-integration (2 missing)
     'analyze-codebase-for-mcp':      'code scan, MCP tool opportunity',
     'scaffold-mcp-server':           'scaffold frame, MCP server skeleton',
-    // review (3 missing)
     'review-skill-format':           'skill document, format validation',
     'update-skill-content':          'skill file, content update arrow',
     'refactor-skill-structure':      'skill structure, refactor arrows',
-    // esoteric (3 missing - Kabbalistic)
     'read-tree-of-life':             'Tree of Life, sephiroth circles, paths',
     'apply-gematria':                'Hebrew letters, numerical values, computation',
     'study-hebrew-letters':          'aleph beth, Hebrew letter forms, mystical',
-    // travel (6)
     'plan-tour-route':               'route path, waypoints, map optimization',
     'create-spatial-visualization':  'interactive map, elevation profile, spatial data',
     'generate-tour-report':          'tour document, map insert, itinerary',
     'plan-hiking-tour':              'mountain trail, hiking path, elevation',
     'check-hiking-gear':             'backpack, gear checklist, equipment',
     'assess-trail-conditions':       'trail weather, condition assessment, safety',
-    // relocation (3)
     'plan-eu-relocation':            'EU map, relocation timeline, dependency flow',
     'check-relocation-documents':    'passport, document verification, checkmark',
     'navigate-dach-bureaucracy':     'German forms, bureaucratic steps, stamp',
-    // a2a-protocol (3)
     'design-a2a-agent-card':         'agent card, capability manifest, JSON',
     'implement-a2a-server':          'server, JSON-RPC, task lifecycle',
     'test-a2a-interop':              'two agents, handshake test, conformance',
-    // geometry (3)
     'construct-geometric-figure':    'compass, ruler, geometric construction',
     'solve-trigonometric-problem':   'unit circle, sine wave, triangle',
     'prove-geometric-theorem':       'proof triangle, QED, axiomatic',
-    // stochastic-processes (3)
     'model-markov-chain':            'state graph, transition arrows, steady state',
     'fit-hidden-markov-model':       'hidden states, observation layer, Viterbi',
     'simulate-stochastic-process':   'random walk, simulation path, Monte Carlo',
-    // theoretical-science (3)
     'formulate-quantum-problem':     'psi wave function, quantum bracket, Hamiltonian',
     'derive-theoretical-result':     'derivation steps, proof chain, first principles',
     'survey-theoretical-literature': 'papers stack, literature synthesis, survey',
-    // diffusion (3)
     'fit-drift-diffusion-model':     'drift accumulator, decision boundary, RT',
     'implement-diffusion-network':   'noise-to-image, denoising steps, U-Net',
     'analyze-diffusion-dynamics':    'SDE curve, Fokker-Planck, diffusion equation',
-    // hildegard (5)
     'formulate-herbal-remedy':       'mortar pestle, herb, medieval preparation',
     'assess-holistic-health':        'four humors, temperament wheel, balance',
     'compose-sacred-music':          'neume notation, antiphon, modal music',
     'practice-viriditas':            'green spiral, viriditas power, living green',
     'consult-natural-history':       'illustrated manuscript, plant, stone, Physica',
-    // maintenance (4)
     'clean-codebase':                'broom, dead code sweep, lint cleanup',
     'tidy-project-structure':        'organized folders, tidy structure, convention',
     'repair-broken-references':      'broken link, repair chain, fix connection',
     'escalate-issues':               'priority arrow, severity triage, escalation',
-    // blender (3)
     'create-3d-scene':               '3D cube, viewport grid, scene setup',
     'script-blender-automation':     'Python script, 3D automation, procedural',
     'render-blender-output':         'camera lens, render output, compositing',
-    // visualization (2)
     'create-2d-composition':         'SVG canvas, 2D layers, diagram layout',
     'render-publication-graphic':    'publication chart, DPI, typography',
-    // entomology (5)
     'document-insect-sighting':      'field notebook, camera, insect silhouette',
     'identify-insect':               'magnifying lens, dichotomous key, body plan',
     'observe-insect-behavior':       'ethogram chart, stopwatch, behavior tally',
     'collect-preserve-specimens':    'entomological pin, specimen box, label',
     'survey-insect-population':      'transect line, diversity index, population graph',
-    // 3d-printing (3)
     'prepare-print-model':           'sliced model layers, support generation',
     'select-print-material':         'filament spool, material properties',
     'troubleshoot-print-issues':     'printer nozzle, wrench, adhesion fix',
-    // digital-logic (4)
     'evaluate-boolean-expression':   'truth table, Boolean algebra, logic gates',
     'design-logic-circuit':          'NAND gate, combinational logic, schematic',
     'build-sequential-circuit':      'flip-flop, state machine, clock edge',
     'simulate-cpu-architecture':     'CPU chip, ALU, instruction pipeline',
-    // electromagnetism (4)
     'analyze-magnetic-field':        'bar magnet, field lines, N-S poles',
     'solve-electromagnetic-induction':'Faraday coil, induced current, solenoid',
     'formulate-maxwell-equations':   'Maxwell wave, E and B fields, sinusoid',
     'design-electromagnetic-device': 'motor coil, stator rotor, electromagnetic',
-    // levitation (3)
     'analyze-magnetic-levitation':   'maglev float, superconductor, magnetic gap',
     'design-acoustic-levitation':    'standing wave, acoustic node, trapped particle',
     'evaluate-levitation-mechanism': 'comparison table, levitation methods, tradeoff',
-    // community-discovered operational (5)
     'manage-token-budget':           'token gauge, budget meter, cost cap',
     'prune-agent-memory':            'memory cards, pruning shears, forget policy',
     'circuit-breaker-pattern':       'circuit switch, break gap, fault tolerance',
     'verify-agent-output':           'verification stamp, evidence chain, checkmark',
     'bootstrap-agent-identity':      'identity rings, cold start, loading anchor',
+    'test-team-coordination':        'team test nodes, coordination check, validation',
+    'metal':                         'ore ingot, essence extraction, refined metal',
+    'create-glyph':                  'paintbrush, geometric output, glyph creation',
+    'enhance-glyph':                 'loupe magnifier, shape refinement, glyph polish',
+    'audit-icon-pipeline':           'pipeline gap, warning marker, audit check',
+    'render-icon-pipeline':          'processing gear, icon output, render',
+    'analyze-tensegrity-system':     'compression strut, tension cable, structural node',
   };
 
   if (overrides[id]) return overrides[id];
@@ -287,62 +259,168 @@ function skillKeywords(id, title) {
 }
 
 // ── Seed strategy ───────────────────────────────────────────────────
-// Alphabetical domain index * 10000 + 1-based skill offset within domain
-function computeSeed(domain, domainIndex, skillOffset) {
-  return (domainIndex + 1) * 10000 + skillOffset;
+function computeSeed(groupIndex, itemOffset) {
+  return (groupIndex + 1) * 10000 + itemOffset;
 }
 
-// ── Main ────────────────────────────────────────────────────────────
+// ── Load skills.json ────────────────────────────────────────────────
 const skills = JSON.parse(readFileSync(SKILLS_PATH, 'utf8'));
 
-// Sort domains alphabetically for stable index assignment
-const domainsSorted = Object.keys(skills.domains).sort();
-const domainIndexMap = {};
-domainsSorted.forEach((d, i) => { domainIndexMap[d] = i; });
+// ── Build skill manifest ────────────────────────────────────────────
+function buildSkillManifest() {
+  const domainsSorted = Object.keys(skills.domains).sort();
+  const domainIndexMap = {};
+  domainsSorted.forEach((d, i) => { domainIndexMap[d] = i; });
 
-// Group nodes by domain to compute per-domain offsets
-const domainNodes = {};
-for (const node of skills.nodes) {
-  if (!domainNodes[node.domain]) domainNodes[node.domain] = [];
-  domainNodes[node.domain].push(node);
+  const domainNodes = {};
+  for (const node of skills.nodes) {
+    if (node.type && node.type !== 'skill') continue;
+    if (!domainNodes[node.domain]) domainNodes[node.domain] = [];
+    domainNodes[node.domain].push(node);
+  }
+
+  const icons = [];
+  for (const domain of domainsSorted) {
+    const nodes = domainNodes[domain] || [];
+    const domainIdx = domainIndexMap[domain];
+    const style = DOMAIN_STYLES[domain] || {
+      basePrompt: skills.domains[domain]?.description || 'Glowing icon',
+      glow: 'white'
+    };
+
+    mkdirSync(resolve(ICONS_DIR, domain), { recursive: true });
+
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      const seed = computeSeed(domainIdx, i + 1);
+      const keywords = skillKeywords(node.id, node.title);
+      const prompt = `${style.basePrompt}, ${keywords}, ${SHARED_SUFFIX}`;
+
+      icons.push({
+        skillId: node.id,
+        domain,
+        prompt,
+        seed,
+        path: `public/icons/${domain}/${node.id}.webp`,
+        status: 'pending',
+      });
+    }
+  }
+
+  const output = resolve(__dirname, 'public', 'data', 'icon-manifest.json');
+  const manifest = { meta: META, domainStyles: DOMAIN_STYLES, icons };
+  writeFileSync(output, JSON.stringify(manifest, null, 2));
+
+  console.log(`Generated ${output}`);
+  console.log(`  Icons: ${icons.length}`);
+  console.log(`  Domains: ${domainsSorted.length}`);
+  console.log(`  Icon directories created under ${ICONS_DIR}`);
 }
 
-const icons = [];
-for (const domain of domainsSorted) {
-  const nodes = domainNodes[domain] || [];
-  const domainIdx = domainIndexMap[domain];
-  const style = DOMAIN_STYLES[domain] || { basePrompt: 'Glowing icon', glow: 'white' };
+// ── Build agent manifest ────────────────────────────────────────────
+function buildAgentManifest() {
+  const agentNodes = skills.nodes.filter(n => n.type === 'agent');
+  const agentIds = agentNodes.map(n => n.id.replace('agent:', '')).sort();
 
-  // Ensure domain icon directory exists
-  mkdirSync(resolve(ICONS_DIR, domain), { recursive: true });
+  const PALETTES = [
+    'cyberpunk', 'viridis', 'magma', 'inferno',
+    'plasma', 'cividis', 'mako', 'rocket', 'turbo'
+  ];
 
-  for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    const seed = computeSeed(domain, domainIdx, i + 1);
-    const keywords = skillKeywords(node.id, node.title);
-    const prompt = `${style.basePrompt}, ${keywords}, ${SHARED_SUFFIX}`;
-    const path = `public/icons/${domain}/${node.id}.webp`;
+  const agentStyles = {};
+  const icons = [];
+
+  for (let i = 0; i < agentIds.length; i++) {
+    const id = agentIds[i];
+    const node = agentNodes.find(n => n.id === `agent:${id}`);
+
+    // Style: hand-tuned from YAML, or default from registry description
+    agentStyles[id] = AGENT_STYLES[id] || {
+      description: node?.description || id,
+      glow: 'white',
+      concept: `${id} agent persona icon`
+    };
 
     icons.push({
-      skillId: node.id,
-      domain,
-      prompt,
-      seed,
-      path,
+      agentId: id,
+      path: `public/icons/cyberpunk/agents/${id}.webp`,
       status: 'pending',
     });
   }
+
+  const output = resolve(__dirname, 'public', 'data', 'agent-icon-manifest.json');
+  const manifest = {
+    meta: {
+      type: 'agent-icons',
+      pipeline: 'R/ggplot2 + ggfx neon glow',
+      resolution: '1024x1024',
+      format: 'webp',
+      total_agents: agentIds.length,
+      palettes: PALETTES,
+      path_format: 'icons/<palette>/agents/<agentId>.webp'
+    },
+    agentStyles,
+    icons,
+  };
+  writeFileSync(output, JSON.stringify(manifest, null, 2));
+
+  console.log(`Generated ${output}`);
+  console.log(`  Agents: ${agentIds.length}`);
 }
 
-const manifest = {
-  meta: META,
-  domainStyles: DOMAIN_STYLES,
-  icons,
-};
+// ── Build team manifest ─────────────────────────────────────────────
+function buildTeamManifest() {
+  const teamNodes = skills.nodes.filter(n => n.type === 'team');
+  const teamIds = teamNodes.map(n => n.id.replace('team:', '')).sort();
 
-writeFileSync(OUTPUT_PATH, JSON.stringify(manifest, null, 2));
+  const PALETTES = [
+    'cyberpunk', 'viridis', 'magma', 'inferno',
+    'plasma', 'cividis', 'mako', 'rocket', 'turbo'
+  ];
 
-console.log(`Generated ${OUTPUT_PATH}`);
-console.log(`  Icons: ${icons.length}`);
-console.log(`  Domains: ${domainsSorted.length}`);
-console.log(`  Icon directories created under ${ICONS_DIR}`);
+  const teamStyles = {};
+  const icons = [];
+
+  for (let i = 0; i < teamIds.length; i++) {
+    const id = teamIds[i];
+    const node = teamNodes.find(n => n.id === `team:${id}`);
+
+    teamStyles[id] = TEAM_STYLES[id] || {
+      description: node?.description || id,
+      glow: 'white',
+      concept: `${id} team composition icon`
+    };
+
+    icons.push({
+      teamId: id,
+      path: `public/icons/cyberpunk/teams/${id}.webp`,
+      status: 'pending',
+    });
+  }
+
+  const output = resolve(__dirname, 'public', 'data', 'team-icon-manifest.json');
+  const manifest = {
+    meta: {
+      type: 'team-icons',
+      pipeline: 'R/ggplot2 + ggfx neon glow',
+      resolution: '1024x1024',
+      format: 'webp',
+      total_teams: teamIds.length,
+      palettes: PALETTES,
+      path_format: 'icons/<palette>/teams/<teamId>.webp'
+    },
+    teamStyles,
+    icons,
+  };
+  writeFileSync(output, JSON.stringify(manifest, null, 2));
+
+  console.log(`Generated ${output}`);
+  console.log(`  Teams: ${teamIds.length}`);
+}
+
+// ── Main ────────────────────────────────────────────────────────────
+const shouldBuild = type => buildTypes.includes(type) || buildTypes.includes('all');
+
+if (shouldBuild('skill'))  buildSkillManifest();
+if (shouldBuild('agent'))  buildAgentManifest();
+if (shouldBuild('team'))   buildTeamManifest();

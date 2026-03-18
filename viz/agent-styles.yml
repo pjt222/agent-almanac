@@ -1,0 +1,262 @@
+# agent-styles.yml - Creative metadata for agent icon generation
+# Hand-tuned descriptions, glow colors, and visual concepts.
+# New agents without entries here get defaults from the registry description.
+
+acp-developer:
+  concept: Two agent circles with bidirectional arrows
+  description: Agent-to-Agent protocol developer for interoperable systems
+  glow: teal-aqua
+adaptic:
+  concept: Panoramic eye with overlapping lens circles
+  description: Panoramic synthesis through simultaneous multi-domain awareness
+  glow: teal-green
+advocatus-diaboli:
+  concept: Devil's pitchfork crossed with scales of justice
+  description: Critical thinking and devil's advocate argumentation
+  glow: devil-red
+alchemist:
+  concept: Triangular flask with transformation flame
+  description: Code/data transmutation via alchemical process
+  glow: amber-gold
+apa-specialist:
+  concept: Academic document with APA header mark
+  description: APA 7th edition compliance for academic manuscripts
+  glow: academic-blue
+auditor:
+  concept: Clipboard with magnifying glass
+  description: GxP audit and CAPA investigation
+  glow: burnt-orange
+blender-artist:
+  concept: Isometric 3D cube with viewport ring
+  description: 3D and 2D visualization specialist using Blender Python API
+  glow: blender-orange
+chromatographer:
+  concept: Column with gradient flow and separated bands
+  description: Chromatographic method development and troubleshooting
+  glow: teal
+citizen-entomologist:
+  concept: Magnifying glass over insect with iNaturalist notebook
+  description: Curiosity-driven insect guide for citizen science
+  glow: leaf-green
+code-reviewer:
+  concept: Magnifying glass over diff lines
+  description: Code quality and PR review
+  glow: rose
+conservation-entomologist:
+  concept: Insect silhouette within ecosystem web and habitat circle
+  description: Conservation-focused insect specialist for ecosystem roles
+  glow: forest-green
+contemplative:
+  concept: Still water surface with concentric ripple arcs and center point
+  description: Meta-cognitive practice specialist for meditation, healing, and creative
+    stillness
+  glow: soft-violet
+designer:
+  concept: Golden spiral inside compass circle
+  description: Ornamental design and AI image generation
+  glow: pink
+devops-engineer:
+  concept: Infinity loop with gear
+  description: Infrastructure, CI/CD, and platform engineering
+  glow: neon-green
+diffusion-specialist:
+  concept: Gaussian bell curve with spreading particles
+  description: Diffusion process specialist bridging cognitive and generative models
+  glow: soft-purple
+dog-trainer:
+  concept: Seated dog with handler's hand signal above
+  description: Canine behavior specialist using positive reinforcement
+  glow: warm-orange
+etymologist:
+  concept: Root tree with branching word-family connections
+  description: Word origin research and historical linguistics
+  glow: parchment-gold
+fabricator:
+  concept: 3D printer nozzle with layered printed output
+  description: 3D printing and additive manufacturing specialist
+  glow: steel-blue
+gardener:
+  concept: Bonsai tree inside contemplative enso circle
+  description: Plant cultivation guide with contemplative checkpoints
+  glow: spring-green
+geometrist:
+  concept: Triangle with compass arc and angle markers
+  description: Classical and computational geometry specialist
+  glow: ice-blue
+gxp-validator:
+  concept: Shield with document and checkmark
+  description: Computer systems validation and compliance
+  glow: hot-pink
+hiking-guide:
+  concept: Mountain peaks with winding trail path
+  description: Outdoor trip planning for hiking tours
+  glow: earthy-green
+hildegard:
+  concept: Gothic abbey window with herbal sprig and radiance apex
+  description: Medieval polymath — Hildegard von Bingen herbal medicine, sacred music,
+    viriditas
+  glow: herb-green
+ip-analyst:
+  concept: Shield with patent document inside
+  description: Patent landscape and prior art analysis
+  glow: ice-blue
+janitor:
+  concept: Broom with sparkle marks indicating cleanliness
+  description: Triple-scope maintenance for codebase cleanup and project tidying
+  glow: sage
+jigsawr-developer:
+  concept: Interlocking puzzle pieces forming hexagonal badge
+  description: Jigsaw puzzle R package development
+  glow: teal-green
+kabalist:
+  concept: Tree of Life with sephirot circles and three pillars
+  description: Kabbalistic studies and Tree of Life navigation
+  glow: mystic-violet
+lapidary:
+  concept: Faceted gemstone with crown and pavilion angles
+  description: Gemstone identification, cutting, and appraisal
+  glow: crystal-blue
+librarian:
+  concept: Open book with catalog index tabs along right edge
+  description: Knowledge organization and library management specialist
+  glow: leather-brown
+markovian:
+  concept: Chain of connected state circles with transition arrows
+  description: Stochastic process specialist for Markov models
+  glow: soft-blue
+martial-artist:
+  concept: Flowing circle with balanced figure
+  description: Defensive martial arts and awareness
+  glow: crimson
+mcp-developer:
+  concept: Socket connector with gear and cable
+  description: MCP server development and codebase analysis
+  glow: teal
+mlops-engineer:
+  concept: Neural network with pipeline arrow
+  description: ML operations and experiment lifecycle
+  glow: lavender-violet
+mycologist:
+  concept: Mushroom cap with mycelium network threads
+  description: Fungi specialist for identification and cultivation
+  glow: mushroom-purple
+mystic:
+  concept: Third eye with concentric mandala rings
+  description: Esoteric practices and meditation facilitation
+  glow: magenta
+nlp-specialist:
+  concept: Text tokens flowing through transformer architecture
+  description: Natural language processing and text analysis
+  glow: language-violet
+number-theorist:
+  concept: Archimedean spiral with prime number markers
+  description: Prime analysis, modular arithmetic, and proofs
+  glow: prime-violet
+polymath:
+  concept: Brain network spanning multiple knowledge domains
+  description: Cross-disciplinary synthesis and orchestration
+  glow: golden-yellow
+project-manager:
+  concept: Gantt bars with milestone diamond
+  description: Agile and classic project management
+  glow: orange
+prospector:
+  concept: Gold pan with water ripples and nugget
+  description: Mineral and gold finder for field geology
+  glow: gold
+putior-integrator:
+  concept: Flowchart with connected nodes
+  description: Workflow visualization and Mermaid diagrams
+  glow: spring-green
+quarto-developer:
+  concept: Document page with Q lettermark and multilingual code blocks
+  description: Quarto CLI specialist for multilingual documentation and publishing
+  glow: teal
+r-developer:
+  concept: Hexagonal R badge with terminal cursor
+  description: R package development and statistical computing
+  glow: cyan
+relocation-expert:
+  concept: Suitcase with travel arrow and EU stars
+  description: Cross-border EU/DACH relocation specialist
+  glow: warm-coral
+security-analyst:
+  concept: Shield with radar eye scanner
+  description: Security auditing and vulnerability assessment
+  glow: bright-red
+senior-data-scientist:
+  concept: Scatter chart with brain node
+  description: Statistical analysis and ML review
+  glow: violet
+senior-researcher:
+  concept: Open book with magnifier
+  description: Research methodology and peer review
+  glow: amber
+senior-software-developer:
+  concept: Layered architecture tower blocks
+  description: Architecture and system design review
+  glow: sky-blue
+senior-ux-ui-specialist:
+  concept: User silhouette with flow arrows
+  description: Usability and accessibility review
+  glow: mint
+senior-web-designer:
+  concept: Layout grid with color palette swatches
+  description: Visual design and layout review
+  glow: yellow
+shaman:
+  concept: Drum circle with spirit lines rising
+  description: Shamanic practitioner for journeying and ceremony
+  glow: deep-violet
+shapeshifter:
+  concept: Overlapping geometric shapes transitioning
+  description: Metamorphic transformation and adaptive systems
+  glow: lavender
+shiny-developer:
+  concept: Reactive diamond inside browser with reactive graph connections
+  description: Shiny reactive web app specialist for R
+  glow: electric-blue
+skill-reviewer:
+  concept: Document with magnifying glass overlay
+  description: SKILL.md quality validation and refactoring
+  glow: review-pink
+spectroscopist:
+  concept: Prism dispersing light beam into spectrum bands
+  description: Spectroscopy interpretation and analysis planning
+  glow: violet
+survivalist:
+  concept: Compass rose with flame center
+  description: Wilderness survival and bushcraft
+  glow: olive
+swarm-strategist:
+  concept: Hexagonal cell cluster with radiating connections
+  description: Collective intelligence and distributed coordination
+  glow: lime
+taxonomic-entomologist:
+  concept: Pinned insect specimen with classification labels
+  description: Methodical insect taxonomist with dichotomous keys
+  glow: specimen-green
+tcg-specialist:
+  concept: Fanned playing cards with grading badge
+  description: Trading card game grading and collection
+  glow: card-red
+theoretical-researcher:
+  concept: Atom orbitals with central nucleus and integral sign
+  description: Theoretical science researcher spanning quantum physics and mathematics
+  glow: warm-gold
+tour-planner:
+  concept: Map pin with route line and compass rose
+  description: Spatial and temporal tour planning with interactive maps
+  glow: sage-green
+translator:
+  concept: Overlapping documents with translation arrow
+  description: Content translation across 4 locales (de, zh-CN, ja, es)
+  glow: teal
+version-manager:
+  concept: Version tag badge with increment arrow
+  description: Semantic versioning and release management
+  glow: semver-green
+web-developer:
+  concept: Browser window with angle brackets
+  description: Full-stack Next.js and TypeScript development
+  glow: coral

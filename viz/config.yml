@@ -1,0 +1,36 @@
+default:
+  r_version: "4.5.2"
+  glow_sigma: 4
+  size_px: 512
+  hd: true
+  dpi: 150
+  webp_quality: 80
+  expand: 3
+  canvas_size: 100
+  hd_multiplier: 2
+  output_dir: "public/icons"
+  output_dir_hd: "public/icons-hd"
+  parallel:
+    strategy: "multicore"
+    workers: !expr max(1L, parallel::detectCores() - 1L)
+
+wsl:
+  inherits: default
+  r_path: "/usr/local/bin/Rscript"
+  renv_platform: "linux"
+  parallel:
+    strategy: "multicore"
+
+windows:
+  inherits: default
+  r_path: "C:/Program Files/R/R-4.5.2/bin/Rscript.exe"
+  renv_platform: "windows"
+  parallel:
+    strategy: "multisession"
+
+docker:
+  inherits: default
+  r_path: "/usr/local/bin/Rscript"
+  renv_platform: "linux"
+  parallel:
+    strategy: "multicore"

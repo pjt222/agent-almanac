@@ -1,5 +1,5 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 307 skillIds to a specific glyph drawing function.
+# Maps each of 328 skillIds to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #
@@ -8,10 +8,11 @@
 # a list of ggplot2 layers.
 
 SKILL_GLYPHS <- list(
-  # ── alchemy (3) ────────────────────────────────────────────────────────
+  # ── alchemy (4) ────────────────────────────────────────────────────────
   "athanor"                        = "glyph_athanor",
   "transmute"                      = "glyph_transmute",
   "chrysopoeia"                    = "glyph_chrysopoeia",
+  "metal"                          = "glyph_metal_ingot",
 
   # ── bushcraft (4) ──────────────────────────────────────────────────────
   "make-fire"                      = "glyph_flame",
@@ -62,12 +63,10 @@ SKILL_GLYPHS <- list(
   "redirect"                       = "glyph_redirect_spiral",
   "awareness"                      = "glyph_awareness_eye",
 
-  # ── design (5) ─────────────────────────────────────────────────────────
+  # ── design (3) ─────────────────────────────────────────────────────────
   "ornament-style-mono"            = "glyph_palette",
   "ornament-style-color"           = "glyph_palette_color",
   "ornament-style-modern"          = "glyph_compass_drafting",
-  "create-skill-glyph"             = "glyph_paintbrush_code",
-  "glyph-enhance"                  = "glyph_paintbrush_enhance",
 
   # ── devops (13) ────────────────────────────────────────────────────────
   "build-ci-cd-pipeline"           = "glyph_pipeline",
@@ -231,7 +230,7 @@ SKILL_GLYPHS <- list(
   "build-parameterized-report"     = "glyph_template_params",
   "generate-statistical-tables"    = "glyph_table_stats",
 
-  # ── review (10) ────────────────────────────────────────────────────────
+  # ── review (11) ────────────────────────────────────────────────────────
   "review-research"                = "glyph_magnifier_paper",
   "review-data-analysis"           = "glyph_magnifier_chart",
   "review-software-architecture"   = "glyph_magnifier_arch",
@@ -242,6 +241,7 @@ SKILL_GLYPHS <- list(
   "update-skill-content"           = "glyph_skill_update",
   "refactor-skill-structure"       = "glyph_skill_refactor",
   "review-codebase"                = "glyph_magnifier_checklist",
+  "test-team-coordination"         = "glyph_test_team_nodes",
 
   # ── web-dev (4) ────────────────────────────────────────────────────────
   "scaffold-nextjs-app"            = "glyph_nextjs_scaffold",
@@ -386,9 +386,13 @@ SKILL_GLYPHS <- list(
   "script-blender-automation"      = "glyph_blender_script",
   "render-blender-output"          = "glyph_render_camera",
 
-  # ── visualization (2) ──────────────────────────────────────────
+  # ── visualization (6) ──────────────────────────────────────────
   "create-2d-composition"          = "glyph_2d_canvas",
   "render-publication-graphic"     = "glyph_pub_chart",
+  "create-glyph"                   = "glyph_paintbrush_code",
+  "enhance-glyph"                  = "glyph_paintbrush_enhance",
+  "audit-icon-pipeline"            = "glyph_audit_pipeline",
+  "render-icon-pipeline"           = "glyph_render_pipeline",
 
   # ── 3d-printing (3) ────────────────────────────────────────────
   "prepare-print-model"            = "glyph_3d_model_prep",
@@ -443,5 +447,8 @@ SKILL_GLYPHS <- list(
   # ── levitation (3) ───────────────────────────────────────────────────
   "analyze-magnetic-levitation"     = "glyph_maglev_float",
   "design-acoustic-levitation"      = "glyph_acoustic_node",
-  "evaluate-levitation-mechanism"   = "glyph_levitation_compare"
+  "evaluate-levitation-mechanism"   = "glyph_levitation_compare",
+
+  # ── tensegrity (1) ─────────────────────────────────────────────────────
+  "analyze-tensegrity-system"      = "glyph_tensegrity"
 )

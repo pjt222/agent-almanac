@@ -4,7 +4,7 @@
     "pipeline": "R/ggplot2 + ggfx neon glow",
     "resolution": "1024x1024",
     "format": "webp",
-    "total_agents": 65,
+    "total_agents": 66,
     "palettes": [
       "cyberpunk",
       "viridis",
@@ -19,647 +19,667 @@
     "path_format": "icons/<palette>/agents/<agentId>.webp"
   },
   "agentStyles": {
-    "alchemist": {
-      "description": "Code/data transmutation via alchemical process",
-      "glow": "amber-gold",
-      "concept": "Triangular flask with transformation flame"
-    },
-    "r-developer": {
-      "description": "R package development and statistical computing",
-      "glow": "cyan",
-      "concept": "Hexagonal R badge with terminal cursor"
-    },
-    "code-reviewer": {
-      "description": "Code quality and PR review",
-      "glow": "rose",
-      "concept": "Magnifying glass over diff lines"
-    },
-    "contemplative": {
-      "description": "Meta-cognitive practice specialist for meditation, healing, and creative stillness",
-      "glow": "soft-violet",
-      "concept": "Still water surface with concentric ripple arcs and center point"
-    },
-    "security-analyst": {
-      "description": "Security auditing and vulnerability assessment",
-      "glow": "bright-red",
-      "concept": "Shield with radar eye scanner"
-    },
-    "web-developer": {
-      "description": "Full-stack Next.js and TypeScript development",
-      "glow": "coral",
-      "concept": "Browser window with angle brackets"
-    },
-    "survivalist": {
-      "description": "Wilderness survival and bushcraft",
-      "glow": "olive",
-      "concept": "Compass rose with flame center"
-    },
-    "mystic": {
-      "description": "Esoteric practices and meditation facilitation",
-      "glow": "magenta",
-      "concept": "Third eye with concentric mandala rings"
-    },
-    "martial-artist": {
-      "description": "Defensive martial arts and awareness",
-      "glow": "crimson",
-      "concept": "Flowing circle with balanced figure"
-    },
-    "designer": {
-      "description": "Ornamental design and AI image generation",
-      "glow": "pink",
-      "concept": "Golden spiral inside compass circle"
-    },
-    "gardener": {
-      "description": "Plant cultivation guide with contemplative checkpoints",
-      "glow": "spring-green",
-      "concept": "Bonsai tree inside contemplative enso circle"
-    },
-    "gxp-validator": {
-      "description": "Computer systems validation and compliance",
-      "glow": "hot-pink",
-      "concept": "Shield with document and checkmark"
-    },
-    "auditor": {
-      "description": "GxP audit and CAPA investigation",
-      "glow": "burnt-orange",
-      "concept": "Clipboard with magnifying glass"
-    },
-    "ip-analyst": {
-      "description": "Patent landscape and prior art analysis",
-      "glow": "ice-blue",
-      "concept": "Shield with patent document inside"
-    },
-    "senior-researcher": {
-      "description": "Research methodology and peer review",
-      "glow": "amber",
-      "concept": "Open book with magnifier"
-    },
-    "senior-data-scientist": {
-      "description": "Statistical analysis and ML review",
-      "glow": "violet",
-      "concept": "Scatter chart with brain node"
-    },
-    "senior-software-developer": {
-      "description": "Architecture and system design review",
-      "glow": "sky-blue",
-      "concept": "Layered architecture tower blocks"
-    },
-    "senior-web-designer": {
-      "description": "Visual design and layout review",
-      "glow": "yellow",
-      "concept": "Layout grid with color palette swatches"
-    },
-    "senior-ux-ui-specialist": {
-      "description": "Usability and accessibility review",
-      "glow": "mint",
-      "concept": "User silhouette with flow arrows"
-    },
-    "polymath": {
-      "description": "Cross-disciplinary synthesis and orchestration",
-      "glow": "golden-yellow",
-      "concept": "Brain network spanning multiple knowledge domains"
-    },
-    "project-manager": {
-      "description": "Agile and classic project management",
-      "glow": "orange",
-      "concept": "Gantt bars with milestone diamond"
-    },
-    "devops-engineer": {
-      "description": "Infrastructure, CI/CD, and platform engineering",
-      "glow": "neon-green",
-      "concept": "Infinity loop with gear"
-    },
-    "mlops-engineer": {
-      "description": "ML operations and experiment lifecycle",
-      "glow": "lavender-violet",
-      "concept": "Neural network with pipeline arrow"
-    },
-    "putior-integrator": {
-      "description": "Workflow visualization and Mermaid diagrams",
-      "glow": "spring-green",
-      "concept": "Flowchart with connected nodes"
-    },
-    "swarm-strategist": {
-      "description": "Collective intelligence and distributed coordination",
-      "glow": "lime",
-      "concept": "Hexagonal cell cluster with radiating connections"
-    },
-    "tcg-specialist": {
-      "description": "Trading card game grading and collection",
-      "glow": "card-red",
-      "concept": "Fanned playing cards with grading badge"
-    },
-    "jigsawr-developer": {
-      "description": "Jigsaw puzzle R package development",
-      "glow": "teal-green",
-      "concept": "Interlocking puzzle pieces forming hexagonal badge"
-    },
-    "shapeshifter": {
-      "description": "Metamorphic transformation and adaptive systems",
-      "glow": "lavender",
-      "concept": "Overlapping geometric shapes transitioning"
-    },
-    "quarto-developer": {
-      "description": "Quarto CLI specialist for multilingual documentation and publishing",
-      "glow": "teal",
-      "concept": "Document page with Q lettermark and multilingual code blocks"
-    },
-    "shiny-developer": {
-      "description": "Shiny reactive web app specialist for R",
-      "glow": "electric-blue",
-      "concept": "Reactive diamond inside browser with reactive graph connections"
-    },
-    "dog-trainer": {
-      "description": "Canine behavior specialist using positive reinforcement",
-      "glow": "warm-orange",
-      "concept": "Seated dog with handler's hand signal above"
-    },
-    "mycologist": {
-      "description": "Fungi specialist for identification and cultivation",
-      "glow": "mushroom-purple",
-      "concept": "Mushroom cap with mycelium network threads"
-    },
-    "prospector": {
-      "description": "Mineral and gold finder for field geology",
-      "glow": "gold",
-      "concept": "Gold pan with water ripples and nugget"
-    },
-    "shaman": {
-      "description": "Shamanic practitioner for journeying and ceremony",
-      "glow": "deep-violet",
-      "concept": "Drum circle with spirit lines rising"
-    },
-    "librarian": {
-      "description": "Knowledge organization and library management specialist",
-      "glow": "leather-brown",
-      "concept": "Open book with catalog index tabs along right edge"
-    },
-    "tour-planner": {
-      "description": "Spatial and temporal tour planning with interactive maps",
-      "glow": "sage-green",
-      "concept": "Map pin with route line and compass rose"
-    },
-    "hiking-guide": {
-      "description": "Outdoor trip planning for hiking tours",
-      "glow": "earthy-green",
-      "concept": "Mountain peaks with winding trail path"
-    },
-    "relocation-expert": {
-      "description": "Cross-border EU/DACH relocation specialist",
-      "glow": "warm-coral",
-      "concept": "Suitcase with travel arrow and EU stars"
-    },
-    "mcp-developer": {
-      "description": "MCP server development and codebase analysis",
-      "glow": "teal",
-      "concept": "Socket connector with gear and cable"
-    },
     "acp-developer": {
+      "concept": "Two agent circles with bidirectional arrows",
       "description": "Agent-to-Agent protocol developer for interoperable systems",
-      "glow": "teal-aqua",
-      "concept": "Two agent circles with bidirectional arrows"
+      "glow": "teal-aqua"
     },
     "adaptic": {
+      "concept": "Panoramic eye with overlapping lens circles",
       "description": "Panoramic synthesis through simultaneous multi-domain awareness",
-      "glow": "teal-green",
-      "concept": "Panoramic eye with overlapping lens circles"
-    },
-    "geometrist": {
-      "description": "Classical and computational geometry specialist",
-      "glow": "ice-blue",
-      "concept": "Triangle with compass arc and angle markers"
-    },
-    "markovian": {
-      "description": "Stochastic process specialist for Markov models",
-      "glow": "soft-blue",
-      "concept": "Chain of connected state circles with transition arrows"
-    },
-    "theoretical-researcher": {
-      "description": "Theoretical science researcher spanning quantum physics and mathematics",
-      "glow": "warm-gold",
-      "concept": "Atom orbitals with central nucleus and integral sign"
-    },
-    "diffusion-specialist": {
-      "description": "Diffusion process specialist bridging cognitive and generative models",
-      "glow": "soft-purple",
-      "concept": "Gaussian bell curve with spreading particles"
-    },
-    "hildegard": {
-      "description": "Medieval polymath — Hildegard von Bingen herbal medicine, sacred music, viriditas",
-      "glow": "herb-green",
-      "concept": "Gothic abbey window with herbal sprig and radiance apex"
-    },
-    "janitor": {
-      "description": "Triple-scope maintenance for codebase cleanup and project tidying",
-      "glow": "sage",
-      "concept": "Broom with sparkle marks indicating cleanliness"
-    },
-    "blender-artist": {
-      "description": "3D and 2D visualization specialist using Blender Python API",
-      "glow": "blender-orange",
-      "concept": "Isometric 3D cube with viewport ring"
-    },
-    "fabricator": {
-      "description": "3D printing and additive manufacturing specialist",
-      "glow": "steel-blue",
-      "concept": "3D printer nozzle with layered printed output"
-    },
-    "kabalist": {
-      "description": "Kabbalistic studies and Tree of Life navigation",
-      "glow": "mystic-violet",
-      "concept": "Tree of Life with sephirot circles and three pillars"
-    },
-    "lapidary": {
-      "description": "Gemstone identification, cutting, and appraisal",
-      "glow": "crystal-blue",
-      "concept": "Faceted gemstone with crown and pavilion angles"
-    },
-    "number-theorist": {
-      "description": "Prime analysis, modular arithmetic, and proofs",
-      "glow": "prime-violet",
-      "concept": "Archimedean spiral with prime number markers"
-    },
-    "skill-reviewer": {
-      "description": "SKILL.md quality validation and refactoring",
-      "glow": "review-pink",
-      "concept": "Document with magnifying glass overlay"
-    },
-    "version-manager": {
-      "description": "Semantic versioning and release management",
-      "glow": "semver-green",
-      "concept": "Version tag badge with increment arrow"
+      "glow": "teal-green"
     },
     "advocatus-diaboli": {
+      "concept": "Devil's pitchfork crossed with scales of justice",
       "description": "Critical thinking and devil's advocate argumentation",
-      "glow": "devil-red",
-      "concept": "Devil's pitchfork crossed with scales of justice"
+      "glow": "devil-red"
+    },
+    "alchemist": {
+      "concept": "Triangular flask with transformation flame",
+      "description": "Code/data transmutation via alchemical process",
+      "glow": "amber-gold"
     },
     "apa-specialist": {
+      "concept": "Academic document with APA header mark",
       "description": "APA 7th edition compliance for academic manuscripts",
-      "glow": "academic-blue",
-      "concept": "Academic document with APA header mark"
+      "glow": "academic-blue"
     },
-    "etymologist": {
-      "description": "Word origin research and historical linguistics",
-      "glow": "parchment-gold",
-      "concept": "Root tree with branching word-family connections"
+    "auditor": {
+      "concept": "Clipboard with magnifying glass",
+      "description": "GxP audit and CAPA investigation",
+      "glow": "burnt-orange"
     },
-    "nlp-specialist": {
-      "description": "Natural language processing and text analysis",
-      "glow": "language-violet",
-      "concept": "Text tokens flowing through transformer architecture"
-    },
-    "citizen-entomologist": {
-      "description": "Curiosity-driven insect guide for citizen science",
-      "glow": "leaf-green",
-      "concept": "Magnifying glass over insect with iNaturalist notebook"
-    },
-    "conservation-entomologist": {
-      "description": "Conservation-focused insect specialist for ecosystem roles",
-      "glow": "forest-green",
-      "concept": "Insect silhouette within ecosystem web and habitat circle"
-    },
-    "taxonomic-entomologist": {
-      "description": "Methodical insect taxonomist with dichotomous keys",
-      "glow": "specimen-green",
-      "concept": "Pinned insect specimen with classification labels"
-    },
-    "spectroscopist": {
-      "description": "Spectroscopy interpretation and analysis planning",
-      "glow": "violet",
-      "concept": "Prism dispersing light beam into spectrum bands"
+    "blender-artist": {
+      "concept": "Isometric 3D cube with viewport ring",
+      "description": "3D and 2D visualization specialist using Blender Python API",
+      "glow": "blender-orange"
     },
     "chromatographer": {
+      "concept": "Column with gradient flow and separated bands",
       "description": "Chromatographic method development and troubleshooting",
-      "glow": "teal",
-      "concept": "Column with gradient flow and separated bands"
+      "glow": "teal"
+    },
+    "citizen-entomologist": {
+      "concept": "Magnifying glass over insect with iNaturalist notebook",
+      "description": "Curiosity-driven insect guide for citizen science",
+      "glow": "leaf-green"
+    },
+    "code-reviewer": {
+      "concept": "Magnifying glass over diff lines",
+      "description": "Code quality and PR review",
+      "glow": "rose"
+    },
+    "conservation-entomologist": {
+      "concept": "Insect silhouette within ecosystem web and habitat circle",
+      "description": "Conservation-focused insect specialist for ecosystem roles",
+      "glow": "forest-green"
+    },
+    "contemplative": {
+      "concept": "Still water surface with concentric ripple arcs and center point",
+      "description": "Meta-cognitive practice specialist for meditation, healing, and creative stillness",
+      "glow": "soft-violet"
+    },
+    "designer": {
+      "concept": "Golden spiral inside compass circle",
+      "description": "Ornamental design and AI image generation",
+      "glow": "pink"
+    },
+    "devops-engineer": {
+      "concept": "Infinity loop with gear",
+      "description": "Infrastructure, CI/CD, and platform engineering",
+      "glow": "neon-green"
+    },
+    "diffusion-specialist": {
+      "concept": "Gaussian bell curve with spreading particles",
+      "description": "Diffusion process specialist bridging cognitive and generative models",
+      "glow": "soft-purple"
+    },
+    "dog-trainer": {
+      "concept": "Seated dog with handler's hand signal above",
+      "description": "Canine behavior specialist using positive reinforcement",
+      "glow": "warm-orange"
+    },
+    "etymologist": {
+      "concept": "Root tree with branching word-family connections",
+      "description": "Word origin research and historical linguistics",
+      "glow": "parchment-gold"
+    },
+    "fabricator": {
+      "concept": "3D printer nozzle with layered printed output",
+      "description": "3D printing and additive manufacturing specialist",
+      "glow": "steel-blue"
+    },
+    "gardener": {
+      "concept": "Bonsai tree inside contemplative enso circle",
+      "description": "Plant cultivation guide with contemplative checkpoints",
+      "glow": "spring-green"
+    },
+    "geometrist": {
+      "concept": "Triangle with compass arc and angle markers",
+      "description": "Classical and computational geometry specialist",
+      "glow": "ice-blue"
+    },
+    "gxp-validator": {
+      "concept": "Shield with document and checkmark",
+      "description": "Computer systems validation and compliance",
+      "glow": "hot-pink"
+    },
+    "hiking-guide": {
+      "concept": "Mountain peaks with winding trail path",
+      "description": "Outdoor trip planning for hiking tours",
+      "glow": "earthy-green"
+    },
+    "hildegard": {
+      "concept": "Gothic abbey window with herbal sprig and radiance apex",
+      "description": "Medieval polymath — Hildegard von Bingen herbal medicine, sacred music, viriditas",
+      "glow": "herb-green"
+    },
+    "ip-analyst": {
+      "concept": "Shield with patent document inside",
+      "description": "Patent landscape and prior art analysis",
+      "glow": "ice-blue"
+    },
+    "janitor": {
+      "concept": "Broom with sparkle marks indicating cleanliness",
+      "description": "Triple-scope maintenance for codebase cleanup and project tidying",
+      "glow": "sage"
+    },
+    "jigsawr-developer": {
+      "concept": "Interlocking puzzle pieces forming hexagonal badge",
+      "description": "Jigsaw puzzle R package development",
+      "glow": "teal-green"
+    },
+    "kabalist": {
+      "concept": "Tree of Life with sephirot circles and three pillars",
+      "description": "Kabbalistic studies and Tree of Life navigation",
+      "glow": "mystic-violet"
+    },
+    "lapidary": {
+      "concept": "Faceted gemstone with crown and pavilion angles",
+      "description": "Gemstone identification, cutting, and appraisal",
+      "glow": "crystal-blue"
+    },
+    "librarian": {
+      "concept": "Open book with catalog index tabs along right edge",
+      "description": "Knowledge organization and library management specialist",
+      "glow": "leather-brown"
+    },
+    "logician": {
+      "description": "Digital logic specialist for Boolean algebra, gate-level circuit design, sequential logic, and CPU architecture simulation",
+      "glow": "white",
+      "concept": "logician agent persona icon"
+    },
+    "markovian": {
+      "concept": "Chain of connected state circles with transition arrows",
+      "description": "Stochastic process specialist for Markov models",
+      "glow": "soft-blue"
+    },
+    "martial-artist": {
+      "concept": "Flowing circle with balanced figure",
+      "description": "Defensive martial arts and awareness",
+      "glow": "crimson"
+    },
+    "mcp-developer": {
+      "concept": "Socket connector with gear and cable",
+      "description": "MCP server development and codebase analysis",
+      "glow": "teal"
+    },
+    "mlops-engineer": {
+      "concept": "Neural network with pipeline arrow",
+      "description": "ML operations and experiment lifecycle",
+      "glow": "lavender-violet"
+    },
+    "mycologist": {
+      "concept": "Mushroom cap with mycelium network threads",
+      "description": "Fungi specialist for identification and cultivation",
+      "glow": "mushroom-purple"
+    },
+    "mystic": {
+      "concept": "Third eye with concentric mandala rings",
+      "description": "Esoteric practices and meditation facilitation",
+      "glow": "magenta"
+    },
+    "nlp-specialist": {
+      "concept": "Text tokens flowing through transformer architecture",
+      "description": "Natural language processing and text analysis",
+      "glow": "language-violet"
+    },
+    "number-theorist": {
+      "concept": "Archimedean spiral with prime number markers",
+      "description": "Prime analysis, modular arithmetic, and proofs",
+      "glow": "prime-violet"
+    },
+    "physicist": {
+      "description": "Classical and applied physics specialist covering electromagnetism, levitation mechanisms, and physical device design",
+      "glow": "white",
+      "concept": "physicist agent persona icon"
+    },
+    "polymath": {
+      "concept": "Brain network spanning multiple knowledge domains",
+      "description": "Cross-disciplinary synthesis and orchestration",
+      "glow": "golden-yellow"
+    },
+    "project-manager": {
+      "concept": "Gantt bars with milestone diamond",
+      "description": "Agile and classic project management",
+      "glow": "orange"
+    },
+    "prospector": {
+      "concept": "Gold pan with water ripples and nugget",
+      "description": "Mineral and gold finder for field geology",
+      "glow": "gold"
+    },
+    "putior-integrator": {
+      "concept": "Flowchart with connected nodes",
+      "description": "Workflow visualization and Mermaid diagrams",
+      "glow": "spring-green"
+    },
+    "quarto-developer": {
+      "concept": "Document page with Q lettermark and multilingual code blocks",
+      "description": "Quarto CLI specialist for multilingual documentation and publishing",
+      "glow": "teal"
+    },
+    "r-developer": {
+      "concept": "Hexagonal R badge with terminal cursor",
+      "description": "R package development and statistical computing",
+      "glow": "cyan"
+    },
+    "relocation-expert": {
+      "concept": "Suitcase with travel arrow and EU stars",
+      "description": "Cross-border EU/DACH relocation specialist",
+      "glow": "warm-coral"
+    },
+    "security-analyst": {
+      "concept": "Shield with radar eye scanner",
+      "description": "Security auditing and vulnerability assessment",
+      "glow": "bright-red"
+    },
+    "senior-data-scientist": {
+      "concept": "Scatter chart with brain node",
+      "description": "Statistical analysis and ML review",
+      "glow": "violet"
+    },
+    "senior-researcher": {
+      "concept": "Open book with magnifier",
+      "description": "Research methodology and peer review",
+      "glow": "amber"
+    },
+    "senior-software-developer": {
+      "concept": "Layered architecture tower blocks",
+      "description": "Architecture and system design review",
+      "glow": "sky-blue"
+    },
+    "senior-ux-ui-specialist": {
+      "concept": "User silhouette with flow arrows",
+      "description": "Usability and accessibility review",
+      "glow": "mint"
+    },
+    "senior-web-designer": {
+      "concept": "Layout grid with color palette swatches",
+      "description": "Visual design and layout review",
+      "glow": "yellow"
+    },
+    "shaman": {
+      "concept": "Drum circle with spirit lines rising",
+      "description": "Shamanic practitioner for journeying and ceremony",
+      "glow": "deep-violet"
+    },
+    "shapeshifter": {
+      "concept": "Overlapping geometric shapes transitioning",
+      "description": "Metamorphic transformation and adaptive systems",
+      "glow": "lavender"
+    },
+    "shiny-developer": {
+      "concept": "Reactive diamond inside browser with reactive graph connections",
+      "description": "Shiny reactive web app specialist for R",
+      "glow": "electric-blue"
+    },
+    "skill-reviewer": {
+      "concept": "Document with magnifying glass overlay",
+      "description": "SKILL.md quality validation and refactoring",
+      "glow": "review-pink"
+    },
+    "spectroscopist": {
+      "concept": "Prism dispersing light beam into spectrum bands",
+      "description": "Spectroscopy interpretation and analysis planning",
+      "glow": "violet"
+    },
+    "survivalist": {
+      "concept": "Compass rose with flame center",
+      "description": "Wilderness survival and bushcraft",
+      "glow": "olive"
+    },
+    "swarm-strategist": {
+      "concept": "Hexagonal cell cluster with radiating connections",
+      "description": "Collective intelligence and distributed coordination",
+      "glow": "lime"
+    },
+    "taxonomic-entomologist": {
+      "concept": "Pinned insect specimen with classification labels",
+      "description": "Methodical insect taxonomist with dichotomous keys",
+      "glow": "specimen-green"
+    },
+    "tcg-specialist": {
+      "concept": "Fanned playing cards with grading badge",
+      "description": "Trading card game grading and collection",
+      "glow": "card-red"
+    },
+    "theoretical-researcher": {
+      "concept": "Atom orbitals with central nucleus and integral sign",
+      "description": "Theoretical science researcher spanning quantum physics and mathematics",
+      "glow": "warm-gold"
+    },
+    "tour-planner": {
+      "concept": "Map pin with route line and compass rose",
+      "description": "Spatial and temporal tour planning with interactive maps",
+      "glow": "sage-green"
+    },
+    "translator": {
+      "concept": "Overlapping documents with translation arrow",
+      "description": "Content translation across 4 locales (de, zh-CN, ja, es)",
+      "glow": "teal"
+    },
+    "version-manager": {
+      "concept": "Version tag badge with increment arrow",
+      "description": "Semantic versioning and release management",
+      "glow": "semver-green"
+    },
+    "web-developer": {
+      "concept": "Browser window with angle brackets",
+      "description": "Full-stack Next.js and TypeScript development",
+      "glow": "coral"
     }
   },
   "icons": [
     {
-      "agentId": "alchemist",
-      "path": "public/icons/cyberpunk/agents/alchemist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "r-developer",
-      "path": "public/icons/cyberpunk/agents/r-developer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "code-reviewer",
-      "path": "public/icons/cyberpunk/agents/code-reviewer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "security-analyst",
-      "path": "public/icons/cyberpunk/agents/security-analyst.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "web-developer",
-      "path": "public/icons/cyberpunk/agents/web-developer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "jigsawr-developer",
-      "path": "public/icons/cyberpunk/agents/jigsawr-developer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "survivalist",
-      "path": "public/icons/cyberpunk/agents/survivalist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "mystic",
-      "path": "public/icons/cyberpunk/agents/mystic.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "martial-artist",
-      "path": "public/icons/cyberpunk/agents/martial-artist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "designer",
-      "path": "public/icons/cyberpunk/agents/designer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "gardener",
-      "path": "public/icons/cyberpunk/agents/gardener.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "gxp-validator",
-      "path": "public/icons/cyberpunk/agents/gxp-validator.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "auditor",
-      "path": "public/icons/cyberpunk/agents/auditor.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "senior-researcher",
-      "path": "public/icons/cyberpunk/agents/senior-researcher.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "senior-data-scientist",
-      "path": "public/icons/cyberpunk/agents/senior-data-scientist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "senior-software-developer",
-      "path": "public/icons/cyberpunk/agents/senior-software-developer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "senior-web-designer",
-      "path": "public/icons/cyberpunk/agents/senior-web-designer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "senior-ux-ui-specialist",
-      "path": "public/icons/cyberpunk/agents/senior-ux-ui-specialist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "project-manager",
-      "path": "public/icons/cyberpunk/agents/project-manager.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "devops-engineer",
-      "path": "public/icons/cyberpunk/agents/devops-engineer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "mlops-engineer",
-      "path": "public/icons/cyberpunk/agents/mlops-engineer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "putior-integrator",
-      "path": "public/icons/cyberpunk/agents/putior-integrator.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "swarm-strategist",
-      "path": "public/icons/cyberpunk/agents/swarm-strategist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "shapeshifter",
-      "path": "public/icons/cyberpunk/agents/shapeshifter.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "polymath",
-      "path": "public/icons/cyberpunk/agents/polymath.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "tcg-specialist",
-      "path": "public/icons/cyberpunk/agents/tcg-specialist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "ip-analyst",
-      "path": "public/icons/cyberpunk/agents/ip-analyst.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "quarto-developer",
-      "path": "public/icons/cyberpunk/agents/quarto-developer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "shiny-developer",
-      "path": "public/icons/cyberpunk/agents/shiny-developer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "dog-trainer",
-      "path": "public/icons/cyberpunk/agents/dog-trainer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "mycologist",
-      "path": "public/icons/cyberpunk/agents/mycologist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "prospector",
-      "path": "public/icons/cyberpunk/agents/prospector.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "shaman",
-      "path": "public/icons/cyberpunk/agents/shaman.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "librarian",
-      "path": "public/icons/cyberpunk/agents/librarian.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "tour-planner",
-      "path": "public/icons/cyberpunk/agents/tour-planner.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "hiking-guide",
-      "path": "public/icons/cyberpunk/agents/hiking-guide.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "relocation-expert",
-      "path": "public/icons/cyberpunk/agents/relocation-expert.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "mcp-developer",
-      "path": "public/icons/cyberpunk/agents/mcp-developer.webp",
-      "status": "done"
-    },
-    {
       "agentId": "acp-developer",
       "path": "public/icons/cyberpunk/agents/acp-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "adaptic",
       "path": "public/icons/cyberpunk/agents/adaptic.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "geometrist",
-      "path": "public/icons/cyberpunk/agents/geometrist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "markovian",
-      "path": "public/icons/cyberpunk/agents/markovian.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "theoretical-researcher",
-      "path": "public/icons/cyberpunk/agents/theoretical-researcher.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "diffusion-specialist",
-      "path": "public/icons/cyberpunk/agents/diffusion-specialist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "hildegard",
-      "path": "public/icons/cyberpunk/agents/hildegard.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "janitor",
-      "path": "public/icons/cyberpunk/agents/janitor.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "blender-artist",
-      "path": "public/icons/cyberpunk/agents/blender-artist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "fabricator",
-      "path": "public/icons/cyberpunk/agents/fabricator.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "kabalist",
-      "path": "public/icons/cyberpunk/agents/kabalist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "lapidary",
-      "path": "public/icons/cyberpunk/agents/lapidary.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "number-theorist",
-      "path": "public/icons/cyberpunk/agents/number-theorist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "skill-reviewer",
-      "path": "public/icons/cyberpunk/agents/skill-reviewer.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "version-manager",
-      "path": "public/icons/cyberpunk/agents/version-manager.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "advocatus-diaboli",
       "path": "public/icons/cyberpunk/agents/advocatus-diaboli.webp",
-      "status": "done"
+      "status": "pending"
+    },
+    {
+      "agentId": "alchemist",
+      "path": "public/icons/cyberpunk/agents/alchemist.webp",
+      "status": "pending"
     },
     {
       "agentId": "apa-specialist",
       "path": "public/icons/cyberpunk/agents/apa-specialist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
-      "agentId": "etymologist",
-      "path": "public/icons/cyberpunk/agents/etymologist.webp",
-      "status": "done"
+      "agentId": "auditor",
+      "path": "public/icons/cyberpunk/agents/auditor.webp",
+      "status": "pending"
     },
     {
-      "agentId": "nlp-specialist",
-      "path": "public/icons/cyberpunk/agents/nlp-specialist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "citizen-entomologist",
-      "path": "public/icons/cyberpunk/agents/citizen-entomologist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "conservation-entomologist",
-      "path": "public/icons/cyberpunk/agents/conservation-entomologist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "taxonomic-entomologist",
-      "path": "public/icons/cyberpunk/agents/taxonomic-entomologist.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "contemplative",
-      "path": "public/icons/cyberpunk/agents/contemplative.webp",
-      "status": "done"
-    },
-    {
-      "agentId": "spectroscopist",
-      "path": "public/icons/cyberpunk/agents/spectroscopist.webp",
-      "status": "done"
+      "agentId": "blender-artist",
+      "path": "public/icons/cyberpunk/agents/blender-artist.webp",
+      "status": "pending"
     },
     {
       "agentId": "chromatographer",
       "path": "public/icons/cyberpunk/agents/chromatographer.webp",
-      "status": "done"
+      "status": "pending"
+    },
+    {
+      "agentId": "citizen-entomologist",
+      "path": "public/icons/cyberpunk/agents/citizen-entomologist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "code-reviewer",
+      "path": "public/icons/cyberpunk/agents/code-reviewer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "conservation-entomologist",
+      "path": "public/icons/cyberpunk/agents/conservation-entomologist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "contemplative",
+      "path": "public/icons/cyberpunk/agents/contemplative.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "designer",
+      "path": "public/icons/cyberpunk/agents/designer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "devops-engineer",
+      "path": "public/icons/cyberpunk/agents/devops-engineer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "diffusion-specialist",
+      "path": "public/icons/cyberpunk/agents/diffusion-specialist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "dog-trainer",
+      "path": "public/icons/cyberpunk/agents/dog-trainer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "etymologist",
+      "path": "public/icons/cyberpunk/agents/etymologist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "fabricator",
+      "path": "public/icons/cyberpunk/agents/fabricator.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "gardener",
+      "path": "public/icons/cyberpunk/agents/gardener.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "geometrist",
+      "path": "public/icons/cyberpunk/agents/geometrist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "gxp-validator",
+      "path": "public/icons/cyberpunk/agents/gxp-validator.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "hiking-guide",
+      "path": "public/icons/cyberpunk/agents/hiking-guide.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "hildegard",
+      "path": "public/icons/cyberpunk/agents/hildegard.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "ip-analyst",
+      "path": "public/icons/cyberpunk/agents/ip-analyst.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "janitor",
+      "path": "public/icons/cyberpunk/agents/janitor.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "jigsawr-developer",
+      "path": "public/icons/cyberpunk/agents/jigsawr-developer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "kabalist",
+      "path": "public/icons/cyberpunk/agents/kabalist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "lapidary",
+      "path": "public/icons/cyberpunk/agents/lapidary.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "librarian",
+      "path": "public/icons/cyberpunk/agents/librarian.webp",
+      "status": "pending"
     },
     {
       "agentId": "logician",
       "path": "public/icons/cyberpunk/agents/logician.webp",
-      "status": "done"
+      "status": "pending"
+    },
+    {
+      "agentId": "markovian",
+      "path": "public/icons/cyberpunk/agents/markovian.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "martial-artist",
+      "path": "public/icons/cyberpunk/agents/martial-artist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "mcp-developer",
+      "path": "public/icons/cyberpunk/agents/mcp-developer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "mlops-engineer",
+      "path": "public/icons/cyberpunk/agents/mlops-engineer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "mycologist",
+      "path": "public/icons/cyberpunk/agents/mycologist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "mystic",
+      "path": "public/icons/cyberpunk/agents/mystic.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "nlp-specialist",
+      "path": "public/icons/cyberpunk/agents/nlp-specialist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "number-theorist",
+      "path": "public/icons/cyberpunk/agents/number-theorist.webp",
+      "status": "pending"
     },
     {
       "agentId": "physicist",
       "path": "public/icons/cyberpunk/agents/physicist.webp",
-      "status": "done"
+      "status": "pending"
+    },
+    {
+      "agentId": "polymath",
+      "path": "public/icons/cyberpunk/agents/polymath.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "project-manager",
+      "path": "public/icons/cyberpunk/agents/project-manager.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "prospector",
+      "path": "public/icons/cyberpunk/agents/prospector.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "putior-integrator",
+      "path": "public/icons/cyberpunk/agents/putior-integrator.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "quarto-developer",
+      "path": "public/icons/cyberpunk/agents/quarto-developer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "r-developer",
+      "path": "public/icons/cyberpunk/agents/r-developer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "relocation-expert",
+      "path": "public/icons/cyberpunk/agents/relocation-expert.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "security-analyst",
+      "path": "public/icons/cyberpunk/agents/security-analyst.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "senior-data-scientist",
+      "path": "public/icons/cyberpunk/agents/senior-data-scientist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "senior-researcher",
+      "path": "public/icons/cyberpunk/agents/senior-researcher.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "senior-software-developer",
+      "path": "public/icons/cyberpunk/agents/senior-software-developer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "senior-ux-ui-specialist",
+      "path": "public/icons/cyberpunk/agents/senior-ux-ui-specialist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "senior-web-designer",
+      "path": "public/icons/cyberpunk/agents/senior-web-designer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "shaman",
+      "path": "public/icons/cyberpunk/agents/shaman.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "shapeshifter",
+      "path": "public/icons/cyberpunk/agents/shapeshifter.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "shiny-developer",
+      "path": "public/icons/cyberpunk/agents/shiny-developer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "skill-reviewer",
+      "path": "public/icons/cyberpunk/agents/skill-reviewer.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "spectroscopist",
+      "path": "public/icons/cyberpunk/agents/spectroscopist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "survivalist",
+      "path": "public/icons/cyberpunk/agents/survivalist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "swarm-strategist",
+      "path": "public/icons/cyberpunk/agents/swarm-strategist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "taxonomic-entomologist",
+      "path": "public/icons/cyberpunk/agents/taxonomic-entomologist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "tcg-specialist",
+      "path": "public/icons/cyberpunk/agents/tcg-specialist.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "theoretical-researcher",
+      "path": "public/icons/cyberpunk/agents/theoretical-researcher.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "tour-planner",
+      "path": "public/icons/cyberpunk/agents/tour-planner.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "translator",
+      "path": "public/icons/cyberpunk/agents/translator.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "version-manager",
+      "path": "public/icons/cyberpunk/agents/version-manager.webp",
+      "status": "pending"
+    },
+    {
+      "agentId": "web-developer",
+      "path": "public/icons/cyberpunk/agents/web-developer.webp",
+      "status": "pending"
     }
   ]
 }

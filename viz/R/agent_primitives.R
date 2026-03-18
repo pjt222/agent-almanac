@@ -2847,3 +2847,82 @@ glyph_agent_adaptic <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── glyph_agent_translator: overlapping documents with translation bridge ─────
+glyph_agent_translator <- function(cx, cy, s, col, bright) {
+  # Two document pages side by side with a curved arrow between them and an
+  # "A" on the source page — the translator agent persona bridging languages.
+  layers <- list()
+
+  # Left document (source, slightly larger to emphasize origin)
+  left_cx <- cx - 12 * s
+  doc_w <- 20 * s
+  doc_h <- 28 * s
+  left_doc <- data.frame(
+    xmin = left_cx - doc_w / 2, xmax = left_cx + doc_w / 2,
+    ymin = cy - doc_h / 2, ymax = cy + doc_h / 2
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = left_doc,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.12), color = bright, linewidth = .lw(s, 2))
+
+  # "A" letter on source page (representing source language)
+  a_letter <- data.frame(
+    x = left_cx + c(-5, 0, 5) * s,
+    y = cy + c(-6, 6, -6) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = a_letter, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2))
+  # A crossbar
+  a_bar <- data.frame(
+    x = c(left_cx - 3 * s, left_cx + 3 * s),
+    y = c(cy - 1 * s, cy - 1 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = a_bar, .aes(x, y),
+    color = bright, linewidth = .lw(s, 1.5))
+
+  # Right document (target, slightly offset down)
+  right_cx <- cx + 12 * s
+  right_doc <- data.frame(
+    xmin = right_cx - doc_w / 2, xmax = right_cx + doc_w / 2,
+    ymin = cy - doc_h / 2 - 2 * s, ymax = cy + doc_h / 2 - 2 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = right_doc,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.08), color = hex_with_alpha(bright, 0.7),
+    linewidth = .lw(s, 2))
+
+  # Text lines on right page (varied lengths = different language)
+  line_widths <- c(12, 8, 14, 10)
+  for (i in 1:4) {
+    ly <- cy + (8 - i * 5) * s - 2 * s
+    line_data <- data.frame(
+      x = c(right_cx - 7 * s, right_cx - 7 * s + line_widths[i] * s),
+      y = c(ly, ly)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = line_data, .aes(x, y),
+      color = hex_with_alpha(bright, 0.4), linewidth = .lw(s, 1.3))
+  }
+
+  # Curved arrow from left doc to right doc (above)
+  t_arrow <- seq(pi, 0, length.out = 30)
+  arrow_r <- 10 * s
+  arrow_arc <- data.frame(
+    x = cx + arrow_r * cos(t_arrow),
+    y = cy + 16 * s + 5 * s * sin(t_arrow)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arrow_arc, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2))
+
+  # Arrowhead
+  arrow_tip_x <- cx + arrow_r
+  arrow_tip_y <- cy + 16 * s
+  arrow_head <- data.frame(
+    x = arrow_tip_x + c(-3.5, 0, -3.5) * s,
+    y = arrow_tip_y + c(2.5, 0, -2.5) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = arrow_head, .aes(x, y),
+    fill = bright, color = "transparent", linewidth = 0)
+
+  layers
+}
