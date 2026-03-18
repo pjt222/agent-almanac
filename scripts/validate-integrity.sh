@@ -297,6 +297,21 @@ if [ -n "$b10_missing" ]; then
 fi
 [ "$b10_warn" -eq 0 ] && echo "OK: All registry domains have DOMAIN_STYLES entries"
 
+# B11: CLI audit (optional, only if CLI is available)
+echo "--- B11: CLI audit ---"
+if command -v node >/dev/null 2>&1 && [ -f "cli/index.js" ]; then
+  cli_out=$(node cli/index.js audit 2>&1) || true
+  if echo "$cli_out" | grep -q "error"; then
+    echo "WARN: CLI audit reported errors:"
+    echo "$cli_out" | grep -i "error" | sed 's/^/  /'
+    warn_count=$((warn_count + 1))
+  else
+    echo "OK: CLI audit passed"
+  fi
+else
+  echo "SKIP: CLI not available (node or cli/index.js missing)"
+fi
+
 echo ""
 echo "=== Summary ==="
 if [ "$failed" -ne 0 ]; then

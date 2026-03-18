@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 328
+total_skills: 329
 
 domains:
   r-packages:
@@ -434,6 +434,11 @@ domains:
         complexity: basic
         language: multi
         description: Write a structured continuation file for cross-session task handoff
+      - id: install-almanac-content
+        path: install-almanac-content/SKILL.md
+        complexity: basic
+        language: multi
+        description: Install skills, agents, and teams from agent-almanac into any supported agentic framework using the CLI
 
   citations:
     description: Academic and software citation management with R and BibTeX

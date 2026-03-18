@@ -72,7 +72,35 @@ The agent-almanac repository uses **relative symlinks** within its own `.claude/
 
 Other projects use **absolute symlinks** that chain through `~/.claude/` to the almanac.
 
-## Setting Up the Hub
+## Recommended: Use the CLI
+
+The `agent-almanac` CLI automates symlink creation and supports 12 frameworks. It is the recommended way to install content:
+
+```bash
+# Detect which frameworks are present
+agent-almanac detect
+
+# Install a skill (creates symlinks in all detected frameworks)
+agent-almanac install commit-changes
+
+# Install all skills in a domain
+agent-almanac install --domain r-packages
+
+# Install an agent with all its skills
+agent-almanac install --agent r-developer --with-deps
+
+# Install a team (Claude Code only)
+agent-almanac install --team r-package-review
+
+# Verify installation health
+agent-almanac audit
+```
+
+The CLI handles path resolution, multi-framework targeting, and idempotent installs. Use the manual setup below only if you need fine-grained control or are setting up the hub for the first time.
+
+See the [install-almanac-content](../skills/install-almanac-content/SKILL.md) skill for the full procedure.
+
+## Manual Setup: The Hub
 
 ### Step 1: Create the global agents symlink
 

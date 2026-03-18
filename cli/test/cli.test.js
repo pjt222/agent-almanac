@@ -31,12 +31,12 @@ describe('registry', () => {
     assert.match(out, /10 skills/);
   });
 
-  it('list --agents shows 65 agents', () => {
+  it('list --agents shows 66 agents', () => {
     const out = run('list --agents');
     assert.match(out, /66 agents/);
   });
 
-  it('list --teams shows 14 teams', () => {
+  it('list --teams shows 15 teams', () => {
     const out = run('list --teams');
     assert.match(out, /15 teams/);
   });
@@ -150,6 +150,83 @@ describe('init', () => {
   it('creates agent-almanac.yml', () => {
     run('init');
     assert.ok(existsSync(manifestPath));
+  });
+});
+
+// ── Framework-specific installs ──────────────────────────────────
+
+describe('adapter: claude-code', () => {
+  after(() => {
+    if (!existsSync(resolve(ROOT, '.claude/skills/commit-changes'))) {
+      try {
+        execSync(`ln -s ../../skills/commit-changes .claude/skills/commit-changes`, { cwd: ROOT });
+      } catch {}
+    }
+  });
+
+  it('installs skill to .claude/skills/', () => {
+    assert.ok(existsSync(resolve(ROOT, '.claude/skills/commit-changes')));
+  });
+
+  it('installs agent to .claude/agents (dry-run)', () => {
+    const out = run('install --agent r-developer --dry-run');
+    assert.match(out, /claude-code/);
+    assert.match(out, /r-developer/);
+  });
+
+  it('installs team to .claude/teams (dry-run)', () => {
+    const out = run('install --team r-package-review --dry-run');
+    assert.match(out, /claude-code/);
+    assert.match(out, /r-package-review/);
+  });
+});
+
+describe('adapter: cursor (dry-run)', () => {
+  it('targets .cursor/skills/ path', () => {
+    const out = run('install commit-changes --framework cursor --dry-run');
+    assert.match(out, /\.cursor\/skills/i);
+  });
+});
+
+describe('adapter: copilot (dry-run)', () => {
+  it('targets .github/ path', () => {
+    const out = run('install commit-changes --framework copilot --dry-run');
+    assert.match(out, /\.github/i);
+  });
+});
+
+describe('adapter: gemini (dry-run)', () => {
+  it('targets .gemini/skills/ path', () => {
+    const out = run('install commit-changes --framework gemini --dry-run');
+    assert.match(out, /\.gemini\/skills/i);
+  });
+});
+
+describe('adapter: aider (dry-run)', () => {
+  it('targets CONVENTIONS.md path', () => {
+    const out = run('install commit-changes --framework aider --dry-run');
+    assert.match(out, /CONVENTIONS/i);
+  });
+});
+
+describe('adapter: opencode (dry-run)', () => {
+  it('targets .opencode/skills/ path', () => {
+    const out = run('install commit-changes --framework opencode --dry-run');
+    assert.match(out, /\.opencode\/skills/i);
+  });
+});
+
+describe('adapter: windsurf (dry-run)', () => {
+  it('targets .windsurf path', () => {
+    const out = run('install commit-changes --framework windsurf --dry-run');
+    assert.match(out, /\.windsurf/i);
+  });
+});
+
+describe('adapter: vibe (dry-run)', () => {
+  it('targets .vibe/skills/ path', () => {
+    const out = run('install commit-changes --framework vibe --dry-run');
+    assert.match(out, /\.vibe\/skills/i);
   });
 });
 
