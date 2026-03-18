@@ -261,7 +261,7 @@ function renderOverview() {
 
     // Icon (if available)
     const iconPath = getIconPath(team, getCurrentThemeName());
-    if (iconPath && isIconLoaded(team, getCurrentThemeName())) {
+    if (iconPath && isIconLoaded(team.id, getCurrentThemeName())) {
       g.append('image')
         .attr('href', iconPath)
         .attr('width', radius * 1.4)
@@ -383,7 +383,7 @@ function renderFocus(teamId) {
     .attr('opacity', 1);
 
   const iconPath = getIconPath(team, getCurrentThemeName());
-  if (iconPath && isIconLoaded(team, getCurrentThemeName())) {
+  if (iconPath && isIconLoaded(team.id, getCurrentThemeName())) {
     rootG.append('image')
       .attr('href', iconPath)
       .attr('x', cx - 24).attr('y', cy - 24)
@@ -684,13 +684,20 @@ export function zoomOutCampfire() {
 }
 
 export function preloadCampfireIcons(nodes, palette) {
-  // Use existing icon system — just ensure team/agent icons are loaded
+  // Use existing icon system — ensure team/agent icons are loaded, then re-render
   const teamAndAgents = nodes.filter(n => n.type === 'team' || n.type === 'agent');
+  let pending = 0;
   for (const node of teamAndAgents) {
     const path = getIconPath(node, palette);
-    if (path && !isIconLoaded(node, palette)) {
+    if (path && !isIconLoaded(node.id, palette)) {
+      pending++;
       const img = new Image();
-      img.onload = () => markIconLoaded(node, palette);
+      img.onload = () => {
+        markIconLoaded(palette, node.id);
+        pending--;
+        if (pending === 0) render();  // Re-render once all icons are loaded
+      };
+      img.onerror = () => { pending--; };
       img.src = path;
     }
   }
