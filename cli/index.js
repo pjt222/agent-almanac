@@ -12,15 +12,22 @@
  *   agent-almanac detect                 Show detected frameworks
  *   agent-almanac audit                  Health check installed content
  *   agent-almanac uninstall <names...>   Remove installed content
+ *   agent-almanac campfire [name]        Browse campfires (team circles)
+ *   agent-almanac gather <name>          Gather a team around the fire
+ *   agent-almanac scatter <name>         Scatter a team (farewell)
+ *   agent-almanac tend                   Health check your campfires
  */
 
 import { Command } from 'commander';
-import { loadRegistries, resolveItems, filterSkills, search } from './lib/registry.js';
+import { createInterface } from 'readline';
+import { loadRegistries, resolveItems, filterSkills, search, findTeam, findAgent } from './lib/registry.js';
 import { detectAlmanacRoot, resolveTargetDir } from './lib/resolver.js';
 import { detectFrameworks } from './lib/detector.js';
 import { getAdapter, getAdaptersForDetections, listAdapters } from './adapters/index.js';
 import { installAll, uninstallAll, auditAll } from './lib/installer.js';
 import { loadManifest, resolveManifest, generateManifest, writeManifest } from './lib/manifest.js';
+import { loadState, saveState, recordGather, recordScatter, recordWarm, markWelcomed, getFireStates, getFireState, findSharedSkills } from './lib/state.js';
+import * as campfire from './lib/campfire-reporter.js';
 import * as reporter from './lib/reporter.js';
 
 const program = new Command();
@@ -351,6 +358,416 @@ program
 
     reporter.printResults([...installResults, ...removeResults]);
   });
+
+// ── campfire ─────────────────────────────────────────────────────
+
+program
+  .command('campfire [name]')
+  .description('Browse campfires (team circles)')
+  .option('--all', 'Show all available campfires')
+  .option('--map', 'Show shared agents between campfires')
+  .option('--web', 'Open campfire view in the viz')
+  .option('--json', 'Output as JSON')
+  .option('--source <path>', 'Path to agent-almanac root')
+  .action(async (name, options) => {
+    const almanacRoot = options.source || detectAlmanacRoot();
+    if (!almanacRoot) {
+      reporter.error('Could not detect agent-almanac root.');
+      process.exit(1);
+    }
+    const reg = loadRegistries(almanacRoot);
+    const state = loadState();
+
+    // JSON mode
+    if (options.json) {
+      const fires = getFireStates(state);
+      campfire.printJson({
+        fires,
+        totalTeams: reg.teams.length,
+        wanderers: state.wanderers || [],
+      });
+      return;
+    }
+
+    // Map mode
+    if (options.map) {
+      campfire.printCampfireMap(reg.teams, state);
+      return;
+    }
+
+    // Web mode — open viz with campfire URL params
+    if (options.web) {
+      const gathered = Object.keys(state.fires).join(',');
+      const url = `http://localhost:5173/?mode=campfire${gathered ? `&gathered=${gathered}` : ''}`;
+      console.log(`\nOpening: ${reporter.chalk.cyan(url)}\n`);
+      const { exec } = await import('child_process');
+      exec(`xdg-open "${url}" 2>/dev/null || open "${url}" 2>/dev/null || start "${url}"`);
+      return;
+    }
+
+    // All mode — categorized list
+    if (options.all) {
+      campfire.printCampfireList({ teams: reg.teams, state, reg });
+      return;
+    }
+
+    // Specific fire detail
+    if (name) {
+      const team = findTeam(reg, name);
+      if (!team) {
+        reporter.error(`Unknown campfire: ${name}`);
+        process.exit(1);
+      }
+      const fireData = state.fires[name] || null;
+      campfire.printFireSummary({ team, fireData, reg });
+      return;
+    }
+
+    // Default: show gathered fires or welcome
+    const fires = getFireStates(state);
+    if (fires.length === 0) {
+      if (!state.welcomed) {
+        campfire.printWelcome(reg.teams.length);
+        saveState(markWelcomed(state));
+      } else {
+        console.log();
+        console.log(reporter.chalk.dim('  No fires burning.'));
+        console.log(reporter.chalk.dim(`  Type 'agent-almanac campfire --all' to browse, or 'agent-almanac gather <name>' to light a fire.`));
+        console.log();
+      }
+    } else {
+      campfire.printTend(fires);
+    }
+  });
+
+// ── gather ──────────────────────────────────────────────────────
+
+program
+  .command('gather <name>')
+  .description('Gather a team around the campfire')
+  .option('--ceremonial', 'Show each practice (skill) arriving')
+  .option('--only <agents>', 'Partial gathering — comma-separated agent IDs')
+  .option('-f, --framework <id>', 'Target specific framework')
+  .option('-g, --global', 'Install to global scope')
+  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('-n, --dry-run', 'Preview without making changes')
+  .option('-q, --quiet', 'No ceremony, just install')
+  .option('--json', 'Output as JSON')
+  .option('--source <path>', 'Path to agent-almanac root')
+  .action(async (name, options) => {
+    const ctx = getContext(options);
+    const state = loadState();
+
+    // Resolve team
+    const team = findTeam(ctx.reg, name);
+    if (!team) {
+      reporter.error(`Unknown campfire: ${name}. Use 'agent-almanac campfire --all' to browse.`);
+      process.exit(1);
+    }
+
+    // Resolve members (filter --only if provided)
+    let memberIds = team.members || [];
+    if (options.only) {
+      const onlyIds = options.only.split(',').map(s => s.trim());
+      memberIds = memberIds.filter(m => onlyIds.includes(m));
+      if (memberIds.length === 0) {
+        reporter.error(`No matching agents in --only. Available: ${(team.members || []).join(', ')}`);
+        process.exit(1);
+      }
+    }
+
+    // Resolve agents and their skills
+    const agents = [];
+    const allSkillItems = [];
+    const allAgentItems = [];
+    const defaultSkillIds = (ctx.reg.defaultSkills || []).map(s => s.id);
+
+    for (const memberId of memberIds) {
+      const agent = findAgent(ctx.reg, memberId);
+      if (!agent) continue;
+      allAgentItems.push(agent);
+
+      const agentSkillIds = [...new Set([...(agent.skills || []), ...defaultSkillIds])];
+      const agentSkills = agentSkillIds.map(sid =>
+        ctx.reg.skills.find(s => s.id === sid),
+      ).filter(Boolean);
+
+      agents.push({
+        id: memberId,
+        lead: memberId === team.lead,
+        skills: agentSkillIds,
+      });
+
+      for (const skill of agentSkills) {
+        if (!allSkillItems.some(s => s.id === skill.id)) {
+          allSkillItems.push(skill);
+        }
+      }
+    }
+
+    // Find skills already installed from other fires
+    const sharedSkills = findSharedSkills(state, ctx.reg);
+
+    // Install via the standard machinery
+    const resolved = {
+      skills: allSkillItems,
+      agents: allAgentItems,
+      teams: [team],
+    };
+
+    if (options.dryRun) reporter.printDryRun();
+
+    const installResults = await installAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
+      dryRun: options.dryRun,
+      force: false,
+      almanacRoot: ctx.almanacRoot,
+    });
+
+    // Categorize results
+    const installed = installResults.filter(r => r.action === 'created').map(r => r.item.id);
+    const skipped = installResults.filter(r => r.action === 'skipped').map(r => r.item.id);
+    const failed = installResults.filter(r => r.error).map(r => ({ id: r.item.id, error: r.error }));
+
+    // JSON output
+    if (options.json) {
+      campfire.printJson({
+        team: name,
+        agents: memberIds,
+        skillsInstalled: installed.length,
+        skillsSkipped: skipped.length,
+        skillsFailed: failed.length,
+        state: 'burning',
+      });
+    } else if (options.quiet) {
+      // Standard reporter output
+      reporter.printResults(installResults);
+    } else {
+      // Ceremony output
+      const partial = options.only && memberIds.length < (team.members || []).length;
+      if (partial) {
+        console.log(reporter.chalk.dim(`\n  Partial gathering: ${name} fire burns with ${memberIds.length} of ${(team.members || []).length} keepers.`));
+      }
+      campfire.printArrival({
+        teamId: name,
+        agents,
+        results: { installed, skipped, failed },
+        ceremonial: options.ceremonial || false,
+        alreadyBurning: sharedSkills,
+      });
+    }
+
+    // Update state (unless dry-run)
+    if (!options.dryRun) {
+      const failedIds = failed.map(f => f.id);
+      recordGather(state, name, memberIds, allSkillItems.length, failedIds);
+      saveState(state);
+    }
+  });
+
+// ── scatter ─────────────────────────────────────────────────────
+
+program
+  .command('scatter <name>')
+  .description('Scatter a team (farewell ceremony)')
+  .option('--ceremonial', 'Show each practice scattering')
+  .option('-f, --framework <id>', 'Target specific framework')
+  .option('-g, --global', 'Uninstall from global scope')
+  .option('--scope <scope>', 'Scope: project, workspace, global', 'project')
+  .option('-n, --dry-run', 'Preview without making changes')
+  .option('-q, --quiet', 'No ceremony, just uninstall')
+  .option('--json', 'Output as JSON')
+  .option('-y, --yes', 'Skip confirmation')
+  .option('--source <path>', 'Path to agent-almanac root')
+  .action(async (name, options) => {
+    const ctx = getContext(options);
+    const state = loadState();
+
+    const team = findTeam(ctx.reg, name);
+    if (!team) {
+      reporter.error(`Unknown campfire: ${name}`);
+      process.exit(1);
+    }
+
+    if (!state.fires[name]) {
+      reporter.error(`The ${name} fire is not burning. Nothing to scatter.`);
+      process.exit(1);
+    }
+
+    // Resolve what to remove
+    const memberIds = team.members || [];
+    const defaultSkillIds = (ctx.reg.defaultSkills || []).map(s => s.id);
+
+    const agents = [];
+    const allSkillItems = [];
+    const allAgentItems = [];
+
+    for (const memberId of memberIds) {
+      const agent = findAgent(ctx.reg, memberId);
+      if (!agent) continue;
+
+      const agentSkillIds = [...new Set([...(agent.skills || []), ...defaultSkillIds])];
+      const agentSkills = agentSkillIds.map(sid =>
+        ctx.reg.skills.find(s => s.id === sid),
+      ).filter(Boolean);
+
+      agents.push({
+        id: memberId,
+        lead: memberId === team.lead,
+        skills: agentSkillIds,
+      });
+
+      allAgentItems.push(agent);
+      for (const skill of agentSkills) {
+        if (!allSkillItems.some(s => s.id === skill.id)) {
+          allSkillItems.push(skill);
+        }
+      }
+    }
+
+    // Find skills/agents needed by other fires
+    const otherFires = Object.entries(state.fires).filter(([id]) => id !== name);
+    const keptSkills = [];
+    const keptAgents = [];
+
+    for (const skill of allSkillItems) {
+      for (const [otherId, otherFire] of otherFires) {
+        const otherAgentIds = otherFire.agents || [];
+        for (const oaId of otherAgentIds) {
+          const oa = findAgent(ctx.reg, oaId);
+          if (oa && (oa.skills || []).includes(skill.id)) {
+            keptSkills.push({ id: skill.id, reason: otherId });
+            break;
+          }
+        }
+        if (keptSkills.some(k => k.id === skill.id)) break;
+      }
+    }
+
+    for (const agent of allAgentItems) {
+      for (const [otherId, otherFire] of otherFires) {
+        if ((otherFire.agents || []).includes(agent.id)) {
+          keptAgents.push({ id: agent.id, reason: otherId });
+          break;
+        }
+      }
+    }
+
+    const keptSkillIds = new Set(keptSkills.map(k => k.id));
+    const keptAgentIds = new Set(keptAgents.map(k => k.id));
+    const toRemoveSkills = allSkillItems.filter(s => !keptSkillIds.has(s.id));
+    const toRemoveAgents = allAgentItems.filter(a => !keptAgentIds.has(a.id));
+
+    const totalSkills = allSkillItems.length;
+
+    // Confirmation (unless --yes or --quiet or --dry-run)
+    if (!options.yes && !options.quiet && !options.dryRun && !options.json) {
+      campfire.printScatterConfirm(team, totalSkills);
+      const answer = await askYesNo();
+      if (!answer) {
+        console.log(reporter.chalk.dim('\n  The fire still burns.\n'));
+        return;
+      }
+    }
+
+    if (options.dryRun) reporter.printDryRun();
+
+    // Uninstall via standard machinery (only items not shared)
+    const resolved = {
+      skills: toRemoveSkills,
+      agents: toRemoveAgents,
+      teams: [team],
+    };
+
+    const uninstallResults = await uninstallAll(resolved, ctx.adapters, ctx.projectDir, ctx.scope, {
+      dryRun: options.dryRun,
+    });
+
+    if (options.json) {
+      campfire.printJson({
+        team: name,
+        skillsRemoved: toRemoveSkills.length,
+        skillsKept: keptSkills.length,
+        agentsKept: keptAgents.length,
+      });
+    } else if (options.quiet) {
+      reporter.printResults(uninstallResults);
+    } else {
+      campfire.printScatter({
+        teamId: name,
+        agents,
+        results: {
+          removed: toRemoveSkills.map(s => s.id),
+          kept: keptSkills,
+          keptAgents,
+        },
+        ceremonial: options.ceremonial || false,
+      });
+    }
+
+    // Update state
+    if (!options.dryRun) {
+      recordScatter(state, name);
+      saveState(state);
+    }
+  });
+
+// ── tend ────────────────────────────────────────────────────────
+
+program
+  .command('tend')
+  .description('Tend your campfires (health check)')
+  .option('--json', 'Output as JSON')
+  .option('--source <path>', 'Path to agent-almanac root')
+  .action(async (options) => {
+    const almanacRoot = options.source || detectAlmanacRoot();
+    if (!almanacRoot) {
+      reporter.error('Could not detect agent-almanac root.');
+      process.exit(1);
+    }
+    const reg = loadRegistries(almanacRoot);
+    const state = loadState();
+    const fires = getFireStates(state);
+
+    if (fires.length === 0) {
+      console.log(reporter.chalk.dim('\n  No fires to tend. Gather a campfire first.\n'));
+      return;
+    }
+
+    if (options.json) {
+      campfire.printJson({ fires });
+      return;
+    }
+
+    // Enrich fire data with registry info
+    const enrichedFires = fires.map(fire => {
+      const team = findTeam(reg, fire.id);
+      return {
+        ...fire,
+        description: team?.description || '',
+        coordination: team?.coordination || '',
+      };
+    });
+
+    campfire.printTend(enrichedFires);
+
+    // Update lastWarmed on all fires (tending is warming)
+    for (const fire of fires) {
+      recordWarm(state, fire.id);
+    }
+    saveState(state);
+  });
+
+// ── Utility ─────────────────────────────────────────────────────
+
+function askYesNo() {
+  return new Promise((resolve) => {
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    rl.question('  ', (answer) => {
+      rl.close();
+      resolve(answer.toLowerCase().startsWith('y'));
+    });
+  });
+}
 
 // ── Parse and run ────────────────────────────────────────────────
 

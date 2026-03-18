@@ -70,7 +70,7 @@ const graph2dMode = {
   destroy: destroyGraph,
 };
 
-const modes = { '2d': graph2dMode, '3d': null, hive: null, chord: null, workflow: null };
+const modes = { '2d': graph2dMode, '3d': null, hive: null, chord: null, workflow: null, campfire: null };
 let activeMode = graph2dMode;
 
 // ── Layout button helper ────────────────────────────────────────────
@@ -81,6 +81,7 @@ const MODE_BUTTON_IDS = {
   hive: 'btn-hive',
   chord: 'btn-chord',
   workflow: 'btn-flow',
+  campfire: 'btn-campfire',
 };
 
 function setActiveMode(mode) {
@@ -133,6 +134,7 @@ let graph3dMod = null;
 let hiveMod = null;
 let chordMod = null;
 let workflowMod = null;
+let campfireMod = null;
 
 async function loadMode(name) {
   if (modes[name]) return modes[name];
@@ -193,6 +195,20 @@ async function loadMode(name) {
       getVisibleAgentIds: workflowMod.getVisibleAgentIdsWorkflow,
       destroy: workflowMod.destroyWorkflowGraph,
     };
+  } else if (name === 'campfire') {
+    if (!campfireMod) campfireMod = await import('./campfire.js');
+    modes.campfire = {
+      focusNode: campfireMod.focusNodeCampfire,
+      resetView: campfireMod.resetViewCampfire,
+      zoomIn: campfireMod.zoomInCampfire,
+      zoomOut: campfireMod.zoomOutCampfire,
+      setSkillVisibility: campfireMod.setSkillVisibilityCampfire,
+      setVisibleAgents: campfireMod.setVisibleAgentsCampfire,
+      setVisibleTeams: campfireMod.setVisibleTeamsCampfire,
+      refreshGraph: campfireMod.refreshCampfireGraph,
+      getVisibleAgentIds: campfireMod.getVisibleAgentIdsCampfire,
+      destroy: campfireMod.destroyCampfireGraph,
+    };
   }
   return modes[name];
 }
@@ -231,6 +247,9 @@ async function switchMode(newModeName) {
       chordMod.initChordGraph(container, allData, modeCallbacks());
     } else if (newModeName === 'workflow') {
       workflowMod.initWorkflowGraph(container, allData, modeCallbacks());
+    } else if (newModeName === 'campfire') {
+      campfireMod.initCampfireGraph(container, allData, modeCallbacks());
+      campfireMod.preloadCampfireIcons(allData.nodes, getCurrentThemeName());
     }
 
     // Update active mode reference
@@ -626,6 +645,12 @@ async function main() {
   });
 
   logEvent('app', { event: 'sessionStart', mode: currentMode, nodeCount: data.nodes.length, linkCount: data.links.length });
+
+  // ── Auto-activate campfire mode from URL params ──
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('mode') === 'campfire') {
+    switchMode('campfire');
+  }
 
   // ── Auto zoom-to-fit after layout settles ──
   setTimeout(() => {

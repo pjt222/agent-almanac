@@ -21,6 +21,9 @@ Thumbs.db
 # Local continuation markers
 CONTINUE_HERE.md
 
+# Campfire state (local, not shared)
+.agent-almanac/
+
 # Node dependencies
 node_modules/
 

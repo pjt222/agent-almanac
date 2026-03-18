@@ -63,7 +63,8 @@
     "spriteSize3d": "3D图标大小",
     "downloadEventLog": "下载事件日志",
     "vizMode": "可视化模式",
-    "language": "语言"
+    "language": "语言",
+    "modeCampfire": "篝火"
   },
   "a11y": {
     "menu": "菜单",
@@ -109,5 +110,25 @@
     "runtimeError": "运行时错误",
     "workflowUnavailable": "工作流图不可用",
     "workflowUnavailableDetail": "请运行以下命令以生成图表数据："
+  },
+  "campfire": {
+    "overview": "篝火总览",
+    "fireKeeper": "守火人",
+    "pattern": "协作模式",
+    "practices": "{count} 个实践",
+    "circle": "圈子",
+    "keepers": "{count} 名成员",
+    "burning": "燃烧中",
+    "embers": "余烬",
+    "cold": "已熄灭",
+    "focusPrompt": "点击篝火查看详情",
+    "backToOverview": "返回所有篝火",
+    "sharedAgents": "共享代理",
+    "noFires": "暂无篝火",
+    "noFiresDetail": "使用 CLI 聚集团队：agent-almanac gather <name>",
+    "fireBurns": "火已燃起。",
+    "fireGoesOut": "火已熄灭。",
+    "practicesTotal": "共 {count} 个实践",
+    "hearthKeeper": "连接者"
   }
 }

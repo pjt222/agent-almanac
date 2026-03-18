@@ -63,7 +63,8 @@
     "spriteSize3d": "Tamaño de icono 3D",
     "downloadEventLog": "Descargar registro de eventos",
     "vizMode": "Modo de visualización",
-    "language": "Idioma"
+    "language": "Idioma",
+    "modeCampfire": "Fogata"
   },
   "a11y": {
     "menu": "Menú",
@@ -109,5 +110,25 @@
     "runtimeError": "Error de ejecución",
     "workflowUnavailable": "Diagrama de flujo no disponible",
     "workflowUnavailableDetail": "Ejecute el siguiente comando para generar los datos del diagrama:"
+  },
+  "campfire": {
+    "overview": "Vista de fogatas",
+    "fireKeeper": "Guardafuegos",
+    "pattern": "Patrón",
+    "practices": "{count} prácticas",
+    "circle": "Círculo",
+    "keepers": "{count} guardianes",
+    "burning": "ardiendo",
+    "embers": "brasas",
+    "cold": "frío",
+    "focusPrompt": "Haz clic en una fogata para ver su círculo",
+    "backToOverview": "Volver a todas las fogatas",
+    "sharedAgents": "Agentes compartidos",
+    "noFires": "No hay fogatas reunidas",
+    "noFiresDetail": "Usa la CLI para reunir un equipo: agent-almanac gather <nombre>",
+    "fireBurns": "El fuego arde.",
+    "fireGoesOut": "El fuego se apaga.",
+    "practicesTotal": "{count} prácticas en total",
+    "hearthKeeper": "guardián del hogar"
   }
 }

@@ -63,7 +63,8 @@
     "spriteSize3d": "3D-Symbolgröße",
     "downloadEventLog": "Ereignisprotokoll herunterladen",
     "vizMode": "Visualisierungsmodus",
-    "language": "Sprache"
+    "language": "Sprache",
+    "modeCampfire": "Lagerfeuer"
   },
   "a11y": {
     "menu": "Menü",
@@ -109,5 +110,25 @@
     "runtimeError": "Laufzeitfehler",
     "workflowUnavailable": "Workflow-Diagramm nicht verfügbar",
     "workflowUnavailableDetail": "Führen Sie den folgenden Befehl aus, um die Diagrammdaten zu generieren:"
+  },
+  "campfire": {
+    "overview": "Lagerfeuer-Übersicht",
+    "fireKeeper": "Feuerhüter",
+    "pattern": "Muster",
+    "practices": "{count} Praktiken",
+    "circle": "Kreis",
+    "keepers": "{count} Hüter",
+    "burning": "brennend",
+    "embers": "Glut",
+    "cold": "erloschen",
+    "focusPrompt": "Klicken Sie auf ein Feuer, um den Kreis zu sehen",
+    "backToOverview": "Zurück zu allen Lagerfeuern",
+    "sharedAgents": "Gemeinsame Agenten",
+    "noFires": "Keine Lagerfeuer versammelt",
+    "noFiresDetail": "Nutzen Sie die CLI, um ein Team zu versammeln: agent-almanac gather <name>",
+    "fireBurns": "Das Feuer brennt.",
+    "fireGoesOut": "Das Feuer erlischt.",
+    "practicesTotal": "{count} Praktiken insgesamt",
+    "hearthKeeper": "Herdhüter"
   }
 }

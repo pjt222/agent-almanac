@@ -34,7 +34,7 @@ export function resolveManifest(manifest, reg) {
   const teams = [];
 
   // Resolve skills (can be strings or objects with domain/complexity)
-  for (const entry of manifest.skills || []) {
+  for (const entry of manifest.skills || manifest.practices || []) {
     if (typeof entry === 'string') {
       if (entry === '*') {
         skills.push(...reg.skills);
@@ -51,8 +51,8 @@ export function resolveManifest(manifest, reg) {
     }
   }
 
-  // Resolve agents
-  for (const entry of manifest.agents || []) {
+  // Resolve agents (wanderers is the campfire synonym)
+  for (const entry of manifest.agents || manifest.wanderers || []) {
     if (typeof entry === 'string') {
       if (entry === '*') {
         agents.push(...reg.agents);
@@ -63,8 +63,8 @@ export function resolveManifest(manifest, reg) {
     }
   }
 
-  // Resolve teams
-  for (const entry of manifest.teams || []) {
+  // Resolve teams (campfires is the campfire synonym)
+  for (const entry of manifest.campfires || manifest.teams || []) {
     if (typeof entry === 'string') {
       if (entry === '*') {
         teams.push(...reg.teams);

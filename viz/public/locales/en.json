@@ -63,7 +63,8 @@
     "spriteSize3d": "3D Icon Size",
     "downloadEventLog": "Download Event Log",
     "vizMode": "Visualization mode",
-    "language": "Language"
+    "language": "Language",
+    "modeCampfire": "Campfire"
   },
   "a11y": {
     "menu": "Menu",
@@ -109,5 +110,25 @@
     "runtimeError": "Runtime Error",
     "workflowUnavailable": "Workflow diagram unavailable",
     "workflowUnavailableDetail": "Run the following command to generate the diagram data:"
+  },
+  "campfire": {
+    "overview": "Campfire Overview",
+    "fireKeeper": "Fire keeper",
+    "pattern": "Pattern",
+    "practices": "{count} practices",
+    "circle": "Circle",
+    "keepers": "{count} keepers",
+    "burning": "burning",
+    "embers": "embers",
+    "cold": "cold",
+    "focusPrompt": "Click a fire to see its circle",
+    "backToOverview": "Back to all campfires",
+    "sharedAgents": "Shared agents",
+    "noFires": "No campfires gathered",
+    "noFiresDetail": "Use the CLI to gather a team: agent-almanac gather <name>",
+    "fireBurns": "The fire burns.",
+    "fireGoesOut": "The fire goes out.",
+    "practicesTotal": "{count} practices total",
+    "hearthKeeper": "hearth-keeper"
   }
 }

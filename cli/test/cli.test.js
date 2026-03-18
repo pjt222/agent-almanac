@@ -23,7 +23,7 @@ function run(args) {
 describe('registry', () => {
   it('list shows skills count', () => {
     const out = run('list --domains');
-    assert.match(out, /58 domains/);
+    assert.match(out, /59 domains/);
   });
 
   it('list --domain r-packages shows 10 skills', () => {
@@ -33,7 +33,7 @@ describe('registry', () => {
 
   it('list --agents shows 66 agents', () => {
     const out = run('list --agents');
-    assert.match(out, /66 agents/);
+    assert.match(out, /67 agents/);
   });
 
   it('list --teams shows 15 teams', () => {
@@ -230,6 +230,114 @@ describe('adapter: vibe (dry-run)', () => {
   });
 });
 
+// ── Campfire ────────────────────────────────────────────────────
+
+describe('campfire', () => {
+  const stateDir = resolve(ROOT, '.agent-almanac');
+
+  after(() => {
+    try { rmSync(stateDir, { recursive: true }); } catch {}
+  });
+
+  it('campfire --all lists all 15 campfires', () => {
+    const out = run('campfire --all');
+    assert.match(out, /campfires/i);
+    assert.match(out, /tending/);
+    assert.match(out, /r-package-review/);
+    assert.match(out, /opaque-team/);
+  });
+
+  it('campfire <name> shows circle detail', () => {
+    const out = run('campfire tending');
+    assert.match(out, /tending/);
+    assert.match(out, /fire keeper/i);
+    assert.match(out, /mystic/);
+    assert.match(out, /practices/);
+  });
+
+  it('campfire --map shows hearth-keepers', () => {
+    const out = run('campfire --map');
+    assert.match(out, /security-analyst/);
+    assert.match(out, /hearth-keeper/);
+  });
+
+  it('campfire --json outputs JSON', () => {
+    const out = run('campfire --json');
+    const data = JSON.parse(out);
+    assert.equal(data.totalTeams, 15);
+    assert.ok(Array.isArray(data.fires));
+  });
+
+  it('campfire shows welcome on first run', () => {
+    // Clean state first
+    try { rmSync(stateDir, { recursive: true }); } catch {}
+    const out = run('campfire');
+    assert.match(out, /Welcome to the campfire/);
+  });
+
+  it('campfire shows "no fires" on second run', () => {
+    const out = run('campfire');
+    assert.match(out, /No fires burning/);
+  });
+});
+
+describe('gather', () => {
+  const stateDir = resolve(ROOT, '.agent-almanac');
+
+  after(() => {
+    try { rmSync(stateDir, { recursive: true }); } catch {}
+  });
+
+  it('gather --dry-run shows arrival ceremony', () => {
+    const out = run('gather tending --dry-run');
+    assert.match(out, /DRY RUN/);
+    assert.match(out, /Gathering the tending circle/);
+    assert.match(out, /mystic/);
+    assert.match(out, /fire burns/i);
+  });
+
+  it('gather --dry-run --ceremonial shows individual skills', () => {
+    const out = run('gather tending --dry-run --ceremonial');
+    assert.match(out, /arrives/);
+    // Should list individual skills with ✦
+    assert.match(out, /heal|meditate/);
+  });
+
+  it('gather --dry-run --json outputs JSON', () => {
+    const out = run('gather tending --dry-run --json');
+    // Extract JSON block from output (skip DRY RUN header line)
+    const jsonStart = out.indexOf('{');
+    const jsonEnd = out.lastIndexOf('}');
+    assert.ok(jsonStart >= 0, 'Should contain JSON');
+    const data = JSON.parse(out.slice(jsonStart, jsonEnd + 1));
+    assert.equal(data.team, 'tending');
+    assert.ok(data.agents.includes('mystic'));
+  });
+
+  it('gather --only selects partial team', () => {
+    const out = run('gather tending --dry-run --only mystic,gardener');
+    assert.match(out, /mystic/);
+    assert.match(out, /gardener/);
+  });
+
+  it('gather rejects unknown team', () => {
+    assert.throws(() => run('gather nonexistent-team'), /Unknown campfire/);
+  });
+});
+
+describe('scatter', () => {
+  it('scatter rejects ungathered team', () => {
+    assert.throws(() => run('scatter tending'), /not burning/);
+  });
+});
+
+describe('tend', () => {
+  it('tend with no fires shows message', () => {
+    const out = run('tend');
+    assert.match(out, /No fires to tend/);
+  });
+});
+
 // ── Version ──────────────────────────────────────────────────────
 
 describe('meta', () => {
@@ -245,5 +353,9 @@ describe('meta', () => {
     assert.match(out, /audit/);
     assert.match(out, /init/);
     assert.match(out, /sync/);
+    assert.match(out, /campfire/);
+    assert.match(out, /gather/);
+    assert.match(out, /scatter/);
+    assert.match(out, /tend/);
   });
 });

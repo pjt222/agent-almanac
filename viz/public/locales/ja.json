@@ -63,7 +63,8 @@
     "spriteSize3d": "3D アイコンサイズ",
     "downloadEventLog": "イベントログをダウンロード",
     "vizMode": "可視化モード",
-    "language": "言語"
+    "language": "言語",
+    "modeCampfire": "焚き火"
   },
   "a11y": {
     "menu": "メニュー",
@@ -109,5 +110,25 @@
     "runtimeError": "ランタイムエラー",
     "workflowUnavailable": "ワークフロー図は利用できません",
     "workflowUnavailableDetail": "以下のコマンドを実行して図表データを生成してください："
+  },
+  "campfire": {
+    "overview": "焚き火の概要",
+    "fireKeeper": "火守り",
+    "pattern": "パターン",
+    "practices": "{count} の実践",
+    "circle": "サークル",
+    "keepers": "{count} 人の守り手",
+    "burning": "燃焼中",
+    "embers": "残り火",
+    "cold": "消えた",
+    "focusPrompt": "焚き火をクリックしてサークルを表示",
+    "backToOverview": "すべての焚き火に戻る",
+    "sharedAgents": "共有エージェント",
+    "noFires": "焚き火がありません",
+    "noFiresDetail": "CLI でチームを集めてください: agent-almanac gather <name>",
+    "fireBurns": "火が燃えている。",
+    "fireGoesOut": "火が消えた。",
+    "practicesTotal": "合計 {count} の実践",
+    "hearthKeeper": "炉守り"
   }
 }
