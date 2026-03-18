@@ -70,7 +70,7 @@ jobs:
               fi
             fi
           done
-          for f in tests/scenarios/agents/*.md 2>/dev/null; do
+          for f in tests/scenarios/agents/*.md ; do
             [ ! -f "$f" ] && continue
             target=$(grep '^target:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
             if [ -n "$target" ]; then
@@ -80,7 +80,7 @@ jobs:
               fi
             fi
           done
-          for f in tests/scenarios/skills/*.md 2>/dev/null; do
+          for f in tests/scenarios/skills/*.md ; do
             [ ! -f "$f" ] && continue
             target=$(grep '^target:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
             if [ -n "$target" ]; then
@@ -90,7 +90,7 @@ jobs:
               fi
             fi
           done
-          for f in tests/scenarios/negative/*.md tests/scenarios/integration/*.md 2>/dev/null; do
+          for f in tests/scenarios/negative/*.md tests/scenarios/integration/*.md ; do
             [ ! -f "$f" ] && continue
             target=$(grep '^target:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
             level=$(grep '^test-level:' "$f" | head -1 | tr -d '\r' | awk '{print $2}')
