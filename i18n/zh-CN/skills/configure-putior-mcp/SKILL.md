@@ -148,7 +148,7 @@ vapply(tools, function(t) t$name, character(1))
 - `list_supported_languages` — 列出支持的语言
 - `get_detection_patterns` — 获取自动检测模式
 - `get_diagram_themes` — 列出可用主题
-- `putior_skills` — AI 助手文档
+- `putior_guide` — AI 助手文档
 - `putior_help` — 快速参考帮助
 
 **实用工具（3 个）：**

@@ -152,7 +152,7 @@ Die 16 Werkzeuge nach Kategorie organisiert:
 - `list_supported_languages` — Unterstuetzte Sprachen auflisten
 - `get_detection_patterns` — Auto-Detection-Muster abrufen
 - `get_diagram_themes` — Verfuegbare Themes auflisten
-- `putior_skills` — KI-Assistenten-Dokumentation
+- `putior_guide` — KI-Assistenten-Dokumentation
 - `putior_help` — Kurzreferenz-Hilfe
 
 **Utilities (3):**

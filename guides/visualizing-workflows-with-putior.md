@@ -140,6 +140,21 @@ PUT annotations are standard source comments with a specific syntax:
 
 Use `get_comment_prefix("ext")` to look up any extension programmatically.
 
+### Block comment annotations
+
+Languages in the `//` group (JS, TS, Go, Rust, C, C++, Java, C#, PHP, Scala, WGSL) also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
+
+```javascript
+/* put id:'init', label:'Initialize', output:'config.internal' */
+
+/**
+ * put id:'transform', label:'Transform Data', input:'raw.json', output:'clean.json'
+ */
+function transformData(raw) { /* ... */ }
+```
+
+Block comment annotations are **only** supported for `//`-prefix languages. They are **not** available for `#`-prefix languages (R, Python, Shell), `--`-prefix languages (SQL, Lua), or `%`-prefix languages (MATLAB). Backslash continuation is not supported inside block comments.
+
 ### Example: cross-file data flow
 
 ```r
@@ -323,11 +338,46 @@ Restart Claude Desktop after saving. Verify tools with `putior::putior_mcp_tools
 | Category | Tools | Description |
 |----------|-------|-------------|
 | Core workflow (5) | `put`, `put_diagram`, `put_auto`, `put_generate`, `put_merge` | Scan, detect, generate, merge |
-| Reference (7) | `get_comment_prefix`, `get_supported_extensions`, `list_supported_languages`, `get_detection_patterns`, `get_diagram_themes`, `putior_skills`, `putior_help` | Look up language support and themes |
+| Reference (7) | `get_comment_prefix`, `get_supported_extensions`, `list_supported_languages`, `get_detection_patterns`, `get_diagram_themes`, `putior_guide`, `putior_help` | Look up language support and themes |
 | Utilities (3) | `is_valid_put_annotation`, `split_file_list`, `ext_to_language` | Validate and convert |
 | Configuration (1) | `set_putior_log_level` | Control logging verbosity |
 
 Once configured, you can ask Claude to scan a directory, suggest annotations, validate syntax, and generate diagrams -- all within a conversation, without switching to an R console.
+
+## Optional: Interactive Sandbox
+
+If `shiny` is installed, putior provides a browser-based sandbox for experimenting with PUT annotations:
+
+```r
+putior::run_sandbox()
+```
+
+The sandbox lets you paste or type annotated code, simulate multiple files using `# ===== File: name.R =====` markers, customize diagram settings (theme, direction, artifacts), and copy generated Mermaid code to the clipboard. If `shinyAce` is also installed, the editor gains syntax highlighting.
+
+## Optional: ACP Server
+
+**Skill**: [configure-putior-mcp](../skills/configure-putior-mcp/SKILL.md) (Step 5)
+
+The ACP (Agent Communication Protocol) server complements MCP by exposing putior as a REST API for agent-to-agent communication. While MCP provides model-to-tool integration (Claude directly calling putior functions), ACP enables other AI agents or automation scripts to discover and invoke putior over HTTP.
+
+```r
+# Requires plumber2
+install.packages("plumber2")
+
+# Start ACP server (blocking — run in a separate R session)
+putior::putior_acp_server()                        # Default: localhost:8080
+putior::putior_acp_server(host = "0.0.0.0", port = 9000)  # Custom
+```
+
+ACP endpoints:
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/agents` | GET | Discover the putior agent manifest |
+| `/runs` | POST | Execute a putior operation via natural language |
+| `/runs/:run_id` | GET | Retrieve results of a previous run |
+
+The ACP server understands natural language requests like "scan ./R/ for PUT annotations", "generate a diagram", and "help with annotation syntax". Results are returned as JSON.
 
 ## Troubleshooting
 

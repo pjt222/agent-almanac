@@ -124,6 +124,16 @@ cat(put_diagram(put(tmp)))
 
 **Expected:** Mermaid flowchart code printed to console containing `test` and `Hello putior`.
 
+> **Key defaults**: All scan functions (`put()`, `put_auto()`, `put_generate()`, `put_merge()`) default to `recursive = TRUE`, scanning subdirectories automatically. This is a breaking change from pre-0.2.0 versions where the default was `FALSE`. All scan functions also accept an `exclude` parameter for regex-based file filtering (e.g., `put("./src/", exclude = "test_")`).
+
+If the optional `shiny` package is installed, try the interactive sandbox:
+
+```r
+putior::run_sandbox()
+```
+
+This launches a browser-based editor where you can experiment with PUT annotation syntax and see diagrams rendered in real time.
+
 **On failure:** If `put` is not found, the package did not install correctly. Reinstall with `install.packages("putior", dependencies = TRUE)`. If the diagram is empty, verify the temp file was created and the annotation syntax uses single quotes inside double quotes.
 
 ## Validation

@@ -24,6 +24,9 @@ CONTINUE_HERE.md
 # Campfire state (local, not shared)
 .agent-almanac/
 
+# Universal adapter install target (created by CLI tests)
+.agents/
+
 # Node dependencies
 node_modules/
 

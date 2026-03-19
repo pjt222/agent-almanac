@@ -152,7 +152,7 @@ Las 16 herramientas organizadas por categoría:
 - `list_supported_languages` -- Listar lenguajes soportados
 - `get_detection_patterns` -- Obtener patrones de auto-detección
 - `get_diagram_themes` -- Listar temas disponibles
-- `putior_skills` -- Documentación del asistente de IA
+- `putior_guide` -- Documentación del asistente de IA
 - `putior_help` -- Ayuda de referencia rápida
 
 **Utilidades (3):**

@@ -150,7 +150,7 @@ vapply(tools, function(t) t$name, character(1))
 - `list_supported_languages` -- サポートされる言語を一覧表示
 - `get_detection_patterns` -- 自動検出パターンを取得
 - `get_diagram_themes` -- 利用可能なテーマを一覧表示
-- `putior_skills` -- AIアシスタントドキュメンテーション
+- `putior_guide` -- AIアシスタントドキュメンテーション
 - `putior_help` -- クイックリファレンスヘルプ
 
 **ユーティリティ（3）:**

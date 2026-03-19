@@ -135,6 +135,38 @@ Example with `node_type`:
 #   output:'result.parquet'
 ```
 
+**Block comment syntax** (for `//`-prefix languages only: JS, TS, Go, Rust, C, C++, Java, etc.):
+
+Languages that use `//` for line comments also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
+
+```javascript
+/* put id:'init', label:'Initialize Config', output:'config.internal' */
+
+/**
+ * put id:'process', \
+ *   label:'Process Records', \
+ *   input:'config.internal, records.json', \
+ *   output:'results.json'
+ */
+function processRecords(config, records) {
+  // ...
+}
+```
+
+JSDoc-style annotations are particularly useful when documenting workflow steps alongside API documentation:
+
+```typescript
+/**
+ * Transform raw sensor data into normalized readings.
+ * put id:'normalize', label:'Normalize Sensor Data', input:'raw_readings.json', output:'normalized.parquet'
+ */
+export function normalizeSensorData(readings: SensorReading[]): NormalizedData {
+  // ...
+}
+```
+
+> **Note:** Block comment annotations are **not** supported for `#`-prefix languages (R, Python, Shell) or `--`-prefix languages (SQL, Lua). Use only line comments for those languages. Block-originated annotations do not support backslash continuation across lines.
+
 **Cross-file data flow** (connecting scripts via file-based I/O):
 ```r
 # Script 1: extract.R
@@ -224,6 +256,7 @@ cat(put_diagram(merged, theme = "github"))
 - [ ] `put_diagram()` produces a connected flowchart (not all isolated nodes)
 - [ ] Multiline annotations (if used) parse correctly with backslash continuation
 - [ ] `.internal` variables appear only as outputs, never as cross-file inputs
+- [ ] Files excluded via `exclude` parameter do not appear in the workflow (e.g., `put("./src/", exclude = "test_")` skips test helpers)
 
 ## Common Pitfalls
 

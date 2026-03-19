@@ -33,9 +33,9 @@ The agent works with any codebase in any of putior's 30+ supported languages (R,
 
 - **Installation and Setup**: Install putior from CRAN or GitHub with all optional dependencies (mcptools, ellmer, shiny, logger, plumber2)
 - **Codebase Analysis**: Auto-detect workflows using `put_auto()` across multi-language repos; produce coverage reports and annotation plans
-- **Source Annotation**: Add PUT annotations using line comments (`#`, `--`, `//`, `%`) or block comments (`/* */`, `/** */`); generate skeletons via `put_generate()`
+- **Source Annotation**: Add PUT annotations using line comments (`#`, `--`, `//`, `%`) or block comments (`/* */`, `/** */`) with `* put` prefix inside the block body (available only for `//`-prefix languages: JS, TS, Go, Rust, C, C++, Java, etc.); generate skeletons via `put_generate()`
 - **File Exclusion**: Use the `exclude` parameter on `put()`, `put_auto()`, and `put_merge()` to skip files by regex pattern, avoiding circular scan issues and filtering build artifacts
-- **Diagram Generation**: Produce themed Mermaid diagrams (9 themes including 4 colorblind-safe viridis variants) with optional clickable nodes and source info; create fully custom palettes with `put_theme()`
+- **Diagram Generation**: Produce themed Mermaid diagrams (9 themes including 4 colorblind-safe viridis variants) with optional clickable nodes and source info; create fully custom palettes with `put_theme()` and pass them via the `palette` parameter on `put_diagram()` (overrides `theme` when both are provided)
 - **CI/CD Integration**: Create GitHub Actions workflows with sentinel markers for automatic diagram regeneration on push
 - **MCP/ACP Integration**: Configure the putior MCP server (16 tools) for Claude Code and Claude Desktop; optionally set up the ACP REST server
 
