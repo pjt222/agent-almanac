@@ -327,12 +327,12 @@ describe('gather', () => {
 
 describe('scatter', () => {
   it('scatter rejects ungathered team with suggestion', () => {
-    assert.throws(() => run('scatter tending'), /not burning/);
-    try {
-      run('scatter tending');
-    } catch (err) {
-      assert.match(err.stderr || err.message, /gather/);
-    }
+    let caught;
+    assert.throws(() => run('scatter tending'), (err) => {
+      caught = err;
+      return /not burning/.test(err.stderr);
+    });
+    assert.match(caught.stderr, /gather/, 'error should suggest gather command');
   });
 });
 
@@ -342,7 +342,7 @@ describe('tend', () => {
     assert.match(out, /No fires to tend/);
   });
 
-  it('tend --dry does not update lastWarmed', () => {
+  it('tend --dry-run does not update lastWarmed', () => {
     // Gather first to have a fire
     run('gather tending --quiet');
     const stateFile = resolve(ROOT, '.agent-almanac/state.json');
@@ -352,15 +352,15 @@ describe('tend', () => {
     state.fires.tending.lastWarmed = '2020-01-01T00:00:00.000Z';
     writeFileSync(stateFile, JSON.stringify(state, null, 2));
 
-    run('tend --dry');
+    run('tend --dry-run');
     const stateAfter = JSON.parse(readFileSync(stateFile, 'utf8'));
-    assert.equal(stateAfter.fires.tending.lastWarmed, '2020-01-01T00:00:00.000Z', 'lastWarmed should not change with --dry');
+    assert.equal(stateAfter.fires.tending.lastWarmed, '2020-01-01T00:00:00.000Z', 'lastWarmed should not change with --dry-run');
 
     // Clean up
     try { rmSync(resolve(ROOT, '.agent-almanac'), { recursive: true }); } catch {}
   });
 
-  it('tend (without --dry) does update lastWarmed', () => {
+  it('tend (without --dry-run) does update lastWarmed', () => {
     // Gather first
     run('gather tending --quiet');
     const stateFile = resolve(ROOT, '.agent-almanac/state.json');
@@ -421,6 +421,6 @@ describe('meta', () => {
   it('tend help includes examples', () => {
     const out = run('tend --help');
     assert.match(out, /Examples:/);
-    assert.match(out, /tend --dry/);
+    assert.match(out, /tend --dry-run/);
   });
 });

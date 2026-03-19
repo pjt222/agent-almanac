@@ -88,7 +88,7 @@ agent-almanac gather r-package-review --ceremonial
 agent-almanac tend
 
 # Check without warming (read-only, does not update timestamps)
-agent-almanac tend --dry
+agent-almanac tend --dry-run
 
 # Scatter (uninstall) a team — agents depart, shared skills stay
 agent-almanac scatter tending

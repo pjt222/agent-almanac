@@ -25,6 +25,8 @@ let onNodeHover = null;
 let containerEl = null;
 let resizeHandler = null;
 let focusedTeamId = null;
+let iconPreloadPending = 0;
+let iconFailedIds = new Set();
 
 // ── Warm palette ────────────────────────────────────────────────────
 
@@ -152,9 +154,10 @@ const PATTERN_LABELS = {
 function getPatternLabel(pattern) {
   const key = PATTERN_LABELS[pattern];
   if (key) {
-    const label = t(`campfire.${key}`);
-    // If i18n returns the key itself, fall back to raw pattern
-    if (label && !label.includes(key)) return label;
+    const fullKey = `campfire.${key}`;
+    const label = t(fullKey);
+    // t() returns the dotted key string on cache miss — fall back to raw pattern
+    if (label && label !== fullKey) return label;
   }
   return pattern || '';
 }
@@ -179,6 +182,13 @@ function renderOverview() {
       .attr('font-size', '14px')
       .attr('font-family', 'system-ui, sans-serif')
       .text(t('campfire.noFires'));
+    rootG.append('text')
+      .attr('x', width / 2).attr('y', height / 2 + 24)
+      .attr('text-anchor', 'middle')
+      .attr('fill', WARM.textDim)
+      .attr('font-size', '11px')
+      .attr('font-family', 'system-ui, sans-serif')
+      .text(t('campfire.noFiresDetail'));
     return;
   }
 
@@ -419,12 +429,14 @@ function renderOverview() {
 
   items.forEach((item, i) => {
     legendG.append('text')
+      .attr('class', 'legend-item')
       .attr('x', 0).attr('y', 18 + i * 18)
       .attr('fill', item.color)
       .attr('font-size', '12px')
       .attr('font-family', 'system-ui, sans-serif')
       .text(item.glyph);
     legendG.append('text')
+      .attr('class', 'legend-item')
       .attr('x', 18).attr('y', 18 + i * 18)
       .attr('fill', WARM.textDim)
       .attr('font-size', '10px')
@@ -436,7 +448,7 @@ function renderOverview() {
   let legendVisible = true;
   legendG.on('click', () => {
     legendVisible = !legendVisible;
-    legendG.selectAll('text:not(:first-child), line').attr('opacity', legendVisible ? 1 : 0);
+    legendG.selectAll('.legend-item').attr('opacity', legendVisible ? 1 : 0);
     legendBg.attr('height', legendVisible ? 100 : 20);
   });
 }
@@ -863,6 +875,10 @@ export function destroyCampfireGraph() {
   }
   removeBackButton();
   if (containerEl) {
+    const preload = containerEl.querySelector('[data-campfire-preload]');
+    if (preload) preload.remove();
+    const toast = containerEl.querySelector('[data-campfire-toast]');
+    if (toast) toast.remove();
     containerEl.style.backgroundColor = '';
     containerEl.style.removeProperty('--fire-x');
     containerEl.style.removeProperty('--fire-y');
@@ -933,23 +949,83 @@ export function zoomOutCampfire() {
   }
 }
 
+// ── Preload feedback ────────────────────────────────────────────────
+
+function showPreloadIndicator() {
+  if (!containerEl) return;
+  let el = containerEl.querySelector('[data-campfire-preload]');
+  if (el) return;
+  el = document.createElement('div');
+  el.setAttribute('data-campfire-preload', '');
+  el.textContent = 'Loading icons\u2026';
+  el.style.cssText = 'position:absolute;bottom:12px;right:16px;z-index:50;' +
+    'color:' + WARM.textDim + ';font-size:11px;font-family:system-ui,sans-serif;' +
+    'opacity:0.8;pointer-events:none;';
+  containerEl.appendChild(el);
+}
+
+function removePreloadIndicator() {
+  if (!containerEl) return;
+  const el = containerEl.querySelector('[data-campfire-preload]');
+  if (el) {
+    el.style.transition = 'opacity 0.4s';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 400);
+  }
+}
+
+function showIconFailureToast() {
+  if (!containerEl || iconFailedIds.size === 0) return;
+  const count = iconFailedIds.size;
+  const el = document.createElement('div');
+  el.setAttribute('data-campfire-toast', '');
+  el.textContent = `${count} icon${count !== 1 ? 's' : ''} could not be loaded`;
+  el.style.cssText = 'position:absolute;bottom:12px;right:16px;z-index:50;' +
+    'color:' + WARM.amber + ';font-size:11px;font-family:system-ui,sans-serif;' +
+    'opacity:0.9;pointer-events:none;';
+  containerEl.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity 0.6s';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 600);
+  }, 4000);
+}
+
 export function preloadCampfireIcons(nodes, palette) {
   // Use existing icon system — ensure team/agent icons are loaded, then re-render
   const teamAndAgents = nodes.filter(n => n.type === 'team' || n.type === 'agent');
-  let pending = 0;
+  iconPreloadPending = 0;
+  iconFailedIds = new Set();
   for (const node of teamAndAgents) {
     const path = getIconPath(node, palette);
     if (path && !isIconLoaded(node.id, palette)) {
-      pending++;
+      iconPreloadPending++;
+    }
+  }
+  if (iconPreloadPending > 0) showPreloadIndicator();
+
+  for (const node of teamAndAgents) {
+    const path = getIconPath(node, palette);
+    if (path && !isIconLoaded(node.id, palette)) {
       const img = new Image();
       img.onload = () => {
         markIconLoaded(palette, node.id);
-        pending--;
-        if (pending === 0) render();  // Re-render once all icons are loaded
+        iconPreloadPending--;
+        if (iconPreloadPending === 0) {
+          removePreloadIndicator();
+          render();
+          if (iconFailedIds.size > 0) showIconFailureToast();
+        }
       };
       img.onerror = () => {
         console.warn(`[campfire] Failed to load icon for ${node.id}`);
-        pending--;
+        iconFailedIds.add(node.id);
+        iconPreloadPending--;
+        if (iconPreloadPending === 0) {
+          removePreloadIndicator();
+          render();
+          showIconFailureToast();
+        }
       };
       img.src = path;
     }

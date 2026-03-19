@@ -729,10 +729,10 @@ program
 program
   .command('tend')
   .description('Tend your campfires (health check)')
-  .option('--dry', 'Check fire health without warming')
+  .option('-n, --dry-run', 'Check fire health without warming')
   .option('--json', 'Output as JSON')
   .option('--source <path>', 'Path to agent-almanac root')
-  .addHelpText('after', '\nExamples:\n  agent-almanac tend\n  agent-almanac tend --dry')
+  .addHelpText('after', '\nExamples:\n  agent-almanac tend\n  agent-almanac tend --dry-run')
   .action(async (options) => {
     const almanacRoot = options.source || detectAlmanacRoot();
     if (!almanacRoot) {
@@ -766,7 +766,7 @@ program
     campfire.printTend(enrichedFires);
 
     // Update lastWarmed on all fires (tending is warming) — unless --dry
-    if (!options.dry) {
+    if (!options.dryRun) {
       for (const fire of fires) {
         recordWarm(state, fire.id);
       }
