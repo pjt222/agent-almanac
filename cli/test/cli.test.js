@@ -8,7 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { execSync } from 'child_process';
-import { existsSync, mkdirSync, rmSync, readlinkSync } from 'fs';
+import { existsSync, mkdirSync, rmSync, readlinkSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 const CLI = 'node cli/index.js';
@@ -326,8 +326,13 @@ describe('gather', () => {
 });
 
 describe('scatter', () => {
-  it('scatter rejects ungathered team', () => {
+  it('scatter rejects ungathered team with suggestion', () => {
     assert.throws(() => run('scatter tending'), /not burning/);
+    try {
+      run('scatter tending');
+    } catch (err) {
+      assert.match(err.stderr || err.message, /gather/);
+    }
   });
 });
 
@@ -335,6 +340,42 @@ describe('tend', () => {
   it('tend with no fires shows message', () => {
     const out = run('tend');
     assert.match(out, /No fires to tend/);
+  });
+
+  it('tend --dry does not update lastWarmed', () => {
+    // Gather first to have a fire
+    run('gather tending --quiet');
+    const stateFile = resolve(ROOT, '.agent-almanac/state.json');
+
+    // Backdate lastWarmed so we can detect if it changes
+    const state = JSON.parse(readFileSync(stateFile, 'utf8'));
+    state.fires.tending.lastWarmed = '2020-01-01T00:00:00.000Z';
+    writeFileSync(stateFile, JSON.stringify(state, null, 2));
+
+    run('tend --dry');
+    const stateAfter = JSON.parse(readFileSync(stateFile, 'utf8'));
+    assert.equal(stateAfter.fires.tending.lastWarmed, '2020-01-01T00:00:00.000Z', 'lastWarmed should not change with --dry');
+
+    // Clean up
+    try { rmSync(resolve(ROOT, '.agent-almanac'), { recursive: true }); } catch {}
+  });
+
+  it('tend (without --dry) does update lastWarmed', () => {
+    // Gather first
+    run('gather tending --quiet');
+    const stateFile = resolve(ROOT, '.agent-almanac/state.json');
+
+    // Backdate lastWarmed to ensure it changes
+    const state = JSON.parse(readFileSync(stateFile, 'utf8'));
+    state.fires.tending.lastWarmed = '2020-01-01T00:00:00.000Z';
+    writeFileSync(stateFile, JSON.stringify(state, null, 2));
+
+    run('tend');
+    const stateAfter = JSON.parse(readFileSync(stateFile, 'utf8'));
+    assert.notEqual(stateAfter.fires.tending.lastWarmed, '2020-01-01T00:00:00.000Z', 'lastWarmed should update');
+
+    // Clean up
+    try { rmSync(resolve(ROOT, '.agent-almanac'), { recursive: true }); } catch {}
   });
 });
 
@@ -357,5 +398,29 @@ describe('meta', () => {
     assert.match(out, /gather/);
     assert.match(out, /scatter/);
     assert.match(out, /tend/);
+  });
+
+  it('campfire help includes examples', () => {
+    const out = run('campfire --help');
+    assert.match(out, /Examples:/);
+    assert.match(out, /campfire --all/);
+  });
+
+  it('gather help includes examples', () => {
+    const out = run('gather --help');
+    assert.match(out, /Examples:/);
+    assert.match(out, /gather tending/);
+  });
+
+  it('scatter help includes examples', () => {
+    const out = run('scatter --help');
+    assert.match(out, /Examples:/);
+    assert.match(out, /scatter tending/);
+  });
+
+  it('tend help includes examples', () => {
+    const out = run('tend --help');
+    assert.match(out, /Examples:/);
+    assert.match(out, /tend --dry/);
   });
 });

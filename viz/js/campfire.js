@@ -33,12 +33,12 @@ const WARM = {
   fire: '#FF6B35',
   amber: '#FFB347',
   spark: '#FFF4E0',
-  ember: '#8B4513',
-  trail: 'rgba(255, 165, 0, 0.15)',
+  ember: '#A0522D',
+  trail: 'rgba(255, 165, 0, 0.25)',
   trailActive: 'rgba(255, 165, 0, 0.4)',
-  dimNode: 'rgba(255, 255, 255, 0.08)',
+  dimNode: 'rgba(255, 255, 255, 0.15)',
   text: '#D4A574',
-  textDim: 'rgba(212, 165, 116, 0.5)',
+  textDim: 'rgba(212, 165, 116, 0.7)',
 };
 
 /**
@@ -136,13 +136,52 @@ function countTeamSkills(data, teamId) {
   return skillIds.size;
 }
 
+// ── Pattern labels ──────────────────────────────────────────────────
+
+const PATTERN_LABELS = {
+  'hub-and-spoke': 'patternHubAndSpoke',
+  'sequential': 'patternSequential',
+  'parallel': 'patternParallel',
+  'reciprocal': 'patternReciprocal',
+  'timeboxed': 'patternTimeboxed',
+  'adaptive': 'patternAdaptive',
+  'wave-parallel': 'patternWaveParallel',
+  'synoptic': 'patternSynoptic',
+};
+
+function getPatternLabel(pattern) {
+  const key = PATTERN_LABELS[pattern];
+  if (key) {
+    const label = t(`campfire.${key}`);
+    // If i18n returns the key itself, fall back to raw pattern
+    if (label && !label.includes(key)) return label;
+  }
+  return pattern || '';
+}
+
 // ── Overview rendering ──────────────────────────────────────────────
 
 function renderOverview() {
   if (!rootG || !fullData) return;
   rootG.selectAll('*').remove();
+  removeBackButton();
 
   const teams = getTeamNodes(fullData);
+
+  // Empty state
+  if (teams.length === 0) {
+    const width = containerEl.clientWidth;
+    const height = containerEl.clientHeight;
+    rootG.append('text')
+      .attr('x', width / 2).attr('y', height / 2)
+      .attr('text-anchor', 'middle')
+      .attr('fill', WARM.textDim)
+      .attr('font-size', '14px')
+      .attr('font-family', 'system-ui, sans-serif')
+      .text(t('campfire.noFires'));
+    return;
+  }
+
   const teamAgents = buildSharedAgents(fullData);
   const width = containerEl.clientWidth;
   const height = containerEl.clientHeight;
@@ -217,15 +256,34 @@ function renderOverview() {
     const skillCount = countTeamSkills(fullData, team.id);
     const radius = 18 + Math.sqrt(skillCount) * 2;
 
+    const agentCount = findTeamAgents(fullData, team.id).length;
+    const ariaLabel = t('campfire.fireAriaLabel', {
+      team: team.title || team.id,
+      keepers: agentCount,
+      practices: skillCount,
+    }) || `${team.title || team.id} fire, ${agentCount} keepers, ${skillCount} practices`;
+
     const g = fireGroup.append('g')
       .attr('class', 'campfire-fire')
       .attr('transform', `translate(${pos.x}, ${pos.y})`)
       .attr('cursor', 'pointer')
+      .attr('role', 'button')
+      .attr('tabindex', '0')
+      .attr('aria-label', ariaLabel)
       .on('click', () => {
         focusedTeamId = team.id;
         renderFocus(team.id);
         if (onNodeClick) onNodeClick(team);
         logEvent('campfire', { event: 'focusFire', team: team.id });
+      })
+      .on('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          focusedTeamId = team.id;
+          renderFocus(team.id);
+          if (onNodeClick) onNodeClick(team);
+          logEvent('campfire', { event: 'focusFire', team: team.id });
+        }
       })
       .on('mouseenter', () => { if (onNodeHover) onNodeHover(team); })
       .on('mouseleave', () => { if (onNodeHover) onNodeHover(null); });
@@ -248,9 +306,9 @@ function renderOverview() {
       .transition().duration(600).delay(100)
       .attr('opacity', 0.6);
 
-    // Core circle
+    // Core circle with pulse animation
     const teamColor = getTeamColor(team.id) || WARM.fire;
-    g.append('circle')
+    const coreCircle = g.append('circle')
       .attr('r', radius)
       .attr('fill', warmColor(teamColor, 0.4))
       .attr('stroke', WARM.fire)
@@ -258,6 +316,20 @@ function renderOverview() {
       .attr('opacity', 0)
       .transition().duration(400).delay(200)
       .attr('opacity', 1);
+
+    // Subtle breathing pulse (non-color state indicator)
+    function pulseLoop(el) {
+      el.transition('pulse')
+        .duration(2000)
+        .ease(d3.easeSinInOut)
+        .attr('stroke-width', 2.5)
+        .transition('pulse')
+        .duration(2000)
+        .ease(d3.easeSinInOut)
+        .attr('stroke-width', 1.5)
+        .on('end', function () { pulseLoop(d3.select(this)); });
+    }
+    coreCircle.on('end', function () { pulseLoop(d3.select(this)); });
 
     // Icon (if available)
     const iconPath = getIconPath(team, getCurrentThemeName());
@@ -286,7 +358,6 @@ function renderOverview() {
       .attr('opacity', 1);
 
     // Member count
-    const agentCount = findTeamAgents(fullData, team.id).length;
     g.append('text')
       .attr('y', radius + 28)
       .attr('text-anchor', 'middle')
@@ -311,6 +382,87 @@ function renderOverview() {
     .attr('opacity', 0)
     .transition().duration(600).delay(800)
     .attr('opacity', 1);
+
+  // Legend (bottom-right, collapsible)
+  const legendX = width - 170;
+  const legendY = height - 110;
+  const legendG = rootG.append('g')
+    .attr('class', 'campfire-legend')
+    .attr('transform', `translate(${legendX}, ${legendY})`)
+    .attr('cursor', 'pointer')
+    .attr('opacity', 0);
+
+  legendG.transition().duration(600).delay(900).attr('opacity', 0.8);
+
+  const legendBg = legendG.append('rect')
+    .attr('x', -8).attr('y', -16)
+    .attr('width', 160).attr('height', 100)
+    .attr('rx', 6)
+    .attr('fill', WARM.background)
+    .attr('stroke', WARM.trail)
+    .attr('stroke-width', 1);
+
+  const items = [
+    { glyph: '\u25C9', color: WARM.fire, label: t('campfire.legendFire') || 'Fire (team)' },
+    { glyph: '\u25CE', color: WARM.amber, label: t('campfire.legendKeeper') || 'Keeper (agent)' },
+    { glyph: '\u2726', color: WARM.spark, label: t('campfire.legendPractice') || 'Practice (skill)' },
+    { glyph: '\u2500', color: WARM.trail, label: t('campfire.legendTrail') || 'Shared keepers' },
+  ];
+
+  legendG.append('text')
+    .attr('x', 0).attr('y', 0)
+    .attr('fill', WARM.text)
+    .attr('font-size', '10px')
+    .attr('font-weight', 'bold')
+    .attr('font-family', 'system-ui, sans-serif')
+    .text(t('campfire.legendTitle') || 'Legend');
+
+  items.forEach((item, i) => {
+    legendG.append('text')
+      .attr('x', 0).attr('y', 18 + i * 18)
+      .attr('fill', item.color)
+      .attr('font-size', '12px')
+      .attr('font-family', 'system-ui, sans-serif')
+      .text(item.glyph);
+    legendG.append('text')
+      .attr('x', 18).attr('y', 18 + i * 18)
+      .attr('fill', WARM.textDim)
+      .attr('font-size', '10px')
+      .attr('font-family', 'system-ui, sans-serif')
+      .text(item.label);
+  });
+
+  // Toggle legend visibility on click
+  let legendVisible = true;
+  legendG.on('click', () => {
+    legendVisible = !legendVisible;
+    legendG.selectAll('text:not(:first-child), line').attr('opacity', legendVisible ? 1 : 0);
+    legendBg.attr('height', legendVisible ? 100 : 20);
+  });
+}
+
+// ── Back button (DOM overlay) ───────────────────────────────────────
+
+function createBackButton() {
+  removeBackButton();
+  const btn = document.createElement('button');
+  btn.setAttribute('data-campfire-back', '');
+  btn.setAttribute('aria-label', t('campfire.backButtonAriaLabel') || 'Back to all campfires');
+  btn.textContent = `\u2190 ${t('campfire.backToOverview')}`;
+  btn.style.cssText = 'position:absolute;top:20px;left:20px;z-index:100;' +
+    'background:transparent;border:1px solid ' + WARM.amber + ';' +
+    'color:' + WARM.amber + ';font-size:12px;font-family:system-ui,sans-serif;' +
+    'padding:4px 10px;border-radius:4px;cursor:pointer;';
+  btn.addEventListener('click', () => {
+    resetViewCampfire();
+  });
+  containerEl.appendChild(btn);
+}
+
+function removeBackButton() {
+  if (!containerEl) return;
+  const btn = containerEl.querySelector('[data-campfire-back]');
+  if (btn) btn.remove();
 }
 
 // ── Focus rendering (one fire) ──────────────────────────────────────
@@ -334,21 +486,8 @@ function renderFocus(teamId) {
   containerEl.style.setProperty('--fire-x', `${cx}px`);
   containerEl.style.setProperty('--fire-y', `${cy}px`);
 
-  // Back button
-  rootG.append('text')
-    .attr('x', 20)
-    .attr('y', 30)
-    .attr('fill', WARM.amber)
-    .attr('font-size', '12px')
-    .attr('font-family', 'system-ui, sans-serif')
-    .attr('cursor', 'pointer')
-    .text(`← ${t('campfire.backToOverview')}`)
-    .on('click', () => {
-      focusedTeamId = null;
-      containerEl.style.removeProperty('--fire-x');
-      containerEl.style.removeProperty('--fire-y');
-      renderOverview();
-    });
+  // Back button (DOM overlay for keyboard accessibility)
+  createBackButton();
 
   // Central team glow
   const defs = svg.select('defs').empty() ? svg.append('defs') : svg.select('defs');
@@ -406,7 +545,7 @@ function renderFocus(teamId) {
     .transition().duration(400).delay(200)
     .attr('opacity', 1);
 
-  // Pattern info
+  // Pattern info (human-readable label)
   const coordination = team.coordination || '';
   rootG.append('text')
     .attr('x', cx).attr('y', cy + 66)
@@ -414,7 +553,7 @@ function renderFocus(teamId) {
     .attr('fill', WARM.textDim)
     .attr('font-size', '10px')
     .attr('font-family', 'system-ui, sans-serif')
-    .text(coordination)
+    .text(getPatternLabel(coordination))
     .attr('opacity', 0)
     .transition().duration(400).delay(250)
     .attr('opacity', 1);
@@ -440,10 +579,23 @@ function renderFocus(teamId) {
     const isLead = agent.id === (team.lead || team.members?.[0]);
 
     // Agent node
+    const agentAriaLabel = isLead
+      ? (t('campfire.agentLeadAriaLabel', { agent: agent.title || agent.id }) || `${agent.title || agent.id}, fire keeper`)
+      : (t('campfire.agentAriaLabel', { agent: agent.title || agent.id }) || agent.title || agent.id);
+
     const ag = rootG.append('g')
       .attr('transform', `translate(${ax}, ${ay})`)
       .attr('cursor', 'pointer')
+      .attr('role', 'button')
+      .attr('tabindex', '0')
+      .attr('aria-label', agentAriaLabel)
       .on('click', () => { if (onNodeClick) onNodeClick(agent); })
+      .on('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          if (onNodeClick) onNodeClick(agent);
+        }
+      })
       .on('mouseenter', () => { if (onNodeHover) onNodeHover(agent); })
       .on('mouseleave', () => { if (onNodeHover) onNodeHover(null); });
 
@@ -486,12 +638,16 @@ function renderFocus(teamId) {
 
     // Skills (outer ring, sparks radiating from each agent)
     const skills = findAgentSkills(fullData, agent.id);
+    const maxVisible = 12;
+    const visibleSkills = skills.slice(0, maxVisible);
+    const overflowCount = skills.length - maxVisible;
     const skillRadius = Math.min(width, height) * 0.12;
     const fanAngle = (2 * Math.PI) / agentCount * 0.7; // Spread within this agent's sector
     const baseAngle = angle;
 
-    skills.forEach((skill, si) => {
-      const skillAngle = baseAngle + (si - (skills.length - 1) / 2) * (fanAngle / Math.max(skills.length, 1));
+    visibleSkills.forEach((skill, si) => {
+      const totalForLayout = overflowCount > 0 ? maxVisible + 1 : visibleSkills.length;
+      const skillAngle = baseAngle + (si - (totalForLayout - 1) / 2) * (fanAngle / Math.max(totalForLayout, 1));
       const sx = skillRadius * Math.cos(skillAngle);
       const sy = skillRadius * Math.sin(skillAngle);
 
@@ -505,22 +661,54 @@ function renderFocus(teamId) {
         .transition().duration(200).delay(500 + i * 50 + si * 10)
         .attr('opacity', 0.4);
 
-      // Spark dot
+      // Spark dot (enlarged for target size)
       const skillG = rootG.append('g')
         .attr('transform', `translate(${ax + sx}, ${ay + sy})`)
         .attr('cursor', 'pointer')
+        .attr('role', 'button')
+        .attr('tabindex', '0')
+        .attr('aria-label', skill.title || skill.id)
         .on('click', () => { if (onNodeClick) onNodeClick(skill); })
-        .on('mouseenter', () => { if (onNodeHover) onNodeHover(skill); })
-        .on('mouseleave', () => { if (onNodeHover) onNodeHover(null); });
+        .on('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            if (onNodeClick) onNodeClick(skill);
+          }
+        })
+        .on('mouseenter', function () {
+          d3.select(this).select('circle').transition().duration(100).attr('r', 12);
+          if (onNodeHover) onNodeHover(skill);
+        })
+        .on('mouseleave', function () {
+          d3.select(this).select('circle').transition().duration(100).attr('r', 8);
+          if (onNodeHover) onNodeHover(null);
+        });
 
       const skillColor = getColor(skill.domain) || WARM.spark;
       skillG.append('circle')
-        .attr('r', 4)
+        .attr('r', 8)
         .attr('fill', warmColor(skillColor, 0.4))
         .attr('opacity', 0)
         .transition().duration(200).delay(550 + i * 50 + si * 10)
         .attr('opacity', 0.7);
     });
+
+    // Overflow indicator
+    if (overflowCount > 0) {
+      const overflowAngle = baseAngle + (maxVisible - (maxVisible) / 2) * (fanAngle / Math.max(maxVisible + 1, 1));
+      const osx = skillRadius * Math.cos(overflowAngle);
+      const osy = skillRadius * Math.sin(overflowAngle);
+      rootG.append('text')
+        .attr('x', ax + osx).attr('y', ay + osy + 4)
+        .attr('text-anchor', 'middle')
+        .attr('fill', WARM.textDim)
+        .attr('font-size', '9px')
+        .attr('font-family', 'system-ui, sans-serif')
+        .text(t('campfire.moreSkills', { count: overflowCount }) || `+${overflowCount} more`)
+        .attr('opacity', 0)
+        .transition().duration(200).delay(550 + i * 50 + maxVisible * 10)
+        .attr('opacity', 0.7);
+    }
   });
 
   // Total practice count
@@ -600,19 +788,80 @@ export function initCampfireGraph(container, data, { onClick, onHover } = {}) {
   // Check for URL params
   const params = new URLSearchParams(window.location.search);
   const focusTeam = params.get('fire') || params.get('focus');
-  if (focusTeam && data.nodes.find(n => n.id === focusTeam && n.type === 'team')) {
-    focusedTeamId = focusTeam;
+  if (focusTeam) {
+    if (data.nodes.find(n => n.id === focusTeam && n.type === 'team')) {
+      focusedTeamId = focusTeam;
+    } else {
+      // Show brief "not found" message, then render overview
+      render();
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      const msg = rootG.append('text')
+        .attr('x', w / 2).attr('y', 40)
+        .attr('text-anchor', 'middle')
+        .attr('fill', WARM.amber)
+        .attr('font-size', '13px')
+        .attr('font-family', 'system-ui, sans-serif')
+        .text(t('campfire.fireNotFound', { name: focusTeam }) || `Campfire "${focusTeam}" not found`)
+        .attr('opacity', 1);
+      msg.transition().delay(3000).duration(600).attr('opacity', 0).remove();
+      logEvent('campfire', { event: 'init', teams: getTeamNodes(data).length });
+      setupKeyboardHandlers();
+      return;
+    }
   }
 
   render();
   logEvent('campfire', { event: 'init', teams: getTeamNodes(data).length });
+  setupKeyboardHandlers();
+}
+
+// ── Keyboard handlers ───────────────────────────────────────────────
+
+let keydownHandler = null;
+
+function setupKeyboardHandlers() {
+  if (keydownHandler) document.removeEventListener('keydown', keydownHandler);
+
+  keydownHandler = (event) => {
+    if (!containerEl) return;
+
+    // Escape: return to overview from focus view
+    if (event.key === 'Escape' && focusedTeamId) {
+      event.preventDefault();
+      resetViewCampfire();
+      return;
+    }
+
+    // Arrow keys: cycle between focusable elements within the SVG
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      const focusable = Array.from(containerEl.querySelectorAll('[tabindex="0"]'));
+      if (focusable.length === 0) return;
+      const current = focusable.indexOf(document.activeElement);
+      let next;
+      if (event.key === 'ArrowRight') {
+        next = current < focusable.length - 1 ? current + 1 : 0;
+      } else {
+        next = current > 0 ? current - 1 : focusable.length - 1;
+      }
+      focusable[next].focus();
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener('keydown', keydownHandler);
 }
 
 export function destroyCampfireGraph() {
+  if (keydownHandler) {
+    document.removeEventListener('keydown', keydownHandler);
+    keydownHandler = null;
+  }
   if (resizeHandler) {
     window.removeEventListener('resize', resizeHandler);
     resizeHandler = null;
   }
+  removeBackButton();
   if (containerEl) {
     containerEl.style.backgroundColor = '';
     containerEl.style.removeProperty('--fire-x');
@@ -661,6 +910,7 @@ export function focusNodeCampfire(id) {
 
 export function resetViewCampfire() {
   focusedTeamId = null;
+  removeBackButton();
   if (containerEl) {
     containerEl.style.removeProperty('--fire-x');
     containerEl.style.removeProperty('--fire-y');
@@ -697,7 +947,10 @@ export function preloadCampfireIcons(nodes, palette) {
         pending--;
         if (pending === 0) render();  // Re-render once all icons are loaded
       };
-      img.onerror = () => { pending--; };
+      img.onerror = () => {
+        console.warn(`[campfire] Failed to load icon for ${node.id}`);
+        pending--;
+      };
       img.src = path;
     }
   }

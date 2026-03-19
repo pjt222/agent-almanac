@@ -369,6 +369,7 @@ program
   .option('--web', 'Open campfire view in the viz')
   .option('--json', 'Output as JSON')
   .option('--source <path>', 'Path to agent-almanac root')
+  .addHelpText('after', '\nExamples:\n  agent-almanac campfire --all\n  agent-almanac campfire r-package-review\n  agent-almanac campfire --map')
   .action(async (name, options) => {
     const almanacRoot = options.source || detectAlmanacRoot();
     if (!almanacRoot) {
@@ -454,6 +455,7 @@ program
   .option('-q, --quiet', 'No ceremony, just install')
   .option('--json', 'Output as JSON')
   .option('--source <path>', 'Path to agent-almanac root')
+  .addHelpText('after', '\nExamples:\n  agent-almanac gather tending\n  agent-almanac gather r-package-review --ceremonial\n  agent-almanac gather tending --only mystic,gardener')
   .action(async (name, options) => {
     const ctx = getContext(options);
     const state = loadState();
@@ -463,6 +465,16 @@ program
     if (!team) {
       reporter.error(`Unknown campfire: ${name}. Use 'agent-almanac campfire --all' to browse.`);
       process.exit(1);
+    }
+
+    // Warn if already gathered (re-gather confirmation)
+    if (state.fires[name] && !options.dryRun && !options.quiet && !options.json) {
+      console.log(`\n  The ${name} fire is already burning. Regather?`);
+      const answer = await askYesNo();
+      if (!answer) {
+        console.log(reporter.chalk.dim('\n  The fire still burns.\n'));
+        return;
+      }
     }
 
     // Resolve members (filter --only if provided)
@@ -578,6 +590,7 @@ program
   .option('--json', 'Output as JSON')
   .option('-y, --yes', 'Skip confirmation')
   .option('--source <path>', 'Path to agent-almanac root')
+  .addHelpText('after', '\nExamples:\n  agent-almanac scatter tending\n  agent-almanac scatter r-package-review -y')
   .action(async (name, options) => {
     const ctx = getContext(options);
     const state = loadState();
@@ -589,7 +602,7 @@ program
     }
 
     if (!state.fires[name]) {
-      reporter.error(`The ${name} fire is not burning. Nothing to scatter.`);
+      reporter.error(`The ${name} fire is not burning. Nothing to scatter.\n  Try 'agent-almanac gather ${name}' to light this fire first.`);
       process.exit(1);
     }
 
@@ -716,8 +729,10 @@ program
 program
   .command('tend')
   .description('Tend your campfires (health check)')
+  .option('--dry', 'Check fire health without warming')
   .option('--json', 'Output as JSON')
   .option('--source <path>', 'Path to agent-almanac root')
+  .addHelpText('after', '\nExamples:\n  agent-almanac tend\n  agent-almanac tend --dry')
   .action(async (options) => {
     const almanacRoot = options.source || detectAlmanacRoot();
     if (!almanacRoot) {
@@ -750,11 +765,13 @@ program
 
     campfire.printTend(enrichedFires);
 
-    // Update lastWarmed on all fires (tending is warming)
-    for (const fire of fires) {
-      recordWarm(state, fire.id);
+    // Update lastWarmed on all fires (tending is warming) — unless --dry
+    if (!options.dry) {
+      for (const fire of fires) {
+        recordWarm(state, fire.id);
+      }
+      saveState(state);
     }
-    saveState(state);
   });
 
 // ── Utility ─────────────────────────────────────────────────────

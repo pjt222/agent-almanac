@@ -129,6 +129,25 @@
     "fireBurns": "The fire burns.",
     "fireGoesOut": "The fire goes out.",
     "practicesTotal": "{count} practices total",
-    "hearthKeeper": "hearth-keeper"
+    "hearthKeeper": "hearth-keeper",
+    "backButtonAriaLabel": "Back to all campfires",
+    "fireAriaLabel": "{team} fire, {keepers} keepers, {practices} practices",
+    "agentAriaLabel": "{agent}",
+    "agentLeadAriaLabel": "{agent}, fire keeper",
+    "fireNotFound": "Campfire \"{name}\" not found",
+    "legendFire": "Fire (team)",
+    "legendKeeper": "Keeper (agent)",
+    "legendPractice": "Practice (skill)",
+    "legendTrail": "Shared keepers",
+    "legendTitle": "Legend",
+    "patternHubAndSpoke": "Hub and spoke",
+    "patternSequential": "Sequential",
+    "patternParallel": "Parallel",
+    "patternReciprocal": "Reciprocal",
+    "patternTimeboxed": "Timeboxed",
+    "patternAdaptive": "Adaptive",
+    "patternWaveParallel": "Wave-parallel",
+    "patternSynoptic": "Synoptic",
+    "moreSkills": "+{count} more"
   }
 }

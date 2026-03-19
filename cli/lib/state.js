@@ -26,6 +26,17 @@ export function statePath(projectDir = process.cwd()) {
 }
 
 /**
+ * Migrate state between versions.
+ * @param {object} state
+ * @returns {object} Migrated state
+ */
+function migrateState(state) {
+  // Future: handle STATE_VERSION upgrades
+  // if (state.version < 2) { ... migrate ... state.version = 2; }
+  return state;
+}
+
+/**
  * Load the campfire state file.
  * @param {string} [projectDir]
  * @returns {object} State object (empty structure if file doesn't exist)
@@ -37,16 +48,18 @@ export function loadState(projectDir = process.cwd()) {
       version: STATE_VERSION,
       welcomed: false,
       fires: {},
+      // Reserved for future standalone agent tracking (not yet implemented)
       wanderers: [],
     };
   }
   try {
-    return JSON.parse(readFileSync(path, 'utf8'));
+    return migrateState(JSON.parse(readFileSync(path, 'utf8')));
   } catch {
     return {
       version: STATE_VERSION,
       welcomed: false,
       fires: {},
+      // Reserved for future standalone agent tracking (not yet implemented)
       wanderers: [],
     };
   }
