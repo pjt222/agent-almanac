@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 333
+total_skills: 334
 
 domains:
   r-packages:
@@ -1904,3 +1904,12 @@ domains:
         complexity: basic
         language: TypeScript
         description: Design terminal output with chalk colors, Unicode glyphs, multiple verbosity levels, and voice rules
+
+  open-source:
+    description: Open-source contribution workflow skills
+    skills:
+      - id: polish-claw-project
+        path: polish-claw-project/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Contribute to OpenClaw ecosystem projects through structured 9-step audit and PR workflow

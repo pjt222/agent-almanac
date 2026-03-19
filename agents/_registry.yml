@@ -2,7 +2,7 @@
 # Machine-readable catalog of all agent definitions in this library.
 # Keep in sync with the actual agent files on disk.
 
-total_agents: 67
+total_agents: 68
 version: "2.2"
 last_updated: "2026-02-25"
 
@@ -955,6 +955,22 @@ agents:
       - build-cli-plugin
       - test-cli-application
       - design-cli-output
+
+  - id: claw-polisher
+    path: agents/claw-polisher.md
+    description: Open-source contributor for NVIDIA Claw ecosystem with security-aware audit, false positive prevention, and convention-strict PR workflow
+    tags: [open-source, contribution, security, claw, nvidia]
+    priority: normal
+    tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
+    skills:
+      - polish-claw-project
+      - security-audit-codebase
+      - review-codebase
+      - create-pull-request
+      - create-github-issues
+      - manage-git-branches
+      - commit-changes
+      - configure-git-repository
       - install-almanac-content
       - create-github-release
       - apply-semantic-versioning

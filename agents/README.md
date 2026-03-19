@@ -1,7 +1,7 @@
 # Agents Library for Claude Code
 
 <!-- AUTO:START:agents-intro -->
-A collection of 67 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
+A collection of 68 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
 
 All agents inherit **default skills**: meditate, heal.
 <!-- AUTO:END:agents-intro -->
@@ -45,6 +45,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [blender-artist](blender-artist.md) | normal | 3D and 2D visualization specialist using Blender Python API for scene creation, procedural modeling, animation, rendering, and 2D composition |
 | [chromatographer](chromatographer.md) | normal | Chromatographic method development and validation specialist for GC and HPLC with ICH Q2 compliance |
 | [citizen-entomologist](citizen-entomologist.md) | normal | Curiosity-driven entomologist for accessible insect identification, citizen science participation, nature education, and community engagement |
+| [claw-polisher](claw-polisher.md) | normal | Open-source contributor for NVIDIA Claw ecosystem with security-aware audit, false positive prevention, and convention-strict PR workflow |
 | [cli-developer](cli-developer.md) | normal | CLI and terminal tool development specialist for Commander.js applications, plugin architectures, terminal UX, and integration testing |
 | [conservation-entomologist](conservation-entomologist.md) | normal | Conservation-first entomologist for ecological assessment, pollinator surveys, habitat preservation, and non-destructive insect observation |
 | [contemplative](contemplative.md) | normal | Meta-cognitive practice specialist embodying the foundational tending skills — meditation, healing, centering, attunement, and creative stillness |
