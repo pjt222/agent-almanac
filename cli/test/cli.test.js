@@ -23,7 +23,7 @@ function run(args) {
 describe('registry', () => {
   it('list shows skills count', () => {
     const out = run('list --domains');
-    assert.match(out, /59 domains/);
+    assert.match(out, /60 domains/);
   });
 
   it('list --domain r-packages shows 10 skills', () => {
@@ -33,7 +33,7 @@ describe('registry', () => {
 
   it('list --agents shows 66 agents', () => {
     const out = run('list --agents');
-    assert.match(out, /67 agents/);
+    assert.match(out, /68 agents/);
   });
 
   it('list --teams shows 15 teams', () => {

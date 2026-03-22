@@ -1,13 +1,49 @@
 {
   "name": "agent-almanac",
   "version": "1.1.0",
-  "private": true,
-  "description": "Agentic development platform with skills, agents, and guides",
+  "description": "Universal skill/agent/team installer for agentskills.io — works with Claude Code, Cursor, Copilot, Gemini CLI, and 12+ agentic frameworks",
   "type": "module",
+  "license": "MIT",
+  "author": "Philipp Thoss <ph.thoss@gmx.de> (https://github.com/pjt222)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pjt222/agent-almanac.git"
+  },
+  "homepage": "https://github.com/pjt222/agent-almanac#readme",
+  "bugs": {
+    "url": "https://github.com/pjt222/agent-almanac/issues"
+  },
+  "keywords": [
+    "agentskills",
+    "ai-agents",
+    "skills",
+    "cli",
+    "claude-code",
+    "cursor",
+    "copilot",
+    "gemini-cli",
+    "mcp",
+    "agent-almanac"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "bin": {
     "agent-almanac": "./cli/index.js",
     "almanac": "./cli/index.js"
   },
+  "files": [
+    "cli/adapters/",
+    "cli/lib/",
+    "cli/index.js",
+    "cli/README.md",
+    "skills/",
+    "agents/",
+    "teams/",
+    "guides/",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "update-readmes": "node scripts/generate-readmes.js",
     "check-readmes": "node scripts/generate-readmes.js --check",
@@ -16,7 +52,8 @@
     "translation:status": "node scripts/generate-translation-status.js",
     "translate:scaffold": "bash scripts/translate-content.sh",
     "test": "npm run validate:integrity && npm run check-readmes",
-    "test:cli": "node --test cli/test/"
+    "test:cli": "node --test cli/test/cli.test.js",
+    "prepublishOnly": "node --test cli/test/"
   },
   "dependencies": {
     "chalk": "^5.3.0",
