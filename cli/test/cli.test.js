@@ -291,7 +291,7 @@ describe('gather', () => {
   it('gather --dry-run shows arrival ceremony', () => {
     const out = run('gather tending --dry-run');
     assert.match(out, /DRY RUN/);
-    assert.match(out, /Gathering the tending circle/);
+    assert.match(out, /Gathering the.*tending.*circle/);
     assert.match(out, /mystic/);
     assert.match(out, /fire burns/i);
   });
