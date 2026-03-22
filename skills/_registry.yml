@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 334
+total_skills: 335
 
 domains:
   r-packages:
@@ -439,6 +439,11 @@ domains:
         complexity: basic
         language: multi
         description: Install skills, agents, and teams from agent-almanac into any supported agentic framework using the CLI
+      - id: du-dum
+        path: du-dum/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Batch-then-act pattern separating cheap observation from expensive action using two-clock architecture
 
   citations:
     description: Academic and software citation management with R and BibTeX

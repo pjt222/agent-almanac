@@ -3000,3 +3000,47 @@ glyph_agent_cli_dev <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── glyph_agent_claw_polisher: stylized claw with sparkle accents ────────────
+glyph_agent_claw_polisher <- function(cx, cy, s, col, bright) {
+  # A three-pronged claw (talon) with small sparkle dots representing
+  # the polishing / refinement aspect of open-source contribution.
+  layers <- list()
+
+  # Three claw prongs radiating from a base arc
+  for (i in 1:3) {
+    angle <- (i - 2) * 0.4 + pi / 2  # fan out from top
+    base_x <- cx + 5 * s * cos(angle + pi)
+    base_y <- cy + 5 * s * sin(angle + pi)
+    tip_x <- cx + 24 * s * cos(angle)
+    tip_y <- cy + 24 * s * sin(angle)
+    mid_x <- cx + 16 * s * cos(angle + 0.15)
+    mid_y <- cy + 16 * s * sin(angle + 0.15)
+    prong <- data.frame(
+      x = c(base_x, mid_x, tip_x),
+      y = c(base_y, mid_y, tip_y)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = prong, .aes(x, y),
+      color = bright, linewidth = .lw(s, 2.5), lineend = "round")
+  }
+
+  # Base arc connecting prong roots
+  arc_t <- seq(-0.4 + pi / 2 + pi, 0.4 + pi / 2 + pi, length.out = 12)
+  arc <- data.frame(
+    x = cx + 8 * s * cos(arc_t),
+    y = cy + 8 * s * sin(arc_t)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arc, .aes(x, y),
+    color = hex_with_alpha(bright, 0.6), linewidth = .lw(s, 1.5))
+
+  # Sparkle dots (polishing effect) — 3 small circles near the tips
+  sparkle_offsets <- list(c(-18, 12), c(8, 20), c(20, 6))
+  for (sp in sparkle_offsets) {
+    dot <- data.frame(x0 = cx + sp[1] * s, y0 = cy + sp[2] * s, r = 2 * s)
+    layers[[length(layers) + 1]] <- ggforce::geom_circle(data = dot,
+      .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(bright, 0.7), color = NA)
+  }
+
+  layers
+}

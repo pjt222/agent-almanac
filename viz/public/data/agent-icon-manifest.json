@@ -4,7 +4,7 @@
     "pipeline": "R/ggplot2 + ggfx neon glow",
     "resolution": "1024x1024",
     "format": "webp",
-    "total_agents": 67,
+    "total_agents": 68,
     "palettes": [
       "cyberpunk",
       "viridis",
@@ -63,6 +63,11 @@
       "concept": "Magnifying glass over insect with iNaturalist notebook",
       "description": "Curiosity-driven insect guide for citizen science",
       "glow": "leaf-green"
+    },
+    "claw-polisher": {
+      "description": "Open-source contributor for NVIDIA Claw ecosystem with security-aware audit, false positive prevention, and convention-strict PR workflow",
+      "glow": "white",
+      "concept": "claw-polisher agent persona icon"
     },
     "cli-developer": {
       "description": "CLI and terminal tool development specialist for Commander.js applications, plugin architectures, terminal UX, and integration testing",
@@ -402,9 +407,14 @@
       "status": "pending"
     },
     {
+      "agentId": "claw-polisher",
+      "path": "public/icons/cyberpunk/agents/claw-polisher.webp",
+      "status": "done"
+    },
+    {
       "agentId": "cli-developer",
       "path": "public/icons/cyberpunk/agents/cli-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "code-reviewer",

@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-03-18T17:50:52.277Z",
-    "totalSkills": 333,
-    "totalAgents": 67,
+    "generated": "2026-03-22T12:33:06.979Z",
+    "totalSkills": 335,
+    "totalAgents": 68,
     "totalTeams": 15,
-    "totalNodes": 415,
-    "totalLinks": 1809,
-    "totalAgentLinks": 404,
+    "totalNodes": 418,
+    "totalLinks": 1828,
+    "totalAgentLinks": 412,
     "totalTeamLinks": 49,
-    "totalDomains": 59,
+    "totalDomains": 60,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -51,7 +51,7 @@
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
-      "count": 18
+      "count": 19
     },
     "citations": {
       "description": "Academic and software citation management with R and BibTeX",
@@ -252,6 +252,10 @@
     "cli": {
       "description": "CLI tool development — command scaffolding, plugin architecture, terminal output design, and integration testing",
       "count": 4
+    },
+    "open-source": {
+      "description": "Open-source contribution workflow skills",
+      "count": 1
     }
   },
   "nodes": [
@@ -2603,6 +2607,33 @@
       "locales": []
     },
     {
+      "id": "du-dum",
+      "type": "skill",
+      "title": "Du-Dum: Batch-Then-Act Pattern",
+      "domain": "general",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Batch-then-act pattern separating cheap observation from expensive action using two-clock architecture",
+      "tags": [
+        "autonomous-agents",
+        "cost-optimization",
+        "two-clock",
+        "digest",
+        "heartbeat",
+        "batch-then-act",
+        "cron"
+      ],
+      "related": [
+        "manage-token-budget",
+        "circuit-breaker-pattern",
+        "observe",
+        "forage-resources",
+        "coordinate-reasoning"
+      ],
+      "path": "du-dum/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "manage-bibliography",
       "type": "skill",
       "title": "Manage Bibliography",
@@ -4215,7 +4246,12 @@
         "create-skill"
       ],
       "path": "create-glyph/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "enhance-glyph",
@@ -4242,7 +4278,12 @@
         "chrysopoeia"
       ],
       "path": "enhance-glyph/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "tai-chi",
@@ -8703,7 +8744,12 @@
         "render-icon-pipeline"
       ],
       "path": "audit-icon-pipeline/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "render-icon-pipeline",
@@ -8727,7 +8773,12 @@
         "enhance-glyph"
       ],
       "path": "render-icon-pipeline/SKILL.md",
-      "locales": []
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "prepare-print-model",
@@ -10065,6 +10116,34 @@
         "build-cli-plugin"
       ],
       "path": "design-cli-output/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "polish-claw-project",
+      "type": "skill",
+      "title": "Polish Claw Project",
+      "domain": "open-source",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Contribute to OpenClaw ecosystem projects through structured 9-step audit and PR workflow",
+      "tags": [
+        "open-source",
+        "contribution",
+        "security",
+        "code-review",
+        "pull-request",
+        "claw",
+        "nvidia"
+      ],
+      "related": [
+        "security-audit-codebase",
+        "review-codebase",
+        "create-pull-request",
+        "create-github-issues",
+        "manage-git-branches",
+        "commit-changes"
+      ],
+      "path": "polish-claw-project/SKILL.md",
       "locales": []
     },
     {
@@ -12371,12 +12450,48 @@
         "scaffold-cli-command",
         "build-cli-plugin",
         "test-cli-application",
-        "design-cli-output",
+        "design-cli-output"
+      ],
+      "path": "agents/cli-developer.md",
+      "locales": []
+    },
+    {
+      "id": "agent:claw-polisher",
+      "type": "agent",
+      "title": "Claw Polisher",
+      "priority": "normal",
+      "description": "Open-source contributor for NVIDIA Claw ecosystem with security-aware audit, false positive prevention, and convention-strict PR workflow",
+      "tags": [
+        "open-source",
+        "contribution",
+        "security",
+        "claw",
+        "nvidia"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Grep",
+        "Glob",
+        "WebFetch"
+      ],
+      "mcp_servers": [],
+      "skills": [
+        "polish-claw-project",
+        "security-audit-codebase",
+        "review-codebase",
+        "create-pull-request",
+        "create-github-issues",
+        "manage-git-branches",
+        "commit-changes",
+        "configure-git-repository",
         "install-almanac-content",
         "create-github-release",
         "apply-semantic-versioning"
       ],
-      "path": "agents/cli-developer.md",
+      "path": "agents/claw-polisher.md",
       "locales": []
     },
     {
@@ -14369,6 +14484,31 @@
     {
       "source": "install-almanac-content",
       "target": "design-cli-output",
+      "type": "skill"
+    },
+    {
+      "source": "du-dum",
+      "target": "manage-token-budget",
+      "type": "skill"
+    },
+    {
+      "source": "du-dum",
+      "target": "circuit-breaker-pattern",
+      "type": "skill"
+    },
+    {
+      "source": "du-dum",
+      "target": "observe",
+      "type": "skill"
+    },
+    {
+      "source": "du-dum",
+      "target": "forage-resources",
+      "type": "skill"
+    },
+    {
+      "source": "du-dum",
+      "target": "coordinate-reasoning",
       "type": "skill"
     },
     {
@@ -19512,6 +19652,36 @@
       "type": "skill"
     },
     {
+      "source": "polish-claw-project",
+      "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "polish-claw-project",
+      "target": "review-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "polish-claw-project",
+      "target": "create-pull-request",
+      "type": "skill"
+    },
+    {
+      "source": "polish-claw-project",
+      "target": "create-github-issues",
+      "type": "skill"
+    },
+    {
+      "source": "polish-claw-project",
+      "target": "manage-git-branches",
+      "type": "skill"
+    },
+    {
+      "source": "polish-claw-project",
+      "target": "commit-changes",
+      "type": "skill"
+    },
+    {
       "source": "agent:r-developer",
       "target": "create-r-package",
       "type": "agent"
@@ -21517,17 +21687,57 @@
       "type": "agent"
     },
     {
-      "source": "agent:cli-developer",
+      "source": "agent:claw-polisher",
+      "target": "polish-claw-project",
+      "type": "agent"
+    },
+    {
+      "source": "agent:claw-polisher",
+      "target": "security-audit-codebase",
+      "type": "agent"
+    },
+    {
+      "source": "agent:claw-polisher",
+      "target": "review-codebase",
+      "type": "agent"
+    },
+    {
+      "source": "agent:claw-polisher",
+      "target": "create-pull-request",
+      "type": "agent"
+    },
+    {
+      "source": "agent:claw-polisher",
+      "target": "create-github-issues",
+      "type": "agent"
+    },
+    {
+      "source": "agent:claw-polisher",
+      "target": "manage-git-branches",
+      "type": "agent"
+    },
+    {
+      "source": "agent:claw-polisher",
+      "target": "commit-changes",
+      "type": "agent"
+    },
+    {
+      "source": "agent:claw-polisher",
+      "target": "configure-git-repository",
+      "type": "agent"
+    },
+    {
+      "source": "agent:claw-polisher",
       "target": "install-almanac-content",
       "type": "agent"
     },
     {
-      "source": "agent:cli-developer",
+      "source": "agent:claw-polisher",
       "target": "create-github-release",
       "type": "agent"
     },
     {
-      "source": "agent:cli-developer",
+      "source": "agent:claw-polisher",
       "target": "apply-semantic-versioning",
       "type": "agent"
     },

@@ -1,5 +1,5 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 328 skillIds to a specific glyph drawing function.
+# Maps each of 335 skillIds to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #
@@ -121,7 +121,7 @@ SKILL_GLYPHS <- list(
   "prepare-soil"                       = "glyph_soil_layers",
   "read-garden"                        = "glyph_garden_eye",
 
-  # ── general (18) ───────────────────────────────────────────────────────
+  # ── general (19) ───────────────────────────────────────────────────────
   "setup-wsl-dev-environment"      = "glyph_terminal",
   "write-claude-md"                = "glyph_robot_doc",
   "security-audit-codebase"        = "glyph_shield_scan",
@@ -140,6 +140,7 @@ SKILL_GLYPHS <- list(
   "verify-agent-output"            = "glyph_verify_checkmark",
   "continue-here"                  = "glyph_continue_here",
   "install-almanac-content"        = "glyph_almanac_install",
+  "du-dum"                         = "glyph_du_dum",
 
   # ── git (7) ────────────────────────────────────────────────────────────
   "configure-git-repository"       = "glyph_git_config",
@@ -457,5 +458,8 @@ SKILL_GLYPHS <- list(
   "scaffold-cli-command"           = "glyph_cli_scaffold",
   "build-cli-plugin"               = "glyph_cli_plugin",
   "test-cli-application"           = "glyph_cli_test",
-  "design-cli-output"              = "glyph_cli_output"
+  "design-cli-output"              = "glyph_cli_output",
+
+  # ── open-source (1) ──────────────────────────────────────────────────
+  "polish-claw-project"            = "glyph_branch_fork"
 )

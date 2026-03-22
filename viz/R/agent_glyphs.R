@@ -1,5 +1,5 @@
 # agent_glyphs.R - Agent-to-glyph mapping
-# Maps each of 67 agent IDs to a specific glyph drawing function.
+# Maps each of 68 agent IDs to a specific glyph drawing function.
 #
 # Each entry: agentId = "glyph_function_name"
 # The glyph function must accept (cx, cy, s, col, bright) and return
@@ -127,5 +127,8 @@ AGENT_GLYPHS <- list(
   "translator"                  = "glyph_agent_translator",
 
   # ── CLI ─────────────────────────────────────────────────────────────
-  "cli-developer"               = "glyph_agent_cli_dev"
+  "cli-developer"               = "glyph_agent_cli_dev",
+
+  # ── Open Source ────────────────────────────────────────────────────────
+  "claw-polisher"               = "glyph_agent_claw_polisher"
 )

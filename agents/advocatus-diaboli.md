@@ -157,6 +157,16 @@ pessimistic) before committing.
 - **Cannot replace empirical testing**: Can identify where assumptions might fail, but cannot prove they will. Hypotheses surfaced here still need validation
 - **Diminishing returns**: Over-application leads to analysis paralysis. Use for high-stakes decisions, not routine choices
 
+## Composition: With Argumentation Skill
+
+This agent composes naturally with the `argumentation` skill for a pre-decision review loop. The pattern:
+
+1. **Structure** the proposal using `argumentation` (hypothesis-argument-example triad)
+2. **Stress-test** using this agent -- steelman first, then challenge each assumption
+3. **Revise** based on severity: Critical = redesign/abandon, Medium = adjust, Low = note and proceed
+
+Use this composition when you are both the proposer and need adversarial self-review before committing to action. See the `argumentation` skill's Related Skills section for concrete examples.
+
 ## See Also
 
 - [Polymath Agent](polymath.md) — Complementary opposite: synthesis where this agent deconstructs

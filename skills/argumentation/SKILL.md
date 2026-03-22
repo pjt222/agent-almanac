@@ -230,3 +230,22 @@ Combine hypothesis, argument, and examples into the appropriate format for the c
 - `review-software-architecture` -- justifying architectural decisions with the hypothesis-argument-example triad
 - `create-skill` -- skills themselves are structured arguments for how to accomplish a task
 - `write-claude-md` -- documenting conventions and decisions that benefit from clear justification
+
+### Composition: Argumentation + Advocatus Diaboli
+
+For high-stakes decisions, compose this skill with the `advocatus-diaboli` agent to form a pre-decision review loop. The pattern:
+
+1. **Structure** via argumentation -- build the hypothesis-argument-example triad
+2. **Stress-test** via advocatus-diaboli -- steelman the proposal, then challenge each assumption with specific questions. Flag severity: Critical (redesign or abandon), Medium (adjust), Low (note and proceed)
+3. **Revise** based on findings -- critical findings trigger redesign; medium findings trigger adjustment; low findings are noted
+
+**When to compose vs. use alone:**
+- Use argumentation alone when constructing a proposal, PR description, or design justification
+- Use advocatus-diaboli alone when reviewing someone else's existing argument
+- Compose both when you are both the proposer and need adversarial self-review before committing
+
+**Example -- PR response refinement:**
+Argumentation structured a response (hypothesis: combining PRs is better, argument with evidence, collaboration offer). Advocatus-diaboli then caught two critical issues: a claim about proxy process identification was speculative rather than factual (would have been embarrassing on a security PR), and "I have tested this in practice" was unverifiable. Both were removed. The final response was 40-50% shorter -- overexplaining signals insecurity.
+
+**Example -- System design triage:**
+Argumentation (via Plan agent) designed a full 500-line triage pipeline. Advocatus-diaboli killed it: at 9 items, the system was premature and would itself become a maintenance burden (recursive trap). Final solution: 25 lines added to an existing script.

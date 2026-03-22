@@ -266,5 +266,56 @@ glyph_cli_output <- function(cx, cy, s, col, bright) {
   layers
 }
 
+# -- glyph_du_dum: dual-beat ECG trace with digest file between beats -----------
+glyph_du_dum <- function(cx, cy, s, col, bright) {
+  # Two-clock heartbeat: small fast beat (du/observe) on left,
+  # large slow beat (dum/act) on right, connected by flat line.
+  # A small rectangle between beats represents the digest file.
+  layers <- list()
+
+  # ECG baseline
+  baseline_y <- cy - 4 * s
+
+  # Left beat (du) — small, fast: observation clock
+  du_x <- c(-28, -22, -20, -18, -16, -14, -10) * s
+  du_y <- c(0, 0, 2, -2, 8, -4, 0) * s
+  du_df <- data.frame(x = cx + du_x, y = baseline_y + du_y)
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = du_df, .aes(x, y),
+    color = hex_with_alpha(bright, 0.55), linewidth = .lw(s, 2.5))
+
+  # Flat line between beats (digest bridge)
+  bridge_df <- data.frame(x = cx + c(-10, 4) * s, y = c(baseline_y, baseline_y))
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = bridge_df, .aes(x, y),
+    color = hex_with_alpha(bright, 0.3), linewidth = .lw(s, 2))
+
+  # Right beat (dum) — large, strong: action clock
+  dum_x <- c(4, 8, 10, 12, 14, 16, 20, 28) * s
+  dum_y <- c(0, 0, 4, -4, 22, -10, 2, 0) * s
+  dum_df <- data.frame(x = cx + dum_x, y = baseline_y + dum_y)
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = dum_df, .aes(x, y),
+    color = bright, linewidth = .lw(s, 3))
+
+  # Digest file icon (small rectangle centered between beats)
+  digest_rect <- data.frame(
+    xmin = cx - 5 * s, xmax = cx + 1 * s,
+    ymin = cy + 8 * s, ymax = cy + 18 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = digest_rect,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.15), color = bright, linewidth = .lw(s, 1.5))
+
+  # Two tiny lines inside digest (text)
+  for (offset in c(3, -1)) {
+    line_df <- data.frame(
+      x = c(cx - 3 * s, cx - 1 * s),
+      y = c(cy + (13 + offset) * s, cy + (13 + offset) * s)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = line_df, .aes(x, y),
+      color = hex_with_alpha(bright, 0.35), linewidth = .lw(s, 1))
+  }
+
+  layers
+}
+
 # NOTE: Agent glyph glyph_agent_cli_dev lives in agent_primitives.R
 # (agent renderer sources agent_primitives.R, not primitives_*.R files)
