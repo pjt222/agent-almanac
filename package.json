@@ -53,7 +53,7 @@
     "translate:scaffold": "bash scripts/translate-content.sh",
     "test": "npm run validate:integrity && npm run check-readmes",
     "test:cli": "node --test cli/test/cli.test.js",
-    "prepublishOnly": "node --test cli/test/"
+    "prepublishOnly": "node --test cli/test/cli.test.js"
   },
   "dependencies": {
     "chalk": "^5.3.0",
