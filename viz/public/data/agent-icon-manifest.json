@@ -409,7 +409,7 @@
     {
       "agentId": "claw-polisher",
       "path": "public/icons/cyberpunk/agents/claw-polisher.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "cli-developer",

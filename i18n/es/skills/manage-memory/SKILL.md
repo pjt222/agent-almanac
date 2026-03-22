@@ -196,7 +196,8 @@ ls <memory-dir>/*.md | grep -v MEMORY.md
 
 - `write-claude-md` — CLAUDE.md captura las instrucciones del proyecto; la memoria captura el aprendizaje entre sesiones
 - `prune-agent-memory` — el inverso de manage-memory: auditar, clasificar y olvidar selectivamente memorias almacenadas
-- `continue-here` — escribir un archivo de continuación estructurado para el traspaso entre sesiones; complementa la memoria como puente de contexto a corto plazo
+- `write-continue-here` — escribir un archivo de continuación estructurado para el traspaso entre sesiones; complementa la memoria como puente de contexto a corto plazo
+- `read-continue-here` — leer y actuar sobre el archivo de continuación al inicio de sesión; el lado consumidor del traspaso
 - `create-skill` — las nuevas habilidades pueden producir patrones dignos de memoria
 - `heal` — la auto-curación puede actualizar la memoria como parte del paso de integración
 - `meditate` — las sesiones de meditación pueden revelar perspectivas que vale la pena persistir

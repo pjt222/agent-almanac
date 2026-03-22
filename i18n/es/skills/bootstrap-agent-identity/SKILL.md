@@ -254,7 +254,8 @@ Después del bootstrap, verificar que la identidad cargada sea internamente cons
 
 ## Habilidades Relacionadas
 
-- `continue-here` — archivo de traspaso de sesión que proporciona la evidencia que bootstrap-agent-identity consume en el arranque en frío
+- `write-continue-here` — archivo de traspaso de sesión que proporciona la evidencia que bootstrap-agent-identity consume en el arranque en frío
+- `read-continue-here` — lectura y actuación sobre el archivo de continuación al inicio de sesión; el lado consumidor del traspaso
 - `manage-memory` — memoria persistente que complementa la carga progresiva de identidad del bootstrap
 - `center` — establecimiento de línea base conductual; invocado durante la secuencia de calibración
 - `attune` — calibración relacional con el usuario; invocado durante la secuencia de calibración

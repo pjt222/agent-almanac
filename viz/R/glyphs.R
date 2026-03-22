@@ -138,7 +138,8 @@ SKILL_GLYPHS <- list(
   "prune-agent-memory"             = "glyph_memory_prune",
   "circuit-breaker-pattern"        = "glyph_circuit_breaker",
   "verify-agent-output"            = "glyph_verify_checkmark",
-  "continue-here"                  = "glyph_continue_here",
+  "write-continue-here"            = "glyph_continue_here",
+  "read-continue-here"             = "glyph_continue_here",
   "install-almanac-content"        = "glyph_almanac_install",
   "du-dum"                         = "glyph_du_dum",
 

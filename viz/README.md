@@ -1,6 +1,6 @@
 # Interactive Skills Visualization
 
-Force-graph explorer for the 335-skill, 68-agent, 15-team agent-almanac platform. Nodes are skills, agents, and teams; edges express domain membership and cross-references. Each node renders a domain-colored WebP pictogram produced by an R/ggplot2 icon pipeline. Built with [force-graph](https://github.com/vasturiano/force-graph), 9 color themes, and 5 locales.
+Force-graph explorer for the 336-skill, 68-agent, 15-team agent-almanac platform. Nodes are skills, agents, and teams; edges express domain membership and cross-references. Each node renders a domain-colored WebP pictogram produced by an R/ggplot2 icon pipeline. Built with [force-graph](https://github.com/vasturiano/force-graph), 9 color themes, and 5 locales.
 
 ## Quick Start
 

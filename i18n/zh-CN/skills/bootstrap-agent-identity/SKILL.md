@@ -248,7 +248,8 @@ Detection Matrix:
 
 ## 相关技能
 
-- `continue-here` — 会话交接文件，提供 bootstrap-agent-identity 在冷启动时使用的证据
+- `write-continue-here` — 会话交接文件，提供 bootstrap-agent-identity 在冷启动时使用的证据
+- `read-continue-here` — 在会话开始时读取并执行续接文件；交接的消费端
 - `manage-memory` — 持久化记忆，补充引导的渐进式身份加载
 - `center` — 行为基线建立；在校准序列中调用
 - `attune` — 对用户的关系校准；在校准序列中调用

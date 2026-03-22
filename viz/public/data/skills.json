@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated": "2026-03-22T12:33:06.979Z",
-    "totalSkills": 335,
+    "generated": "2026-03-22T18:22:13.661Z",
+    "totalSkills": 336,
     "totalAgents": 68,
     "totalTeams": 15,
-    "totalNodes": 418,
-    "totalLinks": 1828,
+    "totalNodes": 419,
+    "totalLinks": 1835,
     "totalAgentLinks": 412,
     "totalTeamLinks": 49,
     "totalDomains": 60,
@@ -51,7 +51,7 @@
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
-      "count": 19
+      "count": 20
     },
     "citations": {
       "description": "Academic and software citation management with R and BibTeX",
@@ -2188,7 +2188,8 @@
       "related": [
         "write-claude-md",
         "prune-agent-memory",
-        "continue-here",
+        "write-continue-here",
+        "read-continue-here",
         "create-skill",
         "heal",
         "meditate"
@@ -2559,9 +2560,9 @@
       ]
     },
     {
-      "id": "continue-here",
+      "id": "write-continue-here",
       "type": "skill",
-      "title": "Continue Here",
+      "title": "Write Continue Here",
       "domain": "general",
       "complexity": "basic",
       "language": "multi",
@@ -2571,15 +2572,47 @@
         "continuity",
         "handoff",
         "context",
-        "workflow"
+        "workflow",
+        "write"
       ],
       "related": [
+        "read-continue-here",
         "bootstrap-agent-identity",
         "manage-memory",
         "commit-changes",
         "write-claude-md"
       ],
-      "path": "continue-here/SKILL.md",
+      "path": "write-continue-here/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
+    },
+    {
+      "id": "read-continue-here",
+      "type": "skill",
+      "title": "Read Continue Here",
+      "domain": "general",
+      "complexity": "basic",
+      "language": "multi",
+      "description": "Read a continuation file at session start and resume from where the prior session left off",
+      "tags": [
+        "session",
+        "continuity",
+        "handoff",
+        "context",
+        "workflow",
+        "read"
+      ],
+      "related": [
+        "write-continue-here",
+        "bootstrap-agent-identity",
+        "manage-memory",
+        "write-claude-md"
+      ],
+      "path": "read-continue-here/SKILL.md",
       "locales": [
         "de",
         "zh-CN",
@@ -6422,7 +6455,8 @@
         "meta-cognition"
       ],
       "related": [
-        "continue-here",
+        "write-continue-here",
+        "read-continue-here",
         "manage-memory",
         "center",
         "attune",
@@ -14163,7 +14197,12 @@
     },
     {
       "source": "manage-memory",
-      "target": "continue-here",
+      "target": "write-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "manage-memory",
+      "target": "read-continue-here",
       "type": "skill"
     },
     {
@@ -14442,22 +14481,47 @@
       "type": "skill"
     },
     {
-      "source": "continue-here",
+      "source": "write-continue-here",
+      "target": "read-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "write-continue-here",
       "target": "bootstrap-agent-identity",
       "type": "skill"
     },
     {
-      "source": "continue-here",
+      "source": "write-continue-here",
       "target": "manage-memory",
       "type": "skill"
     },
     {
-      "source": "continue-here",
+      "source": "write-continue-here",
       "target": "commit-changes",
       "type": "skill"
     },
     {
-      "source": "continue-here",
+      "source": "write-continue-here",
+      "target": "write-claude-md",
+      "type": "skill"
+    },
+    {
+      "source": "read-continue-here",
+      "target": "write-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "read-continue-here",
+      "target": "bootstrap-agent-identity",
+      "type": "skill"
+    },
+    {
+      "source": "read-continue-here",
+      "target": "manage-memory",
+      "type": "skill"
+    },
+    {
+      "source": "read-continue-here",
       "target": "write-claude-md",
       "type": "skill"
     },
@@ -17318,7 +17382,12 @@
     },
     {
       "source": "bootstrap-agent-identity",
-      "target": "continue-here",
+      "target": "write-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "bootstrap-agent-identity",
+      "target": "read-continue-here",
       "type": "skill"
     },
     {

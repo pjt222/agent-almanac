@@ -252,7 +252,8 @@ metadata:
 
 ## 関連スキル
 
-- `continue-here` — コールドスタートで bootstrap-agent-identity が消費する証拠を提供するセッション引き継ぎファイル
+- `write-continue-here` — コールドスタートで bootstrap-agent-identity が消費する証拠を提供するセッション引き継ぎファイル
+- `read-continue-here` — セッション開始時に継続ファイルを読み取り実行する; 引き継ぎの消費側
 - `manage-memory` — ブートストラップの漸進的なアイデンティティロードを補完する永続的なメモリ
 - `center` — 行動基準の確立；キャリブレーションシーケンス中に呼び出される
 - `attune` — ユーザーへの関係的なキャリブレーション；キャリブレーションシーケンス中に呼び出される

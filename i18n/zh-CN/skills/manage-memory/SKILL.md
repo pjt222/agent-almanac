@@ -192,7 +192,8 @@ ls <memory-dir>/*.md | grep -v MEMORY.md
 
 - `write-claude-md` — CLAUDE.md 捕获项目指令；记忆捕获跨会话学习
 - `prune-agent-memory` — manage-memory 的逆操作：审计、分类和选择性遗忘存储的记忆
-- `continue-here` — 为会话交接编写结构化续接文件；作为短期上下文桥梁补充记忆
+- `write-continue-here` — 为会话交接编写结构化续接文件；作为短期上下文桥梁补充记忆
+- `read-continue-here` — 在会话开始时读取并执行续接文件；交接的消费端
 - `create-skill` — 新技能可能产生值得记忆的模式
 - `heal` — 自我修复可能作为整合步骤的一部分更新记忆
 - `meditate` — 冥想会话可能浮现值得持久化的洞察

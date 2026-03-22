@@ -195,7 +195,8 @@ ls <memory-dir>/*.md | grep -v MEMORY.md
 
 - `write-claude-md` — CLAUDE.md erfasst Projektanweisungen; Speicher erfasst sitzungsuebergreifendes Lernen
 - `prune-agent-memory` — das Gegenstueck zu manage-memory: Pruefung, Klassifizierung und selektives Vergessen gespeicherter Erinnerungen
-- `continue-here` — eine strukturierte Fortsetzungsdatei fuer den Sitzungsuebergabe schreiben; ergaenzt den Speicher als kurzfristige Kontextbruecke
+- `write-continue-here` — eine strukturierte Fortsetzungsdatei fuer den Sitzungsuebergabe schreiben; ergaenzt den Speicher als kurzfristige Kontextbruecke
+- `read-continue-here` — Fortsetzungsdatei beim Sitzungsstart lesen und darauf reagieren; die Verbrauchsseite der Uebergabe
 - `create-skill` — neue Skills koennen erinnerungswuerdige Muster erzeugen
 - `heal` — Selbstheilung kann den Speicher als Teil des Integrationsschritts aktualisieren
 - `meditate` — Meditationssitzungen koennen Erkenntnisse zutage foerdern, die es wert sind, dauerhaft gespeichert zu werden

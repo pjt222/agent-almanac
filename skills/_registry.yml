@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 335
+total_skills: 336
 
 domains:
   r-packages:
@@ -429,11 +429,16 @@ domains:
         complexity: intermediate
         language: multi
         description: Evidence trails and deliverable validation for inter-agent handoffs
-      - id: continue-here
-        path: continue-here/SKILL.md
+      - id: write-continue-here
+        path: write-continue-here/SKILL.md
         complexity: basic
         language: multi
         description: Write a structured continuation file for cross-session task handoff
+      - id: read-continue-here
+        path: read-continue-here/SKILL.md
+        complexity: basic
+        language: multi
+        description: Read a continuation file at session start and resume from where the prior session left off
       - id: install-almanac-content
         path: install-almanac-content/SKILL.md
         complexity: basic
