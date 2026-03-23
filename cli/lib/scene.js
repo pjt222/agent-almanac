@@ -23,11 +23,11 @@ const MARKER_GAP = 4;
 const MARKER_H = GLYPH_SIZE;
 const VERT_GAP = 2; // pixel rows between fire and agents
 
-// Inline image display size in character cells.
-// Terminal cells are ~2:1 height:width, so height = width/2 for square images.
-const INLINE_ICON_W = 16;  // character cells wide
-const INLINE_ICON_H = 8;   // character cells tall (square aspect)
-const INLINE_ICON_GAP = 2; // spaces between inline icons
+// Inline image display sizes in character cells.
+const INLINE_ICON_H = 8;    // icon height (width auto from aspect ratio)
+const INLINE_ICON_GAP = 2;  // spaces between inline icons
+const INLINE_FIRE_W = 16;   // fire width (height auto from aspect ratio)
+const INLINE_FIRE_ROWS = 12; // approximate fire height in rows (for spacing reserve)
 
 /**
  * Build a campfire scene with agents gathered around the fire.
@@ -45,6 +45,12 @@ export function buildFireScene({ state, agentIds = [], teamId, leadId, maxWidth 
 
   // Fire only — no agents.
   if (agentIds.length === 0) {
+    if (canInlineImage()) {
+      const firePng = getCampfirePng(state || 'cold');
+      if (firePng) {
+        return buildInlineFireOnly(firePng, maxWidth);
+      }
+    }
     const indent = Math.max(0, Math.floor((maxWidth - fireW) / 2));
     return renderSprite(fireSprite, { indent });
   }
@@ -78,14 +84,14 @@ function buildInlineScene({ fireSprite, fireState, stripPng, agentIds, agentCoun
   const lines = [];
 
   // Render campfire — prefer inline PNG, fall back to half-block.
+  // Fire is taller than wide (512×640), so specify WIDTH and let height auto-calculate.
   const firePng = getCampfirePng(fireState || 'burning');
   if (firePng) {
-    const fireCells = 16; // display width in character cells
-    const fireH = 8;      // display height (roughly square for the fire aspect)
-    const fireIndent = Math.max(0, Math.floor((maxWidth - fireCells) / 2));
-    lines.push(' '.repeat(fireIndent) + renderInlineImage(firePng, fireCells, fireH));
-    // Reserve space for the fire image.
-    for (let i = 0; i < fireH; i++) lines.push('');
+    const fireW = INLINE_FIRE_W;
+    const fireIndent = Math.max(0, Math.floor((maxWidth - fireW) / 2));
+    lines.push(' '.repeat(fireIndent) + renderInlineImage(firePng, { width: fireW }));
+    // Reserve space — fire at width=16 with 512:640 ratio ≈ 20 rows tall.
+    for (let i = 0; i < INLINE_FIRE_ROWS; i++) lines.push('');
   } else {
     const fireW = fireSprite[0].length;
     const fireIndent = Math.max(0, Math.floor((maxWidth - fireW) / 2));
@@ -94,17 +100,13 @@ function buildInlineScene({ fireSprite, fireState, stripPng, agentIds, agentCoun
   lines.push(''); // gap
 
   if (stripPng) {
-    // Single pre-composed strip image — all agents side by side.
-    const count = agentCount || 4;
-    const stripCells = count * INLINE_ICON_W + (count - 1) * INLINE_ICON_GAP;
-    // Center the strip under the fire.
-    const stripIndent = Math.max(0, Math.floor((maxWidth - stripCells) / 2));
-    lines.push(' '.repeat(stripIndent) + renderInlineImage(stripPng, stripCells, INLINE_ICON_H));
+    // Team strip is wider than tall — specify HEIGHT and let width auto-calculate.
+    lines.push(renderInlineImage(stripPng, { height: INLINE_ICON_H }));
   } else if (agentIds) {
     // Individual images (vertical fallback).
     for (const id of agentIds) {
       const png = getAgentPng(id);
-      if (png) lines.push(renderInlineImage(png, INLINE_ICON_W, INLINE_ICON_H));
+      if (png) lines.push(renderInlineImage(png, { height: INLINE_ICON_H }));
     }
   }
 
@@ -146,4 +148,15 @@ function buildHalfBlockScene({ fireSprite, agentIds, leadId, maxWidth }) {
   const canvas = composite(canvasW, canvasH, layers);
   const indent = Math.max(0, Math.floor((maxWidth - canvasW) / 2));
   return renderSprite(canvas, { indent });
+}
+
+/**
+ * Build fire-only scene as inline image.
+ */
+function buildInlineFireOnly(firePng, maxWidth) {
+  const fireIndent = Math.max(0, Math.floor((maxWidth - INLINE_FIRE_W) / 2));
+  const lines = [];
+  lines.push(' '.repeat(fireIndent) + renderInlineImage(firePng, { width: INLINE_FIRE_W }));
+  for (let i = 0; i < INLINE_FIRE_ROWS; i++) lines.push('');
+  return lines;
 }

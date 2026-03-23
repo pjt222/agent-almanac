@@ -813,10 +813,7 @@ Examples:
         const strip = getTeamStrip(id);
         if (!strip) continue;
         console.log(campfire.C.dim(`  ── ${id} ──`));
-        const memberCount = (team.members || []).length;
-        const stripCells = memberCount * 16 + (memberCount - 1) * 2;
-        const indent = Math.max(0, Math.floor((maxWidth - stripCells) / 2));
-        console.log(' '.repeat(indent) + renderInlineImage(strip, stripCells, 8));
+        console.log(renderInlineImage(strip, { height: 8 }));
         for (let i = 0; i < 8; i++) console.log('');
         console.log();
       }

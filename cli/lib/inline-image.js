@@ -36,13 +36,22 @@ export function canInlineImage() {
 /**
  * Render a base64 PNG as an inline image escape sequence.
  *
+ * Specify width OR height (not both) to let the terminal auto-calculate
+ * the other dimension from the image's aspect ratio. This keeps icons
+ * square and strips proportional.
+ *
  * @param {string} base64png - Base64-encoded PNG data.
- * @param {number} [widthCells=16] - Display width in character cells.
- * @param {number} [heightCells=8] - Display height in character cells.
+ * @param {object} [size] - Display size in character cells.
+ * @param {number} [size.width] - Width in cells (height auto-calculated).
+ * @param {number} [size.height] - Height in cells (width auto-calculated).
  * @returns {string} Escape sequence string (print to stdout).
  */
-export function renderInlineImage(base64png, widthCells = 16, heightCells = 8) {
-  return `${ESC}]1337;File=inline=1;width=${widthCells};height=${heightCells};preserveAspectRatio=1:${base64png}${BEL}`;
+export function renderInlineImage(base64png, size = {}) {
+  const parts = ['inline=1'];
+  if (size.width) parts.push(`width=${size.width}`);
+  if (size.height) parts.push(`height=${size.height}`);
+  parts.push('preserveAspectRatio=1');
+  return `${ESC}]1337;File=${parts.join(';')}:${base64png}${BEL}`;
 }
 
 /**

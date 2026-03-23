@@ -239,11 +239,26 @@ export function getTeamStrip(teamId) {
 
 /**
  * Get the base64 PNG for a campfire state.
+ * For burning, returns the first frame. Use getCampfireFrames for animation.
  * @param {'burning'|'embers'|'cold'} state
  * @returns {string|null} Base64 PNG string, or null if unavailable.
  */
 export function getCampfirePng(state) {
-  return glyphData.campfires?.[state] || null;
+  const data = glyphData.campfires?.[state];
+  if (!data) return null;
+  return Array.isArray(data) ? data[0] : data;
+}
+
+/**
+ * Get all animation frames for a campfire state.
+ * Returns an array (multiple frames for burning, single-element for others).
+ * @param {'burning'|'embers'|'cold'} state
+ * @returns {string[]} Array of base64 PNG strings.
+ */
+export function getCampfireFrames(state) {
+  const data = glyphData.campfires?.[state];
+  if (!data) return [];
+  return Array.isArray(data) ? data : [data];
 }
 
 function buildFallbackGlyph(agentId) {
