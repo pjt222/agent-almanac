@@ -11,6 +11,16 @@ import { execSync } from 'child_process';
 import { existsSync, mkdirSync, rmSync, readlinkSync, readFileSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
+// Direct imports for unit tests.
+import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-renderer.js';
+import {
+  CAMPFIRE_BURNING, CAMPFIRE_EMBERS, CAMPFIRE_COLD,
+  getCampfireSprite,
+  createAgentGlyph, getAgentPng, GLYPH_SIZE,
+} from '../lib/sprites.js';
+import { buildFireScene } from '../lib/scene.js';
+import { canInlineImage, renderInlineImage } from '../lib/inline-image.js';
+
 const CLI = 'node cli/index.js';
 const ROOT = process.cwd();
 
@@ -422,5 +432,183 @@ describe('meta', () => {
     const out = run('tend --help');
     assert.match(out, /Examples:/);
     assert.match(out, /tend --dry-run/);
+  });
+});
+
+// ── Pixel Renderer ──────────────────────────────────────────────────
+
+describe('pixel-renderer', () => {
+  it('renderSprite produces correct row count for even-height sprite', () => {
+    const sprite = [
+      ['#FF0000', '#00FF00'],
+      ['#0000FF', null],
+    ];
+    const lines = renderSprite(sprite);
+    assert.equal(lines.length, 1, '2 pixel rows → 1 terminal row');
+  });
+
+  it('renderSprite pads odd-height sprite', () => {
+    const sprite = [
+      ['#FF0000', '#00FF00'],
+      ['#0000FF', null],
+      ['#FFFF00', '#FF00FF'],
+    ];
+    const lines = renderSprite(sprite);
+    assert.equal(lines.length, 2, '3 pixel rows → 2 terminal rows (padded to 4)');
+  });
+
+  it('renderSprite handles all-null row', () => {
+    const sprite = [
+      [null, null, null],
+      [null, null, null],
+    ];
+    const lines = renderSprite(sprite);
+    assert.equal(lines.length, 1);
+    assert.equal(lines[0].trim(), '');
+  });
+
+  it('renderSprite applies indent', () => {
+    const sprite = [
+      ['#FF0000'],
+      ['#00FF00'],
+    ];
+    const lines = renderSprite(sprite, { indent: 5 });
+    assert.ok(lines[0].startsWith('     '), 'should start with 5 spaces');
+  });
+
+  it('composite places sprite at correct offset', () => {
+    const sprite = [['#FF0000']];
+    const canvas = composite(3, 2, [{ sprite, x: 2, y: 1 }]);
+    assert.equal(canvas[0][0], null);
+    assert.equal(canvas[0][2], null);
+    assert.equal(canvas[1][2], '#FF0000');
+  });
+
+  it('composite later layers overwrite earlier', () => {
+    const a = [['#FF0000']];
+    const b = [['#00FF00']];
+    const canvas = composite(1, 1, [
+      { sprite: a, x: 0, y: 0 },
+      { sprite: b, x: 0, y: 0 },
+    ]);
+    assert.equal(canvas[0][0], '#00FF00');
+  });
+
+  it('canRenderPixelArt returns false in non-TTY test env', () => {
+    assert.equal(canRenderPixelArt(), false);
+  });
+});
+
+// ── Sprites ─────────────────────────────────────────────────────────
+
+describe('sprites', () => {
+  const HEX_RE = /^#[0-9A-Fa-f]{6}$/;
+
+  function validateSprite(sprite, name) {
+    assert.ok(sprite.length > 0, `${name} should have rows`);
+    assert.ok(sprite.length % 2 === 0, `${name} height should be even (got ${sprite.length})`);
+    const width = sprite[0].length;
+    for (let r = 0; r < sprite.length; r++) {
+      assert.equal(sprite[r].length, width, `${name} row ${r} width should be ${width}`);
+      for (let c = 0; c < sprite[r].length; c++) {
+        const pixel = sprite[r][c];
+        assert.ok(pixel === null || HEX_RE.test(pixel), `${name}[${r}][${c}] invalid: ${pixel}`);
+      }
+    }
+  }
+
+  it('CAMPFIRE_BURNING is valid 16x14', () => {
+    validateSprite(CAMPFIRE_BURNING, 'BURNING');
+    assert.equal(CAMPFIRE_BURNING[0].length, 16);
+    assert.equal(CAMPFIRE_BURNING.length, 14);
+  });
+
+  it('CAMPFIRE_EMBERS is valid 16x10', () => {
+    validateSprite(CAMPFIRE_EMBERS, 'EMBERS');
+    assert.equal(CAMPFIRE_EMBERS[0].length, 16);
+    assert.equal(CAMPFIRE_EMBERS.length, 10);
+  });
+
+  it('CAMPFIRE_COLD is valid 16x8', () => {
+    validateSprite(CAMPFIRE_COLD, 'COLD');
+    assert.equal(CAMPFIRE_COLD[0].length, 16);
+    assert.equal(CAMPFIRE_COLD.length, 8);
+  });
+
+  it('getCampfireSprite returns correct variant', () => {
+    assert.strictEqual(getCampfireSprite('burning'), CAMPFIRE_BURNING);
+    assert.strictEqual(getCampfireSprite('embers'), CAMPFIRE_EMBERS);
+    assert.strictEqual(getCampfireSprite('cold'), CAMPFIRE_COLD);
+    assert.strictEqual(getCampfireSprite('unknown'), CAMPFIRE_COLD);
+  });
+
+  it('createAgentGlyph returns GLYPH_SIZE x GLYPH_SIZE sprite for known agent', () => {
+    const glyph = createAgentGlyph('mystic');
+    assert.equal(glyph.length, GLYPH_SIZE, `should be ${GLYPH_SIZE} rows`);
+    assert.equal(glyph[0].length, GLYPH_SIZE, `should be ${GLYPH_SIZE} cols`);
+    const filled = glyph.flat().filter(p => p !== null).length;
+    assert.ok(filled > 0, 'mystic glyph should have colored pixels');
+  });
+
+  it('createAgentGlyph lead variant has amber accent', () => {
+    const glyph = createAgentGlyph('r-developer', true);
+    assert.equal(glyph[0][0], '#FFB347', 'top-left should be amber');
+  });
+
+  it('createAgentGlyph falls back for unknown agent', () => {
+    const glyph = createAgentGlyph('unknown-agent-xyz');
+    assert.equal(glyph.length, GLYPH_SIZE);
+    assert.equal(glyph[0].length, GLYPH_SIZE);
+  });
+});
+
+// ── Inline Image ────────────────────────────────────────────────────
+
+describe('inline-image', () => {
+  it('canInlineImage returns false in non-TTY test env', () => {
+    assert.equal(canInlineImage(), false);
+  });
+
+  it('renderInlineImage produces valid escape sequence', () => {
+    const seq = renderInlineImage('iVBORw0KGgo=', 16);
+    assert.ok(seq.includes('1337;File=inline=1'), 'should contain iTerm2 protocol');
+    assert.ok(seq.includes('iVBORw0KGgo='), 'should contain base64 data');
+  });
+
+  it('getAgentPng returns base64 string for known agent', () => {
+    const png = getAgentPng('mystic');
+    assert.ok(png, 'mystic should have PNG data');
+    assert.ok(png.startsWith('iVBOR'), 'should be base64 PNG');
+  });
+
+  it('getAgentPng returns null for unknown agent', () => {
+    assert.equal(getAgentPng('nonexistent-xyz'), null);
+  });
+});
+
+// ── Scene ───────────────────────────────────────────────────────────
+
+describe('scene', () => {
+  it('buildFireScene returns lines for fire-only', () => {
+    const lines = buildFireScene({ state: 'burning', maxWidth: 80 });
+    assert.ok(lines.length > 0, 'should return terminal lines');
+    assert.equal(lines.length, 7, 'burning 14h → 7 terminal rows');
+  });
+
+  it('buildFireScene returns lines with agents (half-block fallback)', () => {
+    // In non-TTY test env, canInlineImage() is false → half-block path
+    const lines = buildFireScene({
+      state: 'burning',
+      agentIds: ['mystic', 'alchemist', 'gardener'],
+      leadId: 'mystic',
+      maxWidth: 250,
+    });
+    const expectedRows = (14 + 2 + GLYPH_SIZE) / 2;
+    assert.equal(lines.length, expectedRows, `fire + gap + glyphs = ${expectedRows} terminal rows`);
+  });
+
+  it('buildFireScene uses cold sprite for cold state', () => {
+    const lines = buildFireScene({ state: 'cold', maxWidth: 80 });
+    assert.equal(lines.length, 4);
   });
 });

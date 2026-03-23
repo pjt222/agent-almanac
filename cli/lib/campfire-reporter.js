@@ -15,6 +15,8 @@
  */
 
 import { chalk } from './reporter.js';
+import { canRenderPixelArt } from './pixel-renderer.js';
+import { buildFireScene } from './scene.js';
 
 // ── Warm color palette ──────────────────────────────────────────────
 
@@ -116,6 +118,11 @@ function fireClosing(settled, total, failed) {
  */
 export function printWelcome(totalTeams) {
   console.log();
+  if (canRenderPixelArt()) {
+    const scene = buildFireScene({ state: 'burning', maxWidth: process.stdout.columns || 80 });
+    for (const line of scene) console.log(line);
+    console.log();
+  }
   console.log(C.warm('Welcome to the campfire.'));
   console.log();
   console.log(C.dim(`The almanac holds ${totalTeams} circles of practice:`));
@@ -137,6 +144,19 @@ export function printWelcome(totalTeams) {
  */
 export function printArrival({ teamId, agents, results, ceremonial = false, alreadyBurning = new Set() }) {
   console.log();
+  if (canRenderPixelArt()) {
+    const agentIds = agents.map(a => a.id);
+    const leadId = agents.find(a => a.lead)?.id;
+    const scene = buildFireScene({
+      state: 'burning',
+      agentIds,
+      teamId,
+      leadId,
+      maxWidth: process.stdout.columns || 80,
+    });
+    for (const line of scene) console.log(line);
+    console.log();
+  }
   console.log(C.warm(`Gathering the ${C.flame(teamId)} circle...`));
   console.log();
 
@@ -247,6 +267,11 @@ export function printScatter({ teamId, agents, results, ceremonial = false }) {
   console.log();
   const walkOn = remainCount > 0 ? ` ${remainCount} agent${remainCount !== 1 ? 's' : ''} walk${remainCount === 1 ? 's' : ''} on.` : '';
   console.log(`  ${C.warm('The fire goes out.')}${walkOn ? C.dim(walkOn) : ''}`);
+  if (canRenderPixelArt()) {
+    console.log();
+    const scene = buildFireScene({ state: 'cold', maxWidth: process.stdout.columns || 80 });
+    for (const line of scene) console.log(line);
+  }
   console.log();
 }
 
@@ -362,6 +387,20 @@ export function printCampfireList({ teams, state, reg }) {
 export function printFireSummary({ team, fireData, reg }) {
   console.log();
   const fireState = fireData ? computeState(fireData.lastWarmed) : null;
+
+  if (canRenderPixelArt()) {
+    const memberIds = (team.members || []);
+    const scene = buildFireScene({
+      state: fireState || 'cold',
+      agentIds: memberIds,
+      teamId: team.id,
+      leadId: team.lead,
+      maxWidth: process.stdout.columns || 80,
+    });
+    for (const line of scene) console.log(line);
+    console.log();
+  }
+
   const glyph = fireState ? stateGlyph(fireState) : '';
 
   console.log(`  ${glyph} ${C.flame(team.id)} ${C.dim('—')} ${team.description || ''}`);

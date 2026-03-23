@@ -774,6 +774,55 @@ program
     }
   });
 
+// ── Demo ────────────────────────────────────────────────────────
+
+program
+  .command('demo')
+  .description('Preview campfire visuals — fire states and team icons')
+  .addHelpText('after', `
+Examples:
+  agent-almanac demo`)
+  .action(async () => {
+    const { canInlineImage, renderInlineImage } = await import('./lib/inline-image.js');
+    const { getCampfirePng, getTeamStrip, getAgentPng } = await import('./lib/sprites.js');
+    const { buildFireScene } = await import('./lib/scene.js');
+
+    const maxWidth = process.stdout.columns || 120;
+    const inline = canInlineImage();
+
+    console.log();
+    console.log(campfire.C.warm(`  Campfire demo ${campfire.C.dim(`(inline images: ${inline ? 'yes' : 'no'})`)}`));
+    console.log();
+
+    // Fire states.
+    for (const state of ['burning', 'embers', 'cold']) {
+      console.log(campfire.C.dim(`  ── ${state} ──`));
+      const scene = buildFireScene({ state, maxWidth });
+      for (const line of scene) console.log(line);
+      console.log();
+    }
+
+    // Team strip.
+    if (inline) {
+      const almanac = detectAlmanacRoot();
+      const reg = loadRegistries(almanac);
+      const teamIds = reg.teams.map(t => t.id);
+      for (const id of teamIds) {
+        const team = findTeam(reg, id);
+        if (!team) continue;
+        const strip = getTeamStrip(id);
+        if (!strip) continue;
+        console.log(campfire.C.dim(`  ── ${id} ──`));
+        const memberCount = (team.members || []).length;
+        const stripCells = memberCount * 16 + (memberCount - 1) * 2;
+        const indent = Math.max(0, Math.floor((maxWidth - stripCells) / 2));
+        console.log(' '.repeat(indent) + renderInlineImage(strip, stripCells, 8));
+        for (let i = 0; i < 8; i++) console.log('');
+        console.log();
+      }
+    }
+  });
+
 // ── Utility ─────────────────────────────────────────────────────
 
 function askYesNo() {

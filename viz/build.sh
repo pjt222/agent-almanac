@@ -26,7 +26,10 @@ node build-data.js
 echo "=== Step 3/4: Generate icon manifests from skills.json ==="
 node build-icon-manifest.js --type all
 
-echo "=== Step 4/4: Render all icons (standard + HD) ==="
+echo "=== Step 4/5: Render all icons (standard + HD) ==="
 $RSCRIPT build-all-icons.R "$@"
+
+echo "=== Step 5/5: Generate terminal glyph data ==="
+node build-terminal-glyphs.js
 
 echo "=== Done ==="
