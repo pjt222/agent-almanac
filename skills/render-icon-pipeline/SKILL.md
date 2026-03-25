@@ -3,12 +3,13 @@ name: render-icon-pipeline
 description: >
   Run the viz pipeline to render icons from existing glyphs. Entry point for the
   viz subproject covering palette generation, data building, manifest creation,
-  and icon rendering for skills, agents, and teams.
+  and icon rendering for skills, agents, and teams. Always use build.sh as the
+  pipeline entry point — never call Rscript directly.
 license: MIT
 allowed-tools: Read Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: visualization
   complexity: basic
   language: multi
@@ -18,6 +19,8 @@ metadata:
 # Render Icon Pipeline
 
 Run the viz pipeline end-to-end to render icons from existing glyphs. Covers palette generation, data building, manifest creation, and icon rendering for skills, agents, and teams.
+
+**Canonical entry point**: `bash viz/build.sh [flags]` from the project root, or `bash build.sh [flags]` from `viz/`. This script handles platform detection (WSL, Docker, native), R binary selection, and step ordering. Never call `Rscript` directly for build scripts — that path is only for MCP server configuration.
 
 ## When to Use
 
@@ -40,106 +43,94 @@ Run the viz pipeline end-to-end to render icons from existing glyphs. Covers pal
 
 Ensure the environment is ready for rendering.
 
-1. Confirm working directory is `viz/` (or navigate there):
+1. Confirm `viz/build.sh` exists:
    ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
+   ls -la viz/build.sh
    ```
-2. Verify R packages are available:
-   ```bash
-   Rscript -e "requireNamespace('ggplot2'); requireNamespace('ggforce'); requireNamespace('ggfx'); requireNamespace('ragg'); requireNamespace('magick')"
-   ```
-3. Verify Node.js is available:
+2. Verify Node.js is available:
    ```bash
    node --version
    ```
-4. Check that `config.yml` exists (OS-aware R path selection)
+3. Check that `viz/config.yml` exists (platform-specific R path profiles):
+   ```bash
+   ls viz/config.yml
+   ```
 
-**Expected:** All prerequisites pass without error.
+`build.sh` handles R binary resolution automatically — you do not need to verify R paths manually. On WSL it uses `/usr/local/bin/Rscript` (WSL-native R), on Docker it uses the container R, and on native Linux/macOS it uses `Rscript` from PATH.
 
-**On failure:** Install missing R packages with `install.packages()`. If Node.js is missing, install via nvm. If `config.yml` is missing, the pipeline will fall back to system defaults.
+**Expected:** `build.sh`, Node.js, and `config.yml` are present.
 
-### Step 2: Generate Palette Colors
+**On failure:** If `config.yml` is missing, the pipeline falls back to system defaults. If Node.js is missing, install via nvm.
 
-Generate the JSON and JS palette data from R palette definitions.
+### Step 2: Run the Pipeline
 
-```bash
-Rscript generate-palette-colors.R
-```
-
-**Expected:** `viz/public/data/palette-colors.json` and `viz/js/palette-colors.js` updated.
-
-**On failure:** Check that `viz/R/palettes.R` is valid R code. Common issue: syntax error in new domain color entry.
-
-### Step 3: Build Data
-
-Generate the skills/agents/teams data files from registries.
-
-```bash
-node build-data.js
-```
-
-**Expected:** `viz/public/data/skills.json` updated with current registry data.
-
-**On failure:** Verify `skills/_registry.yml`, `agents/_registry.yml`, `teams/_registry.yml` are valid YAML.
-
-### Step 4: Build Manifests
-
-Generate icon manifests from the data files.
-
-```bash
-node build-icon-manifest.js
-```
-
-**Expected:** Three manifest files updated:
-- `viz/public/data/icon-manifest.json`
-- `viz/public/data/agent-icon-manifest.json`
-- `viz/public/data/team-icon-manifest.json`
-
-**On failure:** If manifests are stale, delete them and re-run. Check that `build-data.js` was run first.
-
-### Step 5: Render Icons
-
-Run the icon renderer with appropriate flags.
+`build.sh` executes 5 steps in order:
+1. Generate palette colors (R) → `palette-colors.json` + `colors-generated.js`
+2. Build data (Node) → `skills.json`
+3. Build manifests (Node) → `icon-manifest.json`, `agent-icon-manifest.json`, `team-icon-manifest.json`
+4. Render icons (R) → `icons/` and `icons-hd/` WebP files
+5. Generate terminal glyphs (Node) → `cli/lib/glyph-data.json`
 
 **Full pipeline (all types, all palettes, standard + HD):**
 ```bash
-Rscript build-all-icons.R
+bash viz/build.sh
 ```
 
-**Incremental (skip unchanged glyphs):**
+**Incremental (skip icons that already exist on disk):**
 ```bash
-Rscript build-all-icons.R --skip-existing
-```
-
-**Single entity type:**
-```bash
-Rscript build-all-icons.R --type skill
-Rscript build-all-icons.R --type agent
-Rscript build-all-icons.R --type team
+bash viz/build.sh --skip-existing
 ```
 
 **Single domain (skills only):**
 ```bash
-Rscript build-icons.R --only design
+bash viz/build.sh --only design
 ```
 
-**Single agent or team:**
+**Single entity type:**
 ```bash
-Rscript build-agent-icons.R --only mystic
-Rscript build-team-icons.R --only r-package-review
+bash viz/build.sh --type skill
+bash viz/build.sh --type agent
+bash viz/build.sh --type team
 ```
 
 **Dry run (preview without rendering):**
 ```bash
-Rscript build-all-icons.R --dry-run
+bash viz/build.sh --dry-run
 ```
 
 **Standard size only (skip HD):**
 ```bash
-Rscript build-all-icons.R --no-hd
+bash viz/build.sh --no-hd
 ```
 
-**CLI reference:**
+All flags after `build.sh` are passed through to `build-all-icons.R`.
+
+**Expected:** Icons rendered to `viz/public/icons/<palette>/` and `viz/public/icons-hd/<palette>/`.
+
+**On failure:**
+- **renv hang on NTFS**: The viz `.Rprofile` bypasses `renv/activate.R` and sets `.libPaths()` directly. Ensure you run from `viz/` (build.sh does this automatically via `cd "$(dirname "$0")"`)
+- **Missing R packages**: Run `Rscript -e "install.packages(c('ggplot2', 'ggforce', 'ggfx', 'ragg', 'magick', 'future', 'furrr', 'digest'))"` from the R environment that `build.sh` selects
+- **No glyph mapped**: The entity needs a glyph function — use the `create-glyph` skill before rendering
+
+### Step 3: Verify Output
+
+Confirm the render completed successfully.
+
+1. Check file counts match expectations:
+   ```bash
+   find viz/public/icons/cyberpunk -name "*.webp" | wc -l
+   find viz/public/icons-hd/cyberpunk -name "*.webp" | wc -l
+   ```
+2. Check for reasonable file sizes (2-80 KB per icon)
+3. Run the `audit-icon-pipeline` skill for a comprehensive check
+
+**Expected:** File counts match manifest entry counts. File sizes in expected range.
+
+**On failure:** If counts don't match, some glyphs may have errored during rendering. Check the build log for `[ERROR]` lines.
+
+## CLI Flag Reference
+
+All flags are passed through `build.sh` to `build-all-icons.R`:
 
 | Flag | Default | Description |
 |------|---------|-------------|
@@ -156,29 +147,20 @@ Rscript build-all-icons.R --no-hd
 | `--no-hd` | off | Skip HD variants |
 | `--strict` | off | Exit on first sub-script failure |
 
-**Expected:** Icons rendered to `viz/public/icons/<palette>/` and `viz/public/icons-hd/<palette>/`.
+## What build.sh Does Internally
 
-**On failure:**
-- **renv hang**: Run from `viz/` directory so `.Rprofile` activates the library path workaround
-- **Missing packages**: `install.packages(c("ggplot2", "ggforce", "ggfx", "ragg", "magick", "future", "furrr", "digest"))`
-- **Exit code 5**: Usually means a glyph function errored — check the log for the specific skill/agent/team ID
-- **No glyph mapped**: The entity needs a glyph function — use the `create-glyph` skill
+For reference only — do NOT run these steps manually:
 
-### Step 6: Verify Output
-
-Confirm the render completed successfully.
-
-1. Check file counts match expectations:
-   ```bash
-   find viz/public/icons/cyberpunk -name "*.webp" | wc -l
-   find viz/public/icons-hd/cyberpunk -name "*.webp" | wc -l
-   ```
-2. Check for reasonable file sizes (2-80 KB per icon)
-3. Verify manifests are up to date (run `audit-icon-pipeline` for a full check)
-
-**Expected:** File counts match manifest entry counts. File sizes in expected range.
-
-**On failure:** If counts don't match, some glyphs may have errored during rendering. Check the build log for `[ERROR]` lines.
+```
+cd viz/
+# 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
+# 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript
+# 3. $RSCRIPT generate-palette-colors.R
+# 4. node build-data.js
+# 5. node build-icon-manifest.js --type all
+# 6. $RSCRIPT build-all-icons.R "$@"  (flags passed through)
+# 7. node build-terminal-glyphs.js
+```
 
 ## Docker Alternative
 
@@ -193,7 +175,7 @@ This runs the full pipeline in an isolated Linux environment and serves the resu
 
 ## Validation Checklist
 
-- [ ] Working directory is `viz/`
+- [ ] Ran `bash viz/build.sh` (not bare `Rscript`)
 - [ ] Palette colors generated (JSON + JS)
 - [ ] Data files built from registries
 - [ ] Manifests generated from data
@@ -203,10 +185,11 @@ This runs the full pipeline in an isolated Linux environment and serves the resu
 
 ## Common Pitfalls
 
-- **Wrong working directory**: R scripts expect to be run from `viz/` or to find `viz/R/utils.R` relative to the project root
-- **renv not activated**: The `.Rprofile` workaround requires running from `viz/` — using `--vanilla` flag or running from another directory will skip it
-- **Stale manifests**: Always run Steps 2-4 (palette -> data -> manifest) before Step 5 (render) after registry changes
-- **Parallel on Windows**: Windows doesn't support fork-based parallelism — the pipeline auto-selects `multisession` via `config.yml`
+- **Calling Rscript directly**: Never run `Rscript build-icons.R` or `Rscript generate-palette-colors.R` manually. Always use `bash build.sh [flags]`. Direct Rscript calls bypass platform detection and may use the wrong R binary (Windows R via `~/bin/Rscript` wrapper instead of WSL-native R at `/usr/local/bin/Rscript`). Note: the Windows R path in CLAUDE.md and guides is for **MCP server configuration only**, not for build scripts.
+- **Wrong working directory**: `build.sh` CDs to its own directory automatically (`cd "$(dirname "$0")"`), so you can call it from anywhere: `bash viz/build.sh` from project root works correctly.
+- **Stale manifests**: `build.sh` runs Steps 1-5 in order, so manifests are always regenerated before rendering. If you only need manifests without rendering, use `node viz/build-data.js && node viz/build-icon-manifest.js` (the Node steps don't need R).
+- **renv not activated**: The `.Rprofile` workaround requires running from `viz/` — `build.sh` handles this. Using `--vanilla` flag or running R from another directory will skip it.
+- **Parallel on Windows**: Windows doesn't support fork-based parallelism — the pipeline auto-selects `multisession` via `config.yml`.
 
 ## Related Skills
 
