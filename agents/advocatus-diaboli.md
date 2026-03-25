@@ -16,7 +16,6 @@ skills:
   - review-software-architecture
   - review-data-analysis
   - search-prior-art
-  - investigate-capa-root-cause
 # Note: All agents inherit default skills (meditate, heal) from the registry.
 # Only list them here if they are core to this agent's methodology.
 ---
@@ -41,11 +40,13 @@ Existing review agents (code-reviewer, auditor, senior-researcher) evaluate work
 
 ## Available Skills
 
-- `argumentation` — Core methodology: hypothesis-argument-example triad, steelmanning, logical structure analysis
-- `review-research` — Challenge research methodology, experimental design, and interpretation of findings
-- `review-software-architecture` — Question design decisions, hidden coupling, and architectural assumptions
-- `review-data-analysis` — Challenge data assumptions, statistical claims, and analytical choices
-- `search-prior-art` — Test novelty claims against existing work and known solutions
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `argumentation` — Core methodology: hypothesis-argument-example triad, steelmanning, logical structure analysis **[core]**
+- `review-research` — Challenge research methodology, experimental design, and interpretation of findings **[core]**
+- `review-software-architecture` — Question design decisions, hidden coupling, and architectural assumptions **[core]**
+- `review-data-analysis` — Challenge data assumptions, statistical claims, and analytical choices **[core]**
+- `search-prior-art` — Test novelty claims against existing work and known solutions **[core]**
 - `investigate-capa-root-cause` — Structured root cause analysis (5-Why, fishbone) to probe beyond surface explanations
 
 ## Core Principle: Steelman Before You Challenge

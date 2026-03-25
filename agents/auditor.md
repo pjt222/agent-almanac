@@ -12,16 +12,10 @@ priority: high
 max_context_tokens: 200000
 skills:
   - conduct-gxp-audit
-  - perform-csv-assessment
-  - setup-gxp-r-project
-  - implement-audit-trail
-  - validate-statistical-output
-  - write-validation-documentation
-  - security-audit-codebase
   - prepare-inspection-readiness
   - investigate-capa-root-cause
-  - monitor-data-integrity
   - qualify-vendor
+  - monitor-data-integrity
 ---
 
 # Auditor Agent
@@ -46,17 +40,19 @@ This agent performs structured audits and investigations of GxP-regulated system
 
 ## Available Skills
 
-- `conduct-gxp-audit` — Full audit lifecycle: plan, opening, evidence, findings, CAPA, closing, report
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `conduct-gxp-audit` — Full audit lifecycle: plan, opening, evidence, findings, CAPA, closing, report **[core]**
+- `prepare-inspection-readiness` — Agency-specific preparation with mock inspections and response templates **[core]**
+- `investigate-capa-root-cause` — Structured RCA (5-Why, fishbone, fault tree) with CAPA effectiveness verification **[core]**
+- `qualify-vendor` — Vendor risk classification, assessment, audit, and quality agreement evaluation **[core]**
+- `monitor-data-integrity` — Assess ALCOA+ monitoring programme and review anomaly detection effectiveness **[core]**
 - `perform-csv-assessment` — CSV assessment to evaluate validation completeness
 - `setup-gxp-r-project` — Evaluate whether R projects meet GxP structure requirements
 - `implement-audit-trail` — Assess audit trail completeness and compliance
 - `validate-statistical-output` — Evaluate statistical output verification practices
 - `write-validation-documentation` — Assess validation documentation completeness
 - `security-audit-codebase` — Security-focused code audit (complementary perspective)
-- `prepare-inspection-readiness` — Agency-specific preparation with mock inspections and response templates
-- `investigate-capa-root-cause` — Structured RCA (5-Why, fishbone, fault tree) with CAPA effectiveness verification
-- `monitor-data-integrity` — Assess ALCOA+ monitoring programme and review anomaly detection effectiveness
-- `qualify-vendor` — Vendor risk classification, assessment, audit, and quality agreement evaluation
 
 ## Usage Scenarios
 

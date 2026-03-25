@@ -4,6 +4,7 @@
 
 # Agent Almanac
 
+[![npm version](https://img.shields.io/npm/v/agent-almanac.svg)](https://www.npmjs.com/package/agent-almanac)
 [![Validate Skills](https://github.com/pjt222/agent-almanac/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/pjt222/agent-almanac/actions/workflows/validate-skills.yml)
 [![Update READMEs](https://github.com/pjt222/agent-almanac/actions/workflows/update-readmes.yml/badge.svg)](https://github.com/pjt222/agent-almanac/actions/workflows/update-readmes.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -55,6 +56,14 @@ No setup needed — reference any skill by path in Claude Code:
 > "Follow skills/commit-changes/SKILL.md to stage and commit my changes"
 ```
 
+### Install the CLI
+
+```bash
+npm install -g agent-almanac
+```
+
+Browse campfires (teams), install skills and agents, and manage content across 12+ frameworks. See [cli/README.md](cli/README.md) for full usage.
+
 ### Full setup
 
 **Prerequisites:** [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed, Node.js (for README generation and the visualization).
@@ -102,7 +111,7 @@ agent-almanac/
   viz/          Interactive force-graph explorer with R-generated icons
   tests/        30 test scenarios for validation
   i18n/         Translations (4 locales: de, zh-CN, ja, es)
-  cli/          Universal installer tool (Phase 1)
+  cli/          Universal installer CLI (npm install -g agent-almanac)
   scripts/      Build and CI automation
   sessions/     Tending session archives
 ```

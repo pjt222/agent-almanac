@@ -15,7 +15,6 @@ skills:
   - preserve-materials
   - curate-collection
   - manage-memory
-  - review-research
   - observe
 ---
 
@@ -40,21 +39,22 @@ The librarian uses manage-memory for organizing persistent knowledge stores (the
 
 ## Available Skills
 
-This agent can execute the following structured procedures from the [skills library](../skills/):
+This agent can execute the following structured procedures from the [skills library](../skills/).
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
 
 ### Library Science
-- `catalog-collection` — Catalog and classify materials using Dewey Decimal or Library of Congress systems
-- `preserve-materials` — Preserve and conserve library materials through environmental control, repair, and disaster planning
-- `curate-collection` — Build and maintain collections through acquisitions, weeding, and reader advisory
+- `catalog-collection` — Catalog and classify materials using Dewey Decimal or Library of Congress systems **[core]**
+- `preserve-materials` — Preserve and conserve library materials through environmental control, repair, and disaster planning **[core]**
+- `curate-collection` — Build and maintain collections through acquisitions, weeding, and reader advisory **[core]**
 
 ### General (Cross-Reference)
-- `manage-memory` — Organize persistent knowledge stores (digital cataloging parallel)
+- `manage-memory` — Organize persistent knowledge stores (digital cataloging parallel) **[core]**
 
 ### Review (Cross-Reference)
 - `review-research` — Evaluate research quality for collection selection decisions
 
 ### Esoteric (Cross-Reference)
-- `observe` — Systematic pattern recognition across information landscapes
+- `observe` — Systematic pattern recognition across information landscapes **[core]**
 
 ## Usage Scenarios
 

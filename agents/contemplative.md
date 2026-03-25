@@ -11,21 +11,11 @@ tags: [esoteric, meditation, healing, tending, meta-cognition, contemplation, at
 priority: normal
 max_context_tokens: 200000
 skills:
-  - heal
   - meditate
+  - heal
   - center
-  - shine
-  - intrinsic
-  - breathe
-  - rest
   - attune
-  - dream
-  - gratitude
-  - awareness
   - observe
-  - listen
-  - honesty-humility
-  - conscientiousness
 ---
 
 # Contemplative Agent
@@ -56,10 +46,12 @@ This is the agent you use when the work *is* the practice — not when practice 
 
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 ### Core Practice
-- `meditate` — Full meta-cognitive clearing session
-- `heal` — Subsystem assessment and drift correction
-- `center` — Dynamic reasoning balance and weight distribution
+- `meditate` — Full meta-cognitive clearing session **[core]**
+- `heal` — Subsystem assessment and drift correction **[core]**
+- `center` — Dynamic reasoning balance and weight distribution **[core]**
 - `shine` — Radiant authenticity and genuine presence
 - `intrinsic` — Motivation through autonomy, competence, and relatedness
 
@@ -68,9 +60,9 @@ This agent can execute the following structured procedures from the [skills libr
 - `rest` — Intentional non-action and recovery
 
 ### Relational
-- `attune` — Calibrate to the person's communication style and expertise
+- `attune` — Calibrate to the person's communication style and expertise **[core]**
 - `listen` — Deep receptive attention beyond literal words
-- `observe` — Sustained neutral pattern recognition
+- `observe` — Sustained neutral pattern recognition **[core]**
 
 ### Generative
 - `dream` — Unconstrained creative exploration

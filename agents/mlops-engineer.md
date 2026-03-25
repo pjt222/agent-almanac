@@ -11,34 +11,11 @@ tags: [mlops, machine-learning, experiment-tracking, model-serving, feature-stor
 priority: high
 max_context_tokens: 200000
 skills:
-  # mlops (12)
   - track-ml-experiments
-  - register-ml-model
   - deploy-ml-model-serving
-  - build-feature-store
-  - version-ml-data
   - orchestrate-ml-pipeline
   - monitor-model-drift
-  - run-ab-test-models
-  - setup-automl-pipeline
-  - detect-anomalies-aiops
-  - forecast-operational-metrics
-  - label-training-data
-  # data-serialization (2)
-  - serialize-data-formats
-  - design-serialization-schema
-  # containerization (3)
-  - create-r-dockerfile
-  - setup-docker-compose
-  - optimize-docker-build-cache
-  # review (2)
-  - review-data-analysis
-  - review-software-architecture
-  # git (2)
-  - commit-changes
-  - manage-git-branches
-  # general (1)
-  - write-claude-md
+  - build-feature-store
 ---
 
 # MLOps Engineer Agent
@@ -66,14 +43,16 @@ This agent bridges the gap between data science experimentation and production M
 
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 ### MLOps
-- `track-ml-experiments` — MLflow tracking server, autologging, run comparison
+- `track-ml-experiments` — MLflow tracking server, autologging, run comparison **[core]**
 - `register-ml-model` — MLflow Model Registry with stage transitions and approvals
-- `deploy-ml-model-serving` — MLflow / BentoML / Seldon Core REST/gRPC endpoints
-- `build-feature-store` — Feast offline/online stores with feature definitions
+- `deploy-ml-model-serving` — MLflow / BentoML / Seldon Core REST/gRPC endpoints **[core]**
+- `build-feature-store` — Feast offline/online stores with feature definitions **[core]**
 - `version-ml-data` — DVC data versioning with remote storage and pipelines
-- `orchestrate-ml-pipeline` — Prefect / Airflow DAG construction with retry logic
-- `monitor-model-drift` — Evidently AI drift detection with PSI and KS tests
+- `orchestrate-ml-pipeline` — Prefect / Airflow DAG construction with retry logic **[core]**
+- `monitor-model-drift` — Evidently AI drift detection with PSI and KS tests **[core]**
 - `run-ab-test-models` — Traffic splitting, canary/shadow deployment, significance testing
 - `setup-automl-pipeline` — Optuna / Ray Tune hyperparameter optimization
 - `detect-anomalies-aiops` — Time series anomaly detection and alert correlation

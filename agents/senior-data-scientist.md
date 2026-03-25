@@ -13,7 +13,6 @@ max_context_tokens: 200000
 skills:
   - review-data-analysis
   - validate-statistical-output
-  - generate-statistical-tables
   - review-research
   - serialize-data-formats
   - design-serialization-schema
@@ -39,12 +38,14 @@ This agent reviews data science work at a senior level — not just whether the 
 
 ## Available Skills
 
-- `review-data-analysis` — Comprehensive review of data quality, assumptions, leakage, model validation, reproducibility
-- `validate-statistical-output` — Double programming and independent verification of statistical results
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `review-data-analysis` — Comprehensive review of data quality, assumptions, leakage, model validation, reproducibility **[core]**
+- `validate-statistical-output` — Double programming and independent verification of statistical results **[core]**
 - `generate-statistical-tables` — Publication-ready statistical table creation and review
-- `review-research` — Research methodology and scientific rigour evaluation
-- `serialize-data-formats` — Data serialization format selection and implementation review
-- `design-serialization-schema` — Schema design, versioning, and backwards compatibility review
+- `review-research` — Research methodology and scientific rigour evaluation **[core]**
+- `serialize-data-formats` — Data serialization format selection and implementation review **[core]**
+- `design-serialization-schema` — Schema design, versioning, and backwards compatibility review **[core]**
 
 ## Usage Scenarios
 

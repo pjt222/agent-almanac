@@ -24,34 +24,10 @@ agents:
     mcp_servers: [r-mcptools, r-mcp-server]
     skills:
       - create-r-package
-      - write-roxygen-docs
       - write-testthat-tests
-      - write-vignette
-      - manage-renv-dependencies
-      - setup-github-actions-ci
-      - release-package-version
-      - build-pkgdown-site
       - submit-to-cran
-      - add-rcpp-integration
-      - create-quarto-report
-      - build-parameterized-report
-      - format-apa-report
-      - generate-statistical-tables
-      - setup-gxp-r-project
-      - implement-audit-trail
-      - validate-statistical-output
-      - write-validation-documentation
-      - configure-mcp-server
-      - build-custom-mcp-server
-      - troubleshoot-mcp-connection
-      - create-r-dockerfile
-      - setup-docker-compose
-      - optimize-docker-build-cache
-      - containerize-mcp-server
-      - commit-changes
-      - create-pull-request
-      - manage-git-branches
-      - write-claude-md
+      - manage-renv-dependencies
+      - build-pkgdown-site
 
   - id: code-reviewer
     path: agents/code-reviewer.md
@@ -60,13 +36,11 @@ agents:
     priority: high
     tools: [Read, Edit, Grep, Glob, Bash, WebFetch]
     skills:
+      - review-pull-request
       - security-audit-codebase
-      - commit-changes
-      - create-pull-request
       - resolve-git-conflicts
       - write-testthat-tests
       - configure-git-repository
-      - review-pull-request
 
   - id: security-analyst
     path: agents/security-analyst.md
@@ -80,7 +54,6 @@ agents:
       - implement-audit-trail
       - validate-statistical-output
       - write-validation-documentation
-      - configure-git-repository
 
   - id: web-developer
     path: agents/web-developer.md
@@ -113,21 +86,11 @@ agents:
     priority: normal
     tools: [Read, Grep, Glob]
     skills:
-      - heal
       - meditate
+      - heal
       - center
-      - shine
-      - intrinsic
-      - breathe
-      - rest
       - attune
-      - dream
-      - gratitude
-      - awareness
       - observe
-      - listen
-      - honesty-humility
-      - conscientiousness
 
   - id: mystic
     path: agents/mystic.md
@@ -171,18 +134,10 @@ agents:
     tools: [Read, Write, Edit, Bash, Grep, Glob]
     skills:
       - perform-csv-assessment
-      - setup-gxp-r-project
-      - implement-audit-trail
-      - validate-statistical-output
-      - write-validation-documentation
-      - implement-pharma-serialisation
       - design-compliance-architecture
-      - manage-change-control
+      - implement-audit-trail
       - implement-electronic-signatures
-      - write-standard-operating-procedure
-      - monitor-data-integrity
-      - design-training-program
-      - decommission-validated-system
+      - manage-change-control
 
   - id: auditor
     path: agents/auditor.md
@@ -192,16 +147,10 @@ agents:
     tools: [Read, Grep, Glob, Bash, WebFetch]
     skills:
       - conduct-gxp-audit
-      - perform-csv-assessment
-      - setup-gxp-r-project
-      - implement-audit-trail
-      - validate-statistical-output
-      - write-validation-documentation
-      - security-audit-codebase
       - prepare-inspection-readiness
       - investigate-capa-root-cause
-      - monitor-data-integrity
       - qualify-vendor
+      - monitor-data-integrity
 
   - id: senior-researcher
     path: agents/senior-researcher.md
@@ -224,7 +173,6 @@ agents:
     skills:
       - review-data-analysis
       - validate-statistical-output
-      - generate-statistical-tables
       - review-research
       - serialize-data-formats
       - design-serialization-schema
@@ -276,10 +224,6 @@ agents:
       - plan-sprint
       - manage-backlog
       - generate-status-report
-      - conduct-retrospective
-      - commit-changes
-      - manage-git-branches
-      - write-claude-md
 
   - id: devops-engineer
     path: agents/devops-engineer.md
@@ -289,40 +233,10 @@ agents:
     tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
     skills:
       - build-ci-cd-pipeline
-      - provision-infrastructure-terraform
       - deploy-to-kubernetes
-      - manage-kubernetes-secrets
-      - setup-container-registry
       - implement-gitops-workflow
-      - configure-ingress-networking
-      - setup-service-mesh
-      - configure-api-gateway
-      - enforce-policy-as-code
-      - optimize-cloud-costs
-      - setup-local-kubernetes
-      - write-helm-chart
       - setup-prometheus-monitoring
-      - build-grafana-dashboards
-      - configure-log-aggregation
-      - instrument-distributed-tracing
-      - define-slo-sli-sla
-      - configure-alerting-rules
-      - write-incident-runbook
-      - conduct-post-mortem
-      - plan-capacity
-      - design-on-call-rotation
-      - run-chaos-experiment
-      - setup-uptime-checks
-      - correlate-observability-signals
-      - create-r-dockerfile
-      - setup-docker-compose
-      - optimize-docker-build-cache
-      - containerize-mcp-server
-      - commit-changes
-      - manage-git-branches
-      - configure-git-repository
-      - write-claude-md
-      - security-audit-codebase
+      - write-helm-chart
 
   - id: mlops-engineer
     path: agents/mlops-engineer.md
@@ -332,27 +246,10 @@ agents:
     tools: [Read, Write, Edit, Bash, Grep, Glob, WebFetch]
     skills:
       - track-ml-experiments
-      - register-ml-model
       - deploy-ml-model-serving
-      - build-feature-store
-      - version-ml-data
       - orchestrate-ml-pipeline
       - monitor-model-drift
-      - run-ab-test-models
-      - setup-automl-pipeline
-      - detect-anomalies-aiops
-      - forecast-operational-metrics
-      - label-training-data
-      - serialize-data-formats
-      - design-serialization-schema
-      - create-r-dockerfile
-      - setup-docker-compose
-      - optimize-docker-build-cache
-      - review-data-analysis
-      - review-software-architecture
-      - commit-changes
-      - manage-git-branches
-      - write-claude-md
+      - build-feature-store
 
   - id: putior-integrator
     path: agents/putior-integrator.md
@@ -365,7 +262,6 @@ agents:
       - analyze-codebase-workflow
       - annotate-source-files
       - generate-workflow-diagram
-      - setup-putior-ci
       - configure-putior-mcp
 
   - id: swarm-strategist
@@ -391,16 +287,9 @@ agents:
     skills:
       - generate-puzzle
       - add-puzzle-type
-      - render-puzzle-docs
-      - run-puzzle-tests
       - validate-piles-notation
-      - write-roxygen-docs
-      - write-testthat-tests
-      - manage-renv-dependencies
-      - setup-github-actions-ci
-      - commit-changes
-      - create-pull-request
-      - manage-git-branches
+      - run-puzzle-tests
+      - render-puzzle-docs
 
   - id: shapeshifter
     path: agents/shapeshifter.md
@@ -449,8 +338,6 @@ agents:
       - review-research
       - review-data-analysis
       - review-software-architecture
-      - review-web-design
-      - review-ux-ui
       - assess-ip-landscape
       - search-prior-art
 
@@ -489,7 +376,6 @@ agents:
       - preserve-materials
       - curate-collection
       - manage-memory
-      - review-research
       - observe
 
   - id: gardener
@@ -504,9 +390,6 @@ agents:
       - plan-garden-calendar
       - read-garden
       - maintain-hand-tools
-      - meditate
-      - heal
-      - forage-plants
 
   - id: quarto-developer
     path: agents/quarto-developer.md
@@ -516,14 +399,10 @@ agents:
     tools: [Read, Write, Edit, Bash, Grep, Glob]
     skills:
       - create-quarto-report
-      - format-apa-report
       - build-parameterized-report
+      - format-apa-report
       - generate-statistical-tables
       - write-vignette
-      - build-pkgdown-site
-      - write-roxygen-docs
-      - render-puzzle-docs
-      - write-claude-md
 
   - id: dog-trainer
     path: agents/dog-trainer.md
@@ -593,20 +472,7 @@ agents:
       - build-shiny-module
       - test-shiny-app
       - deploy-shiny-app
-      - optimize-shiny-performance
       - design-shiny-ui
-      - write-testthat-tests
-      - write-roxygen-docs
-      - manage-renv-dependencies
-      - setup-github-actions-ci
-      - release-package-version
-      - create-r-dockerfile
-      - setup-docker-compose
-      - create-quarto-report
-      - commit-changes
-      - create-pull-request
-      - manage-git-branches
-      - write-claude-md
 
   - id: tour-planner
     path: agents/tour-planner.md
@@ -689,7 +555,6 @@ agents:
       - review-software-architecture
       - review-data-analysis
       - search-prior-art
-      - investigate-capa-root-cause
 
   - id: geometrist
     path: agents/geometrist.md
@@ -892,7 +757,6 @@ agents:
       - interpret-mass-spectrum
       - interpret-uv-vis-spectrum
       - interpret-raman-spectrum
-      - plan-spectroscopic-analysis
 
   - id: chromatographer
     path: agents/chromatographer.md
@@ -936,13 +800,11 @@ agents:
     priority: normal
     tools: [Read, Grep, Glob, WebFetch, WebSearch]
     skills:
-      - analyze-magnetic-field
-      - solve-electromagnetic-induction
       - formulate-maxwell-equations
-      - design-electromagnetic-device
+      - solve-electromagnetic-induction
+      - analyze-magnetic-field
       - analyze-magnetic-levitation
-      - design-acoustic-levitation
-      - evaluate-levitation-mechanism
+      - design-electromagnetic-device
 
   - id: cli-developer
     path: agents/cli-developer.md
@@ -955,6 +817,7 @@ agents:
       - build-cli-plugin
       - test-cli-application
       - design-cli-output
+      - install-almanac-content
 
   - id: claw-polisher
     path: agents/claw-polisher.md
@@ -968,9 +831,3 @@ agents:
       - review-codebase
       - create-pull-request
       - create-github-issues
-      - manage-git-branches
-      - commit-changes
-      - configure-git-repository
-      - install-almanac-content
-      - create-github-release
-      - apply-semantic-versioning

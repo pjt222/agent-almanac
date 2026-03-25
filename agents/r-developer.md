@@ -13,34 +13,10 @@ max_context_tokens: 200000
 mcp_servers: [r-mcptools, r-mcp-server]
 skills:
   - create-r-package
-  - write-roxygen-docs
   - write-testthat-tests
-  - write-vignette
-  - manage-renv-dependencies
-  - setup-github-actions-ci
-  - release-package-version
-  - build-pkgdown-site
   - submit-to-cran
-  - add-rcpp-integration
-  - create-quarto-report
-  - build-parameterized-report
-  - format-apa-report
-  - generate-statistical-tables
-  - setup-gxp-r-project
-  - implement-audit-trail
-  - validate-statistical-output
-  - write-validation-documentation
-  - configure-mcp-server
-  - build-custom-mcp-server
-  - troubleshoot-mcp-connection
-  - create-r-dockerfile
-  - setup-docker-compose
-  - optimize-docker-build-cache
-  - containerize-mcp-server
-  - commit-changes
-  - create-pull-request
-  - manage-git-branches
-  - write-claude-md
+  - manage-renv-dependencies
+  - build-pkgdown-site
 ---
 
 # R Developer Agent
@@ -65,16 +41,18 @@ This agent assists with all aspects of R development, from package creation and 
 
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 ### R Package Development
-- `create-r-package` — Scaffold a new R package with complete structure
+- `create-r-package` — Scaffold a new R package with complete structure **[core]**
 - `write-roxygen-docs` — Write roxygen2 documentation for functions and datasets
-- `write-testthat-tests` — Write testthat edition 3 tests with high coverage
+- `write-testthat-tests` — Write testthat edition 3 tests with high coverage **[core]**
 - `write-vignette` — Create long-form package documentation vignettes
-- `manage-renv-dependencies` — Manage reproducible R environments with renv
+- `manage-renv-dependencies` — Manage reproducible R environments with renv **[core]**
 - `setup-github-actions-ci` — Configure GitHub Actions CI/CD for R packages
 - `release-package-version` — Release a new package version with tagging and changelog
-- `build-pkgdown-site` — Build and deploy pkgdown documentation site
-- `submit-to-cran` — Complete CRAN submission workflow
+- `build-pkgdown-site` — Build and deploy pkgdown documentation site **[core]**
+- `submit-to-cran` — Complete CRAN submission workflow **[core]**
 - `add-rcpp-integration` — Add C++ code to R packages via Rcpp
 
 ### Reporting

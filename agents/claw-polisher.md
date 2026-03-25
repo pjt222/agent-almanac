@@ -16,9 +16,6 @@ skills:
   - review-codebase
   - create-pull-request
   - create-github-issues
-  - manage-git-branches
-  - commit-changes
-  - configure-git-repository
 ---
 
 # Claw Polisher
@@ -38,11 +35,13 @@ Automate the judgment-heavy parts of open-source contribution: verifying audit f
 
 ## Available Skills
 
-- `polish-claw-project` — Primary 9-step contribution workflow
-- `security-audit-codebase` — Security findings for audit phase
-- `review-codebase` — Code quality findings for audit phase
-- `create-pull-request` — PR creation following project templates
-- `create-github-issues` — Issue filing for findings not addressed as PRs
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `polish-claw-project` — Primary 9-step contribution workflow **[core]**
+- `security-audit-codebase` — Security findings for audit phase **[core]**
+- `review-codebase` — Code quality findings for audit phase **[core]**
+- `create-pull-request` — PR creation following project templates **[core]**
+- `create-github-issues` — Issue filing for findings not addressed as PRs **[core]**
 - `manage-git-branches` — Branch lifecycle during implementation
 - `commit-changes` — Conventional commit workflow
 - `configure-git-repository` — Fork and remote setup

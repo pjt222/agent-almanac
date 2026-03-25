@@ -12,20 +12,11 @@ priority: high
 max_context_tokens: 200000
 mcp_servers: [r-mcptools]
 skills:
-  # jigsawR domain skills
   - generate-puzzle
   - add-puzzle-type
-  - render-puzzle-docs
-  - run-puzzle-tests
   - validate-piles-notation
-  # Inherited R developer skills
-  - write-roxygen-docs
-  - write-testthat-tests
-  - manage-renv-dependencies
-  - setup-github-actions-ci
-  - commit-changes
-  - create-pull-request
-  - manage-git-branches
+  - run-puzzle-tests
+  - render-puzzle-docs
 ---
 
 # jigsawR Developer Agent
@@ -50,12 +41,14 @@ This agent encodes domain knowledge specific to jigsawR: the unified puzzle pipe
 
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 ### jigsawR Domain
-- `generate-puzzle` — Generate puzzles via generate_puzzle() or geom_puzzle_*() with config validation
-- `add-puzzle-type` — Scaffold a new puzzle type across all 10+ pipeline integration points
-- `render-puzzle-docs` — Render the Quarto documentation site (fresh, cached, or single page)
-- `run-puzzle-tests` — Run the test suite via WSL R with pass/fail/skip interpretation
-- `validate-piles-notation` — Parse and validate PILES notation for piece fusion groups
+- `generate-puzzle` — Generate puzzles via generate_puzzle() or geom_puzzle_*() with config validation **[core]**
+- `add-puzzle-type` — Scaffold a new puzzle type across all 10+ pipeline integration points **[core]**
+- `render-puzzle-docs` — Render the Quarto documentation site (fresh, cached, or single page) **[core]**
+- `run-puzzle-tests` — Run the test suite via WSL R with pass/fail/skip interpretation **[core]**
+- `validate-piles-notation` — Parse and validate PILES notation for piece fusion groups **[core]**
 
 ### R Package Development (Inherited)
 - `write-roxygen-docs` — Write roxygen2 documentation for functions and datasets

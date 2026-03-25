@@ -80,8 +80,10 @@ mcp_servers: array<string>
   # Example: ["r-mcptools", "hf-mcp-server"]
 
 skills: array<string>
-  # List of skill IDs from the skills library this agent can execute
+  # Core skill IDs loaded into subagent context on spawn — max 5
+  # Choose identity skills that define the agent's primary procedures
   # Uses bare skill IDs (slash-command names), not full paths
+  # List remaining skills in the "Available Skills" body section
   # Example: ["create-r-package", "write-testthat-tests", "submit-to-cran"]
 
 default_skills: array<object>    # REGISTRY-LEVEL ONLY

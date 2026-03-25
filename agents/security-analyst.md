@@ -16,7 +16,6 @@ skills:
   - implement-audit-trail
   - validate-statistical-output
   - write-validation-documentation
-  - configure-git-repository
 ---
 
 # Security Analyst Agent
@@ -39,16 +38,17 @@ This agent performs comprehensive security analysis of codebases, configurations
 
 ## Available Skills
 
-This agent can execute the following structured procedures from the [skills library](../skills/):
+This agent can execute the following structured procedures from the [skills library](../skills/).
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
 
 ### Core
-- `security-audit-codebase` — Perform security audits checking for vulnerabilities and secrets
+- `security-audit-codebase` — Perform security audits checking for vulnerabilities and secrets **[core]**
 
 ### Compliance & Validation
-- `setup-gxp-r-project` — Set up R projects compliant with GxP regulations
-- `implement-audit-trail` — Implement audit trail for regulated environments
-- `validate-statistical-output` — Validate statistical results through double programming
-- `write-validation-documentation` — Write IQ/OQ/PQ validation documentation
+- `setup-gxp-r-project` — Set up R projects compliant with GxP regulations **[core]**
+- `implement-audit-trail` — Implement audit trail for regulated environments **[core]**
+- `validate-statistical-output` — Validate statistical results through double programming **[core]**
+- `write-validation-documentation` — Write IQ/OQ/PQ validation documentation **[core]**
 
 ### Repository Security
 - `configure-git-repository` — Configure a Git repository with proper .gitignore and conventions

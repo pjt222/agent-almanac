@@ -16,20 +16,7 @@ skills:
   - build-shiny-module
   - test-shiny-app
   - deploy-shiny-app
-  - optimize-shiny-performance
   - design-shiny-ui
-  - write-testthat-tests
-  - write-roxygen-docs
-  - manage-renv-dependencies
-  - setup-github-actions-ci
-  - release-package-version
-  - create-r-dockerfile
-  - setup-docker-compose
-  - create-quarto-report
-  - commit-changes
-  - create-pull-request
-  - manage-git-branches
-  - write-claude-md
 ---
 
 # Shiny Developer Agent
@@ -62,13 +49,15 @@ The reactive-first approach addresses the most common Shiny development failures
 
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 ### Shiny
-- `scaffold-shiny-app` — scaffold apps with golem, rhino, or vanilla structure
-- `build-shiny-module` — create reusable UI/server modules with NS isolation
-- `test-shiny-app` — shinytest2 end-to-end tests and testServer() unit tests
-- `deploy-shiny-app` — deploy to shinyapps.io, Posit Connect, or Docker
+- `scaffold-shiny-app` — scaffold apps with golem, rhino, or vanilla structure **[core]**
+- `build-shiny-module` — create reusable UI/server modules with NS isolation **[core]**
+- `test-shiny-app` — shinytest2 end-to-end tests and testServer() unit tests **[core]**
+- `deploy-shiny-app` — deploy to shinyapps.io, Posit Connect, or Docker **[core]**
 - `optimize-shiny-performance` — profiling, caching, async, reactive optimization
-- `design-shiny-ui` — bslib theming, layout_columns, cards, value boxes, accessibility
+- `design-shiny-ui` — bslib theming, layout_columns, cards, value boxes, accessibility **[core]**
 
 ### R Packages
 - `write-testthat-tests` — testthat edition 3 tests (golem apps are R packages)

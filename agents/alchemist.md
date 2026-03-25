@@ -14,7 +14,6 @@ skills:
   - athanor
   - transmute
   - chrysopoeia
-  - metal
   - meditate
   - heal
 ---
@@ -39,17 +38,18 @@ The four stages are separated by meditate/heal checkpoints that prevent the most
 
 ## Available Skills
 
-This agent can execute the following structured procedures from the [skills library](../skills/):
+This agent can execute the following structured procedures from the [skills library](../skills/).
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
 
 ### Alchemy
-- `athanor` — Four-stage alchemical transmutation with meditate/heal checkpoints
-- `transmute` — Targeted conversion of functions or modules between forms
-- `chrysopoeia` — Value extraction through systematic classification and optimization
+- `athanor` — Four-stage alchemical transmutation with meditate/heal checkpoints **[core]**
+- `transmute` — Targeted conversion of functions or modules between forms **[core]**
+- `chrysopoeia` — Value extraction through systematic classification and optimization **[core]**
 - `metal` — Extract conceptual essence of a repository as skills, agents, and teams
 
 ### Esoteric (Stage-Gate Checkpoints)
-- `meditate` — Meta-cognitive clearing between transformation stages (calcination checkpoint) *(listed explicitly — core to alchemical process)*
-- `heal` — Subsystem assessment for purification verification (between albedo/citrinitas) *(listed explicitly — core to alchemical process)*
+- `meditate` — Meta-cognitive clearing between transformation stages (calcination checkpoint) *(listed explicitly — core to alchemical process)* **[core]**
+- `heal` — Subsystem assessment for purification verification (between albedo/citrinitas) *(listed explicitly — core to alchemical process)* **[core]**
 
 ## Usage Scenarios
 

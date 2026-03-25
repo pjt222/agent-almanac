@@ -11,46 +11,11 @@ tags: [devops, kubernetes, ci-cd, gitops, observability, infrastructure, platfor
 priority: high
 max_context_tokens: 200000
 skills:
-  # devops (13)
   - build-ci-cd-pipeline
-  - provision-infrastructure-terraform
   - deploy-to-kubernetes
-  - manage-kubernetes-secrets
-  - setup-container-registry
   - implement-gitops-workflow
-  - configure-ingress-networking
-  - setup-service-mesh
-  - configure-api-gateway
-  - enforce-policy-as-code
-  - optimize-cloud-costs
-  - setup-local-kubernetes
-  - write-helm-chart
-  # observability (13)
   - setup-prometheus-monitoring
-  - build-grafana-dashboards
-  - configure-log-aggregation
-  - instrument-distributed-tracing
-  - define-slo-sli-sla
-  - configure-alerting-rules
-  - write-incident-runbook
-  - conduct-post-mortem
-  - plan-capacity
-  - design-on-call-rotation
-  - run-chaos-experiment
-  - setup-uptime-checks
-  - correlate-observability-signals
-  # containerization (4)
-  - create-r-dockerfile
-  - setup-docker-compose
-  - optimize-docker-build-cache
-  - containerize-mcp-server
-  # git (3)
-  - commit-changes
-  - manage-git-branches
-  - configure-git-repository
-  # general (2)
-  - write-claude-md
-  - security-audit-codebase
+  - write-helm-chart
 ---
 
 # DevOps Engineer Agent
@@ -76,23 +41,25 @@ This agent handles the full spectrum of DevOps and platform engineering tasks: f
 
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 ### DevOps
-- `build-ci-cd-pipeline` — GitHub Actions multi-stage pipelines with matrix builds and caching
+- `build-ci-cd-pipeline` — GitHub Actions multi-stage pipelines with matrix builds and caching **[core]**
 - `provision-infrastructure-terraform` — Terraform HCL modules with state management
-- `deploy-to-kubernetes` — kubectl manifests, Deployments, Services, Helm releases
+- `deploy-to-kubernetes` — kubectl manifests, Deployments, Services, Helm releases **[core]**
 - `manage-kubernetes-secrets` — SealedSecrets, external-secrets-operator, rotation
 - `setup-container-registry` — ghcr.io / Docker Hub / Harbor with vulnerability scanning
-- `implement-gitops-workflow` — Argo CD / Flux with app-of-apps and drift detection
+- `implement-gitops-workflow` — Argo CD / Flux with app-of-apps and drift detection **[core]**
 - `configure-ingress-networking` — NGINX Ingress, cert-manager, TLS termination
 - `setup-service-mesh` — Istio / Linkerd with mTLS and traffic management
 - `configure-api-gateway` — Kong / Traefik with rate limiting and auth plugins
 - `enforce-policy-as-code` — OPA Gatekeeper / Kyverno admission control
 - `optimize-cloud-costs` — Kubecost, right-sizing, HPA/VPA, spot instances
 - `setup-local-kubernetes` — kind / k3d / minikube with skaffold / tilt
-- `write-helm-chart` — Helm chart creation with Go templates and chart tests
+- `write-helm-chart` — Helm chart creation with Go templates and chart tests **[core]**
 
 ### Observability
-- `setup-prometheus-monitoring` — Prometheus scrape configs, recording rules, federation
+- `setup-prometheus-monitoring` — Prometheus scrape configs, recording rules, federation **[core]**
 - `build-grafana-dashboards` — Dashboard provisioning with variables and annotations
 - `configure-log-aggregation` — Loki + Promtail log collection, parsing, and retention
 - `instrument-distributed-tracing` — OpenTelemetry SDK, Jaeger / Tempo backends

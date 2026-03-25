@@ -180,27 +180,44 @@ Agents define *who* handles a task; skills define *how* specific procedures are 
 
 #### Referencing Skills
 ```yaml
-# In frontmatter — use bare skill IDs (slash-command names)
+# In frontmatter — max 5 core skills (injected into subagent context on spawn)
 skills:
   - create-r-package
   - write-testthat-tests
   - submit-to-cran
 ```
 
+#### Context Budget and the 5-Skill Limit
+
+When a harness spawns a subagent, frontmatter `skills:` content is injected into the agent's context window. Agent-almanac targets 12+ frameworks with context windows ranging from 48K tokens (Cursor standard) to 1M tokens (Claude Code, Gemini CLI). To ensure cross-platform compatibility:
+
+- **Max 5 skills in frontmatter** — at ~13KB average per skill, 5 skills ≈ 65KB, which fits all major platforms
+- **Identity skills only** — choose skills that define the agent's primary procedure (not utility skills like `commit-changes`)
+- **List remaining skills in prose** — the `## Available Skills` body section documents all skills the agent can invoke on demand
+
+Selection criteria (in priority order):
+1. Skills that define what the agent IS (e.g., `review-research` for senior-researcher)
+2. Skills unique to this agent
+3. Skills used in >80% of invocations
+4. Never: utility skills (`commit-changes`, `manage-git-branches`, `write-claude-md`, `configure-git-repository`, `create-pull-request`, `security-audit-codebase`)
+
 #### Documenting Skills in the Agent Body
-Add an `## Available Skills` section after `## Capabilities`, listing each skill with a brief description:
+Add an `## Available Skills` section after `## Capabilities`, listing each skill with a brief description. Mark core skills (those in frontmatter) with `[core]`:
 
 ```markdown
 ## Available Skills
 
-- `create-r-package` — Scaffold a new R package with complete structure
-- `write-testthat-tests` — Write testthat edition 3 tests with high coverage
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `create-r-package` **[core]** — Scaffold a new R package with complete structure
+- `write-testthat-tests` **[core]** — Write testthat edition 3 tests with high coverage
+- `manage-renv-dependencies` — Manage reproducible R dependencies with renv
 ```
 
 Group by domain when the agent spans many domains; use a flat list for a small number of skills.
 
 #### Keeping Skills in Sync
-- Frontmatter `skills` array must match the `## Available Skills` section
+- Frontmatter `skills` array lists only core skills (max 5); `## Available Skills` lists all skills
 - Both must reference skill IDs that exist in `skills/_registry.yml`
 - Update `agents/_registry.yml` skills arrays when changing agent frontmatter
 

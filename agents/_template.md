@@ -11,8 +11,11 @@ tags: [development, general]
 priority: normal
 max_context_tokens: 200000
 skills: []
-# Note: All agents inherit default skills (meditate, heal) from the registry.
-# Only list them here if they are core to this agent's methodology.
+# Max 5 core skills — these get injected into subagent context on spawn.
+# Choose identity skills that define this agent's primary procedures.
+# List remaining skills in the "Available Skills" body section (loaded on demand).
+# All agents inherit default skills (meditate, heal) from the registry.
+# Only list default skills here if they are core to this agent's methodology.
 # mcp_servers: []  # Optional: MCP servers this agent requires (e.g., r-mcptools, hf-mcp-server)
 ---
 

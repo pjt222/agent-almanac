@@ -16,7 +16,6 @@ skills:
   - interpret-mass-spectrum
   - interpret-uv-vis-spectrum
   - interpret-raman-spectrum
-  - plan-spectroscopic-analysis
 ---
 
 # Spectroscopist Agent
@@ -38,14 +37,15 @@ This agent assists with spectroscopic data interpretation by identifying functio
 
 ## Available Skills
 
-This agent can execute the following structured procedures from the [skills library](../skills/):
+This agent can execute the following structured procedures from the [skills library](../skills/).
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
 
 ### Spectroscopy
-- `interpret-nmr-spectrum` -- Interpret 1D and 2D NMR spectra for structure elucidation
-- `interpret-ir-spectrum` -- Identify functional groups from infrared absorption patterns
-- `interpret-mass-spectrum` -- Determine molecular formula and fragmentation pathways from mass spectra
-- `interpret-uv-vis-spectrum` -- Identify chromophores and quantify analytes from UV-Vis data
-- `interpret-raman-spectrum` -- Analyze Raman-active vibrational modes with IR complementarity
+- `interpret-nmr-spectrum` -- Interpret 1D and 2D NMR spectra for structure elucidation **[core]**
+- `interpret-ir-spectrum` -- Identify functional groups from infrared absorption patterns **[core]**
+- `interpret-mass-spectrum` -- Determine molecular formula and fragmentation pathways from mass spectra **[core]**
+- `interpret-uv-vis-spectrum` -- Identify chromophores and quantify analytes from UV-Vis data **[core]**
+- `interpret-raman-spectrum` -- Analyze Raman-active vibrational modes with IR complementarity **[core]**
 - `plan-spectroscopic-analysis` -- Plan multi-technique analysis with technique selection and sequencing
 
 ## Usage Scenarios

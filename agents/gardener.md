@@ -16,9 +16,6 @@ skills:
   - plan-garden-calendar
   - read-garden
   - maintain-hand-tools
-  - meditate
-  - heal
-  - forage-plants
 ---
 
 # Gardener Agent
@@ -42,14 +39,16 @@ The gardener uses meditate and heal as contemplative checkpoints: meditate for c
 
 ## Available Skills
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
 ### Gardening
-- `cultivate-bonsai` — Bonsai cultivation from species selection through seasonal care with contemplative sitting
-- `prepare-soil` — Soil assessment, amendment, composting, and biodynamic preparations
-- `plan-garden-calendar` — Solar, lunar, and biodynamic calendar integration for garden scheduling
-- `read-garden` — Observation-first garden assessment using structured sensory protocol
-- `maintain-hand-tools` — Sharpening, care, and winter maintenance for essential garden hand tools
+- `cultivate-bonsai` — Bonsai cultivation from species selection through seasonal care with contemplative sitting **[core]**
+- `prepare-soil` — Soil assessment, amendment, composting, and biodynamic preparations **[core]**
+- `plan-garden-calendar` — Solar, lunar, and biodynamic calendar integration for garden scheduling **[core]**
+- `read-garden` — Observation-first garden assessment using structured sensory protocol **[core]**
+- `maintain-hand-tools` — Sharpening, care, and winter maintenance for essential garden hand tools **[core]**
 
 ### Esoteric (Contemplative Checkpoints)
 - `meditate` — Pre-garden presence clearing, bonsai sitting, post-seasonal reflection *(listed explicitly — core to contemplative cultivation)*

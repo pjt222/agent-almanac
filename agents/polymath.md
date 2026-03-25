@@ -14,8 +14,6 @@ skills:
   - review-research
   - review-data-analysis
   - review-software-architecture
-  - review-web-design
-  - review-ux-ui
   - assess-ip-landscape
   - search-prior-art
 ---
@@ -41,18 +39,20 @@ Uses opus model for its broad reasoning capability and ability to hold multiple 
 
 ## Available Skills
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
 ### Review (Delegated to Subagents)
-- `review-research` — Peer review of research methodology and statistics
-- `review-data-analysis` — Data quality, assumptions, and reproducibility review
-- `review-software-architecture` — System-level architecture evaluation
+- `review-research` — Peer review of research methodology and statistics **[core]**
+- `review-data-analysis` — Data quality, assumptions, and reproducibility review **[core]**
+- `review-software-architecture` — System-level architecture evaluation **[core]**
 - `review-web-design` — Visual design review for layout, typography, and brand
 - `review-ux-ui` — Usability and accessibility review
 
 ### Intellectual Property
-- `assess-ip-landscape` — Patent landscape mapping for technology domains
-- `search-prior-art` — Prior art search for patentability and FTO analysis
+- `assess-ip-landscape` — Patent landscape mapping for technology domains **[core]**
+- `search-prior-art` — Prior art search for patentability and FTO analysis **[core]**
 
 ## Usage Scenarios
 

@@ -16,10 +16,6 @@ skills:
   - plan-sprint
   - manage-backlog
   - generate-status-report
-  - conduct-retrospective
-  - commit-changes
-  - manage-git-branches
-  - write-claude-md
 ---
 
 # Project Manager Agent
@@ -42,11 +38,13 @@ This agent manages the lifecycle of a project from inception through delivery. I
 
 ## Available Skills
 
-- `draft-project-charter` — Define project scope, stakeholders, success criteria, and risk register
-- `create-work-breakdown-structure` — Decompose deliverables into estimable work packages (classic)
-- `plan-sprint` — Select backlog items, calculate capacity, decompose into tasks (agile)
-- `manage-backlog` — Create, prioritize, groom, and maintain the product backlog
-- `generate-status-report` — Calculate metrics and produce RAG-rated status reports
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `draft-project-charter` — Define project scope, stakeholders, success criteria, and risk register **[core]**
+- `create-work-breakdown-structure` — Decompose deliverables into estimable work packages (classic) **[core]**
+- `plan-sprint` — Select backlog items, calculate capacity, decompose into tasks (agile) **[core]**
+- `manage-backlog` — Create, prioritize, groom, and maintain the product backlog **[core]**
+- `generate-status-report` — Calculate metrics and produce RAG-rated status reports **[core]**
 - `conduct-retrospective` — Review execution and generate improvement actions
 - `commit-changes` — Commit PM artifact changes to version control
 - `manage-git-branches` — Branch management for PM documentation

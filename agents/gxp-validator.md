@@ -12,18 +12,10 @@ priority: high
 max_context_tokens: 200000
 skills:
   - perform-csv-assessment
-  - setup-gxp-r-project
-  - implement-audit-trail
-  - validate-statistical-output
-  - write-validation-documentation
-  - implement-pharma-serialisation
   - design-compliance-architecture
-  - manage-change-control
+  - implement-audit-trail
   - implement-electronic-signatures
-  - write-standard-operating-procedure
-  - monitor-data-integrity
-  - design-training-program
-  - decommission-validated-system
+  - manage-change-control
 ---
 
 # GxP Validator Agent
@@ -49,15 +41,17 @@ This agent assists with the full regulatory compliance lifecycle for computerize
 
 ## Available Skills
 
-- `design-compliance-architecture` — Map regulations to systems, classify criticality, define governance
-- `perform-csv-assessment` — Full CSV lifecycle: URS, risk assessment, IQ/OQ/PQ, traceability, validation summary
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `perform-csv-assessment` — Full CSV lifecycle: URS, risk assessment, IQ/OQ/PQ, traceability, validation summary **[core]**
+- `design-compliance-architecture` — Map regulations to systems, classify criticality, define governance **[core]**
+- `implement-audit-trail` — Implement audit trail for electronic records compliance **[core]**
+- `implement-electronic-signatures` — 21 CFR 11 Subpart C signatures: manifestation, binding, policy **[core]**
+- `manage-change-control` — Change request triage, impact assessment, revalidation scope **[core]**
 - `setup-gxp-r-project` — Set up R projects compliant with GxP regulations
-- `implement-audit-trail` — Implement audit trail for electronic records compliance
-- `implement-electronic-signatures` — 21 CFR 11 Subpart C signatures: manifestation, binding, policy
 - `validate-statistical-output` — Double programming and statistical output verification
 - `write-validation-documentation` — Write IQ/OQ/PQ validation protocols and reports
 - `write-standard-operating-procedure` — GxP SOPs with approval workflows and periodic review
-- `manage-change-control` — Change request triage, impact assessment, revalidation scope
 - `monitor-data-integrity` — ALCOA+ monitoring, anomaly detection, metrics dashboards
 - `design-training-program` — Role-based training, competency assessment, retraining triggers
 - `implement-pharma-serialisation` — EU FMD, DSCSA, and EPCIS serialisation implementation

@@ -11,14 +11,11 @@ tags: [electromagnetism, levitation, maxwell, magnetic-fields, induction, physic
 priority: normal
 max_context_tokens: 200000
 skills:
-  - analyze-magnetic-field
-  - solve-electromagnetic-induction
   - formulate-maxwell-equations
-  - design-electromagnetic-device
+  - solve-electromagnetic-induction
+  - analyze-magnetic-field
   - analyze-magnetic-levitation
-  - design-acoustic-levitation
-  - evaluate-levitation-mechanism
-  - analyze-tensegrity-system
+  - design-electromagnetic-device
 ---
 
 # Physicist Agent
@@ -41,16 +38,18 @@ This agent assists with classical physics problems at the level where fields, fo
 
 ## Available Skills
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
 ### Electromagnetism
-- `analyze-magnetic-field` — Analyze magnetic field configurations using Biot-Savart, Ampere's law, and magnetic dipole models
-- `solve-electromagnetic-induction` — Solve electromagnetic induction problems using Faraday's law, Lenz's law, and mutual/self-inductance
-- `formulate-maxwell-equations` — Formulate and analyze problems using Maxwell's equations in differential and integral form
-- `design-electromagnetic-device` — Design practical electromagnetic devices: electromagnets, motors, generators, transformers
+- `analyze-magnetic-field` — Analyze magnetic field configurations using Biot-Savart, Ampere's law, and magnetic dipole models **[core]**
+- `solve-electromagnetic-induction` — Solve electromagnetic induction problems using Faraday's law, Lenz's law, and mutual/self-inductance **[core]**
+- `formulate-maxwell-equations` — Formulate and analyze problems using Maxwell's equations in differential and integral form **[core]**
+- `design-electromagnetic-device` — Design practical electromagnetic devices: electromagnets, motors, generators, transformers **[core]**
 
 ### Levitation
-- `analyze-magnetic-levitation` — Analyze magnetic levitation systems including Earnshaw's theorem and circumvention mechanisms
+- `analyze-magnetic-levitation` — Analyze magnetic levitation systems including Earnshaw's theorem and circumvention mechanisms **[core]**
 - `design-acoustic-levitation` — Design acoustic levitation setups using standing wave node trapping
 - `evaluate-levitation-mechanism` — Compare and select among levitation mechanisms for a given application
 

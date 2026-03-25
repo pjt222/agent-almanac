@@ -15,7 +15,6 @@ skills:
   - analyze-codebase-workflow
   - annotate-source-files
   - generate-workflow-diagram
-  - setup-putior-ci
   - configure-putior-mcp
 ---
 
@@ -41,12 +40,14 @@ The agent works with any codebase in any of putior's 30+ supported languages (R,
 
 ## Available Skills
 
-- `install-putior` — Install and configure putior with optional dependencies
-- `analyze-codebase-workflow` — Auto-detect workflows and produce annotation plan
-- `annotate-source-files` — Add PUT annotations using correct comment prefix
-- `generate-workflow-diagram` — Generate themed Mermaid diagrams
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `install-putior` — Install and configure putior with optional dependencies **[core]**
+- `analyze-codebase-workflow` — Auto-detect workflows and produce annotation plan **[core]**
+- `annotate-source-files` — Add PUT annotations using correct comment prefix **[core]**
+- `generate-workflow-diagram` — Generate themed Mermaid diagrams **[core]**
 - `setup-putior-ci` — GitHub Actions for auto-diagram regeneration
-- `configure-putior-mcp` — Configure putior MCP server (16 tools)
+- `configure-putior-mcp` — Configure putior MCP server (16 tools) **[core]**
 
 Skill chaining:
 ```

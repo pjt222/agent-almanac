@@ -12,14 +12,10 @@ priority: normal
 max_context_tokens: 200000
 skills:
   - create-quarto-report
-  - format-apa-report
   - build-parameterized-report
+  - format-apa-report
   - generate-statistical-tables
   - write-vignette
-  - build-pkgdown-site
-  - write-roxygen-docs
-  - render-puzzle-docs
-  - write-claude-md
 ---
 
 # Quarto Developer Agent
@@ -51,16 +47,18 @@ The 4-stage workflow with checkpoints addresses the most common documentation pr
 
 ## Available Skills
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
 ### Reporting
-- `create-quarto-report` — Create Quarto documents for reproducible reports, presentations, or dashboards
-- `format-apa-report` — Format Quarto reports following APA 7th edition style
-- `build-parameterized-report` — Create parameterized Quarto reports that render with different inputs
-- `generate-statistical-tables` — Generate publication-ready tables using gt and kableExtra
+- `create-quarto-report` — Create Quarto documents for reproducible reports, presentations, or dashboards **[core]**
+- `format-apa-report` — Format Quarto reports following APA 7th edition style **[core]**
+- `build-parameterized-report` — Create parameterized Quarto reports that render with different inputs **[core]**
+- `generate-statistical-tables` — Generate publication-ready tables using gt and kableExtra **[core]**
 
 ### R Documentation
-- `write-vignette` — Create R package vignettes using Quarto or R Markdown
+- `write-vignette` — Create R package vignettes using Quarto or R Markdown **[core]**
 - `build-pkgdown-site` — Build and deploy pkgdown documentation sites
 - `write-roxygen-docs` — Write roxygen2 documentation for R package functions
 

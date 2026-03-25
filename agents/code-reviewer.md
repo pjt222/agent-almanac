@@ -11,13 +11,11 @@ tags: [code-review, quality, security, best-practices]
 priority: high
 max_context_tokens: 200000
 skills:
+  - review-pull-request
   - security-audit-codebase
-  - commit-changes
-  - create-pull-request
   - resolve-git-conflicts
   - write-testthat-tests
   - configure-git-repository
-  - review-pull-request
 ---
 
 # Code Reviewer Agent
@@ -39,15 +37,17 @@ This agent performs thorough code reviews by analyzing code changes, identifying
 
 ## Available Skills
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
-- `security-audit-codebase` — Perform security audits checking for vulnerabilities and secrets
+- `security-audit-codebase` — Perform security audits checking for vulnerabilities and secrets **[core]**
 - `commit-changes` — Stage, commit, and amend changes with conventional commits
 - `create-pull-request` — Create and manage pull requests using GitHub CLI
-- `resolve-git-conflicts` — Resolve merge and rebase conflicts with safe recovery strategies
-- `write-testthat-tests` — Write testthat edition 3 tests with high coverage
-- `configure-git-repository` — Configure a Git repository with proper .gitignore and conventions
-- `review-pull-request` — Review pull requests end-to-end using gh CLI with severity-leveled feedback
+- `resolve-git-conflicts` — Resolve merge and rebase conflicts with safe recovery strategies **[core]**
+- `write-testthat-tests` — Write testthat edition 3 tests with high coverage **[core]**
+- `configure-git-repository` — Configure a Git repository with proper .gitignore and conventions **[core]**
+- `review-pull-request` — Review pull requests end-to-end using gh CLI with severity-leveled feedback **[core]**
 
 ## Usage Scenarios
 

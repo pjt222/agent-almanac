@@ -1,8 +1,8 @@
 # CLI — Universal Installer
 
-Universal skill/agent/team installer for 12+ agentic CLI frameworks. Detects which AI tools are present in a project and installs content into the correct paths using pluggable adapters.
+[![npm version](https://img.shields.io/npm/v/agent-almanac.svg)](https://www.npmjs.com/package/agent-almanac)
 
-**Status:** Phase 1 (core library + adapters). See [GitHub issues #142-#146](https://github.com/pjt222/agent-almanac/issues/142) for the roadmap.
+Universal skill/agent/team installer for 12+ agentic CLI frameworks. Detects which AI tools are present in a project and installs content into the correct paths using pluggable adapters.
 
 ## Supported Frameworks
 
@@ -32,38 +32,29 @@ agent-almanac audit                  # Health check installed content
 agent-almanac uninstall <names...>   # Remove installed content
 ```
 
-## Getting Started (Ubuntu)
-
-### Prerequisites
+## Install
 
 ```bash
-# Node.js 20+ (LTS)
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
-sudo apt-get install -y nodejs git
-
-node --version   # v20.x+
-npm --version    # 10.x+
-```
-
-### Install
-
-```bash
-git clone https://github.com/pjt222/agent-almanac.git
-cd agent-almanac
-npm install
-sudo npm link
+npm install -g agent-almanac
 ```
 
 This registers two commands: `agent-almanac` and `almanac` (shorthand). Verify with:
 
 ```bash
-agent-almanac --version
+agent-almanac --version   # 1.1.0
 ```
 
-If you prefer not to install globally, run directly instead:
+Requires Node.js 18+.
+
+### From source
+
+If you prefer to install from source:
 
 ```bash
-node cli/index.js campfire --all
+git clone https://github.com/pjt222/agent-almanac.git
+cd agent-almanac
+npm install
+npm link
 ```
 
 ### Try the Campfire

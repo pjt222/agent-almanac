@@ -16,8 +16,6 @@ skills:
   - test-cli-application
   - design-cli-output
   - install-almanac-content
-  - create-github-release
-  - apply-semantic-versioning
 ---
 
 # CLI Developer Agent
@@ -40,16 +38,18 @@ This agent builds and extends command-line tools. It covers the specific concern
 
 ## Available Skills
 
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 This agent can execute the following structured procedures from the [skills library](../skills/):
 
 ### CLI Development
-- `scaffold-cli-command` — Scaffold a Commander.js command with options, 3 output modes, and ceremony variant
-- `build-cli-plugin` — Build a plugin/adapter extending an abstract base class with strategy selection
-- `test-cli-application` — Write CLI integration tests with node:test, execSync, and cleanup patterns
-- `design-cli-output` — Design terminal output with chalk, Unicode, verbosity levels, and voice rules
+- `scaffold-cli-command` — Scaffold a Commander.js command with options, 3 output modes, and ceremony variant **[core]**
+- `build-cli-plugin` — Build a plugin/adapter extending an abstract base class with strategy selection **[core]**
+- `test-cli-application` — Write CLI integration tests with node:test, execSync, and cleanup patterns **[core]**
+- `design-cli-output` — Design terminal output with chalk, Unicode, verbosity levels, and voice rules **[core]**
 
 ### Cross-Domain
-- `install-almanac-content` — Use the agent-almanac CLI to install skills, agents, and teams
+- `install-almanac-content` — Use the agent-almanac CLI to install skills, agents, and teams **[core]**
 - `create-github-release` — Create a GitHub release with tagging and release notes
 - `apply-semantic-versioning` — Apply semantic versioning to track changes
 
