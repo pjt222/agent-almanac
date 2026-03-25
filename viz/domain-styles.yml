@@ -108,6 +108,78 @@ travel:
 visualization:
   basePrompt: Data chart, plot grid, color palette, graph axis
   glow: chart-green
+versioning:
+  basePrompt: Version number, semantic tag, changelog entry
+  glow: teal
 web-dev:
   basePrompt: Neon browser window, HTML angle brackets
   glow: coral
+workflow-visualization:
+  basePrompt: Mermaid diagram, flowchart arrows, annotated pipeline
+  glow: spring-green
+alchemy:
+  basePrompt: Alchemical flask, transmutation circle, philosopher's stone
+  glow: gold
+animal-training:
+  basePrompt: Dog silhouette, training clicker, positive reinforcement
+  glow: warm-orange
+chromatography:
+  basePrompt: Column separation, gradient flow, chromatogram peaks
+  glow: teal
+citations:
+  basePrompt: Bibliography entry, reference bracket, citation key
+  glow: sky-blue
+cli:
+  basePrompt: Terminal prompt, command line cursor, shell output
+  glow: chartreuse
+crafting:
+  basePrompt: Handcraft tools, fibre sheet, artisan workbench
+  glow: sienna
+gardening:
+  basePrompt: Garden trowel, soil layers, growing seedling
+  glow: leaf-green
+i18n:
+  basePrompt: Globe with language flags, translation arrow, locale code
+  glow: teal
+intellectual-property:
+  basePrompt: Patent document, trademark symbol, claim scope
+  glow: steel-blue
+jigsawr:
+  basePrompt: Jigsaw puzzle piece, tessellation grid, interlocking shapes
+  glow: aqua
+lapidary:
+  basePrompt: Cut gemstone, faceting diagram, polishing lap
+  glow: crystal-blue
+library-science:
+  basePrompt: Card catalog, book spine, classification number
+  glow: parchment
+linguistics:
+  basePrompt: Etymology tree, proto-language root, semantic drift arrow
+  glow: lavender
+morphic:
+  basePrompt: Metamorphic stages, chrysalis, structural transformation
+  glow: violet
+mycology:
+  basePrompt: Mushroom cap, mycelium network, spore print
+  glow: deep-purple
+number-theory:
+  basePrompt: Prime spiral, modular arithmetic, number sequence
+  glow: indigo
+open-source:
+  basePrompt: Contribution graph, pull request, open license badge
+  glow: fuchsia
+prospecting:
+  basePrompt: Gold pan, mineral vein, geological cross-section
+  glow: gold
+shiny:
+  basePrompt: Reactive web app, slider input, dashboard panel
+  glow: bright-blue
+spectroscopy:
+  basePrompt: Absorption spectrum, wavelength peaks, spectral lines
+  glow: violet
+swarm:
+  basePrompt: Ant colony trail, swarm nodes, collective formation
+  glow: lime
+tcg:
+  basePrompt: Trading card, grading case, deck stack
+  glow: crimson

@@ -456,3 +456,4 @@ Pre-call checks are advisory, not authoritative. A tool that passes pre-call che
 - `escalate-issues` — when the failure budget is exhausted or scope reduction is significant, escalate to a specialist or human
 - `write-incident-runbook` — document recurring tool failure patterns as runbooks for faster diagnosis
 - `assess-context` — evaluate whether the current approach can adapt when multiple tools are degraded; pairs with scope reduction decisions
+- `du-dum` — two-clock architecture separating observation from decision; complementary pattern for reducing observation cost in agent loops

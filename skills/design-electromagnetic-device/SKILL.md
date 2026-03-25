@@ -290,3 +290,4 @@ Verify that the design meets all specifications and is physically realizable:
 - `solve-electromagnetic-induction` -- analyze the induction principles underlying motors, generators, and transformers
 - `formulate-maxwell-equations` -- full electromagnetic analysis for high-frequency devices, waveguides, and antennas
 - `simulate-cpu-architecture` -- digital control systems that drive modern motor controllers and power electronics
+- `analyze-tensegrity-system` -- structural analysis of tension-compression networks; shares prestress equilibrium methods with electromagnetic force balancing

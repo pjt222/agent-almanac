@@ -244,3 +244,4 @@ Extinguishing Protocol:
 
 - `purify-water` — boiling water requires a sustained fire; the boiling method depends on this skill
 - `forage-plants` — many plants provide tinder (birch bark, cattail fluff, dried grasses) and some require cooking
+- `paper-making` — handcraft paper from plant fibres; shares fibre preparation and pulping techniques with tinder preparation
