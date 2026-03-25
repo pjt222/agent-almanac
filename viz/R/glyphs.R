@@ -1,5 +1,5 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 335 skillIds to a specific glyph drawing function.
+# Maps each of 336 skillIds to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #

@@ -13,12 +13,14 @@
 
 import sharp from 'sharp';
 import { readdirSync, readFileSync, writeFileSync } from 'fs';
-import { join, basename, resolve } from 'path';
+import { join, basename, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import yaml from 'js-yaml';
 
-const ICONS_DIR  = resolve('dist/icons/cyberpunk/agents');
-const TEAMS_REG  = resolve('../teams/_registry.yml');
-const OUTPUT     = resolve('../cli/lib/glyph-data.json');
+const __dirname  = dirname(fileURLToPath(import.meta.url));
+const ICONS_DIR  = join(__dirname, 'public', 'icons', 'cyberpunk', 'agents');
+const TEAMS_REG  = join(__dirname, '..', 'teams', '_registry.yml');
+const OUTPUT     = join(__dirname, '..', 'cli', 'lib', 'glyph-data.json');
 const SIZE       = parseInt(process.argv.find((_, i, a) => a[i - 1] === '--size') || '16', 10);
 const PNG_SIZE   = parseInt(process.argv.find((_, i, a) => a[i - 1] === '--png-size') || '128', 10);
 const STRIP_GAP  = parseInt(process.argv.find((_, i, a) => a[i - 1] === '--gap') || '32', 10);

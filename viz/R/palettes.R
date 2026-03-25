@@ -136,6 +136,7 @@ get_cyberpunk_colors <- function() {
     "bushcraft"              = "#88cc44",
     "chromatography"         = "#44ccdd",   # teal -- separation/flow
     "citations"              = "#66bbff",
+    "cli"                    = "#55ee33",   # chartreuse -- terminal phosphor green (H=118, gap: entomology-gardening)
     "compliance"             = "#ff3366",
     "containerization"       = "#44ddff",
     "crafting"               = "#cc8855",
@@ -167,6 +168,7 @@ get_cyberpunk_colors <- function() {
     "mycology"               = "#aa77cc",
     "number-theory"          = "#bbaaff",
     "observability"          = "#ffaa00",
+    "open-source"            = "#ee55dd",   # fuchsia -- visually distinct from green cluster (H=303, gap: esoteric-design)
     "project-management"     = "#ff8844",
     "prospecting"            = "#ddaa33",
     "r-packages"             = "#00f0ff",
@@ -199,6 +201,8 @@ get_cyberpunk_colors <- function() {
     "blender-artist"            = "#ff8833",
     "citizen-entomologist"      = "#88dd55",
     "chromatographer"           = "#44ccdd",   # matches chromatography domain
+    "claw-polisher"             = "#ee55dd",   # matches open-source domain
+    "cli-developer"             = "#55ee33",   # matches cli domain
     "code-reviewer"             = "#ff66aa",
     "contemplative"             = "#c4b5fd",
     "conservation-entomologist" = "#66cc33",
