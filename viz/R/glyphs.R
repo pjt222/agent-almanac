@@ -1,5 +1,5 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 336 skillIds to a specific glyph drawing function.
+# Maps each of 337 skillIds to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #
@@ -261,6 +261,7 @@ SKILL_GLYPHS <- list(
   "forage-solutions"               = "glyph_forage_circuit",
   "build-coherence"                = "glyph_coherence_converge",
   "coordinate-reasoning"           = "glyph_coordinate_web",
+  "unleash-the-agents"             = "glyph_unleash_starburst",
 
   # ── morphic (7) ────────────────────────────────────────────────────────
   "assess-form"                    = "glyph_scan_outline",

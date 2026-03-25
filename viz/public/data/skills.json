@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated": "2026-03-22T18:22:13.661Z",
-    "totalSkills": 336,
+    "generated": "2026-03-25T13:47:56.132Z",
+    "totalSkills": 337,
     "totalAgents": 68,
     "totalTeams": 15,
-    "totalNodes": 419,
-    "totalLinks": 1835,
-    "totalAgentLinks": 412,
+    "totalNodes": 420,
+    "totalLinks": 1698,
+    "totalAgentLinks": 269,
     "totalTeamLinks": 49,
     "totalDomains": 60,
     "supportedLocales": [
@@ -103,7 +103,7 @@
     },
     "swarm": {
       "description": "Collective intelligence, emergent coordination, and distributed decision-making strategies",
-      "count": 8
+      "count": 9
     },
     "morphic": {
       "description": "Adaptive transformation, structural metamorphosis, and reconfiguration strategies",
@@ -6250,6 +6250,33 @@
       ]
     },
     {
+      "id": "unleash-the-agents",
+      "type": "skill",
+      "title": "Unleash the Agents",
+      "domain": "swarm",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Parallel multi-agent hypothesis generation across all available agents in structured waves",
+      "tags": [
+        "swarm",
+        "parallel",
+        "hypothesis-generation",
+        "multi-agent",
+        "brainstorming",
+        "convergence"
+      ],
+      "related": [
+        "forage-solutions",
+        "build-coherence",
+        "coordinate-reasoning",
+        "coordinate-swarm",
+        "expand-awareness",
+        "meditate"
+      ],
+      "path": "unleash-the-agents/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "assess-form",
       "type": "skill",
       "title": "Assess Form",
@@ -10207,34 +10234,10 @@
       ],
       "skills": [
         "create-r-package",
-        "write-roxygen-docs",
         "write-testthat-tests",
-        "write-vignette",
-        "manage-renv-dependencies",
-        "setup-github-actions-ci",
-        "release-package-version",
-        "build-pkgdown-site",
         "submit-to-cran",
-        "add-rcpp-integration",
-        "create-quarto-report",
-        "build-parameterized-report",
-        "format-apa-report",
-        "generate-statistical-tables",
-        "setup-gxp-r-project",
-        "implement-audit-trail",
-        "validate-statistical-output",
-        "write-validation-documentation",
-        "configure-mcp-server",
-        "build-custom-mcp-server",
-        "troubleshoot-mcp-connection",
-        "create-r-dockerfile",
-        "setup-docker-compose",
-        "optimize-docker-build-cache",
-        "containerize-mcp-server",
-        "commit-changes",
-        "create-pull-request",
-        "manage-git-branches",
-        "write-claude-md"
+        "manage-renv-dependencies",
+        "build-pkgdown-site"
       ],
       "path": "agents/r-developer.md",
       "locales": [
@@ -10266,13 +10269,11 @@
       ],
       "mcp_servers": [],
       "skills": [
+        "review-pull-request",
         "security-audit-codebase",
-        "commit-changes",
-        "create-pull-request",
         "resolve-git-conflicts",
         "write-testthat-tests",
-        "configure-git-repository",
-        "review-pull-request"
+        "configure-git-repository"
       ],
       "path": "agents/code-reviewer.md",
       "locales": [
@@ -10308,8 +10309,7 @@
         "setup-gxp-r-project",
         "implement-audit-trail",
         "validate-statistical-output",
-        "write-validation-documentation",
-        "configure-git-repository"
+        "write-validation-documentation"
       ],
       "path": "agents/security-analyst.md",
       "locales": []
@@ -10398,21 +10398,11 @@
       ],
       "mcp_servers": [],
       "skills": [
-        "heal",
         "meditate",
+        "heal",
         "center",
-        "shine",
-        "intrinsic",
-        "breathe",
-        "rest",
         "attune",
-        "dream",
-        "gratitude",
-        "awareness",
-        "observe",
-        "listen",
-        "honesty-humility",
-        "conscientiousness"
+        "observe"
       ],
       "path": "agents/contemplative.md",
       "locales": [
@@ -10543,18 +10533,10 @@
       "mcp_servers": [],
       "skills": [
         "perform-csv-assessment",
-        "setup-gxp-r-project",
-        "implement-audit-trail",
-        "validate-statistical-output",
-        "write-validation-documentation",
-        "implement-pharma-serialisation",
         "design-compliance-architecture",
-        "manage-change-control",
+        "implement-audit-trail",
         "implement-electronic-signatures",
-        "write-standard-operating-procedure",
-        "monitor-data-integrity",
-        "design-training-program",
-        "decommission-validated-system"
+        "manage-change-control"
       ],
       "path": "agents/gxp-validator.md",
       "locales": []
@@ -10586,16 +10568,10 @@
       "mcp_servers": [],
       "skills": [
         "conduct-gxp-audit",
-        "perform-csv-assessment",
-        "setup-gxp-r-project",
-        "implement-audit-trail",
-        "validate-statistical-output",
-        "write-validation-documentation",
-        "security-audit-codebase",
         "prepare-inspection-readiness",
         "investigate-capa-root-cause",
-        "monitor-data-integrity",
-        "qualify-vendor"
+        "qualify-vendor",
+        "monitor-data-integrity"
       ],
       "path": "agents/auditor.md",
       "locales": []
@@ -10655,7 +10631,6 @@
       "skills": [
         "review-data-analysis",
         "validate-statistical-output",
-        "generate-statistical-tables",
         "review-research",
         "serialize-data-formats",
         "design-serialization-schema"
@@ -10785,11 +10760,7 @@
         "create-work-breakdown-structure",
         "plan-sprint",
         "manage-backlog",
-        "generate-status-report",
-        "conduct-retrospective",
-        "commit-changes",
-        "manage-git-branches",
-        "write-claude-md"
+        "generate-status-report"
       ],
       "path": "agents/project-manager.md",
       "locales": []
@@ -10821,40 +10792,10 @@
       "mcp_servers": [],
       "skills": [
         "build-ci-cd-pipeline",
-        "provision-infrastructure-terraform",
         "deploy-to-kubernetes",
-        "manage-kubernetes-secrets",
-        "setup-container-registry",
         "implement-gitops-workflow",
-        "configure-ingress-networking",
-        "setup-service-mesh",
-        "configure-api-gateway",
-        "enforce-policy-as-code",
-        "optimize-cloud-costs",
-        "setup-local-kubernetes",
-        "write-helm-chart",
         "setup-prometheus-monitoring",
-        "build-grafana-dashboards",
-        "configure-log-aggregation",
-        "instrument-distributed-tracing",
-        "define-slo-sli-sla",
-        "configure-alerting-rules",
-        "write-incident-runbook",
-        "conduct-post-mortem",
-        "plan-capacity",
-        "design-on-call-rotation",
-        "run-chaos-experiment",
-        "setup-uptime-checks",
-        "correlate-observability-signals",
-        "create-r-dockerfile",
-        "setup-docker-compose",
-        "optimize-docker-build-cache",
-        "containerize-mcp-server",
-        "commit-changes",
-        "manage-git-branches",
-        "configure-git-repository",
-        "write-claude-md",
-        "security-audit-codebase"
+        "write-helm-chart"
       ],
       "path": "agents/devops-engineer.md",
       "locales": []
@@ -10886,27 +10827,10 @@
       "mcp_servers": [],
       "skills": [
         "track-ml-experiments",
-        "register-ml-model",
         "deploy-ml-model-serving",
-        "build-feature-store",
-        "version-ml-data",
         "orchestrate-ml-pipeline",
         "monitor-model-drift",
-        "run-ab-test-models",
-        "setup-automl-pipeline",
-        "detect-anomalies-aiops",
-        "forecast-operational-metrics",
-        "label-training-data",
-        "serialize-data-formats",
-        "design-serialization-schema",
-        "create-r-dockerfile",
-        "setup-docker-compose",
-        "optimize-docker-build-cache",
-        "review-data-analysis",
-        "review-software-architecture",
-        "commit-changes",
-        "manage-git-branches",
-        "write-claude-md"
+        "build-feature-store"
       ],
       "path": "agents/mlops-engineer.md",
       "locales": []
@@ -10940,7 +10864,6 @@
         "analyze-codebase-workflow",
         "annotate-source-files",
         "generate-workflow-diagram",
-        "setup-putior-ci",
         "configure-putior-mcp"
       ],
       "path": "agents/putior-integrator.md",
@@ -11008,16 +10931,9 @@
       "skills": [
         "generate-puzzle",
         "add-puzzle-type",
-        "render-puzzle-docs",
-        "run-puzzle-tests",
         "validate-piles-notation",
-        "write-roxygen-docs",
-        "write-testthat-tests",
-        "manage-renv-dependencies",
-        "setup-github-actions-ci",
-        "commit-changes",
-        "create-pull-request",
-        "manage-git-branches"
+        "run-puzzle-tests",
+        "render-puzzle-docs"
       ],
       "path": "agents/jigsawr-developer.md",
       "locales": []
@@ -11145,8 +11061,6 @@
         "review-research",
         "review-data-analysis",
         "review-software-architecture",
-        "review-web-design",
-        "review-ux-ui",
         "assess-ip-landscape",
         "search-prior-art"
       ],
@@ -11252,7 +11166,6 @@
         "preserve-materials",
         "curate-collection",
         "manage-memory",
-        "review-research",
         "observe"
       ],
       "path": "agents/librarian.md",
@@ -11287,10 +11200,7 @@
         "prepare-soil",
         "plan-garden-calendar",
         "read-garden",
-        "maintain-hand-tools",
-        "meditate",
-        "heal",
-        "forage-plants"
+        "maintain-hand-tools"
       ],
       "path": "agents/gardener.md",
       "locales": []
@@ -11320,14 +11230,10 @@
       "mcp_servers": [],
       "skills": [
         "create-quarto-report",
-        "format-apa-report",
         "build-parameterized-report",
+        "format-apa-report",
         "generate-statistical-tables",
-        "write-vignette",
-        "build-pkgdown-site",
-        "write-roxygen-docs",
-        "render-puzzle-docs",
-        "write-claude-md"
+        "write-vignette"
       ],
       "path": "agents/quarto-developer.md",
       "locales": []
@@ -11515,20 +11421,7 @@
         "build-shiny-module",
         "test-shiny-app",
         "deploy-shiny-app",
-        "optimize-shiny-performance",
-        "design-shiny-ui",
-        "write-testthat-tests",
-        "write-roxygen-docs",
-        "manage-renv-dependencies",
-        "setup-github-actions-ci",
-        "release-package-version",
-        "create-r-dockerfile",
-        "setup-docker-compose",
-        "create-quarto-report",
-        "commit-changes",
-        "create-pull-request",
-        "manage-git-branches",
-        "write-claude-md"
+        "design-shiny-ui"
       ],
       "path": "agents/shiny-developer.md",
       "locales": []
@@ -11757,8 +11650,7 @@
         "review-research",
         "review-software-architecture",
         "review-data-analysis",
-        "search-prior-art",
-        "investigate-capa-root-cause"
+        "search-prior-art"
       ],
       "path": "agents/advocatus-diaboli.md",
       "locales": []
@@ -12321,8 +12213,7 @@
         "interpret-ir-spectrum",
         "interpret-mass-spectrum",
         "interpret-uv-vis-spectrum",
-        "interpret-raman-spectrum",
-        "plan-spectroscopic-analysis"
+        "interpret-raman-spectrum"
       ],
       "path": "agents/spectroscopist.md",
       "locales": []
@@ -12445,13 +12336,11 @@
       ],
       "mcp_servers": [],
       "skills": [
-        "analyze-magnetic-field",
-        "solve-electromagnetic-induction",
         "formulate-maxwell-equations",
-        "design-electromagnetic-device",
+        "solve-electromagnetic-induction",
+        "analyze-magnetic-field",
         "analyze-magnetic-levitation",
-        "design-acoustic-levitation",
-        "evaluate-levitation-mechanism"
+        "design-electromagnetic-device"
       ],
       "path": "agents/physicist.md",
       "locales": []
@@ -12484,7 +12373,8 @@
         "scaffold-cli-command",
         "build-cli-plugin",
         "test-cli-application",
-        "design-cli-output"
+        "design-cli-output",
+        "install-almanac-content"
       ],
       "path": "agents/cli-developer.md",
       "locales": []
@@ -12517,13 +12407,7 @@
         "security-audit-codebase",
         "review-codebase",
         "create-pull-request",
-        "create-github-issues",
-        "manage-git-branches",
-        "commit-changes",
-        "configure-git-repository",
-        "install-almanac-content",
-        "create-github-release",
-        "apply-semantic-versioning"
+        "create-github-issues"
       ],
       "path": "agents/claw-polisher.md",
       "locales": []
@@ -17181,6 +17065,36 @@
       "type": "skill"
     },
     {
+      "source": "unleash-the-agents",
+      "target": "forage-solutions",
+      "type": "skill"
+    },
+    {
+      "source": "unleash-the-agents",
+      "target": "build-coherence",
+      "type": "skill"
+    },
+    {
+      "source": "unleash-the-agents",
+      "target": "coordinate-reasoning",
+      "type": "skill"
+    },
+    {
+      "source": "unleash-the-agents",
+      "target": "coordinate-swarm",
+      "type": "skill"
+    },
+    {
+      "source": "unleash-the-agents",
+      "target": "expand-awareness",
+      "type": "skill"
+    },
+    {
+      "source": "unleash-the-agents",
+      "target": "meditate",
+      "type": "skill"
+    },
+    {
       "source": "assess-form",
       "target": "adapt-architecture",
       "type": "skill"
@@ -19757,37 +19671,7 @@
     },
     {
       "source": "agent:r-developer",
-      "target": "write-roxygen-docs",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
       "target": "write-testthat-tests",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "write-vignette",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "manage-renv-dependencies",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "setup-github-actions-ci",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "release-package-version",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "build-pkgdown-site",
       "type": "agent"
     },
     {
@@ -19797,117 +19681,22 @@
     },
     {
       "source": "agent:r-developer",
-      "target": "add-rcpp-integration",
+      "target": "manage-renv-dependencies",
       "type": "agent"
     },
     {
       "source": "agent:r-developer",
-      "target": "create-quarto-report",
+      "target": "build-pkgdown-site",
       "type": "agent"
     },
     {
-      "source": "agent:r-developer",
-      "target": "build-parameterized-report",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "format-apa-report",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "generate-statistical-tables",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "setup-gxp-r-project",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "implement-audit-trail",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "validate-statistical-output",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "write-validation-documentation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "configure-mcp-server",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "build-custom-mcp-server",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "troubleshoot-mcp-connection",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "create-r-dockerfile",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "setup-docker-compose",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "optimize-docker-build-cache",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "containerize-mcp-server",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "commit-changes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "create-pull-request",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "manage-git-branches",
-      "type": "agent"
-    },
-    {
-      "source": "agent:r-developer",
-      "target": "write-claude-md",
+      "source": "agent:code-reviewer",
+      "target": "review-pull-request",
       "type": "agent"
     },
     {
       "source": "agent:code-reviewer",
       "target": "security-audit-codebase",
-      "type": "agent"
-    },
-    {
-      "source": "agent:code-reviewer",
-      "target": "commit-changes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:code-reviewer",
-      "target": "create-pull-request",
       "type": "agent"
     },
     {
@@ -19926,11 +19715,6 @@
       "type": "agent"
     },
     {
-      "source": "agent:code-reviewer",
-      "target": "review-pull-request",
-      "type": "agent"
-    },
-    {
       "source": "agent:security-analyst",
       "target": "security-audit-codebase",
       "type": "agent"
@@ -19953,11 +19737,6 @@
     {
       "source": "agent:security-analyst",
       "target": "write-validation-documentation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:security-analyst",
-      "target": "configure-git-repository",
       "type": "agent"
     },
     {
@@ -20002,12 +19781,12 @@
     },
     {
       "source": "agent:contemplative",
-      "target": "heal",
+      "target": "meditate",
       "type": "agent"
     },
     {
       "source": "agent:contemplative",
-      "target": "meditate",
+      "target": "heal",
       "type": "agent"
     },
     {
@@ -20017,62 +19796,12 @@
     },
     {
       "source": "agent:contemplative",
-      "target": "shine",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
-      "target": "intrinsic",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
-      "target": "breathe",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
-      "target": "rest",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
       "target": "attune",
       "type": "agent"
     },
     {
       "source": "agent:contemplative",
-      "target": "dream",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
-      "target": "gratitude",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
-      "target": "awareness",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
       "target": "observe",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
-      "target": "listen",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
-      "target": "honesty-humility",
-      "type": "agent"
-    },
-    {
-      "source": "agent:contemplative",
-      "target": "conscientiousness",
       "type": "agent"
     },
     {
@@ -20127,37 +19856,12 @@
     },
     {
       "source": "agent:gxp-validator",
-      "target": "setup-gxp-r-project",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gxp-validator",
-      "target": "implement-audit-trail",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gxp-validator",
-      "target": "validate-statistical-output",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gxp-validator",
-      "target": "write-validation-documentation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gxp-validator",
-      "target": "implement-pharma-serialisation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gxp-validator",
       "target": "design-compliance-architecture",
       "type": "agent"
     },
     {
       "source": "agent:gxp-validator",
-      "target": "manage-change-control",
+      "target": "implement-audit-trail",
       "type": "agent"
     },
     {
@@ -20167,57 +19871,12 @@
     },
     {
       "source": "agent:gxp-validator",
-      "target": "write-standard-operating-procedure",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gxp-validator",
-      "target": "monitor-data-integrity",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gxp-validator",
-      "target": "design-training-program",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gxp-validator",
-      "target": "decommission-validated-system",
+      "target": "manage-change-control",
       "type": "agent"
     },
     {
       "source": "agent:auditor",
       "target": "conduct-gxp-audit",
-      "type": "agent"
-    },
-    {
-      "source": "agent:auditor",
-      "target": "perform-csv-assessment",
-      "type": "agent"
-    },
-    {
-      "source": "agent:auditor",
-      "target": "setup-gxp-r-project",
-      "type": "agent"
-    },
-    {
-      "source": "agent:auditor",
-      "target": "implement-audit-trail",
-      "type": "agent"
-    },
-    {
-      "source": "agent:auditor",
-      "target": "validate-statistical-output",
-      "type": "agent"
-    },
-    {
-      "source": "agent:auditor",
-      "target": "write-validation-documentation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:auditor",
-      "target": "security-audit-codebase",
       "type": "agent"
     },
     {
@@ -20232,12 +19891,12 @@
     },
     {
       "source": "agent:auditor",
-      "target": "monitor-data-integrity",
+      "target": "qualify-vendor",
       "type": "agent"
     },
     {
       "source": "agent:auditor",
-      "target": "qualify-vendor",
+      "target": "monitor-data-integrity",
       "type": "agent"
     },
     {
@@ -20268,11 +19927,6 @@
     {
       "source": "agent:senior-data-scientist",
       "target": "validate-statistical-output",
-      "type": "agent"
-    },
-    {
-      "source": "agent:senior-data-scientist",
-      "target": "generate-statistical-tables",
       "type": "agent"
     },
     {
@@ -20371,33 +20025,8 @@
       "type": "agent"
     },
     {
-      "source": "agent:project-manager",
-      "target": "conduct-retrospective",
-      "type": "agent"
-    },
-    {
-      "source": "agent:project-manager",
-      "target": "commit-changes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:project-manager",
-      "target": "manage-git-branches",
-      "type": "agent"
-    },
-    {
-      "source": "agent:project-manager",
-      "target": "write-claude-md",
-      "type": "agent"
-    },
-    {
       "source": "agent:devops-engineer",
       "target": "build-ci-cd-pipeline",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "provision-infrastructure-terraform",
       "type": "agent"
     },
     {
@@ -20407,52 +20036,7 @@
     },
     {
       "source": "agent:devops-engineer",
-      "target": "manage-kubernetes-secrets",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "setup-container-registry",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
       "target": "implement-gitops-workflow",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "configure-ingress-networking",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "setup-service-mesh",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "configure-api-gateway",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "enforce-policy-as-code",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "optimize-cloud-costs",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "setup-local-kubernetes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "write-helm-chart",
       "type": "agent"
     },
     {
@@ -20462,107 +20046,7 @@
     },
     {
       "source": "agent:devops-engineer",
-      "target": "build-grafana-dashboards",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "configure-log-aggregation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "instrument-distributed-tracing",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "define-slo-sli-sla",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "configure-alerting-rules",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "write-incident-runbook",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "conduct-post-mortem",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "plan-capacity",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "design-on-call-rotation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "run-chaos-experiment",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "setup-uptime-checks",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "correlate-observability-signals",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "create-r-dockerfile",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "setup-docker-compose",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "optimize-docker-build-cache",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "containerize-mcp-server",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "commit-changes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "manage-git-branches",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "configure-git-repository",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "write-claude-md",
-      "type": "agent"
-    },
-    {
-      "source": "agent:devops-engineer",
-      "target": "security-audit-codebase",
+      "target": "write-helm-chart",
       "type": "agent"
     },
     {
@@ -20572,22 +20056,7 @@
     },
     {
       "source": "agent:mlops-engineer",
-      "target": "register-ml-model",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
       "target": "deploy-ml-model-serving",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "build-feature-store",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "version-ml-data",
       "type": "agent"
     },
     {
@@ -20602,77 +20071,7 @@
     },
     {
       "source": "agent:mlops-engineer",
-      "target": "run-ab-test-models",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "setup-automl-pipeline",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "detect-anomalies-aiops",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "forecast-operational-metrics",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "label-training-data",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "serialize-data-formats",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "design-serialization-schema",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "create-r-dockerfile",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "setup-docker-compose",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "optimize-docker-build-cache",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "review-data-analysis",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "review-software-architecture",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "commit-changes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "manage-git-branches",
-      "type": "agent"
-    },
-    {
-      "source": "agent:mlops-engineer",
-      "target": "write-claude-md",
+      "target": "build-feature-store",
       "type": "agent"
     },
     {
@@ -20693,11 +20092,6 @@
     {
       "source": "agent:putior-integrator",
       "target": "generate-workflow-diagram",
-      "type": "agent"
-    },
-    {
-      "source": "agent:putior-integrator",
-      "target": "setup-putior-ci",
       "type": "agent"
     },
     {
@@ -20742,7 +20136,7 @@
     },
     {
       "source": "agent:jigsawr-developer",
-      "target": "render-puzzle-docs",
+      "target": "validate-piles-notation",
       "type": "agent"
     },
     {
@@ -20752,42 +20146,7 @@
     },
     {
       "source": "agent:jigsawr-developer",
-      "target": "validate-piles-notation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:jigsawr-developer",
-      "target": "write-roxygen-docs",
-      "type": "agent"
-    },
-    {
-      "source": "agent:jigsawr-developer",
-      "target": "write-testthat-tests",
-      "type": "agent"
-    },
-    {
-      "source": "agent:jigsawr-developer",
-      "target": "manage-renv-dependencies",
-      "type": "agent"
-    },
-    {
-      "source": "agent:jigsawr-developer",
-      "target": "setup-github-actions-ci",
-      "type": "agent"
-    },
-    {
-      "source": "agent:jigsawr-developer",
-      "target": "commit-changes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:jigsawr-developer",
-      "target": "create-pull-request",
-      "type": "agent"
-    },
-    {
-      "source": "agent:jigsawr-developer",
-      "target": "manage-git-branches",
+      "target": "render-puzzle-docs",
       "type": "agent"
     },
     {
@@ -20872,16 +20231,6 @@
     },
     {
       "source": "agent:polymath",
-      "target": "review-web-design",
-      "type": "agent"
-    },
-    {
-      "source": "agent:polymath",
-      "target": "review-ux-ui",
-      "type": "agent"
-    },
-    {
-      "source": "agent:polymath",
       "target": "assess-ip-landscape",
       "type": "agent"
     },
@@ -20952,11 +20301,6 @@
     },
     {
       "source": "agent:librarian",
-      "target": "review-research",
-      "type": "agent"
-    },
-    {
-      "source": "agent:librarian",
       "target": "observe",
       "type": "agent"
     },
@@ -20986,33 +20330,18 @@
       "type": "agent"
     },
     {
-      "source": "agent:gardener",
-      "target": "meditate",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gardener",
-      "target": "heal",
-      "type": "agent"
-    },
-    {
-      "source": "agent:gardener",
-      "target": "forage-plants",
-      "type": "agent"
-    },
-    {
       "source": "agent:quarto-developer",
       "target": "create-quarto-report",
       "type": "agent"
     },
     {
       "source": "agent:quarto-developer",
-      "target": "format-apa-report",
+      "target": "build-parameterized-report",
       "type": "agent"
     },
     {
       "source": "agent:quarto-developer",
-      "target": "build-parameterized-report",
+      "target": "format-apa-report",
       "type": "agent"
     },
     {
@@ -21023,26 +20352,6 @@
     {
       "source": "agent:quarto-developer",
       "target": "write-vignette",
-      "type": "agent"
-    },
-    {
-      "source": "agent:quarto-developer",
-      "target": "build-pkgdown-site",
-      "type": "agent"
-    },
-    {
-      "source": "agent:quarto-developer",
-      "target": "write-roxygen-docs",
-      "type": "agent"
-    },
-    {
-      "source": "agent:quarto-developer",
-      "target": "render-puzzle-docs",
-      "type": "agent"
-    },
-    {
-      "source": "agent:quarto-developer",
-      "target": "write-claude-md",
       "type": "agent"
     },
     {
@@ -21147,72 +20456,7 @@
     },
     {
       "source": "agent:shiny-developer",
-      "target": "optimize-shiny-performance",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
       "target": "design-shiny-ui",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "write-testthat-tests",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "write-roxygen-docs",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "manage-renv-dependencies",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "setup-github-actions-ci",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "release-package-version",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "create-r-dockerfile",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "setup-docker-compose",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "create-quarto-report",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "commit-changes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "create-pull-request",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "manage-git-branches",
-      "type": "agent"
-    },
-    {
-      "source": "agent:shiny-developer",
-      "target": "write-claude-md",
       "type": "agent"
     },
     {
@@ -21343,11 +20587,6 @@
     {
       "source": "agent:advocatus-diaboli",
       "target": "search-prior-art",
-      "type": "agent"
-    },
-    {
-      "source": "agent:advocatus-diaboli",
-      "target": "investigate-capa-root-cause",
       "type": "agent"
     },
     {
@@ -21641,11 +20880,6 @@
       "type": "agent"
     },
     {
-      "source": "agent:spectroscopist",
-      "target": "plan-spectroscopic-analysis",
-      "type": "agent"
-    },
-    {
       "source": "agent:chromatographer",
       "target": "develop-gc-method",
       "type": "agent"
@@ -21702,7 +20936,7 @@
     },
     {
       "source": "agent:physicist",
-      "target": "analyze-magnetic-field",
+      "target": "formulate-maxwell-equations",
       "type": "agent"
     },
     {
@@ -21712,12 +20946,7 @@
     },
     {
       "source": "agent:physicist",
-      "target": "formulate-maxwell-equations",
-      "type": "agent"
-    },
-    {
-      "source": "agent:physicist",
-      "target": "design-electromagnetic-device",
+      "target": "analyze-magnetic-field",
       "type": "agent"
     },
     {
@@ -21727,12 +20956,7 @@
     },
     {
       "source": "agent:physicist",
-      "target": "design-acoustic-levitation",
-      "type": "agent"
-    },
-    {
-      "source": "agent:physicist",
-      "target": "evaluate-levitation-mechanism",
+      "target": "design-electromagnetic-device",
       "type": "agent"
     },
     {
@@ -21753,6 +20977,11 @@
     {
       "source": "agent:cli-developer",
       "target": "design-cli-output",
+      "type": "agent"
+    },
+    {
+      "source": "agent:cli-developer",
+      "target": "install-almanac-content",
       "type": "agent"
     },
     {
@@ -21778,36 +21007,6 @@
     {
       "source": "agent:claw-polisher",
       "target": "create-github-issues",
-      "type": "agent"
-    },
-    {
-      "source": "agent:claw-polisher",
-      "target": "manage-git-branches",
-      "type": "agent"
-    },
-    {
-      "source": "agent:claw-polisher",
-      "target": "commit-changes",
-      "type": "agent"
-    },
-    {
-      "source": "agent:claw-polisher",
-      "target": "configure-git-repository",
-      "type": "agent"
-    },
-    {
-      "source": "agent:claw-polisher",
-      "target": "install-almanac-content",
-      "type": "agent"
-    },
-    {
-      "source": "agent:claw-polisher",
-      "target": "create-github-release",
-      "type": "agent"
-    },
-    {
-      "source": "agent:claw-polisher",
-      "target": "apply-semantic-versioning",
       "type": "agent"
     },
     {

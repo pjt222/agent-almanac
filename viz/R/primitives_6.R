@@ -350,3 +350,39 @@ glyph_assess_context_lens <- function(cx, cy, s, col, bright) {
   ))
   layers_list
 }
+
+# ── glyph_unleash_starburst: agents radiating outward from central burst ─────
+glyph_unleash_starburst <- function(cx, cy, s, col, bright) {
+  layers <- list()
+  # Central burst ring
+  burst <- data.frame(x0 = cx, y0 = cy, r = 6 * s)
+  layers <- c(layers, list(
+    ggforce::geom_circle(data = burst, .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(bright, 0.5), color = bright, linewidth = .lw(s, 2.5))
+  ))
+  # Radiating agent dots in 3 concentric waves (inner, mid, outer)
+  wave_configs <- list(
+    list(n = 5,  r = 14, dot_r = 3.0, alpha = 0.9, offset = 0),         # wave 1
+    list(n = 7,  r = 22, dot_r = 2.5, alpha = 0.65, offset = pi / 7),   # wave 2
+    list(n = 9,  r = 30, dot_r = 2.0, alpha = 0.4, offset = pi / 9)     # wave 3
+  )
+  for (w in wave_configs) {
+    angles <- seq(0, 2 * pi, length.out = w$n + 1)[seq_len(w$n)] + w$offset
+    for (a in angles) {
+      dot_x <- cx + w$r * s * cos(a)
+      dot_y <- cy + w$r * s * sin(a)
+      # Trail from center to dot
+      trail <- data.frame(x = c(cx, dot_x), y = c(cy, dot_y))
+      dot <- data.frame(x0 = dot_x, y0 = dot_y, r = w$dot_r * s)
+      layers <- c(layers, list(
+        ggplot2::geom_path(data = trail, .aes(x, y),
+          color = hex_with_alpha(col, w$alpha * 0.4), linewidth = .lw(s, 0.8)),
+        ggforce::geom_circle(data = dot, .aes(x0 = x0, y0 = y0, r = r),
+          fill = hex_with_alpha(bright, w$alpha * 0.6),
+          color = hex_with_alpha(bright, w$alpha),
+          linewidth = .lw(s, 1))
+      ))
+    }
+  }
+  layers
+}
