@@ -5,6 +5,10 @@
  * for the terminal width. Uses iTerm2 inline images when the terminal
  * supports them (WezTerm, iTerm2), otherwise falls back to half-block
  * pixel art.
+ *
+ * Inline images: the terminal handles vertical spacing after each image.
+ * No blank-line reservations — WezTerm advances the cursor past the
+ * image automatically.
  */
 
 import { renderSprite, composite } from './pixel-renderer.js';
@@ -23,11 +27,11 @@ const MARKER_GAP = 4;
 const MARKER_H = GLYPH_SIZE;
 const VERT_GAP = 2; // pixel rows between fire and agents
 
-// Inline image display sizes in character cells.
-const INLINE_ICON_H = 8;    // icon height (width auto from aspect ratio)
-const INLINE_ICON_GAP = 2;  // spaces between inline icons
-const INLINE_FIRE_W = 16;   // fire width (height auto from aspect ratio)
-const INLINE_FIRE_ROWS = 12; // approximate fire height in rows (for spacing reserve)
+// Inline image display sizes in screen pixels.
+// Fire PNG is 512×640 → display at 150px wide (height auto = 188px).
+// Agent icon PNGs are 128×128 → strip display at 120px tall (width auto).
+const INLINE_FIRE_W_PX = 150;
+const INLINE_ICON_H_PX = 120;
 
 /**
  * Build a campfire scene with agents gathered around the fire.
@@ -35,6 +39,7 @@ const INLINE_FIRE_ROWS = 12; // approximate fire height in rows (for spacing res
  * @param {object} options
  * @param {'burning'|'embers'|'cold'} options.state - Fire state.
  * @param {string[]} [options.agentIds] - Agent IDs to show.
+ * @param {string}   [options.teamId]   - Team ID (for pre-composed strip lookup).
  * @param {string}   [options.leadId]   - Fire keeper (gets amber accent).
  * @param {number}   [options.maxWidth] - Terminal width for centering.
  * @returns {string[]} Terminal-ready lines.
@@ -48,7 +53,7 @@ export function buildFireScene({ state, agentIds = [], teamId, leadId, maxWidth 
     if (canInlineImage()) {
       const firePng = getCampfirePng(state || 'cold');
       if (firePng) {
-        return buildInlineFireOnly(firePng, maxWidth);
+        return [renderInlineImage(firePng, { widthPx: INLINE_FIRE_W_PX })];
       }
     }
     const indent = Math.max(0, Math.floor((maxWidth - fireW) / 2));
@@ -57,15 +62,13 @@ export function buildFireScene({ state, agentIds = [], teamId, leadId, maxWidth 
 
   // Try inline images first (WezTerm, iTerm2).
   if (canInlineImage()) {
-    // Prefer pre-composed team strip (all icons in one image).
     const strip = teamId ? getTeamStrip(teamId) : null;
     if (strip) {
-      return buildInlineScene({ fireSprite, fireState: state, stripPng: strip, agentCount: agentIds.length, maxWidth });
+      return buildInlineScene({ fireState: state, stripPng: strip, agentIds });
     }
-    // Fall back to individual PNGs if no strip.
     const hasAllPngs = agentIds.every(id => getAgentPng(id));
     if (hasAllPngs) {
-      return buildInlineScene({ fireSprite, fireState: state, agentIds, maxWidth });
+      return buildInlineScene({ fireState: state, agentIds });
     }
   }
 
@@ -74,44 +77,28 @@ export function buildFireScene({ state, agentIds = [], teamId, leadId, maxWidth 
 }
 
 /**
- * Build scene with inline PNG images for agent icons.
- * Campfire stays as half-block art; agents render as actual pixel images.
- *
- * Uses a pre-composed team strip (single image with all members side by side)
- * to avoid cursor positioning issues in WezTerm.
+ * Build scene with inline PNG images.
+ * Each image is emitted on its own line — WezTerm advances the cursor
+ * past the image automatically. No blank-line hacks.
  */
-function buildInlineScene({ fireSprite, fireState, stripPng, agentIds, agentCount, maxWidth }) {
+function buildInlineScene({ fireState, stripPng, agentIds }) {
   const lines = [];
 
-  // Render campfire — prefer inline PNG, fall back to half-block.
-  // Fire is taller than wide (512×640), so specify WIDTH and let height auto-calculate.
+  // Campfire image.
   const firePng = getCampfirePng(fireState || 'burning');
   if (firePng) {
-    const fireW = INLINE_FIRE_W;
-    const fireIndent = Math.max(0, Math.floor((maxWidth - fireW) / 2));
-    lines.push(' '.repeat(fireIndent) + renderInlineImage(firePng, { width: fireW }));
-    // Reserve space — fire at width=16 with 512:640 ratio ≈ 20 rows tall.
-    for (let i = 0; i < INLINE_FIRE_ROWS; i++) lines.push('');
-  } else {
-    const fireW = fireSprite[0].length;
-    const fireIndent = Math.max(0, Math.floor((maxWidth - fireW) / 2));
-    lines.push(...renderSprite(fireSprite, { indent: fireIndent }));
+    lines.push(renderInlineImage(firePng, { widthPx: INLINE_FIRE_W_PX }));
   }
-  lines.push(''); // gap
 
+  // Agent icons — team strip or individual.
   if (stripPng) {
-    // Team strip is wider than tall — specify HEIGHT and let width auto-calculate.
-    lines.push(renderInlineImage(stripPng, { height: INLINE_ICON_H }));
+    lines.push(renderInlineImage(stripPng, { heightPx: INLINE_ICON_H_PX }));
   } else if (agentIds) {
-    // Individual images (vertical fallback).
     for (const id of agentIds) {
       const png = getAgentPng(id);
-      if (png) lines.push(renderInlineImage(png, { height: INLINE_ICON_H }));
+      if (png) lines.push(renderInlineImage(png, { heightPx: INLINE_ICON_H_PX }));
     }
   }
-
-  // Blank lines to prevent text overlapping the image.
-  for (let i = 0; i < INLINE_ICON_H; i++) lines.push('');
 
   return lines;
 }
@@ -130,11 +117,9 @@ function buildHalfBlockScene({ fireSprite, agentIds, leadId, maxWidth }) {
 
   const layers = [];
 
-  // Center fire horizontally on canvas.
   const fireX = Math.floor((canvasW - fireW) / 2);
   layers.push({ sprite: fireSprite, x: fireX, y: 0 });
 
-  // Place agent markers in a row below the fire.
   const agentsStartX = Math.floor((canvasW - agentsRowW) / 2);
   const agentsStartY = fireH + VERT_GAP;
 
@@ -148,15 +133,4 @@ function buildHalfBlockScene({ fireSprite, agentIds, leadId, maxWidth }) {
   const canvas = composite(canvasW, canvasH, layers);
   const indent = Math.max(0, Math.floor((maxWidth - canvasW) / 2));
   return renderSprite(canvas, { indent });
-}
-
-/**
- * Build fire-only scene as inline image.
- */
-function buildInlineFireOnly(firePng, maxWidth) {
-  const fireIndent = Math.max(0, Math.floor((maxWidth - INLINE_FIRE_W) / 2));
-  const lines = [];
-  lines.push(' '.repeat(fireIndent) + renderInlineImage(firePng, { width: INLINE_FIRE_W }));
-  for (let i = 0; i < INLINE_FIRE_ROWS; i++) lines.push('');
-  return lines;
 }

@@ -813,9 +813,7 @@ Examples:
         const strip = getTeamStrip(id);
         if (!strip) continue;
         console.log(campfire.C.dim(`  ── ${id} ──`));
-        console.log(renderInlineImage(strip, { height: 8 }));
-        for (let i = 0; i < 8; i++) console.log('');
-        console.log();
+        console.log(renderInlineImage(strip, { heightPx: 120 }));
       }
     }
   });

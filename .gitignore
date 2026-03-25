@@ -42,4 +42,4 @@ peon-ping-sound.wav
 
 # Quarto render artifacts
 tests/results/**/*.html
-*.knit.md
+*.knit.mdCONTINUE_HERE.md

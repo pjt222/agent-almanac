@@ -16,7 +16,7 @@ import { renderSprite, composite, canRenderPixelArt } from '../lib/pixel-rendere
 import {
   CAMPFIRE_BURNING, CAMPFIRE_EMBERS, CAMPFIRE_COLD,
   getCampfireSprite,
-  createAgentGlyph, getAgentPng, GLYPH_SIZE,
+  createAgentGlyph, getAgentPng, getTeamStrip, getCampfirePng, getCampfireFrames, GLYPH_SIZE,
 } from '../lib/sprites.js';
 import { buildFireScene } from '../lib/scene.js';
 import { canInlineImage, renderInlineImage } from '../lib/inline-image.js';
@@ -41,7 +41,7 @@ describe('registry', () => {
     assert.match(out, /10 skills/);
   });
 
-  it('list --agents shows 66 agents', () => {
+  it('list --agents shows 68 agents', () => {
     const out = run('list --agents');
     assert.match(out, /68 agents/);
   });
@@ -569,10 +569,24 @@ describe('inline-image', () => {
     assert.equal(canInlineImage(), false);
   });
 
-  it('renderInlineImage produces valid escape sequence', () => {
-    const seq = renderInlineImage('iVBORw0KGgo=', 16);
+  it('renderInlineImage with widthPx produces valid escape sequence', () => {
+    const seq = renderInlineImage('iVBORw0KGgo=', { widthPx: 150 });
     assert.ok(seq.includes('1337;File=inline=1'), 'should contain iTerm2 protocol');
+    assert.ok(seq.includes('width=150px'), 'should contain pixel width');
     assert.ok(seq.includes('iVBORw0KGgo='), 'should contain base64 data');
+  });
+
+  it('renderInlineImage with heightPx produces valid escape sequence', () => {
+    const seq = renderInlineImage('iVBORw0KGgo=', { heightPx: 120 });
+    assert.ok(seq.includes('height=120px'), 'should contain pixel height');
+    assert.ok(!seq.includes('width='), 'should not contain width when only height specified');
+  });
+
+  it('renderInlineImage with no size omits dimensions', () => {
+    const seq = renderInlineImage('iVBORw0KGgo=');
+    assert.ok(!seq.includes('width='), 'no width');
+    assert.ok(!seq.includes('height='), 'no height');
+    assert.ok(seq.includes('preserveAspectRatio=1'), 'should preserve aspect ratio');
   });
 
   it('getAgentPng returns base64 string for known agent', () => {
@@ -584,19 +598,58 @@ describe('inline-image', () => {
   it('getAgentPng returns null for unknown agent', () => {
     assert.equal(getAgentPng('nonexistent-xyz'), null);
   });
+
+  it('getCampfirePng returns base64 string for burning', () => {
+    const png = getCampfirePng('burning');
+    assert.ok(png, 'burning should have PNG data');
+    assert.ok(png.startsWith('iVBOR'), 'should be base64 PNG');
+  });
+
+  it('getCampfirePng returns base64 string for embers and cold', () => {
+    assert.ok(getCampfirePng('embers'), 'embers should have PNG data');
+    assert.ok(getCampfirePng('cold'), 'cold should have PNG data');
+  });
+
+  it('getCampfirePng returns null for unknown state', () => {
+    assert.equal(getCampfirePng('nonexistent-xyz'), null);
+  });
+
+  it('getCampfireFrames returns array for burning', () => {
+    const frames = getCampfireFrames('burning');
+    assert.ok(Array.isArray(frames), 'should be array');
+    assert.ok(frames.length > 1, 'burning should have multiple frames');
+    assert.ok(frames[0].startsWith('iVBOR'), 'frames should be base64 PNG');
+  });
+
+  it('getCampfireFrames returns single-element array for embers', () => {
+    const frames = getCampfireFrames('embers');
+    assert.ok(Array.isArray(frames), 'should be array');
+    assert.equal(frames.length, 1, 'embers has one frame');
+  });
+
+  it('getTeamStrip returns base64 string for known team', () => {
+    const strip = getTeamStrip('tending');
+    assert.ok(strip === null || (typeof strip === 'string' && strip.startsWith('iVBOR')),
+      'should be null or base64 PNG');
+  });
+
+  it('getTeamStrip returns null for unknown team', () => {
+    assert.equal(getTeamStrip('nonexistent-xyz'), null);
+  });
 });
 
 // ── Scene ───────────────────────────────────────────────────────────
 
 describe('scene', () => {
   it('buildFireScene returns lines for fire-only', () => {
+    // Non-TTY: canInlineImage() false → half-block: 14px / 2 = 7 rows
     const lines = buildFireScene({ state: 'burning', maxWidth: 80 });
     assert.ok(lines.length > 0, 'should return terminal lines');
-    assert.equal(lines.length, 7, 'burning 14h → 7 terminal rows');
+    assert.equal(lines.length, 7, 'burning half-block = 7 terminal rows');
   });
 
-  it('buildFireScene returns lines with agents (half-block fallback)', () => {
-    // In non-TTY test env, canInlineImage() is false → half-block path
+  it('buildFireScene returns lines with agents', () => {
+    // Non-TTY: half-block path
     const lines = buildFireScene({
       state: 'burning',
       agentIds: ['mystic', 'alchemist', 'gardener'],
@@ -604,7 +657,7 @@ describe('scene', () => {
       maxWidth: 250,
     });
     const expectedRows = (14 + 2 + GLYPH_SIZE) / 2;
-    assert.equal(lines.length, expectedRows, `fire + gap + glyphs = ${expectedRows} terminal rows`);
+    assert.equal(lines.length, expectedRows, `half-block: fire + gap + glyphs = ${expectedRows} rows`);
   });
 
   it('buildFireScene uses cold sprite for cold state', () => {
