@@ -39,7 +39,7 @@ script_dir <- get_script_dir()
 
 # ── Source supporting files ──────────────────────────────────────────────
 source(file.path(script_dir, "R", "utils.R"))
-source(file.path(script_dir, "R", "primitives.R"))
+source_all_primitives(script_dir)
 source(file.path(script_dir, "R", "render.R"))
 source(file.path(script_dir, "R", "palettes.R"))
 source(file.path(script_dir, "R", "team_primitives.R"))

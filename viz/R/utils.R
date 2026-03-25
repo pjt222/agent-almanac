@@ -292,3 +292,19 @@ setup_parallel <- function(workers = NULL) {
 
 # Null-coalescing operator (if not already available)
 `%||%` <- function(a, b) if (is.null(a)) b else a
+
+#' Source all skill primitives files from the R/ directory
+#'
+#' Auto-discovers primitives.R + primitives_N.R files in sorted order.
+#' Use this instead of hardcoding 21+ source() lines in each build script.
+#' @param dir The script directory containing R/ subdirectory
+source_all_primitives <- function(dir) {
+  r_dir <- file.path(dir, "R")
+  # Base primitives first, then numbered files in natural sort order
+  base <- file.path(r_dir, "primitives.R")
+  if (file.exists(base)) source(base)
+  numbered <- sort(list.files(r_dir, pattern = "^primitives_\\d+\\.R$",
+                              full.names = TRUE))
+  for (f in numbered) source(f)
+  invisible(length(numbered) + 1L)
+}

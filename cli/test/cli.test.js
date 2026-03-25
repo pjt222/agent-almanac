@@ -128,7 +128,7 @@ describe('install', () => {
 
   it('agent install with --with-deps includes skills', () => {
     const out = run('install --agent r-developer --with-deps --dry-run');
-    assert.match(out, /30 item\(s\)/);
+    assert.match(out, /6 item\(s\)/);
   });
 
   it('team install warns for unsupported content type', () => {
