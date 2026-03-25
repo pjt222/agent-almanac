@@ -1,6 +1,6 @@
 # Guides
 
-19 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+20 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -29,6 +29,9 @@ AI meta-cognitive tending sessions with the tending team.
 
 ### [Running a Translation Campaign](running-a-translation-campaign.md)
 End-to-end guide for translating all skills, agents, teams, and guides into supported locales using the translation-campaign team.
+
+### [Unleash the Agents](unleash-the-agents.md)
+Structured multi-agent consultation at three tiers for open-ended hypothesis generation.
 
 ### [Production Coordination Patterns](production-coordination-patterns.md)
 Real-world multi-agent orchestration patterns: barrier synchronization, silence budgets, health checks, degraded-wave policies, and cost-aware scheduling.

@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 336
+total_skills: 337
 
 domains:
   r-packages:
@@ -1091,6 +1091,11 @@ domains:
         complexity: intermediate
         language: natural
         description: AI internal coordination using stigmergy and information decay management
+      - id: unleash-the-agents
+        path: unleash-the-agents/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Parallel multi-agent hypothesis generation across all available agents in structured waves
 
   morphic:
     description: Adaptive transformation, structural metamorphosis, and reconfiguration strategies

@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 19
+total_guides: 20
 version: "1.0"
 last_updated: "2026-03-17"
 
@@ -89,6 +89,15 @@ guides:
     agents: [translator, project-manager, skill-reviewer, librarian]
     teams: [translation-campaign]
     skills: [translate-content, review-skill-format]
+
+  - id: unleash-the-agents
+    path: guides/unleash-the-agents.md
+    title: "Unleash the Agents"
+    description: "Structured multi-agent consultation at three tiers for open-ended hypothesis generation"
+    category: workflow
+    agents: [polymath, advocatus-diaboli, senior-researcher, shapeshifter, adaptic]
+    teams: [opaque-team, synoptic-mind]
+    skills: [unleash-the-agents, forage-solutions, build-coherence, coordinate-reasoning, expand-awareness]
 
   - id: production-coordination-patterns
     path: guides/production-coordination-patterns.md
