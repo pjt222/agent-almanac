@@ -187,6 +187,7 @@ URL: https://username.github.io/packagename/, https://github.com/username/packag
 - **Broken vignette links**: Use `vignette("name")` syntax in cross-references, not file paths.
 - **Logo not showing**: Place logo at `man/figures/logo.png` and reference in `_pkgdown.yml`.
 - **Search not working**: Requires `url` field in `_pkgdown.yml` to be set correctly.
+- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
 
 ## Related Skills
 

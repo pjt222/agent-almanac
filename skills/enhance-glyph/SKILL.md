@@ -138,26 +138,15 @@ Edit the glyph function to address the diagnosed issues.
 
 ### Step 4: Re-render — Generate Updated Icons
 
-Render the modified glyph and verify the fix.
+Render the modified glyph and verify the fix. Always use `build.sh` — it handles platform detection and R binary selection. See [render-icon-pipeline](../render-icon-pipeline/SKILL.md) for the full flag reference.
 
 1. Re-render based on entity type:
 
-   **For skills:**
    ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-icons.R --only <domain> --no-cache
-   ```
-
-   **For agents:**
-   ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-agent-icons.R --only <agent-id> --no-cache
-   ```
-
-   **For teams:**
-   ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
-   Rscript build-team-icons.R --only <team-id> --no-cache
+   # From project root — use --no-cache to force re-render of modified glyph
+   bash viz/build.sh --only <domain> --no-cache          # skills
+   bash viz/build.sh --type agent --only <id> --no-cache # agents
+   bash viz/build.sh --type team --only <id> --no-cache  # teams
    ```
 
 2. Verify the output files exist at the expected path for each palette

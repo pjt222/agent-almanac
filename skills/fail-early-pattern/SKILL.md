@@ -340,6 +340,7 @@ Rscript -e "devtools::test()"
 - **Swallowing errors in tryCatch**: `tryCatch(..., error = function(e) NULL)` hides bugs. If you must catch, log or re-throw with added context.
 - **Forgetting call. = FALSE**: In R, `stop("msg")` includes the call by default, which is noisy for end users. Use `call. = FALSE` in user-facing functions. `cli::cli_abort()` does this automatically.
 - **Validating in tests instead of code**: Tests verify behavior but do not protect production callers. Validation belongs in the function itself.
+- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
 
 ## Related Skills
 

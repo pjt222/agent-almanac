@@ -322,6 +322,7 @@ Key principles for disagreement reporting:
 - **Treating verification as infallible**: Verification itself can have bugs. A passing test suite does not mean the code is correct — it means the code satisfies the tests. Keep verification proportional and acknowledge its limits rather than treating green checks as absolute truth.
 - **Silently accepting partial passes**: If 9 out of 10 checks pass, the deliverable still fails. Report the one failure as a structured disagreement. Partial credit is for grading; delivery is binary.
 - **Social trust as a substitute**: "Agent A is reliable, so I'll skip verification" is an attack vector. As Sentinel_Orol notes, trust without verification is exploitable. Verify based on the boundary classification, not on the reputation of the producer.
+- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
 
 ## Related Skills
 

@@ -222,31 +222,21 @@ Register the icon in the appropriate manifest file.
 
 ### Step 5: Render — Generate the Icon
 
-Run the build pipeline to render the WebP.
+Run the icon pipeline to render the new glyph. Always use `build.sh` as the entry point — it handles platform detection and R binary selection. See [render-icon-pipeline](../render-icon-pipeline/SKILL.md) for the full flag reference and pipeline architecture.
 
-1. Navigate to the `viz/` directory
-2. Render based on entity type:
-
-**For skills:**
 ```bash
-cd viz && Rscript build-icons.R --only <domain>
-# Or skip existing: Rscript build-icons.R --only <domain> --skip-existing
+# From project root — renders all palettes, standard + HD, skips existing icons
+bash viz/build.sh --only <domain> --skip-existing          # skills
+bash viz/build.sh --type agent --only <id> --skip-existing # agents
+bash viz/build.sh --type team --only <id> --skip-existing  # teams
+
+# Dry run first:
+bash viz/build.sh --only <domain> --dry-run
 ```
 
-**For agents:**
-```bash
-cd viz && Rscript build-agent-icons.R --only <agent-id>
-# Or skip existing: Rscript build-agent-icons.R --only <agent-id> --skip-existing
-```
+`build.sh` runs the full pipeline (palette → data → manifest → render → terminal glyphs). The non-render steps add ~10 seconds but ensure all data is current.
 
-**For teams:**
-```bash
-cd viz && Rscript build-team-icons.R --only <team-id>
-# Or skip existing: Rscript build-team-icons.R --only <team-id> --skip-existing
-```
-
-3. For a dry run first, add `--dry-run` to any command
-4. Output locations:
+Output locations:
    - Skills: `viz/public/icons/<palette>/<domain>/<skill-id>.webp`
    - Agents: `viz/public/icons/<palette>/agents/<agent-id>.webp`
    - Teams: `viz/public/icons/<palette>/teams/<team-id>.webp`
@@ -328,7 +318,7 @@ get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 When adding a new domain, add it to three places in `palettes.R`:
 1. `PALETTE_DOMAIN_ORDER` (alphabetical)
 2. `get_cyberpunk_colors()` domains list
-3. Run `Rscript generate-palette-colors.R` to regenerate JSON + JS
+3. Run `bash viz/build.sh` to regenerate palettes, data, and manifests
 
 ### Glyph Function Catalog
 

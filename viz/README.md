@@ -25,16 +25,17 @@ The data and icon pipeline is separate from the Vite frontend build. Run it when
 npm run pipeline   # runs build.sh — the single entry point
 ```
 
-`build.sh` executes four steps:
+`build.sh` executes five steps in order (do not run these individually — `build.sh` handles platform detection and R binary selection):
 
-| Step | Command | What it does |
-|------|---------|--------------|
-| 1 | `Rscript generate-palette-colors.R` | Generates palette JSON and JS color data |
+| Step | Command (run by build.sh) | What it does |
+|------|---------------------------|--------------|
+| 1 | `$RSCRIPT generate-palette-colors.R` | Generates palette JSON and JS color data |
 | 2 | `node build-data.js` | Reads all registries, writes `public/data/skills.json` |
 | 3 | `node build-icon-manifest.js` | Produces icon manifests for skills, agents, and teams |
-| 4 | `Rscript build-all-icons.R` | Renders standard and HD WebP icons |
+| 4 | `$RSCRIPT build-all-icons.R` | Renders standard and HD WebP icons |
+| 5 | `node build-terminal-glyphs.js` | Generates CLI glyph data from agent icons |
 
-Individual stages can be run separately:
+Node stages can be run separately (they don't need platform detection):
 
 ```bash
 npm run build-data      # step 2 only
