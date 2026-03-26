@@ -18,7 +18,7 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 - **337 skills** across 60 domains — structured, executable procedures
 - **68 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **15 teams** — predefined multi-agent compositions for complex workflows
-- **20 guides** — human-readable workflow, infrastructure, and reference documentation
+- **21 guides** — human-readable workflow, infrastructure, and reference documentation
 - **Interactive visualization** — force-graph explorer with 337 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
@@ -132,6 +132,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Running Tending](guides/running-tending.md) — AI meta-cognitive tending sessions with the tending team
 - [Running a Translation Campaign](guides/running-a-translation-campaign.md) — End-to-end guide for translating all skills, agents, teams, and guides into supported locales using the translation-campaign team
 - [Unleash the Agents](guides/unleash-the-agents.md) — Structured multi-agent consultation at three tiers for open-ended hypothesis generation
+- [Team Assembly Prompt Patterns](guides/team-assembly-prompt-patterns.md) — How to phrase requests to Claude Code for multi-agent team work at every level of specificity
 - [Production Coordination Patterns](guides/production-coordination-patterns.md) — Real-world multi-agent orchestration patterns: barrier synchronization, silence budgets, health checks, degraded-wave policies, and cost-aware scheduling
 - [AgentSkills Alignment](guides/agentskills-alignment.md) — Standards compliance audits using the agentskills-alignment team for format validation, spec drift detection, and registry integrity
 
@@ -159,10 +160,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 320/337 | 3/68 | 1/15 | 1/20 | 325/440 (73.9%) |
-| zh-CN | 简体中文 | 320/337 | 3/68 | 1/15 | 1/20 | 325/440 (73.9%) |
-| ja | 日本語 | 320/337 | 3/68 | 1/15 | 1/20 | 325/440 (73.9%) |
-| es | Español | 320/337 | 3/68 | 1/15 | 1/20 | 325/440 (73.9%) |
+| de | Deutsch | 320/337 | 3/68 | 1/15 | 1/21 | 325/441 (73.7%) |
+| zh-CN | 简体中文 | 320/337 | 3/68 | 1/15 | 1/21 | 325/441 (73.7%) |
+| ja | 日本語 | 320/337 | 3/68 | 1/15 | 1/21 | 325/441 (73.7%) |
+| es | Español | 320/337 | 3/68 | 1/15 | 1/21 | 325/441 (73.7%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.

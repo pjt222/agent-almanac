@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 20
+total_guides: 21
 version: "1.0"
 last_updated: "2026-03-17"
 
@@ -98,6 +98,15 @@ guides:
     agents: [polymath, advocatus-diaboli, senior-researcher, shapeshifter, adaptic]
     teams: [opaque-team, synoptic-mind]
     skills: [unleash-the-agents, forage-solutions, build-coherence, coordinate-reasoning, expand-awareness]
+
+  - id: team-assembly-prompt-patterns
+    path: guides/team-assembly-prompt-patterns.md
+    title: "Team Assembly Prompt Patterns"
+    description: "How to phrase requests to Claude Code for multi-agent team work at every level of specificity"
+    category: workflow
+    agents: [shapeshifter, contemplative, adaptic]
+    teams: [r-package-review, opaque-team, dyad, synoptic-mind, scrum-team]
+    skills: [coordinate-swarm, create-team]
 
   - id: production-coordination-patterns
     path: guides/production-coordination-patterns.md

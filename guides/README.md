@@ -1,6 +1,6 @@
 # Guides
 
-20 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+21 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -32,6 +32,9 @@ End-to-end guide for translating all skills, agents, teams, and guides into supp
 
 ### [Unleash the Agents](unleash-the-agents.md)
 Structured multi-agent consultation at three tiers for open-ended hypothesis generation.
+
+### [Team Assembly Prompt Patterns](team-assembly-prompt-patterns.md)
+How to phrase requests to Claude Code for multi-agent team work at every level of specificity.
 
 ### [Production Coordination Patterns](production-coordination-patterns.md)
 Real-world multi-agent orchestration patterns: barrier synchronization, silence budgets, health checks, degraded-wave policies, and cost-aware scheduling.
