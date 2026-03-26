@@ -123,12 +123,14 @@ else
 fi
 
 # --- Teams ---
-if [ -L "$PROJECT_CLAUDE/teams" ] || [ -d "$PROJECT_CLAUDE/teams" ]; then
-  PROJECT_TEAM_STATUS="OK"
-  test -d "$PROJECT_CLAUDE/teams" || PROJECT_TEAM_STATUS="BROKEN"
-  PROJECT_TEAM_COUNT=$(ls "$PROJECT_CLAUDE/teams/"*.md 2>/dev/null | wc -l)
+# Teams are NOT symlinked. TeamCreate uses ~/.claude/teams/ for runtime state.
+# A .claude/teams symlink is a misconfiguration — warn if found.
+if [ -L "$PROJECT_CLAUDE/teams" ]; then
+  PROJECT_TEAM_STATUS="MISCONFIGURED"
+  PROJECT_TEAM_COUNT=0
+  # Stale symlink — should be removed to avoid collision with TeamCreate
 else
-  PROJECT_TEAM_STATUS="MISSING"
+  PROJECT_TEAM_STATUS="OK"
   PROJECT_TEAM_COUNT=0
 fi
 ```
@@ -139,7 +141,7 @@ fi
 
 ### Step 4: Audit Global Symlinks
 
-Check `~/.claude/skills/*`, `~/.claude/agents`, `~/.claude/teams`.
+Check `~/.claude/skills/*` and `~/.claude/agents`. Also check that `~/.claude/teams` is NOT a symlink (it should be absent or a directory for TeamCreate runtime state).
 
 ```bash
 GLOBAL_CLAUDE="$HOME/.claude"
@@ -185,12 +187,14 @@ else
 fi
 
 # --- Teams ---
-if [ -L "$GLOBAL_CLAUDE/teams" ] || [ -d "$GLOBAL_CLAUDE/teams" ]; then
-  GLOBAL_TEAM_STATUS="OK"
-  test -d "$GLOBAL_CLAUDE/teams" || GLOBAL_TEAM_STATUS="BROKEN"
-  GLOBAL_TEAM_COUNT=$(ls "$GLOBAL_CLAUDE/teams/"*.md 2>/dev/null | wc -l)
+# Teams are NOT symlinked. TeamCreate uses ~/.claude/teams/ for runtime state.
+# A ~/.claude/teams symlink is a misconfiguration — warn if found.
+if [ -L "$GLOBAL_CLAUDE/teams" ]; then
+  GLOBAL_TEAM_STATUS="MISCONFIGURED"
+  GLOBAL_TEAM_COUNT=0
+  # Stale symlink — should be removed to avoid collision with TeamCreate
 else
-  GLOBAL_TEAM_STATUS="MISSING"
+  GLOBAL_TEAM_STATUS="OK"
   GLOBAL_TEAM_COUNT=0
 fi
 ```
@@ -348,9 +352,9 @@ echo "Global teams:   $GLOBAL_TEAM_STATUS ($GLOBAL_TEAM_COUNT .md files)"
 
 2. **Removing external content**: Never delete items that don't target the almanac. They belong to other projects and are intentional.
 
-3. **Symlinking `_template` directories**: Templates are scaffolding, not consumable content. The `_template` directory should never appear in `.claude/skills/`, `.claude/agents/`, or `.claude/teams/`. Bulk sync scripts must explicitly skip it.
+3. **Symlinking `_template` directories**: Templates are scaffolding, not consumable content. The `_template` directory should never appear in `.claude/skills/` or `.claude/agents/`. Bulk sync scripts must explicitly skip it.
 
-4. **Empty directories blocking symlinks**: `ln -s` fails if the target path is an existing directory. For teams, `~/.claude/teams/` may be an empty directory (from Claude Code runtime) that must be `rmdir`'d before creating a symlink.
+4. **Stale `.claude/teams` symlink**: A `.claude/teams` symlink pointing to team definitions is a misconfiguration. Claude Code's `TeamCreate` uses `~/.claude/teams/` for runtime state (config.json, inboxes). If this path is a symlink to the almanac's `teams/` directory, runtime artifacts will be written into the git-tracked repository. Remove any `.claude/teams` symlink found at project or global level.
 
 5. **Relative vs absolute paths**: Project-level skill symlinks use relative paths (`../../skills/<name>`). Global symlinks use absolute paths (`/path/to/almanac/skills/<name>`). Mixing these patterns causes breakage on moves.
 

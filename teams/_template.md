@@ -62,7 +62,7 @@ Describe how a typical workflow is broken into tasks for each member.
 
 ## Configuration
 
-Machine-readable configuration block for tooling that auto-creates teams.
+Machine-readable configuration block that Claude reads when activating this team via `TeamCreate`.
 
 <!-- CONFIG:START -->
 ```yaml

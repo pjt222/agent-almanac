@@ -35,10 +35,9 @@ Claude Code looks for agents and skills in the `.claude/` directory of the curre
 ```
 ~/.claude/                              Layer 3: Global (user-wide)
 ├── agents → <almanac>/agents
-├── skills/
-│   ├── <skill-a> → <almanac>/skills/<skill-a>
-│   └── <skill-b> → <almanac>/skills/<skill-b>
-└── teams → <almanac>/teams
+└── skills/
+    ├── <skill-a> → <almanac>/skills/<skill-a>
+    └── <skill-b> → <almanac>/skills/<skill-b>
 
 <workspace>/.claude/                    Layer 2: Workspace (multi-project root)
 ├── agents → ~/.claude/agents           (chains through global)
@@ -63,7 +62,6 @@ The agent-almanac repository uses **relative symlinks** within its own `.claude/
 ```
 <almanac>/.claude/
 ├── agents -> ../agents                 (relative — portable)
-├── teams -> ../teams                   (relative — portable)
 └── skills/
     ├── <skill-a> -> ../../skills/<skill-a>
     ├── <skill-b> -> ../../skills/<skill-b>
@@ -110,13 +108,11 @@ ln -s <almanac-path>/agents ~/.claude/agents
 
 This single symlink makes all agent definitions available globally.
 
-### Step 2: Create the global teams symlink
+### Note: Teams do NOT use symlinks
 
-```bash
-ln -s <almanac-path>/teams ~/.claude/teams
-```
+Unlike agents and skills, teams are **not** auto-discovered from `.claude/teams/`. Claude Code's `TeamCreate` tool stores ephemeral runtime state at `~/.claude/teams/{team-name}/config.json`. If this path is occupied by a symlink to team definitions, runtime state would be written into the git-tracked `teams/` directory, polluting the repository.
 
-This single symlink makes all team definitions available globally. If `~/.claude/teams/` already exists as an empty directory (from Claude Code runtime state), remove it first: `rmdir ~/.claude/teams`.
+Team definitions in `teams/` are blueprints that Claude reads directly from the project root when asked to activate a team. No symlink is needed or wanted. If a `~/.claude/teams` symlink exists from a previous setup, remove it: `rm ~/.claude/teams`.
 
 ### Step 3: Create the global skills directory
 
@@ -142,10 +138,9 @@ For each project that should discover shared skills and agents:
 mkdir -p <project>/.claude
 ln -s ~/.claude/agents <project>/.claude/agents
 ln -s ~/.claude/skills <project>/.claude/skills
-ln -s ~/.claude/teams <project>/.claude/teams
 ```
 
-This creates a two-hop chain: `project/.claude/agents → ~/.claude/agents → <almanac>/agents`.
+This creates a two-hop chain: `project/.claude/agents → ~/.claude/agents → <almanac>/agents`. Do not symlink teams -- they are read directly from `teams/` and `~/.claude/teams/` is reserved for TeamCreate runtime state.
 
 ### Step 5: Verify
 
@@ -313,7 +308,7 @@ done
 
 ### Stale runtime data
 
-Claude Code's built-in teams feature creates runtime state directories under `~/.claude/teams/` (with `config.json` and `inboxes/`). These are session artifacts, not team definitions. They can be safely removed after a session ends:
+Claude Code's `TeamCreate` tool creates runtime state directories under `~/.claude/teams/` (with `config.json` and `inboxes/`). These are ephemeral session artifacts, not team definitions. They can be safely removed after a session ends:
 
 ```bash
 # List runtime team data
@@ -323,7 +318,7 @@ ls ~/.claude/teams/
 rm -rf ~/.claude/teams/<session-name>
 ```
 
-Do not confuse these with the agent-almanac's `teams/` directory, which contains team *definitions* (markdown files).
+These are distinct from the agent-almanac's `teams/` directory, which contains team *definitions* (markdown blueprints). The two paths must not be connected by a symlink.
 
 ### Orphaned project symlinks
 

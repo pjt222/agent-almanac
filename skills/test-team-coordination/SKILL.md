@@ -97,7 +97,7 @@ score the rubric, and produce a `RESULT.md` in `tests/results/`.
 
 4.2. Record T0 (task start timestamp).
 
-4.3. Spawn the target team using TeamCreate with the team-size from the scenario. Pass the Primary Task prompt verbatim from the scenario's Task section.
+4.3. Read the target team's definition from `teams/<target>.md`, extract the CONFIG block, and activate the team: call `TeamCreate` with the team name, spawn teammates using each member's `subagent_type`, and create tasks from the CONFIG `tasks` list. Use the team-size from the scenario. Pass the Primary Task prompt verbatim from the scenario's Task section.
 
 4.4. Observe the team's execution phases. Record timestamps for:
    - T1: Form assessment / task decomposition complete

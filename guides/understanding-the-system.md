@@ -214,11 +214,13 @@ Teams coordinate multiple agents on a shared objective. You activate a team by a
 
 > "Activate the scrum-team for this two-week sprint. I will be the Product Owner."
 
-> "Run an tending session."
+> "Run a tending session."
 
-When a team is activated, Claude Code reads the team definition, identifies the lead and members, and follows the coordination pattern. For the `scrum-team`, the human user takes the Product Owner role, and the `project-manager` agent serves as Scrum Master.
+**Important: Teams are not auto-discovered.** Unlike agents (which Claude Code reads from `.claude/agents/`) and skills (from `.claude/skills/`), team definitions are **not** loaded from a `.claude/teams/` directory. Claude Code's `TeamCreate` tool uses `~/.claude/teams/` for ephemeral runtime state -- this path must not be occupied by a symlink to team definitions.
 
-The `opaque-team` is a special case: it consists of N shapeshifter agents that self-organize into whatever roles the task requires, using the adaptive coordination pattern.
+When you ask Claude to activate a team, Claude reads the team definition directly from `teams/{team-name}.md`, identifies the CONFIG block (which specifies members, tasks, and coordination), and orchestrates the activation by calling `TeamCreate`, spawning agents, and creating tasks. The coordination pattern in the team file guides how the lead manages the work.
+
+For the `scrum-team`, the human user takes the Product Owner role, and the `project-manager` agent serves as Scrum Master. The `opaque-team` is a special case: it consists of N shapeshifter agents that self-organize into whatever roles the task requires, using the adaptive coordination pattern.
 
 ## Registries and Discovery
 

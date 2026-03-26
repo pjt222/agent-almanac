@@ -44,15 +44,17 @@ Agents are spawned as subagents via Claude Code's Task tool. Ask Claude Code dir
 
 Agents are discovered from `.claude/agents/` (symlinked to `agents/` in this project).
 
-### Creating Teams
+### Activating Teams
 
-Teams are created with TeamCreate and managed via task lists:
+Teams are activated by asking Claude Code to use them. Claude reads the team definition from `teams/`, then orchestrates via `TeamCreate`, agent spawning, and task creation:
 
 ```
-"Create the r-package-review team to review this package"
+"Use the r-package-review team to review this package"
 "Spin up the scrum-team for this sprint"
 "Launch the tending team for a meditation session"
 ```
+
+Note: Teams are **not** auto-discovered from `.claude/teams/` like agents and skills. Team definitions are blueprints that Claude reads directly from `teams/` when asked.
 
 Available teams: r-package-review, gxp-compliance-validation, fullstack-web-dev, ml-data-science-review, devops-platform-engineering, tending, dyad, scrum-team, opaque-team, agentskills-alignment, entomology, analytical-chemistry, physical-computing, translation-campaign, synoptic-mind.
 

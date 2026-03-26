@@ -9,7 +9,7 @@ description: >
   繰り返される協調タスクのための調整されたグループを作成する場合に使用する。
 locale: ja
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6 # stale — source updated for teams infrastructure fix
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

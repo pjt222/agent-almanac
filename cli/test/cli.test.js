@@ -184,10 +184,10 @@ describe('adapter: claude-code', () => {
     assert.match(out, /r-developer/);
   });
 
-  it('installs team to .claude/teams (dry-run)', () => {
+  it('skips team install with guidance (dry-run)', () => {
     const out = run('install --team r-package-review --dry-run');
     assert.match(out, /claude-code/);
-    assert.match(out, /r-package-review/);
+    assert.match(out, /skipped|blueprint/i);
   });
 });
 

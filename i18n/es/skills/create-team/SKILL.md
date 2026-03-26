@@ -20,7 +20,7 @@ metadata:
   tags: meta, team, creation, composition, coordination
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6 # stale — source updated for teams infrastructure fix
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---

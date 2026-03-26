@@ -236,14 +236,17 @@ Test that the team can be activated in Claude Code:
 User: Use the <team-name> team to <typical task description>
 ```
 
-Claude Code should:
-1. Find the team file at `teams/<team-name>.md`
-2. Identify the lead and members
-3. Follow the coordination pattern described in the file
+Claude reads `teams/<team-name>.md`, extracts the CONFIG block, and orchestrates activation:
+1. Calls `TeamCreate` with the team name and description
+2. Spawns teammates via the `Agent` tool using each member's `subagent_type` from the CONFIG block
+3. Creates tasks via `TaskCreate` with the `blocked_by` dependencies from the CONFIG block
+4. The lead agent coordinates work following the coordination pattern
 
-**Expected:** Claude Code recognizes the team name, identifies the correct lead and members, and follows the coordination pattern.
+Note: Teams are **not** auto-discovered from `.claude/teams/`. Claude reads the definition directly from `teams/` when asked.
 
-**On failure:** Verify the team file is at `teams/<team-name>.md` (not in a subdirectory). Check that all member agents exist in `.claude/agents/` (which symlinks to `agents/`). Confirm the team is listed in `teams/_registry.yml`.
+**Expected:** Claude reads the team file, creates the team via `TeamCreate`, spawns the correct agents, and follows the coordination pattern.
+
+**On failure:** Verify the team file is at `teams/<team-name>.md` (not in a subdirectory). Check that all member agents exist in `agents/`. Confirm the CONFIG block has valid YAML with `subagent_type` for each member. Confirm the team is listed in `teams/_registry.yml`.
 
 ## Validation
 
@@ -266,7 +269,7 @@ Claude Code should:
 - **Too many members**: Teams with more than 5 members become hard to coordinate. The overhead of distributing tasks and synthesizing results outweighs the benefit of additional perspectives. Split into two teams or reduce to the essential specialties.
 - **Overlapping responsibilities**: If two members both "review code quality," their findings will conflict and the lead wastes time deduplicating. Each member must have a clearly distinct focus area.
 - **Wrong coordination pattern**: Using hub-and-spoke when agents need each other's output (should be sequential), or using sequential when agents can work independently (should be parallel). Review the decision guide in Step 4.
-- **Missing CONFIG block**: The CONFIG block is not optional prose decoration. Tooling reads it to auto-create teams with `TeamCreate`. Without it, the team file is only human-readable and cannot be programmatically activated.
+- **Missing CONFIG block**: The CONFIG block is not optional prose decoration. It is the machine-readable specification Claude uses to orchestrate `TeamCreate`, agent spawning, and task creation. Without it, the team can only be activated through ad-hoc prose interpretation, which is less reliable.
 - **Lead agent not in members list**: The lead must also appear as a member with their own role and responsibilities. A lead who only "coordinates" without doing substantive work wastes a slot. Give the lead a concrete review or synthesis responsibility.
 
 ## Related Skills
