@@ -5,7 +5,7 @@ Predefined multi-agent team compositions for coordinated workflows in [Claude Co
 ## Overview
 
 <!-- AUTO:START:teams-intro -->
-A collection of 15 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
+A collection of 16 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
 <!-- AUTO:END:teams-intro -->
 
 Teams complement agents and skills:
@@ -30,6 +30,7 @@ Teams complement agents and skills:
 | [agentskills-alignment](agentskills-alignment.md) | skill-reviewer | 4 | hub-and-spoke | Standards compliance team for maintaining alignment with the agentskills.io open standard |
 | [entomology](entomology.md) | conservation-entomologist | 3 | hub-and-spoke | Multi-agent entomology team combining conservation ecology, systematic taxonomy, and citizen science for comprehensive insect study |
 | [analytical-chemistry](analytical-chemistry.md) | spectroscopist | 3 | hub-and-spoke | Multi-agent analytical chemistry team for spectroscopic and chromatographic analysis with research synthesis |
+| [gpu-acceleration](gpu-acceleration.md) | shapeshifter | 1 | adaptive | Self-organizing team for GPU kernel optimization with adaptive role assignment |
 | [physical-computing](physical-computing.md) | logician | 3 | sequential | Cross-disciplinary team for digital logic design and physical implementation — from Boolean gates to complete computing systems |
 | [translation-campaign](translation-campaign.md) | project-manager | 4 | wave-parallel | Wave-parallel translation team for systematic localization of all skills into supported locales (de, zh-CN, ja, es) |
 | [synoptic-mind](synoptic-mind.md) | adaptic | 3 | synoptic | Shared-workspace panoramic synthesis team using synoptic coordination for cross-domain gestalt integration |

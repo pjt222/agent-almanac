@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 337 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 339 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -73,6 +73,7 @@ Browse by domain:
 | [Versioning](versioning/) | 4 | Semantic versioning, changelog management, release planning, and dependency auditing |
 | [Spectroscopy](spectroscopy/) | 6 | Spectroscopic technique interpretation and analytical planning for NMR, IR, MS, UV-Vis, and Raman |
 | [Chromatography](chromatography/) | 5 | Chromatographic method development, interpretation, troubleshooting, and ICH Q2 validation |
+| [Gpu Optimization](gpu-optimization/) | 2 | GPU kernel performance analysis, software pipelining, and SASS-level optimization |
 | [Digital Logic](digital-logic/) | 4 | Boolean algebra, logic gates, combinational and sequential circuits, and CPU architecture simulation |
 | [Electromagnetism](electromagnetism/) | 4 | Electric and magnetic fields, Maxwell's equations, electromagnetic induction, and practical electromagnetic devices |
 | [Levitation](levitation/) | 3 | Physical levitation mechanisms including magnetic, acoustic, aerodynamic, and electrostatic |
