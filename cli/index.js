@@ -35,7 +35,13 @@ const program = new Command();
 program
   .name('agent-almanac')
   .description('Universal skill/agent/team installer for agentic CLI frameworks')
-  .version('0.1.0');
+  .version('0.1.0')
+  .action(async () => {
+    // Bare invocation — launch TUI if in a TTY, otherwise show help
+    const { startTui } = await import('./lib/tui.js');
+    const launched = await startTui();
+    if (!launched) program.help();
+  });
 
 // ── Shared option parsing ────────────────────────────────────────
 
@@ -832,4 +838,4 @@ function askYesNo() {
 
 // ── Parse and run ────────────────────────────────────────────────
 
-program.parse();
+program.parseAsync();
