@@ -2,7 +2,7 @@
 # Machine-readable catalog of all team definitions in this library.
 # Keep in sync with the actual team files on disk.
 
-total_teams: 15
+total_teams: 16
 version: "1.2"
 last_updated: "2026-02-25"
 
@@ -102,6 +102,14 @@ teams:
     members: [spectroscopist, chromatographer, senior-researcher]
     coordination: hub-and-spoke
     tags: [analytical-chemistry, spectroscopy, chromatography, method-development, structure-elucidation]
+
+  - id: gpu-acceleration
+    path: teams/gpu-acceleration.md
+    description: Self-organizing team for GPU kernel optimization with adaptive role assignment
+    lead: shapeshifter
+    members: [shapeshifter]
+    coordination: adaptive
+    tags: [gpu, cuda, sass, optimization, adaptive, self-organizing, tensor-core]
 
   - id: physical-computing
     path: teams/physical-computing.md

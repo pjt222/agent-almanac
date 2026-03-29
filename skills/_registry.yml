@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 337
+total_skills: 339
 
 domains:
   r-packages:
@@ -1786,6 +1786,20 @@ domains:
         complexity: advanced
         language: natural
         description: Validate analytical methods per ICH Q2 covering specificity, linearity, accuracy, precision, and robustness
+
+  gpu-optimization:
+    description: GPU kernel performance analysis, software pipelining, and SASS-level optimization
+    skills:
+      - id: analyze-kernel-bottleneck
+        path: analyze-kernel-bottleneck/SKILL.md
+        complexity: advanced
+        language: CUDA
+        description: Systematic GPU kernel bottleneck analysis using roofline model, occupancy, compute/load ratio, and SASS inspection
+      - id: pipeline-gpu-kernel
+        path: pipeline-gpu-kernel/SKILL.md
+        complexity: advanced
+        language: CUDA
+        description: Apply software pipelining (double-buffering) to tiled GPU kernels with cp.async and LDG variants
 
   digital-logic:
     description: Boolean algebra, logic gates, combinational and sequential circuits, and CPU architecture simulation
