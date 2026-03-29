@@ -358,7 +358,6 @@ export async function startTui() {
     function cleanup() {
       if (cleanedUp) return;
       cleanedUp = true;
-      clearInterval(tickTimer);
       process.stdin.setRawMode(false);
       process.stdin.pause();
       showCursor();
@@ -369,6 +368,25 @@ export async function startTui() {
 
     process.on('SIGINT', cleanup);
     process.on('SIGTERM', cleanup);
+
+    // ── Status bar (navigation hints) ──
+    function statusBar() {
+      if (helpOverlay) return C.dim('  press any key to return');
+      switch (view) {
+        case VIEW.WELCOME:
+          return `  ${C.amber('g')} kindle  ${C.amber('?')} help  ${C.amber('q')} quit`;
+        case VIEW.CLEARING:
+          return `  ${C.dim('j/k')} navigate  ${C.dim('Enter')} sit by fire  ${C.dim('g')} kindle  ${C.dim('/')} search  ${C.dim('?')} help  ${C.dim('q')} quit`;
+        case VIEW.FIRE:
+          return `  ${C.dim('j/k')} navigate  ${C.dim('Enter')} agent detail  ${C.dim('Esc')} back  ${C.dim('t')} tend  ${C.dim('q')} quit`;
+        case VIEW.AGENT:
+          return `  ${C.dim('Esc')} back  ${C.dim('?')} help  ${C.dim('q')} quit`;
+        case VIEW.SEARCH:
+          return `  ${C.dim('type to search')}  ${C.dim('Enter')} select  ${C.dim('Esc')} cancel`;
+        default:
+          return '';
+      }
+    }
 
     // ── Render ──
     function render() {
@@ -386,6 +404,12 @@ export async function startTui() {
       } else {
         lines = renderClearingLines(data, selected, scrollOffset, '');
       }
+
+      // Append status bar at the bottom
+      const H = rows();
+      while (lines.length < H - 1) lines.push('');
+      lines[H - 1] = statusBar();
+
       clearScreen();
       moveTo(1, 1);
       process.stdout.write(lines.join('\n'));
@@ -517,8 +541,7 @@ export async function startTui() {
     // ── Resize handler ──
     process.stdout.on('resize', render);
 
-    // ── Animation tick ──
-    const tickTimer = setInterval(render, 500);
+    // No animation tick — render only on input or resize to prevent flicker.
 
     render();
   });
