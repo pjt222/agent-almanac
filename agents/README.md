@@ -3,7 +3,7 @@
 <!-- AUTO:START:agents-intro -->
 A collection of 69 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
 
-All agents inherit **default skills**: meditate, heal.
+All agents inherit **default skills**: , .
 <!-- AUTO:END:agents-intro -->
 
 ## How Agents Differ from Skills and Guides
