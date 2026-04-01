@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 339 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 340 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -26,7 +26,7 @@ Browse by domain:
 | [Containerization](containerization/) | 10 | Docker and container workflow skills |
 | [Reporting](reporting/) | 4 | Quarto, R Markdown, and publication-ready report skills |
 | [Compliance](compliance/) | 17 | GxP regulatory and validation skills |
-| [Mcp Integration](mcp-integration/) | 5 | MCP server setup and troubleshooting skills |
+| [Mcp Integration](mcp-integration/) | 6 | MCP server setup and troubleshooting skills |
 | [Web Dev](web-dev/) | 4 | Web development skills for Next.js and modern frontend |
 | [Git](git/) | 7 | Git version control and GitHub workflow skills |
 | [General](general/) | 20 | Cross-cutting development environment and workflow skills |
