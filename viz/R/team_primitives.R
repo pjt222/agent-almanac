@@ -739,3 +739,63 @@ glyph_team_translation_campaign <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── GPU Acceleration Team ──────────────────────────────────────────────
+
+glyph_team_gpu_acceleration <- function(cx, cy, s, col, bright) {
+  # Three GPU cores converging on a central optimization target — hub-and-spoke
+  layers <- list()
+
+  # Central hub (target / optimized kernel)
+  hub <- data.frame(x0 = cx, y0 = cy, r = 7 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = hub,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(col, 0.15), color = bright, linewidth = .lw(s, 2))
+
+  # Inner target ring
+  inner <- data.frame(x0 = cx, y0 = cy, r = 3 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = inner,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(bright, 0.25), color = bright, linewidth = .lw(s, 1))
+
+  # Three spoke nodes (GPU cores at 120-degree intervals)
+  node_r <- 8 * s
+  spoke_r <- 22 * s
+  angles <- c(pi / 2, pi / 2 + 2 * pi / 3, pi / 2 + 4 * pi / 3)
+
+  for (a in angles) {
+    nx <- cx + spoke_r * cos(a)
+    ny <- cy + spoke_r * sin(a)
+
+    # Spoke line (hub to node)
+    spoke <- data.frame(
+      x = c(cx + 7 * s * cos(a), nx - node_r * cos(a)),
+      y = c(cy + 7 * s * sin(a), ny - node_r * sin(a))
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = spoke, .aes(x, y),
+      color = hex_with_alpha(bright, 0.5), linewidth = .lw(s, 1.5))
+
+    # Node circle
+    node <- data.frame(x0 = nx, y0 = ny, r = node_r)
+    layers[[length(layers) + 1]] <- ggforce::geom_circle(data = node,
+      .aes(x0 = x0, y0 = y0, r = r),
+      fill = hex_with_alpha(col, 0.1), color = hex_with_alpha(bright, 0.6),
+      linewidth = .lw(s, 1.5))
+
+    # Mini GPU grid inside each node (2x2)
+    for (dr in c(-1, 1)) {
+      for (dc in c(-1, 1)) {
+        blk <- data.frame(
+          xmin = nx + (dc * 3 - 1.5) * s, xmax = nx + (dc * 3 + 1.5) * s,
+          ymin = ny + (dr * 3 - 1.5) * s, ymax = ny + (dr * 3 + 1.5) * s
+        )
+        layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = blk,
+          .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+          fill = hex_with_alpha(bright, 0.2), color = hex_with_alpha(bright, 0.4),
+          linewidth = .lw(s, 0.6))
+      }
+    }
+  }
+
+  layers
+}

@@ -3044,3 +3044,62 @@ glyph_agent_claw_polisher <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── GPU Optimization ──────────────────────────────────────────────────
+
+glyph_agent_kernel_optimizer <- function(cx, cy, s, col, bright) {
+  # GPU chip with a tuning dial — the kernel performance engineer
+  layers <- list()
+
+  # GPU die
+  die <- data.frame(
+    xmin = cx - 16 * s, xmax = cx + 16 * s,
+    ymin = cy - 10 * s, ymax = cy + 10 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = die,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.1), color = bright, linewidth = .lw(s, 2))
+
+  # Memory bus lines (horizontal, inside die)
+  for (y_off in c(-5, 0, 5)) {
+    bus <- data.frame(
+      x = c(cx - 12 * s, cx + 12 * s),
+      y = c(cy + y_off * s, cy + y_off * s)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = bus, .aes(x, y),
+      color = hex_with_alpha(bright, 0.3), linewidth = .lw(s, 1))
+  }
+
+  # Warp blocks (small filled squares on bus lines)
+  for (y_off in c(-5, 0, 5)) {
+    for (x_off in c(-8, -2, 4, 10)) {
+      blk <- data.frame(
+        xmin = cx + (x_off - 2) * s, xmax = cx + (x_off + 2) * s,
+        ymin = cy + (y_off - 1.5) * s, ymax = cy + (y_off + 1.5) * s
+      )
+      layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = blk,
+        .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+        fill = hex_with_alpha(bright, 0.15), color = hex_with_alpha(bright, 0.4),
+        linewidth = .lw(s, 0.6))
+    }
+  }
+
+  # Tuning dial (bottom-right) — circular gauge with needle
+  dial_cx <- cx + 12 * s
+  dial_cy <- cy - 16 * s
+  dial <- data.frame(x0 = dial_cx, y0 = dial_cy, r = 6 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = dial,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(col, 0.1), color = bright, linewidth = .lw(s, 1.5))
+
+  # Needle pointing to "optimized" position (~2 o'clock)
+  needle_angle <- pi / 4
+  needle <- data.frame(
+    x = c(dial_cx, dial_cx + 4.5 * s * cos(needle_angle)),
+    y = c(dial_cy, dial_cy + 4.5 * s * sin(needle_angle))
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = needle, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2))
+
+  layers
+}

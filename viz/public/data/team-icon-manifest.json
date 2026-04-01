@@ -4,7 +4,7 @@
     "pipeline": "R/ggplot2 + ggfx neon glow",
     "resolution": "1024x1024",
     "format": "webp",
-    "total_teams": 15,
+    "total_teams": 16,
     "palettes": [
       "cyberpunk",
       "viridis",
@@ -48,6 +48,11 @@
       "concept": "Stacked chevrons (sequential pipeline) with 4 member nodes",
       "description": "Full-stack web dev team with sequential pipeline chevrons",
       "glow": "golden-yellow"
+    },
+    "gpu-acceleration": {
+      "description": "Self-organizing team for GPU kernel optimization with adaptive role assignment",
+      "glow": "white",
+      "concept": "gpu-acceleration team composition icon"
     },
     "gxp-compliance-validation": {
       "concept": "Shield with checkmark and 4 audit nodes at corners",
@@ -99,77 +104,82 @@
     {
       "teamId": "agentskills-alignment",
       "path": "public/icons/cyberpunk/teams/agentskills-alignment.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "analytical-chemistry",
       "path": "public/icons/cyberpunk/teams/analytical-chemistry.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "devops-platform-engineering",
       "path": "public/icons/cyberpunk/teams/devops-platform-engineering.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "dyad",
       "path": "public/icons/cyberpunk/teams/dyad.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "entomology",
       "path": "public/icons/cyberpunk/teams/entomology.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "fullstack-web-dev",
       "path": "public/icons/cyberpunk/teams/fullstack-web-dev.webp",
-      "status": "pending"
+      "status": "done"
+    },
+    {
+      "teamId": "gpu-acceleration",
+      "path": "public/icons/cyberpunk/teams/gpu-acceleration.webp",
+      "status": "done"
     },
     {
       "teamId": "gxp-compliance-validation",
       "path": "public/icons/cyberpunk/teams/gxp-compliance-validation.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "ml-data-science-review",
       "path": "public/icons/cyberpunk/teams/ml-data-science-review.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "opaque-team",
       "path": "public/icons/cyberpunk/teams/opaque-team.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "physical-computing",
       "path": "public/icons/cyberpunk/teams/physical-computing.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "r-package-review",
       "path": "public/icons/cyberpunk/teams/r-package-review.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "scrum-team",
       "path": "public/icons/cyberpunk/teams/scrum-team.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "synoptic-mind",
       "path": "public/icons/cyberpunk/teams/synoptic-mind.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "tending",
       "path": "public/icons/cyberpunk/teams/tending.webp",
-      "status": "pending"
+      "status": "done"
     },
     {
       "teamId": "translation-campaign",
       "path": "public/icons/cyberpunk/teams/translation-campaign.webp",
-      "status": "pending"
+      "status": "done"
     }
   ]
 }

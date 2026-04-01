@@ -130,5 +130,12 @@ AGENT_GLYPHS <- list(
   "cli-developer"               = "glyph_agent_cli_dev",
 
   # ── Open Source ────────────────────────────────────────────────────────
-  "claw-polisher"               = "glyph_agent_claw_polisher"
+  "claw-polisher"               = "glyph_agent_claw_polisher",
+
+  # ── GPU Optimization ──────────────────────────────────────────────────
+  "kernel-optimizer"            = "glyph_agent_kernel_optimizer",
+
+  # ── Default Skills (reuse skill glyphs) ───────────────────────────────
+  "heal"                        = "glyph_healing_hands",
+  "meditate"                    = "glyph_lotus_seated"
 )

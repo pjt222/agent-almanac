@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-03-25T13:47:56.132Z",
-    "totalSkills": 337,
-    "totalAgents": 68,
-    "totalTeams": 15,
-    "totalNodes": 420,
-    "totalLinks": 1698,
-    "totalAgentLinks": 269,
-    "totalTeamLinks": 49,
-    "totalDomains": 60,
+    "generated": "2026-04-01T14:03:29.814Z",
+    "totalSkills": 340,
+    "totalAgents": 69,
+    "totalTeams": 16,
+    "totalNodes": 425,
+    "totalLinks": 1713,
+    "totalAgentLinks": 271,
+    "totalTeamLinks": 50,
+    "totalDomains": 61,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -39,7 +39,7 @@
     },
     "mcp-integration": {
       "description": "MCP server setup and troubleshooting skills",
-      "count": 5
+      "count": 6
     },
     "web-dev": {
       "description": "Web development skills for Next.js and modern frontend",
@@ -224,6 +224,10 @@
     "chromatography": {
       "description": "Chromatographic method development, interpretation, troubleshooting, and ICH Q2 validation",
       "count": 5
+    },
+    "gpu-optimization": {
+      "description": "GPU kernel performance analysis, software pipelining, and SASS-level optimization",
+      "count": 2
     },
     "digital-logic": {
       "description": "Boolean algebra, logic gates, combinational and sequential circuits, and CPU architecture simulation",
@@ -1768,6 +1772,33 @@
       ]
     },
     {
+      "id": "cross-review-project",
+      "type": "skill",
+      "title": "Cross-Review Project",
+      "domain": "mcp-integration",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Conduct structured cross-project code review via cross-review-mcp broker with QSG constraints",
+      "tags": [
+        "mcp",
+        "cross-review",
+        "multi-agent",
+        "code-review",
+        "qsg",
+        "a2a"
+      ],
+      "related": [
+        "scaffold-mcp-server",
+        "implement-a2a-server",
+        "review-codebase",
+        "build-consensus",
+        "configure-mcp-server",
+        "unleash-the-agents"
+      ],
+      "path": "cross-review-project/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "scaffold-nextjs-app",
       "type": "skill",
       "title": "Scaffold Next.js App",
@@ -2517,7 +2548,8 @@
         "fail-early-pattern",
         "escalate-issues",
         "write-incident-runbook",
-        "assess-context"
+        "assess-context",
+        "du-dum"
       ],
       "path": "circuit-breaker-pattern/SKILL.md",
       "locales": [
@@ -3161,7 +3193,8 @@
       ],
       "related": [
         "purify-water",
-        "forage-plants"
+        "forage-plants",
+        "paper-making"
       ],
       "path": "make-fire/SKILL.md",
       "locales": [
@@ -9627,6 +9660,54 @@
       ]
     },
     {
+      "id": "analyze-kernel-bottleneck",
+      "type": "skill",
+      "title": "Analyze Kernel Bottleneck",
+      "domain": "gpu-optimization",
+      "complexity": "advanced",
+      "language": "CUDA",
+      "description": "Systematic GPU kernel bottleneck analysis using roofline model, occupancy, compute/load ratio, and SASS inspection",
+      "tags": [
+        "gpu",
+        "roofline",
+        "occupancy",
+        "sass",
+        "tensor-core",
+        "bottleneck-analysis",
+        "compute-load-ratio"
+      ],
+      "related": [
+        "pipeline-gpu-kernel",
+        "simulate-cpu-architecture"
+      ],
+      "path": "analyze-kernel-bottleneck/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "pipeline-gpu-kernel",
+      "type": "skill",
+      "title": "Pipeline GPU Kernel",
+      "domain": "gpu-optimization",
+      "complexity": "advanced",
+      "language": "CUDA",
+      "description": "Apply software pipelining (double-buffering) to tiled GPU kernels with cp.async and LDG variants",
+      "tags": [
+        "gpu",
+        "software-pipelining",
+        "double-buffer",
+        "cp-async",
+        "ldgsts",
+        "tensor-core",
+        "smem",
+        "occupancy"
+      ],
+      "related": [
+        "analyze-kernel-bottleneck"
+      ],
+      "path": "pipeline-gpu-kernel/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "evaluate-boolean-expression",
       "type": "skill",
       "title": "Evaluate Boolean Expression",
@@ -9847,7 +9928,8 @@
         "analyze-magnetic-field",
         "solve-electromagnetic-induction",
         "formulate-maxwell-equations",
-        "simulate-cpu-architecture"
+        "simulate-cpu-architecture",
+        "analyze-tensegrity-system"
       ],
       "path": "design-electromagnetic-device/SKILL.md",
       "locales": [
@@ -12252,6 +12334,39 @@
       "locales": []
     },
     {
+      "id": "agent:kernel-optimizer",
+      "type": "agent",
+      "title": "Kernel Optimizer",
+      "priority": "normal",
+      "description": "GPU kernel optimization specialist for CUDA/SASS performance engineering",
+      "tags": [
+        "gpu",
+        "cuda",
+        "sass",
+        "tensor-core",
+        "optimization",
+        "performance",
+        "kernel",
+        "ampere",
+        "roofline"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Grep",
+        "Glob"
+      ],
+      "mcp_servers": [],
+      "skills": [
+        "analyze-kernel-bottleneck",
+        "pipeline-gpu-kernel"
+      ],
+      "path": "agents/kernel-optimizer.md",
+      "locales": []
+    },
+    {
       "id": "agent:logician",
       "type": "agent",
       "title": "Logician",
@@ -12691,6 +12806,28 @@
         "structure-elucidation"
       ],
       "path": "teams/analytical-chemistry.md",
+      "locales": []
+    },
+    {
+      "id": "team:gpu-acceleration",
+      "type": "team",
+      "title": "Gpu Acceleration",
+      "lead": "shapeshifter",
+      "members": [
+        "shapeshifter"
+      ],
+      "coordination": "adaptive",
+      "description": "Self-organizing team for GPU kernel optimization with adaptive role assignment",
+      "tags": [
+        "gpu",
+        "cuda",
+        "sass",
+        "optimization",
+        "adaptive",
+        "self-organizing",
+        "tensor-core"
+      ],
+      "path": "teams/gpu-acceleration.md",
       "locales": []
     },
     {
@@ -13810,6 +13947,36 @@
       "type": "skill"
     },
     {
+      "source": "cross-review-project",
+      "target": "scaffold-mcp-server",
+      "type": "skill"
+    },
+    {
+      "source": "cross-review-project",
+      "target": "implement-a2a-server",
+      "type": "skill"
+    },
+    {
+      "source": "cross-review-project",
+      "target": "review-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "cross-review-project",
+      "target": "build-consensus",
+      "type": "skill"
+    },
+    {
+      "source": "cross-review-project",
+      "target": "configure-mcp-server",
+      "type": "skill"
+    },
+    {
+      "source": "cross-review-project",
+      "target": "unleash-the-agents",
+      "type": "skill"
+    },
+    {
       "source": "scaffold-nextjs-app",
       "target": "setup-tailwind-typescript",
       "type": "skill"
@@ -14335,6 +14502,11 @@
       "type": "skill"
     },
     {
+      "source": "circuit-breaker-pattern",
+      "target": "du-dum",
+      "type": "skill"
+    },
+    {
       "source": "verify-agent-output",
       "target": "fail-early-pattern",
       "type": "skill"
@@ -14762,6 +14934,11 @@
     {
       "source": "make-fire",
       "target": "forage-plants",
+      "type": "skill"
+    },
+    {
+      "source": "make-fire",
+      "target": "paper-making",
       "type": "skill"
     },
     {
@@ -19185,6 +19362,21 @@
       "type": "skill"
     },
     {
+      "source": "analyze-kernel-bottleneck",
+      "target": "pipeline-gpu-kernel",
+      "type": "skill"
+    },
+    {
+      "source": "analyze-kernel-bottleneck",
+      "target": "simulate-cpu-architecture",
+      "type": "skill"
+    },
+    {
+      "source": "pipeline-gpu-kernel",
+      "target": "analyze-kernel-bottleneck",
+      "type": "skill"
+    },
+    {
       "source": "evaluate-boolean-expression",
       "target": "design-logic-circuit",
       "type": "skill"
@@ -19327,6 +19519,11 @@
     {
       "source": "design-electromagnetic-device",
       "target": "simulate-cpu-architecture",
+      "type": "skill"
+    },
+    {
+      "source": "design-electromagnetic-device",
+      "target": "analyze-tensegrity-system",
       "type": "skill"
     },
     {
@@ -20905,6 +21102,16 @@
       "type": "agent"
     },
     {
+      "source": "agent:kernel-optimizer",
+      "target": "analyze-kernel-bottleneck",
+      "type": "agent"
+    },
+    {
+      "source": "agent:kernel-optimizer",
+      "target": "pipeline-gpu-kernel",
+      "type": "agent"
+    },
+    {
       "source": "agent:logician",
       "target": "evaluate-boolean-expression",
       "type": "agent"
@@ -21202,6 +21409,11 @@
     {
       "source": "team:analytical-chemistry",
       "target": "agent:senior-researcher",
+      "type": "team"
+    },
+    {
+      "source": "team:gpu-acceleration",
+      "target": "agent:shapeshifter",
       "type": "team"
     },
     {

@@ -171,12 +171,13 @@ SKILL_GLYPHS <- list(
   "run-puzzle-tests"           = "glyph_jigsaw_check",
   "validate-piles-notation"    = "glyph_jigsaw_stack",
 
-  # ── mcp-integration (5) ───────────────────────────────────────────────
+  # ── mcp-integration (6) ───────────────────────────────────────────────
   "configure-mcp-server"           = "glyph_server_plug",
   "build-custom-mcp-server"        = "glyph_wrench_server",
   "troubleshoot-mcp-connection"    = "glyph_debug_cable",
   "analyze-codebase-for-mcp"       = "glyph_mcp_analyze",
   "scaffold-mcp-server"            = "glyph_mcp_scaffold",
+  "cross-review-project"           = "glyph_cross_review",
 
   # ── mlops (12) ─────────────────────────────────────────────────────────
   "track-ml-experiments"           = "glyph_experiment_flask",
@@ -463,5 +464,9 @@ SKILL_GLYPHS <- list(
   "design-cli-output"              = "glyph_cli_output",
 
   # ── open-source (1) ──────────────────────────────────────────────────
-  "polish-claw-project"            = "glyph_branch_fork"
+  "polish-claw-project"            = "glyph_branch_fork",
+
+  # ── gpu-optimization (2) ────────────────────────────────────────────
+  "analyze-kernel-bottleneck"      = "glyph_gpu_bottleneck",
+  "pipeline-gpu-kernel"            = "glyph_gpu_pipeline"
 )

@@ -596,3 +596,123 @@ glyph_levitation_compare <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── gpu-optimization ──────────────────────────────────────────────────
+
+glyph_gpu_bottleneck <- function(cx, cy, s, col, bright) {
+  # GPU chip with a narrowing funnel overlay — bottleneck analysis
+  layers <- list()
+
+  # GPU die (wide rectangle)
+  die <- data.frame(
+    xmin = cx - 18 * s, xmax = cx + 18 * s,
+    ymin = cy - 12 * s, ymax = cy + 12 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = die,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.12), color = bright, linewidth = .lw(s, 2))
+
+  # Grid of compute cores (4x3)
+  for (row in -1:1) {
+    for (col_i in -1:2) {
+      core <- data.frame(
+        xmin = cx + (col_i * 8 - 12) * s, xmax = cx + (col_i * 8 - 6) * s,
+        ymin = cy + (row * 7 - 2) * s,    ymax = cy + (row * 7 + 2) * s
+      )
+      layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = core,
+        .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+        fill = hex_with_alpha(bright, 0.2), color = hex_with_alpha(bright, 0.5),
+        linewidth = .lw(s, 0.8))
+    }
+  }
+
+  # Funnel / bottleneck overlay (converging lines below die)
+  funnel <- data.frame(
+    x = c(cx - 14 * s, cx - 4 * s, cx + 4 * s, cx + 14 * s),
+    y = c(cy - 12 * s, cy - 22 * s, cy - 22 * s, cy - 12 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = funnel, .aes(x, y),
+    fill = hex_with_alpha(col, 0.08), color = hex_with_alpha(bright, 0.6),
+    linewidth = .lw(s, 1.5))
+
+  # Exclamation mark in funnel center
+  bang_line <- data.frame(
+    x = c(cx, cx),
+    y = c(cy - 15 * s, cy - 19 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = bang_line, .aes(x, y),
+    color = bright, linewidth = .lw(s, 2.5))
+  bang_dot <- data.frame(x0 = cx, y0 = cy - 21 * s, r = 1.2 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = bang_dot,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = bright, color = bright, linewidth = 0)
+
+  layers
+}
+
+glyph_gpu_pipeline <- function(cx, cy, s, col, bright) {
+  # Double-buffered pipeline: two stacked GPU stages with data flow arrows
+  layers <- list()
+
+  # Stage A (top buffer)
+  stage_a <- data.frame(
+    xmin = cx - 18 * s, xmax = cx + 18 * s,
+    ymin = cy + 4 * s,  ymax = cy + 16 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = stage_a,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.12), color = bright, linewidth = .lw(s, 1.8))
+
+  # Stage B (bottom buffer)
+  stage_b <- data.frame(
+    xmin = cx - 18 * s, xmax = cx + 18 * s,
+    ymin = cy - 16 * s, ymax = cy - 4 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = stage_b,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.12), color = hex_with_alpha(bright, 0.6),
+    linewidth = .lw(s, 1.8))
+
+  # Compute blocks inside stages
+  for (stage_cy in c(cy + 10 * s, cy - 10 * s)) {
+    for (offset in c(-10, 0, 10)) {
+      bar <- data.frame(
+        xmin = cx + (offset - 3) * s, xmax = cx + (offset + 3) * s,
+        ymin = stage_cy - 2 * s, ymax = stage_cy + 2 * s
+      )
+      layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = bar,
+        .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+        fill = hex_with_alpha(bright, 0.2), color = "transparent", linewidth = 0)
+    }
+  }
+
+  # Bidirectional arrows between stages (overlap indicator)
+  arrow_down <- data.frame(
+    x = c(cx - 6 * s, cx - 6 * s), y = c(cy + 4 * s, cy - 4 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arrow_down, .aes(x, y),
+    color = hex_with_alpha(bright, 0.7), linewidth = .lw(s, 1.5))
+
+  arrow_up <- data.frame(
+    x = c(cx + 6 * s, cx + 6 * s), y = c(cy - 4 * s, cy + 4 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arrow_up, .aes(x, y),
+    color = hex_with_alpha(bright, 0.7), linewidth = .lw(s, 1.5))
+
+  # Arrow heads
+  ah_down <- data.frame(
+    x = cx + c(-8, -6, -4) * s,
+    y = cy + c(-1, -4, -1) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = ah_down, .aes(x, y),
+    fill = hex_with_alpha(bright, 0.7), color = "transparent", linewidth = 0)
+
+  ah_up <- data.frame(
+    x = cx + c(4, 6, 8) * s,
+    y = cy + c(1, 4, 1) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = ah_up, .aes(x, y),
+    fill = hex_with_alpha(bright, 0.7), color = "transparent", linewidth = 0)
+
+  layers
+}

@@ -20,5 +20,6 @@ TEAM_GLYPHS <- list(
   "analytical-chemistry"        = "glyph_team_analytical_chemistry",
   "physical-computing"          = "glyph_team_physical_computing",
   "synoptic-mind"               = "glyph_team_synoptic_mind",
-  "translation-campaign"        = "glyph_team_translation_campaign"
+  "translation-campaign"        = "glyph_team_translation_campaign",
+  "gpu-acceleration"            = "glyph_team_gpu_acceleration"
 )

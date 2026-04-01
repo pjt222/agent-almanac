@@ -40,6 +40,79 @@ glyph_mcp_scaffold <- function(cx, cy, s, col, bright) {
   )
 }
 
+glyph_cross_review <- function(cx, cy, s, col, bright) {
+  # Two project boxes exchanging crossing arrows — cross-project review
+  layers <- list()
+
+  # Left project box
+  left_box <- data.frame(
+    xmin = cx - 24 * s, xmax = cx - 8 * s,
+    ymin = cy - 12 * s, ymax = cy + 12 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = left_box,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.12), color = bright, linewidth = .lw(s, 1.8))
+
+  # Right project box
+  right_box <- data.frame(
+    xmin = cx + 8 * s, xmax = cx + 24 * s,
+    ymin = cy - 12 * s, ymax = cy + 12 * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = right_box,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.12), color = hex_with_alpha(bright, 0.7),
+    linewidth = .lw(s, 1.8))
+
+  # Crossing arrows (top: left→right, bottom: right→left)
+  arrow_lr <- data.frame(
+    x = c(cx - 8 * s, cx + 8 * s),
+    y = c(cy + 5 * s, cy + 5 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arrow_lr, .aes(x, y),
+    color = hex_with_alpha(bright, 0.7), linewidth = .lw(s, 1.5))
+  ah_lr <- data.frame(
+    x = cx + c(5, 8, 5) * s,
+    y = cy + c(7, 5, 3) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = ah_lr, .aes(x, y),
+    fill = hex_with_alpha(bright, 0.7), color = "transparent", linewidth = 0)
+
+  arrow_rl <- data.frame(
+    x = c(cx + 8 * s, cx - 8 * s),
+    y = c(cy - 5 * s, cy - 5 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arrow_rl, .aes(x, y),
+    color = hex_with_alpha(bright, 0.7), linewidth = .lw(s, 1.5))
+  ah_rl <- data.frame(
+    x = cx + c(-5, -8, -5) * s,
+    y = cy + c(-3, -5, -7) * s
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_polygon(data = ah_rl, .aes(x, y),
+    fill = hex_with_alpha(bright, 0.7), color = "transparent", linewidth = 0)
+
+  # Code lines inside left box
+  for (y_off in c(6, 2, -2, -6)) {
+    line <- data.frame(
+      x = c(cx - 22 * s, cx - 12 * s),
+      y = c(cy + y_off * s, cy + y_off * s)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = line, .aes(x, y),
+      color = hex_with_alpha(bright, 0.25), linewidth = .lw(s, 1))
+  }
+
+  # Code lines inside right box
+  for (y_off in c(6, 2, -2, -6)) {
+    line <- data.frame(
+      x = c(cx + 10 * s, cx + 22 * s),
+      y = c(cy + y_off * s, cy + y_off * s)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = line, .aes(x, y),
+      color = hex_with_alpha(bright, 0.25), linewidth = .lw(s, 1))
+  }
+
+  layers
+}
+
 # ══════════════════════════════════════════════════════════════════════════════
 # Review missing (3)
 # ══════════════════════════════════════════════════════════════════════════════
