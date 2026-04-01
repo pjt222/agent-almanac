@@ -94,7 +94,7 @@ Guides, skills, agents, and teams are cross-referenced. The parent project `CLAU
 5. Add the entry to `teams/_registry.yml` and update `total_teams` count
 6. Run `npm run update-readmes` (or let CI auto-commit on push to main)
 
-Note: Teams are **not** auto-discovered like agents (from `.claude/agents/`). Do not create a `.claude/teams` symlink -- Claude Code's `TeamCreate` uses `~/.claude/teams/` for runtime state. When a user asks to activate a team, Claude reads the definition directly from `teams/` and orchestrates via `TeamCreate`.
+Note: Teams are **not** auto-discovered like agents (from `.claude/agents/`). Do not create a `.claude/teams` symlink -- Claude Code's `TeamCreate` uses `~/.claude/teams/` for runtime state. When a user asks to activate a team: (1) call `ToolSearch("select:TeamCreate")` to load the TeamCreate tool (it is deferred and must be fetched first), (2) read the team definition from `teams/<team-name>.md`, (3) call `TeamCreate` with the team configuration. Do NOT fall back to spawning individual agents via the Agent tool.
 
 ## Adding a New Guide
 

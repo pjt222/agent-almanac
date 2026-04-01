@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-02-17"
 standard: "agentskills.io/specification"
-total_skills: 339
+total_skills: 340
 
 domains:
   r-packages:
@@ -282,6 +282,11 @@ domains:
         complexity: intermediate
         language: multi
         description: Scaffold a new MCP server from tool specifications using official SDKs
+      - id: cross-review-project
+        path: cross-review-project/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Conduct structured cross-project code review via cross-review-mcp broker with QSG constraints
 
   web-dev:
     description: Web development skills for Next.js and modern frontend
