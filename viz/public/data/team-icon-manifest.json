@@ -104,82 +104,82 @@
     {
       "teamId": "agentskills-alignment",
       "path": "public/icons/cyberpunk/teams/agentskills-alignment.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "analytical-chemistry",
       "path": "public/icons/cyberpunk/teams/analytical-chemistry.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "devops-platform-engineering",
       "path": "public/icons/cyberpunk/teams/devops-platform-engineering.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "dyad",
       "path": "public/icons/cyberpunk/teams/dyad.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "entomology",
       "path": "public/icons/cyberpunk/teams/entomology.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "fullstack-web-dev",
       "path": "public/icons/cyberpunk/teams/fullstack-web-dev.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "gpu-acceleration",
       "path": "public/icons/cyberpunk/teams/gpu-acceleration.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "gxp-compliance-validation",
       "path": "public/icons/cyberpunk/teams/gxp-compliance-validation.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "ml-data-science-review",
       "path": "public/icons/cyberpunk/teams/ml-data-science-review.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "opaque-team",
       "path": "public/icons/cyberpunk/teams/opaque-team.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "physical-computing",
       "path": "public/icons/cyberpunk/teams/physical-computing.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "r-package-review",
       "path": "public/icons/cyberpunk/teams/r-package-review.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "scrum-team",
       "path": "public/icons/cyberpunk/teams/scrum-team.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "synoptic-mind",
       "path": "public/icons/cyberpunk/teams/synoptic-mind.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "tending",
       "path": "public/icons/cyberpunk/teams/tending.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "teamId": "translation-campaign",
       "path": "public/icons/cyberpunk/teams/translation-campaign.webp",
-      "status": "done"
+      "status": "pending"
     }
   ]
 }

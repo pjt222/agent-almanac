@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-04-01T14:03:29.814Z",
+    "generated": "2026-04-01T15:36:34.526Z",
     "totalSkills": 340,
     "totalAgents": 69,
     "totalTeams": 16,
@@ -2660,7 +2660,12 @@
       "complexity": "basic",
       "language": "multi",
       "description": "Install skills, agents, and teams from agent-almanac into any supported agentic framework using the CLI",
-      "tags": [],
+      "tags": [
+        "cli",
+        "installation",
+        "framework-integration",
+        "discovery"
+      ],
       "related": [
         "create-skill",
         "configure-mcp-server",
@@ -10200,7 +10205,13 @@
       "complexity": "intermediate",
       "language": "TypeScript",
       "description": "Scaffold a Commander.js command with options, action handler, three output modes, and optional ceremony variant",
-      "tags": [],
+      "tags": [
+        "cli",
+        "commander",
+        "nodejs",
+        "terminal",
+        "command-pattern"
+      ],
       "related": [
         "build-cli-plugin",
         "test-cli-application",
@@ -10218,7 +10229,13 @@
       "complexity": "intermediate",
       "language": "TypeScript",
       "description": "Build a plugin/adapter extending an abstract base class with strategy selection, registration, and detection",
-      "tags": [],
+      "tags": [
+        "cli",
+        "plugin",
+        "adapter",
+        "architecture",
+        "nodejs"
+      ],
       "related": [
         "scaffold-cli-command",
         "test-cli-application",
@@ -10235,7 +10252,13 @@
       "complexity": "intermediate",
       "language": "TypeScript",
       "description": "Write CLI integration tests with node:test using execSync, output assertions, filesystem checks, and cleanup hooks",
-      "tags": [],
+      "tags": [
+        "cli",
+        "testing",
+        "nodejs",
+        "node-test",
+        "integration"
+      ],
       "related": [
         "scaffold-cli-command",
         "build-cli-plugin",
@@ -10252,7 +10275,13 @@
       "complexity": "basic",
       "language": "TypeScript",
       "description": "Design terminal output with chalk colors, Unicode glyphs, multiple verbosity levels, and voice rules",
-      "tags": [],
+      "tags": [
+        "cli",
+        "terminal",
+        "ux",
+        "chalk",
+        "unicode"
+      ],
       "related": [
         "scaffold-cli-command",
         "test-cli-application",

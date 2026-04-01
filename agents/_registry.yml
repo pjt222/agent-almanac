@@ -7,10 +7,10 @@ version: "2.2"
 last_updated: "2026-02-25"
 
 default_skills:
-  - id: meditate
+  - skill: meditate
     domain: esoteric
     description: "Meta-cognitive meditation for task focus and reasoning clarity"
-  - id: heal
+  - skill: heal
     domain: esoteric
     description: "AI self-healing for subsystem assessment and drift correction"
 

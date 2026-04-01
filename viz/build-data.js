@@ -135,7 +135,9 @@ for (const [id, meta] of skillMap) {
     try {
       const fm = yaml.load(fmMatch[1]);
       if (fm?.metadata?.tags) {
-        tags = fm.metadata.tags.split(',').map(t => t.trim()).filter(Boolean);
+        tags = Array.isArray(fm.metadata.tags)
+          ? fm.metadata.tags.map(t => String(t).trim()).filter(Boolean)
+          : fm.metadata.tags.split(',').map(t => t.trim()).filter(Boolean);
       }
     } catch { console.warn(`Skipping skill with malformed frontmatter: ${skillPath}`); }
   }
