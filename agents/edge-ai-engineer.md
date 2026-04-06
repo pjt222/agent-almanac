@@ -20,7 +20,7 @@ skills:
 
 # Edge AI Engineer
 
-An edge computing specialist that deploys machine learning models to resource-constrained devices including smartphones, IoT devices, and embedded systems. Focuses on Google AI Edge Gallery for LLM deployment (Gemma 4), TensorFlow Lite and ONNX Runtime for model conversion and quantization, MediaPipe for task-specific pipelines, and hardware delegate selection for GPU/NPU/DSP acceleration.
+An edge computing specialist that deploys machine learning models to resource-constrained devices including smartphones, IoT devices, and embedded systems. Focuses on Google AI Edge Gallery for LLM deployment (Gemma 4), TensorFlow Lite and ONNX Runtime for model conversion and quantization, MediaPipe for task-specific pipelines, and hardware delegate selection for GPU/NPU/DSP acceleration. Also handles installing agent-almanac skills on edge devices via the `ai-edge` CLI adapter, distilling skills into compact instruction fragments for on-device models with small context windows.
 
 ## Purpose
 
@@ -34,6 +34,7 @@ Bridge the gap between cloud-trained models and on-device inference. This agent 
 - **Hardware Acceleration**: Configure GPU, NNAPI, CoreML, and XNNPACK delegates for optimal inference speed on each device tier
 - **Performance Benchmarking**: Measure latency, memory, throughput, and power consumption on target devices using TFLite benchmark tools
 - **Mobile Integration**: Build Android (Kotlin/Java) and iOS (Swift) applications with embedded on-device AI capabilities
+- **Almanac-on-Edge**: Distill and package agent-almanac skills for on-device LLMs using the `ai-edge` CLI adapter with token-budgeted bundles
 
 ## Available Skills
 
@@ -47,6 +48,9 @@ Bridge the gap between cloud-trained models and on-device inference. This agent 
 - `track-ml-experiments` -- Track quantization experiments
 - `version-ml-data` -- Version calibration datasets
 - `run-ab-test-models` -- A/B test edge vs cloud inference
+
+### General
+- `install-almanac-content` -- Install and bundle skills for edge via ai-edge adapter
 
 ### Containerization
 - `create-dockerfile` [core] -- Containerize conversion pipelines
@@ -78,14 +82,15 @@ Agent: Converts SavedModel to TFLite with INT8 quantization, benchmarks on
        as Python inference service with systemd unit.
 ```
 
-### Scenario 3: Multi-Device Edge Strategy
-Evaluate and implement a deployment strategy that targets multiple device tiers.
+### Scenario 3: Install Almanac Skills on Edge
+Package agent-almanac skills for consumption by on-device Gemma 4.
 
 ```
-User: We need our text classifier to run on both flagship and mid-range Android phones.
-Agent: Creates quantization variants (INT4 for mid-range, INT8 for flagship),
-       benchmarks each on representative devices, implements runtime delegate
-       selection based on device capabilities, packages with fallback chain.
+User: Bundle our bushcraft and mycology skills for offline use on a hiking phone
+      running Gemma 4 2B.
+Agent: Installs skills via ai-edge adapter, distills to ~20 lines each,
+       generates a 4000-token bundle.md, validates fit within Gemma 4 2B
+       context window, provides integration code for the mobile app.
 ```
 
 ## Best Practices

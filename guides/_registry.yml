@@ -129,11 +129,11 @@ guides:
   - id: edge-computing-deployment
     path: guides/edge-computing-deployment.md
     title: "Edge Computing Deployment"
-    description: "Deploy ML models to edge devices using Google AI Edge Gallery, Gemma 4, TFLite, and ONNX with quantization and hardware acceleration"
+    description: "Install agent-almanac skills on edge LLMs (Gemma 4 via AI Edge Gallery) with distilled content, token budgets, and offline bundles"
     category: workflow
     agents: [edge-ai-engineer, mlops-engineer]
     teams: []
-    skills: [deploy-edge-ai-model, deploy-ml-model-serving, register-ml-model, monitor-model-drift]
+    skills: [deploy-edge-ai-model, deploy-ml-model-serving, install-almanac-content]
 
   # ── Infrastructure guides ────────────────────────────────────────
   - id: setting-up-your-environment
