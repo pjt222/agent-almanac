@@ -2,9 +2,9 @@
 # Machine-readable catalog of all agent definitions in this library.
 # Keep in sync with the actual agent files on disk.
 
-total_agents: 69
-version: "2.2"
-last_updated: "2026-02-25"
+total_agents: 70
+version: "2.3"
+last_updated: "2026-04-06"
 
 default_skills:
   - skill: meditate
@@ -694,6 +694,19 @@ agents:
       - review-skill-format
       - update-skill-content
       - refactor-skill-structure
+
+  - id: evoskills
+    path: agents/evoskills.md
+    description: Self-evolving skill generator that couples iterative skill refinement with co-evolutionary surrogate verification to produce high-quality, multi-file agent skills without ground-truth test access
+    tags: [skills, evolution, co-evolution, verification, generation, self-evolving, meta]
+    priority: high
+    tools: [Read, Write, Edit, Bash, Grep, Glob]
+    skills:
+      - create-skill
+      - evolve-skill
+      - review-skill-format
+      - update-skill-content
+      - verify-agent-output
 
   - id: etymologist
     path: agents/etymologist.md
