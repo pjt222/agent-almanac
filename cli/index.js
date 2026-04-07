@@ -283,6 +283,31 @@ program
     console.log();
   });
 
+// ── bundle ──────────────────────────────────────────────────
+
+program
+  .command('bundle')
+  .description('Generate a bundled system prompt from installed edge content')
+  .option('-f, --framework <id>', 'Target specific framework (default: ai-edge)', 'ai-edge')
+  .option('--max-tokens <n>', 'Token budget for the bundle', parseInt, 4000)
+  .option('--source <path>', 'Path to agent-almanac root')
+  .action(async (options) => {
+    const adapter = getAdapter(options.framework);
+    if (!adapter) {
+      reporter.error(`Unknown framework: ${options.framework}`);
+      process.exit(1);
+    }
+    if (typeof adapter.bundle !== 'function') {
+      reporter.error(`The ${options.framework} adapter does not support bundling.`);
+      process.exit(1);
+    }
+
+    const projectDir = process.cwd();
+    const result = await adapter.bundle(projectDir, { maxTokens: options.maxTokens });
+    console.log(`\nBundle written to ${reporter.chalk.cyan(result.path)}`);
+    console.log(`  ${result.skills} skill(s) included (budget: ${options.maxTokens} tokens)\n`);
+  });
+
 // ── init ─────────────────────────────────────────────────────────
 
 program

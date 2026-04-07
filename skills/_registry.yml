@@ -1,7 +1,7 @@
 version: "1.6"
-generated: "2026-02-17"
+generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 340
+total_skills: 341
 
 domains:
   r-packages:
@@ -954,6 +954,15 @@ domains:
         complexity: advanced
         language: multi
         description: Exemplars, log-to-trace linking, unified dashboards, and RED/USE methods
+
+  edge-computing:
+    description: Edge AI deployment, on-device inference, model quantization, and hardware acceleration
+    skills:
+      - id: deploy-edge-ai-model
+        path: deploy-edge-ai-model/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Google AI Edge Gallery, TFLite, ONNX Runtime, Gemma 4, quantization, and hardware delegates
 
   mlops:
     description: ML experiment tracking, model serving, feature stores, pipelines, and AIOps skills

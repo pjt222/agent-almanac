@@ -2,9 +2,9 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 21
+total_guides: 22
 version: "1.0"
-last_updated: "2026-03-17"
+last_updated: "2026-04-07"
 
 categories:
   workflow:
@@ -125,6 +125,15 @@ guides:
     agents: [skill-reviewer, senior-researcher, senior-software-developer, librarian]
     teams: [agentskills-alignment]
     skills: [review-skill-format, refactor-skill-structure, create-skill, evolve-skill, update-skill-content, catalog-collection, review-software-architecture, review-research]
+
+  - id: edge-computing-deployment
+    path: guides/edge-computing-deployment.md
+    title: "Edge Computing Deployment"
+    description: "Install agent-almanac skills on edge LLMs (Gemma 4 via AI Edge Gallery) with distilled content, token budgets, and offline bundles"
+    category: workflow
+    agents: [edge-ai-engineer, mlops-engineer]
+    teams: []
+    skills: [deploy-edge-ai-model, deploy-ml-model-serving, install-almanac-content]
 
   # ── Infrastructure guides ────────────────────────────────────────
   - id: setting-up-your-environment

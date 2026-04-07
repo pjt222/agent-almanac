@@ -15,11 +15,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **340 skills** across 61 domains — structured, executable procedures
-- **69 agents** — specialized Claude Code personas covering development, review, compliance, and more
+- **341 skills** across 62 domains — structured, executable procedures
+- **70 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **16 teams** — predefined multi-agent compositions for complex workflows
-- **21 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 340 R-generated skill icons and 9 color themes
+- **22 guides** — human-readable workflow, infrastructure, and reference documentation
+- **Interactive visualization** — force-graph explorer with 341 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -135,6 +135,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Team Assembly Prompt Patterns](guides/team-assembly-prompt-patterns.md) — How to phrase requests to Claude Code for multi-agent team work at every level of specificity
 - [Production Coordination Patterns](guides/production-coordination-patterns.md) — Real-world multi-agent orchestration patterns: barrier synchronization, silence budgets, health checks, degraded-wave policies, and cost-aware scheduling
 - [AgentSkills Alignment](guides/agentskills-alignment.md) — Standards compliance audits using the agentskills-alignment team for format validation, spec drift detection, and registry integrity
+- [Edge Computing Deployment](guides/edge-computing-deployment.md) — Install agent-almanac skills on edge LLMs (Gemma 4 via AI Edge Gallery) with distilled content, token budgets, and offline bundles
 
 **Infrastructure**
 
@@ -160,10 +161,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 320/340 | 3/69 | 1/16 | 1/21 | 325/446 (72.9%) |
-| zh-CN | 简体中文 | 320/340 | 3/69 | 1/16 | 1/21 | 325/446 (72.9%) |
-| ja | 日本語 | 320/340 | 3/69 | 1/16 | 1/21 | 325/446 (72.9%) |
-| es | Español | 320/340 | 3/69 | 1/16 | 1/21 | 325/446 (72.9%) |
+| de | Deutsch | 320/341 | 3/70 | 1/16 | 1/22 | 325/449 (72.4%) |
+| zh-CN | 简体中文 | 320/341 | 3/70 | 1/16 | 1/22 | 325/449 (72.4%) |
+| ja | 日本語 | 320/341 | 3/70 | 1/16 | 1/22 | 325/449 (72.4%) |
+| es | Español | 320/341 | 3/70 | 1/16 | 1/22 | 325/449 (72.4%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.

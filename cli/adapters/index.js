@@ -14,6 +14,7 @@ import { CopilotAdapter } from './copilot.js';
 import { CodexAdapter } from './codex.js';
 import { GeminiAdapter } from './gemini.js';
 import { AiderAdapter } from './aider.js';
+import { AiEdgeAdapter } from './ai-edge.js';
 
 /** All registered adapters, keyed by id. */
 const ADAPTERS = new Map();
@@ -34,6 +35,9 @@ register(OpenClawAdapter);
 register(HermesAdapter);
 register(VibeAdapter);
 register(CodexAdapter);
+
+// Edge LLM adapters (distilled content for small context windows)
+register(AiEdgeAdapter);
 
 // Skills-only adapters
 register(CursorAdapter);
