@@ -706,6 +706,11 @@ document.addEventListener('touchmove', e => {
   }
 }, { passive: true });
 
+// Hide tooltip on touchend to prevent stale tooltips on mobile
+document.addEventListener('touchend', () => {
+  if (tooltip) tooltip.style.display = 'none';
+}, { passive: true });
+
 function updateFilteredStats(visibleSkillIds) {
   if (!allData) return;
   const skillSet = new Set(visibleSkillIds);
@@ -809,6 +814,18 @@ if (hamburgerToggle && headerDrawer) {
     }
   });
 }
+
+// ── Close filter panel on graph tap (mobile) ─────
+document.getElementById('graph-container').addEventListener('touchstart', () => {
+  if (window.innerWidth <= 768) {
+    const filterPanel = document.getElementById('filter-panel');
+    const filterBackdrop = document.querySelector('.filter-backdrop');
+    if (filterPanel && filterPanel.classList.contains('mobile-open')) {
+      filterPanel.classList.remove('mobile-open');
+      if (filterBackdrop) filterBackdrop.classList.remove('visible');
+    }
+  }
+}, { passive: true });
 
 // ── Orientation change ──────────────────────────
 window.addEventListener('orientationchange', () => {
