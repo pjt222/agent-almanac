@@ -174,6 +174,7 @@ Convert standard models to TFLite format with post-training quantization.
 
 ```python
 # convert_tflite.py
+import os
 import tensorflow as tf
 import numpy as np
 
@@ -207,7 +208,11 @@ def convert_to_tflite(saved_model_path, output_path, quantization="dynamic"):
     with open(output_path, "wb") as f:
         f.write(tflite_model)
 
-    original_size = os.path.getsize(saved_model_path) / (1024 * 1024)
+    original_size = sum(
+        os.path.getsize(os.path.join(dp, f))
+        for dp, _, filenames in os.walk(saved_model_path)
+        for f in filenames
+    ) / (1024 * 1024)
     quantized_size = len(tflite_model) / (1024 * 1024)
     print(f"Original: {original_size:.1f} MB -> Quantized: {quantized_size:.1f} MB")
     print(f"Compression ratio: {original_size / quantized_size:.1f}x")
@@ -444,4 +449,4 @@ class ModelDownloader(private val context: Context) {
 - `monitor-model-drift` - Monitor model quality over time
 - `register-ml-model` - Register models before edge deployment
 - `create-dockerfile` - Containerize edge model conversion pipeline
-- `select-print-material` - Hardware considerations for IoT edge devices
+- `create-multistage-dockerfile` - Multi-stage builds for model conversion pipelines

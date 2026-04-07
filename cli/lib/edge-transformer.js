@@ -34,6 +34,7 @@ export function distillSkill(filePath) {
   let currentSection = '';
   let inCodeBlock = false;
   let inValidation = false;
+  let inDescription = false;
 
   for (const line of lines) {
     // Parse frontmatter for name and description only
@@ -46,7 +47,20 @@ export function distillSkill(filePath) {
       const nameMatch = line.match(/^name:\s*(.+)/);
       if (nameMatch) name = nameMatch[1].trim();
       const descMatch = line.match(/^description:\s*[>|]?\s*(.*)/);
-      if (descMatch && descMatch[1]) description = descMatch[1].trim();
+      if (descMatch) {
+        if (descMatch[1]) {
+          description = descMatch[1].trim();
+          inDescription = false;
+        } else {
+          // Multiline description (> or |) — collect continuation lines
+          inDescription = true;
+          description = '';
+        }
+      } else if (inDescription && line.match(/^\s+/)) {
+        description += (description ? ' ' : '') + line.trim();
+      } else if (inDescription) {
+        inDescription = false;
+      }
       continue;
     }
 
@@ -71,9 +85,9 @@ export function distillSkill(filePath) {
       continue;
     }
 
-    // Capture validation items
+    // Capture validation items (store without leading dash to avoid double-prefix)
     if (inValidation && line.match(/^- \[[ x]\]/)) {
-      validation.push(line.replace(/^- \[[ x]\]\s*/, '- ').trim());
+      validation.push(line.replace(/^- \[[ x]\]\s*/, '').trim());
     }
   }
 
@@ -223,14 +237,16 @@ export function bundleForEdge(items, options = {}) {
   const output = ['# Available Procedures', ''];
 
   let approxTokens = 10; // header overhead
+  let loadedCount = 0;
   for (const item of items) {
     // Rough estimate: 1 token ≈ 4 characters
     const itemTokens = Math.ceil(item.content.length / 4);
     if (approxTokens + itemTokens > maxTokens) break;
     output.push(item.content, '');
     approxTokens += itemTokens;
+    loadedCount++;
   }
 
-  output.push(`---`, `${items.length} procedures loaded. Follow steps in order.`);
+  output.push(`---`, `${loadedCount} procedures loaded. Follow steps in order.`);
   return output.join('\n');
 }

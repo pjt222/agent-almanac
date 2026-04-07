@@ -1,6 +1,6 @@
 # Guides
 
-21 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+22 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -41,6 +41,9 @@ Real-world multi-agent orchestration patterns: barrier synchronization, silence 
 
 ### [AgentSkills Alignment](agentskills-alignment.md)
 Standards compliance audits using the agentskills-alignment team for format validation, spec drift detection, and registry integrity.
+
+### [Edge Computing Deployment](edge-computing-deployment.md)
+Install agent-almanac skills on edge LLMs (Gemma 4 via AI Edge Gallery) with distilled content, token budgets, and offline bundles.
 
 ## Infrastructure
 

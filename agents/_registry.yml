@@ -4,7 +4,7 @@
 
 total_agents: 70
 version: "2.2"
-last_updated: "2026-02-25"
+last_updated: "2026-04-07"
 
 default_skills:
   - skill: meditate

@@ -80,7 +80,7 @@ export class AiEdgeAdapter extends FrameworkAdapter {
       const dir = resolve(projectDir, '.ai-edge', type);
       if (!existsSync(dir)) continue;
       const singular = type === 'skills' ? 'skill' : type === 'agents' ? 'agent' : 'team';
-      for (const file of readdirSync(dir).filter(f => f.endsWith('.md'))) {
+      for (const file of readdirSync(dir).filter(f => f.endsWith('.md')).sort()) {
         items.push({
           id: file.replace('.md', ''),
           type: singular,
@@ -123,7 +123,7 @@ export class AiEdgeAdapter extends FrameworkAdapter {
 
     if (installed.length > 0) ok.push(`${installed.length} items distilled`);
     if (hasBundle) ok.push('bundle.md present');
-    if (!hasBundle && installed.length > 0) warnings.push('No bundle.md — run `agent-almanac bundle --framework ai-edge`');
+    if (!hasBundle && installed.length > 0) warnings.push('No bundle.md — run `agent-almanac bundle --framework ai-edge` to generate');
     if (installed.length === 0) warnings.push('No content installed for AI Edge');
 
     return {
