@@ -7,7 +7,7 @@
 
 import { loadRegistries } from './registry.js';
 import { detectAlmanacRoot } from './resolver.js';
-import { loadState, saveState, recordWarm, markWelcomed, computeFireState, findHearthKeepers } from './state.js';
+import { loadState, saveState, recordWarm, recordGather, recordScatter, markWelcomed, computeFireState, findHearthKeepers } from './state.js';
 import { buildFireScene } from './scene.js';
 
 let chalk;
@@ -166,7 +166,7 @@ function buildFireRows(data) {
   return { gathered, available };
 }
 
-function renderClearingLines(data, selected, scrollOffset, searchQuery) {
+function renderClearingLines(data, selected, scrollOffset, searchQuery, tendedMsg = false) {
   const W = cols();
   const H = rows();
   const { gathered, available } = buildFireRows(data);
@@ -178,6 +178,7 @@ function renderClearingLines(data, selected, scrollOffset, searchQuery) {
   const lines = [];
   lines.push(C.warm('  THE CLEARING'));
   lines.push(C.dim(`  ${gathered.length} fires burning · ${available.length} unlit`));
+  if (tendedMsg) lines.push(C.warm('  Your fires have been tended.'));
   lines.push('');
 
   let rendered = 0;
@@ -312,7 +313,8 @@ function renderHelp() {
   const binds = [
     ['j / ↓', 'approach (next)'],  ['k / ↑', 'step away (prev)'],
     ['Enter', 'sit by the fire'],   ['Esc', 'rise and look around'],
-    ['g', 'kindle a fire'],         ['t', 'tend fires'],
+    ['g', 'kindle a fire'],         ['s', 'scatter a fire'],
+    ['t', 'tend fires'],
     ['/', 'search the clearing'],   ['1-9', 'jump to fire N'],
     ['Tab', 'next gathering'],      ['?', 'this help'],
     ['q / Ctrl+C', 'leave'],
@@ -334,7 +336,12 @@ export async function startTui() {
 
     const reg = loadRegistries(almanacRoot);
     let state = loadState();
+    const firesBefore = Object.keys(state.fires).filter(id => {
+      const fs = computeFireState(state.fires[id].lastWarmed);
+      return fs === 'burning' || fs === 'embers';
+    }).length;
     state = autoTend(state);
+    const tendedOnEntry = firesBefore > 0;
 
     const teams = reg.teams || [];
     const data = { reg, state, teams };
@@ -347,6 +354,7 @@ export async function startTui() {
     let currentAgent = null;
     let searchQuery = '';
     let helpOverlay = false;
+    let showTendedMsg = tendedOnEntry;
 
     // ── Terminal setup ──
     enterAlt();
@@ -376,7 +384,7 @@ export async function startTui() {
         case VIEW.WELCOME:
           return `  ${C.amber('g')} kindle  ${C.amber('?')} help  ${C.amber('q')} quit`;
         case VIEW.CLEARING:
-          return `  ${C.dim('j/k')} navigate  ${C.dim('Enter')} sit by fire  ${C.dim('g')} kindle  ${C.dim('/')} search  ${C.dim('?')} help  ${C.dim('q')} quit`;
+          return `  ${C.dim('j/k')} navigate  ${C.dim('Enter')} sit  ${C.dim('g')} kindle  ${C.dim('s')} scatter  ${C.dim('/')} search  ${C.dim('?')} help  ${C.dim('q')} quit`;
         case VIEW.FIRE:
           return `  ${C.dim('j/k')} navigate  ${C.dim('Enter')} agent detail  ${C.dim('Esc')} back  ${C.dim('t')} tend  ${C.dim('q')} quit`;
         case VIEW.AGENT:
@@ -396,13 +404,14 @@ export async function startTui() {
       } else if (view === VIEW.WELCOME) {
         lines = renderWelcome(data);
       } else if (view === VIEW.CLEARING || view === VIEW.SEARCH) {
-        lines = renderClearingLines(data, selected, scrollOffset, searchQuery);
+        lines = renderClearingLines(data, selected, scrollOffset, searchQuery, showTendedMsg);
+        showTendedMsg = false;
       } else if (view === VIEW.FIRE && currentTeam) {
         lines = renderFire(data, currentTeam, selectedAgent);
       } else if (view === VIEW.AGENT && currentAgent) {
         lines = renderAgent(currentAgent);
       } else {
-        lines = renderClearingLines(data, selected, scrollOffset, '');
+        lines = renderClearingLines(data, selected, scrollOffset, '', false);
       }
 
       // Append status bar at the bottom
@@ -490,9 +499,27 @@ export async function startTui() {
           const gIdx = gathered.findIndex((_, i) => i > selected);
           selected = gIdx >= 0 ? gIdx : 0;
           adjustScroll();
-        } else if (key.name === 'enter' || (key.name === 'char' && key.value === 'g')) {
+        } else if (key.name === 'enter') {
           const team = allItems[selected];
           if (team) { currentTeam = team; selectedAgent = 0; view = VIEW.FIRE; }
+        } else if (key.name === 'char' && key.value === 'g') {
+          const team = allItems[selected];
+          if (team && !data.state.fires[team.id]) {
+            const memberIds = team.members || [];
+            const skillCount = countTeamSkillSet(team, data.reg).size;
+            state = recordGather(state, team.id, memberIds, skillCount);
+            data.state = state;
+            saveState(state);
+          } else if (team) {
+            currentTeam = team; selectedAgent = 0; view = VIEW.FIRE;
+          }
+        } else if (key.name === 'char' && key.value === 's') {
+          const team = allItems[selected];
+          if (team && data.state.fires[team.id]) {
+            state = recordScatter(state, team.id);
+            data.state = state;
+            saveState(state);
+          }
         } else if (key.name === 'char' && key.value === 't') {
           state = autoTend(state);
           data.state = state;
