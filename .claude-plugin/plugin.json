@@ -10,7 +10,6 @@
   "repository": "https://github.com/pjt222/agent-almanac",
   "homepage": "https://agentskills.io",
   "license": "MIT",
-  "agents": "./agents",
   "keywords": [
     "skills",
     "agents",
