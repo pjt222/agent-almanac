@@ -253,2720 +253,2752 @@
       "domain": "3d-printing",
       "prompt": "Layer-by-layer print, FDM nozzle, 3D model, sliced model layers, support generation, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 10001,
-      "path": "public/icons/3d-printing/prepare-print-model.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/3d-printing/prepare-print-model.webp",
+      "status": "done"
     },
     {
       "skillId": "select-print-material",
       "domain": "3d-printing",
       "prompt": "Layer-by-layer print, FDM nozzle, 3D model, filament spool, material properties, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 10002,
-      "path": "public/icons/3d-printing/select-print-material.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/3d-printing/select-print-material.webp",
+      "status": "done"
     },
     {
       "skillId": "troubleshoot-print-issues",
       "domain": "3d-printing",
       "prompt": "Layer-by-layer print, FDM nozzle, 3D model, printer nozzle, wrench, adhesion fix, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 10003,
-      "path": "public/icons/3d-printing/troubleshoot-print-issues.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/3d-printing/troubleshoot-print-issues.webp",
+      "status": "done"
     },
     {
       "skillId": "design-a2a-agent-card",
       "domain": "a2a-protocol",
       "prompt": "Neon agent handshake, protocol arrows, JSON-RPC, agent card, capability manifest, JSON, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 20001,
-      "path": "public/icons/a2a-protocol/design-a2a-agent-card.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/a2a-protocol/design-a2a-agent-card.webp",
+      "status": "done"
     },
     {
       "skillId": "implement-a2a-server",
       "domain": "a2a-protocol",
       "prompt": "Neon agent handshake, protocol arrows, JSON-RPC, server, JSON-RPC, task lifecycle, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 20002,
-      "path": "public/icons/a2a-protocol/implement-a2a-server.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/a2a-protocol/implement-a2a-server.webp",
+      "status": "done"
     },
     {
       "skillId": "test-a2a-interop",
       "domain": "a2a-protocol",
       "prompt": "Neon agent handshake, protocol arrows, JSON-RPC, two agents, handshake test, conformance, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 20003,
-      "path": "public/icons/a2a-protocol/test-a2a-interop.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/a2a-protocol/test-a2a-interop.webp",
+      "status": "done"
     },
     {
       "skillId": "athanor",
       "domain": "alchemy",
       "prompt": "Alchemical flask, transmutation circle, philosopher's stone, Athanor, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 30001,
-      "path": "public/icons/alchemy/athanor.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/alchemy/athanor.webp",
+      "status": "done"
     },
     {
       "skillId": "transmute",
       "domain": "alchemy",
       "prompt": "Alchemical flask, transmutation circle, philosopher's stone, Transmute, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 30002,
-      "path": "public/icons/alchemy/transmute.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/alchemy/transmute.webp",
+      "status": "done"
     },
     {
       "skillId": "chrysopoeia",
       "domain": "alchemy",
       "prompt": "Alchemical flask, transmutation circle, philosopher's stone, Chrysopoeia, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 30003,
-      "path": "public/icons/alchemy/chrysopoeia.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/alchemy/chrysopoeia.webp",
+      "status": "done"
     },
     {
       "skillId": "metal",
       "domain": "alchemy",
       "prompt": "Alchemical flask, transmutation circle, philosopher's stone, ore ingot, essence extraction, refined metal, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 30004,
-      "path": "public/icons/alchemy/metal.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/alchemy/metal.webp",
+      "status": "done"
     },
     {
       "skillId": "basic-obedience",
       "domain": "animal-training",
       "prompt": "Dog silhouette, training clicker, positive reinforcement, Basic, Obedience, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 40001,
-      "path": "public/icons/animal-training/basic-obedience.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/animal-training/basic-obedience.webp",
+      "status": "done"
     },
     {
       "skillId": "behavioral-modification",
       "domain": "animal-training",
       "prompt": "Dog silhouette, training clicker, positive reinforcement, Behavioral, Modification, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 40002,
-      "path": "public/icons/animal-training/behavioral-modification.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/animal-training/behavioral-modification.webp",
+      "status": "done"
     },
     {
       "skillId": "create-3d-scene",
       "domain": "blender",
       "prompt": "3D wireframe cube, Blender viewport, rendering light, 3D cube, viewport grid, scene setup, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 50001,
-      "path": "public/icons/blender/create-3d-scene.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/blender/create-3d-scene.webp",
+      "status": "done"
     },
     {
       "skillId": "script-blender-automation",
       "domain": "blender",
       "prompt": "3D wireframe cube, Blender viewport, rendering light, Python script, 3D automation, procedural, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 50002,
-      "path": "public/icons/blender/script-blender-automation.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/blender/script-blender-automation.webp",
+      "status": "done"
     },
     {
       "skillId": "render-blender-output",
       "domain": "blender",
       "prompt": "3D wireframe cube, Blender viewport, rendering light, camera lens, render output, compositing, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 50003,
-      "path": "public/icons/blender/render-blender-output.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/blender/render-blender-output.webp",
+      "status": "done"
     },
     {
       "skillId": "make-fire",
       "domain": "bushcraft",
       "prompt": "Neon campfire flame, leaf, compass rose, sparks, flint and steel, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 60001,
-      "path": "public/icons/bushcraft/make-fire.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/bushcraft/make-fire.webp",
+      "status": "done"
     },
     {
       "skillId": "purify-water",
       "domain": "bushcraft",
       "prompt": "Neon campfire flame, leaf, compass rose, water droplet, filtration funnel, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 60002,
-      "path": "public/icons/bushcraft/purify-water.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/bushcraft/purify-water.webp",
+      "status": "done"
     },
     {
       "skillId": "forage-plants",
       "domain": "bushcraft",
       "prompt": "Neon campfire flame, leaf, compass rose, leaf identification, plant specimen, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 60003,
-      "path": "public/icons/bushcraft/forage-plants.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/bushcraft/forage-plants.webp",
+      "status": "done"
     },
     {
       "skillId": "sharpen-knife",
       "domain": "bushcraft",
       "prompt": "Neon campfire flame, leaf, compass rose, Sharpen, Knife, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 60004,
-      "path": "public/icons/bushcraft/sharpen-knife.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/bushcraft/sharpen-knife.webp",
+      "status": "done"
     },
     {
       "skillId": "develop-gc-method",
       "domain": "chromatography",
       "prompt": "Column separation, gradient flow, chromatogram peaks, Develop, Method, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 70001,
-      "path": "public/icons/chromatography/develop-gc-method.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/chromatography/develop-gc-method.webp",
+      "status": "done"
     },
     {
       "skillId": "develop-hplc-method",
       "domain": "chromatography",
       "prompt": "Column separation, gradient flow, chromatogram peaks, Develop, HPLC, Method, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 70002,
-      "path": "public/icons/chromatography/develop-hplc-method.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/chromatography/develop-hplc-method.webp",
+      "status": "done"
     },
     {
       "skillId": "interpret-chromatogram",
       "domain": "chromatography",
       "prompt": "Column separation, gradient flow, chromatogram peaks, Interpret, Chromatogram, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 70003,
-      "path": "public/icons/chromatography/interpret-chromatogram.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/chromatography/interpret-chromatogram.webp",
+      "status": "done"
     },
     {
       "skillId": "troubleshoot-separation",
       "domain": "chromatography",
       "prompt": "Column separation, gradient flow, chromatogram peaks, Troubleshoot, Chromatographic, Separation, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 70004,
-      "path": "public/icons/chromatography/troubleshoot-separation.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/chromatography/troubleshoot-separation.webp",
+      "status": "done"
     },
     {
       "skillId": "validate-analytical-method",
       "domain": "chromatography",
       "prompt": "Column separation, gradient flow, chromatogram peaks, Validate, Analytical, Method, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 70005,
-      "path": "public/icons/chromatography/validate-analytical-method.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/chromatography/validate-analytical-method.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-bibliography",
       "domain": "citations",
       "prompt": "Bibliography entry, reference bracket, citation key, Manage, Bibliography, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 80001,
-      "path": "public/icons/citations/manage-bibliography.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/citations/manage-bibliography.webp",
+      "status": "done"
     },
     {
       "skillId": "format-citations",
       "domain": "citations",
       "prompt": "Bibliography entry, reference bracket, citation key, Format, Citations, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 80002,
-      "path": "public/icons/citations/format-citations.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/citations/format-citations.webp",
+      "status": "done"
     },
     {
       "skillId": "validate-references",
       "domain": "citations",
       "prompt": "Bibliography entry, reference bracket, citation key, Validate, References, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 80003,
-      "path": "public/icons/citations/validate-references.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/citations/validate-references.webp",
+      "status": "done"
     },
     {
       "skillId": "scaffold-cli-command",
       "domain": "cli",
       "prompt": "Terminal prompt, command line cursor, shell output, Scaffold, CLI, Command, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 90001,
-      "path": "public/icons/cli/scaffold-cli-command.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/cli/scaffold-cli-command.webp",
+      "status": "done"
     },
     {
       "skillId": "build-cli-plugin",
       "domain": "cli",
       "prompt": "Terminal prompt, command line cursor, shell output, Build, CLI, Plugin, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 90002,
-      "path": "public/icons/cli/build-cli-plugin.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/cli/build-cli-plugin.webp",
+      "status": "done"
     },
     {
       "skillId": "test-cli-application",
       "domain": "cli",
       "prompt": "Terminal prompt, command line cursor, shell output, Test, CLI, Application, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 90003,
-      "path": "public/icons/cli/test-cli-application.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/cli/test-cli-application.webp",
+      "status": "done"
     },
     {
       "skillId": "design-cli-output",
       "domain": "cli",
       "prompt": "Terminal prompt, command line cursor, shell output, Design, CLI, Output, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 90004,
-      "path": "public/icons/cli/design-cli-output.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/cli/design-cli-output.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-gxp-r-project",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, R hexagon with shield, regulated folder, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100001,
-      "path": "public/icons/compliance/setup-gxp-r-project.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/setup-gxp-r-project.webp",
+      "status": "done"
     },
     {
       "skillId": "write-validation-documentation",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, validation stamp, protocol document, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100002,
-      "path": "public/icons/compliance/write-validation-documentation.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/write-validation-documentation.webp",
+      "status": "done"
     },
     {
       "skillId": "implement-audit-trail",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, footprint trail, timestamp log, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100003,
-      "path": "public/icons/compliance/implement-audit-trail.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/implement-audit-trail.webp",
+      "status": "done"
     },
     {
       "skillId": "validate-statistical-output",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, statistics validation, reference comparison, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100004,
-      "path": "public/icons/compliance/validate-statistical-output.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/validate-statistical-output.webp",
+      "status": "done"
     },
     {
       "skillId": "perform-csv-assessment",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, risk matrix, assessment checklist, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100005,
-      "path": "public/icons/compliance/perform-csv-assessment.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/perform-csv-assessment.webp",
+      "status": "done"
     },
     {
       "skillId": "conduct-gxp-audit",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, audit clipboard, magnifying glass, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100006,
-      "path": "public/icons/compliance/conduct-gxp-audit.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/conduct-gxp-audit.webp",
+      "status": "done"
     },
     {
       "skillId": "implement-pharma-serialisation",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, pharma barcode, track-and-trace, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100007,
-      "path": "public/icons/compliance/implement-pharma-serialisation.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/implement-pharma-serialisation.webp",
+      "status": "done"
     },
     {
       "skillId": "design-compliance-architecture",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, architecture blueprint, regulation map, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100008,
-      "path": "public/icons/compliance/design-compliance-architecture.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/design-compliance-architecture.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-change-control",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, change request form, approval flow, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100009,
-      "path": "public/icons/compliance/manage-change-control.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/manage-change-control.webp",
+      "status": "done"
     },
     {
       "skillId": "implement-electronic-signatures",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, digital signature, fingerprint scan, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100010,
-      "path": "public/icons/compliance/implement-electronic-signatures.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/implement-electronic-signatures.webp",
+      "status": "done"
     },
     {
       "skillId": "write-standard-operating-procedure",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, SOP document, numbered steps, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100011,
-      "path": "public/icons/compliance/write-standard-operating-procedure.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/write-standard-operating-procedure.webp",
+      "status": "done"
     },
     {
       "skillId": "monitor-data-integrity",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, data shield, integrity checkmark, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100012,
-      "path": "public/icons/compliance/monitor-data-integrity.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/monitor-data-integrity.webp",
+      "status": "done"
     },
     {
       "skillId": "design-training-program",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, curriculum tree, graduation cap, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100013,
-      "path": "public/icons/compliance/design-training-program.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/design-training-program.webp",
+      "status": "done"
     },
     {
       "skillId": "decommission-validated-system",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, system power-down, archive box, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100014,
-      "path": "public/icons/compliance/decommission-validated-system.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/decommission-validated-system.webp",
+      "status": "done"
     },
     {
       "skillId": "prepare-inspection-readiness",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, inspection checklist, readiness meter, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100015,
-      "path": "public/icons/compliance/prepare-inspection-readiness.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/prepare-inspection-readiness.webp",
+      "status": "done"
     },
     {
       "skillId": "investigate-capa-root-cause",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, fishbone diagram, root cause arrow, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100016,
-      "path": "public/icons/compliance/investigate-capa-root-cause.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/investigate-capa-root-cause.webp",
+      "status": "done"
     },
     {
       "skillId": "qualify-vendor",
       "domain": "compliance",
       "prompt": "Neon shield seal, regulatory checkmark, vendor badge, qualification star, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 100017,
-      "path": "public/icons/compliance/qualify-vendor.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/compliance/qualify-vendor.webp",
+      "status": "done"
     },
     {
       "skillId": "create-r-dockerfile",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, Docker whale, R hexagon inside, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110001,
-      "path": "public/icons/containerization/create-r-dockerfile.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/create-r-dockerfile.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-docker-compose",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, interconnected containers, orchestration, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110002,
-      "path": "public/icons/containerization/setup-docker-compose.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/setup-docker-compose.webp",
+      "status": "done"
     },
     {
       "skillId": "containerize-mcp-server",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, server in a box, glowing connection, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110003,
-      "path": "public/icons/containerization/containerize-mcp-server.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/containerize-mcp-server.webp",
+      "status": "done"
     },
     {
       "skillId": "optimize-docker-build-cache",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, layered cache, speed arrows, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110004,
-      "path": "public/icons/containerization/optimize-docker-build-cache.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/optimize-docker-build-cache.webp",
+      "status": "done"
     },
     {
       "skillId": "create-dockerfile",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, Create, Dockerfile, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110005,
-      "path": "public/icons/containerization/create-dockerfile.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/create-dockerfile.webp",
+      "status": "done"
     },
     {
       "skillId": "create-multistage-dockerfile",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, Create, Multi, Stage, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110006,
-      "path": "public/icons/containerization/create-multistage-dockerfile.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/create-multistage-dockerfile.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-compose-stack",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, Set, Compose, Stack, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110007,
-      "path": "public/icons/containerization/setup-compose-stack.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/setup-compose-stack.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-nginx",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, Configure, Nginx, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110008,
-      "path": "public/icons/containerization/configure-nginx.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/configure-nginx.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-reverse-proxy",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, Configure, Reverse, Proxy, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110009,
-      "path": "public/icons/containerization/configure-reverse-proxy.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/configure-reverse-proxy.webp",
+      "status": "done"
     },
     {
       "skillId": "deploy-searxng",
       "domain": "containerization",
       "prompt": "Neon container box, whale silhouette, Deploy, SearXNG, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 110010,
-      "path": "public/icons/containerization/deploy-searxng.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/containerization/deploy-searxng.webp",
+      "status": "done"
     },
     {
       "skillId": "paper-making",
       "domain": "crafting",
       "prompt": "Handcraft tools, fibre sheet, artisan workbench, Paper, Making, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 120001,
-      "path": "public/icons/crafting/paper-making.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/crafting/paper-making.webp",
+      "status": "done"
     },
     {
       "skillId": "serialize-data-formats",
       "domain": "data-serialization",
       "prompt": "Neon binary stream, schema tree brackets, format conversion, data stream, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 130001,
-      "path": "public/icons/data-serialization/serialize-data-formats.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/data-serialization/serialize-data-formats.webp",
+      "status": "done"
     },
     {
       "skillId": "design-serialization-schema",
       "domain": "data-serialization",
       "prompt": "Neon binary stream, schema tree brackets, schema blueprint, data types, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 130002,
-      "path": "public/icons/data-serialization/design-serialization-schema.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/data-serialization/design-serialization-schema.webp",
+      "status": "done"
     },
     {
       "skillId": "tai-chi",
       "domain": "defensive",
       "prompt": "Neon flowing water circle, yin-yang shield, tai chi flow, yin-yang balance, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 140001,
-      "path": "public/icons/defensive/tai-chi.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/defensive/tai-chi.webp",
+      "status": "done"
     },
     {
       "skillId": "aikido",
       "domain": "defensive",
       "prompt": "Neon flowing water circle, yin-yang shield, aikido spiral, redirect arrow, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 140002,
-      "path": "public/icons/defensive/aikido.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/defensive/aikido.webp",
+      "status": "done"
     },
     {
       "skillId": "mindfulness",
       "domain": "defensive",
       "prompt": "Neon flowing water circle, yin-yang shield, awareness ripple, centered mind, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 140003,
-      "path": "public/icons/defensive/mindfulness.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/defensive/mindfulness.webp",
+      "status": "done"
     },
     {
       "skillId": "center",
       "domain": "defensive",
       "prompt": "Neon flowing water circle, yin-yang shield, Center, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 140004,
-      "path": "public/icons/defensive/center.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/defensive/center.webp",
+      "status": "done"
     },
     {
       "skillId": "redirect",
       "domain": "defensive",
       "prompt": "Neon flowing water circle, yin-yang shield, Redirect, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 140005,
-      "path": "public/icons/defensive/redirect.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/defensive/redirect.webp",
+      "status": "done"
     },
     {
       "skillId": "awareness",
       "domain": "defensive",
       "prompt": "Neon flowing water circle, yin-yang shield, Awareness, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 140006,
-      "path": "public/icons/defensive/awareness.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/defensive/awareness.webp",
+      "status": "done"
     },
     {
       "skillId": "ornament-style-mono",
       "domain": "design",
       "prompt": "Glowing compass, golden spiral ornament, monochrome pattern, ornament motif, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 150001,
-      "path": "public/icons/design/ornament-style-mono.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/design/ornament-style-mono.webp",
+      "status": "done"
     },
     {
       "skillId": "ornament-style-color",
       "domain": "design",
       "prompt": "Glowing compass, golden spiral ornament, polychrome ornament, color palette, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 150002,
-      "path": "public/icons/design/ornament-style-color.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/design/ornament-style-color.webp",
+      "status": "done"
     },
     {
       "skillId": "ornament-style-modern",
       "domain": "design",
       "prompt": "Glowing compass, golden spiral ornament, modern pattern, futuristic ornament, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 150003,
-      "path": "public/icons/design/ornament-style-modern.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/design/ornament-style-modern.webp",
+      "status": "done"
     },
     {
       "skillId": "create-glyph",
       "domain": "design",
       "prompt": "Glowing compass, golden spiral ornament, paintbrush, geometric output, glyph creation, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 150004,
-      "path": "public/icons/design/create-glyph.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/design/create-glyph.webp",
+      "status": "done"
     },
     {
       "skillId": "enhance-glyph",
       "domain": "design",
       "prompt": "Glowing compass, golden spiral ornament, loupe magnifier, shape refinement, glyph polish, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 150005,
-      "path": "public/icons/design/enhance-glyph.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/design/enhance-glyph.webp",
+      "status": "done"
     },
     {
       "skillId": "build-ci-cd-pipeline",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, pipeline stages, continuous flow, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160001,
-      "path": "public/icons/devops/build-ci-cd-pipeline.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/build-ci-cd-pipeline.webp",
+      "status": "done"
     },
     {
       "skillId": "provision-infrastructure-terraform",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, Terraform blocks, infrastructure map, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160002,
-      "path": "public/icons/devops/provision-infrastructure-terraform.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/provision-infrastructure-terraform.webp",
+      "status": "done"
     },
     {
       "skillId": "deploy-to-kubernetes",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, Kubernetes wheel, pod deployment, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160003,
-      "path": "public/icons/devops/deploy-to-kubernetes.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/deploy-to-kubernetes.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-kubernetes-secrets",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, sealed secrets, encrypted key, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160004,
-      "path": "public/icons/devops/manage-kubernetes-secrets.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/manage-kubernetes-secrets.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-container-registry",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, container registry, image tags, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160005,
-      "path": "public/icons/devops/setup-container-registry.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/setup-container-registry.webp",
+      "status": "done"
     },
     {
       "skillId": "implement-gitops-workflow",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, GitOps sync, Argo CD arrows, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160006,
-      "path": "public/icons/devops/implement-gitops-workflow.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/implement-gitops-workflow.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-ingress-networking",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, ingress gateway, traffic routing, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160007,
-      "path": "public/icons/devops/configure-ingress-networking.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/configure-ingress-networking.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-service-mesh",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, service mesh grid, sidecar proxy, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160008,
-      "path": "public/icons/devops/setup-service-mesh.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/setup-service-mesh.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-api-gateway",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, API gateway, traffic funnel, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160009,
-      "path": "public/icons/devops/configure-api-gateway.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/configure-api-gateway.webp",
+      "status": "done"
     },
     {
       "skillId": "enforce-policy-as-code",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, policy shield, code constraint, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160010,
-      "path": "public/icons/devops/enforce-policy-as-code.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/enforce-policy-as-code.webp",
+      "status": "done"
     },
     {
       "skillId": "optimize-cloud-costs",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, cost graph, optimization arrows, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160011,
-      "path": "public/icons/devops/optimize-cloud-costs.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/optimize-cloud-costs.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-local-kubernetes",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, local cluster, development pods, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160012,
-      "path": "public/icons/devops/setup-local-kubernetes.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/setup-local-kubernetes.webp",
+      "status": "done"
     },
     {
       "skillId": "write-helm-chart",
       "domain": "devops",
       "prompt": "Neon pipeline, gear mechanism, infinity loop, Helm anchor, chart template, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 160013,
-      "path": "public/icons/devops/write-helm-chart.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/devops/write-helm-chart.webp",
+      "status": "done"
     },
     {
       "skillId": "fit-drift-diffusion-model",
       "domain": "diffusion",
       "prompt": "Diffusion gradient, noise-to-signal, spreading pattern, drift accumulator, decision boundary, RT, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 170001,
-      "path": "public/icons/diffusion/fit-drift-diffusion-model.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/diffusion/fit-drift-diffusion-model.webp",
+      "status": "done"
     },
     {
       "skillId": "implement-diffusion-network",
       "domain": "diffusion",
       "prompt": "Diffusion gradient, noise-to-signal, spreading pattern, noise-to-image, denoising steps, U-Net, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 170002,
-      "path": "public/icons/diffusion/implement-diffusion-network.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/diffusion/implement-diffusion-network.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-diffusion-dynamics",
       "domain": "diffusion",
       "prompt": "Diffusion gradient, noise-to-signal, spreading pattern, SDE curve, Fokker-Planck, diffusion equation, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 170003,
-      "path": "public/icons/diffusion/analyze-diffusion-dynamics.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/diffusion/analyze-diffusion-dynamics.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-generative-diffusion-model",
       "domain": "diffusion",
       "prompt": "Diffusion gradient, noise-to-signal, spreading pattern, Analyze, Generative, Diffusion, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 170004,
-      "path": "public/icons/diffusion/analyze-generative-diffusion-model.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/diffusion/analyze-generative-diffusion-model.webp",
+      "status": "done"
     },
     {
       "skillId": "evaluate-boolean-expression",
       "domain": "digital-logic",
       "prompt": "Logic gate symbol, binary truth table, circuit diagram, truth table, Boolean algebra, logic gates, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 180001,
-      "path": "public/icons/digital-logic/evaluate-boolean-expression.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/digital-logic/evaluate-boolean-expression.webp",
+      "status": "done"
     },
     {
       "skillId": "design-logic-circuit",
       "domain": "digital-logic",
       "prompt": "Logic gate symbol, binary truth table, circuit diagram, NAND gate, combinational logic, schematic, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 180002,
-      "path": "public/icons/digital-logic/design-logic-circuit.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/digital-logic/design-logic-circuit.webp",
+      "status": "done"
     },
     {
       "skillId": "build-sequential-circuit",
       "domain": "digital-logic",
       "prompt": "Logic gate symbol, binary truth table, circuit diagram, flip-flop, state machine, clock edge, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 180003,
-      "path": "public/icons/digital-logic/build-sequential-circuit.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/digital-logic/build-sequential-circuit.webp",
+      "status": "done"
     },
     {
       "skillId": "simulate-cpu-architecture",
       "domain": "digital-logic",
       "prompt": "Logic gate symbol, binary truth table, circuit diagram, CPU chip, ALU, instruction pipeline, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 180004,
-      "path": "public/icons/digital-logic/simulate-cpu-architecture.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/digital-logic/simulate-cpu-architecture.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "deploy-edge-ai-model",
+      "domain": "edge-computing",
+      "prompt": "Edge AI deployment, on-device inference, model quantization, and hardware acceleration, Deploy, Edge, Model, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 190001,
+      "path": "public/icons/cyberpunk/edge-computing/deploy-edge-ai-model.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-magnetic-field",
       "domain": "electromagnetism",
       "prompt": "Magnetic field lines, solenoid coil, electromagnetic wave, bar magnet, field lines, N-S poles, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 190001,
-      "path": "public/icons/electromagnetism/analyze-magnetic-field.webp",
-      "status": "pending"
+      "seed": 200001,
+      "path": "public/icons/cyberpunk/electromagnetism/analyze-magnetic-field.webp",
+      "status": "done"
     },
     {
       "skillId": "solve-electromagnetic-induction",
       "domain": "electromagnetism",
       "prompt": "Magnetic field lines, solenoid coil, electromagnetic wave, Faraday coil, induced current, solenoid, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 190002,
-      "path": "public/icons/electromagnetism/solve-electromagnetic-induction.webp",
-      "status": "pending"
+      "seed": 200002,
+      "path": "public/icons/cyberpunk/electromagnetism/solve-electromagnetic-induction.webp",
+      "status": "done"
     },
     {
       "skillId": "formulate-maxwell-equations",
       "domain": "electromagnetism",
       "prompt": "Magnetic field lines, solenoid coil, electromagnetic wave, Maxwell wave, E and B fields, sinusoid, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 190003,
-      "path": "public/icons/electromagnetism/formulate-maxwell-equations.webp",
-      "status": "pending"
+      "seed": 200003,
+      "path": "public/icons/cyberpunk/electromagnetism/formulate-maxwell-equations.webp",
+      "status": "done"
     },
     {
       "skillId": "design-electromagnetic-device",
       "domain": "electromagnetism",
       "prompt": "Magnetic field lines, solenoid coil, electromagnetic wave, motor coil, stator rotor, electromagnetic, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 190004,
-      "path": "public/icons/electromagnetism/design-electromagnetic-device.webp",
-      "status": "pending"
+      "seed": 200004,
+      "path": "public/icons/cyberpunk/electromagnetism/design-electromagnetic-device.webp",
+      "status": "done"
     },
     {
       "skillId": "document-insect-sighting",
       "domain": "entomology",
       "prompt": "Insect specimen, magnifying lens, field notebook, entomological pin, field notebook, camera, insect silhouette, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 200001,
-      "path": "public/icons/entomology/document-insect-sighting.webp",
-      "status": "pending"
+      "seed": 210001,
+      "path": "public/icons/cyberpunk/entomology/document-insect-sighting.webp",
+      "status": "done"
     },
     {
       "skillId": "identify-insect",
       "domain": "entomology",
       "prompt": "Insect specimen, magnifying lens, field notebook, entomological pin, magnifying lens, dichotomous key, body plan, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 200002,
-      "path": "public/icons/entomology/identify-insect.webp",
-      "status": "pending"
+      "seed": 210002,
+      "path": "public/icons/cyberpunk/entomology/identify-insect.webp",
+      "status": "done"
     },
     {
       "skillId": "observe-insect-behavior",
       "domain": "entomology",
       "prompt": "Insect specimen, magnifying lens, field notebook, entomological pin, ethogram chart, stopwatch, behavior tally, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 200003,
-      "path": "public/icons/entomology/observe-insect-behavior.webp",
-      "status": "pending"
+      "seed": 210003,
+      "path": "public/icons/cyberpunk/entomology/observe-insect-behavior.webp",
+      "status": "done"
     },
     {
       "skillId": "collect-preserve-specimens",
       "domain": "entomology",
       "prompt": "Insect specimen, magnifying lens, field notebook, entomological pin, entomological pin, specimen box, label, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 200004,
-      "path": "public/icons/entomology/collect-preserve-specimens.webp",
-      "status": "pending"
+      "seed": 210004,
+      "path": "public/icons/cyberpunk/entomology/collect-preserve-specimens.webp",
+      "status": "done"
     },
     {
       "skillId": "survey-insect-population",
       "domain": "entomology",
       "prompt": "Insect specimen, magnifying lens, field notebook, entomological pin, transect line, diversity index, population graph, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 200005,
-      "path": "public/icons/entomology/survey-insect-population.webp",
-      "status": "pending"
+      "seed": 210005,
+      "path": "public/icons/cyberpunk/entomology/survey-insect-population.webp",
+      "status": "done"
     },
     {
       "skillId": "heal",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, healing hands, energy aura, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210001,
-      "path": "public/icons/esoteric/heal.webp",
-      "status": "pending"
+      "seed": 220001,
+      "path": "public/icons/cyberpunk/esoteric/heal.webp",
+      "status": "done"
     },
     {
       "skillId": "heal-guidance",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Heal, (Guidance), dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210002,
-      "path": "public/icons/esoteric/heal-guidance.webp",
-      "status": "pending"
+      "seed": 220002,
+      "path": "public/icons/cyberpunk/esoteric/heal-guidance.webp",
+      "status": "done"
     },
     {
       "skillId": "meditate",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, lotus position, calm waves, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210003,
-      "path": "public/icons/esoteric/meditate.webp",
-      "status": "pending"
+      "seed": 220003,
+      "path": "public/icons/cyberpunk/esoteric/meditate.webp",
+      "status": "done"
     },
     {
       "skillId": "meditate-guidance",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Meditate, (Guidance), dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210004,
-      "path": "public/icons/esoteric/meditate-guidance.webp",
-      "status": "pending"
+      "seed": 220004,
+      "path": "public/icons/cyberpunk/esoteric/meditate-guidance.webp",
+      "status": "done"
     },
     {
       "skillId": "remote-viewing",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, third eye open, coordinate grid, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210005,
-      "path": "public/icons/esoteric/remote-viewing.webp",
-      "status": "pending"
+      "seed": 220005,
+      "path": "public/icons/cyberpunk/esoteric/remote-viewing.webp",
+      "status": "done"
     },
     {
       "skillId": "remote-viewing-guidance",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Remote, View, (Guidance), dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210006,
-      "path": "public/icons/esoteric/remote-viewing-guidance.webp",
-      "status": "pending"
+      "seed": 220006,
+      "path": "public/icons/cyberpunk/esoteric/remote-viewing-guidance.webp",
+      "status": "done"
     },
     {
       "skillId": "learn",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Learn, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210007,
-      "path": "public/icons/esoteric/learn.webp",
-      "status": "pending"
+      "seed": 220007,
+      "path": "public/icons/cyberpunk/esoteric/learn.webp",
+      "status": "done"
     },
     {
       "skillId": "learn-guidance",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Learn, (Guidance), dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210008,
-      "path": "public/icons/esoteric/learn-guidance.webp",
-      "status": "pending"
+      "seed": 220008,
+      "path": "public/icons/cyberpunk/esoteric/learn-guidance.webp",
+      "status": "done"
     },
     {
       "skillId": "teach",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Teach, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210009,
-      "path": "public/icons/esoteric/teach.webp",
-      "status": "pending"
+      "seed": 220009,
+      "path": "public/icons/cyberpunk/esoteric/teach.webp",
+      "status": "done"
     },
     {
       "skillId": "teach-guidance",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Teach, (Guidance), dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210010,
-      "path": "public/icons/esoteric/teach-guidance.webp",
-      "status": "pending"
+      "seed": 220010,
+      "path": "public/icons/cyberpunk/esoteric/teach-guidance.webp",
+      "status": "done"
     },
     {
       "skillId": "listen",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Listen, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210011,
-      "path": "public/icons/esoteric/listen.webp",
-      "status": "pending"
+      "seed": 220011,
+      "path": "public/icons/cyberpunk/esoteric/listen.webp",
+      "status": "done"
     },
     {
       "skillId": "listen-guidance",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Listen, (Guidance), dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210012,
-      "path": "public/icons/esoteric/listen-guidance.webp",
-      "status": "pending"
+      "seed": 220012,
+      "path": "public/icons/cyberpunk/esoteric/listen-guidance.webp",
+      "status": "done"
     },
     {
       "skillId": "observe",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Observe, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210013,
-      "path": "public/icons/esoteric/observe.webp",
-      "status": "pending"
+      "seed": 220013,
+      "path": "public/icons/cyberpunk/esoteric/observe.webp",
+      "status": "done"
     },
     {
       "skillId": "observe-guidance",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Observe, (Guidance), dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210014,
-      "path": "public/icons/esoteric/observe-guidance.webp",
-      "status": "pending"
+      "seed": 220014,
+      "path": "public/icons/cyberpunk/esoteric/observe-guidance.webp",
+      "status": "done"
     },
     {
       "skillId": "intrinsic",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Intrinsic, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210015,
-      "path": "public/icons/esoteric/intrinsic.webp",
-      "status": "pending"
+      "seed": 220015,
+      "path": "public/icons/cyberpunk/esoteric/intrinsic.webp",
+      "status": "done"
     },
     {
       "skillId": "shiva-bhaga",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Shiva, Bhaga, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210016,
-      "path": "public/icons/esoteric/shiva-bhaga.webp",
-      "status": "pending"
+      "seed": 220016,
+      "path": "public/icons/cyberpunk/esoteric/shiva-bhaga.webp",
+      "status": "done"
     },
     {
       "skillId": "vishnu-bhaga",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Vishnu, Bhaga, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210017,
-      "path": "public/icons/esoteric/vishnu-bhaga.webp",
-      "status": "pending"
+      "seed": 220017,
+      "path": "public/icons/cyberpunk/esoteric/vishnu-bhaga.webp",
+      "status": "done"
     },
     {
       "skillId": "brahma-bhaga",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Brahma, Bhaga, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210018,
-      "path": "public/icons/esoteric/brahma-bhaga.webp",
-      "status": "pending"
+      "seed": 220018,
+      "path": "public/icons/cyberpunk/esoteric/brahma-bhaga.webp",
+      "status": "done"
     },
     {
       "skillId": "conscientiousness",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Conscientiousness, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210019,
-      "path": "public/icons/esoteric/conscientiousness.webp",
-      "status": "pending"
+      "seed": 220019,
+      "path": "public/icons/cyberpunk/esoteric/conscientiousness.webp",
+      "status": "done"
     },
     {
       "skillId": "honesty-humility",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Honesty, Humility, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210020,
-      "path": "public/icons/esoteric/honesty-humility.webp",
-      "status": "pending"
+      "seed": 220020,
+      "path": "public/icons/cyberpunk/esoteric/honesty-humility.webp",
+      "status": "done"
     },
     {
       "skillId": "shine",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Shine, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210021,
-      "path": "public/icons/esoteric/shine.webp",
-      "status": "pending"
+      "seed": 220021,
+      "path": "public/icons/cyberpunk/esoteric/shine.webp",
+      "status": "done"
     },
     {
       "skillId": "breathe",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Breathe, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210022,
-      "path": "public/icons/esoteric/breathe.webp",
-      "status": "pending"
+      "seed": 220022,
+      "path": "public/icons/cyberpunk/esoteric/breathe.webp",
+      "status": "done"
     },
     {
       "skillId": "rest",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Rest, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210023,
-      "path": "public/icons/esoteric/rest.webp",
-      "status": "pending"
+      "seed": 220023,
+      "path": "public/icons/cyberpunk/esoteric/rest.webp",
+      "status": "done"
     },
     {
       "skillId": "attune",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Attune, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210024,
-      "path": "public/icons/esoteric/attune.webp",
-      "status": "pending"
+      "seed": 220024,
+      "path": "public/icons/cyberpunk/esoteric/attune.webp",
+      "status": "done"
     },
     {
       "skillId": "dream",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Dream, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210025,
-      "path": "public/icons/esoteric/dream.webp",
-      "status": "pending"
+      "seed": 220025,
+      "path": "public/icons/cyberpunk/esoteric/dream.webp",
+      "status": "done"
     },
     {
       "skillId": "gratitude",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Gratitude, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210026,
-      "path": "public/icons/esoteric/gratitude.webp",
-      "status": "pending"
+      "seed": 220026,
+      "path": "public/icons/cyberpunk/esoteric/gratitude.webp",
+      "status": "done"
     },
     {
       "skillId": "read-tree-of-life",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Tree of Life, sephiroth circles, paths, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210027,
-      "path": "public/icons/esoteric/read-tree-of-life.webp",
-      "status": "pending"
+      "seed": 220027,
+      "path": "public/icons/cyberpunk/esoteric/read-tree-of-life.webp",
+      "status": "done"
     },
     {
       "skillId": "apply-gematria",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, Hebrew letters, numerical values, computation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210028,
-      "path": "public/icons/esoteric/apply-gematria.webp",
-      "status": "pending"
+      "seed": 220028,
+      "path": "public/icons/cyberpunk/esoteric/apply-gematria.webp",
+      "status": "done"
     },
     {
       "skillId": "study-hebrew-letters",
       "domain": "esoteric",
       "prompt": "Glowing third eye, mandala spiral, aleph beth, Hebrew letter forms, mystical, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 210029,
-      "path": "public/icons/esoteric/study-hebrew-letters.webp",
-      "status": "pending"
+      "seed": 220029,
+      "path": "public/icons/cyberpunk/esoteric/study-hebrew-letters.webp",
+      "status": "done"
     },
     {
       "skillId": "cultivate-bonsai",
       "domain": "gardening",
       "prompt": "Garden trowel, soil layers, growing seedling, Cultivate, Bonsai, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 220001,
-      "path": "public/icons/gardening/cultivate-bonsai.webp",
-      "status": "pending"
+      "seed": 230001,
+      "path": "public/icons/cyberpunk/gardening/cultivate-bonsai.webp",
+      "status": "done"
     },
     {
       "skillId": "prepare-soil",
       "domain": "gardening",
       "prompt": "Garden trowel, soil layers, growing seedling, Prepare, Soil, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 220002,
-      "path": "public/icons/gardening/prepare-soil.webp",
-      "status": "pending"
+      "seed": 230002,
+      "path": "public/icons/cyberpunk/gardening/prepare-soil.webp",
+      "status": "done"
     },
     {
       "skillId": "plan-garden-calendar",
       "domain": "gardening",
       "prompt": "Garden trowel, soil layers, growing seedling, Plan, Garden, Calendar, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 220003,
-      "path": "public/icons/gardening/plan-garden-calendar.webp",
-      "status": "pending"
+      "seed": 230003,
+      "path": "public/icons/cyberpunk/gardening/plan-garden-calendar.webp",
+      "status": "done"
     },
     {
       "skillId": "read-garden",
       "domain": "gardening",
       "prompt": "Garden trowel, soil layers, growing seedling, Read, Garden, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 220004,
-      "path": "public/icons/gardening/read-garden.webp",
-      "status": "pending"
+      "seed": 230004,
+      "path": "public/icons/cyberpunk/gardening/read-garden.webp",
+      "status": "done"
     },
     {
       "skillId": "maintain-hand-tools",
       "domain": "gardening",
       "prompt": "Garden trowel, soil layers, growing seedling, Maintain, Hand, Tools, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 220005,
-      "path": "public/icons/gardening/maintain-hand-tools.webp",
-      "status": "pending"
+      "seed": 230005,
+      "path": "public/icons/cyberpunk/gardening/maintain-hand-tools.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-wsl-dev-environment",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, WSL penguin, terminal window, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230001,
-      "path": "public/icons/general/setup-wsl-dev-environment.webp",
-      "status": "pending"
+      "seed": 240001,
+      "path": "public/icons/cyberpunk/general/setup-wsl-dev-environment.webp",
+      "status": "done"
     },
     {
       "skillId": "write-claude-md",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Claude AI icon, instruction document, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230002,
-      "path": "public/icons/general/write-claude-md.webp",
-      "status": "pending"
+      "seed": 240002,
+      "path": "public/icons/cyberpunk/general/write-claude-md.webp",
+      "status": "done"
     },
     {
       "skillId": "security-audit-codebase",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, security scan, vulnerability shield, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230003,
-      "path": "public/icons/general/security-audit-codebase.webp",
-      "status": "pending"
+      "seed": 240003,
+      "path": "public/icons/cyberpunk/general/security-audit-codebase.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-memory",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Manage, Memory, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230004,
-      "path": "public/icons/general/manage-memory.webp",
-      "status": "pending"
+      "seed": 240004,
+      "path": "public/icons/cyberpunk/general/manage-memory.webp",
+      "status": "done"
     },
     {
       "skillId": "create-skill",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, skill blueprint, creation spark, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230005,
-      "path": "public/icons/general/create-skill.webp",
-      "status": "pending"
+      "seed": 240005,
+      "path": "public/icons/cyberpunk/general/create-skill.webp",
+      "status": "done"
     },
     {
       "skillId": "evolve-skill",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, evolution spiral, skill upgrade arrow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230006,
-      "path": "public/icons/general/evolve-skill.webp",
-      "status": "pending"
+      "seed": 240006,
+      "path": "public/icons/cyberpunk/general/evolve-skill.webp",
+      "status": "done"
     },
     {
       "skillId": "create-agent",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Create, New, Agent, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230007,
-      "path": "public/icons/general/create-agent.webp",
-      "status": "pending"
+      "seed": 240007,
+      "path": "public/icons/cyberpunk/general/create-agent.webp",
+      "status": "done"
     },
     {
       "skillId": "create-team",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Create, New, Team, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230008,
-      "path": "public/icons/general/create-team.webp",
-      "status": "pending"
+      "seed": 240008,
+      "path": "public/icons/cyberpunk/general/create-team.webp",
+      "status": "done"
     },
     {
       "skillId": "fail-early-pattern",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Fail, Early, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230009,
-      "path": "public/icons/general/fail-early-pattern.webp",
-      "status": "pending"
+      "seed": 240009,
+      "path": "public/icons/cyberpunk/general/fail-early-pattern.webp",
+      "status": "done"
     },
     {
       "skillId": "argumentation",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Construct, Arguments, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230010,
-      "path": "public/icons/general/argumentation.webp",
-      "status": "pending"
+      "seed": 240010,
+      "path": "public/icons/cyberpunk/general/argumentation.webp",
+      "status": "done"
     },
     {
       "skillId": "evolve-agent",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Evolve, Existing, Agent, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230011,
-      "path": "public/icons/general/evolve-agent.webp",
-      "status": "pending"
+      "seed": 240011,
+      "path": "public/icons/cyberpunk/general/evolve-agent.webp",
+      "status": "done"
     },
     {
       "skillId": "evolve-team",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Evolve, Existing, Team, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230012,
-      "path": "public/icons/general/evolve-team.webp",
-      "status": "pending"
+      "seed": 240012,
+      "path": "public/icons/cyberpunk/general/evolve-team.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-token-budget",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, token gauge, budget meter, cost cap, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230013,
-      "path": "public/icons/general/manage-token-budget.webp",
-      "status": "pending"
+      "seed": 240013,
+      "path": "public/icons/cyberpunk/general/manage-token-budget.webp",
+      "status": "done"
     },
     {
       "skillId": "prune-agent-memory",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, memory cards, pruning shears, forget policy, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230014,
-      "path": "public/icons/general/prune-agent-memory.webp",
-      "status": "pending"
+      "seed": 240014,
+      "path": "public/icons/cyberpunk/general/prune-agent-memory.webp",
+      "status": "done"
     },
     {
       "skillId": "circuit-breaker-pattern",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, circuit switch, break gap, fault tolerance, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230015,
-      "path": "public/icons/general/circuit-breaker-pattern.webp",
-      "status": "pending"
+      "seed": 240015,
+      "path": "public/icons/cyberpunk/general/circuit-breaker-pattern.webp",
+      "status": "done"
     },
     {
       "skillId": "verify-agent-output",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, verification stamp, evidence chain, checkmark, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230016,
-      "path": "public/icons/general/verify-agent-output.webp",
-      "status": "pending"
+      "seed": 240016,
+      "path": "public/icons/cyberpunk/general/verify-agent-output.webp",
+      "status": "done"
     },
     {
       "skillId": "write-continue-here",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Write, Continue, Here, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230017,
-      "path": "public/icons/general/write-continue-here.webp",
-      "status": "pending"
+      "seed": 240017,
+      "path": "public/icons/cyberpunk/general/write-continue-here.webp",
+      "status": "done"
     },
     {
       "skillId": "read-continue-here",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Read, Continue, Here, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230018,
-      "path": "public/icons/general/read-continue-here.webp",
-      "status": "pending"
+      "seed": 240018,
+      "path": "public/icons/cyberpunk/general/read-continue-here.webp",
+      "status": "done"
     },
     {
       "skillId": "install-almanac-content",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Install, Almanac, Content, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230019,
-      "path": "public/icons/general/install-almanac-content.webp",
-      "status": "pending"
+      "seed": 240019,
+      "path": "public/icons/cyberpunk/general/install-almanac-content.webp",
+      "status": "done"
     },
     {
       "skillId": "du-dum",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Dum:, Batch, Then, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 230020,
-      "path": "public/icons/general/du-dum.webp",
-      "status": "pending"
+      "seed": 240020,
+      "path": "public/icons/cyberpunk/general/du-dum.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "evolve-skill-from-traces",
+      "domain": "general",
+      "prompt": "Glowing terminal prompt, wrench tool, Evolve, Skill, from, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 240021,
+      "path": "public/icons/cyberpunk/general/evolve-skill-from-traces.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "manage-engagement-buffer",
+      "domain": "general",
+      "prompt": "Glowing terminal prompt, wrench tool, Manage, Engagement, Buffer, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 240022,
+      "path": "public/icons/cyberpunk/general/manage-engagement-buffer.webp",
+      "status": "done"
     },
     {
       "skillId": "construct-geometric-figure",
       "domain": "geometry",
       "prompt": "Ruler and compass, Euclidean circle, geometric proof, compass, ruler, geometric construction, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 240001,
-      "path": "public/icons/geometry/construct-geometric-figure.webp",
-      "status": "pending"
+      "seed": 250001,
+      "path": "public/icons/cyberpunk/geometry/construct-geometric-figure.webp",
+      "status": "done"
     },
     {
       "skillId": "solve-trigonometric-problem",
       "domain": "geometry",
       "prompt": "Ruler and compass, Euclidean circle, geometric proof, unit circle, sine wave, triangle, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 240002,
-      "path": "public/icons/geometry/solve-trigonometric-problem.webp",
-      "status": "pending"
+      "seed": 250002,
+      "path": "public/icons/cyberpunk/geometry/solve-trigonometric-problem.webp",
+      "status": "done"
     },
     {
       "skillId": "prove-geometric-theorem",
       "domain": "geometry",
       "prompt": "Ruler and compass, Euclidean circle, geometric proof, proof triangle, QED, axiomatic, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 240003,
-      "path": "public/icons/geometry/prove-geometric-theorem.webp",
-      "status": "pending"
+      "seed": 250003,
+      "path": "public/icons/cyberpunk/geometry/prove-geometric-theorem.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-git-repository",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, git config gear, repository folder, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 250001,
-      "path": "public/icons/git/configure-git-repository.webp",
-      "status": "pending"
+      "seed": 260001,
+      "path": "public/icons/cyberpunk/git/configure-git-repository.webp",
+      "status": "done"
     },
     {
       "skillId": "commit-changes",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, commit diamond, staged files, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 250002,
-      "path": "public/icons/git/commit-changes.webp",
-      "status": "pending"
+      "seed": 260002,
+      "path": "public/icons/cyberpunk/git/commit-changes.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-git-branches",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, branch tree, switch arrows, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 250003,
-      "path": "public/icons/git/manage-git-branches.webp",
-      "status": "pending"
+      "seed": 260003,
+      "path": "public/icons/cyberpunk/git/manage-git-branches.webp",
+      "status": "done"
     },
     {
       "skillId": "create-pull-request",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, pull request merge, branch arrow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 250004,
-      "path": "public/icons/git/create-pull-request.webp",
-      "status": "pending"
+      "seed": 260004,
+      "path": "public/icons/cyberpunk/git/create-pull-request.webp",
+      "status": "done"
     },
     {
       "skillId": "resolve-git-conflicts",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, conflict merge, resolution handshake, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 250005,
-      "path": "public/icons/git/resolve-git-conflicts.webp",
-      "status": "pending"
+      "seed": 260005,
+      "path": "public/icons/cyberpunk/git/resolve-git-conflicts.webp",
+      "status": "done"
     },
     {
       "skillId": "create-github-release",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, release tag, download package, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 250006,
-      "path": "public/icons/git/create-github-release.webp",
-      "status": "pending"
+      "seed": 260006,
+      "path": "public/icons/cyberpunk/git/create-github-release.webp",
+      "status": "done"
     },
     {
       "skillId": "create-github-issues",
       "domain": "git",
       "prompt": "Glowing branch tree, commit graph nodes, Create, GitHub, Issues, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 250007,
-      "path": "public/icons/git/create-github-issues.webp",
-      "status": "pending"
+      "seed": 260007,
+      "path": "public/icons/cyberpunk/git/create-github-issues.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-kernel-bottleneck",
       "domain": "gpu-optimization",
       "prompt": "GPU kernel performance analysis, software pipelining, and SASS-level optimization, Analyze, Kernel, Bottleneck, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 260001,
-      "path": "public/icons/gpu-optimization/analyze-kernel-bottleneck.webp",
-      "status": "pending"
+      "seed": 270001,
+      "path": "public/icons/cyberpunk/gpu-optimization/analyze-kernel-bottleneck.webp",
+      "status": "done"
     },
     {
       "skillId": "pipeline-gpu-kernel",
       "domain": "gpu-optimization",
       "prompt": "GPU kernel performance analysis, software pipelining, and SASS-level optimization, Pipeline, GPU, Kernel, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 260002,
-      "path": "public/icons/gpu-optimization/pipeline-gpu-kernel.webp",
-      "status": "pending"
+      "seed": 270002,
+      "path": "public/icons/cyberpunk/gpu-optimization/pipeline-gpu-kernel.webp",
+      "status": "done"
     },
     {
       "skillId": "formulate-herbal-remedy",
       "domain": "hildegard",
       "prompt": "Medieval manuscript, herbal illustration, sacred music, mortar pestle, herb, medieval preparation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 270001,
-      "path": "public/icons/hildegard/formulate-herbal-remedy.webp",
-      "status": "pending"
+      "seed": 280001,
+      "path": "public/icons/cyberpunk/hildegard/formulate-herbal-remedy.webp",
+      "status": "done"
     },
     {
       "skillId": "assess-holistic-health",
       "domain": "hildegard",
       "prompt": "Medieval manuscript, herbal illustration, sacred music, four humors, temperament wheel, balance, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 270002,
-      "path": "public/icons/hildegard/assess-holistic-health.webp",
-      "status": "pending"
+      "seed": 280002,
+      "path": "public/icons/cyberpunk/hildegard/assess-holistic-health.webp",
+      "status": "done"
     },
     {
       "skillId": "compose-sacred-music",
       "domain": "hildegard",
       "prompt": "Medieval manuscript, herbal illustration, sacred music, neume notation, antiphon, modal music, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 270003,
-      "path": "public/icons/hildegard/compose-sacred-music.webp",
-      "status": "pending"
+      "seed": 280003,
+      "path": "public/icons/cyberpunk/hildegard/compose-sacred-music.webp",
+      "status": "done"
     },
     {
       "skillId": "practice-viriditas",
       "domain": "hildegard",
       "prompt": "Medieval manuscript, herbal illustration, sacred music, green spiral, viriditas power, living green, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 270004,
-      "path": "public/icons/hildegard/practice-viriditas.webp",
-      "status": "pending"
+      "seed": 280004,
+      "path": "public/icons/cyberpunk/hildegard/practice-viriditas.webp",
+      "status": "done"
     },
     {
       "skillId": "consult-natural-history",
       "domain": "hildegard",
       "prompt": "Medieval manuscript, herbal illustration, sacred music, illustrated manuscript, plant, stone, Physica, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 270005,
-      "path": "public/icons/hildegard/consult-natural-history.webp",
-      "status": "pending"
+      "seed": 280005,
+      "path": "public/icons/cyberpunk/hildegard/consult-natural-history.webp",
+      "status": "done"
     },
     {
       "skillId": "translate-content",
       "domain": "i18n",
       "prompt": "Globe with language flags, translation arrow, locale code, Translate, Content, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 280001,
-      "path": "public/icons/i18n/translate-content.webp",
-      "status": "pending"
+      "seed": 290001,
+      "path": "public/icons/cyberpunk/i18n/translate-content.webp",
+      "status": "done"
     },
     {
       "skillId": "assess-ip-landscape",
       "domain": "intellectual-property",
       "prompt": "Patent document, trademark symbol, claim scope, Assess, Landscape, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 290001,
-      "path": "public/icons/intellectual-property/assess-ip-landscape.webp",
-      "status": "pending"
+      "seed": 300001,
+      "path": "public/icons/cyberpunk/intellectual-property/assess-ip-landscape.webp",
+      "status": "done"
     },
     {
       "skillId": "search-prior-art",
       "domain": "intellectual-property",
       "prompt": "Patent document, trademark symbol, claim scope, Search, Prior, Art, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 290002,
-      "path": "public/icons/intellectual-property/search-prior-art.webp",
-      "status": "pending"
+      "seed": 300002,
+      "path": "public/icons/cyberpunk/intellectual-property/search-prior-art.webp",
+      "status": "done"
     },
     {
       "skillId": "screen-trademark",
       "domain": "intellectual-property",
       "prompt": "Patent document, trademark symbol, claim scope, Screen, Trademark, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 290003,
-      "path": "public/icons/intellectual-property/screen-trademark.webp",
-      "status": "pending"
+      "seed": 300003,
+      "path": "public/icons/cyberpunk/intellectual-property/screen-trademark.webp",
+      "status": "done"
     },
     {
       "skillId": "file-trademark",
       "domain": "intellectual-property",
       "prompt": "Patent document, trademark symbol, claim scope, File, Trademark, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 290004,
-      "path": "public/icons/intellectual-property/file-trademark.webp",
-      "status": "pending"
+      "seed": 300004,
+      "path": "public/icons/cyberpunk/intellectual-property/file-trademark.webp",
+      "status": "done"
     },
     {
       "skillId": "headless-web-scraping",
       "domain": "intellectual-property",
       "prompt": "Patent document, trademark symbol, claim scope, Headless, Web, Scraping, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 290005,
-      "path": "public/icons/intellectual-property/headless-web-scraping.webp",
-      "status": "pending"
+      "seed": 300005,
+      "path": "public/icons/cyberpunk/intellectual-property/headless-web-scraping.webp",
+      "status": "done"
     },
     {
       "skillId": "generate-puzzle",
       "domain": "jigsawr",
       "prompt": "Jigsaw puzzle piece, tessellation grid, interlocking shapes, Generate, Puzzle, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 300001,
-      "path": "public/icons/jigsawr/generate-puzzle.webp",
-      "status": "pending"
+      "seed": 310001,
+      "path": "public/icons/cyberpunk/jigsawr/generate-puzzle.webp",
+      "status": "done"
     },
     {
       "skillId": "add-puzzle-type",
       "domain": "jigsawr",
       "prompt": "Jigsaw puzzle piece, tessellation grid, interlocking shapes, Add, Puzzle, Type, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 300002,
-      "path": "public/icons/jigsawr/add-puzzle-type.webp",
-      "status": "pending"
+      "seed": 310002,
+      "path": "public/icons/cyberpunk/jigsawr/add-puzzle-type.webp",
+      "status": "done"
     },
     {
       "skillId": "render-puzzle-docs",
       "domain": "jigsawr",
       "prompt": "Jigsaw puzzle piece, tessellation grid, interlocking shapes, Render, Puzzle, Docs, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 300003,
-      "path": "public/icons/jigsawr/render-puzzle-docs.webp",
-      "status": "pending"
+      "seed": 310003,
+      "path": "public/icons/cyberpunk/jigsawr/render-puzzle-docs.webp",
+      "status": "done"
     },
     {
       "skillId": "run-puzzle-tests",
       "domain": "jigsawr",
       "prompt": "Jigsaw puzzle piece, tessellation grid, interlocking shapes, Run, Puzzle, Tests, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 300004,
-      "path": "public/icons/jigsawr/run-puzzle-tests.webp",
-      "status": "pending"
+      "seed": 310004,
+      "path": "public/icons/cyberpunk/jigsawr/run-puzzle-tests.webp",
+      "status": "done"
     },
     {
       "skillId": "validate-piles-notation",
       "domain": "jigsawr",
       "prompt": "Jigsaw puzzle piece, tessellation grid, interlocking shapes, Validate, PILES, Notation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 300005,
-      "path": "public/icons/jigsawr/validate-piles-notation.webp",
-      "status": "pending"
+      "seed": 310005,
+      "path": "public/icons/cyberpunk/jigsawr/validate-piles-notation.webp",
+      "status": "done"
     },
     {
       "skillId": "identify-gemstone",
       "domain": "lapidary",
       "prompt": "Cut gemstone, faceting diagram, polishing lap, Identify, Gemstone, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 310001,
-      "path": "public/icons/lapidary/identify-gemstone.webp",
-      "status": "pending"
+      "seed": 320001,
+      "path": "public/icons/cyberpunk/lapidary/identify-gemstone.webp",
+      "status": "done"
     },
     {
       "skillId": "cut-gemstone",
       "domain": "lapidary",
       "prompt": "Cut gemstone, faceting diagram, polishing lap, Cut, Gemstone, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 310002,
-      "path": "public/icons/lapidary/cut-gemstone.webp",
-      "status": "pending"
+      "seed": 320002,
+      "path": "public/icons/cyberpunk/lapidary/cut-gemstone.webp",
+      "status": "done"
     },
     {
       "skillId": "polish-gemstone",
       "domain": "lapidary",
       "prompt": "Cut gemstone, faceting diagram, polishing lap, Polish, Gemstone, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 310003,
-      "path": "public/icons/lapidary/polish-gemstone.webp",
-      "status": "pending"
+      "seed": 320003,
+      "path": "public/icons/cyberpunk/lapidary/polish-gemstone.webp",
+      "status": "done"
     },
     {
       "skillId": "appraise-gemstone",
       "domain": "lapidary",
       "prompt": "Cut gemstone, faceting diagram, polishing lap, Appraise, Gemstone, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 310004,
-      "path": "public/icons/lapidary/appraise-gemstone.webp",
-      "status": "pending"
+      "seed": 320004,
+      "path": "public/icons/cyberpunk/lapidary/appraise-gemstone.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-magnetic-levitation",
       "domain": "levitation",
       "prompt": "Floating object, standing wave, magnetic suspension, maglev float, superconductor, magnetic gap, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 320001,
-      "path": "public/icons/levitation/analyze-magnetic-levitation.webp",
-      "status": "pending"
+      "seed": 330001,
+      "path": "public/icons/cyberpunk/levitation/analyze-magnetic-levitation.webp",
+      "status": "done"
     },
     {
       "skillId": "design-acoustic-levitation",
       "domain": "levitation",
       "prompt": "Floating object, standing wave, magnetic suspension, standing wave, acoustic node, trapped particle, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 320002,
-      "path": "public/icons/levitation/design-acoustic-levitation.webp",
-      "status": "pending"
+      "seed": 330002,
+      "path": "public/icons/cyberpunk/levitation/design-acoustic-levitation.webp",
+      "status": "done"
     },
     {
       "skillId": "evaluate-levitation-mechanism",
       "domain": "levitation",
       "prompt": "Floating object, standing wave, magnetic suspension, comparison table, levitation methods, tradeoff, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 320003,
-      "path": "public/icons/levitation/evaluate-levitation-mechanism.webp",
-      "status": "pending"
+      "seed": 330003,
+      "path": "public/icons/cyberpunk/levitation/evaluate-levitation-mechanism.webp",
+      "status": "done"
     },
     {
       "skillId": "catalog-collection",
       "domain": "library-science",
       "prompt": "Card catalog, book spine, classification number, Catalog, Collection, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 330001,
-      "path": "public/icons/library-science/catalog-collection.webp",
-      "status": "pending"
+      "seed": 340001,
+      "path": "public/icons/cyberpunk/library-science/catalog-collection.webp",
+      "status": "done"
     },
     {
       "skillId": "preserve-materials",
       "domain": "library-science",
       "prompt": "Card catalog, book spine, classification number, Preserve, Materials, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 330002,
-      "path": "public/icons/library-science/preserve-materials.webp",
-      "status": "pending"
+      "seed": 340002,
+      "path": "public/icons/cyberpunk/library-science/preserve-materials.webp",
+      "status": "done"
     },
     {
       "skillId": "curate-collection",
       "domain": "library-science",
       "prompt": "Card catalog, book spine, classification number, Curate, Collection, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 330003,
-      "path": "public/icons/library-science/curate-collection.webp",
-      "status": "pending"
+      "seed": 340003,
+      "path": "public/icons/cyberpunk/library-science/curate-collection.webp",
+      "status": "done"
     },
     {
       "skillId": "research-word-etymology",
       "domain": "linguistics",
       "prompt": "Etymology tree, proto-language root, semantic drift arrow, Research, Word, Etymology, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 340001,
-      "path": "public/icons/linguistics/research-word-etymology.webp",
-      "status": "pending"
+      "seed": 350001,
+      "path": "public/icons/cyberpunk/linguistics/research-word-etymology.webp",
+      "status": "done"
     },
     {
       "skillId": "clean-codebase",
       "domain": "maintenance",
       "prompt": "Broom and mop, tidy workspace, cleanup tools, broom, dead code sweep, lint cleanup, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 350001,
-      "path": "public/icons/maintenance/clean-codebase.webp",
-      "status": "pending"
+      "seed": 360001,
+      "path": "public/icons/cyberpunk/maintenance/clean-codebase.webp",
+      "status": "done"
     },
     {
       "skillId": "tidy-project-structure",
       "domain": "maintenance",
       "prompt": "Broom and mop, tidy workspace, cleanup tools, organized folders, tidy structure, convention, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 350002,
-      "path": "public/icons/maintenance/tidy-project-structure.webp",
-      "status": "pending"
+      "seed": 360002,
+      "path": "public/icons/cyberpunk/maintenance/tidy-project-structure.webp",
+      "status": "done"
     },
     {
       "skillId": "repair-broken-references",
       "domain": "maintenance",
       "prompt": "Broom and mop, tidy workspace, cleanup tools, broken link, repair chain, fix connection, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 350003,
-      "path": "public/icons/maintenance/repair-broken-references.webp",
-      "status": "pending"
+      "seed": 360003,
+      "path": "public/icons/cyberpunk/maintenance/repair-broken-references.webp",
+      "status": "done"
     },
     {
       "skillId": "audit-discovery-symlinks",
       "domain": "maintenance",
       "prompt": "Broom and mop, tidy workspace, cleanup tools, audit, discovery, symlinks, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 350004,
-      "path": "public/icons/maintenance/audit-discovery-symlinks.webp",
-      "status": "pending"
+      "seed": 360004,
+      "path": "public/icons/cyberpunk/maintenance/audit-discovery-symlinks.webp",
+      "status": "done"
     },
     {
       "skillId": "escalate-issues",
       "domain": "maintenance",
       "prompt": "Broom and mop, tidy workspace, cleanup tools, priority arrow, severity triage, escalation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 350005,
-      "path": "public/icons/maintenance/escalate-issues.webp",
-      "status": "pending"
+      "seed": 360005,
+      "path": "public/icons/cyberpunk/maintenance/escalate-issues.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-mcp-server",
       "domain": "mcp-integration",
       "prompt": "Glowing server nodes, connection plug, MCP config panel, server settings, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 360001,
-      "path": "public/icons/mcp-integration/configure-mcp-server.webp",
-      "status": "pending"
+      "seed": 370001,
+      "path": "public/icons/cyberpunk/mcp-integration/configure-mcp-server.webp",
+      "status": "done"
     },
     {
       "skillId": "build-custom-mcp-server",
       "domain": "mcp-integration",
       "prompt": "Glowing server nodes, connection plug, custom server build, tool palette, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 360002,
-      "path": "public/icons/mcp-integration/build-custom-mcp-server.webp",
-      "status": "pending"
+      "seed": 370002,
+      "path": "public/icons/cyberpunk/mcp-integration/build-custom-mcp-server.webp",
+      "status": "done"
     },
     {
       "skillId": "troubleshoot-mcp-connection",
       "domain": "mcp-integration",
       "prompt": "Glowing server nodes, connection plug, debug probe, broken connection repair, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 360003,
-      "path": "public/icons/mcp-integration/troubleshoot-mcp-connection.webp",
-      "status": "pending"
+      "seed": 370003,
+      "path": "public/icons/cyberpunk/mcp-integration/troubleshoot-mcp-connection.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-codebase-for-mcp",
       "domain": "mcp-integration",
       "prompt": "Glowing server nodes, connection plug, code scan, MCP tool opportunity, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 360004,
-      "path": "public/icons/mcp-integration/analyze-codebase-for-mcp.webp",
-      "status": "pending"
+      "seed": 370004,
+      "path": "public/icons/cyberpunk/mcp-integration/analyze-codebase-for-mcp.webp",
+      "status": "done"
     },
     {
       "skillId": "scaffold-mcp-server",
       "domain": "mcp-integration",
       "prompt": "Glowing server nodes, connection plug, scaffold frame, MCP server skeleton, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 360005,
-      "path": "public/icons/mcp-integration/scaffold-mcp-server.webp",
-      "status": "pending"
+      "seed": 370005,
+      "path": "public/icons/cyberpunk/mcp-integration/scaffold-mcp-server.webp",
+      "status": "done"
     },
     {
       "skillId": "cross-review-project",
       "domain": "mcp-integration",
       "prompt": "Glowing server nodes, connection plug, Cross, Review, Project, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 360006,
-      "path": "public/icons/mcp-integration/cross-review-project.webp",
-      "status": "pending"
+      "seed": 370006,
+      "path": "public/icons/cyberpunk/mcp-integration/cross-review-project.webp",
+      "status": "done"
     },
     {
       "skillId": "track-ml-experiments",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, MLflow logo, experiment log, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370001,
-      "path": "public/icons/mlops/track-ml-experiments.webp",
-      "status": "pending"
+      "seed": 380001,
+      "path": "public/icons/cyberpunk/mlops/track-ml-experiments.webp",
+      "status": "done"
     },
     {
       "skillId": "register-ml-model",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, model registry, stage transition, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370002,
-      "path": "public/icons/mlops/register-ml-model.webp",
-      "status": "pending"
+      "seed": 380002,
+      "path": "public/icons/cyberpunk/mlops/register-ml-model.webp",
+      "status": "done"
     },
     {
       "skillId": "deploy-ml-model-serving",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, model endpoint, serving container, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370003,
-      "path": "public/icons/mlops/deploy-ml-model-serving.webp",
-      "status": "pending"
+      "seed": 380003,
+      "path": "public/icons/cyberpunk/mlops/deploy-ml-model-serving.webp",
+      "status": "done"
     },
     {
       "skillId": "build-feature-store",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, feature table, feast icon, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370004,
-      "path": "public/icons/mlops/build-feature-store.webp",
-      "status": "pending"
+      "seed": 380004,
+      "path": "public/icons/cyberpunk/mlops/build-feature-store.webp",
+      "status": "done"
     },
     {
       "skillId": "version-ml-data",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, DVC version, data snapshot, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370005,
-      "path": "public/icons/mlops/version-ml-data.webp",
-      "status": "pending"
+      "seed": 380005,
+      "path": "public/icons/cyberpunk/mlops/version-ml-data.webp",
+      "status": "done"
     },
     {
       "skillId": "orchestrate-ml-pipeline",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, pipeline DAG, task flow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370006,
-      "path": "public/icons/mlops/orchestrate-ml-pipeline.webp",
-      "status": "pending"
+      "seed": 380006,
+      "path": "public/icons/cyberpunk/mlops/orchestrate-ml-pipeline.webp",
+      "status": "done"
     },
     {
       "skillId": "monitor-model-drift",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, drift curve, distribution shift, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370007,
-      "path": "public/icons/mlops/monitor-model-drift.webp",
-      "status": "pending"
+      "seed": 380007,
+      "path": "public/icons/cyberpunk/mlops/monitor-model-drift.webp",
+      "status": "done"
     },
     {
       "skillId": "run-ab-test-models",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, A/B split, model comparison, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370008,
-      "path": "public/icons/mlops/run-ab-test-models.webp",
-      "status": "pending"
+      "seed": 380008,
+      "path": "public/icons/cyberpunk/mlops/run-ab-test-models.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-automl-pipeline",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, AutoML optimizer, hyperparameter grid, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370009,
-      "path": "public/icons/mlops/setup-automl-pipeline.webp",
-      "status": "pending"
+      "seed": 380009,
+      "path": "public/icons/cyberpunk/mlops/setup-automl-pipeline.webp",
+      "status": "done"
     },
     {
       "skillId": "detect-anomalies-aiops",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, anomaly spike, AI detection, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370010,
-      "path": "public/icons/mlops/detect-anomalies-aiops.webp",
-      "status": "pending"
+      "seed": 380010,
+      "path": "public/icons/cyberpunk/mlops/detect-anomalies-aiops.webp",
+      "status": "done"
     },
     {
       "skillId": "forecast-operational-metrics",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, forecast curve, prediction line, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370011,
-      "path": "public/icons/mlops/forecast-operational-metrics.webp",
-      "status": "pending"
+      "seed": 380011,
+      "path": "public/icons/cyberpunk/mlops/forecast-operational-metrics.webp",
+      "status": "done"
     },
     {
       "skillId": "label-training-data",
       "domain": "mlops",
       "prompt": "Neural network nodes, brain circuit, labeling tool, annotation marker, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 370012,
-      "path": "public/icons/mlops/label-training-data.webp",
-      "status": "pending"
+      "seed": 380012,
+      "path": "public/icons/cyberpunk/mlops/label-training-data.webp",
+      "status": "done"
     },
     {
       "skillId": "assess-form",
       "domain": "morphic",
       "prompt": "Metamorphic stages, chrysalis, structural transformation, Assess, Form, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 380001,
-      "path": "public/icons/morphic/assess-form.webp",
-      "status": "pending"
+      "seed": 390001,
+      "path": "public/icons/cyberpunk/morphic/assess-form.webp",
+      "status": "done"
     },
     {
       "skillId": "adapt-architecture",
       "domain": "morphic",
       "prompt": "Metamorphic stages, chrysalis, structural transformation, Adapt, Architecture, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 380002,
-      "path": "public/icons/morphic/adapt-architecture.webp",
-      "status": "pending"
+      "seed": 390002,
+      "path": "public/icons/cyberpunk/morphic/adapt-architecture.webp",
+      "status": "done"
     },
     {
       "skillId": "dissolve-form",
       "domain": "morphic",
       "prompt": "Metamorphic stages, chrysalis, structural transformation, Dissolve, Form, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 380003,
-      "path": "public/icons/morphic/dissolve-form.webp",
-      "status": "pending"
+      "seed": 390003,
+      "path": "public/icons/cyberpunk/morphic/dissolve-form.webp",
+      "status": "done"
     },
     {
       "skillId": "repair-damage",
       "domain": "morphic",
       "prompt": "Metamorphic stages, chrysalis, structural transformation, Repair, Damage, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 380004,
-      "path": "public/icons/morphic/repair-damage.webp",
-      "status": "pending"
+      "seed": 390004,
+      "path": "public/icons/cyberpunk/morphic/repair-damage.webp",
+      "status": "done"
     },
     {
       "skillId": "shift-camouflage",
       "domain": "morphic",
       "prompt": "Metamorphic stages, chrysalis, structural transformation, Shift, Camouflage, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 380005,
-      "path": "public/icons/morphic/shift-camouflage.webp",
-      "status": "pending"
+      "seed": 390005,
+      "path": "public/icons/cyberpunk/morphic/shift-camouflage.webp",
+      "status": "done"
     },
     {
       "skillId": "assess-context",
       "domain": "morphic",
       "prompt": "Metamorphic stages, chrysalis, structural transformation, Assess, Context, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 380006,
-      "path": "public/icons/morphic/assess-context.webp",
-      "status": "pending"
+      "seed": 390006,
+      "path": "public/icons/cyberpunk/morphic/assess-context.webp",
+      "status": "done"
     },
     {
       "skillId": "bootstrap-agent-identity",
       "domain": "morphic",
       "prompt": "Metamorphic stages, chrysalis, structural transformation, identity rings, cold start, loading anchor, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 380007,
-      "path": "public/icons/morphic/bootstrap-agent-identity.webp",
-      "status": "pending"
+      "seed": 390007,
+      "path": "public/icons/cyberpunk/morphic/bootstrap-agent-identity.webp",
+      "status": "done"
     },
     {
       "skillId": "fungi-identification",
       "domain": "mycology",
       "prompt": "Mushroom cap, mycelium network, spore print, Fungi, Identification, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 390001,
-      "path": "public/icons/mycology/fungi-identification.webp",
-      "status": "pending"
+      "seed": 400001,
+      "path": "public/icons/cyberpunk/mycology/fungi-identification.webp",
+      "status": "done"
     },
     {
       "skillId": "mushroom-cultivation",
       "domain": "mycology",
       "prompt": "Mushroom cap, mycelium network, spore print, Mushroom, Cultivation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 390002,
-      "path": "public/icons/mycology/mushroom-cultivation.webp",
-      "status": "pending"
+      "seed": 400002,
+      "path": "public/icons/cyberpunk/mycology/mushroom-cultivation.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-prime-numbers",
       "domain": "number-theory",
       "prompt": "Prime spiral, modular arithmetic, number sequence, Analyze, Prime, Numbers, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 400001,
-      "path": "public/icons/number-theory/analyze-prime-numbers.webp",
-      "status": "pending"
+      "seed": 410001,
+      "path": "public/icons/cyberpunk/number-theory/analyze-prime-numbers.webp",
+      "status": "done"
     },
     {
       "skillId": "solve-modular-arithmetic",
       "domain": "number-theory",
       "prompt": "Prime spiral, modular arithmetic, number sequence, Solve, Modular, Arithmetic, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 400002,
-      "path": "public/icons/number-theory/solve-modular-arithmetic.webp",
-      "status": "pending"
+      "seed": 410002,
+      "path": "public/icons/cyberpunk/number-theory/solve-modular-arithmetic.webp",
+      "status": "done"
     },
     {
       "skillId": "explore-diophantine-equations",
       "domain": "number-theory",
       "prompt": "Prime spiral, modular arithmetic, number sequence, Explore, Diophantine, Equations, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 400003,
-      "path": "public/icons/number-theory/explore-diophantine-equations.webp",
-      "status": "pending"
+      "seed": 410003,
+      "path": "public/icons/cyberpunk/number-theory/explore-diophantine-equations.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-prometheus-monitoring",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, Prometheus fire, metrics scrape, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410001,
-      "path": "public/icons/observability/setup-prometheus-monitoring.webp",
-      "status": "pending"
+      "seed": 420001,
+      "path": "public/icons/cyberpunk/observability/setup-prometheus-monitoring.webp",
+      "status": "done"
     },
     {
       "skillId": "build-grafana-dashboards",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, Grafana panel, dashboard grid, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410002,
-      "path": "public/icons/observability/build-grafana-dashboards.webp",
-      "status": "pending"
+      "seed": 420002,
+      "path": "public/icons/cyberpunk/observability/build-grafana-dashboards.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-log-aggregation",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, log funnel, Loki stack, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410003,
-      "path": "public/icons/observability/configure-log-aggregation.webp",
-      "status": "pending"
+      "seed": 420003,
+      "path": "public/icons/cyberpunk/observability/configure-log-aggregation.webp",
+      "status": "done"
     },
     {
       "skillId": "instrument-distributed-tracing",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, trace spans, distributed path, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410004,
-      "path": "public/icons/observability/instrument-distributed-tracing.webp",
-      "status": "pending"
+      "seed": 420004,
+      "path": "public/icons/cyberpunk/observability/instrument-distributed-tracing.webp",
+      "status": "done"
     },
     {
       "skillId": "define-slo-sli-sla",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, SLO gauge, error budget bar, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410005,
-      "path": "public/icons/observability/define-slo-sli-sla.webp",
-      "status": "pending"
+      "seed": 420005,
+      "path": "public/icons/cyberpunk/observability/define-slo-sli-sla.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-alerting-rules",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, alert bell, routing tree, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410006,
-      "path": "public/icons/observability/configure-alerting-rules.webp",
-      "status": "pending"
+      "seed": 420006,
+      "path": "public/icons/cyberpunk/observability/configure-alerting-rules.webp",
+      "status": "done"
     },
     {
       "skillId": "write-incident-runbook",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, runbook steps, incident playbook, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410007,
-      "path": "public/icons/observability/write-incident-runbook.webp",
-      "status": "pending"
+      "seed": 420007,
+      "path": "public/icons/cyberpunk/observability/write-incident-runbook.webp",
+      "status": "done"
     },
     {
       "skillId": "conduct-post-mortem",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, timeline reconstruction, incident analysis, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410008,
-      "path": "public/icons/observability/conduct-post-mortem.webp",
-      "status": "pending"
+      "seed": 420008,
+      "path": "public/icons/cyberpunk/observability/conduct-post-mortem.webp",
+      "status": "done"
     },
     {
       "skillId": "plan-capacity",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, capacity forecast, growth curve, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410009,
-      "path": "public/icons/observability/plan-capacity.webp",
-      "status": "pending"
+      "seed": 420009,
+      "path": "public/icons/cyberpunk/observability/plan-capacity.webp",
+      "status": "done"
     },
     {
       "skillId": "design-on-call-rotation",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, rotation schedule, pager icon, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410010,
-      "path": "public/icons/observability/design-on-call-rotation.webp",
-      "status": "pending"
+      "seed": 420010,
+      "path": "public/icons/cyberpunk/observability/design-on-call-rotation.webp",
+      "status": "done"
     },
     {
       "skillId": "run-chaos-experiment",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, chaos monkey, resilience test, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410011,
-      "path": "public/icons/observability/run-chaos-experiment.webp",
-      "status": "pending"
+      "seed": 420011,
+      "path": "public/icons/cyberpunk/observability/run-chaos-experiment.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-uptime-checks",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, uptime heartbeat, probe signal, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410012,
-      "path": "public/icons/observability/setup-uptime-checks.webp",
-      "status": "pending"
+      "seed": 420012,
+      "path": "public/icons/cyberpunk/observability/setup-uptime-checks.webp",
+      "status": "done"
     },
     {
       "skillId": "correlate-observability-signals",
       "domain": "observability",
       "prompt": "Neon radar eye, signal wave pulse, unified signals, metric-log-trace, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 410013,
-      "path": "public/icons/observability/correlate-observability-signals.webp",
-      "status": "pending"
+      "seed": 420013,
+      "path": "public/icons/cyberpunk/observability/correlate-observability-signals.webp",
+      "status": "done"
+    },
+    {
+      "skillId": "evaluate-agent-framework",
+      "domain": "open-source",
+      "prompt": "Contribution graph, pull request, open license badge, Evaluate, Agent, Framework, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 430001,
+      "path": "public/icons/cyberpunk/open-source/evaluate-agent-framework.webp",
+      "status": "done"
     },
     {
       "skillId": "polish-claw-project",
       "domain": "open-source",
       "prompt": "Contribution graph, pull request, open license badge, Polish, Claw, Project, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 420001,
-      "path": "public/icons/open-source/polish-claw-project.webp",
-      "status": "pending"
+      "seed": 430002,
+      "path": "public/icons/cyberpunk/open-source/polish-claw-project.webp",
+      "status": "done"
     },
     {
       "skillId": "draft-project-charter",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, charter scroll, project scope, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 430001,
-      "path": "public/icons/project-management/draft-project-charter.webp",
-      "status": "pending"
+      "seed": 440001,
+      "path": "public/icons/cyberpunk/project-management/draft-project-charter.webp",
+      "status": "done"
     },
     {
       "skillId": "create-work-breakdown-structure",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, WBS tree, hierarchical boxes, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 430002,
-      "path": "public/icons/project-management/create-work-breakdown-structure.webp",
-      "status": "pending"
+      "seed": 440002,
+      "path": "public/icons/cyberpunk/project-management/create-work-breakdown-structure.webp",
+      "status": "done"
     },
     {
       "skillId": "plan-sprint",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, sprint board, velocity chart, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 430003,
-      "path": "public/icons/project-management/plan-sprint.webp",
-      "status": "pending"
+      "seed": 440003,
+      "path": "public/icons/cyberpunk/project-management/plan-sprint.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-backlog",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, backlog list, priority stack, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 430004,
-      "path": "public/icons/project-management/manage-backlog.webp",
-      "status": "pending"
+      "seed": 440004,
+      "path": "public/icons/cyberpunk/project-management/manage-backlog.webp",
+      "status": "done"
     },
     {
       "skillId": "generate-status-report",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, dashboard gauge, progress bar, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 430005,
-      "path": "public/icons/project-management/generate-status-report.webp",
-      "status": "pending"
+      "seed": 440005,
+      "path": "public/icons/cyberpunk/project-management/generate-status-report.webp",
+      "status": "done"
     },
     {
       "skillId": "conduct-retrospective",
       "domain": "project-management",
       "prompt": "Glowing Gantt chart, milestone markers, retro board, team reflection mirror, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 430006,
-      "path": "public/icons/project-management/conduct-retrospective.webp",
-      "status": "pending"
+      "seed": 440006,
+      "path": "public/icons/cyberpunk/project-management/conduct-retrospective.webp",
+      "status": "done"
     },
     {
       "skillId": "mineral-identification",
       "domain": "prospecting",
       "prompt": "Gold pan, mineral vein, geological cross-section, Mineral, Identification, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 440001,
-      "path": "public/icons/prospecting/mineral-identification.webp",
-      "status": "pending"
+      "seed": 450001,
+      "path": "public/icons/cyberpunk/prospecting/mineral-identification.webp",
+      "status": "done"
     },
     {
       "skillId": "gold-washing",
       "domain": "prospecting",
       "prompt": "Gold pan, mineral vein, geological cross-section, Gold, Washing, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 440002,
-      "path": "public/icons/prospecting/gold-washing.webp",
-      "status": "pending"
+      "seed": 450002,
+      "path": "public/icons/cyberpunk/prospecting/gold-washing.webp",
+      "status": "done"
     },
     {
       "skillId": "create-r-package",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, scaffolding, package box, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450001,
-      "path": "public/icons/r-packages/create-r-package.webp",
-      "status": "pending"
+      "seed": 460001,
+      "path": "public/icons/cyberpunk/r-packages/create-r-package.webp",
+      "status": "done"
     },
     {
       "skillId": "submit-to-cran",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, upload arrow, checkmark stamp, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450002,
-      "path": "public/icons/r-packages/submit-to-cran.webp",
-      "status": "pending"
+      "seed": 460002,
+      "path": "public/icons/cyberpunk/r-packages/submit-to-cran.webp",
+      "status": "done"
     },
     {
       "skillId": "write-roxygen-docs",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, documentation scroll, pen nib, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450003,
-      "path": "public/icons/r-packages/write-roxygen-docs.webp",
-      "status": "pending"
+      "seed": 460003,
+      "path": "public/icons/cyberpunk/r-packages/write-roxygen-docs.webp",
+      "status": "done"
     },
     {
       "skillId": "write-testthat-tests",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, test tubes, assertion checkmark, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450004,
-      "path": "public/icons/r-packages/write-testthat-tests.webp",
-      "status": "pending"
+      "seed": 460004,
+      "path": "public/icons/cyberpunk/r-packages/write-testthat-tests.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-github-actions-ci",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, GitHub octocat, workflow arrows, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450005,
-      "path": "public/icons/r-packages/setup-github-actions-ci.webp",
-      "status": "pending"
+      "seed": 460005,
+      "path": "public/icons/cyberpunk/r-packages/setup-github-actions-ci.webp",
+      "status": "done"
     },
     {
       "skillId": "build-pkgdown-site",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, website wireframe, book pages, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450006,
-      "path": "public/icons/r-packages/build-pkgdown-site.webp",
-      "status": "pending"
+      "seed": 460006,
+      "path": "public/icons/cyberpunk/r-packages/build-pkgdown-site.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-renv-dependencies",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, dependency tree, lock icon, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450007,
-      "path": "public/icons/r-packages/manage-renv-dependencies.webp",
-      "status": "pending"
+      "seed": 460007,
+      "path": "public/icons/cyberpunk/r-packages/manage-renv-dependencies.webp",
+      "status": "done"
     },
     {
       "skillId": "add-rcpp-integration",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, C++ gears, bridge connector, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450008,
-      "path": "public/icons/r-packages/add-rcpp-integration.webp",
-      "status": "pending"
+      "seed": 460008,
+      "path": "public/icons/cyberpunk/r-packages/add-rcpp-integration.webp",
+      "status": "done"
     },
     {
       "skillId": "write-vignette",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, long document, tutorial scroll, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450009,
-      "path": "public/icons/r-packages/write-vignette.webp",
-      "status": "pending"
+      "seed": 460009,
+      "path": "public/icons/cyberpunk/r-packages/write-vignette.webp",
+      "status": "done"
     },
     {
       "skillId": "release-package-version",
       "domain": "r-packages",
       "prompt": "Glowing hexagonal R logo, circuit board traces, version tag, rocket launch, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 450010,
-      "path": "public/icons/r-packages/release-package-version.webp",
-      "status": "pending"
+      "seed": 460010,
+      "path": "public/icons/cyberpunk/r-packages/release-package-version.webp",
+      "status": "done"
     },
     {
       "skillId": "plan-eu-relocation",
       "domain": "relocation",
       "prompt": "Glowing moving box, passport stamp, border crossing, EU map, relocation timeline, dependency flow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460001,
-      "path": "public/icons/relocation/plan-eu-relocation.webp",
-      "status": "pending"
+      "seed": 470001,
+      "path": "public/icons/cyberpunk/relocation/plan-eu-relocation.webp",
+      "status": "done"
     },
     {
       "skillId": "check-relocation-documents",
       "domain": "relocation",
       "prompt": "Glowing moving box, passport stamp, border crossing, passport, document verification, checkmark, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460002,
-      "path": "public/icons/relocation/check-relocation-documents.webp",
-      "status": "pending"
+      "seed": 470002,
+      "path": "public/icons/cyberpunk/relocation/check-relocation-documents.webp",
+      "status": "done"
     },
     {
       "skillId": "navigate-dach-bureaucracy",
       "domain": "relocation",
       "prompt": "Glowing moving box, passport stamp, border crossing, German forms, bureaucratic steps, stamp, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 460003,
-      "path": "public/icons/relocation/navigate-dach-bureaucracy.webp",
-      "status": "pending"
+      "seed": 470003,
+      "path": "public/icons/cyberpunk/relocation/navigate-dach-bureaucracy.webp",
+      "status": "done"
     },
     {
       "skillId": "create-quarto-report",
       "domain": "reporting",
       "prompt": "Glowing chart, document with data, Quarto diamond, rendered document, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 470001,
-      "path": "public/icons/reporting/create-quarto-report.webp",
-      "status": "pending"
+      "seed": 480001,
+      "path": "public/icons/cyberpunk/reporting/create-quarto-report.webp",
+      "status": "done"
     },
     {
       "skillId": "format-apa-report",
       "domain": "reporting",
       "prompt": "Glowing chart, document with data, academic paper, formatted citation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 470002,
-      "path": "public/icons/reporting/format-apa-report.webp",
-      "status": "pending"
+      "seed": 480002,
+      "path": "public/icons/cyberpunk/reporting/format-apa-report.webp",
+      "status": "done"
     },
     {
       "skillId": "build-parameterized-report",
       "domain": "reporting",
       "prompt": "Glowing chart, document with data, template with parameters, gears, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 470003,
-      "path": "public/icons/reporting/build-parameterized-report.webp",
-      "status": "pending"
+      "seed": 480003,
+      "path": "public/icons/cyberpunk/reporting/build-parameterized-report.webp",
+      "status": "done"
     },
     {
       "skillId": "generate-statistical-tables",
       "domain": "reporting",
       "prompt": "Glowing chart, document with data, Generate, Statistical, Tables, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 470004,
-      "path": "public/icons/reporting/generate-statistical-tables.webp",
-      "status": "pending"
+      "seed": 480004,
+      "path": "public/icons/cyberpunk/reporting/generate-statistical-tables.webp",
+      "status": "done"
     },
     {
       "skillId": "review-research",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, research paper, peer review lens, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480001,
-      "path": "public/icons/review/review-research.webp",
-      "status": "pending"
+      "seed": 490001,
+      "path": "public/icons/cyberpunk/review/review-research.webp",
+      "status": "done"
     },
     {
       "skillId": "review-data-analysis",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, data chart, analysis magnifier, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480002,
-      "path": "public/icons/review/review-data-analysis.webp",
-      "status": "pending"
+      "seed": 490002,
+      "path": "public/icons/cyberpunk/review/review-data-analysis.webp",
+      "status": "done"
     },
     {
       "skillId": "review-software-architecture",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, architecture diagram, review eye, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480003,
-      "path": "public/icons/review/review-software-architecture.webp",
-      "status": "pending"
+      "seed": 490003,
+      "path": "public/icons/cyberpunk/review/review-software-architecture.webp",
+      "status": "done"
     },
     {
       "skillId": "review-web-design",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, web layout, design review palette, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480004,
-      "path": "public/icons/review/review-web-design.webp",
-      "status": "pending"
+      "seed": 490004,
+      "path": "public/icons/cyberpunk/review/review-web-design.webp",
+      "status": "done"
     },
     {
       "skillId": "review-ux-ui",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, user interface, usability heuristic, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480005,
-      "path": "public/icons/review/review-ux-ui.webp",
-      "status": "pending"
+      "seed": 490005,
+      "path": "public/icons/cyberpunk/review/review-ux-ui.webp",
+      "status": "done"
     },
     {
       "skillId": "review-pull-request",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, Review, Pull, Request, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480006,
-      "path": "public/icons/review/review-pull-request.webp",
-      "status": "pending"
+      "seed": 490006,
+      "path": "public/icons/cyberpunk/review/review-pull-request.webp",
+      "status": "done"
     },
     {
       "skillId": "review-skill-format",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, skill document, format validation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480007,
-      "path": "public/icons/review/review-skill-format.webp",
-      "status": "pending"
+      "seed": 490007,
+      "path": "public/icons/cyberpunk/review/review-skill-format.webp",
+      "status": "done"
     },
     {
       "skillId": "update-skill-content",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, skill file, content update arrow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480008,
-      "path": "public/icons/review/update-skill-content.webp",
-      "status": "pending"
+      "seed": 490008,
+      "path": "public/icons/cyberpunk/review/update-skill-content.webp",
+      "status": "done"
     },
     {
       "skillId": "refactor-skill-structure",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, skill structure, refactor arrows, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480009,
-      "path": "public/icons/review/refactor-skill-structure.webp",
-      "status": "pending"
+      "seed": 490009,
+      "path": "public/icons/cyberpunk/review/refactor-skill-structure.webp",
+      "status": "done"
     },
     {
       "skillId": "review-codebase",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, Review, Codebase, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480010,
-      "path": "public/icons/review/review-codebase.webp",
-      "status": "pending"
+      "seed": 490010,
+      "path": "public/icons/cyberpunk/review/review-codebase.webp",
+      "status": "done"
     },
     {
       "skillId": "test-team-coordination",
       "domain": "review",
       "prompt": "Glowing magnifying glass, code lens, team test nodes, coordination check, validation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 480011,
-      "path": "public/icons/review/test-team-coordination.webp",
-      "status": "pending"
+      "seed": 490011,
+      "path": "public/icons/cyberpunk/review/test-team-coordination.webp",
+      "status": "done"
     },
     {
       "skillId": "scaffold-shiny-app",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Scaffold, Shiny, App, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490001,
-      "path": "public/icons/shiny/scaffold-shiny-app.webp",
-      "status": "pending"
+      "seed": 500001,
+      "path": "public/icons/cyberpunk/shiny/scaffold-shiny-app.webp",
+      "status": "done"
     },
     {
       "skillId": "build-shiny-module",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Build, Shiny, Module, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490002,
-      "path": "public/icons/shiny/build-shiny-module.webp",
-      "status": "pending"
+      "seed": 500002,
+      "path": "public/icons/cyberpunk/shiny/build-shiny-module.webp",
+      "status": "done"
     },
     {
       "skillId": "test-shiny-app",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Test, Shiny, App, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490003,
-      "path": "public/icons/shiny/test-shiny-app.webp",
-      "status": "pending"
+      "seed": 500003,
+      "path": "public/icons/cyberpunk/shiny/test-shiny-app.webp",
+      "status": "done"
     },
     {
       "skillId": "deploy-shiny-app",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Deploy, Shiny, App, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490004,
-      "path": "public/icons/shiny/deploy-shiny-app.webp",
-      "status": "pending"
+      "seed": 500004,
+      "path": "public/icons/cyberpunk/shiny/deploy-shiny-app.webp",
+      "status": "done"
     },
     {
       "skillId": "optimize-shiny-performance",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Optimize, Shiny, Performance, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490005,
-      "path": "public/icons/shiny/optimize-shiny-performance.webp",
-      "status": "pending"
+      "seed": 500005,
+      "path": "public/icons/cyberpunk/shiny/optimize-shiny-performance.webp",
+      "status": "done"
     },
     {
       "skillId": "design-shiny-ui",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Design, Shiny, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490006,
-      "path": "public/icons/shiny/design-shiny-ui.webp",
-      "status": "pending"
+      "seed": 500006,
+      "path": "public/icons/cyberpunk/shiny/design-shiny-ui.webp",
+      "status": "done"
     },
     {
       "skillId": "deploy-shinyproxy",
       "domain": "shiny",
       "prompt": "Reactive web app, slider input, dashboard panel, Deploy, ShinyProxy, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 490007,
-      "path": "public/icons/shiny/deploy-shinyproxy.webp",
-      "status": "pending"
+      "seed": 500007,
+      "path": "public/icons/cyberpunk/shiny/deploy-shinyproxy.webp",
+      "status": "done"
     },
     {
       "skillId": "interpret-nmr-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, NMR, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500001,
-      "path": "public/icons/spectroscopy/interpret-nmr-spectrum.webp",
-      "status": "pending"
+      "seed": 510001,
+      "path": "public/icons/cyberpunk/spectroscopy/interpret-nmr-spectrum.webp",
+      "status": "done"
     },
     {
       "skillId": "interpret-ir-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500002,
-      "path": "public/icons/spectroscopy/interpret-ir-spectrum.webp",
-      "status": "pending"
+      "seed": 510002,
+      "path": "public/icons/cyberpunk/spectroscopy/interpret-ir-spectrum.webp",
+      "status": "done"
     },
     {
       "skillId": "interpret-mass-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, Mass, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500003,
-      "path": "public/icons/spectroscopy/interpret-mass-spectrum.webp",
-      "status": "pending"
+      "seed": 510003,
+      "path": "public/icons/cyberpunk/spectroscopy/interpret-mass-spectrum.webp",
+      "status": "done"
     },
     {
       "skillId": "interpret-uv-vis-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, Vis, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500004,
-      "path": "public/icons/spectroscopy/interpret-uv-vis-spectrum.webp",
-      "status": "pending"
+      "seed": 510004,
+      "path": "public/icons/cyberpunk/spectroscopy/interpret-uv-vis-spectrum.webp",
+      "status": "done"
     },
     {
       "skillId": "interpret-raman-spectrum",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Interpret, Raman, Spectrum, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500005,
-      "path": "public/icons/spectroscopy/interpret-raman-spectrum.webp",
-      "status": "pending"
+      "seed": 510005,
+      "path": "public/icons/cyberpunk/spectroscopy/interpret-raman-spectrum.webp",
+      "status": "done"
     },
     {
       "skillId": "plan-spectroscopic-analysis",
       "domain": "spectroscopy",
       "prompt": "Absorption spectrum, wavelength peaks, spectral lines, Plan, Spectroscopic, Analysis, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 500006,
-      "path": "public/icons/spectroscopy/plan-spectroscopic-analysis.webp",
-      "status": "pending"
+      "seed": 510006,
+      "path": "public/icons/cyberpunk/spectroscopy/plan-spectroscopic-analysis.webp",
+      "status": "done"
     },
     {
       "skillId": "model-markov-chain",
       "domain": "stochastic-processes",
       "prompt": "Random walk path, probability distribution, Markov chain, state graph, transition arrows, steady state, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510001,
-      "path": "public/icons/stochastic-processes/model-markov-chain.webp",
-      "status": "pending"
+      "seed": 520001,
+      "path": "public/icons/cyberpunk/stochastic-processes/model-markov-chain.webp",
+      "status": "done"
     },
     {
       "skillId": "fit-hidden-markov-model",
       "domain": "stochastic-processes",
       "prompt": "Random walk path, probability distribution, Markov chain, hidden states, observation layer, Viterbi, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510002,
-      "path": "public/icons/stochastic-processes/fit-hidden-markov-model.webp",
-      "status": "pending"
+      "seed": 520002,
+      "path": "public/icons/cyberpunk/stochastic-processes/fit-hidden-markov-model.webp",
+      "status": "done"
     },
     {
       "skillId": "simulate-stochastic-process",
       "domain": "stochastic-processes",
       "prompt": "Random walk path, probability distribution, Markov chain, random walk, simulation path, Monte Carlo, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 510003,
-      "path": "public/icons/stochastic-processes/simulate-stochastic-process.webp",
-      "status": "pending"
+      "seed": 520003,
+      "path": "public/icons/cyberpunk/stochastic-processes/simulate-stochastic-process.webp",
+      "status": "done"
     },
     {
       "skillId": "coordinate-swarm",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Coordinate, Swarm, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520001,
-      "path": "public/icons/swarm/coordinate-swarm.webp",
-      "status": "pending"
+      "seed": 530001,
+      "path": "public/icons/cyberpunk/swarm/coordinate-swarm.webp",
+      "status": "done"
     },
     {
       "skillId": "forage-resources",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Forage, Resources, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520002,
-      "path": "public/icons/swarm/forage-resources.webp",
-      "status": "pending"
+      "seed": 530002,
+      "path": "public/icons/cyberpunk/swarm/forage-resources.webp",
+      "status": "done"
     },
     {
       "skillId": "build-consensus",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Build, Consensus, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520003,
-      "path": "public/icons/swarm/build-consensus.webp",
-      "status": "pending"
+      "seed": 530003,
+      "path": "public/icons/cyberpunk/swarm/build-consensus.webp",
+      "status": "done"
     },
     {
       "skillId": "defend-colony",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Defend, Colony, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520004,
-      "path": "public/icons/swarm/defend-colony.webp",
-      "status": "pending"
+      "seed": 530004,
+      "path": "public/icons/cyberpunk/swarm/defend-colony.webp",
+      "status": "done"
     },
     {
       "skillId": "scale-colony",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Scale, Colony, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520005,
-      "path": "public/icons/swarm/scale-colony.webp",
-      "status": "pending"
+      "seed": 530005,
+      "path": "public/icons/cyberpunk/swarm/scale-colony.webp",
+      "status": "done"
     },
     {
       "skillId": "forage-solutions",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Forage, Solutions, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520006,
-      "path": "public/icons/swarm/forage-solutions.webp",
-      "status": "pending"
+      "seed": 530006,
+      "path": "public/icons/cyberpunk/swarm/forage-solutions.webp",
+      "status": "done"
     },
     {
       "skillId": "build-coherence",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Build, Coherence, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520007,
-      "path": "public/icons/swarm/build-coherence.webp",
-      "status": "pending"
+      "seed": 530007,
+      "path": "public/icons/cyberpunk/swarm/build-coherence.webp",
+      "status": "done"
     },
     {
       "skillId": "coordinate-reasoning",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Coordinate, Reasoning, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520008,
-      "path": "public/icons/swarm/coordinate-reasoning.webp",
-      "status": "pending"
+      "seed": 530008,
+      "path": "public/icons/cyberpunk/swarm/coordinate-reasoning.webp",
+      "status": "done"
     },
     {
       "skillId": "unleash-the-agents",
       "domain": "swarm",
       "prompt": "Ant colony trail, swarm nodes, collective formation, Unleash, Agents, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 520009,
-      "path": "public/icons/swarm/unleash-the-agents.webp",
-      "status": "pending"
+      "seed": 530009,
+      "path": "public/icons/cyberpunk/swarm/unleash-the-agents.webp",
+      "status": "done"
     },
     {
       "skillId": "expand-awareness",
       "domain": "synoptic",
       "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Expand, Awareness, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530001,
-      "path": "public/icons/synoptic/expand-awareness.webp",
-      "status": "pending"
+      "seed": 540001,
+      "path": "public/icons/cyberpunk/synoptic/expand-awareness.webp",
+      "status": "done"
     },
     {
       "skillId": "integrate-gestalt",
       "domain": "synoptic",
       "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Integrate, Gestalt, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530002,
-      "path": "public/icons/synoptic/integrate-gestalt.webp",
-      "status": "pending"
+      "seed": 540002,
+      "path": "public/icons/cyberpunk/synoptic/integrate-gestalt.webp",
+      "status": "done"
     },
     {
       "skillId": "express-insight",
       "domain": "synoptic",
       "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Express, Insight, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530003,
-      "path": "public/icons/synoptic/express-insight.webp",
-      "status": "pending"
+      "seed": 540003,
+      "path": "public/icons/cyberpunk/synoptic/express-insight.webp",
+      "status": "done"
     },
     {
       "skillId": "adaptic",
       "domain": "synoptic",
       "prompt": "Panoramic eye, expanding awareness circles, gestalt integration, Adaptic, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 530004,
-      "path": "public/icons/synoptic/adaptic.webp",
-      "status": "pending"
+      "seed": 540004,
+      "path": "public/icons/cyberpunk/synoptic/adaptic.webp",
+      "status": "done"
     },
     {
       "skillId": "grade-tcg-card",
       "domain": "tcg",
       "prompt": "Trading card, grading case, deck stack, Grade, TCG, Card, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 540001,
-      "path": "public/icons/tcg/grade-tcg-card.webp",
-      "status": "pending"
+      "seed": 550001,
+      "path": "public/icons/cyberpunk/tcg/grade-tcg-card.webp",
+      "status": "done"
     },
     {
       "skillId": "build-tcg-deck",
       "domain": "tcg",
       "prompt": "Trading card, grading case, deck stack, Build, TCG, Deck, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 540002,
-      "path": "public/icons/tcg/build-tcg-deck.webp",
-      "status": "pending"
+      "seed": 550002,
+      "path": "public/icons/cyberpunk/tcg/build-tcg-deck.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-tcg-collection",
       "domain": "tcg",
       "prompt": "Trading card, grading case, deck stack, Manage, TCG, Collection, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 540003,
-      "path": "public/icons/tcg/manage-tcg-collection.webp",
-      "status": "pending"
+      "seed": 550003,
+      "path": "public/icons/cyberpunk/tcg/manage-tcg-collection.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-tensegrity-system",
       "domain": "tensegrity",
       "prompt": "Compression strut, tension cable, geodesic node, structural balance, compression strut, tension cable, structural node, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 550001,
-      "path": "public/icons/tensegrity/analyze-tensegrity-system.webp",
-      "status": "pending"
+      "seed": 560001,
+      "path": "public/icons/cyberpunk/tensegrity/analyze-tensegrity-system.webp",
+      "status": "done"
     },
     {
       "skillId": "formulate-quantum-problem",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, psi wave function, quantum bracket, Hamiltonian, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560001,
-      "path": "public/icons/theoretical-science/formulate-quantum-problem.webp",
-      "status": "pending"
+      "seed": 570001,
+      "path": "public/icons/cyberpunk/theoretical-science/formulate-quantum-problem.webp",
+      "status": "done"
     },
     {
       "skillId": "derive-theoretical-result",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, derivation steps, proof chain, first principles, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560002,
-      "path": "public/icons/theoretical-science/derive-theoretical-result.webp",
-      "status": "pending"
+      "seed": 570002,
+      "path": "public/icons/cyberpunk/theoretical-science/derive-theoretical-result.webp",
+      "status": "done"
     },
     {
       "skillId": "survey-theoretical-literature",
       "domain": "theoretical-science",
       "prompt": "Quantum wave function, mathematical derivation, proof, papers stack, literature synthesis, survey, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 560003,
-      "path": "public/icons/theoretical-science/survey-theoretical-literature.webp",
-      "status": "pending"
+      "seed": 570003,
+      "path": "public/icons/cyberpunk/theoretical-science/survey-theoretical-literature.webp",
+      "status": "done"
     },
     {
       "skillId": "plan-tour-route",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, route path, waypoints, map optimization, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570001,
-      "path": "public/icons/travel/plan-tour-route.webp",
-      "status": "pending"
+      "seed": 580001,
+      "path": "public/icons/cyberpunk/travel/plan-tour-route.webp",
+      "status": "done"
     },
     {
       "skillId": "create-spatial-visualization",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, interactive map, elevation profile, spatial data, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570002,
-      "path": "public/icons/travel/create-spatial-visualization.webp",
-      "status": "pending"
+      "seed": 580002,
+      "path": "public/icons/cyberpunk/travel/create-spatial-visualization.webp",
+      "status": "done"
     },
     {
       "skillId": "generate-tour-report",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, tour document, map insert, itinerary, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570003,
-      "path": "public/icons/travel/generate-tour-report.webp",
-      "status": "pending"
+      "seed": 580003,
+      "path": "public/icons/cyberpunk/travel/generate-tour-report.webp",
+      "status": "done"
     },
     {
       "skillId": "plan-hiking-tour",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, mountain trail, hiking path, elevation, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570004,
-      "path": "public/icons/travel/plan-hiking-tour.webp",
-      "status": "pending"
+      "seed": 580004,
+      "path": "public/icons/cyberpunk/travel/plan-hiking-tour.webp",
+      "status": "done"
     },
     {
       "skillId": "check-hiking-gear",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, backpack, gear checklist, equipment, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570005,
-      "path": "public/icons/travel/check-hiking-gear.webp",
-      "status": "pending"
+      "seed": 580005,
+      "path": "public/icons/cyberpunk/travel/check-hiking-gear.webp",
+      "status": "done"
     },
     {
       "skillId": "assess-trail-conditions",
       "domain": "travel",
       "prompt": "Neon compass rose, map route trail, wanderlust path, trail weather, condition assessment, safety, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 570006,
-      "path": "public/icons/travel/assess-trail-conditions.webp",
-      "status": "pending"
+      "seed": 580006,
+      "path": "public/icons/cyberpunk/travel/assess-trail-conditions.webp",
+      "status": "done"
     },
     {
       "skillId": "apply-semantic-versioning",
       "domain": "versioning",
       "prompt": "Version number, semantic tag, changelog entry, Apply, Semantic, Versioning, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 580001,
-      "path": "public/icons/versioning/apply-semantic-versioning.webp",
-      "status": "pending"
+      "seed": 590001,
+      "path": "public/icons/cyberpunk/versioning/apply-semantic-versioning.webp",
+      "status": "done"
     },
     {
       "skillId": "manage-changelog",
       "domain": "versioning",
       "prompt": "Version number, semantic tag, changelog entry, Manage, Changelog, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 580002,
-      "path": "public/icons/versioning/manage-changelog.webp",
-      "status": "pending"
+      "seed": 590002,
+      "path": "public/icons/cyberpunk/versioning/manage-changelog.webp",
+      "status": "done"
     },
     {
       "skillId": "plan-release-cycle",
       "domain": "versioning",
       "prompt": "Version number, semantic tag, changelog entry, Plan, Release, Cycle, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 580003,
-      "path": "public/icons/versioning/plan-release-cycle.webp",
-      "status": "pending"
+      "seed": 590003,
+      "path": "public/icons/cyberpunk/versioning/plan-release-cycle.webp",
+      "status": "done"
     },
     {
       "skillId": "audit-dependency-versions",
       "domain": "versioning",
       "prompt": "Version number, semantic tag, changelog entry, Audit, Dependency, Versions, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 580004,
-      "path": "public/icons/versioning/audit-dependency-versions.webp",
-      "status": "pending"
+      "seed": 590004,
+      "path": "public/icons/cyberpunk/versioning/audit-dependency-versions.webp",
+      "status": "done"
     },
     {
       "skillId": "create-2d-composition",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, SVG canvas, 2D layers, diagram layout, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 590001,
-      "path": "public/icons/visualization/create-2d-composition.webp",
-      "status": "pending"
+      "seed": 600001,
+      "path": "public/icons/cyberpunk/visualization/create-2d-composition.webp",
+      "status": "done"
     },
     {
       "skillId": "render-publication-graphic",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, publication chart, DPI, typography, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 590002,
-      "path": "public/icons/visualization/render-publication-graphic.webp",
-      "status": "pending"
+      "seed": 600002,
+      "path": "public/icons/cyberpunk/visualization/render-publication-graphic.webp",
+      "status": "done"
     },
     {
       "skillId": "audit-icon-pipeline",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, pipeline gap, warning marker, audit check, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 590003,
-      "path": "public/icons/visualization/audit-icon-pipeline.webp",
-      "status": "pending"
+      "seed": 600003,
+      "path": "public/icons/cyberpunk/visualization/audit-icon-pipeline.webp",
+      "status": "done"
     },
     {
       "skillId": "render-icon-pipeline",
       "domain": "visualization",
       "prompt": "Data chart, plot grid, color palette, graph axis, processing gear, icon output, render, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 590004,
-      "path": "public/icons/visualization/render-icon-pipeline.webp",
-      "status": "pending"
+      "seed": 600004,
+      "path": "public/icons/cyberpunk/visualization/render-icon-pipeline.webp",
+      "status": "done"
     },
     {
       "skillId": "scaffold-nextjs-app",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Next.js logo, app scaffold, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600001,
-      "path": "public/icons/web-dev/scaffold-nextjs-app.webp",
-      "status": "pending"
+      "seed": 610001,
+      "path": "public/icons/cyberpunk/web-dev/scaffold-nextjs-app.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-tailwind-typescript",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Tailwind wind, TypeScript logo, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600002,
-      "path": "public/icons/web-dev/setup-tailwind-typescript.webp",
-      "status": "pending"
+      "seed": 610002,
+      "path": "public/icons/cyberpunk/web-dev/setup-tailwind-typescript.webp",
+      "status": "done"
     },
     {
       "skillId": "deploy-to-vercel",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Vercel triangle, deployment rocket, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600003,
-      "path": "public/icons/web-dev/deploy-to-vercel.webp",
-      "status": "pending"
+      "seed": 610003,
+      "path": "public/icons/cyberpunk/web-dev/deploy-to-vercel.webp",
+      "status": "done"
     },
     {
       "skillId": "use-graphql-api",
       "domain": "web-dev",
       "prompt": "Neon browser window, HTML angle brackets, Use, GraphQL, API, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 600004,
-      "path": "public/icons/web-dev/use-graphql-api.webp",
-      "status": "pending"
+      "seed": 610004,
+      "path": "public/icons/cyberpunk/web-dev/use-graphql-api.webp",
+      "status": "done"
     },
     {
       "skillId": "install-putior",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Install, putior, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610001,
-      "path": "public/icons/workflow-visualization/install-putior.webp",
-      "status": "pending"
+      "seed": 620001,
+      "path": "public/icons/cyberpunk/workflow-visualization/install-putior.webp",
+      "status": "done"
     },
     {
       "skillId": "analyze-codebase-workflow",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Analyze, Codebase, Workflow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610002,
-      "path": "public/icons/workflow-visualization/analyze-codebase-workflow.webp",
-      "status": "pending"
+      "seed": 620002,
+      "path": "public/icons/cyberpunk/workflow-visualization/analyze-codebase-workflow.webp",
+      "status": "done"
     },
     {
       "skillId": "annotate-source-files",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Annotate, Source, Files, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610003,
-      "path": "public/icons/workflow-visualization/annotate-source-files.webp",
-      "status": "pending"
+      "seed": 620003,
+      "path": "public/icons/cyberpunk/workflow-visualization/annotate-source-files.webp",
+      "status": "done"
     },
     {
       "skillId": "generate-workflow-diagram",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Generate, Workflow, Diagram, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610004,
-      "path": "public/icons/workflow-visualization/generate-workflow-diagram.webp",
-      "status": "pending"
+      "seed": 620004,
+      "path": "public/icons/cyberpunk/workflow-visualization/generate-workflow-diagram.webp",
+      "status": "done"
     },
     {
       "skillId": "setup-putior-ci",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Set, putior, CI/CD, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610005,
-      "path": "public/icons/workflow-visualization/setup-putior-ci.webp",
-      "status": "pending"
+      "seed": 620005,
+      "path": "public/icons/cyberpunk/workflow-visualization/setup-putior-ci.webp",
+      "status": "done"
     },
     {
       "skillId": "configure-putior-mcp",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Configure, putior, MCP, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 610006,
-      "path": "public/icons/workflow-visualization/configure-putior-mcp.webp",
-      "status": "pending"
+      "seed": 620006,
+      "path": "public/icons/cyberpunk/workflow-visualization/configure-putior-mcp.webp",
+      "status": "done"
     }
   ]
 }

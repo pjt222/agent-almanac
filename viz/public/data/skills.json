@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-04-01T15:36:34.526Z",
-    "totalSkills": 340,
-    "totalAgents": 69,
+    "generated": "2026-04-08T11:09:40.271Z",
+    "totalSkills": 344,
+    "totalAgents": 71,
     "totalTeams": 16,
-    "totalNodes": 425,
-    "totalLinks": 1713,
-    "totalAgentLinks": 271,
+    "totalNodes": 431,
+    "totalLinks": 1743,
+    "totalAgentLinks": 280,
     "totalTeamLinks": 50,
-    "totalDomains": 61,
+    "totalDomains": 62,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -51,7 +51,7 @@
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
-      "count": 20
+      "count": 22
     },
     "citations": {
       "description": "Academic and software citation management with R and BibTeX",
@@ -92,6 +92,10 @@
     "observability": {
       "description": "Monitoring, logging, tracing, alerting, and reliability engineering skills",
       "count": 13
+    },
+    "edge-computing": {
+      "description": "Edge AI deployment, on-device inference, model quantization, and hardware acceleration",
+      "count": 1
     },
     "mlops": {
       "description": "ML experiment tracking, model serving, feature stores, pipelines, and AIOps skills",
@@ -259,7 +263,7 @@
     },
     "open-source": {
       "description": "Open-source contribution workflow skills",
-      "count": 1
+      "count": 2
     }
   },
   "nodes": [
@@ -2701,6 +2705,60 @@
         "coordinate-reasoning"
       ],
       "path": "du-dum/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "evolve-skill-from-traces",
+      "type": "skill",
+      "title": "Evolve a Skill from Execution Traces",
+      "domain": "general",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Evolve SKILL.md files from agent execution traces using parallel multi-agent patch proposal and conflict-free consolidation",
+      "tags": [
+        "meta",
+        "skill-evolution",
+        "traces",
+        "multi-agent",
+        "consolidation",
+        "trace2skill"
+      ],
+      "related": [
+        "evolve-skill",
+        "create-skill",
+        "review-skill-format",
+        "argumentation",
+        "verify-agent-output"
+      ],
+      "path": "evolve-skill-from-traces/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "manage-engagement-buffer",
+      "type": "skill",
+      "title": "Manage Engagement Buffer",
+      "domain": "general",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Ingest, prioritize, rate-limit, and deduplicate engagement items with digest generation and cooldown tracking",
+      "tags": [
+        "engagement",
+        "buffer",
+        "queue",
+        "rate-limiting",
+        "deduplication",
+        "digest",
+        "cooldown",
+        "autonomous-agents"
+      ],
+      "related": [
+        "du-dum",
+        "manage-token-budget",
+        "circuit-breaker-pattern",
+        "coordinate-reasoning",
+        "forage-resources"
+      ],
+      "path": "manage-engagement-buffer/SKILL.md",
       "locales": []
     },
     {
@@ -5500,6 +5558,33 @@
         "ja",
         "es"
       ]
+    },
+    {
+      "id": "deploy-edge-ai-model",
+      "type": "skill",
+      "title": "Deploy Edge AI Model",
+      "domain": "edge-computing",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Google AI Edge Gallery, TFLite, ONNX Runtime, Gemma 4, quantization, and hardware delegates",
+      "tags": [
+        "edge-ai",
+        "google-ai-edge",
+        "gemma",
+        "tflite",
+        "onnx",
+        "quantization",
+        "on-device"
+      ],
+      "related": [
+        "deploy-ml-model-serving",
+        "monitor-model-drift",
+        "register-ml-model",
+        "create-dockerfile",
+        "create-multistage-dockerfile"
+      ],
+      "path": "deploy-edge-ai-model/SKILL.md",
+      "locales": []
     },
     {
       "id": "track-ml-experiments",
@@ -10291,6 +10376,33 @@
       "locales": []
     },
     {
+      "id": "evaluate-agent-framework",
+      "type": "skill",
+      "title": "Evaluate Agent Framework",
+      "domain": "open-source",
+      "complexity": "advanced",
+      "language": "multi",
+      "description": "Assess open-source agent frameworks for supersession risk, community health, and investment readiness",
+      "tags": [
+        "open-source",
+        "framework-evaluation",
+        "risk-assessment",
+        "community-health",
+        "supersession",
+        "investment"
+      ],
+      "related": [
+        "polish-claw-project",
+        "review-software-architecture",
+        "forage-solutions",
+        "search-prior-art",
+        "security-audit-codebase",
+        "assess-ip-landscape"
+      ],
+      "path": "evaluate-agent-framework/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "polish-claw-project",
       "type": "skill",
       "title": "Polish Claw Project",
@@ -10909,6 +11021,44 @@
         "write-helm-chart"
       ],
       "path": "agents/devops-engineer.md",
+      "locales": []
+    },
+    {
+      "id": "agent:edge-ai-engineer",
+      "type": "agent",
+      "title": "Edge AI Engineer",
+      "priority": "normal",
+      "description": "Edge AI deployment specialist for on-device inference using Google AI Edge Gallery, TFLite, ONNX Runtime, and MediaPipe with model quantization and hardware delegate optimization",
+      "tags": [
+        "edge-computing",
+        "on-device-ai",
+        "tflite",
+        "onnx",
+        "quantization",
+        "google-ai-edge",
+        "gemma",
+        "mediapipe",
+        "mobile",
+        "iot"
+      ],
+      "tools": [
+        "Read",
+        "Write",
+        "Edit",
+        "Bash",
+        "Grep",
+        "Glob",
+        "WebFetch"
+      ],
+      "mcp_servers": [],
+      "skills": [
+        "deploy-edge-ai-model",
+        "deploy-ml-model-serving",
+        "monitor-model-drift",
+        "register-ml-model",
+        "create-dockerfile"
+      ],
+      "path": "agents/edge-ai-engineer.md",
       "locales": []
     },
     {
@@ -12024,6 +12174,36 @@
         "troubleshoot-print-issues"
       ],
       "path": "agents/fabricator.md",
+      "locales": []
+    },
+    {
+      "id": "agent:framework-scout",
+      "type": "agent",
+      "title": "Framework Scout",
+      "priority": "normal",
+      "description": "Open-source agent framework assessor evaluating community health, supersession risk, architecture alignment, and investment readiness",
+      "tags": [
+        "open-source",
+        "framework-evaluation",
+        "risk-assessment",
+        "community-health"
+      ],
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "mcp_servers": [],
+      "skills": [
+        "evaluate-agent-framework",
+        "review-software-architecture",
+        "forage-solutions",
+        "create-github-issues"
+      ],
+      "path": "agents/framework-scout.md",
       "locales": []
     },
     {
@@ -14661,6 +14841,56 @@
       "type": "skill"
     },
     {
+      "source": "evolve-skill-from-traces",
+      "target": "evolve-skill",
+      "type": "skill"
+    },
+    {
+      "source": "evolve-skill-from-traces",
+      "target": "create-skill",
+      "type": "skill"
+    },
+    {
+      "source": "evolve-skill-from-traces",
+      "target": "review-skill-format",
+      "type": "skill"
+    },
+    {
+      "source": "evolve-skill-from-traces",
+      "target": "argumentation",
+      "type": "skill"
+    },
+    {
+      "source": "evolve-skill-from-traces",
+      "target": "verify-agent-output",
+      "type": "skill"
+    },
+    {
+      "source": "manage-engagement-buffer",
+      "target": "du-dum",
+      "type": "skill"
+    },
+    {
+      "source": "manage-engagement-buffer",
+      "target": "manage-token-budget",
+      "type": "skill"
+    },
+    {
+      "source": "manage-engagement-buffer",
+      "target": "circuit-breaker-pattern",
+      "type": "skill"
+    },
+    {
+      "source": "manage-engagement-buffer",
+      "target": "coordinate-reasoning",
+      "type": "skill"
+    },
+    {
+      "source": "manage-engagement-buffer",
+      "target": "forage-resources",
+      "type": "skill"
+    },
+    {
       "source": "manage-bibliography",
       "target": "format-citations",
       "type": "skill"
@@ -16653,6 +16883,31 @@
     {
       "source": "correlate-observability-signals",
       "target": "build-grafana-dashboards",
+      "type": "skill"
+    },
+    {
+      "source": "deploy-edge-ai-model",
+      "target": "deploy-ml-model-serving",
+      "type": "skill"
+    },
+    {
+      "source": "deploy-edge-ai-model",
+      "target": "monitor-model-drift",
+      "type": "skill"
+    },
+    {
+      "source": "deploy-edge-ai-model",
+      "target": "register-ml-model",
+      "type": "skill"
+    },
+    {
+      "source": "deploy-edge-ai-model",
+      "target": "create-dockerfile",
+      "type": "skill"
+    },
+    {
+      "source": "deploy-edge-ai-model",
+      "target": "create-multistage-dockerfile",
       "type": "skill"
     },
     {
@@ -19861,6 +20116,36 @@
       "type": "skill"
     },
     {
+      "source": "evaluate-agent-framework",
+      "target": "polish-claw-project",
+      "type": "skill"
+    },
+    {
+      "source": "evaluate-agent-framework",
+      "target": "review-software-architecture",
+      "type": "skill"
+    },
+    {
+      "source": "evaluate-agent-framework",
+      "target": "forage-solutions",
+      "type": "skill"
+    },
+    {
+      "source": "evaluate-agent-framework",
+      "target": "search-prior-art",
+      "type": "skill"
+    },
+    {
+      "source": "evaluate-agent-framework",
+      "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "evaluate-agent-framework",
+      "target": "assess-ip-landscape",
+      "type": "skill"
+    },
+    {
       "source": "polish-claw-project",
       "target": "security-audit-codebase",
       "type": "skill"
@@ -20273,6 +20558,31 @@
     {
       "source": "agent:devops-engineer",
       "target": "write-helm-chart",
+      "type": "agent"
+    },
+    {
+      "source": "agent:edge-ai-engineer",
+      "target": "deploy-edge-ai-model",
+      "type": "agent"
+    },
+    {
+      "source": "agent:edge-ai-engineer",
+      "target": "deploy-ml-model-serving",
+      "type": "agent"
+    },
+    {
+      "source": "agent:edge-ai-engineer",
+      "target": "monitor-model-drift",
+      "type": "agent"
+    },
+    {
+      "source": "agent:edge-ai-engineer",
+      "target": "register-ml-model",
+      "type": "agent"
+    },
+    {
+      "source": "agent:edge-ai-engineer",
+      "target": "create-dockerfile",
       "type": "agent"
     },
     {
@@ -20963,6 +21273,26 @@
     {
       "source": "agent:fabricator",
       "target": "troubleshoot-print-issues",
+      "type": "agent"
+    },
+    {
+      "source": "agent:framework-scout",
+      "target": "evaluate-agent-framework",
+      "type": "agent"
+    },
+    {
+      "source": "agent:framework-scout",
+      "target": "review-software-architecture",
+      "type": "agent"
+    },
+    {
+      "source": "agent:framework-scout",
+      "target": "forage-solutions",
+      "type": "agent"
+    },
+    {
+      "source": "agent:framework-scout",
+      "target": "create-github-issues",
       "type": "agent"
     },
     {
