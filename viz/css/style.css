@@ -1379,11 +1379,6 @@ body::after {
     height: 24px;
   }
 
-  /* Tooltip: hide on mobile — touch events use detail panel instead */
-  .tooltip {
-    display: none !important;
-  }
-
   /* Backdrop positions for notched devices */
   .header-drawer-backdrop {
     top: calc(var(--header-height) + var(--safe-area-top));
@@ -1464,6 +1459,13 @@ body::after {
   .badge {
     font-size: 11px;
     padding: 3px 10px;
+  }
+}
+
+/* ── Touch-only devices: hide hover tooltips ─────────────────── */
+@media (hover: none) {
+  .tooltip {
+    display: none !important;
   }
 }
 

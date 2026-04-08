@@ -816,8 +816,9 @@ if (hamburgerToggle && headerDrawer) {
 }
 
 // ── Close filter panel on graph tap (mobile) ─────
+const mobileBreakpoint = window.matchMedia('(max-width: 768px)');
 document.getElementById('graph-container').addEventListener('touchstart', () => {
-  if (window.innerWidth <= 768) {
+  if (mobileBreakpoint.matches) {
     const filterPanel = document.getElementById('filter-panel');
     const filterBackdrop = document.querySelector('.filter-backdrop');
     if (filterPanel && filterPanel.classList.contains('mobile-open')) {
@@ -833,6 +834,11 @@ window.addEventListener('orientationchange', () => {
   setTimeout(() => {
     window.dispatchEvent(new Event('resize'));
   }, 100);
+});
+
+// iOS Safari: address bar hide/show and virtual keyboard trigger visualViewport resize
+window.visualViewport?.addEventListener('resize', () => {
+  window.dispatchEvent(new Event('resize'));
 });
 
 // Also handle resize for orientation changes on devices that don't fire orientationchange

@@ -30,32 +30,36 @@ export function initPanel(el, { onRelated } = {}) {
   }
 
   // ── Swipe to dismiss on mobile ──────────────────
+  let isSwiping = false;
   let touchStartY = 0;
   let touchStartX = 0;
   let touchDeltaY = 0;
   let touchDeltaX = 0;
   const SWIPE_DISMISS_THRESHOLD = 80;
 
+  const mobileQuery = window.matchMedia('(max-width: 768px)');
+  const landscapeQuery = window.matchMedia('(orientation: landscape)');
+
   function isLandscapeMobile() {
-    return window.innerWidth <= 768 && window.matchMedia('(orientation: landscape)').matches;
+    return mobileQuery.matches && landscapeQuery.matches;
   }
 
   panelEl.addEventListener('touchstart', e => {
     // Only track if touching the drag handle or top bar area
     const topBar = panelEl.querySelector('.panel-top-bar');
     if (topBar && topBar.contains(e.target)) {
+      isSwiping = true;
       touchStartY = e.touches[0].clientY;
       touchStartX = e.touches[0].clientX;
       touchDeltaY = 0;
       touchDeltaX = 0;
     } else {
-      touchStartY = 0;
-      touchStartX = 0;
+      isSwiping = false;
     }
   }, { passive: true });
 
   panelEl.addEventListener('touchmove', e => {
-    if (!touchStartY && !touchStartX) return;
+    if (!isSwiping) return;
 
     touchDeltaY = e.touches[0].clientY - touchStartY;
     touchDeltaX = e.touches[0].clientX - touchStartX;
@@ -76,7 +80,7 @@ export function initPanel(el, { onRelated } = {}) {
   }, { passive: true });
 
   panelEl.addEventListener('touchend', () => {
-    if (!touchStartY && !touchStartX) return;
+    if (!isSwiping) return;
     panelEl.style.transition = '';
 
     const shouldDismiss = isLandscapeMobile()
@@ -89,8 +93,7 @@ export function initPanel(el, { onRelated } = {}) {
       // Snap back
       panelEl.style.transform = '';
     }
-    touchStartY = 0;
-    touchStartX = 0;
+    isSwiping = false;
     touchDeltaY = 0;
     touchDeltaX = 0;
   }, { passive: true });
