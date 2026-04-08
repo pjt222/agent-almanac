@@ -827,13 +827,13 @@ export function getVisibleDomains() {
 
 export function getVisibleAgentIds() {
   return Object.entries(agentStates)
-    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLocaleFilter(id))
+    .filter(([id, v]) => v && nodePassesTagFilter(id))
     .map(([k]) => k);
 }
 
 export function getVisibleTeamIds() {
   return Object.entries(teamStates)
-    .filter(([id, v]) => v && nodePassesTagFilter(id) && nodePassesLocaleFilter(id))
+    .filter(([id, v]) => v && nodePassesTagFilter(id))
     .map(([k]) => k);
 }
 
