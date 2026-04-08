@@ -730,14 +730,25 @@ function _scheduleHiveIconRefresh() {
 
 export function preloadHiveIcons(nodes, palette) {
   const pal = palette || getCurrentThemeName();
-  for (const node of nodes) {
-    if (isIconLoaded(node.id, pal)) continue;
-    const img = new Image();
-    img.onload = () => {
-      markIconLoaded(pal, node.id);
-      _scheduleHiveIconRefresh();
-    };
-    img.src = getIconPath(node, pal);
+  const pending = nodes.filter(n => !isIconLoaded(n.id, pal));
+  const BATCH = 12;
+  let idx = 0;
+
+  function loadBatch() {
+    const end = Math.min(idx + BATCH, pending.length);
+    let remaining = end - idx;
+    if (remaining <= 0) return;
+    for (let i = idx; i < end; i++) {
+      const node = pending[i];
+      const img = new Image();
+      img.onload = img.onerror = () => {
+        if (img.naturalWidth) markIconLoaded(pal, node.id);
+        if (--remaining === 0) { _scheduleHiveIconRefresh(); loadBatch(); }
+      };
+      img.src = getIconPath(node, pal);
+    }
+    idx = end;
   }
+  loadBatch();
 }
 
