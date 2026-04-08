@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 341
+total_skills: 344
 
 domains:
   r-packages:
@@ -454,6 +454,18 @@ domains:
         complexity: intermediate
         language: multi
         description: Batch-then-act pattern separating cheap observation from expensive action using two-clock architecture
+
+      - id: evolve-skill-from-traces
+        path: evolve-skill-from-traces/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Evolve SKILL.md files from agent execution traces using parallel multi-agent patch proposal and conflict-free consolidation
+
+      - id: manage-engagement-buffer
+        path: manage-engagement-buffer/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Ingest, prioritize, rate-limit, and deduplicate engagement items with digest generation and cooldown tracking
 
   citations:
     description: Academic and software citation management with R and BibTeX
@@ -1951,6 +1963,12 @@ domains:
   open-source:
     description: Open-source contribution workflow skills
     skills:
+      - id: evaluate-agent-framework
+        path: evaluate-agent-framework/SKILL.md
+        complexity: advanced
+        language: multi
+        description: Assess open-source agent frameworks for supersession risk, community health, and investment readiness
+
       - id: polish-claw-project
         path: polish-claw-project/SKILL.md
         complexity: advanced
