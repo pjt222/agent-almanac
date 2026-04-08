@@ -221,7 +221,8 @@ Unleash finds problems; teams solve them. Convert verified hypothesis families i
 1. Create a GitHub issue per verified hypothesis family (use the `create-github-issues` skill)
 2. Prioritize issues by convergence strength and impact
 3. For each issue, assemble a small team via `TeamCreate`:
-   - Include domain-relevant agents for implementation
+   - If a predefined team definition in `teams/` matches the problem domain, use it
+   - If no fitting team exists, default to `opaque-team` (N shapeshifters with adaptive role assignment) — it handles unknown problem shapes without requiring a custom composition
    - Include at least one non-technical agent (e.g., `advocatus-diaboli`, `contemplative`) — they catch implementation risks that technical agents miss
    - Use REST checkpoints between phases to prevent rushing
 4. The pipeline is: **unleash → triage → team-per-issue → resolve**

@@ -153,7 +153,7 @@ Unleash finds problems; teams solve them. The two patterns are complementary:
 After synthesis, convert verified hypothesis families into GitHub issues and assemble a focused team per issue:
 
 1. **Create issues** from the ranked hypothesis families (one issue per family, or group related families)
-2. **Compose a team** for each issue using `TeamCreate` — include domain agents for implementation plus at least one non-technical agent for risk review
+2. **Compose a team** for each issue using `TeamCreate` — if a predefined team in `teams/` matches the domain, use it; otherwise default to [opaque-team](../teams/opaque-team.md) (N shapeshifters with adaptive role assignment). Include at least one non-technical agent for risk review
 3. **Use REST checkpoints** between phases — pausing prevents rushing and catches inconsistencies before they compound (e.g., simplifying a 6-field artifact to 4 during a rest pause)
 4. **Include a non-technical reviewer** in every implementation team — devil's advocates and contemplatives catch critical risks that technical agents miss (e.g., identifying that a shared server instance would silently fail across clients)
 
