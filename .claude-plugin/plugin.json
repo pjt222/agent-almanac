@@ -1,0 +1,26 @@
+{
+  "name": "agent-almanac",
+  "description": "344 agentic skills across 62 domains, 71 agent personas, and 16 team compositions following the agentskills.io open standard",
+  "version": "1.0.0",
+  "author": {
+    "name": "Philipp Thoss",
+    "email": "ph.thoss@gmx.de",
+    "url": "https://github.com/pjt222"
+  },
+  "repository": "https://github.com/pjt222/agent-almanac",
+  "homepage": "https://agentskills.io",
+  "license": "MIT",
+  "agents": "./agents",
+  "keywords": [
+    "skills",
+    "agents",
+    "teams",
+    "agentic",
+    "agentskills",
+    "devops",
+    "compliance",
+    "mlops",
+    "r-packages",
+    "esoteric"
+  ]
+}
