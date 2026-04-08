@@ -706,6 +706,11 @@ document.addEventListener('touchmove', e => {
   }
 }, { passive: true });
 
+// Hide tooltip on touchend to prevent stale tooltips on mobile
+document.addEventListener('touchend', () => {
+  if (tooltip) tooltip.style.display = 'none';
+}, { passive: true });
+
 function updateFilteredStats(visibleSkillIds) {
   if (!allData) return;
   const skillSet = new Set(visibleSkillIds);
@@ -810,12 +815,30 @@ if (hamburgerToggle && headerDrawer) {
   });
 }
 
+// ── Close filter panel on graph tap (mobile) ─────
+const mobileBreakpoint = window.matchMedia('(max-width: 768px)');
+document.getElementById('graph-container').addEventListener('touchstart', () => {
+  if (mobileBreakpoint.matches) {
+    const filterPanel = document.getElementById('filter-panel');
+    const filterBackdrop = document.querySelector('.filter-backdrop');
+    if (filterPanel && filterPanel.classList.contains('mobile-open')) {
+      filterPanel.classList.remove('mobile-open');
+      if (filterBackdrop) filterBackdrop.classList.remove('visible');
+    }
+  }
+}, { passive: true });
+
 // ── Orientation change ──────────────────────────
 window.addEventListener('orientationchange', () => {
   // Small delay to let browser settle orientation
   setTimeout(() => {
     window.dispatchEvent(new Event('resize'));
   }, 100);
+});
+
+// iOS Safari: address bar hide/show and virtual keyboard trigger visualViewport resize
+window.visualViewport?.addEventListener('resize', () => {
+  window.dispatchEvent(new Event('resize'));
 });
 
 // Also handle resize for orientation changes on devices that don't fire orientationchange
