@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 341 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 344 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -29,7 +29,7 @@ Browse by domain:
 | [Mcp Integration](mcp-integration/) | 6 | MCP server setup and troubleshooting skills |
 | [Web Dev](web-dev/) | 4 | Web development skills for Next.js and modern frontend |
 | [Git](git/) | 7 | Git version control and GitHub workflow skills |
-| [General](general/) | 20 | Cross-cutting development environment and workflow skills |
+| [General](general/) | 22 | Cross-cutting development environment and workflow skills |
 | [Citations](citations/) | 3 | Academic and software citation management with R and BibTeX |
 | [Data Serialization](data-serialization/) | 2 | Data serialization formats, schemas, and evolution strategies |
 | [Review](review/) | 11 | Senior-level review skills for research, data, architecture, and design |
@@ -82,7 +82,7 @@ Browse by domain:
 | [Synoptic](synoptic/) | 4 | Panoramic awareness, cross-domain integration, and simultaneous multi-perspective cognition |
 | [Tensegrity](tensegrity/) | 1 | Tensional integrity systems — force balance, prestress stability, and cross-scale structural analysis from cytoskeleton to architecture |
 | [Cli](cli/) | 4 | CLI tool development — command scaffolding, plugin architecture, terminal output design, and integration testing |
-| [Open Source](open-source/) | 1 | Open-source contribution workflow skills |
+| [Open Source](open-source/) | 2 | Open-source contribution workflow skills |
 <!-- AUTO:END:skills-table -->
 
 ## SKILL.md Format
