@@ -243,6 +243,7 @@ async function switchMode(newModeName) {
       graph3dMod.preload3DIcons(allData.nodes, getCurrentThemeName());
     } else if (newModeName === 'hive') {
       hiveMod.initHiveGraph(container, allData, modeCallbacks());
+      hiveMod.preloadHiveIcons(allData.nodes, getCurrentThemeName());
     } else if (newModeName === 'chord') {
       chordMod.initChordGraph(container, allData, modeCallbacks());
     } else if (newModeName === 'workflow') {
