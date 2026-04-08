@@ -2,7 +2,7 @@
 # Machine-readable catalog of all agent definitions in this library.
 # Keep in sync with the actual agent files on disk.
 
-total_agents: 70
+total_agents: 71
 version: "2.2"
 last_updated: "2026-04-07"
 
@@ -662,6 +662,18 @@ agents:
       - prepare-print-model
       - select-print-material
       - troubleshoot-print-issues
+
+  - id: framework-scout
+    path: agents/framework-scout.md
+    description: Open-source agent framework assessor evaluating community health, supersession risk, architecture alignment, and investment readiness
+    tags: [open-source, framework-evaluation, risk-assessment, community-health]
+    priority: normal
+    tools: [Read, Grep, Glob, Bash, WebFetch, WebSearch]
+    skills:
+      - evaluate-agent-framework
+      - review-software-architecture
+      - forage-solutions
+      - create-github-issues
 
   - id: number-theorist
     path: agents/number-theorist.md

@@ -1,7 +1,7 @@
 # Agents Library for Claude Code
 
 <!-- AUTO:START:agents-intro -->
-A collection of 70 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
+A collection of 71 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
 
 All agents inherit **default skills**: , .
 <!-- AUTO:END:agents-intro -->
@@ -55,6 +55,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [edge-ai-engineer](edge-ai-engineer.md) | normal | Edge AI deployment specialist for on-device inference using Google AI Edge Gallery, TFLite, ONNX Runtime, and MediaPipe with model quantization and hardware delegate optimization |
 | [etymologist](etymologist.md) | normal | Historical linguistics specialist for etymology research, proto-language root tracing, cognate comparison, semantic drift documentation, and folk etymology identification |
 | [fabricator](fabricator.md) | normal | 3D printing and additive manufacturing specialist covering FDM, SLA, and SLS processes from model preparation through troubleshooting |
+| [framework-scout](framework-scout.md) | normal | Open-source agent framework assessor evaluating community health, supersession risk, architecture alignment, and investment readiness |
 | [gardener](gardener.md) | normal | Plant cultivation guide for bonsai, soil preparation, biodynamic calendar planning, garden observation, and hand tool maintenance with contemplative checkpoints |
 | [geometrist](geometrist.md) | normal | Classical and computational geometry specialist for ruler-and-compass constructions, Euclidean proofs, trigonometric problem solving, and geometric transformations |
 | [hiking-guide](hiking-guide.md) | normal | Outdoor trip planning guide for hiking tours covering trail selection, difficulty grading, gear checklists, route duration estimation, and safety protocols |
