@@ -1,5 +1,5 @@
 # agent_glyphs.R - Agent-to-glyph mapping
-# Maps each of 69 agent IDs to a specific glyph drawing function.
+# Maps each of 71 agent IDs to a specific glyph drawing function.
 #
 # Each entry: agentId = "glyph_function_name"
 # The glyph function must accept (cx, cy, s, col, bright) and return
@@ -131,6 +131,10 @@ AGENT_GLYPHS <- list(
 
   # ── Open Source ────────────────────────────────────────────────────────
   "claw-polisher"               = "glyph_agent_claw_polisher",
+  "framework-scout"             = "glyph_agent_framework_scout",
+
+  # ── Edge Computing ──────────────────────────────────────────────────
+  "edge-ai-engineer"            = "glyph_agent_edge_ai",
 
   # ── GPU Optimization ──────────────────────────────────────────────────
   "kernel-optimizer"            = "glyph_agent_kernel_optimizer"

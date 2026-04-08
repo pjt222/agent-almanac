@@ -3103,3 +3103,104 @@ glyph_agent_kernel_optimizer <- function(cx, cy, s, col, bright) {
 
   layers
 }
+
+# ── Open Source (framework-scout) ─────────────────────────────────────
+
+# ── glyph_agent_framework_scout: binoculars with assessment ticks ─────
+glyph_agent_framework_scout <- function(cx, cy, s, col, bright) {
+  # Binoculars (two circles joined by a bridge) with small check/cross ticks
+  # representing the assessment output (INVEST vs AVOID).
+  layers <- list()
+
+  # Left lens
+  lens_l <- data.frame(x0 = cx - 10 * s, y0 = cy + 2 * s, r = 9 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = lens_l,
+    .aes(x0 = x0, y0 = y0, r = r),
+    color = bright, fill = hex_with_alpha(col, 0.15), linewidth = .lw(s, 2))
+
+  # Right lens
+  lens_r <- data.frame(x0 = cx + 10 * s, y0 = cy + 2 * s, r = 9 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = lens_r,
+    .aes(x0 = x0, y0 = y0, r = r),
+    color = bright, fill = hex_with_alpha(col, 0.15), linewidth = .lw(s, 2))
+
+  # Bridge connecting lenses
+  bridge <- data.frame(
+    x = c(cx - 4 * s, cx, cx + 4 * s),
+    y = c(cy - 5 * s, cy - 8 * s, cy - 5 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = bridge, .aes(x, y),
+    color = bright, linewidth = .lw(s, 1.8), lineend = "round")
+
+  # Check tick (left lens) — INVEST signal
+  tick <- data.frame(
+    x = c(cx - 14 * s, cx - 10 * s, cx - 5 * s),
+    y = c(cy + 2 * s, cy + 7 * s, cy - 3 * s)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = tick, .aes(x, y),
+    color = hex_with_alpha(bright, 0.8), linewidth = .lw(s, 1.5), lineend = "round")
+
+  # Cross (right lens) — AVOID signal
+  for (rot in c(pi / 4, -pi / 4)) {
+    arm <- data.frame(
+      x = cx + 10 * s + c(-5, 5) * s * cos(rot),
+      y = cy + 2 * s + c(-5, 5) * s * sin(rot)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arm, .aes(x, y),
+      color = hex_with_alpha(bright, 0.5), linewidth = .lw(s, 1.2))
+  }
+
+  layers
+}
+
+# ── Edge Computing ───────────────────────────────────────────────────
+
+# ── glyph_agent_edge_ai: chip with radiating signal arcs ──────────────
+glyph_agent_edge_ai <- function(cx, cy, s, col, bright) {
+  # Stylized microchip with radiating wireless arcs — representing
+  # on-device AI inference at the edge.
+  layers <- list()
+
+  # Central chip body (rounded square)
+  chip_half <- 10 * s
+  chip <- data.frame(
+    xmin = cx - chip_half, xmax = cx + chip_half,
+    ymin = cy - chip_half, ymax = cy + chip_half
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_rect(data = chip,
+    .aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+    fill = hex_with_alpha(col, 0.2), color = bright, linewidth = .lw(s, 2))
+
+  # Chip pins (4 per side)
+  for (side in 1:4) {
+    for (pin in 1:4) {
+      offset <- (pin - 2.5) * 5 * s
+      if (side == 1) { x0 <- cx + offset; y0 <- cy - chip_half; dx <- 0; dy <- -4 * s }
+      else if (side == 2) { x0 <- cx + offset; y0 <- cy + chip_half; dx <- 0; dy <- 4 * s }
+      else if (side == 3) { x0 <- cx - chip_half; y0 <- cy + offset; dx <- -4 * s; dy <- 0 }
+      else { x0 <- cx + chip_half; y0 <- cy + offset; dx <- 4 * s; dy <- 0 }
+      pin_df <- data.frame(x = c(x0, x0 + dx), y = c(y0, y0 + dy))
+      layers[[length(layers) + 1]] <- ggplot2::geom_path(data = pin_df, .aes(x, y),
+        color = hex_with_alpha(bright, 0.5), linewidth = .lw(s, 1))
+    }
+  }
+
+  # "AI" text in center (two dots representing neural core)
+  dots <- data.frame(x0 = cx + c(-4, 4) * s, y0 = rep(cy, 2), r = rep(2.5 * s, 2))
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = dots,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(bright, 0.7), color = NA)
+
+  # Radiating signal arcs (top-right, representing wireless/edge)
+  for (r_mult in c(16, 21, 26)) {
+    arc_t <- seq(pi / 6, pi / 3, length.out = 15)
+    arc_df <- data.frame(
+      x = cx + r_mult * s * cos(arc_t),
+      y = cy + r_mult * s * sin(arc_t)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arc_df, .aes(x, y),
+      color = hex_with_alpha(bright, 0.4), linewidth = .lw(s, 1))
+  }
+
+  layers
+}

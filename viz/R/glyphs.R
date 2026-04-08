@@ -1,5 +1,5 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 337 skillIds to a specific glyph drawing function.
+# Maps each of 344 skillIds to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #
@@ -142,6 +142,8 @@ SKILL_GLYPHS <- list(
   "read-continue-here"             = "glyph_continue_here",
   "install-almanac-content"        = "glyph_almanac_install",
   "du-dum"                         = "glyph_du_dum",
+  "evolve-skill-from-traces"       = "glyph_spiral_arrow",
+  "manage-engagement-buffer"       = "glyph_log_funnel",
 
   # ── git (7) ────────────────────────────────────────────────────────────
   "configure-git-repository"       = "glyph_git_config",
@@ -463,8 +465,12 @@ SKILL_GLYPHS <- list(
   "test-cli-application"           = "glyph_cli_test",
   "design-cli-output"              = "glyph_cli_output",
 
-  # ── open-source (1) ──────────────────────────────────────────────────
+  # ── open-source (2) ──────────────────────────────────────────────────
+  "evaluate-agent-framework"       = "glyph_magnifier_checklist",
   "polish-claw-project"            = "glyph_branch_fork",
+
+  # ── edge-computing (1) ─────────────────────────────────────────────
+  "deploy-edge-ai-model"           = "glyph_cpu_chip",
 
   # ── gpu-optimization (2) ────────────────────────────────────────────
   "analyze-kernel-bottleneck"      = "glyph_gpu_bottleneck",
