@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 22
+total_guides: 23
 version: "1.0"
 last_updated: "2026-04-07"
 
@@ -134,6 +134,15 @@ guides:
     agents: [edge-ai-engineer, mlops-engineer]
     teams: []
     skills: [deploy-edge-ai-model, deploy-ml-model-serving, install-almanac-content]
+
+  - id: self-continuation-loops-playbook
+    path: guides/self-continuation-loops-playbook.md
+    title: "Self-Continuation Loops Playbook"
+    description: "Choose among ScheduleWakeup, CronCreate loops, and loop.md; select sentinels; plan for the 7-day age-out"
+    category: workflow
+    agents: []
+    teams: []
+    skills: [choose-loop-wakeup-interval, read-continue-here, write-continue-here, manage-token-budget, du-dum]
 
   # ── Infrastructure guides ────────────────────────────────────────
   - id: setting-up-your-environment
