@@ -1,6 +1,6 @@
-# primitives_21.R - Glyph library part 21: CLI domain (4) + general (1)
+# primitives_21.R - Glyph library part 21: CLI domain (4) + general (3)
 # Sourced by build-icons.R
-# Domains: cli (4), general (1)
+# Domains: cli (4), general (3)
 
 # ==============================================================================
 # General skills (1)
@@ -313,6 +313,49 @@ glyph_du_dum <- function(cx, cy, s, col, bright) {
     layers[[length(layers) + 1]] <- ggplot2::geom_path(data = line_df, .aes(x, y),
       color = hex_with_alpha(bright, 0.35), linewidth = .lw(s, 1))
   }
+
+  layers
+}
+
+# -- glyph_loop_clock: clock face with sweep arc and central wake spark --------
+glyph_loop_clock <- function(cx, cy, s, col, bright) {
+  # Visual metaphor for choose-loop-wakeup-interval: a clock face represents
+  # the wait window; the sweep arc traces the elapsed delay; the central spark
+  # is the wake event that fires when the delay completes.
+  layers <- list()
+
+  # Clock face — outer circle
+  face <- data.frame(x0 = cx, y0 = cy, r = 22 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = face,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(col, 0.10), color = bright, linewidth = .lw(s, 2.2))
+
+  # Three tick marks at 12, 4, and 8 o'clock (cardinal triad)
+  for (angle_deg in c(90, -30, 210)) {
+    a <- angle_deg * pi / 180
+    tick_df <- data.frame(
+      x = c(cx + 18 * s * cos(a), cx + 22 * s * cos(a)),
+      y = c(cy + 18 * s * sin(a), cy + 22 * s * sin(a))
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = tick_df, .aes(x, y),
+      color = bright, linewidth = .lw(s, 1.8))
+  }
+
+  # Sweep arc — 300 degrees of wait, just outside the clock face
+  t_arc <- seq(pi / 2, pi / 2 - (300 * pi / 180), length.out = 60)
+  arc_r <- 28 * s
+  arc_df <- data.frame(
+    x = cx + arc_r * cos(t_arc),
+    y = cy + arc_r * sin(t_arc)
+  )
+  layers[[length(layers) + 1]] <- ggplot2::geom_path(data = arc_df, .aes(x, y),
+    color = hex_with_alpha(bright, 0.7), linewidth = .lw(s, 2))
+
+  # Central wake spark — small bright filled circle
+  spark <- data.frame(x0 = cx, y0 = cy, r = 3.5 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = spark,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = bright, color = bright, linewidth = .lw(s, 1))
 
   layers
 }

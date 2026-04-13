@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated": "2026-04-08T11:09:40.271Z",
-    "totalSkills": 344,
+    "generated": "2026-04-13T06:51:05.323Z",
+    "totalSkills": 345,
     "totalAgents": 71,
     "totalTeams": 16,
-    "totalNodes": 431,
-    "totalLinks": 1743,
+    "totalNodes": 432,
+    "totalLinks": 1747,
     "totalAgentLinks": 280,
     "totalTeamLinks": 50,
     "totalDomains": 62,
@@ -51,7 +51,7 @@
     },
     "general": {
       "description": "Cross-cutting development environment and workflow skills",
-      "count": 22
+      "count": 23
     },
     "citations": {
       "description": "Academic and software citation management with R and BibTeX",
@@ -2760,6 +2760,36 @@
       ],
       "path": "manage-engagement-buffer/SKILL.md",
       "locales": []
+    },
+    {
+      "id": "choose-loop-wakeup-interval",
+      "type": "skill",
+      "title": "Choose Loop Wakeup Interval",
+      "domain": "general",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Pick a delaySeconds value for ScheduleWakeup using the three-tier cache-aware decision, the [60,3600] clamp, and minute-boundary rounding",
+      "tags": [
+        "loop",
+        "wakeup",
+        "cache",
+        "scheduling",
+        "delay",
+        "general"
+      ],
+      "related": [
+        "manage-token-budget",
+        "du-dum",
+        "read-continue-here",
+        "write-continue-here"
+      ],
+      "path": "choose-loop-wakeup-interval/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "manage-bibliography",
@@ -14888,6 +14918,26 @@
     {
       "source": "manage-engagement-buffer",
       "target": "forage-resources",
+      "type": "skill"
+    },
+    {
+      "source": "choose-loop-wakeup-interval",
+      "target": "manage-token-budget",
+      "type": "skill"
+    },
+    {
+      "source": "choose-loop-wakeup-interval",
+      "target": "du-dum",
+      "type": "skill"
+    },
+    {
+      "source": "choose-loop-wakeup-interval",
+      "target": "read-continue-here",
+      "type": "skill"
+    },
+    {
+      "source": "choose-loop-wakeup-interval",
+      "target": "write-continue-here",
       "type": "skill"
     },
     {

@@ -121,7 +121,7 @@ SKILL_GLYPHS <- list(
   "prepare-soil"                       = "glyph_soil_layers",
   "read-garden"                        = "glyph_garden_eye",
 
-  # ── general (19) ───────────────────────────────────────────────────────
+  # ── general (20) ───────────────────────────────────────────────────────
   "setup-wsl-dev-environment"      = "glyph_terminal",
   "write-claude-md"                = "glyph_robot_doc",
   "security-audit-codebase"        = "glyph_shield_scan",
@@ -144,6 +144,7 @@ SKILL_GLYPHS <- list(
   "du-dum"                         = "glyph_du_dum",
   "evolve-skill-from-traces"       = "glyph_spiral_arrow",
   "manage-engagement-buffer"       = "glyph_log_funnel",
+  "choose-loop-wakeup-interval"    = "glyph_loop_clock",
 
   # ── git (7) ────────────────────────────────────────────────────────────
   "configure-git-repository"       = "glyph_git_config",

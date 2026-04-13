@@ -379,357 +379,357 @@
     {
       "agentId": "acp-developer",
       "path": "public/icons/cyberpunk/agents/acp-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "adaptic",
       "path": "public/icons/cyberpunk/agents/adaptic.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "advocatus-diaboli",
       "path": "public/icons/cyberpunk/agents/advocatus-diaboli.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "alchemist",
       "path": "public/icons/cyberpunk/agents/alchemist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "apa-specialist",
       "path": "public/icons/cyberpunk/agents/apa-specialist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "auditor",
       "path": "public/icons/cyberpunk/agents/auditor.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "blender-artist",
       "path": "public/icons/cyberpunk/agents/blender-artist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "chromatographer",
       "path": "public/icons/cyberpunk/agents/chromatographer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "citizen-entomologist",
       "path": "public/icons/cyberpunk/agents/citizen-entomologist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "claw-polisher",
       "path": "public/icons/cyberpunk/agents/claw-polisher.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "cli-developer",
       "path": "public/icons/cyberpunk/agents/cli-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "code-reviewer",
       "path": "public/icons/cyberpunk/agents/code-reviewer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "conservation-entomologist",
       "path": "public/icons/cyberpunk/agents/conservation-entomologist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "contemplative",
       "path": "public/icons/cyberpunk/agents/contemplative.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "designer",
       "path": "public/icons/cyberpunk/agents/designer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "devops-engineer",
       "path": "public/icons/cyberpunk/agents/devops-engineer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "diffusion-specialist",
       "path": "public/icons/cyberpunk/agents/diffusion-specialist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "dog-trainer",
       "path": "public/icons/cyberpunk/agents/dog-trainer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "edge-ai-engineer",
       "path": "public/icons/cyberpunk/agents/edge-ai-engineer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "etymologist",
       "path": "public/icons/cyberpunk/agents/etymologist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "fabricator",
       "path": "public/icons/cyberpunk/agents/fabricator.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "framework-scout",
       "path": "public/icons/cyberpunk/agents/framework-scout.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "gardener",
       "path": "public/icons/cyberpunk/agents/gardener.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "geometrist",
       "path": "public/icons/cyberpunk/agents/geometrist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "gxp-validator",
       "path": "public/icons/cyberpunk/agents/gxp-validator.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "hiking-guide",
       "path": "public/icons/cyberpunk/agents/hiking-guide.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "hildegard",
       "path": "public/icons/cyberpunk/agents/hildegard.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "ip-analyst",
       "path": "public/icons/cyberpunk/agents/ip-analyst.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "janitor",
       "path": "public/icons/cyberpunk/agents/janitor.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "jigsawr-developer",
       "path": "public/icons/cyberpunk/agents/jigsawr-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "kabalist",
       "path": "public/icons/cyberpunk/agents/kabalist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "kernel-optimizer",
       "path": "public/icons/cyberpunk/agents/kernel-optimizer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "lapidary",
       "path": "public/icons/cyberpunk/agents/lapidary.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "librarian",
       "path": "public/icons/cyberpunk/agents/librarian.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "logician",
       "path": "public/icons/cyberpunk/agents/logician.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "markovian",
       "path": "public/icons/cyberpunk/agents/markovian.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "martial-artist",
       "path": "public/icons/cyberpunk/agents/martial-artist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "mcp-developer",
       "path": "public/icons/cyberpunk/agents/mcp-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "mlops-engineer",
       "path": "public/icons/cyberpunk/agents/mlops-engineer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "mycologist",
       "path": "public/icons/cyberpunk/agents/mycologist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "mystic",
       "path": "public/icons/cyberpunk/agents/mystic.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "nlp-specialist",
       "path": "public/icons/cyberpunk/agents/nlp-specialist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "number-theorist",
       "path": "public/icons/cyberpunk/agents/number-theorist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "physicist",
       "path": "public/icons/cyberpunk/agents/physicist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "polymath",
       "path": "public/icons/cyberpunk/agents/polymath.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "project-manager",
       "path": "public/icons/cyberpunk/agents/project-manager.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "prospector",
       "path": "public/icons/cyberpunk/agents/prospector.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "putior-integrator",
       "path": "public/icons/cyberpunk/agents/putior-integrator.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "quarto-developer",
       "path": "public/icons/cyberpunk/agents/quarto-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "r-developer",
       "path": "public/icons/cyberpunk/agents/r-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "relocation-expert",
       "path": "public/icons/cyberpunk/agents/relocation-expert.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "security-analyst",
       "path": "public/icons/cyberpunk/agents/security-analyst.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "senior-data-scientist",
       "path": "public/icons/cyberpunk/agents/senior-data-scientist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "senior-researcher",
       "path": "public/icons/cyberpunk/agents/senior-researcher.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "senior-software-developer",
       "path": "public/icons/cyberpunk/agents/senior-software-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "senior-ux-ui-specialist",
       "path": "public/icons/cyberpunk/agents/senior-ux-ui-specialist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "senior-web-designer",
       "path": "public/icons/cyberpunk/agents/senior-web-designer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "shaman",
       "path": "public/icons/cyberpunk/agents/shaman.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "shapeshifter",
       "path": "public/icons/cyberpunk/agents/shapeshifter.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "shiny-developer",
       "path": "public/icons/cyberpunk/agents/shiny-developer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "skill-reviewer",
       "path": "public/icons/cyberpunk/agents/skill-reviewer.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "spectroscopist",
       "path": "public/icons/cyberpunk/agents/spectroscopist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "survivalist",
       "path": "public/icons/cyberpunk/agents/survivalist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "swarm-strategist",
       "path": "public/icons/cyberpunk/agents/swarm-strategist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "taxonomic-entomologist",
       "path": "public/icons/cyberpunk/agents/taxonomic-entomologist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "tcg-specialist",
       "path": "public/icons/cyberpunk/agents/tcg-specialist.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "theoretical-researcher",
       "path": "public/icons/cyberpunk/agents/theoretical-researcher.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "tour-planner",
       "path": "public/icons/cyberpunk/agents/tour-planner.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "translator",
       "path": "public/icons/cyberpunk/agents/translator.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "version-manager",
       "path": "public/icons/cyberpunk/agents/version-manager.webp",
-      "status": "done"
+      "status": "pending"
     },
     {
       "agentId": "web-developer",
       "path": "public/icons/cyberpunk/agents/web-developer.webp",
-      "status": "done"
+      "status": "pending"
     }
   ]
 }
