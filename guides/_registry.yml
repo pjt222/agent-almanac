@@ -2,7 +2,7 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 23
+total_guides: 24
 version: "1.0"
 last_updated: "2026-04-07"
 
@@ -15,6 +15,8 @@ categories:
     description: Quick-lookup command and invocation references
   design:
     description: System design documents and architecture specs
+  investigation:
+    description: Methodology guides for legitimate research, audit, and reverse-engineering of integration surfaces
 
 guides:
   # ── Workflow guides ──────────────────────────────────────────────
@@ -227,3 +229,13 @@ guides:
     agents: [adaptic, polymath, contemplative]
     teams: [synoptic-mind, tending, dyad, opaque-team]
     skills: [adaptic, expand-awareness, integrate-gestalt, express-insight, meditate, observe, awareness]
+
+  # ── Investigation guides ─────────────────────────────────────────
+  - id: reverse-engineering-a-cli-harness
+    path: guides/reverse-engineering-a-cli-harness.md
+    title: "Reverse-Engineering a CLI Harness"
+    description: "Five-phase methodology for legitimate integration research against a closed-source CLI harness — baseline, flag discovery, dark-launch detection, wire capture, redaction discipline"
+    category: investigation
+    agents: [security-analyst, code-reviewer]
+    teams: []
+    skills: [audit-dependency-versions, security-audit-codebase]
