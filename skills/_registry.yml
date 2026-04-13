@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 344
+total_skills: 345
 
 domains:
   r-packages:
@@ -466,6 +466,12 @@ domains:
         complexity: intermediate
         language: multi
         description: Ingest, prioritize, rate-limit, and deduplicate engagement items with digest generation and cooldown tracking
+
+      - id: choose-loop-wakeup-interval
+        path: choose-loop-wakeup-interval/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Pick a delaySeconds value for ScheduleWakeup using the three-tier cache-aware decision, the [60,3600] clamp, and minute-boundary rounding
 
   citations:
     description: Academic and software citation management with R and BibTeX
