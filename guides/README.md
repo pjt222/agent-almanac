@@ -1,6 +1,6 @@
 # Guides
 
-22 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
+24 guides serving as the human entry point to the agentic system — practical workflows for agents, teams, and skills, plus infrastructure setup and reference material.
 
 ## Workflow
 
@@ -44,6 +44,9 @@ Standards compliance audits using the agentskills-alignment team for format vali
 
 ### [Edge Computing Deployment](edge-computing-deployment.md)
 Install agent-almanac skills on edge LLMs (Gemma 4 via AI Edge Gallery) with distilled content, token budgets, and offline bundles.
+
+### [Self-Continuation Loops Playbook](self-continuation-loops-playbook.md)
+Choose among ScheduleWakeup, CronCreate loops, and loop.md; select sentinels; plan for the 7-day age-out.
 
 ## Infrastructure
 

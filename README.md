@@ -15,11 +15,11 @@ A library of executable skills, specialist agents, and pre-built teams for [Clau
 ## At a Glance
 
 <!-- AUTO:START:stats -->
-- **344 skills** across 62 domains — structured, executable procedures
+- **345 skills** across 62 domains — structured, executable procedures
 - **71 agents** — specialized Claude Code personas covering development, review, compliance, and more
 - **16 teams** — predefined multi-agent compositions for complex workflows
-- **22 guides** — human-readable workflow, infrastructure, and reference documentation
-- **Interactive visualization** — force-graph explorer with 344 R-generated skill icons and 9 color themes
+- **24 guides** — human-readable workflow, infrastructure, and reference documentation
+- **Interactive visualization** — force-graph explorer with 345 R-generated skill icons and 9 color themes
 <!-- AUTO:END:stats -->
 
 ## How It Works
@@ -149,6 +149,7 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 - [Production Coordination Patterns](guides/production-coordination-patterns.md) — Real-world multi-agent orchestration patterns: barrier synchronization, silence budgets, health checks, degraded-wave policies, and cost-aware scheduling
 - [AgentSkills Alignment](guides/agentskills-alignment.md) — Standards compliance audits using the agentskills-alignment team for format validation, spec drift detection, and registry integrity
 - [Edge Computing Deployment](guides/edge-computing-deployment.md) — Install agent-almanac skills on edge LLMs (Gemma 4 via AI Edge Gallery) with distilled content, token budgets, and offline bundles
+- [Self-Continuation Loops Playbook](guides/self-continuation-loops-playbook.md) — Choose among ScheduleWakeup, CronCreate loops, and loop.md; select sentinels; plan for the 7-day age-out
 
 **Infrastructure**
 
@@ -174,10 +175,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 320/344 | 3/71 | 1/16 | 1/22 | 325/453 (71.7%) |
-| zh-CN | 简体中文 | 320/344 | 3/71 | 1/16 | 1/22 | 325/453 (71.7%) |
-| ja | 日本語 | 320/344 | 3/71 | 1/16 | 1/22 | 325/453 (71.7%) |
-| es | Español | 320/344 | 3/71 | 1/16 | 1/22 | 325/453 (71.7%) |
+| de | Deutsch | 321/345 | 3/71 | 1/16 | 3/24 | 328/456 (71.9%) |
+| zh-CN | 简体中文 | 321/345 | 3/71 | 1/16 | 3/24 | 328/456 (71.9%) |
+| ja | 日本語 | 321/345 | 3/71 | 1/16 | 3/24 | 328/456 (71.9%) |
+| es | Español | 321/345 | 3/71 | 1/16 | 3/24 | 328/456 (71.9%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
