@@ -238,7 +238,7 @@ glyph_adaptic <- function(cx, cy, s, col, bright) {
 }
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Web-dev skills (1)
+# Web-scraping skills (2)
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ── glyph_headless_scraper: browser frame with robotic eye ────────────────────
@@ -301,6 +301,70 @@ glyph_headless_scraper <- function(cx, cy, s, col, bright) {
     )
     layers[[length(layers) + 1]] <- ggplot2::geom_path(data = scan, .aes(x, y),
       color = hex_with_alpha(col, 0.2), linewidth = .lw(s, 0.8))
+  }
+
+  layers
+}
+
+# ── glyph_proxy_rotation: origin node with four orbiting proxy nodes ──────────
+glyph_proxy_rotation <- function(cx, cy, s, col, bright) {
+  # A central origin (request source) connected to four proxy nodes arranged
+  # at compass positions, with curved arcs suggesting rotational cycling
+  # between them — provider-neutral proxy rotation for scraping.
+  layers <- list()
+
+  # Outer ring (the proxy pool boundary)
+  ring <- data.frame(x0 = cx, y0 = cy, r = 20 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = ring,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = "transparent",
+    color = hex_with_alpha(col, 0.25),
+    linewidth = .lw(s, 1.2))
+
+  # Four proxy nodes at N, E, S, W
+  proxy_r <- 4 * s
+  proxy_d <- 16 * s
+  proxies <- data.frame(
+    x0 = cx + c(0,  proxy_d, 0, -proxy_d),
+    y0 = cy + c(proxy_d, 0, -proxy_d, 0),
+    r  = rep(proxy_r, 4)
+  )
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = proxies,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = hex_with_alpha(col, 0.18),
+    color = bright, linewidth = .lw(s, 1.6))
+
+  # Faint spokes from center to each proxy (request routing)
+  for (i in seq_len(nrow(proxies))) {
+    spoke <- data.frame(
+      x = c(cx, proxies$x0[i]),
+      y = c(cy, proxies$y0[i])
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = spoke, .aes(x, y),
+      color = hex_with_alpha(col, 0.3), linewidth = .lw(s, 0.7))
+  }
+
+  # Origin node (request source) — solid central dot
+  origin <- data.frame(x0 = cx, y0 = cy, r = 2.6 * s)
+  layers[[length(layers) + 1]] <- ggforce::geom_circle(data = origin,
+    .aes(x0 = x0, y0 = y0, r = r),
+    fill = bright, color = bright, linewidth = .lw(s, 1.2))
+
+  # Clockwise rotation chevrons at the four diagonal gaps on the outer ring
+  # (NE, SE, SW, NW) — short tangent arrows that imply cycling without
+  # overlapping the proxy nodes themselves.
+  ring_r <- 20 * s
+  chevron_centers <- pi / 4 + (0:3) * (-pi / 2)  # 45°, -45°, -135°, 135°  (clockwise)
+  for (theta in chevron_centers) {
+    half_span <- pi / 18  # 10° arc
+    angles <- seq(theta + half_span, theta - half_span, length.out = 8)
+    chev <- data.frame(
+      x = cx + ring_r * cos(angles),
+      y = cy + ring_r * sin(angles)
+    )
+    layers[[length(layers) + 1]] <- ggplot2::geom_path(data = chev, .aes(x, y),
+      color = bright, linewidth = .lw(s, 1.6),
+      arrow = grid::arrow(length = grid::unit(0.05, "inches"), type = "closed"))
   }
 
   layers

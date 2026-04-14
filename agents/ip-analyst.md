@@ -46,16 +46,17 @@ Adapts the `heal` skill's triage matrix for IP portfolio health assessment — c
 
 ## Available Skills
 
-This agent can execute the following structured procedures from the [skills library](../skills/):
+This agent can execute the following structured procedures from the [skills library](../skills/). Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
 
 ### Intellectual Property
-- `assess-ip-landscape` — Map patent clusters, key players, white spaces, and FTO risks for a technology domain
-- `search-prior-art` — Search patent and non-patent literature for novelty, invalidity, and FTO analysis
-- `screen-trademark` — Trademark conflict screening, distinctiveness analysis, and likelihood-of-confusion assessment
-- `file-trademark` — Trademark filing procedures for EUIPO, USPTO, and Madrid Protocol
+- `assess-ip-landscape` — Map patent clusters, key players, white spaces, and FTO risks for a technology domain **[core]**
+- `search-prior-art` — Search patent and non-patent literature for novelty, invalidity, and FTO analysis **[core]**
+- `screen-trademark` — Trademark conflict screening, distinctiveness analysis, and likelihood-of-confusion assessment **[core]**
+- `file-trademark` — Trademark filing procedures for EUIPO, USPTO, and Madrid Protocol **[core]**
 
-### Web Automation
-- `headless-web-scraping` — Automated data extraction from JS-rendered trademark databases using scrapling
+### Web Scraping
+- `headless-web-scraping` — Automated data extraction from JS-rendered trademark databases using scrapling **[core]**
+- `rotate-scraping-proxies` — Network-layer escalation when trademark or patent databases (e.g. WIPO, TMview) block direct access; provider-neutral with mandatory legality pre-flight
 
 ## Usage Scenarios
 

@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 345
+total_skills: 346
 
 domains:
   r-packages:
@@ -1234,11 +1234,20 @@ domains:
         complexity: advanced
         language: natural
         description: Trademark filing procedures for EUIPO, USPTO, and Madrid Protocol
+
+  web-scraping:
+    description: Headless browsing, data extraction, anti-bot evasion, and ethical proxy rotation for consuming web content
+    skills:
       - id: headless-web-scraping
         path: headless-web-scraping/SKILL.md
         complexity: intermediate
         language: Python
         description: Headless web browsing and data extraction using scrapling for JS-rendered pages and anti-bot sites
+      - id: rotate-scraping-proxies
+        path: rotate-scraping-proxies/SKILL.md
+        complexity: intermediate
+        language: Python
+        description: Provider-neutral proxy rotation as last-resort escalation for blocked scraping with legality, session, cost, and consent guardrails
 
   gardening:
     description: Plant cultivation, soil preparation, garden observation, and hand tool care

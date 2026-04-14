@@ -146,6 +146,7 @@ get_cyberpunk_colors <- function() {
     "devops"                 = "#00ff88",
     "diffusion"              = "#cc77ff",
     "digital-logic"          = "#33ddff",
+    "edge-computing"         = "#7799dd",   # slate-blue -- edge-of-cloud, distributed inference
     "electromagnetism"       = "#ff7744",
     "entomology"             = "#77dd44",
     "esoteric"               = "#dd44ff",
@@ -153,6 +154,7 @@ get_cyberpunk_colors <- function() {
     "general"                = "#ccccff",
     "geometry"               = "#55ccdd",
     "git"                    = "#66ffcc",
+    "gpu-optimization"       = "#ff44cc",   # electric-magenta -- parallel compute intensity, distinct from review pink
     "hildegard"              = "#99bb44",
     "i18n"                   = "#55bbcc",   # teal -- translation/international
     "intellectual-property"  = "#33ccff",
@@ -187,6 +189,7 @@ get_cyberpunk_colors <- function() {
     "versioning"             = "#44ddaa",
     "visualization"          = "#ee77cc",
     "web-dev"                = "#ff6633",
+    "web-scraping"           = "#22aaee",   # web-blue -- networking/extraction, distinct from web-dev orange
     "workflow-visualization" = "#66dd88"
   )
 

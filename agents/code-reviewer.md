@@ -48,6 +48,7 @@ This agent can execute the following structured procedures from the [skills libr
 - `write-testthat-tests` — Write testthat edition 3 tests with high coverage **[core]**
 - `configure-git-repository` — Configure a Git repository with proper .gitignore and conventions **[core]**
 - `review-pull-request` — Review pull requests end-to-end using gh CLI with severity-leveled feedback **[core]**
+- `cross-review-project` — Structured cross-project code review between two Claude Code instances via Git worktrees
 
 ## Usage Scenarios
 

@@ -12,7 +12,7 @@ allowed-tools: Bash Read Write Grep Glob
 metadata:
   author: Philipp Thoss
   version: "1.0"
-  domain: general
+  domain: web-scraping
   complexity: intermediate
   language: Python
   tags: web-scraping, headless, scrapling, automation, data-extraction
@@ -259,7 +259,7 @@ def scrape_urls(urls, selector, delay=1.0):
 **On failure:**
 - 429 Too Many Requests -- increase delay to 3-5 seconds, or stop and retry later
 - `robots.txt` disallows the path -- respect the directive; do not override it
-- IP ban -- stop scraping immediately; the rate limiting was insufficient
+- IP ban -- stop scraping immediately; the rate limiting was insufficient. If access is legitimate (public data, ToS-permitted, robots.txt-respected) and you must continue, see [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md) for network-layer escalation
 
 ## Validation
 
@@ -283,6 +283,7 @@ def scrape_urls(urls, selector, delay=1.0):
 
 ## Related Skills
 
+- [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md) -- network-layer escalation when client-side stealth is exhausted and IP bans block legitimate, ToS-permitted access
 - [use-graphql-api](../use-graphql-api/SKILL.md) -- structured API queries when the site offers a GraphQL endpoint (preferred over scraping)
 - [serialize-data-formats](../serialize-data-formats/SKILL.md) -- converting extracted data to JSON, CSV, or other formats
 - [deploy-searxng](../deploy-searxng/SKILL.md) -- self-hosted search engine that aggregates results from multiple sources

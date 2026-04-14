@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-04-13T06:51:05.323Z",
-    "totalSkills": 345,
+    "generated": "2026-04-14T11:24:07.189Z",
+    "totalSkills": 346,
     "totalAgents": 71,
     "totalTeams": 16,
-    "totalNodes": 432,
-    "totalLinks": 1747,
+    "totalNodes": 433,
+    "totalLinks": 1753,
     "totalAgentLinks": 280,
     "totalTeamLinks": 50,
-    "totalDomains": 62,
+    "totalDomains": 63,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -123,7 +123,11 @@
     },
     "intellectual-property": {
       "description": "Patent landscape analysis, prior art search, and IP strategy",
-      "count": 5
+      "count": 4
+    },
+    "web-scraping": {
+      "description": "Headless browsing, data extraction, anti-bot evasion, and ethical proxy rotation for consuming web content",
+      "count": 2
     },
     "gardening": {
       "description": "Plant cultivation, soil preparation, garden observation, and hand tool care",
@@ -6997,7 +7001,7 @@
       "id": "headless-web-scraping",
       "type": "skill",
       "title": "Headless Web Scraping",
-      "domain": "intellectual-property",
+      "domain": "web-scraping",
       "complexity": "intermediate",
       "language": "Python",
       "description": "Headless web browsing and data extraction using scrapling for JS-rendered pages and anti-bot sites",
@@ -7009,6 +7013,7 @@
         "data-extraction"
       ],
       "related": [
+        "rotate-scraping-proxies",
         "use-graphql-api",
         "serialize-data-formats",
         "deploy-searxng",
@@ -7016,6 +7021,37 @@
       ],
       "path": "headless-web-scraping/SKILL.md",
       "locales": []
+    },
+    {
+      "id": "rotate-scraping-proxies",
+      "type": "skill",
+      "title": "Rotate Scraping Proxies",
+      "domain": "web-scraping",
+      "complexity": "intermediate",
+      "language": "Python",
+      "description": "Provider-neutral proxy rotation as last-resort escalation for blocked scraping with legality, session, cost, and consent guardrails",
+      "tags": [
+        "web-scraping",
+        "proxies",
+        "rotation",
+        "residential",
+        "scrapling",
+        "networking"
+      ],
+      "related": [
+        "headless-web-scraping",
+        "use-graphql-api",
+        "deploy-searxng",
+        "configure-reverse-proxy",
+        "security-audit-codebase"
+      ],
+      "path": "rotate-scraping-proxies/SKILL.md",
+      "locales": [
+        "de",
+        "zh-CN",
+        "ja",
+        "es"
+      ]
     },
     {
       "id": "cultivate-bonsai",
@@ -18082,6 +18118,11 @@
     },
     {
       "source": "headless-web-scraping",
+      "target": "rotate-scraping-proxies",
+      "type": "skill"
+    },
+    {
+      "source": "headless-web-scraping",
       "target": "use-graphql-api",
       "type": "skill"
     },
@@ -18098,6 +18139,31 @@
     {
       "source": "headless-web-scraping",
       "target": "forage-solutions",
+      "type": "skill"
+    },
+    {
+      "source": "rotate-scraping-proxies",
+      "target": "headless-web-scraping",
+      "type": "skill"
+    },
+    {
+      "source": "rotate-scraping-proxies",
+      "target": "use-graphql-api",
+      "type": "skill"
+    },
+    {
+      "source": "rotate-scraping-proxies",
+      "target": "deploy-searxng",
+      "type": "skill"
+    },
+    {
+      "source": "rotate-scraping-proxies",
+      "target": "configure-reverse-proxy",
+      "type": "skill"
+    },
+    {
+      "source": "rotate-scraping-proxies",
+      "target": "security-audit-codebase",
       "type": "skill"
     },
     {

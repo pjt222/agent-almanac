@@ -39,6 +39,9 @@ diffusion:
 digital-logic:
   basePrompt: Logic gate symbol, binary truth table, circuit diagram
   glow: electric-cyan
+edge-computing:
+  basePrompt: Small edge device, network lightning bolt, IoT chip silhouette
+  glow: slate-blue
 electromagnetism:
   basePrompt: Magnetic field lines, solenoid coil, electromagnetic wave
   glow: copper-orange
@@ -57,6 +60,9 @@ geometry:
 git:
   basePrompt: Glowing branch tree, commit graph nodes
   glow: mint
+gpu-optimization:
+  basePrompt: GPU die silhouette, parallel compute lanes, thermal gradient flow
+  glow: electric-magenta
 hildegard:
   basePrompt: Medieval manuscript, herbal illustration, sacred music
   glow: emerald
@@ -114,6 +120,9 @@ versioning:
 web-dev:
   basePrompt: Neon browser window, HTML angle brackets
   glow: coral
+web-scraping:
+  basePrompt: Browser frame with spider eye, network mesh, data extraction lines
+  glow: network-blue
 workflow-visualization:
   basePrompt: Mermaid diagram, flowchart arrows, annotated pipeline
   glow: spring-green

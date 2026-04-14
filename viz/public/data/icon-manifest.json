@@ -54,6 +54,10 @@
       "basePrompt": "Logic gate symbol, binary truth table, circuit diagram",
       "glow": "electric-cyan"
     },
+    "edge-computing": {
+      "basePrompt": "Small edge device, network lightning bolt, IoT chip silhouette",
+      "glow": "slate-blue"
+    },
     "electromagnetism": {
       "basePrompt": "Magnetic field lines, solenoid coil, electromagnetic wave",
       "glow": "copper-orange"
@@ -77,6 +81,10 @@
     "git": {
       "basePrompt": "Glowing branch tree, commit graph nodes",
       "glow": "mint"
+    },
+    "gpu-optimization": {
+      "basePrompt": "GPU die silhouette, parallel compute lanes, thermal gradient flow",
+      "glow": "electric-magenta"
     },
     "hildegard": {
       "basePrompt": "Medieval manuscript, herbal illustration, sacred music",
@@ -153,6 +161,10 @@
     "web-dev": {
       "basePrompt": "Neon browser window, HTML angle brackets",
       "glow": "coral"
+    },
+    "web-scraping": {
+      "basePrompt": "Browser frame with spider eye, network mesh, data extraction lines",
+      "glow": "network-blue"
     },
     "workflow-visualization": {
       "basePrompt": "Mermaid diagram, flowchart arrows, annotated pipeline",
@@ -995,7 +1007,7 @@
     {
       "skillId": "deploy-edge-ai-model",
       "domain": "edge-computing",
-      "prompt": "Edge AI deployment, on-device inference, model quantization, and hardware acceleration, Deploy, Edge, Model, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "Small edge device, network lightning bolt, IoT chip silhouette, Deploy, Edge, Model, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 190001,
       "path": "public/icons/edge-computing/deploy-edge-ai-model.webp",
       "status": "pending"
@@ -1349,184 +1361,184 @@
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, WSL penguin, terminal window, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240001,
-      "path": "public/icons/cyberpunk/general/setup-wsl-dev-environment.webp",
-      "status": "done"
+      "path": "public/icons/general/setup-wsl-dev-environment.webp",
+      "status": "pending"
     },
     {
       "skillId": "write-claude-md",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Claude AI icon, instruction document, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240002,
-      "path": "public/icons/cyberpunk/general/write-claude-md.webp",
-      "status": "done"
+      "path": "public/icons/general/write-claude-md.webp",
+      "status": "pending"
     },
     {
       "skillId": "security-audit-codebase",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, security scan, vulnerability shield, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240003,
-      "path": "public/icons/cyberpunk/general/security-audit-codebase.webp",
-      "status": "done"
+      "path": "public/icons/general/security-audit-codebase.webp",
+      "status": "pending"
     },
     {
       "skillId": "manage-memory",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Manage, Memory, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240004,
-      "path": "public/icons/cyberpunk/general/manage-memory.webp",
-      "status": "done"
+      "path": "public/icons/general/manage-memory.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-skill",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, skill blueprint, creation spark, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240005,
-      "path": "public/icons/cyberpunk/general/create-skill.webp",
-      "status": "done"
+      "path": "public/icons/general/create-skill.webp",
+      "status": "pending"
     },
     {
       "skillId": "evolve-skill",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, evolution spiral, skill upgrade arrow, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240006,
-      "path": "public/icons/cyberpunk/general/evolve-skill.webp",
-      "status": "done"
+      "path": "public/icons/general/evolve-skill.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-agent",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Create, New, Agent, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240007,
-      "path": "public/icons/cyberpunk/general/create-agent.webp",
-      "status": "done"
+      "path": "public/icons/general/create-agent.webp",
+      "status": "pending"
     },
     {
       "skillId": "create-team",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Create, New, Team, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240008,
-      "path": "public/icons/cyberpunk/general/create-team.webp",
-      "status": "done"
+      "path": "public/icons/general/create-team.webp",
+      "status": "pending"
     },
     {
       "skillId": "fail-early-pattern",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Fail, Early, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240009,
-      "path": "public/icons/cyberpunk/general/fail-early-pattern.webp",
-      "status": "done"
+      "path": "public/icons/general/fail-early-pattern.webp",
+      "status": "pending"
     },
     {
       "skillId": "argumentation",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Construct, Arguments, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240010,
-      "path": "public/icons/cyberpunk/general/argumentation.webp",
-      "status": "done"
+      "path": "public/icons/general/argumentation.webp",
+      "status": "pending"
     },
     {
       "skillId": "evolve-agent",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Evolve, Existing, Agent, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240011,
-      "path": "public/icons/cyberpunk/general/evolve-agent.webp",
-      "status": "done"
+      "path": "public/icons/general/evolve-agent.webp",
+      "status": "pending"
     },
     {
       "skillId": "evolve-team",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Evolve, Existing, Team, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240012,
-      "path": "public/icons/cyberpunk/general/evolve-team.webp",
-      "status": "done"
+      "path": "public/icons/general/evolve-team.webp",
+      "status": "pending"
     },
     {
       "skillId": "manage-token-budget",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, token gauge, budget meter, cost cap, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240013,
-      "path": "public/icons/cyberpunk/general/manage-token-budget.webp",
-      "status": "done"
+      "path": "public/icons/general/manage-token-budget.webp",
+      "status": "pending"
     },
     {
       "skillId": "prune-agent-memory",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, memory cards, pruning shears, forget policy, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240014,
-      "path": "public/icons/cyberpunk/general/prune-agent-memory.webp",
-      "status": "done"
+      "path": "public/icons/general/prune-agent-memory.webp",
+      "status": "pending"
     },
     {
       "skillId": "circuit-breaker-pattern",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, circuit switch, break gap, fault tolerance, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240015,
-      "path": "public/icons/cyberpunk/general/circuit-breaker-pattern.webp",
-      "status": "done"
+      "path": "public/icons/general/circuit-breaker-pattern.webp",
+      "status": "pending"
     },
     {
       "skillId": "verify-agent-output",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, verification stamp, evidence chain, checkmark, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240016,
-      "path": "public/icons/cyberpunk/general/verify-agent-output.webp",
-      "status": "done"
+      "path": "public/icons/general/verify-agent-output.webp",
+      "status": "pending"
     },
     {
       "skillId": "write-continue-here",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Write, Continue, Here, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240017,
-      "path": "public/icons/cyberpunk/general/write-continue-here.webp",
-      "status": "done"
+      "path": "public/icons/general/write-continue-here.webp",
+      "status": "pending"
     },
     {
       "skillId": "read-continue-here",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Read, Continue, Here, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240018,
-      "path": "public/icons/cyberpunk/general/read-continue-here.webp",
-      "status": "done"
+      "path": "public/icons/general/read-continue-here.webp",
+      "status": "pending"
     },
     {
       "skillId": "install-almanac-content",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Install, Almanac, Content, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240019,
-      "path": "public/icons/cyberpunk/general/install-almanac-content.webp",
-      "status": "done"
+      "path": "public/icons/general/install-almanac-content.webp",
+      "status": "pending"
     },
     {
       "skillId": "du-dum",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Dum:, Batch, Then, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240020,
-      "path": "public/icons/cyberpunk/general/du-dum.webp",
-      "status": "done"
+      "path": "public/icons/general/du-dum.webp",
+      "status": "pending"
     },
     {
       "skillId": "evolve-skill-from-traces",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Evolve, Skill, from, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240021,
-      "path": "public/icons/cyberpunk/general/evolve-skill-from-traces.webp",
-      "status": "done"
+      "path": "public/icons/general/evolve-skill-from-traces.webp",
+      "status": "pending"
     },
     {
       "skillId": "manage-engagement-buffer",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Manage, Engagement, Buffer, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240022,
-      "path": "public/icons/cyberpunk/general/manage-engagement-buffer.webp",
-      "status": "done"
+      "path": "public/icons/general/manage-engagement-buffer.webp",
+      "status": "pending"
     },
     {
       "skillId": "choose-loop-wakeup-interval",
       "domain": "general",
       "prompt": "Glowing terminal prompt, wrench tool, Choose, Loop, Wakeup, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 240023,
-      "path": "public/icons/cyberpunk/general/choose-loop-wakeup-interval.webp",
-      "status": "done"
+      "path": "public/icons/general/choose-loop-wakeup-interval.webp",
+      "status": "pending"
     },
     {
       "skillId": "construct-geometric-figure",
@@ -1611,18 +1623,18 @@
     {
       "skillId": "analyze-kernel-bottleneck",
       "domain": "gpu-optimization",
-      "prompt": "GPU kernel performance analysis, software pipelining, and SASS-level optimization, Analyze, Kernel, Bottleneck, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "GPU die silhouette, parallel compute lanes, thermal gradient flow, Analyze, Kernel, Bottleneck, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 270001,
-      "path": "public/icons/gpu-optimization/analyze-kernel-bottleneck.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/gpu-optimization/analyze-kernel-bottleneck.webp",
+      "status": "done"
     },
     {
       "skillId": "pipeline-gpu-kernel",
       "domain": "gpu-optimization",
-      "prompt": "GPU kernel performance analysis, software pipelining, and SASS-level optimization, Pipeline, GPU, Kernel, dark background, vector art, clean edges, single centered icon, no text",
+      "prompt": "GPU die silhouette, parallel compute lanes, thermal gradient flow, Pipeline, GPU, Kernel, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 270002,
-      "path": "public/icons/gpu-optimization/pipeline-gpu-kernel.webp",
-      "status": "pending"
+      "path": "public/icons/cyberpunk/gpu-optimization/pipeline-gpu-kernel.webp",
+      "status": "done"
     },
     {
       "skillId": "formulate-herbal-remedy",
@@ -1702,14 +1714,6 @@
       "prompt": "Patent document, trademark symbol, claim scope, File, Trademark, dark background, vector art, clean edges, single centered icon, no text",
       "seed": 300004,
       "path": "public/icons/intellectual-property/file-trademark.webp",
-      "status": "pending"
-    },
-    {
-      "skillId": "headless-web-scraping",
-      "domain": "intellectual-property",
-      "prompt": "Patent document, trademark symbol, claim scope, Headless, Web, Scraping, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 300005,
-      "path": "public/icons/intellectual-property/headless-web-scraping.webp",
       "status": "pending"
     },
     {
@@ -2961,10 +2965,26 @@
       "status": "pending"
     },
     {
+      "skillId": "headless-web-scraping",
+      "domain": "web-scraping",
+      "prompt": "Browser frame with spider eye, network mesh, data extraction lines, Headless, Web, Scraping, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 620001,
+      "path": "public/icons/web-scraping/headless-web-scraping.webp",
+      "status": "pending"
+    },
+    {
+      "skillId": "rotate-scraping-proxies",
+      "domain": "web-scraping",
+      "prompt": "Browser frame with spider eye, network mesh, data extraction lines, Rotate, Scraping, Proxies, dark background, vector art, clean edges, single centered icon, no text",
+      "seed": 620002,
+      "path": "public/icons/web-scraping/rotate-scraping-proxies.webp",
+      "status": "pending"
+    },
+    {
       "skillId": "install-putior",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Install, putior, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620001,
+      "seed": 630001,
       "path": "public/icons/workflow-visualization/install-putior.webp",
       "status": "pending"
     },
@@ -2972,7 +2992,7 @@
       "skillId": "analyze-codebase-workflow",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Analyze, Codebase, Workflow, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620002,
+      "seed": 630002,
       "path": "public/icons/workflow-visualization/analyze-codebase-workflow.webp",
       "status": "pending"
     },
@@ -2980,7 +3000,7 @@
       "skillId": "annotate-source-files",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Annotate, Source, Files, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620003,
+      "seed": 630003,
       "path": "public/icons/workflow-visualization/annotate-source-files.webp",
       "status": "pending"
     },
@@ -2988,7 +3008,7 @@
       "skillId": "generate-workflow-diagram",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Generate, Workflow, Diagram, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620004,
+      "seed": 630004,
       "path": "public/icons/workflow-visualization/generate-workflow-diagram.webp",
       "status": "pending"
     },
@@ -2996,7 +3016,7 @@
       "skillId": "setup-putior-ci",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Set, putior, CI/CD, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620005,
+      "seed": 630005,
       "path": "public/icons/workflow-visualization/setup-putior-ci.webp",
       "status": "pending"
     },
@@ -3004,7 +3024,7 @@
       "skillId": "configure-putior-mcp",
       "domain": "workflow-visualization",
       "prompt": "Mermaid diagram, flowchart arrows, annotated pipeline, Configure, putior, MCP, dark background, vector art, clean edges, single centered icon, no text",
-      "seed": 620006,
+      "seed": 630006,
       "path": "public/icons/workflow-visualization/configure-putior-mcp.webp",
       "status": "pending"
     }

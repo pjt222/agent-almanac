@@ -1,7 +1,7 @@
 # Skills Library for Agentic Systems
 
 <!-- AUTO:START:skills-intro -->
-A collection of 345 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
+A collection of 346 task-level skills following the [Agent Skills open standard](https://agentskills.io) (`SKILL.md` format). These skills provide structured, executable procedures that agentic systems (Claude Code, Codex, Cursor, Gemini CLI, etc.) can consume to perform specific development tasks.
 <!-- AUTO:END:skills-intro -->
 
 ## How Skills Differ from Guides and Agents
@@ -47,7 +47,8 @@ Browse by domain:
 | [Morphic](morphic/) | 7 | Adaptive transformation, structural metamorphosis, and reconfiguration strategies |
 | [Alchemy](alchemy/) | 4 | Code and data transmutation through systematic decomposition, purification, and synthesis |
 | [Tcg](tcg/) | 3 | Trading card game grading, deck building, and collection management |
-| [Intellectual Property](intellectual-property/) | 5 | Patent landscape analysis, prior art search, and IP strategy |
+| [Intellectual Property](intellectual-property/) | 4 | Patent landscape analysis, prior art search, and IP strategy |
+| [Web Scraping](web-scraping/) | 2 | Headless browsing, data extraction, anti-bot evasion, and ethical proxy rotation for consuming web content |
 | [Gardening](gardening/) | 5 | Plant cultivation, soil preparation, garden observation, and hand tool care |
 | [Shiny](shiny/) | 7 | Shiny web application development, modules, testing, and deployment |
 | [Animal Training](animal-training/) | 2 | Canine behavior and obedience training skills |

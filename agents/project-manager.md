@@ -49,6 +49,7 @@ Core skills (loaded automatically when spawned as subagent) are marked with **[c
 - `commit-changes` — Commit PM artifact changes to version control
 - `manage-git-branches` — Branch management for PM documentation
 - `write-claude-md` — Create project instructions referencing PM artifacts
+- `manage-engagement-buffer` — Ingest, prioritize, rate-limit, and deduplicate stakeholder engagement requests
 
 ## Usage Scenarios
 

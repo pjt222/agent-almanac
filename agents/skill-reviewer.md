@@ -38,6 +38,7 @@ This agent ensures every skill in the library meets the agentskills.io standard 
 - **review-skill-format**: Validate a SKILL.md file against the agentskills.io standard checking frontmatter, sections, procedure format, line count, and registry sync
 - **update-skill-content**: Improve an existing SKILL.md by refining procedures, expanding pitfalls, syncing related skills, and bumping the version
 - **refactor-skill-structure**: Refactor an over-long or poorly structured SKILL.md by extracting examples, splitting procedures, and applying progressive disclosure
+- **evolve-skill-from-traces**: Evolve SKILL.md files from agent execution traces using a three-stage pipeline (trace → diff → refine)
 
 ## Usage Scenarios
 
