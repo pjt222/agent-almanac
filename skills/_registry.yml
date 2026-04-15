@@ -1,7 +1,7 @@
 version: "1.6"
 generated: "2026-04-07"
 standard: "agentskills.io/specification"
-total_skills: 346
+total_skills: 350
 
 domains:
   r-packages:
@@ -1989,3 +1989,27 @@ domains:
         complexity: advanced
         language: multi
         description: Contribute to OpenClaw ecosystem projects through structured 9-step audit and PR workflow
+
+  investigation:
+    description: Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure
+    skills:
+      - id: monitor-binary-version-baselines
+        path: monitor-binary-version-baselines/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Establish and maintain longitudinal baselines of CLI binary contents across versions using categorized markers, weighted scoring, and per-version baseline records
+      - id: probe-feature-flag-state
+        path: probe-feature-flag-state/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Probe runtime state of a named feature flag using a four-pronged evidence protocol and four-state classification (LIVE / DARK / INDETERMINATE / UNKNOWN)
+      - id: conduct-empirical-wire-capture
+        path: conduct-empirical-wire-capture/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Capture outbound HTTP and telemetry from a CLI harness at runtime using the cheapest channel that captures the target, with JSONL output for diff-friendly artifacts
+      - id: redact-for-public-disclosure
+        path: redact-for-public-disclosure/SKILL.md
+        complexity: intermediate
+        language: multi
+        description: Redact reverse-engineering findings for public disclosure using deny-list scanners, orphan-commit publish patterns, and category-based calibration that preserves teaching value

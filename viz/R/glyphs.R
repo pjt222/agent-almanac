@@ -1,5 +1,5 @@
 # glyphs.R - Skill-to-glyph mapping
-# Maps each of 346 skillIds to a specific glyph drawing function.
+# Maps each of 350 skillIds to a specific glyph drawing function.
 #
 # put id:"glyph_mapping", label:"SKILL_GLYPHS lookup table (skill ID to glyph function)", node_type:"input", output:"glyph_fn"
 #
@@ -160,6 +160,12 @@ SKILL_GLYPHS <- list(
   "search-prior-art"               = "glyph_prior_art_search",
   "screen-trademark"               = "glyph_trademark_screen",
   "file-trademark"                 = "glyph_trademark_file",
+
+  # ── investigation (4) ──────────────────────────────────────────────────
+  "monitor-binary-version-baselines" = "glyph_version_baseline",
+  "probe-feature-flag-state"         = "glyph_flag_probe",
+  "conduct-empirical-wire-capture"   = "glyph_wire_capture",
+  "redact-for-public-disclosure"     = "glyph_redact_bar",
 
   # ── web-scraping (2) ──────────────────────────────────────────────────
   "headless-web-scraping"          = "glyph_headless_scraper",

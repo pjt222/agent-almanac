@@ -1,14 +1,14 @@
 {
   "meta": {
-    "generated": "2026-04-14T11:24:07.189Z",
-    "totalSkills": 346,
+    "generated": "2026-04-15T12:11:49.046Z",
+    "totalSkills": 350,
     "totalAgents": 71,
     "totalTeams": 16,
-    "totalNodes": 433,
-    "totalLinks": 1753,
+    "totalNodes": 437,
+    "totalLinks": 1771,
     "totalAgentLinks": 280,
     "totalTeamLinks": 50,
-    "totalDomains": 63,
+    "totalDomains": 64,
     "supportedLocales": [
       "de",
       "zh-CN",
@@ -268,6 +268,10 @@
     "open-source": {
       "description": "Open-source contribution workflow skills",
       "count": 2
+    },
+    "investigation": {
+      "description": "Reverse-engineering and longitudinal investigation of closed-source CLI harnesses — version baselining, feature-flag discovery, dark-launch detection, wire capture, and redaction discipline for public disclosure",
+      "count": 4
     }
   },
   "nodes": [
@@ -10497,6 +10501,106 @@
       "locales": []
     },
     {
+      "id": "monitor-binary-version-baselines",
+      "type": "skill",
+      "title": "Monitor Binary Version Baselines",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Establish and maintain longitudinal baselines of CLI binary contents across versions using categorized markers, weighted scoring, and per-version baseline records",
+      "tags": [
+        "reverse-engineering",
+        "baseline",
+        "binary-analysis",
+        "version-tracking",
+        "markers"
+      ],
+      "related": [
+        "security-audit-codebase",
+        "audit-dependency-versions",
+        "probe-feature-flag-state",
+        "conduct-empirical-wire-capture",
+        "redact-for-public-disclosure"
+      ],
+      "path": "monitor-binary-version-baselines/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "probe-feature-flag-state",
+      "type": "skill",
+      "title": "Probe Feature-Flag State",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Probe runtime state of a named feature flag using a four-pronged evidence protocol and four-state classification (LIVE / DARK / INDETERMINATE / UNKNOWN)",
+      "tags": [
+        "reverse-engineering",
+        "feature-flags",
+        "dark-launch",
+        "classification",
+        "evidence"
+      ],
+      "related": [
+        "monitor-binary-version-baselines",
+        "conduct-empirical-wire-capture",
+        "security-audit-codebase",
+        "redact-for-public-disclosure"
+      ],
+      "path": "probe-feature-flag-state/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "conduct-empirical-wire-capture",
+      "type": "skill",
+      "title": "Conduct Empirical Wire Capture",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Capture outbound HTTP and telemetry from a CLI harness at runtime using the cheapest channel that captures the target, with JSONL output for diff-friendly artifacts",
+      "tags": [
+        "reverse-engineering",
+        "wire-capture",
+        "http",
+        "telemetry",
+        "jsonl",
+        "observability"
+      ],
+      "related": [
+        "monitor-binary-version-baselines",
+        "probe-feature-flag-state",
+        "instrument-distributed-tracing",
+        "redact-for-public-disclosure"
+      ],
+      "path": "conduct-empirical-wire-capture/SKILL.md",
+      "locales": []
+    },
+    {
+      "id": "redact-for-public-disclosure",
+      "type": "skill",
+      "title": "Redact for Public Disclosure",
+      "domain": "investigation",
+      "complexity": "intermediate",
+      "language": "multi",
+      "description": "Redact reverse-engineering findings for public disclosure using deny-list scanners, orphan-commit publish patterns, and category-based calibration that preserves teaching value",
+      "tags": [
+        "redaction",
+        "disclosure",
+        "deny-list",
+        "orphan-commit",
+        "ci-gate",
+        "research-publishing"
+      ],
+      "related": [
+        "monitor-binary-version-baselines",
+        "probe-feature-flag-state",
+        "conduct-empirical-wire-capture",
+        "security-audit-codebase",
+        "manage-git-branches"
+      ],
+      "path": "redact-for-public-disclosure/SKILL.md",
+      "locales": []
+    },
+    {
       "id": "agent:r-developer",
       "type": "agent",
       "title": "R Developer",
@@ -20289,6 +20393,96 @@
     {
       "source": "polish-claw-project",
       "target": "commit-changes",
+      "type": "skill"
+    },
+    {
+      "source": "monitor-binary-version-baselines",
+      "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "monitor-binary-version-baselines",
+      "target": "audit-dependency-versions",
+      "type": "skill"
+    },
+    {
+      "source": "monitor-binary-version-baselines",
+      "target": "probe-feature-flag-state",
+      "type": "skill"
+    },
+    {
+      "source": "monitor-binary-version-baselines",
+      "target": "conduct-empirical-wire-capture",
+      "type": "skill"
+    },
+    {
+      "source": "monitor-binary-version-baselines",
+      "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "probe-feature-flag-state",
+      "target": "monitor-binary-version-baselines",
+      "type": "skill"
+    },
+    {
+      "source": "probe-feature-flag-state",
+      "target": "conduct-empirical-wire-capture",
+      "type": "skill"
+    },
+    {
+      "source": "probe-feature-flag-state",
+      "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "probe-feature-flag-state",
+      "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "conduct-empirical-wire-capture",
+      "target": "monitor-binary-version-baselines",
+      "type": "skill"
+    },
+    {
+      "source": "conduct-empirical-wire-capture",
+      "target": "probe-feature-flag-state",
+      "type": "skill"
+    },
+    {
+      "source": "conduct-empirical-wire-capture",
+      "target": "instrument-distributed-tracing",
+      "type": "skill"
+    },
+    {
+      "source": "conduct-empirical-wire-capture",
+      "target": "redact-for-public-disclosure",
+      "type": "skill"
+    },
+    {
+      "source": "redact-for-public-disclosure",
+      "target": "monitor-binary-version-baselines",
+      "type": "skill"
+    },
+    {
+      "source": "redact-for-public-disclosure",
+      "target": "probe-feature-flag-state",
+      "type": "skill"
+    },
+    {
+      "source": "redact-for-public-disclosure",
+      "target": "conduct-empirical-wire-capture",
+      "type": "skill"
+    },
+    {
+      "source": "redact-for-public-disclosure",
+      "target": "security-audit-codebase",
+      "type": "skill"
+    },
+    {
+      "source": "redact-for-public-disclosure",
+      "target": "manage-git-branches",
       "type": "skill"
     },
     {

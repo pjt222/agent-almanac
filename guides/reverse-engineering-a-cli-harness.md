@@ -4,7 +4,7 @@ description: "Methodology for understanding a closed-source CLI harness you inte
 category: investigation
 agents: [security-analyst, code-reviewer]
 teams: []
-skills: [audit-dependency-versions, security-audit-codebase]
+skills: [monitor-binary-version-baselines, probe-feature-flag-state, conduct-empirical-wire-capture, redact-for-public-disclosure, audit-dependency-versions, security-audit-codebase]
 ---
 
 # Reverse-Engineering a CLI Harness
