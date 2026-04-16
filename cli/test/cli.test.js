@@ -33,7 +33,7 @@ function run(args) {
 describe('registry', () => {
   it('list shows skills count', () => {
     const out = run('list --domains');
-    assert.match(out, /60 domains/);
+    assert.match(out, /64 domains/);
   });
 
   it('list --domain r-packages shows 10 skills', () => {
@@ -43,12 +43,12 @@ describe('registry', () => {
 
   it('list --agents shows 68 agents', () => {
     const out = run('list --agents');
-    assert.match(out, /68 agents/);
+    assert.match(out, /71 agents/);
   });
 
   it('list --teams shows 15 teams', () => {
     const out = run('list --teams');
-    assert.match(out, /15 teams/);
+    assert.match(out, /16 teams/);
   });
 });
 
@@ -249,7 +249,7 @@ describe('campfire', () => {
     try { rmSync(stateDir, { recursive: true }); } catch {}
   });
 
-  it('campfire --all lists all 15 campfires', () => {
+  it('campfire --all lists all 16 campfires', () => {
     const out = run('campfire --all');
     assert.match(out, /campfires/i);
     assert.match(out, /tending/);
@@ -274,7 +274,7 @@ describe('campfire', () => {
   it('campfire --json outputs JSON', () => {
     const out = run('campfire --json');
     const data = JSON.parse(out);
-    assert.equal(data.totalTeams, 15);
+    assert.equal(data.totalTeams, 16);
     assert.ok(Array.isArray(data.fires));
   });
 

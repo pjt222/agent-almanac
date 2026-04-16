@@ -1,6 +1,6 @@
 {
   "name": "agent-almanac",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Universal skill/agent/team installer for agentskills.io — works with Claude Code, Cursor, Copilot, Gemini CLI, and 12+ agentic frameworks",
   "type": "module",
   "license": "MIT",
