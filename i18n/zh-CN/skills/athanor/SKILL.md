@@ -17,7 +17,7 @@ metadata:
   tags: alchemy, transmutation, refactoring, transformation, four-stages, nigredo, albedo, citrinitas, rubedo
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: a87e5e03
   translator: claude
   translation_date: "2026-03-17"
 ---

@@ -15,7 +15,7 @@ metadata:
   tags: searxng, self-hosted, search-engine, privacy, docker-compose, meta-search
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: a87e5e03
   translator: claude
   translation_date: "2026-03-17"
 ---

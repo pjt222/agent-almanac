@@ -2,7 +2,7 @@
 name: render-publication-graphic
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: 4859067d
 translator: claude
 translation_date: "2026-03-17"
 description: >

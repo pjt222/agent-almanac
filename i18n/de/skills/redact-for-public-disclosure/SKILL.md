@@ -23,7 +23,7 @@ metadata:
   tags: redaction, disclosure, deny-list, orphan-commit, ci-gate, research-publishing
   locale: de
   source_locale: en
-  source_commit: b9570f58
+  source_commit: f74b59bd
   translator: claude-sonnet-4-6
   translation_date: "2026-04-17"
 ---

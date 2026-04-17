@@ -18,7 +18,7 @@ metadata:
   tags: a2a, server, json-rpc, task-lifecycle, streaming, sse
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: a87e5e03
   translator: claude
   translation_date: "2026-03-17"
 ---

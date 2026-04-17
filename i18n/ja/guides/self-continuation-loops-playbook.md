@@ -7,7 +7,7 @@ teams: []
 skills: [choose-loop-wakeup-interval, read-continue-here, write-continue-here, manage-token-budget, du-dum]
 locale: ja
 source_locale: en
-source_commit: 9c546edf
+source_commit: f1f0ffe1e12d5213f629ff4f0d6b984ad9c06dcd
 translator: "Claude + human review"
 translation_date: "2026-04-13"
 ---

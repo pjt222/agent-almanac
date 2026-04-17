@@ -19,7 +19,7 @@ metadata:
   tags: session, continuity, handoff, context, workflow, write
   locale: de
   source_locale: en
-  source_commit: 5f246ff730eb9a4a00d2475109db467353686108
+  source_commit: 5f246ff7
   translator: scaffold
   translation_date: "2026-03-22"
 ---

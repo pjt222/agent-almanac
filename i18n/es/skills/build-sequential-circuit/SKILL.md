@@ -18,7 +18,7 @@ metadata:
   tags: digital-logic, sequential-circuits, flip-flops, state-machines, registers
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: f39534628ba4bfee67e410b2b9856a7764214b26
   translator: claude
   translation_date: "2026-03-17"
 ---

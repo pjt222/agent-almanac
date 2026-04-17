@@ -20,7 +20,7 @@ metadata:
   tags: defensive, awareness, threat-detection, hallucination-risk, ooda, meta-cognition, ai-self-application
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: a87e5e03
   translator: claude
   translation_date: "2026-03-17"
 ---

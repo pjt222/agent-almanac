@@ -7,7 +7,7 @@ teams: []
 skills: [audit-dependency-versions, security-audit-codebase]
 locale: de
 source_locale: en
-source_commit: f1f0ffe1
+source_commit: f74b59bd
 translator: "Claude + human review"
 translation_date: "2026-04-13"
 ---

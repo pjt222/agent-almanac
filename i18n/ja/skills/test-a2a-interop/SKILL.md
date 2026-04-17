@@ -18,7 +18,7 @@ metadata:
   tags: a2a, testing, interoperability, conformance, integration
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: a87e5e0380bbe51f65cb0662d60c10030a81f255
   translator: claude
   translation_date: "2026-03-17"
 ---

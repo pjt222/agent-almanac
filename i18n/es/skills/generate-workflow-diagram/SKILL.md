@@ -19,7 +19,7 @@ metadata:
   tags: putior, mermaid, diagram, theme, visualization, flowchart
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: 30b85b9086a4cb52c5c8f7abb8970bd42512bb3e
   translator: claude
   translation_date: "2026-03-17"
 ---

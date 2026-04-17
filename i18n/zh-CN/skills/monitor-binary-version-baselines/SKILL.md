@@ -19,7 +19,7 @@ metadata:
   tags: reverse-engineering, baseline, binary-analysis, version-tracking, markers
   locale: zh-CN
   source_locale: en
-  source_commit: b9570f58
+  source_commit: f74b59bd
   translator: "Claude Sonnet 4.6"
   translation_date: "2026-04-17"
 ---

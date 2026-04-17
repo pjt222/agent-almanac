@@ -21,7 +21,7 @@ metadata:
   tags: reverse-engineering, wire-capture, http, telemetry, jsonl, observability
   locale: ja
   source_locale: en
-  source_commit: b9570f58
+  source_commit: f74b59bdb1fa13725f9390df0cf6e76c6f6ddeca
   translator: claude-sonnet-4-6
   translation_date: "2026-04-17"
 ---

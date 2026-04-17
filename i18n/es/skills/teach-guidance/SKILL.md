@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, teaching, coaching, presentation, documentation, explanation, guidance
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: a87e5e0380bbe51f65cb0662d60c10030a81f255
   translator: claude
   translation_date: "2026-03-17"
 ---

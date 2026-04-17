@@ -21,7 +21,7 @@ metadata:
   tags: reverse-engineering, feature-flags, dark-launch, classification, evidence
   locale: zh-CN
   source_locale: en
-  source_commit: b9570f58
+  source_commit: f74b59bd
   translator: "Claude Sonnet 4.6"
   translation_date: "2026-04-17"
 ---

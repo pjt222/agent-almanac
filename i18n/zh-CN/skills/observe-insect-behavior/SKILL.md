@@ -23,7 +23,7 @@ metadata:
   tags: entomology, insects, behavior, ethology, observation, ecology
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: f1162126
   translator: claude
   translation_date: "2026-03-17"
 ---

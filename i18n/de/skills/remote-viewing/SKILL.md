@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, remote-viewing, exploration, investigation, assumption-management
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: 902f69ec
   translator: claude
   translation_date: "2026-03-17"
 ---

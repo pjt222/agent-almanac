@@ -18,7 +18,7 @@ metadata:
   tags: digital-logic, combinational-circuits, logic-gates, nand-universality, adders
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: f3953462
   translator: claude
   translation_date: "2026-03-17"
 ---

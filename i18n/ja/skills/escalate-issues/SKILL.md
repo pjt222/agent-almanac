@@ -18,7 +18,7 @@ metadata:
   tags: maintenance, triage, escalation, routing, issue-reporting
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: 902f69ec4eeddf6fdf26df7e988d8deb1a22c387
   translator: claude
   translation_date: "2026-03-17"
 ---

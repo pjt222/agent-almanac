@@ -22,7 +22,7 @@ metadata:
   tags: alchemy, extraction, essence, meta, skills, agents, teams, conceptual, metallurgy
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: 82164ccf
   translator: claude
   translation_date: "2026-03-17"
 ---

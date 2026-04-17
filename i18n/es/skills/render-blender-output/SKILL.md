@@ -18,7 +18,7 @@ metadata:
   tags: blender, bpy, rendering, cycles, eevee, compositing, output
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: 4859067d57968ba1966e76c55be84ff3691b9969
   translator: claude
   translation_date: "2026-03-17"
 ---

@@ -2,7 +2,7 @@
 name: heal
 locale: caveman
 source_locale: en
-source_commit: 2eb093923467e447a1a3c92a3841cb4565adeece
+source_commit: 2eb09392
 translator: Julius Brussee homage — caveman
 translation_date: "2026-04-17"
 description: >

@@ -21,7 +21,7 @@ metadata:
   tags: swarm, coordination, stigmergy, context-management, information-decay, ai-self-application
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: 902f69ec
   translator: claude
   translation_date: "2026-03-17"
 ---

@@ -15,7 +15,7 @@ metadata:
   tags: chromatography, validation, ich-q2, accuracy, precision, linearity, regulatory
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: b91a8191
   translator: claude
   translation_date: "2026-03-17"
 ---
