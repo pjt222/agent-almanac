@@ -1,0 +1,28 @@
+locale: wenyan
+last_updated: '2026-04-17'
+coverage:
+  skills:
+    translated: 3
+    total: 350
+    pct: 0.9
+    stale: 0
+  agents:
+    translated: 0
+    total: 72
+    pct: 0
+    stale: 0
+  teams:
+    translated: 0
+    total: 17
+    pct: 0
+    stale: 0
+  guides:
+    translated: 0
+    total: 25
+    pct: 0
+    stale: 0
+  total:
+    translated: 3
+    total: 464
+    pct: 0.6
+    stale: 0

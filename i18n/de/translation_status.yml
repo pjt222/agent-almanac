@@ -5,7 +5,7 @@ coverage:
     translated: 326
     total: 350
     pct: 93.1
-    stale: 30
+    stale: 34
   agents:
     translated: 3
     total: 72
@@ -13,16 +13,16 @@ coverage:
     stale: 3
   teams:
     translated: 1
-    total: 16
-    pct: 6.3
+    total: 17
+    pct: 5.9
     stale: 0
   guides:
     translated: 3
-    total: 24
-    pct: 12.5
+    total: 25
+    pct: 12
     stale: 3
   total:
     translated: 333
-    total: 462
-    pct: 72.1
-    stale: 36
+    total: 464
+    pct: 71.8
+    stale: 40
