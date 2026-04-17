@@ -1,0 +1,40 @@
+# Enforce LF line endings for text files regardless of platform
+# Prevents CRLF commits from Windows editors breaking shell scripts on WSL/Linux
+
+# Shell and scripting
+*.sh        text eol=lf
+*.bash      text eol=lf
+*.js        text eol=lf
+*.cjs       text eol=lf
+*.mjs       text eol=lf
+
+# R scripts
+*.R         text eol=lf
+*.r         text eol=lf
+
+# Config and markup
+*.md        text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.json      text eol=lf
+*.toml      text eol=lf
+*.txt       text eol=lf
+*.css       text eol=lf
+*.html      text eol=lf
+*.svg       text eol=lf
+
+# Git config
+.gitignore  text eol=lf
+.gitattributes text eol=lf
+
+# Binary assets — no normalisation
+*.webp      binary
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.pdf       binary
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.eot       binary

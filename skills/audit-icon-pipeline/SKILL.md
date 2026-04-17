@@ -96,7 +96,34 @@ Compare manifest counts against registry counts.
 
 **On failure:** If manifest files don't exist, the data pipeline needs to run first (`node build-data.js && node build-icon-manifest.js`).
 
-### Step 6: Generate Gap Report
+### Step 6: Detect Orphan Icons
+
+Walk `viz/public/icons*/` and flag WebP files whose `<palette>/<domain>/<skillId>` triple does not appear in `icon-manifest.json`.
+
+1. Enumerate all WebP files: `find viz/public/icons* -name "*.webp"`
+2. For each file, extract `<domain>/<id>` from its path
+3. Check if `<domain>/<id>` has an entry in `icon-manifest.json`
+4. Collect non-matching files as orphans — they exist on disk but are no longer referenced
+
+```bash
+# Quick orphan count per palette
+node -e "
+const fs = require('fs');
+const manifest = JSON.parse(fs.readFileSync('viz/public/data/icon-manifest.json'));
+const ids = new Set(manifest.map(e => e.domain + '/' + e.id));
+const orphans = require('child_process')
+  .execSync('find viz/public/icons -name \"*.webp\"').toString().trim().split('\n')
+  .filter(p => { const parts = p.split('/'); const id = parts.slice(-2).join('/').replace('.webp',''); return !ids.has(id); });
+console.log('Orphans:', orphans.length);
+orphans.forEach(p => console.log(' ', p));
+"
+```
+
+**Expected:** Zero orphans. Any orphans indicate skills re-homed to a different domain without cleanup (18 orphans per re-homing = 9 palettes × 2 sizes).
+
+**On failure:** Delete orphans manually — they have no corresponding manifest entry and will not be served. Re-home events are rare, so manual cleanup is acceptable.
+
+### Step 7: Generate Gap Report
 
 Produce a structured summary.
 
@@ -130,6 +157,7 @@ Produce a structured summary.
 - [ ] All three glyph mapping files checked
 - [ ] Icon directories scanned for both standard and HD
 - [ ] Manifest freshness verified
+- [ ] Orphan icons checked (disk paths vs manifest)
 - [ ] Gap report produced with counts and entity lists
 - [ ] Actionable next steps provided
 
@@ -139,6 +167,7 @@ Produce a structured summary.
 - **Palette assumption**: Only checking cyberpunk palette misses palette-specific rendering gaps
 - **Empty directories**: A domain directory existing but empty counts as "icons present" when globbing — check file existence, not directory existence
 - **HD not rendered**: HD icons are in a separate directory tree (`icons-hd/`) — don't confuse with standard icons
+- **Orphans after re-homing**: When a skill's domain changes, `build.sh` creates icons at the new path but does NOT delete the old path — always run Step 6 orphan check after any domain migration
 
 ## Related Skills
 
