@@ -1,0 +1,144 @@
+# Caveman Translation Glossary
+# Homage to JuliusBrussee/caveman — compressed English grunt levels
+# Three levels: lite (no filler), full (drop articles), ultra (abbreviations + arrows)
+
+version: "1.0"
+locale: caveman  # covers caveman-lite, caveman, caveman-ultra
+last_updated: "2026-04-17"
+
+levels:
+  lite:
+    description: "No filler/hedging. Keep grammar, articles, full sentences. Professional but tight."
+    drop_patterns:
+      - "just "
+      - "really "
+      - "basically "
+      - "actually "
+      - "simply "
+      - "sure, "
+      - "certainly"
+      - "of course"
+      - "happy to"
+      - "I'd be happy to"
+      - "feel free to"
+      - "Note that "
+      - "Please note"
+      - "It is worth noting"
+      - "In order to"
+    keep: ["articles (a/an/the)", "full sentences", "hedging OK if technically meaningful"]
+
+  full:
+    description: "Drop articles. Fragments OK. Classic caveman style."
+    drop_patterns:
+      - "the "
+      - "a "
+      - "an "
+      - "just "
+      - "really "
+      - "basically "
+      - "actually "
+      - "simply "
+      - "you can "
+      - "you should "
+      - "you will "
+      - "it is "
+      - "there is "
+      - "there are "
+      - "in order to"
+      - "make sure to"
+      - "be sure to"
+    fragment_ok: true
+    pattern: "[thing] [action] [reason]. [next step]."
+
+  ultra:
+    description: "Abbreviations, arrows for causality, one word when sufficient. Max compression."
+    abbreviations:
+      "database": "DB"
+      "authentication": "auth"
+      "authorization": "auth"
+      "configuration": "config"
+      "request": "req"
+      "response": "res"
+      "function": "fn"
+      "implementation": "impl"
+      "repository": "repo"
+      "dependency": "dep"
+      "dependencies": "deps"
+      "environment": "env"
+      "variable": "var"
+      "parameter": "param"
+      "parameters": "params"
+      "validate": "validate"
+      "validation": "valid."
+      "procedure": "proc"
+      "directory": "dir"
+      "command": "cmd"
+      "output": "out"
+      "input": "in"
+      "error": "err"
+      "warning": "warn"
+      "message": "msg"
+      "version": "ver"
+      "package": "pkg"
+      "process": "proc"
+    causality_arrow: "→"
+    use_arrow_for:
+      - "leads to"
+      - "causes"
+      - "results in"
+      - "therefore"
+      - "so that"
+      - "which means"
+      - "produces"
+    one_word_ok: true
+    fragment_ok: true
+
+drop_words_all_levels:
+  # Drop these in all caveman levels
+  filler: ["just", "really", "basically", "actually", "simply", "quite", "very",
+           "extremely", "absolutely", "literally", "essentially", "generally",
+           "typically", "usually", "normally", "obviously", "clearly"]
+  pleasantries: ["sure", "certainly", "of course", "happy to", "please", "thank you",
+                 "feel free", "don't hesitate"]
+  hedging: ["might", "could", "perhaps", "possibly", "maybe", "arguably",
+            "arguably", "in some cases", "it depends"]
+
+keep_unchanged:
+  - "code blocks (```, bash, yaml, r, etc.)"
+  - "technical identifiers (function names, file paths, flags)"
+  - "tool names (Read, Write, Edit, Bash, Grep, Glob)"
+  - "Expected: / On failure: markers"
+  - "checklist items (- [ ])"
+  - "YAML frontmatter fields"
+  - "warnings and destructive-action confirmations (auto-clarity rule)"
+
+section_headings:
+  lite:
+    "When to Use": "When to Use"
+    "Inputs": "Inputs"
+    "Procedure": "Procedure"
+    "Validation": "Validation"
+    "Common Pitfalls": "Pitfalls"
+    "Related Skills": "Related Skills"
+  full:
+    "When to Use": "When Use"
+    "Inputs": "Inputs"
+    "Procedure": "Steps"
+    "Validation": "Checks"
+    "Common Pitfalls": "Pitfalls"
+    "Related Skills": "See Also"
+  ultra:
+    "When to Use": "Use When"
+    "Inputs": "In"
+    "Procedure": "Do"
+    "Validation": "Check"
+    "Common Pitfalls": "Traps"
+    "Related Skills": "→"
+
+markers:
+  all:
+    "Expected:": "Got:"
+    "On failure:": "If fail:"
+  ultra:
+    "Expected:": "→"
+    "On failure:": "If err:"

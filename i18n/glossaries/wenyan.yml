@@ -1,0 +1,153 @@
+# Wenyan (文言文) Translation Glossary
+# Classical Chinese grunt levels — three compression tiers
+# Homage to JuliusBrussee/caveman
+
+version: "1.0"
+locale: wenyan  # covers wenyan-lite, wenyan, wenyan-ultra
+last_updated: "2026-04-17"
+
+levels:
+  lite:
+    description: "Semi-classical Chinese. Drop filler/hedging but keep grammar structure, classical register."
+    style: "Modern Chinese with classical flavour. Drop modern filler (就是/其實/基本上). Keep full sentences."
+    register: "formal-classical"
+    drop_patterns_zh:
+      - "其實"
+      - "基本上"
+      - "事實上"
+      - "只是"
+      - "只不過"
+      - "就是說"
+      - "所謂的"
+      - "可以說"
+      - "請注意"
+      - "值得注意的是"
+    drop_patterns_en:
+      - "basically"
+      - "actually"
+      - "just"
+      - "simply"
+      - "please note"
+      - "note that"
+
+  full:
+    description: "Full 文言文. Classical sentence patterns, verb-object, subjects often omitted."
+    style: "Classical Chinese. 80-90% character reduction from modern equivalent."
+    register: "classical"
+    particles:
+      subject_marker: "者"
+      object_marker: "之"
+      copula: "乃"
+      possessive: "其"
+      conjunction: "而"
+      locative: "於"
+      instrumental: "以"
+      negation: "不"
+      completed_action: "已"
+      conditional: "若"
+      imperative: "宜"
+      passive: "為...所"
+    sentence_patterns:
+      svo: "Subject-Verb-Object (verb-object order, no copula)"
+      topic_comment: "Topic first, then comment"
+      omit_subject: "Subject often omitted when clear from context"
+      parallel_structure: "四字格 (four-character parallel phrases) preferred"
+    classical_verbs:
+      "execute": "執"
+      "verify": "驗"
+      "create": "建"
+      "delete": "刪"
+      "update": "更"
+      "read": "讀"
+      "write": "書"
+      "check": "查"
+      "run": "行"
+      "install": "裝"
+      "configure": "設"
+      "generate": "生"
+      "return": "返"
+      "fail": "敗"
+      "succeed": "成"
+      "exist": "存"
+      "call": "呼"
+      "define": "定"
+      "use": "用"
+      "open": "開"
+      "close": "閉"
+
+  ultra:
+    description: "Extreme ancient compression. Classical Chinese feel, maximum terseness."
+    style: "Minimum characters per idea. Single characters where possible. Abbreviate all."
+    register: "archaic"
+    compression_target: "5-10 characters per sentence maximum"
+    abbreviations_zh:
+      "命令行": "命"
+      "版本控制": "控"
+      "代碼倉庫": "庫"
+      "依賴項": "依"
+      "配置文件": "配"
+      "環境變量": "環"
+      "函數": "函"
+      "數據庫": "庫"
+      "驗證": "驗"
+      "執行": "行"
+    causality_arrow: "→"
+    one_character_preferred: true
+
+classical_particles:
+  之: "of / it (object marker, particle)"
+  乃: "is / then / thus (copula, consequential)"
+  為: "become / act as / for"
+  其: "its / their / that (possessive/demonstrative)"
+  而: "and / but / then (conjunction)"
+  於: "at / in / to (locative/dative)"
+  以: "with / by means of / because (instrumental)"
+  者: "one who / that which (nominalizer)"
+  也: "sentence-final assertive particle"
+  矣: "sentence-final change-of-state particle"
+  乎: "question particle"
+  哉: "exclamatory particle"
+  焉: "therein / whereat"
+  豈: "how could / is it not that"
+
+keep_unchanged:
+  - "code blocks (```, bash, yaml, r, etc.)"
+  - "technical identifiers (function names, file paths, flags)"
+  - "tool names in English (Read, Write, Edit, Bash, Grep, Glob)"
+  - "YAML frontmatter fields"
+  - "checklist items (- [ ])"
+  - "warnings for destructive operations (auto-clarity rule — revert to clear Chinese)"
+
+section_headings:
+  lite:
+    "When to Use": "適用時機"
+    "Inputs": "輸入"
+    "Procedure": "步驟"
+    "Validation": "驗證"
+    "Common Pitfalls": "常見陷阱"
+    "Related Skills": "相關技能"
+  full:
+    "When to Use": "用時"
+    "Inputs": "入"
+    "Procedure": "法"
+    "Validation": "驗"
+    "Common Pitfalls": "陷"
+    "Related Skills": "參"
+  ultra:
+    "When to Use": "用"
+    "Inputs": "入"
+    "Procedure": "行"
+    "Validation": "驗"
+    "Common Pitfalls": "忌"
+    "Related Skills": "參"
+
+markers:
+  lite:
+    "Expected:": "預期："
+    "On failure:": "失敗時："
+  full:
+    "Expected:": "得："
+    "On failure:": "敗則："
+  ultra:
+    "Expected:": "得："
+    "On failure:": "敗："

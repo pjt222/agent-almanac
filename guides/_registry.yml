@@ -2,9 +2,9 @@
 # Machine-readable catalog of all guide documents in this library.
 # Keep in sync with the actual guide files on disk.
 
-total_guides: 24
+total_guides: 25
 version: "1.0"
-last_updated: "2026-04-07"
+last_updated: "2026-04-17"
 
 categories:
   workflow:
@@ -239,3 +239,12 @@ guides:
     agents: [security-analyst, code-reviewer]
     teams: []
     skills: [audit-dependency-versions, security-audit-codebase]
+
+  - id: caveman-spellbook
+    path: guides/caveman-spellbook.md
+    title: "The Caveman Spellbook"
+    description: "Six grunt-level compression modes for agent-almanac content — a homage to JuliusBrussee/caveman, from lite filler-stripping to extreme classical Chinese abbreviation"
+    category: reference
+    agents: [translator, project-manager, skill-reviewer, librarian]
+    teams: [caveman-spellbook]
+    skills: [translate-content]

@@ -17,6 +17,30 @@ supported_locales:
     name: Español
     name_en: Spanish
     status: active
+  - code: caveman-lite
+    name: Caveman Lite
+    name_en: Caveman Lite
+    status: active
+  - code: caveman
+    name: Caveman
+    name_en: Caveman
+    status: active
+  - code: caveman-ultra
+    name: Caveman Ultra
+    name_en: Caveman Ultra
+    status: active
+  - code: wenyan-lite
+    name: 文言文輕
+    name_en: Wenyan Lite
+    status: active
+  - code: wenyan
+    name: 文言文
+    name_en: Wenyan
+    status: active
+  - code: wenyan-ultra
+    name: 文言文極
+    name_en: Wenyan Ultra
+    status: active
 content_types: [skills, agents, teams, guides]
 source_counts:
   skills: 350

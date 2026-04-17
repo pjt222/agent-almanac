@@ -2,9 +2,9 @@
 # Machine-readable catalog of all team definitions in this library.
 # Keep in sync with the actual team files on disk.
 
-total_teams: 16
+total_teams: 17
 version: "1.3"
-last_updated: "2026-04-16"
+last_updated: "2026-04-17"
 
 teams:
   - id: r-package-review
@@ -134,3 +134,11 @@ teams:
     members: [adaptic, contemplative, polymath]
     coordination: synoptic
     tags: [synoptic, synthesis, panoramic, cross-domain, gestalt, integration]
+
+  - id: caveman-spellbook
+    path: teams/caveman-spellbook.md
+    description: Wave-parallel translation team for grunt-level localization into 6 caveman/wenyan compression levels — a homage to JuliusBrussee/caveman
+    lead: project-manager
+    members: [project-manager, translator, skill-reviewer, librarian]
+    coordination: wave-parallel
+    tags: [i18n, translation, caveman, wenyan, wave-parallel, compression]

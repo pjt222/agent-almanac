@@ -5,7 +5,7 @@ Predefined multi-agent team compositions for coordinated workflows in [Claude Co
 ## Overview
 
 <!-- AUTO:START:teams-intro -->
-A collection of 16 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
+A collection of 17 predefined multi-agent team compositions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each team defines a coordinated group of agents with assigned roles, a lead, and a defined coordination pattern for complex workflows.
 <!-- AUTO:END:teams-intro -->
 
 Teams complement agents and skills:
@@ -34,6 +34,7 @@ Teams complement agents and skills:
 | [physical-computing](physical-computing.md) | logician | 3 | sequential | Cross-disciplinary team for digital logic design and physical implementation — from Boolean gates to complete computing systems |
 | [translation-campaign](translation-campaign.md) | project-manager | 4 | wave-parallel | Wave-parallel translation team for systematic localization of all skills into supported locales (de, zh-CN, ja, es) |
 | [synoptic-mind](synoptic-mind.md) | adaptic | 3 | synoptic | Shared-workspace panoramic synthesis team using synoptic coordination for cross-domain gestalt integration |
+| [caveman-spellbook](caveman-spellbook.md) | project-manager | 4 | wave-parallel | Wave-parallel translation team for grunt-level localization into 6 caveman/wenyan compression levels — a homage to JuliusBrussee/caveman |
 <!-- AUTO:END:teams-table -->
 
 ## Creating a New Team
