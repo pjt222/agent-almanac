@@ -175,10 +175,10 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 <!-- AUTO:START:translations -->
 | Locale | Language | Skills | Agents | Teams | Guides | Total |
 |--------|----------|--------|--------|-------|--------|-------|
-| de | Deutsch | 322/350 | 3/72 | 1/16 | 3/24 | 329/462 (71.2%) |
-| zh-CN | 简体中文 | 322/350 | 3/72 | 1/16 | 3/24 | 329/462 (71.2%) |
-| ja | 日本語 | 322/350 | 3/72 | 1/16 | 3/24 | 329/462 (71.2%) |
-| es | Español | 322/350 | 3/72 | 1/16 | 3/24 | 329/462 (71.2%) |
+| de | Deutsch | 326/350 | 3/72 | 1/16 | 3/24 | 333/462 (72.1%) |
+| zh-CN | 简体中文 | 326/350 | 3/72 | 1/16 | 3/24 | 333/462 (72.1%) |
+| ja | 日本語 | 326/350 | 3/72 | 1/16 | 3/24 | 333/462 (72.1%) |
+| es | Español | 326/350 | 3/72 | 1/16 | 3/24 | 333/462 (72.1%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
