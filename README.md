@@ -180,12 +180,12 @@ New here? Start with [Understanding the System](guides/understanding-the-system.
 | zh-CN | 简体中文 | 326/350 | 3/72 | 1/17 | 3/25 | 333/464 (71.8%) |
 | ja | 日本語 | 326/350 | 3/72 | 1/17 | 3/25 | 333/464 (71.8%) |
 | es | Español | 326/350 | 3/72 | 1/17 | 3/25 | 333/464 (71.8%) |
-| caveman-lite | Caveman Lite | 1/350 | 0/72 | 0/17 | 0/25 | 1/464 (0.2%) |
-| caveman | Caveman | 1/350 | 0/72 | 0/17 | 0/25 | 1/464 (0.2%) |
-| caveman-ultra | Caveman Ultra | 1/350 | 0/72 | 0/17 | 0/25 | 1/464 (0.2%) |
-| wenyan-lite | 文言文輕 | 1/350 | 0/72 | 0/17 | 0/25 | 1/464 (0.2%) |
-| wenyan | 文言文 | 1/350 | 0/72 | 0/17 | 0/25 | 1/464 (0.2%) |
-| wenyan-ultra | 文言文極 | 1/350 | 0/72 | 0/17 | 0/25 | 1/464 (0.2%) |
+| caveman-lite | Caveman Lite | 3/350 | 0/72 | 0/17 | 0/25 | 3/464 (0.6%) |
+| caveman | Caveman | 3/350 | 0/72 | 0/17 | 0/25 | 3/464 (0.6%) |
+| caveman-ultra | Caveman Ultra | 3/350 | 0/72 | 0/17 | 0/25 | 3/464 (0.6%) |
+| wenyan-lite | 文言文輕 | 3/350 | 0/72 | 0/17 | 0/25 | 3/464 (0.6%) |
+| wenyan | 文言文 | 3/350 | 0/72 | 0/17 | 0/25 | 3/464 (0.6%) |
+| wenyan-ultra | 文言文極 | 3/350 | 0/72 | 0/17 | 0/25 | 3/464 (0.6%) |
 <!-- AUTO:END:translations -->
 
 See [i18n/README.md](i18n/README.md) for the translation contributor guide.
