@@ -188,8 +188,13 @@ for (pass in render_passes) {
     cache_key <- paste0("skill:", ic$skillId,
                         if (pass$label != "standard") paste0("@", pass$label) else "")
 
-    # Check content hash
-    current_hash <- compute_render_hash(glyph_fn_name, pass_sigma, pass_size)
+    # Check content hash (include palette colors so a hex change in palettes.R
+    # invalidates the cache for that domain — fixes Issue #233)
+    domain_colors <- vapply(palettes_to_render, function(pal) {
+      all_pal_colors[[pal]]$domains[[ic$domain]] %||% ""
+    }, character(1))
+    current_hash <- compute_render_hash(glyph_fn_name, pass_sigma, pass_size,
+                                        palette_colors = domain_colors)
 
     if (!opts$no_cache && identical(icon_cache[[cache_key]], current_hash)) {
       # Glyph unchanged — check if all palette outputs exist

@@ -164,7 +164,9 @@ log_error <- function(domain, skill_id, err_msg) {
 }
 
 # ── Content-hash cache for incremental rendering ─────────────────────────
-# Hash inputs per icon: glyph function body + glow_sigma + size_px
+# Hash inputs per icon: glyph function body + glow_sigma + size_px + palette colors
+# Palette colors are included in the hash so that changing a domain/agent/team
+# hex value in palettes.R invalidates only that entity's cache entries (#233).
 # Stored at viz/.icon-cache.json
 
 #' Compute a render hash for a single icon configuration
@@ -172,13 +174,27 @@ log_error <- function(domain, skill_id, err_msg) {
 #' @param glyph_fn_name Name of the glyph function
 #' @param glow_sigma Glow blur sigma
 #' @param size_px Output size in pixels
+#' @param palette_colors Optional named character vector of palette->hex for this
+#'   entity (e.g. c(cyberpunk = "#00f0ff", viridis = "#3b528b")). When
+#'   supplied, a color change in any palette invalidates the cache entry for
+#'   that entity. Pass NULL (the default) to omit palette sensitivity (backward
+#'   compatible, though #233 shows that omitting it causes stale colors).
 #' @return Character string hash (MD5)
-compute_render_hash <- function(glyph_fn_name, glow_sigma, size_px) {
+compute_render_hash <- function(glyph_fn_name, glow_sigma, size_px,
+                                palette_colors = NULL) {
   fn_body <- tryCatch(
     paste(deparse(match.fun(glyph_fn_name)), collapse = "\n"),
     error = function(e) glyph_fn_name
   )
-  input_str <- paste(fn_body, glow_sigma, size_px, sep = "|")
+  # Stable serialization of palette_colors: sort by name so ordering of
+  # palettes_to_render does not affect the hash.
+  color_str <- if (!is.null(palette_colors) && length(palette_colors) > 0) {
+    sorted_names <- sort(names(palette_colors))
+    paste(sorted_names, palette_colors[sorted_names], sep = "=", collapse = ",")
+  } else {
+    ""
+  }
+  input_str <- paste(fn_body, glow_sigma, size_px, color_str, sep = "|")
   digest::digest(input_str, algo = "md5", serialize = FALSE)
 }
 

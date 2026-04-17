@@ -146,8 +146,14 @@ for (ic in queue) {
   if (is.null(glyph_fn_name)) glyph_fn_name <- "unknown"
   cache_key <- paste0("agent:", ic$agentId, if (opts$hd) "@hd" else "")
 
+  # Include palette colors so a hex change in palettes.R invalidates this
+  # agent's cache entry — fixes Issue #233
+  agent_colors <- vapply(palettes_to_render, function(pal) {
+    all_pal_colors[[pal]]$agents[[ic$agentId]] %||% ""
+  }, character(1))
   current_hash <- compute_render_hash(glyph_fn_name, opts$glow_sigma,
-                                       opts$size_px)
+                                       opts$size_px,
+                                       palette_colors = agent_colors)
 
   if (!opts$no_cache && identical(icon_cache[[cache_key]], current_hash)) {
     all_exist <- all(vapply(palettes_to_render, function(pal) {
