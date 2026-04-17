@@ -11,14 +11,14 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: i18n
   complexity: intermediate
   language: multi
   tags: i18n, translation, localization, multilingual, l10n
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -153,6 +153,18 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 
 **En caso de fallo:** Comparar sección por sección con la fuente en inglés. Restaurar cualquier sección faltante.
 
+### Paso 5.5: Verificar que la prosa está traducida
+
+5.5.1. Muestrea 3 párrafos de prosa del cuerpo del archivo traducido. Elige párrafos de diferentes secciones — no encabezados, no bloques de código, no metadatos frontales.
+
+5.5.2. Confirma que cada párrafo muestreado está escrito en el idioma de destino, no en inglés.
+
+5.5.3. Si algún párrafo muestreado todavía está en inglés, la traducción está incompleta. Vuelve al Paso 4 y traduce la prosa en inglés restante antes de continuar.
+
+**Esperado:** Los 3 párrafos de prosa muestreados están en el idioma de destino, confirmando que el texto del cuerpo ha sido traducido, no solo los encabezados y los metadatos frontales.
+
+**En caso de fallo:** Identifica qué secciones todavía contienen prosa en inglés. Tradúcelas antes de continuar con el Paso 6.
+
 ### Paso 6: Escribir el archivo traducido
 
 6.1. Escribir el contenido traducido completo en la ruta objetivo usando la herramienta Write o Edit.
@@ -194,3 +206,4 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 - [create-skill](../create-skill/SKILL.md) — comprender la estructura SKILL.md que se está traduciendo
 - [review-skill-format](../review-skill-format/SKILL.md) — validar la estructura de la habilidad traducida
 - [evolve-skill](../evolve-skill/SKILL.md) — actualizar habilidades que han cambiado desde la traducción
+- **Rendimiento en lote sobre calidad**: La salida solo de andamiaje, donde los encabezados están traducidos pero el texto del cuerpo permanece en inglés, no es una traducción válida. Prefiere menos traducciones completas en lugar de muchas parciales.

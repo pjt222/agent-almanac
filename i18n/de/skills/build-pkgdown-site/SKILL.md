@@ -11,7 +11,7 @@ description: >
   zwischen branch-basierter und GitHub Actions-Bereitstellung.
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -194,6 +194,8 @@ URL: https://username.github.io/packagename/, https://github.com/username/packag
 - **Defekte Vignetten-Links**: Syntax `vignette("name")` fuer Querverweise verwenden, keine Dateipfade.
 - **Logo wird nicht angezeigt**: Logo unter `man/figures/logo.png` ablegen und in `_pkgdown.yml` referenzieren.
 - **Suche funktioniert nicht**: Erfordert, dass das `url`-Feld in `_pkgdown.yml` korrekt gesetzt ist.
+
+- **Falsches R-Binary auf Hybrid-Systemen**: Unter WSL oder Docker kann `Rscript` einen plattformuebergreifenden Wrapper statt nativem R aufloesen. Mit `which Rscript && Rscript --version` pruefen. Das native R-Binary bevorzugen (z.B. `/usr/local/bin/Rscript` unter Linux/WSL) fuer Zuverlaessigkeit. Fuer die R-Pfadkonfiguration siehe [Setting Up Your Environment](../../guides/setting-up-your-environment.md).
 
 ## Verwandte Skills
 

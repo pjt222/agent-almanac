@@ -20,7 +20,7 @@ skills:
   - review-pull-request
 locale: zh-CN
 source_locale: en
-source_commit: 6a868d56
+source_commit: 89cb55b1
 translator: Claude Opus 4.6
 translation_date: "2026-03-13"
 ---
@@ -192,3 +192,4 @@ translation_date: "2026-03-13"
 **作者**：Philipp Thoss
 **版本**：1.1.0
 **最后更新**：2026-02-08
+- `cross-review-project` — 通过 Git worktrees 在两个 Claude Code 实例之间进行结构化的跨项目代码审查

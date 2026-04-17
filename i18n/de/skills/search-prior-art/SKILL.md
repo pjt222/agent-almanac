@@ -2,7 +2,7 @@
 name: search-prior-art
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -234,3 +234,5 @@ Die Rechercheergebnisse fuer ihren beabsichtigten Zweck aufbereiten.
 - `assess-ip-landscape` — Breitere Landschaftskartierung die spezifische Stand-der-Technik-Recherchen kontextualisiert
 - `review-research` — Literaturrecherche-Methodik ueberschneidet sich erheblich mit Stand-der-Technik-Recherche
 - `security-audit-codebase` — Systematische Suchmethodik parallelt (Gruendlichkeit, Dokumentation, Reproduzierbarkeit)
+- `screen-trademark` — Markenrechts-Konflikt-Screening und Unterscheidungskraft-Analyse fuer die Markenseite von IP-Landschaften
+- `file-trademark` — Markenrechts-Einreichungsverfahren fuer EUIPO, USPTO und das Madrider Protokoll

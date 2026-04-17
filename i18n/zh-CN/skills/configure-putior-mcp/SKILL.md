@@ -16,7 +16,7 @@ metadata:
   tags: putior, mcp, acp, ai-assistant, claude, tools, integration
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: ecb11b8b
   translator: claude
   translation_date: "2026-03-17"
 ---

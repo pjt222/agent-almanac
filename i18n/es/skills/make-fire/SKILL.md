@@ -18,7 +18,7 @@ metadata:
   tags: bushcraft, fire, survival, friction, flint-and-steel
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: b092becc
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---
@@ -213,3 +213,4 @@ Nunca dejes un fuego desatendido. Extíngelo completamente.
 - `purify-water` — El fuego es necesario para hervir agua en métodos de purificación
 - `forage-plants` — Algunas plantas recolectadas requieren cocción con fuego
 - `sharpen-knife` — Los cuchillos se usan para preparar la leña fina y materiales de yesca
+- `paper-making` — fabricación artesanal de papel con fibras de plantas; comparte técnicas de preparación de fibras y pulpa con la preparación de yesca

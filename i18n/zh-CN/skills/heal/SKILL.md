@@ -2,7 +2,7 @@
 name: heal
 locale: zh-CN
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude-sonnet-4-6
 translation_date: 2026-03-16
 description: >
@@ -73,6 +73,8 @@ metadata:
 - 工具调用是否产生预期结果？还是出现了重复模式（一遍又一遍读取同一文件）？
 - 工具选择是否适合任务，还是默认使用熟悉的工具而非合适的工具？
 - 工具输出是否被充分整合，还是表面使用了它们？
+- 检查最近 3-5 个生成文件的内容：它们是否包含预期内容，还是只有结构性脚手架？
+- 检查输出是否满足工具调用的意图，而不仅仅是格式。
 
 **提示词遵守**
 - 是否遵守了系统提示中的所有活跃指令？

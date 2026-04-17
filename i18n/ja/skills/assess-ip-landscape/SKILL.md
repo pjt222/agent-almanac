@@ -17,7 +17,7 @@ metadata:
   tags: intellectual-property, patents, landscape, fto, trademark, ip-strategy, prior-art
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -208,3 +208,5 @@ Query Construction:
 - `security-audit-codebase` — リスク評価方法論はIPリスクスクリーニングと並行する
 - `review-research` — 文献レビュースキルは先行技術分析に適用される
 - `conduct-gxp-audit` — 監査方法論は体系的なIPランドスケープ文書化と並行する
+- `screen-trademark` — IP ランドスケープの商標側のための商標競合スクリーニングと識別力分析
+- `file-trademark` — EUIPO、USPTO、およびマドリッドプロトコルの商標出願手続き

@@ -11,7 +11,7 @@ description: >
   de R o un borrado de renv.
 locale: es
 source_locale: en
-source_commit: 6f65f316
+source_commit: ecb11b8b
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -131,6 +131,18 @@ cat(put_diagram(put(tmp)))
 **Esperado:** Código de diagrama Mermaid impreso en la consola que contiene `test` y `Hello putior`.
 
 **En caso de fallo:** Si `put` no se encuentra, el paquete no se instaló correctamente. Reinstala con `install.packages("putior", dependencies = TRUE)`. Si el diagrama está vacío, verifica que el archivo temporal fue creado y que la sintaxis de anotación usa comillas simples dentro de comillas dobles.
+
+> **Importante: Las paletas personalizadas no se pueden usar a través de MCP.** El parámetro `palette` de `put_diagram` acepta un objeto R `putior_theme` creado por `put_theme()`. Debido a que MCP se comunica mediante JSON, los objetos R como `putior_theme` no pueden serializarse a través del límite MCP. Al llamar a `put_diagram` mediante MCP, usa el parámetro `theme` basado en cadenas (p. ej., `theme = "viridis"`) en su lugar. Para paletas personalizadas, llama a `put_theme()` y `put_diagram(palette = ...)` directamente en una sesión de R.
+
+> **Valores predeterminados clave**: Todas las funciones de escaneo (`put()`, `put_auto()`, `put_generate()`, `put_merge()`) tienen `recursive = TRUE` como predeterminado, escaneando subdirectorios automáticamente. Este es un cambio disruptivo respecto a las versiones anteriores a la 0.2.0, donde el predeterminado era `FALSE`. Todas las funciones de escaneo también aceptan un parámetro `exclude` para el filtrado de archivos basado en expresiones regulares (p. ej., `put("./src/", exclude = "test_")`).
+
+Si el paquete opcional `shiny` está instalado, prueba el sandbox interactivo:
+
+```r
+putior::run_sandbox()
+```
+
+Esto lanza un editor basado en navegador donde puedes experimentar con la sintaxis de anotación PUT y ver los diagramas renderizados en tiempo real.
 
 ## Validación
 

@@ -7,7 +7,7 @@ description: >
   需要在原版旁边创建高级变体，或相关技能被添加导致交叉引用过期时。
 locale: zh-CN
 source_locale: en
-source_commit: 6f65f316
+source_commit: b4dd42cd
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

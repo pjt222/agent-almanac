@@ -2,7 +2,7 @@
 name: clean-codebase
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -280,6 +280,8 @@ Nach der Bereinigung:
 5. **Testabdeckung ignorieren**: Codebasen ohne Tests koennen nicht sicher bereinigt werden. Wenn die Abdeckung niedrig ist, zuerst fuer Testergaenzungen eskalieren.
 
 6. **Kein Backup erstellen**: Immer ein `backup_JJJJMMTT/`-Verzeichnis erstellen bevor irgendetwas geloescht wird, auch bei Verwendung von Git.
+
+7. **Falsches R-Binary auf Hybrid-Systemen**: Unter WSL oder Docker kann `Rscript` einen plattformuebergreifenden Wrapper statt nativem R aufloesen. Mit `which Rscript && Rscript --version` pruefen. Das native R-Binary bevorzugen (z.B. `/usr/local/bin/Rscript` unter Linux/WSL) fuer Zuverlaessigkeit. Fuer die R-Pfadkonfiguration siehe [Setting Up Your Environment](../../guides/setting-up-your-environment.md).
 
 ## Verwandte Skills
 

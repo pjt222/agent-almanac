@@ -2,7 +2,7 @@
 name: audit-icon-pipeline
 locale: zh-CN
 source_locale: en
-source_commit: 41c6956b
+source_commit: e4ffbae4
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -149,3 +149,5 @@ metadata:
 - [create-glyph](../create-glyph/SKILL.md) — 创建本审计中识别出的缺失符号
 - [enhance-glyph](../enhance-glyph/SKILL.md) — 改善现有符号的质量
 - [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — 运行完整的流水线以生成缺失的图标
+- [ ] Orphan icons checked (disk paths vs manifest)
+- **Orphans after re-homing**: When a skill's domain changes, `build.sh` creates icons at the new path but does NOT delete the old path — always run Step 6 orphan check after any domain migration

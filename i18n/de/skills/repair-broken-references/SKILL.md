@@ -2,7 +2,7 @@
 name: repair-broken-references
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -360,6 +360,8 @@ Nach Reparaturen:
 5. **Zirkulaere Referenz-Fallen**: Datei A importiert B, B importiert A. Aktualisierung einer bricht die andere. Erfordert gleichzeitige Korrektur.
 
 6. **Fragment-Bezeichner ignorieren**: Reparatur von `[Link](#abschnitt)` erfordert Pruefung ob der `#abschnitt`-Anker existiert, nicht nur ob die Datei existiert.
+
+7. **Falsches R-Binary auf Hybrid-Systemen**: Unter WSL oder Docker kann `Rscript` einen plattformuebergreifenden Wrapper statt nativem R aufloesen. Mit `which Rscript && Rscript --version` pruefen. Das native R-Binary bevorzugen (z.B. `/usr/local/bin/Rscript` unter Linux/WSL) fuer Zuverlaessigkeit. Fuer die R-Pfadkonfiguration siehe [Setting Up Your Environment](../../guides/setting-up-your-environment.md).
 
 ## Verwandte Skills
 

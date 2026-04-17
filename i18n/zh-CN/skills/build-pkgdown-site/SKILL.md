@@ -16,7 +16,7 @@ metadata:
   tags: r, pkgdown, documentation, github-pages, website
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -190,6 +190,8 @@ URL: https://username.github.io/packagename/, https://github.com/username/packag
 - **损坏的 vignette 链接**：在交叉引用中使用 `vignette("name")` 语法，而非文件路径
 - **Logo 不显示**：将 logo 放在 `man/figures/logo.png` 并在 `_pkgdown.yml` 中引用
 - **搜索不工作**：需要在 `_pkgdown.yml` 中正确设置 `url` 字段
+
+- **混合系统上错误的 R 二进制文件**：在 WSL 或 Docker 上，`Rscript` 可能解析为跨平台包装器而非原生 R。使用 `which Rscript && Rscript --version` 检查。优先使用原生 R 二进制文件（例如 Linux/WSL 上的 `/usr/local/bin/Rscript`）以确保可靠性。有关 R 路径配置，请参阅 [Setting Up Your Environment](../../guides/setting-up-your-environment.md)。
 
 ## 相关技能
 

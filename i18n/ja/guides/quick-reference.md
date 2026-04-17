@@ -7,7 +7,7 @@ teams: []
 skills: []
 locale: ja
 source_locale: en
-source_commit: 6a868d56
+source_commit: befb7ac1
 translator: Claude Opus 4.6
 translation_date: 2026-03-13
 ---
@@ -49,7 +49,7 @@ ln -s ../../skills/submit-to-cran .claude/skills/submit-to-cran
 
 エージェントは `.claude/agents/`（このプロジェクトでは `agents/` へのシンボリックリンク）から検出される。
 
-### チームの作成
+### チームの有効化
 
 チームはTeamCreateで作成され、タスクリストで管理される:
 

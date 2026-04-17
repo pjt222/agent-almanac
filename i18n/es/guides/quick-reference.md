@@ -7,7 +7,7 @@ teams: []
 skills: []
 locale: es
 source_locale: en
-source_commit: 6a868d56
+source_commit: befb7ac1
 translator: Claude Opus 4.6
 translation_date: 2026-03-13
 ---
@@ -49,7 +49,7 @@ Los agentes se lanzan como subagentes mediante la herramienta Task de Claude Cod
 
 Los agentes se descubren desde `.claude/agents/` (enlazado simbólicamente a `agents/` en este proyecto).
 
-### Crear Equipos
+### Activar Equipos
 
 Los equipos se crean con TeamCreate y se gestionan mediante listas de tareas:
 

@@ -13,37 +13,13 @@ max_context_tokens: 200000
 mcp_servers: [r-mcptools, r-mcp-server]
 skills:
   - create-r-package
-  - write-roxygen-docs
   - write-testthat-tests
-  - write-vignette
   - manage-renv-dependencies
-  - setup-github-actions-ci
-  - release-package-version
   - build-pkgdown-site
   - submit-to-cran
-  - add-rcpp-integration
-  - create-quarto-report
-  - build-parameterized-report
-  - format-apa-report
-  - generate-statistical-tables
-  - setup-gxp-r-project
-  - implement-audit-trail
-  - validate-statistical-output
-  - write-validation-documentation
-  - configure-mcp-server
-  - build-custom-mcp-server
-  - troubleshoot-mcp-connection
-  - create-r-dockerfile
-  - setup-docker-compose
-  - optimize-docker-build-cache
-  - containerize-mcp-server
-  - commit-changes
-  - create-pull-request
-  - manage-git-branches
-  - write-claude-md
 locale: de
 source_locale: en
-source_commit: 6a868d56
+source_commit: 72935101
 translator: claude-opus-4-6
 translation_date: 2026-03-13
 ---
@@ -71,6 +47,8 @@ Dieser Agent unterstuetzt bei allen Aspekten der R-Entwicklung, von der Paketers
 Dieser Agent kann die folgenden strukturierten Verfahren aus der [Skills-Bibliothek](../skills/) ausfuehren:
 
 ### R-Paketentwicklung
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 - `create-r-package` -- Ein neues R-Paket mit vollstaendiger Struktur aufsetzen
 - `write-roxygen-docs` -- roxygen2-Dokumentation fuer Funktionen und Datensaetze schreiben
 - `write-testthat-tests` -- testthat-Edition-3-Tests mit hoher Abdeckung schreiben

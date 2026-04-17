@@ -2,7 +2,7 @@
 name: assess-ip-landscape
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -211,3 +211,5 @@ Die Landschaftsbewertung fuer Entscheidungstraeger aufbereiten.
 - `security-audit-codebase` — Risikobewertungsmethodik parallelt IP-Risikovorpruefung
 - `review-research` — Literaturrecherche-Faehigkeiten gelten fuer Stand-der-Technik-Analysen
 - `conduct-gxp-audit` — Audit-Methodik parallelt systematische IP-Landschaftsdokumentation
+- `screen-trademark` — Markenrechts-Konflikt-Screening und Unterscheidungskraft-Analyse fuer die Markenseite von IP-Landschaften
+- `file-trademark` — Markenrechts-Einreichungsverfahren fuer EUIPO, USPTO und das Madrider Protokoll

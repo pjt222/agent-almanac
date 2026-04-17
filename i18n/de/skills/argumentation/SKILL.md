@@ -11,7 +11,7 @@ description: >
   Aufbauen eines Forschungsarguments oder technischen Vorschlags.
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: 5f246ff7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -190,6 +190,19 @@ Hypothese, Argument und Beispiele in das angemessene Format fuer den Kontext kom
 **Erwartet:** Ein vollstaendiges, fuer den Kontext geeignet formatiertes Argument. Der Leser kann die Hypothese bewerten, dem Reasoning folgen, die Beweise pruefen und Gegenargumente abwaegen -- alles in einer kohaerenten Struktur.
 
 **Bei Fehler:** Falls das zusammengestellte Argument zusammenhangslos wirkt, ist die Hypothese moeglicherweise zu breit. In fokussierte Teilargumente aufteilen, jedes mit seiner eigenen Hypothese-Argument-Beispiel-Triade. Zwei enge Argumente sind staerker als eines weitschweifiges.
+
+### Composition: Argumentation + Advocatus Diaboli
+
+For high-stakes decisions, compose this skill with the `advocatus-diaboli` agent to form a pre-decision review loop. The pattern:
+
+1. **Structure** via argumentation -- build the hypothesis-argument-example triad
+2. **Stress-test** via advocatus-diaboli -- steelman the proposal, then challenge each assumption with specific questions. Flag severity: Critical (redesign or abandon), Medium (adjust), Low (note and proceed)
+3. **Revise** based on findings -- critical findings trigger redesign; medium findings trigger adjustment; low findings are noted
+
+**When to compose vs. use alone:**
+- Use argumentation alone when constructing a proposal, PR description, or design justification
+- Use advocatus-diaboli alone when reviewing someone else's existing argument
+- Compose both when you are both the proposer and need adversarial self-review before committing
 
 ## Validierung
 

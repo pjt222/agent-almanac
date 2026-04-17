@@ -14,7 +14,7 @@ description: >
   hinzugefuegt oder entfernt wurden.
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: 971b2bdc
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

@@ -21,7 +21,7 @@ metadata:
   tags: esoteric, healing, self-repair, meta-cognition, ai-self-application
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---

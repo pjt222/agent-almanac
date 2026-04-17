@@ -9,7 +9,7 @@ description: >
   智能体防止级联工具故障时使用。
 locale: zh-CN
 source_locale: en
-source_commit: 6f65f316
+source_commit: b092becc
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -459,3 +459,4 @@ capability_map:
 - `escalate-issues` — 当故障预算耗尽或范围缩减显著时，升级至专家或人类
 - `write-incident-runbook` — 将反复出现的工具故障模式记录为运行手册以加速诊断
 - `assess-context` — 当多个工具降级时评估当前方法是否能适应；与范围缩减决策配合使用
+- `du-dum` — 双时钟架构将观察与决策分离；补充模式，用于降低智能体循环中的观察成本

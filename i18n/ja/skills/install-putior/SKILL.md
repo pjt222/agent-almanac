@@ -19,7 +19,7 @@ metadata:
   tags: putior, install, workflow, mermaid, visualization, R
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: ecb11b8b
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -130,6 +130,18 @@ cat(put_diagram(put(tmp)))
 **期待結果:** Mermaid flowchart code printed to console containing `test` and `Hello putior`.
 
 **失敗時:** If `put` is not found, the package did not install correctly. Reinstall with `install.packages("putior", dependencies = TRUE)`. If the diagram is empty, verify the temp file was created and the annotation syntax uses single quotes inside double quotes.
+
+> **重要：カスタムパレットは MCP 経由では使用できません。** `put_diagram` の `palette` パラメータは、`put_theme()` で作成された `putior_theme` R オブジェクトを受け付けます。MCP は JSON 経由で通信するため、`putior_theme` のような R オブジェクトを MCP 境界を超えてシリアライズすることはできません。MCP 経由で `put_diagram` を呼び出す場合は、代わりに文字列ベースの `theme` パラメータを使用してください（例：`theme = "viridis"`）。カスタムパレットの場合は、R セッション内で直接 `put_theme()` と `put_diagram(palette = ...)` を呼び出してください。
+
+> **主要なデフォルト値**：すべてのスキャン関数（`put()`、`put_auto()`、`put_generate()`、`put_merge()`）はデフォルトで `recursive = TRUE` となっており、サブディレクトリを自動的にスキャンします。これは 0.2.0 以前のバージョン（デフォルトが `FALSE` だった）からの破壊的変更です。すべてのスキャン関数はまた、正規表現ベースのファイルフィルタリング用の `exclude` パラメータも受け付けます（例：`put("./src/", exclude = "test_")`）。
+
+オプションの `shiny` パッケージがインストールされている場合は、インタラクティブサンドボックスを試してください：
+
+```r
+putior::run_sandbox()
+```
+
+これにより、PUT アノテーション構文を実験してリアルタイムでレンダリングされた図を確認できるブラウザベースのエディタが起動します。
 
 ## バリデーション
 

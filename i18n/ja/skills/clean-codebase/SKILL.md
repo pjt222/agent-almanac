@@ -17,7 +17,7 @@ metadata:
   tags: maintenance, cleanup, lint, dead-code, formatting
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -278,6 +278,8 @@ After cleanup:
 5. **Ignoring Test Coverage**: Cannot safely clean codebases without tests. If coverage is low, escalate for test additions first.
 
 6. **Not Backing Up**: Always create `backup_YYYYMMDD/` directory before deleting anything, even if using git.
+
+7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
 
 ## 関連スキル
 

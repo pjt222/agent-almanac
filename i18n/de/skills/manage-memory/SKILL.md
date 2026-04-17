@@ -11,7 +11,7 @@ description: >
   der Projektstatus geaendert hat und Speichereintraege veraltet sein koennten.
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: 025eea68
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

@@ -13,37 +13,13 @@ max_context_tokens: 200000
 mcp_servers: [r-mcptools, r-mcp-server]
 skills:
   - create-r-package
-  - write-roxygen-docs
   - write-testthat-tests
-  - write-vignette
   - manage-renv-dependencies
-  - setup-github-actions-ci
-  - release-package-version
   - build-pkgdown-site
   - submit-to-cran
-  - add-rcpp-integration
-  - create-quarto-report
-  - build-parameterized-report
-  - format-apa-report
-  - generate-statistical-tables
-  - setup-gxp-r-project
-  - implement-audit-trail
-  - validate-statistical-output
-  - write-validation-documentation
-  - configure-mcp-server
-  - build-custom-mcp-server
-  - troubleshoot-mcp-connection
-  - create-r-dockerfile
-  - setup-docker-compose
-  - optimize-docker-build-cache
-  - containerize-mcp-server
-  - commit-changes
-  - create-pull-request
-  - manage-git-branches
-  - write-claude-md
 locale: es
 source_locale: en
-source_commit: 6a868d56
+source_commit: 72935101
 translator: Claude Opus 4.6
 translation_date: 2026-03-13
 ---
@@ -71,11 +47,13 @@ Este agente asiste en todos los aspectos del desarrollo en R, desde la creación
 Este agente puede ejecutar los siguientes procedimientos estructurados de la [biblioteca de habilidades](../skills/):
 
 ### Desarrollo de Paquetes R
-- `create-r-package` — Generar la estructura de un nuevo paquete R completo
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `create-r-package` — Generar la estructura de un nuevo paquete R completo **[core]**
 - `write-roxygen-docs` — Escribir documentación roxygen2 para funciones y conjuntos de datos
 - `write-testthat-tests` — Escribir pruebas testthat edición 3 con alta cobertura
 - `write-vignette` — Crear viñetas de documentación extendida del paquete
-- `manage-renv-dependencies` — Gestionar entornos R reproducibles con renv
+- `manage-renv-dependencies` — Gestionar entornos R reproducibles con renv **[core]**
 - `setup-github-actions-ci` — Configurar GitHub Actions CI/CD para paquetes R
 - `release-package-version` — Publicar una nueva versión del paquete con etiquetado y registro de cambios
 - `build-pkgdown-site` — Construir y desplegar un sitio de documentación pkgdown

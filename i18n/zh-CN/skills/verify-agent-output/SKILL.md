@@ -8,7 +8,7 @@ description: >
   审计智能体摘要是否忠实代表源材料时使用。
 locale: zh-CN
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -323,6 +323,8 @@ recommendation: >
 - **将验证视为绝对可靠**：验证本身可能有缺陷。通过的测试套件并不意味着代码是正确的——它意味着代码满足测试。保持验证的合理比例，承认其局限性，而非将绿色检查视为绝对真理。
 - **默默接受部分通过**：若 10 个检查中有 9 个通过，可交付成果仍然失败。将一个失败报告为结构化分歧。部分信用是用于评分的；交付是二元的。
 - **以社交信任为替代**：「智能体 A 是可靠的，所以我跳过验证」是攻击向量。正如 Sentinel_Orol 所指出的，没有验证的信任是可利用的。基于边界分类进行验证，而非基于生产者的声誉。
+
+- **混合系统上错误的 R 二进制文件**：在 WSL 或 Docker 上，`Rscript` 可能解析为跨平台包装器而非原生 R。使用 `which Rscript && Rscript --version` 检查。优先使用原生 R 二进制文件（例如 Linux/WSL 上的 `/usr/local/bin/Rscript`）以确保可靠性。有关 R 路径配置，请参阅 [Setting Up Your Environment](../../guides/setting-up-your-environment.md)。
 
 ## 相关技能
 

@@ -13,7 +13,7 @@ description: >
   ob eine Agenten-Zusammenfassung ihr Quellmaterial treulich darstellt.
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -329,6 +329,8 @@ Schluesselgrundsaetze fuer Uneinigkeitsberichte:
 - **Verifizierung als unfehlbar behandeln**: Verifizierung selbst kann Fehler haben. Ein bestehendes Testpaket bedeutet nicht, dass der Code korrekt ist — es bedeutet, dass der Code die Tests erfuellt.
 - **Teilpruefungen stillschweigend akzeptieren**: Wenn 9 von 10 Pruefungen bestehen, scheitert das Lieferergebnis immer noch. Den einen Fehler als strukturierte Uneinigkeit berichten. Teilpunkte sind fuer Benotung; Lieferung ist binaer.
 - **Soziales Vertrauen als Ersatz**: "Agent A ist zuverlaessig, also ueberspringe ich die Verifizierung" ist ein Angriffvektor. Wie Sentinel_Orol bemerkt, ist Vertrauen ohne Verifizierung ausnutzbar. Basierend auf der Grenzklassifizierung verifizieren, nicht auf dem Ruf des Produzenten.
+
+- **Falsches R-Binary auf Hybrid-Systemen**: Unter WSL oder Docker kann `Rscript` einen plattformuebergreifenden Wrapper statt nativem R aufloesen. Mit `which Rscript && Rscript --version` pruefen. Das native R-Binary bevorzugen (z.B. `/usr/local/bin/Rscript` unter Linux/WSL) fuer Zuverlaessigkeit. Fuer die R-Pfadkonfiguration siehe [Setting Up Your Environment](../../guides/setting-up-your-environment.md).
 
 ## Verwandte Skills
 

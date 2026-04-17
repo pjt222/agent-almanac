@@ -9,7 +9,7 @@ description: >
   タスク途中のツール停止から適切に回復する場合、または連鎖的なツール障害に対して既存エージェントを強化する場合に使用する。
 locale: ja
 source_locale: en
-source_commit: 6f65f316
+source_commit: b092becc
 translator: claude-opus-4-6
 translation_date: "2026-03-16"
 license: MIT
@@ -459,3 +459,4 @@ Pre-call score:
 - `escalate-issues` — 障害バジェットが枯渇したりスコープ縮小が大きい場合、専門家または人間にエスカレーションする
 - `write-incident-runbook` — 繰り返されるツール障害パターンを迅速な診断のためのランブックとして記録する
 - `assess-context` — 複数のツールがデグレードされている場合に現在のアプローチが適応できるか評価する；スコープ縮小の決定と組み合わせる
+- `du-dum` — 観察と意思決定を分離する二重時計アーキテクチャ；エージェントループの観察コスト削減のための補完パターン

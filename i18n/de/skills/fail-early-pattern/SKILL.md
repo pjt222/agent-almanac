@@ -12,7 +12,7 @@ description: >
   interner APIs gegen ungueltiger Argumente.
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -346,6 +346,8 @@ Rscript -e "devtools::test()"
 - **Fehler in tryCatch verschlucken**: `tryCatch(..., error = function(e) NULL)` versteckt Bugs. Falls gefangen werden muss, mit hinzugefuegtem Kontext protokollieren oder neu werfen.
 - **call. = FALSE vergessen**: In R schliesst `stop("msg")` standardmaessig den Aufruf ein, was fuer Endbenutzer laestig ist. In benutzerseitigen Funktionen `call. = FALSE` verwenden. `cli::cli_abort()` macht dies automatisch.
 - **In Tests statt in Code validieren**: Tests pruefen Verhalten, schuetzen aber keine Produktions-Aufrufer. Validierung gehoert in die Funktion selbst.
+
+- **Falsches R-Binary auf Hybrid-Systemen**: Unter WSL oder Docker kann `Rscript` einen plattformuebergreifenden Wrapper statt nativem R aufloesen. Mit `which Rscript && Rscript --version` pruefen. Das native R-Binary bevorzugen (z.B. `/usr/local/bin/Rscript` unter Linux/WSL) fuer Zuverlaessigkeit. Fuer die R-Pfadkonfiguration siehe [Setting Up Your Environment](../../guides/setting-up-your-environment.md).
 
 ## Verwandte Skills
 

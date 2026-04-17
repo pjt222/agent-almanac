@@ -18,7 +18,7 @@ metadata:
   tags: maintenance, links, imports, references, orphans
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -359,6 +359,8 @@ After repairs:
 5. **Circular Reference Traps**: File A imports B, B imports A. Updating one breaks the other. Requires simultaneous fix.
 
 6. **Ignoring Fragment Identifiers**: Fixing `[link](#section)` requires checking if `#section` anchor exists, not just if file exists.
+
+7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
 
 ## 関連スキル
 

@@ -7,7 +7,7 @@ teams: []
 skills: []
 locale: de
 source_locale: en
-source_commit: 6a868d56
+source_commit: befb7ac1
 translator: claude-opus-4-6
 translation_date: 2026-03-13
 ---
@@ -49,7 +49,7 @@ Agenten werden als Subagenten ueber das Task-Tool von Claude Code gestartet. Cla
 
 Agenten werden aus `.claude/agents/` entdeckt (in diesem Projekt als Symlink auf `agents/`).
 
-### Teams erstellen
+### Teams aktivieren
 
 Teams werden mit TeamCreate erstellt und ueber Aufgabenlisten verwaltet:
 

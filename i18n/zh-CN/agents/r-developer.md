@@ -13,37 +13,13 @@ max_context_tokens: 200000
 mcp_servers: [r-mcptools, r-mcp-server]
 skills:
   - create-r-package
-  - write-roxygen-docs
   - write-testthat-tests
-  - write-vignette
   - manage-renv-dependencies
-  - setup-github-actions-ci
-  - release-package-version
   - build-pkgdown-site
   - submit-to-cran
-  - add-rcpp-integration
-  - create-quarto-report
-  - build-parameterized-report
-  - format-apa-report
-  - generate-statistical-tables
-  - setup-gxp-r-project
-  - implement-audit-trail
-  - validate-statistical-output
-  - write-validation-documentation
-  - configure-mcp-server
-  - build-custom-mcp-server
-  - troubleshoot-mcp-connection
-  - create-r-dockerfile
-  - setup-docker-compose
-  - optimize-docker-build-cache
-  - containerize-mcp-server
-  - commit-changes
-  - create-pull-request
-  - manage-git-branches
-  - write-claude-md
 locale: zh-CN
 source_locale: en
-source_commit: 6a868d56
+source_commit: 72935101
 translator: Claude Opus 4.6
 translation_date: "2026-03-13"
 ---
@@ -71,11 +47,13 @@ translation_date: "2026-03-13"
 该智能体可以执行[技能库](../skills/)中的以下结构化流程：
 
 ### R 包开发
-- `create-r-package` — 搭建完整结构的新 R 包
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `create-r-package` — 搭建完整结构的新 R 包 **[core]**
 - `write-roxygen-docs` — 为函数和数据集编写 roxygen2 文档
 - `write-testthat-tests` — 编写高覆盖率的 testthat 第 3 版测试
 - `write-vignette` — 创建包的长篇文档 vignettes
-- `manage-renv-dependencies` — 使用 renv 管理可复现的 R 环境
+- `manage-renv-dependencies` — 使用 renv 管理可复现的 R 环境 **[core]**
 - `setup-github-actions-ci` — 为 R 包配置 GitHub Actions CI/CD
 - `release-package-version` — 发布新版本，包括标签和变更日志
 - `build-pkgdown-site` — 构建和部署 pkgdown 文档站点

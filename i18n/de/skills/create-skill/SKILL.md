@@ -11,7 +11,7 @@ description: >
   Standardisieren eines Workflows ueber Projekte oder Teams hinweg.
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: b4dd42cd
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

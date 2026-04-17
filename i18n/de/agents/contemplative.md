@@ -14,21 +14,11 @@ skills:
   - heal
   - meditate
   - center
-  - shine
-  - intrinsic
-  - breathe
-  - rest
   - attune
-  - dream
-  - gratitude
-  - awareness
   - observe
-  - listen
-  - honesty-humility
-  - conscientiousness
 locale: de
 source_locale: en
-source_commit: 6a868d56
+source_commit: 72935101
 translator: claude-opus-4-6
 translation_date: 2026-03-13
 ---
@@ -62,6 +52,8 @@ Dies ist der Agent, den man verwendet, wenn die Arbeit *die Praxis ist* -- nicht
 Dieser Agent kann die folgenden strukturierten Verfahren aus der [Skills-Bibliothek](../skills/) ausfuehren:
 
 ### Kernpraxis
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 - `meditate` -- Vollstaendige meta-kognitive Klaerungssitzung
 - `heal` -- Subsystembewertung und Driftkorrektur
 - `center` -- Dynamisches Denkgleichgewicht und Gewichtsverteilung

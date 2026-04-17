@@ -19,7 +19,7 @@ metadata:
   tags: putior, annotation, workflow, comment-syntax, polyglot, documentation
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: ecb11b8b
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -220,6 +220,38 @@ cat(put_diagram(merged, theme = "github"))
 - ファイル間の重複ID: 各`id`はスキャンされたディレクトリ全体で一意でなければならない
 - 誤った行でのバックスラッシュ継続: `\`は改行前の最後の文字でなければならない
 
+**Block comment syntax** (for `//`-prefix languages only: JS, TS, Go, Rust, C, C++, Java, etc.):
+
+Languages that use `//` for line comments also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
+
+```javascript
+/* put id:'init', label:'Initialize Config', output:'config.internal' */
+
+/**
+ * put id:'process', \
+ *   label:'Process Records', \
+ *   input:'config.internal, records.json', \
+ *   output:'results.json'
+ */
+function processRecords(config, records) {
+  // ...
+}
+```
+
+JSDoc-style annotations are particularly useful when documenting workflow steps alongside API documentation:
+
+```typescript
+/**
+ * Transform raw sensor data into normalized readings.
+ * put id:'normalize', label:'Normalize Sensor Data', input:'raw_readings.json', output:'normalized.parquet'
+ */
+export function normalizeSensorData(readings: SensorReading[]): NormalizedData {
+  // ...
+}
+```
+
+> **Note:** Block comment annotations are **not** supported for `#`-prefix languages (R, Python, Shell) or `--`-prefix languages (SQL, Lua). Use only line comments for those languages.
+
 ## バリデーション
 
 - [ ] アノテーションされたすべてのファイルが構文的に有効なPUTアノテーションを持つ
@@ -246,3 +278,4 @@ cat(put_diagram(merged, theme = "github"))
 - `generate-workflow-diagram` — 次のステップ: アノテーションから最終ダイアグラムを生成する
 - `install-putior` — アノテーション前にputiorをインストールする必要がある
 - `configure-putior-mcp` — MCPツールがインタラクティブなアノテーション支援を提供する
+- [ ] Files excluded via `exclude` parameter do not appear in the workflow (e.g., `put("./src/", exclude = "test_")` skips test helpers)

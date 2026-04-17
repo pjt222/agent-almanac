@@ -21,7 +21,7 @@ metadata:
   tags: intellectual-property, patents, landscape, fto, trademark, ip-strategy, prior-art
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -212,3 +212,5 @@ Empaquetar la evaluación del panorama para los tomadores de decisiones.
 - `security-audit-codebase` — La metodología de evaluación de riesgos es paralela al examen de riesgos de PI
 - `review-research` — Las habilidades de revisión de literatura se aplican al análisis de arte previo
 - `conduct-gxp-audit` — La metodología de auditoría es paralela a la documentación sistemática del panorama de PI
+- `screen-trademark` — cribado de conflictos de marcas y análisis de distintividad para el lado de marcas de los paisajes de PI
+- `file-trademark` — procedimientos de registro de marcas para la EUIPO, la USPTO y el Protocolo de Madrid

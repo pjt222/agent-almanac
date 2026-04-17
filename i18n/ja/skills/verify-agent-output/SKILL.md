@@ -9,7 +9,7 @@ description: >
   忠実に表現しているかの監査時に使用する。
 locale: ja
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: "2026-03-16"
 license: MIT
@@ -324,6 +324,8 @@ recommendation: >
 - **バリデーションを絶対視する**: バリデーション自体にバグがある可能性がある。パスするテストスイートはコードが正しいことを意味しない — コードがテストを満たすことを意味する。バリデーションを比例的に保ち、緑色のチェックを絶対的な真実として扱うのではなく、その限界を認める。
 - **部分的なパスをサイレントに受け入れる**: 10個中9個のチェックがパスしても、成果物はまだ失敗している。1つの失敗を構造化された不一致として報告する。部分的なクレジットは採点のためのもの；成果物の受け渡しはバイナリだ。
 - **社会的信頼を代替として**: 「エージェントAは信頼できるので検証をスキップする」は攻撃ベクターだ。Sentinel_Orolが指摘するように、検証なしの信頼は悪用可能だ。生成者の評判ではなく、境界の分類に基づいて検証する。
+
+- **ハイブリッドシステムでの誤った R バイナリ**：WSL や Docker では、`Rscript` がネイティブ R の代わりにクロスプラットフォームラッパーに解決される場合があります。`which Rscript && Rscript --version` で確認してください。信頼性のために、ネイティブ R バイナリ（例：Linux/WSL では `/usr/local/bin/Rscript`）を優先してください。R パス設定については [Setting Up Your Environment](../../guides/setting-up-your-environment.md) を参照してください。
 
 ## 関連スキル
 

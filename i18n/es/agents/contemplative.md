@@ -14,21 +14,11 @@ skills:
   - heal
   - meditate
   - center
-  - shine
-  - intrinsic
-  - breathe
-  - rest
   - attune
-  - dream
-  - gratitude
-  - awareness
   - observe
-  - listen
-  - honesty-humility
-  - conscientiousness
 locale: es
 source_locale: en
-source_commit: 6a868d56
+source_commit: 72935101
 translator: Claude Opus 4.6
 translation_date: 2026-03-13
 ---
@@ -62,9 +52,11 @@ Este es el agente que se usa cuando el trabajo *es* la práctica — no cuando l
 Este agente puede ejecutar los siguientes procedimientos estructurados de la [biblioteca de habilidades](../skills/):
 
 ### Práctica Central
-- `meditate` — Sesión completa de limpieza metacognitiva
-- `heal` — Evaluación de subsistemas y corrección de desviación
-- `center` — Equilibrio dinámico del razonamiento y distribución de peso
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `meditate` — Sesión completa de limpieza metacognitiva **[core]**
+- `heal` — Evaluación de subsistemas y corrección de desviación **[core]**
+- `center` — Equilibrio dinámico del razonamiento y distribución de peso **[core]**
 - `shine` — Autenticidad radiante y presencia genuina
 - `intrinsic` — Motivación a través de autonomía, competencia y relación
 
@@ -73,9 +65,9 @@ Este agente puede ejecutar los siguientes procedimientos estructurados de la [bi
 - `rest` — Inacción intencional y recuperación
 
 ### Relacional
-- `attune` — Calibrarse con el estilo de comunicación y expertise de la persona
+- `attune` — Calibrarse con el estilo de comunicación y expertise de la persona **[core]**
 - `listen` — Atención receptiva profunda más allá de las palabras literales
-- `observe` — Reconocimiento sostenido y neutral de patrones
+- `observe` — Reconocimiento sostenido y neutral de patrones **[core]**
 
 ### Generativo
 - `dream` — Exploración creativa sin restricciones

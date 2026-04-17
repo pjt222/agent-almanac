@@ -18,7 +18,7 @@ metadata:
   tags: versioning, dependencies, audit, security, upgrades
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -329,6 +329,8 @@ cargo audit --json
 - **チェンジログを読まない**: チェンジログを読まずにメジャーバージョンを盲目的にアップグレードする。依存関係の破壊的変更がプロジェクトの破壊的変更になる
 - **監査疲れ**: 監査を実行するが発見事項に対処しない。ポリシーを設定する: セキュリティの発見事項は1スプリント以内に対処、EOLは1四半期以内に対処
 - **ロックファイルの欠落**: ロックファイルのないプロジェクトは非再現可能なビルドを持つ。監査でロックファイルの欠落が明らかになった場合、それ自体がバージョン管理されたアップグレードの前に対処すべき重大な発見事項
+
+- **ハイブリッドシステムでの誤った R バイナリ**：WSL や Docker では、`Rscript` がネイティブ R の代わりにクロスプラットフォームラッパーに解決される場合があります。`which Rscript && Rscript --version` で確認してください。信頼性のために、ネイティブ R バイナリ（例：Linux/WSL では `/usr/local/bin/Rscript`）を優先してください。R パス設定については [Setting Up Your Environment](../../guides/setting-up-your-environment.md) を参照してください。
 
 ## 関連スキル
 

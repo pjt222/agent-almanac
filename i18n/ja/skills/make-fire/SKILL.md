@@ -17,7 +17,7 @@ metadata:
   tags: bushcraft, fire, survival, wilderness, friction-fire, ferro-rod
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: b092becc
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---
@@ -218,3 +218,4 @@ metadata:
 - `purify-water` — 火は水の煮沸浄化に必要
 - `sharpen-knife` — ナイフの手入れはバトニングや素材準備に不可欠
 - `forage-plants` — ティンダーや着火補助として使える植物の知識
+- `paper-making` — 植物繊維から手作り紙を製造；ティンダー準備と繊維準備・パルプ化技術を共有

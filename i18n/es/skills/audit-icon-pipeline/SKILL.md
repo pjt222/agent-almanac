@@ -2,7 +2,7 @@
 name: audit-icon-pipeline
 locale: es
 source_locale: en
-source_commit: 41c6956b
+source_commit: e4ffbae4
 translator: claude
 translation_date: "2026-03-18"
 description: >
@@ -101,6 +101,33 @@ Comparar conteos del manifiesto contra conteos del registro.
 
 **En caso de fallo:** Si los archivos de manifiesto no existen, el pipeline de datos necesita ejecutarse primero (`node build-data.js && node build-icon-manifest.js`).
 
+### Step 6: Detect Orphan Icons
+
+Walk `viz/public/icons*/` and flag WebP files whose `<palette>/<domain>/<skillId>` triple does not appear in `icon-manifest.json`.
+
+1. Enumerate all WebP files: `find viz/public/icons* -name "*.webp"`
+2. For each file, extract `<domain>/<id>` from its path
+3. Check if `<domain>/<id>` has an entry in `icon-manifest.json`
+4. Collect non-matching files as orphans — they exist on disk but are no longer referenced
+
+```bash
+# Quick orphan count per palette
+node -e "
+const fs = require('fs');
+const manifest = JSON.parse(fs.readFileSync('viz/public/data/icon-manifest.json'));
+const ids = new Set(manifest.map(e => e.domain + '/' + e.id));
+const orphans = require('child_process')
+  .execSync('find viz/public/icons -name \"*.webp\"').toString().trim().split('\n')
+  .filter(p => { const parts = p.split('/'); const id = parts.slice(-2).join('/').replace('.webp',''); return !ids.has(id); });
+console.log('Orphans:', orphans.length);
+orphans.forEach(p => console.log(' ', p));
+"
+```
+
+**Expected:** Zero orphans. Any orphans indicate skills re-homed to a different domain without cleanup.
+
+**On failure:** Delete orphans manually — they have no corresponding manifest entry and will not be served.
+
 ### Paso 6: Generar Informe de Brechas
 
 Producir un resumen estructurado.
@@ -150,3 +177,5 @@ Producir un resumen estructurado.
 - [create-glyph](../create-glyph/SKILL.md) — crear un glyph faltante identificado por esta auditoria
 - [enhance-glyph](../enhance-glyph/SKILL.md) — mejorar la calidad de glyphs existentes
 - [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — ejecutar el pipeline completo para generar iconos faltantes
+- [ ] Orphan icons checked (disk paths vs manifest)
+- **Orphans after re-homing**: When a skill's domain changes, `build.sh` creates icons at the new path but does NOT delete the old path — always run Step 6 orphan check after any domain migration

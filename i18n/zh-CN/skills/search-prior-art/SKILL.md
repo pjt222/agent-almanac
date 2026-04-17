@@ -16,7 +16,7 @@ metadata:
   tags: intellectual-property, prior-art, patents, novelty, obviousness, invalidity, fto
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---
@@ -140,3 +140,5 @@ metadata:
 - `assess-ip-landscape` — 为特定先行技术搜索提供背景的更广泛图谱映射
 - `review-research` — 文献综述方法论与先行技术搜索有显著重叠
 - `security-audit-codebase` — 系统搜索方法论平行（彻底性、文档化、可重现性）
+- `screen-trademark` — 商标冲突筛查和显著性分析，用于 IP 格局的商标方面
+- `file-trademark` — EUIPO、USPTO 和马德里协议的商标申请程序

@@ -2,7 +2,7 @@
 name: heal
 locale: ja
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 description: >

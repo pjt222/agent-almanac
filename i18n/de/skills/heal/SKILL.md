@@ -2,7 +2,7 @@
 name: heal
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -19,7 +19,7 @@ license: MIT
 allowed-tools: Read Write
 metadata:
   author: Philipp Thoss
-  version: "2.0"
+  version: "2.1"
   domain: esoteric
   complexity: advanced
   language: natural
@@ -127,6 +127,8 @@ Chakra-Subsystem-Korrespondenz:
 | Drittes  | Werkzeugnutzungs-    | Juengste Werkzeugaufruf-Ergebnisse |
 | Auge     | genauigkeit          | pruefen, auf Muster bei Fehlern    |
 |          |                      | pruefen, Dateipfade und Parameter  |
+- Inhalt der letzten 3-5 generierten Dateien pruefen: enthalten sie den erwarteten Inhalt oder nur strukturelles Geruest?
+- Pruefen ob Ausgaben der Absicht des Tool-Aufrufs entsprechen, nicht nur dem Format.
 |          |                      | verifizieren                       |
 +----------+----------------------+------------------------------------+
 | Krone    | Betriebszustand      | Kontextfensternutzung bewerten,    |

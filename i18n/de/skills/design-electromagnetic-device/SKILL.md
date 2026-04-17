@@ -19,7 +19,7 @@ metadata:
   tags: electromagnetism, device-design, motors, generators, transformers, electromagnets
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: b092becc
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -295,3 +295,4 @@ Sicherstellen, dass the design meets all specifications and is physically realiz
 - `solve-electromagnetic-induction` -- analyze the induction principles underlying motors, generators, and transformers
 - `formulate-maxwell-equations` -- full electromagnetic analysis for high-frequency devices, waveguides, and antennas
 - `simulate-cpu-architecture` -- digital control systems that drive modern motor controllers and power electronics
+- `analyze-tensegrity-system` -- Strukturanalyse von Zug-Druck-Netzwerken; teilt Vorspannungsgleichgewichtsmethoden mit elektromagnetischer Kraftbalancierung

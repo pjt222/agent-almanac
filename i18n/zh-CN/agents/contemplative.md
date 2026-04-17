@@ -14,21 +14,11 @@ skills:
   - heal
   - meditate
   - center
-  - shine
-  - intrinsic
-  - breathe
-  - rest
   - attune
-  - dream
-  - gratitude
-  - awareness
   - observe
-  - listen
-  - honesty-humility
-  - conscientiousness
 locale: zh-CN
 source_locale: en
-source_commit: 6a868d56
+source_commit: 72935101
 translator: Claude Opus 4.6
 translation_date: "2026-03-13"
 ---
@@ -62,9 +52,11 @@ translation_date: "2026-03-13"
 该智能体可以执行[技能库](../skills/)中的以下结构化流程：
 
 ### 核心实践
-- `meditate` — 完整的元认知清理会话
-- `heal` — 子系统评估和偏移校正
-- `center` — 动态推理平衡和权重分配
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
+- `meditate` — 完整的元认知清理会话 **[core]**
+- `heal` — 子系统评估和偏移校正 **[core]**
+- `center` — 动态推理平衡和权重分配 **[core]**
 - `shine` — 放射性真实和真诚存在
 - `intrinsic` — 通过自主性、胜任感和关联性激发内在动机
 
@@ -73,9 +65,9 @@ translation_date: "2026-03-13"
 - `rest` — 有意识的不作为和恢复
 
 ### 关系
-- `attune` — 校准到用户的沟通风格和专业水平
+- `attune` — 校准到用户的沟通风格和专业水平 **[core]**
 - `listen` — 超越字面意义的深度接收性注意
-- `observe` — 持续的中性模式识别
+- `observe` — 持续的中性模式识别 **[core]**
 
 ### 生成
 - `dream` — 无约束的创造性探索

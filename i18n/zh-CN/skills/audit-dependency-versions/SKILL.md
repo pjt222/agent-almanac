@@ -16,7 +16,7 @@ metadata:
   tags: versioning, dependencies, audit, security, upgrades
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -327,6 +327,8 @@ cargo audit --json
 - **不阅读变更日志**：在不阅读变更日志的情况下盲目升级主要版本。依赖项中的破坏性变更会变成你项目中的破坏性变更
 - **审计疲劳**：运行审计但不对发现采取行动。设定策略：安全发现必须在 1 个冲刺内解决，停止维护的在 1 个季度内解决
 - **缺少锁文件**：没有锁文件的项目具有不可复现的构建。如果审计发现缺少锁文件，这本身就是在版本化升级之前需要解决的关键发现
+
+- **混合系统上错误的 R 二进制文件**：在 WSL 或 Docker 上，`Rscript` 可能解析为跨平台包装器而非原生 R。使用 `which Rscript && Rscript --version` 检查。优先使用原生 R 二进制文件（例如 Linux/WSL 上的 `/usr/local/bin/Rscript`）以确保可靠性。有关 R 路径配置，请参阅 [Setting Up Your Environment](../../guides/setting-up-your-environment.md)。
 
 ## 相关技能
 

@@ -16,7 +16,7 @@ metadata:
   tags: putior, annotation, workflow, comment-syntax, polyglot, documentation
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: ecb11b8b
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -217,6 +217,38 @@ cat(put_diagram(merged, theme = "github"))
 - 跨文件的重复 ID：每个 `id` 在整个扫描目录中必须唯一
 - 续行符在错误行上：`\` 必须是换行前的最后一个字符
 
+**Block comment syntax** (for `//`-prefix languages only: JS, TS, Go, Rust, C, C++, Java, etc.):
+
+Languages that use `//` for line comments also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
+
+```javascript
+/* put id:'init', label:'Initialize Config', output:'config.internal' */
+
+/**
+ * put id:'process', \
+ *   label:'Process Records', \
+ *   input:'config.internal, records.json', \
+ *   output:'results.json'
+ */
+function processRecords(config, records) {
+  // ...
+}
+```
+
+JSDoc-style annotations are particularly useful when documenting workflow steps alongside API documentation:
+
+```typescript
+/**
+ * Transform raw sensor data into normalized readings.
+ * put id:'normalize', label:'Normalize Sensor Data', input:'raw_readings.json', output:'normalized.parquet'
+ */
+export function normalizeSensorData(readings: SensorReading[]): NormalizedData {
+  // ...
+}
+```
+
+> **Note:** Block comment annotations are **not** supported for `#`-prefix languages (R, Python, Shell) or `--`-prefix languages (SQL, Lua). Use only line comments for those languages.
+
 ## 验证清单
 
 - [ ] 每个注解文件有语法有效的 PUT 注解
@@ -243,3 +275,4 @@ cat(put_diagram(merged, theme = "github"))
 - `generate-workflow-diagram` — 下一步：从注解生成最终图表
 - `install-putior` — 注解前必须安装 putior
 - `configure-putior-mcp` — MCP 工具提供交互式注解辅助
+- [ ] Files excluded via `exclude` parameter do not appear in the workflow (e.g., `put("./src/", exclude = "test_")` skips test helpers)

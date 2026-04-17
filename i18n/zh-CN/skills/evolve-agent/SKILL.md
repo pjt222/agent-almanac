@@ -8,7 +8,7 @@ description: >
   旁边创建高级变体，或智能体在实际使用后需要范围优化时。
 locale: zh-CN
 source_locale: en
-source_commit: 6f65f316
+source_commit: 971b2bdc
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

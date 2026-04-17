@@ -14,21 +14,11 @@ skills:
   - heal
   - meditate
   - center
-  - shine
-  - intrinsic
-  - breathe
-  - rest
   - attune
-  - dream
-  - gratitude
-  - awareness
   - observe
-  - listen
-  - honesty-humility
-  - conscientiousness
 locale: ja
 source_locale: en
-source_commit: 6a868d56
+source_commit: 72935101
 translator: Claude Opus 4.6
 translation_date: 2026-03-13
 ---
@@ -62,6 +52,8 @@ translation_date: 2026-03-13
 このエージェントは[スキルライブラリ](../skills/)から以下の構造化された手順を実行できる:
 
 ### コアプラクティス
+Core skills (loaded automatically when spawned as subagent) are marked with **[core]**.
+
 - `meditate` -- 完全なメタ認知浄化セッション
 - `heal` -- サブシステム評価とドリフト修正
 - `center` -- 動的な推論バランスと重み配分

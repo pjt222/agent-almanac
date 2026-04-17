@@ -10,7 +10,7 @@ description: >
   en ramas y GitHub Actions.
 locale: es
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -193,6 +193,8 @@ URL: https://username.github.io/packagename/, https://github.com/username/packag
 - **Enlaces de viñetas rotos**: Usar la sintaxis `vignette("name")` en referencias cruzadas, no rutas de archivo.
 - **Logo no visible**: Colocar el logo en `man/figures/logo.png` y referenciarlo en `_pkgdown.yml`.
 - **Búsqueda no funciona**: Requiere que el campo `url` en `_pkgdown.yml` esté correctamente configurado.
+
+- **Binario R incorrecto en sistemas híbridos**: En WSL o Docker, `Rscript` puede resolverse a un contenedor multiplataforma en lugar de R nativo. Comprueba con `which Rscript && Rscript --version`. Prefiere el binario R nativo (p. ej., `/usr/local/bin/Rscript` en Linux/WSL) para mayor fiabilidad. Consulta [Setting Up Your Environment](../../guides/setting-up-your-environment.md) para la configuración de la ruta de R.
 
 ## Habilidades Relacionadas
 

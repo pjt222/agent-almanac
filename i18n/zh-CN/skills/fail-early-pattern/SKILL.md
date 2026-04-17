@@ -8,7 +8,7 @@ description: >
   质量，或强化内部 API 对无效参数的防护。
 locale: zh-CN
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -342,6 +342,8 @@ Rscript -e "devtools::test()"
 - **在 tryCatch 中吞噬错误**：`tryCatch(..., error = function(e) NULL)` 隐藏 bug。若必须捕获，记录日志或重新抛出并添加上下文。
 - **忘记 call. = FALSE**：在 R 中，`stop("msg")` 默认包含调用信息，对最终用户来说很嘈杂。在面向用户的函数中使用 `call. = FALSE`。`cli::cli_abort()` 自动处理这一点。
 - **在测试中而非代码中验证**：测试验证行为，但不保护生产调用者。验证属于函数本身。
+
+- **混合系统上错误的 R 二进制文件**：在 WSL 或 Docker 上，`Rscript` 可能解析为跨平台包装器而非原生 R。使用 `which Rscript && Rscript --version` 检查。优先使用原生 R 二进制文件（例如 Linux/WSL 上的 `/usr/local/bin/Rscript`）以确保可靠性。有关 R 路径配置，请参阅 [Setting Up Your Environment](../../guides/setting-up-your-environment.md)。
 
 ## 相关技能
 

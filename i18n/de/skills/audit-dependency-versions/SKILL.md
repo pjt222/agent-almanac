@@ -19,7 +19,7 @@ metadata:
   tags: versioning, dependencies, audit, security, upgrades
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -330,6 +330,8 @@ Schreiben the complete audit report to `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDI
 - **Not reading changelogs**: Blindly upgrading a major version ohne reading the changelog. Breaking changes in the Abhaengigkeit become brechende Aenderungs in your project.
 - **Audit fatigue**: Running audits but not acting on findings. Set a policy: security findings muss addressed innerhalb 1 sprint, EOL innerhalb 1 quarter.
 - **Missing lock files**: Projects ohne lock files have non-reproducible builds. If the audit reveals missing lock files, that is itself a critical finding to address vor versioned upgrades.
+
+- **Falsches R-Binary auf Hybrid-Systemen**: Unter WSL oder Docker kann `Rscript` einen plattformuebergreifenden Wrapper statt nativem R aufloesen. Mit `which Rscript && Rscript --version` pruefen. Das native R-Binary bevorzugen (z.B. `/usr/local/bin/Rscript` unter Linux/WSL) fuer Zuverlaessigkeit. Fuer die R-Pfadkonfiguration siehe [Setting Up Your Environment](../../guides/setting-up-your-environment.md).
 
 ## Verwandte Skills
 

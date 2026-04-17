@@ -20,7 +20,7 @@ metadata:
   tags: intellectual-property, prior-art, patents, novelty, obviousness, invalidity, fto
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -232,3 +232,5 @@ Empaquetar los resultados de búsqueda para su uso previsto.
 - `assess-ip-landscape` — Mapeo más amplio del panorama que contextualiza búsquedas específicas de arte previo
 - `review-research` — La metodología de revisión de literatura se superpone significativamente con la búsqueda de arte previo
 - `security-audit-codebase` — Paralelismos en metodología de búsqueda sistemática (exhaustividad, documentación, reproducibilidad)
+- `screen-trademark` — cribado de conflictos de marcas y análisis de distintividad para el lado de marcas de los paisajes de PI
+- `file-trademark` — procedimientos de registro de marcas para la EUIPO, la USPTO y el Protocolo de Madrid

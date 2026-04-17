@@ -11,7 +11,7 @@ description: >
 license: MIT
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: ecb11b8b
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 allowed-tools: Read Write Edit Bash Grep Glob
@@ -220,6 +220,38 @@ cat(put_diagram(merged, theme = "github"))
 - Doppelte IDs über Dateien hinweg: jede `id` muss innerhalb des gesamten gescannten Verzeichnisses eindeutig sein
 - Backslash-Fortsetzung auf der falschen Zeile: `\` muss das letzte Zeichen vor dem Zeilenumbruch sein
 
+**Block comment syntax** (for `//`-prefix languages only: JS, TS, Go, Rust, C, C++, Java, etc.):
+
+Languages that use `//` for line comments also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
+
+```javascript
+/* put id:'init', label:'Initialize Config', output:'config.internal' */
+
+/**
+ * put id:'process', \
+ *   label:'Process Records', \
+ *   input:'config.internal, records.json', \
+ *   output:'results.json'
+ */
+function processRecords(config, records) {
+  // ...
+}
+```
+
+JSDoc-style annotations are particularly useful when documenting workflow steps alongside API documentation:
+
+```typescript
+/**
+ * Transform raw sensor data into normalized readings.
+ * put id:'normalize', label:'Normalize Sensor Data', input:'raw_readings.json', output:'normalized.parquet'
+ */
+export function normalizeSensorData(readings: SensorReading[]): NormalizedData {
+  // ...
+}
+```
+
+> **Note:** Block comment annotations are **not** supported for `#`-prefix languages (R, Python, Shell) or `--`-prefix languages (SQL, Lua). Use only line comments for those languages.
+
 ## Validierung
 
 - [ ] Jede annotierte Datei hat syntaktisch gültige PUT-Annotationen
@@ -245,3 +277,4 @@ cat(put_diagram(merged, theme = "github"))
 - `generate-workflow-diagram` — nächster Schritt: endgültiges Diagramm aus Annotationen generieren
 - `install-putior` — putior muss vor dem Annotieren installiert sein
 - `configure-putior-mcp` — MCP-Tools bieten interaktive Annotationshilfe
+- [ ] Files excluded via `exclude` parameter do not appear in the workflow (e.g., `put("./src/", exclude = "test_")` skips test helpers)

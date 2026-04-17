@@ -2,7 +2,7 @@
 name: render-icon-pipeline
 locale: zh-CN
 source_locale: en
-source_commit: 41c6956b
+source_commit: 640725b5
 translator: claude
 translation_date: "2026-03-18"
 description: >

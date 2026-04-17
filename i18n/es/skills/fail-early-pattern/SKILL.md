@@ -21,7 +21,7 @@ metadata:
   tags: error-handling, validation, defensive-programming, guard-clauses, fail-fast
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -346,6 +346,8 @@ Rscript -e "devtools::test()"
 - **Consumir errores en tryCatch**: `tryCatch(..., error = function(e) NULL)` oculta errores. Si debes capturar, registrar o relanzar con contexto añadido.
 - **Olvidar call. = FALSE**: En R, `stop("msg")` incluye la llamada por defecto, lo que es ruidoso para los usuarios finales. Usar `call. = FALSE` en funciones de cara al usuario. `cli::cli_abort()` hace esto automáticamente.
 - **Validar en pruebas en lugar de en código**: Las pruebas verifican el comportamiento pero no protegen a los llamadores en producción. La validación pertenece a la función misma.
+
+- **Binario R incorrecto en sistemas híbridos**: En WSL o Docker, `Rscript` puede resolverse a un contenedor multiplataforma en lugar de R nativo. Comprueba con `which Rscript && Rscript --version`. Prefiere el binario R nativo (p. ej., `/usr/local/bin/Rscript` en Linux/WSL) para mayor fiabilidad. Consulta [Setting Up Your Environment](../../guides/setting-up-your-environment.md) para la configuración de la ruta de R.
 
 ## Habilidades Relacionadas
 

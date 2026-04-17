@@ -7,7 +7,7 @@ description: >
   请求中审查贡献者提交的技能。
 locale: zh-CN
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -86,6 +86,25 @@ head -30 skills/<skill-name>/SKILL.md | grep -q '^allowed-tools:' && echo "allow
 **预期结果：** 全部四个必需字段存在。全部六个元数据字段存在。`name` 与目录名匹配。`description` 少于 1024 个字符。
 
 **失败处理：** 将每个缺失字段报告为阻塞（BLOCKING）。若 `name` 与目录名不匹配，报告为阻塞并附预期值。若 `description` 超过 1024 个字符，报告为建议（SUGGEST）并附当前长度。
+
+### Step 3: Locale-Specific Validation (Translations Only)
+
+If the frontmatter contains a `locale` field, the file is a translated SKILL.md. Perform these additional checks. If no `locale` field is present, skip this step.
+
+1. **Translation frontmatter fields** — Verify these five fields are present:
+   - `locale` — target locale code (e.g., `de`, `ja`, `zh-CN`, `es`)
+   - `source_locale` — origin locale (typically `en`)
+   - `source_commit` — commit hash of the English source used for translation
+   - `translator` — who or what produced the translation
+   - `translation_date` — ISO 8601 date of translation
+
+2. **Prose language scan** — Sample 3-5 body paragraphs (outside code blocks, frontmatter, and headings). Verify the prose is written in the target locale, not English.
+
+3. **Code block identity check** — Compare code blocks in the translated file against the English source. Code blocks must be identical (code is never translated).
+
+**Expected:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
+
+**On failure:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING.
 
 ### 第 3 步：检查必需章节
 
@@ -198,3 +217,6 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - `update-skill-content` — 格式验证通过后，用此改进内容质量
 - `refactor-skill-structure` — 当技能未通过行数检查时，用此提取和重组
 - `review-pull-request` — 在审查添加或修改技能的 PR 时，将 PR 审查与格式验证结合
+- [ ] (Translations only) All five translation frontmatter fields present (`locale`, `source_locale`, `source_commit`, `translator`, `translation_date`)
+- [ ] (Translations only) Body paragraphs are in the target locale, not English
+- [ ] (Translations only) Code blocks are identical to the English source

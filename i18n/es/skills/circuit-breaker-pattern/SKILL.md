@@ -23,7 +23,7 @@ metadata:
   tags: resilience, circuit-breaker, error-handling, graceful-degradation, tool-reliability, fault-tolerance
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: b092becc
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -464,3 +464,4 @@ Las verificaciones previas a la llamada son orientativas, no autoritativas. Una 
 - `escalate-issues` — cuando el presupuesto de fallos se agota o la reducción del alcance es significativa, escalar a un especialista o humano
 - `write-incident-runbook` — documentar patrones recurrentes de fallos de herramientas como libros de ejecución para un diagnóstico más rápido
 - `assess-context` — evaluar si el enfoque actual puede adaptarse cuando múltiples herramientas están degradadas; se complementa con las decisiones de reducción del alcance
+- `du-dum` — arquitectura de dos relojes que separa la observación de la decisión; patrón complementario para reducir el costo de observación en bucles de agentes

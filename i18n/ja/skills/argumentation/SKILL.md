@@ -9,7 +9,7 @@ description: >
   研究論証や技術提案を構築する場合に使用する。
 locale: ja
 source_locale: en
-source_commit: 6f65f316
+source_commit: 5f246ff7
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -183,6 +183,19 @@ metadata:
 **期待結果：** コンテキストに適した完全にフォーマットされた議論。読者は仮説を評価し、推論をたどり、証拠を確認し、反論を検討できる — すべて一つの一貫した構造で。
 
 **失敗時：** 組み立てられた議論がバラバラに感じられる場合、仮説が広すぎる可能性がある。焦点を絞ったサブ議論に分割し、それぞれが独自の仮説-議論-例のトライアドを持つ。2つの緊密な議論は1つの広がりのあるものより強い。
+
+### Composition: Argumentation + Advocatus Diaboli
+
+For high-stakes decisions, compose this skill with the `advocatus-diaboli` agent to form a pre-decision review loop. The pattern:
+
+1. **Structure** via argumentation -- build the hypothesis-argument-example triad
+2. **Stress-test** via advocatus-diaboli -- steelman the proposal, then challenge each assumption with specific questions. Flag severity: Critical (redesign or abandon), Medium (adjust), Low (note and proceed)
+3. **Revise** based on findings -- critical findings trigger redesign; medium findings trigger adjustment; low findings are noted
+
+**When to compose vs. use alone:**
+- Use argumentation alone when constructing a proposal, PR description, or design justification
+- Use advocatus-diaboli alone when reviewing someone else's existing argument
+- Compose both when you are both the proposer and need adversarial self-review before committing
 
 ## バリデーション
 

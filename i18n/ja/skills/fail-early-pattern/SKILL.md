@@ -11,7 +11,7 @@ description: >
   内部APIを強化する場合に使用する。
 locale: ja
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -345,6 +345,8 @@ Rscript -e "devtools::test()"
 - **tryCatchでエラーを飲み込む**: `tryCatch(..., error = function(e) NULL)` がバグを隠す。キャッチする必要がある場合、コンテキストを追加してログに記録するか再スローする。
 - **call. = FALSEを忘れる**: Rでは `stop("msg")` はデフォルトでコールを含み、エンドユーザーにはノイズになる。ユーザー向け関数では `call. = FALSE` を使用する。`cli::cli_abort()` はこれを自動的に行う。
 - **コードではなくテストでバリデーション**: テストは動作を確認するが、本番の呼び出し元を保護しない。バリデーションは関数自体に属する。
+
+- **ハイブリッドシステムでの誤った R バイナリ**：WSL や Docker では、`Rscript` がネイティブ R の代わりにクロスプラットフォームラッパーに解決される場合があります。`which Rscript && Rscript --version` で確認してください。信頼性のために、ネイティブ R バイナリ（例：Linux/WSL では `/usr/local/bin/Rscript`）を優先してください。R パス設定については [Setting Up Your Environment](../../guides/setting-up-your-environment.md) を参照してください。
 
 ## 関連スキル
 

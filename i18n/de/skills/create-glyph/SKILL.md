@@ -2,7 +2,7 @@
 name: create-glyph
 locale: de
 source_locale: en
-source_commit: 41c6956b
+source_commit: acc252e6
 translator: claude
 translation_date: "2026-03-18"
 description: >

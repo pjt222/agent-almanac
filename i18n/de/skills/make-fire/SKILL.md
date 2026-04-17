@@ -18,7 +18,7 @@ metadata:
   tags: bushcraft, fire, survival, wilderness, shelter
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: b092becc
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---
@@ -234,3 +234,4 @@ KEIN unbeaufsichtigtes Feuer zurücklassen.
 
 - `purify-water` — Feuer wird für die Abkochmethode der Wasserreinigung benötigt; Wasserreinigung ist in Überlebenssituationen oft das dringendste Bedürfnis
 - `forage-plants` — Gesammelte Pflanzen müssen möglicherweise gekocht werden; Feuer zum Kochen verwenden
+- `paper-making` — Handpapier aus Pflanzenfasern herstellen; teilt Faserpraeparations- und Pulptechniken mit der Zundervorbereitung

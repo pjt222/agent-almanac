@@ -16,7 +16,7 @@ metadata:
   tags: argumentation, reasoning, hypothesis, logic, rhetoric, critical-thinking
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: 5f246ff7
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -201,6 +201,19 @@ metadata:
 **预期结果：** 一个完整的、适合其上下文的格式化论证。读者可以评估假设、跟随推理、检查证据并考虑反论点——全部在一个连贯的结构中。
 
 **失败处理：** 如果组装的论证感觉不连贯，假设可能过于宽泛。将其拆分为聚焦的子论证，每个都有自己的假设-论证-示例三元组。两个紧凑的论证强于一个冗长的论证。
+
+### Composition: Argumentation + Advocatus Diaboli
+
+For high-stakes decisions, compose this skill with the `advocatus-diaboli` agent to form a pre-decision review loop. The pattern:
+
+1. **Structure** via argumentation -- build the hypothesis-argument-example triad
+2. **Stress-test** via advocatus-diaboli -- steelman the proposal, then challenge each assumption with specific questions. Flag severity: Critical (redesign or abandon), Medium (adjust), Low (note and proceed)
+3. **Revise** based on findings -- critical findings trigger redesign; medium findings trigger adjustment; low findings are noted
+
+**When to compose vs. use alone:**
+- Use argumentation alone when constructing a proposal, PR description, or design justification
+- Use advocatus-diaboli alone when reviewing someone else's existing argument
+- Compose both when you are both the proposer and need adversarial self-review before committing
 
 ## 验证清单
 

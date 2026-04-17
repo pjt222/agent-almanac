@@ -2,7 +2,7 @@
 name: install-putior
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: ecb11b8b
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -131,6 +131,18 @@ cat(put_diagram(put(tmp)))
 **Erwartet:** Mermaid-Flussdiagramm-Code wird auf der Konsole ausgegeben der `test` und `Hello putior` enthaelt.
 
 **Bei Fehler:** Wenn `put` nicht gefunden wird, wurde das Paket nicht korrekt installiert. Mit `install.packages("putior", dependencies = TRUE)` neu installieren. Wenn das Diagramm leer ist, ueberpruefen ob die temporaere Datei erstellt wurde und die Annotationssyntax einfache Anfuehrungszeichen innerhalb doppelter verwendet.
+
+> **Wichtig: Benutzerdefinierte Paletten koennen nicht ueber MCP verwendet werden.** Der Parameter `palette` von `put_diagram` akzeptiert ein `putior_theme` R-Objekt, das von `put_theme()` erstellt wird. Da MCP ueber JSON kommuniziert, koennen R-Objekte wie `putior_theme` nicht ueber die MCP-Grenze serialisiert werden. Beim Aufruf von `put_diagram` ueber MCP stattdessen den string-basierten Parameter `theme` verwenden (z.B. `theme = "viridis"`). Fuer benutzerdefinierte Paletten `put_theme()` und `put_diagram(palette = ...)` direkt in einer R-Sitzung aufrufen.
+
+> **Wichtige Standardwerte**: Alle Scan-Funktionen (`put()`, `put_auto()`, `put_generate()`, `put_merge()`) haben `recursive = TRUE` als Standard und scannen Unterverzeichnisse automatisch. Dies ist eine brechende Aenderung gegenueber Versionen vor 0.2.0, bei denen der Standard `FALSE` war. Alle Scan-Funktionen akzeptieren auch einen `exclude`-Parameter fuer regex-basierte Dateifilterung (z.B. `put("./src/", exclude = "test_")`).
+
+Falls das optionale `shiny`-Paket installiert ist, die interaktive Sandbox ausprobieren:
+
+```r
+putior::run_sandbox()
+```
+
+Startet einen Browser-basierten Editor zum Experimentieren mit der PUT-Annotationssyntax und Echtzeit-Diagrammdarstellung.
 
 ## Validierung
 

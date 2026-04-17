@@ -15,7 +15,7 @@ metadata:
   tags: bushcraft, fire, survival, wilderness, friction-fire
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: b092becc
   translator: claude-sonnet-4-6
   translation_date: 2026-03-16
 ---
@@ -186,3 +186,4 @@ metadata:
 - `purify-water` — 净化水源需要持续的沸腾火源
 - `forage-plants` — 许多觅食食材需要烹饪才能安全食用
 - `sharpen-knife` — 准备引火材料需要锋利的刀具
+- `paper-making` — 从植物纤维手工制纸；与引火材料准备共享纤维制备和制浆技术

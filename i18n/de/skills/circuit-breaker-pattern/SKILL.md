@@ -14,7 +14,7 @@ description: >
   Agenten gegen kaskadende Tool-Fehler.
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: b092becc
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -464,3 +464,4 @@ Pre-Call-Pruefungen sind beratend, nicht massgeblich. Ein Tool, das Pre-Call-Pru
 - `escalate-issues` — wenn das Fehlerbudget erschoepft oder die Umfangsreduzierung erheblich ist, an einen Spezialisten oder Menschen eskalieren
 - `write-incident-runbook` — wiederkehrende Tool-Ausfall-Muster als Runbooks fuer schnellere Diagnose dokumentieren
 - `assess-context` — bewerten ob der aktuelle Ansatz angepasst werden kann, wenn mehrere Tools degradiert sind; paart mit Umfangsreduzierungsentscheidungen
+- `du-dum` — Zweig-Uhr-Architektur trennt Beobachtung von Entscheidung; komplementaeres Muster zur Reduzierung der Beobachtungskosten in Agentschleifen

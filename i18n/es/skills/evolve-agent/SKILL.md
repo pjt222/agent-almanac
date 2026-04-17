@@ -22,7 +22,7 @@ metadata:
   tags: meta, agent, evolution, maintenance, versioning
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: 971b2bdc
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---

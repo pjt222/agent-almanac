@@ -19,7 +19,7 @@ metadata:
   tags: intellectual-property, prior-art, patents, novelty, obviousness, invalidity, fto
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -231,3 +231,5 @@ Package the search results for their intended use.
 - `assess-ip-landscape` — Broader landscape mapping that contextualizes specific prior art searches
 - `review-research` — Literature review methodology overlaps significantly with prior art search
 - `security-audit-codebase` — Systematic search methodology parallels (thoroughness, documentation, reproducibility)
+- `screen-trademark` — IP ランドスケープの商標側のための商標競合スクリーニングと識別力分析
+- `file-trademark` — EUIPO、USPTO、およびマドリッドプロトコルの商標出願手続き

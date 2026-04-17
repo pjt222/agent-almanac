@@ -6,7 +6,7 @@ description: >
   协调模式在等效工作负载上的表现，或为团队组合建立基准性能。
 locale: zh-CN
 source_locale: en
-source_commit: acc252e6 # stale — source updated for teams infrastructure fix
+source_commit: befb7ac1 # stale — source updated for teams infrastructure fix
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT

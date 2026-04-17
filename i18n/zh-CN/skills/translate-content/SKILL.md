@@ -10,14 +10,14 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: i18n
   complexity: intermediate
   language: multi
   tags: i18n, translation, localization, multilingual, l10n
   locale: zh-CN
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -152,6 +152,18 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 
 **失败处理：** Compare section-by-section with the English source. Restore any missing sections.
 
+### 第 5.5 步：验证散文已翻译
+
+5.5.1. 从翻译文件的正文中抽取 3 个散文段落。从不同章节选择段落——不包括标题、代码块或前置元数据。
+
+5.5.2. 确认每个抽取的段落都用目标语言编写，而非英语。
+
+5.5.3. 如果任何抽取的段落仍为英语，则翻译不完整。返回步骤 4，在继续之前翻译剩余的英语散文。
+
+**预期结果：** 所有 3 个散文段落样本均为目标语言，确认正文内容已翻译——而不仅仅是标题和前置元数据。
+
+**失败处理：** 识别哪些章节仍包含英语散文。在继续步骤 6 之前翻译它们。
+
 ### 第 6 步：Write the translated file
 
 6.1. Write the complete translated content to the target path using the Write or Edit tool.
@@ -193,3 +205,4 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 - [create-skill](../create-skill/SKILL.md) — understand the SKILL.md structure being translated
 - [review-skill-format](../review-skill-format/SKILL.md) — validate translated skill structure
 - [evolve-skill](../evolve-skill/SKILL.md) — update skills that have changed since translation
+- **批量吞吐量优先于质量**：仅脚手架输出——标题已翻译但正文仍为英语——不是有效的翻译。宁可完成较少的完整翻译，也不要进行许多部分翻译。

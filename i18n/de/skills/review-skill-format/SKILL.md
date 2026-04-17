@@ -2,7 +2,7 @@
 name: review-skill-format
 locale: de
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude
 translation_date: "2026-03-17"
 description: >
@@ -91,7 +91,26 @@ head -30 skills/<skill-name>/SKILL.md | grep -q '^allowed-tools:' && echo "allow
 
 **Bei Fehler:** Jedes fehlende Feld als BLOCKIEREND melden. Wenn `name` nicht mit dem Verzeichnisnamen uebereinstimmt, als BLOCKIEREND mit dem erwarteten Wert melden. Wenn `description` 1024 Zeichen ueberschreitet, als VORSCHLAG mit aktueller Laenge melden.
 
-### Schritt 3: Erforderliche Abschnitte pruefen
+### Step 3: Locale-Specific Validation (Translations Only)
+
+If the frontmatter contains a `locale` field, the file is a translated SKILL.md. Perform these additional checks. If no `locale` field is present, skip this step.
+
+1. **Translation frontmatter fields** — Verify these five fields are present:
+   - `locale` — target locale code (e.g., `de`, `ja`, `zh-CN`, `es`)
+   - `source_locale` — origin locale (typically `en`)
+   - `source_commit` — commit hash of the English source used for translation
+   - `translator` — who or what produced the translation
+   - `translation_date` — ISO 8601 date of translation
+
+2. **Prose language scan** — Sample 3-5 body paragraphs (outside code blocks, frontmatter, and headings). Verify the prose is written in the target locale, not English.
+
+3. **Code block identity check** — Compare code blocks in the translated file against the English source. Code blocks must be identical (code is never translated).
+
+**Expected:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
+
+**On failure:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING.
+
+### Schritt 7: Erforderliche Abschnitte pruefen
 
 Verifizieren dass alle sechs erforderlichen Abschnitte im Skill-Koerper vorhanden sind (nach Frontmatter).
 
@@ -117,7 +136,7 @@ grep -qE "## Validation( Checklist)?" skills/<skill-name>/SKILL.md && echo "Vali
 
 **Bei Fehler:** Jeden fehlenden Abschnitt als BLOCKIEREND melden. Ein Skill ohne alle sechs Abschnitte ist nicht konform mit dem agentskills.io-Standard. Die Abschnittsvorlage aus dem `create-skill`-Meta-Skill bereitstellen.
 
-### Schritt 4: Format der Vorgehensweisenschritte pruefen
+### Schritt 7: Format der Vorgehensweisenschritte pruefen
 
 Verifizieren dass jeder Vorgehensweisenschritt dem erforderlichen Muster folgt: nummerierter Schritttitel, Kontext, Codeblock(s) und **Erwartet:**/**Bei Fehler:**-Blocks.
 
@@ -131,7 +150,7 @@ Fuer jeden `### Step N:`-Unterabschnitt pruefen:
 
 **Bei Fehler:** Jeden Schritt dem Erwartet/Bei Fehler fehlt als BLOCKIEREND melden. Wenn Schritte nur vage Anweisungen enthalten ("das System geeignet konfigurieren"), als VORSCHLAG mit Hinweis auf Hinzufuegen konkreter Befehle melden.
 
-### Schritt 5: Zeilenzahl verifizieren
+### Schritt 7: Zeilenzahl verifizieren
 
 Pruefen dass die SKILL.md innerhalb der 500-Zeilen-Grenze liegt.
 
@@ -144,7 +163,7 @@ lines=$(wc -l < skills/<skill-name>/SKILL.md)
 
 **Bei Fehler:** Wenn ueber 500 Zeilen, als BLOCKIEREND melden. Empfehlen den Skill `refactor-skill-structure` zu verwenden um Codeblocks >15 Zeilen nach `references/EXAMPLES.md` zu extrahieren. Typische Reduktion: 20-40% durch Extraktion erweiterter Beispiele.
 
-### Schritt 6: Registry-Synchronisierung pruefen
+### Schritt 7: Registry-Synchronisierung pruefen
 
 Verifizieren dass der Skill in `skills/_registry.yml` unter der korrekten Domain mit uebereinstimmenden Metadaten aufgefuehrt ist.
 
@@ -202,3 +221,6 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - `update-skill-content` -- Nach bestandener Formatvalidierung verwenden um die Inhaltsqualitaet zu verbessern
 - `refactor-skill-structure` -- Wenn ein Skill die Zeilenzahlpruefung nicht besteht, zur Extraktion und Neuorganisation verwenden
 - `review-pull-request` -- Bei der Pruefung eines PR der Skills hinzufuegt oder aendert, PR-Pruefung mit Formatvalidierung kombinieren
+- [ ] (Translations only) All five translation frontmatter fields present (`locale`, `source_locale`, `source_commit`, `translator`, `translation_date`)
+- [ ] (Translations only) Body paragraphs are in the target locale, not English
+- [ ] (Translations only) Code blocks are identical to the English source

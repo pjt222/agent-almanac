@@ -10,14 +10,14 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: i18n
   complexity: intermediate
   language: multi
   tags: i18n, translation, localization, multilingual, l10n
   locale: de
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -152,6 +152,18 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 
 **Bei Fehler:** Vergleichen section-by-section with the English source. Wiederherstellen any missing sections.
 
+### Schritt 5.5: Ueberpruefe ob Prosa uebersetzt ist
+
+5.5.1. Probeentnahme von 3 Prosa-Absaetzen aus dem Hauptteil der uebersetzten Datei. Absaetze aus verschiedenen Abschnitten auswaehlen — keine Ueberschriften, Codeblöcke oder Frontmatter.
+
+5.5.2. Bestaetigen dass jeder Prosa-Absatz in der Zielsprache geschrieben ist, nicht auf Englisch.
+
+5.5.3. Wenn ein Prosa-Absatz noch auf Englisch ist, ist die Uebersetzung unvollstaendig. Zu Schritt 4 zurueckkehren und die verbleibende englische Prosa uebersetzen, bevor fortgefahren wird.
+
+**Erwartet:** Alle 3 Prosa-Absatzproben sind in der Zielsprache, was bestaetigt dass der Textteil uebersetzt wurde — nicht nur Ueberschriften und Frontmatter.
+
+**Bei Fehler:** Identifizieren welche Abschnitte noch englische Prosa enthalten. Diese uebersetzen bevor mit Schritt 6 fortgefahren wird.
+
 ### Schritt 6: Schreiben the translated file
 
 6.1. Schreiben the complete translated content to das Ziel path using the Schreiben or Bearbeiten tool.
@@ -193,3 +205,4 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 - [create-skill](../create-skill/SKILL.md) — understand the SKILL.md structure being translated
 - [review-skill-format](../review-skill-format/SKILL.md) — validate translated skill structure
 - [evolve-skill](../evolve-skill/SKILL.md) — update skills that have changed since translation
+- **Batch-Durchsatz vor Qualitaet**: Reine Geruest-Ausgabe — wo Ueberschriften uebersetzt sind, aber der Textteil auf Englisch bleibt — ist keine gueltige Uebersetzung. Weniger vollstaendige Uebersetzungen sind besser als viele partielle.

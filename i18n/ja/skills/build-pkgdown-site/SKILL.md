@@ -8,7 +8,7 @@ description: >
   またはデプロイ方法の移行時に使用する。
 locale: ja
 source_locale: en
-source_commit: 6f65f316
+source_commit: acc252e6
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -191,6 +191,8 @@ URL: https://username.github.io/packagename/, https://github.com/username/packag
 - **壊れたビネットリンク**: 相互参照にはファイルパスではなく`vignette("name")`構文を使用する
 - **ロゴが表示されない**: ロゴを`man/figures/logo.png`に配置して`_pkgdown.yml`で参照する
 - **検索が機能しない**: `_pkgdown.yml`の`url`フィールドが正しく設定されていることが必要
+
+- **ハイブリッドシステムでの誤った R バイナリ**：WSL や Docker では、`Rscript` がネイティブ R の代わりにクロスプラットフォームラッパーに解決される場合があります。`which Rscript && Rscript --version` で確認してください。信頼性のために、ネイティブ R バイナリ（例：Linux/WSL では `/usr/local/bin/Rscript`）を優先してください。R パス設定については [Setting Up Your Environment](../../guides/setting-up-your-environment.md) を参照してください。
 
 ## 関連スキル
 

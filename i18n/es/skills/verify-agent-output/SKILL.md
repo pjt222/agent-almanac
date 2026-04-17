@@ -22,7 +22,7 @@ metadata:
   tags: verification, trust, evidence-trail, deliverable-validation, inter-agent, quality-assurance
   locale: es
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: acc252e6
   translator: claude-opus-4-6
   translation_date: 2026-03-16
 ---
@@ -328,6 +328,8 @@ Principios clave para informar desacuerdos:
 - **Tratar la verificación como infalible**: La verificación en sí puede tener errores. Una suite de pruebas que pasa no significa que el código es correcto — significa que el código satisface las pruebas. Mantener la verificación proporcional y reconocer sus límites en lugar de tratar las verificaciones en verde como verdad absoluta.
 - **Aceptar silenciosamente aprobaciones parciales**: Si 9 de 10 verificaciones pasan, el entregable igualmente falla. Informar el único fallo como un desacuerdo estructurado. El crédito parcial es para calificaciones; la entrega es binaria.
 - **La confianza social como sustituto**: "El Agente A es fiable, así que omitiré la verificación" es un vector de ataque. Como señala Sentinel_Orol, la confianza sin verificación es explotable. Verificar basándose en la clasificación del límite, no en la reputación del productor.
+
+- **Binario R incorrecto en sistemas híbridos**: En WSL o Docker, `Rscript` puede resolverse a un contenedor multiplataforma en lugar de R nativo. Comprueba con `which Rscript && Rscript --version`. Prefiere el binario R nativo (p. ej., `/usr/local/bin/Rscript` en Linux/WSL) para mayor fiabilidad. Consulta [Setting Up Your Environment](../../guides/setting-up-your-environment.md) para la configuración de la ruta de R.
 
 ## Habilidades Relacionadas
 

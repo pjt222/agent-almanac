@@ -10,14 +10,14 @@ license: MIT
 allowed-tools: Read Write Edit Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: i18n
   complexity: intermediate
   language: multi
   tags: i18n, translation, localization, multilingual, l10n
   locale: ja
   source_locale: en
-  source_commit: 6f65f316
+  source_commit: c7ff09ca
   translator: claude
   translation_date: "2026-03-17"
 ---
@@ -152,6 +152,18 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 
 **失敗時:** Compare section-by-section with the English source. Restore any missing sections.
 
+### ステップ5.5: 散文が翻訳されているか確認する
+
+5.5.1. 翻訳ファイルの本文から 3 つの散文段落をサンプリングする。異なるセクションから段落を選ぶ — 見出し、コードブロック、フロントマターを除く。
+
+5.5.2. サンプリングした各段落が、英語ではなく対象言語で書かれていることを確認する。
+
+5.5.3. サンプリングした段落がまだ英語の場合、翻訳は不完全である。ステップ 4 に戻り、続行する前に残りの英語散文を翻訳する。
+
+**期待される結果:** サンプリングした 3 つの散文段落がすべて対象言語で書かれており、本文が翻訳されていることが確認される — 見出しとフロントマターだけでなく。
+
+**失敗時:** 英語散文が残っているセクションを特定する。ステップ 6 に進む前にそれらを翻訳する。
+
 ### ステップ6: Write the translated file
 
 6.1. Write the complete translated content to the target path using the Write or Edit tool.
@@ -193,3 +205,4 @@ npm run translate:scaffold -- <content-type> <id> <locale>
 - [create-skill](../create-skill/SKILL.md) — understand the SKILL.md structure being translated
 - [review-skill-format](../review-skill-format/SKILL.md) — validate translated skill structure
 - [evolve-skill](../evolve-skill/SKILL.md) — update skills that have changed since translation
+- **品質よりバッチスループット**: 見出しは翻訳されているが本文が英語のままのスキャフォールドのみの出力は有効な翻訳ではない。多くの部分的な翻訳より少ない完全な翻訳を優先する。

@@ -8,7 +8,7 @@ description: >
   スキル提出レビューに使用する。
 locale: ja
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -87,6 +87,25 @@ head -30 skills/<skill-name>/SKILL.md | grep -q '^allowed-tools:' && echo "allow
 **期待結果：** 4つの必須フィールドすべてが存在する。6つのメタデータフィールドすべてが存在する。`name` がディレクトリ名と一致する。`description` が1024文字未満である。
 
 **失敗時：** 欠落している各フィールドをBLOCKINGとして報告する。`name` がディレクトリ名と一致しない場合は、期待される値を添えてBLOCKINGとして報告する。`description` が1024文字を超える場合は、現在の長さを添えてSUGGESTとして報告する。
+
+### Step 3: Locale-Specific Validation (Translations Only)
+
+If the frontmatter contains a `locale` field, the file is a translated SKILL.md. Perform these additional checks. If no `locale` field is present, skip this step.
+
+1. **Translation frontmatter fields** — Verify these five fields are present:
+   - `locale` — target locale code (e.g., `de`, `ja`, `zh-CN`, `es`)
+   - `source_locale` — origin locale (typically `en`)
+   - `source_commit` — commit hash of the English source used for translation
+   - `translator` — who or what produced the translation
+   - `translation_date` — ISO 8601 date of translation
+
+2. **Prose language scan** — Sample 3-5 body paragraphs (outside code blocks, frontmatter, and headings). Verify the prose is written in the target locale, not English.
+
+3. **Code block identity check** — Compare code blocks in the translated file against the English source. Code blocks must be identical (code is never translated).
+
+**Expected:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
+
+**On failure:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING.
 
 ### ステップ3: 必須セクションの確認
 
@@ -199,3 +218,6 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - `update-skill-content` — フォーマット検証が通過した後、このスキルを使用してコンテンツ品質を向上させる
 - `refactor-skill-structure` — スキルが行数チェックで失敗した場合、このスキルを使用して抽出・再構成する
 - `review-pull-request` — スキルを追加または変更するPRをレビューする際に、PRレビューとフォーマット検証を組み合わせる
+- [ ] (Translations only) All five translation frontmatter fields present (`locale`, `source_locale`, `source_commit`, `translator`, `translation_date`)
+- [ ] (Translations only) Body paragraphs are in the target locale, not English
+- [ ] (Translations only) Code blocks are identical to the English source

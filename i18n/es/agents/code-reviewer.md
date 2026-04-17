@@ -20,7 +20,7 @@ skills:
   - review-pull-request
 locale: es
 source_locale: en
-source_commit: 6a868d56
+source_commit: 89cb55b1
 translator: Claude Opus 4.6
 translation_date: 2026-03-13
 ---
@@ -192,3 +192,4 @@ Agente: Análisis de data_processor.py:128-205:
 **Autor**: Philipp Thoss
 **Versión**: 1.1.0
 **Última Actualización**: 2026-02-08
+- `cross-review-project` — revisión de código entre proyectos estructurada entre dos instancias de Claude Code mediante worktrees de Git

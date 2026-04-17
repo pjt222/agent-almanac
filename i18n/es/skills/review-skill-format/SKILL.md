@@ -11,7 +11,7 @@ description: >
   la contribución de una habilidad de un colaborador en una pull request.
 locale: es
 source_locale: en
-source_commit: 6f65f316
+source_commit: c7ff09ca
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 license: MIT
@@ -90,6 +90,25 @@ head -30 skills/<skill-name>/SKILL.md | grep -q '^allowed-tools:' && echo "allow
 **Esperado:** Los cuatro campos obligatorios presentes. Los seis campos de metadatos presentes. `name` coincide con el nombre del directorio. `description` tiene menos de 1024 caracteres.
 
 **En caso de fallo:** Reportar cada campo faltante como BLOQUEANTE. Si `name` no coincide con el nombre del directorio, reportar como BLOQUEANTE con el valor esperado. Si `description` supera los 1024 caracteres, reportar como SUGERENCIA con la longitud actual.
+
+### Step 3: Locale-Specific Validation (Translations Only)
+
+If the frontmatter contains a `locale` field, the file is a translated SKILL.md. Perform these additional checks. If no `locale` field is present, skip this step.
+
+1. **Translation frontmatter fields** — Verify these five fields are present:
+   - `locale` — target locale code (e.g., `de`, `ja`, `zh-CN`, `es`)
+   - `source_locale` — origin locale (typically `en`)
+   - `source_commit` — commit hash of the English source used for translation
+   - `translator` — who or what produced the translation
+   - `translation_date` — ISO 8601 date of translation
+
+2. **Prose language scan** — Sample 3-5 body paragraphs (outside code blocks, frontmatter, and headings). Verify the prose is written in the target locale, not English.
+
+3. **Code block identity check** — Compare code blocks in the translated file against the English source. Code blocks must be identical (code is never translated).
+
+**Expected:** All five translation fields present. Body paragraphs are in the target locale. Code blocks match the English source exactly.
+
+**On failure:** Report missing translation fields as BLOCKING. If body paragraphs are in English despite a non-English `locale`, report as BLOCKING.
 
 ### Paso 3: Verificar las Secciones Obligatorias
 
@@ -202,3 +221,6 @@ grep -A1 "id: <skill-name>" skills/_registry.yml | grep -q "path: <skill-name>/S
 - `update-skill-content` — Después de que pasa la validación de formato, use esto para mejorar la calidad del contenido
 - `refactor-skill-structure` — Cuando una habilidad falla la comprobación de recuento de líneas, use esto para extraer y reorganizar
 - `review-pull-request` — Al revisar una PR que agrega o modifica habilidades, combine la revisión de PR con la validación de formato
+- [ ] (Translations only) All five translation frontmatter fields present (`locale`, `source_locale`, `source_commit`, `translator`, `translation_date`)
+- [ ] (Translations only) Body paragraphs are in the target locale, not English
+- [ ] (Translations only) Code blocks are identical to the English source

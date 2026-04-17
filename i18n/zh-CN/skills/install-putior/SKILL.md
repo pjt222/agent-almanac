@@ -16,7 +16,7 @@ metadata:
   tags: putior, install, workflow, mermaid, visualization, R
 locale: zh-CN
 source_locale: en
-source_commit: 6f65f316
+source_commit: ecb11b8b
 translator: claude-opus-4-6
 translation_date: 2026-03-16
 ---
@@ -127,6 +127,18 @@ cat(put_diagram(put(tmp)))
 **预期结果：** 打印到控制台的 Mermaid 流程图代码，包含 `test` 和 `Hello putior`。
 
 **失败处理：** 如果找不到 `put`，说明包未正确安装。使用 `install.packages("putior", dependencies = TRUE)` 重新安装。如果图表为空，验证临时文件是否已创建，且注释语法中在双引号内使用单引号。
+
+> **重要：自定义调色板不能通过 MCP 使用。** `put_diagram` 的 `palette` 参数接受由 `put_theme()` 创建的 `putior_theme` R 对象。由于 MCP 通过 JSON 通信，无法跨 MCP 边界序列化 `putior_theme` 等 R 对象。通过 MCP 调用 `put_diagram` 时，请改用基于字符串的 `theme` 参数（例如 `theme = "viridis"`）。对于自定义调色板，请直接在 R 会话中调用 `put_theme()` 和 `put_diagram(palette = ...)`。
+
+> **关键默认值**：所有扫描函数（`put()`、`put_auto()`、`put_generate()`、`put_merge()`）默认 `recursive = TRUE`，自动扫描子目录。这是相较于 0.2.0 之前版本（默认为 `FALSE`）的破坏性变更。所有扫描函数还接受 `exclude` 参数用于基于正则表达式的文件过滤（例如 `put("./src/", exclude = "test_")`）。
+
+如果安装了可选的 `shiny` 包，请尝试交互式沙箱：
+
+```r
+putior::run_sandbox()
+```
+
+这将启动一个基于浏览器的编辑器，您可以在其中试验 PUT 注释语法并实时查看渲染的图表。
 
 ## 验证清单
 

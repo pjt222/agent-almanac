@@ -8,7 +8,7 @@ license: MIT
 allowed-tools: Read Bash Grep Glob
 locale: ja
 source_locale: en
-source_commit: 41c6956b
+source_commit: e4ffbae4
 translator: claude
 translation_date: "2026-03-18"
 metadata:
@@ -150,3 +150,5 @@ metadata:
 - [create-glyph](../create-glyph/SKILL.md) — この監査で特定された欠落グリフを作成する
 - [enhance-glyph](../enhance-glyph/SKILL.md) — 既存グリフの品質を改善する
 - [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — 欠落アイコンを生成するためにフルパイプラインを実行する
+- [ ] Orphan icons checked (disk paths vs manifest)
+- **Orphans after re-homing**: When a skill's domain changes, `build.sh` creates icons at the new path but does NOT delete the old path — always run Step 6 orphan check after any domain migration
