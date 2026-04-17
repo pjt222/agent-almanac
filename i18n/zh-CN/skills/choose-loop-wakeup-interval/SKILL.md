@@ -20,7 +20,7 @@ metadata:
   tags: loop, wakeup, cache, scheduling, delay, decision
   locale: zh-CN
   source_locale: en
-  source_commit: f68a28ce
+  source_commit: 9c546edf
   translator: "Claude + human review"
   translation_date: "2026-04-13"
 ---
