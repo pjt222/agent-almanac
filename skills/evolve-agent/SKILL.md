@@ -163,6 +163,60 @@ cp agents/<agent-name>.md agents/<agent-name>-advanced.md
 
 **On failure:** If an edit breaks the document structure, use `git diff` to review changes and revert partial edits with `git checkout -- <file>`.
 
+### Step 4.5: Sync Translated Variants
+
+> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+
+Check whether translations exist for the evolved agent and update them to reflect the new source state:
+
+```bash
+# Check for existing translations
+ls i18n/*/agents/<agent-name>.md 2>/dev/null
+```
+
+#### If translations exist
+
+1. Get the current source commit hash:
+
+```bash
+SOURCE_COMMIT=$(git rev-parse HEAD)
+```
+
+2. Update `source_commit` in each translated file's frontmatter:
+
+```bash
+for locale_file in i18n/*/agents/<agent-name>.md; do
+  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
+done
+```
+
+3. Flag files for re-translation by including affected locales in the commit message:
+
+```
+evolve(<agent-name>): <description of changes>
+
+Translations flagged for re-sync: de, zh-CN, ja, es
+Changed sections: <list sections that changed>
+```
+
+4. Regenerate translation status files:
+
+```bash
+npm run translation:status
+```
+
+#### If no translations exist
+
+No action needed. Proceed to Step 5.
+
+#### For variants
+
+Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
+
+**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+
+**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- agents <agent-name> <locale>`.
+
 ### Step 5: Update Version and Metadata
 
 Bump the `version` field in frontmatter following semantic versioning:
@@ -284,11 +338,13 @@ git diff
 - [ ] For variants: new entry in `agents/_registry.yml` with correct path
 - [ ] For variants: `total_agents` count updated
 - [ ] Cross-references are valid (no broken links in See Also)
+- [ ] For refinements with translations: `source_commit` updated in all locale files
 - [ ] `git diff` confirms no accidental content removal
 
 ## Common Pitfalls
 
 - **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.
+- **Stale translations after evolution**: With 1,288+ translation files in the repo, every agent evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/agents/<agent-name>.md` and update `source_commit` in each, or flag them for re-translation in the commit message.
 - **Skills list drift**: The frontmatter `skills` array and the `## Available Skills` section must stay in sync. Updating one without the other creates confusion for both humans and tooling.
 - **Listing default skills unnecessarily**: Adding `meditate` or `heal` to the frontmatter when they are already inherited from the registry. Only list them if they are core to the agent's methodology (e.g., `mystic`, `alchemist`).
 - **Tool over-provisioning during evolution**: Adding `Bash` or `WebFetch` during an evolution "just in case." Every tool addition should be justified by a specific new capability.

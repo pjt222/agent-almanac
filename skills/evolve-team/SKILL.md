@@ -179,6 +179,60 @@ cp teams/<team-name>.md teams/<team-name>-<specialty>.md
 
 **On failure:** If an edit breaks internal consistency (e.g., CONFIG block lists a member not in frontmatter), compare the frontmatter `members[]` against the Team Composition table, Task Decomposition, and CONFIG block to find the mismatch.
 
+### Step 4.5: Sync Translated Variants
+
+> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+
+Check whether translations exist for the evolved team and update them to reflect the new source state:
+
+```bash
+# Check for existing translations
+ls i18n/*/teams/<team-name>.md 2>/dev/null
+```
+
+#### If translations exist
+
+1. Get the current source commit hash:
+
+```bash
+SOURCE_COMMIT=$(git rev-parse HEAD)
+```
+
+2. Update `source_commit` in each translated file's frontmatter:
+
+```bash
+for locale_file in i18n/*/teams/<team-name>.md; do
+  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
+done
+```
+
+3. Flag files for re-translation by including affected locales in the commit message:
+
+```
+evolve(<team-name>): <description of changes>
+
+Translations flagged for re-sync: de, zh-CN, ja, es
+Changed sections: <list sections that changed>
+```
+
+4. Regenerate translation status files:
+
+```bash
+npm run translation:status
+```
+
+#### If no translations exist
+
+No action needed. Proceed to Step 5.
+
+#### For variants
+
+Defer translation of new variants until the variant stabilizes (1-2 versions). Add translations after the variant has been refined at least once.
+
+**Expected:** All translated files have `source_commit` updated to the current commit. `npm run translation:status` exits 0.
+
+**On failure:** If `sed` fails to match the frontmatter field, open the translated file manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, re-scaffold with `npm run translate:scaffold -- teams <team-name> <locale>`.
+
 ### Step 5: Update the CONFIG Block
 
 The CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` must stay in sync with the prose sections. After any member or task change:
@@ -327,12 +381,14 @@ git diff
 - [ ] For variants: new entry in `teams/_registry.yml` with correct path
 - [ ] For variants: `total_teams` count updated
 - [ ] Cross-references are valid (no broken links in See Also)
+- [ ] For refinements with translations: `source_commit` updated in all locale files
 - [ ] `git diff` confirms no accidental content removal
 
 ## Common Pitfalls
 
 - **CONFIG block drift**: The CONFIG block, frontmatter, and prose sections must all agree on members and tasks. Updating one without the others is the most common team evolution error. After every change, cross-check all three.
 - **Forgetting to bump version**: Without version bumps, there is no way to track what changed or when. Always update `version` and `updated` in frontmatter before committing.
+- **Stale translations after evolution**: Every team evolution triggers staleness in up to 4 locale files. Always check for existing translations with `ls i18n/*/teams/<team-name>.md` and update `source_commit` in each, or flag them for re-translation in the commit message.
 - **Orphaned member references**: When removing a member, their tasks in the Task Decomposition and CONFIG block must be reassigned or removed. Leaving orphaned assignees causes activation failures.
 - **Wrong coordination pattern after evolution**: Adding parallel-capable members to a sequential team, or making a hub-and-spoke team where agents need each other's output. Re-evaluate the pattern decision from `create-team` Step 4 after any structural change.
 - **Team too large after adding members**: Teams with more than 5 members become hard to coordinate. If evolution pushes the team past 5, consider splitting into two focused teams instead.
