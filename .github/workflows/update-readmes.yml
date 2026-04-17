@@ -25,8 +25,9 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: node scripts/generate-readmes.js
+      - run: npm run translation:status
       # SHA-pinned: https://github.com/stefanzweifel/git-auto-commit-action/releases/tag/v7
       - uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9
         with:
-          commit_message: "docs: auto-update README statistics"
-          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md viz/README.md tests/README.md"
+          commit_message: "docs: auto-update README statistics and translation status"
+          file_pattern: "README.md skills/README.md agents/README.md teams/README.md CLAUDE.md guides/README.md viz/README.md tests/README.md i18n/de/translation_status.yml i18n/zh-CN/translation_status.yml i18n/ja/translation_status.yml i18n/es/translation_status.yml"

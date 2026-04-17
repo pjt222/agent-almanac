@@ -336,6 +336,28 @@ ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-nam
 
 **On failure:** Verify the relative path is correct. From `.claude/skills/`, the path `../../skills/<skill-name>` should reach the skill directory. Use `readlink -f` to debug symlink resolution. Claude Code expects a flat structure at `.claude/skills/<name>/SKILL.md`.
 
+### Step 14: Scaffold Translations
+
+> **Required for all skills.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+
+Scaffold translation files for all 4 supported locales immediately after committing the new skill:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- skills <skill-name> "$locale"
+done
+```
+
+Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+
+```bash
+npm run translation:status
+```
+
+**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new skill.
+
+**On failure:** If scaffold fails, verify the skill exists in `skills/_registry.yml` before scaffolding — the script reads the registry. If `translation:status` shows the new files as stale, check that `source_commit` matches the commit hash where the English source was last modified.
+
 ## Validation
 
 - [ ] SKILL.md exists at `skills/<skill-name>/SKILL.md`

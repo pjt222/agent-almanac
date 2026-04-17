@@ -279,6 +279,28 @@ npm run update-readmes
 
 **On failure:** If the symlink is broken, recreate it: `ln -sf ../agents .claude/agents`. If `npm run update-readmes` fails, check that `scripts/generate-readmes.js` exists and `js-yaml` is installed.
 
+### Step 11: Scaffold Translations
+
+> **Required for all agents.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+
+Scaffold translation files for all 4 supported locales immediately after committing the new agent:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- agents <agent-name> "$locale"
+done
+```
+
+Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+
+```bash
+npm run translation:status
+```
+
+**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new agent.
+
+**On failure:** If scaffold fails, verify the agent exists in `agents/_registry.yml`. If status files don't update, run `npm run translation:status` explicitly — it is not triggered automatically by CI.
+
 ## Validation
 
 - [ ] Agent file exists at `agents/<agent-name>.md`

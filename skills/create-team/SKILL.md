@@ -248,6 +248,28 @@ Note: Teams are **not** auto-discovered from `.claude/teams/`. Claude reads the 
 
 **On failure:** Verify the team file is at `teams/<team-name>.md` (not in a subdirectory). Check that all member agents exist in `agents/`. Confirm the CONFIG block has valid YAML with `subagent_type` for each member. Confirm the team is listed in `teams/_registry.yml`.
 
+### Step 11: Scaffold Translations
+
+> **Required for all teams.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+
+Scaffold translation files for all 4 supported locales immediately after committing the new team:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- teams <team-name> "$locale"
+done
+```
+
+Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+
+```bash
+npm run translation:status
+```
+
+**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new team.
+
+**On failure:** If scaffold fails, verify the team exists in `teams/_registry.yml`. If status files don't update, run `npm run translation:status` explicitly.
+
 ## Validation
 
 - [ ] Team file exists at `teams/<team-name>.md`

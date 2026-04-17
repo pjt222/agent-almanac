@@ -156,6 +156,8 @@ cp skills/<skill-name>/SKILL.md skills/<skill-name>-advanced/SKILL.md
 
 ### Step 4.5: Sync Translated Variants
 
+> **Required when translations exist.** This step applies to both human authors and AI agents following this procedure. Do not skip — stale `source_commit` values cause `npm run validate:translations` to report false staleness warnings across all locales.
+
 Check whether translations exist for the evolved skill and update them to reflect the new source state:
 
 ```bash
@@ -175,7 +177,6 @@ SOURCE_COMMIT=$(git rev-parse HEAD)
 
 ```bash
 for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
-  # Replace the source_commit value in frontmatter
   sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
 done
 ```
@@ -189,6 +190,12 @@ Translations flagged for re-sync: de, zh-CN, ja, es
 Changed sections: <list sections that changed>
 ```
 
+4. Regenerate translation status files:
+
+```bash
+npm run translation:status
+```
+
 #### If no translations exist
 
 No action needed. Proceed to Step 5.
@@ -197,7 +204,7 @@ No action needed. Proceed to Step 5.
 
 Defer translation of new variants until the variant stabilizes (1-2 versions). Translating a v1.0 variant that may change substantially by v1.2 wastes effort. Add translations after the variant has been refined at least once.
 
-**Expected:** All translated files have `source_commit` updated to the current commit. The commit message notes which locales need re-translation and which sections changed.
+**Expected:** All translated files have `source_commit` updated to the current commit. The commit message notes which locales need re-translation and which sections changed. `npm run translation:status` exits 0.
 
 **On failure:** If `sed` fails to match the frontmatter field, the translated file may have non-standard formatting. Open it manually and verify it has `source_commit` in its YAML frontmatter. If the field is missing, the file was not scaffolded correctly — re-scaffold with `npm run translate:scaffold`.
 
