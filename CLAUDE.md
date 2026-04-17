@@ -77,7 +77,8 @@ Guides, skills, agents, and teams are cross-referenced. The parent project `CLAU
 4. Symlink into `.claude/skills/`: `ln -s ../../skills/<skill-name> .claude/skills/<skill-name>`
 5. Reference related skills in the new skill's "Related Skills" section
 6. Run `npm run update-readmes` (or let CI auto-commit on push to main)
-7. The meta-skill at `skills/create-skill/SKILL.md` documents this process in detail
+7. **Scaffold translations** (required — do not skip): `for locale in de zh-CN ja es; do npm run translate:scaffold -- skills <skill-name> "$locale"; done && npm run translation:status`
+8. The meta-skill at `skills/create-skill/SKILL.md` documents this process in detail
 
 ## Adding a New Agent
 
@@ -87,7 +88,8 @@ Guides, skills, agents, and teams are cross-referenced. The parent project `CLAU
 4. Write Purpose, Capabilities, Available Skills, Usage Scenarios, Best Practices, Examples, Limitations, and See Also sections
 5. Add the entry to `agents/_registry.yml`
 6. Run `npm run update-readmes` (or let CI auto-commit on push to main)
-7. See `guides/agent-best-practices.md` for detailed guidance on the 5-skill limit and selection criteria
+7. **Scaffold translations** (required — do not skip): `for locale in de zh-CN ja es; do npm run translate:scaffold -- agents <agent-name> "$locale"; done && npm run translation:status`
+8. See `guides/agent-best-practices.md` for detailed guidance on the 5-skill limit and selection criteria
 
 ## Adding a New Team
 
@@ -97,6 +99,7 @@ Guides, skills, agents, and teams are cross-referenced. The parent project `CLAU
 4. Include a `<!-- CONFIG:START -->` / `<!-- CONFIG:END -->` block with machine-readable YAML for tooling
 5. Add the entry to `teams/_registry.yml` and update `total_teams` count
 6. Run `npm run update-readmes` (or let CI auto-commit on push to main)
+7. **Scaffold translations** (required — do not skip): `for locale in de zh-CN ja es; do npm run translate:scaffold -- teams <team-name> "$locale"; done && npm run translation:status`
 
 Note: Teams are **not** auto-discovered like agents (from `.claude/agents/`). Do not create a `.claude/teams` symlink -- Claude Code's `TeamCreate` uses `~/.claude/teams/` for runtime state. When a user asks to activate a team: (1) call `ToolSearch("select:TeamCreate")` to load the TeamCreate tool (it is deferred and must be fetched first), (2) read the team definition from `teams/<team-name>.md`, (3) call `TeamCreate` with the team configuration. Do NOT fall back to spawning individual agents via the Agent tool.
 
