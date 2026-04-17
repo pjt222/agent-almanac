@@ -19,7 +19,7 @@ metadata:
   tags: esoteric, kabbalah, tree-of-life, sephirot, paths, contemplation
   locale: ja
   source_locale: en
-  source_commit: a87e5e0380bbe51f65cb0662d60c10030a81f255
+  source_commit: a87e5e03
   translator: claude
   translation_date: "2026-03-17"
 ---

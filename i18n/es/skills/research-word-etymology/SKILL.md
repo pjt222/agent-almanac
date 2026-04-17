@@ -18,7 +18,7 @@ metadata:
   tags: linguistics, etymology, historical-linguistics, proto-language, cognates
   locale: es
   source_locale: en
-  source_commit: e19b1658fa651e34b79f4722c47adad745d79395
+  source_commit: e19b1658
   translator: claude
   translation_date: "2026-03-17"
 ---

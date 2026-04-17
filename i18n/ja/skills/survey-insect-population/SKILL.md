@@ -25,7 +25,7 @@ metadata:
   tags: entomology, insects, population, survey, ecology, biodiversity, Shannon, Simpson
   locale: ja
   source_locale: en
-  source_commit: f11621268a9e7d8a98b266a509521ee000ca512d
+  source_commit: f1162126
   translator: claude
   translation_date: "2026-03-17"
 ---

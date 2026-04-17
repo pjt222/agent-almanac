@@ -19,7 +19,7 @@ metadata:
   tags: digital-logic, cpu-architecture, instruction-set, datapath, fetch-decode-execute
   locale: es
   source_locale: en
-  source_commit: f39534628ba4bfee67e410b2b9856a7764214b26
+  source_commit: f3953462
   translator: claude
   translation_date: "2026-03-17"
 ---

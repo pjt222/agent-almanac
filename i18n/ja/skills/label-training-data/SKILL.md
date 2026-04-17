@@ -18,7 +18,7 @@ metadata:
   tags: labeling, label-studio, annotation, inter-annotator-agreement, data-quality, active-learning
   locale: ja
   source_locale: en
-  source_commit: a87e5e0380bbe51f65cb0662d60c10030a81f255
+  source_commit: a87e5e03
   translator: claude
   translation_date: "2026-03-17"
 ---

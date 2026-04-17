@@ -15,7 +15,7 @@ metadata:
   tags: spectroscopy, raman, polarizability, vibrational, complementary-ir
   locale: ja
   source_locale: en
-  source_commit: b91a81915d428150d43953e4efe83bffb3697e87
+  source_commit: b91a8191
   translator: claude
   translation_date: "2026-03-17"
 ---

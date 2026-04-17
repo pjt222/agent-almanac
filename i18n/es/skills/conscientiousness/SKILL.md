@@ -20,7 +20,7 @@ metadata:
   tags: esoteric, conscientiousness, diligence, thoroughness, verification, meta-cognition
   locale: es
   source_locale: en
-  source_commit: a87e5e0380bbe51f65cb0662d60c10030a81f255
+  source_commit: a87e5e03
   translator: claude
   translation_date: "2026-03-17"
 ---

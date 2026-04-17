@@ -19,7 +19,7 @@ metadata:
   tags: versioning, release-planning, milestones, release-cycle
   locale: es
   source_locale: en
-  source_commit: 902f69ec4eeddf6fdf26df7e988d8deb1a22c387
+  source_commit: 902f69ec
   translator: claude
   translation_date: "2026-03-17"
 ---
