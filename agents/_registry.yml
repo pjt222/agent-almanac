@@ -2,9 +2,9 @@
 # Machine-readable catalog of all agent definitions in this library.
 # Keep in sync with the actual agent files on disk.
 
-total_agents: 71
+total_agents: 72
 version: "2.2"
-last_updated: "2026-04-07"
+last_updated: "2026-04-17"
 
 default_skills:
   - skill: meditate
@@ -866,3 +866,15 @@ agents:
       - review-codebase
       - create-pull-request
       - create-github-issues
+
+  - id: empirical-investigator
+    path: agents/empirical-investigator.md
+    description: Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure
+    tags: [investigation, reverse-engineering, binary-analysis, feature-flags, disclosure]
+    priority: normal
+    tools: [Read, Grep, Glob, Bash, WebFetch]
+    skills:
+      - conduct-empirical-wire-capture
+      - monitor-binary-version-baselines
+      - probe-feature-flag-state
+      - redact-for-public-disclosure

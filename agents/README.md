@@ -1,7 +1,7 @@
 # Agents Library for Claude Code
 
 <!-- AUTO:START:agents-intro -->
-A collection of 71 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
+A collection of 72 specialized agent definitions for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Each agent defines a persona with specific capabilities, tools, and domain expertise that Claude Code uses when spawned as a subagent.
 
 All agents inherit **default skills**: , .
 <!-- AUTO:END:agents-intro -->
@@ -53,6 +53,7 @@ Agents define *who* (persona, tools, style); skills define *how* (procedure, val
 | [diffusion-specialist](diffusion-specialist.md) | normal | Diffusion process specialist bridging cognitive drift-diffusion models and generative AI diffusion models for parameter estimation and implementation |
 | [dog-trainer](dog-trainer.md) | normal | Canine behavior specialist for obedience training, socialization, and behavioral modification using positive reinforcement and force-free methods |
 | [edge-ai-engineer](edge-ai-engineer.md) | normal | Edge AI deployment specialist for on-device inference using Google AI Edge Gallery, TFLite, ONNX Runtime, and MediaPipe with model quantization and hardware delegate optimization |
+| [empirical-investigator](empirical-investigator.md) | normal | Empirical CLI and binary investigation specialist for wire capture, feature flag probing, version baseline monitoring, and responsible disclosure |
 | [etymologist](etymologist.md) | normal | Historical linguistics specialist for etymology research, proto-language root tracing, cognate comparison, semantic drift documentation, and folk etymology identification |
 | [fabricator](fabricator.md) | normal | 3D printing and additive manufacturing specialist covering FDM, SLA, and SLS processes from model preparation through troubleshooting |
 | [framework-scout](framework-scout.md) | normal | Open-source agent framework assessor evaluating community health, supersession risk, architecture alignment, and investment readiness |
