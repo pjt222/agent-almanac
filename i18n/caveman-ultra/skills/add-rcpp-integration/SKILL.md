@@ -25,47 +25,47 @@ metadata:
 
 # Add Rcpp Integration
 
-Integrate C++ code into an R package using Rcpp for performance-critical operations.
+Integrate C++ into R pkg via Rcpp → perf-critical ops.
 
-## When to Use
+## Use When
 
-- R function is too slow and profiling confirms a bottleneck
-- Need to interface with existing C/C++ libraries
-- Implementing algorithms that benefit from compiled code (loops, recursion)
-- Adding RcppArmadillo for linear algebra operations
+- R fn too slow, profile confirms bottleneck
+- Interface existing C/C++ libs
+- Algos benefit compiled (loops, recursion)
+- RcppArmadillo → linear algebra
 
-## Inputs
+## In
 
-- **Required**: Existing R package
-- **Required**: R function to replace or augment with C++
-- **Optional**: External C++ library to interface with
-- **Optional**: Whether to use RcppArmadillo (default: plain Rcpp)
+- **Required**: Existing R pkg
+- **Required**: R fn to replace/augment w/ C++
+- **Optional**: External C++ lib
+- **Optional**: RcppArmadillo? (default: plain Rcpp)
 
-## Procedure
+## Do
 
-### Step 1: Set Up Rcpp Infrastructure
+### Step 1: Rcpp Infra Setup
 
 ```r
 usethis::use_rcpp()
 ```
 
-This:
-- Creates `src/` directory
-- Adds `Rcpp` to LinkingTo and Imports in DESCRIPTION
-- Creates `R/packagename-package.R` with `@useDynLib` and `@importFrom Rcpp sourceCpp`
-- Updates `.gitignore` for compiled files
+Does:
+- Creates `src/` dir
+- Adds `Rcpp` → LinkingTo + Imports in DESCRIPTION
+- Creates `R/packagename-package.R` w/ `@useDynLib` + `@importFrom Rcpp sourceCpp`
+- Updates `.gitignore` for compiled
 
-For RcppArmadillo:
+RcppArmadillo:
 
 ```r
 usethis::use_rcpp_armadillo()
 ```
 
-**Expected:** `src/` directory created, DESCRIPTION updated with `Rcpp` in LinkingTo and Imports, and `R/packagename-package.R` contains `@useDynLib` directive.
+**→** `src/` created, DESCRIPTION updated `Rcpp` LinkingTo + Imports, `R/packagename-package.R` has `@useDynLib`.
 
-**On failure:** If `usethis::use_rcpp()` fails, manually create `src/`, add `LinkingTo: Rcpp` and `Imports: Rcpp` to DESCRIPTION, and add `#' @useDynLib packagename, .registration = TRUE` and `#' @importFrom Rcpp sourceCpp` to the package-level documentation file.
+**If err:** `usethis::use_rcpp()` fails → manually create `src/`, add `LinkingTo: Rcpp` + `Imports: Rcpp`, add `#' @useDynLib packagename, .registration = TRUE` + `#' @importFrom Rcpp sourceCpp` to pkg doc file.
 
-### Step 2: Write C++ Function
+### Step 2: Write C++ Fn
 
 Create `src/my_function.cpp`:
 
@@ -90,7 +90,7 @@ NumericVector cumsum_cpp(NumericVector x) {
 }
 ```
 
-For RcppArmadillo:
+RcppArmadillo:
 
 ```cpp
 #include <RcppArmadillo.h>
@@ -108,9 +108,9 @@ arma::mat mat_mult(const arma::mat& A, const arma::mat& B) {
 }
 ```
 
-**Expected:** C++ source file exists at `src/my_function.cpp` with valid `// [[Rcpp::export]]` annotation and roxygen-style `//'` documentation comments.
+**→** C++ src at `src/my_function.cpp` w/ valid `// [[Rcpp::export]]` + roxygen `//'` docs.
 
-**On failure:** Verify the file uses `#include <Rcpp.h>` (or `<RcppArmadillo.h>` for Armadillo), that the export annotation is on its own line directly above the function signature, and that return types map to valid Rcpp types.
+**If err:** Verify `#include <Rcpp.h>` (or `<RcppArmadillo.h>`), export annotation own line directly above signature, return types map valid Rcpp.
 
 ### Step 3: Generate RcppExports
 
@@ -119,9 +119,9 @@ Rcpp::compileAttributes()
 devtools::document()
 ```
 
-**Expected:** `R/RcppExports.R` and `src/RcppExports.cpp` generated automatically.
+**→** `R/RcppExports.R` + `src/RcppExports.cpp` auto-generated.
 
-**On failure:** Check C++ syntax errors. Ensure `// [[Rcpp::export]]` tag is present above each exported function.
+**If err:** Check C++ syntax. Ensure `// [[Rcpp::export]]` above each exported fn.
 
 ### Step 4: Verify Compilation
 
@@ -129,14 +129,14 @@ devtools::document()
 devtools::load_all()
 ```
 
-**Expected:** Package compiles and loads without errors.
+**→** Pkg compiles + loads no err.
 
-**On failure:** Check compiler output for errors. Common issues:
-- Missing system headers: Install development libraries
-- Syntax errors: C++ compiler messages point to the line
-- Missing `Rcpp::depends` attribute for RcppArmadillo
+**If err:** Check compiler out. Common:
+- Missing system headers → install dev libs
+- Syntax err → compiler msgs point to line
+- Missing `Rcpp::depends` for RcppArmadillo
 
-### Step 5: Write Tests for Compiled Code
+### Step 5: Tests for Compiled
 
 ```r
 test_that("cumsum_cpp matches base R", {
@@ -150,11 +150,11 @@ test_that("cumsum_cpp handles edge cases", {
 })
 ```
 
-**Expected:** Tests pass, confirming the C++ function produces identical results to the R equivalent and handles edge cases (empty vectors, NA values) correctly.
+**→** Tests pass → C++ identical to R + edge cases (empty, NA) correct.
 
-**On failure:** If tests fail on NA handling, add explicit NA checks in the C++ code using `NumericVector::is_na()`. If tests fail on empty input, add a guard clause for zero-length vectors at the top of the function.
+**If err:** NA fail → add explicit NA checks via `NumericVector::is_na()`. Empty fail → guard clause zero-length at top.
 
-### Step 6: Add Cleanup Script
+### Step 6: Cleanup Script
 
 Create `src/Makevars`:
 
@@ -162,7 +162,7 @@ Create `src/Makevars`:
 PKG_CXXFLAGS = -O2
 ```
 
-Create `cleanup` in package root (for CRAN):
+Create `cleanup` in pkg root (CRAN):
 
 ```bash
 #!/bin/sh
@@ -171,13 +171,13 @@ rm -f src/*.o src/*.so src/*.dll
 
 Make executable: `chmod +x cleanup`
 
-**Expected:** `src/Makevars` sets compiler flags and `cleanup` script removes compiled objects. Both files exist at the package root level.
+**→** `src/Makevars` sets compiler flags, `cleanup` removes objects. Both at pkg root.
 
-**On failure:** Verify `cleanup` has execute permissions (`chmod +x cleanup`) and that `Makevars` uses tabs (not spaces) for indentation if adding Makefile-style rules.
+**If err:** Verify `cleanup` has exec perms (`chmod +x cleanup`), `Makevars` tabs (not spaces) for Makefile rules.
 
 ### Step 7: Update .Rbuildignore
 
-Ensure compiled artifacts are handled:
+Handle compiled artifacts:
 
 ```
 ^src/.*\.o$
@@ -185,31 +185,31 @@ Ensure compiled artifacts are handled:
 ^src/.*\.dll$
 ```
 
-**Expected:** `.Rbuildignore` patterns prevent compiled object files from being included in the package tarball, while preserving source files and Makevars.
+**→** `.Rbuildignore` patterns prevent compiled objects in tarball, preserve src + Makevars.
 
-**On failure:** Run `devtools::check()` and look for NOTEs about unexpected files in `src/`. Adjust `.Rbuildignore` patterns to exclude only `.o`, `.so`, and `.dll` files.
+**If err:** `devtools::check()` → NOTEs about unexpected files in `src/`. Adjust patterns → exclude only `.o`, `.so`, `.dll`.
 
-## Validation
+## Check
 
-- [ ] `devtools::load_all()` compiles without warnings
-- [ ] Compiled function produces correct results
-- [ ] Tests pass for edge cases (NA, empty, large inputs)
-- [ ] `R CMD check` passes with no compilation warnings
-- [ ] RcppExports files are generated and committed
-- [ ] Performance improvement confirmed with benchmarks
+- [ ] `devtools::load_all()` compiles no warn
+- [ ] Compiled fn produces correct results
+- [ ] Tests pass edge cases (NA, empty, large)
+- [ ] `R CMD check` passes no compile warn
+- [ ] RcppExports generated + committed
+- [ ] Perf improvement via benchmarks
 
-## Common Pitfalls
+## Traps
 
-- **Forgetting `compileAttributes()`**: Must regenerate RcppExports after changing C++ files
-- **Integer overflow**: Use `double` instead of `int` for large numeric values
-- **Memory management**: Rcpp handles memory automatically for Rcpp types; don't manually `delete`
-- **NA handling**: C++ doesn't know about R's NA. Check with `Rcpp::NumericVector::is_na()`
-- **Platform portability**: Avoid platform-specific C++ features. Test on Windows, macOS, and Linux.
-- **Missing `@useDynLib`**: The package-level doc must include `@useDynLib packagename, .registration = TRUE`
+- **Forget `compileAttributes()`**: Must regen RcppExports after C++ changes
+- **Int overflow**: `double` not `int` for large numerics
+- **Memory mgmt**: Rcpp auto-handles for Rcpp types; no manual `delete`
+- **NA handling**: C++ doesn't know R's NA. Check `Rcpp::NumericVector::is_na()`
+- **Platform portability**: Avoid platform-specific C++. Test Win, macOS, Linux.
+- **Missing `@useDynLib`**: Pkg doc must `@useDynLib packagename, .registration = TRUE`
 
-## Related Skills
+## →
 
-- `create-r-package` - package setup before adding Rcpp
-- `write-testthat-tests` - testing compiled functions
-- `setup-github-actions-ci` - CI must have C++ toolchain
-- `submit-to-cran` - compiled packages need extra CRAN checks
+- `create-r-package` — pkg setup before Rcpp
+- `write-testthat-tests` — testing compiled fns
+- `setup-github-actions-ci` — CI needs C++ toolchain
+- `submit-to-cran` — compiled pkgs need extra CRAN checks

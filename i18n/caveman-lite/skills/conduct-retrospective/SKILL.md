@@ -61,9 +61,9 @@ Extract key facts:
 - Unplanned work that entered the sprint
 - Open action items from previous retrospectives
 
-**Expected:** Data summary with quantitative metrics (velocity, completion %, blocker count).
+**Got:** Data summary with quantitative metrics (velocity, completion %, blocker count).
 
-**On failure:** If no artifacts exist, base the retrospective on qualitative observations.
+**If fail:** If no artifacts exist, base the retrospective on qualitative observations.
 
 ### Step 2: Structure "What Went Well"
 
@@ -78,11 +78,11 @@ List 3-5 things that worked well, with evidence:
 | 3 | [Specific positive observation] | [Metric, example, or artifact reference] |
 ```
 
-Focus on practices to continue, not just outcomes. "Daily standups kept blockers visible" is more actionable than "We delivered on time."
+Focus on practices to continue, not only outcomes. "Daily standups kept blockers visible" is more actionable than "We delivered on time."
 
-**Expected:** 3-5 evidence-backed positive observations.
+**Got:** 3-5 evidence-backed positive observations.
 
-**On failure:** If nothing went well, look harder — even small wins matter. At minimum, the team completed the period.
+**If fail:** If nothing went well, look harder — even small wins matter. At minimum, the team completed the period.
 
 ### Step 3: Structure "What Needs Improvement"
 
@@ -99,9 +99,9 @@ List 3-5 things that need improvement, with evidence:
 
 Be specific and factual. "Estimation was off" is vague. "3 of 5 items exceeded estimates by >50%, adding 8 unplanned days" is actionable.
 
-**Expected:** 3-5 evidence-backed improvement areas with stated impact.
+**Got:** 3-5 evidence-backed improvement areas with stated impact.
 
-**On failure:** If the team claims everything is fine, compare planned vs actual metrics — gaps reveal issues.
+**If fail:** If the team claims everything is fine, compare planned vs actual metrics — gaps reveal issues.
 
 ### Step 4: Generate Improvement Actions
 
@@ -122,9 +122,9 @@ Each action must be:
 - Time-bound (due date within next 1-2 sprints)
 - Verifiable (success criteria defined)
 
-**Expected:** 2-4 improvement actions with owners and due dates.
+**Got:** 2-4 improvement actions with owners and due dates.
 
-**On failure:** If actions are too vague, apply the "how would you verify this was done?" test.
+**If fail:** If actions are too vague, apply the "how would you verify this was done?" test.
 
 ### Step 5: Review Previous Actions and Write Report
 
@@ -172,9 +172,9 @@ Write the complete retrospective:
 
 Save as `RETRO-[YYYY-MM-DD].md`.
 
-**Expected:** Complete retrospective document saved with actions, evidence, and previous action review.
+**Got:** Complete retrospective document saved with actions, evidence, and previous action review.
 
-**On failure:** If the retrospective has no improvement actions, it's not driving change — revisit Step 3.
+**If fail:** If the retrospective has no improvement actions, it's not driving change — revisit Step 3.
 
 ## Validation
 
@@ -186,7 +186,7 @@ Save as `RETRO-[YYYY-MM-DD].md`.
 - [ ] Previous retrospective actions reviewed for closure
 - [ ] Recurring issues flagged
 
-## Common Pitfalls
+## Pitfalls
 
 - **Blame game**: Retrospectives review processes and practices, not people. Frame issues as systemic, not personal.
 - **Actions without follow-through**: The biggest retrospective failure. Always review previous actions before creating new ones.

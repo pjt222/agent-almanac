@@ -63,9 +63,9 @@ Run the kernel with CUDA events (`BenchTimer`), record time in milliseconds. Cal
    - Bandwidth-limited kernels: `effective_bw = total_bytes / (time_ms / 1000) / 1e9`
    - Flash Attention: `effective_gflops = (4 * batch * heads * seq_len^2 * head_dim) / (time_ms / 1000) / 1e9`
 
-**Expected:** Baseline numbers: kernel time in ms, effective GFLOPS, and effective bandwidth.
+**Got:** Baseline numbers: kernel time in ms, effective GFLOPS, and effective bandwidth.
 
-**On failure:** Check that the kernel launches without error (`CHECK_CU` macro). Verify warmup runs precede measurement. Ensure problem dimensions are large enough to saturate the GPU (small problems may bottleneck on launch overhead).
+**If fail:** Check that the kernel launches without error (`CHECK_CU` macro). Verify warmup runs precede measurement. Ensure problem dimensions are large enough to saturate the GPU (small problems may bottleneck on launch overhead).
 
 ### Step 2: Classify on the Roofline
 
@@ -96,9 +96,9 @@ Compute arithmetic intensity and compare against the machine balance point to cl
 
 4. **Compute attained fraction**: `attained = effective_throughput / peak_throughput`. If memory-bound: compare effective bandwidth to 608 GB/s. If compute-bound: compare effective GFLOPS to the relevant peak.
 
-**Expected:** Classification as compute-bound, memory-bound, or latency-bound (low occupancy causing neither compute nor memory saturation) with numerical justification.
+**Got:** Classification as compute-bound, memory-bound, or latency-bound (low occupancy causing neither compute nor memory saturation) with numerical justification.
 
-**On failure:** Recheck byte counting. Watch for redundant re-reads (e.g., 9x in direct conv2d without im2col). If neither compute nor memory is saturated, the kernel is likely latency-bound (see Step 3).
+**If fail:** Recheck byte counting. Watch for redundant re-reads (e.g., 9x in direct conv2d without im2col). If neither compute nor memory is saturated, the kernel is likely latency-bound (see Step 3).
 
 ### Step 3: Calculate Occupancy
 
@@ -118,9 +118,9 @@ Determine active warps per SM from the launch configuration and resource usage:
 5. **Active warps/SM** = `blocks_per_SM * warps_per_block`.
 6. **Key threshold**: 8 warps/SM is sufficient for latency hiding on GA104. Below 8 = structural problem causing latency-bound behavior.
 
-**Expected:** Occupancy table showing blocks/SM, active warps/SM, and the limiting factor (registers, smem, or warps).
+**Got:** Occupancy table showing blocks/SM, active warps/SM, and the limiting factor (registers, smem, or warps).
 
-**On failure:** Check `cuFuncSetAttribute` for dynamic shared memory. Verify `--resource-usage` reports match the actual launch configuration. If register count is unexpectedly high, try `--maxrregcount=N` to cap registers (trading register spills for occupancy).
+**If fail:** Check `cuFuncSetAttribute` for dynamic shared memory. Verify `--resource-usage` reports match the actual launch configuration. If register count is unexpectedly high, try `--maxrregcount=N` to cap registers (trading register spills for occupancy).
 
 ### Step 4: Compute the Compute/Load Ratio Per Tile
 
@@ -143,9 +143,9 @@ Count compute instructions and load bytes per K-tile from SASS (not source code)
    - **Medium** (5-20:1): cp.async may help, benchmark both paths.
    - **Low** (<5:1): cp.async strongly beneficial; loads dominate and async copy hides latency. Reference: IGEMM has 8 IMMA per tile = low ratio, cp.async measured +35%.
 
-**Expected:** Compute/load ratio with classification (high/medium/low) and cp.async recommendation.
+**Got:** Compute/load ratio with classification (high/medium/low) and cp.async recommendation.
 
-**On failure:** Count from SASS disassembly, not source code -- the compiler may fuse, eliminate, or reorder instructions. Ensure you are counting instructions within the inner loop only (the K-tile iteration), not the entire kernel.
+**If fail:** Count from SASS disassembly, not source code -- the compiler may fuse, eliminate, or reorder instructions. Ensure you are counting instructions within the inner loop only (the K-tile iteration), not the entire kernel.
 
 ### Step 5: Inspect SASS Instructions
 
@@ -180,9 +180,9 @@ Examine the full SASS instruction mix and stall codes:
    - FFMA S04 stalls: if independent, reducible to S01 via CuAssembler.
    - Excessive BAR.SYNC: may indicate over-synchronization between pipeline stages.
 
-**Expected:** Instruction count table and stall code summary with identified optimization targets.
+**Got:** Instruction count table and stall code summary with identified optimization targets.
 
-**On failure:** Ensure `cuobjdump` architecture matches the kernel compilation target (both must be sm_86). If SASS output is empty, the cubin may be corrupt -- recompile.
+**If fail:** Ensure `cuobjdump` architecture matches the kernel compilation target (both must be sm_86). If SASS output is empty, the cubin may be corrupt -- recompile.
 
 ### Step 6: Check the Smem Cliff
 
@@ -198,9 +198,9 @@ Determine whether shared memory usage crosses the architecture-specific occupanc
 4. **Check double-buffering impact**: Double-buffering doubles smem usage. If current smem is 30 KB, double-buffered = 60 KB, which crosses the cliff. Evaluate whether the async benefit outweighs the occupancy loss.
 5. **Record** smem/block, blocks/SM, and whether the cliff is crossed.
 
-**Expected:** Smem/block value with blocks/SM count and explicit statement of whether the 50 KB cliff is crossed.
+**Got:** Smem/block value with blocks/SM count and explicit statement of whether the 50 KB cliff is crossed.
 
-**On failure:** If above cliff and occupancy is the bottleneck, the optimization strategy must change: reduce tile size to get smem under 50 KB, or accept 1 block/SM and compensate with higher compute/load ratio per tile (more register reuse, longer K-tiles).
+**If fail:** If above cliff and occupancy is the bottleneck, the optimization strategy must change: reduce tile size to get smem under 50 KB, or accept 1 block/SM and compensate with higher compute/load ratio per tile (more register reuse, longer K-tiles).
 
 ### Step 7: Build the Decision Matrix
 
@@ -220,9 +220,9 @@ Synthesize findings from Steps 2-6 into an optimization strategy:
 2. **Estimate gain range** for each strategy based on how far the kernel is from the relevant ceiling.
 3. **Flag conflicts**: e.g., cp.async doubles smem (may cross cliff), larger tiles increase register pressure (may reduce occupancy).
 
-**Expected:** Ranked list of recommended optimizations with predicted gain range and potential conflicts.
+**Got:** Ranked list of recommended optimizations with predicted gain range and potential conflicts.
 
-**On failure:** If no clear winner emerges, run micro-benchmarks isolating each strategy (e.g., test cp.async alone, test reduced tile size alone) to measure actual impact before combining.
+**If fail:** If no clear winner emerges, run micro-benchmarks isolating each strategy (e.g., test cp.async alone, test reduced tile size alone) to measure actual impact before combining.
 
 ### Step 8: Document Findings
 
@@ -285,9 +285,9 @@ Produce a structured bottleneck report:
 3. [Strategy] — estimated [X-Y]% gain
 ```
 
-**Expected:** Complete markdown report consumable by a kernel-optimizer agent or human developer.
+**Got:** Complete markdown report consumable by a kernel-optimizer agent or human developer.
 
-**On failure:** Re-run with different problem sizes (e.g., 1024, 2048, 4096, 8192) to confirm findings are not size-specific. Small problems may appear latency-bound when the real bottleneck at scale is memory bandwidth.
+**If fail:** Re-run with different problem sizes (e.g., 1024, 2048, 4096, 8192) to confirm findings are not size-specific. Small problems may appear latency-bound when the real bottleneck at scale is memory bandwidth.
 
 ## Validation
 
@@ -300,7 +300,7 @@ Produce a structured bottleneck report:
 - [ ] Decision matrix applied with strategy recommendation
 - [ ] Findings documented in structured report
 
-## Common Pitfalls
+## Pitfalls
 
 - **Re-read multiplication**: Direct conv2d reads each weight 9x without im2col, inflating the byte count by 9x. Use actual unique bytes loaded from DRAM, not total load instructions, when computing arithmetic intensity.
 - **Confusing FP16 Tensor Core peak with FP32 peak**: FP16 TC peak is 174 TFLOPS, FP32 FFMA peak is 21.7 TFLOPS -- an 8x difference. Using the wrong peak makes roofline classification meaningless.

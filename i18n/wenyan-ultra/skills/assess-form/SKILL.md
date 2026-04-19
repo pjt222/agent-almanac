@@ -24,47 +24,47 @@ metadata:
   tags: morphic, assessment, architecture, transformation-readiness
 ---
 
-# Assess Form
+# 評形
 
-Evaluate a system's current structural form — its architecture, rigidity, pressure points, and capacity for change — to determine transformation readiness before initiating metamorphosis.
+評系今構形——構、剛、壓、變能——以定變備於變起前。
 
-## When to Use
+## 用
 
-- Before any significant architectural change to understand the starting point
-- When a system feels "stuck" but the reasons are unclear
-- When external pressure (growth, market shift, tech debt) is mounting but the response is uncertain
-- Assessing whether a proposed transformation is feasible given the current form
-- Periodic health checks for long-lived systems (annual form assessment)
-- Complementing `adapt-architecture` — assess first, then transform
+- 大構變前知始點→用
+- 系似「卡」而由不清→用
+- 外壓（長、市轉、技債）積而應不確→用
+- 評擬變於今形可行否→用
+- 久存系之常檢（年形評）→用
+- 補 `adapt-architecture` ——先評後變→用
 
-## Inputs
+## 入
 
-- **Required**: The system to assess (codebase, organization, infrastructure, process)
-- **Optional**: Proposed transformation direction (what might the system need to become?)
-- **Optional**: Known pain points or pressure sources
-- **Optional**: Previous transformation attempts and their outcomes
-- **Optional**: Time horizon for potential transformation
-- **Optional**: Available resources for transformation effort
+- **必**：欲評之系（庫、組、設、程）
+- **可**：擬變向（系當為何）
+- **可**：知痛或壓源
+- **可**：前變試與其果
+- **可**：潛變時域
+- **可**：可達變資
 
-## Procedure
+## 行
 
-### Step 1: Inventory the Current Form
+### 一：錄今形
 
-Catalog the system's structural elements without judgment — understand what exists before evaluating it.
+無判錄系構件——評前知所存。
 
-1. Map the structural components:
-   - **Modules**: distinct functional units (services, teams, packages, departments)
-   - **Interfaces**: how modules connect (APIs, protocols, contracts, reporting lines)
-   - **Data flows**: how information moves through the system
-   - **Dependencies**: what depends on what (direct, transitive, circular)
-   - **Load-bearing structures**: components that everything else relies on
-2. Document the form's age and history:
-   - When was each major component introduced?
-   - Which components have changed recently vs. remained static?
-   - What is the "geological layer" structure (old core, newer additions, recent patches)?
-3. Identify the form's "skeleton" vs. "flesh":
-   - Skeleton: structural decisions that are extremely costly to change (language, database, deployment model)
-   - Flesh: functional decisions that can change more easily (business logic, UI, configuration)
+1. 圖構件：
+   - **模**：獨功單（服、隊、包、部）
+   - **介**：模如何接（API、協、契、報線）
+   - **數流**：信如何於系行
+   - **依**：何依何（直、傳、循）
+   - **承載構**：諸他賴之件
+2. 文形齡與史：
+   - 各大件何時入？
+   - 何件近變對留靜？
+   - 「地層」構（古核、新加、近補）為何？
+3. 識形之「骨」對「肉」：
+   - 骨：變極貴之構決（言、庫、部模）
+   - 肉：易變之功決（商邏、UI、設）
 
 ```
 Structural Inventory Template:
@@ -79,53 +79,53 @@ Structural Inventory Template:
 └──────────────┴──────────┴────────────┴───────────────────┴──────────┘
 ```
 
-**Expected:** A complete structural inventory showing components, their ages, modification recency, dependency profiles, and classification as skeleton or flesh. This is the "X-ray" of the current form.
+得：完構錄示件、其齡、近改、依形、骨/肉分。此即今形之「X 光」。
 
-**On failure:** If the inventory is incomplete (components are unknown or undocumented), that itself is a finding — the form has opacity, which is a transformation risk. Document what you can, flag unknowns, and plan discovery for the gaps.
+敗：錄不全（件未知或無文）→自為發——形有不透，乃變險。文可知者、標未知、計缺探。
 
-### Step 2: Map Transformation Pressure
+### 二：圖變壓
 
-Identify the forces pushing the system toward change and the forces resisting it.
+識推系向變之力與抗之力。
 
-1. Catalog external pressures (forces demanding change):
-   - Growth pressure: current form can't handle increasing load
-   - Market pressure: competitors or users demand capabilities the current form can't support
-   - Technology pressure: underlying technology is becoming obsolete or unsupported
-   - Regulatory pressure: compliance requirements the current form doesn't meet
-   - Integration pressure: must connect with systems the current form wasn't designed for
-2. Catalog internal pressures (forces demanding change from within):
-   - Technical debt: accumulated shortcuts that slow development
-   - Knowledge concentration: critical knowledge held by too few people
-   - Morale pressure: team frustration with the current form
-   - Operational burden: maintenance cost consuming resources that should go to development
-3. Catalog resistance forces (forces opposing change):
-   - Inertia: the existing form works "well enough"
-   - Dependency lock-in: too many things depend on the current form
-   - Knowledge loss risk: transformation might destroy institutional knowledge
-   - Cost: transformation requires investment with uncertain return
-   - Fear: previous transformation attempts failed
+1. 錄外壓（求變之力）：
+   - 長壓：今形不能負日載
+   - 市壓：競或用求今形不支之能
+   - 技壓：底技將舊或不支
+   - 規壓：今形不滿之合規需
+   - 接壓：須接今形未為之系
+2. 錄內壓（內求變之力）：
+   - 技債：累捷致開緩
+   - 知聚：關知於少人
+   - 士氣：隊對今形之挫
+   - 操負：維耗本當為開之資
+3. 錄抗力（對變之力）：
+   - 慣性：今形「足好」
+   - 依鎖：諸物賴今形
+   - 知失險：變或毀體知
+   - 本：變需投而回不確
+   - 懼：前變試敗
 
-**Expected:** A pressure map showing the direction and magnitude of forces acting on the system. If transformation pressure significantly exceeds resistance, transformation is overdue. If resistance significantly exceeds pressure, transformation will fail without first reducing resistance.
+得：壓圖示影系力之向與量。變壓大過抗→變宜遲。抗大過壓→變必先減抗否則敗。
 
-**On failure:** If pressure mapping produces a balanced picture (neither strong pressure nor strong resistance), the system may not need transformation — or the analysis is surface-level. Dig deeper: interview stakeholders, measure specific pain points, project forward 12-18 months. What pressures will intensify?
+敗：壓圖出衡（壓抗皆不強）→系或不需變——或析淺。深探：問利者、量具痛、前推 12-18 月。何壓將強？
 
-### Step 3: Assess Structural Rigidity
+### 三：評構剛
 
-Determine how flexible or rigid the current form is — can it bend, or will it break?
+定今形柔剛——可彎或破？
 
-1. Test interface flexibility:
-   - Can modules be replaced without cascading changes? (loose coupling = flexible)
-   - Are interfaces well-defined and stable? (contract clarity = flexible)
-   - How many "god modules" exist (modules that everything depends on)? (concentration = rigid)
-2. Test data flexibility:
-   - Is data migration straightforward? (schema evolution tools, versioning)
-   - Are data formats standardized or bespoke? (bespoke = rigid)
-   - How entangled is business logic with data structure? (entangled = rigid)
-3. Test process flexibility:
-   - Can the team ship changes quickly? (deployment pipeline health)
-   - Is the test suite comprehensive? (safety net for change)
-   - How many "don't touch" components exist? (forbidden zones = rigid)
-4. Calculate the rigidity score:
+1. 測介柔：
+   - 模可代而無連動乎？（鬆耦=柔）
+   - 介定明穩乎？（契清=柔）
+   - 「神模」（諸物賴之模）幾？（聚=剛）
+2. 測數柔：
+   - 數遷易乎？（規演工、版）
+   - 數式標或客？（客=剛）
+   - 商邏與數構纏乎？（纏=剛）
+3. 測程柔：
+   - 隊可速發變乎？（部管健）
+   - 測套全乎？（變之安網）
+   - 「勿觸」件幾？（禁區=剛）
+4. 算剛分：
 
 ```
 Rigidity Assessment:
@@ -145,40 +145,40 @@ Rigidity Assessment:
 └──────────────────────┴───────────────────────┴──────────────────────┘
 ```
 
-**Expected:** A rigidity score that quantifies how much structural resistance transformation will encounter. Flexible systems (6-9) can transform incrementally. Rigid systems (14-18) need dissolution before reconstruction (see `dissolve-form`).
+得：剛分量變遇之構抗。柔系（6-9）可漸變。剛系（14-18）需溶後重建（見 `dissolve-form`）。
 
-**On failure:** If the rigidity assessment is inconclusive (moderate score but unclear where the real problems are), focus on the highest-scoring dimensions. A system can be flexible overall but have one extremely rigid component that blocks transformation. Target that component specifically.
+敗：剛評不結（中分而真題不清）→注最高分維。系可全柔而一極剛件阻變。標彼件。
 
-### Step 4: Estimate Change Capacity
+### 四：估變能
 
-Assess the system's (and team's) ability to absorb and execute transformation.
+評系（與隊）吸與行變之能。
 
-1. Available transformation energy:
-   - What percentage of team capacity can be allocated to transformation?
-   - Is there organizational support (budget, mandate, patience)?
-   - Are the right skills available (architecture, migration, testing)?
-2. Change absorption rate:
-   - How many changes can the system absorb per time unit without destabilizing?
-   - What is the recovery time after a significant change?
-   - Is there a staging/canary mechanism for incremental transformation?
-3. Transformation experience:
-   - Has the team successfully transformed similar systems before?
-   - Are there transformation tools and practices in place (feature flags, strangler fig, blue-green)?
-   - What is the team's risk tolerance?
-4. Calculate change capacity:
-   - High capacity: dedicated team, strong tooling, prior experience, organizational support
-   - Moderate capacity: part-time allocation, some tooling, limited experience
-   - Low capacity: no dedicated resources, no tooling, no experience, resistant organization
+1. 可達變能：
+   - 隊能何分可給變？
+   - 有組支（預、令、忍）乎？
+   - 對技在乎（構、遷、測）？
+2. 變吸率：
+   - 系每時可吸幾變不致不穩？
+   - 大變後復時何？
+   - 有階/金絲機為漸變乎？
+3. 變經：
+   - 隊曾成變似系乎？
+   - 有變工與例（特旗、絞榕、藍綠）乎？
+   - 隊險忍何？
+4. 算變能：
+   - 高：專隊、強工、前經、組支
+   - 中：兼職、某工、限經
+   - 低：無專資、無工、無經、抗組
 
-**Expected:** A change capacity assessment that indicates whether the system/team can execute the proposed transformation given current resources, skills, and organizational support.
+得：變能評示系/隊以今資、技、組支可行擬變否。
 
-**On failure:** If change capacity is low but transformation pressure is high, the first transformation isn't the system — it's the team's capability. Invest in tooling, training, and organizational buy-in before attempting the architectural transformation.
+敗：變能低而變壓高→首變非系——乃隊能。先投工、訓、組同意再試構變。
 
-### Step 5: Classify Transformation Readiness
+### 五：分變備
 
-Combine pressure, rigidity, and capacity assessments into a readiness classification.
+合壓、剛、能評為備分。
 
-1. Plot the system on the readiness matrix:
+1. 圖系於備矩：
 
 ```
 Transformation Readiness Matrix:
@@ -199,45 +199,45 @@ Transformation Readiness Matrix:
 └─────────────────┴────────────────────────┴────────────────────────┘
 ```
 
-2. Document the readiness classification with:
-   - Classification label (READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER)
-   - Key findings from each assessment dimension
-   - Recommended next step
-   - Risk factors that could change the classification
-3. If READY: proceed to `adapt-architecture`
-4. If PREPARE: proceed to `dissolve-form` to reduce rigidity
-5. If INVEST: build capacity (training, tooling, organizational support), then reassess
-6. If CRITICAL: address capacity and rigidity simultaneously (may require external help)
-7. If OPTIONAL/DEFER: document the assessment and set a reassessment date
+2. 文備分附：
+   - 分標（READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER）
+   - 各評維要發
+   - 薦次步
+   - 變分之險因
+3. READY→入 `adapt-architecture`
+4. PREPARE→入 `dissolve-form` 減剛
+5. INVEST→建能（訓、工、組支）後重評
+6. CRITICAL→同處能與剛（或需外助）
+7. OPTIONAL/DEFER→文評、設重評日
 
-**Expected:** A clear, justified transformation readiness classification with specific next steps. The classification enables informed decision-making about when and how to transform.
+得：明、證之變備分附具次步。分使知決何時與如何變。
 
-**On failure:** If the classification is ambiguous (e.g., moderate pressure, moderate rigidity, moderate capacity), default to PREPARE — reduce rigidity incrementally while monitoring pressure. This builds capability and reduces risk whether or not full transformation is eventually needed.
+敗：分含糊（如中壓、中剛、中能）→默 PREPARE——漸減剛而監壓。建能減險不論全變終是否需。
 
-## Validation
+## 驗
 
-- [ ] Structural inventory is complete with components, ages, dependencies, and types
-- [ ] Transformation pressure is mapped (external, internal, resistance forces)
-- [ ] Rigidity score is calculated across all dimensions
-- [ ] Change capacity is assessed (resources, absorption rate, experience)
-- [ ] Readiness classification is determined with justified reasoning
-- [ ] Next steps are documented based on the classification
-- [ ] Reassessment date is set (even if currently READY)
+- [ ] 構錄完附件、齡、依、類
+- [ ] 變壓圖（外、內、抗）
+- [ ] 剛分跨諸維算
+- [ ] 變能評（資、吸率、經）
+- [ ] 備分定附證理
+- [ ] 次步按分文
+- [ ] 重評日設（即今 READY）
 
-## Common Pitfalls
+## 忌
 
-- **Assessing only the technical system**: Transformation readiness includes organizational readiness. A technically flexible system with an organizationally rigid team will still fail to transform
-- **Optimistic capacity estimation**: Teams consistently overestimate their capacity for change while maintaining normal operations. Use 50% of stated capacity as the realistic estimate
-- **Ignoring resistance forces**: Pressure mapping that only catalogs change forces misses the resistance that will slow or stop transformation. Resistance is often stronger than it appears
-- **Assessment paralysis**: The form assessment should take hours to days, not weeks. If it's taking too long, the system is too complex to assess fully — assess at a higher abstraction level and drill into problem areas
-- **Confusing rigidity with stability**: A rigid system is not the same as a stable system. Stability comes from well-designed flexibility; rigidity is the absence of designed flexibility
+- **唯評技系**：變備含組備。技柔系而組剛隊仍變敗
+- **樂觀能估**：隊恆過估持常操之變能。用 50% 述能為實估
+- **忽抗力**：壓圖唯錄變力失緩或止變之抗。抗常較表強
+- **評癱**：形評當時至日，非週。久→系太繁不能全評——升抽象階評而入題區
+- **混剛於穩**：剛系非穩系。穩自設善之柔；剛乃設柔之缺
 
-## Related Skills
+## 參
 
-- `adapt-architecture` — the primary transformation skill; assess-form determines readiness for it
-- `dissolve-form` — for systems classified as PREPARE or CRITICAL, rigidity reduction before transformation
-- `repair-damage` — for systems that need repair before assessment can be meaningful
-- `shift-camouflage` — surface-level adaptation that may resolve pressure without full transformation
-- `forage-resources` — resource exploration informs form assessment when the question is "what should we become?"
-- `review-software-architecture` — complementary skill for detailed technical architecture evaluation
-- `assess-context` — AI self-application variant; maps structural assessment to reasoning context malleability, rigidity mapping, and transformation readiness
+- `adapt-architecture` —— 主變技；assess-form 定備
+- `dissolve-form` —— 分為 PREPARE 或 CRITICAL 之系，變前減剛
+- `repair-damage` —— 評有意前需修之系
+- `shift-camouflage` —— 表變或解壓無須全變
+- `forage-resources` —— 資探告形評於問「當為何」
+- `review-software-architecture` —— 詳技構評之伴技
+- `assess-context` —— AI 自施變；圖構評於推脈塑、剛圖、變備

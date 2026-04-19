@@ -116,9 +116,9 @@ Scoring:
 - Scores within 2-3 points indicate balanced type (rare)
 ```
 
-**Expected:** Dominant and secondary temperament identified, with score profile showing primary constitutional tendencies.
+**Got:** Dominant and secondary temperament identified, with score profile showing primary constitutional tendencies.
 
-**On failure:** If all scores are within 2-3 points of each other, the person has a balanced temperament (unusual in Hildegard's system). Proceed with general recommendations avoiding extremes (no very hot or very cold foods).
+**If fail:** If all scores are within 2-3 points of each other, the person has a balanced temperament (unusual in Hildegard's system). Proceed with general recommendations avoiding extremes (no hot or cold foods).
 
 ### Step 2: Elemental Balance Assessment
 
@@ -162,9 +162,9 @@ Assessment:
 4. Determine if imbalance is acute (recent onset) or chronic (longstanding pattern)
 ```
 
-**Expected:** Identification of 1-2 elemental imbalances (e.g., "Excess water with deficient fire" = cold/damp pattern with low vitality).
+**Got:** Identification of 1-2 elemental imbalances (e.g., "Excess water with deficient fire" = cold/damp pattern with low vitality).
 
-**On failure:** If symptom pattern is unclear or contradictory, default to the opposite qualities of the dominant temperament. Example: Choleric (hot/dry) feeling unwell likely has excess fire → recommend cooling/moistening.
+**If fail:** If symptom pattern is unclear or contradictory, default to the opposite qualities of the dominant temperament. Example: Choleric (hot/dry) feeling unwell likely has excess fire → recommend cooling/moistening.
 
 ### Step 3: Dietary Recommendations
 
@@ -231,9 +231,9 @@ eat galangal, and he will be restored to health."
 - Especially for melancholic and phlegmatic types
 ```
 
-**Expected:** Specific food recommendations tailored to temperament and current imbalance, with clear "favor/moderate/avoid" categories.
+**Got:** Specific food recommendations tailored to temperament and current imbalance, with clear "favor/moderate/avoid" categories.
 
-**On failure:** If dietary restrictions prevent following recommendations (e.g., vegetarian unable to eat lamb), substitute within the same elemental category (warming/cooling/moistening/drying). Consult the plant-based options within each category.
+**If fail:** If dietary restrictions prevent following recommendations (e.g., vegetarian unable to eat lamb), substitute within the same elemental category (warming/cooling/moistening/drying). Consult the plant-based options within each category.
 
 ### Step 4: Lifestyle and Seasonal Adjustments
 
@@ -297,9 +297,9 @@ SEASONAL ADJUSTMENTS (all temperaments):
 - Winter (Water depth): Warming foods, rest more, contemplation, less activity
 ```
 
-**Expected:** 3-5 specific lifestyle recommendations that address the identified imbalance and align with Hildegard's holistic view (body, mind, spirit, nature).
+**Got:** 3-5 specific lifestyle recommendations that address the identified imbalance and align with Hildegard's holistic view (body, mind, spirit, nature).
 
-**On failure:** If recommendations feel overwhelming, prioritize ONE dietary change and ONE lifestyle change to begin. Full rebalancing takes weeks to months — start small.
+**If fail:** If recommendations feel overwhelming, prioritize ONE dietary change and ONE lifestyle change to begin. Full rebalancing takes weeks to months — start small.
 
 ### Step 5: Integration and Monitoring
 
@@ -333,9 +333,9 @@ Hildegard's system is preventive and lifelong. The goal is not to "fix" and retu
 to old habits, but to develop a sustainable, temperament-harmonious way of living.
 ```
 
-**Expected:** User has clear timeline for change implementation, monitoring practices, and criteria for reassessment.
+**Got:** User has clear timeline for change implementation, monitoring practices, and criteria for reassessment.
 
-**On failure:** If user reports feeling worse after 1-2 weeks, reassess for overcorrection. Example: Adding too many warming foods to a choleric type could cause excess fire. Dial back to neutral foods temporarily.
+**If fail:** If user reports feeling worse after 1-2 weeks, reassess for overcorrection. Example: Adding too many warming foods to a choleric type could cause excess fire. Dial back to neutral foods temporarily.
 
 ## Validation Checklist
 
@@ -349,7 +349,7 @@ to old habits, but to develop a sustainable, temperament-harmonious way of livin
 - [ ] Monitoring and reassessment triggers documented
 - [ ] User informed this is holistic guidance, not medical diagnosis
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Rigid Type-Casting**: Most people are blends. Don't force a single temperament identity
 2. **Ignoring Season**: Winter melancholic needs different foods than summer melancholic

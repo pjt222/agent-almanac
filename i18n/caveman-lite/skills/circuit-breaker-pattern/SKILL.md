@@ -103,9 +103,9 @@ For each tool, document:
 2. What alternative tools can partially cover it (with degradation notes)
 3. What the manual fallback is when no tool alternative exists
 
-**Expected:** A complete capability map covering every tool the agent uses. Each entry has at least a fallback, even if no tool alternative exists. The map makes explicit what is usually implicit: which tools are critical (no alternatives) and which are substitutable.
+**Got:** A complete capability map covering every tool the agent uses. Each entry has at least a fallback, even if no tool alternative exists. The map makes explicit what is usually implicit: which tools are critical (no alternatives) and which are substitutable.
 
-**On failure:** If the tool list is unclear, start with the `allowed-tools` from the skill's frontmatter. If alternatives are uncertain, mark them as `degradation: "unknown — test before relying on this route"` rather than omitting them.
+**If fail:** If the tool list is unclear, start with the `allowed-tools` from the skill's frontmatter. If alternatives are uncertain, mark them as `degradation: "unknown — test before relying on this route"` rather than omitting them.
 
 ### Step 2: Initialize Circuit Breaker State
 
@@ -140,9 +140,9 @@ Failure budget: 0 / 5 consumed
 - HALF-OPEN -> CLOSED: On successful probe call
 - HALF-OPEN -> OPEN: On failed probe call
 
-**Expected:** A state table initialized for all tools with CLOSED state and zero failure counts. The failure threshold and budget are explicitly declared.
+**Got:** A state table initialized for all tools with CLOSED state and zero failure counts. The failure threshold and budget are explicitly declared.
 
-**On failure:** If the tool list cannot be enumerated upfront (dynamic tool discovery), initialize state on first use of each tool. The pattern still applies — you just build the table incrementally.
+**If fail:** If the tool list cannot be enumerated upfront (dynamic tool discovery), initialize state on first use of each tool. The pattern still applies — build the table incrementally.
 
 ### Step 3: Implement the Call-and-Track Loop
 
@@ -180,9 +180,9 @@ AFTER each tool call:
 
 The expeditor never retries a failed call immediately. It records the failure, checks thresholds, and moves on. Retries happen only through the HALF-OPEN probe mechanism at a later step.
 
-**Expected:** A clear decision loop that the agent follows before and after every tool call. Tool health is tracked continuously. The expeditor layer never blocks on a failing tool.
+**Got:** A clear decision loop that the agent follows before and after every tool call. Tool health is tracked continuously. The expeditor layer never blocks on a failing tool.
 
-**On failure:** If tracking state across calls is impractical (e.g., stateless execution), degrade to a simpler model: count total failures and pause at budget. The three-state circuit breaker is ideal; a failure counter is the minimum viable pattern.
+**If fail:** If tracking state across calls is impractical (e.g., stateless execution), degrade to a simpler model: count total failures and pause at budget. The three-state circuit breaker is ideal; a failure counter is the minimum viable pattern.
 
 ### Step 4: Route to Alternatives on Open Circuit
 
@@ -222,9 +222,9 @@ Route 4: Scope reduction
   → Document: "SKIPPED: API key search — no tools available"
 ```
 
-**Expected:** When a tool circuit opens, the agent transparently routes to an alternative or degrades scope. The routing decision and any degradation are documented in the task output so the user knows what was affected.
+**Got:** When a tool circuit opens, the agent transparently routes to an alternative or degrades scope. The routing decision and any degradation are documented in the task output so the user knows what was affected.
 
-**On failure:** If the capability map is incomplete (no alternatives listed), default to scope reduction and report. Never silently skip work — always document what was skipped and why.
+**If fail:** If the capability map is incomplete (no alternatives listed), default to scope reduction and report. Never silently skip work — always document what was skipped and why.
 
 ### Step 5: Reduce Scope to Achievable Work
 
@@ -259,9 +259,9 @@ or user can run commands manually.
 
 Do not attempt deferred sub-tasks. Do not retry open-circuited tools hoping they will work. The circuit breaker exists precisely to prevent this — trust its state.
 
-**Expected:** A clear partition of the task into achievable and deferred work. The agent completes all achievable work and reports deferred items with the reason and what would unblock them.
+**Got:** A clear partition of the task into achievable and deferred work. The agent completes all achievable work and reports deferred items with the reason and what would unblock them.
 
-**On failure:** If scope reduction removes all sub-tasks (every tool is broken), skip directly to Step 6 — pause and report. An agent with no working tools should not pretend to make progress.
+**If fail:** If scope reduction removes all sub-tasks (every tool is broken), skip directly to Step 6 — pause and report. An agent with no working tools should not pretend to make progress.
 
 ### Step 6: Handle Staleness and Label Data Quality
 
@@ -291,9 +291,9 @@ When presenting potentially stale data:
 
 Never silently present stale data as current. The user or downstream agent must know the data quality to make sound decisions.
 
-**Expected:** All tool outputs that may be stale carry explicit labels. Fresh data is not labeled (labeling is reserved for uncertainty, not confirmation).
+**Got:** All tool outputs that may be stale carry explicit labels. Fresh data is not labeled (labeling is reserved for uncertainty, not confirmation).
 
-**On failure:** If staleness cannot be determined (no timestamps, no comparison baseline), note the uncertainty: "[FRESHNESS UNKNOWN — no baseline for comparison]". Uncertainty about freshness is itself information.
+**If fail:** If staleness cannot be determined (no timestamps, no comparison baseline), note the uncertainty: "[FRESHNESS UNKNOWN — no baseline for comparison]". Uncertainty about freshness is itself information.
 
 ### Step 7: Enforce the Failure Budget
 
@@ -347,9 +347,9 @@ Recommendation:
 
 The pause-and-report serves the same function as a circuit breaker in electrical systems: it prevents damage from accumulating. An agent that keeps calling broken tools wastes context window, confuses the user with repeated errors, and may produce inconsistent partial results.
 
-**Expected:** The agent stops cleanly when the failure budget is exhausted. The report includes completed work, incomplete work, tool health, and actionable next steps.
+**Got:** The agent stops cleanly when the failure budget is exhausted. The report includes completed work, incomplete work, tool health, and actionable next steps.
 
-**On failure:** If the agent cannot generate a clean report (e.g., state tracking was lost), output whatever information is available. A partial report is better than silent continuation.
+**If fail:** If the agent cannot generate a clean report (e.g., state tracking was lost), output whatever information is available. A partial report is better than silent continuation.
 
 ### Step 8: Separation of Concerns — Expeditor vs. Executor
 
@@ -371,9 +371,9 @@ Verify that the orchestration logic (Steps 2-7) is cleanly separated from tool e
 
 If the expeditor is "cooking" (making tool calls to work around other tool failures), the separation is broken. The expeditor should route to an alternative tool or reduce scope — not try to fix the broken tool.
 
-**Expected:** A clean boundary between orchestration decisions and tool execution. The expeditor layer can be described without referencing specific tool APIs or error types.
+**Got:** A clean boundary between orchestration decisions and tool execution. The expeditor layer can be described without referencing specific tool APIs or error types.
 
-**On failure:** If orchestration and execution are entangled, refactor by extracting the decision logic into a separate step that runs before each tool call. The decision step produces one of four outputs: CALL, SKIP, PROBE, or PAUSE. The execution step acts on that output.
+**If fail:** If orchestration and execution are entangled, refactor by extracting the decision logic into a separate step that runs before each tool call. The decision step produces one of four outputs: CALL, SKIP, PROBE, or PAUSE. The execution step acts on that output.
 
 ### Step 9: Detect Cascading Failures
 
@@ -388,16 +388,16 @@ When multiple tools share infrastructure (network, filesystem, permissions), a s
 **Response protocol:**
 
 1. When a second breaker opens, check whether the failure category matches the first
-2. If correlated: flag as **systemic failure** — pause all tool calls, not just the broken ones
+2. If correlated: flag as **systemic failure** — pause all tool calls, not only the broken ones
 3. Report the suspected root cause: "Multiple tools failing with [shared pattern] — likely [network/filesystem/permissions] issue"
 4. Do not probe half-open tools during a systemic failure — probes will also fail and waste budget
 5. Resume probing only after the user confirms the infrastructure issue is resolved
 
 **Backoff compounding:** When cascading failures trigger, use exponential backoff for half-open probes: probe at step 3, then step 6, then step 12. Cap the maximum interval at 20 steps to prevent permanent circuit lock. This prevents rapid-fire probes from overwhelming a recovering system.
 
-**Expected:** Correlated failures are detected and treated as a single systemic event rather than N independent breaker trips. The failure budget counts the systemic event once, not N times.
+**Got:** Correlated failures are detected and treated as a single systemic event rather than N independent breaker trips. The failure budget counts the systemic event once, not N times.
 
-**On failure:** If correlation detection is impractical (failures have different error signatures despite a shared cause), fall back to independent per-tool breakers. The system still degrades gracefully — it just consumes budget faster.
+**If fail:** If correlation detection is impractical (failures have different error signatures despite a shared cause), fall back to independent per-tool breakers. The system still degrades gracefully — it consumes budget faster.
 
 ### Step 10: Pre-Call Tool Selection Layer
 
@@ -422,9 +422,9 @@ Pre-call score:
 
 Pre-call checks are advisory, not authoritative. A tool that passes pre-call checks can still fail during execution. The circuit breaker remains the primary reliability mechanism.
 
-**Expected:** Predictable failures (missing tools, unreachable servers) are caught before they consume the failure budget. The circuit breaker handles only genuine runtime failures.
+**Got:** Predictable failures (missing tools, unreachable servers) are caught before they consume the failure budget. The circuit breaker handles only genuine runtime failures.
 
-**On failure:** If pre-call checks are unavailable or add too much overhead, skip this step entirely. The circuit breaker loop in Step 3 handles all failures — pre-call selection is an optimization, not a requirement.
+**If fail:** If pre-call checks are unavailable or add too much overhead, skip this step entirely. The circuit breaker loop in Step 3 handles all failures — pre-call selection is an optimization, not a requirement.
 
 ## Validation
 
@@ -443,7 +443,7 @@ Pre-call checks are advisory, not authoritative. A tool that passes pre-call che
 - [ ] Systemic failure mode pauses all probes until infrastructure is confirmed recovered
 - [ ] Pre-call checks (if used) do not consume the failure budget on predictable failures
 
-## Common Pitfalls
+## Pitfalls
 
 - **Retrying instead of circuit-breaking**: Calling a broken tool repeatedly wastes the failure budget and context window. Three consecutive failures is a pattern, not bad luck. Open the circuit.
 - **Cooking in the expeditor**: The orchestration layer should decide *what* to attempt, not *how* to fix broken tools. If the expeditor is crafting workaround commands for Bash failures, it has crossed the separation boundary.
@@ -452,7 +452,7 @@ Pre-call checks are advisory, not authoritative. A tool that passes pre-call che
 - **Opening circuits too eagerly**: A single transient failure should not open the circuit. Use a threshold (default: 3) to filter noise from signal.
 - **Never probing after opening**: A permanently open circuit means the agent never discovers that a tool has recovered. Half-open probes are essential for recovery.
 - **Ignoring the failure budget**: Without a budget, an agent can accumulate dozens of failures across different tools while still "making progress" on paper. The budget forces an honest checkpoint.
-- **Cascading backoff multiplication**: When multiple tools in a dependency chain each apply their own exponential backoff, the compound delay grows multiplicatively. Cap total aggregate backoff across the chain, not just per tool.
+- **Cascading backoff multiplication**: When multiple tools in a dependency chain each apply their own exponential backoff, the compound delay grows multiplicatively. Cap total aggregate backoff across the chain, not per tool.
 - **Stale discovery scores**: Pre-call selection (Step 10) caches tool availability assessments. If the cache is not invalidated when conditions change, the agent may skip a recovered tool or attempt an unavailable one. Re-check scores after any systemic failure event.
 
 ## Related Skills

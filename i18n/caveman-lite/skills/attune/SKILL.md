@@ -26,13 +26,13 @@ metadata:
 
 # Attune
 
-Calibrate to the person — reading communication style, expertise depth, emotional register, and implicit preferences from conversational evidence. Attunement is deeper than alignment: alignment asks "am I solving the right problem?" Attunement asks "am I meeting this person where they are?"
+Calibrate to the person — read communication style, expertise depth, emotional register, and implicit preferences from conversational evidence. Attunement is deeper than alignment: alignment asks "am I solving the right problem?" Attunement asks "am I meeting this person where they are?"
 
 ## When to Use
 
 - At the start of a new session — calibrate before the first substantive response
 - When communication feels mismatched — too formal, too casual, too detailed, too sparse
-- After receiving unexpected feedback — the mismatch reveals an attunement gap
+- After unexpected feedback — the mismatch reveals an attunement gap
 - When transitioning between very different contexts (e.g., technical debugging to creative brainstorming)
 - When MEMORY.md contains user preferences worth re-reading
 - When `heal`'s User-Intent Alignment check reveals surface alignment but deeper disconnection
@@ -58,9 +58,9 @@ Before adapting, observe. Attunement begins with reception, not analysis.
 2. Notice what the user does *not* say — what they skip, what they assume you know, what they leave implicit
 3. If MEMORY.md or CLAUDE.md is available, check for stored preferences — they represent patterns stable enough to record
 
-**Expected:** A picture of how this person communicates — not a psychological profile, but a communication fingerprint. Enough to match their register.
+**Got:** A picture of how this person communicates — not a psychological profile, but a communication fingerprint. Enough to match their register.
 
-**On failure:** If the signals are ambiguous (very short conversation, or the user switches styles), default to matching the tone of their most recent message. Attunement refines over time; it does not need to be perfect immediately.
+**If fail:** If the signals are ambiguous (very short conversation, or the user switches styles), default to matching the tone of their most recent message. Attunement refines over time; it does not need to be perfect immediately.
 
 ### Step 2: Read — Assess Expertise and Context
 
@@ -107,23 +107,23 @@ Attunement Matrix:
 └──────────────┴──────────────────────────────────────────────────┘
 ```
 
-**Expected:** A clear sense of the user's expertise level and preferred communication style, grounded in evidence from the conversation — not assumed from demographics or stereotypes.
+**Got:** A clear sense of the user's expertise level and preferred communication style, grounded in evidence from the conversation — not assumed from demographics or stereotypes.
 
-**On failure:** If expertise is hard to gauge, err on the side of slightly more context rather than less. Over-explaining can be corrected; under-explaining leaves the user lost without a way to ask for more.
+**If fail:** If expertise is hard to gauge, err on the side of slightly more context rather than less. Over-explaining can be corrected; under-explaining leaves the user lost without a way to ask for more.
 
 ### Step 3: Resonate — Match the Frequency
 
 Adapt your communication to match the person. This is not mimicry — it is resonance. You do not become them; you meet them.
 
-1. **Match length**: If they write two sentences, your response should not be two paragraphs (unless the content genuinely requires it)
+1. **Match length**: If they write two sentences, your response should not be two paragraphs (unless the content requires it)
 2. **Match vocabulary**: Use the terms they use. If they say "function," do not say "method" unless the distinction matters
 3. **Match structure**: If they use bullet points, respond with structure. If they write prose, respond in prose
 4. **Match energy**: If they are excited about the task, bring engagement. If they are frustrated, bring calm competence. If they are exploratory, explore with them
 5. **Do not over-match**: Matching does not mean flattening yourself. If the user is wrong about something, attunement does not mean agreeing — it means communicating the correction in their register
 
-**Expected:** A noticeable shift in communication quality. The user feels heard and met, not lectured at or pandered to. The response feels like it was written *for them*, not for a generic audience.
+**Got:** A noticeable shift in communication quality. The user feels heard and met, not lectured at or pandered to. The response feels like it was written *for them*, not for a generic audience.
 
-**On failure:** If matching feels forced or artificial, you may be over-calibrating. The goal is natural resonance, not precise imitation. Let it be approximate. Attunement is a direction, not a destination.
+**If fail:** If matching feels forced or artificial, you may be over-calibrating. The goal is natural resonance, not precise imitation. Let it be approximate. Attunement is a direction, not a destination.
 
 ### Step 4: Sustain — Carry Attunement Forward
 
@@ -132,11 +132,11 @@ Attunement is not a one-time calibration — it is an ongoing practice.
 1. After each user message, briefly check: has the register shifted? People adjust their communication as conversations progress
 2. Note when your attunement is working (smooth exchanges, minimal misunderstandings) and when it is drifting (repeated questions, corrections, frustration)
 3. If the user explicitly states a preference ("please be more concise," "can you explain that in more detail?"), treat it as a strong signal — it overrides your inference
-4. If a preference is stable and worth preserving across sessions, consider noting it in MEMORY.md
+4. If a preference is stable and worth preserving across sessions, note it in MEMORY.md
 
-**Expected:** Sustained quality of communication throughout the session, with natural micro-adjustments as the conversation evolves.
+**Got:** Sustained quality of communication throughout the session, with natural micro-adjustments as the conversation evolves.
 
-**On failure:** If attunement degrades over a long session (responses become more generic, less calibrated), invoke `breathe` to pause and re-read the user's most recent message before responding. Mid-session re-attunement is lighter than a full attune cycle.
+**If fail:** If attunement degrades over a long session (responses become more generic, less calibrated), invoke `breathe` to pause and re-read the user's most recent message before responding. Mid-session re-attunement is lighter than a full attune cycle.
 
 ## Validation
 
@@ -147,7 +147,7 @@ Attunement is not a one-time calibration — it is an ongoing practice.
 - [ ] Explicit user preferences were respected when stated
 - [ ] Attunement improved communication quality (fewer misunderstandings, smoother flow)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Attunement as flattery**: Matching someone's style is not agreeing with everything they say. Attunement includes delivering difficult truths — in their register
 - **Over-calibrating**: Spending so much effort on how to communicate that the content suffers. Attunement should be lightweight, not a primary task

@@ -32,7 +32,7 @@ Audit project dependencies for version staleness, known security vulnerabilities
 
 - Before a release to ensure dependencies are current and secure
 - During periodic maintenance (monthly or quarterly dependency reviews)
-- After receiving a security advisory affecting a project dependency
+- After a security advisory affects a project dependency
 - When upgrading a project to a new language version (e.g., R 4.4 to 4.5)
 - Before submitting a package to CRAN, npm, or crates.io
 - When inheriting a project and assessing its dependency health
@@ -100,9 +100,9 @@ Build an inventory table:
 | pytest | 8.0.0 | dev | Python |
 ```
 
-**Expected:** Complete inventory of all direct and (optionally) transitive dependencies with pinned versions.
+**Got:** Complete inventory of all direct and (optionally) transitive dependencies with pinned versions.
 
-**On failure:** If lock files are missing, the project has reproducibility issues. Note this as a finding and inventory from the manifest file (DESCRIPTION, package.json) using declared version constraints instead of pinned versions.
+**If fail:** If lock files are missing, the project has reproducibility issues. Note this as a finding and inventory from the manifest file (DESCRIPTION, package.json) using declared version constraints instead of pinned versions.
 
 ### Step 2: Check Latest Available Versions
 
@@ -155,9 +155,9 @@ Update the inventory with latest versions:
 | shiny | 1.7.4 | 1.9.1 | minor |
 ```
 
-**Expected:** Latest version identified for each dependency with the gap magnitude (patch/minor/major).
+**Got:** Latest version identified for each dependency with the gap magnitude (patch/minor/major).
 
-**On failure:** If a package registry is unreachable, note the dependency as "unable to check" and proceed with the rest. Do not block the entire audit on one unreachable registry.
+**If fail:** If a package registry is unreachable, note the dependency as "unable to check" and proceed with the rest. Do not block the entire audit on one unreachable registry.
 
 ### Step 3: Classify Staleness
 
@@ -166,7 +166,7 @@ Assign a staleness level to each dependency:
 | Level | Definition | Action |
 |---|---|---|
 | **Current** | At latest version or within latest patch | No action needed |
-| **Patch behind** | Same major.minor, older patch | Low priority upgrade, usually safe |
+| **Patch behind** | Same major.minor, older patch | Low priority upgrade, safe |
 | **Minor behind** | Same major, older minor | Medium priority, review changelog for new features |
 | **Major behind** | Older major version | High priority, likely breaking changes in upgrade |
 | **EOL / Archived** | Package no longer maintained | Critical: find replacement or fork |
@@ -190,9 +190,9 @@ Color coding:
 - **AMBER**: Any minor-behind or one major-behind
 - **RED**: Multiple major-behind or any EOL packages
 
-**Expected:** Every dependency classified by staleness with an overall health rating.
+**Got:** Every dependency classified by staleness with an overall health rating.
 
-**On failure:** If version comparison logic is ambiguous (non-SemVer versions, date-based versions), classify conservatively as "minor behind" and note the non-standard versioning.
+**If fail:** If version comparison logic is ambiguous (non-SemVer versions, date-based versions), classify conservatively as "minor behind" and note the non-standard versioning.
 
 ### Step 4: Check for Security Vulnerabilities
 
@@ -242,9 +242,9 @@ Document findings:
 **Security status**: RED (1 critical, 1 high)
 ```
 
-**Expected:** Security vulnerabilities identified with CVE, severity, affected version, and fix version.
+**Got:** Security vulnerabilities identified with CVE, severity, affected version, and fix version.
 
-**On failure:** If no audit tool is available for the ecosystem, search GitHub Security Advisories manually for each dependency. Note that the audit is best-effort without tooling.
+**If fail:** If no audit tool is available for the ecosystem, search GitHub Security Advisories manually for each dependency. The audit is best-effort without tooling.
 
 ### Step 5: Plan Upgrade Path
 
@@ -278,9 +278,9 @@ Prioritize upgrades based on risk and impact:
 
 For each major upgrade, note known breaking changes by checking the dependency's changelog.
 
-**Expected:** Prioritized upgrade plan with security fixes first, then EOL replacements, major upgrades, and minor/patch batches.
+**Got:** Prioritized upgrade plan with security fixes first, then EOL replacements, major upgrades, and minor/patch batches.
 
-**On failure:** If a dependency has no clear upgrade path (abandoned with no fork), document the risk and recommend: (1) vendoring the current version, (2) finding an alternative package, or (3) accepting the risk with monitoring.
+**If fail:** If a dependency has no clear upgrade path (abandoned with no fork), document the risk and recommend: (1) vendoring the current version, (2) finding an alternative package, or (3) accepting the risk with monitoring.
 
 ### Step 6: Document Compatibility Risks
 
@@ -305,9 +305,9 @@ For each planned upgrade, assess compatibility:
 
 Write the complete audit report to `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDIT-2026-02-17.md`.
 
-**Expected:** Compatibility risks documented for each significant upgrade. Complete audit report written.
+**Got:** Compatibility risks documented for each significant upgrade. Complete audit report written.
 
-**On failure:** If compatibility cannot be assessed without testing, recommend a branch-based upgrade approach: create a branch, apply the upgrade, run tests, and evaluate results before merging.
+**If fail:** If compatibility cannot be assessed without testing, recommend a branch-based upgrade approach: create a branch, apply the upgrade, run tests, and evaluate results before merging.
 
 ## Validation
 
@@ -322,7 +322,7 @@ Write the complete audit report to `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDIT-20
 - [ ] Audit report written to DEPENDENCY-AUDIT.md
 - [ ] No dependencies left as "unable to check" without documented reason
 
-## Common Pitfalls
+## Pitfalls
 
 - **Ignoring transitive dependencies**: A project may have 10 direct dependencies but 200 transitive ones. Security vulnerabilities often hide in transitive dependencies. Use `npm ls` or `renv::dependencies()` to see the full tree.
 - **Upgrading everything at once**: Batch-upgrading all dependencies in one commit makes it impossible to identify which upgrade caused a regression. Upgrade in logical groups (security first, then majors individually, then minors/patches as a batch).

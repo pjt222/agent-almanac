@@ -27,27 +27,27 @@ metadata:
 
 # Analyze Codebase Workflow
 
-Survey an arbitrary repository to auto-detect data flows, file I/O, and script dependencies, then produce a structured annotation plan for manual refinement.
+Survey repo → auto-detect data flows, file I/O, script deps → structured annotation plan for manual refinement.
 
-## When to Use
+## Use When
 
-- Onboarding onto an unfamiliar codebase and need to understand data flow
-- Starting putior integration in a project that has no PUT annotations yet
-- Auditing an existing project's data pipeline before documentation
-- Preparing an annotation plan before running `annotate-source-files`
+- Onboard unfamiliar codebase → understand data flow
+- Start putior integration, no PUT annotations
+- Audit existing data pipeline pre-doc
+- Prep annotation plan before `annotate-source-files`
 
-## Inputs
+## In
 
-- **Required**: Path to the repository or source directory to analyze
-- **Optional**: Specific subdirectories to focus on (default: entire repo)
-- **Optional**: Languages to include or exclude (default: all detected)
-- **Optional**: Detection scope: inputs only, outputs only, or both (default: both + dependencies)
+- **Required**: Path to repo/src dir
+- **Optional**: Subdirs focus (default: entire repo)
+- **Optional**: Langs include/exclude (default: all detected)
+- **Optional**: Scope: inputs only, outputs only, both (default: both + deps)
 
-## Procedure
+## Do
 
-### Step 1: Survey Repository Structure
+### Step 1: Survey Repo Structure
 
-Identify source files and their languages to understand what putior can analyze.
+Identify src files + langs → what putior can analyze.
 
 ```r
 library(putior)
@@ -60,20 +60,20 @@ list_supported_languages(detection_only = TRUE)  # Only languages with auto-dete
 exts <- get_supported_extensions()
 ```
 
-Use file listing to understand repo composition:
+File listing → repo composition:
 
 ```bash
 # Count files by extension in the target directory
 find /path/to/repo -type f | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -20
 ```
 
-**Expected:** A list of file extensions present in the repo, with counts. Map these against `get_supported_extensions()` to know coverage.
+**→** File extensions in repo + counts. Map against `get_supported_extensions()` → coverage.
 
-**On failure:** If the repo has no files matching supported extensions, putior cannot auto-detect workflows. Consider whether the language is supported but files use non-standard extensions.
+**If err:** No files match supported → putior can't auto-detect. Check if lang supported but non-standard ext.
 
-### Step 2: Check Language Detection Coverage
+### Step 2: Check Detection Coverage
 
-For each detected language, verify auto-detection pattern availability.
+Per detected lang → verify auto-detect pattern available.
 
 ```r
 # Check which languages have auto-detection patterns (18 languages, 902 patterns)
@@ -93,13 +93,13 @@ for (lang in c("r", "python", "javascript", "sql", "dockerfile", "makefile")) {
 }
 ```
 
-**Expected:** Pattern counts printed for each language. R has 124 patterns, Python 159, JavaScript 71, etc.
+**→** Pattern counts printed. R 124, Python 159, JS 71, etc.
 
-**On failure:** If a language returns no patterns, it supports manual annotations but not auto-detection. Plan to annotate those files manually.
+**If err:** No patterns → supports manual only, not auto. Plan manual annotations.
 
 ### Step 3: Run Auto-Detection
 
-Execute `put_auto()` on the target directory to discover workflow elements.
+Execute `put_auto()` → discover workflow elements.
 
 ```r
 # Full auto-detection
@@ -124,7 +124,7 @@ print(workflow)
 cat(sprintf("Detected %d workflow nodes\n", nrow(workflow)))
 ```
 
-For large repos, analyze subdirectories incrementally:
+Large repos → analyze subdirs incrementally:
 
 ```r
 # Analyze specific subdirectories
@@ -132,13 +132,13 @@ etl_workflow <- put_auto("./src/etl/")
 api_workflow <- put_auto("./src/api/")
 ```
 
-**Expected:** A data frame with columns including `id`, `label`, `input`, `output`, `source_file`. Each row represents a detected workflow step.
+**→** Df w/ `id`, `label`, `input`, `output`, `source_file` cols. Row = detected step.
 
-**On failure:** If the result is empty, the source files may not contain recognizable I/O patterns. Try enabling debug logging: `workflow <- put_auto("./src/", log_level = "DEBUG")` to see which files are scanned and which patterns match.
+**If err:** Empty → src may lack recognizable I/O patterns. Try `workflow <- put_auto("./src/", log_level = "DEBUG")` → see scanned + matched.
 
-### Step 4: Generate Initial Diagram
+### Step 4: Initial Diagram
 
-Visualize the auto-detected workflow to assess coverage and identify gaps.
+Visualize auto-detected → assess coverage + gaps.
 
 ```r
 # Generate diagram from auto-detected workflow
@@ -151,13 +151,13 @@ cat(put_diagram(workflow, show_source_info = TRUE))
 writeLines(put_diagram(workflow, theme = "github"), "workflow-auto.md")
 ```
 
-**Expected:** A Mermaid flowchart showing detected nodes connected by data flow edges. Nodes should be labeled with meaningful function/file names.
+**→** Mermaid flowchart, detected nodes + data flow edges. Meaningful fn/file labels.
 
-**On failure:** If the diagram shows disconnected nodes, the auto-detection found I/O patterns but couldn't infer connections. This is normal — connections are derived from matching output filenames to input filenames. The annotation plan (next step) will address gaps.
+**If err:** Disconnected nodes → auto-detect found I/O but couldn't infer connections. Normal — matching output → input filenames. Annotation plan next step fills.
 
-### Step 5: Produce Annotation Plan
+### Step 5: Annotation Plan
 
-Generate a structured plan documenting what was found and what needs manual annotation.
+Generate plan → what found + what needs manual.
 
 ```r
 # Generate annotation suggestions
@@ -170,7 +170,7 @@ put_generate("./src/", style = "multiline")
 put_generate("./src/", output = "clipboard")
 ```
 
-Document the plan with coverage assessment:
+Doc plan w/ coverage assessment:
 
 ```markdown
 ## Annotation Plan
@@ -191,29 +191,29 @@ Document the plan with coverage assessment:
 - transform.py output `clean.parquet` → load.R input (needs annotation)
 ```
 
-**Expected:** A clear plan separating auto-detected files from those needing manual annotation, with specific recommendations for each file.
+**→** Clear plan: auto-detected vs manual, specific recs per file.
 
-**On failure:** If `put_generate()` produces no output, ensure the directory path is correct and contains source files in supported languages.
+**If err:** `put_generate()` no out → verify path correct + has supported src files.
 
-## Validation
+## Check
 
-- [ ] `put_auto()` executes without errors on the target directory
-- [ ] Detected workflow has at least one node (unless repo has no recognizable I/O)
-- [ ] `put_diagram()` produces valid Mermaid code from the auto-detected workflow
-- [ ] `put_generate()` produces annotation suggestions for files with detected patterns
-- [ ] Annotation plan document created with coverage assessment
+- [ ] `put_auto()` no err on target
+- [ ] Detected workflow has ≥1 node (unless no recognizable I/O)
+- [ ] `put_diagram()` produces valid Mermaid
+- [ ] `put_generate()` produces suggestions for detected files
+- [ ] Annotation plan doc created w/ coverage assessment
 
-## Common Pitfalls
+## Traps
 
-- **Scanning too broadly**: Running `put_auto(".")` on a repo root may include `node_modules/`, `.git/`, `venv/`, etc. Target specific source directories.
-- **Expecting full coverage**: Auto-detection finds file I/O and library calls, not business logic. A 40-60% coverage rate is typical; the rest needs manual annotation.
-- **Ignoring dependencies**: The `detect_dependencies = TRUE` flag catches `source()`, `import`, `require()` calls that link scripts together. Disabling it loses cross-file connections.
-- **Language mismatch**: Files with non-standard extensions (e.g., `.R` vs `.r`, `.jsx` vs `.js`) may not be detected. Use `get_comment_prefix()` to check if an extension is recognized. Note that extensionless files like `Dockerfile` and `Makefile` are supported via exact filename matching.
-- **Large repos**: For repos with 100+ source files, analyze by module/directory to keep diagrams readable.
+- **Scan too broad**: `put_auto(".")` → includes `node_modules/`, `.git/`, `venv/`. Target specific src dirs.
+- **Expect full coverage**: Auto-detect finds I/O + lib calls, not business logic. 40-60% typical; rest manual.
+- **Ignore deps**: `detect_dependencies = TRUE` catches `source()`, `import`, `require()` → links scripts. Disable → lose cross-file connections.
+- **Lang mismatch**: Non-standard ext (`.R` vs `.r`, `.jsx` vs `.js`) may not detect. Use `get_comment_prefix()`. Extensionless `Dockerfile`, `Makefile` supported via filename match.
+- **Large repos**: 100+ src files → analyze by module/dir → diagrams readable.
 
-## Related Skills
+## →
 
-- `install-putior` — prerequisite: putior must be installed first
-- `annotate-source-files` — next step: add manual annotations based on the plan
-- `generate-workflow-diagram` — generate final diagram after annotation is complete
-- `configure-putior-mcp` — use MCP tools for interactive analysis sessions
+- `install-putior` — prereq
+- `annotate-source-files` — next: add manual
+- `generate-workflow-diagram` — final after annotation
+- `configure-putior-mcp` — MCP tools for interactive

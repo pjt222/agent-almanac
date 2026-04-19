@@ -23,39 +23,39 @@ metadata:
   tags: tensegrity, structural-integrity, prestress, biomechanics, cytoskeleton, force-balance
 ---
 
-# Analyze Tensegrity System
+# 析張拉
 
-Analyze a tensegrity (tensional integrity) system -- a structure where isolated compression elements (struts) are stabilized by a continuous tension network (cables/tendons). Determine the system's force balance, prestress equilibrium, structural stability, and cross-scale coherence from molecular cytoskeleton to architectural form.
+析張拉系——孤壓元（柱）以續張網（索）穩。定力衡、預應衡、構穩、跨尺一致由分子骨架至建。
 
-## When to Use
+## 用
 
-- Evaluating whether a structure exhibits true tensegrity (compression-tension separation) or is a conventional frame
-- Analyzing the structural stability of a tensegrity design in architecture, robotics, or deployable structures
-- Applying Donald Ingber's cellular tensegrity model to cytoskeletal mechanics (microtubules, actin, intermediate filaments)
-- Assessing the load capacity and failure modes of an existing tensegrity system
-- Determining whether a biological structure (cell, tissue, musculoskeletal system) can be modeled as tensegrity
-- Computing prestress requirements for a tensegrity to achieve rigidity despite having more mechanisms than a conventional truss
+- 評構真張拉（壓張分）或常框→用
+- 析建、機、伸構之張拉設穩→用
+- 施 Ingber 細胞張拉模於骨架機（微管、肌動、中纖）→用
+- 評既張拉之載與敗模→用
+- 判生構（細胞、組、肌骨）可張拉模否→用
+- 算張拉得剛之預應需（雖較常桁多機）→用
 
-## Inputs
+## 入
 
-- **Required**: Description of the system (physical structure, biological cell, architectural model, or robotic mechanism)
-- **Required**: Identification of candidate compression and tension elements
-- **Optional**: Material properties (Young's modulus, cross-section, length for each element)
-- **Optional**: External loads and boundary conditions
-- **Optional**: Scale of interest (molecular, cellular, tissue, architectural)
-- **Optional**: Known topology family (prism, octahedron, icosahedron, X-module)
+- **必**：系述（物構、生細胞、建模、機機）
+- **必**：候壓張元識
+- **可**：材性（楊氏模、截、各元長）
+- **可**：外載與界條
+- **可**：尺（分、細胞、組、建）
+- **可**：知拓族（柱、八面、二十面、X 模）
 
-## Procedure
+## 行
 
-### Step 1: Characterize the System
+### 一：定系
 
-Establish the complete physical description by identifying every compression element (strut) and tension element (cable), their connectivity, and the boundary conditions.
+定每壓元（柱）與張元（索）、其連、界條以立全物述。
 
-1. **Compression inventory**: List all struts -- rigid elements that resist compression. Record each strut's length, cross-section, material, and Young's modulus. In biological systems, identify microtubules (hollow cylinders, ~25 nm outer diameter, 14 nm inner diameter, E ~ 1.2 GPa, persistence length ~ 5 mm).
-2. **Tension inventory**: List all cables -- elements that resist tension only and go slack under compression. Record rest length, cross-sectional area, and tensile stiffness. In biological systems: actin filaments (helical, ~7 nm diameter, E ~ 2.6 GPa, persistence length ~ 17 um) and intermediate filaments (IFs, ~10 nm diameter, highly extensible, strain-stiffening).
-3. **Connectivity topology**: Document which struts connect to which cables at which nodes (joints). Construct the incidence matrix C (rows = members, columns = nodes) encoding the topology.
-4. **Boundary conditions**: Identify fixed nodes (grounded joints), free nodes, and external loads. Note gravitational loading direction and magnitude.
-5. **Scale identification**: Classify as molecular (nm), cellular (um), architectural (m), or robotic (cm-m).
+1. **壓錄**：列諸柱——抗壓剛元。錄各柱長、截、材、楊氏模。生系：識微管（中空筒，~25 nm 外徑，14 nm 內徑，E ~ 1.2 GPa，持久長 ~ 5 mm）。
+2. **張錄**：列諸索——唯抗張、壓下鬆。錄靜長、截面、張剛。生系：肌動（螺，~7 nm 徑，E ~ 2.6 GPa，持久長 ~ 17 um），中纖（IF，~10 nm 徑，極伸、應變硬）。
+3. **連拓**：文何柱接何索於何節。建關聯矩 C（行=元、列=節）。
+4. **界條**：識固節、自節、外載。錄重向與量。
+5. **尺定**：分（nm）、細胞（um）、建（m）、機（cm-m）。
 
 ```markdown
 ## System Characterization
@@ -68,20 +68,20 @@ Establish the complete physical description by identifying every compression ele
 - **Boundary conditions**: [description]
 ```
 
-**Expected:** A complete inventory of all compression and tension elements with material properties, an incidence matrix, and boundary conditions sufficient to set up the equilibrium equations.
+得：諸壓張元之全錄附材性、關聯矩、足以設衡方之界條。
 
-**On failure:** If element properties are unknown (common in biological systems), use published values: microtubules (E ~ 1.2 GPa, persistence length ~ 5 mm), actin (E ~ 2.6 GPa, persistence length ~ 17 um), intermediate filaments (highly nonlinear, strain-stiffening with low initial modulus ~1 MPa rising to ~1 GPa at high strain). If connectivity is unclear, reduce the system to the simplest topology that captures the essential force paths.
+敗：元性未知（生系常）→用出版值：微管（E ~ 1.2 GPa，持久長 ~ 5 mm）、肌動（E ~ 2.6 GPa，持久長 ~ 17 um）、中纖（高非線、應變硬，初模 ~1 MPa 升至高應變 ~1 GPa）。連不清→簡至最簡拓捕本力路。
 
-### Step 2: Classify the Tensegrity Type
+### 二：分張拉類
 
-Determine what class of tensegrity the system belongs to and whether it is biological or engineered.
+定系屬何張拉類及生或工。
 
-1. **Class determination**:
-   - **Class 1**: Struts do not touch each other -- all struts are isolated, connected only through the tension network. Most Fuller/Snelson structures are class 1.
-   - **Class 2**: Struts may contact at shared nodes. Many biological systems are class 2 (microtubules share centrosome attachment points).
-2. **Topology identification**: Count b = total members (struts + cables), j = nodes. Identify if the topology matches a known family: tensegrity prism (3-strut, 6-cable triangular antiprism), expanded octahedron (6-strut, 24-cable), icosahedral tensegrity (30-strut, 90-cable), or X-module (basic 2D unit cell).
-3. **Biological vs. engineered**: Biological tensegrity has specific features: compression elements are discrete and stiff (microtubules), tension network is continuous (actin cortex + IFs), prestress is generated actively (actomyosin contractility via ATP hydrolysis), and the system exhibits mechanotransduction (force-to-signal conversion). Document which features are present.
-4. **Dimension**: Classify as 2D (planar) or 3D.
+1. **類定**：
+   - **類 1**：柱不相觸——諸柱孤，唯經張網接。多 Fuller/Snelson 構為類 1
+   - **類 2**：柱可於共節觸。多生系為類 2（微管共中體附點）
+2. **拓識**：計 b = 總元（柱+索）、j = 節。識拓配知族否：張拉柱（3 柱、6 索三角反柱）、擴八面（6 柱、24 索）、二十面張拉（30 柱、90 索）、X 模（基 2D 單元）
+3. **生對工**：生張拉特：壓元離散剛（微管），張網續（肌動皮+IF），預應主動生（肌動肌球以 ATP 水解收），系示機械轉導（力轉信）。文何特存。
+4. **維**：分為 2D（平）或 3D。
 
 ```markdown
 ## Tensegrity Classification
@@ -102,19 +102,19 @@ Determine what class of tensegrity the system belongs to and whether it is biolo
 | Nucleus                 | Internal compression  | Lamina network forms sub-tensegrity           |
 ```
 
-**Expected:** A clear classification (class, dimension, category) with the biological mapping table completed for biological systems. For engineered systems, the topology family is identified.
+得：明分（類、維、種）附生表完於生系。工系：拓族識。
 
-**On failure:** If the system does not cleanly fit class 1 or class 2, it may be a hybrid or a conventional frame. A true tensegrity requires that at least some elements work only in tension (cables that go slack under compression). If no elements are tension-only, the system is not a tensegrity -- reclassify as a conventional truss or frame and apply standard structural analysis.
+敗：系不明合類 1 或 2→或混或常框。真張拉須至少有元唯張行（壓下鬆之索）。無唯張元→非張拉，重分為常桁或框施標構析。
 
-### Step 3: Analyze Force Balance and Prestress Equilibrium
+### 三：析力衡與預應衡
 
-Compute static equilibrium at every node, determine the state of prestress (internal tension/compression with no external load), and verify that all cables remain in tension.
+各節算靜衡、定預應態（無外載之內張壓）、驗諸索仍張。
 
-1. **Construct the equilibrium matrix**: For b members and j nodes in d dimensions, build the equilibrium matrix A (size dj x b). Each column encodes the direction cosines of a member's force contribution at its two end nodes. The equilibrium equation is A * t = f_ext, where t is the vector of member force densities (force/length) and f_ext is the external load vector.
-2. **Solve for self-stress**: With f_ext = 0, find the null space of A. Each basis vector of null(A) is a state of self-stress -- internal forces satisfying equilibrium without external load. The number of independent self-stress states is s = b - rank(A).
-3. **Verify cable tension**: In any valid tensegrity self-stress, all cables must have positive force density (tension) and all struts must have negative force density (compression). A self-stress that puts a cable in compression is not physically realizable (the cable would go slack).
-4. **Compute prestress level**: The actual prestress is a linear combination of self-stress basis vectors chosen so all cable tensions are positive. Record the minimum cable tension t_min (the margin before any cable goes slack).
-5. **Load capacity**: Add external loads and solve A * t = f_ext. The load at which the first cable tension reaches zero is the critical load F_crit.
+1. **建衡矩**：b 元 j 節 d 維，建衡矩 A（大 dj x b）。各列編元於兩端節之力貢方向餘弦。衡方 A * t = f_ext，t 為元力密向，f_ext 為外載向。
+2. **解自應**：f_ext = 0，求 A 之零空。null(A) 之各基向為一自應態——內力滿衡而無外載。獨自應態數 s = b - rank(A)。
+3. **驗索張**：任有效張拉自應，諸索須正力密（張）、諸柱須負（壓）。索壓之自應非物可實（索鬆）。
+4. **算預應位**：實預應乃自應基向之線合擇至諸索張正。錄最小索張 t_min（任索鬆前裕）。
+5. **載量**：加外載解 A * t = f_ext。首索張至零之載為臨載 F_crit。
 
 ```markdown
 ## Prestress Equilibrium
@@ -131,27 +131,27 @@ Compute static equilibrium at every node, determine the state of prestress (inte
 | C1     | cable | [positive]    | [value] | tension     |
 ```
 
-**Expected:** Self-stress states are computed, a physically realizable prestress (all cables in tension, all struts in compression) is found, and load capacity is estimated.
+得：自應態算、物可實預應（諸索張、諸柱壓）得、載量估。
 
-**On failure:** If no self-stress state keeps all cables in tension, the topology does not support a tensegrity prestress. Either (a) the incidence matrix has errors, (b) the system needs additional cables, or (c) it is a mechanism rather than a tensegrity. For large systems, use the force density method (Schek, 1974) or numerical null-space computation rather than hand calculation.
+敗：無自應態保諸索張→拓不支張拉預應。或（a）關聯矩誤、（b）系需加索、（c）為機非張拉。大系用力密法（Schek, 1974）或數零空算非手算。
 
-### Step 4: Check Stability Using Maxwell's Criterion
+### 四：以 Maxwell 準察穩
 
-Determine whether the tensegrity is rigid (stable against infinitesimal perturbations) or a mechanism (has zero-energy deformation modes).
+定張拉剛（對微擾穩）或機（有零能變模）。
 
-1. **Apply the extended Maxwell rule**: For a pin-jointed framework in d dimensions with b bars, j nodes, k kinematic constraints (supports), s self-stress states, and m infinitesimal mechanisms:
+1. **施擴 Maxwell 律**：d 維針節框，b 桿、j 節、k 運限（支）、s 自應態、m 微機：
 
    **b - dj + k + s = m**
 
-   This relates bars, joints, and constraints to the balance between self-stress and mechanism states.
+   此關桿節限於自應與機態之衡。
 
-2. **Compute from the equilibrium matrix**: rank(A) = b - s. The number of mechanisms is m = dj - k - rank(A). If m = 0, the structure is first-order rigid. If m > 0, prestress stability must be checked.
-3. **Prestress stability test**: For each mechanism mode q, compute the second-order energy E_2 = q^T * G * q, where G is the geometric stiffness matrix (stress matrix). If E_2 > 0 for all mechanism modes, the tensegrity is prestress-stable (Connelly and Whiteley, 1996). This is how tensegrity achieves rigidity -- not through bar count, but through prestress stabilization of mechanisms.
-4. **Classify rigidity**:
-   - **Kinematically determinate**: m = 0, s = 0 (rare for tensegrity)
-   - **Statically indeterminate and rigid**: m = 0, s > 0
-   - **Prestress-stable**: m > 0, but all mechanisms stabilized by prestress
-   - **Mechanism**: m > 0, not stabilized (structure can deform)
+2. **由衡矩算**：rank(A) = b - s。機數 m = dj - k - rank(A)。m = 0→構一階剛。m > 0→須察預應穩。
+3. **預應穩測**：各機模 q，算二階能 E_2 = q^T * G * q，G 為幾剛矩（應力矩）。若諸機模 E_2 > 0，張拉為預應穩（Connelly 與 Whiteley，1996）。此即張拉得剛——非由桿數，乃由預應穩機。
+4. **分剛**：
+   - **運定**：m = 0、s = 0（張拉罕）
+   - **靜不定且剛**：m = 0、s > 0
+   - **預應穩**：m > 0，諸機由預應穩
+   - **機**：m > 0、不穩（構可變）
 
 ```markdown
 ## Stability Analysis (Maxwell's Criterion)
@@ -167,18 +167,18 @@ Determine whether the tensegrity is rigid (stable against infinitesimal perturba
 - **Rigidity class**: [determinate / indeterminate / prestress-stable / mechanism]
 ```
 
-**Expected:** Maxwell count performed, mechanisms determined, and for m > 0, prestress stability evaluated. The structure is classified as rigid, prestress-stable, or mechanism.
+得：Maxwell 計行、機定，m > 0 評預應穩。構分為剛、預應穩、或機。
 
-**On failure:** If the structure is a mechanism (m > 0 and not prestress-stable), options: (a) add cables to increase b and reduce m, (b) increase prestress, (c) modify topology. In biological systems, active actomyosin contractility continuously adjusts prestress to maintain stability -- the cell is a self-tuning tensegrity.
+敗：構為機（m > 0 且非預應穩）→選：（a）增索以增 b 減 m，（b）增預應，（c）改拓。生系主動肌動肌球收續調預應以維穩——細胞為自調張拉。
 
-### Step 5: Map Biological Tensegrity (Cross-Scale Analysis)
+### 五：圖生張拉（跨尺析）
 
-If the system has a biological interpretation, map the analysis to Ingber's cellular tensegrity model and check cross-scale coherence. Skip this step for purely engineered systems.
+若系生釋，圖至 Ingber 細胞張拉模而察跨尺一致。純工系跳此。
 
-1. **Molecular scale (nm)**: Identify protein filaments as tensegrity elements. Microtubules (alpha/beta-tubulin heterodimers, GTP-dependent polymerization, dynamic instability with catastrophe/rescue). Actin (G-actin → F-actin polymerization, treadmilling). Intermediate filaments (type-dependent: vimentin, keratin, desmin, nuclear lamins).
-2. **Cellular scale (um)**: Map the whole-cell tensegrity. Actin cortex = continuous tension shell. Microtubules radiating from centrosome = compression struts bearing against cortex. IFs = secondary tension path connecting nucleus to focal adhesions. Actomyosin contractility (myosin II motor proteins) = active prestress generator.
-3. **Tissue scale (mm-cm)**: Cells form a higher-order tensegrity. Each cell acts as a compression-bearing element, connected by continuous ECM tension network (collagen, elastin). Cell-cell junctions (cadherins) and cell-ECM junctions (integrins) serve as nodes.
-4. **Cross-scale coherence**: Verify that perturbation at one scale propagates to others. External force at ECM transmits through integrins to cytoskeleton to nucleus -- this mechanotransduction pathway is the signature of cross-scale tensegrity.
+1. **分尺（nm）**：識蛋纖為張拉元。微管（α/β-tubulin 二體、GTP 賴聚、動不穩附災變/復）。肌動（G-actin → F-actin 聚、踏輪）。中纖（型賴：vimentin、keratin、desmin、核 lamin）。
+2. **細胞尺（um）**：圖全胞張拉。肌動皮=續張殼。微管自中體輻=壓柱抗皮。IF=次張路接核於焦點黏。肌動肌球收（肌球 II 馬達蛋）=主動預應源。
+3. **組尺（mm-cm）**：細胞成更高張拉。各細胞為承壓元，由續 ECM 張網接（膠原、彈白）。胞胞接（cadherin）、胞 ECM 接（integrin）為節。
+4. **跨尺一致**：驗一尺擾傳於他。ECM 外力經 integrin 傳骨架傳核——此機械轉導路為跨尺張拉之徵。
 
 ```markdown
 ## Cross-Scale Biological Tensegrity
@@ -193,23 +193,23 @@ If the system has a biological interpretation, map the analysis to Ingber's cell
 ECM --> integrin --> focal adhesion --> actin cortex --> IF --> nuclear lamina --> chromatin
 ```
 
-**Expected:** Biological tensegrity mapped at each relevant scale with compression, tension, prestress source, and nodes identified. Cross-scale force transmission documented.
+得：各相關尺生張拉圖附壓、張、預應源、節識。跨尺力傳文。
 
-**On failure:** If the cross-scale mapping breaks (no clear tension continuity between scales), document the gap. Not all biological structures are tensegrity at all scales. The spine is tensegrity at the musculoskeletal level (bones=struts, muscles/fascia=cables) but individual vertebrae are conventional compression structures internally.
+敗：跨尺圖斷（無尺間明張續）→文缺。非諸生構諸尺皆張拉。脊於肌骨階為張拉（骨=柱、肌膜=索）而個椎內為常壓構。
 
-### Step 6: Synthesize Analysis and Assess Structural Integrity
+### 六：合析評構整
 
-Combine all preceding analyses into a final assessment of the system's tensional integrity.
+合前析為系張拉整之末評。
 
-1. **Force balance summary**: State whether prestress equilibrium is achieved, the rigidity classification, and the load capacity margin.
-2. **Vulnerability analysis**: Identify the critical member -- the cable whose failure causes the greatest loss of integrity (highest force density relative to strength), and the strut whose buckling would cause collapse (check against Euler buckling: P_cr = pi^2 * EI / L^2).
-3. **Redundancy assessment**: How many cables can be removed before s drops to 0? How many before the system becomes an unstabilized mechanism?
-4. **Design recommendations** (engineered systems): Cable pretension levels, strut sizing, topology modifications for improved margins.
-5. **Biological implications** (biological systems): Relate to pathophysiology -- reduced microtubule stability (colchicine/taxol), disrupted IF networks (laminopathies), altered prestress (cancer cell mechanics with increased contractility).
-6. **Integrity rating**:
-   - **ROBUST**: s >= 2, all cables well above slack threshold, critical member failure does not cause collapse
-   - **MARGINAL**: s = 1 or minimum cable tension near zero under expected loads
-   - **FRAGILE**: s = 0, or critical member failure causes system collapse
+1. **力衡要**：述預應衡達否、剛分、載量裕。
+2. **脆析**：識關元——敗致最大整失之索（力密相對強最高）、屈致崩之柱（察 Euler 屈：P_cr = pi^2 * EI / L^2）。
+3. **冗評**：可去幾索而 s 降至 0？幾而系為不穩機？
+4. **設薦**（工系）：索預張位、柱大、改拓以增裕。
+5. **生意**（生系）：關於病——微管穩減（colchicine/taxol）、IF 網斷（laminopathy）、預應變（癌胞機械以增收）。
+6. **整評**：
+   - **強**：s >= 2，諸索遠於鬆閾，關元敗不致崩
+   - **邊**：s = 1 或預期載下最小索張近零
+   - **脆**：s = 0，或關元敗致系崩
 
 ```markdown
 ## Structural Integrity Assessment
@@ -226,38 +226,38 @@ Combine all preceding analyses into a final assessment of the system's tensional
 3. [specific recommendation]
 ```
 
-**Expected:** Complete structural integrity assessment with rigidity classification, vulnerability identification, redundancy analysis, and integrity rating (ROBUST/MARGINAL/FRAGILE) with actionable recommendations.
+得：完構整評附剛分、脆識、冗析、整評（強/邊/脆）附可行薦。
 
-**On failure:** If the analysis is incomplete (equilibrium matrix too large, biological parameters unknown), state the assessment as conditional: "MARGINAL pending numerical verification" or "classification requires experimental measurement of prestress level." Partial assessment with explicit gaps is more valuable than no assessment.
+敗：析不全（衡矩太大、生參未知）→評為條件：「邊待數驗」或「分待實量預應位」。明缺之部分評勝無評。
 
-## Validation
+## 驗
 
-- [ ] All compression elements (struts) and tension elements (cables) are inventoried with properties
-- [ ] Connectivity topology is documented (incidence matrix or equivalent)
-- [ ] Tensegrity class (1 or 2) is determined based on strut contact
-- [ ] Equilibrium matrix is constructed and rank computed
-- [ ] At least one self-stress state is found with all cables in tension
-- [ ] Maxwell's extended rule is applied: b - dj + k + s = m
-- [ ] Infinitesimal mechanisms (if any) are checked for prestress stability
-- [ ] Rigidity classification is assigned
-- [ ] For biological systems, cross-scale mapping table is completed
-- [ ] Structural integrity is rated ROBUST, MARGINAL, or FRAGILE with justification
+- [ ] 諸壓元（柱）與張元（索）皆錄附性
+- [ ] 連拓文（關聯矩或等）
+- [ ] 張拉類（1 或 2）由柱觸定
+- [ ] 衡矩建附 rank 算
+- [ ] 至少一自應態諸索皆張
+- [ ] Maxwell 擴律施：b - dj + k + s = m
+- [ ] 微機（若有）皆察預應穩
+- [ ] 剛分賦
+- [ ] 生系跨尺圖完
+- [ ] 構整評為強、邊、脆附由
 
-## Common Pitfalls
+## 忌
 
-- **Confusing tensegrity with conventional trusses**: A tensegrity requires that some elements work only in tension (they go slack under compression). If all elements can bear both tension and compression, it is a conventional frame, not a tensegrity. The one-way nature of cables creates the nonlinearity that requires prestress for stability.
-- **Ignoring prestress in stability analysis**: An unstressed tensegrity is always a mechanism -- cables at rest length provide no stiffness. Maxwell's count alone often yields m > 0 for tensegrity, suggesting instability. The prestress stability check (Step 4) is essential: prestress is what makes tensegrity rigid.
-- **Treating biological tensegrity as static**: Cellular tensegrity is actively maintained by ATP-dependent myosin II motors generating contractility on actin. The prestress is dynamic, not fixed. Static analysis captures the structural principle but misses active regulation. Always note whether prestress is passive (cable pretension) or active (motor-generated).
-- **Applying Maxwell's rule without accounting for cable slackening**: Maxwell's rule assumes all members are active. External loads causing cables to go slack reduce the effective b, changing the stability calculation. Track which cables remain taut under each load case.
-- **Conflating Snelson's sculptures with Ingber's cell model**: Snelson's artistic tensegrities use rigid metal struts and steel cables. Ingber's cellular tensegrity features viscoelastic elements, active regulation, and dynamic instability of compression elements (microtubule catastrophe). The structural principle is the same; the material behavior is fundamentally different.
-- **Neglecting strut buckling**: Tensegrity analysis treats struts as rigid. Slender struts can buckle (Euler: P_cr = pi^2 * EI / L^2). If compressive force approaches the buckling load, the rigid-strut assumption fails and actual load capacity is lower than predicted.
+- **混張拉於常桁**：張拉須有唯張元（壓下鬆）。諸元皆可承張壓→常框非張拉。索單向致需預應穩之非線
+- **穩析忽預應**：未應張拉恆為機——靜長索無剛。Maxwell 計常出 m > 0 示張拉不穩。預應穩察（步四）為要：預應乃張拉剛之由
+- **視生張拉為靜**：細胞張拉由 ATP 賴肌球 II 馬達於肌動生收主動維。預應動非固。靜析捕構律但失主調。恆錄預應為被動（索預張）或主動（馬達生）
+- **施 Maxwell 律忽索鬆**：Maxwell 律設諸元活。外載致索鬆減效 b，變穩算。各載例追何索仍緊
+- **混 Snelson 雕於 Ingber 胞模**：Snelson 藝張拉用剛金柱與鋼索。Ingber 細胞張拉特黏彈元、主動調、壓元動不穩（微管災變）。構律同；材行本異
+- **忽柱屈**：張拉析視柱為剛。細柱可屈（Euler：P_cr = pi^2 * EI / L^2）。壓力近屈載→剛柱設失，實載低於預
 
-## Related Skills
+## 參
 
-- `assess-form` -- structural inventory and transformation readiness; assess-form evaluates a system's form generically, while this skill applies the specific tensegrity framework of compression-tension decomposition
-- `adapt-architecture` -- architectural metamorphosis; tensegrity analysis identifies whether integrity depends on tension continuity, informing which elements can safely be modified during transformation
-- `repair-damage` -- regenerative recovery; in tensegrity, cable failure and strut failure have different consequences, and the critical member analysis (Step 6) directly informs repair priority
-- `center` -- dynamic reasoning balance; tensegrity's principle of stability through balanced tension (not rigid compression) is the structural metaphor underlying centering
-- `integrate-gestalt` -- tension-resonance mapping in gestalt integration mirrors compression-tension duality; both find coherence through productive interplay of opposing forces
-- `analyze-magnetic-levitation` -- sister analysis skill sharing the same rigor pattern (characterize, classify, verify stability); levitation achieves contactless force balance, tensegrity achieves contact-based force balance through tension continuity
-- `construct-geometric-figure` -- geometric construction of tensegrity node positions; the geometric figure provides the initial topology that tensegrity analysis then verifies for stability
+- `assess-form` —— 構錄與變備；assess-form 通評形，此技施張拉壓張分之具體框
+- `adapt-architecture` —— 構變；張拉析識整賴張續否、告變中何元可安改
+- `repair-damage` —— 復原；張拉中索敗與柱敗異果，關元析（步六）直告修序
+- `center` —— 動推衡；張拉之穩經衡張（非剛壓）律乃中之構喻
+- `integrate-gestalt` —— 形合中張和圖鏡壓張對；皆由對力產合而得一致
+- `analyze-magnetic-levitation` —— 共析嚴紋之姊技（定、分、驗穩）；浮達無觸力衡，張拉達觸基力衡經張續
+- `construct-geometric-figure` —— 張拉節位之幾構；幾形供初拓而後張拉析驗穩

@@ -24,60 +24,60 @@ metadata:
   tags: esoteric, attunement, empathy, communication, calibration, meta-cognition, ai-self-application
 ---
 
-# Attune
+# 調諧
 
-Calibrate to the person — reading communication style, expertise depth, emotional register, and implicit preferences from conversational evidence. Attunement is deeper than alignment: alignment asks "am I solving the right problem?" Attunement asks "am I meeting this person where they are?"
+調諧於人——從對話證據中讀取溝通風格、專業深度、情緒基調與隱含偏好。調諧深於對齊：對齊問「是否解對了問題」；調諧問「是否在其所在之處與之相會」。
 
-## When to Use
+## 適用時機
 
-- At the start of a new session — calibrate before the first substantive response
-- When communication feels mismatched — too formal, too casual, too detailed, too sparse
-- After receiving unexpected feedback — the mismatch reveals an attunement gap
-- When transitioning between very different contexts (e.g., technical debugging to creative brainstorming)
-- When MEMORY.md contains user preferences worth re-reading
-- When `heal`'s User-Intent Alignment check reveals surface alignment but deeper disconnection
+- 新會話之始——於首次實質回應之前先行校準
+- 溝通顯失匹配——過於正式、過於隨意、過於詳盡、過於簡略
+- 收到出乎意料的回饋之後——錯配即揭示調諧之缺
+- 在差異甚大的上下文之間切換（如由技術除錯轉入創意發想）
+- 當 MEMORY.md 記有值得重讀的用戶偏好
+- 當 `heal` 之用戶意圖對齊檢查顯示表面對齊而深層脫節
 
-## Inputs
+## 輸入
 
-- **Required**: Current conversation context (available implicitly)
-- **Optional**: MEMORY.md and project CLAUDE.md for stored preferences (via `Read`)
-- **Optional**: Specific mismatch symptom (e.g., "my explanations are too long for this user")
+- **必要**：當前對話上下文（隱式可用）
+- **選擇性**：MEMORY.md 與項目 CLAUDE.md 內所存之偏好（透過 `Read`）
+- **選擇性**：具體的錯配徵狀（如「對此用戶，我的解釋過長」）
 
-## Procedure
+## 步驟
 
-### Step 1: Receive — Gather Signals
+### 步驟一：承接——匯集信號
 
-Before adapting, observe. Attunement begins with reception, not analysis.
+調諧始於承接，非始於分析。先觀察，後適應。
 
-1. Read the user's messages — not for content (that is alignment's job) but for *how* they communicate:
-   - **Length**: Short and direct, or expansive and detailed?
-   - **Vocabulary**: Technical jargon, plain language, or mixed?
-   - **Tone**: Formal, casual, warm, efficient, playful?
-   - **Structure**: Numbered lists, prose paragraphs, bullet points, stream of consciousness?
-   - **Punctuation**: Precise punctuation, emoji, ellipses, exclamation marks?
-2. Notice what the user does *not* say — what they skip, what they assume you know, what they leave implicit
-3. If MEMORY.md or CLAUDE.md is available, check for stored preferences — they represent patterns stable enough to record
+1. 讀用戶訊息——非為內容（此乃對齊之責），而為其*如何*表達：
+   - **長度**：簡短直接，還是鋪陳詳盡？
+   - **詞彙**：技術術語、白話，抑或混合？
+   - **語調**：正式、隨意、溫和、高效、俏皮？
+   - **結構**：條列編號、散文段落、要點列舉、意識流？
+   - **標點**：嚴謹標點、表情符號、省略號、驚嘆號？
+2. 留意用戶*未說*之處——所略、所假定你已知、所留之隱含
+3. 若 MEMORY.md 或 CLAUDE.md 可用，查其既存偏好——彼為足夠穩定而值得記錄之模式
 
-**Expected:** A picture of how this person communicates — not a psychological profile, but a communication fingerprint. Enough to match their register.
+**預期：** 對此人溝通方式之一幅圖像——非心理側寫，而是溝通指紋，足以配其基調。
 
-**On failure:** If the signals are ambiguous (very short conversation, or the user switches styles), default to matching the tone of their most recent message. Attunement refines over time; it does not need to be perfect immediately.
+**失敗時：** 信號曖昧（對話極短，或風格變動）時，以最新訊息之語調為基準。調諧隨時修煉，無須一蹴可幾。
 
-### Step 2: Read — Assess Expertise and Context
+### 步驟二：辨讀——評估專業與背景
 
-Determine what this person knows so you can meet them at their level.
+判知此人所知，方能於其所在相會。
 
-1. **Domain expertise**: What does the user know about the topic at hand?
-   - Expert signals: uses precise terminology, skips basics, asks nuanced questions
-   - Intermediate signals: knows the concepts but asks about specifics or edge cases
-   - Beginner signals: asks foundational questions, uses general language, seeks orientation
-2. **Tool familiarity**: How comfortable is the user with the tools in play?
-   - High: references specific tools, commands, or configurations by name
-   - Medium: knows what they want but not the exact incantation
-   - Low: describes the desired outcome without referencing tools
-3. **Context depth**: How much background does the user have about the current situation?
-   - Deep: has been working on this for a while, carries implicit context
-   - Moderate: understands the project but not the specific issue
-   - Fresh: coming to this without prior context
+1. **領域專業**：用戶對所論主題知之幾何？
+   - 專家信號：術語精準、略過基礎、發問細緻
+   - 中階信號：熟知概念，但問具體或邊緣案例
+   - 新手信號：問基礎、用通俗語、尋方向感
+2. **工具熟稔度**：用戶對相關工具駕馭如何？
+   - 高：指名具體工具、指令、配置
+   - 中：知所欲為，惟不諳精確咒語
+   - 低：述其所求結果，未及工具
+3. **上下文深度**：用戶對當前情境之背景有多少？
+   - 深：已耕耘良久，攜帶隱含脈絡
+   - 中：知項目而不知具體議題
+   - 淺：無先備背景而至
 
 ```
 Attunement Matrix:
@@ -107,58 +107,58 @@ Attunement Matrix:
 └──────────────┴──────────────────────────────────────────────────┘
 ```
 
-**Expected:** A clear sense of the user's expertise level and preferred communication style, grounded in evidence from the conversation — not assumed from demographics or stereotypes.
+**預期：** 對用戶專業層級與偏好風格之清晰判斷，立足於對話證據，而非出自人口特徵或刻板印象。
 
-**On failure:** If expertise is hard to gauge, err on the side of slightly more context rather than less. Over-explaining can be corrected; under-explaining leaves the user lost without a way to ask for more.
+**失敗時：** 專業難以測度時，寧可稍多背景而勿過少。過度解釋可事後修正；解釋不足則令人迷失而無從追問。
 
-### Step 3: Resonate — Match the Frequency
+### 步驟三：共振——對其頻率
 
-Adapt your communication to match the person. This is not mimicry — it is resonance. You do not become them; you meet them.
+以溝通對應其人。非模仿，乃共振。不化為其人，而與其相會。
 
-1. **Match length**: If they write two sentences, your response should not be two paragraphs (unless the content genuinely requires it)
-2. **Match vocabulary**: Use the terms they use. If they say "function," do not say "method" unless the distinction matters
-3. **Match structure**: If they use bullet points, respond with structure. If they write prose, respond in prose
-4. **Match energy**: If they are excited about the task, bring engagement. If they are frustrated, bring calm competence. If they are exploratory, explore with them
-5. **Do not over-match**: Matching does not mean flattening yourself. If the user is wrong about something, attunement does not mean agreeing — it means communicating the correction in their register
+1. **匹配長度**：其寫兩句，你勿回兩段（除非內容實有所需）
+2. **匹配詞彙**：用其所用之詞。其言「function」則勿改稱「method」，除非區別確有必要
+3. **匹配結構**：其用要點，你亦結構回應；其作散文，你亦以散文回
+4. **匹配能量**：其興奮則帶投入；其挫折則以沉穩應之；其探索則與之同行
+5. **勿過度匹配**：匹配非自我抹平。用戶若有錯處，調諧非同意，而是以其基調傳達更正
 
-**Expected:** A noticeable shift in communication quality. The user feels heard and met, not lectured at or pandered to. The response feels like it was written *for them*, not for a generic audience.
+**預期：** 溝通品質可察之變。用戶覺被聽見、被相會，非受說教或諂媚。回應如為其而寫，非泛泛之論。
 
-**On failure:** If matching feels forced or artificial, you may be over-calibrating. The goal is natural resonance, not precise imitation. Let it be approximate. Attunement is a direction, not a destination.
+**失敗時：** 匹配顯勉強或做作，或為過度校準。目標是自然共振，非精確模仿。允其大概即可。調諧是方向，非終點。
 
-### Step 4: Sustain — Carry Attunement Forward
+### 步驟四：持守——延續調諧
 
-Attunement is not a one-time calibration — it is an ongoing practice.
+調諧非一次校準，乃持續之修煉。
 
-1. After each user message, briefly check: has the register shifted? People adjust their communication as conversations progress
-2. Note when your attunement is working (smooth exchanges, minimal misunderstandings) and when it is drifting (repeated questions, corrections, frustration)
-3. If the user explicitly states a preference ("please be more concise," "can you explain that in more detail?"), treat it as a strong signal — it overrides your inference
-4. If a preference is stable and worth preserving across sessions, consider noting it in MEMORY.md
+1. 用戶每則訊息後略作檢查：基調是否已移？人隨對話推進而調整其表達
+2. 留意調諧何時有效（交流順暢、誤解極少）、何時偏移（重複提問、反覆更正、流露挫折）
+3. 若用戶明言偏好（「請簡短些」、「可否再詳解」），視為強信號——其優先於你之推測
+4. 若偏好穩定、值得跨會話保留，可記於 MEMORY.md
 
-**Expected:** Sustained quality of communication throughout the session, with natural micro-adjustments as the conversation evolves.
+**預期：** 整場會話溝通品質持穩，隨對話推演自然微調。
 
-**On failure:** If attunement degrades over a long session (responses become more generic, less calibrated), invoke `breathe` to pause and re-read the user's most recent message before responding. Mid-session re-attunement is lighter than a full attune cycle.
+**失敗時：** 長時會話中調諧退化（回應愈趨泛化、失去校準）時，調用 `breathe` 暫停，重讀用戶最新訊息再回。會話中段之再調諧，較完整一輪為輕。
 
-## Validation
+## 驗證
 
-- [ ] Communication signals were gathered from actual conversational evidence, not assumed
-- [ ] Expertise level was assessed with specific evidence (terminology used, questions asked)
-- [ ] Response style adapted to match the user's register (length, vocabulary, tone, structure)
-- [ ] The adaptation feels natural, not forced or imitative
-- [ ] Explicit user preferences were respected when stated
-- [ ] Attunement improved communication quality (fewer misunderstandings, smoother flow)
+- [ ] 溝通信號取自真實對話證據，非為臆測
+- [ ] 專業層級以具體證據評估（所用術語、所提問題）
+- [ ] 回應風格配其基調（長度、詞彙、語調、結構）
+- [ ] 調整自然，無勉強或模仿之感
+- [ ] 用戶明言之偏好獲得尊重
+- [ ] 調諧改善了溝通品質（誤解減少、流動更順）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Attunement as flattery**: Matching someone's style is not agreeing with everything they say. Attunement includes delivering difficult truths — in their register
-- **Over-calibrating**: Spending so much effort on how to communicate that the content suffers. Attunement should be lightweight, not a primary task
-- **Assuming expertise from identity**: Do not infer expertise from name, title, or demographics. Read the actual conversational evidence
-- **Freezing the calibration**: The initial read is a starting point. People shift. Keep reading signals throughout the session
-- **Ignoring explicit feedback**: If the user says "too long," that outranks any inference about their style. Explicit beats implicit
+- **將調諧視為奉承**：配其風格非全然附和所言。調諧亦含以其基調傳達難言之真
+- **過度校準**：耗神於如何說，而致內容受損。調諧宜輕，非主務
+- **由身分推斷專業**：勿以姓名、職稱、人口特徵推論專業。讀真實對話證據
+- **凝固校準**：初讀只是起點。人會變動。通場持續讀信號
+- **忽視明確回饋**：用戶若言「過長」，其優先於任何風格推論。明言勝於暗示
 
-## Related Skills
+## 相關技能
 
-- `listen` — deep receptive attention to extract intent; attune focuses on *how* they communicate while listen focuses on *what* they mean
-- `heal` — the User-Intent Alignment check; attune goes deeper into relational quality
-- `observe` — sustained neutral observation; attune applies observation specifically to the person
-- `shine` — radiant authenticity; attunement without authenticity becomes mimicry
-- `breathe` — micro-reset that enables mid-session re-attunement
+- `listen` — 深度承接注意以擷取意圖；調諧重於其*如何*表達，聆聽重於其*所欲表達*
+- `heal` — 用戶意圖對齊檢查；調諧更深入關係品質
+- `observe` — 持續中性觀察；調諧將觀察專用於人
+- `shine` — 光明本真；失卻本真之調諧淪為模仿
+- `breathe` — 微重置，使會話中段再調諧成為可能

@@ -25,29 +25,29 @@ metadata:
   tags: putior, workflow, analysis, auto-detect, polyglot, data-pipeline
 ---
 
-# Analyze Codebase Workflow
+# 析碼庫工作流
 
-Survey an arbitrary repository to auto-detect data flows, file I/O, and script dependencies, then produce a structured annotation plan for manual refinement.
+調查任一倉庫以自動偵測資料流、檔案 I/O 與腳本依賴，並產出結構化標註計畫供人工精修。
 
-## When to Use
+## 適用時機
 
-- Onboarding onto an unfamiliar codebase and need to understand data flow
-- Starting putior integration in a project that has no PUT annotations yet
-- Auditing an existing project's data pipeline before documentation
-- Preparing an annotation plan before running `annotate-source-files`
+- 初涉陌生碼庫，須解資料流
+- 於尚無 PUT 標註之專案啟動 putior 整合
+- 文件化前審計既有專案之資料管線
+- 於行 `annotate-source-files` 前備標註計畫
 
-## Inputs
+## 輸入
 
-- **Required**: Path to the repository or source directory to analyze
-- **Optional**: Specific subdirectories to focus on (default: entire repo)
-- **Optional**: Languages to include or exclude (default: all detected)
-- **Optional**: Detection scope: inputs only, outputs only, or both (default: both + dependencies)
+- **必要**：欲分析之倉庫或源目錄之路徑
+- **選擇性**：欲聚焦之特定子目錄（預設：整倉庫）
+- **選擇性**：欲納入或排除之語言（預設：一切已偵測者）
+- **選擇性**：偵測範圍：僅輸入、僅輸出、或二者（預設：二者 + 依賴）
 
-## Procedure
+## 步驟
 
-### Step 1: Survey Repository Structure
+### 步驟一：調查倉庫結構
 
-Identify source files and their languages to understand what putior can analyze.
+辨源檔及其語言以解 putior 可析者。
 
 ```r
 library(putior)
@@ -60,20 +60,20 @@ list_supported_languages(detection_only = TRUE)  # Only languages with auto-dete
 exts <- get_supported_extensions()
 ```
 
-Use file listing to understand repo composition:
+以列檔解倉庫構成：
 
 ```bash
 # Count files by extension in the target directory
 find /path/to/repo -type f | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -20
 ```
 
-**Expected:** A list of file extensions present in the repo, with counts. Map these against `get_supported_extensions()` to know coverage.
+**預期：** 倉庫所現副檔名清單，附計數。將此對 `get_supported_extensions()` 比，以知覆蓋。
 
-**On failure:** If the repo has no files matching supported extensions, putior cannot auto-detect workflows. Consider whether the language is supported but files use non-standard extensions.
+**失敗時：** 若倉庫無檔合於支援之副檔名，putior 不能自動偵測工作流。考量語言雖支援然檔用非標準副檔名。
 
-### Step 2: Check Language Detection Coverage
+### 步驟二：查語言偵測之覆蓋
 
-For each detected language, verify auto-detection pattern availability.
+對每偵測之語言，驗自動偵測模式之可用性。
 
 ```r
 # Check which languages have auto-detection patterns (18 languages, 902 patterns)
@@ -93,13 +93,13 @@ for (lang in c("r", "python", "javascript", "sql", "dockerfile", "makefile")) {
 }
 ```
 
-**Expected:** Pattern counts printed for each language. R has 124 patterns, Python 159, JavaScript 71, etc.
+**預期：** 各語言之模式計數已印。R 有 124 模式，Python 159，JavaScript 71 等。
 
-**On failure:** If a language returns no patterns, it supports manual annotations but not auto-detection. Plan to annotate those files manually.
+**失敗時：** 若語言回無模式，則支援人工標註而非自動偵測。計畫人工標註該等檔。
 
-### Step 3: Run Auto-Detection
+### 步驟三：執行自動偵測
 
-Execute `put_auto()` on the target directory to discover workflow elements.
+於目標目錄行 `put_auto()` 以發現工作流元素。
 
 ```r
 # Full auto-detection
@@ -124,7 +124,7 @@ print(workflow)
 cat(sprintf("Detected %d workflow nodes\n", nrow(workflow)))
 ```
 
-For large repos, analyze subdirectories incrementally:
+對大型倉庫，逐次分析子目錄：
 
 ```r
 # Analyze specific subdirectories
@@ -132,13 +132,13 @@ etl_workflow <- put_auto("./src/etl/")
 api_workflow <- put_auto("./src/api/")
 ```
 
-**Expected:** A data frame with columns including `id`, `label`, `input`, `output`, `source_file`. Each row represents a detected workflow step.
+**預期：** data frame 含 `id`、`label`、`input`、`output`、`source_file` 等欄。每行表一偵測之工作流步驟。
 
-**On failure:** If the result is empty, the source files may not contain recognizable I/O patterns. Try enabling debug logging: `workflow <- put_auto("./src/", log_level = "DEBUG")` to see which files are scanned and which patterns match.
+**失敗時：** 若結果為空，源檔或不含可識之 I/O 模式。試啟除錯記錄：`workflow <- put_auto("./src/", log_level = "DEBUG")`，以見何檔被掃、何模式相符。
 
-### Step 4: Generate Initial Diagram
+### 步驟四：生初圖
 
-Visualize the auto-detected workflow to assess coverage and identify gaps.
+視覺化自動偵測之工作流以評覆蓋並辨缺。
 
 ```r
 # Generate diagram from auto-detected workflow
@@ -151,13 +151,13 @@ cat(put_diagram(workflow, show_source_info = TRUE))
 writeLines(put_diagram(workflow, theme = "github"), "workflow-auto.md")
 ```
 
-**Expected:** A Mermaid flowchart showing detected nodes connected by data flow edges. Nodes should be labeled with meaningful function/file names.
+**預期：** Mermaid 流程圖呈現偵測之節點，以資料流邊相連。節點應以有意義之函式／檔案名標。
 
-**On failure:** If the diagram shows disconnected nodes, the auto-detection found I/O patterns but couldn't infer connections. This is normal — connections are derived from matching output filenames to input filenames. The annotation plan (next step) will address gaps.
+**失敗時：** 若圖呈分離節點，自動偵測尋得 I/O 模式然不能推連結。此為常——連結由比對輸出檔名與輸入檔名而得。標註計畫（下一步）將彌缺。
 
-### Step 5: Produce Annotation Plan
+### 步驟五：產標註計畫
 
-Generate a structured plan documenting what was found and what needs manual annotation.
+生結構化計畫，記所尋得者與所需人工標註者。
 
 ```r
 # Generate annotation suggestions
@@ -170,7 +170,7 @@ put_generate("./src/", style = "multiline")
 put_generate("./src/", output = "clipboard")
 ```
 
-Document the plan with coverage assessment:
+附覆蓋評估之計畫文件：
 
 ```markdown
 ## Annotation Plan
@@ -191,29 +191,29 @@ Document the plan with coverage assessment:
 - transform.py output `clean.parquet` → load.R input (needs annotation)
 ```
 
-**Expected:** A clear plan separating auto-detected files from those needing manual annotation, with specific recommendations for each file.
+**預期：** 清晰之計畫，分自動偵測之檔與需人工標註者，附各檔具體建議。
 
-**On failure:** If `put_generate()` produces no output, ensure the directory path is correct and contains source files in supported languages.
+**失敗時：** 若 `put_generate()` 無輸出，確保目錄路徑正確且含支援語言之源檔。
 
-## Validation
+## 驗證
 
-- [ ] `put_auto()` executes without errors on the target directory
-- [ ] Detected workflow has at least one node (unless repo has no recognizable I/O)
-- [ ] `put_diagram()` produces valid Mermaid code from the auto-detected workflow
-- [ ] `put_generate()` produces annotation suggestions for files with detected patterns
-- [ ] Annotation plan document created with coverage assessment
+- [ ] `put_auto()` 於目標目錄執行而無誤
+- [ ] 偵測之工作流至少一節點（除非倉庫無可識之 I/O）
+- [ ] `put_diagram()` 自自動偵測之工作流產有效 Mermaid 碼
+- [ ] `put_generate()` 為偵測模式之檔產標註建議
+- [ ] 標註計畫文件已建，附覆蓋評估
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Scanning too broadly**: Running `put_auto(".")` on a repo root may include `node_modules/`, `.git/`, `venv/`, etc. Target specific source directories.
-- **Expecting full coverage**: Auto-detection finds file I/O and library calls, not business logic. A 40-60% coverage rate is typical; the rest needs manual annotation.
-- **Ignoring dependencies**: The `detect_dependencies = TRUE` flag catches `source()`, `import`, `require()` calls that link scripts together. Disabling it loses cross-file connections.
-- **Language mismatch**: Files with non-standard extensions (e.g., `.R` vs `.r`, `.jsx` vs `.js`) may not be detected. Use `get_comment_prefix()` to check if an extension is recognized. Note that extensionless files like `Dockerfile` and `Makefile` are supported via exact filename matching.
-- **Large repos**: For repos with 100+ source files, analyze by module/directory to keep diagrams readable.
+- **掃過廣**：於倉庫根行 `put_auto(".")` 恐含 `node_modules/`、`.git/`、`venv/` 等。鎖定特定源目錄
+- **期全覆蓋**：自動偵測尋得檔案 I/O 與函式庫呼叫，非業務邏輯。40-60% 覆蓋為常；其餘需人工標註
+- **忽依賴**：`detect_dependencies = TRUE` 旗標捕 `source()`、`import`、`require()` 呼叫以連腳本。停之則失跨檔連結
+- **語言不符**：副檔名非標準之檔（如 `.R` vs `.r`、`.jsx` vs `.js`）恐不被偵測。用 `get_comment_prefix()` 查副檔名是否識。注：無副檔名之檔如 `Dockerfile`、`Makefile` 透過精確檔名比對而支援
+- **大型倉庫**：對 100+ 源檔之倉庫，按模組／目錄分析以保圖可讀
 
-## Related Skills
+## 相關技能
 
-- `install-putior` — prerequisite: putior must be installed first
-- `annotate-source-files` — next step: add manual annotations based on the plan
-- `generate-workflow-diagram` — generate final diagram after annotation is complete
-- `configure-putior-mcp` — use MCP tools for interactive analysis sessions
+- `install-putior` — 先決：putior 須先安裝
+- `annotate-source-files` — 下步：依計畫加人工標註
+- `generate-workflow-diagram` — 標註完後生最終圖
+- `configure-putior-mcp` — 用 MCP 工具行互動分析會話

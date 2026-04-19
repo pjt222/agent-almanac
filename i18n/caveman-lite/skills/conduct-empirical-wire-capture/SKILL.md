@@ -80,9 +80,9 @@ Common channels, cheapest first:
 
 Pick the cheapest channel that captures the target. A 3-target capture that answers one specific question beats a 20-target capture that answers none.
 
-**Expected:** an observability table with one row per question, each annotated with channel and known blockers. Targets without a viable channel are flagged "out of scope this session."
+**Got:** an observability table with one row per question, each annotated with channel and known blockers. Targets without a viable channel are flagged "out of scope this session."
 
-**On failure:** if every target lands in the proxy column, the table is too ambitious. Trim to the one or two highest-value questions and revisit lower-cost channels for them.
+**If fail:** if every target lands in the proxy column, the table is too ambitious. Trim to the one or two highest-value questions and revisit lower-cost channels for them.
 
 ### Step 2: Prepare a Disposable Workspace
 
@@ -97,9 +97,9 @@ git check-ignore captures/ || echo "WARNING: captures/ not git-ignored"
 
 Confirm the capture session is not your primary working session — verbose-fetch and TUI rendering interfere with each other.
 
-**Expected:** a timestamped capture directory, git-ignored, separate from your working session.
+**Got:** a timestamped capture directory, git-ignored, separate from your working session.
 
-**On failure:** if `git check-ignore` reports the directory as not ignored, fix `.gitignore` before running any capture command. Do not proceed with credentials at risk.
+**If fail:** if `git check-ignore` reports the directory as not ignored, fix `.gitignore` before running any capture command. Do not proceed with credentials at risk.
 
 ### Step 3: Hook-Driven Capture for Per-Event Targets
 
@@ -125,9 +125,9 @@ Why subprocess-per-event:
 - Failure of one capture does not contaminate the next.
 - Subprocess overhead is acceptable because events are rare (per-user-action, not per-byte).
 
-**Expected:** one JSONL line per fired event in `events.jsonl`, each well-formed JSON parseable with `jq`.
+**Got:** one JSONL line per fired event in `events.jsonl`, each well-formed JSON parseable with `jq`.
 
-**On failure:** if `jq` reports parse errors, the payload contains unescaped control chars or binary data — pipe through `jq -R` (raw input) and base64-encode the payload field instead.
+**If fail:** if `jq` reports parse errors, the payload contains unescaped control chars or binary data — pipe through `jq -R` (raw input) and base64-encode the payload field instead.
 
 ### Step 4: Long-Running Session Capture for Sequential State
 
@@ -146,9 +146,9 @@ The wallclock prefix makes ordering unambiguous when multiple captures run concu
 
 Convert TSV to JSONL after the session ends (Step 5), not during.
 
-**Expected:** a TSV log with monotonically increasing timestamps, one stderr line per row.
+**Got:** a TSV log with monotonically increasing timestamps, one stderr line per row.
 
-**On failure:** if timestamps go backwards, the harness is buffering stderr — re-run with `stdbuf -oL -eL` or the bundler's equivalent line-buffer flag.
+**If fail:** if timestamps go backwards, the harness is buffering stderr — re-run with `stdbuf -oL -eL` or the bundler's equivalent line-buffer flag.
 
 ### Step 5: Normalize to JSONL
 
@@ -180,9 +180,9 @@ jq -c 'select(.payload | tostring | test("/api/v1/example"))' session.jsonl
 jq -r '.timestamp' session.jsonl | sort | uniq -c
 ```
 
-**Expected:** every line of `*.jsonl` parses with `jq -e .`; no `BAD LINE` warnings.
+**Got:** every line of `*.jsonl` parses with `jq -e .`; no `BAD LINE` warnings.
 
-**On failure:** if some lines fail validation, the source TSV had embedded tabs in the payload — re-run Step 4 with a different delimiter or base64-encode the second field.
+**If fail:** if some lines fail validation, the source TSV had embedded tabs in the payload — re-run Step 4 with a different delimiter or base64-encode the second field.
 
 ### Step 6: Redact at Capture Time
 
@@ -213,9 +213,9 @@ grep -Ei 'bearer [A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}' capt
 
 The `captured-then-redacted` artifact always leaks something. The only safe pattern is `redacted-as-captured`. If you discover an unredacted token in a finalized artifact, treat the entire capture as compromised — delete it, rotate the credential, and re-run.
 
-**Expected:** the `LEAK DETECTED` check exits 0 (no matches). `grep` for known credential prefixes returns nothing.
+**Got:** the `LEAK DETECTED` check exits 0 (no matches). `grep` for known credential prefixes returns nothing.
 
-**On failure:** if the leak check finds a hit, do not edit the file in place. Delete the entire capture directory, extend the redactor regex to cover the leaked pattern category, and re-run from Step 3 or 4.
+**If fail:** if the leak check finds a hit, do not edit the file in place. Delete the entire capture directory, extend the redactor regex to cover the leaked pattern category, and re-run from Step 3 or 4.
 
 ### Step 7: Classify Response Categories Before Recording
 
@@ -245,9 +245,9 @@ jq -c '. + {class: (
 
 A 401 on a token-refresh channel is not a failure — it is the first half of a handshake. Misclassifying handshake steps as failures produces false-positive findings that waste reviewer attention.
 
-**Expected:** every line in `*.classified.jsonl` has a `class` field with a known value.
+**Got:** every line in `*.classified.jsonl` has a `class` field with a known value.
 
-**On failure:** if classification produces many `other` entries, the table above is incomplete for this harness — extend it with one row per recurring `other` pattern before continuing analysis.
+**If fail:** if classification produces many `other` entries, the table above is incomplete for this harness — extend it with one row per recurring `other` pattern before continuing analysis.
 
 ### Step 8: Persist the Capture Manifest
 
@@ -269,9 +269,9 @@ EOF
 
 The manifest is what makes the capture diff-able against future versions.
 
-**Expected:** `capture-manifest.json` exists, parses with `jq`, and lists every artifact file in the capture directory.
+**Got:** `capture-manifest.json` exists, parses with `jq`, and lists every artifact file in the capture directory.
 
-**On failure:** if the harness has no version flag, record the binary's `sha256sum` instead. An unidentified binary produces uncomparable captures.
+**If fail:** if the harness has no version flag, record the binary's `sha256sum` instead. An unidentified binary produces uncomparable captures.
 
 ## Validation
 
@@ -283,7 +283,7 @@ The manifest is what makes the capture diff-able against future versions.
 - [ ] `capture-manifest.json` records the harness version (or sha256), channel, and question
 - [ ] The capture directory contains only the targets enumerated in Step 1 (no incidental traffic from other apps)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Capture-first, question-later**: a log nobody reads is wasted disk and wasted attention. Build the observability table first; capture only what answers a specific question.
 - **Reaching for `mitmproxy` first**: outbound proxy is the most invasive channel. It requires cert trust, breaks on certificate pinning, and pollutes the harness's environment. Use it only when on-disk, transcript, verbose-fetch, and hook channels are all blocked.

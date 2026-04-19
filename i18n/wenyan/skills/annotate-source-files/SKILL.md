@@ -25,29 +25,29 @@ metadata:
   tags: putior, annotation, workflow, comment-syntax, polyglot, documentation
 ---
 
-# Annotate Source Files
+# 注源檔
 
-Add PUT workflow annotations to source files so putior can extract structured workflow data and generate Mermaid diagrams.
+添 PUT 工作流注於源檔，使 putior 可取結構化工作流數而生 Mermaid 圖。
 
-## When to Use
+## 用時
 
-- After analyzing a codebase with `analyze-codebase-workflow` and having an annotation plan
-- Adding workflow documentation to new or existing source files
-- Enriching auto-detected workflows with manual labels and connections
-- Documenting data pipelines, ETL processes, or multi-step computations
+- 以 `analyze-codebase-workflow` 析畢且有注計後乃用
+- 添工作流文於新或既源檔乃用
+- 以手標與連豐自察工作流乃用
+- 書數管、ETL、多步計算乃用
 
-## Inputs
+## 入
 
-- **Required**: Source files to annotate
-- **Required**: Annotation plan or knowledge of the workflow steps
-- **Optional**: Style preference: single-line or multiline (default: single-line)
-- **Optional**: Whether to use `put_generate()` for skeleton generation (default: yes)
+- **必要**：待注之源檔
+- **必要**：注計或工作流諸步之知
+- **可選**：風格：單行或多行（默：單行）
+- **可選**：用 `put_generate()` 生骨乎（默：是）
 
-## Procedure
+## 法
 
-### Step 1: Determine Comment Prefix
+### 第一步：定注之前綴
 
-Each language has a specific comment prefix for PUT annotations. Use `get_comment_prefix()` to find the correct one.
+各語有特注前綴。以 `get_comment_prefix()` 得之。
 
 ```r
 library(putior)
@@ -64,15 +64,15 @@ get_comment_prefix("m")    # "%"
 get_comment_prefix("lua")  # "--"
 ```
 
-**Expected:** A string like `"#"`, `"--"`, `"//"`, or `"%"`.
+**得：** 一串如 `"#"`、`"--"`、`"//"`、或 `"%"`。
 
-> **Line and block comments:** putior detects annotations in both line comments (`//`, `#`, `--`) and C-style block comments (`/* */`, `/** */`). For JS/TS, both `//` and `/* */` blocks are scanned. Python triple-quote strings (`''' '''`) are **not** detected — use `#` for Python annotations.
+> **行注與塊注**：putior 察行注（`//`、`#`、`--`）及 C 式塊注（`/* */`、`/** */`）中之注。JS/TS 行注與塊注皆掃。Python 三引號串（`''' '''`）*不*察——Python 注用 `#`。
 
-**On failure:** If the extension is not recognized, the file language may not be supported. Check `get_supported_extensions()` for the full list. For unsupported languages, use `#` as a conventional default.
+**敗則：** 若擴未識，檔語或不支。以 `get_supported_extensions()` 察全列。不支之語用 `#` 為約默。
 
-### Step 2: Generate Annotation Skeletons
+### 第二步：生注骨
 
-Use `put_generate()` to create annotation templates based on auto-detected I/O.
+用 `put_generate()` 以自察 I/O 建注樣。
 
 ```r
 # Print suggestions to console
@@ -88,51 +88,51 @@ put_generate("./src/etl/", style = "multiline")
 put_generate("./src/etl/", output = "clipboard")
 ```
 
-Example output for an R file:
+R 檔之例：
 ```r
 # put id:'extract_data', label:'Extract Customer Data', input:'customers.csv', output:'raw_data.internal'
 ```
 
-Example output for SQL:
+SQL 之例：
 ```sql
 -- put id:'load_data', label:'Load Customer Table', output:'customers'
 ```
 
-**Expected:** One or more annotation comment lines per source file, pre-filled with detected function names and I/O.
+**得：** 每源檔一或多注行，預填察函名與 I/O。
 
-**On failure:** If no suggestions are generated, the file may not contain recognizable I/O patterns. Write annotations manually based on your understanding of the code.
+**敗則：** 若無薦生，檔或無可識 I/O 式。依碼解手書注。
 
-### Step 3: Refine Annotations
+### 第三步：精注
 
-Edit the generated skeletons to add accurate labels, connections, and metadata.
+編骨以添正標、連、元。
 
-**Annotation syntax reference:**
+**注語法參：**
 
 ```
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 
-Fields:
-- `id` (required): Unique identifier, used for node connections
-- `label` (required): Human-readable description shown in diagram
-- `input`: Comma-separated list of input files or variables
-- `output`: Comma-separated list of output files or variables
-- `.internal` extension: Marks in-memory variables (not persisted between scripts)
-- `node_type`: Controls Mermaid node shape and class styling. Values:
-  - `"input"` — stadium shape `([...])` for data sources and configuration
-  - `"output"` — subroutine shape `[[...]]` for generated artifacts
-  - `"process"` — rectangle `[...]` for processing steps (default)
-  - `"decision"` — diamond `{...}` for conditional logic
-  - `"start"` / `"end"` — stadium shape `([...])` for entry/terminal nodes
+欄：
+- `id`（必）：獨識，連節用
+- `label`（必）：圖顯之人讀述
+- `input`：入檔或量逗列
+- `output`：出檔或量逗列
+- `.internal` 擴：標記憶量（腳本間未存）
+- `node_type`：控 Mermaid 節形與類：
+  - `"input"` — 體育場形 `([...])` 為數源與設
+  - `"output"` — 子程形 `[[...]]` 為生物
+  - `"process"` — 矩 `[...]` 為處理步（默）
+  - `"decision"` — 菱 `{...}` 為條件邏輯
+  - `"start"` / `"end"` — 體育場形 `([...])` 為入/終節
 
-Example with `node_type`:
+附 `node_type` 之例：
 ```r
 # put id:'config', label:'Load Config', node_type:'input', output:'config.internal'
 # put id:'transform', label:'Apply Rules', node_type:'process', input:'config.internal', output:'result.rds'
 # put id:'report', label:'Generate Report', node_type:'output', input:'result.rds'
 ```
 
-**Multiline syntax** (for complex annotations):
+**多行語法**（為繁注）：
 ```r
 # put id:'complex_step', \
 #   label:'Multi-line Label', \
@@ -140,9 +140,9 @@ Example with `node_type`:
 #   output:'result.parquet'
 ```
 
-**Block comment syntax** (for `//`-prefix languages only: JS, TS, Go, Rust, C, C++, Java, etc.):
+**塊注語法**（唯 `//` 前綴之語：JS、TS、Go、Rust、C、C++、Java 等）：
 
-Languages that use `//` for line comments also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
+用 `//` 行注之語亦支 `/* */` 與 `/** */` 塊注中之 PUT 注。塊內用 `* put` 為行前：
 
 ```javascript
 /* put id:'init', label:'Initialize Config', output:'config.internal' */
@@ -158,7 +158,7 @@ function processRecords(config, records) {
 }
 ```
 
-JSDoc-style annotations are particularly useful when documenting workflow steps alongside API documentation:
+JSDoc 式注尤宜於書工作流步附 API 文：
 
 ```typescript
 /**
@@ -170,9 +170,9 @@ export function normalizeSensorData(readings: SensorReading[]): NormalizedData {
 }
 ```
 
-> **Note:** Block comment annotations are **not** supported for `#`-prefix languages (R, Python, Shell) or `--`-prefix languages (SQL, Lua). Use only line comments for those languages. Block-originated annotations do not support backslash continuation across lines.
+> **注**：塊注注*不*支 `#` 前綴之語（R、Python、Shell）或 `--` 前綴之語（SQL、Lua）。彼語唯用行注。塊起注不支跨行反斜續。
 
-**Cross-file data flow** (connecting scripts via file-based I/O):
+**跨檔數流**（以檔 I/O 連本）：
 ```r
 # Script 1: extract.R
 # put id:'extract', label:'Extract Data', output:'raw_data.internal, raw_data.rds'
@@ -185,20 +185,20 @@ data <- readRDS("raw_data.rds")
 arrow::write_parquet(clean, "clean_data.parquet")
 ```
 
-**Expected:** Annotations refined with accurate IDs, labels, and I/O fields that reflect actual data flow.
+**得：** 注精附正 ID、標、I/O 欄映實數流。
 
-**On failure:** If unsure about I/O, use `.internal` extension for in-memory intermediates and explicit file names for persisted data.
+**敗則：** 若 I/O 不定，用 `.internal` 擴於記憶中間，用明檔名於持數。
 
-### Step 4: Insert Annotations into Files
+### 第四步：插注於檔
 
-Place annotations at the top of each file or immediately above the relevant code block.
+置注於檔首或相關塊之上。
 
-**Placement conventions:**
-1. **File-level annotation**: Place at the top of the file, after any shebang line or file header comment
-2. **Block-level annotation**: Place immediately above the code block it describes
-3. **Multiple annotations per file**: Use for files with distinct workflow phases
+**位之例**：
+1. **檔級注**：置檔首（shebang 或檔頭注後）
+2. **塊級注**：置所述塊之上
+3. **每檔多注**：於有別工作流段之檔用
 
-Example placement in an R file:
+R 檔位例：
 ```r
 #!/usr/bin/env Rscript
 # ETL Extract Script
@@ -213,15 +213,15 @@ df_clean <- df[complete.cases(df), ]
 saveRDS(df_clean, "clean.rds")
 ```
 
-Use the Edit tool to insert annotations into existing files without disturbing surrounding code.
+用 Edit 工具插注於既檔而不擾周圍碼。
 
-**Expected:** Annotations inserted at appropriate locations in each source file.
+**得：** 注插於每源檔之宜位。
 
-**On failure:** If annotations break syntax highlighting in the editor, ensure the comment prefix is correct for the language. PUT annotations are standard comments and should not affect code execution.
+**敗則：** 若注亂編之語法高亮，確注前綴合語。PUT 注為標注，當不影碼執行。
 
-### Step 5: Validate Annotations
+### 第五步：驗注
 
-Run putior's validation to check annotation syntax and connectivity.
+行 putior 驗以察注語法與連。
 
 ```r
 # Scan annotated files
@@ -245,38 +245,38 @@ merged <- put_merge("./src/", merge_strategy = "supplement")
 cat(put_diagram(merged, theme = "github"))
 ```
 
-**Expected:** All annotations parse without errors. The diagram shows a connected workflow. `put_merge()` fills in any gaps from auto-detection.
+**得：** 諸注皆析無訛。圖示連之工作流。`put_merge()` 補自察之隙。
 
-**On failure:** Common validation issues:
-- Missing closing quote: `id:'name` → `id:'name'`
-- Using double quotes inside: `id:"name"` → `id:'name'`
-- Duplicate IDs across files: each `id` must be unique across the entire scanned directory
-- Backslash continuation on the wrong line: the `\` must be the last character before newline
+**敗則：** 常驗患：
+- 閉引闕：`id:'name` → `id:'name'`
+- 內用雙引：`id:"name"` → `id:'name'`
+- 跨檔重 ID：每 `id` 於掃目內必獨
+- 反斜續於誤行：`\` 必為換行前末字
 
-## Validation
+## 驗
 
-- [ ] Every annotated file has syntactically valid PUT annotations
-- [ ] `put("./src/")` returns a data frame with the expected number of nodes
-- [ ] No duplicate `id` values across the scanned directory
-- [ ] `put_diagram()` produces a connected flowchart (not all isolated nodes)
-- [ ] Multiline annotations (if used) parse correctly with backslash continuation
-- [ ] `.internal` variables appear only as outputs, never as cross-file inputs
-- [ ] Files excluded via `exclude` parameter do not appear in the workflow (e.g., `put("./src/", exclude = "test_")` skips test helpers)
+- [ ] 每注檔有語法有效 PUT 注
+- [ ] `put("./src/")` 返期節數之數框
+- [ ] 掃目無重 `id`
+- [ ] `put_diagram()` 生連之流圖（非諸離節）
+- [ ] 多行注（若用）正析附反斜續
+- [ ] `.internal` 量只為出，勿為跨檔入
+- [ ] 經 `exclude` 排之檔不現於工作流（如 `put("./src/", exclude = "test_")` 跳試助）
 
-## Common Pitfalls
+## 陷
 
-- **Quote nesting errors**: PUT annotations use single quotes: `id:'name'`. Double quotes cause parsing issues when the annotation is inside a string context.
-- **Duplicate IDs**: Every `id` must be globally unique within the scanned scope. Use a naming convention like `<script>_<step>` (e.g., `extract_read`, `transform_clean`).
-- **.internal as cross-file input**: `.internal` variables exist only during script execution. To pass data between scripts, use a persisted file format (`.rds`, `.csv`, `.parquet`) as the output of one script and input of the next.
-- **Missing connections**: If the diagram shows disconnected nodes, check that output filenames in one annotation exactly match input filenames in another (including extensions).
-- **Wrong comment prefix**: Using `#` in a SQL file or `//` in Python will cause the annotation to be treated as code, not a comment. Always verify with `get_comment_prefix()`.
-- **Forgetting multiline continuation**: When using multiline annotations, every continued line must end with `\` and the next line must start with the comment prefix.
-- **Python triple-quote strings**: putior does not scan Python triple-quote strings (`''' '''`, `""" """`). Always use `#` for Python PUT annotations.
-- **Meta-pipeline annotations**: If you annotate a build script that also scans for annotations (e.g., a script that calls `put()` and `put_diagram()`), the script's own annotations will appear in the generated diagram. Either exclude the file from scanning (see `generate-workflow-diagram` Common Pitfalls) or avoid placing PUT annotations in the build script itself.
+- **引套誤**：PUT 注用單引：`id:'name'`。雙引於串境致析患
+- **重 ID**：每 `id` 於掃範內必全獨。用如 `<script>_<step>` 之命約（如 `extract_read`、`transform_clean`）
+- **`.internal` 為跨檔入**：`.internal` 量只於本執行時存。本間傳數用持檔式（`.rds`、`.csv`、`.parquet`）為一本之出、他本之入
+- **連闕**：若圖示離節，察一注之出檔名與他注之入檔名全合（含擴）
+- **誤注前綴**：SQL 檔用 `#` 或 Python 用 `//` 致注被視為碼。恆以 `get_comment_prefix()` 驗
+- **忘多行續**：多行注每續行必以 `\` 終，下行必以注前綴始
+- **Python 三引號串**：putior 不掃 Python 三引號串（`''' '''`、`""" """`）。Python PUT 注恆用 `#`
+- **元管道注**：若注亦掃注之建本（如呼 `put()` 與 `put_diagram()` 之本），本自之注現於所生圖。或從掃排此檔（見 `generate-workflow-diagram` 常陷），或勿於建本置 PUT 注
 
-## Related Skills
+## 參
 
-- `analyze-codebase-workflow` — prerequisite: produces the annotation plan this skill follows
-- `generate-workflow-diagram` — next step: generate the final diagram from annotations
-- `install-putior` — putior must be installed before annotating
-- `configure-putior-mcp` — MCP tools provide interactive annotation assistance
+- `analyze-codebase-workflow` — 前置：生此技所循之注計
+- `generate-workflow-diagram` — 下步：自注生終圖
+- `install-putior` — 注前 putior 必裝
+- `configure-putior-mcp` — MCP 工具供互注助

@@ -89,7 +89,7 @@ services:
       - app
 ```
 
-**Expected:** Requests to port 80 are forwarded to the app service.
+**Got:** Requests to port 80 are forwarded to the app service.
 
 ### Step 2: Static File Serving
 
@@ -187,9 +187,9 @@ docker compose run --rm certbot certonly \
   -d example.com --email admin@example.com --agree-tos
 ```
 
-**Expected:** HTTPS works with valid Let's Encrypt certificate.
+**Got:** HTTPS works with valid Let's Encrypt certificate.
 
-**On failure:** Check DNS points to the server. Verify port 80 is open for ACME challenges.
+**If fail:** Check DNS points to the server. Verify port 80 is open for ACME challenges.
 
 ### Step 4: Security Headers
 
@@ -262,7 +262,7 @@ docker compose exec nginx nginx -s reload
 curl -I https://example.com
 ```
 
-**Expected:** `nginx -t` reports syntax OK. Headers include security headers.
+**Got:** `nginx -t` reports syntax OK. Headers include security headers.
 
 ## Validation
 
@@ -273,7 +273,7 @@ curl -I https://example.com
 - [ ] Rate limiting triggers on excessive requests
 - [ ] SSL Labs test gives A+ rating (if public)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing `proxy_set_header Host`**: Backend receives wrong host header, breaking virtual hosts and redirects.
 - **`location` order matters**: Nginx uses the most specific match. Exact (`=`) > prefix (`^~`) > regex (`~`) > general prefix.

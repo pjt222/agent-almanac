@@ -24,29 +24,29 @@ metadata:
   tags: jigsawr, puzzle-type, pipeline, integration, scaffold
 ---
 
-# Add Puzzle Type
+# 增拼圖類型
 
-Scaffold a new puzzle type across all pipeline integration points in jigsawR.
+於 jigsawR 跨所有管線整合點為新拼圖類型搭建鷹架。
 
-## When to Use
+## 適用時機
 
-- Adding a completely new puzzle type to the package
-- Following the established integration checklist (CLAUDE.md 10-point pipeline)
-- Ensuring nothing is missed when wiring a new type end-to-end
+- 為套件新增一全新拼圖類型
+- 遵既定整合清單（CLAUDE.md 之 10 點管線）
+- 確保新類型自端至端布線時無有遺漏
 
-## Inputs
+## 輸入
 
-- **Required**: New type name (lowercase, e.g. `"triangular"`)
-- **Required**: Geometry description (how pieces are shaped/arranged)
-- **Required**: Whether the type needs external packages (add to Suggests)
-- **Optional**: Parameter list beyond the standard (grid, size, seed, tabsize, offset)
-- **Optional**: Reference implementation or algorithm source
+- **必要**：新類型名（小寫，如 `"triangular"`）
+- **必要**：幾何描述（拼塊形與排列）
+- **必要**：類型是否需外部套件（加至 Suggests）
+- **選擇性**：標準之外（grid、size、seed、tabsize、offset）之參數列
+- **選擇性**：參考實作或演算法來源
 
-## Procedure
+## 步驟
 
-### Step 1: Create Core Puzzle Module
+### 步驟一：建立核心拼圖模組
 
-Create `R/<type>_puzzle.R` with the internal generation function:
+建立 `R/<type>_puzzle.R`，含內部生成函式：
 
 ```r
 #' Generate <type> puzzle pieces (internal)
@@ -60,83 +60,83 @@ generate_<type>_pieces_internal <- function(params, seed) {
 }
 ```
 
-Follow the pattern in `R/voronoi_puzzle.R` or `R/snic_puzzle.R` for structure.
+依 `R/voronoi_puzzle.R` 或 `R/snic_puzzle.R` 之結構為範。
 
-**Expected:** Function returns a list with `$pieces`, `$edges`, `$adjacency`, `$metadata`.
+**預期：** 函式回傳含 `$pieces`、`$edges`、`$adjacency`、`$metadata` 之 list。
 
-**On failure:** Compare the return structure against `generate_voronoi_pieces_internal()` to identify missing list elements or incorrect types.
+**失敗時：** 與 `generate_voronoi_pieces_internal()` 比對回傳結構，以辨缺失之 list 元素或型別錯誤。
 
-### Step 2: Wire into jigsawR_clean.R
+### 步驟二：布線至 jigsawR_clean.R
 
-Edit `R/jigsawR_clean.R`:
+編輯 `R/jigsawR_clean.R`：
 
-1. Add `"<type>"` to the `valid_types` vector
-2. Add type-specific parameter extraction in the params section
-3. Add validation logic for type-specific constraints
-4. Add filename prefix mapping (e.g., `"<type>"` -> `"<type>_"`)
+1. 將 `"<type>"` 加入 `valid_types` 向量
+2. 於 params 段加入類型特有之參數提取
+3. 加入類型特有約束之驗證邏輯
+4. 加入檔名前綴對應（如 `"<type>"` -> `"<type>_"`）
 
 ```r
 # In valid_types
 valid_types <- c("rectangular", "hexagonal", "concentric", "voronoi", "snic", "<type>")
 ```
 
-**Expected:** `generate_puzzle(type = "<type>")` is accepted without "unknown type" error.
+**預期：** `generate_puzzle(type = "<type>")` 受納而無 "unknown type" 之誤。
 
-**On failure:** Verify the type string is added to `valid_types` exactly as spelled, and that parameter extraction covers all required type-specific arguments.
+**失敗時：** 驗證類型字串拼寫無誤地加入 `valid_types`，且參數提取涵蓋一切類型特有之必要引數。
 
-### Step 3: Wire into unified_piece_generation.R
+### 步驟三：布線至 unified_piece_generation.R
 
-Edit `R/unified_piece_generation.R`:
+編輯 `R/unified_piece_generation.R`：
 
-1. Add dispatch case in `generate_pieces_internal()`
-2. Add fusion handling if the type supports PILES notation
+1. 於 `generate_pieces_internal()` 加入分派 case
+2. 若類型支援 PILES 記法，加入融合處理
 
 ```r
 # In the switch/dispatch
 "<type>" = generate_<type>_pieces_internal(params, seed)
 ```
 
-**Expected:** Pieces are generated when the type is dispatched.
+**預期：** 分派類型時，拼塊得以生成。
 
-**On failure:** Confirm the dispatch case string matches the type name exactly and that `generate_<type>_pieces_internal` is defined and exported from the puzzle module.
+**失敗時：** 確認分派 case 字串與類型名完全相符，且 `generate_<type>_pieces_internal` 已於拼圖模組定義並輸出。
 
-### Step 4: Wire into piece_positioning.R
+### 步驟四：布線至 piece_positioning.R
 
-Edit `R/piece_positioning.R`:
+編輯 `R/piece_positioning.R`：
 
-Add positioning dispatch for the new type. Most types use shared positioning logic, but some need custom handling.
+為新類型加入定位分派。多數類型用共用之定位邏輯，然有些須自訂。
 
-**Expected:** `apply_piece_positioning()` handles the new type without errors and pieces are placed at correct coordinates.
+**預期：** `apply_piece_positioning()` 處理新類型而無誤，且拼塊置於正確座標。
 
-**On failure:** Check whether the new type needs custom positioning logic or can reuse the shared positioning path. Add a dispatch case if the default path does not apply.
+**失敗時：** 查新類型是否需自訂定位邏輯或可重用共用定位路徑。預設路徑不適用時加分派 case。
 
-### Step 5: Wire into unified_renderer.R
+### 步驟五：布線至 unified_renderer.R
 
-Edit `R/unified_renderer.R`:
+編輯 `R/unified_renderer.R`：
 
-1. Add rendering case in `render_puzzle_svg()`
-2. Add edge path function: `get_<type>_edge_paths()`
-3. Add piece name function: `get_<type>_piece_name()`
+1. 於 `render_puzzle_svg()` 加入渲染 case
+2. 加入邊路徑函式：`get_<type>_edge_paths()`
+3. 加入拼塊名函式：`get_<type>_piece_name()`
 
-**Expected:** SVG output is generated for the new type with correct piece outlines and edge paths.
+**預期：** 為新類型生成 SVG 輸出，附正確之拼塊輪廓與邊路徑。
 
-**On failure:** Verify `get_<type>_edge_paths()` returns valid SVG path data and `get_<type>_piece_name()` produces unique identifiers for each piece.
+**失敗時：** 驗證 `get_<type>_edge_paths()` 回傳有效之 SVG 路徑資料，且 `get_<type>_piece_name()` 為各拼塊產唯一識別。
 
-### Step 6: Wire into adjacency_api.R
+### 步驟六：布線至 adjacency_api.R
 
-Edit `R/adjacency_api.R`:
+編輯 `R/adjacency_api.R`：
 
-Add neighbor dispatch so `get_neighbors()` and `get_adjacency()` work for the new type.
+加入鄰接分派，使 `get_neighbors()` 與 `get_adjacency()` 對新類型有效。
 
-**Expected:** `get_neighbors(result, piece_id)` returns correct neighbors for any piece in the puzzle.
+**預期：** `get_neighbors(result, piece_id)` 為拼圖中任一塊回傳正確鄰居。
 
-**On failure:** Check that the adjacency dispatch returns the correct data structure. Test with a small grid and manually verify neighbor relationships against the geometry.
+**失敗時：** 查鄰接分派是否回傳正確資料結構。以小格網測試並依幾何手動驗證鄰接關係。
 
-### Step 7: Add ggpuzzle Geom Layer
+### 步驟七：增 ggpuzzle Geom 層
 
-Edit `R/geom_puzzle.R`:
+編輯 `R/geom_puzzle.R`：
 
-Create `geom_puzzle_<type>()` using the `make_puzzle_layer()` factory:
+以 `make_puzzle_layer()` 工廠建立 `geom_puzzle_<type>()`：
 
 ```r
 #' @export
@@ -145,38 +145,38 @@ geom_puzzle_<type> <- function(mapping = NULL, data = NULL, ...) {
 }
 ```
 
-**Expected:** `ggplot() + geom_puzzle_<type>(aes(...))` renders without error.
+**預期：** `ggplot() + geom_puzzle_<type>(aes(...))` 渲染而無誤。
 
-**On failure:** Verify `make_puzzle_layer()` receives the correct type string and that the geom function is exported in the NAMESPACE via `@export`.
+**失敗時：** 驗證 `make_puzzle_layer()` 收到正確之類型字串，且 geom 函式已透過 `@export` 於 NAMESPACE 輸出。
 
-### Step 8: Add Stat Dispatch
+### 步驟八：增 Stat 分派
 
-Edit `R/stat_puzzle.R`:
+編輯 `R/stat_puzzle.R`：
 
-1. Add type-specific default parameters
-2. Add dispatch case in `compute_panel()`
+1. 加入類型特有之預設參數
+2. 於 `compute_panel()` 加入分派 case
 
-**Expected:** The stat layer computes puzzle geometry correctly and produces the expected number of polygons.
+**預期：** stat 層正確計算拼圖幾何，並產出預期數量之多邊形。
 
-**On failure:** Check that the `compute_panel()` dispatch case returns a data frame with the required columns (`x`, `y`, `group`, `piece_id`) and that default parameters are sensible for the new type.
+**失敗時：** 查 `compute_panel()` 分派 case 是否回傳含必要欄（`x`、`y`、`group`、`piece_id`）之 data frame，且預設參數對新類型合宜。
 
-### Step 9: Update DESCRIPTION
+### 步驟九：更新 DESCRIPTION
 
-Edit `DESCRIPTION`:
+編輯 `DESCRIPTION`：
 
-1. Add new type to the Description field text
-2. Add any new packages to `Suggests:` (if external dependency)
-3. Update `Collate:` to include the new R file (alphabetical order)
+1. 將新類型加入 Description 欄之文字
+2. 將任何新套件加入 `Suggests:`（若為外部依賴）
+3. 更新 `Collate:` 以納入新 R 檔（按字母順序）
 
-**Expected:** `devtools::document()` succeeds. No NOTE about unlisted files.
+**預期：** `devtools::document()` 成功。無關於未列檔案之 NOTE。
 
-**On failure:** Check that the new R file is listed in the `Collate:` field in alphabetical order and that any new Suggests packages are spelled correctly with version constraints.
+**失敗時：** 查新 R 檔是否按字母順序列於 `Collate:` 欄，且任何新 Suggests 套件之拼寫與版本約束皆正確。
 
-### Step 10: Update config.yml
+### 步驟十：更新 config.yml
 
-Edit `inst/config.yml`:
+編輯 `inst/config.yml`：
 
-Add defaults and constraints for the new type:
+為新類型加入預設與約束：
 
 ```yaml
 <type>:
@@ -195,25 +195,25 @@ Add defaults and constraints for the new type:
   # Add type-specific params here
 ```
 
-**Expected:** Config is valid YAML. Defaults produce a working puzzle when used by `generate_puzzle()`.
+**預期：** 配置為有效之 YAML。預設於 `generate_puzzle()` 用之時產出可用拼圖。
 
-**On failure:** Validate YAML with `yaml::yaml.load_file("inst/config.yml")`. Ensure default grid and size values produce a sensible puzzle (not too small or too large).
+**失敗時：** 以 `yaml::yaml.load_file("inst/config.yml")` 驗證 YAML。確保預設之 grid 與 size 值產合宜拼圖（不過小亦不過大）。
 
-### Step 11: Extend Shiny App
+### 步驟十一：擴展 Shiny App
 
-Edit `inst/shiny-app/app.R`:
+編輯 `inst/shiny-app/app.R`：
 
-1. Add the new type to the UI type selector
-2. Add conditional UI panels for type-specific parameters
-3. Add server-side generation logic
+1. 將新類型加入 UI 類型選擇器
+2. 為類型特有參數加入條件式 UI 面板
+3. 加入伺服端生成邏輯
 
-**Expected:** Shiny app shows the new type in the dropdown and generates puzzles when selected.
+**預期：** Shiny app 於下拉選單中顯示新類型，並於選定時生成拼圖。
 
-**On failure:** Check that the type is added to the `choices` argument of the UI selector, that the conditional panel for type-specific parameters uses `conditionalPanel(condition = "input.type == '<type>'")`, and that the server-side handler passes the correct parameters.
+**失敗時：** 查類型是否加入 UI 選擇器之 `choices` 引數，類型特有參數之條件式面板是否用 `conditionalPanel(condition = "input.type == '<type>'")`，且伺服端處理器是否傳遞正確參數。
 
-### Step 12: Create Test Suite
+### 步驟十二：建立測試套件
 
-Create `tests/testthat/test-<type>-puzzles.R`:
+建立 `tests/testthat/test-<type>-puzzles.R`：
 
 ```r
 test_that("<type> puzzle generates correct piece count", { ... })
@@ -225,36 +225,36 @@ test_that("<type> SVG output is well-formed", { ... })
 test_that("<type> config constraints are enforced", { ... })
 ```
 
-If the type requires an external package, wrap tests with `skip_if_not_installed()`.
+若類型需外部套件，以 `skip_if_not_installed()` 包裝測試。
 
-**Expected:** All tests pass. No skips unless external dependency is missing.
+**預期：** 一切測試通過。除非外部依賴缺失，否則無 skip。
 
-**On failure:** Check each integration point individually. The most common issue is missing dispatch cases — run `grep -rn "switch\|valid_types" R/` to find all dispatch locations.
+**失敗時：** 個別檢查各整合點。最常見之問題乃缺失之分派 case——行 `grep -rn "switch\|valid_types" R/` 以尋一切分派位置。
 
-## Validation
+## 驗證
 
-- [ ] `generate_puzzle(type = "<type>")` produces valid output
-- [ ] All 10 integration points are wired correctly
-- [ ] `devtools::test()` passes with new tests
-- [ ] `devtools::check()` returns 0 errors, 0 warnings
-- [ ] Shiny app renders the new type
-- [ ] Config constraints are enforced (min/max validation)
-- [ ] Adjacency and fusion work correctly
-- [ ] ggpuzzle geom layer renders without error
-- [ ] `devtools::document()` succeeds (NAMESPACE updated)
+- [ ] `generate_puzzle(type = "<type>")` 產有效輸出
+- [ ] 一切 10 整合點正確布線
+- [ ] `devtools::test()` 連同新測試通過
+- [ ] `devtools::check()` 回傳 0 errors、0 warnings
+- [ ] Shiny app 渲染新類型
+- [ ] 配置約束受執行（min/max 驗證）
+- [ ] 鄰接與融合正確運作
+- [ ] ggpuzzle geom 層渲染而無誤
+- [ ] `devtools::document()` 成功（NAMESPACE 已更新）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Missing dispatch case**: Forgetting one of the 10+ files causes silent failure or "unknown type" errors
-- **strsplit with negative numbers**: When creating adjacency keys with `paste(a, b, sep = "-")`, negative piece labels produce keys like `"1--1"`. Use `"|"` separator instead and split with `"\\|"`.
-- **Using `cat()` for output**: Always use `cli` package logging wrappers (`log_info`, `log_warn`, etc.)
-- **Collate order**: DESCRIPTION Collate field must be alphabetical or dependency-ordered
-- **Config.yml format**: Ensure YAML is valid; test with `yaml::yaml.load_file("inst/config.yml")`
+- **缺失分派 case**：遺一 10+ 檔之一致默默失敗或「unknown type」之誤
+- **strsplit 與負數**：以 `paste(a, b, sep = "-")` 建鄰接鍵時，負拼塊標籤產如 `"1--1"` 之鍵。改用 `"|"` 分隔符並以 `"\\|"` 切分
+- **以 `cat()` 輸出**：務用 `cli` 套件之記錄包裝（`log_info`、`log_warn` 等）
+- **Collate 順序**：DESCRIPTION 之 Collate 欄須按字母或依賴順序
+- **Config.yml 格式**：確保 YAML 有效；以 `yaml::yaml.load_file("inst/config.yml")` 測試
 
-## Related Skills
+## 相關技能
 
-- `generate-puzzle` — test the new type after scaffolding
-- `run-puzzle-tests` — run the full test suite to verify integration
-- `validate-piles-notation` — test fusion with the new type
-- `write-testthat-tests` — general test-writing patterns
-- `write-roxygen-docs` — document the new geom function
+- `generate-puzzle` — 鷹架後測試新類型
+- `run-puzzle-tests` — 執行完整測試套件以驗證整合
+- `validate-piles-notation` — 以新類型測試融合
+- `write-testthat-tests` — 通用測試撰寫模式
+- `write-roxygen-docs` — 為新 geom 函式撰寫文件

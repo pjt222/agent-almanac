@@ -101,9 +101,9 @@ Minimizing Collection Impact:
 - Prefer common and abundant species for teaching collections
 ```
 
-**Expected:** All required permits are obtained, protected species lists have been checked, and the collector has a clear understanding of what may and may not be collected at the site.
+**Got:** All required permits are obtained, protected species lists have been checked, and the collector has a clear understanding of what may and may not be collected at the site.
 
-**On failure:** If permits cannot be obtained, do not collect. Photograph specimens in situ and use citizen science platforms for identification. If a collected specimen turns out to be a protected species, consult the relevant wildlife authority immediately. Do not discard the specimen — accidental collection should be reported, not concealed.
+**If fail:** If permits cannot be obtained, do not collect. Photograph specimens in situ and use citizen science platforms for identification. If a collected specimen turns out to be a protected species, consult the relevant wildlife authority immediately. Do not discard the specimen — accidental collection should be reported, not concealed.
 
 ### Step 2: Select Collection Method
 
@@ -169,9 +169,9 @@ Collection Methods:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** One or more collection methods selected based on target taxa and habitat, with equipment assembled and ready before entering the field.
+**Got:** One or more collection methods selected based on target taxa and habitat, with equipment assembled and ready before entering the field.
 
-**On failure:** If the intended method is not yielding specimens (e.g., sweep netting in heavy rain), switch to an alternative method. Light trapping requires specific weather conditions — warm, humid, still, moonless nights are optimal. If conditions are poor, reschedule rather than running traps inefficiently.
+**If fail:** If the intended method is not yielding specimens (e.g., sweep netting in heavy rain), switch to an alternative method. Light trapping requires specific weather conditions — warm, humid, still, moonless nights are optimal. If conditions are poor, reschedule rather than running traps inefficiently.
 
 ### Step 3: Dispatch Specimens Humanely
 
@@ -213,9 +213,9 @@ NEVER use:
 - Prolonged suffocation — slow and damages specimens from struggling
 ```
 
-**Expected:** Specimens dispatched quickly (within minutes) with minimal damage to morphological features. Lepidoptera kept separate to prevent scale loss from contact with other specimens.
+**Got:** Specimens dispatched quickly (within minutes) with minimal damage to morphological features. Lepidoptera kept separate to prevent scale loss from contact with other specimens.
 
-**On failure:** If ethyl acetate is unavailable, freezing is the best alternative for most taxa. In the field without either, place specimens in individual vials or envelopes (for Lepidoptera, use glassine envelopes with wings folded) and freeze upon return. Do not leave live insects in a sealed container without a killing agent — they will damage themselves.
+**If fail:** If ethyl acetate is unavailable, freezing is the best alternative for most taxa. In the field without either, place specimens in individual vials or envelopes (for Lepidoptera, use glassine envelopes with wings folded) and freeze upon return. Do not leave live insects in a sealed container without a killing agent — they will damage themselves.
 
 ### Step 4: Pin Specimens (Dry Preservation)
 
@@ -283,9 +283,9 @@ Spreading Wings (Lepidoptera, Odonata):
 6. Remove paper strips carefully
 ```
 
-**Expected:** Each specimen pinned through the correct position for its order, at the correct height on the pin, with wings spread where required (Lepidoptera, Odonata). Specimens allowed to dry fully before handling.
+**Got:** Each specimen pinned through the correct position for its order, at the correct height on the pin, with wings spread where required (Lepidoptera, Odonata). Specimens allowed to dry fully before handling.
 
-**On failure:** If a specimen is too dry and brittle to pin (legs snapping, wings cracking), it needs relaxing first. Place the specimen in a relaxing chamber (a sealed container with damp sand or paper towels and a few drops of phenol to prevent mold) for 24-48 hours until limbs are pliable. If a pin is placed in the wrong position, it is better to carefully re-pin while the specimen is still fresh than to leave it incorrectly mounted.
+**If fail:** If a specimen is too dry and brittle to pin (legs snapping, wings cracking), it needs relaxing first. Place the specimen in a relaxing chamber (a sealed container with damp sand or paper towels and a few drops of phenol to prevent mold) for 24-48 hours until limbs are pliable. If a pin is placed in the wrong position, it is better to carefully re-pin while the specimen is still fresh than to leave it incorrectly mounted.
 
 ### Step 5: Preserve in Ethanol (Wet Preservation)
 
@@ -330,9 +330,9 @@ Do NOT use:
   color loss compared to ethanol.
 ```
 
-**Expected:** Soft-bodied specimens preserved in 70-80% ethanol (or 95%+ for DNA work) in labeled vials with sufficient fluid volume.
+**Got:** Soft-bodied specimens preserved in 70-80% ethanol (or 95%+ for DNA work) in labeled vials with sufficient fluid volume.
 
-**On failure:** If ethanol is unavailable in the field, specimens can be temporarily stored in high-proof clear spirits (vodka, Everclear) as an emergency measure. Transfer to laboratory-grade ethanol as soon as possible. If specimens have been stored too long in weak preservative and show decomposition, they may still be identifiable but will be unsuitable for molecular work.
+**If fail:** If ethanol is unavailable in the field, specimens can be temporarily stored in high-proof clear spirits (vodka, Everclear) as an emergency measure. Transfer to laboratory-grade ethanol as soon as possible. If specimens have been stored too long in weak preservative and show decomposition, they may still be identifiable but will be unsuitable for molecular work.
 
 ### Step 6: Label Every Specimen
 
@@ -371,9 +371,9 @@ Label Format Rules:
   heights
 ```
 
-**Expected:** Every specimen carries at minimum a locality label with country, locality, coordinates, date, and collector. Wet specimens have the same data on an internal label written in pencil or laser-printed.
+**Got:** Every specimen carries at minimum a locality label with country, locality, coordinates, date, and collector. Wet specimens have the same data on an internal label written in pencil or laser-printed.
 
-**On failure:** If GPS coordinates were not recorded in the field, estimate them from a map using the locality description. If the date is uncertain, record the best estimate and mark it with a question mark. A specimen with approximate data is far more valuable than one with no label at all. Never move a label from one specimen to another.
+**If fail:** If GPS coordinates were not recorded in the field, estimate them from a map using the locality description. If the date is uncertain, record the best estimate and mark it with a question mark. A specimen with approximate data is far more valuable than one with no label at all. Never move a label from one specimen to another.
 
 ### Step 7: Store and Protect the Collection
 
@@ -419,9 +419,9 @@ Wet Collection Storage:
   plastic vials allow more evaporation
 ```
 
-**Expected:** Dry specimens stored in sealed drawers with pest deterrents. Wet specimens stored upright with adequate ethanol levels. Storage area has stable temperature and humidity.
+**Got:** Dry specimens stored in sealed drawers with pest deterrents. Wet specimens stored upright with adequate ethanol levels. Storage area has stable temperature and humidity.
 
-**On failure:** If proper museum storage is not available, store pinned specimens in airtight plastic containers (tackle boxes, Tupperware) with foam inserts and pest deterrent. This is adequate for personal collections and short-term storage. For long-term preservation of scientifically valuable specimens, deposit them in a recognized museum or university collection.
+**If fail:** If proper museum storage is not available, store pinned specimens in airtight plastic containers (tackle boxes, Tupperware) with foam inserts and pest deterrent. This is adequate for personal collections and short-term storage. For long-term preservation of scientifically valuable specimens, deposit them in a recognized museum or university collection.
 
 ### Step 8: Curate and Enter into Database
 
@@ -470,9 +470,9 @@ Database Standards:
 - Assign a unique catalog number to every specimen, even if unidentified
 ```
 
-**Expected:** All specimens cataloged in a database with unique identifiers, taxonomy, locality, date, collector, and storage location. Collection is on a regular inspection and maintenance schedule.
+**Got:** All specimens cataloged in a database with unique identifiers, taxonomy, locality, date, collector, and storage location. Collection is on a regular inspection and maintenance schedule.
 
-**On failure:** If a full database is not feasible, maintain at minimum a handwritten catalog or spreadsheet with catalog numbers corresponding to specimens. The catalog number links the specimen to its data — without it, the specimen and its data become disconnected if labels are lost. Even a simple numbered list is better than no catalog at all.
+**If fail:** If a full database is not feasible, maintain at minimum a handwritten catalog or spreadsheet with catalog numbers corresponding to specimens. The catalog number links the specimen to its data — without it, the specimen and its data become disconnected if labels are lost. Even a simple numbered list is better than no catalog at all.
 
 ## Validation
 
@@ -487,7 +487,7 @@ Database Standards:
 - [ ] Storage includes pest deterrents and stable environmental conditions
 - [ ] Specimens are cataloged in a database or notebook with unique identifiers
 
-## Common Pitfalls
+## Pitfalls
 
 - **Collecting without permits**: A specimen collected illegally cannot be used in published research, deposited in a museum, or transferred across borders. Always obtain authorization first
 - **Over-collecting**: Taking more specimens than needed depletes populations without scientific benefit. Collect the minimum required for identification (often 5-10 individuals per morphospecies per site)

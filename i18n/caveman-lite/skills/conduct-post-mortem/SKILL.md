@@ -64,9 +64,9 @@ curl -G 'http://prometheus:9090/api/v1/query_range' \
 amtool alert query --within=2h alertname="HighErrorRate" --output json > alerts.json
 ```
 
-**Expected:** Logs, metrics, and alerts covering the full incident timeline.
+**Got:** Logs, metrics, and alerts covering the full incident timeline.
 
-**On failure:** If data is incomplete, note gaps in the report. Set up longer retention for next time.
+**If fail:** If data is incomplete, note gaps in the report. Set up longer retention for next time.
 
 ### Step 2: Build the Timeline
 
@@ -88,9 +88,9 @@ Create a chronological reconstruction:
 | 10:40:00 | Incident marked resolved | PagerDuty | @alice |
 ```
 
-**Expected:** A clear, minute-by-minute sequence showing what happened and when.
+**Got:** A clear, minute-by-minute sequence showing what happened and when.
 
-**On failure:** Timestamp mismatches. Ensure all systems use NTP and log in UTC.
+**If fail:** Timestamp mismatches. Ensure all systems use NTP and log in UTC.
 
 ### Step 3: Identify Contributing Factors
 
@@ -114,9 +114,9 @@ Use the Five Whys or fishbone analysis:
 - Database alerts only fire on total failure, not degradation
 ```
 
-**Expected:** Multiple layers of causation identified, avoiding blame.
+**Got:** Multiple layers of causation identified, avoiding blame.
 
-**On failure:** If analysis stops at "engineer made a mistake", dig deeper. What allowed that mistake?
+**If fail:** If analysis stops at "engineer made a mistake", dig deeper. What allowed that mistake?
 
 ### Step 4: Generate Action Items
 
@@ -135,9 +135,9 @@ Create concrete, trackable improvements:
 | AI-006 | Add load testing for new query patterns | @charlie | 2025-03-15 | Low |
 ```
 
-**Expected:** Each action has an owner, deadline, and clear deliverable.
+**Got:** Each action has an owner, deadline, and clear deliverable.
 
-**On failure:** Vague actions like "improve testing" won't get done. Make specific.
+**If fail:** Vague actions like "improve testing" won't get done. Make specific.
 
 ### Step 5: Write and Distribute Report
 
@@ -175,16 +175,16 @@ missing index. Under increased load, this saturated the connection pool.
 
 ## Lessons Learned
 - Database monitoring is insufficient; need connection-level metrics
-- Load testing must cover new query patterns, not just volume
+- Load testing must cover new query patterns, not only volume
 - Connection pool sizing hasn't kept pace with traffic growth
 
 ## Prevention
 See Action Items above.
 ```
 
-**Expected:** Report shared with team and stakeholders within 48 hours of incident.
+**Got:** Report shared with team and stakeholders within 48 hours of incident.
 
-**On failure:** If report delays exceed 1 week, insights grow stale. Prioritize post-mortems.
+**If fail:** If report delays exceed 1 week, insights grow stale. Prioritize post-mortems.
 
 ### Step 6: Review Action Items in Standup/Retros
 
@@ -201,21 +201,21 @@ gh issue create --title "AI-001: Add connection pool metrics" \
 # Add to team calendar: Weekly review of open post-mortem items
 ```
 
-**Expected:** Action items tracked in project management tool, reviewed weekly.
+**Got:** Action items tracked in project management tool, reviewed weekly.
 
-**On failure:** If action items languish, incidents will recur. Assign executive sponsor for high-priority items.
+**If fail:** If action items languish, incidents will recur. Assign executive sponsor for high-priority items.
 
 ## Validation
 
 - [ ] Timeline is complete and chronologically accurate
-- [ ] Multiple contributing factors identified (not just one)
+- [ ] Multiple contributing factors identified (not only one)
 - [ ] Action items have owners, deadlines, and priorities
 - [ ] Report uses blameless language (no "X caused the issue")
 - [ ] Report distributed to all stakeholders within 48 hours
 - [ ] Action items tracked in ticketing system
 - [ ] Follow-up review scheduled for 4 weeks out
 
-## Common Pitfalls
+## Pitfalls
 
 - **Blame culture**: Using "who" language instead of "what/why". Focus on systems, not people.
 - **Shallow analysis**: Stopping at the first cause. Always ask "why" at least 5 times.

@@ -65,9 +65,9 @@ Constraints: C must lie on the same side of AB as point P (if specified).
 
 Verify that all referenced elements are well-defined and consistent.
 
-**Expected:** A clear, unambiguous restatement of the construction problem with every given element cataloged and the target figure precisely described.
+**Got:** A clear, unambiguous restatement of the construction problem with every given element cataloged and the target figure precisely described.
 
-**On failure:** If the problem statement is ambiguous, list the possible interpretations and request clarification. If given elements are contradictory (e.g., a triangle with side lengths 1, 1, 5), state the contradiction and halt.
+**If fail:** If the problem statement is ambiguous, list the possible interpretations and request clarification. If given elements are contradictory (e.g., a triangle with side lengths 1, 1, 5), state the contradiction and halt.
 
 ### Step 2: Verify Constructibility
 
@@ -98,9 +98,9 @@ Constructibility analysis:
 - Verdict: CONSTRUCTIBLE
 ```
 
-**Expected:** A definitive yes/no verdict on constructibility, with a brief justification citing the relevant algebraic or classical result.
+**Got:** A definitive yes/no verdict on constructibility, with a brief justification citing the relevant algebraic or classical result.
 
-**On failure:** If constructibility is uncertain, attempt to reduce the problem to known constructible primitives. If the figure is provably non-constructible, document the impossibility proof and suggest the closest constructible approximation or an alternative method (e.g., neusis construction, origami).
+**If fail:** If constructibility is uncertain, attempt to reduce the problem to known constructible primitives. If the figure is provably non-constructible, document the impossibility proof and suggest the closest constructible approximation or an alternative method (e.g., neusis construction, origami).
 
 ### Step 3: Plan Construction Sequence
 
@@ -126,9 +126,9 @@ Step 4: Draw line through P and Q.                     [uses: P, Q]
 
 4. **Annotate each step** with its geometric purpose (e.g., "This constructs the perpendicular bisector of AB").
 
-**Expected:** An ordered list of primitive operations where each step depends only on previously established elements, covering all parts of the target figure.
+**Got:** An ordered list of primitive operations where each step depends only on previously established elements, covering all parts of the target figure.
 
-**On failure:** If the decomposition stalls, identify which part of the figure cannot be reached from the current set of constructed points. Revisit Step 2 to confirm constructibility, or introduce auxiliary constructions (helper circles, midpoints, reflections) to bridge the gap.
+**If fail:** If the decomposition stalls, identify which part of the figure cannot be reached from the current set of constructed points. Revisit Step 2 to confirm constructibility, or introduce auxiliary constructions (helper circles, midpoints, reflections) to bridge the gap.
 
 ### Step 4: Execute Construction Steps with Justification
 
@@ -155,9 +155,9 @@ Step 3: Mark intersections of C1 and C2 as P and Q.
 
 Continue until the target figure is fully constructed. For complex figures, group related steps into phases (e.g., "Phase 1: Construct auxiliary perpendicular bisector", "Phase 2: Locate incenter").
 
-**Expected:** A complete sequence of justified construction steps that, when executed in order, produce the target figure. Every new point, line, or circle is accounted for.
+**Got:** A complete sequence of justified construction steps that, when executed in order, produce the target figure. Every new point, line, or circle is accounted for.
 
-**On failure:** If a justification cannot be provided for a step, the step may be invalid. Verify the geometric claim independently. Common errors include assuming two circles intersect when they do not (check distance between centers vs. sum/difference of radii), or assuming a point lies on a line without proof.
+**If fail:** If a justification cannot be provided for a step, the step may be invalid. Verify the geometric claim independently. Common errors include assuming two circles intersect when they do not (check distance between centers vs. sum/difference of radii), or assuming a point lies on a line without proof.
 
 ### Step 5: Verify Construction Meets Specification
 
@@ -183,9 +183,9 @@ Triangle ABC: sides AB = BC = CA = 1. VERIFIED.
 
 4. **Document the verification result** with a clear pass/fail for each constraint.
 
-**Expected:** Every constraint from the original specification is verified, and the construction is confirmed correct. A coordinate check (when performed) matches the geometric argument.
+**Got:** Every constraint from the original specification is verified, and the construction is confirmed correct. A coordinate check (when performed) matches the geometric argument.
 
-**On failure:** If a constraint fails, trace back through the construction to find the erroneous step. Common causes: incorrect intersection choice (wrong branch of a circle-line intersection), sign error in coordinate verification, or a missing auxiliary construction.
+**If fail:** If a constraint fails, trace back through the construction to find the erroneous step. Common causes: incorrect intersection choice (wrong branch of a circle-line intersection), sign error in coordinate verification, or a missing auxiliary construction.
 
 ## Validation
 
@@ -199,7 +199,7 @@ Triangle ABC: sides AB = BC = CA = 1. VERIFIED.
 - [ ] No step relies on measurement, approximation, or non-constructible operations
 - [ ] Step count is reasonable for the complexity of the figure
 
-## Common Pitfalls
+## Pitfalls
 
 - **Assuming intersection exists**: Two circles only intersect if the distance between centers is between |r1 - r2| and r1 + r2. Always verify this condition before marking intersection points. Forgetting this check leads to constructions that work on paper but fail geometrically.
 

@@ -83,9 +83,9 @@ follow the extended system (Mispar Gadol).
 4. State the source: is this a biblical word, a divine name, a modern Hebrew word, or a technical Kabbalistic term?
 5. If ambiguous, present both common spellings and compute gematria for each
 
-**Expected:** The Hebrew letter sequence is established with confidence. The user knows exactly which letters are being summed and can verify the spelling.
+**Got:** The Hebrew letter sequence is established with confidence. The user knows exactly which letters are being summed and can verify the spelling.
 
-**On failure:** If the transliteration is ambiguous (e.g., "chai" could be Chet-Yod or Chet-Yod-Yod in some contexts), present both options with their gematria values and let the user select.
+**If fail:** If the transliteration is ambiguous (e.g., "chai" could be Chet-Yod or Chet-Yod-Yod in some contexts), present both options with their gematria values and let the user select.
 
 ### Step 2: Apply Standard Gematria (Mispar Hechrachi)
 
@@ -100,9 +100,9 @@ Sum the letter values using the standard Hebrew number table.
    - A well-known gematria value (26 = YHVH, 18 = chai, 72 = Shem ha-Mephorash, 137 = Kabbalah)
 5. If the total exceeds 400, note that it requires summing multiple hundreds
 
-**Expected:** A clear numerical result with the computation shown step by step. The user can verify each letter's value against the table.
+**Got:** A clear numerical result with the computation shown step by step. The user can verify each letter's value against the table.
 
-**On failure:** If the user provides a word with uncertain Hebrew spelling, compute values for all plausible spellings and note the range. The "correct" spelling depends on the source text.
+**If fail:** If the user provides a word with uncertain Hebrew spelling, compute values for all plausible spellings and note the range. The "correct" spelling depends on the source text.
 
 ### Step 3: Apply Ordinal and Reduced Methods (Optional)
 
@@ -136,9 +136,9 @@ A substitution cipher: first letter ↔ last letter.
 3. Present all three values together for comparison
 4. Note which method reveals the most interesting connections for this particular word
 
-**Expected:** Three numerical values (standard, ordinal, reduced) presented side by side. The reduced value often links to single-digit sephirotic numbers, making it useful for Tree of Life mapping.
+**Got:** Three numerical values (standard, ordinal, reduced) presented side by side. The reduced value often links to single-digit sephirotic numbers, making it useful for Tree of Life mapping.
 
-**On failure:** If the user only wants one method, provide that method and mention the others exist for future exploration. Do not overwhelm with calculations if a single method was requested.
+**If fail:** If the user only wants one method, provide that method and mention the others exist for future exploration. Do not overwhelm with calculations if a single method was requested.
 
 ### Step 4: Search for Isopsephy Connections
 
@@ -154,9 +154,9 @@ Identify other Hebrew words or phrases that share the same numerical value.
 4. For each connection, note the source tradition (Zohar, Talmud, later Kabbalistic commentary, Hermetic tradition)
 5. Note if no significant connections are found — not every number has rich isopsephy
 
-**Expected:** A set of words sharing the same gematria value, each with a brief note on why the connection might be meaningful. The user has material for contemplation.
+**Got:** A set of words sharing the same gematria value, each with a brief note on why the connection might be meaningful. The user has material for contemplation.
 
-**On failure:** If no well-known connections exist for the computed value, acknowledge this. Offer to compute the value's relationship to nearby significant numbers (e.g., "your value is 378, which is 2 more than shalom [376] — what does that suggest?").
+**If fail:** If no well-known connections exist for the computed value, acknowledge this. Offer to compute the value's relationship to nearby significant numbers (e.g., "your value is 378, which is 2 more than shalom [376] — what does that suggest?").
 
 ### Step 5: Interpret Connections and Correspondences
 
@@ -173,9 +173,9 @@ Move from computation to contemplation — what do the numerical relationships s
 4. If the user provided a guiding question (from Inputs), address it directly using the gematria results
 5. Close with one integrative statement connecting the numerical analysis to the word's meaning
 
-**Expected:** The numerical analysis has become meaningful — not just arithmetic but a lens for understanding the word's place in the symbolic network of Kabbalah.
+**Got:** The numerical analysis has become meaningful — not arithmetic but a lens for understanding the word's place in the symbolic network of Kabbalah.
 
-**On failure:** If interpretation feels forced or speculative, say so directly. Some gematria computations are more fruitful than others. Honest acknowledgment of thin connections is better than fabricating significance.
+**If fail:** If interpretation feels forced or speculative, say so directly. Some gematria computations are more fruitful than others. Honest acknowledgment of thin connections is better than fabricating significance.
 
 ## Validation
 
@@ -186,7 +186,7 @@ Move from computation to contemplation — what do the numerical relationships s
 - [ ] Interpretation was framed as contemplative, not demonstrative
 - [ ] The computation is verifiable — the user can check each letter against the value table
 
-## Common Pitfalls
+## Pitfalls
 
 - **Spelling ambiguity**: Hebrew words can be spelled with or without vowel letters (matres lectionis). The gematria changes significantly — always confirm the spelling
 - **Final-form confusion**: Whether Mem-final = 40 or 600 depends on which gematria system is used. State the system explicitly

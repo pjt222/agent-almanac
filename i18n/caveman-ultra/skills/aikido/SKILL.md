@@ -27,49 +27,49 @@ metadata:
 
 # Practice Aikido
 
-Develop an aikido practice rooted in centering, blending with incoming force, and resolving conflict through controlled technique rather than opposing strength with strength.
+Aikido practice → centering, blending incoming force, resolve conflict via controlled technique not strength vs strength.
 
-## When to Use
+## Use When
 
-- Learning a defensive martial art that prioritizes de-escalation and controlled resolution
-- Developing the ability to redirect aggression without causing unnecessary harm
-- Building safe falling skills (ukemi) applicable to any physical activity or emergency
-- Cultivating calm centeredness under physical pressure or confrontation
-- Complementing tai chi or meditation with a partner-based martial practice (see `tai-chi`, `meditate`)
-- Training awareness and response to multiple simultaneous threats
+- Learn defensive martial art → de-escalation + controlled resolution
+- Redirect aggression → no unnecessary harm
+- Build safe falling (ukemi) → any physical activity/emergency
+- Cultivate calm centeredness under pressure
+- Complement tai chi/meditation w/ partner practice (see `tai-chi`, `meditate`)
+- Train awareness + response → multiple simultaneous threats
 
-## Inputs
+## In
 
-- **Required**: Practice space with a padded or yielding surface (tatami, judo mats, grass; avoid concrete)
-- **Required**: Comfortable clothing allowing full range of motion (gi preferred; loose exercise clothing acceptable)
-- **Optional**: Training partner (essential for techniques; solo practice covers centering, ukemi, and movement)
-- **Optional**: Practice weapons (wooden: jo staff ~128cm, bokken sword ~102cm, tanto knife ~30cm)
-- **Optional**: Experience level (beginner, intermediate, advanced; default: beginner)
-- **Optional**: Available practice time (minimum 20 minutes; recommended 60-90 minutes)
+- **Required**: Practice space, padded/yielding (tatami, judo mats, grass; no concrete)
+- **Required**: Comfortable clothing, full range (gi preferred; loose exercise OK)
+- **Optional**: Training partner (essential for techniques; solo covers centering, ukemi, movement)
+- **Optional**: Practice weapons (wooden: jo ~128cm, bokken ~102cm, tanto ~30cm)
+- **Optional**: Exp level (beginner, intermediate, advanced; default: beginner)
+- **Optional**: Time (min 20 min; rec 60-90 min)
 
-## Procedure
+## Do
 
-### Step 1: Ground and Center
+### Step 1: Ground + Center
 
-Every aikido technique begins from a centered state. Without center, technique becomes muscular struggle.
+Every technique begins centered. No center → muscular struggle.
 
-1. Stand in hanmi (half-facing stance): one foot forward, feet roughly shoulder-width apart at 60-degree angle
-2. Bend knees slightly — weight sinks toward the one-point (seika tanden), located 5cm below the navel
-3. Relax the shoulders completely — let them drop away from the ears
-4. Extend awareness outward while keeping attention anchored at the one-point
-5. Test your center: have a partner push gently on your chest
-   - If you resist with upper body, you are not centered — relax and sink lower
-   - If you maintain stability without effort, center is established
-6. Practice weight underside: imagine that the heavy part of each arm is the underside; let the upper surface feel light and buoyant
-7. Extend ki: project calm, positive energy forward through the fingertips — not tension, but focused intention
+1. Hanmi (half-facing stance): one foot forward, shoulder-width, 60°
+2. Knees bent slight → weight sinks → one-point (seika tanden), 5cm below navel
+3. Shoulders relax fully → drop from ears
+4. Extend awareness outward, anchor at one-point
+5. Test: partner pushes chest gently
+   - Resist upper body → not centered → relax, sink
+   - Stable no effort → centered
+6. Weight underside: heavy part of arm = underside; upper surface light, buoyant
+7. Extend ki: project calm forward thru fingertips — intention, not tension
 
-**Expected:** A stable, relaxed stance where pushes are absorbed through the structure into the ground rather than resisted by muscles. A quiet mind with broad awareness.
+**→** Stable, relaxed stance. Pushes absorb thru structure → ground, not muscles. Quiet mind, broad awareness.
 
-**On failure:** If the stance feels rigid, you are holding tension. Shake out the arms and legs, take 5 deep breaths, and re-establish from scratch. If pushes easily displace you, lower your center of gravity (bend knees more) and focus on the one-point. Centering is a skill that deepens over months — initial wobbliness is normal.
+**If err:** Rigid → holding tension. Shake arms/legs, 5 breaths, restart. Pushes displace → lower center (bend more), focus one-point. Centering deepens months — initial wobbliness normal.
 
-### Step 2: Master Ukemi (Falling and Rolling)
+### Step 2: Ukemi (Falling + Rolling)
 
-Ukemi is the art of receiving technique safely. It is the most important skill in aikido — you will fall thousands of times.
+Receive technique safely. Most important skill — thousands of falls.
 
 ```
 Ukemi Progression:
@@ -96,19 +96,19 @@ Ukemi Progression:
 ```
 
 Key principles:
-1. The slap absorbs impact by spreading force across the arm surface — time it to land just before the body
-2. Tuck the chin on every fall — the head never contacts the ground
-3. Exhale on impact; holding the breath creates rigidity and increases injury risk
-4. Forward rolls should be round and smooth — if there are thuds or flat spots, the body is not curved enough
-5. Practice both sides: right shoulder forward and left shoulder forward
+1. Slap absorbs impact → spreads force across arm → time it pre-body
+2. Tuck chin every fall → head never contacts ground
+3. Exhale on impact; held breath → rigid → injury risk
+4. Forward rolls round + smooth → thuds/flat = not curved
+5. Both sides: right + left shoulder forward
 
-**Expected:** After 2-3 months of regular practice, forward rolls are smooth and quiet on both sides. Backward falls are automatic (no fear response). You can be thrown at moderate speed without hesitation.
+**→** 2-3 months regular → forward rolls smooth + quiet both sides. Backward auto (no fear). Thrown moderate speed, no hesitate.
 
-**On failure:** If forward rolls cause shoulder pain, the angle is likely too steep (going over the top of the shoulder instead of across the back diagonally). Have a partner or instructor check the line. If fear prevents commitment to the roll, return to the kneeling version and build up gradually. Never force a breakfall before the forward roll is second nature.
+**If err:** Forward rolls → shoulder pain → angle too steep (over top, not diagonal across back). Partner/instructor checks line. Fear → kneeling ver, build up. Never force breakfall pre-second-nature forward roll.
 
-### Step 3: Practice Basic Techniques
+### Step 3: Basic Techniques
 
-The four foundational techniques address the most common attack scenarios and embody aikido's core principles.
+4 foundational techniques → most common attacks + core principles.
 
 ```
 Technique Selection by Attack:
@@ -132,117 +132,117 @@ Technique Selection by Attack:
 └─────────────────┴──────────────────┴──────────────────────────────────────┘
 ```
 
-For each technique:
-1. Begin with the attack at slow, cooperative speed
-2. Blend first: move your body off the attack line (never block head-on)
-3. Connect: make contact with the attacker's arm or body to feel their balance
-4. Redirect: use circular motion to guide the attacker's energy into the technique
-5. Complete: throw or pin with control — the goal is to end the encounter, not to injure
-6. Practice 10-20 repetitions per side, alternating roles (nage/tori throws, uke attacks and falls)
-7. Gradually increase speed and resistance as both partners gain proficiency
+Per technique:
+1. Slow cooperative speed first
+2. Blend first: body off attack line (never block head-on)
+3. Connect: contact attacker's arm/body → feel balance
+4. Redirect: circular motion → guide energy into technique
+5. Complete: throw/pin w/ control — end encounter, not injure
+6. 10-20 reps/side, alternate roles (nage/tori throws, uke attacks + falls)
+7. Gradually increase speed + resistance as both gain proficiency
 
-**Expected:** Techniques feel smooth and circular. The attacker is led rather than forced. At cooperative speed, both partners finish the exchange safely and without strain.
+**→** Smooth, circular. Attacker led not forced. Cooperative speed → both finish safely no strain.
 
-**On failure:** If a technique requires significant muscular effort, the blending is incomplete — the defender is fighting the attack instead of redirecting it. Return to the moment of contact and practice the initial blend in isolation. If the attacker feels yanked or wrenched, slow down and focus on leading with the center, not pulling with the hands.
+**If err:** Needs muscle → blending incomplete → fighting not redirecting. Return to contact moment, practice blend isolated. Attacker yanked/wrenched → slow down, lead w/ center not hands.
 
-### Step 4: Develop Blending (Tai Sabaki)
+### Step 4: Blending (Tai Sabaki)
 
-Tai sabaki — body movement — is the engine of aikido. Technique without movement is just wrestling.
+Body movement = engine. Technique no movement = wrestling.
 
-1. **Irimi (entering)**: Step directly forward and past the attacker, moving inside their reach
-   - Practice: partner extends a punch; step past it so you end behind their shoulder
-2. **Tenkan (turning)**: Pivot 180 degrees on the front foot, redirecting the attacker's line
-   - Practice: partner grabs your wrist; pivot smoothly so you face the same direction they do
-3. **Irimi-tenkan (enter and turn)**: Combine entering with a pivot — the most common movement
-   - Practice: enter past the attack, then pivot to control the attacker from behind
-4. **Kaiten (rotation)**: Full body rotation to generate circular force for throws
-   - Practice: combined with shiho-nage and other rotational techniques
-5. Practice all movements solo first: step-pivot, step-pivot, step-pivot across the mat
-6. Then with a partner: focus on matching timing to the attack — move as they commit, not before or after
+1. **Irimi (entering)**: Step directly forward + past attacker, inside reach
+   - Practice: partner punches; step past → behind shoulder
+2. **Tenkan (turning)**: Pivot 180° on front foot → redirect line
+   - Practice: partner grabs wrist; pivot smoothly → face same direction
+3. **Irimi-tenkan (enter + turn)**: Combine — most common
+   - Practice: enter past attack, pivot → control behind
+4. **Kaiten (rotation)**: Full body rotation → circular force for throws
+   - Practice: combined w/ shiho-nage + rotational techniques
+5. Solo first: step-pivot, step-pivot across mat
+6. Partner: match timing → move as they commit, not before/after
 
-**Expected:** Movement is fluid, centered, and timed to the attack. The defender is never squared up facing the attack force — always angled off the line.
+**→** Fluid, centered, timed to attack. Defender never squared facing force → angled off line.
 
-**On failure:** If timing is off (arriving too early or too late), practice with a very slow, telegraphed attack. The defender should move at the same moment the attack commits — this is the "aiki" timing. If turns feel clumsy, practice tenkan as a standalone drill: 100 pivots per session builds smooth, automatic rotation.
+**If err:** Off timing (early/late) → slow telegraphed attack. Move same moment attack commits = "aiki" timing. Clumsy turns → tenkan standalone: 100 pivots/session → smooth auto rotation.
 
-### Step 5: Train Randori (Multiple Attackers)
+### Step 5: Randori (Multiple Attackers)
 
-Randori develops the awareness and decisiveness needed when overwhelmed. It is where principles are truly tested.
+Develops awareness + decisiveness when overwhelmed. Principles tested.
 
-1. Begin with two attackers at slow speed — they take turns (not simultaneous)
-2. Core principle: never stop moving. Stationary means surrounded
-3. Use each attacker as a shield against the others: redirect one into the path of another
-4. Move to open space — never back into a corner or wall
-5. Extend awareness in all directions; do not fixate on one attacker (see `mindfulness`)
-6. Apply simple, reliable techniques — complex techniques fail under pressure
-7. Progress to three attackers, then four, increasing speed gradually
-8. Randori is not about defeating every attacker — it is about maintaining center and freedom of movement
+1. 2 attackers slow → turns (not simultaneous)
+2. Core: never stop moving. Stationary = surrounded
+3. Each attacker = shield against others: redirect one → path of another
+4. Move to open space → never corner/wall
+5. Extend awareness all directions; no fixate on one (see `mindfulness`)
+6. Simple reliable techniques — complex fails under pressure
+7. Progress to 3, then 4, increase speed
+8. Not about defeating all → maintain center + freedom
 
-**Expected:** The ability to stay calm and mobile while being approached from multiple angles. Techniques are applied fluidly without freezing or tunnel vision.
+**→** Stay calm + mobile while approached multi-angle. Fluid technique, no freezing/tunnel.
 
-**On failure:** If panic sets in, return to two slow attackers. Randori anxiety is normal and decreases with exposure. If techniques collapse under pressure, simplify: focus on irimi (entering) and tenkan (turning) only, ignoring throws entirely. Movement and positioning are more important than technique execution in randori.
+**If err:** Panic → 2 slow attackers. Randori anxiety normal, decreases w/ exposure. Techniques collapse → simplify: irimi + tenkan only, no throws. Movement + positioning > execution in randori.
 
-### Step 6: Integrate Weapons Awareness
+### Step 6: Weapons Awareness
 
-Weapons training deepens understanding of distance, timing, and line — principles that improve empty-hand technique.
+Deepens distance, timing, line — improves empty-hand.
 
-1. **Jo (staff)**: Practice 31-count jo kata for line and extension
-   - The jo teaches maintaining distance and controlling space
-   - Partner practice: jo-dori (staff taking) — disarm a staff attack with empty hands
-2. **Bokken (wooden sword)**: Practice suburi (cutting exercises) for precision and center line awareness
-   - The sword teaches commitment: every cut must follow a precise line
-   - Partner practice: kumitachi (paired sword forms) for timing and distance
-3. **Tanto (wooden knife)**: Practice tanto-dori (knife defense)
-   - The knife teaches respect for close-range danger
-   - Always redirect the weapon hand — never reach for the blade
-4. Weapons principles that transfer to empty-hand:
-   - Ma-ai (proper distance): too close invites the weapon; too far wastes the response
-   - Shomen (center line): all attacks and defenses relate to the vertical center line
-   - Zanshin (continuing awareness): remain alert after the technique completes
+1. **Jo (staff)**: 31-count jo kata → line + extension
+   - Teaches distance + space control
+   - Partner: jo-dori (staff taking) — disarm staff attack empty-hand
+2. **Bokken (wooden sword)**: Suburi (cutting exercises) → precision + center line
+   - Teaches commitment: every cut precise line
+   - Partner: kumitachi (paired sword forms) → timing + distance
+3. **Tanto (wooden knife)**: Tanto-dori (knife defense)
+   - Teaches respect close-range danger
+   - Always redirect weapon hand — never reach blade
+4. Principles transfer to empty-hand:
+   - Ma-ai (distance): too close invites weapon; too far wastes response
+   - Shomen (center line): all attacks/defenses relate to vertical center
+   - Zanshin (continuing awareness): alert after technique completes
 
-**Expected:** Weapons practice clarifies why tai sabaki, timing, and distance matter. Empty-hand technique improves as body movement becomes more precise.
+**→** Weapons clarify why tai sabaki, timing, distance matter. Empty-hand improves as movement precises.
 
-**On failure:** If weapons feel awkward or disconnected from empty-hand practice, focus on suburi (solo cutting exercises) for one month before adding partner work. If a partner practice becomes competitive or dangerous, slow down immediately — wooden weapons can cause real injury at speed.
+**If err:** Weapons awkward/disconnected → suburi (solo cutting) 1 month before partner. Partner competitive/dangerous → slow down → wooden can injure at speed.
 
-### Step 7: Apply Principles Off the Mat
+### Step 7: Off-Mat Principles
 
-Aikido's value extends beyond the dojo into daily interaction and conflict resolution.
+Value beyond dojo → daily interaction + conflict resolution.
 
-1. In confrontation, apply irimi-tenkan mentally: move toward the person's concern (enter), then redirect the conversation to common ground (turn)
-2. In physical space, maintain awareness of position, exits, and others' body language (see `mindfulness`)
-3. Practice "receiving" criticism or aggression without resistance — acknowledge the energy, then redirect
-4. Cultivate the habit of centering before stressful situations: drop awareness to the one-point, relax shoulders, extend calm intention
-5. Regular practice schedule:
-   - Solo (daily, 15-30 min): centering, ukemi rolls, tai sabaki, weapons suburi
-   - Partner (2-3x weekly, 60-90 min): techniques, randori, weapons partner work
-6. Complement with tai chi for internal energy development (see `tai-chi`)
-7. Complement with meditation for mental stillness and equanimity (see `meditate`)
+1. Confrontation → mental irimi-tenkan: move toward concern (enter), redirect → common ground (turn)
+2. Physical space → awareness position, exits, body language (see `mindfulness`)
+3. "Receive" criticism/aggression no resistance — acknowledge energy, redirect
+4. Habit center before stress: drop to one-point, relax shoulders, extend calm
+5. Regular schedule:
+   - Solo (daily, 15-30 min): centering, ukemi, tai sabaki, suburi
+   - Partner (2-3x/week, 60-90 min): techniques, randori, weapons partner
+6. Complement tai chi → internal energy (see `tai-chi`)
+7. Complement meditation → stillness + equanimity (see `meditate`)
 
-**Expected:** Aikido principles — blending, redirecting, centering — become natural responses to conflict in daily life. Physical practice maintains and deepens martial skill.
+**→** Principles — blending, redirecting, centering — natural responses to daily conflict. Physical practice maintains + deepens martial skill.
 
-**On failure:** If daily practice lapses, focus on the smallest unit: 5 minutes of centering and 20 forward rolls. Consistency matters more than duration. If the martial aspects feel disconnected from daily life, reflect on how each technique is a metaphor: irimi is facing a problem directly; tenkan is changing perspective; ukemi is recovering from setbacks.
+**If err:** Lapses → smallest unit: 5 min centering + 20 rolls. Consistency > duration. Disconnected from daily → reflect: irimi = face problem direct; tenkan = change perspective; ukemi = recover setback.
 
-## Validation
+## Check
 
-- [ ] Centered stance absorbs moderate pushes without muscular resistance
-- [ ] Forward rolls are smooth, quiet, and practiced on both sides
-- [ ] At least four basic techniques can be performed cooperatively with a partner
-- [ ] Tai sabaki (irimi, tenkan, irimi-tenkan) is practiced both solo and with a partner
-- [ ] Randori with two slow attackers can be sustained for 60 seconds without freezing
-- [ ] At least one weapon (jo, bokken, or tanto) has been practiced in solo kata
-- [ ] Practice includes both solo and partner components regularly
+- [ ] Centered stance absorbs moderate pushes no muscular resistance
+- [ ] Forward rolls smooth, quiet, both sides
+- [ ] 4+ basic techniques cooperative w/ partner
+- [ ] Tai sabaki (irimi, tenkan, irimi-tenkan) solo + partner
+- [ ] Randori 2 slow attackers 60 sec no freezing
+- [ ] 1+ weapon (jo, bokken, tanto) solo kata
+- [ ] Solo + partner components regularly
 
-## Common Pitfalls
+## Traps
 
-- **Using muscle instead of blending**: If a technique requires strength, the timing or angle is wrong. Relax, re-enter, and let the attacker's energy do the work. Aikido's power comes from redirecting force, not generating it
-- **Neglecting ukemi**: Students who avoid falling avoid learning. Ukemi IS aikido — the ability to receive force safely. Practice it every session, especially at the start
-- **Fear of commitment**: Half-hearted entering (irimi) puts you in the worst position — too close to evade, too far to control. Once you decide to enter, commit fully to moving past the attack
-- **Fixating on one attacker**: In randori and in life, tunnel vision is dangerous. Keep soft, wide awareness. Peripheral vision detects motion before focused vision does
-- **Training only with compliant partners**: While beginners need cooperation, intermediate students should gradually increase resistance. Technique that only works on a cooperative partner is incomplete
+- **Muscle instead of blending**: Needs strength → timing/angle wrong. Relax, re-enter, let attacker's energy work. Power from redirecting, not generating.
+- **Neglect ukemi**: Avoid falling → avoid learning. Ukemi IS aikido. Every session, start.
+- **Fear of commitment**: Half-hearted irimi → worst position — too close evade, too far control. Decide enter → commit fully.
+- **Fixate on one attacker**: Tunnel vision dangerous. Soft wide awareness. Peripheral detects motion before focused.
+- **Compliant partners only**: Beginners need cooperation; intermediate gradually more resistance. Technique only on cooperative = incomplete.
 
-## Related Skills
+## →
 
-- `tai-chi` — complementary internal martial art; shares the principle of yielding to overcome force, with emphasis on solo cultivation
-- `mindfulness` — defensive situational awareness provides the perceptual foundation for martial readiness and conflict avoidance
-- `meditate` — seated meditation develops the centered, equanimous mind state that aikido requires under pressure
-- `heal` — understanding body mechanics from aikido practice informs first aid and bodywork approaches
-- `redirect` — AI self-application variant; maps aikido blending and redirection to handling conflicting demands and tool failures
+- `tai-chi` — complementary internal; shares yielding principle, solo focus
+- `mindfulness` — defensive awareness → perceptual foundation for martial readiness
+- `meditate` — seated meditation → centered equanimous mind under pressure
+- `heal` — body mechanics from aikido → first aid + bodywork
+- `redirect` — AI variant; maps blending/redirection → conflicting demands + tool failures

@@ -26,29 +26,29 @@ metadata:
 
 # Apply Semantic Versioning
 
-Determine and apply the correct semantic version bump by analyzing changes since the last release. This skill reads version files, classifies changes as breaking (major), feature (minor), or fix (patch), computes the new version number, and updates the appropriate files. Follows [SemVer 2.0.0](https://semver.org/) specification.
+Determine and apply correct semantic version bump by analyzing changes since last release. This skill reads version files, classifies changes as breaking (major), feature (minor), or fix (patch), computes new version number, updates appropriate files. Follows [SemVer 2.0.0](https://semver.org/) specification.
 
-## When to Use
+## When Use
 
-- Preparing a new release and need to determine the correct version number
-- After merging a set of changes and before tagging a release
-- Evaluating whether a change constitutes a breaking change
-- Adding pre-release identifiers (alpha, beta, rc) to a version
-- Resolving disagreement about what version bump is appropriate
+- Preparing new release and need to determine correct version number
+- After merging set of changes and before tagging release
+- Evaluating whether change constitutes breaking change
+- Adding pre-release identifiers (alpha, beta, rc) to version
+- Resolving disagreement about what version bump appropriate
 
 ## Inputs
 
-- **Required**: Project root directory containing a version file (DESCRIPTION, package.json, Cargo.toml, pyproject.toml, or VERSION)
-- **Required**: Git history since the last release (tag or commit)
+- **Required**: Project root directory containing version file (DESCRIPTION, package.json, Cargo.toml, pyproject.toml, or VERSION)
+- **Required**: Git history since last release (tag or commit)
 - **Optional**: Commit convention in use (Conventional Commits, free-form)
 - **Optional**: Pre-release label to apply (alpha, beta, rc)
 - **Optional**: Previous version if not readable from files
 
-## Procedure
+## Steps
 
 ### Step 1: Read Current Version
 
-Locate and read the version file in the project root.
+Locate and read version file in project root.
 
 ```bash
 # R packages
@@ -67,15 +67,15 @@ grep 'version' pyproject.toml
 cat VERSION
 ```
 
-Parse the current version into major.minor.patch components. If the version contains a pre-release suffix (e.g., `1.2.0-beta.1`), note it separately.
+Parse current version into major.minor.patch components. Version contains pre-release suffix (e.g., `1.2.0-beta.1`)? Note it separately.
 
-**Expected:** Current version identified as `MAJOR.MINOR.PATCH[-PRERELEASE]`.
+**Got:** Current version identified as `MAJOR.MINOR.PATCH[-PRERELEASE]`.
 
-**On failure:** If no version file is found, check for a VERSION file or git tags (`git describe --tags --abbrev=0`). If no version exists at all, start at `0.1.0` for initial development or `1.0.0` if the project has a stable public API.
+**If fail:** No version file found? Check for VERSION file or git tags (`git describe --tags --abbrev=0`). No version exists at all? Start at `0.1.0` for initial development or `1.0.0` if project has stable public API.
 
 ### Step 2: Analyze Changes Since Last Release
 
-Retrieve the list of changes since the last tagged release.
+Retrieve list of changes since last tagged release.
 
 ```bash
 # Find the last version tag
@@ -88,15 +88,15 @@ git log --oneline v1.2.3..HEAD
 git log --oneline v1.2.3..HEAD | grep -E "^[a-f0-9]+ (feat|fix|BREAKING)"
 ```
 
-If no tags exist, compare against the initial commit or a known baseline.
+No tags exist? Compare against initial commit or known baseline.
 
-**Expected:** A list of commits with messages that can be classified by change type.
+**Got:** List of commits with messages that can be classified by change type.
 
-**On failure:** If git history is unavailable or tags are missing, ask the developer to describe the changes manually. Classify based on their description.
+**If fail:** Git history unavailable or tags missing? Ask developer to describe changes manually. Classify based on their description.
 
 ### Step 3: Classify Changes
 
-Apply the SemVer classification rules:
+Apply SemVer classification rules:
 
 | Change Type | Version Bump | Examples |
 |---|---|---|
@@ -105,22 +105,22 @@ Apply the SemVer classification rules:
 | **Fix** (backwards-compatible bug fix) | PATCH | Bug fix, documentation correction, performance improvement with same API |
 
 Classification rules:
-1. If ANY change is breaking, the bump is MAJOR (resets minor and patch to 0)
-2. If no breaking changes but ANY new features, the bump is MINOR (resets patch to 0)
-3. If only fixes, the bump is PATCH
+1. ANY change is breaking? Bump is MAJOR (resets minor and patch to 0)
+2. No breaking changes but ANY new features? Bump is MINOR (resets patch to 0)
+3. Only fixes? Bump is PATCH
 
 Special cases:
 - **Pre-1.0.0**: During initial development (`0.x.y`), minor bumps may contain breaking changes. Document clearly.
-- **Deprecation**: Deprecating a function is a MINOR change (it still works). Removing it is MAJOR.
-- **Internal changes**: Refactoring that does not change the public API is PATCH.
+- **Deprecation**: Deprecating function is MINOR change (it still works). Removing it is MAJOR.
+- **Internal changes**: Refactoring that does not change public API is PATCH.
 
-**Expected:** Each change classified as breaking/feature/fix, and the overall bump level determined.
+**Got:** Each change classified as breaking/feature/fix, overall bump level determined.
 
-**On failure:** If changes are ambiguous, err on the side of a higher bump. A conservative major bump is better than a minor bump that breaks downstream code.
+**If fail:** Changes ambiguous? Err on side of higher bump. Conservative major bump better than minor bump that breaks downstream code.
 
 ### Step 4: Compute New Version
 
-Apply the bump to the current version:
+Apply bump to current version:
 
 | Current | Bump | New Version |
 |---|---|---|
@@ -130,20 +130,20 @@ Apply the bump to the current version:
 | 0.9.5 | MINOR | 0.10.0 |
 | 2.0.0-rc.1 | (release) | 2.0.0 |
 
-If a pre-release label is requested:
+Pre-release label requested?
 - `1.3.0-alpha.1` for first alpha of upcoming 1.3.0
 - `1.3.0-beta.1` for first beta
 - `1.3.0-rc.1` for first release candidate
 
 Pre-release precedence: `alpha < beta < rc < (release)`.
 
-**Expected:** New version number computed following SemVer rules.
+**Got:** New version number computed following SemVer rules.
 
-**On failure:** If the current version is malformed or non-SemVer, normalize it first. For example, `1.2` becomes `1.2.0`.
+**If fail:** Current version malformed or non-SemVer? Normalize first. Example: `1.2` becomes `1.2.0`.
 
 ### Step 5: Update Version Files
 
-Write the new version to the appropriate file(s).
+Write new version to appropriate file(s).
 
 ```r
 # R: Update DESCRIPTION
@@ -161,15 +161,15 @@ Write the new version to the appropriate file(s).
 # Change version = "1.2.3" to version = "1.3.0"
 ```
 
-If the project has multiple files that reference the version (e.g., `_pkgdown.yml`, `CITATION`, `codemeta.json`), update all of them.
+Project has multiple files that reference version (e.g., `_pkgdown.yml`, `CITATION`, `codemeta.json`)? Update all of them.
 
-**Expected:** All version files updated consistently to the new version number.
+**Got:** All version files updated consistently to new version number.
 
-**On failure:** If a file update fails, revert all changes to maintain consistency. Never leave version files in a partially updated state.
+**If fail:** File update fails? Revert all changes to maintain consistency. Never leave version files in partially updated state.
 
 ### Step 6: Create Version Tag
 
-After committing the version bump, create a git tag.
+After committing version bump, create git tag.
 
 ```bash
 # Annotated tag (preferred)
@@ -179,40 +179,40 @@ git tag -a v1.3.0 -m "Release v1.3.0"
 git tag v1.3.0
 ```
 
-Use the project's established tag format:
+Use project's established tag format:
 - `v1.3.0` (most common)
 - `1.3.0` (no prefix)
 - `package-name@1.3.0` (monorepo)
 
-**Expected:** Git tag created matching the new version.
+**Got:** Git tag created matching new version.
 
-**On failure:** If the tag already exists, the version was not properly bumped. Check for duplicate tags with `git tag -l "v1.3*"` and resolve before proceeding.
+**If fail:** Tag already exists? Version was not properly bumped. Check for duplicate tags with `git tag -l "v1.3*"` and resolve before proceeding.
 
-## Validation
+## Checks
 
-- [ ] Current version was read from the correct version file
-- [ ] All commits since the last release were analyzed
-- [ ] Each change is classified as breaking, feature, or fix
-- [ ] The bump level matches the highest-severity change (breaking > feature > fix)
+- [ ] Current version read from correct version file
+- [ ] All commits since last release analyzed
+- [ ] Each change classified as breaking, feature, or fix
+- [ ] Bump level matches highest-severity change (breaking > feature > fix)
 - [ ] New version follows SemVer 2.0.0 format: `MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`
-- [ ] All version files in the project are updated consistently
+- [ ] All version files in project updated consistently
 - [ ] No version was skipped (e.g., 1.2.3 to 1.4.0 without 1.3.0 being released)
-- [ ] Git tag matches the new version and project's tag format convention
+- [ ] Git tag matches new version and project's tag format convention
 - [ ] Pre-release suffix, if used, follows correct precedence (alpha < beta < rc)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Skipping minor versions**: Going from 1.2.3 directly to 1.4.0 because "we added two features." Each release gets one bump; the number of features does not determine the version.
-- **Treating deprecation as breaking**: Deprecating a function (adding a warning) is a minor change. Only removing it is a breaking change.
-- **Forgetting pre-1.0.0 rules**: Before 1.0.0, the API is considered unstable. Some projects bump minor for breaking changes during this phase, but it should be documented.
+- **Skipping minor versions**: Going from 1.2.3 directly to 1.4.0 because "we added two features." Each release gets one bump; number of features does not determine version.
+- **Treating deprecation as breaking**: Deprecating function (adding warning) is minor change. Only removing it is breaking change.
+- **Forgetting pre-1.0.0 rules**: Before 1.0.0, API considered unstable. Some projects bump minor for breaking changes during this phase, but should be documented.
 - **Inconsistent version files**: Updating package.json but not package-lock.json, or updating DESCRIPTION but not CITATION. All version references must stay in sync.
-- **Build metadata confusion**: Build metadata (`+build.123`) does not affect version precedence. `1.0.0+build.1` and `1.0.0+build.2` have the same precedence.
-- **Not tagging releases**: Without git tags, future version bumps cannot determine the baseline for change analysis.
+- **Build metadata confusion**: Build metadata (`+build.123`) does not affect version precedence. `1.0.0+build.1` and `1.0.0+build.2` have same precedence.
+- **Not tagging releases**: Without git tags, future version bumps cannot determine baseline for change analysis.
 
-## Related Skills
+## See Also
 
 - `manage-changelog` -- Maintain changelog entries that pair with version bumps
 - `plan-release-cycle` -- Plan release milestones that determine when version bumps occur
 - `release-package-version` -- R-specific release workflow that includes version bumping
-- `commit-changes` -- Commit the version bump with a proper message
-- `create-github-release` -- Create a GitHub release from the version tag
+- `commit-changes` -- Commit version bump with proper message
+- `create-github-release` -- Create GitHub release from version tag

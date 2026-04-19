@@ -72,9 +72,9 @@ Value Classification:
    - Measure memory allocation patterns
 5. Produce the **Assay Report**: element-by-element classification with evidence
 
-**Expected:** Every significant element classified with evidence. Gold elements are identified for protection during optimization. Lead elements are prioritized by impact.
+**Got:** Every significant element classified with evidence. Gold elements are identified for protection during optimization. Lead elements are prioritized by impact.
 
-**On failure:** If profiling tools aren't available, use static analysis: function complexity (cyclomatic), dependency count, and code size as proxies. If the codebase is too large, focus on the critical path first.
+**If fail:** If profiling tools aren't available, use static analysis: function complexity (cyclomatic), dependency count, and code size as proxies. If the codebase is too large, focus on the critical path first.
 
 ### Step 2: Refine — Amplify the Gold
 
@@ -90,9 +90,9 @@ Protect and enhance the highest-value elements.
    - Resolve minor code smells without restructuring
 3. Do not modify Gold/Silver behavior — only improve their polish and protection
 
-**Expected:** Gold and Silver elements are better tested, documented, and protected. No behavioral changes, only quality improvements.
+**Got:** Gold and Silver elements are better tested, documented, and protected. No behavioral changes, only quality improvements.
 
-**On failure:** If a "Gold" element reveals hidden problems during closer inspection, reclassify it. Better to be honest about value than to protect flawed code.
+**If fail:** If a "Gold" element reveals hidden problems during closer inspection, reclassify it. Better to be honest about value than to protect flawed code.
 
 ### Step 3: Transmute — Convert Lead to Gold
 
@@ -102,7 +102,7 @@ Transform heavy, inefficient elements into optimized equivalents.
 2. For each Lead element, choose a transmutation strategy:
    - **Algorithm optimization**: Replace O(n^2) with O(n log n), eliminate redundant computation
    - **Caching/memoization**: Store expensive results that are requested repeatedly
-   - **Lazy evaluation**: Defer computation until results are actually needed
+   - **Lazy evaluation**: Defer computation until results are needed
    - **Batch processing**: Combine many small operations into fewer large ones
    - **Structural simplification**: Reduce cyclomatic complexity, flatten deep nesting
 3. Apply the strategy and measure the improvement:
@@ -111,9 +111,9 @@ Transform heavy, inefficient elements into optimized equivalents.
    - Before/after dependency counts for coupling changes
 4. Verify behavioral equivalence after each transmutation
 
-**Expected:** Measurable improvement on the target value metric. Each transmuted element performs better than its Lead predecessor while maintaining identical behavior.
+**Got:** Measurable improvement on the target value metric. Each transmuted element performs better than its Lead predecessor while maintaining identical behavior.
 
-**On failure:** If a Lead element resists optimization within its current interface, consider whether the interface itself is the problem. Sometimes the transmutation requires changing how the element is called, not just how it's implemented.
+**If fail:** If a Lead element resists optimization within its current interface, consider whether the interface itself is the problem. Sometimes the transmutation requires changing how the element is called, not how it's implemented.
 
 ### Step 4: Purge — Remove the Dross
 
@@ -130,9 +130,9 @@ Eliminate dead weight systematically.
 3. Verify nothing breaks after each removal (run tests)
 4. Document what was removed and why (in commit messages, not in code)
 
-**Expected:** The codebase is lighter. Bundle size, dependency count, or code volume measurably reduced. All tests still pass.
+**Got:** The codebase is lighter. Bundle size, dependency count, or code volume measurably reduced. All tests still pass.
 
-**On failure:** If removing an element breaks something, it wasn't dross — reclassify it. If dynamic references make it hard to verify usage, add temporary logging before deletion to confirm no runtime access.
+**If fail:** If removing an element breaks something, it wasn't dross — reclassify it. If dynamic references make it hard to verify usage, add temporary logging before deletion to confirm no runtime access.
 
 ### Step 5: Verify — Weigh the Gold
 
@@ -146,9 +146,9 @@ Measure the overall improvement.
    - Elements purged (Dross removed with size/count impact)
    - Overall metric improvement (e.g., "47% faster", "32% smaller bundle")
 
-**Expected:** Measurable, documented improvement on the target value metric. The codebase is demonstrably more valuable than before.
+**Got:** Measurable, documented improvement on the target value metric. The codebase is demonstrably more valuable than before.
 
-**On failure:** If overall improvement is marginal, the original code may have been better than assumed. Document what was learned — knowing that code is already near-optimal is itself valuable.
+**If fail:** If overall improvement is marginal, the original code may have been better than assumed. Document what was learned — knowing that code is already near-optimal is itself valuable.
 
 ## Validation Checklist
 
@@ -161,7 +161,7 @@ Measure the overall improvement.
 - [ ] No behavioral regressions introduced
 - [ ] Constraints from Inputs are satisfied
 
-## Common Pitfalls
+## Pitfalls
 
 - **Premature optimization**: Optimizing without profiling. Always measure first, optimize the hot paths
 - **Polishing dross**: Spending effort improving code that should be deleted. Classify before refining
@@ -171,7 +171,7 @@ Measure the overall improvement.
 
 ## Related Skills
 
-- `athanor` — Full four-stage transformation when chrysopoeia reveals the code needs restructuring, not just optimization
+- `athanor` — Full four-stage transformation when chrysopoeia reveals the code needs restructuring, not optimization
 - `transmute` — Targeted conversion when a Lead element needs a paradigm shift
 - `review-software-architecture` — Architecture-level evaluation that complements code-level chrysopoeia
 - `review-data-analysis` — Data pipeline optimization parallels code optimization

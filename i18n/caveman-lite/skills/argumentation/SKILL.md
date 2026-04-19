@@ -64,9 +64,9 @@ State your claim as a clear, falsifiable hypothesis. A hypothesis is not an opin
 | "The API design is cleaner"          | "Replacing the 5 endpoint variants with a single parameterized endpoint reduces the public API surface by 60%" |
 | "This research approach is better"   | "Method A achieves higher precision than Method B on dataset X at the 95% confidence level" |
 
-**Expected:** A one-sentence hypothesis that is specific, scoped, and falsifiable. Someone reading it can immediately imagine what evidence would confirm or refute it.
+**Got:** A one-sentence hypothesis that is specific, scoped, and falsifiable. Someone reading it can immediately imagine what evidence would confirm or refute it.
 
-**On failure:** If the hypothesis feels vague, apply the "how would I disprove this?" test. If you cannot imagine counter-evidence, the claim is an opinion, not a hypothesis. Narrow the scope or add measurable criteria until it becomes testable.
+**If fail:** If the hypothesis feels vague, apply the "how would I disprove this?" test. If you cannot imagine counter-evidence, the claim is an opinion, not a hypothesis. Narrow the scope or add measurable criteria until it becomes testable.
 
 ### Step 2: Identify the Argument Type
 
@@ -89,9 +89,9 @@ Select the logical structure that best supports your hypothesis. Different claim
 
 3. Consider combining types for stronger arguments (e.g., analogical reasoning backed by inductive evidence)
 
-**Expected:** A chosen argument type (or combination) with a clear rationale for why it fits the hypothesis.
+**Got:** A chosen argument type (or combination) with a clear rationale for why it fits the hypothesis.
 
-**On failure:** If no single type fits cleanly, the hypothesis may need splitting into sub-claims. Break it into parts that each have a natural argument structure.
+**If fail:** If no single type fits cleanly, the hypothesis may need splitting into sub-claims. Break it into parts that each have a natural argument structure.
 
 ### Step 3: Construct the Argument
 
@@ -132,9 +132,9 @@ Build the logical chain that connects your hypothesis to its justification.
 >
 > **Rebuttal**: Valid limitation. The hypothesis is scoped to biomedical NER specifically. However, similar domain-adaptation gains appear in legal NLP (Legal-BERT) and financial NLP (FinBERT), suggesting the pattern may generalize to other specialized domains, though that is a separate claim requiring its own evidence.
 
-**Expected:** A complete argument chain with premises, logical connection, a steelmanned counterargument, and a rebuttal. The reader can follow the reasoning step by step.
+**Got:** A complete argument chain with premises, logical connection, a steelmanned counterargument, and a rebuttal. The reader can follow the reasoning step by step.
 
-**On failure:** If the argument feels weak, check the premises. Weak arguments usually stem from unsupported premises, not faulty logic. Find evidence for each premise or acknowledge it as an assumption. If the counterargument is stronger than the rebuttal, the hypothesis may need revision.
+**If fail:** If the argument feels weak, check the premises. Weak arguments usually stem from unsupported premises, not faulty logic. Find evidence for each premise or acknowledge it as an assumption. If the counterargument is stronger than the rebuttal, the hypothesis may need revision.
 
 ### Step 4: Provide Concrete Examples
 
@@ -155,9 +155,9 @@ Support the argument with independently verifiable evidence. Examples are not il
 | Representative         | "3 of 5 validation bugs in the last 6 months followed this pattern" | "I once saw a bug like this"             |
 | Includes edge cases    | "This pattern holds for string inputs but not for file upload validation, which has handler-specific constraints" | (no limitations mentioned)               |
 
-**Expected:** Concrete examples that a reader can verify independently. At least one positive and one edge case. Each references a specific artifact (file, line, issue, paper, dataset).
+**Got:** Concrete examples that a reader can verify independently. At least one positive and one edge case. Each references a specific artifact (file, line, issue, paper, dataset).
 
-**On failure:** If examples are hard to find, the hypothesis may be too broad or not grounded in observable reality. Narrow the scope to what you can actually point to. Absence of examples is a signal, not a gap to paper over with vague references.
+**If fail:** If examples are hard to find, the hypothesis may be too broad or not grounded in observable reality. Narrow the scope to what you can point to. Absence of examples is a signal, not a gap to paper over with vague references.
 
 ### Step 5: Assemble the Complete Argument
 
@@ -196,14 +196,14 @@ Combine hypothesis, argument, and examples into the appropriate format for the c
 4. **For research writing** -- map to the standard structure: Introduction states the hypothesis, Methods/Results provide argument and examples, Discussion addresses counterarguments
 
 5. Review the assembled argument for:
-   - Logical gaps (does the conclusion actually follow from the premises?)
+   - Logical gaps (does the conclusion follow from the premises?)
    - Missing evidence (are there unsupported premises?)
    - Unaddressed counterarguments (is the strongest objection answered?)
    - Scope creep (does the argument stay within the hypothesis bounds?)
 
-**Expected:** A complete, formatted argument appropriate for its context. The reader can evaluate the hypothesis, follow the reasoning, check the evidence, and consider counterarguments -- all in one coherent structure.
+**Got:** A complete, formatted argument appropriate for its context. The reader can evaluate the hypothesis, follow the reasoning, check the evidence, and consider counterarguments -- all in one coherent structure.
 
-**On failure:** If the assembled argument feels disjointed, the hypothesis may be too broad. Split it into focused sub-arguments, each with its own hypothesis-argument-example triad. Two tight arguments are stronger than one sprawling one.
+**If fail:** If the assembled argument feels disjointed, the hypothesis may be too broad. Split it into focused sub-arguments, each with its own hypothesis-argument-example triad. Two tight arguments are stronger than one sprawling one.
 
 ## Validation
 
@@ -219,7 +219,7 @@ Combine hypothesis, argument, and examples into the appropriate format for the c
 - [ ] Output format matches the context (code review, PR, ADR, research)
 - [ ] No logical fallacies (appeal to authority, false dichotomy, strawman)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Stating opinions as hypotheses**: "This code is messy" is a preference, not a hypothesis. Rewrite as a testable claim: "This module has 4 responsibilities that should be separated per the single-responsibility principle, as evidenced by its 6 public methods spanning 3 unrelated domains."
 - **Skipping the counterargument**: Unaddressed objections weaken the argument even if the reader never voices them. Always steelman -- state the strongest opposing case in its best form before rebutting it.

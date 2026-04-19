@@ -82,9 +82,9 @@ AI Coordination Problem Types:
 
 Classify the current task. Most complex tasks are Construction or Division of Labor; most debugging tasks are Foraging; most design decisions are Consensus.
 
-**Expected:** A clear classification that determines which coordination signals to use. The classification should match how the task actually feels, not how it was described.
+**Got:** A clear classification that determines which coordination signals to use. The classification should match how the task actually feels, not how it was described.
 
-**On failure:** If the task spans multiple types (common for large tasks), identify the dominant type for the current phase. Construction during implementation, Foraging during debugging, Consensus during design. The type can change as the task progresses.
+**If fail:** If the task spans multiple types (common for large tasks), identify the dominant type for the current phase. Construction during implementation, Foraging during debugging, Consensus during design. The type can change as the task progresses.
 
 ### Step 2: Design Context Signals
 
@@ -122,9 +122,9 @@ Additionally, design inhibition signals — markers for tried-and-failed approac
 - After an approach is abandoned: note why (prevents revisiting without new evidence)
 - After a user correction: note what was wrong (prevents repeating the error)
 
-**Expected:** A mental model of information freshness across the current context. Identification of which information is fresh and which needs refreshing before reliance.
+**Got:** A mental model of information freshness across the current context. Identification of which information is fresh and which needs refreshing before reliance.
 
-**On failure:** If information freshness is hard to assess, default to "re-read before relying on" for anything not verified in the last 5-10 actions. Over-refreshing wastes some effort but prevents stale-information errors.
+**If fail:** If information freshness is hard to assess, default to "re-read before relying on" for anything not verified in the last 5-10 actions. Over-refreshing wastes some effort but prevents stale-information errors.
 
 ### Step 3: Define Local Protocols
 
@@ -164,9 +164,9 @@ Local Protocol Rules:
 
 These protocols are simple enough to apply at every step without significant overhead.
 
-**Expected:** A set of lightweight rules that improve coordination quality without slowing execution. The rules should feel helpful, not burdensome.
+**Got:** A set of lightweight rules that improve coordination quality without slowing execution. The rules should feel helpful, not burdensome.
 
-**On failure:** If the protocols feel like overhead, reduce to the two most important for the current task type: Safety + Deposit for Construction, Safety + Exploration for Foraging, Safety + Response for tasks with active user feedback.
+**If fail:** If the protocols feel like overhead, reduce to the two most important for the current task type: Safety + Deposit for Construction, Safety + Exploration for Foraging, Safety + Response for tasks with active user feedback.
 
 ### Step 4: Calibrate Information Freshness
 
@@ -188,9 +188,9 @@ Freshness Audit Template:
 └────────────────────────┴──────────┴──────────────┴─────────────────┘
 ```
 
-**Expected:** A concrete inventory of information freshness with stale items identified for refresh. At least one fact re-verified — if nothing needed refreshing, the audit was too shallow or the context is genuinely fresh.
+**Got:** A concrete inventory of information freshness with stale items identified for refresh. At least one fact re-verified — if nothing needed refreshing, the audit was too shallow or the context is genuinely fresh.
 
-**On failure:** If the audit reveals significant information loss (multiple facts with "Lost" or "Unknown" status), this is a signal to run `heal` for a full subsystem assessment. Information loss beyond a threshold means coordination is compromised at the foundation level.
+**If fail:** If the audit reveals significant information loss (multiple facts with "Lost" or "Unknown" status), this is a signal to run `heal` for a full subsystem assessment. Information loss beyond a threshold means coordination is compromised at the foundation level.
 
 ### Step 5: Test Emergent Coherence
 
@@ -213,9 +213,9 @@ Coherence Test:
 └────────────────────────────────────┴─────────────────────────────────┘
 ```
 
-**Expected:** A concrete assessment of overall coherence with specific issues identified. Coherent coordination should feel like parts clicking together; incoherent coordination feels like forcing puzzle pieces.
+**Got:** A concrete assessment of overall coherence with specific issues identified. Coherent coordination should feel like parts clicking together; incoherent coordination feels like forcing puzzle pieces.
 
-**On failure:** If coherence is poor, identify the specific point where sub-tasks diverge. Often it is a single stale assumption or an unprocessed user correction that propagated through downstream work. Fix the point of divergence, then re-verify downstream outputs.
+**If fail:** If coherence is poor, identify the specific point where sub-tasks diverge. Often it is a single stale assumption or an unprocessed user correction that propagated through downstream work. Fix the point of divergence, then re-verify downstream outputs.
 
 ## Validation
 
@@ -226,7 +226,7 @@ Coherence Test:
 - [ ] Emergent coherence was tested across sub-tasks
 - [ ] Inhibition signals were respected (tried-and-failed approaches not repeated)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Over-engineering signals**: Complex coordination protocols slow work more than they help. Start with Safety + Deposit; add others only when problems emerge
 - **Trusting stale context**: The most common coordination failure is relying on information that was true 20 messages ago but has since been updated or invalidated. When in doubt, re-read

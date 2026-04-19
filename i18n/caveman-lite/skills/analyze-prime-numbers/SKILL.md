@@ -41,7 +41,7 @@ Analyze prime numbers by selecting and applying the appropriate algorithm for th
 - **Required**: The integer(s) to analyze, or a bound for distribution analysis
 - **Required**: Task type -- one of: primality test, factorization, or distribution analysis
 - **Optional**: Preferred algorithm (trial division, Miller-Rabin, Sieve of Eratosthenes, Pollard's rho)
-- **Optional**: Whether to produce a formal proof of primality or just a computational verdict
+- **Optional**: Whether to produce a formal proof of primality or a computational verdict
 - **Optional**: Output format (factor tree, prime list, count, table)
 
 ## Procedure
@@ -56,9 +56,9 @@ Classify the request into one of three categories and select the appropriate alg
 
 Record the task type and the input value(s).
 
-**Expected:** A clear classification with the input values recorded.
+**Got:** A clear classification with the input values recorded.
 
-**On failure:** If the input is ambiguous (e.g., "analyze 60"), ask the user to clarify whether they want a primality test, factorization, or distribution analysis. Default to factorization for composite numbers and primality confirmation for suspected primes.
+**If fail:** If the input is ambiguous (e.g., "analyze 60"), ask the user to clarify whether they want a primality test, factorization, or distribution analysis. Default to factorization for composite numbers and primality confirmation for suspected primes.
 
 ### Step 2: Apply Primality Testing (if task = primality)
 
@@ -96,9 +96,9 @@ Test whether n is prime using an algorithm matched to the size of n.
 | 8     | 19    | 17    | 59    |       |       |
 | 9     | 23    | 18    | 61    |       |       |
 
-**Expected:** A definitive answer (prime or composite) with the algorithm used and any witnesses or divisors found.
+**Got:** A definitive answer (prime or composite) with the algorithm used and any witnesses or divisors found.
 
-**On failure:** If Miller-Rabin reports "probably prime" but certainty is required, escalate to a deterministic test (e.g., AKS or ECPP). For trial division, if computation is too slow, switch to Miller-Rabin.
+**If fail:** If Miller-Rabin reports "probably prime" but certainty is required, escalate to a deterministic test (e.g., AKS or ECPP). For trial division, if computation is too slow, switch to Miller-Rabin.
 
 ### Step 3: Apply Factorization (if task = factorization)
 
@@ -131,9 +131,9 @@ Factor n completely into its prime power decomposition.
 | Quadratic sieve | L(n)^{1+o(1)}              | n up to ~10^50        |
 | GNFS            | L(n)^{(64/9)^{1/3}+o(1)}  | n > 10^50             |
 
-**Expected:** A complete prime factorization in canonical form, verified by multiplication.
+**Got:** A complete prime factorization in canonical form, verified by multiplication.
 
-**On failure:** If Pollard's rho fails to find a factor after many iterations (cycle detected without a non-trivial gcd), try different values of c (at least 5 attempts). If all fail, the cofactor may be prime -- confirm with a primality test.
+**If fail:** If Pollard's rho fails to find a factor after many iterations (cycle detected without a non-trivial gcd), try different values of c (at least 5 attempts). If all fail, the cofactor may be prime -- confirm with a primality test.
 
 ### Step 4: Apply Distribution Analysis (if task = distribution)
 
@@ -171,9 +171,9 @@ Max prime gap:  148 (between 492113 and 492227)
 Twin primes:    8,169 pairs
 ```
 
-**Expected:** A count of primes with PNT comparison and optional gap analysis.
+**Got:** A count of primes with PNT comparison and optional gap analysis.
 
-**On failure:** If N is too large for in-memory sieving (N > 10^9), use a segmented sieve that processes the range in blocks. If only a count is needed (not a list), use the Meissel-Lehmer algorithm for pi(N) directly.
+**If fail:** If N is too large for in-memory sieving (N > 10^9), use a segmented sieve that processes the range in blocks. If only a count is needed (not a list), use the Meissel-Lehmer algorithm for pi(N) directly.
 
 ### Step 5: Verify Results Computationally
 
@@ -201,9 +201,9 @@ Cross-check all results using an independent computation method.
 
 4. **Document the verification** with the method used and the outcome.
 
-**Expected:** All results independently verified with no discrepancies.
+**Got:** All results independently verified with no discrepancies.
 
-**On failure:** If verification reveals a discrepancy, re-run the original computation with extra checks enabled (e.g., verbose trial division logging). The most common errors are off-by-one in sieve bounds, integer overflow in modular arithmetic, and mistaking a pseudoprime for a prime.
+**If fail:** If verification reveals a discrepancy, re-run the original computation with extra checks enabled (e.g., verbose trial division logging). The most common errors are off-by-one in sieve bounds, integer overflow in modular arithmetic, and mistaking a pseudoprime for a prime.
 
 ## Validation
 
@@ -218,7 +218,7 @@ Cross-check all results using an independent computation method.
 - [ ] Results are verified by an independent method or against published values
 - [ ] Edge cases (n = 0, 1, 2, negative inputs) are addressed
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting n = 1 is not prime**: By convention, 1 is neither prime nor composite. Many algorithms silently misclassify it.
 
@@ -226,7 +226,7 @@ Cross-check all results using an independent computation method.
 
 - **Sieve off-by-one errors**: The sieve must mark composites starting from p^2, not from 2p. Starting from 2p wastes time but is correct; starting from p+1 is wrong.
 
-- **Pollard's rho cycle with d = n**: If gcd(|x - y|, n) = n, the algorithm has found the trivial factor. Retry with a different polynomial constant c, not just a different starting point.
+- **Pollard's rho cycle with d = n**: If gcd(|x - y|, n) = n, the algorithm has found the trivial factor. Retry with a different polynomial constant c, not a different starting point.
 
 - **Carmichael numbers fooling Fermat's test**: Numbers like 561 = 3 * 11 * 17 pass Fermat's primality test for all coprime bases. Always use Miller-Rabin, not plain Fermat.
 

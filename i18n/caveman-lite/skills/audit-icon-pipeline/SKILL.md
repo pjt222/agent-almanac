@@ -47,9 +47,9 @@ Collect all entity IDs from the source-of-truth registries.
 3. Read `teams/_registry.yml` — extract all team IDs
 4. Record counts: total skills, agents, teams
 
-**Expected:** Three lists of entity IDs with counts matching `total_skills`, `total_agents`, `total_teams`.
+**Got:** Three lists of entity IDs with counts matching `total_skills`, `total_agents`, `total_teams`.
 
-**On failure:** If a registry file is missing, report the path and skip that entity type.
+**If fail:** If a registry file is missing, report the path and skip that entity type.
 
 ### Step 2: Read Glyph Mappings
 
@@ -59,9 +59,9 @@ Collect all mapped entity IDs from the glyph mapping files.
 2. Read `viz/R/agent_glyphs.R` — extract all keys from `AGENT_GLYPHS` list
 3. Read `viz/R/team_glyphs.R` — extract all keys from `TEAM_GLYPHS` list
 
-**Expected:** Three lists of mapped IDs.
+**Got:** Three lists of mapped IDs.
 
-**On failure:** If a glyph file is missing, report it and mark all entities of that type as unmapped.
+**If fail:** If a glyph file is missing, report it and mark all entities of that type as unmapped.
 
 ### Step 3: Compute Missing Glyphs
 
@@ -71,9 +71,9 @@ Diff registry IDs against mapped IDs.
 2. Missing agent glyphs: `registry_agent_ids - mapped_agent_ids`
 3. Missing team glyphs: `registry_team_ids - mapped_team_ids`
 
-**Expected:** Lists of entity IDs that exist in registries but have no glyph function mapped.
+**Got:** Lists of entity IDs that exist in registries but have no glyph function mapped.
 
-**On failure:** If diff computation fails, verify ID formats match between registry and glyph files (e.g., underscores vs hyphens).
+**If fail:** If diff computation fails, verify ID formats match between registry and glyph files (e.g., underscores vs hyphens).
 
 ### Step 4: Check Rendered Icons
 
@@ -84,9 +84,9 @@ Verify that mapped glyphs have corresponding rendered icon files.
 3. For each mapped team ID, check `viz/public/icons/<palette>/teams/<teamId>.webp`
 4. Check HD variants in `viz/public/icons-hd/` with the same structure
 
-**Expected:** Lists of entities with glyphs but missing rendered icons (standard and/or HD).
+**Got:** Lists of entities with glyphs but missing rendered icons (standard and/or HD).
 
-**On failure:** If the icon directory doesn't exist, the pipeline hasn't been run yet — report all as missing.
+**If fail:** If the icon directory doesn't exist, the pipeline hasn't been run yet — report all as missing.
 
 ### Step 5: Check Manifest Freshness
 
@@ -97,9 +97,9 @@ Compare manifest counts against registry counts.
 3. Read `viz/public/data/team-icon-manifest.json` — count entries
 4. Compare against registry totals
 
-**Expected:** Manifest counts match registry counts. Discrepancies indicate stale manifests.
+**Got:** Manifest counts match registry counts. Discrepancies indicate stale manifests.
 
-**On failure:** If manifest files don't exist, the data pipeline needs to run first (`node build-data.js && node build-icon-manifest.js`).
+**If fail:** If manifest files don't exist, the data pipeline needs to run first (`node build-data.js && node build-icon-manifest.js`).
 
 ### Step 6: Detect Orphan Icons
 
@@ -124,9 +124,9 @@ orphans.forEach(p => console.log(' ', p));
 "
 ```
 
-**Expected:** Zero orphans. Any orphans indicate skills re-homed to a different domain without cleanup (18 orphans per re-homing = 9 palettes × 2 sizes).
+**Got:** Zero orphans. Any orphans indicate skills re-homed to a different domain without cleanup (18 orphans per re-homing = 9 palettes × 2 sizes).
 
-**On failure:** Delete orphans manually — they have no corresponding manifest entry and will not be served. Re-home events are rare, so manual cleanup is acceptable.
+**If fail:** Delete orphans manually — they have no corresponding manifest entry and will not be served. Re-home events are rare, so manual cleanup is acceptable.
 
 ### Step 7: Generate Gap Report
 
@@ -152,9 +152,9 @@ Produce a structured summary.
    ```
 2. Suggest next actions based on findings
 
-**Expected:** A complete gap report with actionable next steps.
+**Got:** A complete gap report with actionable next steps.
 
-**On failure:** If all checks pass with zero gaps, report "Pipeline fully in sync" as a positive outcome.
+**If fail:** If all checks pass with zero gaps, report "Pipeline fully in sync" as a positive outcome.
 
 ## Validation Checklist
 
@@ -166,7 +166,7 @@ Produce a structured summary.
 - [ ] Gap report produced with counts and entity lists
 - [ ] Actionable next steps provided
 
-## Common Pitfalls
+## Pitfalls
 
 - **ID format mismatch**: Registry uses kebab-case (`create-skill`), glyph maps may use snake_case keys — ensure comparison normalizes
 - **Palette assumption**: Only checking cyberpunk palette misses palette-specific rendering gaps

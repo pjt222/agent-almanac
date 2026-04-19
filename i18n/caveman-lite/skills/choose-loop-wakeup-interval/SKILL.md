@@ -52,13 +52,13 @@ The reasoning travels with the `ScheduleWakeup` tool description at tool-call ti
 
 Decide which tier the wait belongs to:
 
-- **Active watch (cache-warm)**: something is expected to change within the next 5 minutes — a build nearing completion, a state transition being polled, a process that was just kicked off
+- **Active watch (cache-warm)**: something is expected to change within the next 5 minutes — a build nearing completion, a state transition being polled, a process that was kicked off
 - **Cache-miss wait**: nothing worth checking sooner than 5 minutes from now; the context cache will go cold and that is acceptable
 - **Idle**: no specific signal to watch; the loop is checking in because it might find something, not because it will
 
-**Expected:** A clear classification: active-watch, cache-miss, or idle.
+**Got:** A clear classification: active-watch, cache-miss, or idle.
 
-**On failure:** If the wait cannot be classified — if there is no honest answer to "what am I waiting for?" — the loop probably should not exist. Skip to Step 5 and consider not scheduling a wakeup at all.
+**If fail:** If the wait cannot be classified — if there is no honest answer to "what am I waiting for?" — the loop probably should not exist. Skip to Step 5 and consider not scheduling a wakeup at all.
 
 ### Step 2: Apply the Three-Tier Decision
 
@@ -72,9 +72,9 @@ Pick a `delaySeconds` based on the classification:
 
 **Do not pick 300 s.** It is the worst-of-both interval: the cache misses, but the wait is too short to amortize the miss. If you find yourself reaching for "about 5 minutes," drop to 270 s (stay warm) or commit to 1200 s+ (amortize the miss).
 
-**Expected:** A specific `delaySeconds` value chosen from one of the three tiers, not a round-number-minute value picked out of habit.
+**Got:** A specific `delaySeconds` value chosen from one of the three tiers, not a round-number-minute value picked out of habit.
 
-**On failure:** If the choice keeps landing on 300 s, the underlying question is usually "should this loop exist at this cadence at all?" — re-examine Step 1.
+**If fail:** If the choice keeps landing on 300 s, the underlying question is usually "should this loop exist at this cadence at all?" — re-examine Step 1.
 
 ### Step 3: Size for the Minute Boundary
 
@@ -86,9 +86,9 @@ Worked example:
 
 Consequence: sub-minute intent is meaningless. Treat the value you pass as a **floor**, not a precise schedule. If a minute of skew matters, your loop cadence is too tight for this mechanism.
 
-**Expected:** You have accepted that the actual wait will be up to 60 s longer than the requested `delaySeconds`. For cache-warm ticks this matters — 270 s can become ~330 s in practice, tipping into cache-miss territory.
+**Got:** You have accepted that the actual wait will be up to 60 s longer than the requested `delaySeconds`. For cache-warm ticks this matters — 270 s can become ~330 s in practice, tipping into cache-miss territory.
 
-**On failure:** If near-the-ceiling values (e.g. 265 s when targeting cache-warmth) are common, pad downward — use 240 s instead of 270 s to preserve the cache-warm guarantee even under worst-case minute-boundary skew.
+**If fail:** If near-the-ceiling values (e.g. 265 s when targeting cache-warmth) are common, pad downward — use 240 s instead of 270 s to preserve the cache-warm guarantee even under worst-case minute-boundary skew.
 
 ### Step 4: Respect the Clamp
 
@@ -100,9 +100,9 @@ Plan against the clamped value, not the requested one:
 - Request above 3600 → actual wait is 3600 s (1 hour)
 - No runtime extends the ceiling; multi-hour waits require multiple ticks
 
-**Expected:** Your chosen value falls inside `[60, 3600]`, or you have deliberately accepted the clamped behaviour.
+**Got:** Your chosen value falls inside `[60, 3600]`, or you have deliberately accepted the clamped behaviour.
 
-**On failure:** If the need is genuinely multi-hour (e.g. "wake me in 4 hours"), chain wakeups — schedule a 3600 s tick that itself reschedules — or use a cron-based loop (`CronCreate` with `kind: "loop"`) instead.
+**If fail:** If the need is genuinely multi-hour (e.g. "wake me in 4 hours"), chain wakeups — schedule a 3600 s tick that itself reschedules — or use a cron-based loop (`CronCreate` with `kind: "loop"`) instead.
 
 ### Step 5: Write a Specific `reason`
 
@@ -113,9 +113,9 @@ The `reason` field is telemetry, user-visible status, and prompt-cache warmth re
 
 The reader of this field is a user trying to understand what the loop is doing without having to predict your cadence in advance. Write for them.
 
-**Expected:** A concrete, one-phrase reason that would make sense to a user glancing at status.
+**Got:** A concrete, one-phrase reason that would make sense to a user glancing at status.
 
-**On failure:** If no specific reason can be given, revisit whether the loop should exist (Step 1 and Step 6).
+**If fail:** If no specific reason can be given, revisit whether the loop should exist (Step 1 and Step 6).
 
 ### Step 6: Recognize the Don't-Loop Case
 
@@ -126,9 +126,9 @@ Not every "come back later" impulse warrants a scheduled wakeup. Do NOT schedule
 - The task is interactive (asks the user questions between ticks)
 - The cadence needed is shorter than the clamp floor (60 s) — polling that tight belongs to an event-driven mechanism, not a loop
 
-**Expected:** A conscious choice between scheduling a wakeup and not looping at all. "Because I could" is not a reason to loop.
+**Got:** A conscious choice between scheduling a wakeup and not looping at all. "Because I could" is not a reason to loop.
 
-**On failure:** If you keep scheduling wakeups that the user interrupts before they fire, the pattern is wrong — not the interval.
+**If fail:** If you keep scheduling wakeups that the user interrupts before they fire, the pattern is wrong — not the interval.
 
 ## Validation
 
@@ -138,9 +138,9 @@ Not every "come back later" impulse warrants a scheduled wakeup. Do NOT schedule
 - [ ] The value is inside `[60, 3600]` or the clamped behaviour is explicitly accepted
 - [ ] Minute-boundary skew has been accounted for (treat the value as a floor)
 - [ ] `reason` is concrete and under 200 chars
-- [ ] The don't-loop check was performed — the wakeup is actually warranted
+- [ ] The don't-loop check was performed — the wakeup is warranted
 
-## Common Pitfalls
+## Pitfalls
 
 - **Round-minute default (300 s)**: The single most common mistake. "About 5 minutes" feels natural and is exactly wrong. Drop to 270 s or commit to 1200 s+.
 - **Ignoring minute-boundary skew**: Requesting 60 s near the end of a minute can produce ~120 s of actual delay. For cache-warm ticks, this can push the tick past the 5-minute TTL unexpectedly.

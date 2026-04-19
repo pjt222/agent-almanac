@@ -26,40 +26,40 @@ metadata:
 
 # Analyze Diffusion Dynamics
 
-Characterize the behavior of diffusion processes by specifying their stochastic differential equations, deriving the corresponding Fokker-Planck equation, computing first-passage time distributions analytically or numerically, performing parameter sensitivity analysis, and validating analytical results against Monte Carlo simulation.
+Characterize diffusion process behavior → SDEs, Fokker-Planck, FPT distributions, param sensitivity, MC simulation valid.
 
-## When to Use
+## Use When
 
-- Deriving the probability density evolution of a continuous-time diffusion process
-- Computing mean first-passage times or full first-passage time distributions for bounded diffusion
-- Analyzing how drift, diffusion coefficient, and boundary parameters affect process behavior
-- Validating closed-form solutions against stochastic simulation
-- Building intuition for the dynamics underlying drift-diffusion models or generative diffusion processes
+- Derive prob density evolution → continuous-time diffusion
+- Compute mean FPT or full FPT distributions → bounded diffusion
+- Analyze drift/diffusion/boundary param effects
+- Validate closed-form vs stochastic sim
+- Build intuition for drift-diffusion or generative diffusion
 
-## Inputs
+## In
 
-- **Required**: SDE specification (drift function, diffusion coefficient, domain/boundaries)
-- **Required**: Parameter values or ranges for the drift and diffusion functions
-- **Required**: Boundary conditions (absorbing, reflecting, or mixed)
-- **Optional**: Time horizon for transient analysis (default: auto-detect from dynamics)
-- **Optional**: Spatial discretization resolution for numerical PDE solvers (default: dx=0.001)
-- **Optional**: Number of Monte Carlo trajectories for simulation validation (default: 10000)
+- **Required**: SDE spec (drift fn, diffusion coeff, domain/boundaries)
+- **Required**: Param values/ranges
+- **Required**: Boundary conditions (absorbing, reflecting, mixed)
+- **Optional**: Time horizon (default: auto-detect)
+- **Optional**: Spatial discretization resolution (default: dx=0.001)
+- **Optional**: MC trajectories (default: 10000)
 
-## Procedure
+## Do
 
-### Step 1: Specify the SDE Model
+### Step 1: Specify SDE Model
 
-Define the drift function, diffusion coefficient, and boundary conditions for the process.
+Define drift, diffusion coeff, boundaries.
 
-1. Write the SDE in standard Ito form:
+1. SDE in Ito form:
 
 ```
 dX(t) = mu(X, t) dt + sigma(X, t) dW(t)
 ```
 
-where `mu` is the drift function, `sigma` is the diffusion coefficient, and `W(t)` is a standard Wiener process.
+where `mu` = drift, `sigma` = diffusion coeff, `W(t)` = Wiener proc.
 
-2. Implement the SDE components in code:
+2. Impl SDE:
 
 ```python
 import numpy as np
@@ -94,7 +94,7 @@ ddm_process = DiffusionProcess(
 )
 ```
 
-3. Define the initial condition:
+3. Define initial condition:
 
 ```python
 # Point source at x0
@@ -104,7 +104,7 @@ x0 = 0.75  # starting point (e.g., midpoint between boundaries for DDM with z=a/
 initial_distribution = lambda x: np.exp(-50 * (x - 0.75)**2)  # narrow Gaussian
 ```
 
-4. Validate parameter consistency:
+4. Validate param consistency:
 
 ```python
 def validate_process(process, x0):
@@ -121,27 +121,27 @@ def validate_process(process, x0):
 validate_process(ddm_process, x0=0.75)
 ```
 
-**Expected:** A fully specified SDE with finite drift values, strictly positive diffusion coefficient, and initial condition within the domain boundaries.
+**→** Fully spec'd SDE, finite drift, strictly pos diffusion, x0 in domain.
 
-**On failure:** If the diffusion coefficient is zero or negative at any point in the domain, the process is degenerate -- check the functional form. If drift is infinite at a boundary, consider whether a reflecting boundary is more appropriate.
+**If err:** Diffusion zero/neg anywhere → degenerate → check form. Drift infinite at boundary → reflecting may be better.
 
-### Step 2: Derive the Fokker-Planck Equation
+### Step 2: Derive Fokker-Planck
 
-Convert the SDE to its equivalent partial differential equation for the probability density.
+SDE → PDE for prob density.
 
-1. Write the Fokker-Planck equation (FPE) for the transition density p(x, t):
+1. FPE for transition density p(x, t):
 
 ```
 dp/dt = -d/dx [mu(x,t) * p(x,t)] + (1/2) * d^2/dx^2 [sigma(x,t)^2 * p(x,t)]
 ```
 
-2. For constant coefficients (standard DDM case), this simplifies to:
+2. Constant coeffs (standard DDM) simplifies:
 
 ```
 dp/dt = -v * dp/dx + (s^2 / 2) * d^2p/dx^2
 ```
 
-3. Implement numerical solution of the FPE via finite differences:
+3. Numerical solution via finite diffs:
 
 ```python
 from scipy.sparse import diags
@@ -192,7 +192,7 @@ def solve_fokker_planck(process, x0, t_max, dx=0.001, dt=None):
     return x_grid, survival, density_snapshots
 ```
 
-4. Run and plot the evolving density:
+4. Run + plot evolving density:
 
 ```python
 import matplotlib.pyplot as plt
@@ -216,15 +216,15 @@ fig.tight_layout()
 fig.savefig("fokker_planck_solution.png", dpi=150)
 ```
 
-**Expected:** Density starts as a narrow peak at x0, spreads and drifts according to the SDE coefficients, and gradually decays as probability is absorbed at the boundaries. Survival probability decreases monotonically from 1 toward 0.
+**→** Density starts narrow peak at x0, spreads + drifts per SDE coeffs, decays as absorbed at boundaries. Survival monotonic 1 → 0.
 
-**On failure:** If the density develops oscillations or negative values, the time step is too large -- reduce dt. If density does not decay (survival stays near 1), the boundaries may be too far from x0 or drift pushes away from both boundaries. Check boundary conditions in the solver.
+**If err:** Oscillations/neg values → dt too large → reduce. Survival stays near 1 → boundaries too far or drift pushes away. Check solver boundary conditions.
 
-### Step 3: Compute First-Passage Time Distributions
+### Step 3: FPT Distributions
 
-Derive the distribution of times at which the process first reaches a boundary.
+Derive distribution of times first reaching boundary.
 
-1. Compute the first-passage time density from the survival function:
+1. FPT density from survival:
 
 ```python
 def first_passage_time_density(survival, dt):
@@ -234,7 +234,7 @@ def first_passage_time_density(survival, dt):
     return fpt_density
 ```
 
-2. For the standard DDM with constant drift, use the known analytic solution:
+2. Standard DDM constant drift → known analytic:
 
 ```python
 def ddm_fpt_upper(t, v, a, z, s=1.0, n_terms=50):
@@ -253,7 +253,7 @@ def ddm_fpt_upper(t, v, a, z, s=1.0, n_terms=50):
     return density
 ```
 
-3. Compute summary statistics of the FPT distribution:
+3. Summary stats of FPT:
 
 ```python
 def fpt_statistics(fpt_density, dt):
@@ -283,17 +283,17 @@ def fpt_statistics(fpt_density, dt):
     }
 ```
 
-4. For two-boundary problems, separate FPT by boundary using probability flux at each absorbing wall (finite difference of density at the boundary grid points).
+4. Two-boundary → separate FPT by boundary via prob flux at each absorbing wall (finite diff of density at boundary grid pts).
 
-**Expected:** FPT density is a right-skewed unimodal distribution. For the DDM with positive drift, the upper boundary FPT has more mass and a shorter mode than the lower boundary FPT. Mean FPT for typical DDM parameters (v=1, a=1.5, z=0.75) is approximately 0.5-2.0 seconds.
+**→** FPT density right-skewed unimodal. DDM pos drift → upper boundary FPT more mass + shorter mode than lower. Typical DDM (v=1, a=1.5, z=0.75) → mean FPT ~0.5-2.0s.
 
-**On failure:** If the FPT density has negative values, the numerical differentiation is noisy -- apply a small Gaussian smoothing kernel. If total probability at both boundaries does not sum to approximately 1.0, either the time horizon is too short (increase t_max) or there is probability leakage in the solver.
+**If err:** Neg values → numerical diff noisy → apply small Gaussian smoothing. Total prob not ~1.0 → horizon too short (increase t_max) or prob leakage in solver.
 
-### Step 4: Analyze Parameter Sensitivity
+### Step 4: Param Sensitivity
 
-Quantify how changes in each parameter affect the first-passage time distribution.
+Quantify param change effects on FPT.
 
-1. Define the parameter grid for sensitivity analysis:
+1. Define param grid:
 
 ```python
 param_ranges = {
@@ -305,7 +305,7 @@ param_ranges = {
 base_params = {"v": 1.0, "a": 1.5, "z_ratio": 0.5}
 ```
 
-2. Sweep each parameter while holding others at baseline:
+2. Sweep each param, others at baseline:
 
 ```python
 sensitivity_results = {}
@@ -360,7 +360,7 @@ fig.tight_layout()
 fig.savefig("parameter_sensitivity.png", dpi=150)
 ```
 
-4. Compute partial derivatives (local sensitivity at baseline):
+4. Partial derivatives (local sensitivity at baseline):
 
 ```python
 for param_name, result in sensitivity_results.items():
@@ -371,15 +371,15 @@ for param_name, result in sensitivity_results.items():
         print(f"d(mean_FPT)/d({param_name}) at baseline: {d_mean:.4f}")
 ```
 
-**Expected:** Drift rate (v) has a strong negative effect on mean FPT and strong positive effect on accuracy. Boundary separation (a) has a strong positive effect on mean FPT (speed-accuracy tradeoff). Starting point (z) shifts accuracy with a smaller effect on mean FPT.
+**→** Drift (v) strong neg effect mean FPT + strong pos accuracy. Boundary sep (a) strong pos mean FPT (speed-accuracy tradeoff). Start (z) shifts accuracy, smaller effect on mean FPT.
 
-**On failure:** If sensitivity curves are flat or non-monotonic, check that the parameter range is wide enough and that the solver time horizon captures the full FPT distribution. Non-monotonic mean FPT with respect to drift rate would indicate a solver bug.
+**If err:** Flat or non-monotonic → check range wide + solver horizon captures full FPT. Non-monotonic mean FPT vs drift → solver bug.
 
-### Step 5: Validate Analytics Against Numerical Simulation
+### Step 5: Validate vs Sim
 
-Run Monte Carlo simulations of the SDE to confirm analytical and numerical PDE results.
+MC sim of SDE → confirm analytic + numerical PDE.
 
-1. Implement Euler-Maruyama simulation of the SDE:
+1. Euler-Maruyama sim:
 
 ```python
 def simulate_sde(process, x0, dt_sim=0.0001, t_max=10.0, n_trajectories=10000):
@@ -412,7 +412,7 @@ def simulate_sde(process, x0, dt_sim=0.0001, t_max=10.0, n_trajectories=10000):
     return fpt_upper, fpt_lower
 ```
 
-2. Run simulation and compute empirical FPT distribution:
+2. Run sim + compute empirical FPT:
 
 ```python
 fpt_upper_sim, fpt_lower_sim = simulate_sde(ddm_process, x0=0.75, n_trajectories=50000)
@@ -428,7 +428,7 @@ print(f"Mean FPT (upper): {valid_upper.mean():.4f} +/- {valid_upper.std()/np.sqr
 print(f"Mean FPT (lower): {valid_lower.mean():.4f} +/- {valid_lower.std()/np.sqrt(len(valid_lower)):.4f}")
 ```
 
-3. Compare simulation against analytical or numerical PDE solution:
+3. Compare sim vs analytic or PDE:
 
 ```python
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -450,7 +450,7 @@ ax.legend()
 fig.savefig("fpt_validation.png", dpi=150)
 ```
 
-4. Quantify agreement between methods:
+4. Quantify agreement:
 
 ```python
 from scipy.stats import ks_2samp
@@ -468,31 +468,31 @@ print(f"Max CDF difference (simulation vs. analytic): {max_diff:.4f}")
 assert max_diff < 0.05, f"Simulation and analytic FPT differ by {max_diff:.4f} (threshold: 0.05)"
 ```
 
-**Expected:** Simulation histograms closely match the analytical FPT curves. KS-test maximum CDF difference below 0.05 for 50,000 trajectories. Mean FPT from simulation within 2 standard errors of the analytical value.
+**→** Sim histograms closely match analytic FPT. KS max CDF diff <0.05 for 50K trajectories. Mean FPT sim within 2 SE of analytic.
 
-**On failure:** If simulation disagrees with analytics, first check the Euler-Maruyama step size -- dt_sim should be small enough that boundary crossings are not missed (try dt_sim=0.00001). If the analytical series does not converge, increase n_terms. For non-constant coefficients where no analytic solution exists, compare two numerical methods (PDE solver vs. simulation) against each other.
+**If err:** Disagree → check Euler-Maruyama step → dt_sim small enough (try dt_sim=0.00001) → boundary crossings not missed. Series no converge → increase n_terms. Non-constant coeffs no analytic → compare 2 numerical methods (PDE vs sim).
 
-## Validation
+## Check
 
-- [ ] SDE specification passes consistency checks (finite drift, positive diffusion, x0 in domain)
-- [ ] Fokker-Planck density integrates to a value that decreases monotonically over time (survival function)
-- [ ] Fokker-Planck solution shows no numerical artifacts (oscillations, negative values)
-- [ ] FPT density is non-negative and integrates to approximately 1.0 across both boundaries
-- [ ] Sensitivity analysis shows expected monotonic relationships (v vs. accuracy, a vs. mean FPT)
-- [ ] Monte Carlo simulation mean FPT is within 2 standard errors of the PDE/analytic solution
-- [ ] KS-test maximum CDF difference between simulation and analytics is below 0.05
+- [ ] SDE spec passes consistency (finite drift, pos diffusion, x0 in domain)
+- [ ] FPE density integrates → decreases monotonic (survival)
+- [ ] FPE solution no artifacts (oscillations, neg)
+- [ ] FPT density non-neg + integrates ~1.0 across boundaries
+- [ ] Sensitivity monotonic expected (v vs accuracy, a vs mean FPT)
+- [ ] MC mean FPT within 2 SE of PDE/analytic
+- [ ] KS max CDF diff sim vs analytic <0.05
 
-## Common Pitfalls
+## Traps
 
-- **Euler-Maruyama step size too large**: Large dt_sim causes trajectories to overshoot boundaries, leading to biased FPT estimates. Use dt_sim at most 1/10 of the expected mean FPT, or use a boundary-corrected scheme.
-- **Truncating the FPT series too early**: The analytic DDM FPT density uses an infinite series. Too few terms (< 20) causes visible artifacts, especially at short times. Use at least 50 terms and check convergence.
-- **Ignoring numerical diffusion in PDE solver**: First-order finite difference schemes introduce artificial diffusion that broadens the FPT distribution. Use Crank-Nicolson or higher-order schemes for accuracy.
-- **Confusing Ito and Stratonovich forms**: The Fokker-Planck equation differs depending on the SDE convention. The standard form above assumes Ito calculus. If the SDE was written in Stratonovich form, add the noise-induced drift correction term.
-- **Not accounting for both boundaries**: In two-boundary problems, the total absorption probability must sum to 1.0. Reporting only the upper boundary FPT without accounting for the lower boundary gives incorrect statistics.
+- **Euler-Maruyama step too large**: Large dt_sim → trajectories overshoot boundaries → biased FPT. Use dt_sim ≤1/10 expected mean FPT or boundary-corrected scheme.
+- **Truncate FPT series too early**: Analytic DDM FPT uses infinite series. <20 terms → visible artifacts at short times. ≥50 + check convergence.
+- **Ignore numerical diffusion in PDE**: 1st-order finite diff → artificial diffusion broadens FPT. Use Crank-Nicolson or higher-order.
+- **Confuse Ito + Stratonovich**: FPE differs by SDE convention. Above assumes Ito. Stratonovich → add noise-induced drift correction.
+- **Not accounting both boundaries**: Two-boundary → total absorption prob = 1.0. Only upper → incorrect stats.
 
-## Related Skills
+## →
 
-- `fit-drift-diffusion-model` - applies these dynamics to estimate parameters from behavioral data
-- `implement-diffusion-network` - generative diffusion models discretize the same SDE framework
-- `write-testthat-tests` - testing numerical solvers and analytical implementations
-- `create-technical-report` - documenting diffusion analysis results
+- `fit-drift-diffusion-model` — applies dynamics → estimate params from behavioral data
+- `implement-diffusion-network` — generative diffusion models discretize same SDE framework
+- `write-testthat-tests` — testing numerical solvers + analytic impls
+- `create-technical-report` — document diffusion analysis results

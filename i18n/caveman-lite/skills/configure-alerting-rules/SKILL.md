@@ -101,9 +101,9 @@ alerting:
       api_version: v2
 ```
 
-**Expected:** Alertmanager UI accessible at `http://localhost:9093`, Prometheus "Status > Alertmanagers" shows UP status.
+**Got:** Alertmanager UI accessible at `http://localhost:9093`, Prometheus "Status > Alertmanagers" shows UP status.
 
-**On failure:**
+**If fail:**
 - Check Alertmanager logs: `docker logs alertmanager`
 - Verify Prometheus can reach Alertmanager: `curl http://alertmanager:9093/api/v2/status`
 - Test webhook URLs: `curl -X POST <SLACK_WEBHOOK_URL> -d '{"text":"test"}'`
@@ -164,9 +164,9 @@ promtool check rules /etc/prometheus/rules/alerts.yml
 curl -X POST http://localhost:9090/-/reload
 ```
 
-**Expected:** Alerts visible in Prometheus "Alerts" page, alerts fire when thresholds exceeded, Alertmanager receives fired alerts.
+**Got:** Alerts visible in Prometheus "Alerts" page, alerts fire when thresholds exceeded, Alertmanager receives fired alerts.
 
-**On failure:**
+**If fail:**
 - Check Prometheus logs for rule evaluation errors
 - Verify rule syntax with `promtool check rules`
 - Test alert queries independently in Prometheus UI
@@ -206,9 +206,9 @@ receivers:
         text: '{{ template "slack.default.text" . }}'
 ```
 
-**Expected:** Notifications formatted consistently, include all relevant context, actionable with runbook links.
+**Got:** Notifications formatted consistently, include all relevant context, actionable with runbook links.
 
-**On failure:**
+**If fail:**
 - Test template rendering: `amtool template test --config.file=alertmanager.yml`
 - Check template syntax errors in Alertmanager logs
 - Use `{{ . | json }}` to debug template data structure
@@ -250,9 +250,9 @@ group_by: ['alertname']
 group_by: ['alertname', 'cluster']
 ```
 
-**Expected:** Alerts routed to correct teams, grouped logically, timing appropriate for severity.
+**Got:** Alerts routed to correct teams, grouped logically, timing appropriate for severity.
 
-**On failure:**
+**If fail:**
 - Test routing: `amtool config routes test --config.file=alertmanager.yml --alertname=HighCPU --label=severity=critical`
 - Check routing tree: `amtool config routes show --config.file=alertmanager.yml`
 - Verify `continue: true` if alert should match multiple routes
@@ -298,9 +298,9 @@ amtool silence query
 amtool silence expire <SILENCE_ID>
 ```
 
-**Expected:** Inhibition reduces cascade alerts automatically, silences prevent notifications during planned maintenance.
+**Got:** Inhibition reduces cascade alerts automatically, silences prevent notifications during planned maintenance.
 
-**On failure:**
+**If fail:**
 - Test inhibition logic with live alerts
 - Check Alertmanager UI "Silences" tab
 - Verify silence matchers are exact (labels must match perfectly)
@@ -334,9 +334,9 @@ receivers:
         send_resolved: true
 ```
 
-**Expected:** Alerts create incidents in PagerDuty, appear in team communication channels, trigger on-call escalations.
+**Got:** Alerts create incidents in PagerDuty, appear in team communication channels, trigger on-call escalations.
 
-**On failure:**
+**If fail:**
 - Verify API keys/tokens are valid
 - Check network connectivity to external services
 - Test webhook endpoints independently with curl
@@ -355,7 +355,7 @@ receivers:
 - [ ] Resolved notifications sent when alerts clear
 - [ ] External integrations (PagerDuty, Opsgenie) create incidents
 
-## Common Pitfalls
+## Pitfalls
 
 - **Alert fatigue**: Too many low-priority alerts cause responders to ignore critical ones. Set strict thresholds, use inhibition.
 - **Missing `for` duration**: Alerts without `for` fire on transient spikes. Always use 5-10 minute windows.

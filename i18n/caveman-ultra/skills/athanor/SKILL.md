@@ -27,182 +27,182 @@ metadata:
 
 # Athanor
 
-Execute a four-stage alchemical transmutation of code or data — decomposing the prima materia, purifying its essence, illuminating its target form, and synthesizing the refined output. The athanor is the furnace that maintains steady heat across all stages.
+4-stage alchemical transmutation — decompose prima materia → purify essence → illuminate target form → synthesize refined. Athanor = furnace maintaining steady heat all stages.
 
-## When to Use
+## Use When
 
-- Transforming legacy code into modern, well-structured equivalents
-- Refactoring deeply tangled modules where incremental fixes keep failing
-- Converting a codebase from one paradigm to another (procedural to functional, monolith to modular)
-- Processing raw, messy data into clean analytical datasets
-- When simpler refactoring approaches have stalled and a full-cycle transformation is needed
+- Transform legacy → modern well-structured
+- Refactor deeply tangled modules where incremental fixes keep failing
+- Convert paradigm (procedural → functional, monolith → modular)
+- Process raw messy data → clean analytical datasets
+- Simpler refactoring stalled + full-cycle transformation needed
 
-## Inputs
+## In
 
-- **Required**: The material to transform (file paths, module names, or data sources)
-- **Required**: The desired end state (target architecture, paradigm, or format)
-- **Optional**: Known constraints (must preserve API, can't change database schema, etc.)
-- **Optional**: Prior failed transformation attempts and why they stalled
+- **Required**: Material (file paths, module names, data srcs)
+- **Required**: Desired end state (target architecture, paradigm, format)
+- **Optional**: Known constraints (preserve API, can't change DB schema, etc.)
+- **Optional**: Prior failed attempts + why stalled
 
-## Procedure
+## Do
 
 ### Step 1: Nigredo — Decomposition
 
-Break the prima materia into its constituent elements. Nothing is sacred; everything is cataloged.
+Break prima materia into constituent elements. Nothing sacred; everything cataloged.
 
-1. Inventory the material completely:
-   - List every function, class, module, or data entity
-   - Map all dependencies (imports, calls, data flows)
-   - Identify hidden coupling (shared globals, implicit state, side effects)
+1. Inventory completely:
+   - Every fn, class, module, data entity
+   - All deps (imports, calls, data flows)
+   - Hidden coupling (shared globals, implicit state, side effects)
 2. Surface hidden assumptions:
-   - What undocumented behaviors does the code rely on?
-   - What error conditions are silently swallowed?
-   - What ordering dependencies exist?
-3. Catalog anti-patterns and technical debt:
-   - God objects, circular dependencies, copy-paste duplication
+   - Undocumented behaviors code relies on?
+   - Err conditions silently swallowed?
+   - Ordering deps exist?
+3. Catalog anti-patterns + tech debt:
+   - God objects, circular deps, copy-paste duplication
    - Dead code paths, unreachable branches, vestigial features
-   - Hardcoded values, magic numbers, embedded configuration
-4. Produce the **Nigredo Inventory**: a structured catalog of every element, dependency, assumption, and anti-pattern
+   - Hardcoded values, magic numbers, embedded config
+4. Produce **Nigredo Inventory**: structured catalog of every element + dep + assumption + anti-pattern
 
-**Expected:** A complete, unflinching inventory of the material. The inventory should feel uncomfortable — if it doesn't, the decomposition isn't thorough enough. Every hidden assumption is now explicit.
+**→** Complete unflinching inventory. Should feel uncomfortable — if not, decomposition not thorough. Every hidden assumption now explicit.
 
-**On failure:** If the material is too large to inventory fully, decompose by module boundary and treat each module as a separate athanor run. If dependencies are too tangled to map, use `grep`/`Grep` to trace actual call sites rather than relying on documentation.
+**If err:** Material too large → decompose by module boundary + each module separate athanor run. Deps too tangled to map → `grep`/`Grep` trace actual call sites not docs.
 
 ### Step 2: Meditate — Calcination Checkpoint
 
-Run the `meditate` skill to clear assumptions accumulated during nigredo.
+Run `meditate` → clear assumptions accumulated during nigredo.
 
-1. Set aside the nigredo inventory and clear mental context
-2. Anchor on the transformation goal stated in Inputs
-3. Observe what biases nigredo introduced — did the decomposition make certain approaches seem inevitable?
-4. Label any premature solution ideas as "tangent" and return to the goal
+1. Set aside nigredo inventory + clear mental ctx
+2. Anchor on transformation goal stated in Inputs
+3. Observe nigredo biases — decomposition made certain approaches seem inevitable?
+4. Label premature solution ideas "tangent" + return to goal
 
-**Expected:** A clear, unbiased state ready to evaluate the material without being anchored to its current form. The goal feels fresh rather than constrained by what was found.
+**→** Clear unbiased state → eval material no anchoring to current form. Goal feels fresh not constrained by what was found.
 
-**On failure:** If the nigredo findings keep pulling attention (a particularly bad anti-pattern, a clever hack that's tempting to preserve), write it down and explicitly set it aside. Proceed only when the goal is clearer than the current form.
+**If err:** Nigredo findings keep pulling attention (particularly bad anti-pattern, clever hack tempting to preserve) → write down + explicitly set aside. Proceed only when goal clearer than current form.
 
 ### Step 3: Albedo — Purification
 
-Separate the essential from the accidental. Strip away everything that doesn't serve the target form.
+Separate essential from accidental. Strip everything not serving target form.
 
-1. From the nigredo inventory, classify each element:
-   - **Essential**: Core business logic, irreplaceable algorithms, critical data transformations
-   - **Accidental**: Framework boilerplate, workarounds for old bugs, compatibility shims
+1. From nigredo inventory classify each:
+   - **Essential**: Core business logic, irreplaceable algos, critical data transformations
+   - **Accidental**: Framework boilerplate, workarounds for old bugs, compat shims
    - **Toxic**: Anti-patterns, security vulnerabilities, dead code
-2. Extract the essential elements into isolation:
-   - Pull core logic out of framework wrappers
+2. Extract essential into isolation:
+   - Pull core logic from framework wrappers
    - Separate data transformation from I/O
-   - Extract interfaces from implementations
-3. Remove toxic elements entirely — document what was removed and why
-4. For accidental elements, determine if equivalents exist in the target form
-5. Produce the **Albedo Extract**: purified essential logic with clean interfaces
+   - Extract interfaces from impls
+3. Remove toxic entirely — doc what removed + why
+4. Accidental → determine if equivalents exist in target form
+5. Produce **Albedo Extract**: purified essential logic + clean interfaces
 
-**Expected:** A set of pure, isolated functions/modules that represent the core value of the original material. Each piece is testable in isolation. The extract is significantly smaller than the original.
+**→** Set of pure isolated fns/modules representing core value. Each piece testable in isolation. Extract significantly smaller than original.
 
-**On failure:** If essential and accidental are too intertwined to separate, introduce seam points (interfaces) first. If the material resists purification, it may need `dissolve-form` before the athanor can continue.
+**If err:** Essential + accidental too intertwined → introduce seam pts (interfaces) first. Material resists purification → may need `dissolve-form` before athanor continues.
 
 ### Step 4: Heal — Purification Assessment
 
-Run the `heal` skill to assess whether the purification was thorough.
+Run `heal` → assess purification thorough.
 
-1. Triage the albedo extract: is anything still carrying toxic residue?
-2. Check for drift: has the purification drifted from the original transformation goal?
-3. Assess completeness: are all essential elements accounted for, or were some discarded prematurely?
-4. Rebalance if needed: restore any essential elements that were incorrectly classified as accidental
+1. Triage albedo extract: anything still carrying toxic residue?
+2. Check drift: purification drifted from transformation goal?
+3. Assess completeness: all essential accounted for, or discarded prematurely?
+4. Rebalance: restore essential elements incorrectly classified as accidental
 
-**Expected:** Confidence that the albedo extract is complete, clean, and ready for illumination. No essential logic was lost; no toxic patterns remain.
+**→** Confidence that albedo extract complete + clean + ready for illumination. No essential logic lost; no toxic patterns remain.
 
-**On failure:** If the assessment reveals significant gaps, return to Step 3 with the specific gaps identified. Do not proceed to citrinitas with incomplete material.
+**If err:** Assessment reveals significant gaps → return Step 3 w/ specific gaps ID'd. No proceed to citrinitas w/ incomplete material.
 
 ### Step 5: Citrinitas — Illumination
 
-See the target form. Map the purified elements to their optimal structure.
+See target form. Map purified elements → optimal structure.
 
-1. Pattern recognition: identify which design patterns serve the purified elements
-   - Does the data flow suggest pipes/filters, event sourcing, CQRS?
-   - Do the interfaces suggest strategy, adapter, facade?
-   - Does the module structure suggest hexagonal, layered, micro-kernel?
-2. Design the target architecture:
-   - Map each essential element to its new location
-   - Define the interfaces between components
-   - Specify the data flow through the new structure
-3. Identify what must be created new (has no equivalent in the original):
-   - New abstractions that unify duplicated logic
-   - New interfaces that replace implicit coupling
-   - New error handling that replaces silent failures
-4. Produce the **Citrinitas Blueprint**: a complete mapping from albedo extract to target form
+1. Pattern recognition: which design patterns serve purified:
+   - Data flow suggests pipes/filters, event sourcing, CQRS?
+   - Interfaces suggest strategy, adapter, facade?
+   - Module structure suggests hexagonal, layered, micro-kernel?
+2. Design target architecture:
+   - Map each essential → new location
+   - Define interfaces between components
+   - Specify data flow through new structure
+3. ID what must be new (no equivalent in original):
+   - New abstractions unifying duplicated logic
+   - New interfaces replacing implicit coupling
+   - New err handling replacing silent failures
+4. Produce **Citrinitas Blueprint**: complete mapping albedo extract → target form
 
-**Expected:** A clear, detailed blueprint where every essential element has a home and every interface is defined. The blueprint should feel inevitable — given the purified elements, this structure is the natural fit.
+**→** Clear detailed blueprint, every essential has home + every interface defined. Should feel inevitable — given purified elements, structure = natural fit.
 
-**On failure:** If multiple valid architectures compete, evaluate each against the constraints from Inputs. If no clear winner emerges, prefer the simplest option and document the alternatives as future options.
+**If err:** Multi valid architectures compete → eval each vs Input constraints. No clear winner → prefer simplest + doc alternatives as future options.
 
 ### Step 6: Meditate — Pre-Synthesis Checkpoint
 
-Run the `meditate` skill to prepare for the final synthesis.
+Run `meditate` → prep for final synthesis.
 
-1. Clear the analytical context from citrinitas
-2. Anchor on the citrinitas blueprint as the synthesis guide
-3. Observe any anxiety about the transformation — is anything being rushed?
-4. Confirm readiness: the blueprint is clear, the material is purified, the constraints are known
+1. Clear analytical ctx from citrinitas
+2. Anchor on citrinitas blueprint as synthesis guide
+3. Observe anxiety about transformation — anything rushed?
+4. Confirm readiness: blueprint clear + material purified + constraints known
 
-**Expected:** Calm clarity about what needs to be built. The synthesis phase should be execution, not design.
+**→** Calm clarity about what to build. Synthesis should be execution, not design.
 
-**On failure:** If doubt persists about the blueprint, revisit Step 5 with the specific concerns. Better to refine the blueprint than to begin synthesis with uncertainty.
+**If err:** Doubt persists about blueprint → revisit Step 5 w/ specific concerns. Better refine blueprint than begin synthesis w/ uncertainty.
 
 ### Step 7: Rubedo — Synthesis
 
-Compose the purified elements into their target form. The philosopher's stone: working, optimized code.
+Compose purified elements → target form. Philosopher's stone: working + optimized code.
 
-1. Build the new structure following the citrinitas blueprint:
-   - Create files, modules, and interfaces as specified
-   - Migrate each essential element to its new location
-   - Implement new abstractions and interfaces
-2. Wire the components together:
+1. Build new structure per citrinitas blueprint:
+   - Create files, modules, interfaces as specified
+   - Migrate each essential to new location
+   - Impl new abstractions + interfaces
+2. Wire components:
    - Connect data flows as designed
-   - Implement error propagation through new paths
-   - Configure dependency injection or module loading
-3. Verify the synthesis:
-   - Does each component work in isolation? (unit tests)
-   - Do the components compose correctly? (integration tests)
-   - Does the full system produce the same outputs as the original? (regression tests)
+   - Impl err propagation through new paths
+   - Config dep injection or module loading
+3. Verify synthesis:
+   - Each component works in isolation? (unit tests)
+   - Components compose correctly? (integration tests)
+   - Full system produces same out as original? (regression tests)
 4. Remove scaffolding:
-   - Delete temporary compatibility shims
+   - Delete temp compat shims
    - Remove migration aids
-   - Clean up any remaining references to the old structure
-5. Produce the **Rubedo Output**: the transmuted code, fully functional in its new form
+   - Clean up remaining refs to old structure
+5. Produce **Rubedo Out**: transmuted code, fully functional in new form
 
-**Expected:** Working code that is measurably better than the original: fewer lines, clearer structure, better test coverage, fewer dependencies. The transformation is complete and the old form can be retired.
+**→** Working code measurably better than original: fewer lines, clearer structure, better test coverage, fewer deps. Transformation complete + old form can be retired.
 
-**On failure:** If synthesis reveals gaps in the blueprint, do not patch — return to Step 5 (citrinitas) to revise the design. If individual components fail, isolate and fix them before attempting full integration. The rubedo must not produce a half-transformed chimera.
+**If err:** Synthesis reveals gaps in blueprint → no patch → return Step 5 (citrinitas) revise design. Individual components fail → isolate + fix before full integration. Rubedo must not produce half-transformed chimera.
 
-## Validation Checklist
+## Check
 
-- [ ] Nigredo inventory is complete (all elements, dependencies, assumptions cataloged)
+- [ ] Nigredo inventory complete (all elements, deps, assumptions cataloged)
 - [ ] Meditate checkpoint passed between nigredo/albedo (assumptions cleared)
-- [ ] Albedo extract contains only essential elements with clean interfaces
+- [ ] Albedo extract contains only essential + clean interfaces
 - [ ] Heal assessment confirms purification completeness
-- [ ] Citrinitas blueprint maps every essential element to target form
+- [ ] Citrinitas blueprint maps every essential → target form
 - [ ] Meditate checkpoint passed between citrinitas/rubedo (ready for synthesis)
-- [ ] Rubedo output passes regression tests against original behavior
-- [ ] Rubedo output is measurably improved (complexity, coupling, test coverage)
-- [ ] No toxic elements survived into the final output
-- [ ] Transformation constraints from Inputs are satisfied
+- [ ] Rubedo out passes regression tests vs original behavior
+- [ ] Rubedo out measurably improved (complexity, coupling, test coverage)
+- [ ] No toxic elements survived → final out
+- [ ] Transformation constraints from Inputs satisfied
 
-## Common Pitfalls
+## Traps
 
-- **Skipping nigredo depth**: Rushing decomposition means hidden coupling surfaces during synthesis. Invest fully in the inventory
-- **Preserving accidental complexity**: Attachment to clever workarounds or "it works, don't touch it" code. If it's not essential, it goes
-- **Skipping meditate checkpoints**: Cognitive momentum from one stage biases the next. The pauses are structural, not optional
-- **Blueprint-less synthesis**: Starting to code before citrinitas is complete produces patchwork, not transmutation
-- **Incomplete regression testing**: The rubedo must reproduce original behavior. Untested paths will break silently
-- **Scope creep during citrinitas**: The illumination phase reveals opportunities for improvement beyond the original goal. Note them but don't pursue them — the athanor serves the stated transformation, not a hypothetical ideal
+- **Skip nigredo depth**: Rushing decomposition → hidden coupling surfaces during synthesis. Invest fully in inventory.
+- **Preserve accidental complexity**: Attachment to clever workarounds or "it works, don't touch it" code. Not essential → goes.
+- **Skip meditate checkpoints**: Cognitive momentum from 1 stage biases next. Pauses structural, not optional.
+- **Blueprint-less synthesis**: Starting code pre-citrinitas complete → patchwork not transmutation.
+- **Incomplete regression testing**: Rubedo must reproduce original behavior. Untested paths break silently.
+- **Scope creep during citrinitas**: Illumination reveals opportunities beyond original goal. Note but don't pursue — athanor serves stated transformation not hypothetical ideal.
 
-## Related Skills
+## →
 
-- `transmute` — Lighter-weight transformation for single functions or small modules
-- `chrysopoeia` — Value extraction and optimization (turning base code into gold)
-- `meditate` — Meta-cognitive clearing used as stage-gate checkpoints
-- `heal` — Subsystem assessment used for purification validation
-- `dissolve-form` — When material is too rigid for the athanor, dissolve first
-- `adapt-architecture` — Complementary approach for system-level migration patterns
-- `review-software-architecture` — Post-synthesis architecture review
+- `transmute` — lighter-weight transformation for single fns or small modules
+- `chrysopoeia` — value extraction + optimization (base code → gold)
+- `meditate` — meta-cognitive clearing used as stage-gate checkpoints
+- `heal` — subsystem assessment used for purification validation
+- `dissolve-form` — material too rigid for athanor → dissolve first
+- `adapt-architecture` — complementary approach for system-level migration patterns
+- `review-software-architecture` — post-synthesis architecture review

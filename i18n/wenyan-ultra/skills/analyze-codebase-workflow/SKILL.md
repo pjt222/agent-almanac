@@ -25,29 +25,29 @@ metadata:
   tags: putior, workflow, analysis, auto-detect, polyglot, data-pipeline
 ---
 
-# Analyze Codebase Workflow
+# 析庫流
 
-Survey an arbitrary repository to auto-detect data flows, file I/O, and script dependencies, then produce a structured annotation plan for manual refinement.
+掃庫自察數流、檔 I/O、依，出註計可手精。
 
-## When to Use
+## 用
 
-- Onboarding onto an unfamiliar codebase and need to understand data flow
-- Starting putior integration in a project that has no PUT annotations yet
-- Auditing an existing project's data pipeline before documentation
-- Preparing an annotation plan before running `annotate-source-files`
+- 入新庫須知數流→用
+- 項無 PUT 註而起 putior→用
+- 文前審項數流→用
+- `annotate-source-files` 前備註計→用
 
-## Inputs
+## 入
 
-- **Required**: Path to the repository or source directory to analyze
-- **Optional**: Specific subdirectories to focus on (default: entire repo)
-- **Optional**: Languages to include or exclude (default: all detected)
-- **Optional**: Detection scope: inputs only, outputs only, or both (default: both + dependencies)
+- **必**：庫或源處之路
+- **可**：注定子處（默全庫）
+- **可**：含/排之言（默諸察）
+- **可**：察範：唯入、唯出、或兩（默兩+依）
 
-## Procedure
+## 行
 
-### Step 1: Survey Repository Structure
+### 一：掃庫構
 
-Identify source files and their languages to understand what putior can analyze.
+識源檔與其言以知 putior 可析者。
 
 ```r
 library(putior)
@@ -60,20 +60,20 @@ list_supported_languages(detection_only = TRUE)  # Only languages with auto-dete
 exts <- get_supported_extensions()
 ```
 
-Use file listing to understand repo composition:
+以列檔知庫成：
 
 ```bash
 # Count files by extension in the target directory
 find /path/to/repo -type f | sed 's/.*\.//' | sort | uniq -c | sort -rn | head -20
 ```
 
-**Expected:** A list of file extensions present in the repo, with counts. Map these against `get_supported_extensions()` to know coverage.
+得：庫中諸延附數。映於 `get_supported_extensions()` 知覆。
 
-**On failure:** If the repo has no files matching supported extensions, putior cannot auto-detect workflows. Consider whether the language is supported but files use non-standard extensions.
+敗：庫無檔合支延→putior 不能自察。或言支但檔用非標延。
 
-### Step 2: Check Language Detection Coverage
+### 二：察言覆
 
-For each detected language, verify auto-detection pattern availability.
+各察言驗自察紋有否。
 
 ```r
 # Check which languages have auto-detection patterns (18 languages, 902 patterns)
@@ -93,13 +93,13 @@ for (lang in c("r", "python", "javascript", "sql", "dockerfile", "makefile")) {
 }
 ```
 
-**Expected:** Pattern counts printed for each language. R has 124 patterns, Python 159, JavaScript 71, etc.
+得：各言紋數印。R 124、Python 159、JavaScript 71 等。
 
-**On failure:** If a language returns no patterns, it supports manual annotations but not auto-detection. Plan to annotate those files manually.
+敗：言返無紋→支手註而非自察。計手註此檔。
 
-### Step 3: Run Auto-Detection
+### 三：行自察
 
-Execute `put_auto()` on the target directory to discover workflow elements.
+於標處行 `put_auto()` 以發流元。
 
 ```r
 # Full auto-detection
@@ -124,7 +124,7 @@ print(workflow)
 cat(sprintf("Detected %d workflow nodes\n", nrow(workflow)))
 ```
 
-For large repos, analyze subdirectories incrementally:
+大庫漸析子處：
 
 ```r
 # Analyze specific subdirectories
@@ -132,13 +132,13 @@ etl_workflow <- put_auto("./src/etl/")
 api_workflow <- put_auto("./src/api/")
 ```
 
-**Expected:** A data frame with columns including `id`, `label`, `input`, `output`, `source_file`. Each row represents a detected workflow step.
+得：數框含 `id`、`label`、`input`、`output`、`source_file` 等欄。各行為一察流步。
 
-**On failure:** If the result is empty, the source files may not contain recognizable I/O patterns. Try enabling debug logging: `workflow <- put_auto("./src/", log_level = "DEBUG")` to see which files are scanned and which patterns match.
+敗：果空→源或無可識 I/O 紋。試開除錯：`workflow <- put_auto("./src/", log_level = "DEBUG")` 察掃檔與配紋。
 
-### Step 4: Generate Initial Diagram
+### 四：生初圖
 
-Visualize the auto-detected workflow to assess coverage and identify gaps.
+繪自察流以評覆與識缺。
 
 ```r
 # Generate diagram from auto-detected workflow
@@ -151,13 +151,13 @@ cat(put_diagram(workflow, show_source_info = TRUE))
 writeLines(put_diagram(workflow, theme = "github"), "workflow-auto.md")
 ```
 
-**Expected:** A Mermaid flowchart showing detected nodes connected by data flow edges. Nodes should be labeled with meaningful function/file names.
+得：Mermaid 流圖示察點以數流邊接。點標當有意函/檔名。
 
-**On failure:** If the diagram shows disconnected nodes, the auto-detection found I/O patterns but couldn't infer connections. This is normal — connections are derived from matching output filenames to input filenames. The annotation plan (next step) will address gaps.
+敗：圖示斷點→自察找 I/O 紋而不能推接。常事——接由出檔名配入檔名而生。註計（次步）解缺。
 
-### Step 5: Produce Annotation Plan
+### 五：出註計
 
-Generate a structured plan documenting what was found and what needs manual annotation.
+生構文示所發及待手註者。
 
 ```r
 # Generate annotation suggestions
@@ -170,7 +170,7 @@ put_generate("./src/", style = "multiline")
 put_generate("./src/", output = "clipboard")
 ```
 
-Document the plan with coverage assessment:
+文以覆評：
 
 ```markdown
 ## Annotation Plan
@@ -191,29 +191,29 @@ Document the plan with coverage assessment:
 - transform.py output `clean.parquet` → load.R input (needs annotation)
 ```
 
-**Expected:** A clear plan separating auto-detected files from those needing manual annotation, with specific recommendations for each file.
+得：清計分自察檔與待手註者，附各檔具體薦。
 
-**On failure:** If `put_generate()` produces no output, ensure the directory path is correct and contains source files in supported languages.
+敗：`put_generate()` 無出→確路正且含支言之源檔。
 
-## Validation
+## 驗
 
-- [ ] `put_auto()` executes without errors on the target directory
-- [ ] Detected workflow has at least one node (unless repo has no recognizable I/O)
-- [ ] `put_diagram()` produces valid Mermaid code from the auto-detected workflow
-- [ ] `put_generate()` produces annotation suggestions for files with detected patterns
-- [ ] Annotation plan document created with coverage assessment
+- [ ] `put_auto()` 於標處行而無誤
+- [ ] 察流至少一點（除非庫無可識 I/O）
+- [ ] `put_diagram()` 自察流出有效 Mermaid
+- [ ] `put_generate()` 為察紋之檔出註薦
+- [ ] 註計文已建附覆評
 
-## Common Pitfalls
+## 忌
 
-- **Scanning too broadly**: Running `put_auto(".")` on a repo root may include `node_modules/`, `.git/`, `venv/`, etc. Target specific source directories.
-- **Expecting full coverage**: Auto-detection finds file I/O and library calls, not business logic. A 40-60% coverage rate is typical; the rest needs manual annotation.
-- **Ignoring dependencies**: The `detect_dependencies = TRUE` flag catches `source()`, `import`, `require()` calls that link scripts together. Disabling it loses cross-file connections.
-- **Language mismatch**: Files with non-standard extensions (e.g., `.R` vs `.r`, `.jsx` vs `.js`) may not be detected. Use `get_comment_prefix()` to check if an extension is recognized. Note that extensionless files like `Dockerfile` and `Makefile` are supported via exact filename matching.
-- **Large repos**: For repos with 100+ source files, analyze by module/directory to keep diagrams readable.
+- **掃過廣**：庫根行 `put_auto(".")` 或含 `node_modules/`、`.git/`、`venv/` 等。標定源處
+- **盼全覆**：自察找檔 I/O 與庫呼非商邏。常 40-60% 覆；餘待手註
+- **忽依**：`detect_dependencies = TRUE` 旗捕 `source()`、`import`、`require()` 連腳。停則失跨檔接
+- **言不配**：非標延（如 `.R` 對 `.r`、`.jsx` 對 `.js`）或不察。用 `get_comment_prefix()` 察延識否。`Dockerfile`、`Makefile` 等無延檔以全名配支
+- **大庫**：百源檔以上→按模/處析以保圖可讀
 
-## Related Skills
+## 參
 
-- `install-putior` — prerequisite: putior must be installed first
-- `annotate-source-files` — next step: add manual annotations based on the plan
-- `generate-workflow-diagram` — generate final diagram after annotation is complete
-- `configure-putior-mcp` — use MCP tools for interactive analysis sessions
+- `install-putior` — 前置：先裝 putior
+- `annotate-source-files` — 次步：按計加手註
+- `generate-workflow-diagram` — 註畢生末圖
+- `configure-putior-mcp` — 用 MCP 工為互析

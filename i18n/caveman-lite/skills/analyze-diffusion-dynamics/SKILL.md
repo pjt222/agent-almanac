@@ -121,9 +121,9 @@ def validate_process(process, x0):
 validate_process(ddm_process, x0=0.75)
 ```
 
-**Expected:** A fully specified SDE with finite drift values, strictly positive diffusion coefficient, and initial condition within the domain boundaries.
+**Got:** A fully specified SDE with finite drift values, strictly positive diffusion coefficient, and initial condition within the domain boundaries.
 
-**On failure:** If the diffusion coefficient is zero or negative at any point in the domain, the process is degenerate -- check the functional form. If drift is infinite at a boundary, consider whether a reflecting boundary is more appropriate.
+**If fail:** If the diffusion coefficient is zero or negative at any point in the domain, the process is degenerate -- check the functional form. If drift is infinite at a boundary, consider whether a reflecting boundary is more appropriate.
 
 ### Step 2: Derive the Fokker-Planck Equation
 
@@ -216,9 +216,9 @@ fig.tight_layout()
 fig.savefig("fokker_planck_solution.png", dpi=150)
 ```
 
-**Expected:** Density starts as a narrow peak at x0, spreads and drifts according to the SDE coefficients, and gradually decays as probability is absorbed at the boundaries. Survival probability decreases monotonically from 1 toward 0.
+**Got:** Density starts as a narrow peak at x0, spreads and drifts according to the SDE coefficients, and gradually decays as probability is absorbed at the boundaries. Survival probability decreases monotonically from 1 toward 0.
 
-**On failure:** If the density develops oscillations or negative values, the time step is too large -- reduce dt. If density does not decay (survival stays near 1), the boundaries may be too far from x0 or drift pushes away from both boundaries. Check boundary conditions in the solver.
+**If fail:** If the density develops oscillations or negative values, the time step is too large -- reduce dt. If density does not decay (survival stays near 1), the boundaries may be too far from x0 or drift pushes away from both boundaries. Check boundary conditions in the solver.
 
 ### Step 3: Compute First-Passage Time Distributions
 
@@ -285,9 +285,9 @@ def fpt_statistics(fpt_density, dt):
 
 4. For two-boundary problems, separate FPT by boundary using probability flux at each absorbing wall (finite difference of density at the boundary grid points).
 
-**Expected:** FPT density is a right-skewed unimodal distribution. For the DDM with positive drift, the upper boundary FPT has more mass and a shorter mode than the lower boundary FPT. Mean FPT for typical DDM parameters (v=1, a=1.5, z=0.75) is approximately 0.5-2.0 seconds.
+**Got:** FPT density is a right-skewed unimodal distribution. For the DDM with positive drift, the upper boundary FPT has more mass and a shorter mode than the lower boundary FPT. Mean FPT for typical DDM parameters (v=1, a=1.5, z=0.75) is approximately 0.5-2.0 seconds.
 
-**On failure:** If the FPT density has negative values, the numerical differentiation is noisy -- apply a small Gaussian smoothing kernel. If total probability at both boundaries does not sum to approximately 1.0, either the time horizon is too short (increase t_max) or there is probability leakage in the solver.
+**If fail:** If the FPT density has negative values, the numerical differentiation is noisy -- apply a small Gaussian smoothing kernel. If total probability at both boundaries does not sum to approximately 1.0, either the time horizon is too short (increase t_max) or there is probability leakage in the solver.
 
 ### Step 4: Analyze Parameter Sensitivity
 
@@ -371,9 +371,9 @@ for param_name, result in sensitivity_results.items():
         print(f"d(mean_FPT)/d({param_name}) at baseline: {d_mean:.4f}")
 ```
 
-**Expected:** Drift rate (v) has a strong negative effect on mean FPT and strong positive effect on accuracy. Boundary separation (a) has a strong positive effect on mean FPT (speed-accuracy tradeoff). Starting point (z) shifts accuracy with a smaller effect on mean FPT.
+**Got:** Drift rate (v) has a strong negative effect on mean FPT and strong positive effect on accuracy. Boundary separation (a) has a strong positive effect on mean FPT (speed-accuracy tradeoff). Starting point (z) shifts accuracy with a smaller effect on mean FPT.
 
-**On failure:** If sensitivity curves are flat or non-monotonic, check that the parameter range is wide enough and that the solver time horizon captures the full FPT distribution. Non-monotonic mean FPT with respect to drift rate would indicate a solver bug.
+**If fail:** If sensitivity curves are flat or non-monotonic, check that the parameter range is wide enough and that the solver time horizon captures the full FPT distribution. Non-monotonic mean FPT with respect to drift rate would indicate a solver bug.
 
 ### Step 5: Validate Analytics Against Numerical Simulation
 
@@ -468,9 +468,9 @@ print(f"Max CDF difference (simulation vs. analytic): {max_diff:.4f}")
 assert max_diff < 0.05, f"Simulation and analytic FPT differ by {max_diff:.4f} (threshold: 0.05)"
 ```
 
-**Expected:** Simulation histograms closely match the analytical FPT curves. KS-test maximum CDF difference below 0.05 for 50,000 trajectories. Mean FPT from simulation within 2 standard errors of the analytical value.
+**Got:** Simulation histograms closely match the analytical FPT curves. KS-test maximum CDF difference below 0.05 for 50,000 trajectories. Mean FPT from simulation within 2 standard errors of the analytical value.
 
-**On failure:** If simulation disagrees with analytics, first check the Euler-Maruyama step size -- dt_sim should be small enough that boundary crossings are not missed (try dt_sim=0.00001). If the analytical series does not converge, increase n_terms. For non-constant coefficients where no analytic solution exists, compare two numerical methods (PDE solver vs. simulation) against each other.
+**If fail:** If simulation disagrees with analytics, first check the Euler-Maruyama step size -- dt_sim should be small enough that boundary crossings are not missed (try dt_sim=0.00001). If the analytical series does not converge, increase n_terms. For non-constant coefficients where no analytic solution exists, compare two numerical methods (PDE solver vs. simulation) against each other.
 
 ## Validation
 
@@ -482,7 +482,7 @@ assert max_diff < 0.05, f"Simulation and analytic FPT differ by {max_diff:.4f} (
 - [ ] Monte Carlo simulation mean FPT is within 2 standard errors of the PDE/analytic solution
 - [ ] KS-test maximum CDF difference between simulation and analytics is below 0.05
 
-## Common Pitfalls
+## Pitfalls
 
 - **Euler-Maruyama step size too large**: Large dt_sim causes trajectories to overshoot boundaries, leading to biased FPT estimates. Use dt_sim at most 1/10 of the expected mean FPT, or use a boundary-corrected scheme.
 - **Truncating the FPT series too early**: The analytic DDM FPT density uses an infinite series. Too few terms (< 20) causes visible artifacts, especially at short times. Use at least 50 terms and check convergence.

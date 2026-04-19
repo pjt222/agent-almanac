@@ -100,9 +100,9 @@ kubectl wait --for=condition=ready pod -l app=kong -n kong --timeout=300s
 kubectl get svc -n kong kong-proxy  # Get load balancer IP
 ```
 
-**Expected:** Gateway pods running with 2 replicas. Load balancer service has external IP assigned. Admin API accessible (Kong: port 8001, Traefik: dashboard port 8080). Health checks passing.
+**Got:** Gateway pods running with 2 replicas. Load balancer service has external IP assigned. Admin API accessible (Kong: port 8001, Traefik: dashboard port 8080). Health checks passing.
 
-**On failure:**
+**If fail:**
 - Check pod logs: `kubectl logs -n kong -l app=kong`
 - Verify database connection (Kong): `kubectl logs -n kong kong-migrations-<hash>`
 - Check service account permissions (Traefik): `kubectl get clusterrolebinding traefik -o yaml`
@@ -146,9 +146,9 @@ curl -H "Host: api.example.com" https://GATEWAY_IP/api/users
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-2-configure-backend-services-and-routes) for complete routing configurations
 
-**Expected:** Routes correctly proxy traffic to backend services. Weighted routing distributes traffic according to configuration. Health checks monitor backend service health.
+**Got:** Routes correctly proxy traffic to backend services. Weighted routing distributes traffic according to configuration. Health checks monitor backend service health.
 
-**On failure:**
+**If fail:**
 - Verify backend services running: `kubectl get svc -n default`
 - Check DNS resolution: `kubectl run test --rm -it --image=busybox -- nslookup user-service.default.svc.cluster.local`
 - Review gateway logs: `kubectl logs -n kong -l app=kong --tail=50`
@@ -201,9 +201,9 @@ curl -u user1:password https://GATEWAY_IP/api/protected
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-3-implement-authentication-and-authorization) for complete authentication configurations
 
-**Expected:** Unauthenticated requests return 401. Valid credentials allow access. Rate limiting returns 429 after threshold. JWT tokens validate correctly. ACL enforces group permissions.
+**Got:** Unauthenticated requests return 401. Valid credentials allow access. Rate limiting returns 429 after threshold. JWT tokens validate correctly. ACL enforces group permissions.
 
-**On failure:**
+**If fail:**
 - Verify consumer creation: `curl http://localhost:8001/consumers`
 - Check plugin enabled: `curl http://localhost:8001/plugins | jq .`
 - Test with verbose: `curl -v` to see response headers
@@ -253,9 +253,9 @@ curl -v https://GATEWAY_IP/api/users | grep X-Gateway
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-4-configure-requestresponse-transformation) for complete transformation configurations
 
-**Expected:** Request headers added/removed as configured. Response headers include gateway metadata. Large requests rejected with 413. Circuit breaker trips on repeated failures. Retries occur for transient errors.
+**Got:** Request headers added/removed as configured. Response headers include gateway metadata. Large requests rejected with 413. Circuit breaker trips on repeated failures. Retries occur for transient errors.
 
-**On failure:**
+**If fail:**
 - Verify middleware order in chain
 - Check for header conflicts with backend services
 - Test transformations individually before chaining
@@ -306,9 +306,9 @@ kubectl port-forward -n traefik svc/traefik-dashboard 8080:8080
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-5-enable-monitoring-and-analytics) for complete monitoring configurations
 
-**Expected:** Prometheus scraping gateway metrics successfully. Dashboards show request rates, latency percentiles, error rates. Logs forwarding to aggregation system. Metrics segmented by service, route, and consumer.
+**Got:** Prometheus scraping gateway metrics successfully. Dashboards show request rates, latency percentiles, error rates. Logs forwarding to aggregation system. Metrics segmented by service, route, and consumer.
 
-**On failure:**
+**If fail:**
 - Verify ServiceMonitor: `kubectl get servicemonitor -A`
 - Check Prometheus targets in UI
 - Ensure metrics port accessible: `kubectl port-forward -n kong svc/kong-metrics 8100:8100`
@@ -360,9 +360,9 @@ curl -i https://api.example.com/api/users     # Routes to v2
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-deprecation) for complete versioning configurations
 
-**Expected:** Different versions route to appropriate backend services. Deprecation headers present on v1 responses. Rate limits stricter for deprecated versions. Default path routes to latest version. Metrics segmented by API version.
+**Got:** Different versions route to appropriate backend services. Deprecation headers present on v1 responses. Rate limits stricter for deprecated versions. Default path routes to latest version. Metrics segmented by API version.
 
-**On failure:**
+**If fail:**
 - Verify path precedence/priority configuration (higher priority = evaluated first)
 - Check for overlapping path patterns
 - Test each version route independently
@@ -384,7 +384,7 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-dep
 - [ ] Deprecation headers present on older API versions
 - [ ] Health checks monitoring backend service availability
 
-## Common Pitfalls
+## Pitfalls
 
 - **Database Dependency (Kong)**: Kong with database requires PostgreSQL/Cassandra. DB-less mode available but limits some features (runtime config changes). Use DB mode for production with multiple gateway instances.
 

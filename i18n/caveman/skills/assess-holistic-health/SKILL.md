@@ -27,31 +27,31 @@ metadata:
 
 # Assess Holistic Health
 
-Evaluate health through Hildegard von Bingen's temperament system from *Causae et Curae*, assessing the four temperaments, elemental balance, and providing dietary and lifestyle recommendations.
+Evaluate health through Hildegard von Bingen's temperament system from *Causae et Curae*. Assess four temperaments, elemental balance. Provide dietary and lifestyle recommendations.
 
-## When to Use
+## When Use
 
-- You want to understand your constitutional type (temperament) in Hildegardian terms
-- You are experiencing imbalance (fatigue, irritability, digestive issues, mental fog) and need holistic guidance
-- You need dietary recommendations based on temperament
-- You are integrating Hildegard's health principles into a wellness practice
-- You want to understand the relationship between temperament, elements, and health
-- You are researching medieval humoral medicine
+- Want to understand your constitutional type (temperament) in Hildegardian terms
+- Experiencing imbalance (fatigue, irritability, digestive issues, mental fog) and need holistic guidance
+- Need dietary recommendations based on temperament
+- Integrating Hildegard's health principles into wellness practice
+- Want to understand relationship between temperament, elements, health
+- Researching medieval humoral medicine
 
 ## Inputs
 
 - **Required**: Current symptoms or health concerns (physical, mental, emotional)
 - **Required**: Responses to temperament assessment questions (constitution, habits, preferences)
-- **Optional**: Age, sex, and general health history (for context)
+- **Optional**: Age, sex, general health history (for context)
 - **Optional**: Current season (for seasonal adjustment recommendations)
 - **Optional**: Existing dietary restrictions or preferences
 - **Optional**: Known temperament from previous assessment
 
-## Procedure
+## Steps
 
 ### Step 1: Temperament Assessment
 
-Determine the dominant temperament through observation and structured questions.
+Determine dominant temperament through observation and structured questions.
 
 ```
 The Four Temperaments in Causae et Curae:
@@ -116,13 +116,13 @@ Scoring:
 - Scores within 2-3 points indicate balanced type (rare)
 ```
 
-**Expected:** Dominant and secondary temperament identified, with score profile showing primary constitutional tendencies.
+**Got:** Dominant and secondary temperament identified, with score profile showing primary constitutional tendencies.
 
-**On failure:** If all scores are within 2-3 points of each other, the person has a balanced temperament (unusual in Hildegard's system). Proceed with general recommendations avoiding extremes (no very hot or very cold foods).
+**If fail:** All scores within 2-3 points of each other? Person has balanced temperament (unusual in Hildegard's system). Proceed with general recommendations avoiding extremes (no very hot or very cold foods).
 
 ### Step 2: Elemental Balance Assessment
 
-Evaluate whether the current state reflects excess, deficiency, or balance of elemental qualities.
+Evaluate whether current state reflects excess, deficiency, or balance of elemental qualities.
 
 ```
 Elemental Imbalance Patterns:
@@ -162,9 +162,9 @@ Assessment:
 4. Determine if imbalance is acute (recent onset) or chronic (longstanding pattern)
 ```
 
-**Expected:** Identification of 1-2 elemental imbalances (e.g., "Excess water with deficient fire" = cold/damp pattern with low vitality).
+**Got:** Identification of 1-2 elemental imbalances (e.g., "Excess water with deficient fire" = cold/damp pattern with low vitality).
 
-**On failure:** If symptom pattern is unclear or contradictory, default to the opposite qualities of the dominant temperament. Example: Choleric (hot/dry) feeling unwell likely has excess fire → recommend cooling/moistening.
+**If fail:** Symptom pattern unclear or contradictory? Default to opposite qualities of dominant temperament. Example: Choleric (hot/dry) feeling unwell likely has excess fire → recommend cooling/moistening.
 
 ### Step 3: Dietary Recommendations
 
@@ -231,9 +231,9 @@ eat galangal, and he will be restored to health."
 - Especially for melancholic and phlegmatic types
 ```
 
-**Expected:** Specific food recommendations tailored to temperament and current imbalance, with clear "favor/moderate/avoid" categories.
+**Got:** Specific food recommendations tailored to temperament and current imbalance, with clear "favor/moderate/avoid" categories.
 
-**On failure:** If dietary restrictions prevent following recommendations (e.g., vegetarian unable to eat lamb), substitute within the same elemental category (warming/cooling/moistening/drying). Consult the plant-based options within each category.
+**If fail:** Dietary restrictions prevent following recommendations (e.g., vegetarian unable to eat lamb)? Substitute within same elemental category (warming/cooling/moistening/drying). Consult plant-based options within each category.
 
 ### Step 4: Lifestyle and Seasonal Adjustments
 
@@ -297,13 +297,13 @@ SEASONAL ADJUSTMENTS (all temperaments):
 - Winter (Water depth): Warming foods, rest more, contemplation, less activity
 ```
 
-**Expected:** 3-5 specific lifestyle recommendations that address the identified imbalance and align with Hildegard's holistic view (body, mind, spirit, nature).
+**Got:** 3-5 specific lifestyle recommendations that address identified imbalance and align with Hildegard's holistic view (body, mind, spirit, nature).
 
-**On failure:** If recommendations feel overwhelming, prioritize ONE dietary change and ONE lifestyle change to begin. Full rebalancing takes weeks to months — start small.
+**If fail:** Recommendations feel overwhelming? Prioritize ONE dietary change and ONE lifestyle change to begin. Full rebalancing takes weeks to months — start small.
 
 ### Step 5: Integration and Monitoring
 
-Provide timeline, monitoring guidelines, and when to reassess.
+Provide timeline, monitoring guidelines, when to reassess.
 
 ```
 Integration Protocol:
@@ -333,9 +333,9 @@ Hildegard's system is preventive and lifelong. The goal is not to "fix" and retu
 to old habits, but to develop a sustainable, temperament-harmonious way of living.
 ```
 
-**Expected:** User has clear timeline for change implementation, monitoring practices, and criteria for reassessment.
+**Got:** User has clear timeline for change implementation, monitoring practices, criteria for reassessment.
 
-**On failure:** If user reports feeling worse after 1-2 weeks, reassess for overcorrection. Example: Adding too many warming foods to a choleric type could cause excess fire. Dial back to neutral foods temporarily.
+**If fail:** User reports feeling worse after 1-2 weeks? Reassess for overcorrection. Example: Adding too many warming foods to choleric type could cause excess fire. Dial back to neutral foods temporarily.
 
 ## Validation Checklist
 
@@ -349,17 +349,17 @@ to old habits, but to develop a sustainable, temperament-harmonious way of livin
 - [ ] Monitoring and reassessment triggers documented
 - [ ] User informed this is holistic guidance, not medical diagnosis
 
-## Common Pitfalls
+## Pitfalls
 
-1. **Rigid Type-Casting**: Most people are blends. Don't force a single temperament identity
+1. **Rigid Type-Casting**: Most people are blends. Don't force single temperament identity
 2. **Ignoring Season**: Winter melancholic needs different foods than summer melancholic
 3. **Overcorrecting**: Adding excessive opposite qualities can create new imbalance. Go gradually
 4. **Modern Food Confusion**: Hildegard's foods reflect 12th-century European diet. Adapt to available foods with same elemental qualities
-5. **Expecting Fast Results**: Temperament is constitutional; rebalancing takes weeks to months
-6. **Isolating Diet**: Hildegard's system is holistic. Diet alone without lifestyle/spiritual integration is incomplete
-7. **Neglecting Spiritual Component**: *Causae et Curae* integrates body and soul. Prayer, meditation, and virtue are part of health
+5. **Expecting Fast Results**: Temperament constitutional; rebalancing takes weeks to months
+6. **Isolating Diet**: Hildegard's system holistic. Diet alone without lifestyle/spiritual integration incomplete
+7. **Neglecting Spiritual Component**: *Causae et Curae* integrates body and soul. Prayer, meditation, virtue are part of health
 
-## Related Skills
+## See Also
 
 - `formulate-herbal-remedy` — Use herbs to support temperament rebalancing (warming/cooling plants)
 - `practice-viriditas` — Spiritual practice supports holistic health integration

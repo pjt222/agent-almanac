@@ -25,33 +25,33 @@ metadata:
   tags: hildegard, temperament, humors, causae-et-curae, holistic-health, elements
 ---
 
-# Assess Holistic Health
+# 全健評
 
-Evaluate health through Hildegard von Bingen's temperament system from *Causae et Curae*, assessing the four temperaments, elemental balance, and providing dietary and lifestyle recommendations.
+由 Hildegard von Bingen《Causae et Curae》之氣質系評健。四氣（多血、膽汁、黑膽、痰）、元（氣、火、土、水）、食居薦以復衡。
 
-## When to Use
+## 用
 
-- You want to understand your constitutional type (temperament) in Hildegardian terms
-- You are experiencing imbalance (fatigue, irritability, digestive issues, mental fog) and need holistic guidance
-- You need dietary recommendations based on temperament
-- You are integrating Hildegard's health principles into a wellness practice
-- You want to understand the relationship between temperament, elements, and health
-- You are researching medieval humoral medicine
+- 欲解 Hildegard 體質類→用
+- 經失衡（疲、躁、消化症、霧）需全導→用
+- 需按氣食薦→用
+- 整 Hildegard 健律入養→用
+- 解氣、元、健關→用
+- 究中世體液醫→用
 
-## Inputs
+## 入
 
-- **Required**: Current symptoms or health concerns (physical, mental, emotional)
-- **Required**: Responses to temperament assessment questions (constitution, habits, preferences)
-- **Optional**: Age, sex, and general health history (for context)
-- **Optional**: Current season (for seasonal adjustment recommendations)
-- **Optional**: Existing dietary restrictions or preferences
-- **Optional**: Known temperament from previous assessment
+- **必**：今症或健憂（身、心、情）
+- **必**：氣評問之答（體質、習、好）
+- **可**：齡、性、健史（脈）
+- **可**：今季（為季調薦）
+- **可**：既食限或好
+- **可**：前評知氣
 
-## Procedure
+## 行
 
-### Step 1: Temperament Assessment
+### 一：氣評
 
-Determine the dominant temperament through observation and structured questions.
+由觀與構問定主氣。
 
 ```
 The Four Temperaments in Causae et Curae:
@@ -116,13 +116,13 @@ Scoring:
 - Scores within 2-3 points indicate balanced type (rare)
 ```
 
-**Expected:** Dominant and secondary temperament identified, with score profile showing primary constitutional tendencies.
+得：主與次氣識，附分形示主體質傾。
 
-**On failure:** If all scores are within 2-3 points of each other, the person has a balanced temperament (unusual in Hildegard's system). Proceed with general recommendations avoiding extremes (no very hot or very cold foods).
+敗：諸分皆 2-3 內→人有衡氣（Hildegard 系罕）。進通薦避極（無極熱或極冷食）。
 
-### Step 2: Elemental Balance Assessment
+### 二：元衡評
 
-Evaluate whether the current state reflects excess, deficiency, or balance of elemental qualities.
+評今態反元質之過、缺、衡。
 
 ```
 Elemental Imbalance Patterns:
@@ -162,13 +162,13 @@ Assessment:
 4. Determine if imbalance is acute (recent onset) or chronic (longstanding pattern)
 ```
 
-**Expected:** Identification of 1-2 elemental imbalances (e.g., "Excess water with deficient fire" = cold/damp pattern with low vitality).
+得：1-2 元失衡識（如「水過火缺」=冷濕紋附低活）。
 
-**On failure:** If symptom pattern is unclear or contradictory, default to the opposite qualities of the dominant temperament. Example: Choleric (hot/dry) feeling unwell likely has excess fire → recommend cooling/moistening.
+敗：症紋不清或反→默主氣對之質。例：膽汁（熱乾）不適或過火→薦涼濕。
 
-### Step 3: Dietary Recommendations
+### 三：食薦
 
-Prescribe foods to rebalance elemental excess or deficiency, following Hildegard's *Physica* and *Causae et Curae*.
+按 Hildegard《Physica》與《Causae et Curae》方食以復元過缺。
 
 ```
 Hildegard's Dietary Principles:
@@ -231,13 +231,13 @@ eat galangal, and he will be restored to health."
 - Especially for melancholic and phlegmatic types
 ```
 
-**Expected:** Specific food recommendations tailored to temperament and current imbalance, with clear "favor/moderate/avoid" categories.
+得：合氣與今失衡之具食薦附明「宜/節/避」類。
 
-**On failure:** If dietary restrictions prevent following recommendations (e.g., vegetarian unable to eat lamb), substitute within the same elemental category (warming/cooling/moistening/drying). Consult the plant-based options within each category.
+敗：食限阻循薦（如素食不食羊）→於同元類（暖/涼/濕/乾）替。察各類之植選。
 
-### Step 4: Lifestyle and Seasonal Adjustments
+### 四：居與季調
 
-Recommend non-dietary practices to support rebalancing: sleep, movement, prayer, seasonal rhythms.
+薦食外實以助復衡：眠、行、禱、季律。
 
 ```
 Lifestyle Recommendations by Imbalance:
@@ -297,13 +297,13 @@ SEASONAL ADJUSTMENTS (all temperaments):
 - Winter (Water depth): Warming foods, rest more, contemplation, less activity
 ```
 
-**Expected:** 3-5 specific lifestyle recommendations that address the identified imbalance and align with Hildegard's holistic view (body, mind, spirit, nature).
+得：3-5 具居薦對識失衡且合 Hildegard 全觀（身、心、靈、自然）。
 
-**On failure:** If recommendations feel overwhelming, prioritize ONE dietary change and ONE lifestyle change to begin. Full rebalancing takes weeks to months — start small.
+敗：薦壓→先一食變、一居變。全復需週至月——始小。
 
-### Step 5: Integration and Monitoring
+### 五：整與監
 
-Provide timeline, monitoring guidelines, and when to reassess.
+供時、監、何時重評。
 
 ```
 Integration Protocol:
@@ -333,37 +333,37 @@ Hildegard's system is preventive and lifelong. The goal is not to "fix" and retu
 to old habits, but to develop a sustainable, temperament-harmonious way of living.
 ```
 
-**Expected:** User has clear timeline for change implementation, monitoring practices, and criteria for reassessment.
+得：用者有清變施時、監實、重評準。
 
-**On failure:** If user reports feeling worse after 1-2 weeks, reassess for overcorrection. Example: Adding too many warming foods to a choleric type could cause excess fire. Dial back to neutral foods temporarily.
+敗：用者報 1-2 週後感劣→重評為過正。例：膽汁加過多暖食或致過火。回中食暫。
 
-## Validation Checklist
+## 驗
 
-- [ ] Temperament assessment completed with dominant and secondary types identified
-- [ ] Elemental imbalance(s) identified (excess/deficiency of air/fire/earth/water)
-- [ ] Dietary recommendations provided with "favor/moderate/avoid" categories
-- [ ] Spelt and galangal (Hildegard's universals) included unless contraindicated
-- [ ] Lifestyle recommendations address imbalance (grounding, cooling, stimulating, etc.)
-- [ ] Seasonal adjustments noted if applicable
-- [ ] Integration timeline provided (weeks 1-2, 3-4, 5-8)
-- [ ] Monitoring and reassessment triggers documented
-- [ ] User informed this is holistic guidance, not medical diagnosis
+- [ ] 氣評完附主與次類識
+- [ ] 元失衡識（過/缺氣/火/土/水）
+- [ ] 食薦附「宜/節/避」類
+- [ ] 斯佩耳特與良姜（Hildegard 普）含除非禁
+- [ ] 居薦對失衡（接地、涼、激等）
+- [ ] 季調若可註
+- [ ] 整時供（週 1-2、3-4、5-8）
+- [ ] 監與重評觸文
+- [ ] 用者知此為全導非醫診
 
-## Common Pitfalls
+## 忌
 
-1. **Rigid Type-Casting**: Most people are blends. Don't force a single temperament identity
-2. **Ignoring Season**: Winter melancholic needs different foods than summer melancholic
-3. **Overcorrecting**: Adding excessive opposite qualities can create new imbalance. Go gradually
-4. **Modern Food Confusion**: Hildegard's foods reflect 12th-century European diet. Adapt to available foods with same elemental qualities
-5. **Expecting Fast Results**: Temperament is constitutional; rebalancing takes weeks to months
-6. **Isolating Diet**: Hildegard's system is holistic. Diet alone without lifestyle/spiritual integration is incomplete
-7. **Neglecting Spiritual Component**: *Causae et Curae* integrates body and soul. Prayer, meditation, and virtue are part of health
+1. **剛類定**：多人為混。勿強單氣身分
+2. **忽季**：冬黑膽需異於夏黑膽之食
+3. **過正**：加過對質致新失衡。漸進
+4. **現食混**：Hildegard 之食反十二世紀歐食。適同元質之可達食
+5. **盼速效**：氣為體質；復需週至月
+6. **孤食**：Hildegard 系全。獨食而無居/靈整不全
+7. **忽靈分**：《Causae et Curae》整身與魂。禱、冥、德為健分
 
-## Related Skills
+## 參
 
-- `formulate-herbal-remedy` — Use herbs to support temperament rebalancing (warming/cooling plants)
-- `practice-viriditas` — Spiritual practice supports holistic health integration
-- `consult-natural-history` — Foods in *Physica* have temperamental and elemental properties
-- `meditate` (esoteric domain) — Meditation practices tailored to temperament imbalance
-- `heal` (esoteric domain) — Post-assessment healing modalities for specific imbalances
-- `plan-garden-calendar` (gardening domain) — Seasonal food growing aligned with Hildegard's calendar
+- `formulate-herbal-remedy` —— 用草助氣復（暖/涼植）
+- `practice-viriditas` —— 靈實助全健整
+- `consult-natural-history` —— 《Physica》食有氣與元性
+- `meditate`（esoteric 域）—— 對氣失衡之冥實
+- `heal`（esoteric 域）—— 評後對具失衡之癒法
+- `plan-garden-calendar`（gardening 域）—— 對 Hildegard 曆之季食

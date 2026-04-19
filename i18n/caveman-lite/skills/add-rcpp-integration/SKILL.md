@@ -61,9 +61,9 @@ For RcppArmadillo:
 usethis::use_rcpp_armadillo()
 ```
 
-**Expected:** `src/` directory created, DESCRIPTION updated with `Rcpp` in LinkingTo and Imports, and `R/packagename-package.R` contains `@useDynLib` directive.
+**Got:** `src/` directory created, DESCRIPTION updated with `Rcpp` in LinkingTo and Imports, and `R/packagename-package.R` contains `@useDynLib` directive.
 
-**On failure:** If `usethis::use_rcpp()` fails, manually create `src/`, add `LinkingTo: Rcpp` and `Imports: Rcpp` to DESCRIPTION, and add `#' @useDynLib packagename, .registration = TRUE` and `#' @importFrom Rcpp sourceCpp` to the package-level documentation file.
+**If fail:** If `usethis::use_rcpp()` fails, manually create `src/`, add `LinkingTo: Rcpp` and `Imports: Rcpp` to DESCRIPTION, and add `#' @useDynLib packagename, .registration = TRUE` and `#' @importFrom Rcpp sourceCpp` to the package-level documentation file.
 
 ### Step 2: Write C++ Function
 
@@ -108,9 +108,9 @@ arma::mat mat_mult(const arma::mat& A, const arma::mat& B) {
 }
 ```
 
-**Expected:** C++ source file exists at `src/my_function.cpp` with valid `// [[Rcpp::export]]` annotation and roxygen-style `//'` documentation comments.
+**Got:** C++ source file exists at `src/my_function.cpp` with valid `// [[Rcpp::export]]` annotation and roxygen-style `//'` documentation comments.
 
-**On failure:** Verify the file uses `#include <Rcpp.h>` (or `<RcppArmadillo.h>` for Armadillo), that the export annotation is on its own line directly above the function signature, and that return types map to valid Rcpp types.
+**If fail:** Verify the file uses `#include <Rcpp.h>` (or `<RcppArmadillo.h>` for Armadillo), that the export annotation is on its own line directly above the function signature, and that return types map to valid Rcpp types.
 
 ### Step 3: Generate RcppExports
 
@@ -119,9 +119,9 @@ Rcpp::compileAttributes()
 devtools::document()
 ```
 
-**Expected:** `R/RcppExports.R` and `src/RcppExports.cpp` generated automatically.
+**Got:** `R/RcppExports.R` and `src/RcppExports.cpp` generated automatically.
 
-**On failure:** Check C++ syntax errors. Ensure `// [[Rcpp::export]]` tag is present above each exported function.
+**If fail:** Check C++ syntax errors. Ensure `// [[Rcpp::export]]` tag is present above each exported function.
 
 ### Step 4: Verify Compilation
 
@@ -129,9 +129,9 @@ devtools::document()
 devtools::load_all()
 ```
 
-**Expected:** Package compiles and loads without errors.
+**Got:** Package compiles and loads without errors.
 
-**On failure:** Check compiler output for errors. Common issues:
+**If fail:** Check compiler output for errors. Common issues:
 - Missing system headers: Install development libraries
 - Syntax errors: C++ compiler messages point to the line
 - Missing `Rcpp::depends` attribute for RcppArmadillo
@@ -150,9 +150,9 @@ test_that("cumsum_cpp handles edge cases", {
 })
 ```
 
-**Expected:** Tests pass, confirming the C++ function produces identical results to the R equivalent and handles edge cases (empty vectors, NA values) correctly.
+**Got:** Tests pass, confirming the C++ function produces identical results to the R equivalent and handles edge cases (empty vectors, NA values) correctly.
 
-**On failure:** If tests fail on NA handling, add explicit NA checks in the C++ code using `NumericVector::is_na()`. If tests fail on empty input, add a guard clause for zero-length vectors at the top of the function.
+**If fail:** If tests fail on NA handling, add explicit NA checks in the C++ code using `NumericVector::is_na()`. If tests fail on empty input, add a guard clause for zero-length vectors at the top of the function.
 
 ### Step 6: Add Cleanup Script
 
@@ -171,9 +171,9 @@ rm -f src/*.o src/*.so src/*.dll
 
 Make executable: `chmod +x cleanup`
 
-**Expected:** `src/Makevars` sets compiler flags and `cleanup` script removes compiled objects. Both files exist at the package root level.
+**Got:** `src/Makevars` sets compiler flags and `cleanup` script removes compiled objects. Both files exist at the package root level.
 
-**On failure:** Verify `cleanup` has execute permissions (`chmod +x cleanup`) and that `Makevars` uses tabs (not spaces) for indentation if adding Makefile-style rules.
+**If fail:** Verify `cleanup` has execute permissions (`chmod +x cleanup`) and that `Makevars` uses tabs (not spaces) for indentation if adding Makefile-style rules.
 
 ### Step 7: Update .Rbuildignore
 
@@ -185,9 +185,9 @@ Ensure compiled artifacts are handled:
 ^src/.*\.dll$
 ```
 
-**Expected:** `.Rbuildignore` patterns prevent compiled object files from being included in the package tarball, while preserving source files and Makevars.
+**Got:** `.Rbuildignore` patterns prevent compiled object files from being included in the package tarball, while preserving source files and Makevars.
 
-**On failure:** Run `devtools::check()` and look for NOTEs about unexpected files in `src/`. Adjust `.Rbuildignore` patterns to exclude only `.o`, `.so`, and `.dll` files.
+**If fail:** Run `devtools::check()` and look for NOTEs about unexpected files in `src/`. Adjust `.Rbuildignore` patterns to exclude only `.o`, `.so`, and `.dll` files.
 
 ## Validation
 
@@ -198,7 +198,7 @@ Ensure compiled artifacts are handled:
 - [ ] RcppExports files are generated and committed
 - [ ] Performance improvement confirmed with benchmarks
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting `compileAttributes()`**: Must regenerate RcppExports after changing C++ files
 - **Integer overflow**: Use `double` instead of `int` for large numeric values

@@ -61,7 +61,7 @@ Select between Loki (Prometheus-style) or ELK (Elasticsearch-based) based on req
 - Lower resource consumption compared to Elasticsearch
 
 **ELK advantages**:
-- Full-text search across all log content (not just labels)
+- Full-text search across all log content (not only labels)
 - Rich query DSL and aggregations
 - Mature ecosystem with beats, logstash plugins
 - Better for compliance/audit logs requiring deep historical search
@@ -83,9 +83,9 @@ Use ELK if:
 - Legacy systems with existing Logstash pipelines
 ```
 
-**Expected:** Clear choice made based on requirements, team downloads appropriate installation artifacts.
+**Got:** Clear choice made based on requirements, team downloads appropriate installation artifacts.
 
-**On failure:**
+**If fail:**
 - Benchmark storage requirements: Loki ~10x less than Elasticsearch for same logs
 - Evaluate query patterns: full-text search needs vs label filtering
 - Consider operational overhead: ELK requires more tuning and resources
@@ -150,9 +150,9 @@ storage_config:
     shared_store: s3
 ```
 
-**Expected:** Loki starts successfully, health check passes at `http://localhost:3100/ready`, logs stored according to retention policy.
+**Got:** Loki starts successfully, health check passes at `http://localhost:3100/ready`, logs stored according to retention policy.
 
-**On failure:**
+**If fail:**
 - Check Loki logs: `docker logs loki`
 - Verify storage directories exist and are writable
 - Test config syntax: `docker run grafana/loki:2.9.0 -config.file=/etc/loki/local-config.yaml -verify-config`
@@ -181,9 +181,9 @@ Key Promtail concepts:
 - **Relabel configs**: Dynamic labeling based on metadata
 - **Positions file**: Tracks read offsets to avoid re-processing logs
 
-**Expected:** Promtail scrapes configured log files, labels applied correctly, logs visible in Loki via LogQL queries.
+**Got:** Promtail scrapes configured log files, labels applied correctly, logs visible in Loki via LogQL queries.
 
-**On failure:**
+**If fail:**
 - Check Promtail logs: `docker logs promtail`
 - Verify file paths are accessible: `docker exec promtail ls /var/log`
 - Test regex patterns independently with sample log lines
@@ -264,9 +264,9 @@ topk(10, sum by (message) (count_over_time({level="error"} [1h])))
 
 Create Grafana explore queries or dashboard panels using these patterns.
 
-**Expected:** Queries return expected log lines, filtering works correctly, aggregations produce metrics from logs.
+**Got:** Queries return expected log lines, filtering works correctly, aggregations produce metrics from logs.
 
-**On failure:**
+**If fail:**
 - Use Grafana Explore to debug queries interactively
 - Check label names: `curl http://localhost:3100/loki/api/v1/labels`
 - Verify label values: `curl http://localhost:3100/loki/api/v1/label/{label_name}/values`
@@ -358,9 +358,9 @@ datasources:
 5. Click trace ID in logs
 6. Tempo trace view opens with full distributed trace
 
-**Expected:** Clicking metrics opens related logs, trace IDs in logs link to trace viewer, single pane for metrics/logs/traces navigation.
+**Got:** Clicking metrics opens related logs, trace IDs in logs link to trace viewer, single pane for metrics/logs/traces navigation.
 
-**On failure:**
+**If fail:**
 - Verify trace ID format matches regex in derived fields
 - Check that trace_id label extracted by Promtail pipeline
 - Ensure Tempo datasource configured in Grafana
@@ -429,9 +429,9 @@ curl http://localhost:3100/metrics | grep loki_compactor
 curl http://localhost:3100/metrics | grep loki_boltdb_shipper_retention_deleted
 ```
 
-**Expected:** Old logs automatically deleted per retention policy, storage usage stabilizes, compaction reduces index size.
+**Got:** Old logs automatically deleted per retention policy, storage usage stabilizes, compaction reduces index size.
 
-**On failure:**
+**If fail:**
 - Enable compactor in Loki config if retention not working
 - Check compactor logs: `docker logs loki | grep compactor`
 - Verify retention_enabled: true and retention_deletes_enabled: true
@@ -451,7 +451,7 @@ curl http://localhost:3100/metrics | grep loki_boltdb_shipper_retention_deleted
 - [ ] Compaction running and reducing storage overhead
 - [ ] Storage usage within allocated disk/S3 budget
 
-## Common Pitfalls
+## Pitfalls
 
 - **High cardinality labels**: Using unbounded label values (user IDs, request IDs) causes index explosion. Use fixed labels (level, service, env) and put variables in log lines.
 - **Missing log parsing**: Sending raw logs without label extraction limits query capabilities. Always parse structured logs (JSON, logfmt) or use regex for unstructured.

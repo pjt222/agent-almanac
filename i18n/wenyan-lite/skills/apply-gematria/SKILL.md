@@ -24,31 +24,31 @@ metadata:
   tags: esoteric, kabbalah, gematria, hebrew, numerology, isopsephy
 ---
 
-# Apply Gematria
+# 施數秘術
 
-Compute and analyze gematria — the system of assigning numerical values to Hebrew letters and words. Covers standard (Mispar Hechrachi), ordinal (Mispar Siduri), and reduced (Mispar Katan) methods, isopsephy comparisons between words of equal value, and interpretive frameworks for contemplation.
+計算並分析 gematria——希伯來字母與字之數值賦予系統。涵蓋標準（Mispar Hechrachi）、序數（Mispar Siduri）、約簡（Mispar Katan）三法，等值字之 isopsephy 比對，與冥想之詮釋框架。
 
-## When to Use
+## 適用時機
 
-- You want to compute the numerical value of a Hebrew word or phrase
-- You are comparing two words to determine if they share a gematria value (isopsephy)
-- You need to understand which gematria method is appropriate for a given analysis
-- You are studying a biblical verse or divine name and want to uncover numerical correspondences
-- You are exploring the relationship between a word's meaning and its numerical value
-- You want to connect a numerical result to its position on the Tree of Life
+- 欲計希伯來字或詞之數值
+- 比兩字以判其是否共 gematria 值（isopsephy）
+- 須解何 gematria 法宜於某分析
+- 研聖經經文或神名而欲揭數值對應
+- 探字之意與其數值之關
+- 欲將數值結果繫於生命樹上之位
 
-## Inputs
+## 輸入
 
-- **Required**: A Hebrew word, phrase, or divine name to analyze (in Hebrew script or transliteration)
-- **Optional**: A second word/phrase for comparison (isopsephy)
-- **Optional**: Preferred gematria method (standard, ordinal, reduced, or all three)
-- **Optional**: Context or question guiding the analysis (e.g., "Why do these two words share a value?")
+- **必要**：欲析之希伯來字、詞或神名（希伯來字或音譯）
+- **選擇性**：第二字／詞以資比對（isopsephy）
+- **選擇性**：偏好之 gematria 法（標準、序數、約簡或三者）
+- **選擇性**：指引分析之情境或問題（如「此二字何以共值？」）
 
-## Procedure
+## 步驟
 
-### Step 1: Transliterate and Identify the Hebrew Source
+### 步驟一：音譯並識希伯來源
 
-Establish the exact Hebrew spelling of the word or phrase.
+立字或詞之精確希伯來拼。
 
 ```
 HEBREW LETTER VALUES — Standard Gematria (Mispar Hechrachi):
@@ -77,36 +77,36 @@ same values for regular and final forms. The 500-900 values above
 follow the extended system (Mispar Gadol).
 ```
 
-1. If the input is in English transliteration, convert to Hebrew letter sequence
-2. Verify the spelling: Hebrew has multiple possible spellings for some words (plene vs. defective)
-3. Note if the word contains final-form letters (Kaf-sofit, Mem-sofit, Nun-sofit, Peh-sofit, Tzadi-sofit)
-4. State the source: is this a biblical word, a divine name, a modern Hebrew word, or a technical Kabbalistic term?
-5. If ambiguous, present both common spellings and compute gematria for each
+1. 若輸入為英文音譯，轉為希伯來字母序列
+2. 驗拼：希伯來語對某些字有多種可能拼法（充足拼 vs. 缺拼）
+3. 注字是否含末形字母（Kaf-sofit、Mem-sofit、Nun-sofit、Peh-sofit、Tzadi-sofit）
+4. 陳源：此為聖經之字、神名、現代希伯來字或卡巴拉技術術語？
+5. 若曖昧，呈兩常拼並為各計 gematria
 
-**Expected:** The Hebrew letter sequence is established with confidence. The user knows exactly which letters are being summed and can verify the spelling.
+**預期：** 希伯來字母序列以信心立。使用者明知何字母被加，並可驗拼。
 
-**On failure:** If the transliteration is ambiguous (e.g., "chai" could be Chet-Yod or Chet-Yod-Yod in some contexts), present both options with their gematria values and let the user select.
+**失敗時：** 若音譯曖昧（如「chai」於某情境可為 Chet-Yod 或 Chet-Yod-Yod），呈兩選項附其 gematria 值並令使用者擇。
 
-### Step 2: Apply Standard Gematria (Mispar Hechrachi)
+### 步驟二：施標準 gematria（Mispar Hechrachi）
 
-Sum the letter values using the standard Hebrew number table.
+以標準希伯來數表加字母值。
 
-1. Write out each letter with its standard value
-2. Sum the values left to right (Hebrew reads right to left, but addition is commutative)
-3. State the total clearly
-4. Note if the total matches a significant number:
-   - A sephira number (1-10)
-   - A path number (11-32)
-   - A well-known gematria value (26 = YHVH, 18 = chai, 72 = Shem ha-Mephorash, 137 = Kabbalah)
-5. If the total exceeds 400, note that it requires summing multiple hundreds
+1. 列每字母附其標準值
+2. 自左至右加值（希伯來自右至左讀，然加法可交換）
+3. 明陳總
+4. 注總是否合於顯著數：
+   - sephira 數（1-10）
+   - 路徑數（11-32）
+   - 著名 gematria 值（26 = YHVH、18 = chai、72 = Shem ha-Mephorash、137 = Kabbalah）
+5. 若總超 400，注其需加多百
 
-**Expected:** A clear numerical result with the computation shown step by step. The user can verify each letter's value against the table.
+**預期：** 清晰之數值結果，附逐步計算。使用者可對表驗每字母之值。
 
-**On failure:** If the user provides a word with uncertain Hebrew spelling, compute values for all plausible spellings and note the range. The "correct" spelling depends on the source text.
+**失敗時：** 若使用者提希伯來拼不確之字，為一切合理拼計值並注範圍。「正確」之拼依源文。
 
-### Step 3: Apply Ordinal and Reduced Methods (Optional)
+### 步驟三：施序數與約簡法（選擇性）
 
-Compute alternative gematria values that reveal different patterns.
+計揭不同模式之替代 gematria 值。
 
 ```
 ORDINAL GEMATRIA (Mispar Siduri):
@@ -131,72 +131,72 @@ A substitution cipher: first letter ↔ last letter.
   "Sheshach" = Babel via Atbash).
 ```
 
-1. Compute ordinal gematria: sum each letter's position (1-22) in the alphabet
-2. Compute reduced gematria: reduce each standard value to single digit, then sum and reduce again
-3. Present all three values together for comparison
-4. Note which method reveals the most interesting connections for this particular word
+1. 計序數 gematria：加每字母於字母表中之位（1-22）
+2. 計約簡 gematria：將每標準值約至一位數，後加並再約
+3. 三值並陳以資比
+4. 注何法為此特定字揭最有趣之關
 
-**Expected:** Three numerical values (standard, ordinal, reduced) presented side by side. The reduced value often links to single-digit sephirotic numbers, making it useful for Tree of Life mapping.
+**預期：** 三數值（標準、序數、約簡）並陳。約簡值常繫於單位 sephirotic 數，於生命樹對應有用。
 
-**On failure:** If the user only wants one method, provide that method and mention the others exist for future exploration. Do not overwhelm with calculations if a single method was requested.
+**失敗時：** 若使用者僅欲一法，供之並提他法存，供將來探究。若僅請一法，勿以多計算壓之。
 
-### Step 4: Search for Isopsephy Connections
+### 步驟四：尋 isopsephy 之關
 
-Identify other Hebrew words or phrases that share the same numerical value.
+辨他共同數值之希伯來字或詞。
 
-1. Take the standard gematria value from Step 2
-2. Search for well-known words, divine names, or phrases with the same value
-3. Present 2-5 connections, prioritizing:
-   - Biblical words and phrases
-   - Divine names and sephirotic titles
-   - Traditional Kabbalistic connections documented in classical sources
-   - Surprising or illuminating connections
-4. For each connection, note the source tradition (Zohar, Talmud, later Kabbalistic commentary, Hermetic tradition)
-5. Note if no significant connections are found — not every number has rich isopsephy
+1. 取步驟二之標準 gematria 值
+2. 尋同值之著名字、神名或詞
+3. 呈 2-5 連結，依先：
+   - 聖經字與詞
+   - 神名與 sephirotic 銜
+   - 經典源所記之傳統卡巴拉連結
+   - 出乎意料或具啟發之連結
+4. 對每連結，注源傳（Zohar、Talmud、後期卡巴拉註、Hermetic 傳）
+5. 若無顯著連結，注之——非每數皆有富 isopsephy
 
-**Expected:** A set of words sharing the same gematria value, each with a brief note on why the connection might be meaningful. The user has material for contemplation.
+**預期：** 共同 gematria 值之字集，每附簡注其關之意義。使用者得冥想之材。
 
-**On failure:** If no well-known connections exist for the computed value, acknowledge this. Offer to compute the value's relationship to nearby significant numbers (e.g., "your value is 378, which is 2 more than shalom [376] — what does that suggest?").
+**失敗時：** 若計算之值無著名連結，承認之。可計值與近顯著數之關（如「君之值為 378，較 shalom [376] 多 2——其示何？」）。
 
-### Step 5: Interpret Connections and Correspondences
+### 步驟五：詮釋連結與對應
 
-Move from computation to contemplation — what do the numerical relationships suggest?
+由計算移至冥想——數關示何？
 
-1. State clearly: gematria reveals correspondences for contemplation, not proofs or predictions
-2. For each isopsephy connection found, pose a contemplative question:
-   - "Word A and Word B share the value N. How might their meanings illuminate each other?"
-   - "The reduced value points to sephira X. How does this word's meaning relate to that sephira's quality?"
-3. Note connections to the Tree of Life:
-   - Standard value 1-10 → direct sephirotic correspondence
-   - Reduced value 1-9 → sephirotic resonance
-   - Value = a path number (11-32) → resonance with that path's Hebrew letter
-4. If the user provided a guiding question (from Inputs), address it directly using the gematria results
-5. Close with one integrative statement connecting the numerical analysis to the word's meaning
+1. 明陳：gematria 揭冥想之對應，非證或預測
+2. 對每尋得之 isopsephy 連結，提一冥想問：
+   - 「字 A 與字 B 共值 N。其義何以相互照亮？」
+   - 「約簡值指 sephira X。此字之義何以繫於該 sephira 之質？」
+3. 注於生命樹之關：
+   - 標準值 1-10 → 直接 sephirotic 對應
+   - 約簡值 1-9 → sephirotic 共鳴
+   - 值 = 路徑數（11-32）→ 與該路徑之希伯來字母共鳴
+4. 若使用者提指引問題（自輸入），用 gematria 結果直接應之
+5. 以一整合陳述繫數分析於字之義
 
-**Expected:** The numerical analysis has become meaningful — not just arithmetic but a lens for understanding the word's place in the symbolic network of Kabbalah.
+**預期：** 數分析已成有意——非僅算術而為解字於卡巴拉象徵網絡中之位之鏡。
 
-**On failure:** If interpretation feels forced or speculative, say so directly. Some gematria computations are more fruitful than others. Honest acknowledgment of thin connections is better than fabricating significance.
+**失敗時：** 若詮釋覺強行或臆測，明陳之。某些 gematria 計算較他者更富。對薄連結之誠承勝於造意。
 
-## Validation
+## 驗證
 
-- [ ] The Hebrew spelling was established with confidence (or multiple spellings presented)
-- [ ] Standard gematria was computed with each letter's value shown
-- [ ] At least one additional method (ordinal or reduced) was applied
-- [ ] Isopsephy connections were searched and results presented with source notes
-- [ ] Interpretation was framed as contemplative, not demonstrative
-- [ ] The computation is verifiable — the user can check each letter against the value table
+- [ ] 希伯來拼以信心立（或多拼已呈）
+- [ ] 標準 gematria 已計，每字母之值已示
+- [ ] 至少一額外法（序數或約簡）已施
+- [ ] isopsephy 連結已尋並呈，附源注
+- [ ] 詮釋以冥想為框，非以證為框
+- [ ] 計算可驗——使用者可對值表查每字母
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Spelling ambiguity**: Hebrew words can be spelled with or without vowel letters (matres lectionis). The gematria changes significantly — always confirm the spelling
-- **Final-form confusion**: Whether Mem-final = 40 or 600 depends on which gematria system is used. State the system explicitly
-- **Finding what you expect**: Gematria with enough methods will eventually connect any two words. Privileging connections that confirm a preexisting belief is confirmation bias, not analysis
-- **Ignoring tradition**: Classical Kabbalistic gematria connections (e.g., YHVH = 26, echad [one] = 13, ahavah [love] = 13, so love + unity = God) are documented in authoritative sources. Novel connections should be distinguished from traditional ones
-- **Treating gematria as proof**: Numerical equality between words suggests a correspondence to contemplate, not an identity or causal relationship
-- **Forgetting context**: The same word may have different gematria significance in a biblical verse vs. a liturgical text vs. a Kabbalistic meditation. Context shapes interpretation
+- **拼之曖昧**：希伯來字可附或不附母音字母（matres lectionis）拼。gematria 顯著變——恆確拼
+- **末形之混**：Mem-final 為 40 或 600 取決於所用 gematria 系。明陳系
+- **得君所期**：以足多之法行 gematria 終可連任二字。優待證先信之連結為證實偏見，非分析
+- **忽傳**：經典卡巴拉 gematria 連結（如 YHVH = 26、echad [一] = 13、ahavah [愛] = 13，故愛 + 一 = 神）於權威源中有記。新連結應與傳統者相區
+- **將 gematria 視為證**：字間之數相等示一冥想之對應，非等同或因果之關
+- **遺情境**：同字於聖經經文、儀式文、卡巴拉冥想中或有不同 gematria 意義。情境塑詮釋
 
-## Related Skills
+## 相關技能
 
-- `read-tree-of-life` — Map gematria values to sephirot and paths for structural context
-- `study-hebrew-letters` — Understanding individual letter symbolism deepens gematria interpretation
-- `observe` — Sustained neutral attention to patterns; gematria is a form of numerical pattern recognition
+- `read-tree-of-life` — 將 gematria 值對應於 sephirot 與路徑以求結構情境
+- `study-hebrew-letters` — 解個別字母之象徵深 gematria 之詮釋
+- `observe` — 對模式之持續中性注意；gematria 為一形之數模式辨識

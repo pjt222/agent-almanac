@@ -25,100 +25,100 @@ metadata:
 
 # Analyze Codebase for MCP
 
-Scan a codebase to discover functions, REST endpoints, CLI commands, and data access patterns that are good candidates for MCP tool exposure, then produce a structured tool specification document.
+Scan codebase → fns, REST endpoints, CLI cmds, data access candidates → MCP tool exposure → structured tool spec doc.
 
-## When to Use
+## Use When
 
-- Planning an MCP server for an existing project and need to know what to expose
-- Auditing a codebase before wrapping it as an AI-accessible tool surface
-- Comparing what a codebase can do versus what is already exposed via MCP
-- Generating a tool specification document to hand off to `scaffold-mcp-server`
-- Evaluating whether a third-party library is worth wrapping as MCP tools
+- Plan MCP server existing project → know what to expose
+- Audit codebase pre-AI-tool-surface wrap
+- Compare codebase capability vs MCP exposed
+- Generate tool spec → hand to `scaffold-mcp-server`
+- Evaluate 3rd-party lib worth wrapping
 
-## Inputs
+## In
 
-- **Required**: Path to the codebase root directory
-- **Required**: Target language(s) of the codebase (e.g., TypeScript, Python, R, Go)
-- **Optional**: Existing MCP server code to compare against (gap analysis)
-- **Optional**: Domain focus (e.g., "data analysis", "file operations", "API integration")
-- **Optional**: Maximum number of tools to recommend (default: 20)
+- **Required**: Path to codebase root
+- **Required**: Target lang(s) (TS, Python, R, Go)
+- **Optional**: Existing MCP server code → gap analysis
+- **Optional**: Domain focus ("data analysis", "file ops", "API integration")
+- **Optional**: Max tools to recommend (default: 20)
 
-## Procedure
+## Do
 
-### Step 1: Scan Codebase Structure
+### Step 1: Scan Structure
 
-1.1. Use `Glob` to map the directory tree, focusing on source directories:
-   - `src/**/*.{ts,js,py,R,go,rs}` for source files
-   - `**/routes/**`, `**/api/**`, `**/controllers/**` for endpoint definitions
-   - `**/cli/**`, `**/commands/**` for CLI entry points
-   - `**/package.json`, `**/setup.py`, `**/DESCRIPTION` for dependency metadata
+1.1. `Glob` → dir tree, src dirs:
+   - `src/**/*.{ts,js,py,R,go,rs}` → src files
+   - `**/routes/**`, `**/api/**`, `**/controllers/**` → endpoints
+   - `**/cli/**`, `**/commands/**` → CLI entries
+   - `**/package.json`, `**/setup.py`, `**/DESCRIPTION` → dep metadata
 
-1.2. Categorize files by role:
-   - **Entry points**: main files, route handlers, CLI commands
-   - **Core logic**: business logic functions, algorithms, data transformers
-   - **Data access**: database queries, file I/O, API clients
+1.2. Categorize by role:
+   - **Entry**: main files, route handlers, CLI cmds
+   - **Core logic**: business fns, algos, data transformers
+   - **Data access**: DB queries, file I/O, API clients
    - **Utilities**: helpers, formatters, validators
 
-1.3. Count total files, lines of code, and exported symbols to gauge project size.
+1.3. Count files, LOC, exported symbols → gauge size.
 
-**Expected:** A categorized file inventory with role annotations.
+**→** Categorized inventory w/ role annotations.
 
-**On failure:** If the codebase is too large (>10,000 files), narrow the scan to specific directories or modules using the domain focus input. If no source files are found, verify the root path and language parameters.
+**If err:** Too large (>10K files) → narrow via domain focus. No src found → verify root path + lang params.
 
-### Step 2: Identify Exposed Functions and Endpoints
+### Step 2: Identify Fns + Endpoints
 
-2.1. Use `Grep` to find exported functions and public APIs:
-   - TypeScript/JavaScript: `export (async )?function`, `export default`, `module.exports`
-   - Python: functions not prefixed with `_`, `@app.route`, `@router`
-   - R: functions listed in NAMESPACE or `#' @export` roxygen tags
-   - Go: capitalized function names (exported by convention)
+2.1. `Grep` exported fns + public APIs:
+   - TS/JS: `export (async )?function`, `export default`, `module.exports`
+   - Python: fns no `_` prefix, `@app.route`, `@router`
+   - R: NAMESPACE or `#' @export` roxygen
+   - Go: capitalized fn names (exported by convention)
 
-2.2. For each candidate function, extract:
-   - **Name**: function or endpoint name
-   - **Signature**: parameters with types and defaults
-   - **Return type**: what the function produces
-   - **Documentation**: docstrings, JSDoc, roxygen, godoc
-   - **Location**: file path and line number
+2.2. Per candidate extract:
+   - **Name**: fn/endpoint
+   - **Signature**: params w/ types + defaults
+   - **Return type**
+   - **Docs**: docstrings, JSDoc, roxygen, godoc
+   - **Location**: file path + line
 
-2.3. For REST APIs, additionally extract:
-   - HTTP method and route pattern
-   - Request body schema
-   - Response shape
-   - Authentication requirements
+2.3. REST APIs, also extract:
+   - HTTP method + route pattern
+   - Req body schema
+   - Res shape
+   - Auth reqs
 
-2.4. Build a candidate list sorted by potential utility (public, documented, well-typed functions first).
+2.4. Sort by potential utility (public, documented, well-typed first).
 
-**Expected:** A list of 20-100 candidate functions/endpoints with extracted metadata.
+**→** 20-100 candidates w/ extracted metadata.
 
-**On failure:** If few candidates are found, broaden the search to include internal functions that could be made public. If documentation is sparse, flag this as a risk in the output.
+**If err:** Few candidates → broaden → include internal that could be public. Sparse docs → flag as risk.
 
 ### Step 3: Evaluate MCP Suitability
 
-3.1. For each candidate, assess against MCP tool criteria:
+3.1. Per candidate → MCP tool criteria:
 
-   - **Input contract clarity**: Are parameters well-typed and documented? Can they be described in a JSON Schema?
-   - **Output predictability**: Does the function return structured data (JSON-serializable)? Is the return shape consistent?
-   - **Side effects**: Does the function modify state (files, database, external services)? Side effects must be clearly labeled.
-   - **Idempotency**: Is the operation safe to retry? Non-idempotent tools need explicit warnings.
-   - **Execution time**: Will it complete within a reasonable timeout (< 30 seconds)? Long-running operations need async patterns.
-   - **Error handling**: Does it throw structured errors or fail silently?
+   - **In contract clarity**: params well-typed + documented? JSON Schema describable?
+   - **Out predictability**: structured (JSON-serializable)? Consistent shape?
+   - **Side effects**: modifies state (files, DB, external)? Must be labeled.
+   - **Idempotency**: safe to retry? Non-idempotent → explicit warn.
+   - **Exec time**: completes <30s? Long-running → async patterns.
+   - **Err handling**: structured errs or silent fail?
 
-3.2. Score each candidate on a 1-5 scale:
-   - **5**: Pure function, typed I/O, documented, fast, no side effects
-   - **4**: Well-typed, documented, minor side effects (e.g., logging)
-   - **3**: Reasonable I/O contract but needs wrapping (e.g., returns raw objects)
-   - **2**: Significant side effects or unclear contract, needs substantial adaptation
-   - **1**: Not suitable without major refactoring
+3.2. Score 1-5:
+   - **5**: Pure fn, typed I/O, documented, fast, no side effects
+   - **4**: Well-typed, documented, minor side effects (logging)
+   - **3**: Reasonable I/O, needs wrapping (raw objects)
+   - **2**: Significant side effects or unclear, substantial adaptation
+   - **1**: Not suitable no major refactor
 
-3.3. Filter candidates to those scoring 3 or above. Flag score-2 items as "future candidates" requiring refactoring.
+3.3. Filter ≥3. Flag score-2 → "future candidates" needing refactor.
 
-**Expected:** A scored and filtered candidate list with suitability rationale for each.
+**→** Scored + filtered list w/ suitability rationale.
 
-**On failure:** If most candidates score below 3, the codebase may need refactoring before MCP exposure. Document the gaps and recommend specific improvements (add types, extract pure functions, wrap side effects).
+**If err:** Most <3 → codebase needs refactor pre-MCP. Doc gaps → recommend (add types, extract pure fns, wrap side effects).
 
-### Step 4: Design Tool Specifications
+### Step 4: Design Tool Specs
 
-4.1. For each selected candidate (score >= 3), draft a tool specification:
+4.1. Per selected (≥3) draft spec:
 
 ```yaml
 - name: tool_name
@@ -141,69 +141,69 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
   suitability_score: 5
 ```
 
-4.2. Group tools into logical categories (e.g., "Data Queries", "File Operations", "Analysis", "Configuration").
+4.2. Group logical categories ("Data Queries", "File Ops", "Analysis", "Config").
 
-4.3. Identify dependencies between tools (e.g., "list_datasets" should be called before "query_dataset").
+4.3. Identify deps between tools ("list_datasets" before "query_dataset").
 
-4.4. Determine if any tools need wrappers to:
-   - Simplify complex parameter objects into flat inputs
-   - Convert raw return values to structured text or JSON
-   - Add safety guards (e.g., read-only wrappers for database functions)
+4.4. Need wrappers?
+   - Simplify complex param objects → flat in
+   - Convert raw returns → structured text/JSON
+   - Safety guards (read-only wrappers for DB fns)
 
-**Expected:** A complete YAML tool specification with categories, dependencies, and wrapper notes.
+**→** Complete YAML spec w/ categories, deps, wrapper notes.
 
-**On failure:** If tool specifications are ambiguous, revisit Step 2 to extract more detail from source code. If parameter types cannot be inferred, flag for manual review.
+**If err:** Ambiguous → Step 2 → more src detail. Param types uninferable → flag manual review.
 
-### Step 5: Generate Tool Spec Document
+### Step 5: Generate Tool Spec Doc
 
-5.1. Write the final specification document with these sections:
-   - **Summary**: Codebase overview, language, size, and analysis date
-   - **Recommended Tools**: Full specifications from Step 4, grouped by category
-   - **Future Candidates**: Score-2 items with refactoring recommendations
-   - **Excluded Items**: Score-1 items with exclusion rationale
-   - **Dependencies**: Tool dependency graph
-   - **Implementation Notes**: Wrapper requirements, authentication needs, transport recommendations
+5.1. Final doc sections:
+   - **Summary**: Codebase overview, lang, size, date
+   - **Recommended Tools**: Full specs from Step 4, grouped
+   - **Future Candidates**: Score-2 + refactor recs
+   - **Excluded**: Score-1 + rationale
+   - **Dependencies**: Tool dep graph
+   - **Impl Notes**: Wrappers, auth, transport
 
-5.2. Save as `mcp-tool-spec.yml` (machine-readable) and optionally `mcp-tool-spec.md` (human-readable summary).
+5.2. Save `mcp-tool-spec.yml` (machine) + `mcp-tool-spec.md` (human).
 
-5.3. If an existing MCP server was provided, include a gap analysis section:
-   - Tools in the spec but not yet implemented
-   - Implemented tools not in the spec (possibly stale)
-   - Tools with specification drift (implementation diverges from spec)
+5.3. Existing MCP server provided → gap analysis:
+   - In spec, not impl
+   - Impl, not in spec (stale)
+   - Spec drift (impl diverges)
 
-**Expected:** A complete tool specification document ready for consumption by `scaffold-mcp-server`.
+**→** Complete doc → consumable by `scaffold-mcp-server`.
 
-**On failure:** If the document exceeds reasonable size (>200 tools), split into modules with cross-references. If the codebase has no suitable candidates, produce a "readiness assessment" document with refactoring recommendations instead.
+**If err:** >200 tools → split modules w/ cross-refs. No candidates → "readiness assessment" doc w/ refactor recs.
 
-## Validation
+## Check
 
-- [ ] All source files in the target codebase were scanned
-- [ ] Candidate functions have extracted names, signatures, and return types
-- [ ] Each candidate has a suitability score with written rationale
-- [ ] Tool specifications include complete parameter schemas with types
-- [ ] Side effects are explicitly documented for every tool
-- [ ] The output document is valid YAML (parseable by any YAML library)
-- [ ] Tool names follow MCP conventions (snake_case, descriptive, unique)
-- [ ] Categories and dependencies form a coherent tool surface
-- [ ] Gap analysis is included when an existing MCP server was provided
-- [ ] Future candidates section lists refactoring steps needed for score-2 items
+- [ ] All src files scanned
+- [ ] Candidates have names, signatures, returns
+- [ ] Each candidate scored + rationale
+- [ ] Tool specs complete param schemas w/ types
+- [ ] Side effects explicit per tool
+- [ ] Doc valid YAML (parseable)
+- [ ] Tool names follow MCP (snake_case, unique)
+- [ ] Categories + deps coherent
+- [ ] Gap analysis if existing MCP provided
+- [ ] Future candidates list refactor steps
 
-## Common Pitfalls
+## Traps
 
-- **Exposing too many tools**: AI assistants work best with 10-30 focused tools. Prioritize breadth of capability over depth. Resist exposing every public function.
-- **Ignoring side effects**: A function that "just reads" but also writes to a log or cache still has side effects. Audit carefully with `Grep` for file writes, network calls, and database mutations.
-- **Assuming type safety**: Dynamic languages (Python, R, JavaScript) may have functions with no type annotations. Infer types from usage patterns and tests, but flag uncertainty in the spec.
-- **Missing authentication context**: Functions that work in an authenticated web request may fail when called via MCP without session context. Check for implicit auth dependencies such as session cookies, JWT tokens, or environment-injected credentials.
-- **Over-engineering wrappers**: If a function needs a 50-line wrapper to be MCP-compatible, it may not be a good candidate. Prefer functions that map naturally to tool interfaces.
-- **Neglecting error paths**: MCP tools must return structured errors. Functions that throw untyped exceptions need error-handling wrappers.
-- **Conflating internal and external APIs**: Internal helper functions called by other internal code are poor MCP candidates. Focus on functions designed for external consumption or clear boundary APIs.
-- **Skipping the gap analysis**: If an existing MCP server is provided, always compare the spec against current implementation. Without gap analysis, you risk duplicating work or missing stale tools.
+- **Too many tools**: AI works best 10-30 focused. Breadth > depth. Resist every public fn.
+- **Ignore side effects**: "Just reads" + logs/cache = still side effects. Audit `Grep` file writes, network, DB.
+- **Assume type safety**: Dynamic langs (Py, R, JS) may lack type annotations. Infer from usage, flag uncertainty.
+- **Missing auth ctx**: Fns working in authed web req may fail via MCP no session. Check implicit session cookies, JWT, env creds.
+- **Over-engineer wrappers**: 50-line wrapper → not good candidate. Prefer natural mapping.
+- **Neglect err paths**: MCP must return structured errs. Untyped exceptions → err-handling wrappers.
+- **Conflate internal + external APIs**: Internal helpers poor candidates. Focus external-consumption or boundary APIs.
+- **Skip gap analysis**: Existing MCP provided → always compare. No gap analysis → duplicate work or stale tools.
 
-## Related Skills
+## →
 
-- `scaffold-mcp-server` - use the output spec to generate a working MCP server
-- `build-custom-mcp-server` - manual server implementation reference
-- `configure-mcp-server` - connect the resulting server to Claude Code/Desktop
-- `troubleshoot-mcp-connection` - debug connectivity after deploying the server
-- `review-software-architecture` - architecture review for tool surface design
-- `security-audit-codebase` - security audit before exposing functions externally
+- `scaffold-mcp-server` — use out spec → working MCP
+- `build-custom-mcp-server` — manual impl ref
+- `configure-mcp-server` — connect to Claude Code/Desktop
+- `troubleshoot-mcp-connection` — debug after deploy
+- `review-software-architecture` — arch review for tool surface
+- `security-audit-codebase` — audit pre-external exposure

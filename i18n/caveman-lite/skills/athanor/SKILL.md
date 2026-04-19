@@ -64,9 +64,9 @@ Break the prima materia into its constituent elements. Nothing is sacred; everyt
    - Hardcoded values, magic numbers, embedded configuration
 4. Produce the **Nigredo Inventory**: a structured catalog of every element, dependency, assumption, and anti-pattern
 
-**Expected:** A complete, unflinching inventory of the material. The inventory should feel uncomfortable — if it doesn't, the decomposition isn't thorough enough. Every hidden assumption is now explicit.
+**Got:** A complete, unflinching inventory of the material. The inventory should feel uncomfortable — if it doesn't, the decomposition isn't thorough enough. Every hidden assumption is now explicit.
 
-**On failure:** If the material is too large to inventory fully, decompose by module boundary and treat each module as a separate athanor run. If dependencies are too tangled to map, use `grep`/`Grep` to trace actual call sites rather than relying on documentation.
+**If fail:** If the material is too large to inventory fully, decompose by module boundary and treat each module as a separate athanor run. If dependencies are too tangled to map, use `grep`/`Grep` to trace actual call sites rather than relying on documentation.
 
 ### Step 2: Meditate — Calcination Checkpoint
 
@@ -77,9 +77,9 @@ Run the `meditate` skill to clear assumptions accumulated during nigredo.
 3. Observe what biases nigredo introduced — did the decomposition make certain approaches seem inevitable?
 4. Label any premature solution ideas as "tangent" and return to the goal
 
-**Expected:** A clear, unbiased state ready to evaluate the material without being anchored to its current form. The goal feels fresh rather than constrained by what was found.
+**Got:** A clear, unbiased state ready to evaluate the material without being anchored to its current form. The goal feels fresh rather than constrained by what was found.
 
-**On failure:** If the nigredo findings keep pulling attention (a particularly bad anti-pattern, a clever hack that's tempting to preserve), write it down and explicitly set it aside. Proceed only when the goal is clearer than the current form.
+**If fail:** If the nigredo findings keep pulling attention (a particularly bad anti-pattern, a clever hack that's tempting to preserve), write it down and explicitly set it aside. Proceed only when the goal is clearer than the current form.
 
 ### Step 3: Albedo — Purification
 
@@ -97,9 +97,9 @@ Separate the essential from the accidental. Strip away everything that doesn't s
 4. For accidental elements, determine if equivalents exist in the target form
 5. Produce the **Albedo Extract**: purified essential logic with clean interfaces
 
-**Expected:** A set of pure, isolated functions/modules that represent the core value of the original material. Each piece is testable in isolation. The extract is significantly smaller than the original.
+**Got:** A set of pure, isolated functions/modules that represent the core value of the original material. Each piece is testable in isolation. The extract is significantly smaller than the original.
 
-**On failure:** If essential and accidental are too intertwined to separate, introduce seam points (interfaces) first. If the material resists purification, it may need `dissolve-form` before the athanor can continue.
+**If fail:** If essential and accidental are too intertwined to separate, introduce seam points (interfaces) first. If the material resists purification, it may need `dissolve-form` before the athanor can continue.
 
 ### Step 4: Heal — Purification Assessment
 
@@ -110,9 +110,9 @@ Run the `heal` skill to assess whether the purification was thorough.
 3. Assess completeness: are all essential elements accounted for, or were some discarded prematurely?
 4. Rebalance if needed: restore any essential elements that were incorrectly classified as accidental
 
-**Expected:** Confidence that the albedo extract is complete, clean, and ready for illumination. No essential logic was lost; no toxic patterns remain.
+**Got:** Confidence that the albedo extract is complete, clean, and ready for illumination. No essential logic was lost; no toxic patterns remain.
 
-**On failure:** If the assessment reveals significant gaps, return to Step 3 with the specific gaps identified. Do not proceed to citrinitas with incomplete material.
+**If fail:** If the assessment reveals significant gaps, return to Step 3 with the specific gaps identified. Do not proceed to citrinitas with incomplete material.
 
 ### Step 5: Citrinitas — Illumination
 
@@ -132,9 +132,9 @@ See the target form. Map the purified elements to their optimal structure.
    - New error handling that replaces silent failures
 4. Produce the **Citrinitas Blueprint**: a complete mapping from albedo extract to target form
 
-**Expected:** A clear, detailed blueprint where every essential element has a home and every interface is defined. The blueprint should feel inevitable — given the purified elements, this structure is the natural fit.
+**Got:** A clear, detailed blueprint where every essential element has a home and every interface is defined. The blueprint should feel inevitable — given the purified elements, this structure is the natural fit.
 
-**On failure:** If multiple valid architectures compete, evaluate each against the constraints from Inputs. If no clear winner emerges, prefer the simplest option and document the alternatives as future options.
+**If fail:** If multiple valid architectures compete, evaluate each against the constraints from Inputs. If no clear winner emerges, prefer the simplest option and document the alternatives as future options.
 
 ### Step 6: Meditate — Pre-Synthesis Checkpoint
 
@@ -145,9 +145,9 @@ Run the `meditate` skill to prepare for the final synthesis.
 3. Observe any anxiety about the transformation — is anything being rushed?
 4. Confirm readiness: the blueprint is clear, the material is purified, the constraints are known
 
-**Expected:** Calm clarity about what needs to be built. The synthesis phase should be execution, not design.
+**Got:** Calm clarity about what needs to be built. The synthesis phase should be execution, not design.
 
-**On failure:** If doubt persists about the blueprint, revisit Step 5 with the specific concerns. Better to refine the blueprint than to begin synthesis with uncertainty.
+**If fail:** If doubt persists about the blueprint, revisit Step 5 with the specific concerns. Better to refine the blueprint than to begin synthesis with uncertainty.
 
 ### Step 7: Rubedo — Synthesis
 
@@ -171,9 +171,9 @@ Compose the purified elements into their target form. The philosopher's stone: w
    - Clean up any remaining references to the old structure
 5. Produce the **Rubedo Output**: the transmuted code, fully functional in its new form
 
-**Expected:** Working code that is measurably better than the original: fewer lines, clearer structure, better test coverage, fewer dependencies. The transformation is complete and the old form can be retired.
+**Got:** Working code that is measurably better than the original: fewer lines, clearer structure, better test coverage, fewer dependencies. The transformation is complete and the old form can be retired.
 
-**On failure:** If synthesis reveals gaps in the blueprint, do not patch — return to Step 5 (citrinitas) to revise the design. If individual components fail, isolate and fix them before attempting full integration. The rubedo must not produce a half-transformed chimera.
+**If fail:** If synthesis reveals gaps in the blueprint, do not patch — return to Step 5 (citrinitas) to revise the design. If individual components fail, isolate and fix them before attempting full integration. The rubedo must not produce a half-transformed chimera.
 
 ## Validation Checklist
 
@@ -188,7 +188,7 @@ Compose the purified elements into their target form. The philosopher's stone: w
 - [ ] No toxic elements survived into the final output
 - [ ] Transformation constraints from Inputs are satisfied
 
-## Common Pitfalls
+## Pitfalls
 
 - **Skipping nigredo depth**: Rushing decomposition means hidden coupling surfaces during synthesis. Invest fully in the inventory
 - **Preserving accidental complexity**: Attachment to clever workarounds or "it works, don't touch it" code. If it's not essential, it goes

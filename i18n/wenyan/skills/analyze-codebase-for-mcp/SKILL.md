@@ -23,102 +23,102 @@ metadata:
   tags: mcp, analysis, tool-design, codebase
 ---
 
-# Analyze Codebase for MCP
+# 析碼庫為 MCP
 
-Scan a codebase to discover functions, REST endpoints, CLI commands, and data access patterns that are good candidates for MCP tool exposure, then produce a structured tool specification document.
+掃碼庫以察函、REST 端點、CLI 命、數訪之式而宜 MCP 工具露出者，生結構化之工具規文。
 
-## When to Use
+## 用時
 
-- Planning an MCP server for an existing project and need to know what to expose
-- Auditing a codebase before wrapping it as an AI-accessible tool surface
-- Comparing what a codebase can do versus what is already exposed via MCP
-- Generating a tool specification document to hand off to `scaffold-mcp-server`
-- Evaluating whether a third-party library is worth wrapping as MCP tools
+- 為既存之項謀 MCP 服而需知所露者乃用
+- 將碼庫裹為 AI 可達之面前審之乃用
+- 比碼庫所能與已露於 MCP 者乃用
+- 生工具規文交付 `scaffold-mcp-server` 乃用
+- 察三方庫值裹為 MCP 工具乎乃用
 
-## Inputs
+## 入
 
-- **Required**: Path to the codebase root directory
-- **Required**: Target language(s) of the codebase (e.g., TypeScript, Python, R, Go)
-- **Optional**: Existing MCP server code to compare against (gap analysis)
-- **Optional**: Domain focus (e.g., "data analysis", "file operations", "API integration")
-- **Optional**: Maximum number of tools to recommend (default: 20)
+- **必要**：碼庫根目之徑
+- **必要**：碼庫之語（如 TypeScript、Python、R、Go）
+- **可選**：既有 MCP 服之碼以比（隙析）
+- **可選**：域之焦（如「數析」、「檔操」、「API 整合」）
+- **可選**：所薦工具最多之數（默：20）
 
-## Procedure
+## 法
 
-### Step 1: Scan Codebase Structure
+### 第一步：掃碼庫之構
 
-1.1. Use `Glob` to map the directory tree, focusing on source directories:
-   - `src/**/*.{ts,js,py,R,go,rs}` for source files
-   - `**/routes/**`, `**/api/**`, `**/controllers/**` for endpoint definitions
-   - `**/cli/**`, `**/commands/**` for CLI entry points
-   - `**/package.json`, `**/setup.py`, `**/DESCRIPTION` for dependency metadata
+1.1. 以 `Glob` 繪目樹，注源目：
+   - `src/**/*.{ts,js,py,R,go,rs}` 為源
+   - `**/routes/**`、`**/api/**`、`**/controllers/**` 為端點定
+   - `**/cli/**`、`**/commands/**` 為 CLI 入
+   - `**/package.json`、`**/setup.py`、`**/DESCRIPTION` 為依元
 
-1.2. Categorize files by role:
-   - **Entry points**: main files, route handlers, CLI commands
-   - **Core logic**: business logic functions, algorithms, data transformers
-   - **Data access**: database queries, file I/O, API clients
-   - **Utilities**: helpers, formatters, validators
+1.2. 按角分類：
+   - **入點**：主檔、路由處、CLI 命
+   - **核邏**：業之函、算法、數之轉
+   - **數訪**：庫查、檔 I/O、API 客
+   - **雜助**：助者、格者、驗者
 
-1.3. Count total files, lines of code, and exported symbols to gauge project size.
+1.3. 計總檔、碼行、導符以估項之大。
 
-**Expected:** A categorized file inventory with role annotations.
+**得：** 按角注之檔錄。
 
-**On failure:** If the codebase is too large (>10,000 files), narrow the scan to specific directories or modules using the domain focus input. If no source files are found, verify the root path and language parameters.
+**敗則：** 若碼庫過大（逾萬檔），以域焦縮掃特目或模。若無源檔，驗根徑與語參。
 
-### Step 2: Identify Exposed Functions and Endpoints
+### 第二步：識已露之函與端點
 
-2.1. Use `Grep` to find exported functions and public APIs:
-   - TypeScript/JavaScript: `export (async )?function`, `export default`, `module.exports`
-   - Python: functions not prefixed with `_`, `@app.route`, `@router`
-   - R: functions listed in NAMESPACE or `#' @export` roxygen tags
-   - Go: capitalized function names (exported by convention)
+2.1. 以 `Grep` 尋導之函與公之 API：
+   - TypeScript/JavaScript：`export (async )?function`、`export default`、`module.exports`
+   - Python：未以 `_` 前之函、`@app.route`、`@router`
+   - R：NAMESPACE 所列或 `#' @export` roxygen 注之函
+   - Go：大寫始之函名（按約導）
 
-2.2. For each candidate function, extract:
-   - **Name**: function or endpoint name
-   - **Signature**: parameters with types and defaults
-   - **Return type**: what the function produces
-   - **Documentation**: docstrings, JSDoc, roxygen, godoc
-   - **Location**: file path and line number
+2.2. 每候函，取：
+   - **名**：函或端點之名
+   - **簽**：參及其型與默
+   - **返型**：函所生者
+   - **文**：docstring、JSDoc、roxygen、godoc
+   - **位**：檔徑與行號
 
-2.3. For REST APIs, additionally extract:
-   - HTTP method and route pattern
-   - Request body schema
-   - Response shape
-   - Authentication requirements
+2.3. 為 REST API，加取：
+   - HTTP 法與路之式
+   - 請求體之模
+   - 應之形
+   - 認證之求
 
-2.4. Build a candidate list sorted by potential utility (public, documented, well-typed functions first).
+2.4. 建候列，以潛益而序（公之、有文、型明之函先）。
 
-**Expected:** A list of 20-100 candidate functions/endpoints with extracted metadata.
+**得：** 二十至百候函/端點，有取之元。
 
-**On failure:** If few candidates are found, broaden the search to include internal functions that could be made public. If documentation is sparse, flag this as a risk in the output.
+**敗則：** 若候少，擴搜以納可轉公之內函。若文稀，標為出之險。
 
-### Step 3: Evaluate MCP Suitability
+### 第三步：評 MCP 之宜
 
-3.1. For each candidate, assess against MCP tool criteria:
+3.1. 每候，按 MCP 工具準：
 
-   - **Input contract clarity**: Are parameters well-typed and documented? Can they be described in a JSON Schema?
-   - **Output predictability**: Does the function return structured data (JSON-serializable)? Is the return shape consistent?
-   - **Side effects**: Does the function modify state (files, database, external services)? Side effects must be clearly labeled.
-   - **Idempotency**: Is the operation safe to retry? Non-idempotent tools need explicit warnings.
-   - **Execution time**: Will it complete within a reasonable timeout (< 30 seconds)? Long-running operations need async patterns.
-   - **Error handling**: Does it throw structured errors or fail silently?
+   - **入約之明**：參型明而有文乎？可以 JSON Schema 述乎？
+   - **出之可預**：函返結構化之數（JSON 可序化）乎？返形恆乎？
+   - **副作**：函改狀（檔、庫、外服）乎？副作必明標。
+   - **冪等**：操安再試乎？非冪等需明警。
+   - **執行之時**：可於理限內（< 30 秒）成乎？久行之操需異步式。
+   - **誤處**：擲結構化之誤抑或默敗？
 
-3.2. Score each candidate on a 1-5 scale:
-   - **5**: Pure function, typed I/O, documented, fast, no side effects
-   - **4**: Well-typed, documented, minor side effects (e.g., logging)
-   - **3**: Reasonable I/O contract but needs wrapping (e.g., returns raw objects)
-   - **2**: Significant side effects or unclear contract, needs substantial adaptation
-   - **1**: Not suitable without major refactoring
+3.2. 各候以 1-5 評：
+   - **5**：純函、型明、有文、速、無副作
+   - **4**：型明、有文、微副作（如日誌）
+   - **3**：I/O 約尚可而需裹（如返原物）
+   - **2**：重副作或約不明，需重適
+   - **1**：不宜除非大改
 
-3.3. Filter candidates to those scoring 3 or above. Flag score-2 items as "future candidates" requiring refactoring.
+3.3. 濾候至 3 以上。2 者標為「未來候」需改。
 
-**Expected:** A scored and filtered candidate list with suitability rationale for each.
+**得：** 評且濾之候列，各有宜之由。
 
-**On failure:** If most candidates score below 3, the codebase may need refactoring before MCP exposure. Document the gaps and recommend specific improvements (add types, extract pure functions, wrap side effects).
+**敗則：** 若多候低於 3，碼庫或需改然後露為 MCP。書其隙薦改之具（加型、取純函、裹副作）。
 
-### Step 4: Design Tool Specifications
+### 第四步：設工具規
 
-4.1. For each selected candidate (score >= 3), draft a tool specification:
+4.1. 每選候（評 >= 3），擬工具規：
 
 ```yaml
 - name: tool_name
@@ -141,69 +141,69 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
   suitability_score: 5
 ```
 
-4.2. Group tools into logical categories (e.g., "Data Queries", "File Operations", "Analysis", "Configuration").
+4.2. 聚工具為邏類（如「數查」、「檔操」、「析」、「設」）。
 
-4.3. Identify dependencies between tools (e.g., "list_datasets" should be called before "query_dataset").
+4.3. 識工具間之依（如「list_datasets」宜先於「query_dataset」）。
 
-4.4. Determine if any tools need wrappers to:
-   - Simplify complex parameter objects into flat inputs
-   - Convert raw return values to structured text or JSON
-   - Add safety guards (e.g., read-only wrappers for database functions)
+4.4. 定工具需裹否以：
+   - 簡繁參為平入
+   - 轉原返為結構化文或 JSON
+   - 加安守（如庫函只讀之裹）
 
-**Expected:** A complete YAML tool specification with categories, dependencies, and wrapper notes.
+**得：** 全 YAML 工具規，含類、依、裹之注。
 
-**On failure:** If tool specifications are ambiguous, revisit Step 2 to extract more detail from source code. If parameter types cannot be inferred, flag for manual review.
+**敗則：** 若規曖昧，返第二步取更詳。若參型不可推，標為人審。
 
-### Step 5: Generate Tool Spec Document
+### 第五步：生工具規文
 
-5.1. Write the final specification document with these sections:
-   - **Summary**: Codebase overview, language, size, and analysis date
-   - **Recommended Tools**: Full specifications from Step 4, grouped by category
-   - **Future Candidates**: Score-2 items with refactoring recommendations
-   - **Excluded Items**: Score-1 items with exclusion rationale
-   - **Dependencies**: Tool dependency graph
-   - **Implementation Notes**: Wrapper requirements, authentication needs, transport recommendations
+5.1. 書終規文，含：
+   - **要**：碼庫概、語、大、析之日
+   - **薦工具**：第四步全規，按類聚
+   - **未來候**：2 者與改薦
+   - **排除者**：1 者與排之由
+   - **依**：工具依圖
+   - **實注**：裹之求、認之求、傳之薦
 
-5.2. Save as `mcp-tool-spec.yml` (machine-readable) and optionally `mcp-tool-spec.md` (human-readable summary).
+5.2. 存為 `mcp-tool-spec.yml`（機讀）及可選 `mcp-tool-spec.md`（人讀要）。
 
-5.3. If an existing MCP server was provided, include a gap analysis section:
-   - Tools in the spec but not yet implemented
-   - Implemented tools not in the spec (possibly stale)
-   - Tools with specification drift (implementation diverges from spec)
+5.3. 若給既存 MCP 服，含隙析段：
+   - 規中之工具未實現者
+   - 已實現而不在規者（或陳）
+   - 規實偏移者（實違規）
 
-**Expected:** A complete tool specification document ready for consumption by `scaffold-mcp-server`.
+**得：** 全工具規文，備予 `scaffold-mcp-server` 用。
 
-**On failure:** If the document exceeds reasonable size (>200 tools), split into modules with cross-references. If the codebase has no suitable candidates, produce a "readiness assessment" document with refactoring recommendations instead.
+**敗則：** 若文過大（逾 200 工具），析為模附交參。若碼庫無宜候，代以「備度評」文與改薦。
 
-## Validation
+## 驗
 
-- [ ] All source files in the target codebase were scanned
-- [ ] Candidate functions have extracted names, signatures, and return types
-- [ ] Each candidate has a suitability score with written rationale
-- [ ] Tool specifications include complete parameter schemas with types
-- [ ] Side effects are explicitly documented for every tool
-- [ ] The output document is valid YAML (parseable by any YAML library)
-- [ ] Tool names follow MCP conventions (snake_case, descriptive, unique)
-- [ ] Categories and dependencies form a coherent tool surface
-- [ ] Gap analysis is included when an existing MCP server was provided
-- [ ] Future candidates section lists refactoring steps needed for score-2 items
+- [ ] 目庫諸源皆已掃
+- [ ] 候函取名、簽、返型
+- [ ] 每候有評與書之由
+- [ ] 工具規含全參模與型
+- [ ] 每工具副作明書
+- [ ] 出之文為有效 YAML（任 YAML 庫可析）
+- [ ] 工具名循 MCP 約（snake_case、述、獨）
+- [ ] 類與依成貫之工具面
+- [ ] 給既存 MCP 服則含隙析
+- [ ] 未來候段列 2 者所需改之步
 
-## Common Pitfalls
+## 陷
 
-- **Exposing too many tools**: AI assistants work best with 10-30 focused tools. Prioritize breadth of capability over depth. Resist exposing every public function.
-- **Ignoring side effects**: A function that "just reads" but also writes to a log or cache still has side effects. Audit carefully with `Grep` for file writes, network calls, and database mutations.
-- **Assuming type safety**: Dynamic languages (Python, R, JavaScript) may have functions with no type annotations. Infer types from usage patterns and tests, but flag uncertainty in the spec.
-- **Missing authentication context**: Functions that work in an authenticated web request may fail when called via MCP without session context. Check for implicit auth dependencies such as session cookies, JWT tokens, or environment-injected credentials.
-- **Over-engineering wrappers**: If a function needs a 50-line wrapper to be MCP-compatible, it may not be a good candidate. Prefer functions that map naturally to tool interfaces.
-- **Neglecting error paths**: MCP tools must return structured errors. Functions that throw untyped exceptions need error-handling wrappers.
-- **Conflating internal and external APIs**: Internal helper functions called by other internal code are poor MCP candidates. Focus on functions designed for external consumption or clear boundary APIs.
-- **Skipping the gap analysis**: If an existing MCP server is provided, always compare the spec against current implementation. Without gap analysis, you risk duplicating work or missing stale tools.
+- **露過多工具**：AI 助最宜十至三十聚工具。重能之廣勝於深。勿露諸公函
+- **忽副作**：「只讀」之函亦或書日誌或緩。以 `Grep` 察檔寫、網呼、庫改
+- **假型安**：動語（Python、R、JavaScript）或無型注。由用式與試推型，標疑於規
+- **失認上下文**：於認證網請求中行之函經 MCP 呼或無會話而敗。察隱認之依如會話 cookie、JWT 令、環注憑
+- **過築裹**：函需五十行之裹方合 MCP 則或非佳候。重自然映工具界之函
+- **忽誤路**：MCP 工具須返結構化誤。擲未型異之函需誤處之裹
+- **混內外 API**：他內碼所呼之內助函為劣 MCP 候。重設於外用之函或清界 API
+- **跳隙析**：若給既存 MCP 服，恆比規與當前實現。無隙析則冒複功或失陳工具
 
-## Related Skills
+## 參
 
-- `scaffold-mcp-server` - use the output spec to generate a working MCP server
-- `build-custom-mcp-server` - manual server implementation reference
-- `configure-mcp-server` - connect the resulting server to Claude Code/Desktop
-- `troubleshoot-mcp-connection` - debug connectivity after deploying the server
-- `review-software-architecture` - architecture review for tool surface design
-- `security-audit-codebase` - security audit before exposing functions externally
+- `scaffold-mcp-server` — 用出之規生工作之 MCP 服
+- `build-custom-mcp-server` — 手實現之參
+- `configure-mcp-server` — 連所生之服至 Claude Code/Desktop
+- `troubleshoot-mcp-connection` — 部後調連
+- `review-software-architecture` — 工具面設之審
+- `security-audit-codebase` — 外露函之前安審

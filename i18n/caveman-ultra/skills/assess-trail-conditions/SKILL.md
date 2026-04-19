@@ -26,30 +26,30 @@ metadata:
 
 # Assess Trail Conditions
 
-Evaluate current trail conditions for safety decision-making before a planned hike or during tour planning.
+Eval current trail conditions → safety decision pre-hike or during tour plan.
 
-## When to Use
+## Use When
 
-- The day before or morning of a planned hike to make a go/no-go decision
-- During tour planning to assess seasonal viability of a route
-- After unexpected weather changes during a multi-day tour
-- When reports suggest trail damage, closures, or unusual hazards
-- Before committing to an alpine or exposed route
+- Day before or morning of planned hike → go/no-go
+- Tour planning → seasonal viability
+- After unexpected weather on multi-day tour
+- Reports suggest trail damage, closures, unusual hazards
+- Before committing alpine or exposed route
 
-## Inputs
+## In
 
-- **Required**: Trail name, region, and approximate coordinates or waypoints
-- **Required**: Planned date(s) of the hike
-- **Optional**: Trail difficulty rating (SAC T1-T6)
-- **Optional**: Maximum elevation on the route
-- **Optional**: Known hazard points (river crossings, exposed ridges, glaciers)
-- **Optional**: Group experience level (affects risk tolerance thresholds)
+- **Required**: Trail name, region, coords/waypoints
+- **Required**: Planned date(s)
+- **Optional**: Difficulty (SAC T1-T6)
+- **Optional**: Max elevation
+- **Optional**: Known hazard pts (river crossings, exposed ridges, glaciers)
+- **Optional**: Group exp level (risk tolerance thresholds)
 
-## Procedure
+## Do
 
-### Step 1: Gather Weather Data
+### Step 1: Gather Weather
 
-Collect weather forecasts from multiple sources for the trail's elevation range.
+Forecasts from multi srcs for trail's elevation range.
 
 ```
 Weather Data Sources (in preference order):
@@ -73,7 +73,7 @@ Weather Data Sources (in preference order):
 └────────────────────────┴──────────────────────────────────────┘
 ```
 
-Collect the following data points:
+Collect:
 
 ```
 Weather Assessment:
@@ -94,13 +94,13 @@ Weather Assessment:
 └─────────────────────┴───────────────┴───────────────────────────┘
 ```
 
-**Expected:** Weather data from at least 2 independent sources, with altitude-specific information for both the lowest and highest points of the route.
+**→** Weather from ≥2 independent srcs + altitude-specific for lowest + highest route pts.
 
-**On failure:** If detailed mountain forecasts are unavailable for the specific region, use general forecasts with altitude adjustments: temperature drops approximately 6.5 C per 1000 m of elevation gain, wind speed increases with altitude and exposure. If forecasts disagree, plan for the worse prediction.
+**If err:** Detailed mountain forecasts unavail for region → general forecasts + altitude adjustments: temp drops ~6.5 C per 1000 m gain, wind increases w/ altitude + exposure. Forecasts disagree → plan worse prediction.
 
-### Step 2: Assess Terrain Conditions
+### Step 2: Assess Terrain
 
-Evaluate the current state of the trail surface, snow, water, and exposure hazards.
+Current state of trail surface, snow, water, exposure hazards.
 
 ```
 Terrain Condition Factors:
@@ -134,20 +134,20 @@ Terrain Condition Factors:
 └──────────────────────┴─────────────────────────────────────────┘
 ```
 
-Data sources for terrain conditions:
-- Recent trip reports (hiking forums, mountain club sites)
-- Hut warden reports (call the nearest hut)
-- Webcams at or near the trail
-- Avalanche bulletins (include snow and terrain info even in summer)
-- Trail maintenance authorities (national park offices, Alpenverein sections)
+Data srcs for terrain:
+- Recent trip reports (forums, club sites)
+- Hut warden reports (call nearest)
+- Webcams at/near trail
+- Avalanche bulletins (snow + terrain info even summer)
+- Trail maintenance authorities (nat park offices, Alpenverein)
 
-**Expected:** A terrain assessment for each significant hazard point on the route, based on current data no more than 48 hours old.
+**→** Terrain assessment per significant hazard pt, current data ≤48 hr old.
 
-**On failure:** If current condition data is unavailable (remote area, no recent reports), assume conditions are worse than average for the season. Contact the nearest staffed hut or mountain rescue station for local knowledge.
+**If err:** Current data unavail (remote, no recent reports) → assume worse than avg for season. Contact nearest staffed hut or mountain rescue for local knowledge.
 
-### Step 3: Evaluate Trail Status
+### Step 3: Eval Trail Status
 
-Check for closures, diversions, and maintenance issues on the planned route.
+Closures, diversions, maintenance on planned route.
 
 ```
 Trail Status Sources:
@@ -170,18 +170,18 @@ Trail Status Sources:
 
 Check for:
 1. **Full closures**: Trail impassable or legally closed (wildlife protection, construction)
-2. **Partial closures**: Sections closed with official diversions
-3. **Seasonal closures**: Trail not yet open for the season (snow, hut not staffed)
+2. **Partial closures**: Sections closed w/ official diversions
+3. **Seasonal closures**: Not yet open (snow, hut not staffed)
 4. **Damage reports**: Landslides, bridge washouts, trail erosion
 5. **Event impacts**: Races, military exercises, hunting seasons
 
-**Expected:** Confirmed trail status (open, partially closed, closed) with any diversions mapped and time impact estimated.
+**→** Confirmed trail status (open, partially closed, closed) + diversions mapped + time impact estimated.
 
-**On failure:** If trail status cannot be confirmed, plan for potential diversions. Carry a detailed map (not just the trail app route) so that alternatives can be navigated on the spot. If a trail is listed as closed, respect the closure even if it appears passable.
+**If err:** Status can't be confirmed → plan potential diversions. Carry detailed map (not just trail app route) → alternatives navigable on spot. Listed closed → respect even if appears passable.
 
 ### Step 4: Rate Safety Level
 
-Combine all assessment data into an overall safety rating.
+Combine all into overall safety rating.
 
 ```
 Safety Rating Criteria:
@@ -218,19 +218,19 @@ Safety Rating Criteria:
 └─────────┴────────────────────────────────────────────────────┘
 ```
 
-For YELLOW ratings, define specific mitigation actions:
-- Early start to beat afternoon weather
+YELLOW ratings → specific mitigation actions:
+- Early start → beat afternoon weather
 - Turnaround time if conditions worsen
 - Specific sections to monitor closely
 - Communication plan if group separates
 
-**Expected:** A clear GREEN, YELLOW, or RED rating with specific justification. YELLOW ratings include actionable mitigation steps and defined trigger points for abort.
+**→** Clear GREEN/YELLOW/RED + specific justification. YELLOW → actionable mitigation + defined trigger pts for abort.
 
-**On failure:** If the assessment is inconclusive (insufficient data to rate confidently), treat it as YELLOW at minimum. Uncertainty should increase caution, not decrease it. If any single factor is RED, the overall rating is RED regardless of other factors.
+**If err:** Inconclusive (insufficient data) → treat YELLOW min. Uncertainty should increase caution. Any single RED → overall RED regardless of others.
 
-### Step 5: Generate Conditions Report
+### Step 5: Generate Report
 
-Compile the assessment into a concise, actionable report.
+Concise actionable report.
 
 ```
 Conditions Report Template:
@@ -272,35 +272,35 @@ DECISION
 ═══════════════════════════════════════════════
 ```
 
-**Expected:** A complete, dated conditions report that enables an informed go/no-go decision. The report should be shareable with all group members and understandable without additional context.
+**→** Complete dated conditions report enabling informed go/no-go. Shareable w/ all group + understandable no additional ctx.
 
-**On failure:** If the report cannot be completed (e.g., key data unavailable), state what is unknown and how it affects the decision. An incomplete assessment with acknowledged gaps is safer than a false sense of certainty.
+**If err:** Can't complete report (key data unavail) → state what unknown + how affects decision. Incomplete + acknowledged gaps safer than false certainty.
 
-## Validation
+## Check
 
-- [ ] Weather data collected from at least 2 independent sources
-- [ ] Altitude-specific forecasts obtained (not just valley weather)
-- [ ] Terrain conditions assessed for all key hazard points on the route
+- [ ] Weather from ≥2 independent srcs
+- [ ] Altitude-specific forecasts (not just valley)
+- [ ] Terrain assessed all key hazard pts
 - [ ] Trail status verified (open/closed/diversions)
-- [ ] Safety rating assigned with clear justification
-- [ ] Mitigations defined for YELLOW ratings
-- [ ] Conditions report is complete and dated
-- [ ] Report shared with all group members
-- [ ] Assessment is no more than 24 hours old at time of departure
+- [ ] Safety rating assigned + clear justification
+- [ ] Mitigations defined for YELLOW
+- [ ] Report complete + dated
+- [ ] Report shared w/ all group members
+- [ ] Assessment ≤24 hr old at departure
 
-## Common Pitfalls
+## Traps
 
-- **Valley weather bias**: Clear skies in the valley mean nothing at altitude. Always check summit-level forecasts; conditions can be dramatically different 1000 m higher.
-- **Stale data**: A report from 3 days ago is unreliable. Mountain conditions change rapidly. Reassess on the morning of the hike.
-- **Optimism bias**: The desire to hike a planned route makes people rationalize marginal conditions. If you have to argue the case for going, the conditions are probably not good enough.
-- **Single-source reliance**: One forecast can be wrong. Cross-check with at least two sources, and weight local/mountain-specific sources over general ones.
-- **Ignoring trend**: Current conditions may be acceptable but deteriorating. A deteriorating trend requires more caution than the snapshot suggests.
-- **Social pressure override**: Never proceed because the group is eager or because you drove a long way. The mountain will be there next week; you might not be.
-- **Snow line miscalculation**: The reported snow line is an average. North-facing slopes can hold snow 200-500 m below the reported line.
+- **Valley weather bias**: Clear valley means nothing at altitude. Always check summit-level; dramatically different 1000 m higher.
+- **Stale data**: Report from 3 days unreliable. Mountain conditions change rapidly. Reassess morning of hike.
+- **Optimism bias**: Desire → rationalize marginal conditions. Argue case for going → probably not good enough.
+- **Single-src reliance**: 1 forecast can be wrong. Cross-check ≥2 srcs, weight local/mountain-specific > general.
+- **Ignore trend**: Current acceptable but deteriorating → more caution than snapshot suggests.
+- **Social pressure override**: Never proceed because group eager or long drive. Mountain will be there next week; you might not.
+- **Snow line miscalc**: Reported snow line = avg. North-facing slopes hold snow 200-500 m below reported.
 
-## Related Skills
+## →
 
-- `plan-hiking-tour` — uses this assessment as input for the safety evaluation step
-- `check-hiking-gear` — gear adjustments based on assessed conditions (add microspikes, extra layers)
+- `plan-hiking-tour` — uses this assessment as input for safety eval step
+- `check-hiking-gear` — gear adjustments per assessed conditions (microspikes, extra layers)
 - `plan-tour-route` — trail condition awareness for broader tour planning
-- `create-spatial-visualization` — visualize hazard zones on a map overlay
+- `create-spatial-visualization` — visualize hazard zones on map overlay

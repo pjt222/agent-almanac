@@ -119,9 +119,9 @@ from torchmetrics.image import FrechetInceptionDistance
 # feature embeddings from the Inception network
 ```
 
-**Expected:** FID below 30 for a well-trained Stable Diffusion model on standard benchmarks. IS above 50 on ImageNet-class prompts. CLIP score above 25 for text-conditioned models. Precision and recall both above 0.6.
+**Got:** FID below 30 for a well-trained Stable Diffusion model on standard benchmarks. IS above 50 on ImageNet-class prompts. CLIP score above 25 for text-conditioned models. Precision and recall both above 0.6.
 
-**On failure:** If FID is above 100, verify that real and generated images share the same resolution and normalization. If CLIP score is low but FID is acceptable, the model generates plausible images that do not match the text prompt -- check the text encoder. Ensure at least 10,000 samples for stable FID estimates.
+**If fail:** If FID is above 100, verify that real and generated images share the same resolution and normalization. If CLIP score is low but FID is acceptable, the model generates plausible images that do not match the text prompt -- check the text encoder. Ensure at least 10,000 samples for stable FID estimates.
 
 ### Step 2: Noise Schedule Inspection
 
@@ -182,9 +182,9 @@ ax.set_title("Schedule Comparison"); ax.legend()
 fig.savefig("schedule_comparison.png", dpi=150)
 ```
 
-**Expected:** Cosine schedule shows a more gradual SNR decrease in mid-timesteps compared to linear. The log-SNR curve should span from approximately +10 (clean) to -10 (pure noise). Learned schedules should be monotonically decreasing.
+**Got:** Cosine schedule shows a more gradual SNR decrease in mid-timesteps compared to linear. The log-SNR curve should span from approximately +10 (clean) to -10 (pure noise). Learned schedules should be monotonically decreasing.
 
-**On failure:** If alphas_cumprod is not monotonically decreasing, the schedule is misconfigured. If values are constant, check that the scheduler was properly initialized with the model's config. For custom schedulers, verify that `set_timesteps()` has been called.
+**If fail:** If alphas_cumprod is not monotonically decreasing, the schedule is misconfigured. If values are constant, check that the scheduler was properly initialized with the model's config. For custom schedulers, verify that `set_timesteps()` has been called.
 
 ### Step 3: Attention Map Analysis
 
@@ -251,9 +251,9 @@ fig.tight_layout()
 fig.savefig("attention_maps.png", dpi=150)
 ```
 
-**Expected:** Content tokens ("car", "house") activate localized spatial regions. Style/color tokens ("red", "blue") activate regions overlapping with their associated object. Early timesteps (high noise) show diffuse attention; later timesteps show sharp, localized attention.
+**Got:** Content tokens ("car", "house") activate localized spatial regions. Style/color tokens ("red", "blue") activate regions overlapping with their associated object. Early timesteps (high noise) show diffuse attention; later timesteps show sharp, localized attention.
 
-**On failure:** If all attention maps look uniform, the hook may be capturing self-attention instead of cross-attention -- verify the layer name contains `attn2` (cross) not `attn1` (self). If attention is captured but has wrong dimensions, check that the output tensor indexing matches the layer's head count and spatial resolution.
+**If fail:** If all attention maps look uniform, the hook may be capturing self-attention instead of cross-attention -- verify the layer name contains `attn2` (cross) not `attn1` (self). If attention is captured but has wrong dimensions, check that the output tensor indexing matches the layer's head count and spatial resolution.
 
 ### Step 4: Latent Space Probing
 
@@ -336,9 +336,9 @@ score = ood_score(test_z)
 print(f"OOD score: {score:.2f} (reference mean: {np.mean([ood_score(r) for r in ref_latents]):.2f})")
 ```
 
-**Expected:** Interpolated images show smooth, semantically meaningful transitions without artifacts. Semantic directions produce consistent attribute changes when added to diverse latent codes. OOD scores for in-distribution images cluster tightly; outliers score significantly higher.
+**Got:** Interpolated images show smooth, semantically meaningful transitions without artifacts. Semantic directions produce consistent attribute changes when added to diverse latent codes. OOD scores for in-distribution images cluster tightly; outliers score significantly higher.
 
-**On failure:** If interpolation produces blurry or incoherent midpoints, use slerp instead of linear interpolation -- linear interpolation traverses low-density regions in high-dimensional latent spaces. If semantic directions have no visible effect, increase the direction magnitude or verify the text encoder is the same one used during model training.
+**If fail:** If interpolation produces blurry or incoherent midpoints, use slerp instead of linear interpolation -- linear interpolation traverses low-density regions in high-dimensional latent spaces. If semantic directions have no visible effect, increase the direction magnitude or verify the text encoder is the same one used during model training.
 
 ## Validation
 
@@ -351,7 +351,7 @@ print(f"OOD score: {score:.2f} (reference mean: {np.mean([ood_score(r) for r in 
 - [ ] Latent interpolations are smooth with no sudden jumps or artifacts
 - [ ] OOD detection baseline established from at least 100 reference samples
 
-## Common Pitfalls
+## Pitfalls
 
 - **FID on mismatched resolutions**: Real and generated images must be the same resolution before feeding to Inception. Resize both sets identically or FID will be inflated.
 - **Forgetting to normalize for torchmetrics**: `FrechetInceptionDistance(normalize=True)` expects [0, 1] float tensors. With `normalize=False` it expects [0, 255] uint8. Mixing conventions gives meaningless FID.

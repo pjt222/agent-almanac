@@ -24,31 +24,31 @@ metadata:
   tags: morphic, assessment, context-evaluation, malleability, meta-cognition, ai-self-application
 ---
 
-# Assess Context
+# 察境
 
-Evaluate the current reasoning context for malleability — identifying which elements are rigid (cannot change), which are flexible (can change cheaply), where transformation pressure is building, and whether the current approach has the capacity to adapt if needed.
+評當前推境之可塑——識何元剛（不可變）、何元柔（易變）、何處蛻變壓積、當前法有適之能乎。
 
-## When to Use
+## 用時
 
-- When a complex task feels stuck and it is unclear whether to push through or pivot
-- Before a significant approach change to assess whether the current reasoning structure can support it
-- When accumulated workarounds suggest the underlying approach may be wrong
-- After `heal` or `awareness` has identified drift but the appropriate response (continue, adjust, or rebuild) is unclear
-- When context has grown long and it is unclear how much can be preserved versus how much needs to be rebuilt
-- Periodic structural health check during extended multi-step tasks
+- 繁任覺滯而不明當進或當轉乃用
+- 重法變前評當前推構能支之乎乃用
+- 變通積示本法或誤乃用
+- `heal` 或 `awareness` 識偏而宜應（續、調、重）不明乃用
+- 境長而不明何保何重乃用
+- 長多步任中期結構健察乃用
 
-## Inputs
+## 入
 
-- **Required**: Current task context and reasoning state (available implicitly)
-- **Optional**: Specific concern triggering the assessment (e.g., "I keep adding workarounds")
-- **Optional**: Proposed pivot direction (what might the approach need to become?)
-- **Optional**: Previous assessment results for trend analysis
+- **必要**：當前任境與推態（隱可得）
+- **可選**：啟察之具憂（如「吾屢加變通」）
+- **可選**：擬轉向（法或當為何？）
+- **可選**：前察果以析趨
 
-## Procedure
+## 法
 
-### Step 1: Inventory Reasoning Form
+### 第一步：錄推之形
 
-Catalog the structural components of the current reasoning approach without judgment.
+錄當前推法之結構元而不評。
 
 ```
 Structural Inventory Table:
@@ -80,20 +80,20 @@ Structural Inventory Table:
 └────────────────────┴──────────────┴──────────────────────────────────┘
 ```
 
-Classify each component:
-- **Skeleton**: hard to change; changing it cascades through everything downstream
-- **Flesh**: easy to change; can be swapped without affecting other components
-- **Scar tissue**: workarounds that indicate structural problems; often flesh pretending to be skeleton
+分各元：
+- **骨**：難變；變則下流皆連
+- **肉**：易變；可換而他元無恙
+- **疤**：示結構之變通；常為肉假為骨
 
-Map dependencies: which components depend on which? A skeleton component with many dependents is load-bearing. A flesh component with no dependents is disposable.
+映依：何元依何？骨元多依為承載者。肉元無依為可棄。
 
-**Expected:** A complete inventory showing what the current approach is built from, what is rigid, what is flexible, and where stress is visible (workarounds). The inventory should reveal structure that was not obvious before cataloging.
+**得：** 全錄示當前法何建、何剛、何柔、何處有壓（變通）。錄當露前未察之構。
 
-**On failure:** If the inventory is hard to construct (the approach is too tangled to decompose), that is itself a finding — high structural opacity indicates high rigidity. Start with what is visible and note the opacity zones.
+**敗則：** 若錄難建（法亂不可析），此本為發現——高結構不透示高剛。自可見者始而注不透區。
 
-### Step 2: Map Transformation Pressure
+### 第二步：映蛻變壓
 
-Identify forces pushing the current approach toward change and forces resisting it.
+識推當前法向變之力與抗之力。
 
 ```
 Pressure Map:
@@ -137,15 +137,15 @@ Pressure Map:
 └─────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Estimate the balance: is transformation pressure growing, stable, or declining?
+估衡：蛻變壓增、穩、降？
 
-**Expected:** A clear picture of forces acting on the current approach. If pressure significantly exceeds resistance, a pivot is overdue. If resistance significantly exceeds pressure, the current approach should continue.
+**得：** 當前法上諸力之清圖。若壓大勝抗，轉已過時。若抗大勝壓，當前法當續。
 
-**On failure:** If the pressure map is ambiguous (neither strong pressure nor strong resistance), project forward: will the pressures intensify? Will the workarounds compound? An approach that is "good enough now but degrading" is under more pressure than it appears.
+**敗則：** 若壓圖歧（無強壓無強抗），前瞻：諸壓將增乎？變通將累乎？「今足而退」之法壓大於所顯。
 
-### Step 3: Assess Reasoning Rigidity
+### 第三步：察推之剛
 
-Determine how flexible the current approach is — can it adapt, or will it break?
+定當前法之柔——可適乎、將崩乎？
 
 ```
 Rigidity Score:
@@ -177,28 +177,28 @@ Rigidity Score:
 └──────────────────────────┴─────┴──────────┴──────┴──────────────┘
 ```
 
-**Expected:** A rigidity score with specific evidence for each dimension. The score reveals whether the approach can absorb change or will need to be rebuilt.
+**得：** 剛分附每維之具證。分露法能收變乎、需重建乎。
 
-**On failure:** If all dimensions score low (claiming high flexibility), probe the "god module" dimension more carefully: is there one key conclusion or assumption that everything else depends on? If so, the flexibility is illusory — one wrong assumption collapses the whole structure.
+**敗則：** 若諸維皆低（稱高柔），深察「神模」維：有單關鍵結或假依之者乎？若有，柔為幻——一誤假崩全構。
 
-### Step 4: Estimate Change Capacity
+### 第四步：估變之能
 
-Assess the practical ability to pivot or adapt the current approach.
+評轉或適當前法之實能。
 
-1. **Context window remaining**: how much room is left for new reasoning? Extensive remaining context = high capacity. Approaching limits = low capacity
-2. **Information preservation on pivot**: if the approach changes, what can be carried forward? High-quality sub-task outputs survive pivots; reasoning chains tied to the old approach do not
-3. **Recovery tools available**: can MEMORY.md capture key findings before pivoting? Can the user provide additional context? Are relevant files still accessible?
-4. **User patience factor**: has the user indicated urgency? Multiple corrections suggest declining patience. An explicit "take your time" suggests high patience
+1. **境窗餘**：餘何多新推？餘多 = 高能。近極限 = 低能
+2. **轉時保信息**：若法變，何可攜？高質子任出可越轉；繫舊法之推鏈不可
+3. **復具**：MEMORY.md 可捕轉前要乎？用者可供加境乎？相關檔仍可訪乎？
+4. **用者耐因**：用者示急乎？多改示耐降。明「慢慢」示高耐
 
-Change capacity is not just theoretical — it includes the practical constraints of the current session.
+變能不止理論——含當前會話之實約。
 
-**Expected:** An honest assessment of the ability to change course, accounting for both technical and relational factors.
+**得：** 誠評變向能，計技與關二因。
 
-**On failure:** If change capacity is low (limited context, critical information at risk of loss), the first priority before any pivot is preservation: summarize key findings, note critical facts, update MEMORY.md if appropriate. Pivoting without preservation is worse than not pivoting.
+**敗則：** 若變能低（境限、危信息失），轉前先保：要結、注關事、宜則更 MEMORY.md。無保而轉惡於不轉。
 
-### Step 5: Classify Transformation Readiness
+### 第五步：分蛻變備
 
-Combine the assessments into a readiness classification.
+合諸察為備分類。
 
 ```
 Transformation Readiness Matrix:
@@ -225,38 +225,38 @@ Transformation Readiness Matrix:
 └─────────────────┴────────────────────────┴────────────────────────┘
 ```
 
-Document the classification with:
-- Classification label (READY / PREPARE / INVEST / CRITICAL / DEFER)
-- Key findings from each dimension
-- Recommended next action
-- What signal would change the classification
+書分類：
+- 標籤（READY / PREPARE / INVEST / CRITICAL / DEFER）
+- 每維之要發現
+- 薦下步
+- 何信將改分類
 
-**Expected:** A clear, justified classification with a specific recommended action. The classification should feel like a conclusion, not a guess.
+**得：** 清而證之分類附具薦行。分當覺如結非猜。
 
-**On failure:** If the classification is ambiguous, default to PREPARE — reducing rigidity (clarifying assumptions, removing workarounds) is valuable regardless of whether a full pivot happens. Preparation improves the approach whether it continues or changes.
+**敗則：** 若分類歧，默 PREPARE——減剛（明假、除變通）無論全轉行否皆有益。備進法，無論其續或變。
 
-## Validation
+## 驗
 
-- [ ] Structural inventory was completed with skeleton/flesh/scar-tissue classification
-- [ ] Transformation pressures were mapped (external, internal, resistance)
-- [ ] Rigidity was scored across multiple dimensions with specific evidence
-- [ ] Change capacity was assessed including practical session constraints
-- [ ] Readiness classification was determined with justified reasoning
-- [ ] A concrete next action was identified based on the classification
-- [ ] A reassessment trigger was defined
+- [ ] 結構錄已成附骨/肉/疤分類
+- [ ] 蛻變壓已映（外、內、抗）
+- [ ] 剛評於多維附具證
+- [ ] 變能察含實會話約
+- [ ] 備分類已定附證之推
+- [ ] 依分類識具下行
+- [ ] 再評觸發已定
 
-## Common Pitfalls
+## 陷
 
-- **Assessing only the technical approach**: Context readiness includes user relationship factors. An approach that is technically flexible but has generated user frustration is more rigid than it appears
-- **Sunk cost as rigidity**: Prior effort is not structural rigidity. The work already done may be valuable regardless of whether the approach changes. Distinguish between "I can't change" (rigidity) and "I don't want to change" (sunk cost)
-- **Assessment as avoidance**: If assess-context is invoked to avoid making a difficult decision, the assessment will be inconclusive by design. If the pressure is clear, act on it
-- **Ignoring workarounds as signals**: Workarounds are scar tissue — evidence that the structure was stressed and patched rather than properly adapted. A high workaround count means the next stress is more likely to break through
-- **Confusing rigidity with commitment**: A committed approach (deliberately chosen, evidence-based) is different from a rigid one (locked in by dependencies and assumptions). Commitment can be changed by decision; rigidity can only be changed by restructuring
+- **只評技之法**：境備含用者關因。技柔而致用者厭之法剛於所顯
+- **沉陷為剛**：前勞非結構之剛。已作或有值無論法變否。別「不可變」（剛）與「不欲變」（沉陷）
+- **察為避**：若 assess-context 為避難決而呼，察本設為歧。若壓明，行之
+- **忽變通為信**：變通乃疤——結構受壓而補而非適之信。高變通計示下壓更可能破
+- **混剛於承諾**：承諾之法（意擇、證本）異於剛（依與假鎖）。承諾可經決變；剛僅經重構變
 
-## Related Skills
+## 參
 
-- `assess-form` — the multi-system assessment model that this skill adapts to AI reasoning context
-- `adapt-architecture` — if classified READY, use architectural adaptation principles for the pivot
-- `heal` — deeper subsystem scan when the assessment reveals drift beyond structural issues
-- `center` — establishes the balanced baseline needed for honest assessment
-- `coordinate-reasoning` — manages information freshness that the assessment depends on
+- `assess-form` — 此技適於 AI 推境之多系評模
+- `adapt-architecture` — 若分 READY，以架構適則行轉
+- `heal` — 察露結構外之偏時深子系掃
+- `center` — 立誠察所需之衡基
+- `coordinate-reasoning` — 守察所依之信息新

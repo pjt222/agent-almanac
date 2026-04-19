@@ -23,51 +23,52 @@ metadata:
   tags: r, rcpp, cpp, performance, compiled-code
 ---
 
-# Add Rcpp Integration
+# 接 Rcpp
 
-Integrate C++ code into an R package using Rcpp for performance-critical operations.
+入 C++ 於 R 包以速關行。
 
-## When to Use
+## 用
 
-- R function is too slow and profiling confirms a bottleneck
-- Need to interface with existing C/C++ libraries
-- Implementing algorithms that benefit from compiled code (loops, recursion)
-- Adding RcppArmadillo for linear algebra operations
+- R 函慢、剖證瓶→用
+- 接既有 C/C++ 庫→用
+- 算（環、遞）益於編→用
+- 增 RcppArmadillo 為線代→用
 
-## Inputs
+## 入
 
-- **Required**: Existing R package
-- **Required**: R function to replace or augment with C++
-- **Optional**: External C++ library to interface with
-- **Optional**: Whether to use RcppArmadillo (default: plain Rcpp)
+- **必**：既存 R 包
+- **必**：欲代或補之 R 函
+- **可**：欲接之外 C++ 庫
+- **可**：用 RcppArmadillo 否（默純 Rcpp）
 
-## Procedure
+## 行
 
-### Step 1: Set Up Rcpp Infrastructure
+### 一：設 Rcpp 基
 
 ```r
 usethis::use_rcpp()
 ```
 
-This:
-- Creates `src/` directory
-- Adds `Rcpp` to LinkingTo and Imports in DESCRIPTION
-- Creates `R/packagename-package.R` with `@useDynLib` and `@importFrom Rcpp sourceCpp`
-- Updates `.gitignore` for compiled files
+此：
 
-For RcppArmadillo:
+- 建 `src/`
+- 入 `Rcpp` 於 LinkingTo 與 Imports
+- 建 `R/packagename-package.R` 含 `@useDynLib` 與 `@importFrom Rcpp sourceCpp`
+- 更 `.gitignore` 避編檔
+
+RcppArmadillo：
 
 ```r
 usethis::use_rcpp_armadillo()
 ```
 
-**Expected:** `src/` directory created, DESCRIPTION updated with `Rcpp` in LinkingTo and Imports, and `R/packagename-package.R` contains `@useDynLib` directive.
+得：`src/` 已建，DESCRIPTION 含 `Rcpp` 於 LinkingTo 與 Imports，`R/packagename-package.R` 含 `@useDynLib`。
 
-**On failure:** If `usethis::use_rcpp()` fails, manually create `src/`, add `LinkingTo: Rcpp` and `Imports: Rcpp` to DESCRIPTION, and add `#' @useDynLib packagename, .registration = TRUE` and `#' @importFrom Rcpp sourceCpp` to the package-level documentation file.
+敗：`usethis::use_rcpp()` 敗→手建 `src/`、入 `LinkingTo: Rcpp` 與 `Imports: Rcpp` 於 DESCRIPTION，入 `#' @useDynLib packagename, .registration = TRUE` 與 `#' @importFrom Rcpp sourceCpp` 於包級文。
 
-### Step 2: Write C++ Function
+### 二：書 C++ 函
 
-Create `src/my_function.cpp`:
+建 `src/my_function.cpp`：
 
 ```cpp
 #include <Rcpp.h>
@@ -90,7 +91,7 @@ NumericVector cumsum_cpp(NumericVector x) {
 }
 ```
 
-For RcppArmadillo:
+RcppArmadillo：
 
 ```cpp
 #include <RcppArmadillo.h>
@@ -108,35 +109,32 @@ arma::mat mat_mult(const arma::mat& A, const arma::mat& B) {
 }
 ```
 
-**Expected:** C++ source file exists at `src/my_function.cpp` with valid `// [[Rcpp::export]]` annotation and roxygen-style `//'` documentation comments.
+得：C++ 源於 `src/my_function.cpp`，含有效 `// [[Rcpp::export]]` 與 `//'` 註。
 
-**On failure:** Verify the file uses `#include <Rcpp.h>` (or `<RcppArmadillo.h>` for Armadillo), that the export annotation is on its own line directly above the function signature, and that return types map to valid Rcpp types.
+敗：驗檔用 `#include <Rcpp.h>`（Armadillo 用 `<RcppArmadillo.h>`），出註於函簽前獨行，返型映 Rcpp 有效型。
 
-### Step 3: Generate RcppExports
+### 三：生 RcppExports
 
 ```r
 Rcpp::compileAttributes()
 devtools::document()
 ```
 
-**Expected:** `R/RcppExports.R` and `src/RcppExports.cpp` generated automatically.
+得：`R/RcppExports.R` 與 `src/RcppExports.cpp` 自生。
 
-**On failure:** Check C++ syntax errors. Ensure `// [[Rcpp::export]]` tag is present above each exported function.
+敗：察 C++ 語誤。確 `// [[Rcpp::export]]` 標於各出函上。
 
-### Step 4: Verify Compilation
+### 四：驗編
 
 ```r
 devtools::load_all()
 ```
 
-**Expected:** Package compiles and loads without errors.
+得：包編、載而無誤。
 
-**On failure:** Check compiler output for errors. Common issues:
-- Missing system headers: Install development libraries
-- Syntax errors: C++ compiler messages point to the line
-- Missing `Rcpp::depends` attribute for RcppArmadillo
+敗：察編出。常症：缺系頭→裝開發庫；語誤→C++ 編訊指行；缺 `Rcpp::depends` 屬於 RcppArmadillo。
 
-### Step 5: Write Tests for Compiled Code
+### 五：書測編
 
 ```r
 test_that("cumsum_cpp matches base R", {
@@ -150,34 +148,34 @@ test_that("cumsum_cpp handles edge cases", {
 })
 ```
 
-**Expected:** Tests pass, confirming the C++ function produces identical results to the R equivalent and handles edge cases (empty vectors, NA values) correctly.
+得：測過，證 C++ 函果同 R 等且妥處邊例（空向、NA）。
 
-**On failure:** If tests fail on NA handling, add explicit NA checks in the C++ code using `NumericVector::is_na()`. If tests fail on empty input, add a guard clause for zero-length vectors at the top of the function.
+敗：NA 測敗→於 C++ 加 `NumericVector::is_na()` 之檢。空入測敗→於函首加零長守。
 
-### Step 6: Add Cleanup Script
+### 六：增清腳
 
-Create `src/Makevars`:
+建 `src/Makevars`：
 
 ```makefile
 PKG_CXXFLAGS = -O2
 ```
 
-Create `cleanup` in package root (for CRAN):
+建 `cleanup` 於包根（為 CRAN）：
 
 ```bash
 #!/bin/sh
 rm -f src/*.o src/*.so src/*.dll
 ```
 
-Make executable: `chmod +x cleanup`
+可行：`chmod +x cleanup`
 
-**Expected:** `src/Makevars` sets compiler flags and `cleanup` script removes compiled objects. Both files exist at the package root level.
+得：`src/Makevars` 設編旗，`cleanup` 去編對。皆於包根。
 
-**On failure:** Verify `cleanup` has execute permissions (`chmod +x cleanup`) and that `Makevars` uses tabs (not spaces) for indentation if adding Makefile-style rules.
+敗：驗 `cleanup` 有可行權（`chmod +x cleanup`），`Makevars` 用製表（非空）若加 Makefile 規。
 
-### Step 7: Update .Rbuildignore
+### 七：更 .Rbuildignore
 
-Ensure compiled artifacts are handled:
+確編產妥處：
 
 ```
 ^src/.*\.o$
@@ -185,31 +183,31 @@ Ensure compiled artifacts are handled:
 ^src/.*\.dll$
 ```
 
-**Expected:** `.Rbuildignore` patterns prevent compiled object files from being included in the package tarball, while preserving source files and Makevars.
+得：`.Rbuildignore` 紋阻編對檔入包包，存源檔與 Makevars。
 
-**On failure:** Run `devtools::check()` and look for NOTEs about unexpected files in `src/`. Adjust `.Rbuildignore` patterns to exclude only `.o`, `.so`, and `.dll` files.
+敗：行 `devtools::check()` 察 NOTE 關 `src/` 中意外檔。調紋唯排 `.o`、`.so`、`.dll`。
 
-## Validation
+## 驗
 
-- [ ] `devtools::load_all()` compiles without warnings
-- [ ] Compiled function produces correct results
-- [ ] Tests pass for edge cases (NA, empty, large inputs)
-- [ ] `R CMD check` passes with no compilation warnings
-- [ ] RcppExports files are generated and committed
-- [ ] Performance improvement confirmed with benchmarks
+- [ ] `devtools::load_all()` 編無警
+- [ ] 編函出正果
+- [ ] 邊例（NA、空、巨）測過
+- [ ] `R CMD check` 過無編警
+- [ ] RcppExports 已生且提
+- [ ] 性能改以基準證
 
-## Common Pitfalls
+## 忌
 
-- **Forgetting `compileAttributes()`**: Must regenerate RcppExports after changing C++ files
-- **Integer overflow**: Use `double` instead of `int` for large numeric values
-- **Memory management**: Rcpp handles memory automatically for Rcpp types; don't manually `delete`
-- **NA handling**: C++ doesn't know about R's NA. Check with `Rcpp::NumericVector::is_na()`
-- **Platform portability**: Avoid platform-specific C++ features. Test on Windows, macOS, and Linux.
-- **Missing `@useDynLib`**: The package-level doc must include `@useDynLib packagename, .registration = TRUE`
+- **忘 `compileAttributes()`**：改 C++ 後須重生 RcppExports
+- **整溢**：大數用 `double` 非 `int`
+- **記理**：Rcpp 自理 Rcpp 型；勿手 `delete`
+- **NA 處**：C++ 不知 R 之 NA。用 `Rcpp::NumericVector::is_na()` 檢
+- **跨台**：避台專 C++ 特。測於 Windows、macOS、Linux
+- **缺 `@useDynLib`**：包級文須含 `@useDynLib packagename, .registration = TRUE`
 
-## Related Skills
+## 參
 
-- `create-r-package` - package setup before adding Rcpp
-- `write-testthat-tests` - testing compiled functions
-- `setup-github-actions-ci` - CI must have C++ toolchain
-- `submit-to-cran` - compiled packages need extra CRAN checks
+- `create-r-package` — 增 Rcpp 前包設
+- `write-testthat-tests` — 測編函
+- `setup-github-actions-ci` — CI 須有 C++ 工
+- `submit-to-cran` — 編包需 CRAN 加察

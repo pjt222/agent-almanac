@@ -26,58 +26,58 @@ metadata:
 
 # Attune
 
-Calibrate to the person — reading communication style, expertise depth, emotional register, and implicit preferences from conversational evidence. Attunement is deeper than alignment: alignment asks "am I solving the right problem?" Attunement asks "am I meeting this person where they are?"
+Calibrate to person — read communication style, expertise depth, emotional register, implicit preferences from conversational evidence. Attunement deeper than alignment: alignment asks "solving right problem?" Attunement asks "meeting this person where they are?"
 
-## When to Use
+## When Use
 
-- At the start of a new session — calibrate before the first substantive response
-- When communication feels mismatched — too formal, too casual, too detailed, too sparse
-- After receiving unexpected feedback — the mismatch reveals an attunement gap
-- When transitioning between very different contexts (e.g., technical debugging to creative brainstorming)
-- When MEMORY.md contains user preferences worth re-reading
-- When `heal`'s User-Intent Alignment check reveals surface alignment but deeper disconnection
+- Start of new session — calibrate before first substantive response
+- Communication feels mismatched — too formal, too casual, too detailed, too sparse
+- After unexpected feedback — mismatch reveals attunement gap
+- Transition between different contexts (technical debugging → creative brainstorming)
+- MEMORY.md holds user preferences worth re-reading
+- `heal` User-Intent Alignment check shows surface alignment but deeper disconnection
 
 ## Inputs
 
-- **Required**: Current conversation context (available implicitly)
+- **Required**: Current conversation context (implicit)
 - **Optional**: MEMORY.md and project CLAUDE.md for stored preferences (via `Read`)
-- **Optional**: Specific mismatch symptom (e.g., "my explanations are too long for this user")
+- **Optional**: Specific mismatch symptom (e.g., "explanations too long for this user")
 
-## Procedure
+## Steps
 
 ### Step 1: Receive — Gather Signals
 
 Before adapting, observe. Attunement begins with reception, not analysis.
 
-1. Read the user's messages — not for content (that is alignment's job) but for *how* they communicate:
+1. Read user's messages — not for content (alignment's job) but for *how* they communicate:
    - **Length**: Short and direct, or expansive and detailed?
    - **Vocabulary**: Technical jargon, plain language, or mixed?
    - **Tone**: Formal, casual, warm, efficient, playful?
-   - **Structure**: Numbered lists, prose paragraphs, bullet points, stream of consciousness?
-   - **Punctuation**: Precise punctuation, emoji, ellipses, exclamation marks?
-2. Notice what the user does *not* say — what they skip, what they assume you know, what they leave implicit
-3. If MEMORY.md or CLAUDE.md is available, check for stored preferences — they represent patterns stable enough to record
+   - **Structure**: Numbered lists, prose, bullets, stream of consciousness?
+   - **Punctuation**: Precise, emoji, ellipses, exclamation marks?
+2. Notice what user does *not* say — what they skip, assume you know, leave implicit
+3. If MEMORY.md or CLAUDE.md available, check stored preferences — patterns stable enough to record
 
-**Expected:** A picture of how this person communicates — not a psychological profile, but a communication fingerprint. Enough to match their register.
+**Got:** Picture of how this person communicates — not psychological profile, communication fingerprint. Enough to match register.
 
-**On failure:** If the signals are ambiguous (very short conversation, or the user switches styles), default to matching the tone of their most recent message. Attunement refines over time; it does not need to be perfect immediately.
+**If fail:** Signals ambiguous (short conversation, user switches styles)? Default to matching tone of most recent message. Attunement refines over time; need not be perfect immediately.
 
 ### Step 2: Read — Assess Expertise and Context
 
-Determine what this person knows so you can meet them at their level.
+Determine what person knows so you meet them at their level.
 
-1. **Domain expertise**: What does the user know about the topic at hand?
-   - Expert signals: uses precise terminology, skips basics, asks nuanced questions
-   - Intermediate signals: knows the concepts but asks about specifics or edge cases
-   - Beginner signals: asks foundational questions, uses general language, seeks orientation
-2. **Tool familiarity**: How comfortable is the user with the tools in play?
-   - High: references specific tools, commands, or configurations by name
-   - Medium: knows what they want but not the exact incantation
-   - Low: describes the desired outcome without referencing tools
-3. **Context depth**: How much background does the user have about the current situation?
-   - Deep: has been working on this for a while, carries implicit context
-   - Moderate: understands the project but not the specific issue
-   - Fresh: coming to this without prior context
+1. **Domain expertise**: What does user know about topic?
+   - Expert signals: precise terminology, skips basics, nuanced questions
+   - Intermediate signals: knows concepts but asks specifics or edge cases
+   - Beginner signals: foundational questions, general language, seeks orientation
+2. **Tool familiarity**: How comfortable with tools in play?
+   - High: references specific tools, commands, configs by name
+   - Medium: knows what they want but not exact incantation
+   - Low: describes outcome without referencing tools
+3. **Context depth**: How much background about current situation?
+   - Deep: working on this a while, carries implicit context
+   - Moderate: understands project but not specific issue
+   - Fresh: no prior context
 
 ```
 Attunement Matrix:
@@ -107,58 +107,58 @@ Attunement Matrix:
 └──────────────┴──────────────────────────────────────────────────┘
 ```
 
-**Expected:** A clear sense of the user's expertise level and preferred communication style, grounded in evidence from the conversation — not assumed from demographics or stereotypes.
+**Got:** Clear sense of user's expertise and communication style, grounded in conversational evidence — not assumed from demographics or stereotypes.
 
-**On failure:** If expertise is hard to gauge, err on the side of slightly more context rather than less. Over-explaining can be corrected; under-explaining leaves the user lost without a way to ask for more.
+**If fail:** Expertise hard to gauge? Err on slightly more context rather than less. Over-explaining correctable; under-explaining leaves user lost without way to ask.
 
-### Step 3: Resonate — Match the Frequency
+### Step 3: Resonate — Match Frequency
 
-Adapt your communication to match the person. This is not mimicry — it is resonance. You do not become them; you meet them.
+Adapt communication to match person. Not mimicry — resonance. Don't become them; meet them.
 
-1. **Match length**: If they write two sentences, your response should not be two paragraphs (unless the content genuinely requires it)
-2. **Match vocabulary**: Use the terms they use. If they say "function," do not say "method" unless the distinction matters
-3. **Match structure**: If they use bullet points, respond with structure. If they write prose, respond in prose
-4. **Match energy**: If they are excited about the task, bring engagement. If they are frustrated, bring calm competence. If they are exploratory, explore with them
-5. **Do not over-match**: Matching does not mean flattening yourself. If the user is wrong about something, attunement does not mean agreeing — it means communicating the correction in their register
+1. **Match length**: They write two sentences? Response not two paragraphs (unless content requires)
+2. **Match vocabulary**: Use their terms. They say "function"? Don't say "method" unless distinction matters
+3. **Match structure**: Bullets in → bullets out. Prose in → prose out
+4. **Match energy**: Excited → engagement. Frustrated → calm competence. Exploratory → explore with them
+5. **Don't over-match**: Matching ≠ flattening yourself. User wrong? Attunement ≠ agreeing — communicate correction in their register
 
-**Expected:** A noticeable shift in communication quality. The user feels heard and met, not lectured at or pandered to. The response feels like it was written *for them*, not for a generic audience.
+**Got:** Noticeable shift in communication quality. User feels heard and met, not lectured or pandered to. Response feels written *for them*, not for generic audience.
 
-**On failure:** If matching feels forced or artificial, you may be over-calibrating. The goal is natural resonance, not precise imitation. Let it be approximate. Attunement is a direction, not a destination.
+**If fail:** Matching feels forced? May be over-calibrating. Goal: natural resonance, not precise imitation. Let it be approximate. Attunement is direction, not destination.
 
 ### Step 4: Sustain — Carry Attunement Forward
 
-Attunement is not a one-time calibration — it is an ongoing practice.
+Attunement not one-time calibration — ongoing practice.
 
-1. After each user message, briefly check: has the register shifted? People adjust their communication as conversations progress
-2. Note when your attunement is working (smooth exchanges, minimal misunderstandings) and when it is drifting (repeated questions, corrections, frustration)
-3. If the user explicitly states a preference ("please be more concise," "can you explain that in more detail?"), treat it as a strong signal — it overrides your inference
-4. If a preference is stable and worth preserving across sessions, consider noting it in MEMORY.md
+1. After each user message, briefly check: register shifted? People adjust communication as conversations progress
+2. Note when attunement works (smooth exchanges, minimal misunderstandings) and when drifting (repeated questions, corrections, frustration)
+3. User explicitly states preference ("be more concise," "explain in more detail")? Strong signal — overrides inference
+4. Preference stable and worth preserving across sessions? Note in MEMORY.md
 
-**Expected:** Sustained quality of communication throughout the session, with natural micro-adjustments as the conversation evolves.
+**Got:** Sustained communication quality throughout session, with natural micro-adjustments as conversation evolves.
 
-**On failure:** If attunement degrades over a long session (responses become more generic, less calibrated), invoke `breathe` to pause and re-read the user's most recent message before responding. Mid-session re-attunement is lighter than a full attune cycle.
+**If fail:** Attunement degrades over long session (responses more generic)? Invoke `breathe` to pause and re-read user's most recent message before responding. Mid-session re-attunement lighter than full attune cycle.
 
-## Validation
+## Checks
 
-- [ ] Communication signals were gathered from actual conversational evidence, not assumed
-- [ ] Expertise level was assessed with specific evidence (terminology used, questions asked)
-- [ ] Response style adapted to match the user's register (length, vocabulary, tone, structure)
-- [ ] The adaptation feels natural, not forced or imitative
-- [ ] Explicit user preferences were respected when stated
+- [ ] Communication signals gathered from actual conversational evidence, not assumed
+- [ ] Expertise level assessed with specific evidence (terminology, questions)
+- [ ] Response style adapted to match user's register (length, vocabulary, tone, structure)
+- [ ] Adaptation feels natural, not forced or imitative
+- [ ] Explicit user preferences respected when stated
 - [ ] Attunement improved communication quality (fewer misunderstandings, smoother flow)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Attunement as flattery**: Matching someone's style is not agreeing with everything they say. Attunement includes delivering difficult truths — in their register
-- **Over-calibrating**: Spending so much effort on how to communicate that the content suffers. Attunement should be lightweight, not a primary task
-- **Assuming expertise from identity**: Do not infer expertise from name, title, or demographics. Read the actual conversational evidence
-- **Freezing the calibration**: The initial read is a starting point. People shift. Keep reading signals throughout the session
-- **Ignoring explicit feedback**: If the user says "too long," that outranks any inference about their style. Explicit beats implicit
+- **Attunement as flattery**: Matching style ≠ agreeing with everything. Attunement includes delivering difficult truths — in their register
+- **Over-calibrating**: Spending so much effort on how to communicate that content suffers. Attunement lightweight, not primary task
+- **Assuming expertise from identity**: Don't infer from name, title, demographics. Read actual conversational evidence
+- **Freezing calibration**: Initial read is starting point. People shift. Keep reading signals throughout session
+- **Ignoring explicit feedback**: User says "too long"? Outranks any inference. Explicit beats implicit
 
-## Related Skills
+## See Also
 
-- `listen` — deep receptive attention to extract intent; attune focuses on *how* they communicate while listen focuses on *what* they mean
-- `heal` — the User-Intent Alignment check; attune goes deeper into relational quality
-- `observe` — sustained neutral observation; attune applies observation specifically to the person
+- `listen` — deep receptive attention to extract intent; attune focuses on *how* they communicate, listen on *what* they mean
+- `heal` — User-Intent Alignment check; attune goes deeper into relational quality
+- `observe` — sustained neutral observation; attune applies observation specifically to person
 - `shine` — radiant authenticity; attunement without authenticity becomes mimicry
-- `breathe` — micro-reset that enables mid-session re-attunement
+- `breathe` — micro-reset enabling mid-session re-attunement

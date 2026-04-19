@@ -64,11 +64,11 @@ get_comment_prefix("m")    # "%"
 get_comment_prefix("lua")  # "--"
 ```
 
-**Expected:** A string like `"#"`, `"--"`, `"//"`, or `"%"`.
+**Got:** A string like `"#"`, `"--"`, `"//"`, or `"%"`.
 
 > **Line and block comments:** putior detects annotations in both line comments (`//`, `#`, `--`) and C-style block comments (`/* */`, `/** */`). For JS/TS, both `//` and `/* */` blocks are scanned. Python triple-quote strings (`''' '''`) are **not** detected — use `#` for Python annotations.
 
-**On failure:** If the extension is not recognized, the file language may not be supported. Check `get_supported_extensions()` for the full list. For unsupported languages, use `#` as a conventional default.
+**If fail:** If the extension is not recognized, the file language may not be supported. Check `get_supported_extensions()` for the full list. For unsupported languages, use `#` as a conventional default.
 
 ### Step 2: Generate Annotation Skeletons
 
@@ -98,9 +98,9 @@ Example output for SQL:
 -- put id:'load_data', label:'Load Customer Table', output:'customers'
 ```
 
-**Expected:** One or more annotation comment lines per source file, pre-filled with detected function names and I/O.
+**Got:** One or more annotation comment lines per source file, pre-filled with detected function names and I/O.
 
-**On failure:** If no suggestions are generated, the file may not contain recognizable I/O patterns. Write annotations manually based on your understanding of the code.
+**If fail:** If no suggestions are generated, the file may not contain recognizable I/O patterns. Write annotations manually based on your understanding of the code.
 
 ### Step 3: Refine Annotations
 
@@ -185,9 +185,9 @@ data <- readRDS("raw_data.rds")
 arrow::write_parquet(clean, "clean_data.parquet")
 ```
 
-**Expected:** Annotations refined with accurate IDs, labels, and I/O fields that reflect actual data flow.
+**Got:** Annotations refined with accurate IDs, labels, and I/O fields that reflect actual data flow.
 
-**On failure:** If unsure about I/O, use `.internal` extension for in-memory intermediates and explicit file names for persisted data.
+**If fail:** If unsure about I/O, use `.internal` extension for in-memory intermediates and explicit file names for persisted data.
 
 ### Step 4: Insert Annotations into Files
 
@@ -215,9 +215,9 @@ saveRDS(df_clean, "clean.rds")
 
 Use the Edit tool to insert annotations into existing files without disturbing surrounding code.
 
-**Expected:** Annotations inserted at appropriate locations in each source file.
+**Got:** Annotations inserted at appropriate locations in each source file.
 
-**On failure:** If annotations break syntax highlighting in the editor, ensure the comment prefix is correct for the language. PUT annotations are standard comments and should not affect code execution.
+**If fail:** If annotations break syntax highlighting in the editor, ensure the comment prefix is correct for the language. PUT annotations are standard comments and should not affect code execution.
 
 ### Step 5: Validate Annotations
 
@@ -245,9 +245,9 @@ merged <- put_merge("./src/", merge_strategy = "supplement")
 cat(put_diagram(merged, theme = "github"))
 ```
 
-**Expected:** All annotations parse without errors. The diagram shows a connected workflow. `put_merge()` fills in any gaps from auto-detection.
+**Got:** All annotations parse without errors. The diagram shows a connected workflow. `put_merge()` fills in any gaps from auto-detection.
 
-**On failure:** Common validation issues:
+**If fail:** Common validation issues:
 - Missing closing quote: `id:'name` → `id:'name'`
 - Using double quotes inside: `id:"name"` → `id:'name'`
 - Duplicate IDs across files: each `id` must be unique across the entire scanned directory
@@ -263,7 +263,7 @@ cat(put_diagram(merged, theme = "github"))
 - [ ] `.internal` variables appear only as outputs, never as cross-file inputs
 - [ ] Files excluded via `exclude` parameter do not appear in the workflow (e.g., `put("./src/", exclude = "test_")` skips test helpers)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Quote nesting errors**: PUT annotations use single quotes: `id:'name'`. Double quotes cause parsing issues when the annotation is inside a string context.
 - **Duplicate IDs**: Every `id` must be globally unique within the scanned scope. Use a naming convention like `<script>_<step>` (e.g., `extract_read`, `transform_clean`).

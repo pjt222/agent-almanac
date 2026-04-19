@@ -74,9 +74,9 @@ Extract every registration, application, and notification step from the relocati
 3. Order steps according to the dependency chain from the relocation plan
 4. Note which steps share the same documents (to avoid redundant preparation)
 
-**Expected:** A numbered list of all bureaucratic steps, categorized and ordered, with notes on shared document requirements.
+**Got:** A numbered list of all bureaucratic steps, categorized and ordered, with notes on shared document requirements.
 
-**On failure:** If the relocation plan is incomplete or unavailable, build the step list from the destination country's official relocation checklist (e.g., Germany: make-it-in-germany.com, Austria: migration.gv.at, Switzerland: ch.ch/en/moving-switzerland).
+**If fail:** If the relocation plan is incomplete or unavailable, build the step list from the destination country's official relocation checklist (e.g., Germany: make-it-in-germany.com, Austria: migration.gv.at, Switzerland: ch.ch/en/moving-switzerland).
 
 ### Step 2: Map Required Documents per Step
 
@@ -127,9 +127,9 @@ For each bureaucratic step, identify every document the authority requires.
    - Previous school reports with translations
    - Residence registration confirmation
 
-**Expected:** A matrix mapping each bureaucratic step to its required documents, with document specifications (original required, copy acceptable, certified translation needed).
+**Got:** A matrix mapping each bureaucratic step to its required documents, with document specifications (original required, copy acceptable, certified translation needed).
 
-**On failure:** If requirements for a specific step are unclear, check the authority's website directly or call their service line. Requirements can change; do not rely solely on third-party guides older than 12 months.
+**If fail:** If requirements for a specific step are unclear, check the authority's website directly or call their service line. Requirements can change; do not rely solely on third-party guides older than 12 months.
 
 ### Step 3: Check Current Document Status
 
@@ -156,9 +156,9 @@ Compare the required documents against the current inventory to identify gaps.
    - Whether it can be ordered remotely or requires in-person appearance
 5. Flag any documents where names do not match (e.g., passport has maiden name, marriage certificate has married name) -- these will likely require explanation or additional proof of name change
 
-**Expected:** A status table for every required document: status (have/copy-only/expired/missing/N-A), validity date, and notes on any issues.
+**Got:** A status table for every required document: status (have/copy-only/expired/missing/N-A), validity date, and notes on any issues.
 
-**On failure:** If document status cannot be confirmed (e.g., documents are in storage or with another party), mark as "unconfirmed" and treat as potentially missing for planning purposes.
+**If fail:** If document status cannot be confirmed (e.g., documents are in storage or with another party), mark as "unconfirmed" and treat as potentially missing for planning purposes.
 
 ### Step 4: Identify Translation and Apostille Requirements
 
@@ -183,11 +183,11 @@ Determine which documents need certified translation, apostille, or other legali
    - EU-internal documents: often exempt from apostille under EU regulations, but verify per document type
    - Switzerland is a Hague Convention member but not an EU member; rules differ
 5. Check if the destination country accepts digital or electronic apostilles
-6. Note that some documents require both apostille AND certified translation (the apostille itself may also need translation)
+6. Some documents require both apostille AND certified translation (the apostille itself may also need translation)
 
-**Expected:** A translation/legalization matrix showing for each document: translation needed (yes/no), apostille needed (yes/no), estimated cost, and estimated processing time.
+**Got:** A translation/legalization matrix showing for each document: translation needed (yes/no), apostille needed (yes/no), estimated cost, and estimated processing time.
 
-**On failure:** If uncertain whether a specific document needs apostille, contact the destination authority directly. Over-preparing (getting an unnecessary apostille) is better than under-preparing (being turned away at the appointment).
+**If fail:** If uncertain whether a specific document needs apostille, contact the destination authority directly. Over-preparing (getting an unnecessary apostille) is better than under-preparing (being turned away at the appointment).
 
 ### Step 5: Generate Action List
 
@@ -214,9 +214,9 @@ Compile all findings into a prioritized, deadline-aware action list.
 5. Calculate total estimated cost for all document preparation
 6. Add a "document folder" checklist for the day of each appointment, listing exactly which originals, copies, and translations to bring
 
-**Expected:** A prioritized action list with deadlines, costs, and processing times, plus per-appointment packing lists for documents.
+**Got:** A prioritized action list with deadlines, costs, and processing times, plus per-appointment packing lists for documents.
 
-**On failure:** If processing times are uncertain (common for documents from countries with slower bureaucracies), use worst-case estimates and start the process as early as possible. Flag items where expedited processing is available at additional cost.
+**If fail:** If processing times are uncertain (common for documents from countries with slower bureaucracies), use worst-case estimates and start the process as early as possible. Flag items where expedited processing is available at additional cost.
 
 ## Validation
 
@@ -229,7 +229,7 @@ Compile all findings into a prioritized, deadline-aware action list.
 - The total cost estimate is calculated and presented
 - Per-appointment document checklists are generated for at least the first three bureaucratic steps
 
-## Common Pitfalls
+## Pitfalls
 
 - **Assuming EU documents need no preparation**: While EU regulations simplify cross-border document acceptance, most offices still require translations and some require apostilles even between EU states
 - **Name mismatches across documents**: Transliteration from non-Latin scripts, use of maiden vs. married names, and middle name inconsistencies are the most common reason for rejection at appointments

@@ -26,221 +26,221 @@ metadata:
 
 # Check Relocation Documents
 
-Verify that all required documents are present, valid, and properly prepared for each bureaucratic step of an EU/DACH relocation, generating an actionable list of missing items and translation needs.
+Verify docs present, valid, prepared for each bureaucratic step of EU/DACH relocation. Output: list of missing items and translation needs.
 
-## When to Use
+## When Use
 
-- After creating a relocation plan and before beginning bureaucratic procedures
-- When preparing for a specific appointment (Buergeramt, Finanzamt, insurance office)
-- When unsure which documents need certified translation or apostille
-- After receiving a rejection or request for additional documents from an authority
-- When a household member has a different nationality requiring separate document tracks
-- As a periodic check during the relocation process to ensure nothing has been overlooked
+- After relocation plan made, before bureaucratic steps begin
+- Prep for specific appointment (Buergeramt, Finanzamt, insurance office)
+- Unsure which docs need certified translation or apostille
+- After authority rejects or requests more docs
+- Household member different nationality → separate doc track
+- Periodic check during relocation, catch missed items
 
 ## Inputs
 
 ### Required
 
-- **Relocation plan**: Output from the plan-eu-relocation skill or equivalent, listing all bureaucratic steps
-- **Destination country**: Germany, Austria, Switzerland, or other EU country
-- **Nationality/nationalities**: For all household members
-- **Document inventory**: List of documents currently in possession (originals and copies)
+- **Relocation plan**: Output from plan-eu-relocation skill or equivalent. Lists bureaucratic steps.
+- **Destination country**: Germany, Austria, Switzerland, other EU country
+- **Nationality/nationalities**: All household members
+- **Document inventory**: Docs in hand (originals and copies)
 
 ### Optional
 
-- **Origin country**: For determining which documents need apostille or Hague Convention legalization
-- **Employment contract**: To determine employer-provided documents (e.g., Arbeitgeberbescheinigung)
-- **Language of existing documents**: To identify translation needs
-- **Previous relocation experience**: Prior EU registrations that may simplify requirements
-- **Special circumstances**: Recognized refugees, EU Blue Card holders, posted workers (different document requirements)
+- **Origin country**: Determines apostille or Hague legalization
+- **Employment contract**: Reveals employer docs (Arbeitgeberbescheinigung)
+- **Language of existing documents**: Shows translation needs
+- **Previous relocation experience**: Prior EU registrations may simplify
+- **Special circumstances**: Recognized refugees, EU Blue Card, posted workers — different rules
 
-## Procedure
+## Steps
 
 ### Step 1: List All Bureaucratic Steps
 
-Extract every registration, application, and notification step from the relocation plan.
+Pull every registration, application, notification from relocation plan.
 
-1. Parse the relocation plan for all action items requiring document submission
-2. Categorize steps by authority type:
-   - Municipal registration offices (Buergeramt, Meldeamt, Einwohnerkontrolle)
-   - Tax authorities (Finanzamt)
-   - Health insurance providers (Krankenkasse, OeGK, Swiss insurer)
-   - Social security offices (Rentenversicherung, Sozialversicherung, AHV)
-   - Immigration/foreigners office (Auslaenderbehorde) if applicable
-   - Banks and financial institutions
-   - Schools and childcare facilities
+1. Parse plan. Extract action items needing document submission.
+2. Categorize steps by authority:
+   - Municipal registration (Buergeramt, Meldeamt, Einwohnerkontrolle)
+   - Tax (Finanzamt)
+   - Health insurance (Krankenkasse, OeGK, Swiss insurer)
+   - Social security (Rentenversicherung, Sozialversicherung, AHV)
+   - Immigration (Auslaenderbehorde) if applicable
+   - Banks
+   - Schools, childcare
    - Vehicle registration (Kfz-Zulassungsstelle)
-   - Other (pet import, professional license recognition)
-3. Order steps according to the dependency chain from the relocation plan
-4. Note which steps share the same documents (to avoid redundant preparation)
+   - Other (pet import, license recognition)
+3. Order steps by dependency chain from plan.
+4. Note shared docs across steps. Avoid redundant prep.
 
-**Expected:** A numbered list of all bureaucratic steps, categorized and ordered, with notes on shared document requirements.
+**Got:** Numbered list of bureaucratic steps. Categorized, ordered. Notes on shared docs.
 
-**On failure:** If the relocation plan is incomplete or unavailable, build the step list from the destination country's official relocation checklist (e.g., Germany: make-it-in-germany.com, Austria: migration.gv.at, Switzerland: ch.ch/en/moving-switzerland).
+**If fail:** Plan incomplete or missing? Build step list from official source. Germany: make-it-in-germany.com. Austria: migration.gv.at. Switzerland: ch.ch/en/moving-switzerland.
 
 ### Step 2: Map Required Documents per Step
 
-For each bureaucratic step, identify every document the authority requires.
+For each step, identify every doc authority requires.
 
-1. For municipal registration (Anmeldung/Meldezettel):
-   - Valid passport or national ID card (all household members)
+1. Municipal registration (Anmeldung/Meldezettel):
+   - Valid passport or national ID (all household members)
    - Wohnungsgeberbestaetigung / rental contract / property deed
-   - Marriage certificate (if registering as a couple)
-   - Birth certificates (for children)
-   - Previous registration confirmation (if moving within the country)
-2. For tax registration:
-   - Residence registration confirmation (Meldebestaetigung/Meldezettel)
+   - Marriage certificate (if registering as couple)
+   - Birth certificates (children)
+   - Previous registration confirmation (intra-country move)
+2. Tax registration:
+   - Meldebestaetigung/Meldezettel
    - Employment contract or business registration
-   - Tax ID from origin country (for cross-border coordination)
-   - Marriage certificate (for tax class assignment in Germany)
-3. For health insurance enrollment:
-   - Employment contract or proof of self-employment
-   - Previous insurance confirmation or EHIC (European Health Insurance Card)
-   - S1 form (for posted workers or cross-border situations)
+   - Tax ID from origin country (cross-border coordination)
+   - Marriage certificate (tax class assignment in Germany)
+3. Health insurance enrollment:
+   - Employment contract or self-employment proof
+   - Previous insurance confirmation or EHIC
+   - S1 form (posted workers, cross-border)
    - Residence registration confirmation
-4. For social security coordination:
-   - A1 portable document (for posted workers)
-   - E-forms or S-forms for benefit transfers
-   - Employment history documentation
+4. Social security coordination:
+   - A1 portable document (posted workers)
+   - E-forms or S-forms (benefit transfers)
+   - Employment history
    - Social security number from origin country
-5. For bank account opening:
+5. Bank account opening:
    - Valid passport or national ID
    - Residence registration confirmation
-   - Proof of income (employment contract or recent payslips)
+   - Proof of income (contract or recent payslips)
    - Tax ID or Steueridentifikationsnummer (Germany)
-6. For immigration/residence permits (non-EU nationals):
-   - Valid passport with at least 6 months remaining validity
-   - Biometric photos (specific format per country)
-   - Employment contract or job offer letter
+6. Immigration/residence permits (non-EU nationals):
+   - Passport with 6+ months remaining validity
+   - Biometric photos (per-country format)
+   - Employment contract or offer letter
    - Proof of financial means
    - Health insurance confirmation
-   - University degree with recognition (for EU Blue Card)
-   - Criminal background check (may require apostille)
-7. For vehicle re-registration:
-   - Vehicle registration document (Fahrzeugbrief/Zulassungsbescheinigung Teil II)
-   - Proof of insurance (eVB number in Germany)
-   - TUeV/Pickerl/MFK inspection certificate
+   - University degree with recognition (EU Blue Card)
+   - Criminal background check (may need apostille)
+7. Vehicle re-registration:
+   - Vehicle registration doc (Fahrzeugbrief/Zulassungsbescheinigung Teil II)
+   - Insurance proof (eVB number in Germany)
+   - TUeV/Pickerl/MFK inspection cert
    - Residence registration confirmation
-8. For school/childcare enrollment:
+8. School/childcare enrollment:
    - Birth certificates
    - Vaccination records (Impfpass)
-   - Previous school reports with translations
+   - Previous school reports + translations
    - Residence registration confirmation
 
-**Expected:** A matrix mapping each bureaucratic step to its required documents, with document specifications (original required, copy acceptable, certified translation needed).
+**Got:** Matrix: each step → required docs. Specs noted (original, copy OK, certified translation).
 
-**On failure:** If requirements for a specific step are unclear, check the authority's website directly or call their service line. Requirements can change; do not rely solely on third-party guides older than 12 months.
+**If fail:** Requirements unclear? Check authority website direct or call service line. Rules change. Third-party guides older than 12 months unreliable.
 
 ### Step 3: Check Current Document Status
 
-Compare the required documents against the current inventory to identify gaps.
+Compare required docs vs inventory. Find gaps.
 
-1. For each required document, check:
-   - **Have (original)**: Original document is in possession and accessible
-   - **Have (copy only)**: Only a copy exists; original may need to be ordered
-   - **Expired**: Document exists but validity period has passed
-   - **Missing**: Document does not exist and must be obtained
-   - **Not applicable**: Document is not needed for this specific case
-2. For documents that are "Have (original)", verify:
-   - The document is not damaged or illegible
-   - Names match across all documents (watch for transliteration differences, maiden names, middle names)
-   - The document will still be valid at the time it will be used (passports, ID cards, insurance cards)
-3. For expired documents, determine:
+1. For each required doc, mark:
+   - **Have (original)**: Original in hand, accessible
+   - **Have (copy only)**: Copy only. Order original?
+   - **Expired**: Exists but validity passed
+   - **Missing**: Does not exist. Must obtain.
+   - **Not applicable**: Not needed for this case
+2. For "Have (original)", verify:
+   - Not damaged or illegible
+   - Names match across all docs. Watch transliteration, maiden names, middle names.
+   - Valid at time of use (passports, IDs, insurance cards)
+3. For expired docs, determine:
    - Renewal processing time at issuing authority
-   - Whether an expired document is accepted temporarily (some are, most are not)
-   - Cost of renewal
-4. For missing documents, determine:
-   - Issuing authority and their processing time
-   - Required supporting documents to obtain the missing document (recursive check)
-   - Cost and payment method
-   - Whether it can be ordered remotely or requires in-person appearance
-5. Flag any documents where names do not match (e.g., passport has maiden name, marriage certificate has married name) -- these will likely require explanation or additional proof of name change
+   - Expired doc accepted temporarily? (Rarely.)
+   - Renewal cost
+4. For missing docs, determine:
+   - Issuing authority + processing time
+   - Supporting docs needed to obtain it (recursive check)
+   - Cost + payment method
+   - Remote order OR in-person required?
+5. Flag name mismatches. Passport = maiden name, marriage cert = married name → likely needs explanation or name-change proof.
 
-**Expected:** A status table for every required document: status (have/copy-only/expired/missing/N-A), validity date, and notes on any issues.
+**Got:** Status table. Every required doc: status (have/copy-only/expired/missing/N-A), validity date, issue notes.
 
-**On failure:** If document status cannot be confirmed (e.g., documents are in storage or with another party), mark as "unconfirmed" and treat as potentially missing for planning purposes.
+**If fail:** Status unconfirmed (docs in storage, with another party)? Mark "unconfirmed". Treat as potentially missing for planning.
 
 ### Step 4: Identify Translation and Apostille Requirements
 
-Determine which documents need certified translation, apostille, or other legalization.
+Find which docs need certified translation, apostille, other legalization.
 
-1. Check destination country language requirements:
-   - Germany: Documents must generally be in German or accompanied by certified translation
-   - Austria: Same as Germany; some offices accept English for EU documents
-   - Switzerland: Depends on canton (German, French, Italian, or Romansh area)
-2. Identify which documents are exempt from translation:
-   - EU multilingual standard forms (Regulation 2016/1191) for birth, marriage, death, and other civil status documents between EU member states
-   - Passports and national ID cards (universally accepted without translation)
-   - EHIC (European Health Insurance Card)
-3. For documents requiring translation:
-   - Must be done by a sworn/certified translator (beeidigter Uebersetzer)
-   - The translator must be certified in the destination country (not the origin country)
-   - Typical turnaround: 3-10 business days
-   - Cost: 30-80 EUR per page depending on language pair and complexity
-4. Determine apostille or legalization requirements:
-   - Documents from Hague Convention countries: apostille from issuing country's competent authority
-   - Documents from non-Hague countries: full legalization chain (local notary, foreign ministry, embassy)
-   - EU-internal documents: often exempt from apostille under EU regulations, but verify per document type
-   - Switzerland is a Hague Convention member but not an EU member; rules differ
-5. Check if the destination country accepts digital or electronic apostilles
-6. Note that some documents require both apostille AND certified translation (the apostille itself may also need translation)
+1. Destination country language rules:
+   - Germany: Docs in German OR certified translation required
+   - Austria: Same as Germany. Some offices accept English for EU docs.
+   - Switzerland: Depends on canton (German, French, Italian, Romansh)
+2. Translation-exempt docs:
+   - EU multilingual standard forms (Regulation 2016/1191) — civil status between EU states
+   - Passports, national IDs (accepted without translation)
+   - EHIC
+3. Docs needing translation:
+   - Must be sworn/certified translator (beeidigter Uebersetzer)
+   - Translator certified in destination country, not origin
+   - Turnaround: 3-10 business days
+   - Cost: 30-80 EUR per page, varies by language pair
+4. Apostille/legalization rules:
+   - Hague Convention countries: apostille from issuing country's competent authority
+   - Non-Hague: full legalization chain (local notary, foreign ministry, embassy)
+   - EU-internal docs: often exempt under EU regulations. Verify per doc type.
+   - Switzerland: Hague member, not EU. Rules differ.
+5. Check if destination accepts digital/electronic apostilles.
+6. Some docs need apostille AND translation. Apostille itself may need translation.
 
-**Expected:** A translation/legalization matrix showing for each document: translation needed (yes/no), apostille needed (yes/no), estimated cost, and estimated processing time.
+**Got:** Matrix per doc: translation needed (y/n), apostille needed (y/n), estimated cost, estimated processing time.
 
-**On failure:** If uncertain whether a specific document needs apostille, contact the destination authority directly. Over-preparing (getting an unnecessary apostille) is better than under-preparing (being turned away at the appointment).
+**If fail:** Apostille need unclear? Contact destination authority direct. Over-prep beats under-prep. Turned away at appointment wastes days.
 
 ### Step 5: Generate Action List
 
-Compile all findings into a prioritized, deadline-aware action list.
+Merge findings into prioritized, deadline-aware action list.
 
-1. Merge all gaps (missing, expired, translation needed, apostille needed) into a single action list
-2. For each action item, include:
+1. Merge gaps (missing, expired, translation, apostille) → single list.
+2. Per action item, include:
    - Document name
-   - Action required (obtain, renew, translate, apostille, replace)
+   - Action (obtain, renew, translate, apostille, replace)
    - Issuing authority or service provider
-   - Estimated processing time
-   - Estimated cost
-   - Deadline (derived from when the document is first needed in the relocation timeline)
+   - Processing time
+   - Cost
+   - Deadline (from timeline — when doc first needed)
    - Priority (critical / high / medium / low)
-3. Assign priority based on:
-   - **Critical**: Blocks the first bureaucratic step (e.g., passport for Anmeldung) or has a non-negotiable deadline
-   - **High**: Needed within the first 2 weeks after arrival; long processing time
-   - **Medium**: Needed within the first month; reasonable processing time
-   - **Low**: Needed eventually; no immediate deadline pressure
-4. Order the list by:
-   - First: Critical items sorted by longest processing time (start these first)
-   - Then: High items sorted by deadline
-   - Then: Medium and low items
-5. Calculate total estimated cost for all document preparation
-6. Add a "document folder" checklist for the day of each appointment, listing exactly which originals, copies, and translations to bring
+3. Priority rules:
+   - **Critical**: Blocks first bureaucratic step (e.g., passport for Anmeldung). Or non-negotiable deadline.
+   - **High**: Needed within 2 weeks after arrival. Long processing time.
+   - **Medium**: Needed within 1 month. Reasonable processing.
+   - **Low**: Needed eventually. No pressure.
+4. Order:
+   - Critical first. Sort by longest processing time (start these first).
+   - High next. Sort by deadline.
+   - Medium, low after.
+5. Calculate total estimated cost for all prep.
+6. Add per-appointment "document folder" checklist. List originals, copies, translations to bring.
 
-**Expected:** A prioritized action list with deadlines, costs, and processing times, plus per-appointment packing lists for documents.
+**Got:** Prioritized action list. Deadlines, costs, processing times. Per-appointment packing lists.
 
-**On failure:** If processing times are uncertain (common for documents from countries with slower bureaucracies), use worst-case estimates and start the process as early as possible. Flag items where expedited processing is available at additional cost.
+**If fail:** Processing times uncertain (common with slow bureaucracies)? Use worst case. Start early. Flag items where expedited processing available at extra cost.
 
-## Validation
+## Checks
 
-- Every bureaucratic step from the relocation plan has at least one document mapped to it
-- No document is listed as "status unknown" -- all must be confirmed as have/missing/expired/N-A
-- Translation requirements reference the destination country's official language requirements
-- Apostille requirements are verified against Hague Convention membership of the issuing country
-- Deadlines in the action list align with the relocation timeline from plan-eu-relocation
-- Priority assignments are consistent (no "low" priority item that blocks a "critical" step)
-- The total cost estimate is calculated and presented
-- Per-appointment document checklists are generated for at least the first three bureaucratic steps
+- Every step from plan has at least one doc mapped
+- No doc "status unknown" — all confirmed as have/missing/expired/N-A
+- Translation reqs reference destination's official language rules
+- Apostille reqs verified against Hague membership of issuing country
+- Deadlines align with relocation timeline from plan-eu-relocation
+- Priorities consistent (no "low" item blocking "critical" step)
+- Total cost calculated
+- Per-appointment checklists generated for first 3 steps minimum
 
-## Common Pitfalls
+## Pitfalls
 
-- **Assuming EU documents need no preparation**: While EU regulations simplify cross-border document acceptance, most offices still require translations and some require apostilles even between EU states
-- **Name mismatches across documents**: Transliteration from non-Latin scripts, use of maiden vs. married names, and middle name inconsistencies are the most common reason for rejection at appointments
-- **Relying on photocopies**: Most DACH authorities require original documents for inspection and keep certified copies; bring originals even if you think copies will suffice
-- **Ordering translations too late**: Sworn translators often have 1-2 week backlogs, and this extends during peak relocation season (August-September)
-- **Forgetting the apostille on the translation**: Some authorities require the apostille on the original document AND a separate certified translation of the apostilled document
-- **Not checking document validity periods**: A passport valid for 2 more months may be rejected if the authority requires 6 months remaining validity
-- **Ignoring the multilingual EU forms**: For civil status documents between EU countries, multilingual standard forms (available from the issuing authority) can eliminate the need for translation entirely -- but you must request them explicitly
-- **Assuming digital documents are accepted**: Most DACH government offices still require physical documents; PDF printouts of digital-only documents may not be accepted without additional verification
+- **Assuming EU docs need no prep**: EU regulations simplify cross-border acceptance. Most offices still require translations. Some require apostilles even between EU states.
+- **Name mismatches across docs**: Transliteration from non-Latin scripts, maiden vs married names, middle name differences → most common rejection cause.
+- **Relying on photocopies**: DACH authorities require originals for inspection, keep certified copies. Bring originals.
+- **Ordering translations too late**: Sworn translators have 1-2 week backlogs. Peak season (Aug-Sep) extends this.
+- **Forgetting apostille on translation**: Some authorities require apostille on original AND certified translation of apostilled doc.
+- **Not checking validity periods**: Passport valid 2 more months may be rejected if authority requires 6 months remaining.
+- **Ignoring multilingual EU forms**: For civil status docs between EU countries, multilingual forms eliminate translation. Must request explicitly.
+- **Assuming digital docs accepted**: Most DACH offices require physical docs. PDF printouts of digital-only docs may need extra verification.
 
-## Related Skills
+## See Also
 
-- [plan-eu-relocation](../plan-eu-relocation/SKILL.md) -- Create the relocation plan that feeds into this document check
-- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- Detailed guidance for the procedures these documents are needed for
+- [plan-eu-relocation](../plan-eu-relocation/SKILL.md) -- Create plan that feeds this check
+- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- Detailed procedure guidance

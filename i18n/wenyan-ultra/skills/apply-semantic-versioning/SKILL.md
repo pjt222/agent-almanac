@@ -24,31 +24,31 @@ metadata:
   tags: versioning, semver, version-bump, breaking-changes
 ---
 
-# Apply Semantic Versioning
+# 施 SemVer
 
-Determine and apply the correct semantic version bump by analyzing changes since the last release. This skill reads version files, classifies changes as breaking (major), feature (minor), or fix (patch), computes the new version number, and updates the appropriate files. Follows [SemVer 2.0.0](https://semver.org/) specification.
+由變析定正版升。析變、分主/次/補、算新版、更檔。循 [SemVer 2.0.0](https://semver.org/)。
 
-## When to Use
+## 用
 
-- Preparing a new release and need to determine the correct version number
-- After merging a set of changes and before tagging a release
-- Evaluating whether a change constitutes a breaking change
-- Adding pre-release identifiers (alpha, beta, rc) to a version
-- Resolving disagreement about what version bump is appropriate
+- 備新發須定正版號→用
+- 合變後標前→用
+- 評變為破否→用
+- 加預發識（alpha、beta、rc）→用
+- 解版升爭→用
 
-## Inputs
+## 入
 
-- **Required**: Project root directory containing a version file (DESCRIPTION, package.json, Cargo.toml, pyproject.toml, or VERSION)
-- **Required**: Git history since the last release (tag or commit)
-- **Optional**: Commit convention in use (Conventional Commits, free-form)
-- **Optional**: Pre-release label to apply (alpha, beta, rc)
-- **Optional**: Previous version if not readable from files
+- **必**：項根含版檔（DESCRIPTION、package.json、Cargo.toml、pyproject.toml、或 VERSION）
+- **必**：自末發以來之 git 史
+- **可**：用之提例（規範提交、自由）
+- **可**：欲加預發標
+- **可**：前版若不可自檔讀
 
-## Procedure
+## 行
 
-### Step 1: Read Current Version
+### 一：讀今版
 
-Locate and read the version file in the project root.
+於項根尋讀版檔。
 
 ```bash
 # R packages
@@ -67,15 +67,15 @@ grep 'version' pyproject.toml
 cat VERSION
 ```
 
-Parse the current version into major.minor.patch components. If the version contains a pre-release suffix (e.g., `1.2.0-beta.1`), note it separately.
+析今版為 major.minor.patch。版含預發後綴（如 `1.2.0-beta.1`）→獨記。
 
-**Expected:** Current version identified as `MAJOR.MINOR.PATCH[-PRERELEASE]`.
+得：今版識為 `MAJOR.MINOR.PATCH[-PRERELEASE]`。
 
-**On failure:** If no version file is found, check for a VERSION file or git tags (`git describe --tags --abbrev=0`). If no version exists at all, start at `0.1.0` for initial development or `1.0.0` if the project has a stable public API.
+敗：無版檔→察 VERSION 或 git 標（`git describe --tags --abbrev=0`）。全無版→初發用 `0.1.0`，穩公 API 用 `1.0.0`。
 
-### Step 2: Analyze Changes Since Last Release
+### 二：析末發以來之變
 
-Retrieve the list of changes since the last tagged release.
+取自末標以來諸變。
 
 ```bash
 # Find the last version tag
@@ -88,15 +88,15 @@ git log --oneline v1.2.3..HEAD
 git log --oneline v1.2.3..HEAD | grep -E "^[a-f0-9]+ (feat|fix|BREAKING)"
 ```
 
-If no tags exist, compare against the initial commit or a known baseline.
+無標→比於初提或知基。
 
-**Expected:** A list of commits with messages that can be classified by change type.
+得：諸提附訊可分變類。
 
-**On failure:** If git history is unavailable or tags are missing, ask the developer to describe the changes manually. Classify based on their description.
+敗：git 史不可達或標缺→請開發者述變。按述分。
 
-### Step 3: Classify Changes
+### 三：分變
 
-Apply the SemVer classification rules:
+施 SemVer 分律：
 
 | Change Type | Version Bump | Examples |
 |---|---|---|
@@ -104,23 +104,25 @@ Apply the SemVer classification rules:
 | **Feature** (new backwards-compatible functionality) | MINOR | New exported function, new parameter with default, new file format support |
 | **Fix** (backwards-compatible bug fix) | PATCH | Bug fix, documentation correction, performance improvement with same API |
 
-Classification rules:
-1. If ANY change is breaking, the bump is MAJOR (resets minor and patch to 0)
-2. If no breaking changes but ANY new features, the bump is MINOR (resets patch to 0)
-3. If only fixes, the bump is PATCH
+分律：
 
-Special cases:
-- **Pre-1.0.0**: During initial development (`0.x.y`), minor bumps may contain breaking changes. Document clearly.
-- **Deprecation**: Deprecating a function is a MINOR change (it still works). Removing it is MAJOR.
-- **Internal changes**: Refactoring that does not change the public API is PATCH.
+1. 任變為破→升 MAJOR（次與補歸零）
+2. 無破而任新功→升 MINOR（補歸零）
+3. 唯修→升 PATCH
 
-**Expected:** Each change classified as breaking/feature/fix, and the overall bump level determined.
+特例：
 
-**On failure:** If changes are ambiguous, err on the side of a higher bump. A conservative major bump is better than a minor bump that breaks downstream code.
+- **<1.0.0**：初發（`0.x.y`）次升或含破。明文
+- **棄用**：棄函（仍行）為 MINOR。去之為 MAJOR
+- **內變**：不改公 API 之重構為 PATCH
 
-### Step 4: Compute New Version
+得：各變分為破/功/修，全升階定。
 
-Apply the bump to the current version:
+敗：變含糊→傾高升。保守主升勝破下游碼之次升。
+
+### 四：算新版
+
+施升於今版：
 
 | Current | Bump | New Version |
 |---|---|---|
@@ -130,20 +132,21 @@ Apply the bump to the current version:
 | 0.9.5 | MINOR | 0.10.0 |
 | 2.0.0-rc.1 | (release) | 2.0.0 |
 
-If a pre-release label is requested:
-- `1.3.0-alpha.1` for first alpha of upcoming 1.3.0
-- `1.3.0-beta.1` for first beta
-- `1.3.0-rc.1` for first release candidate
+請預發標：
 
-Pre-release precedence: `alpha < beta < rc < (release)`.
+- `1.3.0-alpha.1` 為將 1.3.0 之首 alpha
+- `1.3.0-beta.1` 為首 beta
+- `1.3.0-rc.1` 為首發候
 
-**Expected:** New version number computed following SemVer rules.
+預發序：`alpha < beta < rc < (發)`。
 
-**On failure:** If the current version is malformed or non-SemVer, normalize it first. For example, `1.2` becomes `1.2.0`.
+得：新版號循 SemVer 算。
 
-### Step 5: Update Version Files
+敗：今版形誤或非 SemVer→先正規。如 `1.2` 為 `1.2.0`。
 
-Write the new version to the appropriate file(s).
+### 五：更版檔
+
+書新版於相關檔。
 
 ```r
 # R: Update DESCRIPTION
@@ -161,15 +164,15 @@ Write the new version to the appropriate file(s).
 # Change version = "1.2.3" to version = "1.3.0"
 ```
 
-If the project has multiple files that reference the version (e.g., `_pkgdown.yml`, `CITATION`, `codemeta.json`), update all of them.
+項有多檔涉版（如 `_pkgdown.yml`、`CITATION`、`codemeta.json`）→皆更。
 
-**Expected:** All version files updated consistently to the new version number.
+得：諸版檔一致更為新版號。
 
-**On failure:** If a file update fails, revert all changes to maintain consistency. Never leave version files in a partially updated state.
+敗：檔更敗→撤諸變保一致。永勿留版檔半更態。
 
-### Step 6: Create Version Tag
+### 六：建版標
 
-After committing the version bump, create a git tag.
+提版升後建 git 標。
 
 ```bash
 # Annotated tag (preferred)
@@ -179,40 +182,41 @@ git tag -a v1.3.0 -m "Release v1.3.0"
 git tag v1.3.0
 ```
 
-Use the project's established tag format:
-- `v1.3.0` (most common)
-- `1.3.0` (no prefix)
-- `package-name@1.3.0` (monorepo)
+用項標例：
 
-**Expected:** Git tag created matching the new version.
+- `v1.3.0`（最常）
+- `1.3.0`（無前綴）
+- `package-name@1.3.0`（單庫多項）
 
-**On failure:** If the tag already exists, the version was not properly bumped. Check for duplicate tags with `git tag -l "v1.3*"` and resolve before proceeding.
+得：git 標配新版。
 
-## Validation
+敗：標已存→版未正升。以 `git tag -l "v1.3*"` 察重標解之再進。
 
-- [ ] Current version was read from the correct version file
-- [ ] All commits since the last release were analyzed
-- [ ] Each change is classified as breaking, feature, or fix
-- [ ] The bump level matches the highest-severity change (breaking > feature > fix)
-- [ ] New version follows SemVer 2.0.0 format: `MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`
-- [ ] All version files in the project are updated consistently
-- [ ] No version was skipped (e.g., 1.2.3 to 1.4.0 without 1.3.0 being released)
-- [ ] Git tag matches the new version and project's tag format convention
-- [ ] Pre-release suffix, if used, follows correct precedence (alpha < beta < rc)
+## 驗
 
-## Common Pitfalls
+- [ ] 今版自正版檔讀
+- [ ] 末發以來諸提皆析
+- [ ] 各變分為破、功、修
+- [ ] 升階配最高嚴變（破 > 功 > 修）
+- [ ] 新版循 SemVer 2.0.0 式：`MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`
+- [ ] 項諸版檔一致更
+- [ ] 無版跳（如 1.2.3 至 1.4.0 而 1.3.0 未發）
+- [ ] git 標配新版與項標式
+- [ ] 預發後綴若用循正序（alpha < beta < rc）
 
-- **Skipping minor versions**: Going from 1.2.3 directly to 1.4.0 because "we added two features." Each release gets one bump; the number of features does not determine the version.
-- **Treating deprecation as breaking**: Deprecating a function (adding a warning) is a minor change. Only removing it is a breaking change.
-- **Forgetting pre-1.0.0 rules**: Before 1.0.0, the API is considered unstable. Some projects bump minor for breaking changes during this phase, but it should be documented.
-- **Inconsistent version files**: Updating package.json but not package-lock.json, or updating DESCRIPTION but not CITATION. All version references must stay in sync.
-- **Build metadata confusion**: Build metadata (`+build.123`) does not affect version precedence. `1.0.0+build.1` and `1.0.0+build.2` have the same precedence.
-- **Not tagging releases**: Without git tags, future version bumps cannot determine the baseline for change analysis.
+## 忌
 
-## Related Skills
+- **跳次版**：自 1.2.3 直至 1.4.0「以加二功」。各發一升；功數不定版
+- **棄用為破**：棄函（加警）為次。唯去為破
+- **忘 <1.0.0 律**：1.0.0 前 API 視為不穩。某項此期次升或破，當文
+- **版檔不一致**：更 package.json 而非 package-lock.json，或更 DESCRIPTION 而非 CITATION。諸版引須同
+- **建元混**：建元（`+build.123`）不影版序。`1.0.0+build.1` 與 `1.0.0+build.2` 同序
+- **不標發**：無 git 標，後版升不能定變析基
 
-- `manage-changelog` -- Maintain changelog entries that pair with version bumps
-- `plan-release-cycle` -- Plan release milestones that determine when version bumps occur
-- `release-package-version` -- R-specific release workflow that includes version bumping
-- `commit-changes` -- Commit the version bump with a proper message
-- `create-github-release` -- Create a GitHub release from the version tag
+## 參
+
+- `manage-changelog` —— 維變誌條與版升配
+- `plan-release-cycle` —— 計發里程定何時版升
+- `release-package-version` —— R 專發流含版升
+- `commit-changes` —— 以正訊提版升
+- `create-github-release` —— 自版標建 GitHub 發

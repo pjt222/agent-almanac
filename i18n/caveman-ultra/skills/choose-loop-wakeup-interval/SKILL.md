@@ -27,161 +27,161 @@ metadata:
 
 # Choose Loop Wakeup Interval
 
-Pick a `delaySeconds` value for `ScheduleWakeup` that respects the prompt cache's 5-minute TTL, the scheduler's whole-minute granularity, and the `[60, 3600]` runtime clamp. The decision is structurally non-trivial: the common instinct "wait about 5 minutes" lands in the worst-of-both zone — pay the cache miss without amortizing the wait.
+Pick `delaySeconds` for `ScheduleWakeup` → respects prompt cache 5-min TTL + scheduler whole-min granularity + `[60, 3600]` clamp. Non-trivial: "wait ~5 min" → worst-of-both zone → pay cache miss without amortizing wait.
 
-The reasoning travels with the `ScheduleWakeup` tool description at tool-call time, but by then the loop is already being scheduled. This skill hoists that reasoning to planning time, where it belongs.
+Reasoning travels w/ `ScheduleWakeup` tool desc at call time → but loop already scheduled. This skill hoists reasoning → planning time.
 
-## When to Use
+## Use When
 
-- Designing an autonomous `/loop` or `ScheduleWakeup`-driven continuation and picking the per-tick delay
-- Planning a heartbeat cadence for a long-running agent that will poll, watch, or iterate
-- Tuning polling cadence against cost or cache-warmth pressure
-- Post-hoc reviewing loop costs and discovering the interval was mis-sized
-- Writing a guide, runbook, or worked example that involves picking `delaySeconds`
+- Designing autonomous `/loop` or `ScheduleWakeup` continuation → pick per-tick delay
+- Heartbeat cadence for long-running agent
+- Tuning polling vs. cost/cache-warmth
+- Post-hoc: loop cost review → mis-sized interval
+- Guide/runbook w/ `delaySeconds` example
 
-## Inputs
+## In
 
-- **Required**: What the loop is waiting for (a specific event, a state transition, an idle tick, a periodic check)
-- **Required**: Whether the reader of this tick will need fresh context (cache-warm) or can tolerate a cold re-read (cache-miss acceptable)
-- **Optional**: Any known lower bound on when the awaited event could possibly occur (e.g. "the build takes at least 4 minutes")
-- **Optional**: A cost ceiling on the total loop (number of ticks × per-tick cost)
+- **Required**: What loop waits for (event, state transition, idle tick, periodic check)
+- **Required**: Next tick needs fresh ctx (cache-warm) or cold re-read OK (cache-miss OK)
+- **Optional**: Known lower bound on event occurrence ("build ≥4 min")
+- **Optional**: Cost ceiling (ticks × per-tick cost)
 
-## Procedure
+## Do
 
 ### Step 1: Classify the Wait
 
-Decide which tier the wait belongs to:
+Tier decision:
 
-- **Active watch (cache-warm)**: something is expected to change within the next 5 minutes — a build nearing completion, a state transition being polled, a process that was just kicked off
-- **Cache-miss wait**: nothing worth checking sooner than 5 minutes from now; the context cache will go cold and that is acceptable
-- **Idle**: no specific signal to watch; the loop is checking in because it might find something, not because it will
+- **Active watch (cache-warm)**: Change expected <5 min → build near done, state transition, just-kicked proc
+- **Cache-miss wait**: Nothing worth checking <5 min → cache cold OK
+- **Idle**: No specific signal → checking in case
 
-**Expected:** A clear classification: active-watch, cache-miss, or idle.
+**→** Classification: active-watch, cache-miss, or idle.
 
-**On failure:** If the wait cannot be classified — if there is no honest answer to "what am I waiting for?" — the loop probably should not exist. Skip to Step 5 and consider not scheduling a wakeup at all.
+**If err:** Can't classify → no honest answer to "what waiting for?" → loop shouldn't exist → skip to Step 5.
 
-### Step 2: Apply the Three-Tier Decision
+### Step 2: Apply Three-Tier Decision
 
-Pick a `delaySeconds` based on the classification:
+Pick `delaySeconds`:
 
-| Tier | Range | Cache behaviour | Use when |
+| Tier | Range | Cache | Use when |
 |---|---|---|---|
-| Cache-warm | **60 – 270 s** | Cache stays warm (under 5-minute TTL) | Active watch — the next tick needs fast, cheap re-entry |
-| Cache-miss | **1200 – 3600 s** | Cache goes cold; one miss buys a long wait | Genuinely idle, or the awaited event cannot happen sooner |
-| Idle default | **1200 – 1800 s** (20–30 min) | Cache goes cold | No specific signal; periodic check with user able to interrupt |
+| Cache-warm | **60 – 270 s** | Warm (<5-min TTL) | Active watch — fast cheap re-entry |
+| Cache-miss | **1200 – 3600 s** | Cold; miss buys long wait | Idle, or event can't happen sooner |
+| Idle default | **1200 – 1800 s** (20–30 min) | Cold | No specific signal; periodic |
 
-**Do not pick 300 s.** It is the worst-of-both interval: the cache misses, but the wait is too short to amortize the miss. If you find yourself reaching for "about 5 minutes," drop to 270 s (stay warm) or commit to 1200 s+ (amortize the miss).
+**Do not pick 300 s.** Worst-of-both: cache misses, wait too short to amortize. Reaching for "~5 min" → drop to 270 s (warm) or 1200 s+ (amortize).
 
-**Expected:** A specific `delaySeconds` value chosen from one of the three tiers, not a round-number-minute value picked out of habit.
+**→** Specific `delaySeconds` from one of three tiers, not round-minute habit.
 
-**On failure:** If the choice keeps landing on 300 s, the underlying question is usually "should this loop exist at this cadence at all?" — re-examine Step 1.
+**If err:** Keep landing on 300 s → real question is "should loop exist at this cadence?" → re-examine Step 1.
 
-### Step 3: Size for the Minute Boundary
+### Step 3: Size for Minute Boundary
 
-The scheduler fires on whole-minute boundaries. A `delaySeconds` of `N` produces an actual delay of `N` to `N + 60` s, depending on what second of the minute you call the tool.
+Scheduler fires on whole-min boundaries. `delaySeconds` = `N` → actual `N` to `N + 60` s, depending on call second.
 
-Worked example:
+Example:
 
-> Calling `ScheduleWakeup({delaySeconds: 90})` at `HH:MM:40` produces a target of `HH:(MM+2):00` — i.e. an actual wait of 140 s, not 90 s.
+> `ScheduleWakeup({delaySeconds: 90})` at `HH:MM:40` → target `HH:(MM+2):00` → actual 140 s, not 90 s.
 
-Consequence: sub-minute intent is meaningless. Treat the value you pass as a **floor**, not a precise schedule. If a minute of skew matters, your loop cadence is too tight for this mechanism.
+Sub-minute intent meaningless. Value = **floor**, not precise. Min of skew matters → cadence too tight for this mech.
 
-**Expected:** You have accepted that the actual wait will be up to 60 s longer than the requested `delaySeconds`. For cache-warm ticks this matters — 270 s can become ~330 s in practice, tipping into cache-miss territory.
+**→** Accepted actual wait up to 60 s longer than requested. Cache-warm: 270 s → ~330 s → tips into cache-miss.
 
-**On failure:** If near-the-ceiling values (e.g. 265 s when targeting cache-warmth) are common, pad downward — use 240 s instead of 270 s to preserve the cache-warm guarantee even under worst-case minute-boundary skew.
+**If err:** Near-ceiling values common (265 s for cache-warm) → pad down → 240 s preserves warmth under worst-case skew.
 
 ### Step 4: Respect the Clamp
 
-The runtime clamps `delaySeconds` to `[60, 3600]` — values outside that range are silently adjusted. Telemetry distinguishes what the model asked for (`chosen_delay_seconds`) from what actually scheduled (`clamped_delay_seconds`) and sets `was_clamped: true` on any mismatch.
+Runtime clamps `delaySeconds` → `[60, 3600]`. Out-of-range → silently adjusted. Telemetry: `chosen_delay_seconds` vs. `clamped_delay_seconds` + `was_clamped: true`.
 
-Plan against the clamped value, not the requested one:
+Plan vs. clamped, not requested:
 
-- Request below 60 → actual wait is 60 s plus minute-boundary skew (up to 120 s in practice)
-- Request above 3600 → actual wait is 3600 s (1 hour)
-- No runtime extends the ceiling; multi-hour waits require multiple ticks
+- Req <60 → actual 60 s + skew (up to 120 s)
+- Req >3600 → actual 3600 s (1 h)
+- No ceiling extension → multi-hour = multi tick
 
-**Expected:** Your chosen value falls inside `[60, 3600]`, or you have deliberately accepted the clamped behaviour.
+**→** Value in `[60, 3600]` or clamp accepted.
 
-**On failure:** If the need is genuinely multi-hour (e.g. "wake me in 4 hours"), chain wakeups — schedule a 3600 s tick that itself reschedules — or use a cron-based loop (`CronCreate` with `kind: "loop"`) instead.
+**If err:** Genuinely multi-hour ("wake in 4 h") → chain wakeups (3600 s tick reschedules) or cron loop (`CronCreate` w/ `kind: "loop"`).
 
-### Step 5: Write a Specific `reason`
+### Step 5: Write Specific `reason`
 
-The `reason` field is telemetry, user-visible status, and prompt-cache warmth reasoning in one line. It is truncated to 200 chars. Make it specific.
+`reason` = telemetry + user status + cache-warmth reasoning. 200-char limit. Specific.
 
 - Good: `checking long bun build`, `polling for EC2 instance running-state`, `idle heartbeat — watching the feed`
 - Bad: `waiting`, `loop`, `next tick`, `continuing`
 
-The reader of this field is a user trying to understand what the loop is doing without having to predict your cadence in advance. Write for them.
+Reader = user glancing at status → write for them.
 
-**Expected:** A concrete, one-phrase reason that would make sense to a user glancing at status.
+**→** Concrete one-phrase reason sensible to glancing user.
 
-**On failure:** If no specific reason can be given, revisit whether the loop should exist (Step 1 and Step 6).
+**If err:** No specific reason → revisit loop existence (Step 1, Step 6).
 
-### Step 6: Recognize the Don't-Loop Case
+### Step 6: Recognize Don't-Loop Case
 
-Not every "come back later" impulse warrants a scheduled wakeup. Do NOT schedule a tick when:
+Not every "come back later" = scheduled wakeup. Do NOT schedule when:
 
-- The user is actively watching — their input is the right trigger, not a timer
-- There is no convergence criterion — the loop has no definition of "done"
-- The task is interactive (asks the user questions between ticks)
-- The cadence needed is shorter than the clamp floor (60 s) — polling that tight belongs to an event-driven mechanism, not a loop
+- User actively watching → their input is trigger, not timer
+- No convergence criterion → no "done" def
+- Interactive task (asks user between ticks)
+- Cadence <clamp floor (60 s) → tight polling = event-driven, not loop
 
-**Expected:** A conscious choice between scheduling a wakeup and not looping at all. "Because I could" is not a reason to loop.
+**→** Conscious choice: schedule wakeup vs. no loop. "Because I could" ≠ reason.
 
-**On failure:** If you keep scheduling wakeups that the user interrupts before they fire, the pattern is wrong — not the interval.
+**If err:** User keeps interrupting wakeups → pattern wrong, not interval.
 
-## Validation
+## Check
 
-- [ ] The wait was classified as active-watch, cache-miss, or idle (one of three)
-- [ ] The chosen `delaySeconds` falls in one of the three tier ranges (60–270, 1200–3600, or 1200–1800 for idle)
-- [ ] The value is not 300 (worst-of-both)
-- [ ] The value is inside `[60, 3600]` or the clamped behaviour is explicitly accepted
-- [ ] Minute-boundary skew has been accounted for (treat the value as a floor)
-- [ ] `reason` is concrete and under 200 chars
-- [ ] The don't-loop check was performed — the wakeup is actually warranted
+- [ ] Wait classified: active-watch, cache-miss, or idle
+- [ ] `delaySeconds` in one of three tier ranges (60–270, 1200–3600, 1200–1800 idle)
+- [ ] Value ≠ 300 (worst-of-both)
+- [ ] Value in `[60, 3600]` or clamp explicitly accepted
+- [ ] Minute-boundary skew accounted (value = floor)
+- [ ] `reason` concrete + <200 chars
+- [ ] Don't-loop check done → wakeup warranted
 
-## Common Pitfalls
+## Traps
 
-- **Round-minute default (300 s)**: The single most common mistake. "About 5 minutes" feels natural and is exactly wrong. Drop to 270 s or commit to 1200 s+.
-- **Ignoring minute-boundary skew**: Requesting 60 s near the end of a minute can produce ~120 s of actual delay. For cache-warm ticks, this can push the tick past the 5-minute TTL unexpectedly.
-- **Chasing sub-minute precision**: The scheduler has minute granularity. Asking for 85 s vs. 90 s vs. 95 s is noise — pick a value and move on.
-- **Opaque `reason` fields**: `"waiting"` tells the user nothing and makes telemetry less useful. Write the reason as if the user will read it on a status line.
-- **Using this skill to justify an unnecessary loop**: If the honest answer to "what am I watching for?" is vague, no interval choice will help — the loop should not exist.
-- **Hand-clamping in the prompt**: Do not clamp in the model's reasoning ("I'll cap at 3600 to be safe"). The runtime clamps. Let it.
-- **Forgetting the 7-day age-out**: A dynamic loop is reaped after 7 days by default (user-configurable up to 30 days). Long-running loops should be designed to end well before that ceiling, not to race against it.
+- **Round-minute default (300 s)**: #1 mistake. "About 5 min" feels natural, is wrong. → 270 s or 1200 s+.
+- **Ignoring minute-boundary skew**: 60 s req near min end → ~120 s actual. Cache-warm: past 5-min TTL.
+- **Sub-min precision**: Min granularity. 85 vs. 90 vs. 95 s = noise. Pick + move.
+- **Opaque `reason`**: `"waiting"` = nothing. Write for user status line.
+- **Justifying unnecessary loop**: Vague "watching for?" → no interval helps → loop shouldn't exist.
+- **Hand-clamping in prompt**: Don't clamp in reasoning ("cap at 3600"). Runtime clamps.
+- **Forgetting 7-day age-out**: Dynamic loop reaped after 7 days default (up to 30). Long loops end before ceiling.
 
 ## Examples
 
 ### Example 1 — Cache-warm active watch
 
-A `bun build` was kicked off; the agent wants to check in quickly so the cache is still warm when results arrive.
+`bun build` kicked off → agent checks quick → cache warm at results.
 
-- Classification: active watch (Step 1)
-- Tier: cache-warm (Step 2), pick **240 s**
-- Minute boundary (Step 3): worst-case actual wait ~300 s — still under the 5-minute TTL with the 60 s buffer
+- Classify: active watch (Step 1)
+- Tier: cache-warm (Step 2) → **240 s**
+- Min boundary (Step 3): worst-case ~300 s → under 5-min TTL w/ 60 s buffer
 - Reason (Step 5): `checking long bun build`
 
 ### Example 2 — Idle heartbeat
 
-An autonomous agent watches a low-volume feed once an hour for anything worth acting on.
+Autonomous agent watches low-volume feed 1×/h.
 
-- Classification: idle (Step 1)
-- Tier: idle default (Step 2), pick **1800 s** (30 min)
-- Minute boundary (Step 3): irrelevant — 60 s of skew is negligible at this cadence
+- Classify: idle (Step 1)
+- Tier: idle default (Step 2) → **1800 s** (30 min)
+- Min boundary (Step 3): irrelevant → 60 s skew negligible
 - Reason (Step 5): `idle heartbeat — watching the feed`
 
-### Example 3 — The anti-pattern
+### Example 3 — Anti-pattern
 
-An agent wants to "wait 5 minutes" while a remote API retries. The request is 300 s.
+Agent wants "wait 5 min" → remote API retries → 300 s req.
 
-- Problem: the cache goes cold at 5 minutes, so 300 s pays the miss — but 300 s is too short to amortize the miss
-- Fix: either drop to 270 s (stay warm) or commit to 1500 s (amortize the miss). Do not pick 300.
+- Problem: cache cold at 5 min → 300 s pays miss but too short to amortize
+- Fix: → 270 s (warm) or 1500 s (amortize). Not 300.
 
-## Related Skills
+## →
 
-- `manage-token-budget` — cost ceilings for long-lived agent loops; cache-aware sizing is one lever
-- `du-dum` — observe/act separation pattern; this skill sizes the observe-clock interval when the loop is cron-less
-- `read-continue-here` — cross-session handoff; this skill covers within-session wakeups
-- `write-continue-here` — the complement of `read-continue-here`
+- `manage-token-budget` — cost ceilings; cache-aware sizing is one lever
+- `du-dum` — observe/act pattern; this skill sizes observe-clock when cron-less
+- `read-continue-here` — cross-session handoff; this = within-session wakeups
+- `write-continue-here` — complement of `read-continue-here`
 
 <!-- Keep under 500 lines. Current: ~200 lines. -->

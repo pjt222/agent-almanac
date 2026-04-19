@@ -24,35 +24,35 @@ metadata:
   tags: lapidary, appraisal, valuation, gemstones, grading
 ---
 
-# Appraise Gemstone
+# 估寶石
 
-Appraise gemstone value using the four Cs (colour, clarity, cut, carat weight), treatment detection, origin assessment, and market factor analysis. This is educational advisory guidance only and does not constitute a certified gemological appraisal.
+以四 C（色、淨、切、克拉）、處置察、源察、市場因析估寶石之值。此為教育指引耳，非證書估也。
 
-> **DISCLAIMER**: This procedure provides educational guidance on gemstone valuation methodology. It is NOT a certified appraisal. For insurance, estate, sale, or legal purposes, always obtain a formal appraisal from a certified gemologist (GIA Graduate Gemologist, FGA, or equivalent). Gemstone values can vary enormously based on factors that require hands-on professional assessment.
+> **免責**：此程供寶估方法之教育指引。*非*證書估也。為保、遺、售、法之故，恆求證書寶石學家（GIA GG、FGA、或等）之正估。寶石值依需實觸專察之諸因可極變。
 
-## When to Use
+## 用時
 
-- You want to understand the factors that determine a gemstone's value
-- You are pre-screening stones before paying for a professional appraisal
-- You need to evaluate whether a seller's asking price is within a reasonable range
-- You are learning gemstone grading methodology for educational purposes
-- You want to understand how treatment status affects value
+- 欲解定寶值之諸因乃用
+- 付證書估前預察石乃用
+- 需評賣價於理範乎乃用
+- 學寶石評級為教育乃用
+- 欲解處置之狀如何影值乃用
 
-## Inputs
+## 入
 
-- **Required**: Identified gemstone (species confirmed — see `identify-gemstone`)
-- **Required**: Access to the stone (loose preferred; mounted stones limit assessment)
-- **Optional**: Carat scale (accurate to 0.01 ct)
-- **Optional**: 10x loupe or gemological microscope
-- **Optional**: Daylight-equivalent light source (5500-6500K)
-- **Optional**: Colour grading master stones or reference images (GIA system)
-- **Optional**: Refractometer and Chelsea filter (for treatment detection)
+- **必要**：已識之寶石（種已確——見 `identify-gemstone`）
+- **必要**：可觸石（散者佳；鑲者限察）
+- **可選**：克拉秤（準至 0.01 ct）
+- **可選**：10 倍放大鏡或寶石顯微
+- **可選**：日光等效光源（5500-6500K）
+- **可選**：色評級標石或參圖（GIA 系）
+- **可選**：折射儀與 Chelsea 濾（處置察）
 
-## Procedure
+## 法
 
-### Step 1: Colour Grading
+### 第一步：色評級
 
-Assess the stone's colour using the three components: hue, saturation, and tone.
+以色相、飽和、明暗三元察石色。
 
 ```
 Colour Assessment Framework:
@@ -104,20 +104,20 @@ IDEAL COLOUR RANGES (highest value):
 - Aquamarine: medium, strong blue (not greenish)
 ```
 
-1. View the stone face-up under daylight-equivalent lighting
-2. Identify the primary hue and any secondary modifiers
-3. Assess saturation — vivid and strong command the highest premiums
-4. Assess tone — medium is generally optimal; too dark or too light reduces value
-5. Compare to reference images or master stones if available
-6. Note any colour zoning visible face-up (reduces value)
+1. 於日光等效光下正面視石
+2. 識主色與次修飾
+3. 察飽和——鮮明者溢價最高
+4. 察明暗——中明為宜；太暗或太淡皆減值
+5. 若有則對參圖或標石比
+6. 記正面所見之色帶（減值）
 
-**Expected:** A three-component colour grade (e.g., "medium vivid blue with slight violetish modifier") that positions the stone on the colour quality spectrum for its species.
+**得：** 三元色級（如「中鮮藍附微紫修飾」）定石於其種之色質譜位。
 
-**On failure:** If lighting conditions are not ideal (yellowish indoor light), note the limitation. Colour grading under incorrect lighting produces unreliable results. If colour-change is suspected (alexandrite, some sapphires, some garnets), assess under both daylight and incandescent light.
+**敗則：** 若光不宜（黃內光），注其限。誤光下評色產不可信之果。若疑變色（紫翠玉、某藍寶、某榴石），於日光與白熾光下察之。
 
-### Step 2: Clarity Grading
+### 第二步：淨評級
 
-Evaluate the stone's internal characteristics under 10x magnification.
+於 10 倍放下評石之內特。
 
 ```
 Coloured Gemstone Clarity Scale (GIA-based):
@@ -155,20 +155,20 @@ Different species have different "normal" clarity levels:
   → Eye-clean examples are extremely rare and valuable
 ```
 
-1. Examine the stone face-up first — does the unaided eye see any inclusions?
-2. Examine under 10x magnification, focusing through the table
-3. Note inclusion type (crystal, feather, fingerprint, silk, needle), size, location, and number
-4. Assess whether inclusions affect transparency, brilliance, or durability
-5. Assign a clarity grade based on the visibility and impact of inclusions
-6. Consider species expectations — an SI1 emerald is excellent; an SI1 aquamarine is average
+1. 先正面察——肉眼見內含乎？
+2. 於 10 倍放下察，透桌聚焦
+3. 記內含類（晶、羽、指紋、絲、針）、大、位、數
+4. 察內含影透光、輝、耐乎
+5. 依內含之見與影賦淨級
+6. 察種之期——SI1 祖母綠為佳，SI1 海水藍為平
 
-**Expected:** A clarity grade with description of key inclusions, their location, and their impact on beauty and durability. Grade is calibrated to species-specific expectations.
+**得：** 淨級附諸要內含之述、位、對美與耐之影。級依種之期校。
 
-**On failure:** If magnification is insufficient (no loupe available), perform an eye-clean/not-eye-clean assessment only. Note the limitation. If the stone is mounted and pavilion inclusions are hidden, note which areas could not be assessed.
+**敗則：** 若放不足（無放），僅察肉眼淨乎。注其限。若石鑲而腹內含隱，記何部不可察。
 
-### Step 3: Cut Quality Assessment
+### 第三步：切質評
 
-Evaluate the quality of the cut based on proportions, symmetry, and light performance.
+以比例、對稱、光表現評切之質。
 
 ```
 Cut Quality Factors:
@@ -209,38 +209,38 @@ SYMMETRY AND FINISH:
 - Girdle consistency (even thickness)
 ```
 
-1. View the stone face-up and rock it gently — observe brilliance, windowing, and extinction
-2. Check proportions: table size, crown height, pavilion depth
-3. Assess symmetry: outline shape, facet alignment, meet precision
-4. Evaluate surface polish: scratches, polish lines, orange peel under 10x
-5. Check girdle: even thickness, not too thin (chipping risk) or too thick (dead weight)
-6. Rate the cut from Excellent to Poor
+1. 正面察而輕搖——察輝、窗、滅
+2. 察比例：桌大、冠高、腹深
+3. 察對稱：輪廓、面齊、會交之精
+4. 察面光：於 10 倍下之劃、光線、橙皮
+5. 察腰：厚勻，非過薄（崩險）亦非過厚（死重）
+6. 評切自優至劣
 
-**Expected:** A cut quality assessment covering proportions, light performance, symmetry, and surface finish. The cut grade significantly affects value — a well-cut stone of moderate quality can outperform a poorly-cut stone of higher colour and clarity.
+**得：** 切質評含比例、光表現、對稱、面光。切級大影值——切佳中質之石可勝切劣高色淨之石。
 
-**On failure:** If the stone is mounted and proportions cannot be fully measured, assess what is visible (face-up light performance, symmetry, polish) and note that proportions could not be verified. Mounted stones always have assessment limitations.
+**敗則：** 若鑲而比例不可全量，評可見者（正面光表現、對稱、光）且注比例未驗。鑲石恆有察限。
 
-### Step 4: Carat Weight and Measurements
+### 第四步：克拉與度量
 
-Record the stone's weight and dimensions.
+記石重與度。
 
-1. Weigh the stone on a carat scale (1 carat = 0.2 grams)
-2. Record weight to two decimal places (e.g., 2.37 ct)
-3. Measure dimensions: length x width x depth in millimetres
-4. For mounted stones, estimate weight from dimensions using species-specific formulas:
-   - Round: diameter^2 x depth x SG factor
-   - Oval: length x width x depth x SG factor x 0.0020
-5. Note that per-carat value increases at commercially significant weight thresholds:
-   - 0.50 ct, 1.00 ct, 2.00 ct, 3.00 ct, 5.00 ct, 10.00 ct
-   - A 1.02 ct stone commands a premium over a 0.98 ct stone of equal quality
+1. 以克拉秤稱石（1 克拉 = 0.2 克）
+2. 記重至二小數（如 2.37 ct）
+3. 量度：長 x 寬 x 深 於毫米
+4. 鑲石依種式於度估重：
+   - 圓：徑^2 x 深 x SG 因
+   - 橢：長 x 寬 x 深 x SG 因 x 0.0020
+5. 注每克拉值於商界要重閾升：
+   - 0.50 ct、1.00 ct、2.00 ct、3.00 ct、5.00 ct、10.00 ct
+   - 1.02 ct 之石溢於等質 0.98 ct 之石
 
-**Expected:** Accurate carat weight (to 0.01 ct) and millimetre dimensions. For mounted stones, a weight estimate with stated margin of error.
+**得：** 準克拉重（至 0.01 ct）與毫米度。鑲石則重估附誤裕。
 
-**On failure:** If no carat scale is available, measure dimensions and estimate weight using standard formulas. Note that the weight is estimated. For valuable stones, always verify weight on a calibrated scale.
+**敗則：** 若無克拉秤，量度以標式估重。注重為估。貴石恆於校秤驗重。
 
-### Step 5: Treatment Detection
+### 第五步：處置察
 
-Assess whether the stone has been treated to enhance its appearance.
+察石曾以處置增色乎。
 
 ```
 Common Gemstone Treatments:
@@ -282,19 +282,19 @@ TREATMENT IMPACT ON VALUE:
 - Requires disclosure at point of sale in all jurisdictions
 ```
 
-1. Examine inclusions for signs of heat treatment (dissolved silk, stress halos)
-2. Use fibre-optic light to check for fracture filling (flash effect)
-3. Check for surface coatings by examining edges and scratches
-4. For high-value stones, note that laboratory certification is essential for treatment status
-5. Record treatment assessment: untreated, heated, filled, coated, diffused, or unknown
+1. 察內含有熱處痕乎（絲化、應力暈）
+2. 以光纖察裂隙填（閃效）
+3. 察面塗：察邊與劃
+4. 高值石注實驗室證（GIA、GRS、SSEF、Gubelin）為處置之權威定
+5. 記處置察：未處、加熱、填、塗、擴散、或未知
 
-**Expected:** A treatment assessment with supporting observations. For stones above $500, recommend laboratory certification (GIA, GRS, SSEF, Gubelin) for authoritative treatment determination.
+**得：** 處置察附支觀。超 500 美金之石薦實驗室證。
 
-**On failure:** Many treatments (especially mild heat treatment and some irradiation) cannot be detected without laboratory instruments (FTIR spectroscopy, UV-Vis, Raman). If treatment status is uncertain, record "unknown — laboratory testing recommended" rather than guessing.
+**敗則：** 諸處（尤輕熱與某輻射）無實驗器具（FTIR 譜、UV-Vis、Raman）不可察。若處置狀不定，記「未知——薦實驗試」勝於猜。
 
-### Step 6: Market Factor Analysis
+### 第六步：市場因析
 
-Consider external factors that affect market value beyond the four Cs.
+察四 C 外影值之外因。
 
 ```
 Market Factors:
@@ -327,37 +327,37 @@ Market Factors:
 +-------------------+------------------------------------------+
 ```
 
-1. Research the stone's likely origin if known or certifiable
-2. Consider the species' current market position (trending up, stable, declining)
-3. Assess whether laboratory certification would add value (generally yes for stones >1 ct and >$500)
-4. Note any provenance or historical significance
-5. Compile the complete assessment into a value range (not a single price point)
+1. 研石之源若可知或可證
+2. 察種之市位（趨升、穩、降）
+3. 評實驗室證可否增值（石 >1 ct 與 >500 美金則可）
+4. 注諸源或歷史要
+5. 合全評為值範（非單價）
 
-**Expected:** A contextualised value range that accounts for the four Cs, treatment status, origin, and market factors. Expressed as a range with stated assumptions.
+**得：** 境化之值範，計四 C、處置、源、市場因。以範而非單值表，附述所假。
 
-**On failure:** Gemstone pricing requires market expertise that evolves continuously. If market data is unavailable, provide the quality assessment (four Cs + treatment) without a price estimate and recommend consultation with a dealer or certified appraiser.
+**敗則：** 寶價需持續演之市場專。若市場數不可得，供質評（四 C + 處置）無價估，薦詢商或證書估師。
 
-## Validation
+## 驗
 
-- [ ] Species positively identified before appraisal began
-- [ ] Colour assessed under daylight-equivalent lighting with hue, saturation, and tone
-- [ ] Clarity graded under 10x magnification with inclusion inventory
-- [ ] Cut quality evaluated for proportions, light performance, symmetry, and finish
-- [ ] Carat weight measured (or estimated with stated margin)
-- [ ] Treatment status assessed with supporting observations
-- [ ] Market factors considered (origin, rarity, certification value)
-- [ ] Value expressed as a range, not a single number
-- [ ] Disclaimer included: this is educational guidance, not a certified appraisal
+- [ ] 估前種已確
+- [ ] 色於日光等效光察附色相、飽和、明暗
+- [ ] 淨於 10 倍放評附內含錄
+- [ ] 切質評含比例、光表現、對稱、面光
+- [ ] 克拉量（或估附誤裕）
+- [ ] 處置狀察附支觀
+- [ ] 市場因察（源、稀、證值）
+- [ ] 值為範表，非單數
+- [ ] 免責含：此為教育指引，非證書估
 
-## Common Pitfalls
+## 陷
 
-- **Omitting the disclaimer**: This procedure provides educational guidance only. Formal appraisals for insurance, sale, or legal purposes require a certified gemologist. Always state this clearly
-- **Grading colour under incorrect lighting**: Fluorescent, incandescent, and LED lights all shift colour perception. Use daylight-equivalent (5500-6500K) or natural north-facing daylight
-- **Ignoring species-specific clarity expectations**: An SI1 emerald is a fine stone; an SI1 aquamarine is below average. Clarity must be graded relative to what is normal for the species
-- **Overvaluing carat weight**: A large, poorly-cut, included stone is worth less per carat than a smaller, well-cut, clean stone. The four Cs interact — weight alone does not determine value
-- **Assuming untreated without evidence**: The majority of rubies and sapphires on the market are heat-treated. Assume treatment unless laboratory certification confirms otherwise
+- **省免責**：此程供教育指引耳。為保、售、法之正估需證書寶石家。明述之
+- **於誤光評色**：熒、白熾、LED 皆移色覺。用日光等效（5500-6500K）或自然北光
+- **忽種之淨期**：SI1 祖母綠佳，SI1 海水藍平。淨須於種常評
+- **過重克拉**：大而切劣含雜之石每克拉低於小而切佳淨者。四 C 互——重單不定值
+- **假未處無證**：市之大多紅藍為熱處。假已處除非實驗室證定
 
-## Related Skills
+## 參
 
-- `identify-gemstone` — Positive species identification is the prerequisite for appraisal; misidentification invalidates the entire assessment
-- `grade-tcg-card` — The observation-first, bias-prevention methodology parallels the discipline needed to avoid "wishful grading" in gemstone appraisal
+- `identify-gemstone` — 估之前題；誤識致全評失
+- `grade-tcg-card` — 察先、防偏之法同寶估中免「願評」之律

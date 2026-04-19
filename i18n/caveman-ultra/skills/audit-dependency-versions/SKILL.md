@@ -26,30 +26,30 @@ metadata:
 
 # Audit Dependency Versions
 
-Audit project dependencies for version staleness, known security vulnerabilities, and compatibility issues. This skill inventories all dependencies from lock files, checks each against the latest available version, classifies staleness levels, identifies security concerns, and produces a prioritized upgrade report with recommended actions.
+Audit deps → ver staleness, known security vulns, compat issues. Inventory all deps from lock files → check latest → classify staleness → flag security → prioritized upgrade report.
 
-## When to Use
+## Use When
 
-- Before a release to ensure dependencies are current and secure
-- During periodic maintenance (monthly or quarterly dependency reviews)
-- After receiving a security advisory affecting a project dependency
-- When upgrading a project to a new language version (e.g., R 4.4 to 4.5)
-- Before submitting a package to CRAN, npm, or crates.io
-- When inheriting a project and assessing its dependency health
+- Pre-release → deps current + secure
+- Periodic maint (monthly/quarterly)
+- Security advisory hits project dep
+- Lang ver upgrade (R 4.4 → 4.5)
+- Pre-submit CRAN/npm/crates.io
+- Inheriting project → dep health
 
-## Inputs
+## In
 
-- **Required**: Project root directory containing dependency/lock files
-- **Optional**: Ecosystem type if not auto-detectable (R, Node.js, Python, Rust)
-- **Optional**: Security-only mode flag (skip staleness, focus on CVEs)
-- **Optional**: Allowlist of dependencies to skip (known acceptable older versions)
-- **Optional**: Target date for compatibility (e.g., "must work with R 4.4.x")
+- **Required**: Project root w/ dep/lock files
+- **Optional**: Ecosystem (R, Node.js, Python, Rust)
+- **Optional**: Security-only mode (skip staleness → CVEs)
+- **Optional**: Allowlist deps to skip
+- **Optional**: Compat target date (e.g., "R 4.4.x")
 
-## Procedure
+## Do
 
 ### Step 1: Inventory All Dependencies
 
-Locate and parse dependency files to build a complete inventory.
+Parse dep files → complete inventory.
 
 **R packages:**
 ```bash
@@ -89,7 +89,7 @@ grep -A 50 "\[dependencies\]" Cargo.toml
 cat Cargo.lock | grep -A 2 "name ="
 ```
 
-Build an inventory table:
+Inventory table:
 
 ```markdown
 | Package | Pinned Version | Type | Ecosystem |
@@ -100,13 +100,13 @@ Build an inventory table:
 | pytest | 8.0.0 | dev | Python |
 ```
 
-**Expected:** Complete inventory of all direct and (optionally) transitive dependencies with pinned versions.
+**→** Complete inventory direct + (optional) transitive deps w/ pinned vers.
 
-**On failure:** If lock files are missing, the project has reproducibility issues. Note this as a finding and inventory from the manifest file (DESCRIPTION, package.json) using declared version constraints instead of pinned versions.
+**If err:** Lock files missing → repro issues. Note as finding → inventory from manifest w/ declared constraints.
 
 ### Step 2: Check Latest Available Versions
 
-For each dependency, determine the latest available version.
+Latest ver per dep.
 
 **R:**
 ```r
@@ -144,7 +144,7 @@ cargo outdated
 cargo search serde --limit 1
 ```
 
-Update the inventory with latest versions:
+Update inventory:
 
 ```markdown
 | Package | Pinned | Latest | Gap |
@@ -155,13 +155,13 @@ Update the inventory with latest versions:
 | shiny | 1.7.4 | 1.9.1 | minor |
 ```
 
-**Expected:** Latest version identified for each dependency with the gap magnitude (patch/minor/major).
+**→** Latest ver per dep w/ gap magnitude (patch/minor/major).
 
-**On failure:** If a package registry is unreachable, note the dependency as "unable to check" and proceed with the rest. Do not block the entire audit on one unreachable registry.
+**If err:** Registry unreachable → mark "unable to check", continue. Don't block full audit on one registry.
 
 ### Step 3: Classify Staleness
 
-Assign a staleness level to each dependency:
+Staleness level per dep:
 
 | Level | Definition | Action |
 |---|---|---|
@@ -171,7 +171,7 @@ Assign a staleness level to each dependency:
 | **Major behind** | Older major version | High priority, likely breaking changes in upgrade |
 | **EOL / Archived** | Package no longer maintained | Critical: find replacement or fork |
 
-Produce a staleness summary:
+Summary:
 
 ```markdown
 ### Staleness Summary
@@ -186,17 +186,17 @@ Produce a staleness summary:
 ```
 
 Color coding:
-- **GREEN**: All packages current or patch-behind
+- **GREEN**: All current/patch-behind
 - **AMBER**: Any minor-behind or one major-behind
-- **RED**: Multiple major-behind or any EOL packages
+- **RED**: Multiple major-behind or any EOL
 
-**Expected:** Every dependency classified by staleness with an overall health rating.
+**→** Every dep classified + overall health rating.
 
-**On failure:** If version comparison logic is ambiguous (non-SemVer versions, date-based versions), classify conservatively as "minor behind" and note the non-standard versioning.
+**If err:** Ver comparison ambiguous (non-SemVer, date-based) → classify conservatively "minor behind" + note non-standard scheme.
 
 ### Step 4: Check for Security Vulnerabilities
 
-Run ecosystem-specific security audit tools:
+Run ecosystem-specific audit tools:
 
 **R:**
 ```r
@@ -242,13 +242,13 @@ Document findings:
 **Security status**: RED (1 critical, 1 high)
 ```
 
-**Expected:** Security vulnerabilities identified with CVE, severity, affected version, and fix version.
+**→** Vulns w/ CVE, severity, affected ver, fix ver.
 
-**On failure:** If no audit tool is available for the ecosystem, search GitHub Security Advisories manually for each dependency. Note that the audit is best-effort without tooling.
+**If err:** No audit tool → GitHub Security Advisories manual search per dep. Best-effort without tooling.
 
 ### Step 5: Plan Upgrade Path
 
-Prioritize upgrades based on risk and impact:
+Prioritize by risk + impact:
 
 ```markdown
 ### Upgrade Plan
@@ -276,15 +276,15 @@ Prioritize upgrades based on risk and impact:
 | ggplot2 | 3.4.0 | 3.5.1 | New geom functions added |
 ```
 
-For each major upgrade, note known breaking changes by checking the dependency's changelog.
+Major upgrades → note breaking changes from dep changelog.
 
-**Expected:** Prioritized upgrade plan with security fixes first, then EOL replacements, major upgrades, and minor/patch batches.
+**→** Prioritized plan: security → EOL → major → minor/patch batches.
 
-**On failure:** If a dependency has no clear upgrade path (abandoned with no fork), document the risk and recommend: (1) vendoring the current version, (2) finding an alternative package, or (3) accepting the risk with monitoring.
+**If err:** Dep abandoned, no fork → document risk. Recommend: (1) vendor current, (2) alt pkg, (3) accept + monitor.
 
 ### Step 6: Document Compatibility Risks
 
-For each planned upgrade, assess compatibility:
+Per planned upgrade:
 
 ```markdown
 ### Compatibility Assessment
@@ -303,39 +303,39 @@ For each planned upgrade, assess compatibility:
 - **Migration guide**: https://webpack.js.org/migrate/5/
 ```
 
-Write the complete audit report to `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDIT-2026-02-17.md`.
+Write report → `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDIT-2026-02-17.md`.
 
-**Expected:** Compatibility risks documented for each significant upgrade. Complete audit report written.
+**→** Compat risks documented per significant upgrade. Report complete.
 
-**On failure:** If compatibility cannot be assessed without testing, recommend a branch-based upgrade approach: create a branch, apply the upgrade, run tests, and evaluate results before merging.
+**If err:** Can't assess without testing → branch-based upgrade: branch, apply, test, evaluate, merge.
 
-## Validation
+## Check
 
-- [ ] All direct dependencies inventoried from lock/manifest files
-- [ ] Latest available version checked for each dependency
-- [ ] Staleness level assigned (current / patch / minor / major / EOL)
-- [ ] Overall health rating calculated (GREEN / AMBER / RED)
-- [ ] Security audit run with ecosystem-appropriate tooling
-- [ ] All CVEs documented with severity, affected version, and fix version
+- [ ] All direct deps inventoried from lock/manifest
+- [ ] Latest ver checked per dep
+- [ ] Staleness level assigned (current/patch/minor/major/EOL)
+- [ ] Overall health rating (GREEN/AMBER/RED)
+- [ ] Security audit w/ ecosystem tooling
+- [ ] All CVEs documented (severity, affected, fix)
 - [ ] Upgrade plan prioritized: security > EOL > major > minor/patch
-- [ ] Compatibility risks assessed for each major upgrade
-- [ ] Audit report written to DEPENDENCY-AUDIT.md
-- [ ] No dependencies left as "unable to check" without documented reason
+- [ ] Compat risks per major upgrade
+- [ ] Report → DEPENDENCY-AUDIT.md
+- [ ] No "unable to check" w/o reason
 
-## Common Pitfalls
+## Traps
 
-- **Ignoring transitive dependencies**: A project may have 10 direct dependencies but 200 transitive ones. Security vulnerabilities often hide in transitive dependencies. Use `npm ls` or `renv::dependencies()` to see the full tree.
-- **Upgrading everything at once**: Batch-upgrading all dependencies in one commit makes it impossible to identify which upgrade caused a regression. Upgrade in logical groups (security first, then majors individually, then minors/patches as a batch).
-- **Confusing "outdated" with "insecure"**: A package one major version behind with no CVEs is lower risk than a current package with a critical vulnerability. Always prioritize security over freshness.
-- **Not reading changelogs**: Blindly upgrading a major version without reading the changelog. Breaking changes in the dependency become breaking changes in your project.
-- **Audit fatigue**: Running audits but not acting on findings. Set a policy: security findings must be addressed within 1 sprint, EOL within 1 quarter.
-- **Missing lock files**: Projects without lock files have non-reproducible builds. If the audit reveals missing lock files, that is itself a critical finding to address before versioned upgrades.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **Ignore transitive deps**: 10 direct → 200 transitive. Vulns hide transitive. Use `npm ls` / `renv::dependencies()`.
+- **Upgrade all at once**: Batch upgrade → can't identify regression source. Upgrade logical groups (security first, majors individually, minors/patches batched).
+- **"Outdated" ≠ "insecure"**: Major behind + no CVE < current + critical vuln. Security > freshness.
+- **Skip changelogs**: Blind major upgrade → breaking changes in dep → breaking changes in your project.
+- **Audit fatigue**: Audits w/o action → worthless. Policy: security → 1 sprint, EOL → 1 quarter.
+- **Missing lock files**: No lock → non-repro builds. Finding itself critical.
+- **Wrong R binary on hybrid**: WSL/Docker → `Rscript` may be cross-platform wrapper. Check `which Rscript && Rscript --version`. Prefer native (e.g., `/usr/local/bin/Rscript`). See [Setting Up Your Environment](../../guides/setting-up-your-environment.md).
 
-## Related Skills
+## →
 
-- `apply-semantic-versioning` -- Version bumps may be triggered by dependency upgrades
-- `manage-renv-dependencies` -- R-specific dependency management with renv
-- `security-audit-codebase` -- Broader security audit that includes dependency vulnerabilities
-- `manage-changelog` -- Document dependency upgrades in the changelog
-- `plan-release-cycle` -- Schedule dependency upgrades within the release timeline
+- `apply-semantic-versioning` — ver bumps may trigger from dep upgrades
+- `manage-renv-dependencies` — R-specific dep mgmt w/ renv
+- `security-audit-codebase` — broader security audit inc. dep vulns
+- `manage-changelog` — doc dep upgrades in changelog
+- `plan-release-cycle` — schedule dep upgrades in release timeline

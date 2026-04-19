@@ -26,27 +26,27 @@ metadata:
 
 # Add Puzzle Type
 
-Scaffold a new puzzle type across all pipeline integration points in jigsawR.
+Scaffold new puzzle type across pipeline integration points jigsawR.
 
-## When to Use
+## Use When
 
-- Adding a completely new puzzle type to the package
-- Following the established integration checklist (CLAUDE.md 10-point pipeline)
-- Ensuring nothing is missed when wiring a new type end-to-end
+- Add new puzzle type to pkg
+- Follow 10-point pipeline checklist (CLAUDE.md)
+- Nothing missed wiring new type end-to-end
 
-## Inputs
+## In
 
 - **Required**: New type name (lowercase, e.g. `"triangular"`)
-- **Required**: Geometry description (how pieces are shaped/arranged)
-- **Required**: Whether the type needs external packages (add to Suggests)
-- **Optional**: Parameter list beyond the standard (grid, size, seed, tabsize, offset)
-- **Optional**: Reference implementation or algorithm source
+- **Required**: Geometry desc (piece shape/arrangement)
+- **Required**: Needs external pkgs? (Suggests)
+- **Optional**: Params beyond standard (grid, size, seed, tabsize, offset)
+- **Optional**: Ref impl or algo source
 
-## Procedure
+## Do
 
-### Step 1: Create Core Puzzle Module
+### Step 1: Core Puzzle Module
 
-Create `R/<type>_puzzle.R` with the internal generation function:
+Create `R/<type>_puzzle.R`:
 
 ```r
 #' Generate <type> puzzle pieces (internal)
@@ -60,83 +60,83 @@ generate_<type>_pieces_internal <- function(params, seed) {
 }
 ```
 
-Follow the pattern in `R/voronoi_puzzle.R` or `R/snic_puzzle.R` for structure.
+Follow pattern `R/voronoi_puzzle.R` or `R/snic_puzzle.R`.
 
-**Expected:** Function returns a list with `$pieces`, `$edges`, `$adjacency`, `$metadata`.
+**→** Fn returns list: `$pieces`, `$edges`, `$adjacency`, `$metadata`.
 
-**On failure:** Compare the return structure against `generate_voronoi_pieces_internal()` to identify missing list elements or incorrect types.
+**If err:** Compare return structure against `generate_voronoi_pieces_internal()` → missing elements or wrong types.
 
-### Step 2: Wire into jigsawR_clean.R
+### Step 2: Wire jigsawR_clean.R
 
 Edit `R/jigsawR_clean.R`:
 
-1. Add `"<type>"` to the `valid_types` vector
-2. Add type-specific parameter extraction in the params section
-3. Add validation logic for type-specific constraints
-4. Add filename prefix mapping (e.g., `"<type>"` -> `"<type>_"`)
+1. Add `"<type>"` to `valid_types`
+2. Type-specific param extraction
+3. Valid. logic type-specific constraints
+4. Filename prefix mapping (e.g., `"<type>"` -> `"<type>_"`)
 
 ```r
 # In valid_types
 valid_types <- c("rectangular", "hexagonal", "concentric", "voronoi", "snic", "<type>")
 ```
 
-**Expected:** `generate_puzzle(type = "<type>")` is accepted without "unknown type" error.
+**→** `generate_puzzle(type = "<type>")` accepted, no "unknown type" err.
 
-**On failure:** Verify the type string is added to `valid_types` exactly as spelled, and that parameter extraction covers all required type-specific arguments.
+**If err:** Verify type string in `valid_types` exact, param extraction covers required type-specific args.
 
-### Step 3: Wire into unified_piece_generation.R
+### Step 3: Wire unified_piece_generation.R
 
 Edit `R/unified_piece_generation.R`:
 
-1. Add dispatch case in `generate_pieces_internal()`
-2. Add fusion handling if the type supports PILES notation
+1. Dispatch case `generate_pieces_internal()`
+2. Fusion handling if PILES notation
 
 ```r
 # In the switch/dispatch
 "<type>" = generate_<type>_pieces_internal(params, seed)
 ```
 
-**Expected:** Pieces are generated when the type is dispatched.
+**→** Pieces generated on dispatch.
 
-**On failure:** Confirm the dispatch case string matches the type name exactly and that `generate_<type>_pieces_internal` is defined and exported from the puzzle module.
+**If err:** Confirm dispatch string exact, `generate_<type>_pieces_internal` defined + exported.
 
-### Step 4: Wire into piece_positioning.R
+### Step 4: Wire piece_positioning.R
 
 Edit `R/piece_positioning.R`:
 
-Add positioning dispatch for the new type. Most types use shared positioning logic, but some need custom handling.
+Add positioning dispatch. Most use shared, some need custom.
 
-**Expected:** `apply_piece_positioning()` handles the new type without errors and pieces are placed at correct coordinates.
+**→** `apply_piece_positioning()` handles new type no err, pieces at correct coords.
 
-**On failure:** Check whether the new type needs custom positioning logic or can reuse the shared positioning path. Add a dispatch case if the default path does not apply.
+**If err:** Check if needs custom or reuse shared path. Add dispatch if default no apply.
 
-### Step 5: Wire into unified_renderer.R
+### Step 5: Wire unified_renderer.R
 
 Edit `R/unified_renderer.R`:
 
-1. Add rendering case in `render_puzzle_svg()`
-2. Add edge path function: `get_<type>_edge_paths()`
-3. Add piece name function: `get_<type>_piece_name()`
+1. Render case `render_puzzle_svg()`
+2. Edge path fn: `get_<type>_edge_paths()`
+3. Piece name fn: `get_<type>_piece_name()`
 
-**Expected:** SVG output is generated for the new type with correct piece outlines and edge paths.
+**→** SVG out generated new type, correct outlines + edge paths.
 
-**On failure:** Verify `get_<type>_edge_paths()` returns valid SVG path data and `get_<type>_piece_name()` produces unique identifiers for each piece.
+**If err:** Verify `get_<type>_edge_paths()` returns valid SVG path, `get_<type>_piece_name()` unique IDs.
 
-### Step 6: Wire into adjacency_api.R
+### Step 6: Wire adjacency_api.R
 
 Edit `R/adjacency_api.R`:
 
-Add neighbor dispatch so `get_neighbors()` and `get_adjacency()` work for the new type.
+Neighbor dispatch → `get_neighbors()` + `get_adjacency()` work.
 
-**Expected:** `get_neighbors(result, piece_id)` returns correct neighbors for any piece in the puzzle.
+**→** `get_neighbors(result, piece_id)` returns correct neighbors.
 
-**On failure:** Check that the adjacency dispatch returns the correct data structure. Test with a small grid and manually verify neighbor relationships against the geometry.
+**If err:** Check dispatch returns correct structure. Test small grid, manually verify against geometry.
 
-### Step 7: Add ggpuzzle Geom Layer
+### Step 7: ggpuzzle Geom Layer
 
 Edit `R/geom_puzzle.R`:
 
-Create `geom_puzzle_<type>()` using the `make_puzzle_layer()` factory:
+`geom_puzzle_<type>()` using `make_puzzle_layer()`:
 
 ```r
 #' @export
@@ -145,38 +145,38 @@ geom_puzzle_<type> <- function(mapping = NULL, data = NULL, ...) {
 }
 ```
 
-**Expected:** `ggplot() + geom_puzzle_<type>(aes(...))` renders without error.
+**→** `ggplot() + geom_puzzle_<type>(aes(...))` renders no err.
 
-**On failure:** Verify `make_puzzle_layer()` receives the correct type string and that the geom function is exported in the NAMESPACE via `@export`.
+**If err:** Verify `make_puzzle_layer()` correct type, geom exported via `@export`.
 
-### Step 8: Add Stat Dispatch
+### Step 8: Stat Dispatch
 
 Edit `R/stat_puzzle.R`:
 
-1. Add type-specific default parameters
-2. Add dispatch case in `compute_panel()`
+1. Type-specific default params
+2. Dispatch case `compute_panel()`
 
-**Expected:** The stat layer computes puzzle geometry correctly and produces the expected number of polygons.
+**→** Stat layer computes geometry, produces expected polygons.
 
-**On failure:** Check that the `compute_panel()` dispatch case returns a data frame with the required columns (`x`, `y`, `group`, `piece_id`) and that default parameters are sensible for the new type.
+**If err:** `compute_panel()` dispatch returns df w/ `x`, `y`, `group`, `piece_id`, defaults sensible.
 
-### Step 9: Update DESCRIPTION
+### Step 9: DESCRIPTION
 
 Edit `DESCRIPTION`:
 
-1. Add new type to the Description field text
-2. Add any new packages to `Suggests:` (if external dependency)
-3. Update `Collate:` to include the new R file (alphabetical order)
+1. New type in Description text
+2. New pkgs → `Suggests:`
+3. `Collate:` include new R file (alphabetical)
 
-**Expected:** `devtools::document()` succeeds. No NOTE about unlisted files.
+**→** `devtools::document()` succeeds. No NOTE unlisted files.
 
-**On failure:** Check that the new R file is listed in the `Collate:` field in alphabetical order and that any new Suggests packages are spelled correctly with version constraints.
+**If err:** New R file in `Collate:` alphabetical, new Suggests pkgs spelled correct w/ ver constraints.
 
-### Step 10: Update config.yml
+### Step 10: config.yml
 
 Edit `inst/config.yml`:
 
-Add defaults and constraints for the new type:
+Defaults + constraints:
 
 ```yaml
 <type>:
@@ -195,23 +195,23 @@ Add defaults and constraints for the new type:
   # Add type-specific params here
 ```
 
-**Expected:** Config is valid YAML. Defaults produce a working puzzle when used by `generate_puzzle()`.
+**→** Config valid YAML. Defaults → working puzzle via `generate_puzzle()`.
 
-**On failure:** Validate YAML with `yaml::yaml.load_file("inst/config.yml")`. Ensure default grid and size values produce a sensible puzzle (not too small or too large).
+**If err:** Validate `yaml::yaml.load_file("inst/config.yml")`. Defaults sensible (not too small/large).
 
-### Step 11: Extend Shiny App
+### Step 11: Shiny App
 
 Edit `inst/shiny-app/app.R`:
 
-1. Add the new type to the UI type selector
-2. Add conditional UI panels for type-specific parameters
-3. Add server-side generation logic
+1. Add type → UI selector
+2. Conditional UI panels type-specific params
+3. Server-side generation
 
-**Expected:** Shiny app shows the new type in the dropdown and generates puzzles when selected.
+**→** Shiny shows new type, generates on select.
 
-**On failure:** Check that the type is added to the `choices` argument of the UI selector, that the conditional panel for type-specific parameters uses `conditionalPanel(condition = "input.type == '<type>'")`, and that the server-side handler passes the correct parameters.
+**If err:** Type in `choices` of selector, conditional panel `conditionalPanel(condition = "input.type == '<type>'")`, server passes correct params.
 
-### Step 12: Create Test Suite
+### Step 12: Test Suite
 
 Create `tests/testthat/test-<type>-puzzles.R`:
 
@@ -225,36 +225,36 @@ test_that("<type> SVG output is well-formed", { ... })
 test_that("<type> config constraints are enforced", { ... })
 ```
 
-If the type requires an external package, wrap tests with `skip_if_not_installed()`.
+External dep → `skip_if_not_installed()`.
 
-**Expected:** All tests pass. No skips unless external dependency is missing.
+**→** All pass. No skips unless dep missing.
 
-**On failure:** Check each integration point individually. The most common issue is missing dispatch cases — run `grep -rn "switch\|valid_types" R/` to find all dispatch locations.
+**If err:** Check each point individually. Common: missing dispatch → `grep -rn "switch\|valid_types" R/`.
 
-## Validation
+## Check
 
-- [ ] `generate_puzzle(type = "<type>")` produces valid output
-- [ ] All 10 integration points are wired correctly
-- [ ] `devtools::test()` passes with new tests
-- [ ] `devtools::check()` returns 0 errors, 0 warnings
-- [ ] Shiny app renders the new type
-- [ ] Config constraints are enforced (min/max validation)
-- [ ] Adjacency and fusion work correctly
-- [ ] ggpuzzle geom layer renders without error
+- [ ] `generate_puzzle(type = "<type>")` produces valid out
+- [ ] All 10 points wired
+- [ ] `devtools::test()` passes new tests
+- [ ] `devtools::check()` → 0 err, 0 warn
+- [ ] Shiny renders new type
+- [ ] Config constraints enforced (min/max valid.)
+- [ ] Adjacency + fusion work
+- [ ] ggpuzzle geom renders no err
 - [ ] `devtools::document()` succeeds (NAMESPACE updated)
 
-## Common Pitfalls
+## Traps
 
-- **Missing dispatch case**: Forgetting one of the 10+ files causes silent failure or "unknown type" errors
-- **strsplit with negative numbers**: When creating adjacency keys with `paste(a, b, sep = "-")`, negative piece labels produce keys like `"1--1"`. Use `"|"` separator instead and split with `"\\|"`.
-- **Using `cat()` for output**: Always use `cli` package logging wrappers (`log_info`, `log_warn`, etc.)
-- **Collate order**: DESCRIPTION Collate field must be alphabetical or dependency-ordered
-- **Config.yml format**: Ensure YAML is valid; test with `yaml::yaml.load_file("inst/config.yml")`
+- **Missing dispatch**: One of 10+ files forgotten → silent fail or "unknown type"
+- **strsplit neg nums**: `paste(a, b, sep = "-")` → `"1--1"`. Use `"|"` + split `"\\|"`.
+- **`cat()` for out**: Always `cli` logging wrappers (`log_info`, `log_warn`, etc.)
+- **Collate order**: alphabetical or dep-ordered
+- **config.yml format**: Valid YAML; test `yaml::yaml.load_file("inst/config.yml")`
 
-## Related Skills
+## →
 
-- `generate-puzzle` — test the new type after scaffolding
-- `run-puzzle-tests` — run the full test suite to verify integration
-- `validate-piles-notation` — test fusion with the new type
-- `write-testthat-tests` — general test-writing patterns
-- `write-roxygen-docs` — document the new geom function
+- `generate-puzzle` — test new type after scaffold
+- `run-puzzle-tests` — full suite verify integration
+- `validate-piles-notation` — test fusion w/ new type
+- `write-testthat-tests` — general test patterns
+- `write-roxygen-docs` — document new geom fn

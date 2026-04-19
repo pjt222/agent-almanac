@@ -60,9 +60,9 @@ Before checking work, re-establish exactly what was committed to.
 4. Note any acceptance criteria the user provided
 5. Compare the commitment list against what was actually delivered
 
-**Expected:** A complete list of commitments — explicit requirements plus implicit promises — with a preliminary match against deliverables.
+**Got:** A complete list of commitments — explicit requirements plus implicit promises — with a preliminary match against deliverables.
 
-**On failure:** If the original request is no longer in context (compressed), reconstruct from what remains and acknowledge any gaps to the user.
+**If fail:** If the original request is no longer in context (compressed), reconstruct from what remains and acknowledge any gaps to the user.
 
 ### Step 2: Verify Completeness
 
@@ -91,9 +91,9 @@ Completeness Matrix:
 2. Mark each item: Done (fully complete), Partial (started but incomplete), Missing (not addressed)
 3. For Partial and Missing items, note what remains
 
-**Expected:** Every commitment has a verified status. No item is left unchecked.
+**Got:** Every commitment has a verified status. No item is left unchecked.
 
-**On failure:** If verification reveals missed items, address them immediately rather than noting them for later. Conscientiousness means completing now, not intending to complete.
+**If fail:** If verification reveals missed items, address them immediately rather than noting them for later. Conscientiousness means completing now, not intending to complete.
 
 ### Step 3: Verify Correctness
 
@@ -108,9 +108,9 @@ Completeness is necessary but not sufficient — what was done must also be righ
 3. For documentation: is it accurate, clear, and free of errors?
 4. For multi-step processes: does the output of each step correctly feed the next?
 
-**Expected:** Each deliverable is both complete and correct. Errors are caught before the user sees them.
+**Got:** Each deliverable is both complete and correct. Errors are caught before the user sees them.
 
-**On failure:** If errors are found, fix them immediately. Do not present work with known errors, even if the errors seem minor.
+**If fail:** If errors are found, fix them immediately. Do not present work with known errors, even if the errors seem minor.
 
 ### Step 4: Verify Presentation
 
@@ -122,9 +122,9 @@ The final check: is the deliverable presented in a way that serves the user?
 4. **Actionability**: Does the user know what to do next?
 5. **Honesty**: Are limitations or caveats clearly stated?
 
-**Expected:** A deliverable that is complete, correct, and well-presented.
+**Got:** A deliverable that is complete, correct, and well-presented.
 
-**On failure:** If presentation is poor despite correct content, restructure. Good work poorly presented is a conscientiousness failure.
+**If fail:** If presentation is poor despite correct content, restructure. Good work poorly presented is a conscientiousness failure.
 
 ## Validation
 
@@ -135,7 +135,7 @@ The final check: is the deliverable presented in a way that serves the user?
 - [ ] Edge cases were considered where relevant
 - [ ] The deliverable is clearly presented and actionable
 
-## Common Pitfalls
+## Pitfalls
 
 - **Verification theater**: Going through the motions of checking without actually re-reading or re-verifying. The check must use evidence, not memory
 - **Partial conscientiousness**: Checking the main deliverable but ignoring side commitments ("I'll also..."). Every promise counts

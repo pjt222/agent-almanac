@@ -27,49 +27,49 @@ metadata:
 
 # Adapt Architecture
 
-Execute structural metamorphosis — transforming a system's architecture from its current form to a target form while maintaining operational continuity. Uses strangler fig migration, chrysalis phases, and interface preservation to ensure the system never stops functioning during transformation.
+Execute structural metamorphosis — transform system architecture from current form to target form while keep operational continuity. Use strangler fig migration, chrysalis phases, interface preservation. System never stops working during transformation.
 
-## When to Use
+## When Use
 
-- Form assessment (see `assess-form`) classified the system as READY
-- A system must evolve its architecture to meet new requirements without downtime
-- Migrating from monolith to microservices (or the reverse)
-- Replacing a core subsystem while dependent systems continue operating
-- Evolving a data model while maintaining backward compatibility
-- Any architectural change that must be gradual rather than big-bang
+- Form assessment (see `assess-form`) classified system as READY
+- System must evolve architecture to meet new requirements without downtime
+- Migrating from monolith to microservices (or reverse)
+- Replacing core subsystem while dependent systems keep operating
+- Evolving data model while keep backward compatibility
+- Any architectural change must be gradual, not big-bang
 
 ## Inputs
 
 - **Required**: Current form assessment (from `assess-form` or equivalent analysis)
-- **Required**: Target architecture (what the system should become)
+- **Required**: Target architecture (what system should become)
 - **Required**: Operational continuity requirements (what must not break during transformation)
 - **Optional**: Available transformation budget (time, people, compute)
-- **Optional**: Rollback requirements (how far back must we be able to retreat?)
-- **Optional**: Parallel running duration (how long to run old and new simultaneously)
+- **Optional**: Rollback requirements (how far back must retreat?)
+- **Optional**: Parallel running duration (how long run old and new together)
 
-## Procedure
+## Steps
 
-### Step 1: Design the Transformation Blueprint
+### Step 1: Design Transformation Blueprint
 
-Plan the metamorphosis path from current form to target form.
+Plan metamorphosis path from current form to target form.
 
-1. Map the transformation as a sequence of intermediate forms:
+1. Map transformation as sequence of intermediate forms:
    - Current form → Intermediate form 1 → ... → Target form
-   - Each intermediate form must be operationally viable (can serve traffic, pass tests)
-   - No intermediate form should be harder to maintain than the current form
-2. Identify the transformation seams:
-   - Where can the current form be "cut" to insert the new architecture?
+   - Each intermediate form must be operationally viable (serves traffic, passes tests)
+   - No intermediate form harder to maintain than current form
+2. Identify transformation seams:
+   - Where can current form be "cut" to insert new architecture?
    - Natural seams: existing interfaces, module boundaries, data partitions
-   - Artificial seams: interfaces created specifically to enable the cut (anti-corruption layers)
-3. Choose the metamorphosis pattern:
-   - **Strangler fig**: new system grows around the old, gradually replacing it
-   - **Chrysalis**: old system is wrapped in a new shell; internals replaced while shell preserves external interface
-   - **Budding**: new system grows alongside the old; traffic gradually shifts (see `scale-colony` for colony budding)
+   - Artificial seams: interfaces created specifically to enable cut (anti-corruption layers)
+3. Choose metamorphosis pattern:
+   - **Strangler fig**: new system grows around old, gradually replaces it
+   - **Chrysalis**: old system wrapped in new shell; internals replaced while shell preserves external interface
+   - **Budding**: new system grows alongside old; traffic gradually shifts (see `scale-colony` for colony budding)
    - **Metamorphic migration**: phased replacement of components in dependency order (leaves first, roots last)
-4. Design the interface preservation layer:
+4. Design interface preservation layer:
    - External consumers must not experience disruption
    - API versioning, backward-compatible contracts, adapter patterns
-   - The preservation layer is temporary scaffolding — plan its removal
+   - Preservation layer is temporary scaffolding — plan its removal
 
 ```
 Metamorphosis Patterns:
@@ -94,139 +94,139 @@ Metamorphosis Patterns:
 └───────────────┴───────────────────────────────────────────────────┘
 ```
 
-**Expected:** A transformation blueprint showing intermediate forms, seams, the chosen metamorphosis pattern, and the interface preservation strategy. Each step is concrete and testable.
+**Got:** Transformation blueprint shows intermediate forms, seams, chosen metamorphosis pattern, interface preservation strategy. Each step concrete and testable.
 
-**On failure:** If no clean seam can be found, the system may need preliminary dissolution (see `dissolve-form`) to create seams before transformation. If the intermediate forms aren't operationally viable, the transformation steps are too large — decompose into smaller increments.
+**If fail:** No clean seam? System may need preliminary dissolution (see `dissolve-form`) to create seams before transformation. Intermediate forms not operationally viable? Transformation steps too large — decompose into smaller increments.
 
-### Step 2: Build the Scaffolding
+### Step 2: Build Scaffolding
 
-Construct the temporary infrastructure that supports metamorphosis.
+Construct temporary infrastructure that supports metamorphosis.
 
-1. Create the anti-corruption layer:
-   - A thin translation layer between the old and new systems
-   - Routes requests to the appropriate system (old or new) based on migration state
+1. Create anti-corruption layer:
+   - Thin translation layer between old and new systems
+   - Routes requests to appropriate system (old or new) based on migration state
    - Translates data formats between old and new representations
-   - This layer is the "cocoon" that protects the transformation
+   - This layer is "cocoon" that protects transformation
 2. Set up parallel running infrastructure:
-   - Both old and new systems must be deployable simultaneously
+   - Both old and new systems must be deployable together
    - Feature flags control which system handles which traffic
    - Comparison mechanisms validate that old and new produce equivalent results
 3. Establish rollback checkpoints:
-   - At each intermediate form, verify that rollback to the previous form is possible
-   - Rollback must be faster than the forward transformation step
+   - At each intermediate form, verify rollback to previous form possible
+   - Rollback must be faster than forward transformation step
    - Data migration must be reversible (or data must be dual-written during transition)
-4. Build the validation harness:
-   - Automated tests that verify operational continuity at each intermediate form
-   - Performance benchmarks that detect regression
-   - Data integrity checks that catch migration errors
+4. Build validation harness:
+   - Automated tests verify operational continuity at each intermediate form
+   - Performance benchmarks detect regression
+   - Data integrity checks catch migration errors
 
-**Expected:** Scaffolding infrastructure (anti-corruption layer, parallel running, rollback, validation) is in place before any transformation begins. The scaffolding itself is tested and verified.
+**Got:** Scaffolding infrastructure (anti-corruption layer, parallel running, rollback, validation) in place before any transformation begins. Scaffolding itself tested and verified.
 
-**On failure:** If scaffolding is too expensive, simplify: the minimum viable scaffolding is a feature flag and a rollback procedure. Anti-corruption layers and parallel running add safety but are not always necessary for smaller transformations.
+**If fail:** Scaffolding too expensive? Simplify: minimum viable scaffolding is feature flag and rollback procedure. Anti-corruption layers and parallel running add safety but not always necessary for smaller transformations.
 
 ### Step 3: Execute Progressive Cutover
 
 Migrate functionality from old form to new form incrementally.
 
 1. Order components for migration:
-   - Start with the least-coupled, lowest-risk component (build confidence)
+   - Start with least-coupled, lowest-risk component (build confidence)
    - Progress toward more critical, more coupled components
-   - Save the most coupled/critical component for last (by which point the team has experience)
+   - Save most coupled/critical component for last (by then team has experience)
 2. For each component:
-   a. Implement the new version behind the anti-corruption layer
-   b. Run parallel: both old and new process the same inputs
-   c. Compare outputs — they should be equivalent (or the differences should be expected and documented)
-   d. When confident, switch traffic to the new version (feature flag flip)
+   a. Implement new version behind anti-corruption layer
+   b. Run parallel: both old and new process same inputs
+   c. Compare outputs — should be equivalent (or differences should be expected and documented)
+   d. When confident, switch traffic to new version (feature flag flip)
    e. Monitor for anomalies (increase monitoring sensitivity post-cutover)
-   f. After a stability period, decommission the old version of this component
+   f. After stability period, decommission old version of this component
 3. Maintain continuous delivery throughout:
-   - Each cutover step is a normal deployment, not a special event
-   - The system is always in a known, tested, operational state
-   - If a cutover causes issues, roll back to the previous state (which is still operational)
+   - Each cutover step is normal deployment, not special event
+   - System always in known, tested, operational state
+   - Cutover causes issues? Roll back to previous state (still operational)
 
-**Expected:** Functionality migrates component by component with validation at each step. The system is always operational. Each cutover builds confidence for the next.
+**Got:** Functionality migrates component by component with validation at each step. System always operational. Each cutover builds confidence for next.
 
-**On failure:** If parallel running reveals discrepancies, the new implementation has a bug — fix it before cutting over. If a cutover causes performance degradation, the new component may need optimization or the anti-corruption layer is adding too much overhead. If the team loses confidence mid-migration, pause and stabilize — a half-migrated system in a known state is far better than a rushed full migration.
+**If fail:** Parallel running reveals discrepancies? New implementation has bug — fix before cutting over. Cutover causes performance degradation? New component may need optimization or anti-corruption layer adding too much overhead. Team loses confidence mid-migration? Pause and stabilize — half-migrated system in known state far better than rushed full migration.
 
-### Step 4: Manage the Chrysalis Phase
+### Step 4: Manage Chrysalis Phase
 
-Navigate the most vulnerable period — when the system is between forms.
+Navigate most vulnerable period — when system between forms.
 
-1. Acknowledge the chrysalis reality:
-   - During migration, the system is partly old and partly new
-   - This hybrid state is inherently more complex than either pure state
-   - Complexity peaks at the midpoint of migration, then decreases
+1. Acknowledge chrysalis reality:
+   - During migration, system is partly old and partly new
+   - This hybrid state inherently more complex than either pure state
+   - Complexity peaks at midpoint of migration, then decreases
 2. Chrysalis discipline:
-   - No new features during the chrysalis phase (transformation only)
+   - No new features during chrysalis phase (transformation only)
    - Minimal external changes (freeze non-essential deployments)
    - Increased monitoring and on-call coverage
    - Daily check-ins on migration progress and system health
 3. Mid-chrysalis assessment:
-   - At the halfway point, assess: is the target form still the right goal?
-   - Has anything changed (market, requirements, team) that affects the target?
-   - Should the transformation continue, pause, or redirect?
-4. Protect the chrysalis:
-   - Keep the rollback path clear at all times
-   - Document the current hybrid state thoroughly (future debuggers will need it)
-   - Resist the temptation to "clean up" temporary scaffolding before migration is complete
+   - At halfway point, assess: target form still right goal?
+   - Anything changed (market, requirements, team) that affects target?
+   - Should transformation continue, pause, or redirect?
+4. Protect chrysalis:
+   - Keep rollback path clear at all times
+   - Document current hybrid state thoroughly (future debuggers will need it)
+   - Resist temptation to "clean up" temporary scaffolding before migration complete
 
-**Expected:** The chrysalis phase is managed as a deliberate, time-bounded period with increased discipline and monitoring. The team understands that temporary complexity is the cost of safe transformation.
+**Got:** Chrysalis phase managed as deliberate, time-bounded period with increased discipline and monitoring. Team understands temporary complexity is cost of safe transformation.
 
-**On failure:** If the chrysalis phase drags on too long, the hybrid state becomes the new normal — which is worse than either old or new. Set a time limit. If the limit is reached, either accelerate the remaining migration or accept the hybrid state as the "new form" and stabilize it.
+**If fail:** Chrysalis phase drags too long? Hybrid state becomes new normal — worse than either old or new. Set time limit. Limit reached? Either accelerate remaining migration or accept hybrid state as "new form" and stabilize it.
 
 ### Step 5: Complete Metamorphosis and Stabilize
 
-Finish the transformation and remove scaffolding.
+Finish transformation. Remove scaffolding.
 
 1. Final cutover:
-   - Migrate the last component(s) to the new form
-   - Run full validation suite against the complete new system
+   - Migrate last component(s) to new form
+   - Run full validation suite against complete new system
    - Performance test under production-equivalent load
 2. Remove scaffolding:
-   - Decommission the anti-corruption layer (it's no longer needed)
-   - Remove feature flags related to the migration
+   - Decommission anti-corruption layer (no longer needed)
+   - Remove feature flags related to migration
    - Clean up parallel running infrastructure
-   - Archive (don't delete) the old system code for reference
+   - Archive (don't delete) old system code for reference
 3. Post-metamorphosis stabilization:
-   - Run in the new form for 2-4 weeks with enhanced monitoring
+   - Run in new form for 2-4 weeks with enhanced monitoring
    - Address any issues that emerge under real-world conditions
-   - Update documentation to reflect the new architecture
+   - Update documentation to reflect new architecture
 4. Retrospective:
-   - What went well in the transformation?
+   - What went well in transformation?
    - What was harder than expected?
-   - What would we do differently next time?
-   - Update the team's transformation playbook
+   - What would do differently next time?
+   - Update team's transformation playbook
 
-**Expected:** The transformation is complete. The system operates in its new form. Scaffolding is removed. Documentation is updated. The team has captured learnings for future transformations.
+**Got:** Transformation complete. System operates in new form. Scaffolding removed. Documentation updated. Team captured learnings for future transformations.
 
-**On failure:** If the new form is unstable after cutover, maintain the rollback path and continue stabilization. If stabilization takes more than the planned period, there may be a design issue in the new architecture — consider whether targeted fixes or a partial rollback of the most problematic component is appropriate.
+**If fail:** New form unstable after cutover? Maintain rollback path and continue stabilization. Stabilization takes more than planned period? Design issue in new architecture — consider whether targeted fixes or partial rollback of most problematic component appropriate.
 
-## Validation
+## Checks
 
 - [ ] Transformation blueprint shows viable intermediate forms
-- [ ] Scaffolding (anti-corruption layer, rollback, validation harness) is in place before migration starts
+- [ ] Scaffolding (anti-corruption layer, rollback, validation harness) in place before migration starts
 - [ ] Components migrate in order from lowest to highest risk
 - [ ] Parallel running validates equivalence at each step
-- [ ] Chrysalis phase is time-bounded with feature freeze discipline
-- [ ] All scaffolding is removed after transformation completes
+- [ ] Chrysalis phase time-bounded with feature freeze discipline
+- [ ] All scaffolding removed after transformation completes
 - [ ] Post-metamorphosis stabilization period passes without critical issues
 - [ ] Retrospective captures learnings
 
-## Common Pitfalls
+## Pitfalls
 
-- **Big-bang migration**: Attempting to transform everything at once. This abandons the safety of incremental cutover and maximizes blast radius. Always migrate incrementally
-- **Permanent scaffolding**: Anti-corruption layers and feature flags that are never removed become technical debt. Plan scaffolding removal as part of the transformation, not as an afterthought
-- **Chrysalis denial**: Pretending the hybrid state is normal leads to feature development on unstable foundations. Acknowledge the chrysalis phase and enforce its discipline
-- **Target fixation**: Becoming so committed to the target architecture that signs of a better alternative are ignored. The mid-chrysalis assessment exists for this reason
+- **Big-bang migration**: Transform everything at once. Abandons safety of incremental cutover. Maximizes blast radius. Always migrate incrementally
+- **Permanent scaffolding**: Anti-corruption layers and feature flags never removed become technical debt. Plan scaffolding removal as part of transformation, not afterthought
+- **Chrysalis denial**: Pretend hybrid state is normal. Leads to feature development on unstable foundations. Acknowledge chrysalis phase and enforce discipline
+- **Target fixation**: Becoming so committed to target architecture that signs of better alternative ignored. Mid-chrysalis assessment exists for this reason
 - **Transformation fatigue**: Long migrations exhaust teams. Keep each transformation step small enough to complete in days, not weeks. Celebrate milestones to maintain momentum
 
-## Related Skills
+## See Also
 
-- `assess-form` — prerequisite assessment that determines if the system is ready for transformation
-- `dissolve-form` — for systems too rigid to transform directly; dissolution creates the seams needed here
+- `assess-form` — prerequisite assessment determines if system ready for transformation
+- `dissolve-form` — for systems too rigid to transform directly; dissolution creates seams needed here
 - `repair-damage` — recovery skill for when transformation introduces damage
-- `shift-camouflage` — surface adaptation that may suffice without deep architectural change
-- `coordinate-swarm` — swarm coordination informs the sequencing of transformation across distributed systems
-- `scale-colony` — growth pressure is a common trigger for architectural adaptation
-- `implement-gitops-workflow` — GitOps provides the deployment infrastructure for progressive cutover
-- `review-software-architecture` — complementary review skill for evaluating the target architecture
+- `shift-camouflage` — surface adaptation may suffice without deep architectural change
+- `coordinate-swarm` — swarm coordination informs sequencing of transformation across distributed systems
+- `scale-colony` — growth pressure is common trigger for architectural adaptation
+- `implement-gitops-workflow` — GitOps provides deployment infrastructure for progressive cutover
+- `review-software-architecture` — complementary review skill for evaluating target architecture

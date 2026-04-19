@@ -69,9 +69,9 @@ cat VERSION
 
 Parse the current version into major.minor.patch components. If the version contains a pre-release suffix (e.g., `1.2.0-beta.1`), note it separately.
 
-**Expected:** Current version identified as `MAJOR.MINOR.PATCH[-PRERELEASE]`.
+**Got:** Current version identified as `MAJOR.MINOR.PATCH[-PRERELEASE]`.
 
-**On failure:** If no version file is found, check for a VERSION file or git tags (`git describe --tags --abbrev=0`). If no version exists at all, start at `0.1.0` for initial development or `1.0.0` if the project has a stable public API.
+**If fail:** If no version file is found, check for a VERSION file or git tags (`git describe --tags --abbrev=0`). If no version exists at all, start at `0.1.0` for initial development or `1.0.0` if the project has a stable public API.
 
 ### Step 2: Analyze Changes Since Last Release
 
@@ -90,9 +90,9 @@ git log --oneline v1.2.3..HEAD | grep -E "^[a-f0-9]+ (feat|fix|BREAKING)"
 
 If no tags exist, compare against the initial commit or a known baseline.
 
-**Expected:** A list of commits with messages that can be classified by change type.
+**Got:** A list of commits with messages that can be classified by change type.
 
-**On failure:** If git history is unavailable or tags are missing, ask the developer to describe the changes manually. Classify based on their description.
+**If fail:** If git history is unavailable or tags are missing, ask the developer to describe the changes manually. Classify based on their description.
 
 ### Step 3: Classify Changes
 
@@ -114,9 +114,9 @@ Special cases:
 - **Deprecation**: Deprecating a function is a MINOR change (it still works). Removing it is MAJOR.
 - **Internal changes**: Refactoring that does not change the public API is PATCH.
 
-**Expected:** Each change classified as breaking/feature/fix, and the overall bump level determined.
+**Got:** Each change classified as breaking/feature/fix, and the overall bump level determined.
 
-**On failure:** If changes are ambiguous, err on the side of a higher bump. A conservative major bump is better than a minor bump that breaks downstream code.
+**If fail:** If changes are ambiguous, err on the side of a higher bump. A conservative major bump is better than a minor bump that breaks downstream code.
 
 ### Step 4: Compute New Version
 
@@ -137,9 +137,9 @@ If a pre-release label is requested:
 
 Pre-release precedence: `alpha < beta < rc < (release)`.
 
-**Expected:** New version number computed following SemVer rules.
+**Got:** New version number computed following SemVer rules.
 
-**On failure:** If the current version is malformed or non-SemVer, normalize it first. For example, `1.2` becomes `1.2.0`.
+**If fail:** If the current version is malformed or non-SemVer, normalize it first. For example, `1.2` becomes `1.2.0`.
 
 ### Step 5: Update Version Files
 
@@ -163,9 +163,9 @@ Write the new version to the appropriate file(s).
 
 If the project has multiple files that reference the version (e.g., `_pkgdown.yml`, `CITATION`, `codemeta.json`), update all of them.
 
-**Expected:** All version files updated consistently to the new version number.
+**Got:** All version files updated consistently to the new version number.
 
-**On failure:** If a file update fails, revert all changes to maintain consistency. Never leave version files in a partially updated state.
+**If fail:** If a file update fails, revert all changes to maintain consistency. Never leave version files in a partially updated state.
 
 ### Step 6: Create Version Tag
 
@@ -184,9 +184,9 @@ Use the project's established tag format:
 - `1.3.0` (no prefix)
 - `package-name@1.3.0` (monorepo)
 
-**Expected:** Git tag created matching the new version.
+**Got:** Git tag created matching the new version.
 
-**On failure:** If the tag already exists, the version was not properly bumped. Check for duplicate tags with `git tag -l "v1.3*"` and resolve before proceeding.
+**If fail:** If the tag already exists, the version was not properly bumped. Check for duplicate tags with `git tag -l "v1.3*"` and resolve before proceeding.
 
 ## Validation
 
@@ -200,7 +200,7 @@ Use the project's established tag format:
 - [ ] Git tag matches the new version and project's tag format convention
 - [ ] Pre-release suffix, if used, follows correct precedence (alpha < beta < rc)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Skipping minor versions**: Going from 1.2.3 directly to 1.4.0 because "we added two features." Each release gets one bump; the number of features does not determine the version.
 - **Treating deprecation as breaking**: Deprecating a function (adding a warning) is a minor change. Only removing it is a breaking change.

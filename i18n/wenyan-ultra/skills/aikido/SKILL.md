@@ -25,51 +25,51 @@ metadata:
   tags: defensive, aikido, martial-arts, blending, ukemi, redirection
 ---
 
-# Practice Aikido
+# 合氣道
 
-Develop an aikido practice rooted in centering, blending with incoming force, and resolving conflict through controlled technique rather than opposing strength with strength.
+立中、合來力、以技解爭，非以強對強。
 
-## When to Use
+## 用
 
-- Learning a defensive martial art that prioritizes de-escalation and controlled resolution
-- Developing the ability to redirect aggression without causing unnecessary harm
-- Building safe falling skills (ukemi) applicable to any physical activity or emergency
-- Cultivating calm centeredness under physical pressure or confrontation
-- Complementing tai chi or meditation with a partner-based martial practice (see `tai-chi`, `meditate`)
-- Training awareness and response to multiple simultaneous threats
+- 學防身術重緩、控解→用
+- 引怒而不傷→用
+- 安受身（ukemi）→用
+- 壓下養靜中→用
+- 補太極或冥（見 `tai-chi`、`meditate`）→用
+- 對多敵之覺與應→用
 
-## Inputs
+## 入
 
-- **Required**: Practice space with a padded or yielding surface (tatami, judo mats, grass; avoid concrete)
-- **Required**: Comfortable clothing allowing full range of motion (gi preferred; loose exercise clothing acceptable)
-- **Optional**: Training partner (essential for techniques; solo practice covers centering, ukemi, and movement)
-- **Optional**: Practice weapons (wooden: jo staff ~128cm, bokken sword ~102cm, tanto knife ~30cm)
-- **Optional**: Experience level (beginner, intermediate, advanced; default: beginner)
-- **Optional**: Available practice time (minimum 20 minutes; recommended 60-90 minutes)
+- **必**：練所、有墊（榻、柔道墊、草；忌混凝）
+- **必**：寬衣（道服佳；鬆衣可）
+- **可**：練伴（技必、獨可練中、ukemi、行）
+- **可**：練器（木：杖約 128cm、劍約 102cm、刀約 30cm）
+- **可**：階（始、中、上；默始）
+- **可**：練時（最少 20 分；薦 60-90 分）
 
-## Procedure
+## 行
 
-### Step 1: Ground and Center
+### 一：接地立中
 
-Every aikido technique begins from a centered state. Without center, technique becomes muscular struggle.
+技皆始於中。無中則為肌爭。
 
-1. Stand in hanmi (half-facing stance): one foot forward, feet roughly shoulder-width apart at 60-degree angle
-2. Bend knees slightly — weight sinks toward the one-point (seika tanden), located 5cm below the navel
-3. Relax the shoulders completely — let them drop away from the ears
-4. Extend awareness outward while keeping attention anchored at the one-point
-5. Test your center: have a partner push gently on your chest
-   - If you resist with upper body, you are not centered — relax and sink lower
-   - If you maintain stability without effort, center is established
-6. Practice weight underside: imagine that the heavy part of each arm is the underside; let the upper surface feel light and buoyant
-7. Extend ki: project calm, positive energy forward through the fingertips — not tension, but focused intention
+1. 立半身：一足前，足距肩寬，60 度角
+2. 微屈膝——重沉至「一點」（臍下五公分）
+3. 全鬆肩——降離耳
+4. 覺向外延而注於一點
+5. 驗中：伴輕推胸
+   - 上身抗→未中，鬆而沉
+   - 不費而穩→中已立
+6. 練重於下：想各臂之重在下；上面輕浮
+7. 延氣：靜正之能透指出——非緊乃定意
 
-**Expected:** A stable, relaxed stance where pushes are absorbed through the structure into the ground rather than resisted by muscles. A quiet mind with broad awareness.
+得：穩鬆之姿，推由構入地非肌抗。心靜覺廣。
 
-**On failure:** If the stance feels rigid, you are holding tension. Shake out the arms and legs, take 5 deep breaths, and re-establish from scratch. If pushes easily displace you, lower your center of gravity (bend knees more) and focus on the one-point. Centering is a skill that deepens over months — initial wobbliness is normal.
+敗：姿剛→存緊。抖臂腿、深呼五次、重始。推易移→沉重心、注一點。立中乃月積之技，初搖常事。
 
-### Step 2: Master Ukemi (Falling and Rolling)
+### 二：精 ukemi（受身）
 
-Ukemi is the art of receiving technique safely. It is the most important skill in aikido — you will fall thousands of times.
+ukemi 乃安受技之術。aikido 第一技——將跌千次。
 
 ```
 Ukemi Progression:
@@ -95,20 +95,21 @@ Ukemi Progression:
 └────────────────────┴──────────────────────────┴───────────────────────────┘
 ```
 
-Key principles:
-1. The slap absorbs impact by spreading force across the arm surface — time it to land just before the body
-2. Tuck the chin on every fall — the head never contacts the ground
-3. Exhale on impact; holding the breath creates rigidity and increases injury risk
-4. Forward rolls should be round and smooth — if there are thuds or flat spots, the body is not curved enough
-5. Practice both sides: right shoulder forward and left shoulder forward
+要律：
 
-**Expected:** After 2-3 months of regular practice, forward rolls are smooth and quiet on both sides. Backward falls are automatic (no fear response). You can be thrown at moderate speed without hesitation.
+1. 拍以散力於臂面——時於身落前
+2. 各跌收頷——首勿觸地
+3. 落時呼；屏息致剛、增傷
+4. 前滾須圓滑——有撞或平則身未夠彎
+5. 兩側皆練：右肩前、左肩前
 
-**On failure:** If forward rolls cause shoulder pain, the angle is likely too steep (going over the top of the shoulder instead of across the back diagonally). Have a partner or instructor check the line. If fear prevents commitment to the roll, return to the kneeling version and build up gradually. Never force a breakfall before the forward roll is second nature.
+得：常練 2-3 月後前滾兩側皆滑靜。後跌已自動（無懼）。中速可受擲不豫。
 
-### Step 3: Practice Basic Techniques
+敗：前滾肩痛→角過陡（過肩頂非斜過背）。請伴或師察線。畏滾→回跪式漸建。前滾未熟勿強為破跌。
 
-The four foundational techniques address the most common attack scenarios and embody aikido's core principles.
+### 三：練基技
+
+四基技應常擊景而體 aikido 核律。
 
 ```
 Technique Selection by Attack:
@@ -132,117 +133,118 @@ Technique Selection by Attack:
 └─────────────────┴──────────────────┴──────────────────────────────────────┘
 ```
 
-For each technique:
-1. Begin with the attack at slow, cooperative speed
-2. Blend first: move your body off the attack line (never block head-on)
-3. Connect: make contact with the attacker's arm or body to feel their balance
-4. Redirect: use circular motion to guide the attacker's energy into the technique
-5. Complete: throw or pin with control — the goal is to end the encounter, not to injure
-6. Practice 10-20 repetitions per side, alternating roles (nage/tori throws, uke attacks and falls)
-7. Gradually increase speed and resistance as both partners gain proficiency
+各技：
 
-**Expected:** Techniques feel smooth and circular. The attacker is led rather than forced. At cooperative speed, both partners finish the exchange safely and without strain.
+1. 始以慢協速
+2. 先合：身離擊線（勿頭對頭格）
+3. 接：觸伴臂或身以感其衡
+4. 引：以圓動導敵能入技
+5. 畢：擲或鎖以控——意在止爭非傷
+6. 各側 10-20 次，輪角（投/取擲，受擊而跌）
+7. 兩伴熟則漸增速與抗
 
-**On failure:** If a technique requires significant muscular effort, the blending is incomplete — the defender is fighting the attack instead of redirecting it. Return to the moment of contact and practice the initial blend in isolation. If the attacker feels yanked or wrenched, slow down and focus on leading with the center, not pulling with the hands.
+得：技滑而圓。敵獲引非強。協速下兩伴皆安畢、無緊。
 
-### Step 4: Develop Blending (Tai Sabaki)
+敗：技需大力→合未足，防者抗擊非引。回觸時、孤練初合。敵感拽絞→緩之、注以中引非以手拉。
 
-Tai sabaki — body movement — is the engine of aikido. Technique without movement is just wrestling.
+### 四：養合（tai sabaki）
 
-1. **Irimi (entering)**: Step directly forward and past the attacker, moving inside their reach
-   - Practice: partner extends a punch; step past it so you end behind their shoulder
-2. **Tenkan (turning)**: Pivot 180 degrees on the front foot, redirecting the attacker's line
-   - Practice: partner grabs your wrist; pivot smoothly so you face the same direction they do
-3. **Irimi-tenkan (enter and turn)**: Combine entering with a pivot — the most common movement
-   - Practice: enter past the attack, then pivot to control the attacker from behind
-4. **Kaiten (rotation)**: Full body rotation to generate circular force for throws
-   - Practice: combined with shiho-nage and other rotational techniques
-5. Practice all movements solo first: step-pivot, step-pivot, step-pivot across the mat
-6. Then with a partner: focus on matching timing to the attack — move as they commit, not before or after
+身行——aikido 之機。無行之技乃摔角。
 
-**Expected:** Movement is fluid, centered, and timed to the attack. The defender is never squared up facing the attack force — always angled off the line.
+1. **入身（irimi）**：直前過敵，入其達內
+   - 練：伴出拳；步過之至其肩後
+2. **轉身（tenkan）**：以前足旋 180 度，導敵線
+   - 練：伴執腕；滑旋至同向
+3. **入轉**：合入與旋——最常之行
+   - 練：入過擊、旋以自後控敵
+4. **回轉（kaiten）**：全身旋以生圓力為擲
+   - 練：合 shiho-nage 與他旋技
+5. 諸行先獨練：步旋、步旋、步旋遍墊
+6. 後合伴：注時於擊——其決時行，非前非後
 
-**On failure:** If timing is off (arriving too early or too late), practice with a very slow, telegraphed attack. The defender should move at the same moment the attack commits — this is the "aiki" timing. If turns feel clumsy, practice tenkan as a standalone drill: 100 pivots per session builds smooth, automatic rotation.
+得：行流、中、合擊時。防者永不正對擊力——恆斜離線。
 
-### Step 5: Train Randori (Multiple Attackers)
+敗：時誤（過早或晚）→以極慢明擊練。防者於擊決時動——此乃「合氣」之時。轉鈍→獨練 tenkan：各課百旋以建滑自動。
 
-Randori develops the awareness and decisiveness needed when overwhelmed. It is where principles are truly tested.
+### 五：練亂取（多敵）
 
-1. Begin with two attackers at slow speed — they take turns (not simultaneous)
-2. Core principle: never stop moving. Stationary means surrounded
-3. Use each attacker as a shield against the others: redirect one into the path of another
-4. Move to open space — never back into a corner or wall
-5. Extend awareness in all directions; do not fixate on one attacker (see `mindfulness`)
-6. Apply simple, reliable techniques — complex techniques fail under pressure
-7. Progress to three attackers, then four, increasing speed gradually
-8. Randori is not about defeating every attacker — it is about maintaining center and freedom of movement
+亂取養壓下之覺與決。律真受驗於此。
 
-**Expected:** The ability to stay calm and mobile while being approached from multiple angles. Techniques are applied fluidly without freezing or tunnel vision.
+1. 始以二慢敵——輪番（非同時）
+2. 核：永勿停。靜即被圍
+3. 用各敵為盾擋他：引一入他之路
+4. 行至空地——勿退角或牆
+5. 覺延諸向；勿執一敵（見 `mindfulness`）
+6. 用簡可靠之技——複雜壓下敗
+7. 進至三、四敵，速漸增
+8. 亂取非為勝諸敵——乃存中與行之自由
 
-**On failure:** If panic sets in, return to two slow attackers. Randori anxiety is normal and decreases with exposure. If techniques collapse under pressure, simplify: focus on irimi (entering) and tenkan (turning) only, ignoring throws entirely. Movement and positioning are more important than technique execution in randori.
+得：多向被近時能靜能行。技流暢無凍無管視。
 
-### Step 6: Integrate Weapons Awareness
+敗：起恐→回二慢。亂取慮常事，露次而減。技壓下崩→簡之：唯入身、轉身，棄擲。亂取中行與位重於施技。
 
-Weapons training deepens understanding of distance, timing, and line — principles that improve empty-hand technique.
+### 六：合器覺
 
-1. **Jo (staff)**: Practice 31-count jo kata for line and extension
-   - The jo teaches maintaining distance and controlling space
-   - Partner practice: jo-dori (staff taking) — disarm a staff attack with empty hands
-2. **Bokken (wooden sword)**: Practice suburi (cutting exercises) for precision and center line awareness
-   - The sword teaches commitment: every cut must follow a precise line
-   - Partner practice: kumitachi (paired sword forms) for timing and distance
-3. **Tanto (wooden knife)**: Practice tanto-dori (knife defense)
-   - The knife teaches respect for close-range danger
-   - Always redirect the weapon hand — never reach for the blade
-4. Weapons principles that transfer to empty-hand:
-   - Ma-ai (proper distance): too close invites the weapon; too far wastes the response
-   - Shomen (center line): all attacks and defenses relate to the vertical center line
-   - Zanshin (continuing awareness): remain alert after the technique completes
+器練深距、時、線之解——益空手技。
 
-**Expected:** Weapons practice clarifies why tai sabaki, timing, and distance matter. Empty-hand technique improves as body movement becomes more precise.
+1. **杖**：練 31 數杖型以線與延
+   - 杖教存距、控空
+   - 伴練：奪杖——以空手解杖擊
+2. **木劍**：練素振以精度與中線覺
+   - 劍教決：每砍須循精線
+   - 伴練：對劍以時與距
+3. **木刀**：練奪刀
+   - 刀教近危之敬
+   - 永引器手——勿伸刃
+4. 器律轉空手：
+   - 間合（正距）：太近招器；太遠廢應
+   - 正面（中線）：諸擊防皆關於垂中線
+   - 殘心（續覺）：技畢後仍警
 
-**On failure:** If weapons feel awkward or disconnected from empty-hand practice, focus on suburi (solo cutting exercises) for one month before adding partner work. If a partner practice becomes competitive or dangerous, slow down immediately — wooden weapons can cause real injury at speed.
+得：器練明 tai sabaki、時、距之要。空手技進，身行更精。
 
-### Step 7: Apply Principles Off the Mat
+敗：器拙或斷於空手→注素振一月再合伴。伴練成競或危→即緩——木器於速可真傷。
 
-Aikido's value extends beyond the dojo into daily interaction and conflict resolution.
+### 七：施律於墊外
 
-1. In confrontation, apply irimi-tenkan mentally: move toward the person's concern (enter), then redirect the conversation to common ground (turn)
-2. In physical space, maintain awareness of position, exits, and others' body language (see `mindfulness`)
-3. Practice "receiving" criticism or aggression without resistance — acknowledge the energy, then redirect
-4. Cultivate the habit of centering before stressful situations: drop awareness to the one-point, relax shoulders, extend calm intention
-5. Regular practice schedule:
-   - Solo (daily, 15-30 min): centering, ukemi rolls, tai sabaki, weapons suburi
-   - Partner (2-3x weekly, 60-90 min): techniques, randori, weapons partner work
-6. Complement with tai chi for internal energy development (see `tai-chi`)
-7. Complement with meditation for mental stillness and equanimity (see `meditate`)
+aikido 之值越道場入日交與爭解。
 
-**Expected:** Aikido principles — blending, redirecting, centering — become natural responses to conflict in daily life. Physical practice maintains and deepens martial skill.
+1. 對峙時心施入轉：向其憂行（入），轉話至共地（轉）
+2. 物空中存位、出口、他身語之覺（見 `mindfulness`）
+3. 練「受」評或怒不抗——認其能、後引
+4. 養壓前立中之習：覺降一點、鬆肩、延靜意
+5. 常練表：
+   - 獨（日 15-30 分）：立中、ukemi 滾、tai sabaki、器素振
+   - 伴（週 2-3 次，60-90 分）：技、亂取、器伴練
+6. 補太極為內能（見 `tai-chi`）
+7. 補冥為心靜（見 `meditate`）
 
-**On failure:** If daily practice lapses, focus on the smallest unit: 5 minutes of centering and 20 forward rolls. Consistency matters more than duration. If the martial aspects feel disconnected from daily life, reflect on how each technique is a metaphor: irimi is facing a problem directly; tenkan is changing perspective; ukemi is recovering from setbacks.
+得：合、引、立中律成日爭之自然應。身練存且深武技。
 
-## Validation
+敗：日練斷→注最小：5 分立中、20 前滾。常勝久。武似斷於日→思各技為喻：irimi 直面題；tenkan 改見；ukemi 復於敗。
 
-- [ ] Centered stance absorbs moderate pushes without muscular resistance
-- [ ] Forward rolls are smooth, quiet, and practiced on both sides
-- [ ] At least four basic techniques can be performed cooperatively with a partner
-- [ ] Tai sabaki (irimi, tenkan, irimi-tenkan) is practiced both solo and with a partner
-- [ ] Randori with two slow attackers can be sustained for 60 seconds without freezing
-- [ ] At least one weapon (jo, bokken, or tanto) has been practiced in solo kata
-- [ ] Practice includes both solo and partner components regularly
+## 驗
 
-## Common Pitfalls
+- [ ] 中姿受中推無肌抗
+- [ ] 前滾兩側皆滑靜
+- [ ] 至少四基技可協與伴行
+- [ ] tai sabaki（irimi、tenkan、入轉）獨與伴皆練
+- [ ] 二慢敵亂取可持 60 秒不凍
+- [ ] 至少一器（杖、木劍、木刀）獨型練過
+- [ ] 練含獨與伴常分
 
-- **Using muscle instead of blending**: If a technique requires strength, the timing or angle is wrong. Relax, re-enter, and let the attacker's energy do the work. Aikido's power comes from redirecting force, not generating it
-- **Neglecting ukemi**: Students who avoid falling avoid learning. Ukemi IS aikido — the ability to receive force safely. Practice it every session, especially at the start
-- **Fear of commitment**: Half-hearted entering (irimi) puts you in the worst position — too close to evade, too far to control. Once you decide to enter, commit fully to moving past the attack
-- **Fixating on one attacker**: In randori and in life, tunnel vision is dangerous. Keep soft, wide awareness. Peripheral vision detects motion before focused vision does
-- **Training only with compliant partners**: While beginners need cooperation, intermediate students should gradually increase resistance. Technique that only works on a cooperative partner is incomplete
+## 忌
 
-## Related Skills
+- **以肌代合**：技需力→時或角誤。鬆、再入、令敵能為功。aikido 之力出引非生
+- **忽 ukemi**：避跌者避學。ukemi 即 aikido——安受力之能。每課練、尤始
+- **畏決**：半 irimi 致最劣位——太近不避太遠不控。決入則全行過擊
+- **執一敵**：亂取與生中管視危。持軟廣覺。周視察動先於焦視
+- **唯協練**：始須協，中當漸加抗。唯協能行之技未全
 
-- `tai-chi` — complementary internal martial art; shares the principle of yielding to overcome force, with emphasis on solo cultivation
-- `mindfulness` — defensive situational awareness provides the perceptual foundation for martial readiness and conflict avoidance
-- `meditate` — seated meditation develops the centered, equanimous mind state that aikido requires under pressure
-- `heal` — understanding body mechanics from aikido practice informs first aid and bodywork approaches
-- `redirect` — AI self-application variant; maps aikido blending and redirection to handling conflicting demands and tool failures
+## 參
+
+- `tai-chi` — 補內武術；共讓克強之律，重獨修
+- `mindfulness` — 防情境覺供武備與避爭之知基
+- `meditate` — 坐冥養 aikido 壓下所需之中、平心
+- `heal` — aikido 解體機益急救與身工
+- `redirect` — AI 自施變；映 aikido 合與引於處衝需與工敗

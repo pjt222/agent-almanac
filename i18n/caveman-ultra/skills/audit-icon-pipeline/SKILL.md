@@ -22,93 +22,93 @@ metadata:
 
 # Audit Icon Pipeline
 
-Detect missing glyphs, missing icons, and stale manifests by comparing registries against glyph mapping files, icon directories, and manifests. Produces a structured gap report covering skills, agents, and teams.
+Detect missing glyphs, icons, stale manifests → compare registries vs glyph mappings, icon dirs, manifests. Structured gap report → skills, agents, teams.
 
-## When to Use
+## Use When
 
-- After adding new skills, agents, or teams to check if icons are needed
-- Before a full pipeline render to identify what's missing
-- After registry updates to ensure manifests are in sync
-- Periodic health check of the icon pipeline
+- After add new skills/agents/teams → icons needed?
+- Pre-full pipeline render → identify missing
+- After registry updates → manifests in sync
+- Periodic health check of icon pipeline
 
-## Inputs
+## In
 
-- **Optional**: Entity type filter — `skill`, `agent`, `team`, or `all` (default: `all`)
-- **Optional**: Palette to check (default: `cyberpunk` — the reference palette)
+- **Optional**: Entity type filter — `skill`, `agent`, `team`, `all` (default: `all`)
+- **Optional**: Palette (default: `cyberpunk` — reference)
 
-## Procedure
+## Do
 
 ### Step 1: Read Registries
 
-Collect all entity IDs from the source-of-truth registries.
+Collect entity IDs from source-of-truth registries.
 
-1. Read `skills/_registry.yml` — extract all skill IDs across all domains
-2. Read `agents/_registry.yml` — extract all agent IDs
-3. Read `teams/_registry.yml` — extract all team IDs
+1. `skills/_registry.yml` → all skill IDs across all domains
+2. `agents/_registry.yml` → all agent IDs
+3. `teams/_registry.yml` → all team IDs
 4. Record counts: total skills, agents, teams
 
-**Expected:** Three lists of entity IDs with counts matching `total_skills`, `total_agents`, `total_teams`.
+**→** 3 lists of entity IDs w/ counts matching `total_skills`, `total_agents`, `total_teams`.
 
-**On failure:** If a registry file is missing, report the path and skip that entity type.
+**If err:** Registry file missing → report path + skip that type.
 
 ### Step 2: Read Glyph Mappings
 
-Collect all mapped entity IDs from the glyph mapping files.
+Collect mapped entity IDs from glyph mapping files.
 
-1. Read `viz/R/glyphs.R` — extract all keys from `SKILL_GLYPHS` list
-2. Read `viz/R/agent_glyphs.R` — extract all keys from `AGENT_GLYPHS` list
-3. Read `viz/R/team_glyphs.R` — extract all keys from `TEAM_GLYPHS` list
+1. `viz/R/glyphs.R` → all keys from `SKILL_GLYPHS` list
+2. `viz/R/agent_glyphs.R` → all keys from `AGENT_GLYPHS` list
+3. `viz/R/team_glyphs.R` → all keys from `TEAM_GLYPHS` list
 
-**Expected:** Three lists of mapped IDs.
+**→** 3 lists of mapped IDs.
 
-**On failure:** If a glyph file is missing, report it and mark all entities of that type as unmapped.
+**If err:** Glyph file missing → report + mark all entities of that type unmapped.
 
 ### Step 3: Compute Missing Glyphs
 
-Diff registry IDs against mapped IDs.
+Diff registry IDs vs mapped IDs.
 
 1. Missing skill glyphs: `registry_skill_ids - mapped_skill_ids`
 2. Missing agent glyphs: `registry_agent_ids - mapped_agent_ids`
 3. Missing team glyphs: `registry_team_ids - mapped_team_ids`
 
-**Expected:** Lists of entity IDs that exist in registries but have no glyph function mapped.
+**→** Lists of entity IDs in registries w/o glyph fn mapped.
 
-**On failure:** If diff computation fails, verify ID formats match between registry and glyph files (e.g., underscores vs hyphens).
+**If err:** Diff fails → verify ID formats match (underscores vs hyphens).
 
 ### Step 4: Check Rendered Icons
 
-Verify that mapped glyphs have corresponding rendered icon files.
+Verify mapped glyphs have corresponding rendered icon files.
 
-1. For each mapped skill ID, check `viz/public/icons/<palette>/<domain>/<skillId>.webp`
-2. For each mapped agent ID, check `viz/public/icons/<palette>/agents/<agentId>.webp`
-3. For each mapped team ID, check `viz/public/icons/<palette>/teams/<teamId>.webp`
-4. Check HD variants in `viz/public/icons-hd/` with the same structure
+1. Per mapped skill ID → check `viz/public/icons/<palette>/<domain>/<skillId>.webp`
+2. Per mapped agent ID → check `viz/public/icons/<palette>/agents/<agentId>.webp`
+3. Per mapped team ID → check `viz/public/icons/<palette>/teams/<teamId>.webp`
+4. HD variants in `viz/public/icons-hd/` same structure
 
-**Expected:** Lists of entities with glyphs but missing rendered icons (standard and/or HD).
+**→** Lists of entities w/ glyphs but missing rendered icons (standard/HD).
 
-**On failure:** If the icon directory doesn't exist, the pipeline hasn't been run yet — report all as missing.
+**If err:** Icon dir missing → pipeline not run → report all as missing.
 
 ### Step 5: Check Manifest Freshness
 
-Compare manifest counts against registry counts.
+Compare manifest counts vs registry counts.
 
-1. Read `viz/public/data/icon-manifest.json` — count entries
-2. Read `viz/public/data/agent-icon-manifest.json` — count entries
-3. Read `viz/public/data/team-icon-manifest.json` — count entries
-4. Compare against registry totals
+1. `viz/public/data/icon-manifest.json` → count entries
+2. `viz/public/data/agent-icon-manifest.json` → count entries
+3. `viz/public/data/team-icon-manifest.json` → count entries
+4. Compare vs registry totals
 
-**Expected:** Manifest counts match registry counts. Discrepancies indicate stale manifests.
+**→** Manifest counts match registry counts. Discrepancy = stale.
 
-**On failure:** If manifest files don't exist, the data pipeline needs to run first (`node build-data.js && node build-icon-manifest.js`).
+**If err:** Manifest files missing → data pipeline must run first (`node build-data.js && node build-icon-manifest.js`).
 
 ### Step 6: Detect Orphan Icons
 
-Walk `viz/public/icons*/` and flag WebP files whose `<palette>/<domain>/<skillId>` triple does not appear in `icon-manifest.json`.
+Walk `viz/public/icons*/` → flag WebP files whose `<palette>/<domain>/<skillId>` triple absent from `icon-manifest.json`.
 
-1. Enumerate all WebP files: `find viz/public/icons* -name "*.webp"`
-2. For each file, extract `<domain>/<id>` from its path
-3. Check if `<domain>/<id>` has an entry in `icon-manifest.json`
-4. Collect non-matching files as orphans — they exist on disk but are no longer referenced
+1. Enumerate all WebPs: `find viz/public/icons* -name "*.webp"`
+2. Per file → extract `<domain>/<id>` from path
+3. Check `<domain>/<id>` has entry in `icon-manifest.json`
+4. Non-matching = orphans → exist on disk but no longer referenced
 
 ```bash
 # Quick orphan count per palette
@@ -124,15 +124,15 @@ orphans.forEach(p => console.log(' ', p));
 "
 ```
 
-**Expected:** Zero orphans. Any orphans indicate skills re-homed to a different domain without cleanup (18 orphans per re-homing = 9 palettes × 2 sizes).
+**→** Zero orphans. Any = skills re-homed to diff domain w/o cleanup (18 orphans per re-homing = 9 palettes × 2 sizes).
 
-**On failure:** Delete orphans manually — they have no corresponding manifest entry and will not be served. Re-home events are rare, so manual cleanup is acceptable.
+**If err:** Delete orphans manually → no manifest entry, won't be served. Re-home events rare → manual cleanup OK.
 
 ### Step 7: Generate Gap Report
 
-Produce a structured summary.
+Structured summary.
 
-1. Format output as a clear table or list:
+1. Format out as clear table/list:
    ```
    === Icon Pipeline Audit ===
 
@@ -150,32 +150,32 @@ Produce a structured summary.
      agent-icon-manifest.json: 66 entries vs 66 registry (OK)
      team-icon-manifest.json: 15 entries vs 15 registry (OK)
    ```
-2. Suggest next actions based on findings
+2. Suggest next actions from findings
 
-**Expected:** A complete gap report with actionable next steps.
+**→** Complete gap report w/ actionable next steps.
 
-**On failure:** If all checks pass with zero gaps, report "Pipeline fully in sync" as a positive outcome.
+**If err:** All checks pass, zero gaps → report "Pipeline fully in sync" as positive outcome.
 
-## Validation Checklist
+## Check
 
-- [ ] All three registries read successfully
-- [ ] All three glyph mapping files checked
-- [ ] Icon directories scanned for both standard and HD
+- [ ] All 3 registries read
+- [ ] All 3 glyph mapping files checked
+- [ ] Icon dirs scanned both standard + HD
 - [ ] Manifest freshness verified
 - [ ] Orphan icons checked (disk paths vs manifest)
-- [ ] Gap report produced with counts and entity lists
+- [ ] Gap report produced w/ counts + entity lists
 - [ ] Actionable next steps provided
 
-## Common Pitfalls
+## Traps
 
-- **ID format mismatch**: Registry uses kebab-case (`create-skill`), glyph maps may use snake_case keys — ensure comparison normalizes
-- **Palette assumption**: Only checking cyberpunk palette misses palette-specific rendering gaps
-- **Empty directories**: A domain directory existing but empty counts as "icons present" when globbing — check file existence, not directory existence
-- **HD not rendered**: HD icons are in a separate directory tree (`icons-hd/`) — don't confuse with standard icons
-- **Orphans after re-homing**: When a skill's domain changes, `build.sh` creates icons at the new path but does NOT delete the old path — always run Step 6 orphan check after any domain migration
+- **ID format mismatch**: Registry = kebab-case (`create-skill`), glyph maps may use snake_case → normalize comparison
+- **Palette assumption**: Only checking cyberpunk misses palette-specific gaps
+- **Empty dirs**: Domain dir exists but empty → counts as "icons present" w/ globbing → check file existence, not dir
+- **HD not rendered**: HD icons in separate tree (`icons-hd/`) → don't confuse w/ standard
+- **Orphans after re-homing**: Skill domain change → `build.sh` creates icons at new path but NOT deletes old → always run Step 6 orphan check after any domain migration
 
-## Related Skills
+## →
 
-- [create-glyph](../create-glyph/SKILL.md) — create a missing glyph identified by this audit
+- [create-glyph](../create-glyph/SKILL.md) — create missing glyph identified by this audit
 - [enhance-glyph](../enhance-glyph/SKILL.md) — improve quality of existing glyphs
-- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — run the full pipeline to generate missing icons
+- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — run full pipeline → generate missing icons

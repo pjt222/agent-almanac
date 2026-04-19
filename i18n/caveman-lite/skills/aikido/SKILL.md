@@ -63,9 +63,9 @@ Every aikido technique begins from a centered state. Without center, technique b
 6. Practice weight underside: imagine that the heavy part of each arm is the underside; let the upper surface feel light and buoyant
 7. Extend ki: project calm, positive energy forward through the fingertips — not tension, but focused intention
 
-**Expected:** A stable, relaxed stance where pushes are absorbed through the structure into the ground rather than resisted by muscles. A quiet mind with broad awareness.
+**Got:** A stable, relaxed stance where pushes are absorbed through the structure into the ground rather than resisted by muscles. A quiet mind with broad awareness.
 
-**On failure:** If the stance feels rigid, you are holding tension. Shake out the arms and legs, take 5 deep breaths, and re-establish from scratch. If pushes easily displace you, lower your center of gravity (bend knees more) and focus on the one-point. Centering is a skill that deepens over months — initial wobbliness is normal.
+**If fail:** If the stance feels rigid, you are holding tension. Shake out the arms and legs, take 5 deep breaths, and re-establish from scratch. If pushes easily displace you, lower your center of gravity (bend knees more) and focus on the one-point. Centering is a skill that deepens over months — initial wobbliness is normal.
 
 ### Step 2: Master Ukemi (Falling and Rolling)
 
@@ -96,15 +96,15 @@ Ukemi Progression:
 ```
 
 Key principles:
-1. The slap absorbs impact by spreading force across the arm surface — time it to land just before the body
+1. The slap absorbs impact by spreading force across the arm surface — time it to land before the body
 2. Tuck the chin on every fall — the head never contacts the ground
 3. Exhale on impact; holding the breath creates rigidity and increases injury risk
 4. Forward rolls should be round and smooth — if there are thuds or flat spots, the body is not curved enough
 5. Practice both sides: right shoulder forward and left shoulder forward
 
-**Expected:** After 2-3 months of regular practice, forward rolls are smooth and quiet on both sides. Backward falls are automatic (no fear response). You can be thrown at moderate speed without hesitation.
+**Got:** After 2-3 months of regular practice, forward rolls are smooth and quiet on both sides. Backward falls are automatic (no fear response). You can be thrown at moderate speed without hesitation.
 
-**On failure:** If forward rolls cause shoulder pain, the angle is likely too steep (going over the top of the shoulder instead of across the back diagonally). Have a partner or instructor check the line. If fear prevents commitment to the roll, return to the kneeling version and build up gradually. Never force a breakfall before the forward roll is second nature.
+**If fail:** If forward rolls cause shoulder pain, the angle is likely too steep (going over the top of the shoulder instead of across the back diagonally). Have a partner or instructor check the line. If fear prevents commitment to the roll, return to the kneeling version and build up gradually. Never force a breakfall before the forward roll is second nature.
 
 ### Step 3: Practice Basic Techniques
 
@@ -141,13 +141,13 @@ For each technique:
 6. Practice 10-20 repetitions per side, alternating roles (nage/tori throws, uke attacks and falls)
 7. Gradually increase speed and resistance as both partners gain proficiency
 
-**Expected:** Techniques feel smooth and circular. The attacker is led rather than forced. At cooperative speed, both partners finish the exchange safely and without strain.
+**Got:** Techniques feel smooth and circular. The attacker is led rather than forced. At cooperative speed, both partners finish the exchange safely and without strain.
 
-**On failure:** If a technique requires significant muscular effort, the blending is incomplete — the defender is fighting the attack instead of redirecting it. Return to the moment of contact and practice the initial blend in isolation. If the attacker feels yanked or wrenched, slow down and focus on leading with the center, not pulling with the hands.
+**If fail:** If a technique requires significant muscular effort, the blending is incomplete — the defender is fighting the attack instead of redirecting it. Return to the moment of contact and practice the initial blend in isolation. If the attacker feels yanked or wrenched, slow down and focus on leading with the center, not pulling with the hands.
 
 ### Step 4: Develop Blending (Tai Sabaki)
 
-Tai sabaki — body movement — is the engine of aikido. Technique without movement is just wrestling.
+Tai sabaki — body movement — is the engine of aikido. Technique without movement is wrestling.
 
 1. **Irimi (entering)**: Step directly forward and past the attacker, moving inside their reach
    - Practice: partner extends a punch; step past it so you end behind their shoulder
@@ -160,9 +160,9 @@ Tai sabaki — body movement — is the engine of aikido. Technique without move
 5. Practice all movements solo first: step-pivot, step-pivot, step-pivot across the mat
 6. Then with a partner: focus on matching timing to the attack — move as they commit, not before or after
 
-**Expected:** Movement is fluid, centered, and timed to the attack. The defender is never squared up facing the attack force — always angled off the line.
+**Got:** Movement is fluid, centered, and timed to the attack. The defender is never squared up facing the attack force — always angled off the line.
 
-**On failure:** If timing is off (arriving too early or too late), practice with a very slow, telegraphed attack. The defender should move at the same moment the attack commits — this is the "aiki" timing. If turns feel clumsy, practice tenkan as a standalone drill: 100 pivots per session builds smooth, automatic rotation.
+**If fail:** If timing is off (arriving too early or too late), practice with a slow, telegraphed attack. The defender should move at the same moment the attack commits — this is the "aiki" timing. If turns feel clumsy, practice tenkan as a standalone drill: 100 pivots per session builds smooth, automatic rotation.
 
 ### Step 5: Train Randori (Multiple Attackers)
 
@@ -177,9 +177,9 @@ Randori develops the awareness and decisiveness needed when overwhelmed. It is w
 7. Progress to three attackers, then four, increasing speed gradually
 8. Randori is not about defeating every attacker — it is about maintaining center and freedom of movement
 
-**Expected:** The ability to stay calm and mobile while being approached from multiple angles. Techniques are applied fluidly without freezing or tunnel vision.
+**Got:** The ability to stay calm and mobile while being approached from multiple angles. Techniques are applied fluidly without freezing or tunnel vision.
 
-**On failure:** If panic sets in, return to two slow attackers. Randori anxiety is normal and decreases with exposure. If techniques collapse under pressure, simplify: focus on irimi (entering) and tenkan (turning) only, ignoring throws entirely. Movement and positioning are more important than technique execution in randori.
+**If fail:** If panic sets in, return to two slow attackers. Randori anxiety is normal and decreases with exposure. If techniques collapse under pressure, simplify: focus on irimi (entering) and tenkan (turning) only, ignoring throws entirely. Movement and positioning are more important than technique execution in randori.
 
 ### Step 6: Integrate Weapons Awareness
 
@@ -199,9 +199,9 @@ Weapons training deepens understanding of distance, timing, and line — princip
    - Shomen (center line): all attacks and defenses relate to the vertical center line
    - Zanshin (continuing awareness): remain alert after the technique completes
 
-**Expected:** Weapons practice clarifies why tai sabaki, timing, and distance matter. Empty-hand technique improves as body movement becomes more precise.
+**Got:** Weapons practice clarifies why tai sabaki, timing, and distance matter. Empty-hand technique improves as body movement becomes more precise.
 
-**On failure:** If weapons feel awkward or disconnected from empty-hand practice, focus on suburi (solo cutting exercises) for one month before adding partner work. If a partner practice becomes competitive or dangerous, slow down immediately — wooden weapons can cause real injury at speed.
+**If fail:** If weapons feel awkward or disconnected from empty-hand practice, focus on suburi (solo cutting exercises) for one month before adding partner work. If a partner practice becomes competitive or dangerous, slow down immediately — wooden weapons can cause real injury at speed.
 
 ### Step 7: Apply Principles Off the Mat
 
@@ -217,9 +217,9 @@ Aikido's value extends beyond the dojo into daily interaction and conflict resol
 6. Complement with tai chi for internal energy development (see `tai-chi`)
 7. Complement with meditation for mental stillness and equanimity (see `meditate`)
 
-**Expected:** Aikido principles — blending, redirecting, centering — become natural responses to conflict in daily life. Physical practice maintains and deepens martial skill.
+**Got:** Aikido principles — blending, redirecting, centering — become natural responses to conflict in daily life. Physical practice maintains and deepens martial skill.
 
-**On failure:** If daily practice lapses, focus on the smallest unit: 5 minutes of centering and 20 forward rolls. Consistency matters more than duration. If the martial aspects feel disconnected from daily life, reflect on how each technique is a metaphor: irimi is facing a problem directly; tenkan is changing perspective; ukemi is recovering from setbacks.
+**If fail:** If daily practice lapses, focus on the smallest unit: 5 minutes of centering and 20 forward rolls. Consistency matters more than duration. If the martial aspects feel disconnected from daily life, reflect on how each technique is a metaphor: irimi is facing a problem directly; tenkan is changing perspective; ukemi is recovering from setbacks.
 
 ## Validation
 
@@ -231,7 +231,7 @@ Aikido's value extends beyond the dojo into daily interaction and conflict resol
 - [ ] At least one weapon (jo, bokken, or tanto) has been practiced in solo kata
 - [ ] Practice includes both solo and partner components regularly
 
-## Common Pitfalls
+## Pitfalls
 
 - **Using muscle instead of blending**: If a technique requires strength, the timing or angle is wrong. Relax, re-enter, and let the attacker's energy do the work. Aikido's power comes from redirecting force, not generating it
 - **Neglecting ukemi**: Students who avoid falling avoid learning. Ukemi IS aikido — the ability to receive force safely. Practice it every session, especially at the start

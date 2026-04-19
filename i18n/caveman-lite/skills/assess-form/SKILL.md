@@ -63,7 +63,7 @@ Catalog the system's structural elements without judgment — understand what ex
    - Which components have changed recently vs. remained static?
    - What is the "geological layer" structure (old core, newer additions, recent patches)?
 3. Identify the form's "skeleton" vs. "flesh":
-   - Skeleton: structural decisions that are extremely costly to change (language, database, deployment model)
+   - Skeleton: structural decisions that are costly to change (language, database, deployment model)
    - Flesh: functional decisions that can change more easily (business logic, UI, configuration)
 
 ```
@@ -79,9 +79,9 @@ Structural Inventory Template:
 └──────────────┴──────────┴────────────┴───────────────────┴──────────┘
 ```
 
-**Expected:** A complete structural inventory showing components, their ages, modification recency, dependency profiles, and classification as skeleton or flesh. This is the "X-ray" of the current form.
+**Got:** A complete structural inventory showing components, their ages, modification recency, dependency profiles, and classification as skeleton or flesh. This is the "X-ray" of the current form.
 
-**On failure:** If the inventory is incomplete (components are unknown or undocumented), that itself is a finding — the form has opacity, which is a transformation risk. Document what you can, flag unknowns, and plan discovery for the gaps.
+**If fail:** If the inventory is incomplete (components are unknown or undocumented), that itself is a finding — the form has opacity, which is a transformation risk. Document what you can, flag unknowns, and plan discovery for the gaps.
 
 ### Step 2: Map Transformation Pressure
 
@@ -105,9 +105,9 @@ Identify the forces pushing the system toward change and the forces resisting it
    - Cost: transformation requires investment with uncertain return
    - Fear: previous transformation attempts failed
 
-**Expected:** A pressure map showing the direction and magnitude of forces acting on the system. If transformation pressure significantly exceeds resistance, transformation is overdue. If resistance significantly exceeds pressure, transformation will fail without first reducing resistance.
+**Got:** A pressure map showing the direction and magnitude of forces acting on the system. If transformation pressure significantly exceeds resistance, transformation is overdue. If resistance significantly exceeds pressure, transformation will fail without first reducing resistance.
 
-**On failure:** If pressure mapping produces a balanced picture (neither strong pressure nor strong resistance), the system may not need transformation — or the analysis is surface-level. Dig deeper: interview stakeholders, measure specific pain points, project forward 12-18 months. What pressures will intensify?
+**If fail:** If pressure mapping produces a balanced picture (neither strong pressure nor strong resistance), the system may not need transformation — or the analysis is surface-level. Dig deeper: interview stakeholders, measure specific pain points, project forward 12-18 months. What pressures will intensify?
 
 ### Step 3: Assess Structural Rigidity
 
@@ -145,9 +145,9 @@ Rigidity Assessment:
 └──────────────────────┴───────────────────────┴──────────────────────┘
 ```
 
-**Expected:** A rigidity score that quantifies how much structural resistance transformation will encounter. Flexible systems (6-9) can transform incrementally. Rigid systems (14-18) need dissolution before reconstruction (see `dissolve-form`).
+**Got:** A rigidity score that quantifies how much structural resistance transformation will encounter. Flexible systems (6-9) can transform incrementally. Rigid systems (14-18) need dissolution before reconstruction (see `dissolve-form`).
 
-**On failure:** If the rigidity assessment is inconclusive (moderate score but unclear where the real problems are), focus on the highest-scoring dimensions. A system can be flexible overall but have one extremely rigid component that blocks transformation. Target that component specifically.
+**If fail:** If the rigidity assessment is inconclusive (moderate score but unclear where the real problems are), focus on the highest-scoring dimensions. A system can be flexible overall but have one rigid component that blocks transformation. Target that component specifically.
 
 ### Step 4: Estimate Change Capacity
 
@@ -170,9 +170,9 @@ Assess the system's (and team's) ability to absorb and execute transformation.
    - Moderate capacity: part-time allocation, some tooling, limited experience
    - Low capacity: no dedicated resources, no tooling, no experience, resistant organization
 
-**Expected:** A change capacity assessment that indicates whether the system/team can execute the proposed transformation given current resources, skills, and organizational support.
+**Got:** A change capacity assessment that indicates whether the system/team can execute the proposed transformation given current resources, skills, and organizational support.
 
-**On failure:** If change capacity is low but transformation pressure is high, the first transformation isn't the system — it's the team's capability. Invest in tooling, training, and organizational buy-in before attempting the architectural transformation.
+**If fail:** If change capacity is low but transformation pressure is high, the first transformation isn't the system — it's the team's capability. Invest in tooling, training, and organizational buy-in before attempting the architectural transformation.
 
 ### Step 5: Classify Transformation Readiness
 
@@ -210,9 +210,9 @@ Transformation Readiness Matrix:
 6. If CRITICAL: address capacity and rigidity simultaneously (may require external help)
 7. If OPTIONAL/DEFER: document the assessment and set a reassessment date
 
-**Expected:** A clear, justified transformation readiness classification with specific next steps. The classification enables informed decision-making about when and how to transform.
+**Got:** A clear, justified transformation readiness classification with specific next steps. The classification enables informed decision-making about when and how to transform.
 
-**On failure:** If the classification is ambiguous (e.g., moderate pressure, moderate rigidity, moderate capacity), default to PREPARE — reduce rigidity incrementally while monitoring pressure. This builds capability and reduces risk whether or not full transformation is eventually needed.
+**If fail:** If the classification is ambiguous (e.g., moderate pressure, moderate rigidity, moderate capacity), default to PREPARE — reduce rigidity incrementally while monitoring pressure. This builds capability and reduces risk whether or not full transformation is eventually needed.
 
 ## Validation
 
@@ -224,7 +224,7 @@ Transformation Readiness Matrix:
 - [ ] Next steps are documented based on the classification
 - [ ] Reassessment date is set (even if currently READY)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Assessing only the technical system**: Transformation readiness includes organizational readiness. A technically flexible system with an organizationally rigid team will still fail to transform
 - **Optimistic capacity estimation**: Teams consistently overestimate their capacity for change while maintaining normal operations. Use 50% of stated capacity as the realistic estimate

@@ -107,13 +107,13 @@ IDEAL COLOUR RANGES (highest value):
 1. View the stone face-up under daylight-equivalent lighting
 2. Identify the primary hue and any secondary modifiers
 3. Assess saturation — vivid and strong command the highest premiums
-4. Assess tone — medium is generally optimal; too dark or too light reduces value
+4. Assess tone — medium is optimal; too dark or too light reduces value
 5. Compare to reference images or master stones if available
 6. Note any colour zoning visible face-up (reduces value)
 
-**Expected:** A three-component colour grade (e.g., "medium vivid blue with slight violetish modifier") that positions the stone on the colour quality spectrum for its species.
+**Got:** A three-component colour grade (e.g., "medium vivid blue with slight violetish modifier") that positions the stone on the colour quality spectrum for its species.
 
-**On failure:** If lighting conditions are not ideal (yellowish indoor light), note the limitation. Colour grading under incorrect lighting produces unreliable results. If colour-change is suspected (alexandrite, some sapphires, some garnets), assess under both daylight and incandescent light.
+**If fail:** If lighting conditions are not ideal (yellowish indoor light), note the limitation. Colour grading under incorrect lighting produces unreliable results. If colour-change is suspected (alexandrite, some sapphires, some garnets), assess under both daylight and incandescent light.
 
 ### Step 2: Clarity Grading
 
@@ -162,9 +162,9 @@ Different species have different "normal" clarity levels:
 5. Assign a clarity grade based on the visibility and impact of inclusions
 6. Consider species expectations — an SI1 emerald is excellent; an SI1 aquamarine is average
 
-**Expected:** A clarity grade with description of key inclusions, their location, and their impact on beauty and durability. Grade is calibrated to species-specific expectations.
+**Got:** A clarity grade with description of key inclusions, their location, and their impact on beauty and durability. Grade is calibrated to species-specific expectations.
 
-**On failure:** If magnification is insufficient (no loupe available), perform an eye-clean/not-eye-clean assessment only. Note the limitation. If the stone is mounted and pavilion inclusions are hidden, note which areas could not be assessed.
+**If fail:** If magnification is insufficient (no loupe available), perform an eye-clean/not-eye-clean assessment only. Note the limitation. If the stone is mounted and pavilion inclusions are hidden, note which areas could not be assessed.
 
 ### Step 3: Cut Quality Assessment
 
@@ -216,9 +216,9 @@ SYMMETRY AND FINISH:
 5. Check girdle: even thickness, not too thin (chipping risk) or too thick (dead weight)
 6. Rate the cut from Excellent to Poor
 
-**Expected:** A cut quality assessment covering proportions, light performance, symmetry, and surface finish. The cut grade significantly affects value — a well-cut stone of moderate quality can outperform a poorly-cut stone of higher colour and clarity.
+**Got:** A cut quality assessment covering proportions, light performance, symmetry, and surface finish. The cut grade significantly affects value — a well-cut stone of moderate quality can outperform a poorly-cut stone of higher colour and clarity.
 
-**On failure:** If the stone is mounted and proportions cannot be fully measured, assess what is visible (face-up light performance, symmetry, polish) and note that proportions could not be verified. Mounted stones always have assessment limitations.
+**If fail:** If the stone is mounted and proportions cannot be fully measured, assess what is visible (face-up light performance, symmetry, polish) and note that proportions could not be verified. Mounted stones always have assessment limitations.
 
 ### Step 4: Carat Weight and Measurements
 
@@ -234,9 +234,9 @@ Record the stone's weight and dimensions.
    - 0.50 ct, 1.00 ct, 2.00 ct, 3.00 ct, 5.00 ct, 10.00 ct
    - A 1.02 ct stone commands a premium over a 0.98 ct stone of equal quality
 
-**Expected:** Accurate carat weight (to 0.01 ct) and millimetre dimensions. For mounted stones, a weight estimate with stated margin of error.
+**Got:** Accurate carat weight (to 0.01 ct) and millimetre dimensions. For mounted stones, a weight estimate with stated margin of error.
 
-**On failure:** If no carat scale is available, measure dimensions and estimate weight using standard formulas. Note that the weight is estimated. For valuable stones, always verify weight on a calibrated scale.
+**If fail:** If no carat scale is available, measure dimensions and estimate weight using standard formulas. Note that the weight is estimated. For valuable stones, always verify weight on a calibrated scale.
 
 ### Step 5: Treatment Detection
 
@@ -288,9 +288,9 @@ TREATMENT IMPACT ON VALUE:
 4. For high-value stones, note that laboratory certification is essential for treatment status
 5. Record treatment assessment: untreated, heated, filled, coated, diffused, or unknown
 
-**Expected:** A treatment assessment with supporting observations. For stones above $500, recommend laboratory certification (GIA, GRS, SSEF, Gubelin) for authoritative treatment determination.
+**Got:** A treatment assessment with supporting observations. For stones above $500, recommend laboratory certification (GIA, GRS, SSEF, Gubelin) for authoritative treatment determination.
 
-**On failure:** Many treatments (especially mild heat treatment and some irradiation) cannot be detected without laboratory instruments (FTIR spectroscopy, UV-Vis, Raman). If treatment status is uncertain, record "unknown — laboratory testing recommended" rather than guessing.
+**If fail:** Many treatments (especially mild heat treatment and some irradiation) cannot be detected without laboratory instruments (FTIR spectroscopy, UV-Vis, Raman). If treatment status is uncertain, record "unknown — laboratory testing recommended" rather than guessing.
 
 ### Step 6: Market Factor Analysis
 
@@ -333,9 +333,9 @@ Market Factors:
 4. Note any provenance or historical significance
 5. Compile the complete assessment into a value range (not a single price point)
 
-**Expected:** A contextualised value range that accounts for the four Cs, treatment status, origin, and market factors. Expressed as a range with stated assumptions.
+**Got:** A contextualised value range that accounts for the four Cs, treatment status, origin, and market factors. Expressed as a range with stated assumptions.
 
-**On failure:** Gemstone pricing requires market expertise that evolves continuously. If market data is unavailable, provide the quality assessment (four Cs + treatment) without a price estimate and recommend consultation with a dealer or certified appraiser.
+**If fail:** Gemstone pricing requires market expertise that evolves continuously. If market data is unavailable, provide the quality assessment (four Cs + treatment) without a price estimate and recommend consultation with a dealer or certified appraiser.
 
 ## Validation
 
@@ -349,7 +349,7 @@ Market Factors:
 - [ ] Value expressed as a range, not a single number
 - [ ] Disclaimer included: this is educational guidance, not a certified appraisal
 
-## Common Pitfalls
+## Pitfalls
 
 - **Omitting the disclaimer**: This procedure provides educational guidance only. Formal appraisals for insurance, sale, or legal purposes require a certified gemologist. Always state this clearly
 - **Grading colour under incorrect lighting**: Fluorescent, incandescent, and LED lights all shift colour perception. Use daylight-equivalent (5500-6500K) or natural north-facing daylight

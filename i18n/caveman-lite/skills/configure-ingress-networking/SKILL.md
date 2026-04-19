@@ -104,9 +104,9 @@ curl http://$INGRESS_IP
 # Should return 404 (no backend configured yet)
 ```
 
-**Expected:** NGINX Ingress Controller pods running in ingress-nginx namespace. LoadBalancer service has external IP assigned. Metrics endpoint accessible on port 10254. Health check at `/healthz` returns 200 OK.
+**Got:** NGINX Ingress Controller pods running in ingress-nginx namespace. LoadBalancer service has external IP assigned. Metrics endpoint accessible on port 10254. Health check at `/healthz` returns 200 OK.
 
-**On failure:** For pending LoadBalancer, verify cloud provider integration and service quotas. For CrashLoopBackOff, check controller logs with `kubectl logs -n ingress-nginx -l app.kubernetes.io/component=controller`. For webhook errors, verify admission webhook certificate is valid. For no external IP on bare-metal, install MetalLB or use NodePort service type.
+**If fail:** For pending LoadBalancer, verify cloud provider integration and service quotas. For CrashLoopBackOff, check controller logs with `kubectl logs -n ingress-nginx -l app.kubernetes.io/component=controller`. For webhook errors, verify admission webhook certificate is valid. For no external IP on bare-metal, install MetalLB or use NodePort service type.
 
 ### Step 2: Install cert-manager for Automated TLS
 
@@ -179,9 +179,9 @@ kubectl get clusterissuer
 kubectl describe clusterissuer letsencrypt-prod
 ```
 
-**Expected:** cert-manager pods running in cert-manager namespace. ClusterIssuers created with Ready status. ACME account registered with Let's Encrypt. Webhook responding to certificate requests.
+**Got:** cert-manager pods running in cert-manager namespace. ClusterIssuers created with Ready status. ACME account registered with Let's Encrypt. Webhook responding to certificate requests.
 
-**On failure:** For webhook timeout errors, increase `webhook.timeoutSeconds` or check network policies blocking cert-manager to API server. For ACME registration failures, verify email is valid and server URL correct. For DNS01 failures, check Route53 IAM permissions allow route53:ChangeResourceRecordSets. Test DNS propagation with `dig +short _acme-challenge.example.com TXT`.
+**If fail:** For webhook timeout errors, increase `webhook.timeoutSeconds` or check network policies blocking cert-manager to API server. For ACME registration failures, verify email is valid and server URL correct. For DNS01 failures, check Route53 IAM permissions allow route53:ChangeResourceRecordSets. Test DNS propagation with `dig +short _acme-challenge.example.com TXT`.
 
 ### Step 3: Create Basic Ingress with TLS
 
@@ -247,9 +247,9 @@ kubectl delete secret web-tls-secret
 # cert-manager will recreate with production certificate
 ```
 
-**Expected:** Ingress resource created. cert-manager detects annotation and creates Certificate resource. HTTP-01 challenge completes successfully. TLS secret created with valid certificate. HTTPS requests succeed with trusted certificate. HTTP redirects to HTTPS.
+**Got:** Ingress resource created. cert-manager detects annotation and creates Certificate resource. HTTP-01 challenge completes successfully. TLS secret created with valid certificate. HTTPS requests succeed with trusted certificate. HTTP redirects to HTTPS.
 
-**On failure:** For challenge failures, verify DNS resolves to Ingress LoadBalancer IP with `dig web.example.com`. For rate limit errors, use staging issuer until configuration correct. For certificate not issued, check events with `kubectl describe certificate web-tls-secret` and `kubectl get challenges`. For "too many certificates" error, hit Let's Encrypt rate limits (50 certs/domain/week); wait or use staging.
+**If fail:** For challenge failures, verify DNS resolves to Ingress LoadBalancer IP with `dig web.example.com`. For rate limit errors, use staging issuer until configuration correct. For certificate not issued, check events with `kubectl describe certificate web-tls-secret` and `kubectl get challenges`. For "too many certificates" error, hit Let's Encrypt rate limits (50 certs/domain/week); wait or use staging.
 
 ### Step 4: Implement Advanced Routing and Load Balancing
 
@@ -365,9 +365,9 @@ curl https://app.example.com/admin/      # -> admin service
 curl -H "X-Canary: always" https://app.example.com/api/  # -> api-v2 (100%)
 ```
 
-**Expected:** Single Ingress routes to multiple services based on path. Rewrite-target strips path prefix. Canary Ingress splits traffic by weight. Header-based routing sends specific requests to canary. TLS terminates at Ingress, backends use HTTP.
+**Got:** Single Ingress routes to multiple services based on path. Rewrite-target strips path prefix. Canary Ingress splits traffic by weight. Header-based routing sends specific requests to canary. TLS terminates at Ingress, backends use HTTP.
 
-**On failure:** For 404 errors, verify service names and ports match. For rewrite issues, test regex with `nginx.ingress.kubernetes.io/rewrite-target` debugger. For canary not working, verify only one Ingress has `canary: "false"` (main) and others have `canary: "true"`. For traffic imbalance, check backend pod counts and readiness probes.
+**If fail:** For 404 errors, verify service names and ports match. For rewrite issues, test regex with `nginx.ingress.kubernetes.io/rewrite-target` debugger. For canary not working, verify only one Ingress has `canary: "false"` (main) and others have `canary: "true"`. For traffic imbalance, check backend pod counts and readiness probes.
 
 ### Step 5: Configure Rate Limiting and Authentication
 
@@ -383,9 +383,9 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Rate limiting blocks excessive requests with 503 Service Temporarily Unavailable. Basic auth prompts for credentials, rejects unauthorized requests. OAuth2 redirects to provider login page, sets authentication cookies.
+**Got:** Rate limiting blocks excessive requests with 503 Service Temporarily Unavailable. Basic auth prompts for credentials, rejects unauthorized requests. OAuth2 redirects to provider login page, sets authentication cookies.
 
-**On failure:** For rate limit not working, verify annotation syntax and restart Ingress controller pods. For basic auth 500 errors, check secret format with `kubectl get secret basic-auth -o yaml | grep auth:`. For OAuth2 failures, verify client ID/secret and callback URL registered with provider. Check oauth2-proxy logs for detailed errors.
+**If fail:** For rate limit not working, verify annotation syntax and restart Ingress controller pods. For basic auth 500 errors, check secret format with `kubectl get secret basic-auth -o yaml | grep auth:`. For OAuth2 failures, verify client ID/secret and callback URL registered with provider. Check oauth2-proxy logs for detailed errors.
 
 ### Step 6: Implement Custom Error Pages and Request Modification
 
@@ -401,9 +401,9 @@ apiVersion: v1
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Custom 404 and 503 pages display instead of default NGINX pages. CORS headers allow specified origins and methods. Security headers protect against XSS and clickjacking. Request body size limit allows large file uploads. Timeout settings prevent premature connection closes.
+**Got:** Custom 404 and 503 pages display instead of default NGINX pages. CORS headers allow specified origins and methods. Security headers protect against XSS and clickjacking. Request body size limit allows large file uploads. Timeout settings prevent premature connection closes.
 
-**On failure:** For custom error pages not showing, verify ConfigMap mounted to controller pods and default backend deployed. For CORS preflight failures, check OPTIONS requests allowed in backend service. For 413 Request Entity Too Large, increase `proxy-body-size` annotation. For timeout errors, increase all three timeout annotations together.
+**If fail:** For custom error pages not showing, verify ConfigMap mounted to controller pods and default backend deployed. For CORS preflight failures, check OPTIONS requests allowed in backend service. For 413 Request Entity Too Large, increase `proxy-body-size` annotation. For timeout errors, increase all three timeout annotations together.
 
 ## Validation
 
@@ -418,7 +418,7 @@ apiVersion: v1
 - [ ] CORS headers allow cross-origin requests from specified domains
 - [ ] Metrics endpoint exposes Prometheus metrics for monitoring
 
-## Common Pitfalls
+## Pitfalls
 
 - **No ingressClassName**: Ingress not picked up by controller. Always specify `ingressClassName: nginx` in Kubernetes 1.19+.
 

@@ -26,33 +26,33 @@ metadata:
 
 # Appraise Gemstone
 
-Appraise gemstone value using the four Cs (colour, clarity, cut, carat weight), treatment detection, origin assessment, and market factor analysis. This is educational advisory guidance only and does not constitute a certified gemological appraisal.
+Value via 4 Cs (colour, clarity, cut, carat) + treatment detection + origin + market factors. Educational advisory only — NOT certified gemological appraisal.
 
-> **DISCLAIMER**: This procedure provides educational guidance on gemstone valuation methodology. It is NOT a certified appraisal. For insurance, estate, sale, or legal purposes, always obtain a formal appraisal from a certified gemologist (GIA Graduate Gemologist, FGA, or equivalent). Gemstone values can vary enormously based on factors that require hands-on professional assessment.
+> **DISCLAIMER**: Educational guidance on valuation methodology. NOT certified appraisal. Insurance, estate, sale, legal → always formal appraisal from certified gemologist (GIA Graduate Gemologist, FGA, or equivalent). Gemstone values vary enormously via factors requiring hands-on professional assessment.
 
-## When to Use
+## Use When
 
-- You want to understand the factors that determine a gemstone's value
-- You are pre-screening stones before paying for a professional appraisal
-- You need to evaluate whether a seller's asking price is within a reasonable range
-- You are learning gemstone grading methodology for educational purposes
-- You want to understand how treatment status affects value
+- Understand factors determining value
+- Pre-screen before paying professional appraisal
+- Eval seller asking price reasonable range
+- Learning grading methodology educational
+- Understand treatment status → value
 
-## Inputs
+## In
 
 - **Required**: Identified gemstone (species confirmed — see `identify-gemstone`)
-- **Required**: Access to the stone (loose preferred; mounted stones limit assessment)
-- **Optional**: Carat scale (accurate to 0.01 ct)
+- **Required**: Access to stone (loose preferred; mounted limits assessment)
+- **Optional**: Carat scale (0.01 ct)
 - **Optional**: 10x loupe or gemological microscope
-- **Optional**: Daylight-equivalent light source (5500-6500K)
-- **Optional**: Colour grading master stones or reference images (GIA system)
-- **Optional**: Refractometer and Chelsea filter (for treatment detection)
+- **Optional**: Daylight-equivalent light (5500-6500K)
+- **Optional**: Colour grading master stones or ref images (GIA)
+- **Optional**: Refractometer + Chelsea filter (treatment detection)
 
-## Procedure
+## Do
 
 ### Step 1: Colour Grading
 
-Assess the stone's colour using the three components: hue, saturation, and tone.
+Assess via 3 components: hue, saturation, tone.
 
 ```
 Colour Assessment Framework:
@@ -104,20 +104,20 @@ IDEAL COLOUR RANGES (highest value):
 - Aquamarine: medium, strong blue (not greenish)
 ```
 
-1. View the stone face-up under daylight-equivalent lighting
-2. Identify the primary hue and any secondary modifiers
-3. Assess saturation — vivid and strong command the highest premiums
-4. Assess tone — medium is generally optimal; too dark or too light reduces value
-5. Compare to reference images or master stones if available
-6. Note any colour zoning visible face-up (reduces value)
+1. View face-up under daylight-equivalent
+2. ID primary hue + secondary modifiers
+3. Assess saturation — vivid + strong command highest premiums
+4. Assess tone — medium generally optimal; too dark/light reduces value
+5. Compare to ref images or master stones
+6. Note any colour zoning face-up (reduces value)
 
-**Expected:** A three-component colour grade (e.g., "medium vivid blue with slight violetish modifier") that positions the stone on the colour quality spectrum for its species.
+**→** 3-component colour grade ("medium vivid blue w/ slight violetish modifier") positioning stone on quality spectrum for species.
 
-**On failure:** If lighting conditions are not ideal (yellowish indoor light), note the limitation. Colour grading under incorrect lighting produces unreliable results. If colour-change is suspected (alexandrite, some sapphires, some garnets), assess under both daylight and incandescent light.
+**If err:** Lighting not ideal (yellowish indoor) → note limitation. Grading under incorrect lighting unreliable. Colour-change suspected (alexandrite, some sapphires, garnets) → assess both daylight + incandescent.
 
 ### Step 2: Clarity Grading
 
-Evaluate the stone's internal characteristics under 10x magnification.
+Evaluate internal chars under 10x mag.
 
 ```
 Coloured Gemstone Clarity Scale (GIA-based):
@@ -155,20 +155,20 @@ Different species have different "normal" clarity levels:
   → Eye-clean examples are extremely rare and valuable
 ```
 
-1. Examine the stone face-up first — does the unaided eye see any inclusions?
-2. Examine under 10x magnification, focusing through the table
-3. Note inclusion type (crystal, feather, fingerprint, silk, needle), size, location, and number
-4. Assess whether inclusions affect transparency, brilliance, or durability
-5. Assign a clarity grade based on the visibility and impact of inclusions
-6. Consider species expectations — an SI1 emerald is excellent; an SI1 aquamarine is average
+1. Face-up first — unaided eye sees inclusions?
+2. Under 10x mag, focus through table
+3. Note inclusion type (crystal, feather, fingerprint, silk, needle), size, location, num
+4. Assess transparency, brilliance, durability impact
+5. Assign grade per visibility + impact
+6. Consider species expectations — SI1 emerald excellent; SI1 aquamarine average
 
-**Expected:** A clarity grade with description of key inclusions, their location, and their impact on beauty and durability. Grade is calibrated to species-specific expectations.
+**→** Clarity grade + key inclusions desc + location + impact. Calibrated to species expectations.
 
-**On failure:** If magnification is insufficient (no loupe available), perform an eye-clean/not-eye-clean assessment only. Note the limitation. If the stone is mounted and pavilion inclusions are hidden, note which areas could not be assessed.
+**If err:** Mag insufficient (no loupe) → eye-clean/not-eye-clean only. Note limitation. Mounted + pavilion inclusions hidden → note inaccessible areas.
 
-### Step 3: Cut Quality Assessment
+### Step 3: Cut Quality
 
-Evaluate the quality of the cut based on proportions, symmetry, and light performance.
+Evaluate proportions, symmetry, light performance.
 
 ```
 Cut Quality Factors:
@@ -209,38 +209,38 @@ SYMMETRY AND FINISH:
 - Girdle consistency (even thickness)
 ```
 
-1. View the stone face-up and rock it gently — observe brilliance, windowing, and extinction
-2. Check proportions: table size, crown height, pavilion depth
-3. Assess symmetry: outline shape, facet alignment, meet precision
-4. Evaluate surface polish: scratches, polish lines, orange peel under 10x
+1. Face-up + rock gently — observe brilliance, windowing, extinction
+2. Check proportions: table, crown, pavilion depth
+3. Assess symmetry: outline, facet alignment, meet precision
+4. Eval polish: scratches, polish lines, orange peel under 10x
 5. Check girdle: even thickness, not too thin (chipping risk) or too thick (dead weight)
-6. Rate the cut from Excellent to Poor
+6. Rate Excellent → Poor
 
-**Expected:** A cut quality assessment covering proportions, light performance, symmetry, and surface finish. The cut grade significantly affects value — a well-cut stone of moderate quality can outperform a poorly-cut stone of higher colour and clarity.
+**→** Cut quality covering proportions, light performance, symmetry, finish. Significantly affects value — well-cut moderate quality > poorly-cut higher colour/clarity.
 
-**On failure:** If the stone is mounted and proportions cannot be fully measured, assess what is visible (face-up light performance, symmetry, polish) and note that proportions could not be verified. Mounted stones always have assessment limitations.
+**If err:** Mounted + proportions can't be fully measured → assess visible (face-up light perf, symmetry, polish) + note proportions unverified. Mounted always has limitations.
 
-### Step 4: Carat Weight and Measurements
+### Step 4: Carat + Measurements
 
-Record the stone's weight and dimensions.
+Record weight + dims.
 
-1. Weigh the stone on a carat scale (1 carat = 0.2 grams)
-2. Record weight to two decimal places (e.g., 2.37 ct)
-3. Measure dimensions: length x width x depth in millimetres
-4. For mounted stones, estimate weight from dimensions using species-specific formulas:
+1. Weigh on carat scale (1 carat = 0.2 g)
+2. Record 2 decimals (2.37 ct)
+3. Measure L x W x depth in mm
+4. Mounted → estimate weight from dims via species formulas:
    - Round: diameter^2 x depth x SG factor
-   - Oval: length x width x depth x SG factor x 0.0020
-5. Note that per-carat value increases at commercially significant weight thresholds:
+   - Oval: L x W x depth x SG factor x 0.0020
+5. Per-carat value increases at commercially significant thresholds:
    - 0.50 ct, 1.00 ct, 2.00 ct, 3.00 ct, 5.00 ct, 10.00 ct
-   - A 1.02 ct stone commands a premium over a 0.98 ct stone of equal quality
+   - 1.02 ct commands premium over 0.98 ct equal quality
 
-**Expected:** Accurate carat weight (to 0.01 ct) and millimetre dimensions. For mounted stones, a weight estimate with stated margin of error.
+**→** Accurate carat (0.01 ct) + mm dims. Mounted → estimate + stated margin.
 
-**On failure:** If no carat scale is available, measure dimensions and estimate weight using standard formulas. Note that the weight is estimated. For valuable stones, always verify weight on a calibrated scale.
+**If err:** No scale → measure dims + estimate via std formulas. Note estimated. Valuable stones → verify on calibrated scale.
 
 ### Step 5: Treatment Detection
 
-Assess whether the stone has been treated to enhance its appearance.
+Stone treated to enhance appearance?
 
 ```
 Common Gemstone Treatments:
@@ -282,19 +282,19 @@ TREATMENT IMPACT ON VALUE:
 - Requires disclosure at point of sale in all jurisdictions
 ```
 
-1. Examine inclusions for signs of heat treatment (dissolved silk, stress halos)
-2. Use fibre-optic light to check for fracture filling (flash effect)
-3. Check for surface coatings by examining edges and scratches
-4. For high-value stones, note that laboratory certification is essential for treatment status
-5. Record treatment assessment: untreated, heated, filled, coated, diffused, or unknown
+1. Examine inclusions for heat treatment (dissolved silk, stress halos)
+2. Fibre-optic light → check fracture filling (flash)
+3. Surface coatings → examine edges + scratches
+4. High-value stones → lab cert essential for treatment
+5. Record: untreated, heated, filled, coated, diffused, unknown
 
-**Expected:** A treatment assessment with supporting observations. For stones above $500, recommend laboratory certification (GIA, GRS, SSEF, Gubelin) for authoritative treatment determination.
+**→** Treatment assessment + supporting observations. Stones >$500 → recommend lab cert (GIA, GRS, SSEF, Gubelin) authoritative determination.
 
-**On failure:** Many treatments (especially mild heat treatment and some irradiation) cannot be detected without laboratory instruments (FTIR spectroscopy, UV-Vis, Raman). If treatment status is uncertain, record "unknown — laboratory testing recommended" rather than guessing.
+**If err:** Many treatments (mild heat, some irradiation) undetectable w/o lab instruments (FTIR, UV-Vis, Raman). Uncertain → "unknown — lab testing recommended" not guessing.
 
-### Step 6: Market Factor Analysis
+### Step 6: Market Factors
 
-Consider external factors that affect market value beyond the four Cs.
+External factors beyond 4 Cs.
 
 ```
 Market Factors:
@@ -327,37 +327,37 @@ Market Factors:
 +-------------------+------------------------------------------+
 ```
 
-1. Research the stone's likely origin if known or certifiable
-2. Consider the species' current market position (trending up, stable, declining)
-3. Assess whether laboratory certification would add value (generally yes for stones >1 ct and >$500)
-4. Note any provenance or historical significance
-5. Compile the complete assessment into a value range (not a single price point)
+1. Research origin if known/certifiable
+2. Current market position (trending, stable, declining)
+3. Lab cert add value? (generally yes stones >1 ct + >$500)
+4. Provenance or historical significance
+5. Complete assessment → value range (not single price)
 
-**Expected:** A contextualised value range that accounts for the four Cs, treatment status, origin, and market factors. Expressed as a range with stated assumptions.
+**→** Contextualised value range w/ 4 Cs + treatment + origin + market factors. Range w/ stated assumptions.
 
-**On failure:** Gemstone pricing requires market expertise that evolves continuously. If market data is unavailable, provide the quality assessment (four Cs + treatment) without a price estimate and recommend consultation with a dealer or certified appraiser.
+**If err:** Pricing reqs market expertise evolving. Data unavail → quality assessment (4 Cs + treatment) no price estimate + recommend dealer or certified appraiser.
 
-## Validation
+## Check
 
-- [ ] Species positively identified before appraisal began
-- [ ] Colour assessed under daylight-equivalent lighting with hue, saturation, and tone
-- [ ] Clarity graded under 10x magnification with inclusion inventory
-- [ ] Cut quality evaluated for proportions, light performance, symmetry, and finish
-- [ ] Carat weight measured (or estimated with stated margin)
-- [ ] Treatment status assessed with supporting observations
-- [ ] Market factors considered (origin, rarity, certification value)
-- [ ] Value expressed as a range, not a single number
-- [ ] Disclaimer included: this is educational guidance, not a certified appraisal
+- [ ] Species positively ID'd pre-appraisal
+- [ ] Colour under daylight-equivalent w/ hue, saturation, tone
+- [ ] Clarity graded 10x mag w/ inclusion inventory
+- [ ] Cut quality eval'd proportions, light perf, symmetry, finish
+- [ ] Carat measured (or estimated + stated margin)
+- [ ] Treatment status w/ supporting obs
+- [ ] Market factors considered (origin, rarity, cert value)
+- [ ] Value = range, not single num
+- [ ] Disclaimer included: educational not certified
 
-## Common Pitfalls
+## Traps
 
-- **Omitting the disclaimer**: This procedure provides educational guidance only. Formal appraisals for insurance, sale, or legal purposes require a certified gemologist. Always state this clearly
-- **Grading colour under incorrect lighting**: Fluorescent, incandescent, and LED lights all shift colour perception. Use daylight-equivalent (5500-6500K) or natural north-facing daylight
-- **Ignoring species-specific clarity expectations**: An SI1 emerald is a fine stone; an SI1 aquamarine is below average. Clarity must be graded relative to what is normal for the species
-- **Overvaluing carat weight**: A large, poorly-cut, included stone is worth less per carat than a smaller, well-cut, clean stone. The four Cs interact — weight alone does not determine value
-- **Assuming untreated without evidence**: The majority of rubies and sapphires on the market are heat-treated. Assume treatment unless laboratory certification confirms otherwise
+- **Omit disclaimer**: Educational only. Formal appraisals for insurance/sale/legal → certified gemologist. State clearly.
+- **Colour under incorrect lighting**: Fluorescent, incandescent, LED all shift perception. Daylight-equivalent (5500-6500K) or natural north-facing.
+- **Ignore species clarity expectations**: SI1 emerald fine; SI1 aquamarine below average. Graded rel to species normal.
+- **Overvalue carat**: Large + poorly-cut + included worth less/ct than smaller + well-cut + clean. 4 Cs interact — weight alone no determine value.
+- **Assume untreated no evidence**: Majority of rubies + sapphires heat-treated. Assume treatment unless lab cert confirms otherwise.
 
-## Related Skills
+## →
 
-- `identify-gemstone` — Positive species identification is the prerequisite for appraisal; misidentification invalidates the entire assessment
-- `grade-tcg-card` — The observation-first, bias-prevention methodology parallels the discipline needed to avoid "wishful grading" in gemstone appraisal
+- `identify-gemstone` — positive species ID prereq; misidentification invalidates entire assessment
+- `grade-tcg-card` — observation-first, bias-prevention methodology parallels discipline to avoid "wishful grading"

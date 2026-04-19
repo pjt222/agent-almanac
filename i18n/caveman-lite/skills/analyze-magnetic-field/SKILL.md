@@ -64,9 +64,9 @@ Fully specify the source before selecting a method:
 - **Current continuity**: [verified / issue noted]
 ```
 
-**Expected:** A complete geometric description of the current distribution with coordinate system chosen, symmetries cataloged, and current continuity verified.
+**Got:** A complete geometric description of the current distribution with coordinate system chosen, symmetries cataloged, and current continuity verified.
 
-**On failure:** If the geometry is too complex for a closed-form parametric description, discretize into short straight segments (numerical Biot-Savart). If current continuity is violated, add displacement current or return charge accumulation terms before proceeding.
+**If fail:** If the geometry is too complex for a closed-form parametric description, discretize into short straight segments (numerical Biot-Savart). If current continuity is violated, add displacement current or return charge accumulation terms before proceeding.
 
 ### Step 2: Select Appropriate Law
 
@@ -97,9 +97,9 @@ Choose the method that matches the problem's symmetry and complexity:
 - **Fallback method**: [if primary fails or for cross-validation]
 ```
 
-**Expected:** A justified choice of method with a clear statement of why the chosen law is appropriate for the problem's symmetry level.
+**Got:** A justified choice of method with a clear statement of why the chosen law is appropriate for the problem's symmetry level.
 
-**On failure:** If Ampere's law is chosen but the symmetry is insufficient (B cannot be extracted from the integral), fall back to Biot-Savart. If the source geometry is too complex for analytic Biot-Savart, discretize numerically.
+**If fail:** If Ampere's law is chosen but the symmetry is insufficient (B cannot be extracted from the integral), fall back to Biot-Savart. If the source geometry is too complex for analytic Biot-Savart, discretize numerically.
 
 ### Step 3: Set Up and Evaluate Field Integrals
 
@@ -134,9 +134,9 @@ Execute the calculation using the method selected in Step 2:
 - **Convergence check** (if numerical): [N vs. 2N comparison]
 ```
 
-**Expected:** An explicit expression for B(r) at the observation points, with correct units (Tesla or Gauss) and a convergence check for numerical results.
+**Got:** An explicit expression for B(r) at the observation points, with correct units (Tesla or Gauss) and a convergence check for numerical results.
 
-**On failure:** If the integral diverges, check for a missing regularization (e.g., the field on the wire itself diverges for an infinitely thin wire -- use finite wire radius). If numerical results oscillate with N, the integrand has a near-singularity that requires adaptive quadrature or analytical subtraction of the singular part.
+**If fail:** If the integral diverges, check for a missing regularization (e.g., the field on the wire itself diverges for an infinitely thin wire -- use finite wire radius). If numerical results oscillate with N, the integrand has a near-singularity that requires adaptive quadrature or analytical subtraction of the singular part.
 
 ### Step 4: Check Limiting Cases
 
@@ -165,9 +165,9 @@ Verify the result against known physics before trusting it:
 | Units | -- | Tesla | [check] | [Yes/No] |
 ```
 
-**Expected:** All limiting cases match. The field has the correct units, symmetry, and asymptotic behavior.
+**Got:** All limiting cases match. The field has the correct units, symmetry, and asymptotic behavior.
 
-**On failure:** A failed limit indicates an error in the integral setup or evaluation. The most common causes are: wrong sign in the cross product, missing factor of 2 or pi, incorrect limits of integration, or a coordinate system mismatch between source and field point parameterizations.
+**If fail:** A failed limit indicates an error in the integral setup or evaluation. The most common causes are: wrong sign in the cross product, missing factor of 2 or pi, incorrect limits of integration, or a coordinate system mismatch between source and field point parameterizations.
 
 ### Step 5: Incorporate Magnetic Materials and Visualize
 
@@ -201,9 +201,9 @@ Extend the analysis to include material effects and produce field visualizations
 - **Div B = 0 check**: [field lines close / verified numerically]
 ```
 
-**Expected:** A complete field solution including material effects where relevant, with a visualization that shows closed field lines consistent with div B = 0 and qualitative behavior matching physical intuition.
+**Got:** A complete field solution including material effects where relevant, with a visualization that shows closed field lines consistent with div B = 0 and qualitative behavior matching physical intuition.
 
-**On failure:** If field lines do not close, the calculation has a divergence error -- recheck the integral or numerical method. If the material introduces unexpected field amplification, verify that mu_r is applied only inside the material volume and that boundary conditions are correctly enforced at every interface.
+**If fail:** If field lines do not close, the calculation has a divergence error -- recheck the integral or numerical method. If the material introduces unexpected field amplification, verify that mu_r is applied only inside the material volume and that boundary conditions are correctly enforced at every interface.
 
 ## Validation
 
@@ -220,7 +220,7 @@ Extend the analysis to include material effects and produce field visualizations
 - [ ] Material boundary conditions are correctly applied (if applicable)
 - [ ] Field lines form closed loops (div B = 0)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Wrong cross-product direction**: The Biot-Savart cross product is dl' x r_hat (source to field), not r_hat x dl'. Getting this backward flips the entire field direction. Use the right-hand rule as a quick check.
 - **Confusing B and H**: In vacuum B = mu_0 H, but inside magnetic materials B = mu H. Ampere's law in terms of H uses free current only; in terms of B it includes bound (magnetization) currents. Mixing conventions produces factors-of-mu_r errors.

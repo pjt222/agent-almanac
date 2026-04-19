@@ -25,184 +25,184 @@ metadata:
   tags: alchemy, transmutation, refactoring, transformation, four-stages, nigredo, albedo, citrinitas, rubedo
 ---
 
-# Athanor
+# 煉爐
 
-Execute a four-stage alchemical transmutation of code or data — decomposing the prima materia, purifying its essence, illuminating its target form, and synthesizing the refined output. The athanor is the furnace that maintains steady heat across all stages.
+行碼或數之四階煉金轉化——nigredo（解）、albedo（淨）、citrinitas（明）、rubedo（合）——間置冥想與愈之察點。煉爐乃諸階保恆溫之爐也。
 
-## When to Use
+## 用時
 
-- Transforming legacy code into modern, well-structured equivalents
-- Refactoring deeply tangled modules where incremental fixes keep failing
-- Converting a codebase from one paradigm to another (procedural to functional, monolith to modular)
-- Processing raw, messy data into clean analytical datasets
-- When simpler refactoring approaches have stalled and a full-cycle transformation is needed
+- 變遺碼為今之等乃用
+- 重構深纏模而漸修屢敗乃用
+- 轉碼庫於諸範間（程式至函式、巨石至模塊）乃用
+- 處原亂數為淨析數集乃用
+- 輕重構法已滯而需全環轉乃用
 
-## Inputs
+## 入
 
-- **Required**: The material to transform (file paths, module names, or data sources)
-- **Required**: The desired end state (target architecture, paradigm, or format)
-- **Optional**: Known constraints (must preserve API, can't change database schema, etc.)
-- **Optional**: Prior failed transformation attempts and why they stalled
+- **必要**：待變之材（檔徑、模名、或數源）
+- **必要**：所求末態（目架構、範、或式）
+- **可選**：已知約（須守 API、不可改庫模等）
+- **可選**：前敗試與其滯之由
 
-## Procedure
+## 法
 
-### Step 1: Nigredo — Decomposition
+### 第一步：Nigredo — 解
 
-Break the prima materia into its constituent elements. Nothing is sacred; everything is cataloged.
+破原材為構元。無神聖；一切錄。
 
-1. Inventory the material completely:
-   - List every function, class, module, or data entity
-   - Map all dependencies (imports, calls, data flows)
-   - Identify hidden coupling (shared globals, implicit state, side effects)
-2. Surface hidden assumptions:
-   - What undocumented behaviors does the code rely on?
-   - What error conditions are silently swallowed?
-   - What ordering dependencies exist?
-3. Catalog anti-patterns and technical debt:
-   - God objects, circular dependencies, copy-paste duplication
-   - Dead code paths, unreachable branches, vestigial features
-   - Hardcoded values, magic numbers, embedded configuration
-4. Produce the **Nigredo Inventory**: a structured catalog of every element, dependency, assumption, and anti-pattern
+1. 全錄材：
+   - 列每函、類、模、或數實
+   - 映諸依（入、呼、數流）
+   - 識隱耦（共全、隱態、副作）
+2. 露隱假：
+   - 碼依何未書行？
+   - 何錯條默吞？
+   - 何序依存？
+3. 錄反式與技債：
+   - 神物、環依、複貼重
+   - 死路、不及枝、遺功
+   - 硬值、魔數、嵌設
+4. 生 **Nigredo 錄**：每元、依、假、反式之結構化錄
 
-**Expected:** A complete, unflinching inventory of the material. The inventory should feel uncomfortable — if it doesn't, the decomposition isn't thorough enough. Every hidden assumption is now explicit.
+**得：** 材之全不退錄。錄當覺不適——若不然，解不徹。諸隱假今明。
 
-**On failure:** If the material is too large to inventory fully, decompose by module boundary and treat each module as a separate athanor run. If dependencies are too tangled to map, use `grep`/`Grep` to trace actual call sites rather than relying on documentation.
+**敗則：** 若材過大不可全錄，按模界解而各為獨煉爐行。若依過纏不可映，以 `grep`/`Grep` 追實呼位代文。
 
-### Step 2: Meditate — Calcination Checkpoint
+### 第二步：冥想 — 煅察點
 
-Run the `meditate` skill to clear assumptions accumulated during nigredo.
+行 `meditate` 以清 nigredo 所積之假。
 
-1. Set aside the nigredo inventory and clear mental context
-2. Anchor on the transformation goal stated in Inputs
-3. Observe what biases nigredo introduced — did the decomposition make certain approaches seem inevitable?
-4. Label any premature solution ideas as "tangent" and return to the goal
+1. 置 nigredo 錄而清心境
+2. 錨於入所述之變目
+3. 察 nigredo 引之偏——解使某法似不可免乎？
+4. 標早解念為「旁」而返目
 
-**Expected:** A clear, unbiased state ready to evaluate the material without being anchored to its current form. The goal feels fresh rather than constrained by what was found.
+**得：** 清之無偏態備評材而不錨於當前之形。目覺新而非受現形所限。
 
-**On failure:** If the nigredo findings keep pulling attention (a particularly bad anti-pattern, a clever hack that's tempting to preserve), write it down and explicitly set it aside. Proceed only when the goal is clearer than the current form.
+**敗則：** 若 nigredo 發現屢引注（特惡反式、巧 hack 誘存），書而明置之。唯目清於當前形時進。
 
-### Step 3: Albedo — Purification
+### 第三步：Albedo — 淨
 
-Separate the essential from the accidental. Strip away everything that doesn't serve the target form.
+別本於偶。去諸不事目形者。
 
-1. From the nigredo inventory, classify each element:
-   - **Essential**: Core business logic, irreplaceable algorithms, critical data transformations
-   - **Accidental**: Framework boilerplate, workarounds for old bugs, compatibility shims
-   - **Toxic**: Anti-patterns, security vulnerabilities, dead code
-2. Extract the essential elements into isolation:
-   - Pull core logic out of framework wrappers
-   - Separate data transformation from I/O
-   - Extract interfaces from implementations
-3. Remove toxic elements entirely — document what was removed and why
-4. For accidental elements, determine if equivalents exist in the target form
-5. Produce the **Albedo Extract**: purified essential logic with clean interfaces
+1. 自 nigredo 錄分每元：
+   - **本**：核業邏、不替算法、關數變
+   - **偶**：框架皮、舊錯變通、兼容墊
+   - **毒**：反式、安漏、死碼
+2. 取本元於孤：
+   - 自框架皮取核邏
+   - 別數變於 I/O
+   - 自實取界
+3. 全除毒元——書除何與何以
+4. 偶元則定目形有等乎
+5. 生 **Albedo 取**：淨本邏附清界
 
-**Expected:** A set of pure, isolated functions/modules that represent the core value of the original material. Each piece is testable in isolation. The extract is significantly smaller than the original.
+**得：** 一組純孤之函/模表原材之核值。每片可孤試。取顯小於原。
 
-**On failure:** If essential and accidental are too intertwined to separate, introduce seam points (interfaces) first. If the material resists purification, it may need `dissolve-form` before the athanor can continue.
+**敗則：** 若本偶過纏不可別，先立縫點（界）。若材抗淨，或需 `dissolve-form` 於煉爐續前。
 
-### Step 4: Heal — Purification Assessment
+### 第四步：愈 — 淨察
 
-Run the `heal` skill to assess whether the purification was thorough.
+行 `heal` 察淨徹乎。
 
-1. Triage the albedo extract: is anything still carrying toxic residue?
-2. Check for drift: has the purification drifted from the original transformation goal?
-3. Assess completeness: are all essential elements accounted for, or were some discarded prematurely?
-4. Rebalance if needed: restore any essential elements that were incorrectly classified as accidental
+1. 分 albedo 取：仍持毒殘乎？
+2. 察偏：淨偏於原變目乎？
+3. 察全：諸本元皆計乎、或早棄？
+4. 若需再衡：復誤分為偶之本元
 
-**Expected:** Confidence that the albedo extract is complete, clean, and ready for illumination. No essential logic was lost; no toxic patterns remain.
+**得：** 信 albedo 取全、淨、備明。無本邏失；無毒式留。
 
-**On failure:** If the assessment reveals significant gaps, return to Step 3 with the specific gaps identified. Do not proceed to citrinitas with incomplete material.
+**敗則：** 若察顯要隙，返第三步附所識隙。勿於材不全時進 citrinitas。
 
-### Step 5: Citrinitas — Illumination
+### 第五步：Citrinitas — 明
 
-See the target form. Map the purified elements to their optimal structure.
+見目形。映淨元於其佳構。
 
-1. Pattern recognition: identify which design patterns serve the purified elements
-   - Does the data flow suggest pipes/filters, event sourcing, CQRS?
-   - Do the interfaces suggest strategy, adapter, facade?
-   - Does the module structure suggest hexagonal, layered, micro-kernel?
-2. Design the target architecture:
-   - Map each essential element to its new location
-   - Define the interfaces between components
-   - Specify the data flow through the new structure
-3. Identify what must be created new (has no equivalent in the original):
-   - New abstractions that unify duplicated logic
-   - New interfaces that replace implicit coupling
-   - New error handling that replaces silent failures
-4. Produce the **Citrinitas Blueprint**: a complete mapping from albedo extract to target form
+1. 式識：識何設計式事淨元
+   - 數流示管/濾、事件源、CQRS 乎？
+   - 界示策、適、外觀乎？
+   - 模構示六角、層、微核乎？
+2. 設目架構：
+   - 映每本元於新位
+   - 定組件間之界
+   - 述新構中數流
+3. 識須新建者（原無等）：
+   - 統複邏之新抽象
+   - 代隱耦之新界
+   - 代默敗之新誤處
+4. 生 **Citrinitas 藍**：自 albedo 取至目形之全映
 
-**Expected:** A clear, detailed blueprint where every essential element has a home and every interface is defined. The blueprint should feel inevitable — given the purified elements, this structure is the natural fit.
+**得：** 清詳之藍，每本元有家、每界有定。藍當覺不可免——予淨元則此構為自然合。
 
-**On failure:** If multiple valid architectures compete, evaluate each against the constraints from Inputs. If no clear winner emerges, prefer the simplest option and document the alternatives as future options.
+**敗則：** 若多有效架構競，對入之約評各。若無明勝者，擇最簡而書他為未來擇。
 
-### Step 6: Meditate — Pre-Synthesis Checkpoint
+### 第六步：冥想 — 合前察點
 
-Run the `meditate` skill to prepare for the final synthesis.
+行 `meditate` 備終合。
 
-1. Clear the analytical context from citrinitas
-2. Anchor on the citrinitas blueprint as the synthesis guide
-3. Observe any anxiety about the transformation — is anything being rushed?
-4. Confirm readiness: the blueprint is clear, the material is purified, the constraints are known
+1. 清 citrinitas 之析境
+2. 錨於 citrinitas 藍為合之導
+3. 察變之焦——何被急乎？
+4. 確備：藍清、材淨、約知
 
-**Expected:** Calm clarity about what needs to be built. The synthesis phase should be execution, not design.
+**得：** 所建之靜清。合階當為執，非設。
 
-**On failure:** If doubt persists about the blueprint, revisit Step 5 with the specific concerns. Better to refine the blueprint than to begin synthesis with uncertainty.
+**敗則：** 若藍疑持，返第五步附具憂。精藍勝於疑而始合。
 
-### Step 7: Rubedo — Synthesis
+### 第七步：Rubedo — 合
 
-Compose the purified elements into their target form. The philosopher's stone: working, optimized code.
+組淨元於目形。賢者之石：行而優之碼。
 
-1. Build the new structure following the citrinitas blueprint:
-   - Create files, modules, and interfaces as specified
-   - Migrate each essential element to its new location
-   - Implement new abstractions and interfaces
-2. Wire the components together:
-   - Connect data flows as designed
-   - Implement error propagation through new paths
-   - Configure dependency injection or module loading
-3. Verify the synthesis:
-   - Does each component work in isolation? (unit tests)
-   - Do the components compose correctly? (integration tests)
-   - Does the full system produce the same outputs as the original? (regression tests)
-4. Remove scaffolding:
-   - Delete temporary compatibility shims
-   - Remove migration aids
-   - Clean up any remaining references to the old structure
-5. Produce the **Rubedo Output**: the transmuted code, fully functional in its new form
+1. 循 citrinitas 藍建新構：
+   - 建檔、模、界如所規
+   - 遷每本元至新位
+   - 實新抽象與界
+2. 連組：
+   - 接數流如所設
+   - 實新路誤傳
+   - 設依注或模載
+3. 驗合：
+   - 各組孤行乎？（單試）
+   - 組正組乎？（整試）
+   - 全系生同原之出乎？（回歸試）
+4. 除鷹架：
+   - 除暫兼容墊
+   - 除遷助
+   - 清留於舊構之引
+5. 生 **Rubedo 出**：已轉之碼，全行於新形
 
-**Expected:** Working code that is measurably better than the original: fewer lines, clearer structure, better test coverage, fewer dependencies. The transformation is complete and the old form can be retired.
+**得：** 行碼於原可量進：少行、清構、好試覆、少依。變已成，舊形可退。
 
-**On failure:** If synthesis reveals gaps in the blueprint, do not patch — return to Step 5 (citrinitas) to revise the design. If individual components fail, isolate and fix them before attempting full integration. The rubedo must not produce a half-transformed chimera.
+**敗則：** 若合露藍隙，勿補——返第五步（citrinitas）改設。若組失，孤修之而後試整合。rubedo 不可生半變之嵌合。
 
-## Validation Checklist
+## 驗
 
-- [ ] Nigredo inventory is complete (all elements, dependencies, assumptions cataloged)
-- [ ] Meditate checkpoint passed between nigredo/albedo (assumptions cleared)
-- [ ] Albedo extract contains only essential elements with clean interfaces
-- [ ] Heal assessment confirms purification completeness
-- [ ] Citrinitas blueprint maps every essential element to target form
-- [ ] Meditate checkpoint passed between citrinitas/rubedo (ready for synthesis)
-- [ ] Rubedo output passes regression tests against original behavior
-- [ ] Rubedo output is measurably improved (complexity, coupling, test coverage)
-- [ ] No toxic elements survived into the final output
-- [ ] Transformation constraints from Inputs are satisfied
+- [ ] Nigredo 錄全（諸元、依、假皆錄）
+- [ ] Nigredo/albedo 間冥想察點過（假清）
+- [ ] Albedo 取只含本元附清界
+- [ ] 愈察確淨全
+- [ ] Citrinitas 藍映每本元於目形
+- [ ] Citrinitas/rubedo 間冥想察點過（備合）
+- [ ] Rubedo 出過原行之回歸試
+- [ ] Rubedo 出可量進（繁度、耦、試覆）
+- [ ] 無毒元存於終出
+- [ ] 入之變約皆達
 
-## Common Pitfalls
+## 陷
 
-- **Skipping nigredo depth**: Rushing decomposition means hidden coupling surfaces during synthesis. Invest fully in the inventory
-- **Preserving accidental complexity**: Attachment to clever workarounds or "it works, don't touch it" code. If it's not essential, it goes
-- **Skipping meditate checkpoints**: Cognitive momentum from one stage biases the next. The pauses are structural, not optional
-- **Blueprint-less synthesis**: Starting to code before citrinitas is complete produces patchwork, not transmutation
-- **Incomplete regression testing**: The rubedo must reproduce original behavior. Untested paths will break silently
-- **Scope creep during citrinitas**: The illumination phase reveals opportunities for improvement beyond the original goal. Note them but don't pursue them — the athanor serves the stated transformation, not a hypothetical ideal
+- **跳 nigredo 之深**：急解致合中隱耦露。盡投於錄
+- **存偶繁**：戀巧變通或「行勿觸」之碼。非本則去
+- **跳冥想察點**：一階之認知勢偏下一。頓為結構，非選
+- **無藍合**：citrinitas 未盡前始碼生補丁，非轉化
+- **不全回歸試**：rubedo 須重現原行。未試路默破
+- **citrinitas 中範蔓**：明階露原目外之進機。注而勿追——煉爐事所述之變，非臆想
 
-## Related Skills
+## 參
 
-- `transmute` — Lighter-weight transformation for single functions or small modules
-- `chrysopoeia` — Value extraction and optimization (turning base code into gold)
-- `meditate` — Meta-cognitive clearing used as stage-gate checkpoints
-- `heal` — Subsystem assessment used for purification validation
-- `dissolve-form` — When material is too rigid for the athanor, dissolve first
-- `adapt-architecture` — Complementary approach for system-level migration patterns
-- `review-software-architecture` — Post-synthesis architecture review
+- `transmute` — 單函或小模之輕變
+- `chrysopoeia` — 值取與優（變基碼為金）
+- `meditate` — 階門察點之元認知清
+- `heal` — 淨驗之子系察
+- `dissolve-form` — 材過剛不可煉時先溶
+- `adapt-architecture` — 系級遷式之補法
+- `review-software-architecture` — 合後架構審

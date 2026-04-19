@@ -26,44 +26,44 @@ metadata:
 
 # Assess Form
 
-Evaluate a system's current structural form — its architecture, rigidity, pressure points, and capacity for change — to determine transformation readiness before initiating metamorphosis.
+Evaluate system's current structural form — its architecture, rigidity, pressure points, capacity for change — to determine transformation readiness before initiating metamorphosis.
 
-## When to Use
+## When Use
 
-- Before any significant architectural change to understand the starting point
-- When a system feels "stuck" but the reasons are unclear
-- When external pressure (growth, market shift, tech debt) is mounting but the response is uncertain
-- Assessing whether a proposed transformation is feasible given the current form
+- Before any significant architectural change to understand starting point
+- System feels "stuck" but reasons unclear
+- External pressure (growth, market shift, tech debt) mounting but response uncertain
+- Assessing whether proposed transformation feasible given current form
 - Periodic health checks for long-lived systems (annual form assessment)
 - Complementing `adapt-architecture` — assess first, then transform
 
 ## Inputs
 
-- **Required**: The system to assess (codebase, organization, infrastructure, process)
-- **Optional**: Proposed transformation direction (what might the system need to become?)
+- **Required**: System to assess (codebase, organization, infrastructure, process)
+- **Optional**: Proposed transformation direction (what might system need to become?)
 - **Optional**: Known pain points or pressure sources
 - **Optional**: Previous transformation attempts and their outcomes
 - **Optional**: Time horizon for potential transformation
 - **Optional**: Available resources for transformation effort
 
-## Procedure
+## Steps
 
-### Step 1: Inventory the Current Form
+### Step 1: Inventory Current Form
 
-Catalog the system's structural elements without judgment — understand what exists before evaluating it.
+Catalog system's structural elements without judgment — understand what exists before evaluating it.
 
-1. Map the structural components:
+1. Map structural components:
    - **Modules**: distinct functional units (services, teams, packages, departments)
    - **Interfaces**: how modules connect (APIs, protocols, contracts, reporting lines)
-   - **Data flows**: how information moves through the system
+   - **Data flows**: how information moves through system
    - **Dependencies**: what depends on what (direct, transitive, circular)
    - **Load-bearing structures**: components that everything else relies on
-2. Document the form's age and history:
+2. Document form's age and history:
    - When was each major component introduced?
    - Which components have changed recently vs. remained static?
-   - What is the "geological layer" structure (old core, newer additions, recent patches)?
-3. Identify the form's "skeleton" vs. "flesh":
-   - Skeleton: structural decisions that are extremely costly to change (language, database, deployment model)
+   - What is "geological layer" structure (old core, newer additions, recent patches)?
+3. Identify form's "skeleton" vs. "flesh":
+   - Skeleton: structural decisions extremely costly to change (language, database, deployment model)
    - Flesh: functional decisions that can change more easily (business logic, UI, configuration)
 
 ```
@@ -79,39 +79,39 @@ Structural Inventory Template:
 └──────────────┴──────────┴────────────┴───────────────────┴──────────┘
 ```
 
-**Expected:** A complete structural inventory showing components, their ages, modification recency, dependency profiles, and classification as skeleton or flesh. This is the "X-ray" of the current form.
+**Got:** Complete structural inventory showing components, their ages, modification recency, dependency profiles, classification as skeleton or flesh. This is "X-ray" of current form.
 
-**On failure:** If the inventory is incomplete (components are unknown or undocumented), that itself is a finding — the form has opacity, which is a transformation risk. Document what you can, flag unknowns, and plan discovery for the gaps.
+**If fail:** Inventory incomplete (components unknown or undocumented)? That itself is finding — form has opacity, transformation risk. Document what you can, flag unknowns, plan discovery for gaps.
 
 ### Step 2: Map Transformation Pressure
 
-Identify the forces pushing the system toward change and the forces resisting it.
+Identify forces pushing system toward change and forces resisting it.
 
 1. Catalog external pressures (forces demanding change):
    - Growth pressure: current form can't handle increasing load
-   - Market pressure: competitors or users demand capabilities the current form can't support
-   - Technology pressure: underlying technology is becoming obsolete or unsupported
-   - Regulatory pressure: compliance requirements the current form doesn't meet
-   - Integration pressure: must connect with systems the current form wasn't designed for
+   - Market pressure: competitors or users demand capabilities current form can't support
+   - Technology pressure: underlying technology becoming obsolete or unsupported
+   - Regulatory pressure: compliance requirements current form doesn't meet
+   - Integration pressure: must connect with systems current form wasn't designed for
 2. Catalog internal pressures (forces demanding change from within):
    - Technical debt: accumulated shortcuts that slow development
    - Knowledge concentration: critical knowledge held by too few people
-   - Morale pressure: team frustration with the current form
+   - Morale pressure: team frustration with current form
    - Operational burden: maintenance cost consuming resources that should go to development
 3. Catalog resistance forces (forces opposing change):
-   - Inertia: the existing form works "well enough"
-   - Dependency lock-in: too many things depend on the current form
+   - Inertia: existing form works "well enough"
+   - Dependency lock-in: too many things depend on current form
    - Knowledge loss risk: transformation might destroy institutional knowledge
    - Cost: transformation requires investment with uncertain return
    - Fear: previous transformation attempts failed
 
-**Expected:** A pressure map showing the direction and magnitude of forces acting on the system. If transformation pressure significantly exceeds resistance, transformation is overdue. If resistance significantly exceeds pressure, transformation will fail without first reducing resistance.
+**Got:** Pressure map showing direction and magnitude of forces acting on system. Transformation pressure significantly exceeds resistance? Transformation overdue. Resistance significantly exceeds pressure? Transformation will fail without first reducing resistance.
 
-**On failure:** If pressure mapping produces a balanced picture (neither strong pressure nor strong resistance), the system may not need transformation — or the analysis is surface-level. Dig deeper: interview stakeholders, measure specific pain points, project forward 12-18 months. What pressures will intensify?
+**If fail:** Pressure mapping produces balanced picture (neither strong pressure nor strong resistance)? System may not need transformation — or analysis surface-level. Dig deeper: interview stakeholders, measure specific pain points, project forward 12-18 months. What pressures will intensify?
 
 ### Step 3: Assess Structural Rigidity
 
-Determine how flexible or rigid the current form is — can it bend, or will it break?
+Determine how flexible or rigid current form is — can it bend, or will it break?
 
 1. Test interface flexibility:
    - Can modules be replaced without cascading changes? (loose coupling = flexible)
@@ -122,10 +122,10 @@ Determine how flexible or rigid the current form is — can it bend, or will it 
    - Are data formats standardized or bespoke? (bespoke = rigid)
    - How entangled is business logic with data structure? (entangled = rigid)
 3. Test process flexibility:
-   - Can the team ship changes quickly? (deployment pipeline health)
-   - Is the test suite comprehensive? (safety net for change)
+   - Can team ship changes quickly? (deployment pipeline health)
+   - Is test suite comprehensive? (safety net for change)
    - How many "don't touch" components exist? (forbidden zones = rigid)
-4. Calculate the rigidity score:
+4. Calculate rigidity score:
 
 ```
 Rigidity Assessment:
@@ -145,40 +145,40 @@ Rigidity Assessment:
 └──────────────────────┴───────────────────────┴──────────────────────┘
 ```
 
-**Expected:** A rigidity score that quantifies how much structural resistance transformation will encounter. Flexible systems (6-9) can transform incrementally. Rigid systems (14-18) need dissolution before reconstruction (see `dissolve-form`).
+**Got:** Rigidity score that quantifies how much structural resistance transformation will encounter. Flexible systems (6-9) can transform incrementally. Rigid systems (14-18) need dissolution before reconstruction (see `dissolve-form`).
 
-**On failure:** If the rigidity assessment is inconclusive (moderate score but unclear where the real problems are), focus on the highest-scoring dimensions. A system can be flexible overall but have one extremely rigid component that blocks transformation. Target that component specifically.
+**If fail:** Rigidity assessment inconclusive (moderate score but unclear where real problems are)? Focus on highest-scoring dimensions. System can be flexible overall but have one extremely rigid component that blocks transformation. Target that component specifically.
 
 ### Step 4: Estimate Change Capacity
 
-Assess the system's (and team's) ability to absorb and execute transformation.
+Assess system's (and team's) ability to absorb and execute transformation.
 
 1. Available transformation energy:
    - What percentage of team capacity can be allocated to transformation?
    - Is there organizational support (budget, mandate, patience)?
-   - Are the right skills available (architecture, migration, testing)?
+   - Are right skills available (architecture, migration, testing)?
 2. Change absorption rate:
-   - How many changes can the system absorb per time unit without destabilizing?
-   - What is the recovery time after a significant change?
-   - Is there a staging/canary mechanism for incremental transformation?
+   - How many changes can system absorb per time unit without destabilizing?
+   - What is recovery time after significant change?
+   - Is there staging/canary mechanism for incremental transformation?
 3. Transformation experience:
-   - Has the team successfully transformed similar systems before?
+   - Has team successfully transformed similar systems before?
    - Are there transformation tools and practices in place (feature flags, strangler fig, blue-green)?
-   - What is the team's risk tolerance?
+   - What is team's risk tolerance?
 4. Calculate change capacity:
    - High capacity: dedicated team, strong tooling, prior experience, organizational support
    - Moderate capacity: part-time allocation, some tooling, limited experience
    - Low capacity: no dedicated resources, no tooling, no experience, resistant organization
 
-**Expected:** A change capacity assessment that indicates whether the system/team can execute the proposed transformation given current resources, skills, and organizational support.
+**Got:** Change capacity assessment that indicates whether system/team can execute proposed transformation given current resources, skills, organizational support.
 
-**On failure:** If change capacity is low but transformation pressure is high, the first transformation isn't the system — it's the team's capability. Invest in tooling, training, and organizational buy-in before attempting the architectural transformation.
+**If fail:** Change capacity low but transformation pressure high? First transformation isn't system — it's team's capability. Invest in tooling, training, organizational buy-in before attempting architectural transformation.
 
 ### Step 5: Classify Transformation Readiness
 
-Combine pressure, rigidity, and capacity assessments into a readiness classification.
+Combine pressure, rigidity, capacity assessments into readiness classification.
 
-1. Plot the system on the readiness matrix:
+1. Plot system on readiness matrix:
 
 ```
 Transformation Readiness Matrix:
@@ -199,45 +199,45 @@ Transformation Readiness Matrix:
 └─────────────────┴────────────────────────┴────────────────────────┘
 ```
 
-2. Document the readiness classification with:
+2. Document readiness classification with:
    - Classification label (READY / PREPARE / INVEST / CRITICAL / OPTIONAL / DEFER)
    - Key findings from each assessment dimension
    - Recommended next step
-   - Risk factors that could change the classification
-3. If READY: proceed to `adapt-architecture`
-4. If PREPARE: proceed to `dissolve-form` to reduce rigidity
-5. If INVEST: build capacity (training, tooling, organizational support), then reassess
-6. If CRITICAL: address capacity and rigidity simultaneously (may require external help)
-7. If OPTIONAL/DEFER: document the assessment and set a reassessment date
+   - Risk factors that could change classification
+3. READY? Proceed to `adapt-architecture`
+4. PREPARE? Proceed to `dissolve-form` to reduce rigidity
+5. INVEST? Build capacity (training, tooling, organizational support), then reassess
+6. CRITICAL? Address capacity and rigidity simultaneously (may require external help)
+7. OPTIONAL/DEFER? Document assessment and set reassessment date
 
-**Expected:** A clear, justified transformation readiness classification with specific next steps. The classification enables informed decision-making about when and how to transform.
+**Got:** Clear, justified transformation readiness classification with specific next steps. Classification enables informed decision-making about when and how to transform.
 
-**On failure:** If the classification is ambiguous (e.g., moderate pressure, moderate rigidity, moderate capacity), default to PREPARE — reduce rigidity incrementally while monitoring pressure. This builds capability and reduces risk whether or not full transformation is eventually needed.
+**If fail:** Classification ambiguous (e.g., moderate pressure, moderate rigidity, moderate capacity)? Default to PREPARE — reduce rigidity incrementally while monitoring pressure. Builds capability and reduces risk whether or not full transformation eventually needed.
 
-## Validation
+## Checks
 
-- [ ] Structural inventory is complete with components, ages, dependencies, and types
-- [ ] Transformation pressure is mapped (external, internal, resistance forces)
-- [ ] Rigidity score is calculated across all dimensions
-- [ ] Change capacity is assessed (resources, absorption rate, experience)
-- [ ] Readiness classification is determined with justified reasoning
-- [ ] Next steps are documented based on the classification
-- [ ] Reassessment date is set (even if currently READY)
+- [ ] Structural inventory complete with components, ages, dependencies, types
+- [ ] Transformation pressure mapped (external, internal, resistance forces)
+- [ ] Rigidity score calculated across all dimensions
+- [ ] Change capacity assessed (resources, absorption rate, experience)
+- [ ] Readiness classification determined with justified reasoning
+- [ ] Next steps documented based on classification
+- [ ] Reassessment date set (even if currently READY)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Assessing only the technical system**: Transformation readiness includes organizational readiness. A technically flexible system with an organizationally rigid team will still fail to transform
-- **Optimistic capacity estimation**: Teams consistently overestimate their capacity for change while maintaining normal operations. Use 50% of stated capacity as the realistic estimate
-- **Ignoring resistance forces**: Pressure mapping that only catalogs change forces misses the resistance that will slow or stop transformation. Resistance is often stronger than it appears
-- **Assessment paralysis**: The form assessment should take hours to days, not weeks. If it's taking too long, the system is too complex to assess fully — assess at a higher abstraction level and drill into problem areas
-- **Confusing rigidity with stability**: A rigid system is not the same as a stable system. Stability comes from well-designed flexibility; rigidity is the absence of designed flexibility
+- **Assessing only technical system**: Transformation readiness includes organizational readiness. Technically flexible system with organizationally rigid team will still fail to transform
+- **Optimistic capacity estimation**: Teams consistently overestimate their capacity for change while maintaining normal operations. Use 50% of stated capacity as realistic estimate
+- **Ignoring resistance forces**: Pressure mapping that only catalogs change forces misses resistance that will slow or stop transformation. Resistance often stronger than it appears
+- **Assessment paralysis**: Form assessment should take hours to days, not weeks. Taking too long? System too complex to assess fully — assess at higher abstraction level and drill into problem areas
+- **Confusing rigidity with stability**: Rigid system not same as stable system. Stability comes from well-designed flexibility; rigidity is absence of designed flexibility
 
-## Related Skills
+## See Also
 
-- `adapt-architecture` — the primary transformation skill; assess-form determines readiness for it
+- `adapt-architecture` — primary transformation skill; assess-form determines readiness for it
 - `dissolve-form` — for systems classified as PREPARE or CRITICAL, rigidity reduction before transformation
 - `repair-damage` — for systems that need repair before assessment can be meaningful
 - `shift-camouflage` — surface-level adaptation that may resolve pressure without full transformation
-- `forage-resources` — resource exploration informs form assessment when the question is "what should we become?"
+- `forage-resources` — resource exploration informs form assessment when question is "what should we become?"
 - `review-software-architecture` — complementary skill for detailed technical architecture evaluation
-- `assess-context` — AI self-application variant; maps structural assessment to reasoning context malleability, rigidity mapping, and transformation readiness
+- `assess-context` — AI self-application variant; maps structural assessment to reasoning context malleability, rigidity mapping, transformation readiness

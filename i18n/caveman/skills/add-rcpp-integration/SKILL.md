@@ -25,13 +25,13 @@ metadata:
 
 # Add Rcpp Integration
 
-Integrate C++ code into an R package using Rcpp for performance-critical operations.
+Integrate C++ code into R package using Rcpp for performance-critical operations.
 
-## When to Use
+## When Use
 
-- R function is too slow and profiling confirms a bottleneck
+- R function too slow and profiling confirms bottleneck
 - Need to interface with existing C/C++ libraries
-- Implementing algorithms that benefit from compiled code (loops, recursion)
+- Implementing algorithms benefit from compiled code (loops, recursion)
 - Adding RcppArmadillo for linear algebra operations
 
 ## Inputs
@@ -41,7 +41,7 @@ Integrate C++ code into an R package using Rcpp for performance-critical operati
 - **Optional**: External C++ library to interface with
 - **Optional**: Whether to use RcppArmadillo (default: plain Rcpp)
 
-## Procedure
+## Steps
 
 ### Step 1: Set Up Rcpp Infrastructure
 
@@ -61,9 +61,9 @@ For RcppArmadillo:
 usethis::use_rcpp_armadillo()
 ```
 
-**Expected:** `src/` directory created, DESCRIPTION updated with `Rcpp` in LinkingTo and Imports, and `R/packagename-package.R` contains `@useDynLib` directive.
+**Got:** `src/` directory created. DESCRIPTION updated with `Rcpp` in LinkingTo and Imports. `R/packagename-package.R` contains `@useDynLib` directive.
 
-**On failure:** If `usethis::use_rcpp()` fails, manually create `src/`, add `LinkingTo: Rcpp` and `Imports: Rcpp` to DESCRIPTION, and add `#' @useDynLib packagename, .registration = TRUE` and `#' @importFrom Rcpp sourceCpp` to the package-level documentation file.
+**If fail:** `usethis::use_rcpp()` fails? Manually create `src/`, add `LinkingTo: Rcpp` and `Imports: Rcpp` to DESCRIPTION. Add `#' @useDynLib packagename, .registration = TRUE` and `#' @importFrom Rcpp sourceCpp` to package-level documentation file.
 
 ### Step 2: Write C++ Function
 
@@ -108,9 +108,9 @@ arma::mat mat_mult(const arma::mat& A, const arma::mat& B) {
 }
 ```
 
-**Expected:** C++ source file exists at `src/my_function.cpp` with valid `// [[Rcpp::export]]` annotation and roxygen-style `//'` documentation comments.
+**Got:** C++ source file exists at `src/my_function.cpp` with valid `// [[Rcpp::export]]` annotation and roxygen-style `//'` documentation comments.
 
-**On failure:** Verify the file uses `#include <Rcpp.h>` (or `<RcppArmadillo.h>` for Armadillo), that the export annotation is on its own line directly above the function signature, and that return types map to valid Rcpp types.
+**If fail:** Verify file uses `#include <Rcpp.h>` (or `<RcppArmadillo.h>` for Armadillo). Export annotation on its own line directly above function signature. Return types map to valid Rcpp types.
 
 ### Step 3: Generate RcppExports
 
@@ -119,9 +119,9 @@ Rcpp::compileAttributes()
 devtools::document()
 ```
 
-**Expected:** `R/RcppExports.R` and `src/RcppExports.cpp` generated automatically.
+**Got:** `R/RcppExports.R` and `src/RcppExports.cpp` generated automatically.
 
-**On failure:** Check C++ syntax errors. Ensure `// [[Rcpp::export]]` tag is present above each exported function.
+**If fail:** Check C++ syntax errors. Ensure `// [[Rcpp::export]]` tag present above each exported function.
 
 ### Step 4: Verify Compilation
 
@@ -129,11 +129,11 @@ devtools::document()
 devtools::load_all()
 ```
 
-**Expected:** Package compiles and loads without errors.
+**Got:** Package compiles and loads without errors.
 
-**On failure:** Check compiler output for errors. Common issues:
+**If fail:** Check compiler output for errors. Common issues:
 - Missing system headers: Install development libraries
-- Syntax errors: C++ compiler messages point to the line
+- Syntax errors: C++ compiler messages point to line
 - Missing `Rcpp::depends` attribute for RcppArmadillo
 
 ### Step 5: Write Tests for Compiled Code
@@ -150,9 +150,9 @@ test_that("cumsum_cpp handles edge cases", {
 })
 ```
 
-**Expected:** Tests pass, confirming the C++ function produces identical results to the R equivalent and handles edge cases (empty vectors, NA values) correctly.
+**Got:** Tests pass. Confirm C++ function produces identical results to R equivalent. Handles edge cases (empty vectors, NA values) correctly.
 
-**On failure:** If tests fail on NA handling, add explicit NA checks in the C++ code using `NumericVector::is_na()`. If tests fail on empty input, add a guard clause for zero-length vectors at the top of the function.
+**If fail:** Tests fail on NA handling? Add explicit NA checks in C++ code using `NumericVector::is_na()`. Tests fail on empty input? Add guard clause for zero-length vectors at top of function.
 
 ### Step 6: Add Cleanup Script
 
@@ -171,13 +171,13 @@ rm -f src/*.o src/*.so src/*.dll
 
 Make executable: `chmod +x cleanup`
 
-**Expected:** `src/Makevars` sets compiler flags and `cleanup` script removes compiled objects. Both files exist at the package root level.
+**Got:** `src/Makevars` sets compiler flags. `cleanup` script removes compiled objects. Both files exist at package root level.
 
-**On failure:** Verify `cleanup` has execute permissions (`chmod +x cleanup`) and that `Makevars` uses tabs (not spaces) for indentation if adding Makefile-style rules.
+**If fail:** Verify `cleanup` has execute permissions (`chmod +x cleanup`). `Makevars` uses tabs (not spaces) for indentation if adding Makefile-style rules.
 
 ### Step 7: Update .Rbuildignore
 
-Ensure compiled artifacts are handled:
+Ensure compiled artifacts handled:
 
 ```
 ^src/.*\.o$
@@ -185,29 +185,29 @@ Ensure compiled artifacts are handled:
 ^src/.*\.dll$
 ```
 
-**Expected:** `.Rbuildignore` patterns prevent compiled object files from being included in the package tarball, while preserving source files and Makevars.
+**Got:** `.Rbuildignore` patterns prevent compiled object files from being included in package tarball. Preserves source files and Makevars.
 
-**On failure:** Run `devtools::check()` and look for NOTEs about unexpected files in `src/`. Adjust `.Rbuildignore` patterns to exclude only `.o`, `.so`, and `.dll` files.
+**If fail:** Run `devtools::check()` and look for NOTEs about unexpected files in `src/`. Adjust `.Rbuildignore` patterns to exclude only `.o`, `.so`, `.dll` files.
 
-## Validation
+## Checks
 
 - [ ] `devtools::load_all()` compiles without warnings
 - [ ] Compiled function produces correct results
 - [ ] Tests pass for edge cases (NA, empty, large inputs)
 - [ ] `R CMD check` passes with no compilation warnings
-- [ ] RcppExports files are generated and committed
+- [ ] RcppExports files generated and committed
 - [ ] Performance improvement confirmed with benchmarks
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting `compileAttributes()`**: Must regenerate RcppExports after changing C++ files
 - **Integer overflow**: Use `double` instead of `int` for large numeric values
 - **Memory management**: Rcpp handles memory automatically for Rcpp types; don't manually `delete`
 - **NA handling**: C++ doesn't know about R's NA. Check with `Rcpp::NumericVector::is_na()`
-- **Platform portability**: Avoid platform-specific C++ features. Test on Windows, macOS, and Linux.
-- **Missing `@useDynLib`**: The package-level doc must include `@useDynLib packagename, .registration = TRUE`
+- **Platform portability**: Avoid platform-specific C++ features. Test on Windows, macOS, Linux.
+- **Missing `@useDynLib`**: Package-level doc must include `@useDynLib packagename, .registration = TRUE`
 
-## Related Skills
+## See Also
 
 - `create-r-package` - package setup before adding Rcpp
 - `write-testthat-tests` - testing compiled functions

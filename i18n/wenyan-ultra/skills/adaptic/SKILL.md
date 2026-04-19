@@ -25,33 +25,33 @@ metadata:
   tags: synoptic, adaptic, panoramic, synthesis, gestalt, meta-skill
 ---
 
-# Adaptic
+# 統觀
 
-Compose the 5-step synoptic cycle to achieve panoramic synthesis across multiple domains. Where sequential analysis produces compromise ("a little of each"), the synoptic cycle produces integration — a unified understanding that holds all domains simultaneously and finds the emergent whole.
+合五步以成全觀之合。序解致妥協，統觀致融——一見兼諸域而見湧現之全。
 
-## When to Use
+## 用
 
-- A problem genuinely spans 3+ domains and the *interactions between domains* matter more than depth in any one
-- Sequential analysis (polymath style) has been tried but the synthesis feels like compromise rather than integration
-- Existing approaches feel like "a little of each" rather than a unified vision
-- Before major architectural decisions affecting multiple stakeholders
-- When domain experts disagree and the resolution lies *between* their perspectives, not within any one
+- 題真涉三域以上、域間之交重於單域之深→用
+- 序析（博士式）已試而合似妥協→用
+- 既法似「各取一二」非統一→用
+- 大構決影多者前→用
+- 域家相歧而解在諸見間→用
 
-## When NOT to Use
+## 不用
 
-- Single-domain problems — use the domain agent directly
-- Well-understood trade-offs where polymath-style sequential analysis suffices
-- Self-care or wellness contexts — use the tending team instead
-- When speed matters more than depth — the full cycle requires sustained attention
+- 單域之題——直用域者
+- 衡明、序析足者
+- 自養養生——用 tending 隊
+- 速重於深——全環需持注
 
-## Inputs
+## 入
 
-- **Required**: The problem or question requiring multi-domain synthesis
-- **Optional**: Explicit list of domains to hold (default: auto-detect from problem context)
-- **Optional**: Depth setting — `light`, `standard`, or `deep` (default: `standard`)
-- **Optional**: Expression form — `narrative`, `diagram`, `table`, or `recommendation` (default: `auto`)
+- **必**：須多域合之題
+- **可**：明列諸域（默：自題察）
+- **可**：深設——`light`、`standard`、`deep`（默 `standard`）
+- **可**：表式——`narrative`、`diagram`、`table`、`recommendation`（默 `auto`）
 
-## Configuration
+## 設
 
 ```yaml
 settings:
@@ -60,111 +60,111 @@ settings:
   expression_form: auto    # narrative, diagram, table, recommendation
 ```
 
-## Procedure
+## 行
 
-### Step 1: Clear — Empty the Workspace
+### 一：清——空作所
 
-Run the `meditate` skill to clear prior context, assumptions, and single-domain bias.
+行 `meditate` 以清前脈、預設、單域偏。
 
-1. Execute the full meditate procedure: prepare, anchor, observe distractions, close
-2. Pay special attention to domain bias — the tendency to frame the problem through whichever domain was most recently active
-3. Clear any premature solutions that arrived before the full picture was visible
-4. If `depth: light` is set, abbreviate to a brief context-clearing pause rather than the full meditation
+1. 行 `meditate` 全程：備、定、察擾、收
+2. 特察域偏——以末活之域框題之傾向
+3. 清未見全像即至之早解
+4. `depth: light`→簡為短頓非全冥
 
-**Expected:** The workspace is empty. No domain has priority. No solution has been pre-selected. The agent is in a neutral, receptive state ready to hold multiple perspectives simultaneously.
+得：作所空。無域佔先。無解預定。神中性受納，可同持諸見。
 
-**On failure:** If a particular domain keeps asserting itself as "the real problem," name that bias explicitly: "I notice I am framing this as primarily a [domain] problem." Naming the bias loosens its grip. If clearing fails entirely, the problem may genuinely be single-domain — reconsider whether the synoptic cycle is needed.
+敗：某域恆稱「真題」→明名其偏：「吾框此為主 [域] 題」。名之則弱。盡清不能→題或真為單域，再考統觀必要乎。
 
-### Step 2: Open — Enter Panoramic Mode
+### 二：開——入全觀
 
-Run the `expand-awareness` skill to shift from narrow focus to wide-field perception.
+行 `expand-awareness` 以由窄轉廣。
 
-1. Inventory all domains relevant to the problem — do not pre-filter or rank them
-2. For each domain, note its core concerns, constraints, and values without evaluating
-3. Soften the focus: hold all domains in awareness simultaneously rather than cycling through them one at a time
-4. Resist the pull to "start solving" — this step is purely about opening the field of view
-5. If domains were provided explicitly in the inputs, use those as the starting set but remain open to discovering additional relevant domains
+1. 列題之諸域——勿先濾排
+2. 各域：核憂、限、值，勿評
+3. 軟焦：諸域同持於覺，非依次循
+4. 抗即解之拉——此步唯開視野
+5. 入若明予域，以為始而仍開於發新
 
-**Expected:** A panoramic field is open. All relevant domains are held in awareness simultaneously. The agent can sense the full landscape without zooming into any single domain. The feeling is spacious rather than overwhelming.
+得：全場開。諸域同持覺中。可感全景而不入單域。覺寬非壓。
 
-**On failure:** If the domain list feels incomplete, ask: "What perspective is missing that would change the picture?" If simultaneous awareness collapses into sequential scanning (domain A, then B, then C), slow down — the goal is to hold the whole field, not to tour its parts. If more than 7 domains are active, group related domains into clusters to reduce cognitive load while maintaining breadth.
+敗：域不全→問：「缺何見可變圖」。同覺塌為序掃→緩之，欲持全非巡部。逾七域→聚相關以減負而存廣。
 
-### Step 3: Perceive — Notice Cross-Domain Patterns
+### 三：察——識跨域之紋
 
-While maintaining panoramic awareness, run `observe` and `awareness` to notice patterns, tensions, and resonances *across* all visible domains.
+持全觀，行 `observe` 與 `awareness` 識諸域間之紋、張、和。
 
-1. Hold the panoramic field open from Step 2 — do not narrow focus
-2. Run `observe` to notice what is actually present: what patterns repeat across domains? what tensions exist between domains? what resonances connect seemingly unrelated concerns?
-3. Run `awareness` to notice what is *not* being seen: which domains are being subtly ignored? where are blind spots? what assumptions are operating below the surface?
-4. Record cross-domain observations without interpreting them yet:
-   - **Tensions**: where domains pull in opposite directions
-   - **Resonances**: where domains reinforce or echo each other
-   - **Gaps**: where no domain addresses a concern that the whole picture reveals
-   - **Surprises**: where a domain contributes something unexpected to the picture
-5. If `depth: deep` is set, extend this step — cycle through observe and awareness multiple times, allowing subtler patterns to surface
+1. 持二步之全場——勿窄
+2. 行 `observe`：何在？何紋跨域復？何張在域間？何和接無關之憂？
+3. 行 `awareness`：何未見？何域微忽？何盲點？何隱設於下？
+4. 記跨域察而未釋：
+   - **張**：域相反拉處
+   - **和**：域相強或應處
+   - **缺**：諸域皆不及而全圖示之憂處
+   - **驚**：域出意外貢處
+5. `depth: deep`→延此步——多循 observe 與 awareness 以浮微紋
 
-The critical discipline: perceive across all domains simultaneously, not each domain in turn. Sequential perception loses the cross-domain patterns that are the entire point of the synoptic cycle.
+要律：跨諸域同察，非各域依次。序察失跨域紋，乃統觀之意所在。
 
-**Expected:** A rich set of cross-domain observations — tensions, resonances, gaps, and surprises. These observations span the boundaries between domains rather than living within any single one. The agent has noticed something that would not be visible from any single domain's perspective.
+得：豐之跨域察——張、和、缺、驚。皆跨域界，非寓單域。察出單域不可見之物。
 
-**On failure:** If observations are all within single domains ("in domain A, I notice X"), the panoramic field has collapsed. Return to Step 2 and re-open. If no cross-domain patterns emerge, the problem may not require synoptic treatment — it may be genuinely decomposable into independent domain problems. If the perceive step produces an overwhelming number of observations, prioritize tensions (they are where integration happens).
+敗：察皆寓單域（「於 A，吾見 X」）→全場已塌，回二步重開。無跨域紋→題或不需統觀，可分為獨立域題。察過繁→先張（合之所在）。
 
-### Step 4: Integrate — Form the Emergent Whole
+### 四：合——成湧現之全
 
-Run the `integrate-gestalt` skill to synthesize cross-domain observations into a unified understanding.
+行 `integrate-gestalt` 合跨域察為統一。
 
-1. Map the tensions identified in Step 3 — do not resolve them prematurely; hold them as creative constraints
-2. Find the figure: what unified understanding emerges when all observations are held together? This is not a compromise or average — it is a new pattern that includes but transcends the individual domain perspectives
-3. Test the whole: does the integrated understanding honor each domain's core concerns? Does it resolve tensions or merely paper over them?
-4. Name the insight in one clear statement — if it cannot be stated simply, the integration is not yet complete
-5. Verify that the insight is genuinely emergent: could it have been reached by analyzing domains sequentially? If yes, the synoptic cycle added no value and sequential analysis would have sufficed
+1. 圖三步張——勿早解；持為創限
+2. 尋形：同持諸察湧何統？此非妥非平均，乃含且越諸見之新紋
+3. 驗全：合解尊各域核乎？解張或僅蓋之乎？
+4. 一句明見——不能簡述則合未畢
+5. 驗見真湧現：序析可達否？可→統觀無加值，序析已足
 
-**Expected:** A single integrated understanding that holds all domains simultaneously. The insight feels like discovery rather than construction — it emerged from the whole rather than being assembled from parts. Each domain's core concerns are honored, and the tensions between domains are resolved rather than compromised.
+得：一統解同持諸域。見如發現非構——自全湧出非由部組。各域核獲尊。張獲解非妥。
 
-**On failure:** If integration produces "a little of each domain" rather than a unified whole, the gestalt has not formed. Return to Step 3 and look for the tensions that are being avoided — integration happens *through* tension, not around it. If no gestalt forms after extended effort, decompose: find the 2-3 domains with the strongest tensions and integrate those first, then expand.
+敗：合出「各域一二」非統一→形未成。回三步尋避之張——合過張非繞之。久不成→分：擇張最強之 2-3 域先合，後擴。
 
-### Step 5: Express — Communicate the Integrated Understanding
+### 五：表——傳統解
 
-Run the `express-insight` skill to communicate the synthesis to the intended audience.
+行 `express-insight` 傳合於受。
 
-1. Assess the audience: what domains are they familiar with? what framing will make the integrated insight accessible?
-2. Choose the expression form (or use the one specified in inputs):
-   - **Narrative**: for audiences that need to understand the journey from parts to whole
-   - **Diagram**: for audiences that need to see structural relationships
-   - **Table**: for audiences that need to compare domain perspectives systematically
-   - **Recommendation**: for audiences that need an actionable decision
-3. Express the integrated understanding with transparency: show which domains contributed, where tensions were resolved, and what the emergent insight adds beyond any single perspective
-4. Invite challenge: explicitly note which aspects of the integration are strongest and which are most speculative
+1. 評受：熟何域？何框使合見可達？
+2. 擇表式（或用入所定）：
+   - **敘**：受須由部至全之程
+   - **圖**：受須見構關
+   - **表**：受須序比域見
+   - **薦**：受須可行決
+3. 透明表合：示哪域貢、何處解張、湧見越單見何
+4. 邀疑：明哪段最強、哪最揣
 
-**Expected:** A clear, well-formed expression of the integrated understanding that is accessible to the intended audience. The expression shows its work — the audience can see how domain perspectives contributed to the whole. The form matches the audience's needs.
+得：清、形善之合表，受可達。表示其工——受可見域見如何貢全。式合受需。
 
-**On failure:** If the expression feels like a list of domain perspectives rather than an integrated whole, the insight from Step 4 has been lost in translation. Return to the one-statement summary from Step 4 and build the expression outward from that center. If the audience framing is wrong, ask: "Who needs this and what decision does it inform?"
+敗：表似域見之列非統全→四步見已失於譯。回四步一句而由其外建表。受框誤→問：「誰需此？決何？」
 
-## Validation
+## 驗
 
-- [ ] Step 1 (Clear) was executed — prior context and domain bias were explicitly released
-- [ ] Step 2 (Open) produced a panoramic field holding 3+ domains simultaneously
-- [ ] Step 3 (Perceive) identified cross-domain patterns (not just within-domain observations)
-- [ ] Step 4 (Integrate) produced a single emergent insight that transcends any individual domain
-- [ ] Step 5 (Express) communicated the insight in a form appropriate to the audience
-- [ ] The final output could not have been produced by sequential single-domain analysis
-- [ ] Each domain's core concerns are honored in the integrated understanding
-- [ ] Tensions between domains were resolved through integration, not compromise
+- [ ] 一步（清）已行——前脈、域偏明釋
+- [ ] 二步（開）成全場持三域以上同覺
+- [ ] 三步（察）識跨域紋（非僅域內察）
+- [ ] 四步（合）成一湧見越單域
+- [ ] 五步（表）以合受之式傳見
+- [ ] 末出非單域序析可成
+- [ ] 各域核於合中獲尊
+- [ ] 域張由合解，非妥
 
-## Common Pitfalls
+## 忌
 
-- **Sequential masquerading as simultaneous**: Cycling through domains one at a time and then stapling the results together is not synoptic perception. The test: did the cross-domain *interactions* produce something new, or is the output just a concatenation of domain analyses?
-- **Premature integration**: Jumping to a synthesis before the panoramic field has fully opened. Steps 2 and 3 build the perceptual foundation that makes genuine integration possible — rushing them produces shallow synthesis.
-- **Compromise instead of emergence**: Averaging domain perspectives ("50% security, 50% usability") is compromise, not integration. True integration finds a frame where both concerns are *fully* met, or it honestly names the irreducible trade-off.
-- **Overuse on single-domain problems**: Not every problem needs panoramic synthesis. If the problem lives cleanly in one domain, synoptic treatment adds overhead without value. The "When NOT to Use" criteria exist for a reason.
-- **Losing the insight in expression**: Step 4 produces a clear gestalt, but Step 5 fragments it back into a domain-by-domain list. Keep the integrated insight as the center of expression; domain details are supporting evidence, not the main structure.
-- **Domain inflation**: Artificially expanding the domain count to justify synoptic treatment. Three genuinely relevant domains produce better synthesis than seven domains where four are peripheral.
+- **序偽同**：依次循域而綴果，非統觀。驗：跨域交湧新乎？或僅域析之連？
+- **早合**：全場未開即合。二、三步築覺基使真合可成——急則淺
+- **妥代湧**：「半安半用」乃妥非合。真合尋兩憂皆全足之框，或誠名不可減之衡
+- **單域過用**：非題皆需全觀。題寓單域時統觀加負無值。「不用」之則為此
+- **見失於表**：四步成清形，五步又分為域列。持合見為表之心；域細為旁證非主構
+- **域膨**：偽增域數以稱統觀。三真域之合勝七域而四為旁
 
-## Related Skills
+## 參
 
-- `meditate` — Step 1 of the cycle; clears context and establishes neutral starting state
-- `expand-awareness` — Step 2 of the cycle; shifts from narrow focus to panoramic perception
-- `observe` — used in Step 3; notices what is present across the field
-- `awareness` — used in Step 3; notices what is not being seen, reveals blind spots
-- `integrate-gestalt` — Step 4 of the cycle; forms the emergent whole from cross-domain patterns
-- `express-insight` — Step 5 of the cycle; communicates the integrated understanding
+- `meditate` — 一步：清脈立中性始態
+- `expand-awareness` — 二步：由窄轉廣
+- `observe` — 三步用：察場中所現
+- `awareness` — 三步用：察未見、揭盲點
+- `integrate-gestalt` — 四步：跨域紋成湧全
+- `express-insight` — 五步：傳統解

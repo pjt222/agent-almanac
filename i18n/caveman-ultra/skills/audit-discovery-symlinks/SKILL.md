@@ -25,29 +25,29 @@ metadata:
 
 # audit-discovery-symlinks
 
-## When to Use
+## Use When
 
-- After adding new skills, agents, or teams to the almanac
-- After a repository rename or move that may have broken absolute symlinks
-- When slash commands or agents are not found in Claude Code
-- As a periodic health check to catch drift between registries and discovery paths
-- When onboarding a new project that should discover shared almanac content
+- After add new skills/agents/teams → almanac
+- After repo rename/move → abs symlinks may break
+- Slash cmds/agents not found in Claude Code
+- Periodic health check → drift registries vs discovery
+- Onboard new project → should discover shared almanac
 
-**Do NOT use** for creating the initial symlink hub from scratch. See the [symlink-architecture guide](../../guides/symlink-architecture.md) for first-time setup.
+**Do NOT use** → creating initial symlink hub from scratch. See [symlink-architecture guide](../../guides/symlink-architecture.md) for first-time setup.
 
-## Inputs
+## In
 
-| Parameter | Type | Required | Description |
+| Param | Type | Required | Desc |
 |-----------|------|----------|-------------|
-| `almanac_path` | string | No | Absolute path to agent-almanac root. Auto-detected from `.claude/` symlink targets or cwd if omitted |
+| `almanac_path` | string | No | Abs path to agent-almanac root. Auto-detect from `.claude/` symlink targets or cwd if omitted |
 | `scope` | enum | No | `project`, `global`, or `both` (default: `both`) |
-| `fix_mode` | enum | No | `report` (default: audit only), `auto` (fix all safe issues), `interactive` (prompt before each fix) |
+| `fix_mode` | enum | No | `report` (default: audit only), `auto` (fix all safe), `interactive` (prompt each) |
 
-## Procedure
+## Do
 
 ### Step 1: Identify Almanac Path
 
-Locate the agent-almanac root directory.
+Locate agent-almanac root dir.
 
 ```bash
 # Auto-detect from current project's .claude/agents symlink
@@ -68,13 +68,13 @@ fi
 echo "Almanac path: $ALMANAC_PATH"
 ```
 
-**Expected:** `ALMANAC_PATH` points to a directory containing `skills/_registry.yml`, `agents/_registry.yml`, and `teams/_registry.yml`.
+**→** `ALMANAC_PATH` points to dir w/ `skills/_registry.yml`, `agents/_registry.yml`, `teams/_registry.yml`.
 
-**On failure:** If auto-detection fails, ask the user for the `almanac_path` input. The almanac root is the directory containing `skills/`, `agents/`, `teams/`, and their registries.
+**If err:** Auto-detect fails → ask user for `almanac_path`. Root = dir w/ `skills/`, `agents/`, `teams/` + registries.
 
 ### Step 2: Inventory Registries
 
-Extract the canonical lists of skills, agents, and teams from their registries.
+Extract canonical lists from registries.
 
 ```bash
 # Count registered skills (entries with "- id:" under domain sections)
@@ -92,13 +92,13 @@ REGISTERED_TEAM_COUNT=$(echo "$REGISTERED_TEAMS" | wc -l)
 echo "Registered: $REGISTERED_SKILL_COUNT skills, $REGISTERED_AGENT_COUNT agents, $REGISTERED_TEAM_COUNT teams"
 ```
 
-**Expected:** Counts match the `total_skills`, `total_agents`, `total_teams` values in each registry header.
+**→** Counts match `total_skills`, `total_agents`, `total_teams` in registry headers.
 
-**On failure:** If counts diverge from the header totals, the registry itself is out of sync. Note the discrepancy in the report but continue with the actual `- id:` entries as the source of truth.
+**If err:** Counts diverge → registry out of sync. Note discrepancy → continue using actual `- id:` entries as source of truth.
 
 ### Step 3: Audit Project-Level Symlinks
 
-Check `.claude/skills/*`, `.claude/agents`, `.claude/teams` in the current project directory.
+Check `.claude/skills/*`, `.claude/agents`, `.claude/teams` in cwd.
 
 ```bash
 PROJECT_CLAUDE=".claude"
@@ -140,13 +140,13 @@ else
 fi
 ```
 
-**Expected:** Zero missing, zero broken. Extraneous items are classified and explained.
+**→** Zero missing, zero broken. Extraneous classified + explained.
 
-**On failure:** If `.claude/` does not exist at all, the project has no discovery setup. Note this and skip to global audit.
+**If err:** No `.claude/` → no discovery setup. Note → skip to global audit.
 
 ### Step 4: Audit Global Symlinks
 
-Check `~/.claude/skills/*` and `~/.claude/agents`. Also check that `~/.claude/teams` is NOT a symlink (it should be absent or a directory for TeamCreate runtime state).
+Check `~/.claude/skills/*` + `~/.claude/agents`. Verify `~/.claude/teams` is NOT a symlink (absent or real dir for TeamCreate runtime).
 
 ```bash
 GLOBAL_CLAUDE="$HOME/.claude"
@@ -204,13 +204,13 @@ else
 fi
 ```
 
-**Expected:** Zero missing almanac skills, zero broken. External content (peon-ping, etc.) is listed but not flagged as errors.
+**→** Zero missing almanac skills, zero broken. External listed, not flagged err.
 
-**On failure:** If `~/.claude/` does not exist, the global hub is not set up. Refer to the [symlink-architecture guide](../../guides/symlink-architecture.md) for initial setup.
+**If err:** No `~/.claude/` → global hub not set up. See [symlink-architecture guide](../../guides/symlink-architecture.md) for initial setup.
 
 ### Step 5: Generate Audit Report
 
-Produce a summary table covering both layers.
+Summary table both layers.
 
 ```markdown
 # Discovery Symlink Audit Report
@@ -243,13 +243,13 @@ Produce a summary table covering both layers.
 - External content (non-almanac): [list — informational only]
 ```
 
-**Expected:** A clear, actionable report. Zero issues means a clean bill of health.
+**→** Clear actionable report. Zero issues = clean.
 
-**On failure:** If report generation itself fails, output raw counts and lists to the console as fallback.
+**If err:** Report gen fails → raw counts + lists to console as fallback.
 
 ### Step 6: Repair (Optional)
 
-If `fix_mode` is `auto` or `interactive`, fix the issues found.
+If `fix_mode` = `auto`/`interactive` → fix found issues.
 
 **6a. Create missing project symlinks:**
 ```bash
@@ -313,15 +313,15 @@ if [ "$GLOBAL_TEAM_STATUS" = "MISSING" ]; then
 fi
 ```
 
-**Important:** Never remove items classified as external. These belong to other projects (e.g., peon-ping) and must be preserved.
+**Important:** Never remove items classified as external. Belong to other projects (peon-ping) → preserve.
 
-**Expected:** All missing symlinks created, all broken symlinks removed, all stale almanac entries cleaned. External content untouched.
+**→** All missing created, broken removed, stale cleaned. External untouched.
 
-**On failure:** If `ln -s` fails due to an existing file/directory at the target path (e.g., empty directory instead of symlink), remove the blocker first with `rmdir` (for empty dirs) or flag for manual review (for non-empty dirs).
+**If err:** `ln -s` fails due to existing file/dir at target (empty dir instead of symlink) → remove blocker first w/ `rmdir` (empty) or flag for manual review (non-empty).
 
 ### Step 7: Verify
 
-Re-run the audit checks from Steps 3-4 to confirm repairs.
+Re-run Steps 3-4 checks → confirm repairs.
 
 ```bash
 echo "=== Post-repair verification ==="
@@ -335,40 +335,40 @@ echo "Project teams:  $PROJECT_TEAM_STATUS ($PROJECT_TEAM_COUNT .md files)"
 echo "Global teams:   $GLOBAL_TEAM_STATUS ($GLOBAL_TEAM_COUNT .md files)"
 ```
 
-**Expected:** Zero missing, zero broken. Counts match registered totals (for almanac content). External content listed separately.
+**→** Zero missing, zero broken. Counts match registered totals (almanac). External listed separately.
 
-**On failure:** If issues remain after repair, report the specific failures. Common causes: permission errors on `~/.claude/`, NTFS path length limits on `/mnt/` paths, or a non-empty directory blocking symlink creation.
+**If err:** Issues remain post-repair → report specific failures. Common: perms on `~/.claude/`, NTFS path length on `/mnt/`, non-empty dir blocking symlink.
 
-## Validation
+## Check
 
-- [ ] Almanac path correctly identified and contains all three registries
-- [ ] Registry counts match `total_*` header values (or discrepancy noted)
-- [ ] Project-level skills, agents, and teams audited
-- [ ] Global-level skills, agents, and teams audited
-- [ ] External content (non-almanac) identified and excluded from issue counts
-- [ ] `_template` entries flagged as extraneous (never belongs in discovery paths)
-- [ ] Audit report generated with clear counts and actionable lists
-- [ ] If `fix_mode` is `auto`: all safe repairs applied, external content untouched
-- [ ] Post-repair verification confirms zero missing, zero broken
+- [ ] Almanac path identified + contains all 3 registries
+- [ ] Registry counts match `total_*` headers (or discrepancy noted)
+- [ ] Project-level skills/agents/teams audited
+- [ ] Global-level skills/agents/teams audited
+- [ ] External content identified + excluded from issue counts
+- [ ] `_template` entries flagged extraneous
+- [ ] Audit report generated w/ counts + lists
+- [ ] `fix_mode=auto` → safe repairs applied, external untouched
+- [ ] Post-repair verification → zero missing, zero broken
 
-## Common Pitfalls
+## Traps
 
-1. **Confusing external content with missing almanac content**: `~/.claude/skills/` may contain skills from other projects (e.g., peon-ping). Always check whether a symlink target is under the almanac path before classifying it as stale or extraneous.
+1. **External vs missing almanac**: `~/.claude/skills/` may contain skills from other projects (peon-ping). Check symlink target is under almanac path before classifying stale/extraneous.
 
-2. **Removing external content**: Never delete items that don't target the almanac. They belong to other projects and are intentional.
+2. **Remove external**: Never delete items not targeting almanac. Belong to other projects, intentional.
 
-3. **Symlinking `_template` directories**: Templates are scaffolding, not consumable content. The `_template` directory should never appear in `.claude/skills/` or `.claude/agents/`. Bulk sync scripts must explicitly skip it.
+3. **Symlink `_template` dirs**: Scaffolding, not consumable. Should never appear in `.claude/skills/` or `.claude/agents/`. Bulk sync scripts must skip.
 
-4. **Stale `.claude/teams` symlink**: A `.claude/teams` symlink pointing to team definitions is a misconfiguration. Claude Code's `TeamCreate` uses `~/.claude/teams/` for runtime state (config.json, inboxes). If this path is a symlink to the almanac's `teams/` directory, runtime artifacts will be written into the git-tracked repository. Remove any `.claude/teams` symlink found at project or global level.
+4. **Stale `.claude/teams` symlink**: Symlink pointing to team defs = misconfig. TeamCreate uses `~/.claude/teams/` for runtime (config.json, inboxes). If this path symlinks almanac `teams/` → runtime artifacts written to git-tracked repo. Remove any `.claude/teams` symlink found.
 
-5. **Relative vs absolute paths**: Project-level skill symlinks use relative paths (`../../skills/<name>`). Global symlinks use absolute paths (`/path/to/almanac/skills/<name>`). Mixing these patterns causes breakage on moves.
+5. **Relative vs absolute paths**: Project-level skill symlinks = relative (`../../skills/<name>`). Global = absolute (`/path/to/almanac/skills/<name>`). Mixing → breakage on moves.
 
-6. **Registry header vs actual count**: The `total_skills` field in the registry header may be stale if someone added entries without updating the count. Trust the actual `- id:` entries, not the header.
+6. **Registry header vs actual count**: `total_skills` in header may be stale if entries added w/o count update. Trust actual `- id:` entries, not header.
 
-## Related Skills
+## →
 
-- [repair-broken-references](../repair-broken-references/SKILL.md) -- general broken link and reference repair
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) -- project directory organization
-- [create-skill](../create-skill/SKILL.md) -- includes symlink creation for new skills (Step 13)
-- [create-agent](../create-agent/SKILL.md) -- includes discovery verification (Step 10)
-- [create-team](../create-team/SKILL.md) -- team creation with registry integration
+- [repair-broken-references](../repair-broken-references/SKILL.md) — general broken link/ref repair
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — project dir org
+- [create-skill](../create-skill/SKILL.md) — inc. symlink creation for new skills (Step 13)
+- [create-agent](../create-agent/SKILL.md) — inc. discovery verification (Step 10)
+- [create-team](../create-team/SKILL.md) — team creation w/ registry integration

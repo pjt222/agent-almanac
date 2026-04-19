@@ -24,223 +24,163 @@ metadata:
   tags: relocation, documents, checklist, verification, translation
 ---
 
-# Check Relocation Documents
+# 查遷文
 
-Verify that all required documents are present, valid, and properly prepared for each bureaucratic step of an EU/DACH relocation, generating an actionable list of missing items and translation needs.
+核遷策所需文牒，揭缺失與譯之需。
 
-## When to Use
+## 用
 
-- After creating a relocation plan and before beginning bureaucratic procedures
-- When preparing for a specific appointment (Buergeramt, Finanzamt, insurance office)
-- When unsure which documents need certified translation or apostille
-- After receiving a rejection or request for additional documents from an authority
-- When a household member has a different nationality requiring separate document tracks
-- As a periodic check during the relocation process to ensure nothing has been overlooked
+- 策定→官程未啟→用
+- 赴署前（Buergeramt, Finanzamt）→用
+- 譯否、認證否存疑→用
+- 受拒→用
+- 家人異籍→用
+- 遷程中定期察→用
 
-## Inputs
+## 入
 
-### Required
+### 必
 
-- **Relocation plan**: Output from the plan-eu-relocation skill or equivalent, listing all bureaucratic steps
-- **Destination country**: Germany, Austria, Switzerland, or other EU country
-- **Nationality/nationalities**: For all household members
-- **Document inventory**: List of documents currently in possession (originals and copies)
+- **遷策**：plan-eu-relocation 之出
+- **目國**：德奧瑞或他 EU
+- **籍**：家之諸員
+- **現存文牒**
 
-### Optional
+### 可
 
-- **Origin country**: For determining which documents need apostille or Hague Convention legalization
-- **Employment contract**: To determine employer-provided documents (e.g., Arbeitgeberbescheinigung)
-- **Language of existing documents**: To identify translation needs
-- **Previous relocation experience**: Prior EU registrations that may simplify requirements
-- **Special circumstances**: Recognized refugees, EU Blue Card holders, posted workers (different document requirements)
+- **原籍國**：定認證之需
+- **僱約**：定僱方所供
+- **文之語**：定譯之需
+- **往遷經歷**
+- **特況**：難民、藍卡、派遣工
 
-## Procedure
+## 行
 
-### Step 1: List All Bureaucratic Steps
+### 一：列官程
 
-Extract every registration, application, and notification step from the relocation plan.
+析策、列所有官程。
 
-1. Parse the relocation plan for all action items requiring document submission
-2. Categorize steps by authority type:
-   - Municipal registration offices (Buergeramt, Meldeamt, Einwohnerkontrolle)
-   - Tax authorities (Finanzamt)
-   - Health insurance providers (Krankenkasse, OeGK, Swiss insurer)
-   - Social security offices (Rentenversicherung, Sozialversicherung, AHV)
-   - Immigration/foreigners office (Auslaenderbehorde) if applicable
-   - Banks and financial institutions
-   - Schools and childcare facilities
-   - Vehicle registration (Kfz-Zulassungsstelle)
-   - Other (pet import, professional license recognition)
-3. Order steps according to the dependency chain from the relocation plan
-4. Note which steps share the same documents (to avoid redundant preparation)
+1. 析策取需交文之事
+2. 按署分類：
+   - 市署（Buergeramt, Meldeamt, Einwohnerkontrolle）
+   - 稅署（Finanzamt）
+   - 醫保（Krankenkasse, OeGK, Swiss insurer）
+   - 社保（Rentenversicherung, Sozialversicherung, AHV）
+   - 外署（Auslaenderbehorde）若須
+   - 銀行
+   - 學校、托兒
+   - 車署（Kfz-Zulassungsstelle）
+   - 他（寵物入境、職照認可）
+3. 依策之序排
+4. 注共用文者
 
-**Expected:** A numbered list of all bureaucratic steps, categorized and ordered, with notes on shared document requirements.
+得：分類有序之事列。
 
-**On failure:** If the relocation plan is incomplete or unavailable, build the step list from the destination country's official relocation checklist (e.g., Germany: make-it-in-germany.com, Austria: migration.gv.at, Switzerland: ch.ch/en/moving-switzerland).
+敗：策闕→依目國官單建之（makeitingermany.de, migration.gv.at, ch.ch）。
 
-### Step 2: Map Required Documents per Step
+### 二：映文於程
 
-For each bureaucratic step, identify every document the authority requires.
+每程→所需文。
 
-1. For municipal registration (Anmeldung/Meldezettel):
-   - Valid passport or national ID card (all household members)
-   - Wohnungsgeberbestaetigung / rental contract / property deed
-   - Marriage certificate (if registering as a couple)
-   - Birth certificates (for children)
-   - Previous registration confirmation (if moving within the country)
-2. For tax registration:
-   - Residence registration confirmation (Meldebestaetigung/Meldezettel)
-   - Employment contract or business registration
-   - Tax ID from origin country (for cross-border coordination)
-   - Marriage certificate (for tax class assignment in Germany)
-3. For health insurance enrollment:
-   - Employment contract or proof of self-employment
-   - Previous insurance confirmation or EHIC (European Health Insurance Card)
-   - S1 form (for posted workers or cross-border situations)
-   - Residence registration confirmation
-4. For social security coordination:
-   - A1 portable document (for posted workers)
-   - E-forms or S-forms for benefit transfers
-   - Employment history documentation
-   - Social security number from origin country
-5. For bank account opening:
-   - Valid passport or national ID
-   - Residence registration confirmation
-   - Proof of income (employment contract or recent payslips)
-   - Tax ID or Steueridentifikationsnummer (Germany)
-6. For immigration/residence permits (non-EU nationals):
-   - Valid passport with at least 6 months remaining validity
-   - Biometric photos (specific format per country)
-   - Employment contract or job offer letter
-   - Proof of financial means
-   - Health insurance confirmation
-   - University degree with recognition (for EU Blue Card)
-   - Criminal background check (may require apostille)
-7. For vehicle re-registration:
-   - Vehicle registration document (Fahrzeugbrief/Zulassungsbescheinigung Teil II)
-   - Proof of insurance (eVB number in Germany)
-   - TUeV/Pickerl/MFK inspection certificate
-   - Residence registration confirmation
-8. For school/childcare enrollment:
-   - Birth certificates
-   - Vaccination records (Impfpass)
-   - Previous school reports with translations
-   - Residence registration confirmation
+1. **市登**（Anmeldung）：護照或身份證、住所證（Wohnungsgeberbestaetigung）、婚書、出生證、舊登記
+2. **稅登**：市登證、僱約、原籍稅號、婚書
+3. **醫保**：僱約、舊保證或 EHIC、S1、市登
+4. **社保**：A1、E/S 表、僱歷、原籍社號
+5. **開戶**：護照、市登、入憑、稅號
+6. **居留**（非 EU）：護照 6 月餘效、生物照、僱約、財證、醫保、認可學位、無犯錄
+7. **車**：車牒（Fahrzeugbrief）、保險（eVB）、檢照（TUeV/Pickerl/MFK）、市登
+8. **學托**：出生證、疫苗冊、舊校報（譯）、市登
 
-**Expected:** A matrix mapping each bureaucratic step to its required documents, with document specifications (original required, copy acceptable, certified translation needed).
+得：程↔文之矩陣。原件/副本/認譯分明。
 
-**On failure:** If requirements for a specific step are unclear, check the authority's website directly or call their service line. Requirements can change; do not rely solely on third-party guides older than 12 months.
+敗：要求不明→問署官網或電。勿依 12 月前之舊指南。
 
-### Step 3: Check Current Document Status
+### 三：察現狀
 
-Compare the required documents against the current inventory to identify gaps.
+對比已有與所需→揭缺。
 
-1. For each required document, check:
-   - **Have (original)**: Original document is in possession and accessible
-   - **Have (copy only)**: Only a copy exists; original may need to be ordered
-   - **Expired**: Document exists but validity period has passed
-   - **Missing**: Document does not exist and must be obtained
-   - **Not applicable**: Document is not needed for this specific case
-2. For documents that are "Have (original)", verify:
-   - The document is not damaged or illegible
-   - Names match across all documents (watch for transliteration differences, maiden names, middle names)
-   - The document will still be valid at the time it will be used (passports, ID cards, insurance cards)
-3. For expired documents, determine:
-   - Renewal processing time at issuing authority
-   - Whether an expired document is accepted temporarily (some are, most are not)
-   - Cost of renewal
-4. For missing documents, determine:
-   - Issuing authority and their processing time
-   - Required supporting documents to obtain the missing document (recursive check)
-   - Cost and payment method
-   - Whether it can be ordered remotely or requires in-person appearance
-5. Flag any documents where names do not match (e.g., passport has maiden name, marriage certificate has married name) -- these will likely require explanation or additional proof of name change
+1. 每文之狀：
+   - **有原**：原件在手
+   - **僅副**：無原、須訂
+   - **逾**：已過期
+   - **缺**：未有
+   - **不需**
+2. 有原者→察：未毀、名合、用時尚效
+3. 逾者→察：更新期、權宜受否、費
+4. 缺者→察：發署、期、上游文（遞歸）、費、遠訂否
+5. 名異者（婚前後、拼寫）→標
 
-**Expected:** A status table for every required document: status (have/copy-only/expired/missing/N-A), validity date, and notes on any issues.
+得：每文之狀表：狀/效期/備註。
 
-**On failure:** If document status cannot be confirmed (e.g., documents are in storage or with another party), mark as "unconfirmed" and treat as potentially missing for planning purposes.
+敗：狀不明→標「未確」、以缺計。
 
-### Step 4: Identify Translation and Apostille Requirements
+### 四：辨譯認證之需
 
-Determine which documents need certified translation, apostille, or other legalization.
+定何文須認譯、加簽（apostille）。
 
-1. Check destination country language requirements:
-   - Germany: Documents must generally be in German or accompanied by certified translation
-   - Austria: Same as Germany; some offices accept English for EU documents
-   - Switzerland: Depends on canton (German, French, Italian, or Romansh area)
-2. Identify which documents are exempt from translation:
-   - EU multilingual standard forms (Regulation 2016/1191) for birth, marriage, death, and other civil status documents between EU member states
-   - Passports and national ID cards (universally accepted without translation)
-   - EHIC (European Health Insurance Card)
-3. For documents requiring translation:
-   - Must be done by a sworn/certified translator (beeidigter Uebersetzer)
-   - The translator must be certified in the destination country (not the origin country)
-   - Typical turnaround: 3-10 business days
-   - Cost: 30-80 EUR per page depending on language pair and complexity
-4. Determine apostille or legalization requirements:
-   - Documents from Hague Convention countries: apostille from issuing country's competent authority
-   - Documents from non-Hague countries: full legalization chain (local notary, foreign ministry, embassy)
-   - EU-internal documents: often exempt from apostille under EU regulations, but verify per document type
-   - Switzerland is a Hague Convention member but not an EU member; rules differ
-5. Check if the destination country accepts digital or electronic apostilles
-6. Note that some documents require both apostille AND certified translation (the apostille itself may also need translation)
+1. 目國語：
+   - 德：德文或認譯
+   - 奧：同德；部分受 EU 英文
+   - 瑞：依州（德、法、意、羅）
+2. 免譯者：EU 多語標表（2016/1191 規）、護照身份證、EHIC
+3. 須譯者：
+   - 目國認證譯者（非原籍）
+   - 3-10 工作日
+   - 30-80 歐/頁
+4. 認證/合法化：
+   - 海牙國→加簽
+   - 非海牙→全鏈（公證、外部、使館）
+   - EU 內→多免加簽，然須逐文驗
+   - 瑞士為海牙非 EU
+5. 察電子加簽受否
+6. 或加簽+譯俱須
 
-**Expected:** A translation/legalization matrix showing for each document: translation needed (yes/no), apostille needed (yes/no), estimated cost, and estimated processing time.
+得：每文之譯/加簽/費/期之矩陣。
 
-**On failure:** If uncertain whether a specific document needs apostille, contact the destination authority directly. Over-preparing (getting an unnecessary apostille) is better than under-preparing (being turned away at the appointment).
+敗：存疑→直問目署。備多優於備少。
 
-### Step 5: Generate Action List
+### 五：生事單
 
-Compile all findings into a prioritized, deadline-aware action list.
+匯總發現→限期分級之單。
 
-1. Merge all gaps (missing, expired, translation needed, apostille needed) into a single action list
-2. For each action item, include:
-   - Document name
-   - Action required (obtain, renew, translate, apostille, replace)
-   - Issuing authority or service provider
-   - Estimated processing time
-   - Estimated cost
-   - Deadline (derived from when the document is first needed in the relocation timeline)
-   - Priority (critical / high / medium / low)
-3. Assign priority based on:
-   - **Critical**: Blocks the first bureaucratic step (e.g., passport for Anmeldung) or has a non-negotiable deadline
-   - **High**: Needed within the first 2 weeks after arrival; long processing time
-   - **Medium**: Needed within the first month; reasonable processing time
-   - **Low**: Needed eventually; no immediate deadline pressure
-4. Order the list by:
-   - First: Critical items sorted by longest processing time (start these first)
-   - Then: High items sorted by deadline
-   - Then: Medium and low items
-5. Calculate total estimated cost for all document preparation
-6. Add a "document folder" checklist for the day of each appointment, listing exactly which originals, copies, and translations to bring
+1. 併所有缺（缺、逾、譯、加簽）為一
+2. 每事：文名、事（取/更/譯/加簽/替）、署、期、費、限期、級
+3. 級：
+   - **急**：阻首程或限期硬
+   - **高**：抵後 2 週內
+   - **中**：首月內
+   - **低**：無即限
+4. 序：急（長期先）→高（限期）→中低
+5. 算總費
+6. 每赴署之「文匣」清單
 
-**Expected:** A prioritized action list with deadlines, costs, and processing times, plus per-appointment packing lists for documents.
+得：分級限期有費之單+逐赴清單。
 
-**On failure:** If processing times are uncertain (common for documents from countries with slower bureaucracies), use worst-case estimates and start the process as early as possible. Flag items where expedited processing is available at additional cost.
+敗：期不明→取最壞、及早啟。注加急之選（增費）。
 
-## Validation
+## 驗
 
-- Every bureaucratic step from the relocation plan has at least one document mapped to it
-- No document is listed as "status unknown" -- all must be confirmed as have/missing/expired/N-A
-- Translation requirements reference the destination country's official language requirements
-- Apostille requirements are verified against Hague Convention membership of the issuing country
-- Deadlines in the action list align with the relocation timeline from plan-eu-relocation
-- Priority assignments are consistent (no "low" priority item that blocks a "critical" step)
-- The total cost estimate is calculated and presented
-- Per-appointment document checklists are generated for at least the first three bureaucratic steps
+- [ ] 每程皆有文映
+- [ ] 無「狀不明」之文
+- [ ] 譯之需依目國官規
+- [ ] 加簽依海牙籍
+- [ ] 限期合遷時
+- [ ] 級序一貫
+- [ ] 總費已計
+- [ ] 首三程之赴署清單已生
 
-## Common Pitfalls
+## 忌
 
-- **Assuming EU documents need no preparation**: While EU regulations simplify cross-border document acceptance, most offices still require translations and some require apostilles even between EU states
-- **Name mismatches across documents**: Transliteration from non-Latin scripts, use of maiden vs. married names, and middle name inconsistencies are the most common reason for rejection at appointments
-- **Relying on photocopies**: Most DACH authorities require original documents for inspection and keep certified copies; bring originals even if you think copies will suffice
-- **Ordering translations too late**: Sworn translators often have 1-2 week backlogs, and this extends during peak relocation season (August-September)
-- **Forgetting the apostille on the translation**: Some authorities require the apostille on the original document AND a separate certified translation of the apostilled document
-- **Not checking document validity periods**: A passport valid for 2 more months may be rejected if the authority requires 6 months remaining validity
-- **Ignoring the multilingual EU forms**: For civil status documents between EU countries, multilingual standard forms (available from the issuing authority) can eliminate the need for translation entirely -- but you must request them explicitly
-- **Assuming digital documents are accepted**: Most DACH government offices still require physical documents; PDF printouts of digital-only documents may not be accepted without additional verification
+- **EU 無備之誤**：多署仍須譯、部分須加簽
+- **名不合**：轉寫、婚前後、中名→最常致拒
+- **只副本**：DACH 多須原件驗
+- **譯遲訂**：認譯常 1-2 週積（8-9 月尤甚）
+- **漏譯上之加簽**：或須原件加簽+認譯
+- **未察效期**：護照餘 2 月→常拒（須 6 月）
+- **忽 EU 多語標表**：可免譯，然須明求
+- **電子文非受**：DACH 多須紙本
 
-## Related Skills
+## 參
 
-- [plan-eu-relocation](../plan-eu-relocation/SKILL.md) -- Create the relocation plan that feeds into this document check
-- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md) -- Detailed guidance for the procedures these documents are needed for
+- [plan-eu-relocation](../plan-eu-relocation/SKILL.md)
+- [navigate-dach-bureaucracy](../navigate-dach-bureaucracy/SKILL.md)

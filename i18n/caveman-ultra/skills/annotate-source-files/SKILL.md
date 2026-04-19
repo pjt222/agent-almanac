@@ -27,27 +27,27 @@ metadata:
 
 # Annotate Source Files
 
-Add PUT workflow annotations to source files so putior can extract structured workflow data and generate Mermaid diagrams.
+Add PUT workflow annotations → putior extracts structured workflow data + generates Mermaid diagrams.
 
-## When to Use
+## Use When
 
-- After analyzing a codebase with `analyze-codebase-workflow` and having an annotation plan
-- Adding workflow documentation to new or existing source files
-- Enriching auto-detected workflows with manual labels and connections
-- Documenting data pipelines, ETL processes, or multi-step computations
+- After `analyze-codebase-workflow` + annotation plan
+- Add workflow docs new/existing src
+- Enrich auto-detected w/ manual labels + connections
+- Doc data pipelines, ETL, multi-step computations
 
-## Inputs
+## In
 
-- **Required**: Source files to annotate
-- **Required**: Annotation plan or knowledge of the workflow steps
-- **Optional**: Style preference: single-line or multiline (default: single-line)
-- **Optional**: Whether to use `put_generate()` for skeleton generation (default: yes)
+- **Required**: Src files to annotate
+- **Required**: Annotation plan or workflow steps knowledge
+- **Optional**: Style — single-line or multiline (default: single-line)
+- **Optional**: Use `put_generate()` skeletons? (default: yes)
 
-## Procedure
+## Do
 
 ### Step 1: Determine Comment Prefix
 
-Each language has a specific comment prefix for PUT annotations. Use `get_comment_prefix()` to find the correct one.
+Each lang has specific prefix. `get_comment_prefix()` → correct one.
 
 ```r
 library(putior)
@@ -64,15 +64,15 @@ get_comment_prefix("m")    # "%"
 get_comment_prefix("lua")  # "--"
 ```
 
-**Expected:** A string like `"#"`, `"--"`, `"//"`, or `"%"`.
+**→** String like `"#"`, `"--"`, `"//"`, or `"%"`.
 
-> **Line and block comments:** putior detects annotations in both line comments (`//`, `#`, `--`) and C-style block comments (`/* */`, `/** */`). For JS/TS, both `//` and `/* */` blocks are scanned. Python triple-quote strings (`''' '''`) are **not** detected — use `#` for Python annotations.
+> **Line + block comments:** putior detects annotations in both line comments (`//`, `#`, `--`) + C-style block comments (`/* */`, `/** */`). JS/TS both `//` + `/* */` scanned. Python triple-quote strings (`''' '''`) **not** detected — use `#` for Python.
 
-**On failure:** If the extension is not recognized, the file language may not be supported. Check `get_supported_extensions()` for the full list. For unsupported languages, use `#` as a conventional default.
+**If err:** Ext not recognized → lang may not be supported. Check `get_supported_extensions()`. Unsupported langs → use `#` conventional default.
 
-### Step 2: Generate Annotation Skeletons
+### Step 2: Generate Skeletons
 
-Use `put_generate()` to create annotation templates based on auto-detected I/O.
+`put_generate()` → annotation templates based on auto-detected I/O.
 
 ```r
 # Print suggestions to console
@@ -88,51 +88,51 @@ put_generate("./src/etl/", style = "multiline")
 put_generate("./src/etl/", output = "clipboard")
 ```
 
-Example output for an R file:
+Example out for R file:
 ```r
 # put id:'extract_data', label:'Extract Customer Data', input:'customers.csv', output:'raw_data.internal'
 ```
 
-Example output for SQL:
+Example out for SQL:
 ```sql
 -- put id:'load_data', label:'Load Customer Table', output:'customers'
 ```
 
-**Expected:** One or more annotation comment lines per source file, pre-filled with detected function names and I/O.
+**→** 1+ annotation comment lines per file, pre-filled w/ detected fn names + I/O.
 
-**On failure:** If no suggestions are generated, the file may not contain recognizable I/O patterns. Write annotations manually based on your understanding of the code.
+**If err:** No suggestions → file may not have recognizable I/O patterns. Write annotations manually.
 
 ### Step 3: Refine Annotations
 
-Edit the generated skeletons to add accurate labels, connections, and metadata.
+Edit generated skeletons → accurate labels, connections, metadata.
 
-**Annotation syntax reference:**
+**Annotation syntax:**
 
 ```
 <prefix> put id:'unique_id', label:'Human Readable Label', input:'file1.csv, file2.rds', output:'result.parquet, summary.internal'
 ```
 
 Fields:
-- `id` (required): Unique identifier, used for node connections
-- `label` (required): Human-readable description shown in diagram
-- `input`: Comma-separated list of input files or variables
-- `output`: Comma-separated list of output files or variables
-- `.internal` extension: Marks in-memory variables (not persisted between scripts)
-- `node_type`: Controls Mermaid node shape and class styling. Values:
-  - `"input"` — stadium shape `([...])` for data sources and configuration
-  - `"output"` — subroutine shape `[[...]]` for generated artifacts
-  - `"process"` — rectangle `[...]` for processing steps (default)
-  - `"decision"` — diamond `{...}` for conditional logic
-  - `"start"` / `"end"` — stadium shape `([...])` for entry/terminal nodes
+- `id` (required): Unique ID, for node connections
+- `label` (required): Human-readable desc shown diagram
+- `input`: Comma-separated ins
+- `output`: Comma-separated outs
+- `.internal` ext: Marks in-memory vars (not persisted between scripts)
+- `node_type`: Mermaid shape + class styling. Values:
+  - `"input"` — stadium shape `([...])` data srcs + config
+  - `"output"` — subroutine shape `[[...]]` generated artifacts
+  - `"process"` — rectangle `[...]` processing steps (default)
+  - `"decision"` — diamond `{...}` conditional logic
+  - `"start"` / `"end"` — stadium shape `([...])` entry/terminal
 
-Example with `node_type`:
+Example w/ `node_type`:
 ```r
 # put id:'config', label:'Load Config', node_type:'input', output:'config.internal'
 # put id:'transform', label:'Apply Rules', node_type:'process', input:'config.internal', output:'result.rds'
 # put id:'report', label:'Generate Report', node_type:'output', input:'result.rds'
 ```
 
-**Multiline syntax** (for complex annotations):
+**Multiline syntax** (complex):
 ```r
 # put id:'complex_step', \
 #   label:'Multi-line Label', \
@@ -140,9 +140,9 @@ Example with `node_type`:
 #   output:'result.parquet'
 ```
 
-**Block comment syntax** (for `//`-prefix languages only: JS, TS, Go, Rust, C, C++, Java, etc.):
+**Block comment syntax** (`//`-prefix langs only: JS, TS, Go, Rust, C, C++, Java, etc.):
 
-Languages that use `//` for line comments also support PUT annotations inside `/* */` and `/** */` block comments. Use `* put` as the line prefix inside the block body:
+Langs w/ `//` line comments also support PUT in `/* */` + `/** */` blocks. Use `* put` as line prefix inside block body:
 
 ```javascript
 /* put id:'init', label:'Initialize Config', output:'config.internal' */
@@ -158,7 +158,7 @@ function processRecords(config, records) {
 }
 ```
 
-JSDoc-style annotations are particularly useful when documenting workflow steps alongside API documentation:
+JSDoc annotations useful documenting workflow + API docs:
 
 ```typescript
 /**
@@ -170,9 +170,9 @@ export function normalizeSensorData(readings: SensorReading[]): NormalizedData {
 }
 ```
 
-> **Note:** Block comment annotations are **not** supported for `#`-prefix languages (R, Python, Shell) or `--`-prefix languages (SQL, Lua). Use only line comments for those languages. Block-originated annotations do not support backslash continuation across lines.
+> **Note:** Block comment annotations **not** supported for `#`-prefix (R, Python, Shell) or `--`-prefix (SQL, Lua). Line comments only those. Block-originated no backslash continuation across lines.
 
-**Cross-file data flow** (connecting scripts via file-based I/O):
+**Cross-file data flow** (connect scripts via file-based I/O):
 ```r
 # Script 1: extract.R
 # put id:'extract', label:'Extract Data', output:'raw_data.internal, raw_data.rds'
@@ -185,20 +185,20 @@ data <- readRDS("raw_data.rds")
 arrow::write_parquet(clean, "clean_data.parquet")
 ```
 
-**Expected:** Annotations refined with accurate IDs, labels, and I/O fields that reflect actual data flow.
+**→** Annotations refined w/ accurate IDs, labels, I/O reflecting actual data flow.
 
-**On failure:** If unsure about I/O, use `.internal` extension for in-memory intermediates and explicit file names for persisted data.
+**If err:** Unsure I/O → `.internal` ext for in-memory intermediates + explicit file names for persisted.
 
-### Step 4: Insert Annotations into Files
+### Step 4: Insert Annotations
 
-Place annotations at the top of each file or immediately above the relevant code block.
+Place at top of file or immediately above relevant code block.
 
 **Placement conventions:**
-1. **File-level annotation**: Place at the top of the file, after any shebang line or file header comment
-2. **Block-level annotation**: Place immediately above the code block it describes
-3. **Multiple annotations per file**: Use for files with distinct workflow phases
+1. **File-level**: Top after shebang or header comment
+2. **Block-level**: Immediately above code block it describes
+3. **Multi per file**: Distinct workflow phases
 
-Example placement in an R file:
+Example in R:
 ```r
 #!/usr/bin/env Rscript
 # ETL Extract Script
@@ -213,15 +213,15 @@ df_clean <- df[complete.cases(df), ]
 saveRDS(df_clean, "clean.rds")
 ```
 
-Use the Edit tool to insert annotations into existing files without disturbing surrounding code.
+Edit tool → insert into existing files no disturb surrounding.
 
-**Expected:** Annotations inserted at appropriate locations in each source file.
+**→** Annotations inserted at appropriate locations per file.
 
-**On failure:** If annotations break syntax highlighting in the editor, ensure the comment prefix is correct for the language. PUT annotations are standard comments and should not affect code execution.
+**If err:** Break syntax highlighting → verify prefix correct for lang. PUT = std comments + should not affect exec.
 
-### Step 5: Validate Annotations
+### Step 5: Validate
 
-Run putior's validation to check annotation syntax and connectivity.
+Run putior validation → syntax + connectivity.
 
 ```r
 # Scan annotated files
@@ -245,38 +245,38 @@ merged <- put_merge("./src/", merge_strategy = "supplement")
 cat(put_diagram(merged, theme = "github"))
 ```
 
-**Expected:** All annotations parse without errors. The diagram shows a connected workflow. `put_merge()` fills in any gaps from auto-detection.
+**→** All annotations parse no err. Diagram shows connected workflow. `put_merge()` fills gaps from auto-detection.
 
-**On failure:** Common validation issues:
-- Missing closing quote: `id:'name` → `id:'name'`
-- Using double quotes inside: `id:"name"` → `id:'name'`
-- Duplicate IDs across files: each `id` must be unique across the entire scanned directory
-- Backslash continuation on the wrong line: the `\` must be the last character before newline
+**If err:** Common issues:
+- Missing close quote: `id:'name` → `id:'name'`
+- Double quotes inside: `id:"name"` → `id:'name'`
+- Duplicate IDs across files: each `id` must be unique across entire scanned dir
+- Backslash continuation wrong line: `\` must be last char before newline
 
-## Validation
+## Check
 
 - [ ] Every annotated file has syntactically valid PUT annotations
-- [ ] `put("./src/")` returns a data frame with the expected number of nodes
-- [ ] No duplicate `id` values across the scanned directory
-- [ ] `put_diagram()` produces a connected flowchart (not all isolated nodes)
-- [ ] Multiline annotations (if used) parse correctly with backslash continuation
-- [ ] `.internal` variables appear only as outputs, never as cross-file inputs
-- [ ] Files excluded via `exclude` parameter do not appear in the workflow (e.g., `put("./src/", exclude = "test_")` skips test helpers)
+- [ ] `put("./src/")` returns df w/ expected node count
+- [ ] No duplicate `id` values across scanned dir
+- [ ] `put_diagram()` produces connected flowchart (not all isolated)
+- [ ] Multiline annotations (if used) parse correct w/ backslash continuation
+- [ ] `.internal` vars appear only outputs, never cross-file ins
+- [ ] Files excluded via `exclude` no appear in workflow (e.g., `put("./src/", exclude = "test_")` skips test helpers)
 
-## Common Pitfalls
+## Traps
 
-- **Quote nesting errors**: PUT annotations use single quotes: `id:'name'`. Double quotes cause parsing issues when the annotation is inside a string context.
-- **Duplicate IDs**: Every `id` must be globally unique within the scanned scope. Use a naming convention like `<script>_<step>` (e.g., `extract_read`, `transform_clean`).
-- **.internal as cross-file input**: `.internal` variables exist only during script execution. To pass data between scripts, use a persisted file format (`.rds`, `.csv`, `.parquet`) as the output of one script and input of the next.
-- **Missing connections**: If the diagram shows disconnected nodes, check that output filenames in one annotation exactly match input filenames in another (including extensions).
-- **Wrong comment prefix**: Using `#` in a SQL file or `//` in Python will cause the annotation to be treated as code, not a comment. Always verify with `get_comment_prefix()`.
-- **Forgetting multiline continuation**: When using multiline annotations, every continued line must end with `\` and the next line must start with the comment prefix.
-- **Python triple-quote strings**: putior does not scan Python triple-quote strings (`''' '''`, `""" """`). Always use `#` for Python PUT annotations.
-- **Meta-pipeline annotations**: If you annotate a build script that also scans for annotations (e.g., a script that calls `put()` and `put_diagram()`), the script's own annotations will appear in the generated diagram. Either exclude the file from scanning (see `generate-workflow-diagram` Common Pitfalls) or avoid placing PUT annotations in the build script itself.
+- **Quote nesting**: PUT uses single quotes: `id:'name'`. Double quotes → parsing issues when annotation in string ctx.
+- **Duplicate IDs**: Every `id` must be globally unique within scanned scope. Naming: `<script>_<step>` (e.g., `extract_read`, `transform_clean`).
+- **.internal as cross-file in**: `.internal` exists only during script exec. Pass data between scripts → persisted file format (`.rds`, `.csv`, `.parquet`) as out of one + in of next.
+- **Missing connections**: Disconnected nodes → check out filenames in 1 annotation exactly match in filenames in another (including exts).
+- **Wrong prefix**: `#` in SQL or `//` in Python → annotation treated as code not comment. Always verify `get_comment_prefix()`.
+- **Forget multiline continuation**: Every continued line must end `\` + next line must start w/ comment prefix.
+- **Python triple-quote strings**: putior no scan (`''' '''`, `""" """`). Always `#` for Python PUT.
+- **Meta-pipeline annotations**: Annotate build script that also scans for annotations (e.g., script calling `put()` + `put_diagram()`) → script's own annotations appear in generated diagram. Exclude file from scanning (see `generate-workflow-diagram` Traps) or no PUT in build script itself.
 
-## Related Skills
+## →
 
-- `analyze-codebase-workflow` — prerequisite: produces the annotation plan this skill follows
-- `generate-workflow-diagram` — next step: generate the final diagram from annotations
-- `install-putior` — putior must be installed before annotating
-- `configure-putior-mcp` — MCP tools provide interactive annotation assistance
+- `analyze-codebase-workflow` — prereq: produces annotation plan this follows
+- `generate-workflow-diagram` — next: generate final from annotations
+- `install-putior` — putior installed before annotating
+- `configure-putior-mcp` — MCP tools interactive annotation assistance

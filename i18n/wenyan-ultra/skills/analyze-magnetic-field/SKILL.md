@@ -23,36 +23,36 @@ metadata:
   tags: electromagnetism, magnetic-fields, biot-savart, ampere, magnetic-materials
 ---
 
-# Analyze Magnetic Field
+# 析磁場
 
-Calculate the magnetic field produced by a given current distribution by characterizing the source geometry, selecting the appropriate law (Biot-Savart for arbitrary geometries, Ampere's law for high-symmetry configurations), evaluating field integrals, checking limiting cases, incorporating magnetic material effects where relevant, and visualizing the resulting field-line topology.
+由電分算磁場：定源、選律（Biot-Savart 任幾、Ampere 對稱）、積分、驗極限、含材效、繪場線。
 
-## When to Use
+## 用
 
-- Computing the B-field from an arbitrary current-carrying conductor (wire loop, helix, irregular path)
-- Exploiting cylindrical, planar, or toroidal symmetry to apply Ampere's law directly
-- Estimating far-field behavior via the magnetic dipole approximation
-- Superposing fields from multiple current sources
-- Analyzing magnetic materials: linear permeability, B-H curves, hysteresis, saturation
+- 由任電導算 B 場（線環、螺、不規路）→用
+- 用筒、平、環對稱直施 Ampere→用
+- 由磁偶估遠場→用
+- 多源場疊→用
+- 析磁材：線磁導、B-H 曲、滯、飽→用
 
-## Inputs
+## 入
 
-- **Required**: Current distribution specification (geometry, current magnitude and direction)
-- **Required**: Region of interest where the field is needed (observation points or volume)
-- **Optional**: Material properties (relative permeability, B-H curve data, coercivity, remanence)
-- **Optional**: Desired accuracy level (exact integral, multipole expansion order, numerical resolution)
-- **Optional**: Visualization requirements (2D cross-section, 3D field lines, magnitude contour map)
+- **必**：電分規（幾、流值與向）
+- **必**：求場之域（觀點或體）
+- **可**：材性（相磁導、B-H 數、矯場、餘磁）
+- **可**：精階（精積、多極展階、數辨）
+- **可**：視需（2D 切、3D 場線、值等高）
 
-## Procedure
+## 行
 
-### Step 1: Characterize Current Distribution and Geometry
+### 一：定電分與幾
 
-Fully specify the source before selecting a method:
+擇法前全規源：
 
-1. **Current path**: Describe the geometry of every current-carrying element. For line currents, specify the path as a parametric curve r'(t). For surface currents, specify the surface current density K (A/m). For volume currents, specify J (A/m^2).
-2. **Coordinate system**: Choose coordinates aligned with the dominant symmetry. Cylindrical (rho, phi, z) for wires and solenoids. Spherical (r, theta, phi) for dipoles and loops at large distances. Cartesian for planar sheets.
-3. **Symmetry analysis**: Identify translational, rotational, and reflection symmetries. A symmetry of the source is a symmetry of the field. Document which components of B are nonzero by symmetry and which vanish.
-4. **Current continuity**: Verify that the current distribution satisfies div(J) = 0 (steady state) or div(J) = -d(rho)/dt (time-varying). Inconsistent current distributions produce unphysical fields.
+1. **電路**：每電元之幾。線流：路為參曲 r'(t)。面流：面流密 K (A/m)。體流：J (A/m^2)。
+2. **座系**：合主對稱。筒（rho、phi、z）為線、螺。球（r、theta、phi）為偶與遠處之環。卡為平片。
+3. **對稱析**：識平移、旋、反對稱。源之對稱乃場之對稱。文明 B 諸分由對稱非零或消。
+4. **流續**：驗 div(J) = 0（穩態）或 div(J) = -d(rho)/dt（時變）。不一致電分致非物場。
 
 ```markdown
 ## Source Characterization
@@ -64,30 +64,30 @@ Fully specify the source before selecting a method:
 - **Current continuity**: [verified / issue noted]
 ```
 
-**Expected:** A complete geometric description of the current distribution with coordinate system chosen, symmetries cataloged, and current continuity verified.
+得：完整幾述，座定、對稱錄、流續驗。
 
-**On failure:** If the geometry is too complex for a closed-form parametric description, discretize into short straight segments (numerical Biot-Savart). If current continuity is violated, add displacement current or return charge accumulation terms before proceeding.
+敗：幾太繁不能閉式參→離為短直段（數 Biot-Savart）。流不續→加位移流或返荷積項再進。
 
-### Step 2: Select Appropriate Law
+### 二：選律
 
-Choose the method that matches the problem's symmetry and complexity:
+合題對稱與繁：
 
-1. **Ampere's law** (high symmetry): Use when the current distribution has sufficient symmetry that B can be pulled out of the line integral. Applicable cases:
-   - Infinite straight wire (cylindrical symmetry) -> circular Amperian loop
-   - Infinite solenoid (translational + rotational) -> rectangular Amperian loop
-   - Toroid (rotational about the ring axis) -> circular Amperian loop
-   - Infinite planar current sheet (translational in two directions) -> rectangular loop
+1. **Ampere 律**（高對稱）：源之對稱足以由線積出 B。適：
+   - 無窮直線（筒對稱）→ 圓 Amperian 環
+   - 無窮螺管（平移+旋）→ 矩 Amperian 環
+   - 環（旋於環軸）→ 圓 Amperian 環
+   - 無窮平流片（兩向平移）→ 矩環
 
-2. **Biot-Savart law** (general): Use for arbitrary geometries where Ampere's law cannot simplify:
+2. **Biot-Savart 律**（通用）：Ampere 不能簡時用：
    - dB = (mu_0 / 4 pi) * (I dl' x r_hat) / r^2
-   - For volume currents: B(r) = (mu_0 / 4 pi) * integral of (J(r') x r_hat) / r^2 dV'
+   - 體流：B(r) = (mu_0 / 4 pi) * integral of (J(r') x r_hat) / r^2 dV'
 
-3. **Magnetic dipole approximation** (far field): Use when the observation point is far from the source (r >> source dimension d):
-   - Compute the magnetic dipole moment: m = I * A * n_hat (for a planar loop of area A)
+3. **磁偶近**（遠場）：觀於遠（r >> 源 d）：
+   - 算磁偶矩：m = I * A * n_hat（平環 A）
    - B_dipole(r) = (mu_0 / 4 pi) * [3(m . r_hat) r_hat - m] / r^3
-   - Valid when r/d > 5 for ~1% accuracy
+   - r/d > 5 約 1% 精
 
-4. **Superposition**: For multiple sources, compute B from each independently and sum vectorially. Linearity of Maxwell's equations guarantees this is exact.
+4. **疊**：多源各算 B 而向加。Maxwell 線性保此精。
 
 ```markdown
 ## Method Selection
@@ -97,34 +97,34 @@ Choose the method that matches the problem's symmetry and complexity:
 - **Fallback method**: [if primary fails or for cross-validation]
 ```
 
-**Expected:** A justified choice of method with a clear statement of why the chosen law is appropriate for the problem's symmetry level.
+得：擇法附明由：所擇律何以合對稱階。
 
-**On failure:** If Ampere's law is chosen but the symmetry is insufficient (B cannot be extracted from the integral), fall back to Biot-Savart. If the source geometry is too complex for analytic Biot-Savart, discretize numerically.
+敗：選 Ampere 而對稱不足（B 不可由積出）→退至 Biot-Savart。源太繁不能析 Biot-Savart→數離。
 
-### Step 3: Set Up and Evaluate Field Integrals
+### 三：設積分而算
 
-Execute the calculation using the method selected in Step 2:
+按二步法行算：
 
-1. **Ampere's law path**: For each Amperian loop:
-   - Parameterize the loop path and compute the line integral of B . dl
-   - Compute the enclosed current I_enc by counting all currents threading the loop
-   - Solve: contour_integral(B . dl) = mu_0 * I_enc
-   - Extract B from the integral using the symmetry established in Step 1
+1. **Ampere 律路**：各 Amperian 環：
+   - 參環路而算 B . dl 線積
+   - 計圍流 I_enc 數穿環諸流
+   - 解：contour_integral(B . dl) = mu_0 * I_enc
+   - 由對稱（一步立）出 B
 
-2. **Biot-Savart integration**: For each field point r:
-   - Parameterize the source: dl' = (dr'/dt) dt or express J(r') over the volume
-   - Compute the displacement vector: r - r' and its magnitude |r - r'|
-   - Evaluate the cross product: dl' x (r - r') or J x (r - r')
-   - Integrate over the source (line, surface, or volume)
-   - For analytic evaluation: exploit symmetry to reduce dimensionality (e.g., on-axis field of a loop involves only one integral)
-   - For numerical evaluation: discretize into N segments, compute the sum, and check convergence by doubling N
+2. **Biot-Savart 積**：各場點 r：
+   - 參源：dl' = (dr'/dt) dt 或表 J(r') 於體
+   - 算位移向：r - r' 與其值 |r - r'|
+   - 算叉積：dl' x (r - r') 或 J x (r - r')
+   - 積於源（線、面、體）
+   - 析評：用對稱降維（如環軸場僅一積）
+   - 數評：離為 N 段、算和、倍 N 驗收
 
-3. **Dipole calculation**:
-   - Compute total magnetic moment: m = (1/2) integral of (r' x J) dV' for volume currents, or m = I * A * n_hat for a planar loop
-   - Apply the dipole field formula at each observation point
-   - Estimate the error: the next multipole (quadrupole) correction scales as (d/r)^4
+3. **偶算**：
+   - 算總磁矩：m = (1/2) integral of (r' x J) dV' 為體流，或 m = I * A * n_hat 為平環
+   - 各觀點施偶場式
+   - 估誤：次多極（四極）正按 (d/r)^4 縮
 
-4. **Superposition assembly**: Sum contributions from all sources at each observation point. Track components separately to preserve cancellation accuracy.
+4. **疊裝**：各觀點和諸源貢。各分獨追以保消精。
 
 ```markdown
 ## Field Calculation
@@ -134,25 +134,25 @@ Execute the calculation using the method selected in Step 2:
 - **Convergence check** (if numerical): [N vs. 2N comparison]
 ```
 
-**Expected:** An explicit expression for B(r) at the observation points, with correct units (Tesla or Gauss) and a convergence check for numerical results.
+得：B(r) 於觀點之明式，附正單位（Tesla 或 Gauss）與數結之收驗。
 
-**On failure:** If the integral diverges, check for a missing regularization (e.g., the field on the wire itself diverges for an infinitely thin wire -- use finite wire radius). If numerical results oscillate with N, the integrand has a near-singularity that requires adaptive quadrature or analytical subtraction of the singular part.
+敗：積發散→察缺正規（如線本場無窮細線發散——用有限線徑）。數果隨 N 振→積近奇，需適配積或析減奇部。
 
-### Step 4: Check Limiting Cases
+### 四：驗極限
 
-Verify the result against known physics before trusting it:
+信前比知物理：
 
-1. **Far-field dipole limit**: At large r, any localized current distribution should produce a field that matches the magnetic dipole formula. Compute B from your result in the limit r -> infinity and compare with (mu_0 / 4 pi) * [3(m . r_hat) r_hat - m] / r^3.
+1. **遠場偶極限**：大 r，任局電分應出配磁偶式之場。算 r → 無窮極限與 (mu_0 / 4 pi) * [3(m . r_hat) r_hat - m] / r^3 比。
 
-2. **Near-field infinite-wire limit**: Close to a long straight segment of the conductor (distance rho << length L), the field should approach B = mu_0 I / (2 pi rho). Check this for the relevant portion of your geometry.
+2. **近場無窮線極限**：近長直導段（距 rho << 長 L），場應近 B = mu_0 I / (2 pi rho)。察相關幾段。
 
-3. **On-axis special cases**: For loops and solenoids, the on-axis field has simple closed forms:
-   - Single circular loop of radius R at distance z on axis: B_z = mu_0 I R^2 / [2 (R^2 + z^2)^(3/2)]
-   - Solenoid of length L, n turns per length: B_interior = mu_0 n I (for L >> R)
+3. **軸特例**：環、螺軸場有簡閉式：
+   - 半徑 R 之圓環於軸距 z：B_z = mu_0 I R^2 / [2 (R^2 + z^2)^(3/2)]
+   - 長 L 螺管，每長 n 圈：B_interior = mu_0 n I（L >> R）
 
-4. **Symmetry consistency**: Verify that components predicted to vanish by symmetry (Step 1) are indeed zero in the computed result. A nonzero forbidden component indicates an error.
+4. **對稱一致**：驗一步預測消之分（步一）果中真零。非零禁分示誤。
 
-5. **Dimensional analysis**: Verify that B has units of Tesla. Every term should carry mu_0 * [current] / [length] or equivalent.
+5. **量綱析**：驗 B 為 Tesla。各項應載 mu_0 * [流] / [長] 或等。
 
 ```markdown
 ## Limiting Case Verification
@@ -165,33 +165,33 @@ Verify the result against known physics before trusting it:
 | Units | -- | Tesla | [check] | [Yes/No] |
 ```
 
-**Expected:** All limiting cases match. The field has the correct units, symmetry, and asymptotic behavior.
+得：諸極限皆配。場有正單位、對稱、漸態。
 
-**On failure:** A failed limit indicates an error in the integral setup or evaluation. The most common causes are: wrong sign in the cross product, missing factor of 2 or pi, incorrect limits of integration, or a coordinate system mismatch between source and field point parameterizations.
+敗：極限敗示積設或評誤。常因：叉積錯號、缺 2 或 pi 因、積限誤、源與場參座系不配。
 
-### Step 5: Incorporate Magnetic Materials and Visualize
+### 五：含磁材而視
 
-Extend the analysis to include material effects and produce field visualizations:
+擴含材效而出視：
 
-1. **Linear magnetic materials**: Replace mu_0 with mu = mu_r * mu_0 inside the material. Apply boundary conditions at material interfaces:
-   - Normal component: B1_n = B2_n (continuous)
-   - Tangential component: H1_t - H2_t = K_free (surface free current)
-   - In the absence of free surface currents: H1_t = H2_t
+1. **線磁材**：材內以 mu = mu_r * mu_0 代 mu_0。材界施條：
+   - 法分：B1_n = B2_n（連）
+   - 切分：H1_t - H2_t = K_free（面自流）
+   - 無自面流：H1_t = H2_t
 
-2. **Nonlinear materials (B-H curves)**: For ferromagnetic cores:
-   - Use the material's B-H curve to relate B and H at each point
-   - For design purposes, approximate with piecewise linear segments: linear region (B = mu H), knee region, and saturation region (B approximately constant)
-   - Account for hysteresis if the operating point cycles: remanent magnetization B_r and coercive field H_c define the loop
+2. **非線材（B-H 曲）**：鐵磁核：
+   - 用材 B-H 曲關各點 B 與 H
+   - 為設近以分線段：線域（B = mu H）、膝域、飽域（B 近常）
+   - 操點循環時計滯：餘磁化 B_r 與矯場 H_c 定環
 
-3. **Demagnetization effects**: For finite-geometry magnetic materials (e.g., short rods, spheres), the internal field is reduced by the demagnetization factor N_d: H_internal = H_applied - N_d * M.
+3. **退磁效**：有限幾磁材（短桿、球）內場以退磁因 N_d 減：H_internal = H_applied - N_d * M。
 
-4. **Field visualization**:
-   - Plot field lines using the stream function or by integrating dB/ds along the field direction
-   - Plot magnitude contours (|B| as a color map)
-   - For 2D cross-sections, indicate the current direction (dots for out-of-page, crosses for into-page)
-   - Verify that field lines form closed loops (div B = 0) -- open field lines indicate a visualization or calculation error
+4. **場視**：
+   - 以流函或沿場向積 dB/ds 繪場線
+   - 繪值等高（|B| 為色圖）
+   - 2D 切示流向（出頁點、入頁叉）
+   - 驗場線成閉環（div B = 0）——開線示視或算誤
 
-5. **Physical intuition check**: Confirm that the field pattern makes qualitative sense. The field should be strongest near the current source, should circulate around currents (right-hand rule), and should decay with distance.
+5. **物覺察**：確場圖質合理。場應強於源近、繞流（右手律）、隨距減。
 
 ```markdown
 ## Material Effects and Visualization
@@ -201,37 +201,37 @@ Extend the analysis to include material effects and produce field visualizations
 - **Div B = 0 check**: [field lines close / verified numerically]
 ```
 
-**Expected:** A complete field solution including material effects where relevant, with a visualization that shows closed field lines consistent with div B = 0 and qualitative behavior matching physical intuition.
+得：含相關材效之全場解，附視示閉場線合 div B = 0 與物覺一致行。
 
-**On failure:** If field lines do not close, the calculation has a divergence error -- recheck the integral or numerical method. If the material introduces unexpected field amplification, verify that mu_r is applied only inside the material volume and that boundary conditions are correctly enforced at every interface.
+敗：場線不閉→算有散誤，重察積或數法。材致意外場放→驗 mu_r 唯施材體內且界條於各界正行。
 
-## Validation
+## 驗
 
-- [ ] Current distribution is fully specified with geometry, magnitude, and direction
-- [ ] Current continuity (div J = 0 for steady state) is verified
-- [ ] Coordinate system is aligned with the dominant symmetry
-- [ ] Method selection (Ampere / Biot-Savart / dipole) is justified by symmetry analysis
-- [ ] Field integrals are set up with correct cross products and limits
-- [ ] Numerical results show convergence (N vs. 2N test)
-- [ ] Far-field dipole limit is verified
-- [ ] Near-field and on-axis limits match known formulas
-- [ ] Forbidden symmetry components are zero
-- [ ] Units are Tesla throughout
-- [ ] Material boundary conditions are correctly applied (if applicable)
-- [ ] Field lines form closed loops (div B = 0)
+- [ ] 電分全規幾、值、向
+- [ ] 流續（穩態 div J = 0）驗
+- [ ] 座系合主對稱
+- [ ] 法選（Ampere / Biot-Savart / 偶）以對稱析證
+- [ ] 場積設正叉積與限
+- [ ] 數果示收（N 對 2N 測）
+- [ ] 遠場偶極限驗
+- [ ] 近場與軸極限配知式
+- [ ] 禁對稱分為零
+- [ ] 全程單位 Tesla
+- [ ] 材界條正施（若可）
+- [ ] 場線成閉環（div B = 0）
 
-## Common Pitfalls
+## 忌
 
-- **Wrong cross-product direction**: The Biot-Savart cross product is dl' x r_hat (source to field), not r_hat x dl'. Getting this backward flips the entire field direction. Use the right-hand rule as a quick check.
-- **Confusing B and H**: In vacuum B = mu_0 H, but inside magnetic materials B = mu H. Ampere's law in terms of H uses free current only; in terms of B it includes bound (magnetization) currents. Mixing conventions produces factors-of-mu_r errors.
-- **Applying Ampere's law without sufficient symmetry**: Ampere's law is always true but only useful when symmetry allows B to be extracted from the integral. If B varies along the Amperian loop, the law gives a single scalar equation for a spatially varying function -- underdetermined.
-- **Ignoring the finite length of "infinite" wires**: Real solenoids and wires have ends. The infinite-wire or infinite-solenoid formula is valid only far from the ends (distance from end >> radius). Near the ends, use the full Biot-Savart integral or finite-solenoid corrections.
-- **Neglecting demagnetization in finite geometries**: A magnetized sphere or short rod does not have the same internal field as a long rod in the same applied field. The demagnetization factor can reduce the effective internal field by 30-100% depending on the aspect ratio.
-- **Non-physical field lines**: If a visualization shows field lines that begin or end in free space (not on a current source or at infinity), the calculation or plotting algorithm has an error. Magnetic field lines always form closed loops.
+- **叉積向誤**：Biot-Savart 叉積為 dl' x r_hat（源至場），非 r_hat x dl'。反之翻全場向。用右手律速察
+- **混 B 與 H**：真空 B = mu_0 H，材內 B = mu H。Ampere 律以 H 唯用自流；以 B 含束（磁化）流。混例致 mu_r 因誤
+- **施 Ampere 律無足對稱**：Ampere 恆真但唯對稱可由積出 B 時有用。B 沿 Amperian 環變→律出單純量方為空變函——不定
+- **忽「無窮」線之有限長**：真螺、線有端。無窮線或螺式唯遠端有效（端距 >> 徑）。近端用全 Biot-Savart 積或有限螺正
+- **忽有限幾退磁**：磁化球或短桿之內場異於同施場下長桿。退磁因可減效內場 30-100% 按比
+- **非物場線**：視示場線始或終於空（非源或無窮）→算或繪有誤。磁場線恆閉環
 
-## Related Skills
+## 參
 
-- `solve-electromagnetic-induction` -- use the computed B-field to analyze time-varying flux and induced EMF
-- `formulate-maxwell-equations` -- generalize to the full set of Maxwell's equations including displacement current and wave propagation
-- `design-electromagnetic-device` -- apply magnetic field analysis to the design of electromagnets, motors, and transformers
-- `formulate-quantum-problem` -- quantum treatment of magnetic interactions (Zeeman effect, spin-orbit coupling)
+- `solve-electromagnetic-induction` —— 用算 B 場析時變通與感 EMF
+- `formulate-maxwell-equations` —— 推全 Maxwell 方含位移流與波傳
+- `design-electromagnetic-device` —— 施磁場析於電磁、馬達、變壓設
+- `formulate-quantum-problem` —— 磁交之量處（Zeeman 效、自旋軌耦）

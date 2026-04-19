@@ -24,32 +24,32 @@ metadata:
   tags: travel, hiking, safety, weather, terrain, conditions
 ---
 
-# Assess Trail Conditions
+# 評徑況
 
-Evaluate current trail conditions for safety decision-making before a planned hike or during tour planning.
+評今徑況為安決——氣、雪線、河渡、暴露、維。出綠/黃/紅安評附行/不行薦。
 
-## When to Use
+## 用
 
-- The day before or morning of a planned hike to make a go/no-go decision
-- During tour planning to assess seasonal viability of a route
-- After unexpected weather changes during a multi-day tour
-- When reports suggest trail damage, closures, or unusual hazards
-- Before committing to an alpine or exposed route
+- 行前日或晨為行/不行決→用
+- 旅謀為季可行評→用
+- 多日旅意外氣變後→用
+- 報示徑損或閉時→用
+- 入高山或暴路前→用
 
-## Inputs
+## 入
 
-- **Required**: Trail name, region, and approximate coordinates or waypoints
-- **Required**: Planned date(s) of the hike
-- **Optional**: Trail difficulty rating (SAC T1-T6)
-- **Optional**: Maximum elevation on the route
-- **Optional**: Known hazard points (river crossings, exposed ridges, glaciers)
-- **Optional**: Group experience level (affects risk tolerance thresholds)
+- **必**：徑名、區、近座或路點
+- **必**：計行日
+- **可**：徑難（SAC T1-T6）
+- **可**：路最高
+- **可**：知險點（河渡、暴脊、冰）
+- **可**：群經（影險忍）
 
-## Procedure
+## 行
 
-### Step 1: Gather Weather Data
+### 一：採氣數
 
-Collect weather forecasts from multiple sources for the trail's elevation range.
+自多源收徑高範之氣預。
 
 ```
 Weather Data Sources (in preference order):
@@ -73,7 +73,7 @@ Weather Data Sources (in preference order):
 └────────────────────────┴──────────────────────────────────────┘
 ```
 
-Collect the following data points:
+收諸數：
 
 ```
 Weather Assessment:
@@ -94,13 +94,13 @@ Weather Assessment:
 └─────────────────────┴───────────────┴───────────────────────────┘
 ```
 
-**Expected:** Weather data from at least 2 independent sources, with altitude-specific information for both the lowest and highest points of the route.
+得：自至少 2 獨源之氣數，附路最低與最高之高專信。
 
-**On failure:** If detailed mountain forecasts are unavailable for the specific region, use general forecasts with altitude adjustments: temperature drops approximately 6.5 C per 1000 m of elevation gain, wind speed increases with altitude and exposure. If forecasts disagree, plan for the worse prediction.
+敗：山專預不可達→用通預附高調：每升 1000 m 溫降約 6.5°C，風隨高與暴增。預異→計較劣預。
 
-### Step 2: Assess Terrain Conditions
+### 二：評地況
 
-Evaluate the current state of the trail surface, snow, water, and exposure hazards.
+評徑面、雪、水、暴險今態。
 
 ```
 Terrain Condition Factors:
@@ -134,20 +134,21 @@ Terrain Condition Factors:
 └──────────────────────┴─────────────────────────────────────────┘
 ```
 
-Data sources for terrain conditions:
-- Recent trip reports (hiking forums, mountain club sites)
-- Hut warden reports (call the nearest hut)
-- Webcams at or near the trail
-- Avalanche bulletins (include snow and terrain info even in summer)
-- Trail maintenance authorities (national park offices, Alpenverein sections)
+地況數源：
 
-**Expected:** A terrain assessment for each significant hazard point on the route, based on current data no more than 48 hours old.
+- 近行報（行壇、山會址）
+- 屋管報（呼最近屋）
+- 徑或近徑網攝
+- 雪崩公（夏含雪與地信）
+- 徑維局（公園處、Alpenverein）
 
-**On failure:** If current condition data is unavailable (remote area, no recent reports), assume conditions are worse than average for the season. Contact the nearest staffed hut or mountain rescue station for local knowledge.
+得：路各要險點之地評，基於不過 48 時之今數。
 
-### Step 3: Evaluate Trail Status
+敗：今況數不可達（遠區無近報）→設況較季均劣。呼最近職屋或山救站求地知。
 
-Check for closures, diversions, and maintenance issues on the planned route.
+### 三：評徑態
+
+察計路之閉、改道、維題。
 
 ```
 Trail Status Sources:
@@ -168,20 +169,21 @@ Trail Status Sources:
 └────────────────────────┴──────────────────────────────────────┘
 ```
 
-Check for:
-1. **Full closures**: Trail impassable or legally closed (wildlife protection, construction)
-2. **Partial closures**: Sections closed with official diversions
-3. **Seasonal closures**: Trail not yet open for the season (snow, hut not staffed)
-4. **Damage reports**: Landslides, bridge washouts, trail erosion
-5. **Event impacts**: Races, military exercises, hunting seasons
+察：
 
-**Expected:** Confirmed trail status (open, partially closed, closed) with any diversions mapped and time impact estimated.
+1. **全閉**：徑不可過或法閉（野生護、建）
+2. **部閉**：段閉附正改道
+3. **季閉**：徑季未開（雪、屋未職）
+4. **損報**：滑、橋沖、徑蝕
+5. **事影**：賽、軍演、獵季
 
-**On failure:** If trail status cannot be confirmed, plan for potential diversions. Carry a detailed map (not just the trail app route) so that alternatives can be navigated on the spot. If a trail is listed as closed, respect the closure even if it appears passable.
+得：徑態確（開、部閉、閉）附改道圖與時影估。
 
-### Step 4: Rate Safety Level
+敗：徑態不可確→計潛改道。攜詳圖（非僅徑應路）使可現場航替。徑列為閉→敬之即似可過。
 
-Combine all assessment data into an overall safety rating.
+### 四：評安階
+
+合諸評為總安評。
 
 ```
 Safety Rating Criteria:
@@ -218,19 +220,20 @@ Safety Rating Criteria:
 └─────────┴────────────────────────────────────────────────────┘
 ```
 
-For YELLOW ratings, define specific mitigation actions:
-- Early start to beat afternoon weather
-- Turnaround time if conditions worsen
-- Specific sections to monitor closely
-- Communication plan if group separates
+黃評定具減動：
 
-**Expected:** A clear GREEN, YELLOW, or RED rating with specific justification. YELLOW ratings include actionable mitigation steps and defined trigger points for abort.
+- 早起以越午前氣
+- 況劣轉返時
+- 須密監之段
+- 群分時通計
 
-**On failure:** If the assessment is inconclusive (insufficient data to rate confidently), treat it as YELLOW at minimum. Uncertainty should increase caution, not decrease it. If any single factor is RED, the overall rating is RED regardless of other factors.
+得：明 GREEN、YELLOW、或 RED 評附具證。YELLOW 含可行減步與定中止觸。
 
-### Step 5: Generate Conditions Report
+敗：評不結（信不足）→默至少 YELLOW。不確當增慎非減。任一素紅→總評紅不論他。
 
-Compile the assessment into a concise, actionable report.
+### 五：生況報
+
+合評為簡可行報。
 
 ```
 Conditions Report Template:
@@ -272,35 +275,35 @@ DECISION
 ═══════════════════════════════════════════════
 ```
 
-**Expected:** A complete, dated conditions report that enables an informed go/no-go decision. The report should be shareable with all group members and understandable without additional context.
+得：完、有日之況報使知行/不行決。報可分群且不需加脈可解。
 
-**On failure:** If the report cannot be completed (e.g., key data unavailable), state what is unknown and how it affects the decision. An incomplete assessment with acknowledged gaps is safer than a false sense of certainty.
+敗：報不能完（如關數不可達）→述未知與其影決。明缺之不全評勝偽信。
 
-## Validation
+## 驗
 
-- [ ] Weather data collected from at least 2 independent sources
-- [ ] Altitude-specific forecasts obtained (not just valley weather)
-- [ ] Terrain conditions assessed for all key hazard points on the route
-- [ ] Trail status verified (open/closed/diversions)
-- [ ] Safety rating assigned with clear justification
-- [ ] Mitigations defined for YELLOW ratings
-- [ ] Conditions report is complete and dated
-- [ ] Report shared with all group members
-- [ ] Assessment is no more than 24 hours old at time of departure
+- [ ] 氣數自至少 2 獨源
+- [ ] 高專預得（非僅谷氣）
+- [ ] 路諸要險點之地況評
+- [ ] 徑態驗（開/閉/改道）
+- [ ] 安評附明證
+- [ ] YELLOW 評之減定
+- [ ] 況報完且日
+- [ ] 報分諸群成員
+- [ ] 評於起時不過 24 時舊
 
-## Common Pitfalls
+## 忌
 
-- **Valley weather bias**: Clear skies in the valley mean nothing at altitude. Always check summit-level forecasts; conditions can be dramatically different 1000 m higher.
-- **Stale data**: A report from 3 days ago is unreliable. Mountain conditions change rapidly. Reassess on the morning of the hike.
-- **Optimism bias**: The desire to hike a planned route makes people rationalize marginal conditions. If you have to argue the case for going, the conditions are probably not good enough.
-- **Single-source reliance**: One forecast can be wrong. Cross-check with at least two sources, and weight local/mountain-specific sources over general ones.
-- **Ignoring trend**: Current conditions may be acceptable but deteriorating. A deteriorating trend requires more caution than the snapshot suggests.
-- **Social pressure override**: Never proceed because the group is eager or because you drove a long way. The mountain will be there next week; you might not be.
-- **Snow line miscalculation**: The reported snow line is an average. North-facing slopes can hold snow 200-500 m below the reported line.
+- **谷氣偏**：谷天清於高無意。恆察峰預；況可較高 1000 m 大異
+- **舊數**：3 日前報不靠。山況速變。行晨重評
+- **樂偏**：欲行計路使理化邊況。需辯案者→況或不足
+- **唯一源**：一預可誤。至少 2 源交核，重地/山專源
+- **忽趨**：今況可受而退。退趨需較瞬示更慎
+- **社壓覆**：永勿因群急或駕長而行。山次週仍在；君或不
+- **雪線誤算**：報雪線為均。北面可保雪報線下 200-500 m
 
-## Related Skills
+## 參
 
-- `plan-hiking-tour` — uses this assessment as input for the safety evaluation step
-- `check-hiking-gear` — gear adjustments based on assessed conditions (add microspikes, extra layers)
-- `plan-tour-route` — trail condition awareness for broader tour planning
-- `create-spatial-visualization` — visualize hazard zones on a map overlay
+- `plan-hiking-tour` —— 用此評為安評步入
+- `check-hiking-gear` —— 按評況裝調（加微爪、加層）
+- `plan-tour-route` —— 廣旅謀之徑況覺
+- `create-spatial-visualization` —— 圖險區於地疊

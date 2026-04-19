@@ -24,38 +24,38 @@ metadata:
   tags: argumentation, reasoning, hypothesis, logic, rhetoric, critical-thinking
 ---
 
-# Construct Arguments
+# 構論證
 
-Build rigorous arguments from hypothesis through reasoning to concrete evidence. Every persuasive technical claim follows the same triad: a clear hypothesis states *what* you believe, an argument explains *why* it holds, and examples prove *that* it holds. This skill teaches you to apply that structure to code reviews, design decisions, research writing, and any context where claims need justification.
+自假設經推理至具體證據之嚴謹論證構建。每有說服力之技術主張遵同三合：清晰假設陳*何*所信，論證釋*何以*成立，例證實*事實*成立。此技能教君將此結構施於碼複查、設計決策、研究撰寫，及任何主張需理由之情境。
 
-## When to Use
+## 適用時機
 
-- Writing or reviewing a PR description that proposes a technical change
-- Justifying a design decision in an ADR (Architecture Decision Record)
-- Constructing feedback in a code review that goes beyond "I don't like this"
-- Writing a research argument or technical proposal
-- Challenging or defending an approach in a technical discussion
+- 撰或複查提技術變更之 PR 描述
+- 於 ADR（Architecture Decision Record）中為設計決策辯
+- 為碼複查構超「我不喜」之回饋
+- 撰研究論證或技術提案
+- 於技術討論中挑戰或捍衛一法
 
-## Inputs
+## 輸入
 
-- **Required**: A claim or position that needs justification
-- **Required**: Context (code review, design decision, research, documentation)
-- **Optional**: Audience (peer developers, reviewers, stakeholders, researchers)
-- **Optional**: Counterarguments or alternative positions to address
-- **Optional**: Evidence or data available to support the claim
+- **必要**：需理由之主張或立場
+- **必要**：情境（碼複查、設計決策、研究、文件）
+- **選擇性**：受眾（同儕開發者、複查者、利害關係人、研究者）
+- **選擇性**：欲應之反論或替代立場
+- **選擇性**：可支主張之證據或資料
 
-## Procedure
+## 步驟
 
-### Step 1: Formulate the Hypothesis
+### 步驟一：擬假設
 
-State your claim as a clear, falsifiable hypothesis. A hypothesis is not an opinion or a preference -- it is a specific assertion that can be tested against evidence.
+將主張陳為清晰、可證偽之假設。假設非意見或偏好——乃可對證據試之特定斷言。
 
-1. Write the claim in one sentence
-2. Apply the falsifiability test: can someone prove this wrong with evidence?
-3. Scope it narrowly: constrain to a specific context, codebase, or domain
-4. Distinguish from opinions by checking for testable criteria
+1. 將主張寫為一句
+2. 施可證偽試：他人能以證據證之為錯否？
+3. 窄其範：限於特定情境、碼庫或領域
+4. 由查可試之準則以與意見區
 
-**Falsifiable vs. unfalsifiable:**
+**不可證偽 vs. 可證偽：**
 
 | Unfalsifiable (opinion)              | Falsifiable (hypothesis)                                       |
 |--------------------------------------|----------------------------------------------------------------|
@@ -64,15 +64,15 @@ State your claim as a clear, falsifiable hypothesis. A hypothesis is not an opin
 | "The API design is cleaner"          | "Replacing the 5 endpoint variants with a single parameterized endpoint reduces the public API surface by 60%" |
 | "This research approach is better"   | "Method A achieves higher precision than Method B on dataset X at the 95% confidence level" |
 
-**Expected:** A one-sentence hypothesis that is specific, scoped, and falsifiable. Someone reading it can immediately imagine what evidence would confirm or refute it.
+**預期：** 一句之假設，特定、有範、可證偽。讀者可即想何證據將證或駁之。
 
-**On failure:** If the hypothesis feels vague, apply the "how would I disprove this?" test. If you cannot imagine counter-evidence, the claim is an opinion, not a hypothesis. Narrow the scope or add measurable criteria until it becomes testable.
+**失敗時：** 若假設覺曖昧，施「我如何駁之？」之試。若不能想反證，主張為意見而非假設。窄範或加可量準則直至可試。
 
-### Step 2: Identify the Argument Type
+### 步驟二：辨論證類型
 
-Select the logical structure that best supports your hypothesis. Different claims call for different reasoning strategies.
+擇最佳支假設之邏輯結構。不同主張需不同推理策略。
 
-1. Review the four argument types:
+1. 覽四論證類型：
 
 | Type        | Structure                                  | Best for                          |
 |-------------|--------------------------------------------|-----------------------------------|
@@ -81,72 +81,72 @@ Select the logical structure that best supports your hypothesis. Different claim
 | Analogical  | X is similar to Y in relevant ways; Y has property P; therefore X likely has P | Design decisions, technology choices |
 | Evidential  | Evidence E is more likely under hypothesis H1 than H2; therefore H1 is supported | Research findings, A/B test results |
 
-2. Match your hypothesis to the strongest argument type:
-   - Claiming something *must* be true? Use **deductive**
-   - Claiming something *tends* to be true based on observations? Use **inductive**
-   - Claiming something *will likely work* based on similar prior cases? Use **analogical**
-   - Claiming one explanation *fits the data better* than alternatives? Use **evidential**
+2. 將假設配於最強論證類型：
+   - 主張某事*必*為真？用**演繹**
+   - 主張某事依觀察而*傾向*真？用**歸納**
+   - 主張某事依先例而*將可能工*？用**類比**
+   - 主張一解釋較替代*更合資料*？用**證據**
 
-3. Consider combining types for stronger arguments (e.g., analogical reasoning backed by inductive evidence)
+3. 考合類型以更強論證（如類比推理由歸納證據支持）
 
-**Expected:** A chosen argument type (or combination) with a clear rationale for why it fits the hypothesis.
+**預期：** 已擇之論證類型（或合），附其合於假設之清理由。
 
-**On failure:** If no single type fits cleanly, the hypothesis may need splitting into sub-claims. Break it into parts that each have a natural argument structure.
+**失敗時：** 若無單一類型潔合，假設或須拆為子主張。將之拆為各有自然論證結構之部。
 
-### Step 3: Construct the Argument
+### 步驟三：構論證
 
-Build the logical chain that connects your hypothesis to its justification.
+建連假設於其理由之邏輯鏈。
 
-1. State the premises (the facts or assumptions you start from)
-2. Show the logical connection (how the premises lead to the conclusion)
-3. Steelman the strongest counterargument: state the best opposing case *before* refuting it
-4. Address the counterargument directly with evidence or reasoning
+1. 陳前提（君所自起之事實或假設）
+2. 示邏輯連結（前提如何引至結論）
+3. 鋼化最強反論：於駁前以最佳形式陳之
+4. 以證據或推理直應反論
 
-**Worked example -- Code Review (deductive + inductive):**
+**舉例——碼複查（演繹 + 歸納）：**
 
-> **Hypothesis**: "Extracting the validation logic into a shared module will reduce bug duplication across the three API handlers."
+> **假設**：「將驗證邏輯提取至共享模組將減三 API 處理器間之缺陷重複。」
 >
-> **Premises**:
-> - The three handlers (`createUser`, `updateUser`, `deleteUser`) each implement the same input validation with slight variations (observed in `src/handlers/`)
-> - In the last 6 months, 3 of 5 validation bugs were fixed in one handler but not propagated to the others (see issues #42, #57, #61)
-> - Shared modules enforce a single source of truth for logic (deductive: if one implementation, then one place to fix)
+> **前提**：
+> - 三處理器（`createUser`、`updateUser`、`deleteUser`）各以微異實作同輸入驗證（於 `src/handlers/` 觀察）
+> - 過去 6 月，5 驗證缺陷中 3 於一處理器修而未傳於他者（見 issues #42、#57、#61）
+> - 共享模組執行邏輯之單一真源（演繹：若一實作，則一處可修）
 >
-> **Logical chain**: Because the three handlers duplicate the same validation (premise 1), bugs fixed in one are missed in others (premise 2, inductive from 3/5 cases). A shared module means fixes apply once to all callers (deductive from shared-module semantics). Therefore, extraction will reduce bug duplication.
+> **邏輯鏈**：因三處理器重複同驗證（前提一），於一中修之缺陷於他者中漏（前提二，自 3/5 案歸納）。共享模組意修一施於一切呼叫者（自共享模組語意演繹）。故，提取將減缺陷重複。
 >
-> **Counterargument (steelmanned)**: "Shared modules introduce coupling -- a change to validation for one handler could break the others."
+> **反論（鋼化）**：「共享模組引耦合——對一處理器驗證之變或斷他者。」
 >
-> **Rebuttal**: The handlers already share identical validation *intent*; the coupling is implicit and harder to maintain. Making it explicit via a shared module with parameterized options (e.g., `validate(input, { requireEmail: true })`) makes the coupling visible and testable. The current implicit duplication is riskier because it hides the dependency.
+> **反駁**：處理器已共相同驗證*意圖*；耦合為隱且難維。經有參數化選項之共享模組（如 `validate(input, { requireEmail: true })`）使之顯，使耦合可見可測。當前隱重複更險，因其隱依賴。
 
-**Worked example -- Research (evidential):**
+**舉例——研究（證據）：**
 
-> **Hypothesis**: "Pre-training on domain-specific corpora improves downstream task performance more than increasing general corpus size for biomedical NER."
+> **假設**：「對生醫 NER 而言，於領域特定語料預訓練較增大通用語料更能改進下游任務表現。」
 >
-> **Premises**:
-> - BioBERT pre-trained on PubMed (4.5B words) outperforms BERT-Large pre-trained on general English (16B words) on 6/6 biomedical NER benchmarks (Lee et al., 2020)
-> - SciBERT pre-trained on Semantic Scholar (3.1B words) outperforms BERT-Base on SciERC and JNLPBA despite a smaller pre-training corpus
-> - General-domain scaling (BERT-Base to BERT-Large, 3x parameters) yields smaller gains on biomedical NER than domain adaptation (BERT-Base to BioBERT, same parameters)
+> **前提**：
+> - 於 PubMed（45 億字）預訓練之 BioBERT 於 6/6 生醫 NER 基準上勝於通用英文（160 億字）預訓練之 BERT-Large（Lee et al., 2020）
+> - 於 Semantic Scholar（31 億字）預訓練之 SciBERT 雖預訓練語料更小仍於 SciERC 與 JNLPBA 上勝 BERT-Base
+> - 通用領域之擴展（BERT-Base 至 BERT-Large，3 倍參數）於生醫 NER 上產之增益較領域適應（BERT-Base 至 BioBERT，同參數）為小
 >
-> **Logical chain**: The evidence consistently shows that domain corpus selection outweighs corpus scale for biomedical NER (evidential: these results are more likely if domain specificity matters more than scale). Three independent comparisons point the same direction, strengthening the inductive case.
+> **邏輯鏈**：證據一致示對生醫 NER 而言，領域語料之擇勝語料規模（證據：此結果若領域特異性較規模更要則更可能）。三獨立比對指同方向，強歸納之案。
 >
-> **Counterargument (steelmanned)**: "These results may not generalize beyond biomedical NER -- biomedicine has unusually specialized vocabulary that inflates the domain-adaptation advantage."
+> **反論（鋼化）**：「此結果或不能推廣於生醫 NER 之外——生醫有異常專之詞彙，膨脹領域適應之優勢。」
 >
-> **Rebuttal**: Valid limitation. The hypothesis is scoped to biomedical NER specifically. However, similar domain-adaptation gains appear in legal NLP (Legal-BERT) and financial NLP (FinBERT), suggesting the pattern may generalize to other specialized domains, though that is a separate claim requiring its own evidence.
+> **反駁**：合理之限。假設特限於生醫 NER。然類似領域適應增益於法律 NLP（Legal-BERT）與金融 NLP（FinBERT）亦現，示模式或可推廣於他專領域，然此為需自身證據之另論。
 
-**Expected:** A complete argument chain with premises, logical connection, a steelmanned counterargument, and a rebuttal. The reader can follow the reasoning step by step.
+**預期：** 完整論證鏈，附前提、邏輯連結、鋼化之反論、反駁。讀者可逐步循推理。
 
-**On failure:** If the argument feels weak, check the premises. Weak arguments usually stem from unsupported premises, not faulty logic. Find evidence for each premise or acknowledge it as an assumption. If the counterargument is stronger than the rebuttal, the hypothesis may need revision.
+**失敗時：** 若論證覺弱，查前提。弱論證常源於未支前提，非邏輯之誤。為每前提尋證據或承認其為假設。若反論強於反駁，假設或需修。
 
-### Step 4: Provide Concrete Examples
+### 步驟四：供具體例
 
-Support the argument with independently verifiable evidence. Examples are not illustrations -- they are the empirical foundation that makes the argument testable.
+以可獨立驗之證據支論證。例非說明——乃使論證可試之經驗基礎。
 
-1. Provide at least one **positive example** that confirms the hypothesis
-2. Provide at least one **edge case or boundary example** that tests limits
-3. Ensure each example is **independently verifiable**: another person can reproduce or check it without relying on your interpretation
-4. For code claims, reference specific files, line numbers, or commits
-5. For research claims, cite specific papers, datasets, or experimental results
+1. 至少供一**正例**確認假設
+2. 至少供一**邊界情況或極端例**測極限
+3. 確各例**可獨立驗**：他人能複現或查而不依君之詮
+4. 對碼主張，引特定檔案、行號或提交
+5. 對研究主張，引特定論文、資料集或實驗結果
 
-**Example selection criteria:**
+**例選擇準則：**
 
 | Criterion              | Good example                                        | Bad example                              |
 |------------------------|-----------------------------------------------------|------------------------------------------|
@@ -155,15 +155,15 @@ Support the argument with independently verifiable evidence. Examples are not il
 | Representative         | "3 of 5 validation bugs in the last 6 months followed this pattern" | "I once saw a bug like this"             |
 | Includes edge cases    | "This pattern holds for string inputs but not for file upload validation, which has handler-specific constraints" | (no limitations mentioned)               |
 
-**Expected:** Concrete examples that a reader can verify independently. At least one positive and one edge case. Each references a specific artifact (file, line, issue, paper, dataset).
+**預期：** 讀者可獨立驗之具體例。至少一正例與一邊界情況。每引特定產物（檔案、行、issue、論文、資料集）。
 
-**On failure:** If examples are hard to find, the hypothesis may be too broad or not grounded in observable reality. Narrow the scope to what you can actually point to. Absence of examples is a signal, not a gap to paper over with vague references.
+**失敗時：** 若例難尋，假設或過廣或不繫於可觀察之實。將範窄至君實能指之事。例之缺為信號，非以糢糊引用粉飾之缺。
 
-### Step 5: Assemble the Complete Argument
+### 步驟五：組完整論證
 
-Combine hypothesis, argument, and examples into the appropriate format for the context.
+將假設、論證、例合為情境宜之格式。
 
-1. **For code reviews** -- structure the comment as:
+1. **碼複查**——將評論結構為：
    ```
    [S] <one-line summary of the suggestion>
 
@@ -176,7 +176,7 @@ Combine hypothesis, argument, and examples into the appropriate format for the c
    **Suggestion**: <concrete code change or approach>
    ```
 
-2. **For PR descriptions** -- structure the body as:
+2. **PR 描述**——將本結構為：
    ```markdown
    ## Why
 
@@ -191,66 +191,66 @@ Combine hypothesis, argument, and examples into the appropriate format for the c
    <Examples: benchmarks, bug references, before/after comparisons>
    ```
 
-3. **For ADRs (Architecture Decision Records)** -- use the standard ADR format with the triad mapped to Context (hypothesis), Decision (argument), and Consequences (examples/evidence of expected outcomes)
+3. **ADR（Architecture Decision Records）**——用標準 ADR 格式，將三合對應於 Context（假設）、Decision（論證）、Consequences（預期結果之例／證據）
 
-4. **For research writing** -- map to the standard structure: Introduction states the hypothesis, Methods/Results provide argument and examples, Discussion addresses counterarguments
+4. **研究撰寫**——對應於標準結構：Introduction 陳假設，Methods/Results 供論證與例，Discussion 應反論
 
-5. Review the assembled argument for:
-   - Logical gaps (does the conclusion actually follow from the premises?)
-   - Missing evidence (are there unsupported premises?)
-   - Unaddressed counterarguments (is the strongest objection answered?)
-   - Scope creep (does the argument stay within the hypothesis bounds?)
+5. 複查組成之論證以查：
+   - 邏輯缺（結論實由前提導否？）
+   - 缺證（有未支前提否？）
+   - 未應反論（最強反對已答否？）
+   - 範蔓延（論證留於假設範圍內否？）
 
-**Expected:** A complete, formatted argument appropriate for its context. The reader can evaluate the hypothesis, follow the reasoning, check the evidence, and consider counterarguments -- all in one coherent structure.
+**預期：** 完整、宜其情境之格式之論證。讀者可評假設、循推理、查證據、考反論——皆於一連貫結構中。
 
-**On failure:** If the assembled argument feels disjointed, the hypothesis may be too broad. Split it into focused sub-arguments, each with its own hypothesis-argument-example triad. Two tight arguments are stronger than one sprawling one.
+**失敗時：** 若組成之論證覺脫節，假設或過廣。拆為焦點子論證，各有自身假設-論證-例三合。二緊論證強於一鬆散。
 
-## Validation
+## 驗證
 
-- [ ] Hypothesis is falsifiable (someone could disprove it with evidence)
-- [ ] Hypothesis is scoped to a specific context, not a universal claim
-- [ ] Argument type is identified and appropriate for the claim
-- [ ] Premises are stated explicitly, not assumed as shared knowledge
-- [ ] Logical chain connects premises to conclusion without gaps
-- [ ] Strongest counterargument is steelmanned and addressed
-- [ ] At least one positive example supports the hypothesis
-- [ ] At least one edge case or limitation is acknowledged
-- [ ] All examples are independently verifiable (references provided)
-- [ ] Output format matches the context (code review, PR, ADR, research)
-- [ ] No logical fallacies (appeal to authority, false dichotomy, strawman)
+- [ ] 假設可證偽（他人可以證據駁之）
+- [ ] 假設範限於特定情境，非普世主張
+- [ ] 論證類型已辨且合於主張
+- [ ] 前提明陳，非假為共知
+- [ ] 邏輯鏈連前提於結論而無缺
+- [ ] 最強反論已鋼化並已應
+- [ ] 至少一正例支假設
+- [ ] 至少一邊界情況或限制已承
+- [ ] 一切例皆可獨立驗（引用已供）
+- [ ] 輸出格式合於情境（碼複查、PR、ADR、研究）
+- [ ] 無邏輯謬誤（訴諸權威、假二分、稻草人）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Stating opinions as hypotheses**: "This code is messy" is a preference, not a hypothesis. Rewrite as a testable claim: "This module has 4 responsibilities that should be separated per the single-responsibility principle, as evidenced by its 6 public methods spanning 3 unrelated domains."
-- **Skipping the counterargument**: Unaddressed objections weaken the argument even if the reader never voices them. Always steelman -- state the strongest opposing case in its best form before rebutting it.
-- **Vague examples**: "We've seen this pattern before" is not evidence. Point to specific issues, commits, lines, papers, or datasets. If you cannot find a concrete example, your hypothesis may not be well-grounded.
-- **Argument from authority**: "The senior engineer said so" or "Google does it this way" is not a logical argument. Authority can *motivate* investigation, but the argument must stand on its own evidence and reasoning.
-- **Scope creep in conclusions**: Drawing conclusions broader than what the evidence supports. If your examples cover 3 API handlers, don't conclude about the entire codebase. Match conclusion scope to evidence scope.
-- **Conflating argument types**: Using inductive language ("tends to") for deductive claims ("must be") or vice versa. Be precise about the strength of your conclusion -- deductive arguments give certainty, inductive arguments give probability.
+- **將意見陳為假設**：「此碼亂」為偏好，非假設。改為可試之主張：「此模組有 4 責任應依單一責任原則分，由其跨 3 不相關領域之 6 公共方法為證」
+- **跳反論**：未應之反對弱化論證，即使讀者未發聲。恆鋼化——以最佳形式陳最強反對之案，後駁之
+- **糢糊例**：「我們曾見此模式」非證據。指特定 issue、提交、行、論文或資料集。若不能尋具體例，假設或不甚紮實
+- **訴諸權威**：「資深工程師曰然」或「Google 此為之」非邏輯論證。權威可*動*探究，然論證須立於自身之證據與推理
+- **結論之範蔓延**：自證據所支以外導結論。若君之例涵 3 API 處理器，勿於整碼庫導結論。將結論之範配於證據之範
+- **混論證類型**：對演繹主張（「必為」）用歸納語（「傾向」），或反之。精言結論之強——演繹論證給確定，歸納論證給機率
 
-## Related Skills
+## 相關技能
 
-- `review-pull-request` -- applying argumentation to structured code review feedback
-- `review-research` -- constructing evidence-based arguments in research contexts
-- `review-software-architecture` -- justifying architectural decisions with the hypothesis-argument-example triad
-- `create-skill` -- skills themselves are structured arguments for how to accomplish a task
-- `write-claude-md` -- documenting conventions and decisions that benefit from clear justification
+- `review-pull-request` — 將論證施於結構化碼複查回饋
+- `review-research` — 於研究情境中構基於證據之論證
+- `review-software-architecture` — 以假設-論證-例三合為架構決策辯
+- `create-skill` — 技能本身為達任務之結構化論證
+- `write-claude-md` — 文件化得益於清理由之慣例與決策
 
-### Composition: Argumentation + Advocatus Diaboli
+### 組合：Argumentation + Advocatus Diaboli
 
-For high-stakes decisions, compose this skill with the `advocatus-diaboli` agent to form a pre-decision review loop. The pattern:
+對高賭注之決策，將此技能與 `advocatus-diaboli` 代理組成決策前複查環。模式：
 
-1. **Structure** via argumentation -- build the hypothesis-argument-example triad
-2. **Stress-test** via advocatus-diaboli -- steelman the proposal, then challenge each assumption with specific questions. Flag severity: Critical (redesign or abandon), Medium (adjust), Low (note and proceed)
-3. **Revise** based on findings -- critical findings trigger redesign; medium findings trigger adjustment; low findings are noted
+1. **結構**經 argumentation——構假設-論證-例三合
+2. **壓力測試**經 advocatus-diaboli——鋼化提案，後以特定問挑戰各假設。標嚴重度：Critical（重設計或棄）、Medium（調）、Low（注並進）
+3. **修**依發現——critical 發現觸重設計；medium 觸調；low 受注
 
-**When to compose vs. use alone:**
-- Use argumentation alone when constructing a proposal, PR description, or design justification
-- Use advocatus-diaboli alone when reviewing someone else's existing argument
-- Compose both when you are both the proposer and need adversarial self-review before committing
+**何時組合 vs. 獨用：**
+- 構提案、PR 描述或設計理由時獨用 argumentation
+- 複查他人既有論證時獨用 advocatus-diaboli
+- 君既為提者又需於提交前對抗自我複查時，組二者
 
-**Example -- PR response refinement:**
-Argumentation structured a response (hypothesis: combining PRs is better, argument with evidence, collaboration offer). Advocatus-diaboli then caught two critical issues: a claim about proxy process identification was speculative rather than factual (would have been embarrassing on a security PR), and "I have tested this in practice" was unverifiable. Both were removed. The final response was 40-50% shorter -- overexplaining signals insecurity.
+**舉例——PR 回應精修：**
+Argumentation 結構回應（假設：合 PR 為佳，附證據之論證，合作邀請）。Advocatus-diaboli 後捕二關鍵問題：關於代理過程識別之主張為臆測非事實（於安全 PR 上將尷尬），「我已實踐測試之」不可驗。皆移之。最終回應短 40-50%——過解釋示不安。
 
-**Example -- System design triage:**
-Argumentation (via Plan agent) designed a full 500-line triage pipeline. Advocatus-diaboli killed it: at 9 items, the system was premature and would itself become a maintenance burden (recursive trap). Final solution: 25 lines added to an existing script.
+**舉例——系統設計分流：**
+Argumentation（經 Plan 代理）設計完整 500 行分流管線。Advocatus-diaboli 殺之：於 9 項時，系統為過早，自身將成維護負擔（遞迴陷阱）。最終解：於既有腳本加 25 行。

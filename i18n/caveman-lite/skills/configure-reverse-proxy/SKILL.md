@@ -146,9 +146,9 @@ server {
 }
 ```
 
-**Expected:** WebSocket connections establish and persist.
+**Got:** WebSocket connections establish and persist.
 
-**On failure:** Check `proxy_http_version 1.1` is set. Verify `Upgrade` and `Connection` headers.
+**If fail:** Check `proxy_http_version 1.1` is set. Verify `Upgrade` and `Connection` headers.
 
 ### Step 5: Traefik — Docker Label Auto-Discovery
 
@@ -195,7 +195,7 @@ volumes:
   letsencrypt:
 ```
 
-**Expected:** Traefik auto-discovers services via labels, provisions SSL certificates.
+**Got:** Traefik auto-discovers services via labels, provisions SSL certificates.
 
 ### Step 6: Traefik — Path-Based Routing with Labels
 
@@ -238,7 +238,7 @@ wscat -c ws://localhost/ws/
 # http://localhost:8080/dashboard/
 ```
 
-**Expected:** Requests route to correct backends. WebSocket upgrades succeed.
+**Got:** Requests route to correct backends. WebSocket upgrades succeed.
 
 ## Validation
 
@@ -249,7 +249,7 @@ wscat -c ws://localhost/ws/
 - [ ] Traefik auto-discovers new services via labels (if using Traefik)
 - [ ] Configuration survives `docker compose restart`
 
-## Common Pitfalls
+## Pitfalls
 
 - **Trailing slash mismatch**: `proxy_pass http://app/` vs `http://app` behaves differently with path stripping in Nginx.
 - **WebSocket timeout**: Default `proxy_read_timeout` is 60s. Long-lived WebSocket connections need `86400` (24h).

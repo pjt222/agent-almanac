@@ -25,51 +25,51 @@ metadata:
   tags: morphic, adaptation, architecture, migration, strangler-fig
 ---
 
-# Adapt Architecture
+# 變架構
 
-Execute structural metamorphosis — transforming a system's architecture from its current form to a target form while maintaining operational continuity. Uses strangler fig migration, chrysalis phases, and interface preservation to ensure the system never stops functioning during transformation.
+執結構之蛻變，使系統由舊形而至新形，而運行不輟。用絞榕之遷、蛹化之階、界面之守，以全其功於變之中。
 
-## When to Use
+## 用時
 
-- Form assessment (see `assess-form`) classified the system as READY
-- A system must evolve its architecture to meet new requirements without downtime
-- Migrating from monolith to microservices (or the reverse)
-- Replacing a core subsystem while dependent systems continue operating
-- Evolving a data model while maintaining backward compatibility
-- Any architectural change that must be gradual rather than big-bang
+- 形之察（見 `assess-form`）定系統為 READY 乃用
+- 架構宜更以應新求而不停機乃用
+- 由巨石遷至微服（或反之）乃用
+- 易核心之部而餘依之系統仍運乃用
+- 更數據之模而守舊約乃用
+- 凡架構之變宜漸而非驟者乃用
 
-## Inputs
+## 入
 
-- **Required**: Current form assessment (from `assess-form` or equivalent analysis)
-- **Required**: Target architecture (what the system should become)
-- **Required**: Operational continuity requirements (what must not break during transformation)
-- **Optional**: Available transformation budget (time, people, compute)
-- **Optional**: Rollback requirements (how far back must we be able to retreat?)
-- **Optional**: Parallel running duration (how long to run old and new simultaneously)
+- **必要**：當前形之察（出 `assess-form` 或同類之析）
+- **必要**：目標架構（系統所當成者）
+- **必要**：運行連續之求（變中不可壞者）
+- **可選**：變之資（時、人、算力）
+- **可選**：退之求（可退至何處）
+- **可選**：並行之久（新舊並行幾何）
 
-## Procedure
+## 法
 
-### Step 1: Design the Transformation Blueprint
+### 第一步：繪變之藍圖
 
-Plan the metamorphosis path from current form to target form.
+謀由當前至目標之蛻路。
 
-1. Map the transformation as a sequence of intermediate forms:
-   - Current form → Intermediate form 1 → ... → Target form
-   - Each intermediate form must be operationally viable (can serve traffic, pass tests)
-   - No intermediate form should be harder to maintain than the current form
-2. Identify the transformation seams:
-   - Where can the current form be "cut" to insert the new architecture?
-   - Natural seams: existing interfaces, module boundaries, data partitions
-   - Artificial seams: interfaces created specifically to enable the cut (anti-corruption layers)
-3. Choose the metamorphosis pattern:
-   - **Strangler fig**: new system grows around the old, gradually replacing it
-   - **Chrysalis**: old system is wrapped in a new shell; internals replaced while shell preserves external interface
-   - **Budding**: new system grows alongside the old; traffic gradually shifts (see `scale-colony` for colony budding)
-   - **Metamorphic migration**: phased replacement of components in dependency order (leaves first, roots last)
-4. Design the interface preservation layer:
-   - External consumers must not experience disruption
-   - API versioning, backward-compatible contracts, adapter patterns
-   - The preservation layer is temporary scaffolding — plan its removal
+1. 繪變為諸中間形之序：
+   - 當前形 → 中間形一 → … → 目標形
+   - 各中間形必可運（能受流量、過試）
+   - 無一中間形難於當前者
+2. 識變之縫：
+   - 當前形何處可「切」以納新架構？
+   - 天然之縫：既有界面、模塊之界、數據之分
+   - 人為之縫：為切而設之界面（防腐之層）
+3. 擇蛻變之式：
+   - **絞榕**：新系繞舊而長，漸代之
+   - **蛹化**：舊系裹以新殼，內換而外穩
+   - **出芽**：新系並舊而生，流量漸遷（群落出芽見 `scale-colony`）
+   - **蛻變遷移**：依賴之序分階易之（葉先，根末）
+4. 設界面之守層：
+   - 外部消費者不可覺其擾
+   - API 版本、向後之約、適配之式
+   - 守層乃暫設之架——預其撤除
 
 ```
 Metamorphosis Patterns:
@@ -94,139 +94,139 @@ Metamorphosis Patterns:
 └───────────────┴───────────────────────────────────────────────────┘
 ```
 
-**Expected:** A transformation blueprint showing intermediate forms, seams, the chosen metamorphosis pattern, and the interface preservation strategy. Each step is concrete and testable.
+**得：** 變之藍圖已成，中間之形、縫、所擇之蛻式、守界面之策皆明。每步具體而可試。
 
-**On failure:** If no clean seam can be found, the system may need preliminary dissolution (see `dissolve-form`) to create seams before transformation. If the intermediate forms aren't operationally viable, the transformation steps are too large — decompose into smaller increments.
+**敗則：** 若無淨縫可得，系統或須先溶（見 `dissolve-form`）以開縫。若中間形不可運，則其步過大——析為更小之增。
 
-### Step 2: Build the Scaffolding
+### 第二步：築其鷹架
 
-Construct the temporary infrastructure that supports metamorphosis.
+建支蛻變之暫設基礎。
 
-1. Create the anti-corruption layer:
-   - A thin translation layer between the old and new systems
-   - Routes requests to the appropriate system (old or new) based on migration state
-   - Translates data formats between old and new representations
-   - This layer is the "cocoon" that protects the transformation
-2. Set up parallel running infrastructure:
-   - Both old and new systems must be deployable simultaneously
-   - Feature flags control which system handles which traffic
-   - Comparison mechanisms validate that old and new produce equivalent results
-3. Establish rollback checkpoints:
-   - At each intermediate form, verify that rollback to the previous form is possible
-   - Rollback must be faster than the forward transformation step
-   - Data migration must be reversible (or data must be dual-written during transition)
-4. Build the validation harness:
-   - Automated tests that verify operational continuity at each intermediate form
-   - Performance benchmarks that detect regression
-   - Data integrity checks that catch migration errors
+1. 建防腐之層：
+   - 新舊之間薄薄之譯層
+   - 依遷之狀，分派請求於舊或新
+   - 譯數據之形於新舊之間
+   - 此層為「繭」也，護其蛻變
+2. 設並行之基：
+   - 新舊二系可同時部署
+   - 功能旗掌何者受何流
+   - 比對之機驗新舊之輸出相等
+3. 立退之節點：
+   - 每中間形，驗可退至前形
+   - 退宜速於進
+   - 數據之遷可逆（或過渡中雙寫）
+4. 築驗證之架：
+   - 自動之試以驗連續運行
+   - 性能之量以測退化
+   - 數據完整之查以察遷誤
 
-**Expected:** Scaffolding infrastructure (anti-corruption layer, parallel running, rollback, validation) is in place before any transformation begins. The scaffolding itself is tested and verified.
+**得：** 鷹架（防腐層、並行、退機、驗證）具於遷前。鷹架本身已試已驗。
 
-**On failure:** If scaffolding is too expensive, simplify: the minimum viable scaffolding is a feature flag and a rollback procedure. Anti-corruption layers and parallel running add safety but are not always necessary for smaller transformations.
+**敗則：** 若鷹架過費，可簡之：最少者一功能旗與退之程耳。防腐之層與並行雖增安，小變未必皆需。
 
-### Step 3: Execute Progressive Cutover
+### 第三步：執漸進之易
 
-Migrate functionality from old form to new form incrementally.
+由舊形漸遷功能於新形。
 
-1. Order components for migration:
-   - Start with the least-coupled, lowest-risk component (build confidence)
-   - Progress toward more critical, more coupled components
-   - Save the most coupled/critical component for last (by which point the team has experience)
-2. For each component:
-   a. Implement the new version behind the anti-corruption layer
-   b. Run parallel: both old and new process the same inputs
-   c. Compare outputs — they should be equivalent (or the differences should be expected and documented)
-   d. When confident, switch traffic to the new version (feature flag flip)
-   e. Monitor for anomalies (increase monitoring sensitivity post-cutover)
-   f. After a stability period, decommission the old version of this component
-3. Maintain continuous delivery throughout:
-   - Each cutover step is a normal deployment, not a special event
-   - The system is always in a known, tested, operational state
-   - If a cutover causes issues, roll back to the previous state (which is still operational)
+1. 定組件之序：
+   - 先取最疏、最輕險者以立信
+   - 漸進至要、至緊之組件
+   - 最要者最後（其時隊伍已熟）
+2. 每組件：
+   a. 於防腐層後置新版
+   b. 並行：新舊同受其入
+   c. 比其輸出——當等（或所異當預而書之）
+   d. 信足則移流於新（翻功能旗）
+   e. 察異象（易後增監察之敏）
+   f. 穩之後，除此組件之舊版
+3. 始終持續交付：
+   - 每易一步乃常部署，非特事
+   - 系統恆於已知、已試、可運之狀
+   - 若易生患，退至前狀（仍可運）
 
-**Expected:** Functionality migrates component by component with validation at each step. The system is always operational. Each cutover builds confidence for the next.
+**得：** 功能逐組件而遷，每步有驗。系統恆可運。每易立信以進下一。
 
-**On failure:** If parallel running reveals discrepancies, the new implementation has a bug — fix it before cutting over. If a cutover causes performance degradation, the new component may need optimization or the anti-corruption layer is adding too much overhead. If the team loses confidence mid-migration, pause and stabilize — a half-migrated system in a known state is far better than a rushed full migration.
+**敗則：** 若並行顯異，新實現有訛——易前修之。若易致性能降，新組件宜優化，或防腐層累贅過重。若隊伍半途失信，宜停而穩之——半遷於已知之狀遠勝於急而全遷。
 
-### Step 4: Manage the Chrysalis Phase
+### 第四步：守其蛹化之期
 
-Navigate the most vulnerable period — when the system is between forms.
+行最脆之時——系統介於二形之間也。
 
-1. Acknowledge the chrysalis reality:
-   - During migration, the system is partly old and partly new
-   - This hybrid state is inherently more complex than either pure state
-   - Complexity peaks at the midpoint of migration, then decreases
-2. Chrysalis discipline:
-   - No new features during the chrysalis phase (transformation only)
-   - Minimal external changes (freeze non-essential deployments)
-   - Increased monitoring and on-call coverage
-   - Daily check-ins on migration progress and system health
-3. Mid-chrysalis assessment:
-   - At the halfway point, assess: is the target form still the right goal?
-   - Has anything changed (market, requirements, team) that affects the target?
-   - Should the transformation continue, pause, or redirect?
-4. Protect the chrysalis:
-   - Keep the rollback path clear at all times
-   - Document the current hybrid state thoroughly (future debuggers will need it)
-   - Resist the temptation to "clean up" temporary scaffolding before migration is complete
+1. 承蛹之實：
+   - 遷之中，系統半舊半新
+   - 此雜狀本繁於純狀
+   - 繁之峰在遷之半，後乃降
+2. 蛹之律：
+   - 蛹期無新功（唯蛻變）
+   - 外變至少（凍非要之部署）
+   - 增監與值守
+   - 日察遷之進與系之健
+3. 半蛹之察：
+   - 行至半途，察：目標形猶是正鵠乎？
+   - 市、求、隊有變乎，影及目標乎？
+   - 蛻變當續、當停、當轉乎？
+4. 護其蛹：
+   - 退之路恆清
+   - 書當前雜狀之詳（後之調試者需之）
+   - 莫誘於「清」暫設之架於遷未畢時
 
-**Expected:** The chrysalis phase is managed as a deliberate, time-bounded period with increased discipline and monitoring. The team understands that temporary complexity is the cost of safe transformation.
+**得：** 蛹期作為有意、有期之段而守，律更嚴，察更密。隊知暫繁乃安蛻之價。
 
-**On failure:** If the chrysalis phase drags on too long, the hybrid state becomes the new normal — which is worse than either old or new. Set a time limit. If the limit is reached, either accelerate the remaining migration or accept the hybrid state as the "new form" and stabilize it.
+**敗則：** 若蛹期過長，雜狀成新常——此惡於新舊也。立時限。若逾限，或速其餘遷，或納雜狀為「新形」而穩之。
 
-### Step 5: Complete Metamorphosis and Stabilize
+### 第五步：蛻成而穩
 
-Finish the transformation and remove scaffolding.
+終其變，撤其架。
 
-1. Final cutover:
-   - Migrate the last component(s) to the new form
-   - Run full validation suite against the complete new system
-   - Performance test under production-equivalent load
-2. Remove scaffolding:
-   - Decommission the anti-corruption layer (it's no longer needed)
-   - Remove feature flags related to the migration
-   - Clean up parallel running infrastructure
-   - Archive (don't delete) the old system code for reference
-3. Post-metamorphosis stabilization:
-   - Run in the new form for 2-4 weeks with enhanced monitoring
-   - Address any issues that emerge under real-world conditions
-   - Update documentation to reflect the new architecture
-4. Retrospective:
-   - What went well in the transformation?
-   - What was harder than expected?
-   - What would we do differently next time?
-   - Update the team's transformation playbook
+1. 末易：
+   - 遷最後一組件入新形
+   - 行全驗套於新系
+   - 於產境等量之載下測其性能
+2. 撤鷹架：
+   - 除防腐層（無用矣）
+   - 除遷相關之功能旗
+   - 清並行之基
+   - 存（勿刪）舊系之碼為參
+3. 蛻後之穩：
+   - 於新形運二至四週，增察
+   - 解現實條件下所現之患
+   - 更文檔以映新架構
+4. 覆盤：
+   - 蛻中何者善成？
+   - 何者難於所料？
+   - 下次當作何異？
+   - 更隊伍蛻變之譜
 
-**Expected:** The transformation is complete. The system operates in its new form. Scaffolding is removed. Documentation is updated. The team has captured learnings for future transformations.
+**得：** 蛻已成。系統運於新形。鷹架已撤。文檔已更。隊伍捕獲所學，以利將來之蛻。
 
-**On failure:** If the new form is unstable after cutover, maintain the rollback path and continue stabilization. If stabilization takes more than the planned period, there may be a design issue in the new architecture — consider whether targeted fixes or a partial rollback of the most problematic component is appropriate.
+**敗則：** 若新形易後未穩，保退路而續穩之。若穩期逾所計，新架構或有設計之患——察是否宜修正或退最患之組件。
 
-## Validation
+## 驗
 
-- [ ] Transformation blueprint shows viable intermediate forms
-- [ ] Scaffolding (anti-corruption layer, rollback, validation harness) is in place before migration starts
-- [ ] Components migrate in order from lowest to highest risk
-- [ ] Parallel running validates equivalence at each step
-- [ ] Chrysalis phase is time-bounded with feature freeze discipline
-- [ ] All scaffolding is removed after transformation completes
-- [ ] Post-metamorphosis stabilization period passes without critical issues
-- [ ] Retrospective captures learnings
+- [ ] 蛻之藍圖顯可行中間形
+- [ ] 鷹架（防腐層、退機、驗架）在遷前已具
+- [ ] 組件由輕險至重險之序而遷
+- [ ] 並行驗每步之等
+- [ ] 蛹期有限而凍新功
+- [ ] 蛻畢所有鷹架皆撤
+- [ ] 蛻後之穩期無重患
+- [ ] 覆盤捕學
 
-## Common Pitfalls
+## 陷
 
-- **Big-bang migration**: Attempting to transform everything at once. This abandons the safety of incremental cutover and maximizes blast radius. Always migrate incrementally
-- **Permanent scaffolding**: Anti-corruption layers and feature flags that are never removed become technical debt. Plan scaffolding removal as part of the transformation, not as an afterthought
-- **Chrysalis denial**: Pretending the hybrid state is normal leads to feature development on unstable foundations. Acknowledge the chrysalis phase and enforce its discipline
-- **Target fixation**: Becoming so committed to the target architecture that signs of a better alternative are ignored. The mid-chrysalis assessment exists for this reason
-- **Transformation fatigue**: Long migrations exhaust teams. Keep each transformation step small enough to complete in days, not weeks. Celebrate milestones to maintain momentum
+- **驟遷**：欲一舉而盡變。棄漸易之安，最大其爆圍。必漸遷之
+- **架不撤**：防腐與功能旗久之不除乃成技債。撤架當作蛻之一段，非事後之想
+- **諱蛹**：假雜狀為常致新功建於浮基。宜承蛹期而守其律
+- **目標之執**：溺於目標而視更佳之路而不見。半蛹之察正為此設
+- **蛻疲**：久遷耗人。每步宜小，日計可成，非週計。慶里程以續其勢
 
-## Related Skills
+## 參
 
-- `assess-form` — prerequisite assessment that determines if the system is ready for transformation
-- `dissolve-form` — for systems too rigid to transform directly; dissolution creates the seams needed here
-- `repair-damage` — recovery skill for when transformation introduces damage
-- `shift-camouflage` — surface adaptation that may suffice without deep architectural change
-- `coordinate-swarm` — swarm coordination informs the sequencing of transformation across distributed systems
-- `scale-colony` — growth pressure is a common trigger for architectural adaptation
-- `implement-gitops-workflow` — GitOps provides the deployment infrastructure for progressive cutover
-- `review-software-architecture` — complementary review skill for evaluating the target architecture
+- `assess-form` — 前置之察，定系統是否宜蛻
+- `dissolve-form` — 過剛而不可直蛻之系統；溶之以開縫
+- `repair-damage` — 若蛻致損之復法
+- `shift-camouflage` — 表層之適，或免深架之變
+- `coordinate-swarm` — 群協之序啟分布式蛻變之次
+- `scale-colony` — 長之壓常啟架構之適
+- `implement-gitops-workflow` — GitOps 提供漸易之部署基
+- `review-software-architecture` — 審目標架構之補

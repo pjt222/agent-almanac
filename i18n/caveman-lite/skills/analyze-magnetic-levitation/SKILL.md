@@ -65,9 +65,9 @@ Establish the complete physical description of the object and field source befor
 - **Environment**: [temperature, pressure, vibration]
 ```
 
-**Expected:** A complete specification of the object and field source sufficient to determine forces and stability without further assumptions.
+**Got:** A complete specification of the object and field source sufficient to determine forces and stability without further assumptions.
 
-**On failure:** If the magnetic susceptibility or moment is unknown, measure or estimate it from material data tables. Without this quantity, force calculations are impossible. For composite objects, compute an effective susceptibility from the volume-weighted average.
+**If fail:** If the magnetic susceptibility or moment is unknown, measure or estimate it from material data tables. Without this quantity, force calculations are impossible. For composite objects, compute an effective susceptibility from the volume-weighted average.
 
 ### Step 2: Apply Earnshaw's Theorem
 
@@ -89,9 +89,9 @@ Determine whether passive static levitation is possible for the given system:
 - **Reasoning**: [which condition of the theorem applies or fails]
 ```
 
-**Expected:** A definitive classification of whether the proposed levitation is Earnshaw-forbidden or Earnshaw-permitted, with the specific physical reasoning documented.
+**Got:** A definitive classification of whether the proposed levitation is Earnshaw-forbidden or Earnshaw-permitted, with the specific physical reasoning documented.
 
-**On failure:** If the object has mixed magnetic character (e.g., a ferromagnetic core with a diamagnetic shell), analyze each component separately. The overall stability depends on the net energy landscape, which may require numerical field computation.
+**If fail:** If the object has mixed magnetic character (e.g., a ferromagnetic core with a diamagnetic shell), analyze each component separately. The overall stability depends on the net energy landscape, which may require numerical field computation.
 
 ### Step 3: Identify Circumvention Mechanism
 
@@ -115,9 +115,9 @@ If Earnshaw's theorem forbids passive static levitation, identify which of the f
 - **Limitations**: [load capacity, power consumption, cryogenics, mass window]
 ```
 
-**Expected:** Identification of the specific mechanism with its physical basis clearly explained, including quantitative requirements for the mechanism to function.
+**Got:** Identification of the specific mechanism with its physical basis clearly explained, including quantitative requirements for the mechanism to function.
 
-**On failure:** If the system does not clearly fit any of the four mechanisms, check for hybrid approaches (e.g., permanent magnets for the primary force with eddy current damping for stability, or diamagnetic stabilization of a paramagnetic system). Also consider whether the system uses electrodynamic levitation (moving conductors in a magnetic field), which is a distinct mechanism based on Lenz's law.
+**If fail:** If the system does not clearly fit any of the four mechanisms, check for hybrid approaches (e.g., permanent magnets for the primary force with eddy current damping for stability, or diamagnetic stabilization of a paramagnetic system). Also consider whether the system uses electrodynamic levitation (moving conductors in a magnetic field), which is a distinct mechanism based on Lenz's law.
 
 ### Step 4: Calculate Levitation Conditions
 
@@ -147,9 +147,9 @@ Compute the force balance and quantitative conditions for stable levitation:
 - **Maximum load**: m_max = [value, units kg]
 ```
 
-**Expected:** A complete force balance with the equilibrium position determined, stiffness values computed for vertical and lateral directions, and the load capacity estimated.
+**Got:** A complete force balance with the equilibrium position determined, stiffness values computed for vertical and lateral directions, and the load capacity estimated.
 
-**On failure:** If the force balance has no solution (magnetic force too weak to overcome gravity), the system cannot levitate the specified object. Either increase the field gradient (stronger magnets, closer spacing), reduce the object mass, or switch to a material with higher susceptibility. If stiffness is negative in any direction, the equilibrium is unstable in that direction -- return to Step 3 to identify an appropriate stabilization mechanism.
+**If fail:** If the force balance has no solution (magnetic force too weak to overcome gravity), the system cannot levitate the specified object. Either increase the field gradient (stronger magnets, closer spacing), reduce the object mass, or switch to a material with higher susceptibility. If stiffness is negative in any direction, the equilibrium is unstable in that direction -- return to Step 3 to identify an appropriate stabilization mechanism.
 
 ### Step 5: Verify Stability in All Degrees of Freedom
 
@@ -177,9 +177,9 @@ Confirm that the levitation is stable against perturbations in all six rigid-bod
 | Spin (theta_z)    | [N/A or value]       | [Yes/No] | [only relevant for spin-stabilized] |
 ```
 
-**Expected:** All six degrees of freedom are either inherently stable (positive restoring force/torque) or stabilized by an identified mechanism (feedback, gyroscopic, flux pinning). The system is confirmed viable for levitation.
+**Got:** All six degrees of freedom are either inherently stable (positive restoring force/torque) or stabilized by an identified mechanism (feedback, gyroscopic, flux pinning). The system is confirmed viable for levitation.
 
-**On failure:** If any degree of freedom is unstable and no stabilization mechanism is identified, the levitation design is not viable as specified. The most common fix is adding an active feedback loop for the unstable direction, adding diamagnetic material for passive stabilization of a lateral mode, or increasing spin rate for gyroscopic stabilization. Return to Step 3 to incorporate the additional mechanism.
+**If fail:** If any degree of freedom is unstable and no stabilization mechanism is identified, the levitation design is not viable as specified. The most common fix is adding an active feedback loop for the unstable direction, adding diamagnetic material for passive stabilization of a lateral mode, or increasing spin rate for gyroscopic stabilization. Return to Step 3 to incorporate the additional mechanism.
 
 ## Validation
 
@@ -194,14 +194,14 @@ Confirm that the levitation is stable against perturbations in all six rigid-bod
 - [ ] For active systems, control bandwidth and stability margins are checked
 - [ ] Load capacity limits are estimated
 
-## Common Pitfalls
+## Pitfalls
 
 - **Assuming permanent magnets can levitate each other statically**: Earnshaw's theorem forbids this for paramagnetic and ferromagnetic objects, yet it is the most common misconception. The attraction or repulsion along one axis always produces instability along a perpendicular axis. Always apply the theorem before attempting force balance calculations.
 - **Confusing Meissner levitation with flux pinning**: Meissner effect (type-I) produces pure repulsion and only works with the superconductor below the magnet. Flux pinning (type-II) locks the superconductor at a fixed position relative to the field, allowing suspension in any orientation. The physics and the design implications are fundamentally different.
 - **Ignoring tilting modes**: Many analyses check only translational stability and declare the system stable. Tilting instability is the primary failure mode for passive magnetic levitation and requires separate analysis. A system can have positive translational stiffness in all directions while being tilt-unstable.
-- **Underestimating diamagnetic levitation field requirements**: Diamagnetic susceptibilities are very small (chi_v ~ -10^-5 for most materials, -4.5 x 10^-4 for pyrolytic graphite). Levitating even milligram-scale objects requires strong field gradients, typically B * dB/dz > 1000 T^2/m for non-graphite materials.
+- **Underestimating diamagnetic levitation field requirements**: Diamagnetic susceptibilities are small (chi_v ~ -10^-5 for most materials, -4.5 x 10^-4 for pyrolytic graphite). Levitating even milligram-scale objects requires strong field gradients, B * dB/dz > 1000 T^2/m for non-graphite materials.
 - **Neglecting eddy current effects**: Time-varying fields or moving conductors generate eddy currents that produce both forces and heating. In active feedback systems, eddy currents in the levitated object create phase lag that can destabilize the control loop.
-- **Treating superconductors as perfect diamagnets in all conditions**: Type-II superconductors in the mixed state (B_c1 < B < B_c2) have partial flux penetration. The levitation force depends on the magnetization history (hysteresis), not just the instantaneous field.
+- **Treating superconductors as perfect diamagnets in all conditions**: Type-II superconductors in the mixed state (B_c1 < B < B_c2) have partial flux penetration. The levitation force depends on the magnetization history (hysteresis), not the instantaneous field.
 
 ## Related Skills
 

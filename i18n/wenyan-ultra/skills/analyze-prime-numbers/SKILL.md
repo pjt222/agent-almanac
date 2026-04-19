@@ -24,65 +24,65 @@ metadata:
   tags: number-theory, primes, primality, factorization, sieve
 ---
 
-# Analyze Prime Numbers
+# 析素
 
-Analyze prime numbers by selecting and applying the appropriate algorithm for the task at hand: primality testing, integer factorization, or prime distribution analysis. Verify results computationally and relate findings to the Prime Number Theorem.
+擇行算：素測、分解、分析。算驗結而合素定理。
 
-## When to Use
+## 用
 
-- Determining whether a given integer is prime or composite
-- Finding the complete prime factorization of an integer
-- Counting or listing primes up to a given bound
-- Verifying the Prime Number Theorem approximation for a specific range
-- Investigating properties of primes in a number-theoretic proof or computation
+- 判某整為素或合→用
+- 求整全素分→用
+- 限內計或列素→用
+- 驗某範素定理近→用
+- 數論證或算察素性→用
 
-## Inputs
+## 入
 
-- **Required**: The integer(s) to analyze, or a bound for distribution analysis
-- **Required**: Task type -- one of: primality test, factorization, or distribution analysis
-- **Optional**: Preferred algorithm (trial division, Miller-Rabin, Sieve of Eratosthenes, Pollard's rho)
-- **Optional**: Whether to produce a formal proof of primality or just a computational verdict
-- **Optional**: Output format (factor tree, prime list, count, table)
+- **必**：析之整或分析之限
+- **必**：類——素測、分解、分析
+- **可**：偏算（試除、Miller-Rabin、Eratosthenes 篩、Pollard rho）
+- **可**：出形證或唯算判
+- **可**：出式（因樹、素列、計、表）
 
-## Procedure
+## 行
 
-### Step 1: Determine the Task Type
+### 一：定類
 
-Classify the request into one of three categories and select the appropriate algorithmic path.
+請分為三類擇算路。
 
-1. **Primality test**: Given a single integer n, determine whether n is prime.
-2. **Factorization**: Given a composite integer n, find its complete prime factorization.
-3. **Distribution analysis**: Given a bound N, analyze the primes up to N (count, list, gaps, density).
+1. **素測**：給整 n，判 n 為素否
+2. **分解**：給合 n，求其全素分
+3. **分析**：給限 N，析 N 內素（計、列、隙、密）
 
-Record the task type and the input value(s).
+錄類與入值。
 
-**Expected:** A clear classification with the input values recorded.
+得：明分附入值錄。
 
-**On failure:** If the input is ambiguous (e.g., "analyze 60"), ask the user to clarify whether they want a primality test, factorization, or distribution analysis. Default to factorization for composite numbers and primality confirmation for suspected primes.
+敗：入含糊（如「析 60」）→請用者明素測、分解、分析。合默為分解，疑素默為素確。
 
-### Step 2: Apply Primality Testing (if task = primality)
+### 二：施素測（若類=素測）
 
-Test whether n is prime using an algorithm matched to the size of n.
+按 n 大配算測 n 為素否。
 
-1. **Handle trivial cases**: n < 2 is not prime. n = 2 or n = 3 is prime. If n is even and n > 2, it is composite.
+1. **平案**：n < 2 非素。n = 2 或 3 為素。n 偶且 > 2 為合。
 
-2. **Small n (n < 10^6)**: Use trial division.
-   - Test divisibility by all primes p up to floor(sqrt(n)).
-   - Optimization: test 2, then odd numbers 3, 5, 7, ... or use a 6k +/- 1 wheel.
-   - If no divisor found, n is prime.
+2. **小 n（n < 10^6）**：用試除。
+   - 試除諸素 p 至 floor(sqrt(n))
+   - 優：試 2、後奇 3、5、7…或用 6k +/- 1 輪
+   - 無除則 n 素
 
-3. **Large n (n >= 10^6)**: Use Miller-Rabin probabilistic test.
-   - Write n - 1 = 2^s * d where d is odd.
-   - For each witness a in {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}:
-     - Compute x = a^d mod n.
-     - If x = 1 or x = n - 1, this witness passes.
-     - Otherwise, square x up to s - 1 times. If x ever equals n - 1, pass.
-     - If no pass, n is composite (a is a witness).
-   - For n < 3.317 * 10^24, the witnesses {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37} give a deterministic result.
+3. **大 n（n >= 10^6）**：用 Miller-Rabin 概測。
+   - 書 n - 1 = 2^s * d，d 奇
+   - 各證 a 於 {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37}：
+     - 算 x = a^d mod n
+     - x = 1 或 x = n - 1→此證過
+     - 否方 x 至 s - 1 次。x 嘗等 n - 1→過
+     - 無過→n 合（a 為證）
+   - n < 3.317 * 10^24 之 {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37} 證為定
 
-4. **Record the verdict**: prime or composite, with the witness or certificate.
+4. **錄判**：素或合，附證或證書。
 
-**Small primes reference (first 25):**
+**首二十五素：**
 
 | Index | Prime | Index | Prime | Index | Prime |
 |-------|-------|-------|-------|-------|-------|
@@ -96,33 +96,33 @@ Test whether n is prime using an algorithm matched to the size of n.
 | 8     | 19    | 17    | 59    |       |       |
 | 9     | 23    | 18    | 61    |       |       |
 
-**Expected:** A definitive answer (prime or composite) with the algorithm used and any witnesses or divisors found.
+得：定答（素或合）附用算與所見證或除。
 
-**On failure:** If Miller-Rabin reports "probably prime" but certainty is required, escalate to a deterministic test (e.g., AKS or ECPP). For trial division, if computation is too slow, switch to Miller-Rabin.
+敗：Miller-Rabin 報「概素」而需確→升至定測（如 AKS 或 ECPP）。試除算太慢→換 Miller-Rabin。
 
-### Step 3: Apply Factorization (if task = factorization)
+### 三：施分解（若類=分解）
 
-Factor n completely into its prime power decomposition.
+全分 n 為其素冪分。
 
-1. **Extract small factors by trial division**:
-   - Divide out 2 as many times as possible, recording the exponent.
-   - Divide out odd primes 3, 5, 7, 11, ... up to a cutoff (e.g., 10^4 or sqrt(n) if n is small).
-   - After each division, update n to the remaining cofactor.
+1. **以試除取小因**：
+   - 除 2 盡，錄冪
+   - 除奇素 3、5、7、11…至截（如 10^4 或小 n 之 sqrt(n)）
+   - 各除後更 n 為剩餘因
 
-2. **If cofactor > 1 and cofactor < 10^12**: Continue trial division up to sqrt(cofactor).
+2. **若餘 > 1 且 < 10^12**：續試除至 sqrt(餘)。
 
-3. **If cofactor > 1 and cofactor >= 10^12**: Apply Pollard's rho algorithm.
-   - Choose f(x) = x^2 + c (mod n) with random c.
-   - Use Floyd's cycle detection: x = f(x), y = f(f(y)).
-   - Compute d = gcd(|x - y|, n) at each step.
-   - If 1 < d < n, d is a non-trivial factor. Recurse on d and n/d.
-   - If d = n, retry with a different c.
+3. **若餘 > 1 且 >= 10^12**：施 Pollard rho。
+   - 擇 f(x) = x^2 + c (mod n) 隨 c
+   - 用 Floyd 環察：x = f(x)、y = f(f(y))
+   - 各步算 d = gcd(|x - y|, n)
+   - 1 < d < n→d 為非平因。遞於 d 與 n/d
+   - d = n→以異 c 重試
 
-4. **Verify**: Multiply all found prime factors (with exponents) and confirm the product equals the original n. Test each factor for primality.
+4. **驗**：乘諸素因（附冪）確同原 n。各因素測。
 
-5. **Present the result** in standard form: n = p1^a1 * p2^a2 * ... * pk^ak with p1 < p2 < ... < pk.
+5. **以標式呈**：n = p1^a1 * p2^a2 * ... * pk^ak，p1 < p2 < ... < pk。
 
-**Algorithm complexity notes:**
+**算複雜：**
 
 | Algorithm       | Complexity                  | Best for              |
 |-----------------|-----------------------------|-----------------------|
@@ -131,34 +131,34 @@ Factor n completely into its prime power decomposition.
 | Quadratic sieve | L(n)^{1+o(1)}              | n up to ~10^50        |
 | GNFS            | L(n)^{(64/9)^{1/3}+o(1)}  | n > 10^50             |
 
-**Expected:** A complete prime factorization in canonical form, verified by multiplication.
+得：標式之全素分，乘驗。
 
-**On failure:** If Pollard's rho fails to find a factor after many iterations (cycle detected without a non-trivial gcd), try different values of c (at least 5 attempts). If all fail, the cofactor may be prime -- confirm with a primality test.
+敗：Pollard rho 多迭不得因（環察無非平 gcd）→試異 c（至少 5 次）。皆敗→餘或為素，以素測確。
 
-### Step 4: Apply Distribution Analysis (if task = distribution)
+### 四：施分析（若類=分析）
 
-Analyze the distribution of primes up to a given bound N.
+析 N 內素分。
 
-1. **Generate primes using the Sieve of Eratosthenes**:
-   - Create a boolean array of size N + 1, initialized to true.
-   - Set indices 0 and 1 to false (not prime).
-   - For each p from 2 to floor(sqrt(N)):
-     - If p is still marked true, mark all multiples p^2, p^2 + p, p^2 + 2p, ... as false.
-   - Collect all indices still marked true.
+1. **以 Eratosthenes 篩生素**：
+   - 建大 N + 1 之布陣，初為真
+   - 設 0 與 1 為偽（非素）
+   - 各 p 自 2 至 floor(sqrt(N))：
+     - p 仍真→標諸倍 p^2、p^2 + p、p^2 + 2p…為偽
+   - 收諸仍真之指
 
-2. **Count primes**: Compute pi(N) = number of primes up to N.
+2. **計素**：算 pi(N) = N 內素數。
 
-3. **Compare with the Prime Number Theorem**:
-   - PNT approximation: pi(N) ~ N / ln(N).
-   - Logarithmic integral approximation: Li(N) = integral from 2 to N of 1/ln(t) dt.
-   - Compute the relative error: |pi(N) - N/ln(N)| / pi(N).
+3. **比於素定理**：
+   - PNT 近：pi(N) ~ N / ln(N)
+   - 對數積近：Li(N) = integral from 2 to N of 1/ln(t) dt
+   - 算相對誤：|pi(N) - N/ln(N)| / pi(N)
 
-4. **Analyze prime gaps** (optional):
-   - Compute gaps between consecutive primes.
-   - Report the maximum gap, average gap, and any twin primes (gap = 2).
-   - Average gap near N is approximately ln(N).
+4. **析素隙**（可）：
+   - 算連素隙
+   - 報最大隙、均隙、雙生素（隙=2）
+   - N 近均隙約 ln(N)
 
-5. **Present findings** in a summary table:
+5. **以表呈**：
 
 ```
 Bound N:       1,000,000
@@ -171,21 +171,21 @@ Max prime gap:  148 (between 492113 and 492227)
 Twin primes:    8,169 pairs
 ```
 
-**Expected:** A count of primes with PNT comparison and optional gap analysis.
+得：素計附 PNT 比與可選隙析。
 
-**On failure:** If N is too large for in-memory sieving (N > 10^9), use a segmented sieve that processes the range in blocks. If only a count is needed (not a list), use the Meissel-Lehmer algorithm for pi(N) directly.
+敗：N 太大不能內存篩（N > 10^9）→用段篩按段處範。唯需計（非列）→用 Meissel-Lehmer 直算 pi(N)。
 
-### Step 5: Verify Results Computationally
+### 五：算驗
 
-Cross-check all results using an independent computation method.
+以獨法交核諸結。
 
-1. **For primality**: If trial division was used, verify with a quick Miller-Rabin pass (or vice versa). For known primes, check against published prime tables or OEIS sequences.
+1. **素測**：試除用→以快 Miller-Rabin 驗（或反之）。知素查表或 OEIS 序。
 
-2. **For factorization**: Multiply all factors and confirm equality with the original input. Independently test each claimed prime factor for primality.
+2. **分解**：乘諸因確同原入。獨測諸宣素因素性。
 
-3. **For distribution**: Spot-check by testing 3-5 individual numbers from the sieve output for primality. Compare pi(N) against published values for standard benchmarks (pi(10^k) for k = 1, ..., 9).
+3. **分析**：抽 3-5 篩出之數獨素測。比 pi(N) 於標基出版值（pi(10^k) k = 1, ..., 9）。
 
-**Published values of pi(N):**
+**pi(N) 出版值：**
 
 | N       | pi(N)        |
 |---------|-------------|
@@ -199,41 +199,41 @@ Cross-check all results using an independent computation method.
 | 10^8    | 5,761,455   |
 | 10^9    | 50,847,534  |
 
-4. **Document the verification** with the method used and the outcome.
+4. **錄驗**附用法與果。
 
-**Expected:** All results independently verified with no discrepancies.
+得：諸結獨驗無異。
 
-**On failure:** If verification reveals a discrepancy, re-run the original computation with extra checks enabled (e.g., verbose trial division logging). The most common errors are off-by-one in sieve bounds, integer overflow in modular arithmetic, and mistaking a pseudoprime for a prime.
+敗：驗示異→重行原算開額察（如試除詳記）。常誤：篩限差一、模算整溢、誤偽素為素。
 
-## Validation
+## 驗
 
-- [ ] Task type is correctly classified (primality, factorization, or distribution)
-- [ ] Algorithm is appropriate for the input size
-- [ ] Trivial cases (n < 2, n = 2, even n) are handled before general algorithms
-- [ ] Primality verdicts are definitive (not "probably prime" without qualification)
-- [ ] Factorizations multiply back to the original number
-- [ ] Every claimed prime factor has been tested for primality
-- [ ] Sieve bounds include sqrt(N) coverage for marking composites
-- [ ] PNT comparison uses the correct formula (N/ln(N) or Li(N))
-- [ ] Results are verified by an independent method or against published values
-- [ ] Edge cases (n = 0, 1, 2, negative inputs) are addressed
+- [ ] 類正分（素、解、布）
+- [ ] 算合入大
+- [ ] 平案（n < 2、n = 2、偶 n）通算前處
+- [ ] 素判定（非「概素」無修飾）
+- [ ] 分解乘回原
+- [ ] 諸宣素因皆素測
+- [ ] 篩限含 sqrt(N) 覆以標合
+- [ ] PNT 比用正式（N/ln(N) 或 Li(N)）
+- [ ] 結以獨法或於出版值驗
+- [ ] 邊例（n = 0、1、2、負入）皆理
 
-## Common Pitfalls
+## 忌
 
-- **Forgetting n = 1 is not prime**: By convention, 1 is neither prime nor composite. Many algorithms silently misclassify it.
+- **忘 n = 1 非素**：例 1 既非素亦非合。諸算默誤分
 
-- **Integer overflow in modular exponentiation**: When computing a^d mod n for Miller-Rabin, naive exponentiation overflows. Use modular exponentiation (repeated squaring with mod at each step).
+- **模冪整溢**：Miller-Rabin 算 a^d mod n 樸冪致溢。用模冪（重方各步取模）
 
-- **Sieve off-by-one errors**: The sieve must mark composites starting from p^2, not from 2p. Starting from 2p wastes time but is correct; starting from p+1 is wrong.
+- **篩差一誤**：篩標合自 p^2 始非 2p。自 2p 浪時但正；自 p+1 誤
 
-- **Pollard's rho cycle with d = n**: If gcd(|x - y|, n) = n, the algorithm has found the trivial factor. Retry with a different polynomial constant c, not just a different starting point.
+- **Pollard rho 環 d = n**：gcd(|x - y|, n) = n→算得平因。試異多項常 c，非異始點
 
-- **Carmichael numbers fooling Fermat's test**: Numbers like 561 = 3 * 11 * 17 pass Fermat's primality test for all coprime bases. Always use Miller-Rabin, not plain Fermat.
+- **Carmichael 數欺 Fermat 測**：561 = 3 * 11 * 17 等過諸互素基之 Fermat 素測。恆用 Miller-Rabin 非平 Fermat
 
-- **Confusing pi(n) with the constant pi**: The prime counting function pi(n) and the circle constant 3.14159... share notation. Context must be unambiguous.
+- **混 pi(n) 與常 pi**：素計函 pi(n) 與圓常 3.14159… 共記。脈須無歧
 
-## Related Skills
+## 參
 
-- `solve-modular-arithmetic` -- Modular arithmetic underpins Miller-Rabin and many factorization methods
-- `explore-diophantine-equations` -- Prime factorization is a prerequisite for solving many Diophantine equations
-- `formulate-quantum-problem` -- Shor's algorithm for integer factorization connects primes to quantum computing
+- `solve-modular-arithmetic` —— 模算為 Miller-Rabin 與諸分解法之基
+- `explore-diophantine-equations` —— 素分為解多 Diophantine 方之前置
+- `formulate-quantum-problem` —— Shor 整分算接素於量算

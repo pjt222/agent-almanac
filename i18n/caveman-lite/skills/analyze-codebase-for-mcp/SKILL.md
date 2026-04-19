@@ -61,9 +61,9 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
 
 1.3. Count total files, lines of code, and exported symbols to gauge project size.
 
-**Expected:** A categorized file inventory with role annotations.
+**Got:** A categorized file inventory with role annotations.
 
-**On failure:** If the codebase is too large (>10,000 files), narrow the scan to specific directories or modules using the domain focus input. If no source files are found, verify the root path and language parameters.
+**If fail:** If the codebase is too large (>10,000 files), narrow the scan to specific directories or modules using the domain focus input. If no source files are found, verify the root path and language parameters.
 
 ### Step 2: Identify Exposed Functions and Endpoints
 
@@ -88,9 +88,9 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
 
 2.4. Build a candidate list sorted by potential utility (public, documented, well-typed functions first).
 
-**Expected:** A list of 20-100 candidate functions/endpoints with extracted metadata.
+**Got:** A list of 20-100 candidate functions/endpoints with extracted metadata.
 
-**On failure:** If few candidates are found, broaden the search to include internal functions that could be made public. If documentation is sparse, flag this as a risk in the output.
+**If fail:** If few candidates are found, broaden the search to include internal functions that could be made public. If documentation is sparse, flag this as a risk in the output.
 
 ### Step 3: Evaluate MCP Suitability
 
@@ -112,9 +112,9 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
 
 3.3. Filter candidates to those scoring 3 or above. Flag score-2 items as "future candidates" requiring refactoring.
 
-**Expected:** A scored and filtered candidate list with suitability rationale for each.
+**Got:** A scored and filtered candidate list with suitability rationale for each.
 
-**On failure:** If most candidates score below 3, the codebase may need refactoring before MCP exposure. Document the gaps and recommend specific improvements (add types, extract pure functions, wrap side effects).
+**If fail:** If most candidates score below 3, the codebase may need refactoring before MCP exposure. Document the gaps and recommend specific improvements (add types, extract pure functions, wrap side effects).
 
 ### Step 4: Design Tool Specifications
 
@@ -150,9 +150,9 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
    - Convert raw return values to structured text or JSON
    - Add safety guards (e.g., read-only wrappers for database functions)
 
-**Expected:** A complete YAML tool specification with categories, dependencies, and wrapper notes.
+**Got:** A complete YAML tool specification with categories, dependencies, and wrapper notes.
 
-**On failure:** If tool specifications are ambiguous, revisit Step 2 to extract more detail from source code. If parameter types cannot be inferred, flag for manual review.
+**If fail:** If tool specifications are ambiguous, revisit Step 2 to extract more detail from source code. If parameter types cannot be inferred, flag for manual review.
 
 ### Step 5: Generate Tool Spec Document
 
@@ -171,9 +171,9 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
    - Implemented tools not in the spec (possibly stale)
    - Tools with specification drift (implementation diverges from spec)
 
-**Expected:** A complete tool specification document ready for consumption by `scaffold-mcp-server`.
+**Got:** A complete tool specification document ready for consumption by `scaffold-mcp-server`.
 
-**On failure:** If the document exceeds reasonable size (>200 tools), split into modules with cross-references. If the codebase has no suitable candidates, produce a "readiness assessment" document with refactoring recommendations instead.
+**If fail:** If the document exceeds reasonable size (>200 tools), split into modules with cross-references. If the codebase has no suitable candidates, produce a "readiness assessment" document with refactoring recommendations instead.
 
 ## Validation
 
@@ -188,7 +188,7 @@ Scan a codebase to discover functions, REST endpoints, CLI commands, and data ac
 - [ ] Gap analysis is included when an existing MCP server was provided
 - [ ] Future candidates section lists refactoring steps needed for score-2 items
 
-## Common Pitfalls
+## Pitfalls
 
 - **Exposing too many tools**: AI assistants work best with 10-30 focused tools. Prioritize breadth of capability over depth. Resist exposing every public function.
 - **Ignoring side effects**: A function that "just reads" but also writes to a log or cache still has side effects. Audit carefully with `Grep` for file writes, network calls, and database mutations.

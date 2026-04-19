@@ -69,9 +69,9 @@ Establish the boundaries of the landscape analysis.
    - Watch for expired patents that open up design space
 5. Document the scope as the **Landscape Charter**
 
-**Expected:** A clear, bounded scope that is specific enough to produce actionable results but broad enough to capture the relevant competitive landscape. Classification codes identified for systematic search.
+**Got:** A clear, bounded scope that is specific enough to produce actionable results but broad enough to capture the relevant competitive landscape. Classification codes identified for systematic search.
 
-**On failure:** If the technology domain is too broad (thousands of results), narrow by adding technical specificity or focusing on a specific application area. If too narrow (few results), broaden to adjacent technologies. The right scope typically yields 100-1000 patent families.
+**If fail:** If the technology domain is too broad (thousands of results), narrow by adding technical specificity or focusing on a specific application area. If too narrow (few results), broaden to adjacent technologies. The right scope yields 100-1000 patent families.
 
 ### Step 2: Harvest Patent Data
 
@@ -104,9 +104,9 @@ Query Construction:
 4. Deduplicate by patent family (group national filings of the same invention)
 5. Record the total patent family count and source databases
 
-**Expected:** A structured dataset of patent families within scope, deduplicated and timestamped. The dataset is the foundation for all subsequent analysis.
+**Got:** A structured dataset of patent families within scope, deduplicated and timestamped. The dataset is the foundation for all subsequent analysis.
 
-**On failure:** If database access is limited, Google Patents + Lens.org (free) provide good coverage. If the query returns too many results (>5000), add technical specificity. If too few (<50), broaden keywords or add classification codes.
+**If fail:** If database access is limited, Google Patents + Lens.org (free) provide good coverage. If the query returns too many results (>5000), add technical specificity. If too few (<50), broaden keywords or add classification codes.
 
 ### Step 3: Analyze the Landscape
 
@@ -130,9 +130,9 @@ Map the patent clusters, key players, and trends.
    - These are likely blocking patents or essential prior art
 5. Produce the **Landscape Map**: clusters, players, trends, and key patents
 
-**Expected:** A clear picture of who owns what, where the activity is concentrated, and how the landscape is evolving. Key blocking patents identified. White spaces (areas with few filings) visible.
+**Got:** A clear picture of who owns what, where the activity is concentrated, and how the landscape is evolving. Key blocking patents identified. White spaces (areas with few filings) visible.
 
-**On failure:** If the dataset is too small for meaningful clustering, combine clusters into broader groups. If one assignee dominates (>50% of filings), analyze their portfolio as a separate sub-landscape.
+**If fail:** If the dataset is too small for meaningful clustering, combine clusters into broader groups. If one assignee dominates (>50% of filings), analyze their portfolio as a separate sub-landscape.
 
 ### Step 4: Identify White Spaces and Risks
 
@@ -154,9 +154,9 @@ Extract strategic insights from the landscape.
    - Which competitors might be interested in cross-licensing?
 4. Produce the **Strategic Assessment**: white spaces, FTO risks, positioning, and recommendations
 
-**Expected:** Actionable strategic recommendations: where to file, what to avoid, who to watch, and what risks need detailed FTO analysis.
+**Got:** Actionable strategic recommendations: where to file, what to avoid, who to watch, and what risks need detailed FTO analysis.
 
-**On failure:** If FTO risks are identified, this screening is preliminary — it does NOT replace a formal FTO opinion from a patent attorney. Flag critical risks for legal review. If white spaces seem too good (a valuable area with no filings), verify the search scope didn't accidentally exclude relevant filings.
+**If fail:** If FTO risks are identified, this screening is preliminary — it does NOT replace a formal FTO opinion from a patent attorney. Flag critical risks for legal review. If white spaces seem too good (a valuable area with no filings), verify the search scope didn't accidentally exclude relevant filings.
 
 ### Step 5: Document and Recommend
 
@@ -178,9 +178,9 @@ Package the landscape assessment for decision-makers.
    - Define alert queries for new filings in critical areas
    - Set review cadence (quarterly for active areas, annually for stable ones)
 
-**Expected:** A complete landscape report that enables strategic IP decisions. The report is evidence-based, clearly scoped, and actionable.
+**Got:** A complete landscape report that enables strategic IP decisions. The report is evidence-based, clearly scoped, and actionable.
 
-**On failure:** If the report is too large, produce the executive summary first and offer detailed sections on request. The executive summary should always stand alone as a decision document.
+**If fail:** If the report is too large, produce the executive summary first and offer detailed sections on request. The executive summary should always stand alone as a decision document.
 
 ## Validation Checklist
 
@@ -195,7 +195,7 @@ Package the landscape assessment for decision-makers.
 - [ ] Limitations acknowledged (screening vs. formal FTO opinion)
 - [ ] Monitoring alerts defined for ongoing landscape tracking
 
-## Common Pitfalls
+## Pitfalls
 
 - **Too broad a scope**: "AI patents" is not a landscape — it's an ocean. Be specific about the technology and application
 - **Single-database reliance**: No single patent database has complete coverage. Use at least two sources

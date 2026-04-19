@@ -26,36 +26,36 @@ metadata:
 
 # Construct Arguments
 
-Build rigorous arguments from hypothesis through reasoning to concrete evidence. Every persuasive technical claim follows the same triad: a clear hypothesis states *what* you believe, an argument explains *why* it holds, and examples prove *that* it holds. This skill teaches you to apply that structure to code reviews, design decisions, research writing, and any context where claims need justification.
+Build rigorous arguments hypothesis → reasoning → concrete evidence. Triad: hypothesis = *what* you believe, argument = *why* holds, examples = *that* holds. Apply to code reviews, design decisions, research writing, any ctx w/ claims needing justification.
 
-## When to Use
+## Use When
 
-- Writing or reviewing a PR description that proposes a technical change
-- Justifying a design decision in an ADR (Architecture Decision Record)
-- Constructing feedback in a code review that goes beyond "I don't like this"
-- Writing a research argument or technical proposal
-- Challenging or defending an approach in a technical discussion
+- Writing/reviewing PR desc proposing technical change
+- Justifying design decision in ADR
+- Code review feedback beyond "I don't like this"
+- Research argument or technical proposal
+- Challenge/defend approach in technical discussion
 
-## Inputs
+## In
 
-- **Required**: A claim or position that needs justification
-- **Required**: Context (code review, design decision, research, documentation)
-- **Optional**: Audience (peer developers, reviewers, stakeholders, researchers)
-- **Optional**: Counterarguments or alternative positions to address
-- **Optional**: Evidence or data available to support the claim
+- **Required**: Claim or position needing justification
+- **Required**: Context (code review, design decision, research, doc)
+- **Optional**: Audience (peer devs, reviewers, stakeholders, researchers)
+- **Optional**: Counterarguments or alternative positions
+- **Optional**: Evidence or data available
 
-## Procedure
+## Do
 
-### Step 1: Formulate the Hypothesis
+### Step 1: Formulate Hypothesis
 
-State your claim as a clear, falsifiable hypothesis. A hypothesis is not an opinion or a preference -- it is a specific assertion that can be tested against evidence.
+Clear, falsifiable claim. Not opinion or preference — specific assertion testable vs evidence.
 
-1. Write the claim in one sentence
-2. Apply the falsifiability test: can someone prove this wrong with evidence?
-3. Scope it narrowly: constrain to a specific context, codebase, or domain
-4. Distinguish from opinions by checking for testable criteria
+1. Claim in 1 sentence
+2. Falsifiability test: can someone prove wrong w/ evidence?
+3. Scope narrowly: specific ctx, codebase, domain
+4. Distinguish from opinions → testable criteria
 
-**Falsifiable vs. unfalsifiable:**
+**Falsifiable vs unfalsifiable:**
 
 | Unfalsifiable (opinion)              | Falsifiable (hypothesis)                                       |
 |--------------------------------------|----------------------------------------------------------------|
@@ -64,87 +64,87 @@ State your claim as a clear, falsifiable hypothesis. A hypothesis is not an opin
 | "The API design is cleaner"          | "Replacing the 5 endpoint variants with a single parameterized endpoint reduces the public API surface by 60%" |
 | "This research approach is better"   | "Method A achieves higher precision than Method B on dataset X at the 95% confidence level" |
 
-**Expected:** A one-sentence hypothesis that is specific, scoped, and falsifiable. Someone reading it can immediately imagine what evidence would confirm or refute it.
+**→** 1-sentence hypothesis specific + scoped + falsifiable. Reader immediately imagines evidence confirming/refuting.
 
-**On failure:** If the hypothesis feels vague, apply the "how would I disprove this?" test. If you cannot imagine counter-evidence, the claim is an opinion, not a hypothesis. Narrow the scope or add measurable criteria until it becomes testable.
+**If err:** Vague → "how would I disprove?" test. Can't imagine counter-evidence → opinion not hypothesis. Narrow scope or add measurable criteria.
 
-### Step 2: Identify the Argument Type
+### Step 2: ID Argument Type
 
-Select the logical structure that best supports your hypothesis. Different claims call for different reasoning strategies.
+Logical structure for hypothesis. Diff claims need diff reasoning strategies.
 
-1. Review the four argument types:
+1. Review 4 types:
 
 | Type        | Structure                                  | Best for                          |
 |-------------|--------------------------------------------|-----------------------------------|
-| Deductive   | If A then B; A is true; therefore B        | Formal proofs, type safety claims |
-| Inductive   | Observed pattern across N cases; therefore likely in general | Performance data, test results    |
-| Analogical  | X is similar to Y in relevant ways; Y has property P; therefore X likely has P | Design decisions, technology choices |
-| Evidential  | Evidence E is more likely under hypothesis H1 than H2; therefore H1 is supported | Research findings, A/B test results |
+| Deductive   | If A then B; A true; therefore B        | Formal proofs, type safety |
+| Inductive   | Observed pattern N cases; therefore likely | Perf data, test results    |
+| Analogical  | X similar to Y relevant ways; Y has P; therefore X likely P | Design decisions, tech choices |
+| Evidential  | E more likely under H1 than H2; therefore H1 supported | Research findings, A/B results |
 
-2. Match your hypothesis to the strongest argument type:
-   - Claiming something *must* be true? Use **deductive**
-   - Claiming something *tends* to be true based on observations? Use **inductive**
-   - Claiming something *will likely work* based on similar prior cases? Use **analogical**
-   - Claiming one explanation *fits the data better* than alternatives? Use **evidential**
+2. Match hypothesis → strongest type:
+   - *must* be true → **deductive**
+   - *tends* to be true via observations → **inductive**
+   - *will likely work* via similar prior cases → **analogical**
+   - one explanation *fits data better* → **evidential**
 
-3. Consider combining types for stronger arguments (e.g., analogical reasoning backed by inductive evidence)
+3. Combine types for stronger arguments (analogical + inductive evidence)
 
-**Expected:** A chosen argument type (or combination) with a clear rationale for why it fits the hypothesis.
+**→** Chosen type (or combo) + clear rationale why fits hypothesis.
 
-**On failure:** If no single type fits cleanly, the hypothesis may need splitting into sub-claims. Break it into parts that each have a natural argument structure.
+**If err:** No single type fits cleanly → split hypothesis into sub-claims. Each w/ natural argument structure.
 
-### Step 3: Construct the Argument
+### Step 3: Construct Argument
 
-Build the logical chain that connects your hypothesis to its justification.
+Logical chain connecting hypothesis → justification.
 
-1. State the premises (the facts or assumptions you start from)
-2. Show the logical connection (how the premises lead to the conclusion)
-3. Steelman the strongest counterargument: state the best opposing case *before* refuting it
-4. Address the counterargument directly with evidence or reasoning
+1. State premises (facts/assumptions starting from)
+2. Show logical connection (premises → conclusion)
+3. Steelman strongest counterargument — state best opposing *before* refuting
+4. Address counterargument directly w/ evidence or reasoning
 
-**Worked example -- Code Review (deductive + inductive):**
+**Worked example — Code Review (deductive + inductive):**
 
-> **Hypothesis**: "Extracting the validation logic into a shared module will reduce bug duplication across the three API handlers."
+> **Hypothesis**: "Extracting validation logic into shared module will reduce bug duplication across 3 API handlers."
 >
 > **Premises**:
-> - The three handlers (`createUser`, `updateUser`, `deleteUser`) each implement the same input validation with slight variations (observed in `src/handlers/`)
-> - In the last 6 months, 3 of 5 validation bugs were fixed in one handler but not propagated to the others (see issues #42, #57, #61)
-> - Shared modules enforce a single source of truth for logic (deductive: if one implementation, then one place to fix)
+> - 3 handlers (`createUser`, `updateUser`, `deleteUser`) impl same input valid. w/ slight variations (observed `src/handlers/`)
+> - Last 6 months, 3/5 valid. bugs fixed in 1 handler not propagated (issues #42, #57, #61)
+> - Shared modules enforce single src of truth (deductive: if one impl, then one place to fix)
 >
-> **Logical chain**: Because the three handlers duplicate the same validation (premise 1), bugs fixed in one are missed in others (premise 2, inductive from 3/5 cases). A shared module means fixes apply once to all callers (deductive from shared-module semantics). Therefore, extraction will reduce bug duplication.
+> **Logical chain**: Because 3 handlers duplicate same valid. (premise 1), bugs fixed in 1 missed in others (premise 2, inductive from 3/5). Shared module → fixes apply once to all callers (deductive from shared-module semantics). Therefore extraction reduces bug duplication.
 >
-> **Counterargument (steelmanned)**: "Shared modules introduce coupling -- a change to validation for one handler could break the others."
+> **Counterargument (steelmanned)**: "Shared modules introduce coupling — change to valid. for 1 handler could break others."
 >
-> **Rebuttal**: The handlers already share identical validation *intent*; the coupling is implicit and harder to maintain. Making it explicit via a shared module with parameterized options (e.g., `validate(input, { requireEmail: true })`) makes the coupling visible and testable. The current implicit duplication is riskier because it hides the dependency.
+> **Rebuttal**: Handlers already share identical valid. *intent*; coupling implicit + harder to maintain. Making explicit via shared module w/ parameterized options (`validate(input, { requireEmail: true })`) makes coupling visible + testable. Current implicit duplication riskier — hides dependency.
 
-**Worked example -- Research (evidential):**
+**Worked example — Research (evidential):**
 
-> **Hypothesis**: "Pre-training on domain-specific corpora improves downstream task performance more than increasing general corpus size for biomedical NER."
+> **Hypothesis**: "Pre-training on domain-specific corpora improves downstream task perf more than increasing general corpus size for biomedical NER."
 >
 > **Premises**:
-> - BioBERT pre-trained on PubMed (4.5B words) outperforms BERT-Large pre-trained on general English (16B words) on 6/6 biomedical NER benchmarks (Lee et al., 2020)
-> - SciBERT pre-trained on Semantic Scholar (3.1B words) outperforms BERT-Base on SciERC and JNLPBA despite a smaller pre-training corpus
-> - General-domain scaling (BERT-Base to BERT-Large, 3x parameters) yields smaller gains on biomedical NER than domain adaptation (BERT-Base to BioBERT, same parameters)
+> - BioBERT pre-trained on PubMed (4.5B words) outperforms BERT-Large on general English (16B words) on 6/6 biomedical NER benchmarks (Lee et al., 2020)
+> - SciBERT pre-trained on Semantic Scholar (3.1B words) outperforms BERT-Base on SciERC + JNLPBA despite smaller pre-training corpus
+> - General-domain scaling (BERT-Base → BERT-Large, 3x params) smaller gains on biomedical NER than domain adaptation (BERT-Base → BioBERT, same params)
 >
-> **Logical chain**: The evidence consistently shows that domain corpus selection outweighs corpus scale for biomedical NER (evidential: these results are more likely if domain specificity matters more than scale). Three independent comparisons point the same direction, strengthening the inductive case.
+> **Logical chain**: Evidence consistently shows domain corpus selection outweighs scale for biomedical NER (evidential: these results more likely if domain specificity > scale). 3 independent comparisons same direction → strengthens inductive case.
 >
-> **Counterargument (steelmanned)**: "These results may not generalize beyond biomedical NER -- biomedicine has unusually specialized vocabulary that inflates the domain-adaptation advantage."
+> **Counterargument (steelmanned)**: "Results may not generalize beyond biomedical NER — biomedicine has unusually specialized vocab inflating domain-adaptation advantage."
 >
-> **Rebuttal**: Valid limitation. The hypothesis is scoped to biomedical NER specifically. However, similar domain-adaptation gains appear in legal NLP (Legal-BERT) and financial NLP (FinBERT), suggesting the pattern may generalize to other specialized domains, though that is a separate claim requiring its own evidence.
+> **Rebuttal**: Valid limitation. Hypothesis scoped biomedical NER specifically. Similar gains appear legal NLP (Legal-BERT) + financial NLP (FinBERT) → pattern may generalize to other specialized domains, separate claim needing its own evidence.
 
-**Expected:** A complete argument chain with premises, logical connection, a steelmanned counterargument, and a rebuttal. The reader can follow the reasoning step by step.
+**→** Complete argument chain + premises + logical connection + steelmanned counterargument + rebuttal. Reader follows step by step.
 
-**On failure:** If the argument feels weak, check the premises. Weak arguments usually stem from unsupported premises, not faulty logic. Find evidence for each premise or acknowledge it as an assumption. If the counterargument is stronger than the rebuttal, the hypothesis may need revision.
+**If err:** Argument weak → check premises. Weak args stem from unsupported premises not faulty logic. Find evidence per premise or acknowledge as assumption. Counterargument stronger than rebuttal → hypothesis needs revision.
 
-### Step 4: Provide Concrete Examples
+### Step 4: Concrete Examples
 
-Support the argument with independently verifiable evidence. Examples are not illustrations -- they are the empirical foundation that makes the argument testable.
+Support w/ independently verifiable evidence. Not illustrations — empirical foundation making argument testable.
 
-1. Provide at least one **positive example** that confirms the hypothesis
-2. Provide at least one **edge case or boundary example** that tests limits
-3. Ensure each example is **independently verifiable**: another person can reproduce or check it without relying on your interpretation
-4. For code claims, reference specific files, line numbers, or commits
-5. For research claims, cite specific papers, datasets, or experimental results
+1. ≥1 **positive example** confirming hypothesis
+2. ≥1 **edge case/boundary example** testing limits
+3. Each **independently verifiable**: another person can reproduce or check no relying on your interpretation
+4. Code claims → specific files, line nums, commits
+5. Research claims → specific papers, datasets, experimental results
 
 **Example selection criteria:**
 
@@ -155,15 +155,15 @@ Support the argument with independently verifiable evidence. Examples are not il
 | Representative         | "3 of 5 validation bugs in the last 6 months followed this pattern" | "I once saw a bug like this"             |
 | Includes edge cases    | "This pattern holds for string inputs but not for file upload validation, which has handler-specific constraints" | (no limitations mentioned)               |
 
-**Expected:** Concrete examples that a reader can verify independently. At least one positive and one edge case. Each references a specific artifact (file, line, issue, paper, dataset).
+**→** Concrete examples reader can verify independently. ≥1 positive + 1 edge case. Each refs specific artifact (file, line, issue, paper, dataset).
 
-**On failure:** If examples are hard to find, the hypothesis may be too broad or not grounded in observable reality. Narrow the scope to what you can actually point to. Absence of examples is a signal, not a gap to paper over with vague references.
+**If err:** Examples hard to find → hypothesis too broad or not grounded observable reality. Narrow scope → what you can actually point to. Absence = signal, not gap to paper over.
 
-### Step 5: Assemble the Complete Argument
+### Step 5: Assemble Complete Argument
 
-Combine hypothesis, argument, and examples into the appropriate format for the context.
+Combine hypothesis + argument + examples → appropriate format for ctx.
 
-1. **For code reviews** -- structure the comment as:
+1. **Code reviews** — structure:
    ```
    [S] <one-line summary of the suggestion>
 
@@ -176,7 +176,7 @@ Combine hypothesis, argument, and examples into the appropriate format for the c
    **Suggestion**: <concrete code change or approach>
    ```
 
-2. **For PR descriptions** -- structure the body as:
+2. **PR descriptions** — body:
    ```markdown
    ## Why
 
@@ -191,66 +191,66 @@ Combine hypothesis, argument, and examples into the appropriate format for the c
    <Examples: benchmarks, bug references, before/after comparisons>
    ```
 
-3. **For ADRs (Architecture Decision Records)** -- use the standard ADR format with the triad mapped to Context (hypothesis), Decision (argument), and Consequences (examples/evidence of expected outcomes)
+3. **ADRs (Architecture Decision Records)** — std ADR format + triad → Context (hypothesis), Decision (argument), Consequences (examples/evidence of expected outcomes)
 
-4. **For research writing** -- map to the standard structure: Introduction states the hypothesis, Methods/Results provide argument and examples, Discussion addresses counterarguments
+4. **Research writing** — std structure: Intro = hypothesis, Methods/Results = argument + examples, Discussion = counterarguments
 
-5. Review the assembled argument for:
-   - Logical gaps (does the conclusion actually follow from the premises?)
-   - Missing evidence (are there unsupported premises?)
-   - Unaddressed counterarguments (is the strongest objection answered?)
-   - Scope creep (does the argument stay within the hypothesis bounds?)
+5. Review assembled for:
+   - Logical gaps (conclusion follow from premises?)
+   - Missing evidence (unsupported premises?)
+   - Unaddressed counterarguments (strongest objection answered?)
+   - Scope creep (stays within hypothesis bounds?)
 
-**Expected:** A complete, formatted argument appropriate for its context. The reader can evaluate the hypothesis, follow the reasoning, check the evidence, and consider counterarguments -- all in one coherent structure.
+**→** Complete formatted argument appropriate for ctx. Reader can eval hypothesis, follow reasoning, check evidence, consider counterarguments — all in 1 coherent structure.
 
-**On failure:** If the assembled argument feels disjointed, the hypothesis may be too broad. Split it into focused sub-arguments, each with its own hypothesis-argument-example triad. Two tight arguments are stronger than one sprawling one.
+**If err:** Assembled feels disjointed → hypothesis too broad. Split into focused sub-arguments, each w/ own triad. 2 tight > 1 sprawling.
 
-## Validation
+## Check
 
-- [ ] Hypothesis is falsifiable (someone could disprove it with evidence)
-- [ ] Hypothesis is scoped to a specific context, not a universal claim
-- [ ] Argument type is identified and appropriate for the claim
-- [ ] Premises are stated explicitly, not assumed as shared knowledge
-- [ ] Logical chain connects premises to conclusion without gaps
-- [ ] Strongest counterargument is steelmanned and addressed
-- [ ] At least one positive example supports the hypothesis
-- [ ] At least one edge case or limitation is acknowledged
-- [ ] All examples are independently verifiable (references provided)
-- [ ] Output format matches the context (code review, PR, ADR, research)
+- [ ] Hypothesis falsifiable (could disprove w/ evidence)
+- [ ] Hypothesis scoped specific ctx, not universal
+- [ ] Argument type ID'd + appropriate for claim
+- [ ] Premises stated explicitly, not assumed shared knowledge
+- [ ] Logical chain connects premises → conclusion no gaps
+- [ ] Strongest counterargument steelmanned + addressed
+- [ ] ≥1 positive example supports
+- [ ] ≥1 edge case or limitation acknowledged
+- [ ] All examples independently verifiable (refs provided)
+- [ ] Out format matches ctx (code review, PR, ADR, research)
 - [ ] No logical fallacies (appeal to authority, false dichotomy, strawman)
 
-## Common Pitfalls
+## Traps
 
-- **Stating opinions as hypotheses**: "This code is messy" is a preference, not a hypothesis. Rewrite as a testable claim: "This module has 4 responsibilities that should be separated per the single-responsibility principle, as evidenced by its 6 public methods spanning 3 unrelated domains."
-- **Skipping the counterargument**: Unaddressed objections weaken the argument even if the reader never voices them. Always steelman -- state the strongest opposing case in its best form before rebutting it.
-- **Vague examples**: "We've seen this pattern before" is not evidence. Point to specific issues, commits, lines, papers, or datasets. If you cannot find a concrete example, your hypothesis may not be well-grounded.
-- **Argument from authority**: "The senior engineer said so" or "Google does it this way" is not a logical argument. Authority can *motivate* investigation, but the argument must stand on its own evidence and reasoning.
-- **Scope creep in conclusions**: Drawing conclusions broader than what the evidence supports. If your examples cover 3 API handlers, don't conclude about the entire codebase. Match conclusion scope to evidence scope.
-- **Conflating argument types**: Using inductive language ("tends to") for deductive claims ("must be") or vice versa. Be precise about the strength of your conclusion -- deductive arguments give certainty, inductive arguments give probability.
+- **State opinions as hypotheses**: "This code is messy" = preference not hypothesis. Rewrite testable: "This module has 4 responsibilities that should be separated per single-responsibility principle, as evidenced by 6 public methods spanning 3 unrelated domains."
+- **Skip counterargument**: Unaddressed objections weaken even if reader never voices. Always steelman — state strongest opposing in best form before rebutting.
+- **Vague examples**: "We've seen this pattern" not evidence. Point to specific issues, commits, lines, papers, datasets. Can't find concrete → hypothesis not well-grounded.
+- **Argument from authority**: "Senior engineer said so" or "Google does it this way" not logical argument. Authority *motivates* investigation; argument must stand on evidence + reasoning.
+- **Scope creep in conclusions**: Drawing broader than evidence supports. Examples cover 3 API handlers → don't conclude about entire codebase. Match conclusion scope → evidence scope.
+- **Conflate argument types**: Inductive lang ("tends to") for deductive ("must be") or vice versa. Precise about strength — deductive = certainty, inductive = probability.
 
-## Related Skills
+## →
 
-- `review-pull-request` -- applying argumentation to structured code review feedback
-- `review-research` -- constructing evidence-based arguments in research contexts
-- `review-software-architecture` -- justifying architectural decisions with the hypothesis-argument-example triad
-- `create-skill` -- skills themselves are structured arguments for how to accomplish a task
-- `write-claude-md` -- documenting conventions and decisions that benefit from clear justification
+- `review-pull-request` — apply argumentation → structured code review feedback
+- `review-research` — evidence-based arguments in research
+- `review-software-architecture` — justify architectural decisions via triad
+- `create-skill` — skills = structured arguments for how to accomplish task
+- `write-claude-md` — doc conventions + decisions benefiting from clear justification
 
 ### Composition: Argumentation + Advocatus Diaboli
 
-For high-stakes decisions, compose this skill with the `advocatus-diaboli` agent to form a pre-decision review loop. The pattern:
+High-stakes decisions → compose w/ `advocatus-diaboli` agent → pre-decision review loop:
 
-1. **Structure** via argumentation -- build the hypothesis-argument-example triad
-2. **Stress-test** via advocatus-diaboli -- steelman the proposal, then challenge each assumption with specific questions. Flag severity: Critical (redesign or abandon), Medium (adjust), Low (note and proceed)
-3. **Revise** based on findings -- critical findings trigger redesign; medium findings trigger adjustment; low findings are noted
+1. **Structure** via argumentation — build triad
+2. **Stress-test** via advocatus-diaboli — steelman proposal, challenge each assumption w/ specific questions. Severity: Critical (redesign/abandon), Medium (adjust), Low (note + proceed)
+3. **Revise** per findings — critical → redesign; medium → adjustment; low → noted
 
-**When to compose vs. use alone:**
-- Use argumentation alone when constructing a proposal, PR description, or design justification
-- Use advocatus-diaboli alone when reviewing someone else's existing argument
-- Compose both when you are both the proposer and need adversarial self-review before committing
+**When compose vs alone:**
+- Argumentation alone → constructing proposal, PR desc, design justification
+- Advocatus-diaboli alone → reviewing someone else's existing argument
+- Compose both → you're both proposer + need adversarial self-review pre-committing
 
-**Example -- PR response refinement:**
-Argumentation structured a response (hypothesis: combining PRs is better, argument with evidence, collaboration offer). Advocatus-diaboli then caught two critical issues: a claim about proxy process identification was speculative rather than factual (would have been embarrassing on a security PR), and "I have tested this in practice" was unverifiable. Both were removed. The final response was 40-50% shorter -- overexplaining signals insecurity.
+**Example — PR response refinement:**
+Argumentation structured response (hypothesis: combining PRs better, argument w/ evidence, collaboration offer). Advocatus-diaboli caught 2 critical issues: claim about proxy proc ID speculative not factual (would've been embarrassing on security PR), "I have tested this in practice" unverifiable. Both removed. Final 40-50% shorter — overexplaining signals insecurity.
 
-**Example -- System design triage:**
-Argumentation (via Plan agent) designed a full 500-line triage pipeline. Advocatus-diaboli killed it: at 9 items, the system was premature and would itself become a maintenance burden (recursive trap). Final solution: 25 lines added to an existing script.
+**Example — System design triage:**
+Argumentation (via Plan agent) designed full 500-line triage pipeline. Advocatus-diaboli killed: at 9 items, premature + system itself would become maintenance burden (recursive trap). Final: 25 lines added to existing script.

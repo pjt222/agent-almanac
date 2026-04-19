@@ -90,8 +90,8 @@ Plan and execute a GxP audit of computerized systems, data integrity practices, 
 | Auditee Representative | [Name] | Facilitate access and information |
 ```
 
-**Expected:** Audit plan approved by quality management and communicated to auditee at least 2 weeks before the audit.
-**On failure:** Reschedule if auditee cannot provide required documentation or personnel.
+**Got:** Audit plan approved by quality management and communicated to auditee at least 2 weeks before the audit.
+**If fail:** Reschedule if auditee cannot provide required documentation or personnel.
 
 ### Step 2: Conduct Opening Meeting
 
@@ -103,8 +103,8 @@ Agenda:
 5. Identify auditee escorts and document custodians
 6. Address questions
 
-**Expected:** Opening meeting documented with attendance record.
-**On failure:** If key personnel are unavailable, reschedule affected audit activities.
+**Got:** Opening meeting documented with attendance record.
+**If fail:** If key personnel are unavailable, reschedule affected audit activities.
 
 ### Step 3: Collect and Review Evidence
 
@@ -138,8 +138,8 @@ Review documentation and records against audit criteria:
 - [ ] System clocks synchronized and accurate
 - [ ] Security patches applied per approved change control
 
-**Expected:** Evidence collected as screenshots, document copies, interview notes with timestamps.
-**On failure:** Record "unable to verify" as an observation and note the reason.
+**Got:** Evidence collected as screenshots, document copies, interview notes with timestamps.
+**If fail:** Record "unable to verify" as an observation and note the reason.
 
 ### Step 4: Classify Findings
 
@@ -173,8 +173,8 @@ Document each finding:
 [Impact on data integrity, product quality, or patient safety]
 ```
 
-**Expected:** Every finding has classification, evidence, and regulatory reference.
-**On failure:** If classification is disputed, escalate to the audit program manager for adjudication.
+**Got:** Every finding has classification, evidence, and regulatory reference.
+**If fail:** If classification is disputed, escalate to the audit program manager for adjudication.
 
 ### Step 5: Conduct Closing Meeting
 
@@ -185,8 +185,8 @@ Agenda:
 4. Confirm next steps and report timeline
 5. Acknowledge auditee cooperation
 
-**Expected:** Closing meeting documented with attendance. Auditee acknowledges findings (acknowledgement ≠ agreement).
-**On failure:** If auditee disputes a finding, document the disagreement and escalate per SOP.
+**Got:** Closing meeting documented with attendance. Auditee acknowledges findings (acknowledgement ≠ agreement).
+**If fail:** If auditee disputes a finding, document the disagreement and escalate per SOP.
 
 ### Step 6: Write Audit Report
 
@@ -231,8 +231,8 @@ The overall compliance status is assessed as [Satisfactory / Needs Improvement /
 | QA Director | | | |
 ```
 
-**Expected:** Report issued within 15 business days of the closing meeting.
-**On failure:** If delayed beyond 15 days, notify stakeholders and document the reason.
+**Got:** Report issued within 15 business days of the closing meeting.
+**If fail:** If delayed beyond 15 days, notify stakeholders and document the reason.
 
 ### Step 7: Track CAPA and Verify Effectiveness
 
@@ -246,8 +246,8 @@ For each finding requiring a CAPA:
 | F-002 | CAPA-2025-043 | Training matrix not updated | Complete training, update tracking | 2025-05-01 | Open | Scheduled 2025-08-01 |
 ```
 
-**Expected:** CAPAs assigned, tracked, and effectiveness verified per defined timeline.
-**On failure:** Unresolved CAPAs escalate to QA management and are flagged in the next audit cycle.
+**Got:** CAPAs assigned, tracked, and effectiveness verified per defined timeline.
+**If fail:** Unresolved CAPAs escalate to QA management and are flagged in the next audit cycle.
 
 ## Validation
 
@@ -259,7 +259,7 @@ For each finding requiring a CAPA:
 - [ ] CAPAs assigned with due dates for all critical and major findings
 - [ ] Previous audit CAPAs verified for closure effectiveness
 
-## Common Pitfalls
+## Pitfalls
 
 - **Scope creep**: Expanding the audit scope during execution without formal agreement leads to incomplete coverage and disputes.
 - **Opinion-based findings**: Findings must reference specific regulatory requirements, not personal preferences.

@@ -94,9 +94,9 @@ Metamorphosis Patterns:
 └───────────────┴───────────────────────────────────────────────────┘
 ```
 
-**Expected:** A transformation blueprint showing intermediate forms, seams, the chosen metamorphosis pattern, and the interface preservation strategy. Each step is concrete and testable.
+**Got:** A transformation blueprint showing intermediate forms, seams, the chosen metamorphosis pattern, and the interface preservation strategy. Each step is concrete and testable.
 
-**On failure:** If no clean seam can be found, the system may need preliminary dissolution (see `dissolve-form`) to create seams before transformation. If the intermediate forms aren't operationally viable, the transformation steps are too large — decompose into smaller increments.
+**If fail:** If no clean seam can be found, the system may need preliminary dissolution (see `dissolve-form`) to create seams before transformation. If the intermediate forms aren't operationally viable, the transformation steps are too large — decompose into smaller increments.
 
 ### Step 2: Build the Scaffolding
 
@@ -120,9 +120,9 @@ Construct the temporary infrastructure that supports metamorphosis.
    - Performance benchmarks that detect regression
    - Data integrity checks that catch migration errors
 
-**Expected:** Scaffolding infrastructure (anti-corruption layer, parallel running, rollback, validation) is in place before any transformation begins. The scaffolding itself is tested and verified.
+**Got:** Scaffolding infrastructure (anti-corruption layer, parallel running, rollback, validation) is in place before any transformation begins. The scaffolding itself is tested and verified.
 
-**On failure:** If scaffolding is too expensive, simplify: the minimum viable scaffolding is a feature flag and a rollback procedure. Anti-corruption layers and parallel running add safety but are not always necessary for smaller transformations.
+**If fail:** If scaffolding is too expensive, simplify: the minimum viable scaffolding is a feature flag and a rollback procedure. Anti-corruption layers and parallel running add safety but are not always necessary for smaller transformations.
 
 ### Step 3: Execute Progressive Cutover
 
@@ -144,9 +144,9 @@ Migrate functionality from old form to new form incrementally.
    - The system is always in a known, tested, operational state
    - If a cutover causes issues, roll back to the previous state (which is still operational)
 
-**Expected:** Functionality migrates component by component with validation at each step. The system is always operational. Each cutover builds confidence for the next.
+**Got:** Functionality migrates component by component with validation at each step. The system is always operational. Each cutover builds confidence for the next.
 
-**On failure:** If parallel running reveals discrepancies, the new implementation has a bug — fix it before cutting over. If a cutover causes performance degradation, the new component may need optimization or the anti-corruption layer is adding too much overhead. If the team loses confidence mid-migration, pause and stabilize — a half-migrated system in a known state is far better than a rushed full migration.
+**If fail:** If parallel running reveals discrepancies, the new implementation has a bug — fix it before cutting over. If a cutover causes performance degradation, the new component may need optimization or the anti-corruption layer is adding too much overhead. If the team loses confidence mid-migration, pause and stabilize — a half-migrated system in a known state is far better than a rushed full migration.
 
 ### Step 4: Manage the Chrysalis Phase
 
@@ -170,9 +170,9 @@ Navigate the most vulnerable period — when the system is between forms.
    - Document the current hybrid state thoroughly (future debuggers will need it)
    - Resist the temptation to "clean up" temporary scaffolding before migration is complete
 
-**Expected:** The chrysalis phase is managed as a deliberate, time-bounded period with increased discipline and monitoring. The team understands that temporary complexity is the cost of safe transformation.
+**Got:** The chrysalis phase is managed as a deliberate, time-bounded period with increased discipline and monitoring. The team understands that temporary complexity is the cost of safe transformation.
 
-**On failure:** If the chrysalis phase drags on too long, the hybrid state becomes the new normal — which is worse than either old or new. Set a time limit. If the limit is reached, either accelerate the remaining migration or accept the hybrid state as the "new form" and stabilize it.
+**If fail:** If the chrysalis phase drags on too long, the hybrid state becomes the new normal — which is worse than either old or new. Set a time limit. If the limit is reached, either accelerate the remaining migration or accept the hybrid state as the "new form" and stabilize it.
 
 ### Step 5: Complete Metamorphosis and Stabilize
 
@@ -197,9 +197,9 @@ Finish the transformation and remove scaffolding.
    - What would we do differently next time?
    - Update the team's transformation playbook
 
-**Expected:** The transformation is complete. The system operates in its new form. Scaffolding is removed. Documentation is updated. The team has captured learnings for future transformations.
+**Got:** The transformation is complete. The system operates in its new form. Scaffolding is removed. Documentation is updated. The team has captured learnings for future transformations.
 
-**On failure:** If the new form is unstable after cutover, maintain the rollback path and continue stabilization. If stabilization takes more than the planned period, there may be a design issue in the new architecture — consider whether targeted fixes or a partial rollback of the most problematic component is appropriate.
+**If fail:** If the new form is unstable after cutover, maintain the rollback path and continue stabilization. If stabilization takes more than the planned period, there may be a design issue in the new architecture — consider whether targeted fixes or a partial rollback of the most problematic component is appropriate.
 
 ## Validation
 
@@ -212,7 +212,7 @@ Finish the transformation and remove scaffolding.
 - [ ] Post-metamorphosis stabilization period passes without critical issues
 - [ ] Retrospective captures learnings
 
-## Common Pitfalls
+## Pitfalls
 
 - **Big-bang migration**: Attempting to transform everything at once. This abandons the safety of incremental cutover and maximizes blast radius. Always migrate incrementally
 - **Permanent scaffolding**: Anti-corruption layers and feature flags that are never removed become technical debt. Plan scaffolding removal as part of the transformation, not as an afterthought

@@ -24,64 +24,64 @@ metadata:
   tags: intellectual-property, patents, landscape, fto, trademark, ip-strategy, prior-art
 ---
 
-# Assess IP Landscape
+# 評 IP 域
 
-Map the intellectual property landscape for a technology area — identify patent clusters, white spaces, key players, and freedom-to-operate risks. Produces a strategic assessment that informs R&D direction, licensing decisions, and IP filing strategy.
+圖技或產之 IP 域——專利群、白區、要員、FTO 險、策略位。
 
-## When to Use
+## 用
 
-- Before starting R&D in a new technology area (what's already claimed?)
-- Evaluating a market entry where incumbents have strong patent portfolios
-- Preparing for investment due diligence (IP asset assessment)
-- Informing a patent filing strategy (where to file, what to claim)
-- Assessing freedom-to-operate risk for a new product or feature
-- Monitoring competitor IP activity for strategic positioning
+- 入新技 R&D 前——已稱何→用
+- 入既競強利之市→用
+- 投資審（IP 評）備→用
+- 告利申策→用
+- 評新產 FTO 險→用
+- 監競 IP 為策略位→用
 
-## Inputs
+## 入
 
-- **Required**: Technology domain or product area to assess
-- **Required**: Geographic scope (US, EU, global)
-- **Optional**: Specific competitors to focus on
-- **Optional**: Own patent portfolio (for gap analysis and FTO)
-- **Optional**: Time horizon (last 5 years, last 10 years, all time)
-- **Optional**: Classification codes (IPC, CPC) if known
+- **必**：欲評技或產
+- **必**：地範（US、EU、全）
+- **可**：注定競
+- **可**：自利集（為缺析與 FTO）
+- **可**：時域（末 5 年、末 10 年、全）
+- **可**：類碼（IPC、CPC）若知
 
-## Procedure
+## 行
 
-### Step 1: Define the Search Scope
+### 一：定搜範
 
-Establish the boundaries of the landscape analysis.
+立域析界。
 
-1. Define the technology domain precisely:
-   - Core technology area (e.g., "transformer-based language models" not "AI")
-   - Adjacent areas to include (e.g., "attention mechanisms, tokenization, inference optimization")
-   - Areas to explicitly exclude (e.g., "computer vision transformers" if focusing on NLP)
-2. Identify relevant classification codes:
-   - IPC (International Patent Classification) — broad, used worldwide
-   - CPC (Cooperative Patent Classification) — more specific, US/EU standard
-   - Search WIPO's IPC publication or USPTO's CPC browser
-3. Define the geographic scope:
-   - US (USPTO), EU (EPO), WIPO (PCT), specific national offices
-   - Most analyses start with US + EU + PCT for broad coverage
-4. Set the time window:
-   - Recent activity: last 3-5 years (current competitive landscape)
-   - Full history: 10-20 years (mature technology areas)
-   - Watch for expired patents that open up design space
-5. Document the scope as the **Landscape Charter**
+1. 定技域精：
+   - 核技（如「變換器言模」非「AI」）
+   - 含鄰域（如「注機、分詞、推優」）
+   - 明排域（如注 NLP 則排「視變換器」）
+2. 識相關類碼：
+   - IPC（國際專利分類）——廣，世界用
+   - CPC（協作專利分類）——細，US/EU 標
+   - 搜 WIPO IPC 出或 USPTO CPC 覽
+3. 定地範：
+   - US（USPTO）、EU（EPO）、WIPO（PCT）、特國
+   - 多析始於 US+EU+PCT 為廣覆
+4. 設時窗：
+   - 近活：末 3-5 年（今競域）
+   - 全史：10-20 年（熟技域）
+   - 察過期利開設計空
+5. 文範為**域章**
 
-**Expected:** A clear, bounded scope that is specific enough to produce actionable results but broad enough to capture the relevant competitive landscape. Classification codes identified for systematic search.
+得：清、定範足以出可行果而廣以捕相關競域。類碼識為系搜。
 
-**On failure:** If the technology domain is too broad (thousands of results), narrow by adding technical specificity or focusing on a specific application area. If too narrow (few results), broaden to adjacent technologies. The right scope typically yields 100-1000 patent families.
+敗：技域太廣（千果）→加技具或注某用域。太窄（少果）→擴鄰技。正範常出 100-1000 利族。
 
-### Step 2: Harvest Patent Data
+### 二：採利數
 
-Collect the patent data within the defined scope.
+收定範內利數。
 
-1. Query patent databases using the Landscape Charter:
-   - **Free databases**: Google Patents, USPTO PatFT/AppFT, Espacenet, WIPO Patentscope
-   - **Commercial databases**: Orbit, PatSnap, Derwent, Lens.org (freemium)
-   - Combine keyword search + classification codes for best coverage
-2. Build search queries systematically:
+1. 以域章詢利庫：
+   - **免庫**：Google Patents、USPTO PatFT/AppFT、Espacenet、WIPO Patentscope
+   - **商庫**：Orbit、PatSnap、Derwent、Lens.org（部免）
+   - 合鍵詞+類碼為最佳覆
+2. 系構詢：
 
 ```
 Query Construction:
@@ -96,118 +96,118 @@ Query Construction:
 +-------------------+------------------------------------------+
 ```
 
-3. Download results in structured format (CSV, JSON) including:
-   - Patent/application number, title, abstract, filing date
-   - Assignee/applicant, inventor(s)
-   - Classification codes, citation data
-   - Legal status (granted, pending, expired, abandoned)
-4. Deduplicate by patent family (group national filings of the same invention)
-5. Record the total patent family count and source databases
+3. 構式（CSV、JSON）下果含：
+   - 利/申號、題、摘、申日
+   - 受讓/申、發明
+   - 類碼、引數
+   - 法態（授、待、過、棄）
+4. 按利族重複（同發明之國申聚）
+5. 錄總利族數與源庫
 
-**Expected:** A structured dataset of patent families within scope, deduplicated and timestamped. The dataset is the foundation for all subsequent analysis.
+得：定範內構之利族集，重複且時。集為諸後析之基。
 
-**On failure:** If database access is limited, Google Patents + Lens.org (free) provide good coverage. If the query returns too many results (>5000), add technical specificity. If too few (<50), broaden keywords or add classification codes.
+敗：庫達限→Google Patents+Lens.org（免）供良覆。詢果太多（>5000）→加技具。太少（<50）→擴鍵詞或加類碼。
 
-### Step 3: Analyze the Landscape
+### 三：析域
 
-Map the patent clusters, key players, and trends.
+圖利群、要員、趨。
 
-1. **Cluster analysis**: Group patents by sub-technology:
-   - Use classification codes or keyword clustering to identify 5-10 sub-areas
-   - Count patent families per cluster
-   - Identify which clusters are growing (recent filing surges) vs. mature (flat or declining)
-2. **Key player analysis**: Identify the top 10 assignees by:
-   - Total patent family count (portfolio breadth)
-   - Recent filing rate (last 3 years — current activity)
-   - Average citation count (patent quality proxy)
-   - Geographic filing breadth (US-only vs. global filings)
-3. **Trend analysis**: Chart filing trends over the time window:
-   - Overall filing volume by year
-   - Filing volume by cluster by year
-   - New entrants (assignees filing for the first time in the domain)
-4. **Citation network**: Identify the most-cited patents (foundational IP):
-   - High forward citations = heavily relied upon by subsequent filings
-   - These are likely blocking patents or essential prior art
-5. Produce the **Landscape Map**: clusters, players, trends, and key patents
+1. **群析**：按子技聚利：
+   - 用類碼或鍵詞聚識 5-10 子域
+   - 計各群利族數
+   - 識何群增（近申湧）對熟（平或退）
+2. **要員析**：識頂十受讓按：
+   - 總利族數（集廣）
+   - 近申率（末 3 年——今活）
+   - 均引數（利質代）
+   - 地申廣（唯 US 對全）
+3. **趨析**：圖時窗內申趨：
+   - 年度總申量
+   - 年度按群之申量
+   - 新入者（首於域申之受讓）
+4. **引網**：識最引利（基 IP）：
+   - 高前引=後申重賴
+   - 此或為阻利或要前藝
+5. 出**域圖**：群、員、趨、要利
 
-**Expected:** A clear picture of who owns what, where the activity is concentrated, and how the landscape is evolving. Key blocking patents identified. White spaces (areas with few filings) visible.
+得：誰擁何、活何處聚、域如何演之明像。要阻利識。白區（少申域）見。
 
-**On failure:** If the dataset is too small for meaningful clustering, combine clusters into broader groups. If one assignee dominates (>50% of filings), analyze their portfolio as a separate sub-landscape.
+敗：集太小不能聚→合群為廣聚。一受讓主（>50% 申）→析其集為獨子域。
 
-### Step 4: Identify White Spaces and Risks
+### 四：識白區與險
 
-Extract strategic insights from the landscape.
+由域取策略見。
 
-1. **White space analysis** (opportunities):
-   - Technology areas within scope with few or no patent filings
-   - Expired patent families where the design space has reopened
-   - Active areas where only one player has filed (first-mover but no competition)
-   - White spaces adjacent to growing clusters (next frontier)
-2. **FTO risk screening** (threats) — adapted from `heal` triage matrix:
-   - **Critical**: Granted patents directly covering your planned product/feature
-   - **High**: Pending applications likely to grant with relevant claims
-   - **Medium**: Granted patents in adjacent areas that could be broadly interpreted
-   - **Low**: Expired patents, narrow claims, or geographically irrelevant filings
-3. **Competitive positioning**:
-   - Where does your portfolio (if any) sit relative to competitors?
-   - Which competitors have blocking positions in your target areas?
-   - Which competitors might be interested in cross-licensing?
-4. Produce the **Strategic Assessment**: white spaces, FTO risks, positioning, and recommendations
+1. **白區析**（機）：
+   - 範內少或無申技域
+   - 過期利族設計空再開
+   - 唯一員申之活域（先而無競）
+   - 增群鄰之白區（次前沿）
+2. **FTO 險篩**（威）——適自 `heal` 分類矩：
+   - **關**：直覆計產/特之授利
+   - **高**：將授含相關稱之待申
+   - **中**：鄰域可廣釋之授利
+   - **低**：過利、窄稱、地不關申
+3. **競位**：
+   - 自集（若有）相對競何處？
+   - 何競於標域有阻位？
+   - 何競或興於互授？
+4. 出**策略評**：白區、FTO 險、位、薦
 
-**Expected:** Actionable strategic recommendations: where to file, what to avoid, who to watch, and what risks need detailed FTO analysis.
+得：可行策略薦：何處申、何避、誰監、何險需詳 FTO 析。
 
-**On failure:** If FTO risks are identified, this screening is preliminary — it does NOT replace a formal FTO opinion from a patent attorney. Flag critical risks for legal review. If white spaces seem too good (a valuable area with no filings), verify the search scope didn't accidentally exclude relevant filings.
+敗：FTO 險識→此篩為初——**不**代利師正 FTO 意。標關險為法察。白區似太善（值域無申）→驗搜範未誤排相關申。
 
-### Step 5: Document and Recommend
+### 五：文與薦
 
-Package the landscape assessment for decision-makers.
+包域評為決者。
 
-1. Write the **Landscape Report** with sections:
-   - Executive summary (1 page: key findings, top risks, main recommendations)
-   - Scope and methodology (search terms, databases, date range)
-   - Landscape overview (clusters, trends, key players with visualizations)
-   - White space analysis (opportunities ranked by strategic value)
-   - Risk assessment (FTO concerns ranked by severity)
-   - Recommendations (filing strategy, licensing targets, monitoring alerts)
-2. Include supporting data:
-   - Patent family list (structured, sortable)
-   - Cluster map (visual)
-   - Filing trend charts
-   - Key patent summaries (top 10-20 most relevant patents)
-3. Set up ongoing monitoring:
-   - Define alert queries for new filings in critical areas
-   - Set review cadence (quarterly for active areas, annually for stable ones)
+1. 書**域報**含：
+   - 行要（一頁：要發、頂險、主薦）
+   - 範與法（搜詞、庫、日範）
+   - 域覽（群、趨、要員附視）
+   - 白區析（按策略值排機）
+   - 險評（按嚴排 FTO 憂）
+   - 薦（申策、授標、監警）
+2. 含支數：
+   - 利族列（構、可排）
+   - 群圖（視）
+   - 申趨圖
+   - 要利要（頂 10-20 最相關利）
+3. 設續監：
+   - 為關區定新申警詢
+   - 設察期（活區季、穩區年）
 
-**Expected:** A complete landscape report that enables strategic IP decisions. The report is evidence-based, clearly scoped, and actionable.
+得：完域報使策 IP 決。報基證、清範、可行。
 
-**On failure:** If the report is too large, produce the executive summary first and offer detailed sections on request. The executive summary should always stand alone as a decision document.
+敗：報太大→先出行要而請詳段。行要當恆獨立為決文。
 
-## Validation Checklist
+## 驗
 
-- [ ] Landscape Charter defines scope, classification, geography, and time window
-- [ ] Patent dataset harvested from multiple databases and deduplicated
-- [ ] Clusters identified with filing counts and trend direction
-- [ ] Top 10 key players profiled with portfolio metrics
-- [ ] White spaces identified and ranked by strategic value
-- [ ] FTO risks screened and classified by severity
-- [ ] Key blocking patents identified with citation analysis
-- [ ] Recommendations are specific and actionable
-- [ ] Limitations acknowledged (screening vs. formal FTO opinion)
-- [ ] Monitoring alerts defined for ongoing landscape tracking
+- [ ] 域章定範、類、地、時窗
+- [ ] 利集自多庫採且重複
+- [ ] 群識附申數與趨向
+- [ ] 頂十要員附集度評
+- [ ] 白區識且按策略值排
+- [ ] FTO 險篩且按嚴分
+- [ ] 要阻利識附引析
+- [ ] 薦具體可行
+- [ ] 限認（篩對正 FTO 意）
+- [ ] 續域追之監警定
 
-## Common Pitfalls
+## 忌
 
-- **Too broad a scope**: "AI patents" is not a landscape — it's an ocean. Be specific about the technology and application
-- **Single-database reliance**: No single patent database has complete coverage. Use at least two sources
-- **Ignoring patent families**: Counting individual filings instead of families inflates the numbers. One invention filed in 10 countries is one patent family, not ten
-- **Confusing applications with grants**: A pending application is not an enforceable right. Distinguish between granted patents and published applications
-- **White space misinterpretation**: An empty area might mean "nobody tried" or "everybody tried and failed." Investigate before assuming opportunity
-- **Landscape as legal opinion**: This skill produces strategic intelligence, not legal advice. FTO risks flagged here need formal analysis by patent counsel
+- **範太廣**：「AI 利」非域——乃海。具技與用
+- **唯一庫**：無單利庫有完覆。用至少二源
+- **忽利族**：計獨申非族膨數。一發明於十國申為一族非十
+- **混申於授**：待申非可行權。分授利與出版申
+- **白區誤釋**：空域或意「無人試」或「皆試而敗」。設機前察
+- **域為法意**：此技出策略情非法導。此標 FTO 險需正析由利律師
 
-## Related Skills
+## 參
 
-- `search-prior-art` — Detailed prior art search for specific inventions or patent validity challenges
-- `screen-trademark` — Trademark conflict screening and distinctiveness analysis for the trademark side of IP landscapes
-- `file-trademark` — Trademark filing procedures for EUIPO, USPTO, and Madrid Protocol
-- `security-audit-codebase` — Risk assessment methodology parallels IP risk screening
-- `review-research` — Literature review skills apply to prior art analysis
+- `search-prior-art` —— 詳前藝搜為具發明或利效挑
+- `screen-trademark` —— 商標衝篩與獨性析
+- `file-trademark` —— EUIPO、USPTO、Madrid 之商標申程
+- `security-audit-codebase` —— 險評法鏡 IP 險篩
+- `review-research` —— 文獻察適前藝析

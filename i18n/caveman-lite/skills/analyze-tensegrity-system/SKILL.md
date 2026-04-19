@@ -68,9 +68,9 @@ Establish the complete physical description by identifying every compression ele
 - **Boundary conditions**: [description]
 ```
 
-**Expected:** A complete inventory of all compression and tension elements with material properties, an incidence matrix, and boundary conditions sufficient to set up the equilibrium equations.
+**Got:** A complete inventory of all compression and tension elements with material properties, an incidence matrix, and boundary conditions sufficient to set up the equilibrium equations.
 
-**On failure:** If element properties are unknown (common in biological systems), use published values: microtubules (E ~ 1.2 GPa, persistence length ~ 5 mm), actin (E ~ 2.6 GPa, persistence length ~ 17 um), intermediate filaments (highly nonlinear, strain-stiffening with low initial modulus ~1 MPa rising to ~1 GPa at high strain). If connectivity is unclear, reduce the system to the simplest topology that captures the essential force paths.
+**If fail:** If element properties are unknown (common in biological systems), use published values: microtubules (E ~ 1.2 GPa, persistence length ~ 5 mm), actin (E ~ 2.6 GPa, persistence length ~ 17 um), intermediate filaments (highly nonlinear, strain-stiffening with low initial modulus ~1 MPa rising to ~1 GPa at high strain). If connectivity is unclear, reduce the system to the simplest topology that captures the essential force paths.
 
 ### Step 2: Classify the Tensegrity Type
 
@@ -102,9 +102,9 @@ Determine what class of tensegrity the system belongs to and whether it is biolo
 | Nucleus                 | Internal compression  | Lamina network forms sub-tensegrity           |
 ```
 
-**Expected:** A clear classification (class, dimension, category) with the biological mapping table completed for biological systems. For engineered systems, the topology family is identified.
+**Got:** A clear classification (class, dimension, category) with the biological mapping table completed for biological systems. For engineered systems, the topology family is identified.
 
-**On failure:** If the system does not cleanly fit class 1 or class 2, it may be a hybrid or a conventional frame. A true tensegrity requires that at least some elements work only in tension (cables that go slack under compression). If no elements are tension-only, the system is not a tensegrity -- reclassify as a conventional truss or frame and apply standard structural analysis.
+**If fail:** If the system does not cleanly fit class 1 or class 2, it may be a hybrid or a conventional frame. A true tensegrity requires that at least some elements work only in tension (cables that go slack under compression). If no elements are tension-only, the system is not a tensegrity -- reclassify as a conventional truss or frame and apply standard structural analysis.
 
 ### Step 3: Analyze Force Balance and Prestress Equilibrium
 
@@ -131,9 +131,9 @@ Compute static equilibrium at every node, determine the state of prestress (inte
 | C1     | cable | [positive]    | [value] | tension     |
 ```
 
-**Expected:** Self-stress states are computed, a physically realizable prestress (all cables in tension, all struts in compression) is found, and load capacity is estimated.
+**Got:** Self-stress states are computed, a physically realizable prestress (all cables in tension, all struts in compression) is found, and load capacity is estimated.
 
-**On failure:** If no self-stress state keeps all cables in tension, the topology does not support a tensegrity prestress. Either (a) the incidence matrix has errors, (b) the system needs additional cables, or (c) it is a mechanism rather than a tensegrity. For large systems, use the force density method (Schek, 1974) or numerical null-space computation rather than hand calculation.
+**If fail:** If no self-stress state keeps all cables in tension, the topology does not support a tensegrity prestress. Either (a) the incidence matrix has errors, (b) the system needs additional cables, or (c) it is a mechanism rather than a tensegrity. For large systems, use the force density method (Schek, 1974) or numerical null-space computation rather than hand calculation.
 
 ### Step 4: Check Stability Using Maxwell's Criterion
 
@@ -167,9 +167,9 @@ Determine whether the tensegrity is rigid (stable against infinitesimal perturba
 - **Rigidity class**: [determinate / indeterminate / prestress-stable / mechanism]
 ```
 
-**Expected:** Maxwell count performed, mechanisms determined, and for m > 0, prestress stability evaluated. The structure is classified as rigid, prestress-stable, or mechanism.
+**Got:** Maxwell count performed, mechanisms determined, and for m > 0, prestress stability evaluated. The structure is classified as rigid, prestress-stable, or mechanism.
 
-**On failure:** If the structure is a mechanism (m > 0 and not prestress-stable), options: (a) add cables to increase b and reduce m, (b) increase prestress, (c) modify topology. In biological systems, active actomyosin contractility continuously adjusts prestress to maintain stability -- the cell is a self-tuning tensegrity.
+**If fail:** If the structure is a mechanism (m > 0 and not prestress-stable), options: (a) add cables to increase b and reduce m, (b) increase prestress, (c) modify topology. In biological systems, active actomyosin contractility continuously adjusts prestress to maintain stability -- the cell is a self-tuning tensegrity.
 
 ### Step 5: Map Biological Tensegrity (Cross-Scale Analysis)
 
@@ -193,9 +193,9 @@ If the system has a biological interpretation, map the analysis to Ingber's cell
 ECM --> integrin --> focal adhesion --> actin cortex --> IF --> nuclear lamina --> chromatin
 ```
 
-**Expected:** Biological tensegrity mapped at each relevant scale with compression, tension, prestress source, and nodes identified. Cross-scale force transmission documented.
+**Got:** Biological tensegrity mapped at each relevant scale with compression, tension, prestress source, and nodes identified. Cross-scale force transmission documented.
 
-**On failure:** If the cross-scale mapping breaks (no clear tension continuity between scales), document the gap. Not all biological structures are tensegrity at all scales. The spine is tensegrity at the musculoskeletal level (bones=struts, muscles/fascia=cables) but individual vertebrae are conventional compression structures internally.
+**If fail:** If the cross-scale mapping breaks (no clear tension continuity between scales), document the gap. Not all biological structures are tensegrity at all scales. The spine is tensegrity at the musculoskeletal level (bones=struts, muscles/fascia=cables) but individual vertebrae are conventional compression structures internally.
 
 ### Step 6: Synthesize Analysis and Assess Structural Integrity
 
@@ -226,9 +226,9 @@ Combine all preceding analyses into a final assessment of the system's tensional
 3. [specific recommendation]
 ```
 
-**Expected:** Complete structural integrity assessment with rigidity classification, vulnerability identification, redundancy analysis, and integrity rating (ROBUST/MARGINAL/FRAGILE) with actionable recommendations.
+**Got:** Complete structural integrity assessment with rigidity classification, vulnerability identification, redundancy analysis, and integrity rating (ROBUST/MARGINAL/FRAGILE) with actionable recommendations.
 
-**On failure:** If the analysis is incomplete (equilibrium matrix too large, biological parameters unknown), state the assessment as conditional: "MARGINAL pending numerical verification" or "classification requires experimental measurement of prestress level." Partial assessment with explicit gaps is more valuable than no assessment.
+**If fail:** If the analysis is incomplete (equilibrium matrix too large, biological parameters unknown), state the assessment as conditional: "MARGINAL pending numerical verification" or "classification requires experimental measurement of prestress level." Partial assessment with explicit gaps is more valuable than no assessment.
 
 ## Validation
 
@@ -243,7 +243,7 @@ Combine all preceding analyses into a final assessment of the system's tensional
 - [ ] For biological systems, cross-scale mapping table is completed
 - [ ] Structural integrity is rated ROBUST, MARGINAL, or FRAGILE with justification
 
-## Common Pitfalls
+## Pitfalls
 
 - **Confusing tensegrity with conventional trusses**: A tensegrity requires that some elements work only in tension (they go slack under compression). If all elements can bear both tension and compression, it is a conventional frame, not a tensegrity. The one-way nature of cables creates the nonlinearity that requires prestress for stability.
 - **Ignoring prestress in stability analysis**: An unstressed tensegrity is always a mechanism -- cables at rest length provide no stiffness. Maxwell's count alone often yields m > 0 for tensegrity, suggesting instability. The prestress stability check (Step 4) is essential: prestress is what makes tensegrity rigid.
