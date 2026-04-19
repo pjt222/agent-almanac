@@ -29,33 +29,26 @@ metadata:
 
 # Collect and Preserve Specimens
 
-Collect and preserve insect specimens to museum-grade standards for taxonomic study, reference collections, and ecological research.
+Collect + preserve insect specimens → museum-grade standards for taxonomy, reference, ecology research.
 
-## When to Use
+## Use When
 
-- You need physical specimens for definitive taxonomic identification
-- You are building a reference collection for a habitat, region, or taxon
-- You are preserving voucher specimens for published ecological research
-- You need to send specimens to taxonomic specialists for identification
-- You are curating or restoring an existing insect collection
+- Need physical specimens → definitive taxonomy ID
+- Building reference collection (habitat, region, taxon)
+- Preserving voucher specimens → published ecology research
+- Sending specimens to specialists for ID
+- Curating / restoring existing insect collection
 
-## Inputs
+## In
 
-- **Required**: Legal authorization to collect at the intended site (permits, landowner consent)
-- **Required**: Collection equipment appropriate to the target taxa
-- **Required**: Preservation materials (pins, ethanol, or both)
-- **Required**: Labeling materials (archival paper, fine-point pen or printer)
-- **Optional**: Spreading boards for Lepidoptera and Odonata
-- **Optional**: Relaxing chamber for rehydrating dried specimens
-- **Optional**: Dissecting microscope for sorting and preparation
-- **Optional**: Database or catalog system for specimen records
-- **Optional**: Unit trays, drawers, and storage cabinets
+- **Required**: Legal auth (permits, landowner consent); collection gear fit for target taxa; preservation materials (pins, ethanol); labeling materials (archival paper, fine-pen or printer)
+- **Optional**: Spreading boards (Lepidoptera, Odonata); relaxing chamber for rehydrating dried specimens; dissecting microscope for sorting + prep; database / catalog system; unit trays, drawers, storage cabinets
 
-## Procedure
+## Do
 
 ### Step 1: Verify Legal Requirements
 
-Before any collection activity, confirm that you have the legal right to collect at the site and that your target taxa are not protected.
+Before any collection → confirm legal right to collect + target taxa not protected.
 
 ```
 FUNDAMENTAL RULE:
@@ -101,13 +94,13 @@ Minimizing Collection Impact:
 - Prefer common and abundant species for teaching collections
 ```
 
-**Expected:** All required permits are obtained, protected species lists have been checked, and the collector has a clear understanding of what may and may not be collected at the site.
+**→** All permits obtained, protected species lists checked, collector clear what may/may not collect.
 
-**On failure:** If permits cannot be obtained, do not collect. Photograph specimens in situ and use citizen science platforms for identification. If a collected specimen turns out to be a protected species, consult the relevant wildlife authority immediately. Do not discard the specimen — accidental collection should be reported, not concealed.
+**If err:** Can't get permits → don't collect. Photograph in situ, use citizen science platforms for ID. Accidentally collected protected species → consult wildlife authority immediately. Don't discard → report, not conceal.
 
 ### Step 2: Select Collection Method
 
-Choose the method that matches your target taxa, habitat, and research objectives. Different methods sample different portions of the insect community.
+Match method to target taxa, habitat, research goals. Diff methods sample diff insect community portions.
 
 ```
 Collection Methods:
@@ -169,13 +162,13 @@ Collection Methods:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** One or more collection methods selected based on target taxa and habitat, with equipment assembled and ready before entering the field.
+**→** 1+ methods selected by target taxa + habitat, gear assembled + ready pre-field.
 
-**On failure:** If the intended method is not yielding specimens (e.g., sweep netting in heavy rain), switch to an alternative method. Light trapping requires specific weather conditions — warm, humid, still, moonless nights are optimal. If conditions are poor, reschedule rather than running traps inefficiently.
+**If err:** Method not yielding (e.g., sweep netting in rain) → switch alt method. Light trapping needs specific weather → warm, humid, still, moonless = optimal. Poor conditions → reschedule vs. run inefficient.
 
 ### Step 3: Dispatch Specimens Humanely
 
-Kill collected insects as quickly and humanely as possible. Prolonged distress damages specimens (broken legs, lost scales) and is ethically unacceptable.
+Kill insects fast + humane. Prolonged distress damages specimens (broken legs, lost scales) + ethically unacceptable.
 
 ```
 Dispatch Methods:
@@ -213,13 +206,13 @@ NEVER use:
 - Prolonged suffocation — slow and damages specimens from struggling
 ```
 
-**Expected:** Specimens dispatched quickly (within minutes) with minimal damage to morphological features. Lepidoptera kept separate to prevent scale loss from contact with other specimens.
+**→** Specimens dispatched fast (minutes) w/ minimal morphology damage. Lepidoptera kept separate → prevent scale loss from contact.
 
-**On failure:** If ethyl acetate is unavailable, freezing is the best alternative for most taxa. In the field without either, place specimens in individual vials or envelopes (for Lepidoptera, use glassine envelopes with wings folded) and freeze upon return. Do not leave live insects in a sealed container without a killing agent — they will damage themselves.
+**If err:** No ethyl acetate → freezing = best alt for most taxa. Field w/o either → individual vials or envelopes (Lepidoptera: glassine envelopes, wings folded), freeze on return. Don't leave live insects sealed w/o killing agent → they damage themselves.
 
 ### Step 4: Pin Specimens (Dry Preservation)
 
-Pin each specimen through the correct location for its order. Proper pin placement is essential for both access to diagnostic features and long-term structural integrity.
+Pin each specimen through correct location for its order. Proper pin placement essential → diagnostic access + long-term integrity.
 
 ```
 Pin Placement by Order:
@@ -283,13 +276,13 @@ Spreading Wings (Lepidoptera, Odonata):
 6. Remove paper strips carefully
 ```
 
-**Expected:** Each specimen pinned through the correct position for its order, at the correct height on the pin, with wings spread where required (Lepidoptera, Odonata). Specimens allowed to dry fully before handling.
+**→** Each specimen pinned correct position for order, correct pin height, wings spread where req'd (Lepidoptera, Odonata). Specimens fully dry before handling.
 
-**On failure:** If a specimen is too dry and brittle to pin (legs snapping, wings cracking), it needs relaxing first. Place the specimen in a relaxing chamber (a sealed container with damp sand or paper towels and a few drops of phenol to prevent mold) for 24-48 hours until limbs are pliable. If a pin is placed in the wrong position, it is better to carefully re-pin while the specimen is still fresh than to leave it incorrectly mounted.
+**If err:** Specimen too dry + brittle to pin (legs snap, wings crack) → needs relaxing first. Place in relaxing chamber 24-48 hrs until limbs pliable. Pin in wrong spot → better carefully re-pin while specimen fresh than leave incorrect.
 
 ### Step 5: Preserve in Ethanol (Wet Preservation)
 
-Soft-bodied specimens that would shrivel or distort if dried must be preserved in liquid.
+Soft-bodied specimens that shrivel / distort dry → preserve in liquid.
 
 ```
 Wet Preservation Protocol:
@@ -330,13 +323,13 @@ Do NOT use:
   color loss compared to ethanol.
 ```
 
-**Expected:** Soft-bodied specimens preserved in 70-80% ethanol (or 95%+ for DNA work) in labeled vials with sufficient fluid volume.
+**→** Soft-bodied specimens preserved 70-80% ethanol (or 95%+ for DNA) in labeled vials w/ sufficient fluid volume.
 
-**On failure:** If ethanol is unavailable in the field, specimens can be temporarily stored in high-proof clear spirits (vodka, Everclear) as an emergency measure. Transfer to laboratory-grade ethanol as soon as possible. If specimens have been stored too long in weak preservative and show decomposition, they may still be identifiable but will be unsuitable for molecular work.
+**If err:** No ethanol in field → temporarily high-proof clear spirits (vodka, Everclear) as emergency. Transfer to lab-grade ethanol ASAP. Stored too long in weak preservative → maybe still ID'able but unsuitable for molecular work.
 
 ### Step 6: Label Every Specimen
 
-Every specimen must carry labels providing the minimum data needed for scientific use. An unlabeled specimen has no scientific value.
+Every specimen must carry labels → min data for scientific use. Unlabeled specimen = zero scientific value.
 
 ```
 Labeling Standards:
@@ -371,13 +364,13 @@ Label Format Rules:
   heights
 ```
 
-**Expected:** Every specimen carries at minimum a locality label with country, locality, coordinates, date, and collector. Wet specimens have the same data on an internal label written in pencil or laser-printed.
+**→** Every specimen carries min locality label: country, locality, coords, date, collector. Wet specimens same data on internal label in pencil or laser-printed.
 
-**On failure:** If GPS coordinates were not recorded in the field, estimate them from a map using the locality description. If the date is uncertain, record the best estimate and mark it with a question mark. A specimen with approximate data is far more valuable than one with no label at all. Never move a label from one specimen to another.
+**If err:** No GPS coords in field → estimate from map via locality desc. Date uncertain → best estimate + question mark. Specimen w/ approx data > specimen w/ no label. NEVER move label from one specimen to another.
 
-### Step 7: Store and Protect the Collection
+### Step 7: Store + Protect Collection
 
-Proper storage protects specimens from physical damage, pests, and environmental degradation.
+Proper storage protects from physical damage, pests, env degradation.
 
 ```
 Dry Collection Storage:
@@ -419,13 +412,13 @@ Wet Collection Storage:
   plastic vials allow more evaporation
 ```
 
-**Expected:** Dry specimens stored in sealed drawers with pest deterrents. Wet specimens stored upright with adequate ethanol levels. Storage area has stable temperature and humidity.
+**→** Dry specimens sealed drawers + pest deterrents. Wet specimens upright + adequate ethanol. Storage area stable temp + humidity.
 
-**On failure:** If proper museum storage is not available, store pinned specimens in airtight plastic containers (tackle boxes, Tupperware) with foam inserts and pest deterrent. This is adequate for personal collections and short-term storage. For long-term preservation of scientifically valuable specimens, deposit them in a recognized museum or university collection.
+**If err:** No museum storage → pinned specimens in airtight plastic containers (tackle boxes, Tupperware) w/ foam inserts + pest deterrent. Adequate for personal + short-term. Long-term sci-valuable → deposit recognized museum or university.
 
-### Step 8: Curate and Enter into Database
+### Step 8: Curate + Enter Database
 
-Maintain the collection as a living scientific resource through systematic curation and data management.
+Maintain collection as living sci resource → systematic curation + data mgmt.
 
 ```
 Curation Tasks:
@@ -470,36 +463,36 @@ Database Standards:
 - Assign a unique catalog number to every specimen, even if unidentified
 ```
 
-**Expected:** All specimens cataloged in a database with unique identifiers, taxonomy, locality, date, collector, and storage location. Collection is on a regular inspection and maintenance schedule.
+**→** All specimens cataloged in DB w/ unique IDs, taxonomy, locality, date, collector, storage location. Regular inspection + maintenance schedule.
 
-**On failure:** If a full database is not feasible, maintain at minimum a handwritten catalog or spreadsheet with catalog numbers corresponding to specimens. The catalog number links the specimen to its data — without it, the specimen and its data become disconnected if labels are lost. Even a simple numbered list is better than no catalog at all.
+**If err:** Full DB not feasible → min handwritten catalog or spreadsheet w/ catalog numbers matching specimens. Catalog number links specimen to data → w/o it, specimen + data disconnect if labels lost. Simple numbered list > no catalog.
 
-## Validation
+## Check
 
-- [ ] Legal requirements were verified and permits obtained before collecting
-- [ ] Collection methods were appropriate for the target taxa and habitat
-- [ ] Specimens were dispatched humanely and promptly
-- [ ] Dry specimens were pinned through the correct position for their order
-- [ ] Lepidoptera and Odonata had wings properly spread before drying
-- [ ] Soft-bodied specimens were preserved in 70-80% ethanol
-- [ ] Every specimen carries a locality label with date, location, coordinates, and collector
-- [ ] Wet specimen labels are written in pencil or laser-printed and placed inside the vial
-- [ ] Storage includes pest deterrents and stable environmental conditions
-- [ ] Specimens are cataloged in a database or notebook with unique identifiers
+- [ ] Legal req's verified + permits obtained pre-collect
+- [ ] Collection methods fit target taxa + habitat
+- [ ] Specimens dispatched humanely + prompt
+- [ ] Dry specimens pinned correct position for order
+- [ ] Lepidoptera + Odonata had wings properly spread pre-dry
+- [ ] Soft-bodied preserved 70-80% ethanol
+- [ ] Every specimen carries locality label: date, location, coords, collector
+- [ ] Wet specimen labels pencil or laser-printed, inside vial
+- [ ] Storage: pest deterrents + stable env
+- [ ] Specimens cataloged in DB or notebook w/ unique IDs
 
-## Common Pitfalls
+## Traps
 
-- **Collecting without permits**: A specimen collected illegally cannot be used in published research, deposited in a museum, or transferred across borders. Always obtain authorization first
-- **Over-collecting**: Taking more specimens than needed depletes populations without scientific benefit. Collect the minimum required for identification (often 5-10 individuals per morphospecies per site)
-- **Mixing specimens from different sites in one container**: This makes locality data uncertain for all specimens in the batch. Keep each collecting event in a separate container with its own temporary label
-- **Using the wrong pin position**: Pinning a beetle through the center of the thorax instead of the right elytron obscures ventral diagnostic features. Always check the order-specific pin position
-- **Ethanol concentration too low for DNA work**: Specimens for molecular analysis require 95%+ ethanol with a change after 24 hours to remove body fluid dilution. Standard 70% ethanol preserves morphology but degrades DNA over time
-- **Forgetting to label wet specimens internally**: A label taped to the outside of a vial can detach. The label inside the vial is the permanent record. Always place a pencil-written or laser-printed label inside with the specimen
-- **Neglecting pest management**: Dermestid beetles (museum beetles) can destroy an entire drawer of specimens in weeks. Regular pest monitoring and fumigant replacement are not optional for any collection stored longer than a few months
+- **Collect w/o permits**: Illegal → can't publish, deposit, transfer borders. Always auth first.
+- **Over-collect**: Depletes pops w/o benefit. Min for ID (5-10 per morphospecies per site).
+- **Mix diff sites**: Locality data uncertain for batch. Each event → separate container + temp label.
+- **Wrong pin position**: Pinning beetle through thorax center vs. right elytron obscures ventral features. Check order-specific position.
+- **Ethanol too low for DNA**: Molecular needs 95%+ ethanol + change after 24 hrs. 70% preserves morphology but degrades DNA.
+- **No internal wet label**: Outside label detaches. Inside = permanent. Pencil or laser-print inside.
+- **Neglect pest mgmt**: Dermestid beetles destroy drawer in weeks. Monitoring + fumigant not optional > few months.
 
-## Related Skills
+## →
 
-- `identify-insect` — morphological identification of collected specimens using dichotomous keys, wing venation, mouthparts, and antennae
-- `document-insect-sighting` — photographic and contextual documentation of sightings that may supplement or replace physical collecting
-- `observe-insect-behavior` — behavioral observation protocols for live insects before or instead of collecting
-- `survey-insect-population` — systematic population surveys that typically require specimen collection for identification and voucher purposes
+- `identify-insect` — morphology ID via dichotomous keys, wing venation, mouthparts, antennae
+- `document-insect-sighting` — photographic + contextual doc supplementing/replacing collecting
+- `observe-insect-behavior` — behavioral observation for live insects before/instead of collecting
+- `survey-insect-population` — systematic pop surveys req collection for ID + voucher

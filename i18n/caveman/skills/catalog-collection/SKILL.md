@@ -29,27 +29,27 @@ metadata:
 
 Catalog and classify library or archival materials using standard classification systems and descriptive cataloging practices.
 
-## When to Use
+## When Use
 
-- You are organizing a personal, institutional, or community library from scratch
-- You need to assign call numbers and subject headings to new acquisitions
-- You want to create consistent catalog records for findability
-- You are reclassifying a collection that has outgrown its original system
-- You need to establish authority control for authors, series, or subjects
+- Organizing personal, institutional, or community library from scratch
+- Assigning call numbers and subject headings to new acquisitions
+- Creating consistent catalog records for findability
+- Reclassifying collection that has outgrown original system
+- Establishing authority control for authors, series, subjects
 
 ## Inputs
 
 - **Required**: Materials to catalog (books, serials, media, archival items)
 - **Required**: Chosen classification system (Dewey Decimal or Library of Congress)
 - **Optional**: Existing catalog or inventory to integrate with
-- **Optional**: Subject heading authority (LCSH, Sears, or custom thesaurus)
+- **Optional**: Subject heading authority (LCSH, Sears, custom thesaurus)
 - **Optional**: MARC-compatible cataloging software (Koha, Evergreen, LibraryThing)
 
-## Procedure
+## Steps
 
 ### Step 1: Choose the Classification System
 
-Select a system that matches the collection's size, scope, and audience.
+Select system matching collection's size, scope, audience.
 
 ```
 Classification System Comparison:
@@ -78,13 +78,13 @@ Decision Rule:
 - Mixed or uncertain: Start with DDC; migrate to LCC if collection exceeds 10K
 ```
 
-**Expected:** A classification system chosen that fits the collection's scale and purpose.
+**Got:** Classification system chosen fitting collection's scale and purpose.
 
-**On failure:** If neither system fits (e.g., a highly specialized archive), consider a faceted classification or custom scheme, but document the mapping to DDC or LCC for interoperability.
+**If fail:** Neither system fits (e.g., highly specialized archive)? Consider faceted classification or custom scheme, but document mapping to DDC or LCC for interoperability.
 
 ### Step 2: Perform Descriptive Cataloging
 
-Create a bibliographic description for each item following standard practice.
+Create bibliographic description for each item following standard practice.
 
 ```
 Descriptive Cataloging Elements (RDA-aligned):
@@ -121,9 +121,9 @@ Take information from the item itself (title page first,
 then cover, colophon, verso). Do not guess or embellish.
 ```
 
-**Expected:** A consistent bibliographic record for each item with enough detail for unique identification and discovery.
+**Got:** Consistent bibliographic record for each item with enough detail for unique identification and discovery.
 
-**On failure:** If publication information is missing (common in older or self-published works), use square brackets to indicate supplied information: `[ca. 1920]`, `[s.l.]` (no place), `[s.n.]` (no publisher).
+**If fail:** Publication information missing (common in older or self-published works)? Use square brackets to indicate supplied information: `[ca. 1920]`, `[s.l.]` (no place), `[s.n.]` (no publisher).
 
 ### Step 3: Assign Subject Headings
 
@@ -160,13 +160,13 @@ Assignment Rules:
 5. Be consistent: if you use "Automobiles" don't also use "Cars" as a heading
 ```
 
-**Expected:** Each item has 1-3 subject headings from a controlled vocabulary, applied consistently across the collection.
+**Got:** Each item has 1-3 subject headings from controlled vocabulary, applied consistently across collection.
 
-**On failure:** If no suitable heading exists in your authority, create a local heading and document it in a local authority file. Review periodically for alignment with the main authority.
+**If fail:** No suitable heading exists in your authority? Create local heading, document it in local authority file. Review periodically for alignment with main authority.
 
 ### Step 4: Assign Call Numbers
 
-Build the shelf address using the chosen classification system.
+Build shelf address using chosen classification system.
 
 ```
 Dewey Decimal Call Number Construction:
@@ -199,13 +199,13 @@ segment by segment. Numbers sort numerically,
 letters sort alphabetically, Cutters sort as decimals.
 ```
 
-**Expected:** Every cataloged item has a unique call number that determines its shelf position.
+**Got:** Every cataloged item has unique call number determining its shelf position.
 
-**On failure:** If two items generate the same call number, add a work mark (first letter of title, excluding articles) or a copy number to disambiguate.
+**If fail:** Two items generate same call number? Add work mark (first letter of title, excluding articles) or copy number to disambiguate.
 
 ### Step 5: Create or Update Catalog Records
 
-Enter the cataloged information into your catalog system.
+Enter cataloged information into your catalog system.
 
 ```
 Minimum Viable Catalog Record:
@@ -238,13 +238,13 @@ shared database before creating original records. Someone has
 likely already cataloged the same edition.
 ```
 
-**Expected:** Each item has a catalog record in the system with all required fields populated. Records are searchable by author, title, subject, and call number.
+**Got:** Each item has catalog record in system with all required fields populated. Records searchable by author, title, subject, call number.
 
-**On failure:** If cataloging software is unavailable, a well-structured spreadsheet (with consistent column headings matching the fields above) serves as a functional catalog. Migrate to proper software when available.
+**If fail:** Cataloging software unavailable? Well-structured spreadsheet (with consistent column headings matching fields above) serves as functional catalog. Migrate to proper software when available.
 
 ### Step 6: Organize the Physical Shelf
 
-Arrange materials according to their call numbers.
+Arrange materials according to call numbers.
 
 ```
 Shelf Organization Principles:
@@ -267,30 +267,30 @@ Shelf Reading (periodic verification):
 - Note damaged items for repair or replacement
 ```
 
-**Expected:** Materials are physically arranged in call number order with clear spine labels and growth space.
+**Got:** Materials physically arranged in call number order with clear spine labels and growth space.
 
-**On failure:** If space is insufficient, prioritize high-circulation items on accessible shelves and move low-use items to compact storage, noting the location change in catalog records.
+**If fail:** Space insufficient? Prioritize high-circulation items on accessible shelves, move low-use items to compact storage, noting location change in catalog records.
 
-## Validation
+## Checks
 
 - [ ] Classification system chosen and documented
-- [ ] Descriptive cataloging completed for all items with title, author, and publication data
-- [ ] Subject headings assigned from a controlled vocabulary (1-3 per item)
+- [ ] Descriptive cataloging completed for all items with title, author, publication data
+- [ ] Subject headings assigned from controlled vocabulary (1-3 per item)
 - [ ] Call numbers assigned and unique for each item
 - [ ] Catalog records created in system or spreadsheet
 - [ ] Physical materials shelved in call number order with spine labels
 - [ ] Authority control established for consistent name and subject forms
 
-## Common Pitfalls
+## Pitfalls
 
-- **Inconsistent headings**: Using both "World War, 1939-1945" and "WWII" defeats the purpose of controlled vocabulary. Pick one authority and stick to it
-- **Over-classification**: Assigning a 15-digit DDC number to a small personal library adds complexity without benefit. Match granularity to collection size
+- **Inconsistent headings**: Using both "World War, 1939-1945" and "WWII" defeats purpose of controlled vocabulary. Pick one authority, stick to it
+- **Over-classification**: Assigning 15-digit DDC number to small personal library adds complexity without benefit. Match granularity to collection size
 - **Ignoring copy cataloging**: Creating original records when copy records exist wastes time. Always check shared databases first
-- **Spine label neglect**: A cataloged book without a spine label will be misshelved. Label immediately after cataloging
-- **No growth space**: Packing shelves to 100% capacity means every new acquisition triggers a chain of shifting. Leave room
+- **Spine label neglect**: Cataloged book without spine label will be misshelved. Label immediately after cataloging
+- **No growth space**: Packing shelves to 100% capacity means every new acquisition triggers chain of shifting. Leave room
 
-## Related Skills
+## See Also
 
 - `preserve-materials` — Conservation of cataloged materials to maintain their condition
-- `curate-collection` — Collection development decisions that determine what gets cataloged
+- `curate-collection` — Collection development decisions determining what gets cataloged
 - `manage-memory` — Organizing persistent knowledge stores (digital parallel to physical cataloging)

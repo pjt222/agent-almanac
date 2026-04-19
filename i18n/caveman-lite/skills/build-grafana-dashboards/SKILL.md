@@ -92,9 +92,9 @@ Key design principles:
 - **Drill-down paths**: Link from high-level to detailed dashboards
 - **Responsive layout**: Use rows and panel widths that work on various screens
 
-**Expected:** Clear dashboard structure documented, stakeholders aligned on metrics and layout priorities.
+**Got:** Clear dashboard structure documented, stakeholders aligned on metrics and layout priorities.
 
-**On failure:**
+**If fail:**
 - Conduct dashboard design review with end users (SREs, developers)
 - Benchmark against industry standards (USE method, RED method, Four Golden Signals)
 - Review existing dashboards in team for consistency patterns
@@ -192,9 +192,9 @@ Variable types and use cases:
 - **Constant variables**: Shared values across panels (data source names, thresholds)
 - **Text box variables**: Free-form input for filtering
 
-**Expected:** Variables populate correctly from data source, cascading filters work (environment filters instances), default selections appropriate.
+**Got:** Variables populate correctly from data source, cascading filters work (environment filters instances), default selections appropriate.
 
-**On failure:**
+**If fail:**
 - Test variable queries independently in Prometheus UI
 - Check for circular dependencies (variable A depends on B depends on A)
 - Verify regex patterns in `allValue` field for multi-select variables
@@ -287,9 +287,9 @@ Panel selection guide:
 - **Table**: Detailed breakdown of multiple metrics
 - **Logs**: Raw log lines from Loki with filtering
 
-**Expected:** Panels render correctly with data, visualizations match intended metric types, legends descriptive, thresholds highlight problems.
+**Got:** Panels render correctly with data, visualizations match intended metric types, legends descriptive, thresholds highlight problems.
 
-**On failure:**
+**If fail:**
 - Test queries in Explore view with same time range and variables
 - Check for metric name typos or incorrect label filters
 - Verify aggregation functions match metric type (rate for counters, avg for gauges)
@@ -317,9 +317,9 @@ Layout best practices:
 - Maintain consistent panel heights within rows (typically 4, 8, or 12 units)
 - Use full width (24) for time series, half width (12) for comparisons
 
-**Expected:** Dashboard layout organized logically, rows collapse/expand correctly, panels align visually without gaps.
+**Got:** Dashboard layout organized logically, rows collapse/expand correctly, panels align visually without gaps.
 
-**On failure:**
+**If fail:**
 - Validate gridPos coordinates don't overlap
 - Check that row panels array contains panels (not null)
 - Verify y-coordinates increment logically down the page
@@ -359,9 +359,9 @@ Link variables:
 - `${__from}`, `${__to}`: Current dashboard time range
 - `$__url_time_range`: Encoded time range for URL
 
-**Expected:** Clicking panel elements or dashboard links navigates to related views with context preserved (time range, variables).
+**Got:** Clicking panel elements or dashboard links navigates to related views with context preserved (time range, variables).
 
-**On failure:**
+**If fail:**
 - URL encode special characters in query parameters
 - Test links with various variable selections (All vs specific value)
 - Verify target dashboard UIDs exist and are accessible
@@ -440,9 +440,9 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
 ```
 
-**Expected:** Dashboards automatically loaded on Grafana startup, changes to JSON files reflected after update interval, version control tracks dashboard changes.
+**Got:** Dashboards automatically loaded on Grafana startup, changes to JSON files reflected after update interval, version control tracks dashboard changes.
 
-**On failure:**
+**If fail:**
 - Check Grafana logs: `docker logs grafana | grep -i provisioning`
 - Verify JSON syntax: `python -m json.tool dashboard.json`
 - Ensure file permissions allow Grafana to read: `chmod 644 *.json`
@@ -464,7 +464,7 @@ services:
 - [ ] Responsive layout works on different screen sizes
 - [ ] Tooltip and hover interactions provide useful context
 
-## Common Pitfalls
+## Pitfalls
 
 - **Variable not updating panels**: Ensure queries use `$variable` syntax, not hardcoded values. Check variable refresh settings.
 - **Empty panels with correct query**: Verify time range includes data points. Check scrape interval vs aggregation window (5m rate needs >5m of data).

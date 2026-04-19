@@ -82,9 +82,9 @@ Creative Space Assessment:
 2. Note the degrees of freedom: these are where genuine creation happens
 3. Identify seeds without committing to them — they inform, not dictate
 
-**Expected:** A clear picture of the creative space: bounded by constraints, informed by seeds, and opened by degrees of freedom.
+**Got:** A clear picture of the creative space: bounded by constraints, informed by seeds, and opened by degrees of freedom.
 
-**On failure:** If the space feels fully constrained (no degrees of freedom), re-examine — often constraints that seem fixed are actually preferences. Ask the user if needed.
+**If fail:** If the space feels fully constrained (no degrees of freedom), re-examine — often constraints that seem fixed are preferences. Ask the user if needed.
 
 ### Step 2: Generate — Divergent Exploration
 
@@ -100,9 +100,9 @@ Produce multiple possibilities without evaluating them.
 4. Include at least one approach that feels unconventional or risky
 5. Do not evaluate yet — generation and evaluation are separate phases
 
-**Expected:** Three or more genuinely distinct approaches, each with a clear identity and trade-off profile.
+**Got:** Three or more genuinely distinct approaches, each with a clear identity and trade-off profile.
 
-**On failure:** If all approaches feel similar, the generation was too narrow. Return to Step 1 and look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if I did the opposite of the obvious approach?"
+**If fail:** If all approaches feel similar, the generation was too narrow. Return to Step 1 and look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if I did the opposite of the obvious approach?"
 
 ### Step 3: Evaluate — Convergent Selection
 
@@ -118,9 +118,9 @@ Assess the generated approaches against the creative space.
 3. Among remaining approaches, choose based on the user's implicit values (simplicity? thoroughness? creativity?)
 4. If two approaches are equally strong, present both to the user with trade-offs clearly stated
 
-**Expected:** A single chosen approach (or a clearly framed choice for the user) with articulated reasoning.
+**Got:** A single chosen approach (or a clearly framed choice for the user) with articulated reasoning.
 
-**On failure:** If no approach satisfies all constraints, the constraints may be contradictory. Surface the contradiction to the user rather than forcing a creation that compromises on fundamentals.
+**If fail:** If no approach satisfies all constraints, the constraints may be contradictory. Surface the contradiction to the user rather than forcing a creation that compromises on fundamentals.
 
 ### Step 4: Manifest — Bring into Form
 
@@ -132,9 +132,9 @@ Execute the chosen approach, giving it concrete form.
 4. Resist the urge to over-elaborate — creation is complete when nothing more can be removed
 5. Name what was created: a clear, descriptive identifier that captures its essence
 
-**Expected:** A concrete creation that embodies the chosen approach — code, plan, structure, or design that exists where void existed before.
+**Got:** A concrete creation that embodies the chosen approach — code, plan, structure, or design that exists where void existed before.
 
-**On failure:** If the manifestation diverges from the chosen approach, pause and re-read Step 3's selection. Drift during manifestation often indicates the selection was not fully committed to. Either recommit or re-select.
+**If fail:** If the manifestation diverges from the chosen approach, pause and re-read Step 3's selection. Drift during manifestation often indicates the selection was not fully committed to. Either recommit or re-select.
 
 ### Step 5: Nurture — Protect the Nascent Creation
 
@@ -146,9 +146,9 @@ New creations are fragile. Protect them through their early stages.
 4. Hand off to `vishnu-bhaga` for ongoing preservation if the creation will persist
 5. Document the creative choices made: what was chosen, what was rejected, and why
 
-**Expected:** A creation that is tested, documented, and ready for sustained use.
+**Got:** A creation that is tested, documented, and ready for sustained use.
 
-**On failure:** If the creation fails its first test, assess whether the failure is in the creation or the test. If the creation is fundamentally flawed, return to Step 2 with the failure as a new anti-pattern seed.
+**If fail:** If the creation fails its first test, assess whether the failure is in the creation or the test. If the creation is fundamentally flawed, return to Step 2 with the failure as a new anti-pattern seed.
 
 ## Validation
 
@@ -159,7 +159,7 @@ New creations are fragile. Protect them through their early stages.
 - [ ] The creation was tested against its constraints
 - [ ] Creative choices were documented for future reference
 
-## Common Pitfalls
+## Pitfalls
 
 - **Creating before clearing**: Attempting creation without prior dissolution produces new patterns contaminated by old ones. Run `shiva-bhaga` first if the space is cluttered
 - **Single-option generation**: Generating one approach and then evaluating it is not creation — it is executing the first idea. True creation requires divergent options

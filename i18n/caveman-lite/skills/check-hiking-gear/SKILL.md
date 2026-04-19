@@ -82,9 +82,9 @@ Hike Profiles:
   TROPICAL:       Hot, humid, rain, insects
 ```
 
-**Expected:** A clear hike profile with all condition factors assessed. This profile drives the checklist in Step 2.
+**Got:** A clear hike profile with all condition factors assessed. This profile drives the checklist in Step 2.
 
-**On failure:** If conditions are uncertain (e.g., shoulder season with unpredictable weather), plan for the worse case. It is always better to carry a rain jacket you don't use than to be soaked without one.
+**If fail:** If conditions are uncertain (e.g., shoulder season with unpredictable weather), plan for the worse case. It is always better to carry a rain jacket you don't use than to be soaked without one.
 
 ### Step 2: Generate Base Checklist by Category
 
@@ -160,9 +160,9 @@ ADDITIONAL BY PROFILE:
 └──────────────────┴────────────────────────────────────────────┘
 ```
 
-**Expected:** A complete checklist with all ten essentials, appropriate clothing layers, and profile-specific additions. Every item is relevant to the assessed conditions.
+**Got:** A complete checklist with all ten essentials, appropriate clothing layers, and profile-specific additions. Every item is relevant to the assessed conditions.
 
-**On failure:** If the list seems excessive for a short easy hike, verify that only the base ten essentials are included for SUMMER-DAY profiles. If the list seems too light for alpine conditions, cross-reference with the Alpine profile add-ons.
+**If fail:** If the list seems excessive for a short easy hike, verify that only the base ten essentials are included for SUMMER-DAY profiles. If the list seems too light for alpine conditions, cross-reference with the Alpine profile add-ons.
 
 ### Step 3: Optimize Weight
 
@@ -204,9 +204,9 @@ Shared Gear Distribution:
   Emergency gear         → distribute PLB, rope among members
 ```
 
-**Expected:** A weight-optimized checklist where every item serves a clear purpose. Total pack weight is within the target range for the hike profile. Shared gear is assigned to specific group members.
+**Got:** A weight-optimized checklist where every item serves a clear purpose. Total pack weight is within the target range for the hike profile. Shared gear is assigned to specific group members.
 
-**On failure:** If pack weight exceeds the target by more than 20%, reconsider whether the hike profile is appropriate. A heavily loaded pack on a long day dramatically increases fatigue and injury risk. Either reduce gear (accept more risk) or choose an easier/shorter route.
+**If fail:** If pack weight exceeds the target by more than 20%, reconsider whether the hike profile is appropriate. A heavily loaded pack on a long day dramatically increases fatigue and injury risk. Either reduce gear (accept more risk) or choose an easier/shorter route.
 
 ### Step 4: Verify Completeness Against Conditions
 
@@ -233,9 +233,9 @@ Verification Checklist:
 └────────────────────────────────────────┴──────────┴──────────┘
 ```
 
-**Expected:** All checks pass. The hiker can confidently state what every item in the pack is for and would notice if any item were missing.
+**Got:** All checks pass. The hiker can confidently state what every item in the pack is for and would notice if any item were missing.
 
-**On failure:** If any essential check fails, resolve it before departure. The most dangerous failures are: no navigation backup (phone dies), insufficient water capacity, and missing insulation layer (hypothermia risk even in summer above treeline).
+**If fail:** If any essential check fails, resolve it before departure. The most dangerous failures are: no navigation backup (phone dies), insufficient water capacity, and missing insulation layer (hypothermia risk even in summer above treeline).
 
 ## Validation
 
@@ -248,7 +248,7 @@ Verification Checklist:
 - [ ] Emergency kit includes personal medications
 - [ ] No new/untested gear on the hike (broken-in boots, tested stove)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Cotton kills**: Cotton clothing retains moisture and loses insulation when wet. Use merino wool or synthetic fabrics for all layers.
 - **New boots on hike day**: Untested footwear causes blisters. Break in new boots with at least 3-4 shorter walks before a long hike.

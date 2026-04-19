@@ -25,28 +25,28 @@ metadata:
 
 # Build Custom MCP Server
 
-Create a custom MCP server that exposes domain-specific tools to AI assistants.
+Custom MCP server → expose domain-specific tools to AI assistants.
 
-## When to Use
+## Use When
 
-- Need to expose custom functionality to Claude Code or Claude Desktop
-- Building specialized tools beyond what mcptools provides
-- Creating a domain-specific AI assistant integration
-- Wrapping existing APIs or services as MCP tools
+- Expose custom fn to Claude Code / Claude Desktop
+- Specialized tools beyond mcptools
+- Domain-specific AI assistant integration
+- Wrap existing APIs/services as MCP tools
 
-## Inputs
+## In
 
-- **Required**: List of tools to expose (name, description, parameters, behavior)
-- **Required**: Implementation language (Node.js or R)
-- **Required**: Transport type (stdio or HTTP)
-- **Optional**: Authentication requirements
+- **Required**: Tool list (name, desc, params, behavior)
+- **Required**: Impl lang (Node.js or R)
+- **Required**: Transport (stdio or HTTP)
+- **Optional**: Auth reqs
 - **Optional**: Docker packaging needs
 
-## Procedure
+## Do
 
-### Step 1: Define Tool Specifications
+### Step 1: Define Tool Specs
 
-Before writing code, define each tool:
+Before code, define each tool:
 
 ```yaml
 tools:
@@ -76,11 +76,11 @@ tools:
         required: true
 ```
 
-**Expected:** A YAML or markdown specification for each tool with name, description, parameters (including types, defaults, and required flags), and return type documented before writing any code.
+**→** YAML/md spec per tool w/ name, desc, params (types, defaults, required), return type documented before code.
 
-**On failure:** If tool specifications are unclear, interview the domain expert or review the existing API documentation to determine parameter types and return formats.
+**If err:** Specs unclear → interview domain expert or review existing API docs for param types + return formats.
 
-### Step 2: Implement in Node.js (Using MCP SDK)
+### Step 2: Impl in Node.js (MCP SDK)
 
 ```javascript
 // server.js
@@ -137,11 +137,11 @@ const transport = new StdioServerTransport();
 await server.connect(transport);
 ```
 
-**Expected:** A working `server.js` file that imports the MCP SDK, defines tools with Zod schemas, and connects via stdio transport. Running `node server.js` starts the server without errors.
+**→** Working `server.js` imports MCP SDK, defines tools w/ Zod schemas, connects via stdio. `node server.js` starts w/o errs.
 
-**On failure:** Verify that `@modelcontextprotocol/sdk` and `zod` are installed (`npm install`). Check that the import paths match the SDK version (the SDK reorganized exports between versions).
+**If err:** Verify `@modelcontextprotocol/sdk` + `zod` installed (`npm install`). Check import paths match SDK ver (SDK reorganized exports between versions).
 
-### Step 3: Implement in R (Using mcptools)
+### Step 3: Impl in R (mcptools)
 
 ```r
 # server.R
@@ -168,11 +168,11 @@ mcp_tool(
 mcptools::mcp_server()
 ```
 
-**Expected:** A working `server.R` file that registers custom tools with `mcp_tool()` and starts the server with `mcp_server()`. Running `Rscript server.R` starts the MCP server.
+**→** Working `server.R` registers tools w/ `mcp_tool()`, starts via `mcp_server()`. `Rscript server.R` starts MCP server.
 
-**On failure:** Ensure `mcptools` is installed from GitHub (`remotes::install_github("posit-dev/mcptools")`). Check that the handler function signatures match the parameter definitions.
+**If err:** `mcptools` installed from GitHub (`remotes::install_github("posit-dev/mcptools")`). Handler fn signatures match param defs.
 
-### Step 4: Set Up Project Structure
+### Step 4: Project Structure
 
 ```
 my-mcp-server/
@@ -187,19 +187,19 @@ my-mcp-server/
 └── README.md             # Setup instructions
 ```
 
-**Expected:** Project directory created with `server.js` (or `server.R`), `package.json`, `tools/` directory for modular tool implementations, and `test/` directory for tests.
+**→** Project dir w/ `server.js` (or `server.R`), `package.json`, `tools/` for modular tool impls, `test/` for tests.
 
-**On failure:** If the directory structure doesn't match your implementation language, adjust accordingly. R servers may use `R/` instead of `tools/` and `tests/testthat/` instead of `test/`.
+**If err:** Structure doesn't match impl lang → adjust. R servers may use `R/` vs `tools/` + `tests/testthat/` vs `test/`.
 
-### Step 5: Test the Server
+### Step 5: Test Server
 
-**Manual testing with stdio**:
+**Manual stdio test**:
 
 ```bash
 echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | node server.js
 ```
 
-**Register with Claude Code**:
+**Register w/ Claude Code**:
 
 ```bash
 claude mcp add my-server stdio "node" "/path/to/server.js"
@@ -207,13 +207,13 @@ claude mcp add my-server stdio "node" "/path/to/server.js"
 
 **Verify tools appear**:
 
-Start a Claude Code session and check that custom tools are listed and functional.
+Start Claude Code session, check custom tools listed + functional.
 
-**Expected:** The `tools/list` JSON-RPC call returns all defined tools with correct names and schemas. `claude mcp list` shows the server registered. Tools are callable from a Claude Code session.
+**→** `tools/list` JSON-RPC returns all tools w/ correct names + schemas. `claude mcp list` shows server registered. Tools callable from session.
 
-**On failure:** If `tools/list` returns an empty array, the tools were not registered before `server.connect()`. If Claude Code cannot find the server, verify the command path in `claude mcp add` is absolute and the binary is executable.
+**If err:** `tools/list` returns empty → tools not registered before `server.connect()`. Claude Code can't find → verify cmd path in `claude mcp add` absolute + binary executable.
 
-### Step 6: Add Error Handling
+### Step 6: Error Handling
 
 ```javascript
 server.tool("risky_operation", "...", schema, async (params) => {
@@ -231,13 +231,13 @@ server.tool("risky_operation", "...", schema, async (params) => {
 });
 ```
 
-**Expected:** Each tool handler is wrapped in try/catch. Invalid inputs return `isError: true` with a descriptive message instead of crashing the server process.
+**→** Each handler wrapped in try/catch. Invalid in → `isError: true` w/ desc msg, not crash.
 
-**On failure:** If the server still crashes on bad input, check that the try/catch wraps the entire handler body including any async operations. Ensure promises are awaited within the try block.
+**If err:** Still crashes on bad in → try/catch wraps full handler body incl async. Promises awaited in try block.
 
 ### Step 7: Package for Distribution
 
-Create a `package.json` with a bin entry:
+Create `package.json` w/ bin entry:
 
 ```json
 {
@@ -253,36 +253,36 @@ Create a `package.json` with a bin entry:
 }
 ```
 
-Users can then install and configure:
+Users install + configure:
 
 ```bash
 npm install -g my-mcp-server
 claude mcp add my-server stdio "my-mcp-server"
 ```
 
-**Expected:** A `package.json` with a `bin` entry pointing to the server entry point. Users can install globally with `npm install -g` and register with `claude mcp add`.
+**→** `package.json` w/ `bin` entry pointing to entry point. Users install globally w/ `npm install -g` + register w/ `claude mcp add`.
 
-**On failure:** If the bin entry doesn't work after global install, ensure `server.js` has a shebang line (`#!/usr/bin/env node`) and is marked executable. Verify the package name doesn't conflict with existing npm packages.
+**If err:** Bin entry doesn't work after global install → `server.js` has shebang (`#!/usr/bin/env node`) + marked executable. Pkg name doesn't conflict w/ existing npm.
 
-## Validation
+## Check
 
-- [ ] Server starts without errors
-- [ ] `tools/list` returns all defined tools with correct schemas
-- [ ] Each tool executes correctly with valid input
-- [ ] Tools return appropriate errors for invalid input
-- [ ] Server works with Claude Code via stdio transport
-- [ ] Tools are discoverable and usable in Claude sessions
+- [ ] Server starts w/o errs
+- [ ] `tools/list` returns all tools w/ correct schemas
+- [ ] Each tool executes correctly w/ valid in
+- [ ] Tools return appropriate errs for invalid in
+- [ ] Works w/ Claude Code via stdio
+- [ ] Tools discoverable + usable in Claude sessions
 
-## Common Pitfalls
+## Traps
 
-- **Blocking operations**: MCP servers should handle requests asynchronously. Long-running operations block other tool calls.
-- **Missing error handling**: Unhandled exceptions crash the server. Always wrap tool handlers in try/catch.
-- **Schema mismatches**: Tool parameter schemas must exactly match what the handler expects
-- **stdio buffering**: When using stdio transport, ensure output is flushed. Node.js buffers stdout by default.
-- **Security**: MCP servers have the same access as the process. Validate inputs carefully, especially for shell commands or database queries.
+- **Blocking ops**: Handle req async. Long ops block other tool calls
+- **Missing err handling**: Unhandled exceptions crash. Always wrap in try/catch
+- **Schema mismatch**: Param schemas must exactly match handler expects
+- **stdio buffering**: Ensure out flushed. Node.js buffers stdout by default
+- **Security**: MCP servers have same access as process. Validate in carefully, esp shell cmds/DB queries
 
-## Related Skills
+## →
 
-- `configure-mcp-server` - connect the built server to clients
-- `troubleshoot-mcp-connection` - debug connectivity issues
-- `containerize-mcp-server` - package the server in Docker
+- `configure-mcp-server` — connect built server to clients
+- `troubleshoot-mcp-connection` — debug connectivity
+- `containerize-mcp-server` — package in Docker

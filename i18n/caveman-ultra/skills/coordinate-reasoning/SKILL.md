@@ -26,29 +26,29 @@ metadata:
 
 # Coordinate Reasoning
 
-Manage the internal coordination of reasoning processes using stigmergic principles — treating context as an environment where information signals have freshness, decay rates, and interaction rules that produce coherent behavior from simple local protocols.
+Manage internal coordination of reasoning procs using stigmergic principles → treat ctx as env where info signals have freshness, decay rates, interaction rules producing coherent behavior from simple local protocols.
 
-## When to Use
+## Use When
 
-- During complex tasks where multiple sub-tasks must coordinate (multi-file edits, multi-step refactoring)
-- When context has grown long and information freshness is uncertain
-- After context compression when some information may have been lost
-- When sub-task outputs need to feed into each other cleanly
-- When earlier reasoning results need to be carried forward without degradation
-- Complementing `forage-solutions` (exploration) and `build-coherence` (decision) with execution coordination
+- Complex tasks where multi sub-tasks must coordinate (multi-file edits, multi-step refactor)
+- Ctx grown long + info freshness uncertain
+- Post ctx compression when some info may be lost
+- Sub-task outs need to feed into each other clean
+- Earlier reasoning results need to carry forward w/o degradation
+- Complement `forage-solutions` (exploration) + `build-coherence` (decision) w/ exec coordination
 
-## Inputs
+## In
 
-- **Required**: Current task decomposition (what sub-tasks exist and how do they relate?)
-- **Optional**: Known information freshness concerns (e.g., "I read that file 20 messages ago")
-- **Optional**: Sub-task dependency map (which sub-tasks feed into which?)
-- **Optional**: Available coordination tools (MEMORY.md, task list, inline notes)
+- **Required**: Current task decomposition (what sub-tasks exist + how relate?)
+- **Optional**: Known info freshness concerns (e.g., "I read that file 20 msgs ago")
+- **Optional**: Sub-task dep map (which sub-tasks feed into which?)
+- **Optional**: Avail coordination tools (MEMORY.md, task list, inline notes)
 
-## Procedure
+## Do
 
-### Step 1: Classify the Coordination Problem
+### Step 1: Classify Coordination Problem
 
-Different coordination challenges require different signal designs.
+Diff coordination challenges → diff signal designs.
 
 ```
 AI Coordination Problem Types:
@@ -80,15 +80,15 @@ AI Coordination Problem Types:
 └─────────────────────┴──────────────────────────────────────────────────┘
 ```
 
-Classify the current task. Most complex tasks are Construction or Division of Labor; most debugging tasks are Foraging; most design decisions are Consensus.
+Classify current task. Most complex tasks = Construction or Division of Labor; most debugging = Foraging; most design decisions = Consensus.
 
-**Expected:** A clear classification that determines which coordination signals to use. The classification should match how the task actually feels, not how it was described.
+**→** Clear classification determines which coordination signals to use. Classification should match how task actually feels, not how it was described.
 
-**On failure:** If the task spans multiple types (common for large tasks), identify the dominant type for the current phase. Construction during implementation, Foraging during debugging, Consensus during design. The type can change as the task progresses.
+**If err:** Task spans multi types (common for large tasks) → ID dominant type for current phase. Construction during impl, Foraging during debug, Consensus during design. Type can change as task progresses.
 
 ### Step 2: Design Context Signals
 
-Treat information in the conversation context as signals with freshness and decay properties.
+Treat info in conv ctx as signals w/ freshness + decay properties.
 
 ```
 Information Decay Rate Table:
@@ -118,17 +118,17 @@ Information Decay Rate Table:
 
 Additionally, design inhibition signals — markers for tried-and-failed approaches:
 
-- After a tool call fails: note the failure mode (prevents retrying the same call)
-- After an approach is abandoned: note why (prevents revisiting without new evidence)
-- After a user correction: note what was wrong (prevents repeating the error)
+- Post tool call fail: note fail mode (prevents retrying same call)
+- Post approach abandoned: note why (prevents revisiting w/o new evidence)
+- Post user correction: note what was wrong (prevents repeating err)
 
-**Expected:** A mental model of information freshness across the current context. Identification of which information is fresh and which needs refreshing before reliance.
+**→** Mental model of info freshness across current ctx. ID which info fresh + which needs refreshing before reliance.
 
-**On failure:** If information freshness is hard to assess, default to "re-read before relying on" for anything not verified in the last 5-10 actions. Over-refreshing wastes some effort but prevents stale-information errors.
+**If err:** Info freshness hard to assess → default "re-read before relying on" for anything not verified in last 5-10 actions. Over-refreshing wastes some effort but prevents stale-info errs.
 
 ### Step 3: Define Local Protocols
 
-Establish simple rules for how reasoning should proceed at each step, using only locally available information.
+Establish simple rules for how reasoning should proceed each step, using only locally avail info.
 
 ```
 Local Protocol Rules:
@@ -162,21 +162,21 @@ Local Protocol Rules:
 └──────────────────────┴────────────────────────────────────────────────┘
 ```
 
-These protocols are simple enough to apply at every step without significant overhead.
+Protocols simple enough to apply each step w/o significant overhead.
 
-**Expected:** A set of lightweight rules that improve coordination quality without slowing execution. The rules should feel helpful, not burdensome.
+**→** Set of lightweight rules that improve coordination quality w/o slowing exec. Rules should feel helpful, not burdensome.
 
-**On failure:** If the protocols feel like overhead, reduce to the two most important for the current task type: Safety + Deposit for Construction, Safety + Exploration for Foraging, Safety + Response for tasks with active user feedback.
+**If err:** Protocols feel like overhead → reduce to 2 most important for current task type: Safety + Deposit for Construction, Safety + Exploration for Foraging, Safety + Response for tasks w/ active user feedback.
 
 ### Step 4: Calibrate Information Freshness
 
-Perform an active audit of information staleness in the current context.
+Active audit of info staleness in current ctx.
 
-1. What facts were established more than N messages ago? List them
-2. For each: has it been updated, contradicted, or rendered irrelevant since?
-3. Check for context compression losses: is there information you remember having but can no longer find in the visible context?
-4. Check for drift between early plans and current execution: has the approach changed without updating the plan?
-5. Re-verify the 2-3 most critical facts (the ones that the most downstream reasoning depends on)
+1. What facts established more than N msgs ago? List them
+2. Each: has it been updated, contradicted, rendered irrelevant since?
+3. Check ctx compression losses: info you remember having but can't find in visible ctx?
+4. Check drift between early plans + current exec: approach changed w/o updating plan?
+5. Re-verify 2-3 most critical facts (ones most downstream reasoning depends on)
 
 ```
 Freshness Audit Template:
@@ -188,18 +188,18 @@ Freshness Audit Template:
 └────────────────────────┴──────────┴──────────────┴─────────────────┘
 ```
 
-**Expected:** A concrete inventory of information freshness with stale items identified for refresh. At least one fact re-verified — if nothing needed refreshing, the audit was too shallow or the context is genuinely fresh.
+**→** Concrete inventory of info freshness w/ stale items ID'd for refresh. At least one fact re-verified — if nothing needed refreshing, audit too shallow or ctx genuinely fresh.
 
-**On failure:** If the audit reveals significant information loss (multiple facts with "Lost" or "Unknown" status), this is a signal to run `heal` for a full subsystem assessment. Information loss beyond a threshold means coordination is compromised at the foundation level.
+**If err:** Audit reveals significant info loss (multi facts w/ "Lost" or "Unknown" status) → signal to run `heal` for full subsystem assessment. Info loss beyond threshold → coordination compromised at foundation level.
 
 ### Step 5: Test Emergent Coherence
 
-Verify that the sub-tasks, when combined, produce a coherent whole.
+Verify sub-tasks, when combined, produce coherent whole.
 
-1. Does each sub-task's output feed cleanly into the next? Or are there gaps, contradictions, or mismatched assumptions?
-2. Are tool calls building toward the goal, or are they repetitive (re-reading the same file, re-running the same search)?
-3. Is the overall direction still aligned with the user's request? Or has incremental drift accumulated into significant misalignment?
-4. Stress test: if one key assumption is wrong, how much of the work cascades? High cascade = fragile coordination. Low cascade = robust coordination
+1. Each sub-task's out feeds clean into next? Or gaps, contradictions, mismatched assumptions?
+2. Tool calls building toward goal, or repetitive (re-reading same file, re-running same search)?
+3. Overall direction still aligned w/ user's req? Or incremental drift → significant misalignment?
+4. Stress test: if one key assumption wrong, how much work cascades? High cascade = fragile coordination. Low cascade = robust coordination.
 
 ```
 Coherence Test:
@@ -213,31 +213,31 @@ Coherence Test:
 └────────────────────────────────────┴─────────────────────────────────┘
 ```
 
-**Expected:** A concrete assessment of overall coherence with specific issues identified. Coherent coordination should feel like parts clicking together; incoherent coordination feels like forcing puzzle pieces.
+**→** Concrete assessment of overall coherence w/ specific issues ID'd. Coherent coordination feels like parts clicking together; incoherent feels like forcing puzzle pieces.
 
-**On failure:** If coherence is poor, identify the specific point where sub-tasks diverge. Often it is a single stale assumption or an unprocessed user correction that propagated through downstream work. Fix the point of divergence, then re-verify downstream outputs.
+**If err:** Coherence poor → ID specific point where sub-tasks diverge. Often single stale assumption or unprocessed user correction propagated through downstream work. Fix point of divergence, re-verify downstream outs.
 
-## Validation
+## Check
 
-- [ ] Coordination problem was classified by type
-- [ ] Information decay rates were considered for facts relied upon
-- [ ] Local protocols were applied (especially Safety and Deposit)
-- [ ] Freshness audit identified stale information (or confirmed freshness with evidence)
-- [ ] Emergent coherence was tested across sub-tasks
-- [ ] Inhibition signals were respected (tried-and-failed approaches not repeated)
+- [ ] Coordination problem classified by type
+- [ ] Info decay rates considered for facts relied upon
+- [ ] Local protocols applied (especially Safety + Deposit)
+- [ ] Freshness audit ID'd stale info (or confirmed freshness w/ evidence)
+- [ ] Emergent coherence tested across sub-tasks
+- [ ] Inhibition signals respected (tried-and-failed approaches not repeated)
 
-## Common Pitfalls
+## Traps
 
-- **Over-engineering signals**: Complex coordination protocols slow work more than they help. Start with Safety + Deposit; add others only when problems emerge
-- **Trusting stale context**: The most common coordination failure is relying on information that was true 20 messages ago but has since been updated or invalidated. When in doubt, re-read
-- **Ignoring inhibition signals**: Retrying a failed approach without changing anything is not persistence — it is ignoring the failure signal. Something must be different for a retry to succeed
-- **No deposits**: Completing sub-tasks without noting their outputs forces later sub-tasks to re-derive or re-read. Brief summaries save significant re-work
-- **Assuming coherence**: Not testing whether sub-tasks actually combine into a coherent whole. Each sub-task can be correct independently but incoherent collectively — the integration is where coordination fails
+- **Over-engineering signals**: Complex coordination protocols slow work more than help. Start w/ Safety + Deposit; add others only when problems emerge.
+- **Trust stale ctx**: Most common coordination failure = relying on info true 20 msgs ago but since updated or invalidated. When in doubt, re-read.
+- **Ignore inhibition signals**: Retrying failed approach w/o changing anything ≠ persistence → ignoring fail signal. Something must be different for retry to succeed.
+- **No deposits**: Completing sub-tasks w/o noting outs forces later sub-tasks to re-derive or re-read. Brief summaries save significant re-work.
+- **Assume coherence**: Not testing whether sub-tasks actually combine into coherent whole. Each sub-task correct independently but incoherent collectively → integration is where coordination fails.
 
-## Related Skills
+## →
 
-- `coordinate-swarm` — the multi-agent coordination model that this skill adapts to single-agent reasoning
-- `forage-solutions` — coordinates exploration across multiple hypotheses
-- `build-coherence` — coordinates evaluation across competing approaches
+- `coordinate-swarm` — multi-agent coordination model this skill adapts to single-agent reasoning
+- `forage-solutions` — coordinates exploration across multi hypotheses
+- `build-coherence` — coordinates eval across competing approaches
 - `heal` — deeper assessment when coordination failures reveal subsystem drift
-- `awareness` — monitors for coordination breakdown signals during execution
+- `awareness` — monitors for coordination breakdown signals during exec

@@ -63,13 +63,13 @@ Choose the deck's strategic identity.
    - Budget constraints (combo decks often need specific expensive cards)
    - Format legality (check ban lists and rotation status)
 3. Identify 1-2 primary win conditions:
-   - How does this deck actually win the game?
+   - How does this deck win the game?
    - What is the ideal game state this deck is trying to reach?
 4. State the archetype selection and win condition clearly
 
-**Expected:** A clear archetype with defined win conditions. The strategy is specific enough to guide card selection but flexible enough to adapt.
+**Got:** A clear archetype with defined win conditions. The strategy is specific enough to guide card selection but flexible enough to adapt.
 
-**On failure:** If no archetype feels right, start with the strongest individual cards available and let the archetype emerge from the card pool. Sometimes the best deck is built around a card, not a concept.
+**If fail:** If no archetype feels right, start with the strongest individual cards available and let the archetype emerge from the card pool. Sometimes the best deck is built around a card, not a concept.
 
 ### Step 2: Build the Core
 
@@ -92,9 +92,9 @@ Select the cards that define the deck's strategy.
    - Pokemon: Energy cards (8-12 basic + special)
    - FaB: Pitch value distribution (balance red/yellow/blue)
 
-**Expected:** A complete deck list at or near the minimum deck size for the format. Every card has a clear role (core, support, interaction, or resource).
+**Got:** A complete deck list at or near the minimum deck size for the format. Every card has a clear role (core, support, interaction, or resource).
 
-**On failure:** If the deck list exceeds the format size, cut the weakest support cards first. If the core engine requires too many cards (>25), the strategy may be too fragile — simplify the win condition.
+**If fail:** If the deck list exceeds the format size, cut the weakest support cards first. If the core engine requires too many cards (>25), the strategy may be too fragile — simplify the win condition.
 
 ### Step 3: Analyze the Curve
 
@@ -116,9 +116,9 @@ Verify the deck's resource distribution supports its strategy.
    - No critical category completely missing
 4. Adjust if the curve doesn't support the strategy
 
-**Expected:** A smooth curve that lets the deck execute its strategy on time. Aggro plays out fast, control survives early, combo assembles on schedule.
+**Got:** A smooth curve that lets the deck execute its strategy on time. Aggro plays out fast, control survives early, combo assembles on schedule.
 
-**On failure:** If the curve is lumpy (too many expensive cards, not enough early plays), swap expensive support cards for cheaper alternatives. The curve is more important than any individual card.
+**If fail:** If the curve is lumpy (too many expensive cards, not enough early plays), swap expensive support cards for cheaper alternatives. The curve is more important than any individual card.
 
 ### Step 4: Meta-Game Positioning
 
@@ -137,9 +137,9 @@ Evaluate the deck against the expected field.
    - Adding sideboard (if the format allows) for unfavorable matchups
    - Whether a different archetype is better positioned
 
-**Expected:** A clear picture of where the deck sits in the meta. Favorable and unfavorable matchups identified with specific reasons.
+**Got:** A clear picture of where the deck sits in the meta. Favorable and unfavorable matchups identified with specific reasons.
 
-**On failure:** If meta data isn't available, focus on versatility — ensure the deck can interact with multiple strategies rather than being optimized for one matchup.
+**If fail:** If meta data isn't available, focus on versatility — ensure the deck can interact with multiple strategies rather than being optimized for one matchup.
 
 ### Step 5: Build the Sideboard
 
@@ -156,9 +156,9 @@ Construct sideboard/side deck for format-specific adaptation (if applicable).
 4. Ensure no sideboard card is only relevant against one fringe deck
    - Each sideboard slot should cover at least 2 matchups if possible
 
-**Expected:** A focused sideboard that meaningfully improves the worst matchups without diluting the main strategy.
+**Got:** A focused sideboard that meaningfully improves the worst matchups without diluting the main strategy.
 
-**On failure:** If the sideboard can't fix the worst matchups, the deck may be poorly positioned in the current meta. Consider whether the core strategy needs adjustment rather than sideboard patches.
+**If fail:** If the sideboard can't fix the worst matchups, the deck may be poorly positioned in the current meta. Consider whether the core strategy needs adjustment rather than sideboard patches.
 
 ## Validation Checklist
 
@@ -171,7 +171,7 @@ Construct sideboard/side deck for format-specific adaptation (if applicable).
 - [ ] Sideboard targets the worst matchups with clear swap plans
 - [ ] Budget constraints satisfied (if applicable)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Too many win conditions**: A deck with 3 different ways to win usually does none of them well. Focus on 1-2
 - **Curve blindness**: Adding powerful expensive cards without checking if the deck can cast them on time

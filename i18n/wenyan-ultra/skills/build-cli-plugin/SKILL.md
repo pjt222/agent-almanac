@@ -29,30 +29,30 @@ metadata:
     - nodejs
 ---
 
-# Build a CLI Plugin
+# 建命工插件
 
-Add a new plugin or adapter to a CLI tool's pluggable architecture using the abstract base class pattern.
+以抽象基類模→加新插件/配器於命工之可插構。
 
-## When to Use
+## 用
 
-- Adding support for a new target framework to a CLI installer
-- Building a plugin system for a multi-target command-line tool
-- Extending an existing adapter architecture with a new strategy variant
-- Porting content delivery to a framework that uses a different file layout
+- 加新標框支於命裝器
+- 為多標命工建插系
+- 擴現配器構以新策變
+- 移內容發至用異檔布之框
 
-## Inputs
+## 入
 
-- **Required**: Framework or target the plugin supports (name, config paths, conventions)
-- **Required**: Path to the base class or plugin contract
-- **Required**: Installation strategy: `symlink`, `copy`, `file-per-item`, or `append-to-file`
-- **Optional**: Content types the plugin handles (e.g., skills only, skills + agents, full support)
-- **Optional**: Scope support (project-level, global, both)
+- **必**：插所支之框或標（名、配徑、規）
+- **必**：基類或插契之徑
+- **必**：裝策：`symlink`、`copy`、`file-per-item`、`append-to-file`
+- **可**：插處之內容類（如唯技、技+將、全支）
+- **可**：範支（案級、全域、兩）
 
-## Procedure
+## 行
 
-### Step 1: Define the Contract
+### 一：定契
 
-The base class establishes the interface all plugins must implement:
+基類立諸插當施之介。
 
 ```javascript
 export class FrameworkAdapter {
@@ -71,40 +71,40 @@ export class FrameworkAdapter {
 }
 ```
 
-**Static fields** define the plugin's identity and capabilities:
-- `id`: Used in `--framework <id>` option and result reporting
-- `displayName`: Shown in human-readable output
-- `strategy`: Determines how content reaches the target
-- `contentTypes`: Filters which items this adapter receives
+**靜欄** 定插之身與能：
+- `id`：用於 `--framework <id>` 選項與結報
+- `displayName`：顯於人讀出
+- `strategy`：定內容達標之方
+- `contentTypes`：濾此配器受之項
 
-If the base class does not exist yet, create it first. The pattern scales to any number of plugins.
+基類未存→先造之。模可縮至任數插件。
 
-**Expected:** A base class with static identity fields and abstract methods.
+**得：** 基類附靜身欄與抽方。
 
-**On failure:** If the base class has methods that don't apply to all plugins (e.g., not all frameworks support `audit`), provide default implementations that return sensible no-ops.
+**敗：** 基類有不適諸插之方（如非諸框支 `audit`）→供默施返妥空操。
 
-### Step 2: Choose the Installation Strategy
+### 二：擇裝策
 
-| Strategy | When to use | Example |
-|----------|------------|---------|
-| **symlink** | Target reads source files directly. Cheapest, stays in sync. | Claude Code reads `.claude/skills/<name>/` symlinks |
-| **copy** | Target needs files in its own directory. Modifications don't propagate. | Some IDEs index only their own dirs |
-| **file-per-item** | Target expects one file per item with specific format. | Cursor `.mdc` rules files |
-| **append-to-file** | Target reads a single instructions file. | Aider `CONVENTIONS.md`, Codex `AGENTS.md` |
+| 策 | 用時 | 例 |
+|----|------|-----|
+| **symlink** | 標直讀源檔。最廉、同步 | Claude Code 讀 `.claude/skills/<name>/` 符連 |
+| **copy** | 標需檔於己目。改不傳 | 某 IDE 唯索其目 |
+| **file-per-item** | 標每項一檔，有專格 | Cursor `.mdc` 律檔 |
+| **append-to-file** | 標讀單指檔 | Aider `CONVENTIONS.md`、Codex `AGENTS.md` |
 
-Strategy determines the implementation shape:
-- **Symlink**: `symlinkSync(source, target)` — handle relative vs. absolute paths
-- **Copy**: `cpSync(source, target, { recursive: true })` — handle overwrites
-- **File-per-item**: `writeFileSync(target, transform(content))` — may need format conversion
-- **Append-to-file**: Wrap content in markers for idempotent insert/replace/remove
+策定施形：
+- **Symlink**：`symlinkSync(source, target)`—處相對對絕對徑
+- **Copy**：`cpSync(source, target, { recursive: true })`—處覆
+- **File-per-item**：`writeFileSync(target, transform(content))`—或需格轉
+- **Append-to-file**：包內容以標冪等插/替/除
 
-**Expected:** Strategy selected with clear rationale based on how the target framework discovers content.
+**得：** 策已擇附基於標框如何發現內容之清由。
 
-**On failure:** If unsure, check the framework's documentation for how it discovers configuration or instruction files. Default to symlink if the framework reads arbitrary directories.
+**敗：** 不確→察框文如何發現配或指檔。框讀任意目→默為 symlink。
 
-### Step 3: Implement Detection
+### 三：施偵
 
-Detection tells the CLI which frameworks are present in a project:
+偵告命工案中何框存。
 
 ```javascript
 // In detector.js — each rule checks for a filesystem marker
@@ -119,19 +119,19 @@ const RULES = [
 ];
 ```
 
-Detection strategies:
-- **Directory presence**: `.claude/`, `.cursor/`, `.gemini/`
-- **Config file**: `opencode.json`, `.aider.conf.yml`
-- **Instruction file**: `AGENTS.md`, `CONVENTIONS.md`
-- **Global markers**: `~/.openclaw/`, `~/.hermes/`
+偵策：
+- **目存**：`.claude/`、`.cursor/`、`.gemini/`
+- **配檔**：`opencode.json`、`.aider.conf.yml`
+- **指檔**：`AGENTS.md`、`CONVENTIONS.md`
+- **全域標**：`~/.openclaw/`、`~/.hermes/`
 
-Always return the marker in the detection result so users can understand why a framework was detected.
+偵結必返標以令用者解框何以被偵。
 
-**Expected:** A detection rule that reliably identifies the framework without false positives.
+**得：** 偵律穩識框而無偽陽。
 
-**On failure:** If the framework has no unique marker (generic directory name), use a combination of markers or require explicit `--framework` specification.
+**敗：** 框無唯標（泛目名）→用多標組或需顯 `--framework`。
 
-### Step 4: Implement Install with Idempotency
+### 四：冪等施裝
 
 ```javascript
 async install(item, projectDir, scope, options) {
@@ -162,17 +162,17 @@ async install(item, projectDir, scope, options) {
 }
 ```
 
-Idempotency rules:
-- **Skip** if target exists and `--force` is not set
-- **Overwrite** if `--force` is set (remove first, then install)
-- **Dry-run** always succeeds with `action: 'created'`
-- **Return value** must always be `{ action, path, details? }`
+冪等律：
+- 標存且未 `--force`→**略**
+- `--force` 設→**覆**（先除，後裝）
+- **乾行** 必成於 `action: 'created'`
+- **返值** 必為 `{ action, path, details? }`
 
-**Expected:** Install creates content at the target path, skips if already present, respects `--force` and `--dry-run`.
+**得：** 裝於標徑造內容，若已存則略，循 `--force` 與 `--dry-run`。
 
-**On failure:** If symlink creation fails on Windows/NTFS, fall back to directory junction or copy. Log the fallback.
+**敗：** symlink 於 Windows/NTFS 敗→退為目連或拷。記退。
 
-### Step 5: Implement Uninstall with Cleanup
+### 五：施卸與清
 
 ```javascript
 async uninstall(item, projectDir, scope, options) {
@@ -194,16 +194,16 @@ async uninstall(item, projectDir, scope, options) {
 }
 ```
 
-Cleanup considerations:
-- Remove only what the plugin installed — never delete user-created files
-- For append-to-file: remove the marked section, not the entire file
-- Leave parent directories intact (other plugins may use them)
+清慮：
+- 唯除插所裝—絕不刪用者造檔
+- append-to-file：除標段，非全檔
+- 留父目（他插或用之）
 
-**Expected:** Uninstall removes only the plugin's content and nothing else.
+**得：** 卸唯除插內容。
 
-**On failure:** If removal fails (permissions, locked file), return an error result instead of throwing.
+**敗：** 除敗（權、鎖檔）→返誤結非拋。
 
-### Step 6: Implement Listing and Audit
+### 六：施列與審
 
 ```javascript
 async listInstalled(projectDir, scope) {
@@ -232,11 +232,11 @@ async audit(projectDir, scope) {
 }
 ```
 
-**Expected:** Listing returns all installed items with broken-link detection. Audit summarizes health.
+**得：** 列返諸裝項附破連偵。審概健。
 
-**On failure:** If the target directory doesn't exist, return empty results (not an error — the framework just has nothing installed).
+**敗：** 標目不存→返空結（非誤—框但無所裝）。
 
-### Step 7: Register the Plugin
+### 七：註插件
 
 ```javascript
 // In adapters/index.js
@@ -244,16 +244,16 @@ import { MyFrameworkAdapter } from './my-framework.js';
 register(MyFrameworkAdapter);
 ```
 
-Registration makes the adapter available to:
-- Auto-detection (`detectFrameworks()` → `getAdaptersForDetections()`)
-- Explicit selection (`--framework my-framework`)
-- Listing (`listAdapters()`)
+註令配器得於：
+- 自偵（`detectFrameworks()` → `getAdaptersForDetections()`）
+- 顯擇（`--framework my-framework`）
+- 列（`listAdapters()`）
 
-**Expected:** The adapter appears in `tool detect` output and can be targeted with `--framework`.
+**得：** 配器現於 `tool detect` 出且可以 `--framework` 標。
 
-**On failure:** If the adapter doesn't appear, verify `static id` matches the detection rule's `id` and that `register()` was called.
+**敗：** 配器不現→驗 `static id` 合偵律之 `id` 且 `register()` 已呼。
 
-### Step 8: Write Tests
+### 八：書試
 
 ```javascript
 describe('adapter: my-framework (dry-run)', () => {
@@ -264,34 +264,34 @@ describe('adapter: my-framework (dry-run)', () => {
 });
 ```
 
-Test at minimum: dry-run path, detection presence, and content type support.
+最少試：乾行徑、偵存、內容類支。
 
-**Expected:** Adapter-specific tests confirm the installation path and behavior.
+**得：** 配器專試證裝徑與行。
 
-**On failure:** If the framework isn't detected in CI (no marker directory), use `--framework` explicitly in tests.
+**敗：** CI 不偵（無標目）→試中顯用 `--framework`。
 
-## Validation
+## 驗
 
-- [ ] Plugin extends the base class correctly
-- [ ] Static fields (`id`, `displayName`, `strategy`, `contentTypes`) are set
-- [ ] Detection rule identifies the framework without false positives
-- [ ] `install()` is idempotent (skip if exists, respect `--force`)
-- [ ] `uninstall()` removes only plugin-created content
-- [ ] `listInstalled()` detects broken symlinks
-- [ ] `audit()` reports health accurately
-- [ ] Plugin is registered and appears in `tool detect`
-- [ ] Dry-run tests pass
+- [ ] 插件正擴基類
+- [ ] 靜欄（`id`、`displayName`、`strategy`、`contentTypes`）已設
+- [ ] 偵律識框而無偽陽
+- [ ] `install()` 冪等（存則略，循 `--force`）
+- [ ] `uninstall()` 唯除插所造
+- [ ] `listInstalled()` 偵破符連
+- [ ] `audit()` 準報健
+- [ ] 插件已註且現於 `tool detect`
+- [ ] 乾行試通
 
-## Common Pitfalls
+## 忌
 
-- **Forgetting relative vs. absolute symlinks**: Project-scope symlinks should be relative (portable). Global-scope symlinks should be absolute (not dependent on cwd).
-- **Not handling missing parent directories**: Always `mkdirSync(dir, { recursive: true })` before creating content.
-- **Append-to-file without markers**: Without idempotent markers (`<!-- start:id -->` / `<!-- end:id -->`), repeated installs duplicate content. Always wrap appended content.
-- **Detection false positives**: A generic directory name (e.g., `.config/`) may match multiple frameworks. Use specific file markers inside the directory.
-- **Forgetting `supports()` check**: The installer calls `supports(item.type)` before dispatching. If `contentTypes` is wrong, the adapter silently skips items.
+- **忘相對對絕對 symlink**：案範 symlink 當相對（可攜）。全域範 symlink 當絕對（非依 cwd）。
+- **不處缺父目**：造內容前必 `mkdirSync(dir, { recursive: true })`。
+- **append-to-file 無標**：無冪等標（`<!-- start:id -->` / `<!-- end:id -->`）→重裝複內容。必包所附內容。
+- **偵偽陽**：泛目名（如 `.config/`）或合多框。用目中專檔標。
+- **忘 `supports()` 察**：裝器呼 `supports(item.type)` 前派。`contentTypes` 誤→配器默略項。
 
-## Related Skills
+## 參
 
-- `scaffold-cli-command` — build the CLI commands that use this plugin
-- `test-cli-application` — testing patterns for CLI tools including adapter tests
-- `design-cli-output` — terminal output for install/uninstall results
+- `scaffold-cli-command` — 建用此插之命
+- `test-cli-application` — 命工試模含配器試
+- `design-cli-output` — 裝/卸結之端出

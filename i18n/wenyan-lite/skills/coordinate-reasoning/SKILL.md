@@ -24,31 +24,31 @@ metadata:
   tags: swarm, coordination, stigmergy, context-management, information-decay, ai-self-application
 ---
 
-# Coordinate Reasoning
+# 協調推理
 
-Manage the internal coordination of reasoning processes using stigmergic principles — treating context as an environment where information signals have freshness, decay rates, and interaction rules that produce coherent behavior from simple local protocols.
+以共遺（stigmergic）原則管推理過程之內協——視脈絡為環境，其中資訊信號有新鮮度、衰減率、互動規則，由簡單局部協議產生連貫行為。
 
-## When to Use
+## 適用時機
 
-- During complex tasks where multiple sub-tasks must coordinate (multi-file edits, multi-step refactoring)
-- When context has grown long and information freshness is uncertain
-- After context compression when some information may have been lost
-- When sub-task outputs need to feed into each other cleanly
-- When earlier reasoning results need to be carried forward without degradation
-- Complementing `forage-solutions` (exploration) and `build-coherence` (decision) with execution coordination
+- 複雜任務中多子任務須協調（多檔編輯、多步重構）
+- 脈絡長而資訊新鮮不確
+- 脈絡壓縮後某資訊或已失
+- 子任務之輸出須淨餵次者
+- 早推理結果須無退化前行
+- 補 `forage-solutions`（探索）與 `build-coherence`（決策）以執行協調
 
-## Inputs
+## 輸入
 
-- **Required**: Current task decomposition (what sub-tasks exist and how do they relate?)
-- **Optional**: Known information freshness concerns (e.g., "I read that file 20 messages ago")
-- **Optional**: Sub-task dependency map (which sub-tasks feed into which?)
-- **Optional**: Available coordination tools (MEMORY.md, task list, inline notes)
+- **必要**：當前任務分解（何子任務存、其如何相關）
+- **選擇性**：已知之資訊新鮮疑慮（如「我 20 訊前讀此檔」）
+- **選擇性**：子任務依賴圖（何子任務餵何者）
+- **選擇性**：可用之協調工具（MEMORY.md、任務清單、行內註）
 
-## Procedure
+## 步驟
 
-### Step 1: Classify the Coordination Problem
+### 步驟一：分類協調問題
 
-Different coordination challenges require different signal designs.
+不同協調挑戰需不同信號設計。
 
 ```
 AI Coordination Problem Types:
@@ -80,15 +80,15 @@ AI Coordination Problem Types:
 └─────────────────────┴──────────────────────────────────────────────────┘
 ```
 
-Classify the current task. Most complex tasks are Construction or Division of Labor; most debugging tasks are Foraging; most design decisions are Consensus.
+分當前任務。多數複雜任務為建造或分工；多數除錯任務為探尋；多數設計決定為共識。
 
-**Expected:** A clear classification that determines which coordination signals to use. The classification should match how the task actually feels, not how it was described.
+**預期：** 明分類以定用何協調信號。分類應合任務之實感，非所述之。
 
-**On failure:** If the task spans multiple types (common for large tasks), identify the dominant type for the current phase. Construction during implementation, Foraging during debugging, Consensus during design. The type can change as the task progresses.
+**失敗時：** 若任務橫跨多類（大任務常然），辨當前階段之主類。實作時建造、除錯時探尋、設計時共識。類可隨任務進而變。
 
-### Step 2: Design Context Signals
+### 步驟二：設脈絡信號
 
-Treat information in the conversation context as signals with freshness and decay properties.
+視對話脈絡中之資訊為含新鮮與衰減性之信號。
 
 ```
 Information Decay Rate Table:
@@ -116,19 +116,19 @@ Information Decay Rate Table:
 └───────────────────────────┴──────────┴──────────────────────────────┘
 ```
 
-Additionally, design inhibition signals — markers for tried-and-failed approaches:
+此外，設抑制信號——試而敗之法之標：
 
-- After a tool call fails: note the failure mode (prevents retrying the same call)
-- After an approach is abandoned: note why (prevents revisiting without new evidence)
-- After a user correction: note what was wrong (prevents repeating the error)
+- 工具呼失敗後：記敗模式（防重呼同呼）
+- 法棄後：記因（防無新證而返）
+- 用戶糾正後：記何處誤（防重犯）
 
-**Expected:** A mental model of information freshness across the current context. Identification of which information is fresh and which needs refreshing before reliance.
+**預期：** 當前脈絡中資訊新鮮之心智模型。辨何資訊新鮮、何需刷前方可賴。
 
-**On failure:** If information freshness is hard to assess, default to "re-read before relying on" for anything not verified in the last 5-10 actions. Over-refreshing wastes some effort but prevents stale-information errors.
+**失敗時：** 若新鮮難估，預設「賴前重讀」於近 5-10 行未驗之任何資訊。過度刷耗力但防陳舊資訊之錯。
 
-### Step 3: Define Local Protocols
+### 步驟三：定局部協議
 
-Establish simple rules for how reasoning should proceed at each step, using only locally available information.
+立推理如何於每步行之簡則，僅用局部可達之資訊。
 
 ```
 Local Protocol Rules:
@@ -162,21 +162,21 @@ Local Protocol Rules:
 └──────────────────────┴────────────────────────────────────────────────┘
 ```
 
-These protocols are simple enough to apply at every step without significant overhead.
+此協議足簡以於每步施而無顯負。
 
-**Expected:** A set of lightweight rules that improve coordination quality without slowing execution. The rules should feel helpful, not burdensome.
+**預期：** 輕量規則以進協調品質而不緩執行。規則應覺助而非累。
 
-**On failure:** If the protocols feel like overhead, reduce to the two most important for the current task type: Safety + Deposit for Construction, Safety + Exploration for Foraging, Safety + Response for tasks with active user feedback.
+**失敗時：** 若協議覺為負，減至當前任務類最要之二：建造用 Safety + Deposit，探尋用 Safety + Exploration，有活用戶回饋之任務用 Safety + Response。
 
-### Step 4: Calibrate Information Freshness
+### 步驟四：校準資訊新鮮
 
-Perform an active audit of information staleness in the current context.
+於當前脈絡中行資訊陳舊之主動稽核。
 
-1. What facts were established more than N messages ago? List them
-2. For each: has it been updated, contradicted, or rendered irrelevant since?
-3. Check for context compression losses: is there information you remember having but can no longer find in the visible context?
-4. Check for drift between early plans and current execution: has the approach changed without updating the plan?
-5. Re-verify the 2-3 most critical facts (the ones that the most downstream reasoning depends on)
+1. 何事於超 N 訊前已立？列之
+2. 各：其後是否已更、反、或無關？
+3. 查脈絡壓縮之失：是否有記曾有而今於可見脈絡中不能尋之資訊？
+4. 查初計畫與當前執行之漂：法已變而未更計畫？
+5. 重驗最關鍵之 2-3 事實（下游推理最賴者）
 
 ```
 Freshness Audit Template:
@@ -188,18 +188,18 @@ Freshness Audit Template:
 └────────────────────────┴──────────┴──────────────┴─────────────────┘
 ```
 
-**Expected:** A concrete inventory of information freshness with stale items identified for refresh. At least one fact re-verified — if nothing needed refreshing, the audit was too shallow or the context is genuinely fresh.
+**預期：** 具體之資訊新鮮清單，陳舊項已辨以待刷。至少一事實已重驗——若無需刷者，稽核過淺或脈絡真新。
 
-**On failure:** If the audit reveals significant information loss (multiple facts with "Lost" or "Unknown" status), this is a signal to run `heal` for a full subsystem assessment. Information loss beyond a threshold means coordination is compromised at the foundation level.
+**失敗時：** 若稽核揭顯著資訊失（多事實態為「Lost」或「Unknown」），此為行 `heal` 以全子系統評估之信。超閾之資訊失意協調於基礎層已損。
 
-### Step 5: Test Emergent Coherence
+### 步驟五：測湧連貫
 
-Verify that the sub-tasks, when combined, produce a coherent whole.
+驗子任務合時產連貫之整。
 
-1. Does each sub-task's output feed cleanly into the next? Or are there gaps, contradictions, or mismatched assumptions?
-2. Are tool calls building toward the goal, or are they repetitive (re-reading the same file, re-running the same search)?
-3. Is the overall direction still aligned with the user's request? Or has incremental drift accumulated into significant misalignment?
-4. Stress test: if one key assumption is wrong, how much of the work cascades? High cascade = fragile coordination. Low cascade = robust coordination
+1. 每子任務之輸出淨餵次者？抑有缺、矛、不合假？
+2. 工具呼構建目標，抑重複（重讀同檔、重搜同）？
+3. 總向仍合用戶請求？抑漸進漂積為顯偏？
+4. 壓力測：若一關鍵假誤，幾許工作連鎖？高連鎖＝脆協調。低連鎖＝韌協調
 
 ```
 Coherence Test:
@@ -213,31 +213,31 @@ Coherence Test:
 └────────────────────────────────────┴─────────────────────────────────┘
 ```
 
-**Expected:** A concrete assessment of overall coherence with specific issues identified. Coherent coordination should feel like parts clicking together; incoherent coordination feels like forcing puzzle pieces.
+**預期：** 總連貫之具體評附具體問題。連貫之協調應覺如部件咬合；不連貫之協調覺如強推拼圖。
 
-**On failure:** If coherence is poor, identify the specific point where sub-tasks diverge. Often it is a single stale assumption or an unprocessed user correction that propagated through downstream work. Fix the point of divergence, then re-verify downstream outputs.
+**失敗時：** 若連貫差，辨子任務分歧之具體點。常為單一陳舊假或未處用戶糾正傳至下游。修分歧點後重驗下游輸出。
 
-## Validation
+## 驗證
 
-- [ ] Coordination problem was classified by type
-- [ ] Information decay rates were considered for facts relied upon
-- [ ] Local protocols were applied (especially Safety and Deposit)
-- [ ] Freshness audit identified stale information (or confirmed freshness with evidence)
-- [ ] Emergent coherence was tested across sub-tasks
-- [ ] Inhibition signals were respected (tried-and-failed approaches not repeated)
+- [ ] 協調問題已按類分
+- [ ] 所賴事實之資訊衰減率已慮
+- [ ] 局部協議已施（尤 Safety 與 Deposit）
+- [ ] 新鮮稽核已辨陳舊資訊（或以證確新鮮）
+- [ ] 湧連貫已跨子任務測
+- [ ] 抑制信號已守（試敗之法不重）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Over-engineering signals**: Complex coordination protocols slow work more than they help. Start with Safety + Deposit; add others only when problems emerge
-- **Trusting stale context**: The most common coordination failure is relying on information that was true 20 messages ago but has since been updated or invalidated. When in doubt, re-read
-- **Ignoring inhibition signals**: Retrying a failed approach without changing anything is not persistence — it is ignoring the failure signal. Something must be different for a retry to succeed
-- **No deposits**: Completing sub-tasks without noting their outputs forces later sub-tasks to re-derive or re-read. Brief summaries save significant re-work
-- **Assuming coherence**: Not testing whether sub-tasks actually combine into a coherent whole. Each sub-task can be correct independently but incoherent collectively — the integration is where coordination fails
+- **過工程化信號**：複雜協調協議緩工甚於助。始 Safety + Deposit；唯於問題現時加他
+- **信陳舊脈絡**：最常見之協調敗乃賴 20 訊前為真而後已更或廢之資訊。疑則重讀
+- **忽抑制信號**：無改而重試敗法非堅——乃忽敗信號。重試欲成，必有異
+- **無存置**：完子任務而不記其輸出迫後子任務重推或重讀。簡摘省大量重工
+- **假連貫**：未測子任務合為連貫整。各子任務可獨立正確而集合不連貫——協調於整合處敗
 
-## Related Skills
+## 相關技能
 
-- `coordinate-swarm` — the multi-agent coordination model that this skill adapts to single-agent reasoning
-- `forage-solutions` — coordinates exploration across multiple hypotheses
-- `build-coherence` — coordinates evaluation across competing approaches
-- `heal` — deeper assessment when coordination failures reveal subsystem drift
-- `awareness` — monitors for coordination breakdown signals during execution
+- `coordinate-swarm` — 此技能所適之多代理協調模型
+- `forage-solutions` — 跨多假之探索協調
+- `build-coherence` — 跨競爭法之評估協調
+- `heal` — 協調敗揭子系統漂時之深評估
+- `awareness` — 執行中協調崩之信號監

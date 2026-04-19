@@ -25,163 +25,163 @@ metadata:
   tags: loop, wakeup, cache, scheduling, delay, general
 ---
 
-# Choose Loop Wakeup Interval
+# 擇循環醒寐之時
 
-Pick a `delaySeconds` value for `ScheduleWakeup` that respects the prompt cache's 5-minute TTL, the scheduler's whole-minute granularity, and the `[60, 3600]` runtime clamp. The decision is structurally non-trivial: the common instinct "wait about 5 minutes" lands in the worst-of-both zone — pay the cache miss without amortizing the wait.
+擇 `delaySeconds` 之值於 `ScheduleWakeup`，合乎緩存五分之壽、調度整分之粒、`[60, 3600]` 之限。其擇非淺：常人之念「約五分」，正陷兩失之地——既失緩存，又不攤長待。
 
-The reasoning travels with the `ScheduleWakeup` tool description at tool-call time, but by then the loop is already being scheduled. This skill hoists that reasoning to planning time, where it belongs.
+其理本隨 `ScheduleWakeup` 之具述而至呼時，然其時循環已定。此技將其理提於謀時，正其所宜也。
 
-## When to Use
+## 用時
 
-- Designing an autonomous `/loop` or `ScheduleWakeup`-driven continuation and picking the per-tick delay
-- Planning a heartbeat cadence for a long-running agent that will poll, watch, or iterate
-- Tuning polling cadence against cost or cache-warmth pressure
-- Post-hoc reviewing loop costs and discovering the interval was mis-sized
-- Writing a guide, runbook, or worked example that involves picking `delaySeconds`
+- 設自主 `/loop` 或 `ScheduleWakeup` 驅續，擇每刻之遲
+- 為長行之使者謀心跳之律，將察、將觀、將迭
+- 調輪詢之律以應本或緩存之壓
+- 事後察循環之本，而覺時距失宜
+- 書引、書行冊、書有 `delaySeconds` 之例
 
-## Inputs
+## 入
 
-- **Required**: What the loop is waiting for (a specific event, a state transition, an idle tick, a periodic check)
-- **Required**: Whether the reader of this tick will need fresh context (cache-warm) or can tolerate a cold re-read (cache-miss acceptable)
-- **Optional**: Any known lower bound on when the awaited event could possibly occur (e.g. "the build takes at least 4 minutes")
-- **Optional**: A cost ceiling on the total loop (number of ticks × per-tick cost)
+- **必**：循環所待者何（某事、某態之變、閒刻、週察）
+- **必**：此刻讀者需新脈絡乎（緩存溫）抑或可忍冷讀（緩存失可受）
+- **可選**：所待事之最早可發之下界（如「建至少四分」）
+- **可選**：循環總本之上限（刻數 × 每刻之本）
 
-## Procedure
+## 法
 
-### Step 1: Classify the Wait
+### 第一步：分待之類
 
-Decide which tier the wait belongs to:
+定此待屬何階：
 
-- **Active watch (cache-warm)**: something is expected to change within the next 5 minutes — a build nearing completion, a state transition being polled, a process that was just kicked off
-- **Cache-miss wait**: nothing worth checking sooner than 5 minutes from now; the context cache will go cold and that is acceptable
-- **Idle**: no specific signal to watch; the loop is checking in because it might find something, not because it will
+- **主察（緩存溫）**：五分內有變可期——建將成、態將遷、程方啟
+- **緩存失之待**：五分內無值察之事；脈絡緩存將冷而可受
+- **閒**：無特定之兆可察；循環來察，蓋或有所得，非必有所得
 
-**Expected:** A clear classification: active-watch, cache-miss, or idle.
+**得：** 分明之類：主察、緩存失、或閒。
 
-**On failure:** If the wait cannot be classified — if there is no honest answer to "what am I waiting for?" — the loop probably should not exist. Skip to Step 5 and consider not scheduling a wakeup at all.
+**敗則：** 若待不可分——若無誠答於「吾何所待」——此循環或本不宜存。跳至第五步，慎思不設醒寐。
 
-### Step 2: Apply the Three-Tier Decision
+### 第二步：施三階之擇
 
-Pick a `delaySeconds` based on the classification:
+依所分擇 `delaySeconds`：
 
-| Tier | Range | Cache behaviour | Use when |
+| 階 | 範 | 緩存之行 | 用於 |
 |---|---|---|---|
-| Cache-warm | **60 – 270 s** | Cache stays warm (under 5-minute TTL) | Active watch — the next tick needs fast, cheap re-entry |
-| Cache-miss | **1200 – 3600 s** | Cache goes cold; one miss buys a long wait | Genuinely idle, or the awaited event cannot happen sooner |
-| Idle default | **1200 – 1800 s** (20–30 min) | Cache goes cold | No specific signal; periodic check with user able to interrupt |
+| 緩存溫 | **60 – 270 秒** | 緩存溫存（未及五分之壽） | 主察——下刻需速且廉之再入 |
+| 緩存失 | **1200 – 3600 秒** | 緩存冷；一失換久待 | 真閒、或所待事不可早發 |
+| 閒之常 | **1200 – 1800 秒**（二十至三十分） | 緩存冷 | 無特兆；週察而用者可中斷 |
 
-**Do not pick 300 s.** It is the worst-of-both interval: the cache misses, but the wait is too short to amortize the miss. If you find yourself reaching for "about 5 minutes," drop to 270 s (stay warm) or commit to 1200 s+ (amortize the miss).
+**勿擇 300 秒。** 此兩失之距：緩存已失，而待太短不足攤其失。若念「約五分」，降至 270 秒（保溫）或定 1200 秒以上（攤其失）。
 
-**Expected:** A specific `delaySeconds` value chosen from one of the three tiers, not a round-number-minute value picked out of habit.
+**得：** 自三階中擇定一 `delaySeconds`，非習擇之整分之數。
 
-**On failure:** If the choice keeps landing on 300 s, the underlying question is usually "should this loop exist at this cadence at all?" — re-examine Step 1.
+**敗則：** 若擇屢落 300 秒，根本之問常為「此循環當以此律存乎」——重察第一步。
 
-### Step 3: Size for the Minute Boundary
+### 第三步：量於分界
 
-The scheduler fires on whole-minute boundaries. A `delaySeconds` of `N` produces an actual delay of `N` to `N + 60` s, depending on what second of the minute you call the tool.
+調度者發於整分之界。`delaySeconds` 為 `N` 者，實遲為 `N` 至 `N + 60` 秒，視呼時於分中何秒而定。
 
-Worked example:
+例：
 
-> Calling `ScheduleWakeup({delaySeconds: 90})` at `HH:MM:40` produces a target of `HH:(MM+2):00` — i.e. an actual wait of 140 s, not 90 s.
+> 於 `HH:MM:40` 呼 `ScheduleWakeup({delaySeconds: 90})`，則目標為 `HH:(MM+2):00`——即實待 140 秒，非 90 秒。
 
-Consequence: sub-minute intent is meaningless. Treat the value you pass as a **floor**, not a precise schedule. If a minute of skew matters, your loop cadence is too tight for this mechanism.
+故：秒下之意無義。所傳之值視為**下限**，非精確之期。若一分之差緊要，則循環之律過密，不宜用此機。
 
-**Expected:** You have accepted that the actual wait will be up to 60 s longer than the requested `delaySeconds`. For cache-warm ticks this matters — 270 s can become ~330 s in practice, tipping into cache-miss territory.
+**得：** 已受實待可長於 `delaySeconds` 達 60 秒。於緩存溫之刻此要緊——270 秒實可成約 330 秒，入緩存失之境。
 
-**On failure:** If near-the-ceiling values (e.g. 265 s when targeting cache-warmth) are common, pad downward — use 240 s instead of 270 s to preserve the cache-warm guarantee even under worst-case minute-boundary skew.
+**敗則：** 若近上限之值（如求溫之 265 秒）常見，則降之——用 240 秒替 270 秒，以保溫之諾於最壞之分界偏移下。
 
-### Step 4: Respect the Clamp
+### 第四步：敬其限
 
-The runtime clamps `delaySeconds` to `[60, 3600]` — values outside that range are silently adjusted. Telemetry distinguishes what the model asked for (`chosen_delay_seconds`) from what actually scheduled (`clamped_delay_seconds`) and sets `was_clamped: true` on any mismatch.
+行時以 `delaySeconds` 限於 `[60, 3600]`——逾者默調。遙測分所求（`chosen_delay_seconds`）與實定（`clamped_delay_seconds`），不合則設 `was_clamped: true`。
 
-Plan against the clamped value, not the requested one:
+謀以限後之值，非所求之值：
 
-- Request below 60 → actual wait is 60 s plus minute-boundary skew (up to 120 s in practice)
-- Request above 3600 → actual wait is 3600 s (1 hour)
-- No runtime extends the ceiling; multi-hour waits require multiple ticks
+- 求低於 60 → 實待 60 秒加分界偏移（實可達 120 秒）
+- 求高於 3600 → 實待 3600 秒（一時）
+- 無運行延其上；數時之待需多刻
 
-**Expected:** Your chosen value falls inside `[60, 3600]`, or you have deliberately accepted the clamped behaviour.
+**得：** 所擇之值落於 `[60, 3600]` 內，或有意受限後之行。
 
-**On failure:** If the need is genuinely multi-hour (e.g. "wake me in 4 hours"), chain wakeups — schedule a 3600 s tick that itself reschedules — or use a cron-based loop (`CronCreate` with `kind: "loop"`) instead.
+**敗則：** 若真需數時（如「四時後喚吾」），鏈醒寐——設 3600 秒之刻而自再定——或以 cron 為循環（`CronCreate` 附 `kind: "loop"`）代之。
 
-### Step 5: Write a Specific `reason`
+### 第五步：書具體之 `reason`
 
-The `reason` field is telemetry, user-visible status, and prompt-cache warmth reasoning in one line. It is truncated to 200 chars. Make it specific.
+`reason` 者，遙測、用者可見之狀、緩存溫之理合一也。截於 200 字。宜具體。
 
-- Good: `checking long bun build`, `polling for EC2 instance running-state`, `idle heartbeat — watching the feed`
-- Bad: `waiting`, `loop`, `next tick`, `continuing`
+- 善：`checking long bun build`、`polling for EC2 instance running-state`、`idle heartbeat — watching the feed`
+- 惡：`waiting`、`loop`、`next tick`、`continuing`
 
-The reader of this field is a user trying to understand what the loop is doing without having to predict your cadence in advance. Write for them.
+此欄之讀者乃用者，欲解循環所為而不必預知其律。為其書也。
 
-**Expected:** A concrete, one-phrase reason that would make sense to a user glancing at status.
+**得：** 一具體之語，使用者一瞥狀態而解之。
 
-**On failure:** If no specific reason can be given, revisit whether the loop should exist (Step 1 and Step 6).
+**敗則：** 若無具體之由可述，重思循環是否當存（第一步與第六步）。
 
-### Step 6: Recognize the Don't-Loop Case
+### 第六步：識勿循環之境
 
-Not every "come back later" impulse warrants a scheduled wakeup. Do NOT schedule a tick when:
+非每「後來」之念皆宜設醒寐。不可設刻於：
 
-- The user is actively watching — their input is the right trigger, not a timer
-- There is no convergence criterion — the loop has no definition of "done"
-- The task is interactive (asks the user questions between ticks)
-- The cadence needed is shorter than the clamp floor (60 s) — polling that tight belongs to an event-driven mechanism, not a loop
+- 用者主察——其入為正觸，非計時
+- 無收斂之準——循環無「畢」之義
+- 任務互動（於刻間問用者）
+- 所需之律短於限之底（60 秒）——此密之輪詢屬事驅之機，非循環
 
-**Expected:** A conscious choice between scheduling a wakeup and not looping at all. "Because I could" is not a reason to loop.
+**得：** 明擇設醒寐或不循環。「因可」非循環之由。
 
-**On failure:** If you keep scheduling wakeups that the user interrupts before they fire, the pattern is wrong — not the interval.
+**敗則：** 若所設醒寐屢為用者於發前中斷，則式誤，非時誤也。
 
-## Validation
+## 驗
 
-- [ ] The wait was classified as active-watch, cache-miss, or idle (one of three)
-- [ ] The chosen `delaySeconds` falls in one of the three tier ranges (60–270, 1200–3600, or 1200–1800 for idle)
-- [ ] The value is not 300 (worst-of-both)
-- [ ] The value is inside `[60, 3600]` or the clamped behaviour is explicitly accepted
-- [ ] Minute-boundary skew has been accounted for (treat the value as a floor)
-- [ ] `reason` is concrete and under 200 chars
-- [ ] The don't-loop check was performed — the wakeup is actually warranted
+- [ ] 待已分為主察、緩存失、或閒（三擇其一）
+- [ ] 所擇 `delaySeconds` 落於三階之一（60–270、1200–3600、或閒之 1200–1800）
+- [ ] 非 300（兩失之距）
+- [ ] 於 `[60, 3600]` 內，或明受限後之行
+- [ ] 分界偏移已計（所值視為下限）
+- [ ] `reason` 具體且不及 200 字
+- [ ] 勿循環之察已行——醒寐確當
 
-## Common Pitfalls
+## 陷
 
-- **Round-minute default (300 s)**: The single most common mistake. "About 5 minutes" feels natural and is exactly wrong. Drop to 270 s or commit to 1200 s+.
-- **Ignoring minute-boundary skew**: Requesting 60 s near the end of a minute can produce ~120 s of actual delay. For cache-warm ticks, this can push the tick past the 5-minute TTL unexpectedly.
-- **Chasing sub-minute precision**: The scheduler has minute granularity. Asking for 85 s vs. 90 s vs. 95 s is noise — pick a value and move on.
-- **Opaque `reason` fields**: `"waiting"` tells the user nothing and makes telemetry less useful. Write the reason as if the user will read it on a status line.
-- **Using this skill to justify an unnecessary loop**: If the honest answer to "what am I watching for?" is vague, no interval choice will help — the loop should not exist.
-- **Hand-clamping in the prompt**: Do not clamp in the model's reasoning ("I'll cap at 3600 to be safe"). The runtime clamps. Let it.
-- **Forgetting the 7-day age-out**: A dynamic loop is reaped after 7 days by default (user-configurable up to 30 days). Long-running loops should be designed to end well before that ceiling, not to race against it.
+- **整分之常（300 秒）**：最常之誤。「約五分」似然而正誤。降至 270 秒或定 1200 秒以上。
+- **忽分界之偏**：於分末求 60 秒可生約 120 秒之實遲。於緩存溫之刻，此可推越五分之壽。
+- **追秒下之精**：調度者粒為分。求 85 秒、90 秒、95 秒皆噪——擇一而行。
+- **`reason` 欄晦**：`"waiting"` 於用者無益而減遙測之用。書其由如用者將讀於狀態線。
+- **用此技以證冗循環**：若「吾何所察」誠答含糊，無時距可救——循環本不宜存。
+- **於提示中手限**：勿於推理中限（「吾將限於 3600 以安」）。行時自限，任其自為。
+- **忘七日之老**：動循環默七日後收（用者可調至三十日）。長行之循環宜設其盡遠於上限，非與之競。
 
-## Examples
+## 例
 
-### Example 1 — Cache-warm active watch
+### 例一——緩存溫之主察
 
-A `bun build` was kicked off; the agent wants to check in quickly so the cache is still warm when results arrive.
+`bun build` 方啟；使者欲速察使緩存尚溫於果至時。
 
-- Classification: active watch (Step 1)
-- Tier: cache-warm (Step 2), pick **240 s**
-- Minute boundary (Step 3): worst-case actual wait ~300 s — still under the 5-minute TTL with the 60 s buffer
-- Reason (Step 5): `checking long bun build`
+- 分（第一步）：主察
+- 階（第二步）：緩存溫，擇 **240 秒**
+- 分界（第三步）：最壞實待約 300 秒——仍於五分之壽內含 60 秒餘
+- 由（第五步）：`checking long bun build`
 
-### Example 2 — Idle heartbeat
+### 例二——閒之心跳
 
-An autonomous agent watches a low-volume feed once an hour for anything worth acting on.
+自主使者一時察低量之饋一次，尋值行之事。
 
-- Classification: idle (Step 1)
-- Tier: idle default (Step 2), pick **1800 s** (30 min)
-- Minute boundary (Step 3): irrelevant — 60 s of skew is negligible at this cadence
-- Reason (Step 5): `idle heartbeat — watching the feed`
+- 分（第一步）：閒
+- 階（第二步）：閒之常，擇 **1800 秒**（三十分）
+- 分界（第三步）：無關——此律下 60 秒之偏微不足道
+- 由（第五步）：`idle heartbeat — watching the feed`
 
-### Example 3 — The anti-pattern
+### 例三——反式
 
-An agent wants to "wait 5 minutes" while a remote API retries. The request is 300 s.
+使者欲「待五分」於遠端 API 再試之時。所求 300 秒。
 
-- Problem: the cache goes cold at 5 minutes, so 300 s pays the miss — but 300 s is too short to amortize the miss
-- Fix: either drop to 270 s (stay warm) or commit to 1500 s (amortize the miss). Do not pick 300.
+- 問：緩存於五分冷，故 300 秒已失——而 300 秒太短不足攤其失
+- 補：或降至 270 秒（保溫）或定 1500 秒（攤其失）。勿擇 300。
 
-## Related Skills
+## 參
 
-- `manage-token-budget` — cost ceilings for long-lived agent loops; cache-aware sizing is one lever
-- `du-dum` — observe/act separation pattern; this skill sizes the observe-clock interval when the loop is cron-less
-- `read-continue-here` — cross-session handoff; this skill covers within-session wakeups
-- `write-continue-here` — the complement of `read-continue-here`
+- `manage-token-budget` — 長存使者循環之本限；緩存之量其一桿也
+- `du-dum` — 察行分離之式；此技量察鍾之距於循環無 cron 時
+- `read-continue-here` — 跨會話之交接；此技涵會話內之醒寐
+- `write-continue-here` — `read-continue-here` 之補
 
 <!-- Keep under 500 lines. Current: ~200 lines. -->

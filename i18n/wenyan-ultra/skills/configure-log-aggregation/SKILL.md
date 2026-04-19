@@ -23,52 +23,51 @@ metadata:
   tags: loki, promtail, logging, elk, log-aggregation
 ---
 
-# Configure Log Aggregation
+# 配日聚
 
-Implement centralized log collection, parsing, and querying with Loki/Promtail or ELK stack for operational visibility.
+以 Loki/Promtail 或 ELK 施中集日收、析、查以運可見。
 
-## When to Use
+## 用
 
-- Consolidating logs from multiple services or hosts into a searchable system
-- Replacing local log files with centralized, queryable log storage
-- Correlating logs with metrics and traces for full observability
-- Implementing structured logging with label extraction from unstructured logs
-- Setting retention policies for log data based on storage and compliance needs
-- Troubleshooting production incidents requiring log analysis across services
+- 合多服/主日於可查系
+- 替本地日檔為集中可查存
+- 日與度跡關聯以全可觀
+- 結構日含標抽以析
+- 依存與合規設日留策
+- 產事查須跨服日析
 
-## Inputs
+## 入
 
-- **Required**: Log sources (application logs, system logs, container logs)
-- **Required**: Log format patterns (JSON, plaintext, syslog, etc.)
-- **Optional**: Label extraction rules for structured querying
-- **Optional**: Retention and compression policies
-- **Optional**: Existing log shipper configuration (Fluentd, Filebeat, Promtail)
+- **必**：日源（應用日、系日、容器日）
+- **必**：日格（JSON、素、syslog 等）
+- **可**：標抽規以結構查
+- **可**：留與壓策
+- **可**：現日輸配（Fluentd、Filebeat、Promtail）
 
-## Procedure
+## 行
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 見 [Extended Examples](references/EXAMPLES.md) 以全配與模。
 
+### 一：擇日聚堆
 
-### Step 1: Choose Log Aggregation Stack
+於 Loki（Prometheus 式）與 ELK（Elasticsearch 基）間擇。
 
-Select between Loki (Prometheus-style) or ELK (Elasticsearch-based) based on requirements.
+**Loki 利**：
+- 輕，為 K8s 與雲原生設
+- 標索引（如 Prometheus）減存負
+- Grafana 原生整
+- 水平擴以物存（S3、GCS）
+- 資耗較 Elasticsearch 少
 
-**Loki advantages**:
-- Lightweight, designed for Kubernetes and cloud-native environments
-- Label-based indexing (like Prometheus) for low storage overhead
-- Native integration with Grafana for unified dashboards
-- Horizontal scalability with object storage (S3, GCS)
-- Lower resource consumption compared to Elasticsearch
+**ELK 利**：
+- 諸日全文搜（非只標）
+- 富查 DSL 與聚
+- 成熟生態含 beats、logstash plugin
+- 合規/審計需深史搜為宜
 
-**ELK advantages**:
-- Full-text search across all log content (not just labels)
-- Rich query DSL and aggregations
-- Mature ecosystem with beats, logstash plugins
-- Better for compliance/audit logs requiring deep historical search
+此導焦 **Loki + Promtail**（新設多宜）。
 
-For this guide, we'll focus on **Loki + Promtail** (recommended for most modern setups).
-
-Decision criteria:
+決準：
 ```markdown
 Use Loki if:
 - You want label-based queries similar to Prometheus
@@ -83,18 +82,18 @@ Use ELK if:
 - Legacy systems with existing Logstash pipelines
 ```
 
-**Expected:** Clear choice made based on requirements, team downloads appropriate installation artifacts.
+**得：** 依求明擇，組下宜之裝構件。
 
-**On failure:**
-- Benchmark storage requirements: Loki ~10x less than Elasticsearch for same logs
-- Evaluate query patterns: full-text search needs vs label filtering
-- Consider operational overhead: ELK requires more tuning and resources
+**敗：**
+- 基準存求：Loki 較 Elasticsearch ~10x 少
+- 評查模：全文搜 vs 標濾
+- 察運負：ELK 須多調與資
 
-### Step 2: Deploy Loki
+### 二：部 Loki
 
-Install and configure Loki with appropriate storage backend.
+裝且配 Loki 含宜存後。
 
-**Docker Compose deployment** (`docker-compose.yml`):
+**Docker Compose 部**（`docker-compose.yml`）：
 
 ```yaml
 version: '3.8'
@@ -125,7 +124,7 @@ volumes:
   loki-data:
 ```
 
-**Loki configuration** (`loki-config.yml`):
+**Loki 配**（`loki-config.yml`）：
 
 ```yaml
 auth_enabled: false
@@ -137,7 +136,7 @@ server:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-For **production** with S3 storage:
+**生產** 含 S3 存：
 
 ```yaml
 storage_config:
@@ -150,20 +149,20 @@ storage_config:
     shared_store: s3
 ```
 
-**Expected:** Loki starts successfully, health check passes at `http://localhost:3100/ready`, logs stored according to retention policy.
+**得：** Loki 成啟，健察過於 `http://localhost:3100/ready`，日按留策存。
 
-**On failure:**
-- Check Loki logs: `docker logs loki`
-- Verify storage directories exist and are writable
-- Test config syntax: `docker run grafana/loki:2.9.0 -config.file=/etc/loki/local-config.yaml -verify-config`
-- Ensure retention settings don't exceed disk capacity
-- For S3: verify IAM permissions and bucket access
+**敗：**
+- 察 Loki 日：`docker logs loki`
+- 驗存目錄在且可寫
+- 測配語：`docker run grafana/loki:2.9.0 -config.file=/etc/loki/local-config.yaml -verify-config`
+- 確留設不超盤量
+- S3：驗 IAM 權與桶存取
 
-### Step 3: Configure Promtail for Log Shipping
+### 三：配 Promtail 以輸日
 
-Set up Promtail to scrape logs and forward to Loki with label extraction.
+設 Promtail 以刮日且附標抽前轉至 Loki。
 
-**Promtail configuration** (`promtail-config.yml`):
+**Promtail 配**（`promtail-config.yml`）：
 
 ```yaml
 server:
@@ -175,26 +174,26 @@ positions:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Key Promtail concepts:
-- **Scrape configs**: Define log sources and how to discover them
-- **Pipeline stages**: Transform and label logs before sending to Loki
-- **Relabel configs**: Dynamic labeling based on metadata
-- **Positions file**: Tracks read offsets to avoid re-processing logs
+Promtail 要念：
+- **Scrape configs**：定日源與如何發現
+- **Pipeline stages**：發前變與標日
+- **Relabel configs**：依元動標
+- **Positions file**：追讀偏以避重處
 
-**Expected:** Promtail scrapes configured log files, labels applied correctly, logs visible in Loki via LogQL queries.
+**得：** Promtail 刮已配日檔，標正施，日經 LogQL 於 Loki 可見。
 
-**On failure:**
-- Check Promtail logs: `docker logs promtail`
-- Verify file paths are accessible: `docker exec promtail ls /var/log`
-- Test regex patterns independently with sample log lines
-- Monitor Promtail metrics: `curl http://localhost:9080/metrics | grep promtail`
-- Check positions file for progress: `cat /tmp/positions.yaml`
+**敗：**
+- 察 Promtail 日：`docker logs promtail`
+- 驗檔路可達：`docker exec promtail ls /var/log`
+- 以樣日獨測正則
+- 察 Promtail 度：`curl http://localhost:9080/metrics | grep promtail`
+- 察 positions 檔進：`cat /tmp/positions.yaml`
 
-### Step 4: Query Logs with LogQL
+### 四：以 LogQL 查日
 
-Learn LogQL syntax for filtering and aggregating logs.
+學 LogQL 語以濾與聚日。
 
-**Basic queries**:
+**基查**：
 
 ```logql
 # All logs from a job
@@ -214,7 +213,7 @@ Learn LogQL syntax for filtering and aggregating logs.
 {job="app"} != "debug" # Doesn't contain "debug"
 ```
 
-**Parsing and filtering**:
+**析與濾**：
 
 ```logql
 # JSON parsing
@@ -230,7 +229,7 @@ Learn LogQL syntax for filtering and aggregating logs.
 {job="nginx"} | pattern `<ip> - <user> [<timestamp>] "<method> <path> <protocol>" <status> <size>` | status >= 500
 ```
 
-**Aggregations** (metrics from logs):
+**聚**（從日生度）：
 
 ```logql
 # Count log lines per level
@@ -249,7 +248,7 @@ avg_over_time({job="app"} | json | unwrap duration [5m])
 topk(10, sum by (message) (count_over_time({level="error"} [1h])))
 ```
 
-**Filtering by extracted fields**:
+**依抽欄濾**：
 
 ```logql
 # Find specific trace in logs
@@ -262,22 +261,22 @@ topk(10, sum by (message) (count_over_time({level="error"} [1h])))
 {job="app"} | json | message=~"authentication failed" | user_id != ""
 ```
 
-Create Grafana explore queries or dashboard panels using these patterns.
+以此模建 Grafana explore 查或板。
 
-**Expected:** Queries return expected log lines, filtering works correctly, aggregations produce metrics from logs.
+**得：** 查返預期日，濾正行，聚從日生度。
 
-**On failure:**
-- Use Grafana Explore to debug queries interactively
-- Check label names: `curl http://localhost:3100/loki/api/v1/labels`
-- Verify label values: `curl http://localhost:3100/loki/api/v1/label/{label_name}/values`
-- Simplify query: start with basic label selector, add filters incrementally
-- Check time range: logs might not exist in selected window
+**敗：**
+- 用 Grafana Explore 互式調查
+- 察標名：`curl http://localhost:3100/loki/api/v1/labels`
+- 驗標值：`curl http://localhost:3100/loki/api/v1/label/{label_name}/values`
+- 簡查：起於基標選，漸加濾
+- 察時範：日或不在所選窗
 
-### Step 5: Integrate Logs with Metrics and Traces
+### 五：整日於度與跡
 
-Correlate logs with Prometheus metrics and distributed traces for unified observability.
+以 Prometheus 度與分散跡關聯日為統一可觀。
 
-**Add trace IDs to logs** (application instrumentation):
+**於日加 trace ID**（應用埋點）：
 
 ```python
 # Python with OpenTelemetry
@@ -313,9 +312,9 @@ func handleRequest(ctx context.Context) {
 }
 ```
 
-**Configure Grafana data links** from metrics to logs:
+**配 Grafana 數據鏈** 從度至日：
 
-In Prometheus panel field config:
+於 Prometheus 板欄配：
 
 ```json
 {
@@ -333,9 +332,9 @@ In Prometheus panel field config:
 }
 ```
 
-**Configure Grafana data links** from logs to traces:
+**配 Grafana 數據鏈** 從日至跡：
 
-In Loki datasource config:
+於 Loki datasource 配：
 
 ```yaml
 datasources:
@@ -350,28 +349,28 @@ datasources:
           url: "$${__value.raw}"
 ```
 
-**Correlate logs in Grafana Explore**:
-1. Query metrics in Prometheus
-2. Click on data point
-3. Select "View Logs" from context menu
-4. Loki query auto-populated with relevant labels and time range
-5. Click trace ID in logs
-6. Tempo trace view opens with full distributed trace
+**於 Grafana Explore 關聯日**：
+1. 於 Prometheus 查度
+2. 點數據
+3. 於脈菜擇「View Logs」
+4. Loki 查自填關標與時範
+5. 於日點 trace ID
+6. Tempo 跡視開示全分散跡
 
-**Expected:** Clicking metrics opens related logs, trace IDs in logs link to trace viewer, single pane for metrics/logs/traces navigation.
+**得：** 點度開相關日，日中 trace ID 鏈至跡視，單窗察度/日/跡。
 
-**On failure:**
-- Verify trace ID format matches regex in derived fields
-- Check that trace_id label extracted by Promtail pipeline
-- Ensure Tempo datasource configured in Grafana
-- Test URL encoding for complex filter expressions
-- Validate data link URLs in incognito/private browser window
+**敗：**
+- 驗 trace ID 格匹 derivedFields 正則
+- 察 trace_id 標為 Promtail pipeline 抽
+- 確 Tempo datasource 已於 Grafana 配
+- 測複濾式之 URL 編碼
+- 於匿名/私瀏窗驗數據鏈 URL
 
-### Step 6: Set Up Log Retention and Compaction
+### 六：設日留與壓
 
-Configure retention policies and compaction to manage storage costs.
+配留策與壓以管存費。
 
-**Retention by stream** (in Loki config):
+**依流留**（於 Loki 配）：
 
 ```yaml
 limits_config:
@@ -390,7 +389,7 @@ overrides:
     retention_period: 168h   # 7 days for dev
 ```
 
-**Retention by stream labels** (requires compactor):
+**依流標留**（須 compactor）：
 
 ```yaml
 compactor:
@@ -402,9 +401,9 @@ compactor:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Priority determines which rule applies when multiple match (lower number = higher priority).
+優先決多規匹時何規施（小數＝高優）。
 
-**Compression settings**:
+**壓設**：
 
 ```yaml
 chunk_store_config:
@@ -416,7 +415,7 @@ chunk_store_config:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Monitor retention**:
+**監留**：
 
 ```bash
 # Check chunk stats
@@ -429,41 +428,41 @@ curl http://localhost:3100/metrics | grep loki_compactor
 curl http://localhost:3100/metrics | grep loki_boltdb_shipper_retention_deleted
 ```
 
-**Expected:** Old logs automatically deleted per retention policy, storage usage stabilizes, compaction reduces index size.
+**得：** 舊日按留策自刪，存用穩，壓減索尺。
 
-**On failure:**
-- Enable compactor in Loki config if retention not working
-- Check compactor logs: `docker logs loki | grep compactor`
-- Verify retention_enabled: true and retention_deletes_enabled: true
-- Monitor disk usage: `du -sh /loki/`
-- For S3: check bucket lifecycle policies don't conflict with Loki retention
+**敗：**
+- 留不行→於 Loki 配啟 compactor
+- 察 compactor 日：`docker logs loki | grep compactor`
+- 驗 retention_enabled: true 且 retention_deletes_enabled: true
+- 察盤用：`du -sh /loki/`
+- S3：察桶生命策不衝 Loki 留
 
-## Validation
+## 驗
 
-- [ ] Loki API health check returns 200: `curl http://localhost:3100/ready`
-- [ ] Promtail successfully scraping logs from all configured sources
-- [ ] Labels extracted correctly from log lines (visible in Grafana Explore)
-- [ ] LogQL queries return expected results with proper filtering
-- [ ] Log retention policy enforced (old logs deleted after retention period)
-- [ ] Logs accessible from Grafana dashboards and Explore view
-- [ ] Trace IDs from logs link to Tempo trace viewer
-- [ ] Metrics panels have data links to relevant logs
-- [ ] Compaction running and reducing storage overhead
-- [ ] Storage usage within allocated disk/S3 budget
+- [ ] Loki API 健察返 200：`curl http://localhost:3100/ready`
+- [ ] Promtail 成刮諸配日源
+- [ ] 標正抽於日行（於 Grafana Explore 可見）
+- [ ] LogQL 查返預期含適濾
+- [ ] 日留策執（舊日留期後刪）
+- [ ] 日於 Grafana 板與 Explore 可達
+- [ ] 日中 trace ID 鏈至 Tempo 跡視
+- [ ] 度板有至相關日之數據鏈
+- [ ] 壓行減存負
+- [ ] 存用於分配盤/S3 預算內
 
-## Common Pitfalls
+## 忌
 
-- **High cardinality labels**: Using unbounded label values (user IDs, request IDs) causes index explosion. Use fixed labels (level, service, env) and put variables in log lines.
-- **Missing log parsing**: Sending raw logs without label extraction limits query capabilities. Always parse structured logs (JSON, logfmt) or use regex for unstructured.
-- **Incorrect time parsing**: Mismatched timestamp formats cause logs to be out of order or rejected. Test timestamp parsing with sample logs.
-- **Retention not working**: Compactor must be enabled for retention to delete old data. Check `retention_enabled: true` and `retention_deletes_enabled: true`.
-- **Ingestion rate limits**: Default limits (10MB/s) may be too low for high-volume systems. Adjust `ingestion_rate_mb` and `ingestion_burst_size_mb`.
-- **Query timeouts**: Broad queries over long time ranges can timeout. Use more specific label selectors and shorter time windows.
-- **Log duplication**: Multiple Promtail instances scraping same logs create duplicates. Use unique labels or positions file coordination.
+- **高基數標**：無界標值（用戶 ID、求 ID）致索爆。用定標（level、service、env）變入日行。
+- **無日析**：發生日而無標抽限查。必析結構日（JSON、logfmt）或正則析無結構。
+- **時析誤**：時格不合致日序亂或拒。以樣日測時析。
+- **留不行**：compactor 須啟方刪舊。察 `retention_enabled: true` 與 `retention_deletes_enabled: true`。
+- **入率限**：默（10MB/s）或於高量低。調 `ingestion_rate_mb` 與 `ingestion_burst_size_mb`。
+- **查超時**：廣查於長期或超時。用具體標選與短時窗。
+- **日重**：多 Promtail 刮同日生重。用唯標或 positions 檔協調。
 
-## Related Skills
+## 參
 
-- `correlate-observability-signals` - Unified debugging across metrics, logs, and traces using trace IDs
-- `build-grafana-dashboards` - Visualize log-derived metrics and create log panels in dashboards
-- `setup-prometheus-monitoring` - Metrics provide context for when to query logs during incidents
-- `instrument-distributed-tracing` - Add trace IDs to logs for correlation with distributed traces
+- `correlate-observability-signals` - 經 trace ID 統合度、日、跡除錯
+- `build-grafana-dashboards` - 視日生度且建板之日面板
+- `setup-prometheus-monitoring` - 度供事中查日之脈
+- `instrument-distributed-tracing` - 於日加 trace ID 關聯分散跡

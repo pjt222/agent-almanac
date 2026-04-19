@@ -26,24 +26,24 @@ metadata:
 
 # Configure Nginx
 
-Set up Nginx as a web server and reverse proxy with SSL termination and security hardening.
+Set up Nginx as web server + reverse proxy w/ SSL termination + security hardening.
 
-## When to Use
+## Use When
 
-- Serving static files (HTML, CSS, JS) in production
+- Serving static files (HTML, CSS, JS) in prod
 - Reverse proxying to backend services (Node.js, Python, Go, R/Shiny)
-- Terminating SSL/TLS with Let's Encrypt certificates
-- Load balancing across multiple backend instances
-- Adding rate limiting and security headers
+- Terminating SSL/TLS w/ Let's Encrypt certs
+- Load balancing across multi backend instances
+- Adding rate limiting + security headers
 
-## Inputs
+## In
 
 - **Required**: Deployment target (Docker container or bare metal)
 - **Required**: Backend service(s) to proxy (host:port)
 - **Optional**: Domain name for SSL
-- **Optional**: Static file directory
+- **Optional**: Static file dir
 
-## Procedure
+## Do
 
 ### Step 1: Basic Reverse Proxy
 
@@ -89,7 +89,7 @@ services:
       - app
 ```
 
-**Expected:** Requests to port 80 are forwarded to the app service.
+**→** Reqs to port 80 forwarded to app service.
 
 ### Step 2: Static File Serving
 
@@ -115,9 +115,9 @@ server {
 }
 ```
 
-### Step 3: SSL/TLS with Let's Encrypt
+### Step 3: SSL/TLS w/ Let's Encrypt
 
-Using certbot with the webroot method:
+Using certbot w/ webroot method:
 
 ```nginx
 server {
@@ -154,7 +154,7 @@ server {
 }
 ```
 
-Docker Compose with certbot:
+Docker Compose w/ certbot:
 
 ```yaml
 services:
@@ -179,7 +179,7 @@ volumes:
   certbot-certs:
 ```
 
-Initial certificate:
+Initial cert:
 
 ```bash
 docker compose run --rm certbot certonly \
@@ -187,9 +187,9 @@ docker compose run --rm certbot certonly \
   -d example.com --email admin@example.com --agree-tos
 ```
 
-**Expected:** HTTPS works with valid Let's Encrypt certificate.
+**→** HTTPS works w/ valid Let's Encrypt cert.
 
-**On failure:** Check DNS points to the server. Verify port 80 is open for ACME challenges.
+**If err:** Check DNS points to server. Valid. port 80 open for ACME challenges.
 
 ### Step 4: Security Headers
 
@@ -262,28 +262,28 @@ docker compose exec nginx nginx -s reload
 curl -I https://example.com
 ```
 
-**Expected:** `nginx -t` reports syntax OK. Headers include security headers.
+**→** `nginx -t` reports syntax OK. Headers include security headers.
 
-## Validation
+## Check
 
-- [ ] `nginx -t` reports configuration is valid
+- [ ] `nginx -t` reports config valid
 - [ ] HTTP redirects to HTTPS (if SSL enabled)
-- [ ] Backend service is reachable through the proxy
-- [ ] Security headers present in response
-- [ ] Rate limiting triggers on excessive requests
-- [ ] SSL Labs test gives A+ rating (if public)
+- [ ] Backend service reachable through proxy
+- [ ] Security headers in res
+- [ ] Rate limiting triggers on excessive reqs
+- [ ] SSL Labs test → A+ rating (if public)
 
-## Common Pitfalls
+## Traps
 
-- **Missing `proxy_set_header Host`**: Backend receives wrong host header, breaking virtual hosts and redirects.
-- **`location` order matters**: Nginx uses the most specific match. Exact (`=`) > prefix (`^~`) > regex (`~`) > general prefix.
-- **SSL certificate renewal**: Set up a cron or timer to run `certbot renew` and reload Nginx.
-- **Large request bodies**: Default `client_max_body_size` is 1MB. Increase for file uploads: `client_max_body_size 50m;`.
-- **WebSocket proxying**: Requires additional headers. See `configure-reverse-proxy` for the pattern.
+- **Missing `proxy_set_header Host`**: Backend gets wrong host header → breaks virtual hosts + redirects.
+- **`location` order matters**: Nginx uses most specific match. Exact (`=`) > prefix (`^~`) > regex (`~`) > general prefix.
+- **SSL cert renewal**: Set up cron/timer → `certbot renew` + reload Nginx.
+- **Large req bodies**: Default `client_max_body_size` = 1MB. Increase for file uploads: `client_max_body_size 50m;`.
+- **WebSocket proxying**: Requires additional headers. See `configure-reverse-proxy` for pattern.
 
-## Related Skills
+## →
 
-- `configure-reverse-proxy` - multi-tool proxy patterns including WebSocket and Traefik
-- `setup-compose-stack` - compose stack that includes Nginx
+- `configure-reverse-proxy` - multi-tool proxy patterns inc WebSocket + Traefik
+- `setup-compose-stack` - compose stack inc Nginx
 - `deploy-searxng` - uses Nginx as frontend for SearXNG
-- `configure-ingress-networking` - Kubernetes ingress (NGINX Ingress Controller)
+- `configure-ingress-networking` - K8s ingress (NGINX Ingress Controller)

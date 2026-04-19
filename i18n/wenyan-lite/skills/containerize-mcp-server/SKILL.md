@@ -23,27 +23,27 @@ metadata:
   tags: docker, mcp, mcptools, claude, container
 ---
 
-# Containerize MCP Server
+# 容器化 MCP 伺服器
 
-Package an R MCP server into a Docker container for portable deployment.
+將 R MCP 伺服器包入 Docker 容器以便可攜部署。
 
-## When to Use
+## 適用時機
 
-- Deploying an R MCP server without requiring a local R installation
-- Creating a reproducible MCP server environment
-- Running MCP servers alongside other containerized services
-- Distributing an MCP server to other developers
+- 部署 R MCP 伺服器而無需本地 R 裝
+- 建可重現之 MCP 伺服器環境
+- 令 MCP 伺服器與他容器化服務並行
+- 分發 MCP 伺服器予他開發者
 
-## Inputs
+## 輸入
 
-- **Required**: R MCP server implementation (mcptools-based or custom)
-- **Required**: Docker installed and running
-- **Optional**: Additional R packages the server needs
-- **Optional**: Transport mode (stdio or HTTP)
+- **必要**：R MCP 伺服器實作（以 mcptools 或自訂）
+- **必要**：Docker 已裝且運行
+- **選擇性**：伺服器需之額外 R 包
+- **選擇性**：傳輸模式（stdio 或 HTTP）
 
-## Procedure
+## 步驟
 
-### Step 1: Create Dockerfile for MCP Server
+### 步驟一：建 MCP 伺服器之 Dockerfile
 
 ```dockerfile
 FROM rocker/r-ver:4.5.0
@@ -82,11 +82,11 @@ ENV RENV_PATHS_CACHE=/workspace/renv/cache
 CMD ["R", "-e", "mcptools::mcp_server()"]
 ```
 
-**Expected:** A `Dockerfile` exists in the project root with `rocker/r-ver` base image, system dependencies, mcptools installation, and the MCP server as the default command.
+**預期：** 項目根有 `Dockerfile` 含 `rocker/r-ver` 基底鏡、系統依賴、mcptools 之裝、MCP 伺服器為預命令。
 
-**On failure:** Verify the base image tag matches your R version. If `remotes::install_github` fails, check that `git` and `libgit2-dev` are in the system dependencies layer.
+**失敗時：** 驗基底鏡標合你之 R 版本。若 `remotes::install_github` 敗，查 `git` 與 `libgit2-dev` 於系統依賴層中。
 
-### Step 2: Create docker-compose.yml
+### 步驟二：建 docker-compose.yml
 
 ```yaml
 version: '3.8'
@@ -119,34 +119,34 @@ volumes:
     driver: local
 ```
 
-Using `network_mode: "host"` ensures the MCP server ports are accessible on localhost.
+用 `network_mode: "host"` 確 MCP 伺服器 port 於 localhost 可達。
 
-**Expected:** A `docker-compose.yml` file in the project root with the MCP server service, volume mounts for project files and renv cache, and `stdin_open`/`tty` enabled for stdio transport.
+**預期：** 項目根有 `docker-compose.yml` 含 MCP 伺服器服務、項目檔與 renv 快取之 volume 掛、為 stdio 傳輸而啟之 `stdin_open`/`tty`。
 
-**On failure:** If volume paths are invalid, adjust `/path/to/projects` to the actual project directory. On Windows/WSL, use `/mnt/c/...` or `/mnt/d/...` paths.
+**失敗時：** 若 volume 路徑無效，將 `/path/to/projects` 調為實項目目錄。Windows/WSL 用 `/mnt/c/...` 或 `/mnt/d/...` 路徑。
 
-### Step 3: Build and Start
+### 步驟三：建並啟
 
 ```bash
 docker compose build
 docker compose up -d
 ```
 
-**Expected:** Container starts with MCP server running.
+**預期：** 容器啟含 MCP 伺服器運行。
 
-**On failure:** Check logs with `docker compose logs mcp-server`. Common issues:
-- Missing R packages: Add to Dockerfile RUN install step
-- Port already in use: Change exposed port or stop conflicting service
+**失敗時：** 以 `docker compose logs mcp-server` 查日誌。常見：
+- 缺 R 包：加至 Dockerfile RUN install 步
+- Port 已用：換 port 或止衝突之服務
 
-### Step 4: Connect Claude Code to Container
+### 步驟四：將 Claude Code 連至容器
 
-For stdio transport (container must stay running with stdin):
+stdio 傳輸（容器須保運行含 stdin）：
 
 ```bash
 claude mcp add r-mcp-docker stdio "docker" "exec" "-i" "r-mcp-server" "R" "-e" "mcptools::mcp_server()"
 ```
 
-For HTTP transport (if the MCP server supports it):
+HTTP 傳輸（若 MCP 伺服器支）：
 
 ```json
 {
@@ -159,11 +159,11 @@ For HTTP transport (if the MCP server supports it):
 }
 ```
 
-**Expected:** Claude Code's MCP configuration includes the `r-mcp-docker` server entry, and `claude mcp list` shows the new server.
+**預期：** Claude Code 之 MCP 配置含 `r-mcp-docker` 伺服器項，`claude mcp list` 顯新伺服器。
 
-**On failure:** For stdio transport, ensure the container name matches (`r-mcp-server`) and that the container is running with `docker ps`. For HTTP transport, verify the port is exposed and reachable with `curl http://localhost:3000/mcp`.
+**失敗時：** stdio 則確容器名合（`r-mcp-server`）且容器以 `docker ps` 顯運行。HTTP 則驗 port 暴且以 `curl http://localhost:3000/mcp` 可達。
 
-### Step 5: Verify Connection
+### 步驟五：驗連接
 
 ```bash
 # Check container is running
@@ -176,49 +176,49 @@ docker exec -it r-mcp-server R -e "sessionInfo()"
 docker exec -it r-mcp-server R -e "library(mcptools)"
 ```
 
-**Expected:** `docker ps` shows the `r-mcp-server` container running, `sessionInfo()` returns the expected R version, and `library(mcptools)` loads without error.
+**預期：** `docker ps` 顯 `r-mcp-server` 容器運行，`sessionInfo()` 返預期 R 版本，`library(mcptools)` 無誤載入。
 
-**On failure:** If the container is not running, check `docker compose logs mcp-server` for startup errors. If mcptools fails to load, rebuild the image to ensure the package installed correctly.
+**失敗時：** 若容器不運，以 `docker compose logs mcp-server` 查啟動錯。若 mcptools 載失，重建鏡以確包正確裝。
 
-### Step 6: Add Custom MCP Tools
+### 步驟六：加自訂 MCP 工具
 
-To add project-specific MCP tools, mount your R scripts:
+加項目特定 MCP 工具，掛 R 腳本：
 
 ```yaml
 volumes:
   - ./mcp-tools:/mcp-tools
 ```
 
-And load them in the CMD:
+並於 CMD 中載：
 
 ```dockerfile
 CMD ["R", "-e", "source('/mcp-tools/custom_tools.R'); mcptools::mcp_server()"]
 ```
 
-**Expected:** Custom R scripts are accessible inside the container at `/mcp-tools/`, and the MCP server loads them on startup alongside the default tools.
+**預期：** 自訂 R 腳本於容器內 `/mcp-tools/` 可達，MCP 伺服器啟時連預設工具載之。
 
-**On failure:** Verify the volume mount path is correct with `docker exec -it r-mcp-server ls /mcp-tools/`. If scripts fail to source, check for missing package dependencies in the custom tools.
+**失敗時：** 以 `docker exec -it r-mcp-server ls /mcp-tools/` 驗 volume 掛路徑正確。若腳本 source 敗，查自訂工具中缺之包依賴。
 
-## Validation
+## 驗證
 
-- [ ] Container builds without errors
-- [ ] MCP server starts inside the container
-- [ ] Claude Code can connect to the containerized server
-- [ ] MCP tools respond correctly to requests
-- [ ] Container restarts cleanly
-- [ ] Volume mounts allow access to project files
+- [ ] 容器建而無誤
+- [ ] MCP 伺服器於容器內啟
+- [ ] Claude Code 可連至容器化伺服器
+- [ ] MCP 工具正確回應請求
+- [ ] 容器淨重啟
+- [ ] Volume 掛允存取項目檔
 
-## Common Pitfalls
+## 常見陷阱
 
-- **stdin/tty requirements**: MCP stdio transport requires `stdin_open: true` and `tty: true`
-- **Network isolation**: Default Docker networking may prevent localhost access. Use `network_mode: "host"` or expose specific ports.
-- **Package versions**: Pin mcptools to a specific commit for reproducibility
-- **Large image size**: mcptools + dependencies can be large. Consider multi-stage builds for production.
-- **Windows Docker paths**: When running Docker Desktop on Windows with WSL, path mapping differs
+- **stdin/tty 要**：MCP stdio 傳輸需 `stdin_open: true` 與 `tty: true`
+- **網路隔離**：預 Docker 網路或防 localhost 存取。用 `network_mode: "host"` 或暴指定 port
+- **包版本**：釘 mcptools 於特定提交以求可重現
+- **大鏡**：mcptools + 依賴可甚大。生產慮多階段建
+- **Windows Docker 路徑**：Windows + WSL 下行 Docker Desktop 時路徑映射異
 
-## Related Skills
+## 相關技能
 
-- `create-r-dockerfile` - base Dockerfile patterns for R
-- `setup-docker-compose` - compose configuration details
-- `configure-mcp-server` - MCP server configuration without Docker
-- `troubleshoot-mcp-connection` - debugging MCP connectivity issues
+- `create-r-dockerfile` - R 之基底 Dockerfile 模式
+- `setup-docker-compose` - compose 配置細節
+- `configure-mcp-server` - 無 Docker 之 MCP 伺服器配置
+- `troubleshoot-mcp-connection` - 診 MCP 連通問題

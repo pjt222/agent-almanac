@@ -26,17 +26,17 @@ metadata:
 
 # Configure Reverse Proxy
 
-Set up reverse proxy patterns for routing traffic to backend services using Nginx, Traefik, or ShinyProxy.
+Set up reverse proxy patterns for routing traffic to backend services w/ Nginx, Traefik, or ShinyProxy.
 
-## When to Use
+## Use When
 
-- Routing multiple services behind a single entry point
-- Proxying WebSocket connections (Shiny, Socket.IO, live reload)
-- Auto-discovering Docker services with Traefik labels
-- Path-based or host-based routing to different backends
-- Adding SSL termination to services that don't handle TLS
+- Route multi services behind single entry point
+- Proxy WebSocket connections (Shiny, Socket.IO, live reload)
+- Auto-discover Docker services w/ Traefik labels
+- Path-based / host-based routing to diff backends
+- Add SSL termination to services that don't handle TLS
 
-## Inputs
+## In
 
 - **Required**: Backend services to proxy (host:port)
 - **Required**: Routing strategy (path-based, host-based, or both)
@@ -44,7 +44,7 @@ Set up reverse proxy patterns for routing traffic to backend services using Ngin
 - **Optional**: Domain name(s) for host-based routing
 - **Optional**: WebSocket endpoints to proxy
 
-## Procedure
+## Do
 
 ### Step 1: Choose Proxy Tool
 
@@ -82,7 +82,7 @@ server {
 }
 ```
 
-**Note:** Trailing `/` on `proxy_pass` strips the location prefix. `proxy_pass http://api:8000/;` with `location /api/` forwards `/api/users` as `/users`.
+**Note:** Trailing `/` on `proxy_pass` strips location prefix. `proxy_pass http://api:8000/;` w/ `location /api/` forwards `/api/users` as `/users`.
 
 ### Step 3: Nginx — Host-Based Routing
 
@@ -112,7 +112,7 @@ server {
 
 ### Step 4: Nginx — WebSocket Proxying
 
-WebSockets require upgrade headers. Essential for Shiny, Socket.IO, and live reload:
+WebSockets require upgrade headers. Essential for Shiny, Socket.IO, live reload:
 
 ```nginx
 location /ws/ {
@@ -146,9 +146,9 @@ server {
 }
 ```
 
-**Expected:** WebSocket connections establish and persist.
+**→** WebSocket connections establish + persist.
 
-**On failure:** Check `proxy_http_version 1.1` is set. Verify `Upgrade` and `Connection` headers.
+**If err:** Check `proxy_http_version 1.1` set. Valid. `Upgrade` + `Connection` headers.
 
 ### Step 5: Traefik — Docker Label Auto-Discovery
 
@@ -195,9 +195,9 @@ volumes:
   letsencrypt:
 ```
 
-**Expected:** Traefik auto-discovers services via labels, provisions SSL certificates.
+**→** Traefik auto-discovers services via labels, provisions SSL certs.
 
-### Step 6: Traefik — Path-Based Routing with Labels
+### Step 6: Traefik — Path-Based Routing w/ Labels
 
 ```yaml
 services:
@@ -210,7 +210,7 @@ services:
       - "traefik.http.services.api.loadbalancer.server.port=8000"
 ```
 
-### Step 7: Traefik — Rate Limiting and Headers
+### Step 7: Traefik — Rate Limiting + Headers
 
 ```yaml
 labels:
@@ -238,28 +238,28 @@ wscat -c ws://localhost/ws/
 # http://localhost:8080/dashboard/
 ```
 
-**Expected:** Requests route to correct backends. WebSocket upgrades succeed.
+**→** Reqs route to correct backends. WebSocket upgrades succeed.
 
-## Validation
+## Check
 
-- [ ] HTTP requests route to the correct backend based on path or host
-- [ ] WebSocket connections establish and maintain
-- [ ] SSL termination works (if configured)
+- [ ] HTTP reqs route to correct backend by path or host
+- [ ] WebSocket connections establish + maintain
+- [ ] SSL termination works (if config'd)
 - [ ] Backend services receive correct `Host`, `X-Real-IP`, `X-Forwarded-For` headers
 - [ ] Traefik auto-discovers new services via labels (if using Traefik)
-- [ ] Configuration survives `docker compose restart`
+- [ ] Config survives `docker compose restart`
 
-## Common Pitfalls
+## Traps
 
-- **Trailing slash mismatch**: `proxy_pass http://app/` vs `http://app` behaves differently with path stripping in Nginx.
-- **WebSocket timeout**: Default `proxy_read_timeout` is 60s. Long-lived WebSocket connections need `86400` (24h).
-- **Docker socket security**: Mounting `/var/run/docker.sock` in Traefik gives it full Docker access. Use `ro` mount and consider socket proxy.
-- **DNS resolution**: Nginx resolves upstreams at startup. Use `resolver 127.0.0.11` for Docker's internal DNS with dynamic services.
-- **Missing `proxy_buffering off`**: Shiny and SSE endpoints need `proxy_buffering off` for real-time streaming.
+- **Trailing slash mismatch**: `proxy_pass http://app/` vs `http://app` behaves differently w/ path stripping in Nginx.
+- **WebSocket timeout**: Default `proxy_read_timeout` = 60s. Long-lived WebSocket connections need `86400` (24h).
+- **Docker socket security**: Mounting `/var/run/docker.sock` in Traefik gives full Docker access. Use `ro` mount + consider socket proxy.
+- **DNS resolution**: Nginx resolves upstreams at startup. Use `resolver 127.0.0.11` for Docker's internal DNS w/ dynamic services.
+- **Missing `proxy_buffering off`**: Shiny + SSE endpoints need `proxy_buffering off` for real-time streaming.
 
-## Related Skills
+## →
 
-- `configure-nginx` - detailed Nginx configuration with SSL and security headers
+- `configure-nginx` - detailed Nginx config w/ SSL + security headers
 - `deploy-shinyproxy` - ShinyProxy for containerized Shiny app hosting
-- `setup-compose-stack` - compose stack that uses a reverse proxy
-- `configure-api-gateway` - API gateway patterns with Kong and Traefik
+- `setup-compose-stack` - compose stack using reverse proxy
+- `configure-api-gateway` - API gateway patterns w/ Kong + Traefik

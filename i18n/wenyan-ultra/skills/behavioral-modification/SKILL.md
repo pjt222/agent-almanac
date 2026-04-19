@@ -25,31 +25,31 @@ metadata:
   tags: animal-training, dog, behavior, reactivity, anxiety, desensitization, counter-conditioning
 ---
 
-# Behavioral Modification
+# 改行
 
-Address unwanted dog behaviors through desensitization, counter-conditioning, and environmental management.
+以減敏、反條、境管處不欲犬行。
 
-## When to Use
+## 用
 
-- A dog shows reactivity (lunging, barking, growling) toward other dogs, people, or stimuli
-- Separation anxiety manifests as destructive behavior, vocalization, or house soiling when left alone
-- Resource guarding: the dog stiffens, growls, or snaps when approached while eating or holding an object
-- Excessive barking, jumping, pulling on leash, or other behaviors that interfere with daily life
-- After basic obedience is established — behavioral modification builds on foundation commands
+- 犬對他犬、人、刺顯反（撲、吠、咆）
+- 獨居慮→毀物、鳴、汙屋
+- 護資：食或持物時僵、咆、咬近者
+- 過吠、跳、牽繩拉等擾日常
+- 基順已立—改行乃基順之上
 
-## Inputs
+## 入
 
-- **Required**: A specific unwanted behavior to address (not "the dog is bad" but "the dog lunges at other dogs on leash")
-- **Required**: The dog's threshold distance or trigger level (how close/intense before the behavior starts)
-- **Optional**: History of the behavior (when it started, what triggers it, what makes it worse)
-- **Optional**: High-value treats that the dog will eat even when mildly stressed
-- **Optional**: Veterinary clearance (rule out pain or medical causes for behavior changes)
+- **必**：具體不欲行（非「犬惡」而「牽繩見他犬即撲」）
+- **必**：犬之閾距或觸級（多近/強始行）
+- **可**：行之史（起時、何觸、何致惡）
+- **可**：犬於輕壓下仍食之高值獎
+- **可**：獸醫許可（排痛或醫因）
 
-## Procedure
+## 行
 
-### Step 1: Identify and Define the Behavior
+### 一：識且定行
 
-Precision matters — vague descriptions lead to vague interventions.
+精要—泛述致泛預。
 
 ```
 Behavior Analysis (ABC Model):
@@ -75,11 +75,11 @@ Threshold Mapping:
 - The working zone is BELOW threshold — where the dog notices but can still think
 ```
 
-**Expected:** A precise behavior definition with identified trigger, threshold distance, and current consequence pattern.
+**得：** 具體行定附識觸、閾距、當結果模。
 
-**On failure:** If the behavior seems to have no consistent trigger, keep a log for one week: date, time, context, behavior, consequence. Patterns often emerge that are not obvious in the moment.
+**敗：** 行似無穩觸→記一週：日、時、境、行、結果。模常於事後現。
 
-### Step 2: Choose the Intervention Strategy
+### 二：擇預策
 
 ```
 Strategy Selection:
@@ -103,13 +103,13 @@ Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 ```
 
-**Expected:** A specific strategy selected for the identified behavior.
+**得：** 擇具體策於所識行。
 
-**On failure:** If the behavior is severe (biting with contact, extreme panic, self-harm), refer to a certified applied animal behaviorist (CAAB) or veterinary behaviorist (DACVB). This skill covers moderate behavioral issues, not clinical cases.
+**敗：** 行烈（咬致傷、極恐、自害）→薦證動物行家（CAAB）或獸醫行家（DACVB）。本技涵中度，非臨床例。
 
-### Step 3: Execute Desensitization and Counter-Conditioning
+### 三：行減敏與反條
 
-The core protocol for reactivity and fear-based behaviors.
+反與懼本行之核協。
 
 ```
 DS/CC Protocol:
@@ -145,13 +145,13 @@ DS/CC Protocol:
    - Dog's body language at threshold becomes more relaxed
 ```
 
-**Expected:** Over weeks, the dog's threshold distance decreases and emotional response to the trigger shifts from fear/aggression to neutral or positive.
+**得：** 經週，犬閾距減，對觸之情反自恐/攻轉為中或正。
 
-**On failure:** If no progress after 3-4 weeks of consistent sessions, reassess: (1) are you working below threshold? (2) are the treats high-value enough? (3) is the trigger exposure too frequent outside of training (flooding undoes DS/CC)? (4) consider consulting a professional.
+**敗：** 三四週穩課無進→重評：（一）在閾下乎？（二）獎值足乎？（三）訓外觸曝過頻乎（氾濫破 DS/CC）？（四）宜問專家。
 
-### Step 4: Manage the Environment
+### 四：管境
 
-Training changes behavior over time. Management prevents rehearsal now.
+訓經時改行。管今止演。
 
 ```
 Management Strategies:
@@ -179,29 +179,29 @@ Every rehearsal of the unwanted behavior strengthens it.
 Management prevents rehearsal while training builds the new response.
 ```
 
-**Expected:** The unwanted behavior is not being practiced outside of controlled training sessions.
+**得：** 訓外無演不欲行。
 
-**On failure:** If management is impossible (e.g., cannot avoid all dog encounters), reduce training criteria to match reality. Some environmental exposure is unavoidable; ensure training sessions provide a strong enough counter-experience.
+**敗：** 管不可（如不可避諸犬遇）→減訓標以合實。某境曝不可免；確保訓課供足強之反經驗。
 
-## Validation
+## 驗
 
-- [ ] The behavior was defined precisely using the ABC model
-- [ ] Threshold distance was identified before starting DS/CC
-- [ ] Training was conducted consistently below threshold
-- [ ] Treats were high-value enough for the dog to eat in the presence of the trigger
-- [ ] Sessions were 5-15 minutes, ending before the dog went over threshold
-- [ ] Environmental management prevented behavior rehearsal outside training
-- [ ] Progress indicators (check-ins, reduced threshold distance) are being tracked
+- [ ] 行以 ABC 模精定
+- [ ] DS/CC 前識閾距
+- [ ] 訓穩於閾下
+- [ ] 獎足高犬於觸前可食
+- [ ] 課 5-15 分，終於犬未過閾
+- [ ] 境管止訓外演
+- [ ] 進徵（check-in、閾距減）已跟
 
-## Common Pitfalls
+## 忌
 
-- **Working over threshold**: The single most common error. If the dog cannot eat treats, you are too close. Move back
-- **Inconsistency**: DS/CC requires regular sessions (3-5 per week minimum). Sporadic training produces sporadic results
-- **Flooding**: Forcing the dog to endure the trigger at close range does not "get them used to it" — it traumatizes and worsens the behavior
-- **Punishment**: Correcting a reactive dog (leash pop, yelling "no") suppresses the warning signals but increases the underlying emotion. The dog learns to bite without warning
-- **Expecting linear progress**: Behavioral modification has plateaus and regressions. A bad session does not erase prior progress. Zoom out and look at the trend over weeks
-- **Ignoring medical causes**: Pain, thyroid disorders, and neurological issues can all present as behavioral problems. Veterinary clearance is not optional for sudden-onset behavior changes
+- **過閾工**：最常誤。犬不能食→過近。退
+- **不一**：DS/CC 需規律課（週三五以上）。散訓得散果
+- **氾濫**：迫犬近觸→非「習之」而致傷且惡行
+- **罰**：正反犬（拉繩、喊「否」）抑警徵而加底情。犬學不警而咬
+- **望線進**：改行有停與退。一劣課不抹先進。闊視週之趨
+- **略醫因**：痛、甲狀、神經皆或現為行題。猝發行變當先醫許
 
-## Related Skills
+## 參
 
-- `basic-obedience` — foundation commands that behavioral modification builds upon; reliable recall is essential for safety
+- `basic-obedience` — 改行所依之基命；穩召安全至要

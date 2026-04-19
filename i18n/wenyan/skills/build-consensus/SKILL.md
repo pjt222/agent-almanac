@@ -24,65 +24,65 @@ metadata:
   tags: swarm, consensus, quorum-sensing, distributed-agreement
 ---
 
-# Build Consensus
+# 建共識
 
-Achieve collective agreement across distributed agents without a central authority — using scout advocacy, threshold quorum sensing, and commitment dynamics modeled on honeybee swarm decision-making.
+無中權而於分代理達集同——以探倡、閾諾感、諾動，模於蜂群擇穴之決。
 
-## When to Use
+## 用時
 
-- A group must collectively decide between multiple options without a designated leader
-- Centralized decision-making is a bottleneck or a single point of failure
-- Stakeholders have different information and perspectives that must be integrated
-- Past decisions suffered from groupthink (premature convergence) or analysis paralysis (no convergence)
-- Designing automated systems that must reach consensus (distributed databases, multi-agent AI)
-- Complementing `coordinate-swarm` when the coordination requires explicit collective decisions
+- 群須無指領而集擇諸選
+- 中權之決為瓶或單敗點
+- 諸利者有異訊異見須整
+- 昔決患群思（早聚）或析癱（不聚）
+- 設須達共識之自系（分庫、多代理 AI）
+- 輔 `coordinate-swarm`——協須明集決時
 
-## Inputs
+## 入
 
-- **Required**: The decision to be made (binary choice, selection from N options, parameter setting)
-- **Required**: The participating agents (team members, services, voters)
-- **Optional**: Known options with preliminary quality assessments
-- **Optional**: Decision urgency (time budget)
-- **Optional**: Acceptable error rate (can the group occasionally pick the second-best option?)
-- **Optional**: Current decision-making failure mode (groupthink, deadlock, flip-flopping)
+- **必要**：待決之題（二擇、於 N 中擇、參設）
+- **必要**：參之諸代理（隊員、服、投者）
+- **可選**：已知諸選附初質評
+- **可選**：決之急（時預）
+- **可選**：可容錯率（群偶擇次佳可乎？）
+- **可選**：當前決之敗模（群思、僵、搖）
 
-## Procedure
+## 法
 
-### Step 1: Generate Proposals Through Independent Scouting
+### 第一步：獨探生提案
 
-Ensure the decision space is adequately explored before any advocacy begins.
+確決空已充探，倡前不始。
 
-1. Assign scouts to independently explore the option space:
-   - Each scout evaluates options without knowing other scouts' findings
-   - Independent evaluation prevents early herding toward popular-but-mediocre options
-   - Scout count: at minimum, 3 scouts per serious option (for reliability)
-2. Scouts produce structured assessments:
-   - Option identifier
-   - Quality score (normalized 0-100 or categorical: poor/fair/good/excellent)
-   - Key strengths and risks identified
-   - Confidence level (how thoroughly was this option evaluated?)
-3. Aggregate scout reports without filtering — all options above a minimum quality threshold enter the advocacy phase
+1. 派探者獨探諸選之空：
+   - 各探不知他探之見而評
+   - 獨評阻早聚於流中而平之選
+   - 探數：至少三探為各要選（為可靠）
+2. 探生結構化之評：
+   - 選之識
+   - 質分（歸 0-100 或類：劣/中/良/優）
+   - 所識之要強與危
+   - 信級（此選評幾徹？）
+3. 集探之報而不篩——所有過最質閾者進倡階
 
-**Expected:** A set of independently evaluated proposals with quality scores and assessments. No option has been eliminated by a single evaluator; diversity of perspective is preserved.
+**得：** 獨評之諸案附質分與察。無選為單評者所除；多見之繁保之。
 
-**On failure:** If scouts converge on the same option without independent evaluation, the scouting was not truly independent. Rerun with explicit information barriers. If too many options survive to the advocacy phase, raise the minimum quality threshold. If too few survive, lower it or add more scouts.
+**敗則：** 若諸探未獨評而聚於一選，探非真獨。以明訊障重之。若過多選過倡階，升最質閾。若過少，降之或加探。
 
-### Step 2: Run Advocacy Dynamics (Waggle Dance)
+### 第二步：行倡動（擺舞）
 
-Allow scouts to advocate for their preferred options, with advocacy intensity proportional to quality.
+令探倡其好選，倡之力按質成比。
 
-1. Each scout advocates for their top-rated option:
-   - Advocacy intensity is proportional to the quality score (better options get more vigorous advocacy)
-   - Advocacy is public — all agents observe all advocacy signals
-   - Advocates present evidence and quality assessment, not just preference
-2. Uncommitted agents observe advocacy and evaluate:
-   - Follow up on advocated options by inspecting them independently
-   - If an agent's own inspection confirms the quality, they join the advocacy
-   - If inspection reveals lower quality than advertised, they do not join
-3. Cross-inspection dynamics:
-   - Advocates for weaker options naturally lose followers as agents independently verify
-   - Advocates for stronger options gain followers through confirmed quality
-   - The process is self-correcting: exaggerated advocacy fails the verification step
+1. 各探倡其首選：
+   - 倡力按質分（佳選得更烈之倡）
+   - 倡為公——諸代理見諸倡信
+   - 倡者呈證與質評，非止好
+2. 未諾之代理觀倡而評：
+   - 循倡之選而獨察
+   - 己察證其質者，加入倡
+   - 察示質劣於所宣者，不加
+3. 交察之動：
+   - 弱選之倡自失從——代理獨驗之
+   - 強選之倡得從——因驗證其質
+   - 過程自正：誇倡於驗階敗
 
 ```
 Advocacy Dynamics:
@@ -101,98 +101,98 @@ Advocacy Dynamics:
 └─────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** Advocacy for the best option(s) grows over time as agents independently verify quality. Advocacy for weaker options fades as verification fails. The group naturally converges toward the strongest option without any agent dictating the choice.
+**得：** 諸代理獨驗質時，佳選之倡漸長。弱選之倡因驗敗而淡。群自聚於強選而無代理定擇。
 
-**On failure:** If advocacy doesn't converge (two options remain neck-and-neck), the options may be genuinely equivalent — proceed to quorum with either, or use a tiebreaker rule. If advocacy converges too fast on a mediocre option, increase the independence of evaluation (more scouts, stricter information barriers) and add a mandatory cross-inspection step.
+**敗則：** 若倡不聚（二選相持），諸選或真等——以任一達諾，或用破平之律。若倡過速聚於中選，增評之獨（更多探、嚴訊障），加必交察之步。
 
-### Step 3: Set Quorum Threshold and Commit
+### 第三步：立諾閾而諾
 
-Define the commitment threshold that triggers collective action.
+定觸集行之諾閾。
 
-1. Set the quorum threshold:
-   - **Simple decisions**: 50% + 1 of agents committed to one option
-   - **Important decisions**: 66-75% committed to one option
-   - **Critical/irreversible decisions**: 80%+ committed to one option
-   - Rule of thumb: higher stakes → higher quorum → slower but more reliable consensus
-2. Monitor commitment accumulation:
-   - Track how many agents have committed to each option over time
-   - Display commitment levels transparently (all agents can see the current state)
-   - Do not allow commitment withdrawal mid-cycle (prevents oscillation)
-3. When quorum is reached:
-   - The winning option is adopted as the collective decision
-   - Advocates for losing options acknowledge the decision (no rogue agents)
-   - Implementation begins immediately — delay after consensus erodes commitment
+1. 立諾閾：
+   - **簡決**：50% + 1 之代理諾於一選
+   - **要決**：66-75% 諾於一選
+   - **要/不可逆決**：80%+ 諾於一選
+   - 大律：賭高 → 閾高 → 共識慢而更可靠
+2. 監諾之累：
+   - 蹤隨時諸選之諾者數
+   - 透明示諾級（諸代理見當態）
+   - 環中不容撤諾（防搖）
+3. 諾達時：
+   - 勝選為集決
+   - 敗選之倡者認決（無悖之代理）
+   - 即始施——共後之延耗諾
 
-**Expected:** A clear quorum moment where enough agents have independently committed to one option. The decision is legitimate because it emerged from independent evaluation, not authority or coercion.
+**得：** 明諾之刻，足代理已獨諾於一選。決為合法——因生於獨評，非權或迫。
 
-**On failure:** If quorum is never reached within the time budget, escalate to Step 4 (deadlock resolution). If quorum is reached but agents are unhappy, the advocacy phase was too short — agents committed without adequate evaluation. If the consensus was wrong (discovered after the fact), the independent scouting was insufficient — increase scout diversity and evaluation thoroughness in the next cycle.
+**敗則：** 若時預內諾不達，升至第四步（僵解）。若諾達而代理不悅，倡階過短——代理諾而未充評。若共識誤（事後發），獨探不足——下環宜增探之繁與評之徹。
 
-### Step 4: Resolve Deadlocks
+### 第四步：解僵
 
-Break decision gridlock when the natural consensus process stalls.
+自然共識停時破決之阻。
 
-1. Diagnose the deadlock type:
-   - **Genuine tie**: two options are equally good → flip a coin; the cost of delay exceeds the cost of picking the "wrong" equal option
-   - **Information deficit**: agents can't evaluate options well enough → invest in more scouting before re-running advocacy
-   - **Faction formation**: entrenched subgroups refuse to cross-inspect → introduce mandatory rotation where advocates must inspect the opposing option
-   - **Option proliferation**: too many options fragment commitment → eliminate the bottom 50% and re-run advocacy
-2. Apply the appropriate resolution:
-   - Genuine tie: random selection or merge options if compatible
-   - Information deficit: time-boxed scouting extension
-   - Faction formation: forced cross-inspection round
-   - Option proliferation: ranked elimination tournament
-3. After resolution, reset the quorum clock and re-run Step 3
+1. 診僵之類：
+   - **真等**：二選等佳 → 擲幣；延之價過於擇「誤」之等選
+   - **訊缺**：代理不能充評 → 投更多探後再行倡
+   - **派成**：固黨拒交察 → 入必交之輪，倡者察反選
+   - **選繁**：諸選分諾 → 除下半，重行倡
+2. 施合解：
+   - 真等：隨擇或若可合則合
+   - 訊缺：時限之探延
+   - 派成：強交察之輪
+   - 選繁：排名淘汰之賽
+3. 解後，重諾之鐘而重行第三步
 
-**Expected:** Deadlock resolved through the appropriate intervention. The resolution is visible and accepted by the group as fair process, even if individual agents preferred a different outcome.
+**得：** 以合介解僵。解可見，群受為公過程，雖諸代理好別果。
 
-**On failure:** If deadlocks recur on the same decision, the decision framing may be wrong. Step back and ask: can the decision be decomposed into smaller, independent decisions? Can the scope be reduced? Is there a "try both and see" option? Sometimes the best consensus is "we'll run a time-boxed experiment."
+**敗則：** 若同決反僵，決框或誤。退而問：決可分為小獨決乎？範可減乎？有「皆試而觀」之選乎？或最佳共識為「吾等行時限之試」。
 
-### Step 5: Assess Consensus Quality
+### 第五步：評共識之質
 
-Evaluate whether the consensus process produced a good decision, not just a decision.
+察過程生佳決，抑只生決。
 
-1. Post-decision assessment:
-   - Was the winning option independently verified by at least N agents?
-   - Was the decision speed appropriate (not too fast/groupthink, not too slow/paralysis)?
-   - Did the process surface information that would have been missed by a single decision-maker?
-   - Are agents committed to implementation, or merely compliant?
-2. Track consensus health metrics:
-   - **Time to quorum**: decreasing over successive decisions indicates learning; increasing indicates growing complexity or dysfunction
-   - **Scout-to-commit ratio**: how much scouting was needed per commitment? High ratio = difficult decision or low trust
-   - **Post-decision regret rate**: how often does the group wish it had chosen differently?
-3. Feed learnings back into the process:
-   - Adjust quorum thresholds based on decision importance and past accuracy
-   - Adjust scout count based on option complexity
-   - Adjust time budgets based on historical time-to-quorum
+1. 決後評：
+   - 勝選為至少 N 代理獨驗乎？
+   - 決速合乎（不速為群思，不慢為癱）？
+   - 過程浮單決者所失之訊乎？
+   - 代理諾於施，抑止從？
+2. 蹤共識康之度：
+   - **達諾之時**：續減示學；續增示繁或失調
+   - **探諾之比**：每諾須探幾？高比=難決或低信
+   - **決後悔率**：群悔擇何頻？
+3. 所學反饋於程：
+   - 諾閾按決之要與昔準調之
+   - 探數按選之繁調之
+   - 時預按歷之達諾時調之
 
-**Expected:** A feedback loop that improves consensus quality over time. The group learns to scout more effectively, advocate more honestly, and commit more confidently.
+**得：** 反饋之環以時善共識。群學更善探、更實倡、更信諾。
 
-**On failure:** If consensus quality metrics are poor (high regret, slow decisions), audit the process for structural failures: insufficient scouting diversity, advocacy without verification, or thresholds set too low for the decision type. Rebuild the specific failing stage rather than overhauling the entire process.
+**敗則：** 若共識質度劣（高悔、慢決），審程結構之敗：探繁不足、倡無驗、閾於決類太低。重建特敗之階，非翻全程。
 
-## Validation
+## 驗
 
-- [ ] Proposals were generated through independent scouting (no herding)
-- [ ] Advocacy intensity was proportional to assessed quality
-- [ ] Uncommitted agents independently verified advocated options
-- [ ] Quorum threshold was appropriate for the decision's importance
-- [ ] Quorum was reached and the decision was implemented promptly
-- [ ] Deadlock resolution mechanism was available (even if unused)
-- [ ] Post-decision quality assessment was conducted
+- [ ] 提案以獨探生（無流群）
+- [ ] 倡力按評質成比
+- [ ] 未諾之代理獨驗所倡之選
+- [ ] 諾閾合決之要
+- [ ] 諾達而決速施
+- [ ] 僵解機備（雖未用）
+- [ ] 決後質評已行
 
-## Common Pitfalls
+## 陷
 
-- **Skipping independent scouting**: Jumping directly to advocacy produces groupthink. The quality of consensus depends entirely on the quality of independent evaluation
-- **Equal advocacy for unequal options**: If every option gets the same advocacy regardless of quality, the process degenerates into random selection. Advocacy must be proportional to assessed quality
-- **Commitment withdrawal**: Allowing agents to un-commit creates oscillation. Once committed in a cycle, agents stay committed until the cycle resolves
-- **Confusing consensus with unanimity**: Consensus requires sufficient agreement, not total agreement. Waiting for 100% creates permanent deadlock
-- **Ignoring the losing side**: Agents who advocated for the losing option have information the group needs. Their concerns should inform implementation, even if they don't block the decision
+- **略獨探**：直跳倡生群思。共識之質全依獨評之質
+- **不等選均倡**：諸選得同倡不論質，過程降為隨擇。倡必按評質成比
+- **撤諾**：容代理撤諾生搖。環中諾者留諾至環解
+- **混共識與全同**：共識須足同，非全同。候 100% 生永僵
+- **忽敗方**：倡敗選之代理有群所須之訊。其憂宜告施，雖不阻決
 
-## Related Skills
+## 參
 
-- `coordinate-swarm` — foundational coordination framework that supports the signal-based consensus mechanism
-- `defend-colony` — collective defense decisions often require rapid consensus under threat
-- `scale-colony` — consensus mechanisms must adapt when the group size changes significantly
-- `dissolve-form` — morphic skill for controlled dismantling, where consensus before dissolution is critical
-- `plan-sprint` — sprint planning involves team consensus on commitment scope
-- `conduct-retrospective` — retrospectives are a form of consensus-building about process improvement
-- `build-coherence` — AI self-application variant; maps bee democracy to single-agent multi-path reasoning with confidence thresholds and deadlock resolution
+- `coordinate-swarm` — 支信號共識機之基協架
+- `defend-colony` — 集防決常於危下須速共識
+- `scale-colony` — 群大變時共識機宜調
+- `dissolve-form` — 解前之共識要——morphic 之控解技
+- `plan-sprint` — sprint 規含諾範之隊共識
+- `conduct-retrospective` — 回顧為程善之共識形
+- `build-coherence` — AI 自用之變；映蜂民主於單代理多徑推理，含信閾與僵解

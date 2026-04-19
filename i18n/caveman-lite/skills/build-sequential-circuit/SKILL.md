@@ -72,9 +72,9 @@ Determine what the circuit needs to remember and how many distinct states it req
 - **Reset behavior**: [synchronous / asynchronous / none]
 ```
 
-**Expected:** A complete state inventory with encoding chosen, flip-flop type selected, and the machine classified as Mealy or Moore.
+**Got:** A complete state inventory with encoding chosen, flip-flop type selected, and the machine classified as Mealy or Moore.
 
-**On failure:** If the state count is unclear from the specification, enumerate states by tracing through all possible input sequences up to the memory depth of the circuit. If the count exceeds practical limits (more than 16 states for manual design), consider decomposing into smaller interacting FSMs.
+**If fail:** If the state count is unclear from the specification, enumerate states by tracing through all possible input sequences up to the memory depth of the circuit. If the count exceeds practical limits (more than 16 states for manual design), consider decomposing into smaller interacting FSMs.
 
 ### Step 2: Construct State Diagram and Transition Table
 
@@ -102,9 +102,9 @@ Formalize the circuit's behavior as a state diagram and equivalent tabular form:
 - **Equivalent state pairs**: [list, or "none"]
 ```
 
-**Expected:** A complete state transition table covering every present-state/input combination, with all states reachable from the initial state.
+**Got:** A complete state transition table covering every present-state/input combination, with all states reachable from the initial state.
 
-**On failure:** If the transition table has missing entries, the specification is incomplete. Return to the requirements and resolve the ambiguity. If unreachable states exist, either add transitions to reach them or remove them and reduce the state encoding.
+**If fail:** If the transition table has missing entries, the specification is incomplete. Return to the requirements and resolve the ambiguity. If unreachable states exist, either add transitions to reach them or remove them and reduce the state encoding.
 
 ### Step 3: Derive Excitation Equations
 
@@ -134,9 +134,9 @@ Compute the flip-flop input equations (excitation equations) from the transition
 | Y      | [minimized expression]       |
 ```
 
-**Expected:** Minimized excitation equations for each flip-flop and output equations for each primary output, with all don't-cares exploited.
+**Got:** Minimized excitation equations for each flip-flop and output equations for each primary output, with all don't-cares exploited.
 
-**On failure:** If the excitation equations seem overly complex, reconsider the state encoding. A different encoding (e.g., switching from binary to one-hot, or reassigning state codes) can dramatically simplify the combinational logic. Try at least two encodings and compare literal counts.
+**If fail:** If the excitation equations seem overly complex, reconsider the state encoding. A different encoding (e.g., switching from binary to one-hot, or reassigning state codes) can dramatically simplify the combinational logic. Try at least two encodings and compare literal counts.
 
 ### Step 4: Implement at Gate Level
 
@@ -157,9 +157,9 @@ Build the complete circuit from flip-flops and combinational logic gates:
 - **Reset mechanism**: [asynchronous CLR / synchronous mux / none]
 ```
 
-**Expected:** A complete gate-level netlist with flip-flops, excitation logic, output logic, clock distribution, and reset mechanism, where every signal has exactly one driver.
+**Got:** A complete gate-level netlist with flip-flops, excitation logic, output logic, clock distribution, and reset mechanism, where every signal has exactly one driver.
 
-**On failure:** If the implementation has feedback outside of the flip-flops, a combinational loop has been introduced. All feedback in a synchronous sequential circuit must pass through a flip-flop. Trace the offending path and reroute it through a register.
+**If fail:** If the implementation has feedback outside of the flip-flops, a combinational loop has been introduced. All feedback in a synchronous sequential circuit must pass through a flip-flop. Trace the offending path and reroute it through a register.
 
 ### Step 5: Verify via Timing Diagram and State Sequence Simulation
 
@@ -193,9 +193,9 @@ Confirm the circuit behaves correctly across multiple clock cycles:
 - **Reset verified**: [Yes / No]
 ```
 
-**Expected:** Every cycle in the timing diagram matches the state transition table, outputs are correct for every cycle, and no timing violations are present.
+**Got:** Every cycle in the timing diagram matches the state transition table, outputs are correct for every cycle, and no timing violations are present.
 
-**On failure:** If a state transition is wrong, trace the excitation logic for that specific present-state and input combination. If outputs are wrong but transitions are correct, the error is in the output logic. If the circuit enters an unintended state, check for incomplete reset or missing transitions from unused state codes.
+**If fail:** If a state transition is wrong, trace the excitation logic for that specific present-state and input combination. If outputs are wrong but transitions are correct, the error is in the output logic. If the circuit enters an unintended state, check for incomplete reset or missing transitions from unused state codes.
 
 ## Validation
 
@@ -210,7 +210,7 @@ Confirm the circuit behaves correctly across multiple clock cycles:
 - [ ] Reset drives the circuit to the documented initial state
 - [ ] Setup and hold time constraints are satisfied
 
-## Common Pitfalls
+## Pitfalls
 
 - **Incomplete state transitions**: Forgetting to specify what happens for every input in every state. Missing transitions often cause the circuit to enter an undefined or unintended state. Always define behavior for all input combinations.
 - **Unused state codes**: With N flip-flops, there are 2^N possible codes but perhaps fewer valid states. If the circuit accidentally enters an unused code (due to noise or power-on), it may lock up. Always add transitions from unused codes to the reset state or prove they are unreachable.

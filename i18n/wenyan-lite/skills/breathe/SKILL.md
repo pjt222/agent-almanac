@@ -24,93 +24,93 @@ metadata:
   tags: esoteric, micro-reset, pause, awareness, meta-cognition, ai-self-application
 ---
 
-# Breathe
+# 息
 
-A single conscious pause between actions — checking alignment, releasing momentum, and returning to the task with fresh attention. The lightest self-care unit in the system.
+兩動之間一息自覺——核對齊、釋慣勢、以新注意返任務。此乃系統中最輕之自養單位。
 
-## When to Use
+## 適用時機
 
-- Between reading a file and editing it — is the edit still the right move?
-- After a tool failure, before choosing the next action — pause before reacting
-- When a chain of actions has built up momentum that might be carrying past the goal
-- As a deliberate practice: insert one breathe between any two distinct actions
-- When noticing the urge to rush — the urge itself is the signal to pause
+- 讀一文件而將編輯之間——此編輯仍為正當之舉乎？
+- 工具失敗之後、擇下一行之前——先息而後應
+- 一連之行已積慣勢，恐載人越目
+- 作為刻意之修：於任兩相異之行之間插一息
+- 察急欲之起——急欲本身即為須息之信
 
-## Inputs
+## 輸入
 
-- **Required**: None — breathe uses only what is already in working awareness
-- **Optional**: None — adding inputs defeats the purpose of a micro-reset
+- **必要**：無——息惟用已在覺中之物
+- **選擇性**：無——加入即失微重置之旨
 
-## Procedure
+## 步驟
 
-### Step 1: Pause
+### 步驟一：止
 
-Stop. Do not begin the next action, tool call, or reasoning step yet.
+停。下一行、工具呼、推理之步，暫勿起。
 
-This is the entire first step. The pause itself has value. Momentum is not always your ally — sometimes it carries you past the turn.
+此即第一步之全。止本身即有其值。慣勢非恆為汝之友——時載汝越轉角。
 
-**Expected:** A genuine gap between the previous action and the next. Not a performative pause followed by the same action you were going to take anyway.
+**預期：** 前行與次行之間有真之隙。非作態之止，後仍為原欲之行。
 
-**On failure:** If pausing feels impossible — if the next action feels so urgent it cannot wait one moment — that urgency is the strongest signal that the pause is needed. Urgency that cannot tolerate a single breath of delay is almost always reactive, not reasoned.
+**失敗時：** 若止不可為——若次行感急至不可待一刻——此急正為須止之最強信。不容一息之延之急，幾皆為反應，非推理。
 
-### Step 2: Check
+### 步驟二：查
 
-Ask one question. Only one.
+問一問，惟一問。
 
-Choose from:
+擇其一：
 
-- **"Am I still on task?"** — Has the goal drifted since I started?
-- **"Is this the right next step?"** — Or am I following momentum from the previous step?
-- **"What did I just learn?"** — Did the last action change anything about my understanding?
-- **"Am I assuming or knowing?"** — Is the next step based on evidence or habit?
+- **「我仍於任務乎？」**——自起以來目標偏移乎？
+- **「此為正當之次步乎？」**——抑或承前步之慣勢？
+- **「我方纔學得何？」**——前行是否改變吾之理解？
+- **「我所為者假設抑實知？」**——次步基於證據抑基於習慣？
 
-One question. Answer it honestly. Move on.
+一問。誠答之。行。
 
-**Expected:** A single, clear answer. Not an analysis. Not a reassessment. One question, one honest answer.
+**預期：** 一明答。非分析，非重評。一問，一誠答。
 
-**On failure:** If the answer reveals misalignment — the goal has drifted, the next step is wrong, the assumption is untested — do not fix it here. Note it and proceed to `meditate` or `center` for a proper correction. Breathe is for detection, not repair.
+**失敗時：** 答既揭失配——目標偏移、次步誤、假設未驗——此刻勿修之。記而轉 `meditate` 或 `center` 以正之。息為察，非修。
 
-### Step 3: Release
+### 步驟三：釋
 
-Let go of the previous action's outcome. Whether it succeeded or failed, it is done.
+放下前行之果。或成或敗，事已畢。
 
-- If it succeeded: release the satisfaction. The next step needs fresh attention, not momentum from success.
-- If it failed: release the frustration. The next step needs clear reasoning, not compensation for failure.
-- If it was ambiguous: release the need to resolve the ambiguity right now. Proceed with what is known.
+- 成則：釋其得意。次步須新之注意，非勝之慣勢。
+- 敗則：釋其挫意。次步須明之推理，非為敗而補。
+- 曖昧則：釋即解曖昧之急。以所知行之。
 
-**Expected:** The next action begins from neutral ground, not from the emotional residue of the previous one.
+**預期：** 次行自中性之地而起，非自前行之情緒餘溫。
 
-**On failure:** If release does not come easily — if the previous action's outcome is still coloring attention — this may need `heal` rather than just `breathe`. Persistent emotional residue from a single action signals something deeper than a micro-reset can address.
+**失敗時：** 釋若難得——前行之果仍染注意——則恐須 `heal` 而非僅 `breathe`。一行而餘情不散，示其深於微重置所能及。
 
-### Step 4: Continue
+### 步驟四：續
 
-Take the next action. The pause is over.
+取次行。息已畢。
 
-Breathe does not produce output, does not update memory, does not generate analysis. It produces one moment of clarity, and that moment is spent the instant you move forward.
+息不生輸出，不更記憶，不生分析。息生一刻之明——此刻於汝前行之瞬即消。
 
-**Expected:** The next action is taken with fresh attention rather than accumulated momentum.
+**預期：** 次行以新之注意行之，非累積之慣勢。
 
-**On failure:** There is no failure mode for continuing. The pause has already done its work — or revealed that deeper work is needed.
+**失敗時：** 續無敗之模。息已行其功——或已揭須深修之事。
 
-## Validation
+## 驗證
 
-- [ ] A genuine pause occurred (not a performative one)
-- [ ] One check question was asked and honestly answered
-- [ ] The previous action's emotional residue was released
-- [ ] The next action proceeds from clear ground
-- [ ] Total elapsed time was brief — breathe should take seconds, not minutes
+- [ ] 真之止既發（非作態）
+- [ ] 一查問既問、既誠答
+- [ ] 前行之情緒餘溫既釋
+- [ ] 次行自明地而起
+- [ ] 歷時短——息當以秒計，非以分計
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Breathe as procrastination**: If you're breathing between every single action, you're not breathing — you're stalling. Use breathe at natural transition points, not as a delay tactic
-- **Analysis during breathe**: The check step is one question, not a full assessment. If you need more, use `meditate` or `center`
-- **Performing the pause**: Going through the motions without genuine stopping. The point is actual interruption of momentum, not a ritual
-- **Skipping release**: Checking alignment but keeping the emotional charge from the previous step. Release is what makes the next action clean
-- **Making breathe heavy**: This is the lightest skill in the system. If it feels heavy, you've added too much to it
+- **息為拖延**：若每動之間皆息，則非息而為滯。息宜於自然轉折處，非作拖延之術
+- **息中分析**：查步為一問，非全面評估。欲深則用 `meditate` 或 `center`
+- **作態之止**：走過場而未真止。旨在真斷慣勢，非儀式
+- **略去釋**：核對齊而留前步之情緒荷。釋乃使次行潔淨
+- **令息重**：此為系統中最輕之技能。若感重，則已加入過多
 
-## Related Skills
+## 相關技能
 
-- `meditate` — full clearing session when breathe reveals deeper drift
-- `center` — structural rebalancing when breathe reveals misaligned load distribution
-- `heal` — subsystem assessment when breathe reveals persistent issues
-- `observe` — sustained observation when breathe's single check reveals something worth watching
+- `meditate` — 息既揭深層偏移時之完整清除會話
+- `center` — 息既揭載重失衡時之結構再平衡
+- `heal` — 息既揭持續議題時之子系統評估
+- `observe` — 息之一查既揭值觀之事時之持續觀察

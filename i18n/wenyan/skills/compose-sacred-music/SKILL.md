@@ -24,34 +24,34 @@ metadata:
   tags: hildegard, sacred-music, chant, gregorian, modal, symphonia, antiphon, sequence
 ---
 
-# Compose Sacred Music
+# 製聖樂
 
-Compose or analyze sacred music in Hildegard von Bingen's distinctive style, following her *Symphonia harmoniae caelestium revelationum* and modal composition principles.
+依賓根之希爾德嘉德獨特之風製或析聖樂，循其 *Symphonia harmoniae caelestium revelationum* 與調式作曲之理。
 
-## When to Use
+## 用時
 
-- You want to compose a new piece of sacred music in Hildegardian style
-- You need to analyze an existing Hildegard chant for structure, mode, and text-setting
-- You are researching medieval modal music and neumatic notation
-- You want to understand the liturgical context of Hildegard's compositions
-- You are preparing to perform or teach Hildegard's music
-- You need guidance on text-setting for Latin sacred texts
+- 欲製新聖樂於希爾德嘉德之風
+- 需析現存希爾德嘉德之歌之構、調、詞設
+- 研中世調式之樂與紐姆之記
+- 欲解希爾德嘉德曲之禮境
+- 備演或教希爾德嘉德之樂
+- 需設拉丁聖詞之指
 
-## Inputs
+## 入
 
-- **Required**: Purpose (compose new piece OR analyze existing piece)
-- **Required for composition**: Sacred text (Latin preferred, English acceptable for study)
-- **Required for composition**: Liturgical context (antiphon, sequence, responsory, hymn)
-- **Required for analysis**: Title of Hildegard piece to analyze (e.g., "O vis aeternitatis")
-- **Optional**: Feast day or liturgical season (influences modal choice)
-- **Optional**: Intended performer experience level (simple syllabic vs. virtuosic melismatic)
-- **Optional**: Mode preference (if composing)
+- **必**：旨（製新曲或析存曲）
+- **製必**：聖詞（拉丁為上，英可為學）
+- **製必**：禮境（對歌、繼歌、應歌、頌）
+- **析必**：所析之希爾德嘉德之曲名（如「O vis aeternitatis」）
+- **可選**：節或禮季（影調擇）
+- **可選**：演者之階（簡音節或繁華彩）
+- **可選**：調之好（若製）
 
-## Procedure
+## 法
 
-### Step 1: Modal Selection (if composing) or Identification (if analyzing)
+### 第一步：擇調（製）或識調（析）
 
-Choose or identify the liturgical mode that governs the melodic structure.
+擇或識御旋律之禮調。
 
 ```
 The Eight Church Modes (Medieval System):
@@ -101,13 +101,13 @@ Modal Selection by Liturgical Context:
 - General saints → Mode 1 or Mode 8
 ```
 
-**Expected:** Mode identified (if analyzing) or selected (if composing) with final note and characteristic range established.
+**得：** 調已識（析）或擇（製），終音與特範已立。
 
-**On failure:** If uncertain, default to Mode 1 (Dorian authentic, final on D). This is Hildegard's most frequent choice and offers wide melodic range.
+**敗則：** 不確則默擇第一調（多利安本調，終於 D）。乃希爾德嘉德最常之擇且供廣旋律之範。
 
-### Step 2: Melodic Contour and Range
+### 第二步：旋律之輪廓與範
 
-Establish the distinctive wide-range, soaring melodic contour characteristic of Hildegard's style.
+立希爾德嘉德風之廣範翱翔之輪廓。
 
 ```
 Hildegard's Melodic Signature:
@@ -138,13 +138,13 @@ Hildegard's Melismatic Technique:
   - Example: "aeternitatis" may carry 15-30 notes across the word
 ```
 
-**Expected:** Melodic contour sketched with identified climax point, wide range planned (minimum 9th, preferably 10th-12th), and syllabic/melismatic distribution determined.
+**得：** 旋律輪廓已略，峰點已識，廣範已謀（至少九度，宜十至十二），音節與華彩之分已定。
 
-**On failure:** If melodic range feels too wide for performers, reduce climax by one step (e.g., from high D to C). Maintain the arch shape but compress the range.
+**敗則：** 若範過廣於演者，降峰一步（如自高 D 至 C）。留弧之形而縮其範。
 
-### Step 3: Text-Setting — Syllabic and Melismatic
+### 第三步：詞設——音節與華彩
 
-Map the sacred text to melody with appropriate syllabic, neumatic, and melismatic distribution.
+以合宜之音節、紐姆、華彩之分映聖詞於旋律。
 
 ```
 Hildegard's Text-Setting Principles:
@@ -196,13 +196,13 @@ RESPONSORY (call-and-response structure):
 - Example: "O ignis Spiritus" — highly melismatic solo sections
 ```
 
-**Expected:** Text fully mapped to melody with syllabic/neumatic/melismatic choices marked. Key theological terms receive melismatic treatment. Text remains intelligible despite ornamentation.
+**得：** 詞全映於旋律，音節/紐姆/華彩之擇已標。關神學之詞受華彩之待。詞雖飾仍可聞。
 
-**On failure:** If text becomes unintelligible (too much melisma), simplify non-essential words to syllabic. Retain melisma ONLY on 1-2 most important words per phrase.
+**敗則：** 若詞不可聞（華彩過），簡非要之詞為音節。只留華彩於每句之一二最要之詞。
 
-### Step 4: Neumatic Notation (Optional — for authenticity)
+### 第四步：紐姆之記（選——為真）
 
-Notate using medieval square-note neumes on a 4-line staff (if desired for historical accuracy).
+用中世四線譜上方形紐姆記之（若求史之真）。
 
 ```
 Medieval Neumatic Notation Basics:
@@ -234,13 +234,13 @@ Modern Alternative:
 - Mark text syllables clearly under each neume group
 ```
 
-**Expected:** (Optional) Neumatic notation sketch provided if user requests historical authenticity. Modern staff notation acceptable for performance preparation.
+**得：**（選）紐姆記之略若用者求史真。現代五線之記可受以備演。
 
-**On failure:** If neumatic notation is too complex, provide modern staff notation with clear phrasing marks. Hildegard's music can be performed from modern notation without loss of essential character.
+**敗則：** 若紐姆過繁，供現代之記附清之句標。希爾德嘉德之樂可由現代記演而無失本質。
 
-### Step 5: Liturgical Context and Performance Notes
+### 第五步：禮境與演注
 
-Situate the composition or analysis within liturgical use and provide performance guidance.
+置作或析於禮用且供演之指。
 
 ```
 Liturgical Context by Form:
@@ -296,36 +296,36 @@ ENSEMBLE:
   for Hildegard's convent, but aesthetically compatible)
 ```
 
-**Expected:** Liturgical use identified (when/where the piece is sung), performance notes provided (tempo, dynamics, pronunciation), and historical context clarified.
+**得：** 禮用已識（何時何處唱），演之注已供（速、強弱、發音），史境已明。
 
-**On failure:** If liturgical context is unclear, focus on performance notes only. Hildegard's music can be performed in concert settings without strict liturgical adherence.
+**敗則：** 若禮境不明，專於演之注。希爾德嘉德之樂可於音樂會中演而無嚴守禮。
 
-## Validation Checklist
+## 驗
 
-- [ ] Mode identified or selected (1-8, with final note)
-- [ ] Melodic range spans at least a 9th (preferably 10th-12th)
-- [ ] Key theological terms receive melismatic treatment
-- [ ] Climax placed on most important word in text
-- [ ] Phrase begins low (near final) and ends on final note
-- [ ] Text intelligible despite ornamentation (not over-melismatic on every word)
-- [ ] Liturgical context noted (antiphon/sequence/responsory)
-- [ ] Performance notes provided (tempo, dynamics, pronunciation)
-- [ ] If analyzing: Comparison to Hildegard's authentic works cited
+- [ ] 調已識或擇（一至八，附終音）
+- [ ] 旋律範至少九度（宜十至十二）
+- [ ] 關神學之詞受華彩
+- [ ] 峰置於詞中最要
+- [ ] 句始低（近終）而終於終音
+- [ ] 詞雖飾仍可聞（非每字皆華彩）
+- [ ] 禮境已注（對歌/繼歌/應歌）
+- [ ] 演之注已供（速、強弱、發音）
+- [ ] 若析：引希爾德嘉德真作以比
 
-## Common Pitfalls
+## 陷
 
-1. **Over-melisma**: Adding melismas to every syllable obscures text. Reserve for key words
-2. **Ignoring Mode**: Hildegard respects modal boundaries. Don't drift to unrelated pitches
-3. **Modern Rhythm**: Medieval chant is non-metrical. Avoid imposing 4/4 time signatures
-4. **Narrow Range**: Hildegard's signature is WIDE range. Less than a 9th is not Hildegardian
-5. **Premature Climax**: Placing highest note too early leaves nowhere to build. Save for key word
-6. **Monotone Sections**: Long syllabic sections without melodic interest sound flat. Mix syllabic with neumatic
-7. **Ignoring Text Meaning**: Melody must serve theological meaning. Random melisma placement is anti-Hildegardian
+1. **華彩過**：每音節加華彩掩詞。留於要字
+2. **忽調**：希爾德嘉德敬調界。勿遊於無關之音
+3. **現代之律**：中世歌乃非律。勿加 4/4 之拍
+4. **範窄**：希爾德嘉德之簽為廣範。少於九度非其風
+5. **峰早**：最高音置太早，後無所升。留於要字
+6. **單調之段**：長音節無旋律之興則平。雜以紐姆
+7. **忽詞義**：旋律必事神學之義。隨意置華彩非希爾德嘉德之風
 
-## Related Skills
+## 參
 
-- `practice-viriditas` — Hildegard's music is an expression of viriditas (greening life force)
-- `consult-natural-history` — Many chants reference plants, stones, elements from *Physica*
-- `assess-holistic-health` — Music as healing modality in Hildegard's holistic system
-- `meditate` (esoteric domain) — Singing Hildegard's music can be meditative practice
-- `formulate-herbal-remedy` — Some chants reference herbs with healing properties
+- `practice-viriditas` — 希爾德嘉德之樂乃 viriditas（綠生之力）之表
+- `consult-natural-history` — 諸歌引 *Physica* 之草、石、元
+- `assess-holistic-health` — 樂為希爾德嘉德整健系之癒式
+- `meditate`（esoteric 域） — 唱希爾德嘉德之樂可為冥之修
+- `formulate-herbal-remedy` — 諸歌引有癒之草

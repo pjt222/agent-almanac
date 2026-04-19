@@ -26,27 +26,27 @@ metadata:
 
 # Build Parameterized Report
 
-Create reports that accept parameters to generate multiple customized variations from a single template.
+建可接參數之報告，自一模板生多定制變體。
 
-## When to Use
+## 適用時機
 
-- Generating the same report for different departments, regions, or time periods
-- Creating client-specific reports from a template
-- Building dashboards that filter to specific subsets
-- Automating recurring reports with different inputs
+- 為不同部門、地區、時期生同一報告
+- 自模板生客戶專之報告
+- 建濾特定子集之儀表板
+- 自動化以不同輸入之循環報告
 
-## Inputs
+## 輸入
 
-- **Required**: Report template (Quarto or R Markdown)
-- **Required**: Parameter definitions (names, types, defaults)
-- **Optional**: List of parameter values for batch generation
-- **Optional**: Output directory for generated reports
+- **必要**：報告模板（Quarto 或 R Markdown）
+- **必要**：參數定義（名、類型、預設）
+- **選擇性**：批生之參數值列
+- **選擇性**：所生報告之輸出目錄
 
-## Procedure
+## 步驟
 
-### Step 1: Define Parameters in YAML
+### 步驟一：於 YAML 定參數
 
-For Quarto (`report.qmd`):
+Quarto（`report.qmd`）：
 
 ```yaml
 ---
@@ -61,7 +61,7 @@ format:
 ---
 ```
 
-For R Markdown (`report.Rmd`):
+R Markdown（`report.Rmd`）：
 
 ```yaml
 ---
@@ -74,11 +74,11 @@ output: html_document
 ---
 ```
 
-**Expected:** The YAML header contains a `params:` block with named parameters, each having a default value of the correct type.
+**預期：** YAML 首部含 `params:` 塊，其中有名參數，各具正類預設值。
 
-**On failure:** If rendering fails with "object 'params' not found", ensure the `params:` block is correctly indented under the YAML frontmatter. For Quarto, `params` must be at the top level of the YAML, not nested under `format:`.
+**失敗時：** 渲染失「object 'params' not found」時，確 `params:` 塊於 YAML 首部下正縮進。Quarto 中，`params` 當於 YAML 頂層，非嵌於 `format:` 下。
 
-### Step 2: Use Parameters in Code
+### 步驟二：於代碼中用參數
 
 ````markdown
 ```{r}
@@ -104,13 +104,13 @@ forecast::autoplot(forecast_model)
 ```
 ````
 
-**Expected:** Code chunks reference parameters via `params$name` and conditional chunks use `#| eval: !expr params$flag` for Quarto. Inline R expressions like `` `r params$region` `` render dynamic text.
+**預期：** 代碼塊透過 `params$name` 引參數，條件塊於 Quarto 用 `#| eval: !expr params$flag`。行內 R 表達式如 `` `r params$region` `` 生動態文字。
 
-**On failure:** If `params$name` returns NULL, verify the parameter name matches exactly between the YAML definition and the code reference (case-sensitive). Check that default values are the correct type.
+**失敗時：** 若 `params$name` 返 NULL，驗參數名與 YAML 定義中代碼引之完全相符（大小寫敏感）。查預設值為正類。
 
-### Step 3: Render with Custom Parameters
+### 步驟三：以自訂參數渲染
 
-Single render:
+單次渲染：
 
 ```r
 # Quarto
@@ -127,11 +127,11 @@ rmarkdown::render(
 )
 ```
 
-**Expected:** A single report renders successfully with custom parameter values overriding the YAML defaults. The output file is created at the specified path.
+**預期：** 單報告以自訂參數值覆 YAML 預設而成渲染。輸出文件於所指路徑生成。
 
-**On failure:** If Quarto render fails, check that `quarto` CLI is installed and on PATH. If R Markdown render fails, verify `rmarkdown` is installed. Ensure parameter names in `execute_params` (Quarto) or `params` (R Markdown) match the YAML definitions exactly.
+**失敗時：** 若 Quarto 渲染失，查 `quarto` CLI 已裝且於 PATH。若 R Markdown 渲染失，驗 `rmarkdown` 已裝。確 `execute_params`（Quarto）或 `params`（R Markdown）中參數名與 YAML 定義完全相符。
 
-### Step 4: Batch Render Multiple Reports
+### 步驟四：批渲多報告
 
 ```r
 regions <- c("North America", "Europe", "Asia Pacific", "Latin America")
@@ -153,11 +153,11 @@ purrr::pwalk(combinations, function(region, year) {
 })
 ```
 
-**Expected:** One HTML file per region-year combination.
+**預期：** 每地區-年組合一 HTML 文件。
 
-**On failure:** Check that parameter names match exactly between YAML and code. Ensure all parameter values are valid.
+**失敗時：** 查參數名於 YAML 與代碼間完全相符。確所有參數值為有效。
 
-### Step 5: Add Parameter Validation
+### 步驟五：加參數驗證
 
 ```r
 #| label: validate-params
@@ -169,11 +169,11 @@ stopifnot(
 )
 ```
 
-**Expected:** The validation code chunk runs at the start of each render and stops with an informative error if any parameter is out of range or the wrong type.
+**預期：** 驗證代碼塊於每次渲染始執，任一參數超範圍或誤類即以明告止。
 
-**On failure:** If `stopifnot()` produces unhelpful error messages, switch to explicit `if (!cond) stop("message")` calls for clearer diagnostics.
+**失敗時：** 若 `stopifnot()` 之錯訊不助，改用明之 `if (!cond) stop("message")` 以明斷。
 
-### Step 6: Organize Output
+### 步驟六：組織輸出
 
 ```r
 # Create output directory
@@ -188,29 +188,29 @@ quarto::quarto_render(
 )
 ```
 
-**Expected:** Output files are written to a date-stamped subdirectory with descriptive names (e.g., `reports/2025-06/report-europe.html`).
+**預期：** 輸出文件寫入日期標之子目錄，以描述性名命（如 `reports/2025-06/report-europe.html`）。
 
-**On failure:** If `dir.create()` fails, check that the parent directory exists and is writable. On Windows, verify the path length does not exceed 260 characters.
+**失敗時：** 若 `dir.create()` 失，查父目錄存且可寫。Windows 上驗路徑長不超 260 字元。
 
-## Validation
+## 驗證
 
-- [ ] Report renders with default parameters
-- [ ] Report renders with each set of custom parameters
-- [ ] Parameters are validated before processing
-- [ ] Output files are named descriptively
-- [ ] Conditional sections render correctly based on parameters
-- [ ] Batch generation completes for all combinations
+- [ ] 報告以預設參數渲染
+- [ ] 報告以每組自訂參數渲染
+- [ ] 參數於處理前驗證
+- [ ] 輸出文件以描述性名命
+- [ ] 條件部分依參數正渲染
+- [ ] 批生於所有組合完成
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Parameter name mismatch**: YAML names must exactly match `params$name` references in code
-- **Type coercion**: YAML may parse `year: 2025` as integer but code expects character. Be explicit.
-- **Conditional evaluation**: Use `#| eval: !expr params$flag` not `eval = params$flag` in Quarto
-- **File overwriting**: Without unique output names, each render overwrites the previous
-- **Memory in batch mode**: Long batch runs may accumulate memory. Consider using `callr::r()` for isolation.
+- **參數名失配**：YAML 名須與代碼中 `params$name` 引完全相符
+- **類型強轉**：YAML 或解 `year: 2025` 為整數而代碼期字元。明示之
+- **條件之評**：Quarto 中用 `#| eval: !expr params$flag`，非 `eval = params$flag`
+- **文件覆寫**：無唯一輸出名時，每次渲染覆前次
+- **批模式記憶**：長批之運行或累記憶。考慮用 `callr::r()` 以隔離
 
-## Related Skills
+## 相關技能
 
-- `create-quarto-report` - base Quarto document setup
-- `generate-statistical-tables` - tables that adapt to parameters
-- `format-apa-report` - parameterized academic reports
+- `create-quarto-report` — 基礎 Quarto 文檔設置
+- `generate-statistical-tables` — 隨參數調之表
+- `format-apa-report` — 參數化學術報告

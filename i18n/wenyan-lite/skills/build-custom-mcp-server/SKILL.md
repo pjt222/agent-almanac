@@ -25,28 +25,28 @@ metadata:
 
 # Build Custom MCP Server
 
-Create a custom MCP server that exposes domain-specific tools to AI assistants.
+建自訂 MCP 伺服器以向 AI 助手暴露領域專之工具。
 
-## When to Use
+## 適用時機
 
-- Need to expose custom functionality to Claude Code or Claude Desktop
-- Building specialized tools beyond what mcptools provides
-- Creating a domain-specific AI assistant integration
-- Wrapping existing APIs or services as MCP tools
+- 須向 Claude Code 或 Claude Desktop 暴露自訂功能
+- 建超 mcptools 所提之專工具
+- 創領域專之 AI 助手整合
+- 包既有 API 或服務為 MCP 工具
 
-## Inputs
+## 輸入
 
-- **Required**: List of tools to expose (name, description, parameters, behavior)
-- **Required**: Implementation language (Node.js or R)
-- **Required**: Transport type (stdio or HTTP)
-- **Optional**: Authentication requirements
-- **Optional**: Docker packaging needs
+- **必要**：所暴露之工具列（名、描述、參數、行為）
+- **必要**：實作語（Node.js 或 R）
+- **必要**：傳輸類（stdio 或 HTTP）
+- **選擇性**：驗證需求
+- **選擇性**：Docker 打包之需
 
-## Procedure
+## 步驟
 
-### Step 1: Define Tool Specifications
+### 步驟一：定工具規
 
-Before writing code, define each tool:
+書代碼前，定每工具：
 
 ```yaml
 tools:
@@ -76,11 +76,11 @@ tools:
         required: true
 ```
 
-**Expected:** A YAML or markdown specification for each tool with name, description, parameters (including types, defaults, and required flags), and return type documented before writing any code.
+**預期：** 每工具之 YAML 或 markdown 規，含名、描、參（含類、預設、必須旗）、返類，於書代碼前已錄。
 
-**On failure:** If tool specifications are unclear, interview the domain expert or review the existing API documentation to determine parameter types and return formats.
+**失敗時：** 若工具規不明，訪域專或審既有 API 文檔以定參類與返格式。
 
-### Step 2: Implement in Node.js (Using MCP SDK)
+### 步驟二：以 Node.js 實作（用 MCP SDK）
 
 ```javascript
 // server.js
@@ -137,11 +137,11 @@ const transport = new StdioServerTransport();
 await server.connect(transport);
 ```
 
-**Expected:** A working `server.js` file that imports the MCP SDK, defines tools with Zod schemas, and connects via stdio transport. Running `node server.js` starts the server without errors.
+**預期：** 可工作之 `server.js`，引 MCP SDK、以 Zod 綱定工具、以 stdio 傳輸連。運行 `node server.js` 不錯啟伺服器。
 
-**On failure:** Verify that `@modelcontextprotocol/sdk` and `zod` are installed (`npm install`). Check that the import paths match the SDK version (the SDK reorganized exports between versions).
+**失敗時：** 驗 `@modelcontextprotocol/sdk` 與 `zod` 已裝（`npm install`）。查引路合 SDK 版（SDK 於版間重組導出）。
 
-### Step 3: Implement in R (Using mcptools)
+### 步驟三：以 R 實作（用 mcptools）
 
 ```r
 # server.R
@@ -168,11 +168,11 @@ mcp_tool(
 mcptools::mcp_server()
 ```
 
-**Expected:** A working `server.R` file that registers custom tools with `mcp_tool()` and starts the server with `mcp_server()`. Running `Rscript server.R` starts the MCP server.
+**預期：** 可工作之 `server.R`，以 `mcp_tool()` 註自訂工具、以 `mcp_server()` 啟伺服器。運行 `Rscript server.R` 啟 MCP 伺服器。
 
-**On failure:** Ensure `mcptools` is installed from GitHub (`remotes::install_github("posit-dev/mcptools")`). Check that the handler function signatures match the parameter definitions.
+**失敗時：** 確 `mcptools` 自 GitHub 裝（`remotes::install_github("posit-dev/mcptools")`）。查處理函之簽名合參數定義。
 
-### Step 4: Set Up Project Structure
+### 步驟四：立項目結構
 
 ```
 my-mcp-server/
@@ -187,33 +187,33 @@ my-mcp-server/
 └── README.md             # Setup instructions
 ```
 
-**Expected:** Project directory created with `server.js` (or `server.R`), `package.json`, `tools/` directory for modular tool implementations, and `test/` directory for tests.
+**預期：** 項目目錄已創，含 `server.js`（或 `server.R`）、`package.json`、模組工具實作之 `tools/`、測之 `test/`。
 
-**On failure:** If the directory structure doesn't match your implementation language, adjust accordingly. R servers may use `R/` instead of `tools/` and `tests/testthat/` instead of `test/`.
+**失敗時：** 若結構與實作語不合，相應調。R 伺服器或用 `R/` 代 `tools/`，`tests/testthat/` 代 `test/`。
 
-### Step 5: Test the Server
+### 步驟五：測伺服器
 
-**Manual testing with stdio**:
+**以 stdio 手動測**：
 
 ```bash
 echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | node server.js
 ```
 
-**Register with Claude Code**:
+**於 Claude Code 註**：
 
 ```bash
 claude mcp add my-server stdio "node" "/path/to/server.js"
 ```
 
-**Verify tools appear**:
+**驗工具顯**：
 
-Start a Claude Code session and check that custom tools are listed and functional.
+啟 Claude Code 會話，查自訂工具已列且可行。
 
-**Expected:** The `tools/list` JSON-RPC call returns all defined tools with correct names and schemas. `claude mcp list` shows the server registered. Tools are callable from a Claude Code session.
+**預期：** `tools/list` JSON-RPC 呼返諸定工具及正綱。`claude mcp list` 顯所註伺服器。工具於 Claude Code 會話可呼。
 
-**On failure:** If `tools/list` returns an empty array, the tools were not registered before `server.connect()`. If Claude Code cannot find the server, verify the command path in `claude mcp add` is absolute and the binary is executable.
+**失敗時：** 若 `tools/list` 返空陣列，工具於 `server.connect()` 前未註。若 Claude Code 不尋伺服器，驗 `claude mcp add` 中之命令路為絕對且二進可執。
 
-### Step 6: Add Error Handling
+### 步驟六：加錯處
 
 ```javascript
 server.tool("risky_operation", "...", schema, async (params) => {
@@ -231,13 +231,13 @@ server.tool("risky_operation", "...", schema, async (params) => {
 });
 ```
 
-**Expected:** Each tool handler is wrapped in try/catch. Invalid inputs return `isError: true` with a descriptive message instead of crashing the server process.
+**預期：** 每工具處理包 try/catch。無效輸入返 `isError: true` 附描訊，非崩伺服器。
 
-**On failure:** If the server still crashes on bad input, check that the try/catch wraps the entire handler body including any async operations. Ensure promises are awaited within the try block.
+**失敗時：** 若伺服器仍崩於壞輸入，查 try/catch 包全處理體，含任 async 操作。確 promises 於 try 塊內 awaited。
 
-### Step 7: Package for Distribution
+### 步驟七：打包以分發
 
-Create a `package.json` with a bin entry:
+建 `package.json` 附 bin 項：
 
 ```json
 {
@@ -253,36 +253,36 @@ Create a `package.json` with a bin entry:
 }
 ```
 
-Users can then install and configure:
+用戶乃可裝並配：
 
 ```bash
 npm install -g my-mcp-server
 claude mcp add my-server stdio "my-mcp-server"
 ```
 
-**Expected:** A `package.json` with a `bin` entry pointing to the server entry point. Users can install globally with `npm install -g` and register with `claude mcp add`.
+**預期：** `package.json` 附指向伺服器入口之 `bin` 項。用戶可以 `npm install -g` 全域裝、以 `claude mcp add` 註。
 
-**On failure:** If the bin entry doesn't work after global install, ensure `server.js` has a shebang line (`#!/usr/bin/env node`) and is marked executable. Verify the package name doesn't conflict with existing npm packages.
+**失敗時：** 若全域裝後 bin 項不工，確 `server.js` 有 shebang 行（`#!/usr/bin/env node`）且標為可執。驗套件名不衝既有 npm 套件。
 
-## Validation
+## 驗證
 
-- [ ] Server starts without errors
-- [ ] `tools/list` returns all defined tools with correct schemas
-- [ ] Each tool executes correctly with valid input
-- [ ] Tools return appropriate errors for invalid input
-- [ ] Server works with Claude Code via stdio transport
-- [ ] Tools are discoverable and usable in Claude sessions
+- [ ] 伺服器無錯啟
+- [ ] `tools/list` 返諸定工具及正綱
+- [ ] 每工具以有效輸入正執
+- [ ] 工具對無效輸入返合錯
+- [ ] 伺服器以 stdio 傳輸與 Claude Code 工作
+- [ ] 工具於 Claude 會話可發現且可用
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Blocking operations**: MCP servers should handle requests asynchronously. Long-running operations block other tool calls.
-- **Missing error handling**: Unhandled exceptions crash the server. Always wrap tool handlers in try/catch.
-- **Schema mismatches**: Tool parameter schemas must exactly match what the handler expects
-- **stdio buffering**: When using stdio transport, ensure output is flushed. Node.js buffers stdout by default.
-- **Security**: MCP servers have the same access as the process. Validate inputs carefully, especially for shell commands or database queries.
+- **阻操作**：MCP 伺服器當異步處請求。長操作阻他工具呼
+- **缺錯處**：未處之異崩伺服器。恆包工具處於 try/catch
+- **綱失配**：工具參綱須完合處理所期
+- **stdio 緩衝**：用 stdio 傳輸時，確輸出已沖。Node.js 預設緩 stdout
+- **安全**：MCP 伺服器與進程具同存取。細驗輸入，尤其 shell 命令或數據庫查詢
 
-## Related Skills
+## 相關技能
 
-- `configure-mcp-server` - connect the built server to clients
-- `troubleshoot-mcp-connection` - debug connectivity issues
-- `containerize-mcp-server` - package the server in Docker
+- `configure-mcp-server` — 連所建伺服器至客戶端
+- `troubleshoot-mcp-connection` — 調連問題
+- `containerize-mcp-server` — 以 Docker 包伺服器

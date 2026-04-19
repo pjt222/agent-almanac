@@ -74,9 +74,9 @@ output: html_document
 ---
 ```
 
-**Expected:** The YAML header contains a `params:` block with named parameters, each having a default value of the correct type.
+**Got:** The YAML header contains a `params:` block with named parameters, each having a default value of the correct type.
 
-**On failure:** If rendering fails with "object 'params' not found", ensure the `params:` block is correctly indented under the YAML frontmatter. For Quarto, `params` must be at the top level of the YAML, not nested under `format:`.
+**If fail:** If rendering fails with "object 'params' not found", ensure the `params:` block is correctly indented under the YAML frontmatter. For Quarto, `params` must be at the top level of the YAML, not nested under `format:`.
 
 ### Step 2: Use Parameters in Code
 
@@ -104,9 +104,9 @@ forecast::autoplot(forecast_model)
 ```
 ````
 
-**Expected:** Code chunks reference parameters via `params$name` and conditional chunks use `#| eval: !expr params$flag` for Quarto. Inline R expressions like `` `r params$region` `` render dynamic text.
+**Got:** Code chunks reference parameters via `params$name` and conditional chunks use `#| eval: !expr params$flag` for Quarto. Inline R expressions like `` `r params$region` `` render dynamic text.
 
-**On failure:** If `params$name` returns NULL, verify the parameter name matches exactly between the YAML definition and the code reference (case-sensitive). Check that default values are the correct type.
+**If fail:** If `params$name` returns NULL, verify the parameter name matches exactly between the YAML definition and the code reference (case-sensitive). Check that default values are the correct type.
 
 ### Step 3: Render with Custom Parameters
 
@@ -127,9 +127,9 @@ rmarkdown::render(
 )
 ```
 
-**Expected:** A single report renders successfully with custom parameter values overriding the YAML defaults. The output file is created at the specified path.
+**Got:** A single report renders successfully with custom parameter values overriding the YAML defaults. The output file is created at the specified path.
 
-**On failure:** If Quarto render fails, check that `quarto` CLI is installed and on PATH. If R Markdown render fails, verify `rmarkdown` is installed. Ensure parameter names in `execute_params` (Quarto) or `params` (R Markdown) match the YAML definitions exactly.
+**If fail:** If Quarto render fails, check that `quarto` CLI is installed and on PATH. If R Markdown render fails, verify `rmarkdown` is installed. Ensure parameter names in `execute_params` (Quarto) or `params` (R Markdown) match the YAML definitions exactly.
 
 ### Step 4: Batch Render Multiple Reports
 
@@ -153,9 +153,9 @@ purrr::pwalk(combinations, function(region, year) {
 })
 ```
 
-**Expected:** One HTML file per region-year combination.
+**Got:** One HTML file per region-year combination.
 
-**On failure:** Check that parameter names match exactly between YAML and code. Ensure all parameter values are valid.
+**If fail:** Check that parameter names match exactly between YAML and code. Ensure all parameter values are valid.
 
 ### Step 5: Add Parameter Validation
 
@@ -169,9 +169,9 @@ stopifnot(
 )
 ```
 
-**Expected:** The validation code chunk runs at the start of each render and stops with an informative error if any parameter is out of range or the wrong type.
+**Got:** The validation code chunk runs at the start of each render and stops with an informative error if any parameter is out of range or the wrong type.
 
-**On failure:** If `stopifnot()` produces unhelpful error messages, switch to explicit `if (!cond) stop("message")` calls for clearer diagnostics.
+**If fail:** If `stopifnot()` produces unhelpful error messages, switch to explicit `if (!cond) stop("message")` calls for clearer diagnostics.
 
 ### Step 6: Organize Output
 
@@ -188,9 +188,9 @@ quarto::quarto_render(
 )
 ```
 
-**Expected:** Output files are written to a date-stamped subdirectory with descriptive names (e.g., `reports/2025-06/report-europe.html`).
+**Got:** Output files are written to a date-stamped subdirectory with descriptive names (e.g., `reports/2025-06/report-europe.html`).
 
-**On failure:** If `dir.create()` fails, check that the parent directory exists and is writable. On Windows, verify the path length does not exceed 260 characters.
+**If fail:** If `dir.create()` fails, check that the parent directory exists and is writable. On Windows, verify the path length does not exceed 260 characters.
 
 ## Validation
 
@@ -201,7 +201,7 @@ quarto::quarto_render(
 - [ ] Conditional sections render correctly based on parameters
 - [ ] Batch generation completes for all combinations
 
-## Common Pitfalls
+## Pitfalls
 
 - **Parameter name mismatch**: YAML names must exactly match `params$name` references in code
 - **Type coercion**: YAML may parse `year: 2025` as integer but code expects character. Be explicit.

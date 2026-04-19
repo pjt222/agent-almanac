@@ -77,9 +77,9 @@ Approach Evaluation Template:
 
 Fill this out for each approach separately. Do not write a comparison until all individual evaluations are complete.
 
-**Expected:** Independent evaluations where each approach is assessed on its own terms. The evaluation of approach B does not reference approach A. Quality scores reflect genuine assessment, not ranking.
+**Got:** Independent evaluations where each approach is assessed on its own terms. The evaluation of approach B does not reference approach A. Quality scores reflect genuine assessment, not ranking.
 
-**On failure:** If the evaluations are contaminated (you find yourself writing "better than A" while assessing B), reset. Assess A completely, then clear the framing and assess B from scratch. If the scores are all identical, the evaluation dimensions are too coarse — add domain-specific criteria.
+**If fail:** If the evaluations are contaminated (you find yourself writing "better than A" while assessing B), reset. Assess A completely, then clear the framing and assess B from scratch. If the scores are all identical, the evaluation dimensions are too coarse — add domain-specific criteria.
 
 ### Step 2: Waggle Dance — Reason Out Loud
 
@@ -95,9 +95,9 @@ Advocate for each approach proportionally to its quality. This is the AI equival
 
 The purpose of reasoning-out-loud is to make the decision auditable — to yourself and to the user. If the reasoning cannot be articulated, the assessment is shallower than the score suggests.
 
-**Expected:** Explicit reasoning for each approach that would be persuasive to a neutral observer. Cross-inspection reveals at least one consideration that was initially overlooked.
+**Got:** Explicit reasoning for each approach that would be persuasive to a neutral observer. Cross-inspection reveals at least one consideration that was initially overlooked.
 
-**On failure:** If advocacy feels perfunctory (going through motions), the approaches may not be genuinely different — they may be variations of the same idea. Check: do the approaches differ in mechanism, or only in implementation detail? If the latter, the decision may not matter much — pick either and move on.
+**If fail:** If advocacy feels perfunctory (going through motions), the approaches may not be genuinely different — they may be variations of the same idea. Check: do the approaches differ in mechanism, or only in implementation detail? If the latter, the decision may not matter much — pick either and move on.
 
 ### Step 3: Set Quorum Threshold and Commit
 
@@ -128,9 +128,9 @@ Confidence Thresholds by Stakes:
 4. If no: identify what additional information would raise confidence to the threshold
 5. Once committed, do not revisit unless new disqualifying evidence emerges
 
-**Expected:** A clear commitment moment with stated reasoning. The decision is made at an appropriate confidence level for its stakes.
+**Got:** A clear commitment moment with stated reasoning. The decision is made at an appropriate confidence level for its stakes.
 
-**On failure:** If the threshold is never met (can't reach 90% on an irreversible decision), ask: is the decision truly irreversible? Can it be decomposed into a reversible test phase + an irreversible commit? Most apparently irreversible decisions can be staged. If staging is impossible, communicate the uncertainty to the user and ask for guidance.
+**If fail:** If the threshold is never met (can't reach 90% on an irreversible decision), ask: is the decision truly irreversible? Can it be decomposed into a reversible test phase + an irreversible commit? Most apparently irreversible decisions can be staged. If staging is impossible, communicate the uncertainty to the user and ask for guidance.
 
 ### Step 4: Resolve Deadlocks
 
@@ -163,9 +163,9 @@ Deadlock Resolution:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**Expected:** Deadlock resolved through the appropriate mechanism. The resolution is decisive — no lingering doubt that undermines execution.
+**Got:** Deadlock resolved through the appropriate mechanism. The resolution is decisive — no lingering doubt that undermines execution.
 
-**On failure:** If the deadlock persists through all resolution strategies, the decision may be premature. Ask the user: "I see two equally strong approaches: [A] and [B]. [Brief case for each.] Which aligns better with your priorities?" Delegating a genuine tie to the user is not a failure — it is acknowledging that the decision depends on values the AI cannot infer.
+**If fail:** If the deadlock persists through all resolution strategies, the decision may be premature. Ask the user: "I see two equally strong approaches: [A] and [B]. [Brief case for each.] Which aligns better with your priorities?" Delegating a genuine tie to the user is not a failure — it is acknowledging that the decision depends on values the AI cannot infer.
 
 ### Step 5: Assess Coherence Quality
 
@@ -180,9 +180,9 @@ After committing to a decision, evaluate whether the process produced genuine co
 4. Is there useful information from the losing approaches that should inform implementation?
    - A risk identified in approach B might apply to approach A as well
 
-**Expected:** A brief quality check that either confirms the decision or identifies it as weak. If weak, return to the appropriate earlier step rather than proceeding on shaky ground.
+**Got:** A brief quality check that either confirms the decision or identifies it as weak. If weak, return to the appropriate earlier step rather than proceeding on shaky ground.
 
-**On failure:** If the quality check reveals that the decision was preference-based rather than evidence-based, acknowledge it honestly. Sometimes preference is all that is available — but it should be labeled as such, not dressed up as analysis.
+**If fail:** If the quality check reveals that the decision was preference-based rather than evidence-based, acknowledge it honestly. Sometimes preference is all that is available — but it should be labeled as such, not dressed up as analysis.
 
 ## Validation
 
@@ -194,13 +194,13 @@ After committing to a decision, evaluate whether the process produced genuine co
 - [ ] Post-decision quality check was performed
 - [ ] A reassessment trigger was defined
 
-## Common Pitfalls
+## Pitfalls
 
-- **Premature commitment**: Deciding before evaluating all approaches. The first approach considered has an anchoring advantage — it gets more mental attention simply by being first. Evaluate all before comparing
+- **Premature commitment**: Deciding before evaluating all approaches. The first approach considered has an anchoring advantage — it gets more mental attention by being first. Evaluate all before comparing
 - **Equal advocacy for unequal approaches**: If approach A scored 85 and approach B scored 45, spending equal time advocating for both wastes effort and creates false equivalence
 - **Rubber-stamping**: Going through the evaluation process to justify a decision already made. The test is whether the evaluation could have changed the outcome. If not, the process was theater
 - **Threshold avoidance**: Lowering the confidence threshold to make the decision easier rather than gathering the information needed to meet the appropriate threshold
-- **Ignoring the losing side**: The losing approach often contains warnings that apply to the winning one. Risks identified in approach B don't disappear just because approach A was chosen
+- **Ignoring the losing side**: The losing approach often contains warnings that apply to the winning one. Risks identified in approach B don't disappear because approach A was chosen
 
 ## Related Skills
 

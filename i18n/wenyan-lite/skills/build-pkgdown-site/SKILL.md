@@ -25,37 +25,37 @@ metadata:
 
 # Build pkgdown Site
 
-Configure and deploy a pkgdown documentation website for an R package.
+配置並部署 R 套件之 pkgdown 文檔網站。
 
-## When to Use
+## 適用時機
 
-- Creating a documentation site for an R package
-- Customizing pkgdown layout, theme, or navigation
-- Fixing 404 errors on a deployed pkgdown site
-- Migrating between deployment methods
+- 為 R 套件建文檔站
+- 定制 pkgdown 之版型、主題、導航
+- 修已部署 pkgdown 站之 404
+- 於部署法間遷移
 
-## Inputs
+## 輸入
 
-- **Required**: R package with roxygen2 documentation
-- **Required**: GitHub repository
-- **Optional**: Custom theme or branding
-- **Optional**: Vignettes to include as articles
+- **必要**：含 roxygen2 文檔之 R 套件
+- **必要**：GitHub 倉庫
+- **選擇性**：自定主題或品牌
+- **選擇性**：列為文章之 vignettes
 
-## Procedure
+## 步驟
 
-### Step 1: Initialize pkgdown
+### 步驟一：初始化 pkgdown
 
 ```r
 usethis::use_pkgdown()
 ```
 
-This creates `_pkgdown.yml` and adds pkgdown to `.Rbuildignore`.
+此創 `_pkgdown.yml` 並於 `.Rbuildignore` 加 pkgdown 相關項。
 
-**Expected:** `_pkgdown.yml` exists in the project root. `.Rbuildignore` contains pkgdown-related entries.
+**預期：** `_pkgdown.yml` 存於項目根。`.Rbuildignore` 含 pkgdown 相關項。
 
-**On failure:** Install pkgdown with `install.packages("pkgdown")`. If `_pkgdown.yml` already exists, the function will update `.Rbuildignore` without overwriting the config.
+**失敗時：** 以 `install.packages("pkgdown")` 裝 pkgdown。若 `_pkgdown.yml` 已存，此函僅更 `.Rbuildignore` 而不覆配置。
 
-### Step 2: Configure `_pkgdown.yml`
+### 步驟二：配置 `_pkgdown.yml`
 
 ```yaml
 url: https://username.github.io/packagename/
@@ -97,41 +97,41 @@ articles:
       - customization
 ```
 
-**Critical**: Set `development: mode: release`. The default `mode: auto` causes 404 errors on GitHub Pages because it appends `/dev/` to URLs.
+**關鍵**：設 `development: mode: release`。預設 `mode: auto` 於 GitHub Pages 致 404，因其於 URL 附 `/dev/`。
 
-**Expected:** `_pkgdown.yml` contains valid YAML with `url`, `template`, `navbar`, `reference`, and `articles` sections appropriate for the package.
+**預期：** `_pkgdown.yml` 含有效 YAML，具合於套件之 `url`、`template`、`navbar`、`reference`、`articles` 段。
 
-**On failure:** Validate YAML syntax with an online YAML linter. Ensure all function names in `reference.contents` match actual exported functions.
+**失敗時：** 以線上 YAML 校驗器驗語法。確 `reference.contents` 中所有函數名合實際已導出之函數。
 
-### Step 3: Build Locally
+### 步驟三：本地構建
 
 ```r
 pkgdown::build_site()
 ```
 
-**Expected:** `docs/` directory created with a complete site including `index.html`, function reference pages, and articles.
+**預期：** 創 `docs/` 目錄，含完整站，包 `index.html`、函數參考頁、文章。
 
-**On failure:** Common issues: missing pandoc (set `RSTUDIO_PANDOC` in `.Renviron`), missing vignette dependencies (install suggested packages), or broken examples (fix or wrap in `\dontrun{}`).
+**失敗時：** 常見問題：pandoc 缺（於 `.Renviron` 設 `RSTUDIO_PANDOC`）、vignette 依賴缺（裝建議套件）、或破之示例（修或包入 `\dontrun{}`）。
 
-### Step 4: Preview Site
+### 步驟四：預覽站
 
 ```r
 pkgdown::preview_site()
 ```
 
-Verify navigation, function reference, articles, and search work correctly.
+驗導航、函數參考、文章、搜索正工。
 
-**Expected:** Site opens in the browser at localhost. All navigation links work, function reference pages render, and search returns results.
+**預期：** 站於瀏覽器之 localhost 開。導航連結皆工、函數參考頁渲染、搜索返結果。
 
-**On failure:** If the preview does not open, manually open `docs/index.html` in a browser. If pages are missing, check that `devtools::document()` was run before building the site.
+**失敗時：** 若預覽不開，手於瀏覽器開 `docs/index.html`。若頁缺，查構站前是否已運行 `devtools::document()`。
 
-### Step 5: Deploy to GitHub Pages
+### 步驟五：部署至 GitHub Pages
 
-**Method A: GitHub Actions (Recommended)**
+**法甲：GitHub Actions（建議）**
 
-See `setup-github-actions-ci` skill for the pkgdown workflow.
+見 `setup-github-actions-ci` 技能之 pkgdown 工作流。
 
-**Method B: Manual Branch Deployment**
+**法乙：手動分支部署**
 
 ```bash
 # Build site
@@ -149,54 +149,54 @@ git push origin gh-pages
 git checkout main
 ```
 
-**Expected:** The `gh-pages` branch exists on the remote with the site files at the root level.
+**預期：** `gh-pages` 分支存於遠端，站文件於根層級。
 
-**On failure:** If the push is rejected, ensure you have write access to the repository. If using GitHub Actions deployment instead, skip this step and follow the `setup-github-actions-ci` skill.
+**失敗時：** 若推被拒，確有倉庫寫權限。若用 GitHub Actions 部署，略此步並循 `setup-github-actions-ci` 技能。
 
-### Step 6: Configure GitHub Pages
+### 步驟六：配置 GitHub Pages
 
-1. Go to repository Settings > Pages
-2. Set Source to "Deploy from a branch"
-3. Select `gh-pages` branch, `/ (root)` folder
-4. Save
+1. 至倉庫 Settings > Pages
+2. Source 設為「Deploy from a branch」
+3. 選 `gh-pages` 分支、`/ (root)` 資料夾
+4. 存
 
-**Expected:** Site available at `https://username.github.io/packagename/` within a few minutes.
+**預期：** 站於數分鐘內於 `https://username.github.io/packagename/` 可用。
 
-**On failure:** If the site returns 404, verify the Pages source matches the deployment method (branch deployment requires "Deploy from a branch"). Check that `development: mode: release` is set in `_pkgdown.yml`.
+**失敗時：** 若站返 404，驗 Pages 源合部署法（分支部署須「Deploy from a branch」）。查 `_pkgdown.yml` 中 `development: mode: release` 已設。
 
-### Step 7: Add URL to DESCRIPTION
+### 步驟七：加 URL 至 DESCRIPTION
 
 ```
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 
-**Expected:** DESCRIPTION `URL` field contains both the pkgdown site URL and the GitHub repository URL, separated by a comma.
+**預期：** DESCRIPTION 之 `URL` 段含 pkgdown 站 URL 與 GitHub 倉庫 URL，以逗分。
 
-**On failure:** If `R CMD check` warns about invalid URLs, verify the pkgdown site is actually deployed and accessible before adding the URL.
+**失敗時：** 若 `R CMD check` 警 URL 無效，先驗 pkgdown 站確實部署且可達，後加 URL。
 
-## Validation
+## 驗證
 
-- [ ] Site builds locally without errors
-- [ ] All function reference pages render correctly
-- [ ] Articles/vignettes are accessible and render properly
-- [ ] Search functionality works
-- [ ] Navigation links are correct
-- [ ] Site deploys successfully to GitHub Pages
-- [ ] No 404 errors on the deployed site
-- [ ] `development: mode: release` is set in `_pkgdown.yml`
+- [ ] 站於本地無錯構建
+- [ ] 所有函數參考頁正渲染
+- [ ] 文章／vignettes 可達且正渲染
+- [ ] 搜索功能工作
+- [ ] 導航連結正確
+- [ ] 站成部署至 GitHub Pages
+- [ ] 已部署站無 404
+- [ ] `_pkgdown.yml` 中 `development: mode: release` 已設
 
-## Common Pitfalls
+## 常見陷阱
 
-- **404 errors after deployment**: Almost always caused by `development: mode: auto` (the default). Change to `mode: release`.
-- **Missing reference pages**: Functions must be exported and documented. Run `devtools::document()` first.
-- **Broken vignette links**: Use `vignette("name")` syntax in cross-references, not file paths.
-- **Logo not showing**: Place logo at `man/figures/logo.png` and reference in `_pkgdown.yml`.
-- **Search not working**: Requires `url` field in `_pkgdown.yml` to be set correctly.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **部署後之 404**：幾皆因 `development: mode: auto`（預設）。改為 `mode: release`
+- **參考頁缺**：函數須已導出且已文檔。先運行 `devtools::document()`
+- **破之 vignette 連結**：交叉引用用 `vignette("name")` 語法，非文件路徑
+- **標誌不顯**：標誌置於 `man/figures/logo.png`，於 `_pkgdown.yml` 引之
+- **搜索不工**：須 `_pkgdown.yml` 之 `url` 段正設
+- **混合系統之誤 R 二進位**：WSL 或 Docker 中，`Rscript` 或解為跨平台包裝而非原生 R。以 `which Rscript && Rscript --version` 查。為可靠，宜用原生 R 二進位（如 Linux/WSL 之 `/usr/local/bin/Rscript`）。見 [Setting Up Your Environment](../../guides/setting-up-your-environment.md) 之 R 路徑配置。
 
-## Related Skills
+## 相關技能
 
-- `setup-github-actions-ci` - automated pkgdown deployment workflow
-- `write-roxygen-docs` - function documentation that appears on the site
-- `write-vignette` - articles that appear in the site navigation
-- `release-package-version` - trigger site rebuild on release
+- `setup-github-actions-ci` — 自動化 pkgdown 部署工作流
+- `write-roxygen-docs` — 於站顯之函數文檔
+- `write-vignette` — 於站導航顯之文章
+- `release-package-version` — 發布時觸站重構

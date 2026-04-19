@@ -25,27 +25,27 @@ metadata:
 
 # Build Shiny Module
 
-Create reusable Shiny UI/server module pairs with proper namespace isolation, reactive communication, and composability.
+Create reusable Shiny UI/server module pairs with proper namespace isolation, reactive communication, composability.
 
-## When to Use
+## When Use
 
-- Extracting a reusable component from a growing Shiny app
-- Building a UI widget that will be used in multiple places
-- Encapsulating complex reactive logic behind a clean interface
+- Extracting reusable component from growing Shiny app
+- Building UI widget used in multiple places
+- Encapsulating complex reactive logic behind clean interface
 - Composing larger applications from smaller, testable units
 
 ## Inputs
 
 - **Required**: Module purpose and functionality description
-- **Required**: Input/output contract (what the module receives and returns)
-- **Optional**: Whether the module nests other modules (default: no)
-- **Optional**: Framework context (golem, rhino, or vanilla)
+- **Required**: Input/output contract (what module receives and returns)
+- **Optional**: Whether module nests other modules (default: no)
+- **Optional**: Framework context (golem, rhino, vanilla)
 
-## Procedure
+## Steps
 
 ### Step 1: Define the Module Interface
 
-Before writing code, define what the module accepts and returns:
+Before writing code, define what module accepts and returns:
 
 ```
 Module: data_filter
@@ -54,9 +54,9 @@ Outputs: reactive filtered dataset
 UI: filter controls (selectInput, sliderInput, dateRangeInput)
 ```
 
-**Expected:** Clear contract specifying reactive inputs, reactive outputs, and UI elements.
+**Got:** Clear contract specifying reactive inputs, reactive outputs, UI elements.
 
-**On failure:** If the interface is unclear, the module is probably too broad. Split it into smaller modules with single responsibilities.
+**If fail:** Interface unclear? Module probably too broad. Split into smaller modules with single responsibilities.
 
 ### Step 2: Create the Module UI Function
 
@@ -83,13 +83,13 @@ dataFilterUI <- function(id) {
 Key rules:
 - Function name follows `<name>UI` convention
 - First argument is always `id`
-- Create `ns <- NS(id)` at the top
+- Create `ns <- NS(id)` at top
 - Wrap every `inputId` and `outputId` with `ns()`
-- Return a `tagList()` to allow flexible placement
+- Return `tagList()` to allow flexible placement
 
-**Expected:** UI function that creates namespaced input/output elements.
+**Got:** UI function creating namespaced input/output elements.
 
-**On failure:** If IDs collide when using the module twice, check that every ID is wrapped with `ns()`. Common miss: IDs inside `renderUI()` or `uiOutput()` — these need `ns()` too.
+**If fail:** IDs collide when using module twice? Check every ID wrapped with `ns()`. Common miss: IDs inside `renderUI()` or `uiOutput()` — these need `ns()` too.
 
 ### Step 3: Create the Module Server Function
 
@@ -161,12 +161,12 @@ Key rules:
 - First argument is always `id`
 - Additional arguments are reactive expressions or static values
 - Use `moduleServer(id, function(input, output, session) { ... })`
-- Use `session$ns` for dynamic UI created inside the server
+- Use `session$ns` for dynamic UI created inside server
 - Return reactive values explicitly
 
-**Expected:** Server function that processes inputs and returns reactive output.
+**Got:** Server function processing inputs and returning reactive output.
 
-**On failure:** If reactive values don't update, check that inputs from dynamic UI use `session$ns` (not the outer `ns`). If the module returns NULL, ensure `return()` is the last expression inside `moduleServer()`.
+**If fail:** Reactive values don't update? Check inputs from dynamic UI use `session$ns` (not outer `ns`). Module returns NULL? Ensure `return()` is last expression inside `moduleServer()`.
 
 ### Step 4: Wire the Module into the Parent App
 
@@ -201,13 +201,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Module appears in the UI and its returned reactive flows into downstream outputs.
+**Got:** Module appears in UI and its returned reactive flows into downstream outputs.
 
-**On failure:** If the module UI doesn't render, verify the `id` string matches between UI and server calls. If the returned reactive is NULL, check that the server function actually returns a value.
+**If fail:** Module UI doesn't render? Verify `id` string matches between UI and server calls. Returned reactive is NULL? Check server function actually returns value.
 
 ### Step 5: Compose Nested Modules (Optional)
 
-For modules that contain other modules:
+For modules containing other modules:
 
 ```r
 analysisUI <- function(id) {
@@ -233,11 +233,11 @@ analysisServer <- function(id, data) {
 }
 ```
 
-Key rule: In the UI, nest with `ns("inner_id")`. In the server, call with just `"inner_id"` — `moduleServer` handles the namespace chaining.
+Key rule: In UI, nest with `ns("inner_id")`. In server, call with just `"inner_id"` — `moduleServer` handles namespace chaining.
 
-**Expected:** Inner module renders correctly within the outer module's namespace.
+**Got:** Inner module renders correctly within outer module's namespace.
 
-**On failure:** If the inner module's UI doesn't appear, you likely forgot `ns()` around the inner module's ID in the outer UI function. If server communication breaks, check that the inner module ID matches (no `ns()` in the server call).
+**If fail:** Inner module's UI doesn't appear? Likely forgot `ns()` around inner module's ID in outer UI function. Server communication breaks? Check inner module ID matches (no `ns()` in server call).
 
 ### Step 6: Test the Module in Isolation
 
@@ -258,31 +258,31 @@ if (interactive()) {
 }
 ```
 
-**Expected:** Module works correctly in the minimal test app.
+**Got:** Module works correctly in minimal test app.
 
-**On failure:** If the module fails in isolation but works in the full app (or vice versa), check for implicit dependencies on global variables or parent session state.
+**If fail:** Module fails in isolation but works in full app (or vice versa)? Check for implicit dependencies on global variables or parent session state.
 
-## Validation
+## Checks
 
-- [ ] Module UI function accepts `id` as first argument and uses `NS(id)`
-- [ ] Every input/output ID in the UI is wrapped with `ns()`
+- [ ] Module UI function accepts `id` as first argument, uses `NS(id)`
+- [ ] Every input/output ID in UI wrapped with `ns()`
 - [ ] Module server uses `moduleServer(id, function(input, output, session) { ... })`
 - [ ] Dynamic UI in server uses `session$ns` for IDs
 - [ ] Module can be instantiated multiple times without ID collisions
-- [ ] Reactive return values are accessible to the parent app
-- [ ] Module works in a minimal standalone test app
+- [ ] Reactive return values accessible to parent app
+- [ ] Module works in minimal standalone test app
 
-## Common Pitfalls
+## Pitfalls
 
-- **Forgetting `ns()` in `renderUI()`**: Dynamic UI created inside the server must use `session$ns` — the outer `ns` is not available inside `moduleServer()`.
+- **Forgetting `ns()` in `renderUI()`**: Dynamic UI created inside server must use `session$ns` — outer `ns` not available inside `moduleServer()`.
 - **Passing non-reactive data**: Module arguments that change over time must be reactive expressions. Pass `reactive(data)` not `data`.
-- **ID mismatch**: The `id` string in the UI call must exactly match the `id` in the server call.
-- **Not returning reactives**: If the module computes something the parent needs, it must `return()` a reactive. Forgetting this is a silent bug.
+- **ID mismatch**: `id` string in UI call must exactly match `id` in server call.
+- **Not returning reactives**: Module computes something parent needs? Must `return()` a reactive. Forgetting this is silent bug.
 - **Namespace in nested modules**: In UI: `ns("inner_id")`. In server: just `"inner_id"`. Mixing these up causes namespace double-wrapping or missing prefixes.
 
-## Related Skills
+## See Also
 
-- `scaffold-shiny-app` — set up the app structure before adding modules
+- `scaffold-shiny-app` — set up app structure before adding modules
 - `test-shiny-app` — test modules with testServer() unit tests
 - `design-shiny-ui` — bslib layout and theming for module UIs
 - `optimize-shiny-performance` — cache and async patterns within modules

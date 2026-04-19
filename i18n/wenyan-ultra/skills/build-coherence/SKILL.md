@@ -24,34 +24,34 @@ metadata:
   tags: swarm, coherence, approach-selection, confidence-thresholds, meta-cognition, ai-self-application
 ---
 
-# Build Coherence
+# 建合
 
-Evaluate competing approaches through independent assessment, explicit reasoning-out-loud advocacy, confidence-calibrated commitment thresholds, and structured deadlock resolution — producing coherent decisions from multiple reasoning paths.
+評競法以獨評、顯推言倡、信校委閾、結構困解—自多推路生合決。
 
-## When to Use
+## 用
 
-- `forage-solutions` has identified multiple valid approaches and a selection must be made
-- Oscillating between two approaches without committing to either
-- Needing to justify a decision with structured reasoning (architecture choice, tool selection, implementation strategy)
-- When a previous decision was made by gut feeling and needs evidence-based validation
-- When internal reasoning is producing contradictory conclusions and coherence must be restored
-- Before an irreversible action (merging, deploying, deleting) where the cost of the wrong choice is high
+- `forage-solutions` 識多有效法→當擇
+- 於兩法間振而未委
+- 需以結構推證決（構擇、工擇、施策）
+- 前決由直覺而需據驗
+- 內推生矛結而需復合
+- 前不可逆行（合、發、刪）→誤擇價高
 
-## Inputs
+## 入
 
-- **Required**: Two or more competing approaches to evaluate
-- **Optional**: Quality assessments from prior scouting (see `forage-solutions`)
-- **Optional**: Decision stakes (reversible, moderate, irreversible) for threshold calibration
-- **Optional**: Time budget for the decision
-- **Optional**: Known failure mode (oscillation, premature commitment, groupthink)
+- **必**：兩或多競法以評
+- **可**：昔偵之質評（見 `forage-solutions`）
+- **可**：決重（可逆、中、不可逆）以校閾
+- **可**：決之時限
+- **可**：知敗模（振、早委、群思）
 
-## Procedure
+## 行
 
-### Step 1: Independent Evaluation
+### 一：獨評
 
-Assess each approach on its own merits before comparing them. The critical rule: do not let the assessment of approach A bias the assessment of approach B.
+較前以己質評每法。要律：勿令 A 評偏 B 評。
 
-For each approach, evaluate independently:
+每法獨評：
 
 ```
 Approach Evaluation Template:
@@ -75,33 +75,33 @@ Approach Evaluation Template:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-Fill this out for each approach separately. Do not write a comparison until all individual evaluations are complete.
+每法別填。諸獨評未完前勿書較。
 
-**Expected:** Independent evaluations where each approach is assessed on its own terms. The evaluation of approach B does not reference approach A. Quality scores reflect genuine assessment, not ranking.
+**得：** 獨評—每法以己語評。B 評不引 A。質分映真評，非排序。
 
-**On failure:** If the evaluations are contaminated (you find yourself writing "better than A" while assessing B), reset. Assess A completely, then clear the framing and assess B from scratch. If the scores are all identical, the evaluation dimensions are too coarse — add domain-specific criteria.
+**敗：** 評染（評 B 時書「勝 A」）→重置。全評 A，而後清框自零評 B。諸分皆同→評維過粗—加域專準。
 
-### Step 2: Waggle Dance — Reason Out Loud
+### 二：搖擺舞—言推
 
-Advocate for each approach proportionally to its quality. This is the AI equivalent of the bee waggle dance: making implicit reasoning explicit and public.
+依質倡每法。乃蜂搖擺舞之 AI 對：令隱推為顯為公。
 
-1. For each approach, state the case for it — as if presenting to a skeptical user:
-   - "Approach A is strong because [evidence]. The main risk is [risk], which is mitigated by [mitigation]."
-2. Advocacy intensity should be proportional to quality score:
-   - High-quality approach: detailed advocacy with specific evidence
-   - Medium-quality approach: brief advocacy with acknowledged limitations
-   - Low-quality approach: mentioned for completeness, not actively advocated
-3. **Cross-inspection**: after advocating for A, actively look for evidence that supports B instead. After advocating for B, look for evidence that supports A. This counteracts confirmation bias
+1. 每法→陳其理—如對疑用者呈：
+   - 「A 法強因 [證]。主險為 [險]，以 [緩] 解。」
+2. 倡強當依質分比：
+   - 高質法：詳倡附具體證
+   - 中質法：略倡附認限
+   - 低質法：為全而提，不主倡
+3. **互察**：倡 A 後→主尋支 B 之證。倡 B 後→尋支 A 之證。此抗證偏
 
-The purpose of reasoning-out-loud is to make the decision auditable — to yourself and to the user. If the reasoning cannot be articulated, the assessment is shallower than the score suggests.
+言推之旨乃令決可審—於己與用者。若推不可述→評淺於所述分。
 
-**Expected:** Explicit reasoning for each approach that would be persuasive to a neutral observer. Cross-inspection reveals at least one consideration that was initially overlooked.
+**得：** 每法顯推，可服中察者。互察揭至少一初遺之慮。
 
-**On failure:** If advocacy feels perfunctory (going through motions), the approaches may not be genuinely different — they may be variations of the same idea. Check: do the approaches differ in mechanism, or only in implementation detail? If the latter, the decision may not matter much — pick either and move on.
+**敗：** 倡覺草率（走過場）→諸法或非真異—或一念之變。察：諸法異於機乎，抑唯異於施詳？後者→決或不要—擇其一而進。
 
-### Step 3: Set Quorum Threshold and Commit
+### 三：設法定閾而委
 
-Set the confidence threshold required to commit, calibrated to the decision's stakes.
+設委所需信閾，校於決之重。
 
 ```
 Confidence Thresholds by Stakes:
@@ -122,19 +122,19 @@ Confidence Thresholds by Stakes:
 └─────────────────────┴───────────┴──────────────────────────────────┘
 ```
 
-1. Classify the decision stakes
-2. Check: does the leading approach's quality score × confidence reach the threshold?
-3. If yes: commit. State the decision, the reasoning, and the key risk being accepted
-4. If no: identify what additional information would raise confidence to the threshold
-5. Once committed, do not revisit unless new disqualifying evidence emerges
+1. 分決重
+2. 察：首法之質分 × 信達閾乎？
+3. 若然：委。陳決、推、所受之要險
+4. 若否：識何加訊可升信至閾
+5. 委後勿重察除非新去權證現
 
-**Expected:** A clear commitment moment with stated reasoning. The decision is made at an appropriate confidence level for its stakes.
+**得：** 清委時附述推。決以重所宜之信級作。
 
-**On failure:** If the threshold is never met (can't reach 90% on an irreversible decision), ask: is the decision truly irreversible? Can it be decomposed into a reversible test phase + an irreversible commit? Most apparently irreversible decisions can be staged. If staging is impossible, communicate the uncertainty to the user and ask for guidance.
+**敗：** 閾永不達（不可逆事不能達九成）→問：決真不可逆乎？可分為可逆試階 + 不可逆委乎？多似不可逆之決可分階。若不可→告用者疑而求導。
 
-### Step 4: Resolve Deadlocks
+### 四：解困
 
-When two or more approaches have similar scores and the quorum threshold is not met for any single one.
+兩或多法分近而無單一達法定閾。
 
 ```
 Deadlock Resolution:
@@ -163,49 +163,49 @@ Deadlock Resolution:
 └────────────────────────┴──────────────────────────────────────────┘
 ```
 
-**Expected:** Deadlock resolved through the appropriate mechanism. The resolution is decisive — no lingering doubt that undermines execution.
+**得：** 困以所宜之機解。解要—無留疑擾行。
 
-**On failure:** If the deadlock persists through all resolution strategies, the decision may be premature. Ask the user: "I see two equally strong approaches: [A] and [B]. [Brief case for each.] Which aligns better with your priorities?" Delegating a genuine tie to the user is not a failure — it is acknowledging that the decision depends on values the AI cannot infer.
+**敗：** 諸解後困仍→決或早。問用者：「見兩等強法：[A] 與 [B]。[各略陳]。合汝值者何？」委真平於用者—非敗—乃認決依 AI 不可推之值。
 
-### Step 5: Assess Coherence Quality
+### 五：評合質
 
-After committing to a decision, evaluate whether the process produced genuine coherence or just a decision.
+委後→評程生真合或但決。
 
-1. Was the decision evidence-based, or was it rubber-stamping an initial preference?
-   - Test: was the preference the same before and after evaluation? If so, did the evaluation change anything?
-2. Were the losing approaches genuinely considered, or were they straw men?
-   - Test: can you articulate the strongest case for the losing approach?
-3. What signal would trigger reassessment?
-   - Define a specific observation that would invalidate the decision ("If I discover that the API doesn't support X, then approach B becomes better")
-4. Is there useful information from the losing approaches that should inform implementation?
-   - A risk identified in approach B might apply to approach A as well
+1. 決據證乎，或但印初偏？
+   - 試：評前後偏同乎？若同→評改何？
+2. 敗法真慮乎，抑稻草人？
+   - 試：能述敗法之最強理乎？
+3. 何訊觸重評？
+   - 定具體察以廢決（「若 API 不支 X，則 B 法更佳」）
+4. 敗法中有益訊當導施乎？
+   - B 法識之險或亦適 A
 
-**Expected:** A brief quality check that either confirms the decision or identifies it as weak. If weak, return to the appropriate earlier step rather than proceeding on shaky ground.
+**得：** 略質察—證決或識其弱。弱→返宜前步，勿於不穩地進。
 
-**On failure:** If the quality check reveals that the decision was preference-based rather than evidence-based, acknowledge it honestly. Sometimes preference is all that is available — but it should be labeled as such, not dressed up as analysis.
+**敗：** 質察揭決由偏而非據→誠認。偏或所有—當名之，勿飾為析。
 
-## Validation
+## 驗
 
-- [ ] Each approach was evaluated independently before comparison
-- [ ] Advocacy was proportional to quality (not equal attention regardless of merit)
-- [ ] Cross-inspection was performed (looking for counter-evidence after advocacy)
-- [ ] Quorum threshold was calibrated to decision stakes
-- [ ] If deadlocked, a specific resolution strategy was applied
-- [ ] Post-decision quality check was performed
-- [ ] A reassessment trigger was defined
+- [ ] 較前每法獨評
+- [ ] 倡依質比（非平注無論優劣）
+- [ ] 互察已行（倡後尋反證）
+- [ ] 法定閾校於決重
+- [ ] 若困→具體解策已施
+- [ ] 決後質察已行
+- [ ] 重評觸已定
 
-## Common Pitfalls
+## 忌
 
-- **Premature commitment**: Deciding before evaluating all approaches. The first approach considered has an anchoring advantage — it gets more mental attention simply by being first. Evaluate all before comparing
-- **Equal advocacy for unequal approaches**: If approach A scored 85 and approach B scored 45, spending equal time advocating for both wastes effort and creates false equivalence
-- **Rubber-stamping**: Going through the evaluation process to justify a decision already made. The test is whether the evaluation could have changed the outcome. If not, the process was theater
-- **Threshold avoidance**: Lowering the confidence threshold to make the decision easier rather than gathering the information needed to meet the appropriate threshold
-- **Ignoring the losing side**: The losing approach often contains warnings that apply to the winning one. Risks identified in approach B don't disappear just because approach A was chosen
+- **早委**：評諸法前決。首慮法有錨利—但先得更心注。評諸而後較
+- **平倡不平法**：A 分 85 而 B 分 45→平時倡兩→費力造偽等
+- **印決**：行評以飾已決。試：評能改果乎？不→程為戲
+- **避閾**：降信閾以易決，非集所需訊達宜閾
+- **略敗側**：敗法常含警適勝法。B 識之險不因 A 勝而失
 
-## Related Skills
+## 參
 
-- `build-consensus` — the multi-agent consensus model that this skill adapts to single-agent reasoning
-- `forage-solutions` — scouts the solution space that coherence evaluates; typically precedes this skill
-- `coordinate-reasoning` — manages information flow during multi-path evaluation
-- `center` — establishes the balanced baseline needed for unbiased evaluation
-- `meditate` — clears assumptions between evaluating different approaches
+- `build-consensus` — 此技所適於單將推之多將合模
+- `forage-solutions` — 偵合所評之解空；常先於此
+- `coordinate-reasoning` — 多路評時訊流管
+- `center` — 立無偏評所需之衡基
+- `meditate` — 評異法間清假

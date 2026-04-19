@@ -26,32 +26,32 @@ metadata:
 
 # Compose Sacred Music
 
-Compose or analyze sacred music in Hildegard von Bingen's distinctive style, following her *Symphonia harmoniae caelestium revelationum* and modal composition principles.
+Compose or analyze sacred music in Hildegard von Bingen's style → follow her *Symphonia harmoniae caelestium revelationum* + modal composition principles.
 
-## When to Use
+## Use When
 
-- You want to compose a new piece of sacred music in Hildegardian style
-- You need to analyze an existing Hildegard chant for structure, mode, and text-setting
-- You are researching medieval modal music and neumatic notation
-- You want to understand the liturgical context of Hildegard's compositions
-- You are preparing to perform or teach Hildegard's music
-- You need guidance on text-setting for Latin sacred texts
+- Compose new sacred piece Hildegardian style
+- Analyze existing Hildegard chant for structure, mode, text-setting
+- Research medieval modal music + neumatic notation
+- Understand liturgical context of Hildegard's compositions
+- Prepare to perform or teach Hildegard's music
+- Need guidance on text-setting Latin sacred texts
 
-## Inputs
+## In
 
-- **Required**: Purpose (compose new piece OR analyze existing piece)
-- **Required for composition**: Sacred text (Latin preferred, English acceptable for study)
+- **Required**: Purpose (compose new OR analyze existing)
+- **Required for composition**: Sacred text (Latin preferred, English OK for study)
 - **Required for composition**: Liturgical context (antiphon, sequence, responsory, hymn)
-- **Required for analysis**: Title of Hildegard piece to analyze (e.g., "O vis aeternitatis")
-- **Optional**: Feast day or liturgical season (influences modal choice)
-- **Optional**: Intended performer experience level (simple syllabic vs. virtuosic melismatic)
+- **Required for analysis**: Title of Hildegard piece (e.g., "O vis aeternitatis")
+- **Optional**: Feast day / liturgical season (drives modal choice)
+- **Optional**: Performer experience level (simple syllabic vs. virtuosic melismatic)
 - **Optional**: Mode preference (if composing)
 
-## Procedure
+## Do
 
-### Step 1: Modal Selection (if composing) or Identification (if analyzing)
+### Step 1: Modal Selection (compose) or Identification (analyze)
 
-Choose or identify the liturgical mode that governs the melodic structure.
+Pick / ID the liturgical mode driving melodic structure.
 
 ```
 The Eight Church Modes (Medieval System):
@@ -101,13 +101,13 @@ Modal Selection by Liturgical Context:
 - General saints → Mode 1 or Mode 8
 ```
 
-**Expected:** Mode identified (if analyzing) or selected (if composing) with final note and characteristic range established.
+**→** Mode ID'd (analyze) or selected (compose) w/ final note + characteristic range set.
 
-**On failure:** If uncertain, default to Mode 1 (Dorian authentic, final on D). This is Hildegard's most frequent choice and offers wide melodic range.
+**If err:** Uncertain → default Mode 1 (Dorian authentic, final D). Hildegard's most frequent + wide melodic range.
 
-### Step 2: Melodic Contour and Range
+### Step 2: Melodic Contour + Range
 
-Establish the distinctive wide-range, soaring melodic contour characteristic of Hildegard's style.
+Establish distinctive wide-range, soaring contour of Hildegard's style.
 
 ```
 Hildegard's Melodic Signature:
@@ -138,13 +138,13 @@ Hildegard's Melismatic Technique:
   - Example: "aeternitatis" may carry 15-30 notes across the word
 ```
 
-**Expected:** Melodic contour sketched with identified climax point, wide range planned (minimum 9th, preferably 10th-12th), and syllabic/melismatic distribution determined.
+**→** Contour sketched w/ climax point ID'd, wide range planned (min 9th, prefer 10th-12th), syllabic/melismatic distribution set.
 
-**On failure:** If melodic range feels too wide for performers, reduce climax by one step (e.g., from high D to C). Maintain the arch shape but compress the range.
+**If err:** Range too wide for performers → reduce climax by 1 step (e.g., high D → C). Keep arch shape, compress range.
 
-### Step 3: Text-Setting — Syllabic and Melismatic
+### Step 3: Text-Setting — Syllabic + Melismatic
 
-Map the sacred text to melody with appropriate syllabic, neumatic, and melismatic distribution.
+Map sacred text to melody w/ syllabic, neumatic, melismatic distribution.
 
 ```
 Hildegard's Text-Setting Principles:
@@ -196,13 +196,13 @@ RESPONSORY (call-and-response structure):
 - Example: "O ignis Spiritus" — highly melismatic solo sections
 ```
 
-**Expected:** Text fully mapped to melody with syllabic/neumatic/melismatic choices marked. Key theological terms receive melismatic treatment. Text remains intelligible despite ornamentation.
+**→** Text fully mapped to melody w/ syllabic/neumatic/melismatic choices marked. Key theological terms → melismatic. Text stays intelligible despite ornamentation.
 
-**On failure:** If text becomes unintelligible (too much melisma), simplify non-essential words to syllabic. Retain melisma ONLY on 1-2 most important words per phrase.
+**If err:** Text becomes unintelligible (too much melisma) → simplify non-essential words to syllabic. Keep melisma ONLY on 1-2 most important words per phrase.
 
 ### Step 4: Neumatic Notation (Optional — for authenticity)
 
-Notate using medieval square-note neumes on a 4-line staff (if desired for historical accuracy).
+Notate w/ medieval square-note neumes on 4-line staff (if desired for historical accuracy).
 
 ```
 Medieval Neumatic Notation Basics:
@@ -234,13 +234,13 @@ Modern Alternative:
 - Mark text syllables clearly under each neume group
 ```
 
-**Expected:** (Optional) Neumatic notation sketch provided if user requests historical authenticity. Modern staff notation acceptable for performance preparation.
+**→** (Optional) Neumatic notation sketch if user requests historical authenticity. Modern staff notation OK for performance prep.
 
-**On failure:** If neumatic notation is too complex, provide modern staff notation with clear phrasing marks. Hildegard's music can be performed from modern notation without loss of essential character.
+**If err:** Neumatic too complex → modern staff notation w/ clear phrasing marks. Hildegard's music performs from modern notation w/o losing essential character.
 
-### Step 5: Liturgical Context and Performance Notes
+### Step 5: Liturgical Context + Performance Notes
 
-Situate the composition or analysis within liturgical use and provide performance guidance.
+Situate composition / analysis w/ liturgical use + performance guidance.
 
 ```
 Liturgical Context by Form:
@@ -296,36 +296,36 @@ ENSEMBLE:
   for Hildegard's convent, but aesthetically compatible)
 ```
 
-**Expected:** Liturgical use identified (when/where the piece is sung), performance notes provided (tempo, dynamics, pronunciation), and historical context clarified.
+**→** Liturgical use ID'd (when/where sung), performance notes (tempo, dynamics, pronunciation), historical context clarified.
 
-**On failure:** If liturgical context is unclear, focus on performance notes only. Hildegard's music can be performed in concert settings without strict liturgical adherence.
+**If err:** Liturgical context unclear → focus performance notes only. Hildegard's music can perform concert settings w/o strict liturgical adherence.
 
-## Validation Checklist
+## Check
 
-- [ ] Mode identified or selected (1-8, with final note)
-- [ ] Melodic range spans at least a 9th (preferably 10th-12th)
-- [ ] Key theological terms receive melismatic treatment
-- [ ] Climax placed on most important word in text
-- [ ] Phrase begins low (near final) and ends on final note
-- [ ] Text intelligible despite ornamentation (not over-melismatic on every word)
+- [ ] Mode ID'd / selected (1-8, w/ final note)
+- [ ] Melodic range ≥ 9th (prefer 10th-12th)
+- [ ] Key theological terms get melismatic treatment
+- [ ] Climax on most important word in text
+- [ ] Phrase begins low (near final) + ends on final
+- [ ] Text intelligible despite ornamentation (not over-melismatic every word)
 - [ ] Liturgical context noted (antiphon/sequence/responsory)
-- [ ] Performance notes provided (tempo, dynamics, pronunciation)
-- [ ] If analyzing: Comparison to Hildegard's authentic works cited
+- [ ] Performance notes (tempo, dynamics, pronunciation)
+- [ ] Analyze → comparison to Hildegard's authentic works cited
 
-## Common Pitfalls
+## Traps
 
-1. **Over-melisma**: Adding melismas to every syllable obscures text. Reserve for key words
-2. **Ignoring Mode**: Hildegard respects modal boundaries. Don't drift to unrelated pitches
-3. **Modern Rhythm**: Medieval chant is non-metrical. Avoid imposing 4/4 time signatures
-4. **Narrow Range**: Hildegard's signature is WIDE range. Less than a 9th is not Hildegardian
-5. **Premature Climax**: Placing highest note too early leaves nowhere to build. Save for key word
-6. **Monotone Sections**: Long syllabic sections without melodic interest sound flat. Mix syllabic with neumatic
-7. **Ignoring Text Meaning**: Melody must serve theological meaning. Random melisma placement is anti-Hildegardian
+1. **Over-melisma**: Melismas every syllable obscures text. Reserve for key words.
+2. **Ignore Mode**: Hildegard respects modal boundaries. Don't drift to unrelated pitches.
+3. **Modern Rhythm**: Medieval chant non-metrical. Don't impose 4/4 time sigs.
+4. **Narrow Range**: Hildegard's signature = WIDE range. Less than 9th = not Hildegardian.
+5. **Premature Climax**: Highest note too early → nowhere to build. Save for key word.
+6. **Monotone Sections**: Long syllabic w/o melodic interest sound flat. Mix syllabic + neumatic.
+7. **Ignore Text Meaning**: Melody must serve theological meaning. Random melisma placement = anti-Hildegardian.
 
-## Related Skills
+## →
 
-- `practice-viriditas` — Hildegard's music is an expression of viriditas (greening life force)
-- `consult-natural-history` — Many chants reference plants, stones, elements from *Physica*
+- `practice-viriditas` — Hildegard's music = expression of viriditas (greening life force)
+- `consult-natural-history` — Many chants ref plants, stones, elements from *Physica*
 - `assess-holistic-health` — Music as healing modality in Hildegard's holistic system
-- `meditate` (esoteric domain) — Singing Hildegard's music can be meditative practice
-- `formulate-herbal-remedy` — Some chants reference herbs with healing properties
+- `meditate` (esoteric domain) — Singing Hildegard's music = meditative practice
+- `formulate-herbal-remedy` — Some chants ref herbs w/ healing properties

@@ -20,95 +20,95 @@ metadata:
   tags: visualization, audit, icons, glyphs, pipeline, gap-analysis
 ---
 
-# Audit Icon Pipeline
+# 審像管
 
-Detect missing glyphs, missing icons, and stale manifests by comparing registries against glyph mapping files, icon directories, and manifests. Produces a structured gap report covering skills, agents, and teams.
+較冊與符映檔、像目、清單→察缺符、缺像、舊清單。出結構缺報涵技、將、隊。
 
-## When to Use
+## 用
 
-- After adding new skills, agents, or teams to check if icons are needed
-- Before a full pipeline render to identify what's missing
-- After registry updates to ensure manifests are in sync
-- Periodic health check of the icon pipeline
+- 新增技/將/隊→察像需否
+- 全管前→識何缺
+- 冊更後→驗清單同步
+- 定期察像管健
 
-## Inputs
+## 入
 
-- **Optional**: Entity type filter — `skill`, `agent`, `team`, or `all` (default: `all`)
-- **Optional**: Palette to check (default: `cyberpunk` — the reference palette)
+- **可**：實類濾—`skill`、`agent`、`team`、`all`（默 `all`）
+- **可**：查之色板（默 `cyberpunk`—參色板）
 
-## Procedure
+## 行
 
-### Step 1: Read Registries
+### 一：讀諸冊
 
-Collect all entity IDs from the source-of-truth registries.
+自諸正典冊集諸實 ID。
 
-1. Read `skills/_registry.yml` — extract all skill IDs across all domains
-2. Read `agents/_registry.yml` — extract all agent IDs
-3. Read `teams/_registry.yml` — extract all team IDs
-4. Record counts: total skills, agents, teams
+1. 讀 `skills/_registry.yml`—諸域中取諸技 ID
+2. 讀 `agents/_registry.yml`—取諸將 ID
+3. 讀 `teams/_registry.yml`—取諸隊 ID
+4. 記計：技、將、隊總
 
-**Expected:** Three lists of entity IDs with counts matching `total_skills`, `total_agents`, `total_teams`.
+**得：** 三實 ID 列與計合 `total_skills`、`total_agents`、`total_teams`。
 
-**On failure:** If a registry file is missing, report the path and skip that entity type.
+**敗：** 冊檔缺→報徑而略其類。
 
-### Step 2: Read Glyph Mappings
+### 二：讀符映
 
-Collect all mapped entity IDs from the glyph mapping files.
+自符映檔集諸映實 ID。
 
-1. Read `viz/R/glyphs.R` — extract all keys from `SKILL_GLYPHS` list
-2. Read `viz/R/agent_glyphs.R` — extract all keys from `AGENT_GLYPHS` list
-3. Read `viz/R/team_glyphs.R` — extract all keys from `TEAM_GLYPHS` list
+1. 讀 `viz/R/glyphs.R`—取 `SKILL_GLYPHS` 之諸鍵
+2. 讀 `viz/R/agent_glyphs.R`—取 `AGENT_GLYPHS` 之諸鍵
+3. 讀 `viz/R/team_glyphs.R`—取 `TEAM_GLYPHS` 之諸鍵
 
-**Expected:** Three lists of mapped IDs.
+**得：** 三映 ID 列。
 
-**On failure:** If a glyph file is missing, report it and mark all entities of that type as unmapped.
+**敗：** 符檔缺→報而標其類諸實為未映。
 
-### Step 3: Compute Missing Glyphs
+### 三：算缺符
 
-Diff registry IDs against mapped IDs.
+較冊 ID 與映 ID。
 
-1. Missing skill glyphs: `registry_skill_ids - mapped_skill_ids`
-2. Missing agent glyphs: `registry_agent_ids - mapped_agent_ids`
-3. Missing team glyphs: `registry_team_ids - mapped_team_ids`
+1. 缺技符：`registry_skill_ids - mapped_skill_ids`
+2. 缺將符：`registry_agent_ids - mapped_agent_ids`
+3. 缺隊符：`registry_team_ids - mapped_team_ids`
 
-**Expected:** Lists of entity IDs that exist in registries but have no glyph function mapped.
+**得：** 實 ID 列，存於冊而無符函映。
 
-**On failure:** If diff computation fails, verify ID formats match between registry and glyph files (e.g., underscores vs hyphens).
+**敗：** 較算敗→驗冊與符檔之 ID 格式合（如底線對劃）。
 
-### Step 4: Check Rendered Icons
+### 四：察已渲像
 
-Verify that mapped glyphs have corresponding rendered icon files.
+驗諸映符有應之渲像檔。
 
-1. For each mapped skill ID, check `viz/public/icons/<palette>/<domain>/<skillId>.webp`
-2. For each mapped agent ID, check `viz/public/icons/<palette>/agents/<agentId>.webp`
-3. For each mapped team ID, check `viz/public/icons/<palette>/teams/<teamId>.webp`
-4. Check HD variants in `viz/public/icons-hd/` with the same structure
+1. 每映技 ID→察 `viz/public/icons/<palette>/<domain>/<skillId>.webp`
+2. 每映將 ID→察 `viz/public/icons/<palette>/agents/<agentId>.webp`
+3. 每映隊 ID→察 `viz/public/icons/<palette>/teams/<teamId>.webp`
+4. 察 HD 變體於 `viz/public/icons-hd/`，同結構
 
-**Expected:** Lists of entities with glyphs but missing rendered icons (standard and/or HD).
+**得：** 實列—有符而缺渲像（標與/或 HD）。
 
-**On failure:** If the icon directory doesn't exist, the pipeline hasn't been run yet — report all as missing.
+**敗：** 像目不存→管未行→報諸為缺。
 
-### Step 5: Check Manifest Freshness
+### 五：察清單新否
 
-Compare manifest counts against registry counts.
+較清單計與冊計。
 
-1. Read `viz/public/data/icon-manifest.json` — count entries
-2. Read `viz/public/data/agent-icon-manifest.json` — count entries
-3. Read `viz/public/data/team-icon-manifest.json` — count entries
-4. Compare against registry totals
+1. 讀 `viz/public/data/icon-manifest.json`—計條
+2. 讀 `viz/public/data/agent-icon-manifest.json`—計條
+3. 讀 `viz/public/data/team-icon-manifest.json`—計條
+4. 較冊總
 
-**Expected:** Manifest counts match registry counts. Discrepancies indicate stale manifests.
+**得：** 清單計合冊計。差→清單陳舊。
 
-**On failure:** If manifest files don't exist, the data pipeline needs to run first (`node build-data.js && node build-icon-manifest.js`).
+**敗：** 清單檔不存→資料管先行（`node build-data.js && node build-icon-manifest.js`）。
 
-### Step 6: Detect Orphan Icons
+### 六：察孤像
 
-Walk `viz/public/icons*/` and flag WebP files whose `<palette>/<domain>/<skillId>` triple does not appear in `icon-manifest.json`.
+巡 `viz/public/icons*/` 旗其 `<palette>/<domain>/<skillId>` 三元不現於 `icon-manifest.json` 之 WebP 檔。
 
-1. Enumerate all WebP files: `find viz/public/icons* -name "*.webp"`
-2. For each file, extract `<domain>/<id>` from its path
-3. Check if `<domain>/<id>` has an entry in `icon-manifest.json`
-4. Collect non-matching files as orphans — they exist on disk but are no longer referenced
+1. 列諸 WebP：`find viz/public/icons* -name "*.webp"`
+2. 每檔→自徑取 `<domain>/<id>`
+3. 察 `<domain>/<id>` 是否有 `icon-manifest.json` 條
+4. 集不合檔為孤—存於盤而不再引
 
 ```bash
 # Quick orphan count per palette
@@ -124,15 +124,15 @@ orphans.forEach(p => console.log(' ', p));
 "
 ```
 
-**Expected:** Zero orphans. Any orphans indicate skills re-homed to a different domain without cleanup (18 orphans per re-homing = 9 palettes × 2 sizes).
+**得：** 零孤。孤存→技移域而未清（每移 18 孤 = 9 色板 × 2 尺寸）。
 
-**On failure:** Delete orphans manually — they have no corresponding manifest entry and will not be served. Re-home events are rare, so manual cleanup is acceptable.
+**敗：** 手刪孤—無清單條且不服。移事罕，手清可。
 
-### Step 7: Generate Gap Report
+### 七：生缺報
 
-Produce a structured summary.
+出結構概。
 
-1. Format output as a clear table or list:
+1. 出為清表或列：
    ```
    === Icon Pipeline Audit ===
 
@@ -150,32 +150,32 @@ Produce a structured summary.
      agent-icon-manifest.json: 66 entries vs 66 registry (OK)
      team-icon-manifest.json: 15 entries vs 15 registry (OK)
    ```
-2. Suggest next actions based on findings
+2. 依發現薦下一行
 
-**Expected:** A complete gap report with actionable next steps.
+**得：** 全缺報附可行下步。
 
-**On failure:** If all checks pass with zero gaps, report "Pipeline fully in sync" as a positive outcome.
+**敗：** 諸察皆通零缺→報「管全同步」為正果。
 
-## Validation Checklist
+## 驗
 
-- [ ] All three registries read successfully
-- [ ] All three glyph mapping files checked
-- [ ] Icon directories scanned for both standard and HD
-- [ ] Manifest freshness verified
-- [ ] Orphan icons checked (disk paths vs manifest)
-- [ ] Gap report produced with counts and entity lists
-- [ ] Actionable next steps provided
+- [ ] 三冊皆讀
+- [ ] 三符映檔皆察
+- [ ] 像目巡察標與 HD
+- [ ] 清單新否已驗
+- [ ] 孤像察（盤徑對清單）
+- [ ] 缺報附計與實列
+- [ ] 可行下步提供
 
-## Common Pitfalls
+## 忌
 
-- **ID format mismatch**: Registry uses kebab-case (`create-skill`), glyph maps may use snake_case keys — ensure comparison normalizes
-- **Palette assumption**: Only checking cyberpunk palette misses palette-specific rendering gaps
-- **Empty directories**: A domain directory existing but empty counts as "icons present" when globbing — check file existence, not directory existence
-- **HD not rendered**: HD icons are in a separate directory tree (`icons-hd/`) — don't confuse with standard icons
-- **Orphans after re-homing**: When a skill's domain changes, `build.sh` creates icons at the new path but does NOT delete the old path — always run Step 6 orphan check after any domain migration
+- **ID 格式不合**：冊用 kebab-case（`create-skill`），符映或用 snake_case→確保較時歸一
+- **色板假設**：唯察 cyberpunk 板→遺色板專渲之缺
+- **空目**：域目存而空→通配算「像有」→察檔存，非目存
+- **HD 未渲**：HD 像於別樹（`icons-hd/`）—勿混標像
+- **移域後孤**：技之域改→`build.sh` 造新徑像而不刪舊徑—域移後必行步六察孤
 
-## Related Skills
+## 參
 
-- [create-glyph](../create-glyph/SKILL.md) — create a missing glyph identified by this audit
-- [enhance-glyph](../enhance-glyph/SKILL.md) — improve quality of existing glyphs
-- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — run the full pipeline to generate missing icons
+- [create-glyph](../create-glyph/SKILL.md) — 造此審識之缺符
+- [enhance-glyph](../enhance-glyph/SKILL.md) — 改現符之質
+- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — 行全管以生缺像

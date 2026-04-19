@@ -23,28 +23,28 @@ metadata:
   tags: git, version-control, gitignore, hooks, branching
 ---
 
-# Configure Git Repository
+# 配置 Git 倉庫
 
-Set up a Git repository with appropriate configuration for the project type.
+依項目類型以合適配置設 Git 倉庫。
 
-## When to Use
+## 適用時機
 
-- Initializing version control for a new project
-- Adding `.gitignore` for a specific language/framework
-- Setting up branch protection and conventions
-- Configuring commit hooks
+- 新項目之版本控制之始
+- 為特定語言/框架加 `.gitignore`
+- 設分支保護與慣例
+- 配提交鉤子
 
-## Inputs
+## 輸入
 
-- **Required**: Project directory
-- **Required**: Project type (R package, Node.js, Python, general)
-- **Optional**: Remote repository URL
-- **Optional**: Branch strategy (trunk-based, Git Flow)
-- **Optional**: Commit message convention
+- **必要**：項目目錄
+- **必要**：項目類型（R 包、Node.js、Python、通用）
+- **選擇性**：遠端倉庫 URL
+- **選擇性**：分支策（基於主幹、Git Flow）
+- **選擇性**：提交訊息慣例
 
-## Procedure
+## 步驟
 
-### Step 1: Initialize Repository
+### 步驟一：初始化倉庫
 
 ```bash
 cd /path/to/project
@@ -52,13 +52,13 @@ git init
 git branch -M main
 ```
 
-**Expected:** `.git/` directory created. Default branch is named `main`.
+**預期：** `.git/` 目錄已建。預設分支名為 `main`。
 
-**On failure:** If `git init` fails, ensure Git is installed (`git --version`). If the directory already has a `.git/`, the repository is already initialized — skip this step.
+**失敗時：** 若 `git init` 敗，確 Git 已裝（`git --version`）。若目錄已有 `.git/`，倉庫已初始化——略此步。
 
-### Step 2: Create .gitignore
+### 步驟二：建 .gitignore
 
-**R Package**:
+**R 包**：
 
 ```gitignore
 # R artifacts
@@ -94,7 +94,7 @@ inst/doc/
 Thumbs.db
 ```
 
-**Node.js/TypeScript**:
+**Node.js/TypeScript**：
 
 ```gitignore
 node_modules/
@@ -113,7 +113,7 @@ Thumbs.db
 coverage/
 ```
 
-**Python**:
+**Python**：
 
 ```gitignore
 __pycache__/
@@ -135,11 +135,11 @@ htmlcov/
 .vscode/
 ```
 
-**Expected:** `.gitignore` file created with entries appropriate for the project type. Sensitive files (`.Renviron`, `.env`) and generated artifacts are excluded.
+**預期：** `.gitignore` 已建，含項目類型合適之條目。敏感檔（`.Renviron`、`.env`）與生成產物已排除。
 
-**On failure:** If unsure which entries to include, use `gitignore.io` or GitHub's `.gitignore` templates as a starting point and customize for the project.
+**失敗時：** 若不確該含何條目，用 `gitignore.io` 或 GitHub 之 `.gitignore` 模板為起點並依項目調。
 
-### Step 3: Create Initial Commit
+### 步驟三：建首次提交
 
 ```bash
 git add .gitignore
@@ -147,11 +147,11 @@ git add .  # Review what's being added first with git status
 git commit -m "Initial project setup"
 ```
 
-**Expected:** First commit created containing `.gitignore` and initial project files. `git log` shows one commit.
+**預期：** 首次提交已建，含 `.gitignore` 與初始項目檔。`git log` 顯一提交。
 
-**On failure:** If `git commit` fails with "nothing to commit," ensure files were staged with `git add`. If it fails with an author identity error, set `git config user.name` and `git config user.email`.
+**失敗時：** 若 `git commit` 敗報「nothing to commit」，確檔已以 `git add` 暫存。若敗報作者身分錯，設 `git config user.name` 與 `git config user.email`。
 
-### Step 4: Connect Remote
+### 步驟四：連遠端
 
 ```bash
 # Add remote
@@ -161,17 +161,17 @@ git remote add origin git@github.com:username/repo.git
 git push -u origin main
 ```
 
-**Expected:** Remote `origin` is configured. `git remote -v` shows fetch and push URLs. Initial commit is pushed to the remote.
+**預期：** 遠端 `origin` 已配。`git remote -v` 顯 fetch 與 push URL。首提交已推至遠端。
 
-**On failure:** If push fails with "Permission denied (publickey)," configure SSH keys (see `setup-wsl-dev-environment`). If the remote already exists, update it with `git remote set-url origin <url>`.
+**失敗時：** 若推敗報「Permission denied (publickey)」，配 SSH 金鑰（見 `setup-wsl-dev-environment`）。若遠端已存，以 `git remote set-url origin <url>` 更。
 
-### Step 5: Set Up Branch Conventions
+### 步驟五：設分支慣例
 
-**Trunk-based (recommended for small teams)**:
+**基於主幹（小團隊推薦）**：
 
-- `main`: production-ready code
-- Feature branches: `feature/description`
-- Bug fixes: `fix/description`
+- `main`：生產可用代碼
+- 功能分支：`feature/description`
+- 錯誤修復：`fix/description`
 
 ```bash
 # Create feature branch
@@ -182,13 +182,13 @@ git checkout main
 git merge feature/add-authentication
 ```
 
-**Expected:** Branch naming convention is established and documented. Team members know which prefix to use for each type of work.
+**預期：** 分支命名慣例已立且已記。團隊成員知每類工作之前綴。
 
-**On failure:** If branches are already named inconsistently, rename them with `git branch -m old-name new-name` and update any open PRs.
+**失敗時：** 若分支已以不一致之名，以 `git branch -m old-name new-name` 重命並更任何未結之 PR。
 
-### Step 6: Configure Commit Conventions
+### 步驟六：配提交慣例
 
-Conventional Commits format:
+Conventional Commits 格式：
 
 ```
 type(scope): description
@@ -201,13 +201,13 @@ refactor: extract helper function
 chore: update dependencies
 ```
 
-**Expected:** Commit message convention is documented and agreed upon by the team. Future commits follow the `type: description` format.
+**預期：** 提交訊息慣例已記且團隊已同意。未來提交循 `type: description` 格式。
 
-**On failure:** If team members are not following the convention, enforce it with a commit-msg hook that validates the format (see Step 7).
+**失敗時：** 若團隊成員未循慣例，以驗格式之 commit-msg 鉤子強行（見步驟七）。
 
-### Step 7: Set Up Pre-Commit Hooks (Optional)
+### 步驟七：設預提交鉤子（選擇性）
 
-Create `.githooks/pre-commit`:
+建 `.githooks/pre-commit`：
 
 ```bash
 #!/bin/bash
@@ -229,11 +229,11 @@ chmod +x .githooks/pre-commit
 git config core.hooksPath .githooks
 ```
 
-**Expected:** Pre-commit hook runs automatically on each `git commit`. Linting errors block the commit until fixed.
+**預期：** 預提交鉤子於每 `git commit` 自動行。Lint 錯阻提交直至修。
 
-**On failure:** If the hook does not run, verify `core.hooksPath` is set (`git config core.hooksPath`) and the hook file is executable (`chmod +x`).
+**失敗時：** 若鉤子不行，驗 `core.hooksPath` 已設（`git config core.hooksPath`）且鉤子檔可執行（`chmod +x`）。
 
-### Step 8: Create README
+### 步驟八：建 README
 
 ```bash
 # Minimal README
@@ -244,30 +244,30 @@ git add README.md
 git commit -m "Add README"
 ```
 
-**Expected:** `README.md` committed to the repository. The project has a minimal but informative landing page on GitHub.
+**預期：** `README.md` 已提至倉庫。項目於 GitHub 上有簡約而有資之落地頁。
 
-**On failure:** If `README.md` already exists, update it rather than overwriting. Use `usethis::use_readme_md()` in R projects for a template with badges.
+**失敗時：** 若 `README.md` 已存，更之勿覆。R 項目用 `usethis::use_readme_md()` 取含徽章之模板。
 
-## Validation
+## 驗證
 
-- [ ] `.gitignore` excludes sensitive and generated files
-- [ ] No sensitive data (tokens, passwords) in tracked files
-- [ ] Remote repository connected and accessible
-- [ ] Branch naming conventions documented
-- [ ] Initial commit created cleanly
+- [ ] `.gitignore` 排敏感與生成檔
+- [ ] 追蹤檔中無敏感數據（令牌、密碼）
+- [ ] 遠端倉庫已連且可達
+- [ ] 分支命名慣例已記
+- [ ] 首次提交已淨建
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Committing before .gitignore**: Add `.gitignore` first. Files already tracked aren't affected by later `.gitignore` entries.
-- **Sensitive data in history**: If secrets are committed, they remain in history even after deletion. Use `git filter-repo` or BFG to clean.
-- **Large binary files**: Don't commit large binaries. Use Git LFS for files > 1MB.
-- **Line endings**: Set `core.autocrlf=input` on Windows/WSL to prevent CRLF/LF issues.
+- **先提交後 `.gitignore`**：先加 `.gitignore`。已追之檔不受後加條目影響
+- **史中之敏感數據**：若密碼已提，刪後仍於史。以 `git filter-repo` 或 BFG 清
+- **大二進制檔**：勿提大二進制。>1MB 之檔用 Git LFS
+- **行尾**：Windows/WSL 設 `core.autocrlf=input` 以防 CRLF/LF 問題
 
-## Related Skills
+## 相關技能
 
-- `commit-changes` - staging and committing workflow
-- `manage-git-branches` - branch creation and conventions
-- `create-r-package` - Git setup as part of R package creation
-- `setup-wsl-dev-environment` - Git installation and SSH keys
-- `create-github-release` - creating releases from the repository
-- `security-audit-codebase` - check for committed secrets
+- `commit-changes` - 暫存與提交之工作流
+- `manage-git-branches` - 分支建與慣例
+- `create-r-package` - R 包建時之 Git 設
+- `setup-wsl-dev-environment` - Git 裝與 SSH 金鑰
+- `create-github-release` - 自倉庫建發行版
+- `security-audit-codebase` - 查已提之秘密

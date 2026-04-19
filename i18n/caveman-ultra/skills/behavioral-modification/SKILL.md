@@ -27,29 +27,29 @@ metadata:
 
 # Behavioral Modification
 
-Address unwanted dog behaviors through desensitization, counter-conditioning, and environmental management.
+Unwanted dog behaviors → desensitize, counter-condition, manage env.
 
-## When to Use
+## Use When
 
-- A dog shows reactivity (lunging, barking, growling) toward other dogs, people, or stimuli
-- Separation anxiety manifests as destructive behavior, vocalization, or house soiling when left alone
-- Resource guarding: the dog stiffens, growls, or snaps when approached while eating or holding an object
-- Excessive barking, jumping, pulling on leash, or other behaviors that interfere with daily life
-- After basic obedience is established — behavioral modification builds on foundation commands
+- Reactivity (lunge, bark, growl) at dogs, ppl, stimuli
+- Separation anxiety → destruction, vocal, soiling when alone
+- Resource guarding: stiff, growl, snap near food/object
+- Excessive bark, jump, pull, etc. interfere w/ life
+- After basic obedience — builds on foundation cmds
 
-## Inputs
+## In
 
-- **Required**: A specific unwanted behavior to address (not "the dog is bad" but "the dog lunges at other dogs on leash")
-- **Required**: The dog's threshold distance or trigger level (how close/intense before the behavior starts)
-- **Optional**: History of the behavior (when it started, what triggers it, what makes it worse)
-- **Optional**: High-value treats that the dog will eat even when mildly stressed
-- **Optional**: Veterinary clearance (rule out pain or medical causes for behavior changes)
+- **Required**: Specific unwanted behavior ("dog lunges at dogs on leash", not "bad")
+- **Required**: Threshold distance or trigger level (close/intense before behavior)
+- **Optional**: History (start, triggers, worsen factors)
+- **Optional**: High-value treats dog eats when mildly stressed
+- **Optional**: Vet clearance (rule out pain/medical)
 
-## Procedure
+## Do
 
-### Step 1: Identify and Define the Behavior
+### Step 1: Define Behavior
 
-Precision matters — vague descriptions lead to vague interventions.
+Precision matters — vague descriptions → vague interventions.
 
 ```
 Behavior Analysis (ABC Model):
@@ -75,11 +75,11 @@ Threshold Mapping:
 - The working zone is BELOW threshold — where the dog notices but can still think
 ```
 
-**Expected:** A precise behavior definition with identified trigger, threshold distance, and current consequence pattern.
+**→** Precise behavior def + trigger + threshold distance + current consequence.
 
-**On failure:** If the behavior seems to have no consistent trigger, keep a log for one week: date, time, context, behavior, consequence. Patterns often emerge that are not obvious in the moment.
+**If err:** No consistent trigger → log 1 wk: date, time, ctx, behavior, consequence. Patterns emerge.
 
-### Step 2: Choose the Intervention Strategy
+### Step 2: Pick Strategy
 
 ```
 Strategy Selection:
@@ -103,13 +103,13 @@ Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 ```
 
-**Expected:** A specific strategy selected for the identified behavior.
+**→** Specific strategy for behavior.
 
-**On failure:** If the behavior is severe (biting with contact, extreme panic, self-harm), refer to a certified applied animal behaviorist (CAAB) or veterinary behaviorist (DACVB). This skill covers moderate behavioral issues, not clinical cases.
+**If err:** Severe behavior (bite w/ contact, extreme panic, self-harm) → refer to CAAB or DACVB. This skill covers moderate, not clinical.
 
-### Step 3: Execute Desensitization and Counter-Conditioning
+### Step 3: DS/CC
 
-The core protocol for reactivity and fear-based behaviors.
+Core proc for reactivity + fear.
 
 ```
 DS/CC Protocol:
@@ -145,13 +145,13 @@ DS/CC Protocol:
    - Dog's body language at threshold becomes more relaxed
 ```
 
-**Expected:** Over weeks, the dog's threshold distance decreases and emotional response to the trigger shifts from fear/aggression to neutral or positive.
+**→** Over wks: threshold shrinks, emotion shifts fear/aggression → neutral/positive.
 
-**On failure:** If no progress after 3-4 weeks of consistent sessions, reassess: (1) are you working below threshold? (2) are the treats high-value enough? (3) is the trigger exposure too frequent outside of training (flooding undoes DS/CC)? (4) consider consulting a professional.
+**If err:** No progress 3-4 wks of consistent sessions → reassess: (1) below threshold? (2) treats high-value? (3) trigger exposure too frequent outside training (flooding undoes DS/CC)? (4) consult pro.
 
-### Step 4: Manage the Environment
+### Step 4: Manage Env
 
-Training changes behavior over time. Management prevents rehearsal now.
+Training changes behavior over time. Mgmt prevents rehearsal now.
 
 ```
 Management Strategies:
@@ -179,29 +179,29 @@ Every rehearsal of the unwanted behavior strengthens it.
 Management prevents rehearsal while training builds the new response.
 ```
 
-**Expected:** The unwanted behavior is not being practiced outside of controlled training sessions.
+**→** Unwanted behavior not practiced outside controlled sessions.
 
-**On failure:** If management is impossible (e.g., cannot avoid all dog encounters), reduce training criteria to match reality. Some environmental exposure is unavoidable; ensure training sessions provide a strong enough counter-experience.
+**If err:** Mgmt impossible (can't avoid all dog encounters) → reduce training criteria to match reality. Some exposure unavoidable; training sessions need strong enough counter-experience.
 
-## Validation
+## Check
 
-- [ ] The behavior was defined precisely using the ABC model
-- [ ] Threshold distance was identified before starting DS/CC
-- [ ] Training was conducted consistently below threshold
-- [ ] Treats were high-value enough for the dog to eat in the presence of the trigger
-- [ ] Sessions were 5-15 minutes, ending before the dog went over threshold
-- [ ] Environmental management prevented behavior rehearsal outside training
-- [ ] Progress indicators (check-ins, reduced threshold distance) are being tracked
+- [ ] Behavior defined precisely via ABC
+- [ ] Threshold distance ID'd before DS/CC
+- [ ] Training consistently below threshold
+- [ ] Treats high-value enough for dog to eat near trigger
+- [ ] Sessions 5-15 min, end before over threshold
+- [ ] Env mgmt prevents rehearsal outside training
+- [ ] Progress indicators (check-ins, reduced distance) tracked
 
-## Common Pitfalls
+## Traps
 
-- **Working over threshold**: The single most common error. If the dog cannot eat treats, you are too close. Move back
-- **Inconsistency**: DS/CC requires regular sessions (3-5 per week minimum). Sporadic training produces sporadic results
-- **Flooding**: Forcing the dog to endure the trigger at close range does not "get them used to it" — it traumatizes and worsens the behavior
-- **Punishment**: Correcting a reactive dog (leash pop, yelling "no") suppresses the warning signals but increases the underlying emotion. The dog learns to bite without warning
-- **Expecting linear progress**: Behavioral modification has plateaus and regressions. A bad session does not erase prior progress. Zoom out and look at the trend over weeks
-- **Ignoring medical causes**: Pain, thyroid disorders, and neurological issues can all present as behavioral problems. Veterinary clearance is not optional for sudden-onset behavior changes
+- **Over threshold**: Most common err. Dog can't eat treats → too close. Back up
+- **Inconsistency**: DS/CC needs regular sessions (3-5/wk min). Sporadic → sporadic results
+- **Flooding**: Forcing trigger close up doesn't habituate — traumatizes, worsens behavior
+- **Punishment**: Leash pop, "no" → suppresses warning signals but keeps underlying emotion. Dog learns to bite w/o warning
+- **Linear progress**: Plateaus + regressions normal. Bad session ≠ lost progress. Zoom out, trend over wks
+- **Ignore medical**: Pain, thyroid, neuro → present as behavior. Vet clearance not optional for sudden changes
 
-## Related Skills
+## →
 
-- `basic-obedience` — foundation commands that behavioral modification builds upon; reliable recall is essential for safety
+- `basic-obedience` — foundation cmds this builds on; reliable recall essential for safety

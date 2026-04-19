@@ -28,9 +28,9 @@ metadata:
 
 Design and implement production-grade continuous integration and deployment pipelines with GitHub Actions.
 
-## When to Use
+## When Use
 
-- Setting up automated testing and deployment for a new project
+- Setting up automated testing and deployment for new project
 - Migrating from Jenkins, Travis CI, or CircleCI to GitHub Actions
 - Implementing matrix builds across multiple platforms or language versions
 - Adding build caching to speed up CI/CD execution time
@@ -42,22 +42,17 @@ Design and implement production-grade continuous integration and deployment pipe
 - **Required**: Repository with code to test/build/deploy
 - **Required**: GitHub Actions workflow directory (`.github/workflows/`)
 - **Optional**: Secrets for deployment targets (AWS, Azure, Docker registries)
-- **Optional**: Self-hosted runner configuration for specialized builds
+- **Optional**: Self-hosted runner config for specialized builds
 - **Optional**: Branch protection rules and required status checks
 
-## Procedure
+## Steps
 
 ### Step 1: Create Base Workflow Structure
 
-Create `.github/workflows/ci.yml` with trigger configuration and basic job structure.
+Create `.github/workflows/ci.yml` with trigger config and basic job structure.
 
 ```yaml
 name: CI Pipeline
-locale: caveman
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   push:
@@ -95,13 +90,13 @@ jobs:
         run: npm run format:check
 ```
 
-**Expected:** Workflow file created with proper YAML syntax, triggers configured, and basic lint job defined.
+**Got:** Workflow file created, proper YAML syntax, triggers configured, basic lint job defined.
 
-**On failure:** Validate YAML syntax with `yamllint .github/workflows/ci.yml`. Check indentation (use spaces, not tabs). Verify action versions are current by checking GitHub Marketplace.
+**If fail:** Validate YAML with `yamllint .github/workflows/ci.yml`. Check indentation (spaces, not tabs). Verify action versions current via GitHub Marketplace.
 
 ### Step 2: Implement Matrix Build Strategy
 
-Add matrix builds to test across multiple platforms, language versions, or configurations.
+Add matrix builds to test across multiple platforms, language versions, configurations.
 
 ```yaml
   test:
@@ -141,13 +136,13 @@ Add matrix builds to test across multiple platforms, language versions, or confi
           fail_ci_if_error: true
 ```
 
-**Expected:** Matrix generates 8 parallel jobs (3 OS × 3 Node versions - 1 exclusion). All tests pass across platforms. Coverage report uploads from single canonical job.
+**Got:** Matrix generates 8 parallel jobs (3 OS × 3 Node versions - 1 exclusion). All tests pass across platforms. Coverage uploads from single canonical job.
 
-**On failure:** If matrix syntax errors occur, verify proper indentation and array notation. For flaky tests, add retry logic with `uses: nick-invision/retry@v2`. For platform-specific failures, add OS conditionals or expand exclusions.
+**If fail:** Matrix syntax errors? Verify indentation and array notation. For flaky tests, add retry logic with `uses: nick-invision/retry@v2`. For platform-specific failures, add OS conditionals or expand exclusions.
 
 ### Step 3: Configure Dependency Caching and Artifact Management
 
-Optimize build speed with intelligent caching and preserve build artifacts.
+Optimize build speed with intelligent caching, preserve build artifacts.
 
 ```yaml
   build:
@@ -194,9 +189,9 @@ Optimize build speed with intelligent caching and preserve build artifacts.
           if-no-files-found: error
 ```
 
-**Expected:** First run downloads dependencies (slow), subsequent runs restore from cache (fast). Build artifacts upload successfully with unique SHA-based naming.
+**Got:** First run downloads dependencies (slow), subsequent runs restore from cache (fast). Build artifacts upload with unique SHA-based naming.
 
-**On failure:** If cache misses frequently, verify cache key includes all relevant file hashes. For upload failures, check path exists and glob patterns match actual build output. Verify `retention-days` meets organizational policies.
+**If fail:** Cache misses frequently? Verify cache key includes all relevant file hashes. Upload failures? Check path exists, glob patterns match actual build output. Verify `retention-days` meets organizational policies.
 
 ### Step 4: Implement Security Scanning and Quality Gates
 
@@ -239,9 +234,9 @@ Add security vulnerability scanning and code quality enforcement.
           head: HEAD
 ```
 
-**Expected:** Security scans complete, results upload to GitHub Security tab. Critical vulnerabilities block merge if branch protection configured. No secrets detected in commits.
+**Got:** Security scans complete, results upload to GitHub Security tab. Critical vulnerabilities block merge if branch protection configured. No secrets detected in commits.
 
-**On failure:** For false positives, create `.trivyignore` file with CVE IDs and justifications. For audit failures, review `npm audit fix` suggestions. For secret detection false positives, add patterns to `.trufflehog.yml` exclude list.
+**If fail:** False positives? Create `.trivyignore` with CVE IDs and justifications. Audit failures? Review `npm audit fix` suggestions. Secret detection false positives? Add patterns to `.trufflehog.yml` exclude list.
 
 ### Step 5: Configure Environment-Specific Deployments
 
@@ -314,13 +309,13 @@ Set up deployment stages with environment protection rules and approval gates.
           generate_release_notes: true
 ```
 
-**Expected:** Staging deploys automatically on develop branch. Production requires manual approval (configured in GitHub Environment settings). CloudFront invalidation clears CDN cache. Release created for tagged commits.
+**Got:** Staging deploys automatically on develop branch. Production requires manual approval (from GitHub Environment settings). CloudFront invalidation clears CDN cache. Release created for tagged commits.
 
-**On failure:** For AWS credential errors, verify OIDC trust relationship allows `role-to-assume`. For S3 sync failures, check bucket policies and IAM permissions. For environment approval issues, verify protection rules in Settings > Environments.
+**If fail:** AWS credential errors? Verify OIDC trust relationship allows `role-to-assume`. S3 sync failures? Check bucket policies and IAM permissions. Environment approval issues? Verify protection rules in Settings > Environments.
 
 ### Step 6: Add Notification and Monitoring Integration
 
-Integrate Slack notifications, deployment tracking, and performance monitoring.
+Integrate Slack notifications, deployment tracking, performance monitoring.
 
 ```yaml
   notify:
@@ -395,24 +390,24 @@ Integrate Slack notifications, deployment tracking, and performance monitoring.
           EOF
 ```
 
-**Expected:** Slack receives formatted notification with deployment status, repository details, and clickable workflow link. Datadog event logged for successful production deployments with appropriate tags.
+**Got:** Slack receives formatted notification with deployment status, repository details, clickable workflow link. Datadog event logged for successful production deployments with appropriate tags.
 
-**On failure:** For Slack failures, verify webhook URL is valid and workspace allows incoming webhooks. Test with `curl -X POST $SLACK_WEBHOOK_URL -d '{"text":"test"}'`. For Datadog failures, verify API key has event submission permissions.
+**If fail:** Slack failures? Verify webhook URL valid, workspace allows incoming webhooks. Test with `curl -X POST $SLACK_WEBHOOK_URL -d '{"text":"test"}'`. Datadog failures? Verify API key has event submission permissions.
 
-## Validation
+## Checks
 
 - [ ] Workflow syntax validates with `yamllint` or GitHub's workflow editor
 - [ ] All jobs have explicit dependencies (`needs:`) to control execution order
 - [ ] Matrix builds cover all target platforms and versions
 - [ ] Caching reduces build time by >50% on subsequent runs
-- [ ] Secrets are stored in GitHub Secrets, never hardcoded in workflow files
+- [ ] Secrets stored in GitHub Secrets, never hardcoded in workflow files
 - [ ] Security scans upload results to GitHub Security tab
 - [ ] Environment protection rules require approval for production deployments
 - [ ] Failed deployments don't leave system in inconsistent state
 - [ ] Notifications reach appropriate channels (Slack, email, monitoring tools)
 - [ ] Workflow completes in <10 minutes for typical changes
 
-## Common Pitfalls
+## Pitfalls
 
 - **Cache key too broad**: Using `${{ runner.os }}-build-` as cache key causes false hits when dependencies change. Include `hashFiles('**/package-lock.json')` in key.
 
@@ -426,13 +421,13 @@ Integrate Slack notifications, deployment tracking, and performance monitoring.
 
 - **No rollback strategy**: Deployment failures leave system in broken state. Implement blue-green or canary deployments with automatic rollback on health check failures.
 
-- **Hardcoded values**: Workflow contains environment-specific URLs, bucket names, or API endpoints. Use environment variables and GitHub Secrets.
+- **Hardcoded values**: Workflow contains environment-specific URLs, bucket names, API endpoints. Use environment variables and GitHub Secrets.
 
 - **No timeout limits**: Jobs hang indefinitely on network issues or infinite loops. Add `timeout-minutes: 15` to all jobs.
 
-## Related Skills
+## See Also
 
-- `setup-github-actions-ci` - Initial GitHub Actions configuration for R packages and basic projects
+- `setup-github-actions-ci` - Initial GitHub Actions config for R packages and basic projects
 - `commit-changes` - Proper Git workflow integration with CI/CD triggers
 - `configure-git-repository` - Repository settings and branch protection rules
 - `setup-container-registry` - Docker image builds in CI/CD pipelines

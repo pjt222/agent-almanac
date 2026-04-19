@@ -23,39 +23,39 @@ metadata:
   tags: feature-store, feast, offline-store, online-store, feature-engineering
 ---
 
-# Build Feature Store
+# 建特徵庫
 
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 全設檔與範見 [Extended Examples](references/EXAMPLES.md)。
 
-Implement centralized feature management with Feast for consistent feature serving across training and inference.
+以 Feast 施中央特徵之管，令訓練與推理得一致之特徵供。
 
-## When to Use
+## 用時
 
-- Managing features for multiple ML models across teams
-- Ensuring training-serving consistency for features
-- Implementing point-in-time correct historical features
-- Serving low-latency features for real-time inference
-- Reusing feature definitions across projects
-- Versioning feature transformations
-- Building feature catalog for discovery and governance
-- Preventing feature leakage in training pipelines
+- 理諸 ML 模跨隊之特徵
+- 保訓練與供之一致
+- 施時點正確之歷史特徵
+- 為即時推理供低延之特徵
+- 跨項目復用特徵定
+- 版特徵之變
+- 建特徵目錄為察與治
+- 防訓練脈中之特徵漏
 
-## Inputs
+## 入
 
-- **Required**: Raw data sources (databases, data lakes, data warehouses)
-- **Required**: Python environment with Feast installed
-- **Required**: Offline store backend (BigQuery, Snowflake, Redshift, or Parquet files)
-- **Required**: Online store backend (Redis, DynamoDB, Cassandra, or SQLite for dev)
-- **Optional**: Feature transformation logic (Python, SQL, Spark)
-- **Optional**: Entity key definitions (user_id, product_id, etc.)
-- **Optional**: Kubernetes cluster for Feast server deployment
+- **必要**：源資料（庫、湖、倉）
+- **必要**：Python 境，已裝 Feast
+- **必要**：離線庫後端（BigQuery、Snowflake、Redshift、或 Parquet 檔）
+- **必要**：在線庫後端（Redis、DynamoDB、Cassandra、或 SQLite 為開發）
+- **可選**：特徵變之邏（Python、SQL、Spark）
+- **可選**：實體鍵之定（user_id、product_id 等）
+- **可選**：Feast 服交之 Kubernetes 群
 
-## Procedure
+## 法
 
-### Step 1: Initialize Feast Feature Repository
+### 第一步：初 Feast 特徵庫
 
-Set up Feast project structure and configure storage backends.
+立 Feast 項之構而設儲後端。
 
 ```bash
 # Install Feast with required extras
@@ -72,7 +72,7 @@ cd my_feature_repo
 # └── data/                    # Sample data (dev only)
 ```
 
-Configure `feature_store.yaml`:
+設 `feature_store.yaml`：
 
 ```yaml
 # feature_store.yaml
@@ -86,7 +86,7 @@ offline_store:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Production configuration with cloud backends:
+以雲後端之生產設：
 
 ```yaml
 # feature_store.prod.yaml
@@ -100,13 +100,13 @@ offline_store:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Feast repository initialized with config file, sample feature definitions created, offline and online stores configured, registry path accessible.
+**得：** Feast 庫已初附設檔，範特徵定已建，離與在線庫皆設，註冊路可及。
 
-**On failure:** Verify database/Redis credentials (`psql -U feast_user -h localhost`), check connection strings format, ensure databases exist (`CREATE DATABASE feature_store`), verify cloud permissions for S3/BigQuery/DynamoDB, test connectivity to storage backends, check Feast version compatibility with backends (`feast version`).
+**敗則：** 驗庫/Redis 憑（`psql -U feast_user -h localhost`），察連串格，確庫存（`CREATE DATABASE feature_store`），驗雲之 S3/BigQuery/DynamoDB 權，試連儲後端，察 Feast 版合後端（`feast version`）。
 
-### Step 2: Define Entities and Data Sources
+### 第二步：定實體與源
 
-Create entity definitions and connect to raw data sources.
+建實體定，連源資料。
 
 ```python
 # entities.py
@@ -120,7 +120,7 @@ customer = Entity(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Define data sources:
+定源：
 
 ```python
 # data_sources.py
@@ -134,13 +134,13 @@ customer_transactions_source = FileSource(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Entity definitions reference correct ID columns, data sources connect to raw data successfully, event_timestamp_column exists in source data, created_timestamp_column allows point-in-time queries.
+**得：** 實體定引正 ID 欄，源連源資料成功，event_timestamp_column 存源中，created_timestamp_column 令時點詢可行。
 
-**On failure:** Verify source data files exist and are readable, check BigQuery/Redshift credentials and table access, ensure timestamp columns have correct format (Unix timestamp or ISO8601), verify Kafka connectivity and topic existence, check schema compatibility between sources and entities.
+**敗則：** 驗源檔存而可讀，察 BigQuery/Redshift 憑與表取，確時戳欄格正（Unix 或 ISO8601），驗 Kafka 連與題存，察源與實體之模合。
 
-### Step 3: Define Feature Views with Transformations
+### 第三步：定特徵視含變
 
-Create feature views that define how raw data becomes ML-ready features.
+建特徵視以定源如何成 ML 備之特徵。
 
 ```python
 # feature_views.py
@@ -154,13 +154,13 @@ from data_sources import customer_features_source
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Feature views registered successfully, schema matches source data, transformations execute without errors, TTL values appropriate for use case, on-demand views combine batch and request features.
+**得：** 特徵視已註，模合源，變無錯行，TTL 合用例，按需視合批與請時特徵。
 
-**On failure:** Verify field names match source columns exactly, check dtype compatibility (Int64 vs Int32), ensure entity references exist, validate transformation logic with sample data, check for division by zero in calculations, verify request source schema matches inference payload.
+**敗則：** 驗欄名全合源欄，察 dtype 合（Int64 非 Int32），確實體引存，以範驗變邏，察算中除零，驗請源模合推理荷。
 
-### Step 4: Apply Feature Definitions and Materialize Features
+### 第四步：施特徵定而物化
 
-Deploy feature definitions to registry and materialize to online store.
+交特徵定於註冊，物化於在線庫。
 
 ```bash
 # Apply feature definitions to registry
@@ -174,7 +174,7 @@ feast apply
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Programmatic materialization:
+程式之物化：
 
 ```python
 # materialize_features.py
@@ -188,13 +188,13 @@ fs = FeatureStore(repo_path=".")
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Feature definitions applied to registry without conflicts, materialization job completes successfully, online store populated with features, feature freshness within configured TTL.
+**得：** 特徵定施於註冊無衝，物化任成，在線庫已填特徵，特徵新於設之 TTL。
 
-**On failure:** Check offline store query succeeds (`feast feature-views describe customer_stats`), verify time range has data, ensure online store writable (Redis/DynamoDB permissions), check for duplicate feature names across views, verify entity keys exist in source data, monitor materialization job logs for errors, check disk space for local stores.
+**敗則：** 察離線庫詢成（`feast feature-views describe customer_stats`），驗時段有資料，確在線庫可書（Redis/DynamoDB 權），察視間無重特徵名，驗實體鍵存於源，監物化任之日誌，察盤空於本地庫。
 
-### Step 5: Retrieve Features for Training
+### 第五步：為訓練取特徵
 
-Fetch point-in-time correct historical features for model training.
+取時點正確之歷史特徵以訓模。
 
 ```python
 # get_training_data.py
@@ -208,7 +208,7 @@ fs = FeatureStore(repo_path=".")
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Point-in-time correctness validation:
+時點正確之驗：
 
 ```python
 # validate_pit_correctness.py
@@ -222,13 +222,13 @@ def validate_point_in_time_correctness(training_df, entity_df):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Historical features retrieved successfully, entity_df timestamps preserved, no NaN values for materialized features, point-in-time correctness guaranteed (no future data leakage), feature service groups features logically.
+**得：** 歷史特徵取成，entity_df 時戳保留，物化之特徵無 NaN，時點正確保（無未來漏），特徵服邏輯集特徵。
 
-**On failure:** Check entity_df has required columns (entity names + event_timestamp), verify feature view names match registry, ensure offline store has data for requested time range, check for timezone mismatches (use UTC), verify entity IDs exist in source data, inspect logs for SQL query errors, validate feature view TTL covers requested time range.
+**敗則：** 察 entity_df 有須欄（實體名 + event_timestamp），驗特徵視名合註冊，確離庫有所請時段之資料，察時區不合（用 UTC），驗實體 ID 存於源，察日誌之 SQL 詢錯，驗特徵視 TTL 涵所請時段。
 
-### Step 6: Serve Features for Real-Time Inference
+### 第六步：為即時推理供特徵
 
-Retrieve low-latency features from online store for model serving.
+自在線庫取低延之特徵供模。
 
 ```python
 # serve_features.py
@@ -242,7 +242,7 @@ def get_inference_features(customer_ids: list, request_data: dict = None):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-FastAPI integration:
+FastAPI 整：
 
 ```python
 # api.py
@@ -256,42 +256,42 @@ fs = FeatureStore(repo_path=".")
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Online features retrieved in <10ms for single entity, batch retrieval scales efficiently, on-demand transformations execute correctly, request-time features merged with batch features, API responds quickly (<50ms end-to-end).
+**得：** 單實體之在線特徵取於十毫秒內，批取高效，按需變正行，請時特徵與批特徵合，API 速應（端至端五十毫秒內）。
 
-**On failure:** Check online store populated (run materialize if empty), verify Redis/DynamoDB connectivity and latency, ensure entity keys exist in online store, check for cold start issues (warm up cache), verify on-demand transformation logic, monitor online store memory/CPU usage, check network latency between service and online store.
+**敗則：** 察在線庫已填（空則行物化），驗 Redis/DynamoDB 連與延，確實體鍵存於在線庫，察冷啟題（暖緩），驗按需變邏，監在線庫之記/CPU 用，察服與在線庫間之網延。
 
-## Validation
+## 驗
 
-- [ ] Feast repository initialized and configured
-- [ ] Offline and online stores connected successfully
-- [ ] Entity definitions match source data
-- [ ] Feature views registered in registry
-- [ ] On-demand transformations execute correctly
-- [ ] Materialization completes without errors
-- [ ] Historical features retrieved with point-in-time correctness
-- [ ] Online features served with low latency (<10ms)
-- [ ] Feature freshness within configured TTL
-- [ ] Training-serving consistency verified
-- [ ] Feature catalog accessible for discovery
+- [ ] Feast 庫已初已設
+- [ ] 離線與在線庫皆連成
+- [ ] 實體定合源
+- [ ] 特徵視已註於註冊
+- [ ] 按需變正行
+- [ ] 物化畢無錯
+- [ ] 歷史特徵取附時點正確
+- [ ] 在線特徵供以低延（十毫秒內）
+- [ ] 特徵新於設之 TTL
+- [ ] 訓供之一致已驗
+- [ ] 特徵目可為察
 
-## Common Pitfalls
+## 陷
 
-- **Feature leakage**: Using future data in historical features - always validate point-in-time correctness, use created_timestamp column
-- **Inconsistent transformations**: Different logic for training vs serving - use Feast on-demand views for consistency
-- **Stale features**: Online store not materialized regularly - set up scheduled materialization jobs (cron/Airflow)
-- **Missing entity keys**: Entities in training set not in online store - ensure comprehensive materialization, handle missing keys gracefully
-- **Type mismatches**: Schema types don't match source data - validate dtypes before apply, use explicit Field definitions
-- **Slow online retrieval**: Network latency or overloaded online store - co-locate feature store with inference service, use connection pooling
-- **Large feature views**: Materializing millions of entities is slow - partition by date, use incremental materialization, optimize offline queries
-- **No feature versioning**: Breaking changes affect production models - version feature views, maintain backward compatibility
-- **Timezone confusion**: Mixing timezones causes incorrect joins - always use UTC for timestamps
-- **Ignoring TTL**: Serving expired features - set appropriate TTL values, monitor feature freshness
+- **特徵漏**：歷史特徵中用未來資料——恆驗時點正確，用 created_timestamp 欄
+- **變不一**：訓與供邏異——用 Feast 按需視為一致
+- **陳特徵**：在線庫未定期物化——立排程物化任（cron/Airflow）
+- **缺實體鍵**：訓集中之實體不於在線庫——確全物化，優理缺鍵
+- **型不合**：模型類不合源——apply 前驗 dtype，用明 Field 定
+- **在線取慢**：網延或在線庫過載——特徵庫共置於推理服，用連池
+- **大特徵視**：物化百萬實體慢——按日分，用增量物化，優離詢
+- **無特徵版**：破變影響生產模——版特徵視，持向後相容
+- **時區之惑**：混時區致合誤——恆用 UTC 為時戳
+- **忽 TTL**：供過期特徵——設合 TTL，監特徵新
 
-## Related Skills
+## 參
 
-- `track-ml-experiments` - Log feature metadata in MLflow experiments
-- `orchestrate-ml-pipeline` - Schedule feature materialization jobs
-- `version-ml-data` - Version raw data sources for feature engineering
-- `deploy-ml-model-serving` - Integrate feature store with model serving
-- `serialize-data-formats` - Choose efficient storage formats for features
-- `design-serialization-schema` - Design schemas for feature sources
+- `track-ml-experiments` - 記特徵元於 MLflow 實驗
+- `orchestrate-ml-pipeline` - 排程特徵物化任
+- `version-ml-data` - 版源資料為特徵工
+- `deploy-ml-model-serving` - 整特徵庫與模供
+- `serialize-data-formats` - 擇特徵之高效儲格
+- `design-serialization-schema` - 設特徵源之模

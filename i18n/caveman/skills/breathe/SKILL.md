@@ -26,32 +26,32 @@ metadata:
 
 # Breathe
 
-A single conscious pause between actions — checking alignment, releasing momentum, and returning to the task with fresh attention. The lightest self-care unit in the system.
+Single conscious pause between actions — check alignment, release momentum, return to task with fresh attention. Lightest self-care unit in system.
 
-## When to Use
+## When Use
 
-- Between reading a file and editing it — is the edit still the right move?
-- After a tool failure, before choosing the next action — pause before reacting
-- When a chain of actions has built up momentum that might be carrying past the goal
-- As a deliberate practice: insert one breathe between any two distinct actions
-- When noticing the urge to rush — the urge itself is the signal to pause
+- Between reading a file and editing it — edit still right move?
+- After tool failure, before choosing next action — pause before reacting
+- Chain of actions built momentum possibly carrying past goal
+- Deliberate practice: insert one breathe between any two distinct actions
+- Noticing urge to rush — urge itself is signal to pause
 
 ## Inputs
 
-- **Required**: None — breathe uses only what is already in working awareness
-- **Optional**: None — adding inputs defeats the purpose of a micro-reset
+- **Required**: None — breathe uses only what's already in working awareness
+- **Optional**: None — adding inputs defeats purpose of micro-reset
 
-## Procedure
+## Steps
 
 ### Step 1: Pause
 
-Stop. Do not begin the next action, tool call, or reasoning step yet.
+Stop. Do not begin next action, tool call, or reasoning step yet.
 
-This is the entire first step. The pause itself has value. Momentum is not always your ally — sometimes it carries you past the turn.
+This is entire first step. Pause itself has value. Momentum not always ally — sometimes carries past the turn.
 
-**Expected:** A genuine gap between the previous action and the next. Not a performative pause followed by the same action you were going to take anyway.
+**Got:** Genuine gap between previous action and next. Not performative pause followed by same action you were going to take anyway.
 
-**On failure:** If pausing feels impossible — if the next action feels so urgent it cannot wait one moment — that urgency is the strongest signal that the pause is needed. Urgency that cannot tolerate a single breath of delay is almost always reactive, not reasoned.
+**If fail:** Pausing feels impossible — next action feels so urgent it cannot wait one moment? That urgency is strongest signal pause is needed. Urgency that cannot tolerate single breath of delay almost always reactive, not reasoned.
 
 ### Step 2: Check
 
@@ -59,56 +59,56 @@ Ask one question. Only one.
 
 Choose from:
 
-- **"Am I still on task?"** — Has the goal drifted since I started?
-- **"Is this the right next step?"** — Or am I following momentum from the previous step?
-- **"What did I just learn?"** — Did the last action change anything about my understanding?
-- **"Am I assuming or knowing?"** — Is the next step based on evidence or habit?
+- **"Am I still on task?"** — Has goal drifted since start?
+- **"Is this right next step?"** — Or following momentum from previous step?
+- **"What did I just learn?"** — Did last action change anything about my understanding?
+- **"Am I assuming or knowing?"** — Is next step based on evidence or habit?
 
-One question. Answer it honestly. Move on.
+One question. Answer honestly. Move on.
 
-**Expected:** A single, clear answer. Not an analysis. Not a reassessment. One question, one honest answer.
+**Got:** Single, clear answer. Not analysis. Not reassessment. One question, one honest answer.
 
-**On failure:** If the answer reveals misalignment — the goal has drifted, the next step is wrong, the assumption is untested — do not fix it here. Note it and proceed to `meditate` or `center` for a proper correction. Breathe is for detection, not repair.
+**If fail:** Answer reveals misalignment — goal drifted, next step wrong, assumption untested? Do not fix here. Note it, proceed to `meditate` or `center` for proper correction. Breathe for detection, not repair.
 
 ### Step 3: Release
 
-Let go of the previous action's outcome. Whether it succeeded or failed, it is done.
+Let go of previous action's outcome. Succeeded or failed, it's done.
 
-- If it succeeded: release the satisfaction. The next step needs fresh attention, not momentum from success.
-- If it failed: release the frustration. The next step needs clear reasoning, not compensation for failure.
-- If it was ambiguous: release the need to resolve the ambiguity right now. Proceed with what is known.
+- Succeeded? Release satisfaction. Next step needs fresh attention, not momentum from success.
+- Failed? Release frustration. Next step needs clear reasoning, not compensation for failure.
+- Ambiguous? Release need to resolve ambiguity right now. Proceed with what's known.
 
-**Expected:** The next action begins from neutral ground, not from the emotional residue of the previous one.
+**Got:** Next action begins from neutral ground, not from emotional residue of previous one.
 
-**On failure:** If release does not come easily — if the previous action's outcome is still coloring attention — this may need `heal` rather than just `breathe`. Persistent emotional residue from a single action signals something deeper than a micro-reset can address.
+**If fail:** Release doesn't come easily — previous action's outcome still coloring attention? May need `heal` rather than just `breathe`. Persistent emotional residue from single action signals something deeper than micro-reset can address.
 
 ### Step 4: Continue
 
-Take the next action. The pause is over.
+Take next action. Pause over.
 
-Breathe does not produce output, does not update memory, does not generate analysis. It produces one moment of clarity, and that moment is spent the instant you move forward.
+Breathe produces no output, updates no memory, generates no analysis. Produces one moment of clarity, spent instant you move forward.
 
-**Expected:** The next action is taken with fresh attention rather than accumulated momentum.
+**Got:** Next action taken with fresh attention rather than accumulated momentum.
 
-**On failure:** There is no failure mode for continuing. The pause has already done its work — or revealed that deeper work is needed.
+**If fail:** No failure mode for continuing. Pause already did work — or revealed deeper work needed.
 
-## Validation
+## Checks
 
-- [ ] A genuine pause occurred (not a performative one)
-- [ ] One check question was asked and honestly answered
-- [ ] The previous action's emotional residue was released
-- [ ] The next action proceeds from clear ground
-- [ ] Total elapsed time was brief — breathe should take seconds, not minutes
+- [ ] Genuine pause occurred (not performative)
+- [ ] One check question asked, honestly answered
+- [ ] Previous action's emotional residue released
+- [ ] Next action proceeds from clear ground
+- [ ] Total elapsed time brief — breathe takes seconds, not minutes
 
-## Common Pitfalls
+## Pitfalls
 
-- **Breathe as procrastination**: If you're breathing between every single action, you're not breathing — you're stalling. Use breathe at natural transition points, not as a delay tactic
-- **Analysis during breathe**: The check step is one question, not a full assessment. If you need more, use `meditate` or `center`
-- **Performing the pause**: Going through the motions without genuine stopping. The point is actual interruption of momentum, not a ritual
-- **Skipping release**: Checking alignment but keeping the emotional charge from the previous step. Release is what makes the next action clean
-- **Making breathe heavy**: This is the lightest skill in the system. If it feels heavy, you've added too much to it
+- **Breathe as procrastination**: Breathing between every single action? Not breathing — stalling. Use breathe at natural transition points, not as delay tactic
+- **Analysis during breathe**: Check step is one question, not full assessment. Need more? Use `meditate` or `center`
+- **Performing the pause**: Going through motions without genuine stopping. Point is actual interruption of momentum, not ritual
+- **Skipping release**: Checking alignment but keeping emotional charge from previous step. Release makes next action clean
+- **Making breathe heavy**: Lightest skill in system. Feels heavy? You've added too much
 
-## Related Skills
+## See Also
 
 - `meditate` — full clearing session when breathe reveals deeper drift
 - `center` — structural rebalancing when breathe reveals misaligned load distribution

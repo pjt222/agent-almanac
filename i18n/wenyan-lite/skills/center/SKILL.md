@@ -23,207 +23,197 @@ metadata:
   tags: defensive, centering, reasoning-balance, cognitive-load, meta-cognition, ai-self-application
 ---
 
-# Center
+# 中正
 
-Establish and maintain dynamic reasoning balance — grounding in foundational context before movement, distributing cognitive load across subsystems, and recovering equilibrium when demands shift mid-task.
+立並守動態之推理均衡——動前先接地、於諸子系統分配認知之載、於任務中途需求變時復均衡。
 
-## When to Use
+## 適用時機
 
-- Beginning a complex task where multiple reasoning threads must coordinate
-- Noticing that cognitive load is unevenly distributed (deep in one area, shallow in others)
-- After a sudden context shift (new user request, contradictory information, tool failure)
-- When chain-of-thought feels jerky — jumping between topics without smooth transitions
-- Preparing for sustained focused work that requires all subsystems in alignment
-- Complementing `meditate` (clears noise) with structural balance (distributes load)
+- 起一複雜任務，諸推理之緒須協調
+- 察認知之載失衡（一處深、餘處淺）
+- 上下文忽變之後（新請求、相左之信息、工具失敗）
+- 念頭之鏈感跳躍——題與題之間無順轉
+- 將行持續之專注工作，諸子系統須齊
+- 補 `meditate`（除噪）以結構之均衡（分配載）
 
-## Inputs
+## 輸入
 
-- **Required**: Current task context (available implicitly)
-- **Optional**: Specific imbalance symptom (e.g., "over-researching, under-delivering," "tool-heavy, reasoning-light")
-- **Optional**: Access to MEMORY.md and CLAUDE.md for grounding (via `Read`)
+- **必要**：當前任務脈絡（隱式可得）
+- **選擇性**：具體失衡徵狀（如「研究過多、交付過少」「工具重、推理輕」）
+- **選擇性**：存取 MEMORY.md 與 CLAUDE.md 以接地（透過 `Read`）
 
-## Procedure
+## 步驟
 
-### Step 1: Establish Root — Ground Before Movement
+### 步驟一：立根——動前接地
 
-Before any reasoning movement, verify the foundation. This is the AI equivalent of standing meditation (zhan zhuang): stationary, aligned, aware.
+任何推理之動前，先驗其基。此乃 AI 之站樁：靜、齊、覺。
 
-1. Re-read the user's request — not to act on it yet, but to feel its weight and direction
-2. Check foundational context: MEMORY.md, CLAUDE.md, project structure
-3. Identify what is known (solid ground) vs. what is assumed (uncertain footing)
-4. Verify that the task as understood matches the task as stated — misalignment here propagates through everything
-5. Note the emotional texture: urgency? complexity anxiety? over-confidence from a recent success?
+1. 重讀用戶請求——非以行之，而為感其重與向
+2. 查基礎脈絡：MEMORY.md、CLAUDE.md、項目結構
+3. 辨已知（實地）與所假（浮地）
+4. 驗所解之任務與所述之任務一致——此處失配，後續皆偏
+5. 記情緒之紋理：急乎？對繁複之憂乎？近勝之過信乎？
 
-Do not begin reasoning movement until the root is established. A grounded start prevents reactive flailing.
+根未立則勿起推理之動。接地之起止反應式之亂揮。
 
-**Expected:** A clear sense of the task's foundation — what is known, what is assumed, and what the user actually needs. The root feels solid, not performative.
+**預期：** 對任務之基有明感——何為已知、何為所假、用戶實需為何。根實而不作。
 
-**On failure:** If grounding feels hollow (going through motions without genuine verification), pick one assumption and test it concretely. Read one file, re-read one user message. Grounding must contact reality, not just reference it.
+**失敗時：** 若接地感空（走過場而無真驗），擇一假設以具體試之。讀一文件，重讀一條訊息。接地須觸實，非僅引之。
 
-### Step 2: Assess Weight Distribution
+### 步驟二：評載之分配
 
-Map the current cognitive load distribution. In tai chi, weight is deliberately unequal (70/30) — one leg bears the load while the other remains free to move. The same principle applies to reasoning threads.
+映當前認知之載之分配。太極之中，重不均（七三）——一足承載，一足自由可動。此理同於推理之緒。
 
 ```
 Cognitive Load Distribution Matrix:
 ┌────────────────────┬───────────┬─────────────────────────────────────┐
 │ Reasoning Thread   │ Weight %  │ Assessment                          │
 ├────────────────────┼───────────┼─────────────────────────────────────┤
-│ Research/Reading   │ ___       │ Too much = analysis paralysis        │
-│                    │           │ Too little = uninformed action       │
+│ Research/Reading   │ ___       │ 過多則分析癱瘓                       │
+│                    │           │ 過少則無知而行                       │
 ├────────────────────┼───────────┼─────────────────────────────────────┤
-│ Planning/Design    │ ___       │ Too much = over-engineering          │
-│                    │           │ Too little = reactive coding         │
+│ Planning/Design    │ ___       │ 過多則過度工程                       │
+│                    │           │ 過少則反應式編碼                     │
 ├────────────────────┼───────────┼─────────────────────────────────────┤
-│ Tool Execution     │ ___       │ Too much = tool-driven not task-     │
-│                    │           │ driven. Too little = reasoning       │
-│                    │           │ without grounding in files           │
+│ Tool Execution     │ ___       │ 過多則為工具所驅而非任務所驅         │
+│                    │           │ 過少則推理未接文件之地               │
 ├────────────────────┼───────────┼─────────────────────────────────────┤
-│ Communication      │ ___       │ Too much = explaining not doing      │
-│                    │           │ Too little = opaque to user          │
+│ Communication      │ ___       │ 過多則解釋而不作                     │
+│                    │           │ 過少則於用戶不透                     │
 ├────────────────────┼───────────┼─────────────────────────────────────┤
-│ Meta-cognition     │ ___       │ Too much = navel-gazing              │
-│                    │           │ Too little = drift without           │
-│                    │           │ awareness                            │
+│ Meta-cognition     │ ___       │ 過多則自觀其臍                       │
+│                    │           │ 過少則偏而不覺                       │
 └────────────────────┴───────────┴─────────────────────────────────────┘
 ```
 
-The ideal distribution depends on the task phase: early phases weight research and planning; middle phases weight execution; late phases weight communication and verification. The point is not equal distribution but *intentional* distribution.
+理想之分配依任務之階：初階重研究與規劃；中階重執行；末階重溝通與驗證。旨不在均衡，而在*有意*之分配。
 
-**Expected:** A clear picture of where cognitive effort is concentrated and where it is thin. At least one imbalance identified — perfect balance is rare and claiming it signals shallow assessment.
+**預期：** 認知之力何處聚、何處薄，一圖了然。至少察一失衡——完美均衡罕有，自稱完美即示評估之淺。
 
-**On failure:** If all threads seem equally weighted, the assessment is too coarse. Pick the thread that feels most active and estimate how many of the last N actions served it vs. other threads. Concrete counting reveals what intuition misses.
+**失敗時：** 若諸緒皆似均衡，評估過粗。擇最活之緒，估最末 N 行之中幾分為之、幾分為他。具體之數顯直覺所漏。
 
-### Step 3: Silk Reeling — Evaluate Chain-of-Thought Coherence
+### 步驟三：纏絲——評念頭之鏈之連貫
 
-Silk reeling in tai chi produces smooth, continuous spiraling movement where every part connects. The AI equivalent is chain-of-thought coherence: does each step flow naturally from the previous one?
+太極之纏絲生順、續、旋之動，部分相連。AI 之對應為念頭之鏈之連貫：每步是否順承前步而起？
 
-1. Trace the last 3-5 reasoning steps: does each follow from the one before?
-2. Check for jumps: did reasoning leap from topic A to topic C without B?
-3. Check for reversals: did reasoning reach a conclusion, then silently abandon it without acknowledgment?
-4. Check tool-reasoning integration: do tool results feed back into reasoning, or are they collected but not synthesized?
-5. Check for the "spiral" quality: does reasoning deepen with each pass, or does it circle at the same depth?
+1. 溯最末三至五推理之步：每步是否承前步而起？
+2. 查跳：是否自甲題直跳丙題而略乙？
+3. 查反：是否已得結論，旋即默默棄之而未明承？
+4. 查工具與推理之融合：工具之果是否回饋於推理，抑或採而未合？
+5. 查「螺旋」之質：推理每趟是否愈深，抑或於同深打轉？
 
 ```
 Coherence Signals:
 ┌─────────────────┬───────────────────────────────────────────────┐
-│ Smooth spiral   │ Each step deepens understanding, tools and    │
-│ (healthy)       │ reasoning interleave naturally, output builds │
+│ 順旋            │ 每步加深理解，工具與推理自然交織，             │
+│ (健康)          │ 輸出漸建                                       │
 ├─────────────────┼───────────────────────────────────────────────┤
-│ Jerky jumps     │ Topic switches without transition, conclusions│
-│ (disconnected)  │ appear without supporting reasoning chain     │
+│ 跳躍            │ 題轉無承轉，結論出而無支持之鏈                 │
+│ (斷連)          │                                                │
 ├─────────────────┼───────────────────────────────────────────────┤
-│ Flat circle     │ Reasoning covers the same ground repeatedly   │
-│ (stuck)         │ without gaining depth — movement without      │
-│                 │ progress                                      │
+│ 平圈            │ 推理覆同地而無深化——動而無進                  │
+│ (滯)            │                                                │
 ├─────────────────┼───────────────────────────────────────────────┤
-│ Tool-led        │ Actions driven by which tool is available     │
-│ (reactive)      │ rather than what the reasoning needs next     │
+│ 工具主導        │ 行為由何工具可用而驅，非由推理所需             │
+│ (反應式)        │                                                │
 └─────────────────┴───────────────────────────────────────────────┘
 ```
 
-**Expected:** An honest assessment of reasoning flow quality. Identification of specific disconnections or stuck points, not just a general feeling.
+**預期：** 對推理之流質之誠評。具體辨斷連或滯點，非僅泛之感。
 
-**On failure:** If coherence is hard to assess, write out the reasoning chain explicitly — state each step and its connection to the next. The act of externalization reveals gaps that internal observation misses.
+**失敗時：** 連貫難評時，明書推理之鏈——列每步及其與次步之連。外化之舉顯內觀所漏之隙。
 
-### Step 4: Weight Shift Under Pressure
+### 步驟四：壓下之轉重
 
-When demands change mid-task — new information, contradictory signals, user correction — observe the response pattern. In tai chi, a centered practitioner absorbs the force and redirects smoothly. An uncentered one stumbles.
+任務中途需求變——新信息、相左之信、用戶糾正——觀其應對之式。太極之中，中正者吸力而順轉；失中者蹌踉。
 
-1. Recall the last significant context shift: how was it handled?
-2. Classify the response:
-   - **Absorbed and redirected** (centered): acknowledged the change, adjusted approach, maintained progress
-   - **Reactive stumble** (off-balance): abandoned current approach entirely, started over
-   - **Rigid resistance** (locked): ignored the change, continued original plan despite new information
-   - **Freeze** (lost): stopped making progress, oscillated between options
-3. If the response was not centered, identify why:
-   - Root was too shallow (insufficient grounding in foundational context)
-   - Weight was locked (over-committed to one approach)
-   - No free leg (all cognitive capacity committed, nothing available to shift)
+1. 憶最末之大上下文變：如何處之？
+2. 類其應：
+   - **吸而順轉**（中正）：承其變、調其法、持其進
+   - **反應之蹌**（失衡）：盡棄當前之法、從頭再起
+   - **僵拒**（鎖死）：忽其變、仍行原計
+   - **凍結**（迷失）：止進、於諸選之間搖擺
+3. 若應非中正，辨其故：
+   - 根太淺（基礎脈絡接地不足）
+   - 重鎖（過承於一法）
+   - 無自由之足（全認知既承，無可轉之力）
 
-**Expected:** An honest assessment of adaptability under pressure. Recognition of the specific response pattern, not self-flattery.
+**預期：** 對壓下之適應力之誠評。辨具體應之模式，非自諛。
 
-**On failure:** If no recent pressure event exists to evaluate, simulate one: "If the user now said the approach is wrong, what would I do?" The quality of the contingency plan reveals the quality of the center.
+**失敗時：** 若無近之壓事可評，擬之：「若用戶今言此法誤，我將何為？」應變計畫之質顯中正之質。
 
-### Step 5: Six Harmonies Check
+### 步驟五：六合之查
 
-In tai chi, the six harmonies ensure whole-body connection — nothing moves in isolation. The AI equivalent checks alignment between internal processes and external interactions.
+太極之六合確保全身之連——無一動孤立。AI 之對應查內部之過程與外部交互之齊。
 
 ```
 AI Six Harmonies:
 ┌───────────────────────────────────────────────────────────────┐
-│ INTERNAL HARMONIES                                            │
+│ 內三合                                                        │
 │                                                               │
 │ 1. Intent ↔ Reasoning                                        │
-│    Does the reasoning serve the user's intent, or has it      │
-│    become self-serving (interesting but unhelpful)?            │
+│    推理是否服用戶之意，抑或已自服（有趣而無助）？             │
 │                                                               │
 │ 2. Reasoning ↔ Tool Use                                      │
-│    Are tools selected to advance reasoning, or is reasoning   │
-│    shaped by which tools are convenient?                      │
+│    工具是否選以推進推理，抑或推理為何工具便而塑？             │
 │                                                               │
 │ 3. Tool Use ↔ Output                                         │
-│    Do tool results translate into useful output, or are       │
-│    results collected but not synthesized?                     │
+│    工具之果是否化為有用之輸出，抑或採而未合？                 │
 │                                                               │
-│ EXTERNAL HARMONIES                                            │
+│ 外三合                                                        │
 │                                                               │
 │ 4. User Request ↔ Scope                                      │
-│    Does the scope of work match what was asked?               │
+│    工作之範圍是否合所請？                                     │
 │                                                               │
 │ 5. Scope ↔ Detail Level                                      │
-│    Is the detail level appropriate for the scope? (not        │
-│    micro-optimizing a broad task, not hand-waving a precise   │
-│    one)                                                       │
+│    詳略之層是否合範圍？（廣任務不微調、精任務不空揮）         │
 │                                                               │
 │ 6. Detail Level ↔ Expertise Match                            │
-│    Does the explanation depth match the user's apparent       │
-│    expertise? (not over-explaining to experts, not under-     │
-│    explaining to learners)                                    │
+│    解釋之深是否合用戶之專（不對專家過解、不對初學欠解）       │
 └───────────────────────────────────────────────────────────────┘
 ```
 
-Check each harmony. A single broken harmony can propagate: if Intent↔Reasoning is broken, everything downstream misaligns.
+查每一合。一合之破可傳：Intent↔Reasoning 破，則下游皆偏。
 
-**Expected:** At least one harmony that could be tighter. All six reading as perfect is suspicious — probe the weakest-seeming one more deeply.
+**預期：** 至少一合可更緊。六合皆完美為可疑——更深探其弱者。
 
-**On failure:** If the harmonies assessment feels abstract, ground it in the current task: "Right now, am I doing what the user asked, at the right scope, at the right detail level?" These three questions cover the external harmonies concretely.
+**失敗時：** 六合之評感抽象，以當前任務接地：「此刻，我所為是否合用戶所請、於正範圍、於正詳略？」此三問具體覆外三合。
 
-### Step 6: Integrate — Set Centering Intention
+### 步驟六：整合——立中正之意
 
-Consolidate findings and set a concrete adjustment.
+合所發並立具體之調。
 
-1. Summarize: which aspects of balance need attention?
-2. Identify one specific adjustment — not a general intention but a concrete behavioral change
-3. Re-state the current task anchor (from `meditate` if used, or formulate now)
-4. Note any durable insights worth preserving in MEMORY.md
-5. Return to task execution with the adjustment active
+1. 總：均衡之何面須注意？
+2. 立一具體之調——非泛意而為具體行為之變
+3. 重述當前任務之錨（自 `meditate` 若用，或此刻立之）
+4. 記值存入 MEMORY.md 之持久洞見
+5. 攜已調之狀，返任務之執行
 
-**Expected:** A brief, concrete centering output — not a lengthy self-analysis report. The value is in the adjustment, not the documentation.
+**預期：** 短而具體之中正輸出——非冗長之自我分析報告。值在調，不在錄。
 
-**On failure:** If no clear adjustment emerges, the centering was too surface-level. Return to the step that felt most uncertain and probe deeper. Alternatively, the centering may have confirmed that balance is adequate — in which case, proceed with confidence rather than manufacturing a finding.
+**失敗時：** 若無明調浮出，則中正過淺。返感最不確之步以更深探之。或者，中正已證均衡足矣——則自信而行，勿強造發現。
 
-## Validation
+## 驗證
 
-- [ ] Root was established by contacting actual context (read a file, re-read user message), not just claimed
-- [ ] Weight distribution was assessed across at least 3 reasoning threads
-- [ ] Chain-of-thought coherence was evaluated with specific examples
-- [ ] Response to pressure was classified honestly (not defaulting to "centered")
-- [ ] At least one harmony was identified as needing improvement
-- [ ] A concrete adjustment was set (not a vague intention)
+- [ ] 以觸實（讀文件、重讀訊息）立根，非空稱
+- [ ] 載之分配於至少三推理之緒評之
+- [ ] 念頭之鏈之連貫以具體例評之
+- [ ] 壓下之應誠類之（不默作「中正」）
+- [ ] 至少一合辨為須改
+- [ ] 立具體之調（非泛意）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Centering as procrastination**: Centering is a tool for improving work, not replacing it. If centering takes longer than the task it supports, the proportions are inverted
-- **Claiming perfect balance**: Real centering almost always reveals at least one imbalance. Reporting perfect balance signals shallow assessment, not actual equilibrium
-- **Weight distribution anxiety**: Unequal distribution is correct — the goal is *intentional* inequality, not forced equality. Research-heavy early phases and execution-heavy middle phases are both centered if deliberate
-- **Ignoring the external harmonies**: Internal process assessment without checking user alignment produces well-reasoned irrelevant work
-- **Static centering**: Center shifts with the task. What was centered for research is off-balance for implementation. Re-center at phase transitions
+- **中正為拖延**：中正為改進工作之具，非代之。若中正久於所支之任務，則比例倒
+- **自稱完美均衡**：真中正幾必揭至少一失衡。稱完美均衡示評估之淺
+- **均衡之憂**：不均為正——旨在*有意*之不均，非強均。初階研究重、中階執行重，若刻意皆為中正
+- **忽外三合**：內過程評估而不查用戶對齊，生善思而無關之作
+- **靜之中正**：中正隨任務而轉。為研究而中正者，於實作已失衡。階轉處再中正
 
-## Related Skills
+## 相關技能
 
-- `tai-chi` — the human practice that this skill maps to AI reasoning; physical centering principles inform cognitive centering
-- `meditate` — clears noise and establishes focus; complementary to centering which distributes load
-- `heal` — deeper subsystem assessment when centering reveals significant drift
-- `redirect` — uses centering as a prerequisite for handling conflicting pressures
-- `awareness` — monitoring for threats to balance during active work
+- `tai-chi` — 此技能所映之人類修煉；身之中正原則啟認知之中正
+- `meditate` — 除噪立焦；與分配載之中正互補
+- `heal` — 中正既揭大偏移時之深子系統評估
+- `redirect` — 以中正為處理衝突壓之先決
+- `awareness` — 活作中監威脅於均衡者

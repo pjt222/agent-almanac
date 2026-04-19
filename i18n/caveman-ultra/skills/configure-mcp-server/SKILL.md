@@ -25,23 +25,23 @@ metadata:
 
 # Configure MCP Server
 
-Set up MCP server connections for Claude Code (WSL) and Claude Desktop (Windows).
+Set up MCP server connections for Claude Code (WSL) + Claude Desktop (Windows).
 
-## When to Use
+## Use When
 
 - Setting up Claude Code to connect to R via mcptools
-- Configuring Claude Desktop with MCP servers
+- Configuring Claude Desktop w/ MCP servers
 - Adding Hugging Face or other remote MCP servers
 - Troubleshooting MCP connectivity between tools
 
-## Inputs
+## In
 
 - **Required**: MCP server type (mcptools, Hugging Face, custom)
 - **Required**: Client (Claude Code, Claude Desktop, or both)
-- **Optional**: Authentication tokens
-- **Optional**: Custom server implementation
+- **Optional**: Auth tokens
+- **Optional**: Custom server impl
 
-## Procedure
+## Do
 
 ### Step 1: Install MCP Server Packages
 
@@ -58,9 +58,9 @@ remotes::install_github("posit-dev/mcptools")
 npm install -g mcp-remote
 ```
 
-**Expected:** `mcptools` installs from GitHub and loads in R without errors. `mcp-remote` is available globally via `which mcp-remote` or `npm list -g mcp-remote`.
+**→** `mcptools` installs from GitHub + loads in R w/o errs. `mcp-remote` avail globally via `which mcp-remote` or `npm list -g mcp-remote`.
 
-**On failure:** For `mcptools`, ensure `remotes` is installed first. If GitHub rate-limits the install, set a `GITHUB_PAT` in `~/.Renviron`. For `mcp-remote`, verify Node.js and npm are installed and on PATH.
+**If err:** `mcptools` → ensure `remotes` installed first. GitHub rate-limits install → set `GITHUB_PAT` in `~/.Renviron`. `mcp-remote` → valid. Node.js + npm installed + on PATH.
 
 ### Step 2: Configure Claude Code (WSL)
 
@@ -80,16 +80,16 @@ claude mcp add hf-mcp-server \
   -- mcp-remote https://huggingface.co/mcp
 ```
 
-**Verify configuration**:
+**Verify config**:
 
 ```bash
 claude mcp list
 claude mcp get r-mcptools
 ```
 
-**Expected:** `claude mcp list` shows both `r-mcptools` and `hf-mcp-server` (or whichever servers were added). `claude mcp get r-mcptools` displays the correct command and arguments.
+**→** `claude mcp list` shows both `r-mcptools` + `hf-mcp-server` (or whichever added). `claude mcp get r-mcptools` displays correct cmd + args.
 
-**On failure:** If the server does not appear in the list, verify `~/.claude.json` contains the correct entry. If the `claude` command is not found, add it to PATH: `export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`.
+**If err:** Server not in list → valid. `~/.claude.json` contains correct entry. `claude` cmd not found → add to PATH: `export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`.
 
 ### Step 3: Configure Claude Desktop (Windows)
 
@@ -113,11 +113,11 @@ Edit `%APPDATA%\Claude\claude_desktop_config.json`:
 }
 ```
 
-**Important**: Use 8.3 short paths for Windows directories with spaces (`PROGRA~1` not `Program Files`). Use environment variables for tokens, not `--header` arguments.
+**Important**: Use 8.3 short paths for Windows dirs w/ spaces (`PROGRA~1` not `Program Files`). Use env vars for tokens, not `--header` args.
 
-**Expected:** The JSON config file at `%APPDATA%\Claude\claude_desktop_config.json` is valid JSON with the correct server entries. Claude Desktop shows MCP server indicators after restart.
+**→** JSON config file at `%APPDATA%\Claude\claude_desktop_config.json` valid JSON w/ correct server entries. Claude Desktop shows MCP server indicators post-restart.
 
-**On failure:** Validate the JSON with a linter (e.g., `jq . < config.json`). Use 8.3 short paths (`PROGRA~1`) if Windows path spaces cause parsing errors. Ensure Claude Desktop is fully restarted (not just minimized).
+**If err:** Valid. JSON w/ linter (e.g., `jq . < config.json`). Use 8.3 short paths (`PROGRA~1`) if Windows path spaces cause parse errs. Ensure Claude Desktop fully restarted (not just minimized).
 
 ### Step 4: Configure R Session for MCP
 
@@ -129,11 +129,11 @@ if (requireNamespace("mcptools", quietly = TRUE)) {
 }
 ```
 
-This starts the MCP session automatically when opening the project in RStudio.
+Starts MCP session auto when opening project in RStudio.
 
-**Expected:** The `.Rprofile` file conditionally starts `mcptools::mcp_session()` when the project is opened in RStudio, making MCP tools available automatically.
+**→** `.Rprofile` conditionally starts `mcptools::mcp_session()` when project opened in RStudio → MCP tools avail auto.
 
-**On failure:** If `mcptools` is not found at session start, verify it is installed in the library that RStudio uses (check `.libPaths()`). If using renv, ensure mcptools is in the renv library.
+**If err:** `mcptools` not found at session start → valid. installed in library RStudio uses (check `.libPaths()`). Using renv → ensure mcptools in renv library.
 
 ### Step 5: Verify Connections
 
@@ -143,21 +143,21 @@ This starts the MCP session automatically when opening the project in RStudio.
 "/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe" -e "mcptools::mcp_server()"
 ```
 
-**Test from within Claude Code**:
+**Test from w/in Claude Code**:
 
-Start Claude Code and use MCP tools — they should appear in the tool list.
+Start Claude Code + use MCP tools → they should appear in tool list.
 
 **Test Claude Desktop**:
 
-Restart Claude Desktop after configuration changes. Check for MCP server indicators in the UI.
+Restart Claude Desktop post-config changes. Check for MCP server indicators in UI.
 
-**Expected:** Running Rscript with `mcptools::mcp_server()` produces output without errors. MCP tools appear in the Claude Code tool list during an active session. Claude Desktop shows server status after restart.
+**→** Rscript w/ `mcptools::mcp_server()` produces out w/o errs. MCP tools appear in Claude Code tool list during active session. Claude Desktop shows server status post-restart.
 
-**On failure:** If the Rscript command fails, check the full path is correct (`ls "/mnt/c/Program Files/R/"` to verify R version). If tools don't appear in Claude Code, restart the session. For Claude Desktop, check firewall settings.
+**If err:** Rscript fails → check full path correct (`ls "/mnt/c/Program Files/R/"` to valid. R ver). Tools don't appear in Claude Code → restart session. Claude Desktop → check firewall.
 
 ### Step 6: Multi-Server Configuration
 
-Both Claude Code and Claude Desktop support multiple MCP servers simultaneously:
+Both Claude Code + Claude Desktop support multi MCP servers simultaneously:
 
 ```bash
 # Claude Code: add multiple servers
@@ -166,27 +166,27 @@ claude mcp add hf-mcp-server -e HF_TOKEN=token -- mcp-remote https://huggingface
 claude mcp add custom-server stdio "/path/to/server" -- --port 3001
 ```
 
-**Expected:** Multiple MCP servers configured and accessible simultaneously. `claude mcp list` shows all servers. Each server's tools are available in the same Claude Code session.
+**→** Multi MCP servers config'd + accessible simultaneously. `claude mcp list` shows all. Each server's tools avail in same Claude Code session.
 
-**On failure:** If servers conflict, check that each has a unique name in the configuration. If one server blocks others, verify servers use non-blocking I/O (stdio transport handles this automatically).
+**If err:** Servers conflict → check each has unique name in config. One server blocks others → valid. servers use non-blocking I/O (stdio transport handles auto).
 
-## Validation
+## Check
 
-- [ ] `claude mcp list` shows all configured servers
+- [ ] `claude mcp list` shows all config'd servers
 - [ ] R MCP server responds to tool calls
-- [ ] Hugging Face MCP server authenticates and responds
-- [ ] Both Claude Code and Claude Desktop can connect (if both configured)
-- [ ] MCP tools appear in the tool list during sessions
+- [ ] Hugging Face MCP server auths + responds
+- [ ] Both Claude Code + Claude Desktop can connect (if both config'd)
+- [ ] MCP tools appear in tool list during sessions
 
-## Common Pitfalls
+## Traps
 
-- **Windows path spaces**: Use 8.3 short names or quote paths correctly. Different tools parse paths differently.
-- **Token in command args**: On Windows, `--header "Authorization: Bearer token"` fails due to parsing. Use environment variables instead.
-- **Confusing Claude Code and Claude Desktop configs**: These are separate tools with separate config files (`~/.claude.json` vs `%APPDATA%\Claude\`)
-- **npx vs global install**: `npx mcp-remote` may fail in Claude Desktop context. Install globally with `npm install -g mcp-remote`.
-- **mcptools version**: Ensure mcptools is up to date. It requires the `ellmer` package as a dependency.
+- **Windows path spaces**: Use 8.3 short names or quote paths correct. Diff tools parse paths differently.
+- **Token in cmd args**: Windows, `--header "Authorization: Bearer token"` fails due to parsing. Use env vars instead.
+- **Confuse Claude Code + Claude Desktop configs**: Separate tools w/ separate config files (`~/.claude.json` vs `%APPDATA%\Claude\`)
+- **npx vs global install**: `npx mcp-remote` may fail in Claude Desktop context. Install globally w/ `npm install -g mcp-remote`.
+- **mcptools ver**: Ensure mcptools up to date. Requires `ellmer` pkg as dep.
 
-## Related Skills
+## →
 
 - `build-custom-mcp-server` - creating your own MCP server
 - `troubleshoot-mcp-connection` - debugging connection issues

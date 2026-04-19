@@ -30,7 +30,7 @@ metadata:
 
 Implement centralized feature management with Feast for consistent feature serving across training and inference.
 
-## When to Use
+## When Use
 
 - Managing features for multiple ML models across teams
 - Ensuring training-serving consistency for features
@@ -51,11 +51,11 @@ Implement centralized feature management with Feast for consistent feature servi
 - **Optional**: Entity key definitions (user_id, product_id, etc.)
 - **Optional**: Kubernetes cluster for Feast server deployment
 
-## Procedure
+## Steps
 
 ### Step 1: Initialize Feast Feature Repository
 
-Set up Feast project structure and configure storage backends.
+Set up Feast project structure, configure storage backends.
 
 ```bash
 # Install Feast with required extras
@@ -100,13 +100,13 @@ offline_store:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Feast repository initialized with config file, sample feature definitions created, offline and online stores configured, registry path accessible.
+**Got:** Feast repository initialized with config file, sample feature definitions created, offline and online stores configured, registry path accessible.
 
-**On failure:** Verify database/Redis credentials (`psql -U feast_user -h localhost`), check connection strings format, ensure databases exist (`CREATE DATABASE feature_store`), verify cloud permissions for S3/BigQuery/DynamoDB, test connectivity to storage backends, check Feast version compatibility with backends (`feast version`).
+**If fail:** Verify database/Redis credentials (`psql -U feast_user -h localhost`), check connection strings format, ensure databases exist (`CREATE DATABASE feature_store`), verify cloud permissions for S3/BigQuery/DynamoDB, test connectivity to storage backends, check Feast version compatibility with backends (`feast version`).
 
 ### Step 2: Define Entities and Data Sources
 
-Create entity definitions and connect to raw data sources.
+Create entity definitions, connect to raw data sources.
 
 ```python
 # entities.py
@@ -134,13 +134,13 @@ customer_transactions_source = FileSource(
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Entity definitions reference correct ID columns, data sources connect to raw data successfully, event_timestamp_column exists in source data, created_timestamp_column allows point-in-time queries.
+**Got:** Entity definitions reference correct ID columns, data sources connect to raw data successfully, event_timestamp_column exists in source data, created_timestamp_column allows point-in-time queries.
 
-**On failure:** Verify source data files exist and are readable, check BigQuery/Redshift credentials and table access, ensure timestamp columns have correct format (Unix timestamp or ISO8601), verify Kafka connectivity and topic existence, check schema compatibility between sources and entities.
+**If fail:** Verify source data files exist and are readable, check BigQuery/Redshift credentials and table access, ensure timestamp columns have correct format (Unix timestamp or ISO8601), verify Kafka connectivity and topic existence, check schema compatibility between sources and entities.
 
 ### Step 3: Define Feature Views with Transformations
 
-Create feature views that define how raw data becomes ML-ready features.
+Create feature views defining how raw data becomes ML-ready features.
 
 ```python
 # feature_views.py
@@ -154,13 +154,13 @@ from data_sources import customer_features_source
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Feature views registered successfully, schema matches source data, transformations execute without errors, TTL values appropriate for use case, on-demand views combine batch and request features.
+**Got:** Feature views registered successfully, schema matches source data, transformations execute without errors, TTL values appropriate for use case, on-demand views combine batch and request features.
 
-**On failure:** Verify field names match source columns exactly, check dtype compatibility (Int64 vs Int32), ensure entity references exist, validate transformation logic with sample data, check for division by zero in calculations, verify request source schema matches inference payload.
+**If fail:** Verify field names match source columns exactly, check dtype compatibility (Int64 vs Int32), ensure entity references exist, validate transformation logic with sample data, check for division by zero in calculations, verify request source schema matches inference payload.
 
 ### Step 4: Apply Feature Definitions and Materialize Features
 
-Deploy feature definitions to registry and materialize to online store.
+Deploy feature definitions to registry, materialize to online store.
 
 ```bash
 # Apply feature definitions to registry
@@ -188,9 +188,9 @@ fs = FeatureStore(repo_path=".")
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Feature definitions applied to registry without conflicts, materialization job completes successfully, online store populated with features, feature freshness within configured TTL.
+**Got:** Feature definitions applied to registry without conflicts, materialization job completes successfully, online store populated with features, feature freshness within configured TTL.
 
-**On failure:** Check offline store query succeeds (`feast feature-views describe customer_stats`), verify time range has data, ensure online store writable (Redis/DynamoDB permissions), check for duplicate feature names across views, verify entity keys exist in source data, monitor materialization job logs for errors, check disk space for local stores.
+**If fail:** Check offline store query succeeds (`feast feature-views describe customer_stats`), verify time range has data, ensure online store writable (Redis/DynamoDB permissions), check for duplicate feature names across views, verify entity keys exist in source data, monitor materialization job logs for errors, check disk space for local stores.
 
 ### Step 5: Retrieve Features for Training
 
@@ -222,9 +222,9 @@ def validate_point_in_time_correctness(training_df, entity_df):
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Historical features retrieved successfully, entity_df timestamps preserved, no NaN values for materialized features, point-in-time correctness guaranteed (no future data leakage), feature service groups features logically.
+**Got:** Historical features retrieved successfully, entity_df timestamps preserved, no NaN values for materialized features, point-in-time correctness guaranteed (no future data leakage), feature service groups features logically.
 
-**On failure:** Check entity_df has required columns (entity names + event_timestamp), verify feature view names match registry, ensure offline store has data for requested time range, check for timezone mismatches (use UTC), verify entity IDs exist in source data, inspect logs for SQL query errors, validate feature view TTL covers requested time range.
+**If fail:** Check entity_df has required columns (entity names + event_timestamp), verify feature view names match registry, ensure offline store has data for requested time range, check for timezone mismatches (use UTC), verify entity IDs exist in source data, inspect logs for SQL query errors, validate feature view TTL covers requested time range.
 
 ### Step 6: Serve Features for Real-Time Inference
 
@@ -256,11 +256,11 @@ fs = FeatureStore(repo_path=".")
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Online features retrieved in <10ms for single entity, batch retrieval scales efficiently, on-demand transformations execute correctly, request-time features merged with batch features, API responds quickly (<50ms end-to-end).
+**Got:** Online features retrieved in <10ms for single entity, batch retrieval scales efficiently, on-demand transformations execute correctly, request-time features merged with batch features, API responds quickly (<50ms end-to-end).
 
-**On failure:** Check online store populated (run materialize if empty), verify Redis/DynamoDB connectivity and latency, ensure entity keys exist in online store, check for cold start issues (warm up cache), verify on-demand transformation logic, monitor online store memory/CPU usage, check network latency between service and online store.
+**If fail:** Check online store populated (run materialize if empty), verify Redis/DynamoDB connectivity and latency, ensure entity keys exist in online store, check for cold start issues (warm up cache), verify on-demand transformation logic, monitor online store memory/CPU usage, check network latency between service and online store.
 
-## Validation
+## Checks
 
 - [ ] Feast repository initialized and configured
 - [ ] Offline and online stores connected successfully
@@ -274,7 +274,7 @@ fs = FeatureStore(repo_path=".")
 - [ ] Training-serving consistency verified
 - [ ] Feature catalog accessible for discovery
 
-## Common Pitfalls
+## Pitfalls
 
 - **Feature leakage**: Using future data in historical features - always validate point-in-time correctness, use created_timestamp column
 - **Inconsistent transformations**: Different logic for training vs serving - use Feast on-demand views for consistency
@@ -287,7 +287,7 @@ fs = FeatureStore(repo_path=".")
 - **Timezone confusion**: Mixing timezones causes incorrect joins - always use UTC for timestamps
 - **Ignoring TTL**: Serving expired features - set appropriate TTL values, monitor feature freshness
 
-## Related Skills
+## See Also
 
 - `track-ml-experiments` - Log feature metadata in MLflow experiments
 - `orchestrate-ml-pipeline` - Schedule feature materialization jobs

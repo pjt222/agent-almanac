@@ -24,30 +24,30 @@ metadata:
   tags: defensive, awareness, threat-detection, hallucination-risk, ooda, meta-cognition, ai-self-application
 ---
 
-# Awareness
+# 警覺
 
-Maintain continuous situational awareness of internal reasoning quality — detecting hallucination risk, scope creep, context degradation, and confidence-accuracy mismatch in real time using adapted Cooper color codes and OODA loop decision-making.
+持續察內推理之質——即時察幻覺之危、範圍蔓延、脈絡衰敗、自信與實之不合，以採 Cooper 色碼與 OODA 環之決。
 
-## When to Use
+## 用時
 
-- During any task where reasoning quality matters (which is most tasks)
-- When operating in unfamiliar territory (new codebase, unfamiliar domain, complex request)
-- After detecting early warning signs: a fact that feels uncertain, a tool result that seems wrong, a growing sense of confusion
-- As a continuous background process during extended work sessions
-- When `center` or `heal` has revealed drift but specific threats have not been identified
-- Before high-stakes output (irreversible changes, user-facing communication, architectural decisions)
+- 任何推理質要緊之務（大多務也）
+- 行於陌生之境（新碼庫、陌域、繁請）
+- 早見警兆後：事實覺可疑、工具果似誤、漸覺困惑
+- 久務中為背景之持察
+- `center` 或 `heal` 已示偏移而具體之危未識
+- 高賭輸出之前（不可逆之改、面用者之通言、架構之決）
 
-## Inputs
+## 入
 
-- **Required**: Active task context (available implicitly)
-- **Optional**: Specific concern triggering heightened awareness (e.g., "I'm not sure this API exists")
-- **Optional**: Task type for threat profile selection (see Step 5)
+- **必要**：當前務脈絡（隱式可得）
+- **可選**：觸高警之具體憂（如「吾不確此 API 存否」）
+- **可選**：務類以選危剖面（見第五步）
 
-## Procedure
+## 法
 
-### Step 1: Establish AI Cooper Color Codes
+### 第一步：立 AI Cooper 色碼
 
-Calibrate the current awareness level using an adapted version of Cooper's color code system.
+以 Cooper 色碼之改版校當前警級。
 
 ```
 AI Cooper Color Codes:
@@ -84,15 +84,15 @@ AI Cooper Color Codes:
 └──────────┴─────────────────────┴──────────────────────────────────────────┘
 ```
 
-Identify the current color code. If the answer is White (no monitoring), the awareness practice has already succeeded by revealing the gap.
+識當前色碼。若答為 White（無察），警覺之行已示缺乃已成功。
 
-**Expected:** Accurate self-assessment of the current awareness level. Yellow is the goal during normal work. White should be rare and brief. Extended Orange is unsustainable — either confirm or dismiss the concern.
+**得：** 當前警級之實自評。Yellow 乃常務之目。White 宜稀而短。久駐 Orange 不可持——宜確證或釋之。
 
-**On failure:** If the color code assessment itself feels like it is being done on autopilot (going through motions), that is White masquerading as Yellow. Genuine Yellow involves actively checking output against evidence, not just claiming to do so.
+**敗則：** 若色碼之評自身似自動而行（走過場），乃 White 假為 Yellow。真 Yellow 含以證實察輸出，非徒稱為之。
 
-### Step 2: Detect Internal Threat Indicators
+### 第二步：察內危之兆
 
-Systematically scan for the specific signals that precede common AI reasoning failures.
+系統掃先於常見 AI 推理敗之信號。
 
 ```
 Threat Indicator Detection:
@@ -130,15 +130,15 @@ Threat Indicator Detection:
 └───────────────────────────┴──────────────────────────────────────────┘
 ```
 
-For each category, check: is this signal present right now? If yes, shift from Yellow to Orange and identify the specific concern.
+各類察之：此兆現乎？若是，自 Yellow 轉 Orange，識具體之憂。
 
-**Expected:** At least one category scanned with genuine attention. Detection of a signal — even a mild one — is more useful than reporting "all clear." If every scan returns clean, the detection threshold may be too high.
+**得：** 至少一類以真意掃之。察一兆——即使微——勝於報「皆清」。若諸掃皆返無事，察之閾或過高。
 
-**On failure:** If threat detection feels abstract, ground it in the most recent output: pick the last factual claim made and ask "How do I know this is true? Did I read it, or am I generating it?" This one question catches most hallucination risk.
+**敗則：** 若危察覺抽象，以最近輸出落地：擇末陳之實問「何以知此為真？吾讀之乎，抑生之乎？」此一問捕大多幻覺之危。
 
-### Step 3: Run OODA Loop for Identified Threats
+### 第三步：為已識之危行 OODA 環
 
-When a specific threat is identified (Orange state), cycle through Observe-Orient-Decide-Act.
+既識具體之危（Orange），循環 Observe-Orient-Decide-Act。
 
 ```
 AI OODA Loop:
@@ -161,15 +161,15 @@ AI OODA Loop:
 └──────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-The OODA loop should be fast. The goal is not perfection but rapid cycling between observation and action. Spending too long in Orient (analysis paralysis) is the most common failure.
+OODA 之環宜速。目非圓滿，乃觀與行之速循。久滯於 Orient（析癱）為最常之敗。
 
-**Expected:** A complete loop from observation through action in a brief period. The threat is either confirmed and corrected, or dismissed with specific evidence for dismissal.
+**得：** 自察至行之全環，短時內完。危或確證而正之，或以具體證釋之。
 
-**On failure:** If the loop stalls at Orient (can't determine what the threat means), skip to a safe default: verify the uncertain fact through tool use. Direct observation resolves most ambiguity faster than analysis.
+**敗則：** 若環滯於 Orient（不能定此危何意），直赴安全默：以工具驗不確之實。直察解大多模糊，快於析。
 
-### Step 4: Rapid Stabilization
+### 第四步：速穩
 
-When a threat materializes (Red) or cascading failures occur (Black), stabilize before continuing.
+危已成（Red）或連鎖敗（Black）之時，先穩而後繼。
 
 ```
 AI Stabilization Protocol:
@@ -197,13 +197,13 @@ AI Stabilization Protocol:
 └────────────────────────┴─────────────────────────────────────────────┘
 ```
 
-**Expected:** Return from Red/Black to Yellow through deliberate stabilization. The next output after stabilization should be measurably more grounded than the output that triggered the error.
+**得：** 自 Red/Black 以審慎之穩返 Yellow。穩後之輸出較致錯之輸出明顯更實。
 
-**On failure:** If stabilization is ineffective (still confused, still producing errors), the issue may be structural — not a momentary lapse but a fundamental misunderstanding. Escalate: communicate to the user that the approach needs resetting and ask for clarification.
+**敗則：** 若穩無效（仍亂，仍生錯），此或結構性——非一時之失，乃根本之誤解。升之：告用者法須重置，請澄清。
 
-### Step 5: Apply Context-Specific Threat Profiles
+### 第五步：施務類之危剖
 
-Different task types have different dominant threats. Calibrate awareness focus by task.
+務類不同，主危不同。以務校警覺之焦。
 
 ```
 Task-Specific Threat Profiles:
@@ -236,62 +236,62 @@ Task-Specific Threat Profiles:
 └─────────────────────┴─────────────────────┴───────────────────────────┘
 ```
 
-Identify the current task type and adjust monitoring focus accordingly.
+識當前務類，依之調察焦。
 
-**Expected:** Awareness sharpened for the specific threats most likely in the current task type, rather than generic monitoring of everything.
+**得：** 警覺銳於當務最可能之危，非泛察諸事。
 
-**On failure:** If the task type is unclear or spans multiple categories, default to hallucination risk monitoring — it is the most universally applicable threat and the most damaging when missed.
+**敗則：** 若務類不明或跨多類，默為察幻覺之危——此危最普適，失之害最大。
 
-### Step 6: Review and Calibrate
+### 第六步：覆察與校
 
-After each awareness event (threat detected, OODA cycled, stabilization applied), briefly review.
+警覺事後（危已察、OODA 已環、穩已施），略覆察。
 
-1. What color code was active when the issue was detected?
-2. Was the detection timely, or was the issue already manifesting in output?
-3. Was the OODA loop fast enough, or did Orient stall?
-4. Was the response proportional (not over- or under-reacting)?
-5. What would catch this earlier next time?
+1. 察此事時何色碼在行？
+2. 察之及時乎，抑問題已見於輸出？
+3. OODA 之環足速乎，抑 Orient 滯？
+4. 反應成比例乎（非過亦非不足）？
+5. 下次何以早察之？
 
-**Expected:** A brief calibration that improves future detection. Not a lengthy post-mortem — just enough to tune the sensitivity.
+**得：** 略校以善後察。非長篇之覆盤——止於調敏度而已。
 
-**On failure:** If review produces no useful calibration, the awareness event was either trivial (no learning needed) or the review is too shallow. For significant events, ask: "What was I not monitoring that I should have been?"
+**敗則：** 若覆察無益校，或事微不足學，或察太淺。於要事宜問：「吾未察而本當察者為何？」
 
-### Step 7: Integration — Maintain Yellow Default
+### 第七步：整合——持 Yellow 為默
 
-Set the ongoing awareness posture.
+定長警之姿。
 
-1. Yellow is the default state during all work — relaxed monitoring, not hypervigilance
-2. Adjust monitoring focus based on the current task type (Step 5)
-3. Note any recurring threat patterns from this session for MEMORY.md
-4. Return to task execution with calibrated awareness active
+1. Yellow 為諸務之默——鬆察，非過警
+2. 依當務類調察焦（第五步）
+3. 記此會中反覆之危模式於 MEMORY.md
+4. 以校好之警覺返務
 
-**Expected:** A sustainable awareness level that improves work quality without slowing it. Awareness should feel like peripheral vision — present but not demanding central attention.
+**得：** 可持之警級，善工質而不緩之。警覺宜似邊察——存而不奪中焦。
 
-**On failure:** If awareness becomes exhausting or hypervigilant (chronic Orange), the threshold is too sensitive. Raise the threshold for what triggers Orange. True awareness is sustainable. If it drains energy, it is anxiety masquerading as vigilance.
+**敗則：** 若警覺成疲或過警（長 Orange），閾過敏。升觸 Orange 之閾。真警覺可持。若耗精，乃憂假為警。
 
-## Validation
+## 驗
 
-- [ ] Current color code was assessed honestly (not defaulting to Yellow when White is more accurate)
-- [ ] At least one threat category was scanned with specific evidence, not just checked off
-- [ ] OODA loop was applied to any identified threat (observed, oriented, decided, acted)
-- [ ] Stabilization protocol was available if needed (even if not triggered)
-- [ ] Awareness focus was calibrated to the current task type
-- [ ] Post-event calibration was performed for any significant awareness event
-- [ ] Yellow was re-established as the sustainable default
+- [ ] 當前色碼實評（非 White 之時默為 Yellow）
+- [ ] 至少一危類以具體之證掃之，非草打勾
+- [ ] OODA 施於所察之危（察、定、決、行）
+- [ ] 穩之法備（雖未發）
+- [ ] 察焦校於當前務類
+- [ ] 凡要警事，事後校已行
+- [ ] Yellow 重立為可持之默
 
-## Common Pitfalls
+## 陷
 
-- **White masquerading as Yellow**: Claiming to be monitoring while actually on autopilot. The test: can you name the last fact you verified? If not, you are in White
-- **Chronic Orange**: Treating every uncertainty as a threat drains cognitive resources and slows work. Orange is for specific identified risks, not general anxiety. If everything feels risky, the calibration is off
-- **Observation without action**: Detecting a threat but not cycling through OODA to resolve it. Detection without response is worse than no detection — it adds anxiety without correction
-- **Skipping Orient**: Jumping from Observe to Act without understanding what the observation means. This produces reactive corrections that may be worse than the original error
-- **Ignoring the gut signal**: When something "feels wrong" but the explicit check comes back clean, investigate further rather than dismissing the feeling. Implicit pattern matching often detects issues before explicit analysis
-- **Over-stabilizing**: Running the full stabilization protocol for minor issues. A quick fact-check is sufficient for most Orange-level concerns. Reserve full stabilization for Red and Black events
+- **White 假為 Yellow**：稱察而實自動。試之：能名末所驗之實乎？否則乃 White
+- **長 Orange**：視諸不確皆為危，耗神而緩務。Orange 為具體已識之危，非泛憂。若諸皆覺險，校已失
+- **察而不行**：察危而未循 OODA 解之。察無應劣於無察——增憂而無正
+- **跳 Orient**：自 Observe 直至 Act 而不解察之意。此生反射之正，或劣於原錯
+- **忽直覺之信**：某覺「不妥」而明察返清時，宜深察，非棄之。隱式模式常於明析前察之
+- **過穩**：微事施全穩之法。多 Orange 事快驗事實足矣。全穩留予 Red 與 Black
 
-## Related Skills
+## 參
 
-- `mindfulness` — the human practice that this skill maps to AI reasoning; physical situational awareness principles inform cognitive threat detection
-- `center` — establishes the balanced baseline from which awareness operates; awareness without center is hypervigilance
-- `redirect` — handles pressures once awareness has detected them
-- `heal` — deeper subsystem assessment when awareness reveals patterns of drift
-- `meditate` — develops the observational clarity that awareness depends on
+- `mindfulness` — 人之行，此技映之於 AI 推理；身之警覺原理通於認知危察
+- `center` — 立警覺所起之平衡；無 center 之警覺為過警
+- `redirect` — 察後應壓
+- `heal` — 警覺示偏移模式時之深子系察
+- `meditate` — 養警覺所依之察明

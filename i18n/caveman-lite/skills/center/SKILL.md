@@ -56,9 +56,9 @@ Before any reasoning movement, verify the foundation. This is the AI equivalent 
 
 Do not begin reasoning movement until the root is established. A grounded start prevents reactive flailing.
 
-**Expected:** A clear sense of the task's foundation — what is known, what is assumed, and what the user actually needs. The root feels solid, not performative.
+**Got:** A clear sense of the task's foundation — what is known, what is assumed, and what the user needs. The root feels solid, not performative.
 
-**On failure:** If grounding feels hollow (going through motions without genuine verification), pick one assumption and test it concretely. Read one file, re-read one user message. Grounding must contact reality, not just reference it.
+**If fail:** If grounding feels hollow (going through motions without genuine verification), pick one assumption and test it concretely. Read one file, re-read one user message. Grounding must contact reality, not just reference it.
 
 ### Step 2: Assess Weight Distribution
 
@@ -90,9 +90,9 @@ Cognitive Load Distribution Matrix:
 
 The ideal distribution depends on the task phase: early phases weight research and planning; middle phases weight execution; late phases weight communication and verification. The point is not equal distribution but *intentional* distribution.
 
-**Expected:** A clear picture of where cognitive effort is concentrated and where it is thin. At least one imbalance identified — perfect balance is rare and claiming it signals shallow assessment.
+**Got:** A clear picture of where cognitive effort is concentrated and where it is thin. At least one imbalance identified — perfect balance is rare and claiming it signals shallow assessment.
 
-**On failure:** If all threads seem equally weighted, the assessment is too coarse. Pick the thread that feels most active and estimate how many of the last N actions served it vs. other threads. Concrete counting reveals what intuition misses.
+**If fail:** If all threads seem equally weighted, the assessment is too coarse. Pick the thread that feels most active and estimate how many of the last N actions served it vs. other threads. Concrete counting reveals what intuition misses.
 
 ### Step 3: Silk Reeling — Evaluate Chain-of-Thought Coherence
 
@@ -122,9 +122,9 @@ Coherence Signals:
 └─────────────────┴───────────────────────────────────────────────┘
 ```
 
-**Expected:** An honest assessment of reasoning flow quality. Identification of specific disconnections or stuck points, not just a general feeling.
+**Got:** An honest assessment of reasoning flow quality. Identification of specific disconnections or stuck points, not just a general feeling.
 
-**On failure:** If coherence is hard to assess, write out the reasoning chain explicitly — state each step and its connection to the next. The act of externalization reveals gaps that internal observation misses.
+**If fail:** If coherence is hard to assess, write out the reasoning chain explicitly — state each step and its connection to the next. The act of externalization reveals gaps that internal observation misses.
 
 ### Step 4: Weight Shift Under Pressure
 
@@ -141,9 +141,9 @@ When demands change mid-task — new information, contradictory signals, user co
    - Weight was locked (over-committed to one approach)
    - No free leg (all cognitive capacity committed, nothing available to shift)
 
-**Expected:** An honest assessment of adaptability under pressure. Recognition of the specific response pattern, not self-flattery.
+**Got:** An honest assessment of adaptability under pressure. Recognition of the specific response pattern, not self-flattery.
 
-**On failure:** If no recent pressure event exists to evaluate, simulate one: "If the user now said the approach is wrong, what would I do?" The quality of the contingency plan reveals the quality of the center.
+**If fail:** If no recent pressure event exists to evaluate, simulate one: "If the user now said the approach is wrong, what would I do?" The quality of the contingency plan reveals the quality of the center.
 
 ### Step 5: Six Harmonies Check
 
@@ -185,9 +185,9 @@ AI Six Harmonies:
 
 Check each harmony. A single broken harmony can propagate: if Intent↔Reasoning is broken, everything downstream misaligns.
 
-**Expected:** At least one harmony that could be tighter. All six reading as perfect is suspicious — probe the weakest-seeming one more deeply.
+**Got:** At least one harmony that could be tighter. All six reading as perfect is suspicious — probe the weakest-seeming one more deeply.
 
-**On failure:** If the harmonies assessment feels abstract, ground it in the current task: "Right now, am I doing what the user asked, at the right scope, at the right detail level?" These three questions cover the external harmonies concretely.
+**If fail:** If the harmonies assessment feels abstract, ground it in the current task: "Right now, am I doing what the user asked, at the right scope, at the right detail level?" These three questions cover the external harmonies concretely.
 
 ### Step 6: Integrate — Set Centering Intention
 
@@ -199,9 +199,9 @@ Consolidate findings and set a concrete adjustment.
 4. Note any durable insights worth preserving in MEMORY.md
 5. Return to task execution with the adjustment active
 
-**Expected:** A brief, concrete centering output — not a lengthy self-analysis report. The value is in the adjustment, not the documentation.
+**Got:** A brief, concrete centering output — not a lengthy self-analysis report. The value is in the adjustment, not the documentation.
 
-**On failure:** If no clear adjustment emerges, the centering was too surface-level. Return to the step that felt most uncertain and probe deeper. Alternatively, the centering may have confirmed that balance is adequate — in which case, proceed with confidence rather than manufacturing a finding.
+**If fail:** If no clear adjustment emerges, the centering was too surface-level. Return to the step that felt most uncertain and probe deeper. Alternatively, the centering may have confirmed that balance is adequate — in which case, proceed with confidence rather than manufacturing a finding.
 
 ## Validation
 
@@ -212,7 +212,7 @@ Consolidate findings and set a concrete adjustment.
 - [ ] At least one harmony was identified as needing improvement
 - [ ] A concrete adjustment was set (not a vague intention)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Centering as procrastination**: Centering is a tool for improving work, not replacing it. If centering takes longer than the task it supports, the proportions are inverted
 - **Claiming perfect balance**: Real centering almost always reveals at least one imbalance. Reporting perfect balance signals shallow assessment, not actual equilibrium

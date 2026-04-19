@@ -79,9 +79,9 @@ export class FrameworkAdapter {
 
 If the base class does not exist yet, create it first. The pattern scales to any number of plugins.
 
-**Expected:** A base class with static identity fields and abstract methods.
+**Got:** A base class with static identity fields and abstract methods.
 
-**On failure:** If the base class has methods that don't apply to all plugins (e.g., not all frameworks support `audit`), provide default implementations that return sensible no-ops.
+**If fail:** If the base class has methods that don't apply to all plugins (e.g., not all frameworks support `audit`), provide default implementations that return sensible no-ops.
 
 ### Step 2: Choose the Installation Strategy
 
@@ -98,9 +98,9 @@ Strategy determines the implementation shape:
 - **File-per-item**: `writeFileSync(target, transform(content))` — may need format conversion
 - **Append-to-file**: Wrap content in markers for idempotent insert/replace/remove
 
-**Expected:** Strategy selected with clear rationale based on how the target framework discovers content.
+**Got:** Strategy selected with clear rationale based on how the target framework discovers content.
 
-**On failure:** If unsure, check the framework's documentation for how it discovers configuration or instruction files. Default to symlink if the framework reads arbitrary directories.
+**If fail:** If unsure, check the framework's documentation for how it discovers configuration or instruction files. Default to symlink if the framework reads arbitrary directories.
 
 ### Step 3: Implement Detection
 
@@ -127,9 +127,9 @@ Detection strategies:
 
 Always return the marker in the detection result so users can understand why a framework was detected.
 
-**Expected:** A detection rule that reliably identifies the framework without false positives.
+**Got:** A detection rule that reliably identifies the framework without false positives.
 
-**On failure:** If the framework has no unique marker (generic directory name), use a combination of markers or require explicit `--framework` specification.
+**If fail:** If the framework has no unique marker (generic directory name), use a combination of markers or require explicit `--framework` specification.
 
 ### Step 4: Implement Install with Idempotency
 
@@ -168,9 +168,9 @@ Idempotency rules:
 - **Dry-run** always succeeds with `action: 'created'`
 - **Return value** must always be `{ action, path, details? }`
 
-**Expected:** Install creates content at the target path, skips if already present, respects `--force` and `--dry-run`.
+**Got:** Install creates content at the target path, skips if already present, respects `--force` and `--dry-run`.
 
-**On failure:** If symlink creation fails on Windows/NTFS, fall back to directory junction or copy. Log the fallback.
+**If fail:** If symlink creation fails on Windows/NTFS, fall back to directory junction or copy. Log the fallback.
 
 ### Step 5: Implement Uninstall with Cleanup
 
@@ -199,9 +199,9 @@ Cleanup considerations:
 - For append-to-file: remove the marked section, not the entire file
 - Leave parent directories intact (other plugins may use them)
 
-**Expected:** Uninstall removes only the plugin's content and nothing else.
+**Got:** Uninstall removes only the plugin's content and nothing else.
 
-**On failure:** If removal fails (permissions, locked file), return an error result instead of throwing.
+**If fail:** If removal fails (permissions, locked file), return an error result instead of throwing.
 
 ### Step 6: Implement Listing and Audit
 
@@ -232,9 +232,9 @@ async audit(projectDir, scope) {
 }
 ```
 
-**Expected:** Listing returns all installed items with broken-link detection. Audit summarizes health.
+**Got:** Listing returns all installed items with broken-link detection. Audit summarizes health.
 
-**On failure:** If the target directory doesn't exist, return empty results (not an error — the framework just has nothing installed).
+**If fail:** If the target directory doesn't exist, return empty results (not an error — the framework has nothing installed).
 
 ### Step 7: Register the Plugin
 
@@ -249,9 +249,9 @@ Registration makes the adapter available to:
 - Explicit selection (`--framework my-framework`)
 - Listing (`listAdapters()`)
 
-**Expected:** The adapter appears in `tool detect` output and can be targeted with `--framework`.
+**Got:** The adapter appears in `tool detect` output and can be targeted with `--framework`.
 
-**On failure:** If the adapter doesn't appear, verify `static id` matches the detection rule's `id` and that `register()` was called.
+**If fail:** If the adapter doesn't appear, verify `static id` matches the detection rule's `id` and that `register()` was called.
 
 ### Step 8: Write Tests
 
@@ -266,9 +266,9 @@ describe('adapter: my-framework (dry-run)', () => {
 
 Test at minimum: dry-run path, detection presence, and content type support.
 
-**Expected:** Adapter-specific tests confirm the installation path and behavior.
+**Got:** Adapter-specific tests confirm the installation path and behavior.
 
-**On failure:** If the framework isn't detected in CI (no marker directory), use `--framework` explicitly in tests.
+**If fail:** If the framework isn't detected in CI (no marker directory), use `--framework` explicitly in tests.
 
 ## Validation
 
@@ -282,7 +282,7 @@ Test at minimum: dry-run path, detection presence, and content type support.
 - [ ] Plugin is registered and appears in `tool detect`
 - [ ] Dry-run tests pass
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting relative vs. absolute symlinks**: Project-scope symlinks should be relative (portable). Global-scope symlinks should be absolute (not dependent on cwd).
 - **Not handling missing parent directories**: Always `mkdirSync(dir, { recursive: true })` before creating content.

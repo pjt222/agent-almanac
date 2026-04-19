@@ -28,38 +28,38 @@ metadata:
 
 # Conduct Empirical Wire Capture
 
-Set up a reproducible wire-capture harness for a CLI tool's outbound HTTP and telemetry, matching each observability target to the cheapest channel that captures it.
+Set up reproducible wire-capture harness for CLI tool's outbound HTTP + telemetry → match each observability target to cheapest channel that captures it.
 
 ## Scope and Ethics
 
 Read this before configuring any capture.
 
-- Wire capture is for **your own** requests against **your own** account, on **your own** machine. Capturing other users' traffic is exfiltration, not research, and is out of scope.
-- Credentials almost always appear in raw wire output. Redact at capture time (Step 6) — never "capture now, redact later."
-- Capture is *observation*, not modification. Do not use captured payloads to bypass server-side rate limits, replay another user's session, or activate a dark-launched capability without authorization.
-- The output of this skill is an internal artifact. Public publication of wire findings goes through `redact-for-public-disclosure` (Phase 5 of the parent guide), not this skill.
+- Wire capture = **your own** reqs vs. **your own** account, on **your own** machine. Capturing other users' traffic = exfiltration, not research, out of scope.
+- Credentials almost always appear in raw wire out. Redact at capture time (Step 6) → never "capture now, redact later."
+- Capture = *observation*, not modification. Don't use captured payloads to bypass server-side rate limits, replay another user's session, or activate dark-launched capability w/o auth.
+- This skill's out = internal artifact. Public publication of wire findings goes through `redact-for-public-disclosure` (Phase 5 of parent guide), not this skill.
 
-## When to Use
+## Use When
 
-- A static finding (a flag, an endpoint reference, a telemetry-event name) needs runtime confirmation that it actually fires.
-- A payload shape is needed for a client re-implementation, a tracing instrumentation, or a cross-version diff.
-- Dark-vs-live disambiguation requires watching what the binary actually sends, not what the bundle suggests it might.
-- A behavior changed silently between versions and you want a reproducible artifact to compare against future versions.
+- Static finding (flag, endpoint ref, telemetry-event name) needs runtime confirmation it actually fires.
+- Payload shape needed for client re-impl, tracing instrumentation, or cross-version diff.
+- Dark-vs-live disambiguation → watch what binary actually sends, not what bundle suggests.
+- Behavior changed silently between vers → want reproducible artifact to compare vs. future vers.
 
-Do **not** use this skill for: version baselining (use `monitor-binary-version-baselines`), flag-state probing (use `probe-feature-flag-state`), or preparing redacted artifacts for public publication (use `redact-for-public-disclosure`).
+Do **NOT** use for: version baselining (use `monitor-binary-version-baselines`), flag-state probing (use `probe-feature-flag-state`), or preparing redacted artifacts for public publication (use `redact-for-public-disclosure`).
 
-## Inputs
+## In
 
-- **Required**: A CLI harness binary you can run locally against your own account.
-- **Required**: A specific question to answer (e.g., "does endpoint X fire on event Y?", "what is the payload shape for telemetry event Z?"). Capture without a question produces a log that nobody reads.
-- **Optional**: Static findings from prior phases (marker catalog, candidate flag list, suspected endpoints) that scope the capture targets.
-- **Optional**: A private workspace path for capture artifacts. Default is `./captures/` — must be in `.gitignore`.
+- **Required**: CLI harness binary runnable locally vs. own account.
+- **Required**: Specific question (e.g., "does endpoint X fire on event Y?", "what payload shape for telemetry event Z?"). Capture w/o question → log nobody reads.
+- **Optional**: Static findings from prior phases (marker catalog, candidate flag list, suspected endpoints) → scope capture targets.
+- **Optional**: Private workspace path for capture artifacts. Default `./captures/` → must be in `.gitignore`.
 
-## Procedure
+## Do
 
-### Step 1: Build the Observability Table First
+### Step 1: Build Observability Table First
 
-Before configuring any capture, enumerate the questions you need to answer and map each to a capture channel. One row per target.
+Before configuring any capture → enumerate questions + map each to capture channel. One row per target.
 
 | target | observable via | blocker |
 |---|---|---|
@@ -71,22 +71,22 @@ Before configuring any capture, enumerate the questions you need to answer and m
 
 Common channels, cheapest first:
 
-- **On-disk state file mutation** — when the harness writes its state to a known path, `diff` between snapshots is free.
-- **Transcript file** — when the harness already writes a session transcript, parse it directly. No instrumentation.
+- **On-disk state file mutation** — harness writes state to known path → `diff` between snapshots = free.
+- **Transcript file** — harness already writes session transcript → parse direct. No instrumentation.
 - **Verbose-fetch stderr** — bundler-provided env var (e.g., bun's `BUN_CONFIG_VERBOSE_FETCH=curl`) routes every fetch to stderr. Noisy but captures every fetch.
-- **Hook-driven subprocess** — when the harness exposes lifecycle hooks (`UserPromptSubmit`, `Stop`, etc.), spawn a short capture subprocess per event.
-- **Long-running session capture** — one process across a session, wallclock-tagged. Use for sequences.
-- **Outbound HTTP proxy** — clean separation, but requires CA cert trust and breaks when the harness pins certificates.
+- **Hook-driven subprocess** — harness exposes lifecycle hooks (`UserPromptSubmit`, `Stop`, etc.) → spawn short capture subprocess per event.
+- **Long-running session capture** — one proc across session, wallclock-tagged. Use for sequences.
+- **Outbound HTTP proxy** — clean separation, but requires CA cert trust + breaks when harness pins certs.
 
-Pick the cheapest channel that captures the target. A 3-target capture that answers one specific question beats a 20-target capture that answers none.
+Pick cheapest channel capturing target. 3-target capture answering one specific question > 20-target capture answering none.
 
-**Expected:** an observability table with one row per question, each annotated with channel and known blockers. Targets without a viable channel are flagged "out of scope this session."
+**→** Observability table w/ one row per question, each annotated w/ channel + known blockers. Targets w/o viable channel → flag "out of scope this session."
 
-**On failure:** if every target lands in the proxy column, the table is too ambitious. Trim to the one or two highest-value questions and revisit lower-cost channels for them.
+**If err:** Every target lands in proxy column → table too ambitious. Trim to 1-2 highest-value questions, revisit lower-cost channels for them.
 
-### Step 2: Prepare a Disposable Workspace
+### Step 2: Prepare Disposable Workspace
 
-Wire capture pollutes terminals, leaves files in unexpected places, and may leak credentials into logs.
+Wire capture pollutes terminals, leaves files in unexpected places, may leak credentials into logs.
 
 ```bash
 mkdir -p captures/$(date -u +%Y-%m-%dT%H-%M-%S)
@@ -95,17 +95,17 @@ echo 'captures/' >> ../../.gitignore
 git check-ignore captures/ || echo "WARNING: captures/ not git-ignored"
 ```
 
-Confirm the capture session is not your primary working session — verbose-fetch and TUI rendering interfere with each other.
+Confirm capture session ≠ primary working session → verbose-fetch + TUI rendering interfere.
 
-**Expected:** a timestamped capture directory, git-ignored, separate from your working session.
+**→** Timestamped capture dir, git-ignored, separate from working session.
 
-**On failure:** if `git check-ignore` reports the directory as not ignored, fix `.gitignore` before running any capture command. Do not proceed with credentials at risk.
+**If err:** `git check-ignore` reports dir not ignored → fix `.gitignore` before any capture cmd. Don't proceed w/ creds at risk.
 
 ### Step 3: Hook-Driven Capture for Per-Event Targets
 
-When the target is a discrete event (a tool invocation, a prompt submission, a session stop), use the harness's hook surface. Spawn a short-lived capture subprocess per event; do not sit in-process.
+Target = discrete event (tool invocation, prompt submit, session stop) → use harness's hook surface. Spawn short-lived capture subprocess per event; don't sit in-process.
 
-The pattern (synthetic example):
+Pattern (synthetic example):
 
 ```bash
 # Hook script, registered with the harness's hook config.
@@ -121,17 +121,17 @@ echo "$PAYLOAD" >> "$CAPTURE_DIR/events.jsonl"
 
 Why subprocess-per-event:
 
-- No token state, no session coupling — each invocation is independent.
-- Failure of one capture does not contaminate the next.
-- Subprocess overhead is acceptable because events are rare (per-user-action, not per-byte).
+- No token state, no session coupling → each invocation indep.
+- Fail of one capture doesn't contaminate next.
+- Subprocess overhead OK → events rare (per-user-action, not per-byte).
 
-**Expected:** one JSONL line per fired event in `events.jsonl`, each well-formed JSON parseable with `jq`.
+**→** One JSONL line per fired event in `events.jsonl`, each well-formed JSON parseable w/ `jq`.
 
-**On failure:** if `jq` reports parse errors, the payload contains unescaped control chars or binary data — pipe through `jq -R` (raw input) and base64-encode the payload field instead.
+**If err:** `jq` reports parse errs → payload has unescaped control chars / binary data → pipe through `jq -R` (raw in) + base64-encode payload field.
 
 ### Step 4: Long-Running Session Capture for Sequential State
 
-When the target is a sequence (multi-turn handshake, scheduled-task lifecycle, retry/backoff state machine), one capture process across the session, wallclock-tagged.
+Target = sequence (multi-turn handshake, scheduled-task lifecycle, retry/backoff state machine) → one capture proc across session, wallclock-tagged.
 
 ```bash
 # Run the harness with verbose-fetch routed to a tee-d log.
@@ -142,17 +142,17 @@ BUN_CONFIG_VERBOSE_FETCH=curl harness-cli run-task 2> >(
 )
 ```
 
-The wallclock prefix makes ordering unambiguous when multiple captures run concurrently. TSV (tab-separated) is intentional — it survives shells that mangle JSON quoting on stderr.
+Wallclock prefix makes ordering unambiguous when multi captures run concurrent. TSV (tab-separated) intentional → survives shells that mangle JSON quoting on stderr.
 
-Convert TSV to JSONL after the session ends (Step 5), not during.
+Convert TSV → JSONL after session ends (Step 5), not during.
 
-**Expected:** a TSV log with monotonically increasing timestamps, one stderr line per row.
+**→** TSV log w/ monotonic timestamps, one stderr line per row.
 
-**On failure:** if timestamps go backwards, the harness is buffering stderr — re-run with `stdbuf -oL -eL` or the bundler's equivalent line-buffer flag.
+**If err:** Timestamps go backwards → harness buffering stderr → re-run w/ `stdbuf -oL -eL` or bundler's line-buffer flag.
 
 ### Step 5: Normalize to JSONL
 
-JSONL is the artifact format: one JSON object per line, fields `timestamp`, `source`, `target`, `payload`. Diff-friendly, `jq`-filterable, and stable across editor reloads.
+JSONL = artifact format: one JSON object per line, fields `timestamp`, `source`, `target`, `payload`. Diff-friendly, `jq`-filterable, stable across editor reloads.
 
 ```bash
 # Parse the TSV from Step 4 into JSONL.
@@ -162,7 +162,7 @@ awk -F'\t' '{
 }' < session.tsv | jq -c . > session.jsonl
 ```
 
-Validate every line parses:
+Valid. every line parses:
 
 ```bash
 while IFS= read -r line; do
@@ -180,13 +180,13 @@ jq -c 'select(.payload | tostring | test("/api/v1/example"))' session.jsonl
 jq -r '.timestamp' session.jsonl | sort | uniq -c
 ```
 
-**Expected:** every line of `*.jsonl` parses with `jq -e .`; no `BAD LINE` warnings.
+**→** Every line of `*.jsonl` parses w/ `jq -e .`; no `BAD LINE` warns.
 
-**On failure:** if some lines fail validation, the source TSV had embedded tabs in the payload — re-run Step 4 with a different delimiter or base64-encode the second field.
+**If err:** Some lines fail valid. → source TSV had embedded tabs in payload → re-run Step 4 w/ diff delimiter or base64-encode second field.
 
 ### Step 6: Redact at Capture Time
 
-Strip auth headers, session IDs, bearer tokens, and PII **before** writing to disk. The `events.jsonl` and `session.jsonl` files should not, on first write, contain a single secret.
+Strip auth headers, session IDs, bearer tokens, PII **before** writing to disk. `events.jsonl` + `session.jsonl` should not, on first write, contain a single secret.
 
 ```bash
 # Stream the raw capture through a redactor before persisting.
@@ -202,7 +202,7 @@ redact() {
 cat raw-capture.txt | redact > session.tsv
 ```
 
-After capture, verify nothing slipped through:
+Post-capture, valid. nothing slipped through:
 
 ```bash
 # Patterns that must not appear in any *.jsonl file.
@@ -211,15 +211,15 @@ grep -Ei 'bearer [A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}' capt
   || echo "redaction clean"
 ```
 
-The `captured-then-redacted` artifact always leaks something. The only safe pattern is `redacted-as-captured`. If you discover an unredacted token in a finalized artifact, treat the entire capture as compromised — delete it, rotate the credential, and re-run.
+`captured-then-redacted` artifact always leaks something. Only safe pattern = `redacted-as-captured`. Unredacted token found in finalized artifact → treat whole capture as compromised → delete, rotate credential, re-run.
 
-**Expected:** the `LEAK DETECTED` check exits 0 (no matches). `grep` for known credential prefixes returns nothing.
+**→** `LEAK DETECTED` check exits 0 (no matches). `grep` for known credential prefixes returns nothing.
 
-**On failure:** if the leak check finds a hit, do not edit the file in place. Delete the entire capture directory, extend the redactor regex to cover the leaked pattern category, and re-run from Step 3 or 4.
+**If err:** Leak check finds hit → don't edit file in place. Delete whole capture dir, extend redactor regex to cover leaked pattern category, re-run from Step 3 or 4.
 
 ### Step 7: Classify Response Categories Before Recording
 
-HTTP status codes carry different semantic weight in different contexts. Classify before recording so downstream `jq` filters operate on intent, not raw codes.
+HTTP status codes carry diff semantic weight in diff contexts. Classify before recording → downstream `jq` filters operate on intent, not raw codes.
 
 | Observed status | Channel context | Classification |
 |---|---|---|
@@ -231,7 +231,7 @@ HTTP status codes carry different semantic weight in different contexts. Classif
 | 429 | Any | rate-limit (back off; do not retry tight) |
 | 5xx | Any | server failure (record, do not assume) |
 
-Add a `class` field at capture time:
+Add `class` field at capture time:
 
 ```bash
 jq -c '. + {class: (
@@ -243,15 +243,15 @@ jq -c '. + {class: (
   else "other" end)}' session.jsonl > session.classified.jsonl
 ```
 
-A 401 on a token-refresh channel is not a failure — it is the first half of a handshake. Misclassifying handshake steps as failures produces false-positive findings that waste reviewer attention.
+401 on token-refresh channel ≠ failure → first half of handshake. Misclassifying handshake steps as failures produces false-positive findings wasting reviewer attention.
 
-**Expected:** every line in `*.classified.jsonl` has a `class` field with a known value.
+**→** Every line in `*.classified.jsonl` has `class` field w/ known value.
 
-**On failure:** if classification produces many `other` entries, the table above is incomplete for this harness — extend it with one row per recurring `other` pattern before continuing analysis.
+**If err:** Classification produces many `other` entries → table above incomplete for this harness → extend w/ one row per recurring `other` pattern before analysis.
 
-### Step 8: Persist the Capture Manifest
+### Step 8: Persist Capture Manifest
 
-A capture run is reproducible only if the inputs are recorded alongside the outputs. Write a manifest:
+Capture run reproducible only if inputs recorded alongside outs. Write manifest:
 
 ```bash
 cat > capture-manifest.json <<EOF
@@ -267,36 +267,36 @@ cat > capture-manifest.json <<EOF
 EOF
 ```
 
-The manifest is what makes the capture diff-able against future versions.
+Manifest = what makes capture diff-able vs. future vers.
 
-**Expected:** `capture-manifest.json` exists, parses with `jq`, and lists every artifact file in the capture directory.
+**→** `capture-manifest.json` exists, parses w/ `jq`, lists every artifact file in capture dir.
 
-**On failure:** if the harness has no version flag, record the binary's `sha256sum` instead. An unidentified binary produces uncomparable captures.
+**If err:** Harness has no ver flag → record binary's `sha256sum` instead. Unidentified binary → uncomparable captures.
 
-## Validation
+## Check
 
-- [ ] Observability table built before any capture command was run
-- [ ] Capture directory is git-ignored and timestamped
-- [ ] Every `*.jsonl` file parses with `jq -e .` line-by-line
+- [ ] Observability table built before any capture cmd run
+- [ ] Capture dir git-ignored + timestamped
+- [ ] Every `*.jsonl` file parses w/ `jq -e .` line-by-line
 - [ ] Redaction leak-check returns no matches for known credential prefixes
-- [ ] Each captured event has a `class` field with a known value
-- [ ] `capture-manifest.json` records the harness version (or sha256), channel, and question
-- [ ] The capture directory contains only the targets enumerated in Step 1 (no incidental traffic from other apps)
+- [ ] Each captured event has `class` field w/ known value
+- [ ] `capture-manifest.json` records harness ver (or sha256), channel, question
+- [ ] Capture dir contains only targets enumerated in Step 1 (no incidental traffic from other apps)
 
-## Common Pitfalls
+## Traps
 
-- **Capture-first, question-later**: a log nobody reads is wasted disk and wasted attention. Build the observability table first; capture only what answers a specific question.
-- **Reaching for `mitmproxy` first**: outbound proxy is the most invasive channel. It requires cert trust, breaks on certificate pinning, and pollutes the harness's environment. Use it only when on-disk, transcript, verbose-fetch, and hook channels are all blocked.
-- **Capturing in your primary working session**: verbose-fetch stderr bleeds into TUI rendering and can leak fragments of your other work into the capture. Always use a disposable shell.
-- **"We'll redact later"**: every captured-then-redacted artifact has leaked a credential at least once. Redact at capture time or do not capture.
-- **Treating 4xx as failure uniformly**: a 401 on a token-refresh channel is a handshake step, not a failure. Classify response categories per channel context (Step 7) before drawing conclusions.
-- **Long-running capture for per-event targets**: a session-long process to capture three discrete events couples token state across captures and makes one bad event poison the next. Use hook-driven subprocesses for events; reserve session capture for sequences.
-- **No manifest**: a JSONL file without `capture-manifest.json` is not reproducible — you cannot diff it against next month's binary if you do not know which version produced it.
-- **Capturing other users' traffic**: out of scope. Wire capture is for your own account on your own machine. If a capture incidentally records another user's request, delete the capture and tighten the channel.
+- **Capture-first, question-later**: Log nobody reads = wasted disk + attention. Build observability table first; capture only what answers specific question.
+- **Reach for `mitmproxy` first**: Outbound proxy = most invasive channel. Requires cert trust, breaks on cert pinning, pollutes harness env. Use only when on-disk, transcript, verbose-fetch, hook channels all blocked.
+- **Capture in primary working session**: Verbose-fetch stderr bleeds into TUI rendering → can leak fragments of other work into capture. Always use disposable shell.
+- **"We'll redact later"**: Every captured-then-redacted artifact has leaked credential at least once. Redact at capture time or don't capture.
+- **Treat 4xx as fail uniformly**: 401 on token-refresh channel = handshake step, not failure. Classify response categories per channel context (Step 7) before drawing conclusions.
+- **Long-running capture for per-event targets**: Session-long proc to capture 3 discrete events couples token state across captures → one bad event poisons next. Use hook-driven subprocesses for events; reserve session capture for sequences.
+- **No manifest**: JSONL file w/o `capture-manifest.json` not reproducible → can't diff vs. next month's binary if you don't know which ver produced it.
+- **Capture other users' traffic**: Out of scope. Wire capture = own account on own machine. Capture incidentally records another user's req → delete capture + tighten channel.
 
-## Related Skills
+## →
 
-- `monitor-binary-version-baselines` — Phase 1 of the parent methodology; produces the version baseline this skill's manifest references.
-- `probe-feature-flag-state` — Phases 2-3; wire capture is one of its evidence prongs, and this skill teaches the capture half.
-- `instrument-distributed-tracing` — shares the JSONL-over-wallclock philosophy; applied here to a single binary instead of a service mesh.
-- `redact-for-public-disclosure` — Phase 5; this skill only covers capture-time redaction for internal use, not the publication-bar redaction needed before any capture leaves a private workspace.
+- `monitor-binary-version-baselines` — Phase 1 parent methodology; produces version baseline this skill's manifest references.
+- `probe-feature-flag-state` — Phases 2-3; wire capture = one of its evidence prongs, this skill teaches capture half.
+- `instrument-distributed-tracing` — shares JSONL-over-wallclock philosophy; applied here to single binary vs. service mesh.
+- `redact-for-public-disclosure` — Phase 5; this skill covers only capture-time redaction for internal use, not publication-bar redaction needed before any capture leaves private workspace.

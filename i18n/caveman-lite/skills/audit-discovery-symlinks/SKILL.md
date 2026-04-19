@@ -68,9 +68,9 @@ fi
 echo "Almanac path: $ALMANAC_PATH"
 ```
 
-**Expected:** `ALMANAC_PATH` points to a directory containing `skills/_registry.yml`, `agents/_registry.yml`, and `teams/_registry.yml`.
+**Got:** `ALMANAC_PATH` points to a directory containing `skills/_registry.yml`, `agents/_registry.yml`, and `teams/_registry.yml`.
 
-**On failure:** If auto-detection fails, ask the user for the `almanac_path` input. The almanac root is the directory containing `skills/`, `agents/`, `teams/`, and their registries.
+**If fail:** If auto-detection fails, ask the user for the `almanac_path` input. The almanac root is the directory containing `skills/`, `agents/`, `teams/`, and their registries.
 
 ### Step 2: Inventory Registries
 
@@ -92,9 +92,9 @@ REGISTERED_TEAM_COUNT=$(echo "$REGISTERED_TEAMS" | wc -l)
 echo "Registered: $REGISTERED_SKILL_COUNT skills, $REGISTERED_AGENT_COUNT agents, $REGISTERED_TEAM_COUNT teams"
 ```
 
-**Expected:** Counts match the `total_skills`, `total_agents`, `total_teams` values in each registry header.
+**Got:** Counts match the `total_skills`, `total_agents`, `total_teams` values in each registry header.
 
-**On failure:** If counts diverge from the header totals, the registry itself is out of sync. Note the discrepancy in the report but continue with the actual `- id:` entries as the source of truth.
+**If fail:** If counts diverge from the header totals, the registry itself is out of sync. Note the discrepancy in the report but continue with the actual `- id:` entries as the source of truth.
 
 ### Step 3: Audit Project-Level Symlinks
 
@@ -140,9 +140,9 @@ else
 fi
 ```
 
-**Expected:** Zero missing, zero broken. Extraneous items are classified and explained.
+**Got:** Zero missing, zero broken. Extraneous items are classified and explained.
 
-**On failure:** If `.claude/` does not exist at all, the project has no discovery setup. Note this and skip to global audit.
+**If fail:** If `.claude/` does not exist at all, the project has no discovery setup. Note this and skip to global audit.
 
 ### Step 4: Audit Global Symlinks
 
@@ -204,9 +204,9 @@ else
 fi
 ```
 
-**Expected:** Zero missing almanac skills, zero broken. External content (peon-ping, etc.) is listed but not flagged as errors.
+**Got:** Zero missing almanac skills, zero broken. External content (peon-ping, etc.) is listed but not flagged as errors.
 
-**On failure:** If `~/.claude/` does not exist, the global hub is not set up. Refer to the [symlink-architecture guide](../../guides/symlink-architecture.md) for initial setup.
+**If fail:** If `~/.claude/` does not exist, the global hub is not set up. Refer to the [symlink-architecture guide](../../guides/symlink-architecture.md) for initial setup.
 
 ### Step 5: Generate Audit Report
 
@@ -243,9 +243,9 @@ Produce a summary table covering both layers.
 - External content (non-almanac): [list — informational only]
 ```
 
-**Expected:** A clear, actionable report. Zero issues means a clean bill of health.
+**Got:** A clear, actionable report. Zero issues means a clean bill of health.
 
-**On failure:** If report generation itself fails, output raw counts and lists to the console as fallback.
+**If fail:** If report generation itself fails, output raw counts and lists to the console as fallback.
 
 ### Step 6: Repair (Optional)
 
@@ -315,9 +315,9 @@ fi
 
 **Important:** Never remove items classified as external. These belong to other projects (e.g., peon-ping) and must be preserved.
 
-**Expected:** All missing symlinks created, all broken symlinks removed, all stale almanac entries cleaned. External content untouched.
+**Got:** All missing symlinks created, all broken symlinks removed, all stale almanac entries cleaned. External content untouched.
 
-**On failure:** If `ln -s` fails due to an existing file/directory at the target path (e.g., empty directory instead of symlink), remove the blocker first with `rmdir` (for empty dirs) or flag for manual review (for non-empty dirs).
+**If fail:** If `ln -s` fails due to an existing file/directory at the target path (e.g., empty directory instead of symlink), remove the blocker first with `rmdir` (for empty dirs) or flag for manual review (for non-empty dirs).
 
 ### Step 7: Verify
 
@@ -335,9 +335,9 @@ echo "Project teams:  $PROJECT_TEAM_STATUS ($PROJECT_TEAM_COUNT .md files)"
 echo "Global teams:   $GLOBAL_TEAM_STATUS ($GLOBAL_TEAM_COUNT .md files)"
 ```
 
-**Expected:** Zero missing, zero broken. Counts match registered totals (for almanac content). External content listed separately.
+**Got:** Zero missing, zero broken. Counts match registered totals (for almanac content). External content listed separately.
 
-**On failure:** If issues remain after repair, report the specific failures. Common causes: permission errors on `~/.claude/`, NTFS path length limits on `/mnt/` paths, or a non-empty directory blocking symlink creation.
+**If fail:** If issues remain after repair, report the specific failures. Common causes: permission errors on `~/.claude/`, NTFS path length limits on `/mnt/` paths, or a non-empty directory blocking symlink creation.
 
 ## Validation
 
@@ -351,7 +351,7 @@ echo "Global teams:   $GLOBAL_TEAM_STATUS ($GLOBAL_TEAM_COUNT .md files)"
 - [ ] If `fix_mode` is `auto`: all safe repairs applied, external content untouched
 - [ ] Post-repair verification confirms zero missing, zero broken
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Confusing external content with missing almanac content**: `~/.claude/skills/` may contain skills from other projects (e.g., peon-ping). Always check whether a symlink target is under the almanac path before classifying it as stale or extraneous.
 

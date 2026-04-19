@@ -23,29 +23,29 @@ metadata:
   tags: post-mortem, incident-review, blameless, timeline, action-items
 ---
 
-# Conduct Post-Mortem
+# 行事後之審
 
-Lead a blameless post-mortem to learn from incidents and improve system resilience.
+引無責事後之審以學於事且增系之韌。
 
-## When to Use
+## 用時
 
-- After any production incident or service degradation
-- Following a near-miss or close call
-- When investigating recurring issues
-- To share learnings across teams
+- 產境有事或服降之後
+- 近失或險過之後
+- 察重現之問時
+- 跨團共所學
 
-## Inputs
+## 入
 
-- **Required**: Incident details (start/end time, services affected, severity)
-- **Required**: Access to logs, metrics, and alerts during the incident window
-- **Optional**: Runbook used during incident response
-- **Optional**: Communication logs (Slack, PagerDuty)
+- **必**：事詳（起止時、受影之服、重）
+- **必**：事窗中誌、量、警之訪
+- **可選**：事中所用之行冊
+- **可選**：通誌（Slack、PagerDuty）
 
-## Procedure
+## 法
 
-### Step 1: Collect Raw Data
+### 第一步：收原資
 
-Gather all artifacts from the incident:
+聚事之諸品：
 
 ```bash
 # Export relevant logs (adjust timerange)
@@ -64,13 +64,13 @@ curl -G 'http://prometheus:9090/api/v1/query_range' \
 amtool alert query --within=2h alertname="HighErrorRate" --output json > alerts.json
 ```
 
-**Expected:** Logs, metrics, and alerts covering the full incident timeline.
+**得：** 誌、量、警涵全事線。
 
-**On failure:** If data is incomplete, note gaps in the report. Set up longer retention for next time.
+**敗則：** 資不全則注缺於報。下次設更長之留。
 
-### Step 2: Build the Timeline
+### 第二步：建時線
 
-Create a chronological reconstruction:
+生時序之復：
 
 ```markdown
 ## Timeline (all times UTC)
@@ -88,13 +88,13 @@ Create a chronological reconstruction:
 | 10:40:00 | Incident marked resolved | PagerDuty | @alice |
 ```
 
-**Expected:** A clear, minute-by-minute sequence showing what happened and when.
+**得：** 明分分之序示何事於何時。
 
-**On failure:** Timestamp mismatches. Ensure all systems use NTP and log in UTC.
+**敗則：** 時戳不合。確諸系用 NTP 而誌 UTC。
 
-### Step 3: Identify Contributing Factors
+### 第三步：識助因
 
-Use the Five Whys or fishbone analysis:
+用五何或魚骨之析：
 
 ```markdown
 ## Contributing Factors
@@ -114,13 +114,13 @@ Use the Five Whys or fishbone analysis:
 - Database alerts only fire on total failure, not degradation
 ```
 
-**Expected:** Multiple layers of causation identified, avoiding blame.
+**得：** 多層因已識而無責。
 
-**On failure:** If analysis stops at "engineer made a mistake", dig deeper. What allowed that mistake?
+**敗則：** 若析止於「工師誤」，深掘。何令此誤發？
 
-### Step 4: Generate Action Items
+### 第四步：生行項
 
-Create concrete, trackable improvements:
+立具體可追之改：
 
 ```markdown
 ## Action Items
@@ -135,13 +135,13 @@ Create concrete, trackable improvements:
 | AI-006 | Add load testing for new query patterns | @charlie | 2025-03-15 | Low |
 ```
 
-**Expected:** Each action has an owner, deadline, and clear deliverable.
+**得：** 每行有主、期、明產。
 
-**On failure:** Vague actions like "improve testing" won't get done. Make specific.
+**敗則：** 含糊如「改測」不行。宜具體。
 
-### Step 5: Write and Distribute Report
+### 第五步：書而分報
 
-Use this template structure:
+用此範構：
 
 ```markdown
 # Post-Mortem: API Service Degradation (2025-02-09)
@@ -182,13 +182,13 @@ missing index. Under increased load, this saturated the connection pool.
 See Action Items above.
 ```
 
-**Expected:** Report shared with team and stakeholders within 48 hours of incident.
+**得：** 報於事後四十八時內分於團與相關。
 
-**On failure:** If report delays exceed 1 week, insights grow stale. Prioritize post-mortems.
+**敗則：** 若報遲逾一週，見解將陳。先於事後之審。
 
-### Step 6: Review Action Items in Standup/Retros
+### 第六步：於日會/回顧察行項
 
-Track action item progress:
+追行項之進：
 
 ```bash
 # Create GitHub issues from action items
@@ -201,29 +201,29 @@ gh issue create --title "AI-001: Add connection pool metrics" \
 # Add to team calendar: Weekly review of open post-mortem items
 ```
 
-**Expected:** Action items tracked in project management tool, reviewed weekly.
+**得：** 行項追於項目管具，週察之。
 
-**On failure:** If action items languish, incidents will recur. Assign executive sponsor for high-priority items.
+**敗則：** 若行項荒，事必重。為高危項命執助。
 
-## Validation
+## 驗
 
-- [ ] Timeline is complete and chronologically accurate
-- [ ] Multiple contributing factors identified (not just one)
-- [ ] Action items have owners, deadlines, and priorities
-- [ ] Report uses blameless language (no "X caused the issue")
-- [ ] Report distributed to all stakeholders within 48 hours
-- [ ] Action items tracked in ticketing system
-- [ ] Follow-up review scheduled for 4 weeks out
+- [ ] 時線全且時序準
+- [ ] 多助因已識（非一）
+- [ ] 行項有主、期、先
+- [ ] 報用無責之言（無「X 致此問」）
+- [ ] 報於四十八時內分於諸相關
+- [ ] 行項追於票系
+- [ ] 四週後之察已排
 
-## Common Pitfalls
+## 陷
 
-- **Blame culture**: Using "who" language instead of "what/why". Focus on systems, not people.
-- **Shallow analysis**: Stopping at the first cause. Always ask "why" at least 5 times.
-- **Vague action items**: "Improve monitoring" is not actionable. "Add metric X to dashboard Y by date Z" is.
-- **No follow-through**: Action items created but never reviewed. Set calendar reminders.
-- **Fear of transparency**: Hiding incidents reduces learning. Share widely (within appropriate security boundaries).
+- **責之文**：用「誰」而非「何/因」之言。專於系，非人。
+- **淺析**：止於初因。必問「因」至少五次。
+- **含糊行項**：「改察」非可行。「於日 Z 加量 X 於板 Y」乃可行。
+- **不隨**：行項建而不察。設日曆之提。
+- **畏明**：匿事減學。廣分（於合安界內）。
 
-## Related Skills
+## 參
 
-- `write-incident-runbook` - create runbooks referenced during incidents
-- `configure-alerting-rules` - improve alerts based on post-mortem findings
+- `write-incident-runbook` - 建事中所引之行冊
+- `configure-alerting-rules` - 依事後之得改警

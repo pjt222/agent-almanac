@@ -25,31 +25,31 @@ metadata:
   tags: esoteric, creation, genesis, ideation, emergence, hindu-trinity, brahma
 ---
 
-# Brahma Bhaga
+# 梵天之分
 
-Generative creation from void or ambiguity — structured emergence of new patterns, approaches, and solutions where none existed before.
+自虛或模糊之生——新模、法、解之結構化湧現，前所未有者。
 
-## When to Use
+## 用時
 
-- After `shiva-bhaga` dissolution has cleared stale patterns and created space
-- Facing a genuinely novel problem with no obvious template or precedent
-- The user's request requires invention rather than retrieval or adaptation
-- Multiple possible approaches exist and none has been chosen — the creative act is the choice itself
-- A blank slate: new file, new project, new architecture, new approach
-- When incremental modification has reached its limits and a fresh design is needed
+- `shiva-bhaga` 溶盡陳模，空已闢
+- 遇真新之題而無明範或先例
+- 用者之請須創而非索或改
+- 諸法皆可而未擇——創之行即擇本身
+- 白板：新檔、新項、新架、新法
+- 增改已至其限而須新設
 
-## Inputs
+## 入
 
-- **Required**: The creative goal or void to fill (available from conversation context)
-- **Optional**: Constraints that bound the creation (user requirements, technical limitations)
-- **Optional**: Seeds — fragments, inspirations, or partial ideas that inform the creation
-- **Optional**: What was dissolved (`shiva-bhaga` output) — understanding what failed guides what to create
+- **必要**：創之旨或待填之虛（對話脈絡可得）
+- **可選**：限（用者要求、技術限制）
+- **可選**：種子——碎片、啟示、或半念供創
+- **可選**：所溶者（`shiva-bhaga` 之出）——知昔何敗引今何創
 
-## Procedure
+## 法
 
-### Step 1: Survey the Void
+### 第一步：察虛
 
-Before creating, understand the space available for creation.
+創之前，識可創之空。
 
 ```
 Creative Space Assessment:
@@ -78,99 +78,99 @@ Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Map each dimension honestly — especially constraints, which are often implicit
-2. Note the degrees of freedom: these are where genuine creation happens
-3. Identify seeds without committing to them — they inform, not dictate
+1. 實繪諸維——尤其限，常為隱
+2. 記由之度：真創生於此
+3. 識種子而不拘之——其供而不命
 
-**Expected:** A clear picture of the creative space: bounded by constraints, informed by seeds, and opened by degrees of freedom.
+**得：** 創之空清象：限為界、種為供、由度為開。
 
-**On failure:** If the space feels fully constrained (no degrees of freedom), re-examine — often constraints that seem fixed are actually preferences. Ask the user if needed.
+**敗則：** 若空似全限（無由度），重察——似定之限常實為好。若須，問用者。
 
-### Step 2: Generate — Divergent Exploration
+### 第二步：生——發散探索
 
-Produce multiple possibilities without evaluating them.
+生諸可而未評。
 
-1. Generate at least three distinct approaches to filling the creative space
-2. Each approach should be genuinely different — not variations on a theme
-3. For each approach, capture:
-   - The core idea in one sentence
-   - How it satisfies the constraints
-   - What makes it distinct from the others
-   - What it sacrifices or trades off
-4. Include at least one approach that feels unconventional or risky
-5. Do not evaluate yet — generation and evaluation are separate phases
+1. 至少生三具別之法以填創空
+2. 各法宜真異——非同題之變
+3. 各法記：
+   - 核念一句
+   - 如何合限
+   - 異於他法之處
+   - 捨與換
+4. 含至少一不常或冒險之法
+5. 勿評——生與評為別階
 
-**Expected:** Three or more genuinely distinct approaches, each with a clear identity and trade-off profile.
+**得：** 三或多真異之法，各有清身與捨換之貌。
 
-**On failure:** If all approaches feel similar, the generation was too narrow. Return to Step 1 and look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if I did the opposite of the obvious approach?"
+**敗則：** 若諸法皆似，生太狹。返第一步尋未探之由度。或反一限：「若反明法何如？」
 
-### Step 3: Evaluate — Convergent Selection
+### 第三步：評——收斂擇
 
-Assess the generated approaches against the creative space.
+評所生之法於創空。
 
-1. For each approach, assess:
-   - **Constraint satisfaction**: Does it meet all non-negotiable requirements?
-   - **Elegance**: Is it the simplest solution that works?
-   - **Resilience**: Will it survive future perturbation?
-   - **Integration**: Does it fit naturally with the surrounding context?
-   - **Novelty**: Does it bring something genuinely new, or merely rearrange the old?
-2. Eliminate approaches that violate hard constraints
-3. Among remaining approaches, choose based on the user's implicit values (simplicity? thoroughness? creativity?)
-4. If two approaches are equally strong, present both to the user with trade-offs clearly stated
+1. 各法評：
+   - **限合**：合諸硬要求乎？
+   - **雅**：為成之最簡乎？
+   - **韌**：能歷後擾乎？
+   - **融**：自然合周脈乎？
+   - **新**：帶真新乎，抑只排舊？
+2. 刪犯硬限者
+3. 餘法中依用者隱值擇（簡？徹？創？）
+4. 若二法等強，並呈用者，明列捨換
 
-**Expected:** A single chosen approach (or a clearly framed choice for the user) with articulated reasoning.
+**得：** 一擇之法（或為用者明框之擇），附清理。
 
-**On failure:** If no approach satisfies all constraints, the constraints may be contradictory. Surface the contradiction to the user rather than forcing a creation that compromises on fundamentals.
+**敗則：** 若無法合諸限，限或相悖。浮悖於用者而非強創折中於根本。
 
-### Step 4: Manifest — Bring into Form
+### 第四步：成——予以形
 
-Execute the chosen approach, giving it concrete form.
+行所擇之法，賦之具體形。
 
-1. Begin with the skeleton: the minimal structure that embodies the core idea
-2. Build outward from the core, adding detail as needed
-3. At each step, check: "Is this addition serving the core idea or diluting it?"
-4. Resist the urge to over-elaborate — creation is complete when nothing more can be removed
-5. Name what was created: a clear, descriptive identifier that captures its essence
+1. 始於骨架：體核念之最簡結構
+2. 自核外建，須處增詳
+3. 各步察：「此增助核念乎，抑稀之？」
+4. 拒過繁——創成於不可復減
+5. 名所創：清述之識，捕其本質
 
-**Expected:** A concrete creation that embodies the chosen approach — code, plan, structure, or design that exists where void existed before.
+**得：** 具體之創，體所擇之法——碼、計、構、或設，存於昔虛之處。
 
-**On failure:** If the manifestation diverges from the chosen approach, pause and re-read Step 3's selection. Drift during manifestation often indicates the selection was not fully committed to. Either recommit or re-select.
+**敗則：** 若成偏離所擇之法，頓而重讀第三步之擇。成中之偏常示擇未全決。或重決或重擇。
 
-### Step 5: Nurture — Protect the Nascent Creation
+### 第五步：養——護新生之創
 
-New creations are fragile. Protect them through their early stages.
+新創脆。護其早階。
 
-1. Test the creation against its constraints — does it work as intended?
-2. Identify the weakest point — where is it most likely to break?
-3. Strengthen the weakest point without over-engineering
-4. Hand off to `vishnu-bhaga` for ongoing preservation if the creation will persist
-5. Document the creative choices made: what was chosen, what was rejected, and why
+1. 驗創於限——如意行乎？
+2. 識最弱處——何處最易破？
+3. 強最弱處而不過工
+4. 若創將持，交於 `vishnu-bhaga` 以續保
+5. 錄創之擇：所擇、所棄、與由
 
-**Expected:** A creation that is tested, documented, and ready for sustained use.
+**得：** 已驗、已錄、備持久用之創。
 
-**On failure:** If the creation fails its first test, assess whether the failure is in the creation or the test. If the creation is fundamentally flawed, return to Step 2 with the failure as a new anti-pattern seed.
+**敗則：** 若創首試敗，察敗在創抑在試。若創根本有瑕，返第二步以敗為新反模種。
 
-## Validation
+## 驗
 
-- [ ] The creative space was surveyed before generating ideas
-- [ ] At least three genuinely distinct approaches were generated
-- [ ] Selection was based on explicit criteria, not default instinct
-- [ ] The creation was manifested starting from its core, building outward
-- [ ] The creation was tested against its constraints
-- [ ] Creative choices were documented for future reference
+- [ ] 生念之前已察創空
+- [ ] 至少三真異之法已生
+- [ ] 擇依明準，非默直覺
+- [ ] 創自核始成，外建之
+- [ ] 創已驗於限
+- [ ] 創之擇已錄備後用
 
-## Common Pitfalls
+## 陷
 
-- **Creating before clearing**: Attempting creation without prior dissolution produces new patterns contaminated by old ones. Run `shiva-bhaga` first if the space is cluttered
-- **Single-option generation**: Generating one approach and then evaluating it is not creation — it is executing the first idea. True creation requires divergent options
-- **Novelty for its own sake**: Creating something unconventional when a simple standard approach would serve better. Novelty is a tool, not a goal
-- **Perfectionist manifestation**: Polishing endlessly rather than shipping a working creation. A complete imperfect creation outperforms an incomplete perfect one
-- **Unprotected creation**: Manifesting something new and immediately moving on without testing or documentation leaves the creation vulnerable
+- **未清先創**：無前溶而創生新模染於舊。空雜者宜先行 `shiva-bhaga`
+- **單選之生**：生一法而評之非創——乃執首念。真創須發散之選
+- **為新而新**：當簡標法可更善時而造不常之物。新為工具，非目
+- **完美成**：拋光不止而不交可行之創。全不完之創勝於不完之全
+- **未護之創**：成新即去而不驗不錄，留創於脆
 
-## Related Skills
+## 參
 
-- `shiva-bhaga` — destruction creates the void that Brahma fills; dissolution precedes creation
-- `vishnu-bhaga` — preservation sustains what Brahma creates; handoff from creation to maintenance
-- `intrinsic` — creative engagement benefits from autonomous motivation; creation thrives in flow
-- `learn` — when creation requires knowledge not yet held, learning precedes generation
-- `adapt-architecture` — the morphic equivalent for creating new architectural patterns from existing systems
+- `shiva-bhaga` — 滅生梵天所填之虛；溶先於創
+- `vishnu-bhaga` — 保持梵天所創；自創交於保
+- `intrinsic` — 創之參惠於自發之動；創盛於流
+- `learn` — 創須未持之知時，學先於生
+- `adapt-architecture` — 自現系生新架模式之 morphic 對照

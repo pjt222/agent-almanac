@@ -25,24 +25,24 @@ metadata:
 
 # Configure Git Repository
 
-Set up a Git repository with appropriate configuration for the project type.
+Set up Git repo with appropriate config for project type.
 
-## When to Use
+## When Use
 
-- Initializing version control for a new project
-- Adding `.gitignore` for a specific language/framework
-- Setting up branch protection and conventions
-- Configuring commit hooks
+- Initialize version control for new project
+- Add `.gitignore` for specific language/framework
+- Set up branch protection, conventions
+- Configure commit hooks
 
 ## Inputs
 
 - **Required**: Project directory
 - **Required**: Project type (R package, Node.js, Python, general)
-- **Optional**: Remote repository URL
+- **Optional**: Remote repo URL
 - **Optional**: Branch strategy (trunk-based, Git Flow)
 - **Optional**: Commit message convention
 
-## Procedure
+## Steps
 
 ### Step 1: Initialize Repository
 
@@ -52,9 +52,9 @@ git init
 git branch -M main
 ```
 
-**Expected:** `.git/` directory created. Default branch is named `main`.
+**Got:** `.git/` directory created. Default branch named `main`.
 
-**On failure:** If `git init` fails, ensure Git is installed (`git --version`). If the directory already has a `.git/`, the repository is already initialized — skip this step.
+**If fail:** `git init` fails? Ensure Git installed (`git --version`). Directory already has `.git/`? Repo already initialized — skip.
 
 ### Step 2: Create .gitignore
 
@@ -135,9 +135,9 @@ htmlcov/
 .vscode/
 ```
 
-**Expected:** `.gitignore` file created with entries appropriate for the project type. Sensitive files (`.Renviron`, `.env`) and generated artifacts are excluded.
+**Got:** `.gitignore` created with entries appropriate for project type. Sensitive files (`.Renviron`, `.env`) and generated artifacts excluded.
 
-**On failure:** If unsure which entries to include, use `gitignore.io` or GitHub's `.gitignore` templates as a starting point and customize for the project.
+**If fail:** Unsure which entries to include? Use `gitignore.io` or GitHub `.gitignore` templates as starting point, customize for project.
 
 ### Step 3: Create Initial Commit
 
@@ -147,9 +147,9 @@ git add .  # Review what's being added first with git status
 git commit -m "Initial project setup"
 ```
 
-**Expected:** First commit created containing `.gitignore` and initial project files. `git log` shows one commit.
+**Got:** First commit created containing `.gitignore` and initial project files. `git log` shows one commit.
 
-**On failure:** If `git commit` fails with "nothing to commit," ensure files were staged with `git add`. If it fails with an author identity error, set `git config user.name` and `git config user.email`.
+**If fail:** `git commit` fails with "nothing to commit"? Ensure files staged with `git add`. Fails with author identity error? Set `git config user.name` and `git config user.email`.
 
 ### Step 4: Connect Remote
 
@@ -161,9 +161,9 @@ git remote add origin git@github.com:username/repo.git
 git push -u origin main
 ```
 
-**Expected:** Remote `origin` is configured. `git remote -v` shows fetch and push URLs. Initial commit is pushed to the remote.
+**Got:** Remote `origin` configured. `git remote -v` shows fetch and push URLs. Initial commit pushed to remote.
 
-**On failure:** If push fails with "Permission denied (publickey)," configure SSH keys (see `setup-wsl-dev-environment`). If the remote already exists, update it with `git remote set-url origin <url>`.
+**If fail:** Push fails with "Permission denied (publickey)"? Configure SSH keys (see `setup-wsl-dev-environment`). Remote already exists? Update with `git remote set-url origin <url>`.
 
 ### Step 5: Set Up Branch Conventions
 
@@ -182,9 +182,9 @@ git checkout main
 git merge feature/add-authentication
 ```
 
-**Expected:** Branch naming convention is established and documented. Team members know which prefix to use for each type of work.
+**Got:** Branch naming convention established, documented. Team members know which prefix to use for each type of work.
 
-**On failure:** If branches are already named inconsistently, rename them with `git branch -m old-name new-name` and update any open PRs.
+**If fail:** Branches already named inconsistently? Rename with `git branch -m old-name new-name`, update any open PRs.
 
 ### Step 6: Configure Commit Conventions
 
@@ -201,9 +201,9 @@ refactor: extract helper function
 chore: update dependencies
 ```
 
-**Expected:** Commit message convention is documented and agreed upon by the team. Future commits follow the `type: description` format.
+**Got:** Commit message convention documented, agreed by team. Future commits follow `type: description` format.
 
-**On failure:** If team members are not following the convention, enforce it with a commit-msg hook that validates the format (see Step 7).
+**If fail:** Team members not following convention? Enforce with commit-msg hook that validates format (see Step 7).
 
 ### Step 7: Set Up Pre-Commit Hooks (Optional)
 
@@ -229,9 +229,9 @@ chmod +x .githooks/pre-commit
 git config core.hooksPath .githooks
 ```
 
-**Expected:** Pre-commit hook runs automatically on each `git commit`. Linting errors block the commit until fixed.
+**Got:** Pre-commit hook runs automatically on each `git commit`. Linting errors block commit until fixed.
 
-**On failure:** If the hook does not run, verify `core.hooksPath` is set (`git config core.hooksPath`) and the hook file is executable (`chmod +x`).
+**If fail:** Hook does not run? Verify `core.hooksPath` set (`git config core.hooksPath`), hook file executable (`chmod +x`).
 
 ### Step 8: Create README
 
@@ -244,30 +244,30 @@ git add README.md
 git commit -m "Add README"
 ```
 
-**Expected:** `README.md` committed to the repository. The project has a minimal but informative landing page on GitHub.
+**Got:** `README.md` committed to repo. Project has minimal but informative landing page on GitHub.
 
-**On failure:** If `README.md` already exists, update it rather than overwriting. Use `usethis::use_readme_md()` in R projects for a template with badges.
+**If fail:** `README.md` already exists? Update rather than overwrite. Use `usethis::use_readme_md()` in R projects for template with badges.
 
-## Validation
+## Checks
 
 - [ ] `.gitignore` excludes sensitive and generated files
 - [ ] No sensitive data (tokens, passwords) in tracked files
-- [ ] Remote repository connected and accessible
+- [ ] Remote repo connected, accessible
 - [ ] Branch naming conventions documented
 - [ ] Initial commit created cleanly
 
-## Common Pitfalls
+## Pitfalls
 
 - **Committing before .gitignore**: Add `.gitignore` first. Files already tracked aren't affected by later `.gitignore` entries.
-- **Sensitive data in history**: If secrets are committed, they remain in history even after deletion. Use `git filter-repo` or BFG to clean.
+- **Sensitive data in history**: Secrets committed remain in history even after deletion. Use `git filter-repo` or BFG to clean.
 - **Large binary files**: Don't commit large binaries. Use Git LFS for files > 1MB.
 - **Line endings**: Set `core.autocrlf=input` on Windows/WSL to prevent CRLF/LF issues.
 
-## Related Skills
+## See Also
 
 - `commit-changes` - staging and committing workflow
 - `manage-git-branches` - branch creation and conventions
 - `create-r-package` - Git setup as part of R package creation
 - `setup-wsl-dev-environment` - Git installation and SSH keys
-- `create-github-release` - creating releases from the repository
+- `create-github-release` - creating releases from repo
 - `security-audit-codebase` - check for committed secrets

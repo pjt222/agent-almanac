@@ -27,29 +27,29 @@ metadata:
 
 # Catalog Collection
 
-Catalog and classify library or archival materials using standard classification systems and descriptive cataloging practices.
+以標準分類系統與描述編目法編錄並類分圖書或檔案資料。
 
-## When to Use
+## 適用時機
 
-- You are organizing a personal, institutional, or community library from scratch
-- You need to assign call numbers and subject headings to new acquisitions
-- You want to create consistent catalog records for findability
-- You are reclassifying a collection that has outgrown its original system
-- You need to establish authority control for authors, series, or subjects
+- 自頭組個人、機構或社區圖書館
+- 為新入館書指派分類號與主題詞
+- 為可尋性創一致之目錄記錄
+- 為既有系統已不敷之館藏重類
+- 為作者、叢書、主題立權威控制
 
-## Inputs
+## 輸入
 
-- **Required**: Materials to catalog (books, serials, media, archival items)
-- **Required**: Chosen classification system (Dewey Decimal or Library of Congress)
-- **Optional**: Existing catalog or inventory to integrate with
-- **Optional**: Subject heading authority (LCSH, Sears, or custom thesaurus)
-- **Optional**: MARC-compatible cataloging software (Koha, Evergreen, LibraryThing)
+- **必要**：欲編之資料（書、連續刊、媒、檔案）
+- **必要**：所擇分類系統（Dewey Decimal 或 Library of Congress）
+- **選擇性**：既有目錄或清冊以整合
+- **選擇性**：主題詞權威（LCSH、Sears、或自訂辭典）
+- **選擇性**：MARC 相容之編目軟體（Koha、Evergreen、LibraryThing）
 
-## Procedure
+## 步驟
 
-### Step 1: Choose the Classification System
+### 步驟一：擇分類系統
 
-Select a system that matches the collection's size, scope, and audience.
+擇合館藏之大、範、眾之系統。
 
 ```
 Classification System Comparison:
@@ -78,13 +78,13 @@ Decision Rule:
 - Mixed or uncertain: Start with DDC; migrate to LCC if collection exceeds 10K
 ```
 
-**Expected:** A classification system chosen that fits the collection's scale and purpose.
+**預期：** 擇合館藏規模與旨之分類系統。
 
-**On failure:** If neither system fits (e.g., a highly specialized archive), consider a faceted classification or custom scheme, but document the mapping to DDC or LCC for interoperability.
+**失敗時：** 若二系統皆不合（如高度專之檔案），考慮刻面分類或自訂方案，而錄其映至 DDC 或 LCC 以互用。
 
-### Step 2: Perform Descriptive Cataloging
+### 步驟二：行描述編目
 
-Create a bibliographic description for each item following standard practice.
+為每件循標準實務創書目描述。
 
 ```
 Descriptive Cataloging Elements (RDA-aligned):
@@ -121,13 +121,13 @@ Take information from the item itself (title page first,
 then cover, colophon, verso). Do not guess or embellish.
 ```
 
-**Expected:** A consistent bibliographic record for each item with enough detail for unique identification and discovery.
+**預期：** 每件有一致之書目記錄，詳足以獨辨與發現。
 
-**On failure:** If publication information is missing (common in older or self-published works), use square brackets to indicate supplied information: `[ca. 1920]`, `[s.l.]` (no place), `[s.n.]` (no publisher).
+**失敗時：** 若出版信息缺（舊或自出版常見），以方括示所補信息：`[ca. 1920]`、`[s.l.]`（無地）、`[s.n.]`（無出版者）。
 
-### Step 3: Assign Subject Headings
+### 步驟三：指派主題詞
 
-Apply controlled vocabulary terms so users can find materials by topic.
+用受控詞以便使用者按題尋資。
 
 ```
 Subject Heading Sources:
@@ -160,13 +160,13 @@ Assignment Rules:
 5. Be consistent: if you use "Automobiles" don't also use "Cars" as a heading
 ```
 
-**Expected:** Each item has 1-3 subject headings from a controlled vocabulary, applied consistently across the collection.
+**預期：** 每件具一至三來自受控詞之主題詞，於全館一致施之。
 
-**On failure:** If no suitable heading exists in your authority, create a local heading and document it in a local authority file. Review periodically for alignment with the main authority.
+**失敗時：** 若權威中無合主題詞，創本地詞並錄於本地權威檔。定期審以對主權威齊。
 
-### Step 4: Assign Call Numbers
+### 步驟四：指派分類號
 
-Build the shelf address using the chosen classification system.
+以所擇分類系統建架上之位址。
 
 ```
 Dewey Decimal Call Number Construction:
@@ -199,13 +199,13 @@ segment by segment. Numbers sort numerically,
 letters sort alphabetically, Cutters sort as decimals.
 ```
 
-**Expected:** Every cataloged item has a unique call number that determines its shelf position.
+**預期：** 每件具一唯一之分類號，以定其架位。
 
-**On failure:** If two items generate the same call number, add a work mark (first letter of title, excluding articles) or a copy number to disambiguate.
+**失敗時：** 若二件生同分類號，加作品標記（書名之首字母，略冠詞）或副本號以辨之。
 
-### Step 5: Create or Update Catalog Records
+### 步驟五：創或更目錄記錄
 
-Enter the cataloged information into your catalog system.
+將所編信息入目錄系統。
 
 ```
 Minimum Viable Catalog Record:
@@ -238,13 +238,13 @@ shared database before creating original records. Someone has
 likely already cataloged the same edition.
 ```
 
-**Expected:** Each item has a catalog record in the system with all required fields populated. Records are searchable by author, title, subject, and call number.
+**預期：** 每件於系統中有一目錄記錄，諸必要欄已填。記錄可按作者、書名、主題、分類號尋。
 
-**On failure:** If cataloging software is unavailable, a well-structured spreadsheet (with consistent column headings matching the fields above) serves as a functional catalog. Migrate to proper software when available.
+**失敗時：** 若無編目軟體可用，具一致列頭（合上欄）之結構化試算表可為功能目錄。有軟體時遷入之。
 
-### Step 6: Organize the Physical Shelf
+### 步驟六：組架
 
-Arrange materials according to their call numbers.
+依分類號置資料。
 
 ```
 Shelf Organization Principles:
@@ -267,30 +267,30 @@ Shelf Reading (periodic verification):
 - Note damaged items for repair or replacement
 ```
 
-**Expected:** Materials are physically arranged in call number order with clear spine labels and growth space.
+**預期：** 資料按分類號置，附明脊標與生長空間。
 
-**On failure:** If space is insufficient, prioritize high-circulation items on accessible shelves and move low-use items to compact storage, noting the location change in catalog records.
+**失敗時：** 若空不足，先置高流通品於易取之架，將低用品移至緊密庫存，於目錄記錄記位變。
 
-## Validation
+## 驗證
 
-- [ ] Classification system chosen and documented
-- [ ] Descriptive cataloging completed for all items with title, author, and publication data
-- [ ] Subject headings assigned from a controlled vocabulary (1-3 per item)
-- [ ] Call numbers assigned and unique for each item
-- [ ] Catalog records created in system or spreadsheet
-- [ ] Physical materials shelved in call number order with spine labels
-- [ ] Authority control established for consistent name and subject forms
+- [ ] 分類系統已擇且已錄
+- [ ] 諸件皆已完描述編目，含題、作者、出版
+- [ ] 自受控詞指派主題詞（每件一至三）
+- [ ] 每件已指派且唯一之分類號
+- [ ] 目錄記錄於系統或試算表已創
+- [ ] 實體資料按分類號排架，附脊標
+- [ ] 立權威控制以求名與主題一致
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Inconsistent headings**: Using both "World War, 1939-1945" and "WWII" defeats the purpose of controlled vocabulary. Pick one authority and stick to it
-- **Over-classification**: Assigning a 15-digit DDC number to a small personal library adds complexity without benefit. Match granularity to collection size
-- **Ignoring copy cataloging**: Creating original records when copy records exist wastes time. Always check shared databases first
-- **Spine label neglect**: A cataloged book without a spine label will be misshelved. Label immediately after cataloging
-- **No growth space**: Packing shelves to 100% capacity means every new acquisition triggers a chain of shifting. Leave room
+- **詞不一致**：同時用「二次世界大戰，1939-1945」與「二戰」敗受控詞之旨。擇一權威而守之
+- **過分類**：於小個人館施十五位 DDC 號加繁而無益。令粒度合館大
+- **忽復製編目**：複記錄既存而創原記錄費時。恆先查共享庫
+- **忽脊標**：無脊標之已編書將誤架。編目後即標
+- **無生長空**：架塞滿致每新入需連動。留餘地
 
-## Related Skills
+## 相關技能
 
-- `preserve-materials` — Conservation of cataloged materials to maintain their condition
-- `curate-collection` — Collection development decisions that determine what gets cataloged
-- `manage-memory` — Organizing persistent knowledge stores (digital parallel to physical cataloging)
+- `preserve-materials` — 編目資料之保存以維其態
+- `curate-collection` — 決定何物入編之收藏發展
+- `manage-memory` — 組持久知識庫（實體編目之數位平行）

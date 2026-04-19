@@ -23,37 +23,36 @@ metadata:
   tags: grafana, dashboards, visualization, panels, provisioning
 ---
 
-# Build Grafana Dashboards
+# 建 Grafana 儀表
 
-Design and deploy Grafana dashboards with best practices for maintainability, reusability, and version control.
+設發 Grafana 儀表附可維、可重用、版控之佳慣。
 
-## When to Use
+## 用
 
-- Creating visual representations of Prometheus, Loki, or other data source metrics
-- Building operational dashboards for SRE teams and incident responders
-- Establishing executive-level reporting dashboards for SLO compliance
-- Migrating dashboards from manual creation to version-controlled provisioning
-- Standardizing dashboard layouts across teams with template variables
-- Creating drill-down experiences from high-level overviews to detailed metrics
+- 造 Prometheus、Loki 或他資源指之視
+- 建 SRE 隊與事應者之運儀
+- 立高管 SLO 合規報儀
+- 移儀自手造至版控發
+- 以模變一跨隊儀布
+- 造自高概至細指之鑽探
 
-## Inputs
+## 入
 
-- **Required**: Data source configuration (Prometheus, Loki, Tempo, etc.)
-- **Required**: Metrics or logs to visualize with their query patterns
-- **Optional**: Template variables for multi-service or multi-environment views
-- **Optional**: Existing dashboard JSON for migration or modification
-- **Optional**: Annotation queries for event correlation (deployments, incidents)
+- **必**：資源配（Prometheus、Loki、Tempo 等）
+- **必**：當視之指或志附查模
+- **可**：多服或多環視之模變
+- **可**：現儀 JSON 為移或改
+- **可**：事關註查（發、事件）
 
-## Procedure
+## 行
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 詳 [Extended Examples](references/EXAMPLES.md) 備全配檔與模。
 
+### 一：設儀構
 
-### Step 1: Design Dashboard Structure
+建板前→謀儀布與組。
 
-Plan dashboard layout and organization before building panels.
-
-Create a dashboard specification document:
+造儀規文：
 
 ```markdown
 # Service Overview Dashboard
@@ -86,24 +85,24 @@ Real-time operational view for on-call engineers monitoring the API service.
 - Alert firing/resolving events
 ```
 
-Key design principles:
-- **Most important metrics first**: Critical metrics at the top, details below
-- **Consistent time ranges**: Synchronize time across all panels
-- **Drill-down paths**: Link from high-level to detailed dashboards
-- **Responsive layout**: Use rows and panel widths that work on various screens
+要設則：
+- **要指先**：頂為危指、下為詳
+- **一致時範**：諸板同時
+- **鑽探路**：自高連至細儀
+- **適布**：用列與板寬適諸屏
 
-**Expected:** Clear dashboard structure documented, stakeholders aligned on metrics and layout priorities.
+**得：** 儀構已錄，當事人合指與布之優序。
 
-**On failure:**
-- Conduct dashboard design review with end users (SREs, developers)
-- Benchmark against industry standards (USE method, RED method, Four Golden Signals)
-- Review existing dashboards in team for consistency patterns
+**敗：**
+- 與末用者（SRE、開發者）行儀設察
+- 較業標（USE 法、RED 法、四金號）
+- 察隊現儀以求一致模
 
-### Step 2: Create Dashboard with Template Variables
+### 二：以模變造儀
 
-Build the dashboard foundation with reusable variables for filtering.
+建儀基附可重用變為濾。
 
-Create dashboard JSON structure (or use UI, then export):
+造儀 JSON 構（或用 UI 後出）：
 
 ```json
 {
@@ -185,26 +184,26 @@ Create dashboard JSON structure (or use UI, then export):
 }
 ```
 
-Variable types and use cases:
-- **Query variables**: Dynamic lists from data source (`label_values()`, `query_result()`)
-- **Interval variables**: Aggregation windows for queries
-- **Custom variables**: Static lists for non-metric selections
-- **Constant variables**: Shared values across panels (data source names, thresholds)
-- **Text box variables**: Free-form input for filtering
+變類與用例：
+- **查變**：自資源動列（`label_values()`、`query_result()`）
+- **區變**：查之集區
+- **客變**：非指擇之靜列
+- **恆變**：跨板共值（資源名、閾）
+- **文變**：濾之自入
 
-**Expected:** Variables populate correctly from data source, cascading filters work (environment filters instances), default selections appropriate.
+**得：** 變自資源正充、級聯濾行（env 濾實）、默擇宜。
 
-**On failure:**
-- Test variable queries independently in Prometheus UI
-- Check for circular dependencies (variable A depends on B depends on A)
-- Verify regex patterns in `allValue` field for multi-select variables
-- Review variable refresh settings (on dashboard load vs on time range change)
+**敗：**
+- 於 Prometheus UI 獨試變查
+- 察循依（A 依 B 依 A）
+- 驗 `allValue` 之正則於多擇變
+- 察變刷設（載儀時對時範變時）
 
-### Step 3: Build Visualization Panels
+### 三：建視板
 
-Create panels for each metric with appropriate visualization types.
+每指造宜視類之板。
 
-**Time series panel** (request rate):
+**時序板**（請率）：
 
 ```json
 {
@@ -254,7 +253,7 @@ Create panels for each metric with appropriate visualization types.
 }
 ```
 
-**Stat panel** (error rate):
+**stat 板**（誤率）：
 
 ```json
 {
@@ -266,7 +265,7 @@ Create panels for each metric with appropriate visualization types.
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Heatmap panel** (latency distribution):
+**熱圖板**（延分布）：
 
 ```json
 {
@@ -278,27 +277,27 @@ Create panels for each metric with appropriate visualization types.
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Panel selection guide:
-- **Time series**: Trends over time (rates, counts, durations)
-- **Stat**: Single current value with threshold coloring
-- **Gauge**: Percentage values (CPU, memory, disk usage)
-- **Bar gauge**: Comparing multiple values at a point in time
-- **Heatmap**: Distribution of values over time (latency percentiles)
-- **Table**: Detailed breakdown of multiple metrics
-- **Logs**: Raw log lines from Loki with filtering
+板擇導：
+- **時序**：時趨（率、計、時長）
+- **Stat**：單當值附閾色
+- **表**：百分值（CPU、記、盤）
+- **條表**：一時多值較
+- **熱圖**：時值分布（延分位）
+- **表**：多指細分
+- **志**：Loki 原志附濾
 
-**Expected:** Panels render correctly with data, visualizations match intended metric types, legends descriptive, thresholds highlight problems.
+**得：** 板正渲附資、視合指類、圖例述、閾顯題。
 
-**On failure:**
-- Test queries in Explore view with same time range and variables
-- Check for metric name typos or incorrect label filters
-- Verify aggregation functions match metric type (rate for counters, avg for gauges)
-- Review unit configurations (bytes, seconds, requests per second)
-- Enable "Show query inspector" to debug empty results
+**敗：**
+- Explore 視中以同時範與變試查
+- 察指名或標濾誤
+- 驗集函合指類（counter 用 rate、gauge 用 avg）
+- 察單位配（bytes、seconds、requests per second）
+- 啟「Show query inspector」除空結
 
-### Step 4: Configure Rows and Layout
+### 四：配列與布
 
-Organize panels into collapsible rows for logical grouping.
+組板入可折列以邏分。
 
 ```json
 {
@@ -310,26 +309,26 @@ Organize panels into collapsible rows for logical grouping.
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Layout best practices:
-- Grid is 24 units wide, each panel specifies `w` (width) and `h` (height)
-- Use rows to group related panels, collapse less critical sections by default
-- Place most critical metrics in first visible area (y=0-8)
-- Maintain consistent panel heights within rows (typically 4, 8, or 12 units)
-- Use full width (24) for time series, half width (12) for comparisons
+布佳慣：
+- 格 24 單寬，每板定 `w`（寬）與 `h`（高）
+- 用列組相關板，默折較不危段
+- 置最危指於首視區（y=0-8）
+- 列內守一致板高（典 4、8、12 單）
+- 時序用全寬（24），較用半寬（12）
 
-**Expected:** Dashboard layout organized logically, rows collapse/expand correctly, panels align visually without gaps.
+**得：** 儀布邏組、列正折展、板視齊無隙。
 
-**On failure:**
-- Validate gridPos coordinates don't overlap
-- Check that row panels array contains panels (not null)
-- Verify y-coordinates increment logically down the page
-- Use Grafana UI "Edit JSON" to inspect grid positions
+**敗：**
+- 驗 gridPos 坐標不疊
+- 察列 panels 陣含板（非 null）
+- 驗 y 坐標於頁下遞
+- 用 Grafana UI「Edit JSON」察格位
 
-### Step 5: Add Links and Drill-Downs
+### 五：加連與鑽探
 
-Create navigation paths between related dashboards.
+造相關儀間導路。
 
-Dashboard-level links in JSON:
+儀級連於 JSON：
 
 ```json
 {
@@ -341,7 +340,7 @@ Dashboard-level links in JSON:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Panel-level data links:
+板級資連：
 
 ```json
 {
@@ -353,31 +352,31 @@ Panel-level data links:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Link variables:
-- `$service`, `$environment`: Dashboard template variables
-- `${__field.labels.instance}`: Label value from clicked data point
-- `${__from}`, `${__to}`: Current dashboard time range
-- `$__url_time_range`: Encoded time range for URL
+連變：
+- `$service`、`$environment`：儀模變
+- `${__field.labels.instance}`：點擊資點之標值
+- `${__from}`、`${__to}`：當儀時範
+- `$__url_time_range`：URL 之編時範
 
-**Expected:** Clicking panel elements or dashboard links navigates to related views with context preserved (time range, variables).
+**得：** 點板元或儀連→導相關視附脈留（時範、變）。
 
-**On failure:**
-- URL encode special characters in query parameters
-- Test links with various variable selections (All vs specific value)
-- Verify target dashboard UIDs exist and are accessible
-- Check that `includeVars` and `keepTime` flags work as expected
+**敗：**
+- URL 編查參中特字
+- 以諸變擇（All 對具值）試連
+- 驗標儀 UID 存且可達
+- 察 `includeVars` 與 `keepTime` 如望行
 
-### Step 6: Set Up Dashboard Provisioning
+### 六：設儀發
 
-Version control dashboards as code for reproducible deployments.
+版控儀為碼以可復發。
 
-Create provisioning directory structure:
+造發目構：
 
 ```bash
 mkdir -p /etc/grafana/provisioning/{dashboards,datasources}
 ```
 
-Datasource provisioning (`/etc/grafana/provisioning/datasources/prometheus.yml`):
+資源發（`/etc/grafana/provisioning/datasources/prometheus.yml`）：
 
 ```yaml
 apiVersion: 1
@@ -389,7 +388,7 @@ datasources:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Dashboard provisioning (`/etc/grafana/provisioning/dashboards/default.yml`):
+儀發（`/etc/grafana/provisioning/dashboards/default.yml`）：
 
 ```yaml
 apiVersion: 1
@@ -407,7 +406,7 @@ providers:
       foldersFromFilesStructure: true
 ```
 
-Store dashboard JSON files in `/var/lib/grafana/dashboards/`:
+存儀 JSON 檔於 `/var/lib/grafana/dashboards/`：
 
 ```bash
 /var/lib/grafana/dashboards/
@@ -421,7 +420,7 @@ Store dashboard JSON files in `/var/lib/grafana/dashboards/`:
     └── kubernetes.json
 ```
 
-Using Docker Compose:
+用 Docker Compose：
 
 ```yaml
 version: '3.8'
@@ -440,44 +439,44 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
 ```
 
-**Expected:** Dashboards automatically loaded on Grafana startup, changes to JSON files reflected after update interval, version control tracks dashboard changes.
+**得：** 儀於 Grafana 起時自載、JSON 改後於更區映、版控跟儀變。
 
-**On failure:**
-- Check Grafana logs: `docker logs grafana | grep -i provisioning`
-- Verify JSON syntax: `python -m json.tool dashboard.json`
-- Ensure file permissions allow Grafana to read: `chmod 644 *.json`
-- Test with `allowUiUpdates: false` to prevent UI modifications
-- Validate provisioning config: `curl http://localhost:3000/api/admin/provisioning/dashboards/reload -X POST -H "Authorization: Bearer $GRAFANA_API_KEY"`
+**敗：**
+- 察 Grafana 志：`docker logs grafana | grep -i provisioning`
+- 驗 JSON 法：`python -m json.tool dashboard.json`
+- 確檔權允 Grafana 讀：`chmod 644 *.json`
+- 以 `allowUiUpdates: false` 試防 UI 改
+- 驗發配：`curl http://localhost:3000/api/admin/provisioning/dashboards/reload -X POST -H "Authorization: Bearer $GRAFANA_API_KEY"`
 
-## Validation
+## 驗
 
-- [ ] Dashboard loads without errors in Grafana UI
-- [ ] All template variables populate with expected values
-- [ ] Variable cascading works (selecting environment filters instances)
-- [ ] Panels display data for configured time ranges
-- [ ] Panel queries use variables correctly (no hardcoded values)
-- [ ] Thresholds highlight problem states appropriately
-- [ ] Legend formatting descriptive and not cluttered
-- [ ] Annotations appear for relevant events
-- [ ] Links navigate to correct dashboards with context preserved
-- [ ] Dashboard provisioned from JSON file (version controlled)
-- [ ] Responsive layout works on different screen sizes
-- [ ] Tooltip and hover interactions provide useful context
+- [ ] 儀於 Grafana UI 無誤載
+- [ ] 諸模變以望值充
+- [ ] 變級聯行（擇環濾實）
+- [ ] 板顯配時範資
+- [ ] 板查正用變（無硬值）
+- [ ] 閾宜顯題態
+- [ ] 圖例格述且不雜
+- [ ] 註現於相關事
+- [ ] 連導正儀附脈留
+- [ ] 儀自 JSON 發（版控）
+- [ ] 適布行於異屏大
+- [ ] 提示與懸互供益脈
 
-## Common Pitfalls
+## 忌
 
-- **Variable not updating panels**: Ensure queries use `$variable` syntax, not hardcoded values. Check variable refresh settings.
-- **Empty panels with correct query**: Verify time range includes data points. Check scrape interval vs aggregation window (5m rate needs >5m of data).
-- **Legend too verbose**: Use `legendFormat` to show only relevant labels, not full metric name. Example: `{{method}} - {{status}}` instead of default.
-- **Inconsistent time ranges**: Set dashboard time sync so all panels share the same time window. Use "Sync cursor" for correlated investigation.
-- **Performance issues**: Avoid queries returning high cardinality series (>1000). Use recording rules or pre-aggregation. Limit time ranges for expensive queries.
-- **Dashboard drift**: Without provisioning, manual UI changes create version control conflicts. Use `allowUiUpdates: false` in production.
-- **Missing data links**: Data links require exact label names. Use `${__field.labels.labelname}` carefully, verify label exists in query result.
-- **Annotation overload**: Too many annotations clutter the view. Filter annotations by importance or use separate annotation tracks.
+- **變不更板**：確查用 `$variable` 法，非硬值。察變刷設。
+- **空板而查正**：驗時範含資點。察取區對集區（5m rate 需 >5m 資）。
+- **圖例冗**：用 `legendFormat` 示相關標，非全指名。例：`{{method}} - {{status}}` 代默。
+- **時範不一**：設儀時同令諸板共時窗。用「Sync cursor」為關探。
+- **效題**：避返高基數系（>1000）。用錄律或預集。限貴查之時範。
+- **儀漂**：無發→手改生版控撞。產用 `allowUiUpdates: false`。
+- **缺資連**：資連需精標名。細用 `${__field.labels.labelname}`，驗標存查結。
+- **註泛**：過多註雜視。依要濾註或用別註軌。
 
-## Related Skills
+## 參
 
-- `setup-prometheus-monitoring` - Configure Prometheus data sources that feed Grafana dashboards
-- `configure-log-aggregation` - Set up Loki for log panel queries and log-based annotations
-- `define-slo-sli-sla` - Visualize SLO compliance and error budgets with Grafana stat and gauge panels
-- `instrument-distributed-tracing` - Add trace ID links from metrics panels to Tempo trace views
+- `setup-prometheus-monitoring` — 配 Grafana 所食之 Prometheus 資源
+- `configure-log-aggregation` — 設 Loki 為志板查與志註
+- `define-slo-sli-sla` — 以 Grafana stat 與 gauge 視 SLO 合規與誤預算
+- `instrument-distributed-tracing` — 自指板加蹤 ID 連至 Tempo 蹤視

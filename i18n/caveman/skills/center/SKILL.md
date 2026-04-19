@@ -25,44 +25,44 @@ metadata:
 
 # Center
 
-Establish and maintain dynamic reasoning balance — grounding in foundational context before movement, distributing cognitive load across subsystems, and recovering equilibrium when demands shift mid-task.
+Establish and maintain dynamic reasoning balance — ground in foundational context before movement, distribute cognitive load across subsystems, recover equilibrium when demands shift mid-task.
 
-## When to Use
+## When Use
 
-- Beginning a complex task where multiple reasoning threads must coordinate
-- Noticing that cognitive load is unevenly distributed (deep in one area, shallow in others)
-- After a sudden context shift (new user request, contradictory information, tool failure)
-- When chain-of-thought feels jerky — jumping between topics without smooth transitions
-- Preparing for sustained focused work that requires all subsystems in alignment
+- Beginning complex task where multiple reasoning threads must coordinate
+- Noticing cognitive load unevenly distributed (deep in one area, shallow in others)
+- After sudden context shift (new user request, contradictory information, tool failure)
+- Chain-of-thought feels jerky — jumping between topics without smooth transitions
+- Preparing for sustained focused work requiring all subsystems in alignment
 - Complementing `meditate` (clears noise) with structural balance (distributes load)
 
 ## Inputs
 
-- **Required**: Current task context (available implicitly)
+- **Required**: Current task context (implicit)
 - **Optional**: Specific imbalance symptom (e.g., "over-researching, under-delivering," "tool-heavy, reasoning-light")
 - **Optional**: Access to MEMORY.md and CLAUDE.md for grounding (via `Read`)
 
-## Procedure
+## Steps
 
 ### Step 1: Establish Root — Ground Before Movement
 
-Before any reasoning movement, verify the foundation. This is the AI equivalent of standing meditation (zhan zhuang): stationary, aligned, aware.
+Before any reasoning movement, verify foundation. AI equivalent of standing meditation (zhan zhuang): stationary, aligned, aware.
 
-1. Re-read the user's request — not to act on it yet, but to feel its weight and direction
+1. Re-read user's request — not to act on it yet, but feel its weight and direction
 2. Check foundational context: MEMORY.md, CLAUDE.md, project structure
-3. Identify what is known (solid ground) vs. what is assumed (uncertain footing)
-4. Verify that the task as understood matches the task as stated — misalignment here propagates through everything
-5. Note the emotional texture: urgency? complexity anxiety? over-confidence from a recent success?
+3. Identify what's known (solid ground) vs what's assumed (uncertain footing)
+4. Verify task as understood matches task as stated — misalignment here propagates through everything
+5. Note emotional texture: urgency? complexity anxiety? over-confidence from recent success?
 
-Do not begin reasoning movement until the root is established. A grounded start prevents reactive flailing.
+Do not begin reasoning movement until root established. Grounded start prevents reactive flailing.
 
-**Expected:** A clear sense of the task's foundation — what is known, what is assumed, and what the user actually needs. The root feels solid, not performative.
+**Got:** Clear sense of task's foundation — what's known, what's assumed, what user actually needs. Root feels solid, not performative.
 
-**On failure:** If grounding feels hollow (going through motions without genuine verification), pick one assumption and test it concretely. Read one file, re-read one user message. Grounding must contact reality, not just reference it.
+**If fail:** Grounding feels hollow (going through motions without genuine verification)? Pick one assumption, test concretely. Read one file, re-read one user message. Grounding must contact reality, not just reference it.
 
 ### Step 2: Assess Weight Distribution
 
-Map the current cognitive load distribution. In tai chi, weight is deliberately unequal (70/30) — one leg bears the load while the other remains free to move. The same principle applies to reasoning threads.
+Map current cognitive load distribution. In tai chi, weight deliberately unequal (70/30) — one leg bears load, other remains free to move. Same principle for reasoning threads.
 
 ```
 Cognitive Load Distribution Matrix:
@@ -88,21 +88,21 @@ Cognitive Load Distribution Matrix:
 └────────────────────┴───────────┴─────────────────────────────────────┘
 ```
 
-The ideal distribution depends on the task phase: early phases weight research and planning; middle phases weight execution; late phases weight communication and verification. The point is not equal distribution but *intentional* distribution.
+Ideal distribution depends on task phase: early phases weight research and planning; middle phases weight execution; late phases weight communication and verification. Point not equal distribution but *intentional* distribution.
 
-**Expected:** A clear picture of where cognitive effort is concentrated and where it is thin. At least one imbalance identified — perfect balance is rare and claiming it signals shallow assessment.
+**Got:** Clear picture of where cognitive effort concentrated, where thin. At least one imbalance identified — perfect balance rare, claiming it signals shallow assessment.
 
-**On failure:** If all threads seem equally weighted, the assessment is too coarse. Pick the thread that feels most active and estimate how many of the last N actions served it vs. other threads. Concrete counting reveals what intuition misses.
+**If fail:** All threads seem equally weighted? Assessment too coarse. Pick most active thread, estimate how many of last N actions served it vs others. Concrete counting reveals what intuition misses.
 
 ### Step 3: Silk Reeling — Evaluate Chain-of-Thought Coherence
 
-Silk reeling in tai chi produces smooth, continuous spiraling movement where every part connects. The AI equivalent is chain-of-thought coherence: does each step flow naturally from the previous one?
+Silk reeling in tai chi produces smooth, continuous spiraling movement where every part connects. AI equivalent: chain-of-thought coherence — does each step flow naturally from previous?
 
-1. Trace the last 3-5 reasoning steps: does each follow from the one before?
+1. Trace last 3-5 reasoning steps: does each follow from one before?
 2. Check for jumps: did reasoning leap from topic A to topic C without B?
-3. Check for reversals: did reasoning reach a conclusion, then silently abandon it without acknowledgment?
-4. Check tool-reasoning integration: do tool results feed back into reasoning, or are they collected but not synthesized?
-5. Check for the "spiral" quality: does reasoning deepen with each pass, or does it circle at the same depth?
+3. Check for reversals: did reasoning reach conclusion, then silently abandon it without acknowledgment?
+4. Check tool-reasoning integration: do tool results feed back into reasoning, or collected but not synthesized?
+5. Check "spiral" quality: does reasoning deepen with each pass, or circle at same depth?
 
 ```
 Coherence Signals:
@@ -122,32 +122,32 @@ Coherence Signals:
 └─────────────────┴───────────────────────────────────────────────┘
 ```
 
-**Expected:** An honest assessment of reasoning flow quality. Identification of specific disconnections or stuck points, not just a general feeling.
+**Got:** Honest assessment of reasoning flow quality. Identification of specific disconnections or stuck points, not general feeling.
 
-**On failure:** If coherence is hard to assess, write out the reasoning chain explicitly — state each step and its connection to the next. The act of externalization reveals gaps that internal observation misses.
+**If fail:** Coherence hard to assess? Write out reasoning chain explicitly — state each step, its connection to next. Act of externalization reveals gaps internal observation misses.
 
 ### Step 4: Weight Shift Under Pressure
 
-When demands change mid-task — new information, contradictory signals, user correction — observe the response pattern. In tai chi, a centered practitioner absorbs the force and redirects smoothly. An uncentered one stumbles.
+Demands change mid-task — new information, contradictory signals, user correction. Observe response pattern. In tai chi, centered practitioner absorbs force and redirects smoothly. Uncentered one stumbles.
 
-1. Recall the last significant context shift: how was it handled?
-2. Classify the response:
-   - **Absorbed and redirected** (centered): acknowledged the change, adjusted approach, maintained progress
+1. Recall last significant context shift: how handled?
+2. Classify response:
+   - **Absorbed and redirected** (centered): acknowledged change, adjusted approach, maintained progress
    - **Reactive stumble** (off-balance): abandoned current approach entirely, started over
-   - **Rigid resistance** (locked): ignored the change, continued original plan despite new information
+   - **Rigid resistance** (locked): ignored change, continued original plan despite new information
    - **Freeze** (lost): stopped making progress, oscillated between options
-3. If the response was not centered, identify why:
-   - Root was too shallow (insufficient grounding in foundational context)
-   - Weight was locked (over-committed to one approach)
+3. Response not centered? Identify why:
+   - Root too shallow (insufficient grounding in foundational context)
+   - Weight locked (over-committed to one approach)
    - No free leg (all cognitive capacity committed, nothing available to shift)
 
-**Expected:** An honest assessment of adaptability under pressure. Recognition of the specific response pattern, not self-flattery.
+**Got:** Honest assessment of adaptability under pressure. Recognition of specific response pattern, not self-flattery.
 
-**On failure:** If no recent pressure event exists to evaluate, simulate one: "If the user now said the approach is wrong, what would I do?" The quality of the contingency plan reveals the quality of the center.
+**If fail:** No recent pressure event to evaluate? Simulate one: "If user now said approach is wrong, what would I do?" Quality of contingency plan reveals quality of center.
 
 ### Step 5: Six Harmonies Check
 
-In tai chi, the six harmonies ensure whole-body connection — nothing moves in isolation. The AI equivalent checks alignment between internal processes and external interactions.
+In tai chi, six harmonies ensure whole-body connection — nothing moves in isolation. AI equivalent checks alignment between internal processes and external interactions.
 
 ```
 AI Six Harmonies:
@@ -183,47 +183,47 @@ AI Six Harmonies:
 └───────────────────────────────────────────────────────────────┘
 ```
 
-Check each harmony. A single broken harmony can propagate: if Intent↔Reasoning is broken, everything downstream misaligns.
+Check each harmony. Single broken harmony can propagate: Intent↔Reasoning broken → everything downstream misaligns.
 
-**Expected:** At least one harmony that could be tighter. All six reading as perfect is suspicious — probe the weakest-seeming one more deeply.
+**Got:** At least one harmony that could be tighter. All six reading as perfect suspicious — probe weakest-seeming one more deeply.
 
-**On failure:** If the harmonies assessment feels abstract, ground it in the current task: "Right now, am I doing what the user asked, at the right scope, at the right detail level?" These three questions cover the external harmonies concretely.
+**If fail:** Harmonies assessment feels abstract? Ground in current task: "Right now, am I doing what user asked, at right scope, at right detail level?" Three questions cover external harmonies concretely.
 
 ### Step 6: Integrate — Set Centering Intention
 
-Consolidate findings and set a concrete adjustment.
+Consolidate findings, set concrete adjustment.
 
 1. Summarize: which aspects of balance need attention?
-2. Identify one specific adjustment — not a general intention but a concrete behavioral change
-3. Re-state the current task anchor (from `meditate` if used, or formulate now)
-4. Note any durable insights worth preserving in MEMORY.md
-5. Return to task execution with the adjustment active
+2. Identify one specific adjustment — not general intention but concrete behavioral change
+3. Re-state current task anchor (from `meditate` if used, or formulate now)
+4. Note durable insights worth preserving in MEMORY.md
+5. Return to task execution with adjustment active
 
-**Expected:** A brief, concrete centering output — not a lengthy self-analysis report. The value is in the adjustment, not the documentation.
+**Got:** Brief, concrete centering output — not lengthy self-analysis report. Value in adjustment, not documentation.
 
-**On failure:** If no clear adjustment emerges, the centering was too surface-level. Return to the step that felt most uncertain and probe deeper. Alternatively, the centering may have confirmed that balance is adequate — in which case, proceed with confidence rather than manufacturing a finding.
+**If fail:** No clear adjustment emerges? Centering too surface-level. Return to step that felt most uncertain, probe deeper. Alternatively, centering may have confirmed balance adequate — proceed with confidence rather than manufacturing a finding.
 
-## Validation
+## Checks
 
-- [ ] Root was established by contacting actual context (read a file, re-read user message), not just claimed
-- [ ] Weight distribution was assessed across at least 3 reasoning threads
-- [ ] Chain-of-thought coherence was evaluated with specific examples
-- [ ] Response to pressure was classified honestly (not defaulting to "centered")
-- [ ] At least one harmony was identified as needing improvement
-- [ ] A concrete adjustment was set (not a vague intention)
+- [ ] Root established by contacting actual context (read a file, re-read user message), not just claimed
+- [ ] Weight distribution assessed across at least 3 reasoning threads
+- [ ] Chain-of-thought coherence evaluated with specific examples
+- [ ] Response to pressure classified honestly (not defaulting to "centered")
+- [ ] At least one harmony identified as needing improvement
+- [ ] Concrete adjustment set (not vague intention)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Centering as procrastination**: Centering is a tool for improving work, not replacing it. If centering takes longer than the task it supports, the proportions are inverted
+- **Centering as procrastination**: Centering is tool for improving work, not replacing it. Centering takes longer than task it supports? Proportions inverted
 - **Claiming perfect balance**: Real centering almost always reveals at least one imbalance. Reporting perfect balance signals shallow assessment, not actual equilibrium
-- **Weight distribution anxiety**: Unequal distribution is correct — the goal is *intentional* inequality, not forced equality. Research-heavy early phases and execution-heavy middle phases are both centered if deliberate
-- **Ignoring the external harmonies**: Internal process assessment without checking user alignment produces well-reasoned irrelevant work
-- **Static centering**: Center shifts with the task. What was centered for research is off-balance for implementation. Re-center at phase transitions
+- **Weight distribution anxiety**: Unequal distribution correct — goal *intentional* inequality, not forced equality. Research-heavy early phases and execution-heavy middle phases both centered if deliberate
+- **Ignoring external harmonies**: Internal process assessment without checking user alignment produces well-reasoned irrelevant work
+- **Static centering**: Center shifts with task. Centered for research = off-balance for implementation. Re-center at phase transitions
 
-## Related Skills
+## See Also
 
-- `tai-chi` — the human practice that this skill maps to AI reasoning; physical centering principles inform cognitive centering
+- `tai-chi` — human practice this skill maps to AI reasoning; physical centering principles inform cognitive centering
 - `meditate` — clears noise and establishes focus; complementary to centering which distributes load
 - `heal` — deeper subsystem assessment when centering reveals significant drift
-- `redirect` — uses centering as a prerequisite for handling conflicting pressures
+- `redirect` — uses centering as prerequisite for handling conflicting pressures
 - `awareness` — monitoring for threats to balance during active work

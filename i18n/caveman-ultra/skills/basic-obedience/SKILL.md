@@ -27,29 +27,29 @@ metadata:
 
 # Basic Obedience
 
-Teach foundation commands (sit, stay, come, heel, down) using positive reinforcement and marker training.
+Foundation cmds (sit, stay, come, heel, down) → positive reinforcement + marker training.
 
-## When to Use
+## Use When
 
-- A new puppy (8+ weeks) is ready for foundation training
-- An adult dog lacks reliable basic commands
-- A rescue or rehomed dog needs to learn the household's command vocabulary
-- Before advancing to more complex behaviors or off-leash work
-- When existing commands have degraded and need re-establishing
+- New puppy (8+ wks) ready for foundation
+- Adult dog no reliable basics
+- Rescue dog → learn household cmd vocab
+- Before complex behaviors or off-leash
+- Existing cmds degraded → re-establish
 
-## Inputs
+## In
 
-- **Required**: A dog (any breed, any age 8+ weeks)
-- **Required**: High-value treats (small, soft, quickly consumed)
-- **Optional**: Clicker or verbal marker word (e.g., "yes")
-- **Optional**: 6-foot leash and flat collar or harness
-- **Optional**: Quiet training space with minimal distractions (initially)
+- **Required**: Dog (any breed, 8+ wks)
+- **Required**: High-value treats (small, soft, quick)
+- **Optional**: Clicker or verbal marker ("yes")
+- **Optional**: 6-ft leash + flat collar/harness
+- **Optional**: Quiet space, min distractions (init)
 
-## Procedure
+## Do
 
-### Step 1: Establish the Marker
+### Step 1: Charge Marker
 
-The marker bridges the gap between the desired behavior and the reward.
+Marker bridges behavior → reward.
 
 ```
 Marker Training Protocol:
@@ -67,13 +67,13 @@ Late marking teaches the wrong behavior.
 Mark → then reach for the treat (not the reverse).
 ```
 
-**Expected:** The dog reliably orients toward the handler upon hearing the marker, expecting a reward.
+**→** Dog orients to handler on marker, expects reward.
 
-**On failure:** If the dog does not respond to the marker after 20 reps, the treat value is too low. Switch to higher-value rewards (cheese, chicken, liver). If the dog is too distracted to eat, the environment is too stimulating — move to a quieter space.
+**If err:** No response after 20 reps → treat value low. Higher-value (cheese, chicken, liver). Dog too distracted to eat → env too stimulating, quieter space.
 
-### Step 2: Teach the Five Foundation Commands
+### Step 2: Five Foundation Cmds
 
-Work on one command per session until reliable, then begin mixing.
+One cmd per session → reliable, then mix.
 
 ```
 Command Protocols:
@@ -115,11 +115,11 @@ HEEL:
 5. If the dog pulls ahead, stop walking. Resume when the leash is loose.
 ```
 
-**Expected:** Each command is performed reliably in a low-distraction environment with treats as motivation.
+**→** Each cmd reliable in low-distraction env w/ treats.
 
-**On failure:** If a command is not progressing after 3 sessions, break it into smaller steps. The dog may need an intermediate behavior (e.g., for "down," reward the head-lowering motion before requiring full elbows-on-ground).
+**If err:** Cmd no progress after 3 sessions → break into smaller steps. Intermediate behavior (e.g., "down" → reward head-lowering before full elbows-on-ground).
 
-### Step 3: Structure Training Sessions
+### Step 3: Session Structure
 
 ```
 Session Guidelines:
@@ -144,13 +144,13 @@ The 80/20 Rule:
 - 20% challenge keeps the dog engaged without frustrating
 ```
 
-**Expected:** Short, successful sessions that leave the dog wanting more.
+**→** Short, successful sessions. Dog wants more.
 
-**On failure:** If the dog disengages (sniffing, looking away, lying down), the session is too long, too hard, or the rewards are insufficiently motivating. End the session and reassess.
+**If err:** Dog disengages (sniff, look away, lie down) → session too long/hard or rewards weak. End, reassess.
 
-### Step 4: Distraction-Proof the Commands
+### Step 4: Distraction-Proof
 
-Once reliable in a quiet environment, systematically add distractions.
+Reliable quiet env → add distractions systematically.
 
 ```
 Distraction Ladder (work through sequentially):
@@ -170,28 +170,28 @@ At each new level:
 - If the dog fails 3 reps in a row, you moved up too fast — go back one level
 ```
 
-**Expected:** Commands work reliably in progressively more distracting environments.
+**→** Cmds reliable in progressively more distracting envs.
 
-**On failure:** If a specific distraction (other dogs, squirrels) consistently breaks training, that distraction needs separate counter-conditioning work (see `behavioral-modification`).
+**If err:** Specific distraction (other dogs, squirrels) consistently breaks training → needs separate counter-conditioning (see `behavioral-modification`).
 
-## Validation
+## Check
 
-- [ ] Marker is charged and the dog responds reliably
-- [ ] All five commands are performed in a low-distraction environment
-- [ ] Training sessions are 5-10 minutes, ending on success
-- [ ] Success rate is at or above 80% for each command
-- [ ] Commands are being generalized through the distraction ladder
-- [ ] The handler's timing (marker within 1 second) is consistent
+- [ ] Marker charged, dog responds reliably
+- [ ] All 5 cmds work in low-distraction env
+- [ ] Sessions 5-10 min, end on success
+- [ ] Success rate ≥80% per cmd
+- [ ] Cmds generalizing via distraction ladder
+- [ ] Handler timing (marker within 1s) consistent
 
-## Common Pitfalls
+## Traps
 
-- **Repeating the cue**: Saying "sit, sit, SIT" teaches the dog that the first "sit" is optional. Say it once and wait
-- **Treating too late**: The treat should follow the marker within 2-3 seconds. Late treating breaks the association
-- **Luring forever**: The hand motion with the treat (lure) should be faded within 10-20 reps. Otherwise the dog only responds when food is visible
-- **Punishing failed recalls**: Calling "come" and then scolding the dog (for being slow, for having something in its mouth) poisons the recall cue permanently
-- **Training too long**: A fatigued dog learns nothing. Quit while ahead
-- **Inconsistent cues**: All household members must use the same words and gestures for each command
+- **Repeat cue**: "sit, sit, SIT" → teaches first "sit" optional. Say once, wait
+- **Treat late**: Treat follows marker within 2-3s. Late → breaks assoc
+- **Lure forever**: Hand motion w/ treat fades in 10-20 reps. Else dog only responds when food visible
+- **Punish failed recall**: Call "come" then scold → poisons recall cue permanently
+- **Train too long**: Fatigued dog learns nothing. Quit ahead
+- **Inconsistent cues**: All household uses same words + gestures
 
-## Related Skills
+## →
 
-- `behavioral-modification` — for addressing unwanted behaviors that interfere with basic obedience
+- `behavioral-modification` — unwanted behaviors that interfere w/ basic obedience

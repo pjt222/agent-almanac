@@ -26,15 +26,15 @@ metadata:
 
 # Configure Nginx
 
-Set up Nginx as a web server and reverse proxy with SSL termination and security hardening.
+Set up Nginx as web server and reverse proxy with SSL termination, security hardening.
 
-## When to Use
+## When Use
 
 - Serving static files (HTML, CSS, JS) in production
 - Reverse proxying to backend services (Node.js, Python, Go, R/Shiny)
 - Terminating SSL/TLS with Let's Encrypt certificates
 - Load balancing across multiple backend instances
-- Adding rate limiting and security headers
+- Adding rate limiting, security headers
 
 ## Inputs
 
@@ -43,7 +43,7 @@ Set up Nginx as a web server and reverse proxy with SSL termination and security
 - **Optional**: Domain name for SSL
 - **Optional**: Static file directory
 
-## Procedure
+## Steps
 
 ### Step 1: Basic Reverse Proxy
 
@@ -89,7 +89,7 @@ services:
       - app
 ```
 
-**Expected:** Requests to port 80 are forwarded to the app service.
+**Got:** Requests to port 80 forwarded to app service.
 
 ### Step 2: Static File Serving
 
@@ -117,7 +117,7 @@ server {
 
 ### Step 3: SSL/TLS with Let's Encrypt
 
-Using certbot with the webroot method:
+Using certbot with webroot method:
 
 ```nginx
 server {
@@ -187,9 +187,9 @@ docker compose run --rm certbot certonly \
   -d example.com --email admin@example.com --agree-tos
 ```
 
-**Expected:** HTTPS works with valid Let's Encrypt certificate.
+**Got:** HTTPS works with valid Let's Encrypt certificate.
 
-**On failure:** Check DNS points to the server. Verify port 80 is open for ACME challenges.
+**If fail:** Check DNS points to server. Verify port 80 open for ACME challenges.
 
 ### Step 4: Security Headers
 
@@ -262,26 +262,26 @@ docker compose exec nginx nginx -s reload
 curl -I https://example.com
 ```
 
-**Expected:** `nginx -t` reports syntax OK. Headers include security headers.
+**Got:** `nginx -t` reports syntax OK. Headers include security headers.
 
-## Validation
+## Checks
 
-- [ ] `nginx -t` reports configuration is valid
+- [ ] `nginx -t` reports configuration valid
 - [ ] HTTP redirects to HTTPS (if SSL enabled)
-- [ ] Backend service is reachable through the proxy
+- [ ] Backend service reachable through proxy
 - [ ] Security headers present in response
 - [ ] Rate limiting triggers on excessive requests
 - [ ] SSL Labs test gives A+ rating (if public)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing `proxy_set_header Host`**: Backend receives wrong host header, breaking virtual hosts and redirects.
-- **`location` order matters**: Nginx uses the most specific match. Exact (`=`) > prefix (`^~`) > regex (`~`) > general prefix.
-- **SSL certificate renewal**: Set up a cron or timer to run `certbot renew` and reload Nginx.
+- **`location` order matters**: Nginx uses most specific match. Exact (`=`) > prefix (`^~`) > regex (`~`) > general prefix.
+- **SSL certificate renewal**: Set up cron or timer to run `certbot renew`, reload Nginx.
 - **Large request bodies**: Default `client_max_body_size` is 1MB. Increase for file uploads: `client_max_body_size 50m;`.
-- **WebSocket proxying**: Requires additional headers. See `configure-reverse-proxy` for the pattern.
+- **WebSocket proxying**: Requires additional headers. See `configure-reverse-proxy` for pattern.
 
-## Related Skills
+## See Also
 
 - `configure-reverse-proxy` - multi-tool proxy patterns including WebSocket and Traefik
 - `setup-compose-stack` - compose stack that includes Nginx

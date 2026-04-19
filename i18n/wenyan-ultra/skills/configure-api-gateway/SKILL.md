@@ -23,39 +23,39 @@ metadata:
   tags: api-gateway, kong, traefik, rate-limiting, authentication, routing, middleware
 ---
 
-# Configure API Gateway
+# 配 API 閘
 
-Deploy and configure an API gateway for centralized API traffic management and policy enforcement.
+部且配 API 閘以集中管流與策執。
 
-## When to Use
+## 用
 
-- Multiple backend services need unified API endpoint with consistent policies
-- Require centralized authentication/authorization for API access
-- Need rate limiting and quota management across APIs
-- Want to transform requests/responses without modifying backend services
-- Implementing API versioning and deprecation strategies
-- Need detailed API analytics and monitoring
-- Require service discovery and load balancing for microservices
+- 多後端須統 API 端與一策
+- 須集中 API 存取之鑑授
+- 諸 API 須限率與配額管
+- 欲變求/響而不改後端
+- 施 API 版管與廢策
+- 須詳 API 析與監
+- 須服發現與微服負載平衡
 
-## Inputs
+## 入
 
-- **Required**: Kubernetes cluster or Docker environment
-- **Required**: Choice of API gateway (Kong or Traefik)
-- **Required**: Backend service endpoints to proxy
-- **Optional**: Authentication provider (OAuth2, OIDC, API keys)
-- **Optional**: Rate limiting requirements (requests per minute/hour)
-- **Optional**: Custom middleware or plugin configurations
-- **Optional**: TLS certificates for HTTPS endpoints
+- **必**：Kubernetes 群或 Docker 境
+- **必**：閘擇（Kong 或 Traefik）
+- **必**：所代後端服端
+- **可**：鑑供（OAuth2、OIDC、API key）
+- **可**：限率求（每分/時）
+- **可**：自定中間件或 plugin 配
+- **可**：HTTPS 之 TLS 證
 
-## Procedure
+## 行
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 見 [Extended Examples](references/EXAMPLES.md) 以全配檔與模。
 
-### Step 1: Install API Gateway
+### 一：裝 API 閘
 
-Deploy the API gateway with database (Kong) or file-based config (Traefik).
+部閘與庫（Kong）或檔配（Traefik）。
 
-**For Kong with PostgreSQL:**
+**Kong 加 PostgreSQL：**
 ```yaml
 # kong-deployment.yaml (excerpt - see EXAMPLES.md for complete file)
 apiVersion: v1
@@ -73,7 +73,7 @@ spec:
   # ... (PostgreSQL, migrations, services - see EXAMPLES.md)
 ```
 
-**For Traefik:**
+**Traefik：**
 ```yaml
 # traefik-deployment.yaml (excerpt - see EXAMPLES.md for complete file)
 apiVersion: v1
@@ -91,28 +91,28 @@ spec:
   # ... (RBAC, ConfigMap, services - see EXAMPLES.md)
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-1-install-api-gateway) for the complete deployment manifests
+見 [EXAMPLES.md](references/EXAMPLES.md#step-1-install-api-gateway) 以全部 manifest
 
-Deploy:
+部：
 ```bash
 kubectl apply -f kong-deployment.yaml  # OR traefik-deployment.yaml
 kubectl wait --for=condition=ready pod -l app=kong -n kong --timeout=300s
 kubectl get svc -n kong kong-proxy  # Get load balancer IP
 ```
 
-**Expected:** Gateway pods running with 2 replicas. Load balancer service has external IP assigned. Admin API accessible (Kong: port 8001, Traefik: dashboard port 8080). Health checks passing.
+**得：** 閘 pod 行 2 replica。負載平衡服有外 IP。管 API 可達（Kong: 8001、Traefik: 8080）。健察過。
 
-**On failure:**
-- Check pod logs: `kubectl logs -n kong -l app=kong`
-- Verify database connection (Kong): `kubectl logs -n kong kong-migrations-<hash>`
-- Check service account permissions (Traefik): `kubectl get clusterrolebinding traefik -o yaml`
-- Ensure ports not already bound: `kubectl get svc --all-namespaces | grep 8000`
+**敗：**
+- 察 pod 日誌：`kubectl logs -n kong -l app=kong`
+- 驗庫連（Kong）：`kubectl logs -n kong kong-migrations-<hash>`
+- 察服帳權（Traefik）：`kubectl get clusterrolebinding traefik -o yaml`
+- 確埠未佔：`kubectl get svc --all-namespaces | grep 8000`
 
-### Step 2: Configure Backend Services and Routes
+### 二：配後端服與路
 
-Define upstream services and create routes to expose APIs.
+定上游服，建路以露 API。
 
-**For Kong (using decK for declarative config):**
+**Kong（用 decK 宣式配）：**
 ```bash
 # Install decK CLI
 curl -sL https://github.com/Kong/deck/releases/download/v1.28.0/deck_1.28.0_linux_amd64.tar.gz | tar -xz
@@ -124,7 +124,7 @@ deck sync --kong-addr http://localhost:8001 -s kong.yaml
 curl -i http://localhost:8001/routes  # Verify routes
 ```
 
-**For Traefik (using IngressRoute CRD):**
+**Traefik（用 IngressRoute CRD）：**
 ```yaml
 # traefik-routes.yaml (excerpt)
 apiVersion: traefik.io/v1alpha1
@@ -138,27 +138,27 @@ spec:
     # ... (see EXAMPLES.md for full configuration)
 ```
 
-Apply routes:
+施路：
 ```bash
 kubectl apply -f traefik-routes.yaml
 curl -H "Host: api.example.com" https://GATEWAY_IP/api/users
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-2-configure-backend-services-and-routes) for complete routing configurations
+見 [EXAMPLES.md](references/EXAMPLES.md#step-2-configure-backend-services-and-routes) 以全路配
 
-**Expected:** Routes correctly proxy traffic to backend services. Weighted routing distributes traffic according to configuration. Health checks monitor backend service health.
+**得：** 路正代流至後端。權重路按配分。健察監後端狀。
 
-**On failure:**
-- Verify backend services running: `kubectl get svc -n default`
-- Check DNS resolution: `kubectl run test --rm -it --image=busybox -- nslookup user-service.default.svc.cluster.local`
-- Review gateway logs: `kubectl logs -n kong -l app=kong --tail=50`
-- Validate configuration: `deck validate -s kong.yaml`
+**敗：**
+- 驗後端服行：`kubectl get svc -n default`
+- 察 DNS：`kubectl run test --rm -it --image=busybox -- nslookup user-service.default.svc.cluster.local`
+- 審閘日誌：`kubectl logs -n kong -l app=kong --tail=50`
+- 驗配：`deck validate -s kong.yaml`
 
-### Step 3: Implement Authentication and Authorization
+### 三：施鑑與授
 
-Configure authentication plugins/middleware for API security.
+配鑑 plugin/中間件於 API 安。
 
-**For Kong (API Key and JWT authentication):**
+**Kong（API key 與 JWT 鑑）：**
 ```yaml
 # kong-auth-config.yaml (excerpt)
 consumers:
@@ -180,7 +180,7 @@ deck sync --kong-addr http://localhost:8001 -s kong-auth-config.yaml
 curl -i -H "apikey: mobile-secret-key-123" http://GATEWAY_IP/api/users
 ```
 
-**For Traefik (BasicAuth and ForwardAuth middleware):**
+**Traefik（BasicAuth 與 ForwardAuth 中間件）：**
 ```yaml
 # traefik-auth-middleware.yaml (excerpt)
 apiVersion: traefik.io/v1alpha1
@@ -199,21 +199,21 @@ kubectl apply -f traefik-auth-middleware.yaml
 curl -u user1:password https://GATEWAY_IP/api/protected
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-3-implement-authentication-and-authorization) for complete authentication configurations
+見 [EXAMPLES.md](references/EXAMPLES.md#step-3-implement-authentication-and-authorization) 以全鑑配
 
-**Expected:** Unauthenticated requests return 401. Valid credentials allow access. Rate limiting returns 429 after threshold. JWT tokens validate correctly. ACL enforces group permissions.
+**得：** 未鑑求返 401。有效憑得入。限率達閾返 429。JWT 正驗。ACL 執組權。
 
-**On failure:**
-- Verify consumer creation: `curl http://localhost:8001/consumers`
-- Check plugin enabled: `curl http://localhost:8001/plugins | jq .`
-- Test with verbose: `curl -v` to see response headers
-- Validate JWT: use jwt.io to decode token
+**敗：**
+- 驗 consumer 建：`curl http://localhost:8001/consumers`
+- 察 plugin 啟：`curl http://localhost:8001/plugins | jq .`
+- 詳測：`curl -v` 察響頭
+- 驗 JWT：jwt.io 解碼
 
-### Step 4: Configure Request/Response Transformation
+### 四：配求/響變換
 
-Add middleware to transform requests and responses.
+加中間件變換求與響。
 
-**For Kong:**
+**Kong：**
 ```yaml
 # kong-transformations.yaml (excerpt)
 plugins:
@@ -232,7 +232,7 @@ plugins:
 deck sync --kong-addr http://localhost:8001 -s kong-transformations.yaml
 ```
 
-**For Traefik:**
+**Traefik：**
 ```yaml
 # traefik-transformations.yaml (excerpt)
 apiVersion: traefik.io/v1alpha1
@@ -251,21 +251,21 @@ kubectl apply -f traefik-transformations.yaml
 curl -v https://GATEWAY_IP/api/users | grep X-Gateway
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-4-configure-requestresponse-transformation) for complete transformation configurations
+見 [EXAMPLES.md](references/EXAMPLES.md#step-4-configure-requestresponse-transformation) 以全變換配
 
-**Expected:** Request headers added/removed as configured. Response headers include gateway metadata. Large requests rejected with 413. Circuit breaker trips on repeated failures. Retries occur for transient errors.
+**得：** 求頭按配加/除。響頭含閘元。大求以 413 拒。屢敗觸斷路。瞬錯重試。
 
-**On failure:**
-- Verify middleware order in chain
-- Check for header conflicts with backend services
-- Test transformations individually before chaining
-- Review logs for transformation errors
+**敗：**
+- 驗鏈中中間件序
+- 察與後端之頭衝突
+- 先獨測變換再鏈
+- 察日誌尋變換錯
 
-### Step 5: Enable Monitoring and Analytics
+### 五：啟監與析
 
-Configure metrics, logging, and dashboards for API visibility.
+配度、日、板以 API 可見。
 
-**Kong monitoring setup:**
+**Kong 監設：**
 ```yaml
 # kong-monitoring.yaml (excerpt)
 plugins:
@@ -285,7 +285,7 @@ kubectl apply -f kong-servicemonitor.yaml
 curl http://localhost:8100/metrics
 ```
 
-**Traefik monitoring (built-in):**
+**Traefik 監（內建）：**
 ```yaml
 # ServiceMonitor (excerpt - see EXAMPLES.md for Grafana dashboard)
 apiVersion: monitoring.coreos.com/v1
@@ -304,21 +304,21 @@ kubectl port-forward -n traefik svc/traefik-dashboard 8080:8080
 # Open http://localhost:8080/dashboard/
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-5-enable-monitoring-and-analytics) for complete monitoring configurations
+見 [EXAMPLES.md](references/EXAMPLES.md#step-5-enable-monitoring-and-analytics) 以全監配
 
-**Expected:** Prometheus scraping gateway metrics successfully. Dashboards show request rates, latency percentiles, error rates. Logs forwarding to aggregation system. Metrics segmented by service, route, and consumer.
+**得：** Prometheus 成刮閘度。板示求率、延百分位、錯率。日前至聚系。度按服、路、consumer 分。
 
-**On failure:**
-- Verify ServiceMonitor: `kubectl get servicemonitor -A`
-- Check Prometheus targets in UI
-- Ensure metrics port accessible: `kubectl port-forward -n kong svc/kong-metrics 8100:8100`
-- Validate log endpoint reachability
+**敗：**
+- 驗 ServiceMonitor：`kubectl get servicemonitor -A`
+- 於 Prometheus UI 察目標
+- 確度埠可達：`kubectl port-forward -n kong svc/kong-metrics 8100:8100`
+- 驗日端可達
 
-### Step 6: Implement API Versioning and Deprecation
+### 六：施 API 版與廢
 
-Configure version management and graceful API deprecation.
+配版管與優雅廢。
 
-**Kong versioning strategy:**
+**Kong 版策：**
 ```yaml
 # kong-versioning.yaml (excerpt)
 services:
@@ -337,7 +337,7 @@ services:
 # ... (see EXAMPLES.md for v2, default routing, rate limits)
 ```
 
-**Traefik versioning:**
+**Traefik 版：**
 ```yaml
 # traefik-versioning.yaml (excerpt)
 apiVersion: traefik.io/v1alpha1
@@ -351,65 +351,65 @@ spec:
 # ... (see EXAMPLES.md for complete IngressRoutes)
 ```
 
-Test versioning:
+測版：
 ```bash
 curl -i https://api.example.com/api/v1/users  # Deprecated
 curl -i https://api.example.com/api/v2/users  # Current
 curl -i https://api.example.com/api/users     # Routes to v2
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-deprecation) for complete versioning configurations
+見 [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-deprecation) 以全版配
 
-**Expected:** Different versions route to appropriate backend services. Deprecation headers present on v1 responses. Rate limits stricter for deprecated versions. Default path routes to latest version. Metrics segmented by API version.
+**得：** 異版路至宜後端。廢頭現於 v1 響。限率於廢版更嚴。默路至最新。度按版分。
 
-**On failure:**
-- Verify path precedence/priority configuration (higher priority = evaluated first)
-- Check for overlapping path patterns
-- Test each version route independently
-- Review routing logs for path matching
-- Ensure backend services for each version are running
+**敗：**
+- 驗路先後（高先評）
+- 察重疊路模式
+- 各版路獨測
+- 察路日誌察路匹
+- 確諸版後端在行
 
-## Validation
+## 驗
 
-- [ ] API gateway pods running with multiple replicas for HA
-- [ ] Load balancer service has external IP assigned
-- [ ] Routes correctly proxy traffic to backend services
-- [ ] Authentication/authorization enforcing access control (401/403 responses)
-- [ ] Rate limiting returns 429 after exceeding quotas
-- [ ] Request/response transformation adding/removing headers correctly
-- [ ] Circuit breaker trips on repeated backend failures
-- [ ] Metrics exposed and scraped by Prometheus
-- [ ] Dashboards showing request rates, latency, errors
-- [ ] API versioning routing requests to correct backend versions
-- [ ] Deprecation headers present on older API versions
-- [ ] Health checks monitoring backend service availability
+- [ ] 閘 pod 行多 replica 為高可用
+- [ ] 負載平衡服有外 IP
+- [ ] 路正代流至後端
+- [ ] 鑑授執控（401/403 響）
+- [ ] 限率超配額返 429
+- [ ] 求/響變換正加/除頭
+- [ ] 屢後端敗觸斷路
+- [ ] 度露且 Prometheus 刮
+- [ ] 板示求率、延、錯
+- [ ] API 版路至正後端版
+- [ ] 廢頭現於舊 API 版
+- [ ] 健察監後端可用
 
-## Common Pitfalls
+## 忌
 
-- **Database Dependency (Kong)**: Kong with database requires PostgreSQL/Cassandra. DB-less mode available but limits some features (runtime config changes). Use DB mode for production with multiple gateway instances.
+- **庫依（Kong）**：Kong 含庫須 PostgreSQL/Cassandra。無庫模可，然限部分功能（運時配變）。生產多閘須庫模。
 
-- **Path Matching Order**: Routes/IngressRoutes evaluated in specific order. More specific paths should have higher priority. Overlapping paths cause unpredictable routing. Test with `curl -v` to verify actual route hit.
+- **路匹序**：路/IngressRoute 按特序評。具體路須高優。重疊路致不可料路由。`curl -v` 驗實路。
 
-- **Authentication Bypass**: Ensure authentication plugins applied to all routes. Easy to add route without auth. Use default plugins at service level, then override per-route as needed.
+- **鑑繞過**：確鑑 plugin 施於諸路。易添路而無鑑。用服級默 plugin，再每路覆。
 
-- **Rate Limit Scope**: Rate limiting `policy: local` counts per gateway pod. For consistent limits across replicas, use centralized policy (Redis) or sticky sessions.
+- **限率範**：`policy: local` 每閘 pod 計。跨 replica 一致→用集中策（Redis）或粘會話。
 
-- **CORS Configuration**: API gateway should handle CORS, not individual services. Add CORS plugin/middleware early to avoid browser preflight failures.
+- **CORS 配**：閘宜處 CORS，非個服。早加 CORS plugin/中間件以免瀏覽器預檢敗。
 
-- **SSL/TLS Termination**: Gateway typically terminates SSL. Ensure certificates valid and auto-renewal configured. Use cert-manager for Kubernetes certificate management.
+- **SSL/TLS 終**：閘常終 SSL。確證有效且自動更新。K8s 用 cert-manager 管證。
 
-- **Upstream Health Checks**: Configure active health checks to detect backend failures quickly. Passive checks rely on real traffic and may be slower to detect issues.
+- **上游健察**：配主動察以速偵後端敗。被動察依實流→或慢察。
 
-- **Plugin/Middleware Execution Order**: Order matters. Authentication before rate limiting (avoid wasted rate limit slots for invalid requests). Transformation before logging (log transformed values).
+- **Plugin/中間件行序**：序要。鑑先於限率（免無效求耗限率位）。變換先於日誌（記變換值）。
 
-- **Resource Limits**: Gateway pods can consume significant CPU under load. Set appropriate resource requests/limits. Monitor CPU throttling in production.
+- **資源限**：閘 pod 於壓下耗 CPU 多。設宜之 request/limit。生產察 CPU 節流。
 
-- **Migration Strategy**: Don't enable all plugins at once. Roll out incrementally: routing → authentication → rate limiting → transformations → advanced features.
+- **遷策**：勿一時啟諸 plugin。漸施：路→鑑→限率→變換→進階。
 
-## Related Skills
+## 參
 
-- `configure-ingress-networking` - Ingress controller setup complements API gateway
-- `setup-service-mesh` - Service mesh provides complementary east-west traffic management
-- `manage-kubernetes-secrets` - Certificate and credential management for gateway
-- `setup-prometheus-monitoring` - Monitoring integration for gateway metrics
-- `enforce-policy-as-code` - Policy enforcement that complements gateway authorization
+- `configure-ingress-networking` - Ingress 控器設補 API 閘
+- `setup-service-mesh` - 服網供補東西流管
+- `manage-kubernetes-secrets` - 閘證與憑管
+- `setup-prometheus-monitoring` - 閘度監整
+- `enforce-policy-as-code` - 策執補閘授

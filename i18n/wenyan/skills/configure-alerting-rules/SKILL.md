@@ -23,37 +23,37 @@ metadata:
   tags: alertmanager, alerting, routing, pagerduty, slack
 ---
 
-# Configure Alerting Rules
+# 設警之則
 
-Set up Prometheus alerting rules and Alertmanager for reliable, actionable incident notifications.
+設 Prometheus 之警則與 Alertmanager 為可信可行之事告。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 見 [Extended Examples](references/EXAMPLES.md) 以全設檔與範。
 
-## When to Use
+## 用時
 
-- Implementing proactive monitoring with automated incident detection
-- Routing alerts to appropriate teams based on severity and service ownership
-- Reducing alert fatigue through intelligent grouping and deduplication
-- Integrating monitoring with on-call systems (PagerDuty, Opsgenie)
-- Establishing escalation policies for critical production issues
-- Migrating from legacy monitoring systems to Prometheus-based alerting
-- Creating actionable alerts that guide responders to resolution
+- 施自動察事之主動監
+- 依重與服主路警於合團
+- 以智聚與去重減警疲
+- 合監於值班系（PagerDuty、Opsgenie）
+- 立升策於產之危問
+- 自舊監遷於 Prometheus 之警
+- 建可行之警導應者至解
 
-## Inputs
+## 入
 
-- **Required**: Prometheus metrics to alert on (error rates, latency, saturation)
-- **Required**: On-call rotation and escalation policies
-- **Optional**: Existing alert definitions to migrate
-- **Optional**: Notification channels (Slack, email, PagerDuty)
-- **Optional**: Runbook documentation for common alerts
+- **必**：可警之 Prometheus 量（誤率、遲、飽）
+- **必**：值班輪與升之策
+- **可選**：現存警定以遷
+- **可選**：告管（Slack、郵、PagerDuty）
+- **可選**：常警之行冊
 
-## Procedure
+## 法
 
-### Step 1: Deploy Alertmanager
+### 第一步：部 Alertmanager
 
-Install and configure Alertmanager to receive alerts from Prometheus.
+裝設 Alertmanager 以受 Prometheus 之警。
 
-**Docker Compose deployment** (basic structure):
+**Docker Compose 部**（基構）：
 
 ```yaml
 version: '3.8'
@@ -67,7 +67,7 @@ services:
     # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Basic Alertmanager configuration** (`alertmanager.yml` excerpt):
+**基 Alertmanager 設**（`alertmanager.yml` 摘）：
 
 ```yaml
 global:
@@ -89,7 +89,7 @@ route:
 # ... (see EXAMPLES.md for complete routing, inhibition rules, and receivers)
 ```
 
-**Configure Prometheus to use Alertmanager** (`prometheus.yml`):
+**設 Prometheus 用 Alertmanager**（`prometheus.yml`）：
 
 ```yaml
 alerting:
@@ -101,19 +101,19 @@ alerting:
       api_version: v2
 ```
 
-**Expected:** Alertmanager UI accessible at `http://localhost:9093`, Prometheus "Status > Alertmanagers" shows UP status.
+**得：** Alertmanager UI 於 `http://localhost:9093` 可訪，Prometheus「Status > Alertmanagers」示 UP。
 
-**On failure:**
-- Check Alertmanager logs: `docker logs alertmanager`
-- Verify Prometheus can reach Alertmanager: `curl http://alertmanager:9093/api/v2/status`
-- Test webhook URLs: `curl -X POST <SLACK_WEBHOOK_URL> -d '{"text":"test"}'`
-- Validate YAML syntax: `amtool check-config alertmanager.yml`
+**敗則：**
+- 察 Alertmanager 誌：`docker logs alertmanager`
+- 驗 Prometheus 可達 Alertmanager：`curl http://alertmanager:9093/api/v2/status`
+- 試 webhook URL：`curl -X POST <SLACK_WEBHOOK_URL> -d '{"text":"test"}'`
+- 驗 YAML 法：`amtool check-config alertmanager.yml`
 
-### Step 2: Define Alerting Rules in Prometheus
+### 第二步：定警之則於 Prometheus
 
-Create alerting rules that fire when conditions are met.
+建警則，條件滿則發。
 
-**Create alerting rules file** (`/etc/prometheus/rules/alerts.yml` excerpt):
+**建警則檔**（`/etc/prometheus/rules/alerts.yml` 摘）：
 
 ```yaml
 groups:
@@ -141,15 +141,15 @@ groups:
           # ... (see EXAMPLES.md for complete alerts)
 ```
 
-**Alert design best practices**:
+**警設之善實**：
 
-- **`for` duration**: Prevents flapping alerts. Use 5-10 minutes for most alerts.
-- **Descriptive annotations**: Include current value, affected resource, and runbook link.
-- **Severity levels**: critical (pages on-call), warning (investigate), info (FYI)
-- **Team labels**: Enable routing to correct team/channel
-- **Runbook links**: Every alert should have a runbook URL
+- **`for` 之時**：防警抖。多數警用五至十分。
+- **描註**：含當值、受影資、行冊鏈。
+- **重級**：critical（呼值班）、warning（察）、info（悉）
+- **團標**：令路至正團/道
+- **行冊鏈**：每警必有行冊 URL
 
-Load rules into Prometheus:
+載則於 Prometheus：
 
 ```yaml
 # prometheus.yml
@@ -157,26 +157,26 @@ rule_files:
   - "rules/*.yml"
 ```
 
-Validate and reload:
+驗而重載：
 
 ```bash
 promtool check rules /etc/prometheus/rules/alerts.yml
 curl -X POST http://localhost:9090/-/reload
 ```
 
-**Expected:** Alerts visible in Prometheus "Alerts" page, alerts fire when thresholds exceeded, Alertmanager receives fired alerts.
+**得：** 警見於 Prometheus 之「Alerts」頁，越閾時發，Alertmanager 受之。
 
-**On failure:**
-- Check Prometheus logs for rule evaluation errors
-- Verify rule syntax with `promtool check rules`
-- Test alert queries independently in Prometheus UI
-- Inspect alert state transitions: Inactive → Pending → Firing
+**敗則：**
+- 察 Prometheus 誌之則評誤
+- 以 `promtool check rules` 驗則法
+- 獨試警查於 Prometheus UI
+- 察警態遷：Inactive → Pending → Firing
 
-### Step 3: Create Notification Templates
+### 第三步：建告範
 
-Design readable, actionable notification messages.
+設可讀可行之告訊。
 
-**Create template file** (`/etc/alertmanager/templates/default.tmpl` excerpt):
+**建範檔**（`/etc/alertmanager/templates/default.tmpl` 摘）：
 
 ```gotmpl
 {{ define "slack.default.title" }}
@@ -195,7 +195,7 @@ Design readable, actionable notification messages.
 # ... (see EXAMPLES.md for complete email and PagerDuty templates)
 ```
 
-**Use templates in receivers**:
+**於受者用範**：
 
 ```yaml
 receivers:
@@ -206,18 +206,18 @@ receivers:
         text: '{{ template "slack.default.text" . }}'
 ```
 
-**Expected:** Notifications formatted consistently, include all relevant context, actionable with runbook links.
+**得：** 告一式，含相關境，附行冊鏈以可行。
 
-**On failure:**
-- Test template rendering: `amtool template test --config.file=alertmanager.yml`
-- Check template syntax errors in Alertmanager logs
-- Use `{{ . | json }}` to debug template data structure
+**敗則：**
+- 試範渲：`amtool template test --config.file=alertmanager.yml`
+- 察 Alertmanager 誌之範法誤
+- 用 `{{ . | json }}` 以調範資之構
 
-### Step 4: Configure Routing and Grouping
+### 第四步：設路與聚
 
-Optimize alert delivery with intelligent routing rules.
+以智路則優送警。
 
-**Advanced routing configuration** (excerpt):
+**進路設**（摘）：
 
 ```yaml
 route:
@@ -240,7 +240,7 @@ route:
 # ... (see EXAMPLES.md for complete routing with time intervals)
 ```
 
-**Grouping strategies**:
+**聚之策**：
 
 ```yaml
 # Group by alertname: All HighCPU alerts bundled together
@@ -250,18 +250,18 @@ group_by: ['alertname']
 group_by: ['alertname', 'cluster']
 ```
 
-**Expected:** Alerts routed to correct teams, grouped logically, timing appropriate for severity.
+**得：** 警路至正團，聚理合，時合於重。
 
-**On failure:**
-- Test routing: `amtool config routes test --config.file=alertmanager.yml --alertname=HighCPU --label=severity=critical`
-- Check routing tree: `amtool config routes show --config.file=alertmanager.yml`
-- Verify `continue: true` if alert should match multiple routes
+**敗則：**
+- 試路：`amtool config routes test --config.file=alertmanager.yml --alertname=HighCPU --label=severity=critical`
+- 察路樹：`amtool config routes show --config.file=alertmanager.yml`
+- 若警應配多路驗 `continue: true`
 
-### Step 5: Implement Inhibition and Silencing
+### 第五步：施抑與默
 
-Reduce alert noise with inhibition rules and temporary silences.
+以抑則與暫默減警噪。
 
-**Inhibition rules** (suppress dependent alerts):
+**抑則**（壓依警）：
 
 ```yaml
 inhibit_rules:
@@ -283,7 +283,7 @@ inhibit_rules:
 # ... (see EXAMPLES.md for more inhibition patterns)
 ```
 
-**Create silences programmatically**:
+**以程建默**：
 
 ```bash
 # Silence during maintenance
@@ -298,18 +298,18 @@ amtool silence query
 amtool silence expire <SILENCE_ID>
 ```
 
-**Expected:** Inhibition reduces cascade alerts automatically, silences prevent notifications during planned maintenance.
+**得：** 抑自減連警，默於謀之養時防告。
 
-**On failure:**
-- Test inhibition logic with live alerts
-- Check Alertmanager UI "Silences" tab
-- Verify silence matchers are exact (labels must match perfectly)
+**敗則：**
+- 以活警試抑理
+- 察 Alertmanager UI 之「Silences」
+- 驗默配完全對（標必全配）
 
-### Step 6: Integrate with External Systems
+### 第六步：合外系
 
-Connect Alertmanager to PagerDuty, Opsgenie, Jira, etc.
+連 Alertmanager 於 PagerDuty、Opsgenie、Jira 等。
 
-**PagerDuty integration** (excerpt):
+**PagerDuty 合**（摘）：
 
 ```yaml
 receivers:
@@ -324,7 +324,7 @@ receivers:
         # ... (see EXAMPLES.md for complete integration examples)
 ```
 
-**Webhook for custom integrations**:
+**Webhook 為自定合**：
 
 ```yaml
 receivers:
@@ -334,41 +334,41 @@ receivers:
         send_resolved: true
 ```
 
-**Expected:** Alerts create incidents in PagerDuty, appear in team communication channels, trigger on-call escalations.
+**得：** 警於 PagerDuty 建事，現於團通道，發值班升。
 
-**On failure:**
-- Verify API keys/tokens are valid
-- Check network connectivity to external services
-- Test webhook endpoints independently with curl
-- Enable debug mode: `--log.level=debug`
+**敗則：**
+- 驗 API 符有效
+- 察於外服之網
+- 獨以 curl 試 webhook 端
+- 啟調：`--log.level=debug`
 
-## Validation
+## 驗
 
-- [ ] Alertmanager receives alerts from Prometheus successfully
-- [ ] Alerts routed to correct teams based on labels and severity
-- [ ] Notifications delivered to Slack, email, or PagerDuty
-- [ ] Alert grouping reduces notification volume appropriately
-- [ ] Inhibition rules suppress dependent alerts correctly
-- [ ] Silences prevent notifications during maintenance windows
-- [ ] Notification templates include runbook links and context
-- [ ] Repeat interval prevents alert fatigue for long-running issues
-- [ ] Resolved notifications sent when alerts clear
-- [ ] External integrations (PagerDuty, Opsgenie) create incidents
+- [ ] Alertmanager 自 Prometheus 成受警
+- [ ] 警依標與重路至正團
+- [ ] 告送至 Slack、郵、或 PagerDuty
+- [ ] 警聚合減告量
+- [ ] 抑則壓依警
+- [ ] 默防告於養窗
+- [ ] 告範含行冊鏈與境
+- [ ] 重複間防長問之疲
+- [ ] 警解時送解告
+- [ ] 外合（PagerDuty、Opsgenie）建事
 
-## Common Pitfalls
+## 陷
 
-- **Alert fatigue**: Too many low-priority alerts cause responders to ignore critical ones. Set strict thresholds, use inhibition.
-- **Missing `for` duration**: Alerts without `for` fire on transient spikes. Always use 5-10 minute windows.
-- **Overly broad grouping**: Grouping by `['...']` sends individual notifications. Use specific label grouping.
-- **No runbook links**: Alerts without runbooks leave responders guessing. Every alert needs a runbook URL.
-- **Incorrect severity**: Mislabeling warnings as critical desensitizes team. Reserve critical for emergencies.
-- **Forgotten silences**: Silences without expiration can hide real issues. Always set end times.
-- **Single route**: All alerts to one channel loses context. Use team-specific routing.
-- **No inhibition**: Cascade alerts during outages create noise. Implement inhibition rules.
+- **警疲**：低先警過多使應者忽危。設嚴閾、用抑。
+- **缺 `for` 之時**：無 `for` 之警於瞬峰發。必用五至十分之窗。
+- **聚過廣**：以 `['...']` 聚送獨告。用特標聚。
+- **無行冊鏈**：無行冊之警使應者茫。每警必有行冊 URL。
+- **重誤**：誤標警為危使團鈍感。危留於急。
+- **忘默**：無限之默可掩真問。必設止時。
+- **單路**：諸警至一道失境。用團特路。
+- **無抑**：事中連警生噪。施抑則。
 
-## Related Skills
+## 參
 
-- `setup-prometheus-monitoring` - Define metrics and recording rules that feed alerting rules
-- `define-slo-sli-sla` - Generate SLO burn rate alerts for error budget management
-- `write-incident-runbook` - Create runbooks linked from alert annotations
-- `build-grafana-dashboards` - Visualize alert firing history and silence patterns
+- `setup-prometheus-monitoring` - 定供警則之量與錄則
+- `define-slo-sli-sla` - 生 SLO 燃率警以治誤預
+- `write-incident-runbook` - 建警註所鏈之行冊
+- `build-grafana-dashboards` - 視警發史與默式

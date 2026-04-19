@@ -25,37 +25,37 @@ metadata:
   tags: geometry, construction, ruler-compass, euclidean, straightedge
 ---
 
-# Construct a Geometric Figure
+# 作幾何圖
 
-Produce a ruler-and-compass construction for a specified geometric figure, documenting every step with its Euclidean justification and verifying the result against the original specification.
+以尺規作法加步釋之每作，從所予元生可構之幾何圖，驗其合原規。
 
-## When to Use
+## 用
 
-- Given specific geometric elements (points, segments, angles) and asked to construct a figure
-- Tasked with producing a classical Euclidean construction (bisectors, perpendiculars, tangents)
-- Verifying whether a figure is constructible with straightedge and compass alone
-- Generating construction instructions for educational or documentation purposes
-- Converting a geometric specification into an ordered sequence of primitive operations
+- 予幾何元（點、段、角）而求作圖
+- 行古典歐氏作（平分、垂、切）
+- 驗圖可否以尺規作
+- 生作導以教或文
+- 化幾何規為有序原作序
 
-## Inputs
+## 入
 
-- **Required**: Description of the target figure (e.g., "equilateral triangle with side length AB")
-- **Required**: Given elements (points, segments, circles, angles provided as starting data)
-- **Optional**: Output format (narrative prose, numbered steps, pseudocode, SVG coordinates)
-- **Optional**: Level of justification detail (terse, standard, rigorous with theorem citations)
-- **Optional**: Whether to include impossibility analysis if figure is not constructible
+- **必**：目圖述（如「以 AB 為邊之等邊三角」）
+- **必**：所予元（起始之點、段、圓、角）
+- **可**：輸格（敘、編步、偽碼、SVG 座標）
+- **可**：釋詳（略、常、嚴含定理引）
+- **可**：若不可構→含不可構析否
 
-## Procedure
+## 行
 
-### Step 1: Identify Given Elements and Target Figure
+### 一：識所予元與目圖
 
-Parse the problem statement to extract:
+析題取：
 
-1. **Given elements** -- list every point, segment, angle, circle, or length provided.
-2. **Target figure** -- state precisely what must be constructed.
-3. **Constraints** -- note any additional conditions (congruence, parallelism, tangency, collinearity).
+1. **所予元**——列諸點、段、角、圓、長。
+2. **目圖**——明言所當作。
+3. **約束**——注加條件（同、平、切、共線）。
 
-Express the problem in standard form:
+以標式言題：
 
 ```
 Given: Points A, B; segment AB; circle C1 centered at A with radius r.
@@ -63,32 +63,32 @@ Construct: Equilateral triangle ABC with AB as one side.
 Constraints: C must lie on the same side of AB as point P (if specified).
 ```
 
-Verify that all referenced elements are well-defined and consistent.
+驗諸所引元良定且一致。
 
-**Expected:** A clear, unambiguous restatement of the construction problem with every given element cataloged and the target figure precisely described.
+**得：** 題淨重述，每所予元記，目圖明述。
 
-**On failure:** If the problem statement is ambiguous, list the possible interpretations and request clarification. If given elements are contradictory (e.g., a triangle with side lengths 1, 1, 5), state the contradiction and halt.
+**敗：** 題歧→列可能解且求明。所予元相悖（如三邊 1, 1, 5）→陳悖而止。
 
-### Step 2: Verify Constructibility
+### 二：驗可構
 
-Determine whether the target figure can be constructed using straightedge and compass alone.
+定目圖可否只以尺規作。
 
-1. **Check algebraic constraints.** A length is constructible if and only if it lies in a field extension of the rationals obtained by successive square roots. If the construction requires cube roots or transcendental operations, it is impossible.
+1. **察代約。** 長可構若僅若在有理之連平方根擴體中。須立方根或超越→不可。
 
-2. **Known impossible constructions:**
-   - Trisecting a general angle
-   - Doubling the cube (constructing cube root of 2)
-   - Squaring the circle (constructing sqrt(pi))
-   - Constructing a regular n-gon when n is not a product of a power of 2 and distinct Fermat primes
+2. **已知不可構：**
+   - 三分一般角
+   - 倍立方（作 2 之立方根）
+   - 化圓為方（作 sqrt(pi)）
+   - n 非 2 冪與異 Fermat 質之積之正 n 邊形
 
-3. **Known constructible operations:**
-   - Bisecting any angle or segment
-   - Constructing perpendiculars and parallels
-   - Transferring a given length
-   - Regular n-gons for n in {3, 4, 5, 6, 8, 10, 12, 15, 16, 17, 20, ...}
-   - Any length expressible using +, -, *, /, and sqrt over the given lengths
+3. **已知可構操作：**
+   - 平分角或段
+   - 作垂與平
+   - 移長
+   - n ∈ {3, 4, 5, 6, 8, 10, 12, 15, 16, 17, 20, ...} 之正 n 邊形
+   - 以 +、-、*、/、sqrt 可表之長
 
-4. **Document the verdict** with justification.
+4. **記裁決**加釋。
 
 ```
 Constructibility analysis:
@@ -98,22 +98,22 @@ Constructibility analysis:
 - Verdict: CONSTRUCTIBLE
 ```
 
-**Expected:** A definitive yes/no verdict on constructibility, with a brief justification citing the relevant algebraic or classical result.
+**得：** 可構與否之明裁，附簡釋引相關代或古典果。
 
-**On failure:** If constructibility is uncertain, attempt to reduce the problem to known constructible primitives. If the figure is provably non-constructible, document the impossibility proof and suggest the closest constructible approximation or an alternative method (e.g., neusis construction, origami).
+**敗：** 可構不確→試化題為已知可構原。已證不可→記不可證且建近似可構或他法（如 neusis、摺紙）。
 
-### Step 3: Plan Construction Sequence
+### 三：謀作序
 
-Decompose the target figure into a sequence of primitive construction operations.
+分目圖為原作操作序。
 
-1. **Identify primitives needed.** Every ruler-and-compass construction reduces to these atomic operations:
-   - Draw a line through two points
-   - Draw a circle with a given center and radius (center + point on circumference)
-   - Mark the intersection of two lines
-   - Mark the intersection(s) of a line and a circle
-   - Mark the intersection(s) of two circles
+1. **識所需原。** 諸尺規作化為此原子操作：
+   - 經兩點作線
+   - 作圓（中+圓周點）
+   - 標兩線之交
+   - 標線圓之交
+   - 標兩圓之交
 
-2. **Order the operations.** Each operation must reference only points that already exist (given or previously constructed). Build a dependency graph:
+2. **序之。** 每操作只引已在之點（予或先作）。建依賴圖：
 
 ```
 Step 1: Draw circle C1 centered at A through B.       [uses: A, B]
@@ -122,26 +122,26 @@ Step 3: Mark intersections of C1 and C2 as P, Q.      [uses: C1, C2]
 Step 4: Draw line through P and Q.                     [uses: P, Q]
 ```
 
-3. **Minimize step count.** Look for opportunities to combine operations or reuse previously constructed elements.
+3. **減步。** 尋合併或重用先作元之機。
 
-4. **Annotate each step** with its geometric purpose (e.g., "This constructs the perpendicular bisector of AB").
+4. **每步注**其幾何旨（如「此作 AB 之垂平分線」）。
 
-**Expected:** An ordered list of primitive operations where each step depends only on previously established elements, covering all parts of the target figure.
+**得：** 原操作有序列，每步依賴先立元，覆目圖諸部。
 
-**On failure:** If the decomposition stalls, identify which part of the figure cannot be reached from the current set of constructed points. Revisit Step 2 to confirm constructibility, or introduce auxiliary constructions (helper circles, midpoints, reflections) to bridge the gap.
+**敗：** 分解止→識目圖何部自現作點不可達。返步二確可構，或引輔作（助圓、中點、反射）橋溝。
 
-### Step 4: Execute Construction Steps with Justification
+### 四：行作步附釋
 
-Write out each construction step in full, providing the Euclidean justification.
+寫每作步全附歐氏釋。
 
-For each primitive operation, document:
+每原操作記：
 
-1. **The operation**: what is drawn or marked.
-2. **The inputs**: which existing elements are used.
-3. **The justification**: which Euclidean proposition, theorem, or property guarantees the operation produces the claimed result.
-4. **The output**: what new elements are created.
+1. **操作**：所作所標。
+2. **入**：所用現元。
+3. **釋**：何歐氏命題、定理、性質保其果。
+4. **出**：所建新元。
 
-Format each step consistently:
+格一致：
 
 ```
 Step 3: Mark intersections of C1 and C2 as P and Q.
@@ -153,24 +153,24 @@ Step 3: Mark intersections of C1 and C2 as P and Q.
   - Output: Points P and Q, where AP = BP = AB (equilateral property).
 ```
 
-Continue until the target figure is fully constructed. For complex figures, group related steps into phases (e.g., "Phase 1: Construct auxiliary perpendicular bisector", "Phase 2: Locate incenter").
+續至目圖全作。複圖→聚相關步為階（如「階一：作輔垂平分線」、「階二：定內心」）。
 
-**Expected:** A complete sequence of justified construction steps that, when executed in order, produce the target figure. Every new point, line, or circle is accounted for.
+**得：** 依序行則生目圖之全有釋作步序。每新點、線、圓皆記。
 
-**On failure:** If a justification cannot be provided for a step, the step may be invalid. Verify the geometric claim independently. Common errors include assuming two circles intersect when they do not (check distance between centers vs. sum/difference of radii), or assuming a point lies on a line without proof.
+**敗：** 步釋不能→步或無效。獨驗幾何宣。常誤：設兩圓交而實不（察中距與半徑和/差）、或設點在線而無證。
 
-### Step 5: Verify Construction Meets Specification
+### 五：驗作合規
 
-Confirm that the constructed figure satisfies all original requirements.
+確所作圖合諸原求。
 
-1. **Check each constraint** from Step 1 against the constructed figure:
-   - Congruence: verify equal lengths or angles using the construction.
-   - Parallelism/perpendicularity: confirm using the construction method (e.g., perpendicular bisector guarantees 90 degrees).
-   - Incidence: verify that required points lie on required lines or circles.
+1. **察原約** 於所作圖：
+   - 同：驗等長或等角
+   - 平/垂：確以作法（如垂平分線保 90°）
+   - 入：驗所需點在所需線或圓
 
-2. **Count degrees of freedom.** The constructed figure should have exactly the number of free parameters implied by the specification. If there are extra degrees of freedom, the specification was under-determined. If there are none and the construction fails, the specification was over-determined or contradictory.
+2. **數自由度。** 所作圖當有規所隱之數參。多→規欠定。零而敗→規過定或悖。
 
-3. **Test with specific coordinates** (optional but recommended for complex constructions):
+3. **以具座標測**（選，複作宜）：
 
 ```
 Verification with coordinates:
@@ -181,40 +181,40 @@ Intersection: x = 1/2, y = sqrt(3)/2
 Triangle ABC: sides AB = BC = CA = 1. VERIFIED.
 ```
 
-4. **Document the verification result** with a clear pass/fail for each constraint.
+4. **記驗果**明過/敗於每約。
 
-**Expected:** Every constraint from the original specification is verified, and the construction is confirmed correct. A coordinate check (when performed) matches the geometric argument.
+**得：** 原規諸約皆驗，作確。座標測（若行）合幾何論。
 
-**On failure:** If a constraint fails, trace back through the construction to find the erroneous step. Common causes: incorrect intersection choice (wrong branch of a circle-line intersection), sign error in coordinate verification, or a missing auxiliary construction.
+**敗：** 約敗→溯作尋誤步。常因：交擇誤（圓線交分支誤）、座標驗號誤、或缺輔作。
 
-## Validation
+## 驗
 
-- [ ] Problem statement is restated in standard Given/Construct/Constraints form
-- [ ] Constructibility analysis is present with a clear verdict and justification
-- [ ] Every construction step uses only previously established elements
-- [ ] Every step includes operation, inputs, justification, and output
-- [ ] The justification cites a relevant geometric principle (Euclid, theorem name, or property)
-- [ ] The target figure is fully constructed (no missing components)
-- [ ] All original constraints are verified against the completed construction
-- [ ] No step relies on measurement, approximation, or non-constructible operations
-- [ ] Step count is reasonable for the complexity of the figure
+- [ ] 題以標 Given/Construct/Constraints 式重述
+- [ ] 可構析存含明裁與釋
+- [ ] 每作步只用先立元
+- [ ] 每步含操作、入、釋、出
+- [ ] 釋引相幾何原（Euclid、定理名、性質）
+- [ ] 目圖全作（無缺部）
+- [ ] 原諸約對完作皆驗
+- [ ] 無步依量、近似、不可構操作
+- [ ] 步數合圖複
 
-## Common Pitfalls
+## 忌
 
-- **Assuming intersection exists**: Two circles only intersect if the distance between centers is between |r1 - r2| and r1 + r2. Always verify this condition before marking intersection points. Forgetting this check leads to constructions that work on paper but fail geometrically.
+- **設交存**：兩圓交僅中距在 |r1 - r2| 與 r1 + r2 間。標交前必驗。忘察→紙上行而幾何敗。
 
-- **Wrong intersection branch**: Circle-circle and line-circle intersections yield two points. The construction must specify which one to use (e.g., "the intersection on the same side of AB as point P"). Ambiguous intersection choices produce two valid but different figures.
+- **交分支誤**：圓圓、線圓交皆二點。作須指用何（如「AB 同側於點 P 之交」）。交擇歧→生二有效而異圖。
 
-- **Conflating construction with measurement**: Ruler-and-compass construction does not allow measuring lengths or angles. You cannot "measure segment AB, then mark off the same length." Instead, use the compass to transfer the radius by drawing a circle centered at the new point through the old endpoint.
+- **混作與量**：尺規作不容量長或角。勿「量 AB 再標同長」。用圓規移徑：以新點為中，經舊端作圓。
 
-- **Skipping constructibility check**: Attempting to trisect a general angle or construct a regular heptagon wastes effort. Always verify constructibility before beginning the construction sequence.
+- **略可構察**：試三分一般角或作正七邊形費力。先驗可構。
 
-- **Over-complicated sequences**: Many constructions have elegant short solutions. If your construction exceeds 15 primitive steps for a standard figure, look for a simpler approach. Classic sources (Euclid, Hartshorne) often provide minimal constructions.
+- **序過繁**：多作有簡解。標圖作逾 15 步→尋簡法。古典源（Euclid、Hartshorne）常供最簡作。
 
-- **Implicit auxiliary elements**: Failing to document helper constructions (e.g., "extend line AB to point D") makes the sequence impossible to follow. Every element used must be explicitly constructed.
+- **隱輔元**：忘記助作（如「延 AB 至 D」）→序不可循。每所用元皆須明作。
 
-## Related Skills
+## 參
 
-- `solve-trigonometric-problem` - trigonometric analysis often motivates or verifies constructions
-- `prove-geometric-theorem` - constructions frequently appear as steps within geometric proofs
-- `create-skill` - follow when packaging a new construction as a reusable skill
+- `solve-trigonometric-problem` - 三角析常啟或驗作
+- `prove-geometric-theorem` - 作常為幾何證步
+- `create-skill` - 封新作為可重用技時依

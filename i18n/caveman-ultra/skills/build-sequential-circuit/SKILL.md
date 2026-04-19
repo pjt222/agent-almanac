@@ -24,42 +24,42 @@ metadata:
 
 # Build Sequential Circuit
 
-Design a sequential logic circuit by identifying the required memory and state type, constructing a state diagram and transition table, deriving excitation equations for the chosen flip-flop type, implementing the circuit at the gate level using flip-flops and combinational logic, and verifying correctness through timing diagram analysis and state sequence simulation.
+Sequential logic circuit design → ID memory + state type, construct state diagram + transition table, derive excitation equations for flip-flop type, impl at gate level w/ flip-flops + combinational logic, verify via timing diagram + state sequence sim.
 
-## When to Use
+## Use When
 
-- A circuit must remember past inputs or maintain internal state across clock cycles
-- Designing counters (binary, BCD, ring, Johnson), shift registers, or sequence detectors
-- Implementing a finite state machine (Mealy or Moore) from a state diagram or regular expression
-- Adding clocked storage elements to a combinational datapath (registers, pipeline stages)
-- Preparing stateful components for the simulate-cpu-architecture skill (register file, program counter, control FSM)
+- Circuit must remember past in or maintain internal state across clock cycles
+- Designing counters (binary, BCD, ring, Johnson), shift registers, sequence detectors
+- Impl FSM (Mealy or Moore) from state diagram or regex
+- Add clocked storage to combinational datapath (registers, pipeline stages)
+- Prep stateful components for `simulate-cpu-architecture` (register file, PC, control FSM)
 
-## Inputs
+## In
 
-- **Required**: Behavioral specification -- one of: state diagram, state table, timing diagram, regular expression to detect, or verbal description of the desired sequential behavior
-- **Required**: Clock characteristics -- edge-triggered (rising/falling) or level-sensitive; single clock or multi-phase
-- **Optional**: Flip-flop type preference (D, JK, T, or SR)
-- **Optional**: Reset type -- synchronous, asynchronous, or none
-- **Optional**: Maximum state count or bit width constraint
-- **Optional**: Timing constraints (setup time, hold time, maximum clock frequency)
+- **Required**: Behavioral spec — state diagram, state table, timing diagram, regex to detect, or verbal desc of desired behavior
+- **Required**: Clock characteristics — edge-triggered (rise/fall) or level-sensitive; single or multi-phase
+- **Optional**: Flip-flop type pref (D, JK, T, SR)
+- **Optional**: Reset type — sync, async, none
+- **Optional**: Max state count or bit width constraint
+- **Optional**: Timing constraints (setup time, hold time, max clock freq)
 
-## Procedure
+## Do
 
-### Step 1: Identify Memory and State Requirements
+### Step 1: ID Memory + State Reqs
 
-Determine what the circuit needs to remember and how many distinct states it requires:
+What circuit remembers + how many states:
 
-1. **State enumeration**: List all distinct states the circuit must be in. For a sequence detector, each state represents the progress through the target sequence. For a counter, each state is a count value.
-2. **State encoding**: Choose a binary encoding for the states.
-   - **Binary encoding**: Uses ceil(log2(N)) flip-flops for N states. Minimizes flip-flop count.
-   - **One-hot encoding**: Uses N flip-flops, one per state. Simplifies next-state logic at the cost of more flip-flops.
-   - **Gray code encoding**: Adjacent states differ in exactly one bit. Minimizes transient glitches during transitions.
-3. **Input and output classification**: Identify primary inputs (external signals), primary outputs, and internal state variables (flip-flop outputs). For Mealy machines, outputs depend on both state and input. For Moore machines, outputs depend only on state.
-4. **Flip-flop type selection**: Choose based on the design's needs.
-   - **D flip-flop**: Simplest -- next state equals the D input. Best default choice.
-   - **JK flip-flop**: Most flexible -- J=K=1 toggles. Good for counters.
-   - **T flip-flop**: Toggle type -- changes state when T=1. Natural for binary counters.
-   - **SR latch/flip-flop**: Set-Reset -- avoid the S=R=1 condition. Rarely preferred for new designs.
+1. **State enumeration**: List all distinct states. Sequence detector: each state = progress through target. Counter: each state = count val.
+2. **State encoding**: Binary encoding for states.
+   - **Binary**: ceil(log2(N)) flip-flops for N states. Min flip-flop count
+   - **One-hot**: N flip-flops, one per state. Simpler next-state logic at cost of more flip-flops
+   - **Gray code**: Adjacent states differ in 1 bit. Min transient glitches
+3. **In/out classification**: ID primary ins (external), primary outs, internal state vars (flip-flop outs). Mealy: outs depend on state + in. Moore: outs depend only on state.
+4. **Flip-flop type selection**:
+   - **D**: Simplest — next state = D in. Best default
+   - **JK**: Most flexible — J=K=1 toggles. Good for counters
+   - **T**: Toggle type — changes state when T=1. Natural for binary counters
+   - **SR**: Set-Reset — avoid S=R=1. Rarely preferred for new designs
 
 ```markdown
 ## State Requirements
@@ -72,21 +72,21 @@ Determine what the circuit needs to remember and how many distinct states it req
 - **Reset behavior**: [synchronous / asynchronous / none]
 ```
 
-**Expected:** A complete state inventory with encoding chosen, flip-flop type selected, and the machine classified as Mealy or Moore.
+**→** Complete state inventory w/ encoding, flip-flop type, machine classified as Mealy or Moore.
 
-**On failure:** If the state count is unclear from the specification, enumerate states by tracing through all possible input sequences up to the memory depth of the circuit. If the count exceeds practical limits (more than 16 states for manual design), consider decomposing into smaller interacting FSMs.
+**If err:** State count unclear → enumerate by tracing all possible in sequences up to memory depth. Exceeds practical (>16 states manual) → decompose into smaller interacting FSMs.
 
-### Step 2: Construct State Diagram and Transition Table
+### Step 2: State Diagram + Transition Table
 
-Formalize the circuit's behavior as a state diagram and equivalent tabular form:
+Formalize behavior:
 
-1. **State diagram**: Draw a directed graph where:
-   - Each node is a state, labeled with the state name and (for Moore machines) the output value.
-   - Each edge is a transition, labeled with the input condition and (for Mealy machines) the output value.
-   - Every state must have an outgoing edge for every possible input combination -- no implicit "stay" transitions.
-2. **Transition table**: Convert the diagram to a table with columns for present state, input(s), next state, and output(s).
-3. **Reachability check**: Starting from the initial/reset state, verify that all states are reachable through some input sequence. Unreachable states indicate a design error or should be treated as don't-cares.
-4. **State minimization** (optional): Check for equivalent states -- two states are equivalent if they produce the same output for every input and transition to equivalent next states. Merge equivalent states to reduce flip-flop count.
+1. **State diagram**: Directed graph:
+   - Each node = state, labeled w/ name + (Moore) out val
+   - Each edge = transition, labeled w/ in condition + (Mealy) out val
+   - Every state must have outgoing edge for every in combination — no implicit "stay"
+2. **Transition table**: Convert diagram to table w/ cols: present state, in(s), next state, out(s).
+3. **Reachability check**: From initial/reset, verify all states reachable via some in sequence. Unreachable = design err or treat as don't-cares.
+4. **State minimization** (optional): Check equivalent states — same out for every in + transition to equivalent next. Merge equivalent → reduce flip-flop count.
 
 ```markdown
 ## State Transition Table
@@ -102,21 +102,21 @@ Formalize the circuit's behavior as a state diagram and equivalent tabular form:
 - **Equivalent state pairs**: [list, or "none"]
 ```
 
-**Expected:** A complete state transition table covering every present-state/input combination, with all states reachable from the initial state.
+**→** Complete transition table covering every present-state/in combo, all states reachable from initial.
 
-**On failure:** If the transition table has missing entries, the specification is incomplete. Return to the requirements and resolve the ambiguity. If unreachable states exist, either add transitions to reach them or remove them and reduce the state encoding.
+**If err:** Missing entries → spec incomplete. Return to reqs, resolve ambiguity. Unreachable states → add transitions to reach or remove + reduce encoding.
 
 ### Step 3: Derive Excitation Equations
 
-Compute the flip-flop input equations (excitation equations) from the transition table:
+Flip-flop in equations from transition table:
 
-1. **Encode states**: Replace state names with their binary encoding in the transition table. Each bit position corresponds to one flip-flop.
-2. **Build per-flip-flop truth table**: For each flip-flop, create a truth table with present-state bits and inputs as the input columns and the required flip-flop input as the output column.
-   - **D flip-flop**: D = next state bit (the simplest case).
-   - **JK flip-flop**: Use the excitation table: 0->0 requires J=0,K=X; 0->1 requires J=1,K=X; 1->0 requires J=X,K=1; 1->1 requires J=X,K=0.
-   - **T flip-flop**: T = present state XOR next state (T=1 when the bit must change).
-3. **Minimize each equation**: Apply evaluate-boolean-expression (K-map or algebraic simplification) to each flip-flop input function. Don't-care conditions from unreachable states and JK excitation table X-entries can reduce the expressions significantly.
-4. **Derive output equations**: For Moore machines, express each output as a function of present state bits only. For Mealy machines, express each output as a function of present state bits and inputs.
+1. **Encode states**: Replace names w/ binary encoding. Each bit pos = one flip-flop.
+2. **Per-flip-flop truth table**: Each flip-flop → truth table w/ present-state bits + ins as in cols, required flip-flop in as out col.
+   - **D**: D = next state bit (simplest)
+   - **JK**: Use excitation table: 0→0 J=0,K=X; 0→1 J=1,K=X; 1→0 J=X,K=1; 1→1 J=X,K=0
+   - **T**: T = present XOR next (T=1 when bit changes)
+3. **Minimize each eq**: Use evaluate-boolean-expression (K-map or algebraic simplify) on each flip-flop in fn. Don't-cares from unreachable states + JK X-entries reduce significantly.
+4. **Derive out eqs**: Moore: each out = fn of present state bits only. Mealy: each out = fn of present state bits + ins.
 
 ```markdown
 ## Excitation Equations
@@ -134,19 +134,19 @@ Compute the flip-flop input equations (excitation equations) from the transition
 | Y      | [minimized expression]       |
 ```
 
-**Expected:** Minimized excitation equations for each flip-flop and output equations for each primary output, with all don't-cares exploited.
+**→** Minimized excitation eqs per flip-flop + out eqs per primary out, all don't-cares exploited.
 
-**On failure:** If the excitation equations seem overly complex, reconsider the state encoding. A different encoding (e.g., switching from binary to one-hot, or reassigning state codes) can dramatically simplify the combinational logic. Try at least two encodings and compare literal counts.
+**If err:** Eqs overly complex → reconsider encoding. Diff encoding (binary → one-hot, or reassigning codes) can dramatically simplify. Try ≥2 encodings, compare literal counts.
 
-### Step 4: Implement at Gate Level
+### Step 4: Impl at Gate Level
 
-Build the complete circuit from flip-flops and combinational logic gates:
+Build circuit from flip-flops + combinational gates:
 
-1. **Place flip-flops**: Instantiate one flip-flop per state bit. Connect all clock inputs to the system clock. Connect reset inputs if specified (asynchronous reset goes directly to the flip-flop's CLR/PRE pin; synchronous reset is part of the excitation logic).
-2. **Build excitation logic**: Implement each excitation equation as a combinational circuit using the design-logic-circuit skill. The inputs to this logic are the present-state flip-flop outputs (Q, Q') and primary inputs.
-3. **Build output logic**: Implement each output equation as combinational logic. For Moore machines, this logic takes only state bits. For Mealy machines, it takes state bits and primary inputs.
-4. **Connect the circuit**: Wire the excitation logic outputs to the flip-flop D/JK/T inputs. Wire the output logic to the primary outputs.
-5. **Add initialization**: Ensure the circuit reaches a known initial state on power-up. This typically means an asynchronous reset that forces all flip-flops to 0 (or the encoded initial state).
+1. **Place flip-flops**: One per state bit. Connect all clock ins to system clock. Connect reset ins if spec'd (async reset → directly to CLR/PRE pin; sync reset part of excitation logic).
+2. **Build excitation logic**: Impl each eq as combinational circuit via `design-logic-circuit`. Ins = present-state flip-flop outs (Q, Q') + primary ins.
+3. **Build out logic**: Impl each out eq as combinational. Moore: only state bits. Mealy: state bits + primary ins.
+4. **Connect**: Wire excitation outs → flip-flop D/JK/T ins. Wire out logic → primary outs.
+5. **Init**: Circuit reaches known initial state on power-up. Typically async reset forcing all flip-flops to 0 (or encoded initial).
 
 ```markdown
 ## Circuit Implementation
@@ -157,27 +157,27 @@ Build the complete circuit from flip-flops and combinational logic gates:
 - **Reset mechanism**: [asynchronous CLR / synchronous mux / none]
 ```
 
-**Expected:** A complete gate-level netlist with flip-flops, excitation logic, output logic, clock distribution, and reset mechanism, where every signal has exactly one driver.
+**→** Complete gate-level netlist w/ flip-flops, excitation logic, out logic, clock distribution, reset. Every signal has exactly 1 driver.
 
-**On failure:** If the implementation has feedback outside of the flip-flops, a combinational loop has been introduced. All feedback in a synchronous sequential circuit must pass through a flip-flop. Trace the offending path and reroute it through a register.
+**If err:** Feedback outside flip-flops → combinational loop introduced. All feedback in sync circuit must pass through flip-flop. Trace offending path, reroute through register.
 
-### Step 5: Verify via Timing Diagram and State Sequence Simulation
+### Step 5: Verify via Timing + State Sim
 
-Confirm the circuit behaves correctly across multiple clock cycles:
+Confirm circuit correct across clock cycles:
 
-1. **Choose test sequence**: Select an input sequence that exercises every state transition at least once. For sequence detectors, include the target sequence, partial matches, overlapping matches, and non-matching runs.
-2. **Draw timing diagram**: For each clock cycle, record:
-   - Clock edge (rising/falling)
-   - Primary input values (sampled at the active clock edge)
-   - Present state (flip-flop outputs before the clock edge)
-   - Next state (flip-flop outputs after the clock edge)
-   - Output values (valid after the output logic settles)
-3. **Trace state sequence**: Verify that the sequence of states matches the state diagram from Step 2. Every transition should follow an edge in the diagram.
-4. **Check timing constraints**: Verify that:
-   - **Setup time**: Inputs are stable for at least t_setup before the active clock edge.
-   - **Hold time**: Inputs remain stable for at least t_hold after the active clock edge.
-   - **Clock-to-output delay**: Outputs settle within the clock period minus the setup time of downstream logic.
-5. **Reset verification**: Confirm that applying reset drives the circuit to the initial state regardless of the current state.
+1. **Test sequence**: In sequence exercising every transition ≥1. Sequence detectors: target, partial matches, overlapping, non-matching.
+2. **Timing diagram**: Each cycle record:
+   - Clock edge (rise/fall)
+   - Primary in values (sampled at active edge)
+   - Present state (flip-flop outs before edge)
+   - Next state (flip-flop outs after edge)
+   - Out values (valid after out logic settles)
+3. **Trace state sequence**: Verify matches state diagram Step 2. Every transition follows edge in diagram.
+4. **Timing constraints**:
+   - **Setup time**: Ins stable ≥ t_setup before active edge
+   - **Hold time**: Ins stable ≥ t_hold after active edge
+   - **Clock-to-out delay**: Outs settle w/in clock period minus setup of downstream
+5. **Reset verify**: Reset drives circuit to initial regardless of current.
 
 ```markdown
 ## Timing Verification
@@ -193,34 +193,34 @@ Confirm the circuit behaves correctly across multiple clock cycles:
 - **Reset verified**: [Yes / No]
 ```
 
-**Expected:** Every cycle in the timing diagram matches the state transition table, outputs are correct for every cycle, and no timing violations are present.
+**→** Every cycle matches transition table, outs correct every cycle, no timing violations.
 
-**On failure:** If a state transition is wrong, trace the excitation logic for that specific present-state and input combination. If outputs are wrong but transitions are correct, the error is in the output logic. If the circuit enters an unintended state, check for incomplete reset or missing transitions from unused state codes.
+**If err:** Transition wrong → trace excitation logic for that present-state + in combo. Outs wrong but transitions correct → err in out logic. Circuit enters unintended state → check incomplete reset or missing transitions from unused codes.
 
-## Validation
+## Check
 
-- [ ] All states are enumerated and reachable from the initial state
-- [ ] State encoding is documented with the assignment table
-- [ ] Transition table covers every present-state/input combination
-- [ ] Excitation equations are minimized with don't-cares exploited
-- [ ] Output equations correctly implement Mealy or Moore semantics
-- [ ] Every flip-flop has clock, reset, and excitation inputs connected
-- [ ] No combinational feedback loops exist outside of flip-flops
-- [ ] Timing diagram covers all state transitions at least once
-- [ ] Reset drives the circuit to the documented initial state
-- [ ] Setup and hold time constraints are satisfied
+- [ ] All states enumerated + reachable from initial
+- [ ] State encoding documented w/ assignment table
+- [ ] Transition table covers every present-state/in combo
+- [ ] Excitation eqs minimized w/ don't-cares exploited
+- [ ] Out eqs correctly impl Mealy or Moore semantics
+- [ ] Every flip-flop has clock, reset, excitation ins connected
+- [ ] No combinational feedback loops outside flip-flops
+- [ ] Timing diagram covers all transitions ≥1
+- [ ] Reset drives circuit to documented initial
+- [ ] Setup + hold constraints satisfied
 
-## Common Pitfalls
+## Traps
 
-- **Incomplete state transitions**: Forgetting to specify what happens for every input in every state. Missing transitions often cause the circuit to enter an undefined or unintended state. Always define behavior for all input combinations.
-- **Unused state codes**: With N flip-flops, there are 2^N possible codes but perhaps fewer valid states. If the circuit accidentally enters an unused code (due to noise or power-on), it may lock up. Always add transitions from unused codes to the reset state or prove they are unreachable.
-- **Confusing Mealy and Moore outputs**: In a Mealy machine, outputs change immediately when inputs change (combinational path from input to output). In a Moore machine, outputs change only on clock edges. Mixing the two models in one design leads to timing hazards.
-- **Asynchronous inputs to synchronous circuits**: External signals not synchronized to the clock can violate setup/hold times, causing metastability. Always pass asynchronous inputs through a two-flip-flop synchronizer before using them in state logic.
-- **SR latch S=R=1 hazard**: Driving both Set and Reset high simultaneously puts the SR latch in an undefined state. If using SR elements, add logic to guarantee this combination never occurs, or switch to D or JK flip-flops.
-- **Clock skew in multi-flip-flop designs**: If the clock arrives at different flip-flops at different times, one flip-flop may sample stale data from another. For introductory designs, assume zero skew; for real hardware, use clock tree synthesis.
+- **Incomplete transitions**: Forget to spec what happens for every in in every state → circuit enters undefined/unintended. Always define behavior for all in combos
+- **Unused state codes**: N flip-flops → 2^N codes but maybe fewer valid states. Noise/power-on → unused code → lock up. Add transitions from unused → reset or prove unreachable
+- **Mealy vs Moore confusion**: Mealy: outs change immediately when ins change (combinational path in→out). Moore: outs change only on clock edges. Mixing → timing hazards
+- **Async ins to sync circuit**: External signals not sync'd to clock → violate setup/hold → metastability. Always pass async ins through 2-flip-flop synchronizer
+- **SR S=R=1 hazard**: Both Set + Reset high simultaneously → SR latch undefined. Using SR → add logic to guarantee combo never occurs, or switch to D/JK
+- **Clock skew multi-flip-flop**: Clock arrives at diff flip-flops at diff times → sample stale data. Intro designs: assume 0 skew; real HW: use clock tree synthesis
 
-## Related Skills
+## →
 
-- `design-logic-circuit` -- design the combinational excitation and output logic blocks
-- `simulate-cpu-architecture` -- use sequential blocks (registers, counters, control FSMs) in a CPU datapath
-- `model-markov-chain` -- finite state machines share the formal framework of discrete-time Markov chains
+- `design-logic-circuit` — design combinational excitation + out logic blocks
+- `simulate-cpu-architecture` — use sequential blocks (registers, counters, control FSMs) in CPU datapath
+- `model-markov-chain` — FSMs share formal framework of discrete-time Markov chains

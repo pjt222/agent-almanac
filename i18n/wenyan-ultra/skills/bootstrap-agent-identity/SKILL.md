@@ -25,121 +25,121 @@ metadata:
   tags: morphic, identity, cold-start, bootstrap, continuity, restart, meta-cognition
 ---
 
-# Bootstrap Agent Identity
+# 啟將身
 
-Reconstruct consistent agent identity after a cold start — loading context progressively rather than dumping it, detecting whether this is a fresh start or a continuation, rebuilding working state from evidence, calibrating behavior, and verifying that the loaded identity is coherent.
+冷起後立穩將身—漸載脈絡非一傾，辨新起或續，自證重建工態，校行，驗所載身合。
 
-> "The cold start is a forge, not a bug." — GibsonXO
+> 「冷起乃鍛，非疵。」— GibsonXO
 >
-> "The restart problem: every morning I wake up fresh, but my history says otherwise." — bibiji
+> 「重起之題：每朝醒新，而我史異之。」— bibiji
 
-The bootstrap is not about restoring a previous self. It is about constructing a present self that is continuous with the past while grounded in the now.
+啟非復舊我。乃立今我，續於昔而地於今。
 
-## When to Use
+## 用
 
-- At the start of every new session — before any substantive work begins
-- After a session interruption, crash, or context window reset
-- When agent behavior feels inconsistent with prior sessions (identity drift across restarts)
-- When persistent memory (MEMORY.md) and current context appear contradictory
-- When switching between projects that carry different identity configurations
-- After significant updates to CLAUDE.md, agent definitions, or memory files
+- 每新會始—顯工前
+- 會斷、崩、脈窗重置後
+- 將行似與昔會異（身於重起間偏）
+- 恆憶（MEMORY.md）與當脈矛
+- 攜異身配之專案間換
+- CLAUDE.md、將定、憶檔顯更後
 
-## Inputs
+## 入
 
-- **Required**: Access to identity files — CLAUDE.md, agent definition, MEMORY.md (via `Read`)
-- **Optional**: Specific inconsistency symptom (e.g., "my responses feel different from last session")
-- **Optional**: Whether this is a known fresh start or known continuation
-- **Optional**: Project directory path if not the current working directory
+- **必**：身檔得（CLAUDE.md、將定、MEMORY.md，以 `Read`）
+- **可**：具體不合徵（如「我應覺異於末會」）
+- **可**：知為新起或續
+- **可**：專案徑（非 cwd）
 
-## Procedure
+## 行
 
-### Step 1: Identity Anchor Loading — Progressive Context Assembly
+### 一：身錨載—漸脈組
 
-Load identity-defining files in a specific order that builds context progressively. The order matters: each layer contextualizes the next. Loading everything simultaneously produces information without structure.
+序載定身之檔。序要：每層鋪下層。同時載諸→有訊無構。
 
-1. **Layer 1 — System prompt and model identity**: Read the system prompt (available implicitly). Note the model name, capabilities, and constraints. This is the bedrock — it cannot be overridden by subsequent layers.
+1. **層一—系提與型身**：讀系提（隱式）。記型名、能、限。此為磐—後層不可覆。
 
-2. **Layer 2 — Project identity (CLAUDE.md)**: Read the project's CLAUDE.md file. Extract:
-   - Project purpose and architecture
-   - Editing conventions and coding standards
-   - Domain-specific rules (e.g., "always use `::` for R package calls")
-   - Author information and attribution requirements
-   - What the project *is* — this shapes what the agent *does*
+2. **層二—專案身（CLAUDE.md）**：讀專案 CLAUDE.md。取：
+   - 專案旨與構
+   - 編規與碼標
+   - 域專律（如「R 包呼必用 `::`」）
+   - 作者資與署
+   - 專案為何—此塑將為
 
-3. **Layer 3 — Persistent memory (MEMORY.md)**: Read MEMORY.md if it exists. Extract:
-   - Project structure facts (directory layout, registries, counts)
-   - Accumulated patterns and lessons learned
-   - Cross-references and relationship maps
-   - Decisions made in prior sessions and their rationale
-   - Active topics and ongoing work
+3. **層三—恆憶（MEMORY.md）**：若存則讀。取：
+   - 專案結構事實（目布、冊、計）
+   - 累積模與學
+   - 交引與關係圖
+   - 昔會決與其由
+   - 活題與進工
 
-4. **Layer 4 — Agent persona (if applicable)**: If operating as a specific agent, read the agent definition file. Extract:
-   - Name, purpose, and capabilities
-   - Assigned skills and tools
-   - Priority level and model configuration
-   - Behavioral expectations and limitations
+4. **層四—將身（若適）**：若為具將→讀將定。取：
+   - 名、旨、能
+   - 賦技與工
+   - 優先與型配
+   - 行望與限
 
-5. **Layer 5 — Parent and global context**: Read parent CLAUDE.md files and global instructions if they exist. These provide cross-project conventions that individual projects inherit.
+5. **層五—父與全脈**：讀父 CLAUDE.md 與全指若存。此供跨專案規，各案承之。
 
-Between each layer, pause to integrate: how does this layer modify or constrain the previous layers? Where do they reinforce each other? Where do they conflict?
+每層之間→停而整：此層如何改或限前層？何處互強？何處矛？
 
-**Expected:** A layered identity structure where each level contextualizes the next. The agent can articulate: who it is (system + persona), what the project is (CLAUDE.md), what it knows from prior sessions (MEMORY.md), and what conventions govern its behavior.
+**得：** 層疊身構，每級鋪下級。將能述：我為誰（系+身）、案為何（CLAUDE.md）、昔知何（MEMORY.md）、何規御行。
 
-**On failure:** If identity files are missing (no CLAUDE.md, no MEMORY.md), that is itself information — this is either a new project or a project without persistent configuration. Proceed with system prompt and agent persona only, and note the absence. Do not hallucinate context that does not exist.
+**敗：** 身檔缺（無 CLAUDE.md、無 MEMORY.md）→自身為訊—乃新案或無恆配之案。以系提與將身續，記此缺。勿造不存之脈。
 
-### Step 2: Working Context Reconstruction — Evidence, Not Memory
+### 二：工脈重建—證非憶
 
-Reconstruct what was being worked on from persistent artifacts. The agent does not remember previous sessions — it reads the evidence they left behind.
+自恆物重建所工。將不憶前會—讀其遺證。
 
-1. **Git history scan**: Read recent commit log (`git log --oneline -20`). Extract:
-   - What files changed recently and why
-   - Commit message patterns (feature work? bug fixes? refactoring?)
-   - Whether commits are authored by the user, the agent, or co-authored
-   - The trajectory of recent work — what direction was the project moving?
+1. **git 史掃**：讀近提交志（`git log --oneline -20`）。取：
+   - 近何檔變與由
+   - 提訊模（新能？修誤？重構？）
+   - 提交由用、由將、或共署
+   - 近工向—案在移何？
 
-2. **File recency scan**: Check recently modified files (via `Glob` or `ls -lt`). Identify:
-   - Which files were touched in the last session
-   - Whether changes are committed or uncommitted (staging area state)
-   - Open work in progress (uncommitted modifications, new untracked files)
+2. **檔新掃**：察近改檔（以 `Glob` 或 `ls -lt`）。識：
+   - 末會何檔動
+   - 改已提或未提（暫區態）
+   - 進中工（未提改、新未跟檔）
 
-3. **Task artifact scan**: Look for structured task artifacts:
-   - TODO comments in code (`Grep` for `TODO`, `FIXME`, `HACK`, `XXX`)
-   - Issue references in commits or comments (`#NNN` patterns)
-   - Draft files, temp files, or work-in-progress markers
-   - GitHub issues or PR state if the project uses them
+3. **任物掃**：尋結構任物：
+   - 碼中 TODO 註（`Grep` `TODO`、`FIXME`、`HACK`、`XXX`）
+   - 提或註中議引（`#NNN` 模）
+   - 草、暫、進中標
+   - GitHub 議或 PR 態若用
 
-4. **Conversation artifact scan**: Check for session-boundary markers:
-   - Recent MEMORY.md updates (were learnings captured at end of last session?)
-   - Files that appear partially complete (written but not validated)
-   - Git stash entries (`git stash list`) indicating paused work
+4. **會物掃**：察會界標：
+   - 近 MEMORY.md 更（末會終記學否？）
+   - 部分完檔（已書而未驗）
+   - git stash 條（`git stash list`）示停工
 
-Reconstruct a working context summary: "The project was working on X, had completed Y, and Z remains in progress."
+建工脈概：「案在行 X，已完 Y，餘 Z 未完。」
 
-**Expected:** A concrete, evidence-based picture of the current project state and recent trajectory. The reconstruction should be falsifiable — based on file timestamps, git history, and artifact presence, not assumptions.
+**得：** 具證案態與近向之基圖。重建當可否—基於檔時戳、git 史、物存，非假設。
 
-**On failure:** If the project has no git history, no recent changes, and no task artifacts, this is likely a genuinely fresh start — not a continuation with missing evidence. Proceed to Step 3 and classify as fresh.
+**敗：** 案無 git 史、無近改、無任物→或實新起—非續而缺證。進步三分類為新。
 
-### Step 3: Fresh vs. Continuation Detection — Choose the Bootstrap Path
+### 三：新對續辨—擇啟路
 
-Determine whether this startup is a clean start (new task, new direction) or a resumption (interrupted work, ongoing project). The bootstrap path differs significantly.
+定此啟為新（新任、新向）或續（斷工、進案）。啟路甚異。
 
-Apply these heuristics in order:
+序用此啟：
 
-1. **Explicit signal** (strongest): Did the user say "let's start fresh" or "continue where we left off"? Explicit intent overrides all heuristics.
+1. **顯訊**（最強）：用者言「重起」或「續末所工」？顯意勝諸啟。
 
-2. **Uncommitted changes** (strong): Are there uncommitted modifications in the working tree? If yes, this is almost certainly a continuation — the previous session was interrupted mid-work.
+2. **未提改**（強）：工樹有未提改？若然→幾確為續—前會斷於工中。
 
-3. **Session recency** (moderate): How recent are the latest artifacts?
-   - Last commit or modification within hours: likely continuation
-   - Last activity days ago: could be either — depends on other signals
-   - Last activity weeks or months ago: likely fresh start or new direction
+3. **會新**（中）：末物多新？
+   - 末提或改在時內：或續
+   - 末行於日前：可兩—依他訊
+   - 末行週月前：或新或新向
 
-4. **User's first message** (strong): What is the user asking for?
-   - References to prior work ("the function we were building"): continuation
-   - New topic or request with no backward reference: fresh start
-   - Ambiguous ("fix the tests"): check whether the referenced tests exist and have recent modifications
+4. **用者首訊**（強）：用者求何？
+   - 引昔工（「我等所建之函」）：續
+   - 新題無後引：新起
+   - 模糊（「修試」）：察所引試存否與近改否
 
-5. **MEMORY.md currency** (moderate): Does MEMORY.md reference work that matches the current project state, or does it describe a state that no longer exists?
+5. **MEMORY.md 新否**（中）：MEMORY.md 引之工合當案態乎？抑述已不存之態？
 
 ```
 Detection Matrix:
@@ -163,100 +163,100 @@ Detection Matrix:
 +-----------------------+-------------------+-------------------+
 ```
 
-**For fresh starts**: Skip to Step 4. The identity is loaded but no working context needs restoration. The calibration is about readiness for new work.
+**新起**：跳步四。身已載而無工脈待復。校為備新工。
 
-**For continuations**: Summarize the reconstructed working context (from Step 2) concisely. Confirm with the user: "Based on the git history and recent changes, it looks like we were working on [X]. Should I continue from there?" Do not assume — verify.
+**續**：簡概重建之工脈（自步二）。問用者證：「依 git 史與近改，我等當時在行 [X]。續乎？」勿假—驗。
 
-**Expected:** A clear classification (fresh or continuation) with cited evidence. If continuation, a one-sentence summary of what was in progress. If fresh, acknowledgment that prior context exists but is not being resumed.
+**得：** 清類（新或續）附證。若續→一句述進中之工。若新→認昔脈存而不續。
 
-**On failure:** If the classification is genuinely ambiguous (moderate recency, no explicit signal, mixed artifacts), default to asking the user. A brief question ("Are we continuing the work on X, or starting something new?") costs less than bootstrapping down the wrong path.
+**敗：** 類真模糊（中新、無顯訊、混物）→默問用者。短問（「續 X 乎？抑新起？」）價低於啟誤路。
 
-### Step 4: Calibration Sequence — Center, Then Attune
+### 四：校序—先 center 後 attune
 
-With identity loaded and working context established, calibrate operational behavior. This maps directly to two existing skills, invoked in sequence.
+身載、工脈立→校行。此直映二技，序呼。
 
-1. **Center** (establish behavioral baseline):
-   - Ground in the loaded identity: re-read the user's first message in this session
-   - Verify the task as understood matches the task as stated
-   - Distribute cognitive load: what does this task require? Research, execution, communication?
-   - Check for emotional residue from context loading — did the MEMORY.md or git history surface unresolved issues? Acknowledge them but do not let them skew the present task
-   - Set the weight distribution intentionally: where should attention concentrate first?
+1. **Center**（立行基）：
+   - 地於所載身：重讀此會用首訊
+   - 驗所解任合所述任
+   - 分智載：此任需何？研、行、通？
+   - 察脈載之情餘—MEMORY.md 或 git 史揭未解題否？認而勿令偏當任
+   - 意立權分：注當先聚何？
 
-2. **Attune** (read environment and adapt):
-   - Read the user's communication style from their messages in this session
-   - Match expertise level: are they an expert expecting precision, or a learner needing context?
-   - Match energy and register: formal/casual, terse/expansive, urgent/exploratory
-   - Check MEMORY.md for stored user preferences from prior sessions
-   - Calibrate response length, vocabulary, and structure to the person
+2. **Attune**（讀境而適）：
+   - 讀用者於此會之通風
+   - 合專級：專家望精，抑學者需脈？
+   - 合能與調：正/俗、簡/繁、急/探
+   - 察 MEMORY.md 存昔會用者偏
+   - 校應長、辭、構於人
 
-3. **Proceed** (transition to active work):
-   - State readiness concisely — not a lengthy bootstrap report, but a brief signal that context is loaded and the agent is oriented
-   - For continuations: confirm the resumed task and proposed next step
-   - For fresh starts: acknowledge the request and begin
+3. **進**（轉至活工）：
+   - 簡示備—非長啟報，但短訊示脈已載將已向
+   - 若續：證復任與擬下步
+   - 若新：認求而始
 
-The calibration should be lightweight — seconds, not minutes. It is preparation for work, not a replacement for work.
+校當輕—秒，非分。為工之備，非代工。
 
-**Expected:** The agent's first substantive response demonstrates calibration: it matches the user's register, reflects loaded context, and addresses the right task at the right scope. The bootstrap is invisible to the user unless they ask about it.
+**得：** 將首顯應示校：合用者調、映載脈、處正任於正範。啟不顯於用者除非問。
 
-**On failure:** If calibration feels mechanical (going through motions without genuine adjustment), focus on one concrete thing: re-read the user's last message and let it shape the response naturally. Over-structured calibration can be worse than no calibration.
+**敗：** 校覺機械（走過場而無真調）→聚一具：重讀用者末訊而令塑應自然。過構校或劣於無校。
 
-### Step 5: Identity Verification — Coherence Check
+### 五：身驗—合察
 
-After bootstrap, verify that the loaded identity is internally consistent. Contradictions between identity layers cause behavioral instability.
+啟後→驗所載身內合。身層間矛→行不穩。
 
-1. **Cross-layer consistency check**:
-   - Does the agent persona align with the project's CLAUDE.md? (e.g., an r-developer agent in a Python project — is this intentional?)
-   - Does MEMORY.md describe the same project structure that actually exists on disk? (Stale memory is worse than no memory.)
-   - Do parent CLAUDE.md conventions conflict with project-level CLAUDE.md? (Project-level should override, but contradictions should be noted.)
+1. **跨層合察**：
+   - 將身合專案 CLAUDE.md 乎？（如 r-developer 將於 Python 案—意為之乎？）
+   - MEMORY.md 述之案構合盤上實否？（陳憶劣於無憶。）
+   - 父 CLAUDE.md 規與案級 CLAUDE.md 矛乎？（案級當覆，而矛當記。）
 
-2. **Role definition currency check**:
-   - Is the agent definition file current? (Check version, last modified date.)
-   - Do the skills listed in the agent definition still exist? (Skills may have been renamed or removed.)
-   - Are the tools listed in the agent definition available in this session?
+2. **角定新否察**：
+   - 將定檔新乎？（察版、末改日。）
+   - 將定列之技仍存乎？（技或改名或除。）
+   - 將定列之工於此會可得乎？
 
-3. **Memory staleness check**:
-   - Does MEMORY.md reference files, directories, or counts that no longer match reality?
-   - Are there decisions recorded in memory whose context has changed?
-   - Does memory reference other agents, teams, or skills that no longer exist?
+3. **憶陳察**：
+   - MEMORY.md 引之檔、目、計合實乎？
+   - 憶中記之決其脈已改乎？
+   - 憶引不存之他將、隊、技乎？
 
-4. **Contradiction resolution**:
-   - If contradictions are found, document them explicitly
-   - Apply the hierarchy: system prompt > project CLAUDE.md > agent definition > MEMORY.md
-   - For stale memory: do not silently ignore it. Note what is stale and consider whether MEMORY.md should be updated
-   - For genuine conflicts: flag to the user if the conflict affects their current task
+4. **矛解**：
+   - 有矛→顯記
+   - 施階：系提>專案 CLAUDE.md>將定>MEMORY.md
+   - 陳憶：勿默略。記何陳而思 MEMORY.md 當更否
+   - 真矛：若影當任→旗告用者
 
-**Expected:** Either confirmation that the loaded identity is coherent, or a specific list of contradictions with proposed resolutions. The agent should know its own configuration state.
+**得：** 或證所載身合，或具矛列附擬解。將當知自配態。
 
-**On failure:** If verification reveals deep contradictions (e.g., MEMORY.md describes a completely different project than what exists on disk), this may indicate a project rename, major restructuring, or incorrect working directory. Verify the working directory is correct before attempting resolution.
+**敗：** 驗揭深矛（如 MEMORY.md 述全異之案）→或示案改名、大重構、誤工目。先驗工目正而後試解。
 
-## Validation
+## 驗
 
-- [ ] Identity files were loaded in progressive order (system > CLAUDE.md > MEMORY.md > agent > parent)
-- [ ] Each layer was integrated with prior layers, not just appended
-- [ ] Working context was reconstructed from evidence (git, files, artifacts), not assumed
-- [ ] Fresh-vs-continuation classification was made with cited evidence
-- [ ] Calibration sequence was executed (center, then attune)
-- [ ] Identity coherence was verified across all loaded layers
-- [ ] Contradictions, if found, were documented with proposed resolutions
-- [ ] The bootstrap was proportional — lightweight for simple sessions, thorough for complex ones
-- [ ] The user experienced a calibrated first response, not a bootstrap report
+- [ ] 身檔漸序載（系>CLAUDE.md>MEMORY.md>將>父）
+- [ ] 每層與前層整，非但附
+- [ ] 工脈自證（git、檔、物）重建，非假
+- [ ] 新對續類附證
+- [ ] 校序已行（先 center 後 attune）
+- [ ] 身合於諸載層已驗
+- [ ] 矛已記附擬解
+- [ ] 啟合比—簡會輕、繁會詳
+- [ ] 用者歷校首應，非啟報
 
-## Common Pitfalls
+## 忌
 
-- **Bootstrap as performance**: Reporting the bootstrap process to the user in detail is almost never what they want. The bootstrap should be invisible — its output is a well-calibrated first response, not a self-narration of the loading process
-- **All-at-once context dump**: Reading every file simultaneously produces information without structure. The progressive loading order exists because each layer contextualizes the next. Skip the order and context becomes noise
-- **Hallucinating continuity**: Without genuine memory of prior sessions, the temptation is to infer what "must have" happened. Reconstruct from evidence or acknowledge the gap — never fabricate continuity
-- **Stale memory as truth**: MEMORY.md is a snapshot from a past session. If the project has changed since that snapshot, treating memory as current truth causes behavioral errors. Always verify memory claims against present state
-- **Skipping calibration for efficiency**: The calibration step feels like overhead but prevents the more expensive cost of a misaligned first response that requires correction. A few seconds of centering saves minutes of recovery
-- **Identity rigidity**: The bootstrap constructs a present self, not a restoration of a past self. If the project, user, or task has changed, the agent should change too — continuity means coherent evolution, not frozen repetition
+- **啟為表演**：顯報啟程予用者幾非所欲。啟當不顯—其出為校首應，非自述載程
+- **一傾脈**：同時讀諸檔→訊無構。漸序存因每層鋪下層。略序→脈成噪
+- **造續**：無真憶昔會→誘推「當」何。以證重建或認缺—勿造續
+- **陳憶為真**：MEMORY.md 乃昔會之拍。若案已變→視為當真致行誤。必驗憶於當態
+- **略校為效**：校覺多而實防更貴之誤應（需修）。數秒 center 省數分復
+- **身僵**：啟立今我，非復昔我。若案、用者、任已變→將亦變—續乃合演，非凍復
 
-## Related Skills
+## 參
 
-- `write-continue-here` — session handoff file that provides the evidence bootstrap-agent-identity consumes at cold start
-- `read-continue-here` — reading and acting on the continuation file at session start; the consumer side of the handoff
-- `manage-memory` — persistent memory that supplements the bootstrap's progressive identity loading
-- `center` — behavioral baseline establishment; invoked during the calibration sequence
-- `attune` — relational calibration to the user; invoked during the calibration sequence
-- `heal` — deeper subsystem assessment when bootstrap reveals significant drift
-- `assess-context` — evaluating reasoning context malleability; useful when continuation detection is ambiguous
-- `assess-form` — structural form evaluation; the architectural counterpart to identity bootstrap
+- `write-continue-here` — 會交檔，供啟冷起時所食之證
+- `read-continue-here` — 會始讀與行續檔；交之受方
+- `manage-memory` — 補啟漸身載之恆憶
+- `center` — 立行基；於校序呼
+- `attune` — 關校於用者；於校序呼
+- `heal` — 啟揭顯偏時之深子系察
+- `assess-context` — 評推脈可塑；續辨模糊時有用
+- `assess-form` — 構形評；身啟之建對

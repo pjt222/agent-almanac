@@ -24,19 +24,19 @@ metadata:
 
 # clean-codebase
 
-## When to Use
+## 用時
 
-Use this skill when a codebase has accumulated hygiene debt:
+用此技於庫積污者：
 
-- Lint warnings have piled up during rapid development
-- Unused imports and variables clutter files
-- Dead code paths exist but were never removed
-- Formatting is inconsistent across files
-- Static analysis tools report fixable issues
+- 速開發中 lint 警已累
+- 未用之引與變雜亂諸檔
+- 死碼徑存而未除
+- 諸檔之式不一
+- 靜析具報可補之問
 
-**Do NOT use** for architectural refactoring, bug fixes, or business logic changes. This skill focuses purely on hygiene and automated cleanup.
+**勿用**於構重構、修訛、或業理之變。此技專於潔與自動之清。
 
-## Inputs
+## 入
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
@@ -46,11 +46,11 @@ Use this skill when a codebase has accumulated hygiene debt:
 | `run_tests` | boolean | No | Run test suite after cleanup (default: true) |
 | `backup` | boolean | No | Create backup before deletion (default: true) |
 
-## Procedure
+## 法
 
-### Step 1: Pre-Cleanup Assessment
+### 第一步：清前之評
 
-Measure the current state to quantify improvements later.
+量當前之態以後驗改。
 
 ```bash
 # Count lint warnings by severity
@@ -65,13 +65,13 @@ cloc . --json > cloc_before.json
 # R: lintr unused function checks
 ```
 
-**Expected:** Baseline metrics saved to `lint_before.json` and `cloc_before.json`
+**得：** 基量存於 `lint_before.json` 與 `cloc_before.json`
 
-**On failure:** If lint tool not found, skip automated fixes and focus on manual review
+**敗則：** 若 lint 具不得，略自動之補而專於手察
 
-### Step 2: Fix Automated Lint Warnings
+### 第二步：補自動 lint 警
 
-Apply safe automated fixes (spacing, quotes, semicolons, trailing whitespace).
+施安之自補（間、引、分、尾空）。
 
 **JavaScript/TypeScript**:
 ```bash
@@ -97,13 +97,13 @@ cargo fmt
 cargo clippy --fix --allow-dirty
 ```
 
-**Expected:** All safe lint warnings resolved; files formatted consistently
+**得：** 諸安 lint 警已解；諸檔式一
 
-**On failure:** If automated fixes introduce test failures, revert changes and escalate
+**敗則：** 若自補引測敗，退變而升
 
-### Step 3: Identify Dead Code Paths
+### 第三步：識死碼徑
 
-Use static analysis to find unreferenced functions, unused variables, and orphaned files.
+用靜析尋未引之函、未用之變、孤之檔。
 
 **JavaScript/TypeScript**:
 ```bash
@@ -121,18 +121,18 @@ vulture . | tee dead_code.txt
 Rscript -e "lintr::lint_dir('.', linters = lintr::unused_function_linter())"
 ```
 
-**General approach**:
-1. Grep for function definitions
-2. Grep for function calls
-3. Report functions defined but never called
+**通法**：
+1. grep 函之定
+2. grep 函之呼
+3. 報定而未呼之函
 
-**Expected:** `dead_code.txt` lists unused functions, variables, and files
+**得：** `dead_code.txt` 列未用之函、變、檔
 
-**On failure:** If static analysis tool unavailable, manually review recent commit history for orphaned code
+**敗則：** 若靜析具不得，手察近之提交史尋孤碼
 
-### Step 4: Remove Unused Imports
+### 第四步：除未用之引
 
-Clean up import blocks by removing references to packages never used.
+清引區，除永未用之包。
 
 **JavaScript**:
 ```bash
@@ -150,39 +150,39 @@ autoflake --remove-all-unused-imports --in-place --recursive .
 grep -r "library(" . | cut -d: -f2 | sort | uniq
 ```
 
-**Expected:** All unused import statements removed
+**得：** 諸未用之引句皆除
 
-**On failure:** If removing imports breaks build, they were used indirectly — restore and document
+**敗則：** 若除引而建敗，間接有用——復而書之
 
-### Step 5: Remove Dead Code (Mode-Dependent)
+### 第五步：除死碼（依模）
 
-**Safe Mode** (default):
-- Only remove code explicitly marked as deprecated
-- Remove commented-out code blocks (if >10 lines and >6 months old)
-- Remove TODO comments referencing completed issues
+**安模**（默）：
+- 只除明標為棄之碼
+- 除已注釋之碼塊（若逾十行且逾六月）
+- 除引已畢之 TODO 注
 
-**Aggressive Mode** (opt-in):
-- Remove all functions identified as unused in Step 3
-- Remove private methods with zero references
-- Remove feature flags for deprecated features
+**侵模**（擇入）：
+- 除第三步所識諸未用之函
+- 除零引之私法
+- 除棄功之旗
 
-For each candidate deletion:
-1. Verify zero references in codebase
-2. Check git history for recent activity (skip if modified in last 30 days)
-3. Remove code and add entry to `CLEANUP_LOG.md`
+每候刪：
+1. 驗庫中零引
+2. 察 git 史近之動（若三十日內改則略）
+3. 除碼而加條入 `CLEANUP_LOG.md`
 
-**Expected:** Dead code removed; `CLEANUP_LOG.md` documents all deletions
+**得：** 死碼已除；`CLEANUP_LOG.md` 書諸除
 
-**On failure:** If uncertain whether code is truly dead, move to `archive/` directory instead
+**敗則：** 若不確碼真死，移入 `archive/` 而非除
 
-### Step 6: Normalize Formatting
+### 第六步：式之一
 
-Ensure consistent formatting across all files (even if not caught by linters).
+確諸檔式一（雖 lint 不捕）。
 
-1. Normalize line endings (LF vs CRLF)
-2. Ensure single newline at end of file
-3. Remove trailing whitespace
-4. Normalize indentation (spaces vs tabs, indent width)
+1. 一行末（LF 抑 CRLF）
+2. 確檔末單新行
+3. 除尾空
+4. 一縮（空抑 tab，縮之寬）
 
 ```bash
 # Example: Fix line endings and trailing whitespace
@@ -190,13 +190,13 @@ find . -type f -name "*.js" -exec sed -i 's/\r$//' {} +
 find . -type f -name "*.js" -exec sed -i 's/[[:space:]]*$//' {} +
 ```
 
-**Expected:** All files follow consistent formatting conventions
+**得：** 諸檔循一式
 
-**On failure:** If sed breaks binary files, skip and document
+**敗則：** 若 sed 破二進之檔，略而書之
 
-### Step 7: Run Tests
+### 第七步：行測
 
-Validate that cleanup didn't break functionality.
+驗清未破功。
 
 ```bash
 # Language-specific test command
@@ -206,13 +206,13 @@ R CMD check           # R
 cargo test            # Rust
 ```
 
-**Expected:** All tests pass (or same failures as before cleanup)
+**得：** 諸測皆通（或同清前之敗）
 
-**On failure:** Revert changes incrementally to identify breaking change, then escalate
+**敗則：** 漸退變以識破者，而升
 
-### Step 8: Generate Cleanup Report
+### 第八步：生清報
 
-Document all changes for review.
+書諸變以察。
 
 ```markdown
 # Codebase Cleanup Report
@@ -249,42 +249,42 @@ Document all changes for review.
 - [x] CLEANUP_LOG.md updated
 ```
 
-**Expected:** Report saved to `CLEANUP_REPORT.md` in project root
+**得：** 報存於項目根之 `CLEANUP_REPORT.md`
 
-**On failure:** (N/A — generate report regardless of outcome)
+**敗則：**（無——無論結果皆生報）
 
-## Validation Checklist
+## 驗
 
-After cleanup:
+清後：
 
-- [ ] All tests pass (or same failures as before)
-- [ ] No new lint warnings introduced
-- [ ] Backup created before any deletions
-- [ ] `CLEANUP_LOG.md` documents all removed code
-- [ ] Cleanup report generated with metrics
-- [ ] Git diff reviewed for unexpected changes
-- [ ] CI pipeline passes
+- [ ] 諸測皆通（或同前之敗）
+- [ ] 無新 lint 警引入
+- [ ] 除前已備
+- [ ] `CLEANUP_LOG.md` 書諸除碼
+- [ ] 清報已生附量
+- [ ] git diff 已察無外變
+- [ ] CI 管已通
 
-## Common Pitfalls
+## 陷
 
-1. **Removing Code Still Used via Reflection**: Static analysis misses dynamic calls (e.g., `eval()`, metaprogramming). Always check git history.
+1. **除仍以反射用之碼**：靜析漏動呼（如 `eval()`、元編程）。必察 git 史。
 
-2. **Breaking Implicit Dependencies**: Removing imports that were used by dependencies. Run tests after every import removal.
+2. **破隱依**：除依所用之引。每除引後行測。
 
-3. **Deleting Feature Flags for Active Features**: Even if unused in current branch, feature flags may be active in other environments. Check deployment configs.
+3. **刪活功之旗**：雖當枝未用，或於他境活。察部署之設。
 
-4. **Over-Aggressive Formatting**: Tools like `black` or `prettier` may reformat code in ways that trigger unnecessary diffs. Configure tools to match project style.
+4. **過侵之式**：如 `black`、`prettier` 可重式生冗 diff。設具合項目之風。
 
-5. **Ignoring Test Coverage**: Cannot safely clean codebases without tests. If coverage is low, escalate for test additions first.
+5. **忽測覆**：無測之庫不可安清。若覆低，先升補測。
 
-6. **Not Backing Up**: Always create `backup_YYYYMMDD/` directory before deleting anything, even if using git.
+6. **不備**：除前必建 `backup_YYYYMMDD/`，雖用 git。
 
-7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+7. **混系上之誤 R 二**：於 WSL 或 Docker，`Rscript` 或解為跨臺之包而非原生 R。以 `which Rscript && Rscript --version` 察。宜用原生 R 二（如 Linux/WSL 上之 `/usr/local/bin/Rscript`）以信。見 [Setting Up Your Environment](../../guides/setting-up-your-environment.md) 以 R 路之設。
 
-## Related Skills
+## 參
 
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) — Organize directory layout, update READMEs
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Fix dead links and imports
-- [escalate-issues](../escalate-issues/SKILL.md) — Route complex problems to specialists
-- [r-packages/run-r-cmd-check](../../r-packages/run-r-cmd-check/SKILL.md) — Run full R package checks
-- [devops/dependency-audit](../../devops/dependency-audit/SKILL.md) — Check for outdated dependencies
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — 整目之構，更 README
+- [repair-broken-references](../repair-broken-references/SKILL.md) — 修死鏈與引
+- [escalate-issues](../escalate-issues/SKILL.md) — 路雜問於專
+- [r-packages/run-r-cmd-check](../../r-packages/run-r-cmd-check/SKILL.md) — 行全 R 包察
+- [devops/dependency-audit](../../devops/dependency-audit/SKILL.md) — 察過時之依

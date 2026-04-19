@@ -26,48 +26,48 @@ metadata:
 
 # Conduct a Retrospective
 
-Facilitate a structured retrospective that reviews recent project execution, identifies what worked and what didn't, and produces actionable improvement items that feed back into project processes. This skill transforms raw project data into evidence-backed learnings with specific actions, owners, and due dates.
+Facilitate structured retrospective → review recent project exec, ID what worked + what didn't, produce actionable improvements w/ owners + due dates. Transforms raw project data → evidence-backed learnings w/ specific actions, owners, due dates.
 
-## When to Use
+## Use When
 
-- End of a sprint (sprint retrospective)
-- End of a project phase or milestone
-- After a significant incident, failure, or success
-- Quarterly review of ongoing project processes
-- Before starting a similar project (lessons learned review)
+- End of sprint (sprint retrospective)
+- End of project phase / milestone
+- Post significant incident, failure, or success
+- Quarterly review of ongoing project procs
+- Before starting similar project (lessons learned review)
 
-## Inputs
+## In
 
 - **Required**: Period under review (sprint number, date range, or milestone)
-- **Optional**: Status reports from the review period
-- **Optional**: Sprint velocity and completion data
-- **Optional**: Previous retrospective actions (to check closure)
-- **Optional**: Team feedback or survey results
+- **Optional**: Status reports from review period
+- **Optional**: Sprint velocity + completion data
+- **Optional**: Prev retrospective actions (check closure)
+- **Optional**: Team feedback / survey results
 
-## Procedure
+## Do
 
 ### Step 1: Gather Retrospective Data
 
-Read available artifacts from the review period:
-- STATUS-REPORT-*.md files for the period
+Read available artifacts from review period:
+- STATUS-REPORT-*.md files for period
 - SPRINT-PLAN.md for planned vs actual
-- BACKLOG.md for item flow and cycle times
-- Previous RETRO-*.md for open action items
+- BACKLOG.md for item flow + cycle times
+- Prev RETRO-*.md for open action items
 
 Extract key facts:
 - Items planned vs completed
 - Velocity trend
-- Blockers encountered and resolution time
-- Unplanned work that entered the sprint
-- Open action items from previous retrospectives
+- Blockers encountered + resolution time
+- Unplanned work entering sprint
+- Open action items from prev retros
 
-**Expected:** Data summary with quantitative metrics (velocity, completion %, blocker count).
+**→** Data summary w/ quantitative metrics (velocity, completion %, blocker count).
 
-**On failure:** If no artifacts exist, base the retrospective on qualitative observations.
+**If err:** No artifacts → base retro on qualitative observations.
 
 ### Step 2: Structure "What Went Well"
 
-List 3-5 things that worked well, with evidence:
+List 3-5 things that worked, w/ evidence:
 
 ```markdown
 ## What Went Well
@@ -78,15 +78,15 @@ List 3-5 things that worked well, with evidence:
 | 3 | [Specific positive observation] | [Metric, example, or artifact reference] |
 ```
 
-Focus on practices to continue, not just outcomes. "Daily standups kept blockers visible" is more actionable than "We delivered on time."
+Focus on practices to continue, not outcomes. "Daily standups kept blockers visible" > "We delivered on time."
 
-**Expected:** 3-5 evidence-backed positive observations.
+**→** 3-5 evidence-backed positive observations.
 
-**On failure:** If nothing went well, look harder — even small wins matter. At minimum, the team completed the period.
+**If err:** Nothing went well → look harder. Small wins matter. At min, team completed period.
 
 ### Step 3: Structure "What Needs Improvement"
 
-List 3-5 things that need improvement, with evidence:
+List 3-5 things needing improvement, w/ evidence:
 
 ```markdown
 ## What Needs Improvement
@@ -97,15 +97,15 @@ List 3-5 things that need improvement, with evidence:
 | 3 | [Specific issue] | [Metric, example, or incident] | [Effect on delivery] |
 ```
 
-Be specific and factual. "Estimation was off" is vague. "3 of 5 items exceeded estimates by >50%, adding 8 unplanned days" is actionable.
+Specific + factual. "Estimation was off" = vague. "3 of 5 items exceeded estimates by >50%, adding 8 unplanned days" = actionable.
 
-**Expected:** 3-5 evidence-backed improvement areas with stated impact.
+**→** 3-5 evidence-backed improvement areas w/ stated impact.
 
-**On failure:** If the team claims everything is fine, compare planned vs actual metrics — gaps reveal issues.
+**If err:** Team claims everything fine → compare planned vs actual metrics → gaps reveal issues.
 
 ### Step 4: Generate Improvement Actions
 
-For each improvement area, create an actionable item:
+Each improvement area → actionable item:
 
 ```markdown
 ## Improvement Actions
@@ -119,16 +119,16 @@ For each improvement area, create an actionable item:
 Each action must be:
 - Specific (not "improve estimation" but "add estimation review step to grooming")
 - Owned (one person accountable)
-- Time-bound (due date within next 1-2 sprints)
+- Time-bound (due date w/in next 1-2 sprints)
 - Verifiable (success criteria defined)
 
-**Expected:** 2-4 improvement actions with owners and due dates.
+**→** 2-4 improvement actions w/ owners + due dates.
 
-**On failure:** If actions are too vague, apply the "how would you verify this was done?" test.
+**If err:** Actions too vague → apply "how would you verify this was done?" test.
 
-### Step 5: Review Previous Actions and Write Report
+### Step 5: Review Previous Actions + Write Report
 
-Check previous retrospective actions for closure:
+Check prev retrospective actions for closure:
 
 ```markdown
 ## Previous Action Review
@@ -138,9 +138,9 @@ Check previous retrospective actions for closure:
 | A-prev-002 | [Action from last retro] | [Name] | Closed / Open / Recurring | [Outcome] |
 ```
 
-Flag recurring items (same issue appearing in 3+ retrospectives) — these need escalation or a different approach.
+Flag recurring items (same issue appearing 3+ retros) → escalation or different approach needed.
 
-Write the complete retrospective:
+Write complete retrospective:
 
 ```markdown
 # Retrospective: [Sprint N / Phase Name / Date Range]
@@ -172,32 +172,32 @@ Write the complete retrospective:
 
 Save as `RETRO-[YYYY-MM-DD].md`.
 
-**Expected:** Complete retrospective document saved with actions, evidence, and previous action review.
+**→** Complete retrospective doc saved w/ actions, evidence, prev action review.
 
-**On failure:** If the retrospective has no improvement actions, it's not driving change — revisit Step 3.
+**If err:** Retro has no improvement actions → not driving change → revisit Step 3.
 
-## Validation
+## Check
 
-- [ ] Retrospective file created with date-stamped filename
+- [ ] Retro file created w/ date-stamped filename
 - [ ] Period summary includes quantitative metrics
 - [ ] "What Went Well" has 3-5 evidence-backed items
 - [ ] "What Needs Improvement" has 3-5 evidence-backed items
-- [ ] Improvement actions have owners, due dates, and success criteria
-- [ ] Previous retrospective actions reviewed for closure
+- [ ] Improvement actions have owners, due dates, success criteria
+- [ ] Prev retro actions reviewed for closure
 - [ ] Recurring issues flagged
 
-## Common Pitfalls
+## Traps
 
-- **Blame game**: Retrospectives review processes and practices, not people. Frame issues as systemic, not personal.
-- **Actions without follow-through**: The biggest retrospective failure. Always review previous actions before creating new ones.
-- **Too many actions**: 2-4 focused actions are better than 10 vague ones. The team can only absorb so many changes.
-- **No evidence**: "We feel estimation is bad" is opinion. "3 of 5 items exceeded estimates by 50%" is data. Always attach evidence.
-- **Skipping the positives**: Only discussing problems is demoralizing. Celebrating wins reinforces good practices.
+- **Blame game**: Retros review procs + practices, not people. Frame issues systemic, not personal.
+- **Actions w/o follow-through**: Biggest retro failure. Always review prev actions before creating new.
+- **Too many actions**: 2-4 focused > 10 vague. Team can only absorb so many changes.
+- **No evidence**: "We feel estimation bad" = opinion. "3 of 5 items exceeded estimates by 50%" = data. Always attach evidence.
+- **Skip positives**: Only discussing problems demoralizing. Celebrating wins reinforces good practices.
 
-## Related Skills
+## →
 
-- `generate-status-report` — status reports provide the data for retrospectives
-- `manage-backlog` — improvement actions feed back into the backlog
-- `plan-sprint` — retrospective learnings improve sprint planning accuracy
-- `draft-project-charter` — review charter assumptions and risk accuracy
-- `create-work-breakdown-structure` — review estimation accuracy against WBS
+- `generate-status-report` — status reports provide data for retros
+- `manage-backlog` — improvement actions feed back into backlog
+- `plan-sprint` — retro learnings improve sprint planning accuracy
+- `draft-project-charter` — review charter assumptions + risk accuracy
+- `create-work-breakdown-structure` — review estimation accuracy vs. WBS

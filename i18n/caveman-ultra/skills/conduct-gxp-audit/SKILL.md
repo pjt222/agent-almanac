@@ -26,28 +26,28 @@ metadata:
 
 # Conduct GxP Audit
 
-Plan and execute a GxP audit of computerized systems, data integrity practices, or regulated processes.
+Plan + execute GxP audit of computerized systems, data integrity practices, or regulated procs.
 
-## When to Use
+## Use When
 
-- Scheduled internal audit of a validated computerized system
+- Scheduled internal audit of validated computerized system
 - Supplier/vendor qualification audit for GxP-relevant software
-- Pre-inspection readiness assessment before a regulatory audit
-- For-cause audit triggered by a deviation, complaint, or data integrity concern
-- Periodic review of a validated system's compliance posture
+- Pre-inspection readiness assessment before regulatory audit
+- For-cause audit triggered by deviation, complaint, or data integrity concern
+- Periodic review of validated system's compliance posture
 
-## Inputs
+## In
 
-- **Required**: Audit scope (system, process, or site to audit)
-- **Required**: Applicable regulations (21 CFR Part 11, EU Annex 11, GMP, GLP, GCP)
-- **Required**: Previous audit reports and open CAPA items
-- **Optional**: System validation documentation (URS, VP, IQ/OQ/PQ, traceability matrix)
+- **Required**: Audit scope (system, proc, or site to audit)
+- **Required**: Applicable regs (21 CFR Part 11, EU Annex 11, GMP, GLP, GCP)
+- **Required**: Prev audit reports + open CAPA items
+- **Optional**: System valid. docs (URS, VP, IQ/OQ/PQ, traceability matrix)
 - **Optional**: SOPs, training records, change control logs
-- **Optional**: Specific risk areas or concerns triggering the audit
+- **Optional**: Specific risk areas / concerns triggering audit
 
-## Procedure
+## Do
 
-### Step 1: Develop the Audit Plan
+### Step 1: Develop Audit Plan
 
 ```markdown
 # Audit Plan
@@ -90,56 +90,56 @@ Plan and execute a GxP audit of computerized systems, data integrity practices, 
 | Auditee Representative | [Name] | Facilitate access and information |
 ```
 
-**Expected:** Audit plan approved by quality management and communicated to auditee at least 2 weeks before the audit.
-**On failure:** Reschedule if auditee cannot provide required documentation or personnel.
+**→** Audit plan approved by QA mgmt + communicated to auditee ≥ 2 weeks before audit.
+**If err:** Reschedule if auditee can't provide req'd docs or personnel.
 
 ### Step 2: Conduct Opening Meeting
 
 Agenda:
-1. Introduce audit team and roles
-2. Confirm scope, schedule, and logistics
-3. Explain finding classification system (critical/major/minor)
-4. Confirm confidentiality agreements
-5. Identify auditee escorts and document custodians
+1. Introduce audit team + roles
+2. Confirm scope, schedule, logistics
+3. Explain finding classification (critical/major/minor)
+4. Confirm confidentiality
+5. ID auditee escorts + doc custodians
 6. Address questions
 
-**Expected:** Opening meeting documented with attendance record.
-**On failure:** If key personnel are unavailable, reschedule affected audit activities.
+**→** Opening meeting doc'd w/ attendance record.
+**If err:** Key personnel unavail → reschedule affected audit activities.
 
-### Step 3: Collect and Review Evidence
+### Step 3: Collect + Review Evidence
 
-Review documentation and records against audit criteria:
+Review docs + records vs. audit criteria:
 
 #### 3a. Validation Documentation Review
-- [ ] URS exists and is approved
-- [ ] Validation plan matches system category and risk
-- [ ] IQ/OQ/PQ protocols executed with results documented
-- [ ] Traceability matrix links requirements to test results
-- [ ] Deviations documented and resolved
-- [ ] Validation summary report approved
+- [ ] URS exists + approved
+- [ ] Valid. plan matches system category + risk
+- [ ] IQ/OQ/PQ protocols executed w/ results doc'd
+- [ ] Traceability matrix links req's to test results
+- [ ] Deviations doc'd + resolved
+- [ ] Valid. summary report approved
 
 #### 3b. Operational Controls Review
-- [ ] SOPs current and approved
-- [ ] Training records demonstrate competence for all users
-- [ ] Change control records complete (request, assessment, approval, verification)
+- [ ] SOPs current + approved
+- [ ] Training records show competence all users
+- [ ] Change control records complete (req, assessment, approval, valid.)
 - [ ] Incident/deviation reports handled per SOP
 - [ ] Periodic review conducted on schedule
 
 #### 3c. Data Integrity Assessment
-- [ ] Audit trail enabled and not modifiable by users
-- [ ] Electronic signatures meet regulatory requirements
-- [ ] Backup and recovery procedures documented and tested
-- [ ] Access controls enforce role-based permissions
-- [ ] Data is attributable, legible, contemporaneous, original, accurate (ALCOA+)
+- [ ] Audit trail enabled + not user-modifiable
+- [ ] Electronic sigs meet reg req's
+- [ ] Backup + recovery docs'd + tested
+- [ ] Access controls enforce role-based perms
+- [ ] Data: attributable, legible, contemporaneous, original, accurate (ALCOA+)
 
 #### 3d. System Configuration Review
-- [ ] Production configuration matches validated state
-- [ ] User accounts reviewed — no shared accounts, inactive accounts disabled
-- [ ] System clocks synchronized and accurate
+- [ ] Prod config matches validated state
+- [ ] User accounts reviewed — no shared accounts, inactive disabled
+- [ ] System clocks sync'd + accurate
 - [ ] Security patches applied per approved change control
 
-**Expected:** Evidence collected as screenshots, document copies, interview notes with timestamps.
-**On failure:** Record "unable to verify" as an observation and note the reason.
+**→** Evidence collected as screenshots, doc copies, interview notes w/ timestamps.
+**If err:** Can't verify → record "unable to verify" as observation + reason.
 
 ### Step 4: Classify Findings
 
@@ -152,7 +152,7 @@ Classify each finding by severity:
 | **Minor** | Isolated deviation from procedure. No direct impact on data integrity or product quality. | Correction within 60 business days |
 | **Observation** | Opportunity for improvement. Not a regulatory requirement. | Optional — tracked for trend analysis |
 
-Document each finding:
+Doc each finding:
 
 ```markdown
 ## Finding F-[NNN]
@@ -173,20 +173,20 @@ Document each finding:
 [Impact on data integrity, product quality, or patient safety]
 ```
 
-**Expected:** Every finding has classification, evidence, and regulatory reference.
-**On failure:** If classification is disputed, escalate to the audit program manager for adjudication.
+**→** Every finding has classification, evidence, reg ref.
+**If err:** Classification disputed → escalate to audit program manager for adjudication.
 
 ### Step 5: Conduct Closing Meeting
 
 Agenda:
 1. Present findings summary (no new findings should be raised)
 2. Review finding classifications
-3. Discuss preliminary CAPA expectations and timelines
-4. Confirm next steps and report timeline
+3. Discuss prelim CAPA expectations + timelines
+4. Confirm next steps + report timeline
 5. Acknowledge auditee cooperation
 
-**Expected:** Closing meeting documented with attendance. Auditee acknowledges findings (acknowledgement ≠ agreement).
-**On failure:** If auditee disputes a finding, document the disagreement and escalate per SOP.
+**→** Closing meeting doc'd w/ attendance. Auditee acknowledges findings (acknowledgement ≠ agreement).
+**If err:** Auditee disputes finding → doc disagreement + escalate per SOP.
 
 ### Step 6: Write Audit Report
 
@@ -231,12 +231,12 @@ The overall compliance status is assessed as [Satisfactory / Needs Improvement /
 | QA Director | | | |
 ```
 
-**Expected:** Report issued within 15 business days of the closing meeting.
-**On failure:** If delayed beyond 15 days, notify stakeholders and document the reason.
+**→** Report issued within 15 business days of closing meeting.
+**If err:** Delayed beyond 15 days → notify stakeholders + doc reason.
 
-### Step 7: Track CAPA and Verify Effectiveness
+### Step 7: Track CAPA + Verify Effectiveness
 
-For each finding requiring a CAPA:
+Each finding requiring CAPA:
 
 ```markdown
 ## CAPA Tracking
@@ -246,31 +246,31 @@ For each finding requiring a CAPA:
 | F-002 | CAPA-2025-043 | Training matrix not updated | Complete training, update tracking | 2025-05-01 | Open | Scheduled 2025-08-01 |
 ```
 
-**Expected:** CAPAs assigned, tracked, and effectiveness verified per defined timeline.
-**On failure:** Unresolved CAPAs escalate to QA management and are flagged in the next audit cycle.
+**→** CAPAs assigned, tracked, effectiveness verified per defined timeline.
+**If err:** Unresolved CAPAs escalate to QA mgmt + flag in next audit cycle.
 
-## Validation
+## Check
 
-- [ ] Audit plan approved and communicated before audit
-- [ ] Opening and closing meetings documented with attendance
-- [ ] Evidence collected with timestamps and source references
-- [ ] Every finding has classification, evidence, and regulatory reference
+- [ ] Audit plan approved + communicated pre-audit
+- [ ] Opening + closing meetings doc'd w/ attendance
+- [ ] Evidence collected w/ timestamps + source refs
+- [ ] Every finding has classification, evidence, reg ref
 - [ ] Audit report issued within 15 business days
-- [ ] CAPAs assigned with due dates for all critical and major findings
-- [ ] Previous audit CAPAs verified for closure effectiveness
+- [ ] CAPAs assigned w/ due dates for all critical + major findings
+- [ ] Prev audit CAPAs verified for closure effectiveness
 
-## Common Pitfalls
+## Traps
 
-- **Scope creep**: Expanding the audit scope during execution without formal agreement leads to incomplete coverage and disputes.
-- **Opinion-based findings**: Findings must reference specific regulatory requirements, not personal preferences.
-- **Adversarial tone**: Audits are collaborative quality improvement exercises, not interrogations.
-- **Ignoring positives**: Reporting only findings without acknowledging good practices undermines trust.
-- **No effectiveness check**: Closing a CAPA without verifying the fix actually works is a recurring regulatory citation.
+- **Scope creep**: Expanding scope during exec w/o formal agreement → incomplete coverage + disputes.
+- **Opinion-based findings**: Findings must ref specific reg req's, not personal preferences.
+- **Adversarial tone**: Audits = collaborative quality improvement, not interrogations.
+- **Ignore positives**: Reporting only findings w/o acknowledging good practices undermines trust.
+- **No effectiveness check**: Closing CAPA w/o verifying fix actually works = recurring regulatory citation.
 
-## Related Skills
+## →
 
 - `perform-csv-assessment` — full CSV lifecycle assessment (URS through validation summary)
 - `setup-gxp-r-project` — project structure for validated R environments
-- `implement-audit-trail` — audit trail implementation for electronic records
-- `write-validation-documentation` — IQ/OQ/PQ protocol and report writing
+- `implement-audit-trail` — audit trail impl for electronic records
+- `write-validation-documentation` — IQ/OQ/PQ protocol + report writing
 - `security-audit-codebase` — security-focused code audit (complementary perspective)

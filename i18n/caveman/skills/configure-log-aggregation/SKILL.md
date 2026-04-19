@@ -25,11 +25,11 @@ metadata:
 
 # Configure Log Aggregation
 
-Implement centralized log collection, parsing, and querying with Loki/Promtail or ELK stack for operational visibility.
+Implement centralized log collection, parsing, querying with Loki/Promtail or ELK stack for operational visibility.
 
-## When to Use
+## When Use
 
-- Consolidating logs from multiple services or hosts into a searchable system
+- Consolidating logs from multiple services or hosts into searchable system
 - Replacing local log files with centralized, queryable log storage
 - Correlating logs with metrics and traces for full observability
 - Implementing structured logging with label extraction from unstructured logs
@@ -44,7 +44,7 @@ Implement centralized log collection, parsing, and querying with Loki/Promtail o
 - **Optional**: Retention and compression policies
 - **Optional**: Existing log shipper configuration (Fluentd, Filebeat, Promtail)
 
-## Procedure
+## Steps
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
@@ -66,7 +66,7 @@ Select between Loki (Prometheus-style) or ELK (Elasticsearch-based) based on req
 - Mature ecosystem with beats, logstash plugins
 - Better for compliance/audit logs requiring deep historical search
 
-For this guide, we'll focus on **Loki + Promtail** (recommended for most modern setups).
+For this guide, focus on **Loki + Promtail** (recommended for most modern setups).
 
 Decision criteria:
 ```markdown
@@ -83,16 +83,16 @@ Use ELK if:
 - Legacy systems with existing Logstash pipelines
 ```
 
-**Expected:** Clear choice made based on requirements, team downloads appropriate installation artifacts.
+**Got:** Clear choice made based on requirements, team downloads appropriate installation artifacts.
 
-**On failure:**
+**If fail:**
 - Benchmark storage requirements: Loki ~10x less than Elasticsearch for same logs
 - Evaluate query patterns: full-text search needs vs label filtering
 - Consider operational overhead: ELK requires more tuning and resources
 
 ### Step 2: Deploy Loki
 
-Install and configure Loki with appropriate storage backend.
+Install, configure Loki with appropriate storage backend.
 
 **Docker Compose deployment** (`docker-compose.yml`):
 
@@ -150,9 +150,9 @@ storage_config:
     shared_store: s3
 ```
 
-**Expected:** Loki starts successfully, health check passes at `http://localhost:3100/ready`, logs stored according to retention policy.
+**Got:** Loki starts successfully, health check passes at `http://localhost:3100/ready`, logs stored according to retention policy.
 
-**On failure:**
+**If fail:**
 - Check Loki logs: `docker logs loki`
 - Verify storage directories exist and are writable
 - Test config syntax: `docker run grafana/loki:2.9.0 -config.file=/etc/loki/local-config.yaml -verify-config`
@@ -161,7 +161,7 @@ storage_config:
 
 ### Step 3: Configure Promtail for Log Shipping
 
-Set up Promtail to scrape logs and forward to Loki with label extraction.
+Set up Promtail to scrape logs, forward to Loki with label extraction.
 
 **Promtail configuration** (`promtail-config.yml`):
 
@@ -177,13 +177,13 @@ positions:
 
 Key Promtail concepts:
 - **Scrape configs**: Define log sources and how to discover them
-- **Pipeline stages**: Transform and label logs before sending to Loki
+- **Pipeline stages**: Transform, label logs before sending to Loki
 - **Relabel configs**: Dynamic labeling based on metadata
 - **Positions file**: Tracks read offsets to avoid re-processing logs
 
-**Expected:** Promtail scrapes configured log files, labels applied correctly, logs visible in Loki via LogQL queries.
+**Got:** Promtail scrapes configured log files, labels applied correctly, logs visible in Loki via LogQL queries.
 
-**On failure:**
+**If fail:**
 - Check Promtail logs: `docker logs promtail`
 - Verify file paths are accessible: `docker exec promtail ls /var/log`
 - Test regex patterns independently with sample log lines
@@ -192,7 +192,7 @@ Key Promtail concepts:
 
 ### Step 4: Query Logs with LogQL
 
-Learn LogQL syntax for filtering and aggregating logs.
+Learn LogQL syntax for filtering, aggregating logs.
 
 **Basic queries**:
 
@@ -264,9 +264,9 @@ topk(10, sum by (message) (count_over_time({level="error"} [1h])))
 
 Create Grafana explore queries or dashboard panels using these patterns.
 
-**Expected:** Queries return expected log lines, filtering works correctly, aggregations produce metrics from logs.
+**Got:** Queries return expected log lines, filtering works correctly, aggregations produce metrics from logs.
 
-**On failure:**
+**If fail:**
 - Use Grafana Explore to debug queries interactively
 - Check label names: `curl http://localhost:3100/loki/api/v1/labels`
 - Verify label values: `curl http://localhost:3100/loki/api/v1/label/{label_name}/values`
@@ -275,7 +275,7 @@ Create Grafana explore queries or dashboard panels using these patterns.
 
 ### Step 5: Integrate Logs with Metrics and Traces
 
-Correlate logs with Prometheus metrics and distributed traces for unified observability.
+Correlate logs with Prometheus metrics, distributed traces for unified observability.
 
 **Add trace IDs to logs** (application instrumentation):
 
@@ -358,9 +358,9 @@ datasources:
 5. Click trace ID in logs
 6. Tempo trace view opens with full distributed trace
 
-**Expected:** Clicking metrics opens related logs, trace IDs in logs link to trace viewer, single pane for metrics/logs/traces navigation.
+**Got:** Clicking metrics opens related logs, trace IDs in logs link to trace viewer, single pane for metrics/logs/traces navigation.
 
-**On failure:**
+**If fail:**
 - Verify trace ID format matches regex in derived fields
 - Check that trace_id label extracted by Promtail pipeline
 - Ensure Tempo datasource configured in Grafana
@@ -369,7 +369,7 @@ datasources:
 
 ### Step 6: Set Up Log Retention and Compaction
 
-Configure retention policies and compaction to manage storage costs.
+Configure retention policies, compaction to manage storage costs.
 
 **Retention by stream** (in Loki config):
 
@@ -429,16 +429,16 @@ curl http://localhost:3100/metrics | grep loki_compactor
 curl http://localhost:3100/metrics | grep loki_boltdb_shipper_retention_deleted
 ```
 
-**Expected:** Old logs automatically deleted per retention policy, storage usage stabilizes, compaction reduces index size.
+**Got:** Old logs automatically deleted per retention policy, storage usage stabilizes, compaction reduces index size.
 
-**On failure:**
+**If fail:**
 - Enable compactor in Loki config if retention not working
 - Check compactor logs: `docker logs loki | grep compactor`
 - Verify retention_enabled: true and retention_deletes_enabled: true
 - Monitor disk usage: `du -sh /loki/`
 - For S3: check bucket lifecycle policies don't conflict with Loki retention
 
-## Validation
+## Checks
 
 - [ ] Loki API health check returns 200: `curl http://localhost:3100/ready`
 - [ ] Promtail successfully scraping logs from all configured sources
@@ -451,9 +451,9 @@ curl http://localhost:3100/metrics | grep loki_boltdb_shipper_retention_deleted
 - [ ] Compaction running and reducing storage overhead
 - [ ] Storage usage within allocated disk/S3 budget
 
-## Common Pitfalls
+## Pitfalls
 
-- **High cardinality labels**: Using unbounded label values (user IDs, request IDs) causes index explosion. Use fixed labels (level, service, env) and put variables in log lines.
+- **High cardinality labels**: Using unbounded label values (user IDs, request IDs) causes index explosion. Use fixed labels (level, service, env), put variables in log lines.
 - **Missing log parsing**: Sending raw logs without label extraction limits query capabilities. Always parse structured logs (JSON, logfmt) or use regex for unstructured.
 - **Incorrect time parsing**: Mismatched timestamp formats cause logs to be out of order or rejected. Test timestamp parsing with sample logs.
 - **Retention not working**: Compactor must be enabled for retention to delete old data. Check `retention_enabled: true` and `retention_deletes_enabled: true`.
@@ -461,7 +461,7 @@ curl http://localhost:3100/metrics | grep loki_boltdb_shipper_retention_deleted
 - **Query timeouts**: Broad queries over long time ranges can timeout. Use more specific label selectors and shorter time windows.
 - **Log duplication**: Multiple Promtail instances scraping same logs create duplicates. Use unique labels or positions file coordination.
 
-## Related Skills
+## See Also
 
 - `correlate-observability-signals` - Unified debugging across metrics, logs, and traces using trace IDs
 - `build-grafana-dashboards` - Visualize log-derived metrics and create log panels in dashboards

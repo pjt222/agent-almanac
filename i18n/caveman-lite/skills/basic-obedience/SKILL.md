@@ -67,9 +67,9 @@ Late marking teaches the wrong behavior.
 Mark → then reach for the treat (not the reverse).
 ```
 
-**Expected:** The dog reliably orients toward the handler upon hearing the marker, expecting a reward.
+**Got:** The dog reliably orients toward the handler upon hearing the marker, expecting a reward.
 
-**On failure:** If the dog does not respond to the marker after 20 reps, the treat value is too low. Switch to higher-value rewards (cheese, chicken, liver). If the dog is too distracted to eat, the environment is too stimulating — move to a quieter space.
+**If fail:** If the dog does not respond to the marker after 20 reps, the treat value is too low. Switch to higher-value rewards (cheese, chicken, liver). If the dog is too distracted to eat, the environment is too stimulating — move to a quieter space.
 
 ### Step 2: Teach the Five Foundation Commands
 
@@ -115,9 +115,9 @@ HEEL:
 5. If the dog pulls ahead, stop walking. Resume when the leash is loose.
 ```
 
-**Expected:** Each command is performed reliably in a low-distraction environment with treats as motivation.
+**Got:** Each command is performed reliably in a low-distraction environment with treats as motivation.
 
-**On failure:** If a command is not progressing after 3 sessions, break it into smaller steps. The dog may need an intermediate behavior (e.g., for "down," reward the head-lowering motion before requiring full elbows-on-ground).
+**If fail:** If a command is not progressing after 3 sessions, break it into smaller steps. The dog may need an intermediate behavior (e.g., for "down," reward the head-lowering motion before requiring full elbows-on-ground).
 
 ### Step 3: Structure Training Sessions
 
@@ -144,9 +144,9 @@ The 80/20 Rule:
 - 20% challenge keeps the dog engaged without frustrating
 ```
 
-**Expected:** Short, successful sessions that leave the dog wanting more.
+**Got:** Short, successful sessions that leave the dog wanting more.
 
-**On failure:** If the dog disengages (sniffing, looking away, lying down), the session is too long, too hard, or the rewards are insufficiently motivating. End the session and reassess.
+**If fail:** If the dog disengages (sniffing, looking away, lying down), the session is too long, too hard, or the rewards are insufficiently motivating. End the session and reassess.
 
 ### Step 4: Distraction-Proof the Commands
 
@@ -170,9 +170,9 @@ At each new level:
 - If the dog fails 3 reps in a row, you moved up too fast — go back one level
 ```
 
-**Expected:** Commands work reliably in progressively more distracting environments.
+**Got:** Commands work reliably in progressively more distracting environments.
 
-**On failure:** If a specific distraction (other dogs, squirrels) consistently breaks training, that distraction needs separate counter-conditioning work (see `behavioral-modification`).
+**If fail:** If a specific distraction (other dogs, squirrels) consistently breaks training, that distraction needs separate counter-conditioning work (see `behavioral-modification`).
 
 ## Validation
 
@@ -183,7 +183,7 @@ At each new level:
 - [ ] Commands are being generalized through the distraction ladder
 - [ ] The handler's timing (marker within 1 second) is consistent
 
-## Common Pitfalls
+## Pitfalls
 
 - **Repeating the cue**: Saying "sit, sit, SIT" teaches the dog that the first "sit" is optional. Say it once and wait
 - **Treating too late**: The treat should follow the marker within 2-3 seconds. Late treating breaks the association

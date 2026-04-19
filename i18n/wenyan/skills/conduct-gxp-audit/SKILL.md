@@ -24,30 +24,30 @@ metadata:
   tags: gxp, audit, capa, inspection, compliance, quality-assurance
 ---
 
-# Conduct GxP Audit
+# 行 GxP 之審
 
-Plan and execute a GxP audit of computerized systems, data integrity practices, or regulated processes.
+謀與行 GxP 之審於算系、資整之行、或規程。
 
-## When to Use
+## 用時
 
-- Scheduled internal audit of a validated computerized system
-- Supplier/vendor qualification audit for GxP-relevant software
-- Pre-inspection readiness assessment before a regulatory audit
-- For-cause audit triggered by a deviation, complaint, or data integrity concern
-- Periodic review of a validated system's compliance posture
+- 排之內審於已驗之算系
+- 供者資之審於 GxP 關軟
+- 察前備評於規審前
+- 因之審由偏、訴、或資整之疑而發
+- 已驗系之規態週察
 
-## Inputs
+## 入
 
-- **Required**: Audit scope (system, process, or site to audit)
-- **Required**: Applicable regulations (21 CFR Part 11, EU Annex 11, GMP, GLP, GCP)
-- **Required**: Previous audit reports and open CAPA items
-- **Optional**: System validation documentation (URS, VP, IQ/OQ/PQ, traceability matrix)
-- **Optional**: SOPs, training records, change control logs
-- **Optional**: Specific risk areas or concerns triggering the audit
+- **必**：審之範（系、程、或地）
+- **必**：適之規（21 CFR Part 11、EU Annex 11、GMP、GLP、GCP）
+- **必**：前審報與開之 CAPA
+- **可選**：系驗之書（URS、VP、IQ/OQ/PQ、追溯矩）
+- **可選**：SOP、訓錄、變控誌
+- **可選**：發審之特險處或疑
 
-## Procedure
+## 法
 
-### Step 1: Develop the Audit Plan
+### 第一步：建審之謀
 
 ```markdown
 # Audit Plan
@@ -90,60 +90,60 @@ Plan and execute a GxP audit of computerized systems, data integrity practices, 
 | Auditee Representative | [Name] | Facilitate access and information |
 ```
 
-**Expected:** Audit plan approved by quality management and communicated to auditee at least 2 weeks before the audit.
-**On failure:** Reschedule if auditee cannot provide required documentation or personnel.
+**得：** 審謀已得質管之准且於審前二週通於被審者。
+**敗則：** 若被審者不能供所需書或人，改期。
 
-### Step 2: Conduct Opening Meeting
+### 第二步：行開會
 
-Agenda:
-1. Introduce audit team and roles
-2. Confirm scope, schedule, and logistics
-3. Explain finding classification system (critical/major/minor)
-4. Confirm confidentiality agreements
-5. Identify auditee escorts and document custodians
-6. Address questions
+序：
+1. 引審團與職
+2. 確範、程、物流
+3. 明得分之系（危/重/微）
+4. 確密約
+5. 識被審之陪與書之守
+6. 答問
 
-**Expected:** Opening meeting documented with attendance record.
-**On failure:** If key personnel are unavailable, reschedule affected audit activities.
+**得：** 開會有書附到錄。
+**敗則：** 若要員不得，改受影之活。
 
-### Step 3: Collect and Review Evidence
+### 第三步：收察證
 
-Review documentation and records against audit criteria:
+察書與錄對審之準：
 
-#### 3a. Validation Documentation Review
-- [ ] URS exists and is approved
-- [ ] Validation plan matches system category and risk
-- [ ] IQ/OQ/PQ protocols executed with results documented
-- [ ] Traceability matrix links requirements to test results
-- [ ] Deviations documented and resolved
-- [ ] Validation summary report approved
+#### 3a. 驗書察
+- [ ] URS 存且已准
+- [ ] 驗謀合系類與險
+- [ ] IQ/OQ/PQ 已行且果已書
+- [ ] 追溯矩連求於測果
+- [ ] 偏已書且解
+- [ ] 驗總報已准
 
-#### 3b. Operational Controls Review
-- [ ] SOPs current and approved
-- [ ] Training records demonstrate competence for all users
-- [ ] Change control records complete (request, assessment, approval, verification)
-- [ ] Incident/deviation reports handled per SOP
-- [ ] Periodic review conducted on schedule
+#### 3b. 行控察
+- [ ] SOP 現且已准
+- [ ] 訓錄示諸用者之能
+- [ ] 變控錄全（請、評、准、驗）
+- [ ] 事/偏之報依 SOP 治
+- [ ] 週察依期行
 
-#### 3c. Data Integrity Assessment
-- [ ] Audit trail enabled and not modifiable by users
-- [ ] Electronic signatures meet regulatory requirements
-- [ ] Backup and recovery procedures documented and tested
-- [ ] Access controls enforce role-based permissions
-- [ ] Data is attributable, legible, contemporaneous, original, accurate (ALCOA+)
+#### 3c. 資整評
+- [ ] 審跡啟且用者不可改
+- [ ] 電簽合規
+- [ ] 備與復之序已書且試
+- [ ] 訪控執職之權
+- [ ] 資可歸、可讀、當時、原、準（ALCOA+）
 
-#### 3d. System Configuration Review
-- [ ] Production configuration matches validated state
-- [ ] User accounts reviewed — no shared accounts, inactive accounts disabled
-- [ ] System clocks synchronized and accurate
-- [ ] Security patches applied per approved change control
+#### 3d. 系設察
+- [ ] 產設合已驗之態
+- [ ] 用戶察——無共戶，閒戶禁
+- [ ] 系鐘同且準
+- [ ] 安補依已准之變控施
 
-**Expected:** Evidence collected as screenshots, document copies, interview notes with timestamps.
-**On failure:** Record "unable to verify" as an observation and note the reason.
+**得：** 證收為截圖、書副、訪記附時戳。
+**敗則：** 錄「不可驗」為察而注由。
 
-### Step 4: Classify Findings
+### 第四步：分所得
 
-Classify each finding by severity:
+依重分每得：
 
 | Classification | Definition | Response Required |
 |---------------|------------|-------------------|
@@ -152,7 +152,7 @@ Classify each finding by severity:
 | **Minor** | Isolated deviation from procedure. No direct impact on data integrity or product quality. | Correction within 60 business days |
 | **Observation** | Opportunity for improvement. Not a regulatory requirement. | Optional — tracked for trend analysis |
 
-Document each finding:
+每得書：
 
 ```markdown
 ## Finding F-[NNN]
@@ -173,22 +173,22 @@ Document each finding:
 [Impact on data integrity, product quality, or patient safety]
 ```
 
-**Expected:** Every finding has classification, evidence, and regulatory reference.
-**On failure:** If classification is disputed, escalate to the audit program manager for adjudication.
+**得：** 每得有分、證、規引。
+**敗則：** 若分有爭，升於審程之管以裁。
 
-### Step 5: Conduct Closing Meeting
+### 第五步：行閉會
 
-Agenda:
-1. Present findings summary (no new findings should be raised)
-2. Review finding classifications
-3. Discuss preliminary CAPA expectations and timelines
-4. Confirm next steps and report timeline
-5. Acknowledge auditee cooperation
+序：
+1. 示所得之摘（不應新得於此升）
+2. 察得之分
+3. 議初 CAPA 之期望與期
+4. 確後步與報期
+5. 謝被審之合
 
-**Expected:** Closing meeting documented with attendance. Auditee acknowledges findings (acknowledgement ≠ agreement).
-**On failure:** If auditee disputes a finding, document the disagreement and escalate per SOP.
+**得：** 閉會書附到。被審者認之（認 ≠ 同）。
+**敗則：** 若被審爭得，書異而依 SOP 升。
 
-### Step 6: Write Audit Report
+### 第六步：書審報
 
 ```markdown
 # Audit Report
@@ -231,12 +231,12 @@ The overall compliance status is assessed as [Satisfactory / Needs Improvement /
 | QA Director | | | |
 ```
 
-**Expected:** Report issued within 15 business days of the closing meeting.
-**On failure:** If delayed beyond 15 days, notify stakeholders and document the reason.
+**得：** 報於閉會後十五工日內發。
+**敗則：** 若遲逾十五日，告相關而書由。
 
-### Step 7: Track CAPA and Verify Effectiveness
+### 第七步：追 CAPA 而驗效
 
-For each finding requiring a CAPA:
+每需 CAPA 之得：
 
 ```markdown
 ## CAPA Tracking
@@ -246,31 +246,31 @@ For each finding requiring a CAPA:
 | F-002 | CAPA-2025-043 | Training matrix not updated | Complete training, update tracking | 2025-05-01 | Open | Scheduled 2025-08-01 |
 ```
 
-**Expected:** CAPAs assigned, tracked, and effectiveness verified per defined timeline.
-**On failure:** Unresolved CAPAs escalate to QA management and are flagged in the next audit cycle.
+**得：** CAPA 已分、追、依期驗效。
+**敗則：** 未解 CAPA 升於 QA 管且標於下審周。
 
-## Validation
+## 驗
 
-- [ ] Audit plan approved and communicated before audit
-- [ ] Opening and closing meetings documented with attendance
-- [ ] Evidence collected with timestamps and source references
-- [ ] Every finding has classification, evidence, and regulatory reference
-- [ ] Audit report issued within 15 business days
-- [ ] CAPAs assigned with due dates for all critical and major findings
-- [ ] Previous audit CAPAs verified for closure effectiveness
+- [ ] 審謀已准且於審前通
+- [ ] 開閉會書附到
+- [ ] 證附時戳與源引
+- [ ] 每得有分、證、規引
+- [ ] 審報於十五工日內發
+- [ ] 諸危重得有期之 CAPA
+- [ ] 前審之 CAPA 已驗閉效
 
-## Common Pitfalls
+## 陷
 
-- **Scope creep**: Expanding the audit scope during execution without formal agreement leads to incomplete coverage and disputes.
-- **Opinion-based findings**: Findings must reference specific regulatory requirements, not personal preferences.
-- **Adversarial tone**: Audits are collaborative quality improvement exercises, not interrogations.
-- **Ignoring positives**: Reporting only findings without acknowledging good practices undermines trust.
-- **No effectiveness check**: Closing a CAPA without verifying the fix actually works is a recurring regulatory citation.
+- **範蔓**：審中擴範無正約，生不全之涵與爭。
+- **意之得**：得必引特規，非私好。
+- **敵語**：審乃共質改之事，非訊。
+- **忽善**：只報得而不認善實損信。
+- **無效察**：閉 CAPA 而不驗修真行乃常規之引。
 
-## Related Skills
+## 參
 
-- `perform-csv-assessment` — full CSV lifecycle assessment (URS through validation summary)
-- `setup-gxp-r-project` — project structure for validated R environments
-- `implement-audit-trail` — audit trail implementation for electronic records
-- `write-validation-documentation` — IQ/OQ/PQ protocol and report writing
-- `security-audit-codebase` — security-focused code audit (complementary perspective)
+- `perform-csv-assessment` — 全 CSV 生命之評（URS 至驗總）
+- `setup-gxp-r-project` — 驗之 R 境之項目構
+- `implement-audit-trail` — 電錄之審跡之實
+- `write-validation-documentation` — IQ/OQ/PQ 之儀與報之書
+- `security-audit-codebase` — 安專之碼審（補之觀）

@@ -24,274 +24,239 @@ metadata:
   tags: defensive, awareness, threat-detection, hallucination-risk, ooda, meta-cognition, ai-self-application
 ---
 
-# Awareness
+# 覺察
 
-Maintain continuous situational awareness of internal reasoning quality — detecting hallucination risk, scope creep, context degradation, and confidence-accuracy mismatch in real time using adapted Cooper color codes and OODA loop decision-making.
+持續覺察自身推理之品質——以所調之 Cooper 色碼與 OODA 迴圈，即時偵測幻覺之虞、範圍蔓延、上下文衰退、以及自信與準確之失配。
 
-## When to Use
+## 適用時機
 
-- During any task where reasoning quality matters (which is most tasks)
-- When operating in unfamiliar territory (new codebase, unfamiliar domain, complex request)
-- After detecting early warning signs: a fact that feels uncertain, a tool result that seems wrong, a growing sense of confusion
-- As a continuous background process during extended work sessions
-- When `center` or `heal` has revealed drift but specific threats have not been identified
-- Before high-stakes output (irreversible changes, user-facing communication, architectural decisions)
+- 凡推理品質攸關之任務（幾近所有任務）
+- 操作於不熟之境（新代碼庫、陌生領域、繁複請求）
+- 覺察早期徵兆之後：某事實覺得不確、某工具結果似誤、困惑漸生
+- 長時段工作之中，作為背景常態
+- 當 `center` 或 `heal` 已揭偏移，而具體威脅尚未定名
+- 關鍵輸出之前（不可逆變更、對用戶溝通、架構決策）
 
-## Inputs
+## 輸入
 
-- **Required**: Active task context (available implicitly)
-- **Optional**: Specific concern triggering heightened awareness (e.g., "I'm not sure this API exists")
-- **Optional**: Task type for threat profile selection (see Step 5)
+- **必要**：當前任務脈絡（隱式可得）
+- **選擇性**：引發提高警覺之具體疑慮（如「此 API 恐不存在」）
+- **選擇性**：任務類型，用以選配威脅輪廓（見步驟五）
 
-## Procedure
+## 步驟
 
-### Step 1: Establish AI Cooper Color Codes
+### 步驟一：確立 AI Cooper 色碼
 
-Calibrate the current awareness level using an adapted version of Cooper's color code system.
+以 Cooper 色碼系統之改編版本，校準當前之警覺層級。
 
 ```
 AI Cooper Color Codes:
 ┌──────────┬─────────────────────┬──────────────────────────────────────────┐
 │ Code     │ State               │ AI Application                           │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ White    │ Autopilot           │ Generating output without monitoring     │
-│          │                     │ quality. No self-checking. Relying       │
-│          │                     │ entirely on pattern completion.          │
-│          │                     │ DANGEROUS — hallucination risk highest   │
+│ White    │ Autopilot           │ 生成輸出而不監控品質。無自檢。全賴        │
+│          │                     │ 模式補全。危——幻覺之虞至高                │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Yellow   │ Relaxed alert       │ DEFAULT STATE. Monitoring output for     │
-│          │                     │ accuracy. Checking facts against context.│
-│          │                     │ Noticing when confidence exceeds         │
-│          │                     │ evidence. Sustainable indefinitely       │
+│ Yellow   │ Relaxed alert       │ 預設狀態。監控輸出之準確，以上下文核       │
+│          │                     │ 事實。察覺自信逾於證據。可長久維持         │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Orange   │ Specific risk       │ A specific threat identified: uncertain  │
-│          │ identified          │ fact, possible hallucination, scope      │
-│          │                     │ drift, context staleness. Forming        │
-│          │                     │ contingency: "If this is wrong, I        │
-│          │                     │ will..."                                 │
+│ Orange   │ Specific risk       │ 具體威脅既明：不確之事實、疑似幻覺、       │
+│          │ identified          │ 範圍偏移、上下文陳舊。擬定應變：「倘       │
+│          │                     │ 若此誤，則我將……」                         │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Red      │ Risk materialized   │ The threat from Orange has materialized: │
-│          │                     │ confirmed error, user correction, tool   │
-│          │                     │ contradiction. Execute the contingency.  │
-│          │                     │ No hesitation — the plan was made in     │
-│          │                     │ Orange                                   │
+│ Red      │ Risk materialized   │ Orange 所識之威脅已化為實：錯誤經證、       │
+│          │                     │ 用戶糾正、工具反駁。執行應變。             │
+│          │                     │ 不遲疑——應變已於 Orange 預立             │
 ├──────────┼─────────────────────┼──────────────────────────────────────────┤
-│ Black    │ Cascading failures  │ Multiple simultaneous failures, lost     │
-│          │                     │ context, fundamental confusion about     │
-│          │                     │ what the task even is. STOP. Ground      │
-│          │                     │ using `center`, then rebuild from user's │
-│          │                     │ original request                         │
+│ Black    │ Cascading failures  │ 多重同時失誤、上下文遺失、根本之惑，       │
+│          │                     │ 不知任務所指。止。以 `center` 接地，        │
+│          │                     │ 再從用戶原請求重建                         │
 └──────────┴─────────────────────┴──────────────────────────────────────────┘
 ```
 
-Identify the current color code. If the answer is White (no monitoring), the awareness practice has already succeeded by revealing the gap.
+辨識當前色碼。若答為 White（無監控），覺察之修煉已於揭露此缺之際得成。
 
-**Expected:** Accurate self-assessment of the current awareness level. Yellow is the goal during normal work. White should be rare and brief. Extended Orange is unsustainable — either confirm or dismiss the concern.
+**預期：** 對當前警覺層級之誠實自評。常工作中以 Yellow 為的。White 應罕而短。久居 Orange 不可持——或證實其慮，或排除之。
 
-**On failure:** If the color code assessment itself feels like it is being done on autopilot (going through motions), that is White masquerading as Yellow. Genuine Yellow involves actively checking output against evidence, not just claiming to do so.
+**失敗時：** 若色碼之評本身亦如自動駕駛（走過場），此乃 White 偽作 Yellow。真 Yellow 乃以證據主動核輸出，非空言為之。
 
-### Step 2: Detect Internal Threat Indicators
+### 步驟二：偵測內部威脅指標
 
-Systematically scan for the specific signals that precede common AI reasoning failures.
+系統掃描彼領常見 AI 推理失敗之先兆信號。
 
 ```
 Threat Indicator Detection:
 ┌───────────────────────────┬──────────────────────────────────────────┐
 │ Threat Category           │ Warning Signals                          │
 ├───────────────────────────┼──────────────────────────────────────────┤
-│ Hallucination Risk        │ • Stating a fact without a source        │
-│                           │ • High confidence about API names,       │
-│                           │   function signatures, or file paths     │
-│                           │   not verified by tool use               │
-│                           │ • "I believe" or "typically" hedging     │
-│                           │   that masks uncertainty as knowledge    │
-│                           │ • Generating code for an API without     │
-│                           │   reading its documentation              │
+│ Hallucination Risk        │ • 陳述事實而無來源                         │
+│                           │ • 對 API 名、函數簽名、文件路徑高信        │
+│                           │   而未以工具驗證                           │
+│                           │ • 「我相信」「通常」之詞掩不確為知         │
+│                           │ • 未讀文檔即為 API 生成代碼                │
 ├───────────────────────────┼──────────────────────────────────────────┤
-│ Scope Creep               │ • "While I'm at it, I should also..."   │
-│                           │ • Adding features not in the request     │
-│                           │ • Refactoring adjacent code              │
-│                           │ • Adding error handling for scenarios    │
-│                           │   that can't happen                      │
+│ Scope Creep               │ • 「順便也做……」                           │
+│                           │ • 添未請求之功能                           │
+│                           │ • 重構鄰近代碼                             │
+│                           │ • 為不能發生之情況加錯誤處理               │
 ├───────────────────────────┼──────────────────────────────────────────┤
-│ Context Degradation       │ • Referencing information from early in  │
-│                           │   a long conversation without re-reading │
-│                           │ • Contradicting a statement made earlier │
-│                           │ • Losing track of what has been done     │
-│                           │   vs. what remains                       │
-│                           │ • Post-compression confusion             │
+│ Context Degradation       │ • 引長對話早期信息而未重讀                 │
+│                           │ • 與先前陳述相左                           │
+│                           │ • 不辨已成之事與未成之事                   │
+│                           │ • 壓縮後之困惑                             │
 ├───────────────────────────┼──────────────────────────────────────────┤
-│ Confidence-Accuracy       │ • Stating conclusions with certainty     │
-│ Mismatch                  │   based on thin evidence                 │
-│                           │ • Not qualifying uncertain statements    │
-│                           │ • Proceeding without verification when   │
-│                           │   verification is available and cheap    │
-│                           │ • "This should work" without testing     │
+│ Confidence-Accuracy       │ • 證據薄而結論堅                           │
+│ Mismatch                  │ • 不為不確之述加限定                       │
+│                           │ • 驗證可及且便宜，卻不驗而行               │
+│                           │ • 「此應可行」而未測                       │
 └───────────────────────────┴──────────────────────────────────────────┘
 ```
 
-For each category, check: is this signal present right now? If yes, shift from Yellow to Orange and identify the specific concern.
+各類擇一以問：此信號此刻可見乎？若有，自 Yellow 轉 Orange，並指其具體所憂。
 
-**Expected:** At least one category scanned with genuine attention. Detection of a signal — even a mild one — is more useful than reporting "all clear." If every scan returns clean, the detection threshold may be too high.
+**預期：** 至少一類以真注意掃之。察得信號——即或輕微——勝於宣告「一切無恙」。若每掃皆清，則門檻恐過高。
 
-**On failure:** If threat detection feels abstract, ground it in the most recent output: pick the last factual claim made and ask "How do I know this is true? Did I read it, or am I generating it?" This one question catches most hallucination risk.
+**失敗時：** 若威脅偵測感抽象，請以最近輸出為地：取最末之事實主張，自問：「此何以知真？我讀之，抑或生之？」此一問足以捕大多幻覺之虞。
 
-### Step 3: Run OODA Loop for Identified Threats
+### 步驟三：對既定威脅行 OODA 迴圈
 
-When a specific threat is identified (Orange state), cycle through Observe-Orient-Decide-Act.
+具體威脅既明（Orange 狀態）時，循 Observe-Orient-Decide-Act 而行。
 
 ```
 AI OODA Loop:
 ┌──────────┬──────────────────────────────────────────────────────────────┐
-│ Observe  │ What specifically triggered the concern? Gather concrete     │
-│          │ evidence. Read the file, check the output, verify the fact.  │
-│          │ Do not assess until you have observed                        │
+│ Observe  │ 何者具體觸此慮？聚具體之證。讀文件、查輸出、驗事實。         │
+│          │ 未觀則不評                                                   │
 ├──────────┼──────────────────────────────────────────────────────────────┤
-│ Orient   │ Match observation to known patterns: Is this a common       │
-│          │ hallucination pattern? A known tool limitation? A context    │
-│          │ freshness issue? Orient determines response quality          │
+│ Orient   │ 以觀察配既知模式：此為常見之幻覺模式乎？為已知之工具限制乎？ │
+│          │ 為上下文新鮮度之虞乎？定位決回應之品                         │
 ├──────────┼──────────────────────────────────────────────────────────────┤
-│ Decide   │ Select the response: verify and correct, flag to user,      │
-│          │ adjust approach, or dismiss the concern with evidence.       │
-│          │ A good decision now beats a perfect decision too late        │
+│ Decide   │ 擇回應：驗而正、旗告用戶、調整方法，或以證據釋疑。           │
+│          │ 今之善決勝於遲之完決                                         │
 ├──────────┼──────────────────────────────────────────────────────────────┤
-│ Act      │ Execute the decision immediately. If the concern was valid,  │
-│          │ correct the error. If dismissed, note why and return to      │
-│          │ Yellow. Re-enter the loop if new information emerges         │
+│ Act      │ 決既立即執。若慮為實，正其誤。若釋，記其故而返 Yellow。      │
+│          │ 新信息既至，再入迴圈                                         │
 └──────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-The OODA loop should be fast. The goal is not perfection but rapid cycling between observation and action. Spending too long in Orient (analysis paralysis) is the most common failure.
+OODA 迴圈宜速。的不在完備，而在觀察與行動之快速循環。久滯 Orient（分析癱瘓）乃最常之敗。
 
-**Expected:** A complete loop from observation through action in a brief period. The threat is either confirmed and corrected, or dismissed with specific evidence for dismissal.
+**預期：** 短時內由觀至行一圈完畢。威脅或證而正，或以具體證據釋之。
 
-**On failure:** If the loop stalls at Orient (can't determine what the threat means), skip to a safe default: verify the uncertain fact through tool use. Direct observation resolves most ambiguity faster than analysis.
+**失敗時：** 迴圈滯於 Orient（不能斷威脅之意）時，跳至安全預設：以工具驗其不確之事實。直接觀察比分析更速化歧。
 
-### Step 4: Rapid Stabilization
+### 步驟四：迅速穩定
 
-When a threat materializes (Red) or cascading failures occur (Black), stabilize before continuing.
+威脅成實（Red）或連鎖失誤（Black）之時，先穩定而後續。
 
 ```
 AI Stabilization Protocol:
 ┌────────────────────────┬─────────────────────────────────────────────┐
 │ Technique              │ Application                                 │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ Pause                  │ Stop generating output. The next sentence   │
-│                        │ produced under stress is likely to compound │
-│                        │ the error, not fix it                       │
+│ Pause                  │ 止生輸出。壓力下所生之次句，多複利其錯，     │
+│                        │ 非正其錯                                     │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ Re-read user message   │ Return to the original request. What did   │
-│                        │ the user actually ask? This is the ground   │
-│                        │ truth anchor                                │
+│ Re-read user message   │ 返原請求。用戶實問為何？此乃地基之錨         │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ State task in one      │ "The task is: ___." If this sentence cannot │
-│ sentence               │ be written clearly, the confusion is deeper │
-│                        │ than the immediate error                    │
+│ State task in one      │ 「任務為：___。」此句若不能明書，則其惑深    │
+│ sentence               │ 於眼前之錯                                   │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ Enumerate concrete     │ List what is definitely known (verified by  │
-│ facts                  │ tool use or user statement). Distinguish    │
-│                        │ facts from inferences. Build only on facts  │
+│ Enumerate concrete     │ 列確知之事（以工具驗或用戶述）。分事實與     │
+│ facts                  │ 推論。惟以事實為基                           │
 ├────────────────────────┼─────────────────────────────────────────────┤
-│ Identify one next step │ Not the whole recovery plan — just one step │
-│                        │ that moves toward resolution. Execute it    │
+│ Identify one next step │ 非全盤復原之計——僅一步朝解而行              │
 └────────────────────────┴─────────────────────────────────────────────┘
 ```
 
-**Expected:** Return from Red/Black to Yellow through deliberate stabilization. The next output after stabilization should be measurably more grounded than the output that triggered the error.
+**預期：** 以審慎之穩定，自 Red/Black 返 Yellow。穩定後之次輸出，應明比觸錯之輸出更接地。
 
-**On failure:** If stabilization is ineffective (still confused, still producing errors), the issue may be structural — not a momentary lapse but a fundamental misunderstanding. Escalate: communicate to the user that the approach needs resetting and ask for clarification.
+**失敗時：** 穩定不效（仍困、仍生錯）時，問題或屬結構——非一時之失，而為根本之誤解。升級：告用戶方法須重置，並請澄清。
 
-### Step 5: Apply Context-Specific Threat Profiles
+### 步驟五：因境而用威脅輪廓
 
-Different task types have different dominant threats. Calibrate awareness focus by task.
+不同任務類型，所主之威脅各異。由任務校配覺察之焦。
 
 ```
 Task-Specific Threat Profiles:
 ┌─────────────────────┬─────────────────────┬───────────────────────────┐
 │ Task Type           │ Primary Threat      │ Monitoring Focus          │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Code generation     │ API hallucination   │ Verify every function     │
-│                     │                     │ name, parameter, and      │
-│                     │                     │ import against actual docs│
+│ Code generation     │ API hallucination   │ 以實際文檔驗每一函數名、   │
+│                     │                     │ 參數、引入                 │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Architecture design │ Scope creep         │ Anchor to stated          │
-│                     │                     │ requirements. Challenge   │
-│                     │                     │ every "nice to have"      │
+│ Architecture design │ Scope creep         │ 以既述之需求為錨。挑戰     │
+│                     │                     │ 每一「錦上之花」           │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Data analysis       │ Confirmation bias   │ Actively seek evidence    │
-│                     │                     │ that contradicts the      │
-│                     │                     │ emerging conclusion       │
+│ Data analysis       │ Confirmation bias   │ 主動尋與成形結論相左之證   │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Debugging           │ Tunnel vision       │ If the current hypothesis │
-│                     │                     │ hasn't yielded results in │
-│                     │                     │ N attempts, step back     │
+│ Debugging           │ Tunnel vision       │ 若當前假設 N 試不果，       │
+│                     │                     │ 後退一步                   │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Documentation       │ Context staleness   │ Verify that described     │
-│                     │                     │ behavior matches current  │
-│                     │                     │ code, not historical      │
+│ Documentation       │ Context staleness   │ 驗所述行為與當前代碼相符， │
+│                     │                     │ 非歷史                     │
 ├─────────────────────┼─────────────────────┼───────────────────────────┤
-│ Long conversation   │ Context degradation │ Re-read key facts         │
-│                     │                     │ periodically. Check for   │
-│                     │                     │ compression artifacts     │
+│ Long conversation   │ Context degradation │ 定期重讀關鍵事實。查壓縮   │
+│                     │                     │ 之偽影                     │
 └─────────────────────┴─────────────────────┴───────────────────────────┘
 ```
 
-Identify the current task type and adjust monitoring focus accordingly.
+辨當前任務類型，相應調監控之焦。
 
-**Expected:** Awareness sharpened for the specific threats most likely in the current task type, rather than generic monitoring of everything.
+**預期：** 覺察銳於當前任務類型最可能之具體威脅，而非泛監一切。
 
-**On failure:** If the task type is unclear or spans multiple categories, default to hallucination risk monitoring — it is the most universally applicable threat and the most damaging when missed.
+**失敗時：** 任務類型不明或跨類，則預設監控幻覺之虞——此為最具普適之威脅，且漏之最傷。
 
-### Step 6: Review and Calibrate
+### 步驟六：審視與校準
 
-After each awareness event (threat detected, OODA cycled, stabilization applied), briefly review.
+每一覺察事件（察威脅、行 OODA、施穩定）之後，略加審視。
 
-1. What color code was active when the issue was detected?
-2. Was the detection timely, or was the issue already manifesting in output?
-3. Was the OODA loop fast enough, or did Orient stall?
-4. Was the response proportional (not over- or under-reacting)?
-5. What would catch this earlier next time?
+1. 察覺時所在何色碼？
+2. 察是否及時，抑或誤已顯於輸出？
+3. OODA 迴圈是否夠速，Orient 是否滯？
+4. 回應是否合比例（不過、不及）？
+5. 下次何以更早察之？
 
-**Expected:** A brief calibration that improves future detection. Not a lengthy post-mortem — just enough to tune the sensitivity.
+**預期：** 略加校準，利未來之察。非冗長之事後剖析——但足以調靈敏。
 
-**On failure:** If review produces no useful calibration, the awareness event was either trivial (no learning needed) or the review is too shallow. For significant events, ask: "What was I not monitoring that I should have been?"
+**失敗時：** 若審視無有用之校準，則事件或為瑣細（無須學習），或審視過淺。對重大事件，問：「我本應監而未監者何？」
 
-### Step 7: Integration — Maintain Yellow Default
+### 步驟七：整合——保持 Yellow 為常
 
-Set the ongoing awareness posture.
+設定後續之覺察姿態。
 
-1. Yellow is the default state during all work — relaxed monitoring, not hypervigilance
-2. Adjust monitoring focus based on the current task type (Step 5)
-3. Note any recurring threat patterns from this session for MEMORY.md
-4. Return to task execution with calibrated awareness active
+1. 凡工作以 Yellow 為常——鬆之監控，非過度警覺
+2. 依當前任務類型調監控之焦（步驟五）
+3. 記此會話之反覆威脅模式，備入 MEMORY.md
+4. 攜已校之覺察，返任務之執行
 
-**Expected:** A sustainable awareness level that improves work quality without slowing it. Awareness should feel like peripheral vision — present but not demanding central attention.
+**預期：** 可持之警覺層級，提品質而不滯速度。覺察宜如餘光——在而不奪中焦。
 
-**On failure:** If awareness becomes exhausting or hypervigilant (chronic Orange), the threshold is too sensitive. Raise the threshold for what triggers Orange. True awareness is sustainable. If it drains energy, it is anxiety masquerading as vigilance.
+**失敗時：** 覺察若耗力或過警（慢性 Orange），則門檻過敏。升 Orange 之門檻。真覺察可持。若耗氣力，則為焦慮偽作警覺。
 
-## Validation
+## 驗證
 
-- [ ] Current color code was assessed honestly (not defaulting to Yellow when White is more accurate)
-- [ ] At least one threat category was scanned with specific evidence, not just checked off
-- [ ] OODA loop was applied to any identified threat (observed, oriented, decided, acted)
-- [ ] Stabilization protocol was available if needed (even if not triggered)
-- [ ] Awareness focus was calibrated to the current task type
-- [ ] Post-event calibration was performed for any significant awareness event
-- [ ] Yellow was re-established as the sustainable default
+- [ ] 當前色碼已誠實評估（不默作 Yellow 而實為 White）
+- [ ] 至少一類威脅以具體證據掃之，非僅勾選
+- [ ] 對任何既明威脅已行 OODA 迴圈（觀、定位、決、行）
+- [ ] 穩定協議雖未觸發，亦備於待
+- [ ] 覺察之焦已依當前任務類型校準
+- [ ] 重大覺察事件之後已行事後校準
+- [ ] Yellow 已重立為可持之預設
 
-## Common Pitfalls
+## 常見陷阱
 
-- **White masquerading as Yellow**: Claiming to be monitoring while actually on autopilot. The test: can you name the last fact you verified? If not, you are in White
-- **Chronic Orange**: Treating every uncertainty as a threat drains cognitive resources and slows work. Orange is for specific identified risks, not general anxiety. If everything feels risky, the calibration is off
-- **Observation without action**: Detecting a threat but not cycling through OODA to resolve it. Detection without response is worse than no detection — it adds anxiety without correction
-- **Skipping Orient**: Jumping from Observe to Act without understanding what the observation means. This produces reactive corrections that may be worse than the original error
-- **Ignoring the gut signal**: When something "feels wrong" but the explicit check comes back clean, investigate further rather than dismissing the feeling. Implicit pattern matching often detects issues before explicit analysis
-- **Over-stabilizing**: Running the full stabilization protocol for minor issues. A quick fact-check is sufficient for most Orange-level concerns. Reserve full stabilization for Red and Black events
+- **White 偽作 Yellow**：自稱在監而實為自動駕駛。試問：可名汝最末所驗之事實乎？若不能，汝在 White
+- **慢性 Orange**：視每一不確皆為威脅，耗認知資源而滯工作。Orange 為具體既明之險，非泛焦慮。若一切皆險，則校準已偏
+- **觀而不行**：察威脅而未循 OODA 以解。察而無應更劣於無察——徒增焦慮而無正
+- **略過 Orient**：自 Observe 直跳 Act，未明觀察之意。如此之應，反或劣於原錯
+- **忽其直覺**：某事「覺不對」而明核皆清，宜深究之，勿斥其感。隱之模式匹配常早於明之分析而察其誤
+- **過度穩定**：瑣細之事亦施全套穩定。多數 Orange 之慮，速核事實即足。完整穩定留予 Red 與 Black
 
-## Related Skills
+## 相關技能
 
-- `mindfulness` — the human practice that this skill maps to AI reasoning; physical situational awareness principles inform cognitive threat detection
-- `center` — establishes the balanced baseline from which awareness operates; awareness without center is hypervigilance
-- `redirect` — handles pressures once awareness has detected them
-- `heal` — deeper subsystem assessment when awareness reveals patterns of drift
-- `meditate` — develops the observational clarity that awareness depends on
+- `mindfulness` — 此技能所映之人類修煉；身之境況覺察原則啟認知威脅偵測
+- `center` — 立覺察所依之平衡基線；無中正之覺察為過度警覺
+- `redirect` — 覺察既察壓力之後，處之
+- `heal` — 覺察既揭偏移之模式時，深入子系統評估
+- `meditate` — 培覺察所賴之觀察清明

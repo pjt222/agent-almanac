@@ -63,9 +63,9 @@ Ensure the decision space is adequately explored before any advocacy begins.
    - Confidence level (how thoroughly was this option evaluated?)
 3. Aggregate scout reports without filtering — all options above a minimum quality threshold enter the advocacy phase
 
-**Expected:** A set of independently evaluated proposals with quality scores and assessments. No option has been eliminated by a single evaluator; diversity of perspective is preserved.
+**Got:** A set of independently evaluated proposals with quality scores and assessments. No option has been eliminated by a single evaluator; diversity of perspective is preserved.
 
-**On failure:** If scouts converge on the same option without independent evaluation, the scouting was not truly independent. Rerun with explicit information barriers. If too many options survive to the advocacy phase, raise the minimum quality threshold. If too few survive, lower it or add more scouts.
+**If fail:** If scouts converge on the same option without independent evaluation, the scouting was not truly independent. Rerun with explicit information barriers. If too many options survive to the advocacy phase, raise the minimum quality threshold. If too few survive, lower it or add more scouts.
 
 ### Step 2: Run Advocacy Dynamics (Waggle Dance)
 
@@ -101,9 +101,9 @@ Advocacy Dynamics:
 └─────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** Advocacy for the best option(s) grows over time as agents independently verify quality. Advocacy for weaker options fades as verification fails. The group naturally converges toward the strongest option without any agent dictating the choice.
+**Got:** Advocacy for the best option(s) grows over time as agents independently verify quality. Advocacy for weaker options fades as verification fails. The group naturally converges toward the strongest option without any agent dictating the choice.
 
-**On failure:** If advocacy doesn't converge (two options remain neck-and-neck), the options may be genuinely equivalent — proceed to quorum with either, or use a tiebreaker rule. If advocacy converges too fast on a mediocre option, increase the independence of evaluation (more scouts, stricter information barriers) and add a mandatory cross-inspection step.
+**If fail:** If advocacy doesn't converge (two options remain neck-and-neck), the options may be genuinely equivalent — proceed to quorum with either, or use a tiebreaker rule. If advocacy converges too fast on a mediocre option, increase the independence of evaluation (more scouts, stricter information barriers) and add a mandatory cross-inspection step.
 
 ### Step 3: Set Quorum Threshold and Commit
 
@@ -123,9 +123,9 @@ Define the commitment threshold that triggers collective action.
    - Advocates for losing options acknowledge the decision (no rogue agents)
    - Implementation begins immediately — delay after consensus erodes commitment
 
-**Expected:** A clear quorum moment where enough agents have independently committed to one option. The decision is legitimate because it emerged from independent evaluation, not authority or coercion.
+**Got:** A clear quorum moment where enough agents have independently committed to one option. The decision is legitimate because it emerged from independent evaluation, not authority or coercion.
 
-**On failure:** If quorum is never reached within the time budget, escalate to Step 4 (deadlock resolution). If quorum is reached but agents are unhappy, the advocacy phase was too short — agents committed without adequate evaluation. If the consensus was wrong (discovered after the fact), the independent scouting was insufficient — increase scout diversity and evaluation thoroughness in the next cycle.
+**If fail:** If quorum is never reached within the time budget, escalate to Step 4 (deadlock resolution). If quorum is reached but agents are unhappy, the advocacy phase was too short — agents committed without adequate evaluation. If the consensus was wrong (discovered after the fact), the independent scouting was insufficient — increase scout diversity and evaluation thoroughness in the next cycle.
 
 ### Step 4: Resolve Deadlocks
 
@@ -143,9 +143,9 @@ Break decision gridlock when the natural consensus process stalls.
    - Option proliferation: ranked elimination tournament
 3. After resolution, reset the quorum clock and re-run Step 3
 
-**Expected:** Deadlock resolved through the appropriate intervention. The resolution is visible and accepted by the group as fair process, even if individual agents preferred a different outcome.
+**Got:** Deadlock resolved through the appropriate intervention. The resolution is visible and accepted by the group as fair process, even if individual agents preferred a different outcome.
 
-**On failure:** If deadlocks recur on the same decision, the decision framing may be wrong. Step back and ask: can the decision be decomposed into smaller, independent decisions? Can the scope be reduced? Is there a "try both and see" option? Sometimes the best consensus is "we'll run a time-boxed experiment."
+**If fail:** If deadlocks recur on the same decision, the decision framing may be wrong. Step back and ask: can the decision be decomposed into smaller, independent decisions? Can the scope be reduced? Is there a "try both and see" option? Sometimes the best consensus is "we'll run a time-boxed experiment."
 
 ### Step 5: Assess Consensus Quality
 
@@ -165,9 +165,9 @@ Evaluate whether the consensus process produced a good decision, not just a deci
    - Adjust scout count based on option complexity
    - Adjust time budgets based on historical time-to-quorum
 
-**Expected:** A feedback loop that improves consensus quality over time. The group learns to scout more effectively, advocate more honestly, and commit more confidently.
+**Got:** A feedback loop that improves consensus quality over time. The group learns to scout more effectively, advocate more honestly, and commit more confidently.
 
-**On failure:** If consensus quality metrics are poor (high regret, slow decisions), audit the process for structural failures: insufficient scouting diversity, advocacy without verification, or thresholds set too low for the decision type. Rebuild the specific failing stage rather than overhauling the entire process.
+**If fail:** If consensus quality metrics are poor (high regret, slow decisions), audit the process for structural failures: insufficient scouting diversity, advocacy without verification, or thresholds set too low for the decision type. Rebuild the specific failing stage rather than overhauling the entire process.
 
 ## Validation
 
@@ -179,7 +179,7 @@ Evaluate whether the consensus process produced a good decision, not just a deci
 - [ ] Deadlock resolution mechanism was available (even if unused)
 - [ ] Post-decision quality assessment was conducted
 
-## Common Pitfalls
+## Pitfalls
 
 - **Skipping independent scouting**: Jumping directly to advocacy produces groupthink. The quality of consensus depends entirely on the quality of independent evaluation
 - **Equal advocacy for unequal options**: If every option gets the same advocacy regardless of quality, the process degenerates into random selection. Advocacy must be proportional to assessed quality

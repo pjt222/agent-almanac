@@ -25,35 +25,35 @@ metadata:
   tags: resilience, circuit-breaker, error-handling, graceful-degradation, tool-reliability, fault-tolerance
 ---
 
-# Circuit Breaker Pattern
+# 斷路之式
 
-Graceful degradation when tools fail. An agent that calls five tools and one is broken should not fail entirely — it should recognize the broken tool, stop calling it, reduce scope to what remains achievable, and report honestly about what was skipped. This skill codifies that logic using the circuit breaker pattern from distributed systems, adapted to agentic tool orchestration.
+具敗則柔降。使者呼五具而一破者，不宜盡敗——宜識其破、止呼之、減範至可成者、誠報所略。此技以散系之斷路式為準，化為使者具之調度。
 
-The core insight, from kirapixelads' "Kitchen Fire Problem": the expeditor (orchestration layer) must not cook. Separation of concerns between deciding *what* to attempt and *how* to attempt it prevents the orchestrator from getting trapped in a failing tool's retry loop.
+核心之見，自 kirapixelads「廚火之問」：調者（調度之層）不可自炊。析「何攻」與「如何攻」之分，免調者陷於敗具之再試環。
 
-## When to Use
+## 用時
 
-- Building agents that depend on multiple tools with varying reliability
-- Designing fault-tolerant agentic workflows where partial results are better than total failure
-- An agent is stuck in a retry loop on a broken tool instead of continuing with working tools
-- Recovering gracefully from tool outages mid-task
-- Hardening existing agents against cascading tool failures
-- Stale or cached tool output is being treated as fresh data
+- 建倚多具而信度異之使者
+- 設容錯之流，偏成勝於全敗
+- 使者陷於敗具之再試環而不進於可用之具
+- 任務中具斷而柔恢
+- 固舊使者禦連鎖之具敗
+- 陳緩之具出被視為新資
 
-## Inputs
+## 入
 
-- **Required**: List of tools the agent depends on (names and purposes)
-- **Required**: The task the agent is trying to accomplish
-- **Optional**: Known tool reliability issues or past failure patterns
-- **Optional**: Failure threshold (default: 3 consecutive failures before opening circuit)
-- **Optional**: Failure budget per cycle (default: 5 total failures before pause-and-report)
-- **Optional**: Half-open probe interval (default: every 3rd attempt after opening)
+- **必**：使者所倚之具列（名與用）
+- **必**：使者所圖之任
+- **可選**：已知之具病或往敗之式
+- **可選**：敗之閾（默：三連敗開路）
+- **可選**：每周之敗額（默：五總敗而後停報）
+- **可選**：半開試之距（默：開後每三攻一試）
 
-## Procedure
+## 法
 
-### Step 1: Build the Capability Map
+### 第一步：建能圖
 
-Declare what each tool provides and what alternatives exist. This map is the foundation for scope reduction — without it, a tool failure leaves the agent guessing about what to do next.
+明各具所供與所有之替。此圖乃範縮之基——無之則具敗而使者茫然。
 
 ```yaml
 capability_map:
@@ -98,18 +98,18 @@ capability_map:
     fallback: "state what information is needed; ask user to provide it"
 ```
 
-For each tool, document:
-1. What capability it provides (one line)
-2. What alternative tools can partially cover it (with degradation notes)
-3. What the manual fallback is when no tool alternative exists
+每具書：
+1. 所供之能（一言）
+2. 可部分代之具（附降等之注）
+3. 無具可代時之手補
 
-**Expected:** A complete capability map covering every tool the agent uses. Each entry has at least a fallback, even if no tool alternative exists. The map makes explicit what is usually implicit: which tools are critical (no alternatives) and which are substitutable.
+**得：** 全能圖涵使者所用每具。每條至少有補，雖無具替。圖明示常隱者：何具關鍵（無替）、何具可代。
 
-**On failure:** If the tool list is unclear, start with the `allowed-tools` from the skill's frontmatter. If alternatives are uncertain, mark them as `degradation: "unknown — test before relying on this route"` rather than omitting them.
+**敗則：** 若具列含糊，自技之 `allowed-tools` 始。替不確者，標 `degradation: "unknown — test before relying on this route"` 而不略之。
 
-### Step 2: Initialize Circuit Breaker State
+### 第二步：初斷路之態
 
-Set up the state tracker for each tool. Every tool starts in CLOSED state (healthy, normal operation).
+為每具設態追。諸具起於 CLOSED 態（健，常行）。
 
 ```
 Circuit Breaker State Table:
@@ -127,26 +127,26 @@ Circuit Breaker State Table:
 Failure budget: 0 / 5 consumed
 ```
 
-**State definitions:**
+**態之定：**
 
-- **CLOSED** — Tool is healthy. Use normally. Track consecutive failures.
-- **OPEN** — Tool is known-broken. Do not call it. Route to alternatives or degrade scope.
-- **HALF-OPEN** — Tool was broken but may have recovered. Send a single probe call. If it succeeds, transition to CLOSED. If it fails, return to OPEN.
+- **CLOSED**——具健。正常用。追連敗。
+- **OPEN**——具已破。勿呼。路於替或降範。
+- **HALF-OPEN**——具曾破或已恢。發一試呼。成則遷 CLOSED；敗則返 OPEN。
 
-**State transitions:**
+**態之遷：**
 
-- CLOSED -> OPEN: When consecutive failures reach the threshold (default: 3)
-- OPEN -> HALF-OPEN: After a configurable interval (e.g., every 3rd task step)
-- HALF-OPEN -> CLOSED: On successful probe call
-- HALF-OPEN -> OPEN: On failed probe call
+- CLOSED -> OPEN：連敗至閾（默：三）
+- OPEN -> HALF-OPEN：經定距（如每三步）
+- HALF-OPEN -> CLOSED：試呼成
+- HALF-OPEN -> OPEN：試呼敗
 
-**Expected:** A state table initialized for all tools with CLOSED state and zero failure counts. The failure threshold and budget are explicitly declared.
+**得：** 全具態表已初為 CLOSED 零敗。閾與額明宣。
 
-**On failure:** If the tool list cannot be enumerated upfront (dynamic tool discovery), initialize state on first use of each tool. The pattern still applies — you just build the table incrementally.
+**敗則：** 若具不可預列（動發現），首用時初其態。式仍適——漸建表耳。
 
-### Step 3: Implement the Call-and-Track Loop
+### 第三步：行呼追環
 
-When the agent needs to call a tool, follow this decision sequence. This is the expeditor logic — it decides *whether* to attempt the call, not *how* to execute it.
+使者欲呼具時，循此決序。此乃調者之理——決「是否攻」，非「如何行」。
 
 ```
 BEFORE each tool call:
@@ -178,22 +178,22 @@ AFTER each tool call:
          Report to user (Step 6)
 ```
 
-The expeditor never retries a failed call immediately. It records the failure, checks thresholds, and moves on. Retries happen only through the HALF-OPEN probe mechanism at a later step.
+調者不即再試敗呼。記敗、察閾、而進。再試唯經 HALF-OPEN 試機於後步。
 
-**Expected:** A clear decision loop that the agent follows before and after every tool call. Tool health is tracked continuously. The expeditor layer never blocks on a failing tool.
+**得：** 明決環，使者每呼前後循之。具健續追。調層不阻於敗具。
 
-**On failure:** If tracking state across calls is impractical (e.g., stateless execution), degrade to a simpler model: count total failures and pause at budget. The three-state circuit breaker is ideal; a failure counter is the minimum viable pattern.
+**敗則：** 若跨呼追態難（如無態之行），降至簡：數總敗而於額停。三態斷路為佳；敗計為最小可行式。
 
-### Step 4: Route to Alternatives on Open Circuit
+### 第四步：路於開路之替
 
-When a tool's circuit is OPEN, consult the capability map (Step 1) and route to the best available alternative.
+某具路 OPEN 時，查能圖（第一步）而路於至善可用之替。
 
-**Routing priority:**
+**路之序：**
 
-1. **Tool alternative with low degradation** — Use another tool that provides similar capability. Note the degradation in the task output.
-2. **Tool alternative with high degradation** — Use another tool with significant capability loss. Explicitly label what is missing from the result.
-3. **Manual fallback** — Report what the agent cannot do and what information or action the user would need to provide.
-4. **Scope reduction** — If no alternative exists and no fallback is viable, remove the dependent sub-task from scope entirely (Step 5).
+1. **低降之替**——用他具供似能。於任出注其降。
+2. **高降之替**——用他具而能損顯。明示所缺。
+3. **手補**——報使者不能為何及需用者提供之資或行。
+4. **範縮**——無替無補，則除其依之子任（第五步）。
 
 ```
 Example routing decision:
@@ -222,22 +222,22 @@ Route 4: Scope reduction
   → Document: "SKIPPED: API key search — no tools available"
 ```
 
-**Expected:** When a tool circuit opens, the agent transparently routes to an alternative or degrades scope. The routing decision and any degradation are documented in the task output so the user knows what was affected.
+**得：** 具路開時，使者明路於替或降範。路之決與任一降皆書於任出，使用者知所影。
 
-**On failure:** If the capability map is incomplete (no alternatives listed), default to scope reduction and report. Never silently skip work — always document what was skipped and why.
+**敗則：** 若能圖不全（無替列），默降為範縮而報之。永勿默略——必書所略與由。
 
-### Step 5: Reduce Scope to Achievable Work
+### 第五步：減範至可成
 
-When tools are open-circuited and alternatives are exhausted, reduce the task to what can still be accomplished with working tools. This is not failure — it is honest scope management.
+具開而替盡時，減任至以可用具仍可成者。非敗也——乃誠之範治。
 
-**Scope reduction protocol:**
+**範縮之儀：**
 
-1. List remaining sub-tasks
-2. For each sub-task, check which tools it requires
-3. If all required tools are CLOSED or have viable alternatives: keep the sub-task
-4. If any required tool is OPEN with no alternative: mark the sub-task as DEFERRED
-5. Continue with the reduced scope
-6. Report deferred sub-tasks at the end
+1. 列餘子任
+2. 每子任察其所需具
+3. 若所需具皆 CLOSED 或有替：留之
+4. 若所需具有 OPEN 而無替：標為 DEFERRED
+5. 以縮之範續
+6. 末報延之子任
 
 ```
 Scope Reduction Report:
@@ -257,24 +257,24 @@ Sub-tasks 3 and 5 require Bash — will probe on next cycle
 or user can run commands manually.
 ```
 
-Do not attempt deferred sub-tasks. Do not retry open-circuited tools hoping they will work. The circuit breaker exists precisely to prevent this — trust its state.
+勿攻延之子任。勿再試開路之具望其可行。斷路正為此存——信其態。
 
-**Expected:** A clear partition of the task into achievable and deferred work. The agent completes all achievable work and reports deferred items with the reason and what would unblock them.
+**得：** 任明分為可成與延。使者成諸可成而報延者附由及解阻之法。
 
-**On failure:** If scope reduction removes all sub-tasks (every tool is broken), skip directly to Step 6 — pause and report. An agent with no working tools should not pretend to make progress.
+**敗則：** 若範縮除盡子任（每具皆破），直至第六步——停而報。無具可用者不宜偽進。
 
-### Step 6: Handle Staleness and Label Data Quality
+### 第六步：察陳且標資質
 
-When a tool returns data that may be stale (cached results, outdated snapshots, previously fetched content), label it explicitly rather than treating it as fresh.
+某具返資或已陳（緩果、過時之攝、前取之容）時，明標之，勿視為新。
 
-**Staleness indicators:**
+**陳之兆：**
 
-- Tool output matches a previous call exactly (possible cache hit)
-- Data references timestamps older than the current task
-- Tool documentation mentions caching behavior
-- Results contradict other recent observations
+- 具出與前呼同（或緩中）
+- 資引之時比當任舊
+- 具書言緩行
+- 果與近察相違
 
-**Labeling protocol:**
+**標之儀：**
 
 ```
 When presenting potentially stale data:
@@ -289,15 +289,15 @@ When presenting potentially stale data:
 "[UNVERIFIED — WebSearch result from {date}; current status unknown]"
 ```
 
-Never silently present stale data as current. The user or downstream agent must know the data quality to make sound decisions.
+勿默示陳資為新。用者或下游使者必知資質而後能明決。
 
-**Expected:** All tool outputs that may be stale carry explicit labels. Fresh data is not labeled (labeling is reserved for uncertainty, not confirmation).
+**得：** 或陳之出皆明標。新資無標（標專於不確，非確）。
 
-**On failure:** If staleness cannot be determined (no timestamps, no comparison baseline), note the uncertainty: "[FRESHNESS UNKNOWN — no baseline for comparison]". Uncertainty about freshness is itself information.
+**敗則：** 若陳不可定（無時戳、無比基），注其不確：「[FRESHNESS UNKNOWN — no baseline for comparison]」。不確本身亦資也。
 
-### Step 7: Enforce the Failure Budget
+### 第七步：執敗之額
 
-Track total failures across all tools. When the budget is exhausted, the agent pauses and reports rather than continuing to accumulate errors.
+追諸具總敗。額盡則使者停報，勿續積誤。
 
 ```
 Failure Budget Enforcement:
@@ -316,7 +316,7 @@ Status: 1 failure remaining before mandatory pause
 → If it fails: PAUSE and generate status report
 ```
 
-**On budget exhaustion:**
+**額盡之處：**
 
 ```
 FAILURE BUDGET EXHAUSTED — PAUSING
@@ -345,65 +345,65 @@ Recommendation:
   3. Resume from sub-task 4 after resolution
 ```
 
-The pause-and-report serves the same function as a circuit breaker in electrical systems: it prevents damage from accumulating. An agent that keeps calling broken tools wastes context window, confuses the user with repeated errors, and may produce inconsistent partial results.
+停而報，如電路之斷：免積損。續呼敗具者耗脈絡、擾用者以覆誤、或生矛盾之偏果。
 
-**Expected:** The agent stops cleanly when the failure budget is exhausted. The report includes completed work, incomplete work, tool health, and actionable next steps.
+**得：** 額盡則使者清止。報含已成、未成、具健、可行之後步。
 
-**On failure:** If the agent cannot generate a clean report (e.g., state tracking was lost), output whatever information is available. A partial report is better than silent continuation.
+**敗則：** 若使者不能生清報（如態追已失），輸所有之資。偏報勝於默續。
 
-### Step 8: Separation of Concerns — Expeditor vs. Executor
+### 第八步：分理——調者與執者
 
-Verify that the orchestration logic (Steps 2-7) is cleanly separated from tool execution.
+驗調度之理（第二至第七步）與具行清分。
 
-**The expeditor (orchestration) does:**
-- Track tool health state
-- Decide whether to call a tool, skip it, or probe it
-- Route to alternatives when a tool is open-circuited
-- Enforce the failure budget
-- Generate status reports
+**調者（調度）為：**
+- 追具健之態
+- 決呼、略、或試之
+- 某具開時路於替
+- 執敗額
+- 生狀態報
 
-**The expeditor does NOT:**
-- Retry failed tool calls immediately
-- Modify tool call parameters to work around errors
-- Catch and suppress tool errors
-- Make assumptions about why a tool failed
-- Execute fallback logic that itself requires tools
+**調者不為：**
+- 即再試敗呼
+- 改呼參以繞誤
+- 捕而掩具誤
+- 假設具敗之由
+- 行自需具之補理
 
-If the expeditor is "cooking" (making tool calls to work around other tool failures), the separation is broken. The expeditor should route to an alternative tool or reduce scope — not try to fix the broken tool.
+調者若「炊」（呼具以繞他具之敗），則分斷。調者宜路於替或減範——勿試修破具。
 
-**Expected:** A clean boundary between orchestration decisions and tool execution. The expeditor layer can be described without referencing specific tool APIs or error types.
+**得：** 調決與具行清界。調層可述而不引具 API 或誤型。
 
-**On failure:** If orchestration and execution are entangled, refactor by extracting the decision logic into a separate step that runs before each tool call. The decision step produces one of four outputs: CALL, SKIP, PROBE, or PAUSE. The execution step acts on that output.
+**敗則：** 若調執相纏，重構——抽決理為呼前獨步。決步生四出之一：CALL、SKIP、PROBE、或 PAUSE。行步隨出而動。
 
-### Step 9: Detect Cascading Failures
+### 第九步：察連鎖之敗
 
-When multiple tools share infrastructure (network, filesystem, permissions), a single root cause can trip several breakers simultaneously. Detect and handle this correlated pattern rather than treating each breaker independently.
+多具共基（網、檔系、權）時，一根因可同跳數路。察此相關之式，勿獨治每路。
 
-**Cascading failure indicators:**
+**連鎖敗之兆：**
 
-- 3+ tools transition to OPEN within the same task step or a narrow window
-- Failures share a common error signature (e.g., "connection refused," "permission denied")
-- Tools that previously had independent failure histories suddenly fail together
+- 三具以上於同步或近窗內遷 OPEN
+- 諸敗共簽名（如「connection refused」、「permission denied」）
+- 前獨敗史之具忽同敗
 
-**Response protocol:**
+**應之儀：**
 
-1. When a second breaker opens, check whether the failure category matches the first
-2. If correlated: flag as **systemic failure** — pause all tool calls, not just the broken ones
-3. Report the suspected root cause: "Multiple tools failing with [shared pattern] — likely [network/filesystem/permissions] issue"
-4. Do not probe half-open tools during a systemic failure — probes will also fail and waste budget
-5. Resume probing only after the user confirms the infrastructure issue is resolved
+1. 第二路開時，察敗類是否同於第一
+2. 若相關：標為**系之敗**——停所有具呼，非只破者
+3. 報疑之根因：「Multiple tools failing with [shared pattern] — likely [network/filesystem/permissions] issue」
+4. 系敗時勿試半開之具——試亦將敗而耗額
+5. 唯於用者確基礎已恢後再試
 
-**Backoff compounding:** When cascading failures trigger, use exponential backoff for half-open probes: probe at step 3, then step 6, then step 12. Cap the maximum interval at 20 steps to prevent permanent circuit lock. This prevents rapid-fire probes from overwhelming a recovering system.
+**退合之疊：** 連鎖敗觸時，半開試用指數退：第三步試、第六步試、第十二步試。限上距於二十步以免永閉。此免急試壓恢中之系。
 
-**Expected:** Correlated failures are detected and treated as a single systemic event rather than N independent breaker trips. The failure budget counts the systemic event once, not N times.
+**得：** 相關敗視為一系事，非 N 獨跳。敗額只計系事一次，非 N 次。
 
-**On failure:** If correlation detection is impractical (failures have different error signatures despite a shared cause), fall back to independent per-tool breakers. The system still degrades gracefully — it just consumes budget faster.
+**敗則：** 若相關察難（敗簽異雖共因），降為獨路。系仍柔降——只耗額速耳。
 
-### Step 10: Pre-Call Tool Selection Layer
+### 第十步：呼前擇具之層
 
-Before engaging the circuit breaker loop (Step 3), optionally verify that a tool is available and likely to succeed. This reduces unnecessary breaker trips from predictable failures.
+行斷路環（第三步）前，或驗具可得且有望成。此減可預敗之冗跳。
 
-**Pre-call checks:**
+**呼前之察：**
 
 | Check | Method | Action on failure |
 |-------|--------|-------------------|
@@ -411,7 +411,7 @@ Before engaging the circuit breaker loop (Step 3), optionally verify that a tool
 | MCP server health | Check server process/connection status | Route to alternative immediately |
 | Resource availability | Verify target file/URL/endpoint exists | Route or degrade scope |
 
-**Decision table:**
+**決表：**
 
 ```
 Pre-call score:
@@ -420,45 +420,45 @@ Pre-call score:
   UNAVAILABLE → skip tool, route to alternative (Step 4) without consuming budget
 ```
 
-Pre-call checks are advisory, not authoritative. A tool that passes pre-call checks can still fail during execution. The circuit breaker remains the primary reliability mechanism.
+呼前之察乃諮而非斷。過察之具仍可於行時敗。斷路仍為主之信機。
 
-**Expected:** Predictable failures (missing tools, unreachable servers) are caught before they consume the failure budget. The circuit breaker handles only genuine runtime failures.
+**得：** 可預之敗（具缺、服不可達）於耗額前捕。斷路只治真行時之敗。
 
-**On failure:** If pre-call checks are unavailable or add too much overhead, skip this step entirely. The circuit breaker loop in Step 3 handles all failures — pre-call selection is an optimization, not a requirement.
+**敗則：** 若呼前察不可得或加冗過重，全略此步。第三步之斷路環治一切敗——呼前擇乃優，非必。
 
-## Validation
+## 驗
 
-- [ ] Capability map covers all tools with alternatives and fallbacks documented
-- [ ] Circuit breaker state table is initialized for all tools
-- [ ] State transitions follow CLOSED -> OPEN -> HALF-OPEN -> CLOSED cycle
-- [ ] Failure threshold is explicitly declared (not implicit)
-- [ ] Alternative routing is attempted before scope reduction
-- [ ] Scope reduction is documented with deferred sub-tasks and reasons
-- [ ] Stale data is labeled explicitly — never presented as fresh
-- [ ] Failure budget is enforced with pause-and-report on exhaustion
-- [ ] Expeditor logic does not execute tool calls or retry failed calls
-- [ ] Status report includes completed work, incomplete work, and tool health
-- [ ] No silent failures — every skip, deferral, and degradation is documented
-- [ ] Cascading failures are detected when 3+ tools open simultaneously
-- [ ] Systemic failure mode pauses all probes until infrastructure is confirmed recovered
-- [ ] Pre-call checks (if used) do not consume the failure budget on predictable failures
+- [ ] 能圖涵諸具附替與補
+- [ ] 斷路態表已初為諸具
+- [ ] 態遷循 CLOSED -> OPEN -> HALF-OPEN -> CLOSED 環
+- [ ] 敗閾明宣（非隱）
+- [ ] 替路攻於範縮前
+- [ ] 範縮書延之子任與由
+- [ ] 陳資明標——永勿示為新
+- [ ] 敗額執以停報於盡時
+- [ ] 調者不行具呼或再試敗呼
+- [ ] 狀態報含已成、未成、具健
+- [ ] 無默敗——每略、延、降皆書
+- [ ] 三具以上同開時察連鎖敗
+- [ ] 系敗模停諸試至基礎確恢
+- [ ] 呼前察（若用）不耗額於可預敗
 
-## Common Pitfalls
+## 陷
 
-- **Retrying instead of circuit-breaking**: Calling a broken tool repeatedly wastes the failure budget and context window. Three consecutive failures is a pattern, not bad luck. Open the circuit.
-- **Cooking in the expeditor**: The orchestration layer should decide *what* to attempt, not *how* to fix broken tools. If the expeditor is crafting workaround commands for Bash failures, it has crossed the separation boundary.
-- **Silent scope reduction**: Dropping sub-tasks without documenting them produces results that look complete but are not. Always report what was skipped.
-- **Treating stale data as fresh**: Cached or previously fetched results may not reflect current state. Label uncertainty rather than ignoring it.
-- **Opening circuits too eagerly**: A single transient failure should not open the circuit. Use a threshold (default: 3) to filter noise from signal.
-- **Never probing after opening**: A permanently open circuit means the agent never discovers that a tool has recovered. Half-open probes are essential for recovery.
-- **Ignoring the failure budget**: Without a budget, an agent can accumulate dozens of failures across different tools while still "making progress" on paper. The budget forces an honest checkpoint.
-- **Cascading backoff multiplication**: When multiple tools in a dependency chain each apply their own exponential backoff, the compound delay grows multiplicatively. Cap total aggregate backoff across the chain, not just per tool.
-- **Stale discovery scores**: Pre-call selection (Step 10) caches tool availability assessments. If the cache is not invalidated when conditions change, the agent may skip a recovered tool or attempt an unavailable one. Re-check scores after any systemic failure event.
+- **再試而不斷路**：屢呼破具耗額與脈絡。三連敗為式，非惡運。開路之。
+- **於調者炊**：調層宜決「攻何」，非「如何修破具」。若調者為 Bash 敗而製繞令，已越界。
+- **默範縮**：略子任而不書，果似全而實否。必報所略。
+- **視陳為新**：緩或前取之果或不反當態。標不確，勿忽之。
+- **過急開路**：一瞬敗不宜開路。用閾（默：三）濾噪留訊。
+- **開後不試**：永開之路使使者永不知具已恢。半開之試為恢之要。
+- **忽敗額**：無額，使者可積數十敗而表上仍「進」。額強誠之檢。
+- **連鎖退之疊乘**：鏈中諸具各施指數退，合遲乘增。限鏈總退，非只每具。
+- **陳之發現值**：呼前擇（第十步）緩具可得之評。緩於境變時未廢，使者或略已恢之具或攻不得之具。每系敗後再察之。
 
-## Related Skills
+## 參
 
-- `fail-early-pattern` — complementary pattern: fail-early validates inputs before work begins; circuit-breaker manages failures during work
-- `escalate-issues` — when the failure budget is exhausted or scope reduction is significant, escalate to a specialist or human
-- `write-incident-runbook` — document recurring tool failure patterns as runbooks for faster diagnosis
-- `assess-context` — evaluate whether the current approach can adapt when multiple tools are degraded; pairs with scope reduction decisions
-- `du-dum` — two-clock architecture separating observation from decision; complementary pattern for reducing observation cost in agent loops
+- `fail-early-pattern` — 補式：前者驗入於始，斷路治行中之敗
+- `escalate-issues` — 額盡或範縮顯時升於專家或人
+- `write-incident-runbook` — 書重現具敗之式為行冊以速診
+- `assess-context` — 多具降時評當前之法可適乎；與範縮之決配
+- `du-dum` — 二鍾之構析察於決；補式以減使者環中察之本

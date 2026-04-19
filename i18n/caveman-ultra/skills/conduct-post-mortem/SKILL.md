@@ -25,27 +25,27 @@ metadata:
 
 # Conduct Post-Mortem
 
-Lead a blameless post-mortem to learn from incidents and improve system resilience.
+Lead blameless post-mortem → learn from incidents + improve system resilience.
 
-## When to Use
+## Use When
 
-- After any production incident or service degradation
-- Following a near-miss or close call
-- When investigating recurring issues
-- To share learnings across teams
+- Post production incident or service degradation
+- Post near-miss / close call
+- Investigating recurring issues
+- Share learnings across teams
 
-## Inputs
+## In
 
 - **Required**: Incident details (start/end time, services affected, severity)
-- **Required**: Access to logs, metrics, and alerts during the incident window
+- **Required**: Access to logs, metrics, alerts during incident window
 - **Optional**: Runbook used during incident response
 - **Optional**: Communication logs (Slack, PagerDuty)
 
-## Procedure
+## Do
 
 ### Step 1: Collect Raw Data
 
-Gather all artifacts from the incident:
+Gather all artifacts from incident:
 
 ```bash
 # Export relevant logs (adjust timerange)
@@ -64,13 +64,13 @@ curl -G 'http://prometheus:9090/api/v1/query_range' \
 amtool alert query --within=2h alertname="HighErrorRate" --output json > alerts.json
 ```
 
-**Expected:** Logs, metrics, and alerts covering the full incident timeline.
+**→** Logs, metrics, alerts covering full incident timeline.
 
-**On failure:** If data is incomplete, note gaps in the report. Set up longer retention for next time.
+**If err:** Data incomplete → note gaps in report. Set up longer retention next time.
 
-### Step 2: Build the Timeline
+### Step 2: Build Timeline
 
-Create a chronological reconstruction:
+Chronological reconstruction:
 
 ```markdown
 ## Timeline (all times UTC)
@@ -88,13 +88,13 @@ Create a chronological reconstruction:
 | 10:40:00 | Incident marked resolved | PagerDuty | @alice |
 ```
 
-**Expected:** A clear, minute-by-minute sequence showing what happened and when.
+**→** Clear minute-by-minute seq showing what + when.
 
-**On failure:** Timestamp mismatches. Ensure all systems use NTP and log in UTC.
+**If err:** Timestamp mismatches → ensure all systems use NTP + log in UTC.
 
 ### Step 3: Identify Contributing Factors
 
-Use the Five Whys or fishbone analysis:
+Five Whys or fishbone analysis:
 
 ```markdown
 ## Contributing Factors
@@ -114,13 +114,13 @@ Use the Five Whys or fishbone analysis:
 - Database alerts only fire on total failure, not degradation
 ```
 
-**Expected:** Multiple layers of causation identified, avoiding blame.
+**→** Multiple causation layers ID'd, no blame.
 
-**On failure:** If analysis stops at "engineer made a mistake", dig deeper. What allowed that mistake?
+**If err:** Analysis stops at "engineer made mistake" → dig deeper. What allowed that mistake?
 
 ### Step 4: Generate Action Items
 
-Create concrete, trackable improvements:
+Concrete trackable improvements:
 
 ```markdown
 ## Action Items
@@ -135,13 +135,13 @@ Create concrete, trackable improvements:
 | AI-006 | Add load testing for new query patterns | @charlie | 2025-03-15 | Low |
 ```
 
-**Expected:** Each action has an owner, deadline, and clear deliverable.
+**→** Each action has owner, deadline, clear deliverable.
 
-**On failure:** Vague actions like "improve testing" won't get done. Make specific.
+**If err:** Vague actions like "improve testing" won't get done → make specific.
 
-### Step 5: Write and Distribute Report
+### Step 5: Write + Distribute Report
 
-Use this template structure:
+Template structure:
 
 ```markdown
 # Post-Mortem: API Service Degradation (2025-02-09)
@@ -182,9 +182,9 @@ missing index. Under increased load, this saturated the connection pool.
 See Action Items above.
 ```
 
-**Expected:** Report shared with team and stakeholders within 48 hours of incident.
+**→** Report shared w/ team + stakeholders within 48 hrs of incident.
 
-**On failure:** If report delays exceed 1 week, insights grow stale. Prioritize post-mortems.
+**If err:** Report delay > 1 week → insights grow stale → prioritize post-mortems.
 
 ### Step 6: Review Action Items in Standup/Retros
 
@@ -201,29 +201,29 @@ gh issue create --title "AI-001: Add connection pool metrics" \
 # Add to team calendar: Weekly review of open post-mortem items
 ```
 
-**Expected:** Action items tracked in project management tool, reviewed weekly.
+**→** Action items tracked in project mgmt tool, reviewed weekly.
 
-**On failure:** If action items languish, incidents will recur. Assign executive sponsor for high-priority items.
+**If err:** Action items languish → incidents recur. Assign exec sponsor for high-pri items.
 
-## Validation
+## Check
 
-- [ ] Timeline is complete and chronologically accurate
-- [ ] Multiple contributing factors identified (not just one)
-- [ ] Action items have owners, deadlines, and priorities
+- [ ] Timeline complete + chronologically accurate
+- [ ] Multiple contributing factors ID'd (not just one)
+- [ ] Action items have owners, deadlines, priorities
 - [ ] Report uses blameless language (no "X caused the issue")
-- [ ] Report distributed to all stakeholders within 48 hours
+- [ ] Report distributed to all stakeholders within 48 hrs
 - [ ] Action items tracked in ticketing system
-- [ ] Follow-up review scheduled for 4 weeks out
+- [ ] Follow-up review scheduled 4 weeks out
 
-## Common Pitfalls
+## Traps
 
-- **Blame culture**: Using "who" language instead of "what/why". Focus on systems, not people.
-- **Shallow analysis**: Stopping at the first cause. Always ask "why" at least 5 times.
-- **Vague action items**: "Improve monitoring" is not actionable. "Add metric X to dashboard Y by date Z" is.
-- **No follow-through**: Action items created but never reviewed. Set calendar reminders.
-- **Fear of transparency**: Hiding incidents reduces learning. Share widely (within appropriate security boundaries).
+- **Blame culture**: Using "who" language vs. "what/why" → focus on systems, not people.
+- **Shallow analysis**: Stopping at first cause. Always ask "why" ≥ 5 times.
+- **Vague action items**: "Improve monitoring" = not actionable. "Add metric X to dashboard Y by date Z" = actionable.
+- **No follow-through**: Action items created but never reviewed → set calendar reminders.
+- **Fear of transparency**: Hiding incidents reduces learning. Share widely (w/in appropriate security boundaries).
 
-## Related Skills
+## →
 
-- `write-incident-runbook` - create runbooks referenced during incidents
+- `write-incident-runbook` - create runbooks ref'd during incidents
 - `configure-alerting-rules` - improve alerts based on post-mortem findings

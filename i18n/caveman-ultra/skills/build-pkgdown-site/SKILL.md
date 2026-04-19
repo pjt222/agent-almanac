@@ -25,35 +25,35 @@ metadata:
 
 # Build pkgdown Site
 
-Configure and deploy a pkgdown documentation website for an R package.
+Config + deploy pkgdown doc site for R pkg.
 
-## When to Use
+## Use When
 
-- Creating a documentation site for an R package
-- Customizing pkgdown layout, theme, or navigation
-- Fixing 404 errors on a deployed pkgdown site
-- Migrating between deployment methods
+- Doc site for R pkg
+- Customize pkgdown layout, theme, nav
+- Fix 404s on deployed pkgdown site
+- Migrate between deploy methods
 
-## Inputs
+## In
 
-- **Required**: R package with roxygen2 documentation
-- **Required**: GitHub repository
-- **Optional**: Custom theme or branding
+- **Required**: R pkg w/ roxygen2 docs
+- **Required**: GitHub repo
+- **Optional**: Custom theme/branding
 - **Optional**: Vignettes to include as articles
 
-## Procedure
+## Do
 
-### Step 1: Initialize pkgdown
+### Step 1: Init pkgdown
 
 ```r
 usethis::use_pkgdown()
 ```
 
-This creates `_pkgdown.yml` and adds pkgdown to `.Rbuildignore`.
+Creates `_pkgdown.yml` + adds pkgdown to `.Rbuildignore`.
 
-**Expected:** `_pkgdown.yml` exists in the project root. `.Rbuildignore` contains pkgdown-related entries.
+**→** `_pkgdown.yml` in project root. `.Rbuildignore` has pkgdown entries.
 
-**On failure:** Install pkgdown with `install.packages("pkgdown")`. If `_pkgdown.yml` already exists, the function will update `.Rbuildignore` without overwriting the config.
+**If err:** Install pkgdown via `install.packages("pkgdown")`. `_pkgdown.yml` already exists → fn updates `.Rbuildignore` w/o overwriting config.
 
 ### Step 2: Configure `_pkgdown.yml`
 
@@ -97,11 +97,11 @@ articles:
       - customization
 ```
 
-**Critical**: Set `development: mode: release`. The default `mode: auto` causes 404 errors on GitHub Pages because it appends `/dev/` to URLs.
+**Critical**: Set `development: mode: release`. Default `mode: auto` causes 404s on GitHub Pages (appends `/dev/` to URLs).
 
-**Expected:** `_pkgdown.yml` contains valid YAML with `url`, `template`, `navbar`, `reference`, and `articles` sections appropriate for the package.
+**→** `_pkgdown.yml` valid YAML w/ `url`, `template`, `navbar`, `reference`, `articles` appropriate for pkg.
 
-**On failure:** Validate YAML syntax with an online YAML linter. Ensure all function names in `reference.contents` match actual exported functions.
+**If err:** Validate YAML syntax w/ online linter. All fn names in `reference.contents` match actual exported fns.
 
 ### Step 3: Build Locally
 
@@ -109,29 +109,29 @@ articles:
 pkgdown::build_site()
 ```
 
-**Expected:** `docs/` directory created with a complete site including `index.html`, function reference pages, and articles.
+**→** `docs/` dir created w/ complete site incl `index.html`, fn ref pages, articles.
 
-**On failure:** Common issues: missing pandoc (set `RSTUDIO_PANDOC` in `.Renviron`), missing vignette dependencies (install suggested packages), or broken examples (fix or wrap in `\dontrun{}`).
+**If err:** Common issues: missing pandoc (set `RSTUDIO_PANDOC` in `.Renviron`), missing vignette deps (install suggested pkgs), broken examples (fix or wrap in `\dontrun{}`).
 
-### Step 4: Preview Site
+### Step 4: Preview
 
 ```r
 pkgdown::preview_site()
 ```
 
-Verify navigation, function reference, articles, and search work correctly.
+Verify nav, fn ref, articles, search work.
 
-**Expected:** Site opens in the browser at localhost. All navigation links work, function reference pages render, and search returns results.
+**→** Site opens in browser at localhost. Nav links work, ref pages render, search returns results.
 
-**On failure:** If the preview does not open, manually open `docs/index.html` in a browser. If pages are missing, check that `devtools::document()` was run before building the site.
+**If err:** Preview doesn't open → manually open `docs/index.html`. Pages missing → check `devtools::document()` ran before build.
 
 ### Step 5: Deploy to GitHub Pages
 
 **Method A: GitHub Actions (Recommended)**
 
-See `setup-github-actions-ci` skill for the pkgdown workflow.
+See `setup-github-actions-ci` skill for pkgdown workflow.
 
-**Method B: Manual Branch Deployment**
+**Method B: Manual Branch Deploy**
 
 ```bash
 # Build site
@@ -149,20 +149,20 @@ git push origin gh-pages
 git checkout main
 ```
 
-**Expected:** The `gh-pages` branch exists on the remote with the site files at the root level.
+**→** `gh-pages` branch on remote w/ site files at root.
 
-**On failure:** If the push is rejected, ensure you have write access to the repository. If using GitHub Actions deployment instead, skip this step and follow the `setup-github-actions-ci` skill.
+**If err:** Push rejected → ensure write access. Using GitHub Actions instead → skip + follow `setup-github-actions-ci`.
 
 ### Step 6: Configure GitHub Pages
 
-1. Go to repository Settings > Pages
-2. Set Source to "Deploy from a branch"
+1. Repo Settings > Pages
+2. Source: "Deploy from a branch"
 3. Select `gh-pages` branch, `/ (root)` folder
 4. Save
 
-**Expected:** Site available at `https://username.github.io/packagename/` within a few minutes.
+**→** Site available at `https://username.github.io/packagename/` within min.
 
-**On failure:** If the site returns 404, verify the Pages source matches the deployment method (branch deployment requires "Deploy from a branch"). Check that `development: mode: release` is set in `_pkgdown.yml`.
+**If err:** 404 → verify Pages source matches deploy method (branch deploy needs "Deploy from a branch"). Check `development: mode: release` in `_pkgdown.yml`.
 
 ### Step 7: Add URL to DESCRIPTION
 
@@ -170,33 +170,33 @@ git checkout main
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 
-**Expected:** DESCRIPTION `URL` field contains both the pkgdown site URL and the GitHub repository URL, separated by a comma.
+**→** DESCRIPTION `URL` has pkgdown site URL + GitHub repo URL, comma-separated.
 
-**On failure:** If `R CMD check` warns about invalid URLs, verify the pkgdown site is actually deployed and accessible before adding the URL.
+**If err:** `R CMD check` warns invalid URLs → verify pkgdown site actually deployed + accessible before adding.
 
-## Validation
+## Check
 
-- [ ] Site builds locally without errors
-- [ ] All function reference pages render correctly
-- [ ] Articles/vignettes are accessible and render properly
-- [ ] Search functionality works
-- [ ] Navigation links are correct
-- [ ] Site deploys successfully to GitHub Pages
-- [ ] No 404 errors on the deployed site
-- [ ] `development: mode: release` is set in `_pkgdown.yml`
+- [ ] Builds locally w/o errs
+- [ ] All fn ref pages render
+- [ ] Articles/vignettes accessible + render
+- [ ] Search works
+- [ ] Nav links correct
+- [ ] Deploys to GitHub Pages
+- [ ] No 404s
+- [ ] `development: mode: release` set
 
-## Common Pitfalls
+## Traps
 
-- **404 errors after deployment**: Almost always caused by `development: mode: auto` (the default). Change to `mode: release`.
-- **Missing reference pages**: Functions must be exported and documented. Run `devtools::document()` first.
-- **Broken vignette links**: Use `vignette("name")` syntax in cross-references, not file paths.
-- **Logo not showing**: Place logo at `man/figures/logo.png` and reference in `_pkgdown.yml`.
-- **Search not working**: Requires `url` field in `_pkgdown.yml` to be set correctly.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **404 after deploy**: Almost always `development: mode: auto` (default). → `mode: release`
+- **Missing ref pages**: Fns must be exported + documented. Run `devtools::document()` first
+- **Broken vignette links**: Use `vignette("name")` syntax for cross-refs, not file paths
+- **Logo not showing**: Place at `man/figures/logo.png`, ref in `_pkgdown.yml`
+- **Search not working**: Needs `url` field in `_pkgdown.yml` set correctly
+- **Wrong R binary hybrid sys**: WSL/Docker → `Rscript` may resolve to cross-platform wrapper vs native. Check `which Rscript && Rscript --version`. Prefer native (e.g., `/usr/local/bin/Rscript` on Linux/WSL). See [Setting Up Your Environment](../../guides/setting-up-your-environment.md)
 
-## Related Skills
+## →
 
-- `setup-github-actions-ci` - automated pkgdown deployment workflow
-- `write-roxygen-docs` - function documentation that appears on the site
-- `write-vignette` - articles that appear in the site navigation
-- `release-package-version` - trigger site rebuild on release
+- `setup-github-actions-ci` — automated pkgdown deploy workflow
+- `write-roxygen-docs` — fn docs that appear on site
+- `write-vignette` — articles in site nav
+- `release-package-version` — trigger rebuild on release

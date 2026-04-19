@@ -24,29 +24,29 @@ metadata:
   tags: putior, mcp, acp, ai-assistant, claude, tools, integration
 ---
 
-# Configure putior MCP Server
+# 配置 putior MCP 伺服器
 
-Set up the putior MCP server so AI assistants (Claude Code, Claude Desktop) can directly call workflow annotation and diagram generation tools.
+設 putior MCP 伺服器令 AI 助手（Claude Code、Claude Desktop）可直呼工作流註釋與圖表生成之工具。
 
-## When to Use
+## 適用時機
 
-- Enabling AI assistants to interactively annotate and visualize workflows
-- Setting up a new development environment with putior MCP integration
-- After installing putior and wanting AI-assisted workflow documentation
-- Configuring agent-to-agent communication via ACP for automated pipelines
+- 令 AI 助手互動式註釋並視覺化工作流
+- 設新開發環境含 putior MCP 整合
+- 裝 putior 後欲 AI 輔助工作流文件
+- 為自動化管線配代理間通訊 via ACP
 
-## Inputs
+## 輸入
 
-- **Required**: putior installed (see `install-putior`)
-- **Required**: Target client: Claude Code, Claude Desktop, or both
-- **Optional**: Whether to also configure ACP server (default: no)
-- **Optional**: Custom host/port for ACP server (default: localhost:8080)
+- **必要**：putior 已裝（見 `install-putior`）
+- **必要**：目標客戶端：Claude Code、Claude Desktop、或兩者
+- **選擇性**：是否亦配 ACP 伺服器（預設：否）
+- **選擇性**：ACP 伺服器之自訂主機/port（預設：localhost:8080）
 
-## Procedure
+## 步驟
 
-### Step 1: Install MCP Dependencies
+### 步驟一：裝 MCP 依賴
 
-Install the required packages for MCP server functionality.
+裝 MCP 伺服器功能所需之包。
 
 ```r
 # Required: MCP framework
@@ -60,39 +60,39 @@ library(mcptools)
 library(ellmer)
 ```
 
-**Expected:** Both packages install and load without errors.
+**預期：** 兩包裝且載入無誤。
 
-**On failure:** `mcptools` requires `remotes` package. Install it first: `install.packages("remotes")`. If GitHub rate-limits, configure a `GITHUB_PAT` in `~/.Renviron` (add the line `GITHUB_PAT=your_token_here` and restart R). Do **not** paste tokens into shell commands or commit them to version control.
+**失敗時：** `mcptools` 需 `remotes` 包。先裝：`install.packages("remotes")`。GitHub 限速則於 `~/.Renviron` 配 `GITHUB_PAT`（加行 `GITHUB_PAT=your_token_here` 並重啟 R）。**勿**將令牌貼於 shell 命令或提至版本控制。
 
-### Step 2: Configure Claude Code (WSL/Linux/macOS)
+### 步驟二：配 Claude Code（WSL/Linux/macOS）
 
-Add the putior MCP server to Claude Code's configuration.
+加 putior MCP 伺服器至 Claude Code 之配置。
 
 ```bash
 # One-line setup
 claude mcp add putior -- Rscript -e "putior::putior_mcp_server()"
 ```
 
-For WSL with Windows R:
+WSL 用 Windows R：
 ```bash
 claude mcp add putior -- "/mnt/c/Program Files/R/R-4.5.2/bin/Rscript.exe" -e "putior::putior_mcp_server()"
 ```
 
-Verify the configuration:
+驗配置：
 ```bash
 claude mcp list
 claude mcp get putior
 ```
 
-**Expected:** `putior` appears in the MCP server list with status "configured".
+**預期：** `putior` 見於 MCP 伺服器列，態為「configured」。
 
-**On failure:** If Claude Code is not in PATH, add it: `export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`. If the Rscript path is wrong, locate R with `which Rscript` or `ls "/mnt/c/Program Files/R/"`.
+**失敗時：** 若 Claude Code 不於 PATH，加之：`export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`。若 Rscript 路徑錯，以 `which Rscript` 或 `ls "/mnt/c/Program Files/R/"` 尋 R。
 
-### Step 3: Configure Claude Desktop (Windows)
+### 步驟三：配 Claude Desktop（Windows）
 
-Add putior to Claude Desktop's MCP configuration file.
+加 putior 於 Claude Desktop 之 MCP 配置檔。
 
-Edit `%APPDATA%\Claude\claude_desktop_config.json`:
+編 `%APPDATA%\Claude\claude_desktop_config.json`：
 
 ```json
 {
@@ -105,7 +105,7 @@ Edit `%APPDATA%\Claude\claude_desktop_config.json`:
 }
 ```
 
-Or with the full path:
+或以全路徑：
 ```json
 {
   "mcpServers": {
@@ -117,15 +117,15 @@ Or with the full path:
 }
 ```
 
-Restart Claude Desktop after editing the configuration.
+編配置後重啟 Claude Desktop。
 
-**Expected:** Claude Desktop shows putior in its MCP server list. Tools become available in conversation.
+**預期：** Claude Desktop 於其 MCP 伺服器列顯 putior。對話中工具可用。
 
-**On failure:** Validate JSON syntax with a JSON linter. Check that the R path exists. Use 8.3 short names (`PROGRA~1`, `R-45~1.0`) if spaces in paths cause issues.
+**失敗時：** 以 JSON linter 驗語法。查 R 路徑存。若路徑空格致問題，用 8.3 短名（`PROGRA~1`、`R-45~1.0`）。
 
-### Step 4: Verify All 16 Tools
+### 步驟四：驗全 16 工具
 
-Test that all MCP tools are accessible and functional.
+測所有 MCP 工具可達且可用。
 
 ```r
 # Get tool definitions
@@ -136,48 +136,48 @@ cat(sprintf("Total tools: %d\n", length(tools)))
 vapply(tools, function(t) t$name, character(1))
 ```
 
-The 16 tools organized by category:
+16 工具依類：
 
-**Core Workflow (5):**
-- `put` — Scan files for PUT annotations (supports `exclude` parameter for regex-based file filtering)
-- `put_diagram` — Generate Mermaid diagrams
-- `put_auto` — Auto-detect workflow from code (supports `exclude` parameter)
-- `put_generate` — Generate annotation suggestions (supports `exclude` parameter)
-- `put_merge` — Merge manual + auto annotations (supports `exclude` parameter)
+**核心工作流（5）：**
+- `put` — 掃檔尋 PUT 註（支 `exclude` 參數以正則過濾檔）
+- `put_diagram` — 生 Mermaid 圖表
+- `put_auto` — 自代碼自動偵工作流（支 `exclude` 參數）
+- `put_generate` — 生註建議（支 `exclude` 參數）
+- `put_merge` — 合手動+自動註（支 `exclude` 參數）
 
-**Reference/Discovery (7):**
-- `get_comment_prefix` — Get comment prefix for extension
-- `get_supported_extensions` — List supported extensions
-- `list_supported_languages` — List supported languages
-- `get_detection_patterns` — Get auto-detection patterns
-- `get_diagram_themes` — List available themes
-- `putior_guide` — AI assistant documentation
-- `putior_help` — Quick reference help
+**參考/發現（7）：**
+- `get_comment_prefix` — 取副檔之註前綴
+- `get_supported_extensions` — 列支援副檔
+- `list_supported_languages` — 列支援語言
+- `get_detection_patterns` — 取自動偵模式
+- `get_diagram_themes` — 列可用主題
+- `putior_guide` — AI 助手文件
+- `putior_help` — 速參之助
 
-**Utilities (3):**
-- `is_valid_put_annotation` — Validate annotation syntax
-- `split_file_list` — Parse file lists
-- `ext_to_language` — Extension to language name
+**工具（3）：**
+- `is_valid_put_annotation` — 驗註語法
+- `split_file_list` — 解檔清單
+- `ext_to_language` — 副檔至語言名
 
-**Configuration (1):**
-- `set_putior_log_level` — Configure logging verbosity
+**配置（1）：**
+- `set_putior_log_level` — 配記錄詳度
 
-> **Important: Custom palettes cannot be used through MCP.** The `palette` parameter on `put_diagram` accepts a `putior_theme` R object created by `put_theme()`. Because MCP communicates via JSON, R objects like `putior_theme` cannot be serialized across the MCP boundary. When calling `put_diagram` through MCP, use the string-based `theme` parameter (e.g., `theme = "viridis"`) instead. For custom palettes, call `put_theme()` and `put_diagram(palette = ...)` directly in an R session.
+> **要：自訂調色盤不能經 MCP 用。** `put_diagram` 之 `palette` 參數收 `put_theme()` 建之 `putior_theme` R 物件。MCP 以 JSON 通訊，`putior_theme` 等 R 物件不能跨 MCP 邊界序列化。經 MCP 呼 `put_diagram` 時改用字串式之 `theme` 參數（如 `theme = "viridis"`）。自訂調色盤則於 R 會話中直呼 `put_theme()` 與 `put_diagram(palette = ...)`。
 
-Test core tools from Claude Code:
+自 Claude Code 測核心工具：
 ```
 Use the putior_help tool to see available commands
 Use the put tool to scan ./R/ for annotations
 Use the put_diagram tool to generate a diagram
 ```
 
-**Expected:** All 16 tools listed. Core tools return expected results when called with valid inputs.
+**預期：** 全 16 工具列。以有效輸入呼核心工具返預期結果。
 
-**On failure:** If tools are missing, check that putior version is current: `packageVersion("putior")`. Older versions may have fewer tools. Update with `remotes::install_github("pjt222/putior")`.
+**失敗時：** 若工具缺，查 putior 版本：`packageVersion("putior")`。舊版或工具更少。以 `remotes::install_github("pjt222/putior")` 更。
 
-### Step 5: Configure ACP Server (Optional)
+### 步驟五：配 ACP 伺服器（選擇性）
 
-Set up the ACP (Agent Communication Protocol) server for agent-to-agent communication.
+設 ACP（Agent Communication Protocol）伺服器以代理間通訊。
 
 ```r
 # Install ACP dependency
@@ -190,7 +190,7 @@ putior::putior_acp_server()
 putior::putior_acp_server(host = "0.0.0.0", port = 9000)
 ```
 
-Test ACP endpoints:
+測 ACP 端點：
 ```bash
 # Discover agent
 curl http://localhost:8080/agents
@@ -206,33 +206,33 @@ curl -X POST http://localhost:8080/runs \
   -d '{"input": [{"role": "user", "parts": [{"content": "generate diagram for ./R/"}]}]}'
 ```
 
-**Expected:** ACP server starts on the configured port. `/agents` returns the putior agent manifest. `/runs` accepts natural language requests and returns workflow results.
+**預期：** ACP 伺服器於已配 port 啟。`/agents` 返 putior 代理清單。`/runs` 收自然語請求並返工作流結果。
 
-**On failure:** If port 8080 is in use, specify a different port. If `plumber2` is not installed, the server function will print a helpful error message suggesting installation.
+**失敗時：** 若 port 8080 已用，指不同 port。若 `plumber2` 未裝，伺服器函數印建議裝之助錯。
 
-## Validation
+## 驗證
 
-- [ ] `putior::putior_mcp_tools()` exposes the core tools (`put`, `put_diagram`, `put_auto`, `put_generate`, `put_merge`) and returns ~16 tools for the current version
-- [ ] Claude Code: `claude mcp list` shows `putior` configured
-- [ ] Claude Code: `putior_help` tool returns help text when invoked
-- [ ] Claude Desktop: putior appears in the MCP server list after restart
-- [ ] Core tools (`put`, `put_diagram`, `put_auto`) execute without errors
-- [ ] (Optional) ACP server responds to `curl http://localhost:8080/agents`
+- [ ] `putior::putior_mcp_tools()` 暴露核心工具（`put`、`put_diagram`、`put_auto`、`put_generate`、`put_merge`）且返當前版本之約 16 工具
+- [ ] Claude Code：`claude mcp list` 顯 `putior` 已配
+- [ ] Claude Code：`putior_help` 工具呼時返助文
+- [ ] Claude Desktop：重啟後 putior 見於 MCP 伺服器列
+- [ ] 核心工具（`put`、`put_diagram`、`put_auto`）行而無誤
+- [ ] （選擇性）ACP 伺服器回應 `curl http://localhost:8080/agents`
 
-## Common Pitfalls
+## 常見陷阱
 
-- **mcptools not installed**: The MCP server requires `mcptools` (from GitHub) and `ellmer` (from CRAN). Both must be installed. putior checks and provides helpful messages if they're missing.
-- **Wrong R path in Claude Desktop**: Windows paths need escaping in JSON (`\\`). Use 8.3 short names to avoid spaces: `C:\\PROGRA~1\\R\\R-45~1.0\\bin\\x64\\Rscript.exe`.
-- **Forgetting to restart**: Claude Desktop must be restarted after editing the config file. Claude Code picks up changes on next session start.
-- **renv isolation**: If putior is installed in an renv library but Claude Code/Desktop launches R without renv, the packages won't be found. Ensure `mcptools` and `ellmer` are installed in the global library or configure renv activation in the MCP server command.
-- **Port conflicts for ACP**: The default ACP port (8080) is commonly used. Check with `lsof -i :8080` or `netstat -tlnp | grep 8080` before starting.
-- **Including only specific tools**: To expose a subset of tools, use `putior_mcp_tools(include = c("put", "put_diagram"))` when building custom MCP server wrappers.
-- **Custom palettes via MCP**: The `palette` parameter on `put_diagram` requires a `putior_theme` R object (created by `put_theme()`), which cannot be serialized through MCP's JSON interface. Use the built-in `theme` parameter string for MCP calls. For custom palettes, use R directly.
+- **mcptools 未裝**：MCP 伺服器需 `mcptools`（自 GitHub）與 `ellmer`（自 CRAN）。兩者皆須裝。putior 查之並於缺時供助訊
+- **Claude Desktop 中 R 路徑誤**：JSON 中 Windows 路徑需跳脫（`\\`）。用 8.3 短名以免空格：`C:\\PROGRA~1\\R\\R-45~1.0\\bin\\x64\\Rscript.exe`
+- **忘重啟**：編配置後 Claude Desktop 須重啟。Claude Code 下次會話啟時取變
+- **renv 隔離**：若 putior 裝於 renv 庫而 Claude Code/Desktop 啟 R 無 renv，則包不被找到。確 `mcptools` 與 `ellmer` 裝於全域庫或於 MCP 伺服器命令中配 renv 啟用
+- **ACP port 衝突**：預 ACP port（8080）常用。啟前以 `lsof -i :8080` 或 `netstat -tlnp | grep 8080` 查
+- **僅含特定工具**：暴露工具子集時建自訂 MCP 伺服器包裝用 `putior_mcp_tools(include = c("put", "put_diagram"))`
+- **經 MCP 用自訂調色盤**：`put_diagram` 之 `palette` 參數需 `putior_theme` R 物件（由 `put_theme()` 建），不能跨 MCP 之 JSON 介序列化。MCP 呼用內建 `theme` 參數字串。自訂調色盤直用 R
 
-## Related Skills
+## 相關技能
 
-- `install-putior` — prerequisite: putior and optional deps must be installed
-- `configure-mcp-server` — general MCP server configuration for Claude Code/Desktop
-- `troubleshoot-mcp-connection` — diagnose connection issues if tools don't appear
-- `build-custom-mcp-server` — build custom MCP servers that wrap putior tools
-- `analyze-codebase-workflow` — use MCP tools interactively for codebase analysis
+- `install-putior` — 前置：putior 與選擇性依賴須裝
+- `configure-mcp-server` — Claude Code/Desktop 之通用 MCP 伺服器配置
+- `troubleshoot-mcp-connection` — 若工具不現則診連接問題
+- `build-custom-mcp-server` — 建包裝 putior 工具之自訂 MCP 伺服器
+- `analyze-codebase-workflow` — 互動式用 MCP 工具行代碼庫分析

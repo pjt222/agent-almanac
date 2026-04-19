@@ -26,63 +26,63 @@ metadata:
 
 # Build Consensus
 
-Achieve collective agreement across distributed agents without a central authority — using scout advocacy, threshold quorum sensing, and commitment dynamics modeled on honeybee swarm decision-making.
+Achieve collective agreement across distributed agents without central authority — use scout advocacy, threshold quorum sensing, commitment dynamics modeled on honeybee swarm decision-making.
 
-## When to Use
+## When Use
 
-- A group must collectively decide between multiple options without a designated leader
-- Centralized decision-making is a bottleneck or a single point of failure
-- Stakeholders have different information and perspectives that must be integrated
+- Group must collectively decide between multiple options without designated leader
+- Centralized decision-making is bottleneck or single point of failure
+- Stakeholders have different information, perspectives that must be integrated
 - Past decisions suffered from groupthink (premature convergence) or analysis paralysis (no convergence)
 - Designing automated systems that must reach consensus (distributed databases, multi-agent AI)
-- Complementing `coordinate-swarm` when the coordination requires explicit collective decisions
+- Complementing `coordinate-swarm` when coordination requires explicit collective decisions
 
 ## Inputs
 
-- **Required**: The decision to be made (binary choice, selection from N options, parameter setting)
-- **Required**: The participating agents (team members, services, voters)
+- **Required**: Decision to be made (binary choice, selection from N options, parameter setting)
+- **Required**: Participating agents (team members, services, voters)
 - **Optional**: Known options with preliminary quality assessments
 - **Optional**: Decision urgency (time budget)
-- **Optional**: Acceptable error rate (can the group occasionally pick the second-best option?)
+- **Optional**: Acceptable error rate (can group occasionally pick second-best option?)
 - **Optional**: Current decision-making failure mode (groupthink, deadlock, flip-flopping)
 
-## Procedure
+## Steps
 
 ### Step 1: Generate Proposals Through Independent Scouting
 
-Ensure the decision space is adequately explored before any advocacy begins.
+Ensure decision space adequately explored before any advocacy begins.
 
-1. Assign scouts to independently explore the option space:
+1. Assign scouts to independently explore option space:
    - Each scout evaluates options without knowing other scouts' findings
    - Independent evaluation prevents early herding toward popular-but-mediocre options
-   - Scout count: at minimum, 3 scouts per serious option (for reliability)
+   - Scout count: minimum 3 scouts per serious option (for reliability)
 2. Scouts produce structured assessments:
    - Option identifier
    - Quality score (normalized 0-100 or categorical: poor/fair/good/excellent)
    - Key strengths and risks identified
-   - Confidence level (how thoroughly was this option evaluated?)
-3. Aggregate scout reports without filtering — all options above a minimum quality threshold enter the advocacy phase
+   - Confidence level (how thoroughly was option evaluated?)
+3. Aggregate scout reports without filtering — all options above minimum quality threshold enter advocacy phase
 
-**Expected:** A set of independently evaluated proposals with quality scores and assessments. No option has been eliminated by a single evaluator; diversity of perspective is preserved.
+**Got:** Set of independently evaluated proposals with quality scores and assessments. No option eliminated by single evaluator; diversity of perspective preserved.
 
-**On failure:** If scouts converge on the same option without independent evaluation, the scouting was not truly independent. Rerun with explicit information barriers. If too many options survive to the advocacy phase, raise the minimum quality threshold. If too few survive, lower it or add more scouts.
+**If fail:** Scouts converge on same option without independent evaluation? Scouting not truly independent. Rerun with explicit information barriers. Too many options survive to advocacy phase? Raise minimum quality threshold. Too few survive? Lower it or add more scouts.
 
 ### Step 2: Run Advocacy Dynamics (Waggle Dance)
 
-Allow scouts to advocate for their preferred options, with advocacy intensity proportional to quality.
+Allow scouts to advocate for preferred options. Advocacy intensity proportional to quality.
 
 1. Each scout advocates for their top-rated option:
-   - Advocacy intensity is proportional to the quality score (better options get more vigorous advocacy)
-   - Advocacy is public — all agents observe all advocacy signals
+   - Advocacy intensity proportional to quality score (better options get more vigorous advocacy)
+   - Advocacy public — all agents observe all advocacy signals
    - Advocates present evidence and quality assessment, not just preference
 2. Uncommitted agents observe advocacy and evaluate:
    - Follow up on advocated options by inspecting them independently
-   - If an agent's own inspection confirms the quality, they join the advocacy
-   - If inspection reveals lower quality than advertised, they do not join
+   - Agent's own inspection confirms quality → joins advocacy
+   - Inspection reveals lower quality than advertised → does not join
 3. Cross-inspection dynamics:
    - Advocates for weaker options naturally lose followers as agents independently verify
    - Advocates for stronger options gain followers through confirmed quality
-   - The process is self-correcting: exaggerated advocacy fails the verification step
+   - Process self-correcting: exaggerated advocacy fails verification step
 
 ```
 Advocacy Dynamics:
@@ -101,98 +101,98 @@ Advocacy Dynamics:
 └─────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** Advocacy for the best option(s) grows over time as agents independently verify quality. Advocacy for weaker options fades as verification fails. The group naturally converges toward the strongest option without any agent dictating the choice.
+**Got:** Advocacy for best option(s) grows over time as agents independently verify quality. Advocacy for weaker options fades as verification fails. Group naturally converges toward strongest option without any agent dictating choice.
 
-**On failure:** If advocacy doesn't converge (two options remain neck-and-neck), the options may be genuinely equivalent — proceed to quorum with either, or use a tiebreaker rule. If advocacy converges too fast on a mediocre option, increase the independence of evaluation (more scouts, stricter information barriers) and add a mandatory cross-inspection step.
+**If fail:** Advocacy doesn't converge (two options remain neck-and-neck)? Options may be genuinely equivalent — proceed to quorum with either, or use tiebreaker rule. Advocacy converges too fast on mediocre option? Increase independence of evaluation (more scouts, stricter information barriers), add mandatory cross-inspection step.
 
 ### Step 3: Set Quorum Threshold and Commit
 
-Define the commitment threshold that triggers collective action.
+Define commitment threshold that triggers collective action.
 
-1. Set the quorum threshold:
+1. Set quorum threshold:
    - **Simple decisions**: 50% + 1 of agents committed to one option
    - **Important decisions**: 66-75% committed to one option
    - **Critical/irreversible decisions**: 80%+ committed to one option
    - Rule of thumb: higher stakes → higher quorum → slower but more reliable consensus
 2. Monitor commitment accumulation:
    - Track how many agents have committed to each option over time
-   - Display commitment levels transparently (all agents can see the current state)
+   - Display commitment levels transparently (all agents can see current state)
    - Do not allow commitment withdrawal mid-cycle (prevents oscillation)
-3. When quorum is reached:
-   - The winning option is adopted as the collective decision
-   - Advocates for losing options acknowledge the decision (no rogue agents)
+3. Quorum reached:
+   - Winning option adopted as collective decision
+   - Advocates for losing options acknowledge decision (no rogue agents)
    - Implementation begins immediately — delay after consensus erodes commitment
 
-**Expected:** A clear quorum moment where enough agents have independently committed to one option. The decision is legitimate because it emerged from independent evaluation, not authority or coercion.
+**Got:** Clear quorum moment where enough agents have independently committed to one option. Decision legitimate because emerged from independent evaluation, not authority or coercion.
 
-**On failure:** If quorum is never reached within the time budget, escalate to Step 4 (deadlock resolution). If quorum is reached but agents are unhappy, the advocacy phase was too short — agents committed without adequate evaluation. If the consensus was wrong (discovered after the fact), the independent scouting was insufficient — increase scout diversity and evaluation thoroughness in the next cycle.
+**If fail:** Quorum never reached within time budget? Escalate to Step 4 (deadlock resolution). Quorum reached but agents unhappy? Advocacy phase was too short — agents committed without adequate evaluation. Consensus was wrong (discovered after fact)? Independent scouting insufficient — increase scout diversity and evaluation thoroughness in next cycle.
 
 ### Step 4: Resolve Deadlocks
 
-Break decision gridlock when the natural consensus process stalls.
+Break decision gridlock when natural consensus process stalls.
 
-1. Diagnose the deadlock type:
-   - **Genuine tie**: two options are equally good → flip a coin; the cost of delay exceeds the cost of picking the "wrong" equal option
+1. Diagnose deadlock type:
+   - **Genuine tie**: two options equally good → flip coin; cost of delay exceeds cost of picking "wrong" equal option
    - **Information deficit**: agents can't evaluate options well enough → invest in more scouting before re-running advocacy
-   - **Faction formation**: entrenched subgroups refuse to cross-inspect → introduce mandatory rotation where advocates must inspect the opposing option
-   - **Option proliferation**: too many options fragment commitment → eliminate the bottom 50% and re-run advocacy
-2. Apply the appropriate resolution:
+   - **Faction formation**: entrenched subgroups refuse to cross-inspect → introduce mandatory rotation where advocates must inspect opposing option
+   - **Option proliferation**: too many options fragment commitment → eliminate bottom 50%, re-run advocacy
+2. Apply appropriate resolution:
    - Genuine tie: random selection or merge options if compatible
    - Information deficit: time-boxed scouting extension
    - Faction formation: forced cross-inspection round
    - Option proliferation: ranked elimination tournament
-3. After resolution, reset the quorum clock and re-run Step 3
+3. After resolution, reset quorum clock, re-run Step 3
 
-**Expected:** Deadlock resolved through the appropriate intervention. The resolution is visible and accepted by the group as fair process, even if individual agents preferred a different outcome.
+**Got:** Deadlock resolved through appropriate intervention. Resolution visible and accepted by group as fair process, even if individual agents preferred different outcome.
 
-**On failure:** If deadlocks recur on the same decision, the decision framing may be wrong. Step back and ask: can the decision be decomposed into smaller, independent decisions? Can the scope be reduced? Is there a "try both and see" option? Sometimes the best consensus is "we'll run a time-boxed experiment."
+**If fail:** Deadlocks recur on same decision? Decision framing may be wrong. Step back, ask: can decision be decomposed into smaller, independent decisions? Can scope be reduced? Is there "try both and see" option? Sometimes best consensus is "we'll run time-boxed experiment."
 
 ### Step 5: Assess Consensus Quality
 
-Evaluate whether the consensus process produced a good decision, not just a decision.
+Evaluate whether consensus process produced good decision, not just decision.
 
 1. Post-decision assessment:
-   - Was the winning option independently verified by at least N agents?
-   - Was the decision speed appropriate (not too fast/groupthink, not too slow/paralysis)?
-   - Did the process surface information that would have been missed by a single decision-maker?
+   - Was winning option independently verified by at least N agents?
+   - Was decision speed appropriate (not too fast/groupthink, not too slow/paralysis)?
+   - Did process surface information that would have been missed by single decision-maker?
    - Are agents committed to implementation, or merely compliant?
 2. Track consensus health metrics:
    - **Time to quorum**: decreasing over successive decisions indicates learning; increasing indicates growing complexity or dysfunction
    - **Scout-to-commit ratio**: how much scouting was needed per commitment? High ratio = difficult decision or low trust
-   - **Post-decision regret rate**: how often does the group wish it had chosen differently?
-3. Feed learnings back into the process:
+   - **Post-decision regret rate**: how often does group wish it had chosen differently?
+3. Feed learnings back into process:
    - Adjust quorum thresholds based on decision importance and past accuracy
    - Adjust scout count based on option complexity
    - Adjust time budgets based on historical time-to-quorum
 
-**Expected:** A feedback loop that improves consensus quality over time. The group learns to scout more effectively, advocate more honestly, and commit more confidently.
+**Got:** Feedback loop that improves consensus quality over time. Group learns to scout more effectively, advocate more honestly, commit more confidently.
 
-**On failure:** If consensus quality metrics are poor (high regret, slow decisions), audit the process for structural failures: insufficient scouting diversity, advocacy without verification, or thresholds set too low for the decision type. Rebuild the specific failing stage rather than overhauling the entire process.
+**If fail:** Consensus quality metrics poor (high regret, slow decisions)? Audit process for structural failures: insufficient scouting diversity, advocacy without verification, or thresholds set too low for decision type. Rebuild specific failing stage rather than overhauling entire process.
 
-## Validation
+## Checks
 
-- [ ] Proposals were generated through independent scouting (no herding)
-- [ ] Advocacy intensity was proportional to assessed quality
+- [ ] Proposals generated through independent scouting (no herding)
+- [ ] Advocacy intensity proportional to assessed quality
 - [ ] Uncommitted agents independently verified advocated options
-- [ ] Quorum threshold was appropriate for the decision's importance
-- [ ] Quorum was reached and the decision was implemented promptly
-- [ ] Deadlock resolution mechanism was available (even if unused)
-- [ ] Post-decision quality assessment was conducted
+- [ ] Quorum threshold appropriate for decision's importance
+- [ ] Quorum reached, decision implemented promptly
+- [ ] Deadlock resolution mechanism available (even if unused)
+- [ ] Post-decision quality assessment conducted
 
-## Common Pitfalls
+## Pitfalls
 
-- **Skipping independent scouting**: Jumping directly to advocacy produces groupthink. The quality of consensus depends entirely on the quality of independent evaluation
-- **Equal advocacy for unequal options**: If every option gets the same advocacy regardless of quality, the process degenerates into random selection. Advocacy must be proportional to assessed quality
-- **Commitment withdrawal**: Allowing agents to un-commit creates oscillation. Once committed in a cycle, agents stay committed until the cycle resolves
+- **Skipping independent scouting**: Jumping directly to advocacy produces groupthink. Quality of consensus depends entirely on quality of independent evaluation
+- **Equal advocacy for unequal options**: Every option gets same advocacy regardless of quality? Process degenerates into random selection. Advocacy must be proportional to assessed quality
+- **Commitment withdrawal**: Allowing agents to un-commit creates oscillation. Once committed in cycle, agents stay committed until cycle resolves
 - **Confusing consensus with unanimity**: Consensus requires sufficient agreement, not total agreement. Waiting for 100% creates permanent deadlock
-- **Ignoring the losing side**: Agents who advocated for the losing option have information the group needs. Their concerns should inform implementation, even if they don't block the decision
+- **Ignoring losing side**: Agents who advocated for losing option have information group needs. Their concerns should inform implementation, even if they don't block decision
 
-## Related Skills
+## See Also
 
-- `coordinate-swarm` — foundational coordination framework that supports the signal-based consensus mechanism
+- `coordinate-swarm` — foundational coordination framework supporting signal-based consensus mechanism
 - `defend-colony` — collective defense decisions often require rapid consensus under threat
-- `scale-colony` — consensus mechanisms must adapt when the group size changes significantly
+- `scale-colony` — consensus mechanisms must adapt when group size changes significantly
 - `dissolve-form` — morphic skill for controlled dismantling, where consensus before dissolution is critical
 - `plan-sprint` — sprint planning involves team consensus on commitment scope
-- `conduct-retrospective` — retrospectives are a form of consensus-building about process improvement
+- `conduct-retrospective` — retrospectives are form of consensus-building about process improvement
 - `build-coherence` — AI self-application variant; maps bee democracy to single-agent multi-path reasoning with confidence thresholds and deadlock resolution

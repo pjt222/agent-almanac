@@ -24,29 +24,29 @@ metadata:
   tags: reverse-proxy, traefik, nginx, websocket, routing, shinyproxy, ssl
 ---
 
-# Configure Reverse Proxy
+# 設反代
 
-Set up reverse proxy patterns for routing traffic to backend services using Nginx, Traefik, or ShinyProxy.
+以 Nginx、Traefik、ShinyProxy 設路流於後服之反代式。
 
-## When to Use
+## 用時
 
-- Routing multiple services behind a single entry point
-- Proxying WebSocket connections (Shiny, Socket.IO, live reload)
-- Auto-discovering Docker services with Traefik labels
-- Path-based or host-based routing to different backends
-- Adding SSL termination to services that don't handle TLS
+- 路多服於單入
+- 代 WebSocket 連（Shiny、Socket.IO、即載）
+- 以 Traefik 標自發 Docker 服
+- 徑或主之路於異後
+- 加 SSL 終於不治 TLS 之服
 
-## Inputs
+## 入
 
-- **Required**: Backend services to proxy (host:port)
-- **Required**: Routing strategy (path-based, host-based, or both)
-- **Optional**: Proxy tool preference (Nginx, Traefik)
-- **Optional**: Domain name(s) for host-based routing
-- **Optional**: WebSocket endpoints to proxy
+- **必**：代之後服（host:port）
+- **必**：路之策（徑、主、或二）
+- **可選**：代具之好（Nginx、Traefik）
+- **可選**：主路之域名
+- **可選**：代之 WebSocket 端
 
-## Procedure
+## 法
 
-### Step 1: Choose Proxy Tool
+### 第一步：擇代具
 
 | Feature | Nginx | Traefik |
 |---------|-------|---------|
@@ -57,7 +57,7 @@ Set up reverse proxy patterns for routing traffic to backend services using Ngin
 | WebSocket | Manual config | Automatic |
 | Best for | Static config, high traffic | Dynamic Docker environments |
 
-### Step 2: Nginx — Path-Based Routing
+### 第二步：Nginx——徑路
 
 ```nginx
 server {
@@ -82,9 +82,9 @@ server {
 }
 ```
 
-**Note:** Trailing `/` on `proxy_pass` strips the location prefix. `proxy_pass http://api:8000/;` with `location /api/` forwards `/api/users` as `/users`.
+**注：** `proxy_pass` 之尾 `/` 剝位前綴。`location /api/` 附 `proxy_pass http://api:8000/;` 將 `/api/users` 轉為 `/users`。
 
-### Step 3: Nginx — Host-Based Routing
+### 第三步：Nginx——主路
 
 ```nginx
 server {
@@ -110,9 +110,9 @@ server {
 }
 ```
 
-### Step 4: Nginx — WebSocket Proxying
+### 第四步：Nginx——WebSocket 代
 
-WebSockets require upgrade headers. Essential for Shiny, Socket.IO, and live reload:
+WebSocket 需升頭。於 Shiny、Socket.IO、即載為要：
 
 ```nginx
 location /ws/ {
@@ -125,7 +125,7 @@ location /ws/ {
 }
 ```
 
-For Shiny apps specifically:
+專於 Shiny 應：
 
 ```nginx
 map $http_upgrade $connection_upgrade {
@@ -146,13 +146,13 @@ server {
 }
 ```
 
-**Expected:** WebSocket connections establish and persist.
+**得：** WebSocket 連立且持。
 
-**On failure:** Check `proxy_http_version 1.1` is set. Verify `Upgrade` and `Connection` headers.
+**敗則：** 察 `proxy_http_version 1.1` 已設。驗 `Upgrade` 與 `Connection` 頭。
 
-### Step 5: Traefik — Docker Label Auto-Discovery
+### 第五步：Traefik——Docker 標自發
 
-`docker-compose.yml`:
+`docker-compose.yml`：
 
 ```yaml
 services:
@@ -195,9 +195,9 @@ volumes:
   letsencrypt:
 ```
 
-**Expected:** Traefik auto-discovers services via labels, provisions SSL certificates.
+**得：** Traefik 以標自發服，供 SSL 證。
 
-### Step 6: Traefik — Path-Based Routing with Labels
+### 第六步：Traefik——徑路以標
 
 ```yaml
 services:
@@ -210,7 +210,7 @@ services:
       - "traefik.http.services.api.loadbalancer.server.port=8000"
 ```
 
-### Step 7: Traefik — Rate Limiting and Headers
+### 第七步：Traefik——率限與頭
 
 ```yaml
 labels:
@@ -222,7 +222,7 @@ labels:
   - "traefik.http.routers.app.middlewares=ratelimit,security"
 ```
 
-### Step 8: Verify Proxy Configuration
+### 第八步：驗代設
 
 ```bash
 # Nginx: test config
@@ -238,28 +238,28 @@ wscat -c ws://localhost/ws/
 # http://localhost:8080/dashboard/
 ```
 
-**Expected:** Requests route to correct backends. WebSocket upgrades succeed.
+**得：** 請依徑或主路於正後。WebSocket 升成。
 
-## Validation
+## 驗
 
-- [ ] HTTP requests route to the correct backend based on path or host
-- [ ] WebSocket connections establish and maintain
-- [ ] SSL termination works (if configured)
-- [ ] Backend services receive correct `Host`, `X-Real-IP`, `X-Forwarded-For` headers
-- [ ] Traefik auto-discovers new services via labels (if using Traefik)
-- [ ] Configuration survives `docker compose restart`
+- [ ] HTTP 請依徑或主路於正後
+- [ ] WebSocket 連立且持
+- [ ] SSL 終行（若設）
+- [ ] 後受正 `Host`、`X-Real-IP`、`X-Forwarded-For` 頭
+- [ ] Traefik 以標自發新服（若用 Traefik）
+- [ ] 設於 `docker compose restart` 後存
 
-## Common Pitfalls
+## 陷
 
-- **Trailing slash mismatch**: `proxy_pass http://app/` vs `http://app` behaves differently with path stripping in Nginx.
-- **WebSocket timeout**: Default `proxy_read_timeout` is 60s. Long-lived WebSocket connections need `86400` (24h).
-- **Docker socket security**: Mounting `/var/run/docker.sock` in Traefik gives it full Docker access. Use `ro` mount and consider socket proxy.
-- **DNS resolution**: Nginx resolves upstreams at startup. Use `resolver 127.0.0.11` for Docker's internal DNS with dynamic services.
-- **Missing `proxy_buffering off`**: Shiny and SSE endpoints need `proxy_buffering off` for real-time streaming.
+- **尾 `/` 不合**：Nginx 中 `proxy_pass http://app/` 對 `http://app` 於徑剝行異。
+- **WebSocket 超時**：默 `proxy_read_timeout` 六十秒。長 WebSocket 連需 `86400`（二十四時）。
+- **Docker 符安**：於 Traefik 掛 `/var/run/docker.sock` 予其全 Docker 訪。用 `ro` 掛且慎思符代。
+- **DNS 解**：Nginx 於啟時解上。動服用 `resolver 127.0.0.11` 為 Docker 內 DNS。
+- **缺 `proxy_buffering off`**：Shiny 與 SSE 端需 `proxy_buffering off` 為實時流。
 
-## Related Skills
+## 參
 
-- `configure-nginx` - detailed Nginx configuration with SSL and security headers
-- `deploy-shinyproxy` - ShinyProxy for containerized Shiny app hosting
-- `setup-compose-stack` - compose stack that uses a reverse proxy
-- `configure-api-gateway` - API gateway patterns with Kong and Traefik
+- `configure-nginx` - Nginx 詳設附 SSL 與安頭
+- `deploy-shinyproxy` - ShinyProxy 為容 Shiny 應載
+- `setup-compose-stack` - 用反代之 compose 棧
+- `configure-api-gateway` - Kong 與 Traefik 之 API 門式

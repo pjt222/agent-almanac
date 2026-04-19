@@ -25,27 +25,27 @@ metadata:
 
 # Build Shiny Module
 
-Create reusable Shiny UI/server module pairs with proper namespace isolation, reactive communication, and composability.
+創具正命名空間隔離、反應式溝通、可組合之可復用 Shiny UI/server 模組對。
 
-## When to Use
+## 適用時機
 
-- Extracting a reusable component from a growing Shiny app
-- Building a UI widget that will be used in multiple places
-- Encapsulating complex reactive logic behind a clean interface
-- Composing larger applications from smaller, testable units
+- 自漸長之 Shiny 應用抽可復用組件
+- 建多處可用之 UI 小部件
+- 以潔介面封繁之反應邏輯
+- 自更小可測之單位組大應用
 
-## Inputs
+## 輸入
 
-- **Required**: Module purpose and functionality description
-- **Required**: Input/output contract (what the module receives and returns)
-- **Optional**: Whether the module nests other modules (default: no)
-- **Optional**: Framework context (golem, rhino, or vanilla)
+- **必要**：模組之旨與功能描
+- **必要**：輸入／輸出之合同（模組受何返何）
+- **選擇性**：模組是否嵌他模組（預設：否）
+- **選擇性**：框架脈絡（golem、rhino、或 vanilla）
 
-## Procedure
+## 步驟
 
-### Step 1: Define the Module Interface
+### 步驟一：定模組介面
 
-Before writing code, define what the module accepts and returns:
+書代碼前，定模組所受所返：
 
 ```
 Module: data_filter
@@ -54,11 +54,11 @@ Outputs: reactive filtered dataset
 UI: filter controls (selectInput, sliderInput, dateRangeInput)
 ```
 
-**Expected:** Clear contract specifying reactive inputs, reactive outputs, and UI elements.
+**預期：** 明之合同，指定反應輸入、反應輸出、UI 元素。
 
-**On failure:** If the interface is unclear, the module is probably too broad. Split it into smaller modules with single responsibilities.
+**失敗時：** 若介面不明，模組恐過廣。分為單責之小模組。
 
-### Step 2: Create the Module UI Function
+### 步驟二：創模組 UI 函
 
 ```r
 #' Data Filter Module UI
@@ -80,18 +80,18 @@ dataFilterUI <- function(id) {
 }
 ```
 
-Key rules:
-- Function name follows `<name>UI` convention
-- First argument is always `id`
-- Create `ns <- NS(id)` at the top
-- Wrap every `inputId` and `outputId` with `ns()`
-- Return a `tagList()` to allow flexible placement
+要則：
+- 函名循 `<name>UI` 約定
+- 首參恆為 `id`
+- 於頂立 `ns <- NS(id)`
+- 每 `inputId` 與 `outputId` 皆包於 `ns()`
+- 返 `tagList()` 以允彈性置
 
-**Expected:** UI function that creates namespaced input/output elements.
+**預期：** UI 函創命名空間之輸入／輸出元素。
 
-**On failure:** If IDs collide when using the module twice, check that every ID is wrapped with `ns()`. Common miss: IDs inside `renderUI()` or `uiOutput()` — these need `ns()` too.
+**失敗時：** 若用模組二次時 ID 碰撞，查每 ID 皆包於 `ns()`。常漏：`renderUI()` 或 `uiOutput()` 內之 ID——此亦需 `ns()`。
 
-### Step 3: Create the Module Server Function
+### 步驟三：創模組伺服器函
 
 ```r
 #' Data Filter Module Server
@@ -156,19 +156,19 @@ dataFilterServer <- function(id, data, columns) {
 }
 ```
 
-Key rules:
-- Function name follows `<name>Server` convention
-- First argument is always `id`
-- Additional arguments are reactive expressions or static values
-- Use `moduleServer(id, function(input, output, session) { ... })`
-- Use `session$ns` for dynamic UI created inside the server
-- Return reactive values explicitly
+要則：
+- 函名循 `<name>Server` 約定
+- 首參恆為 `id`
+- 餘參為反應式表達或靜值
+- 用 `moduleServer(id, function(input, output, session) { ... })`
+- 伺服器內創之動態 UI 用 `session$ns`
+- 明返反應值
 
-**Expected:** Server function that processes inputs and returns reactive output.
+**預期：** 伺服器函處輸入、返反應輸出。
 
-**On failure:** If reactive values don't update, check that inputs from dynamic UI use `session$ns` (not the outer `ns`). If the module returns NULL, ensure `return()` is the last expression inside `moduleServer()`.
+**失敗時：** 若反應值不更，查動態 UI 之輸入用 `session$ns`（非外之 `ns`）。若模組返 NULL，確 `return()` 為 `moduleServer()` 內末表達。
 
-### Step 4: Wire the Module into the Parent App
+### 步驟四：於父應用接模組
 
 ```r
 # In app_ui.R or ui
@@ -201,13 +201,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Module appears in the UI and its returned reactive flows into downstream outputs.
+**預期：** 模組於 UI 顯，其所返反應流至下游輸出。
 
-**On failure:** If the module UI doesn't render, verify the `id` string matches between UI and server calls. If the returned reactive is NULL, check that the server function actually returns a value.
+**失敗時：** 若模組 UI 不渲，驗 UI 與伺服器呼間 `id` 字串相符。若所返反應為 NULL，查伺服器函實返值。
 
-### Step 5: Compose Nested Modules (Optional)
+### 步驟五：組嵌模組（選）
 
-For modules that contain other modules:
+含他模組之模組：
 
 ```r
 analysisUI <- function(id) {
@@ -233,13 +233,13 @@ analysisServer <- function(id, data) {
 }
 ```
 
-Key rule: In the UI, nest with `ns("inner_id")`. In the server, call with just `"inner_id"` — `moduleServer` handles the namespace chaining.
+要則：UI 中以 `ns("inner_id")` 嵌。伺服器中僅以 `"inner_id"` 呼——`moduleServer` 處命名空間之鏈。
 
-**Expected:** Inner module renders correctly within the outer module's namespace.
+**預期：** 內模組於外模組之命名空間中正渲。
 
-**On failure:** If the inner module's UI doesn't appear, you likely forgot `ns()` around the inner module's ID in the outer UI function. If server communication breaks, check that the inner module ID matches (no `ns()` in the server call).
+**失敗時：** 若內模組 UI 不現，恐忘於外 UI 函中以 `ns()` 包內模組 ID。若伺服器溝通斷，查內模組 ID 相符（伺服器呼中無 `ns()`）。
 
-### Step 6: Test the Module in Isolation
+### 步驟六：隔離測模組
 
 ```r
 # Quick test app for the module
@@ -258,31 +258,31 @@ if (interactive()) {
 }
 ```
 
-**Expected:** Module works correctly in the minimal test app.
+**預期：** 模組於最小測應用中正工。
 
-**On failure:** If the module fails in isolation but works in the full app (or vice versa), check for implicit dependencies on global variables or parent session state.
+**失敗時：** 若模組於隔離敗而於全應用工（或反），查對全域變或父會話狀態之隱依。
 
-## Validation
+## 驗證
 
-- [ ] Module UI function accepts `id` as first argument and uses `NS(id)`
-- [ ] Every input/output ID in the UI is wrapped with `ns()`
-- [ ] Module server uses `moduleServer(id, function(input, output, session) { ... })`
-- [ ] Dynamic UI in server uses `session$ns` for IDs
-- [ ] Module can be instantiated multiple times without ID collisions
-- [ ] Reactive return values are accessible to the parent app
-- [ ] Module works in a minimal standalone test app
+- [ ] 模組 UI 函受 `id` 為首參且用 `NS(id)`
+- [ ] UI 中每輸入／輸出 ID 皆包於 `ns()`
+- [ ] 模組伺服器用 `moduleServer(id, function(input, output, session) { ... })`
+- [ ] 伺服器中動態 UI 之 ID 用 `session$ns`
+- [ ] 模組可實例化多次而無 ID 碰撞
+- [ ] 反應返值可為父應用存取
+- [ ] 模組於最小獨立測應用中工
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Forgetting `ns()` in `renderUI()`**: Dynamic UI created inside the server must use `session$ns` — the outer `ns` is not available inside `moduleServer()`.
-- **Passing non-reactive data**: Module arguments that change over time must be reactive expressions. Pass `reactive(data)` not `data`.
-- **ID mismatch**: The `id` string in the UI call must exactly match the `id` in the server call.
-- **Not returning reactives**: If the module computes something the parent needs, it must `return()` a reactive. Forgetting this is a silent bug.
-- **Namespace in nested modules**: In UI: `ns("inner_id")`. In server: just `"inner_id"`. Mixing these up causes namespace double-wrapping or missing prefixes.
+- **`renderUI()` 中忘 `ns()`**：伺服器內創之動態 UI 須用 `session$ns`——外之 `ns` 於 `moduleServer()` 內不可得
+- **傳非反應數據**：隨時變之模組參須為反應式表達。傳 `reactive(data)` 非 `data`
+- **ID 失配**：UI 呼中之 `id` 字串須與伺服器呼中之 `id` 完相符
+- **不返反應**：若模組算父所需之物，須 `return()` 一反應。忘此為默錯
+- **嵌模組之命名空間**：UI：`ns("inner_id")`。伺服器：僅 `"inner_id"`。混致雙包或漏前綴
 
-## Related Skills
+## 相關技能
 
-- `scaffold-shiny-app` — set up the app structure before adding modules
-- `test-shiny-app` — test modules with testServer() unit tests
-- `design-shiny-ui` — bslib layout and theming for module UIs
-- `optimize-shiny-performance` — cache and async patterns within modules
+- `scaffold-shiny-app` — 加模組前立應用結構
+- `test-shiny-app` — 以 testServer() 單元測測模組
+- `design-shiny-ui` — 模組 UI 之 bslib 版型與主題
+- `optimize-shiny-performance` — 模組內之快取與 async 模式

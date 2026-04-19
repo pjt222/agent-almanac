@@ -51,9 +51,9 @@ usethis::use_pkgdown()
 
 This creates `_pkgdown.yml` and adds pkgdown to `.Rbuildignore`.
 
-**Expected:** `_pkgdown.yml` exists in the project root. `.Rbuildignore` contains pkgdown-related entries.
+**Got:** `_pkgdown.yml` exists in the project root. `.Rbuildignore` contains pkgdown-related entries.
 
-**On failure:** Install pkgdown with `install.packages("pkgdown")`. If `_pkgdown.yml` already exists, the function will update `.Rbuildignore` without overwriting the config.
+**If fail:** Install pkgdown with `install.packages("pkgdown")`. If `_pkgdown.yml` already exists, the function will update `.Rbuildignore` without overwriting the config.
 
 ### Step 2: Configure `_pkgdown.yml`
 
@@ -99,9 +99,9 @@ articles:
 
 **Critical**: Set `development: mode: release`. The default `mode: auto` causes 404 errors on GitHub Pages because it appends `/dev/` to URLs.
 
-**Expected:** `_pkgdown.yml` contains valid YAML with `url`, `template`, `navbar`, `reference`, and `articles` sections appropriate for the package.
+**Got:** `_pkgdown.yml` contains valid YAML with `url`, `template`, `navbar`, `reference`, and `articles` sections appropriate for the package.
 
-**On failure:** Validate YAML syntax with an online YAML linter. Ensure all function names in `reference.contents` match actual exported functions.
+**If fail:** Validate YAML syntax with an online YAML linter. Ensure all function names in `reference.contents` match actual exported functions.
 
 ### Step 3: Build Locally
 
@@ -109,9 +109,9 @@ articles:
 pkgdown::build_site()
 ```
 
-**Expected:** `docs/` directory created with a complete site including `index.html`, function reference pages, and articles.
+**Got:** `docs/` directory created with a complete site including `index.html`, function reference pages, and articles.
 
-**On failure:** Common issues: missing pandoc (set `RSTUDIO_PANDOC` in `.Renviron`), missing vignette dependencies (install suggested packages), or broken examples (fix or wrap in `\dontrun{}`).
+**If fail:** Common issues: missing pandoc (set `RSTUDIO_PANDOC` in `.Renviron`), missing vignette dependencies (install suggested packages), or broken examples (fix or wrap in `\dontrun{}`).
 
 ### Step 4: Preview Site
 
@@ -121,9 +121,9 @@ pkgdown::preview_site()
 
 Verify navigation, function reference, articles, and search work correctly.
 
-**Expected:** Site opens in the browser at localhost. All navigation links work, function reference pages render, and search returns results.
+**Got:** Site opens in the browser at localhost. All navigation links work, function reference pages render, and search returns results.
 
-**On failure:** If the preview does not open, manually open `docs/index.html` in a browser. If pages are missing, check that `devtools::document()` was run before building the site.
+**If fail:** If the preview does not open, manually open `docs/index.html` in a browser. If pages are missing, check that `devtools::document()` was run before building the site.
 
 ### Step 5: Deploy to GitHub Pages
 
@@ -149,9 +149,9 @@ git push origin gh-pages
 git checkout main
 ```
 
-**Expected:** The `gh-pages` branch exists on the remote with the site files at the root level.
+**Got:** The `gh-pages` branch exists on the remote with the site files at the root level.
 
-**On failure:** If the push is rejected, ensure you have write access to the repository. If using GitHub Actions deployment instead, skip this step and follow the `setup-github-actions-ci` skill.
+**If fail:** If the push is rejected, ensure you have write access to the repository. If using GitHub Actions deployment instead, skip this step and follow the `setup-github-actions-ci` skill.
 
 ### Step 6: Configure GitHub Pages
 
@@ -160,9 +160,9 @@ git checkout main
 3. Select `gh-pages` branch, `/ (root)` folder
 4. Save
 
-**Expected:** Site available at `https://username.github.io/packagename/` within a few minutes.
+**Got:** Site available at `https://username.github.io/packagename/` within a few minutes.
 
-**On failure:** If the site returns 404, verify the Pages source matches the deployment method (branch deployment requires "Deploy from a branch"). Check that `development: mode: release` is set in `_pkgdown.yml`.
+**If fail:** If the site returns 404, verify the Pages source matches the deployment method (branch deployment requires "Deploy from a branch"). Check that `development: mode: release` is set in `_pkgdown.yml`.
 
 ### Step 7: Add URL to DESCRIPTION
 
@@ -170,9 +170,9 @@ git checkout main
 URL: https://username.github.io/packagename/, https://github.com/username/packagename
 ```
 
-**Expected:** DESCRIPTION `URL` field contains both the pkgdown site URL and the GitHub repository URL, separated by a comma.
+**Got:** DESCRIPTION `URL` field contains both the pkgdown site URL and the GitHub repository URL, separated by a comma.
 
-**On failure:** If `R CMD check` warns about invalid URLs, verify the pkgdown site is actually deployed and accessible before adding the URL.
+**If fail:** If `R CMD check` warns about invalid URLs, verify the pkgdown site is deployed and accessible before adding the URL.
 
 ## Validation
 
@@ -185,7 +185,7 @@ URL: https://username.github.io/packagename/, https://github.com/username/packag
 - [ ] No 404 errors on the deployed site
 - [ ] `development: mode: release` is set in `_pkgdown.yml`
 
-## Common Pitfalls
+## Pitfalls
 
 - **404 errors after deployment**: Almost always caused by `development: mode: auto` (the default). Change to `mode: release`.
 - **Missing reference pages**: Functions must be exported and documented. Run `devtools::document()` first.

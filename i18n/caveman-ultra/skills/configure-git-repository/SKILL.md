@@ -25,26 +25,26 @@ metadata:
 
 # Configure Git Repository
 
-Set up a Git repository with appropriate configuration for the project type.
+Set up Git repo w/ appropriate config for project type.
 
-## When to Use
+## Use When
 
-- Initializing version control for a new project
-- Adding `.gitignore` for a specific language/framework
-- Setting up branch protection and conventions
-- Configuring commit hooks
+- Init version control for new project
+- Add `.gitignore` for specific language/framework
+- Set up branch protection + conventions
+- Configure commit hooks
 
-## Inputs
+## In
 
-- **Required**: Project directory
-- **Required**: Project type (R package, Node.js, Python, general)
-- **Optional**: Remote repository URL
+- **Required**: Project dir
+- **Required**: Project type (R pkg, Node.js, Python, general)
+- **Optional**: Remote repo URL
 - **Optional**: Branch strategy (trunk-based, Git Flow)
-- **Optional**: Commit message convention
+- **Optional**: Commit msg convention
 
-## Procedure
+## Do
 
-### Step 1: Initialize Repository
+### Step 1: Initialize Repo
 
 ```bash
 cd /path/to/project
@@ -52,9 +52,9 @@ git init
 git branch -M main
 ```
 
-**Expected:** `.git/` directory created. Default branch is named `main`.
+**→** `.git/` dir created. Default branch = `main`.
 
-**On failure:** If `git init` fails, ensure Git is installed (`git --version`). If the directory already has a `.git/`, the repository is already initialized — skip this step.
+**If err:** `git init` fails → ensure Git installed (`git --version`). Dir already has `.git/` → repo already init'd → skip step.
 
 ### Step 2: Create .gitignore
 
@@ -135,9 +135,9 @@ htmlcov/
 .vscode/
 ```
 
-**Expected:** `.gitignore` file created with entries appropriate for the project type. Sensitive files (`.Renviron`, `.env`) and generated artifacts are excluded.
+**→** `.gitignore` created w/ entries for project type. Sensitive files (`.Renviron`, `.env`) + generated artifacts excluded.
 
-**On failure:** If unsure which entries to include, use `gitignore.io` or GitHub's `.gitignore` templates as a starting point and customize for the project.
+**If err:** Unsure which entries → use `gitignore.io` or GitHub's `.gitignore` templates as starting point, customize.
 
 ### Step 3: Create Initial Commit
 
@@ -147,9 +147,9 @@ git add .  # Review what's being added first with git status
 git commit -m "Initial project setup"
 ```
 
-**Expected:** First commit created containing `.gitignore` and initial project files. `git log` shows one commit.
+**→** First commit w/ `.gitignore` + initial project files. `git log` shows one commit.
 
-**On failure:** If `git commit` fails with "nothing to commit," ensure files were staged with `git add`. If it fails with an author identity error, set `git config user.name` and `git config user.email`.
+**If err:** "Nothing to commit" → ensure files staged w/ `git add`. Author identity err → set `git config user.name` + `git config user.email`.
 
 ### Step 4: Connect Remote
 
@@ -161,15 +161,15 @@ git remote add origin git@github.com:username/repo.git
 git push -u origin main
 ```
 
-**Expected:** Remote `origin` is configured. `git remote -v` shows fetch and push URLs. Initial commit is pushed to the remote.
+**→** Remote `origin` config'd. `git remote -v` shows fetch + push URLs. Initial commit pushed.
 
-**On failure:** If push fails with "Permission denied (publickey)," configure SSH keys (see `setup-wsl-dev-environment`). If the remote already exists, update it with `git remote set-url origin <url>`.
+**If err:** Push fails "Permission denied (publickey)" → configure SSH keys (see `setup-wsl-dev-environment`). Remote already exists → update w/ `git remote set-url origin <url>`.
 
 ### Step 5: Set Up Branch Conventions
 
-**Trunk-based (recommended for small teams)**:
+**Trunk-based (rec'd for small teams)**:
 
-- `main`: production-ready code
+- `main`: prod-ready code
 - Feature branches: `feature/description`
 - Bug fixes: `fix/description`
 
@@ -182,9 +182,9 @@ git checkout main
 git merge feature/add-authentication
 ```
 
-**Expected:** Branch naming convention is established and documented. Team members know which prefix to use for each type of work.
+**→** Branch naming convention established + doc'd. Team knows which prefix to use for each work type.
 
-**On failure:** If branches are already named inconsistently, rename them with `git branch -m old-name new-name` and update any open PRs.
+**If err:** Branches already named inconsistent → rename w/ `git branch -m old-name new-name` + update any open PRs.
 
 ### Step 6: Configure Commit Conventions
 
@@ -201,9 +201,9 @@ refactor: extract helper function
 chore: update dependencies
 ```
 
-**Expected:** Commit message convention is documented and agreed upon by the team. Future commits follow the `type: description` format.
+**→** Commit msg convention doc'd + agreed. Future commits follow `type: description` format.
 
-**On failure:** If team members are not following the convention, enforce it with a commit-msg hook that validates the format (see Step 7).
+**If err:** Team not following → enforce w/ commit-msg hook validating format (see Step 7).
 
 ### Step 7: Set Up Pre-Commit Hooks (Optional)
 
@@ -229,9 +229,9 @@ chmod +x .githooks/pre-commit
 git config core.hooksPath .githooks
 ```
 
-**Expected:** Pre-commit hook runs automatically on each `git commit`. Linting errors block the commit until fixed.
+**→** Pre-commit hook runs auto on each `git commit`. Lint errs block commit until fixed.
 
-**On failure:** If the hook does not run, verify `core.hooksPath` is set (`git config core.hooksPath`) and the hook file is executable (`chmod +x`).
+**If err:** Hook doesn't run → valid. `core.hooksPath` set (`git config core.hooksPath`) + hook file executable (`chmod +x`).
 
 ### Step 8: Create README
 
@@ -244,30 +244,30 @@ git add README.md
 git commit -m "Add README"
 ```
 
-**Expected:** `README.md` committed to the repository. The project has a minimal but informative landing page on GitHub.
+**→** `README.md` committed. Project has minimal but informative landing page on GitHub.
 
-**On failure:** If `README.md` already exists, update it rather than overwriting. Use `usethis::use_readme_md()` in R projects for a template with badges.
+**If err:** `README.md` already exists → update vs. overwrite. R projects → use `usethis::use_readme_md()` for template w/ badges.
 
-## Validation
+## Check
 
-- [ ] `.gitignore` excludes sensitive and generated files
+- [ ] `.gitignore` excludes sensitive + generated files
 - [ ] No sensitive data (tokens, passwords) in tracked files
-- [ ] Remote repository connected and accessible
-- [ ] Branch naming conventions documented
-- [ ] Initial commit created cleanly
+- [ ] Remote repo connected + accessible
+- [ ] Branch naming conventions doc'd
+- [ ] Initial commit clean
 
-## Common Pitfalls
+## Traps
 
-- **Committing before .gitignore**: Add `.gitignore` first. Files already tracked aren't affected by later `.gitignore` entries.
-- **Sensitive data in history**: If secrets are committed, they remain in history even after deletion. Use `git filter-repo` or BFG to clean.
+- **Commit before .gitignore**: Add `.gitignore` first. Files already tracked unaffected by later `.gitignore` entries.
+- **Sensitive data in history**: Secrets committed → remain in history even after deletion. Use `git filter-repo` or BFG to clean.
 - **Large binary files**: Don't commit large binaries. Use Git LFS for files > 1MB.
-- **Line endings**: Set `core.autocrlf=input` on Windows/WSL to prevent CRLF/LF issues.
+- **Line endings**: Set `core.autocrlf=input` on Windows/WSL → prevent CRLF/LF issues.
 
-## Related Skills
+## →
 
-- `commit-changes` - staging and committing workflow
-- `manage-git-branches` - branch creation and conventions
-- `create-r-package` - Git setup as part of R package creation
-- `setup-wsl-dev-environment` - Git installation and SSH keys
-- `create-github-release` - creating releases from the repository
+- `commit-changes` - staging + committing workflow
+- `manage-git-branches` - branch creation + conventions
+- `create-r-package` - Git setup as part of R pkg creation
+- `setup-wsl-dev-environment` - Git install + SSH keys
+- `create-github-release` - creating releases from repo
 - `security-audit-codebase` - check for committed secrets

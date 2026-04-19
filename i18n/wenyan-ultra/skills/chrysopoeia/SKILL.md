@@ -26,33 +26,33 @@ metadata:
 
 # Chrysopoeia
 
-Systematically extract maximum value from existing code — identify what's golden (high-value, well-designed), what's lead (resource-heavy, poorly optimized), and what's dross (dead weight). Then amplify the gold, transmute the lead, and remove the dross.
+提碼之極值：辨金（值高、善構）、鉛（重、拙）、渣（死）。揚金、轉鉛、去渣。
 
-## When to Use
+## 用
 
-- Optimizing a working but sluggish codebase for performance
-- Refining an API surface that has accumulated cruft over iterations
-- Reducing bundle size, memory footprint, or startup time
-- Preparing code for open-source release (extracting the valuable core)
-- When code works correctly but doesn't shine — it needs polish, not rewrite
+- 可用而遲→優
+- API 積垢→修
+- 減包量、減存、減啟時
+- 開源前→取其精
+- 碼可而不耀→磨非重寫
 
-## Inputs
+## 入
 
-- **Required**: Codebase or module to optimize (file paths)
-- **Required**: Value metric (performance, API clarity, bundle size, readability)
-- **Optional**: Profiling data or benchmarks showing current performance
-- **Optional**: Budget or target (e.g., "reduce bundle by 40%", "sub-100ms response")
-- **Optional**: Constraints (can't change public API, must maintain backward compat)
+- **必**：碼庫/模塊（路徑）
+- **必**：值度（性能、API 明、包量、可讀）
+- **可**：剖析或基準數據
+- **可**：標（如「減包 40%」、「響應 < 100ms」）
+- **可**：約束（API 不變、向後兼容）
 
-## Procedure
+## 行
 
-### Step 1: Assay — Classify the Material
+### 一：察——分料
 
-Systematically classify every element by its value contribution.
+按值分諸元。
 
-1. Define the value metric from Inputs (performance, clarity, size, etc.)
-2. Inventory the codebase elements (functions, modules, exports, dependencies)
-3. Classify each element:
+1. 依入定值度
+2. 列碼元（函、模、出、依）
+3. 各元分級：
 
 ```
 Value Classification:
@@ -66,112 +66,112 @@ Value Classification:
 +--------+---------------------------------------------------------+
 ```
 
-4. For performance optimization, profile first:
-   - Identify hot paths (where time is spent)
-   - Identify cold paths (rarely executed code that may be dross)
-   - Measure memory allocation patterns
-5. Produce the **Assay Report**: element-by-element classification with evidence
+4. 優化性能→先剖：
+   - 識熱路（耗時處）
+   - 識冷路（少行之碼→或渣）
+   - 量存配模式
+5. 出**察報**：逐元+證據
 
-**Expected:** Every significant element classified with evidence. Gold elements are identified for protection during optimization. Lead elements are prioritized by impact.
+**得：** 諸要元皆分+證。金者得護。鉛者按影響序。
 
-**On failure:** If profiling tools aren't available, use static analysis: function complexity (cyclomatic), dependency count, and code size as proxies. If the codebase is too large, focus on the critical path first.
+**敗：** 無剖析具→用靜析：函複雜度、依數、碼量。庫過大→先焦路。
 
-### Step 2: Refine — Amplify the Gold
+### 二：煉——揚金
 
-Protect and enhance the highest-value elements.
+護且強至貴者。
 
-1. For each Gold element:
-   - Ensure it has comprehensive tests (these are your most valuable assets)
-   - Document its interface clearly if not already done
-   - Consider whether it could be extracted as a reusable module
-2. For each Silver element:
-   - Apply targeted improvements (better naming, clearer types, minor optimizations)
-   - Bring test coverage to Gold-level
-   - Resolve minor code smells without restructuring
-3. Do not modify Gold/Silver behavior — only improve their polish and protection
+1. 每金元：
+   - 確有全備測試（最貴資產）
+   - 介面明文
+   - 或可抽為可重用模
+2. 每銀元：
+   - 施定點改（命名、類型、微優）
+   - 測覆至金級
+   - 除微瑕不重構
+3. 勿變金銀之行——只磨不改
 
-**Expected:** Gold and Silver elements are better tested, documented, and protected. No behavioral changes, only quality improvements.
+**得：** 金銀更備測、文、護。無行變，只磨。
 
-**On failure:** If a "Gold" element reveals hidden problems during closer inspection, reclassify it. Better to be honest about value than to protect flawed code.
+**敗：** 「金」細察現瑕→重分。誠於值，勝護瑕碼。
 
-### Step 3: Transmute — Convert Lead to Gold
+### 三：轉——鉛化金
 
-Transform heavy, inefficient elements into optimized equivalents.
+化重拙為優。
 
-1. Prioritize Lead elements by impact (highest resource consumption first)
-2. For each Lead element, choose a transmutation strategy:
-   - **Algorithm optimization**: Replace O(n^2) with O(n log n), eliminate redundant computation
-   - **Caching/memoization**: Store expensive results that are requested repeatedly
-   - **Lazy evaluation**: Defer computation until results are actually needed
-   - **Batch processing**: Combine many small operations into fewer large ones
-   - **Structural simplification**: Reduce cyclomatic complexity, flatten deep nesting
-3. Apply the strategy and measure the improvement:
-   - Before/after benchmarks for performance changes
-   - Before/after line counts for complexity changes
-   - Before/after dependency counts for coupling changes
-4. Verify behavioral equivalence after each transmutation
+1. 鉛按影響序（耗資最大先）
+2. 每鉛擇策：
+   - **算優**：O(n^2)→O(n log n)、除冗算
+   - **緩存/記憶化**：存昂貴多求之果
+   - **惰求**：用時方算
+   - **批處**：併小為大
+   - **結構簡化**：減複雜度、平深嵌
+3. 施策→量變：
+   - 性能→前後基準
+   - 複雜度→前後行數
+   - 耦合→前後依數
+4. 每轉後驗行相等
 
-**Expected:** Measurable improvement on the target value metric. Each transmuted element performs better than its Lead predecessor while maintaining identical behavior.
+**得：** 度上可量之進。每轉元優於鉛且行同。
 
-**On failure:** If a Lead element resists optimization within its current interface, consider whether the interface itself is the problem. Sometimes the transmutation requires changing how the element is called, not just how it's implemented.
+**敗：** 鉛於現介面拒優→或介面即病。須變調用法，非只實現。
 
-### Step 4: Purge — Remove the Dross
+### 四：滌——除渣
 
-Eliminate dead weight systematically.
+系統除死重。
 
-1. For each Dross element, verify it's truly unused:
-   - Search for all references (grep, IDE find-usages)
-   - Check for dynamic references (string-based dispatch, reflection)
-   - Check for external consumers (if the code is a library)
-2. Remove confirmed dross:
-   - Delete dead code, unused exports, vestigial features
-   - Remove unused dependencies from package manifests
-   - Clean up configuration for removed features
-3. Verify nothing breaks after each removal (run tests)
-4. Document what was removed and why (in commit messages, not in code)
+1. 每渣驗真未用：
+   - 尋諸引（grep、IDE find-usages）
+   - 察動引（字串派發、反射）
+   - 察外用（若為庫）
+2. 去確渣：
+   - 刪死碼、未用出、退化功能
+   - 除未用依於清單
+   - 清已去功能之配
+3. 每去後驗不破（行測）
+4. 記所去與因（於提交訊息，非碼）
 
-**Expected:** The codebase is lighter. Bundle size, dependency count, or code volume measurably reduced. All tests still pass.
+**得：** 庫輕矣。包量/依數/碼量可量減。諸測猶過。
 
-**On failure:** If removing an element breaks something, it wasn't dross — reclassify it. If dynamic references make it hard to verify usage, add temporary logging before deletion to confirm no runtime access.
+**敗：** 去破某物→非渣，重分。動引難驗→暫加日誌，確無運行存取後刪。
 
-### Step 5: Verify — Weigh the Gold
+### 五：驗——稱金
 
-Measure the overall improvement.
+量總進。
 
-1. Run the same benchmarks/metrics used in Step 1
-2. Compare before/after on the target value metric
-3. Document the chrysopoeia results:
-   - Elements refined (Gold/Silver improvements)
-   - Elements transmuted (Lead → Gold conversions with measurements)
-   - Elements purged (Dross removed with size/count impact)
-   - Overall metric improvement (e.g., "47% faster", "32% smaller bundle")
+1. 行步一同之基準
+2. 比前後於值度
+3. 記 chrysopoeia 果：
+   - 煉元（金銀之磨）
+   - 轉元（鉛→金+量）
+   - 滌元（渣去+量）
+   - 總進（如「快 47%」、「包小 32%」）
 
-**Expected:** Measurable, documented improvement on the target value metric. The codebase is demonstrably more valuable than before.
+**得：** 可量有文之進於值度。庫明勝於前。
 
-**On failure:** If overall improvement is marginal, the original code may have been better than assumed. Document what was learned — knowing that code is already near-optimal is itself valuable.
+**敗：** 總進微→原碼或勝於所設。記所學——知碼近極優亦貴。
 
-## Validation Checklist
+## 驗
 
-- [ ] Assay report classifies all significant elements with evidence
-- [ ] Gold elements have comprehensive tests and documentation
-- [ ] Lead transmutations show measurable before/after improvement
-- [ ] Dross removal verified with reference checks before deletion
-- [ ] All tests pass after each stage
-- [ ] Overall improvement measured and documented
-- [ ] No behavioral regressions introduced
-- [ ] Constraints from Inputs are satisfied
+- [ ] 察報分諸要元+證
+- [ ] 金有全測與文
+- [ ] 鉛轉可量前後進
+- [ ] 渣刪前驗引
+- [ ] 每階後諸測皆過
+- [ ] 總進有量有文
+- [ ] 無行退
+- [ ] 入之約束皆守
 
-## Common Pitfalls
+## 忌
 
-- **Premature optimization**: Optimizing without profiling. Always measure first, optimize the hot paths
-- **Polishing dross**: Spending effort improving code that should be deleted. Classify before refining
-- **Breaking Gold**: Optimization that degrades the best code. Gold elements should only get better, never worse
-- **Unmeasured claims**: "It feels faster" is not chrysopoeia. Every improvement must be quantified
-- **Optimizing cold paths**: Spending effort on code that runs once at startup when the bottleneck is the request loop
+- **早優**：未剖即優——先量再優熱路
+- **磨渣**：費力於當刪之碼——先分再煉
+- **破金**：優致最佳碼退——金只進不退
+- **無量之辭**：「感覺快」非 chrysopoeia——每進須有量
+- **優冷路**：費力於啟時單行之碼，瓶頸實在求環
 
-## Related Skills
+## 參
 
-- `athanor` — Full four-stage transformation when chrysopoeia reveals the code needs restructuring, not just optimization
-- `transmute` — Targeted conversion when a Lead element needs a paradigm shift
-- `review-software-architecture` — Architecture-level evaluation that complements code-level chrysopoeia
-- `review-data-analysis` — Data pipeline optimization parallels code optimization
+- `athanor` — 四階全變，chrysopoeia 揭須重構非只優時
+- `transmute` — 點轉，鉛元須范式變時
+- `review-software-architecture` — 架構級察，補碼級 chrysopoeia
+- `review-data-analysis` — 數據管道優，合於碼優

@@ -54,9 +54,9 @@ Outputs: reactive filtered dataset
 UI: filter controls (selectInput, sliderInput, dateRangeInput)
 ```
 
-**Expected:** Clear contract specifying reactive inputs, reactive outputs, and UI elements.
+**Got:** Clear contract specifying reactive inputs, reactive outputs, and UI elements.
 
-**On failure:** If the interface is unclear, the module is probably too broad. Split it into smaller modules with single responsibilities.
+**If fail:** If the interface is unclear, the module is probably too broad. Split it into smaller modules with single responsibilities.
 
 ### Step 2: Create the Module UI Function
 
@@ -87,9 +87,9 @@ Key rules:
 - Wrap every `inputId` and `outputId` with `ns()`
 - Return a `tagList()` to allow flexible placement
 
-**Expected:** UI function that creates namespaced input/output elements.
+**Got:** UI function that creates namespaced input/output elements.
 
-**On failure:** If IDs collide when using the module twice, check that every ID is wrapped with `ns()`. Common miss: IDs inside `renderUI()` or `uiOutput()` — these need `ns()` too.
+**If fail:** If IDs collide when using the module twice, check that every ID is wrapped with `ns()`. Common miss: IDs inside `renderUI()` or `uiOutput()` — these need `ns()` too.
 
 ### Step 3: Create the Module Server Function
 
@@ -164,9 +164,9 @@ Key rules:
 - Use `session$ns` for dynamic UI created inside the server
 - Return reactive values explicitly
 
-**Expected:** Server function that processes inputs and returns reactive output.
+**Got:** Server function that processes inputs and returns reactive output.
 
-**On failure:** If reactive values don't update, check that inputs from dynamic UI use `session$ns` (not the outer `ns`). If the module returns NULL, ensure `return()` is the last expression inside `moduleServer()`.
+**If fail:** If reactive values don't update, check that inputs from dynamic UI use `session$ns` (not the outer `ns`). If the module returns NULL, ensure `return()` is the last expression inside `moduleServer()`.
 
 ### Step 4: Wire the Module into the Parent App
 
@@ -201,9 +201,9 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** Module appears in the UI and its returned reactive flows into downstream outputs.
+**Got:** Module appears in the UI and its returned reactive flows into downstream outputs.
 
-**On failure:** If the module UI doesn't render, verify the `id` string matches between UI and server calls. If the returned reactive is NULL, check that the server function actually returns a value.
+**If fail:** If the module UI doesn't render, verify the `id` string matches between UI and server calls. If the returned reactive is NULL, check that the server function returns a value.
 
 ### Step 5: Compose Nested Modules (Optional)
 
@@ -235,9 +235,9 @@ analysisServer <- function(id, data) {
 
 Key rule: In the UI, nest with `ns("inner_id")`. In the server, call with just `"inner_id"` — `moduleServer` handles the namespace chaining.
 
-**Expected:** Inner module renders correctly within the outer module's namespace.
+**Got:** Inner module renders correctly within the outer module's namespace.
 
-**On failure:** If the inner module's UI doesn't appear, you likely forgot `ns()` around the inner module's ID in the outer UI function. If server communication breaks, check that the inner module ID matches (no `ns()` in the server call).
+**If fail:** If the inner module's UI doesn't appear, you likely forgot `ns()` around the inner module's ID in the outer UI function. If server communication breaks, check that the inner module ID matches (no `ns()` in the server call).
 
 ### Step 6: Test the Module in Isolation
 
@@ -258,9 +258,9 @@ if (interactive()) {
 }
 ```
 
-**Expected:** Module works correctly in the minimal test app.
+**Got:** Module works correctly in the minimal test app.
 
-**On failure:** If the module fails in isolation but works in the full app (or vice versa), check for implicit dependencies on global variables or parent session state.
+**If fail:** If the module fails in isolation but works in the full app (or vice versa), check for implicit dependencies on global variables or parent session state.
 
 ## Validation
 
@@ -272,7 +272,7 @@ if (interactive()) {
 - [ ] Reactive return values are accessible to the parent app
 - [ ] Module works in a minimal standalone test app
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting `ns()` in `renderUI()`**: Dynamic UI created inside the server must use `session$ns` — the outer `ns` is not available inside `moduleServer()`.
 - **Passing non-reactive data**: Module arguments that change over time must be reactive expressions. Pass `reactive(data)` not `data`.

@@ -24,30 +24,30 @@ metadata:
   tags: nginx, reverse-proxy, ssl, tls, lets-encrypt, web-server, security-headers
 ---
 
-# Configure Nginx
+# 配 Nginx
 
-Set up Nginx as a web server and reverse proxy with SSL termination and security hardening.
+設 Nginx 為網服與反代，含 SSL 終與安固。
 
-## When to Use
+## 用
 
-- Serving static files (HTML, CSS, JS) in production
-- Reverse proxying to backend services (Node.js, Python, Go, R/Shiny)
-- Terminating SSL/TLS with Let's Encrypt certificates
-- Load balancing across multiple backend instances
-- Adding rate limiting and security headers
+- 生產供靜檔（HTML、CSS、JS）
+- 反代至後端（Node.js、Python、Go、R/Shiny）
+- 以 Let's Encrypt 終 SSL/TLS
+- 諸後端間負載平衡
+- 加限率與安頭
 
-## Inputs
+## 入
 
-- **Required**: Deployment target (Docker container or bare metal)
-- **Required**: Backend service(s) to proxy (host:port)
-- **Optional**: Domain name for SSL
-- **Optional**: Static file directory
+- **必**：部目（Docker 容器或裸機）
+- **必**：所代後端（host:port）
+- **可**：SSL 域名
+- **可**：靜檔目錄
 
-## Procedure
+## 行
 
-### Step 1: Basic Reverse Proxy
+### 一：基反代
 
-`nginx.conf`:
+`nginx.conf`：
 
 ```nginx
 events {
@@ -74,7 +74,7 @@ http {
 }
 ```
 
-Docker Compose service:
+Docker Compose 服：
 
 ```yaml
 services:
@@ -89,9 +89,9 @@ services:
       - app
 ```
 
-**Expected:** Requests to port 80 are forwarded to the app service.
+**得：** 80 埠求轉至 app 服。
 
-### Step 2: Static File Serving
+### 二：靜檔供
 
 ```nginx
 server {
@@ -115,9 +115,9 @@ server {
 }
 ```
 
-### Step 3: SSL/TLS with Let's Encrypt
+### 三：SSL/TLS 以 Let's Encrypt
 
-Using certbot with the webroot method:
+以 certbot webroot 法：
 
 ```nginx
 server {
@@ -154,7 +154,7 @@ server {
 }
 ```
 
-Docker Compose with certbot:
+Docker Compose 含 certbot：
 
 ```yaml
 services:
@@ -179,7 +179,7 @@ volumes:
   certbot-certs:
 ```
 
-Initial certificate:
+初證：
 
 ```bash
 docker compose run --rm certbot certonly \
@@ -187,11 +187,11 @@ docker compose run --rm certbot certonly \
   -d example.com --email admin@example.com --agree-tos
 ```
 
-**Expected:** HTTPS works with valid Let's Encrypt certificate.
+**得：** HTTPS 含有效 Let's Encrypt 證。
 
-**On failure:** Check DNS points to the server. Verify port 80 is open for ACME challenges.
+**敗：** 察 DNS 指服。驗 80 埠開以 ACME 挑戰。
 
-### Step 4: Security Headers
+### 四：安頭
 
 ```nginx
 server {
@@ -209,7 +209,7 @@ server {
 }
 ```
 
-### Step 5: Rate Limiting
+### 五：限率
 
 ```nginx
 http {
@@ -231,7 +231,7 @@ http {
 }
 ```
 
-### Step 6: Load Balancing
+### 六：負載平衡
 
 ```nginx
 upstream app {
@@ -249,7 +249,7 @@ upstream app {
 | IP hash | `ip_hash` | Sticky sessions |
 | Weighted | `server app:3000 weight=3` | Proportional |
 
-### Step 7: Test Configuration
+### 七：測配
 
 ```bash
 # Test config syntax
@@ -262,28 +262,28 @@ docker compose exec nginx nginx -s reload
 curl -I https://example.com
 ```
 
-**Expected:** `nginx -t` reports syntax OK. Headers include security headers.
+**得：** `nginx -t` 報語正。頭含安頭。
 
-## Validation
+## 驗
 
-- [ ] `nginx -t` reports configuration is valid
-- [ ] HTTP redirects to HTTPS (if SSL enabled)
-- [ ] Backend service is reachable through the proxy
-- [ ] Security headers present in response
-- [ ] Rate limiting triggers on excessive requests
-- [ ] SSL Labs test gives A+ rating (if public)
+- [ ] `nginx -t` 報配有效
+- [ ] HTTP 轉 HTTPS（若 SSL 啟）
+- [ ] 後端服經代可達
+- [ ] 響中現安頭
+- [ ] 過求觸限率
+- [ ] SSL Labs 測得 A+（若公）
 
-## Common Pitfalls
+## 忌
 
-- **Missing `proxy_set_header Host`**: Backend receives wrong host header, breaking virtual hosts and redirects.
-- **`location` order matters**: Nginx uses the most specific match. Exact (`=`) > prefix (`^~`) > regex (`~`) > general prefix.
-- **SSL certificate renewal**: Set up a cron or timer to run `certbot renew` and reload Nginx.
-- **Large request bodies**: Default `client_max_body_size` is 1MB. Increase for file uploads: `client_max_body_size 50m;`.
-- **WebSocket proxying**: Requires additional headers. See `configure-reverse-proxy` for the pattern.
+- **缺 `proxy_set_header Host`**：後端收誤主機頭→破虛主機與轉。
+- **`location` 序要**：Nginx 用最具體匹。exact（`=`）> prefix（`^~`）> regex（`~`）> general prefix。
+- **SSL 證更**：設 cron 或計時器以 `certbot renew` 且 Nginx 重載。
+- **大求體**：默 `client_max_body_size` 1MB。檔上→`client_max_body_size 50m;`。
+- **WebSocket 代**：須加頭。見 `configure-reverse-proxy`。
 
-## Related Skills
+## 參
 
-- `configure-reverse-proxy` - multi-tool proxy patterns including WebSocket and Traefik
-- `setup-compose-stack` - compose stack that includes Nginx
-- `deploy-searxng` - uses Nginx as frontend for SearXNG
-- `configure-ingress-networking` - Kubernetes ingress (NGINX Ingress Controller)
+- `configure-reverse-proxy` - 多具代模含 WebSocket 與 Traefik
+- `setup-compose-stack` - 含 Nginx 之 compose 堆
+- `deploy-searxng` - 用 Nginx 為 SearXNG 前
+- `configure-ingress-networking` - K8s ingress（NGINX Ingress 控）

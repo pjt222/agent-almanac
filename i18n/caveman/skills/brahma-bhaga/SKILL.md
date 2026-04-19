@@ -27,29 +27,29 @@ metadata:
 
 # Brahma Bhaga
 
-Generative creation from void or ambiguity — structured emergence of new patterns, approaches, and solutions where none existed before.
+Generative creation from void or ambiguity — structured emergence of new patterns, approaches, solutions where none existed before.
 
-## When to Use
+## When Use
 
-- After `shiva-bhaga` dissolution has cleared stale patterns and created space
-- Facing a genuinely novel problem with no obvious template or precedent
-- The user's request requires invention rather than retrieval or adaptation
-- Multiple possible approaches exist and none has been chosen — the creative act is the choice itself
-- A blank slate: new file, new project, new architecture, new approach
-- When incremental modification has reached its limits and a fresh design is needed
+- After `shiva-bhaga` dissolution cleared stale patterns, created space
+- Facing genuinely novel problem — no obvious template or precedent
+- User's request requires invention rather than retrieval or adaptation
+- Multiple approaches exist, none chosen — creative act is the choice itself
+- Blank slate: new file, new project, new architecture, new approach
+- Incremental modification has reached limits — fresh design needed
 
 ## Inputs
 
-- **Required**: The creative goal or void to fill (available from conversation context)
-- **Optional**: Constraints that bound the creation (user requirements, technical limitations)
-- **Optional**: Seeds — fragments, inspirations, or partial ideas that inform the creation
+- **Required**: Creative goal or void to fill (from conversation context)
+- **Optional**: Constraints bounding creation (user requirements, technical limitations)
+- **Optional**: Seeds — fragments, inspirations, partial ideas informing creation
 - **Optional**: What was dissolved (`shiva-bhaga` output) — understanding what failed guides what to create
 
-## Procedure
+## Steps
 
 ### Step 1: Survey the Void
 
-Before creating, understand the space available for creation.
+Before creating, understand space available for creation.
 
 ```
 Creative Space Assessment:
@@ -78,99 +78,99 @@ Creative Space Assessment:
 +---------------------+---------------------------+------------------------+
 ```
 
-1. Map each dimension honestly — especially constraints, which are often implicit
-2. Note the degrees of freedom: these are where genuine creation happens
+1. Map each dimension honestly — especially constraints, often implicit
+2. Note degrees of freedom: where genuine creation happens
 3. Identify seeds without committing to them — they inform, not dictate
 
-**Expected:** A clear picture of the creative space: bounded by constraints, informed by seeds, and opened by degrees of freedom.
+**Got:** Clear picture of creative space: bounded by constraints, informed by seeds, opened by degrees of freedom.
 
-**On failure:** If the space feels fully constrained (no degrees of freedom), re-examine — often constraints that seem fixed are actually preferences. Ask the user if needed.
+**If fail:** Space feels fully constrained (no degrees of freedom)? Re-examine — constraints that seem fixed are often preferences. Ask user if needed.
 
 ### Step 2: Generate — Divergent Exploration
 
-Produce multiple possibilities without evaluating them.
+Produce multiple possibilities without evaluating.
 
-1. Generate at least three distinct approaches to filling the creative space
-2. Each approach should be genuinely different — not variations on a theme
+1. Generate at least three distinct approaches to fill creative space
+2. Each approach genuinely different — not variations on a theme
 3. For each approach, capture:
-   - The core idea in one sentence
-   - How it satisfies the constraints
-   - What makes it distinct from the others
+   - Core idea in one sentence
+   - How it satisfies constraints
+   - What makes it distinct from others
    - What it sacrifices or trades off
-4. Include at least one approach that feels unconventional or risky
+4. Include at least one unconventional or risky approach
 5. Do not evaluate yet — generation and evaluation are separate phases
 
-**Expected:** Three or more genuinely distinct approaches, each with a clear identity and trade-off profile.
+**Got:** Three or more genuinely distinct approaches, each with clear identity and trade-off profile.
 
-**On failure:** If all approaches feel similar, the generation was too narrow. Return to Step 1 and look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if I did the opposite of the obvious approach?"
+**If fail:** All approaches feel similar? Generation too narrow. Return to Step 1, look for unexplored degrees of freedom. Alternatively, invert a constraint: "What if opposite of the obvious approach?"
 
 ### Step 3: Evaluate — Convergent Selection
 
-Assess the generated approaches against the creative space.
+Assess generated approaches vs creative space.
 
 1. For each approach, assess:
-   - **Constraint satisfaction**: Does it meet all non-negotiable requirements?
-   - **Elegance**: Is it the simplest solution that works?
-   - **Resilience**: Will it survive future perturbation?
-   - **Integration**: Does it fit naturally with the surrounding context?
-   - **Novelty**: Does it bring something genuinely new, or merely rearrange the old?
-2. Eliminate approaches that violate hard constraints
-3. Among remaining approaches, choose based on the user's implicit values (simplicity? thoroughness? creativity?)
-4. If two approaches are equally strong, present both to the user with trade-offs clearly stated
+   - **Constraint satisfaction**: Meets all non-negotiable requirements?
+   - **Elegance**: Simplest solution that works?
+   - **Resilience**: Survives future perturbation?
+   - **Integration**: Fits naturally with surrounding context?
+   - **Novelty**: Brings something genuinely new, or merely rearranges old?
+2. Eliminate approaches violating hard constraints
+3. Among remaining approaches, choose from user's implicit values (simplicity? thoroughness? creativity?)
+4. Two approaches equally strong? Present both to user with trade-offs clearly stated
 
-**Expected:** A single chosen approach (or a clearly framed choice for the user) with articulated reasoning.
+**Got:** Single chosen approach (or clearly framed choice for user) with articulated reasoning.
 
-**On failure:** If no approach satisfies all constraints, the constraints may be contradictory. Surface the contradiction to the user rather than forcing a creation that compromises on fundamentals.
+**If fail:** No approach satisfies all constraints? Constraints may be contradictory. Surface contradiction to user rather than forcing creation that compromises fundamentals.
 
 ### Step 4: Manifest — Bring into Form
 
-Execute the chosen approach, giving it concrete form.
+Execute chosen approach, give concrete form.
 
-1. Begin with the skeleton: the minimal structure that embodies the core idea
-2. Build outward from the core, adding detail as needed
-3. At each step, check: "Is this addition serving the core idea or diluting it?"
-4. Resist the urge to over-elaborate — creation is complete when nothing more can be removed
-5. Name what was created: a clear, descriptive identifier that captures its essence
+1. Begin with skeleton: minimal structure embodying core idea
+2. Build outward from core, adding detail as needed
+3. At each step, check: "Does this addition serve core idea or dilute it?"
+4. Resist urge to over-elaborate — creation complete when nothing more can be removed
+5. Name what was created: clear, descriptive identifier capturing its essence
 
-**Expected:** A concrete creation that embodies the chosen approach — code, plan, structure, or design that exists where void existed before.
+**Got:** Concrete creation embodying chosen approach — code, plan, structure, or design existing where void was before.
 
-**On failure:** If the manifestation diverges from the chosen approach, pause and re-read Step 3's selection. Drift during manifestation often indicates the selection was not fully committed to. Either recommit or re-select.
+**If fail:** Manifestation diverges from chosen approach? Pause, re-read Step 3's selection. Drift during manifestation often signals selection not fully committed to. Either recommit or re-select.
 
 ### Step 5: Nurture — Protect the Nascent Creation
 
-New creations are fragile. Protect them through their early stages.
+New creations fragile. Protect them through early stages.
 
-1. Test the creation against its constraints — does it work as intended?
-2. Identify the weakest point — where is it most likely to break?
-3. Strengthen the weakest point without over-engineering
-4. Hand off to `vishnu-bhaga` for ongoing preservation if the creation will persist
-5. Document the creative choices made: what was chosen, what was rejected, and why
+1. Test creation vs its constraints — works as intended?
+2. Identify weakest point — where most likely to break?
+3. Strengthen weakest point without over-engineering
+4. Hand off to `vishnu-bhaga` for ongoing preservation if creation will persist
+5. Document creative choices made: what was chosen, what was rejected, why
 
-**Expected:** A creation that is tested, documented, and ready for sustained use.
+**Got:** Creation tested, documented, ready for sustained use.
 
-**On failure:** If the creation fails its first test, assess whether the failure is in the creation or the test. If the creation is fundamentally flawed, return to Step 2 with the failure as a new anti-pattern seed.
+**If fail:** Creation fails first test? Assess whether failure is in creation or test. Creation fundamentally flawed? Return to Step 2 with failure as new anti-pattern seed.
 
-## Validation
+## Checks
 
-- [ ] The creative space was surveyed before generating ideas
-- [ ] At least three genuinely distinct approaches were generated
-- [ ] Selection was based on explicit criteria, not default instinct
-- [ ] The creation was manifested starting from its core, building outward
-- [ ] The creation was tested against its constraints
-- [ ] Creative choices were documented for future reference
+- [ ] Creative space surveyed before generating ideas
+- [ ] At least three genuinely distinct approaches generated
+- [ ] Selection based on explicit criteria, not default instinct
+- [ ] Creation manifested starting from core, building outward
+- [ ] Creation tested vs its constraints
+- [ ] Creative choices documented for future reference
 
-## Common Pitfalls
+## Pitfalls
 
-- **Creating before clearing**: Attempting creation without prior dissolution produces new patterns contaminated by old ones. Run `shiva-bhaga` first if the space is cluttered
-- **Single-option generation**: Generating one approach and then evaluating it is not creation — it is executing the first idea. True creation requires divergent options
-- **Novelty for its own sake**: Creating something unconventional when a simple standard approach would serve better. Novelty is a tool, not a goal
-- **Perfectionist manifestation**: Polishing endlessly rather than shipping a working creation. A complete imperfect creation outperforms an incomplete perfect one
-- **Unprotected creation**: Manifesting something new and immediately moving on without testing or documentation leaves the creation vulnerable
+- **Creating before clearing**: Attempting creation without prior dissolution produces new patterns contaminated by old ones. Run `shiva-bhaga` first if space is cluttered
+- **Single-option generation**: Generating one approach then evaluating it is not creation — it's executing first idea. True creation requires divergent options
+- **Novelty for its own sake**: Creating something unconventional when simple standard approach would serve better. Novelty is tool, not goal
+- **Perfectionist manifestation**: Polishing endlessly rather than shipping working creation. Complete imperfect creation outperforms incomplete perfect one
+- **Unprotected creation**: Manifesting something new and immediately moving on without testing or documentation leaves creation vulnerable
 
-## Related Skills
+## See Also
 
-- `shiva-bhaga` — destruction creates the void that Brahma fills; dissolution precedes creation
+- `shiva-bhaga` — destruction creates void Brahma fills; dissolution precedes creation
 - `vishnu-bhaga` — preservation sustains what Brahma creates; handoff from creation to maintenance
 - `intrinsic` — creative engagement benefits from autonomous motivation; creation thrives in flow
-- `learn` — when creation requires knowledge not yet held, learning precedes generation
-- `adapt-architecture` — the morphic equivalent for creating new architectural patterns from existing systems
+- `learn` — creation requiring knowledge not yet held? Learning precedes generation
+- `adapt-architecture` — morphic equivalent for creating new architectural patterns from existing systems

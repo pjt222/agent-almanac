@@ -29,11 +29,11 @@ Set up Prometheus alerting rules and Alertmanager for reliable, actionable incid
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-## When to Use
+## When Use
 
 - Implementing proactive monitoring with automated incident detection
-- Routing alerts to appropriate teams based on severity and service ownership
-- Reducing alert fatigue through intelligent grouping and deduplication
+- Routing alerts to appropriate teams based on severity, service ownership
+- Reducing alert fatigue through intelligent grouping, deduplication
 - Integrating monitoring with on-call systems (PagerDuty, Opsgenie)
 - Establishing escalation policies for critical production issues
 - Migrating from legacy monitoring systems to Prometheus-based alerting
@@ -42,16 +42,16 @@ Set up Prometheus alerting rules and Alertmanager for reliable, actionable incid
 ## Inputs
 
 - **Required**: Prometheus metrics to alert on (error rates, latency, saturation)
-- **Required**: On-call rotation and escalation policies
+- **Required**: On-call rotation, escalation policies
 - **Optional**: Existing alert definitions to migrate
 - **Optional**: Notification channels (Slack, email, PagerDuty)
 - **Optional**: Runbook documentation for common alerts
 
-## Procedure
+## Steps
 
 ### Step 1: Deploy Alertmanager
 
-Install and configure Alertmanager to receive alerts from Prometheus.
+Install, configure Alertmanager to receive alerts from Prometheus.
 
 **Docker Compose deployment** (basic structure):
 
@@ -101,9 +101,9 @@ alerting:
       api_version: v2
 ```
 
-**Expected:** Alertmanager UI accessible at `http://localhost:9093`, Prometheus "Status > Alertmanagers" shows UP status.
+**Got:** Alertmanager UI accessible at `http://localhost:9093`, Prometheus "Status > Alertmanagers" shows UP status.
 
-**On failure:**
+**If fail:**
 - Check Alertmanager logs: `docker logs alertmanager`
 - Verify Prometheus can reach Alertmanager: `curl http://alertmanager:9093/api/v2/status`
 - Test webhook URLs: `curl -X POST <SLACK_WEBHOOK_URL> -d '{"text":"test"}'`
@@ -111,7 +111,7 @@ alerting:
 
 ### Step 2: Define Alerting Rules in Prometheus
 
-Create alerting rules that fire when conditions are met.
+Create alerting rules that fire when conditions met.
 
 **Create alerting rules file** (`/etc/prometheus/rules/alerts.yml` excerpt):
 
@@ -144,10 +144,10 @@ groups:
 **Alert design best practices**:
 
 - **`for` duration**: Prevents flapping alerts. Use 5-10 minutes for most alerts.
-- **Descriptive annotations**: Include current value, affected resource, and runbook link.
+- **Descriptive annotations**: Include current value, affected resource, runbook link.
 - **Severity levels**: critical (pages on-call), warning (investigate), info (FYI)
 - **Team labels**: Enable routing to correct team/channel
-- **Runbook links**: Every alert should have a runbook URL
+- **Runbook links**: Every alert should have runbook URL
 
 Load rules into Prometheus:
 
@@ -157,16 +157,16 @@ rule_files:
   - "rules/*.yml"
 ```
 
-Validate and reload:
+Validate, reload:
 
 ```bash
 promtool check rules /etc/prometheus/rules/alerts.yml
 curl -X POST http://localhost:9090/-/reload
 ```
 
-**Expected:** Alerts visible in Prometheus "Alerts" page, alerts fire when thresholds exceeded, Alertmanager receives fired alerts.
+**Got:** Alerts visible in Prometheus "Alerts" page, alerts fire when thresholds exceeded, Alertmanager receives fired alerts.
 
-**On failure:**
+**If fail:**
 - Check Prometheus logs for rule evaluation errors
 - Verify rule syntax with `promtool check rules`
 - Test alert queries independently in Prometheus UI
@@ -206,9 +206,9 @@ receivers:
         text: '{{ template "slack.default.text" . }}'
 ```
 
-**Expected:** Notifications formatted consistently, include all relevant context, actionable with runbook links.
+**Got:** Notifications formatted consistently, include all relevant context, actionable with runbook links.
 
-**On failure:**
+**If fail:**
 - Test template rendering: `amtool template test --config.file=alertmanager.yml`
 - Check template syntax errors in Alertmanager logs
 - Use `{{ . | json }}` to debug template data structure
@@ -250,16 +250,16 @@ group_by: ['alertname']
 group_by: ['alertname', 'cluster']
 ```
 
-**Expected:** Alerts routed to correct teams, grouped logically, timing appropriate for severity.
+**Got:** Alerts routed to correct teams, grouped logically, timing appropriate for severity.
 
-**On failure:**
+**If fail:**
 - Test routing: `amtool config routes test --config.file=alertmanager.yml --alertname=HighCPU --label=severity=critical`
 - Check routing tree: `amtool config routes show --config.file=alertmanager.yml`
 - Verify `continue: true` if alert should match multiple routes
 
 ### Step 5: Implement Inhibition and Silencing
 
-Reduce alert noise with inhibition rules and temporary silences.
+Reduce alert noise with inhibition rules, temporary silences.
 
 **Inhibition rules** (suppress dependent alerts):
 
@@ -298,9 +298,9 @@ amtool silence query
 amtool silence expire <SILENCE_ID>
 ```
 
-**Expected:** Inhibition reduces cascade alerts automatically, silences prevent notifications during planned maintenance.
+**Got:** Inhibition reduces cascade alerts automatically, silences prevent notifications during planned maintenance.
 
-**On failure:**
+**If fail:**
 - Test inhibition logic with live alerts
 - Check Alertmanager UI "Silences" tab
 - Verify silence matchers are exact (labels must match perfectly)
@@ -334,15 +334,15 @@ receivers:
         send_resolved: true
 ```
 
-**Expected:** Alerts create incidents in PagerDuty, appear in team communication channels, trigger on-call escalations.
+**Got:** Alerts create incidents in PagerDuty, appear in team communication channels, trigger on-call escalations.
 
-**On failure:**
+**If fail:**
 - Verify API keys/tokens are valid
 - Check network connectivity to external services
 - Test webhook endpoints independently with curl
 - Enable debug mode: `--log.level=debug`
 
-## Validation
+## Checks
 
 - [ ] Alertmanager receives alerts from Prometheus successfully
 - [ ] Alerts routed to correct teams based on labels and severity
@@ -355,18 +355,18 @@ receivers:
 - [ ] Resolved notifications sent when alerts clear
 - [ ] External integrations (PagerDuty, Opsgenie) create incidents
 
-## Common Pitfalls
+## Pitfalls
 
 - **Alert fatigue**: Too many low-priority alerts cause responders to ignore critical ones. Set strict thresholds, use inhibition.
 - **Missing `for` duration**: Alerts without `for` fire on transient spikes. Always use 5-10 minute windows.
 - **Overly broad grouping**: Grouping by `['...']` sends individual notifications. Use specific label grouping.
-- **No runbook links**: Alerts without runbooks leave responders guessing. Every alert needs a runbook URL.
+- **No runbook links**: Alerts without runbooks leave responders guessing. Every alert needs runbook URL.
 - **Incorrect severity**: Mislabeling warnings as critical desensitizes team. Reserve critical for emergencies.
 - **Forgotten silences**: Silences without expiration can hide real issues. Always set end times.
 - **Single route**: All alerts to one channel loses context. Use team-specific routing.
 - **No inhibition**: Cascade alerts during outages create noise. Implement inhibition rules.
 
-## Related Skills
+## See Also
 
 - `setup-prometheus-monitoring` - Define metrics and recording rules that feed alerting rules
 - `define-slo-sli-sla` - Generate SLO burn rate alerts for error budget management

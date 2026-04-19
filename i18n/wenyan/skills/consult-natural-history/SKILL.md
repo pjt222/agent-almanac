@@ -25,32 +25,32 @@ metadata:
   tags: hildegard, physica, natural-history, stones, animals, plants, elements
 ---
 
-# Consult Natural History
+# 諮自然史
 
-Reference Hildegard von Bingen's *Physica* for natural history knowledge — properties of plants, stones, animals, fish, birds, elements, and trees with their medicinal, symbolic, and practical applications.
+引希爾德嘉德 *Physica* 之自然知——草、石、獸、魚、鳥、元、樹之性，附醫、象、用。
 
-## When to Use
+## 用時
 
-- You need to understand a specific plant, stone, or animal from Hildegard's perspective
-- You want to explore symbolic or medicinal properties of natural objects in *Physica*
-- You are researching medieval natural history and cosmology
-- You need to cross-reference properties across categories (e.g., a plant and a stone with similar temperament)
-- You want to integrate *Physica*'s knowledge into health, spiritual, or creative practice
-- You are studying the relationship between nature and theology in Hildegard's thought
+- 需自希爾德嘉德之觀解某草、石、獸
+- 欲察 *Physica* 中自物之象或醫性
+- 研中世自然史與宇宙
+- 跨類參（如溫同之草石）
+- 欲合 *Physica* 於健、神、創之修
+- 研希爾德嘉德思中自然與神學之關
 
-## Inputs
+## 入
 
-- **Required**: Category to consult (plants, stones, animals, fish, birds, elements, trees, reptiles, metals)
-- **Required**: Specific item or property inquiry (e.g., "emerald", "fennel", "properties of fire element")
-- **Optional**: Application context (medicinal, symbolic, liturgical, practical)
-- **Optional**: Related temperament or ailment (to guide property interpretation)
-- **Optional**: Cross-reference request (e.g., "plants and stones for cold temperament")
+- **必**：諮之類（草、石、獸、魚、鳥、元、樹、爬、金）
+- **必**：特項或性之問（如「翠玉」、「茴香」、「火元之性」）
+- **可選**：用之境（醫、象、禮、行）
+- **可選**：相關溫或疾（以導性解）
+- **可選**：跨參之求（如「冷溫之草與石」）
 
-## Procedure
+## 法
 
-### Step 1: Identify the Category in Physica
+### 第一步：於 *Physica* 識類
 
-Determine which of the nine books of *Physica* contains the requested knowledge.
+定 *Physica* 九卷中何卷含求之知。
 
 ```
 Physica — Nine Books of Natural History:
@@ -100,13 +100,13 @@ Lookup Process:
 4. Note symbolic or theological associations if relevant
 ```
 
-**Expected:** Correct book/category identified for the inquiry (e.g., "emerald" → Book IV Stones; "fennel" → Book I Plants).
+**得：** 正卷/類識（如「翠玉」→卷四石；「茴香」→卷一草）。
 
-**On failure:** If uncertain which category, search multiple. Example: "willow" could be Book I (plant) or Book III (tree) — Hildegard lists it in Book III as a tree with bark and wood properties.
+**敗則：** 若類不確，搜多處。例：「柳」或為卷一（草）或卷三（樹）——希爾德嘉德列於卷三為樹附皮木性。
 
-### Step 2: Extract Properties and Applications
+### 第二步：取性與用
 
-Retrieve the specific properties Hildegard attributes to the item.
+取希爾德嘉德歸於物之特性。
 
 ```
 Property Categories in Physica:
@@ -167,13 +167,13 @@ OAK TREE (Book III, Chapter 5):
 - Medicinal: Oak bark decoction for diarrhea, wounds (external)
 ```
 
-**Expected:** Properties extracted with temperature, moisture, medicinal use, and symbolic associations clearly noted.
+**得：** 性取附溫、濕、醫用、象聯明注。
 
-**On failure:** If *Physica* entry is brief or unclear, supplement with known temperamental logic. Example: If Hildegard says only "it is warm," infer that it treats cold conditions and avoid in hot conditions.
+**敗則：** 若 *Physica* 條簡或不明，補以知溫理。例：若希氏只言「暖」，推其治冷而避於熱。
 
-### Step 3: Cross-Reference Between Categories (Optional)
+### 第三步：跨類參（選）
 
-Identify related items across categories that share properties or work synergistically.
+識跨類之相關項，共性或協用。
 
 ```
 Cross-Referencing Patterns:
@@ -218,13 +218,13 @@ Strength/Endurance:
 - METALS: Iron (Book IX) — fortitude, weapon-making
 ```
 
-**Expected:** Related items identified across 2-3 categories that share temperament, medicinal use, or symbolic meaning. Synergistic use suggested where appropriate.
+**得：** 跨二三類識相關項附共溫、醫用、象。宜時議協用。
 
-**On failure:** If cross-references are unclear, focus on single-category lookup. Cross-referencing is enrichment, not essential for basic consultation.
+**敗則：** 若跨參不明，專於單類查。跨參乃豐，非基諮之必。
 
-### Step 4: Application Guidance
+### 第四步：用之指
 
-Provide practical or symbolic guidance for using the knowledge.
+為所用供實或象之指。
 
 ```
 Application Types:
@@ -273,13 +273,13 @@ stones (Book IV). Compare to *Scivias* Book I for theological integration of
 creation and redemption."
 ```
 
-**Expected:** Clear, actionable guidance for using *Physica* knowledge in context (medicinal, spiritual, seasonal, scholarly). User knows what to do with the information.
+**得：** 於境（醫、神、季、學）中用 *Physica* 知之明可行之指。用者知何為。
 
-**On failure:** If application is unclear, provide the raw *Physica* entry text and let user determine application. Hildegard's entries are often self-explanatory.
+**敗則：** 若用不明，供原 *Physica* 條文而任用者定用。希氏之條常自明。
 
-### Step 5: Contextualize within Hildegard's Holistic System
+### 第五步：納入希氏整系
 
-Integrate *Physica* knowledge with broader Hildegardian health and spiritual practice.
+合 *Physica* 知於廣希氏健與神修。
 
 ```
 Integration with Other Hildegardian Practices:
@@ -324,35 +324,35 @@ Hildegard's medicine is NOT isolated remedies but integrated practice:
 Body (herbs, diet), Soul (prayer, music), Nature (seasons, viriditas)
 ```
 
-**Expected:** User understands *Physica* as one component of Hildegard's holistic system. Cross-references to temperament, viriditas, and liturgical context provided where relevant.
+**得：** 用者解 *Physica* 為希氏整系之一分。宜時供溫、viriditas、禮境之跨參。
 
-**On failure:** If integration feels complex, focus on immediate practical use (Step 4) and defer holistic integration for advanced study.
+**敗則：** 若整合感繁，專於即用（第四步）而留整整於深研。
 
-## Validation Checklist
+## 驗
 
-- [ ] Correct *Physica* book/category identified (I–IX)
-- [ ] Properties extracted: temperature, moisture, medicinal use, symbolic meaning
-- [ ] Contraindications or cautions noted (if any)
-- [ ] Application guidance provided (medicinal, spiritual, seasonal, or scholarly)
-- [ ] Cross-references noted (if requested) across 2+ categories
-- [ ] Integration with broader Hildegardian system contextualized
-- [ ] User informed this is medieval natural history, not modern scientific taxonomy
+- [ ] 正 *Physica* 卷/類識（I–IX）
+- [ ] 性取：溫、濕、醫用、象
+- [ ] 禁忌或慎注（若有）
+- [ ] 用之指已供（醫、神、季、學）
+- [ ] 跨參（若求）跨二類以上
+- [ ] 於廣希氏系中置境
+- [ ] 告用者此乃中世自然史，非現代科分
 
-## Common Pitfalls
+## 陷
 
-1. **Modern Scientific Overlay**: *Physica* is pre-scientific. Don't expect botanical accuracy by Linnaean standards
-2. **Literal Ingredient Substitution**: Medieval plants may differ from modern cultivars. Research carefully before using
-3. **Ignoring Temperament**: Hildegard's properties are temperamental (hot/cold, moist/dry), not chemical. Context matters
-4. **Isolated Remedy Focus**: *Physica* is not a standalone herbal. It integrates with *Causae et Curae*, viriditas, and spirituality
-5. **Animal Cruelty**: Some *Physica* remedies use animal parts. Adapt ethically or omit
-6. **Stone Ingestion**: Some remedies involve powdering stones in wine. Modern safety: Do NOT ingest stones/minerals
-7. **Symbolic Dismissal**: *Physica*'s symbolic meanings are integral to Hildegard's theology. Don't separate "practical" from "spiritual"
+1. **現代科疊**：*Physica* 前於科。勿期林奈之準
+2. **字面之代**：中世草或異於現種。用前慎研
+3. **忽溫**：希氏之性乃溫（熱冷、濕乾），非化。境要
+4. **孤方之專**：*Physica* 非獨草書。合 *Causae et Curae*、viriditas、神
+5. **虐獸**：某方用獸部。宜倫改或略
+6. **食石**：某方粉石於酒。今安：勿食石/礦
+7. **略象**：*Physica* 之象義關希氏神學。勿分「行」與「神」
 
-## Related Skills
+## 參
 
-- `formulate-herbal-remedy` — Uses *Physica* Book I (Plants) as primary source
-- `assess-holistic-health` — *Physica* properties align with temperament system in *Causae et Curae*
-- `practice-viriditas` — *Physica* as catalog of viriditas expressions in creation
-- `compose-sacred-music` — Many chants reference *Physica* natural imagery
-- `heal` (esoteric domain) — *Physica* remedies as part of holistic healing modalities
-- `prepare-soil` (gardening domain) — Growing *Physica* medicinal plants
+- `formulate-herbal-remedy` — 用 *Physica* 卷一（草）為主源
+- `assess-holistic-health` — *Physica* 性合 *Causae et Curae* 之溫系
+- `practice-viriditas` — *Physica* 為造中 viriditas 之表之冊
+- `compose-sacred-music` — 諸歌引 *Physica* 自然之象
+- `heal`（esoteric 域） — *Physica* 方為整癒式之一
+- `prepare-soil`（gardening 域） — 栽 *Physica* 醫草

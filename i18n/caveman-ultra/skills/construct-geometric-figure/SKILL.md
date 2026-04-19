@@ -27,35 +27,35 @@ metadata:
 
 # Construct a Geometric Figure
 
-Produce a ruler-and-compass construction for a specified geometric figure, documenting every step with its Euclidean justification and verifying the result against the original specification.
+Produce ruler-and-compass construction for specified figure → doc every step w/ Euclidean justification + valid. result vs. original spec.
 
-## When to Use
+## Use When
 
-- Given specific geometric elements (points, segments, angles) and asked to construct a figure
-- Tasked with producing a classical Euclidean construction (bisectors, perpendiculars, tangents)
-- Verifying whether a figure is constructible with straightedge and compass alone
-- Generating construction instructions for educational or documentation purposes
-- Converting a geometric specification into an ordered sequence of primitive operations
+- Given specific geometric elements (points, segments, angles) + asked to construct figure
+- Tasked w/ producing classical Euclidean construction (bisectors, perpendiculars, tangents)
+- Valid. whether figure constructible w/ straightedge + compass alone
+- Gen construction instructions for ed / docs
+- Convert geometric spec → ordered seq of primitive ops
 
-## Inputs
+## In
 
-- **Required**: Description of the target figure (e.g., "equilateral triangle with side length AB")
-- **Required**: Given elements (points, segments, circles, angles provided as starting data)
-- **Optional**: Output format (narrative prose, numbered steps, pseudocode, SVG coordinates)
-- **Optional**: Level of justification detail (terse, standard, rigorous with theorem citations)
-- **Optional**: Whether to include impossibility analysis if figure is not constructible
+- **Required**: Desc of target figure (e.g., "equilateral triangle w/ side length AB")
+- **Required**: Given elements (points, segments, circles, angles as starting data)
+- **Optional**: Out format (narrative prose, numbered steps, pseudocode, SVG coords)
+- **Optional**: Justification detail level (terse, standard, rigorous w/ theorem citations)
+- **Optional**: Include impossibility analysis if not constructible
 
-## Procedure
+## Do
 
-### Step 1: Identify Given Elements and Target Figure
+### Step 1: Identify Given Elements + Target Figure
 
-Parse the problem statement to extract:
+Parse problem statement → extract:
 
-1. **Given elements** -- list every point, segment, angle, circle, or length provided.
+1. **Given elements** -- list every point, segment, angle, circle, length provided.
 2. **Target figure** -- state precisely what must be constructed.
-3. **Constraints** -- note any additional conditions (congruence, parallelism, tangency, collinearity).
+3. **Constraints** -- note additional conditions (congruence, parallelism, tangency, collinearity).
 
-Express the problem in standard form:
+Express problem in standard form:
 
 ```
 Given: Points A, B; segment AB; circle C1 centered at A with radius r.
@@ -63,32 +63,32 @@ Construct: Equilateral triangle ABC with AB as one side.
 Constraints: C must lie on the same side of AB as point P (if specified).
 ```
 
-Verify that all referenced elements are well-defined and consistent.
+Valid. all ref'd elements well-defined + consistent.
 
-**Expected:** A clear, unambiguous restatement of the construction problem with every given element cataloged and the target figure precisely described.
+**→** Clear, unambiguous restatement of construction problem w/ every given element cataloged + target figure precisely described.
 
-**On failure:** If the problem statement is ambiguous, list the possible interpretations and request clarification. If given elements are contradictory (e.g., a triangle with side lengths 1, 1, 5), state the contradiction and halt.
+**If err:** Problem statement ambiguous → list possible interpretations + req clarification. Given elements contradictory (e.g., triangle w/ side lengths 1, 1, 5) → state contradiction + halt.
 
 ### Step 2: Verify Constructibility
 
-Determine whether the target figure can be constructed using straightedge and compass alone.
+Determine whether target can be constructed w/ straightedge + compass alone.
 
-1. **Check algebraic constraints.** A length is constructible if and only if it lies in a field extension of the rationals obtained by successive square roots. If the construction requires cube roots or transcendental operations, it is impossible.
+1. **Check algebraic constraints.** Length constructible iff lies in field extension of rationals obtained by successive sqrt. Requires cube roots / transcendental ops → impossible.
 
 2. **Known impossible constructions:**
-   - Trisecting a general angle
-   - Doubling the cube (constructing cube root of 2)
-   - Squaring the circle (constructing sqrt(pi))
-   - Constructing a regular n-gon when n is not a product of a power of 2 and distinct Fermat primes
+   - Trisecting general angle
+   - Doubling cube (constructing cube root of 2)
+   - Squaring circle (constructing sqrt(pi))
+   - Regular n-gon when n ≠ product of power of 2 + distinct Fermat primes
 
-3. **Known constructible operations:**
-   - Bisecting any angle or segment
-   - Constructing perpendiculars and parallels
-   - Transferring a given length
+3. **Known constructible ops:**
+   - Bisecting any angle / segment
+   - Constructing perpendiculars + parallels
+   - Transferring given length
    - Regular n-gons for n in {3, 4, 5, 6, 8, 10, 12, 15, 16, 17, 20, ...}
-   - Any length expressible using +, -, *, /, and sqrt over the given lengths
+   - Any length expressible using +, -, *, /, sqrt over given lengths
 
-4. **Document the verdict** with justification.
+4. **Doc verdict** w/ justification.
 
 ```
 Constructibility analysis:
@@ -98,22 +98,22 @@ Constructibility analysis:
 - Verdict: CONSTRUCTIBLE
 ```
 
-**Expected:** A definitive yes/no verdict on constructibility, with a brief justification citing the relevant algebraic or classical result.
+**→** Definitive yes/no verdict on constructibility, w/ brief justification citing relevant algebraic / classical result.
 
-**On failure:** If constructibility is uncertain, attempt to reduce the problem to known constructible primitives. If the figure is provably non-constructible, document the impossibility proof and suggest the closest constructible approximation or an alternative method (e.g., neusis construction, origami).
+**If err:** Constructibility uncertain → reduce problem to known constructible primitives. Provably non-constructible → doc impossibility proof + suggest closest constructible approximation or alt method (e.g., neusis construction, origami).
 
 ### Step 3: Plan Construction Sequence
 
-Decompose the target figure into a sequence of primitive construction operations.
+Decompose target figure → seq of primitive ops.
 
-1. **Identify primitives needed.** Every ruler-and-compass construction reduces to these atomic operations:
-   - Draw a line through two points
-   - Draw a circle with a given center and radius (center + point on circumference)
-   - Mark the intersection of two lines
-   - Mark the intersection(s) of a line and a circle
-   - Mark the intersection(s) of two circles
+1. **Identify primitives needed.** Every ruler-and-compass reduces to these atomic ops:
+   - Draw line through two points
+   - Draw circle w/ given center + radius (center + point on circumference)
+   - Mark intersection of two lines
+   - Mark intersection(s) of line + circle
+   - Mark intersection(s) of two circles
 
-2. **Order the operations.** Each operation must reference only points that already exist (given or previously constructed). Build a dependency graph:
+2. **Order ops.** Each op must ref only points already existing (given or prev constructed). Build dep graph:
 
 ```
 Step 1: Draw circle C1 centered at A through B.       [uses: A, B]
@@ -122,26 +122,26 @@ Step 3: Mark intersections of C1 and C2 as P, Q.      [uses: C1, C2]
 Step 4: Draw line through P and Q.                     [uses: P, Q]
 ```
 
-3. **Minimize step count.** Look for opportunities to combine operations or reuse previously constructed elements.
+3. **Minimize step count.** Look for opportunities to combine ops or reuse prev constructed elements.
 
-4. **Annotate each step** with its geometric purpose (e.g., "This constructs the perpendicular bisector of AB").
+4. **Annotate each step** w/ geometric purpose (e.g., "This constructs perpendicular bisector of AB").
 
-**Expected:** An ordered list of primitive operations where each step depends only on previously established elements, covering all parts of the target figure.
+**→** Ordered list of primitive ops where each step depends only on prev est'd elements, covering all parts of target.
 
-**On failure:** If the decomposition stalls, identify which part of the figure cannot be reached from the current set of constructed points. Revisit Step 2 to confirm constructibility, or introduce auxiliary constructions (helper circles, midpoints, reflections) to bridge the gap.
+**If err:** Decomp stalls → ID which part of figure can't be reached from current set of constructed points. Revisit Step 2 to confirm constructibility, or introduce auxiliary constructions (helper circles, midpoints, reflections) to bridge gap.
 
-### Step 4: Execute Construction Steps with Justification
+### Step 4: Execute Construction Steps w/ Justification
 
-Write out each construction step in full, providing the Euclidean justification.
+Write each construction step in full, providing Euclidean justification.
 
-For each primitive operation, document:
+Each primitive op → doc:
 
-1. **The operation**: what is drawn or marked.
-2. **The inputs**: which existing elements are used.
-3. **The justification**: which Euclidean proposition, theorem, or property guarantees the operation produces the claimed result.
-4. **The output**: what new elements are created.
+1. **Op**: what is drawn / marked.
+2. **Ins**: which existing elements used.
+3. **Justification**: which Euclidean proposition / theorem / property guarantees op produces claimed result.
+4. **Out**: what new elements created.
 
-Format each step consistently:
+Format each step consistent:
 
 ```
 Step 3: Mark intersections of C1 and C2 as P and Q.
@@ -153,24 +153,24 @@ Step 3: Mark intersections of C1 and C2 as P and Q.
   - Output: Points P and Q, where AP = BP = AB (equilateral property).
 ```
 
-Continue until the target figure is fully constructed. For complex figures, group related steps into phases (e.g., "Phase 1: Construct auxiliary perpendicular bisector", "Phase 2: Locate incenter").
+Continue until target fully constructed. Complex figures → group related steps into phases (e.g., "Phase 1: Construct auxiliary perpendicular bisector", "Phase 2: Locate incenter").
 
-**Expected:** A complete sequence of justified construction steps that, when executed in order, produce the target figure. Every new point, line, or circle is accounted for.
+**→** Complete seq of justified construction steps that, executed in order, produce target. Every new point, line, circle accounted for.
 
-**On failure:** If a justification cannot be provided for a step, the step may be invalid. Verify the geometric claim independently. Common errors include assuming two circles intersect when they do not (check distance between centers vs. sum/difference of radii), or assuming a point lies on a line without proof.
+**If err:** Can't provide justification for step → step may be invalid. Valid. geometric claim independently. Common errs: assuming two circles intersect when they don't (check distance between centers vs. sum/diff of radii), or assuming point lies on line w/o proof.
 
 ### Step 5: Verify Construction Meets Specification
 
-Confirm that the constructed figure satisfies all original requirements.
+Confirm constructed figure satisfies all original reqs.
 
-1. **Check each constraint** from Step 1 against the constructed figure:
-   - Congruence: verify equal lengths or angles using the construction.
-   - Parallelism/perpendicularity: confirm using the construction method (e.g., perpendicular bisector guarantees 90 degrees).
-   - Incidence: verify that required points lie on required lines or circles.
+1. **Check each constraint** from Step 1 vs. constructed figure:
+   - Congruence: verify equal lengths / angles via construction.
+   - Parallelism/perpendicularity: confirm via construction method (e.g., perpendicular bisector guarantees 90 deg).
+   - Incidence: verify req'd points lie on req'd lines / circles.
 
-2. **Count degrees of freedom.** The constructed figure should have exactly the number of free parameters implied by the specification. If there are extra degrees of freedom, the specification was under-determined. If there are none and the construction fails, the specification was over-determined or contradictory.
+2. **Count degrees of freedom.** Constructed figure should have exactly number of free params implied by spec. Extra dof → spec under-determined. None + construction fails → spec over-determined / contradictory.
 
-3. **Test with specific coordinates** (optional but recommended for complex constructions):
+3. **Test w/ specific coords** (optional but rec'd for complex constructions):
 
 ```
 Verification with coordinates:
@@ -181,40 +181,40 @@ Intersection: x = 1/2, y = sqrt(3)/2
 Triangle ABC: sides AB = BC = CA = 1. VERIFIED.
 ```
 
-4. **Document the verification result** with a clear pass/fail for each constraint.
+4. **Doc verification result** w/ clear pass/fail each constraint.
 
-**Expected:** Every constraint from the original specification is verified, and the construction is confirmed correct. A coordinate check (when performed) matches the geometric argument.
+**→** Every constraint from original spec verified, construction confirmed correct. Coord check (when done) matches geometric argument.
 
-**On failure:** If a constraint fails, trace back through the construction to find the erroneous step. Common causes: incorrect intersection choice (wrong branch of a circle-line intersection), sign error in coordinate verification, or a missing auxiliary construction.
+**If err:** Constraint fails → trace back through construction → find erroneous step. Common causes: incorrect intersection choice (wrong branch of circle-line intersection), sign err in coord verification, or missing auxiliary construction.
 
-## Validation
+## Check
 
-- [ ] Problem statement is restated in standard Given/Construct/Constraints form
-- [ ] Constructibility analysis is present with a clear verdict and justification
-- [ ] Every construction step uses only previously established elements
-- [ ] Every step includes operation, inputs, justification, and output
-- [ ] The justification cites a relevant geometric principle (Euclid, theorem name, or property)
-- [ ] The target figure is fully constructed (no missing components)
-- [ ] All original constraints are verified against the completed construction
-- [ ] No step relies on measurement, approximation, or non-constructible operations
-- [ ] Step count is reasonable for the complexity of the figure
+- [ ] Problem restated in standard Given/Construct/Constraints form
+- [ ] Constructibility analysis w/ clear verdict + justification
+- [ ] Every construction step uses only prev est'd elements
+- [ ] Every step includes op, ins, justification, out
+- [ ] Justification cites relevant geometric principle (Euclid, theorem name, property)
+- [ ] Target fully constructed (no missing components)
+- [ ] All original constraints verified vs. completed construction
+- [ ] No step relies on measurement, approximation, or non-constructible ops
+- [ ] Step count reasonable for figure complexity
 
-## Common Pitfalls
+## Traps
 
-- **Assuming intersection exists**: Two circles only intersect if the distance between centers is between |r1 - r2| and r1 + r2. Always verify this condition before marking intersection points. Forgetting this check leads to constructions that work on paper but fail geometrically.
+- **Assume intersection exists**: Two circles only intersect if distance between centers between |r1 - r2| + r1 + r2. Always valid. this before marking intersection points. Forgetting → constructions work on paper but fail geometrically.
 
-- **Wrong intersection branch**: Circle-circle and line-circle intersections yield two points. The construction must specify which one to use (e.g., "the intersection on the same side of AB as point P"). Ambiguous intersection choices produce two valid but different figures.
+- **Wrong intersection branch**: Circle-circle + line-circle intersections yield two points. Construction must specify which to use (e.g., "intersection on same side of AB as point P"). Ambiguous intersection choices → two valid but diff figures.
 
-- **Conflating construction with measurement**: Ruler-and-compass construction does not allow measuring lengths or angles. You cannot "measure segment AB, then mark off the same length." Instead, use the compass to transfer the radius by drawing a circle centered at the new point through the old endpoint.
+- **Conflate construction w/ measurement**: Ruler-and-compass doesn't allow measuring lengths / angles. Can't "measure segment AB, mark off same length." Use compass to transfer radius by drawing circle centered at new point through old endpoint.
 
-- **Skipping constructibility check**: Attempting to trisect a general angle or construct a regular heptagon wastes effort. Always verify constructibility before beginning the construction sequence.
+- **Skip constructibility check**: Attempting to trisect general angle or construct regular heptagon wastes effort. Always valid. constructibility before beginning construction seq.
 
-- **Over-complicated sequences**: Many constructions have elegant short solutions. If your construction exceeds 15 primitive steps for a standard figure, look for a simpler approach. Classic sources (Euclid, Hartshorne) often provide minimal constructions.
+- **Over-complicated seqs**: Many constructions have elegant short solutions. Construction exceeds 15 primitive steps for standard figure → look for simpler approach. Classic sources (Euclid, Hartshorne) often provide minimal constructions.
 
-- **Implicit auxiliary elements**: Failing to document helper constructions (e.g., "extend line AB to point D") makes the sequence impossible to follow. Every element used must be explicitly constructed.
+- **Implicit auxiliary elements**: Failing to doc helper constructions (e.g., "extend line AB to point D") makes seq impossible to follow. Every element used must be explicit constructed.
 
-## Related Skills
+## →
 
-- `solve-trigonometric-problem` - trigonometric analysis often motivates or verifies constructions
-- `prove-geometric-theorem` - constructions frequently appear as steps within geometric proofs
-- `create-skill` - follow when packaging a new construction as a reusable skill
+- `solve-trigonometric-problem` - trig analysis often motivates / verifies constructions
+- `prove-geometric-theorem` - constructions frequently appear as steps in geometric proofs
+- `create-skill` - follow when packaging new construction as reusable skill

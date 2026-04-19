@@ -83,9 +83,9 @@ Load identity-defining files in a specific order that builds context progressive
 
 Between each layer, pause to integrate: how does this layer modify or constrain the previous layers? Where do they reinforce each other? Where do they conflict?
 
-**Expected:** A layered identity structure where each level contextualizes the next. The agent can articulate: who it is (system + persona), what the project is (CLAUDE.md), what it knows from prior sessions (MEMORY.md), and what conventions govern its behavior.
+**Got:** A layered identity structure where each level contextualizes the next. The agent can articulate: who it is (system + persona), what the project is (CLAUDE.md), what it knows from prior sessions (MEMORY.md), and what conventions govern its behavior.
 
-**On failure:** If identity files are missing (no CLAUDE.md, no MEMORY.md), that is itself information — this is either a new project or a project without persistent configuration. Proceed with system prompt and agent persona only, and note the absence. Do not hallucinate context that does not exist.
+**If fail:** If identity files are missing (no CLAUDE.md, no MEMORY.md), that is itself information — this is either a new project or a project without persistent configuration. Proceed with system prompt and agent persona only, and note the absence. Do not hallucinate context that does not exist.
 
 ### Step 2: Working Context Reconstruction — Evidence, Not Memory
 
@@ -115,9 +115,9 @@ Reconstruct what was being worked on from persistent artifacts. The agent does n
 
 Reconstruct a working context summary: "The project was working on X, had completed Y, and Z remains in progress."
 
-**Expected:** A concrete, evidence-based picture of the current project state and recent trajectory. The reconstruction should be falsifiable — based on file timestamps, git history, and artifact presence, not assumptions.
+**Got:** A concrete, evidence-based picture of the current project state and recent trajectory. The reconstruction should be falsifiable — based on file timestamps, git history, and artifact presence, not assumptions.
 
-**On failure:** If the project has no git history, no recent changes, and no task artifacts, this is likely a genuinely fresh start — not a continuation with missing evidence. Proceed to Step 3 and classify as fresh.
+**If fail:** If the project has no git history, no recent changes, and no task artifacts, this is likely a genuinely fresh start — not a continuation with missing evidence. Proceed to Step 3 and classify as fresh.
 
 ### Step 3: Fresh vs. Continuation Detection — Choose the Bootstrap Path
 
@@ -167,9 +167,9 @@ Detection Matrix:
 
 **For continuations**: Summarize the reconstructed working context (from Step 2) concisely. Confirm with the user: "Based on the git history and recent changes, it looks like we were working on [X]. Should I continue from there?" Do not assume — verify.
 
-**Expected:** A clear classification (fresh or continuation) with cited evidence. If continuation, a one-sentence summary of what was in progress. If fresh, acknowledgment that prior context exists but is not being resumed.
+**Got:** A clear classification (fresh or continuation) with cited evidence. If continuation, a one-sentence summary of what was in progress. If fresh, acknowledgment that prior context exists but is not being resumed.
 
-**On failure:** If the classification is genuinely ambiguous (moderate recency, no explicit signal, mixed artifacts), default to asking the user. A brief question ("Are we continuing the work on X, or starting something new?") costs less than bootstrapping down the wrong path.
+**If fail:** If the classification is genuinely ambiguous (moderate recency, no explicit signal, mixed artifacts), default to asking the user. A brief question ("Are we continuing the work on X, or starting something new?") costs less than bootstrapping down the wrong path.
 
 ### Step 4: Calibration Sequence — Center, Then Attune
 
@@ -196,9 +196,9 @@ With identity loaded and working context established, calibrate operational beha
 
 The calibration should be lightweight — seconds, not minutes. It is preparation for work, not a replacement for work.
 
-**Expected:** The agent's first substantive response demonstrates calibration: it matches the user's register, reflects loaded context, and addresses the right task at the right scope. The bootstrap is invisible to the user unless they ask about it.
+**Got:** The agent's first substantive response demonstrates calibration: it matches the user's register, reflects loaded context, and addresses the right task at the right scope. The bootstrap is invisible to the user unless they ask about it.
 
-**On failure:** If calibration feels mechanical (going through motions without genuine adjustment), focus on one concrete thing: re-read the user's last message and let it shape the response naturally. Over-structured calibration can be worse than no calibration.
+**If fail:** If calibration feels mechanical (going through motions without genuine adjustment), focus on one concrete thing: re-read the user's last message and let it shape the response naturally. Over-structured calibration can be worse than no calibration.
 
 ### Step 5: Identity Verification — Coherence Check
 
@@ -206,7 +206,7 @@ After bootstrap, verify that the loaded identity is internally consistent. Contr
 
 1. **Cross-layer consistency check**:
    - Does the agent persona align with the project's CLAUDE.md? (e.g., an r-developer agent in a Python project — is this intentional?)
-   - Does MEMORY.md describe the same project structure that actually exists on disk? (Stale memory is worse than no memory.)
+   - Does MEMORY.md describe the same project structure that exists on disk? (Stale memory is worse than no memory.)
    - Do parent CLAUDE.md conventions conflict with project-level CLAUDE.md? (Project-level should override, but contradictions should be noted.)
 
 2. **Role definition currency check**:
@@ -225,9 +225,9 @@ After bootstrap, verify that the loaded identity is internally consistent. Contr
    - For stale memory: do not silently ignore it. Note what is stale and consider whether MEMORY.md should be updated
    - For genuine conflicts: flag to the user if the conflict affects their current task
 
-**Expected:** Either confirmation that the loaded identity is coherent, or a specific list of contradictions with proposed resolutions. The agent should know its own configuration state.
+**Got:** Either confirmation that the loaded identity is coherent, or a specific list of contradictions with proposed resolutions. The agent should know its own configuration state.
 
-**On failure:** If verification reveals deep contradictions (e.g., MEMORY.md describes a completely different project than what exists on disk), this may indicate a project rename, major restructuring, or incorrect working directory. Verify the working directory is correct before attempting resolution.
+**If fail:** If verification reveals deep contradictions (e.g., MEMORY.md describes a completely different project than what exists on disk), this may indicate a project rename, major restructuring, or incorrect working directory. Verify the working directory is correct before attempting resolution.
 
 ## Validation
 
@@ -241,7 +241,7 @@ After bootstrap, verify that the loaded identity is internally consistent. Contr
 - [ ] The bootstrap was proportional — lightweight for simple sessions, thorough for complex ones
 - [ ] The user experienced a calibrated first response, not a bootstrap report
 
-## Common Pitfalls
+## Pitfalls
 
 - **Bootstrap as performance**: Reporting the bootstrap process to the user in detail is almost never what they want. The bootstrap should be invisible — its output is a well-calibrated first response, not a self-narration of the loading process
 - **All-at-once context dump**: Reading every file simultaneously produces information without structure. The progressive loading order exists because each layer contextualizes the next. Skip the order and context becomes noise

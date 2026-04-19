@@ -22,44 +22,44 @@ metadata:
   tags: digital-logic, sequential-circuits, flip-flops, state-machines, registers
 ---
 
-# Build Sequential Circuit
+# 建序路
 
-Design a sequential logic circuit by identifying the required memory and state type, constructing a state diagram and transition table, deriving excitation equations for the chosen flip-flop type, implementing the circuit at the gate level using flip-flops and combinational logic, and verifying correctness through timing diagram analysis and state sequence simulation.
+設序路—識記與態類、建態圖與轉表、導所擇 FF 類之激方、以 FF 與組合邏輯於門級施、以時圖析與態序模驗正。
 
-## When to Use
+## 用
 
-- A circuit must remember past inputs or maintain internal state across clock cycles
-- Designing counters (binary, BCD, ring, Johnson), shift registers, or sequence detectors
-- Implementing a finite state machine (Mealy or Moore) from a state diagram or regular expression
-- Adding clocked storage elements to a combinational datapath (registers, pipeline stages)
-- Preparing stateful components for the simulate-cpu-architecture skill (register file, program counter, control FSM)
+- 路當記昔入或於時週間守內態
+- 設計計（binary、BCD、ring、Johnson）、移寄、序偵
+- 自態圖或正表施有限態機（Mealy 或 Moore）
+- 加時控存於組合資路（寄、管階）
+- 備態件為 simulate-cpu-architecture 技（寄檔、程計、控 FSM）
 
-## Inputs
+## 入
 
-- **Required**: Behavioral specification -- one of: state diagram, state table, timing diagram, regular expression to detect, or verbal description of the desired sequential behavior
-- **Required**: Clock characteristics -- edge-triggered (rising/falling) or level-sensitive; single clock or multi-phase
-- **Optional**: Flip-flop type preference (D, JK, T, or SR)
-- **Optional**: Reset type -- synchronous, asynchronous, or none
-- **Optional**: Maximum state count or bit width constraint
-- **Optional**: Timing constraints (setup time, hold time, maximum clock frequency)
+- **必**：行規—一於：態圖、態表、時圖、當偵之正表、或欲序行之述
+- **必**：時特—邊觸（升/降）或級敏；單時或多相
+- **可**：FF 類偏（D、JK、T、SR）
+- **可**：重置類—同步、異步或無
+- **可**：最多態或位寬限
+- **可**：時束（setup、hold、最大時頻）
 
-## Procedure
+## 行
 
-### Step 1: Identify Memory and State Requirements
+### 一：識記與態需
 
-Determine what the circuit needs to remember and how many distinct states it requires:
+定路當記何與需幾異態：
 
-1. **State enumeration**: List all distinct states the circuit must be in. For a sequence detector, each state represents the progress through the target sequence. For a counter, each state is a count value.
-2. **State encoding**: Choose a binary encoding for the states.
-   - **Binary encoding**: Uses ceil(log2(N)) flip-flops for N states. Minimizes flip-flop count.
-   - **One-hot encoding**: Uses N flip-flops, one per state. Simplifies next-state logic at the cost of more flip-flops.
-   - **Gray code encoding**: Adjacent states differ in exactly one bit. Minimizes transient glitches during transitions.
-3. **Input and output classification**: Identify primary inputs (external signals), primary outputs, and internal state variables (flip-flop outputs). For Mealy machines, outputs depend on both state and input. For Moore machines, outputs depend only on state.
-4. **Flip-flop type selection**: Choose based on the design's needs.
-   - **D flip-flop**: Simplest -- next state equals the D input. Best default choice.
-   - **JK flip-flop**: Most flexible -- J=K=1 toggles. Good for counters.
-   - **T flip-flop**: Toggle type -- changes state when T=1. Natural for binary counters.
-   - **SR latch/flip-flop**: Set-Reset -- avoid the S=R=1 condition. Rarely preferred for new designs.
+1. **態列**：列諸路必居之異態。序偵中每態示於標序中之進。計中每態為一計值。
+2. **態編**：擇態之二進編。
+   - **二進編**：N 態用 ceil(log2(N)) FF。最少 FF 計。
+   - **One-hot 編**：N 態用 N FF，一態一。簡次態邏於多 FF 之價。
+   - **Gray 編**：鄰態異於一位。轉時減瞬閃。
+3. **入出分**：識主入（外號）、主出、內態變（FF 出）。Mealy 機出依態與入。Moore 機出唯依態。
+4. **FF 類擇**：依設需。
+   - **D FF**：最簡—次態為 D 入。佳默擇。
+   - **JK FF**：最活—J=K=1 翻。計之宜。
+   - **T FF**：翻類—T=1 時變態。二進計自然。
+   - **SR 閂/FF**：Set-Reset—避 S=R=1。新設罕宜。
 
 ```markdown
 ## State Requirements
@@ -72,21 +72,21 @@ Determine what the circuit needs to remember and how many distinct states it req
 - **Reset behavior**: [synchronous / asynchronous / none]
 ```
 
-**Expected:** A complete state inventory with encoding chosen, flip-flop type selected, and the machine classified as Mealy or Moore.
+**得：** 全態錄附所擇編、所擇 FF 類、機分為 Mealy 或 Moore。
 
-**On failure:** If the state count is unclear from the specification, enumerate states by tracing through all possible input sequences up to the memory depth of the circuit. If the count exceeds practical limits (more than 16 states for manual design), consider decomposing into smaller interacting FSMs.
+**敗：** 規中態計不明→循諸入序至路記深以列態。計過實限（手設過 16 態）→宜分為小互 FSM。
 
-### Step 2: Construct State Diagram and Transition Table
+### 二：建態圖與轉表
 
-Formalize the circuit's behavior as a state diagram and equivalent tabular form:
+以態圖與等表正路行：
 
-1. **State diagram**: Draw a directed graph where:
-   - Each node is a state, labeled with the state name and (for Moore machines) the output value.
-   - Each edge is a transition, labeled with the input condition and (for Mealy machines) the output value.
-   - Every state must have an outgoing edge for every possible input combination -- no implicit "stay" transitions.
-2. **Transition table**: Convert the diagram to a table with columns for present state, input(s), next state, and output(s).
-3. **Reachability check**: Starting from the initial/reset state, verify that all states are reachable through some input sequence. Unreachable states indicate a design error or should be treated as don't-cares.
-4. **State minimization** (optional): Check for equivalent states -- two states are equivalent if they produce the same output for every input and transition to equivalent next states. Merge equivalent states to reduce flip-flop count.
+1. **態圖**：繪有向圖：
+   - 每節為態，以態名與（Moore 機）出值標
+   - 每邊為轉，以入條與（Mealy 機）出值標
+   - 每態必有每可能入組之出邊—無隱「留」轉
+2. **轉表**：圖轉表，列為當態、入、次態、出。
+3. **可達察**：自初/重置態始→驗諸態可經某入序達。不可達態示設誤或視為 don't-care。
+4. **態小化**（可選）：察等態—兩態若每入同出且轉至等次態則等。合等態以減 FF 計。
 
 ```markdown
 ## State Transition Table
@@ -102,21 +102,21 @@ Formalize the circuit's behavior as a state diagram and equivalent tabular form:
 - **Equivalent state pairs**: [list, or "none"]
 ```
 
-**Expected:** A complete state transition table covering every present-state/input combination, with all states reachable from the initial state.
+**得：** 全轉表涵每當態/入組，諸態自初可達。
 
-**On failure:** If the transition table has missing entries, the specification is incomplete. Return to the requirements and resolve the ambiguity. If unreachable states exist, either add transitions to reach them or remove them and reduce the state encoding.
+**敗：** 轉表條缺→規不全。返需而解模糊。不可達態存→或加轉以達，或除而減態編。
 
-### Step 3: Derive Excitation Equations
+### 三：導激方
 
-Compute the flip-flop input equations (excitation equations) from the transition table:
+自轉表算 FF 入方（激方）：
 
-1. **Encode states**: Replace state names with their binary encoding in the transition table. Each bit position corresponds to one flip-flop.
-2. **Build per-flip-flop truth table**: For each flip-flop, create a truth table with present-state bits and inputs as the input columns and the required flip-flop input as the output column.
-   - **D flip-flop**: D = next state bit (the simplest case).
-   - **JK flip-flop**: Use the excitation table: 0->0 requires J=0,K=X; 0->1 requires J=1,K=X; 1->0 requires J=X,K=1; 1->1 requires J=X,K=0.
-   - **T flip-flop**: T = present state XOR next state (T=1 when the bit must change).
-3. **Minimize each equation**: Apply evaluate-boolean-expression (K-map or algebraic simplification) to each flip-flop input function. Don't-care conditions from unreachable states and JK excitation table X-entries can reduce the expressions significantly.
-4. **Derive output equations**: For Moore machines, express each output as a function of present state bits only. For Mealy machines, express each output as a function of present state bits and inputs.
+1. **編態**：轉表中態名以二進編代。每位應一 FF。
+2. **建每 FF 真表**：每 FF 造真表—當態位與入為入列，所需 FF 入為出列。
+   - **D FF**：D = 次態位（最簡）
+   - **JK FF**：用激表：0->0 需 J=0,K=X；0->1 需 J=1,K=X；1->0 需 J=X,K=1；1->1 需 J=X,K=0
+   - **T FF**：T = 當態 XOR 次態（T=1 時位必變）
+3. **小化每方**：施 evaluate-boolean-expression（K 圖或代數簡）於每 FF 入函。不可達態與 JK 激表 X 之 don't-care 可顯減表。
+4. **導出方**：Moore 機→每出為當態位之函。Mealy 機→每出為當態位與入之函。
 
 ```markdown
 ## Excitation Equations
@@ -134,19 +134,19 @@ Compute the flip-flop input equations (excitation equations) from the transition
 | Y      | [minimized expression]       |
 ```
 
-**Expected:** Minimized excitation equations for each flip-flop and output equations for each primary output, with all don't-cares exploited.
+**得：** 每 FF 之小化激方與每主出之出方，諸 don't-care 已用。
 
-**On failure:** If the excitation equations seem overly complex, reconsider the state encoding. A different encoding (e.g., switching from binary to one-hot, or reassigning state codes) can dramatically simplify the combinational logic. Try at least two encodings and compare literal counts.
+**敗：** 激方似過繁→重思態編。異編（如自二進換 one-hot，或重賦態碼）可顯簡組合邏輯。試至少兩編而較字計。
 
-### Step 4: Implement at Gate Level
+### 四：門級施
 
-Build the complete circuit from flip-flops and combinational logic gates:
+自 FF 與組合門建全路：
 
-1. **Place flip-flops**: Instantiate one flip-flop per state bit. Connect all clock inputs to the system clock. Connect reset inputs if specified (asynchronous reset goes directly to the flip-flop's CLR/PRE pin; synchronous reset is part of the excitation logic).
-2. **Build excitation logic**: Implement each excitation equation as a combinational circuit using the design-logic-circuit skill. The inputs to this logic are the present-state flip-flop outputs (Q, Q') and primary inputs.
-3. **Build output logic**: Implement each output equation as combinational logic. For Moore machines, this logic takes only state bits. For Mealy machines, it takes state bits and primary inputs.
-4. **Connect the circuit**: Wire the excitation logic outputs to the flip-flop D/JK/T inputs. Wire the output logic to the primary outputs.
-5. **Add initialization**: Ensure the circuit reaches a known initial state on power-up. This typically means an asynchronous reset that forces all flip-flops to 0 (or the encoded initial state).
+1. **置 FF**：每態位實 FF 一。諸時入連系時。若述重置→連重置入（異步重置直連 FF CLR/PRE；同步重置為激邏一分）
+2. **建激邏**：每激方以 design-logic-circuit 技為組合路施。此邏輯入為當態 FF 出（Q、Q'）與主入。
+3. **建出邏**：每出方為組合邏。Moore 機→唯取態位。Mealy 機→取態位與主入。
+4. **連路**：激邏出連 FF D/JK/T 入。出邏連主出。
+5. **加初**：確路通電達知初態。典乃異步重置迫諸 FF 為 0（或編之初態）
 
 ```markdown
 ## Circuit Implementation
@@ -157,27 +157,27 @@ Build the complete circuit from flip-flops and combinational logic gates:
 - **Reset mechanism**: [asynchronous CLR / synchronous mux / none]
 ```
 
-**Expected:** A complete gate-level netlist with flip-flops, excitation logic, output logic, clock distribution, and reset mechanism, where every signal has exactly one driver.
+**得：** 全門級網表附 FF、激邏、出邏、時布、重置，每號有且唯有一驅。
 
-**On failure:** If the implementation has feedback outside of the flip-flops, a combinational loop has been introduced. All feedback in a synchronous sequential circuit must pass through a flip-flop. Trace the offending path and reroute it through a register.
+**敗：** 施有 FF 外之回饋→組合迴現。同步序路諸回饋必經 FF。循犯路而改經寄。
 
-### Step 5: Verify via Timing Diagram and State Sequence Simulation
+### 五：以時圖與態序模驗
 
-Confirm the circuit behaves correctly across multiple clock cycles:
+證路跨諸時週正行：
 
-1. **Choose test sequence**: Select an input sequence that exercises every state transition at least once. For sequence detectors, include the target sequence, partial matches, overlapping matches, and non-matching runs.
-2. **Draw timing diagram**: For each clock cycle, record:
-   - Clock edge (rising/falling)
-   - Primary input values (sampled at the active clock edge)
-   - Present state (flip-flop outputs before the clock edge)
-   - Next state (flip-flop outputs after the clock edge)
-   - Output values (valid after the output logic settles)
-3. **Trace state sequence**: Verify that the sequence of states matches the state diagram from Step 2. Every transition should follow an edge in the diagram.
-4. **Check timing constraints**: Verify that:
-   - **Setup time**: Inputs are stable for at least t_setup before the active clock edge.
-   - **Hold time**: Inputs remain stable for at least t_hold after the active clock edge.
-   - **Clock-to-output delay**: Outputs settle within the clock period minus the setup time of downstream logic.
-5. **Reset verification**: Confirm that applying reset drives the circuit to the initial state regardless of the current state.
+1. **擇試序**：擇入序至少行每態轉一次。序偵中含標序、部分合、疊合、不合行。
+2. **繪時圖**：每時週錄：
+   - 時邊（升/降）
+   - 主入值（活時邊取）
+   - 當態（時邊前 FF 出）
+   - 次態（時邊後 FF 出）
+   - 出值（出邏穩後有效）
+3. **循態序**：驗態序合步二之態圖。每轉當循圖中一邊。
+4. **察時束**：驗：
+   - **Setup**：活時邊前入穩至少 t_setup
+   - **Hold**：活時邊後入穩至少 t_hold
+   - **時至出延**：出於時週減下游邏之 setup 內穩
+5. **重置驗**：確施重置驅路至初態，無論當態。
 
 ```markdown
 ## Timing Verification
@@ -193,34 +193,34 @@ Confirm the circuit behaves correctly across multiple clock cycles:
 - **Reset verified**: [Yes / No]
 ```
 
-**Expected:** Every cycle in the timing diagram matches the state transition table, outputs are correct for every cycle, and no timing violations are present.
+**得：** 時圖每週合轉表，出每週正，無時違。
 
-**On failure:** If a state transition is wrong, trace the excitation logic for that specific present-state and input combination. If outputs are wrong but transitions are correct, the error is in the output logic. If the circuit enters an unintended state, check for incomplete reset or missing transitions from unused state codes.
+**敗：** 態轉誤→循其當態/入組之激邏。出誤而轉正→誤於出邏。路入意外態→察重置未全或未用態碼缺轉。
 
-## Validation
+## 驗
 
-- [ ] All states are enumerated and reachable from the initial state
-- [ ] State encoding is documented with the assignment table
-- [ ] Transition table covers every present-state/input combination
-- [ ] Excitation equations are minimized with don't-cares exploited
-- [ ] Output equations correctly implement Mealy or Moore semantics
-- [ ] Every flip-flop has clock, reset, and excitation inputs connected
-- [ ] No combinational feedback loops exist outside of flip-flops
-- [ ] Timing diagram covers all state transitions at least once
-- [ ] Reset drives the circuit to the documented initial state
-- [ ] Setup and hold time constraints are satisfied
+- [ ] 諸態列且自初態可達
+- [ ] 態編錄附賦表
+- [ ] 轉表涵每當態/入組
+- [ ] 激方以 don't-care 小化
+- [ ] 出方正施 Mealy 或 Moore 義
+- [ ] 每 FF 之時、重置、激入已連
+- [ ] 無 FF 外之組合回饋
+- [ ] 時圖涵諸態轉至少一次
+- [ ] 重置驅路至錄之初態
+- [ ] setup 與 hold 束已滿
 
-## Common Pitfalls
+## 忌
 
-- **Incomplete state transitions**: Forgetting to specify what happens for every input in every state. Missing transitions often cause the circuit to enter an undefined or unintended state. Always define behavior for all input combinations.
-- **Unused state codes**: With N flip-flops, there are 2^N possible codes but perhaps fewer valid states. If the circuit accidentally enters an unused code (due to noise or power-on), it may lock up. Always add transitions from unused codes to the reset state or prove they are unreachable.
-- **Confusing Mealy and Moore outputs**: In a Mealy machine, outputs change immediately when inputs change (combinational path from input to output). In a Moore machine, outputs change only on clock edges. Mixing the two models in one design leads to timing hazards.
-- **Asynchronous inputs to synchronous circuits**: External signals not synchronized to the clock can violate setup/hold times, causing metastability. Always pass asynchronous inputs through a two-flip-flop synchronizer before using them in state logic.
-- **SR latch S=R=1 hazard**: Driving both Set and Reset high simultaneously puts the SR latch in an undefined state. If using SR elements, add logic to guarantee this combination never occurs, or switch to D or JK flip-flops.
-- **Clock skew in multi-flip-flop designs**: If the clock arrives at different flip-flops at different times, one flip-flop may sample stale data from another. For introductory designs, assume zero skew; for real hardware, use clock tree synthesis.
+- **轉不全**：忘定每態每入何行。轉缺常致路入未定或意外態。諸入組必皆定。
+- **未用態碼**：N FF 有 2^N 可能碼而或少於有效態。路誤入未用碼（因噪或起）→或鎖。諸未用碼必加轉至重置態或證不可達。
+- **混 Mealy 與 Moore 出**：Mealy 機入變出即變（入至出之組合路）。Moore 機出唯於時邊變。一設混兩→時險。
+- **異步入於同步路**：未同時之外號或違 setup/hold 致亞穩。異步入必經二 FF 同步器而後用於態邏。
+- **SR 閂 S=R=1 險**：Set 與 Reset 同高→SR 閂於未定態。若用 SR→加邏保此組不現，或換 D 或 JK FF。
+- **多 FF 之時偏**：時於異 FF 異時達→一 FF 或取他之舊資。入設假零偏；實硬用時樹合。
 
-## Related Skills
+## 參
 
-- `design-logic-circuit` -- design the combinational excitation and output logic blocks
-- `simulate-cpu-architecture` -- use sequential blocks (registers, counters, control FSMs) in a CPU datapath
-- `model-markov-chain` -- finite state machines share the formal framework of discrete-time Markov chains
+- `design-logic-circuit` — 設組合激與出邏塊
+- `simulate-cpu-architecture` — CPU 資路用序塊（寄、計、控 FSM）
+- `model-markov-chain` — FSM 與離時馬氏鏈共正框

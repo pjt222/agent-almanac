@@ -75,9 +75,9 @@ Threshold Mapping:
 - The working zone is BELOW threshold — where the dog notices but can still think
 ```
 
-**Expected:** A precise behavior definition with identified trigger, threshold distance, and current consequence pattern.
+**Got:** A precise behavior definition with identified trigger, threshold distance, and current consequence pattern.
 
-**On failure:** If the behavior seems to have no consistent trigger, keep a log for one week: date, time, context, behavior, consequence. Patterns often emerge that are not obvious in the moment.
+**If fail:** If the behavior seems to have no consistent trigger, keep a log for one week: date, time, context, behavior, consequence. Patterns often emerge that are not obvious in the moment.
 
 ### Step 2: Choose the Intervention Strategy
 
@@ -103,9 +103,9 @@ Strategy Selection:
 +----------------------------+-----------------------------------+-----------------+
 ```
 
-**Expected:** A specific strategy selected for the identified behavior.
+**Got:** A specific strategy selected for the identified behavior.
 
-**On failure:** If the behavior is severe (biting with contact, extreme panic, self-harm), refer to a certified applied animal behaviorist (CAAB) or veterinary behaviorist (DACVB). This skill covers moderate behavioral issues, not clinical cases.
+**If fail:** If the behavior is severe (biting with contact, extreme panic, self-harm), refer to a certified applied animal behaviorist (CAAB) or veterinary behaviorist (DACVB). This skill covers moderate behavioral issues, not clinical cases.
 
 ### Step 3: Execute Desensitization and Counter-Conditioning
 
@@ -145,9 +145,9 @@ DS/CC Protocol:
    - Dog's body language at threshold becomes more relaxed
 ```
 
-**Expected:** Over weeks, the dog's threshold distance decreases and emotional response to the trigger shifts from fear/aggression to neutral or positive.
+**Got:** Over weeks, the dog's threshold distance decreases and emotional response to the trigger shifts from fear/aggression to neutral or positive.
 
-**On failure:** If no progress after 3-4 weeks of consistent sessions, reassess: (1) are you working below threshold? (2) are the treats high-value enough? (3) is the trigger exposure too frequent outside of training (flooding undoes DS/CC)? (4) consider consulting a professional.
+**If fail:** If no progress after 3-4 weeks of consistent sessions, reassess: (1) are you working below threshold? (2) are the treats high-value enough? (3) is the trigger exposure too frequent outside of training (flooding undoes DS/CC)? (4) consider consulting a professional.
 
 ### Step 4: Manage the Environment
 
@@ -179,9 +179,9 @@ Every rehearsal of the unwanted behavior strengthens it.
 Management prevents rehearsal while training builds the new response.
 ```
 
-**Expected:** The unwanted behavior is not being practiced outside of controlled training sessions.
+**Got:** The unwanted behavior is not being practiced outside of controlled training sessions.
 
-**On failure:** If management is impossible (e.g., cannot avoid all dog encounters), reduce training criteria to match reality. Some environmental exposure is unavoidable; ensure training sessions provide a strong enough counter-experience.
+**If fail:** If management is impossible (e.g., cannot avoid all dog encounters), reduce training criteria to match reality. Some environmental exposure is unavoidable; ensure training sessions provide a strong enough counter-experience.
 
 ## Validation
 
@@ -193,7 +193,7 @@ Management prevents rehearsal while training builds the new response.
 - [ ] Environmental management prevented behavior rehearsal outside training
 - [ ] Progress indicators (check-ins, reduced threshold distance) are being tracked
 
-## Common Pitfalls
+## Pitfalls
 
 - **Working over threshold**: The single most common error. If the dog cannot eat treats, you are too close. Move back
 - **Inconsistency**: DS/CC requires regular sessions (3-5 per week minimum). Sporadic training produces sporadic results

@@ -26,14 +26,14 @@ metadata:
 
 # Configure putior MCP Server
 
-Set up the putior MCP server so AI assistants (Claude Code, Claude Desktop) can directly call workflow annotation and diagram generation tools.
+Set up putior MCP server so AI assistants (Claude Code, Claude Desktop) can directly call workflow annotation, diagram generation tools.
 
-## When to Use
+## When Use
 
-- Enabling AI assistants to interactively annotate and visualize workflows
-- Setting up a new development environment with putior MCP integration
-- After installing putior and wanting AI-assisted workflow documentation
-- Configuring agent-to-agent communication via ACP for automated pipelines
+- Enable AI assistants to interactively annotate, visualize workflows
+- Set up new dev environment with putior MCP integration
+- After install putior and want AI-assisted workflow documentation
+- Configure agent-to-agent communication via ACP for automated pipelines
 
 ## Inputs
 
@@ -42,11 +42,11 @@ Set up the putior MCP server so AI assistants (Claude Code, Claude Desktop) can 
 - **Optional**: Whether to also configure ACP server (default: no)
 - **Optional**: Custom host/port for ACP server (default: localhost:8080)
 
-## Procedure
+## Steps
 
 ### Step 1: Install MCP Dependencies
 
-Install the required packages for MCP server functionality.
+Install required packages for MCP server functionality.
 
 ```r
 # Required: MCP framework
@@ -60,13 +60,13 @@ library(mcptools)
 library(ellmer)
 ```
 
-**Expected:** Both packages install and load without errors.
+**Got:** Both packages install, load without errors.
 
-**On failure:** `mcptools` requires `remotes` package. Install it first: `install.packages("remotes")`. If GitHub rate-limits, configure a `GITHUB_PAT` in `~/.Renviron` (add the line `GITHUB_PAT=your_token_here` and restart R). Do **not** paste tokens into shell commands or commit them to version control.
+**If fail:** `mcptools` requires `remotes` package. Install first: `install.packages("remotes")`. GitHub rate-limits? Configure `GITHUB_PAT` in `~/.Renviron` (add line `GITHUB_PAT=your_token_here`, restart R). Do **not** paste tokens into shell commands or commit them to version control.
 
 ### Step 2: Configure Claude Code (WSL/Linux/macOS)
 
-Add the putior MCP server to Claude Code's configuration.
+Add putior MCP server to Claude Code configuration.
 
 ```bash
 # One-line setup
@@ -78,19 +78,19 @@ For WSL with Windows R:
 claude mcp add putior -- "/mnt/c/Program Files/R/R-4.5.2/bin/Rscript.exe" -e "putior::putior_mcp_server()"
 ```
 
-Verify the configuration:
+Verify configuration:
 ```bash
 claude mcp list
 claude mcp get putior
 ```
 
-**Expected:** `putior` appears in the MCP server list with status "configured".
+**Got:** `putior` appears in MCP server list with status "configured".
 
-**On failure:** If Claude Code is not in PATH, add it: `export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`. If the Rscript path is wrong, locate R with `which Rscript` or `ls "/mnt/c/Program Files/R/"`.
+**If fail:** Claude Code not in PATH? Add: `export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`. Rscript path wrong? Locate R with `which Rscript` or `ls "/mnt/c/Program Files/R/"`.
 
 ### Step 3: Configure Claude Desktop (Windows)
 
-Add putior to Claude Desktop's MCP configuration file.
+Add putior to Claude Desktop MCP configuration file.
 
 Edit `%APPDATA%\Claude\claude_desktop_config.json`:
 
@@ -105,7 +105,7 @@ Edit `%APPDATA%\Claude\claude_desktop_config.json`:
 }
 ```
 
-Or with the full path:
+Or with full path:
 ```json
 {
   "mcpServers": {
@@ -117,15 +117,15 @@ Or with the full path:
 }
 ```
 
-Restart Claude Desktop after editing the configuration.
+Restart Claude Desktop after editing configuration.
 
-**Expected:** Claude Desktop shows putior in its MCP server list. Tools become available in conversation.
+**Got:** Claude Desktop shows putior in its MCP server list. Tools become available in conversation.
 
-**On failure:** Validate JSON syntax with a JSON linter. Check that the R path exists. Use 8.3 short names (`PROGRA~1`, `R-45~1.0`) if spaces in paths cause issues.
+**If fail:** Validate JSON syntax with JSON linter. Check R path exists. Use 8.3 short names (`PROGRA~1`, `R-45~1.0`) if spaces in paths cause issues.
 
 ### Step 4: Verify All 16 Tools
 
-Test that all MCP tools are accessible and functional.
+Test all MCP tools accessible, functional.
 
 ```r
 # Get tool definitions
@@ -136,7 +136,7 @@ cat(sprintf("Total tools: %d\n", length(tools)))
 vapply(tools, function(t) t$name, character(1))
 ```
 
-The 16 tools organized by category:
+16 tools organized by category:
 
 **Core Workflow (5):**
 - `put` — Scan files for PUT annotations (supports `exclude` parameter for regex-based file filtering)
@@ -162,7 +162,7 @@ The 16 tools organized by category:
 **Configuration (1):**
 - `set_putior_log_level` — Configure logging verbosity
 
-> **Important: Custom palettes cannot be used through MCP.** The `palette` parameter on `put_diagram` accepts a `putior_theme` R object created by `put_theme()`. Because MCP communicates via JSON, R objects like `putior_theme` cannot be serialized across the MCP boundary. When calling `put_diagram` through MCP, use the string-based `theme` parameter (e.g., `theme = "viridis"`) instead. For custom palettes, call `put_theme()` and `put_diagram(palette = ...)` directly in an R session.
+> **Important: Custom palettes cannot be used through MCP.** The `palette` parameter on `put_diagram` accepts a `putior_theme` R object created by `put_theme()`. Because MCP communicates via JSON, R objects like `putior_theme` cannot be serialized across MCP boundary. When calling `put_diagram` through MCP, use string-based `theme` parameter (e.g., `theme = "viridis"`) instead. For custom palettes, call `put_theme()` and `put_diagram(palette = ...)` directly in R session.
 
 Test core tools from Claude Code:
 ```
@@ -171,13 +171,13 @@ Use the put tool to scan ./R/ for annotations
 Use the put_diagram tool to generate a diagram
 ```
 
-**Expected:** All 16 tools listed. Core tools return expected results when called with valid inputs.
+**Got:** All 16 tools listed. Core tools return expected results when called with valid inputs.
 
-**On failure:** If tools are missing, check that putior version is current: `packageVersion("putior")`. Older versions may have fewer tools. Update with `remotes::install_github("pjt222/putior")`.
+**If fail:** Tools missing? Check putior version current: `packageVersion("putior")`. Older versions may have fewer tools. Update with `remotes::install_github("pjt222/putior")`.
 
 ### Step 5: Configure ACP Server (Optional)
 
-Set up the ACP (Agent Communication Protocol) server for agent-to-agent communication.
+Set up ACP (Agent Communication Protocol) server for agent-to-agent communication.
 
 ```r
 # Install ACP dependency
@@ -206,30 +206,30 @@ curl -X POST http://localhost:8080/runs \
   -d '{"input": [{"role": "user", "parts": [{"content": "generate diagram for ./R/"}]}]}'
 ```
 
-**Expected:** ACP server starts on the configured port. `/agents` returns the putior agent manifest. `/runs` accepts natural language requests and returns workflow results.
+**Got:** ACP server starts on configured port. `/agents` returns putior agent manifest. `/runs` accepts natural language requests, returns workflow results.
 
-**On failure:** If port 8080 is in use, specify a different port. If `plumber2` is not installed, the server function will print a helpful error message suggesting installation.
+**If fail:** Port 8080 in use? Specify different port. `plumber2` not installed? Server function prints helpful error message suggesting installation.
 
-## Validation
+## Checks
 
-- [ ] `putior::putior_mcp_tools()` exposes the core tools (`put`, `put_diagram`, `put_auto`, `put_generate`, `put_merge`) and returns ~16 tools for the current version
+- [ ] `putior::putior_mcp_tools()` exposes core tools (`put`, `put_diagram`, `put_auto`, `put_generate`, `put_merge`), returns ~16 tools for current version
 - [ ] Claude Code: `claude mcp list` shows `putior` configured
 - [ ] Claude Code: `putior_help` tool returns help text when invoked
-- [ ] Claude Desktop: putior appears in the MCP server list after restart
+- [ ] Claude Desktop: putior appears in MCP server list after restart
 - [ ] Core tools (`put`, `put_diagram`, `put_auto`) execute without errors
 - [ ] (Optional) ACP server responds to `curl http://localhost:8080/agents`
 
-## Common Pitfalls
+## Pitfalls
 
-- **mcptools not installed**: The MCP server requires `mcptools` (from GitHub) and `ellmer` (from CRAN). Both must be installed. putior checks and provides helpful messages if they're missing.
+- **mcptools not installed**: MCP server requires `mcptools` (from GitHub) and `ellmer` (from CRAN). Both must be installed. putior checks, provides helpful messages if missing.
 - **Wrong R path in Claude Desktop**: Windows paths need escaping in JSON (`\\`). Use 8.3 short names to avoid spaces: `C:\\PROGRA~1\\R\\R-45~1.0\\bin\\x64\\Rscript.exe`.
-- **Forgetting to restart**: Claude Desktop must be restarted after editing the config file. Claude Code picks up changes on next session start.
-- **renv isolation**: If putior is installed in an renv library but Claude Code/Desktop launches R without renv, the packages won't be found. Ensure `mcptools` and `ellmer` are installed in the global library or configure renv activation in the MCP server command.
-- **Port conflicts for ACP**: The default ACP port (8080) is commonly used. Check with `lsof -i :8080` or `netstat -tlnp | grep 8080` before starting.
-- **Including only specific tools**: To expose a subset of tools, use `putior_mcp_tools(include = c("put", "put_diagram"))` when building custom MCP server wrappers.
-- **Custom palettes via MCP**: The `palette` parameter on `put_diagram` requires a `putior_theme` R object (created by `put_theme()`), which cannot be serialized through MCP's JSON interface. Use the built-in `theme` parameter string for MCP calls. For custom palettes, use R directly.
+- **Forgetting to restart**: Claude Desktop must be restarted after editing config file. Claude Code picks up changes on next session start.
+- **renv isolation**: putior installed in renv library but Claude Code/Desktop launches R without renv? Packages won't be found. Ensure `mcptools` and `ellmer` installed in global library or configure renv activation in MCP server command.
+- **Port conflicts for ACP**: Default ACP port (8080) commonly used. Check with `lsof -i :8080` or `netstat -tlnp | grep 8080` before starting.
+- **Including only specific tools**: To expose subset of tools, use `putior_mcp_tools(include = c("put", "put_diagram"))` when building custom MCP server wrappers.
+- **Custom palettes via MCP**: `palette` parameter on `put_diagram` requires `putior_theme` R object (created by `put_theme()`), which cannot be serialized through MCP JSON interface. Use built-in `theme` parameter string for MCP calls. For custom palettes, use R directly.
 
-## Related Skills
+## See Also
 
 - `install-putior` — prerequisite: putior and optional deps must be installed
 - `configure-mcp-server` — general MCP server configuration for Claude Code/Desktop

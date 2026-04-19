@@ -25,34 +25,34 @@ metadata:
 
 # Configure Ingress Networking
 
-Set up production-grade Kubernetes Ingress with NGINX controller, automated TLS certificates, and advanced routing capabilities.
+Set up prod-grade Kubernetes Ingress w/ NGINX controller, automated TLS certs, advanced routing.
 
-## When to Use
+## Use When
 
-- Exposing multiple Kubernetes services via single load balancer
-- Implementing path-based or host-based routing for microservices
-- Automating TLS certificate issuance and renewal with Let's Encrypt
-- Implementing rate limiting, authentication, and WAF policies
-- Setting up blue-green or canary deployments with traffic splitting
-- Configuring custom error pages and request/response modification
+- Expose multi K8s services via single LB
+- Impl path-based / host-based routing for microservices
+- Automate TLS cert issuance + renewal w/ Let's Encrypt
+- Impl rate limiting, auth, WAF policies
+- Set up blue-green / canary deployments w/ traffic splitting
+- Configure custom error pages + req/res modification
 
-## Inputs
+## In
 
-- **Required**: Kubernetes cluster with LoadBalancer support or MetalLB
-- **Required**: DNS records pointing to cluster LoadBalancer IP
-- **Optional**: Existing TLS certificates or Let's Encrypt account
-- **Optional**: OAuth2 provider for authentication
+- **Required**: K8s cluster w/ LoadBalancer support or MetalLB
+- **Required**: DNS records → cluster LB IP
+- **Optional**: Existing TLS certs or Let's Encrypt account
+- **Optional**: OAuth2 provider for auth
 - **Optional**: WAF rules (ModSecurity)
 - **Optional**: Prometheus for metrics collection
 
-## Procedure
+## Do
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> See [Extended Examples](references/EXAMPLES.md) for complete config files + templates.
 
 
 ### Step 1: Install NGINX Ingress Controller
 
-Deploy NGINX Ingress Controller with Helm and configure cloud provider integration.
+Deploy NGINX Ingress Controller w/ Helm + configure cloud provider integration.
 
 ```bash
 # Add NGINX Ingress Helm repository
@@ -104,13 +104,13 @@ curl http://$INGRESS_IP
 # Should return 404 (no backend configured yet)
 ```
 
-**Expected:** NGINX Ingress Controller pods running in ingress-nginx namespace. LoadBalancer service has external IP assigned. Metrics endpoint accessible on port 10254. Health check at `/healthz` returns 200 OK.
+**→** NGINX Ingress Controller pods running in ingress-nginx ns. LB service has external IP. Metrics endpoint accessible on port 10254. Health check `/healthz` returns 200 OK.
 
-**On failure:** For pending LoadBalancer, verify cloud provider integration and service quotas. For CrashLoopBackOff, check controller logs with `kubectl logs -n ingress-nginx -l app.kubernetes.io/component=controller`. For webhook errors, verify admission webhook certificate is valid. For no external IP on bare-metal, install MetalLB or use NodePort service type.
+**If err:** Pending LB → valid. cloud provider integration + service quotas. CrashLoopBackOff → check controller logs `kubectl logs -n ingress-nginx -l app.kubernetes.io/component=controller`. Webhook errs → valid. admission webhook cert valid. No external IP bare-metal → install MetalLB or use NodePort service type.
 
 ### Step 2: Install cert-manager for Automated TLS
 
-Deploy cert-manager and configure Let's Encrypt ClusterIssuer.
+Deploy cert-manager + configure Let's Encrypt ClusterIssuer.
 
 ```bash
 # Install cert-manager CRDs
@@ -179,13 +179,13 @@ kubectl get clusterissuer
 kubectl describe clusterissuer letsencrypt-prod
 ```
 
-**Expected:** cert-manager pods running in cert-manager namespace. ClusterIssuers created with Ready status. ACME account registered with Let's Encrypt. Webhook responding to certificate requests.
+**→** cert-manager pods running in cert-manager ns. ClusterIssuers created w/ Ready status. ACME account reg'd w/ Let's Encrypt. Webhook responding to cert reqs.
 
-**On failure:** For webhook timeout errors, increase `webhook.timeoutSeconds` or check network policies blocking cert-manager to API server. For ACME registration failures, verify email is valid and server URL correct. For DNS01 failures, check Route53 IAM permissions allow route53:ChangeResourceRecordSets. Test DNS propagation with `dig +short _acme-challenge.example.com TXT`.
+**If err:** Webhook timeout → increase `webhook.timeoutSeconds` or check network policies blocking cert-manager to API server. ACME reg fails → valid. email valid + server URL correct. DNS01 fails → check Route53 IAM perms allow route53:ChangeResourceRecordSets. Test DNS propagation w/ `dig +short _acme-challenge.example.com TXT`.
 
-### Step 3: Create Basic Ingress with TLS
+### Step 3: Create Basic Ingress w/ TLS
 
-Deploy application and expose via Ingress with automatic certificate issuance.
+Deploy app + expose via Ingress w/ auto cert issuance.
 
 ```bash
 # Deploy sample application
@@ -247,13 +247,13 @@ kubectl delete secret web-tls-secret
 # cert-manager will recreate with production certificate
 ```
 
-**Expected:** Ingress resource created. cert-manager detects annotation and creates Certificate resource. HTTP-01 challenge completes successfully. TLS secret created with valid certificate. HTTPS requests succeed with trusted certificate. HTTP redirects to HTTPS.
+**→** Ingress resource created. cert-manager detects annotation + creates Cert resource. HTTP-01 challenge completes. TLS secret created w/ valid cert. HTTPS reqs succeed w/ trusted cert. HTTP redirects to HTTPS.
 
-**On failure:** For challenge failures, verify DNS resolves to Ingress LoadBalancer IP with `dig web.example.com`. For rate limit errors, use staging issuer until configuration correct. For certificate not issued, check events with `kubectl describe certificate web-tls-secret` and `kubectl get challenges`. For "too many certificates" error, hit Let's Encrypt rate limits (50 certs/domain/week); wait or use staging.
+**If err:** Challenge fails → valid. DNS resolves to Ingress LB IP w/ `dig web.example.com`. Rate limit errs → use staging issuer until config correct. Cert not issued → check events `kubectl describe certificate web-tls-secret` + `kubectl get challenges`. "Too many certificates" → hit Let's Encrypt rate limits (50 certs/domain/week); wait or use staging.
 
-### Step 4: Implement Advanced Routing and Load Balancing
+### Step 4: Implement Advanced Routing + Load Balancing
 
-Configure path-based routing, header-based routing, and traffic splitting.
+Configure path-based routing, header-based routing, traffic splitting.
 
 ```bash
 # Deploy multiple services
@@ -365,13 +365,13 @@ curl https://app.example.com/admin/      # -> admin service
 curl -H "X-Canary: always" https://app.example.com/api/  # -> api-v2 (100%)
 ```
 
-**Expected:** Single Ingress routes to multiple services based on path. Rewrite-target strips path prefix. Canary Ingress splits traffic by weight. Header-based routing sends specific requests to canary. TLS terminates at Ingress, backends use HTTP.
+**→** Single Ingress routes to multi services by path. Rewrite-target strips path prefix. Canary Ingress splits traffic by weight. Header-based routing sends specific reqs to canary. TLS terminates at Ingress, backends use HTTP.
 
-**On failure:** For 404 errors, verify service names and ports match. For rewrite issues, test regex with `nginx.ingress.kubernetes.io/rewrite-target` debugger. For canary not working, verify only one Ingress has `canary: "false"` (main) and others have `canary: "true"`. For traffic imbalance, check backend pod counts and readiness probes.
+**If err:** 404 errs → valid. service names + ports match. Rewrite issues → test regex w/ `nginx.ingress.kubernetes.io/rewrite-target` debugger. Canary not working → valid. only one Ingress has `canary: "false"` (main) + others have `canary: "true"`. Traffic imbalance → check backend pod counts + readiness probes.
 
-### Step 5: Configure Rate Limiting and Authentication
+### Step 5: Configure Rate Limiting + Auth
 
-Implement rate limiting, basic auth, and OAuth2 authentication.
+Impl rate limiting, basic auth, OAuth2.
 
 ```bash
 # Rate limiting by IP
@@ -383,13 +383,13 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Rate limiting blocks excessive requests with 503 Service Temporarily Unavailable. Basic auth prompts for credentials, rejects unauthorized requests. OAuth2 redirects to provider login page, sets authentication cookies.
+**→** Rate limiting blocks excessive reqs w/ 503 Service Temporarily Unavailable. Basic auth prompts for creds, rejects unauth'd reqs. OAuth2 redirects to provider login page, sets auth cookies.
 
-**On failure:** For rate limit not working, verify annotation syntax and restart Ingress controller pods. For basic auth 500 errors, check secret format with `kubectl get secret basic-auth -o yaml | grep auth:`. For OAuth2 failures, verify client ID/secret and callback URL registered with provider. Check oauth2-proxy logs for detailed errors.
+**If err:** Rate limit not working → valid. annotation syntax + restart Ingress controller pods. Basic auth 500 errs → check secret format `kubectl get secret basic-auth -o yaml | grep auth:`. OAuth2 fails → valid. client ID/secret + callback URL reg'd w/ provider. Check oauth2-proxy logs for detailed errs.
 
-### Step 6: Implement Custom Error Pages and Request Modification
+### Step 6: Implement Custom Error Pages + Request Modification
 
-Configure custom error pages, CORS, and request/response headers.
+Configure custom error pages, CORS, req/res headers.
 
 ```bash
 # Create ConfigMap with custom error pages
@@ -401,45 +401,45 @@ apiVersion: v1
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Custom 404 and 503 pages display instead of default NGINX pages. CORS headers allow specified origins and methods. Security headers protect against XSS and clickjacking. Request body size limit allows large file uploads. Timeout settings prevent premature connection closes.
+**→** Custom 404 + 503 pages display vs. default NGINX pages. CORS headers allow specified origins + methods. Security headers protect vs. XSS + clickjacking. Req body size limit allows large file uploads. Timeout settings prevent premature connection closes.
 
-**On failure:** For custom error pages not showing, verify ConfigMap mounted to controller pods and default backend deployed. For CORS preflight failures, check OPTIONS requests allowed in backend service. For 413 Request Entity Too Large, increase `proxy-body-size` annotation. For timeout errors, increase all three timeout annotations together.
+**If err:** Custom error pages not showing → valid. ConfigMap mounted to controller pods + default backend deployed. CORS preflight fails → check OPTIONS reqs allowed in backend service. 413 Req Entity Too Large → increase `proxy-body-size` annotation. Timeout errs → increase all three timeout annotations together.
 
-## Validation
+## Check
 
-- [ ] NGINX Ingress Controller running with external IP assigned
-- [ ] cert-manager issues certificates automatically via Let's Encrypt
+- [ ] NGINX Ingress Controller running w/ external IP
+- [ ] cert-manager issues certs auto via Let's Encrypt
 - [ ] HTTPS redirects enforce SSL for all Ingresses
-- [ ] Path-based routing directs requests to correct backend services
-- [ ] Canary Ingresses split traffic according to weight annotations
-- [ ] Rate limiting blocks excessive requests from single IP
-- [ ] Authentication (basic auth or OAuth2) protects admin routes
-- [ ] Custom error pages display on 404/503 errors
-- [ ] CORS headers allow cross-origin requests from specified domains
+- [ ] Path-based routing directs reqs to correct backend services
+- [ ] Canary Ingresses split traffic per weight annotations
+- [ ] Rate limiting blocks excessive reqs from single IP
+- [ ] Auth (basic auth or OAuth2) protects admin routes
+- [ ] Custom error pages display on 404/503 errs
+- [ ] CORS headers allow cross-origin reqs from specified domains
 - [ ] Metrics endpoint exposes Prometheus metrics for monitoring
 
-## Common Pitfalls
+## Traps
 
-- **No ingressClassName**: Ingress not picked up by controller. Always specify `ingressClassName: nginx` in Kubernetes 1.19+.
+- **No ingressClassName**: Ingress not picked up by controller. Always specify `ingressClassName: nginx` in K8s 1.19+.
 
-- **Certificate challenges fail**: DNS doesn't point to Ingress LoadBalancer. Verify with `dig yourdomain.com` before requesting certificate.
+- **Cert challenges fail**: DNS doesn't point to Ingress LB. Valid. w/ `dig yourdomain.com` before requesting cert.
 
-- **HTTP-01 challenge timeout**: Firewall blocks port 80. Let's Encrypt must reach `http://domain/.well-known/acme-challenge/` for validation.
+- **HTTP-01 challenge timeout**: Firewall blocks port 80. Let's Encrypt must reach `http://domain/.well-known/acme-challenge/` for valid.
 
-- **Rate limit applies globally**: `limit-rps` annotation applies per Ingress, not per path. Create separate Ingresses for different rate limits.
+- **Rate limit applies globally**: `limit-rps` annotation applies per Ingress, not per path. Create separate Ingresses for diff rate limits.
 
-- **Rewrite-target regex wrong**: Captures don't match path pattern. Test with `echo "/api/users" | sed 's|/api(/\|$)\(.*\)|/\2|'`.
+- **Rewrite-target regex wrong**: Captures don't match path pattern. Test w/ `echo "/api/users" | sed 's|/api(/\|$)\(.*\)|/\2|'`.
 
-- **Canary weight ignored**: Multiple canary Ingresses for same host/path conflict. Only create one canary Ingress per route.
+- **Canary weight ignored**: Multi canary Ingresses for same host/path conflict. Only create one canary Ingress per route.
 
-- **Auth bypass via IP**: Authentication only on Ingress, backend services accessible via ClusterIP. Implement network policies or service mesh.
+- **Auth bypass via IP**: Auth only on Ingress, backend services accessible via ClusterIP. Impl network policies or service mesh.
 
-- **Configuration-snippet injection risk**: User input in configuration-snippet allows NGINX config injection. Validate and sanitize all annotations.
+- **Config-snippet injection risk**: User in in config-snippet allows NGINX config injection. Valid. + sanitize all annotations.
 
-## Related Skills
+## →
 
 - `deploy-to-kubernetes` - Creating Services that Ingress routes to
-- `manage-kubernetes-secrets` - Managing TLS certificates as Secrets
-- `implement-gitops-workflow` - Declarative Ingress management with Argo CD
-- `setup-service-mesh` - Advanced traffic management with Istio/Linkerd
+- `manage-kubernetes-secrets` - Managing TLS certs as Secrets
+- `implement-gitops-workflow` - Declarative Ingress mgmt w/ Argo CD
+- `setup-service-mesh` - Advanced traffic mgmt w/ Istio/Linkerd
 - `build-ci-cd-pipeline` - Automated Ingress updates in CI/CD

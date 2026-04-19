@@ -24,163 +24,163 @@ metadata:
   tags: tcg, deck-building, pokemon, mtg, fab, strategy, meta, archetype
 ---
 
-# Build TCG Deck
+# 建 TCG 牌組
 
-Construct a trading card game deck from archetype selection through final optimization, following a structured process that works across Pokemon TCG, Magic: The Gathering, Flesh and Blood, and other major TCGs.
+自原型擇至末優建 TCG 牌組，循跨 Pokemon TCG、Magic: The Gathering、Flesh and Blood 及諸主 TCG 之結構程。
 
-## When to Use
+## 用
 
-- Building a new deck for a specific tournament format or casual play
-- Adapting an existing deck to a changed meta-game
-- Evaluating whether a new card or set release warrants a deck change
-- Teaching someone the principles of deck construction
-- Converting a deck concept into a tournament-ready list
+- 為賽制或休玩建新牌組
+- 適已變元遊之現牌組
+- 評新卡或擴是否值牌組改
+- 教他建牌組則
+- 牌念轉賽備列
 
-## Inputs
+## 入
 
-- **Required**: Card game (Pokemon TCG, MTG, FaB, etc.)
-- **Required**: Format (Standard, Expanded, Modern, Legacy, Blitz, etc.)
-- **Required**: Goal (competitive tournament, casual play, budget build)
-- **Optional**: Preferred archetype or strategy (aggro, control, combo, midrange)
-- **Optional**: Budget constraints (maximum spend, cards already owned)
-- **Optional**: Current meta-game snapshot (top decks, expected field)
+- **必**：卡戲（Pokemon TCG、MTG、FaB 等）
+- **必**：制（Standard、Expanded、Modern、Legacy、Blitz 等）
+- **必**：標（賽競、休玩、廉建）
+- **可**：偏原型或策（aggro、control、combo、midrange）
+- **可**：預束（最花、已有卡）
+- **可**：當元遊拍（頂牌、候域）
 
-## Procedure
+## 行
 
-### Step 1: Define the Archetype
+### 一：定原型
 
-Choose the deck's strategic identity.
+擇牌組之策身。
 
-1. Identify the available archetypes in the current format:
-   - **Aggro**: Win quickly through early pressure and efficient attackers
-   - **Control**: Answer threats efficiently, win in the late game with card advantage
-   - **Combo**: Assemble specific card combinations for powerful synergy or instant wins
-   - **Midrange**: Flexible strategy that shifts between aggro and control as needed
-   - **Tempo**: Gain resource advantage through efficient timing and disruption
-2. Select an archetype based on:
-   - Player preference and playstyle
-   - Meta-game positioning (what beats the top decks?)
-   - Budget constraints (combo decks often need specific expensive cards)
-   - Format legality (check ban lists and rotation status)
-3. Identify 1-2 primary win conditions:
-   - How does this deck actually win the game?
-   - What is the ideal game state this deck is trying to reach?
-4. State the archetype selection and win condition clearly
+1. 識當制可得原型：
+   - **Aggro**：早壓與效擊速勝
+   - **Control**：效答威，於晚局以卡勝優勝
+   - **Combo**：合具卡組以強聚或即勝
+   - **Midrange**：活策—於 aggro 與 control 間按需移
+   - **Tempo**：以效時與擾得資優
+2. 依擇原型：
+   - 玩偏與風
+   - 元遊位（何勝頂牌？）
+   - 預束（combo 牌常需具貴卡）
+   - 制法（察禁列與輪轉）
+3. 識 1-2 主勝條：
+   - 牌組實何勝？
+   - 牌組欲達之理局態？
+4. 顯述原型擇與勝條
 
-**Expected:** A clear archetype with defined win conditions. The strategy is specific enough to guide card selection but flexible enough to adapt.
+**得：** 清原型附定勝條。策足具以導卡擇而足活以適。
 
-**On failure:** If no archetype feels right, start with the strongest individual cards available and let the archetype emerge from the card pool. Sometimes the best deck is built around a card, not a concept.
+**敗：** 無原型合→始於可得最強單卡而令原型自卡池現。有時最佳牌組建於卡而非念。
 
-### Step 2: Build the Core
+### 二：建核
 
-Select the cards that define the deck's strategy.
+擇定牌組策之卡。
 
-1. Identify the **core engine** (12-20 cards depending on game):
-   - The cards that directly enable the win condition
-   - Maximum legal copies of each core card
-   - These are non-negotiable — the deck doesn't function without them
-2. Add **support cards** (8-15 cards):
-   - Cards that find or protect the core engine
-   - Draw/search effects to improve consistency
-   - Protection for key pieces (counters, shields, removal)
-3. Add **interaction** (8-12 cards):
-   - Removal for opponent's threats
-   - Disruption for opponent's strategy
-   - Defensive options appropriate to the format
-4. Fill the **resource base** (game-specific):
-   - MTG: Lands (typically 24-26 for 60-card, 16-17 for 40-card)
-   - Pokemon: Energy cards (8-12 basic + special)
-   - FaB: Pitch value distribution (balance red/yellow/blue)
+1. 識**核引**（依戲 12-20 卡）：
+   - 直啟勝條之卡
+   - 每核卡最多法份
+   - 此不可商—牌組無此不行
+2. 加**支卡**（8-15 卡）：
+   - 尋或護核引之卡
+   - 抽/尋效以升一致
+   - 要件護（反制、盾、除）
+3. 加**互動**（8-12 卡）：
+   - 對威之除
+   - 對策之擾
+   - 適制之守選
+4. 填**資基**（戲專）：
+   - MTG：地（60 牌典 24-26、40 牌 16-17）
+   - Pokemon：能卡（8-12 基 + 特）
+   - FaB：棄值分（均 red/yellow/blue）
 
-**Expected:** A complete deck list at or near the minimum deck size for the format. Every card has a clear role (core, support, interaction, or resource).
+**得：** 至或近制最小牌大之全牌列。每卡有清角（核、支、互、資）。
 
-**On failure:** If the deck list exceeds the format size, cut the weakest support cards first. If the core engine requires too many cards (>25), the strategy may be too fragile — simplify the win condition.
+**敗：** 牌列過制大→先斷最弱支。核引需過多卡（>25）→策或過脆—簡勝條。
 
-### Step 3: Analyze the Curve
+### 三：析曲線
 
-Verify the deck's resource distribution supports its strategy.
+驗牌組資分支其策。
 
-1. Plot the **mana/energy/cost curve**:
-   - Count cards at each cost point (0, 1, 2, 3, 4, 5+)
-   - Verify the curve matches the archetype:
-     - Aggro: peaks at 1-2, drops sharply after 3
-     - Midrange: peaks at 2-3, moderate presence at 4-5
-     - Control: flatter curve, more high-cost finishers
-     - Combo: concentrated at combo-piece costs
-2. Check **color/type distribution** (MTG: color balance; Pokemon: energy type coverage):
-   - Can the resource base reliably cast cards on curve?
-   - Are there color-intensive cards that need dedicated resource support?
-3. Verify **card type balance**:
-   - Sufficient creatures/attackers to apply pressure
-   - Sufficient spells/trainers for interaction and consistency
-   - No critical category completely missing
-4. Adjust if the curve doesn't support the strategy
+1. 繪 **mana/energy/cost 曲**：
+   - 計每費點卡（0、1、2、3、4、5+）
+   - 驗曲合原型：
+     - Aggro：峰於 1-2，3 後急降
+     - Midrange：峰於 2-3，4-5 中有
+     - Control：扁曲，多高費終結
+     - Combo：聚於 combo 件費
+2. 察**色/類分**（MTG：色衡；Pokemon：能類涵）：
+   - 資基能依曲穩施卡否？
+   - 有需專資支之色密卡乎？
+3. 驗**卡類衡**：
+   - 足生/擊以加壓
+   - 足咒/訓為互與一致
+   - 無危類全缺
+4. 曲不支策→調
 
-**Expected:** A smooth curve that lets the deck execute its strategy on time. Aggro plays out fast, control survives early, combo assembles on schedule.
+**得：** 平曲令牌依時行策。Aggro 速行、control 早存、combo 時合。
 
-**On failure:** If the curve is lumpy (too many expensive cards, not enough early plays), swap expensive support cards for cheaper alternatives. The curve is more important than any individual card.
+**敗：** 曲顛（過多貴卡、早玩不足）→換貴支卡為廉代。曲要過於任單卡。
 
-### Step 4: Meta-Game Positioning
+### 四：元遊位
 
-Evaluate the deck against the expected field.
+較牌組與候域。
 
-1. Identify the top 5 decks in the current meta (use tournament results, tier lists)
-2. For each top deck, evaluate:
-   - **Favorable**: Your strategy naturally counters theirs (score: +1)
-   - **Even**: Neither deck has a structural advantage (score: 0)
-   - **Unfavorable**: Their strategy naturally counters yours (score: -1)
-3. Calculate the expected win rate against the field:
-   - Weight matchups by the opponent's meta share
-   - A deck with 60%+ expected win rate against the top 5 is well-positioned
-4. If positioning is poor, consider:
-   - Switching interaction cards to target the worst matchups
-   - Adding sideboard (if the format allows) for unfavorable matchups
-   - Whether a different archetype is better positioned
+1. 識當元頂五牌（用賽果、層表）
+2. 每頂牌→評：
+   - **利**：策自克其（分：+1）
+   - **平**：兩牌無構利（分：0）
+   - **不利**：其策自克己（分：-1）
+3. 算對域之候勝率：
+   - 以對手元份加權配對
+   - 對頂五勝率 60%+ 為位佳
+4. 若位差→慮：
+   - 換互卡以標最壞配對
+   - 加邊板（若制允）於不利配對
+   - 或他原型位較佳乎
 
-**Expected:** A clear picture of where the deck sits in the meta. Favorable and unfavorable matchups identified with specific reasons.
+**得：** 牌組於元位之清圖。利與不利配對以具體由識。
 
-**On failure:** If meta data isn't available, focus on versatility — ensure the deck can interact with multiple strategies rather than being optimized for one matchup.
+**敗：** 無元資→聚於泛—確牌可互多策，非優於一配。
 
-### Step 5: Build the Sideboard
+### 五：建邊板
 
-Construct sideboard/side deck for format-specific adaptation (if applicable).
+為制專適建邊板/側牌（若適）。
 
-1. For each unfavorable matchup from Step 4:
-   - Identify 2-4 cards that improve the matchup significantly
-   - These should be high-impact cards, not marginal improvements
-2. For each card in the sideboard, know:
-   - What matchup(s) it comes in against
-   - What it replaces from the main deck
-   - Whether bringing it in changes the deck's curve significantly
-3. Verify sideboard doesn't exceed format limits (MTG: 15 cards, FaB: varies)
-4. Ensure no sideboard card is only relevant against one fringe deck
-   - Each sideboard slot should cover at least 2 matchups if possible
+1. 每步四不利配對→
+   - 識 2-4 卡顯改配對
+   - 此當為高影卡，非微改
+2. 每邊板卡知：
+   - 入對何配對
+   - 代主牌何
+   - 入否顯改牌曲
+3. 驗邊板不過制限（MTG：15 卡、FaB：變）
+4. 確無邊板卡唯對邊緣牌相關
+   - 每邊板位當盡涵至少二配對
 
-**Expected:** A focused sideboard that meaningfully improves the worst matchups without diluting the main strategy.
+**得：** 聚邊板顯改最壞配對而不稀主策。
 
-**On failure:** If the sideboard can't fix the worst matchups, the deck may be poorly positioned in the current meta. Consider whether the core strategy needs adjustment rather than sideboard patches.
+**敗：** 邊板不能修最壞配對→牌於當元或位差。慮核策需調而非邊板補。
 
-## Validation Checklist
+## 驗
 
-- [ ] Archetype and win conditions clearly defined
-- [ ] Deck meets format legality (ban list, rotation, card count)
-- [ ] Every card has a defined role (core, support, interaction, resource)
-- [ ] Mana/energy curve supports the strategy's speed
-- [ ] Resource base can reliably cast cards on curve
-- [ ] Meta matchups evaluated with specific reasoning
-- [ ] Sideboard targets the worst matchups with clear swap plans
-- [ ] Budget constraints satisfied (if applicable)
+- [ ] 原型與勝條清定
+- [ ] 牌合制法（禁列、輪轉、卡計）
+- [ ] 每卡有定角（核、支、互、資）
+- [ ] mana/energy 曲支策速
+- [ ] 資基可依曲穩施卡
+- [ ] 元配對以具體推評
+- [ ] 邊板以清換計標最壞配對
+- [ ] 預束滿（若適）
 
-## Common Pitfalls
+## 忌
 
-- **Too many win conditions**: A deck with 3 different ways to win usually does none of them well. Focus on 1-2
-- **Curve blindness**: Adding powerful expensive cards without checking if the deck can cast them on time
-- **Ignoring the meta**: Building in a vacuum. The best deck in theory loses to the most common deck in practice
-- **Emotional card inclusion**: Keeping a pet card that doesn't serve the strategy. Every slot must earn its place
-- **Sideboard afterthought**: Building the sideboard last with leftover cards. The sideboard is part of the deck, not an appendix
-- **Over-teching**: Filling the deck with narrow answers to specific decks instead of proactive strategy
+- **多勝條**：一牌三勝法常皆不精。聚於 1-2
+- **曲盲**：加強貴卡而不察牌能否時施
+- **略元**：於真空建。理中最佳牌敗於實中最常牌
+- **情卡入**：留寵卡而不服策。每位必爭其位
+- **邊板後補**：末以餘卡建邊板。邊板為牌之一，非附錄
+- **過技**：填牌以窄答於具牌而非主策
 
-## Related Skills
+## 參
 
-- `grade-tcg-card` — Card condition assessment for tournament legality and collection value
-- `manage-tcg-collection` — Inventory management for tracking which cards are available for deck building
+- `grade-tcg-card` — 為賽法與藏值評卡況
+- `manage-tcg-collection` — 錄可建牌之卡

@@ -23,31 +23,31 @@ metadata:
   tags: maintenance, symlinks, discovery, claude-code, audit
 ---
 
-# audit-discovery-symlinks
+# 審發現符連
 
-## When to Use
+## 用
 
-- After adding new skills, agents, or teams to the almanac
-- After a repository rename or move that may have broken absolute symlinks
-- When slash commands or agents are not found in Claude Code
-- As a periodic health check to catch drift between registries and discovery paths
-- When onboarding a new project that should discover shared almanac content
+- 新增技/將/隊於 almanac→審
+- 庫改名或移→絕符連或破→審
+- Claude Code 尋不得斜命或將→審
+- 定期察以捕冊與發現徑之漂
+- 新專案當共享 almanac 內容→審
 
-**Do NOT use** for creating the initial symlink hub from scratch. See the [symlink-architecture guide](../../guides/symlink-architecture.md) for first-time setup.
+**勿用**於初造符連樞。詳 [symlink-architecture guide](../../guides/symlink-architecture.md)。
 
-## Inputs
+## 入
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `almanac_path` | string | No | Absolute path to agent-almanac root. Auto-detected from `.claude/` symlink targets or cwd if omitted |
-| `scope` | enum | No | `project`, `global`, or `both` (default: `both`) |
-| `fix_mode` | enum | No | `report` (default: audit only), `auto` (fix all safe issues), `interactive` (prompt before each fix) |
+| 參 | 類 | 必 | 述 |
+|---|---|---|---|
+| `almanac_path` | 串 | 否 | agent-almanac 根絕徑。略則自 `.claude/` 符連目標或 cwd 識 |
+| `scope` | 列 | 否 | `project`、`global`、`both`（默 `both`） |
+| `fix_mode` | 列 | 否 | `report`（默，唯審）、`auto`（修諸安題）、`interactive`（每修前問） |
 
-## Procedure
+## 行
 
-### Step 1: Identify Almanac Path
+### 一：識 almanac 徑
 
-Locate the agent-almanac root directory.
+尋 agent-almanac 根目。
 
 ```bash
 # Auto-detect from current project's .claude/agents symlink
@@ -68,13 +68,13 @@ fi
 echo "Almanac path: $ALMANAC_PATH"
 ```
 
-**Expected:** `ALMANAC_PATH` points to a directory containing `skills/_registry.yml`, `agents/_registry.yml`, and `teams/_registry.yml`.
+**得：** `ALMANAC_PATH` 指含 `skills/_registry.yml`、`agents/_registry.yml`、`teams/_registry.yml` 之目。
 
-**On failure:** If auto-detection fails, ask the user for the `almanac_path` input. The almanac root is the directory containing `skills/`, `agents/`, `teams/`, and their registries.
+**敗：** 自識敗→問用者 `almanac_path`。almanac 根乃含 `skills/`、`agents/`、`teams/` 及其冊之目。
 
-### Step 2: Inventory Registries
+### 二：錄諸冊
 
-Extract the canonical lists of skills, agents, and teams from their registries.
+自諸冊取技、將、隊之正典錄。
 
 ```bash
 # Count registered skills (entries with "- id:" under domain sections)
@@ -92,13 +92,13 @@ REGISTERED_TEAM_COUNT=$(echo "$REGISTERED_TEAMS" | wc -l)
 echo "Registered: $REGISTERED_SKILL_COUNT skills, $REGISTERED_AGENT_COUNT agents, $REGISTERED_TEAM_COUNT teams"
 ```
 
-**Expected:** Counts match the `total_skills`, `total_agents`, `total_teams` values in each registry header.
+**得：** 計合冊頭之 `total_skills`、`total_agents`、`total_teams`。
 
-**On failure:** If counts diverge from the header totals, the registry itself is out of sync. Note the discrepancy in the report but continue with the actual `- id:` entries as the source of truth.
+**敗：** 計與頭異→冊自身不同步。記差於報而以實 `- id:` 條為真源續行。
 
-### Step 3: Audit Project-Level Symlinks
+### 三：審專案符連
 
-Check `.claude/skills/*`, `.claude/agents`, `.claude/teams` in the current project directory.
+察當專案目中 `.claude/skills/*`、`.claude/agents`、`.claude/teams`。
 
 ```bash
 PROJECT_CLAUDE=".claude"
@@ -140,13 +140,13 @@ else
 fi
 ```
 
-**Expected:** Zero missing, zero broken. Extraneous items are classified and explained.
+**得：** 零缺、零破。多餘項已分類且釋。
 
-**On failure:** If `.claude/` does not exist at all, the project has no discovery setup. Note this and skip to global audit.
+**敗：** `.claude/` 全不存→專案無發現設。記而跳全域審。
 
-### Step 4: Audit Global Symlinks
+### 四：審全域符連
 
-Check `~/.claude/skills/*` and `~/.claude/agents`. Also check that `~/.claude/teams` is NOT a symlink (it should be absent or a directory for TeamCreate runtime state).
+察 `~/.claude/skills/*` 與 `~/.claude/agents`。且察 `~/.claude/teams` 非符連（當缺或為實目以存 TeamCreate 運行態）。
 
 ```bash
 GLOBAL_CLAUDE="$HOME/.claude"
@@ -204,13 +204,13 @@ else
 fi
 ```
 
-**Expected:** Zero missing almanac skills, zero broken. External content (peon-ping, etc.) is listed but not flagged as errors.
+**得：** 零缺 almanac 技、零破。外部內容（peon-ping 等）列而不旗為誤。
 
-**On failure:** If `~/.claude/` does not exist, the global hub is not set up. Refer to the [symlink-architecture guide](../../guides/symlink-architecture.md) for initial setup.
+**敗：** `~/.claude/` 不存→全域樞未設。詳 [symlink-architecture guide](../../guides/symlink-architecture.md)。
 
-### Step 5: Generate Audit Report
+### 五：生審報
 
-Produce a summary table covering both layers.
+出兩層概表。
 
 ```markdown
 # Discovery Symlink Audit Report
@@ -243,29 +243,29 @@ Produce a summary table covering both layers.
 - External content (non-almanac): [list — informational only]
 ```
 
-**Expected:** A clear, actionable report. Zero issues means a clean bill of health.
+**得：** 清可行之報。零題即健。
 
-**On failure:** If report generation itself fails, output raw counts and lists to the console as fallback.
+**敗：** 報生自身敗→退而出諸計與列至控台。
 
-### Step 6: Repair (Optional)
+### 六：修（可選）
 
-If `fix_mode` is `auto` or `interactive`, fix the issues found.
+若 `fix_mode` 為 `auto` 或 `interactive`，修所發之題。
 
-**6a. Create missing project symlinks:**
+**6a. 造缺之專案符連：**
 ```bash
 for skill in $MISSING_PROJECT_SKILLS; do
   ln -s "../../skills/$skill" "$PROJECT_CLAUDE/skills/$skill"
 done
 ```
 
-**6b. Create missing global symlinks:**
+**6b. 造缺之全域符連：**
 ```bash
 for skill in $MISSING_GLOBAL_SKILLS; do
   ln -s "$ALMANAC_PATH/skills/$skill" "$GLOBAL_CLAUDE/skills/$skill"
 done
 ```
 
-**6c. Remove broken symlinks:**
+**6c. 除破符連：**
 ```bash
 # Project
 for broken in $BROKEN_PROJECT_SKILLS; do
@@ -278,7 +278,7 @@ for broken in $BROKEN_GLOBAL_SKILLS; do
 done
 ```
 
-**6d. Remove stale almanac entries:**
+**6d. 除舊 almanac 條：**
 ```bash
 # Only remove items that target the almanac path but aren't in the registry
 for stale in $STALE_GLOBAL_SKILLS; do
@@ -290,7 +290,7 @@ rm -f "$GLOBAL_CLAUDE/skills/_template"
 rm -f "$PROJECT_CLAUDE/skills/_template"
 ```
 
-**6e. Fix missing directory symlinks (agents/teams):**
+**6e. 修缺之目符連（將/隊）：**
 ```bash
 # Project agents
 if [ "$PROJECT_AGENT_STATUS" = "MISSING" ]; then
@@ -313,15 +313,15 @@ if [ "$GLOBAL_TEAM_STATUS" = "MISSING" ]; then
 fi
 ```
 
-**Important:** Never remove items classified as external. These belong to other projects (e.g., peon-ping) and must be preserved.
+**要：** 勿除分類為外部之項。彼屬他專案（如 peon-ping），必保。
 
-**Expected:** All missing symlinks created, all broken symlinks removed, all stale almanac entries cleaned. External content untouched.
+**得：** 諸缺符連造、諸破符連除、諸舊 almanac 條清。外部不動。
 
-**On failure:** If `ln -s` fails due to an existing file/directory at the target path (e.g., empty directory instead of symlink), remove the blocker first with `rmdir` (for empty dirs) or flag for manual review (for non-empty dirs).
+**敗：** `ln -s` 因目標徑已有檔/目（如空目代符連）而敗→先除阻：空目以 `rmdir`，非空目旗為手察。
 
-### Step 7: Verify
+### 七：驗
 
-Re-run the audit checks from Steps 3-4 to confirm repairs.
+重行三、四步以證修。
 
 ```bash
 echo "=== Post-repair verification ==="
@@ -335,40 +335,40 @@ echo "Project teams:  $PROJECT_TEAM_STATUS ($PROJECT_TEAM_COUNT .md files)"
 echo "Global teams:   $GLOBAL_TEAM_STATUS ($GLOBAL_TEAM_COUNT .md files)"
 ```
 
-**Expected:** Zero missing, zero broken. Counts match registered totals (for almanac content). External content listed separately.
+**得：** 零缺、零破。計合冊總（於 almanac 內容）。外部內容別列。
 
-**On failure:** If issues remain after repair, report the specific failures. Common causes: permission errors on `~/.claude/`, NTFS path length limits on `/mnt/` paths, or a non-empty directory blocking symlink creation.
+**敗：** 修後仍題→報具體敗。常因：`~/.claude/` 權限、`/mnt/` 徑 NTFS 長限、非空目阻符連造。
 
-## Validation
+## 驗
 
-- [ ] Almanac path correctly identified and contains all three registries
-- [ ] Registry counts match `total_*` header values (or discrepancy noted)
-- [ ] Project-level skills, agents, and teams audited
-- [ ] Global-level skills, agents, and teams audited
-- [ ] External content (non-almanac) identified and excluded from issue counts
-- [ ] `_template` entries flagged as extraneous (never belongs in discovery paths)
-- [ ] Audit report generated with clear counts and actionable lists
-- [ ] If `fix_mode` is `auto`: all safe repairs applied, external content untouched
-- [ ] Post-repair verification confirms zero missing, zero broken
+- [ ] almanac 徑正識且含三冊
+- [ ] 冊計合 `total_*` 頭值（或差已記）
+- [ ] 專案層技、將、隊已審
+- [ ] 全域層技、將、隊已審
+- [ ] 外部內容識別且排於題計外
+- [ ] `_template` 旗為多餘（不當於發現徑）
+- [ ] 審報生附清計與可行列
+- [ ] 若 `fix_mode` 為 `auto`：諸安修已施，外部不動
+- [ ] 修後驗證零缺、零破
 
-## Common Pitfalls
+## 忌
 
-1. **Confusing external content with missing almanac content**: `~/.claude/skills/` may contain skills from other projects (e.g., peon-ping). Always check whether a symlink target is under the almanac path before classifying it as stale or extraneous.
+1. **混外部與缺之 almanac 內容**：`~/.claude/skills/` 或含他專案技（如 peon-ping）。分類為舊或多餘前，先察符連目標是否於 almanac 徑下。
 
-2. **Removing external content**: Never delete items that don't target the almanac. They belong to other projects and are intentional.
+2. **除外部**：勿刪非指 almanac 之項。彼屬他專案，有意為之。
 
-3. **Symlinking `_template` directories**: Templates are scaffolding, not consumable content. The `_template` directory should never appear in `.claude/skills/` or `.claude/agents/`. Bulk sync scripts must explicitly skip it.
+3. **符連 `_template`**：模板乃支架，非用之內容。`_template` 目不當於 `.claude/skills/` 或 `.claude/agents/`。批量同步腳本必明跳之。
 
-4. **Stale `.claude/teams` symlink**: A `.claude/teams` symlink pointing to team definitions is a misconfiguration. Claude Code's `TeamCreate` uses `~/.claude/teams/` for runtime state (config.json, inboxes). If this path is a symlink to the almanac's `teams/` directory, runtime artifacts will be written into the git-tracked repository. Remove any `.claude/teams` symlink found at project or global level.
+4. **舊 `.claude/teams` 符連**：指隊定義之 `.claude/teams` 符連乃錯設。Claude Code 之 `TeamCreate` 用 `~/.claude/teams/` 存運行態（config.json、收件箱）。若此徑為符連指 almanac `teams/`，運行物會寫入 git 追跡庫。除任 `.claude/teams` 符連於專案或全域層。
 
-5. **Relative vs absolute paths**: Project-level skill symlinks use relative paths (`../../skills/<name>`). Global symlinks use absolute paths (`/path/to/almanac/skills/<name>`). Mixing these patterns causes breakage on moves.
+5. **相對對絕對徑**：專案層技符連用相對徑（`../../skills/<name>`）。全域符連用絕對徑（`/path/to/almanac/skills/<name>`）。混則移時破。
 
-6. **Registry header vs actual count**: The `total_skills` field in the registry header may be stale if someone added entries without updating the count. Trust the actual `- id:` entries, not the header.
+6. **冊頭對實計**：冊頭 `total_skills` 或陳（有人增條而不更頭）。信實 `- id:` 條，非頭。
 
-## Related Skills
+## 參
 
-- [repair-broken-references](../repair-broken-references/SKILL.md) -- general broken link and reference repair
-- [tidy-project-structure](../tidy-project-structure/SKILL.md) -- project directory organization
-- [create-skill](../create-skill/SKILL.md) -- includes symlink creation for new skills (Step 13)
-- [create-agent](../create-agent/SKILL.md) -- includes discovery verification (Step 10)
-- [create-team](../create-team/SKILL.md) -- team creation with registry integration
+- [repair-broken-references](../repair-broken-references/SKILL.md) — 通用破鏈與引修
+- [tidy-project-structure](../tidy-project-structure/SKILL.md) — 專案目結構整
+- [create-skill](../create-skill/SKILL.md) — 含新技符連造（步 13）
+- [create-agent](../create-agent/SKILL.md) — 含發現驗（步 10）
+- [create-team](../create-team/SKILL.md) — 隊造與冊整

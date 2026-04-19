@@ -24,17 +24,17 @@ metadata:
 
 # clean-codebase
 
-## When to Use
+## When Use
 
-Use this skill when a codebase has accumulated hygiene debt:
+Use when codebase has accumulated hygiene debt:
 
-- Lint warnings have piled up during rapid development
-- Unused imports and variables clutter files
-- Dead code paths exist but were never removed
-- Formatting is inconsistent across files
+- Lint warnings piled up during rapid development
+- Unused imports, variables clutter files
+- Dead code paths exist but never removed
+- Formatting inconsistent across files
 - Static analysis tools report fixable issues
 
-**Do NOT use** for architectural refactoring, bug fixes, or business logic changes. This skill focuses purely on hygiene and automated cleanup.
+**Do NOT use** for architectural refactoring, bug fixes, or business logic changes. Skill focuses purely on hygiene, automated cleanup.
 
 ## Inputs
 
@@ -46,11 +46,11 @@ Use this skill when a codebase has accumulated hygiene debt:
 | `run_tests` | boolean | No | Run test suite after cleanup (default: true) |
 | `backup` | boolean | No | Create backup before deletion (default: true) |
 
-## Procedure
+## Steps
 
 ### Step 1: Pre-Cleanup Assessment
 
-Measure the current state to quantify improvements later.
+Measure current state to quantify improvements later.
 
 ```bash
 # Count lint warnings by severity
@@ -65,9 +65,9 @@ cloc . --json > cloc_before.json
 # R: lintr unused function checks
 ```
 
-**Expected:** Baseline metrics saved to `lint_before.json` and `cloc_before.json`
+**Got:** Baseline metrics saved to `lint_before.json` and `cloc_before.json`
 
-**On failure:** If lint tool not found, skip automated fixes and focus on manual review
+**If fail:** Lint tool not found? Skip automated fixes, focus on manual review
 
 ### Step 2: Fix Automated Lint Warnings
 
@@ -97,13 +97,13 @@ cargo fmt
 cargo clippy --fix --allow-dirty
 ```
 
-**Expected:** All safe lint warnings resolved; files formatted consistently
+**Got:** All safe lint warnings resolved; files formatted consistently
 
-**On failure:** If automated fixes introduce test failures, revert changes and escalate
+**If fail:** Automated fixes introduce test failures? Revert changes, escalate
 
 ### Step 3: Identify Dead Code Paths
 
-Use static analysis to find unreferenced functions, unused variables, and orphaned files.
+Use static analysis to find unreferenced functions, unused variables, orphaned files.
 
 **JavaScript/TypeScript**:
 ```bash
@@ -126,9 +126,9 @@ Rscript -e "lintr::lint_dir('.', linters = lintr::unused_function_linter())"
 2. Grep for function calls
 3. Report functions defined but never called
 
-**Expected:** `dead_code.txt` lists unused functions, variables, and files
+**Got:** `dead_code.txt` lists unused functions, variables, files
 
-**On failure:** If static analysis tool unavailable, manually review recent commit history for orphaned code
+**If fail:** Static analysis tool unavailable? Manually review recent commit history for orphaned code
 
 ### Step 4: Remove Unused Imports
 
@@ -150,9 +150,9 @@ autoflake --remove-all-unused-imports --in-place --recursive .
 grep -r "library(" . | cut -d: -f2 | sort | uniq
 ```
 
-**Expected:** All unused import statements removed
+**Got:** All unused import statements removed
 
-**On failure:** If removing imports breaks build, they were used indirectly — restore and document
+**If fail:** Removing imports breaks build? Used indirectly — restore, document
 
 ### Step 5: Remove Dead Code (Mode-Dependent)
 
@@ -169,11 +169,11 @@ grep -r "library(" . | cut -d: -f2 | sort | uniq
 For each candidate deletion:
 1. Verify zero references in codebase
 2. Check git history for recent activity (skip if modified in last 30 days)
-3. Remove code and add entry to `CLEANUP_LOG.md`
+3. Remove code, add entry to `CLEANUP_LOG.md`
 
-**Expected:** Dead code removed; `CLEANUP_LOG.md` documents all deletions
+**Got:** Dead code removed; `CLEANUP_LOG.md` documents all deletions
 
-**On failure:** If uncertain whether code is truly dead, move to `archive/` directory instead
+**If fail:** Uncertain whether code truly dead? Move to `archive/` directory instead
 
 ### Step 6: Normalize Formatting
 
@@ -190,13 +190,13 @@ find . -type f -name "*.js" -exec sed -i 's/\r$//' {} +
 find . -type f -name "*.js" -exec sed -i 's/[[:space:]]*$//' {} +
 ```
 
-**Expected:** All files follow consistent formatting conventions
+**Got:** All files follow consistent formatting conventions
 
-**On failure:** If sed breaks binary files, skip and document
+**If fail:** sed breaks binary files? Skip, document
 
 ### Step 7: Run Tests
 
-Validate that cleanup didn't break functionality.
+Validate cleanup didn't break functionality.
 
 ```bash
 # Language-specific test command
@@ -206,9 +206,9 @@ R CMD check           # R
 cargo test            # Rust
 ```
 
-**Expected:** All tests pass (or same failures as before cleanup)
+**Got:** All tests pass (or same failures as before cleanup)
 
-**On failure:** Revert changes incrementally to identify breaking change, then escalate
+**If fail:** Revert changes incrementally to identify breaking change, then escalate
 
 ### Step 8: Generate Cleanup Report
 
@@ -249,11 +249,11 @@ Document all changes for review.
 - [x] CLEANUP_LOG.md updated
 ```
 
-**Expected:** Report saved to `CLEANUP_REPORT.md` in project root
+**Got:** Report saved to `CLEANUP_REPORT.md` in project root
 
-**On failure:** (N/A — generate report regardless of outcome)
+**If fail:** (N/A — generate report regardless of outcome)
 
-## Validation Checklist
+## Checks
 
 After cleanup:
 
@@ -265,26 +265,26 @@ After cleanup:
 - [ ] Git diff reviewed for unexpected changes
 - [ ] CI pipeline passes
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Removing Code Still Used via Reflection**: Static analysis misses dynamic calls (e.g., `eval()`, metaprogramming). Always check git history.
 
-2. **Breaking Implicit Dependencies**: Removing imports that were used by dependencies. Run tests after every import removal.
+2. **Breaking Implicit Dependencies**: Removing imports used by dependencies. Run tests after every import removal.
 
 3. **Deleting Feature Flags for Active Features**: Even if unused in current branch, feature flags may be active in other environments. Check deployment configs.
 
 4. **Over-Aggressive Formatting**: Tools like `black` or `prettier` may reformat code in ways that trigger unnecessary diffs. Configure tools to match project style.
 
-5. **Ignoring Test Coverage**: Cannot safely clean codebases without tests. If coverage is low, escalate for test additions first.
+5. **Ignoring Test Coverage**: Cannot safely clean codebases without tests. Coverage low? Escalate for test additions first.
 
 6. **Not Backing Up**: Always create `backup_YYYYMMDD/` directory before deleting anything, even if using git.
 
-7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+7. **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
 
-## Related Skills
+## See Also
 
 - [tidy-project-structure](../tidy-project-structure/SKILL.md) — Organize directory layout, update READMEs
-- [repair-broken-references](../repair-broken-references/SKILL.md) — Fix dead links and imports
+- [repair-broken-references](../repair-broken-references/SKILL.md) — Fix dead links, imports
 - [escalate-issues](../escalate-issues/SKILL.md) — Route complex problems to specialists
 - [r-packages/run-r-cmd-check](../../r-packages/run-r-cmd-check/SKILL.md) — Run full R package checks
 - [devops/dependency-audit](../../devops/dependency-audit/SKILL.md) — Check for outdated dependencies

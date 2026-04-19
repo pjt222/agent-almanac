@@ -25,17 +25,17 @@ metadata:
 
 # Configure API Gateway
 
-Deploy and configure an API gateway for centralized API traffic management and policy enforcement.
+Deploy, configure API gateway for centralized API traffic management, policy enforcement.
 
-## When to Use
+## When Use
 
 - Multiple backend services need unified API endpoint with consistent policies
 - Require centralized authentication/authorization for API access
-- Need rate limiting and quota management across APIs
+- Need rate limiting, quota management across APIs
 - Want to transform requests/responses without modifying backend services
-- Implementing API versioning and deprecation strategies
-- Need detailed API analytics and monitoring
-- Require service discovery and load balancing for microservices
+- Implementing API versioning, deprecation strategies
+- Need detailed API analytics, monitoring
+- Require service discovery, load balancing for microservices
 
 ## Inputs
 
@@ -47,13 +47,13 @@ Deploy and configure an API gateway for centralized API traffic management and p
 - **Optional**: Custom middleware or plugin configurations
 - **Optional**: TLS certificates for HTTPS endpoints
 
-## Procedure
+## Steps
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
 ### Step 1: Install API Gateway
 
-Deploy the API gateway with database (Kong) or file-based config (Traefik).
+Deploy API gateway with database (Kong) or file-based config (Traefik).
 
 **For Kong with PostgreSQL:**
 ```yaml
@@ -91,7 +91,7 @@ spec:
   # ... (RBAC, ConfigMap, services - see EXAMPLES.md)
 ```
 
-See [EXAMPLES.md](references/EXAMPLES.md#step-1-install-api-gateway) for the complete deployment manifests
+See [EXAMPLES.md](references/EXAMPLES.md#step-1-install-api-gateway) for complete deployment manifests
 
 Deploy:
 ```bash
@@ -100,9 +100,9 @@ kubectl wait --for=condition=ready pod -l app=kong -n kong --timeout=300s
 kubectl get svc -n kong kong-proxy  # Get load balancer IP
 ```
 
-**Expected:** Gateway pods running with 2 replicas. Load balancer service has external IP assigned. Admin API accessible (Kong: port 8001, Traefik: dashboard port 8080). Health checks passing.
+**Got:** Gateway pods running with 2 replicas. Load balancer service has external IP assigned. Admin API accessible (Kong: port 8001, Traefik: dashboard port 8080). Health checks passing.
 
-**On failure:**
+**If fail:**
 - Check pod logs: `kubectl logs -n kong -l app=kong`
 - Verify database connection (Kong): `kubectl logs -n kong kong-migrations-<hash>`
 - Check service account permissions (Traefik): `kubectl get clusterrolebinding traefik -o yaml`
@@ -110,7 +110,7 @@ kubectl get svc -n kong kong-proxy  # Get load balancer IP
 
 ### Step 2: Configure Backend Services and Routes
 
-Define upstream services and create routes to expose APIs.
+Define upstream services, create routes to expose APIs.
 
 **For Kong (using decK for declarative config):**
 ```bash
@@ -146,9 +146,9 @@ curl -H "Host: api.example.com" https://GATEWAY_IP/api/users
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-2-configure-backend-services-and-routes) for complete routing configurations
 
-**Expected:** Routes correctly proxy traffic to backend services. Weighted routing distributes traffic according to configuration. Health checks monitor backend service health.
+**Got:** Routes correctly proxy traffic to backend services. Weighted routing distributes traffic according to configuration. Health checks monitor backend service health.
 
-**On failure:**
+**If fail:**
 - Verify backend services running: `kubectl get svc -n default`
 - Check DNS resolution: `kubectl run test --rm -it --image=busybox -- nslookup user-service.default.svc.cluster.local`
 - Review gateway logs: `kubectl logs -n kong -l app=kong --tail=50`
@@ -201,9 +201,9 @@ curl -u user1:password https://GATEWAY_IP/api/protected
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-3-implement-authentication-and-authorization) for complete authentication configurations
 
-**Expected:** Unauthenticated requests return 401. Valid credentials allow access. Rate limiting returns 429 after threshold. JWT tokens validate correctly. ACL enforces group permissions.
+**Got:** Unauthenticated requests return 401. Valid credentials allow access. Rate limiting returns 429 after threshold. JWT tokens validate correctly. ACL enforces group permissions.
 
-**On failure:**
+**If fail:**
 - Verify consumer creation: `curl http://localhost:8001/consumers`
 - Check plugin enabled: `curl http://localhost:8001/plugins | jq .`
 - Test with verbose: `curl -v` to see response headers
@@ -211,7 +211,7 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-3-implement-authentication-and-aut
 
 ### Step 4: Configure Request/Response Transformation
 
-Add middleware to transform requests and responses.
+Add middleware to transform requests, responses.
 
 **For Kong:**
 ```yaml
@@ -253,9 +253,9 @@ curl -v https://GATEWAY_IP/api/users | grep X-Gateway
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-4-configure-requestresponse-transformation) for complete transformation configurations
 
-**Expected:** Request headers added/removed as configured. Response headers include gateway metadata. Large requests rejected with 413. Circuit breaker trips on repeated failures. Retries occur for transient errors.
+**Got:** Request headers added/removed as configured. Response headers include gateway metadata. Large requests rejected with 413. Circuit breaker trips on repeated failures. Retries occur for transient errors.
 
-**On failure:**
+**If fail:**
 - Verify middleware order in chain
 - Check for header conflicts with backend services
 - Test transformations individually before chaining
@@ -263,7 +263,7 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-4-configure-requestresponse-transf
 
 ### Step 5: Enable Monitoring and Analytics
 
-Configure metrics, logging, and dashboards for API visibility.
+Configure metrics, logging, dashboards for API visibility.
 
 **Kong monitoring setup:**
 ```yaml
@@ -306,9 +306,9 @@ kubectl port-forward -n traefik svc/traefik-dashboard 8080:8080
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-5-enable-monitoring-and-analytics) for complete monitoring configurations
 
-**Expected:** Prometheus scraping gateway metrics successfully. Dashboards show request rates, latency percentiles, error rates. Logs forwarding to aggregation system. Metrics segmented by service, route, and consumer.
+**Got:** Prometheus scraping gateway metrics successfully. Dashboards show request rates, latency percentiles, error rates. Logs forwarding to aggregation system. Metrics segmented by service, route, consumer.
 
-**On failure:**
+**If fail:**
 - Verify ServiceMonitor: `kubectl get servicemonitor -A`
 - Check Prometheus targets in UI
 - Ensure metrics port accessible: `kubectl port-forward -n kong svc/kong-metrics 8100:8100`
@@ -316,7 +316,7 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-5-enable-monitoring-and-analytics)
 
 ### Step 6: Implement API Versioning and Deprecation
 
-Configure version management and graceful API deprecation.
+Configure version management, graceful API deprecation.
 
 **Kong versioning strategy:**
 ```yaml
@@ -360,16 +360,16 @@ curl -i https://api.example.com/api/users     # Routes to v2
 
 See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-deprecation) for complete versioning configurations
 
-**Expected:** Different versions route to appropriate backend services. Deprecation headers present on v1 responses. Rate limits stricter for deprecated versions. Default path routes to latest version. Metrics segmented by API version.
+**Got:** Different versions route to appropriate backend services. Deprecation headers present on v1 responses. Rate limits stricter for deprecated versions. Default path routes to latest version. Metrics segmented by API version.
 
-**On failure:**
+**If fail:**
 - Verify path precedence/priority configuration (higher priority = evaluated first)
 - Check for overlapping path patterns
 - Test each version route independently
 - Review routing logs for path matching
 - Ensure backend services for each version are running
 
-## Validation
+## Checks
 
 - [ ] API gateway pods running with multiple replicas for HA
 - [ ] Load balancer service has external IP assigned
@@ -384,13 +384,13 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-dep
 - [ ] Deprecation headers present on older API versions
 - [ ] Health checks monitoring backend service availability
 
-## Common Pitfalls
+## Pitfalls
 
 - **Database Dependency (Kong)**: Kong with database requires PostgreSQL/Cassandra. DB-less mode available but limits some features (runtime config changes). Use DB mode for production with multiple gateway instances.
 
 - **Path Matching Order**: Routes/IngressRoutes evaluated in specific order. More specific paths should have higher priority. Overlapping paths cause unpredictable routing. Test with `curl -v` to verify actual route hit.
 
-- **Authentication Bypass**: Ensure authentication plugins applied to all routes. Easy to add route without auth. Use default plugins at service level, then override per-route as needed.
+- **Authentication Bypass**: Ensure authentication plugins applied to all routes. Easy to add route without auth. Use default plugins at service level, override per-route as needed.
 
 - **Rate Limit Scope**: Rate limiting `policy: local` counts per gateway pod. For consistent limits across replicas, use centralized policy (Redis) or sticky sessions.
 
@@ -398,7 +398,7 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-dep
 
 - **SSL/TLS Termination**: Gateway typically terminates SSL. Ensure certificates valid and auto-renewal configured. Use cert-manager for Kubernetes certificate management.
 
-- **Upstream Health Checks**: Configure active health checks to detect backend failures quickly. Passive checks rely on real traffic and may be slower to detect issues.
+- **Upstream Health Checks**: Configure active health checks to detect backend failures quickly. Passive checks rely on real traffic, may be slower to detect issues.
 
 - **Plugin/Middleware Execution Order**: Order matters. Authentication before rate limiting (avoid wasted rate limit slots for invalid requests). Transformation before logging (log transformed values).
 
@@ -406,7 +406,7 @@ See [EXAMPLES.md](references/EXAMPLES.md#step-6-implement-api-versioning-and-dep
 
 - **Migration Strategy**: Don't enable all plugins at once. Roll out incrementally: routing → authentication → rate limiting → transformations → advanced features.
 
-## Related Skills
+## See Also
 
 - `configure-ingress-networking` - Ingress controller setup complements API gateway
 - `setup-service-mesh` - Service mesh provides complementary east-west traffic management

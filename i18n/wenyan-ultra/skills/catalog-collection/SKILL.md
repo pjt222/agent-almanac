@@ -25,31 +25,31 @@ metadata:
   tags: library-science, cataloging, classification, dewey, loc, marc, metadata, taxonomy
 ---
 
-# Catalog Collection
+# 錄藏
 
-Catalog and classify library or archival materials using standard classification systems and descriptive cataloging practices.
+以標庫系錄分庫或檔物，循標分系與述錄慣。
 
-## When to Use
+## 用
 
-- You are organizing a personal, institutional, or community library from scratch
-- You need to assign call numbers and subject headings to new acquisitions
-- You want to create consistent catalog records for findability
-- You are reclassifying a collection that has outgrown its original system
-- You need to establish authority control for authors, series, or subjects
+- 自零建私、機、社區庫
+- 為新收賦索號與題標
+- 造一致錄使易尋
+- 重分已出原系之藏
+- 立作者、叢、題之權控
 
-## Inputs
+## 入
 
-- **Required**: Materials to catalog (books, serials, media, archival items)
-- **Required**: Chosen classification system (Dewey Decimal or Library of Congress)
-- **Optional**: Existing catalog or inventory to integrate with
-- **Optional**: Subject heading authority (LCSH, Sears, or custom thesaurus)
-- **Optional**: MARC-compatible cataloging software (Koha, Evergreen, LibraryThing)
+- **必**：當錄物（書、刊、媒、檔）
+- **必**：所擇分系（DDC 或 LCC）
+- **可**：現錄或表以整
+- **可**：題標權（LCSH、Sears、客詞庫）
+- **可**：合 MARC 之錄件（Koha、Evergreen、LibraryThing）
 
-## Procedure
+## 行
 
-### Step 1: Choose the Classification System
+### 一：擇分系
 
-Select a system that matches the collection's size, scope, and audience.
+擇合藏規模、範、眾之系。
 
 ```
 Classification System Comparison:
@@ -78,13 +78,13 @@ Decision Rule:
 - Mixed or uncertain: Start with DDC; migrate to LCC if collection exceeds 10K
 ```
 
-**Expected:** A classification system chosen that fits the collection's scale and purpose.
+**得：** 分系合藏規模與旨已擇。
 
-**On failure:** If neither system fits (e.g., a highly specialized archive), consider a faceted classification or custom scheme, but document the mapping to DDC or LCC for interoperability.
+**敗：** 兩系皆不合（如極專檔）→慮面分或客制，而錄對 DDC 或 LCC 之映以通用。
 
-### Step 2: Perform Descriptive Cataloging
+### 二：行述錄
 
-Create a bibliographic description for each item following standard practice.
+每物循標慣造書錄。
 
 ```
 Descriptive Cataloging Elements (RDA-aligned):
@@ -121,13 +121,13 @@ Take information from the item itself (title page first,
 then cover, colophon, verso). Do not guess or embellish.
 ```
 
-**Expected:** A consistent bibliographic record for each item with enough detail for unique identification and discovery.
+**得：** 每物一致書錄附足詳以唯識與發現。
 
-**On failure:** If publication information is missing (common in older or self-published works), use square brackets to indicate supplied information: `[ca. 1920]`, `[s.l.]` (no place), `[s.n.]` (no publisher).
+**敗：** 刊資缺（舊或自印常）→以方括示供值：`[ca. 1920]`、`[s.l.]`（無地）、`[s.n.]`（無社）。
 
-### Step 3: Assign Subject Headings
+### 三：賦題標
 
-Apply controlled vocabulary terms so users can find materials by topic.
+施控詞以令用者依題尋物。
 
 ```
 Subject Heading Sources:
@@ -160,13 +160,13 @@ Assignment Rules:
 5. Be consistent: if you use "Automobiles" don't also use "Cars" as a heading
 ```
 
-**Expected:** Each item has 1-3 subject headings from a controlled vocabulary, applied consistently across the collection.
+**得：** 每物有 1-3 自控詞之題標，跨藏一致施。
 
-**On failure:** If no suitable heading exists in your authority, create a local heading and document it in a local authority file. Review periodically for alignment with the main authority.
+**敗：** 權中無宜標→造本地標且錄於本權檔。定期察與主權合。
 
-### Step 4: Assign Call Numbers
+### 四：賦索號
 
-Build the shelf address using the chosen classification system.
+以所擇分系建架址。
 
 ```
 Dewey Decimal Call Number Construction:
@@ -199,13 +199,13 @@ segment by segment. Numbers sort numerically,
 letters sort alphabetically, Cutters sort as decimals.
 ```
 
-**Expected:** Every cataloged item has a unique call number that determines its shelf position.
+**得：** 每錄物有唯索號定其架位。
 
-**On failure:** If two items generate the same call number, add a work mark (first letter of title, excluding articles) or a copy number to disambiguate.
+**敗：** 兩物生同索號→加作標（首題字，除冠）或副號以區。
 
-### Step 5: Create or Update Catalog Records
+### 五：造或更錄
 
-Enter the cataloged information into your catalog system.
+錄錄資入錄系。
 
 ```
 Minimum Viable Catalog Record:
@@ -238,13 +238,13 @@ shared database before creating original records. Someone has
 likely already cataloged the same edition.
 ```
 
-**Expected:** Each item has a catalog record in the system with all required fields populated. Records are searchable by author, title, subject, and call number.
+**得：** 每物系中一錄附諸必欄。錄可依作、題、題標、索號搜。
 
-**On failure:** If cataloging software is unavailable, a well-structured spreadsheet (with consistent column headings matching the fields above) serves as a functional catalog. Migrate to proper software when available.
+**敗：** 無錄件→結構好之試算表（列名合上欄）為行錄。得件時遷。
 
-### Step 6: Organize the Physical Shelf
+### 六：組實架
 
-Arrange materials according to their call numbers.
+依索號排物。
 
 ```
 Shelf Organization Principles:
@@ -267,30 +267,30 @@ Shelf Reading (periodic verification):
 - Note damaged items for repair or replacement
 ```
 
-**Expected:** Materials are physically arranged in call number order with clear spine labels and growth space.
+**得：** 物依索號實排附清脊標與長空。
 
-**On failure:** If space is insufficient, prioritize high-circulation items on accessible shelves and move low-use items to compact storage, noting the location change in catalog records.
+**敗：** 空不足→優置高流物於易達架，移低用物至緊存，錄於錄注位。
 
-## Validation
+## 驗
 
-- [ ] Classification system chosen and documented
-- [ ] Descriptive cataloging completed for all items with title, author, and publication data
-- [ ] Subject headings assigned from a controlled vocabulary (1-3 per item)
-- [ ] Call numbers assigned and unique for each item
-- [ ] Catalog records created in system or spreadsheet
-- [ ] Physical materials shelved in call number order with spine labels
-- [ ] Authority control established for consistent name and subject forms
+- [ ] 分系已擇且錄
+- [ ] 述錄完於諸物附題、作、刊資
+- [ ] 題標自控詞賦（每物 1-3）
+- [ ] 索號已賦且每物唯
+- [ ] 錄於系或試算表造
+- [ ] 實物依索號架附脊標
+- [ ] 權控已立以一致名與題式
 
-## Common Pitfalls
+## 忌
 
-- **Inconsistent headings**: Using both "World War, 1939-1945" and "WWII" defeats the purpose of controlled vocabulary. Pick one authority and stick to it
-- **Over-classification**: Assigning a 15-digit DDC number to a small personal library adds complexity without benefit. Match granularity to collection size
-- **Ignoring copy cataloging**: Creating original records when copy records exist wastes time. Always check shared databases first
-- **Spine label neglect**: A cataloged book without a spine label will be misshelved. Label immediately after cataloging
-- **No growth space**: Packing shelves to 100% capacity means every new acquisition triggers a chain of shifting. Leave room
+- **標不一**：同用「World War, 1939-1945」與「WWII」敗控詞之旨。擇一權而守
+- **過分**：小私庫賦 15 位 DDC 號加繁無益。分度合藏規模
+- **略錄錄**：共錄存而造原錄耗時。先察共庫
+- **脊標略**：已錄無脊標之書必誤架。錄後即標
+- **無長空**：架滿 100%→每新收觸一連移。留空
 
-## Related Skills
+## 參
 
-- `preserve-materials` — Conservation of cataloged materials to maintain their condition
-- `curate-collection` — Collection development decisions that determine what gets cataloged
-- `manage-memory` — Organizing persistent knowledge stores (digital parallel to physical cataloging)
+- `preserve-materials` — 保錄物之況
+- `curate-collection` — 定何錄之藏發展決
+- `manage-memory` — 組持知存（錄之數對）

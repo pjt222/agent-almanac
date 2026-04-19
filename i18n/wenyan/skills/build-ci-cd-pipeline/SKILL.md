@@ -24,40 +24,35 @@ metadata:
   tags: ci-cd, github-actions, pipeline, automation, testing
 ---
 
-# Build CI/CD Pipeline
+# 建 CI/CD 之脈
 
-Design and implement production-grade continuous integration and deployment pipelines with GitHub Actions.
+設立生產級持集與交付之脈，以 GitHub Actions 為之。
 
-## When to Use
+## 用時
 
-- Setting up automated testing and deployment for a new project
-- Migrating from Jenkins, Travis CI, or CircleCI to GitHub Actions
-- Implementing matrix builds across multiple platforms or language versions
-- Adding build caching to speed up CI/CD execution time
-- Creating multi-stage pipelines with environment-specific deployments
-- Implementing security scanning and code quality gates
+- 新項設自動測與交
+- 自 Jenkins、Travis CI、或 CircleCI 遷於 GitHub Actions
+- 跨諸平或語版行矩陣建
+- 加建之緩以速 CI/CD
+- 建多階之脈，各境有專交
+- 施安掃與碼質之門
 
-## Inputs
+## 入
 
-- **Required**: Repository with code to test/build/deploy
-- **Required**: GitHub Actions workflow directory (`.github/workflows/`)
-- **Optional**: Secrets for deployment targets (AWS, Azure, Docker registries)
-- **Optional**: Self-hosted runner configuration for specialized builds
-- **Optional**: Branch protection rules and required status checks
+- **必要**：含碼之庫，欲測、建、交
+- **必要**：GitHub Actions 工作流之目（`.github/workflows/`）
+- **可選**：交標之密（AWS、Azure、Docker 冊）
+- **可選**：為專建設自主 runner
+- **可選**：分支護律與必之狀查
 
-## Procedure
+## 法
 
-### Step 1: Create Base Workflow Structure
+### 第一步：建基工作流之構
 
-Create `.github/workflows/ci.yml` with trigger configuration and basic job structure.
+立 `.github/workflows/ci.yml`，含觸之設與基 job 之構。
 
 ```yaml
 name: CI Pipeline
-locale: wenyan
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 
 on:
   push:
@@ -95,13 +90,13 @@ jobs:
         run: npm run format:check
 ```
 
-**Expected:** Workflow file created with proper YAML syntax, triggers configured, and basic lint job defined.
+**得：** 工作流檔建，YAML 語法正，觸已設，基 lint job 已定。
 
-**On failure:** Validate YAML syntax with `yamllint .github/workflows/ci.yml`. Check indentation (use spaces, not tabs). Verify action versions are current by checking GitHub Marketplace.
+**敗則：** 驗 YAML 語法以 `yamllint .github/workflows/ci.yml`。察縮進（用空格，勿制表）。驗 action 之版至新，察於 GitHub Marketplace。
 
-### Step 2: Implement Matrix Build Strategy
+### 第二步：施矩陣建之略
 
-Add matrix builds to test across multiple platforms, language versions, or configurations.
+加矩陣建以測跨諸平、諸語版、諸設。
 
 ```yaml
   test:
@@ -141,13 +136,13 @@ Add matrix builds to test across multiple platforms, language versions, or confi
           fail_ci_if_error: true
 ```
 
-**Expected:** Matrix generates 8 parallel jobs (3 OS × 3 Node versions - 1 exclusion). All tests pass across platforms. Coverage report uploads from single canonical job.
+**得：** 矩陣生八並行 job（三 OS × 三 Node 版 − 一排除）。諸平之測皆過。覆蓋報自一規範 job 上傳。
 
-**On failure:** If matrix syntax errors occur, verify proper indentation and array notation. For flaky tests, add retry logic with `uses: nick-invision/retry@v2`. For platform-specific failures, add OS conditionals or expand exclusions.
+**敗則：** 若矩陣語法誤，驗縮進與陣列之記。測脆者，加重試邏以 `uses: nick-invision/retry@v2`。平特之敗，加 OS 條件或擴排除。
 
-### Step 3: Configure Dependency Caching and Artifact Management
+### 第三步：設依緩與物之管
 
-Optimize build speed with intelligent caching and preserve build artifacts.
+以智緩速建，保建之物。
 
 ```yaml
   build:
@@ -194,13 +189,13 @@ Optimize build speed with intelligent caching and preserve build artifacts.
           if-no-files-found: error
 ```
 
-**Expected:** First run downloads dependencies (slow), subsequent runs restore from cache (fast). Build artifacts upload successfully with unique SHA-based naming.
+**得：** 首行下依（緩），續行自緩復（速）。建之物成功上傳，以 SHA 為名。
 
-**On failure:** If cache misses frequently, verify cache key includes all relevant file hashes. For upload failures, check path exists and glob patterns match actual build output. Verify `retention-days` meets organizational policies.
+**敗則：** 若緩常失，驗緩鍵含諸相關檔之哈希。上傳敗者，察路存否與通配合實建出否。驗 `retention-days` 合組織之政。
 
-### Step 4: Implement Security Scanning and Quality Gates
+### 第四步：施安掃與質之門
 
-Add security vulnerability scanning and code quality enforcement.
+加安漏之掃與碼質之強。
 
 ```yaml
   security:
@@ -239,13 +234,13 @@ Add security vulnerability scanning and code quality enforcement.
           head: HEAD
 ```
 
-**Expected:** Security scans complete, results upload to GitHub Security tab. Critical vulnerabilities block merge if branch protection configured. No secrets detected in commits.
+**得：** 安掃畢，果傳 GitHub Security 籤。若分支護已設，重漏阻並。提交無漏密。
 
-**On failure:** For false positives, create `.trivyignore` file with CVE IDs and justifications. For audit failures, review `npm audit fix` suggestions. For secret detection false positives, add patterns to `.trufflehog.yml` exclude list.
+**敗則：** 誤報者，建 `.trivyignore` 檔，含 CVE ID 與理由。audit 敗者，察 `npm audit fix` 之議。密察誤報者，加模於 `.trufflehog.yml` 之排除。
 
-### Step 5: Configure Environment-Specific Deployments
+### 第五步：設境特之交
 
-Set up deployment stages with environment protection rules and approval gates.
+立交階，含境護律與允之門。
 
 ```yaml
   deploy-staging:
@@ -314,13 +309,13 @@ Set up deployment stages with environment protection rules and approval gates.
           generate_release_notes: true
 ```
 
-**Expected:** Staging deploys automatically on develop branch. Production requires manual approval (configured in GitHub Environment settings). CloudFront invalidation clears CDN cache. Release created for tagged commits.
+**得：** 測境於 develop 分支自動交。生產須手允（於 GitHub Environment 設）。CloudFront 之無效清 CDN 緩。標記之提交生 Release。
 
-**On failure:** For AWS credential errors, verify OIDC trust relationship allows `role-to-assume`. For S3 sync failures, check bucket policies and IAM permissions. For environment approval issues, verify protection rules in Settings > Environments.
+**敗則：** AWS 憑敗者，驗 OIDC 信任令 `role-to-assume` 可。S3 sync 敗者，察桶政與 IAM 權。境允題者，驗護律於 Settings > Environments。
 
-### Step 6: Add Notification and Monitoring Integration
+### 第六步：加通知與監視之整合
 
-Integrate Slack notifications, deployment tracking, and performance monitoring.
+整 Slack 通知、交蹤、性監。
 
 ```yaml
   notify:
@@ -395,45 +390,45 @@ Integrate Slack notifications, deployment tracking, and performance monitoring.
           EOF
 ```
 
-**Expected:** Slack receives formatted notification with deployment status, repository details, and clickable workflow link. Datadog event logged for successful production deployments with appropriate tags.
+**得：** Slack 收格式化通知，含交態、庫詳、可點工作流鏈。Datadog 記生產交之事件，帶適標。
 
-**On failure:** For Slack failures, verify webhook URL is valid and workspace allows incoming webhooks. Test with `curl -X POST $SLACK_WEBHOOK_URL -d '{"text":"test"}'`. For Datadog failures, verify API key has event submission permissions.
+**敗則：** Slack 敗者，驗 webhook URL 有效且工作區容 webhook。以 `curl -X POST $SLACK_WEBHOOK_URL -d '{"text":"test"}'` 試之。Datadog 敗者，驗 API 鍵有事件提交之權。
 
-## Validation
+## 驗
 
-- [ ] Workflow syntax validates with `yamllint` or GitHub's workflow editor
-- [ ] All jobs have explicit dependencies (`needs:`) to control execution order
-- [ ] Matrix builds cover all target platforms and versions
-- [ ] Caching reduces build time by >50% on subsequent runs
-- [ ] Secrets are stored in GitHub Secrets, never hardcoded in workflow files
-- [ ] Security scans upload results to GitHub Security tab
-- [ ] Environment protection rules require approval for production deployments
-- [ ] Failed deployments don't leave system in inconsistent state
-- [ ] Notifications reach appropriate channels (Slack, email, monitoring tools)
-- [ ] Workflow completes in <10 minutes for typical changes
+- [ ] 工作流語法以 `yamllint` 或 GitHub 之編輯器驗過
+- [ ] 諸 job 有明依（`needs:`）以控執序
+- [ ] 矩陣涵諸標平與版
+- [ ] 緩減續建時半以上
+- [ ] 密存於 GitHub Secrets，工作流檔中無硬碼
+- [ ] 安掃果上傳於 GitHub Security 籤
+- [ ] 境護律要求生產交之允
+- [ ] 交敗不留系於不一致之態
+- [ ] 通知達適道（Slack、信、監工）
+- [ ] 典型改之工作流於十分內畢
 
-## Common Pitfalls
+## 陷
 
-- **Cache key too broad**: Using `${{ runner.os }}-build-` as cache key causes false hits when dependencies change. Include `hashFiles('**/package-lock.json')` in key.
+- **緩鍵太泛**：用 `${{ runner.os }}-build-` 為緩鍵致依變時誤中。宜含 `hashFiles('**/package-lock.json')` 於鍵
 
-- **Artifact name collisions**: Using static artifact names like `dist` causes overwrites in concurrent builds. Include `${{ github.sha }}` or `${{ matrix.os }}-${{ matrix.node }}` in names.
+- **物名相衝**：用靜物名如 `dist` 致並建之覆。宜含 `${{ github.sha }}` 或 `${{ matrix.os }}-${{ matrix.node }}` 於名
 
-- **Secrets in logs**: Avoid `echo $SECRET` or similar commands. GitHub masks registered secrets, but derived values may leak. Use `::add-mask::` for dynamic secrets.
+- **密於日誌**：勿 `echo $SECRET` 等命。GitHub 遮已註之密，而衍值或漏。動密宜用 `::add-mask::`
 
-- **Insufficient permissions**: Default `GITHUB_TOKEN` has limited permissions. Add explicit `permissions:` block for security events, packages, issues, etc.
+- **權不足**：默 `GITHUB_TOKEN` 權有限。為安事件、包、問題等，加明 `permissions:` 塊
 
-- **Missing if conditionals**: Jobs run on all triggers unless guarded with `if: github.ref == 'refs/heads/main'`. Prevent accidental production deploys from PRs.
+- **缺 if 條件**：諸 job 於諸觸皆行，除以 `if: github.ref == 'refs/heads/main'` 護之。防 PR 誤交生產
 
-- **No rollback strategy**: Deployment failures leave system in broken state. Implement blue-green or canary deployments with automatic rollback on health check failures.
+- **無回滾之略**：交敗留系於壞態。施藍綠或金絲雀之交，帶康查敗之自動回滾
 
-- **Hardcoded values**: Workflow contains environment-specific URLs, bucket names, or API endpoints. Use environment variables and GitHub Secrets.
+- **硬編之值**：工作流含境特 URL、桶名、或 API 端點。宜用環變與 GitHub Secrets
 
-- **No timeout limits**: Jobs hang indefinitely on network issues or infinite loops. Add `timeout-minutes: 15` to all jobs.
+- **無時限**：job 於網題或無限循環中永懸。諸 job 加 `timeout-minutes: 15`
 
-## Related Skills
+## 參
 
-- `setup-github-actions-ci` - Initial GitHub Actions configuration for R packages and basic projects
-- `commit-changes` - Proper Git workflow integration with CI/CD triggers
-- `configure-git-repository` - Repository settings and branch protection rules
-- `setup-container-registry` - Docker image builds in CI/CD pipelines
-- `implement-gitops-workflow` - ArgoCD/Flux integration with CI/CD
+- `setup-github-actions-ci` - R 包與基項之初 GitHub Actions 設
+- `commit-changes` - 與 CI/CD 觸整合之 Git 工作流
+- `configure-git-repository` - 庫設與分支護律
+- `setup-container-registry` - CI/CD 脈中 Docker 像之建
+- `implement-gitops-workflow` - ArgoCD/Flux 與 CI/CD 之整合

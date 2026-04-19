@@ -27,30 +27,30 @@ metadata:
 
 # Consult Natural History
 
-Reference Hildegard von Bingen's *Physica* for natural history knowledge — properties of plants, stones, animals, fish, birds, elements, and trees with their medicinal, symbolic, and practical applications.
+Reference Hildegard von Bingen's *Physica* for natural history knowledge — properties of plants, stones, animals, fish, birds, elements, trees w/ medicinal, symbolic, practical applications.
 
-## When to Use
+## Use When
 
-- You need to understand a specific plant, stone, or animal from Hildegard's perspective
-- You want to explore symbolic or medicinal properties of natural objects in *Physica*
-- You are researching medieval natural history and cosmology
-- You need to cross-reference properties across categories (e.g., a plant and a stone with similar temperament)
-- You want to integrate *Physica*'s knowledge into health, spiritual, or creative practice
-- You are studying the relationship between nature and theology in Hildegard's thought
+- Need to understand specific plant, stone, animal from Hildegard's perspective
+- Explore symbolic / medicinal properties of natural objects in *Physica*
+- Researching medieval natural history + cosmology
+- Cross-ref properties across categories (e.g., plant + stone w/ similar temperament)
+- Integrate *Physica* knowledge into health, spiritual, creative practice
+- Studying relationship between nature + theology in Hildegard's thought
 
-## Inputs
+## In
 
 - **Required**: Category to consult (plants, stones, animals, fish, birds, elements, trees, reptiles, metals)
-- **Required**: Specific item or property inquiry (e.g., "emerald", "fennel", "properties of fire element")
+- **Required**: Specific item / property inquiry (e.g., "emerald", "fennel", "properties of fire element")
 - **Optional**: Application context (medicinal, symbolic, liturgical, practical)
-- **Optional**: Related temperament or ailment (to guide property interpretation)
-- **Optional**: Cross-reference request (e.g., "plants and stones for cold temperament")
+- **Optional**: Related temperament / ailment (guide property interpretation)
+- **Optional**: Cross-ref req (e.g., "plants + stones for cold temperament")
 
-## Procedure
+## Do
 
-### Step 1: Identify the Category in Physica
+### Step 1: Identify Category in Physica
 
-Determine which of the nine books of *Physica* contains the requested knowledge.
+Determine which of the nine books of *Physica* contains req'd knowledge.
 
 ```
 Physica — Nine Books of Natural History:
@@ -100,13 +100,13 @@ Lookup Process:
 4. Note symbolic or theological associations if relevant
 ```
 
-**Expected:** Correct book/category identified for the inquiry (e.g., "emerald" → Book IV Stones; "fennel" → Book I Plants).
+**→** Correct book/category ID'd for inquiry (e.g., "emerald" → Book IV Stones; "fennel" → Book I Plants).
 
-**On failure:** If uncertain which category, search multiple. Example: "willow" could be Book I (plant) or Book III (tree) — Hildegard lists it in Book III as a tree with bark and wood properties.
+**If err:** Uncertain which category → search multi. Ex: "willow" could be Book I (plant) or Book III (tree) — Hildegard lists in Book III as tree w/ bark + wood properties.
 
-### Step 2: Extract Properties and Applications
+### Step 2: Extract Properties + Applications
 
-Retrieve the specific properties Hildegard attributes to the item.
+Retrieve specific properties Hildegard attributes to item.
 
 ```
 Property Categories in Physica:
@@ -167,13 +167,13 @@ OAK TREE (Book III, Chapter 5):
 - Medicinal: Oak bark decoction for diarrhea, wounds (external)
 ```
 
-**Expected:** Properties extracted with temperature, moisture, medicinal use, and symbolic associations clearly noted.
+**→** Properties extracted w/ temperature, moisture, medicinal use, symbolic associations clearly noted.
 
-**On failure:** If *Physica* entry is brief or unclear, supplement with known temperamental logic. Example: If Hildegard says only "it is warm," infer that it treats cold conditions and avoid in hot conditions.
+**If err:** *Physica* entry brief / unclear → supplement w/ known temperamental logic. Ex: Hildegard says only "it is warm" → infer treats cold conditions + avoid in hot conditions.
 
 ### Step 3: Cross-Reference Between Categories (Optional)
 
-Identify related items across categories that share properties or work synergistically.
+ID related items across categories sharing properties or synergy.
 
 ```
 Cross-Referencing Patterns:
@@ -218,13 +218,13 @@ Strength/Endurance:
 - METALS: Iron (Book IX) — fortitude, weapon-making
 ```
 
-**Expected:** Related items identified across 2-3 categories that share temperament, medicinal use, or symbolic meaning. Synergistic use suggested where appropriate.
+**→** Related items ID'd across 2-3 categories sharing temperament, medicinal use, symbolic meaning. Synergistic use suggested where appropriate.
 
-**On failure:** If cross-references are unclear, focus on single-category lookup. Cross-referencing is enrichment, not essential for basic consultation.
+**If err:** Cross-refs unclear → focus on single-category lookup. Cross-ref = enrichment, not essential for basic consultation.
 
 ### Step 4: Application Guidance
 
-Provide practical or symbolic guidance for using the knowledge.
+Provide practical / symbolic guidance for using knowledge.
 
 ```
 Application Types:
@@ -273,13 +273,13 @@ stones (Book IV). Compare to *Scivias* Book I for theological integration of
 creation and redemption."
 ```
 
-**Expected:** Clear, actionable guidance for using *Physica* knowledge in context (medicinal, spiritual, seasonal, scholarly). User knows what to do with the information.
+**→** Clear, actionable guidance for using *Physica* knowledge in context (medicinal, spiritual, seasonal, scholarly). User knows what to do w/ info.
 
-**On failure:** If application is unclear, provide the raw *Physica* entry text and let user determine application. Hildegard's entries are often self-explanatory.
+**If err:** Application unclear → provide raw *Physica* entry text + let user determine application. Hildegard's entries often self-explanatory.
 
-### Step 5: Contextualize within Hildegard's Holistic System
+### Step 5: Contextualize in Hildegard's Holistic System
 
-Integrate *Physica* knowledge with broader Hildegardian health and spiritual practice.
+Integrate *Physica* knowledge w/ broader Hildegardian health + spiritual practice.
 
 ```
 Integration with Other Hildegardian Practices:
@@ -324,35 +324,35 @@ Hildegard's medicine is NOT isolated remedies but integrated practice:
 Body (herbs, diet), Soul (prayer, music), Nature (seasons, viriditas)
 ```
 
-**Expected:** User understands *Physica* as one component of Hildegard's holistic system. Cross-references to temperament, viriditas, and liturgical context provided where relevant.
+**→** User understands *Physica* as one component of Hildegard's holistic system. Cross-refs to temperament, viriditas, liturgical context provided where relevant.
 
-**On failure:** If integration feels complex, focus on immediate practical use (Step 4) and defer holistic integration for advanced study.
+**If err:** Integration complex → focus on immediate practical use (Step 4) + defer holistic integration for advanced study.
 
-## Validation Checklist
+## Check
 
-- [ ] Correct *Physica* book/category identified (I–IX)
+- [ ] Correct *Physica* book/category ID'd (I–IX)
 - [ ] Properties extracted: temperature, moisture, medicinal use, symbolic meaning
-- [ ] Contraindications or cautions noted (if any)
-- [ ] Application guidance provided (medicinal, spiritual, seasonal, or scholarly)
-- [ ] Cross-references noted (if requested) across 2+ categories
-- [ ] Integration with broader Hildegardian system contextualized
-- [ ] User informed this is medieval natural history, not modern scientific taxonomy
+- [ ] Contraindications / cautions noted (if any)
+- [ ] Application guidance provided (medicinal, spiritual, seasonal, scholarly)
+- [ ] Cross-refs noted (if req'd) across 2+ categories
+- [ ] Integration w/ broader Hildegardian system contextualized
+- [ ] User informed this = medieval natural history, not modern scientific taxonomy
 
-## Common Pitfalls
+## Traps
 
-1. **Modern Scientific Overlay**: *Physica* is pre-scientific. Don't expect botanical accuracy by Linnaean standards
-2. **Literal Ingredient Substitution**: Medieval plants may differ from modern cultivars. Research carefully before using
-3. **Ignoring Temperament**: Hildegard's properties are temperamental (hot/cold, moist/dry), not chemical. Context matters
-4. **Isolated Remedy Focus**: *Physica* is not a standalone herbal. It integrates with *Causae et Curae*, viriditas, and spirituality
-5. **Animal Cruelty**: Some *Physica* remedies use animal parts. Adapt ethically or omit
-6. **Stone Ingestion**: Some remedies involve powdering stones in wine. Modern safety: Do NOT ingest stones/minerals
-7. **Symbolic Dismissal**: *Physica*'s symbolic meanings are integral to Hildegard's theology. Don't separate "practical" from "spiritual"
+1. **Modern Scientific Overlay**: *Physica* = pre-scientific. Don't expect botanical accuracy by Linnaean standards.
+2. **Literal Ingredient Substitution**: Medieval plants may differ from modern cultivars. Research careful before using.
+3. **Ignore Temperament**: Hildegard's properties = temperamental (hot/cold, moist/dry), not chemical. Context matters.
+4. **Isolated Remedy Focus**: *Physica* ≠ standalone herbal. Integrates w/ *Causae et Curae*, viriditas, spirituality.
+5. **Animal Cruelty**: Some *Physica* remedies use animal parts. Adapt ethically or omit.
+6. **Stone Ingestion**: Some remedies involve powdering stones in wine. Modern safety: Do NOT ingest stones/minerals.
+7. **Symbolic Dismissal**: *Physica*'s symbolic meanings integral to Hildegard's theology. Don't separate "practical" from "spiritual".
 
-## Related Skills
+## →
 
 - `formulate-herbal-remedy` — Uses *Physica* Book I (Plants) as primary source
-- `assess-holistic-health` — *Physica* properties align with temperament system in *Causae et Curae*
+- `assess-holistic-health` — *Physica* properties align w/ temperament system in *Causae et Curae*
 - `practice-viriditas` — *Physica* as catalog of viriditas expressions in creation
-- `compose-sacred-music` — Many chants reference *Physica* natural imagery
+- `compose-sacred-music` — Many chants ref *Physica* natural imagery
 - `heal` (esoteric domain) — *Physica* remedies as part of holistic healing modalities
 - `prepare-soil` (gardening domain) — Growing *Physica* medicinal plants

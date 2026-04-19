@@ -24,34 +24,34 @@ metadata:
   tags: versioning, dependencies, audit, security, upgrades
 ---
 
-# Audit Dependency Versions
+# 審依版
 
-Audit project dependencies for version staleness, known security vulnerabilities, and compatibility issues. This skill inventories all dependencies from lock files, checks each against the latest available version, classifies staleness levels, identifies security concerns, and produces a prioritized upgrade report with recommended actions.
+審依項之陳、險、相容。自鎖檔起錄依，較最新版，分陳級，識險，出序升報。
 
-## When to Use
+## 用
 
-- Before a release to ensure dependencies are current and secure
-- During periodic maintenance (monthly or quarterly dependency reviews)
-- After receiving a security advisory affecting a project dependency
-- When upgrading a project to a new language version (e.g., R 4.4 to 4.5)
-- Before submitting a package to CRAN, npm, or crates.io
-- When inheriting a project and assessing its dependency health
+- 發版前→察依現且安
+- 定期維護（月季）→察
+- 得險報→察涉之依
+- 升語版（R 4.4→4.5）→察
+- 交 CRAN、npm、crates.io 前→察
+- 承舊專案→評其依健
 
-## Inputs
+## 入
 
-- **Required**: Project root directory containing dependency/lock files
-- **Optional**: Ecosystem type if not auto-detectable (R, Node.js, Python, Rust)
-- **Optional**: Security-only mode flag (skip staleness, focus on CVEs)
-- **Optional**: Allowlist of dependencies to skip (known acceptable older versions)
-- **Optional**: Target date for compatibility (e.g., "must work with R 4.4.x")
+- **必**：專案根含依/鎖檔
+- **可**：生態類（R、Node.js、Python、Rust）未自識時
+- **可**：唯險模（略陳，專 CVE）
+- **可**：免察依清單（已知可容舊版）
+- **可**：相容標日（如「須容 R 4.4.x」）
 
-## Procedure
+## 行
 
-### Step 1: Inventory All Dependencies
+### 一：錄諸依
 
-Locate and parse dependency files to build a complete inventory.
+尋、解依檔以建全錄。
 
-**R packages:**
+**R 包：**
 ```bash
 # Direct dependencies from DESCRIPTION
 grep -A 100 "^Imports:" DESCRIPTION | grep -B 100 "^[A-Z]" | head -50
@@ -61,7 +61,7 @@ grep -A 100 "^Suggests:" DESCRIPTION | grep -B 100 "^[A-Z]" | head -50
 cat renv.lock | grep -A 3 '"Package"'
 ```
 
-**Node.js:**
+**Node.js：**
 ```bash
 # Direct dependencies
 cat package.json | grep -A 100 '"dependencies"' | grep -B 100 "}"
@@ -71,7 +71,7 @@ cat package.json | grep -A 100 '"devDependencies"' | grep -B 100 "}"
 cat package-lock.json | grep '"version"' | head -20
 ```
 
-**Python:**
+**Python：**
 ```bash
 # From requirements or pyproject
 cat requirements.txt
@@ -81,7 +81,7 @@ cat pyproject.toml | grep -A 50 "dependencies"
 cat requirements.lock 2>/dev/null || pip freeze
 ```
 
-**Rust:**
+**Rust：**
 ```bash
 # From Cargo.toml
 grep -A 50 "\[dependencies\]" Cargo.toml
@@ -89,7 +89,7 @@ grep -A 50 "\[dependencies\]" Cargo.toml
 cat Cargo.lock | grep -A 2 "name ="
 ```
 
-Build an inventory table:
+立錄表：
 
 ```markdown
 | Package | Pinned Version | Type | Ecosystem |
@@ -100,15 +100,15 @@ Build an inventory table:
 | pytest | 8.0.0 | dev | Python |
 ```
 
-**Expected:** Complete inventory of all direct and (optionally) transitive dependencies with pinned versions.
+**得：** 直依與（可選）傳依之全錄，附釘版。
 
-**On failure:** If lock files are missing, the project has reproducibility issues. Note this as a finding and inventory from the manifest file (DESCRIPTION, package.json) using declared version constraints instead of pinned versions.
+**敗：** 鎖檔缺→專案不可復。記為發現，自清單檔（DESCRIPTION、package.json）以宣版束代釘版錄之。
 
-### Step 2: Check Latest Available Versions
+### 二：察最新版
 
-For each dependency, determine the latest available version.
+每依定最新可得版。
 
-**R:**
+**R：**
 ```r
 # Check available versions
 available.packages()[c("dplyr", "testthat"), "Version"]
@@ -117,7 +117,7 @@ available.packages()[c("dplyr", "testthat"), "Version"]
 Rscript -e 'cat(available.packages()["dplyr", "Version"])'
 ```
 
-**Node.js:**
+**Node.js：**
 ```bash
 # Check outdated packages
 npm outdated --json
@@ -126,7 +126,7 @@ npm outdated --json
 npm view express version
 ```
 
-**Python:**
+**Python：**
 ```bash
 # Check outdated
 pip list --outdated --format=json
@@ -135,7 +135,7 @@ pip list --outdated --format=json
 pip index versions requests 2>/dev/null
 ```
 
-**Rust:**
+**Rust：**
 ```bash
 # Check outdated
 cargo outdated
@@ -144,7 +144,7 @@ cargo outdated
 cargo search serde --limit 1
 ```
 
-Update the inventory with latest versions:
+錄附最新版：
 
 ```markdown
 | Package | Pinned | Latest | Gap |
@@ -155,23 +155,23 @@ Update the inventory with latest versions:
 | shiny | 1.7.4 | 1.9.1 | minor |
 ```
 
-**Expected:** Latest version identified for each dependency with the gap magnitude (patch/minor/major).
+**得：** 每依定最新版與差（patch/minor/major）。
 
-**On failure:** If a package registry is unreachable, note the dependency as "unable to check" and proceed with the rest. Do not block the entire audit on one unreachable registry.
+**敗：** 包庫不可達→記此依「不可察」而續。勿因一庫不達阻全審。
 
-### Step 3: Classify Staleness
+### 三：分陳級
 
-Assign a staleness level to each dependency:
+每依賦陳級：
 
-| Level | Definition | Action |
+| 級 | 定義 | 行 |
 |---|---|---|
-| **Current** | At latest version or within latest patch | No action needed |
-| **Patch behind** | Same major.minor, older patch | Low priority upgrade, usually safe |
-| **Minor behind** | Same major, older minor | Medium priority, review changelog for new features |
-| **Major behind** | Older major version | High priority, likely breaking changes in upgrade |
-| **EOL / Archived** | Package no longer maintained | Critical: find replacement or fork |
+| **現** | 最新或最新 patch 內 | 無需 |
+| **patch 落** | 同 major.minor，patch 舊 | 低優先升，多安 |
+| **minor 落** | 同 major，minor 舊 | 中優先，閱更新志 |
+| **major 落** | major 舊 | 高優先，升多破 |
+| **EOL/封存** | 不再維護 | 危：尋代或叉 |
 
-Produce a staleness summary:
+出陳概：
 
 ```markdown
 ### Staleness Summary
@@ -185,27 +185,27 @@ Produce a staleness summary:
 **Overall health**: AMBER (major-behind and EOL packages present)
 ```
 
-Color coding:
-- **GREEN**: All packages current or patch-behind
-- **AMBER**: Any minor-behind or one major-behind
-- **RED**: Multiple major-behind or any EOL packages
+色分：
+- **GREEN**：諸皆現或 patch 落
+- **AMBER**：任 minor 落或一 major 落
+- **RED**：多 major 落或任 EOL
 
-**Expected:** Every dependency classified by staleness with an overall health rating.
+**得：** 每依分陳級，附總健評。
 
-**On failure:** If version comparison logic is ambiguous (non-SemVer versions, date-based versions), classify conservatively as "minor behind" and note the non-standard versioning.
+**敗：** 版較邏輯模糊（非 SemVer、日期版）→保守分為「minor 落」並記非標版制。
 
-### Step 4: Check for Security Vulnerabilities
+### 四：察安險
 
-Run ecosystem-specific security audit tools:
+依生態行險審工具：
 
-**R:**
+**R：**
 ```r
 # No built-in audit tool; check manually
 # Cross-reference with https://www.r-project.org/security.html
 # Check GitHub advisories for each package
 ```
 
-**Node.js:**
+**Node.js：**
 ```bash
 # Built-in audit
 npm audit --json
@@ -214,7 +214,7 @@ npm audit --json
 npm audit --audit-level=moderate
 ```
 
-**Python:**
+**Python：**
 ```bash
 # Using pip-audit
 pip-audit --format=json
@@ -223,13 +223,13 @@ pip-audit --format=json
 safety check --json
 ```
 
-**Rust:**
+**Rust：**
 ```bash
 # Using cargo-audit
 cargo audit --json
 ```
 
-Document findings:
+錄發現：
 
 ```markdown
 ### Security Findings
@@ -242,13 +242,13 @@ Document findings:
 **Security status**: RED (1 critical, 1 high)
 ```
 
-**Expected:** Security vulnerabilities identified with CVE, severity, affected version, and fix version.
+**得：** 險識附 CVE、嚴、涉版、修版。
 
-**On failure:** If no audit tool is available for the ecosystem, search GitHub Security Advisories manually for each dependency. Note that the audit is best-effort without tooling.
+**敗：** 此生態無審工具→手查 GitHub Security Advisories。記無工具則審盡力而為。
 
-### Step 5: Plan Upgrade Path
+### 五：謀升路
 
-Prioritize upgrades based on risk and impact:
+依險與影分升序：
 
 ```markdown
 ### Upgrade Plan
@@ -276,15 +276,15 @@ Prioritize upgrades based on risk and impact:
 | ggplot2 | 3.4.0 | 3.5.1 | New geom functions added |
 ```
 
-For each major upgrade, note known breaking changes by checking the dependency's changelog.
+每 major 升→察其更新志以知破改。
 
-**Expected:** Prioritized upgrade plan with security fixes first, then EOL replacements, major upgrades, and minor/patch batches.
+**得：** 序升謀：險先、EOL 次、major、minor/patch 末批。
 
-**On failure:** If a dependency has no clear upgrade path (abandoned with no fork), document the risk and recommend: (1) vendoring the current version, (2) finding an alternative package, or (3) accepting the risk with monitoring.
+**敗：** 依無清升路（棄且無叉）→記險並薦：（一）藏存當版、（二）尋代、（三）承險而監。
 
-### Step 6: Document Compatibility Risks
+### 六：錄相容險
 
-For each planned upgrade, assess compatibility:
+每計升→評相容：
 
 ```markdown
 ### Compatibility Assessment
@@ -303,39 +303,39 @@ For each planned upgrade, assess compatibility:
 - **Migration guide**: https://webpack.js.org/migrate/5/
 ```
 
-Write the complete audit report to `DEPENDENCY-AUDIT.md` or `DEPENDENCY-AUDIT-2026-02-17.md`.
+書全審報於 `DEPENDENCY-AUDIT.md` 或 `DEPENDENCY-AUDIT-2026-02-17.md`。
 
-**Expected:** Compatibility risks documented for each significant upgrade. Complete audit report written.
+**得：** 每顯升錄相容險。全審報已書。
 
-**On failure:** If compatibility cannot be assessed without testing, recommend a branch-based upgrade approach: create a branch, apply the upgrade, run tests, and evaluate results before merging.
+**敗：** 相容非試不可評→薦枝法：造枝、施升、行試、評果而後合。
 
-## Validation
+## 驗
 
-- [ ] All direct dependencies inventoried from lock/manifest files
-- [ ] Latest available version checked for each dependency
-- [ ] Staleness level assigned (current / patch / minor / major / EOL)
-- [ ] Overall health rating calculated (GREEN / AMBER / RED)
-- [ ] Security audit run with ecosystem-appropriate tooling
-- [ ] All CVEs documented with severity, affected version, and fix version
-- [ ] Upgrade plan prioritized: security > EOL > major > minor/patch
-- [ ] Compatibility risks assessed for each major upgrade
-- [ ] Audit report written to DEPENDENCY-AUDIT.md
-- [ ] No dependencies left as "unable to check" without documented reason
+- [ ] 諸直依自鎖/清單檔錄
+- [ ] 每依察最新版
+- [ ] 陳級已賦（現/patch/minor/major/EOL）
+- [ ] 總健評算（GREEN/AMBER/RED）
+- [ ] 安審以生態工具行
+- [ ] 諸 CVE 錄嚴、涉版、修版
+- [ ] 升謀已序：險>EOL>major>minor/patch
+- [ ] 每 major 升評相容險
+- [ ] 審報書於 DEPENDENCY-AUDIT.md
+- [ ] 無依遺為「不可察」而無故
 
-## Common Pitfalls
+## 忌
 
-- **Ignoring transitive dependencies**: A project may have 10 direct dependencies but 200 transitive ones. Security vulnerabilities often hide in transitive dependencies. Use `npm ls` or `renv::dependencies()` to see the full tree.
-- **Upgrading everything at once**: Batch-upgrading all dependencies in one commit makes it impossible to identify which upgrade caused a regression. Upgrade in logical groups (security first, then majors individually, then minors/patches as a batch).
-- **Confusing "outdated" with "insecure"**: A package one major version behind with no CVEs is lower risk than a current package with a critical vulnerability. Always prioritize security over freshness.
-- **Not reading changelogs**: Blindly upgrading a major version without reading the changelog. Breaking changes in the dependency become breaking changes in your project.
-- **Audit fatigue**: Running audits but not acting on findings. Set a policy: security findings must be addressed within 1 sprint, EOL within 1 quarter.
-- **Missing lock files**: Projects without lock files have non-reproducible builds. If the audit reveals missing lock files, that is itself a critical finding to address before versioned upgrades.
-- **Wrong R binary on hybrid systems**: On WSL or Docker, `Rscript` may resolve to a cross-platform wrapper instead of native R. Check with `which Rscript && Rscript --version`. Prefer the native R binary (e.g., `/usr/local/bin/Rscript` on Linux/WSL) for reliability. See [Setting Up Your Environment](../../guides/setting-up-your-environment.md) for R path configuration.
+- **略傳依**：專案 10 直依→傳依或 200。險多藏於傳依。用 `npm ls` 或 `renv::dependencies()` 察全樹。
+- **一次全升**：諸依一提交全升→無從識何升致退。依類升（險先、major 逐一、minor/patch 末批）。
+- **混「陳」與「險」**：major 落一無 CVE→險低於現版具危 CVE。先安後新。
+- **不閱更新志**：盲升 major 而不閱更新志→依之破改成專案之破改。
+- **審疲**：行審而不行動→立策：險 1 sprint 內解、EOL 1 季內解。
+- **鎖檔缺**：無鎖檔→建不可復。審現鎖檔缺自為危發現，當先解而後版升。
+- **混系 R 執誤**：WSL/Docker 上 `Rscript` 或解為跨平臺包裝非原 R。察 `which Rscript && Rscript --version`。宜用原 R（如 Linux/WSL `/usr/local/bin/Rscript`）以穩。詳 [Setting Up Your Environment](../../guides/setting-up-your-environment.md)。
 
-## Related Skills
+## 參
 
-- `apply-semantic-versioning` -- Version bumps may be triggered by dependency upgrades
-- `manage-renv-dependencies` -- R-specific dependency management with renv
-- `security-audit-codebase` -- Broader security audit that includes dependency vulnerabilities
-- `manage-changelog` -- Document dependency upgrades in the changelog
-- `plan-release-cycle` -- Schedule dependency upgrades within the release timeline
+- `apply-semantic-versioning` — 依升或觸發版升
+- `manage-renv-dependencies` — R 專依管以 renv
+- `security-audit-codebase` — 廣安審含依險
+- `manage-changelog` — 更新志錄依升
+- `plan-release-cycle` — 依升排於發版時程內

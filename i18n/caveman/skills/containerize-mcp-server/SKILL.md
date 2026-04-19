@@ -25,23 +25,23 @@ metadata:
 
 # Containerize MCP Server
 
-Package an R MCP server into a Docker container for portable deployment.
+Package R MCP server into Docker container for portable deployment.
 
-## When to Use
+## When Use
 
-- Deploying an R MCP server without requiring a local R installation
-- Creating a reproducible MCP server environment
-- Running MCP servers alongside other containerized services
-- Distributing an MCP server to other developers
+- Deploy R MCP server without requiring local R installation
+- Create reproducible MCP server environment
+- Run MCP servers alongside other containerized services
+- Distribute MCP server to other developers
 
 ## Inputs
 
 - **Required**: R MCP server implementation (mcptools-based or custom)
-- **Required**: Docker installed and running
-- **Optional**: Additional R packages the server needs
+- **Required**: Docker installed, running
+- **Optional**: Additional R packages server needs
 - **Optional**: Transport mode (stdio or HTTP)
 
-## Procedure
+## Steps
 
 ### Step 1: Create Dockerfile for MCP Server
 
@@ -82,9 +82,9 @@ ENV RENV_PATHS_CACHE=/workspace/renv/cache
 CMD ["R", "-e", "mcptools::mcp_server()"]
 ```
 
-**Expected:** A `Dockerfile` exists in the project root with `rocker/r-ver` base image, system dependencies, mcptools installation, and the MCP server as the default command.
+**Got:** `Dockerfile` exists in project root with `rocker/r-ver` base image, system dependencies, mcptools installation, MCP server as default command.
 
-**On failure:** Verify the base image tag matches your R version. If `remotes::install_github` fails, check that `git` and `libgit2-dev` are in the system dependencies layer.
+**If fail:** Verify base image tag matches your R version. `remotes::install_github` fails? Check `git` and `libgit2-dev` are in system dependencies layer.
 
 ### Step 2: Create docker-compose.yml
 
@@ -119,11 +119,11 @@ volumes:
     driver: local
 ```
 
-Using `network_mode: "host"` ensures the MCP server ports are accessible on localhost.
+Using `network_mode: "host"` ensures MCP server ports accessible on localhost.
 
-**Expected:** A `docker-compose.yml` file in the project root with the MCP server service, volume mounts for project files and renv cache, and `stdin_open`/`tty` enabled for stdio transport.
+**Got:** `docker-compose.yml` in project root with MCP server service, volume mounts for project files and renv cache, `stdin_open`/`tty` enabled for stdio transport.
 
-**On failure:** If volume paths are invalid, adjust `/path/to/projects` to the actual project directory. On Windows/WSL, use `/mnt/c/...` or `/mnt/d/...` paths.
+**If fail:** Volume paths invalid? Adjust `/path/to/projects` to actual project directory. On Windows/WSL, use `/mnt/c/...` or `/mnt/d/...` paths.
 
 ### Step 3: Build and Start
 
@@ -132,9 +132,9 @@ docker compose build
 docker compose up -d
 ```
 
-**Expected:** Container starts with MCP server running.
+**Got:** Container starts with MCP server running.
 
-**On failure:** Check logs with `docker compose logs mcp-server`. Common issues:
+**If fail:** Check logs with `docker compose logs mcp-server`. Common issues:
 - Missing R packages: Add to Dockerfile RUN install step
 - Port already in use: Change exposed port or stop conflicting service
 
@@ -146,7 +146,7 @@ For stdio transport (container must stay running with stdin):
 claude mcp add r-mcp-docker stdio "docker" "exec" "-i" "r-mcp-server" "R" "-e" "mcptools::mcp_server()"
 ```
 
-For HTTP transport (if the MCP server supports it):
+For HTTP transport (if MCP server supports it):
 
 ```json
 {
@@ -159,9 +159,9 @@ For HTTP transport (if the MCP server supports it):
 }
 ```
 
-**Expected:** Claude Code's MCP configuration includes the `r-mcp-docker` server entry, and `claude mcp list` shows the new server.
+**Got:** Claude Code MCP configuration includes `r-mcp-docker` server entry. `claude mcp list` shows new server.
 
-**On failure:** For stdio transport, ensure the container name matches (`r-mcp-server`) and that the container is running with `docker ps`. For HTTP transport, verify the port is exposed and reachable with `curl http://localhost:3000/mcp`.
+**If fail:** Stdio transport? Ensure container name matches (`r-mcp-server`) and container running with `docker ps`. HTTP transport? Verify port exposed, reachable with `curl http://localhost:3000/mcp`.
 
 ### Step 5: Verify Connection
 
@@ -176,47 +176,47 @@ docker exec -it r-mcp-server R -e "sessionInfo()"
 docker exec -it r-mcp-server R -e "library(mcptools)"
 ```
 
-**Expected:** `docker ps` shows the `r-mcp-server` container running, `sessionInfo()` returns the expected R version, and `library(mcptools)` loads without error.
+**Got:** `docker ps` shows `r-mcp-server` container running. `sessionInfo()` returns expected R version. `library(mcptools)` loads without error.
 
-**On failure:** If the container is not running, check `docker compose logs mcp-server` for startup errors. If mcptools fails to load, rebuild the image to ensure the package installed correctly.
+**If fail:** Container not running? Check `docker compose logs mcp-server` for startup errors. mcptools fails to load? Rebuild image to ensure package installed correctly.
 
 ### Step 6: Add Custom MCP Tools
 
-To add project-specific MCP tools, mount your R scripts:
+To add project-specific MCP tools, mount R scripts:
 
 ```yaml
 volumes:
   - ./mcp-tools:/mcp-tools
 ```
 
-And load them in the CMD:
+Load them in CMD:
 
 ```dockerfile
 CMD ["R", "-e", "source('/mcp-tools/custom_tools.R'); mcptools::mcp_server()"]
 ```
 
-**Expected:** Custom R scripts are accessible inside the container at `/mcp-tools/`, and the MCP server loads them on startup alongside the default tools.
+**Got:** Custom R scripts accessible inside container at `/mcp-tools/`. MCP server loads them on startup alongside default tools.
 
-**On failure:** Verify the volume mount path is correct with `docker exec -it r-mcp-server ls /mcp-tools/`. If scripts fail to source, check for missing package dependencies in the custom tools.
+**If fail:** Verify volume mount path correct with `docker exec -it r-mcp-server ls /mcp-tools/`. Scripts fail to source? Check missing package dependencies in custom tools.
 
-## Validation
+## Checks
 
 - [ ] Container builds without errors
-- [ ] MCP server starts inside the container
-- [ ] Claude Code can connect to the containerized server
+- [ ] MCP server starts inside container
+- [ ] Claude Code can connect to containerized server
 - [ ] MCP tools respond correctly to requests
 - [ ] Container restarts cleanly
 - [ ] Volume mounts allow access to project files
 
-## Common Pitfalls
+## Pitfalls
 
 - **stdin/tty requirements**: MCP stdio transport requires `stdin_open: true` and `tty: true`
 - **Network isolation**: Default Docker networking may prevent localhost access. Use `network_mode: "host"` or expose specific ports.
-- **Package versions**: Pin mcptools to a specific commit for reproducibility
+- **Package versions**: Pin mcptools to specific commit for reproducibility
 - **Large image size**: mcptools + dependencies can be large. Consider multi-stage builds for production.
-- **Windows Docker paths**: When running Docker Desktop on Windows with WSL, path mapping differs
+- **Windows Docker paths**: Running Docker Desktop on Windows with WSL? Path mapping differs
 
-## Related Skills
+## See Also
 
 - `create-r-dockerfile` - base Dockerfile patterns for R
 - `setup-docker-compose` - compose configuration details

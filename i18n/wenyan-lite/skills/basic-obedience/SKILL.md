@@ -27,29 +27,29 @@ metadata:
 
 # Basic Obedience
 
-Teach foundation commands (sit, stay, come, heel, down) using positive reinforcement and marker training.
+以正向增強與記號訓練教基礎指令（坐、留、來、隨行、伏）。
 
-## When to Use
+## 適用時機
 
-- A new puppy (8+ weeks) is ready for foundation training
-- An adult dog lacks reliable basic commands
-- A rescue or rehomed dog needs to learn the household's command vocabulary
-- Before advancing to more complex behaviors or off-leash work
-- When existing commands have degraded and need re-establishing
+- 新犬（八週以上）已可行基礎訓練
+- 成犬無可靠之基礎指令
+- 救援或再家犬須學家中之指令語
+- 行更繁之行為或離繩工作之前
+- 既有指令已退，須再立
 
-## Inputs
+## 輸入
 
-- **Required**: A dog (any breed, any age 8+ weeks)
-- **Required**: High-value treats (small, soft, quickly consumed)
-- **Optional**: Clicker or verbal marker word (e.g., "yes")
-- **Optional**: 6-foot leash and flat collar or harness
-- **Optional**: Quiet training space with minimal distractions (initially)
+- **必要**：犬（任種，八週以上）
+- **必要**：高值零食（小、軟、易食）
+- **選擇性**：響片或口頭記號語（如「好」）
+- **選擇性**：六呎繩與平頸圈或胸背帶
+- **選擇性**：靜之訓練之地，擾少（起初）
 
-## Procedure
+## 步驟
 
-### Step 1: Establish the Marker
+### 步驟一：立記號
 
-The marker bridges the gap between the desired behavior and the reward.
+記號橋接所欲行為與獎勵之隙。
 
 ```
 Marker Training Protocol:
@@ -67,13 +67,13 @@ Late marking teaches the wrong behavior.
 Mark → then reach for the treat (not the reverse).
 ```
 
-**Expected:** The dog reliably orients toward the handler upon hearing the marker, expecting a reward.
+**預期：** 犬聞記號可靠轉向訓者而待獎勵。
 
-**On failure:** If the dog does not respond to the marker after 20 reps, the treat value is too low. Switch to higher-value rewards (cheese, chicken, liver). If the dog is too distracted to eat, the environment is too stimulating — move to a quieter space.
+**失敗時：** 犬二十次後仍不應記號，零食之值太低。換更高值之獎（起司、雞、肝）。若犬擾至不食，環境刺激過強——移至靜地。
 
-### Step 2: Teach the Five Foundation Commands
+### 步驟二：教五基礎指令
 
-Work on one command per session until reliable, then begin mixing.
+一會一指令至可靠，後乃混之。
 
 ```
 Command Protocols:
@@ -115,11 +115,11 @@ HEEL:
 5. If the dog pulls ahead, stop walking. Resume when the leash is loose.
 ```
 
-**Expected:** Each command is performed reliably in a low-distraction environment with treats as motivation.
+**預期：** 每一指令於擾少之境，以零食為動機而可靠行之。
 
-**On failure:** If a command is not progressing after 3 sessions, break it into smaller steps. The dog may need an intermediate behavior (e.g., for "down," reward the head-lowering motion before requiring full elbows-on-ground).
+**失敗時：** 一指令三會無進，析為更小之步。犬或需中間行為（如「伏」時，先獎低頭之動，未須全肘著地）。
 
-### Step 3: Structure Training Sessions
+### 步驟三：立訓練會之結構
 
 ```
 Session Guidelines:
@@ -144,13 +144,13 @@ The 80/20 Rule:
 - 20% challenge keeps the dog engaged without frustrating
 ```
 
-**Expected:** Short, successful sessions that leave the dog wanting more.
+**預期：** 短而成之會，犬離時仍欲更多。
 
-**On failure:** If the dog disengages (sniffing, looking away, lying down), the session is too long, too hard, or the rewards are insufficiently motivating. End the session and reassess.
+**失敗時：** 犬若離心（嗅、望他處、臥下），會過長、過難，或獎不足動。止會而重評。
 
-### Step 4: Distraction-Proof the Commands
+### 步驟四：以擾固指令
 
-Once reliable in a quiet environment, systematically add distractions.
+既於靜境可靠，系統漸加擾。
 
 ```
 Distraction Ladder (work through sequentially):
@@ -170,28 +170,28 @@ At each new level:
 - If the dog fails 3 reps in a row, you moved up too fast — go back one level
 ```
 
-**Expected:** Commands work reliably in progressively more distracting environments.
+**預期：** 指令於漸擾之境可靠行之。
 
-**On failure:** If a specific distraction (other dogs, squirrels) consistently breaks training, that distraction needs separate counter-conditioning work (see `behavioral-modification`).
+**失敗時：** 某擾（他犬、松鼠）持壞訓練，此擾須分離之反制條件工作（見 `behavioral-modification`）。
 
-## Validation
+## 驗證
 
-- [ ] Marker is charged and the dog responds reliably
-- [ ] All five commands are performed in a low-distraction environment
-- [ ] Training sessions are 5-10 minutes, ending on success
-- [ ] Success rate is at or above 80% for each command
-- [ ] Commands are being generalized through the distraction ladder
-- [ ] The handler's timing (marker within 1 second) is consistent
+- [ ] 記號已充，犬可靠應之
+- [ ] 五指令皆於擾少之境行之
+- [ ] 訓練會五至十分，以成為終
+- [ ] 每指令之成率在八成以上
+- [ ] 指令已循擾梯漸化
+- [ ] 訓者之時機（記號於一秒內）一致
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Repeating the cue**: Saying "sit, sit, SIT" teaches the dog that the first "sit" is optional. Say it once and wait
-- **Treating too late**: The treat should follow the marker within 2-3 seconds. Late treating breaks the association
-- **Luring forever**: The hand motion with the treat (lure) should be faded within 10-20 reps. Otherwise the dog only responds when food is visible
-- **Punishing failed recalls**: Calling "come" and then scolding the dog (for being slow, for having something in its mouth) poisons the recall cue permanently
-- **Training too long**: A fatigued dog learns nothing. Quit while ahead
-- **Inconsistent cues**: All household members must use the same words and gestures for each command
+- **重呼提示**：言「坐、坐、坐」教犬首「坐」為可省。言一次而待
+- **獎太晚**：獎當於記號後二至三秒內。晚獎破聯結
+- **引誘不絕**：零食之手勢（誘）當於十至二十次內淡去。否則犬惟見食始應
+- **罰敗之召回**：呼「來」而責犬（慢、口中有物）永毒召回之提示
+- **訓太久**：疲犬不學。先止為善
+- **提示不一**：家中諸人須用同語同勢於每一指令
 
-## Related Skills
+## 相關技能
 
-- `behavioral-modification` — for addressing unwanted behaviors that interfere with basic obedience
+- `behavioral-modification` — 處妨基礎順從之不欲行為

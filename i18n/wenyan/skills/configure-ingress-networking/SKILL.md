@@ -23,36 +23,35 @@ metadata:
   tags: ingress, nginx, cert-manager, tls, networking
 ---
 
-# Configure Ingress Networking
+# 設入之網
 
-Set up production-grade Kubernetes Ingress with NGINX controller, automated TLS certificates, and advanced routing capabilities.
+設產級 Kubernetes Ingress 附 NGINX 控、自 TLS 證、進路之能。
 
-## When to Use
+## 用時
 
-- Exposing multiple Kubernetes services via single load balancer
-- Implementing path-based or host-based routing for microservices
-- Automating TLS certificate issuance and renewal with Let's Encrypt
-- Implementing rate limiting, authentication, and WAF policies
-- Setting up blue-green or canary deployments with traffic splitting
-- Configuring custom error pages and request/response modification
+- 經單載衡露多 K8s 服
+- 施徑或主之路於微服
+- 以 Let's Encrypt 自發與更 TLS 證
+- 施率限、認、WAF 策
+- 設藍綠或金絲雀附流分
+- 設自定誤頁與請應之變
 
-## Inputs
+## 入
 
-- **Required**: Kubernetes cluster with LoadBalancer support or MetalLB
-- **Required**: DNS records pointing to cluster LoadBalancer IP
-- **Optional**: Existing TLS certificates or Let's Encrypt account
-- **Optional**: OAuth2 provider for authentication
-- **Optional**: WAF rules (ModSecurity)
-- **Optional**: Prometheus for metrics collection
+- **必**：支 LoadBalancer 或 MetalLB 之 K8s 簇
+- **必**：DNS 指簇 LoadBalancer IP
+- **可選**：現存 TLS 證或 Let's Encrypt 戶
+- **可選**：認之 OAuth2 供
+- **可選**：WAF 則（ModSecurity）
+- **可選**：Prometheus 收量
 
-## Procedure
+## 法
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 見 [Extended Examples](references/EXAMPLES.md) 以全設檔。
 
+### 第一步：裝 NGINX Ingress 控
 
-### Step 1: Install NGINX Ingress Controller
-
-Deploy NGINX Ingress Controller with Helm and configure cloud provider integration.
+以 Helm 部 NGINX Ingress 控且設雲供合。
 
 ```bash
 # Add NGINX Ingress Helm repository
@@ -104,13 +103,13 @@ curl http://$INGRESS_IP
 # Should return 404 (no backend configured yet)
 ```
 
-**Expected:** NGINX Ingress Controller pods running in ingress-nginx namespace. LoadBalancer service has external IP assigned. Metrics endpoint accessible on port 10254. Health check at `/healthz` returns 200 OK.
+**得：** NGINX Ingress 控 pod 行於 ingress-nginx 命名空間。LoadBalancer 服附外 IP。量端於 10254 可訪。`/healthz` 健察返 200。
 
-**On failure:** For pending LoadBalancer, verify cloud provider integration and service quotas. For CrashLoopBackOff, check controller logs with `kubectl logs -n ingress-nginx -l app.kubernetes.io/component=controller`. For webhook errors, verify admission webhook certificate is valid. For no external IP on bare-metal, install MetalLB or use NodePort service type.
+**敗則：** LoadBalancer 懸則驗雲供合與服額。CrashLoopBackOff 則察控誌 `kubectl logs -n ingress-nginx -l app.kubernetes.io/component=controller`。鉤誤則驗准鉤證有效。裸機無外 IP 則裝 MetalLB 或用 NodePort。
 
-### Step 2: Install cert-manager for Automated TLS
+### 第二步：裝 cert-manager 為自 TLS
 
-Deploy cert-manager and configure Let's Encrypt ClusterIssuer.
+部 cert-manager 且設 Let's Encrypt ClusterIssuer。
 
 ```bash
 # Install cert-manager CRDs
@@ -179,13 +178,13 @@ kubectl get clusterissuer
 kubectl describe clusterissuer letsencrypt-prod
 ```
 
-**Expected:** cert-manager pods running in cert-manager namespace. ClusterIssuers created with Ready status. ACME account registered with Let's Encrypt. Webhook responding to certificate requests.
+**得：** cert-manager pod 行於 cert-manager 命名空間。ClusterIssuer 建附 Ready 態。ACME 戶已於 Let's Encrypt 註。鉤應證求。
 
-**On failure:** For webhook timeout errors, increase `webhook.timeoutSeconds` or check network policies blocking cert-manager to API server. For ACME registration failures, verify email is valid and server URL correct. For DNS01 failures, check Route53 IAM permissions allow route53:ChangeResourceRecordSets. Test DNS propagation with `dig +short _acme-challenge.example.com TXT`.
+**敗則：** 鉤超時誤則增 `webhook.timeoutSeconds` 或察網策阻 cert-manager 於 API 伺。ACME 註敗則驗郵有效且服 URL 正。DNS01 敗則察 Route53 IAM 權許 route53:ChangeResourceRecordSets。以 `dig +short _acme-challenge.example.com TXT` 試 DNS 傳。
 
-### Step 3: Create Basic Ingress with TLS
+### 第三步：建基 Ingress 附 TLS
 
-Deploy application and expose via Ingress with automatic certificate issuance.
+部應且經 Ingress 露附自證發。
 
 ```bash
 # Deploy sample application
@@ -247,13 +246,13 @@ kubectl delete secret web-tls-secret
 # cert-manager will recreate with production certificate
 ```
 
-**Expected:** Ingress resource created. cert-manager detects annotation and creates Certificate resource. HTTP-01 challenge completes successfully. TLS secret created with valid certificate. HTTPS requests succeed with trusted certificate. HTTP redirects to HTTPS.
+**得：** Ingress 資建。cert-manager 察註而建 Certificate 資。HTTP-01 挑戰成。TLS 秘建附有效證。HTTPS 請以信證成。HTTP 重至 HTTPS。
 
-**On failure:** For challenge failures, verify DNS resolves to Ingress LoadBalancer IP with `dig web.example.com`. For rate limit errors, use staging issuer until configuration correct. For certificate not issued, check events with `kubectl describe certificate web-tls-secret` and `kubectl get challenges`. For "too many certificates" error, hit Let's Encrypt rate limits (50 certs/domain/week); wait or use staging.
+**敗則：** 挑戰敗則以 `dig web.example.com` 驗 DNS 指 Ingress LoadBalancer IP。率限誤則用暫發者至設正。證不發則以 `kubectl describe certificate web-tls-secret` 與 `kubectl get challenges` 察事。「too many certificates」誤則遇 Let's Encrypt 率限（五十證/域/週）；待或用暫。
 
-### Step 4: Implement Advanced Routing and Load Balancing
+### 第四步：施進路與載衡
 
-Configure path-based routing, header-based routing, and traffic splitting.
+設徑、頭之路與流分。
 
 ```bash
 # Deploy multiple services
@@ -365,13 +364,13 @@ curl https://app.example.com/admin/      # -> admin service
 curl -H "X-Canary: always" https://app.example.com/api/  # -> api-v2 (100%)
 ```
 
-**Expected:** Single Ingress routes to multiple services based on path. Rewrite-target strips path prefix. Canary Ingress splits traffic by weight. Header-based routing sends specific requests to canary. TLS terminates at Ingress, backends use HTTP.
+**得：** 單 Ingress 依徑路於多服。Rewrite-target 剝徑前綴。金絲雀 Ingress 依重分流。頭之路送特請於金絲雀。TLS 終於 Ingress，後用 HTTP。
 
-**On failure:** For 404 errors, verify service names and ports match. For rewrite issues, test regex with `nginx.ingress.kubernetes.io/rewrite-target` debugger. For canary not working, verify only one Ingress has `canary: "false"` (main) and others have `canary: "true"`. For traffic imbalance, check backend pod counts and readiness probes.
+**敗則：** 404 則驗服名與埠配。重寫問則以 `nginx.ingress.kubernetes.io/rewrite-target` 調之具試正則。金絲雀不行則驗唯一 Ingress 有 `canary: "false"`（主）而他有 `canary: "true"`。流不衡則察後 pod 數與準探。
 
-### Step 5: Configure Rate Limiting and Authentication
+### 第五步：設率限與認
 
-Implement rate limiting, basic auth, and OAuth2 authentication.
+施率限、基認、OAuth2 認。
 
 ```bash
 # Rate limiting by IP
@@ -383,13 +382,13 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Rate limiting blocks excessive requests with 503 Service Temporarily Unavailable. Basic auth prompts for credentials, rejects unauthorized requests. OAuth2 redirects to provider login page, sets authentication cookies.
+**得：** 率限以 503 阻過請。基認請憑，拒未權。OAuth2 重至供登頁，設認餅。
 
-**On failure:** For rate limit not working, verify annotation syntax and restart Ingress controller pods. For basic auth 500 errors, check secret format with `kubectl get secret basic-auth -o yaml | grep auth:`. For OAuth2 failures, verify client ID/secret and callback URL registered with provider. Check oauth2-proxy logs for detailed errors.
+**敗則：** 率限不行則驗註法且重啟 Ingress 控 pod。基認 500 誤則以 `kubectl get secret basic-auth -o yaml | grep auth:` 察秘式。OAuth2 敗則驗客 ID/秘與回呼 URL 於供註。察 oauth2-proxy 誌詳誤。
 
-### Step 6: Implement Custom Error Pages and Request Modification
+### 第六步：施自定誤頁與請之變
 
-Configure custom error pages, CORS, and request/response headers.
+設自定誤頁、CORS、請應頭。
 
 ```bash
 # Create ConfigMap with custom error pages
@@ -401,45 +400,45 @@ apiVersion: v1
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Custom 404 and 503 pages display instead of default NGINX pages. CORS headers allow specified origins and methods. Security headers protect against XSS and clickjacking. Request body size limit allows large file uploads. Timeout settings prevent premature connection closes.
+**得：** 自定 404 與 503 頁代默 NGINX 頁。CORS 頭許特源與法。安頭禦 XSS 與點劫。請體限許大傳。超時設防早閉。
 
-**On failure:** For custom error pages not showing, verify ConfigMap mounted to controller pods and default backend deployed. For CORS preflight failures, check OPTIONS requests allowed in backend service. For 413 Request Entity Too Large, increase `proxy-body-size` annotation. For timeout errors, increase all three timeout annotations together.
+**敗則：** 自定誤頁不示則驗 ConfigMap 掛於控 pod 且默後已部。CORS 預檢敗則察後服許 OPTIONS 請。413 則增 `proxy-body-size` 註。超時誤則同增三超時註。
 
-## Validation
+## 驗
 
-- [ ] NGINX Ingress Controller running with external IP assigned
-- [ ] cert-manager issues certificates automatically via Let's Encrypt
-- [ ] HTTPS redirects enforce SSL for all Ingresses
-- [ ] Path-based routing directs requests to correct backend services
-- [ ] Canary Ingresses split traffic according to weight annotations
-- [ ] Rate limiting blocks excessive requests from single IP
-- [ ] Authentication (basic auth or OAuth2) protects admin routes
-- [ ] Custom error pages display on 404/503 errors
-- [ ] CORS headers allow cross-origin requests from specified domains
-- [ ] Metrics endpoint exposes Prometheus metrics for monitoring
+- [ ] NGINX Ingress 控行附外 IP
+- [ ] cert-manager 經 Let's Encrypt 自發證
+- [ ] HTTPS 重執 SSL 於諸 Ingress
+- [ ] 徑路送請於正後服
+- [ ] 金絲雀 Ingress 依重註分流
+- [ ] 率限阻單 IP 過請
+- [ ] 認（基或 OAuth2）護管徑
+- [ ] 404/503 誤示自定頁
+- [ ] CORS 頭許特域跨源
+- [ ] 量端為監露 Prometheus 量
 
-## Common Pitfalls
+## 陷
 
-- **No ingressClassName**: Ingress not picked up by controller. Always specify `ingressClassName: nginx` in Kubernetes 1.19+.
+- **無 ingressClassName**：Ingress 不為控取。K8s 1.19+ 必宣 `ingressClassName: nginx`。
 
-- **Certificate challenges fail**: DNS doesn't point to Ingress LoadBalancer. Verify with `dig yourdomain.com` before requesting certificate.
+- **證挑戰敗**：DNS 不指 Ingress LoadBalancer。證求前以 `dig yourdomain.com` 驗。
 
-- **HTTP-01 challenge timeout**: Firewall blocks port 80. Let's Encrypt must reach `http://domain/.well-known/acme-challenge/` for validation.
+- **HTTP-01 挑戰超時**：防火阻埠 80。Let's Encrypt 必達 `http://domain/.well-known/acme-challenge/` 以驗。
 
-- **Rate limit applies globally**: `limit-rps` annotation applies per Ingress, not per path. Create separate Ingresses for different rate limits.
+- **率限全域**：`limit-rps` 註於 Ingress 施，非於徑。為異率限建獨 Ingress。
 
-- **Rewrite-target regex wrong**: Captures don't match path pattern. Test with `echo "/api/users" | sed 's|/api(/\|$)\(.*\)|/\2|'`.
+- **Rewrite-target 正則誤**：捕不配徑式。以 `echo "/api/users" | sed 's|/api(/\|$)\(.*\)|/\2|'` 試。
 
-- **Canary weight ignored**: Multiple canary Ingresses for same host/path conflict. Only create one canary Ingress per route.
+- **金絲雀重忽**：同主/徑多金絲雀 Ingress 衝。每路只建一金絲雀。
 
-- **Auth bypass via IP**: Authentication only on Ingress, backend services accessible via ClusterIP. Implement network policies or service mesh.
+- **認繞經 IP**：認只於 Ingress，後經 ClusterIP 可達。施網策或服網。
 
-- **Configuration-snippet injection risk**: User input in configuration-snippet allows NGINX config injection. Validate and sanitize all annotations.
+- **configuration-snippet 注險**：其中用者入許 NGINX 設注。驗淨諸註。
 
-## Related Skills
+## 參
 
-- `deploy-to-kubernetes` - Creating Services that Ingress routes to
-- `manage-kubernetes-secrets` - Managing TLS certificates as Secrets
-- `implement-gitops-workflow` - Declarative Ingress management with Argo CD
-- `setup-service-mesh` - Advanced traffic management with Istio/Linkerd
-- `build-ci-cd-pipeline` - Automated Ingress updates in CI/CD
+- `deploy-to-kubernetes` - 建 Ingress 所路之 Service
+- `manage-kubernetes-secrets` - 為 Secret 治 TLS 證
+- `implement-gitops-workflow` - 以 Argo CD 宣 Ingress 治
+- `setup-service-mesh` - Istio/Linkerd 進流治
+- `build-ci-cd-pipeline` - CI/CD 中自動 Ingress 更

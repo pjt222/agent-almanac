@@ -26,13 +26,13 @@ metadata:
 
 # Check Hiking Gear
 
-Generate and verify a hiking gear checklist optimized for the specific conditions of a planned hike.
+Generate and verify hiking gear checklist optimized for specific conditions of planned hike.
 
-## When to Use
+## When Use
 
-- Preparing for a day hike or multi-day trekking tour
-- Packing for a group and distributing shared gear
-- Adapting a standard gear list to specific season or conditions
+- Preparing for day hike or multi-day trekking tour
+- Packing for group, distributing shared gear
+- Adapting standard gear list to specific season or conditions
 - Reviewing gear before departure to catch missing items
 - Managing pack weight for long or technical routes
 
@@ -46,11 +46,11 @@ Generate and verify a hiking gear checklist optimized for the specific condition
 - **Optional**: Target pack weight or weight limit
 - **Optional**: Special requirements (via ferrata gear, glacier equipment, photography)
 
-## Procedure
+## Steps
 
 ### Step 1: Assess Conditions
 
-Determine the environmental factors that drive gear selection.
+Determine environmental factors driving gear selection.
 
 ```
 Condition Assessment Matrix:
@@ -70,7 +70,7 @@ Condition Assessment Matrix:
 └──────────────────┴────────────────────────────────────────────┘
 ```
 
-Classify the hike into one of these profiles:
+Classify hike into one of these profiles:
 
 ```
 Hike Profiles:
@@ -82,13 +82,13 @@ Hike Profiles:
   TROPICAL:       Hot, humid, rain, insects
 ```
 
-**Expected:** A clear hike profile with all condition factors assessed. This profile drives the checklist in Step 2.
+**Got:** Clear hike profile with all condition factors assessed. Profile drives checklist in Step 2.
 
-**On failure:** If conditions are uncertain (e.g., shoulder season with unpredictable weather), plan for the worse case. It is always better to carry a rain jacket you don't use than to be soaked without one.
+**If fail:** Conditions uncertain (e.g., shoulder season with unpredictable weather)? Plan for worse case. Always better to carry rain jacket you don't use than to be soaked without one.
 
 ### Step 2: Generate Base Checklist by Category
 
-Build the gear list organized by the Ten Essentials framework plus additional categories.
+Build gear list organized by Ten Essentials framework plus additional categories.
 
 ```
 THE TEN ESSENTIALS (always carry):
@@ -160,13 +160,13 @@ ADDITIONAL BY PROFILE:
 └──────────────────┴────────────────────────────────────────────┘
 ```
 
-**Expected:** A complete checklist with all ten essentials, appropriate clothing layers, and profile-specific additions. Every item is relevant to the assessed conditions.
+**Got:** Complete checklist with all ten essentials, appropriate clothing layers, profile-specific additions. Every item relevant to assessed conditions.
 
-**On failure:** If the list seems excessive for a short easy hike, verify that only the base ten essentials are included for SUMMER-DAY profiles. If the list seems too light for alpine conditions, cross-reference with the Alpine profile add-ons.
+**If fail:** List seems excessive for short easy hike? Verify only base ten essentials included for SUMMER-DAY profiles. List seems too light for alpine conditions? Cross-reference with Alpine profile add-ons.
 
 ### Step 3: Optimize Weight
 
-Review the checklist to reduce pack weight without compromising safety.
+Review checklist to reduce pack weight without compromising safety.
 
 ```
 Weight Optimization Strategies:
@@ -204,13 +204,13 @@ Shared Gear Distribution:
   Emergency gear         → distribute PLB, rope among members
 ```
 
-**Expected:** A weight-optimized checklist where every item serves a clear purpose. Total pack weight is within the target range for the hike profile. Shared gear is assigned to specific group members.
+**Got:** Weight-optimized checklist where every item serves clear purpose. Total pack weight within target range for hike profile. Shared gear assigned to specific group members.
 
-**On failure:** If pack weight exceeds the target by more than 20%, reconsider whether the hike profile is appropriate. A heavily loaded pack on a long day dramatically increases fatigue and injury risk. Either reduce gear (accept more risk) or choose an easier/shorter route.
+**If fail:** Pack weight exceeds target by more than 20%? Reconsider whether hike profile appropriate. Heavily loaded pack on long day dramatically increases fatigue and injury risk. Either reduce gear (accept more risk) or choose easier/shorter route.
 
 ### Step 4: Verify Completeness Against Conditions
 
-Final cross-check of the gear list against the assessed conditions.
+Final cross-check of gear list against assessed conditions.
 
 ```
 Verification Checklist:
@@ -233,33 +233,33 @@ Verification Checklist:
 └────────────────────────────────────────┴──────────┴──────────┘
 ```
 
-**Expected:** All checks pass. The hiker can confidently state what every item in the pack is for and would notice if any item were missing.
+**Got:** All checks pass. Hiker can confidently state what every item in pack is for, would notice if any item were missing.
 
-**On failure:** If any essential check fails, resolve it before departure. The most dangerous failures are: no navigation backup (phone dies), insufficient water capacity, and missing insulation layer (hypothermia risk even in summer above treeline).
+**If fail:** Any essential check fails? Resolve before departure. Most dangerous failures: no navigation backup (phone dies), insufficient water capacity, missing insulation layer (hypothermia risk even in summer above treeline).
 
-## Validation
+## Checks
 
-- [ ] All ten essentials are included in the checklist
-- [ ] Clothing system matches the expected temperature range
-- [ ] Profile-specific additions are included (snow gear, alpine gear, etc.)
-- [ ] Pack weight is within target range for the hike profile
-- [ ] Shared gear is assigned to specific group members (group hikes)
-- [ ] Water capacity covers the longest gap between resupply points
+- [ ] All ten essentials included in checklist
+- [ ] Clothing system matches expected temperature range
+- [ ] Profile-specific additions included (snow gear, alpine gear, etc.)
+- [ ] Pack weight within target range for hike profile
+- [ ] Shared gear assigned to specific group members (group hikes)
+- [ ] Water capacity covers longest gap between resupply points
 - [ ] Emergency kit includes personal medications
-- [ ] No new/untested gear on the hike (broken-in boots, tested stove)
+- [ ] No new/untested gear on hike (broken-in boots, tested stove)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Cotton kills**: Cotton clothing retains moisture and loses insulation when wet. Use merino wool or synthetic fabrics for all layers.
-- **New boots on hike day**: Untested footwear causes blisters. Break in new boots with at least 3-4 shorter walks before a long hike.
-- **One water source assumption**: If the only planned water source is dry (seasonal streams), dehydration follows quickly. Always carry capacity for the worst case.
-- **Overpacking "just in case"**: Every unnecessary gram compounds over hours. If you cannot name when you would use an item on this specific hike, leave it behind.
-- **Forgetting sun protection**: At altitude, UV exposure increases roughly 10% per 1000 m. Sunburn and snow blindness are real hazards above 2000 m, even in cool weather.
-- **Ignoring group gear overlap**: Four hikers each carrying a full first aid kit wastes weight. Coordinate shared items before packing.
+- **Cotton kills**: Cotton clothing retains moisture, loses insulation when wet. Use merino wool or synthetic fabrics for all layers.
+- **New boots on hike day**: Untested footwear causes blisters. Break in new boots with at least 3-4 shorter walks before long hike.
+- **One water source assumption**: Only planned water source dry (seasonal streams)? Dehydration follows quickly. Always carry capacity for worst case.
+- **Overpacking "just in case"**: Every unnecessary gram compounds over hours. Cannot name when you would use item on this specific hike? Leave it behind.
+- **Forgetting sun protection**: At altitude, UV exposure increases roughly 10% per 1000 m. Sunburn and snow blindness real hazards above 2000 m, even in cool weather.
+- **Ignoring group gear overlap**: Four hikers each carrying full first aid kit wastes weight. Coordinate shared items before packing.
 
-## Related Skills
+## See Also
 
-- `plan-hiking-tour` — the hiking plan that determines what gear is needed
+- `plan-hiking-tour` — hiking plan determining what gear needed
 - `assess-trail-conditions` — current conditions affect gear requirements (e.g., unexpected snow)
-- `make-fire` — emergency fire-starting is one of the ten essentials
-- `purify-water` — water purification methods for when natural sources are the only option
+- `make-fire` — emergency fire-starting is one of ten essentials
+- `purify-water` — water purification methods for when natural sources are only option

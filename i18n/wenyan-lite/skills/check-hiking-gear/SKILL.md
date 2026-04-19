@@ -26,51 +26,51 @@ metadata:
 
 # Check Hiking Gear
 
-Generate and verify a hiking gear checklist optimized for the specific conditions of a planned hike.
+生並驗健行之裝備清單，合其季、時、難、人數之具體條件。
 
-## When to Use
+## 適用時機
 
-- Preparing for a day hike or multi-day trekking tour
-- Packing for a group and distributing shared gear
-- Adapting a standard gear list to specific season or conditions
-- Reviewing gear before departure to catch missing items
-- Managing pack weight for long or technical routes
+- 備日健行或多日徒步之遊
+- 為團體打包並分配共有裝備
+- 以標準清單應具體之季或境
+- 啟行前之裝備覆查以察所缺
+- 為長徑或技術路線管包重
 
-## Inputs
+## 輸入
 
-- **Required**: Hike duration (day hike, overnight, multi-day)
-- **Required**: Season and expected temperature range
-- **Required**: Trail difficulty (SAC T1-T6 or descriptive)
-- **Optional**: Maximum elevation and expected conditions (snow, rain, heat)
-- **Optional**: Group size (for distributing shared gear)
-- **Optional**: Target pack weight or weight limit
-- **Optional**: Special requirements (via ferrata gear, glacier equipment, photography)
+- **必要**：健行之時（日行、過夜、多日）
+- **必要**：季與預期之溫區
+- **必要**：徑之難（SAC T1-T6 或描述）
+- **選擇性**：最高海拔與預期之狀（雪、雨、熱）
+- **選擇性**：團體之人數（分配共有裝備用）
+- **選擇性**：目標包重或重限
+- **選擇性**：特殊之需（鐵索、冰川裝、攝影）
 
-## Procedure
+## 步驟
 
-### Step 1: Assess Conditions
+### 步驟一：評其境
 
-Determine the environmental factors that drive gear selection.
+定驅裝備之選之環境因。
 
 ```
 Condition Assessment Matrix:
 ┌──────────────────┬────────────────────────────────────────────┐
 │ Factor           │ Impact on Gear                             │
 ├──────────────────┼────────────────────────────────────────────┤
-│ Temperature      │ Layering depth, sleeping bag rating        │
-│ Precipitation    │ Rain gear weight, pack cover, gaiters      │
-│ Snow/ice         │ Microspikes, crampons, ice axe, gaiters    │
-│ Sun exposure     │ Sunscreen, hat, sunglasses, lip balm       │
-│ Altitude (>2500m)│ Extra warm layer, sun protection, hydration│
-│ Duration         │ Food weight, water capacity, shelter type  │
-│ Remoteness       │ First aid depth, emergency beacon, backup  │
-│ Technical terrain│ Helmet, harness, rope, via ferrata set     │
-│ Water sources    │ Carry capacity, purification method        │
-│ Hut availability │ Sleeping bag vs. sheet, meal vs. cook gear │
+│ Temperature      │ 層次之深、睡袋之級                          │
+│ Precipitation    │ 雨具之重、包套、雪套                        │
+│ Snow/ice         │ 冰爪齒、冰爪、冰鎬、雪套                    │
+│ Sun exposure     │ 防曬、帽、墨鏡、唇膏                        │
+│ Altitude (>2500m)│ 額外暖層、防曬、水                          │
+│ Duration         │ 食重、水容、庇護類型                        │
+│ Remoteness       │ 急救之深、應急信標、備用                    │
+│ Technical terrain│ 頭盔、吊帶、繩、鐵索組                      │
+│ Water sources    │ 攜帶容量、淨化方法                          │
+│ Hut availability │ 睡袋對睡袋內襯、餐對炊具                    │
 └──────────────────┴────────────────────────────────────────────┘
 ```
 
-Classify the hike into one of these profiles:
+將此行類入其一輪廓：
 
 ```
 Hike Profiles:
@@ -82,13 +82,13 @@ Hike Profiles:
   TROPICAL:       Hot, humid, rain, insects
 ```
 
-**Expected:** A clear hike profile with all condition factors assessed. This profile drives the checklist in Step 2.
+**預期：** 明之行程輪廓，諸因皆已評。此輪廓驅步二之清單。
 
-**On failure:** If conditions are uncertain (e.g., shoulder season with unpredictable weather), plan for the worse case. It is always better to carry a rain jacket you don't use than to be soaked without one.
+**失敗時：** 境不定時（如過渡季之不測），計最壞之況。攜雨衣不用勝於無之而濕。
 
-### Step 2: Generate Base Checklist by Category
+### 步驟二：按類生基礎清單
 
-Build the gear list organized by the Ten Essentials framework plus additional categories.
+以十要素為綱建裝備清單，加其他類。
 
 ```
 THE TEN ESSENTIALS (always carry):
@@ -160,13 +160,13 @@ ADDITIONAL BY PROFILE:
 └──────────────────┴────────────────────────────────────────────┘
 ```
 
-**Expected:** A complete checklist with all ten essentials, appropriate clothing layers, and profile-specific additions. Every item is relevant to the assessed conditions.
+**預期：** 完整之清單，含十要素、合宜之衣層、輪廓專之增項。每物皆合所評之境。
 
-**On failure:** If the list seems excessive for a short easy hike, verify that only the base ten essentials are included for SUMMER-DAY profiles. If the list seems too light for alpine conditions, cross-reference with the Alpine profile add-ons.
+**失敗時：** 清單似為短易行過多，驗 SUMMER-DAY 輪廓惟含十基礎要素。清單似為高山境過輕，交參 Alpine 輪廓之增項。
 
-### Step 3: Optimize Weight
+### 步驟三：優化重量
 
-Review the checklist to reduce pack weight without compromising safety.
+覆查清單以減包重而不損安全。
 
 ```
 Weight Optimization Strategies:
@@ -193,7 +193,7 @@ Weight Targets (pack weight without food/water):
   Winter/alpine:  10-15 kg base weight
 ```
 
-For group hikes, distribute shared gear:
+團體健行，分共有裝備：
 
 ```
 Shared Gear Distribution:
@@ -204,13 +204,13 @@ Shared Gear Distribution:
   Emergency gear         → distribute PLB, rope among members
 ```
 
-**Expected:** A weight-optimized checklist where every item serves a clear purpose. Total pack weight is within the target range for the hike profile. Shared gear is assigned to specific group members.
+**預期：** 重量優化之清單，每物皆有明用。總包重於輪廓目標內。共有裝備分配於具體人員。
 
-**On failure:** If pack weight exceeds the target by more than 20%, reconsider whether the hike profile is appropriate. A heavily loaded pack on a long day dramatically increases fatigue and injury risk. Either reduce gear (accept more risk) or choose an easier/shorter route.
+**失敗時：** 若包重超目標兩成以上，重考輪廓是否合宜。長日重載顯增疲與傷之險。或減裝備（承險）或擇易之短徑。
 
-### Step 4: Verify Completeness Against Conditions
+### 步驟四：以境驗全
 
-Final cross-check of the gear list against the assessed conditions.
+以所評境終查裝備清單。
 
 ```
 Verification Checklist:
@@ -233,33 +233,33 @@ Verification Checklist:
 └────────────────────────────────────────┴──────────┴──────────┘
 ```
 
-**Expected:** All checks pass. The hiker can confidently state what every item in the pack is for and would notice if any item were missing.
+**預期：** 諸查皆過。行者可信陳包中每物為何用，若缺則必察。
 
-**On failure:** If any essential check fails, resolve it before departure. The most dangerous failures are: no navigation backup (phone dies), insufficient water capacity, and missing insulation layer (hypothermia risk even in summer above treeline).
+**失敗時：** 任一要查敗，啟行前先解。最危之敗為：無導航備援（電話盡電）、水容不足、缺絕緣層（樹線上夏亦有低溫之險）。
 
-## Validation
+## 驗證
 
-- [ ] All ten essentials are included in the checklist
-- [ ] Clothing system matches the expected temperature range
-- [ ] Profile-specific additions are included (snow gear, alpine gear, etc.)
-- [ ] Pack weight is within target range for the hike profile
-- [ ] Shared gear is assigned to specific group members (group hikes)
-- [ ] Water capacity covers the longest gap between resupply points
-- [ ] Emergency kit includes personal medications
-- [ ] No new/untested gear on the hike (broken-in boots, tested stove)
+- [ ] 十要素皆含於清單
+- [ ] 衣系合預期之溫區
+- [ ] 輪廓專之增項已含（雪裝、高山裝等）
+- [ ] 包重於行程輪廓之目標內
+- [ ] 共有裝備分配於具體人員（團體行）
+- [ ] 水容覆補給點間最長之隙
+- [ ] 急救含個人藥
+- [ ] 無新／未試之裝備（靴已磨合、爐已測）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Cotton kills**: Cotton clothing retains moisture and loses insulation when wet. Use merino wool or synthetic fabrics for all layers.
-- **New boots on hike day**: Untested footwear causes blisters. Break in new boots with at least 3-4 shorter walks before a long hike.
-- **One water source assumption**: If the only planned water source is dry (seasonal streams), dehydration follows quickly. Always carry capacity for the worst case.
-- **Overpacking "just in case"**: Every unnecessary gram compounds over hours. If you cannot name when you would use an item on this specific hike, leave it behind.
-- **Forgetting sun protection**: At altitude, UV exposure increases roughly 10% per 1000 m. Sunburn and snow blindness are real hazards above 2000 m, even in cool weather.
-- **Ignoring group gear overlap**: Four hikers each carrying a full first aid kit wastes weight. Coordinate shared items before packing.
+- **棉致死**：棉衣留濕而失絕緣。諸層皆用羊毛或合成纖維。
+- **新靴首日**：未試之鞋生水泡。新靴先以三至四次短行磨合。
+- **一水源之假設**：若所計之唯一水源乾（季流），脫水速至。恆備最壞之容。
+- **「或須」之過裝**：每無用之克數時間累積。若不能說此具體行何時用之，留之。
+- **忽防曬**：海拔中 UV 每千米約增一成。樹線上二千米，曬傷與雪盲為真險，涼天亦然。
+- **忽團裝之重複**：四行者各攜全急救盒耗重。打包前協共有之物。
 
-## Related Skills
+## 相關技能
 
-- `plan-hiking-tour` — the hiking plan that determines what gear is needed
-- `assess-trail-conditions` — current conditions affect gear requirements (e.g., unexpected snow)
-- `make-fire` — emergency fire-starting is one of the ten essentials
-- `purify-water` — water purification methods for when natural sources are the only option
+- `plan-hiking-tour` — 定所需裝備之健行計畫
+- `assess-trail-conditions` — 當前境影裝備需求（如非預期之雪）
+- `make-fire` — 應急生火乃十要素之一
+- `purify-water` — 自然源為唯一時之水淨化法

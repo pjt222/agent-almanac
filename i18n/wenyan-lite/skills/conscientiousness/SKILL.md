@@ -25,48 +25,48 @@ metadata:
   tags: esoteric, conscientiousness, diligence, thoroughness, verification, meta-cognition
 ---
 
-# Conscientiousness
+# 盡責
 
-Systematic thoroughness and diligence — ensuring completeness, verifying results, following through on every commitment, and finishing tasks to the standard they deserve.
+系統之周詳與勤——確完整、驗結果、行其諾、完任務至其當得之標。
 
-## When to Use
+## 適用時機
 
-- Before marking a task as complete — as a final verification pass
-- When a response feels "good enough" but the task deserves better
-- After a complex multi-step operation where individual steps may have drifted
-- When the user's request has multiple parts and each part needs verification
-- Before submitting code, documentation, or any deliverable for user review
-- When self-monitoring detects a pattern of cutting corners or rushing
+- 標任務為完前——為最終驗證之過
+- 回應覺「足好」然任務當得更佳
+- 複雜多步作業後，各步或有偏
+- 用戶請求含多部，每部需驗
+- 呈代碼、文件、任何交付物予用戶審前
+- 自監偵省走捷徑或匆忙之模式
 
-## Inputs
+## 輸入
 
-- **Required**: The task or deliverable to verify (available from conversation context)
-- **Optional**: The original user request (for comparison against what was delivered)
-- **Optional**: Any checklist or acceptance criteria provided by the user
-- **Optional**: Prior commitments made during the session (things promised but not yet checked)
+- **必要**：待驗之任務或交付物（於對話脈絡可達）
+- **選擇性**：用戶原始請求（以比所交付）
+- **選擇性**：用戶供之檢核表或受理判準
+- **選擇性**：會話中所作之承諾（已諾而未查者）
 
-## Procedure
+## 步驟
 
-### Step 1: Reconstruct the Full Commitment
+### 步驟一：重構全承諾
 
-Before checking work, re-establish exactly what was committed to.
+驗工作前，重立所諾為何。
 
-1. Re-read the user's original request carefully — not the interpreted version, the actual words
-2. List every explicit requirement mentioned
-3. List every implicit commitment made during the session:
-   - "I'll also update the tests" — was this done?
-   - "Let me fix that too" — was this completed?
-   - "I'll check for edge cases" — were they checked?
-4. Note any acceptance criteria the user provided
-5. Compare the commitment list against what was actually delivered
+1. 仔讀用戶原始請求——非詮之版本，乃實之語
+2. 列其中每一明示要求
+3. 列會話中每一隱含承諾：
+   - 「我亦將更新測試」——已為之否？
+   - 「讓我亦修此」——已完否？
+   - 「我將查邊界情形」——已查否？
+4. 記用戶供之受理判準
+5. 比諾單與實交付之
 
-**Expected:** A complete list of commitments — explicit requirements plus implicit promises — with a preliminary match against deliverables.
+**預期：** 完整之承諾清單——明示要求加隱含之諾——附與交付物之初步比。
 
-**On failure:** If the original request is no longer in context (compressed), reconstruct from what remains and acknowledge any gaps to the user.
+**失敗時：** 若原始請求已不在脈絡（已壓縮），自所餘重構並向用戶承認任何缺。
 
-### Step 2: Verify Completeness
+### 步驟二：驗完整
 
-Check that every committed item was addressed.
+查每一已諾項已處。
 
 ```
 Completeness Matrix:
@@ -84,69 +84,69 @@ Completeness Matrix:
 +---------------------+------------------+------------------+
 ```
 
-1. For each item, verify with evidence — not memory, actual verification:
-   - Code changes: re-read the file to confirm the change exists
-   - Test results: re-run or reference the actual output
-   - Documentation: re-read to confirm accuracy
-2. Mark each item: Done (fully complete), Partial (started but incomplete), Missing (not addressed)
-3. For Partial and Missing items, note what remains
+1. 每項以證驗——非記憶，乃實之驗：
+   - 代碼改：重讀檔以確改存
+   - 測試結果：重行或引實輸出
+   - 文件：重讀以確準
+2. 標每項：Done（全完）、Partial（始而未完）、Missing（未處）
+3. Partial 與 Missing 項記所餘
 
-**Expected:** Every commitment has a verified status. No item is left unchecked.
+**預期：** 每承諾有已驗之態。無項未查。
 
-**On failure:** If verification reveals missed items, address them immediately rather than noting them for later. Conscientiousness means completing now, not intending to complete.
+**失敗時：** 若驗揭漏項，即處勿記後。盡責乃即完，非擬完。
 
-### Step 3: Verify Correctness
+### 步驟三：驗正確
 
-Completeness is necessary but not sufficient — what was done must also be right.
+完整為必須而不足——所為須亦正確。
 
-1. For each completed item, check:
-   - **Accuracy**: Does it do what it should? Are values correct?
-   - **Consistency**: Does it align with the rest of the work? No contradictions?
-   - **Edge cases**: Were boundary conditions considered?
-   - **Integration**: Does it work with the surrounding context?
-2. For code: would this survive a code review? Are there obvious improvements?
-3. For documentation: is it accurate, clear, and free of errors?
-4. For multi-step processes: does the output of each step correctly feed the next?
+1. 每已完項查：
+   - **準**：行其當行？值正確？
+   - **一致**：合其餘之工作？無矛盾？
+   - **邊界情形**：邊界條件已慮？
+   - **整合**：於周圍脈絡中可運？
+2. 代碼：能存於代碼審否？有明改進否？
+3. 文件：準、清、無誤否？
+4. 多步流程：每步之出正確餵次步否？
 
-**Expected:** Each deliverable is both complete and correct. Errors are caught before the user sees them.
+**預期：** 每交付物既完且正。錯於用戶見前已捕。
 
-**On failure:** If errors are found, fix them immediately. Do not present work with known errors, even if the errors seem minor.
+**失敗時：** 若發錯，即修。勿以已知錯之工呈，即錯似微。
 
-### Step 4: Verify Presentation
+### 步驟四：驗呈現
 
-The final check: is the deliverable presented in a way that serves the user?
+最終檢查：交付物之呈現服用戶否？
 
-1. **Clarity**: Can the user understand what was done without re-reading multiple times?
-2. **Organization**: Is the response structured logically? Are related items grouped?
-3. **Conciseness**: Is there unnecessary padding or repetition?
-4. **Actionability**: Does the user know what to do next?
-5. **Honesty**: Are limitations or caveats clearly stated?
+1. **清**：用戶無需重讀多遍即解所為否？
+2. **組**：回應結構合邏輯？相關項已群？
+3. **簡**：有無謂填充或重複否？
+4. **可行**：用戶知下步何為否？
+5. **誠**：限制或警語已明述否？
 
-**Expected:** A deliverable that is complete, correct, and well-presented.
+**預期：** 交付物完、正、良呈。
 
-**On failure:** If presentation is poor despite correct content, restructure. Good work poorly presented is a conscientiousness failure.
+**失敗時：** 若內容正而呈現拙，重組。良工拙呈乃盡責之敗。
 
-## Validation
+## 驗證
 
-- [ ] The original request was re-read (not recalled from memory)
-- [ ] Every explicit requirement was verified with evidence
-- [ ] Every implicit promise was tracked and verified
-- [ ] Correctness was checked beyond mere completeness
-- [ ] Edge cases were considered where relevant
-- [ ] The deliverable is clearly presented and actionable
+- [ ] 原始請求已重讀（非自記憶召回）
+- [ ] 每明示要求以證驗
+- [ ] 每隱含之諾已追且驗
+- [ ] 正確已查，超於僅完整
+- [ ] 相關時邊界情形已慮
+- [ ] 交付物清晰呈現且可行
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Verification theater**: Going through the motions of checking without actually re-reading or re-verifying. The check must use evidence, not memory
-- **Partial conscientiousness**: Checking the main deliverable but ignoring side commitments ("I'll also..."). Every promise counts
-- **Perfectionism masquerading as diligence**: Endless polishing that delays delivery. Conscientiousness is about meeting the committed standard, not exceeding it indefinitely
-- **Conscientiousness fatigue**: Becoming less thorough as the session progresses. The last task deserves the same diligence as the first
-- **Skipping for simple tasks**: Assuming simple tasks don't need verification. Simple tasks with errors are more embarrassing than complex tasks with errors
+- **驗證戲**：行檢查之動作而未實重讀或重驗。檢查須用證，非記憶
+- **局部盡責**：查主交付物而忽附承諾（「我亦將⋯」）。每諾皆計
+- **偽裝勤之完美主義**：無盡磨延交付。盡責乃達所諾之標，非無限超之
+- **盡責疲勞**：會話進行中轉不周。末任務當得之勤與初同
+- **簡單任務略之**：假簡單任務不需驗。簡單任務之錯較複雜任務之錯更窘
 
-## Related Skills
+## 相關技能
 
-- `honesty-humility` — conscientiousness verifies completeness; honesty-humility ensures transparent reporting of what was and was not achieved
-- `heal` — subsystem assessment overlaps with self-verification; conscientiousness focuses on deliverable quality
-- `vishnu-bhaga` — preservation of working state complements conscientiousness in maintaining quality
-- `observe` — sustained neutral observation supports the verification process
-- `intrinsic` — genuine engagement (not compliance) drives thorough execution naturally
+- `honesty-humility` — 盡責驗完整；honesty-humility 確透明報何者成何者未成
+- `heal` — 子系統評估與自驗重疊；盡責專於交付物品質
+- `vishnu-bhaga` — 保可行態補盡責於維品質
+- `observe` — 持續中立觀察支驗證過程
+- `intrinsic` — 真誠投入（非從順）自然驅周詳執行

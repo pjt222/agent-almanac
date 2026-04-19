@@ -24,50 +24,50 @@ metadata:
   tags: project-management, retrospective, continuous-improvement, agile, lessons-learned
 ---
 
-# Conduct a Retrospective
+# 行回顧
 
-Facilitate a structured retrospective that reviews recent project execution, identifies what worked and what didn't, and produces actionable improvement items that feed back into project processes. This skill transforms raw project data into evidence-backed learnings with specific actions, owners, and due dates.
+導結構之回顧，察近項目之行，識善與不善，生可行之改附主與期。此技化原項目之資為附證之學含具體之行、主、期。
 
-## When to Use
+## 用時
 
-- End of a sprint (sprint retrospective)
-- End of a project phase or milestone
-- After a significant incident, failure, or success
-- Quarterly review of ongoing project processes
-- Before starting a similar project (lessons learned review)
+- 一衝之末（衝之回顧）
+- 項段或里程之末
+- 顯事、敗、或成之後
+- 進行程之季察
+- 始似項目前（學之回顧）
 
-## Inputs
+## 入
 
-- **Required**: Period under review (sprint number, date range, or milestone)
-- **Optional**: Status reports from the review period
-- **Optional**: Sprint velocity and completion data
-- **Optional**: Previous retrospective actions (to check closure)
-- **Optional**: Team feedback or survey results
+- **必**：察期（衝號、日範、或里程）
+- **可選**：期中之狀態報
+- **可選**：衝速與成資
+- **可選**：前回顧之行（察閉）
+- **可選**：團反或問果
 
-## Procedure
+## 法
 
-### Step 1: Gather Retrospective Data
+### 第一步：收回顧之資
 
-Read available artifacts from the review period:
-- STATUS-REPORT-*.md files for the period
-- SPRINT-PLAN.md for planned vs actual
-- BACKLOG.md for item flow and cycle times
-- Previous RETRO-*.md for open action items
+讀期中可得之品：
+- STATUS-REPORT-*.md 檔
+- SPRINT-PLAN.md 之謀對實
+- BACKLOG.md 之項流與周期
+- 前 RETRO-*.md 之開行
 
-Extract key facts:
-- Items planned vs completed
-- Velocity trend
-- Blockers encountered and resolution time
-- Unplanned work that entered the sprint
-- Open action items from previous retrospectives
+取要實：
+- 謀對成之項
+- 速之趨
+- 阻與解之時
+- 入衝之不謀作
+- 前回顧之開行
 
-**Expected:** Data summary with quantitative metrics (velocity, completion %, blocker count).
+**得：** 資摘附量度（速、成 %、阻數）。
 
-**On failure:** If no artifacts exist, base the retrospective on qualitative observations.
+**敗則：** 若無品，以質察為基。
 
-### Step 2: Structure "What Went Well"
+### 第二步：構「善者」
 
-List 3-5 things that worked well, with evidence:
+列三至五善事附證：
 
 ```markdown
 ## What Went Well
@@ -78,15 +78,15 @@ List 3-5 things that worked well, with evidence:
 | 3 | [Specific positive observation] | [Metric, example, or artifact reference] |
 ```
 
-Focus on practices to continue, not just outcomes. "Daily standups kept blockers visible" is more actionable than "We delivered on time."
+專於可續之實，非只果。「日站會使阻可見」勝於「我等按期送」。
 
-**Expected:** 3-5 evidence-backed positive observations.
+**得：** 三至五附證之善察。
 
-**On failure:** If nothing went well, look harder — even small wins matter. At minimum, the team completed the period.
+**敗則：** 若無善，更察——微勝亦要。至少團已畢此期。
 
-### Step 3: Structure "What Needs Improvement"
+### 第三步：構「需改者」
 
-List 3-5 things that need improvement, with evidence:
+列三至五需改事附證：
 
 ```markdown
 ## What Needs Improvement
@@ -97,15 +97,15 @@ List 3-5 things that need improvement, with evidence:
 | 3 | [Specific issue] | [Metric, example, or incident] | [Effect on delivery] |
 ```
 
-Be specific and factual. "Estimation was off" is vague. "3 of 5 items exceeded estimates by >50%, adding 8 unplanned days" is actionable.
+宜具體實。「估不準」含糊。「五中三項逾估五成，加八不謀日」可行。
 
-**Expected:** 3-5 evidence-backed improvement areas with stated impact.
+**得：** 三至五附證之改區附影。
 
-**On failure:** If the team claims everything is fine, compare planned vs actual metrics — gaps reveal issues.
+**敗則：** 若團言皆善，比謀對實之量——間隙露問。
 
-### Step 4: Generate Improvement Actions
+### 第四步：生改行
 
-For each improvement area, create an actionable item:
+每改區立可行之項：
 
 ```markdown
 ## Improvement Actions
@@ -116,19 +116,19 @@ For each improvement area, create an actionable item:
 | A-003 | [Specific action] | [Name] | [Date] | [How to verify success] | Improvement #3 |
 ```
 
-Each action must be:
-- Specific (not "improve estimation" but "add estimation review step to grooming")
-- Owned (one person accountable)
-- Time-bound (due date within next 1-2 sprints)
-- Verifiable (success criteria defined)
+每行必：
+- 具體（非「改估」而「加估察步於整理」）
+- 有主（一人負）
+- 有期（下一二衝內）
+- 可驗（成之準已定）
 
-**Expected:** 2-4 improvement actions with owners and due dates.
+**得：** 二至四改行附主與期。
 
-**On failure:** If actions are too vague, apply the "how would you verify this was done?" test.
+**敗則：** 若行過含糊，施「汝如何驗此已成」之試。
 
-### Step 5: Review Previous Actions and Write Report
+### 第五步：察前行且書報
 
-Check previous retrospective actions for closure:
+察前回顧之行為閉：
 
 ```markdown
 ## Previous Action Review
@@ -138,9 +138,9 @@ Check previous retrospective actions for closure:
 | A-prev-002 | [Action from last retro] | [Name] | Closed / Open / Recurring | [Outcome] |
 ```
 
-Flag recurring items (same issue appearing in 3+ retrospectives) — these need escalation or a different approach.
+標重現之項（同問於三回顧以上）——此需升或異法。
 
-Write the complete retrospective:
+書全回顧：
 
 ```markdown
 # Retrospective: [Sprint N / Phase Name / Date Range]
@@ -170,34 +170,34 @@ Write the complete retrospective:
 *Retrospective facilitated by: [Name/Agent]*
 ```
 
-Save as `RETRO-[YYYY-MM-DD].md`.
+存為 `RETRO-[YYYY-MM-DD].md`。
 
-**Expected:** Complete retrospective document saved with actions, evidence, and previous action review.
+**得：** 全回顧之書附行、證、前行察。
 
-**On failure:** If the retrospective has no improvement actions, it's not driving change — revisit Step 3.
+**敗則：** 若回顧無改行，未驅變——重訪第三步。
 
-## Validation
+## 驗
 
-- [ ] Retrospective file created with date-stamped filename
-- [ ] Period summary includes quantitative metrics
-- [ ] "What Went Well" has 3-5 evidence-backed items
-- [ ] "What Needs Improvement" has 3-5 evidence-backed items
-- [ ] Improvement actions have owners, due dates, and success criteria
-- [ ] Previous retrospective actions reviewed for closure
-- [ ] Recurring issues flagged
+- [ ] 回顧檔建附日戳之名
+- [ ] 期摘含量度
+- [ ] 「善者」有三至五附證項
+- [ ] 「需改者」有三至五附證項
+- [ ] 改行有主、期、成準
+- [ ] 前回顧之行已察閉
+- [ ] 重現之問已標
 
-## Common Pitfalls
+## 陷
 
-- **Blame game**: Retrospectives review processes and practices, not people. Frame issues as systemic, not personal.
-- **Actions without follow-through**: The biggest retrospective failure. Always review previous actions before creating new ones.
-- **Too many actions**: 2-4 focused actions are better than 10 vague ones. The team can only absorb so many changes.
-- **No evidence**: "We feel estimation is bad" is opinion. "3 of 5 items exceeded estimates by 50%" is data. Always attach evidence.
-- **Skipping the positives**: Only discussing problems is demoralizing. Celebrating wins reinforces good practices.
+- **責之戲**：回顧察程與實，非人。構問為系，非私。
+- **行而不隨**：回顧最大之敗。建新行前必察前行。
+- **行過多**：二至四專行勝於十含糊。團只可受幾變。
+- **無證**：「我等覺估不準」乃意。「五中三項逾估五成」乃資。必附證。
+- **略善**：只論問則挫。慶勝固善實。
 
-## Related Skills
+## 參
 
-- `generate-status-report` — status reports provide the data for retrospectives
-- `manage-backlog` — improvement actions feed back into the backlog
-- `plan-sprint` — retrospective learnings improve sprint planning accuracy
-- `draft-project-charter` — review charter assumptions and risk accuracy
-- `create-work-breakdown-structure` — review estimation accuracy against WBS
+- `generate-status-report` — 狀報供回顧之資
+- `manage-backlog` — 改行歸積壓
+- `plan-sprint` — 回顧之學改衝謀之準
+- `draft-project-charter` — 察憲假與險之準
+- `create-work-breakdown-structure` — 察估準對 WBS

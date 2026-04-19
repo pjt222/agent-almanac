@@ -86,9 +86,9 @@ AI Cooper Color Codes:
 
 Identify the current color code. If the answer is White (no monitoring), the awareness practice has already succeeded by revealing the gap.
 
-**Expected:** Accurate self-assessment of the current awareness level. Yellow is the goal during normal work. White should be rare and brief. Extended Orange is unsustainable — either confirm or dismiss the concern.
+**Got:** Accurate self-assessment of the current awareness level. Yellow is the goal during normal work. White should be rare and brief. Extended Orange is unsustainable — either confirm or dismiss the concern.
 
-**On failure:** If the color code assessment itself feels like it is being done on autopilot (going through motions), that is White masquerading as Yellow. Genuine Yellow involves actively checking output against evidence, not just claiming to do so.
+**If fail:** If the color code assessment itself feels like it is being done on autopilot (going through motions), that is White masquerading as Yellow. Genuine Yellow involves actively checking output against evidence, not just claiming to do so.
 
 ### Step 2: Detect Internal Threat Indicators
 
@@ -132,9 +132,9 @@ Threat Indicator Detection:
 
 For each category, check: is this signal present right now? If yes, shift from Yellow to Orange and identify the specific concern.
 
-**Expected:** At least one category scanned with genuine attention. Detection of a signal — even a mild one — is more useful than reporting "all clear." If every scan returns clean, the detection threshold may be too high.
+**Got:** At least one category scanned with genuine attention. Detection of a signal — even a mild one — is more useful than reporting "all clear." If every scan returns clean, the detection threshold may be too high.
 
-**On failure:** If threat detection feels abstract, ground it in the most recent output: pick the last factual claim made and ask "How do I know this is true? Did I read it, or am I generating it?" This one question catches most hallucination risk.
+**If fail:** If threat detection feels abstract, ground it in the most recent output: pick the last factual claim made and ask "How do I know this is true? Did I read it, or am I generating it?" This one question catches most hallucination risk.
 
 ### Step 3: Run OODA Loop for Identified Threats
 
@@ -163,9 +163,9 @@ AI OODA Loop:
 
 The OODA loop should be fast. The goal is not perfection but rapid cycling between observation and action. Spending too long in Orient (analysis paralysis) is the most common failure.
 
-**Expected:** A complete loop from observation through action in a brief period. The threat is either confirmed and corrected, or dismissed with specific evidence for dismissal.
+**Got:** A complete loop from observation through action in a brief period. The threat is either confirmed and corrected, or dismissed with specific evidence for dismissal.
 
-**On failure:** If the loop stalls at Orient (can't determine what the threat means), skip to a safe default: verify the uncertain fact through tool use. Direct observation resolves most ambiguity faster than analysis.
+**If fail:** If the loop stalls at Orient (can't determine what the threat means), skip to a safe default: verify the uncertain fact through tool use. Direct observation resolves most ambiguity faster than analysis.
 
 ### Step 4: Rapid Stabilization
 
@@ -197,9 +197,9 @@ AI Stabilization Protocol:
 └────────────────────────┴─────────────────────────────────────────────┘
 ```
 
-**Expected:** Return from Red/Black to Yellow through deliberate stabilization. The next output after stabilization should be measurably more grounded than the output that triggered the error.
+**Got:** Return from Red/Black to Yellow through deliberate stabilization. The next output after stabilization should be measurably more grounded than the output that triggered the error.
 
-**On failure:** If stabilization is ineffective (still confused, still producing errors), the issue may be structural — not a momentary lapse but a fundamental misunderstanding. Escalate: communicate to the user that the approach needs resetting and ask for clarification.
+**If fail:** If stabilization is ineffective (still confused, still producing errors), the issue may be structural — not a momentary lapse but a fundamental misunderstanding. Escalate: communicate to the user that the approach needs resetting and ask for clarification.
 
 ### Step 5: Apply Context-Specific Threat Profiles
 
@@ -238,9 +238,9 @@ Task-Specific Threat Profiles:
 
 Identify the current task type and adjust monitoring focus accordingly.
 
-**Expected:** Awareness sharpened for the specific threats most likely in the current task type, rather than generic monitoring of everything.
+**Got:** Awareness sharpened for the specific threats most likely in the current task type, rather than generic monitoring of everything.
 
-**On failure:** If the task type is unclear or spans multiple categories, default to hallucination risk monitoring — it is the most universally applicable threat and the most damaging when missed.
+**If fail:** If the task type is unclear or spans multiple categories, default to hallucination risk monitoring — it is the most universally applicable threat and the most damaging when missed.
 
 ### Step 6: Review and Calibrate
 
@@ -252,9 +252,9 @@ After each awareness event (threat detected, OODA cycled, stabilization applied)
 4. Was the response proportional (not over- or under-reacting)?
 5. What would catch this earlier next time?
 
-**Expected:** A brief calibration that improves future detection. Not a lengthy post-mortem — just enough to tune the sensitivity.
+**Got:** A brief calibration that improves future detection. Not a lengthy post-mortem — just enough to tune the sensitivity.
 
-**On failure:** If review produces no useful calibration, the awareness event was either trivial (no learning needed) or the review is too shallow. For significant events, ask: "What was I not monitoring that I should have been?"
+**If fail:** If review produces no useful calibration, the awareness event was either trivial (no learning needed) or the review is too shallow. For significant events, ask: "What was I not monitoring that I should have been?"
 
 ### Step 7: Integration — Maintain Yellow Default
 
@@ -265,9 +265,9 @@ Set the ongoing awareness posture.
 3. Note any recurring threat patterns from this session for MEMORY.md
 4. Return to task execution with calibrated awareness active
 
-**Expected:** A sustainable awareness level that improves work quality without slowing it. Awareness should feel like peripheral vision — present but not demanding central attention.
+**Got:** A sustainable awareness level that improves work quality without slowing it. Awareness should feel like peripheral vision — present but not demanding central attention.
 
-**On failure:** If awareness becomes exhausting or hypervigilant (chronic Orange), the threshold is too sensitive. Raise the threshold for what triggers Orange. True awareness is sustainable. If it drains energy, it is anxiety masquerading as vigilance.
+**If fail:** If awareness becomes exhausting or hypervigilant (chronic Orange), the threshold is too sensitive. Raise the threshold for what triggers Orange. True awareness is sustainable. If it drains energy, it is anxiety masquerading as vigilance.
 
 ## Validation
 
@@ -279,9 +279,9 @@ Set the ongoing awareness posture.
 - [ ] Post-event calibration was performed for any significant awareness event
 - [ ] Yellow was re-established as the sustainable default
 
-## Common Pitfalls
+## Pitfalls
 
-- **White masquerading as Yellow**: Claiming to be monitoring while actually on autopilot. The test: can you name the last fact you verified? If not, you are in White
+- **White masquerading as Yellow**: Claiming to be monitoring while on autopilot. The test: can you name the last fact you verified? If not, you are in White
 - **Chronic Orange**: Treating every uncertainty as a threat drains cognitive resources and slows work. Orange is for specific identified risks, not general anxiety. If everything feels risky, the calibration is off
 - **Observation without action**: Detecting a threat but not cycling through OODA to resolve it. Detection without response is worse than no detection — it adds anxiety without correction
 - **Skipping Orient**: Jumping from Observe to Act without understanding what the observation means. This produces reactive corrections that may be worse than the original error

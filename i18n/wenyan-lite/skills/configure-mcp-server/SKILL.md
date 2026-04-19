@@ -23,48 +23,48 @@ metadata:
   tags: mcp, claude-code, claude-desktop, mcptools, configuration
 ---
 
-# Configure MCP Server
+# 配置 MCP 伺服器
 
-Set up MCP server connections for Claude Code (WSL) and Claude Desktop (Windows).
+為 Claude Code（WSL）與 Claude Desktop（Windows）設 MCP 伺服器連接。
 
-## When to Use
+## 適用時機
 
-- Setting up Claude Code to connect to R via mcptools
-- Configuring Claude Desktop with MCP servers
-- Adding Hugging Face or other remote MCP servers
-- Troubleshooting MCP connectivity between tools
+- 配 Claude Code 以 mcptools 連 R
+- 配 Claude Desktop 含 MCP 伺服器
+- 加 Hugging Face 或他遠端 MCP 伺服器
+- 診工具間之 MCP 連通性
 
-## Inputs
+## 輸入
 
-- **Required**: MCP server type (mcptools, Hugging Face, custom)
-- **Required**: Client (Claude Code, Claude Desktop, or both)
-- **Optional**: Authentication tokens
-- **Optional**: Custom server implementation
+- **必要**：MCP 伺服器類（mcptools、Hugging Face、自訂）
+- **必要**：客戶端（Claude Code、Claude Desktop、或兩者）
+- **選擇性**：認證令牌
+- **選擇性**：自訂伺服器實作
 
-## Procedure
+## 步驟
 
-### Step 1: Install MCP Server Packages
+### 步驟一：裝 MCP 伺服器包
 
-**For R (mcptools)**:
+**R（mcptools）**：
 
 ```r
 install.packages("remotes")
 remotes::install_github("posit-dev/mcptools")
 ```
 
-**For Hugging Face**:
+**Hugging Face**：
 
 ```bash
 npm install -g mcp-remote
 ```
 
-**Expected:** `mcptools` installs from GitHub and loads in R without errors. `mcp-remote` is available globally via `which mcp-remote` or `npm list -g mcp-remote`.
+**預期：** `mcptools` 自 GitHub 裝且於 R 中無誤載入。`mcp-remote` 全域可達（`which mcp-remote` 或 `npm list -g mcp-remote`）。
 
-**On failure:** For `mcptools`, ensure `remotes` is installed first. If GitHub rate-limits the install, set a `GITHUB_PAT` in `~/.Renviron`. For `mcp-remote`, verify Node.js and npm are installed and on PATH.
+**失敗時：** `mcptools` 先確 `remotes` 已裝。若 GitHub 限速，於 `~/.Renviron` 設 `GITHUB_PAT`。`mcp-remote` 確 Node.js 與 npm 已裝且於 PATH。
 
-### Step 2: Configure Claude Code (WSL)
+### 步驟二：配 Claude Code（WSL）
 
-**R mcptools server**:
+**R mcptools 伺服器**：
 
 ```bash
 claude mcp add r-mcptools stdio \
@@ -72,7 +72,7 @@ claude mcp add r-mcptools stdio \
   -- -e "mcptools::mcp_server()"
 ```
 
-**Hugging Face server**:
+**Hugging Face 伺服器**：
 
 ```bash
 claude mcp add hf-mcp-server \
@@ -80,20 +80,20 @@ claude mcp add hf-mcp-server \
   -- mcp-remote https://huggingface.co/mcp
 ```
 
-**Verify configuration**:
+**驗配置**：
 
 ```bash
 claude mcp list
 claude mcp get r-mcptools
 ```
 
-**Expected:** `claude mcp list` shows both `r-mcptools` and `hf-mcp-server` (or whichever servers were added). `claude mcp get r-mcptools` displays the correct command and arguments.
+**預期：** `claude mcp list` 顯 `r-mcptools` 與 `hf-mcp-server`（或所加之伺服器）。`claude mcp get r-mcptools` 顯正確命令與參數。
 
-**On failure:** If the server does not appear in the list, verify `~/.claude.json` contains the correct entry. If the `claude` command is not found, add it to PATH: `export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`.
+**失敗時：** 若伺服器未見於列，驗 `~/.claude.json` 含正確項。若 `claude` 命令未找到，加入 PATH：`export PATH="$HOME/.claude/local/node_modules/.bin:$PATH"`。
 
-### Step 3: Configure Claude Desktop (Windows)
+### 步驟三：配 Claude Desktop（Windows）
 
-Edit `%APPDATA%\Claude\claude_desktop_config.json`:
+編輯 `%APPDATA%\Claude\claude_desktop_config.json`：
 
 ```json
 {
@@ -113,15 +113,15 @@ Edit `%APPDATA%\Claude\claude_desktop_config.json`:
 }
 ```
 
-**Important**: Use 8.3 short paths for Windows directories with spaces (`PROGRA~1` not `Program Files`). Use environment variables for tokens, not `--header` arguments.
+**要**：Windows 含空格之目錄用 8.3 短路徑（`PROGRA~1` 非 `Program Files`）。令牌用環境變數，非 `--header` 參數。
 
-**Expected:** The JSON config file at `%APPDATA%\Claude\claude_desktop_config.json` is valid JSON with the correct server entries. Claude Desktop shows MCP server indicators after restart.
+**預期：** `%APPDATA%\Claude\claude_desktop_config.json` 之 JSON 配置有效，含正確伺服器項。重啟後 Claude Desktop 顯 MCP 伺服器指示。
 
-**On failure:** Validate the JSON with a linter (e.g., `jq . < config.json`). Use 8.3 short paths (`PROGRA~1`) if Windows path spaces cause parsing errors. Ensure Claude Desktop is fully restarted (not just minimized).
+**失敗時：** 以 linter 驗 JSON（如 `jq . < config.json`）。若 Windows 路徑空格致解析錯，用 8.3 短路徑（`PROGRA~1`）。確 Claude Desktop 全重啟（非僅最小化）。
 
-### Step 4: Configure R Session for MCP
+### 步驟四：配 R 會話於 MCP
 
-Add to project `.Rprofile`:
+加於項目 `.Rprofile`：
 
 ```r
 if (requireNamespace("mcptools", quietly = TRUE)) {
@@ -129,35 +129,35 @@ if (requireNamespace("mcptools", quietly = TRUE)) {
 }
 ```
 
-This starts the MCP session automatically when opening the project in RStudio.
+此於 RStudio 開項目時自啟 MCP 會話。
 
-**Expected:** The `.Rprofile` file conditionally starts `mcptools::mcp_session()` when the project is opened in RStudio, making MCP tools available automatically.
+**預期：** `.Rprofile` 於項目於 RStudio 開時有條件啟 `mcptools::mcp_session()`，令 MCP 工具自動可用。
 
-**On failure:** If `mcptools` is not found at session start, verify it is installed in the library that RStudio uses (check `.libPaths()`). If using renv, ensure mcptools is in the renv library.
+**失敗時：** 若會話始時 `mcptools` 未找到，驗其已裝於 RStudio 用之庫（查 `.libPaths()`）。若用 renv，確 mcptools 於 renv 庫中。
 
-### Step 5: Verify Connections
+### 步驟五：驗連接
 
-**Test R MCP from WSL**:
+**自 WSL 測 R MCP**：
 
 ```bash
 "/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe" -e "mcptools::mcp_server()"
 ```
 
-**Test from within Claude Code**:
+**自 Claude Code 內測**：
 
-Start Claude Code and use MCP tools — they should appear in the tool list.
+啟 Claude Code 並用 MCP 工具——其宜現於工具列。
 
-**Test Claude Desktop**:
+**測 Claude Desktop**：
 
-Restart Claude Desktop after configuration changes. Check for MCP server indicators in the UI.
+配置改後重啟 Claude Desktop。察 UI 中之 MCP 伺服器指示。
 
-**Expected:** Running Rscript with `mcptools::mcp_server()` produces output without errors. MCP tools appear in the Claude Code tool list during an active session. Claude Desktop shows server status after restart.
+**預期：** 以 `mcptools::mcp_server()` 行 Rscript 生輸出而無誤。MCP 工具於活會話中見於 Claude Code 工具列。Claude Desktop 重啟後顯伺服器態。
 
-**On failure:** If the Rscript command fails, check the full path is correct (`ls "/mnt/c/Program Files/R/"` to verify R version). If tools don't appear in Claude Code, restart the session. For Claude Desktop, check firewall settings.
+**失敗時：** 若 Rscript 命令敗，查全路徑正確（`ls "/mnt/c/Program Files/R/"` 以驗 R 版本）。若工具未現於 Claude Code，重啟會話。Claude Desktop 則查防火牆設。
 
-### Step 6: Multi-Server Configuration
+### 步驟六：多伺服器配置
 
-Both Claude Code and Claude Desktop support multiple MCP servers simultaneously:
+Claude Code 與 Claude Desktop 皆支同時多 MCP 伺服器：
 
 ```bash
 # Claude Code: add multiple servers
@@ -166,28 +166,28 @@ claude mcp add hf-mcp-server -e HF_TOKEN=token -- mcp-remote https://huggingface
 claude mcp add custom-server stdio "/path/to/server" -- --port 3001
 ```
 
-**Expected:** Multiple MCP servers configured and accessible simultaneously. `claude mcp list` shows all servers. Each server's tools are available in the same Claude Code session.
+**預期：** 多 MCP 伺服器同時配且可達。`claude mcp list` 顯所有伺服器。每伺服器之工具於同 Claude Code 會話可用。
 
-**On failure:** If servers conflict, check that each has a unique name in the configuration. If one server blocks others, verify servers use non-blocking I/O (stdio transport handles this automatically).
+**失敗時：** 若伺服器衝突，查各有獨名於配置中。若一伺服器阻他者，驗伺服器用非阻塞 I/O（stdio 傳輸自動處）。
 
-## Validation
+## 驗證
 
-- [ ] `claude mcp list` shows all configured servers
-- [ ] R MCP server responds to tool calls
-- [ ] Hugging Face MCP server authenticates and responds
-- [ ] Both Claude Code and Claude Desktop can connect (if both configured)
-- [ ] MCP tools appear in the tool list during sessions
+- [ ] `claude mcp list` 顯所有已配伺服器
+- [ ] R MCP 伺服器回應工具呼叫
+- [ ] Hugging Face MCP 伺服器認證並回應
+- [ ] Claude Code 與 Claude Desktop 皆可連（若兩者皆配）
+- [ ] MCP 工具見於會話之工具列
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Windows path spaces**: Use 8.3 short names or quote paths correctly. Different tools parse paths differently.
-- **Token in command args**: On Windows, `--header "Authorization: Bearer token"` fails due to parsing. Use environment variables instead.
-- **Confusing Claude Code and Claude Desktop configs**: These are separate tools with separate config files (`~/.claude.json` vs `%APPDATA%\Claude\`)
-- **npx vs global install**: `npx mcp-remote` may fail in Claude Desktop context. Install globally with `npm install -g mcp-remote`.
-- **mcptools version**: Ensure mcptools is up to date. It requires the `ellmer` package as a dependency.
+- **Windows 路徑空格**：用 8.3 短名或妥引用。不同工具解析路徑各異
+- **令牌於命令參數中**：Windows 上 `--header "Authorization: Bearer token"` 因解析而敗。改用環境變數
+- **混淆 Claude Code 與 Claude Desktop 配置**：此乃分之工具含分之配置檔（`~/.claude.json` vs `%APPDATA%\Claude\`）
+- **npx vs 全域裝**：`npx mcp-remote` 於 Claude Desktop 脈絡或敗。以 `npm install -g mcp-remote` 全域裝
+- **mcptools 版本**：確 mcptools 最新。其需 `ellmer` 包為依賴
 
-## Related Skills
+## 相關技能
 
-- `build-custom-mcp-server` - creating your own MCP server
-- `troubleshoot-mcp-connection` - debugging connection issues
-- `setup-wsl-dev-environment` - WSL setup prerequisite
+- `build-custom-mcp-server` - 建自訂 MCP 伺服器
+- `troubleshoot-mcp-connection` - 調連接問題
+- `setup-wsl-dev-environment` - WSL 設之前置

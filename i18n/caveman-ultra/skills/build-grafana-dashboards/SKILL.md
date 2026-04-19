@@ -25,35 +25,34 @@ metadata:
 
 # Build Grafana Dashboards
 
-Design and deploy Grafana dashboards with best practices for maintainability, reusability, and version control.
+Design + deploy Grafana dashboards w/ best practices for maintainability, reusability, version control.
 
-## When to Use
+## Use When
 
-- Creating visual representations of Prometheus, Loki, or other data source metrics
-- Building operational dashboards for SRE teams and incident responders
-- Establishing executive-level reporting dashboards for SLO compliance
-- Migrating dashboards from manual creation to version-controlled provisioning
-- Standardizing dashboard layouts across teams with template variables
-- Creating drill-down experiences from high-level overviews to detailed metrics
+- Visual reps of Prometheus, Loki, other data source metrics
+- Operational dashboards for SRE teams + incident responders
+- Exec-level SLO compliance reporting
+- Migrate manual creation → version-controlled provisioning
+- Standardize layouts across teams w/ template vars
+- Drill-down experiences: high-level → detailed
 
-## Inputs
+## In
 
-- **Required**: Data source configuration (Prometheus, Loki, Tempo, etc.)
-- **Required**: Metrics or logs to visualize with their query patterns
-- **Optional**: Template variables for multi-service or multi-environment views
-- **Optional**: Existing dashboard JSON for migration or modification
-- **Optional**: Annotation queries for event correlation (deployments, incidents)
+- **Required**: Data source config (Prometheus, Loki, Tempo, etc.)
+- **Required**: Metrics or logs to visualize w/ query patterns
+- **Optional**: Template vars for multi-service or multi-env views
+- **Optional**: Existing dashboard JSON for migration/mod
+- **Optional**: Annotation queries for event correlation (deploys, incidents)
 
-## Procedure
+## Do
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
-
+> See [Extended Examples](references/EXAMPLES.md) for complete config files + templates.
 
 ### Step 1: Design Dashboard Structure
 
-Plan dashboard layout and organization before building panels.
+Plan layout + organization before building panels.
 
-Create a dashboard specification document:
+Create dashboard spec doc:
 
 ```markdown
 # Service Overview Dashboard
@@ -86,24 +85,24 @@ Real-time operational view for on-call engineers monitoring the API service.
 - Alert firing/resolving events
 ```
 
-Key design principles:
-- **Most important metrics first**: Critical metrics at the top, details below
-- **Consistent time ranges**: Synchronize time across all panels
-- **Drill-down paths**: Link from high-level to detailed dashboards
-- **Responsive layout**: Use rows and panel widths that work on various screens
+Design principles:
+- **Most important first**: Critical at top, details below
+- **Consistent time ranges**: Sync time across panels
+- **Drill-down paths**: Link high-level → detailed
+- **Responsive layout**: Rows + panel widths work on various screens
 
-**Expected:** Clear dashboard structure documented, stakeholders aligned on metrics and layout priorities.
+**→** Clear structure documented, stakeholders aligned on metrics + layout priorities.
 
-**On failure:**
-- Conduct dashboard design review with end users (SREs, developers)
-- Benchmark against industry standards (USE method, RED method, Four Golden Signals)
-- Review existing dashboards in team for consistency patterns
+**If err:**
+- Conduct design review w/ end users (SREs, devs)
+- Benchmark vs industry standards (USE method, RED method, Four Golden Signals)
+- Review existing dashboards for consistency patterns
 
-### Step 2: Create Dashboard with Template Variables
+### Step 2: Dashboard w/ Template Vars
 
-Build the dashboard foundation with reusable variables for filtering.
+Foundation w/ reusable vars for filtering.
 
-Create dashboard JSON structure (or use UI, then export):
+Dashboard JSON structure (or UI → export):
 
 ```json
 {
@@ -185,24 +184,24 @@ Create dashboard JSON structure (or use UI, then export):
 }
 ```
 
-Variable types and use cases:
-- **Query variables**: Dynamic lists from data source (`label_values()`, `query_result()`)
-- **Interval variables**: Aggregation windows for queries
-- **Custom variables**: Static lists for non-metric selections
-- **Constant variables**: Shared values across panels (data source names, thresholds)
-- **Text box variables**: Free-form input for filtering
+Var types + use cases:
+- **Query vars**: Dynamic lists from data source (`label_values()`, `query_result()`)
+- **Interval vars**: Aggregation windows for queries
+- **Custom vars**: Static lists for non-metric selections
+- **Constant vars**: Shared values across panels (data source names, thresholds)
+- **Text box vars**: Free-form in for filtering
 
-**Expected:** Variables populate correctly from data source, cascading filters work (environment filters instances), default selections appropriate.
+**→** Vars populate from data source, cascading filters work (env filters instances), default selections appropriate.
 
-**On failure:**
-- Test variable queries independently in Prometheus UI
-- Check for circular dependencies (variable A depends on B depends on A)
-- Verify regex patterns in `allValue` field for multi-select variables
-- Review variable refresh settings (on dashboard load vs on time range change)
+**If err:**
+- Test var queries independently in Prometheus UI
+- Check circular deps (A depends on B depends on A)
+- Verify regex in `allValue` for multi-select vars
+- Review var refresh settings (on dashboard load vs time range change)
 
-### Step 3: Build Visualization Panels
+### Step 3: Visualization Panels
 
-Create panels for each metric with appropriate visualization types.
+Create panels per metric w/ appropriate viz types.
 
 **Time series panel** (request rate):
 
@@ -280,25 +279,25 @@ Create panels for each metric with appropriate visualization types.
 
 Panel selection guide:
 - **Time series**: Trends over time (rates, counts, durations)
-- **Stat**: Single current value with threshold coloring
-- **Gauge**: Percentage values (CPU, memory, disk usage)
-- **Bar gauge**: Comparing multiple values at a point in time
-- **Heatmap**: Distribution of values over time (latency percentiles)
-- **Table**: Detailed breakdown of multiple metrics
-- **Logs**: Raw log lines from Loki with filtering
+- **Stat**: Single current value w/ threshold coloring
+- **Gauge**: Pct values (CPU, mem, disk usage)
+- **Bar gauge**: Compare many values at point in time
+- **Heatmap**: Distribution over time (latency percentiles)
+- **Table**: Detailed breakdown of many metrics
+- **Logs**: Raw log lines from Loki w/ filtering
 
-**Expected:** Panels render correctly with data, visualizations match intended metric types, legends descriptive, thresholds highlight problems.
+**→** Panels render w/ data, viz matches intended types, legends descriptive, thresholds highlight problems.
 
-**On failure:**
-- Test queries in Explore view with same time range and variables
-- Check for metric name typos or incorrect label filters
-- Verify aggregation functions match metric type (rate for counters, avg for gauges)
-- Review unit configurations (bytes, seconds, requests per second)
+**If err:**
+- Test queries in Explore view w/ same time range + vars
+- Check metric name typos or incorrect label filters
+- Verify aggregation fns match metric type (rate for counters, avg for gauges)
+- Review unit configs (bytes, sec, req/sec)
 - Enable "Show query inspector" to debug empty results
 
-### Step 4: Configure Rows and Layout
+### Step 4: Rows + Layout
 
-Organize panels into collapsible rows for logical grouping.
+Organize into collapsible rows for logical grouping.
 
 ```json
 {
@@ -311,23 +310,23 @@ Organize panels into collapsible rows for logical grouping.
 ```
 
 Layout best practices:
-- Grid is 24 units wide, each panel specifies `w` (width) and `h` (height)
-- Use rows to group related panels, collapse less critical sections by default
-- Place most critical metrics in first visible area (y=0-8)
-- Maintain consistent panel heights within rows (typically 4, 8, or 12 units)
-- Use full width (24) for time series, half width (12) for comparisons
+- Grid 24 units wide, each panel specifies `w` + `h`
+- Rows group related panels, collapse less critical by default
+- Most critical in first visible area (y=0-8)
+- Consistent panel heights w/in rows (typically 4, 8, 12 units)
+- Full width (24) for time series, half (12) for comparisons
 
-**Expected:** Dashboard layout organized logically, rows collapse/expand correctly, panels align visually without gaps.
+**→** Layout organized logically, rows collapse/expand correctly, panels align w/o gaps.
 
-**On failure:**
-- Validate gridPos coordinates don't overlap
-- Check that row panels array contains panels (not null)
-- Verify y-coordinates increment logically down the page
+**If err:**
+- Validate gridPos coords don't overlap
+- Check row panels array contains panels (not null)
+- Verify y-coords increment logically down page
 - Use Grafana UI "Edit JSON" to inspect grid positions
 
-### Step 5: Add Links and Drill-Downs
+### Step 5: Links + Drill-Downs
 
-Create navigation paths between related dashboards.
+Navigation paths between related dashboards.
 
 Dashboard-level links in JSON:
 
@@ -353,25 +352,25 @@ Panel-level data links:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Link variables:
-- `$service`, `$environment`: Dashboard template variables
-- `${__field.labels.instance}`: Label value from clicked data point
+Link vars:
+- `$service`, `$environment`: Dashboard template vars
+- `${__field.labels.instance}`: Label value from clicked point
 - `${__from}`, `${__to}`: Current dashboard time range
 - `$__url_time_range`: Encoded time range for URL
 
-**Expected:** Clicking panel elements or dashboard links navigates to related views with context preserved (time range, variables).
+**→** Click elements or links navigates to related views w/ ctx preserved (time range, vars).
 
-**On failure:**
-- URL encode special characters in query parameters
-- Test links with various variable selections (All vs specific value)
-- Verify target dashboard UIDs exist and are accessible
-- Check that `includeVars` and `keepTime` flags work as expected
+**If err:**
+- URL encode special chars in query params
+- Test links w/ various var selections (All vs specific)
+- Verify target dashboard UIDs exist + accessible
+- Check `includeVars` + `keepTime` flags work
 
-### Step 6: Set Up Dashboard Provisioning
+### Step 6: Dashboard Provisioning
 
-Version control dashboards as code for reproducible deployments.
+Version control dashboards as code for reproducible deploys.
 
-Create provisioning directory structure:
+Provisioning dir structure:
 
 ```bash
 mkdir -p /etc/grafana/provisioning/{dashboards,datasources}
@@ -407,7 +406,7 @@ providers:
       foldersFromFilesStructure: true
 ```
 
-Store dashboard JSON files in `/var/lib/grafana/dashboards/`:
+Store JSON in `/var/lib/grafana/dashboards/`:
 
 ```bash
 /var/lib/grafana/dashboards/
@@ -421,7 +420,7 @@ Store dashboard JSON files in `/var/lib/grafana/dashboards/`:
     └── kubernetes.json
 ```
 
-Using Docker Compose:
+Docker Compose:
 
 ```yaml
 version: '3.8'
@@ -440,44 +439,44 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
 ```
 
-**Expected:** Dashboards automatically loaded on Grafana startup, changes to JSON files reflected after update interval, version control tracks dashboard changes.
+**→** Dashboards auto-loaded on Grafana startup, JSON changes reflected after update interval, VC tracks dashboard changes.
 
-**On failure:**
+**If err:**
 - Check Grafana logs: `docker logs grafana | grep -i provisioning`
 - Verify JSON syntax: `python -m json.tool dashboard.json`
-- Ensure file permissions allow Grafana to read: `chmod 644 *.json`
-- Test with `allowUiUpdates: false` to prevent UI modifications
-- Validate provisioning config: `curl http://localhost:3000/api/admin/provisioning/dashboards/reload -X POST -H "Authorization: Bearer $GRAFANA_API_KEY"`
+- File perms: `chmod 644 *.json`
+- Test `allowUiUpdates: false` to prevent UI mods
+- Validate provisioning: `curl http://localhost:3000/api/admin/provisioning/dashboards/reload -X POST -H "Authorization: Bearer $GRAFANA_API_KEY"`
 
-## Validation
+## Check
 
-- [ ] Dashboard loads without errors in Grafana UI
-- [ ] All template variables populate with expected values
-- [ ] Variable cascading works (selecting environment filters instances)
+- [ ] Dashboard loads w/o errs in Grafana UI
+- [ ] All template vars populate w/ expected values
+- [ ] Cascading works (env filters instances)
 - [ ] Panels display data for configured time ranges
-- [ ] Panel queries use variables correctly (no hardcoded values)
-- [ ] Thresholds highlight problem states appropriately
-- [ ] Legend formatting descriptive and not cluttered
+- [ ] Queries use vars correctly (no hardcoded)
+- [ ] Thresholds highlight problem states
+- [ ] Legend formatting descriptive, not cluttered
 - [ ] Annotations appear for relevant events
-- [ ] Links navigate to correct dashboards with context preserved
-- [ ] Dashboard provisioned from JSON file (version controlled)
-- [ ] Responsive layout works on different screen sizes
-- [ ] Tooltip and hover interactions provide useful context
+- [ ] Links navigate to correct dashboards w/ ctx preserved
+- [ ] Dashboard provisioned from JSON (version controlled)
+- [ ] Responsive layout works on diff screen sizes
+- [ ] Tooltip + hover provide useful ctx
 
-## Common Pitfalls
+## Traps
 
-- **Variable not updating panels**: Ensure queries use `$variable` syntax, not hardcoded values. Check variable refresh settings.
-- **Empty panels with correct query**: Verify time range includes data points. Check scrape interval vs aggregation window (5m rate needs >5m of data).
-- **Legend too verbose**: Use `legendFormat` to show only relevant labels, not full metric name. Example: `{{method}} - {{status}}` instead of default.
-- **Inconsistent time ranges**: Set dashboard time sync so all panels share the same time window. Use "Sync cursor" for correlated investigation.
-- **Performance issues**: Avoid queries returning high cardinality series (>1000). Use recording rules or pre-aggregation. Limit time ranges for expensive queries.
-- **Dashboard drift**: Without provisioning, manual UI changes create version control conflicts. Use `allowUiUpdates: false` in production.
-- **Missing data links**: Data links require exact label names. Use `${__field.labels.labelname}` carefully, verify label exists in query result.
-- **Annotation overload**: Too many annotations clutter the view. Filter annotations by importance or use separate annotation tracks.
+- **Var not updating panels**: Queries must use `$variable` syntax, not hardcoded. Check var refresh settings
+- **Empty panels w/ correct query**: Verify time range includes data. Check scrape interval vs aggregation window (5m rate needs >5m of data)
+- **Legend verbose**: Use `legendFormat` for relevant labels only, not full metric name. `{{method}} - {{status}}` vs default
+- **Inconsistent time ranges**: Set dashboard time sync → all panels share window. "Sync cursor" for correlated investigation
+- **Perf issues**: Avoid queries returning high cardinality (>1000). Use recording rules or pre-aggregation. Limit time ranges for expensive queries
+- **Dashboard drift**: No provisioning → manual UI changes create VC conflicts. `allowUiUpdates: false` in prod
+- **Missing data links**: Need exact label names. `${__field.labels.labelname}` carefully, verify label exists in query result
+- **Annotation overload**: Too many → clutter. Filter by importance or separate tracks
 
-## Related Skills
+## →
 
-- `setup-prometheus-monitoring` - Configure Prometheus data sources that feed Grafana dashboards
-- `configure-log-aggregation` - Set up Loki for log panel queries and log-based annotations
-- `define-slo-sli-sla` - Visualize SLO compliance and error budgets with Grafana stat and gauge panels
-- `instrument-distributed-tracing` - Add trace ID links from metrics panels to Tempo trace views
+- `setup-prometheus-monitoring` — config Prometheus data sources feeding Grafana
+- `configure-log-aggregation` — set up Loki for log panel queries + log-based annotations
+- `define-slo-sli-sla` — viz SLO compliance + error budgets w/ Grafana stat + gauge panels
+- `instrument-distributed-tracing` — add trace ID links from metrics panels to Tempo trace views

@@ -26,40 +26,40 @@ metadata:
   tags: reverse-engineering, wire-capture, http, telemetry, jsonl, observability
 ---
 
-# Conduct Empirical Wire Capture
+# 行實證之線路捕獲
 
-Set up a reproducible wire-capture harness for a CLI tool's outbound HTTP and telemetry, matching each observability target to the cheapest channel that captures it.
+為 CLI 工具之出站 HTTP 與遙測立可重現之線路捕獲架，將每觀察目標配以捕獲之最廉道。
 
-## Scope and Ethics
+## 範圍與倫理
 
-Read this before configuring any capture.
+配任何捕獲前讀此。
 
-- Wire capture is for **your own** requests against **your own** account, on **your own** machine. Capturing other users' traffic is exfiltration, not research, and is out of scope.
-- Credentials almost always appear in raw wire output. Redact at capture time (Step 6) — never "capture now, redact later."
-- Capture is *observation*, not modification. Do not use captured payloads to bypass server-side rate limits, replay another user's session, or activate a dark-launched capability without authorization.
-- The output of this skill is an internal artifact. Public publication of wire findings goes through `redact-for-public-disclosure` (Phase 5 of the parent guide), not this skill.
+- 線路捕獲用於**自**之請求、於**自**之帳號、於**自**之機。捕他用戶流量乃外洩，非研究，不在此範。
+- 憑證幾於生線路輸出中必現。於捕獲時遮（步驟六）——勿「先捕後遮」。
+- 捕獲乃*觀察*，非改動。勿以捕得之載荷繞伺服器端速率限、重播他人會話、未授權而啟暗啟能力。
+- 此技能之輸出為內部產物。線路發現之公開發布須經 `redact-for-public-disclosure`（父指南之第五階段），非此技能。
 
-## When to Use
+## 適用時機
 
-- A static finding (a flag, an endpoint reference, a telemetry-event name) needs runtime confirmation that it actually fires.
-- A payload shape is needed for a client re-implementation, a tracing instrumentation, or a cross-version diff.
-- Dark-vs-live disambiguation requires watching what the binary actually sends, not what the bundle suggests it might.
-- A behavior changed silently between versions and you want a reproducible artifact to compare against future versions.
+- 靜態發現（旗標、端點引、遙測事件名）需運行時確認其確發
+- 客戶端重實現、追蹤埋點、跨版差異需知載荷形
+- 暗啟 vs 活之分辨需觀二進制實發之物，非打包之可能示
+- 行為於版本間靜然改，需可重現之產物以比未來版
 
-Do **not** use this skill for: version baselining (use `monitor-binary-version-baselines`), flag-state probing (use `probe-feature-flag-state`), or preparing redacted artifacts for public publication (use `redact-for-public-disclosure`).
+勿用此技能於：版本基線（用 `monitor-binary-version-baselines`）、旗標態探（用 `probe-feature-flag-state`）、備公開發布之遮蔽產物（用 `redact-for-public-disclosure`）。
 
-## Inputs
+## 輸入
 
-- **Required**: A CLI harness binary you can run locally against your own account.
-- **Required**: A specific question to answer (e.g., "does endpoint X fire on event Y?", "what is the payload shape for telemetry event Z?"). Capture without a question produces a log that nobody reads.
-- **Optional**: Static findings from prior phases (marker catalog, candidate flag list, suspected endpoints) that scope the capture targets.
-- **Optional**: A private workspace path for capture artifacts. Default is `./captures/` — must be in `.gitignore`.
+- **必要**：可於本地以自己帳號行之 CLI 架二進制
+- **必要**：具體問題（如「端點 X 於事件 Y 發否？」、「遙測事件 Z 之載荷形為何？」）。無問題之捕獲生無人讀之日誌
+- **選擇性**：前階段之靜態發現（標記目錄、候選旗標清單、疑似端點）以限捕獲目標
+- **選擇性**：捕獲產物之私有工作區路徑。預設 `./captures/`——須入 `.gitignore`
 
-## Procedure
+## 步驟
 
-### Step 1: Build the Observability Table First
+### 步驟一：先建觀察表
 
-Before configuring any capture, enumerate the questions you need to answer and map each to a capture channel. One row per target.
+配任何捕獲前，枚舉需答之問題並各配以捕獲道。每目標一列。
 
 | target | observable via | blocker |
 |---|---|---|
@@ -69,24 +69,24 @@ Before configuring any capture, enumerate the questions you need to answer and m
 | Scheduled-task lifecycle event | long-running session capture | wallclock alignment |
 | Local config mutation | on-disk state diff | none — cheapest channel |
 
-Common channels, cheapest first:
+常用道，由廉至昂：
 
-- **On-disk state file mutation** — when the harness writes its state to a known path, `diff` between snapshots is free.
-- **Transcript file** — when the harness already writes a session transcript, parse it directly. No instrumentation.
-- **Verbose-fetch stderr** — bundler-provided env var (e.g., bun's `BUN_CONFIG_VERBOSE_FETCH=curl`) routes every fetch to stderr. Noisy but captures every fetch.
-- **Hook-driven subprocess** — when the harness exposes lifecycle hooks (`UserPromptSubmit`, `Stop`, etc.), spawn a short capture subprocess per event.
-- **Long-running session capture** — one process across a session, wallclock-tagged. Use for sequences.
-- **Outbound HTTP proxy** — clean separation, but requires CA cert trust and breaks when the harness pins certificates.
+- **磁碟態檔案變動** — 架將其態寫於已知路徑時，快照間之 `diff` 無費
+- **轉錄檔** — 架已寫會話轉錄時，直解之。無需埋點
+- **verbose-fetch stderr** — 打包器供之環境變數（如 bun 之 `BUN_CONFIG_VERBOSE_FETCH=curl`）將每一 fetch 導至 stderr。雜而捕每 fetch
+- **鉤子驅動子進程** — 架暴生命週期鉤子（`UserPromptSubmit`、`Stop` 等）時，每事件生短捕獲子進程
+- **長駐會話捕獲** — 跨會話一進程，附掛鐘標。用於序列
+- **出站 HTTP 代理** — 分離清晰，然需 CA 憑信，且架釘憑證時破
 
-Pick the cheapest channel that captures the target. A 3-target capture that answers one specific question beats a 20-target capture that answers none.
+取捕目標之最廉道。答一具體問題之三目標捕獲勝於答無之二十目標捕獲。
 
-**Expected:** an observability table with one row per question, each annotated with channel and known blockers. Targets without a viable channel are flagged "out of scope this session."
+**預期：** 每問題一列之觀察表，各註其道與已知阻。無可行道之目標標為「此會話不在範」。
 
-**On failure:** if every target lands in the proxy column, the table is too ambitious. Trim to the one or two highest-value questions and revisit lower-cost channels for them.
+**失敗時：** 若每目標皆落代理欄，表過雄。修至一二最高價之問題並為其覓低廉道。
 
-### Step 2: Prepare a Disposable Workspace
+### 步驟二：備可棄工作區
 
-Wire capture pollutes terminals, leaves files in unexpected places, and may leak credentials into logs.
+線路捕獲污染終端、於意外處遺檔、或洩憑證於日誌。
 
 ```bash
 mkdir -p captures/$(date -u +%Y-%m-%dT%H-%M-%S)
@@ -95,17 +95,17 @@ echo 'captures/' >> ../../.gitignore
 git check-ignore captures/ || echo "WARNING: captures/ not git-ignored"
 ```
 
-Confirm the capture session is not your primary working session — verbose-fetch and TUI rendering interfere with each other.
+確捕獲會話非主工作會話——verbose-fetch 與 TUI 渲染互擾。
 
-**Expected:** a timestamped capture directory, git-ignored, separate from your working session.
+**預期：** 帶時戳之捕獲目錄，已 git-ignore，與工作會話分。
 
-**On failure:** if `git check-ignore` reports the directory as not ignored, fix `.gitignore` before running any capture command. Do not proceed with credentials at risk.
+**失敗時：** 若 `git check-ignore` 報目錄未被忽略，執任何捕獲前先修 `.gitignore`。勿於憑證有險下進行。
 
-### Step 3: Hook-Driven Capture for Per-Event Targets
+### 步驟三：鉤子驅動之每事件捕獲
 
-When the target is a discrete event (a tool invocation, a prompt submission, a session stop), use the harness's hook surface. Spawn a short-lived capture subprocess per event; do not sit in-process.
+目標為離散事件（工具呼叫、提示提交、會話停）時，用架之鉤子面。每事件生短命捕獲子進程；勿駐於進程內。
 
-The pattern (synthetic example):
+模式（合成示例）：
 
 ```bash
 # Hook script, registered with the harness's hook config.
@@ -119,19 +119,19 @@ PAYLOAD=$(jq -c --arg ts "$TS" --arg ev "$EVENT" \
 echo "$PAYLOAD" >> "$CAPTURE_DIR/events.jsonl"
 ```
 
-Why subprocess-per-event:
+每事件一子進程之故：
 
-- No token state, no session coupling — each invocation is independent.
-- Failure of one capture does not contaminate the next.
-- Subprocess overhead is acceptable because events are rare (per-user-action, not per-byte).
+- 無令牌態、無會話耦合——每次呼皆獨立
+- 一捕之敗不污下次
+- 子進程之負可接——事件稀（按用戶行動，非按字節）
 
-**Expected:** one JSONL line per fired event in `events.jsonl`, each well-formed JSON parseable with `jq`.
+**預期：** `events.jsonl` 中每發事件一 JSONL 行，各為可以 `jq` 解之妥 JSON。
 
-**On failure:** if `jq` reports parse errors, the payload contains unescaped control chars or binary data — pipe through `jq -R` (raw input) and base64-encode the payload field instead.
+**失敗時：** 若 `jq` 報解析錯，載荷含未跳之控制字元或二進制——通過 `jq -R`（原始輸入）並代以 base64 編其載荷欄。
 
-### Step 4: Long-Running Session Capture for Sequential State
+### 步驟四：序列態之長駐會話捕獲
 
-When the target is a sequence (multi-turn handshake, scheduled-task lifecycle, retry/backoff state machine), one capture process across the session, wallclock-tagged.
+目標為序列（多輪握手、排程任務生命週期、重試/退讓狀態機）時，跨會話一捕獲進程，附掛鐘標。
 
 ```bash
 # Run the harness with verbose-fetch routed to a tee-d log.
@@ -142,17 +142,17 @@ BUN_CONFIG_VERBOSE_FETCH=curl harness-cli run-task 2> >(
 )
 ```
 
-The wallclock prefix makes ordering unambiguous when multiple captures run concurrently. TSV (tab-separated) is intentional — it survives shells that mangle JSON quoting on stderr.
+掛鐘前綴令多捕並行時排序明確。TSV（制表符分）為故意——其於損 stderr 上 JSON 引號之 shell 中存。
 
-Convert TSV to JSONL after the session ends (Step 5), not during.
+會話終後（步驟五）再將 TSV 轉為 JSONL，非其間。
 
-**Expected:** a TSV log with monotonically increasing timestamps, one stderr line per row.
+**預期：** 時戳單調遞增之 TSV 日誌，每 stderr 行一列。
 
-**On failure:** if timestamps go backwards, the harness is buffering stderr — re-run with `stdbuf -oL -eL` or the bundler's equivalent line-buffer flag.
+**失敗時：** 若時戳倒行，架緩衝其 stderr——以 `stdbuf -oL -eL` 或打包器之行緩衝等效旗標重行。
 
-### Step 5: Normalize to JSONL
+### 步驟五：歸一為 JSONL
 
-JSONL is the artifact format: one JSON object per line, fields `timestamp`, `source`, `target`, `payload`. Diff-friendly, `jq`-filterable, and stable across editor reloads.
+JSONL 為產物格式：每行一 JSON 物件，欄 `timestamp`、`source`、`target`、`payload`。易 diff、可 `jq` 篩、跨編輯器重載穩。
 
 ```bash
 # Parse the TSV from Step 4 into JSONL.
@@ -162,7 +162,7 @@ awk -F'\t' '{
 }' < session.tsv | jq -c . > session.jsonl
 ```
 
-Validate every line parses:
+驗每行可解：
 
 ```bash
 while IFS= read -r line; do
@@ -170,7 +170,7 @@ while IFS= read -r line; do
 done < session.jsonl
 ```
 
-Typical filter usage:
+典型篩用：
 
 ```bash
 # Show only requests to a specific endpoint pattern.
@@ -180,13 +180,13 @@ jq -c 'select(.payload | tostring | test("/api/v1/example"))' session.jsonl
 jq -r '.timestamp' session.jsonl | sort | uniq -c
 ```
 
-**Expected:** every line of `*.jsonl` parses with `jq -e .`; no `BAD LINE` warnings.
+**預期：** `*.jsonl` 每行可以 `jq -e .` 解；無 `BAD LINE` 警告。
 
-**On failure:** if some lines fail validation, the source TSV had embedded tabs in the payload — re-run Step 4 with a different delimiter or base64-encode the second field.
+**失敗時：** 若某行驗證敗，源 TSV 載荷中含嵌入之制表——以不同分隔符重行步驟四或以 base64 編第二欄。
 
-### Step 6: Redact at Capture Time
+### 步驟六：於捕獲時遮
 
-Strip auth headers, session IDs, bearer tokens, and PII **before** writing to disk. The `events.jsonl` and `session.jsonl` files should not, on first write, contain a single secret.
+**寫磁碟前**剝 auth 頭、會話 ID、bearer 令牌、PII。`events.jsonl` 與 `session.jsonl` 於首次寫時不該含任何秘密。
 
 ```bash
 # Stream the raw capture through a redactor before persisting.
@@ -202,7 +202,7 @@ redact() {
 cat raw-capture.txt | redact > session.tsv
 ```
 
-After capture, verify nothing slipped through:
+捕獲後驗無漏：
 
 ```bash
 # Patterns that must not appear in any *.jsonl file.
@@ -211,15 +211,15 @@ grep -Ei 'bearer [A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}' capt
   || echo "redaction clean"
 ```
 
-The `captured-then-redacted` artifact always leaks something. The only safe pattern is `redacted-as-captured`. If you discover an unredacted token in a finalized artifact, treat the entire capture as compromised — delete it, rotate the credential, and re-run.
+`先捕後遮`之產物總漏物。唯一安全模式乃`邊捕邊遮`。若於已定產物中發現未遮之令牌，視全捕為危——刪之、輪憑證、重行。
 
-**Expected:** the `LEAK DETECTED` check exits 0 (no matches). `grep` for known credential prefixes returns nothing.
+**預期：** `LEAK DETECTED` 檢以 0 退（無匹配）。對已知憑證前綴之 `grep` 無返。
 
-**On failure:** if the leak check finds a hit, do not edit the file in place. Delete the entire capture directory, extend the redactor regex to cover the leaked pattern category, and re-run from Step 3 or 4.
+**失敗時：** 若漏檢發現命中，勿於原檔編輯。刪全捕目錄，擴遮蔽之正則以涵漏之模式類，並自步驟三或四重行。
 
-### Step 7: Classify Response Categories Before Recording
+### 步驟七：記前分類回應類
 
-HTTP status codes carry different semantic weight in different contexts. Classify before recording so downstream `jq` filters operate on intent, not raw codes.
+HTTP 狀態碼於不同脈絡帶不同語意重。記前分類以令下游 `jq` 篩基於意圖而非原碼。
 
 | Observed status | Channel context | Classification |
 |---|---|---|
@@ -231,7 +231,7 @@ HTTP status codes carry different semantic weight in different contexts. Classif
 | 429 | Any | rate-limit (back off; do not retry tight) |
 | 5xx | Any | server failure (record, do not assume) |
 
-Add a `class` field at capture time:
+於捕獲時增 `class` 欄：
 
 ```bash
 jq -c '. + {class: (
@@ -243,15 +243,15 @@ jq -c '. + {class: (
   else "other" end)}' session.jsonl > session.classified.jsonl
 ```
 
-A 401 on a token-refresh channel is not a failure — it is the first half of a handshake. Misclassifying handshake steps as failures produces false-positive findings that waste reviewer attention.
+令牌刷新道上之 401 非失敗——乃握手之首半。誤將握手步視為敗生偽陽發現，耗審者之神。
 
-**Expected:** every line in `*.classified.jsonl` has a `class` field with a known value.
+**預期：** `*.classified.jsonl` 每行有 `class` 欄，值為已知者。
 
-**On failure:** if classification produces many `other` entries, the table above is incomplete for this harness — extend it with one row per recurring `other` pattern before continuing analysis.
+**失敗時：** 若分類生多 `other`，上表於此架不全——擴之，每重現之 `other` 模式一列，再續分析。
 
-### Step 8: Persist the Capture Manifest
+### 步驟八：存捕獲清單
 
-A capture run is reproducible only if the inputs are recorded alongside the outputs. Write a manifest:
+唯當輸入與輸出同記時，捕獲次方可重現。寫清單：
 
 ```bash
 cat > capture-manifest.json <<EOF
@@ -267,36 +267,36 @@ cat > capture-manifest.json <<EOF
 EOF
 ```
 
-The manifest is what makes the capture diff-able against future versions.
+清單令捕獲可對未來版本行 diff。
 
-**Expected:** `capture-manifest.json` exists, parses with `jq`, and lists every artifact file in the capture directory.
+**預期：** `capture-manifest.json` 存、以 `jq` 解、列捕獲目錄中所有產物檔。
 
-**On failure:** if the harness has no version flag, record the binary's `sha256sum` instead. An unidentified binary produces uncomparable captures.
+**失敗時：** 若架無版本旗標，代以二進制之 `sha256sum` 記之。未識之二進制生不可比之捕獲。
 
-## Validation
+## 驗證
 
-- [ ] Observability table built before any capture command was run
-- [ ] Capture directory is git-ignored and timestamped
-- [ ] Every `*.jsonl` file parses with `jq -e .` line-by-line
-- [ ] Redaction leak-check returns no matches for known credential prefixes
-- [ ] Each captured event has a `class` field with a known value
-- [ ] `capture-manifest.json` records the harness version (or sha256), channel, and question
-- [ ] The capture directory contains only the targets enumerated in Step 1 (no incidental traffic from other apps)
+- [ ] 任何捕獲命令行前已建觀察表
+- [ ] 捕獲目錄已 git-ignore 並帶時戳
+- [ ] 每 `*.jsonl` 檔逐行以 `jq -e .` 可解
+- [ ] 對已知憑證前綴之漏檢無匹配
+- [ ] 每捕獲事件有 `class` 欄，值為已知
+- [ ] `capture-manifest.json` 記架版本（或 sha256）、道、問題
+- [ ] 捕獲目錄僅含步驟一枚舉之目標（無他應用之意外流量）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Capture-first, question-later**: a log nobody reads is wasted disk and wasted attention. Build the observability table first; capture only what answers a specific question.
-- **Reaching for `mitmproxy` first**: outbound proxy is the most invasive channel. It requires cert trust, breaks on certificate pinning, and pollutes the harness's environment. Use it only when on-disk, transcript, verbose-fetch, and hook channels are all blocked.
-- **Capturing in your primary working session**: verbose-fetch stderr bleeds into TUI rendering and can leak fragments of your other work into the capture. Always use a disposable shell.
-- **"We'll redact later"**: every captured-then-redacted artifact has leaked a credential at least once. Redact at capture time or do not capture.
-- **Treating 4xx as failure uniformly**: a 401 on a token-refresh channel is a handshake step, not a failure. Classify response categories per channel context (Step 7) before drawing conclusions.
-- **Long-running capture for per-event targets**: a session-long process to capture three discrete events couples token state across captures and makes one bad event poison the next. Use hook-driven subprocesses for events; reserve session capture for sequences.
-- **No manifest**: a JSONL file without `capture-manifest.json` is not reproducible — you cannot diff it against next month's binary if you do not know which version produced it.
-- **Capturing other users' traffic**: out of scope. Wire capture is for your own account on your own machine. If a capture incidentally records another user's request, delete the capture and tighten the channel.
+- **先捕後問**：無人讀之日誌乃廢磁碟與廢神。先建觀察表；僅捕答具體問題者
+- **先伸 `mitmproxy`**：出站代理為最入侵之道。需憑信、憑證釘處破、污架之環境。僅於磁碟、轉錄、verbose-fetch、鉤子諸道皆阻時用
+- **於主工作會話中捕獲**：verbose-fetch stderr 滲入 TUI 渲染，可將他工作之片段洩入捕獲。總用可棄之 shell
+- **「我們後再遮」**：每`先捕後遮`之產物至少漏過憑證一次。捕獲時遮或勿捕
+- **一律視 4xx 為敗**：令牌刷新道上之 401 為握手步，非敗。先按道脈絡分類回應類（步驟七），再下結論
+- **以長駐捕獲捕每事件目標**：跨會話進程捕三離散事件耦令牌態於諸捕間，令一壞事件毒其下。事件用鉤子驅動子進程；序列留長駐捕獲
+- **無清單**：無 `capture-manifest.json` 之 JSONL 檔不可重現——若不知何版生之，則不能對下月之二進制 diff
+- **捕他用戶流量**：不在範。線路捕獲用於自之帳號於自之機。若捕獲意外錄他用戶請求，刪之並緊其道
 
-## Related Skills
+## 相關技能
 
-- `monitor-binary-version-baselines` — Phase 1 of the parent methodology; produces the version baseline this skill's manifest references.
-- `probe-feature-flag-state` — Phases 2-3; wire capture is one of its evidence prongs, and this skill teaches the capture half.
-- `instrument-distributed-tracing` — shares the JSONL-over-wallclock philosophy; applied here to a single binary instead of a service mesh.
-- `redact-for-public-disclosure` — Phase 5; this skill only covers capture-time redaction for internal use, not the publication-bar redaction needed before any capture leaves a private workspace.
+- `monitor-binary-version-baselines` — 父方法論之第一階段；生此技能清單所引之版本基線
+- `probe-feature-flag-state` — 第二至三階段；線路捕獲為其證據支之一，此技能教捕獲之半
+- `instrument-distributed-tracing` — 共 JSONL-掛鐘之哲學；此處應於單一二進制而非服務網格
+- `redact-for-public-disclosure` — 第五階段；此技能僅涵內部用之捕獲時遮，非任何捕獲離私工作區前所需之發布級遮

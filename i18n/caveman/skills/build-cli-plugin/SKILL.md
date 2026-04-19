@@ -31,28 +31,28 @@ metadata:
 
 # Build a CLI Plugin
 
-Add a new plugin or adapter to a CLI tool's pluggable architecture using the abstract base class pattern.
+Add new plugin or adapter to CLI tool's pluggable architecture using abstract base class pattern.
 
-## When to Use
+## When Use
 
-- Adding support for a new target framework to a CLI installer
-- Building a plugin system for a multi-target command-line tool
-- Extending an existing adapter architecture with a new strategy variant
-- Porting content delivery to a framework that uses a different file layout
+- Adding support for new target framework to CLI installer
+- Building plugin system for multi-target command-line tool
+- Extending existing adapter architecture with new strategy variant
+- Porting content delivery to framework using different file layout
 
 ## Inputs
 
-- **Required**: Framework or target the plugin supports (name, config paths, conventions)
-- **Required**: Path to the base class or plugin contract
+- **Required**: Framework or target plugin supports (name, config paths, conventions)
+- **Required**: Path to base class or plugin contract
 - **Required**: Installation strategy: `symlink`, `copy`, `file-per-item`, or `append-to-file`
-- **Optional**: Content types the plugin handles (e.g., skills only, skills + agents, full support)
+- **Optional**: Content types plugin handles (e.g., skills only, skills + agents, full support)
 - **Optional**: Scope support (project-level, global, both)
 
-## Procedure
+## Steps
 
 ### Step 1: Define the Contract
 
-The base class establishes the interface all plugins must implement:
+Base class establishes interface all plugins must implement:
 
 ```javascript
 export class FrameworkAdapter {
@@ -71,17 +71,17 @@ export class FrameworkAdapter {
 }
 ```
 
-**Static fields** define the plugin's identity and capabilities:
+**Static fields** define plugin's identity and capabilities:
 - `id`: Used in `--framework <id>` option and result reporting
 - `displayName`: Shown in human-readable output
-- `strategy`: Determines how content reaches the target
+- `strategy`: Determines how content reaches target
 - `contentTypes`: Filters which items this adapter receives
 
-If the base class does not exist yet, create it first. The pattern scales to any number of plugins.
+Base class doesn't exist yet? Create it first. Pattern scales to any number of plugins.
 
-**Expected:** A base class with static identity fields and abstract methods.
+**Got:** Base class with static identity fields and abstract methods.
 
-**On failure:** If the base class has methods that don't apply to all plugins (e.g., not all frameworks support `audit`), provide default implementations that return sensible no-ops.
+**If fail:** Base class has methods that don't apply to all plugins (e.g., not all frameworks support `audit`)? Provide default implementations returning sensible no-ops.
 
 ### Step 2: Choose the Installation Strategy
 
@@ -92,19 +92,19 @@ If the base class does not exist yet, create it first. The pattern scales to any
 | **file-per-item** | Target expects one file per item with specific format. | Cursor `.mdc` rules files |
 | **append-to-file** | Target reads a single instructions file. | Aider `CONVENTIONS.md`, Codex `AGENTS.md` |
 
-Strategy determines the implementation shape:
-- **Symlink**: `symlinkSync(source, target)` — handle relative vs. absolute paths
+Strategy determines implementation shape:
+- **Symlink**: `symlinkSync(source, target)` — handle relative vs absolute paths
 - **Copy**: `cpSync(source, target, { recursive: true })` — handle overwrites
 - **File-per-item**: `writeFileSync(target, transform(content))` — may need format conversion
 - **Append-to-file**: Wrap content in markers for idempotent insert/replace/remove
 
-**Expected:** Strategy selected with clear rationale based on how the target framework discovers content.
+**Got:** Strategy selected with clear rationale based on how target framework discovers content.
 
-**On failure:** If unsure, check the framework's documentation for how it discovers configuration or instruction files. Default to symlink if the framework reads arbitrary directories.
+**If fail:** Unsure? Check framework's documentation for how it discovers configuration or instruction files. Default to symlink if framework reads arbitrary directories.
 
 ### Step 3: Implement Detection
 
-Detection tells the CLI which frameworks are present in a project:
+Detection tells CLI which frameworks present in project:
 
 ```javascript
 // In detector.js — each rule checks for a filesystem marker
@@ -125,11 +125,11 @@ Detection strategies:
 - **Instruction file**: `AGENTS.md`, `CONVENTIONS.md`
 - **Global markers**: `~/.openclaw/`, `~/.hermes/`
 
-Always return the marker in the detection result so users can understand why a framework was detected.
+Always return marker in detection result so users can understand why framework was detected.
 
-**Expected:** A detection rule that reliably identifies the framework without false positives.
+**Got:** Detection rule reliably identifies framework without false positives.
 
-**On failure:** If the framework has no unique marker (generic directory name), use a combination of markers or require explicit `--framework` specification.
+**If fail:** Framework has no unique marker (generic directory name)? Use combination of markers or require explicit `--framework` specification.
 
 ### Step 4: Implement Install with Idempotency
 
@@ -163,14 +163,14 @@ async install(item, projectDir, scope, options) {
 ```
 
 Idempotency rules:
-- **Skip** if target exists and `--force` is not set
-- **Overwrite** if `--force` is set (remove first, then install)
+- **Skip** if target exists and `--force` not set
+- **Overwrite** if `--force` set (remove first, then install)
 - **Dry-run** always succeeds with `action: 'created'`
 - **Return value** must always be `{ action, path, details? }`
 
-**Expected:** Install creates content at the target path, skips if already present, respects `--force` and `--dry-run`.
+**Got:** Install creates content at target path, skips if already present, respects `--force` and `--dry-run`.
 
-**On failure:** If symlink creation fails on Windows/NTFS, fall back to directory junction or copy. Log the fallback.
+**If fail:** Symlink creation fails on Windows/NTFS? Fall back to directory junction or copy. Log the fallback.
 
 ### Step 5: Implement Uninstall with Cleanup
 
@@ -195,13 +195,13 @@ async uninstall(item, projectDir, scope, options) {
 ```
 
 Cleanup considerations:
-- Remove only what the plugin installed — never delete user-created files
-- For append-to-file: remove the marked section, not the entire file
+- Remove only what plugin installed — never delete user-created files
+- For append-to-file: remove marked section, not entire file
 - Leave parent directories intact (other plugins may use them)
 
-**Expected:** Uninstall removes only the plugin's content and nothing else.
+**Got:** Uninstall removes only plugin's content and nothing else.
 
-**On failure:** If removal fails (permissions, locked file), return an error result instead of throwing.
+**If fail:** Removal fails (permissions, locked file)? Return error result instead of throwing.
 
 ### Step 6: Implement Listing and Audit
 
@@ -232,9 +232,9 @@ async audit(projectDir, scope) {
 }
 ```
 
-**Expected:** Listing returns all installed items with broken-link detection. Audit summarizes health.
+**Got:** Listing returns all installed items with broken-link detection. Audit summarizes health.
 
-**On failure:** If the target directory doesn't exist, return empty results (not an error — the framework just has nothing installed).
+**If fail:** Target directory doesn't exist? Return empty results (not error — framework just has nothing installed).
 
 ### Step 7: Register the Plugin
 
@@ -244,14 +244,14 @@ import { MyFrameworkAdapter } from './my-framework.js';
 register(MyFrameworkAdapter);
 ```
 
-Registration makes the adapter available to:
+Registration makes adapter available to:
 - Auto-detection (`detectFrameworks()` → `getAdaptersForDetections()`)
 - Explicit selection (`--framework my-framework`)
 - Listing (`listAdapters()`)
 
-**Expected:** The adapter appears in `tool detect` output and can be targeted with `--framework`.
+**Got:** Adapter appears in `tool detect` output, can be targeted with `--framework`.
 
-**On failure:** If the adapter doesn't appear, verify `static id` matches the detection rule's `id` and that `register()` was called.
+**If fail:** Adapter doesn't appear? Verify `static id` matches detection rule's `id` and that `register()` was called.
 
 ### Step 8: Write Tests
 
@@ -264,34 +264,34 @@ describe('adapter: my-framework (dry-run)', () => {
 });
 ```
 
-Test at minimum: dry-run path, detection presence, and content type support.
+Test at minimum: dry-run path, detection presence, content type support.
 
-**Expected:** Adapter-specific tests confirm the installation path and behavior.
+**Got:** Adapter-specific tests confirm installation path and behavior.
 
-**On failure:** If the framework isn't detected in CI (no marker directory), use `--framework` explicitly in tests.
+**If fail:** Framework isn't detected in CI (no marker directory)? Use `--framework` explicitly in tests.
 
-## Validation
+## Checks
 
-- [ ] Plugin extends the base class correctly
-- [ ] Static fields (`id`, `displayName`, `strategy`, `contentTypes`) are set
-- [ ] Detection rule identifies the framework without false positives
-- [ ] `install()` is idempotent (skip if exists, respect `--force`)
+- [ ] Plugin extends base class correctly
+- [ ] Static fields (`id`, `displayName`, `strategy`, `contentTypes`) set
+- [ ] Detection rule identifies framework without false positives
+- [ ] `install()` idempotent (skip if exists, respect `--force`)
 - [ ] `uninstall()` removes only plugin-created content
 - [ ] `listInstalled()` detects broken symlinks
 - [ ] `audit()` reports health accurately
-- [ ] Plugin is registered and appears in `tool detect`
+- [ ] Plugin registered, appears in `tool detect`
 - [ ] Dry-run tests pass
 
-## Common Pitfalls
+## Pitfalls
 
-- **Forgetting relative vs. absolute symlinks**: Project-scope symlinks should be relative (portable). Global-scope symlinks should be absolute (not dependent on cwd).
+- **Forgetting relative vs absolute symlinks**: Project-scope symlinks should be relative (portable). Global-scope symlinks should be absolute (not dependent on cwd).
 - **Not handling missing parent directories**: Always `mkdirSync(dir, { recursive: true })` before creating content.
 - **Append-to-file without markers**: Without idempotent markers (`<!-- start:id -->` / `<!-- end:id -->`), repeated installs duplicate content. Always wrap appended content.
-- **Detection false positives**: A generic directory name (e.g., `.config/`) may match multiple frameworks. Use specific file markers inside the directory.
-- **Forgetting `supports()` check**: The installer calls `supports(item.type)` before dispatching. If `contentTypes` is wrong, the adapter silently skips items.
+- **Detection false positives**: Generic directory name (e.g., `.config/`) may match multiple frameworks. Use specific file markers inside directory.
+- **Forgetting `supports()` check**: Installer calls `supports(item.type)` before dispatching. Wrong `contentTypes`? Adapter silently skips items.
 
-## Related Skills
+## See Also
 
-- `scaffold-cli-command` — build the CLI commands that use this plugin
+- `scaffold-cli-command` — build CLI commands using this plugin
 - `test-cli-application` — testing patterns for CLI tools including adapter tests
 - `design-cli-output` — terminal output for install/uninstall results
