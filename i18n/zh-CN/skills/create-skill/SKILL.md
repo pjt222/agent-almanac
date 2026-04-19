@@ -331,6 +331,28 @@ ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-nam
 
 **失败处理：** 验证相对路径正确。从 `.claude/skills/` 出发，路径 `../../skills/<skill-name>` 应到达技能目录。使用 `readlink -f` 调试符号链接解析。Claude Code 期望在 `.claude/skills/<name>/SKILL.md` 的平铺结构。
 
+### 第 14 步：生成翻译文件
+
+> **所有技能必须执行。** 本步骤同时适用于人类作者和遵循此流程的 AI 智能体。不要跳过——遗漏的翻译会累积为过期的待办积压。
+
+在提交新技能后，立即为全部 4 种受支持的语言环境生成翻译文件：
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- skills <skill-name> "$locale"
+done
+```
+
+然后翻译每个文件中生成的散文内容（代码块和 ID 保持英文）。最后重新生成状态文件：
+
+```bash
+npm run translation:status
+```
+
+**预期结果：** 在 `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md` 创建 4 个文件，全部的 `source_commit` 与当前 HEAD 匹配。`npm run validate:translations` 针对新技能显示 0 条过期警告。
+
+**失败处理：** 若脚手架失败，在生成前先确认该技能存在于 `skills/_registry.yml` 中——脚本会读取注册表。若 `translation:status` 将新文件显示为过期，请检查 `source_commit` 是否与英文源最后修改的提交哈希匹配。
+
 ## 验证清单
 
 - [ ] SKILL.md 存在于 `skills/<skill-name>/SKILL.md`

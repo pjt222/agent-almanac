@@ -249,6 +249,28 @@ Claude Code sollte:
 
 **Bei Fehler:** Pruefen ob die Teamdatei unter `teams/<team-name>.md` liegt (nicht in einem Unterverzeichnis). Pruefen ob alle Mitglieder-Agenten in `.claude/agents/` existieren (das auf `agents/` verweist). Bestaetigen, dass das Team in `teams/_registry.yml` aufgefuehrt ist.
 
+### Schritt 11: Uebersetzungen anlegen
+
+> **Erforderlich fuer alle Teams.** Dieser Schritt gilt sowohl fuer menschliche Autoren als auch fuer KI-Agenten, die dieser Vorgehensweise folgen. Nicht ueberspringen — fehlende Uebersetzungen sammeln sich zu einem veralteten Backlog an.
+
+Unmittelbar nach dem Committen des neuen Teams Uebersetzungsdateien fuer alle 4 unterstuetzten Locales anlegen:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- teams <team-name> "$locale"
+done
+```
+
+Anschliessend die angelegte Prosa in jeder Datei uebersetzen (Code-Bloecke und IDs bleiben auf Englisch). Abschliessend die Statusdateien neu generieren:
+
+```bash
+npm run translation:status
+```
+
+**Erwartet:** 4 Dateien unter `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md` erstellt, alle mit `source_commit`, der dem aktuellen HEAD entspricht. `npm run validate:translations` zeigt 0 Stale-Warnungen fuer das neue Team.
+
+**Bei Fehler:** Falls das Scaffolding fehlschlaegt, pruefen ob das Team in `teams/_registry.yml` existiert. Falls sich die Statusdateien nicht aktualisieren, `npm run translation:status` explizit ausfuehren — es wird nicht automatisch von CI ausgeloest.
+
 ## Validierung
 
 - [ ] Teamdatei existiert unter `teams/<team-name>.md`

@@ -334,6 +334,28 @@ ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-nam
 
 **En caso de fallo:** Verificar que la ruta relativa es correcta. Desde `.claude/skills/`, la ruta `../../skills/<skill-name>` debe llegar al directorio de la habilidad. Usar `readlink -f` para depurar la resolución de symlinks. Claude Code espera una estructura plana en `.claude/skills/<name>/SKILL.md`.
 
+### Paso 14: Generar Archivos de Traducción
+
+> **Obligatorio para todas las habilidades.** Este paso se aplica tanto a autores humanos como a agentes de IA que siguen este procedimiento. No omitir — las traducciones faltantes se acumulan como un atraso obsoleto.
+
+Generar archivos de traducción para las 4 localizaciones compatibles inmediatamente después de confirmar la nueva habilidad:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- skills <skill-name> "$locale"
+done
+```
+
+Luego traducir la prosa generada en cada archivo (los bloques de código y los IDs permanecen en inglés). Finalmente regenerar los archivos de estado:
+
+```bash
+npm run translation:status
+```
+
+**Esperado:** 4 archivos creados en `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md`, todos con `source_commit` coincidiendo con el HEAD actual. `npm run validate:translations` muestra 0 advertencias de obsolescencia para la nueva habilidad.
+
+**En caso de fallo:** Si la generación de andamiaje falla, verificar que la habilidad existe en `skills/_registry.yml` antes de generar — el script lee el registro. Si `translation:status` muestra los nuevos archivos como obsoletos, comprobar que `source_commit` coincide con el hash del commit donde se modificó por última vez la fuente en inglés.
+
 ## Validación
 
 - [ ] SKILL.md existe en `skills/<skill-name>/SKILL.md`

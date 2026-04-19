@@ -180,6 +180,60 @@ cp teams/<team-name>.md teams/<team-name>-<specialty>.md
 
 **失败处理：** 若编辑破坏内部一致性（例如 CONFIG 块列出的成员不在前置元数据中），对比前置元数据 `members[]` 与 Team Composition 表格、Task Decomposition 和 CONFIG 块以找出不匹配。
 
+### 第 4.5 步：同步已翻译的变体
+
+> **当存在翻译时必须执行。** 本步骤同时适用于人类作者和遵循此流程的 AI 智能体。不要跳过——过期的 `source_commit` 值会导致 `npm run validate:translations` 在所有语言环境中报告错误的过期警告。
+
+检查此已演进团队是否存在翻译，并将其更新以反映新的源状态：
+
+```bash
+# 检查是否存在翻译
+ls i18n/*/teams/<team-name>.md 2>/dev/null
+```
+
+#### 若存在翻译
+
+1. 获取当前源提交哈希：
+
+```bash
+SOURCE_COMMIT=$(git rev-parse HEAD)
+```
+
+2. 更新每个已翻译文件前置元数据中的 `source_commit`：
+
+```bash
+for locale_file in i18n/*/teams/<team-name>.md; do
+  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
+done
+```
+
+3. 在提交消息中标记受影响的语言环境，以标记文件需要重新翻译：
+
+```
+evolve-team(<team-name>): <更改说明>
+
+Translations flagged for re-sync: de, zh-CN, ja, es
+Changed sections: <列出发生变化的章节>
+```
+
+4. 重新生成翻译状态文件：
+
+```bash
+npm run translation:status
+```
+
+#### 若不存在翻译
+
+无需操作。继续第 5 步。
+
+#### 针对变体
+
+推迟新变体的翻译，直到变体稳定（1-2 个版本）。翻译 v1.0 的变体在到达 v1.2 时可能已大幅变化，属于浪费精力。在变体至少经过一次完善之后再添加翻译。
+
+**预期结果：** 所有已翻译文件的 `source_commit` 更新到当前提交。提交消息注明哪些语言环境需要重新翻译，以及哪些章节发生了变化。`npm run translation:status` 以 0 退出。
+
+**失败处理：** 若 `sed` 无法匹配前置元数据字段，已翻译文件可能采用了非标准格式。手动打开并确认其 YAML 前置元数据中包含 `source_commit`。若字段缺失，该文件未被正确生成——使用 `npm run translate:scaffold -- teams` 重新生成。
+
 ### 第 5 步：更新 CONFIG 块
 
 `<!-- CONFIG:START -->` 和 `<!-- CONFIG:END -->` 之间的 CONFIG 块必须与散文章节保持同步。任何成员或任务更改后：

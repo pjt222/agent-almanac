@@ -325,6 +325,28 @@ ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-nam
 
 **Bei Fehler:** Pruefen ob der relative Pfad korrekt ist. Von `.claude/skills/` aus sollte der Pfad `../../skills/<skill-name>` das Skill-Verzeichnis erreichen. `readlink -f` verwenden, um Symlink-Auflosung zu debuggen.
 
+### Schritt 14: Uebersetzungen anlegen
+
+> **Erforderlich fuer alle Skills.** Dieser Schritt gilt sowohl fuer menschliche Autoren als auch fuer KI-Agenten, die dieser Vorgehensweise folgen. Nicht ueberspringen — fehlende Uebersetzungen sammeln sich zu einem veralteten Backlog an.
+
+Unmittelbar nach dem Committen des neuen Skills Uebersetzungsdateien fuer alle 4 unterstuetzten Locales anlegen:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- skills <skill-name> "$locale"
+done
+```
+
+Anschliessend die angelegte Prosa in jeder Datei uebersetzen (Code-Bloecke und IDs bleiben auf Englisch). Abschliessend die Statusdateien neu generieren:
+
+```bash
+npm run translation:status
+```
+
+**Erwartet:** 4 Dateien unter `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md` erstellt, alle mit `source_commit`, der dem aktuellen HEAD entspricht. `npm run validate:translations` zeigt 0 Stale-Warnungen fuer den neuen Skill.
+
+**Bei Fehler:** Falls das Scaffolding fehlschlaegt, vor dem Anlegen pruefen ob der Skill in `skills/_registry.yml` existiert — das Skript liest die Registry. Falls `translation:status` die neuen Dateien als veraltet anzeigt, pruefen ob `source_commit` mit dem Commit-Hash uebereinstimmt, an dem die englische Quelle zuletzt geaendert wurde.
+
 ## Validierung
 
 - [ ] SKILL.md existiert unter `skills/<skill-name>/SKILL.md`

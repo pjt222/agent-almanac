@@ -285,6 +285,28 @@ npm run update-readmes
 
 **En caso de fallo:** Si el symlink está roto, recrearlo: `ln -sf ../agents .claude/agents`. Si `npm run update-readmes` falla, verificar que `scripts/generate-readmes.js` existe y `js-yaml` está instalado.
 
+### Paso 11: Generar Archivos de Traducción
+
+> **Obligatorio para todos los agentes.** Este paso se aplica tanto a autores humanos como a agentes de IA que siguen este procedimiento. No omitir — las traducciones faltantes se acumulan como un atraso obsoleto.
+
+Generar archivos de traducción para las 4 localizaciones compatibles inmediatamente después de confirmar el nuevo agente:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- agents <agent-name> "$locale"
+done
+```
+
+Luego traducir la prosa generada en cada archivo (los bloques de código y los IDs permanecen en inglés). Finalmente regenerar los archivos de estado:
+
+```bash
+npm run translation:status
+```
+
+**Esperado:** 4 archivos creados en `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md`, todos con `source_commit` coincidiendo con el HEAD actual. `npm run validate:translations` muestra 0 advertencias de obsolescencia para el nuevo agente.
+
+**En caso de fallo:** Si la generación de andamiaje falla, verificar que el agente existe en `agents/_registry.yml`. Si los archivos de estado no se actualizan, ejecutar `npm run translation:status` explícitamente — no se activa automáticamente por CI.
+
 ## Validación
 
 - [ ] El archivo del agente existe en `agents/<agent-name>.md`

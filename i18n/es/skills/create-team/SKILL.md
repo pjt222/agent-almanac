@@ -251,6 +251,28 @@ Claude Code debe:
 
 **En caso de fallo:** Verificar que el archivo del equipo está en `teams/<team-name>.md` (no en un subdirectorio). Comprobar que todos los agentes miembros existen en `.claude/agents/` (que enlaza a `agents/`). Confirmar que el equipo está listado en `teams/_registry.yml`.
 
+### Paso 11: Generar Archivos de Traducción
+
+> **Obligatorio para todos los equipos.** Este paso se aplica tanto a autores humanos como a agentes de IA que siguen este procedimiento. No omitir — las traducciones faltantes se acumulan como un atraso obsoleto.
+
+Generar archivos de traducción para las 4 localizaciones compatibles inmediatamente después de confirmar el nuevo equipo:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- teams <team-name> "$locale"
+done
+```
+
+Luego traducir la prosa generada en cada archivo (los bloques de código y los IDs permanecen en inglés). Finalmente regenerar los archivos de estado:
+
+```bash
+npm run translation:status
+```
+
+**Esperado:** 4 archivos creados en `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md`, todos con `source_commit` coincidiendo con el HEAD actual. `npm run validate:translations` muestra 0 advertencias de obsolescencia para el nuevo equipo.
+
+**En caso de fallo:** Si la generación de andamiaje falla, verificar que el equipo existe en `teams/_registry.yml`. Si los archivos de estado no se actualizan, ejecutar `npm run translation:status` explícitamente — no se activa automáticamente por CI.
+
 ## Validación
 
 - [ ] El archivo del equipo existe en `teams/<team-name>.md`

@@ -168,6 +168,60 @@ cp agents/<agent-name>.md agents/<agent-name>-advanced.md
 
 **失敗時：** 編集でドキュメント構造が壊れた場合、`git diff` で変更を確認し、`git checkout -- <file>` で部分的な編集を元に戻す。
 
+### ステップ4.5: 翻訳済みバリアントを同期する
+
+> **翻訳が存在する場合に必須。** このステップは、この手順に従う人間の著者とAIエージェントの両方に適用される。スキップしない — 古い `source_commit` 値は、`npm run validate:translations` がすべてのロケールにわたって誤った古さ警告を報告する原因となる。
+
+進化したエージェントの翻訳が存在するかどうかを確認し、新しいソース状態を反映するように更新する:
+
+```bash
+# 既存の翻訳を確認する
+ls i18n/*/agents/<agent-name>.md 2>/dev/null
+```
+
+#### 翻訳が存在する場合
+
+1. 現在のソースコミットハッシュを取得する:
+
+```bash
+SOURCE_COMMIT=$(git rev-parse HEAD)
+```
+
+2. 各翻訳ファイルのフロントマターで `source_commit` を更新する:
+
+```bash
+for locale_file in i18n/*/agents/<agent-name>.md; do
+  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
+done
+```
+
+3. 影響を受けるロケールをコミットメッセージに含めて、再翻訳のためにファイルにフラグを立てる:
+
+```
+evolve-agent(<agent-name>): <変更の説明>
+
+Translations flagged for re-sync: de, zh-CN, ja, es
+Changed sections: <変更されたセクションをリストする>
+```
+
+4. 翻訳ステータスファイルを再生成する:
+
+```bash
+npm run translation:status
+```
+
+#### 翻訳が存在しない場合
+
+アクション不要。ステップ5に進む。
+
+#### バリアントの場合
+
+新しいバリアントの翻訳は、バリアントが安定するまで（1〜2バージョン）延期する。v1.2までに大幅に変わる可能性のあるv1.0バリアントを翻訳するのは労力の無駄だ。バリアントが少なくとも1回は改良された後で翻訳を追加する。
+
+**期待結果：** すべての翻訳ファイルで `source_commit` が現在のコミットに更新されている。コミットメッセージには、どのロケールで再翻訳が必要か、どのセクションが変更されたかが記載されている。`npm run translation:status` は0で終了する。
+
+**失敗時：** `sed` がフロントマターフィールドにマッチしない場合、翻訳ファイルが非標準のフォーマットになっている可能性がある。手動で開き、YAMLフロントマターに `source_commit` があることを確認する。フィールドが欠落している場合、ファイルは正しく足場作りされていない — `npm run translate:scaffold -- agents` で再度足場作りする。
+
 ### ステップ5: バージョンとメタデータを更新する
 
 セマンティックバージョニングに従ってフロントマターの `version` フィールドをバンプする:

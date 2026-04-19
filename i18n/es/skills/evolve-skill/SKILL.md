@@ -162,6 +162,60 @@ cp skills/<skill-name>/SKILL.md skills/<skill-name>-advanced/SKILL.md
 
 **En caso de fallo:** Si una edición rompe la estructura del documento, usar `git diff` para revisar los cambios y revertir ediciones parciales con `git checkout -- <file>`.
 
+### Paso 4.5: Sincronizar Variantes Traducidas
+
+> **Obligatorio cuando existen traducciones.** Este paso se aplica tanto a autores humanos como a agentes de IA que siguen este procedimiento. No omitir — los valores obsoletos de `source_commit` hacen que `npm run validate:translations` informe advertencias falsas de obsolescencia en todas las localizaciones.
+
+Comprobar si existen traducciones para la habilidad evolucionada y actualizarlas para reflejar el nuevo estado de la fuente:
+
+```bash
+# Comprobar las traducciones existentes
+ls i18n/*/skills/<skill-name>/SKILL.md 2>/dev/null
+```
+
+#### Si existen traducciones
+
+1. Obtener el hash del commit de la fuente actual:
+
+```bash
+SOURCE_COMMIT=$(git rev-parse HEAD)
+```
+
+2. Actualizar `source_commit` en el frontmatter de cada archivo traducido:
+
+```bash
+for locale_file in i18n/*/skills/<skill-name>/SKILL.md; do
+  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
+done
+```
+
+3. Marcar archivos para re-traducción incluyendo las localizaciones afectadas en el mensaje de commit:
+
+```
+evolve(<skill-name>): <descripción de los cambios>
+
+Translations flagged for re-sync: de, zh-CN, ja, es
+Changed sections: <lista de secciones que cambiaron>
+```
+
+4. Regenerar los archivos de estado de traducción:
+
+```bash
+npm run translation:status
+```
+
+#### Si no existen traducciones
+
+No se requiere ninguna acción. Continuar al Paso 5.
+
+#### Para Variantes
+
+Aplazar la traducción de nuevas variantes hasta que la variante se estabilice (1-2 versiones). Traducir una variante v1.0 que puede cambiar sustancialmente para v1.2 desperdicia esfuerzo. Añadir traducciones después de que la variante haya sido refinada al menos una vez.
+
+**Esperado:** Todos los archivos traducidos tienen `source_commit` actualizado al commit actual. El mensaje de commit indica qué localizaciones necesitan re-traducción y qué secciones cambiaron. `npm run translation:status` sale con 0.
+
+**En caso de fallo:** Si `sed` no coincide con el campo del frontmatter, el archivo traducido puede tener un formato no estándar. Abrirlo manualmente y verificar que tiene `source_commit` en su frontmatter YAML. Si el campo falta, el archivo no se generó correctamente — regenerar con `npm run translate:scaffold`.
+
 ### Paso 5: Actualizar la Versión y los Metadatos
 
 Incrementar el campo `version` en el frontmatter siguiendo las convenciones de semver:

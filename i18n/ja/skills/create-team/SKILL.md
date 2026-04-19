@@ -249,6 +249,28 @@ Claude Codeは以下を行うべきだ:
 
 **失敗時：** チームファイルが `teams/<team-name>.md` にあることを確認する（サブディレクトリではない）。すべてのメンバーエージェントが `.claude/agents/`（`agents/` にシンリンク）に存在することを確認する。チームが `teams/_registry.yml` に一覧されていることを確認する。
 
+### ステップ11: 翻訳ファイルを生成する
+
+> **すべてのチームに必須。** このステップは、この手順に従う人間の著者とAIエージェントの両方に適用される。スキップしない — 欠落した翻訳は古いバックログとして蓄積される。
+
+新しいチームをコミットした直後に、サポートされている4つのロケールすべての翻訳ファイルを生成する:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- teams <team-name> "$locale"
+done
+```
+
+その後、各ファイル内の生成されたプロセを翻訳する（コードブロックとIDは英語のまま）。最後にステータスファイルを再生成する:
+
+```bash
+npm run translation:status
+```
+
+**期待結果：** `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md` に4つのファイルが作成され、すべての `source_commit` が現在のHEADと一致する。`npm run validate:translations` は新しいチームに対して0件の古さ警告を示す。
+
+**失敗時：** 足場作りが失敗した場合、チームが `teams/_registry.yml` に存在するか確認する。ステータスファイルが更新されない場合、`npm run translation:status` を明示的に実行する — CIでは自動的にトリガーされない。
+
 ## バリデーション
 
 - [ ] チームファイルが `teams/<team-name>.md` に存在する

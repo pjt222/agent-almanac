@@ -281,6 +281,28 @@ npm run update-readmes
 
 **失败处理：** 若符号链接损坏，重新创建：`ln -sf ../agents .claude/agents`。若 `npm run update-readmes` 失败，检查 `scripts/generate-readmes.js` 是否存在且 `js-yaml` 已安装。
 
+### 第 11 步：生成翻译文件
+
+> **所有智能体必须执行。** 本步骤同时适用于人类作者和遵循此流程的 AI 智能体。不要跳过——遗漏的翻译会累积为过期的待办积压。
+
+在提交新智能体后，立即为全部 4 种受支持的语言环境生成翻译文件：
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- agents <agent-name> "$locale"
+done
+```
+
+然后翻译每个文件中生成的散文内容（代码块和 ID 保持英文）。最后重新生成状态文件：
+
+```bash
+npm run translation:status
+```
+
+**预期结果：** 在 `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md` 创建 4 个文件，全部的 `source_commit` 与当前 HEAD 匹配。`npm run validate:translations` 针对新智能体显示 0 条过期警告。
+
+**失败处理：** 若脚手架失败，请确认该智能体存在于 `agents/_registry.yml` 中。若状态文件未更新，请显式运行 `npm run translation:status`——CI 不会自动触发该命令。
+
 ## 验证清单
 
 - [ ] 智能体文件存在于 `agents/<agent-name>.md`

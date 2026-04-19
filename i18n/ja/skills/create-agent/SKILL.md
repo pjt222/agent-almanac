@@ -284,6 +284,28 @@ npm run update-readmes
 
 **失敗時：** シンリンクが壊れている場合、再作成する: `ln -sf ../agents .claude/agents`。`npm run update-readmes` が失敗する場合、`scripts/generate-readmes.js` が存在し `js-yaml` がインストールされていることを確認する。
 
+### ステップ11: 翻訳ファイルを生成する
+
+> **すべてのエージェントに必須。** このステップは、この手順に従う人間の著者とAIエージェントの両方に適用される。スキップしない — 欠落した翻訳は古いバックログとして蓄積される。
+
+新しいエージェントをコミットした直後に、サポートされている4つのロケールすべての翻訳ファイルを生成する:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- agents <agent-name> "$locale"
+done
+```
+
+その後、各ファイル内の生成されたプロセを翻訳する（コードブロックとIDは英語のまま）。最後にステータスファイルを再生成する:
+
+```bash
+npm run translation:status
+```
+
+**期待結果：** `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md` に4つのファイルが作成され、すべての `source_commit` が現在のHEADと一致する。`npm run validate:translations` は新しいエージェントに対して0件の古さ警告を示す。
+
+**失敗時：** 足場作りが失敗した場合、エージェントが `agents/_registry.yml` に存在するか確認する。ステータスファイルが更新されない場合、`npm run translation:status` を明示的に実行する — CIでは自動的にトリガーされない。
+
 ## バリデーション
 
 - [ ] エージェントファイルが `agents/<agent-name>.md` に存在する

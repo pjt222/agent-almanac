@@ -333,6 +333,28 @@ ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-nam
 
 **失敗時：** 相対パスが正しいことを確認する。`.claude/skills/` から、パス `../../skills/<skill-name>` がスキルディレクトリに到達するべきだ。シンリンクの解決をデバッグするには `readlink -f` を使用する。Claude Codeは `.claude/skills/<name>/SKILL.md` にフラット構造を期待する。
 
+### ステップ14: 翻訳ファイルを生成する
+
+> **すべてのスキルに必須。** このステップは、この手順に従う人間の著者とAIエージェントの両方に適用される。スキップしない — 欠落した翻訳は古いバックログとして蓄積される。
+
+新しいスキルをコミットした直後に、サポートされている4つのロケールすべての翻訳ファイルを生成する:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- skills <skill-name> "$locale"
+done
+```
+
+その後、各ファイル内の生成されたプロセを翻訳する（コードブロックとIDは英語のまま）。最後にステータスファイルを再生成する:
+
+```bash
+npm run translation:status
+```
+
+**期待結果：** `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md` に4つのファイルが作成され、すべての `source_commit` が現在のHEADと一致する。`npm run validate:translations` は新しいスキルに対して0件の古さ警告を示す。
+
+**失敗時：** 足場作りが失敗した場合、生成する前にスキルが `skills/_registry.yml` に存在するか確認する — スクリプトはレジストリを読み込む。`translation:status` が新しいファイルを古いと表示する場合、`source_commit` が英語ソースが最後に変更されたコミットハッシュと一致しているか確認する。
+
 ## バリデーション
 
 - [ ] SKILL.mdが `skills/<skill-name>/SKILL.md` に存在する

@@ -285,6 +285,28 @@ npm run update-readmes
 
 **Bei Fehler:** Falls der Symlink defekt ist, neu erstellen: `ln -sf ../agents .claude/agents`. Falls `npm run update-readmes` fehlschlaegt, pruefen ob `scripts/generate-readmes.js` existiert und `js-yaml` installiert ist.
 
+### Schritt 11: Uebersetzungen anlegen
+
+> **Erforderlich fuer alle Agenten.** Dieser Schritt gilt sowohl fuer menschliche Autoren als auch fuer KI-Agenten, die dieser Vorgehensweise folgen. Nicht ueberspringen — fehlende Uebersetzungen sammeln sich zu einem veralteten Backlog an.
+
+Unmittelbar nach dem Committen des neuen Agenten Uebersetzungsdateien fuer alle 4 unterstuetzten Locales anlegen:
+
+```bash
+for locale in de zh-CN ja es; do
+  npm run translate:scaffold -- agents <agent-name> "$locale"
+done
+```
+
+Anschliessend die angelegte Prosa in jeder Datei uebersetzen (Code-Bloecke und IDs bleiben auf Englisch). Abschliessend die Statusdateien neu generieren:
+
+```bash
+npm run translation:status
+```
+
+**Erwartet:** 4 Dateien unter `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md` erstellt, alle mit `source_commit`, der dem aktuellen HEAD entspricht. `npm run validate:translations` zeigt 0 Stale-Warnungen fuer den neuen Agenten.
+
+**Bei Fehler:** Falls das Scaffolding fehlschlaegt, pruefen ob der Agent in `agents/_registry.yml` existiert. Falls sich die Statusdateien nicht aktualisieren, `npm run translation:status` explizit ausfuehren — es wird nicht automatisch von CI ausgeloest.
+
 ## Validierung
 
 - [ ] Agentendatei existiert unter `agents/<agent-name>.md`

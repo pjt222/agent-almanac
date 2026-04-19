@@ -185,6 +185,60 @@ cp teams/<team-name>.md teams/<team-name>-<specialty>.md
 
 **Bei Fehler:** Falls eine Bearbeitung interne Konsistenz bricht (z.B. CONFIG-Block listet ein Mitglied auf, das nicht im Frontmatter steht), das Frontmatter `members[]` mit der Teamzusammensetzungs-Tabelle, Aufgabenzerlegung und CONFIG-Block vergleichen, um die Diskrepanz zu finden.
 
+### Schritt 4.5: Uebersetzte Varianten synchronisieren
+
+> **Erforderlich, wenn Uebersetzungen existieren.** Dieser Schritt gilt sowohl fuer menschliche Autoren als auch fuer KI-Agenten, die dieser Vorgehensweise folgen. Nicht ueberspringen — veraltete `source_commit`-Werte fuehren dazu, dass `npm run validate:translations` falsche Stale-Warnungen ueber alle Locales hinweg meldet.
+
+Pruefen, ob Uebersetzungen fuer das weiterentwickelte Team existieren, und sie auf den neuen Stand der Quelle aktualisieren:
+
+```bash
+# Auf vorhandene Uebersetzungen pruefen
+ls i18n/*/teams/<team-name>.md 2>/dev/null
+```
+
+#### Falls Uebersetzungen existieren
+
+1. Aktuellen Quell-Commit-Hash ermitteln:
+
+```bash
+SOURCE_COMMIT=$(git rev-parse HEAD)
+```
+
+2. `source_commit` im Frontmatter jeder uebersetzten Datei aktualisieren:
+
+```bash
+for locale_file in i18n/*/teams/<team-name>.md; do
+  sed -i "s/^source_commit: .*/source_commit: $SOURCE_COMMIT/" "$locale_file"
+done
+```
+
+3. Dateien zur Neu-Uebersetzung markieren, indem betroffene Locales in der Commit-Nachricht aufgefuehrt werden:
+
+```
+evolve-team(<team-name>): <Beschreibung der Aenderungen>
+
+Translations flagged for re-sync: de, zh-CN, ja, es
+Changed sections: <Liste der geaenderten Abschnitte>
+```
+
+4. Uebersetzungs-Statusdateien neu generieren:
+
+```bash
+npm run translation:status
+```
+
+#### Falls keine Uebersetzungen existieren
+
+Keine Aktion noetig. Mit Schritt 5 fortfahren.
+
+#### Fuer Varianten
+
+Die Uebersetzung neuer Varianten aufschieben, bis sich die Variante stabilisiert hat (1-2 Versionen). Eine v1.0-Variante zu uebersetzen, die sich bis v1.2 erheblich aendern kann, verschwendet Aufwand. Uebersetzungen hinzufuegen, nachdem die Variante mindestens einmal verfeinert wurde.
+
+**Erwartet:** Alle uebersetzten Dateien haben `source_commit` auf den aktuellen Commit aktualisiert. Die Commit-Nachricht vermerkt, welche Locales neu uebersetzt werden muessen und welche Abschnitte sich geaendert haben. `npm run translation:status` beendet mit 0.
+
+**Bei Fehler:** Falls `sed` das Frontmatter-Feld nicht matcht, hat die uebersetzte Datei moeglicherweise eine nicht standardisierte Formatierung. Manuell oeffnen und pruefen, ob `source_commit` in ihrem YAML-Frontmatter vorhanden ist. Falls das Feld fehlt, wurde die Datei nicht korrekt angelegt — mit `npm run translate:scaffold -- teams` neu anlegen.
+
 ### Schritt 5: Den CONFIG-Block aktualisieren
 
 Der CONFIG-Block zwischen `<!-- CONFIG:START -->` und `<!-- CONFIG:END -->` muss mit den Prosa-Abschnitten synchron bleiben. Nach jeder Mitglieds- oder Aufgabenaenderung:

@@ -9,11 +9,12 @@ description: >
   Die viz-Pipeline ausfuehren, um Icons aus bestehenden Glyphen zu rendern.
   Einstiegspunkt fuer das viz-Teilprojekt, der Palettengenerierung, Datenaufbau,
   Manifest-Erstellung und Icon-Rendering fuer Skills, Agents und Teams umfasst.
+  Immer build.sh als Pipeline-Einstiegspunkt verwenden — niemals Rscript direkt aufrufen.
 license: MIT
 allowed-tools: Read Bash Grep Glob
 metadata:
   author: Philipp Thoss
-  version: "1.0"
+  version: "1.1"
   domain: visualization
   complexity: basic
   language: multi
@@ -23,6 +24,8 @@ metadata:
 # Icon-Pipeline rendern
 
 Die viz-Pipeline von Anfang bis Ende ausfuehren, um Icons aus bestehenden Glyphen zu rendern. Umfasst Palettengenerierung, Datenaufbau, Manifest-Erstellung und Icon-Rendering fuer Skills, Agents und Teams.
+
+**Kanonischer Einstiegspunkt**: `bash viz/build.sh [flags]` vom Projektstamm aus oder `bash build.sh [flags]` aus `viz/`. Dieses Skript uebernimmt die Plattformerkennung (WSL, Docker, nativ), die Auswahl des R-Binaries und die Reihenfolge der Schritte. Niemals `Rscript` direkt fuer Build-Skripte aufrufen — dieser Pfad ist ausschliesslich fuer die MCP-Server-Konfiguration gedacht.
 
 ## Wann verwenden
 
@@ -45,109 +48,97 @@ Die viz-Pipeline von Anfang bis Ende ausfuehren, um Icons aus bestehenden Glyphe
 
 Sicherstellen, dass die Umgebung fuer das Rendering bereit ist.
 
-1. Arbeitsverzeichnis ist `viz/` (oder dorthin navigieren):
+1. Existenz von `viz/build.sh` bestaetigen:
    ```bash
-   cd /mnt/d/dev/p/agent-almanac/viz
+   ls -la viz/build.sh
    ```
-2. R-Pakete auf Verfuegbarkeit pruefen:
-   ```bash
-   Rscript -e "requireNamespace('ggplot2'); requireNamespace('ggforce'); requireNamespace('ggfx'); requireNamespace('ragg'); requireNamespace('magick')"
-   ```
-3. Node.js auf Verfuegbarkeit pruefen:
+2. Verfuegbarkeit von Node.js pruefen:
    ```bash
    node --version
    ```
-4. Pruefen, ob `config.yml` existiert (betriebssystemabhaengige R-Pfadauswahl)
+3. Pruefen, ob `viz/config.yml` existiert (plattformspezifische R-Pfadprofile):
+   ```bash
+   ls viz/config.yml
+   ```
 
-**Erwartet:** Alle Voraussetzungen bestehen ohne Fehler.
+`build.sh` uebernimmt die Aufloesung des R-Binaries automatisch — R-Pfade muessen nicht manuell verifiziert werden. Unter WSL wird `/usr/local/bin/Rscript` (WSL-natives R) verwendet, unter Docker das Container-R, und unter nativem Linux/macOS `Rscript` aus dem PATH.
 
-**Bei Fehler:** Fehlende R-Pakete mit `install.packages()` installieren. Falls Node.js fehlt, ueber nvm installieren. Falls `config.yml` fehlt, verwendet die Pipeline Systemstandards als Fallback.
+**Erwartet:** `build.sh`, Node.js und `config.yml` sind vorhanden.
 
-### Schritt 2: Palettenfarben generieren
+**Bei Fehler:** Falls `config.yml` fehlt, greift die Pipeline auf Systemstandards zurueck. Falls Node.js fehlt, ueber nvm installieren.
 
-Die JSON- und JS-Palettendaten aus R-Palettendefinitionen generieren.
+### Schritt 2: Pipeline ausfuehren
 
-```bash
-Rscript generate-palette-colors.R
-```
-
-**Erwartet:** `viz/public/data/palette-colors.json` und `viz/js/palette-colors.js` aktualisiert.
-
-**Bei Fehler:** Pruefen, ob `viz/R/palettes.R` gueltiger R-Code ist. Haeufiges Problem: Syntaxfehler im neuen Domaenenfarb-Eintrag.
-
-### Schritt 3: Daten aufbauen
-
-Die Skills-/Agents-/Teams-Datendateien aus Registries generieren.
-
-```bash
-node build-data.js
-```
-
-**Erwartet:** `viz/public/data/skills.json` mit aktuellen Registry-Daten aktualisiert.
-
-**Bei Fehler:** Pruefen, ob `skills/_registry.yml`, `agents/_registry.yml`, `teams/_registry.yml` gueltiges YAML sind.
-
-### Schritt 4: Manifeste erstellen
-
-Icon-Manifeste aus den Datendateien generieren.
-
-```bash
-node build-icon-manifest.js
-```
-
-**Erwartet:** Drei Manifest-Dateien aktualisiert:
-- `viz/public/data/icon-manifest.json`
-- `viz/public/data/agent-icon-manifest.json`
-- `viz/public/data/team-icon-manifest.json`
-
-**Bei Fehler:** Falls Manifeste veraltet sind, loeschen und erneut ausfuehren. Pruefen, ob `build-data.js` zuerst ausgefuehrt wurde.
-
-### Schritt 5: Icons rendern
-
-Den Icon-Renderer mit passenden Flags ausfuehren.
+`build.sh` fuehrt 5 Schritte in folgender Reihenfolge aus:
+1. Palettenfarben generieren (R) → `palette-colors.json` + `colors-generated.js`
+2. Daten aufbauen (Node) → `skills.json`
+3. Manifeste erstellen (Node) → `icon-manifest.json`, `agent-icon-manifest.json`, `team-icon-manifest.json`
+4. Icons rendern (R) → WebP-Dateien in `icons/` und `icons-hd/`
+5. Terminal-Glyphen generieren (Node) → `cli/lib/glyph-data.json`
 
 **Vollstaendige Pipeline (alle Typen, alle Paletten, Standard + HD):**
 ```bash
-Rscript build-all-icons.R
+bash viz/build.sh
 ```
 
-**Inkrementell (unveraenderte Glyphen ueberspringen):**
+**Inkrementell (bereits vorhandene Icons auf der Festplatte ueberspringen):**
 ```bash
-Rscript build-all-icons.R --skip-existing
-```
-
-**Einzelner Entitaetstyp:**
-```bash
-Rscript build-all-icons.R --type skill
-Rscript build-all-icons.R --type agent
-Rscript build-all-icons.R --type team
+bash viz/build.sh --skip-existing
 ```
 
 **Einzelne Domaene (nur Skills):**
 ```bash
-Rscript build-icons.R --only design
+bash viz/build.sh --only design
 ```
 
-**Einzelner Agent oder Team:**
+**Einzelner Entitaetstyp:**
 ```bash
-Rscript build-agent-icons.R --only mystic
-Rscript build-team-icons.R --only r-package-review
+bash viz/build.sh --type skill
+bash viz/build.sh --type agent
+bash viz/build.sh --type team
 ```
 
 **Probelauf (Vorschau ohne Rendering):**
 ```bash
-Rscript build-all-icons.R --dry-run
+bash viz/build.sh --dry-run
 ```
 
 **Nur Standardgroesse (HD ueberspringen):**
 ```bash
-Rscript build-all-icons.R --no-hd
+bash viz/build.sh --no-hd
 ```
 
-**CLI-Referenz:**
+Alle Flags nach `build.sh` werden an `build-all-icons.R` durchgereicht.
 
-| Flag | Standard | Beschreibung |
-|------|----------|--------------|
+**Erwartet:** Icons gerendert nach `viz/public/icons/<palette>/` und `viz/public/icons-hd/<palette>/`.
+
+**Bei Fehler:**
+- **renv-Haenger auf NTFS**: Die viz-`.Rprofile` umgeht `renv/activate.R` und setzt `.libPaths()` direkt. Sicherstellen, dass aus `viz/` ausgefuehrt wird (build.sh erledigt das automatisch via `cd "$(dirname "$0")"`)
+- **Fehlende R-Pakete**: `Rscript -e "install.packages(c('ggplot2', 'ggforce', 'ggfx', 'ragg', 'magick', 'future', 'furrr', 'digest'))"` aus der R-Umgebung ausfuehren, die `build.sh` auswaehlt
+- **No glyph mapped**: Die Entitaet benoetigt eine Glyphen-Funktion — den `create-glyph` Skill vor dem Rendering verwenden
+
+### Schritt 3: Ausgabe verifizieren
+
+Bestaetigen, dass das Rendering erfolgreich abgeschlossen wurde.
+
+1. Dateianzahlen gegen Erwartungen pruefen:
+   ```bash
+   find viz/public/icons/cyberpunk -name "*.webp" | wc -l
+   find viz/public/icons-hd/cyberpunk -name "*.webp" | wc -l
+   ```
+2. Auf angemessene Dateigroessen pruefen (2-80 KB pro Icon)
+3. Den `audit-icon-pipeline` Skill fuer eine vollstaendige Pruefung ausfuehren
+
+**Erwartet:** Dateianzahlen stimmen mit Manifest-Eintragsanzahlen ueberein. Dateigroessen im erwarteten Bereich.
+
+**Bei Fehler:** Falls die Anzahlen nicht uebereinstimmen, koennten einige Glyphen waehrend des Renderings Fehler verursacht haben. Das Build-Log auf `[ERROR]`-Zeilen pruefen.
+
+## CLI-Flag-Referenz
+
+Alle Flags werden von `build.sh` an `build-all-icons.R` durchgereicht:
+
+| Flag | Default | Beschreibung |
+|------|---------|--------------|
 | `--type <types>` | `all` | Kommagetrennt: skill, agent, team |
 | `--palette <name>` | `all` | Einzelne Palette oder `all` (9 Paletten) |
 | `--only <filter>` | keiner | Domaene (Skills) oder Entitaets-ID (Agents/Teams) |
@@ -161,29 +152,20 @@ Rscript build-all-icons.R --no-hd
 | `--no-hd` | aus | HD-Varianten ueberspringen |
 | `--strict` | aus | Bei erstem Unterskript-Fehler beenden |
 
-**Erwartet:** Icons gerendert nach `viz/public/icons/<palette>/` und `viz/public/icons-hd/<palette>/`.
+## Was build.sh intern tut
 
-**Bei Fehler:**
-- **renv-Haenger**: Von `viz/`-Verzeichnis aus starten, damit `.Rprofile` den Library-Pfad-Workaround aktiviert
-- **Fehlende Pakete**: `install.packages(c("ggplot2", "ggforce", "ggfx", "ragg", "magick", "future", "furrr", "digest"))`
-- **Exit-Code 5**: Bedeutet in der Regel, dass eine Glyphen-Funktion einen Fehler verursacht hat — im Log nach der spezifischen Skill-/Agent-/Team-ID suchen
-- **No glyph mapped**: Die Entitaet benoetigt eine Glyphen-Funktion — den `create-glyph` Skill verwenden
+Nur zur Referenz — diese Schritte NICHT manuell ausfuehren:
 
-### Schritt 6: Ausgabe verifizieren
-
-Bestaetigen, dass das Rendering erfolgreich abgeschlossen wurde.
-
-1. Dateianzahlen gegen Erwartungen pruefen:
-   ```bash
-   find viz/public/icons/cyberpunk -name "*.webp" | wc -l
-   find viz/public/icons-hd/cyberpunk -name "*.webp" | wc -l
-   ```
-2. Auf angemessene Dateigroessen pruefen (2-80 KB pro Icon)
-3. Manifest-Aktualitaet verifizieren (`audit-icon-pipeline` fuer vollstaendige Pruefung ausfuehren)
-
-**Erwartet:** Dateianzahlen stimmen mit Manifest-Eintragsanzahlen ueberein. Dateigroessen im erwarteten Bereich.
-
-**Bei Fehler:** Falls die Anzahlen nicht uebereinstimmen, koennten einige Glyphen waehrend des Renderings Fehler verursacht haben. Das Build-Log auf `[ERROR]`-Zeilen pruefen.
+```
+cd viz/
+# 1. Platform detection: sets R_CONFIG_ACTIVE (wsl, docker, or unset)
+# 2. R binary selection: WSL → /usr/local/bin/Rscript, Docker → same, native → Rscript
+# 3. $RSCRIPT generate-palette-colors.R
+# 4. node build-data.js
+# 5. node build-icon-manifest.js --type all
+# 6. $RSCRIPT build-all-icons.R "$@"  (flags passed through)
+# 7. node build-terminal-glyphs.js
+```
 
 ## Docker-Alternative
 
@@ -198,7 +180,7 @@ Dies fuehrt die vollstaendige Pipeline in einer isolierten Linux-Umgebung aus un
 
 ## Validierungscheckliste
 
-- [ ] Arbeitsverzeichnis ist `viz/`
+- [ ] `bash viz/build.sh` ausgefuehrt (nicht bloss `Rscript`)
 - [ ] Palettenfarben generiert (JSON + JS)
 - [ ] Datendateien aus Registries aufgebaut
 - [ ] Manifeste aus Daten generiert
@@ -208,10 +190,11 @@ Dies fuehrt die vollstaendige Pipeline in einer isolierten Linux-Umgebung aus un
 
 ## Haeufige Fehler
 
-- **Falsches Arbeitsverzeichnis**: R-Skripte erwarten, von `viz/` aus ausgefuehrt zu werden oder `viz/R/utils.R` relativ zum Projektstamm zu finden
-- **renv nicht aktiviert**: Der `.Rprofile`-Workaround erfordert Ausfuehrung von `viz/` — die Verwendung des `--vanilla`-Flags oder das Starten aus einem anderen Verzeichnis ueberspringt ihn
-- **Veraltete Manifeste**: Immer Schritte 2-4 (Palette -> Daten -> Manifest) vor Schritt 5 (Rendern) nach Registry-Aenderungen ausfuehren
-- **Parallelitaet unter Windows**: Windows unterstuetzt keine fork-basierte Parallelitaet — die Pipeline waehlt automatisch `multisession` ueber `config.yml`
+- **Rscript direkt aufrufen**: Niemals `Rscript build-icons.R` oder `Rscript generate-palette-colors.R` manuell ausfuehren. Immer `bash build.sh [flags]` verwenden. Direkte Rscript-Aufrufe umgehen die Plattformerkennung und koennen das falsche R-Binary verwenden (Windows-R ueber `~/bin/Rscript`-Wrapper anstelle von WSL-nativem R unter `/usr/local/bin/Rscript`). Hinweis: Der Windows-R-Pfad in CLAUDE.md und Guides ist **ausschliesslich fuer die MCP-Server-Konfiguration** gedacht, nicht fuer Build-Skripte.
+- **Falsches Arbeitsverzeichnis**: `build.sh` wechselt automatisch in sein eigenes Verzeichnis (`cd "$(dirname "$0")"`), sodass der Aufruf von ueberall aus funktioniert: `bash viz/build.sh` vom Projektstamm aus arbeitet korrekt.
+- **Veraltete Manifeste**: `build.sh` fuehrt die Schritte 1-5 in der richtigen Reihenfolge aus, sodass Manifeste immer vor dem Rendering neu generiert werden. Werden nur Manifeste ohne Rendering benoetigt, `node viz/build-data.js && node viz/build-icon-manifest.js` verwenden (die Node-Schritte benoetigen kein R).
+- **renv nicht aktiviert**: Der `.Rprofile`-Workaround erfordert Ausfuehrung von `viz/` — `build.sh` erledigt dies. Die Verwendung des `--vanilla`-Flags oder das Starten von R aus einem anderen Verzeichnis ueberspringt ihn.
+- **Parallelitaet unter Windows**: Windows unterstuetzt keine fork-basierte Parallelitaet — die Pipeline waehlt automatisch `multisession` ueber `config.yml`.
 
 ## Verwandte Skills
 
