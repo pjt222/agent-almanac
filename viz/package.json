@@ -21,7 +21,7 @@
     "d3": "^7",
     "force-graph": "^1.51.2",
     "mermaid": "^11.14.0",
-    "three": "^0.183.2"
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "js-yaml": "^4.1.0",
