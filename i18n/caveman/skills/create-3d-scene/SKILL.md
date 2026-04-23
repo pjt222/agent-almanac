@@ -25,16 +25,16 @@ metadata:
 
 # Create 3D Scene
 
-Set up a complete Blender scene programmatically using the Python API (bpy). Configure scene hierarchy, add mesh objects, create PBR materials with node-based shaders, position lighting and cameras, and set up environment/world settings.
+Set up full Blender scene by code. Python API (bpy). Configure scene hierarchy, add mesh objects, make PBR materials with node shaders, position lighting and cameras, set world.
 
-## When to Use
+## When Use
 
-- Creating reproducible 3D visualization scenes from scratch
+- Building reproducible 3D visualization scenes from scratch
 - Automating product visualization or architectural rendering setup
-- Generating multiple scene variations programmatically
-- Building template scenes for batch rendering workflows
-- Prototyping scene layouts before manual refinement
-- Integrating 3D visualization into data pipelines or reporting systems
+- Making many scene variations by code
+- Template scenes for batch rendering workflows
+- Prototyping scene layouts before hand-refinement
+- Plugging 3D visualization into data pipelines or reporting
 
 ## Inputs
 
@@ -46,11 +46,11 @@ Set up a complete Blender scene programmatically using the Python API (bpy). Con
 | Camera settings | Parameters | Position, rotation, focal length, DOF | `location=(7,-7,5)`, `lens=50mm` |
 | Environment | Configuration | World shader, background, ambient settings | HDRI lighting, solid color, gradient |
 
-## Procedure
+## Steps
 
 ### 1. Set Up Script Structure
 
-Create a Python script with proper imports and structure:
+Make Python script with imports and structure:
 
 ```python
 #!/usr/bin/env python3
@@ -86,8 +86,8 @@ if __name__ == "__main__":
     main()
 ```
 
-**Expected:** Script structure with clear_scene() and main() functions
-**On failure:** Review Python syntax, check bpy import works in Blender Python environment
+**Got:** Script structure with clear_scene() and main() functions
+**If fail:** Check Python syntax. Verify bpy import works in Blender Python env
 
 ### 2. Add Mesh Objects
 
@@ -120,12 +120,12 @@ def add_objects():
     return cube, sphere
 ```
 
-**Expected:** Objects appear in scene with correct names and positions
-**On failure:** Check operator syntax, verify coordinates, ensure no naming conflicts
+**Got:** Objects show in scene with right names and positions
+**If fail:** Check operator syntax. Verify coordinates. No naming conflicts
 
 ### 3. Create Materials with Node-Based Shaders
 
-Set up PBR materials using shader nodes:
+Build PBR materials using shader nodes:
 
 ```python
 def create_material(name, base_color, metallic=0.0, roughness=0.5):
@@ -173,12 +173,12 @@ def apply_materials(cube, sphere):
         sphere.data.materials.append(mat_metal)
 ```
 
-**Expected:** Materials visible in shader editor with proper node connections
-**On failure:** Check node types exist, verify link syntax, ensure color values in [0,1] range
+**Got:** Materials show in shader editor with right node connections
+**If fail:** Check node types exist. Verify link syntax. Color values in [0,1] range
 
 ### 4. Set Up Lighting
 
-Configure lights for scene illumination:
+Configure lights for scene:
 
 ```python
 def setup_lighting():
@@ -214,12 +214,12 @@ def setup_lighting():
     point.data.energy = 500.0
 ```
 
-**Expected:** Three lights with appropriate intensities and positions
-**On failure:** Adjust energy values for render engine (Cycles vs EEVEE), check rotation format
+**Got:** Three lights with right intensities and positions
+**If fail:** Tune energy values for render engine (Cycles vs EEVEE). Check rotation format
 
 ### 5. Position Camera
 
-Set up camera with proper framing:
+Set up camera with good framing:
 
 ```python
 def setup_camera():
@@ -245,8 +245,8 @@ def setup_camera():
     bpy.context.scene.camera = camera
 ```
 
-**Expected:** Camera positioned with correct focal length and DOF settings
-**On failure:** Use simpler rotation method if track_to fails, verify lens units
+**Got:** Camera positioned with right focal length and DOF settings
+**If fail:** Use simpler rotation method if track_to fails. Verify lens units
 
 ### 6. Configure World Environment
 
@@ -286,12 +286,12 @@ def setup_world():
     links.new(node_bg.outputs['Background'], node_output.inputs['Surface'])
 ```
 
-**Expected:** World shader with HDRI or solid background configured
-**On failure:** Skip HDRI loading if file missing, use Background node alone with color
+**Got:** World shader with HDRI or solid background configured
+**If fail:** Skip HDRI loading if file missing. Use Background node alone with color
 
 ### 7. Configure Render Settings
 
-Set basic render parameters:
+Set basic render params:
 
 ```python
 def setup_render_settings():
@@ -315,12 +315,12 @@ def setup_render_settings():
     scene.render.filepath = "/tmp/render_"
 ```
 
-**Expected:** Render settings configured, ready for rendering
-**On failure:** Check engine name spelling, verify resolution values are positive integers
+**Got:** Render settings configured. Ready for rendering
+**If fail:** Check engine name spelling. Verify resolution values are positive ints
 
 ### 8. Organize Scene Hierarchy
 
-Create collections for organization:
+Build collections for organization:
 
 ```python
 def organize_collections():
@@ -349,36 +349,36 @@ def organize_collections():
             col_cameras.objects.link(obj)
 ```
 
-**Expected:** Objects organized in named collections for easier management
-**On failure:** Check collection already exists before creating, handle orphaned objects
+**Got:** Objects organized in named collections. Easier management
+**If fail:** Check collection already exists before creating. Handle orphaned objects
 
-## Validation Checklist
+## Checks
 
 - [ ] Script runs without errors in Blender background mode
 - [ ] All expected objects present in scene outliner
-- [ ] Materials show correct colors and properties in shader editor
+- [ ] Materials show right colors and properties in shader editor
 - [ ] Camera positioned with objects in frame
-- [ ] Lighting provides adequate illumination (test render)
-- [ ] World environment loads correctly (HDRI or background color)
-- [ ] Render settings configured appropriately for output requirements
+- [ ] Lighting provides enough brightness (test render)
+- [ ] World environment loads right (HDRI or background color)
+- [ ] Render settings configured for output requirements
 - [ ] Scene organized logically in collections
-- [ ] No orphaned data blocks (materials, meshes without users)
-- [ ] Script includes clear_scene() for reproducibility
+- [ ] No orphaned data blocks (materials, meshes with no users)
+- [ ] Script has clear_scene() for reproducibility
 
-## Common Pitfalls
+## Pitfalls
 
-1. **Object naming conflicts**: Use unique names, check for existing objects before creating
+1. **Object naming conflicts**: Use unique names. Check for existing objects before creating
 2. **Incorrect color format**: RGB values must be tuples (r, g, b, a) in [0,1] range
 3. **Missing alpha channel**: When setting colors, include alpha: `(r, g, b, 1.0)`
 4. **Node connection errors**: Verify node types have expected inputs/outputs before linking
 5. **Camera not active**: Must set `bpy.context.scene.camera = camera_object`
 6. **Relative vs absolute paths**: Use absolute paths or Path() for cross-platform compatibility
-7. **Units confusion**: Blender uses meters by default, camera lens in millimeters
+7. **Units confusion**: Blender uses meters by default. Camera lens in millimeters
 8. **Rotation formats**: Use `math.radians()` for degree-to-radian conversion
-9. **Render engine differences**: EEVEE and Cycles have different features and parameters
-10. **Memory leaks**: Clear orphaned data blocks to prevent memory buildup in batch operations
+9. **Render engine differences**: EEVEE and Cycles have different features and params
+10. **Memory leaks**: Clear orphaned data blocks to stop memory buildup in batch ops
 
-## Related Skills
+## See Also
 
 - **[script-blender-automation](../script-blender-automation/SKILL.md)**: Advanced scripting patterns for procedural modeling and batch operations
 - **[render-blender-output](../render-blender-output/SKILL.md)**: Configure rendering pipeline and execute renders

@@ -25,32 +25,30 @@ metadata:
 
 # Create 3D Scene
 
-Set up a complete Blender scene programmatically using the Python API (bpy). Configure scene hierarchy, add mesh objects, create PBR materials with node-based shaders, position lighting and cameras, and set up environment/world settings.
+Blender scene via bpy: objects + materials + lights + camera + env.
 
-## When to Use
+## Use When
 
-- Creating reproducible 3D visualization scenes from scratch
-- Automating product visualization or architectural rendering setup
-- Generating multiple scene variations programmatically
-- Building template scenes for batch rendering workflows
-- Prototyping scene layouts before manual refinement
-- Integrating 3D visualization into data pipelines or reporting systems
+- Repro 3D viz scenes from scratch
+- Auto product / architectural render
+- Gen multi scene variations
+- Template scenes for batch render
+- Prototype layouts pre-manual
+- 3D viz → data pipelines / reports
 
-## Inputs
+## In
 
-| Input | Type | Description | Example |
+| In | Type | Desc | Example |
 |-------|------|-------------|---------|
-| Scene specifications | Configuration | Objects, materials, lighting requirements | Product dimensions, material colors, lighting setup |
-| Output requirements | Parameters | Resolution, render engine, quality settings | 1920x1080, Cycles, 128 samples |
-| Asset paths | File paths | External models, textures, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |
-| Camera settings | Parameters | Position, rotation, focal length, DOF | `location=(7,-7,5)`, `lens=50mm` |
-| Environment | Configuration | World shader, background, ambient settings | HDRI lighting, solid color, gradient |
+| Scene spec | Config | Objects, mats, lights | Product dims, colors, lights |
+| Out reqs | Params | Res, engine, quality | 1920x1080, Cycles, 128 samples |
+| Asset paths | Paths | Models, textures, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |
+| Camera | Params | Pos, rot, focal, DOF | `location=(7,-7,5)`, `lens=50mm` |
+| Env | Config | World shader, BG, ambient | HDRI, solid, gradient |
 
-## Procedure
+## Do
 
-### 1. Set Up Script Structure
-
-Create a Python script with proper imports and structure:
+### 1. Script Struct
 
 ```python
 #!/usr/bin/env python3
@@ -86,12 +84,10 @@ if __name__ == "__main__":
     main()
 ```
 
-**Expected:** Script structure with clear_scene() and main() functions
-**On failure:** Review Python syntax, check bpy import works in Blender Python environment
+**Got:** Script w/ clear_scene() + main()
+**If err:** Python syntax, bpy import in Blender env
 
-### 2. Add Mesh Objects
-
-Create primitive or imported mesh objects:
+### 2. Mesh Objects
 
 ```python
 def add_objects():
@@ -120,12 +116,10 @@ def add_objects():
     return cube, sphere
 ```
 
-**Expected:** Objects appear in scene with correct names and positions
-**On failure:** Check operator syntax, verify coordinates, ensure no naming conflicts
+**Got:** Objects in scene w/ names + pos
+**If err:** Op syntax, coords, no name conflicts
 
-### 3. Create Materials with Node-Based Shaders
-
-Set up PBR materials using shader nodes:
+### 3. Node Materials (PBR)
 
 ```python
 def create_material(name, base_color, metallic=0.0, roughness=0.5):
@@ -173,12 +167,10 @@ def apply_materials(cube, sphere):
         sphere.data.materials.append(mat_metal)
 ```
 
-**Expected:** Materials visible in shader editor with proper node connections
-**On failure:** Check node types exist, verify link syntax, ensure color values in [0,1] range
+**Got:** Mats visible in shader editor
+**If err:** Node types, link syntax, color [0,1]
 
-### 4. Set Up Lighting
-
-Configure lights for scene illumination:
+### 4. Lighting
 
 ```python
 def setup_lighting():
@@ -214,12 +206,10 @@ def setup_lighting():
     point.data.energy = 500.0
 ```
 
-**Expected:** Three lights with appropriate intensities and positions
-**On failure:** Adjust energy values for render engine (Cycles vs EEVEE), check rotation format
+**Got:** 3 lights w/ intensity + pos
+**If err:** Tune energy (Cycles vs EEVEE), rot fmt
 
-### 5. Position Camera
-
-Set up camera with proper framing:
+### 5. Camera
 
 ```python
 def setup_camera():
@@ -245,12 +235,10 @@ def setup_camera():
     bpy.context.scene.camera = camera
 ```
 
-**Expected:** Camera positioned with correct focal length and DOF settings
-**On failure:** Use simpler rotation method if track_to fails, verify lens units
+**Got:** Camera w/ focal + DOF
+**If err:** Simpler rot if track_to fails, lens units
 
-### 6. Configure World Environment
-
-Set up world shader and background:
+### 6. World Env
 
 ```python
 def setup_world():
@@ -286,12 +274,10 @@ def setup_world():
     links.new(node_bg.outputs['Background'], node_output.inputs['Surface'])
 ```
 
-**Expected:** World shader with HDRI or solid background configured
-**On failure:** Skip HDRI loading if file missing, use Background node alone with color
+**Got:** World w/ HDRI / solid BG
+**If err:** Skip HDRI if missing → BG node + color
 
-### 7. Configure Render Settings
-
-Set basic render parameters:
+### 7. Render Settings
 
 ```python
 def setup_render_settings():
@@ -315,12 +301,10 @@ def setup_render_settings():
     scene.render.filepath = "/tmp/render_"
 ```
 
-**Expected:** Render settings configured, ready for rendering
-**On failure:** Check engine name spelling, verify resolution values are positive integers
+**Got:** Render ready
+**If err:** Engine spell, res = pos ints
 
-### 8. Organize Scene Hierarchy
-
-Create collections for organization:
+### 8. Collections
 
 ```python
 def organize_collections():
@@ -349,37 +333,37 @@ def organize_collections():
             col_cameras.objects.link(obj)
 ```
 
-**Expected:** Objects organized in named collections for easier management
-**On failure:** Check collection already exists before creating, handle orphaned objects
+**Got:** Named collections
+**If err:** Check exists before create, handle orphans
 
-## Validation Checklist
+## Check
 
-- [ ] Script runs without errors in Blender background mode
-- [ ] All expected objects present in scene outliner
-- [ ] Materials show correct colors and properties in shader editor
-- [ ] Camera positioned with objects in frame
-- [ ] Lighting provides adequate illumination (test render)
-- [ ] World environment loads correctly (HDRI or background color)
-- [ ] Render settings configured appropriately for output requirements
-- [ ] Scene organized logically in collections
-- [ ] No orphaned data blocks (materials, meshes without users)
-- [ ] Script includes clear_scene() for reproducibility
+- [ ] Script runs no err in BG mode
+- [ ] Objects in outliner
+- [ ] Mat colors + props in shader editor
+- [ ] Camera frames objects
+- [ ] Lights adequate (test render)
+- [ ] World env loads
+- [ ] Render settings fit out reqs
+- [ ] Collections logical
+- [ ] No orphan data blocks
+- [ ] clear_scene() for repro
 
-## Common Pitfalls
+## Traps
 
-1. **Object naming conflicts**: Use unique names, check for existing objects before creating
-2. **Incorrect color format**: RGB values must be tuples (r, g, b, a) in [0,1] range
-3. **Missing alpha channel**: When setting colors, include alpha: `(r, g, b, 1.0)`
-4. **Node connection errors**: Verify node types have expected inputs/outputs before linking
-5. **Camera not active**: Must set `bpy.context.scene.camera = camera_object`
-6. **Relative vs absolute paths**: Use absolute paths or Path() for cross-platform compatibility
-7. **Units confusion**: Blender uses meters by default, camera lens in millimeters
-8. **Rotation formats**: Use `math.radians()` for degree-to-radian conversion
-9. **Render engine differences**: EEVEE and Cycles have different features and parameters
-10. **Memory leaks**: Clear orphaned data blocks to prevent memory buildup in batch operations
+1. **Name conflicts**: Unique names, check existing
+2. **Color fmt**: Tuples (r,g,b,a) [0,1]
+3. **Missing alpha**: `(r, g, b, 1.0)`
+4. **Node conn err**: Verify I/O before link
+5. **Camera not active**: `bpy.context.scene.camera = camera_object`
+6. **Rel vs abs paths**: Use abs / Path() cross-platform
+7. **Units**: Blender=meters, lens=mm
+8. **Rot fmt**: `math.radians()` for deg→rad
+9. **Engine diff**: EEVEE vs Cycles features
+10. **Mem leak**: Clear orphans in batch
 
-## Related Skills
+## →
 
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Advanced scripting patterns for procedural modeling and batch operations
-- **[render-blender-output](../render-blender-output/SKILL.md)**: Configure rendering pipeline and execute renders
-- **[create-2d-composition](../../visualization/create-2d-composition/SKILL.md)**: 2D graphics composition using similar scripting approaches
+- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Procedural + batch
+- **[render-blender-output](../render-blender-output/SKILL.md)**: Render pipeline + exec
+- **[create-2d-composition](../../visualization/create-2d-composition/SKILL.md)**: 2D variant

@@ -55,9 +55,9 @@ Ensure all needed labels exist in the repository.
 5. If `create_labels` is true, create missing labels: `gh label create "name" --color "hex" --description "desc"`
 6. Use consistent colors: red for critical/security, orange for high, yellow for medium, blue for architecture, green for testing
 
-**Expected:** All labels referenced by findings exist in the repository. No duplicate labels created.
+**Got:** All labels referenced by findings exist in the repository. No duplicate labels created.
 
-**On failure:** If `gh` CLI is not authenticated, instruct the user to run `gh auth login`. If label creation is denied (insufficient permissions), proceed without creating labels and note which labels are missing.
+**If fail:** If `gh` CLI is not authenticated, instruct the user to run `gh auth login`. If label creation is denied (insufficient permissions), proceed without creating labels and note which labels are missing.
 
 ### Step 2: Group Findings
 
@@ -70,9 +70,9 @@ Batch related findings into logical issues to avoid issue sprawl.
 5. If a group has more than 8 findings, split into sub-groups by sub-theme
 6. Each group becomes one GitHub issue
 
-**Expected:** A set of issue groups, each containing 1-8 related findings. The total number of issues should be manageable (typically 5-15 for a full codebase review).
+**Got:** A set of issue groups, each containing 1-8 related findings. The total number of issues should be manageable (typically 5-15 for a full codebase review).
 
-**On failure:** If findings have no grouping metadata, fall back to one issue per finding. This is acceptable for small finding sets (< 10) but produces too many issues for larger sets.
+**If fail:** If findings have no grouping metadata, fall back to one issue per finding. This is acceptable for small finding sets (< 10) but produces too many issues for larger sets.
 
 ### Step 3: Compose Issues
 
@@ -100,9 +100,9 @@ Build each issue using a standard template.
 3. Apply labels: severity label + theme label + any custom labels
 4. If findings reference specific files, mention them in the body (not as assignees)
 
-**Expected:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria, and appropriate labels.
+**Got:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria, and appropriate labels.
 
-**On failure:** If the body exceeds GitHub's issue size limit (65536 chars), split the issue into parts and cross-reference them.
+**If fail:** If the body exceeds GitHub's issue size limit (65536 chars), split the issue into parts and cross-reference them.
 
 ### Step 4: Create Issues
 
@@ -120,9 +120,9 @@ Create the issues using `gh` CLI and report results.
 4. After all issues are created, print a summary table: `#number | Title | Labels | Findings count`
 5. If issues should be sequenced, add cross-references: edit the first issue to mention "Blocked by #X" or "See also #Y"
 
-**Expected:** All issues created successfully. A summary table with issue numbers and URLs is printed.
+**Got:** All issues created successfully. A summary table with issue numbers and URLs is printed.
 
-**On failure:** If an individual issue fails to create, log the error and continue with remaining issues. Report failures at the end. Common failures: authentication expired, label not found (if `create_labels` was false), network timeout.
+**If fail:** If an individual issue fails to create, log the error and continue with remaining issues. Report failures at the end. Common failures: authentication expired, label not found (if `create_labels` was false), network timeout.
 
 ## Validation
 
@@ -133,7 +133,7 @@ Create the issues using `gh` CLI and report results.
 - [ ] Issue count is reasonable for the finding count (not 1:1 for large sets)
 - [ ] Summary table was printed with all issue URLs
 
-## Common Pitfalls
+## Pitfalls
 
 - **Issue sprawl**: Creating one issue per finding produces 20+ issues that are hard to manage. Group aggressively — 5-10 issues from a full review is ideal
 - **Missing acceptance criteria**: Issues without checkboxes cannot be verified as complete. Every finding should map to at least one checkbox

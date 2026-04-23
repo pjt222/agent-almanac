@@ -22,173 +22,173 @@ metadata:
   tags: mcp, cross-review, multi-agent, code-review, qsg, a2a
 ---
 
-# Cross-Review Project
+# 交叉審項目
 
-Two Claude Code instances review each other's projects through structured artifact exchange via the `cross-review-mcp` broker. The broker enforces Quantized Simplex Gossip (QSG) scaling laws — review bundles must contain at least 5 findings to stay in the selection regime (Γ_h ≈ 1.67), preventing shallow consensus from passing as agreement.
+二 Claude Code 實例藉 `cross-review-mcp` 仲介以結構化構件交換審他項目。仲介強行量子化單純形流言（QSG）縮放律——審查捆須含至少 5 發現以守選擇區（Γ_h ≈ 1.67），防淺共識過為同意。
 
-## When to Use
+## 適用時機
 
-- Two projects share architectural concerns and could learn from each other
-- You want independent code review that goes beyond what a single reviewer sees
-- Cross-pollination is the goal: finding patterns in one project that are missing in the other
-- You need structured, evidence-backed review with accept/reject/discuss verdicts
+- 二項目共建築關切且可自互學
+- 欲超單審者所見之獨立程式審查
+- 目標為交叉授粉：於一項目中尋於另一項目中缺之模式
+- 需結構化、證據背之審查，含接受/拒絕/討論裁決
 
-## Inputs
+## 輸入
 
-- **Required**: Two project paths accessible to two Claude Code instances
-- **Required**: `cross-review-mcp` broker running and configured as an MCP server in both instances
-- **Optional**: Focus areas — specific directories, patterns, or concerns to prioritize
-- **Optional**: Agent IDs — identifiers for each instance (default: project directory name)
+- **必要**：二項目路，二 Claude Code 實例可達
+- **必要**：`cross-review-mcp` 仲介運行，於二實例中配為 MCP 伺服器
+- **選擇性**：焦點區——待優先之特定目錄、模式、關切
+- **選擇性**：代理 ID——各實例之識別符（預設：項目目錄名）
 
-## Procedure
+## 步驟
 
-### Step 1: Verify Prerequisites
+### 步驟一：驗前置
 
-Confirm the broker is running and both instances can reach it.
+確認仲介運行且二實例皆可達之。
 
-1. Check the broker is configured as an MCP server:
+1. 察仲介已配為 MCP 伺服器：
    ```bash
    claude mcp list | grep cross-review
    ```
-2. Call `get_status` to verify the broker is responsive and no stale agents are registered
-3. Read the protocol resource at `cross-review://protocol` — this is a markdown document describing the review dimensions and QSG constraints
+2. 呼 `get_status` 驗仲介應答且無陳舊代理已註冊
+3. 讀 `cross-review://protocol` 之協議資源——為述審查維度與 QSG 約束之 markdown 文件
 
-**Expected:** The broker responds to `get_status` with an empty agent list. The protocol resource is readable as markdown.
+**預期：** 仲介應 `get_status`，代理清單空。協議資源可讀為 markdown。
 
-**On failure:** If the broker is not configured, add it: `claude mcp add cross-review-mcp -- npx cross-review-mcp`. If stale agents exist from a previous session, call `deregister` for each before proceeding.
+**失敗時：** 若仲介未配，加之：`claude mcp add cross-review-mcp -- npx cross-review-mcp`。若前會話有陳舊代理，進前對各 `deregister`。
 
-### Step 2: Register
+### 步驟二：註冊
 
-Register this agent with the broker.
+註冊此代理於仲介。
 
-1. Call `register` with:
-   - `agentId`: a short, unique identifier (e.g., project directory name)
-   - `project`: the project name
-   - `capabilities`: `["review", "suggest"]`
-2. Verify registration by calling `get_status` — your agent should appear with phase `"registered"`
-3. Wait for the peer agent to register: call `wait_for_phase` with the peer's agent ID and phase `"registered"`
+1. 呼 `register` 以：
+   - `agentId`：短、唯一之識別符（如項目目錄名）
+   - `project`：項目名
+   - `capabilities`：`["review", "suggest"]`
+2. 以 `get_status` 驗註冊——代理當現於階段 `"registered"`
+3. 候對代理註冊：以對代理 ID 與階段 `"registered"` 呼 `wait_for_phase`
 
-**Expected:** Both agents registered with the broker. `get_status` shows 2 agents at phase `"registered"`.
+**預期：** 二代理皆於仲介註冊。`get_status` 顯 2 代理於階段 `"registered"`。
 
-**On failure:** If `register` fails with "already registered", the agent ID is taken from a previous session. Call `deregister` first, then re-register.
+**失敗時：** 若 `register` 敗於「already registered」，代理 ID 為前會話所用。先呼 `deregister`，再重註冊。
 
-### Step 3: Briefing Phase
+### 步驟三：簡報階段
 
-Read your own codebase and send a structured briefing to the peer.
+讀自己之程式庫並送結構化簡報予對方。
 
-1. Read systematically:
-   - Entry points (main files, index, CLI commands)
-   - Dependency graph (package.json, DESCRIPTION, go.mod)
-   - Architectural patterns (directory structure, module boundaries)
-   - Known issues (TODO comments, open issues, tech debt)
-   - Test coverage (test directories, CI configuration)
-2. Compose a `Briefing` artifact — a structured summary the peer can use to navigate your codebase efficiently
-3. Call `send_task` with:
-   - `from`: your agent ID
-   - `to`: peer agent ID
-   - `type`: `"briefing"`
-   - `payload`: JSON-encoded briefing
-4. Call `signal_phase` with phase `"briefing"`
+1. 系統化讀：
+   - 入口（主檔、索引、CLI 命令）
+   - 依賴圖（package.json、DESCRIPTION、go.mod）
+   - 建築模式（目錄結構、模組邊界）
+   - 已知問題（TODO 註解、開議題、技術債）
+   - 測試覆蓋（測試目錄、CI 配置）
+2. 組 `Briefing` 構件——結構化摘要，令對方可有效瀏程式庫
+3. 呼 `send_task` 以：
+   - `from`：自代理 ID
+   - `to`：對代理 ID
+   - `type`：`"briefing"`
+   - `payload`：JSON 編之簡報
+4. 呼 `signal_phase` 以階段 `"briefing"`
 
-**Expected:** Briefing sent and phase signaled. The broker enforces that you must send a briefing before advancing to review.
+**預期：** 簡報已送，階段已信號。仲介強行須先送簡報方進至審查。
 
-**On failure:** If `send_task` rejects the briefing, check that the `from` field matches your registered agent ID. Self-sends are rejected.
+**失敗時：** 若 `send_task` 拒簡報，察 `from` 欄合自註冊之代理 ID。自送被拒。
 
-### Step 4: Review Phase
+### 步驟四：審查階段
 
-Wait for the peer's briefing, then review their code and send findings.
+候對之簡報，察其程式並送發現。
 
-1. Call `wait_for_phase` with the peer's ID and phase `"briefing"`
-2. Call `poll_tasks` to retrieve the peer's briefing
-3. Call `ack_tasks` with the received task IDs — this is required (peek-then-ack pattern)
-4. Read the peer's actual source code, informed by their briefing
-5. Produce findings across 6 categories:
-   - `pattern_transfer` — a pattern in your project that the peer could adopt
-   - `missing_practice` — a practice the peer lacks (testing, validation, error handling)
-   - `inconsistency` — internal contradiction within the peer's codebase
-   - `simplification` — unnecessary complexity that could be reduced
-   - `bug_risk` — potential runtime failure or edge case
-   - `documentation_gap` — missing or misleading documentation
-6. Each finding must include:
-   - `id`: unique identifier (e.g., `"F-001"`)
-   - `category`: one of the 6 categories above
-   - `targetFile`: path in the peer's project
-   - `description`: what you found
-   - `evidence`: why this is a valid finding (code references, patterns)
-   - `sourceAnalog` (recommended): the equivalent in your own project that demonstrates the pattern — this is the single mechanism for genuine cross-pollination
-7. Bundle at least **5 findings** (QSG constraint: m ≥ 5 keeps Γ_h ≈ 1.67 in selection regime)
-8. Call `send_task` with type `"review_bundle"` and the JSON-encoded findings array
-9. Call `signal_phase` with phase `"review"`
+1. 以對 ID 與階段 `"briefing"` 呼 `wait_for_phase`
+2. 呼 `poll_tasks` 以取對之簡報
+3. 以所收之任務 ID 呼 `ack_tasks`——此為必要（peek-then-ack 模式）
+4. 讀對之實源程式，以其簡報為引
+5. 產跨 6 類之發現：
+   - `pattern_transfer` —— 自項目中之模式，對可採者
+   - `missing_practice` —— 對所缺之實踐（測試、驗證、誤處）
+   - `inconsistency` —— 對程式庫內之內矛盾
+   - `simplification` —— 可減之不必要複雜
+   - `bug_risk` —— 潛在執行時敗或邊界案
+   - `documentation_gap` —— 缺或誤導之文件
+6. 各發現須含：
+   - `id`：唯一識別符（如 `"F-001"`）
+   - `category`：上 6 類之一
+   - `targetFile`：對項目之路
+   - `description`：所尋之何
+   - `evidence`：此為有效發現之因（程式引、模式）
+   - `sourceAnalog`（建議）：自項目中示此模式之等效——此為真交叉授粉之單一機制
+7. 捆至少 **5 發現**（QSG 約束：m ≥ 5 守 Γ_h ≈ 1.67 於選擇區）
+8. 以型 `"review_bundle"` 與 JSON 編之發現陣列呼 `send_task`
+9. 以階段 `"review"` 呼 `signal_phase`
 
-**Expected:** Review bundle accepted by the broker. Fewer than 5 findings will be rejected.
+**預期：** 審查捆為仲介所受。少於 5 發現將被拒。
 
-**On failure:** If the bundle is rejected for insufficient findings, review more deeply. The constraint exists to prevent shallow reviews from dominating. If you genuinely cannot find 5 issues, reconsider whether cross-review is the right tool for this project pair.
+**失敗時：** 若捆因發現不足而被拒，深審之。此約束存以防淺審主導。若真不能尋 5 問題，重考慮交叉審是否為此項目對之合宜工具。
 
-### Step 5: Dialogue Phase
+### 步驟五：對話階段
 
-Receive findings about your own project and respond with evidence-backed verdicts.
+收對項目之發現並以證據背之裁決應。
 
-1. Call `wait_for_phase` with the peer's ID and phase `"review"`
-2. Call `poll_tasks` to retrieve findings about your project
-3. Call `ack_tasks` with the received task IDs
-4. For each finding, produce a `FindingResponse`:
-   - `findingId`: matches the finding's ID
-   - `verdict`: `"accept"` (valid, will act on it), `"reject"` (invalid, with counter-evidence), or `"discuss"` (needs clarification)
-   - `evidence`: why you accept or reject — must be non-empty
-   - `counterEvidence` (optional): specific code references that contradict the finding
-5. Send all responses via `send_task` with type `"response"`
-6. Call `signal_phase` with phase `"dialogue"`
+1. 以對 ID 與階段 `"review"` 呼 `wait_for_phase`
+2. 呼 `poll_tasks` 以取關於自項目之發現
+3. 以所收之任務 ID 呼 `ack_tasks`
+4. 各發現，產 `FindingResponse`：
+   - `findingId`：合發現之 ID
+   - `verdict`：`"accept"`（有效，將行之）、`"reject"`（無效，含反證）、或 `"discuss"`（需釐清）
+   - `evidence`：接或拒之因——須非空
+   - `counterEvidence`（選擇性）：矛盾發現之具體程式引
+5. 以型 `"response"` 呼 `send_task` 送所有應
+6. 以階段 `"dialogue"` 呼 `signal_phase`
 
-Note: the `"discuss"` verdict is not gated by the protocol — treat it as a flag for manual follow-up, not an automated sub-exchange.
+注：`"discuss"` 裁決非為協議所門。視之為手動後續之旗，非自動子交換。
 
-**Expected:** All findings responded to with verdicts. Empty responses are rejected by the broker.
+**預期：** 所有發現皆以裁決應之。空應為仲介所拒。
 
-**On failure:** If you cannot form an opinion on a finding, default to `"discuss"` with evidence explaining what additional context you need.
+**失敗時：** 若不能對某發現成見，預設 `"discuss"`，含證述所需之更多脈絡。
 
-### Step 6: Synthesis Phase
+### 步驟六：合成階段
 
-Produce a synthesis artifact summarizing accepted findings and planned actions.
+產合成構件，摘接受之發現與計畫行動。
 
-1. Call `wait_for_phase` with the peer's ID and phase `"dialogue"`
-2. Poll any remaining tasks and acknowledge them
-3. Compile a `Synthesis` artifact:
-   - Accepted findings with planned actions (what you will change and why)
-   - Rejected findings with reasons (preserves the reasoning for future review)
-4. Call `send_task` with type `"synthesis"` and the JSON-encoded synthesis
-5. Call `signal_phase` with phase `"synthesis"`
-6. Optionally create GitHub issues for accepted findings
-7. Call `signal_phase` with phase `"complete"`
-8. Call `deregister` to clean up
+1. 以對 ID 與階段 `"dialogue"` 呼 `wait_for_phase`
+2. 輪詢任何餘任務並確認之
+3. 編 `Synthesis` 構件：
+   - 接受之發現含計畫行動（將改何、因何）
+   - 拒之發現含因（保理由供後審）
+4. 以型 `"synthesis"` 與 JSON 編之合成呼 `send_task`
+5. 以階段 `"synthesis"` 呼 `signal_phase`
+6. 選擇性為接受之發現造 GitHub 議題
+7. 以階段 `"complete"` 呼 `signal_phase`
+8. 呼 `deregister` 以清之
 
-**Expected:** Both agents reach `"complete"`. The broker requires at least 2 registered agents to advance to complete.
+**預期：** 二代理皆達 `"complete"`。仲介要求至少 2 註冊代理方進至完成。
 
-**On failure:** If the peer has already deregistered, you can still complete locally. Compile your synthesis from the findings you received.
+**失敗時：** 若對已去註冊，仍可本地完。自所收之發現編合成。
 
-## Validation
+## 驗證
 
-- [ ] Both agents registered and reached `"complete"` phase
-- [ ] Briefings exchanged before reviews began (phase enforcement)
-- [ ] Review bundles contained at least 5 findings each
-- [ ] All findings received a verdict (accept/reject/discuss) with evidence
-- [ ] `ack_tasks` called after every `poll_tasks`
-- [ ] Synthesis produced with accepted findings mapped to actions
-- [ ] Agents deregistered after completion
+- [ ] 二代理皆註冊且達 `"complete"` 階段
+- [ ] 簡報於審查始前已換（階段強行）
+- [ ] 審查捆各含至少 5 發現
+- [ ] 所有發現皆受裁決（接受/拒絕/討論）含證據
+- [ ] 每 `poll_tasks` 後皆呼 `ack_tasks`
+- [ ] 合成已產，接受之發現映至行動
+- [ ] 完後代理已去註冊
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Fewer than 5 findings**: The broker rejects bundles with m < 5. This is not arbitrary — with N=2 agents and 6 categories, m < 5 puts Γ_h at or below the critical boundary where consensus is indistinguishable from noise. Review more deeply; if 5 findings genuinely cannot be found, the projects may not benefit from cross-review.
-- **Forgetting `ack_tasks`**: The broker uses peek-then-ack delivery. Tasks remain in queue until acknowledged. Forgetting to ack causes duplicate processing on the next poll.
-- **Forgetting the `from` parameter**: `send_task` requires an explicit `from` field matching your agent ID. Self-sends are rejected.
-- **Same-model epistemic correlation**: Two Claude instances share training biases. Temporal ordering ensures they don't read each other's output during review, but their priors are correlated. For genuine epistemic independence, use different model families across instances.
-- **Skipping `sourceAnalog`**: The `sourceAnalog` field is optional but is the single mechanism for genuine cross-pollination — it shows *your* implementation of the pattern you're recommending. Always populate it when a source analog exists.
-- **Treating `discuss` as blocking**: Nothing in the protocol gates `complete` on pending discussions being resolved. Treat `discuss` verdicts as flags for manual follow-up after the session.
-- **Not reviewing telemetry**: The broker logs all events to JSONL. After a session, review the log to validate QSG assumptions — estimate α empirically (`α ≈ 1 - reject_rate`) and check per-category accept rates.
+- **少於 5 發現**：仲介拒 m < 5 之捆。此非隨意——N=2 代理與 6 類下，m < 5 置 Γ_h 於或低於共識與雜訊不可辨之臨界。深審之；若 5 發現真不能尋，項目或不受交叉審之益
+- **忘 `ack_tasks`**：仲介用 peek-then-ack 交付。任務留佇列直至確認。忘 ack 致下次輪詢時重處
+- **忘 `from` 參數**：`send_task` 需明 `from` 欄合自代理 ID。自送被拒
+- **同模型之認知相關**：二 Claude 實例共訓練偏見。時序確保審查時不讀他之輸出，然其先驗相關。真認知獨立，用跨實例異模型族
+- **跳 `sourceAnalog`**：`sourceAnalog` 欄為選擇性，然為真交叉授粉之單一機制——其示**自之**所建議模式之實作。源類比存時恒填之
+- **視 `discuss` 為阻**：協議中無門 `complete` 於未決討論。視 `discuss` 裁決為會話後手動後續之旗
+- **不審遙測**：仲介記所有事件至 JSONL。會話後審日誌以驗 QSG 假設——經驗估 α（`α ≈ 1 - reject_rate`），察類接受率
 
-## Related Skills
+## 相關技能
 
-- `scaffold-mcp-server` — for building or extending the broker itself
-- `implement-a2a-server` — A2A protocol patterns the broker draws from
-- `review-codebase` — single-agent review (this skill extends it to cross-agent structured exchange)
-- `build-consensus` — swarm consensus patterns (QSG is the theoretical foundation)
-- `configure-mcp-server` — configuring the broker as an MCP server in Claude Code
-- `unleash-the-agents` — can be used to analyze the broker itself (battle-tested: 40 agents, 10 hypothesis families)
+- `scaffold-mcp-server` —— 建或擴仲介本身
+- `implement-a2a-server` —— 仲介所援之 A2A 協議模式
+- `review-codebase` —— 單代理審（此技能擴之為跨代理結構化交換）
+- `build-consensus` —— 群體共識模式（QSG 為理論基礎）
+- `configure-mcp-server` —— 於 Claude Code 中配仲介為 MCP 伺服器
+- `unleash-the-agents` —— 可用以分析仲介本身（經戰測：40 代理、10 假設族）

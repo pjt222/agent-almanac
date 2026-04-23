@@ -64,8 +64,8 @@ pip install drawsvg reportlab pycairo
 pip install matplotlib numpy pandas
 ```
 
-**Expected:** Libraries installed successfully
-**On failure:** Check Python version (3.7+), use virtual environment to avoid conflicts
+**Got:** Libraries installed successfully
+**If fail:** Check Python version (3.7+), use virtual environment to avoid conflicts
 
 ### 2. Create Basic SVG Graphics
 
@@ -120,8 +120,8 @@ def create_basic_svg(output_path):
     print(f"Saved: {output_path}")
 ```
 
-**Expected:** SVG file generated with shapes and text
-**On failure:** Check svgwrite version, verify output directory writable
+**Got:** SVG file generated with shapes and text
+**If fail:** Check svgwrite version, verify output directory writable
 
 ### 3. Build Diagrams with Layout Logic
 
@@ -213,8 +213,8 @@ def wrap_text(text, max_width=20):
     return lines
 ```
 
-**Expected:** Flowchart with connected boxes and arrows
-**On failure:** Adjust layout calculations, verify arrow marker definitions
+**Got:** Flowchart with connected boxes and arrows
+**If fail:** Adjust layout calculations, verify arrow marker definitions
 
 ### 4. Composite Raster Images
 
@@ -306,8 +306,8 @@ def add_annotations(image_path, annotations, output_path):
     img.save(output_path)
 ```
 
-**Expected:** Composite image created with proper layout
-**On failure:** Check all input images exist, verify image modes compatible
+**Got:** Composite image created with proper layout
+**If fail:** Check all input images exist, verify image modes compatible
 
 ### 5. Generate Data-Driven Graphics
 
@@ -384,8 +384,8 @@ def create_bar_chart_svg(data, labels, output_path):
     dwg.save()
 ```
 
-**Expected:** SVG bar chart with scaled data
-**On failure:** Handle edge cases (empty data, negative values), add validation
+**Got:** SVG bar chart with scaled data
+**If fail:** Handle edge cases (empty data, negative values), add validation
 
 ### 6. Batch Generate Graphics
 
@@ -433,8 +433,8 @@ def batch_generate_badges(users, template_path, output_dir):
         print(f"Generated badge: {output_path}")
 ```
 
-**Expected:** Individual graphic generated for each data item
-**On failure:** Check data structure, handle missing fields with defaults
+**Got:** Individual graphic generated for each data item
+**If fail:** Check data structure, handle missing fields with defaults
 
 ### 7. Convert SVG to Raster
 
@@ -467,8 +467,8 @@ def svg_to_pdf(svg_path, pdf_path):
     print(f"Converted to PDF: {pdf_path}")
 ```
 
-**Expected:** Raster output generated at specified resolution
-**On failure:** Install cairo system library if missing, check SVG validity
+**Got:** Raster output generated at specified resolution
+**If fail:** Install cairo system library if missing, check SVG validity
 
 ## Validation Checklist
 
@@ -483,18 +483,15 @@ def svg_to_pdf(svg_path, pdf_path):
 - [ ] Output files organized logically
 - [ ] Code includes error handling
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
 2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
 3. **Font availability**: System fonts may differ, embed or use web-safe fonts
-4. **Coordinate calculations**: Off-by-one errors in grid layouts
-5. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
-6. **SVG validity**: Check XML structure, close all tags
-7. **File paths**: Handle special characters, spaces in filenames
-8. **Memory usage**: Large batch operations may require chunking
-9. **Aspect ratio**: Maintain proportions when resizing images
-10. **Transparency**: PNG supports alpha, JPEG does not
+4. **Coordinate calculations**: Off-by-one errors in grid layouts; color format — SVG uses hex strings (`#rrggbb`), not tuples
+5. **SVG validity**: Check XML structure, close all tags; handle special characters and spaces in file paths
+6. **Memory usage**: Large batch operations may require chunking; maintain aspect ratio when resizing
+7. **Transparency**: PNG supports alpha, JPEG does not
 
 ## Related Skills
 

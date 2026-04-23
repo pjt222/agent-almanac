@@ -23,54 +23,54 @@ metadata:
   tags: github, release, git-tags, changelog, versioning
 ---
 
-# Create GitHub Release
+# 建 GitHub 發布
 
-Create a tagged GitHub release with release notes and optional artifacts.
+建有標之 GitHub 發布，含發布記與可選之建物。
 
-## When to Use
+## 用時
 
-- Marking a stable version of software for distribution
-- Publishing a new version of a library or application
-- Creating release notes for stakeholders
-- Distributing build artifacts (binaries, tarballs)
+- 標軟件之穩版以布
+- 發庫或應用新版
+- 為相關者建發布記
+- 布建物（二進、tarball）
 
-## Inputs
+## 入
 
-- **Required**: Version number (semantic versioning)
-- **Required**: Summary of changes since last release
-- **Optional**: Build artifacts to attach
-- **Optional**: Whether this is a pre-release
+- **必要**：版號（語義版本）
+- **必要**：自上發以來變之概
+- **可選**：附之建物
+- **可選**：此為預發否
 
-## Procedure
+## 法
 
-### Step 1: Determine Version Number
+### 第一步：定版號
 
-Follow semantic versioning (`MAJOR.MINOR.PATCH`):
+循語義版本（`MAJOR.MINOR.PATCH`）：
 
-| Change | Example | When |
+| 變 | 例 | 時 |
 |--------|---------|------|
-| MAJOR | 1.0.0 -> 2.0.0 | Breaking changes |
-| MINOR | 1.0.0 -> 1.1.0 | New features, backward compatible |
-| PATCH | 1.0.0 -> 1.0.1 | Bug fixes only |
+| MAJOR | 1.0.0 -> 2.0.0 | 破壞性變 |
+| MINOR | 1.0.0 -> 1.1.0 | 新功，向後兼容 |
+| PATCH | 1.0.0 -> 1.0.1 | 唯修訛 |
 
-**Expected:** A version number is chosen that accurately reflects the scope of changes since the last release.
+**得：** 擇版號正映自上發以來變之範圍。
 
-**On failure:** If unsure whether changes are breaking, review the public API diff. Any removal or signature change of an exported function is a breaking change requiring a MAJOR bump.
+**敗則：** 若疑變為破壞否，察公 API 之差。出之函刪或簽變皆破壞，需升 MAJOR。
 
-### Step 2: Update Version in Project Files
+### 第二步：更項目文件之版
 
-- `DESCRIPTION` (R packages)
-- `package.json` (Node.js)
-- `Cargo.toml` (Rust)
-- `pyproject.toml` (Python)
+- `DESCRIPTION`（R 包）
+- `package.json`（Node.js）
+- `Cargo.toml`（Rust）
+- `pyproject.toml`（Python）
 
-**Expected:** The version number is updated in the appropriate project file and committed to version control.
+**得：** 版號於宜文件已更並提交版控。
 
-**On failure:** If the version was already updated in a previous step (e.g., via `usethis::use_version()` in R), verify it matches the intended release version.
+**敗則：** 若前步已更（如 R 之 `usethis::use_version()`），驗其合意圖之發版。
 
-### Step 3: Write Release Notes
+### 第三步：書發布記
 
-Create or update changelog. Organize by category:
+建或更變更誌。按類組：
 
 ```markdown
 ## What's Changed
@@ -93,24 +93,24 @@ Create or update changelog. Organize by category:
 **Full Changelog**: https://github.com/user/repo/compare/v1.0.0...v1.1.0
 ```
 
-**Expected:** Release notes are organized by category (features, fixes, breaking changes) with issue/PR references for traceability.
+**得：** 發布記按類組（功、修、破壞），含議題／PR 引以可追。
 
-**On failure:** If changes are hard to categorize, review `git log v1.0.0..HEAD --oneline` to reconstruct the list of changes since the last release.
+**敗則：** 若變難分類，察 `git log v1.0.0..HEAD --oneline` 以復自上發以來之變列。
 
-### Step 4: Create Git Tag
+### 第四步：建 git 標
 
 ```bash
 git tag -a v1.1.0 -m "Release v1.1.0"
 git push origin v1.1.0
 ```
 
-**Expected:** An annotated tag `v1.1.0` exists locally and on the remote. `git tag -l` shows the tag.
+**得：** 註釋標 `v1.1.0` 存於本地與遠。`git tag -l` 顯之。
 
-**On failure:** If the tag already exists, delete it with `git tag -d v1.1.0 && git push origin :refs/tags/v1.1.0` and recreate it. If push is rejected, ensure you have write access to the remote.
+**敗則：** 若標已存，以 `git tag -d v1.1.0 && git push origin :refs/tags/v1.1.0` 刪之再建。若推拒，確有遠之寫權。
 
-### Step 5: Create GitHub Release
+### 第五步：建 GitHub 發布
 
-**Using GitHub CLI (recommended)**:
+**用 GitHub CLI（宜）**：
 
 ```bash
 gh release create v1.1.0 \
@@ -118,7 +118,7 @@ gh release create v1.1.0 \
   --notes-file CHANGELOG.md
 ```
 
-With artifacts:
+含建物：
 
 ```bash
 gh release create v1.1.0 \
@@ -128,7 +128,7 @@ gh release create v1.1.0 \
   build/app-v1.1.0.zip
 ```
 
-Pre-release:
+預發：
 
 ```bash
 gh release create v2.0.0-beta.1 \
@@ -137,13 +137,13 @@ gh release create v2.0.0-beta.1 \
   --notes "Beta release for testing"
 ```
 
-**Expected:** Release visible on GitHub with tag, notes, and attached artifacts (if any).
+**得：** 發布現於 GitHub 含標、記、附物（若有）。
 
-**On failure:** If `gh` is not authenticated, run `gh auth login`. If the tag does not exist on the remote, push it first with `git push origin v1.1.0`.
+**敗則：** 若 `gh` 未認證，運 `gh auth login`。若標未於遠，以 `git push origin v1.1.0` 先推之。
 
-### Step 6: Auto-Generate Release Notes
+### 第六步：自動生發布記
 
-GitHub can auto-generate notes from merged PRs:
+GitHub 可由已合 PR 自動生記：
 
 ```bash
 gh release create v1.1.0 \
@@ -151,7 +151,7 @@ gh release create v1.1.0 \
   --generate-notes
 ```
 
-Configure categories in `.github/release.yml`:
+於 `.github/release.yml` 設類：
 
 ```yaml
 changelog:
@@ -170,11 +170,11 @@ changelog:
         - "*"
 ```
 
-**Expected:** Release notes are auto-generated from merged PR titles, categorized by label. `.github/release.yml` controls the categories.
+**得：** 發布記由已合 PR 題自動生，按標分類。`.github/release.yml` 控類。
 
-**On failure:** If auto-generated notes are empty, ensure PRs were merged (not closed) and had labels assigned. Manually write notes as a fallback.
+**敗則：** 若自動記為空，確 PR 已合（非閉）且有標。手書記為退。
 
-### Step 7: Verify Release
+### 第七步：驗發布
 
 ```bash
 # List releases
@@ -184,31 +184,31 @@ gh release list
 gh release view v1.1.0
 ```
 
-**Expected:** `gh release list` shows the new release. `gh release view` displays the correct title, tag, notes, and assets.
+**得：** `gh release list` 顯新發。`gh release view` 顯正題、標、記、資。
 
-**On failure:** If the release is missing, check the Actions tab for any release workflows that may have failed. Verify the tag exists with `git tag -l`.
+**敗則：** 若發缺，察 Actions 頁以見是否有發工作流敗。以 `git tag -l` 驗標存。
 
-## Validation
+## 驗
 
-- [ ] Version tag follows semantic versioning
-- [ ] Git tag points to the correct commit
-- [ ] Release notes accurately describe changes
-- [ ] Artifacts (if any) are attached and downloadable
-- [ ] Release is visible on the GitHub repository page
-- [ ] Pre-release flag is set correctly
+- [ ] 版標循語義版本
+- [ ] git 標指正提交
+- [ ] 發布記正述變
+- [ ] 附物（若有）可附可下
+- [ ] 發布現於 GitHub 庫頁
+- [ ] 預發旗正設
 
-## Common Pitfalls
+## 陷
 
-- **Tagging wrong commit**: Always verify `git log` before tagging. Tag after version-bump commit.
-- **Forgetting to push tags**: `git push` doesn't push tags. Use `git push --tags` or `git push origin v1.1.0`.
-- **Inconsistent version format**: Decide on `v1.0.0` vs `1.0.0` and stick with it.
-- **Empty release notes**: Always provide meaningful notes. Users need to know what changed.
-- **Deleting and recreating tags**: Avoid changing tags after push. If needed, create a new version instead.
+- **標誤提交**：標前宜驗 `git log`。版升提交後乃標。
+- **忘推標**：`git push` 不推標。用 `git push --tags` 或 `git push origin v1.1.0`。
+- **版式不一**：於 `v1.0.0` 對 `1.0.0` 中擇一而守之。
+- **發布記空**：宜供有意之記。用者需知所變。
+- **刪而重建標**：推後勿改標。若需，建新版代之。
 
-## Related Skills
+## 參
 
-- `commit-changes` - staging and committing workflow
-- `manage-git-branches` - branch management for release prep
-- `release-package-version` - R-specific release workflow
-- `configure-git-repository` - Git setup prerequisite
-- `setup-github-actions-ci` - automate releases via CI
+- `commit-changes` — 暫存與提交流
+- `manage-git-branches` — 為發備之分支管
+- `release-package-version` — R 專用發流
+- `configure-git-repository` — Git 設前提
+- `setup-github-actions-ci` — 以 CI 自動發

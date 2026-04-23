@@ -25,12 +25,12 @@ metadata:
 
 # Correlate Observability Signals
 
-Connect metrics, logs, and traces for unified debugging across the three pillars of observability.
+Connect metrics, logs, traces. Unified debugging across three pillars of observability.
 
-## When to Use
+## When Use
 
-- Investigating complex incidents that span multiple systems
-- Reducing MTTR (mean time to resolution)
+- Investigating complex incidents spanning many systems
+- Cutting MTTR (mean time to resolution)
 - Building unified observability dashboards
 - Implementing distributed tracing
 - Moving from siloed tools to unified observability
@@ -43,14 +43,14 @@ Connect metrics, logs, and traces for unified debugging across the three pillars
 - **Optional**: Grafana for unified visualization
 - **Optional**: OpenTelemetry instrumentation
 
-## Procedure
+## Steps
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
 
 ### Step 1: Implement Trace Context Propagation
 
-Add trace IDs to all logs and metrics using OpenTelemetry:
+Add trace IDs to all logs and metrics. Use OpenTelemetry.
 
 ```go
 // Go example: Propagate trace context to logs
@@ -119,13 +119,13 @@ def get_user(user_id):
     return {"user_id": user_id}
 ```
 
-**Expected:** All logs include `trace_id` field, enabling log-to-trace correlation.
+**Got:** All logs include `trace_id` field. Enables log-to-trace correlation.
 
-**On failure:** If trace IDs missing, check OpenTelemetry SDK initialization and context propagation.
+**If fail:** Trace IDs missing? Check OpenTelemetry SDK init and context propagation.
 
 ### Step 2: Configure Exemplars in Prometheus
 
-Exemplars link metrics to traces:
+Exemplars link metrics to traces.
 
 ```yaml
 # prometheus.yml
@@ -146,7 +146,7 @@ scrape_configs:
         action: keep
 ```
 
-Instrument application to emit exemplars:
+Instrument app to emit exemplars:
 
 ```go
 // Go: Emit exemplars with Prometheus histogram
@@ -188,11 +188,11 @@ Query exemplars in Prometheus:
 histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 ```
 
-In Grafana, exemplars appear as dots on histogram graphs that link to traces.
+In Grafana, exemplars show as dots on histogram graphs. Link to traces.
 
-**Expected:** Grafana shows exemplars in metric graphs, clicking opens corresponding trace.
+**Got:** Grafana shows exemplars on metric graphs. Click opens matching trace.
 
-**On failure:** Verify Prometheus version ≥2.26 (exemplar support), check Grafana data source config enables exemplars.
+**If fail:** Verify Prometheus version ≥2.26 (exemplar support). Check Grafana data source config enables exemplars.
 
 ### Step 3: Build Unified Dashboard with RED Method
 
@@ -263,9 +263,9 @@ RED Method: Rate, Errors, Duration (for services)
 }
 ```
 
-**Expected:** Single dashboard showing rate, errors, duration + correlated logs.
+**Got:** Single dashboard shows rate, errors, duration + correlated logs.
 
-**On failure:** If panels show "No Data", verify metric names match your instrumentation.
+**If fail:** Panels show "No Data"? Verify metric names match instrumentation.
 
 ### Step 4: Implement USE Method for Resources
 
@@ -349,9 +349,9 @@ USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, dis
 }
 ```
 
-**Expected:** Dashboard showing resource health across all USE dimensions.
+**Got:** Dashboard shows resource health across all USE dimensions.
 
-**On failure:** Ensure node_exporter is running and scraping system metrics.
+**If fail:** Ensure node_exporter runs and scrapes system metrics.
 
 ### Step 5: Link Logs to Traces in Loki
 
@@ -398,13 +398,13 @@ In Grafana, configure Loki data source:
 }
 ```
 
-**Expected:** Clicking trace ID in Loki logs opens corresponding trace in Tempo.
+**Got:** Click trace ID in Loki logs → opens matching trace in Tempo.
 
-**On failure:** Verify regex matches your log format, check Tempo data source UID.
+**If fail:** Verify regex matches log format. Check Tempo data source UID.
 
 ### Step 6: Create Unified Incident View
 
-Build a dashboard that brings all signals together:
+Build dashboard bringing all signals together:
 
 ```json
 {
@@ -420,37 +420,37 @@ Workflow during incident:
 
 1. Alert fires for high error rate
 2. On-call engineer opens Grafana dashboard
-3. Identifies spike in error rate at specific time
+3. Spots spike in error rate at specific time
 4. Clicks exemplar dot on duration histogram → opens trace
 5. Trace shows slow database query
 6. Clicks "View Logs" on span → opens logs for that trace
 7. Logs reveal specific SQL query causing timeout
-8. Root cause identified in <2 minutes
+8. Root cause found in <2 minutes
 
-**Expected:** Single pane of glass for debugging, jumping between metrics/logs/traces.
+**Got:** Single pane of glass for debugging. Jump between metrics/logs/traces.
 
-**On failure:** If links don't work, check data source configurations and trace ID propagation.
+**If fail:** Links break? Check data source configs and trace ID propagation.
 
-## Validation
+## Checks
 
-- [ ] Trace IDs present in all application logs
+- [ ] Trace IDs present in all app logs
 - [ ] Prometheus scraping exemplars
 - [ ] Grafana dashboards show exemplar dots on histograms
-- [ ] Clicking exemplar opens corresponding trace in Tempo/Jaeger
+- [ ] Click exemplar opens matching trace in Tempo/Jaeger
 - [ ] Loki logs have "View Trace" links that work
-- [ ] RED dashboard created for key services
-- [ ] USE dashboard created for infrastructure
+- [ ] RED dashboard built for key services
+- [ ] USE dashboard built for infrastructure
 - [ ] Unified incident dashboard tested during GameDay
 
-## Common Pitfalls
+## Pitfalls
 
-- **Inconsistent trace ID format**: OpenTelemetry uses 32-char hex, Jaeger uses 16-char. Choose one.
-- **Missing context propagation**: If trace IDs don't flow across services, distributed tracing breaks. Use OpenTelemetry auto-instrumentation.
-- **Exemplar overload**: Too many exemplars (>100k) can slow Prometheus. Sample high-volume metrics.
-- **Clock skew**: Traces span multiple services. Ensure NTP is configured; clock drift causes trace ordering issues.
-- **Data retention mismatch**: If traces expire before metrics, correlation breaks. Align retention policies.
+- **Inconsistent trace ID format**: OpenTelemetry uses 32-char hex, Jaeger uses 16-char. Pick one.
+- **Missing context propagation**: Trace IDs don't flow across services → distributed tracing breaks. Use OpenTelemetry auto-instrumentation.
+- **Exemplar overload**: Too many exemplars (>100k) → slow Prometheus. Sample high-volume metrics.
+- **Clock skew**: Traces span many services. Run NTP; clock drift → trace ordering issues.
+- **Data retention mismatch**: Traces expire before metrics → correlation breaks. Align retention policies.
 
-## Related Skills
+## See Also
 
 - `setup-prometheus-monitoring` - metrics foundation for correlation
 - `configure-log-aggregation` - logs foundation for correlation

@@ -25,68 +25,68 @@ metadata:
   tags: swarm, coordination, stigmergy, emergent-behavior
 ---
 
-# Coordinate Swarm
+# 協調群體
 
-Establish coordination across distributed agents using stigmergy (indirect communication through environment modification), local interaction rules, and quorum sensing — enabling coherent collective behavior without a central controller.
+以共遺（stigmergy，藉環境之改動行間接通訊）、局部互動規則與法定感測，立分散代理間之協調——令連貫之集體行為無需中央控制者而生。
 
-## When to Use
+## 適用時機
 
-- Designing distributed systems where no single node should be a coordination bottleneck
-- Organizing teams or workflows that must self-coordinate without constant management oversight
-- Building event-driven architectures where components communicate through shared state rather than direct messaging
-- Scaling a process that works well with 3 agents but breaks down at 30
-- Bootstrapping coordination patterns for a new swarm-style domain (see `forage-resources`, `build-consensus`)
-- Replacing fragile centralized orchestration with resilient emergent coordination
+- 設計分散系統，無單一節點可為協調瓶頸者
+- 組織團隊或工作流，須自協調而不賴管理者常督
+- 建事件驅動架構，組件以共享狀態通訊而非直接傳訊
+- 擴展一法：三代理尚可，三十則崩
+- 為新群體式領域啟動協調模式（見 `forage-resources`、`build-consensus`）
+- 以韌之湧協調取脆之中央編排
 
-## Inputs
+## 輸入
 
-- **Required**: Description of the agents (workers, services, team members) that need coordination
-- **Required**: The collective goal or desired emergent behavior
-- **Optional**: Current coordination mechanism and its failure modes
-- **Optional**: Number of agents (affects pattern selection — small swarms vs. large colonies)
-- **Optional**: Latency tolerance (real-time vs. eventual coordination)
-- **Optional**: Environmental constraints (shared state availability, communication bandwidth)
+- **必要**：須協調之代理（工者、服務、團員）之述
+- **必要**：集體目標或所欲之湧行為
+- **選擇性**：當前協調機制及其敗模
+- **選擇性**：代理之數（影響模式擇——小群與大殖民之別）
+- **選擇性**：延遲容忍（即時與終局協調）
+- **選擇性**：環境約束（共享狀態之得、通訊頻寬）
 
-## Procedure
+## 步驟
 
-### Step 1: Identify the Coordination Problem Class
+### 步驟一：辨協調問題之類
 
-Classify the coordination challenge to select appropriate patterns.
+分協調挑戰之類以擇當之模式。
 
-1. Map the current state: who are the agents, what do they do individually, where does coordination break down?
-2. Classify the problem:
-   - **Foraging** — agents search for and exploit distributed resources (see `forage-resources`)
-   - **Consensus** — agents must agree on a collective decision (see `build-consensus`)
-   - **Construction** — agents build or maintain a shared structure incrementally
-   - **Defense** — agents detect and respond to threats collectively (see `defend-colony`)
-   - **Division of labor** — agents must self-organize into specialized roles
-3. Identify the failure mode of current coordination:
-   - Single point of failure (centralized controller)
-   - Communication bottleneck (too many direct messages)
-   - Coherence loss (agents drift apart without feedback)
-   - Rigidity (cannot adapt to changing conditions)
+1. 繪當前態：代理為誰、其獨行何事、協調於何崩
+2. 分問題：
+   - **探尋（Foraging）** — 代理搜並利散佈之資源（見 `forage-resources`）
+   - **共識（Consensus）** — 代理須同一集體決定（見 `build-consensus`）
+   - **建造（Construction）** — 代理漸建或維持共享結構
+   - **防禦（Defense）** — 代理集體偵威而應（見 `defend-colony`）
+   - **分工** — 代理須自組織為專門之角色
+3. 辨當前協調之敗模：
+   - 單點之敗（中央控制者）
+   - 通訊瓶頸（直接傳訊過多）
+   - 連貫之失（代理無回饋而漸離）
+   - 僵（不能應變之條件）
 
-**Expected:** A clear classification of the coordination problem type and the specific failure mode to address. This determines which swarm patterns to apply.
+**預期：** 協調問題類與待處之具體敗模之明分類。此定何群體模式可施。
 
-**On failure:** If the problem doesn't fit a single class, it may be a composite. Decompose into sub-problems and address each with the appropriate pattern. If agents are too heterogeneous for a single coordination model, consider layered coordination — homogeneous clusters coordinated via inter-cluster stigmergy.
+**失敗時：** 若問題不合單類，或為複合。分為子問題而各以當之模式處之。若代理異質甚、不合單一協調模型，考慮分層協調——同質之群以跨群之共遺協調。
 
-### Step 2: Design Stigmergic Signals
+### 步驟二：設共遺信號
 
-Create the indirect communication channels through which agents influence each other's behavior.
+建間接通訊之道，藉之代理互影響行為。
 
-1. Define the shared environment (database, message queue, file system, physical space, shared board)
-2. Design signals that agents deposit into the environment:
-   - **Trail signals**: markers that accumulate along successful paths (like ant pheromones)
-   - **Threshold signals**: counters that trigger behavior changes when they cross thresholds
-   - **Inhibition signals**: markers that repel agents from exhausted areas
-3. Define signal properties:
-   - **Decay rate**: how quickly signals fade (prevents stale state from dominating)
-   - **Reinforcement**: how successful outcomes strengthen signals
-   - **Visibility radius**: how far a signal propagates
-4. Map signals to agent behaviors:
-   - When an agent detects signal X above threshold T, it performs action A
-   - When an agent completes action A successfully, it deposits signal Y
-   - When no signal is detected, the agent follows its default exploration behavior
+1. 定共享環境（資料庫、訊息佇列、檔案系統、實體空間、共享板）
+2. 設代理存入環境之信號：
+   - **徑信號**：沿成功路積之標記（如蟻之費洛蒙）
+   - **閾信號**：計數器，越閾則觸行為變
+   - **抑制信號**：標記，斥代理離已竭之域
+3. 定信號之性：
+   - **衰減率**：信號消之速（防陳舊狀態主導）
+   - **增強**：成功之果如何強信號
+   - **可見半徑**：信號傳之遠
+4. 映信號於代理行為：
+   - 代理偵得信號 X 過閾 T 則行動作 A
+   - 代理成完動作 A 則存信號 Y
+   - 偵無信號時，代理循其預設之探尋行為
 
 ```
 Signal Design Template:
@@ -100,99 +100,99 @@ Signal Design Template:
 └──────────────┴───────────────────┴──────────────┴────────────────────┘
 ```
 
-**Expected:** A signal table mapping environmental markers to agent deposit conditions, decay rates, and response behaviors. Signals should be simple, composable, and independently meaningful.
+**預期：** 信號表，映環境標記於代理存置之條件、衰減率、應對行為。信號當簡、可組、且各自有義。
 
-**On failure:** If signal design feels overly complex, reduce to two signals: one positive (success trail) and one negative (danger flag). Most coordination problems can be bootstrapped with attract/repel dynamics. Add nuance only after the basic system is functioning.
+**失敗時：** 若信號設計覺過繁，減為二：一正（成功徑）一負（危旗）。多數協調問題可以吸斥動力啟動。唯於基本系統行後乃加微妙。
 
-### Step 3: Define Local Interaction Rules
+### 步驟三：定局部互動規則
 
-Specify the simple rules each agent follows, using only local information (their own state + nearby signals).
+列各代理所循之簡規，唯用局部資訊（己之狀態加附近信號）。
 
-1. Define the agent's perception radius (what can it sense?)
-2. Write 3-7 local rules in priority order:
-   - Rule 1 (safety): If danger-flag detected, move away
-   - Rule 2 (response): If help-signal detected and idle, move toward
-   - Rule 3 (exploitation): If success-trail detected, follow toward strongest signal
-   - Rule 4 (exploration): If no signals detected, move randomly with bias toward unexplored areas
-   - Rule 5 (deposit): After completing task, deposit success-trail at location
-3. Each rule must be:
-   - **Local**: depends only on what the individual agent can perceive
-   - **Simple**: expressible in one if-then statement
-   - **Stateless** (preferred): does not require the agent to remember past states
-4. Test rules mentally: if every agent follows these rules, does the desired collective behavior emerge?
+1. 定代理之感知半徑（其能感何者？）
+2. 按優先序寫三至七局部規則：
+   - 規則一（安全）：偵危旗則避
+   - 規則二（應）：偵求援信號且閒則趨
+   - 規則三（利用）：偵成功徑則趨最強信號
+   - 規則四（探）：無信號則隨機移，偏未探之域
+   - 規則五（存）：完任務則於該位存成功徑
+3. 各規則必：
+   - **局部**：唯賴該代理可直接感知者
+   - **簡**：可以單一 if-then 述之
+   - **無狀態**（佳）：不需代理憶往態
+4. 心中測之：若每代理皆循此規則，所欲之集體行為是否湧現？
 
-**Expected:** A prioritized rule set that each agent executes independently. When applied across the swarm, these local rules produce the target collective behavior (foraging, construction, defense, etc.).
+**預期：** 優先序之規則集，各代理獨立執之。施於群體，此局部規則產目標集體行為（探尋、建造、防禦等）。
 
-**On failure:** If mental simulation doesn't produce the desired emergent behavior, the rules likely need a feedback loop — agents must be able to observe the consequences of their collective actions. Add a signal that represents the collective state (e.g., "task completion rate") and a rule that adjusts behavior based on it.
+**失敗時：** 若心中模擬不產所欲之湧行為，規則或缺回饋環——代理須能觀其集體行動之果。加一信號以表集體狀態（如「任務完成率」），加一規則以其調行為。
 
-### Step 4: Calibrate Quorum Sensing
+### 步驟四：校準法定感測
 
-Set thresholds that trigger collective state changes when enough agents agree.
+設閾，足代理同意時觸集體狀態之變。
 
-1. Identify decisions that require collective agreement (not just individual response):
-   - Switching from exploration to exploitation mode
-   - Committing to a new work site or abandoning an old one
-   - Escalating from normal to emergency response
-2. For each collective decision, define:
-   - **Quorum threshold**: number or percentage of agents that must signal agreement
-   - **Sensing window**: time period over which signals are counted
-   - **Hysteresis**: different thresholds for activation vs. deactivation (prevents oscillation)
-3. Implement quorum as signal accumulation:
-   - Each agent that favors the decision deposits a vote-signal
-   - When accumulated votes exceed the quorum threshold within the sensing window, the decision activates
-   - When votes drop below the deactivation threshold, the decision reverses
+1. 辨需集體同意之決定（非單獨應）：
+   - 由探切至利用模式
+   - 定新工位或棄舊者
+   - 由常態升至應急應對
+2. 各集體決定定：
+   - **法定閾**：同意之代理數或百分比
+   - **感測窗**：計信號之時段
+   - **遲滯**：激活與去活之閾不同（防振盪）
+3. 實作法定為信號積累：
+   - 偏此決定之各代理存投票信號
+   - 積票於感測窗內過法定閾，決定激活
+   - 票降過去活閾，決定逆轉
 
-**Expected:** Quorum thresholds that allow the swarm to make collective decisions without a leader. The hysteresis gap prevents rapid oscillation between states.
+**預期：** 法定閾令群體無領袖而能作集體決定。遲滯之差防狀態間之疾振。
 
-**On failure:** If the swarm oscillates between states, widen the hysteresis gap (e.g., activate at 70%, deactivate at 30%). If the swarm never reaches quorum, lower the threshold or increase the sensing window. If decisions are too slow, reduce the sensing window — but beware of premature consensus.
+**失敗時：** 若群體於狀態間振盪，增遲滯之差（如：激活於 70%、去活於 30%）。若群體不達法定，降閾或增感測窗。若決定過遲，縮感測窗——然須防早熟共識。
 
-### Step 5: Test and Tune Emergent Behavior
+### 步驟五：測並調湧行為
 
-Validate that local rules produce the desired collective behavior, then tune parameters.
+驗局部規則產所欲之集體行為，繼之調參。
 
-1. Run a simulation or pilot with a small number of agents (5-10)
-2. Observe:
-   - Does the swarm converge on the intended behavior?
-   - How long does convergence take?
-   - What happens when conditions change mid-task?
-   - What happens when agents fail or are added?
-3. Tune parameters:
-   - Signal decay rate: too fast → no coordination memory; too slow → stale signals dominate
-   - Quorum threshold: too low → premature collective decisions; too high → paralysis
-   - Exploration-exploitation balance: too much exploration → inefficient; too much exploitation → local optima
-4. Stress test:
-   - Remove 30% of agents suddenly — does the swarm recover?
-   - Double the agent count — does the swarm still coordinate?
-   - Introduce conflicting signals — does the swarm resolve or deadlock?
+1. 以小數代理（5-10）行模擬或試點
+2. 觀：
+   - 群體是否收斂於所欲之行為？
+   - 收斂需時幾何？
+   - 任務中條件變時何如？
+   - 代理敗或增時何如？
+3. 調參：
+   - 信號衰減率：過速則無協調記憶；過緩則陳舊信號主導
+   - 法定閾：過低則早熟集體決定；過高則癱瘓
+   - 探-利之衡：探過則低效；利過則困於局部最優
+4. 壓力測：
+   - 驟移 30% 代理——群體可復乎？
+   - 倍代理數——群體仍能協調乎？
+   - 引入矛盾信號——群體解之或死鎖？
 
-**Expected:** A tuned parameter set where the swarm self-organizes toward the target behavior, recovers from perturbations, and scales gracefully.
+**預期：** 調好之參集，令群體自組織向目標行為、擾後復原、優雅擴展。
 
-**On failure:** If the swarm fails stress tests, the signal design is likely too tightly coupled. Simplify: reduce to fewer signals, increase decay rates (fresher information), and ensure agents have a robust default behavior when no signals are present. A swarm that does something reasonable with zero signals is more resilient than one that depends on signal availability.
+**失敗時：** 若群體壓力測敗，信號設計或耦合過緊。簡之：減信號、增衰減率（新鮮資訊）、確保代理於無信號時有韌之預設行為。無信號時仍行合理之群體勝於賴信號可得之群體。
 
-## Validation
+## 驗證
 
-- [ ] Coordination problem is classified into a recognized pattern (foraging, consensus, construction, defense, division of labor)
-- [ ] Stigmergic signal table is defined with deposit conditions, decay rates, and agent responses
-- [ ] Local interaction rules are simple, local, and prioritized (3-7 rules)
-- [ ] Quorum thresholds are set with hysteresis to prevent oscillation
-- [ ] Small-scale test shows emergent behavior matching the collective goal
-- [ ] Stress test (agent removal, addition, signal disruption) shows graceful degradation
+- [ ] 協調問題已分為可辨之模式（探尋、共識、建造、防禦、分工）
+- [ ] 共遺信號表已定，含存置條件、衰減率、代理應對
+- [ ] 局部互動規則簡、局部、有優先序（3-7 則）
+- [ ] 法定閾已設遲滯以防振盪
+- [ ] 小規模測顯湧行為合集體目標
+- [ ] 壓力測（代理移、增、信號擾）顯優雅之退化
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Over-engineering signals**: Starting with too many signal types creates confusion. Begin with 2 signals (attract/repel) and add only when proven necessary
-- **Centralized thinking in disguise**: If your "local rule" requires an agent to know the global state, it's not local. Refactor until each rule depends only on what the agent can directly perceive
-- **Ignoring decay**: Signals that never decay create fossilized coordination state. Every signal needs a half-life appropriate to the task's time scale
-- **Zero hysteresis**: Quorum thresholds without a gap between activation and deactivation cause rapid state oscillation. Always set deactivation lower than activation
-- **Assuming homogeneity**: If agents have different capabilities, a single rule set may not work. Consider role-differentiated rules (see `scale-colony`)
+- **過工程化信號**：始以過多信號類生惑。始於二信號（吸/斥），證必要乃加
+- **偽裝之中央思維**：若「局部規則」需代理知全局狀態，非局部。重構至各規則僅賴代理直接可感之者
+- **忽衰減**：永不衰之信號生化石化之協調狀態。各信號皆需合任務時尺之半衰期
+- **無遲滯**：法定閾於激活與去活間無差生疾振。去活恒低於激活
+- **假同質**：若代理能力異，單規則集或不行。考慮分角色之規則（見 `scale-colony`）
 
-## Related Skills
+## 相關技能
 
-- `forage-resources` — applies swarm coordination specifically to resource search and explore-exploit tradeoffs
-- `build-consensus` — deep dive into distributed agreement mechanisms, extending the quorum sensing from this skill
-- `defend-colony` — collective defense patterns that build on the signal and rule framework here
-- `scale-colony` — scaling strategies for when the swarm outgrows its initial coordination design
-- `adapt-architecture` — morphic skill for transforming system architecture, complementary when swarm coordination triggers structural change
-- `deploy-to-kubernetes` — practical distributed system deployment where swarm coordination patterns apply
-- `plan-capacity` — capacity planning informed by swarm scaling dynamics
-- `coordinate-reasoning` — AI self-application variant; maps stigmergic signals to context management with information decay rates and local protocols
+- `forage-resources` — 施群體協調於資源搜與探-利取捨
+- `build-consensus` — 深入分散同意機制，延此技能之法定感測
+- `defend-colony` — 集體防禦模式，建於此信號與規則架構上
+- `scale-colony` — 群體超初協調設計時之擴展策略
+- `adapt-architecture` — 變系統架構之變形技能，群體協調觸結構變時互補
+- `deploy-to-kubernetes` — 實用之分散系統部署，群體協調模式適用
+- `plan-capacity` — 依群體擴展動力之容量計劃
+- `coordinate-reasoning` — AI 自我適用之變體；映共遺信號於脈絡管理，含資訊衰減率與局部協議

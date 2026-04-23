@@ -23,40 +23,40 @@ metadata:
   tags: r, package, usethis, scaffold, setup
 ---
 
-# Create R Package
+# 造 R 包
 
-Scaffold a fully configured R package with modern tooling and best practices.
+架含新具與佳實之全設 R 包。
 
-## When to Use
+## 用
 
-- Starting a new R package from scratch
-- Converting loose R scripts into a package
-- Setting up a package skeleton for collaborative development
+- 自零始新 R 包
+- 化散 R 本為包
+- 為合作發立包骨
 
-## Inputs
+## 入
 
-- **Required**: Package name (lowercase, no special characters except `.`)
-- **Required**: One-line description of the package purpose
-- **Optional**: License type (default: MIT)
-- **Optional**: Author information (name, email, ORCID)
-- **Optional**: Whether to initialize renv (default: yes)
+- **必**：包名（小寫、特符僅 `.`）
+- **必**：一行包目述
+- **可**：執照（默：MIT）
+- **可**：作者（名、郵、ORCID）
+- **可**：是否初 renv（默：是）
 
-## Procedure
+## 行
 
-### Step 1: Create Package Skeleton
+### 一：造包骨
 
 ```r
 usethis::create_package("packagename")
 setwd("packagename")
 ```
 
-**Expected:** Directory created with `DESCRIPTION`, `NAMESPACE`, `R/`, and `man/` subdirectories.
+**得：** 目建、含 `DESCRIPTION`、`NAMESPACE`、`R/`、`man/` 子目。
 
-**On failure:** Ensure usethis is installed (`install.packages("usethis")`). Check that the directory does not already exist.
+**敗：** 保 usethis 裝（`install.packages("usethis")`）。察目未存。
 
-### Step 2: Configure DESCRIPTION
+### 二：設 DESCRIPTION
 
-Edit `DESCRIPTION` with accurate metadata:
+編 `DESCRIPTION` 含正備：
 
 ```
 Package: packagename
@@ -75,11 +75,11 @@ URL: https://github.com/username/packagename
 BugReports: https://github.com/username/packagename/issues
 ```
 
-**Expected:** Valid DESCRIPTION that passes `R CMD check` with no metadata warnings.
+**得：** 有效 DESCRIPTION 通 `R CMD check` 無備警。
 
-**On failure:** If `R CMD check` warns about DESCRIPTION fields, verify that `Title` is in Title Case, `Description` is more than one sentence, and `Authors@R` uses valid `person()` syntax.
+**敗：** `R CMD check` 警 DESCRIPTION 欄→驗 `Title` 為 Title Case、`Description` 過一句、`Authors@R` 用有效 `person()` 文。
 
-### Step 3: Set Up Infrastructure
+### 三：設基建
 
 ```r
 usethis::use_mit_license()
@@ -90,13 +90,13 @@ usethis::use_git()
 usethis::use_github_action("check-standard")
 ```
 
-**Expected:** LICENSE, README.md, NEWS.md, `tests/` directory, `.git/` initialized, and `.github/workflows/` created.
+**得：** LICENSE、README.md、NEWS.md、`tests/` 目、`.git/` 初、`.github/workflows/` 建。
 
-**On failure:** If any `usethis::use_*()` function fails, install the missing dependency and rerun. If `.git/` already exists, `use_git()` will skip initialization.
+**敗：** `usethis::use_*()` 敗→裝缺依重行。`.git/` 已存→`use_git()` 略初。
 
-### Step 4: Create Development Configuration
+### 四：建發設
 
-Create `.Rprofile`:
+建 `.Rprofile`：
 
 ```r
 if (file.exists("renv/activate.R")) {
@@ -108,14 +108,14 @@ if (requireNamespace("mcptools", quietly = TRUE)) {
 }
 ```
 
-Create `.Renviron.example`:
+建 `.Renviron.example`：
 
 ```
 RSTUDIO_PANDOC="C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools"
 # GITHUB_PAT=your_github_token_here
 ```
 
-Create `.Rbuildignore` entries:
+建 `.Rbuildignore` 項：
 
 ```
 ^\.Rprofile$
@@ -128,23 +128,23 @@ Create `.Rbuildignore` entries:
 ^.*\.Rproj$
 ```
 
-**Expected:** `.Rprofile`, `.Renviron.example`, and `.Rbuildignore` are created. Development files are excluded from the built package.
+**得：** `.Rprofile`、`.Renviron.example`、`.Rbuildignore` 建。發檔除於構包。
 
-**On failure:** If `.Rprofile` causes errors on startup, check for syntax issues. Ensure `requireNamespace()` guards prevent failures when optional packages are missing.
+**敗：** `.Rprofile` 啟誤→察文法。保 `requireNamespace()` 守防選包缺時敗。
 
-### Step 5: Initialize renv
+### 五：初 renv
 
 ```r
 renv::init()
 ```
 
-**Expected:** `renv/` directory and `renv.lock` created. Project-local library is active.
+**得：** `renv/` 目與 `renv.lock` 建。案地庫活。
 
-**On failure:** Install renv with `install.packages("renv")`. If renv hangs during initialization, check network connectivity or set `options(timeout = 600)`.
+**敗：** `install.packages("renv")` 裝 renv。初懸→察網或 `options(timeout = 600)`。
 
-### Step 6: Create Package Documentation File
+### 六：建包備檔
 
-Create `R/packagename-package.R`:
+建 `R/packagename-package.R`：
 
 ```r
 #' @keywords internal
@@ -155,35 +155,35 @@ Create `R/packagename-package.R`:
 NULL
 ```
 
-**Expected:** `R/packagename-package.R` exists with the `"_PACKAGE"` sentinel. Running `devtools::document()` generates package-level help.
+**得：** `R/packagename-package.R` 存含 `"_PACKAGE"` 哨。`devtools::document()` 生包級助。
 
-**On failure:** Ensure the filename matches the pattern `R/<packagename>-package.R`. The `"_PACKAGE"` string must be a standalone expression, not inside a function.
+**敗：** 保檔名合 `R/<packagename>-package.R` 模。`"_PACKAGE"` 須為獨表、非於函內。
 
-### Step 7: Create CLAUDE.md
+### 七：建 CLAUDE.md
 
-Create `CLAUDE.md` in the project root with project-specific instructions for AI assistants.
+於案根建 `CLAUDE.md` 含 AI 助手之案專令。
 
-**Expected:** `CLAUDE.md` exists in the project root with project-specific editing conventions, build commands, and architecture notes.
+**得：** `CLAUDE.md` 存於案根含案專編規、構令、架注。
 
-**On failure:** If unsure what to include, start with the package name, a one-line description, common dev commands (`devtools::check()`, `devtools::test()`), and any non-obvious conventions.
+**敗：** 疑何含→始於包名、一行述、常發令（`devtools::check()`、`devtools::test()`）、任不明規。
 
-## Validation
+## 驗
 
-- [ ] `devtools::check()` returns 0 errors, 0 warnings
-- [ ] Package structure matches expected layout
-- [ ] `.Rprofile` loads without errors
-- [ ] `renv::status()` shows no issues
-- [ ] Git repository initialized with appropriate `.gitignore`
-- [ ] GitHub Actions workflow file present
+- [ ] `devtools::check()` 返零誤零警
+- [ ] 包構合期
+- [ ] `.Rprofile` 載無誤
+- [ ] `renv::status()` 顯無問
+- [ ] Git 庫初含合 `.gitignore`
+- [ ] GitHub Actions 流檔存
 
-## Common Pitfalls
+## 忌
 
-- **Package name conflicts**: Check CRAN with `available::available("packagename")` before committing to a name
-- **Missing .Rbuildignore entries**: Development files (`.Rprofile`, `.Renviron`, `renv/`) must be excluded from the built package
-- **Forgetting Encoding**: Always include `Encoding: UTF-8` in DESCRIPTION
-- **RoxygenNote mismatch**: The version in DESCRIPTION must match your installed roxygen2
+- **包名衝**：委名前以 `available::available("packagename")` 察 CRAN
+- **缺 .Rbuildignore 項**：發檔（`.Rprofile`、`.Renviron`、`renv/`）須除於構包
+- **忘 Encoding**：DESCRIPTION 恆含 `Encoding: UTF-8`
+- **RoxygenNote 不合**：DESCRIPTION 中版須合裝之 roxygen2
 
-## Examples
+## 例
 
 ```r
 # Minimal creation
@@ -199,10 +199,10 @@ usethis::use_github_action("check-standard")
 renv::init()
 ```
 
-## Related Skills
+## 參
 
-- `write-roxygen-docs` - document the functions you create
-- `write-testthat-tests` - add tests for your package
-- `setup-github-actions-ci` - detailed CI/CD configuration
-- `manage-renv-dependencies` - manage package dependencies
-- `write-claude-md` - create effective AI assistant instructions
+- `write-roxygen-docs` - 備所造函
+- `write-testthat-tests` - 為包加試
+- `setup-github-actions-ci` - 備 CI/CD 設細
+- `manage-renv-dependencies` - 理包依
+- `write-claude-md` - 造效 AI 助令

@@ -25,12 +25,12 @@ metadata:
 
 # Create GitHub Release
 
-Create a tagged GitHub release with release notes and optional artifacts.
+Create tagged GitHub release with release notes and optional artifacts.
 
-## When to Use
+## When Use
 
-- Marking a stable version of software for distribution
-- Publishing a new version of a library or application
+- Marking stable software version for distribution
+- Publishing new version of library or app
 - Creating release notes for stakeholders
 - Distributing build artifacts (binaries, tarballs)
 
@@ -41,7 +41,7 @@ Create a tagged GitHub release with release notes and optional artifacts.
 - **Optional**: Build artifacts to attach
 - **Optional**: Whether this is a pre-release
 
-## Procedure
+## Steps
 
 ### Step 1: Determine Version Number
 
@@ -53,9 +53,9 @@ Follow semantic versioning (`MAJOR.MINOR.PATCH`):
 | MINOR | 1.0.0 -> 1.1.0 | New features, backward compatible |
 | PATCH | 1.0.0 -> 1.0.1 | Bug fixes only |
 
-**Expected:** A version number is chosen that accurately reflects the scope of changes since the last release.
+**Got:** Version number chosen reflects scope of changes since last release.
 
-**On failure:** If unsure whether changes are breaking, review the public API diff. Any removal or signature change of an exported function is a breaking change requiring a MAJOR bump.
+**If fail:** Unsure if changes are breaking? Review public API diff. Any removal or signature change of exported function → breaking change needing MAJOR bump.
 
 ### Step 2: Update Version in Project Files
 
@@ -64,9 +64,9 @@ Follow semantic versioning (`MAJOR.MINOR.PATCH`):
 - `Cargo.toml` (Rust)
 - `pyproject.toml` (Python)
 
-**Expected:** The version number is updated in the appropriate project file and committed to version control.
+**Got:** Version number updated in right project file and committed to version control.
 
-**On failure:** If the version was already updated in a previous step (e.g., via `usethis::use_version()` in R), verify it matches the intended release version.
+**If fail:** Version already updated in earlier step (e.g., via `usethis::use_version()` in R)? Verify matches intended release version.
 
 ### Step 3: Write Release Notes
 
@@ -93,9 +93,9 @@ Create or update changelog. Organize by category:
 **Full Changelog**: https://github.com/user/repo/compare/v1.0.0...v1.1.0
 ```
 
-**Expected:** Release notes are organized by category (features, fixes, breaking changes) with issue/PR references for traceability.
+**Got:** Release notes organized by category (features, fixes, breaking changes) with issue/PR references for traceability.
 
-**On failure:** If changes are hard to categorize, review `git log v1.0.0..HEAD --oneline` to reconstruct the list of changes since the last release.
+**If fail:** Changes hard to categorize? Review `git log v1.0.0..HEAD --oneline` to rebuild list of changes since last release.
 
 ### Step 4: Create Git Tag
 
@@ -104,9 +104,9 @@ git tag -a v1.1.0 -m "Release v1.1.0"
 git push origin v1.1.0
 ```
 
-**Expected:** An annotated tag `v1.1.0` exists locally and on the remote. `git tag -l` shows the tag.
+**Got:** Annotated tag `v1.1.0` exists locally and on remote. `git tag -l` shows tag.
 
-**On failure:** If the tag already exists, delete it with `git tag -d v1.1.0 && git push origin :refs/tags/v1.1.0` and recreate it. If push is rejected, ensure you have write access to the remote.
+**If fail:** Tag already exists? Delete with `git tag -d v1.1.0 && git push origin :refs/tags/v1.1.0` and recreate. Push rejected? Confirm write access to remote.
 
 ### Step 5: Create GitHub Release
 
@@ -137,9 +137,9 @@ gh release create v2.0.0-beta.1 \
   --notes "Beta release for testing"
 ```
 
-**Expected:** Release visible on GitHub with tag, notes, and attached artifacts (if any).
+**Got:** Release visible on GitHub with tag, notes, attached artifacts (if any).
 
-**On failure:** If `gh` is not authenticated, run `gh auth login`. If the tag does not exist on the remote, push it first with `git push origin v1.1.0`.
+**If fail:** `gh` not authenticated? Run `gh auth login`. Tag does not exist on remote? Push it first with `git push origin v1.1.0`.
 
 ### Step 6: Auto-Generate Release Notes
 
@@ -170,9 +170,9 @@ changelog:
         - "*"
 ```
 
-**Expected:** Release notes are auto-generated from merged PR titles, categorized by label. `.github/release.yml` controls the categories.
+**Got:** Release notes auto-generated from merged PR titles, categorized by label. `.github/release.yml` controls categories.
 
-**On failure:** If auto-generated notes are empty, ensure PRs were merged (not closed) and had labels assigned. Manually write notes as a fallback.
+**If fail:** Auto-generated notes empty? Confirm PRs were merged (not closed) and had labels. Write notes by hand as fallback.
 
 ### Step 7: Verify Release
 
@@ -184,28 +184,28 @@ gh release list
 gh release view v1.1.0
 ```
 
-**Expected:** `gh release list` shows the new release. `gh release view` displays the correct title, tag, notes, and assets.
+**Got:** `gh release list` shows new release. `gh release view` displays right title, tag, notes, assets.
 
-**On failure:** If the release is missing, check the Actions tab for any release workflows that may have failed. Verify the tag exists with `git tag -l`.
+**If fail:** Release missing? Check Actions tab for release workflows that may have failed. Verify tag exists with `git tag -l`.
 
-## Validation
+## Checks
 
 - [ ] Version tag follows semantic versioning
-- [ ] Git tag points to the correct commit
+- [ ] Git tag points to right commit
 - [ ] Release notes accurately describe changes
-- [ ] Artifacts (if any) are attached and downloadable
-- [ ] Release is visible on the GitHub repository page
-- [ ] Pre-release flag is set correctly
+- [ ] Artifacts (if any) attached and downloadable
+- [ ] Release visible on GitHub repo page
+- [ ] Pre-release flag set correctly
 
-## Common Pitfalls
+## Pitfalls
 
 - **Tagging wrong commit**: Always verify `git log` before tagging. Tag after version-bump commit.
 - **Forgetting to push tags**: `git push` doesn't push tags. Use `git push --tags` or `git push origin v1.1.0`.
-- **Inconsistent version format**: Decide on `v1.0.0` vs `1.0.0` and stick with it.
-- **Empty release notes**: Always provide meaningful notes. Users need to know what changed.
-- **Deleting and recreating tags**: Avoid changing tags after push. If needed, create a new version instead.
+- **Inconsistent version format**: Pick `v1.0.0` vs `1.0.0` and stick with it.
+- **Empty release notes**: Always give meaningful notes. Users need to know what changed.
+- **Deleting and recreating tags**: Dodge changing tags after push. If needed, create new version instead.
 
-## Related Skills
+## See Also
 
 - `commit-changes` - staging and committing workflow
 - `manage-git-branches` - branch management for release prep

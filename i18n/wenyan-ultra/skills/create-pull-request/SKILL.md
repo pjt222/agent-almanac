@@ -24,30 +24,30 @@ metadata:
   tags: github, pull-request, code-review, gh-cli, collaboration
 ---
 
-# Create Pull Request
+# 造拉請
 
-Create a GitHub pull request with a clear title, structured description, and proper branch setup.
+建含明標、結述、正枝設之 GitHub 拉請。
 
-## When to Use
+## 用
 
-- Proposing changes from a feature or fix branch for review
-- Merging completed work into the main branch
-- Requesting code review from collaborators
-- Documenting the purpose and scope of a set of changes
+- 自能或修枝提變以評
+- 併畢工於主枝
+- 求合作碼評
+- 備一組變之目與範
 
-## Inputs
+## 入
 
-- **Required**: Feature branch with committed changes
-- **Required**: Base branch to merge into (usually `main`)
-- **Optional**: Reviewers to request
-- **Optional**: Labels or milestone
-- **Optional**: Draft status
+- **必**：含承變之能枝
+- **必**：併入基枝（常 `main`）
+- **可**：求評者
+- **可**：標或里程
+- **可**：草態
 
-## Procedure
+## 行
 
-### Step 1: Ensure Branch Is Ready
+### 一：保枝備
 
-Verify the branch is up to date with the base branch and all changes are committed:
+驗枝與基枝同且諸變已承：
 
 ```bash
 # Check for uncommitted changes
@@ -60,13 +60,13 @@ git fetch origin
 git rebase origin/main
 ```
 
-**Expected:** Branch is ahead of `origin/main` with no uncommitted changes and no conflicts.
+**得：** 枝先於 `origin/main` 無未承變且無衝。
 
-**On failure:** If rebase conflicts occur, resolve them (see `resolve-git-conflicts` skill), then `git rebase --continue`. If the branch has diverged significantly, consider `git merge origin/main` instead.
+**敗：** Rebase 衝→解（見 `resolve-git-conflicts`）、續 `git rebase --continue`。枝大漂→考 `git merge origin/main`。
 
-### Step 2: Review All Changes on the Branch
+### 二：評枝上諸變
 
-Examine the full diff and commit history that will be included in the PR:
+察 PR 中將含之全差與承：
 
 ```bash
 # See all commits on this branch (not on main)
@@ -79,24 +79,24 @@ git diff origin/main...HEAD
 git status -sb
 ```
 
-**Expected:** All commits are relevant to the PR. The diff shows only intended changes.
+**得：** 諸承皆合 PR。差僅顯意變。
 
-**On failure:** If unrelated commits are present, consider interactive rebase to clean up history before creating the PR.
+**敗：** 含無關承→考互動 rebase 清史後建 PR。
 
-### Step 3: Push the Branch
+### 三：推枝
 
 ```bash
 # Push branch to remote (set upstream tracking)
 git push -u origin HEAD
 ```
 
-**Expected:** Branch appears on GitHub remote.
+**得：** 枝現於 GitHub 遠。
 
-**On failure:** If push is rejected, pull first with `git pull --rebase origin <branch>` and resolve any conflicts.
+**敗：** 推拒→先 `git pull --rebase origin <branch>` 解衝。
 
-### Step 4: Write PR Title and Description
+### 四：書 PR 標與述
 
-Keep the title under 70 characters. Use the body for details:
+標 70 字符內。體為細：
 
 ```bash
 gh pr create --title "Add weighted mean calculation" --body "$(cat <<'EOF'
@@ -115,19 +115,19 @@ EOF
 )"
 ```
 
-For draft PRs:
+草 PR：
 
 ```bash
 gh pr create --title "WIP: Add authentication" --body "..." --draft
 ```
 
-**Expected:** PR created on GitHub with a URL returned. Description clearly communicates what changed and how to test.
+**得：** PR 於 GitHub 建、返 URL。述明達何變與試法。
 
-**On failure:** If `gh` is not authenticated, run `gh auth login`. If the base branch is wrong, specify with `--base main`.
+**敗：** `gh` 未證→行 `gh auth login`。基枝誤→以 `--base main` 指。
 
-### Step 5: Handle Review Feedback
+### 五：理評回
 
-Respond to review comments and push updates:
+應評論、推更：
 
 ```bash
 # View PR comments
@@ -146,13 +146,13 @@ EOF
 git push
 ```
 
-**Expected:** New commits appear on the PR. Review comments are addressed.
+**得：** 新承現於 PR。評論已應。
 
-**On failure:** If CI checks fail after pushing, read the check output with `gh pr checks` and fix the issues before requesting re-review.
+**敗：** 推後 CI 敗→以 `gh pr checks` 讀出、修問再求重評。
 
-### Step 6: Merge and Clean Up
+### 六：併與清
 
-After approval:
+通過後：
 
 ```bash
 # Merge the PR (squash merge keeps history clean)
@@ -165,39 +165,39 @@ gh pr merge --merge --delete-branch
 gh pr merge --rebase --delete-branch
 ```
 
-After merge, update local main:
+併後更地 main：
 
 ```bash
 git checkout main
 git pull origin main
 ```
 
-**Expected:** PR is merged, remote branch is deleted, local main is updated.
+**得：** PR 已併、遠枝刪、地 main 更。
 
-**On failure:** If merge is blocked by failing checks or missing approvals, address those first. Do not force-merge without resolving blockers.
+**敗：** 併為敗察或缺核阻→先治。勿強併跨阻。
 
-## Validation
+## 驗
 
-- [ ] PR title is concise (under 70 characters) and descriptive
-- [ ] PR body includes summary of changes and test plan
-- [ ] All commits on the branch are relevant to the PR
-- [ ] CI checks pass
-- [ ] Branch is up to date with base branch
-- [ ] Reviewers are assigned (if required by repository settings)
-- [ ] No sensitive data in the diff
+- [ ] PR 標簡（70 字符內）且述
+- [ ] PR 體含變結與試謀
+- [ ] 枝上諸承皆關 PR
+- [ ] CI 察通
+- [ ] 枝與基枝同
+- [ ] 評者已指（若庫設需）
+- [ ] 差無敏感
 
-## Common Pitfalls
+## 忌
 
-- **PR too large**: Keep PRs focused on a single feature or fix. Large PRs are harder to review and more likely to have merge conflicts.
-- **Missing test plan**: Always describe how the changes can be verified, even for documentation PRs.
-- **Stale branch**: If the base branch has moved ahead significantly, rebase before creating the PR to minimize merge conflicts.
-- **Force-pushing during review**: Avoid force-pushing to a branch with open review comments. Push new commits so reviewers can see incremental changes.
-- **Not reading CI output**: Check `gh pr checks` before asking for re-review. Failing CI wastes reviewers' time.
-- **Forgetting to delete branch**: Use `--delete-branch` with merge to keep the remote clean.
+- **PR 過大**：PR 當專於單能或修。大 PR 難評而易衝
+- **缺試謀**：恆述如何驗變、備 PR 亦然
+- **陳枝**：基枝大前→建 PR 前 rebase 以減衝
+- **評中強推**：避強推於含開評之枝。推新承使評者見漸變
+- **不讀 CI 出**：求重評前察 `gh pr checks`。敗 CI 費評者時
+- **忘刪枝**：併用 `--delete-branch` 保遠潔
 
-## Related Skills
+## 參
 
-- `commit-changes` - creating commits for the PR
-- `manage-git-branches` - branch creation and naming conventions
-- `resolve-git-conflicts` - handling conflicts during rebase/merge
-- `create-github-release` - releasing after merge
+- `commit-changes` - 為 PR 建承
+- `manage-git-branches` - 枝建與命規
+- `resolve-git-conflicts` - rebase/merge 中衝
+- `create-github-release` - 併後發

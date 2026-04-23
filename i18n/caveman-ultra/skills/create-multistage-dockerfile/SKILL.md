@@ -26,37 +26,37 @@ metadata:
 
 # Create Multi-Stage Dockerfile
 
-Build multi-stage Dockerfiles that produce minimal production images by separating build tooling from runtime.
+Separate build + runtime → min prod img.
 
-## When to Use
+## Use When
 
-- Production images are too large (>500MB for compiled languages)
-- Build tools (compilers, dev headers) are included in the final image
-- Need separate images for development and production from one Dockerfile
-- Deploying to constrained environments (edge, serverless)
+- Prod imgs too large (>500MB compiled)
+- Build tools (compilers, headers) in final img
+- Need dev + prod from 1 Dockerfile
+- Constrained env (edge, serverless)
 
-## Inputs
+## In
 
-- **Required**: Existing Dockerfile or project to containerize
-- **Required**: Language and build system (npm, pip, go build, cargo, maven)
-- **Optional**: Target runtime base (slim, alpine, distroless, scratch)
-- **Optional**: Size budget for final image
+- **Required**: Existing Dockerfile / project
+- **Required**: Lang + build (npm, pip, go, cargo, maven)
+- **Optional**: Runtime base (slim, alpine, distroless, scratch)
+- **Optional**: Size budget
 
-## Procedure
+## Do
 
-### Step 1: Identify Build vs Runtime Dependencies
+### Step 1: Build vs Runtime Deps
 
-| Category | Build Stage | Runtime Stage |
+| Cat | Build Stage | Runtime |
 |----------|-------------|---------------|
 | Compilers | gcc, g++, rustc | Not needed |
-| Package managers | npm, pip, cargo | Sometimes (interpreted langs) |
-| Dev headers | `-dev` packages | Not needed |
-| Source code | Full source tree | Only compiled output |
-| Test frameworks | jest, pytest | Not needed |
+| Pkg mgrs | npm, pip, cargo | Sometimes (interpreted) |
+| Dev headers | `-dev` pkgs | Not needed |
+| Source | Full tree | Only compiled out |
+| Test fw | jest, pytest | Not needed |
 
-### Step 2: Structure the Multi-Stage Build
+### Step 2: Multi-Stage Struct
 
-The core pattern: build in a fat image, copy artifacts to a slim image.
+Pattern: build in fat img, copy artifacts → slim.
 
 ```dockerfile
 # ---- Build Stage ----
@@ -74,7 +74,7 @@ EXPOSE <port>
 CMD [<entrypoint>]
 ```
 
-### Step 3: Apply Language-Specific Patterns
+### Step 3: Lang-Specific
 
 #### Node.js (pruned node_modules)
 
@@ -97,7 +97,7 @@ EXPOSE 3000
 CMD ["node", "dist/index.js"]
 ```
 
-#### Python (virtualenv copy)
+#### Python (venv copy)
 
 ```dockerfile
 FROM python:3.12-bookworm AS builder
@@ -119,7 +119,7 @@ EXPOSE 8000
 CMD ["python", "app.py"]
 ```
 
-#### Go (static binary to scratch)
+#### Go (static → scratch)
 
 ```dockerfile
 FROM golang:1.23-bookworm AS builder
@@ -136,7 +136,7 @@ EXPOSE 8080
 ENTRYPOINT ["/server"]
 ```
 
-#### Rust (static musl binary)
+#### Rust (static musl)
 
 ```dockerfile
 FROM rust:1.82-bookworm AS builder
@@ -156,23 +156,23 @@ EXPOSE 8080
 ENTRYPOINT ["/myapp"]
 ```
 
-**Expected:** Final image contains only the runtime and compiled artifacts.
+**Got:** Final img = runtime + compiled artifacts only.
 
-**On failure:** Check `COPY --from=builder` paths. Use `docker build --target builder` to debug the build stage.
+**If err:** Check `COPY --from=builder` paths. Use `docker build --target builder` → debug build stage.
 
-### Step 4: Choose Runtime Base
+### Step 4: Runtime Base
 
-| Base | Size | Shell | Use Case |
+| Base | Size | Shell | Use |
 |------|------|-------|----------|
-| `scratch` | 0 MB | No | Static Go/Rust binaries |
-| `gcr.io/distroless/static` | ~2 MB | No | Static binaries + CA certs |
-| `gcr.io/distroless/base` | ~20 MB | No | Dynamic binaries (libc) |
-| `*-slim` | 50-150 MB | Yes | Interpreted languages |
-| `alpine` | ~7 MB | Yes | When shell access needed |
+| `scratch` | 0 MB | No | Static Go/Rust |
+| `gcr.io/distroless/static` | ~2 MB | No | Static + CA certs |
+| `gcr.io/distroless/base` | ~20 MB | No | Dynamic (libc) |
+| `*-slim` | 50-150 MB | Yes | Interpreted |
+| `alpine` | ~7 MB | Yes | Shell needed |
 
-**Note:** Alpine uses musl libc. Some Python wheels and Node native modules may not work. Prefer `-slim` (glibc) for interpreted languages.
+**Note:** Alpine = musl libc. Some Python wheels / Node native mods fail. Prefer `-slim` (glibc) for interpreted.
 
-### Step 5: Build Args Across Stages
+### Step 5: Build Args Cross Stages
 
 ```dockerfile
 ARG APP_VERSION=0.0.0
@@ -186,11 +186,11 @@ COPY --from=builder /server /server
 ENTRYPOINT ["/server"]
 ```
 
-Build with: `docker build --build-arg APP_VERSION=1.2.3 .`
+Build: `docker build --build-arg APP_VERSION=1.2.3 .`
 
-**Note:** `ARG` before `FROM` is global. Each stage must re-declare `ARG` to use it.
+**Note:** `ARG` before `FROM` = global. Each stage must re-declare `ARG` to use.
 
-### Step 6: Compare Image Sizes
+### Step 6: Compare Sizes
 
 ```bash
 # Build both variants
@@ -201,28 +201,28 @@ docker build -t myapp:slim .
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep myapp
 ```
 
-**Expected:** Production image is 50-90% smaller than the build stage.
+**Got:** Prod img 50-90% smaller than build.
 
-## Validation
+## Check
 
-- [ ] `docker build` completes for all stages
-- [ ] Final image does not contain build tools (compilers, dev headers)
-- [ ] `docker run` works correctly from the slim image
-- [ ] Image size is significantly reduced vs single-stage
-- [ ] `COPY --from=builder` paths are correct
-- [ ] No source code leaks into the production image
+- [ ] All stages build
+- [ ] Final img no build tools
+- [ ] `docker run` works from slim
+- [ ] Size reduced vs single-stage
+- [ ] `COPY --from=builder` paths correct
+- [ ] No src leak into prod
 
-## Common Pitfalls
+## Traps
 
-- **Missing runtime libraries**: Compiled code may need shared libraries (`libc`, `libssl`). Test the slim image thoroughly.
-- **Broken `COPY --from` paths**: The artifact path must match exactly. Use `docker build --target builder` then `docker run --rm builder ls /path` to debug.
-- **Alpine musl issues**: Native Node.js addons and some Python packages fail on Alpine. Use `-slim` instead.
-- **Global ARG scope**: An `ARG` declared before `FROM` is available to `FROM` lines only. Re-declare inside each stage that needs it.
-- **Forgetting CA certificates**: `scratch` has no certificates. Copy `/etc/ssl/certs/ca-certificates.crt` from the builder or use distroless.
+- **Missing runtime libs**: Compiled code may need shared libs (`libc`, `libssl`). Test slim thoroughly.
+- **Broken `COPY --from`**: Path must match exact. Debug: `docker build --target builder` + `docker run --rm builder ls /path`.
+- **Alpine musl**: Native Node addons + some Python fail. Use `-slim`.
+- **ARG scope**: Global `ARG` before `FROM` → only `FROM` lines. Re-declare in each stage needing it.
+- **No CA certs**: `scratch` has none. Copy `/etc/ssl/certs/ca-certificates.crt` / use distroless.
 
-## Related Skills
+## →
 
-- `create-dockerfile` - single-stage general Dockerfiles
-- `create-r-dockerfile` - R-specific Dockerfiles with rocker images
-- `optimize-docker-build-cache` - layer caching and BuildKit features
-- `setup-compose-stack` - compose configurations using multi-stage images
+- `create-dockerfile` — single-stage general
+- `create-r-dockerfile` — R-specific rocker
+- `optimize-docker-build-cache` — layer caching + BuildKit
+- `setup-compose-stack` — compose w/ multi-stage

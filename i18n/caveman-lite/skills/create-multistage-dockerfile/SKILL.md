@@ -156,9 +156,9 @@ EXPOSE 8080
 ENTRYPOINT ["/myapp"]
 ```
 
-**Expected:** Final image contains only the runtime and compiled artifacts.
+**Got:** Final image contains only the runtime and compiled artifacts.
 
-**On failure:** Check `COPY --from=builder` paths. Use `docker build --target builder` to debug the build stage.
+**If fail:** Check `COPY --from=builder` paths. Use `docker build --target builder` to debug the build stage.
 
 ### Step 4: Choose Runtime Base
 
@@ -201,7 +201,7 @@ docker build -t myapp:slim .
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep myapp
 ```
 
-**Expected:** Production image is 50-90% smaller than the build stage.
+**Got:** Production image is 50-90% smaller than the build stage.
 
 ## Validation
 
@@ -212,7 +212,7 @@ docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep myapp
 - [ ] `COPY --from=builder` paths are correct
 - [ ] No source code leaks into the production image
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing runtime libraries**: Compiled code may need shared libraries (`libc`, `libssl`). Test the slim image thoroughly.
 - **Broken `COPY --from` paths**: The artifact path must match exactly. Use `docker build --target builder` then `docker run --rm builder ls /path` to debug.

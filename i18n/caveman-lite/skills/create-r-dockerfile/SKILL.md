@@ -52,9 +52,9 @@ Build a Dockerfile for R projects using rocker base images with proper dependenc
 | With RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |
 | Shiny server | `rocker/shiny-verse:4.5.0` | ~2GB |
 
-**Expected:** A base image is selected that matches the project's requirements without unnecessary bloat.
+**Got:** A base image is selected that matches the project's requirements without unnecessary bloat.
 
-**On failure:** If unsure which image to use, start with `rocker/r-ver` (minimal) and add packages as needed. Check [rocker-org](https://github.com/rocker-org/rocker-versioned2) for the full image catalog.
+**If fail:** If unsure which image to use, start with `rocker/r-ver` (minimal) and add packages as needed. Check [rocker-org](https://github.com/rocker-org/rocker-versioned2) for the full image catalog.
 
 ### Step 2: Write Dockerfile
 
@@ -110,9 +110,9 @@ COPY . .
 CMD ["R"]
 ```
 
-**Expected:** Dockerfile builds successfully with `docker build -t myproject .`
+**Got:** Dockerfile builds successfully with `docker build -t myproject .`
 
-**On failure:** If the build fails during `apt-get install`, check package names for the target distro (Debian). If `renv::restore()` fails, ensure `renv.lock` and `renv/activate.R` are copied before the restore step.
+**If fail:** If the build fails during `apt-get install`, check package names for the target distro (Debian). If `renv::restore()` fails, ensure `renv.lock` and `renv/activate.R` are copied before the restore step.
 
 ### Step 3: Create .dockerignore
 
@@ -128,9 +128,9 @@ docs/
 *.tar.gz
 ```
 
-**Expected:** `.dockerignore` excludes Git history, IDE files, local renv library, and build artifacts from the Docker context.
+**Got:** `.dockerignore` excludes Git history, IDE files, local renv library, and build artifacts from the Docker context.
 
-**On failure:** If the Docker build still copies unwanted files, verify `.dockerignore` is in the same directory as the Dockerfile and uses correct glob patterns.
+**If fail:** If the Docker build still copies unwanted files, verify `.dockerignore` is in the same directory as the Dockerfile and uses correct glob patterns.
 
 ### Step 4: Build and Test
 
@@ -139,9 +139,9 @@ docker build -t r-project:latest .
 docker run --rm -it r-project:latest R -e "sessionInfo()"
 ```
 
-**Expected:** Container starts with correct R version and all packages available. `sessionInfo()` output confirms the expected R version.
+**Got:** Container starts with correct R version and all packages available. `sessionInfo()` output confirms the expected R version.
 
-**On failure:** Check build logs for system dependency errors. Add missing `-dev` packages to the `apt-get install` layer.
+**If fail:** Check build logs for system dependency errors. Add missing `-dev` packages to the `apt-get install` layer.
 
 ### Step 5: Optimize for Production
 
@@ -162,9 +162,9 @@ WORKDIR /app
 CMD ["Rscript", "main.R"]
 ```
 
-**Expected:** Multi-stage build produces a smaller final image. Runtime stage contains only compiled R packages, not build tools.
+**Got:** Multi-stage build produces a smaller final image. Runtime stage contains only compiled R packages, not build tools.
 
-**On failure:** If packages fail to load in the runtime stage, ensure the library path in `COPY --from=builder` matches where R installed packages. Check with `R -e ".libPaths()"` in both stages.
+**If fail:** If packages fail to load in the runtime stage, ensure the library path in `COPY --from=builder` matches where R installed packages. Check with `R -e ".libPaths()"` in both stages.
 
 ## Validation
 
@@ -175,7 +175,7 @@ CMD ["Rscript", "main.R"]
 - [ ] Image size is reasonable for the use case
 - [ ] Rebuilds are fast when only code changes (layer caching works)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing system dependencies**: R packages with compiled code need `-dev` libraries. Check error messages during `install.packages()`
 - **Layer cache invalidation**: Copying all files before installing packages invalidates cache on every code change. Copy lockfile first.

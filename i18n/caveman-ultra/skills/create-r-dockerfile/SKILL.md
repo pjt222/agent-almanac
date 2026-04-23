@@ -25,38 +25,38 @@ metadata:
 
 # Create R Dockerfile
 
-Build a Dockerfile for R projects using rocker base images with proper dependency management.
+Dockerfile for R using rocker + dep mgmt.
 
-## When to Use
+## Use When
 
-- Containerizing an R application or analysis
-- Creating reproducible R environments
-- Deploying R-based services (Shiny, Plumber, MCP server)
-- Setting up consistent development environments
+- Containerize R app / analysis
+- Repro R env
+- Deploy R svcs (Shiny, Plumber, MCP)
+- Consistent dev env
 
-## Inputs
+## In
 
-- **Required**: R project with dependencies (DESCRIPTION or renv.lock)
-- **Required**: Purpose (development, production, or service)
-- **Optional**: R version (default: latest stable)
-- **Optional**: Additional system libraries needed
+- **Required**: R proj + deps (DESCRIPTION / renv.lock)
+- **Required**: Purpose (dev/prod/svc)
+- **Optional**: R ver (def: latest stable)
+- **Optional**: Extra sys libs
 
-## Procedure
+## Do
 
-### Step 1: Choose Base Image
+### Step 1: Base Img
 
-| Use Case | Base Image | Size |
+| Use | Base | Size |
 |----------|-----------|------|
-| Minimal R runtime | `rocker/r-ver:4.5.0` | ~800MB |
-| With tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
-| With RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |
-| Shiny server | `rocker/shiny-verse:4.5.0` | ~2GB |
+| Min R | `rocker/r-ver:4.5.0` | ~800MB |
+| Tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
+| RStudio Svr | `rocker/rstudio:4.5.0` | ~1.9GB |
+| Shiny | `rocker/shiny-verse:4.5.0` | ~2GB |
 
-**Expected:** A base image is selected that matches the project's requirements without unnecessary bloat.
+**Got:** Base matches reqs, no bloat.
 
-**On failure:** If unsure which image to use, start with `rocker/r-ver` (minimal) and add packages as needed. Check [rocker-org](https://github.com/rocker-org/rocker-versioned2) for the full image catalog.
+**If err:** Unsure → `rocker/r-ver` (min) + add pkgs. See [rocker-org](https://github.com/rocker-org/rocker-versioned2) catalog.
 
-### Step 2: Write Dockerfile
+### Step 2: Dockerfile
 
 ```dockerfile
 FROM rocker/r-ver:4.5.0
@@ -110,11 +110,11 @@ COPY . .
 CMD ["R"]
 ```
 
-**Expected:** Dockerfile builds successfully with `docker build -t myproject .`
+**Got:** `docker build -t myproject .` builds OK.
 
-**On failure:** If the build fails during `apt-get install`, check package names for the target distro (Debian). If `renv::restore()` fails, ensure `renv.lock` and `renv/activate.R` are copied before the restore step.
+**If err:** `apt-get install` fail → check pkg names (Debian). `renv::restore()` fail → ensure `renv.lock` + `renv/activate.R` copied before restore.
 
-### Step 3: Create .dockerignore
+### Step 3: .dockerignore
 
 ```
 .git
@@ -128,24 +128,24 @@ docs/
 *.tar.gz
 ```
 
-**Expected:** `.dockerignore` excludes Git history, IDE files, local renv library, and build artifacts from the Docker context.
+**Got:** `.dockerignore` excludes git, IDE, local renv lib, artifacts.
 
-**On failure:** If the Docker build still copies unwanted files, verify `.dockerignore` is in the same directory as the Dockerfile and uses correct glob patterns.
+**If err:** Build still copies unwanted → verify `.dockerignore` in same dir as Dockerfile, correct glob.
 
-### Step 4: Build and Test
+### Step 4: Build + Test
 
 ```bash
 docker build -t r-project:latest .
 docker run --rm -it r-project:latest R -e "sessionInfo()"
 ```
 
-**Expected:** Container starts with correct R version and all packages available. `sessionInfo()` output confirms the expected R version.
+**Got:** Container starts, R ver correct, pkgs avail. `sessionInfo()` confirms.
 
-**On failure:** Check build logs for system dependency errors. Add missing `-dev` packages to the `apt-get install` layer.
+**If err:** Check build logs for sys dep err. Add missing `-dev` pkgs.
 
-### Step 5: Optimize for Production
+### Step 5: Prod Optimize
 
-For production deployments, use multi-stage builds:
+Multi-stage:
 
 ```dockerfile
 # Build stage
@@ -162,26 +162,26 @@ WORKDIR /app
 CMD ["Rscript", "main.R"]
 ```
 
-**Expected:** Multi-stage build produces a smaller final image. Runtime stage contains only compiled R packages, not build tools.
+**Got:** Multi-stage → smaller final img. Runtime = compiled R pkgs only.
 
-**On failure:** If packages fail to load in the runtime stage, ensure the library path in `COPY --from=builder` matches where R installed packages. Check with `R -e ".libPaths()"` in both stages.
+**If err:** Pkgs fail load in runtime → lib path in `COPY --from=builder` must match R install path. Check: `R -e ".libPaths()"` in both.
 
-## Validation
+## Check
 
-- [ ] `docker build` completes without errors
-- [ ] Container starts and R session works
-- [ ] All required packages are available
-- [ ] `.dockerignore` excludes unnecessary files
-- [ ] Image size is reasonable for the use case
-- [ ] Rebuilds are fast when only code changes (layer caching works)
+- [ ] `docker build` no err
+- [ ] Container starts, R works
+- [ ] All req pkgs avail
+- [ ] `.dockerignore` excludes junk
+- [ ] Img size reasonable
+- [ ] Fast rebuild on code-only change (cache works)
 
-## Common Pitfalls
+## Traps
 
-- **Missing system dependencies**: R packages with compiled code need `-dev` libraries. Check error messages during `install.packages()`
-- **Layer cache invalidation**: Copying all files before installing packages invalidates cache on every code change. Copy lockfile first.
-- **Large images**: Use `rm -rf /var/lib/apt/lists/*` after `apt-get install`. Consider multi-stage builds.
-- **Timezone issues**: Add `ENV TZ=UTC` or install `tzdata` for timezone-aware operations
-- **Running as root**: Add a non-root user for production: `RUN useradd -m appuser && USER appuser`
+- **Missing sys deps**: Compiled R pkgs need `-dev` libs. Check `install.packages()` err msgs
+- **Cache invalidation**: Copy all files pre-install → cache invalidated on code change. Copy lockfile first.
+- **Large imgs**: `rm -rf /var/lib/apt/lists/*` after `apt-get install`. Multi-stage.
+- **Timezone**: `ENV TZ=UTC` / install `tzdata` for TZ-aware ops
+- **Root user**: Add non-root prod: `RUN useradd -m appuser && USER appuser`
 
 ## Examples
 
@@ -196,9 +196,9 @@ docker run -d -p 8000:8000 r-api:latest
 docker run -d -p 3838:3838 r-shiny:latest
 ```
 
-## Related Skills
+## →
 
-- `setup-docker-compose` - orchestrate multiple containers
-- `containerize-mcp-server` - special case for MCP R servers
-- `optimize-docker-build-cache` - advanced caching strategies
-- `manage-renv-dependencies` - renv.lock feeds into Docker builds
+- `setup-docker-compose` — orchestrate multi containers
+- `containerize-mcp-server` — MCP R svrs
+- `optimize-docker-build-cache` — cache strategies
+- `manage-renv-dependencies` — renv.lock → Docker

@@ -23,34 +23,34 @@ metadata:
   tags: correlation, exemplars, red-method, use-method, unified-observability
 ---
 
-# Correlate Observability Signals
+# 聯可觀之訊
 
-Connect metrics, logs, and traces for unified debugging across the three pillars of observability.
+聯度、誌、跡三柱為一，以統合而除三界之弊。
 
-## When to Use
+## 用時
 
-- Investigating complex incidents that span multiple systems
-- Reducing MTTR (mean time to resolution)
-- Building unified observability dashboards
-- Implementing distributed tracing
-- Moving from siloed tools to unified observability
+- 究跨系統之繁亂
+- 減 MTTR（平均解決之時）
+- 建統合之可觀儀盤
+- 施散式之跡
+- 由孤工具轉統合可觀
 
-## Inputs
+## 入
 
-- **Required**: Prometheus (metrics)
-- **Required**: Log aggregation system (Loki, Elasticsearch, CloudWatch)
-- **Required**: Distributed tracing backend (Tempo, Jaeger, Zipkin)
-- **Optional**: Grafana for unified visualization
-- **Optional**: OpenTelemetry instrumentation
+- **必要**：Prometheus（度）
+- **必要**：誌聚之系（Loki、Elasticsearch、CloudWatch）
+- **必要**：散跡之後端（Tempo、Jaeger、Zipkin）
+- **可選**：Grafana 以作統合之視
+- **可選**：OpenTelemetry 之儀化
 
-## Procedure
+## 法
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 全配置文件與樣板參 [Extended Examples](references/EXAMPLES.md)。
 
 
-### Step 1: Implement Trace Context Propagation
+### 第一步：施跡脈之傳
 
-Add trace IDs to all logs and metrics using OpenTelemetry:
+以 OpenTelemetry 置跡 ID 於諸誌與度：
 
 ```go
 // Go example: Propagate trace context to logs
@@ -88,7 +88,7 @@ func processData(ctx context.Context, userID string) {
 }
 ```
 
-Python example:
+Python 例：
 
 ```python
 # Python: Flask with OpenTelemetry
@@ -119,13 +119,13 @@ def get_user(user_id):
     return {"user_id": user_id}
 ```
 
-**Expected:** All logs include `trace_id` field, enabling log-to-trace correlation.
+**得：** 諸誌含 `trace_id` 之域，誌與跡可聯。
 
-**On failure:** If trace IDs missing, check OpenTelemetry SDK initialization and context propagation.
+**敗則：** 若跡 ID 失，察 OpenTelemetry SDK 之初與脈之傳。
 
-### Step 2: Configure Exemplars in Prometheus
+### 第二步：設 Prometheus 之範例
 
-Exemplars link metrics to traces:
+範例聯度於跡：
 
 ```yaml
 # prometheus.yml
@@ -146,7 +146,7 @@ scrape_configs:
         action: keep
 ```
 
-Instrument application to emit exemplars:
+儀化應用以發範例：
 
 ```go
 // Go: Emit exemplars with Prometheus histogram
@@ -181,22 +181,22 @@ func recordRequest(ctx context.Context, method, endpoint, status string, duratio
 }
 ```
 
-Query exemplars in Prometheus:
+於 Prometheus 查範例：
 
 ```promql
 # Histogram with exemplars
 histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 ```
 
-In Grafana, exemplars appear as dots on histogram graphs that link to traces.
+於 Grafana，範例現為直方圖上之點，聯至跡。
 
-**Expected:** Grafana shows exemplars in metric graphs, clicking opens corresponding trace.
+**得：** Grafana 顯範例於度圖，點之則開相應之跡。
 
-**On failure:** Verify Prometheus version ≥2.26 (exemplar support), check Grafana data source config enables exemplars.
+**敗則：** 驗 Prometheus 版本 ≥2.26（支援範例），查 Grafana 源設啟範例。
 
-### Step 3: Build Unified Dashboard with RED Method
+### 第三步：以 RED 法建統合儀盤
 
-RED Method: Rate, Errors, Duration (for services)
+RED 法：率、訛、時（施於服）
 
 ```json
 {
@@ -263,13 +263,13 @@ RED Method: Rate, Errors, Duration (for services)
 }
 ```
 
-**Expected:** Single dashboard showing rate, errors, duration + correlated logs.
+**得：** 一儀盤顯率、訛、時，兼聯之誌。
 
-**On failure:** If panels show "No Data", verify metric names match your instrumentation.
+**敗則：** 若盤顯「無數據」，驗度之名與儀化相合。
 
-### Step 4: Implement USE Method for Resources
+### 第四步：施 USE 法於諸資
 
-USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, disk)
+USE 法：用、飽、訛（施於 CPU、記憶、盤等資）
 
 ```json
 {
@@ -349,13 +349,13 @@ USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, dis
 }
 ```
 
-**Expected:** Dashboard showing resource health across all USE dimensions.
+**得：** 儀盤顯資健於諸 USE 維度。
 
-**On failure:** Ensure node_exporter is running and scraping system metrics.
+**敗則：** 確 node_exporter 運而採系之度。
 
-### Step 5: Link Logs to Traces in Loki
+### 第五步：於 Loki 聯誌至跡
 
-Configure Loki to extract trace IDs:
+設 Loki 以抽跡 ID：
 
 ```yaml
 # loki-config.yml
@@ -378,7 +378,7 @@ query_config:
       urlDisplayLabel: 'View Trace'
 ```
 
-In Grafana, configure Loki data source:
+於 Grafana 設 Loki 源：
 
 ```json
 {
@@ -398,13 +398,13 @@ In Grafana, configure Loki data source:
 }
 ```
 
-**Expected:** Clicking trace ID in Loki logs opens corresponding trace in Tempo.
+**得：** 點 Loki 誌中之跡 ID 則開 Tempo 之跡。
 
-**On failure:** Verify regex matches your log format, check Tempo data source UID.
+**敗則：** 驗正則合誌之式，察 Tempo 源之 UID。
 
-### Step 6: Create Unified Incident View
+### 第六步：建統合事件之視
 
-Build a dashboard that brings all signals together:
+建一盤聚諸訊：
 
 ```json
 {
@@ -416,43 +416,43 @@ Build a dashboard that brings all signals together:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Workflow during incident:
+事件之流：
 
-1. Alert fires for high error rate
-2. On-call engineer opens Grafana dashboard
-3. Identifies spike in error rate at specific time
-4. Clicks exemplar dot on duration histogram → opens trace
-5. Trace shows slow database query
-6. Clicks "View Logs" on span → opens logs for that trace
-7. Logs reveal specific SQL query causing timeout
-8. Root cause identified in <2 minutes
+1. 高訛率觸警
+2. 值班師開 Grafana 盤
+3. 識某時訛率之峰
+4. 點時直方圖上之範例 → 開跡
+5. 跡顯庫之慢查
+6. 點跨距上之「觀誌」 → 開該跡之誌
+7. 誌示具體 SQL 查致超時
+8. 根因識於二分鐘內
 
-**Expected:** Single pane of glass for debugging, jumping between metrics/logs/traces.
+**得：** 一玻觀諸訊，跳於度、誌、跡間除弊。
 
-**On failure:** If links don't work, check data source configurations and trace ID propagation.
+**敗則：** 若聯失效，察諸源設與跡 ID 之傳。
 
-## Validation
+## 驗
 
-- [ ] Trace IDs present in all application logs
-- [ ] Prometheus scraping exemplars
-- [ ] Grafana dashboards show exemplar dots on histograms
-- [ ] Clicking exemplar opens corresponding trace in Tempo/Jaeger
-- [ ] Loki logs have "View Trace" links that work
-- [ ] RED dashboard created for key services
-- [ ] USE dashboard created for infrastructure
-- [ ] Unified incident dashboard tested during GameDay
+- [ ] 諸應用誌皆含跡 ID
+- [ ] Prometheus 採範例
+- [ ] Grafana 盤於直方圖顯範例點
+- [ ] 點範例則於 Tempo／Jaeger 開相應之跡
+- [ ] Loki 誌有可行之「觀跡」聯
+- [ ] 要服已建 RED 盤
+- [ ] 基建已建 USE 盤
+- [ ] 統合事件盤於 GameDay 已試
 
-## Common Pitfalls
+## 陷
 
-- **Inconsistent trace ID format**: OpenTelemetry uses 32-char hex, Jaeger uses 16-char. Choose one.
-- **Missing context propagation**: If trace IDs don't flow across services, distributed tracing breaks. Use OpenTelemetry auto-instrumentation.
-- **Exemplar overload**: Too many exemplars (>100k) can slow Prometheus. Sample high-volume metrics.
-- **Clock skew**: Traces span multiple services. Ensure NTP is configured; clock drift causes trace ordering issues.
-- **Data retention mismatch**: If traces expire before metrics, correlation breaks. Align retention policies.
+- **跡 ID 式不一**：OpenTelemetry 用 32 字元十六進位，Jaeger 用 16 字元。宜擇其一。
+- **脈傳失**：若跡 ID 不跨服，散跡斷。用 OpenTelemetry 自動儀化。
+- **範例過**：範例過多（>100k）則 Prometheus 緩。高量度宜採樣。
+- **鐘偏**：跡跨諸服。確設 NTP；鐘偏致跡序誤。
+- **留存不合**：若跡先於度過期，聯斷。諸留存期宜合。
 
-## Related Skills
+## 參
 
-- `setup-prometheus-monitoring` - metrics foundation for correlation
-- `configure-log-aggregation` - logs foundation for correlation
-- `instrument-distributed-tracing` - traces foundation for correlation
-- `build-grafana-dashboards` - unified visualization layer
+- `setup-prometheus-monitoring` — 聯之度根基
+- `configure-log-aggregation` — 聯之誌根基
+- `instrument-distributed-tracing` — 聯之跡根基
+- `build-grafana-dashboards` — 統合視之層

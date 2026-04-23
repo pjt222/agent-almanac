@@ -57,9 +57,9 @@ Articulate what problem requires multiple agents working together. A valid team 
 
 Write the purpose as one paragraph that a human or agent can read to decide whether to activate this team.
 
-**Expected:** A clear paragraph explaining the team's value proposition, with at least two distinct specialties identified.
+**Got:** A clear paragraph explaining the team's value proposition, with at least two distinct specialties identified.
 
-**On failure:** If you cannot identify two distinct specialties, the task likely does not need a team. Use a single agent with multiple skills instead.
+**If fail:** If you cannot identify two distinct specialties, the task likely does not need a team. Use a single agent with multiple skills instead.
 
 ### Step 2: Select Lead Agent
 
@@ -76,9 +76,9 @@ grep "^  - id:" agents/_registry.yml
 
 The lead must also appear as a member in the team composition (the lead is always a member).
 
-**Expected:** One agent selected as lead, confirmed to exist in the agents registry.
+**Got:** One agent selected as lead, confirmed to exist in the agents registry.
 
-**On failure:** If no existing agent fits the lead role, create one first using the `create-agent` skill (or `agents/_template.md` manually). Do not create a team with a lead that does not exist as an agent definition.
+**If fail:** If no existing agent fits the lead role, create one first using the `create-agent` skill (or `agents/_template.md` manually). Do not create a team with a lead that does not exist as an agent definition.
 
 ### Step 3: Select Member Agents
 
@@ -95,9 +95,9 @@ grep "id: agent-name-here" agents/_registry.yml
 
 Validate non-overlap: no two members should have the same primary responsibility. If responsibilities overlap, either merge the roles or sharpen the boundaries.
 
-**Expected:** 2-5 members selected, each with a unique role and clear responsibilities, all confirmed in the agents registry.
+**Got:** 2-5 members selected, each with a unique role and clear responsibilities, all confirmed in the agents registry.
 
-**On failure:** If a needed agent does not exist, create it first. If responsibilities overlap between two members, rewrite them to clarify boundaries or remove one member.
+**If fail:** If a needed agent does not exist, create it first. If responsibilities overlap between two members, rewrite them to clarify boundaries or remove one member.
 
 ### Step 4: Choose Coordination Pattern
 
@@ -118,9 +118,9 @@ Select the pattern that best fits the team's workflow. The five patterns and the
 - If work spans multiple iterations with planning ceremonies: **timeboxed**
 - If you cannot predict the task structure in advance: **adaptive**
 
-**Expected:** One coordination pattern selected with a clear rationale for the choice.
+**Got:** One coordination pattern selected with a clear rationale for the choice.
 
-**On failure:** If unsure, default to hub-and-spoke. It is the most common pattern and works for most review and analysis workflows.
+**If fail:** If unsure, default to hub-and-spoke. It is the most common pattern and works for most review and analysis workflows.
 
 ### Step 5: Design Task Decomposition
 
@@ -132,9 +132,9 @@ Define how a typical incoming request gets split across team members. Structure 
 
 For each member, list 3-5 concrete tasks they would perform on a typical request. These tasks appear in both the "Task Decomposition" prose section and the CONFIG block's `tasks` list.
 
-**Expected:** A phase-structured decomposition with concrete tasks per member, matching the chosen coordination pattern.
+**Got:** A phase-structured decomposition with concrete tasks per member, matching the chosen coordination pattern.
 
-**On failure:** If tasks are too vague (e.g., "reviews things"), make them specific (e.g., "reviews code style against tidyverse style guide, checks test coverage, evaluates error message quality").
+**If fail:** If tasks are too vague (e.g., "reviews things"), make them specific (e.g., "reviews code style against tidyverse style guide, checks test coverage, evaluates error message quality").
 
 ### Step 6: Write the Team File
 
@@ -158,9 +158,9 @@ Fill in the following sections in order:
 10. **Limitations**: 3-5 known constraints
 11. **See Also**: Links to member agent files and related skills/teams
 
-**Expected:** A complete team file with all sections filled in, no placeholder text remaining from the template.
+**Got:** A complete team file with all sections filled in, no placeholder text remaining from the template.
 
-**On failure:** Compare against an existing team file (e.g., `teams/r-package-review.md`) to verify structure. Search for template placeholder strings like "your-team-name" or "another-agent" to find unfilled sections.
+**If fail:** Compare against an existing team file (e.g., `teams/r-package-review.md`) to verify structure. Search for template placeholder strings like "your-team-name" or "another-agent" to find unfilled sections.
 
 ### Step 7: Write the CONFIG Block
 
@@ -191,9 +191,9 @@ The CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` marke
 
 The `subagent_type` field maps to Claude Code agent types. For agents defined in `.claude/agents/`, use the agent id as the subagent_type. Use `blocked_by` to express task dependencies (e.g., synthesis is blocked by all review tasks).
 
-**Expected:** CONFIG block is valid YAML, all agents match those in the frontmatter members list, and task dependencies form a valid DAG (no cycles).
+**Got:** CONFIG block is valid YAML, all agents match those in the frontmatter members list, and task dependencies form a valid DAG (no cycles).
 
-**On failure:** Validate YAML syntax. Verify that every `assignee` in the tasks list matches an `agent` in the members list. Check that `blocked_by` references only task names defined earlier in the list.
+**If fail:** Validate YAML syntax. Verify that every `assignee` in the tasks list matches an `agent` in the members list. Check that `blocked_by` references only task names defined earlier in the list.
 
 ### Step 8: Add to Registry
 
@@ -215,9 +215,9 @@ Update the `total_teams` count at the top of the registry (currently 8; it becom
 grep "id: <team-name>" teams/_registry.yml
 ```
 
-**Expected:** New entry appears in the registry, `total_teams` count is incremented by one.
+**Got:** New entry appears in the registry, `total_teams` count is incremented by one.
 
-**On failure:** If the team name already exists in the registry, choose a different name or update the existing entry. Verify the YAML indentation matches existing entries.
+**If fail:** If the team name already exists in the registry, choose a different name or update the existing entry. Verify the YAML indentation matches existing entries.
 
 ### Step 9: Run README Automation
 
@@ -229,9 +229,9 @@ npm run update-readmes
 
 This updates the dynamic sections in `teams/README.md` and any other files with `<!-- AUTO:START -->` / `<!-- AUTO:END -->` markers that reference team data.
 
-**Expected:** Command exits 0, `teams/README.md` now lists the new team.
+**Got:** Command exits 0, `teams/README.md` now lists the new team.
 
-**On failure:** Run `npm run check-readmes` to see which files are out of sync. If the script fails, verify `package.json` exists in the repository root and `js-yaml` is installed (`npm install`).
+**If fail:** Run `npm run check-readmes` to see which files are out of sync. If the script fails, verify `package.json` exists in the repository root and `js-yaml` is installed (`npm install`).
 
 ### Step 10: Verify Team Activation
 
@@ -249,9 +249,9 @@ Claude reads `teams/<team-name>.md`, extracts the CONFIG block, and orchestrates
 
 Note: Teams are **not** auto-discovered from `.claude/teams/`. Claude reads the definition directly from `teams/` when asked.
 
-**Expected:** Claude reads the team file, creates the team via `TeamCreate`, spawns the correct agents, and follows the coordination pattern.
+**Got:** Claude reads the team file, creates the team via `TeamCreate`, spawns the correct agents, and follows the coordination pattern.
 
-**On failure:** Verify the team file is at `teams/<team-name>.md` (not in a subdirectory). Check that all member agents exist in `agents/`. Confirm the CONFIG block has valid YAML with `subagent_type` for each member. Confirm the team is listed in `teams/_registry.yml`.
+**If fail:** Verify the team file is at `teams/<team-name>.md` (not in a subdirectory). Check that all member agents exist in `agents/`. Confirm the CONFIG block has valid YAML with `subagent_type` for each member. Confirm the team is listed in `teams/_registry.yml`.
 
 ### Step 11: Scaffold Translations
 
@@ -271,9 +271,9 @@ Then translate the scaffolded prose in each file (code blocks and IDs stay in En
 npm run translation:status
 ```
 
-**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new team.
+**Got:** 4 files created at `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new team.
 
-**On failure:** If scaffold fails, verify the team exists in `teams/_registry.yml`. If status files don't update, run `npm run translation:status` explicitly.
+**If fail:** If scaffold fails, verify the team exists in `teams/_registry.yml`. If status files don't update, run `npm run translation:status` explicitly.
 
 ## Validation
 
@@ -291,7 +291,7 @@ npm run translation:status
 - [ ] `total_teams` count in registry is incremented
 - [ ] `npm run update-readmes` completes without errors
 
-## Common Pitfalls
+## Pitfalls
 
 - **Too many members**: Teams with more than 5 members become hard to coordinate. The overhead of distributing tasks and synthesizing results outweighs the benefit of additional perspectives. Split into two teams or reduce to the essential specialties.
 - **Overlapping responsibilities**: If two members both "review code quality," their findings will conflict and the lead wastes time deduplicating. Each member must have a clearly distinct focus area.

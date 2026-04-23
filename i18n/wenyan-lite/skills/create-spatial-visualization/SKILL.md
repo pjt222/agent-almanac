@@ -24,34 +24,34 @@ metadata:
   tags: travel, maps, leaflet, gpx, elevation, visualization
 ---
 
-# Create Spatial Visualization
+# 造空間可視化
 
-Create interactive maps, elevation profiles, and spatial visualizations from GPX tracks, waypoints, or route data.
+自 GPX 軌、路徑點、路線資料造互動地圖、高度曲線、空間可視化。
 
-## When to Use
+## 適用時機
 
-- Visualizing a planned or completed tour route on an interactive map
-- Creating elevation profiles for hiking or cycling routes
-- Overlaying waypoints, POIs, and route corridors on a basemap
-- Generating static map images for print reports
-- Building a web-based trip dashboard with spatial data
+- 於互動地圖可視化已計畫或完之遊路線
+- 為徒步或單車路線造高度曲線
+- 於底圖上疊路徑點、POI、路線走廊
+- 為印報告生靜態地圖圖像
+- 建含空間資料之網基遊程儀表板
 
-## Inputs
+## 輸入
 
-- **Required**: Spatial data source (GPX file, CSV with lat/lon, GeoJSON, or waypoint list)
-- **Required**: Visualization type (interactive map, static map, elevation profile, heatmap)
-- **Optional**: Basemap preference (OpenStreetMap, satellite, terrain, topo)
-- **Optional**: Styling parameters (colors, line width, marker icons)
-- **Optional**: Output format (HTML widget, PNG, SVG, embedded in Quarto)
-- **Optional**: Additional layers (POI markers, area boundaries, distance markers)
+- **必要**：空間資料源（GPX 檔、含緯/經之 CSV、GeoJSON、路徑點清單）
+- **必要**：可視化型（互動地圖、靜態地圖、高度曲線、熱圖）
+- **選擇性**：底圖偏好（OpenStreetMap、衛星、地形、地勢）
+- **選擇性**：樣式參數（色、線寬、標記圖示）
+- **選擇性**：輸出格式（HTML widget、PNG、SVG、Quarto 內嵌）
+- **選擇性**：他層（POI 標記、區界、距離標記）
 
-## Procedure
+## 步驟
 
-### Step 1: Import Spatial Data
+### 步驟一：匯入空間資料
 
-Load and parse the spatial data into a usable format.
+載並解析空間資料為可用格式。
 
-**R approach (sf package):**
+**R 法（sf 套件）：**
 
 ```r
 # GPX file
@@ -66,7 +66,7 @@ points <- readr::read_csv("stops.csv") |>
 route <- sf::st_read("route.geojson")
 ```
 
-**JavaScript approach (for Observable/D3):**
+**JavaScript 法（供 Observable/D3）：**
 
 ```javascript
 // GPX parsing
@@ -83,15 +83,15 @@ const coordinates = Array.from(trkpts).map(pt => ({
 }));
 ```
 
-Verify the coordinate reference system (CRS) is WGS 84 (EPSG:4326) for web maps.
+驗座標參考系（CRS）為 WGS 84（EPSG:4326），以供網頁地圖。
 
-**Expected:** Spatial data loaded as an sf object (R) or coordinate array (JS) with valid geometries. Point counts match expected input (e.g., a GPX track has hundreds to thousands of points).
+**預期：** 空間資料已載為 sf 物件（R）或座標陣列（JS），幾何有效。點數合所期（如 GPX 軌含數百至數千點）。
 
-**On failure:** If GPX parsing fails, check the file is valid XML. Common issues: truncated files from GPS battery death, mixed namespaces, or GPX 1.0 vs 1.1 differences. If CRS is missing, assign it explicitly with `sf::st_set_crs(data, 4326)`. If coordinates appear inverted (lat/lon swapped), check the column order.
+**失敗時：** 若 GPX 解析敗，察檔為有效 XML。常見問題：GPS 電耗致檔截、混合命名空間、GPX 1.0 與 1.1 之別。若 CRS 缺，以 `sf::st_set_crs(data, 4326)` 明設之。若座標顛倒（緯/經互換），察欄序。
 
-### Step 2: Process and Clean
+### 步驟二：處理與清
 
-Transform raw data into analysis-ready spatial features.
+將原始資料轉為分析備之空間特徵。
 
 ```
 Processing Pipeline:
@@ -108,7 +108,7 @@ Processing Pipeline:
 └─────────────────────┴──────────────────────────────────────────┘
 ```
 
-**R processing example:**
+**R 處理範例：**
 
 ```r
 # Calculate cumulative distance
@@ -128,13 +128,13 @@ elevation_df <- data.frame(
 track_simple <- sf::st_simplify(track, dTolerance = 0.001)
 ```
 
-**Expected:** Clean spatial data with calculated distances, elevation extracted, and geometry simplified for the target output. No NA coordinates, no zero-length segments.
+**預期：** 清潔之空間資料，距離已算、高度已萃、幾何已簡以合目標輸出。無 NA 座標、無零長段。
 
-**On failure:** If elevation data is missing (common with some GPS devices), use a DEM lookup service or note that elevation profile is unavailable. If track simplification removes critical shape detail, reduce the tolerance value. If distance calculations produce NA, check for empty geometries with `sf::st_is_empty()`.
+**失敗時：** 若高度資料缺（某 GPS 裝置常然），用 DEM 查服務或記高度曲線不可得。若軌簡化移關鍵形狀細節，降容差值。若距離計生 NA，以 `sf::st_is_empty()` 察空幾何。
 
-### Step 3: Select Visualization Type
+### 步驟三：擇可視化型
 
-Choose and configure the appropriate visualization for the data and audience.
+為資料與讀者擇並配合宜之可視化。
 
 ```
 Visualization Decision Matrix:
@@ -158,21 +158,21 @@ Visualization Decision Matrix:
 └─────────────────────┴──────────────────────┴───────────────────┘
 ```
 
-Configure basemap tiles appropriate for the content:
-- **OpenStreetMap**: General purpose, good labels
-- **Stamen Terrain**: Hiking and outdoor routes
-- **ESRI World Imagery**: Satellite context
-- **OpenTopoMap**: Topographic contours for elevation context
+配合內容之底圖磚：
+- **OpenStreetMap**：通用、標籤佳
+- **Stamen Terrain**：徒步與戶外路線
+- **ESRI World Imagery**：衛星脈絡
+- **OpenTopoMap**：高度脈絡之地形等高線
 
-**Expected:** A clear decision on visualization type and toolchain, with basemap selected to complement the route data.
+**預期：** 可視化型與工具鏈之明決定，底圖擇以補路線資料。
 
-**On failure:** If the chosen tool cannot handle the data volume (e.g., 100,000+ track points in leaflet), simplify the geometry first or switch to a canvas-based renderer (deck.gl). If basemap tiles are unavailable (rare), fall back to OpenStreetMap as the most reliable free option.
+**失敗時：** 若擇之工具不能處資料量（如 leaflet 中之 100,000+ 軌點），先簡化幾何或改 canvas 基礎渲染器（deck.gl）。若底圖磚不可得（少見），回退至 OpenStreetMap 為最可靠之免費選項。
 
-### Step 4: Render Map or Chart
+### 步驟四：渲染地圖或圖表
 
-Build the visualization with all layers and styling.
+以所有層與樣式建可視化。
 
-**Interactive map (R/leaflet):**
+**互動地圖（R/leaflet）：**
 
 ```r
 leaflet::leaflet() |>
@@ -194,7 +194,7 @@ leaflet::leaflet() |>
   leaflet::addMiniMap(position = "bottomright")
 ```
 
-**Elevation profile (R/ggplot2):**
+**高度曲線（R/ggplot2）：**
 
 ```r
 ggplot2::ggplot(elevation_df, ggplot2::aes(x = distance_km, y = elevation_m)) +
@@ -208,15 +208,15 @@ ggplot2::ggplot(elevation_df, ggplot2::aes(x = distance_km, y = elevation_m)) +
   ggplot2::theme_minimal()
 ```
 
-Add supplementary layers as needed: distance markers every N km, day-break indicators, difficulty-colored segments, POI icons.
+按需加輔助層：每 N km 距離標記、日分隔指示、難度著色段、POI 圖示。
 
-**Expected:** A rendered visualization that clearly shows the route, waypoints, and any supplementary information. Interactive maps should be responsive with working popups and zoom. Elevation profiles should have correct axis scales.
+**預期：** 已渲之可視化明顯示路線、路徑點、任何輔助資訊。互動地圖當回應，彈出與縮放可行。高度曲線當有正確軸尺。
 
-**On failure:** If the map renders but shows no data, check that coordinates are in the correct CRS (EPSG:4326 for leaflet). If popups are empty, verify the column names in the popup formula. If the elevation profile has extreme spikes, filter out GPS elevation errors (values deviating more than 100 m from neighbors).
+**失敗時：** 若地圖渲但無資料顯，察座標於正確 CRS（leaflet 用 EPSG:4326）。若彈出空，驗彈出公式中之欄名。若高度曲線有極端尖峰，濾出 GPS 高度誤（較鄰點偏 100 m 以上）。
 
-### Step 5: Export and Embed
+### 步驟五：匯出與嵌
 
-Save the visualization in the target format.
+存可視化於目標格式。
 
 ```
 Export Options:
@@ -232,37 +232,37 @@ Export Options:
 └───────────────────┴────────────────────────────────────────────┘
 ```
 
-For Quarto embedding:
-1. Place the visualization code in a code chunk with appropriate labels
-2. Use `#| fig-cap:` for static plots or `#| label: fig-map` for cross-referencing
-3. Set `self-contained: true` in YAML to bundle tile images (increases file size)
+Quarto 內嵌：
+1. 置可視化程式於含當標籤之程式塊
+2. 靜態圖用 `#| fig-cap:`，交叉引用用 `#| label: fig-map`
+3. 於 YAML 設 `self-contained: true` 以捆磚圖像（增檔大小）
 
-**Expected:** Exported file is viewable in the target context (browser for HTML, report for embedded, print for PNG/SVG). File size is reasonable (under 5 MB for HTML widgets, under 1 MB for images).
+**預期：** 匯出檔於目標脈絡可檢視（HTML 用瀏覽器、嵌入用報告、印用 PNG/SVG）。檔大小合理（HTML widget 5 MB 內、圖像 1 MB 內）。
 
-**On failure:** If the HTML widget is too large, reduce tile caching or simplify geometries. If Quarto rendering fails with leaflet, ensure the htmlwidgets package is installed and the output format is HTML (leaflet does not render to PDF). For PDF output, use a static map alternative (tmap with `tmap_mode("plot")`).
+**失敗時：** 若 HTML widget 過大，減磚快取或簡化幾何。若 Quarto 渲染於 leaflet 時敗，確保 htmlwidgets 套件已裝且輸出格式為 HTML（leaflet 不渲染至 PDF）。PDF 輸出用靜態地圖替代（tmap 以 `tmap_mode("plot")`）。
 
-## Validation
+## 驗證
 
-- [ ] Spatial data imports without errors and has correct CRS
-- [ ] All track points and waypoints render in the expected geographic area
-- [ ] Elevation profile (if included) shows plausible values without extreme spikes
-- [ ] Interactive map has working zoom, pan, and popups
-- [ ] Distance and elevation scales are correctly labeled
-- [ ] Export file is viewable in the target format
-- [ ] File size is appropriate for the delivery method
+- [ ] 空間資料匯入無誤且 CRS 正確
+- [ ] 所有軌點與路徑點渲於所期之地理區
+- [ ] 高度曲線（若含）顯可信值，無極端尖峰
+- [ ] 互動地圖之縮放、平移、彈出可行
+- [ ] 距離與高度尺標籤正確
+- [ ] 匯出檔於目標格式可檢視
+- [ ] 檔大小合交付法
 
-## Common Pitfalls
+## 常見陷阱
 
-- **CRS mismatch**: Mixing EPSG:4326 (degrees) with projected CRS (meters) causes data to render in the wrong location or at wrong scale. Always transform to EPSG:4326 for web maps.
-- **GPS elevation noise**: GPS-derived elevation is far less accurate than horizontal position. Smooth elevation data or use DEM-based elevation for profiles.
-- **Tile server rate limits**: Fetching many tiles rapidly can trigger rate limits on free tile servers. Cache tiles locally for repeated rendering, and respect usage policies.
-- **Over-detailed tracks**: Raw GPS tracks with 1-second logging produce enormous files. Simplify before web display.
-- **Leaflet in PDF**: Leaflet maps cannot render in PDF output. Use tmap or ggplot2 with ggspatial for print formats.
-- **Missing popups**: Forgetting to add `popup = ~column_name` results in markers with no information on click.
+- **CRS 不合**：混 EPSG:4326（度）與投影 CRS（米）令資料渲於誤位或誤尺。網頁地圖恒轉為 EPSG:4326
+- **GPS 高度雜訊**：GPS 衍生之高度較水平位遠不準。平滑高度資料或用 DEM 基礎之高度作曲線
+- **磚伺服器限率**：疾取多磚可觸免費磚伺服器之限率。為重複渲染本地快取磚，守用政策
+- **過細軌**：原始 GPS 軌以秒為單位記生巨檔。網頁顯前先簡化
+- **PDF 中之 Leaflet**：Leaflet 地圖不能於 PDF 輸出渲染。印用 tmap 或 ggplot2 加 ggspatial
+- **缺彈出**：忘加 `popup = ~column_name` 致標記於點擊時無資訊
 
-## Related Skills
+## 相關技能
 
-- `plan-tour-route` — generate the route data that this skill visualizes
-- `generate-tour-report` — embed visualizations into a formatted tour report
-- `plan-hiking-tour` — source of GPX and elevation data for hiking visualizations
-- `create-quarto-report` — Quarto rendering for embedding spatial visualizations
+- `plan-tour-route` —— 生此技能所可視化之路線資料
+- `generate-tour-report` —— 於格式化之遊程報告中嵌可視化
+- `plan-hiking-tour` —— 徒步可視化之 GPX 與高度資料源
+- `create-quarto-report` —— 嵌空間可視化之 Quarto 渲染

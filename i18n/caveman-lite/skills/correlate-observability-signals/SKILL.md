@@ -119,9 +119,9 @@ def get_user(user_id):
     return {"user_id": user_id}
 ```
 
-**Expected:** All logs include `trace_id` field, enabling log-to-trace correlation.
+**Got:** All logs include `trace_id` field, enabling log-to-trace correlation.
 
-**On failure:** If trace IDs missing, check OpenTelemetry SDK initialization and context propagation.
+**If fail:** If trace IDs missing, check OpenTelemetry SDK initialization and context propagation.
 
 ### Step 2: Configure Exemplars in Prometheus
 
@@ -190,9 +190,9 @@ histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 
 In Grafana, exemplars appear as dots on histogram graphs that link to traces.
 
-**Expected:** Grafana shows exemplars in metric graphs, clicking opens corresponding trace.
+**Got:** Grafana shows exemplars in metric graphs, clicking opens corresponding trace.
 
-**On failure:** Verify Prometheus version ≥2.26 (exemplar support), check Grafana data source config enables exemplars.
+**If fail:** Verify Prometheus version ≥2.26 (exemplar support), check Grafana data source config enables exemplars.
 
 ### Step 3: Build Unified Dashboard with RED Method
 
@@ -263,9 +263,9 @@ RED Method: Rate, Errors, Duration (for services)
 }
 ```
 
-**Expected:** Single dashboard showing rate, errors, duration + correlated logs.
+**Got:** Single dashboard showing rate, errors, duration + correlated logs.
 
-**On failure:** If panels show "No Data", verify metric names match your instrumentation.
+**If fail:** If panels show "No Data", verify metric names match your instrumentation.
 
 ### Step 4: Implement USE Method for Resources
 
@@ -349,9 +349,9 @@ USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, dis
 }
 ```
 
-**Expected:** Dashboard showing resource health across all USE dimensions.
+**Got:** Dashboard showing resource health across all USE dimensions.
 
-**On failure:** Ensure node_exporter is running and scraping system metrics.
+**If fail:** Ensure node_exporter is running and scraping system metrics.
 
 ### Step 5: Link Logs to Traces in Loki
 
@@ -398,9 +398,9 @@ In Grafana, configure Loki data source:
 }
 ```
 
-**Expected:** Clicking trace ID in Loki logs opens corresponding trace in Tempo.
+**Got:** Clicking trace ID in Loki logs opens corresponding trace in Tempo.
 
-**On failure:** Verify regex matches your log format, check Tempo data source UID.
+**If fail:** Verify regex matches your log format, check Tempo data source UID.
 
 ### Step 6: Create Unified Incident View
 
@@ -427,9 +427,9 @@ Workflow during incident:
 7. Logs reveal specific SQL query causing timeout
 8. Root cause identified in <2 minutes
 
-**Expected:** Single pane of glass for debugging, jumping between metrics/logs/traces.
+**Got:** Single pane of glass for debugging, jumping between metrics/logs/traces.
 
-**On failure:** If links don't work, check data source configurations and trace ID propagation.
+**If fail:** If links don't work, check data source configurations and trace ID propagation.
 
 ## Validation
 
@@ -442,7 +442,7 @@ Workflow during incident:
 - [ ] USE dashboard created for infrastructure
 - [ ] Unified incident dashboard tested during GameDay
 
-## Common Pitfalls
+## Pitfalls
 
 - **Inconsistent trace ID format**: OpenTelemetry uses 32-char hex, Jaeger uses 16-char. Choose one.
 - **Missing context propagation**: If trace IDs don't flow across services, distributed tracing breaks. Use OpenTelemetry auto-instrumentation.

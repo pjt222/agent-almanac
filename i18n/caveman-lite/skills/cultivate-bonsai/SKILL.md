@@ -79,9 +79,9 @@ Selection Criteria:
 4. Available as nursery stock (don't start from seed — too slow for learning)
 ```
 
-**Expected:** Species selected that matches climate, experience, and aesthetic goal.
+**Got:** Species selected that matches climate, experience, and aesthetic goal.
 
-**On failure:** If unsure about species suitability, default to Chinese elm — it tolerates the widest range of conditions and forgives beginner mistakes.
+**If fail:** If unsure about species suitability, default to Chinese elm — it tolerates the widest range of conditions and forgives beginner mistakes.
 
 ### Step 2: Meditate Checkpoint — Sitting with the Tree
 
@@ -102,9 +102,9 @@ Bonsai Sitting Protocol (5-10 minutes):
 If you feel rushed or impatient, you are not ready. Return tomorrow.
 ```
 
-**Expected:** Calm, unhurried state. A sense of the tree's natural movement and character.
+**Got:** Calm, unhurried state. A sense of the tree's natural movement and character.
 
-**On failure:** If unable to quiet the planning mind, do not proceed to structural pruning. Maintenance watering and feeding may continue without this checkpoint.
+**If fail:** If unable to quiet the planning mind, do not proceed to structural pruning. Maintenance watering and feeding may continue without this checkpoint.
 
 ### Step 3: Pruning
 
@@ -134,9 +134,9 @@ a branch, leave it for one more season. You can always remove later;
 you cannot reattach.
 ```
 
-**Expected:** Tree with cleaner silhouette, improved light penetration, and clear trunk line.
+**Got:** Tree with cleaner silhouette, improved light penetration, and clear trunk line.
 
-**On failure:** If too much foliage was removed, move tree to sheltered spot with dappled light. Reduce watering slightly (less foliage = less transpiration). Do not fertilize until new growth appears.
+**If fail:** If too much foliage was removed, move tree to sheltered spot with dappled light. Reduce watering slightly (less foliage = less transpiration). Do not fertilize until new growth appears.
 
 ### Step 4: Wiring
 
@@ -165,9 +165,9 @@ Common Errors:
 - Bending too fast: branch snaps at the wire point
 ```
 
-**Expected:** Branches held in desired position without bark damage. Wire will be removed in 3-6 months.
+**Got:** Branches held in desired position without bark damage. Wire will be removed in 3-6 months.
 
-**On failure:** If wire bites into bark, cut it off immediately. The scar will heal over 2-3 growing seasons. Apply cut paste to deep wounds.
+**If fail:** If wire bites into bark, cut it off immediately. The scar will heal over 2-3 growing seasons. Apply cut paste to deep wounds.
 
 ### Step 5: Repotting
 
@@ -210,9 +210,9 @@ Repotting Protocol:
    - Do NOT fertilize for 4-6 weeks (new roots need to establish)
 ```
 
-**Expected:** Tree stable in pot, soil drains freely when watered, no wobble in trunk.
+**Got:** Tree stable in pot, soil drains freely when watered, no wobble in trunk.
 
-**On failure:** If tree shows severe wilting within days of repotting, too many roots were removed. Move to shade, mist foliage daily, and apply rooting hormone to next watering. Recovery takes 4-8 weeks.
+**If fail:** If tree shows severe wilting within days of repotting, too many roots were removed. Move to shade, mist foliage daily, and apply rooting hormone to next watering. Recovery takes 4-8 weeks.
 
 ### Step 6: Heal Checkpoint — Post-Repot Assessment
 
@@ -238,9 +238,9 @@ If 3+ indicators show stress:
 5. Reassess at 4 weeks
 ```
 
-**Expected:** Tree showing new bud activity and stable footing within 2-3 weeks.
+**Got:** Tree showing new bud activity and stable footing within 2-3 weeks.
 
-**On failure:** If no new growth at 6 weeks and indicators remain stressed, the tree may need to be removed from the bonsai pot and placed in a larger recovery container with standard potting mix for one full growing season.
+**If fail:** If no new growth at 6 weeks and indicators remain stressed, the tree may need to be removed from the bonsai pot and placed in a larger recovery container with standard potting mix for one full growing season.
 
 ### Step 7: Seasonal Care Calendar
 
@@ -270,9 +270,9 @@ Bonsai Seasonal Calendar (Temperate Zones):
 └─────────┴──────────────────────────────────────────────────┘
 ```
 
-**Expected:** Year-round care rhythm established with seasonal transitions.
+**Got:** Year-round care rhythm established with seasonal transitions.
 
-**On failure:** If a seasonal task was missed (e.g., spring repot), wait until next year — out-of-season repotting is more dangerous than waiting.
+**If fail:** If a seasonal task was missed (e.g., spring repot), wait until next year — out-of-season repotting is more dangerous than waiting.
 
 ## Validation Checklist
 
@@ -285,7 +285,7 @@ Bonsai Seasonal Calendar (Temperate Zones):
 - [ ] Heal checkpoint performed 2 weeks post-repot
 - [ ] Seasonal care tasks aligned with current season
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Over-pruning**: Removing too much foliage weakens the tree. When in doubt, leave it
 2. **Forgotten wire**: Wire left too long scars bark permanently. Set monthly reminders to check

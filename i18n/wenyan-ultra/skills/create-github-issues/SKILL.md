@@ -22,64 +22,64 @@ metadata:
   tags: git, github, project-management, issues, review, automation
 ---
 
-# Create GitHub Issues
+# 造 GitHub 議題
 
-Structured GitHub issue creation from review findings or task breakdowns. Converts a list of findings (from `review-codebase`, `security-audit-codebase`, or manual analysis) into well-formed GitHub issues with labels, acceptance criteria, and cross-references.
+自評見或任分結構建 GitHub 議題。化見列（自 `review-codebase`、`security-audit-codebase` 或手析）為含標、驗準、交引之正議題。
 
-## When to Use
+## 用
 
-- After a codebase review produces a findings table that needs tracking
-- After a planning session identifies work items that should become issues
-- When converting a TODO list or backlog into trackable GitHub issues
-- When batch-creating related issues that need consistent formatting and labeling
+- 碼評生須跟之見列後
+- 謀議識須為議之工項後
+- 轉 TODO 或備為可跟 GitHub 議
+- 批建須一致式與標之關議
 
-## Inputs
+## 入
 
-- **Required**: `findings` — a list of items, each with at minimum a title and description. Ideally also includes: severity, affected files, and suggested labels
-- **Optional**:
-  - `group_by` — how to batch findings into issues: `severity`, `file`, `theme` (default: `theme`)
-  - `label_prefix` — prefix for auto-created labels (default: none)
-  - `create_labels` — whether to create missing labels (default: `true`)
-  - `dry_run` — preview issues without creating them (default: `false`)
+- **必**：`findings` — 項列，各至少含標與述。理亦含：嚴、影檔、建標
+- **可**：
+  - `group_by` — 如何批見為議：`severity`、`file`、`theme`（默：`theme`）
+  - `label_prefix` — 自建標前綴（默：無）
+  - `create_labels` — 是否建缺標（默：`true`）
+  - `dry_run` — 不建僅預（默：`false`）
 
-## Procedure
+## 行
 
-### Step 1: Prepare Labels
+### 一：備標
 
-Ensure all needed labels exist in the repository.
+保諸需標存於庫。
 
-1. List existing labels: `gh label list --limit 100`
-2. Identify labels needed by the findings (from severity, phase, or explicit label fields)
-3. Map severities to labels if not already mapped: `critical`, `high-priority`, `medium-priority`, `low-priority`
-4. Map phases/themes to labels: `security`, `architecture`, `code-quality`, `accessibility`, `testing`, `performance`
-5. If `create_labels` is true, create missing labels: `gh label create "name" --color "hex" --description "desc"`
-6. Use consistent colors: red for critical/security, orange for high, yellow for medium, blue for architecture, green for testing
+1. 列存標：`gh label list --limit 100`
+2. 識見所需標（自嚴、階、或顯標欄）
+3. 未映則映嚴至標：`critical`、`high-priority`、`medium-priority`、`low-priority`
+4. 映階/題至標：`security`、`architecture`、`code-quality`、`accessibility`、`testing`、`performance`
+5. `create_labels` 為 true→建缺標：`gh label create "name" --color "hex" --description "desc"`
+6. 用一致色：紅為 critical/security、橙為 high、黃為 medium、藍為 architecture、綠為 testing
 
-**Expected:** All labels referenced by findings exist in the repository. No duplicate labels created.
+**得：** 見引之諸標存於庫。無重建標。
 
-**On failure:** If `gh` CLI is not authenticated, instruct the user to run `gh auth login`. If label creation is denied (insufficient permissions), proceed without creating labels and note which labels are missing.
+**敗：** `gh` CLI 未證→告用行 `gh auth login`。標建拒（權不足）→不建而記何標缺。
 
-### Step 2: Group Findings
+### 二：組見
 
-Batch related findings into logical issues to avoid issue sprawl.
+批關見為議以避議蔓。
 
-1. If `group_by` is `theme`: group findings by their phase or category (all security findings → 1-2 issues, all a11y → 1 issue)
-2. If `group_by` is `severity`: group findings by severity level (all CRITICAL → 1 issue, all HIGH → 1 issue)
-3. If `group_by` is `file`: group findings by primary affected file
-4. Within each group, order findings by severity (CRITICAL first)
-5. If a group has more than 8 findings, split into sub-groups by sub-theme
-6. Each group becomes one GitHub issue
+1. `group_by` 為 `theme`→按階或類組見（諸 security→1-2 議、諸 a11y→1 議）
+2. `group_by` 為 `severity`→按嚴組（諸 CRITICAL→1 議、諸 HIGH→1 議）
+3. `group_by` 為 `file`→按主影檔組
+4. 組內按嚴序（CRITICAL 先）
+5. 組過 8 見→按子題分子組
+6. 各組為一 GitHub 議
 
-**Expected:** A set of issue groups, each containing 1-8 related findings. The total number of issues should be manageable (typically 5-15 for a full codebase review).
+**得：** 議組集、各含 1-8 關見。議總數可理（全碼評典型 5-15）。
 
-**On failure:** If findings have no grouping metadata, fall back to one issue per finding. This is acceptable for small finding sets (< 10) but produces too many issues for larger sets.
+**敗：** 見無組備→退為一見一議。小集（< 10）可、大集則生過多議。
 
-### Step 3: Compose Issues
+### 三：組議
 
-Build each issue using a standard template.
+以標模築各議。
 
-1. **Title**: `[Severity] Theme: Brief description` — e.g., `[HIGH] Security: Eliminate innerHTML injection in panel.js`
-2. **Body** structure:
+1. **Title**：`[Severity] Theme: Brief description` — 如 `[HIGH] Security: Eliminate innerHTML injection in panel.js`
+2. **Body** 構：
    ```
    ## Summary
    One-paragraph overview of what this issue addresses and why it matters.
@@ -97,54 +97,54 @@ Build each issue using a standard template.
    Generated from codebase review on YYYY-MM-DD.
    Related: #issue_numbers (if applicable)
    ```
-3. Apply labels: severity label + theme label + any custom labels
-4. If findings reference specific files, mention them in the body (not as assignees)
+3. 施標：嚴標+題標+任自定標
+4. 見引具檔→於體提之（非為指派）
 
-**Expected:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria, and appropriate labels.
+**得：** 各議含明標、含嚴徽之編見、驗準勾、合標。
 
-**On failure:** If the body exceeds GitHub's issue size limit (65536 chars), split the issue into parts and cross-reference them.
+**敗：** 體過 GitHub 議寸限（65536 字符）→分議為部、交引之。
 
-### Step 4: Create Issues
+### 四：建議
 
-Create the issues using `gh` CLI and report results.
+以 `gh` CLI 建議並報果。
 
-1. If `dry_run` is true, print each issue title and body without creating, then stop
-2. For each composed issue, create it:
+1. `dry_run` 為 true→印各議標與體而不建，止
+2. 各組議建之：
    ```bash
    gh issue create --title "title" --body "$(cat <<'EOF'
    body content
    EOF
    )" --label "label1,label2"
    ```
-3. Record the URL of each created issue
-4. After all issues are created, print a summary table: `#number | Title | Labels | Findings count`
-5. If issues should be sequenced, add cross-references: edit the first issue to mention "Blocked by #X" or "See also #Y"
+3. 記各建議之 URL
+4. 諸議建後印結表：`#number | Title | Labels | Findings count`
+5. 議須序→加交引：編首議提「Blocked by #X」或「See also #Y」
 
-**Expected:** All issues created successfully. A summary table with issue numbers and URLs is printed.
+**得：** 諸議建成。結表含議號與 URL 印。
 
-**On failure:** If an individual issue fails to create, log the error and continue with remaining issues. Report failures at the end. Common failures: authentication expired, label not found (if `create_labels` was false), network timeout.
+**敗：** 單議建敗→誌誤續。終報敗。常敗：證逾、標缺（`create_labels` 為 false）、網超時。
 
-## Validation
+## 驗
 
-- [ ] All findings are represented in at least one issue
-- [ ] Each issue has at least one label
-- [ ] Each issue has checkbox acceptance criteria
-- [ ] No duplicate issues were created (check titles against existing open issues)
-- [ ] Issue count is reasonable for the finding count (not 1:1 for large sets)
-- [ ] Summary table was printed with all issue URLs
+- [ ] 諸見現於至少一議
+- [ ] 各議含至少一標
+- [ ] 各議含驗準勾
+- [ ] 無重議（察標與存開議）
+- [ ] 議數合見數（大集非 1:1）
+- [ ] 結表含諸議 URL 印
 
-## Common Pitfalls
+## 忌
 
-- **Issue sprawl**: Creating one issue per finding produces 20+ issues that are hard to manage. Group aggressively — 5-10 issues from a full review is ideal
-- **Missing acceptance criteria**: Issues without checkboxes cannot be verified as complete. Every finding should map to at least one checkbox
-- **Label chaos**: Creating too many labels makes filtering useless. Stick to severity + theme, not per-finding labels
-- **Stale references**: If creating issues from an old review, verify findings still apply before creating issues. Code may have changed
-- **Forgetting dry run**: For large finding sets, always preview with `dry_run: true` first. It is much easier to edit a plan than to close 15 incorrect issues
+- **議蔓**：一見一議生 20+ 議難理。積極組——全評 5-10 議為理想
+- **缺驗準**：議無勾不可驗畢。各見當映至少一勾
+- **標亂**：過多標濾無用。限於嚴+題、非一見一標
+- **陳引**：自舊評建議→建前驗見仍適。碼或變
+- **忘試行**：大見集→必先以 `dry_run: true` 預。編謀易於閉 15 誤議
 
-## Related Skills
+## 參
 
-- `review-codebase` — produces the findings table this skill consumes
-- `review-pull-request` — produces PR-scoped findings that can also be converted to issues
-- `manage-backlog` — organizes issues into sprints and priorities after creation
-- `create-pull-request` — creates PRs that reference and close the issues
-- `commit-changes` — commits the fixes that resolve the issues
+- `review-codebase` — 生此技消之見列
+- `review-pull-request` — 生 PR 範見亦可化為議
+- `manage-backlog` — 建後組議為 sprints 與優先
+- `create-pull-request` — 建引並閉議之 PR
+- `commit-changes` — 承解議之修

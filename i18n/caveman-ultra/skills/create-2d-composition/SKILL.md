@@ -25,33 +25,31 @@ metadata:
 
 # Create 2D Composition
 
-Generate 2D graphics programmatically using SVG construction, diagram layout algorithms, image compositing, and batch processing workflows. Covers vector graphics generation, raster image manipulation, typography, and automated production of charts, diagrams, and infographics.
+2D graphics via SVG + layout + compositing + batch → charts, diagrams, infographics.
 
-## When to Use
+## Use When
 
-- Generating diagrams, flowcharts, or infographics programmatically
-- Creating reproducible scientific figures or publication graphics
-- Automating production of badges, icons, or visual assets
-- Compositing multiple images or data visualizations
-- Building custom chart types not available in standard libraries
-- Batch generating graphics with parameter variations
-- Creating SVG templates for web or print applications
+- Diagrams/flowcharts/infographics programmatic
+- Repro scientific figures
+- Auto badges/icons/assets
+- Composite imgs / data viz
+- Custom chart types (not in libs)
+- Batch gen w/ param variations
+- SVG templates web/print
 
-## Inputs
+## In
 
-| Input | Type | Description | Example |
+| In | Type | Desc | Example |
 |-------|------|-------------|---------|
-| Layout specification | Configuration | Dimensions, margins, grid layout | Canvas 800x600px, 20px margins |
-| Visual elements | Data/Assets | Shapes, text, images, data points | Rectangle coordinates, labels, icons |
-| Style parameters | CSS/Attributes | Colors, fonts, stroke widths, opacity | `fill="#3366cc"`, `stroke-width="2"` |
-| Data sources | Files/Arrays | Values to visualize or annotate | CSV data, JSON configuration |
-| Output format | String | SVG, PNG, PDF, composite formats | `output.svg`, 300 DPI PNG |
+| Layout spec | Config | Dims, margins, grid | 800x600px canvas, 20px margins |
+| Visual elements | Data/Assets | Shapes, text, imgs, pts | Rect coords, labels, icons |
+| Style params | CSS/Attrs | Colors, fonts, stroke, opacity | `fill="#3366cc"`, `stroke-width="2"` |
+| Data sources | Files/Arrays | Values → viz | CSV, JSON config |
+| Out format | String | SVG/PNG/PDF | `output.svg`, 300 DPI PNG |
 
-## Procedure
+## Do
 
-### 1. Set Up Python Environment
-
-Install required libraries for 2D composition:
+### 1. Python Env Setup
 
 ```bash
 # Core libraries
@@ -64,12 +62,10 @@ pip install drawsvg reportlab pycairo
 pip install matplotlib numpy pandas
 ```
 
-**Expected:** Libraries installed successfully
-**On failure:** Check Python version (3.7+), use virtual environment to avoid conflicts
+**Got:** Libs installed
+**If err:** Check Python 3.7+, use venv
 
-### 2. Create Basic SVG Graphics
-
-Generate SVG using svgwrite:
+### 2. Basic SVG
 
 ```python
 import svgwrite
@@ -120,12 +116,10 @@ def create_basic_svg(output_path):
     print(f"Saved: {output_path}")
 ```
 
-**Expected:** SVG file generated with shapes and text
-**On failure:** Check svgwrite version, verify output directory writable
+**Got:** SVG w/ shapes + text
+**If err:** Check svgwrite ver, out dir writable
 
-### 3. Build Diagrams with Layout Logic
-
-Create structured diagrams with calculated positioning:
+### 3. Diagram Layout
 
 ```python
 def create_flowchart(steps, output_path):
@@ -213,12 +207,10 @@ def wrap_text(text, max_width=20):
     return lines
 ```
 
-**Expected:** Flowchart with connected boxes and arrows
-**On failure:** Adjust layout calculations, verify arrow marker definitions
+**Got:** Flowchart w/ boxes + arrows
+**If err:** Adjust layout calc, verify arrow markers
 
-### 4. Composite Raster Images
-
-Combine multiple images using Pillow:
+### 4. Composite Raster
 
 ```python
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -306,12 +298,10 @@ def add_annotations(image_path, annotations, output_path):
     img.save(output_path)
 ```
 
-**Expected:** Composite image created with proper layout
-**On failure:** Check all input images exist, verify image modes compatible
+**Got:** Composite img w/ layout
+**If err:** Check inputs exist, img modes compat
 
-### 5. Generate Data-Driven Graphics
-
-Create visualizations from data:
+### 5. Data-Driven Graphics
 
 ```python
 import numpy as np
@@ -384,12 +374,10 @@ def create_bar_chart_svg(data, labels, output_path):
     dwg.save()
 ```
 
-**Expected:** SVG bar chart with scaled data
-**On failure:** Handle edge cases (empty data, negative values), add validation
+**Got:** SVG bar chart scaled
+**If err:** Handle edge cases (empty, neg), add validate
 
-### 6. Batch Generate Graphics
-
-Automate creation of multiple graphics:
+### 6. Batch Gen
 
 ```python
 def batch_generate_badges(users, template_path, output_dir):
@@ -433,12 +421,10 @@ def batch_generate_badges(users, template_path, output_dir):
         print(f"Generated badge: {output_path}")
 ```
 
-**Expected:** Individual graphic generated for each data item
-**On failure:** Check data structure, handle missing fields with defaults
+**Got:** Per-item graphic gen
+**If err:** Check data struct, defaults for missing
 
-### 7. Convert SVG to Raster
-
-Export SVG to PNG/PDF for various uses:
+### 7. SVG → Raster
 
 ```python
 import cairosvg
@@ -467,37 +453,37 @@ def svg_to_pdf(svg_path, pdf_path):
     print(f"Converted to PDF: {pdf_path}")
 ```
 
-**Expected:** Raster output generated at specified resolution
-**On failure:** Install cairo system library if missing, check SVG validity
+**Got:** Raster out @ res
+**If err:** Install cairo sys lib, check SVG valid
 
-## Validation Checklist
+## Check
 
-- [ ] Graphics render correctly in target applications
-- [ ] Text is readable and properly positioned
-- [ ] Colors match specifications (check hex codes)
-- [ ] Dimensions appropriate for use case
-- [ ] SVG validates against standard (if required)
-- [ ] Raster exports have correct DPI
-- [ ] Layout adapts to data variations
-- [ ] Batch processing completes without errors
-- [ ] Output files organized logically
-- [ ] Code includes error handling
+- [ ] Graphics render in target apps
+- [ ] Text readable + positioned
+- [ ] Colors match (hex)
+- [ ] Dims fit use case
+- [ ] SVG validates (if req)
+- [ ] Raster DPI correct
+- [ ] Layout adapts to data
+- [ ] Batch completes no err
+- [ ] Out files organized
+- [ ] Err handling in code
 
-## Common Pitfalls
+## Traps
 
-1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
-2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
-3. **Font availability**: System fonts may differ, embed or use web-safe fonts
-4. **Coordinate calculations**: Off-by-one errors in grid layouts
-5. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
-6. **SVG validity**: Check XML structure, close all tags
-7. **File paths**: Handle special characters, spaces in filenames
-8. **Memory usage**: Large batch operations may require chunking
-9. **Aspect ratio**: Maintain proportions when resizing images
-10. **Transparency**: PNG supports alpha, JPEG does not
+1. **Unit confusion**: SVG units (px, mm, cm) vs screen px vs print DPI
+2. **Text overflow**: Text exceeds shape → wrap
+3. **Font avail**: Sys fonts differ → embed / web-safe
+4. **Coord calc**: Off-by-one in grids
+5. **Color fmt**: SVG hex (`#rrggbb`), not tuples
+6. **SVG valid**: XML struct, close tags
+7. **File paths**: Special chars, spaces
+8. **Memory**: Large batch → chunk
+9. **Aspect ratio**: Preserve on resize
+10. **Transparency**: PNG alpha, JPEG not
 
-## Related Skills
+## →
 
-- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication-specific output requirements
-- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into reports
+- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication out reqs
+- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: 3D variant
+- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Graphics in reports

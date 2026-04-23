@@ -49,9 +49,9 @@ Decompose project scope into a hierarchical set of work packages that can be est
 ### Step 1: Extract Deliverables from Charter
 Read the project charter. List all deliverables and acceptance criteria. Group them into 3-7 top-level categories (these become WBS Level 1 elements).
 
-**Expected:** List of Level 1 WBS elements matching charter deliverables.
+**Got:** List of Level 1 WBS elements matching charter deliverables.
 
-**On failure:** If charter is vague, return to `draft-project-charter` to refine scope.
+**If fail:** If charter is vague, return to `draft-project-charter` to refine scope.
 
 ### Step 2: Decompose into Work Packages
 For each Level 1 element, decompose into sub-elements (Level 2, Level 3). Apply the 100% rule: child elements must represent 100% of the parent's scope. Stop decomposing when work packages are:
@@ -81,9 +81,9 @@ Create a WBS outline:
 
 Apply WBS codes (1.1.1 format). Ensure 3-5 levels deep maximum. Always include a "Project Management" branch.
 
-**Expected:** Complete WBS with 15-50 work packages, each with a unique WBS code.
+**Got:** Complete WBS with 15-50 work packages, each with a unique WBS code.
 
-**On failure:** If decomposition exceeds 5 levels, the scope is too large — consider splitting into sub-projects.
+**If fail:** If decomposition exceeds 5 levels, the scope is too large — consider splitting into sub-projects.
 
 ### Step 3: Write WBS Dictionary
 For each work package (leaf node), write a dictionary entry:
@@ -104,9 +104,9 @@ For each work package (leaf node), write a dictionary entry:
 ...
 ```
 
-**Expected:** Dictionary entry for every leaf-node work package.
+**Got:** Dictionary entry for every leaf-node work package.
 
-**On failure:** Missing dictionary entries indicate incomplete decomposition — revisit Step 2.
+**If fail:** Missing dictionary entries indicate incomplete decomposition — revisit Step 2.
 
 ### Step 4: Estimate Effort
 For each work package, apply one estimation method:
@@ -125,9 +125,9 @@ Create a summary table:
 
 Total effort = sum of all work packages.
 
-**Expected:** Every work package has an effort estimate with stated confidence.
+**Got:** Every work package has an effort estimate with stated confidence.
 
-**On failure:** If confidence is Low on >30% of packages, schedule a refinement session with SMEs.
+**If fail:** If confidence is Low on >30% of packages, schedule a refinement session with SMEs.
 
 ### Step 5: Identify Dependencies and Critical Path Candidates
 Map dependencies between work packages:
@@ -141,16 +141,16 @@ Map dependencies between work packages:
 
 Identify the longest chain of dependent work packages — this is the critical path candidate.
 
-**Expected:** Dependency table with at least finish-to-start relationships identified.
+**Got:** Dependency table with at least finish-to-start relationships identified.
 
-**On failure:** If dependencies form cycles, the decomposition has errors — revisit Step 2.
+**If fail:** If dependencies form cycles, the decomposition has errors — revisit Step 2.
 
 ### Step 6: Review and Baseline
 Combine WBS and dictionary into final documents. Verify the 100% rule at every level. Get stakeholder sign-off.
 
-**Expected:** WBS.md and WBS-DICTIONARY.md files created and reviewed.
+**Got:** WBS.md and WBS-DICTIONARY.md files created and reviewed.
 
-**On failure:** If stakeholders identify missing scope, add work packages and re-estimate.
+**If fail:** If stakeholders identify missing scope, add work packages and re-estimate.
 
 ## Validation
 
@@ -163,7 +163,7 @@ Combine WBS and dictionary into final documents. Verify the 100% rule at every l
 - [ ] Critical path candidates identified
 - [ ] WBS depth does not exceed 5 levels
 
-## Common Pitfalls
+## Pitfalls
 
 - **Confusing deliverables with activities**: WBS elements should be nouns (deliverables), not verbs (activities). "User Authentication Module" not "Implement Authentication".
 - **Violating the 100% rule**: If children don't add up to 100% of parent scope, work will be missed.

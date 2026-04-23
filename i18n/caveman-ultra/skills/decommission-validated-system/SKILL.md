@@ -26,30 +26,30 @@ metadata:
 
 # Decommission Validated System
 
-Plan and execute the controlled retirement of a validated computerized system while preserving data integrity and meeting regulatory retention requirements.
+Controlled retirement of validated sys + preserve data integrity + meet retention reqs.
 
-## When to Use
+## Use When
 
-- A validated system is being replaced by a new system
-- A system is reaching end-of-life with no replacement (business process eliminated)
-- Vendor discontinues support for a validated product
-- Consolidation of multiple systems into a single platform
-- Regulatory or business changes render a system obsolete
+- Validated sys replaced
+- EOL no replacement (biz proc eliminated)
+- Vendor discontinues support
+- Consolidation → single platform
+- Reg / biz changes → obsolete
 
-## Inputs
+## In
 
-- **Required**: System to be decommissioned (name, version, validation status)
-- **Required**: Data retention requirements by regulation (21 CFR Part 11, GLP, GCP)
-- **Required**: Replacement system (if applicable) and migration scope
-- **Optional**: Current validation documentation package
-- **Optional**: Data volume and format inventory
-- **Optional**: Business owner and stakeholder list
+- **Required**: Sys (name, ver, valid status)
+- **Required**: Retention reqs (21 CFR Part 11, GLP, GCP)
+- **Required**: Replacement sys (if applic) + migration scope
+- **Optional**: Current valid doc pkg
+- **Optional**: Data vol + fmt inventory
+- **Optional**: Biz owner + stakeholders
 
-## Procedure
+## Do
 
-### Step 1: Assess Data Retention Requirements
+### Step 1: Retention Reqs
 
-Determine how long data must be retained and in what form:
+How long + what form:
 
 ```markdown
 # Data Retention Assessment
@@ -73,12 +73,13 @@ Determine how long data must be retained and in what form:
 | [e.g., User data] | [e.g., 200 profiles] | [e.g., LDAP/Database] | [Employment + 2 years] | Anonymise and archive |
 ```
 
-**Expected:** Every data category has a defined retention period, format requirement, and planned disposition.
-**On failure:** If retention requirements are unclear, consult regulatory affairs and legal. Default to the longest applicable retention period.
+**Got:** Every cat has retention + fmt + disposition.
 
-### Step 2: Plan Data Migration (If Applicable)
+**If err:** Unclear reqs → consult regulatory + legal. Default longest applic.
 
-If data is migrating to a replacement system:
+### Step 2: Migration Plan (If Applic)
+
+Data → replacement:
 
 ```markdown
 # Data Migration Plan
@@ -105,12 +106,13 @@ If data is migrating to a replacement system:
 | Audit trail continuity | Verify historical audit trail migrated | All entries present with original timestamps |
 ```
 
-**Expected:** Migration plan includes mapping, transformation rules, and validation checks that prove data integrity was maintained.
-**On failure:** If migration validation fails, do not proceed to decommission. Fix the migration issues and re-validate.
+**Got:** Plan w/ mapping + transforms + validation → proves integrity.
 
-### Step 3: Define Archival Strategy
+**If err:** Migration valid fails → do NOT decommission. Fix + re-validate.
 
-For data that will be archived rather than migrated:
+### Step 3: Archival Strategy
+
+Data → archive (not migrate):
 
 ```markdown
 # Archival Strategy
@@ -139,10 +141,11 @@ For data that will be archived rather than migrated:
 | External auditors | Read access, supervised | Per audit plan |
 ```
 
-**Expected:** Archived data is readable, searchable, and verifiable without the original system.
-**On failure:** If data cannot be read independently of the source system, the archive is not compliant. Consider exporting to an open, standard format (PDF/A, CSV) before decommission.
+**Got:** Archive readable + searchable + verifiable w/o orig sys.
 
-### Step 4: Execute Decommissioning
+**If err:** Can't read indep of src sys → not compliant. Export → open std fmt (PDF/A, CSV) pre-decomm.
+
+### Step 4: Execute
 
 ```markdown
 # Decommission Checklist
@@ -184,32 +187,33 @@ For data that will be archived rather than migrated:
 | Approval | System owner, QA, IT signatures |
 ```
 
-**Expected:** Decommissioning is controlled, documented, and approved — not just "turn it off."
-**On failure:** If any checklist item cannot be completed, document the exception and obtain QA approval before proceeding.
+**Got:** Decomm = controlled + documented + approved. Not "turn it off".
 
-## Validation
+**If err:** Any item incomplete → doc exception + QA approval before proceeding.
 
-- [ ] Data retention requirements assessed for all data categories
-- [ ] Data migration validated with record counts, sampling, and checksums (if applicable)
-- [ ] Archive created in a format readable without the source system
-- [ ] Archive integrity verified with checksums
+## Check
+
+- [ ] Retention reqs assessed all cats
+- [ ] Migration validated w/ counts + sampling + checksums (if applic)
+- [ ] Archive in fmt readable w/o src sys
+- [ ] Archive integrity verified w/ checksums
 - [ ] All user access revoked
-- [ ] Validation documentation archived with defined retention period
-- [ ] SOPs updated to remove references to decommissioned system
-- [ ] Decommission report approved by system owner, QA, and IT
+- [ ] Valid docs archived w/ retention period
+- [ ] SOPs updated to remove decomm sys refs
+- [ ] Decomm report approved: sys owner + QA + IT
 
-## Common Pitfalls
+## Traps
 
-- **Premature decommission**: Turning off a system before data migration is validated risks permanent data loss. Complete all validation before pulling the plug.
-- **Unreadable archives**: Storing data in a proprietary format that requires the original system to read defeats the purpose of archival. Use open formats.
-- **Forgotten audit trails**: Archiving the data but not the audit trail means the data provenance cannot be demonstrated. Always archive audit trails with their parent records.
-- **Orphaned SOPs**: SOPs that still reference a decommissioned system confuse users and create compliance gaps. Update or retire all affected SOPs.
-- **No periodic archive verification**: Archives degrade. Without periodic integrity checks, data loss may go undetected until the data is needed for an inspection.
+- **Premature decomm**: Turn off pre-migration valid → permanent data loss. Complete valid first.
+- **Unreadable archives**: Proprietary fmt needs orig sys → defeats purpose. Use open fmts.
+- **Forgotten audit trails**: Archive data but not audit trail → no provenance. Always archive trails w/ parent records.
+- **Orphaned SOPs**: SOPs still ref decomm sys → user confusion + compliance gaps. Update / retire all.
+- **No periodic archive verify**: Archives degrade. No integrity checks → loss undetected until inspection.
 
-## Related Skills
+## →
 
-- `design-compliance-architecture` — update the system inventory and compliance architecture after decommission
-- `manage-change-control` — decommissioning is a major change requiring change control
-- `write-validation-documentation` — migration validation follows the same IQ/OQ methodology
-- `write-standard-operating-procedure` — retire or update SOPs referencing the decommissioned system
-- `prepare-inspection-readiness` — archived data must remain accessible for regulatory inspections
+- `design-compliance-architecture` — update sys inventory post-decomm
+- `manage-change-control` — decomm = major change → change control
+- `write-validation-documentation` — migration valid follows same IQ/OQ
+- `write-standard-operating-procedure` — retire/update SOPs
+- `prepare-inspection-readiness` — archived data accessible for inspections

@@ -26,145 +26,141 @@ metadata:
 
 # Create a New Team
 
-Define a multi-agent team composition that coordinates two or more agents to accomplish tasks requiring multiple perspectives, specialties, or phases. The resulting team file integrates with the teams registry and can be activated in Claude Code by name.
+Multi-agent team → coord 2+ agents for multi-perspective tasks. Integrates w/ teams registry, activatable in Claude Code by name.
 
-## When to Use
+## Use When
 
-- A task requires multiple perspectives that a single agent cannot provide (e.g., code review plus security audit plus architecture review)
-- You need a recurring collaborative workflow with consistent role assignments and handoff patterns
-- An existing agent composition is being used repeatedly and should be formalized
-- A complex process naturally decomposes into phases or specialties handled by different agents
-- You want to define a coordinated group for sprint-based, pipeline-based, or parallel work
+- Task needs multi perspectives (code review + sec audit + arch)
+- Recurring collab workflow w/ consistent roles
+- Existing ad-hoc composition → formalize
+- Complex proc → phases / specialties
+- Sprint / pipeline / parallel work
 
-## Inputs
+## In
 
-- **Required**: Team name (lowercase kebab-case, e.g., `data-pipeline-review`)
-- **Required**: Team purpose (one paragraph describing what problem requires multiple agents)
-- **Required**: Lead agent (must exist in `agents/_registry.yml`)
-- **Optional**: Coordination pattern (default: hub-and-spoke). One of: `hub-and-spoke`, `sequential`, `parallel`, `timeboxed`, `adaptive`
-- **Optional**: Number of members (default: 3-4; recommended range: 2-5)
-- **Optional**: Source material (existing workflow, runbook, or ad-hoc team composition to formalize)
+- **Required**: Team name (kebab-case, `data-pipeline-review`)
+- **Required**: Purpose (1 paragraph)
+- **Required**: Lead agent (in `agents/_registry.yml`)
+- **Optional**: Coord pattern (def: hub-and-spoke). One of: `hub-and-spoke`, `sequential`, `parallel`, `timeboxed`, `adaptive`
+- **Optional**: Members (def: 3-4; rec: 2-5)
+- **Optional**: Src material
 
-## Procedure
+## Do
 
-### Step 1: Define Team Purpose
+### Step 1: Purpose
 
-Articulate what problem requires multiple agents working together. A valid team purpose must answer:
+Answer:
 
-1. **What outcome** does this team deliver? (e.g., a comprehensive review report, a deployed application, a sprint increment)
-2. **Why can't a single agent do this?** Identify at least two distinct specialties or perspectives required.
-3. **When should this team be activated?** Define the trigger conditions.
+1. **What outcome** delivered? (report, deploy, sprint)
+2. **Why not 1 agent?** ≥2 specialties
+3. **When activate?** Triggers
 
-Write the purpose as one paragraph that a human or agent can read to decide whether to activate this team.
+Write 1 paragraph → human/agent reads → decide activation.
 
-**Expected:** A clear paragraph explaining the team's value proposition, with at least two distinct specialties identified.
+**Got:** Clear paragraph + ≥2 specialties.
 
-**On failure:** If you cannot identify two distinct specialties, the task likely does not need a team. Use a single agent with multiple skills instead.
+**If err:** Can't ID 2 specialties → no team needed. Use 1 agent w/ multi skills.
 
-### Step 2: Select Lead Agent
+### Step 2: Lead
 
-The lead agent orchestrates the team. Choose an agent from `agents/_registry.yml` that:
+Orchestrator. Choose from registry:
 
-- Has domain expertise relevant to the team's primary output
-- Can decompose incoming requests into subtasks for other members
-- Can synthesize results from multiple reviewers into a coherent deliverable
+- Domain expertise → primary output
+- Decompose reqs → subtasks
+- Synthesize results → deliverable
 
 ```bash
 # List all available agents
 grep "^  - id:" agents/_registry.yml
 ```
 
-The lead must also appear as a member in the team composition (the lead is always a member).
+Lead = also member (lead always member).
 
-**Expected:** One agent selected as lead, confirmed to exist in the agents registry.
+**Got:** Lead chosen + in registry.
 
-**On failure:** If no existing agent fits the lead role, create one first using the `create-agent` skill (or `agents/_template.md` manually). Do not create a team with a lead that does not exist as an agent definition.
+**If err:** No fit → create via `create-agent` first. Don't create team w/ non-existent lead.
 
-### Step 3: Select Member Agents
+### Step 3: Members
 
-Choose 2-5 members (including the lead) with clear, non-overlapping responsibilities. For each member, define:
+2-5 members (incl lead), non-overlap responsibilities. Each:
 
-- **id**: Agent name from the agents registry
-- **role**: A short title (e.g., "Quality Reviewer", "Security Auditor", "Architecture Reviewer")
-- **responsibilities**: One sentence describing what this member does that no other member does
+- **id**: Agent name
+- **role**: Short title ("Quality Reviewer", "Security Auditor", "Architecture Reviewer")
+- **responsibilities**: 1 sentence, unique
 
 ```bash
 # Verify each candidate agent exists
 grep "id: agent-name-here" agents/_registry.yml
 ```
 
-Validate non-overlap: no two members should have the same primary responsibility. If responsibilities overlap, either merge the roles or sharpen the boundaries.
+Validate no overlap: same primary resp = merge / sharpen.
 
-**Expected:** 2-5 members selected, each with a unique role and clear responsibilities, all confirmed in the agents registry.
+**Got:** 2-5 members, unique roles, in registry.
 
-**On failure:** If a needed agent does not exist, create it first. If responsibilities overlap between two members, rewrite them to clarify boundaries or remove one member.
+**If err:** Agent missing → create first. Overlap → rewrite / remove 1.
 
-### Step 4: Choose Coordination Pattern
+### Step 4: Coord Pattern
 
-Select the pattern that best fits the team's workflow. The five patterns and their use cases:
-
-| Pattern | When to Use | Example Teams |
+| Pattern | Use When | Example |
 |---------|-------------|---------------|
-| **hub-and-spoke** | Lead distributes tasks, collects results, synthesizes. Best for review and audit workflows. | r-package-review, gxp-compliance-validation, ml-data-science-review |
-| **sequential** | Each agent builds on the previous agent's output. Best for pipelines and staged workflows. | fullstack-web-dev, tending |
-| **parallel** | All agents work simultaneously on independent subtasks. Best when subtasks have no dependencies. | devops-platform-engineering |
-| **timeboxed** | Work organized into fixed-length iterations. Best for ongoing project work with a backlog. | scrum-team |
-| **adaptive** | Team self-organizes based on the task. Best for unknown or highly variable tasks. | opaque-team |
+| **hub-and-spoke** | Lead distrib + collect + synth. Review/audit. | r-package-review, gxp-compliance-validation, ml-data-science-review |
+| **sequential** | Each builds on prior. Pipelines/staged. | fullstack-web-dev, tending |
+| **parallel** | All sim, independent subtasks. No deps. | devops-platform-engineering |
+| **timeboxed** | Fixed iters. Sprint w/ backlog. | scrum-team |
+| **adaptive** | Self-org. Unknown/variable. | opaque-team |
 
-**Decision guide:**
-- If the lead must see all results before producing output: **hub-and-spoke**
-- If agent B needs agent A's output to start: **sequential**
-- If all agents can work without seeing each other's output: **parallel**
-- If work spans multiple iterations with planning ceremonies: **timeboxed**
-- If you cannot predict the task structure in advance: **adaptive**
+**Decision:**
+- Lead sees all results pre-output → **hub-and-spoke**
+- B needs A's out → **sequential**
+- All work w/o seeing others → **parallel**
+- Iters w/ planning → **timeboxed**
+- Unpredictable struct → **adaptive**
 
-**Expected:** One coordination pattern selected with a clear rationale for the choice.
+**Got:** Pattern + rationale.
 
-**On failure:** If unsure, default to hub-and-spoke. It is the most common pattern and works for most review and analysis workflows.
+**If err:** Doubt → hub-and-spoke (most common, works for review/analysis).
 
-### Step 5: Design Task Decomposition
+### Step 5: Task Decomposition
 
-Define how a typical incoming request gets split across team members. Structure this as phases:
+Phases:
 
-1. **Setup phase**: What the lead does to analyze the request and create tasks
-2. **Execution phase**: What each member works on (in parallel, in sequence, or per-sprint depending on coordination pattern)
-3. **Synthesis phase**: How results are collected and the final deliverable is produced
+1. **Setup**: Lead analyzes req + creates tasks
+2. **Execution**: Each member's work (par/seq/sprint)
+3. **Synthesis**: Collect + deliverable
 
-For each member, list 3-5 concrete tasks they would perform on a typical request. These tasks appear in both the "Task Decomposition" prose section and the CONFIG block's `tasks` list.
+Per member: 3-5 concrete tasks (typical req). In "Task Decomposition" prose + CONFIG `tasks` list.
 
-**Expected:** A phase-structured decomposition with concrete tasks per member, matching the chosen coordination pattern.
+**Got:** Phase-structured decomp + concrete tasks per member, matches coord pattern.
 
-**On failure:** If tasks are too vague (e.g., "reviews things"), make them specific (e.g., "reviews code style against tidyverse style guide, checks test coverage, evaluates error message quality").
+**If err:** Vague ("reviews things") → specific ("reviews code style vs tidyverse guide, checks coverage, evaluates err msg quality").
 
-### Step 6: Write the Team File
-
-Copy the template and fill in all sections:
+### Step 6: Team File
 
 ```bash
 cp teams/_template.md teams/<team-name>.md
 ```
 
-Fill in the following sections in order:
+Fill in order:
 
-1. **YAML frontmatter**: `name`, `description`, `lead`, `version` ("1.0.0"), `author`, `created`, `updated`, `tags`, `coordination`, `members[]` (each with id, role, responsibilities)
-2. **Title**: `# Team Name` (human-readable, title case)
-3. **Introduction**: One paragraph summary
-4. **Purpose**: Why this team exists, what specialties it combines
-5. **Team Composition**: Table with Member, Agent, Role, Focus Areas columns
-6. **Coordination Pattern**: Prose description plus ASCII diagram of the flow
-7. **Task Decomposition**: Phased breakdown with concrete tasks per member
-8. **Configuration**: Machine-readable CONFIG block (see Step 7)
-9. **Usage Scenarios**: 2-3 concrete scenarios with example user prompts
-10. **Limitations**: 3-5 known constraints
-11. **See Also**: Links to member agent files and related skills/teams
+1. **YAML frontmatter**: `name`, `description`, `lead`, `version` ("1.0.0"), `author`, `created`, `updated`, `tags`, `coordination`, `members[]` (id, role, responsibilities)
+2. **Title**: `# Team Name` (readable, title case)
+3. **Intro**: 1 paragraph
+4. **Purpose**: Why exist + specialties
+5. **Team Composition**: Table (Member, Agent, Role, Focus)
+6. **Coordination Pattern**: Prose + ASCII diagram
+7. **Task Decomposition**: Phased + tasks per member
+8. **Configuration**: CONFIG block (Step 7)
+9. **Usage Scenarios**: 2-3 + example prompts
+10. **Limitations**: 3-5
+11. **See Also**: Links to members + related
 
-**Expected:** A complete team file with all sections filled in, no placeholder text remaining from the template.
+**Got:** Complete file, no placeholders.
 
-**On failure:** Compare against an existing team file (e.g., `teams/r-package-review.md`) to verify structure. Search for template placeholder strings like "your-team-name" or "another-agent" to find unfilled sections.
+**If err:** Compare existing (`teams/r-package-review.md`). Search placeholders ("your-team-name", "another-agent") → unfilled.
 
-### Step 7: Write the CONFIG Block
+### Step 7: CONFIG Block
 
-The CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers provides machine-readable YAML for tooling. Structure it as follows:
+Between `<!-- CONFIG:START -->` + `<!-- CONFIG:END -->` → YAML for tooling:
 
     <!-- CONFIG:START -->
     ```yaml
@@ -189,15 +185,15 @@ The CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` marke
     ```
     <!-- CONFIG:END -->
 
-The `subagent_type` field maps to Claude Code agent types. For agents defined in `.claude/agents/`, use the agent id as the subagent_type. Use `blocked_by` to express task dependencies (e.g., synthesis is blocked by all review tasks).
+`subagent_type` → Claude Code types. For `.claude/agents/`, use agent id. `blocked_by` = task deps (synth blocked by all reviews).
 
-**Expected:** CONFIG block is valid YAML, all agents match those in the frontmatter members list, and task dependencies form a valid DAG (no cycles).
+**Got:** Valid YAML, agents = frontmatter members, deps = valid DAG (no cycles).
 
-**On failure:** Validate YAML syntax. Verify that every `assignee` in the tasks list matches an `agent` in the members list. Check that `blocked_by` references only task names defined earlier in the list.
+**If err:** Validate syntax. Every `assignee` = `agent` in members. `blocked_by` refs earlier task names only.
 
-### Step 8: Add to Registry
+### Step 8: Registry
 
-Edit `teams/_registry.yml` to add the new team:
+Edit `teams/_registry.yml`:
 
 ```yaml
 - id: <team-name>
@@ -208,56 +204,56 @@ Edit `teams/_registry.yml` to add the new team:
   description: <one-line description matching frontmatter>
 ```
 
-Update the `total_teams` count at the top of the registry (currently 8; it becomes 9 after adding one team).
+Increment `total_teams` (8 → 9 after adding 1).
 
 ```bash
 # Verify the entry was added
 grep "id: <team-name>" teams/_registry.yml
 ```
 
-**Expected:** New entry appears in the registry, `total_teams` count is incremented by one.
+**Got:** Entry in registry, count +1.
 
-**On failure:** If the team name already exists in the registry, choose a different name or update the existing entry. Verify the YAML indentation matches existing entries.
+**If err:** Name exists → diff name / update. Verify YAML indent matches.
 
-### Step 9: Run README Automation
+### Step 9: README Automation
 
-Regenerate README files from the updated registry:
+Regen:
 
 ```bash
 npm run update-readmes
 ```
 
-This updates the dynamic sections in `teams/README.md` and any other files with `<!-- AUTO:START -->` / `<!-- AUTO:END -->` markers that reference team data.
+Updates dynamic sections in `teams/README.md` + files w/ `<!-- AUTO:START -->` markers referencing team data.
 
-**Expected:** Command exits 0, `teams/README.md` now lists the new team.
+**Got:** Exit 0, `teams/README.md` has new team.
 
-**On failure:** Run `npm run check-readmes` to see which files are out of sync. If the script fails, verify `package.json` exists in the repository root and `js-yaml` is installed (`npm install`).
+**If err:** `npm run check-readmes` → out-of-sync files. Script fail → verify `package.json` in root + `js-yaml` installed (`npm install`).
 
-### Step 10: Verify Team Activation
+### Step 10: Verify Activation
 
-Test that the team can be activated in Claude Code:
+Test in Claude Code:
 
 ```
 User: Use the <team-name> team to <typical task description>
 ```
 
-Claude reads `teams/<team-name>.md`, extracts the CONFIG block, and orchestrates activation:
-1. Calls `TeamCreate` with the team name and description
-2. Spawns teammates via the `Agent` tool using each member's `subagent_type` from the CONFIG block
-3. Creates tasks via `TaskCreate` with the `blocked_by` dependencies from the CONFIG block
-4. The lead agent coordinates work following the coordination pattern
+Claude reads `teams/<team-name>.md`, extracts CONFIG, orchestrates:
+1. `TeamCreate` w/ name + desc
+2. Spawn teammates via `Agent` tool (`subagent_type` from CONFIG)
+3. `TaskCreate` w/ `blocked_by` deps from CONFIG
+4. Lead coords per pattern
 
-Note: Teams are **not** auto-discovered from `.claude/teams/`. Claude reads the definition directly from `teams/` when asked.
+Note: Teams **not** auto-discovered from `.claude/teams/`. Claude reads def directly from `teams/` on request.
 
-**Expected:** Claude reads the team file, creates the team via `TeamCreate`, spawns the correct agents, and follows the coordination pattern.
+**Got:** Claude reads file, `TeamCreate` works, spawns correct agents, follows pattern.
 
-**On failure:** Verify the team file is at `teams/<team-name>.md` (not in a subdirectory). Check that all member agents exist in `agents/`. Confirm the CONFIG block has valid YAML with `subagent_type` for each member. Confirm the team is listed in `teams/_registry.yml`.
+**If err:** Verify file at `teams/<team-name>.md` (not subdir). All member agents exist in `agents/`. CONFIG YAML valid + `subagent_type` per member. Listed in `teams/_registry.yml`.
 
 ### Step 11: Scaffold Translations
 
-> **Required for all teams.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+> **Required for all teams.** Human + AI authors. Do not skip → backlog.
 
-Scaffold translation files for all 4 supported locales immediately after committing the new team:
+4 locales post-commit:
 
 ```bash
 for locale in de zh-CN ja es; do
@@ -265,42 +261,42 @@ for locale in de zh-CN ja es; do
 done
 ```
 
-Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+Translate prose (code + IDs EN). Regen:
 
 ```bash
 npm run translation:status
 ```
 
-**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new team.
+**Got:** 4 files at `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md`, `source_commit` = HEAD. `npm run validate:translations` → 0 stale.
 
-**On failure:** If scaffold fails, verify the team exists in `teams/_registry.yml`. If status files don't update, run `npm run translation:status` explicitly.
+**If err:** Scaffold fail → team in `teams/_registry.yml`. Status stale → run `npm run translation:status` explicit.
 
-## Validation
+## Check
 
-- [ ] Team file exists at `teams/<team-name>.md`
-- [ ] YAML frontmatter parses without errors
-- [ ] All required frontmatter fields present: `name`, `description`, `lead`, `version`, `author`, `coordination`, `members[]`
-- [ ] Each member in frontmatter has `id`, `role`, and `responsibilities`
-- [ ] All sections present: Purpose, Team Composition, Coordination Pattern, Task Decomposition, Configuration, Usage Scenarios, Limitations, See Also
-- [ ] CONFIG block exists between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers
-- [ ] CONFIG block YAML is valid and parseable
-- [ ] All member agent ids exist in `agents/_registry.yml`
-- [ ] Lead agent appears in the members list
-- [ ] No two members share the same primary responsibility
-- [ ] Team is listed in `teams/_registry.yml` with correct path, lead, members, and coordination
-- [ ] `total_teams` count in registry is incremented
-- [ ] `npm run update-readmes` completes without errors
+- [ ] File at `teams/<team-name>.md`
+- [ ] YAML parses
+- [ ] Required: `name`, `description`, `lead`, `version`, `author`, `coordination`, `members[]`
+- [ ] Each member: `id`, `role`, `responsibilities`
+- [ ] Sections: Purpose, Team Composition, Coordination Pattern, Task Decomposition, Configuration, Usage Scenarios, Limitations, See Also
+- [ ] CONFIG block between markers
+- [ ] CONFIG YAML valid
+- [ ] All member ids in `agents/_registry.yml`
+- [ ] Lead in members list
+- [ ] No 2 members w/ same primary resp
+- [ ] In `teams/_registry.yml` w/ correct path/lead/members/coord
+- [ ] `total_teams` +1
+- [ ] `npm run update-readmes` no err
 
-## Common Pitfalls
+## Traps
 
-- **Too many members**: Teams with more than 5 members become hard to coordinate. The overhead of distributing tasks and synthesizing results outweighs the benefit of additional perspectives. Split into two teams or reduce to the essential specialties.
-- **Overlapping responsibilities**: If two members both "review code quality," their findings will conflict and the lead wastes time deduplicating. Each member must have a clearly distinct focus area.
-- **Wrong coordination pattern**: Using hub-and-spoke when agents need each other's output (should be sequential), or using sequential when agents can work independently (should be parallel). Review the decision guide in Step 4.
-- **Missing CONFIG block**: The CONFIG block is not optional prose decoration. It is the machine-readable specification Claude uses to orchestrate `TeamCreate`, agent spawning, and task creation. Without it, the team can only be activated through ad-hoc prose interpretation, which is less reliable.
-- **Lead agent not in members list**: The lead must also appear as a member with their own role and responsibilities. A lead who only "coordinates" without doing substantive work wastes a slot. Give the lead a concrete review or synthesis responsibility.
+- **Too many members**: >5 → hard coord. Split team / reduce to essentials.
+- **Overlap resp**: 2 "review code quality" → findings conflict, lead wastes time dedup. Distinct focus.
+- **Wrong coord**: hub-and-spoke when need each other's out (should be seq) / seq when can work indep (should be par). Review Step 4.
+- **Missing CONFIG**: Not optional decoration. Machine-readable spec for `TeamCreate` / spawn / tasks. Without → only ad-hoc prose interp (less reliable).
+- **Lead not in members**: Lead must appear as member w/ own role + resp. Coord-only lead wastes slot. Give concrete review/synth resp.
 
-## Related Skills
+## →
 
-- `create-skill` - follows the same meta-pattern for creating SKILL.md files
-- `create-agent` - create agent definitions that serve as team members
-- `commit-changes` - commit the new team file and registry updates
+- `create-skill` — parallel SKILL.md meta-pattern
+- `create-agent` — create members
+- `commit-changes` — commit team + registry

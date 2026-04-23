@@ -72,9 +72,9 @@ Complexity Tiers:
 
 4. Decide on a function name: `glyph_<descriptive_name>` (snake_case, unique)
 
-**Expected:** A clear mental sketch of the shape with 2-6 planned layers.
+**Got:** A clear mental sketch of the shape with 2-6 planned layers.
 
-**On failure:** If the concept is too abstract, fall back to a related concrete object. Review existing glyphs in the same domain for inspiration.
+**If fail:** If the concept is too abstract, fall back to a related concrete object. Review existing glyphs in the same domain for inspiration.
 
 ### Step 2: Compose — Write the Glyph Function
 
@@ -136,9 +136,9 @@ Write the R function that produces ggplot2 layers.
    - **Agents**: `viz/R/agent_primitives.R`
    - **Teams**: `viz/R/team_primitives.R`
 
-**Expected:** A working R function that returns a list of 2-6 ggplot2 layers.
+**Got:** A working R function that returns a list of 2-6 ggplot2 layers.
 
-**On failure:** If `ggforce::geom_circle` causes errors, ensure ggforce is installed. If coordinates are off, remember the canvas is 100x100 with (0,0) at bottom-left. Test the function interactively:
+**If fail:** If `ggforce::geom_circle` causes errors, ensure ggforce is installed. If coordinates are off, remember the canvas is 100x100 with (0,0) at bottom-left. Test the function interactively:
 ```r
 source("viz/R/utils.R"); source("viz/R/primitives.R")  # etc.
 layers <- glyph_<name>(50, 50, 1.0, "#ff88dd", "#ffa8f0")
@@ -179,9 +179,9 @@ Add the entity-to-glyph mapping in the appropriate glyph mapping file.
 
 5. Verify no duplicate ID exists in the target list
 
-**Expected:** The appropriate `*_GLYPHS` list contains the new mapping.
+**Got:** The appropriate `*_GLYPHS` list contains the new mapping.
 
-**On failure:** If the build later reports "No glyph mapped", double-check that the entity ID exactly matches the one in the manifest and registry.
+**If fail:** If the build later reports "No glyph mapped", double-check that the entity ID exactly matches the one in the manifest and registry.
 
 ### Step 4: Manifest — Add Icon Entry
 
@@ -221,9 +221,9 @@ Register the icon in the appropriate manifest file.
 }
 ```
 
-**Expected:** Valid JSON with the new entry placed among its type siblings.
+**Got:** Valid JSON with the new entry placed among its type siblings.
 
-**On failure:** Validate JSON syntax. Common mistakes: trailing comma after last array element, missing quotes.
+**If fail:** Validate JSON syntax. Common mistakes: trailing comma after last array element, missing quotes.
 
 ### Step 5: Render — Generate the Icon
 
@@ -246,9 +246,9 @@ Output locations:
    - Agents: `viz/public/icons/<palette>/agents/<agent-id>.webp`
    - Teams: `viz/public/icons/<palette>/teams/<team-id>.webp`
 
-**Expected:** The log shows `OK: <entity> (seed=XXXXX, XX.XKB)` and the WebP file exists.
+**Got:** The log shows `OK: <entity> (seed=XXXXX, XX.XKB)` and the WebP file exists.
 
-**On failure:**
+**If fail:**
 - `"No glyph mapped"` — Step 3 mapping is missing or has a typo
 - `"Unknown domain"` — Domain not in `get_palette_colors()` in `palettes.R`
 - R package errors — Run `install.packages(c("ggplot2", "ggforce", "ggfx", "ragg", "magick"))` first
@@ -275,9 +275,9 @@ Check the rendered output meets quality standards.
    - Detail doesn't turn to noise
    - Glow doesn't overwhelm the shape
 
-**Expected:** A clear, recognizable pictogram with even neon glow on transparent background.
+**Got:** A clear, recognizable pictogram with even neon glow on transparent background.
 
-**On failure:**
+**If fail:**
 - Glow too strong: re-render with `--glow-sigma 2` (default is 4)
 - Glow too weak: re-render with `--glow-sigma 8`
 - Shape unreadable at small sizes: simplify the glyph (fewer layers, bolder strokes, increase `.lw(s, base)` base value)
@@ -302,9 +302,9 @@ Make adjustments and re-render.
 
 3. When satisfied, verify the manifest status shows `"done"` (the build script updates it automatically on success)
 
-**Expected:** The final icon passes all verification checks from Step 6.
+**Got:** The final icon passes all verification checks from Step 6.
 
-**On failure:** If after 3+ iterations the glyph still doesn't read well, consider using a completely different visual metaphor (return to Step 1).
+**If fail:** If after 3+ iterations the glyph still doesn't read well, consider using a completely different visual metaphor (return to Step 1).
 
 ## Reference
 
@@ -357,7 +357,7 @@ See the full catalog of available glyph functions in the primitives source files
 - [ ] Transparent background (no solid rectangle behind the glyph)
 - [ ] Manifest status updated to `"done"` after successful render
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forgetting `* s`**: Hard-coded pixel values break when scale changes. Always multiply by `s`.
 - **Canvas origin confusion**: (0,0) is bottom-left, not top-left. Higher `y` values move UP.

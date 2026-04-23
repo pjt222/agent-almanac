@@ -66,9 +66,9 @@ Identify what needs defending, from what, and where the perimeter lies.
    - Inner perimeter: critical asset boundaries (access controls, encryption, isolation)
    - Core: last-resort defenses (backups, kill switches, circuit breakers)
 
-**Expected:** A clear map of assets (prioritized), threats (classified by severity), and defense perimeters (layered). This map guides all subsequent defense design.
+**Got:** A clear map of assets (prioritized), threats (classified by severity), and defense perimeters (layered). This map guides all subsequent defense design.
 
-**On failure:** If the threat landscape feels overwhelming, start with the top 3 critical assets and the top 3 threat types. Perfect coverage is less important than coverage of what matters most. If perimeter boundaries are unclear, default to "trust nothing, verify everything" (zero-trust posture) and define boundaries as you observe actual traffic patterns.
+**If fail:** If the threat landscape feels overwhelming, start with the top 3 critical assets and the top 3 threat types. Perfect coverage is less important than coverage of what matters most. If perimeter boundaries are unclear, default to "trust nothing, verify everything" (zero-trust posture) and define boundaries as you observe actual traffic patterns.
 
 ### Step 2: Design the Alarm Signaling Network
 
@@ -109,9 +109,9 @@ Alarm Propagation:
 └──────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A graduated alarm system where threat severity determines response intensity. Multiple independent sentinel confirmations prevent single-point false alarms. Alarm fatigue is managed through deduplication and calibration.
+**Got:** A graduated alarm system where threat severity determines response intensity. Multiple independent sentinel confirmations prevent single-point false alarms. Alarm fatigue is managed through deduplication and calibration.
 
-**On failure:** If the alarm system produces too many false positives, raise sentinel thresholds or require more confirmations before escalation. If threats slip through undetected, add sentinels at the penetrated layer or lower detection thresholds. If alarm propagation is too slow, reduce the confirmation requirements — but accept higher false positive rate as the tradeoff.
+**If fail:** If the alarm system produces too many false positives, raise sentinel thresholds or require more confirmations before escalation. If threats slip through undetected, add sentinels at the penetrated layer or lower detection thresholds. If alarm propagation is too slow, reduce the confirmation requirements — but accept higher false positive rate as the tradeoff.
 
 ### Step 3: Mobilize Role-Based Defenders
 
@@ -137,9 +137,9 @@ Assign defense roles and mobilization protocols proportional to threat level.
    - Guards can become soldiers (sustained threat requires heavier response)
    - After threat passes, reverse transitions restore normal operations
 
-**Expected:** A defense force that scales with threat severity. Normal operations use minimal defense resources. Under threat, the colony can rapidly mobilize proportional defense without over-reacting or under-reacting.
+**Got:** A defense force that scales with threat severity. Normal operations use minimal defense resources. Under threat, the colony can rapidly mobilize proportional defense without over-reacting or under-reacting.
 
-**On failure:** If mobilization is too slow, pre-position guards closer to known threat vectors. If mobilization is too expensive, reduce the permanent guard force and rely more on worker-to-guard transitions. If role confusion occurs during mobilization, simplify to 3 roles (detect, respond, recover) instead of 5.
+**If fail:** If mobilization is too slow, pre-position guards closer to known threat vectors. If mobilization is too expensive, reduce the permanent guard force and rely more on worker-to-guard transitions. If role confusion occurs during mobilization, simplify to 3 roles (detect, respond, recover) instead of 5.
 
 ### Step 4: Execute Immune Memory and Adaptation
 
@@ -163,9 +163,9 @@ Learn from each threat encounter to improve future defense.
    - Red team exercises introduce novel threats to test adaptation
    - Measure detection time for known vs. unknown threats
 
-**Expected:** A defense system that gets stronger with each encounter. Known threats are detected faster and responded to more effectively. Novel threats are handled by the graduated alarm system, and their resolution adds to the immune memory.
+**Got:** A defense system that gets stronger with each encounter. Known threats are detected faster and responded to more effectively. Novel threats are handled by the graduated alarm system, and their resolution adds to the immune memory.
 
-**On failure:** If immune memory grows too large and slows detection, prioritize signatures by frequency and severity, archiving rare/minor threats. If the defense becomes too specialized against known threats and misses novel ones, maintain a "general patrol" function that doesn't rely on pattern matching — pure anomaly detection as the baseline.
+**If fail:** If immune memory grows too large and slows detection, prioritize signatures by frequency and severity, archiving rare/minor threats. If the defense becomes too specialized against known threats and misses novel ones, maintain a "general patrol" function that doesn't rely on pattern matching — pure anomaly detection as the baseline.
 
 ### Step 5: Coordinate Post-Incident Recovery
 
@@ -189,9 +189,9 @@ Transition from defense mode back to normal operations with damage repair and re
    - Stand down soldiers and return guards to patrol
    - Post-incident review within 24 hours while memory is fresh
 
-**Expected:** A smooth transition from defense to recovery to normal operations. Elevated monitoring during recovery catches secondary threats. The post-incident review feeds learnings into immune memory.
+**Got:** A smooth transition from defense to recovery to normal operations. Elevated monitoring during recovery catches secondary threats. The post-incident review feeds learnings into immune memory.
 
-**On failure:** If recovery is too slow, pre-build recovery playbooks for the most likely damage scenarios. If secondary threats emerge during recovery, the de-escalation was too aggressive — maintain higher alert levels for longer. If post-incident review is skipped (common under time pressure), schedule it as a non-negotiable calendar event.
+**If fail:** If recovery is too slow, pre-build recovery playbooks for the most likely damage scenarios. If secondary threats emerge during recovery, the de-escalation was too aggressive — maintain higher alert levels for longer. If post-incident review is skipped (common under time pressure), schedule it as a non-negotiable calendar event.
 
 ## Validation
 
@@ -204,7 +204,7 @@ Transition from defense mode back to normal operations with damage repair and re
 - [ ] Immune memory captures and applies lessons from each incident
 - [ ] Post-incident recovery protocol restores normal operations safely
 
-## Common Pitfalls
+## Pitfalls
 
 - **Maginot Line defense**: Over-investing in a single defense layer while leaving others unprotected. Defense must be layered — any single layer can be breached
 - **Alert fatigue**: Too many alarms with too few real threats degrades defender attention. Calibrate sentinels ruthlessly; a missed false positive is cheaper than a missed real threat

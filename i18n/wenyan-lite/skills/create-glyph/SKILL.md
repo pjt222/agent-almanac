@@ -24,40 +24,40 @@ metadata:
   tags: design, glyph, pictogram, icon, ggplot2, visualization, neon
 ---
 
-# Create Glyph
+# 造字符
 
-Create R-based pictogram glyphs for skill, agent, or team icons in the `viz/` visualization layer. Each glyph is a pure-ggplot2 function that draws a recognizable shape on a 100x100 canvas, rendered with a neon glow effect to transparent-background WebP.
+於 `viz/` 可視化層為技能、代理、團隊之圖示造 R 基礎之象形字符。各字符為純 ggplot2 函式，於 100x100 畫布上繪可辨之形，經霓虹發光效果渲為透明背景之 WebP。
 
-## When to Use
+## 適用時機
 
-- A new skill, agent, or team has been added and needs a visual icon
-- An existing glyph needs replacement or redesign
-- Batch-creating glyphs for a new domain of skills
-- Prototyping visual metaphors for entity concepts
+- 新技能、代理、團隊已加且需視覺圖示
+- 既字符需替或重設計
+- 為新技能領域批次造字符
+- 為實體概念原型化視覺隱喻
 
-## Inputs
+## 輸入
 
-- **Required**: Entity type — `skill`, `agent`, or `team`
-- **Required**: Entity ID (e.g., `create-glyph`, `mystic`, `r-package-review`) and domain (for skills)
-- **Required**: Visual concept — what the glyph should depict
-- **Optional**: Reference glyph to study for complexity level
-- **Optional**: Custom `--glow-sigma` value (default: 4)
+- **必要**：實體型——`skill`、`agent`、或 `team`
+- **必要**：實體 ID（如 `create-glyph`、`mystic`、`r-package-review`）及領域（技能需）
+- **必要**：視覺概念——字符當繪何
+- **選擇性**：參考字符以定複雜度
+- **選擇性**：自訂之 `--glow-sigma` 值（預設 4）
 
-## Procedure
+## 步驟
 
-### Step 1: Concept — Design the Visual Metaphor
+### 步驟一：概念——設計視覺隱喻
 
-Identify the entity being iconified and choose a visual metaphor.
+辨待圖示化之實體並擇視覺隱喻。
 
-1. Read the entity's source file to understand its core concept:
-   - Skills: `skills/<id>/SKILL.md`
-   - Agents: `agents/<id>.md`
-   - Teams: `teams/<id>.md`
-2. Choose a metaphor type:
-   - **Literal object**: a flask for experiments, a shield for security
-   - **Abstract symbol**: arrows for merging, spirals for iteration
-   - **Composite**: combine 2-3 simple shapes (e.g., document + pen)
-3. Reference existing glyphs for complexity calibration:
+1. 讀實體之源檔以明其核心概念：
+   - 技能：`skills/<id>/SKILL.md`
+   - 代理：`agents/<id>.md`
+   - 團隊：`teams/<id>.md`
+2. 擇隱喻型：
+   - **實物**：實驗之瓶、安全之盾
+   - **抽象符**：合併之箭、迭代之螺旋
+   - **組合**：合 2-3 簡形（如文件 + 筆）
+3. 參既字符以校準複雜度：
 
 ```
 Complexity Tiers:
@@ -70,17 +70,17 @@ Complexity Tiers:
 +----------+--------+-------------------------------------------+
 ```
 
-4. Decide on a function name: `glyph_<descriptive_name>` (snake_case, unique)
+4. 定函式名：`glyph_<descriptive_name>`（snake_case、唯一）
 
-**Expected:** A clear mental sketch of the shape with 2-6 planned layers.
+**預期：** 含 2-6 計畫層之明心中草圖。
 
-**On failure:** If the concept is too abstract, fall back to a related concrete object. Review existing glyphs in the same domain for inspiration.
+**失敗時：** 若概念過抽象，退回相關之具體物。察同領域既字符以得靈感。
 
-### Step 2: Compose — Write the Glyph Function
+### 步驟二：構成——寫字符函式
 
-Write the R function that produces ggplot2 layers.
+寫產 ggplot2 層之 R 函式。
 
-1. Function signature (immutable contract):
+1. 函式簽名（不變契約）：
    ```r
    glyph_<name> <- function(cx, cy, s, col, bright) {
      # cx, cy = center coordinates (50, 50 on 100x100 canvas)
@@ -91,7 +91,7 @@ Write the R function that produces ggplot2 layers.
    }
    ```
 
-2. Apply scale factor `* s` to ALL dimensions for consistent scaling:
+2. 施縮放因子 `* s` 於所有尺寸以便一致縮放：
    ```r
    r <- 20 * s        # radius
    hw <- 15 * s       # half-width
@@ -99,17 +99,17 @@ Write the R function that produces ggplot2 layers.
    lw_thin <- .lw(s, 1.2)  # thinner line width
    ```
 
-3. Build geometry using available primitives:
+3. 以可用之原語建幾何：
 
-   | Geometry | Usage |
+   | 幾何 | 用法 |
    |----------|-------|
-   | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | Filled shapes |
-   | `ggplot2::geom_path(data, .aes(x, y), ...)` | Open lines/curves |
-   | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | Line segments, arrows |
-   | `ggplot2::geom_rect(data, .aes(xmin, xmax, ymin, ymax), ...)` | Rectangles |
-   | `ggforce::geom_circle(data, .aes(x0, y0, r), ...)` | Circles |
+   | `ggplot2::geom_polygon(data, .aes(x, y), ...)` | 填色之形 |
+   | `ggplot2::geom_path(data, .aes(x, y), ...)` | 開之線/曲 |
+   | `ggplot2::geom_segment(data, .aes(x, xend, y, yend), ...)` | 線段、箭 |
+   | `ggplot2::geom_rect(data, .aes(xmin, xmax, ymin, ymax), ...)` | 矩形 |
+   | `ggforce::geom_circle(data, .aes(x0, y0, r), ...)` | 圓 |
 
-4. Apply the color strategy:
+4. 施色策略：
 
    ```
    Alpha Guide:
@@ -125,20 +125,20 @@ Write the R function that produces ggplot2 layers.
    +----------------------+------------+--------------------------+
    ```
 
-5. Return a flat `list()` of layers (the renderer iterates and wraps each with glow)
+5. 返平之 `list()` 層（渲染器迭之並各包以發光）
 
-6. Place the function in the appropriate primitives file based on entity type:
-   - **Skills**: domain-grouped across 19 primitives files:
-     - `primitives.R` — bushcraft, compliance, containerization, data-serialization, defensive
-     - `primitives_2.R` — devops, general, git, mcp-integration
-     - `primitives_3.R` — mlops, observability, PM, r-packages, reporting, review, web-dev, esoteric, design
-     - Additional `primitives_4.R` through `primitives_19.R` for newer domains
-   - **Agents**: `viz/R/agent_primitives.R`
-   - **Teams**: `viz/R/team_primitives.R`
+6. 按實體型置函式於當之原語檔：
+   - **技能**：按領域分於 19 原語檔：
+     - `primitives.R` —— bushcraft、compliance、containerization、data-serialization、defensive
+     - `primitives_2.R` —— devops、general、git、mcp-integration
+     - `primitives_3.R` —— mlops、observability、PM、r-packages、reporting、review、web-dev、esoteric、design
+     - `primitives_4.R` 至 `primitives_19.R` 為新領域
+   - **代理**：`viz/R/agent_primitives.R`
+   - **團隊**：`viz/R/team_primitives.R`
 
-**Expected:** A working R function that returns a list of 2-6 ggplot2 layers.
+**預期：** 一可行之 R 函式，返 2-6 ggplot2 層之清單。
 
-**On failure:** If `ggforce::geom_circle` causes errors, ensure ggforce is installed. If coordinates are off, remember the canvas is 100x100 with (0,0) at bottom-left. Test the function interactively:
+**失敗時：** 若 `ggforce::geom_circle` 致誤，確保已裝 ggforce。若座標誤，記畫布為 100x100 且 (0,0) 於左下。互動測之：
 ```r
 source("viz/R/utils.R"); source("viz/R/primitives.R")  # etc.
 layers <- glyph_<name>(50, 50, 1.0, "#ff88dd", "#ffa8f0")
@@ -148,46 +148,46 @@ for (l in layers) p <- p + l
 print(p)
 ```
 
-### Step 3: Register — Map Entity to Glyph
+### 步驟三：註冊——映實體於字符
 
-Add the entity-to-glyph mapping in the appropriate glyph mapping file.
+於當之字符映射檔加實體-字符映射。
 
-**For skills:**
-1. Open `viz/R/glyphs.R`
-2. Find the comment section for the target domain (e.g., `# -- design (3)`)
-3. Add the entry in alphabetical order within the domain block:
+**技能：**
+1. 開 `viz/R/glyphs.R`
+2. 尋目標領域之註釋段（如 `# -- design (3)`）
+3. 於領域塊內按字母序加項：
    ```r
    "skill-id" = "glyph_function_name",
    ```
-4. Update the domain count in the comment if applicable
+4. 若適用，更註釋中之領域計數
 
-**For agents:**
-1. Open `viz/R/agent_glyphs.R`
-2. Find the alphabetical position in `AGENT_GLYPHS`
-3. Add the entry:
+**代理：**
+1. 開 `viz/R/agent_glyphs.R`
+2. 尋 `AGENT_GLYPHS` 中之字母位
+3. 加項：
    ```r
    "agent-id" = "glyph_function_name",
    ```
 
-**For teams:**
-1. Open `viz/R/team_glyphs.R`
-2. Find the alphabetical position in `TEAM_GLYPHS`
-3. Add the entry:
+**團隊：**
+1. 開 `viz/R/team_glyphs.R`
+2. 尋 `TEAM_GLYPHS` 中之字母位
+3. 加項：
    ```r
    "team-id" = "glyph_function_name",
    ```
 
-5. Verify no duplicate ID exists in the target list
+5. 驗目標清單中無重 ID
 
-**Expected:** The appropriate `*_GLYPHS` list contains the new mapping.
+**預期：** 當之 `*_GLYPHS` 清單含新映射。
 
-**On failure:** If the build later reports "No glyph mapped", double-check that the entity ID exactly matches the one in the manifest and registry.
+**失敗時：** 若後建構報「No glyph mapped」，驗實體 ID 合清單與註冊中者。
 
-### Step 4: Manifest — Add Icon Entry
+### 步驟四：清單——加圖示項
 
-Register the icon in the appropriate manifest file.
+於當之清單檔註冊圖示。
 
-**For skills:** `viz/data/icon-manifest.json`
+**技能：** `viz/data/icon-manifest.json`
 ```json
 {
   "skillId": "skill-id",
@@ -199,7 +199,7 @@ Register the icon in the appropriate manifest file.
 }
 ```
 
-**For agents:** `viz/data/agent-icon-manifest.json`
+**代理：** `viz/data/agent-icon-manifest.json`
 ```json
 {
   "agentId": "agent-id",
@@ -210,7 +210,7 @@ Register the icon in the appropriate manifest file.
 }
 ```
 
-**For teams:** `viz/data/team-icon-manifest.json`
+**團隊：** `viz/data/team-icon-manifest.json`
 ```json
 {
   "teamId": "team-id",
@@ -221,13 +221,13 @@ Register the icon in the appropriate manifest file.
 }
 ```
 
-**Expected:** Valid JSON with the new entry placed among its type siblings.
+**預期：** 有效 JSON，新項置於其型之同輩間。
 
-**On failure:** Validate JSON syntax. Common mistakes: trailing comma after last array element, missing quotes.
+**失敗時：** 驗 JSON 語法。常見錯：末陣列元素後之尾逗、缺引號。
 
-### Step 5: Render — Generate the Icon
+### 步驟五：渲染——生圖示
 
-Run the icon pipeline to render the new glyph. Always use `build.sh` as the entry point — it handles platform detection and R binary selection. See [render-icon-pipeline](../render-icon-pipeline/SKILL.md) for the full flag reference and pipeline architecture.
+行圖示管線以渲新字符。恒以 `build.sh` 為入口——其處平台偵測與 R 二進制擇。全旗標參考與管線架構見 [render-icon-pipeline](../render-icon-pipeline/SKILL.md)。
 
 ```bash
 # From project root — renders all palettes, standard + HD, skips existing icons
@@ -239,80 +239,80 @@ bash viz/build.sh --type team --only <id> --skip-existing  # teams
 bash viz/build.sh --only <domain> --dry-run
 ```
 
-`build.sh` runs the full pipeline (palette → data → manifest → render → terminal glyphs). The non-render steps add ~10 seconds but ensure all data is current.
+`build.sh` 行全管線（palette → data → manifest → render → terminal glyphs）。非渲染步約加 10 秒，然確保所有資料為新。
 
-Output locations:
-   - Skills: `viz/public/icons/<palette>/<domain>/<skill-id>.webp`
-   - Agents: `viz/public/icons/<palette>/agents/<agent-id>.webp`
-   - Teams: `viz/public/icons/<palette>/teams/<team-id>.webp`
+輸出位：
+   - 技能：`viz/public/icons/<palette>/<domain>/<skill-id>.webp`
+   - 代理：`viz/public/icons/<palette>/agents/<agent-id>.webp`
+   - 團隊：`viz/public/icons/<palette>/teams/<team-id>.webp`
 
-**Expected:** The log shows `OK: <entity> (seed=XXXXX, XX.XKB)` and the WebP file exists.
+**預期：** 日誌顯 `OK: <entity> (seed=XXXXX, XX.XKB)` 且 WebP 檔存。
 
-**On failure:**
-- `"No glyph mapped"` — Step 3 mapping is missing or has a typo
-- `"Unknown domain"` — Domain not in `get_palette_colors()` in `palettes.R`
-- R package errors — Run `install.packages(c("ggplot2", "ggforce", "ggfx", "ragg", "magick"))` first
-- If rendering crashes, test the glyph function interactively (see Step 2 fallback)
+**失敗時：**
+- `"No glyph mapped"` —— 步驟三之映射缺或有拼錯
+- `"Unknown domain"` —— 領域未於 `palettes.R` 中之 `get_palette_colors()`
+- R 套件誤 —— 先行 `install.packages(c("ggplot2", "ggforce", "ggfx", "ragg", "magick"))`
+- 若渲染崩，互動測字符函式（見步驟二之回退）
 
-### Step 6: Verify — Visual Inspection
+### 步驟六：驗——視覺察
 
-Check the rendered output meets quality standards.
+察渲染輸出合品質標準。
 
-1. Verify file exists and has reasonable size:
+1. 驗檔存且大小合理：
    ```bash
    ls -la viz/public/icons/cyberpunk/<type-path>/<entity-id>.webp
    # Expected: 15-80 KB typical range
    ```
 
-2. Open the WebP in an image viewer to check:
-   - Shape reads clearly at full size (1024x1024)
-   - Neon glow is present but not overpowering
-   - Background is transparent (no black/white rectangle)
-   - No clipping at canvas edges
+2. 於圖像檢視器開 WebP 以察：
+   - 形於全尺（1024x1024）清晰可讀
+   - 霓虹光現而不過
+   - 背景透明（無黑/白矩形）
+   - 畫布邊無裁切
 
-3. Check at small sizes (the icon renders at ~40-160px in the force graph):
-   - Shape remains recognizable
-   - Detail doesn't turn to noise
-   - Glow doesn't overwhelm the shape
+3. 於小尺下察（圖示於力引圖以 ~40-160px 渲）：
+   - 形仍可辨
+   - 細節不轉為雜訊
+   - 光不壓形
 
-**Expected:** A clear, recognizable pictogram with even neon glow on transparent background.
+**預期：** 透明背景上有均勻霓虹光之明、可辨象形圖。
 
-**On failure:**
-- Glow too strong: re-render with `--glow-sigma 2` (default is 4)
-- Glow too weak: re-render with `--glow-sigma 8`
-- Shape unreadable at small sizes: simplify the glyph (fewer layers, bolder strokes, increase `.lw(s, base)` base value)
-- Clipping at edges: reduce shape dimensions or shift center
+**失敗時：**
+- 光過強：以 `--glow-sigma 2` 重渲（預設 4）
+- 光過弱：以 `--glow-sigma 8` 重渲
+- 形於小尺不可讀：簡化字符（少層、粗筆、增 `.lw(s, base)` 之 base 值）
+- 邊裁切：縮形尺寸或移中心
 
-### Step 7: Iterate — Refine if Needed
+### 步驟七：迭代——按需精修
 
-Make adjustments and re-render.
+調並重渲。
 
-1. Common adjustments:
-   - **Bolder strokes**: increase `.lw(s, base)` — try `base = 3.0` or `3.5`
-   - **More visible fill**: increase alpha from 0.10 to 0.15-0.20
-   - **Shape proportions**: adjust multipliers on `s` (e.g., `20 * s` -> `24 * s`)
-   - **Add/remove detail layers**: keep total layers between 2-6 for best results
+1. 常調：
+   - **粗筆**：增 `.lw(s, base)`——試 `base = 3.0` 或 `3.5`
+   - **更顯之填**：alpha 自 0.10 增至 0.15-0.20
+   - **形比**：調 `s` 之乘（如 `20 * s` -> `24 * s`）
+   - **加/除細節層**：層數守 2-6 為佳
 
-2. To re-render after changes:
+2. 改後重渲：
    ```bash
    # Delete the existing icon first, then re-render
    rm viz/public/icons/cyberpunk/<type-path>/<entity-id>.webp
    # Use the appropriate build command from Step 5
    ```
 
-3. When satisfied, verify the manifest status shows `"done"` (the build script updates it automatically on success)
+3. 滿意時驗清單狀態顯 `"done"`（建構腳本於成功時自動更之）
 
-**Expected:** The final icon passes all verification checks from Step 6.
+**預期：** 終圖示通過步驟六之所有驗證。
 
-**On failure:** If after 3+ iterations the glyph still doesn't read well, consider using a completely different visual metaphor (return to Step 1).
+**失敗時：** 若 3+ 迭代後字符仍不清，考慮全異之視覺隱喻（返步驟一）。
 
-## Reference
+## 參考
 
-### Domain and Entity Color Palettes
+### 領域與實體色板
 
-All 58 domain colors (for skills) are defined in `viz/R/palettes.R` (the single source of truth). Agent and team colors are also managed in `palettes.R`. The cyberpunk palette (hand-tuned neon colors) is in `get_cyberpunk_colors()`. Viridis-family palettes are auto-generated via `viridisLite`.
+所有 58 領域色（技能用）於 `viz/R/palettes.R` 定義（單一真源）。代理與團隊之色亦於 `palettes.R` 管。cyberpunk 色板（手調霓虹色）於 `get_cyberpunk_colors()`。viridis 系色板自 `viridisLite` 生。
 
-To look up a color:
+查色：
 ```r
 source("viz/R/palettes.R")
 get_palette_colors("cyberpunk")$domains[["design"]]   # skill domain
@@ -320,59 +320,59 @@ get_palette_colors("cyberpunk")$agents[["mystic"]]     # agent
 get_palette_colors("cyberpunk")$teams[["tending"]]     # team
 ```
 
-When adding a new domain, add it to three places in `palettes.R`:
-1. `PALETTE_DOMAIN_ORDER` (alphabetical)
-2. `get_cyberpunk_colors()` domains list
-3. Run `bash viz/build.sh` to regenerate palettes, data, and manifests
+加新領域時，於 `palettes.R` 三處加之：
+1. `PALETTE_DOMAIN_ORDER`（字母序）
+2. `get_cyberpunk_colors()` 之 domains 清單
+3. 行 `bash viz/build.sh` 重生色板、資料、清單
 
-### Glyph Function Catalog
+### 字符函式目錄
 
-See the full catalog of available glyph functions in the primitives source files:
-- **Skills**: `viz/R/primitives.R` through `viz/R/primitives_19.R` (domain-grouped)
-- **Agents**: `viz/R/agent_primitives.R`
-- **Teams**: `viz/R/team_primitives.R`
+全可用字符函式見原語源檔：
+- **技能**：`viz/R/primitives.R` 至 `viz/R/primitives_19.R`（按領域組）
+- **代理**：`viz/R/agent_primitives.R`
+- **團隊**：`viz/R/team_primitives.R`
 
-### Helper Functions
+### 輔助函式
 
-| Function | Signature | Purpose |
+| 函式 | 簽名 | 目的 |
 |----------|-----------|---------|
-| `.lw(s, base)` | `(scale, base=2.5)` | Scale-aware line width |
-| `.aes(...)` | alias for `ggplot2::aes` | Shorthand aesthetic mapping |
-| `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | Add alpha to hex color |
-| `brighten_hex(hex, factor)` | `(string, factor=1.3)` | Brighten a hex color |
-| `dim_hex(hex, factor)` | `(string, factor=0.4)` | Dim a hex color |
+| `.lw(s, base)` | `(scale, base=2.5)` | 感知縮放之線寬 |
+| `.aes(...)` | `ggplot2::aes` 之別名 | 美學映射之簡式 |
+| `hex_with_alpha(hex, alpha)` | `(string, 0-1)` | 於十六進制色加 alpha |
+| `brighten_hex(hex, factor)` | `(string, factor=1.3)` | 亮化十六進制色 |
+| `dim_hex(hex, factor)` | `(string, factor=0.4)` | 暗化十六進制色 |
 
-## Validation Checklist
+## 驗證清單
 
-- [ ] Glyph function follows `glyph_<name>(cx, cy, s, col, bright) -> list()` signature
-- [ ] All dimensions use `* s` scaling factor
-- [ ] Color strategy uses `col` for fills, `bright` for outlines, `hex_with_alpha()` for transparency
-- [ ] Function placed in correct primitives file for entity type and domain
-- [ ] Glyph mapping entry added in the appropriate `*_glyphs.R` file
-- [ ] Manifest entry added with correct entity ID, path, and `"status": "pending"`
-- [ ] Build command runs without error (dry-run first)
-- [ ] Rendered WebP exists at the expected path
-- [ ] File size in expected range (15-80 KB)
-- [ ] Icon reads clearly at both 1024px and ~40px display sizes
-- [ ] Transparent background (no solid rectangle behind the glyph)
-- [ ] Manifest status updated to `"done"` after successful render
+- [ ] 字符函式循 `glyph_<name>(cx, cy, s, col, bright) -> list()` 簽名
+- [ ] 所有尺寸用 `* s` 縮放因子
+- [ ] 色策略以 `col` 為填、`bright` 為描邊、`hex_with_alpha()` 為透明
+- [ ] 函式置於合實體型與領域之正確原語檔
+- [ ] 字符映射項加於當之 `*_glyphs.R` 檔
+- [ ] 清單項加於正確之實體 ID、路徑、`"status": "pending"`
+- [ ] 建構命令無誤（先 dry-run）
+- [ ] 渲染之 WebP 存於期望路
+- [ ] 檔大小於期望區間（15-80 KB）
+- [ ] 圖示於 1024px 與 ~40px 顯示尺下皆清晰可讀
+- [ ] 透明背景（字符後無實心矩形）
+- [ ] 成功渲染後清單狀態更為 `"done"`
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Forgetting `* s`**: Hard-coded pixel values break when scale changes. Always multiply by `s`.
-- **Canvas origin confusion**: (0,0) is bottom-left, not top-left. Higher `y` values move UP.
-- **Double glow**: The renderer already applies `ggfx::with_outer_glow()` to every layer. Do NOT add glow inside the glyph function.
-- **Too many layers**: Each layer gets individual glow wrapping. More than 8 layers makes rendering slow and visually noisy.
-- **Mismatched IDs**: The entity ID in the glyph mapping, manifest, and registry must all match exactly.
-- **JSON trailing commas**: The manifest is strict JSON. No trailing comma after the last array element.
-- **Missing domain color**: If the domain isn't in `get_cyberpunk_colors()` in `palettes.R`, rendering will error. Add the color first, then regenerate.
-- **Wrong primitives file**: Skills go in domain-grouped `primitives*.R`, agents in `agent_primitives.R`, teams in `team_primitives.R`.
+- **忘 `* s`**：硬編像素值於縮放改時崩。恒乘以 `s`
+- **畫布原點之惑**：(0,0) 於左下，非左上。較高 `y` 值上移
+- **雙重光**：渲染器已對各層施 `ggfx::with_outer_glow()`。**勿**於字符函式內加光
+- **層過多**：各層單獨包光。過 8 層令渲染緩而視雜
+- **ID 不合**：字符映射、清單、註冊中之實體 ID 須完全相合
+- **JSON 尾逗**：清單為嚴 JSON。末陣列元素後無尾逗
+- **領域色缺**：若領域不於 `palettes.R` 之 `get_cyberpunk_colors()`，渲染將誤。先加色，再重生
+- **原語檔誤**：技能於按領域之 `primitives*.R`，代理於 `agent_primitives.R`，團隊於 `team_primitives.R`
 
-## Related Skills
+## 相關技能
 
-- [enhance-glyph](../enhance-glyph/SKILL.md) — improve an existing glyph's visual quality, fix rendering issues, or add detail layers
-- [audit-icon-pipeline](../audit-icon-pipeline/SKILL.md) — detect missing glyphs and icons to know what needs creating
-- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) — run the full rendering pipeline end-to-end
-- [ornament-style-mono](../ornament-style-mono/SKILL.md) — complementary AI-based image generation (Z-Image vs R-coded glyphs)
-- [ornament-style-color](../ornament-style-color/SKILL.md) — color theory applicable to glyph accent fill decisions
-- [create-skill](../create-skill/SKILL.md) — the parent workflow that triggers glyph creation when adding new skills
+- [enhance-glyph](../enhance-glyph/SKILL.md) —— 改既字符之視覺品質、修渲染問題、加細節層
+- [audit-icon-pipeline](../audit-icon-pipeline/SKILL.md) —— 偵缺之字符與圖示以知待造者
+- [render-icon-pipeline](../render-icon-pipeline/SKILL.md) —— 行全渲染管線
+- [ornament-style-mono](../ornament-style-mono/SKILL.md) —— 互補之 AI 基礎影像生成（Z-Image 對 R 編字符）
+- [ornament-style-color](../ornament-style-color/SKILL.md) —— 字符強調填決之色彩理論
+- [create-skill](../create-skill/SKILL.md) —— 新技能加時觸字符造之父工作流

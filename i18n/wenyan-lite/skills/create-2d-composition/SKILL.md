@@ -23,35 +23,35 @@ metadata:
   tags: svg, 2d, graphics, composition, diagrams, scripting, batch-processing
 ---
 
-# Create 2D Composition
+# 造二維構圖
 
-Generate 2D graphics programmatically using SVG construction, diagram layout algorithms, image compositing, and batch processing workflows. Covers vector graphics generation, raster image manipulation, typography, and automated production of charts, diagrams, and infographics.
+以程式生二維圖形：SVG 構建、圖表佈局演算法、影像合成、批次處理流。涵向量圖形生成、點陣圖像處理、字體排印，與圖表、示意圖、資訊圖之自動化產出。
 
-## When to Use
+## 適用時機
 
-- Generating diagrams, flowcharts, or infographics programmatically
-- Creating reproducible scientific figures or publication graphics
-- Automating production of badges, icons, or visual assets
-- Compositing multiple images or data visualizations
-- Building custom chart types not available in standard libraries
-- Batch generating graphics with parameter variations
-- Creating SVG templates for web or print applications
+- 以程式生示意圖、流程圖、資訊圖
+- 造可重現之科學圖或出版圖
+- 自動化產出徽章、圖示、視覺資產
+- 合成多圖像或資料可視化
+- 建標準庫所無之自訂圖表型
+- 以參數變動批次生圖
+- 為網頁或印刷造 SVG 範本
 
-## Inputs
+## 輸入
 
-| Input | Type | Description | Example |
+| 輸入 | 類型 | 描述 | 範例 |
 |-------|------|-------------|---------|
-| Layout specification | Configuration | Dimensions, margins, grid layout | Canvas 800x600px, 20px margins |
-| Visual elements | Data/Assets | Shapes, text, images, data points | Rectangle coordinates, labels, icons |
-| Style parameters | CSS/Attributes | Colors, fonts, stroke widths, opacity | `fill="#3366cc"`, `stroke-width="2"` |
-| Data sources | Files/Arrays | Values to visualize or annotate | CSV data, JSON configuration |
-| Output format | String | SVG, PNG, PDF, composite formats | `output.svg`, 300 DPI PNG |
+| 佈局規格 | 配置 | 尺寸、邊距、網格佈局 | 畫布 800x600px、20px 邊距 |
+| 視覺元素 | 資料/資產 | 形狀、文字、圖像、資料點 | 矩形座標、標籤、圖示 |
+| 樣式參數 | CSS/屬性 | 色、字體、筆劃寬、透明度 | `fill="#3366cc"`、`stroke-width="2"` |
+| 資料源 | 檔案/陣列 | 待可視化或標註之值 | CSV 資料、JSON 配置 |
+| 輸出格式 | 字串 | SVG、PNG、PDF、合成格式 | `output.svg`、300 DPI PNG |
 
-## Procedure
+## 步驟
 
-### 1. Set Up Python Environment
+### 1. 立 Python 環境
 
-Install required libraries for 2D composition:
+裝二維構圖所需之庫：
 
 ```bash
 # Core libraries
@@ -64,12 +64,12 @@ pip install drawsvg reportlab pycairo
 pip install matplotlib numpy pandas
 ```
 
-**Expected:** Libraries installed successfully
-**On failure:** Check Python version (3.7+), use virtual environment to avoid conflicts
+**預期：** 庫裝成
+**失敗時：** 察 Python 版本（3.7+），用虛擬環境以避衝突
 
-### 2. Create Basic SVG Graphics
+### 2. 造基本 SVG 圖形
 
-Generate SVG using svgwrite:
+以 svgwrite 生 SVG：
 
 ```python
 import svgwrite
@@ -120,12 +120,12 @@ def create_basic_svg(output_path):
     print(f"Saved: {output_path}")
 ```
 
-**Expected:** SVG file generated with shapes and text
-**On failure:** Check svgwrite version, verify output directory writable
+**預期：** SVG 檔已生，含形狀與文字
+**失敗時：** 察 svgwrite 版本，驗輸出目錄可寫
 
-### 3. Build Diagrams with Layout Logic
+### 3. 以佈局邏輯建示意圖
 
-Create structured diagrams with calculated positioning:
+以算出之位造結構化示意圖：
 
 ```python
 def create_flowchart(steps, output_path):
@@ -213,12 +213,12 @@ def wrap_text(text, max_width=20):
     return lines
 ```
 
-**Expected:** Flowchart with connected boxes and arrows
-**On failure:** Adjust layout calculations, verify arrow marker definitions
+**預期：** 流程圖已生，含相連之方塊與箭頭
+**失敗時：** 調佈局計算，驗箭頭標記之定義
 
-### 4. Composite Raster Images
+### 4. 合成點陣圖像
 
-Combine multiple images using Pillow:
+以 Pillow 合多圖：
 
 ```python
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -306,12 +306,12 @@ def add_annotations(image_path, annotations, output_path):
     img.save(output_path)
 ```
 
-**Expected:** Composite image created with proper layout
-**On failure:** Check all input images exist, verify image modes compatible
+**預期：** 合成圖已生，佈局得宜
+**失敗時：** 察輸入圖皆在、驗圖像模式相容
 
-### 5. Generate Data-Driven Graphics
+### 5. 生資料驅動之圖形
 
-Create visualizations from data:
+自資料造可視化：
 
 ```python
 import numpy as np
@@ -384,12 +384,12 @@ def create_bar_chart_svg(data, labels, output_path):
     dwg.save()
 ```
 
-**Expected:** SVG bar chart with scaled data
-**On failure:** Handle edge cases (empty data, negative values), add validation
+**預期：** SVG 長條圖已生，資料已縮放
+**失敗時：** 處邊界案（空資料、負值），加驗證
 
-### 6. Batch Generate Graphics
+### 6. 批次生圖
 
-Automate creation of multiple graphics:
+自動化多圖之造：
 
 ```python
 def batch_generate_badges(users, template_path, output_dir):
@@ -433,12 +433,12 @@ def batch_generate_badges(users, template_path, output_dir):
         print(f"Generated badge: {output_path}")
 ```
 
-**Expected:** Individual graphic generated for each data item
-**On failure:** Check data structure, handle missing fields with defaults
+**預期：** 各資料項皆生獨立圖形
+**失敗時：** 察資料結構，缺欄以預設值處之
 
-### 7. Convert SVG to Raster
+### 7. SVG 轉點陣
 
-Export SVG to PNG/PDF for various uses:
+匯 SVG 為 PNG/PDF 以供多用：
 
 ```python
 import cairosvg
@@ -467,37 +467,37 @@ def svg_to_pdf(svg_path, pdf_path):
     print(f"Converted to PDF: {pdf_path}")
 ```
 
-**Expected:** Raster output generated at specified resolution
-**On failure:** Install cairo system library if missing, check SVG validity
+**預期：** 點陣輸出已生於指定解析度
+**失敗時：** 若缺則裝 cairo 系統庫，察 SVG 之有效性
 
-## Validation Checklist
+## 驗證清單
 
-- [ ] Graphics render correctly in target applications
-- [ ] Text is readable and properly positioned
-- [ ] Colors match specifications (check hex codes)
-- [ ] Dimensions appropriate for use case
-- [ ] SVG validates against standard (if required)
-- [ ] Raster exports have correct DPI
-- [ ] Layout adapts to data variations
-- [ ] Batch processing completes without errors
-- [ ] Output files organized logically
-- [ ] Code includes error handling
+- [ ] 圖形於目標應用中渲染無誤
+- [ ] 文字可讀且位置得宜
+- [ ] 色合規格（察十六進制碼）
+- [ ] 尺寸合用例
+- [ ] SVG 合標準（若需）
+- [ ] 點陣匯出 DPI 正確
+- [ ] 佈局適應資料變動
+- [ ] 批次處理完而無誤
+- [ ] 輸出檔分組得宜
+- [ ] 程式含誤處理
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
-2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
-3. **Font availability**: System fonts may differ, embed or use web-safe fonts
-4. **Coordinate calculations**: Off-by-one errors in grid layouts
-5. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
-6. **SVG validity**: Check XML structure, close all tags
-7. **File paths**: Handle special characters, spaces in filenames
-8. **Memory usage**: Large batch operations may require chunking
-9. **Aspect ratio**: Maintain proportions when resizing images
-10. **Transparency**: PNG supports alpha, JPEG does not
+1. **單位之惑**：SVG 單位（px、mm、cm）與螢幕像素、印刷 DPI 之別
+2. **文字溢**：文字超形狀邊界；宜施換行
+3. **字體可得**：系統字體或異，宜內嵌或用網安之字體
+4. **座標計**：網格佈局中之差一錯
+5. **色格式**：SVG 用十六進制字串（`#rrggbb`），非元組
+6. **SVG 有效性**：察 XML 結構，閉所有標籤
+7. **檔路**：處特殊字元與檔名中之空
+8. **記憶體用**：大批次操作或需分塊
+9. **比例**：改尺寸時保比
+10. **透明**：PNG 支援 alpha，JPEG 則否
 
-## Related Skills
+## 相關技能
 
-- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication-specific output requirements
-- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into reports
+- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**：出版專屬之輸出需求
+- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**：三維之類似程式化法
+- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**：整合圖形於報告中

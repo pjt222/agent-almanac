@@ -25,13 +25,13 @@ metadata:
 
 # Create Quarto Report
 
-Set up and write a reproducible Quarto document for analysis reports, presentations, or websites.
+Set up and write reproducible Quarto document for analysis reports, presentations, websites.
 
-## When to Use
+## When Use
 
-- Creating a reproducible analysis report
-- Building a presentation with embedded code
-- Generating HTML, PDF, or Word documents from code
+- Making reproducible analysis report
+- Building presentation with embedded code
+- Generating HTML, PDF, Word documents from code
 - Migrating from R Markdown to Quarto
 
 ## Inputs
@@ -41,7 +41,7 @@ Set up and write a reproducible Quarto document for analysis reports, presentati
 - **Optional**: Data sources and analysis code
 - **Optional**: Citation bibliography (.bib file)
 
-## Procedure
+## Steps
 
 ### Step 1: Create Quarto Document
 
@@ -67,9 +67,9 @@ bibliography: references.bib
 ---
 ```
 
-**Expected:** File `report.qmd` exists with valid YAML frontmatter including title, author, date, format configuration, and execution options.
+**Got:** File `report.qmd` exists with valid YAML frontmatter: title, author, date, format config, execution options.
 
-**On failure:** Validate the YAML header by checking for matching `---` delimiters and correct indentation. Ensure `format:` key matches one of the supported Quarto output formats (`html`, `pdf`, `docx`, `revealjs`).
+**If fail:** Validate YAML header. Check matching `---` delimiters and right indentation. Confirm `format:` key matches supported Quarto output formats (`html`, `pdf`, `docx`, `revealjs`).
 
 ### Step 2: Write Content with Code Chunks
 
@@ -124,9 +124,9 @@ data |>
 See @tbl-summary for descriptive statistics.
 ````
 
-**Expected:** Content sections contain properly formatted code chunks with `{r}` language identifier and `#|` chunk options for labels, captions, and dimensions.
+**Got:** Content sections have properly formatted code chunks with `{r}` language identifier and `#|` chunk options for labels, captions, dimensions.
 
-**On failure:** Verify code chunks use the ```` ```{r} ```` syntax (not inline backticks), that `#|` options are inside the chunk (not in the YAML header), and that label prefixes match cross-reference types (`fig-` for figures, `tbl-` for tables).
+**If fail:** Verify code chunks use ```` ```{r} ```` syntax (not inline backticks). Confirm `#|` options inside chunk (not in YAML header). Label prefixes match cross-reference types (`fig-` for figures, `tbl-` for tables).
 
 ### Step 3: Configure Chunk Options
 
@@ -144,9 +144,9 @@ Common chunk-level options (use `#|` syntax):
 #| cache: true               # Cache expensive computations
 ```
 
-**Expected:** Chunk options are applied at the chunk level using `#|` syntax, and labels follow naming conventions required for cross-referencing.
+**Got:** Chunk options applied at chunk level using `#|` syntax. Labels follow naming rules for cross-referencing.
 
-**On failure:** Ensure chunk options use `#|` syntax (Quarto-native), not the legacy `{r, option=value}` R Markdown syntax. Verify that label names contain only alphanumeric characters and hyphens.
+**If fail:** Ensure chunk options use `#|` syntax (Quarto-native), not legacy `{r, option=value}` R Markdown syntax. Verify label names have only alphanumeric characters and hyphens.
 
 ### Step 4: Add Cross-References and Citations
 
@@ -163,9 +163,9 @@ Combined figure caption
 :::
 ```
 
-**Expected:** Cross-references (`@fig-name`, `@tbl-name`) resolve to the correct figures and tables, and citations (`@key`) match entries in the `.bib` file.
+**Got:** Cross-references (`@fig-name`, `@tbl-name`) resolve to right figures and tables. Citations (`@key`) match entries in `.bib` file.
 
-**On failure:** Verify that referenced labels exist in code chunks with the correct prefix (`fig-`, `tbl-`). For citations, check that `.bib` keys match exactly (case-sensitive) and that `bibliography:` is set in the YAML header.
+**If fail:** Verify referenced labels exist in code chunks with right prefix (`fig-`, `tbl-`). For citations, check `.bib` keys match exactly (case-sensitive) and `bibliography:` is set in YAML header.
 
 ### Step 5: Render the Document
 
@@ -180,12 +180,12 @@ quarto render report.qmd --to docx
 quarto preview report.qmd
 ```
 
-**Expected:** Output file generated in the specified format.
+**Got:** Output file made in right format.
 
-**On failure:**
+**If fail:**
 - Missing quarto: Install from https://quarto.org/docs/get-started/
 - PDF errors: Install TinyTeX with `quarto install tinytex`
-- R package errors: Ensure all packages are installed
+- R package errors: Confirm all packages installed
 
 ### Step 6: Multi-Format Output
 
@@ -203,26 +203,26 @@ format:
 
 Render all formats: `quarto render report.qmd`
 
-**Expected:** All specified output formats generate successfully, each with correct styling and layout for the target format.
+**Got:** All specified output formats generate fine. Each has right styling and layout for target format.
 
-**On failure:** If one format fails while others succeed, check format-specific requirements: PDF needs a LaTeX engine (install with `quarto install tinytex`), DOCX needs a valid reference template if specified, and format-specific YAML options must be correctly nested under each format key.
+**If fail:** One format fails, others succeed? Check format-specific requirements: PDF needs LaTeX engine (install with `quarto install tinytex`), DOCX needs valid reference template if specified, format-specific YAML options must nest under each format key.
 
-## Validation
+## Checks
 
 - [ ] Document renders without errors
-- [ ] All code chunks execute correctly
+- [ ] All code chunks execute fine
 - [ ] Cross-references resolve (figures, tables, citations)
-- [ ] Table of contents is accurate
-- [ ] Output format is appropriate for the audience
+- [ ] Table of contents accurate
+- [ ] Output format fits audience
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing label prefix**: Cross-referenceable figures need `fig-` prefix in label, tables need `tbl-`
 - **Cache invalidation**: Cached chunks won't re-run when upstream data changes. Delete `_cache/` to force.
 - **PDF without LaTeX**: Install TinyTeX or use `format: pdf` with `pdf-engine: weasyprint` for CSS-based PDF
 - **R Markdown syntax in Quarto**: Use `#|` chunk options instead of `{r, echo=FALSE}` style
 
-## Related Skills
+## See Also
 
 - `format-apa-report` - APA-formatted academic reports
 - `build-parameterized-report` - parameterized multi-report generation

@@ -25,68 +25,68 @@ metadata:
   tags: swarm, coordination, stigmergy, emergent-behavior
 ---
 
-# Coordinate Swarm
+# 協群
 
-Establish coordination across distributed agents using stigmergy (indirect communication through environment modification), local interaction rules, and quorum sensing — enabling coherent collective behavior without a central controller.
+以遺跡之通（改環境而間接通）、局部之規、法定人數之察，立諸散處之群之協，無中央之司而生諧調之集體行。
 
-## When to Use
+## 用時
 
-- Designing distributed systems where no single node should be a coordination bottleneck
-- Organizing teams or workflows that must self-coordinate without constant management oversight
-- Building event-driven architectures where components communicate through shared state rather than direct messaging
-- Scaling a process that works well with 3 agents but breaks down at 30
-- Bootstrapping coordination patterns for a new swarm-style domain (see `forage-resources`, `build-consensus`)
-- Replacing fragile centralized orchestration with resilient emergent coordination
+- 設散處之系，無一節宜為協之瓶頸
+- 團隊或流程宜自協，不賴監管常督
+- 建事件驅動之構，構件以共享狀態通而不直傳
+- 三人之法推至三十人則潰
+- 群式新域之協初建（參 `forage-resources`、`build-consensus`）
+- 以韌之湧現協代脆弱之中央調度
 
-## Inputs
+## 入
 
-- **Required**: Description of the agents (workers, services, team members) that need coordination
-- **Required**: The collective goal or desired emergent behavior
-- **Optional**: Current coordination mechanism and its failure modes
-- **Optional**: Number of agents (affects pattern selection — small swarms vs. large colonies)
-- **Optional**: Latency tolerance (real-time vs. eventual coordination)
-- **Optional**: Environmental constraints (shared state availability, communication bandwidth)
+- **必要**：需協之諸行者（工、服、人）之述
+- **必要**：集體之志或所欲湧現之行
+- **可選**：當前協法及其敗模
+- **可選**：行者之數（影響法之選——小群與大巢異）
+- **可選**：延遲之容（即時與終究之別）
+- **可選**：環境之限（共享狀態之可得、通信之寬）
 
-## Procedure
+## 法
 
-### Step 1: Identify the Coordination Problem Class
+### 第一步：定協題之類
 
-Classify the coordination challenge to select appropriate patterns.
+別協之難以選合宜之法。
 
-1. Map the current state: who are the agents, what do they do individually, where does coordination break down?
-2. Classify the problem:
-   - **Foraging** — agents search for and exploit distributed resources (see `forage-resources`)
-   - **Consensus** — agents must agree on a collective decision (see `build-consensus`)
-   - **Construction** — agents build or maintain a shared structure incrementally
-   - **Defense** — agents detect and respond to threats collectively (see `defend-colony`)
-   - **Division of labor** — agents must self-organize into specialized roles
-3. Identify the failure mode of current coordination:
-   - Single point of failure (centralized controller)
-   - Communication bottleneck (too many direct messages)
-   - Coherence loss (agents drift apart without feedback)
-   - Rigidity (cannot adapt to changing conditions)
+1. 圖當前之狀：行者何人、各為何事、協於何處潰
+2. 別題：
+   - **覓食** — 行者尋散處之資而用之（參 `forage-resources`）
+   - **共識** — 行者宜合於集體之決（參 `build-consensus`）
+   - **建構** — 行者逐步建或守共享之構
+   - **禦** — 行者集體察而應之（參 `defend-colony`）
+   - **分工** — 行者宜自組為專角
+3. 識當前協之敗模：
+   - 單點之敗（中央之司）
+   - 通之瓶頸（直傳過繁）
+   - 諧之失（行者無饋而相離）
+   - 僵（不能應變）
 
-**Expected:** A clear classification of the coordination problem type and the specific failure mode to address. This determines which swarm patterns to apply.
+**得：** 協題之別明，所處敗模清。此定所施群法。
 
-**On failure:** If the problem doesn't fit a single class, it may be a composite. Decompose into sub-problems and address each with the appropriate pattern. If agents are too heterogeneous for a single coordination model, consider layered coordination — homogeneous clusters coordinated via inter-cluster stigmergy.
+**敗則：** 若題不歸一類，或為合成。分為子題，各以合宜之法應。若行者異質過甚，一法難行，宜層協——同質之簇內協，簇間以遺跡協。
 
-### Step 2: Design Stigmergic Signals
+### 第二步：設遺跡之訊
 
-Create the indirect communication channels through which agents influence each other's behavior.
+建間接之通道，行者以之相影響。
 
-1. Define the shared environment (database, message queue, file system, physical space, shared board)
-2. Design signals that agents deposit into the environment:
-   - **Trail signals**: markers that accumulate along successful paths (like ant pheromones)
-   - **Threshold signals**: counters that trigger behavior changes when they cross thresholds
-   - **Inhibition signals**: markers that repel agents from exhausted areas
-3. Define signal properties:
-   - **Decay rate**: how quickly signals fade (prevents stale state from dominating)
-   - **Reinforcement**: how successful outcomes strengthen signals
-   - **Visibility radius**: how far a signal propagates
-4. Map signals to agent behaviors:
-   - When an agent detects signal X above threshold T, it performs action A
-   - When an agent completes action A successfully, it deposits signal Y
-   - When no signal is detected, the agent follows its default exploration behavior
+1. 定共享之環境（庫、隊列、文件系、物理空間、共板）
+2. 設行者置於環境之訊：
+   - **徑訊**：成功之徑所積之標（如蟻之費洛蒙）
+   - **閾訊**：計數過閾則觸行變
+   - **抑訊**：斥行者離已竭之域之標
+3. 定訊之性：
+   - **衰率**：訊褪之速（防陳狀獨霸）
+   - **增**：成之果強訊
+   - **視半徑**：訊播之遠
+4. 訊映行者之行：
+   - 行者察訊 X 過閾 T，則行 A
+   - 行者成 A，則置訊 Y
+   - 無訊可察，行者依默之探行
 
 ```
 Signal Design Template:
@@ -100,99 +100,99 @@ Signal Design Template:
 └──────────────┴───────────────────┴──────────────┴────────────────────┘
 ```
 
-**Expected:** A signal table mapping environmental markers to agent deposit conditions, decay rates, and response behaviors. Signals should be simple, composable, and independently meaningful.
+**得：** 訊表映環境之標至行者置之條件、衰率、應之行。訊宜簡、可組、各有獨立之義。
 
-**On failure:** If signal design feels overly complex, reduce to two signals: one positive (success trail) and one negative (danger flag). Most coordination problems can be bootstrapped with attract/repel dynamics. Add nuance only after the basic system is functioning.
+**敗則：** 訊設過繁，減至二：正（成徑）與負（險旗）。多協題以引斥之動可初建。證之必要後再增微妙。
 
-### Step 3: Define Local Interaction Rules
+### 第三步：定局部交互之規
 
-Specify the simple rules each agent follows, using only local information (their own state + nearby signals).
+每一行者所循之簡規，唯用局部之訊（己之狀加近之訊）。
 
-1. Define the agent's perception radius (what can it sense?)
-2. Write 3-7 local rules in priority order:
-   - Rule 1 (safety): If danger-flag detected, move away
-   - Rule 2 (response): If help-signal detected and idle, move toward
-   - Rule 3 (exploitation): If success-trail detected, follow toward strongest signal
-   - Rule 4 (exploration): If no signals detected, move randomly with bias toward unexplored areas
-   - Rule 5 (deposit): After completing task, deposit success-trail at location
-3. Each rule must be:
-   - **Local**: depends only on what the individual agent can perceive
-   - **Simple**: expressible in one if-then statement
-   - **Stateless** (preferred): does not require the agent to remember past states
-4. Test rules mentally: if every agent follows these rules, does the desired collective behavior emerge?
+1. 定行者察之半徑（能感何物？）
+2. 書三至七局部規，按優先列：
+   - 規一（安）：察險旗則避
+   - 規二（應）：察助訊且閒則近
+   - 規三（用）：察成徑則循最強之訊
+   - 規四（探）：無訊可察則隨動，偏於未探之域
+   - 規五（置）：成任務則置成徑於所在
+3. 每規宜：
+   - **局部**：唯依行者所能直接察者
+   - **簡**：一「若—則」可表
+   - **無狀**（宜）：不賴行者記過去之狀
+4. 心試諸規：若眾行者皆循此規，所欲之集體行湧現乎？
 
-**Expected:** A prioritized rule set that each agent executes independently. When applied across the swarm, these local rules produce the target collective behavior (foraging, construction, defense, etc.).
+**得：** 按優先之規集，每行者獨立執之。施於群，局部之規生所欲之集體行（覓食、建構、禦等）。
 
-**On failure:** If mental simulation doesn't produce the desired emergent behavior, the rules likely need a feedback loop — agents must be able to observe the consequences of their collective actions. Add a signal that represents the collective state (e.g., "task completion rate") and a rule that adjusts behavior based on it.
+**敗則：** 若心模不生所欲湧現，規當缺反饋環——行者宜能察集體行之果。增一訊表集體之狀（如「任務成率」），增一規依之調行。
 
-### Step 4: Calibrate Quorum Sensing
+### 第四步：校法定人數之察
 
-Set thresholds that trigger collective state changes when enough agents agree.
+設閾以觸集體狀變，於足數行者合時。
 
-1. Identify decisions that require collective agreement (not just individual response):
-   - Switching from exploration to exploitation mode
-   - Committing to a new work site or abandoning an old one
-   - Escalating from normal to emergency response
-2. For each collective decision, define:
-   - **Quorum threshold**: number or percentage of agents that must signal agreement
-   - **Sensing window**: time period over which signals are counted
-   - **Hysteresis**: different thresholds for activation vs. deactivation (prevents oscillation)
-3. Implement quorum as signal accumulation:
-   - Each agent that favors the decision deposits a vote-signal
-   - When accumulated votes exceed the quorum threshold within the sensing window, the decision activates
-   - When votes drop below the deactivation threshold, the decision reverses
+1. 識需集體合（非個別應）之決：
+   - 由探轉用
+   - 擇新工所或棄舊者
+   - 由常升至急應
+2. 每集體之決，定：
+   - **法定閾**：宜合者之數或百分比
+   - **察窗**：計訊之時段
+   - **遲滯**：啟閾與停閾異（防震盪）
+3. 以訊積為法定：
+   - 每支持者置票訊
+   - 察窗內累票過閾則啟決
+   - 票降至停閾下則反決
 
-**Expected:** Quorum thresholds that allow the swarm to make collective decisions without a leader. The hysteresis gap prevents rapid oscillation between states.
+**得：** 法定閾使群無首而決。遲滯之差防狀速盪。
 
-**On failure:** If the swarm oscillates between states, widen the hysteresis gap (e.g., activate at 70%, deactivate at 30%). If the swarm never reaches quorum, lower the threshold or increase the sensing window. If decisions are too slow, reduce the sensing window — but beware of premature consensus.
+**敗則：** 若群盪於狀間，闊遲滯差（如 70% 啟、30% 停）。若群永不達法定，降閾或增察窗。若決過遲，減窗——然防早熟共識。
 
-### Step 5: Test and Tune Emergent Behavior
+### 第五步：試而調湧現之行
 
-Validate that local rules produce the desired collective behavior, then tune parameters.
+驗局部之規生所欲之集體行，而後調參。
 
-1. Run a simulation or pilot with a small number of agents (5-10)
-2. Observe:
-   - Does the swarm converge on the intended behavior?
-   - How long does convergence take?
-   - What happens when conditions change mid-task?
-   - What happens when agents fail or are added?
-3. Tune parameters:
-   - Signal decay rate: too fast → no coordination memory; too slow → stale signals dominate
-   - Quorum threshold: too low → premature collective decisions; too high → paralysis
-   - Exploration-exploitation balance: too much exploration → inefficient; too much exploitation → local optima
-4. Stress test:
-   - Remove 30% of agents suddenly — does the swarm recover?
-   - Double the agent count — does the swarm still coordinate?
-   - Introduce conflicting signals — does the swarm resolve or deadlock?
+1. 以小數行者（五至十）模擬或試運
+2. 察：
+   - 群聚於所欲之行乎？
+   - 聚需幾時？
+   - 條件中變則如何？
+   - 行者敗或增則如何？
+3. 調參：
+   - 訊衰率：過速則協無記；過遲則陳訊獨霸
+   - 法定閾：過低則集體決早熟；過高則癱
+   - 探用之衡：探過則效低；用過則陷局部
+4. 壓試：
+   - 驟去 30% 行者——群復乎？
+   - 倍增行者——群猶協乎？
+   - 引衝突之訊——群解或鎖？
 
-**Expected:** A tuned parameter set where the swarm self-organizes toward the target behavior, recovers from perturbations, and scales gracefully.
+**得：** 調好之參集，群自組向所欲之行，能復於擾，優雅而擴。
 
-**On failure:** If the swarm fails stress tests, the signal design is likely too tightly coupled. Simplify: reduce to fewer signals, increase decay rates (fresher information), and ensure agents have a robust default behavior when no signals are present. A swarm that does something reasonable with zero signals is more resilient than one that depends on signal availability.
+**敗則：** 若群敗於壓試，訊設過緊。簡之：減訊數、增衰率（訊鮮）、確保行者於無訊時有堅默之行。零訊仍為合理者之群比依訊者韌。
 
-## Validation
+## 驗
 
-- [ ] Coordination problem is classified into a recognized pattern (foraging, consensus, construction, defense, division of labor)
-- [ ] Stigmergic signal table is defined with deposit conditions, decay rates, and agent responses
-- [ ] Local interaction rules are simple, local, and prioritized (3-7 rules)
-- [ ] Quorum thresholds are set with hysteresis to prevent oscillation
-- [ ] Small-scale test shows emergent behavior matching the collective goal
-- [ ] Stress test (agent removal, addition, signal disruption) shows graceful degradation
+- [ ] 協題別入既知之類（覓食、共識、建構、禦、分工）
+- [ ] 遺跡訊表已定，含置條件、衰率、行者應
+- [ ] 局部交互規簡、局部、有優先（三至七規）
+- [ ] 法定閾有遲滯以防盪
+- [ ] 小規模試顯湧現合集體之志
+- [ ] 壓試（去、增、擾訊）顯優雅降級
 
-## Common Pitfalls
+## 陷
 
-- **Over-engineering signals**: Starting with too many signal types creates confusion. Begin with 2 signals (attract/repel) and add only when proven necessary
-- **Centralized thinking in disguise**: If your "local rule" requires an agent to know the global state, it's not local. Refactor until each rule depends only on what the agent can directly perceive
-- **Ignoring decay**: Signals that never decay create fossilized coordination state. Every signal needs a half-life appropriate to the task's time scale
-- **Zero hysteresis**: Quorum thresholds without a gap between activation and deactivation cause rapid state oscillation. Always set deactivation lower than activation
-- **Assuming homogeneity**: If agents have different capabilities, a single rule set may not work. Consider role-differentiated rules (see `scale-colony`)
+- **訊過度工程**：訊型初多則生惑。始於二訊（引／斥），證必要再增
+- **隱中央之思**：若「局部規」需知全局之狀，非局部也。重構至每規唯依行者可直察者
+- **忽衰**：訊永不衰則生化石之協狀。每訊需半衰期合任務之時尺
+- **無遲滯**：法定閾無啟停之差則速盪。宜設停低於啟
+- **設同質**：若行者能異，一規集難行。考異角之規（參 `scale-colony`）
 
-## Related Skills
+## 參
 
-- `forage-resources` — applies swarm coordination specifically to resource search and explore-exploit tradeoffs
-- `build-consensus` — deep dive into distributed agreement mechanisms, extending the quorum sensing from this skill
-- `defend-colony` — collective defense patterns that build on the signal and rule framework here
-- `scale-colony` — scaling strategies for when the swarm outgrows its initial coordination design
-- `adapt-architecture` — morphic skill for transforming system architecture, complementary when swarm coordination triggers structural change
-- `deploy-to-kubernetes` — practical distributed system deployment where swarm coordination patterns apply
-- `plan-capacity` — capacity planning informed by swarm scaling dynamics
-- `coordinate-reasoning` — AI self-application variant; maps stigmergic signals to context management with information decay rates and local protocols
+- `forage-resources` — 將群協專施於資源尋與探用之衡
+- `build-consensus` — 深究散處合之法，延本技之法定察
+- `defend-colony` — 集體禦之法，建於此之訊規架上
+- `scale-colony` — 當群逾其初協設之擴法
+- `adapt-architecture` — 變形之技以轉系構，與群協觸結構變時相補
+- `deploy-to-kubernetes` — 散系之實地布，群協之法可施
+- `plan-capacity` — 依群擴之動而劃容
+- `coordinate-reasoning` — AI 自施之變；映遺跡之訊至脈絡管理，含信息衰率與局部規

@@ -26,28 +26,28 @@ metadata:
 
 # Create Pull Request
 
-Create a GitHub pull request with a clear title, structured description, and proper branch setup.
+GitHub PR w/ clear title + structured desc + branch setup.
 
-## When to Use
+## Use When
 
-- Proposing changes from a feature or fix branch for review
-- Merging completed work into the main branch
-- Requesting code review from collaborators
-- Documenting the purpose and scope of a set of changes
+- Feature/fix branch → review
+- Merge completed → main
+- Req code review
+- Doc purpose + scope of changes
 
-## Inputs
+## In
 
-- **Required**: Feature branch with committed changes
-- **Required**: Base branch to merge into (usually `main`)
-- **Optional**: Reviewers to request
-- **Optional**: Labels or milestone
+- **Required**: Feature branch w/ committed changes
+- **Required**: Base branch (usually `main`)
+- **Optional**: Reviewers
+- **Optional**: Labels / milestone
 - **Optional**: Draft status
 
-## Procedure
+## Do
 
-### Step 1: Ensure Branch Is Ready
+### Step 1: Branch Ready
 
-Verify the branch is up to date with the base branch and all changes are committed:
+Verify up-to-date + all committed:
 
 ```bash
 # Check for uncommitted changes
@@ -60,13 +60,13 @@ git fetch origin
 git rebase origin/main
 ```
 
-**Expected:** Branch is ahead of `origin/main` with no uncommitted changes and no conflicts.
+**Got:** Branch ahead of `origin/main`, no uncommit, no conflicts.
 
-**On failure:** If rebase conflicts occur, resolve them (see `resolve-git-conflicts` skill), then `git rebase --continue`. If the branch has diverged significantly, consider `git merge origin/main` instead.
+**If err:** Rebase conflicts → resolve (see `resolve-git-conflicts`) → `git rebase --continue`. Diverged → `git merge origin/main`.
 
-### Step 2: Review All Changes on the Branch
+### Step 2: Review Changes
 
-Examine the full diff and commit history that will be included in the PR:
+Full diff + commit history:
 
 ```bash
 # See all commits on this branch (not on main)
@@ -79,24 +79,24 @@ git diff origin/main...HEAD
 git status -sb
 ```
 
-**Expected:** All commits are relevant to the PR. The diff shows only intended changes.
+**Got:** All commits PR-relevant. Diff = intended changes only.
 
-**On failure:** If unrelated commits are present, consider interactive rebase to clean up history before creating the PR.
+**If err:** Unrelated commits → interactive rebase → clean up history pre-PR.
 
-### Step 3: Push the Branch
+### Step 3: Push Branch
 
 ```bash
 # Push branch to remote (set upstream tracking)
 git push -u origin HEAD
 ```
 
-**Expected:** Branch appears on GitHub remote.
+**Got:** Branch on GitHub remote.
 
-**On failure:** If push is rejected, pull first with `git pull --rebase origin <branch>` and resolve any conflicts.
+**If err:** Rejected → `git pull --rebase origin <branch>` + resolve.
 
-### Step 4: Write PR Title and Description
+### Step 4: Title + Desc
 
-Keep the title under 70 characters. Use the body for details:
+Title <70 chars. Body for details:
 
 ```bash
 gh pr create --title "Add weighted mean calculation" --body "$(cat <<'EOF'
@@ -115,19 +115,19 @@ EOF
 )"
 ```
 
-For draft PRs:
+Draft:
 
 ```bash
 gh pr create --title "WIP: Add authentication" --body "..." --draft
 ```
 
-**Expected:** PR created on GitHub with a URL returned. Description clearly communicates what changed and how to test.
+**Got:** PR on GitHub + URL. Desc = what changed + how to test.
 
-**On failure:** If `gh` is not authenticated, run `gh auth login`. If the base branch is wrong, specify with `--base main`.
+**If err:** `gh` not auth → `gh auth login`. Wrong base → `--base main`.
 
-### Step 5: Handle Review Feedback
+### Step 5: Review Feedback
 
-Respond to review comments and push updates:
+Respond + push:
 
 ```bash
 # View PR comments
@@ -146,13 +146,13 @@ EOF
 git push
 ```
 
-**Expected:** New commits appear on the PR. Review comments are addressed.
+**Got:** New commits on PR. Comments addressed.
 
-**On failure:** If CI checks fail after pushing, read the check output with `gh pr checks` and fix the issues before requesting re-review.
+**If err:** CI fail post-push → `gh pr checks` → fix pre-rereq.
 
-### Step 6: Merge and Clean Up
+### Step 6: Merge + Cleanup
 
-After approval:
+Post-approval:
 
 ```bash
 # Merge the PR (squash merge keeps history clean)
@@ -165,39 +165,39 @@ gh pr merge --merge --delete-branch
 gh pr merge --rebase --delete-branch
 ```
 
-After merge, update local main:
+Update local main:
 
 ```bash
 git checkout main
 git pull origin main
 ```
 
-**Expected:** PR is merged, remote branch is deleted, local main is updated.
+**Got:** PR merged, remote branch deleted, local main updated.
 
-**On failure:** If merge is blocked by failing checks or missing approvals, address those first. Do not force-merge without resolving blockers.
+**If err:** Blocked by fail checks / missing approvals → address first. No force-merge w/o resolve.
 
-## Validation
+## Check
 
-- [ ] PR title is concise (under 70 characters) and descriptive
-- [ ] PR body includes summary of changes and test plan
-- [ ] All commits on the branch are relevant to the PR
-- [ ] CI checks pass
-- [ ] Branch is up to date with base branch
-- [ ] Reviewers are assigned (if required by repository settings)
-- [ ] No sensitive data in the diff
+- [ ] Title <70 chars + descriptive
+- [ ] Body: summary + test plan
+- [ ] All commits PR-relevant
+- [ ] CI passes
+- [ ] Branch up-to-date vs base
+- [ ] Reviewers assigned (if req)
+- [ ] No sensitive data
 
-## Common Pitfalls
+## Traps
 
-- **PR too large**: Keep PRs focused on a single feature or fix. Large PRs are harder to review and more likely to have merge conflicts.
-- **Missing test plan**: Always describe how the changes can be verified, even for documentation PRs.
-- **Stale branch**: If the base branch has moved ahead significantly, rebase before creating the PR to minimize merge conflicts.
-- **Force-pushing during review**: Avoid force-pushing to a branch with open review comments. Push new commits so reviewers can see incremental changes.
-- **Not reading CI output**: Check `gh pr checks` before asking for re-review. Failing CI wastes reviewers' time.
-- **Forgetting to delete branch**: Use `--delete-branch` with merge to keep the remote clean.
+- **PR too large**: Focus 1 feat/fix. Large → hard review + merge conflicts.
+- **No test plan**: Always describe verify, even docs.
+- **Stale branch**: Base moved ahead → rebase pre-PR → min conflicts.
+- **Force-push during review**: Avoid on branch w/ open comments. Push new → incremental visible.
+- **Ignoring CI**: Check `gh pr checks` pre-rereq. Fail CI = waste reviewers.
+- **Branch not deleted**: Use `--delete-branch` → remote clean.
 
-## Related Skills
+## →
 
-- `commit-changes` - creating commits for the PR
-- `manage-git-branches` - branch creation and naming conventions
-- `resolve-git-conflicts` - handling conflicts during rebase/merge
-- `create-github-release` - releasing after merge
+- `commit-changes` — PR commits
+- `manage-git-branches` — branch create + naming
+- `resolve-git-conflicts` — rebase/merge conflicts
+- `create-github-release` — release post-merge

@@ -73,8 +73,8 @@ Determine how long data must be retained and in what form:
 | [e.g., User data] | [e.g., 200 profiles] | [e.g., LDAP/Database] | [Employment + 2 years] | Anonymise and archive |
 ```
 
-**Expected:** Every data category has a defined retention period, format requirement, and planned disposition.
-**On failure:** If retention requirements are unclear, consult regulatory affairs and legal. Default to the longest applicable retention period.
+**Got:** Every data category has a defined retention period, format requirement, and planned disposition.
+**If fail:** If retention requirements are unclear, consult regulatory affairs and legal. Default to the longest applicable retention period.
 
 ### Step 2: Plan Data Migration (If Applicable)
 
@@ -105,8 +105,8 @@ If data is migrating to a replacement system:
 | Audit trail continuity | Verify historical audit trail migrated | All entries present with original timestamps |
 ```
 
-**Expected:** Migration plan includes mapping, transformation rules, and validation checks that prove data integrity was maintained.
-**On failure:** If migration validation fails, do not proceed to decommission. Fix the migration issues and re-validate.
+**Got:** Migration plan includes mapping, transformation rules, and validation checks that prove data integrity was maintained.
+**If fail:** If migration validation fails, do not proceed to decommission. Fix the migration issues and re-validate.
 
 ### Step 3: Define Archival Strategy
 
@@ -139,8 +139,8 @@ For data that will be archived rather than migrated:
 | External auditors | Read access, supervised | Per audit plan |
 ```
 
-**Expected:** Archived data is readable, searchable, and verifiable without the original system.
-**On failure:** If data cannot be read independently of the source system, the archive is not compliant. Consider exporting to an open, standard format (PDF/A, CSV) before decommission.
+**Got:** Archived data is readable, searchable, and verifiable without the original system.
+**If fail:** If data cannot be read independently of the source system, the archive is not compliant. Consider exporting to an open, standard format (PDF/A, CSV) before decommission.
 
 ### Step 4: Execute Decommissioning
 
@@ -184,8 +184,8 @@ For data that will be archived rather than migrated:
 | Approval | System owner, QA, IT signatures |
 ```
 
-**Expected:** Decommissioning is controlled, documented, and approved — not just "turn it off."
-**On failure:** If any checklist item cannot be completed, document the exception and obtain QA approval before proceeding.
+**Got:** Decommissioning is controlled, documented, and approved — not just "turn it off."
+**If fail:** If any checklist item cannot be completed, document the exception and obtain QA approval before proceeding.
 
 ## Validation
 
@@ -198,7 +198,7 @@ For data that will be archived rather than migrated:
 - [ ] SOPs updated to remove references to decommissioned system
 - [ ] Decommission report approved by system owner, QA, and IT
 
-## Common Pitfalls
+## Pitfalls
 
 - **Premature decommission**: Turning off a system before data migration is validated risks permanent data loss. Complete all validation before pulling the plug.
 - **Unreadable archives**: Storing data in a proprietary format that requires the original system to read defeats the purpose of archival. Use open formats.

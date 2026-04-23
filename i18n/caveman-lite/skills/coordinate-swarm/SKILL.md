@@ -66,9 +66,9 @@ Classify the coordination challenge to select appropriate patterns.
    - Coherence loss (agents drift apart without feedback)
    - Rigidity (cannot adapt to changing conditions)
 
-**Expected:** A clear classification of the coordination problem type and the specific failure mode to address. This determines which swarm patterns to apply.
+**Got:** A clear classification of the coordination problem type and the specific failure mode to address. This determines which swarm patterns to apply.
 
-**On failure:** If the problem doesn't fit a single class, it may be a composite. Decompose into sub-problems and address each with the appropriate pattern. If agents are too heterogeneous for a single coordination model, consider layered coordination — homogeneous clusters coordinated via inter-cluster stigmergy.
+**If fail:** If the problem doesn't fit a single class, it may be a composite. Decompose into sub-problems and address each with the appropriate pattern. If agents are too heterogeneous for a single coordination model, consider layered coordination — homogeneous clusters coordinated via inter-cluster stigmergy.
 
 ### Step 2: Design Stigmergic Signals
 
@@ -100,9 +100,9 @@ Signal Design Template:
 └──────────────┴───────────────────┴──────────────┴────────────────────┘
 ```
 
-**Expected:** A signal table mapping environmental markers to agent deposit conditions, decay rates, and response behaviors. Signals should be simple, composable, and independently meaningful.
+**Got:** A signal table mapping environmental markers to agent deposit conditions, decay rates, and response behaviors. Signals should be simple, composable, and independently meaningful.
 
-**On failure:** If signal design feels overly complex, reduce to two signals: one positive (success trail) and one negative (danger flag). Most coordination problems can be bootstrapped with attract/repel dynamics. Add nuance only after the basic system is functioning.
+**If fail:** If signal design feels overly complex, reduce to two signals: one positive (success trail) and one negative (danger flag). Most coordination problems can be bootstrapped with attract/repel dynamics. Add nuance only after the basic system is functioning.
 
 ### Step 3: Define Local Interaction Rules
 
@@ -121,9 +121,9 @@ Specify the simple rules each agent follows, using only local information (their
    - **Stateless** (preferred): does not require the agent to remember past states
 4. Test rules mentally: if every agent follows these rules, does the desired collective behavior emerge?
 
-**Expected:** A prioritized rule set that each agent executes independently. When applied across the swarm, these local rules produce the target collective behavior (foraging, construction, defense, etc.).
+**Got:** A prioritized rule set that each agent executes independently. When applied across the swarm, these local rules produce the target collective behavior (foraging, construction, defense, etc.).
 
-**On failure:** If mental simulation doesn't produce the desired emergent behavior, the rules likely need a feedback loop — agents must be able to observe the consequences of their collective actions. Add a signal that represents the collective state (e.g., "task completion rate") and a rule that adjusts behavior based on it.
+**If fail:** If mental simulation doesn't produce the desired emergent behavior, the rules likely need a feedback loop — agents must be able to observe the consequences of their collective actions. Add a signal that represents the collective state (e.g., "task completion rate") and a rule that adjusts behavior based on it.
 
 ### Step 4: Calibrate Quorum Sensing
 
@@ -142,9 +142,9 @@ Set thresholds that trigger collective state changes when enough agents agree.
    - When accumulated votes exceed the quorum threshold within the sensing window, the decision activates
    - When votes drop below the deactivation threshold, the decision reverses
 
-**Expected:** Quorum thresholds that allow the swarm to make collective decisions without a leader. The hysteresis gap prevents rapid oscillation between states.
+**Got:** Quorum thresholds that allow the swarm to make collective decisions without a leader. The hysteresis gap prevents rapid oscillation between states.
 
-**On failure:** If the swarm oscillates between states, widen the hysteresis gap (e.g., activate at 70%, deactivate at 30%). If the swarm never reaches quorum, lower the threshold or increase the sensing window. If decisions are too slow, reduce the sensing window — but beware of premature consensus.
+**If fail:** If the swarm oscillates between states, widen the hysteresis gap (e.g., activate at 70%, deactivate at 30%). If the swarm never reaches quorum, lower the threshold or increase the sensing window. If decisions are too slow, reduce the sensing window — but beware of premature consensus.
 
 ### Step 5: Test and Tune Emergent Behavior
 
@@ -165,9 +165,9 @@ Validate that local rules produce the desired collective behavior, then tune par
    - Double the agent count — does the swarm still coordinate?
    - Introduce conflicting signals — does the swarm resolve or deadlock?
 
-**Expected:** A tuned parameter set where the swarm self-organizes toward the target behavior, recovers from perturbations, and scales gracefully.
+**Got:** A tuned parameter set where the swarm self-organizes toward the target behavior, recovers from perturbations, and scales gracefully.
 
-**On failure:** If the swarm fails stress tests, the signal design is likely too tightly coupled. Simplify: reduce to fewer signals, increase decay rates (fresher information), and ensure agents have a robust default behavior when no signals are present. A swarm that does something reasonable with zero signals is more resilient than one that depends on signal availability.
+**If fail:** If the swarm fails stress tests, the signal design is likely too tightly coupled. Simplify: reduce to fewer signals, increase decay rates (fresher information), and ensure agents have a robust default behavior when no signals are present. A swarm that does something reasonable with zero signals is more resilient than one that depends on signal availability.
 
 ## Validation
 
@@ -178,7 +178,7 @@ Validate that local rules produce the desired collective behavior, then tune par
 - [ ] Small-scale test shows emergent behavior matching the collective goal
 - [ ] Stress test (agent removal, addition, signal disruption) shows graceful degradation
 
-## Common Pitfalls
+## Pitfalls
 
 - **Over-engineering signals**: Starting with too many signal types creates confusion. Begin with 2 signals (attract/repel) and add only when proven necessary
 - **Centralized thinking in disguise**: If your "local rule" requires an agent to know the global state, it's not local. Refactor until each rule depends only on what the agent can directly perceive

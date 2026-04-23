@@ -25,27 +25,27 @@ metadata:
 
 # Create Quarto Report
 
-Set up and write a reproducible Quarto document for analysis reports, presentations, or websites.
+Repro Quarto doc → reports / presentations / websites.
 
-## When to Use
+## Use When
 
-- Creating a reproducible analysis report
-- Building a presentation with embedded code
-- Generating HTML, PDF, or Word documents from code
-- Migrating from R Markdown to Quarto
+- Repro analysis report
+- Presentation w/ embedded code
+- Gen HTML/PDF/Word from code
+- Migrate R Markdown → Quarto
 
-## Inputs
+## In
 
-- **Required**: Report topic and target audience
-- **Required**: Output format (html, pdf, docx, revealjs)
-- **Optional**: Data sources and analysis code
-- **Optional**: Citation bibliography (.bib file)
+- **Required**: Topic + audience
+- **Required**: Out fmt (html, pdf, docx, revealjs)
+- **Optional**: Data + analysis code
+- **Optional**: Bib (.bib)
 
-## Procedure
+## Do
 
-### Step 1: Create Quarto Document
+### Step 1: Create Doc
 
-Create `report.qmd`:
+`report.qmd`:
 
 ```yaml
 ---
@@ -67,11 +67,11 @@ bibliography: references.bib
 ---
 ```
 
-**Expected:** File `report.qmd` exists with valid YAML frontmatter including title, author, date, format configuration, and execution options.
+**Got:** `report.qmd` exists w/ valid YAML (title, author, date, format, exec).
 
-**On failure:** Validate the YAML header by checking for matching `---` delimiters and correct indentation. Ensure `format:` key matches one of the supported Quarto output formats (`html`, `pdf`, `docx`, `revealjs`).
+**If err:** Validate YAML header — `---` delimiters match, indent correct. `format:` = supported (`html`, `pdf`, `docx`, `revealjs`).
 
-### Step 2: Write Content with Code Chunks
+### Step 2: Content + Chunks
 
 ````markdown
 ## Introduction
@@ -124,13 +124,13 @@ data |>
 See @tbl-summary for descriptive statistics.
 ````
 
-**Expected:** Content sections contain properly formatted code chunks with `{r}` language identifier and `#|` chunk options for labels, captions, and dimensions.
+**Got:** Sections w/ `{r}` chunks + `#|` opts (labels, captions, dims).
 
-**On failure:** Verify code chunks use the ```` ```{r} ```` syntax (not inline backticks), that `#|` options are inside the chunk (not in the YAML header), and that label prefixes match cross-reference types (`fig-` for figures, `tbl-` for tables).
+**If err:** Verify ```` ```{r} ```` syntax (not inline). `#|` inside chunk (not YAML). Label prefix matches xref type (`fig-`, `tbl-`).
 
-### Step 3: Configure Chunk Options
+### Step 3: Chunk Opts
 
-Common chunk-level options (use `#|` syntax):
+Common (`#|`):
 
 ```
 #| label: chunk-name        # Required for cross-references
@@ -144,11 +144,11 @@ Common chunk-level options (use `#|` syntax):
 #| cache: true               # Cache expensive computations
 ```
 
-**Expected:** Chunk options are applied at the chunk level using `#|` syntax, and labels follow naming conventions required for cross-referencing.
+**Got:** Opts via `#|` syntax, labels = xref naming conv.
 
-**On failure:** Ensure chunk options use `#|` syntax (Quarto-native), not the legacy `{r, option=value}` R Markdown syntax. Verify that label names contain only alphanumeric characters and hyphens.
+**If err:** `#|` (Quarto-native), not legacy `{r, option=value}`. Labels alphanumeric + hyphens only.
 
-### Step 4: Add Cross-References and Citations
+### Step 4: Xrefs + Citations
 
 ```markdown
 See @fig-scatter for the visualization and @tbl-summary for statistics.
@@ -163,11 +163,11 @@ Combined figure caption
 :::
 ```
 
-**Expected:** Cross-references (`@fig-name`, `@tbl-name`) resolve to the correct figures and tables, and citations (`@key`) match entries in the `.bib` file.
+**Got:** Xrefs (`@fig-name`, `@tbl-name`) resolve. Citations (`@key`) match `.bib`.
 
-**On failure:** Verify that referenced labels exist in code chunks with the correct prefix (`fig-`, `tbl-`). For citations, check that `.bib` keys match exactly (case-sensitive) and that `bibliography:` is set in the YAML header.
+**If err:** Verify labels exist w/ correct prefix (`fig-`, `tbl-`). `.bib` keys exact (case-sensitive). `bibliography:` in YAML.
 
-### Step 5: Render the Document
+### Step 5: Render
 
 ```bash
 quarto render report.qmd
@@ -180,14 +180,14 @@ quarto render report.qmd --to docx
 quarto preview report.qmd
 ```
 
-**Expected:** Output file generated in the specified format.
+**Got:** Out file in fmt.
 
-**On failure:**
-- Missing quarto: Install from https://quarto.org/docs/get-started/
-- PDF errors: Install TinyTeX with `quarto install tinytex`
-- R package errors: Ensure all packages are installed
+**If err:**
+- No quarto → install https://quarto.org/docs/get-started/
+- PDF err → `quarto install tinytex`
+- R pkg err → install
 
-### Step 6: Multi-Format Output
+### Step 6: Multi-Fmt Out
 
 ```yaml
 format:
@@ -201,30 +201,30 @@ format:
     reference-doc: template.docx
 ```
 
-Render all formats: `quarto render report.qmd`
+Render all: `quarto render report.qmd`
 
-**Expected:** All specified output formats generate successfully, each with correct styling and layout for the target format.
+**Got:** All fmts gen, correct styling per target.
 
-**On failure:** If one format fails while others succeed, check format-specific requirements: PDF needs a LaTeX engine (install with `quarto install tinytex`), DOCX needs a valid reference template if specified, and format-specific YAML options must be correctly nested under each format key.
+**If err:** 1 fail, others OK → check fmt-specific. PDF → LaTeX engine (`quarto install tinytex`). DOCX → valid ref template if set. Fmt opts nested under each format key.
 
-## Validation
+## Check
 
-- [ ] Document renders without errors
-- [ ] All code chunks execute correctly
-- [ ] Cross-references resolve (figures, tables, citations)
-- [ ] Table of contents is accurate
-- [ ] Output format is appropriate for the audience
+- [ ] Renders no err
+- [ ] All chunks execute
+- [ ] Xrefs resolve (fig, tbl, cite)
+- [ ] TOC accurate
+- [ ] Out fmt fits audience
 
-## Common Pitfalls
+## Traps
 
-- **Missing label prefix**: Cross-referenceable figures need `fig-` prefix in label, tables need `tbl-`
-- **Cache invalidation**: Cached chunks won't re-run when upstream data changes. Delete `_cache/` to force.
-- **PDF without LaTeX**: Install TinyTeX or use `format: pdf` with `pdf-engine: weasyprint` for CSS-based PDF
-- **R Markdown syntax in Quarto**: Use `#|` chunk options instead of `{r, echo=FALSE}` style
+- **No label prefix**: Fig xref needs `fig-`, tbl needs `tbl-`
+- **Cache invalid**: Cached chunks don't re-run on upstream change. Delete `_cache/` → force.
+- **PDF no LaTeX**: Install TinyTeX OR `pdf-engine: weasyprint` (CSS-based)
+- **RMD syntax in Quarto**: Use `#|` not `{r, echo=FALSE}`
 
-## Related Skills
+## →
 
-- `format-apa-report` - APA-formatted academic reports
-- `build-parameterized-report` - parameterized multi-report generation
-- `generate-statistical-tables` - publication-ready tables
-- `write-vignette` - Quarto vignettes in R packages
+- `format-apa-report` — APA academic reports
+- `build-parameterized-report` — param multi-reports
+- `generate-statistical-tables` — pub-ready tables
+- `write-vignette` — Quarto vignettes in R pkgs

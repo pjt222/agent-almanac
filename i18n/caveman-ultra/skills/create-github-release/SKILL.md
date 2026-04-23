@@ -25,52 +25,52 @@ metadata:
 
 # Create GitHub Release
 
-Create a tagged GitHub release with release notes and optional artifacts.
+Tag + notes + artifacts → GitHub release.
 
-## When to Use
+## Use When
 
-- Marking a stable version of software for distribution
-- Publishing a new version of a library or application
-- Creating release notes for stakeholders
-- Distributing build artifacts (binaries, tarballs)
+- Mark stable ver for distrib
+- Publish lib/app ver
+- Release notes for stakeholders
+- Distrib artifacts (bins, tarballs)
 
-## Inputs
+## In
 
-- **Required**: Version number (semantic versioning)
-- **Required**: Summary of changes since last release
-- **Optional**: Build artifacts to attach
-- **Optional**: Whether this is a pre-release
+- **Required**: Ver # (semver)
+- **Required**: Changes summary
+- **Optional**: Build artifacts
+- **Optional**: Pre-release flag
 
-## Procedure
+## Do
 
-### Step 1: Determine Version Number
+### Step 1: Ver #
 
-Follow semantic versioning (`MAJOR.MINOR.PATCH`):
+Semver (`MAJOR.MINOR.PATCH`):
 
 | Change | Example | When |
 |--------|---------|------|
-| MAJOR | 1.0.0 -> 2.0.0 | Breaking changes |
-| MINOR | 1.0.0 -> 1.1.0 | New features, backward compatible |
-| PATCH | 1.0.0 -> 1.0.1 | Bug fixes only |
+| MAJOR | 1.0.0 -> 2.0.0 | Breaking |
+| MINOR | 1.0.0 -> 1.1.0 | New feat, backward compat |
+| PATCH | 1.0.0 -> 1.0.1 | Bug fix only |
 
-**Expected:** A version number is chosen that accurately reflects the scope of changes since the last release.
+**Got:** Ver matches change scope.
 
-**On failure:** If unsure whether changes are breaking, review the public API diff. Any removal or signature change of an exported function is a breaking change requiring a MAJOR bump.
+**If err:** Doubt breaking → review public API diff. Any removal / signature change of exported fn → breaking → MAJOR.
 
-### Step 2: Update Version in Project Files
+### Step 2: Ver in Project Files
 
-- `DESCRIPTION` (R packages)
-- `package.json` (Node.js)
+- `DESCRIPTION` (R pkgs)
+- `package.json` (Node)
 - `Cargo.toml` (Rust)
 - `pyproject.toml` (Python)
 
-**Expected:** The version number is updated in the appropriate project file and committed to version control.
+**Got:** Ver updated + committed.
 
-**On failure:** If the version was already updated in a previous step (e.g., via `usethis::use_version()` in R), verify it matches the intended release version.
+**If err:** Already updated (`usethis::use_version()`) → verify match.
 
-### Step 3: Write Release Notes
+### Step 3: Notes
 
-Create or update changelog. Organize by category:
+Changelog by cat:
 
 ```markdown
 ## What's Changed
@@ -93,24 +93,24 @@ Create or update changelog. Organize by category:
 **Full Changelog**: https://github.com/user/repo/compare/v1.0.0...v1.1.0
 ```
 
-**Expected:** Release notes are organized by category (features, fixes, breaking changes) with issue/PR references for traceability.
+**Got:** Notes by cat (feat/fix/breaking) + issue/PR refs.
 
-**On failure:** If changes are hard to categorize, review `git log v1.0.0..HEAD --oneline` to reconstruct the list of changes since the last release.
+**If err:** Hard to categorize → `git log v1.0.0..HEAD --oneline` → reconstruct.
 
-### Step 4: Create Git Tag
+### Step 4: Tag
 
 ```bash
 git tag -a v1.1.0 -m "Release v1.1.0"
 git push origin v1.1.0
 ```
 
-**Expected:** An annotated tag `v1.1.0` exists locally and on the remote. `git tag -l` shows the tag.
+**Got:** Tag local + remote. `git tag -l` shows.
 
-**On failure:** If the tag already exists, delete it with `git tag -d v1.1.0 && git push origin :refs/tags/v1.1.0` and recreate it. If push is rejected, ensure you have write access to the remote.
+**If err:** Tag exists → `git tag -d v1.1.0 && git push origin :refs/tags/v1.1.0` + recreate. Push rejected → check write access.
 
-### Step 5: Create GitHub Release
+### Step 5: Release
 
-**Using GitHub CLI (recommended)**:
+**`gh` CLI (rec)**:
 
 ```bash
 gh release create v1.1.0 \
@@ -118,7 +118,7 @@ gh release create v1.1.0 \
   --notes-file CHANGELOG.md
 ```
 
-With artifacts:
+Artifacts:
 
 ```bash
 gh release create v1.1.0 \
@@ -137,13 +137,11 @@ gh release create v2.0.0-beta.1 \
   --notes "Beta release for testing"
 ```
 
-**Expected:** Release visible on GitHub with tag, notes, and attached artifacts (if any).
+**Got:** Release on GitHub w/ tag + notes + artifacts.
 
-**On failure:** If `gh` is not authenticated, run `gh auth login`. If the tag does not exist on the remote, push it first with `git push origin v1.1.0`.
+**If err:** `gh` not auth → `gh auth login`. Tag not on remote → `git push origin v1.1.0`.
 
-### Step 6: Auto-Generate Release Notes
-
-GitHub can auto-generate notes from merged PRs:
+### Step 6: Auto-Gen Notes
 
 ```bash
 gh release create v1.1.0 \
@@ -151,7 +149,7 @@ gh release create v1.1.0 \
   --generate-notes
 ```
 
-Configure categories in `.github/release.yml`:
+Cats in `.github/release.yml`:
 
 ```yaml
 changelog:
@@ -170,11 +168,11 @@ changelog:
         - "*"
 ```
 
-**Expected:** Release notes are auto-generated from merged PR titles, categorized by label. `.github/release.yml` controls the categories.
+**Got:** Notes from merged PR titles by label. `.github/release.yml` → cats.
 
-**On failure:** If auto-generated notes are empty, ensure PRs were merged (not closed) and had labels assigned. Manually write notes as a fallback.
+**If err:** Empty notes → PRs merged (not closed) + labels. Manual fallback.
 
-### Step 7: Verify Release
+### Step 7: Verify
 
 ```bash
 # List releases
@@ -184,31 +182,31 @@ gh release list
 gh release view v1.1.0
 ```
 
-**Expected:** `gh release list` shows the new release. `gh release view` displays the correct title, tag, notes, and assets.
+**Got:** List shows. View shows correct title/tag/notes/assets.
 
-**On failure:** If the release is missing, check the Actions tab for any release workflows that may have failed. Verify the tag exists with `git tag -l`.
+**If err:** Missing → check Actions workflows. Verify tag: `git tag -l`.
 
-## Validation
+## Check
 
-- [ ] Version tag follows semantic versioning
-- [ ] Git tag points to the correct commit
-- [ ] Release notes accurately describe changes
-- [ ] Artifacts (if any) are attached and downloadable
-- [ ] Release is visible on the GitHub repository page
-- [ ] Pre-release flag is set correctly
+- [ ] Ver tag = semver
+- [ ] Tag = correct commit
+- [ ] Notes accurate
+- [ ] Artifacts attached + downloadable
+- [ ] Release visible on repo page
+- [ ] Pre-release flag correct
 
-## Common Pitfalls
+## Traps
 
-- **Tagging wrong commit**: Always verify `git log` before tagging. Tag after version-bump commit.
-- **Forgetting to push tags**: `git push` doesn't push tags. Use `git push --tags` or `git push origin v1.1.0`.
-- **Inconsistent version format**: Decide on `v1.0.0` vs `1.0.0` and stick with it.
-- **Empty release notes**: Always provide meaningful notes. Users need to know what changed.
-- **Deleting and recreating tags**: Avoid changing tags after push. If needed, create a new version instead.
+- **Wrong commit tag**: Verify `git log` pre-tag. Tag after ver-bump commit.
+- **No push tags**: `git push` doesn't. Use `git push --tags` / `git push origin v1.1.0`.
+- **Ver fmt inconsist**: `v1.0.0` vs `1.0.0` → pick + stick.
+- **Empty notes**: Always meaningful. Users need "what changed".
+- **Delete+recreate tags**: Avoid. Create new ver instead.
 
-## Related Skills
+## →
 
-- `commit-changes` - staging and committing workflow
-- `manage-git-branches` - branch management for release prep
-- `release-package-version` - R-specific release workflow
-- `configure-git-repository` - Git setup prerequisite
-- `setup-github-actions-ci` - automate releases via CI
+- `commit-changes` — stage + commit
+- `manage-git-branches` — branch mgmt for release prep
+- `release-package-version` — R-specific
+- `configure-git-repository` — git setup
+- `setup-github-actions-ci` — auto releases via CI

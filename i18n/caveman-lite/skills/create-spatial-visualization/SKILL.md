@@ -85,9 +85,9 @@ const coordinates = Array.from(trkpts).map(pt => ({
 
 Verify the coordinate reference system (CRS) is WGS 84 (EPSG:4326) for web maps.
 
-**Expected:** Spatial data loaded as an sf object (R) or coordinate array (JS) with valid geometries. Point counts match expected input (e.g., a GPX track has hundreds to thousands of points).
+**Got:** Spatial data loaded as an sf object (R) or coordinate array (JS) with valid geometries. Point counts match expected input (e.g., a GPX track has hundreds to thousands of points).
 
-**On failure:** If GPX parsing fails, check the file is valid XML. Common issues: truncated files from GPS battery death, mixed namespaces, or GPX 1.0 vs 1.1 differences. If CRS is missing, assign it explicitly with `sf::st_set_crs(data, 4326)`. If coordinates appear inverted (lat/lon swapped), check the column order.
+**If fail:** If GPX parsing fails, check the file is valid XML. Common issues: truncated files from GPS battery death, mixed namespaces, or GPX 1.0 vs 1.1 differences. If CRS is missing, assign it explicitly with `sf::st_set_crs(data, 4326)`. If coordinates appear inverted (lat/lon swapped), check the column order.
 
 ### Step 2: Process and Clean
 
@@ -128,9 +128,9 @@ elevation_df <- data.frame(
 track_simple <- sf::st_simplify(track, dTolerance = 0.001)
 ```
 
-**Expected:** Clean spatial data with calculated distances, elevation extracted, and geometry simplified for the target output. No NA coordinates, no zero-length segments.
+**Got:** Clean spatial data with calculated distances, elevation extracted, and geometry simplified for the target output. No NA coordinates, no zero-length segments.
 
-**On failure:** If elevation data is missing (common with some GPS devices), use a DEM lookup service or note that elevation profile is unavailable. If track simplification removes critical shape detail, reduce the tolerance value. If distance calculations produce NA, check for empty geometries with `sf::st_is_empty()`.
+**If fail:** If elevation data is missing (common with some GPS devices), use a DEM lookup service or note that elevation profile is unavailable. If track simplification removes critical shape detail, reduce the tolerance value. If distance calculations produce NA, check for empty geometries with `sf::st_is_empty()`.
 
 ### Step 3: Select Visualization Type
 
@@ -164,9 +164,9 @@ Configure basemap tiles appropriate for the content:
 - **ESRI World Imagery**: Satellite context
 - **OpenTopoMap**: Topographic contours for elevation context
 
-**Expected:** A clear decision on visualization type and toolchain, with basemap selected to complement the route data.
+**Got:** A clear decision on visualization type and toolchain, with basemap selected to complement the route data.
 
-**On failure:** If the chosen tool cannot handle the data volume (e.g., 100,000+ track points in leaflet), simplify the geometry first or switch to a canvas-based renderer (deck.gl). If basemap tiles are unavailable (rare), fall back to OpenStreetMap as the most reliable free option.
+**If fail:** If the chosen tool cannot handle the data volume (e.g., 100,000+ track points in leaflet), simplify the geometry first or switch to a canvas-based renderer (deck.gl). If basemap tiles are unavailable (rare), fall back to OpenStreetMap as the most reliable free option.
 
 ### Step 4: Render Map or Chart
 
@@ -210,9 +210,9 @@ ggplot2::ggplot(elevation_df, ggplot2::aes(x = distance_km, y = elevation_m)) +
 
 Add supplementary layers as needed: distance markers every N km, day-break indicators, difficulty-colored segments, POI icons.
 
-**Expected:** A rendered visualization that clearly shows the route, waypoints, and any supplementary information. Interactive maps should be responsive with working popups and zoom. Elevation profiles should have correct axis scales.
+**Got:** A rendered visualization that clearly shows the route, waypoints, and any supplementary information. Interactive maps should be responsive with working popups and zoom. Elevation profiles should have correct axis scales.
 
-**On failure:** If the map renders but shows no data, check that coordinates are in the correct CRS (EPSG:4326 for leaflet). If popups are empty, verify the column names in the popup formula. If the elevation profile has extreme spikes, filter out GPS elevation errors (values deviating more than 100 m from neighbors).
+**If fail:** If the map renders but shows no data, check that coordinates are in the correct CRS (EPSG:4326 for leaflet). If popups are empty, verify the column names in the popup formula. If the elevation profile has extreme spikes, filter out GPS elevation errors (values deviating more than 100 m from neighbors).
 
 ### Step 5: Export and Embed
 
@@ -237,9 +237,9 @@ For Quarto embedding:
 2. Use `#| fig-cap:` for static plots or `#| label: fig-map` for cross-referencing
 3. Set `self-contained: true` in YAML to bundle tile images (increases file size)
 
-**Expected:** Exported file is viewable in the target context (browser for HTML, report for embedded, print for PNG/SVG). File size is reasonable (under 5 MB for HTML widgets, under 1 MB for images).
+**Got:** Exported file is viewable in the target context (browser for HTML, report for embedded, print for PNG/SVG). File size is reasonable (under 5 MB for HTML widgets, under 1 MB for images).
 
-**On failure:** If the HTML widget is too large, reduce tile caching or simplify geometries. If Quarto rendering fails with leaflet, ensure the htmlwidgets package is installed and the output format is HTML (leaflet does not render to PDF). For PDF output, use a static map alternative (tmap with `tmap_mode("plot")`).
+**If fail:** If the HTML widget is too large, reduce tile caching or simplify geometries. If Quarto rendering fails with leaflet, ensure the htmlwidgets package is installed and the output format is HTML (leaflet does not render to PDF). For PDF output, use a static map alternative (tmap with `tmap_mode("plot")`).
 
 ## Validation
 
@@ -251,7 +251,7 @@ For Quarto embedding:
 - [ ] Export file is viewable in the target format
 - [ ] File size is appropriate for the delivery method
 
-## Common Pitfalls
+## Pitfalls
 
 - **CRS mismatch**: Mixing EPSG:4326 (degrees) with projected CRS (meters) causes data to render in the wrong location or at wrong scale. Always transform to EPSG:4326 for web maps.
 - **GPS elevation noise**: GPS-derived elevation is far less accurate than horizontal position. Smooth elevation data or use DEM-based elevation for profiles.

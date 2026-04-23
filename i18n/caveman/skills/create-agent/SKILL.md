@@ -26,49 +26,49 @@ metadata:
 
 # Create a New Agent
 
-Define a Claude Code subagent persona with a focused purpose, curated tools, assigned skills, and complete documentation following the agent template and registry conventions.
+Define Claude Code subagent persona. Focused purpose, curated tools, assigned skills, complete docs. Follow agent template and registry rules.
 
-## When to Use
+## When Use
 
-- Adding a new specialist agent to the library for a domain not yet covered
-- Converting a recurring workflow or prompt pattern into a reusable agent persona
-- Creating a domain-specific assistant with curated skills and constrained tools
-- Splitting an overly broad agent into focused, single-responsibility agents
-- Designing a new team member before composing a multi-agent team
+- Adding new specialist agent to library for new domain
+- Converting recurring workflow or prompt pattern into reusable agent persona
+- Creating domain-specific assistant with curated skills and constrained tools
+- Splitting too-broad agent into focused single-responsibility agents
+- Designing new team member before composing multi-agent team
 
 ## Inputs
 
 - **Required**: Agent name (lowercase kebab-case, e.g., `data-engineer`)
-- **Required**: One-line description of the agent's primary purpose
-- **Required**: Purpose statement explaining the problem the agent solves
+- **Required**: One-line description of agent's primary purpose
+- **Required**: Purpose statement explaining problem agent solves
 - **Optional**: Model choice (default: `sonnet`; alternatives: `opus`, `haiku`)
 - **Optional**: Priority level (default: `normal`; alternatives: `high`, `low`)
 - **Optional**: List of skills from `skills/_registry.yml` to assign
-- **Optional**: MCP servers the agent requires (e.g., `r-mcptools`, `hf-mcp-server`)
+- **Optional**: MCP servers agent needs (e.g., `r-mcptools`, `hf-mcp-server`)
 
-## Procedure
+## Steps
 
 ### Step 1: Design the Agent Persona
 
-Choose a clear, focused identity for the agent:
+Pick clear, focused identity for agent:
 
-- **Name**: lowercase kebab-case, descriptive of the role. Start with a noun or domain qualifier: `security-analyst`, `r-developer`, `tour-planner`. Avoid generic names like `helper` or `assistant`.
-- **Purpose**: one paragraph explaining the specific problem this agent solves. Ask: "What does this agent do that no existing agent covers?"
-- **Communication style**: consider the domain. Technical agents should be precise and citation-heavy. Creative agents can be more exploratory. Compliance agents should be formal and audit-oriented.
+- **Name**: lowercase kebab-case, describes role. Start with noun or domain qualifier: `security-analyst`, `r-developer`, `tour-planner`. Dodge generic names like `helper` or `assistant`.
+- **Purpose**: one paragraph explaining specific problem this agent solves. Ask: "What does this agent do that no existing agent covers?"
+- **Communication style**: think domain. Technical agents precise, citation-heavy. Creative agents can explore more. Compliance agents formal, audit-oriented.
 
-Before proceeding, check for overlap with the existing 53 agents:
+Before moving on, check for overlap with existing 53 agents:
 
 ```bash
 grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 ```
 
-**Expected:** No existing agent covers the same niche. If an existing agent partially overlaps, consider extending it instead of creating a new one.
+**Got:** No existing agent covers same niche. Existing agent partially overlaps? Consider extending it instead of creating new one.
 
-**On failure:** If an agent with significant overlap exists, either extend that agent's skills list or narrow your new agent's scope to complement rather than duplicate it.
+**If fail:** Agent with big overlap exists? Either extend that agent's skills list or narrow your new agent's scope to complement, not duplicate.
 
 ### Step 2: Select Tools
 
-Choose the minimal set of tools the agent needs. Principle of least privilege applies:
+Pick minimal tools agent needs. Principle of least privilege:
 
 | Tool Set | When to Use | Example Agents |
 |----------|-------------|----------------|
@@ -77,27 +77,27 @@ Choose the minimal set of tools the agent needs. Principle of least privilege ap
 | `[Read, Write, Edit, Bash, Grep, Glob]` | Full development — creating/modifying code | r-developer, web-developer, devops-engineer |
 | `[Read, Write, Edit, Bash, Grep, Glob, WebFetch, WebSearch]` | Development plus external research | polymath, shapeshifter |
 
-Do not include `Bash` for agents that only analyze code. Do not include `WebFetch` or `WebSearch` unless the agent genuinely needs to look up external resources.
+Do not include `Bash` for agents only analyzing code. Do not include `WebFetch` or `WebSearch` unless agent truly needs external lookups.
 
-**Expected:** Tool list contains only tools the agent will actually use in its primary workflows.
+**Got:** Tool list has only tools agent will actually use in primary workflows.
 
-**On failure:** Review the agent's capabilities list — if a capability does not require a tool, remove the tool.
+**If fail:** Check agent's capabilities list — capability does not need tool? Remove tool.
 
 ### Step 3: Choose Model
 
-Select the model based on task complexity:
+Pick model based on task complexity:
 
-- **`sonnet`** (default): Most agents. Good balance of reasoning and speed. Use for development, review, analysis, and standard workflows.
-- **`opus`**: Complex reasoning, multi-step planning, nuanced judgment. Use for senior-level agents, architectural decisions, or tasks requiring deep domain expertise.
-- **`haiku`**: Simple, fast responses. Use for agents doing straightforward lookups, formatting, or template-filling.
+- **`sonnet`** (default): Most agents. Good balance of reasoning and speed. Use for development, review, analysis, standard workflows.
+- **`opus`**: Complex reasoning, multi-step planning, nuanced judgment. Use for senior-level agents, architectural decisions, tasks needing deep domain expertise.
+- **`haiku`**: Simple, fast responses. Use for agents doing lookups, formatting, template-filling.
 
-**Expected:** Model matches the cognitive demands of the agent's primary use cases.
+**Got:** Model matches cognitive demands of agent's primary use cases.
 
-**On failure:** When in doubt, use `sonnet`. Upgrade to `opus` only if testing reveals insufficient reasoning quality.
+**If fail:** In doubt? Use `sonnet`. Upgrade to `opus` only if testing shows weak reasoning.
 
 ### Step 4: Assign Skills
 
-Browse the skills registry and select skills relevant to the agent's domain:
+Browse skills registry. Pick skills fitting agent's domain:
 
 ```bash
 # List all skills in a domain
@@ -107,7 +107,7 @@ grep -A3 "domain-name:" skills/_registry.yml
 grep -i "keyword" skills/_registry.yml
 ```
 
-Build the skills list for the frontmatter:
+Build skills list for frontmatter:
 
 ```yaml
 skills:
@@ -116,30 +116,25 @@ skills:
   - skill-id-three
 ```
 
-**Important**: All agents automatically inherit the default skills (`meditate`, `heal`) from the registry-level `default_skills` field. Do NOT list these in the agent's frontmatter unless they are core to the agent's methodology (e.g., the `mystic` agent lists `meditate` because meditation facilitation is its primary purpose).
+**Important**: All agents auto-inherit default skills (`meditate`, `heal`) from registry-level `default_skills` field. Do NOT list these in agent's frontmatter unless core to agent's methodology (e.g., `mystic` agent lists `meditate` because meditation facilitation is primary purpose).
 
-**Expected:** Skills list contains 3-15 skill IDs that exist in `skills/_registry.yml`.
+**Got:** Skills list has 3-15 skill IDs existing in `skills/_registry.yml`.
 
-**On failure:** Verify each skill ID exists: `grep "id: skill-name" skills/_registry.yml`. Remove any that do not match.
+**If fail:** Verify each skill ID exists: `grep "id: skill-name" skills/_registry.yml`. Drop any that do not match.
 
 ### Step 5: Write the Agent File
 
-Copy the template and fill in the frontmatter:
+Copy template. Fill in frontmatter:
 
 ```bash
 cp agents/_template.md agents/<agent-name>.md
 ```
 
-Fill in the YAML frontmatter:
+Fill in YAML frontmatter:
 
 ```yaml
 ---
 name: agent-name
-locale: caveman
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: One to two sentences describing primary capability and domain
 tools: [Read, Write, Edit, Bash, Grep, Glob]
 model: sonnet
@@ -159,17 +154,17 @@ skills:
 ---
 ```
 
-**Expected:** YAML frontmatter parses without errors. All required fields (`name`, `description`, `tools`, `model`, `version`, `author`) are present.
+**Got:** YAML frontmatter parses without errors. All required fields (`name`, `description`, `tools`, `model`, `version`, `author`) present.
 
-**On failure:** Validate YAML syntax. Common issues: missing quotes around version strings, incorrect indentation, unclosed brackets in tool lists.
+**If fail:** Validate YAML syntax. Common issues: missing quotes around version strings, wrong indentation, unclosed brackets in tool lists.
 
 ### Step 6: Write Purpose and Capabilities
 
-Replace the template placeholder sections:
+Replace template placeholder sections:
 
-**Purpose**: One paragraph explaining the specific problem this agent solves and the value it provides. Be concrete — name the domain, the workflow, and the outcome.
+**Purpose**: One paragraph explaining specific problem this agent solves and value it gives. Be concrete — name domain, workflow, outcome.
 
-**Capabilities**: Bulleted list with bold lead-ins. Group by category if the agent has many capabilities:
+**Capabilities**: Bulleted list with bold lead-ins. Group by category if agent has many:
 
 ```markdown
 ## Capabilities
@@ -179,7 +174,7 @@ Replace the template placeholder sections:
 - **Tool Integration**: How it leverages its tools
 ```
 
-**Available Skills**: List each assigned skill with a brief description. Use bare skill IDs (the slash-command names):
+**Available Skills**: List each assigned skill with brief description. Use bare skill IDs (slash-command names):
 
 ```markdown
 ## Available Skills
@@ -187,13 +182,13 @@ Replace the template placeholder sections:
 - `skill-id` - Brief description of what the skill does
 ```
 
-**Expected:** Purpose is specific (not "helps with development"), capabilities are concrete and verifiable, skills list matches frontmatter.
+**Got:** Purpose is specific (not "helps with development"), capabilities are concrete and verifiable, skills list matches frontmatter.
 
-**On failure:** If the purpose feels vague, answer: "What specific task would a user ask this agent to do?" Use that answer as the purpose.
+**If fail:** Purpose feels vague? Answer: "What specific task would user ask this agent to do?" Use that as purpose.
 
 ### Step 7: Write Usage Scenarios and Examples
 
-Provide 2-3 usage scenarios showing how to spawn the agent:
+Give 2-3 usage scenarios showing how to spawn agent:
 
 ```markdown
 ### Scenario 1: Primary Use Case
@@ -207,7 +202,7 @@ Description of another common use case.
 > "Spawn the agent-name to [different task]."
 ```
 
-Add 1-2 concrete examples showing a user request and the expected agent behavior:
+Add 1-2 concrete examples showing user request and expected agent behavior:
 
 ```markdown
 ### Example 1: Basic Usage
@@ -215,13 +210,13 @@ Add 1-2 concrete examples showing a user request and the expected agent behavior
 **Agent**: [Expected response pattern and actions taken]
 ```
 
-**Expected:** Scenarios are realistic, examples show actual value, invocation patterns match Claude Code conventions.
+**Got:** Scenarios are realistic, examples show real value, invocation patterns match Claude Code conventions.
 
-**On failure:** Test the examples mentally — would the agent actually be able to fulfill the request with its assigned tools and skills?
+**If fail:** Test examples in head — would agent actually fulfill request with its assigned tools and skills?
 
 ### Step 8: Write Limitations and See Also
 
-**Limitations**: 3-5 honest constraints. What the agent cannot do, should not be used for, or where it might produce poor results:
+**Limitations**: 3-5 honest constraints. What agent cannot do, should not be used for, or where results poor:
 
 ```markdown
 ## Limitations
@@ -231,7 +226,7 @@ Add 1-2 concrete examples showing a user request and the expected agent behavior
 - Requires MCP server ABC to be running for full functionality
 ```
 
-**See Also**: Cross-reference complementary agents, relevant guides, and related teams:
+**See Also**: Cross-reference complementary agents, relevant guides, related teams:
 
 ```markdown
 ## See Also
@@ -241,13 +236,13 @@ Add 1-2 concrete examples showing a user request and the expected agent behavior
 - [relevant-team](../teams/team-name.md) - team that includes this agent
 ```
 
-**Expected:** Limitations are honest and specific. See Also references existing files.
+**Got:** Limitations honest and specific. See Also references existing files.
 
-**On failure:** Check that referenced files exist: `ls agents/complementary-agent.md`.
+**If fail:** Check referenced files exist: `ls agents/complementary-agent.md`.
 
 ### Step 9: Add to Registry
 
-Edit `agents/_registry.yml` and add the new agent entry in alphabetical position:
+Edit `agents/_registry.yml`. Add new agent entry in alphabetical position:
 
 ```yaml
   - id: agent-name
@@ -261,15 +256,15 @@ Edit `agents/_registry.yml` and add the new agent entry in alphabetical position
       - skill-id-two
 ```
 
-Increment the `total_agents` count at the top of the file.
+Bump `total_agents` count at top of file.
 
-**Expected:** Registry entry matches the agent file frontmatter. `total_agents` equals the actual number of agent entries.
+**Got:** Registry entry matches agent file frontmatter. `total_agents` equals actual number of agent entries.
 
-**On failure:** Count entries with `grep -c "^  - id:" agents/_registry.yml` and verify it matches `total_agents`.
+**If fail:** Count entries with `grep -c "^  - id:" agents/_registry.yml`. Verify matches `total_agents`.
 
 ### Step 10: Verify Discovery
 
-Claude Code discovers agents from the `.claude/agents/` directory. In this repository, that directory is a symlink to `agents/`:
+Claude Code discovers agents from `.claude/agents/` directory. In this repo, that dir is symlink to `agents/`:
 
 ```bash
 # Verify the symlink exists and resolves
@@ -277,23 +272,23 @@ ls -la .claude/agents/
 readlink -f .claude/agents/<agent-name>.md
 ```
 
-If the `.claude/agents/` symlink is intact, no additional action is needed — the new agent file is automatically discoverable.
+If `.claude/agents/` symlink intact, no extra action needed — new agent file auto-discoverable.
 
-Run the README automation to update the agents README:
+Run README automation to update agents README:
 
 ```bash
 npm run update-readmes
 ```
 
-**Expected:** `.claude/agents/<agent-name>.md` resolves to the new agent file. `agents/README.md` includes the new agent.
+**Got:** `.claude/agents/<agent-name>.md` resolves to new agent file. `agents/README.md` includes new agent.
 
-**On failure:** If the symlink is broken, recreate it: `ln -sf ../agents .claude/agents`. If `npm run update-readmes` fails, check that `scripts/generate-readmes.js` exists and `js-yaml` is installed.
+**If fail:** Symlink broken? Recreate: `ln -sf ../agents .claude/agents`. `npm run update-readmes` fails? Check `scripts/generate-readmes.js` exists and `js-yaml` installed.
 
 ### Step 11: Scaffold Translations
 
-> **Required for all agents.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+> **Required for all agents.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations pile into stale backlog.
 
-Scaffold translation files for all 4 supported locales immediately after committing the new agent:
+Scaffold translation files for all 4 supported locales right after committing new agent:
 
 ```bash
 for locale in de zh-CN ja es; do
@@ -301,41 +296,41 @@ for locale in de zh-CN ja es; do
 done
 ```
 
-Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+Then translate scaffolded prose in each file (code blocks and IDs stay English). Finally regenerate status files:
 
 ```bash
 npm run translation:status
 ```
 
-**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new agent.
+**Got:** 4 files created at `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for new agent.
 
-**On failure:** If scaffold fails, verify the agent exists in `agents/_registry.yml`. If status files don't update, run `npm run translation:status` explicitly — it is not triggered automatically by CI.
+**If fail:** Scaffold fails? Verify agent exists in `agents/_registry.yml`. Status files don't update? Run `npm run translation:status` explicitly — CI does not trigger it automatically.
 
-## Validation
+## Checks
 
 - [ ] Agent file exists at `agents/<agent-name>.md`
 - [ ] YAML frontmatter parses without errors
 - [ ] All required fields present: `name`, `description`, `tools`, `model`, `version`, `author`
-- [ ] `name` field matches the filename (without `.md`)
+- [ ] `name` field matches filename (no `.md`)
 - [ ] All sections present: Purpose, Capabilities, Available Skills, Usage Scenarios, Examples, Limitations, See Also
 - [ ] Skills in frontmatter exist in `skills/_registry.yml`
-- [ ] Default skills (`meditate`, `heal`) are NOT listed unless core to agent methodology
-- [ ] Tools list follows least-privilege principle
-- [ ] Agent is listed in `agents/_registry.yml` with correct path and matching metadata
-- [ ] `total_agents` count in registry is updated
-- [ ] `.claude/agents/` symlink resolves to the new agent file
-- [ ] No significant overlap with existing agents
+- [ ] Default skills (`meditate`, `heal`) NOT listed unless core to agent methodology
+- [ ] Tools list follows least-privilege
+- [ ] Agent listed in `agents/_registry.yml` with correct path and matching metadata
+- [ ] `total_agents` count in registry updated
+- [ ] `.claude/agents/` symlink resolves to new agent file
+- [ ] No big overlap with existing agents
 
-## Common Pitfalls
+## Pitfalls
 
-- **Tool over-provisioning**: Including `Bash`, `Write`, or `WebFetch` when the agent only needs to read and analyze. This violates least-privilege and can lead to unintended side effects. Start with the minimal set and add tools only when a capability requires them.
-- **Missing or wrong skill assignments**: Listing skill IDs that do not exist in the registry, or forgetting to assign skills entirely. Always verify each skill ID with `grep "id: skill-name" skills/_registry.yml` before adding it.
-- **Listing default skills unnecessarily**: Adding `meditate` or `heal` to the agent frontmatter when they are already inherited from the registry. Only list them if they are core to the agent's methodology (e.g., `mystic`, `alchemist`, `gardener`, `shaman`).
-- **Scope overlap with existing agents**: Creating a new agent that duplicates functionality already covered by one of the 53 existing agents. Always search the registry first and consider extending an existing agent's skills instead.
-- **Vague purpose and capabilities**: Writing "helps with development" instead of "scaffolds R packages with complete structure, documentation, and CI/CD configuration." Specificity is what makes an agent useful and discoverable.
+- **Tool over-provisioning**: Giving `Bash`, `Write`, or `WebFetch` when agent only needs to read and analyze. Breaks least-privilege, can cause unintended side effects. Start minimal, add tools only when capability needs them.
+- **Missing or wrong skill assignments**: Listing skill IDs not in registry, or forgetting skills entirely. Always verify each skill ID with `grep "id: skill-name" skills/_registry.yml` before adding.
+- **Listing default skills unnecessarily**: Adding `meditate` or `heal` to frontmatter when already inherited from registry. Only list if core to agent's methodology (e.g., `mystic`, `alchemist`, `gardener`, `shaman`).
+- **Scope overlap with existing agents**: Making new agent duplicating existing 53 agents. Search registry first. Consider extending existing agent's skills instead.
+- **Vague purpose and capabilities**: Writing "helps with development" instead of "scaffolds R packages with complete structure, documentation, CI/CD config." Specificity makes agent useful and discoverable.
 
-## Related Skills
+## See Also
 
-- `create-skill` - the parallel procedure for creating SKILL.md files instead of agent files
-- `create-team` - compose multiple agents into a coordinated team (planned)
-- `commit-changes` - commit the new agent file and registry update
+- `create-skill` - parallel procedure for creating SKILL.md files instead of agent files
+- `create-team` - compose many agents into coordinated team (planned)
+- `commit-changes` - commit new agent file and registry update

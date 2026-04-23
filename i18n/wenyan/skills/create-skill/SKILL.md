@@ -25,62 +25,57 @@ metadata:
   tags: meta, skill, agentskills, standard, authoring
 ---
 
-# Create a New Skill
+# 建新技
 
-Author a SKILL.md file that agentic systems can consume to execute a specific procedure.
+書 SKILL.md 文件，使行者系統可消耗以執特定之法。
 
-## When to Use
+## 用時
 
-- Codifying a repeatable procedure that agents should follow
-- Adding a new capability to the skills library
-- Converting a guide, runbook, or checklist into agent-consumable format
-- Standardizing a workflow across projects or teams
+- 將可反復之法定形為行者之循
+- 為技庫增新能
+- 將指南、運行本、清單轉為行者可消之式
+- 跨項目或團隊而一流
 
-## Inputs
+## 入
 
-- **Required**: Task the skill should accomplish
-- **Required**: Domain classification — one of the 48 domains in `skills/_registry.yml`:
-  `r-packages`, `jigsawr`, `containerization`, `reporting`, `compliance`, `mcp-integration`,
-  `web-dev`, `git`, `general`, `citations`, `data-serialization`, `review`, `bushcraft`,
-  `esoteric`, `design`, `defensive`, `project-management`, `devops`, `observability`, `mlops`,
-  `workflow-visualization`, `swarm`, `morphic`, `alchemy`, `tcg`, `intellectual-property`,
-  `gardening`, `shiny`, `animal-training`, `mycology`, `prospecting`, `crafting`,
-  `library-science`, `travel`, `relocation`, `a2a-protocol`, `geometry`, `number-theory`,
-  `stochastic-processes`, `theoretical-science`, `diffusion`, `hildegard`, `maintenance`,
-  `blender`, `visualization`, `3d-printing`, `lapidary`, `versioning`
-- **Required**: Complexity level (basic, intermediate, advanced)
-- **Optional**: Source material (existing guide, runbook, or working example)
-- **Optional**: Related skills to cross-reference
+- **必要**：技所當畢之任務
+- **必要**：域之別——`skills/_registry.yml` 之 48 域之一：
+  `r-packages`、`jigsawr`、`containerization`、`reporting`、`compliance`、`mcp-integration`、
+  `web-dev`、`git`、`general`、`citations`、`data-serialization`、`review`、`bushcraft`、
+  `esoteric`、`design`、`defensive`、`project-management`、`devops`、`observability`、`mlops`、
+  `workflow-visualization`、`swarm`、`morphic`、`alchemy`、`tcg`、`intellectual-property`、
+  `gardening`、`shiny`、`animal-training`、`mycology`、`prospecting`、`crafting`、
+  `library-science`、`travel`、`relocation`、`a2a-protocol`、`geometry`、`number-theory`、
+  `stochastic-processes`、`theoretical-science`、`diffusion`、`hildegard`、`maintenance`、
+  `blender`、`visualization`、`3d-printing`、`lapidary`、`versioning`
+- **必要**：繁度（basic、intermediate、advanced）
+- **可選**：源（現指南、運本、行例）
+- **可選**：欲交叉參之相關技
 
-## Procedure
+## 法
 
-### Step 1: Create Directory
+### 第一步：建目錄
 
-Each skill lives in its own directory:
+每技於己之目錄：
 
 ```bash
 mkdir -p skills/<skill-name>/
 ```
 
-Naming conventions:
-- Use lowercase kebab-case: `submit-to-cran`, not `SubmitToCRAN`
-- Start with a verb: `create-`, `setup-`, `write-`, `deploy-`, `configure-`
-- Be specific: `create-r-dockerfile` not `create-dockerfile`
+名慣：
+- 小寫中劃線：`submit-to-cran`，非 `SubmitToCRAN`
+- 始以動詞：`create-`、`setup-`、`write-`、`deploy-`、`configure-`
+- 具體：`create-r-dockerfile`，非 `create-dockerfile`
 
-**Expected:** Directory `skills/<skill-name>/` exists, and the name follows lowercase kebab-case starting with a verb.
+**得：** 目錄 `skills/<skill-name>/` 存，名循小寫中劃線始以動詞。
 
-**On failure:** If the name does not start with a verb, rename the directory. Check for naming conflicts: `ls skills/ | grep <keyword>` to ensure no existing skill has an overlapping name.
+**敗則：** 若名不始以動詞，更名目錄。察名衝：`ls skills/ | grep <keyword>` 確無現技名重。
 
-### Step 2: Write YAML Frontmatter
+### 第二步：書 YAML 前言
 
 ```yaml
 ---
 name: skill-name-here
-locale: wenyan
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: >
   One to three sentences plus key activation triggers. Must be clear
   enough for an agent to decide whether to activate this skill from
@@ -97,20 +92,20 @@ metadata:
 ---
 ```
 
-**Required fields**: `name`, `description`
+**必要域**：`name`、`description`
 
-**Optional fields**: `license`, `allowed-tools` (experimental), `metadata`, `compatibility`
+**可選域**：`license`、`allowed-tools`（實驗）、`metadata`、`compatibility`
 
-**Metadata conventions**:
-- `complexity`: basic (< 5 steps, no edge cases), intermediate (5-10 steps, some judgment), advanced (10+ steps, significant domain knowledge)
-- `language`: primary language; use `multi` for cross-language skills
-- `tags`: 3-6 tags for discovery; include the domain name
+**元資料慣**：
+- `complexity`：basic（< 5 步，無邊況）、intermediate（5-10 步，有判）、advanced（10+ 步，甚域知）
+- `language`：主語；跨語技用 `multi`
+- `tags`：3-6 標便發現；含域名
 
-**Expected:** YAML frontmatter parses without errors, `name` matches the directory name, and `description` is under 1024 characters with clear activation triggers.
+**得：** YAML 前言無訛而解，`name` 合目錄名，`description` 一千二十四字內有清觸。
 
-**On failure:** Validate YAML by checking for matching `---` delimiters, proper quoting of version strings (e.g., `"1.0"` not `1.0`), and correct `>` multi-line folding syntax for the description field.
+**敗則：** 驗 YAML，察 `---` 界相配、版字串正引（如 `"1.0"` 非 `1.0`）、述用正 `>` 多行折疊。
 
-### Step 3: Write the Title and Introduction
+### 第三步：書題與介
 
 ```markdown
 # Skill Title (Imperative Verb Form)
@@ -118,15 +113,15 @@ metadata:
 One paragraph: what this skill accomplishes and the value it provides.
 ```
 
-The title should match the `name` but in human-readable form. "Submit to CRAN" not "submit-to-cran".
+題合 `name` 而為人讀式。「Submit to CRAN」非「submit-to-cran」。
 
-**Expected:** A top-level `#` heading in imperative form followed by a concise paragraph stating what the skill accomplishes.
+**得：** 頂 `#` 標題以祈使式，續以簡段述技所畢。
 
-**On failure:** If the title reads as a noun phrase rather than a verb phrase, rewrite it. "Package Submission" becomes "Submit to CRAN."
+**敗則：** 若題為名詞而非動詞式，重書。「Package Submission」成「Submit to CRAN」。
 
-### Step 4: Write "When to Use"
+### 第四步：書「用時」
 
-List 3-5 trigger conditions — concrete scenarios where an agent should activate this skill:
+列 3-5 觸件——行者當激此技之具體景：
 
 ```markdown
 ## When to Use
@@ -136,17 +131,17 @@ List 3-5 trigger conditions — concrete scenarios where an agent should activat
 - Setting up a package skeleton for collaborative development
 ```
 
-Write from the agent's perspective. These are the conditions the agent checks to decide activation.
+由行者視書。此為行者察以決激之件。
 
-> **Note**: The most important trigger conditions should also appear in the `description` frontmatter field, since that is read during the discovery phase before the full body is loaded. The `## When to Use` section provides additional detail and context.
+> **注**：最要觸件宜亦現於前言之 `description`，蓋其於發現階段在全體前讀。`## When to Use` 節供增細與脈。
 
-**Expected:** 3-5 bullet points describing concrete, observable conditions under which an agent should activate this skill.
+**得：** 3-5 點述行者當激此技之具體可察件。
 
-**On failure:** If triggers feel vague ("when something needs to be done"), rewrite from the agent's perspective: what observable state or user request would trigger activation?
+**敗則：** 若觸感泛（「需作事時」），由行者視重書：何可察之狀或用者之請當觸激？
 
-### Step 5: Write "Inputs"
+### 第五步：書「入」
 
-Separate required from optional. Be specific about types and defaults:
+分必要與可選。明類與默：
 
 ```markdown
 ## Inputs
@@ -157,13 +152,13 @@ Separate required from optional. Be specific about types and defaults:
 - **Optional**: Whether to initialize renv (default: yes)
 ```
 
-**Expected:** Inputs section clearly separates required from optional parameters, each with a type hint and default value where applicable.
+**得：** 入節清分必要與可選參，各有類示與默（若用）。
 
-**On failure:** If a parameter's type is ambiguous, add a concrete example in parentheses: "Package name (lowercase, no special characters except `.`)".
+**敗則：** 若參類疑，括中加具體例：「Package name (lowercase, no special characters except `.`)」。
 
-### Step 6: Write "Procedure"
+### 第六步：書「法」
 
-This is the core of the skill. Each step follows this pattern:
+此技之核。每步循此式：
 
 ```markdown
 ### Step N: Action Title
@@ -179,25 +174,25 @@ concrete_code("that the agent can execute")
 **On failure:** Recovery steps. Don't just say "fix it" — provide the most common failure cause and its resolution.
 ```
 
-**Writing effective steps**:
-- Each step should be independently verifiable
-- Include actual code, not pseudocode
-- Put the most common path first, edge cases in "On failure"
-- 5-10 steps is the sweet spot. Under 5 may be too vague; over 12 should be split into multiple skills.
-- Reference real tools and real commands, not abstract descriptions
+**有效書步**：
+- 每步宜獨立可驗
+- 含實碼，非偽碼
+- 最常徑先，邊況於「On failure」
+- 5-10 步為宜。少於五或泛；逾十二宜分為多技。
+- 引實工具與實命，非抽象述
 
-**Writing for translation**:
-- Target ~400 lines maximum for English skills. German expands 10-20%, and some CJK translations expand further — a 400-line English source stays under 500 after translation.
-- Avoid idioms and culturally-specific examples that translate poorly.
-- Keep prose concise and direct — shorter sentences translate better.
+**書以便譯**：
+- 英文技至多約 400 行。德擴 10-20%，部分 CJK 擴更甚——英 400 行譯後守 500 下。
+- 避譯不佳之典故與文化專例。
+- 散文簡直——短句譯較佳。
 
-**Expected:** Procedure section contains 5-12 numbered steps, each with concrete code, an `**Expected:**` outcome, and an `**On failure:**` recovery action.
+**得：** 法節含 5-12 號步，各有具體碼、`**Expected:**` 果、`**On failure:**` 復。
 
-**On failure:** If a step lacks code, add the actual command or configuration. If Expected/On failure is missing, write it now — every step that can fail needs both.
+**敗則：** 若步缺碼，加實命或配。若 Expected／On failure 缺，即書之——可敗之步皆需二者。
 
-### Step 7: Write "Validation"
+### 第七步：書「驗」
 
-A checklist the agent runs after completing the procedure:
+法畢後行者運之清單：
 
 ```markdown
 ## Validation
@@ -207,15 +202,15 @@ A checklist the agent runs after completing the procedure:
 - [ ] No errors or warnings in output
 ```
 
-Each item must be objectively verifiable. "Code is clean" is bad. "`devtools::check()` returns 0 errors" is good.
+每項須客觀可驗。「Code is clean」劣。「`devtools::check()` returns 0 errors」佳。
 
-**Expected:** A markdown checklist (`- [ ]`) with 3-8 binary pass/fail criteria that an agent can verify programmatically or by inspection.
+**得：** markdown 勾表（`- [ ]`）有 3-8 二元過敗之準，行者可程或察而驗。
 
-**On failure:** Replace subjective criteria with measurable ones. "Well-documented" becomes "All exported functions have `@param`, `@return`, and `@examples` roxygen tags."
+**敗則：** 以可度者代主觀者。「Well-documented」成「All exported functions have `@param`, `@return`, and `@examples` roxygen tags」。
 
-### Step 8: Write "Common Pitfalls"
+### 第八步：書「陷」
 
-3-6 pitfalls with cause and avoidance:
+3-6 陷含因與避：
 
 ```markdown
 ## Common Pitfalls
@@ -223,15 +218,15 @@ Each item must be objectively verifiable. "Code is clean" is bad. "`devtools::ch
 - **Pitfall name**: What goes wrong and how to avoid it. Be specific about the symptom and the fix.
 ```
 
-Draw from real experience. The best pitfalls are ones that waste significant time and are non-obvious.
+汲實踐。最佳陷為費時顯之非顯者。
 
-**Expected:** 3-6 pitfalls, each with a bold name, a description of what goes wrong, and how to avoid it.
+**得：** 3-6 陷，各有粗名、述所敗、與如何避。
 
-**On failure:** If pitfalls feel generic ("be careful with X"), make them specific: name the symptom, the cause, and the fix. Draw from actual failure scenarios encountered during development or testing.
+**敗則：** 若陷泛（「慎 X」），具體之：名症、因、修。汲開發或試時實敗景。
 
-### Step 9: Write "Related Skills"
+### 第九步：書「參」
 
-Cross-reference 2-5 skills that are commonly used before, after, or alongside this one:
+交叉參常於此前、後、同用之 2-5 技：
 
 ```markdown
 ## Related Skills
@@ -241,15 +236,15 @@ Cross-reference 2-5 skills that are commonly used before, after, or alongside th
 - `alternative-skill` - alternative approach to the same goal
 ```
 
-Use the skill `name` field (kebab-case), not the title.
+用技 `name` 域（中劃線），非題。
 
-**Expected:** 2-5 related skills listed with kebab-case IDs and brief descriptions of the relationship (prerequisite, follow-up, alternative).
+**得：** 2-5 相關技，列以中劃線 ID 與簡述（前提、後續、替）。
 
-**On failure:** Verify each referenced skill exists: `ls skills/<skill-name>/SKILL.md`. Remove any references to skills that have been renamed or removed.
+**敗則：** 驗各所引技存：`ls skills/<skill-name>/SKILL.md`。刪更名或已去之引。
 
-### Step 10: Add to Registry
+### 第十步：入籍
 
-Edit `skills/_registry.yml` and add the new skill under the appropriate domain:
+編 `skills/_registry.yml` 於宜域下加新技：
 
 ```yaml
 - id: skill-name-here
@@ -259,24 +254,24 @@ Edit `skills/_registry.yml` and add the new skill under the appropriate domain:
   description: One-line description matching the frontmatter
 ```
 
-Update the `total_skills` count at the top of the registry.
+更頂之 `total_skills` 計。
 
-**Expected:** New entry appears in `skills/_registry.yml` under the correct domain, and `total_skills` count matches the actual number of skill directories on disk.
+**得：** 新項現於 `skills/_registry.yml` 宜域下，`total_skills` 合盤之實技目數。
 
-**On failure:** Count skills on disk with `find skills -name SKILL.md | wc -l` and compare against `total_skills` in the registry. Verify the `id` field matches the directory name exactly.
+**敗則：** 以 `find skills -name SKILL.md | wc -l` 計盤技與籍 `total_skills` 較。驗 `id` 精合目錄名。
 
-### Step 11: Add Citations (Optional)
+### 第十一步：加引用（可選）
 
-If the skill is based on established methodologies, research papers, software packages, or standards, add citation subfiles to the `references/` directory:
+若技基於既法、論文、軟件包、標準，加引用子文件於 `references/`：
 
 ```bash
 mkdir -p skills/<skill-name>/references/
 ```
 
-Create two files:
+建二文件：
 
-- **`references/CITATIONS.bib`** — Machine-readable BibTeX (source of truth)
-- **`references/CITATIONS.md`** — Human-readable rendered references for GitHub browsing
+- **`references/CITATIONS.bib`** — 機讀 BibTeX（真源）
+- **`references/CITATIONS.md`** — 人讀渲之參，便 GitHub 覽
 
 ```bibtex
 % references/CITATIONS.bib
@@ -298,17 +293,17 @@ References underpinning the **skill-name** skill.
 1. Author, F., & Other, S. (2024). *Paper Title*. Journal Name. https://doi.org/10.xxxx/xxxxx
 ```
 
-Citations are optional — add them when provenance tracking matters (academic methods, published standards, regulatory frameworks).
+引用為可選——溯源要時加之（學術法、發標、規框）。
 
-**Handling `references/` in translations**: Prose descriptions in `references/EXAMPLES.md` should be translated. `references/CITATIONS.bib` stays in English (BibTeX is language-neutral). Translations may symlink to the English `references/` directory if its content is code-only.
+**譯中處 `references/`**：`references/EXAMPLES.md` 之散述宜譯。`references/CITATIONS.bib` 留英（BibTeX 為中立語）。若唯碼，譯可鏈至英 `references/`。
 
-**Expected:** Both files exist and `.bib` parses as valid BibTeX.
+**得：** 二文件存，`.bib` 解為合法 BibTeX。
 
-**On failure:** Validate BibTeX syntax with `bibtool -d references/CITATIONS.bib` or an online validator.
+**敗則：** 以 `bibtool -d references/CITATIONS.bib` 或線上驗器驗 BibTeX 語法。
 
-### Step 12: Validate Skill
+### 第十二步：驗技
 
-Run local validation checks before committing:
+提交前運本地驗：
 
 ```bash
 # Check line count (must be ≤500)
@@ -320,19 +315,19 @@ head -20 skills/<skill-name>/SKILL.md | grep -q '^name:' && echo "name: OK"
 head -20 skills/<skill-name>/SKILL.md | grep -q '^description:' && echo "description: OK"
 ```
 
-**Expected:** Line count ≤500, all required fields present.
+**得：** 行數 ≤500，諸必要域存。
 
-**On failure:** If over 500 lines, apply progressive disclosure — extract large code blocks (>15 lines) to `references/EXAMPLES.md`:
+**敗則：** 若逾 500 行，施漸次披露——抽大碼塊（>15 行）至 `references/EXAMPLES.md`：
 
 ```bash
 mkdir -p skills/<skill-name>/references/
 ```
 
-Move extended code examples, full configuration files, and multi-variant examples to `references/EXAMPLES.md`. Add cross-reference in SKILL.md: `See [EXAMPLES.md](references/EXAMPLES.md) for complete configuration examples.` Keep brief inline snippets (3-10 lines) in the main SKILL.md. The CI workflow at `.github/workflows/validate-skills.yml` enforces these limits on all PRs.
+移擴碼例、全配文件、多變例至 `references/EXAMPLES.md`。SKILL.md 加參：`See [EXAMPLES.md](references/EXAMPLES.md) for complete configuration examples.` 主 SKILL.md 留簡片（3-10 行）。`.github/workflows/validate-skills.yml` 之 CI 於諸 PR 執此限。
 
-### Step 13: Create Slash Command Symlinks
+### 第十三步：建斜命符號鏈
 
-Create symlinks so Claude Code discovers the skill as a `/slash-command`:
+建符號鏈以令 Claude Code 發現技為 `/slash-command`：
 
 ```bash
 # Project-level (available in this project)
@@ -342,15 +337,15 @@ ln -s ../../skills/<skill-name> .claude/skills/<skill-name>
 ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-name>
 ```
 
-**Expected:** `ls -la .claude/skills/<skill-name>/SKILL.md` resolves to the skill file.
+**得：** `ls -la .claude/skills/<skill-name>/SKILL.md` 解至技文件。
 
-**On failure:** Verify the relative path is correct. From `.claude/skills/`, the path `../../skills/<skill-name>` should reach the skill directory. Use `readlink -f` to debug symlink resolution. Claude Code expects a flat structure at `.claude/skills/<name>/SKILL.md`.
+**敗則：** 驗相對路正。由 `.claude/skills/`，`../../skills/<skill-name>` 當達技目錄。以 `readlink -f` 調鏈解。Claude Code 期平構於 `.claude/skills/<name>/SKILL.md`。
 
-### Step 14: Scaffold Translations
+### 第十四步：搭翻譯之架
 
-> **Required for all skills.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+> **諸技必需。** 此步施於人作者與循此法之 AI 行者。勿略——缺譯積為陳積。
 
-Scaffold translation files for all 4 supported locales immediately after committing the new skill:
+提交新技後即為四支持語搭譯文件：
 
 ```bash
 for locale in de zh-CN ja es; do
@@ -358,65 +353,65 @@ for locale in de zh-CN ja es; do
 done
 ```
 
-Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+而譯各文件之散文（代碼塊與 ID 留英）。終重生狀態文件：
 
 ```bash
 npm run translation:status
 ```
 
-**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new skill.
+**得：** 四文件建於 `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md`，`source_commit` 皆合當前 HEAD。`npm run validate:translations` 顯新技無陳警。
 
-**On failure:** If scaffold fails, verify the skill exists in `skills/_registry.yml` before scaffolding — the script reads the registry. If `translation:status` shows the new files as stale, check that `source_commit` matches the commit hash where the English source was last modified.
+**敗則：** 若搭架敗，於搭前驗技存於 `skills/_registry.yml`——本讀籍。若 `translation:status` 顯新文件陳，察 `source_commit` 合英源最後改之提交雜湊。
 
-## Validation
+## 驗
 
-- [ ] SKILL.md exists at `skills/<skill-name>/SKILL.md`
-- [ ] YAML frontmatter parses without errors
-- [ ] `name` field matches directory name
-- [ ] `description` is under 1024 characters
-- [ ] All required sections present: When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills
-- [ ] Every procedure step has concrete code and Expected/On failure pairs
-- [ ] Related Skills reference valid skill names
-- [ ] Skill is listed in `_registry.yml` with correct path
-- [ ] `total_skills` count in registry is updated
-- [ ] SKILL.md is ≤500 lines (extract to `references/EXAMPLES.md` if over)
-- [ ] Estimated translation expansion is acceptable (English source ≤~400 lines so translations stay <500)
-- [ ] Citations added to `references/CITATIONS.bib` + `CITATIONS.md` if skill is based on published methods
-- [ ] Symlink exists at `.claude/skills/<skill-name>` pointing to skill directory
-- [ ] Global symlink exists at `~/.claude/skills/<skill-name>` (if globally available)
+- [ ] SKILL.md 存於 `skills/<skill-name>/SKILL.md`
+- [ ] YAML 前言無訛而解
+- [ ] `name` 合目錄名
+- [ ] `description` 一千二十四字內
+- [ ] 諸必要節存：When to Use、Inputs、Procedure、Validation、Common Pitfalls、Related Skills
+- [ ] 每法步有具體碼與 Expected／On failure 對
+- [ ] Related Skills 引合法技名
+- [ ] 技列於 `_registry.yml` 有正路
+- [ ] 籍之 `total_skills` 已更
+- [ ] SKILL.md ≤500 行（過則抽至 `references/EXAMPLES.md`）
+- [ ] 估譯擴可容（英源 ≤~400 行則譯守 500 下）
+- [ ] 若技基於發之法，加引至 `references/CITATIONS.bib` + `CITATIONS.md`
+- [ ] `.claude/skills/<skill-name>` 存符號鏈指技目錄
+- [ ] `~/.claude/skills/<skill-name>` 存全域符號鏈（若全可用）
 
-## Common Pitfalls
+## 陷
 
-- **Vague procedures**: "Configure the system appropriately" is useless to an agent. Provide exact commands, file paths, and configuration values.
-- **Missing On failure**: Every step that can fail needs recovery guidance. Agents can't improvise — they need the fallback spelled out.
-- **Overly broad scope**: A skill that tries to cover "Set up entire development environment" should be 3-5 focused skills instead. One skill = one procedure.
-- **Untestable validation**: "Code quality is good" can't be verified. "Linter passes with 0 warnings" can.
-- **Stale cross-references**: When renaming or removing skills, grep for the old name in all Related Skills sections.
-- **Description too long**: The description field is what agents read to decide activation. Keep it under 1024 characters and front-load the key information.
-- **Authoring at 500-line limit for single language**: An English skill at 490 lines will exceed 500 when translated to German (~10-20% expansion) or CJK languages. Target ~400 lines for the English source and use progressive disclosure (`references/EXAMPLES.md`) for the rest.
-- **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
+- **法泛**：「Configure the system appropriately」於行者無用。供精命、路、配值。
+- **缺 On failure**：可敗之步皆需復導。行者不能即興——宜明書退路。
+- **範過廣**：欲覆「Set up entire development environment」之技當為 3-5 專技。一技 = 一法。
+- **不可試之驗**：「Code quality is good」不可驗。「Linter passes with 0 warnings」可。
+- **陳交叉參**：更名或去技時，於諸 Related Skills 節 grep 舊名。
+- **述過長**：述為行者決激所讀。守一千二十四字以內，要信前置。
+- **單語達 500 行限**：英技 490 行譯德（~10-20% 擴）或 CJK 則逾 500。英源目標 ~400 行，餘用漸次披露（`references/EXAMPLES.md`）。
+- **NTFS 掛路避 `git mv`（WSL）**：於 `/mnt/` 路，目錄之 `git mv` 或生壞權（`d?????????`）。宜 `mkdir -p` + 複文件 + `git rm` 舊路。參[境指南](../../guides/setting-up-your-environment.md)之疑難節。
 
-## Examples
+## 例
 
-A well-structured skill follows this quality checklist:
-1. An agent can decide whether to use it from the description alone
-2. The procedure can be followed mechanically without ambiguity
-3. Every step has a verifiable outcome
-4. Failure modes have concrete recovery paths
-5. The skill can be composed with related skills
+結構良好之技循此質單：
+1. 行者可由述獨決用否
+2. 法可機械循而無歧
+3. 每步有可驗之果
+4. 敗模有具體復路
+5. 技可與相關技組
 
-Size reference from this library:
-- Basic skills: ~80-120 lines (e.g., `write-vignette`, `configure-git-repository`)
-- Intermediate skills: ~120-180 lines (e.g., `write-testthat-tests`, `manage-renv-dependencies`)
-- Advanced skills: ~180-250 lines (e.g., `submit-to-cran`, `setup-gxp-r-project`)
-- Skills with extended examples: SKILL.md ≤500 lines + `references/EXAMPLES.md` for large configs
+此庫之尺參：
+- 基本技：~80-120 行（如 `write-vignette`、`configure-git-repository`）
+- 中等技：~120-180 行（如 `write-testthat-tests`、`manage-renv-dependencies`）
+- 進階技：~180-250 行（如 `submit-to-cran`、`setup-gxp-r-project`）
+- 含擴例之技：SKILL.md ≤500 行 + `references/EXAMPLES.md` 為大配
 
-## Related Skills
+## 參
 
-- `evolve-skill` - evolve and refine skills created with this procedure
-- `create-agent` - parallel procedure for creating agent definitions
-- `create-team` - parallel procedure for creating team compositions
-- `write-claude-md` - CLAUDE.md can reference skills for project-specific workflows
-- `configure-git-repository` - skills should be version-controlled
-- `commit-changes` - commit the new skill and its symlinks
-- `security-audit-codebase` - review skills for accidentally included secrets or credentials
+- `evolve-skill` — 演化與精此法建之技
+- `create-agent` — 建行者定之平行法
+- `create-team` — 建團組之平行法
+- `write-claude-md` — CLAUDE.md 可參項專流之技
+- `configure-git-repository` — 技宜納版控
+- `commit-changes` — 提交新技及其符號鏈
+- `security-audit-codebase` — 察技是否含入之密或證

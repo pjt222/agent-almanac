@@ -25,17 +25,17 @@ metadata:
 
 # Create 2D Composition
 
-Generate 2D graphics programmatically using SVG construction, diagram layout algorithms, image compositing, and batch processing workflows. Covers vector graphics generation, raster image manipulation, typography, and automated production of charts, diagrams, and infographics.
+Make 2D graphics by code. SVG building, diagram layout, image compositing, batch workflows. Covers vector, raster, typography, auto-production of charts, diagrams, infographics.
 
-## When to Use
+## When Use
 
-- Generating diagrams, flowcharts, or infographics programmatically
-- Creating reproducible scientific figures or publication graphics
-- Automating production of badges, icons, or visual assets
-- Compositing multiple images or data visualizations
-- Building custom chart types not available in standard libraries
-- Batch generating graphics with parameter variations
-- Creating SVG templates for web or print applications
+- Making diagrams, flowcharts, infographics by code
+- Building reproducible scientific figures
+- Auto-producing badges, icons, assets
+- Compositing images or data visualizations
+- Building custom chart types not in standard libs
+- Batch graphics with param variations
+- SVG templates for web or print
 
 ## Inputs
 
@@ -47,11 +47,11 @@ Generate 2D graphics programmatically using SVG construction, diagram layout alg
 | Data sources | Files/Arrays | Values to visualize or annotate | CSV data, JSON configuration |
 | Output format | String | SVG, PNG, PDF, composite formats | `output.svg`, 300 DPI PNG |
 
-## Procedure
+## Steps
 
 ### 1. Set Up Python Environment
 
-Install required libraries for 2D composition:
+Install libs for 2D composition:
 
 ```bash
 # Core libraries
@@ -64,12 +64,11 @@ pip install drawsvg reportlab pycairo
 pip install matplotlib numpy pandas
 ```
 
-**Expected:** Libraries installed successfully
-**On failure:** Check Python version (3.7+), use virtual environment to avoid conflicts
+**Got:** Libraries installed fine. **If fail:** Check Python version (3.7+). Use virtual env
 
 ### 2. Create Basic SVG Graphics
 
-Generate SVG using svgwrite:
+Generate SVG with svgwrite:
 
 ```python
 import svgwrite
@@ -120,12 +119,11 @@ def create_basic_svg(output_path):
     print(f"Saved: {output_path}")
 ```
 
-**Expected:** SVG file generated with shapes and text
-**On failure:** Check svgwrite version, verify output directory writable
+**Got:** SVG file made with shapes and text. **If fail:** Check svgwrite version. Confirm output dir writable
 
 ### 3. Build Diagrams with Layout Logic
 
-Create structured diagrams with calculated positioning:
+Build structured diagrams with calculated positions:
 
 ```python
 def create_flowchart(steps, output_path):
@@ -213,12 +211,11 @@ def wrap_text(text, max_width=20):
     return lines
 ```
 
-**Expected:** Flowchart with connected boxes and arrows
-**On failure:** Adjust layout calculations, verify arrow marker definitions
+**Got:** Flowchart with connected boxes and arrows. **If fail:** Tune layout math. Verify arrow marker definitions
 
 ### 4. Composite Raster Images
 
-Combine multiple images using Pillow:
+Combine many images with Pillow:
 
 ```python
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -306,12 +303,11 @@ def add_annotations(image_path, annotations, output_path):
     img.save(output_path)
 ```
 
-**Expected:** Composite image created with proper layout
-**On failure:** Check all input images exist, verify image modes compatible
+**Got:** Composite image made with right layout. **If fail:** Check all input images exist. Verify image modes match
 
 ### 5. Generate Data-Driven Graphics
 
-Create visualizations from data:
+Make visualizations from data:
 
 ```python
 import numpy as np
@@ -384,12 +380,11 @@ def create_bar_chart_svg(data, labels, output_path):
     dwg.save()
 ```
 
-**Expected:** SVG bar chart with scaled data
-**On failure:** Handle edge cases (empty data, negative values), add validation
+**Got:** SVG bar chart with scaled data. **If fail:** Handle edge cases (empty data, negatives). Add validation
 
 ### 6. Batch Generate Graphics
 
-Automate creation of multiple graphics:
+Auto-make many graphics:
 
 ```python
 def batch_generate_badges(users, template_path, output_dir):
@@ -433,12 +428,12 @@ def batch_generate_badges(users, template_path, output_dir):
         print(f"Generated badge: {output_path}")
 ```
 
-**Expected:** Individual graphic generated for each data item
-**On failure:** Check data structure, handle missing fields with defaults
+**Got:** Individual graphic made for each data item
+**If fail:** Check data structure. Handle missing fields with defaults
 
 ### 7. Convert SVG to Raster
 
-Export SVG to PNG/PDF for various uses:
+Export SVG to PNG/PDF for many uses:
 
 ```python
 import cairosvg
@@ -467,37 +462,38 @@ def svg_to_pdf(svg_path, pdf_path):
     print(f"Converted to PDF: {pdf_path}")
 ```
 
-**Expected:** Raster output generated at specified resolution
-**On failure:** Install cairo system library if missing, check SVG validity
+**Got:** Raster output at right resolution
+**If fail:** Install cairo system library if missing. Check SVG validity
 
-## Validation Checklist
+## Checks
 
-- [ ] Graphics render correctly in target applications
-- [ ] Text is readable and properly positioned
-- [ ] Colors match specifications (check hex codes)
-- [ ] Dimensions appropriate for use case
-- [ ] SVG validates against standard (if required)
-- [ ] Raster exports have correct DPI
-- [ ] Layout adapts to data variations
-- [ ] Batch processing completes without errors
-- [ ] Output files organized logically
-- [ ] Code includes error handling
+- [ ] Graphics render right in target apps
+- [ ] Text readable, positioned well
+- [ ] Colors match specs
+- [ ] Dimensions fit use case
+- [ ] SVG validates (if needed)
+- [ ] Raster exports have right DPI
+- [ ] Layout adapts to data
+- [ ] Batch processing finishes clean
+- [ ] Output files organized
+- [ ] Code has error handling
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Unit confusion**: SVG units (px, mm, cm) vs screen pixels vs print DPI
-2. **Text overflow**: Text exceeding shape boundaries, implement wrapping
-3. **Font availability**: System fonts may differ, embed or use web-safe fonts
-4. **Coordinate calculations**: Off-by-one errors in grid layouts
+2. **Text overflow**: Text past shape boundaries. Wrap it
+3. **Font availability**: System fonts differ. Embed or use web-safe fonts
+4. **Coordinate math**: Off-by-one errors in grid layouts
 5. **Color format**: SVG uses hex strings (`#rrggbb`), not tuples
-6. **SVG validity**: Check XML structure, close all tags
-7. **File paths**: Handle special characters, spaces in filenames
-8. **Memory usage**: Large batch operations may require chunking
-9. **Aspect ratio**: Maintain proportions when resizing images
-10. **Transparency**: PNG supports alpha, JPEG does not
+6. **SVG validity**: Check XML. Close all tags
+7. **File paths**: Handle special chars, spaces in filenames
+8. **Memory usage**: Big batch jobs may need chunking
+9. **Aspect ratio**: Keep proportions when resizing
+10. **Transparency**: PNG supports alpha. JPEG does not
 
-## Related Skills
+## See Also
 
-- **[render-publication-graphic](../render-publication-graphic/SKILL.md)**: Publication-specific output requirements
-- **[create-3d-scene](../../blender/create-3d-scene/SKILL.md)**: Similar programmatic approach for 3D
-- **[generate-quarto-report](../../reporting/generate-quarto-report/SKILL.md)**: Integrating graphics into reports
+- `render-publication-graphic` — publication output
+- `create-3d-scene` — similar programmatic approach for 3D
+- `generate-quarto-report` — integrating graphics into reports
+

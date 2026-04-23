@@ -23,34 +23,34 @@ metadata:
   tags: blender, bpy, 3d, scene-setup, materials, lighting, camera
 ---
 
-# Create 3D Scene
+# 造三維場景
 
-Set up a complete Blender scene programmatically using the Python API (bpy). Configure scene hierarchy, add mesh objects, create PBR materials with node-based shaders, position lighting and cameras, and set up environment/world settings.
+以 Python API（bpy）程式化立一完整 Blender 場景。配置場景階層、加網格物件、以節點式著色器造 PBR 材質、置光與相機、設環境/世界之設。
 
-## When to Use
+## 適用時機
 
-- Creating reproducible 3D visualization scenes from scratch
-- Automating product visualization or architectural rendering setup
-- Generating multiple scene variations programmatically
-- Building template scenes for batch rendering workflows
-- Prototyping scene layouts before manual refinement
-- Integrating 3D visualization into data pipelines or reporting systems
+- 由頭造可重現之三維可視化場景
+- 自動化產品視覺化或建築渲染之設
+- 以程式生多場景變體
+- 為批次渲染流建範本場景
+- 手動精修前之場景佈局原型
+- 整合三維可視化於資料管線或報告系統
 
-## Inputs
+## 輸入
 
-| Input | Type | Description | Example |
+| 輸入 | 類型 | 描述 | 範例 |
 |-------|------|-------------|---------|
-| Scene specifications | Configuration | Objects, materials, lighting requirements | Product dimensions, material colors, lighting setup |
-| Output requirements | Parameters | Resolution, render engine, quality settings | 1920x1080, Cycles, 128 samples |
-| Asset paths | File paths | External models, textures, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |
-| Camera settings | Parameters | Position, rotation, focal length, DOF | `location=(7,-7,5)`, `lens=50mm` |
-| Environment | Configuration | World shader, background, ambient settings | HDRI lighting, solid color, gradient |
+| 場景規格 | 配置 | 物件、材質、光之需 | 產品尺寸、材色、光設 |
+| 輸出需求 | 參數 | 解析度、渲染引擎、品質設 | 1920x1080、Cycles、128 取樣 |
+| 資產路 | 檔路 | 外部模型、貼圖、HDRI | `/path/to/hdri.exr`、`product_model.obj` |
+| 相機設 | 參數 | 位、旋、焦距、景深 | `location=(7,-7,5)`、`lens=50mm` |
+| 環境 | 配置 | 世界著色器、背景、環境光設 | HDRI 光、純色、漸層 |
 
-## Procedure
+## 步驟
 
-### 1. Set Up Script Structure
+### 1. 立腳本結構
 
-Create a Python script with proper imports and structure:
+造一 Python 腳本，含當之匯入與結構：
 
 ```python
 #!/usr/bin/env python3
@@ -86,12 +86,12 @@ if __name__ == "__main__":
     main()
 ```
 
-**Expected:** Script structure with clear_scene() and main() functions
-**On failure:** Review Python syntax, check bpy import works in Blender Python environment
+**預期：** 腳本結構含 clear_scene() 與 main() 函式
+**失敗時：** 察 Python 語法，驗 bpy 匯入於 Blender Python 環境中可行
 
-### 2. Add Mesh Objects
+### 2. 加網格物件
 
-Create primitive or imported mesh objects:
+造原始或匯入之網格物件：
 
 ```python
 def add_objects():
@@ -120,12 +120,12 @@ def add_objects():
     return cube, sphere
 ```
 
-**Expected:** Objects appear in scene with correct names and positions
-**On failure:** Check operator syntax, verify coordinates, ensure no naming conflicts
+**預期：** 物件顯於場景，名與位皆合
+**失敗時：** 察運算子語法，驗座標，確保無命名衝突
 
-### 3. Create Materials with Node-Based Shaders
+### 3. 以節點式著色器造材質
 
-Set up PBR materials using shader nodes:
+以著色器節點立 PBR 材質：
 
 ```python
 def create_material(name, base_color, metallic=0.0, roughness=0.5):
@@ -173,12 +173,12 @@ def apply_materials(cube, sphere):
         sphere.data.materials.append(mat_metal)
 ```
 
-**Expected:** Materials visible in shader editor with proper node connections
-**On failure:** Check node types exist, verify link syntax, ensure color values in [0,1] range
+**預期：** 材質於著色器編輯器中顯，節點連接無誤
+**失敗時：** 察節點型存否，驗連結語法，確保色值於 [0,1] 區間
 
-### 4. Set Up Lighting
+### 4. 立光
 
-Configure lights for scene illumination:
+配光以照場景：
 
 ```python
 def setup_lighting():
@@ -214,12 +214,12 @@ def setup_lighting():
     point.data.energy = 500.0
 ```
 
-**Expected:** Three lights with appropriate intensities and positions
-**On failure:** Adjust energy values for render engine (Cycles vs EEVEE), check rotation format
+**預期：** 三光，強度與位皆當
+**失敗時：** 依渲染引擎（Cycles 與 EEVEE 之別）調能量值，察旋轉格式
 
-### 5. Position Camera
+### 5. 置相機
 
-Set up camera with proper framing:
+立相機，框取得宜：
 
 ```python
 def setup_camera():
@@ -245,12 +245,12 @@ def setup_camera():
     bpy.context.scene.camera = camera
 ```
 
-**Expected:** Camera positioned with correct focal length and DOF settings
-**On failure:** Use simpler rotation method if track_to fails, verify lens units
+**預期：** 相機已置，焦距與景深設皆當
+**失敗時：** track_to 敗則用簡旋轉法，驗鏡頭單位
 
-### 6. Configure World Environment
+### 6. 配世界環境
 
-Set up world shader and background:
+立世界著色器與背景：
 
 ```python
 def setup_world():
@@ -286,12 +286,12 @@ def setup_world():
     links.new(node_bg.outputs['Background'], node_output.inputs['Surface'])
 ```
 
-**Expected:** World shader with HDRI or solid background configured
-**On failure:** Skip HDRI loading if file missing, use Background node alone with color
+**預期：** 世界著色器已配 HDRI 或純背景
+**失敗時：** 檔缺則跳 HDRI 載入，單用 Background 節點加色
 
-### 7. Configure Render Settings
+### 7. 配渲染設
 
-Set basic render parameters:
+設基本渲染參數：
 
 ```python
 def setup_render_settings():
@@ -315,12 +315,12 @@ def setup_render_settings():
     scene.render.filepath = "/tmp/render_"
 ```
 
-**Expected:** Render settings configured, ready for rendering
-**On failure:** Check engine name spelling, verify resolution values are positive integers
+**預期：** 渲染設已配，可備渲染
+**失敗時：** 察引擎名拼法，驗解析度為正整數
 
-### 8. Organize Scene Hierarchy
+### 8. 組織場景階層
 
-Create collections for organization:
+造集合以便組織：
 
 ```python
 def organize_collections():
@@ -349,37 +349,37 @@ def organize_collections():
             col_cameras.objects.link(obj)
 ```
 
-**Expected:** Objects organized in named collections for easier management
-**On failure:** Check collection already exists before creating, handle orphaned objects
+**預期：** 物件組織於名集合中，便於管理
+**失敗時：** 造前察集合已存否，處孤立物件
 
-## Validation Checklist
+## 驗證清單
 
-- [ ] Script runs without errors in Blender background mode
-- [ ] All expected objects present in scene outliner
-- [ ] Materials show correct colors and properties in shader editor
-- [ ] Camera positioned with objects in frame
-- [ ] Lighting provides adequate illumination (test render)
-- [ ] World environment loads correctly (HDRI or background color)
-- [ ] Render settings configured appropriately for output requirements
-- [ ] Scene organized logically in collections
-- [ ] No orphaned data blocks (materials, meshes without users)
-- [ ] Script includes clear_scene() for reproducibility
+- [ ] 腳本於 Blender 背景模式無誤運行
+- [ ] 所期物件皆顯於場景大綱
+- [ ] 材質於著色器編輯器中顯正色與性
+- [ ] 相機已置，物件於框中
+- [ ] 光給充足之照（測渲染）
+- [ ] 世界環境載入無誤（HDRI 或背景色）
+- [ ] 渲染設合輸出需求
+- [ ] 場景於集合中組織得當
+- [ ] 無孤立資料塊（無使用者之材質、網格）
+- [ ] 腳本含 clear_scene() 以便重現
 
-## Common Pitfalls
+## 常見陷阱
 
-1. **Object naming conflicts**: Use unique names, check for existing objects before creating
-2. **Incorrect color format**: RGB values must be tuples (r, g, b, a) in [0,1] range
-3. **Missing alpha channel**: When setting colors, include alpha: `(r, g, b, 1.0)`
-4. **Node connection errors**: Verify node types have expected inputs/outputs before linking
-5. **Camera not active**: Must set `bpy.context.scene.camera = camera_object`
-6. **Relative vs absolute paths**: Use absolute paths or Path() for cross-platform compatibility
-7. **Units confusion**: Blender uses meters by default, camera lens in millimeters
-8. **Rotation formats**: Use `math.radians()` for degree-to-radian conversion
-9. **Render engine differences**: EEVEE and Cycles have different features and parameters
-10. **Memory leaks**: Clear orphaned data blocks to prevent memory buildup in batch operations
+1. **物件命名衝突**：用唯一名，造前察既存物件
+2. **色格式誤**：RGB 值須為元組 (r, g, b, a) 於 [0,1] 區間
+3. **缺 alpha 通道**：設色時含 alpha：`(r, g, b, 1.0)`
+4. **節點連接誤**：連結前驗節點型有所期之輸入/輸出
+5. **相機未激活**：須設 `bpy.context.scene.camera = camera_object`
+6. **相對與絕對路之別**：用絕對路或 Path() 以跨平台相容
+7. **單位之惑**：Blender 預設以公尺為單位，相機鏡頭以毫米
+8. **旋轉格式**：用 `math.radians()` 行度-弧度之轉換
+9. **渲染引擎之別**：EEVEE 與 Cycles 有異之功能與參數
+10. **記憶體洩漏**：清孤立資料塊以防批次操作中之記憶體累積
 
-## Related Skills
+## 相關技能
 
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Advanced scripting patterns for procedural modeling and batch operations
-- **[render-blender-output](../render-blender-output/SKILL.md)**: Configure rendering pipeline and execute renders
-- **[create-2d-composition](../../visualization/create-2d-composition/SKILL.md)**: 2D graphics composition using similar scripting approaches
+- **[script-blender-automation](../script-blender-automation/SKILL.md)**：程序化建模與批次操作之進階腳本模式
+- **[render-blender-output](../render-blender-output/SKILL.md)**：配渲染管線並執渲染
+- **[create-2d-composition](../../visualization/create-2d-composition/SKILL.md)**：以類似腳本法行二維圖形構圖

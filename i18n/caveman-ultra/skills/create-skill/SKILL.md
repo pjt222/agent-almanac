@@ -27,19 +27,19 @@ metadata:
 
 # Create a New Skill
 
-Author a SKILL.md file that agentic systems can consume to execute a specific procedure.
+Author SKILL.md → agents execute procedure.
 
-## When to Use
+## Use When
 
-- Codifying a repeatable procedure that agents should follow
-- Adding a new capability to the skills library
-- Converting a guide, runbook, or checklist into agent-consumable format
-- Standardizing a workflow across projects or teams
+- Codify repeatable proc for agents
+- New cap → skills lib
+- Guide/runbook → agent-consumable
+- Std workflow across projects/teams
 
-## Inputs
+## In
 
-- **Required**: Task the skill should accomplish
-- **Required**: Domain classification — one of the 48 domains in `skills/_registry.yml`:
+- **Required**: Task
+- **Required**: Domain — 1 of 48 in `skills/_registry.yml`:
   `r-packages`, `jigsawr`, `containerization`, `reporting`, `compliance`, `mcp-integration`,
   `web-dev`, `git`, `general`, `citations`, `data-serialization`, `review`, `bushcraft`,
   `esoteric`, `design`, `defensive`, `project-management`, `devops`, `observability`, `mlops`,
@@ -48,39 +48,34 @@ Author a SKILL.md file that agentic systems can consume to execute a specific pr
   `library-science`, `travel`, `relocation`, `a2a-protocol`, `geometry`, `number-theory`,
   `stochastic-processes`, `theoretical-science`, `diffusion`, `hildegard`, `maintenance`,
   `blender`, `visualization`, `3d-printing`, `lapidary`, `versioning`
-- **Required**: Complexity level (basic, intermediate, advanced)
-- **Optional**: Source material (existing guide, runbook, or working example)
-- **Optional**: Related skills to cross-reference
+- **Required**: Complexity (basic/intermediate/advanced)
+- **Optional**: Src (guide/runbook/working example)
+- **Optional**: Related skills
 
-## Procedure
+## Do
 
-### Step 1: Create Directory
+### Step 1: Create Dir
 
-Each skill lives in its own directory:
+Each skill → own dir:
 
 ```bash
 mkdir -p skills/<skill-name>/
 ```
 
-Naming conventions:
-- Use lowercase kebab-case: `submit-to-cran`, not `SubmitToCRAN`
-- Start with a verb: `create-`, `setup-`, `write-`, `deploy-`, `configure-`
-- Be specific: `create-r-dockerfile` not `create-dockerfile`
+Naming:
+- Kebab-case lowercase: `submit-to-cran`, not `SubmitToCRAN`
+- Start w/ verb: `create-`, `setup-`, `write-`, `deploy-`, `configure-`
+- Specific: `create-r-dockerfile` not `create-dockerfile`
 
-**Expected:** Directory `skills/<skill-name>/` exists, and the name follows lowercase kebab-case starting with a verb.
+**Got:** Dir exists, name = kebab-case + verb.
 
-**On failure:** If the name does not start with a verb, rename the directory. Check for naming conflicts: `ls skills/ | grep <keyword>` to ensure no existing skill has an overlapping name.
+**If err:** No verb → rename. Check conflicts: `ls skills/ | grep <keyword>`.
 
-### Step 2: Write YAML Frontmatter
+### Step 2: YAML Frontmatter
 
 ```yaml
 ---
 name: skill-name-here
-locale: caveman-ultra
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: >
   One to three sentences plus key activation triggers. Must be clear
   enough for an agent to decide whether to activate this skill from
@@ -97,20 +92,20 @@ metadata:
 ---
 ```
 
-**Required fields**: `name`, `description`
+**Required**: `name`, `description`
 
-**Optional fields**: `license`, `allowed-tools` (experimental), `metadata`, `compatibility`
+**Optional**: `license`, `allowed-tools` (experimental), `metadata`, `compatibility`
 
-**Metadata conventions**:
-- `complexity`: basic (< 5 steps, no edge cases), intermediate (5-10 steps, some judgment), advanced (10+ steps, significant domain knowledge)
-- `language`: primary language; use `multi` for cross-language skills
-- `tags`: 3-6 tags for discovery; include the domain name
+**Metadata**:
+- `complexity`: basic (<5 steps), intermediate (5-10), advanced (10+)
+- `language`: primary; `multi` for cross-lang
+- `tags`: 3-6, include domain
 
-**Expected:** YAML frontmatter parses without errors, `name` matches the directory name, and `description` is under 1024 characters with clear activation triggers.
+**Got:** YAML parses, `name` = dir, `description` <1024 chars + triggers.
 
-**On failure:** Validate YAML by checking for matching `---` delimiters, proper quoting of version strings (e.g., `"1.0"` not `1.0`), and correct `>` multi-line folding syntax for the description field.
+**If err:** Validate — `---` matched, `"1.0"` (not `1.0`), `>` multi-line fold for desc.
 
-### Step 3: Write the Title and Introduction
+### Step 3: Title + Intro
 
 ```markdown
 # Skill Title (Imperative Verb Form)
@@ -118,15 +113,15 @@ metadata:
 One paragraph: what this skill accomplishes and the value it provides.
 ```
 
-The title should match the `name` but in human-readable form. "Submit to CRAN" not "submit-to-cran".
+Title = `name` in readable. "Submit to CRAN" not "submit-to-cran".
 
-**Expected:** A top-level `#` heading in imperative form followed by a concise paragraph stating what the skill accomplishes.
+**Got:** `#` heading imperative + concise para.
 
-**On failure:** If the title reads as a noun phrase rather than a verb phrase, rewrite it. "Package Submission" becomes "Submit to CRAN."
+**If err:** Noun phrase → rewrite verb. "Package Submission" → "Submit to CRAN."
 
-### Step 4: Write "When to Use"
+### Step 4: When to Use
 
-List 3-5 trigger conditions — concrete scenarios where an agent should activate this skill:
+3-5 triggers — concrete scenarios:
 
 ```markdown
 ## When to Use
@@ -136,17 +131,17 @@ List 3-5 trigger conditions — concrete scenarios where an agent should activat
 - Setting up a package skeleton for collaborative development
 ```
 
-Write from the agent's perspective. These are the conditions the agent checks to decide activation.
+Agent perspective → conditions for activation.
 
-> **Note**: The most important trigger conditions should also appear in the `description` frontmatter field, since that is read during the discovery phase before the full body is loaded. The `## When to Use` section provides additional detail and context.
+> **Note**: Top triggers also in `description` frontmatter (read pre-body-load). `## When to Use` = extra detail.
 
-**Expected:** 3-5 bullet points describing concrete, observable conditions under which an agent should activate this skill.
+**Got:** 3-5 bullets w/ concrete observable conds.
 
-**On failure:** If triggers feel vague ("when something needs to be done"), rewrite from the agent's perspective: what observable state or user request would trigger activation?
+**If err:** Vague ("when something needs doing") → rewrite agent perspective: observable state / user req?
 
-### Step 5: Write "Inputs"
+### Step 5: Inputs
 
-Separate required from optional. Be specific about types and defaults:
+Required vs optional. Types + defaults:
 
 ```markdown
 ## Inputs
@@ -157,13 +152,13 @@ Separate required from optional. Be specific about types and defaults:
 - **Optional**: Whether to initialize renv (default: yes)
 ```
 
-**Expected:** Inputs section clearly separates required from optional parameters, each with a type hint and default value where applicable.
+**Got:** Required/optional separated w/ types + defaults.
 
-**On failure:** If a parameter's type is ambiguous, add a concrete example in parentheses: "Package name (lowercase, no special characters except `.`)".
+**If err:** Ambiguous type → add example: "Package name (lowercase, no special characters except `.`)".
 
-### Step 6: Write "Procedure"
+### Step 6: Procedure
 
-This is the core of the skill. Each step follows this pattern:
+Core. Each step:
 
 ```markdown
 ### Step N: Action Title
@@ -179,25 +174,25 @@ concrete_code("that the agent can execute")
 **On failure:** Recovery steps. Don't just say "fix it" — provide the most common failure cause and its resolution.
 ```
 
-**Writing effective steps**:
-- Each step should be independently verifiable
-- Include actual code, not pseudocode
-- Put the most common path first, edge cases in "On failure"
-- 5-10 steps is the sweet spot. Under 5 may be too vague; over 12 should be split into multiple skills.
-- Reference real tools and real commands, not abstract descriptions
+**Effective steps**:
+- Each independently verifiable
+- Real code, not pseudocode
+- Common path first, edge cases in "On failure"
+- 5-10 steps sweet spot. <5 vague; >12 split skills.
+- Real tools + cmds, not abstract
 
-**Writing for translation**:
-- Target ~400 lines maximum for English skills. German expands 10-20%, and some CJK translations expand further — a 400-line English source stays under 500 after translation.
-- Avoid idioms and culturally-specific examples that translate poorly.
-- Keep prose concise and direct — shorter sentences translate better.
+**For translation**:
+- Target ~400 lines EN. German +10-20%, CJK more → 400 EN stays <500 translated.
+- No idioms / culture-specific.
+- Concise prose, short sentences translate better.
 
-**Expected:** Procedure section contains 5-12 numbered steps, each with concrete code, an `**Expected:**` outcome, and an `**On failure:**` recovery action.
+**Got:** 5-12 numbered steps, each w/ concrete code + `**Expected:**` + `**On failure:**`.
 
-**On failure:** If a step lacks code, add the actual command or configuration. If Expected/On failure is missing, write it now — every step that can fail needs both.
+**If err:** No code → add real cmd/config. No Expected/On failure → write now. Every fail-able step needs both.
 
-### Step 7: Write "Validation"
+### Step 7: Validation
 
-A checklist the agent runs after completing the procedure:
+Checklist agent runs post-proc:
 
 ```markdown
 ## Validation
@@ -207,15 +202,15 @@ A checklist the agent runs after completing the procedure:
 - [ ] No errors or warnings in output
 ```
 
-Each item must be objectively verifiable. "Code is clean" is bad. "`devtools::check()` returns 0 errors" is good.
+Objectively verifiable. "Code clean" bad. "`devtools::check()` returns 0 errors" good.
 
-**Expected:** A markdown checklist (`- [ ]`) with 3-8 binary pass/fail criteria that an agent can verify programmatically or by inspection.
+**Got:** Markdown checklist w/ 3-8 binary pass/fail.
 
-**On failure:** Replace subjective criteria with measurable ones. "Well-documented" becomes "All exported functions have `@param`, `@return`, and `@examples` roxygen tags."
+**If err:** Subjective → measurable. "Well-documented" → "All exported fns have `@param`, `@return`, `@examples` roxygen tags."
 
-### Step 8: Write "Common Pitfalls"
+### Step 8: Common Pitfalls
 
-3-6 pitfalls with cause and avoidance:
+3-6 pitfalls w/ cause + avoidance:
 
 ```markdown
 ## Common Pitfalls
@@ -223,15 +218,15 @@ Each item must be objectively verifiable. "Code is clean" is bad. "`devtools::ch
 - **Pitfall name**: What goes wrong and how to avoid it. Be specific about the symptom and the fix.
 ```
 
-Draw from real experience. The best pitfalls are ones that waste significant time and are non-obvious.
+Real experience. Best = waste time + non-obvious.
 
-**Expected:** 3-6 pitfalls, each with a bold name, a description of what goes wrong, and how to avoid it.
+**Got:** 3-6 pitfalls, each w/ bold name + desc + avoidance.
 
-**On failure:** If pitfalls feel generic ("be careful with X"), make them specific: name the symptom, the cause, and the fix. Draw from actual failure scenarios encountered during development or testing.
+**If err:** Generic ("be careful w/ X") → specific: symptom + cause + fix. Draw from real fails.
 
-### Step 9: Write "Related Skills"
+### Step 9: Related Skills
 
-Cross-reference 2-5 skills that are commonly used before, after, or alongside this one:
+Xref 2-5 used before/after/alongside:
 
 ```markdown
 ## Related Skills
@@ -241,15 +236,15 @@ Cross-reference 2-5 skills that are commonly used before, after, or alongside th
 - `alternative-skill` - alternative approach to the same goal
 ```
 
-Use the skill `name` field (kebab-case), not the title.
+Skill `name` field (kebab-case), not title.
 
-**Expected:** 2-5 related skills listed with kebab-case IDs and brief descriptions of the relationship (prerequisite, follow-up, alternative).
+**Got:** 2-5 related, kebab-case IDs + relationship.
 
-**On failure:** Verify each referenced skill exists: `ls skills/<skill-name>/SKILL.md`. Remove any references to skills that have been renamed or removed.
+**If err:** Verify: `ls skills/<skill-name>/SKILL.md`. Remove renamed/removed refs.
 
-### Step 10: Add to Registry
+### Step 10: Registry
 
-Edit `skills/_registry.yml` and add the new skill under the appropriate domain:
+Edit `skills/_registry.yml`, add under domain:
 
 ```yaml
 - id: skill-name-here
@@ -259,24 +254,24 @@ Edit `skills/_registry.yml` and add the new skill under the appropriate domain:
   description: One-line description matching the frontmatter
 ```
 
-Update the `total_skills` count at the top of the registry.
+Update `total_skills` at top.
 
-**Expected:** New entry appears in `skills/_registry.yml` under the correct domain, and `total_skills` count matches the actual number of skill directories on disk.
+**Got:** Entry under correct domain, `total_skills` = disk count.
 
-**On failure:** Count skills on disk with `find skills -name SKILL.md | wc -l` and compare against `total_skills` in the registry. Verify the `id` field matches the directory name exactly.
+**If err:** Count: `find skills -name SKILL.md | wc -l` vs registry. Verify `id` = dir exact.
 
-### Step 11: Add Citations (Optional)
+### Step 11: Citations (Optional)
 
-If the skill is based on established methodologies, research papers, software packages, or standards, add citation subfiles to the `references/` directory:
+Based on methods/papers/pkgs/standards → add `references/`:
 
 ```bash
 mkdir -p skills/<skill-name>/references/
 ```
 
-Create two files:
+2 files:
 
-- **`references/CITATIONS.bib`** — Machine-readable BibTeX (source of truth)
-- **`references/CITATIONS.md`** — Human-readable rendered references for GitHub browsing
+- **`references/CITATIONS.bib`** — BibTeX (src of truth)
+- **`references/CITATIONS.md`** — rendered for GitHub
 
 ```bibtex
 % references/CITATIONS.bib
@@ -298,17 +293,17 @@ References underpinning the **skill-name** skill.
 1. Author, F., & Other, S. (2024). *Paper Title*. Journal Name. https://doi.org/10.xxxx/xxxxx
 ```
 
-Citations are optional — add them when provenance tracking matters (academic methods, published standards, regulatory frameworks).
+Optional — add when provenance matters (academic, standards, regulatory).
 
-**Handling `references/` in translations**: Prose descriptions in `references/EXAMPLES.md` should be translated. `references/CITATIONS.bib` stays in English (BibTeX is language-neutral). Translations may symlink to the English `references/` directory if its content is code-only.
+**Handling `references/` in translations**: Prose in `references/EXAMPLES.md` → translate. `references/CITATIONS.bib` → English (BibTeX lang-neutral). Translations may symlink to EN `references/` if code-only.
 
-**Expected:** Both files exist and `.bib` parses as valid BibTeX.
+**Got:** Both files exist, `.bib` valid.
 
-**On failure:** Validate BibTeX syntax with `bibtool -d references/CITATIONS.bib` or an online validator.
+**If err:** Validate: `bibtool -d references/CITATIONS.bib` / online.
 
-### Step 12: Validate Skill
+### Step 12: Validate
 
-Run local validation checks before committing:
+Local checks pre-commit:
 
 ```bash
 # Check line count (must be ≤500)
@@ -320,19 +315,19 @@ head -20 skills/<skill-name>/SKILL.md | grep -q '^name:' && echo "name: OK"
 head -20 skills/<skill-name>/SKILL.md | grep -q '^description:' && echo "description: OK"
 ```
 
-**Expected:** Line count ≤500, all required fields present.
+**Got:** ≤500 lines, required fields present.
 
-**On failure:** If over 500 lines, apply progressive disclosure — extract large code blocks (>15 lines) to `references/EXAMPLES.md`:
+**If err:** >500 → progressive disclosure → extract code blocks (>15 lines) → `references/EXAMPLES.md`:
 
 ```bash
 mkdir -p skills/<skill-name>/references/
 ```
 
-Move extended code examples, full configuration files, and multi-variant examples to `references/EXAMPLES.md`. Add cross-reference in SKILL.md: `See [EXAMPLES.md](references/EXAMPLES.md) for complete configuration examples.` Keep brief inline snippets (3-10 lines) in the main SKILL.md. The CI workflow at `.github/workflows/validate-skills.yml` enforces these limits on all PRs.
+Move extended examples, full configs, multi-variant → `references/EXAMPLES.md`. Xref in SKILL.md: `See [EXAMPLES.md](references/EXAMPLES.md) for complete configuration examples.` Keep inline snippets (3-10 lines). CI (`.github/workflows/validate-skills.yml`) enforces on PRs.
 
-### Step 13: Create Slash Command Symlinks
+### Step 13: Slash Command Symlinks
 
-Create symlinks so Claude Code discovers the skill as a `/slash-command`:
+Symlinks → Claude Code discovers as `/slash-command`:
 
 ```bash
 # Project-level (available in this project)
@@ -342,15 +337,15 @@ ln -s ../../skills/<skill-name> .claude/skills/<skill-name>
 ln -s /mnt/d/dev/p/agent-almanac/skills/<skill-name> ~/.claude/skills/<skill-name>
 ```
 
-**Expected:** `ls -la .claude/skills/<skill-name>/SKILL.md` resolves to the skill file.
+**Got:** `ls -la .claude/skills/<skill-name>/SKILL.md` resolves.
 
-**On failure:** Verify the relative path is correct. From `.claude/skills/`, the path `../../skills/<skill-name>` should reach the skill directory. Use `readlink -f` to debug symlink resolution. Claude Code expects a flat structure at `.claude/skills/<name>/SKILL.md`.
+**If err:** Rel path correct. From `.claude/skills/`, `../../skills/<skill-name>` reaches dir. Debug: `readlink -f`. Claude Code expects flat `.claude/skills/<name>/SKILL.md`.
 
 ### Step 14: Scaffold Translations
 
-> **Required for all skills.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+> **Required for all skills.** Human + AI authors. Do not skip → backlog.
 
-Scaffold translation files for all 4 supported locales immediately after committing the new skill:
+4 locales post-commit:
 
 ```bash
 for locale in de zh-CN ja es; do
@@ -358,65 +353,65 @@ for locale in de zh-CN ja es; do
 done
 ```
 
-Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+Translate prose (code + IDs EN). Regen:
 
 ```bash
 npm run translation:status
 ```
 
-**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new skill.
+**Got:** 4 files at `i18n/{de,zh-CN,ja,es}/skills/<skill-name>/SKILL.md`, `source_commit` = HEAD. `npm run validate:translations` → 0 stale.
 
-**On failure:** If scaffold fails, verify the skill exists in `skills/_registry.yml` before scaffolding — the script reads the registry. If `translation:status` shows the new files as stale, check that `source_commit` matches the commit hash where the English source was last modified.
+**If err:** Scaffold fail → skill in `skills/_registry.yml` first (script reads registry). `translation:status` shows stale → `source_commit` = commit hash where EN src last modified.
 
-## Validation
+## Check
 
-- [ ] SKILL.md exists at `skills/<skill-name>/SKILL.md`
-- [ ] YAML frontmatter parses without errors
-- [ ] `name` field matches directory name
-- [ ] `description` is under 1024 characters
-- [ ] All required sections present: When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills
-- [ ] Every procedure step has concrete code and Expected/On failure pairs
-- [ ] Related Skills reference valid skill names
-- [ ] Skill is listed in `_registry.yml` with correct path
-- [ ] `total_skills` count in registry is updated
-- [ ] SKILL.md is ≤500 lines (extract to `references/EXAMPLES.md` if over)
-- [ ] Estimated translation expansion is acceptable (English source ≤~400 lines so translations stay <500)
-- [ ] Citations added to `references/CITATIONS.bib` + `CITATIONS.md` if skill is based on published methods
-- [ ] Symlink exists at `.claude/skills/<skill-name>` pointing to skill directory
-- [ ] Global symlink exists at `~/.claude/skills/<skill-name>` (if globally available)
+- [ ] SKILL.md at `skills/<skill-name>/SKILL.md`
+- [ ] YAML parses
+- [ ] `name` = dir
+- [ ] `description` <1024 chars
+- [ ] Required sections: When to Use, Inputs, Procedure, Validation, Common Pitfalls, Related Skills
+- [ ] Every step has code + Expected/On failure
+- [ ] Related Skills = valid names
+- [ ] In `_registry.yml` w/ correct path
+- [ ] `total_skills` updated
+- [ ] SKILL.md ≤500 lines (extract → `references/EXAMPLES.md` if over)
+- [ ] EN src ≤~400 lines so translations <500
+- [ ] Citations in `references/CITATIONS.bib` + `CITATIONS.md` if pub methods
+- [ ] Symlink at `.claude/skills/<skill-name>` → dir
+- [ ] Global symlink at `~/.claude/skills/<skill-name>` (if global)
 
-## Common Pitfalls
+## Traps
 
-- **Vague procedures**: "Configure the system appropriately" is useless to an agent. Provide exact commands, file paths, and configuration values.
-- **Missing On failure**: Every step that can fail needs recovery guidance. Agents can't improvise — they need the fallback spelled out.
-- **Overly broad scope**: A skill that tries to cover "Set up entire development environment" should be 3-5 focused skills instead. One skill = one procedure.
-- **Untestable validation**: "Code quality is good" can't be verified. "Linter passes with 0 warnings" can.
-- **Stale cross-references**: When renaming or removing skills, grep for the old name in all Related Skills sections.
-- **Description too long**: The description field is what agents read to decide activation. Keep it under 1024 characters and front-load the key information.
-- **Authoring at 500-line limit for single language**: An English skill at 490 lines will exceed 500 when translated to German (~10-20% expansion) or CJK languages. Target ~400 lines for the English source and use progressive disclosure (`references/EXAMPLES.md`) for the rest.
-- **Avoid `git mv` on NTFS-mounted paths (WSL)**: On `/mnt/` paths, `git mv` for directories can create broken permissions (`d?????????`). Use `mkdir -p` + copy files + `git rm` the old path instead. See the [environment guide](../../guides/setting-up-your-environment.md) troubleshooting section.
+- **Vague procedures**: "Configure appropriately" useless to agent. Exact cmds + paths + values.
+- **Missing On failure**: Every fail-able step needs recovery. Agents can't improvise.
+- **Broad scope**: "Set up entire dev env" → 3-5 focused skills. 1 skill = 1 proc.
+- **Untestable validation**: "Code quality good" → "Linter 0 warnings".
+- **Stale xrefs**: Rename/remove → grep old name in Related Skills.
+- **Desc too long**: Agents read → decide activation. <1024 chars, front-load key info.
+- **Authoring @ 500-line limit for 1 lang**: 490 lines EN → exceeds 500 translated (+10-20% German, more CJK). Target ~400 EN + progressive disclosure.
+- **Avoid `git mv` on NTFS (WSL)**: `/mnt/` paths → `git mv` dirs → broken perms (`d?????????`). Use `mkdir -p` + copy + `git rm` old. See [env guide](../../guides/setting-up-your-environment.md).
 
 ## Examples
 
-A well-structured skill follows this quality checklist:
-1. An agent can decide whether to use it from the description alone
-2. The procedure can be followed mechanically without ambiguity
-3. Every step has a verifiable outcome
-4. Failure modes have concrete recovery paths
-5. The skill can be composed with related skills
+Quality checklist:
+1. Agent decides activation from desc alone
+2. Proc mechanical, no ambiguity
+3. Every step verifiable
+4. Failure modes → concrete recovery
+5. Composable w/ related
 
-Size reference from this library:
-- Basic skills: ~80-120 lines (e.g., `write-vignette`, `configure-git-repository`)
-- Intermediate skills: ~120-180 lines (e.g., `write-testthat-tests`, `manage-renv-dependencies`)
-- Advanced skills: ~180-250 lines (e.g., `submit-to-cran`, `setup-gxp-r-project`)
-- Skills with extended examples: SKILL.md ≤500 lines + `references/EXAMPLES.md` for large configs
+Size ref:
+- Basic: ~80-120 lines (`write-vignette`, `configure-git-repository`)
+- Intermediate: ~120-180 lines (`write-testthat-tests`, `manage-renv-dependencies`)
+- Advanced: ~180-250 lines (`submit-to-cran`, `setup-gxp-r-project`)
+- Extended: SKILL.md ≤500 + `references/EXAMPLES.md` for large configs
 
-## Related Skills
+## →
 
-- `evolve-skill` - evolve and refine skills created with this procedure
-- `create-agent` - parallel procedure for creating agent definitions
-- `create-team` - parallel procedure for creating team compositions
-- `write-claude-md` - CLAUDE.md can reference skills for project-specific workflows
-- `configure-git-repository` - skills should be version-controlled
-- `commit-changes` - commit the new skill and its symlinks
-- `security-audit-codebase` - review skills for accidentally included secrets or credentials
+- `evolve-skill` — evolve + refine skills
+- `create-agent` — parallel agent proc
+- `create-team` — parallel team proc
+- `write-claude-md` — CLAUDE.md refs skills
+- `configure-git-repository` — version-control skills
+- `commit-changes` — commit skill + symlinks
+- `security-audit-codebase` — review for secrets

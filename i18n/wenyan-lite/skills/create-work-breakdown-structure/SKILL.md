@@ -24,42 +24,42 @@ metadata:
   tags: project-management, wbs, work-breakdown-structure, classic, waterfall, planning
 ---
 
-# Create a Work Breakdown Structure
+# 造工作分解結構
 
-Decompose project scope into a hierarchical set of work packages that can be estimated, assigned, and tracked. The WBS provides the foundation for effort estimation, resource planning, and schedule development by breaking down complex deliverables into manageable components.
+分項目範圍為階層之工作包，可估、可派、可追。WBS 為估工、資源計畫、排程開發之基，將複雜交付物分為可管之組件。
 
-## When to Use
+## 適用時機
 
-- After a project charter is approved and scope is defined
-- Planning a classic/waterfall project with defined deliverables
-- Breaking down a large initiative into manageable work packages
-- Establishing a basis for effort estimation and resource planning
-- Creating a shared understanding of all required work
+- 項目章程核准且範圍已定後
+- 計畫含既定交付物之古典/瀑布項目
+- 將大倡議分為可管之工作包
+- 立估工與資源計畫之基
+- 造所有所需工作之共識
 
-## Inputs
+## 輸入
 
-- **Required**: Approved project charter (especially scope and deliverables sections)
-- **Required**: Project methodology (classic/waterfall, or hybrid with WBS for planning)
-- **Optional**: Historical effort data from similar projects
-- **Optional**: Team composition and available skills
-- **Optional**: Organizational WBS templates or standards
+- **必要**：核准之項目章程（尤範圍與交付物段）
+- **必要**：項目方法論（古典/瀑布、或含 WBS 之混合計畫）
+- **選擇性**：類似項目之歷史工作資料
+- **選擇性**：團隊組成與可用技能
+- **選擇性**：組織之 WBS 範本或標準
 
-## Procedure
+## 步驟
 
-### Step 1: Extract Deliverables from Charter
-Read the project charter. List all deliverables and acceptance criteria. Group them into 3-7 top-level categories (these become WBS Level 1 elements).
+### 步驟一：自章程萃交付物
+讀項目章程。列所有交付物與接受標準。組之為 3-7 頂層類（此為 WBS Level 1 元素）。
 
-**Expected:** List of Level 1 WBS elements matching charter deliverables.
+**預期：** Level 1 WBS 元素清單合章程交付物。
 
-**On failure:** If charter is vague, return to `draft-project-charter` to refine scope.
+**失敗時：** 若章程泛，返 `draft-project-charter` 以精修範圍。
 
-### Step 2: Decompose into Work Packages
-For each Level 1 element, decompose into sub-elements (Level 2, Level 3). Apply the 100% rule: child elements must represent 100% of the parent's scope. Stop decomposing when work packages are:
-- Estimable (can assign effort in person-days)
-- Assignable (one person or team owns it)
-- Measurable (clear done/not-done criteria)
+### 步驟二：分為工作包
+各 Level 1 元素，分為子元素（Level 2、Level 3）。施 100% 規則：子元素須代表父範圍之 100%。分停於工作包為：
+- 可估（可以人日派工）
+- 可派（一人或一團隊有之）
+- 可量（明完/未完標準）
 
-Create a WBS outline:
+造 WBS 大綱：
 ```markdown
 # Work Breakdown Structure: [Project Name]
 ## Document ID: WBS-[PROJECT]-[YYYY]-[NNN]
@@ -79,14 +79,14 @@ Create a WBS outline:
    3.3 Closure
 ```
 
-Apply WBS codes (1.1.1 format). Ensure 3-5 levels deep maximum. Always include a "Project Management" branch.
+施 WBS 編碼（1.1.1 格式）。確保最深 3-5 層。恒含「Project Management」分支。
 
-**Expected:** Complete WBS with 15-50 work packages, each with a unique WBS code.
+**預期：** 全 WBS，含 15-50 工作包，各有唯一 WBS 編碼。
 
-**On failure:** If decomposition exceeds 5 levels, the scope is too large — consider splitting into sub-projects.
+**失敗時：** 若分超 5 層，範圍過大——考慮分為子項目。
 
-### Step 3: Write WBS Dictionary
-For each work package (leaf node), write a dictionary entry:
+### 步驟三：寫 WBS 字典
+各工作包（葉節點），寫字典項：
 
 ```markdown
 # WBS Dictionary: [Project Name]
@@ -104,17 +104,17 @@ For each work package (leaf node), write a dictionary entry:
 ...
 ```
 
-**Expected:** Dictionary entry for every leaf-node work package.
+**預期：** 各葉節點工作包皆有字典項。
 
-**On failure:** Missing dictionary entries indicate incomplete decomposition — revisit Step 2.
+**失敗時：** 缺之字典項指分解不全——返步驟二。
 
-### Step 4: Estimate Effort
-For each work package, apply one estimation method:
-- **T-shirt sizing** (XS/S/M/L/XL) for early-stage planning
-- **Person-days** for detailed planning
-- **Three-point estimate** (optimistic/most likely/pessimistic) for high-uncertainty work
+### 步驟四：估工
+各工作包施一估法：
+- **T-shirt 尺碼**（XS/S/M/L/XL）供早期計畫
+- **人日**供細計畫
+- **三點估**（樂觀/最可能/悲觀）供高不確之工
 
-Create a summary table:
+造摘要表：
 ```markdown
 ## Effort Summary
 | WBS Code | Work Package | Estimate | Method | Confidence |
@@ -123,14 +123,14 @@ Create a summary table:
 | 1.1.2 | [Name] | M | t-shirt | Medium |
 ```
 
-Total effort = sum of all work packages.
+總工 = 所有工作包之和。
 
-**Expected:** Every work package has an effort estimate with stated confidence.
+**預期：** 各工作包皆有估工含所述信心度。
 
-**On failure:** If confidence is Low on >30% of packages, schedule a refinement session with SMEs.
+**失敗時：** 若 >30% 之包信心為 Low，與 SME 排精修會。
 
-### Step 5: Identify Dependencies and Critical Path Candidates
-Map dependencies between work packages:
+### 步驟五：辨依賴與關鍵路徑候選
+映工作包間之依賴：
 ```markdown
 ## Dependencies
 | WBS Code | Depends On | Type | Notes |
@@ -139,43 +139,43 @@ Map dependencies between work packages:
 | 2.1.1 | 1.1.2 | Finish-to-Start | |
 ```
 
-Identify the longest chain of dependent work packages — this is the critical path candidate.
+辨依賴工作包之最長鏈——此為關鍵路徑候選。
 
-**Expected:** Dependency table with at least finish-to-start relationships identified.
+**預期：** 依賴表含至少 finish-to-start 關係。
 
-**On failure:** If dependencies form cycles, the decomposition has errors — revisit Step 2.
+**失敗時：** 若依賴成環，分解有誤——返步驟二。
 
-### Step 6: Review and Baseline
-Combine WBS and dictionary into final documents. Verify the 100% rule at every level. Get stakeholder sign-off.
+### 步驟六：審與基線
+合 WBS 與字典為終檔。各層驗 100% 規則。得相關者簽。
 
-**Expected:** WBS.md and WBS-DICTIONARY.md files created and reviewed.
+**預期：** WBS.md 與 WBS-DICTIONARY.md 檔已造並審。
 
-**On failure:** If stakeholders identify missing scope, add work packages and re-estimate.
+**失敗時：** 若相關者辨缺範圍，加工作包並重估。
 
-## Validation
+## 驗證
 
-- [ ] WBS file created with document ID and WBS codes
-- [ ] 100% rule satisfied: children fully represent parent scope at every level
-- [ ] Every leaf node has a WBS dictionary entry
-- [ ] All work packages have effort estimates
-- [ ] Dependencies identified with no circular references
-- [ ] Project Management branch included
-- [ ] Critical path candidates identified
-- [ ] WBS depth does not exceed 5 levels
+- [ ] WBS 檔已造，含文件 ID 與 WBS 編碼
+- [ ] 100% 規則於各層皆滿：子完整代表父範圍
+- [ ] 各葉節點有 WBS 字典項
+- [ ] 所有工作包皆有估工
+- [ ] 依賴已辨，無循環引用
+- [ ] 含 Project Management 分支
+- [ ] 關鍵路徑候選已辨
+- [ ] WBS 深度不超 5 層
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Confusing deliverables with activities**: WBS elements should be nouns (deliverables), not verbs (activities). "User Authentication Module" not "Implement Authentication".
-- **Violating the 100% rule**: If children don't add up to 100% of parent scope, work will be missed.
-- **Too shallow or too deep**: 2 levels is too vague for planning; 6+ levels is micromanagement. Target 3-5 levels.
-- **Skipping Project Management branch**: PM work (planning, meetings, reporting) is real work that consumes effort.
-- **Estimating before decomposing**: Estimate work packages, not categories. A Level 1 estimate is unreliable.
-- **No dictionary**: A WBS without a dictionary is a tree of labels — the dictionary provides the definition of done.
+- **混交付物與活動**：WBS 元素當為名詞（交付物），非動詞（活動）。「User Authentication Module」非「Implement Authentication」
+- **違 100% 規則**：若子不合父範圍之 100%，工作將被漏
+- **過淺或過深**：2 層於計畫過泛；6+ 層為微管理。目標 3-5 層
+- **跳 Project Management 分支**：PM 工作（計畫、會議、報告）為耗工之實工
+- **分解前估**：估工作包，非類。Level 1 之估不可靠
+- **無字典**：無字典之 WBS 為標籤之樹——字典提供完成之定義
 
-## Related Skills
+## 相關技能
 
-- `draft-project-charter` — provides the scope and deliverables that feed WBS decomposition
-- `manage-backlog` — translate WBS work packages into backlog items for tracking
-- `generate-status-report` — report progress against WBS % complete
-- `plan-sprint` — if using hybrid approach, sprint-plan from WBS work packages
-- `conduct-retrospective` — review estimation accuracy and decomposition quality
+- `draft-project-charter` —— 提供餵 WBS 分解之範圍與交付物
+- `manage-backlog` —— 將 WBS 工作包轉為追之積壓項
+- `generate-status-report` —— 對 WBS 完成率報告進度
+- `plan-sprint` —— 若用混合法，自 WBS 工作包計畫衝刺
+- `conduct-retrospective` —— 審估之準度與分解之品質

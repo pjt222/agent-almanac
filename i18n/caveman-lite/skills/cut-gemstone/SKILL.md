@@ -98,9 +98,9 @@ and never grind or cut dry without a dust extraction system.
 4. Map colour zones and inclusion locations
 5. Estimate what finished shapes the rough can yield
 
-**Expected:** A documented rough assessment with species confirmed, fractures mapped, colour zones identified, and a cutting plan formed.
+**Got:** A documented rough assessment with species confirmed, fractures mapped, colour zones identified, and a cutting plan formed.
 
-**On failure:** If the rough has extensive fracturing, consider whether it can be stabilized (epoxy impregnation for porous material) or if the yield is too low to justify cutting. Some rough is better sold or traded as specimen material.
+**If fail:** If the rough has extensive fracturing, consider whether it can be stabilized (epoxy impregnation for porous material) or if the yield is too low to justify cutting. Some rough is better sold or traded as specimen material.
 
 ### Step 2: Orientation Planning
 
@@ -138,9 +138,9 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 4. Mark the orientation on the rough with an aluminum pencil
 5. Plan the table position and depth to maximise yield at the chosen orientation
 
-**Expected:** A marked rough stone with the table direction, orientation, and approximate outline indicated. The cutting plan optimises colour presentation and yield.
+**Got:** A marked rough stone with the table direction, orientation, and approximate outline indicated. The cutting plan optimises colour presentation and yield.
 
-**On failure:** If the best colour orientation conflicts with maximum yield, decide based on priority: colour quality almost always increases value more than additional carat weight. When in doubt, orient for colour.
+**If fail:** If the best colour orientation conflicts with maximum yield, decide based on priority: colour quality almost always increases value more than additional carat weight. When in doubt, orient for colour.
 
 ### Step 3: Cabochon Cutting
 
@@ -185,9 +185,9 @@ STEP-BY-STEP:
 5. Grind to shape on 80 grit, dome on 220, smooth through 600 and 1200
 6. Maintain consistent dome curvature throughout — uneven domes show "flat spots" after polishing
 
-**Expected:** A smoothly domed cabochon ready for final polishing, with symmetrical outline, even dome height, and no visible scratches from the 1200-grit stage.
+**Got:** A smoothly domed cabochon ready for final polishing, with symmetrical outline, even dome height, and no visible scratches from the 1200-grit stage.
 
-**On failure:** If the dome has flat spots or asymmetry, return to 220 grit and reshape. Better to lose a little material than to polish an uneven dome. If the stone comes off the dop during grinding, re-dop carefully and continue — check the stone for chips first.
+**If fail:** If the dome has flat spots or asymmetry, return to 220 grit and reshape. Better to lose a little material than to polish an uneven dome. If the stone comes off the dop during grinding, re-dop carefully and continue — check the stone for chips first.
 
 ### Step 4: Faceting
 
@@ -229,9 +229,9 @@ CRITICAL: Pavilion angles determine brilliance.
 7. Cut crown mains, then breaks, then stars, establishing the table last
 8. Pre-polish and polish each tier (see `polish-gemstone` for lap and compound selection)
 
-**Expected:** A faceted gemstone with precise meets (where facet edges converge to a single point), consistent facet sizes, good symmetry, and proper angles for the material's RI.
+**Got:** A faceted gemstone with precise meets (where facet edges converge to a single point), consistent facet sizes, good symmetry, and proper angles for the material's RI.
 
-**On failure:** If facet meets are off, the angles or index settings are slightly wrong. Re-check the published diagram. "Chasing meets" (adjusting one facet to fix another) compounds errors — it is better to re-cut the tier if the error is large. Small meet errors are normal for beginners and do not significantly affect brilliance.
+**If fail:** If facet meets are off, the angles or index settings are slightly wrong. Re-check the published diagram. "Chasing meets" (adjusting one facet to fix another) compounds errors — it is better to re-cut the tier if the error is large. Small meet errors are normal for beginners and do not significantly affect brilliance.
 
 ### Step 5: Post-Cut Inspection
 
@@ -244,9 +244,9 @@ Evaluate the cut stone before proceeding to final polish.
 5. Measure final dimensions and weight
 6. If defects are found, return to the appropriate cutting step before polishing
 
-**Expected:** A fully cut stone that meets quality standards for symmetry, meets, and surface preparation, ready for the polishing stage.
+**Got:** A fully cut stone that meets quality standards for symmetry, meets, and surface preparation, ready for the polishing stage.
 
-**On failure:** If significant defects are found (poor symmetry, bad meets, incorrect proportions), it is more time-efficient to re-cut now than to polish a defective stone and re-cut later. Document what went wrong for the next stone.
+**If fail:** If significant defects are found (poor symmetry, bad meets, incorrect proportions), it is more time-efficient to re-cut now than to polish a defective stone and re-cut later. Document what went wrong for the next stone.
 
 ## Validation
 
@@ -259,7 +259,7 @@ Evaluate the cut stone before proceeding to final polish.
 - [ ] Final dimensions measured and recorded
 - [ ] Stone is free of cutting-stage scratches and ready for polishing
 
-## Common Pitfalls
+## Pitfalls
 
 - **Cutting an unidentified stone**: Some materials produce toxic dust (malachite, cinnabar, chrysotile). Always identify before cutting. Always use water cooling regardless
 - **Skipping orientation planning**: Cutting a pleochroic stone without orienting for colour can produce a dull or off-colour finished gem that would have been beautiful with correct orientation

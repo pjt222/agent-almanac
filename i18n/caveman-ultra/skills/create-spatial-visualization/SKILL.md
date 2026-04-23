@@ -26,32 +26,30 @@ metadata:
 
 # Create Spatial Visualization
 
-Create interactive maps, elevation profiles, and spatial visualizations from GPX tracks, waypoints, or route data.
+Interactive maps + elev profiles + spatial viz from GPX/waypoints/routes.
 
-## When to Use
+## Use When
 
-- Visualizing a planned or completed tour route on an interactive map
-- Creating elevation profiles for hiking or cycling routes
-- Overlaying waypoints, POIs, and route corridors on a basemap
-- Generating static map images for print reports
-- Building a web-based trip dashboard with spatial data
+- Viz tour route on map
+- Elev profile hike/bike
+- Overlay waypoints + POIs
+- Static map → print
+- Web trip dashboard
 
-## Inputs
+## In
 
-- **Required**: Spatial data source (GPX file, CSV with lat/lon, GeoJSON, or waypoint list)
-- **Required**: Visualization type (interactive map, static map, elevation profile, heatmap)
-- **Optional**: Basemap preference (OpenStreetMap, satellite, terrain, topo)
-- **Optional**: Styling parameters (colors, line width, marker icons)
-- **Optional**: Output format (HTML widget, PNG, SVG, embedded in Quarto)
-- **Optional**: Additional layers (POI markers, area boundaries, distance markers)
+- **Required**: Spatial src (GPX, CSV lat/lon, GeoJSON, waypoints)
+- **Required**: Viz type (interactive, static, elev profile, heatmap)
+- **Optional**: Basemap (OSM, satellite, terrain, topo)
+- **Optional**: Styling (colors, width, icons)
+- **Optional**: Out fmt (HTML widget, PNG, SVG, Quarto)
+- **Optional**: Extra layers (POI, areas, dist markers)
 
-## Procedure
+## Do
 
-### Step 1: Import Spatial Data
+### Step 1: Import
 
-Load and parse the spatial data into a usable format.
-
-**R approach (sf package):**
+**R (sf):**
 
 ```r
 # GPX file
@@ -66,7 +64,7 @@ points <- readr::read_csv("stops.csv") |>
 route <- sf::st_read("route.geojson")
 ```
 
-**JavaScript approach (for Observable/D3):**
+**JS (Observable/D3):**
 
 ```javascript
 // GPX parsing
@@ -83,15 +81,13 @@ const coordinates = Array.from(trkpts).map(pt => ({
 }));
 ```
 
-Verify the coordinate reference system (CRS) is WGS 84 (EPSG:4326) for web maps.
+CRS = WGS 84 (EPSG:4326) for web maps.
 
-**Expected:** Spatial data loaded as an sf object (R) or coordinate array (JS) with valid geometries. Point counts match expected input (e.g., a GPX track has hundreds to thousands of points).
+**Got:** Data as sf / coord array, valid geometries. Pt counts match (GPX track = 100s-1000s pts).
 
-**On failure:** If GPX parsing fails, check the file is valid XML. Common issues: truncated files from GPS battery death, mixed namespaces, or GPX 1.0 vs 1.1 differences. If CRS is missing, assign it explicitly with `sf::st_set_crs(data, 4326)`. If coordinates appear inverted (lat/lon swapped), check the column order.
+**If err:** GPX parse fail → check XML valid. Common: truncated (GPS battery), mixed ns, GPX 1.0 vs 1.1. No CRS → `sf::st_set_crs(data, 4326)`. Inverted coords → check col order.
 
-### Step 2: Process and Clean
-
-Transform raw data into analysis-ready spatial features.
+### Step 2: Process + Clean
 
 ```
 Processing Pipeline:
@@ -108,7 +104,7 @@ Processing Pipeline:
 └─────────────────────┴──────────────────────────────────────────┘
 ```
 
-**R processing example:**
+**R:**
 
 ```r
 # Calculate cumulative distance
@@ -128,13 +124,11 @@ elevation_df <- data.frame(
 track_simple <- sf::st_simplify(track, dTolerance = 0.001)
 ```
 
-**Expected:** Clean spatial data with calculated distances, elevation extracted, and geometry simplified for the target output. No NA coordinates, no zero-length segments.
+**Got:** Clean data + distances + elev + simplified geom. No NA coords, no zero-length.
 
-**On failure:** If elevation data is missing (common with some GPS devices), use a DEM lookup service or note that elevation profile is unavailable. If track simplification removes critical shape detail, reduce the tolerance value. If distance calculations produce NA, check for empty geometries with `sf::st_is_empty()`.
+**If err:** No elev (some GPS) → DEM lookup / note unavail. Simplify removes detail → reduce tol. Dist NA → check empties: `sf::st_is_empty()`.
 
-### Step 3: Select Visualization Type
-
-Choose and configure the appropriate visualization for the data and audience.
+### Step 3: Viz Type
 
 ```
 Visualization Decision Matrix:
@@ -158,21 +152,19 @@ Visualization Decision Matrix:
 └─────────────────────┴──────────────────────┴───────────────────┘
 ```
 
-Configure basemap tiles appropriate for the content:
-- **OpenStreetMap**: General purpose, good labels
-- **Stamen Terrain**: Hiking and outdoor routes
-- **ESRI World Imagery**: Satellite context
-- **OpenTopoMap**: Topographic contours for elevation context
+Basemap tiles:
+- **OSM**: General, good labels
+- **Stamen Terrain**: Hike/outdoor
+- **ESRI World Imagery**: Satellite
+- **OpenTopoMap**: Topo contours (elev context)
 
-**Expected:** A clear decision on visualization type and toolchain, with basemap selected to complement the route data.
+**Got:** Viz type + toolchain + basemap decided.
 
-**On failure:** If the chosen tool cannot handle the data volume (e.g., 100,000+ track points in leaflet), simplify the geometry first or switch to a canvas-based renderer (deck.gl). If basemap tiles are unavailable (rare), fall back to OpenStreetMap as the most reliable free option.
+**If err:** Tool can't handle vol (100k+ pts leaflet) → simplify / switch canvas (deck.gl). Tiles unavail → fallback OSM.
 
-### Step 4: Render Map or Chart
+### Step 4: Render
 
-Build the visualization with all layers and styling.
-
-**Interactive map (R/leaflet):**
+**Interactive (R/leaflet):**
 
 ```r
 leaflet::leaflet() |>
@@ -194,7 +186,7 @@ leaflet::leaflet() |>
   leaflet::addMiniMap(position = "bottomright")
 ```
 
-**Elevation profile (R/ggplot2):**
+**Elev profile (R/ggplot2):**
 
 ```r
 ggplot2::ggplot(elevation_df, ggplot2::aes(x = distance_km, y = elevation_m)) +
@@ -208,15 +200,13 @@ ggplot2::ggplot(elevation_df, ggplot2::aes(x = distance_km, y = elevation_m)) +
   ggplot2::theme_minimal()
 ```
 
-Add supplementary layers as needed: distance markers every N km, day-break indicators, difficulty-colored segments, POI icons.
+Add layers: dist markers / N km, day-break, difficulty-color, POI icons.
 
-**Expected:** A rendered visualization that clearly shows the route, waypoints, and any supplementary information. Interactive maps should be responsive with working popups and zoom. Elevation profiles should have correct axis scales.
+**Got:** Viz shows route + waypoints + info. Interactive = responsive popups + zoom. Profile = correct scales.
 
-**On failure:** If the map renders but shows no data, check that coordinates are in the correct CRS (EPSG:4326 for leaflet). If popups are empty, verify the column names in the popup formula. If the elevation profile has extreme spikes, filter out GPS elevation errors (values deviating more than 100 m from neighbors).
+**If err:** No data → CRS correct (EPSG:4326 leaflet). Empty popups → col name in formula. Elev spikes → filter GPS elev errs (>100m deviation from neighbors).
 
-### Step 5: Export and Embed
-
-Save the visualization in the target format.
+### Step 5: Export + Embed
 
 ```
 Export Options:
@@ -232,37 +222,37 @@ Export Options:
 └───────────────────┴────────────────────────────────────────────┘
 ```
 
-For Quarto embedding:
-1. Place the visualization code in a code chunk with appropriate labels
-2. Use `#| fig-cap:` for static plots or `#| label: fig-map` for cross-referencing
-3. Set `self-contained: true` in YAML to bundle tile images (increases file size)
+Quarto embed:
+1. Code chunk w/ labels
+2. `#| fig-cap:` static / `#| label: fig-map` xref
+3. `self-contained: true` YAML → bundle tiles (bigger file)
 
-**Expected:** Exported file is viewable in the target context (browser for HTML, report for embedded, print for PNG/SVG). File size is reasonable (under 5 MB for HTML widgets, under 1 MB for images).
+**Got:** File viewable in target. Size OK (<5MB HTML widget, <1MB images).
 
-**On failure:** If the HTML widget is too large, reduce tile caching or simplify geometries. If Quarto rendering fails with leaflet, ensure the htmlwidgets package is installed and the output format is HTML (leaflet does not render to PDF). For PDF output, use a static map alternative (tmap with `tmap_mode("plot")`).
+**If err:** HTML too big → reduce tile cache / simplify geom. Quarto fail w/ leaflet → htmlwidgets installed + HTML out (leaflet no PDF). PDF → static map alt (tmap `tmap_mode("plot")`).
 
-## Validation
+## Check
 
-- [ ] Spatial data imports without errors and has correct CRS
-- [ ] All track points and waypoints render in the expected geographic area
-- [ ] Elevation profile (if included) shows plausible values without extreme spikes
-- [ ] Interactive map has working zoom, pan, and popups
-- [ ] Distance and elevation scales are correctly labeled
-- [ ] Export file is viewable in the target format
-- [ ] File size is appropriate for the delivery method
+- [ ] Data imports no err, correct CRS
+- [ ] All pts render in expected area
+- [ ] Elev profile plausible, no spikes
+- [ ] Interactive map: zoom + pan + popups work
+- [ ] Scales labeled
+- [ ] Export viewable
+- [ ] Size OK
 
-## Common Pitfalls
+## Traps
 
-- **CRS mismatch**: Mixing EPSG:4326 (degrees) with projected CRS (meters) causes data to render in the wrong location or at wrong scale. Always transform to EPSG:4326 for web maps.
-- **GPS elevation noise**: GPS-derived elevation is far less accurate than horizontal position. Smooth elevation data or use DEM-based elevation for profiles.
-- **Tile server rate limits**: Fetching many tiles rapidly can trigger rate limits on free tile servers. Cache tiles locally for repeated rendering, and respect usage policies.
-- **Over-detailed tracks**: Raw GPS tracks with 1-second logging produce enormous files. Simplify before web display.
-- **Leaflet in PDF**: Leaflet maps cannot render in PDF output. Use tmap or ggplot2 with ggspatial for print formats.
-- **Missing popups**: Forgetting to add `popup = ~column_name` results in markers with no information on click.
+- **CRS mismatch**: EPSG:4326 (deg) vs projected (m) → wrong loc/scale. Transform to EPSG:4326 web.
+- **GPS elev noise**: GPS elev less accurate than horizontal. Smooth / use DEM.
+- **Tile rate limits**: Many tiles → rate limit on free servers. Cache local, respect policies.
+- **Over-detailed tracks**: 1s GPS → huge files. Simplify before web.
+- **Leaflet in PDF**: No render in PDF. Use tmap / ggplot2 + ggspatial for print.
+- **Missing popups**: Forgot `popup = ~column_name` → no info on click.
 
-## Related Skills
+## →
 
-- `plan-tour-route` — generate the route data that this skill visualizes
-- `generate-tour-report` — embed visualizations into a formatted tour report
-- `plan-hiking-tour` — source of GPX and elevation data for hiking visualizations
-- `create-quarto-report` — Quarto rendering for embedding spatial visualizations
+- `plan-tour-route` — gen route data
+- `generate-tour-report` — embed viz in report
+- `plan-hiking-tour` — GPX + elev src
+- `create-quarto-report` — Quarto render

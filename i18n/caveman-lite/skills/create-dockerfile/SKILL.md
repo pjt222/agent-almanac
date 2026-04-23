@@ -53,7 +53,7 @@ Write a production-ready Dockerfile for general-purpose application projects.
 | Rust | `rust:1.82-bookworm` | `debian:bookworm-slim` | ~80MB |
 | Java | `eclipse-temurin:21-jdk` | `eclipse-temurin:21-jre` | ~200MB |
 
-**Expected:** Select the slim/distroless variant for production images.
+**Got:** Select the slim/distroless variant for production images.
 
 ### Step 2: Write Dockerfile (by language)
 
@@ -148,9 +148,9 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ```
 
-**Expected:** `docker build -t myapp .` completes without errors.
+**Got:** `docker build -t myapp .` completes without errors.
 
-**On failure:** Check base image availability and dependency installation commands.
+**If fail:** Check base image availability and dependency installation commands.
 
 ### Step 3: ENTRYPOINT vs CMD
 
@@ -181,7 +181,7 @@ Dockerfile
 docker-compose*.yml
 ```
 
-**Expected:** Build context excludes development artifacts.
+**Got:** Build context excludes development artifacts.
 
 ### Step 5: Add Non-Root User
 
@@ -207,9 +207,9 @@ docker run --rm myapp:latest
 docker image inspect myapp:latest --format '{{.Size}}'
 ```
 
-**Expected:** Container starts, responds on the expected port, runs as non-root.
+**Got:** Container starts, responds on the expected port, runs as non-root.
 
-**On failure:** Check logs with `docker logs`. Verify WORKDIR, COPY paths, and exposed ports.
+**If fail:** Check logs with `docker logs`. Verify WORKDIR, COPY paths, and exposed ports.
 
 ## Validation
 
@@ -220,7 +220,7 @@ docker image inspect myapp:latest --format '{{.Size}}'
 - [ ] Dependencies are copied before source code (cache efficiency)
 - [ ] No secrets or `.env` files baked into the image
 
-## Common Pitfalls
+## Pitfalls
 
 - **COPY before dependency install**: Invalidates the dependency cache on every code change. Always copy the manifest file first.
 - **Running as root**: Default Docker user is root. Always add a non-root user for production.

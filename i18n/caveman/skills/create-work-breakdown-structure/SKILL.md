@@ -26,15 +26,15 @@ metadata:
 
 # Create a Work Breakdown Structure
 
-Decompose project scope into a hierarchical set of work packages that can be estimated, assigned, and tracked. The WBS provides the foundation for effort estimation, resource planning, and schedule development by breaking down complex deliverables into manageable components.
+Break project scope into hierarchical set of work packages. Estimable, assignable, trackable. WBS gives foundation for effort estimation, resource planning, schedule development. Breaks complex deliverables into manageable components.
 
-## When to Use
+## When Use
 
-- After a project charter is approved and scope is defined
-- Planning a classic/waterfall project with defined deliverables
-- Breaking down a large initiative into manageable work packages
-- Establishing a basis for effort estimation and resource planning
-- Creating a shared understanding of all required work
+- After project charter approved and scope defined
+- Planning classic/waterfall project with defined deliverables
+- Breaking big initiative into manageable work packages
+- Setting basis for effort estimation and resource planning
+- Making shared understanding of all required work
 
 ## Inputs
 
@@ -44,22 +44,22 @@ Decompose project scope into a hierarchical set of work packages that can be est
 - **Optional**: Team composition and available skills
 - **Optional**: Organizational WBS templates or standards
 
-## Procedure
+## Steps
 
 ### Step 1: Extract Deliverables from Charter
-Read the project charter. List all deliverables and acceptance criteria. Group them into 3-7 top-level categories (these become WBS Level 1 elements).
+Read project charter. List all deliverables and acceptance criteria. Group into 3-7 top-level categories (these become WBS Level 1 elements).
 
-**Expected:** List of Level 1 WBS elements matching charter deliverables.
+**Got:** List of Level 1 WBS elements matching charter deliverables.
 
-**On failure:** If charter is vague, return to `draft-project-charter` to refine scope.
+**If fail:** Charter vague? Return to `draft-project-charter` to refine scope.
 
 ### Step 2: Decompose into Work Packages
-For each Level 1 element, decompose into sub-elements (Level 2, Level 3). Apply the 100% rule: child elements must represent 100% of the parent's scope. Stop decomposing when work packages are:
+For each Level 1 element, break into sub-elements (Level 2, Level 3). Apply 100% rule: child elements must represent 100% of parent's scope. Stop decomposing when work packages are:
 - Estimable (can assign effort in person-days)
 - Assignable (one person or team owns it)
 - Measurable (clear done/not-done criteria)
 
-Create a WBS outline:
+Create WBS outline:
 ```markdown
 # Work Breakdown Structure: [Project Name]
 ## Document ID: WBS-[PROJECT]-[YYYY]-[NNN]
@@ -79,14 +79,14 @@ Create a WBS outline:
    3.3 Closure
 ```
 
-Apply WBS codes (1.1.1 format). Ensure 3-5 levels deep maximum. Always include a "Project Management" branch.
+Apply WBS codes (1.1.1 format). Keep 3-5 levels deep max. Always include "Project Management" branch.
 
-**Expected:** Complete WBS with 15-50 work packages, each with a unique WBS code.
+**Got:** Complete WBS with 15-50 work packages, each with unique WBS code.
 
-**On failure:** If decomposition exceeds 5 levels, the scope is too large — consider splitting into sub-projects.
+**If fail:** Decomposition exceeds 5 levels? Scope too large — consider splitting into sub-projects.
 
 ### Step 3: Write WBS Dictionary
-For each work package (leaf node), write a dictionary entry:
+For each work package (leaf node), write dictionary entry:
 
 ```markdown
 # WBS Dictionary: [Project Name]
@@ -104,9 +104,9 @@ For each work package (leaf node), write a dictionary entry:
 ...
 ```
 
-**Expected:** Dictionary entry for every leaf-node work package.
+**Got:** Dictionary entry for every leaf-node work package.
 
-**On failure:** Missing dictionary entries indicate incomplete decomposition — revisit Step 2.
+**If fail:** Missing dictionary entries → incomplete decomposition. Revisit Step 2.
 
 ### Step 4: Estimate Effort
 For each work package, apply one estimation method:
@@ -114,7 +114,7 @@ For each work package, apply one estimation method:
 - **Person-days** for detailed planning
 - **Three-point estimate** (optimistic/most likely/pessimistic) for high-uncertainty work
 
-Create a summary table:
+Create summary table:
 ```markdown
 ## Effort Summary
 | WBS Code | Work Package | Estimate | Method | Confidence |
@@ -125,9 +125,9 @@ Create a summary table:
 
 Total effort = sum of all work packages.
 
-**Expected:** Every work package has an effort estimate with stated confidence.
+**Got:** Every work package has effort estimate with stated confidence.
 
-**On failure:** If confidence is Low on >30% of packages, schedule a refinement session with SMEs.
+**If fail:** Confidence Low on >30% of packages? Schedule refinement session with SMEs.
 
 ### Step 5: Identify Dependencies and Critical Path Candidates
 Map dependencies between work packages:
@@ -139,42 +139,42 @@ Map dependencies between work packages:
 | 2.1.1 | 1.1.2 | Finish-to-Start | |
 ```
 
-Identify the longest chain of dependent work packages — this is the critical path candidate.
+Find longest chain of dependent work packages — this is critical path candidate.
 
-**Expected:** Dependency table with at least finish-to-start relationships identified.
+**Got:** Dependency table with at least finish-to-start relationships identified.
 
-**On failure:** If dependencies form cycles, the decomposition has errors — revisit Step 2.
+**If fail:** Dependencies form cycles? Decomposition has errors. Revisit Step 2.
 
 ### Step 6: Review and Baseline
-Combine WBS and dictionary into final documents. Verify the 100% rule at every level. Get stakeholder sign-off.
+Combine WBS and dictionary into final documents. Verify 100% rule at every level. Get stakeholder sign-off.
 
-**Expected:** WBS.md and WBS-DICTIONARY.md files created and reviewed.
+**Got:** WBS.md and WBS-DICTIONARY.md files created and reviewed.
 
-**On failure:** If stakeholders identify missing scope, add work packages and re-estimate.
+**If fail:** Stakeholders identify missing scope? Add work packages and re-estimate.
 
-## Validation
+## Checks
 
 - [ ] WBS file created with document ID and WBS codes
 - [ ] 100% rule satisfied: children fully represent parent scope at every level
-- [ ] Every leaf node has a WBS dictionary entry
+- [ ] Every leaf node has WBS dictionary entry
 - [ ] All work packages have effort estimates
 - [ ] Dependencies identified with no circular references
 - [ ] Project Management branch included
 - [ ] Critical path candidates identified
 - [ ] WBS depth does not exceed 5 levels
 
-## Common Pitfalls
+## Pitfalls
 
 - **Confusing deliverables with activities**: WBS elements should be nouns (deliverables), not verbs (activities). "User Authentication Module" not "Implement Authentication".
-- **Violating the 100% rule**: If children don't add up to 100% of parent scope, work will be missed.
-- **Too shallow or too deep**: 2 levels is too vague for planning; 6+ levels is micromanagement. Target 3-5 levels.
-- **Skipping Project Management branch**: PM work (planning, meetings, reporting) is real work that consumes effort.
-- **Estimating before decomposing**: Estimate work packages, not categories. A Level 1 estimate is unreliable.
-- **No dictionary**: A WBS without a dictionary is a tree of labels — the dictionary provides the definition of done.
+- **Violating the 100% rule**: Children don't add up to 100% of parent scope → work will be missed.
+- **Too shallow or too deep**: 2 levels too vague for planning; 6+ levels is micromanagement. Target 3-5 levels.
+- **Skipping Project Management branch**: PM work (planning, meetings, reporting) is real work consuming effort.
+- **Estimating before decomposing**: Estimate work packages, not categories. Level 1 estimate unreliable.
+- **No dictionary**: WBS without dictionary is tree of labels. Dictionary gives definition of done.
 
-## Related Skills
+## See Also
 
-- `draft-project-charter` — provides the scope and deliverables that feed WBS decomposition
+- `draft-project-charter` — gives scope and deliverables feeding WBS decomposition
 - `manage-backlog` — translate WBS work packages into backlog items for tracking
 - `generate-status-report` — report progress against WBS % complete
 - `plan-sprint` — if using hybrid approach, sprint-plan from WBS work packages

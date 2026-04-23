@@ -24,32 +24,32 @@ metadata:
   tags: gxp, decommission, data-retention, migration, archival, compliance
 ---
 
-# Decommission Validated System
+# 驗證系統退役
 
-Plan and execute the controlled retirement of a validated computerized system while preserving data integrity and meeting regulatory retention requirements.
+計畫並執一已驗證之電腦化系統於生命末之控制退役，保資料完整性並合法規保留要求。
 
-## When to Use
+## 適用時機
 
-- A validated system is being replaced by a new system
-- A system is reaching end-of-life with no replacement (business process eliminated)
-- Vendor discontinues support for a validated product
-- Consolidation of multiple systems into a single platform
-- Regulatory or business changes render a system obsolete
+- 已驗證系統為新系統所替
+- 系統達生命末而無替代（業務程序除）
+- 供應商停對已驗證產品之支援
+- 多系統併入單一平台
+- 法規或業務改令系統過時
 
-## Inputs
+## 輸入
 
-- **Required**: System to be decommissioned (name, version, validation status)
-- **Required**: Data retention requirements by regulation (21 CFR Part 11, GLP, GCP)
-- **Required**: Replacement system (if applicable) and migration scope
-- **Optional**: Current validation documentation package
-- **Optional**: Data volume and format inventory
-- **Optional**: Business owner and stakeholder list
+- **必要**：待退役之系統（名、版、驗證狀態）
+- **必要**：按法規（21 CFR Part 11、GLP、GCP）之資料保留要求
+- **必要**：替代系統（若適用）與遷移範圍
+- **選擇性**：當前驗證文件包
+- **選擇性**：資料量與格式清單
+- **選擇性**：業務擁有者與相關者清單
 
-## Procedure
+## 步驟
 
-### Step 1: Assess Data Retention Requirements
+### 步驟一：評資料保留要求
 
-Determine how long data must be retained and in what form:
+定資料須保留多久及以何形式：
 
 ```markdown
 # Data Retention Assessment
@@ -73,12 +73,12 @@ Determine how long data must be retained and in what form:
 | [e.g., User data] | [e.g., 200 profiles] | [e.g., LDAP/Database] | [Employment + 2 years] | Anonymise and archive |
 ```
 
-**Expected:** Every data category has a defined retention period, format requirement, and planned disposition.
-**On failure:** If retention requirements are unclear, consult regulatory affairs and legal. Default to the longest applicable retention period.
+**預期：** 各資料類皆有定之保留期、格式要求、計畫處置。
+**失敗時：** 若保留要求不清，諮法規事務與法務。預設為最長適用保留期。
 
-### Step 2: Plan Data Migration (If Applicable)
+### 步驟二：計畫資料遷移（若適用）
 
-If data is migrating to a replacement system:
+若資料遷至替代系統：
 
 ```markdown
 # Data Migration Plan
@@ -105,12 +105,12 @@ If data is migrating to a replacement system:
 | Audit trail continuity | Verify historical audit trail migrated | All entries present with original timestamps |
 ```
 
-**Expected:** Migration plan includes mapping, transformation rules, and validation checks that prove data integrity was maintained.
-**On failure:** If migration validation fails, do not proceed to decommission. Fix the migration issues and re-validate.
+**預期：** 遷移計畫含映射、轉換規則、證資料完整性已保之驗證檢查。
+**失敗時：** 若遷移驗證敗，勿進至退役。修遷移問題並重驗。
 
-### Step 3: Define Archival Strategy
+### 步驟三：定歸檔策略
 
-For data that will be archived rather than migrated:
+將歸檔而非遷移之資料：
 
 ```markdown
 # Archival Strategy
@@ -139,10 +139,10 @@ For data that will be archived rather than migrated:
 | External auditors | Read access, supervised | Per audit plan |
 ```
 
-**Expected:** Archived data is readable, searchable, and verifiable without the original system.
-**On failure:** If data cannot be read independently of the source system, the archive is not compliant. Consider exporting to an open, standard format (PDF/A, CSV) before decommission.
+**預期：** 歸檔資料可讀、可搜、可驗而無需原始系統。
+**失敗時：** 若資料不能獨於源系統讀，歸檔不合規。退役前考慮匯出為開放、標準格式（PDF/A、CSV）。
 
-### Step 4: Execute Decommissioning
+### 步驟四：執退役
 
 ```markdown
 # Decommission Checklist
@@ -184,32 +184,32 @@ For data that will be archived rather than migrated:
 | Approval | System owner, QA, IT signatures |
 ```
 
-**Expected:** Decommissioning is controlled, documented, and approved — not just "turn it off."
-**On failure:** If any checklist item cannot be completed, document the exception and obtain QA approval before proceeding.
+**預期：** 退役為控制、有錄、已核——非單「關之」。
+**失敗時：** 若任何清單項不能完，記例外並得 QA 核方續。
 
-## Validation
+## 驗證
 
-- [ ] Data retention requirements assessed for all data categories
-- [ ] Data migration validated with record counts, sampling, and checksums (if applicable)
-- [ ] Archive created in a format readable without the source system
-- [ ] Archive integrity verified with checksums
-- [ ] All user access revoked
-- [ ] Validation documentation archived with defined retention period
-- [ ] SOPs updated to remove references to decommissioned system
-- [ ] Decommission report approved by system owner, QA, and IT
+- [ ] 所有資料類皆已評保留要求
+- [ ] 資料遷移以記錄計數、取樣、校驗和驗證（若適用）
+- [ ] 歸檔造於無需源系統可讀之格式
+- [ ] 歸檔完整性以校驗和驗
+- [ ] 所有用戶存取已撤
+- [ ] 驗證文件已歸檔，含定之保留期
+- [ ] SOP 已更以除對退役系統之引
+- [ ] 退役報告為系統擁有者、QA、IT 所核
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Premature decommission**: Turning off a system before data migration is validated risks permanent data loss. Complete all validation before pulling the plug.
-- **Unreadable archives**: Storing data in a proprietary format that requires the original system to read defeats the purpose of archival. Use open formats.
-- **Forgotten audit trails**: Archiving the data but not the audit trail means the data provenance cannot be demonstrated. Always archive audit trails with their parent records.
-- **Orphaned SOPs**: SOPs that still reference a decommissioned system confuse users and create compliance gaps. Update or retire all affected SOPs.
-- **No periodic archive verification**: Archives degrade. Without periodic integrity checks, data loss may go undetected until the data is needed for an inspection.
+- **早退役**：資料遷移驗證前關系統險永資料失。拔插前完所有驗證
+- **不可讀之歸檔**：存於需原系統方讀之專屬格式違歸檔之意。用開放格式
+- **忘之審計軌**：歸檔資料而非審計軌令資料溯源不能示。恒與父記錄歸檔審計軌
+- **孤立之 SOP**：仍引退役系統之 SOP 令用戶惑並生合規缺。更或退所有受影響之 SOP
+- **無週期性歸檔驗證**：歸檔降。無週期性完整性察，資料失或不察直至檢查需資料
 
-## Related Skills
+## 相關技能
 
-- `design-compliance-architecture` — update the system inventory and compliance architecture after decommission
-- `manage-change-control` — decommissioning is a major change requiring change control
-- `write-validation-documentation` — migration validation follows the same IQ/OQ methodology
-- `write-standard-operating-procedure` — retire or update SOPs referencing the decommissioned system
-- `prepare-inspection-readiness` — archived data must remain accessible for regulatory inspections
+- `design-compliance-architecture` —— 退役後更系統清單與合規架構
+- `manage-change-control` —— 退役為需變更控制之大改
+- `write-validation-documentation` —— 遷移驗證循同 IQ/OQ 方法論
+- `write-standard-operating-procedure` —— 退或更引退役系統之 SOP
+- `prepare-inspection-readiness` —— 歸檔資料須續可為法規檢查所用

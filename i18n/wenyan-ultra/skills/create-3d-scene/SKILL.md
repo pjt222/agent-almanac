@@ -23,34 +23,34 @@ metadata:
   tags: blender, bpy, 3d, scene-setup, materials, lighting, camera
 ---
 
-# Create 3D Scene
+# 造三維場
 
-Set up a complete Blender scene programmatically using the Python API (bpy). Configure scene hierarchy, add mesh objects, create PBR materials with node-based shaders, position lighting and cameras, and set up environment/world settings.
+以 Python API（bpy）程設全 Blender 場。設場層、加網件、以點基 shader 造 PBR 材、位光與機、立境/世設。
 
-## When to Use
+## 用
 
-- Creating reproducible 3D visualization scenes from scratch
-- Automating product visualization or architectural rendering setup
-- Generating multiple scene variations programmatically
-- Building template scenes for batch rendering workflows
-- Prototyping scene layouts before manual refinement
-- Integrating 3D visualization into data pipelines or reporting systems
+- 造可重三維視場
+- 自品視或築渲設
+- 程生多場變
+- 築批渲之模場
+- 手精前試排
+- 融三維視於數流或報系
 
-## Inputs
+## 入
 
-| Input | Type | Description | Example |
+| 入 | 型 | 述 | 例 |
 |-------|------|-------------|---------|
-| Scene specifications | Configuration | Objects, materials, lighting requirements | Product dimensions, material colors, lighting setup |
-| Output requirements | Parameters | Resolution, render engine, quality settings | 1920x1080, Cycles, 128 samples |
-| Asset paths | File paths | External models, textures, HDRIs | `/path/to/hdri.exr`, `product_model.obj` |
-| Camera settings | Parameters | Position, rotation, focal length, DOF | `location=(7,-7,5)`, `lens=50mm` |
-| Environment | Configuration | World shader, background, ambient settings | HDRI lighting, solid color, gradient |
+| 場規 | 設 | 件、材、光需 | 品寸、材色、光設 |
+| 出需 | 參 | 解、渲擎、質設 | 1920x1080、Cycles、128 樣 |
+| 資路 | 檔路 | 外模、紋、HDRI | `/path/to/hdri.exr`、`product_model.obj` |
+| 機設 | 參 | 位、旋、焦距、DOF | `location=(7,-7,5)`、`lens=50mm` |
+| 境 | 設 | 世 shader、背、環設 | HDRI 光、純色、梯 |
 
-## Procedure
+## 行
 
-### 1. Set Up Script Structure
+### 一、設本構
 
-Create a Python script with proper imports and structure:
+建含正引與構之 Python 本：
 
 ```python
 #!/usr/bin/env python3
@@ -86,12 +86,12 @@ if __name__ == "__main__":
     main()
 ```
 
-**Expected:** Script structure with clear_scene() and main() functions
-**On failure:** Review Python syntax, check bpy import works in Blender Python environment
+**得：** 本含 clear_scene() 與 main()
+**敗：** 察 Python 文法、驗 bpy 於 Blender 境中可引
 
-### 2. Add Mesh Objects
+### 二、加網件
 
-Create primitive or imported mesh objects:
+建原或引網件：
 
 ```python
 def add_objects():
@@ -120,12 +120,12 @@ def add_objects():
     return cube, sphere
 ```
 
-**Expected:** Objects appear in scene with correct names and positions
-**On failure:** Check operator syntax, verify coordinates, ensure no naming conflicts
+**得：** 件現於場，名與位正
+**敗：** 察操文法、驗坐、保名無衝
 
-### 3. Create Materials with Node-Based Shaders
+### 三、以點基 shader 造材
 
-Set up PBR materials using shader nodes:
+用 shader 點設 PBR 材：
 
 ```python
 def create_material(name, base_color, metallic=0.0, roughness=0.5):
@@ -173,12 +173,12 @@ def apply_materials(cube, sphere):
         sphere.data.materials.append(mat_metal)
 ```
 
-**Expected:** Materials visible in shader editor with proper node connections
-**On failure:** Check node types exist, verify link syntax, ensure color values in [0,1] range
+**得：** 材顯於 shader 編輯器含正點連
+**敗：** 察點型存、驗連文法、保色值於 [0,1]
 
-### 4. Set Up Lighting
+### 四、設光
 
-Configure lights for scene illumination:
+配光以照場：
 
 ```python
 def setup_lighting():
@@ -214,12 +214,12 @@ def setup_lighting():
     point.data.energy = 500.0
 ```
 
-**Expected:** Three lights with appropriate intensities and positions
-**On failure:** Adjust energy values for render engine (Cycles vs EEVEE), check rotation format
+**得：** 三光含合強與位
+**敗：** 按渲擎調能值、察旋式
 
-### 5. Position Camera
+### 五、位機
 
-Set up camera with proper framing:
+設機含正框：
 
 ```python
 def setup_camera():
@@ -245,12 +245,12 @@ def setup_camera():
     bpy.context.scene.camera = camera
 ```
 
-**Expected:** Camera positioned with correct focal length and DOF settings
-**On failure:** Use simpler rotation method if track_to fails, verify lens units
+**得：** 機位含正焦距與 DOF
+**敗：** track_to 敗→用簡旋法、驗鏡單
 
-### 6. Configure World Environment
+### 六、設世境
 
-Set up world shader and background:
+配世 shader 與背：
 
 ```python
 def setup_world():
@@ -286,12 +286,12 @@ def setup_world():
     links.new(node_bg.outputs['Background'], node_output.inputs['Surface'])
 ```
 
-**Expected:** World shader with HDRI or solid background configured
-**On failure:** Skip HDRI loading if file missing, use Background node alone with color
+**得：** 世 shader 含 HDRI 或純背
+**敗：** 檔缺→略 HDRI 載，獨用 Background 含色
 
-### 7. Configure Render Settings
+### 七、設渲參
 
-Set basic render parameters:
+立基渲參：
 
 ```python
 def setup_render_settings():
@@ -315,12 +315,12 @@ def setup_render_settings():
     scene.render.filepath = "/tmp/render_"
 ```
 
-**Expected:** Render settings configured, ready for rendering
-**On failure:** Check engine name spelling, verify resolution values are positive integers
+**得：** 渲參已配、可渲
+**敗：** 察擎名、驗解值為正整
 
-### 8. Organize Scene Hierarchy
+### 八、組場層
 
-Create collections for organization:
+建組以理：
 
 ```python
 def organize_collections():
@@ -349,37 +349,37 @@ def organize_collections():
             col_cameras.objects.link(obj)
 ```
 
-**Expected:** Objects organized in named collections for easier management
-**On failure:** Check collection already exists before creating, handle orphaned objects
+**得：** 件組於名組中便理
+**敗：** 建前察組存、理孤件
 
-## Validation Checklist
+## 驗
 
-- [ ] Script runs without errors in Blender background mode
-- [ ] All expected objects present in scene outliner
-- [ ] Materials show correct colors and properties in shader editor
-- [ ] Camera positioned with objects in frame
-- [ ] Lighting provides adequate illumination (test render)
-- [ ] World environment loads correctly (HDRI or background color)
-- [ ] Render settings configured appropriately for output requirements
-- [ ] Scene organized logically in collections
-- [ ] No orphaned data blocks (materials, meshes without users)
-- [ ] Script includes clear_scene() for reproducibility
+- [ ] 本於 Blender 背模中無誤行
+- [ ] 諸件於場輪廓中
+- [ ] 材於 shader 編輯器顯正色與性
+- [ ] 機位含件於框
+- [ ] 光足（試渲）
+- [ ] 世境正載
+- [ ] 渲參合出需
+- [ ] 場以組理組
+- [ ] 無孤數塊
+- [ ] 本含 clear_scene() 為重現
 
-## Common Pitfalls
+## 忌
 
-1. **Object naming conflicts**: Use unique names, check for existing objects before creating
-2. **Incorrect color format**: RGB values must be tuples (r, g, b, a) in [0,1] range
-3. **Missing alpha channel**: When setting colors, include alpha: `(r, g, b, 1.0)`
-4. **Node connection errors**: Verify node types have expected inputs/outputs before linking
-5. **Camera not active**: Must set `bpy.context.scene.camera = camera_object`
-6. **Relative vs absolute paths**: Use absolute paths or Path() for cross-platform compatibility
-7. **Units confusion**: Blender uses meters by default, camera lens in millimeters
-8. **Rotation formats**: Use `math.radians()` for degree-to-radian conversion
-9. **Render engine differences**: EEVEE and Cycles have different features and parameters
-10. **Memory leaks**: Clear orphaned data blocks to prevent memory buildup in batch operations
+1. **件名衝**：用獨名、建前察存
+2. **色式誤**：RGB 須為元 (r, g, b, a) 於 [0,1]
+3. **缺 alpha**：設色含 alpha：`(r, g, b, 1.0)`
+4. **點連誤**：連前驗點型含入出
+5. **機非活**：須 `bpy.context.scene.camera = camera_object`
+6. **相與絕路**：用絕路或 Path() 跨平台
+7. **單惑**：Blender 默米、機鏡米厘
+8. **旋式**：用 `math.radians()` 度轉弧
+9. **渲擎異**：EEVEE 與 Cycles 特與參異
+10. **存漏**：清孤塊防批中存積
 
-## Related Skills
+## 參
 
-- **[script-blender-automation](../script-blender-automation/SKILL.md)**: Advanced scripting patterns for procedural modeling and batch operations
-- **[render-blender-output](../render-blender-output/SKILL.md)**: Configure rendering pipeline and execute renders
-- **[create-2d-composition](../../visualization/create-2d-composition/SKILL.md)**: 2D graphics composition using similar scripting approaches
+- **[script-blender-automation](../script-blender-automation/SKILL.md)**：程模與批操之進本模
+- **[render-blender-output](../render-blender-output/SKILL.md)**：設渲流與行渲
+- **[create-2d-composition](../../visualization/create-2d-composition/SKILL.md)**：二維像構之類本法

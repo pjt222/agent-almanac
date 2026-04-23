@@ -24,30 +24,30 @@ metadata:
   tags: github, pull-request, code-review, gh-cli, collaboration
 ---
 
-# Create Pull Request
+# 造拉取請求
 
-Create a GitHub pull request with a clear title, structured description, and proper branch setup.
+造 GitHub 拉取請求，含明標題、結構化描述、得宜之分支立。
 
-## When to Use
+## 適用時機
 
-- Proposing changes from a feature or fix branch for review
-- Merging completed work into the main branch
-- Requesting code review from collaborators
-- Documenting the purpose and scope of a set of changes
+- 自功能或修正分支提改以供審
+- 將已完工作併入主分支
+- 請協作者行程式審查
+- 記一組改動之目的與範圍
 
-## Inputs
+## 輸入
 
-- **Required**: Feature branch with committed changes
-- **Required**: Base branch to merge into (usually `main`)
-- **Optional**: Reviewers to request
-- **Optional**: Labels or milestone
-- **Optional**: Draft status
+- **必要**：含已提交之改動之功能分支
+- **必要**：合併至之基底分支（常為 `main`）
+- **選擇性**：待請之審者
+- **選擇性**：標籤或里程碑
+- **選擇性**：草稿狀態
 
-## Procedure
+## 步驟
 
-### Step 1: Ensure Branch Is Ready
+### 步驟一：確保分支已備
 
-Verify the branch is up to date with the base branch and all changes are committed:
+驗分支與基底分支同步且所有改動已提交：
 
 ```bash
 # Check for uncommitted changes
@@ -60,13 +60,13 @@ git fetch origin
 git rebase origin/main
 ```
 
-**Expected:** Branch is ahead of `origin/main` with no uncommitted changes and no conflicts.
+**預期：** 分支超前 `origin/main`，無未提交之改動且無衝突。
 
-**On failure:** If rebase conflicts occur, resolve them (see `resolve-git-conflicts` skill), then `git rebase --continue`. If the branch has diverged significantly, consider `git merge origin/main` instead.
+**失敗時：** 若 rebase 衝突，解之（見 `resolve-git-conflicts` 技能），繼以 `git rebase --continue`。若分支顯著分歧，考慮 `git merge origin/main` 代之。
 
-### Step 2: Review All Changes on the Branch
+### 步驟二：察分支上所有改動
 
-Examine the full diff and commit history that will be included in the PR:
+察 PR 所含之全差異與提交歷史：
 
 ```bash
 # See all commits on this branch (not on main)
@@ -79,24 +79,24 @@ git diff origin/main...HEAD
 git status -sb
 ```
 
-**Expected:** All commits are relevant to the PR. The diff shows only intended changes.
+**預期：** 所有提交與 PR 相關。差異僅顯所欲之改動。
 
-**On failure:** If unrelated commits are present, consider interactive rebase to clean up history before creating the PR.
+**失敗時：** 若有不相關之提交，考慮互動 rebase 以清歷史，再造 PR。
 
-### Step 3: Push the Branch
+### 步驟三：推分支
 
 ```bash
 # Push branch to remote (set upstream tracking)
 git push -u origin HEAD
 ```
 
-**Expected:** Branch appears on GitHub remote.
+**預期：** 分支現於 GitHub 遠端。
 
-**On failure:** If push is rejected, pull first with `git pull --rebase origin <branch>` and resolve any conflicts.
+**失敗時：** 若推被拒，先以 `git pull --rebase origin <branch>` 拉並解任何衝突。
 
-### Step 4: Write PR Title and Description
+### 步驟四：寫 PR 標題與描述
 
-Keep the title under 70 characters. Use the body for details:
+標題守於 70 字以內。用正文述細節：
 
 ```bash
 gh pr create --title "Add weighted mean calculation" --body "$(cat <<'EOF'
@@ -115,19 +115,19 @@ EOF
 )"
 ```
 
-For draft PRs:
+草稿 PR：
 
 ```bash
 gh pr create --title "WIP: Add authentication" --body "..." --draft
 ```
 
-**Expected:** PR created on GitHub with a URL returned. Description clearly communicates what changed and how to test.
+**預期：** PR 造於 GitHub 且返 URL。描述明述改動與測法。
 
-**On failure:** If `gh` is not authenticated, run `gh auth login`. If the base branch is wrong, specify with `--base main`.
+**失敗時：** 若 `gh` 未認證，行 `gh auth login`。若基底分支誤，以 `--base main` 指定。
 
-### Step 5: Handle Review Feedback
+### 步驟五：處審查回饋
 
-Respond to review comments and push updates:
+應審查意見並推更新：
 
 ```bash
 # View PR comments
@@ -146,13 +146,13 @@ EOF
 git push
 ```
 
-**Expected:** New commits appear on the PR. Review comments are addressed.
+**預期：** 新提交顯於 PR。審查意見已處。
 
-**On failure:** If CI checks fail after pushing, read the check output with `gh pr checks` and fix the issues before requesting re-review.
+**失敗時：** 若推後 CI 察敗，以 `gh pr checks` 察檢查輸出，修之再請重審。
 
-### Step 6: Merge and Clean Up
+### 步驟六：合併與清
 
-After approval:
+核准後：
 
 ```bash
 # Merge the PR (squash merge keeps history clean)
@@ -165,39 +165,39 @@ gh pr merge --merge --delete-branch
 gh pr merge --rebase --delete-branch
 ```
 
-After merge, update local main:
+合併後更本地 main：
 
 ```bash
 git checkout main
 git pull origin main
 ```
 
-**Expected:** PR is merged, remote branch is deleted, local main is updated.
+**預期：** PR 已合、遠端分支已刪、本地 main 已更。
 
-**On failure:** If merge is blocked by failing checks or missing approvals, address those first. Do not force-merge without resolving blockers.
+**失敗時：** 若合被失敗檢查或缺核准所阻，先處之。勿未解阻礙而強制合併。
 
-## Validation
+## 驗證
 
-- [ ] PR title is concise (under 70 characters) and descriptive
-- [ ] PR body includes summary of changes and test plan
-- [ ] All commits on the branch are relevant to the PR
-- [ ] CI checks pass
-- [ ] Branch is up to date with base branch
-- [ ] Reviewers are assigned (if required by repository settings)
-- [ ] No sensitive data in the diff
+- [ ] PR 標題簡（70 字內）且述性
+- [ ] PR 正文含改動摘要與測計畫
+- [ ] 分支上所有提交與 PR 相關
+- [ ] CI 察皆通
+- [ ] 分支與基底分支同步
+- [ ] 審者已指（若倉設要求）
+- [ ] 差異中無敏感資料
 
-## Common Pitfalls
+## 常見陷阱
 
-- **PR too large**: Keep PRs focused on a single feature or fix. Large PRs are harder to review and more likely to have merge conflicts.
-- **Missing test plan**: Always describe how the changes can be verified, even for documentation PRs.
-- **Stale branch**: If the base branch has moved ahead significantly, rebase before creating the PR to minimize merge conflicts.
-- **Force-pushing during review**: Avoid force-pushing to a branch with open review comments. Push new commits so reviewers can see incremental changes.
-- **Not reading CI output**: Check `gh pr checks` before asking for re-review. Failing CI wastes reviewers' time.
-- **Forgetting to delete branch**: Use `--delete-branch` with merge to keep the remote clean.
+- **PR 過大**：PR 守於單功能或修正。大 PR 難審且易生合併衝突
+- **缺測計畫**：恒述改動可如何驗，即文件 PR 亦然
+- **陳舊分支**：若基底分支顯著前行，造 PR 前 rebase 以減合併衝突
+- **審中強制推**：避對有開放審查意見之分支強制推。推新提交令審者見漸進改動
+- **不讀 CI 輸出**：請重審前察 `gh pr checks`。敗 CI 耗審者之時
+- **忘刪分支**：合併時用 `--delete-branch` 以保遠端清
 
-## Related Skills
+## 相關技能
 
-- `commit-changes` - creating commits for the PR
-- `manage-git-branches` - branch creation and naming conventions
-- `resolve-git-conflicts` - handling conflicts during rebase/merge
-- `create-github-release` - releasing after merge
+- `commit-changes` - 為 PR 造提交
+- `manage-git-branches` - 分支造與命名慣例
+- `resolve-git-conflicts` - rebase/合併中之衝突處
+- `create-github-release` - 合併後之發布

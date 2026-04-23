@@ -24,32 +24,32 @@ metadata:
   tags: gardening, bonsai, pruning, wiring, repotting, zen, contemplative
 ---
 
-# Cultivate Bonsai
+# 育盆栽
 
-Cultivate and maintain bonsai trees through seasonal care, structural shaping, and contemplative practice.
+經季護、結塑、冥實育守盆栽。
 
-## When to Use
+## 用
 
-- You are selecting a species for your first or next bonsai
-- You need to prune (maintenance or structural) a bonsai tree
-- Your bonsai needs repotting (roots circling, soil depleted, or growth stalled)
-- You want to wire branches for shaping
-- You need a seasonal care calendar for an existing bonsai collection
-- You want to develop a contemplative sitting practice with a living tree
+- 擇首或次盆栽種
+- 需剪（護或結）盆栽
+- 盆栽需換盆（根環、土竭、長停）
+- 欲繞枝為塑
+- 需存盆栽之季護曆
+- 欲以活樹立冥實
 
-## Inputs
+## 入
 
-- **Required**: Species of tree (or climate zone for species selection guidance)
-- **Optional**: Current state of tree (age estimate, pot size, health, last repotting date)
-- **Optional**: Goal style (formal upright, informal upright, cascade, semi-cascade, literati, windswept, forest)
-- **Optional**: Season and current weather conditions
-- **Optional**: Experience level (beginner, intermediate, advanced)
+- **必**：樹種（或候域為種導）
+- **可**：樹現態（齡、盆寸、健、末換盆日）
+- **可**：目風（正直、非正直、瀑、半瀑、文人、風掃、林）
+- **可**：季與現候
+- **可**：經級（初、中、進）
 
-## Procedure
+## 行
 
-### Step 1: Select or Assess the Species
+### 一：擇或評種
 
-Match species to climate, experience level, and desired aesthetic.
+合種於候、經、欲美。
 
 ```
 Beginner-Friendly Species by Climate:
@@ -79,13 +79,13 @@ Selection Criteria:
 4. Available as nursery stock (don't start from seed — too slow for learning)
 ```
 
-**Expected:** Species selected that matches climate, experience, and aesthetic goal.
+**得：** 種擇合候、經、美。
 
-**On failure:** If unsure about species suitability, default to Chinese elm — it tolerates the widest range of conditions and forgives beginner mistakes.
+**敗：** 疑種合→默榆。容最廣候且恕初誤。
 
-### Step 2: Meditate Checkpoint — Sitting with the Tree
+### 二：冥察點——與樹坐
 
-Before any structural work (pruning, wiring, repotting), sit with the tree.
+結工（剪、繞、換盆）前與樹坐。
 
 ```
 Bonsai Sitting Protocol (5-10 minutes):
@@ -102,13 +102,13 @@ Bonsai Sitting Protocol (5-10 minutes):
 If you feel rushed or impatient, you are not ready. Return tomorrow.
 ```
 
-**Expected:** Calm, unhurried state. A sense of the tree's natural movement and character.
+**得：** 靜不迫態。樹之自動與性之感。
 
-**On failure:** If unable to quiet the planning mind, do not proceed to structural pruning. Maintenance watering and feeding may continue without this checkpoint.
+**敗：** 不能靜謀心→勿進至結剪。護澆與餵可無此察。
 
-### Step 3: Pruning
+### 三：剪
 
-Two types: maintenance pruning (ongoing) and structural pruning (seasonal).
+二型：護剪（續）、結剪（季）。
 
 ```
 Maintenance Pruning (any time during growing season):
@@ -134,13 +134,13 @@ a branch, leave it for one more season. You can always remove later;
 you cannot reattach.
 ```
 
-**Expected:** Tree with cleaner silhouette, improved light penetration, and clear trunk line.
+**得：** 樹含潔廓、光透增、明幹線。
 
-**On failure:** If too much foliage was removed, move tree to sheltered spot with dappled light. Reduce watering slightly (less foliage = less transpiration). Do not fertilize until new growth appears.
+**敗：** 去葉過多→移樹至蔭含斑光處。微減澆（葉少=蒸少）。勿餵至新長現。
 
-### Step 4: Wiring
+### 四：繞
 
-Shape branches by wrapping them with anodized aluminium or annealed copper wire.
+以陽化鋁或退銅線繞枝以塑。
 
 ```
 Wiring Protocol:
@@ -165,13 +165,13 @@ Common Errors:
 - Bending too fast: branch snaps at the wire point
 ```
 
-**Expected:** Branches held in desired position without bark damage. Wire will be removed in 3-6 months.
+**得：** 枝持於欲位無皮傷。線於 3-6 月內將除。
 
-**On failure:** If wire bites into bark, cut it off immediately. The scar will heal over 2-3 growing seasons. Apply cut paste to deep wounds.
+**敗：** 線咬皮→即剪去。疤於 2-3 長季癒。深傷塗剪膏。
 
-### Step 5: Repotting
+### 五：換盆
 
-Repot when roots circle the pot interior or soil no longer drains freely.
+根環盆內或土不再暢排時換盆。
 
 ```
 Repotting Protocol:
@@ -210,13 +210,13 @@ Repotting Protocol:
    - Do NOT fertilize for 4-6 weeks (new roots need to establish)
 ```
 
-**Expected:** Tree stable in pot, soil drains freely when watered, no wobble in trunk.
+**得：** 樹穩於盆、澆時土暢、幹無晃。
 
-**On failure:** If tree shows severe wilting within days of repotting, too many roots were removed. Move to shade, mist foliage daily, and apply rooting hormone to next watering. Recovery takes 4-8 weeks.
+**敗：** 換盆後數日樹嚴萎→去根過多。移蔭、日霧葉、次澆加生根素。復 4-8 週。
 
-### Step 6: Heal Checkpoint — Post-Repot Assessment
+### 六：癒察點——換盆後評
 
-Two weeks after repotting, assess the tree's recovery.
+換盆後二週評樹復。
 
 ```
 Post-Repot Health Triage:
@@ -238,11 +238,11 @@ If 3+ indicators show stress:
 5. Reassess at 4 weeks
 ```
 
-**Expected:** Tree showing new bud activity and stable footing within 2-3 weeks.
+**得：** 樹於 2-3 週內顯新芽動與穩足。
 
-**On failure:** If no new growth at 6 weeks and indicators remain stressed, the tree may need to be removed from the bonsai pot and placed in a larger recovery container with standard potting mix for one full growing season.
+**敗：** 6 週後無新長且指仍迫→或須自盆栽盆出而置更大之復器含標盆土於全長季。
 
-### Step 7: Seasonal Care Calendar
+### 七：季護曆
 
 ```
 Bonsai Seasonal Calendar (Temperate Zones):
@@ -270,34 +270,34 @@ Bonsai Seasonal Calendar (Temperate Zones):
 └─────────┴──────────────────────────────────────────────────┘
 ```
 
-**Expected:** Year-round care rhythm established with seasonal transitions.
+**得：** 年常護律立含季轉。
 
-**On failure:** If a seasonal task was missed (e.g., spring repot), wait until next year — out-of-season repotting is more dangerous than waiting.
+**敗：** 季任漏（如春換盆）→待次年——季外換盆險勝待。
 
-## Validation Checklist
+## 驗
 
-- [ ] Species appropriate for climate zone and experience level
-- [ ] Meditate checkpoint completed before structural pruning or wiring
-- [ ] No more than 1/3 of foliage removed in any single pruning session
-- [ ] Wire gauge approximately 1/3 branch diameter, applied at 45°
-- [ ] Soil mix sifted, free-draining, appropriate for species
-- [ ] No more than 1/3 of root mass removed during repotting
-- [ ] Heal checkpoint performed 2 weeks post-repot
-- [ ] Seasonal care tasks aligned with current season
+- [ ] 種合候域與經級
+- [ ] 結剪或繞前冥察點畢
+- [ ] 一剪會去葉不過 1/3
+- [ ] 線號約枝徑 1/3、45° 施
+- [ ] 土篩、暢排、合種
+- [ ] 換盆去根不過 1/3
+- [ ] 換盆後二週癒察點行
+- [ ] 季護任合現季
 
-## Common Pitfalls
+## 忌
 
-1. **Over-pruning**: Removing too much foliage weakens the tree. When in doubt, leave it
-2. **Forgotten wire**: Wire left too long scars bark permanently. Set monthly reminders to check
-3. **Wrong season for repotting**: Repotting in summer or mid-winter can kill the tree
-4. **Overwatering**: More bonsai die from overwatering than underwatering. Check soil moisture before watering — not on a schedule
-5. **Impatience**: Bonsai develop over decades. A tree shaped this year may not look finished for five years. This is the practice
-6. **Indoor placement**: Most bonsai are outdoor trees. Indoor placement (except tropical species) leads to slow decline from insufficient light and dormancy disruption
+1. **過剪**：去葉過多弱樹。疑則留
+2. **忘線**：線留過久疤皮。月設提醒察
+3. **換盆誤季**：夏或冬中換盆或致樹死
+4. **過澆**：盆栽死於過澆者勝少澆。澆前察土濕——非按時
+5. **急**：盆栽於十年發。今年塑之樹或五年後方成。此為實
+6. **室置**：多盆栽為外樹。室置（除熱帶種）致光不足與休眠破之慢衰
 
-## Related Skills
+## 參
 
-- `prepare-soil` — Soil mix preparation overlaps with bonsai substrate knowledge
-- `maintain-hand-tools` — Bonsai tools (concave cutter, wire cutter, jin pliers) require the same sharpening and oiling care
-- `meditate` — Pre-work contemplative checkpoint (full protocol)
-- `heal` — Post-intervention health assessment (full protocol)
-- `plan-garden-calendar` — Seasonal timing for bonsai work aligns with the solar/lunar calendar
+- `prepare-soil` — 土備與盆栽基知重
+- `maintain-hand-tools` — 盆栽具（凹剪、線剪、jin 鉗）同礪油護
+- `meditate` — 工前冥察點（全協）
+- `heal` — 介後健評（全協）
+- `plan-garden-calendar` — 盆栽季時合日月曆

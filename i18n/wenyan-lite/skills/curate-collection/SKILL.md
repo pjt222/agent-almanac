@@ -25,31 +25,31 @@ metadata:
   tags: library-science, collection-development, weeding, acquisitions, reader-advisory, curation
 ---
 
-# Curate Collection
+# 館藏策展
 
-Build, assess, and maintain a library collection through strategic acquisitions, systematic weeding, usage analysis, and responsive reader advisory.
+經策略採購、系統剔除、用量分析、回應之讀者顧問以建、評、維圖書館藏。
 
-## When to Use
+## 適用時機
 
-- You are building a new collection with a defined scope and budget
-- An existing collection needs assessment for gaps, redundancies, or outdated materials
-- Shelves are overcrowded and systematic weeding is needed
-- Users request materials the collection does not hold
-- You want to establish a formal collection development policy
+- 建含既定範圍與預算之新館藏
+- 評既館藏之缺、冗、或陳舊材料
+- 架擁擠而需系統剔除
+- 用戶請館無之材料
+- 欲立正式館藏發展政策
 
-## Inputs
+## 輸入
 
-- **Required**: Collection scope (subject areas, audience, formats)
-- **Required**: Budget (annual acquisitions budget or one-time allocation)
-- **Optional**: Usage data (circulation statistics, hold requests, ILL requests)
-- **Optional**: Community or institutional profile (demographics, curriculum, research areas)
-- **Optional**: Existing collection development policy
+- **必要**：館藏範圍（主題區、讀者、格式）
+- **必要**：預算（年採購預算或一次分配）
+- **選擇性**：用量資料（流通統計、保留請求、ILL 請求）
+- **選擇性**：社區或機構輪廓（人口、課程、研究區）
+- **選擇性**：既館藏發展政策
 
-## Procedure
+## 步驟
 
-### Step 1: Define the Collection Development Policy
+### 步驟一：定館藏發展政策
 
-Establish the guiding document for all acquisition and weeding decisions.
+立所有採購與剔除決定之引導文件。
 
 ```
 Collection Development Policy Template:
@@ -91,13 +91,13 @@ Collection Development Policy Template:
    - Policy reviewed and updated every 3 years
 ```
 
-**Expected:** A written policy that guides consistent, defensible acquisition and weeding decisions.
+**預期：** 書面政策引導一致、可辯護之採購與剔除決定。
 
-**On failure:** If a formal policy seems excessive for a small collection, write a one-page scope statement covering mission, subjects collected, and basic selection criteria. Even a brief statement prevents drift.
+**失敗時：** 若正式政策於小館藏覺過，寫一頁範圍聲明，涵使命、所採主題、基本擇準。即簡聲明亦防漂。
 
-### Step 2: Assess the Existing Collection
+### 步驟二：評既館藏
 
-Understand what you have before deciding what to add or remove.
+決加或移前先明所有。
 
 ```
 Collection Assessment Methods:
@@ -137,13 +137,13 @@ Mark each cell as: Strong, Adequate, Weak, or Not Collected.
 This visual map reveals gaps and overlaps at a glance.
 ```
 
-**Expected:** A clear picture of the collection's strengths, weaknesses, gaps, and deadweight, supported by data.
+**預期：** 館藏之強、弱、缺、死重之明畫，以資料支。
 
-**On failure:** If circulation data is unavailable (no automated system), use shelf observation: dusty, tightly packed books that haven't moved indicate low use. In-library use can be estimated by counting items left on tables rather than reshelved.
+**失敗時：** 若流通資料不可得（無自動系統），用架察：塵厚、擠塞、久不動之書示低用。館內用可以計留於桌上而非歸架之件估。
 
-### Step 3: Acquire Materials Strategically
+### 步驟三：策略採購
 
-Select and purchase materials that fill gaps and serve user needs.
+擇並購合缺、服用戶需之材料。
 
 ```
 Acquisition Workflow:
@@ -186,13 +186,13 @@ Budget Allocation Rule of Thumb:
 - 5%: reserve for urgent or unexpected needs
 ```
 
-**Expected:** New acquisitions systematically fill identified gaps and respond to user demand, within budget.
+**預期：** 新採購系統填既辨之缺並應用戶需，守預算。
 
-**On failure:** If budget is severely constrained, prioritize user requests (proven demand) over speculative purchases. Supplement with ILL for low-demand subjects rather than buying materials that may not circulate.
+**失敗時：** 若預算嚴緊，優先用戶請（證需）於投機之購。以 ILL 補低需主題，而非購或不流通之材料。
 
-### Step 4: Weed the Collection (Deaccessioning)
+### 步驟四：剔館藏（去登記）
 
-Remove materials that no longer serve the collection's mission.
+移不再服館藏使命之材料。
 
 ```
 CREW Method / MUSTIE Criteria:
@@ -236,13 +236,13 @@ Never discard items with local historical significance
 without institutional review.
 ```
 
-**Expected:** Collection is regularly weeded, with clear documentation of withdrawn items and disposition. The remaining collection is current, relevant, and in good condition.
+**預期：** 館藏定期剔除，移出項與處置皆有明錄。餘館藏為時新、相關、狀況佳。
 
-**On failure:** If weeding feels emotionally difficult (it does for many librarians), remember: keeping a misleading medical text is more harmful than removing it. Weeding is an act of care for the user, not disrespect for the book.
+**失敗時：** 若剔除感情難（多館員然），憶：留誤導之醫學文比移之害。剔除為對用戶之護，非對書之不敬。
 
-### Step 5: Provide Reader Advisory and Reference
+### 步驟五：提供讀者顧問與參考
 
-Connect users with materials that meet their needs.
+連用戶於合其需之材料。
 
 ```
 Reader Advisory Framework:
@@ -274,30 +274,30 @@ Reader Advisory Framework:
    - Display new acquisitions prominently — users notice responsiveness
 ```
 
-**Expected:** Users find what they need, either in the collection or through ILL, and their feedback shapes future acquisitions.
+**預期：** 用戶尋所需，或於館藏或經 ILL，其回饋塑未來採購。
 
-**On failure:** If ILL is not available (no library network), explore open access sources, digital libraries (HathiTrust, Internet Archive, Project Gutenberg), and reciprocal borrowing agreements with nearby libraries.
+**失敗時：** 若 ILL 不可得（無館網），探開放存取源、數位圖書館（HathiTrust、Internet Archive、Project Gutenberg）、與近館互借協議。
 
-## Validation
+## 驗證
 
-- [ ] Collection development policy written and approved
-- [ ] Collection assessment completed with quantitative and qualitative data
-- [ ] Gaps identified and prioritized for acquisition
-- [ ] Budget allocated across subject areas and need categories
-- [ ] Acquisition workflow established with review sources and vendor relationships
-- [ ] Weeding cycle scheduled (annual) with CREW/MUSTIE criteria
-- [ ] User feedback loop in place (requests, ILL data, search logs)
+- [ ] 館藏發展政策已書且核
+- [ ] 館藏評已完，含量與質資料
+- [ ] 缺已辨並優先採購
+- [ ] 預算已分配於主題區與需類
+- [ ] 採購工作流已立，含審源與供應商關係
+- [ ] 剔除週期已排（年），含 CREW/MUSTIE 標準
+- [ ] 用戶回饋迴圈已置（請求、ILL 資料、搜尋日誌）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Collecting without a policy**: Without a scope statement, collections grow by accumulation rather than intention. Everything gets added, nothing gets removed, and the collection becomes a warehouse
-- **Fear of weeding**: Keeping everything "just in case" buries useful materials under deadweight. A smaller, curated collection serves users better than a large, undifferentiated one
-- **Ignoring usage data**: Buying based on professional judgment alone misses what users actually need. Let circulation and ILL data drive at least 30% of acquisition decisions
-- **No budget for replacement**: New acquisitions get all the budget, and worn-out popular items never get replaced. Reserve 10-15% for replacements
-- **Neglecting format diversity**: Not all users read print. Audiobooks, ebooks, and accessible formats serve users who can't or prefer not to read print
+- **無政策而採**：無範圍聲明，館藏以積而長而非有意。皆加，無除，館藏成倉
+- **畏剔除**：「萬一」皆留令有用之材料埋於死重。較小、策展之館藏服用戶勝過大而無別者
+- **忽用量資料**：唯以專業判斷購略用戶實際所需。令流通與 ILL 資料驅動至少 30% 之採購決定
+- **無替代預算**：新採購盡預算，磨損之熱門項永不替。留 10-15% 供替代
+- **忽格式多樣**：非所有用戶皆讀印。有聲書、電子書、無障礙格式服不能或不偏好印之用戶
 
-## Related Skills
+## 相關技能
 
-- `catalog-collection` — Newly acquired materials need cataloging; withdrawn items need record deletion
-- `preserve-materials` — Condition assessment during weeding identifies items needing preservation
-- `review-research` — Evaluating information quality parallels evaluating materials for selection
+- `catalog-collection` —— 新採之材需編目；移出之項需刪記
+- `preserve-materials` —— 剔除時之狀況評辨需保存之項
+- `review-research` —— 評資訊品質與評擇材料相通

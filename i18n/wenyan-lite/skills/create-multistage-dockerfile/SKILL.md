@@ -24,39 +24,39 @@ metadata:
   tags: docker, multi-stage, distroless, alpine, scratch, optimization
 ---
 
-# Create Multi-Stage Dockerfile
+# 造多階段 Dockerfile
 
-Build multi-stage Dockerfiles that produce minimal production images by separating build tooling from runtime.
+建多階段 Dockerfile，以分建構與執行之環境，產最小之生產映像。
 
-## When to Use
+## 適用時機
 
-- Production images are too large (>500MB for compiled languages)
-- Build tools (compilers, dev headers) are included in the final image
-- Need separate images for development and production from one Dockerfile
-- Deploying to constrained environments (edge, serverless)
+- 生產映像過大（編譯語言 >500MB）
+- 建構工具（編譯器、開發標頭）入終映像
+- 需自一 Dockerfile 產異之開發與生產映像
+- 部署至受限環境（邊緣、無伺服）
 
-## Inputs
+## 輸入
 
-- **Required**: Existing Dockerfile or project to containerize
-- **Required**: Language and build system (npm, pip, go build, cargo, maven)
-- **Optional**: Target runtime base (slim, alpine, distroless, scratch)
-- **Optional**: Size budget for final image
+- **必要**：既存之 Dockerfile 或待容器化之項目
+- **必要**：語言與建構系統（npm、pip、go build、cargo、maven）
+- **選擇性**：目標執行基礎（slim、alpine、distroless、scratch）
+- **選擇性**：終映像之大小預算
 
-## Procedure
+## 步驟
 
-### Step 1: Identify Build vs Runtime Dependencies
+### 步驟一：辨建構與執行依賴
 
-| Category | Build Stage | Runtime Stage |
+| 類 | 建構階段 | 執行階段 |
 |----------|-------------|---------------|
-| Compilers | gcc, g++, rustc | Not needed |
-| Package managers | npm, pip, cargo | Sometimes (interpreted langs) |
-| Dev headers | `-dev` packages | Not needed |
-| Source code | Full source tree | Only compiled output |
-| Test frameworks | jest, pytest | Not needed |
+| 編譯器 | gcc、g++、rustc | 不需 |
+| 套件管理器 | npm、pip、cargo | 有時（直譯語言） |
+| 開發標頭 | `-dev` 套件 | 不需 |
+| 源程式 | 全源樹 | 僅編譯輸出 |
+| 測試框架 | jest、pytest | 不需 |
 
-### Step 2: Structure the Multi-Stage Build
+### 步驟二：結構化多階段建構
 
-The core pattern: build in a fat image, copy artifacts to a slim image.
+核心模式：建於胖映像，複構件至 slim 映像。
 
 ```dockerfile
 # ---- Build Stage ----
@@ -74,9 +74,9 @@ EXPOSE <port>
 CMD [<entrypoint>]
 ```
 
-### Step 3: Apply Language-Specific Patterns
+### 步驟三：施語言專屬模式
 
-#### Node.js (pruned node_modules)
+#### Node.js（剪之 node_modules）
 
 ```dockerfile
 FROM node:22-bookworm AS builder
@@ -97,7 +97,7 @@ EXPOSE 3000
 CMD ["node", "dist/index.js"]
 ```
 
-#### Python (virtualenv copy)
+#### Python（virtualenv 複）
 
 ```dockerfile
 FROM python:3.12-bookworm AS builder
@@ -119,7 +119,7 @@ EXPOSE 8000
 CMD ["python", "app.py"]
 ```
 
-#### Go (static binary to scratch)
+#### Go（靜態二進制至 scratch）
 
 ```dockerfile
 FROM golang:1.23-bookworm AS builder
@@ -136,7 +136,7 @@ EXPOSE 8080
 ENTRYPOINT ["/server"]
 ```
 
-#### Rust (static musl binary)
+#### Rust（靜態 musl 二進制）
 
 ```dockerfile
 FROM rust:1.82-bookworm AS builder
@@ -156,23 +156,23 @@ EXPOSE 8080
 ENTRYPOINT ["/myapp"]
 ```
 
-**Expected:** Final image contains only the runtime and compiled artifacts.
+**預期：** 終映像僅含執行時與編譯構件。
 
-**On failure:** Check `COPY --from=builder` paths. Use `docker build --target builder` to debug the build stage.
+**失敗時：** 察 `COPY --from=builder` 路。用 `docker build --target builder` 除錯建構階段。
 
-### Step 4: Choose Runtime Base
+### 步驟四：擇執行基礎
 
-| Base | Size | Shell | Use Case |
+| 基礎 | 大小 | Shell | 用例 |
 |------|------|-------|----------|
-| `scratch` | 0 MB | No | Static Go/Rust binaries |
-| `gcr.io/distroless/static` | ~2 MB | No | Static binaries + CA certs |
-| `gcr.io/distroless/base` | ~20 MB | No | Dynamic binaries (libc) |
-| `*-slim` | 50-150 MB | Yes | Interpreted languages |
-| `alpine` | ~7 MB | Yes | When shell access needed |
+| `scratch` | 0 MB | 無 | 靜態 Go/Rust 二進制 |
+| `gcr.io/distroless/static` | ~2 MB | 無 | 靜態二進制 + CA 憑證 |
+| `gcr.io/distroless/base` | ~20 MB | 無 | 動態二進制（libc） |
+| `*-slim` | 50-150 MB | 有 | 直譯語言 |
+| `alpine` | ~7 MB | 有 | 需 shell 存取時 |
 
-**Note:** Alpine uses musl libc. Some Python wheels and Node native modules may not work. Prefer `-slim` (glibc) for interpreted languages.
+**注：** Alpine 用 musl libc。某 Python wheels 與 Node 原生模組或不可。直譯語言宜用 `-slim`（glibc）。
 
-### Step 5: Build Args Across Stages
+### 步驟五：跨階段之建構引數
 
 ```dockerfile
 ARG APP_VERSION=0.0.0
@@ -186,11 +186,11 @@ COPY --from=builder /server /server
 ENTRYPOINT ["/server"]
 ```
 
-Build with: `docker build --build-arg APP_VERSION=1.2.3 .`
+建以：`docker build --build-arg APP_VERSION=1.2.3 .`
 
-**Note:** `ARG` before `FROM` is global. Each stage must re-declare `ARG` to use it.
+**注：** `FROM` 前之 `ARG` 為全域。各階段須重宣 `ARG` 以用之。
 
-### Step 6: Compare Image Sizes
+### 步驟六：比映像大小
 
 ```bash
 # Build both variants
@@ -201,28 +201,28 @@ docker build -t myapp:slim .
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep myapp
 ```
 
-**Expected:** Production image is 50-90% smaller than the build stage.
+**預期：** 生產映像較建構階段小 50-90%。
 
-## Validation
+## 驗證
 
-- [ ] `docker build` completes for all stages
-- [ ] Final image does not contain build tools (compilers, dev headers)
-- [ ] `docker run` works correctly from the slim image
-- [ ] Image size is significantly reduced vs single-stage
-- [ ] `COPY --from=builder` paths are correct
-- [ ] No source code leaks into the production image
+- [ ] `docker build` 各階段皆完
+- [ ] 終映像不含建構工具（編譯器、開發標頭）
+- [ ] `docker run` 於 slim 映像中行之無誤
+- [ ] 映像大小較單階段顯著減
+- [ ] `COPY --from=builder` 路正確
+- [ ] 無源程式洩入生產映像
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Missing runtime libraries**: Compiled code may need shared libraries (`libc`, `libssl`). Test the slim image thoroughly.
-- **Broken `COPY --from` paths**: The artifact path must match exactly. Use `docker build --target builder` then `docker run --rm builder ls /path` to debug.
-- **Alpine musl issues**: Native Node.js addons and some Python packages fail on Alpine. Use `-slim` instead.
-- **Global ARG scope**: An `ARG` declared before `FROM` is available to `FROM` lines only. Re-declare inside each stage that needs it.
-- **Forgetting CA certificates**: `scratch` has no certificates. Copy `/etc/ssl/certs/ca-certificates.crt` from the builder or use distroless.
+- **缺執行庫**：編譯程式或需共享庫（`libc`、`libssl`）。詳測 slim 映像
+- **`COPY --from` 路斷**：構件路須完全合。用 `docker build --target builder` 繼以 `docker run --rm builder ls /path` 除錯
+- **Alpine musl 問題**：原生 Node.js 附加與某 Python 套件於 Alpine 敗。改用 `-slim`
+- **全域 ARG 範圍**：宣於 `FROM` 前之 `ARG` 僅可用於 `FROM` 行。需用之階段內重宣
+- **忘 CA 憑證**：`scratch` 無憑證。自建構器複 `/etc/ssl/certs/ca-certificates.crt` 或用 distroless
 
-## Related Skills
+## 相關技能
 
-- `create-dockerfile` - single-stage general Dockerfiles
-- `create-r-dockerfile` - R-specific Dockerfiles with rocker images
-- `optimize-docker-build-cache` - layer caching and BuildKit features
-- `setup-compose-stack` - compose configurations using multi-stage images
+- `create-dockerfile` - 單階段通用 Dockerfile
+- `create-r-dockerfile` - R 專屬之 Dockerfile，用 rocker 映像
+- `optimize-docker-build-cache` - 層快取與 BuildKit 功能
+- `setup-compose-stack` - 以多階段映像行之 compose 配置

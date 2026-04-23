@@ -25,14 +25,14 @@ metadata:
 
 # Create Dockerfile
 
-Write a production-ready Dockerfile for general-purpose application projects.
+Write production-ready Dockerfile for general-purpose application projects.
 
-## When to Use
+## When Use
 
-- Containerizing a Node.js, Python, Go, Rust, or Java application
-- Creating a consistent build/runtime environment
-- Preparing an application for cloud deployment or Docker Compose
-- No existing Dockerfile in the project
+- Containerizing Node.js, Python, Go, Rust, or Java app
+- Making consistent build/runtime environment
+- Preparing app for cloud deploy or Docker Compose
+- No existing Dockerfile in project
 
 ## Inputs
 
@@ -41,7 +41,7 @@ Write a production-ready Dockerfile for general-purpose application projects.
 - **Optional**: Target environment (development or production)
 - **Optional**: Exposed ports
 
-## Procedure
+## Steps
 
 ### Step 1: Choose Base Image
 
@@ -53,7 +53,7 @@ Write a production-ready Dockerfile for general-purpose application projects.
 | Rust | `rust:1.82-bookworm` | `debian:bookworm-slim` | ~80MB |
 | Java | `eclipse-temurin:21-jdk` | `eclipse-temurin:21-jre` | ~200MB |
 
-**Expected:** Select the slim/distroless variant for production images.
+**Got:** Pick slim/distroless variant for production images.
 
 ### Step 2: Write Dockerfile (by language)
 
@@ -148,9 +148,9 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ```
 
-**Expected:** `docker build -t myapp .` completes without errors.
+**Got:** `docker build -t myapp .` finishes without errors.
 
-**On failure:** Check base image availability and dependency installation commands.
+**If fail:** Check base image availability and dependency install commands.
 
 ### Step 3: ENTRYPOINT vs CMD
 
@@ -160,7 +160,7 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 | `CMD` | Default arguments | Override with trailing args |
 | Both | `ENTRYPOINT` + default args via `CMD` | Args override CMD only |
 
-Use `ENTRYPOINT` for compiled binaries with a single purpose. Use `CMD` for interpreted languages where you might want `docker run myapp bash`.
+Use `ENTRYPOINT` for compiled binaries with single purpose. Use `CMD` for interpreted languages where might want `docker run myapp bash`.
 
 ### Step 4: Create .dockerignore
 
@@ -181,7 +181,7 @@ Dockerfile
 docker-compose*.yml
 ```
 
-**Expected:** Build context excludes development artifacts.
+**Got:** Build context drops dev artifacts.
 
 ### Step 5: Add Non-Root User
 
@@ -192,7 +192,7 @@ RUN groupadd -r appuser && useradd -r -g appuser -m appuser
 USER appuser
 ```
 
-For distroless images, use the built-in nonroot user:
+For distroless images, use built-in nonroot user:
 
 ```dockerfile
 FROM gcr.io/distroless/static:nonroot
@@ -207,31 +207,31 @@ docker run --rm myapp:latest
 docker image inspect myapp:latest --format '{{.Size}}'
 ```
 
-**Expected:** Container starts, responds on the expected port, runs as non-root.
+**Got:** Container starts, responds on expected port, runs as non-root.
 
-**On failure:** Check logs with `docker logs`. Verify WORKDIR, COPY paths, and exposed ports.
+**If fail:** Check logs with `docker logs`. Verify WORKDIR, COPY paths, exposed ports.
 
-## Validation
+## Checks
 
-- [ ] `docker build` completes without errors
-- [ ] Container starts and application responds
-- [ ] `.dockerignore` excludes unnecessary files
-- [ ] Application runs as non-root user
-- [ ] Dependencies are copied before source code (cache efficiency)
-- [ ] No secrets or `.env` files baked into the image
+- [ ] `docker build` finishes without errors
+- [ ] Container starts and app responds
+- [ ] `.dockerignore` drops unneeded files
+- [ ] App runs as non-root user
+- [ ] Dependencies copied before source code (cache efficiency)
+- [ ] No secrets or `.env` files baked into image
 
-## Common Pitfalls
+## Pitfalls
 
-- **COPY before dependency install**: Invalidates the dependency cache on every code change. Always copy the manifest file first.
-- **Running as root**: Default Docker user is root. Always add a non-root user for production.
-- **Missing .dockerignore**: Sending `node_modules` or `.git` into the build context wastes time and disk.
+- **COPY before dependency install**: Invalidates dependency cache on every code change. Always copy manifest file first.
+- **Running as root**: Default Docker user is root. Always add non-root user for production.
+- **Missing .dockerignore**: Sending `node_modules` or `.git` into build context wastes time and disk.
 - **Using `latest` tag for base images**: Pin to specific versions (e.g., `node:22.11.0`) for reproducibility.
-- **Forgetting `--no-cache-dir`**: Python `pip` caches packages by default, bloating the image.
-- **ADD vs COPY**: Use `COPY` unless you need URL download or tar extraction (`ADD` auto-extracts).
+- **Forgetting `--no-cache-dir`**: Python `pip` caches packages by default, bloating image.
+- **ADD vs COPY**: Use `COPY` unless need URL download or tar extraction (`ADD` auto-extracts).
 
-## Related Skills
+## See Also
 
 - `create-r-dockerfile` - R-specific Dockerfile using rocker images
 - `create-multistage-dockerfile` - multi-stage patterns for minimal production images
 - `optimize-docker-build-cache` - advanced caching strategies
-- `setup-compose-stack` - orchestrate the containerized app with other services
+- `setup-compose-stack` - orchestrate containerized app with other services

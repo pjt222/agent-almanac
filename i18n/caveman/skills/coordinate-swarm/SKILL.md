@@ -27,66 +27,66 @@ metadata:
 
 # Coordinate Swarm
 
-Establish coordination across distributed agents using stigmergy (indirect communication through environment modification), local interaction rules, and quorum sensing — enabling coherent collective behavior without a central controller.
+Set up coordination across distributed agents. Use stigmergy (indirect talk through environment), local rules, quorum sensing. Coherent group behavior, no central boss.
 
-## When to Use
+## When Use
 
-- Designing distributed systems where no single node should be a coordination bottleneck
-- Organizing teams or workflows that must self-coordinate without constant management oversight
-- Building event-driven architectures where components communicate through shared state rather than direct messaging
-- Scaling a process that works well with 3 agents but breaks down at 30
-- Bootstrapping coordination patterns for a new swarm-style domain (see `forage-resources`, `build-consensus`)
-- Replacing fragile centralized orchestration with resilient emergent coordination
+- Designing distributed system, no single node should be bottleneck
+- Organizing teams, workflows must self-coordinate, no constant boss oversight
+- Building event-driven architecture, parts talk through shared state, not direct messages
+- Scaling process works fine with 3 agents, breaks at 30
+- Bootstrapping coordination for new swarm domain (see `forage-resources`, `build-consensus`)
+- Replacing fragile central orchestration with resilient emergent coordination
 
 ## Inputs
 
-- **Required**: Description of the agents (workers, services, team members) that need coordination
-- **Required**: The collective goal or desired emergent behavior
-- **Optional**: Current coordination mechanism and its failure modes
-- **Optional**: Number of agents (affects pattern selection — small swarms vs. large colonies)
-- **Optional**: Latency tolerance (real-time vs. eventual coordination)
-- **Optional**: Environmental constraints (shared state availability, communication bandwidth)
+- **Required**: Description of agents (workers, services, team members) needing coordination
+- **Required**: Collective goal or wanted emergent behavior
+- **Optional**: Current coordination method and its failure modes
+- **Optional**: Agent count (affects pattern choice — small swarm vs. big colony)
+- **Optional**: Latency tolerance (real-time vs. eventual)
+- **Optional**: Environment limits (shared state, bandwidth)
 
-## Procedure
+## Steps
 
-### Step 1: Identify the Coordination Problem Class
+### Step 1: Identify Coordination Problem Class
 
-Classify the coordination challenge to select appropriate patterns.
+Classify challenge. Pick right patterns.
 
-1. Map the current state: who are the agents, what do they do individually, where does coordination break down?
-2. Classify the problem:
-   - **Foraging** — agents search for and exploit distributed resources (see `forage-resources`)
-   - **Consensus** — agents must agree on a collective decision (see `build-consensus`)
-   - **Construction** — agents build or maintain a shared structure incrementally
-   - **Defense** — agents detect and respond to threats collectively (see `defend-colony`)
+1. Map current state: who are agents, what do they do alone, where does coordination break?
+2. Classify problem:
+   - **Foraging** — agents search for, exploit distributed resources (see `forage-resources`)
+   - **Consensus** — agents must agree on collective decision (see `build-consensus`)
+   - **Construction** — agents build, maintain shared structure step by step
+   - **Defense** — agents detect, respond to threats collectively (see `defend-colony`)
    - **Division of labor** — agents must self-organize into specialized roles
-3. Identify the failure mode of current coordination:
-   - Single point of failure (centralized controller)
+3. Identify failure mode of current coordination:
+   - Single point of failure (central controller)
    - Communication bottleneck (too many direct messages)
-   - Coherence loss (agents drift apart without feedback)
-   - Rigidity (cannot adapt to changing conditions)
+   - Coherence loss (agents drift apart, no feedback)
+   - Rigidity (cannot adapt to change)
 
-**Expected:** A clear classification of the coordination problem type and the specific failure mode to address. This determines which swarm patterns to apply.
+**Got:** Clear classification of coordination problem type and specific failure mode to fix. Picks swarm patterns to use.
 
-**On failure:** If the problem doesn't fit a single class, it may be a composite. Decompose into sub-problems and address each with the appropriate pattern. If agents are too heterogeneous for a single coordination model, consider layered coordination — homogeneous clusters coordinated via inter-cluster stigmergy.
+**If fail:** Problem does not fit single class? May be mixed. Break into sub-problems, address each with own pattern. Agents too heterogeneous for single model? Consider layered coordination — homogeneous clusters coordinated via inter-cluster stigmergy.
 
 ### Step 2: Design Stigmergic Signals
 
-Create the indirect communication channels through which agents influence each other's behavior.
+Build indirect talk channels. Agents influence each other through them.
 
-1. Define the shared environment (database, message queue, file system, physical space, shared board)
-2. Design signals that agents deposit into the environment:
-   - **Trail signals**: markers that accumulate along successful paths (like ant pheromones)
-   - **Threshold signals**: counters that trigger behavior changes when they cross thresholds
-   - **Inhibition signals**: markers that repel agents from exhausted areas
+1. Define shared environment (database, message queue, file system, physical space, shared board)
+2. Design signals agents drop into environment:
+   - **Trail signals**: markers pile up along good paths (like ant pheromones)
+   - **Threshold signals**: counters trigger behavior change when crossing threshold
+   - **Inhibition signals**: markers push agents away from exhausted areas
 3. Define signal properties:
-   - **Decay rate**: how quickly signals fade (prevents stale state from dominating)
-   - **Reinforcement**: how successful outcomes strengthen signals
-   - **Visibility radius**: how far a signal propagates
+   - **Decay rate**: how fast signals fade (stops stale state dominating)
+   - **Reinforcement**: how good outcomes strengthen signals
+   - **Visibility radius**: how far signal spreads
 4. Map signals to agent behaviors:
-   - When an agent detects signal X above threshold T, it performs action A
-   - When an agent completes action A successfully, it deposits signal Y
-   - When no signal is detected, the agent follows its default exploration behavior
+   - Agent senses signal X above threshold T → does action A
+   - Agent finishes action A well → drops signal Y
+   - No signal sensed → agent does default exploration
 
 ```
 Signal Design Template:
@@ -100,99 +100,99 @@ Signal Design Template:
 └──────────────┴───────────────────┴──────────────┴────────────────────┘
 ```
 
-**Expected:** A signal table mapping environmental markers to agent deposit conditions, decay rates, and response behaviors. Signals should be simple, composable, and independently meaningful.
+**Got:** Signal table mapping environment markers to deposit conditions, decay rates, response behaviors. Signals simple, composable, each meaningful alone.
 
-**On failure:** If signal design feels overly complex, reduce to two signals: one positive (success trail) and one negative (danger flag). Most coordination problems can be bootstrapped with attract/repel dynamics. Add nuance only after the basic system is functioning.
+**If fail:** Signal design feels too complex? Drop to two signals: one positive (success trail), one negative (danger flag). Most coordination bootstraps with attract/repel. Add nuance only after basic system works.
 
 ### Step 3: Define Local Interaction Rules
 
-Specify the simple rules each agent follows, using only local information (their own state + nearby signals).
+Write simple rules each agent follows. Only local info (own state + nearby signals).
 
-1. Define the agent's perception radius (what can it sense?)
+1. Define agent's perception radius (what can sense?)
 2. Write 3-7 local rules in priority order:
-   - Rule 1 (safety): If danger-flag detected, move away
-   - Rule 2 (response): If help-signal detected and idle, move toward
-   - Rule 3 (exploitation): If success-trail detected, follow toward strongest signal
-   - Rule 4 (exploration): If no signals detected, move randomly with bias toward unexplored areas
-   - Rule 5 (deposit): After completing task, deposit success-trail at location
+   - Rule 1 (safety): Danger-flag sensed → move away
+   - Rule 2 (response): Help-signal sensed and idle → move toward
+   - Rule 3 (exploitation): Success-trail sensed → follow toward strongest signal
+   - Rule 4 (exploration): No signals sensed → move random, bias toward unexplored
+   - Rule 5 (deposit): After task done → drop success-trail at spot
 3. Each rule must be:
-   - **Local**: depends only on what the individual agent can perceive
-   - **Simple**: expressible in one if-then statement
-   - **Stateless** (preferred): does not require the agent to remember past states
-4. Test rules mentally: if every agent follows these rules, does the desired collective behavior emerge?
+   - **Local**: depends only on what agent sees
+   - **Simple**: one if-then statement
+   - **Stateless** (preferred): no need to remember past states
+4. Test rules in head: every agent follows these rules → wanted collective behavior emerges?
 
-**Expected:** A prioritized rule set that each agent executes independently. When applied across the swarm, these local rules produce the target collective behavior (foraging, construction, defense, etc.).
+**Got:** Ranked rule set each agent runs alone. Applied across swarm → target collective behavior (foraging, construction, defense, etc.).
 
-**On failure:** If mental simulation doesn't produce the desired emergent behavior, the rules likely need a feedback loop — agents must be able to observe the consequences of their collective actions. Add a signal that represents the collective state (e.g., "task completion rate") and a rule that adjusts behavior based on it.
+**If fail:** Mental sim does not produce wanted emergent behavior? Rules likely need feedback loop — agents must see consequences of collective actions. Add signal for collective state (e.g., "task completion rate") and rule adjusting behavior from it.
 
 ### Step 4: Calibrate Quorum Sensing
 
-Set thresholds that trigger collective state changes when enough agents agree.
+Set thresholds triggering collective state changes when enough agents agree.
 
-1. Identify decisions that require collective agreement (not just individual response):
+1. Find decisions needing collective agreement (not just individual response):
    - Switching from exploration to exploitation mode
-   - Committing to a new work site or abandoning an old one
+   - Committing to new work site or abandoning old one
    - Escalating from normal to emergency response
 2. For each collective decision, define:
-   - **Quorum threshold**: number or percentage of agents that must signal agreement
-   - **Sensing window**: time period over which signals are counted
-   - **Hysteresis**: different thresholds for activation vs. deactivation (prevents oscillation)
+   - **Quorum threshold**: count or percent of agents must signal agreement
+   - **Sensing window**: time period signals counted over
+   - **Hysteresis**: different thresholds for activation vs. deactivation (stops oscillation)
 3. Implement quorum as signal accumulation:
-   - Each agent that favors the decision deposits a vote-signal
-   - When accumulated votes exceed the quorum threshold within the sensing window, the decision activates
-   - When votes drop below the deactivation threshold, the decision reverses
+   - Each agent favoring decision drops vote-signal
+   - Accumulated votes exceed quorum within sensing window → decision activates
+   - Votes drop below deactivation threshold → decision reverses
 
-**Expected:** Quorum thresholds that allow the swarm to make collective decisions without a leader. The hysteresis gap prevents rapid oscillation between states.
+**Got:** Quorum thresholds let swarm make collective decisions, no leader. Hysteresis gap stops fast oscillation between states.
 
-**On failure:** If the swarm oscillates between states, widen the hysteresis gap (e.g., activate at 70%, deactivate at 30%). If the swarm never reaches quorum, lower the threshold or increase the sensing window. If decisions are too slow, reduce the sensing window — but beware of premature consensus.
+**If fail:** Swarm oscillates between states? Widen hysteresis gap (e.g., activate at 70%, deactivate at 30%). Swarm never reaches quorum? Lower threshold or grow sensing window. Decisions too slow? Shrink sensing window — but watch for premature consensus.
 
 ### Step 5: Test and Tune Emergent Behavior
 
-Validate that local rules produce the desired collective behavior, then tune parameters.
+Validate local rules produce wanted collective behavior, then tune params.
 
-1. Run a simulation or pilot with a small number of agents (5-10)
+1. Run sim or pilot with small agent count (5-10)
 2. Observe:
-   - Does the swarm converge on the intended behavior?
-   - How long does convergence take?
+   - Swarm converges on intended behavior?
+   - How long convergence takes?
    - What happens when conditions change mid-task?
-   - What happens when agents fail or are added?
-3. Tune parameters:
+   - What happens when agents fail or get added?
+3. Tune params:
    - Signal decay rate: too fast → no coordination memory; too slow → stale signals dominate
    - Quorum threshold: too low → premature collective decisions; too high → paralysis
-   - Exploration-exploitation balance: too much exploration → inefficient; too much exploitation → local optima
+   - Exploration-exploitation balance: too much exploration → wasteful; too much exploitation → local optima
 4. Stress test:
-   - Remove 30% of agents suddenly — does the swarm recover?
-   - Double the agent count — does the swarm still coordinate?
-   - Introduce conflicting signals — does the swarm resolve or deadlock?
+   - Remove 30% of agents fast — swarm recovers?
+   - Double agent count — swarm still coordinates?
+   - Inject conflicting signals — swarm resolves or deadlocks?
 
-**Expected:** A tuned parameter set where the swarm self-organizes toward the target behavior, recovers from perturbations, and scales gracefully.
+**Got:** Tuned param set. Swarm self-organizes toward target behavior, recovers from shocks, scales clean.
 
-**On failure:** If the swarm fails stress tests, the signal design is likely too tightly coupled. Simplify: reduce to fewer signals, increase decay rates (fresher information), and ensure agents have a robust default behavior when no signals are present. A swarm that does something reasonable with zero signals is more resilient than one that depends on signal availability.
+**If fail:** Swarm fails stress tests? Signal design likely too tightly coupled. Simplify: fewer signals, higher decay rates (fresh info), agents have robust default behavior when no signals present. Swarm that does something reasonable with zero signals is more resilient than one depending on signal availability.
 
-## Validation
+## Checks
 
-- [ ] Coordination problem is classified into a recognized pattern (foraging, consensus, construction, defense, division of labor)
-- [ ] Stigmergic signal table is defined with deposit conditions, decay rates, and agent responses
-- [ ] Local interaction rules are simple, local, and prioritized (3-7 rules)
-- [ ] Quorum thresholds are set with hysteresis to prevent oscillation
-- [ ] Small-scale test shows emergent behavior matching the collective goal
+- [ ] Coordination problem classified into known pattern (foraging, consensus, construction, defense, division of labor)
+- [ ] Stigmergic signal table defined: deposit conditions, decay rates, agent responses
+- [ ] Local interaction rules simple, local, prioritized (3-7 rules)
+- [ ] Quorum thresholds set with hysteresis to stop oscillation
+- [ ] Small-scale test shows emergent behavior matching collective goal
 - [ ] Stress test (agent removal, addition, signal disruption) shows graceful degradation
 
-## Common Pitfalls
+## Pitfalls
 
-- **Over-engineering signals**: Starting with too many signal types creates confusion. Begin with 2 signals (attract/repel) and add only when proven necessary
-- **Centralized thinking in disguise**: If your "local rule" requires an agent to know the global state, it's not local. Refactor until each rule depends only on what the agent can directly perceive
-- **Ignoring decay**: Signals that never decay create fossilized coordination state. Every signal needs a half-life appropriate to the task's time scale
-- **Zero hysteresis**: Quorum thresholds without a gap between activation and deactivation cause rapid state oscillation. Always set deactivation lower than activation
-- **Assuming homogeneity**: If agents have different capabilities, a single rule set may not work. Consider role-differentiated rules (see `scale-colony`)
+- **Over-engineering signals**: Too many signal types upfront → confusion. Start with 2 signals (attract/repel), add only when proven needed
+- **Centralized thinking in disguise**: "Local rule" needs agent to know global state → not local. Refactor until each rule depends only on what agent senses directly
+- **Ignoring decay**: Signals never decaying → fossilized coordination state. Every signal needs half-life fitting task time scale
+- **Zero hysteresis**: Quorum thresholds with no gap between activation and deactivation → fast state oscillation. Always set deactivation lower than activation
+- **Assuming homogeneity**: Agents have different abilities → single rule set may fail. Consider role-differentiated rules (see `scale-colony`)
 
-## Related Skills
+## See Also
 
-- `forage-resources` — applies swarm coordination specifically to resource search and explore-exploit tradeoffs
-- `build-consensus` — deep dive into distributed agreement mechanisms, extending the quorum sensing from this skill
-- `defend-colony` — collective defense patterns that build on the signal and rule framework here
-- `scale-colony` — scaling strategies for when the swarm outgrows its initial coordination design
-- `adapt-architecture` — morphic skill for transforming system architecture, complementary when swarm coordination triggers structural change
-- `deploy-to-kubernetes` — practical distributed system deployment where swarm coordination patterns apply
+- `forage-resources` — applies swarm coordination to resource search and explore-exploit tradeoffs
+- `build-consensus` — deep dive into distributed agreement, extends quorum sensing from this skill
+- `defend-colony` — collective defense patterns built on signal and rule framework here
+- `scale-colony` — scaling when swarm outgrows initial coordination design
+- `adapt-architecture` — morphic skill for transforming system architecture, pairs with swarm coordination triggering structural change
+- `deploy-to-kubernetes` — practical distributed system deployment where swarm patterns apply
 - `plan-capacity` — capacity planning informed by swarm scaling dynamics
-- `coordinate-reasoning` — AI self-application variant; maps stigmergic signals to context management with information decay rates and local protocols
+- `coordinate-reasoning` — AI self-application variant; maps stigmergic signals to context management with info decay rates and local protocols

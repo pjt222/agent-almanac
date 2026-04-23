@@ -24,34 +24,34 @@ metadata:
   tags: lapidary, cutting, faceting, cabochon, gemstones
 ---
 
-# Cut Gemstone
+# 切寶石
 
-Cut gemstones from rough material using cabochon and faceting techniques, including rough assessment, orientation planning, dopping, grinding, and faceting geometry.
+自原料以凸圓面與刻面之技切寶石，涵原料評、方位規劃、固夾、研磨、刻面幾何。
 
-## When to Use
+## 適用時機
 
-- You have rough gemstone material and want to cut it into a finished cabochon or faceted stone
-- You need to plan cutting orientation for optimal colour, yield, or optical phenomena
-- You are setting up a cabbing machine or faceting machine for the first time
-- You want to understand crown and pavilion angles for standard brilliant cuts
-- You need to select the appropriate cutting approach for a given material
+- 有原寶石料欲切為凸圓面或刻面之成石
+- 須規劃切向以得最優之色、產率、或光現象
+- 初立凸圓機或刻面機時
+- 欲明標準圓明亮切之冠與亭角
+- 為特料擇合宜之切法
 
-## Inputs
+## 輸入
 
-- **Required**: Rough gemstone material (identified species — see `identify-gemstone`)
-- **Required**: Cutting approach decision: cabochon or faceting
-- **Required**: Target shape and approximate size
-- **Optional**: Trim saw with diamond blade
-- **Optional**: Cabbing machine with 80/220/600/1200/3000 grit wheels (for cabochons)
-- **Optional**: Faceting machine with index gear, mast, and lap set (for faceting)
-- **Optional**: Dop wax or epoxy, dop sticks, alcohol lamp
-- **Optional**: Templates (oval, round, marquise) in standard calibrated sizes
+- **必要**：原寶石料（已辨種——見 `identify-gemstone`）
+- **必要**：切法決定：凸圓面或刻面
+- **必要**：目標形與約大小
+- **選擇性**：含鑽鋸片之修鋸
+- **選擇性**：含 80/220/600/1200/3000 目輪之凸圓機（供凸圓面）
+- **選擇性**：含索引齒、桅桿、盤組之刻面機（供刻面）
+- **選擇性**：固夾蠟或環氧、固夾棒、酒精燈
+- **選擇性**：標準校尺之範本（橢、圓、馬眼）
 
-## Procedure
+## 步驟
 
-### Step 1: Rough Assessment and Safety Check
+### 步驟一：原料評與安全察
 
-Evaluate the rough material before any cutting begins.
+切前先評原料。
 
 ```
 Rough Assessment Checklist:
@@ -92,19 +92,19 @@ ALL stone cutting produces silica dust. Always use water cooling
 and never grind or cut dry without a dust extraction system.
 ```
 
-1. Confirm the species identification (if uncertain, run `identify-gemstone` first)
-2. Check for toxic dust risk — some materials require extra precautions
-3. Examine for fractures under strong transmitted light
-4. Map colour zones and inclusion locations
-5. Estimate what finished shapes the rough can yield
+1. 確認種之辨識（疑則先行 `identify-gemstone`）
+2. 察毒塵風險——某料需額外防護
+3. 於強透光下察裂
+4. 映色區與含物位
+5. 估原料可出之成形
 
-**Expected:** A documented rough assessment with species confirmed, fractures mapped, colour zones identified, and a cutting plan formed.
+**預期：** 有錄之原料評，種已確、裂已映、色區已辨、切計畫已成。
 
-**On failure:** If the rough has extensive fracturing, consider whether it can be stabilized (epoxy impregnation for porous material) or if the yield is too low to justify cutting. Some rough is better sold or traded as specimen material.
+**失敗時：** 若原料裂廣，考慮其可穩否（多孔料之環氧浸）或產率是否過低不值切。某原料較宜售或交換為標本料。
 
-### Step 2: Orientation Planning
+### 步驟二：方位規劃
 
-Determine the optimal cutting orientation for colour and phenomena.
+定最佳切向以得色與現象。
 
 ```
 Orientation Principles by Stone Type:
@@ -132,19 +132,19 @@ COLOUR-ZONED MATERIAL (sapphire, ametrine, watermelon tourmaline):
 - Or feature them intentionally (ametrine, watermelon tourmaline)
 ```
 
-1. Determine if the stone is pleochroic — view through the dichroscope from multiple directions
-2. For phenomenal stones (star, cat's eye), locate the inclusion pattern and orient accordingly
-3. For colour-zoned material, decide whether to hide or feature the zoning
-4. Mark the orientation on the rough with an aluminum pencil
-5. Plan the table position and depth to maximise yield at the chosen orientation
+1. 定石是否多色——自多向透二色鏡察
+2. 對現象石（星、貓眼），定含物模式並依之方位
+3. 對色區料，決藏或顯色區
+4. 以鋁筆於原料上標方位
+5. 計台位與深以於所擇方位最大化產率
 
-**Expected:** A marked rough stone with the table direction, orientation, and approximate outline indicated. The cutting plan optimises colour presentation and yield.
+**預期：** 已標原石含台向、方位、約輪廓。切計畫優化色呈現與產率。
 
-**On failure:** If the best colour orientation conflicts with maximum yield, decide based on priority: colour quality almost always increases value more than additional carat weight. When in doubt, orient for colour.
+**失敗時：** 若最佳色向與最大產率衝，按優先度決：色質幾恒增值勝過加克拉重。疑則為色定向。
 
-### Step 3: Cabochon Cutting
+### 步驟三：凸圓切
 
-Shape a gemstone into a domed cabochon on a cabbing machine.
+於凸圓機上將寶石塑為圓頂之凸圓面。
 
 ```
 Cabochon Cutting Sequence:
@@ -178,20 +178,20 @@ STEP-BY-STEP:
 10. POLISH: See polish-gemstone skill for final finishing
 ```
 
-1. Set up the cabbing machine with water flow on all wheels
-2. Put on safety glasses — no exceptions
-3. Cut a slab and mark the template outline
-4. Dop the stone securely — a loose stone during grinding is dangerous
-5. Grind to shape on 80 grit, dome on 220, smooth through 600 and 1200
-6. Maintain consistent dome curvature throughout — uneven domes show "flat spots" after polishing
+1. 立凸圓機，所有輪皆水流
+2. 戴安全眼鏡——無例外
+3. 切板並標範本輪廓
+4. 穩固夾石——研磨中鬆石危險
+5. 於 80 目成形、於 220 圓頂、經 600 與 1200 平滑
+6. 全程保一致之圓頂曲度——不均之頂於拋光後顯「平點」
 
-**Expected:** A smoothly domed cabochon ready for final polishing, with symmetrical outline, even dome height, and no visible scratches from the 1200-grit stage.
+**預期：** 平滑圓頂之凸圓面，備供終拋光，輪廓對稱、頂均、1200 目階之痕不見。
 
-**On failure:** If the dome has flat spots or asymmetry, return to 220 grit and reshape. Better to lose a little material than to polish an uneven dome. If the stone comes off the dop during grinding, re-dop carefully and continue — check the stone for chips first.
+**失敗時：** 若頂有平點或不對稱，返 220 目重塑。寧失少料於拋光不均之頂。若研磨時石脫固夾，慎重固之並續——先察石是否有缺角。
 
-### Step 4: Faceting
+### 步驟四：刻面
 
-Cut precise geometric facets using a faceting machine.
+以刻面機切精確之幾何面。
 
 ```
 Standard Round Brilliant Angles (quartz-family, RI ~1.54):
@@ -220,54 +220,54 @@ CRITICAL: Pavilion angles determine brilliance.
 - Correct angle → total internal reflection (brilliance)
 ```
 
-1. Select a published faceting diagram for the target shape and material RI
-2. Prepare the rough: flat the pavilion side (the pointed bottom will face down)
-3. Dop the stone — use a cone dop for round stones, flat dop for others
-4. Cut pavilion facets first at the published angles on the coarse lap (600 mesh diamond)
-5. Meet all pavilion facets to a precise point (the "culet meet")
-6. Transfer to a cone dop (or use a transfer jig) to cut the crown
-7. Cut crown mains, then breaks, then stars, establishing the table last
-8. Pre-polish and polish each tier (see `polish-gemstone` for lap and compound selection)
+1. 擇合目標形與料 RI 之已刊刻面圖
+2. 備原料：平亭面側（尖底將朝下）
+3. 固夾石——圓石用圓錐固夾、他用平固夾
+4. 先於粗盤（600 目鑽）按已刊角切亭面
+5. 令所有亭面會於一精確點（「底尖會合」）
+6. 換圓錐固夾（或用轉移夾具）以切冠
+7. 切冠主面、繼破面、繼星面，末立台面
+8. 各層預拋與拋（見 `polish-gemstone` 以擇盤與化合物）
 
-**Expected:** A faceted gemstone with precise meets (where facet edges converge to a single point), consistent facet sizes, good symmetry, and proper angles for the material's RI.
+**預期：** 刻面寶石含精會（面邊會於一點）、一致之面尺、良對稱、合料 RI 之角。
 
-**On failure:** If facet meets are off, the angles or index settings are slightly wrong. Re-check the published diagram. "Chasing meets" (adjusting one facet to fix another) compounds errors — it is better to re-cut the tier if the error is large. Small meet errors are normal for beginners and do not significantly affect brilliance.
+**失敗時：** 若面會偏，角或索引設略誤。重察已刊圖。「追會合」（調一面以修他）積誤——若誤大，寧重切該層。初學之小會合誤為常，不顯著影響光輝。
 
-### Step 5: Post-Cut Inspection
+### 步驟五：切後察
 
-Evaluate the cut stone before proceeding to final polish.
+至終拋光前評已切之石。
 
-1. Clean the stone thoroughly
-2. Check symmetry: view from above (outline), from the side (proportions), and through the table (meet precision)
-3. For cabochons: verify dome evenness, check for flat spots, ensure consistent outline shape
-4. For faceted stones: check meets under 10x loupe, look for facet scratches remaining from cutting
-5. Measure final dimensions and weight
-6. If defects are found, return to the appropriate cutting step before polishing
+1. 徹清石
+2. 察對稱：自上察（輪廓）、自側察（比）、經台察（會合精度）
+3. 凸圓面：驗頂均、察平點、確保輪廓一致
+4. 刻面石：於 10x 放大鏡下察會合、尋切階殘痕
+5. 量終尺寸與重
+6. 若尋缺，於拋光前返相應切步
 
-**Expected:** A fully cut stone that meets quality standards for symmetry, meets, and surface preparation, ready for the polishing stage.
+**預期：** 全切之石合對稱、會合、表面備之品質標準，備至拋光階段。
 
-**On failure:** If significant defects are found (poor symmetry, bad meets, incorrect proportions), it is more time-efficient to re-cut now than to polish a defective stone and re-cut later. Document what went wrong for the next stone.
+**失敗時：** 若尋顯著缺（對稱差、會合差、比誤），今重切較後拋光之缺石重切更省時。記何誤以供次石。
 
-## Validation
+## 驗證
 
-- [ ] Species identified and toxic dust risk assessed before cutting
-- [ ] Safety equipment worn throughout (eye protection, dust/splash control)
-- [ ] Water cooling active on all grinding and cutting operations
-- [ ] Orientation planned for optimal colour or phenomena
-- [ ] Cabochon dome is symmetrical with no flat spots (cabochon path)
-- [ ] Facet meets converge to points without significant offset (faceting path)
-- [ ] Final dimensions measured and recorded
-- [ ] Stone is free of cutting-stage scratches and ready for polishing
+- [ ] 切前種已辨且毒塵風險已評
+- [ ] 全程戴安全具（眼護、塵/濺控）
+- [ ] 所有研磨與切作皆水冷激活
+- [ ] 方位已計以最優色或現象
+- [ ] 凸圓面之頂對稱且無平點（凸圓路）
+- [ ] 刻面會於點而無顯著偏移（刻面路）
+- [ ] 終尺寸已量並錄
+- [ ] 石無切階之痕，備拋光
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Cutting an unidentified stone**: Some materials produce toxic dust (malachite, cinnabar, chrysotile). Always identify before cutting. Always use water cooling regardless
-- **Skipping orientation planning**: Cutting a pleochroic stone without orienting for colour can produce a dull or off-colour finished gem that would have been beautiful with correct orientation
-- **Grinding dry**: Dry grinding produces silica dust (chronic health hazard) and overheats the stone (thermal shock can fracture it). Water must flow continuously on all wheels and laps
-- **Rushing through grits**: Skipping from 220 to 1200 grit leaves deep scratches that show after polishing. Each grit stage must fully remove the scratches from the previous stage
-- **Dopping failure**: Inadequate dop adhesion causes the stone to shift or fly off during grinding. Use enough wax, ensure the stone is warm (not cold), and let the dop cool completely before grinding
+- **切未辨之石**：某料產毒塵（孔雀石、辰砂、溫石綿）。切前恒辨之。恒用水冷無論
+- **跳方位規劃**：不為色定向而切多色石可生當以正方位可美之鈍或失色之成石
+- **乾磨**：乾磨產矽塵（慢性健康險）且過熱石（熱衝可致裂）。水須於所有輪與盤持流
+- **疾過目**：自 220 跳至 1200 目留深痕於拋光後顯。各目階須全除前階之痕
+- **固夾敗**：固夾附不足致石於研磨中移或飛脫。用足蠟、確保石溫（非冷）、令固夾全冷方研
 
-## Related Skills
+## 相關技能
 
-- `identify-gemstone` — Species identification is required before cutting begins
-- `polish-gemstone` — The next step after cutting, covering lap selection, compound choice, and final finish
+- `identify-gemstone` —— 切始前需種辨識
+- `polish-gemstone` —— 切後之次步，涵盤擇、化合物擇、終光

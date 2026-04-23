@@ -91,9 +91,9 @@ Collection Development Policy Template:
    - Policy reviewed and updated every 3 years
 ```
 
-**Expected:** A written policy that guides consistent, defensible acquisition and weeding decisions.
+**Got:** A written policy that guides consistent, defensible acquisition and weeding decisions.
 
-**On failure:** If a formal policy seems excessive for a small collection, write a one-page scope statement covering mission, subjects collected, and basic selection criteria. Even a brief statement prevents drift.
+**If fail:** If a formal policy seems excessive for a small collection, write a one-page scope statement covering mission, subjects collected, and basic selection criteria. Even a brief statement prevents drift.
 
 ### Step 2: Assess the Existing Collection
 
@@ -137,9 +137,9 @@ Mark each cell as: Strong, Adequate, Weak, or Not Collected.
 This visual map reveals gaps and overlaps at a glance.
 ```
 
-**Expected:** A clear picture of the collection's strengths, weaknesses, gaps, and deadweight, supported by data.
+**Got:** A clear picture of the collection's strengths, weaknesses, gaps, and deadweight, supported by data.
 
-**On failure:** If circulation data is unavailable (no automated system), use shelf observation: dusty, tightly packed books that haven't moved indicate low use. In-library use can be estimated by counting items left on tables rather than reshelved.
+**If fail:** If circulation data is unavailable (no automated system), use shelf observation: dusty, tightly packed books that haven't moved indicate low use. In-library use can be estimated by counting items left on tables rather than reshelved.
 
 ### Step 3: Acquire Materials Strategically
 
@@ -186,9 +186,9 @@ Budget Allocation Rule of Thumb:
 - 5%: reserve for urgent or unexpected needs
 ```
 
-**Expected:** New acquisitions systematically fill identified gaps and respond to user demand, within budget.
+**Got:** New acquisitions systematically fill identified gaps and respond to user demand, within budget.
 
-**On failure:** If budget is severely constrained, prioritize user requests (proven demand) over speculative purchases. Supplement with ILL for low-demand subjects rather than buying materials that may not circulate.
+**If fail:** If budget is severely constrained, prioritize user requests (proven demand) over speculative purchases. Supplement with ILL for low-demand subjects rather than buying materials that may not circulate.
 
 ### Step 4: Weed the Collection (Deaccessioning)
 
@@ -236,9 +236,9 @@ Never discard items with local historical significance
 without institutional review.
 ```
 
-**Expected:** Collection is regularly weeded, with clear documentation of withdrawn items and disposition. The remaining collection is current, relevant, and in good condition.
+**Got:** Collection is regularly weeded, with clear documentation of withdrawn items and disposition. The remaining collection is current, relevant, and in good condition.
 
-**On failure:** If weeding feels emotionally difficult (it does for many librarians), remember: keeping a misleading medical text is more harmful than removing it. Weeding is an act of care for the user, not disrespect for the book.
+**If fail:** If weeding feels emotionally difficult (it does for many librarians), remember: keeping a misleading medical text is more harmful than removing it. Weeding is an act of care for the user, not disrespect for the book.
 
 ### Step 5: Provide Reader Advisory and Reference
 
@@ -274,9 +274,9 @@ Reader Advisory Framework:
    - Display new acquisitions prominently — users notice responsiveness
 ```
 
-**Expected:** Users find what they need, either in the collection or through ILL, and their feedback shapes future acquisitions.
+**Got:** Users find what they need, either in the collection or through ILL, and their feedback shapes future acquisitions.
 
-**On failure:** If ILL is not available (no library network), explore open access sources, digital libraries (HathiTrust, Internet Archive, Project Gutenberg), and reciprocal borrowing agreements with nearby libraries.
+**If fail:** If ILL is not available (no library network), explore open access sources, digital libraries (HathiTrust, Internet Archive, Project Gutenberg), and reciprocal borrowing agreements with nearby libraries.
 
 ## Validation
 
@@ -288,7 +288,7 @@ Reader Advisory Framework:
 - [ ] Weeding cycle scheduled (annual) with CREW/MUSTIE criteria
 - [ ] User feedback loop in place (requests, ILL data, search logs)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Collecting without a policy**: Without a scope statement, collections grow by accumulation rather than intention. Everything gets added, nothing gets removed, and the collection becomes a warehouse
 - **Fear of weeding**: Keeping everything "just in case" buries useful materials under deadweight. A smaller, curated collection serves users better than a large, undifferentiated one

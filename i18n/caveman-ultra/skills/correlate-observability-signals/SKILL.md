@@ -25,32 +25,31 @@ metadata:
 
 # Correlate Observability Signals
 
-Connect metrics, logs, and traces for unified debugging across the three pillars of observability.
+Metrics + logs + traces → unified debug across 3 pillars.
 
-## When to Use
+## Use When
 
-- Investigating complex incidents that span multiple systems
-- Reducing MTTR (mean time to resolution)
-- Building unified observability dashboards
-- Implementing distributed tracing
-- Moving from siloed tools to unified observability
+- Multi-sys incident invest
+- MTTR reduction
+- Unified obs dashboards
+- Distrib tracing impl
+- Siloed tools → unified
 
-## Inputs
+## In
 
 - **Required**: Prometheus (metrics)
-- **Required**: Log aggregation system (Loki, Elasticsearch, CloudWatch)
-- **Required**: Distributed tracing backend (Tempo, Jaeger, Zipkin)
-- **Optional**: Grafana for unified visualization
-- **Optional**: OpenTelemetry instrumentation
+- **Required**: Log agg sys (Loki, Elasticsearch, CloudWatch)
+- **Required**: Tracing backend (Tempo, Jaeger, Zipkin)
+- **Optional**: Grafana viz
+- **Optional**: OpenTelemetry instrum
 
-## Procedure
+## Do
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
+### Step 1: Trace Context Propagation
 
-### Step 1: Implement Trace Context Propagation
-
-Add trace IDs to all logs and metrics using OpenTelemetry:
+Add trace IDs → all logs/metrics via OpenTelemetry:
 
 ```go
 // Go example: Propagate trace context to logs
@@ -88,7 +87,7 @@ func processData(ctx context.Context, userID string) {
 }
 ```
 
-Python example:
+Python:
 
 ```python
 # Python: Flask with OpenTelemetry
@@ -119,13 +118,13 @@ def get_user(user_id):
     return {"user_id": user_id}
 ```
 
-**Expected:** All logs include `trace_id` field, enabling log-to-trace correlation.
+→ Logs have `trace_id` → log-to-trace correlation works.
 
-**On failure:** If trace IDs missing, check OpenTelemetry SDK initialization and context propagation.
+If err: no trace IDs → check OTel SDK init + ctx propagation.
 
-### Step 2: Configure Exemplars in Prometheus
+### Step 2: Prometheus Exemplars
 
-Exemplars link metrics to traces:
+Exemplars → link metrics ↔ traces:
 
 ```yaml
 # prometheus.yml
@@ -146,7 +145,7 @@ scrape_configs:
         action: keep
 ```
 
-Instrument application to emit exemplars:
+Emit exemplars:
 
 ```go
 // Go: Emit exemplars with Prometheus histogram
@@ -181,22 +180,22 @@ func recordRequest(ctx context.Context, method, endpoint, status string, duratio
 }
 ```
 
-Query exemplars in Prometheus:
+Query:
 
 ```promql
 # Histogram with exemplars
 histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
 ```
 
-In Grafana, exemplars appear as dots on histogram graphs that link to traces.
+Grafana → exemplar dots on histograms → click → trace.
 
-**Expected:** Grafana shows exemplars in metric graphs, clicking opens corresponding trace.
+→ Grafana exemplars in graphs, click opens trace.
 
-**On failure:** Verify Prometheus version ≥2.26 (exemplar support), check Grafana data source config enables exemplars.
+If err: check Prometheus ≥2.26 + Grafana data source exemplar config.
 
-### Step 3: Build Unified Dashboard with RED Method
+### Step 3: RED Dashboard
 
-RED Method: Rate, Errors, Duration (for services)
+RED: Rate, Errors, Duration (services).
 
 ```json
 {
@@ -263,13 +262,13 @@ RED Method: Rate, Errors, Duration (for services)
 }
 ```
 
-**Expected:** Single dashboard showing rate, errors, duration + correlated logs.
+→ One dashboard: rate + errors + duration + logs.
 
-**On failure:** If panels show "No Data", verify metric names match your instrumentation.
+If err: "No Data" → metric name mismatch.
 
-### Step 4: Implement USE Method for Resources
+### Step 4: USE Method for Resources
 
-USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, disk)
+USE: Util, Saturation, Errors (CPU/mem/disk).
 
 ```json
 {
@@ -349,13 +348,11 @@ USE Method: Utilization, Saturation, Errors (for resources like CPU, memory, dis
 }
 ```
 
-**Expected:** Dashboard showing resource health across all USE dimensions.
+→ Res health across all USE dims.
 
-**On failure:** Ensure node_exporter is running and scraping system metrics.
+If err: ensure node_exporter scraping.
 
-### Step 5: Link Logs to Traces in Loki
-
-Configure Loki to extract trace IDs:
+### Step 5: Link Loki Logs → Traces
 
 ```yaml
 # loki-config.yml
@@ -378,7 +375,7 @@ query_config:
       urlDisplayLabel: 'View Trace'
 ```
 
-In Grafana, configure Loki data source:
+Grafana Loki data source:
 
 ```json
 {
@@ -398,13 +395,11 @@ In Grafana, configure Loki data source:
 }
 ```
 
-**Expected:** Clicking trace ID in Loki logs opens corresponding trace in Tempo.
+→ Click trace ID in Loki → opens Tempo trace.
 
-**On failure:** Verify regex matches your log format, check Tempo data source UID.
+If err: regex mismatch / wrong Tempo UID.
 
-### Step 6: Create Unified Incident View
-
-Build a dashboard that brings all signals together:
+### Step 6: Unified Incident View
 
 ```json
 {
@@ -416,43 +411,43 @@ Build a dashboard that brings all signals together:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Workflow during incident:
+Incident workflow:
 
-1. Alert fires for high error rate
-2. On-call engineer opens Grafana dashboard
-3. Identifies spike in error rate at specific time
-4. Clicks exemplar dot on duration histogram → opens trace
-5. Trace shows slow database query
-6. Clicks "View Logs" on span → opens logs for that trace
-7. Logs reveal specific SQL query causing timeout
-8. Root cause identified in <2 minutes
+1. Alert → high err rate
+2. On-call opens Grafana
+3. Spot spike at time T
+4. Click exemplar on duration → trace
+5. Trace → slow DB query
+6. "View Logs" on span → trace logs
+7. Logs → specific SQL timeout
+8. Root cause <2 min
 
-**Expected:** Single pane of glass for debugging, jumping between metrics/logs/traces.
+→ Single pane, jump metrics/logs/traces.
 
-**On failure:** If links don't work, check data source configurations and trace ID propagation.
+If err: links broken → check data sources + trace ID propagation.
 
-## Validation
+## Check
 
-- [ ] Trace IDs present in all application logs
+- [ ] Trace IDs in all app logs
 - [ ] Prometheus scraping exemplars
-- [ ] Grafana dashboards show exemplar dots on histograms
-- [ ] Clicking exemplar opens corresponding trace in Tempo/Jaeger
-- [ ] Loki logs have "View Trace" links that work
-- [ ] RED dashboard created for key services
-- [ ] USE dashboard created for infrastructure
-- [ ] Unified incident dashboard tested during GameDay
+- [ ] Grafana shows exemplar dots
+- [ ] Exemplar click → trace in Tempo/Jaeger
+- [ ] Loki "View Trace" links work
+- [ ] RED dashboard for key services
+- [ ] USE dashboard for infra
+- [ ] Incident dashboard GameDay tested
 
-## Common Pitfalls
+## Traps
 
-- **Inconsistent trace ID format**: OpenTelemetry uses 32-char hex, Jaeger uses 16-char. Choose one.
-- **Missing context propagation**: If trace IDs don't flow across services, distributed tracing breaks. Use OpenTelemetry auto-instrumentation.
-- **Exemplar overload**: Too many exemplars (>100k) can slow Prometheus. Sample high-volume metrics.
-- **Clock skew**: Traces span multiple services. Ensure NTP is configured; clock drift causes trace ordering issues.
-- **Data retention mismatch**: If traces expire before metrics, correlation breaks. Align retention policies.
+- **Trace ID format**: OTel = 32 hex, Jaeger = 16. Pick one.
+- **Missing ctx propagation**: IDs don't flow → distrib tracing breaks. Use OTel auto-instrum.
+- **Exemplar overload**: >100k → slow Prometheus. Sample high-vol.
+- **Clock skew**: Traces span services → NTP required, drift → order issues.
+- **Retention mismatch**: Traces expire < metrics → correlation breaks. Align retention.
 
-## Related Skills
+## →
 
-- `setup-prometheus-monitoring` - metrics foundation for correlation
-- `configure-log-aggregation` - logs foundation for correlation
-- `instrument-distributed-tracing` - traces foundation for correlation
-- `build-grafana-dashboards` - unified visualization layer
+- `setup-prometheus-monitoring` — metrics foundation
+- `configure-log-aggregation` — logs foundation
+- `instrument-distributed-tracing` — trace foundation
+- `build-grafana-dashboards` — unified viz

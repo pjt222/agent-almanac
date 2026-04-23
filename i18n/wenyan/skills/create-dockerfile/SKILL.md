@@ -23,29 +23,29 @@ metadata:
   tags: docker, dockerfile, node, python, go, rust, java, container
 ---
 
-# Create Dockerfile
+# 建 Dockerfile
 
-Write a production-ready Dockerfile for general-purpose application projects.
+為通用應用建可產之 Dockerfile。
 
-## When to Use
+## 用時
 
-- Containerizing a Node.js, Python, Go, Rust, or Java application
-- Creating a consistent build/runtime environment
-- Preparing an application for cloud deployment or Docker Compose
-- No existing Dockerfile in the project
+- 將 Node.js、Python、Go、Rust、Java 應用入容器
+- 建一致之建／運境
+- 備應用為雲布或 Docker Compose
+- 項目無現 Dockerfile
 
-## Inputs
+## 入
 
-- **Required**: Project language and entry point (e.g., `npm start`, `python app.py`)
-- **Required**: Dependency manifest (package.json, requirements.txt, go.mod, Cargo.toml, pom.xml)
-- **Optional**: Target environment (development or production)
-- **Optional**: Exposed ports
+- **必要**：項目語與入點（如 `npm start`、`python app.py`）
+- **必要**：依清單（package.json、requirements.txt、go.mod、Cargo.toml、pom.xml）
+- **可選**：目標境（開發或生產）
+- **可選**：暴露之埠
 
-## Procedure
+## 法
 
-### Step 1: Choose Base Image
+### 第一步：擇基像
 
-| Language | Dev Image | Prod Image | Size |
+| 語 | 開發像 | 產像 | 尺 |
 |----------|-----------|------------|------|
 | Node.js | `node:22-bookworm` | `node:22-bookworm-slim` | ~200MB |
 | Python | `python:3.12-bookworm` | `python:3.12-slim-bookworm` | ~150MB |
@@ -53,9 +53,9 @@ Write a production-ready Dockerfile for general-purpose application projects.
 | Rust | `rust:1.82-bookworm` | `debian:bookworm-slim` | ~80MB |
 | Java | `eclipse-temurin:21-jdk` | `eclipse-temurin:21-jre` | ~200MB |
 
-**Expected:** Select the slim/distroless variant for production images.
+**得：** 為產像擇 slim/distroless 變。
 
-### Step 2: Write Dockerfile (by language)
+### 第二步：書 Dockerfile（按語）
 
 #### Node.js
 
@@ -148,21 +148,21 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ```
 
-**Expected:** `docker build -t myapp .` completes without errors.
+**得：** `docker build -t myapp .` 無訛而畢。
 
-**On failure:** Check base image availability and dependency installation commands.
+**敗則：** 察基像之可得與依裝命令。
 
-### Step 3: ENTRYPOINT vs CMD
+### 第三步：ENTRYPOINT 對 CMD
 
-| Directive | Purpose | Override |
+| 指令 | 用 | 覆蓋 |
 |-----------|---------|----------|
-| `ENTRYPOINT` | Fixed executable | Override with `--entrypoint` |
-| `CMD` | Default arguments | Override with trailing args |
-| Both | `ENTRYPOINT` + default args via `CMD` | Args override CMD only |
+| `ENTRYPOINT` | 定執 | 以 `--entrypoint` 覆 |
+| `CMD` | 默參 | 以尾參覆 |
+| 二者 | `ENTRYPOINT` + `CMD` 之默參 | 參唯覆 CMD |
 
-Use `ENTRYPOINT` for compiled binaries with a single purpose. Use `CMD` for interpreted languages where you might want `docker run myapp bash`.
+`ENTRYPOINT` 用於有單一志之編譯二進。`CMD` 用於解釋語，或欲 `docker run myapp bash` 者。
 
-### Step 4: Create .dockerignore
+### 第四步：建 .dockerignore
 
 ```
 .git
@@ -181,25 +181,25 @@ Dockerfile
 docker-compose*.yml
 ```
 
-**Expected:** Build context excludes development artifacts.
+**得：** 建脈排開發之物。
 
-### Step 5: Add Non-Root User
+### 第五步：增非根用者
 
-Always run as non-root in production:
+產境宜以非根運：
 
 ```dockerfile
 RUN groupadd -r appuser && useradd -r -g appuser -m appuser
 USER appuser
 ```
 
-For distroless images, use the built-in nonroot user:
+distroless 像用內置之 nonroot：
 
 ```dockerfile
 FROM gcr.io/distroless/static:nonroot
 USER nonroot
 ```
 
-### Step 6: Build and Verify
+### 第六步：建而驗
 
 ```bash
 docker build -t myapp:latest .
@@ -207,31 +207,31 @@ docker run --rm myapp:latest
 docker image inspect myapp:latest --format '{{.Size}}'
 ```
 
-**Expected:** Container starts, responds on the expected port, runs as non-root.
+**得：** 容器起，於期埠應，以非根運。
 
-**On failure:** Check logs with `docker logs`. Verify WORKDIR, COPY paths, and exposed ports.
+**敗則：** 以 `docker logs` 察誌。驗 WORKDIR、COPY 路、暴露之埠。
 
-## Validation
+## 驗
 
-- [ ] `docker build` completes without errors
-- [ ] Container starts and application responds
-- [ ] `.dockerignore` excludes unnecessary files
-- [ ] Application runs as non-root user
-- [ ] Dependencies are copied before source code (cache efficiency)
-- [ ] No secrets or `.env` files baked into the image
+- [ ] `docker build` 無訛而畢
+- [ ] 容器起而應用應
+- [ ] `.dockerignore` 排無謂之文件
+- [ ] 應用以非根運
+- [ ] 依先於源碼複（緩存有效）
+- [ ] 無密或 `.env` 烤入像
 
-## Common Pitfalls
+## 陷
 
-- **COPY before dependency install**: Invalidates the dependency cache on every code change. Always copy the manifest file first.
-- **Running as root**: Default Docker user is root. Always add a non-root user for production.
-- **Missing .dockerignore**: Sending `node_modules` or `.git` into the build context wastes time and disk.
-- **Using `latest` tag for base images**: Pin to specific versions (e.g., `node:22.11.0`) for reproducibility.
-- **Forgetting `--no-cache-dir`**: Python `pip` caches packages by default, bloating the image.
-- **ADD vs COPY**: Use `COPY` unless you need URL download or tar extraction (`ADD` auto-extracts).
+- **依裝前 COPY**：每改碼則廢依緩。宜先複清單文件。
+- **以根運**：Docker 默為根。產境宜增非根用者。
+- **缺 .dockerignore**：將 `node_modules` 或 `.git` 送入建脈費時費盤。
+- **基像用 `latest`**：宜釘特版（如 `node:22.11.0`）以重現。
+- **忘 `--no-cache-dir`**：Python `pip` 默緩存包，脹像。
+- **ADD 對 COPY**：除非需 URL 下載或 tar 解壓（`ADD` 自解），宜用 `COPY`。
 
-## Related Skills
+## 參
 
-- `create-r-dockerfile` - R-specific Dockerfile using rocker images
-- `create-multistage-dockerfile` - multi-stage patterns for minimal production images
-- `optimize-docker-build-cache` - advanced caching strategies
-- `setup-compose-stack` - orchestrate the containerized app with other services
+- `create-r-dockerfile` — R 專用 Dockerfile，用 rocker 像
+- `create-multistage-dockerfile` — 多階段之法以最小產像
+- `optimize-docker-build-cache` — 進階緩之策
+- `setup-compose-stack` — 以他服協已容器化之應

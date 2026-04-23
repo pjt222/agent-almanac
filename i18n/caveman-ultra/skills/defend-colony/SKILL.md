@@ -26,72 +26,72 @@ metadata:
 
 # Defend Colony
 
-Implement layered collective defense for distributed systems, teams, or organizations — using alarm signaling, role mobilization, proportional response, and immune memory patterns inspired by social insect colony defense and biological immune systems.
+Layered collective defense: alarm signal + role mobilize + proportional response + immune memory. Inspired by social insect + biological immune sys.
 
-## When to Use
+## Use When
 
-- Designing defense-in-depth for distributed systems where no single guardian can cover all threats
-- Building incident response processes that scale with threat severity
-- Protecting a system where individual components cannot defend themselves alone
-- Current defense is either over-reactive (every alert triggers full mobilization) or under-reactive (threats go unnoticed until damage is done)
-- Building organizational resilience where teams must self-organize in response to incidents
-- Complementing `coordinate-swarm` with specific threat-response coordination patterns
+- Defense-in-depth, no single guardian covers all
+- Incident response scales w/ severity
+- Components can't defend alone
+- Defense over-reactive (every alert = full mob) / under-reactive (threats unnoticed)
+- Org resilience: teams self-org on incident
+- Complement `coordinate-swarm` w/ threat-response patterns
 
-## Inputs
+## In
 
-- **Required**: Description of the colony (system, organization, team) to be defended
-- **Required**: Known threat categories (attacks, failures, competitors, environmental risks)
-- **Optional**: Current defense mechanisms and their failure modes
-- **Optional**: Available defender types and their capabilities
-- **Optional**: Acceptable response latency per threat tier
-- **Optional**: Post-incident recovery requirements
+- **Required**: Colony desc (sys, org, team)
+- **Required**: Threat cats (attacks, failures, competitors, env)
+- **Optional**: Current defenses + fail modes
+- **Optional**: Defender types + caps
+- **Optional**: Latency per tier
+- **Optional**: Recovery reqs
 
-## Procedure
+## Do
 
-### Step 1: Map the Threat Landscape and Defense Perimeter
+### Step 1: Threat Landscape + Perimeter
 
-Identify what needs defending, from what, and where the perimeter lies.
+ID what to defend, from what, where perimeter.
 
-1. Define the colony's critical assets:
-   - What must be protected at all costs? (core data, production systems, key people)
-   - What can sustain temporary damage? (staging environments, non-critical services)
-   - What is expendable under extreme threat? (caches, replicas, non-essential features)
-2. Classify threats by type and severity:
-   - **Probes**: low-level reconnaissance or testing (port scans, repeated failed logins)
-   - **Incursions**: active boundary violations (unauthorized access, injection attempts)
-   - **Infestations**: persistent threats already inside the perimeter (compromised nodes, insider threats)
-   - **Existential**: threats to the colony's survival (data corruption, catastrophic failure, DDoS)
-3. Map the defense perimeter:
-   - Outer perimeter: first detection opportunity (firewalls, rate limits, monitoring)
-   - Inner perimeter: critical asset boundaries (access controls, encryption, isolation)
-   - Core: last-resort defenses (backups, kill switches, circuit breakers)
+1. Critical assets:
+   - Protect all cost (core data, prod sys, key ppl)
+   - Can sustain temp damage (staging, non-crit svcs)
+   - Expendable under extreme (caches, replicas, non-essential)
+2. Classify threats:
+   - **Probes**: low-level recon (port scans, failed logins)
+   - **Incursions**: active boundary violations (unauth access, injection)
+   - **Infestations**: persistent inside (compromised nodes, insider)
+   - **Existential**: survival threats (corruption, catastrophic fail, DDoS)
+3. Perimeter:
+   - Outer: first detection (firewalls, rate limits, monitoring)
+   - Inner: critical asset boundaries (access ctrl, encryption, isolation)
+   - Core: last-resort (backups, kill switches, circuit breakers)
 
-**Expected:** A clear map of assets (prioritized), threats (classified by severity), and defense perimeters (layered). This map guides all subsequent defense design.
+**Got:** Map: assets prioritized + threats classified + perimeters layered.
 
-**On failure:** If the threat landscape feels overwhelming, start with the top 3 critical assets and the top 3 threat types. Perfect coverage is less important than coverage of what matters most. If perimeter boundaries are unclear, default to "trust nothing, verify everything" (zero-trust posture) and define boundaries as you observe actual traffic patterns.
+**If err:** Overwhelming → top 3 critical assets + top 3 threat types. Coverage of what matters > perfect. Unclear boundaries → default zero-trust + define from actual traffic.
 
-### Step 2: Design the Alarm Signaling Network
+### Step 2: Alarm Network
 
-Build the communication system that detects threats and propagates alerts.
+Detection + alert propagation.
 
-1. Deploy sentinels at each defense layer:
-   - Outer sentinels: lightweight, high-sensitivity detectors (may produce false positives)
-   - Inner sentinels: heavier, high-specificity detectors (fewer false positives, slower)
-   - Core sentinels: critical asset monitors (zero tolerance for missed threats)
-2. Define alarm signals with graduated intensity:
-   - **Yellow**: anomaly detected, increased monitoring, no mobilization
-   - **Orange**: confirmed threat pattern, local defenders mobilize, scouts investigate
-   - **Red**: active breach or severe threat, full defense mobilization, non-essential activity paused
-   - **Black**: existential threat, all resources to defense, sacrifice expendable assets if needed
-3. Implement alarm propagation:
-   - Local: sentinels alert nearby defenders directly
-   - Regional: sentinel clusters aggregate signals and escalate if threshold is met
-   - Colony-wide: regional escalation triggers broadcast alarm
-   - Each propagation step adds confirmation — a single sentinel cannot trigger colony-wide alarm
-4. Build in alarm fatigue prevention:
-   - Auto-suppress repeated identical alarms (dedup with time window)
-   - Require escalation to be confirmed by independent sentinels
-   - Track alarm-to-threat ratio — if false positive rate exceeds 50%, recalibrate sentinels
+1. Sentinels per layer:
+   - Outer: light, high-sens (may false+)
+   - Inner: heavy, high-spec (fewer false+, slower)
+   - Core: critical monitors (zero missed tolerance)
+2. Graduated alarms:
+   - **Yellow**: anomaly, increased monitor, no mob
+   - **Orange**: confirmed pattern, local defenders mob, scouts investigate
+   - **Red**: active breach / severe, full mob, non-essential paused
+   - **Black**: existential, all → defense, sacrifice expendable if needed
+3. Propagation:
+   - Local: sentinels alert nearby directly
+   - Regional: clusters aggregate + escalate if threshold met
+   - Colony-wide: regional escalation → broadcast
+   - Each step adds confirmation — single sentinel can't trigger colony-wide
+4. Fatigue prevention:
+   - Auto-suppress repeated identical (dedup w/ time window)
+   - Req escalation confirmed by indep sentinels
+   - Track alarm-to-threat ratio — FP >50% → recalibrate
 
 ```
 Alarm Propagation:
@@ -109,114 +109,114 @@ Alarm Propagation:
 └──────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A graduated alarm system where threat severity determines response intensity. Multiple independent sentinel confirmations prevent single-point false alarms. Alarm fatigue is managed through deduplication and calibration.
+**Got:** Graduated alarm, severity → response intensity. Multi-sentinel confirms prevent single FPs. Fatigue managed via dedup + calibration.
 
-**On failure:** If the alarm system produces too many false positives, raise sentinel thresholds or require more confirmations before escalation. If threats slip through undetected, add sentinels at the penetrated layer or lower detection thresholds. If alarm propagation is too slow, reduce the confirmation requirements — but accept higher false positive rate as the tradeoff.
+**If err:** Too many FPs → raise thresh / more confirms. Threats slip → add sentinels at breach layer / lower thresh. Too slow → reduce confirm reqs (accept higher FP).
 
-### Step 3: Mobilize Role-Based Defenders
+### Step 3: Role-Based Defenders
 
-Assign defense roles and mobilization protocols proportional to threat level.
+Assign roles + mob protocols proportional to threat.
 
-1. Define defender roles:
-   - **Sentinels**: detection specialists (always active, low resource cost)
-   - **Guards**: first responders (idle until mobilized, fast response)
-   - **Soldiers**: heavy defenders (expensive to mobilize, high capability)
-   - **Healers**: damage repair and recovery specialists (see `repair-damage`)
-   - **Messengers**: coordinate defense across colony regions
-2. Map roles to alert levels:
-   - Yellow: sentinels increase monitoring frequency, guards on standby
-   - Orange: guards mobilize to threat location, soldiers on standby
-   - Red: soldiers mobilize, non-essential workers reassigned to defense
-   - Black: all roles to defense, colony activities suspended
-3. Implement proportional response:
-   - Never deploy soldiers for a probe (wasteful and reveals capabilities)
-   - Never rely only on sentinels against an incursion (insufficient response)
-   - Match the response to the threat tier — escalate if the current tier fails, de-escalate when the threat recedes
-4. Role transition protocol:
-   - Workers can become guards (temporary upskilling for emergency)
-   - Guards can become soldiers (sustained threat requires heavier response)
-   - After threat passes, reverse transitions restore normal operations
+1. Roles:
+   - **Sentinels**: detection (always active, low cost)
+   - **Guards**: first responders (idle until mob, fast)
+   - **Soldiers**: heavy (expensive mob, high cap)
+   - **Healers**: repair + recovery (see `repair-damage`)
+   - **Messengers**: coord across regions
+2. Roles → alerts:
+   - Yellow: sentinels ↑ monitor freq, guards standby
+   - Orange: guards mob → threat loc, soldiers standby
+   - Red: soldiers mob, non-essential → defense
+   - Black: all → defense, colony activities suspended
+3. Proportional:
+   - Never soldiers for probe (waste + reveals caps)
+   - Never only sentinels vs incursion (insufficient)
+   - Match tier — escalate if fails, de-escalate when recedes
+4. Role transitions:
+   - Workers → guards (temp upskill emergency)
+   - Guards → soldiers (sustained threat)
+   - Post-threat → reverse transitions restore normal
 
-**Expected:** A defense force that scales with threat severity. Normal operations use minimal defense resources. Under threat, the colony can rapidly mobilize proportional defense without over-reacting or under-reacting.
+**Got:** Force scales w/ severity. Normal = min defense. Under threat = rapid proportional mob, no over/under.
 
-**On failure:** If mobilization is too slow, pre-position guards closer to known threat vectors. If mobilization is too expensive, reduce the permanent guard force and rely more on worker-to-guard transitions. If role confusion occurs during mobilization, simplify to 3 roles (detect, respond, recover) instead of 5.
+**If err:** Mob too slow → pre-position guards near known vectors. Too expensive → reduce permanent guards, rely on worker-to-guard. Role confusion → simplify to 3 (detect/respond/recover).
 
-### Step 4: Execute Immune Memory and Adaptation
+### Step 4: Immune Memory + Adaptation
 
-Learn from each threat encounter to improve future defense.
+Learn each encounter.
 
-1. After each incident, create a threat signature:
-   - Attack pattern (how the threat was detected)
-   - Attack vector (where it entered)
-   - Effective response (what stopped it)
-   - Failed response (what didn't work)
-2. Store signatures in the colony's immune memory:
-   - Fast-lookup pattern library for sentinels
-   - Updated defender playbooks with known-effective responses
-   - Flagged false-positive patterns to reduce future alarm fatigue
-3. Implement adaptive immunity:
-   - New threat signatures are propagated to all sentinels (colony-wide learning)
-   - Sentinels that detected the threat get priority updates (local learning)
-   - Periodic review culls outdated signatures (threats that no longer apply)
-4. Stress test the immune memory:
-   - Re-simulate past threats periodically to verify defenses still work
-   - Red team exercises introduce novel threats to test adaptation
-   - Measure detection time for known vs. unknown threats
+1. Per incident, threat signature:
+   - Attack pattern (how detected)
+   - Vector (where entered)
+   - Effective response (what stopped)
+   - Failed response (what didn't)
+2. Store in immune memory:
+   - Fast-lookup pattern lib for sentinels
+   - Updated playbooks w/ known-effective
+   - Flagged FP patterns → reduce future fatigue
+3. Adaptive immunity:
+   - New signatures → all sentinels (colony-wide learning)
+   - Detecting sentinels get priority updates (local)
+   - Periodic review culls outdated
+4. Stress test:
+   - Re-sim past threats → verify defenses still work
+   - Red team → novel threats test adaptation
+   - Measure detection: known vs unknown
 
-**Expected:** A defense system that gets stronger with each encounter. Known threats are detected faster and responded to more effectively. Novel threats are handled by the graduated alarm system, and their resolution adds to the immune memory.
+**Got:** Defense gets stronger per encounter. Known = faster detect + better response. Novel = graduated alarm, resolution → memory.
 
-**On failure:** If immune memory grows too large and slows detection, prioritize signatures by frequency and severity, archiving rare/minor threats. If the defense becomes too specialized against known threats and misses novel ones, maintain a "general patrol" function that doesn't rely on pattern matching — pure anomaly detection as the baseline.
+**If err:** Memory too large → prioritize by freq + severity, archive rare/minor. Too specialized, misses novel → keep "general patrol" (anomaly detection, no pattern match).
 
-### Step 5: Coordinate Post-Incident Recovery
+### Step 5: Post-Incident Recovery
 
-Transition from defense mode back to normal operations with damage repair and resilience improvement.
+Defense → normal w/ repair + resilience.
 
-1. Threat elimination verification:
-   - Confirm the threat is neutralized (not just suppressed)
-   - Scan for secondary threats that may have entered during the primary incident
-   - Verify no compromised agents remain active
-2. Damage assessment:
-   - Catalog what was damaged, degraded, or lost
-   - Prioritize repair by criticality (core assets first)
-   - Estimate recovery time and resources needed
-3. Recovery execution:
-   - Deploy healers to damaged areas (see `repair-damage` for detailed recovery)
-   - Restore services in priority order
-   - Maintain elevated sentinel activity during recovery (vulnerable period)
-4. De-escalation protocol:
-   - Step down alert levels gradually (Red → Orange → Yellow → Normal)
-   - Return reassigned workers to their primary roles
-   - Stand down soldiers and return guards to patrol
-   - Post-incident review within 24 hours while memory is fresh
+1. Threat elim verify:
+   - Confirm neutralized (not just suppressed)
+   - Scan secondaries during primary
+   - Verify no compromised agents remain
+2. Damage assess:
+   - Catalog damaged/degraded/lost
+   - Priority by criticality (core first)
+   - Estimate recovery time + resources
+3. Recovery:
+   - Healers → damaged (see `repair-damage`)
+   - Restore svcs in priority
+   - Elevated sentinel during recovery (vulnerable period)
+4. De-escalate:
+   - Step down (Red → Orange → Yellow → Normal)
+   - Reassigned workers → primary roles
+   - Stand down soldiers, guards → patrol
+   - Post-incident review <24h (fresh memory)
 
-**Expected:** A smooth transition from defense to recovery to normal operations. Elevated monitoring during recovery catches secondary threats. The post-incident review feeds learnings into immune memory.
+**Got:** Smooth defense → recovery → normal. Elevated monitor catches secondaries. Review feeds memory.
 
-**On failure:** If recovery is too slow, pre-build recovery playbooks for the most likely damage scenarios. If secondary threats emerge during recovery, the de-escalation was too aggressive — maintain higher alert levels for longer. If post-incident review is skipped (common under time pressure), schedule it as a non-negotiable calendar event.
+**If err:** Slow recovery → pre-build playbooks for likely damage. Secondaries during recovery → de-esc too aggressive, keep higher alert longer. Review skipped (time pressure) → schedule non-negotiable.
 
-## Validation
+## Check
 
-- [ ] Critical assets are identified and prioritized
-- [ ] Threats are classified by type and severity
-- [ ] Defense perimeter has multiple layers with sentinels at each
-- [ ] Alarm signaling has graduated levels with multi-sentinel confirmation
-- [ ] Defender roles are defined with mobilization mapped to alert levels
-- [ ] Proportional response prevents over- and under-reaction
-- [ ] Immune memory captures and applies lessons from each incident
-- [ ] Post-incident recovery protocol restores normal operations safely
+- [ ] Critical assets ID'd + prioritized
+- [ ] Threats classified (type + severity)
+- [ ] Perimeter layered + sentinels per layer
+- [ ] Alarm graduated + multi-sentinel confirm
+- [ ] Roles defined + mob → alerts
+- [ ] Proportional prevents over/under
+- [ ] Memory captures + applies lessons
+- [ ] Recovery restores safely
 
-## Common Pitfalls
+## Traps
 
-- **Maginot Line defense**: Over-investing in a single defense layer while leaving others unprotected. Defense must be layered — any single layer can be breached
-- **Alert fatigue**: Too many alarms with too few real threats degrades defender attention. Calibrate sentinels ruthlessly; a missed false positive is cheaper than a missed real threat
-- **Symmetric response**: Responding to every threat with the same intensity wastes resources and reveals your full capabilities. Match response to threat — escalate only when needed
-- **No immune memory**: Defending against the same threat type repeatedly without learning is expensive and fragile. Every incident must update the colony's defense knowledge
-- **Permanent war footing**: Sustained high-alert operations exhaust defenders and degrade normal colony function. De-escalate deliberately when the threat passes
+- **Maginot Line**: Over-invest 1 layer, others unprotected. Layered — any single can breach.
+- **Alert fatigue**: Many alarms, few real → degrades attention. Calibrate ruthless; missed FP cheaper than missed real.
+- **Symmetric response**: Same intensity always → wastes + reveals caps. Match — escalate only when needed.
+- **No immune memory**: Repeated same threat, no learning → expensive + fragile. Every incident → update knowledge.
+- **Permanent war footing**: Sustained high-alert → exhausts + degrades normal. De-esc deliberate when threat passes.
 
-## Related Skills
+## →
 
-- `coordinate-swarm` — foundational coordination patterns that support alarm signaling and mobilization
-- `build-consensus` — rapid consensus for collective defense decisions under time pressure
-- `scale-colony` — defense systems must scale with colony growth
-- `repair-damage` — morphic skill for regenerative recovery after defense incidents
-- `configure-alerting-rules` — practical alerting configuration that implements alarm signaling patterns
-- `conduct-post-mortem` — structured post-incident analysis for feeding immune memory
+- `coordinate-swarm` — foundational coord patterns supporting alarm + mob
+- `build-consensus` — rapid consensus for collective defense under pressure
+- `scale-colony` — defense scales w/ growth
+- `repair-damage` — morphic regenerative recovery
+- `configure-alerting-rules` — practical alerting impl
+- `conduct-post-mortem` — structured analysis → feeds memory

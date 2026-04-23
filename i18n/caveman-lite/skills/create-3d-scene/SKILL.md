@@ -86,8 +86,8 @@ if __name__ == "__main__":
     main()
 ```
 
-**Expected:** Script structure with clear_scene() and main() functions
-**On failure:** Review Python syntax, check bpy import works in Blender Python environment
+**Got:** Script structure with clear_scene() and main() functions
+**If fail:** Review Python syntax, check bpy import works in Blender Python environment
 
 ### 2. Add Mesh Objects
 
@@ -120,8 +120,8 @@ def add_objects():
     return cube, sphere
 ```
 
-**Expected:** Objects appear in scene with correct names and positions
-**On failure:** Check operator syntax, verify coordinates, ensure no naming conflicts
+**Got:** Objects appear in scene with correct names and positions
+**If fail:** Check operator syntax, verify coordinates, ensure no naming conflicts
 
 ### 3. Create Materials with Node-Based Shaders
 
@@ -173,8 +173,8 @@ def apply_materials(cube, sphere):
         sphere.data.materials.append(mat_metal)
 ```
 
-**Expected:** Materials visible in shader editor with proper node connections
-**On failure:** Check node types exist, verify link syntax, ensure color values in [0,1] range
+**Got:** Materials visible in shader editor with proper node connections
+**If fail:** Check node types exist, verify link syntax, ensure color values in [0,1] range
 
 ### 4. Set Up Lighting
 
@@ -214,8 +214,8 @@ def setup_lighting():
     point.data.energy = 500.0
 ```
 
-**Expected:** Three lights with appropriate intensities and positions
-**On failure:** Adjust energy values for render engine (Cycles vs EEVEE), check rotation format
+**Got:** Three lights with appropriate intensities and positions
+**If fail:** Adjust energy values for render engine (Cycles vs EEVEE), check rotation format
 
 ### 5. Position Camera
 
@@ -245,8 +245,8 @@ def setup_camera():
     bpy.context.scene.camera = camera
 ```
 
-**Expected:** Camera positioned with correct focal length and DOF settings
-**On failure:** Use simpler rotation method if track_to fails, verify lens units
+**Got:** Camera positioned with correct focal length and DOF settings
+**If fail:** Use simpler rotation method if track_to fails, verify lens units
 
 ### 6. Configure World Environment
 
@@ -286,8 +286,8 @@ def setup_world():
     links.new(node_bg.outputs['Background'], node_output.inputs['Surface'])
 ```
 
-**Expected:** World shader with HDRI or solid background configured
-**On failure:** Skip HDRI loading if file missing, use Background node alone with color
+**Got:** World shader with HDRI or solid background configured
+**If fail:** Skip HDRI loading if file missing, use Background node alone with color
 
 ### 7. Configure Render Settings
 
@@ -315,8 +315,8 @@ def setup_render_settings():
     scene.render.filepath = "/tmp/render_"
 ```
 
-**Expected:** Render settings configured, ready for rendering
-**On failure:** Check engine name spelling, verify resolution values are positive integers
+**Got:** Render settings configured, ready for rendering
+**If fail:** Check engine name spelling, verify resolution values are positive integers
 
 ### 8. Organize Scene Hierarchy
 
@@ -349,8 +349,8 @@ def organize_collections():
             col_cameras.objects.link(obj)
 ```
 
-**Expected:** Objects organized in named collections for easier management
-**On failure:** Check collection already exists before creating, handle orphaned objects
+**Got:** Objects organized in named collections for easier management
+**If fail:** Check collection already exists before creating, handle orphaned objects
 
 ## Validation Checklist
 
@@ -365,7 +365,7 @@ def organize_collections():
 - [ ] No orphaned data blocks (materials, meshes without users)
 - [ ] Script includes clear_scene() for reproducibility
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Object naming conflicts**: Use unique names, check for existing objects before creating
 2. **Incorrect color format**: RGB values must be tuples (r, g, b, a) in [0,1] range

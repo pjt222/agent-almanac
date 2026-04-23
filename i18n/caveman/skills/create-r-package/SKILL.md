@@ -25,23 +25,23 @@ metadata:
 
 # Create R Package
 
-Scaffold a fully configured R package with modern tooling and best practices.
+Scaffold fully configured R package with modern tooling and best practices.
 
-## When to Use
+## When Use
 
-- Starting a new R package from scratch
-- Converting loose R scripts into a package
-- Setting up a package skeleton for collaborative development
+- Starting new R package from scratch
+- Converting loose R scripts into package
+- Setting up package skeleton for collaborative development
 
 ## Inputs
 
-- **Required**: Package name (lowercase, no special characters except `.`)
-- **Required**: One-line description of the package purpose
+- **Required**: Package name (lowercase, no special chars except `.`)
+- **Required**: One-line description of package purpose
 - **Optional**: License type (default: MIT)
-- **Optional**: Author information (name, email, ORCID)
-- **Optional**: Whether to initialize renv (default: yes)
+- **Optional**: Author info (name, email, ORCID)
+- **Optional**: Whether to init renv (default: yes)
 
-## Procedure
+## Steps
 
 ### Step 1: Create Package Skeleton
 
@@ -50,9 +50,9 @@ usethis::create_package("packagename")
 setwd("packagename")
 ```
 
-**Expected:** Directory created with `DESCRIPTION`, `NAMESPACE`, `R/`, and `man/` subdirectories.
+**Got:** Directory created with `DESCRIPTION`, `NAMESPACE`, `R/`, `man/` subdirectories.
 
-**On failure:** Ensure usethis is installed (`install.packages("usethis")`). Check that the directory does not already exist.
+**If fail:** Confirm usethis installed (`install.packages("usethis")`). Check directory does not already exist.
 
 ### Step 2: Configure DESCRIPTION
 
@@ -75,9 +75,9 @@ URL: https://github.com/username/packagename
 BugReports: https://github.com/username/packagename/issues
 ```
 
-**Expected:** Valid DESCRIPTION that passes `R CMD check` with no metadata warnings.
+**Got:** Valid DESCRIPTION passing `R CMD check` with no metadata warnings.
 
-**On failure:** If `R CMD check` warns about DESCRIPTION fields, verify that `Title` is in Title Case, `Description` is more than one sentence, and `Authors@R` uses valid `person()` syntax.
+**If fail:** `R CMD check` warns about DESCRIPTION fields? Verify `Title` in Title Case, `Description` more than one sentence, `Authors@R` uses valid `person()` syntax.
 
 ### Step 3: Set Up Infrastructure
 
@@ -90,9 +90,9 @@ usethis::use_git()
 usethis::use_github_action("check-standard")
 ```
 
-**Expected:** LICENSE, README.md, NEWS.md, `tests/` directory, `.git/` initialized, and `.github/workflows/` created.
+**Got:** LICENSE, README.md, NEWS.md, `tests/` directory, `.git/` initialized, `.github/workflows/` created.
 
-**On failure:** If any `usethis::use_*()` function fails, install the missing dependency and rerun. If `.git/` already exists, `use_git()` will skip initialization.
+**If fail:** Any `usethis::use_*()` function fails? Install missing dependency, rerun. `.git/` already exists? `use_git()` skips init.
 
 ### Step 4: Create Development Configuration
 
@@ -128,9 +128,9 @@ Create `.Rbuildignore` entries:
 ^.*\.Rproj$
 ```
 
-**Expected:** `.Rprofile`, `.Renviron.example`, and `.Rbuildignore` are created. Development files are excluded from the built package.
+**Got:** `.Rprofile`, `.Renviron.example`, `.Rbuildignore` created. Development files dropped from built package.
 
-**On failure:** If `.Rprofile` causes errors on startup, check for syntax issues. Ensure `requireNamespace()` guards prevent failures when optional packages are missing.
+**If fail:** `.Rprofile` causes startup errors? Check syntax. Confirm `requireNamespace()` guards stop failures when optional packages missing.
 
 ### Step 5: Initialize renv
 
@@ -138,9 +138,9 @@ Create `.Rbuildignore` entries:
 renv::init()
 ```
 
-**Expected:** `renv/` directory and `renv.lock` created. Project-local library is active.
+**Got:** `renv/` directory and `renv.lock` created. Project-local library active.
 
-**On failure:** Install renv with `install.packages("renv")`. If renv hangs during initialization, check network connectivity or set `options(timeout = 600)`.
+**If fail:** Install renv with `install.packages("renv")`. renv hangs during init? Check network. Set `options(timeout = 600)`.
 
 ### Step 6: Create Package Documentation File
 
@@ -155,33 +155,33 @@ Create `R/packagename-package.R`:
 NULL
 ```
 
-**Expected:** `R/packagename-package.R` exists with the `"_PACKAGE"` sentinel. Running `devtools::document()` generates package-level help.
+**Got:** `R/packagename-package.R` exists with `"_PACKAGE"` sentinel. Running `devtools::document()` generates package-level help.
 
-**On failure:** Ensure the filename matches the pattern `R/<packagename>-package.R`. The `"_PACKAGE"` string must be a standalone expression, not inside a function.
+**If fail:** Confirm filename matches pattern `R/<packagename>-package.R`. `"_PACKAGE"` string must be standalone expression, not inside function.
 
 ### Step 7: Create CLAUDE.md
 
-Create `CLAUDE.md` in the project root with project-specific instructions for AI assistants.
+Create `CLAUDE.md` in project root with project-specific instructions for AI assistants.
 
-**Expected:** `CLAUDE.md` exists in the project root with project-specific editing conventions, build commands, and architecture notes.
+**Got:** `CLAUDE.md` exists in project root with project-specific editing conventions, build commands, architecture notes.
 
-**On failure:** If unsure what to include, start with the package name, a one-line description, common dev commands (`devtools::check()`, `devtools::test()`), and any non-obvious conventions.
+**If fail:** Unsure what to include? Start with package name, one-line description, common dev commands (`devtools::check()`, `devtools::test()`), any non-obvious conventions.
 
-## Validation
+## Checks
 
 - [ ] `devtools::check()` returns 0 errors, 0 warnings
 - [ ] Package structure matches expected layout
 - [ ] `.Rprofile` loads without errors
 - [ ] `renv::status()` shows no issues
-- [ ] Git repository initialized with appropriate `.gitignore`
+- [ ] Git repo initialized with right `.gitignore`
 - [ ] GitHub Actions workflow file present
 
-## Common Pitfalls
+## Pitfalls
 
 - **Package name conflicts**: Check CRAN with `available::available("packagename")` before committing to a name
-- **Missing .Rbuildignore entries**: Development files (`.Rprofile`, `.Renviron`, `renv/`) must be excluded from the built package
+- **Missing .Rbuildignore entries**: Development files (`.Rprofile`, `.Renviron`, `renv/`) must drop from built package
 - **Forgetting Encoding**: Always include `Encoding: UTF-8` in DESCRIPTION
-- **RoxygenNote mismatch**: The version in DESCRIPTION must match your installed roxygen2
+- **RoxygenNote mismatch**: Version in DESCRIPTION must match installed roxygen2
 
 ## Examples
 
@@ -199,10 +199,10 @@ usethis::use_github_action("check-standard")
 renv::init()
 ```
 
-## Related Skills
+## See Also
 
-- `write-roxygen-docs` - document the functions you create
-- `write-testthat-tests` - add tests for your package
+- `write-roxygen-docs` - document functions you create
+- `write-testthat-tests` - add tests for package
 - `setup-github-actions-ci` - detailed CI/CD configuration
 - `manage-renv-dependencies` - manage package dependencies
 - `write-claude-md` - create effective AI assistant instructions

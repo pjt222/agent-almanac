@@ -23,29 +23,29 @@ metadata:
   tags: quarto, report, reproducible, rmarkdown, publishing
 ---
 
-# Create Quarto Report
+# 建 Quarto 報告
 
-Set up and write a reproducible Quarto document for analysis reports, presentations, or websites.
+設建可重現之 Quarto 文檔，為析報、演示、網站。
 
-## When to Use
+## 用時
 
-- Creating a reproducible analysis report
-- Building a presentation with embedded code
-- Generating HTML, PDF, or Word documents from code
-- Migrating from R Markdown to Quarto
+- 建可重現之析報
+- 建含嵌碼之演示
+- 由碼生 HTML、PDF、Word 文檔
+- 由 R Markdown 遷至 Quarto
 
-## Inputs
+## 入
 
-- **Required**: Report topic and target audience
-- **Required**: Output format (html, pdf, docx, revealjs)
-- **Optional**: Data sources and analysis code
-- **Optional**: Citation bibliography (.bib file)
+- **必要**：報題與目標聽者
+- **必要**：出式（html、pdf、docx、revealjs）
+- **可選**：數源與析碼
+- **可選**：引目（.bib 文件）
 
-## Procedure
+## 法
 
-### Step 1: Create Quarto Document
+### 第一步：建 Quarto 文檔
 
-Create `report.qmd`:
+建 `report.qmd`：
 
 ```yaml
 ---
@@ -67,11 +67,11 @@ bibliography: references.bib
 ---
 ```
 
-**Expected:** File `report.qmd` exists with valid YAML frontmatter including title, author, date, format configuration, and execution options.
+**得：** `report.qmd` 文件存，有合法 YAML 前言，含題、作者、日、式配、執選。
 
-**On failure:** Validate the YAML header by checking for matching `---` delimiters and correct indentation. Ensure `format:` key matches one of the supported Quarto output formats (`html`, `pdf`, `docx`, `revealjs`).
+**敗則：** 驗 YAML 頭之 `---` 界相配而縮進正。確 `format:` 合 Quarto 支持之出式（`html`、`pdf`、`docx`、`revealjs`）。
 
-### Step 2: Write Content with Code Chunks
+### 第二步：書內容含碼塊
 
 ````markdown
 ## Introduction
@@ -124,13 +124,13 @@ data |>
 See @tbl-summary for descriptive statistics.
 ````
 
-**Expected:** Content sections contain properly formatted code chunks with `{r}` language identifier and `#|` chunk options for labels, captions, and dimensions.
+**得：** 內容節含正格之碼塊，有 `{r}` 語標識與 `#|` 塊選為標、題、尺。
 
-**On failure:** Verify code chunks use the ```` ```{r} ```` syntax (not inline backticks), that `#|` options are inside the chunk (not in the YAML header), and that label prefixes match cross-reference types (`fig-` for figures, `tbl-` for tables).
+**敗則：** 驗碼塊用 ```` ```{r} ```` 語法（非內聯撇），`#|` 選於塊內（非 YAML 頭），標前綴合交叉參類（`fig-` 為圖、`tbl-` 為表）。
 
-### Step 3: Configure Chunk Options
+### 第三步：設塊選
 
-Common chunk-level options (use `#|` syntax):
+常見塊級選（用 `#|` 語法）：
 
 ```
 #| label: chunk-name        # Required for cross-references
@@ -144,11 +144,11 @@ Common chunk-level options (use `#|` syntax):
 #| cache: true               # Cache expensive computations
 ```
 
-**Expected:** Chunk options are applied at the chunk level using `#|` syntax, and labels follow naming conventions required for cross-referencing.
+**得：** 塊選於塊級以 `#|` 施，標循交叉參所需之名慣。
 
-**On failure:** Ensure chunk options use `#|` syntax (Quarto-native), not the legacy `{r, option=value}` R Markdown syntax. Verify that label names contain only alphanumeric characters and hyphens.
+**敗則：** 確塊選用 `#|`（Quarto 原生），非舊 R Markdown 之 `{r, option=value}`。驗標名唯含字母數字與連字符。
 
-### Step 4: Add Cross-References and Citations
+### 第四步：加交叉參與引用
 
 ```markdown
 See @fig-scatter for the visualization and @tbl-summary for statistics.
@@ -163,11 +163,11 @@ Combined figure caption
 :::
 ```
 
-**Expected:** Cross-references (`@fig-name`, `@tbl-name`) resolve to the correct figures and tables, and citations (`@key`) match entries in the `.bib` file.
+**得：** 交叉參（`@fig-name`、`@tbl-name`）解至正圖表，引用（`@key`）合 `.bib` 之項。
 
-**On failure:** Verify that referenced labels exist in code chunks with the correct prefix (`fig-`, `tbl-`). For citations, check that `.bib` keys match exactly (case-sensitive) and that `bibliography:` is set in the YAML header.
+**敗則：** 驗所引之標存於碼塊且前綴正（`fig-`、`tbl-`）。引用者察 `.bib` 鍵精合（辨大小），YAML 頭有 `bibliography:`。
 
-### Step 5: Render the Document
+### 第五步：渲文檔
 
 ```bash
 quarto render report.qmd
@@ -180,14 +180,14 @@ quarto render report.qmd --to docx
 quarto preview report.qmd
 ```
 
-**Expected:** Output file generated in the specified format.
+**得：** 出文件生於指定式。
 
-**On failure:**
-- Missing quarto: Install from https://quarto.org/docs/get-started/
-- PDF errors: Install TinyTeX with `quarto install tinytex`
-- R package errors: Ensure all packages are installed
+**敗則：**
+- 缺 quarto：由 https://quarto.org/docs/get-started/ 裝
+- PDF 訛：以 `quarto install tinytex` 裝 TinyTeX
+- R 包訛：確諸包已裝
 
-### Step 6: Multi-Format Output
+### 第六步：多式出
 
 ```yaml
 format:
@@ -201,30 +201,30 @@ format:
     reference-doc: template.docx
 ```
 
-Render all formats: `quarto render report.qmd`
+渲諸式：`quarto render report.qmd`
 
-**Expected:** All specified output formats generate successfully, each with correct styling and layout for the target format.
+**得：** 諸指定出式皆成，各有合式之樣與佈。
 
-**On failure:** If one format fails while others succeed, check format-specific requirements: PDF needs a LaTeX engine (install with `quarto install tinytex`), DOCX needs a valid reference template if specified, and format-specific YAML options must be correctly nested under each format key.
+**敗則：** 若一式敗他成，察式專需：PDF 需 LaTeX 引擎（以 `quarto install tinytex` 裝），DOCX 需合法參樣（若指定），式專 YAML 選須正嵌於各式鍵下。
 
-## Validation
+## 驗
 
-- [ ] Document renders without errors
-- [ ] All code chunks execute correctly
-- [ ] Cross-references resolve (figures, tables, citations)
-- [ ] Table of contents is accurate
-- [ ] Output format is appropriate for the audience
+- [ ] 文檔無訛而渲
+- [ ] 諸碼塊正執
+- [ ] 交叉參解（圖、表、引用）
+- [ ] 目錄正
+- [ ] 出式合聽者
 
-## Common Pitfalls
+## 陷
 
-- **Missing label prefix**: Cross-referenceable figures need `fig-` prefix in label, tables need `tbl-`
-- **Cache invalidation**: Cached chunks won't re-run when upstream data changes. Delete `_cache/` to force.
-- **PDF without LaTeX**: Install TinyTeX or use `format: pdf` with `pdf-engine: weasyprint` for CSS-based PDF
-- **R Markdown syntax in Quarto**: Use `#|` chunk options instead of `{r, echo=FALSE}` style
+- **缺標前綴**：可交叉參之圖需標有 `fig-`，表需 `tbl-`
+- **緩失效**：緩塊於上游數變時不重運。刪 `_cache/` 以迫之。
+- **無 LaTeX 之 PDF**：裝 TinyTeX，或以 `format: pdf` 與 `pdf-engine: weasyprint` 作基於 CSS 之 PDF
+- **Quarto 中之 R Markdown 語法**：用 `#|` 塊選代 `{r, echo=FALSE}` 式
 
-## Related Skills
+## 參
 
-- `format-apa-report` - APA-formatted academic reports
-- `build-parameterized-report` - parameterized multi-report generation
-- `generate-statistical-tables` - publication-ready tables
-- `write-vignette` - Quarto vignettes in R packages
+- `format-apa-report` — APA 格學術報
+- `build-parameterized-report` — 參化多報生
+- `generate-statistical-tables` — 可刊之表
+- `write-vignette` — R 包之 Quarto vignette

@@ -26,13 +26,13 @@ metadata:
 
 # Create Multi-Stage Dockerfile
 
-Build multi-stage Dockerfiles that produce minimal production images by separating build tooling from runtime.
+Build multi-stage Dockerfiles producing minimal production images. Separate build tooling from runtime.
 
-## When to Use
+## When Use
 
-- Production images are too large (>500MB for compiled languages)
-- Build tools (compilers, dev headers) are included in the final image
-- Need separate images for development and production from one Dockerfile
+- Production images too large (>500MB for compiled languages)
+- Build tools (compilers, dev headers) in final image
+- Need separate images for dev and prod from one Dockerfile
 - Deploying to constrained environments (edge, serverless)
 
 ## Inputs
@@ -42,7 +42,7 @@ Build multi-stage Dockerfiles that produce minimal production images by separati
 - **Optional**: Target runtime base (slim, alpine, distroless, scratch)
 - **Optional**: Size budget for final image
 
-## Procedure
+## Steps
 
 ### Step 1: Identify Build vs Runtime Dependencies
 
@@ -56,7 +56,7 @@ Build multi-stage Dockerfiles that produce minimal production images by separati
 
 ### Step 2: Structure the Multi-Stage Build
 
-The core pattern: build in a fat image, copy artifacts to a slim image.
+Core pattern: build in fat image, copy artifacts to slim image.
 
 ```dockerfile
 # ---- Build Stage ----
@@ -156,9 +156,9 @@ EXPOSE 8080
 ENTRYPOINT ["/myapp"]
 ```
 
-**Expected:** Final image contains only the runtime and compiled artifacts.
+**Got:** Final image has only runtime and compiled artifacts.
 
-**On failure:** Check `COPY --from=builder` paths. Use `docker build --target builder` to debug the build stage.
+**If fail:** Check `COPY --from=builder` paths. Use `docker build --target builder` to debug build stage.
 
 ### Step 4: Choose Runtime Base
 
@@ -201,26 +201,26 @@ docker build -t myapp:slim .
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep myapp
 ```
 
-**Expected:** Production image is 50-90% smaller than the build stage.
+**Got:** Production image 50-90% smaller than build stage.
 
-## Validation
+## Checks
 
-- [ ] `docker build` completes for all stages
-- [ ] Final image does not contain build tools (compilers, dev headers)
-- [ ] `docker run` works correctly from the slim image
-- [ ] Image size is significantly reduced vs single-stage
-- [ ] `COPY --from=builder` paths are correct
-- [ ] No source code leaks into the production image
+- [ ] `docker build` finishes for all stages
+- [ ] Final image has no build tools (compilers, dev headers)
+- [ ] `docker run` works from slim image
+- [ ] Image size significantly smaller vs single-stage
+- [ ] `COPY --from=builder` paths right
+- [ ] No source code leaks into production image
 
-## Common Pitfalls
+## Pitfalls
 
-- **Missing runtime libraries**: Compiled code may need shared libraries (`libc`, `libssl`). Test the slim image thoroughly.
-- **Broken `COPY --from` paths**: The artifact path must match exactly. Use `docker build --target builder` then `docker run --rm builder ls /path` to debug.
+- **Missing runtime libraries**: Compiled code may need shared libraries (`libc`, `libssl`). Test slim image thoroughly.
+- **Broken `COPY --from` paths**: Artifact path must match exactly. Use `docker build --target builder` then `docker run --rm builder ls /path` to debug.
 - **Alpine musl issues**: Native Node.js addons and some Python packages fail on Alpine. Use `-slim` instead.
-- **Global ARG scope**: An `ARG` declared before `FROM` is available to `FROM` lines only. Re-declare inside each stage that needs it.
-- **Forgetting CA certificates**: `scratch` has no certificates. Copy `/etc/ssl/certs/ca-certificates.crt` from the builder or use distroless.
+- **Global ARG scope**: `ARG` declared before `FROM` is available to `FROM` lines only. Re-declare inside each stage that needs it.
+- **Forgetting CA certificates**: `scratch` has no certificates. Copy `/etc/ssl/certs/ca-certificates.crt` from builder or use distroless.
 
-## Related Skills
+## See Also
 
 - `create-dockerfile` - single-stage general Dockerfiles
 - `create-r-dockerfile` - R-specific Dockerfiles with rocker images

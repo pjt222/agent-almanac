@@ -22,64 +22,64 @@ metadata:
   tags: git, github, project-management, issues, review, automation
 ---
 
-# Create GitHub Issues
+# 建 GitHub 議題
 
-Structured GitHub issue creation from review findings or task breakdowns. Converts a list of findings (from `review-codebase`, `security-audit-codebase`, or manual analysis) into well-formed GitHub issues with labels, acceptance criteria, and cross-references.
+由審察所發或任務之分以結構化建 GitHub 議題。將（由 `review-codebase`、`security-audit-codebase` 或手析之）發之列轉為正式議題，含標、驗收、交叉參。
 
-## When to Use
+## 用時
 
-- After a codebase review produces a findings table that needs tracking
-- After a planning session identifies work items that should become issues
-- When converting a TODO list or backlog into trackable GitHub issues
-- When batch-creating related issues that need consistent formatting and labeling
+- 碼庫審生表後需追蹤
+- 規劃會識工項宜成議題後
+- 將 TODO 或積轉為可追之 GitHub 議題
+- 批建相關議題需一致格與標者
 
-## Inputs
+## 入
 
-- **Required**: `findings` — a list of items, each with at minimum a title and description. Ideally also includes: severity, affected files, and suggested labels
-- **Optional**:
-  - `group_by` — how to batch findings into issues: `severity`, `file`, `theme` (default: `theme`)
-  - `label_prefix` — prefix for auto-created labels (default: none)
-  - `create_labels` — whether to create missing labels (default: `true`)
-  - `dry_run` — preview issues without creating them (default: `false`)
+- **必要**：`findings` — 項之列，每項至少含題與述。宜含：嚴重、影響之文件、建議標
+- **可選**：
+  - `group_by` — 如何合發為議題：`severity`、`file`、`theme`（默 `theme`）
+  - `label_prefix` — 自建標之前綴（默無）
+  - `create_labels` — 是否建缺標（默 `true`）
+  - `dry_run` — 預覽議題而不建（默 `false`）
 
-## Procedure
+## 法
 
-### Step 1: Prepare Labels
+### 第一步：備標
 
-Ensure all needed labels exist in the repository.
+確諸需標存於庫。
 
-1. List existing labels: `gh label list --limit 100`
-2. Identify labels needed by the findings (from severity, phase, or explicit label fields)
-3. Map severities to labels if not already mapped: `critical`, `high-priority`, `medium-priority`, `low-priority`
-4. Map phases/themes to labels: `security`, `architecture`, `code-quality`, `accessibility`, `testing`, `performance`
-5. If `create_labels` is true, create missing labels: `gh label create "name" --color "hex" --description "desc"`
-6. Use consistent colors: red for critical/security, orange for high, yellow for medium, blue for architecture, green for testing
+1. 列現標：`gh label list --limit 100`
+2. 識發所需標（由嚴重、階段、明確標域）
+3. 若未映，映嚴重至標：`critical`、`high-priority`、`medium-priority`、`low-priority`
+4. 映階段／主題至標：`security`、`architecture`、`code-quality`、`accessibility`、`testing`、`performance`
+5. 若 `create_labels` 為真，建缺標：`gh label create "name" --color "hex" --description "desc"`
+6. 色宜一致：紅為危／安，橙為高，黃為中，藍為構，綠為試
 
-**Expected:** All labels referenced by findings exist in the repository. No duplicate labels created.
+**得：** 發所引諸標皆存於庫。無重標建。
 
-**On failure:** If `gh` CLI is not authenticated, instruct the user to run `gh auth login`. If label creation is denied (insufficient permissions), proceed without creating labels and note which labels are missing.
+**敗則：** 若 `gh` CLI 未認證，令用者運 `gh auth login`。若標建被拒（權不足），無標而繼並記缺之標。
 
-### Step 2: Group Findings
+### 第二步：合發
 
-Batch related findings into logical issues to avoid issue sprawl.
+合相關之發為議題以免議題蔓延。
 
-1. If `group_by` is `theme`: group findings by their phase or category (all security findings → 1-2 issues, all a11y → 1 issue)
-2. If `group_by` is `severity`: group findings by severity level (all CRITICAL → 1 issue, all HIGH → 1 issue)
-3. If `group_by` is `file`: group findings by primary affected file
-4. Within each group, order findings by severity (CRITICAL first)
-5. If a group has more than 8 findings, split into sub-groups by sub-theme
-6. Each group becomes one GitHub issue
+1. 若 `group_by` 為 `theme`：按階段或類合（諸安發 → 1-2 議題，諸 a11y → 1 議題）
+2. 若 `group_by` 為 `severity`：按嚴重合（諸 CRITICAL → 1 議題，諸 HIGH → 1 議題）
+3. 若 `group_by` 為 `file`：按主影響文件合
+4. 每組內，按嚴重排（CRITICAL 先）
+5. 若組過八發，按子主題再分
+6. 每組成一 GitHub 議題
 
-**Expected:** A set of issue groups, each containing 1-8 related findings. The total number of issues should be manageable (typically 5-15 for a full codebase review).
+**得：** 議題組集，每組含 1-8 相關之發。議題總數宜可管（全庫審常 5-15）。
 
-**On failure:** If findings have no grouping metadata, fall back to one issue per finding. This is acceptable for small finding sets (< 10) but produces too many issues for larger sets.
+**敗則：** 若發無合元資料，退為每發一議題。小發集（<10）可，大集則生議題過多。
 
-### Step 3: Compose Issues
+### 第三步：構議題
 
-Build each issue using a standard template.
+以標準樣建各議題。
 
-1. **Title**: `[Severity] Theme: Brief description` — e.g., `[HIGH] Security: Eliminate innerHTML injection in panel.js`
-2. **Body** structure:
+1. **題**：`[Severity] Theme: Brief description` — 如 `[HIGH] Security: Eliminate innerHTML injection in panel.js`
+2. **體**構：
    ```
    ## Summary
    One-paragraph overview of what this issue addresses and why it matters.
@@ -97,54 +97,54 @@ Build each issue using a standard template.
    Generated from codebase review on YYYY-MM-DD.
    Related: #issue_numbers (if applicable)
    ```
-3. Apply labels: severity label + theme label + any custom labels
-4. If findings reference specific files, mention them in the body (not as assignees)
+3. 施標：嚴重標 + 主題標 + 任何自訂標
+4. 若發引特文件，於體中提（非作為指派者）
 
-**Expected:** Each issue has a clear title, numbered findings with severity badges, checkbox acceptance criteria, and appropriate labels.
+**得：** 每議題有清題、有嚴重徽之號發、勾驗收、合宜之標。
 
-**On failure:** If the body exceeds GitHub's issue size limit (65536 chars), split the issue into parts and cross-reference them.
+**敗則：** 若體逾 GitHub 議題尺限（65536 字），分議題並交叉參。
 
-### Step 4: Create Issues
+### 第四步：建議題
 
-Create the issues using `gh` CLI and report results.
+以 `gh` CLI 建議題並報結果。
 
-1. If `dry_run` is true, print each issue title and body without creating, then stop
-2. For each composed issue, create it:
+1. 若 `dry_run` 為真，印每議題之題與體而不建，即止
+2. 每構成議題，建之：
    ```bash
    gh issue create --title "title" --body "$(cat <<'EOF'
    body content
    EOF
    )" --label "label1,label2"
    ```
-3. Record the URL of each created issue
-4. After all issues are created, print a summary table: `#number | Title | Labels | Findings count`
-5. If issues should be sequenced, add cross-references: edit the first issue to mention "Blocked by #X" or "See also #Y"
+3. 記每建議題之 URL
+4. 諸議題建後，印概表：`#number | Title | Labels | Findings count`
+5. 若議題宜有序，增交叉參：編第一議題以言「Blocked by #X」或「See also #Y」
 
-**Expected:** All issues created successfully. A summary table with issue numbers and URLs is printed.
+**得：** 諸議題皆建成。概表含議題號與 URL 已印。
 
-**On failure:** If an individual issue fails to create, log the error and continue with remaining issues. Report failures at the end. Common failures: authentication expired, label not found (if `create_labels` was false), network timeout.
+**敗則：** 若個別議題建敗，記誤而繼。終報諸敗。常見敗：認證過期、標不存（若 `create_labels` 為假）、網超時。
 
-## Validation
+## 驗
 
-- [ ] All findings are represented in at least one issue
-- [ ] Each issue has at least one label
-- [ ] Each issue has checkbox acceptance criteria
-- [ ] No duplicate issues were created (check titles against existing open issues)
-- [ ] Issue count is reasonable for the finding count (not 1:1 for large sets)
-- [ ] Summary table was printed with all issue URLs
+- [ ] 諸發至少現於一議題
+- [ ] 每議題有至少一標
+- [ ] 每議題有勾驗收
+- [ ] 無重議題建（題與現開議題較）
+- [ ] 議題數合發數（大集非 1:1）
+- [ ] 概表已印含諸議題 URL
 
-## Common Pitfalls
+## 陷
 
-- **Issue sprawl**: Creating one issue per finding produces 20+ issues that are hard to manage. Group aggressively — 5-10 issues from a full review is ideal
-- **Missing acceptance criteria**: Issues without checkboxes cannot be verified as complete. Every finding should map to at least one checkbox
-- **Label chaos**: Creating too many labels makes filtering useless. Stick to severity + theme, not per-finding labels
-- **Stale references**: If creating issues from an old review, verify findings still apply before creating issues. Code may have changed
-- **Forgetting dry run**: For large finding sets, always preview with `dry_run: true` first. It is much easier to edit a plan than to close 15 incorrect issues
+- **議題蔓延**：每發一議題則有 20+ 議題難管。宜積極合——全審 5-10 議題為宜
+- **缺驗收**：無勾之議題無從驗畢。每發宜映至少一勾
+- **標混**：標過多則濾無用。守嚴重 + 主題，勿每發一標
+- **陳引**：由舊審建議題時，建前驗發猶適。碼或已變
+- **忘 dry_run**：大發集前宜 `dry_run: true` 預覽。改劃易於閉 15 錯議題
 
-## Related Skills
+## 參
 
-- `review-codebase` — produces the findings table this skill consumes
-- `review-pull-request` — produces PR-scoped findings that can also be converted to issues
-- `manage-backlog` — organizes issues into sprints and priorities after creation
-- `create-pull-request` — creates PRs that reference and close the issues
-- `commit-changes` — commits the fixes that resolve the issues
+- `review-codebase` — 生此技所耗之發表
+- `review-pull-request` — 生 PR 範圍之發亦可轉為議題
+- `manage-backlog` — 建後將議題組入衝與優先
+- `create-pull-request` — 建 PR 引並閉議題
+- `commit-changes` — 提交解議題之修

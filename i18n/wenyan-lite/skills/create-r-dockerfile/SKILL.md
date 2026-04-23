@@ -23,40 +23,40 @@ metadata:
   tags: docker, r, rocker, container, reproducibility
 ---
 
-# Create R Dockerfile
+# 造 R 之 Dockerfile
 
-Build a Dockerfile for R projects using rocker base images with proper dependency management.
+以 rocker 基礎映像建 R 項目之 Dockerfile，含當之依賴管理。
 
-## When to Use
+## 適用時機
 
-- Containerizing an R application or analysis
-- Creating reproducible R environments
-- Deploying R-based services (Shiny, Plumber, MCP server)
-- Setting up consistent development environments
+- 容器化 R 應用或分析
+- 造可重現之 R 環境
+- 部署 R 基礎之服務（Shiny、Plumber、MCP 伺服器）
+- 立一致之開發環境
 
-## Inputs
+## 輸入
 
-- **Required**: R project with dependencies (DESCRIPTION or renv.lock)
-- **Required**: Purpose (development, production, or service)
-- **Optional**: R version (default: latest stable)
-- **Optional**: Additional system libraries needed
+- **必要**：含依賴之 R 項目（DESCRIPTION 或 renv.lock）
+- **必要**：目的（開發、生產、或服務）
+- **選擇性**：R 版本（預設：最新穩定）
+- **選擇性**：所需之他系統庫
 
-## Procedure
+## 步驟
 
-### Step 1: Choose Base Image
+### 步驟一：擇基礎映像
 
-| Use Case | Base Image | Size |
+| 用例 | 基礎映像 | 大小 |
 |----------|-----------|------|
-| Minimal R runtime | `rocker/r-ver:4.5.0` | ~800MB |
-| With tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
-| With RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |
-| Shiny server | `rocker/shiny-verse:4.5.0` | ~2GB |
+| 最小 R 執行 | `rocker/r-ver:4.5.0` | ~800MB |
+| 含 tidyverse | `rocker/tidyverse:4.5.0` | ~1.8GB |
+| 含 RStudio Server | `rocker/rstudio:4.5.0` | ~1.9GB |
+| Shiny 伺服 | `rocker/shiny-verse:4.5.0` | ~2GB |
 
-**Expected:** A base image is selected that matches the project's requirements without unnecessary bloat.
+**預期：** 擇一合項目需、無不必要膨脹之基礎映像。
 
-**On failure:** If unsure which image to use, start with `rocker/r-ver` (minimal) and add packages as needed. Check [rocker-org](https://github.com/rocker-org/rocker-versioned2) for the full image catalog.
+**失敗時：** 疑用何映像，始於 `rocker/r-ver`（最小），按需加套件。全映像目錄見 [rocker-org](https://github.com/rocker-org/rocker-versioned2)。
 
-### Step 2: Write Dockerfile
+### 步驟二：寫 Dockerfile
 
 ```dockerfile
 FROM rocker/r-ver:4.5.0
@@ -110,11 +110,11 @@ COPY . .
 CMD ["R"]
 ```
 
-**Expected:** Dockerfile builds successfully with `docker build -t myproject .`
+**預期：** Dockerfile 成建：`docker build -t myproject .`
 
-**On failure:** If the build fails during `apt-get install`, check package names for the target distro (Debian). If `renv::restore()` fails, ensure `renv.lock` and `renv/activate.R` are copied before the restore step.
+**失敗時：** 若於 `apt-get install` 時敗，察目標發行版（Debian）之套件名。若 `renv::restore()` 敗，確保 `renv.lock` 與 `renv/activate.R` 於恢復步前已複。
 
-### Step 3: Create .dockerignore
+### 步驟三：造 .dockerignore
 
 ```
 .git
@@ -128,24 +128,24 @@ docs/
 *.tar.gz
 ```
 
-**Expected:** `.dockerignore` excludes Git history, IDE files, local renv library, and build artifacts from the Docker context.
+**預期：** `.dockerignore` 排 Git 歷史、IDE 檔、本地 renv 庫、建構構件於 Docker 脈絡外。
 
-**On failure:** If the Docker build still copies unwanted files, verify `.dockerignore` is in the same directory as the Dockerfile and uses correct glob patterns.
+**失敗時：** 若 Docker 建構仍複不欲檔，驗 `.dockerignore` 與 Dockerfile 同目錄且用正確 glob 模式。
 
-### Step 4: Build and Test
+### 步驟四：建並測
 
 ```bash
 docker build -t r-project:latest .
 docker run --rm -it r-project:latest R -e "sessionInfo()"
 ```
 
-**Expected:** Container starts with correct R version and all packages available. `sessionInfo()` output confirms the expected R version.
+**預期：** 容器啟，R 版本正確，所有套件可得。`sessionInfo()` 輸出證所期 R 版本。
 
-**On failure:** Check build logs for system dependency errors. Add missing `-dev` packages to the `apt-get install` layer.
+**失敗時：** 察建構日誌之系統依賴誤。於 `apt-get install` 層加缺之 `-dev` 套件。
 
-### Step 5: Optimize for Production
+### 步驟五：為生產優化
 
-For production deployments, use multi-stage builds:
+生產部署用多階段建構：
 
 ```dockerfile
 # Build stage
@@ -162,28 +162,28 @@ WORKDIR /app
 CMD ["Rscript", "main.R"]
 ```
 
-**Expected:** Multi-stage build produces a smaller final image. Runtime stage contains only compiled R packages, not build tools.
+**預期：** 多階段建構產較小之終映像。執行階段僅含編譯之 R 套件，無建構工具。
 
-**On failure:** If packages fail to load in the runtime stage, ensure the library path in `COPY --from=builder` matches where R installed packages. Check with `R -e ".libPaths()"` in both stages.
+**失敗時：** 若套件於執行階段載敗，確保 `COPY --from=builder` 之庫路合 R 裝套件之處。於兩階段以 `R -e ".libPaths()"` 察之。
 
-## Validation
+## 驗證
 
-- [ ] `docker build` completes without errors
-- [ ] Container starts and R session works
-- [ ] All required packages are available
-- [ ] `.dockerignore` excludes unnecessary files
-- [ ] Image size is reasonable for the use case
-- [ ] Rebuilds are fast when only code changes (layer caching works)
+- [ ] `docker build` 完而無誤
+- [ ] 容器啟且 R 會話行
+- [ ] 所有所需套件可得
+- [ ] `.dockerignore` 排非必要檔
+- [ ] 映像大小合用例
+- [ ] 程式改時重建快（層快取有效）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Missing system dependencies**: R packages with compiled code need `-dev` libraries. Check error messages during `install.packages()`
-- **Layer cache invalidation**: Copying all files before installing packages invalidates cache on every code change. Copy lockfile first.
-- **Large images**: Use `rm -rf /var/lib/apt/lists/*` after `apt-get install`. Consider multi-stage builds.
-- **Timezone issues**: Add `ENV TZ=UTC` or install `tzdata` for timezone-aware operations
-- **Running as root**: Add a non-root user for production: `RUN useradd -m appuser && USER appuser`
+- **缺系統依賴**：含編譯程式之 R 套件需 `-dev` 庫。察 `install.packages()` 時之誤訊
+- **層快取失效**：於裝套件前複所有檔令每改程式皆失快取。先複鎖檔
+- **大映像**：於 `apt-get install` 後用 `rm -rf /var/lib/apt/lists/*`。考慮多階段建構
+- **時區問題**：加 `ENV TZ=UTC` 或裝 `tzdata` 以行時區感知之操作
+- **以 root 執**：生產加非 root 用戶：`RUN useradd -m appuser && USER appuser`
 
-## Examples
+## 範例
 
 ```bash
 # Development container with mounted source
@@ -196,9 +196,9 @@ docker run -d -p 8000:8000 r-api:latest
 docker run -d -p 3838:3838 r-shiny:latest
 ```
 
-## Related Skills
+## 相關技能
 
-- `setup-docker-compose` - orchestrate multiple containers
-- `containerize-mcp-server` - special case for MCP R servers
-- `optimize-docker-build-cache` - advanced caching strategies
-- `manage-renv-dependencies` - renv.lock feeds into Docker builds
+- `setup-docker-compose` - 編排多容器
+- `containerize-mcp-server` - MCP R 伺服之特別案例
+- `optimize-docker-build-cache` - 進階快取策略
+- `manage-renv-dependencies` - renv.lock 餵入 Docker 建構

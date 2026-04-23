@@ -24,147 +24,147 @@ metadata:
   tags: meta, team, creation, composition, coordination
 ---
 
-# Create a New Team
+# 建新團
 
-Define a multi-agent team composition that coordinates two or more agents to accomplish tasks requiring multiple perspectives, specialties, or phases. The resulting team file integrates with the teams registry and can be activated in Claude Code by name.
+定多行者團組，協二或多行者以畢需多視、專、階之任。其團文件入團籍，可於 Claude Code 以名激。
 
-## When to Use
+## 用時
 
-- A task requires multiple perspectives that a single agent cannot provide (e.g., code review plus security audit plus architecture review)
-- You need a recurring collaborative workflow with consistent role assignments and handoff patterns
-- An existing agent composition is being used repeatedly and should be formalized
-- A complex process naturally decomposes into phases or specialties handled by different agents
-- You want to define a coordinated group for sprint-based, pipeline-based, or parallel work
+- 任需多視單行者不能供者（如碼審＋安審＋構審）
+- 需重複協流含一致角與交接式
+- 現行者組反復用，宜正式化
+- 繁程自然分為異行者處之階或專
+- 欲定為衝基、管基、並行工之協組
 
-## Inputs
+## 入
 
-- **Required**: Team name (lowercase kebab-case, e.g., `data-pipeline-review`)
-- **Required**: Team purpose (one paragraph describing what problem requires multiple agents)
-- **Required**: Lead agent (must exist in `agents/_registry.yml`)
-- **Optional**: Coordination pattern (default: hub-and-spoke). One of: `hub-and-spoke`, `sequential`, `parallel`, `timeboxed`, `adaptive`
-- **Optional**: Number of members (default: 3-4; recommended range: 2-5)
-- **Optional**: Source material (existing workflow, runbook, or ad-hoc team composition to formalize)
+- **必要**：團名（小寫中劃線，如 `data-pipeline-review`）
+- **必要**：團志（一段述何題需多行者）
+- **必要**：領者（須存於 `agents/_registry.yml`）
+- **可選**：協式（默 hub-and-spoke）。其一：`hub-and-spoke`、`sequential`、`parallel`、`timeboxed`、`adaptive`
+- **可選**：成員數（默 3-4；宜 2-5）
+- **可選**：源（現流、運本、臨時團組欲正式化者）
 
-## Procedure
+## 法
 
-### Step 1: Define Team Purpose
+### 第一步：定團志
 
-Articulate what problem requires multiple agents working together. A valid team purpose must answer:
+明何題需多行者同作。合法之團志當答：
 
-1. **What outcome** does this team deliver? (e.g., a comprehensive review report, a deployed application, a sprint increment)
-2. **Why can't a single agent do this?** Identify at least two distinct specialties or perspectives required.
-3. **When should this team be activated?** Define the trigger conditions.
+1. **何果** 此團交？（如全審報、已布應用、衝進展）
+2. **單行者何以不能？** 識至少二殊專或視。
+3. **何時激此團？** 定觸件。
 
-Write the purpose as one paragraph that a human or agent can read to decide whether to activate this team.
+志書為一段，人或行者可讀以決激否。
 
-**Expected:** A clear paragraph explaining the team's value proposition, with at least two distinct specialties identified.
+**得：** 清一段述團之值，至少識二殊專。
 
-**On failure:** If you cannot identify two distinct specialties, the task likely does not need a team. Use a single agent with multiple skills instead.
+**敗則：** 若不能識二殊專，任或不需團。宜用多技之單行者。
 
-### Step 2: Select Lead Agent
+### 第二步：擇領者
 
-The lead agent orchestrates the team. Choose an agent from `agents/_registry.yml` that:
+領者調團。由 `agents/_registry.yml` 擇：
 
-- Has domain expertise relevant to the team's primary output
-- Can decompose incoming requests into subtasks for other members
-- Can synthesize results from multiple reviewers into a coherent deliverable
+- 有與團主出相關之域專
+- 能將入請分為他員之子任
+- 能聚多審者之果為連貫之交
 
 ```bash
 # List all available agents
 grep "^  - id:" agents/_registry.yml
 ```
 
-The lead must also appear as a member in the team composition (the lead is always a member).
+領亦當現於團組之成員（領皆為成員）。
 
-**Expected:** One agent selected as lead, confirmed to exist in the agents registry.
+**得：** 一行者為領，確存於行者籍。
 
-**On failure:** If no existing agent fits the lead role, create one first using the `create-agent` skill (or `agents/_template.md` manually). Do not create a team with a lead that does not exist as an agent definition.
+**敗則：** 若無現行者合領，先以 `create-skill` 技（或手 `agents/_template.md`）建之。勿建領不存為行者定之團。
 
-### Step 3: Select Member Agents
+### 第三步：擇成員行者
 
-Choose 2-5 members (including the lead) with clear, non-overlapping responsibilities. For each member, define:
+擇 2-5 成員（含領），職清無重。每員定：
 
-- **id**: Agent name from the agents registry
-- **role**: A short title (e.g., "Quality Reviewer", "Security Auditor", "Architecture Reviewer")
-- **responsibilities**: One sentence describing what this member does that no other member does
+- **id**：行者籍之名
+- **role**：短題（如「Quality Reviewer」、「Security Auditor」、「Architecture Reviewer」）
+- **responsibilities**：一句述此員所為而他員不為者
 
 ```bash
 # Verify each candidate agent exists
 grep "id: agent-name-here" agents/_registry.yml
 ```
 
-Validate non-overlap: no two members should have the same primary responsibility. If responsibilities overlap, either merge the roles or sharpen the boundaries.
+驗無重：無二員有同主責。若重，或合角或銳界。
 
-**Expected:** 2-5 members selected, each with a unique role and clear responsibilities, all confirmed in the agents registry.
+**得：** 2-5 成員，各有獨角與清責，皆確於行者籍。
 
-**On failure:** If a needed agent does not exist, create it first. If responsibilities overlap between two members, rewrite them to clarify boundaries or remove one member.
+**敗則：** 若缺行者，先建之。若二員責重，重書以清界或去一員。
 
-### Step 4: Choose Coordination Pattern
+### 第四步：擇協式
 
-Select the pattern that best fits the team's workflow. The five patterns and their use cases:
+擇最合團流之式。五式與其用案：
 
-| Pattern | When to Use | Example Teams |
+| 式 | 用時 | 例團 |
 |---------|-------------|---------------|
-| **hub-and-spoke** | Lead distributes tasks, collects results, synthesizes. Best for review and audit workflows. | r-package-review, gxp-compliance-validation, ml-data-science-review |
-| **sequential** | Each agent builds on the previous agent's output. Best for pipelines and staged workflows. | fullstack-web-dev, tending |
-| **parallel** | All agents work simultaneously on independent subtasks. Best when subtasks have no dependencies. | devops-platform-engineering |
-| **timeboxed** | Work organized into fixed-length iterations. Best for ongoing project work with a backlog. | scrum-team |
-| **adaptive** | Team self-organizes based on the task. Best for unknown or highly variable tasks. | opaque-team |
+| **hub-and-spoke** | 領分任、聚果、聚之。最宜審、查流。 | r-package-review、gxp-compliance-validation、ml-data-science-review |
+| **sequential** | 每行者建於前者之出。最宜管與階流。 | fullstack-web-dev、tending |
+| **parallel** | 諸行者同時作獨立子任。最宜子任無依者。 | devops-platform-engineering |
+| **timeboxed** | 工組為定長迭代。最宜有積之持續項工。 | scrum-team |
+| **adaptive** | 團依任自組。最宜未知或甚變之任。 | opaque-team |
 
-**Decision guide:**
-- If the lead must see all results before producing output: **hub-and-spoke**
-- If agent B needs agent A's output to start: **sequential**
-- If all agents can work without seeing each other's output: **parallel**
-- If work spans multiple iterations with planning ceremonies: **timeboxed**
-- If you cannot predict the task structure in advance: **adaptive**
+**決引：**
+- 若領須見諸果乃出：**hub-and-spoke**
+- 若 B 需 A 之出乃起：**sequential**
+- 若諸行者可不見彼此出而作：**parallel**
+- 若工跨多迭代含劃儀：**timeboxed**
+- 若不能預知任構：**adaptive**
 
-**Expected:** One coordination pattern selected with a clear rationale for the choice.
+**得：** 一協式擇，擇之由清。
 
-**On failure:** If unsure, default to hub-and-spoke. It is the most common pattern and works for most review and analysis workflows.
+**敗則：** 若疑，默 hub-and-spoke。此為最常式，適多審析流。
 
-### Step 5: Design Task Decomposition
+### 第五步：設任分
 
-Define how a typical incoming request gets split across team members. Structure this as phases:
+定入請如何跨員分。結構為階：
 
-1. **Setup phase**: What the lead does to analyze the request and create tasks
-2. **Execution phase**: What each member works on (in parallel, in sequence, or per-sprint depending on coordination pattern)
-3. **Synthesis phase**: How results are collected and the final deliverable is produced
+1. **設階**：領如何析請而建任
+2. **執階**：每員作何（並行、有序、衝——依協式）
+3. **聚階**：如何聚果生終交
 
-For each member, list 3-5 concrete tasks they would perform on a typical request. These tasks appear in both the "Task Decomposition" prose section and the CONFIG block's `tasks` list.
+為每員列 3-5 於常請所為具體任。此任現於「Task Decomposition」散節與 CONFIG 塊之 `tasks` 列。
 
-**Expected:** A phase-structured decomposition with concrete tasks per member, matching the chosen coordination pattern.
+**得：** 分階之分，每員有具體任，合所擇協式。
 
-**On failure:** If tasks are too vague (e.g., "reviews things"), make them specific (e.g., "reviews code style against tidyverse style guide, checks test coverage, evaluates error message quality").
+**敗則：** 若任過泛（如「reviews things」），具體之（如「reviews code style against tidyverse style guide, checks test coverage, evaluates error message quality」）。
 
-### Step 6: Write the Team File
+### 第六步：書團文件
 
-Copy the template and fill in all sections:
+複樣填諸節：
 
 ```bash
 cp teams/_template.md teams/<team-name>.md
 ```
 
-Fill in the following sections in order:
+按序填諸節：
 
-1. **YAML frontmatter**: `name`, `description`, `lead`, `version` ("1.0.0"), `author`, `created`, `updated`, `tags`, `coordination`, `members[]` (each with id, role, responsibilities)
-2. **Title**: `# Team Name` (human-readable, title case)
-3. **Introduction**: One paragraph summary
-4. **Purpose**: Why this team exists, what specialties it combines
-5. **Team Composition**: Table with Member, Agent, Role, Focus Areas columns
-6. **Coordination Pattern**: Prose description plus ASCII diagram of the flow
-7. **Task Decomposition**: Phased breakdown with concrete tasks per member
-8. **Configuration**: Machine-readable CONFIG block (see Step 7)
-9. **Usage Scenarios**: 2-3 concrete scenarios with example user prompts
-10. **Limitations**: 3-5 known constraints
-11. **See Also**: Links to member agent files and related skills/teams
+1. **YAML 前言**：`name`、`description`、`lead`、`version`（"1.0.0"）、`author`、`created`、`updated`、`tags`、`coordination`、`members[]`（各有 id、role、responsibilities）
+2. **題**：`# Team Name`（人讀、題式）
+3. **介**：一段概
+4. **志**：何以存此團、合何專
+5. **Team Composition**：含 Member、Agent、Role、Focus Areas 列之表
+6. **Coordination Pattern**：散述與流之 ASCII 圖
+7. **Task Decomposition**：分階之分，每員具體任
+8. **Configuration**：機讀 CONFIG 塊（參第七步）
+9. **Usage Scenarios**：2-3 具體景含例用者請
+10. **Limitations**：3-5 既知限
+11. **See Also**：連成員行者文件與相關技／團
 
-**Expected:** A complete team file with all sections filled in, no placeholder text remaining from the template.
+**得：** 全團文件，諸節皆填，樣之占位盡去。
 
-**On failure:** Compare against an existing team file (e.g., `teams/r-package-review.md`) to verify structure. Search for template placeholder strings like "your-team-name" or "another-agent" to find unfilled sections.
+**敗則：** 與現團文件（如 `teams/r-package-review.md`）較驗構。搜樣占位字（如「your-team-name」、「another-agent」）尋未填。
 
-### Step 7: Write the CONFIG Block
+### 第七步：書 CONFIG 塊
 
-The CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers provides machine-readable YAML for tooling. Structure it as follows:
+`<!-- CONFIG:START -->` 與 `<!-- CONFIG:END -->` 間之 CONFIG 塊供機讀 YAML 以便工具。構如下：
 
     <!-- CONFIG:START -->
     ```yaml
@@ -189,15 +189,15 @@ The CONFIG block between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` marke
     ```
     <!-- CONFIG:END -->
 
-The `subagent_type` field maps to Claude Code agent types. For agents defined in `.claude/agents/`, use the agent id as the subagent_type. Use `blocked_by` to express task dependencies (e.g., synthesis is blocked by all review tasks).
+`subagent_type` 映 Claude Code 行者類。`.claude/agents/` 之行者，用其 id 為 subagent_type。用 `blocked_by` 表任依（如聚被諸審任阻）。
 
-**Expected:** CONFIG block is valid YAML, all agents match those in the frontmatter members list, and task dependencies form a valid DAG (no cycles).
+**得：** CONFIG 塊為合法 YAML，諸行者合前言成員列，任依成合法 DAG（無環）。
 
-**On failure:** Validate YAML syntax. Verify that every `assignee` in the tasks list matches an `agent` in the members list. Check that `blocked_by` references only task names defined earlier in the list.
+**敗則：** 驗 YAML 語法。驗任列每 `assignee` 合成員列之 `agent`。察 `blocked_by` 唯引前定之任名。
 
-### Step 8: Add to Registry
+### 第八步：入籍
 
-Edit `teams/_registry.yml` to add the new team:
+編 `teams/_registry.yml` 加新團：
 
 ```yaml
 - id: <team-name>
@@ -208,56 +208,56 @@ Edit `teams/_registry.yml` to add the new team:
   description: <one-line description matching frontmatter>
 ```
 
-Update the `total_teams` count at the top of the registry (currently 8; it becomes 9 after adding one team).
+更籍頂之 `total_teams` 計（當前 8；加一後成 9）。
 
 ```bash
 # Verify the entry was added
 grep "id: <team-name>" teams/_registry.yml
 ```
 
-**Expected:** New entry appears in the registry, `total_teams` count is incremented by one.
+**得：** 新項現於籍，`total_teams` 增一。
 
-**On failure:** If the team name already exists in the registry, choose a different name or update the existing entry. Verify the YAML indentation matches existing entries.
+**敗則：** 若團名已存，擇他名或更現項。驗 YAML 縮進合現項。
 
-### Step 9: Run README Automation
+### 第九步：運 README 自動
 
-Regenerate README files from the updated registry:
+由更籍重生 README：
 
 ```bash
 npm run update-readmes
 ```
 
-This updates the dynamic sections in `teams/README.md` and any other files with `<!-- AUTO:START -->` / `<!-- AUTO:END -->` markers that reference team data.
+此更 `teams/README.md` 及有 `<!-- AUTO:START -->` / `<!-- AUTO:END -->` 標引團數之他文件之動節。
 
-**Expected:** Command exits 0, `teams/README.md` now lists the new team.
+**得：** 命退 0，`teams/README.md` 現列新團。
 
-**On failure:** Run `npm run check-readmes` to see which files are out of sync. If the script fails, verify `package.json` exists in the repository root and `js-yaml` is installed (`npm install`).
+**敗則：** 運 `npm run check-readmes` 見何不同步。若本敗，驗 `package.json` 於庫根且 `js-yaml` 已裝（`npm install`）。
 
-### Step 10: Verify Team Activation
+### 第十步：驗團激
 
-Test that the team can be activated in Claude Code:
+試團可於 Claude Code 激：
 
 ```
 User: Use the <team-name> team to <typical task description>
 ```
 
-Claude reads `teams/<team-name>.md`, extracts the CONFIG block, and orchestrates activation:
-1. Calls `TeamCreate` with the team name and description
-2. Spawns teammates via the `Agent` tool using each member's `subagent_type` from the CONFIG block
-3. Creates tasks via `TaskCreate` with the `blocked_by` dependencies from the CONFIG block
-4. The lead agent coordinates work following the coordination pattern
+Claude 讀 `teams/<team-name>.md`，抽 CONFIG 塊，調激：
+1. 以團名與述呼 `TeamCreate`
+2. 以 `Agent` 工，用每員 CONFIG 之 `subagent_type` 生員
+3. 以 `TaskCreate` 建任含 CONFIG 之 `blocked_by` 依
+4. 領行者依協式協工
 
-Note: Teams are **not** auto-discovered from `.claude/teams/`. Claude reads the definition directly from `teams/` when asked.
+注：團**非**由 `.claude/teams/` 自動發現。Claude 被問時直由 `teams/` 讀定。
 
-**Expected:** Claude reads the team file, creates the team via `TeamCreate`, spawns the correct agents, and follows the coordination pattern.
+**得：** Claude 讀團文件，以 `TeamCreate` 建團，生正行者，循協式。
 
-**On failure:** Verify the team file is at `teams/<team-name>.md` (not in a subdirectory). Check that all member agents exist in `agents/`. Confirm the CONFIG block has valid YAML with `subagent_type` for each member. Confirm the team is listed in `teams/_registry.yml`.
+**敗則：** 驗團文件於 `teams/<team-name>.md`（非子目錄）。察諸成員行者存於 `agents/`。確 CONFIG 塊有合法 YAML 含每員 `subagent_type`。確團列於 `teams/_registry.yml`。
 
-### Step 11: Scaffold Translations
+### 第十一步：搭翻譯之架
 
-> **Required for all teams.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+> **諸團必需。** 此步施於人作者與循此法之 AI 行者。勿略——缺譯積為陳積。
 
-Scaffold translation files for all 4 supported locales immediately after committing the new team:
+提交新團後即為四支持語搭譯文件：
 
 ```bash
 for locale in de zh-CN ja es; do
@@ -265,42 +265,42 @@ for locale in de zh-CN ja es; do
 done
 ```
 
-Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+而譯各文件之散文（代碼塊與 ID 留英）。終重生狀態文件：
 
 ```bash
 npm run translation:status
 ```
 
-**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new team.
+**得：** 四文件建於 `i18n/{de,zh-CN,ja,es}/teams/<team-name>.md`，`source_commit` 皆合當前 HEAD。`npm run validate:translations` 顯新團無陳警。
 
-**On failure:** If scaffold fails, verify the team exists in `teams/_registry.yml`. If status files don't update, run `npm run translation:status` explicitly.
+**敗則：** 若搭敗，驗團存於 `teams/_registry.yml`。若狀態文件不更，明運 `npm run translation:status`。
 
-## Validation
+## 驗
 
-- [ ] Team file exists at `teams/<team-name>.md`
-- [ ] YAML frontmatter parses without errors
-- [ ] All required frontmatter fields present: `name`, `description`, `lead`, `version`, `author`, `coordination`, `members[]`
-- [ ] Each member in frontmatter has `id`, `role`, and `responsibilities`
-- [ ] All sections present: Purpose, Team Composition, Coordination Pattern, Task Decomposition, Configuration, Usage Scenarios, Limitations, See Also
-- [ ] CONFIG block exists between `<!-- CONFIG:START -->` and `<!-- CONFIG:END -->` markers
-- [ ] CONFIG block YAML is valid and parseable
-- [ ] All member agent ids exist in `agents/_registry.yml`
-- [ ] Lead agent appears in the members list
-- [ ] No two members share the same primary responsibility
-- [ ] Team is listed in `teams/_registry.yml` with correct path, lead, members, and coordination
-- [ ] `total_teams` count in registry is incremented
-- [ ] `npm run update-readmes` completes without errors
+- [ ] 團文件存於 `teams/<team-name>.md`
+- [ ] YAML 前言無訛而解
+- [ ] 諸必要前言域存：`name`、`description`、`lead`、`version`、`author`、`coordination`、`members[]`
+- [ ] 前言每員有 `id`、`role`、`responsibilities`
+- [ ] 諸節存：Purpose、Team Composition、Coordination Pattern、Task Decomposition、Configuration、Usage Scenarios、Limitations、See Also
+- [ ] CONFIG 塊存於 `<!-- CONFIG:START -->` 與 `<!-- CONFIG:END -->` 標間
+- [ ] CONFIG 塊 YAML 合法可解
+- [ ] 諸成員行者 id 存於 `agents/_registry.yml`
+- [ ] 領於成員列
+- [ ] 無二員共主責
+- [ ] 團列於 `teams/_registry.yml` 有正路、領、員、協
+- [ ] 籍之 `total_teams` 計已增
+- [ ] `npm run update-readmes` 無訛而畢
 
-## Common Pitfalls
+## 陷
 
-- **Too many members**: Teams with more than 5 members become hard to coordinate. The overhead of distributing tasks and synthesizing results outweighs the benefit of additional perspectives. Split into two teams or reduce to the essential specialties.
-- **Overlapping responsibilities**: If two members both "review code quality," their findings will conflict and the lead wastes time deduplicating. Each member must have a clearly distinct focus area.
-- **Wrong coordination pattern**: Using hub-and-spoke when agents need each other's output (should be sequential), or using sequential when agents can work independently (should be parallel). Review the decision guide in Step 4.
-- **Missing CONFIG block**: The CONFIG block is not optional prose decoration. It is the machine-readable specification Claude uses to orchestrate `TeamCreate`, agent spawning, and task creation. Without it, the team can only be activated through ad-hoc prose interpretation, which is less reliable.
-- **Lead agent not in members list**: The lead must also appear as a member with their own role and responsibilities. A lead who only "coordinates" without doing substantive work wastes a slot. Give the lead a concrete review or synthesis responsibility.
+- **員過多**：逾五員之團難協。分任聚果之耗過於增視之益。宜分二團或減至要專。
+- **責重**：若二員皆「review code quality」，其發衝而領費時去重。每員須有清異之焦。
+- **協式誤**：行者需他者之出當用序而用 hub-and-spoke，或行者可獨立當用並而用序。察第四步決引。
+- **缺 CONFIG**：CONFIG 塊非可選散飾。其為 Claude 調 `TeamCreate`、生行者、建任之機讀規。無之則唯臨時散解可激，可靠性減。
+- **領不於員列**：領須亦為員，有其角與責。唯「協」不實作之領費位。予領具體審或聚責。
 
-## Related Skills
+## 參
 
-- `create-skill` - follows the same meta-pattern for creating SKILL.md files
-- `create-agent` - create agent definitions that serve as team members
-- `commit-changes` - commit the new team file and registry updates
+- `create-skill` — 建 SKILL.md 文件之同元式
+- `create-agent` — 建為團員之行者定
+- `commit-changes` — 提交新團文件與籍更

@@ -27,15 +27,15 @@ metadata:
 
 # Curate Collection
 
-Build, assess, and maintain a library collection through strategic acquisitions, systematic weeding, usage analysis, and responsive reader advisory.
+Build, assess, maintain library collection. Strategic acquisitions, systematic weeding, usage analysis, responsive reader advisory.
 
-## When to Use
+## When Use
 
-- You are building a new collection with a defined scope and budget
-- An existing collection needs assessment for gaps, redundancies, or outdated materials
-- Shelves are overcrowded and systematic weeding is needed
-- Users request materials the collection does not hold
-- You want to establish a formal collection development policy
+- Building new collection with defined scope and budget
+- Existing collection needs assessment for gaps, redundancies, outdated materials
+- Shelves overcrowded. Systematic weeding needed
+- Users request materials collection does not hold
+- Want to set formal collection development policy
 
 ## Inputs
 
@@ -45,11 +45,11 @@ Build, assess, and maintain a library collection through strategic acquisitions,
 - **Optional**: Community or institutional profile (demographics, curriculum, research areas)
 - **Optional**: Existing collection development policy
 
-## Procedure
+## Steps
 
 ### Step 1: Define the Collection Development Policy
 
-Establish the guiding document for all acquisition and weeding decisions.
+Build guiding document for all acquisition and weeding decisions.
 
 ```
 Collection Development Policy Template:
@@ -91,9 +91,9 @@ Collection Development Policy Template:
    - Policy reviewed and updated every 3 years
 ```
 
-**Expected:** A written policy that guides consistent, defensible acquisition and weeding decisions.
+**Got:** Written policy guiding consistent, defensible acquisition and weeding decisions.
 
-**On failure:** If a formal policy seems excessive for a small collection, write a one-page scope statement covering mission, subjects collected, and basic selection criteria. Even a brief statement prevents drift.
+**If fail:** Formal policy seems excessive for small collection? Write one-page scope statement covering mission, subjects collected, basic selection criteria. Even brief statement stops drift.
 
 ### Step 2: Assess the Existing Collection
 
@@ -137,13 +137,13 @@ Mark each cell as: Strong, Adequate, Weak, or Not Collected.
 This visual map reveals gaps and overlaps at a glance.
 ```
 
-**Expected:** A clear picture of the collection's strengths, weaknesses, gaps, and deadweight, supported by data.
+**Got:** Clear picture of collection's strengths, weaknesses, gaps, deadweight. Supported by data.
 
-**On failure:** If circulation data is unavailable (no automated system), use shelf observation: dusty, tightly packed books that haven't moved indicate low use. In-library use can be estimated by counting items left on tables rather than reshelved.
+**If fail:** Circulation data unavailable (no automated system)? Use shelf observation: dusty, tightly packed books that haven't moved show low use. In-library use can be estimated by counting items left on tables rather than reshelved.
 
 ### Step 3: Acquire Materials Strategically
 
-Select and purchase materials that fill gaps and serve user needs.
+Pick and buy materials filling gaps and serving user needs.
 
 ```
 Acquisition Workflow:
@@ -186,13 +186,13 @@ Budget Allocation Rule of Thumb:
 - 5%: reserve for urgent or unexpected needs
 ```
 
-**Expected:** New acquisitions systematically fill identified gaps and respond to user demand, within budget.
+**Got:** New acquisitions systematically fill identified gaps, respond to user demand, within budget.
 
-**On failure:** If budget is severely constrained, prioritize user requests (proven demand) over speculative purchases. Supplement with ILL for low-demand subjects rather than buying materials that may not circulate.
+**If fail:** Budget severely constrained? Prioritize user requests (proven demand) over speculative purchases. Supplement with ILL for low-demand subjects rather than buying materials that may not circulate.
 
 ### Step 4: Weed the Collection (Deaccessioning)
 
-Remove materials that no longer serve the collection's mission.
+Remove materials no longer serving collection's mission.
 
 ```
 CREW Method / MUSTIE Criteria:
@@ -236,13 +236,13 @@ Never discard items with local historical significance
 without institutional review.
 ```
 
-**Expected:** Collection is regularly weeded, with clear documentation of withdrawn items and disposition. The remaining collection is current, relevant, and in good condition.
+**Got:** Collection regularly weeded. Clear documentation of withdrawn items and disposition. Remaining collection is current, relevant, in good condition.
 
-**On failure:** If weeding feels emotionally difficult (it does for many librarians), remember: keeping a misleading medical text is more harmful than removing it. Weeding is an act of care for the user, not disrespect for the book.
+**If fail:** Weeding feels emotionally hard (it does for many librarians)? Remember: keeping misleading medical text more harmful than removing it. Weeding is act of care for user, not disrespect for book.
 
 ### Step 5: Provide Reader Advisory and Reference
 
-Connect users with materials that meet their needs.
+Connect users with materials fitting their needs.
 
 ```
 Reader Advisory Framework:
@@ -274,30 +274,30 @@ Reader Advisory Framework:
    - Display new acquisitions prominently — users notice responsiveness
 ```
 
-**Expected:** Users find what they need, either in the collection or through ILL, and their feedback shapes future acquisitions.
+**Got:** Users find what they need, either in collection or through ILL. Their feedback shapes future acquisitions.
 
-**On failure:** If ILL is not available (no library network), explore open access sources, digital libraries (HathiTrust, Internet Archive, Project Gutenberg), and reciprocal borrowing agreements with nearby libraries.
+**If fail:** ILL not available (no library network)? Explore open access sources, digital libraries (HathiTrust, Internet Archive, Project Gutenberg), reciprocal borrowing agreements with nearby libraries.
 
-## Validation
+## Checks
 
 - [ ] Collection development policy written and approved
-- [ ] Collection assessment completed with quantitative and qualitative data
+- [ ] Collection assessment done with quantitative and qualitative data
 - [ ] Gaps identified and prioritized for acquisition
 - [ ] Budget allocated across subject areas and need categories
-- [ ] Acquisition workflow established with review sources and vendor relationships
+- [ ] Acquisition workflow set with review sources and vendor relationships
 - [ ] Weeding cycle scheduled (annual) with CREW/MUSTIE criteria
 - [ ] User feedback loop in place (requests, ILL data, search logs)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Collecting without a policy**: Without a scope statement, collections grow by accumulation rather than intention. Everything gets added, nothing gets removed, and the collection becomes a warehouse
-- **Fear of weeding**: Keeping everything "just in case" buries useful materials under deadweight. A smaller, curated collection serves users better than a large, undifferentiated one
+- **Collecting without a policy**: No scope statement → collections grow by accumulation, not intention. Everything gets added, nothing removed, collection becomes warehouse
+- **Fear of weeding**: Keeping everything "just in case" buries useful materials under deadweight. Smaller curated collection serves users better than large undifferentiated one
 - **Ignoring usage data**: Buying based on professional judgment alone misses what users actually need. Let circulation and ILL data drive at least 30% of acquisition decisions
-- **No budget for replacement**: New acquisitions get all the budget, and worn-out popular items never get replaced. Reserve 10-15% for replacements
-- **Neglecting format diversity**: Not all users read print. Audiobooks, ebooks, and accessible formats serve users who can't or prefer not to read print
+- **No budget for replacement**: New acquisitions get all budget, worn-out popular items never get replaced. Reserve 10-15% for replacements
+- **Neglecting format diversity**: Not all users read print. Audiobooks, ebooks, accessible formats serve users who can't or prefer not to read print
 
-## Related Skills
+## See Also
 
 - `catalog-collection` — Newly acquired materials need cataloging; withdrawn items need record deletion
-- `preserve-materials` — Condition assessment during weeding identifies items needing preservation
+- `preserve-materials` — Condition assessment during weeding finds items needing preservation
 - `review-research` — Evaluating information quality parallels evaluating materials for selection

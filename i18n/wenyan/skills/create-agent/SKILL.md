@@ -24,80 +24,80 @@ metadata:
   tags: meta, agent, creation, persona, agentskills
 ---
 
-# Create a New Agent
+# 建新行者
 
-Define a Claude Code subagent persona with a focused purpose, curated tools, assigned skills, and complete documentation following the agent template and registry conventions.
+定 Claude Code 之子行者，有專之志、擇之器、配之技、全之文，循行者樣與籍制。
 
-## When to Use
+## 用時
 
-- Adding a new specialist agent to the library for a domain not yet covered
-- Converting a recurring workflow or prompt pattern into a reusable agent persona
-- Creating a domain-specific assistant with curated skills and constrained tools
-- Splitting an overly broad agent into focused, single-responsibility agents
-- Designing a new team member before composing a multi-agent team
+- 為未覆之域增新專行者於籍
+- 轉反復之流或提示模式為可重用行者
+- 建域專之助，有擇技與限器
+- 析過廣行者為專職單責
+- 設團前擬新成員
 
-## Inputs
+## 入
 
-- **Required**: Agent name (lowercase kebab-case, e.g., `data-engineer`)
-- **Required**: One-line description of the agent's primary purpose
-- **Required**: Purpose statement explaining the problem the agent solves
-- **Optional**: Model choice (default: `sonnet`; alternatives: `opus`, `haiku`)
-- **Optional**: Priority level (default: `normal`; alternatives: `high`, `low`)
-- **Optional**: List of skills from `skills/_registry.yml` to assign
-- **Optional**: MCP servers the agent requires (e.g., `r-mcptools`, `hf-mcp-server`)
+- **必要**：行者之名（小寫中劃線，如 `data-engineer`）
+- **必要**：行者主志之一行述
+- **必要**：志明所解之題
+- **可選**：模型（默 `sonnet`；替 `opus`、`haiku`）
+- **可選**：優先（默 `normal`；替 `high`、`low`）
+- **可選**：由 `skills/_registry.yml` 配之技集
+- **可選**：所需 MCP 伺（如 `r-mcptools`、`hf-mcp-server`）
 
-## Procedure
+## 法
 
-### Step 1: Design the Agent Persona
+### 第一步：設行者之人格
 
-Choose a clear, focused identity for the agent:
+擇清晰專之身：
 
-- **Name**: lowercase kebab-case, descriptive of the role. Start with a noun or domain qualifier: `security-analyst`, `r-developer`, `tour-planner`. Avoid generic names like `helper` or `assistant`.
-- **Purpose**: one paragraph explaining the specific problem this agent solves. Ask: "What does this agent do that no existing agent covers?"
-- **Communication style**: consider the domain. Technical agents should be precise and citation-heavy. Creative agents can be more exploratory. Compliance agents should be formal and audit-oriented.
+- **名**：小寫中劃線，明職。始以名詞或域飾：`security-analyst`、`r-developer`、`tour-planner`。避泛名如 `helper` 或 `assistant`。
+- **志**：一段述此行者所解之具體題。問：「此行者為何？何行者未覆？」
+- **語調**：按域。技術者宜精引證多；創意者可探；合規者宜正式具審。
 
-Before proceeding, check for overlap with the existing 53 agents:
+行前察與現 53 行者之重：
 
 ```bash
 grep -i "description:" agents/_registry.yml | grep -i "<your-domain-keywords>"
 ```
 
-**Expected:** No existing agent covers the same niche. If an existing agent partially overlaps, consider extending it instead of creating a new one.
+**得：** 無現行者覆同利基。若部分重，宜擴現者非建新。
 
-**On failure:** If an agent with significant overlap exists, either extend that agent's skills list or narrow your new agent's scope to complement rather than duplicate it.
+**敗則：** 若現行者重甚，或擴其技集，或窄新者範以補而非重。
 
-### Step 2: Select Tools
+### 第二步：擇器
 
-Choose the minimal set of tools the agent needs. Principle of least privilege applies:
+擇行者所需之最小器集。最小權之則施：
 
-| Tool Set | When to Use | Example Agents |
+| 器集 | 用時 | 例行者 |
 |----------|-------------|----------------|
-| `[Read, Grep, Glob]` | Read-only analysis, review, auditing | code-reviewer, security-analyst, auditor |
-| `[Read, Grep, Glob, WebFetch]` | Analysis plus external lookups | senior-researcher |
-| `[Read, Write, Edit, Bash, Grep, Glob]` | Full development — creating/modifying code | r-developer, web-developer, devops-engineer |
-| `[Read, Write, Edit, Bash, Grep, Glob, WebFetch, WebSearch]` | Development plus external research | polymath, shapeshifter |
+| `[Read, Grep, Glob]` | 唯讀析、審、查 | code-reviewer, security-analyst, auditor |
+| `[Read, Grep, Glob, WebFetch]` | 析兼外查 | senior-researcher |
+| `[Read, Write, Edit, Bash, Grep, Glob]` | 全開發——建改碼 | r-developer, web-developer, devops-engineer |
+| `[Read, Write, Edit, Bash, Grep, Glob, WebFetch, WebSearch]` | 開發兼外研 | polymath, shapeshifter |
 
-Do not include `Bash` for agents that only analyze code. Do not include `WebFetch` or `WebSearch` unless the agent genuinely needs to look up external resources.
+唯析碼者勿含 `Bash`。不需外查者勿含 `WebFetch` 或 `WebSearch`。
 
-**Expected:** Tool list contains only tools the agent will actually use in its primary workflows.
+**得：** 器列唯含行者實用之器。
 
-**On failure:** Review the agent's capabilities list — if a capability does not require a tool, remove the tool.
+**敗則：** 察行者能力列——若能力不需器，刪之。
 
-### Step 3: Choose Model
+### 第三步：擇模型
 
-Select the model based on task complexity:
+按任務繁選：
 
-- **`sonnet`** (default): Most agents. Good balance of reasoning and speed. Use for development, review, analysis, and standard workflows.
-- **`opus`**: Complex reasoning, multi-step planning, nuanced judgment. Use for senior-level agents, architectural decisions, or tasks requiring deep domain expertise.
-- **`haiku`**: Simple, fast responses. Use for agents doing straightforward lookups, formatting, or template-filling.
+- **`sonnet`**（默）：多行者。推理速度衡。用於開發、審、析、標準流。
+- **`opus`**：繁推、多步劃、微判。用於高級行者、架構決、需深域專者。
+- **`haiku`**：簡速應。用於直查、格、填樣者。
 
-**Expected:** Model matches the cognitive demands of the agent's primary use cases.
+**得：** 模型合行者主用案之認知需。
 
-**On failure:** When in doubt, use `sonnet`. Upgrade to `opus` only if testing reveals insufficient reasoning quality.
+**敗則：** 疑則用 `sonnet`。唯試示推理不足乃升 `opus`。
 
-### Step 4: Assign Skills
+### 第四步：配技
 
-Browse the skills registry and select skills relevant to the agent's domain:
+覽技籍擇行者域相關者：
 
 ```bash
 # List all skills in a domain
@@ -107,7 +107,7 @@ grep -A3 "domain-name:" skills/_registry.yml
 grep -i "keyword" skills/_registry.yml
 ```
 
-Build the skills list for the frontmatter:
+為前言建技列：
 
 ```yaml
 skills:
@@ -116,30 +116,25 @@ skills:
   - skill-id-three
 ```
 
-**Important**: All agents automatically inherit the default skills (`meditate`, `heal`) from the registry-level `default_skills` field. Do NOT list these in the agent's frontmatter unless they are core to the agent's methodology (e.g., the `mystic` agent lists `meditate` because meditation facilitation is its primary purpose).
+**要：** 諸行者自動繼籍之 `default_skills`（`meditate`、`heal`）。**勿**列於前言，除其為行者法之核心（如 `mystic` 列 `meditate` 乃因冥想之引為其主志）。
 
-**Expected:** Skills list contains 3-15 skill IDs that exist in `skills/_registry.yml`.
+**得：** 技列含 3-15 存於 `skills/_registry.yml` 之技 ID。
 
-**On failure:** Verify each skill ID exists: `grep "id: skill-name" skills/_registry.yml`. Remove any that do not match.
+**敗則：** 驗每技 ID 存：`grep "id: skill-name" skills/_registry.yml`。刪不合者。
 
-### Step 5: Write the Agent File
+### 第五步：書行者文件
 
-Copy the template and fill in the frontmatter:
+複樣填前言：
 
 ```bash
 cp agents/_template.md agents/<agent-name>.md
 ```
 
-Fill in the YAML frontmatter:
+填 YAML 前言：
 
 ```yaml
 ---
 name: agent-name
-locale: wenyan
-source_locale: en
-source_commit: 82c77053
-translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
 description: One to two sentences describing primary capability and domain
 tools: [Read, Write, Edit, Bash, Grep, Glob]
 model: sonnet
@@ -159,17 +154,17 @@ skills:
 ---
 ```
 
-**Expected:** YAML frontmatter parses without errors. All required fields (`name`, `description`, `tools`, `model`, `version`, `author`) are present.
+**得：** YAML 前言無訛而解。諸必要域（`name`、`description`、`tools`、`model`、`version`、`author`）皆存。
 
-**On failure:** Validate YAML syntax. Common issues: missing quotes around version strings, incorrect indentation, unclosed brackets in tool lists.
+**敗則：** 驗 YAML 語法。常病：版本字串缺引號、縮進誤、器列括弧未閉。
 
-### Step 6: Write Purpose and Capabilities
+### 第六步：書志與能
 
-Replace the template placeholder sections:
+替樣之虛位：
 
-**Purpose**: One paragraph explaining the specific problem this agent solves and the value it provides. Be concrete — name the domain, the workflow, and the outcome.
+**Purpose**：一段述此行者所解之題及所供之值。具體——名域、流、果。
 
-**Capabilities**: Bulleted list with bold lead-ins. Group by category if the agent has many capabilities:
+**Capabilities**：粗體領之點列。能多則依類分組：
 
 ```markdown
 ## Capabilities
@@ -179,7 +174,7 @@ Replace the template placeholder sections:
 - **Tool Integration**: How it leverages its tools
 ```
 
-**Available Skills**: List each assigned skill with a brief description. Use bare skill IDs (the slash-command names):
+**Available Skills**：列諸配技並簡述。用赤技 ID（斜線命令名）：
 
 ```markdown
 ## Available Skills
@@ -187,13 +182,13 @@ Replace the template placeholder sections:
 - `skill-id` - Brief description of what the skill does
 ```
 
-**Expected:** Purpose is specific (not "helps with development"), capabilities are concrete and verifiable, skills list matches frontmatter.
+**得：** 志具體（非「助開發」），能力具體可驗，技列合前言。
 
-**On failure:** If the purpose feels vague, answer: "What specific task would a user ask this agent to do?" Use that answer as the purpose.
+**敗則：** 若志感泛，答：「用者會請此行者作何具體事？」以答為志。
 
-### Step 7: Write Usage Scenarios and Examples
+### 第七步：書用案與例
 
-Provide 2-3 usage scenarios showing how to spawn the agent:
+供 2-3 用案，示如何呼行者：
 
 ```markdown
 ### Scenario 1: Primary Use Case
@@ -207,7 +202,7 @@ Description of another common use case.
 > "Spawn the agent-name to [different task]."
 ```
 
-Add 1-2 concrete examples showing a user request and the expected agent behavior:
+增 1-2 具體例，示用者請求與期行：
 
 ```markdown
 ### Example 1: Basic Usage
@@ -215,13 +210,13 @@ Add 1-2 concrete examples showing a user request and the expected agent behavior
 **Agent**: [Expected response pattern and actions taken]
 ```
 
-**Expected:** Scenarios are realistic, examples show actual value, invocation patterns match Claude Code conventions.
+**得：** 案實，例示實值，呼式合 Claude Code 慣。
 
-**On failure:** Test the examples mentally — would the agent actually be able to fulfill the request with its assigned tools and skills?
+**敗則：** 心試諸例——行者能以其器技實現乎？
 
-### Step 8: Write Limitations and See Also
+### 第八步：書限與參
 
-**Limitations**: 3-5 honest constraints. What the agent cannot do, should not be used for, or where it might produce poor results:
+**Limitations**：3-5 誠實之限。行者不能為、不宜用、或果劣之處：
 
 ```markdown
 ## Limitations
@@ -231,7 +226,7 @@ Add 1-2 concrete examples showing a user request and the expected agent behavior
 - Requires MCP server ABC to be running for full functionality
 ```
 
-**See Also**: Cross-reference complementary agents, relevant guides, and related teams:
+**See Also**：交叉引補行者、相關指南、相關團：
 
 ```markdown
 ## See Also
@@ -241,13 +236,13 @@ Add 1-2 concrete examples showing a user request and the expected agent behavior
 - [relevant-team](../teams/team-name.md) - team that includes this agent
 ```
 
-**Expected:** Limitations are honest and specific. See Also references existing files.
+**得：** 限誠實具體。參引現文件。
 
-**On failure:** Check that referenced files exist: `ls agents/complementary-agent.md`.
+**敗則：** 察引文件存：`ls agents/complementary-agent.md`。
 
-### Step 9: Add to Registry
+### 第九步：入籍
 
-Edit `agents/_registry.yml` and add the new agent entry in alphabetical position:
+編 `agents/_registry.yml` 按字母位增新行者：
 
 ```yaml
   - id: agent-name
@@ -261,15 +256,15 @@ Edit `agents/_registry.yml` and add the new agent entry in alphabetical position
       - skill-id-two
 ```
 
-Increment the `total_agents` count at the top of the file.
+增頂之 `total_agents` 計。
 
-**Expected:** Registry entry matches the agent file frontmatter. `total_agents` equals the actual number of agent entries.
+**得：** 籍項合行者文件前言。`total_agents` 等實項數。
 
-**On failure:** Count entries with `grep -c "^  - id:" agents/_registry.yml` and verify it matches `total_agents`.
+**敗則：** 以 `grep -c "^  - id:" agents/_registry.yml` 計之，驗合 `total_agents`。
 
-### Step 10: Verify Discovery
+### 第十步：驗發現
 
-Claude Code discovers agents from the `.claude/agents/` directory. In this repository, that directory is a symlink to `agents/`:
+Claude Code 由 `.claude/agents/` 發現行者。此庫該目錄為 `agents/` 之符號鏈：
 
 ```bash
 # Verify the symlink exists and resolves
@@ -277,23 +272,23 @@ ls -la .claude/agents/
 readlink -f .claude/agents/<agent-name>.md
 ```
 
-If the `.claude/agents/` symlink is intact, no additional action is needed — the new agent file is automatically discoverable.
+若 `.claude/agents/` 鏈完，無他須為——新行者自動可發現。
 
-Run the README automation to update the agents README:
+運 README 自動更以更行者 README：
 
 ```bash
 npm run update-readmes
 ```
 
-**Expected:** `.claude/agents/<agent-name>.md` resolves to the new agent file. `agents/README.md` includes the new agent.
+**得：** `.claude/agents/<agent-name>.md` 解至新行者文件。`agents/README.md` 含新行者。
 
-**On failure:** If the symlink is broken, recreate it: `ln -sf ../agents .claude/agents`. If `npm run update-readmes` fails, check that `scripts/generate-readmes.js` exists and `js-yaml` is installed.
+**敗則：** 若鏈斷，重建：`ln -sf ../agents .claude/agents`。若 `npm run update-readmes` 敗，察 `scripts/generate-readmes.js` 存且 `js-yaml` 已裝。
 
-### Step 11: Scaffold Translations
+### 第十一步：搭翻譯之架
 
-> **Required for all agents.** This step applies to both human authors and AI agents following this procedure. Do not skip — missing translations accumulate into stale backlog.
+> **諸行者必需。** 此步施於人作者與循此法之 AI 行者。勿略——缺翻譯積為陳積。
 
-Scaffold translation files for all 4 supported locales immediately after committing the new agent:
+提交新行者後即時為四支持語搭翻譯文件：
 
 ```bash
 for locale in de zh-CN ja es; do
@@ -301,41 +296,41 @@ for locale in de zh-CN ja es; do
 done
 ```
 
-Then translate the scaffolded prose in each file (code blocks and IDs stay in English). Finally regenerate the status files:
+而後譯各文件之散文（代碼塊與 ID 留英）。終重生狀態文件：
 
 ```bash
 npm run translation:status
 ```
 
-**Expected:** 4 files created at `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md`, all with `source_commit` matching current HEAD. `npm run validate:translations` shows 0 stale warnings for the new agent.
+**得：** 四文件建於 `i18n/{de,zh-CN,ja,es}/agents/<agent-name>.md`，`source_commit` 皆合當前 HEAD。`npm run validate:translations` 顯新行者無陳警。
 
-**On failure:** If scaffold fails, verify the agent exists in `agents/_registry.yml`. If status files don't update, run `npm run translation:status` explicitly — it is not triggered automatically by CI.
+**敗則：** 若搭架敗，驗行者存於 `agents/_registry.yml`。若狀態文件不更，明運 `npm run translation:status`——CI 不自動觸之。
 
-## Validation
+## 驗
 
-- [ ] Agent file exists at `agents/<agent-name>.md`
-- [ ] YAML frontmatter parses without errors
-- [ ] All required fields present: `name`, `description`, `tools`, `model`, `version`, `author`
-- [ ] `name` field matches the filename (without `.md`)
-- [ ] All sections present: Purpose, Capabilities, Available Skills, Usage Scenarios, Examples, Limitations, See Also
-- [ ] Skills in frontmatter exist in `skills/_registry.yml`
-- [ ] Default skills (`meditate`, `heal`) are NOT listed unless core to agent methodology
-- [ ] Tools list follows least-privilege principle
-- [ ] Agent is listed in `agents/_registry.yml` with correct path and matching metadata
-- [ ] `total_agents` count in registry is updated
-- [ ] `.claude/agents/` symlink resolves to the new agent file
-- [ ] No significant overlap with existing agents
+- [ ] 行者文件存於 `agents/<agent-name>.md`
+- [ ] YAML 前言無訛而解
+- [ ] 諸必要域皆存：`name`、`description`、`tools`、`model`、`version`、`author`
+- [ ] `name` 合文件名（無 `.md`）
+- [ ] 諸節皆存：Purpose、Capabilities、Available Skills、Usage Scenarios、Examples、Limitations、See Also
+- [ ] 前言之技存於 `skills/_registry.yml`
+- [ ] 默技（`meditate`、`heal`）未列，除非行者法之核心
+- [ ] 器列循最小權之則
+- [ ] 行者列於 `agents/_registry.yml`，路與元資料相合
+- [ ] 籍之 `total_agents` 計已更
+- [ ] `.claude/agents/` 符號鏈解至新行者文件
+- [ ] 與現行者無顯重
 
-## Common Pitfalls
+## 陷
 
-- **Tool over-provisioning**: Including `Bash`, `Write`, or `WebFetch` when the agent only needs to read and analyze. This violates least-privilege and can lead to unintended side effects. Start with the minimal set and add tools only when a capability requires them.
-- **Missing or wrong skill assignments**: Listing skill IDs that do not exist in the registry, or forgetting to assign skills entirely. Always verify each skill ID with `grep "id: skill-name" skills/_registry.yml` before adding it.
-- **Listing default skills unnecessarily**: Adding `meditate` or `heal` to the agent frontmatter when they are already inherited from the registry. Only list them if they are core to the agent's methodology (e.g., `mystic`, `alchemist`, `gardener`, `shaman`).
-- **Scope overlap with existing agents**: Creating a new agent that duplicates functionality already covered by one of the 53 existing agents. Always search the registry first and consider extending an existing agent's skills instead.
-- **Vague purpose and capabilities**: Writing "helps with development" instead of "scaffolds R packages with complete structure, documentation, and CI/CD configuration." Specificity is what makes an agent useful and discoverable.
+- **器過配**：僅需讀析者卻含 `Bash`、`Write`、`WebFetch`。違最小權，或致意外副作用。始於最小集，唯能需時增器。
+- **缺或誤技配**：列不存於籍之技 ID，或忘配技。增前皆以 `grep "id: skill-name" skills/_registry.yml` 驗各 ID。
+- **無謂列默技**：於前言加 `meditate` 或 `heal` 而其已由籍繼。唯為行者法之核心（如 `mystic`、`alchemist`、`gardener`、`shaman`）乃列。
+- **與現者範圍重**：建新行者而其能已覆於 53 現行者之一。先搜籍，考擴現者之技而非重。
+- **志能泛**：書「助開發」而非「建 R 包，含全構、文、CI/CD 設」。具體乃行者有用可發現之由。
 
-## Related Skills
+## 參
 
-- `create-skill` - the parallel procedure for creating SKILL.md files instead of agent files
-- `create-team` - compose multiple agents into a coordinated team (planned)
-- `commit-changes` - commit the new agent file and registry update
+- `create-skill` — 建 SKILL.md 文件之平行法，非行者文件
+- `create-team` — 組多行者為協團（劃中）
+- `commit-changes` — 提交新行者文件與籍更

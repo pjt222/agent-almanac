@@ -24,74 +24,74 @@ metadata:
   tags: swarm, defense, immune-response, threat-detection
 ---
 
-# Defend Colony
+# 衛殖民地
 
-Implement layered collective defense for distributed systems, teams, or organizations — using alarm signaling, role mobilization, proportional response, and immune memory patterns inspired by social insect colony defense and biological immune systems.
+為分散系統、團隊、或組織施分層集體防禦——以警報信號、角色動員、比例應對、免疫記憶模式，源自社會性昆蟲殖民地防禦與生物免疫系統。
 
-## When to Use
+## 適用時機
 
-- Designing defense-in-depth for distributed systems where no single guardian can cover all threats
-- Building incident response processes that scale with threat severity
-- Protecting a system where individual components cannot defend themselves alone
-- Current defense is either over-reactive (every alert triggers full mobilization) or under-reactive (threats go unnoticed until damage is done)
-- Building organizational resilience where teams must self-organize in response to incidents
-- Complementing `coordinate-swarm` with specific threat-response coordination patterns
+- 為無單一守衛能涵所有威脅之分散系統設計縱深防禦
+- 建隨威脅嚴重度擴之事故應對程序
+- 保個體組件不能獨衛之系統
+- 當前防禦或過反（各警皆全動員）或不足反（威脅至損害前不察）
+- 建組織韌性，團隊須於事故中自組織
+- 以具體威脅應對協調模式補 `coordinate-swarm`
 
-## Inputs
+## 輸入
 
-- **Required**: Description of the colony (system, organization, team) to be defended
-- **Required**: Known threat categories (attacks, failures, competitors, environmental risks)
-- **Optional**: Current defense mechanisms and their failure modes
-- **Optional**: Available defender types and their capabilities
-- **Optional**: Acceptable response latency per threat tier
-- **Optional**: Post-incident recovery requirements
+- **必要**：待衛之殖民地（系統、組織、團隊）之述
+- **必要**：已知威脅類（攻擊、敗、競爭者、環境險）
+- **選擇性**：當前防禦機制及其敗模
+- **選擇性**：可用之衛者類及其能力
+- **選擇性**：各威脅層可接受之應對延遲
+- **選擇性**：事故後復原要求
 
-## Procedure
+## 步驟
 
-### Step 1: Map the Threat Landscape and Defense Perimeter
+### 步驟一：映威脅景觀與防禦周界
 
-Identify what needs defending, from what, and where the perimeter lies.
+辨須衛何、自何、周界於何處。
 
-1. Define the colony's critical assets:
-   - What must be protected at all costs? (core data, production systems, key people)
-   - What can sustain temporary damage? (staging environments, non-critical services)
-   - What is expendable under extreme threat? (caches, replicas, non-essential features)
-2. Classify threats by type and severity:
-   - **Probes**: low-level reconnaissance or testing (port scans, repeated failed logins)
-   - **Incursions**: active boundary violations (unauthorized access, injection attempts)
-   - **Infestations**: persistent threats already inside the perimeter (compromised nodes, insider threats)
-   - **Existential**: threats to the colony's survival (data corruption, catastrophic failure, DDoS)
-3. Map the defense perimeter:
-   - Outer perimeter: first detection opportunity (firewalls, rate limits, monitoring)
-   - Inner perimeter: critical asset boundaries (access controls, encryption, isolation)
-   - Core: last-resort defenses (backups, kill switches, circuit breakers)
+1. 定殖民地之關鍵資產：
+   - 何須不計代價保護？（核心資料、生產系統、關鍵人）
+   - 何可忍暫損？（演段環境、非關鍵服務）
+   - 何於極端威脅下可棄？（快取、副本、非必要功能）
+2. 按型與嚴重度分威脅：
+   - **探**：低層偵察或測試（埠掃、反覆登入敗）
+   - **侵**：主動邊界違反（未授權存取、注入嘗試）
+   - **侵入**：已於周界內之持威脅（被破節點、內部威脅）
+   - **存亡**：威及殖民地生存者（資料毀、災變敗、DDoS）
+3. 映防禦周界：
+   - 外周界：第一偵機會（防火、限率、監控）
+   - 內周界：關鍵資產邊界（存取控、加密、隔離）
+   - 核心：末防（備份、殺開關、斷路器）
 
-**Expected:** A clear map of assets (prioritized), threats (classified by severity), and defense perimeters (layered). This map guides all subsequent defense design.
+**預期：** 資產（已排優先）、威脅（按嚴重度分）、防禦周界（分層）之明圖。此圖引所有後續防禦設計。
 
-**On failure:** If the threat landscape feels overwhelming, start with the top 3 critical assets and the top 3 threat types. Perfect coverage is less important than coverage of what matters most. If perimeter boundaries are unclear, default to "trust nothing, verify everything" (zero-trust posture) and define boundaries as you observe actual traffic patterns.
+**失敗時：** 若威脅景覺壓，始於前 3 關鍵資產與前 3 威脅類。全涵較關鍵之涵次要。若周界邊模糊，預設「不信任，皆驗」（零信任姿態），察實流量模式以定邊。
 
-### Step 2: Design the Alarm Signaling Network
+### 步驟二：設警報信號網
 
-Build the communication system that detects threats and propagates alerts.
+建偵威脅與傳警之通訊系統。
 
-1. Deploy sentinels at each defense layer:
-   - Outer sentinels: lightweight, high-sensitivity detectors (may produce false positives)
-   - Inner sentinels: heavier, high-specificity detectors (fewer false positives, slower)
-   - Core sentinels: critical asset monitors (zero tolerance for missed threats)
-2. Define alarm signals with graduated intensity:
-   - **Yellow**: anomaly detected, increased monitoring, no mobilization
-   - **Orange**: confirmed threat pattern, local defenders mobilize, scouts investigate
-   - **Red**: active breach or severe threat, full defense mobilization, non-essential activity paused
-   - **Black**: existential threat, all resources to defense, sacrifice expendable assets if needed
-3. Implement alarm propagation:
-   - Local: sentinels alert nearby defenders directly
-   - Regional: sentinel clusters aggregate signals and escalate if threshold is met
-   - Colony-wide: regional escalation triggers broadcast alarm
-   - Each propagation step adds confirmation — a single sentinel cannot trigger colony-wide alarm
-4. Build in alarm fatigue prevention:
-   - Auto-suppress repeated identical alarms (dedup with time window)
-   - Require escalation to be confirmed by independent sentinels
-   - Track alarm-to-threat ratio — if false positive rate exceeds 50%, recalibrate sentinels
+1. 於各防禦層部哨兵：
+   - 外哨：輕量、高敏偵器（或產假陽性）
+   - 內哨：重、高特異偵器（少假陽性、較緩）
+   - 核哨：關鍵資產監視器（零容忍漏威脅）
+2. 定含漸級強度之警報信號：
+   - **黃**：偵異常，增監控，不動員
+   - **橙**：確威脅模式，局部衛者動員，偵察者查
+   - **紅**：主動破或嚴重威脅，全防禦動員，非必要活動停
+   - **黑**：存亡威脅，全資源至防禦，若需則棄可棄資產
+3. 施警報傳播：
+   - 局部：哨兵直警附近衛者
+   - 區域：哨兵群聚信號，若達閾則升
+   - 殖民地全：區域升觸廣播警報
+   - 各傳步加確認——單哨不能觸全殖民地警
+4. 建警報疲勞防：
+   - 自抑重複同警（時窗去重）
+   - 升需獨立哨兵確認
+   - 追警-威脅比——若假陽率超 50%，重校準哨兵
 
 ```
 Alarm Propagation:
@@ -109,114 +109,114 @@ Alarm Propagation:
 └──────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A graduated alarm system where threat severity determines response intensity. Multiple independent sentinel confirmations prevent single-point false alarms. Alarm fatigue is managed through deduplication and calibration.
+**預期：** 漸級警報系統，威脅嚴重度定應對強度。多獨立哨兵確認防單點假警。警報疲勞以去重與校準管。
 
-**On failure:** If the alarm system produces too many false positives, raise sentinel thresholds or require more confirmations before escalation. If threats slip through undetected, add sentinels at the penetrated layer or lower detection thresholds. If alarm propagation is too slow, reduce the confirmation requirements — but accept higher false positive rate as the tradeoff.
+**失敗時：** 若警報系統生過多假陽，升哨兵閾或升前需更多確認。若威脅未偵而過，於被透之層加哨兵或降偵閾。若警報傳過緩，減確認需——然受高假陽率為代價。
 
-### Step 3: Mobilize Role-Based Defenders
+### 步驟三：動員按角色之衛者
 
-Assign defense roles and mobilization protocols proportional to threat level.
+按威脅級比例派防禦角色與動員協議。
 
-1. Define defender roles:
-   - **Sentinels**: detection specialists (always active, low resource cost)
-   - **Guards**: first responders (idle until mobilized, fast response)
-   - **Soldiers**: heavy defenders (expensive to mobilize, high capability)
-   - **Healers**: damage repair and recovery specialists (see `repair-damage`)
-   - **Messengers**: coordinate defense across colony regions
-2. Map roles to alert levels:
-   - Yellow: sentinels increase monitoring frequency, guards on standby
-   - Orange: guards mobilize to threat location, soldiers on standby
-   - Red: soldiers mobilize, non-essential workers reassigned to defense
-   - Black: all roles to defense, colony activities suspended
-3. Implement proportional response:
-   - Never deploy soldiers for a probe (wasteful and reveals capabilities)
-   - Never rely only on sentinels against an incursion (insufficient response)
-   - Match the response to the threat tier — escalate if the current tier fails, de-escalate when the threat recedes
-4. Role transition protocol:
-   - Workers can become guards (temporary upskilling for emergency)
-   - Guards can become soldiers (sustained threat requires heavier response)
-   - After threat passes, reverse transitions restore normal operations
+1. 定衛者角色：
+   - **哨兵**：偵專家（恒激活，低資源成本）
+   - **守衛**：先應者（閒直至動員，速應）
+   - **士兵**：重衛者（動員費，高能力）
+   - **癒者**：損傷修與復原專家（見 `repair-damage`）
+   - **信使**：跨殖民地區協調防禦
+2. 映角色於警級：
+   - 黃：哨兵增監頻，守衛待命
+   - 橙：守衛動員至威脅位，士兵待命
+   - 紅：士兵動員，非必要工者重派至防禦
+   - 黑：所有角色至防禦，殖民地活動暫停
+3. 施比例應對：
+   - 永不為探部士兵（耗且顯能力）
+   - 永不唯以哨兵對侵（應不足）
+   - 應對合威脅層——當前層敗則升，威脅退則降
+4. 角色轉換協議：
+   - 工者可為守衛（急中暫升技）
+   - 守衛可為士兵（持威脅需重應對）
+   - 威脅過後，反轉換復正常運行
 
-**Expected:** A defense force that scales with threat severity. Normal operations use minimal defense resources. Under threat, the colony can rapidly mobilize proportional defense without over-reacting or under-reacting.
+**預期：** 隨威脅嚴重度擴之防禦力。正常運行用最小防禦資源。於威脅下，殖民地可疾動員比例之防禦而不過反或不足反。
 
-**On failure:** If mobilization is too slow, pre-position guards closer to known threat vectors. If mobilization is too expensive, reduce the permanent guard force and rely more on worker-to-guard transitions. If role confusion occurs during mobilization, simplify to 3 roles (detect, respond, recover) instead of 5.
+**失敗時：** 若動員過緩，守衛預置近已知威脅向量。若動員過費，減永守衛力而更賴工者-守衛轉換。若動員時角色惑，簡為 3 角色（偵、應、復）代 5。
 
-### Step 4: Execute Immune Memory and Adaptation
+### 步驟四：執免疫記憶與適應
 
-Learn from each threat encounter to improve future defense.
+自各威脅遇學以改未來防禦。
 
-1. After each incident, create a threat signature:
-   - Attack pattern (how the threat was detected)
-   - Attack vector (where it entered)
-   - Effective response (what stopped it)
-   - Failed response (what didn't work)
-2. Store signatures in the colony's immune memory:
-   - Fast-lookup pattern library for sentinels
-   - Updated defender playbooks with known-effective responses
-   - Flagged false-positive patterns to reduce future alarm fatigue
-3. Implement adaptive immunity:
-   - New threat signatures are propagated to all sentinels (colony-wide learning)
-   - Sentinels that detected the threat get priority updates (local learning)
-   - Periodic review culls outdated signatures (threats that no longer apply)
-4. Stress test the immune memory:
-   - Re-simulate past threats periodically to verify defenses still work
-   - Red team exercises introduce novel threats to test adaptation
-   - Measure detection time for known vs. unknown threats
+1. 各事故後造威脅簽：
+   - 攻擊模式（威脅如何偵）
+   - 攻擊向量（自何入）
+   - 有效應對（何止之）
+   - 敗應對（何不行）
+2. 存簽於殖民地之免疫記憶：
+   - 哨兵用之速查模式庫
+   - 以已知有效應對更衛者劇本
+   - 標假陽性模式以減未來警報疲勞
+3. 施適應免疫：
+   - 新威脅簽傳至所有哨兵（殖民地全學）
+   - 偵威脅之哨兵得優先更（局部學）
+   - 週期審剔過時簽（不再適用之威脅）
+4. 壓力測免疫記憶：
+   - 週期重模擬過去威脅以驗防禦仍行
+   - 紅隊演入新威脅以測適應
+   - 量已知對未知威脅之偵時
 
-**Expected:** A defense system that gets stronger with each encounter. Known threats are detected faster and responded to more effectively. Novel threats are handled by the graduated alarm system, and their resolution adds to the immune memory.
+**預期：** 每遇愈強之防禦系統。已知威脅偵更速、應更有效。新威脅為漸級警報系統所處，其解加入免疫記憶。
 
-**On failure:** If immune memory grows too large and slows detection, prioritize signatures by frequency and severity, archiving rare/minor threats. If the defense becomes too specialized against known threats and misses novel ones, maintain a "general patrol" function that doesn't rely on pattern matching — pure anomaly detection as the baseline.
+**失敗時：** 若免疫記憶過大緩偵，按頻與嚴重度先簽，歸檔稀/小威脅。若防禦過專於已知威脅漏新者，保「一般巡」功能不賴模式合——純異常偵為基線。
 
-### Step 5: Coordinate Post-Incident Recovery
+### 步驟五：協調事故後復原
 
-Transition from defense mode back to normal operations with damage repair and resilience improvement.
+自防禦模式轉至正常運行，含損傷修與韌性改。
 
-1. Threat elimination verification:
-   - Confirm the threat is neutralized (not just suppressed)
-   - Scan for secondary threats that may have entered during the primary incident
-   - Verify no compromised agents remain active
-2. Damage assessment:
-   - Catalog what was damaged, degraded, or lost
-   - Prioritize repair by criticality (core assets first)
-   - Estimate recovery time and resources needed
-3. Recovery execution:
-   - Deploy healers to damaged areas (see `repair-damage` for detailed recovery)
-   - Restore services in priority order
-   - Maintain elevated sentinel activity during recovery (vulnerable period)
-4. De-escalation protocol:
-   - Step down alert levels gradually (Red → Orange → Yellow → Normal)
-   - Return reassigned workers to their primary roles
-   - Stand down soldiers and return guards to patrol
-   - Post-incident review within 24 hours while memory is fresh
+1. 威脅消除驗：
+   - 確威脅已中和（非僅抑）
+   - 掃事故中或入之次威脅
+   - 驗無受損代理仍活
+2. 損傷評：
+   - 列何已損、降、或失
+   - 按關鍵度先修（核心資產先）
+   - 估復原時與所需資源
+3. 復原執：
+   - 部癒者於損區（詳復原見 `repair-damage`）
+   - 按優先序復服務
+   - 於復原時保升之哨兵活動（脆期）
+4. 降級協議：
+   - 漸降警級（紅 → 橙 → 黃 → 正常）
+   - 返重派之工者至主角色
+   - 止士兵而返守衛至巡
+   - 24 時內行事故後審，趁記新
 
-**Expected:** A smooth transition from defense to recovery to normal operations. Elevated monitoring during recovery catches secondary threats. The post-incident review feeds learnings into immune memory.
+**預期：** 自防禦至復原至正常之平順轉換。復原時升監捕次威脅。事故後審餵學於免疫記憶。
 
-**On failure:** If recovery is too slow, pre-build recovery playbooks for the most likely damage scenarios. If secondary threats emerge during recovery, the de-escalation was too aggressive — maintain higher alert levels for longer. If post-incident review is skipped (common under time pressure), schedule it as a non-negotiable calendar event.
+**失敗時：** 若復原過緩，為最可能損境預建復原劇本。若復原時次威脅生，降級過急——保更高警級更久。若事故後審被跳（時壓下常然），排之為不可議之曆事件。
 
-## Validation
+## 驗證
 
-- [ ] Critical assets are identified and prioritized
-- [ ] Threats are classified by type and severity
-- [ ] Defense perimeter has multiple layers with sentinels at each
-- [ ] Alarm signaling has graduated levels with multi-sentinel confirmation
-- [ ] Defender roles are defined with mobilization mapped to alert levels
-- [ ] Proportional response prevents over- and under-reaction
-- [ ] Immune memory captures and applies lessons from each incident
-- [ ] Post-incident recovery protocol restores normal operations safely
+- [ ] 關鍵資產已辨並排優先
+- [ ] 威脅已按型與嚴重度分
+- [ ] 防禦周界含多層，各層有哨兵
+- [ ] 警報信號含漸級，含多哨兵確認
+- [ ] 衛者角色已定，動員映至警級
+- [ ] 比例應對防過反與不足反
+- [ ] 免疫記憶捕並施各事故之教訓
+- [ ] 事故後復原協議安全復正常運行
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Maginot Line defense**: Over-investing in a single defense layer while leaving others unprotected. Defense must be layered — any single layer can be breached
-- **Alert fatigue**: Too many alarms with too few real threats degrades defender attention. Calibrate sentinels ruthlessly; a missed false positive is cheaper than a missed real threat
-- **Symmetric response**: Responding to every threat with the same intensity wastes resources and reveals your full capabilities. Match response to threat — escalate only when needed
-- **No immune memory**: Defending against the same threat type repeatedly without learning is expensive and fragile. Every incident must update the colony's defense knowledge
-- **Permanent war footing**: Sustained high-alert operations exhaust defenders and degrade normal colony function. De-escalate deliberately when the threat passes
+- **馬其諾防線**：過投於單防禦層而他未衛。防禦須分層——任單層皆可被破
+- **警疲勞**：過多警含過少實威脅降衛者注意。狠校哨兵；漏假陽較漏實威脅便宜
+- **對稱應對**：以同強度應每威脅耗資源並顯全能力。應對合威脅——唯需時升
+- **無免疫記憶**：反覆衛同威脅型而不學費且脆。各事故皆當更殖民地防禦知識
+- **永久戰態**：持高警運行耗衛者降殖民地正常功能。威脅過則有意降級
 
-## Related Skills
+## 相關技能
 
-- `coordinate-swarm` — foundational coordination patterns that support alarm signaling and mobilization
-- `build-consensus` — rapid consensus for collective defense decisions under time pressure
-- `scale-colony` — defense systems must scale with colony growth
-- `repair-damage` — morphic skill for regenerative recovery after defense incidents
-- `configure-alerting-rules` — practical alerting configuration that implements alarm signaling patterns
-- `conduct-post-mortem` — structured post-incident analysis for feeding immune memory
+- `coordinate-swarm` —— 支警報信號與動員之基礎協調模式
+- `build-consensus` —— 時壓下集體防禦決定之速共識
+- `scale-colony` —— 防禦系統須隨殖民地長擴
+- `repair-damage` —— 防禦事故後再生復原之變形技能
+- `configure-alerting-rules` —— 施警報信號模式之實用警報配置
+- `conduct-post-mortem` —— 餵免疫記憶之結構化事故後分析
