@@ -25,35 +25,34 @@ metadata:
 
 # Deploy ML Model Serving
 
-
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-Deploy machine learning models to production with scalable serving infrastructure, monitoring, and A/B testing.
+ML → prod. Scalable serving, monitoring, A/B.
 
-## When to Use
+## Use When
 
-- Deploying trained models to production for real-time inference
-- Setting up REST or gRPC APIs for model predictions
-- Implementing autoscaling for variable load patterns
-- Running A/B tests between model versions
-- Migrating from batch to real-time inference
-- Building low-latency prediction services
-- Managing multiple model versions in production
+- Trained models → prod real-time inference
+- REST/gRPC APIs → predictions
+- Autoscale → variable load
+- A/B tests → model vers
+- Batch → real-time migrate
+- Low-latency prediction svcs
+- Multi-ver mgmt prod
 
-## Inputs
+## In
 
-- **Required**: Registered model in MLflow Model Registry or trained model artifact
-- **Required**: Kubernetes cluster or container orchestration platform
-- **Required**: Serving framework choice (MLflow, BentoML, Seldon Core, TorchServe)
-- **Optional**: GPU resources for deep learning models
-- **Optional**: Monitoring infrastructure (Prometheus, Grafana)
-- **Optional**: Load balancer and ingress controller
+- **Required**: Registered model (MLflow Model Registry) or trained artifact
+- **Required**: K8s or container orchestration
+- **Required**: Serving framework (MLflow, BentoML, Seldon Core, TorchServe)
+- **Optional**: GPU → deep learning
+- **Optional**: Monitoring (Prometheus, Grafana)
+- **Optional**: LB + ingress
 
-## Procedure
+## Do
 
-### Step 1: Deploy with MLflow Models Serving
+### Step 1: MLflow Models Serving
 
-Use MLflow's built-in serving for quick deployment of scikit-learn, PyTorch, and TensorFlow models.
+Built-in → quick sklearn/PyTorch/TF.
 
 ```bash
 # Serve model locally for testing
@@ -72,7 +71,7 @@ curl -X POST http://localhost:5001/invocations \
   }'
 ```
 
-Docker deployment:
+Docker deploy:
 
 ```dockerfile
 # Dockerfile.mlflow-serving
@@ -86,7 +85,7 @@ ENV MLFLOW_TRACKING_URI=http://mlflow-server:5000
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Docker Compose for local testing:
+Docker Compose:
 
 ```yaml
 # docker-compose.mlflow-serving.yml
@@ -100,7 +99,7 @@ services:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Test the deployment:
+Test:
 
 ```python
 # test_mlflow_serving.py
@@ -114,13 +113,13 @@ def test_prediction():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model server starts successfully, responds to HTTP POST requests, returns predictions in JSON format, Docker container runs without errors.
+→ Server starts, HTTP POST OK, JSON predictions, Docker runs clean.
 
-**On failure:** Check model URI is valid (`mlflow models list`), verify MLflow tracking server accessibility, ensure all model dependencies installed in container, check port availability (`netstat -tulpn | grep 8080`), verify model flavor compatibility, inspect container logs (`docker logs <container-id>`).
+If err: Model URI valid (`mlflow models list`), tracking server reachable, deps in container, port free (`netstat -tulpn | grep 8080`), flavor compat, `docker logs <container-id>`.
 
-### Step 2: Deploy with BentoML for Production Scale
+### Step 2: BentoML → prod scale
 
-Use BentoML for advanced serving with better performance and features.
+Advanced serving, better perf.
 
 ```python
 # bentoml_service.py
@@ -134,7 +133,7 @@ import mlflow
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Build and containerize:
+Build + containerize:
 
 ```bash
 # Build Bento
@@ -148,7 +147,7 @@ bentoml containerize customer_churn_classifier:latest \
 docker run -p 3000:3000 customer-churn:v1.0
 ```
 
-BentoML configuration:
+BentoML config:
 
 ```yaml
 # bentofile.yaml
@@ -168,7 +167,7 @@ docker:
   cuda_version: null  # Set to "11.6" for GPU support
 ```
 
-Kubernetes deployment:
+K8s deploy:
 
 ```yaml
 # k8s/deployment.yaml
@@ -182,7 +181,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy to Kubernetes:
+Deploy → K8s:
 
 ```bash
 # Apply Kubernetes manifests
@@ -200,13 +199,13 @@ curl -X POST http://$EXTERNAL_IP/predict \
   -d '{"instances": [{"tenure": 12, "monthly_charges": 70.35}]}'
 ```
 
-**Expected:** BentoML service builds successfully, container runs and serves predictions, Kubernetes deployment creates 3 replicas, load balancer exposes external endpoint, health checks pass.
+→ Bento builds, container serves, K8s 3 replicas, LB external EP, health OK.
 
-**On failure:** Verify BentoML installation (`bentoml --version`), check model exists in BentoML store (`bentoml models list`), ensure Docker daemon running, verify Kubernetes cluster access (`kubectl cluster-info`), check resource limits not exceeded, inspect pod logs (`kubectl logs <pod-name>`), verify service selector matches pod labels.
+If err: `bentoml --version`, model in store (`bentoml models list`), Docker running, K8s access (`kubectl cluster-info`), resource limits, pod logs (`kubectl logs <pod-name>`), svc selector matches labels.
 
-### Step 3: Implement Seldon Core for Advanced Features
+### Step 3: Seldon Core → advanced
 
-Use Seldon Core for multi-model serving, A/B testing, and explainability.
+Multi-model serving, A/B, explainability.
 
 ```python
 # seldon_wrapper.py
@@ -220,7 +219,7 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Seldon deployment configuration:
+Seldon deploy config:
 
 ```yaml
 # seldon-deployment.yaml
@@ -234,7 +233,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-A/B testing configuration:
+A/B test:
 
 ```yaml
 # seldon-ab-test.yaml
@@ -248,7 +247,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy to Kubernetes:
+Deploy:
 
 ```bash
 # Install Seldon Core operator
@@ -262,13 +261,13 @@ helm install seldon-core seldon-core-operator \
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Seldon Core operator installed successfully, model deployment creates pods, REST endpoint responds to predictions, A/B test splits traffic correctly, Seldon Analytics records metrics.
+→ Seldon operator OK, pods created, REST EP responds, A/B splits traffic, analytics records.
 
-**On failure:** Verify Seldon Core operator running (`kubectl get pods -n seldon-system`), check SeldonDeployment status (`kubectl describe seldondeployment`), ensure image registry accessible from cluster, verify model URI resolution, check RBAC permissions for Seldon operator, inspect model container logs.
+If err: Operator (`kubectl get pods -n seldon-system`), SeldonDeployment status (`kubectl describe seldondeployment`), image registry access, model URI resolution, RBAC, model container logs.
 
-### Step 4: Implement Monitoring and Observability
+### Step 4: Monitoring + observability
 
-Add comprehensive monitoring for model serving infrastructure.
+Comprehensive metrics.
 
 ```python
 # monitoring.py
@@ -282,7 +281,7 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Prometheus configuration:
+Prometheus config:
 
 ```yaml
 # prometheus-config.yaml
@@ -296,7 +295,7 @@ scrape_configs:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Grafana dashboard JSON:
+Grafana JSON:
 
 ```json
 {
@@ -310,13 +309,13 @@ Grafana dashboard JSON:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prometheus scrapes metrics successfully, Grafana dashboards display prediction throughput, latency percentiles, error rates, and active requests in real-time.
+→ Prometheus scrapes OK, Grafana shows throughput + latency + err rates + active reqs real-time.
 
-**On failure:** Verify Prometheus scrape targets are UP (`http://prometheus:9090/targets`), check metrics endpoint accessibility (`curl http://model-pod:8000/metrics`), ensure Kubernetes service discovery configured, verify Grafana data source connection, check firewall rules for metrics port.
+If err: Scrape targets UP (`http://prometheus:9090/targets`), metrics EP (`curl http://model-pod:8000/metrics`), K8s svc discovery, datasource, firewall port.
 
-### Step 5: Implement Autoscaling
+### Step 5: Autoscaling
 
-Configure horizontal pod autoscaling based on request load.
+HPA by req load.
 
 ```yaml
 # hpa.yaml
@@ -330,7 +329,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Apply autoscaling:
+Apply:
 
 ```bash
 # Enable metrics server (if not already installed)
@@ -350,13 +349,13 @@ kubectl run -it --rm load-generator --image=busybox --restart=Never -- /bin/sh -
 kubectl get hpa -n seldon --watch
 ```
 
-**Expected:** HPA monitors CPU/memory/custom metrics, scales replicas up under load, scales down after stabilization period, min/max replica limits respected.
+→ HPA monitors CPU/mem/custom, scales up on load, down after stabilize, min/max respected.
 
-**On failure:** Verify metrics-server running (`kubectl get deployment metrics-server -n kube-system`), check pod resource requests defined (HPA requires requests), ensure custom metrics available if used, verify RBAC permissions for HPA controller, check stabilization windows not too restrictive.
+If err: metrics-server (`kubectl get deployment metrics-server -n kube-system`), pod resource reqs defined, custom metrics available, RBAC, stabilize windows.
 
-### Step 6: Implement Canary Deployment Strategy
+### Step 6: Canary deploy
 
-Gradually roll out new model versions with traffic shifting.
+Traffic shift.
 
 ```yaml
 # canary-deployment.yaml
@@ -370,7 +369,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Gradual rollout script:
+Gradual rollout:
 
 ```python
 # canary_rollout.py
@@ -384,42 +383,42 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Canary deployment starts with 0% traffic, gradual traffic shift occurs automatically, health checks pass at each stage, rollback triggered if metrics degrade, complete rollout after all stages pass.
+→ Canary 0%, gradual shift, health OK each stage, rollback if degrade, full rollout after all pass.
 
-**On failure:** Verify Seldon deployment has multiple predictors, check traffic percentages sum to 100, ensure canary image exists and is pullable, verify Prometheus metrics available for health checks, check rollback logic executes correctly, inspect pod logs for both versions.
+If err: Multi predictors, traffic sums 100%, canary image pullable, Prometheus metrics for health, rollback logic, both ver logs.
 
-## Validation
+## Check
 
-- [ ] Model server responds to prediction requests
-- [ ] REST/gRPC endpoints functional and documented
-- [ ] Docker containers build and run successfully
-- [ ] Kubernetes deployment creates expected replicas
-- [ ] Load balancer exposes external endpoint
-- [ ] Health checks (liveness/readiness) pass
-- [ ] Prometheus metrics exported and scraped
-- [ ] Grafana dashboards display real-time metrics
-- [ ] Autoscaling triggers under load
-- [ ] A/B test splits traffic correctly
-- [ ] Canary deployment rolls out gradually
-- [ ] Rollback works when canary fails
+- [ ] Server responds → prediction req
+- [ ] REST/gRPC EPs OK + docs
+- [ ] Docker containers build + run
+- [ ] K8s creates expected replicas
+- [ ] LB → external EP
+- [ ] Liveness/readiness pass
+- [ ] Prometheus scraped
+- [ ] Grafana real-time
+- [ ] Autoscale on load
+- [ ] A/B splits correctly
+- [ ] Canary gradual rollout
+- [ ] Rollback works
 
-## Common Pitfalls
+## Traps
 
-- **Cold start latency**: First request slow due to model loading - use readiness probes with adequate delay, implement model caching
-- **Memory leaks**: Long-running servers accumulate memory - monitor memory usage, implement periodic restarts, profile code
-- **Dependency conflicts**: Model dependencies incompatible with serving framework - use exact pinned versions, test in Docker before deployment
-- **Resource limits too low**: Pods OOMKilled or CPU throttled - profile resource usage, set appropriate limits based on load testing
-- **Missing health checks**: Kubernetes routes traffic to unhealthy pods - implement proper liveness/readiness probes
-- **No rollback strategy**: Bad deployment without easy rollback - use canary deployments, keep previous version available
-- **Ignoring latency**: Focusing only on accuracy, not inference speed - benchmark latency, optimize model/code, use batching
-- **Single replica**: No high availability, downtime during deployments - use min 2 replicas, configure anti-affinity
-- **No monitoring**: Issues not detected until customers complain - implement comprehensive metrics from day one
-- **GPU not utilized**: GPU available but not used - set CUDA visible devices, verify GPU allocation in Kubernetes
+- **Cold start**: First req slow → readiness probe delay, cache model
+- **Mem leaks**: Accumulate → monitor, periodic restart, profile
+- **Dep conflicts**: → exact pinned vers, test Docker pre-deploy
+- **Resource limits low**: OOM/throttle → profile, set by load test
+- **No health checks**: K8s routes to unhealthy → liveness/readiness probes
+- **No rollback**: Bad deploy → canary, keep prev ver
+- **Ignore latency**: Only accuracy → bench, optimize, batch
+- **Single replica**: No HA → min 2, anti-affinity
+- **No monitoring**: Until complaints → metrics day 1
+- **GPU unused**: → CUDA visible devices, K8s alloc
 
-## Related Skills
+## →
 
-- `register-ml-model` - Register models before deploying them
-- `run-ab-test-models` - Implement A/B testing between model versions
-- `deploy-to-kubernetes` - General Kubernetes deployment patterns
-- `monitor-ml-model-performance` - Monitor model drift and degradation
-- `orchestrate-ml-pipeline` - Automate model retraining and deployment
+- `register-ml-model` — register before deploy
+- `run-ab-test-models` — A/B ver testing
+- `deploy-to-kubernetes` — K8s patterns
+- `monitor-ml-model-performance` — drift + degrade
+- `orchestrate-ml-pipeline` — auto retrain + deploy

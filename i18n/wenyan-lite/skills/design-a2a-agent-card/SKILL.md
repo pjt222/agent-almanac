@@ -26,31 +26,31 @@ metadata:
 
 # Design A2A Agent Card
 
-Create a standards-compliant A2A Agent Card that advertises an agent's identity, skills, authentication requirements, and capabilities for discovery by other agents.
+建合標之 A2A Agent Card，以告代理之身分、技能、認證需求與能力，供他代理發現。
 
-## When to Use
+## 適用時機
 
-- Building an agent that must be discoverable by other A2A-compliant agents
-- Exposing agent capabilities for multi-agent orchestration
-- Migrating an existing agent to the A2A (Agent-to-Agent) protocol
-- Defining the public contract for an agent before implementation
-- Integrating with agent registries or directories that consume Agent Cards
+- 建代理，須為他 A2A 相容代理所發現
+- 為多代理編排暴露代理能力
+- 將既有代理遷至 A2A（Agent-to-Agent）協定
+- 實作前為代理定公開契約
+- 整合代理註冊表或消費 Agent Card 之目錄
 
-## Inputs
+## 輸入
 
-- **Required**: Agent name and description
-- **Required**: List of skills the agent can perform (name, description, input/output schemas)
-- **Required**: Base URL where the agent will be hosted
-- **Optional**: Authentication method (`none`, `oauth2`, `oidc`, `api-key`)
-- **Optional**: Supported content types beyond `text/plain` (e.g., `image/png`, `application/json`)
-- **Optional**: Capability flags (streaming, push notifications, state transition history)
-- **Optional**: Provider organization name and URL
+- **必需**：代理之名與述
+- **必需**：代理可行之技能清單（名、述、輸入/輸出 schema）
+- **必需**：代理託管之基礎 URL
+- **可選**：認證方法（`none`、`oauth2`、`oidc`、`api-key`）
+- **可選**：超 `text/plain` 之受支援內容類型（如 `image/png`、`application/json`）
+- **可選**：能力旗標（串流、推播通知、狀態轉移歷史）
+- **可選**：提供者組織名與 URL
 
-## Procedure
+## 步驟
 
-### Step 1: Define Agent Identity and Description
+### 步驟一：定代理身分與述
 
-1.1. Choose the agent identity fields:
+1.1. 擇代理身分欄位：
 
 ```json
 {
@@ -65,20 +65,20 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-1.2. Write a clear, actionable description that answers:
-   - What domains does this agent cover?
-   - What kinds of tasks can it handle?
-   - What are its limitations?
+1.2. 書清晰、可執行之述，答：
+   - 此代理涵何等領域？
+   - 可處理何等任務？
+   - 其限何？
 
-1.3. Set the canonical URL where the Agent Card will be served at `/.well-known/agent.json`.
+1.3. 設代理卡將供應於 `/.well-known/agent.json` 之標準 URL。
 
-**Expected:** A complete identity block with name, description, URL, provider, and version.
+**預期：** 完整之身分區塊，含名、述、URL、提供者、版本。
 
-**On failure:** If the agent serves multiple domains, consider whether it should be one agent with many skills or multiple agents with focused scopes. A2A favors focused agents with clear boundaries.
+**失敗時：** 若代理服多領域，慮其宜為一代理具多技能，抑或多代理具聚焦範圍。A2A 偏好聚焦代理具明界。
 
-### Step 2: Enumerate Skills with Input/Output Schemas
+### 步驟二：列技能之輸入/輸出 schema
 
-2.1. Define each skill the agent can perform:
+2.1. 定代理可行之每一技能：
 
 ```json
 {
@@ -111,26 +111,26 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-2.2. For each skill, provide:
-   - **id**: Unique identifier (kebab-case)
-   - **name**: Human-readable display name
-   - **description**: What the skill does, in one to two sentences
-   - **tags**: Searchable keywords for discovery
-   - **examples**: Natural language task examples that trigger this skill
-   - **inputModes**: MIME types the skill accepts
-   - **outputModes**: MIME types the skill can produce
+2.2. 為每技能提供：
+   - **id**：唯一標識（kebab-case）
+   - **name**：人類可讀之顯示名
+   - **description**：一至二句述技能所行
+   - **tags**：供發現之可搜尋關鍵字
+   - **examples**：觸發此技能之自然語言任務例
+   - **inputModes**：技能接受之 MIME 類型
+   - **outputModes**：技能可生之 MIME 類型
 
-2.3. Ensure skill boundaries are clear and non-overlapping. Each task should map to exactly one skill.
+2.3. 確保技能邊界明確且不重疊。每任務應精確對映至一技能。
 
-**Expected:** A skills array where each entry has id, name, description, tags, examples, and I/O modes.
+**預期：** 技能陣列，每條目具 id、name、description、tags、examples、I/O 模式。
 
-**On failure:** If skills overlap significantly, merge them into a single broader skill with more examples. If a skill is too broad, split it into focused sub-skills.
+**失敗時：** 若技能重疊顯著，合之為單一較廣技能具更多例。若技能過廣，分之為聚焦之子技能。
 
-### Step 3: Configure Authentication
+### 步驟三：配認證
 
-3.1. Define the authentication scheme based on deployment context:
+3.1. 依部署情境定認證方案：
 
-**No authentication (local/trusted network):**
+**無認證（本地/可信網路）：**
 
 ```json
 {
@@ -140,7 +140,7 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-**OAuth 2.0 (recommended for production):**
+**OAuth 2.0（生產建議）：**
 
 ```json
 {
@@ -160,7 +160,7 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-**API Key (simple shared-secret):**
+**API Key（簡易共享密鑰）：**
 
 ```json
 {
@@ -175,20 +175,20 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-3.2. Choose the minimum viable authentication for the deployment environment:
-   - Local development: `none`
-   - Internal services: `apiKey`
-   - Public-facing agents: `oauth2` or `oidc`
+3.2. 為部署環境擇最小可行之認證：
+   - 本地開發：`none`
+   - 內部服務：`apiKey`
+   - 面向公開之代理：`oauth2` 或 `oidc`
 
-3.3. Document the token/key provisioning process in the Agent Card's provider section or external documentation.
+3.3. 於 Agent Card 之 provider 區或外部文檔載令牌/金鑰供應過程。
 
-**Expected:** An authentication block matching the deployment security requirements.
+**預期：** 認證區塊合部署安全需求。
 
-**On failure:** If OAuth 2.0 infrastructure is not available, start with API key authentication and plan migration. Never deploy a public agent with `none` authentication.
+**失敗時：** 若 OAuth 2.0 基礎架構不可用，始以 API key 認證並計劃遷移。勿以 `none` 認證部署公開代理。
 
-### Step 4: Specify Capabilities
+### 步驟四：載明能力
 
-4.1. Declare what protocol features the agent supports:
+4.1. 宣告代理支援何等協定功能：
 
 ```json
 {
@@ -200,21 +200,21 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-4.2. Set each capability flag based on implementation readiness:
+4.2. 依實作就緒度設每能力旗標：
 
-   - **streaming**: `true` if the agent supports SSE streaming via `tasks/sendSubscribe`. Enables real-time progress updates for long-running tasks.
-   - **pushNotifications**: `true` if the agent can send webhook callbacks when task state changes. Requires the agent to store and call back webhook URLs.
-   - **stateTransitionHistory**: `true` if the agent maintains a full history of task state transitions (submitted, working, completed, etc.). Useful for audit trails.
+   - **streaming**：若代理透過 `tasks/sendSubscribe` 支援 SSE 串流則 `true`。為長任務啟用即時進度更新。
+   - **pushNotifications**：若代理可於任務狀態變時發 webhook 回調則 `true`。需代理存並回調 webhook URL。
+   - **stateTransitionHistory**：若代理維持任務狀態轉移之完整歷史（submitted、working、completed 等）則 `true`。有益於稽核軌跡。
 
-4.3. Only set capabilities to `true` if the implementation fully supports them. Advertising unsupported capabilities breaks interoperability.
+4.3. 僅於實作全然支援時設能力為 `true`。廣告不支援之能力破壞互通。
 
-**Expected:** A capabilities object with boolean flags matching actual implementation.
+**預期：** 能力物件具布林旗標合實際實作。
 
-**On failure:** If unsure whether a capability will be implemented, set it to `false`. Capabilities can be added in future versions. Removing a capability is a breaking change.
+**失敗時：** 若不確能力將實作，設之為 `false`。能力可於未來版本加。移除能力為破壞性變。
 
-### Step 5: Validate and Publish Agent Card
+### 步驟五：驗證並發布 Agent Card
 
-5.1. Assemble the complete Agent Card:
+5.1. 組裝完整 Agent Card：
 
 ```json
 {
@@ -241,52 +241,52 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-5.2. Validate the Agent Card:
-   - Parse as JSON and verify no syntax errors
-   - Verify all required fields are present (name, description, url, skills)
-   - Verify each skill has id, name, description, and at least one input/output mode
-   - Verify the URL is reachable and serves the card at `/.well-known/agent.json`
+5.2. 驗 Agent Card：
+   - 以 JSON 解析並驗無語法錯
+   - 驗所有必需欄位存（name、description、url、skills）
+   - 驗每技能有 id、name、description 及至少一輸入/輸出模式
+   - 驗 URL 可達且於 `/.well-known/agent.json` 供應該卡
 
-5.3. Publish the Agent Card:
-   - Serve at `https://<agent-url>/.well-known/agent.json`
-   - Set `Content-Type: application/json`
-   - Enable CORS headers if cross-origin discovery is needed
-   - Register with any relevant agent directories or registries
+5.3. 發布 Agent Card：
+   - 於 `https://<agent-url>/.well-known/agent.json` 供應
+   - 設 `Content-Type: application/json`
+   - 若需跨源發現則啟 CORS 標頭
+   - 向任何相關代理目錄或註冊表註冊
 
-5.4. Test discovery by fetching the card:
+5.4. 以取卡試發現：
 
 ```bash
 curl -s https://agent.example.com/.well-known/agent.json | python3 -m json.tool
 ```
 
-**Expected:** A valid JSON Agent Card served at the well-known URL, parseable by any A2A client.
+**預期：** 於 well-known URL 供應之有效 JSON Agent Card，任何 A2A 客戶端皆可解析。
 
-**On failure:** If JSON validation fails, use a JSON linter to identify syntax errors. If the URL is not reachable, check DNS, SSL certificates, and web server configuration. If CORS is needed, add `Access-Control-Allow-Origin` headers.
+**失敗時：** 若 JSON 驗證失敗，用 JSON 檢查器識語法錯。若 URL 不可達，查 DNS、SSL 憑證與 web 伺服器配置。若需 CORS，加 `Access-Control-Allow-Origin` 標頭。
 
-## Validation
+## 驗證
 
-- [ ] Agent Card is valid JSON with no syntax errors
-- [ ] All required fields are present: name, description, url, skills
-- [ ] Each skill has id, name, description, inputModes, and outputModes
-- [ ] Authentication scheme matches deployment security requirements
-- [ ] Capability flags accurately reflect implementation status
-- [ ] Agent Card is served at `/.well-known/agent.json` with correct Content-Type
-- [ ] A2A clients can fetch and parse the card successfully
-- [ ] Examples in skills are realistic and trigger the correct skill
+- [ ] Agent Card 為有效 JSON 且無語法錯
+- [ ] 所有必需欄位存：name、description、url、skills
+- [ ] 每技能有 id、name、description、inputModes、outputModes
+- [ ] 認證方案合部署安全需求
+- [ ] 能力旗標準確反映實作狀態
+- [ ] Agent Card 於 `/.well-known/agent.json` 以正確 Content-Type 供應
+- [ ] A2A 客戶端可成功取並解析該卡
+- [ ] 技能中之例真實且觸發正確之技能
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Overpromising capabilities**: Setting `streaming: true` or `pushNotifications: true` without implementation causes client failures when those features are used. Be conservative.
-- **Vague skill descriptions**: Descriptions like "does data stuff" prevent accurate skill matching. Be specific about inputs, outputs, and domains.
-- **Missing CORS headers**: Browser-based A2A clients cannot fetch the Agent Card without proper CORS configuration.
-- **Skill overlap**: If two skills could handle the same task, client agents cannot determine which to invoke. Ensure clear boundaries.
-- **Forgetting default modes**: If `defaultInputModes` and `defaultOutputModes` are omitted, clients may not know what content types to send.
-- **Version stagnation**: Update the Agent Card version when skills or capabilities change. Clients may cache old versions.
-- **Publishing before implementation**: The Agent Card is a contract. Publishing skills that are not yet implemented leads to runtime failures.
+- **過諾能力**：未實作而設 `streaming: true` 或 `pushNotifications: true` 致用該等功能時客戶端失敗。宜保守。
+- **技能述模糊**：如「做資料之事」之述阻準確技能匹配。應於輸入、輸出與領域具體。
+- **缺 CORS 標頭**：瀏覽器基之 A2A 客戶端若無適當 CORS 配置則無法取 Agent Card。
+- **技能重疊**：若兩技能可處理同任務，客戶端代理無法判擇何者。宜確保明界。
+- **忘預設模式**：若省 `defaultInputModes` 與 `defaultOutputModes`，客戶端可能不知送何等內容類型。
+- **版本停滯**：技能或能力變時更 Agent Card 版本。客戶端可能快取舊版。
+- **實作前發布**：Agent Card 為契約。發布尚未實作之技能致運行時失敗。
 
-## Related Skills
+## 相關技能
 
-- `implement-a2a-server` - implement the server behind the Agent Card
-- `test-a2a-interop` - validate Agent Card conformance and interoperability
-- `build-custom-mcp-server` - MCP server as alternative/complement to A2A
-- `configure-mcp-server` - MCP configuration patterns applicable to A2A setup
+- `implement-a2a-server` - 實作 Agent Card 背後之伺服器
+- `test-a2a-interop` - 驗證 Agent Card 合規與互通
+- `build-custom-mcp-server` - MCP 伺服器作 A2A 之替/補
+- `configure-mcp-server` - MCP 配置模式，適用於 A2A 設定

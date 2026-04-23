@@ -24,31 +24,31 @@ metadata:
   tags: shinyproxy, shiny, docker, deployment, multi-app, authentication, self-hosted
 ---
 
-# Deploy ShinyProxy
+# 部署 ShinyProxy
 
-Deploy ShinyProxy to host multiple containerized Shiny applications with authentication and usage tracking.
+部 ShinyProxy 以宿多容器化之 Shiny 應用，具認證與用量跟蹤。
 
-## When to Use
+## 用時
 
-- Hosting multiple Shiny apps behind a single entry point
-- Need per-app authentication and access control
-- Deploying Shiny apps as isolated Docker containers
-- Scaling beyond single-app deployment (shinyapps.io or standalone Docker)
-- Requiring usage analytics and audit logging
+- 於單入口宿多 Shiny 應用
+- 需各應用獨之認證與訪問控
+- 部 Shiny 應用為獨立 Docker 容器
+- 擴至單應用部署（shinyapps.io 或獨立 Docker）之上
+- 需用量析與審計日誌
 
-## Inputs
+## 入
 
-- **Required**: One or more Shiny apps to deploy
-- **Required**: Server with Docker installed
-- **Optional**: Authentication provider (LDAP, OpenID, social)
-- **Optional**: Domain name and SSL certificate
-- **Optional**: Container orchestrator (Docker or Kubernetes)
+- **必要**：一或多 Shiny 應用以部
+- **必要**：已裝 Docker 之伺
+- **可選**：認證供應者（LDAP、OpenID、社交）
+- **可選**：域名與 SSL 證書
+- **可選**：容器編排者（Docker 或 Kubernetes）
 
-## Procedure
+## 法
 
-### Step 1: Create Shiny App Docker Images
+### 第一步：建 Shiny 應用 Docker 鏡像
 
-Each Shiny app needs its own Docker image. Example `Dockerfile` for a Shiny app:
+各 Shiny 應用需其自鏡像。Shiny 應用之 `Dockerfile` 例：
 
 ```dockerfile
 FROM rocker/shiny:4.5.0
@@ -70,18 +70,18 @@ EXPOSE 3838
 CMD ["R", "-e", "shiny::runApp('/srv/shiny-server/app', host='0.0.0.0', port=3838)"]
 ```
 
-Build and test each app:
+建並測各應用：
 
 ```bash
 docker build -t myorg/dashboard:latest ./apps/dashboard/
 docker run --rm -p 3838:3838 myorg/dashboard:latest
 ```
 
-**Expected:** Each Shiny app runs independently in its own container.
+**得：** 各 Shiny 應用於其自容器獨立行。
 
-### Step 2: Configure ShinyProxy
+### 第二步：配 ShinyProxy
 
-`application.yml`:
+`application.yml`：
 
 ```yaml
 proxy:
@@ -128,9 +128,9 @@ server:
   forward-headers-strategy: native
 ```
 
-### Step 3: Deploy ShinyProxy with Docker Compose
+### 第三步：以 Docker Compose 部 ShinyProxy
 
-`docker-compose.yml`:
+`docker-compose.yml`：
 
 ```yaml
 services:
@@ -167,15 +167,15 @@ docker compose up -d
 docker compose logs -f shinyproxy
 ```
 
-**Expected:** ShinyProxy starts on port 8080, shows login page, and lists configured apps.
+**得：** ShinyProxy 於 8080 端啟，示登錄頁，列所配之應用。
 
-**On failure:** Check `docker compose logs shinyproxy`. Verify app images are available locally (`docker images`).
+**敗則：** 察 `docker compose logs shinyproxy`。驗應用鏡像本地可得（`docker images`）。
 
-### Step 4: Configure Authentication
+### 第四步：配認證
 
-#### Simple (built-in)
+#### 簡（內建）
 
-As shown in Step 2 with `authentication: simple` and inline users.
+如第二步示之 `authentication: simple` 與行內用者。
 
 #### LDAP
 
@@ -192,7 +192,7 @@ proxy:
     group-search-filter: (member={0})
 ```
 
-#### OpenID Connect (Keycloak, Auth0, etc.)
+#### OpenID Connect（Keycloak、Auth0 等）
 
 ```yaml
 proxy:
@@ -206,9 +206,9 @@ proxy:
     roles-claim: realm_access.roles
 ```
 
-### Step 5: Add Reverse Proxy with Nginx
+### 第五步：以 Nginx 加反向代理
 
-For production, place Nginx in front of ShinyProxy:
+於產，宜置 Nginx 於 ShinyProxy 前：
 
 ```nginx
 map $http_upgrade $connection_upgrade {
@@ -238,11 +238,11 @@ server {
 }
 ```
 
-WebSocket support is critical — ShinyProxy and Shiny use WebSockets heavily.
+WebSocket 支持至要——ShinyProxy 與 Shiny 重用 WebSocket。
 
-### Step 6: Usage Tracking
+### 第六步：用量跟蹤
 
-ShinyProxy logs usage events to its log file. For structured tracking, configure InfluxDB:
+ShinyProxy 將用量事件記入日誌。欲結構化跟蹤，配 InfluxDB：
 
 ```yaml
 proxy:
@@ -251,7 +251,7 @@ proxy:
   usage-stats-password: stats_password
 ```
 
-Add InfluxDB to the compose stack:
+於 compose 棧加 InfluxDB：
 
 ```yaml
 services:
@@ -270,7 +270,7 @@ volumes:
   influxdata:
 ```
 
-### Step 7: App Resource Limits
+### 第七步：應用資源限
 
 ```yaml
 specs:
@@ -283,7 +283,7 @@ specs:
       R_MAX_MEM_SIZE: 768m
 ```
 
-### Step 8: Verify Deployment
+### 第八步：驗部署
 
 ```bash
 # Check ShinyProxy health
@@ -297,30 +297,30 @@ curl -s -c cookies.txt -d "username=admin&password=admin_password" \
 curl -s -b cookies.txt http://localhost:8080/api/proxyspec
 ```
 
-**Expected:** Health endpoint returns `UP`. Login succeeds. Apps launch in isolated containers.
+**得：** 健端返 `UP`。登錄成。應用於獨容器啟。
 
-## Validation
+## 驗
 
-- [ ] ShinyProxy starts and shows login page
-- [ ] Authentication works for all configured users
-- [ ] Each Shiny app launches in its own container
-- [ ] WebSocket connections work (Shiny reactivity functions)
-- [ ] Access groups restrict app visibility correctly
-- [ ] Container cleanup works when users disconnect
-- [ ] Logs capture usage events
+- [ ] ShinyProxy 啟且示登錄頁
+- [ ] 認證為諸所配用者可行
+- [ ] 各 Shiny 應用於其自容器啟
+- [ ] WebSocket 連可（Shiny 反應性可行）
+- [ ] 訪問組正限應用可見
+- [ ] 用者離時容器清理可行
+- [ ] 日誌捕用量事件
 
-## Common Pitfalls
+## 陷
 
-- **Docker socket permissions**: ShinyProxy needs Docker socket access to launch containers. Run as a user in the `docker` group or mount the socket.
-- **Network mismatch**: App containers must be on the same Docker network as ShinyProxy (`container-network` in specs must match).
-- **WebSocket proxy**: Nginx or other proxies in front of ShinyProxy must forward WebSocket upgrade headers.
-- **Image not found**: App images must be pulled or built locally on the Docker host before ShinyProxy tries to use them.
-- **Container cleanup**: If ShinyProxy crashes, orphaned app containers may remain. Use `docker ps` to check and clean up.
-- **Memory limits**: Shiny apps can consume significant memory. Set `container-memory-limit` to prevent a single app from starving others.
+- **Docker socket 權限**：ShinyProxy 需 Docker socket 以啟容器。以 `docker` 組之用者行，或掛 socket。
+- **網絡不合**：應用容器宜與 ShinyProxy 同 Docker 網（specs 中 `container-network` 宜合）。
+- **WebSocket 代理**：ShinyProxy 前之 Nginx 或他代理須轉 WebSocket 升級頭。
+- **鏡像不見**：應用鏡像宜於 Docker 主預裝或預建，而後 ShinyProxy 始用。
+- **容器清理**：若 ShinyProxy 崩，孤兒應用容器或留。以 `docker ps` 察且清之。
+- **內存限**：Shiny 應用或耗大內存。設 `container-memory-limit` 以防一應用餓他者。
 
 ## Related Skills
 
-- `deploy-shiny-app` - single-app deployment to shinyapps.io, Posit Connect, or Docker
-- `configure-reverse-proxy` - reverse proxy patterns including WebSocket proxying
-- `create-dockerfile` - general Dockerfile creation for app images
-- `create-r-dockerfile` - R-specific Dockerfiles with rocker images
+- `deploy-shiny-app` - 單應用部至 shinyapps.io、Posit Connect 或 Docker
+- `configure-reverse-proxy` - 反向代理模式含 WebSocket 代理
+- `create-dockerfile` - 通用應用鏡像 Dockerfile 建
+- `create-r-dockerfile` - 用 rocker 鏡之 R 特定 Dockerfile

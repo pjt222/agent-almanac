@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Establish Service Level Objectives (SLO), Service Level Indicators (SLI), and Service Level
   Agreements (SLA) with error budget tracking, burn rate alerts, and automated reporting using
@@ -88,9 +88,9 @@ Example:
 - **SLO**: 99.95% availability (internal target)
 - **Buffer**: 0.05% cushion before SLA breach
 
-**Expected:** Team understands differences, agreement on which metrics become SLIs, alignment on SLO targets.
+**Got:** Team understands differences, agreement on which metrics become SLIs, alignment on SLO targets.
 
-**On failure:**
+**If fail:**
 - Review Google SRE book chapters on SLI/SLO/SLA
 - Conduct workshop with stakeholders to align on definitions
 - Start with simple success-rate SLI before complex latency SLOs
@@ -175,9 +175,9 @@ Avoid:
 - Vanity metrics that don't predict customer impact
 - Overly complex composite scores
 
-**Expected:** 2-4 SLIs selected per service, covering availability and latency at minimum, team agreement on measurement queries.
+**Got:** 2-4 SLIs selected per service, covering availability and latency at minimum, team agreement on measurement queries.
 
-**On failure:**
+**If fail:**
 - Map user journey to identify critical failure points
 - Analyze incident history: which metrics predicted customer impact?
 - Validate SLI with A/B test: degrade metric, measure customer complaints
@@ -241,9 +241,9 @@ Daily budget: ~3,333 failed requests
    - Too loose: Poor user experience, customer churn
    - **Sweet spot**: Slightly better than user expectations
 
-**Expected:** SLO targets set with business stakeholder buy-in, documented with rationale, error budget calculated.
+**Got:** SLO targets set with business stakeholder buy-in, documented with rationale, error budget calculated.
 
-**On failure:**
+**If fail:**
 - Start with achievable target (e.g., 99% if current is 98.5%)
 - Iterate SLO targets quarterly based on actual performance
 - Get executive sponsorship for realistic targets vs "five nines" demands
@@ -324,9 +324,9 @@ Reload Prometheus:
 curl -X POST http://localhost:9090/-/reload
 ```
 
-**Expected:** Sloth generates multi-window multi-burn-rate alerts, recording rules evaluate successfully, alerts fire appropriately during incidents.
+**Got:** Sloth generates multi-window multi-burn-rate alerts, recording rules evaluate successfully, alerts fire appropriately during incidents.
 
-**On failure:**
+**If fail:**
 - Validate YAML syntax with `yamllint slos/user-api.yml`
 - Check Sloth version compatibility (v0.11+ recommended)
 - Verify Prometheus recording rule evaluation: `curl http://localhost:9090/api/v1/rules`
@@ -368,9 +368,9 @@ Visualize SLO compliance and error budget consumption in Grafana.
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Dashboards show real-time SLO compliance, error budget depletion visible, team can make informed decisions about feature velocity.
+**Got:** Dashboards show real-time SLO compliance, error budget depletion visible, team can make informed decisions about feature velocity.
 
-**On failure:**
+**If fail:**
 - Verify recording rules exist: `curl http://localhost:9090/api/v1/rules | jq '.data.groups[].rules[] | select(.name | contains("slo:"))'`
 - Check Prometheus datasource in Grafana has correct URL
 - Validate query results in Explore view before adding to dashboard
@@ -421,9 +421,9 @@ jobs:
           kubectl apply -f deploy/
 ```
 
-**Expected:** Clear policy documented, automated gates prevent risky deployments during budget depletion, team alignment on reliability priorities.
+**Got:** Clear policy documented, automated gates prevent risky deployments during budget depletion, team alignment on reliability priorities.
 
-**On failure:**
+**If fail:**
 - Start with manual policy enforcement (Slack reminders)
 - Gradually automate with soft gates (warnings, not blocks)
 - Get executive buy-in before hard gates (blocking deployments)
@@ -442,7 +442,7 @@ jobs:
 - [ ] Incident retrospectives include SLO impact analysis
 - [ ] SLO compliance reports shared with stakeholders
 
-## Common Pitfalls
+## Pitfalls
 
 - **Overly strict SLOs**: Setting "five nines" without cost analysis leads to burnout and slowed feature velocity. Start achievable, iterate up.
 - **Too many SLIs**: Tracking 10+ indicators creates confusion. Focus on 2-4 critical user-facing metrics.

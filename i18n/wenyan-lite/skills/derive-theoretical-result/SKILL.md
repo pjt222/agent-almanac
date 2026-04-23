@@ -25,34 +25,34 @@ metadata:
 
 # Derive Theoretical Result
 
-Produce a rigorous, step-by-step derivation of a theoretical result starting from stated axioms, first principles, or established theorems. Every algebraic or logical step is explicitly justified, limiting cases are verified, and the final result is presented with a complete notation glossary.
+自既定公理、第一原理或已立之定理起，產生嚴謹、逐步之理論結果推導。每一代數或邏輯步皆明載其理，極限情況皆驗，終果以完整之符號詞彙呈。
 
-## When to Use
+## 適用時機
 
-- Deriving a formula, relation, or theorem from first principles (e.g., deriving the Euler-Lagrange equation from the action principle)
-- Proving a mathematical statement by logical deduction from axioms
-- Re-deriving a textbook result to verify it or adapt it to a modified context
-- Extending a known result to a more general setting (e.g., from flat spacetime to curved spacetime)
-- Producing a self-contained derivation for a paper, thesis, or technical report
+- 自第一原理推導公式、關係或定理（例如自作用原理推導歐拉-拉格朗日方程）
+- 自公理以邏輯演繹證明數學命題
+- 重推教科書結果以驗之或適應其於修改之情境
+- 將既知結果推廣至更一般之設定（例如自平直時空推廣至彎曲時空）
+- 為論文、學位論文或技術報告產生自足之推導
 
-## Inputs
+## 輸入
 
-- **Required**: Target result to derive (equation, inequality, theorem statement, or relation)
-- **Required**: Starting point (axioms, postulates, previously established results, or Lagrangian/Hamiltonian)
-- **Optional**: Preferred proof technique (direct, by contradiction, by induction, variational, constructive)
-- **Optional**: Notation conventions to follow (if matching a specific textbook or collaborator's conventions)
-- **Optional**: Known intermediate results that may be cited without re-derivation
+- **必需**：待推之目標結果（方程、不等式、定理命題或關係）
+- **必需**：起點（公理、假設、先前立之結果或 Lagrangian/Hamiltonian）
+- **可選**：偏好之證明技巧（直接、反證、歸納、變分、構造）
+- **可選**：待遵之符號慣例（若需合特定教科書或合作者之慣例）
+- **可選**：可引用而不再推導之已知中間結果
 
-## Procedure
+## 步驟
 
-### Step 1: State Starting Assumptions and Target Result
+### 步驟一：載明起始假設與目標結果
 
-Write the derivation's contract explicitly before any calculation:
+於任何計算前顯式書寫推導之契約：
 
-1. **Axioms and postulates**: List every assumption the derivation rests on. For physics, this includes the symmetry group, the action principle, or the postulates of quantum mechanics. For mathematics, this includes the axiom system and any previously proven lemmas.
-2. **Target result**: State the result to be derived in precise mathematical notation. If the result is an equation, write both sides. If it is an inequality, state the direction and the conditions for equality.
-3. **Scope and restrictions**: State the domain of validity (e.g., "valid for non-relativistic, spinless particles in three dimensions"). Identify what the derivation does not cover.
-4. **Notation declaration**: Define every symbol that will appear. This prevents ambiguity and makes the derivation self-contained.
+1. **公理與假設**：列推導所賴之每一假設。物理中此含對稱群、作用原理或量子力學之假設。數學中此含公理系統與任何前已證之引理。
+2. **目標結果**：以精確數學符號載待推之結果。若為方程，寫兩邊。若為不等式，載方向與相等條件。
+3. **範圍與限制**：載有效域（如「適於三維中非相對論、無自旋粒子」）。識推導不涵之內容。
+4. **符號宣告**：定將現之每一符號。此避歧義並使推導自足。
 
 ```markdown
 ## Derivation Contract
@@ -64,19 +64,19 @@ Write the derivation's contract explicitly before any calculation:
   - ...
 ```
 
-**Expected:** A complete, unambiguous statement of what is being derived from what, with all notation defined upfront.
+**預期：** 對「由何推何」之完整、無歧義之陳述，所有符號前先定義。
 
-**On failure:** If the target result is ambiguous or the starting assumptions are incomplete, clarify before proceeding. A derivation with hidden assumptions is unreliable.
+**失敗時：** 若目標結果有歧義或起始假設不全，繼續前先明之。藏有假設之推導不可靠。
 
-### Step 2: Identify Required Mathematical Machinery
+### 步驟二：識所需之數學機制
 
-Survey the tools needed and verify their applicability:
+審所需之工具並驗其適用性：
 
-1. **Algebraic techniques**: Identify required manipulations (tensor algebra, commutator algebra, matrix operations, series expansions). Verify that the structures involved satisfy the prerequisites (e.g., convergence conditions for series, invertibility for matrix operations).
-2. **Calculus and analysis**: Identify whether the derivation requires ordinary or partial differentiation, integration (and over what domain), functional derivatives, contour integration, or distribution theory. Verify regularity conditions (differentiability, integrability, analyticity).
-3. **Symmetry and group theory**: Identify representation-theoretic tools needed (irreducible representations, Clebsch-Gordan coefficients, character orthogonality, Wigner-Eckart theorem).
-4. **Topology and geometry** (if applicable): Identify geometric structures (manifolds, fiber bundles, connections) and topological constraints (boundary terms, winding numbers, index theorems).
-5. **Known identities and lemmas**: Collect the specific identities that will be invoked (e.g., Jacobi identity, Bianchi identity, integration by parts, Stokes' theorem). State each one explicitly so the derivation can cite them by name.
+1. **代數技巧**：識所需之操作（張量代數、對易子代數、矩陣運算、級數展開）。驗所涉結構滿足先決條件（如級數收斂條件、矩陣運算之可逆性）。
+2. **微積分與分析**：識推導是否需常或偏微分、積分（及於何域）、泛函導數、圍道積分或分布理論。驗正則性條件（可微性、可積性、解析性）。
+3. **對稱與群論**：識所需之表示理論工具（不可約表示、Clebsch-Gordan 係數、特徵標正交性、Wigner-Eckart 定理）。
+4. **拓撲與幾何**（若適用）：識幾何結構（流形、纖維叢、聯絡）與拓撲約束（邊界項、繞數、指標定理）。
+5. **已知恆等式與引理**：集待引用之具體恆等式（如 Jacobi 恆等式、Bianchi 恆等式、分部積分、Stokes 定理）。顯式載每一，使推導可按名引之。
 
 ```markdown
 ## Mathematical Toolkit
@@ -86,26 +86,26 @@ Survey the tools needed and verify their applicability:
 - **Identities to invoke**: [list with precise statements]
 ```
 
-**Expected:** A checklist of mathematical tools with their applicability conditions verified for the specific problem at hand.
+**預期：** 數學工具之檢核表，其適用性條件於當前問題已驗。
 
-**On failure:** If a required tool has unverified prerequisites (e.g., term-by-term differentiation of a series whose uniform convergence is unknown), flag it as a gap. Either prove the prerequisite or state it as an additional assumption.
+**失敗時：** 若所需之工具有未驗之先決條件（如一致收斂未知之級數逐項微分），標之為缺口。或證該先決條件，或載之為額外假設。
 
-### Step 3: Execute Derivation with Step-by-Step Justification
+### 步驟三：執行推導並逐步載理
 
-Carry out the derivation with every step labeled and justified:
+執行推導，每步標記並載理：
 
-1. **One operation per step**: Each numbered step performs exactly one algebraic or logical operation. Do not combine multiple manipulations into a single step.
-2. **Justification labels**: Tag each step with its justification. Common labels:
-   - `[by assumption]` -- invoking a stated axiom or assumption
-   - `[by definition]` -- using a previously declared definition
-   - `[by {identity name}]` -- applying a named identity (e.g., "by Jacobi identity")
-   - `[by Step N]` -- citing a previous step in this derivation
-   - `[by {theorem name}]` -- invoking an external theorem (stated in Step 2)
-3. **Intermediate checkpoints**: After every 5-10 steps, pause and verify:
-   - Units/dimensions are consistent on both sides
-   - Known symmetries are preserved
-   - The expression has the correct transformation properties
-4. **Branch points**: If the derivation branches (e.g., case analysis for degenerate vs. non-degenerate eigenvalues), treat each branch as a labeled sub-derivation and merge the results.
+1. **每步一操作**：每編號之步僅行一代數或邏輯操作。勿併多操作入一步。
+2. **理據標籤**：標每步以其理據。常見標籤：
+   - `[by assumption]` —— 引已載之公理或假設
+   - `[by definition]` —— 用先前宣告之定義
+   - `[by {identity name}]` —— 應用具名恆等式（如「by Jacobi identity」）
+   - `[by Step N]` —— 引此推導中之前一步
+   - `[by {theorem name}]` —— 引外部定理（於步驟二載之）
+3. **中間檢核點**：每 5-10 步後停而驗：
+   - 兩邊之單位/維度一致
+   - 已知對稱性得保
+   - 該表式有正確之變換性質
+4. **分支點**：若推導分支（如對簡併與非簡併特徵值之分情況分析），將每分支視為標記之子推導並合其結果。
 
 ```markdown
 ## Derivation
@@ -128,24 +128,24 @@ Carry out the derivation with every step labeled and justified:
 *Justification*: [final operation]  QED
 ```
 
-**Expected:** A linear sequence of steps from the starting point to the target result, with no gaps in logic. Every step is independently verifiable.
+**預期：** 自起點至目標結果之線性步序，邏輯無缺。每步皆可獨立驗。
 
-**On failure:** If a step does not follow from the previous one, the derivation has a gap. Either insert the missing intermediate steps or identify the additional assumption needed. Never skip a step with "it can be shown that" unless the omitted result is a well-known identity listed in Step 2.
+**失敗時：** 若某步不繼前一，推導有缺口。或插缺失之中間步，或識所需之額外假設。勿以「可證之」跳步，除非所省之結果為步驟二所列之眾所周知恆等式。
 
-### Step 4: Check Limiting Cases and Special Values
+### 步驟四：檢極限情況與特殊值
 
-Validate the derived result against known physics or mathematics:
+對所推之果驗之於已知物理或數學：
 
-1. **Limiting cases**: Identify at least three limiting cases where the result should reduce to something known:
-   - A simpler, previously derived formula (e.g., non-relativistic limit of a relativistic result)
-   - A trivial case (e.g., setting a coupling constant to zero)
-   - An extreme parameter regime (e.g., high-temperature or low-temperature limit)
+1. **極限情況**：至少識三極限情況，其中結果應化約為已知者：
+   - 更簡、先前推之公式（如相對論結果之非相對論極限）
+   - 平凡情況（如設耦合常數為零）
+   - 極端參數區域（如高溫或低溫極限）
 
-2. **Special values**: Substitute specific values of parameters where the answer is known independently (e.g., n=1 for the hydrogen atom, d=3 for three-dimensional results).
+2. **特殊值**：代入答案可獨立得知之參數之特定值（如氫原子之 n=1、三維結果之 d=3）。
 
-3. **Symmetry checks**: Verify that the result transforms correctly under the symmetry group. If the result should be a scalar, check that it is invariant. If it should be a vector, check its transformation law.
+3. **對稱性檢**：驗結果於對稱群下正確變換。若結果應為標量，查其不變。若應為向量，查其變換律。
 
-4. **Consistency with related results**: Check that the derived result is consistent with other known results in the same theory (e.g., Ward identities, sum rules, reciprocity relations).
+4. **與相關結果之一致性**：查所推結果與同理論中他已知結果之一致（如 Ward 恆等式、求和規則、互易關係）。
 
 ```markdown
 ## Limiting Case Verification
@@ -155,19 +155,19 @@ Validate the derived result against known physics or mathematics:
 | ... | ... | ... | ... | ... |
 ```
 
-**Expected:** All limiting cases and special values produce the expected results. The derivation is internally consistent.
+**預期：** 所有極限情況與特殊值生預期結果。推導內部一致。
 
-**On failure:** A failed limiting case indicates an error in the derivation. Trace the failure back by checking which step first produces an expression that fails the limit. Common causes: incorrect sign, missing factor of 2 or pi, wrong combinatorial coefficient, or a step where an order of limits matters.
+**失敗時：** 極限情況之敗示推導有誤。逐步追溯，查何步先生失該極限之表式。常因：符號錯、缺 2 或 π 之因子、組合係數錯、或極限順序要緊之步。
 
-### Step 5: Present Complete Derivation with Notation Glossary
+### 步驟五：以符號詞彙呈完整推導
 
-Assemble the final, polished derivation:
+組裝終之、精修之推導：
 
-1. **Narrative structure**: Write a brief introductory paragraph stating the physical or mathematical motivation, the approach, and the main result.
-2. **Derivation body**: Present the steps from Step 3, cleaned up for readability. Group related steps into logical blocks with descriptive headings (e.g., "Expanding the action to second order", "Applying the stationary phase condition").
-3. **Result box**: State the final result in a highlighted block, clearly separated from the derivation.
-4. **Notation glossary**: Compile every symbol used in the derivation with its meaning, units (if physical), and first occurrence.
-5. **Assumptions summary**: List all assumptions in a single place, distinguishing fundamental postulates from technical assumptions (e.g., smoothness, convergence).
+1. **敘事結構**：寫簡介之段，載物理或數學動機、方法與主要結果。
+2. **推導主體**：呈步驟三之步，為可讀性潔之。將相關步組為邏輯塊，具描述之標題（如「將作用展開至二階」、「應用穩相條件」）。
+3. **結果框**：於醒目塊中載終果，與推導明離。
+4. **符號詞彙**：編推導中用之每一符號，具其意、單位（若為物理）、首現位置。
+5. **假設總覽**：於一處列所有假設，區基本假設與技術假設（如光滑性、收斂性）。
 
 ```markdown
 ## Final Result
@@ -186,32 +186,32 @@ Assemble the final, polished derivation:
 3. ...
 ```
 
-**Expected:** A self-contained document that a reader can follow from start to finish without consulting external references, except for the explicitly cited identities and theorems.
+**預期：** 自足之文件，讀者自始至終可循之而不須參外，除顯式引之恆等式與定理。
 
-**On failure:** If the derivation is too long for a single document (more than ~50 steps), break it into lemmas. Derive each lemma separately, then assemble the main result by citing the lemmas.
+**失敗時：** 若推導長於單一文件（逾 ~50 步），分為引理。分別推導每引理，後以引引理組主結果。
 
-## Validation
+## 驗證
 
-- [ ] All starting assumptions are explicitly stated before the first calculation step
-- [ ] Every derivation step has a labeled justification (no unjustified leaps)
-- [ ] Units and dimensions are consistent at every intermediate checkpoint
-- [ ] At least three limiting cases are checked and produce expected results
-- [ ] Special values match independently known answers
-- [ ] The result transforms correctly under the stated symmetry group
-- [ ] A notation glossary defines every symbol used
-- [ ] The derivation is complete: no steps are deferred with "it can be shown"
-- [ ] The domain of validity is explicitly stated with the final result
+- [ ] 所有起始假設於第一計算步前顯式載之
+- [ ] 每一推導步皆有標記之理據（無無理之跳躍）
+- [ ] 單位與維度於每一中間檢核點皆一致
+- [ ] 至少三極限情況得檢且生預期結果
+- [ ] 特殊值合獨立已知之答案
+- [ ] 結果於所述對稱群下正確變換
+- [ ] 符號詞彙定推導中用之每一符號
+- [ ] 推導完整：無以「可證之」延之步驟
+- [ ] 有效域於終果處顯式載之
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Hidden assumptions**: Assuming a function is analytic, a series converges, or an integral exists without stating it. Every regularity condition is an assumption and must be declared.
-- **Sign errors**: The most common mechanical error. Verify signs at every step by tracking them through substitutions. Cross-check against dimensional analysis (a sign error often produces a dimensionally inconsistent expression).
-- **Dropped boundary terms**: When integrating by parts or applying Stokes' theorem, boundary terms vanish only if specific conditions are met. State why they vanish (e.g., "because the field decays faster than 1/r at infinity").
-- **Order of limits**: Taking limits in the wrong order can give different results (e.g., thermodynamic limit before zero-temperature limit). State the order explicitly and justify it.
-- **Circular reasoning**: Using the result to be derived as an intermediate step. This is especially subtle when the result is a well-known formula that "seems obvious." Every step must follow from the stated starting point, not from familiarity with the answer.
-- **Notation collisions**: Using the same symbol for different quantities (e.g., 'E' for energy and for electric field). The notation glossary prevents this, but only if it is written before the derivation rather than after.
+- **隱藏假設**：設函數解析、級數收斂、積分存而不載之。每一正則性條件皆為假設，須宣之。
+- **符號錯**：最常見之機械錯。於每步以代入驗符號。以維度分析交叉檢（符號錯常生維度不一之表式）。
+- **漏邊界項**：分部積分或應用 Stokes 定理時，邊界項僅於特定條件下消。載其消之理（如「因場於無窮遠衰於 1/r 之上」）。
+- **極限順序**：以錯誤順序取極限可生不同結果（如於零溫極限前取熱力學極限）。顯式載順序並理之。
+- **循環推理**：以待推之結果為中間步。此於結果為「顯而易見」之眾所周知公式時尤微妙。每步皆須繼所載之起點，而非繼對答案之熟悉。
+- **符號衝突**：同符表不同量（如 'E' 表能量與電場）。符號詞彙防之，然僅於推導前而非後書寫時。
 
-## Related Skills
+## 相關技能
 
-- `formulate-quantum-problem` -- formulate the quantum mechanical framework before deriving results from it
-- `survey-theoretical-literature` -- find prior derivations of the same or related results for comparison
+- `formulate-quantum-problem` —— 自其推導結果前形構量子力學框架
+- `survey-theoretical-literature` —— 尋同或相關結果之前推導以資比較

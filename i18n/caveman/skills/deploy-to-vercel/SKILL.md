@@ -25,14 +25,14 @@ metadata:
 
 # Deploy to Vercel
 
-Deploy a Next.js application to Vercel with production configuration.
+Deploy Next.js application to Vercel with production configuration.
 
-## When to Use
+## When Use
 
-- Deploying a Next.js app for the first time
-- Setting up preview deployments for pull requests
-- Configuring custom domains
-- Managing environment variables in production
+- Deploy Next.js app for first time
+- Set up preview deployments for pull requests
+- Configure custom domains
+- Manage environment variables in production
 
 ## Inputs
 
@@ -41,7 +41,7 @@ Deploy a Next.js application to Vercel with production configuration.
 - **Optional**: Custom domain
 - **Optional**: Environment variables for production
 
-## Procedure
+## Steps
 
 ### Step 1: Verify Local Build
 
@@ -49,9 +49,9 @@ Deploy a Next.js application to Vercel with production configuration.
 npm run build
 ```
 
-**Expected:** Build succeeds with no errors.
+**Got:** Build succeeds with no errors.
 
-**On failure:** Fix build errors before deploying. Common: TypeScript errors, missing dependencies, invalid imports.
+**If fail:** Fix build errors before deploying. Common: TypeScript errors, missing dependencies, invalid imports.
 
 ### Step 2: Install Vercel CLI
 
@@ -59,9 +59,9 @@ npm run build
 npm install -g vercel
 ```
 
-**Expected:** The `vercel` command is available globally and `vercel --version` prints the installed version.
+**Got:** `vercel` command available globally. `vercel --version` prints installed version.
 
-**On failure:** If permission errors occur, use `sudo npm install -g vercel` or configure npm to use a user-local prefix. Verify Node.js is installed with `node --version`.
+**If fail:** If permission errors occur, use `sudo npm install -g vercel` or configure npm to use user-local prefix. Verify Node.js installed with `node --version`.
 
 ### Step 3: Link and Deploy
 
@@ -81,9 +81,9 @@ vercel
 # - Override settings? N
 ```
 
-**Expected:** Preview URL provided (e.g., `https://my-app-xxx.vercel.app`).
+**Got:** Preview URL provided (e.g., `https://my-app-xxx.vercel.app`).
 
-**On failure:** If `vercel login` fails, check internet connectivity and try browser-based authentication. If the deploy fails, review the build output for errors -- Vercel uses a clean environment, so all dependencies must be in `package.json`.
+**If fail:** If `vercel login` fails, check internet connectivity and try browser-based authentication. If deploy fails, review build output for errors -- Vercel uses clean environment, so all dependencies must be in `package.json`.
 
 ### Step 4: Configure Environment Variables
 
@@ -96,11 +96,11 @@ vercel env add API_KEY production preview
 vercel env ls
 ```
 
-Or configure through the Vercel dashboard: Project Settings > Environment Variables.
+Or configure through Vercel dashboard: Project Settings > Environment Variables.
 
-**Expected:** `vercel env ls` shows all required environment variables configured for the correct environments (production, preview, development).
+**Got:** `vercel env ls` shows all required environment variables configured for correct environments (production, preview, development).
 
-**On failure:** If variables are not appearing at runtime, verify the target environment matches (production vs preview). Redeploy after adding variables -- existing deployments do not pick up new variables automatically.
+**If fail:** If variables not appearing at runtime, verify target environment matches (production vs preview). Redeploy after adding variables -- existing deployments do not pick up new variables automatically.
 
 ### Step 5: Deploy to Production
 
@@ -108,9 +108,9 @@ Or configure through the Vercel dashboard: Project Settings > Environment Variab
 vercel --prod
 ```
 
-**Expected:** Production URL available (e.g., `https://my-app.vercel.app`).
+**Got:** Production URL available (e.g., `https://my-app.vercel.app`).
 
-**On failure:** Check deployment logs with `vercel logs` or in the Vercel dashboard. Common issues include missing environment variables in the production environment and build commands differing from local setup.
+**If fail:** Check deployment logs with `vercel logs` or in Vercel dashboard. Common issues: missing environment variables in production environment, build commands differing from local setup.
 
 ### Step 6: Connect GitHub for Auto-Deploy (Recommended)
 
@@ -120,9 +120,9 @@ vercel --prod
    - Push to main -> Production deployment
    - Pull request -> Preview deployment
 
-**Expected:** The Vercel dashboard shows the GitHub repository connected, and subsequent pushes to main trigger production deployments automatically.
+**Got:** Vercel dashboard shows GitHub repository connected. Subsequent pushes to main trigger production deployments automatically.
 
-**On failure:** If the repository does not appear in the import list, check that the Vercel GitHub app has access to the repository. Go to GitHub Settings > Applications > Vercel and grant access.
+**If fail:** If repository does not appear in import list, check Vercel GitHub app has access to repository. Go to GitHub Settings > Applications > Vercel and grant access.
 
 ### Step 7: Configure Custom Domain
 
@@ -134,9 +134,9 @@ Or through dashboard: Project Settings > Domains.
 
 Update DNS records as instructed by Vercel (typically CNAME or A record).
 
-**Expected:** `vercel domains ls` shows the custom domain as configured, and after DNS propagation (up to 48 hours), the domain resolves to the Vercel deployment.
+**Got:** `vercel domains ls` shows custom domain as configured. After DNS propagation (up to 48 hours), domain resolves to Vercel deployment.
 
-**On failure:** If the domain shows "Invalid Configuration," verify DNS records match Vercel's instructions exactly. Use `dig my-domain.com` or an online DNS checker to confirm propagation.
+**If fail:** If domain shows "Invalid Configuration," verify DNS records match Vercel's instructions exactly. Use `dig my-domain.com` or online DNS checker to confirm propagation.
 
 ### Step 8: Optimize Configuration
 
@@ -157,29 +157,29 @@ Create `vercel.json` for advanced settings:
 }
 ```
 
-**Expected:** `vercel.json` is saved in the project root and the next deployment picks up the configuration (visible in the Vercel dashboard build logs).
+**Got:** `vercel.json` saved in project root. Next deployment picks up configuration (visible in Vercel dashboard build logs).
 
-**On failure:** If the configuration is ignored, verify `vercel.json` is valid JSON with `jq . vercel.json`. Check the Vercel docs for your framework version, as some settings may have moved to `next.config.ts`.
+**If fail:** If configuration ignored, verify `vercel.json` is valid JSON with `jq . vercel.json`. Check Vercel docs for framework version, as some settings may have moved to `next.config.ts`.
 
-## Validation
+## Checks
 
 - [ ] `npm run build` succeeds locally
-- [ ] Preview deployment works and is accessible
-- [ ] Production deployment serves the application correctly
-- [ ] Environment variables are available in production
+- [ ] Preview deployment works and accessible
+- [ ] Production deployment serves application correctly
+- [ ] Environment variables available in production
 - [ ] Custom domain resolves (if configured)
 - [ ] GitHub integration triggers deployments on push
 
-## Common Pitfalls
+## Pitfalls
 
-- **Build failing on Vercel but not locally**: Vercel uses a clean environment. Ensure all dependencies are in `package.json`, not just installed globally.
+- **Build failing on Vercel but not locally**: Vercel uses clean environment. Ensure all dependencies in `package.json`, not just installed globally.
 - **Environment variables missing**: Variables must be added to Vercel, not just `.env.local`. Different environments (production, preview, development) have separate variable sets.
-- **Node.js version mismatch**: Set the Node.js version in Project Settings or `package.json` engines field.
+- **Node.js version mismatch**: Set Node.js version in Project Settings or `package.json` engines field.
 - **Large deployments**: Vercel has size limits. Use `.vercelignore` to exclude unnecessary files.
-- **API route timeouts**: Vercel serverless functions have a 10s timeout on the Hobby plan. Optimize or upgrade.
+- **API route timeouts**: Vercel serverless functions have 10s timeout on Hobby plan. Optimize or upgrade.
 
-## Related Skills
+## See Also
 
-- `scaffold-nextjs-app` - create the app to deploy
+- `scaffold-nextjs-app` - create app to deploy
 - `setup-tailwind-typescript` - configure styling before deployment
 - `configure-git-repository` - Git setup for auto-deploy integration

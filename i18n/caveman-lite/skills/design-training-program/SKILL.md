@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Design a GxP training programme covering training needs analysis by role,
   curriculum design (regulatory awareness, system-specific, data integrity),
@@ -72,8 +72,8 @@ Identify what each role needs to know:
 | [Role] | [Current level] | [Required level] | [Gap description] | [H/M/L] |
 ```
 
-**Expected:** Every role has defined training requirements linked to their job function and GxP responsibilities.
-**On failure:** If roles are not clearly defined, conduct a RACI exercise first to establish responsibilities before defining training needs.
+**Got:** Every role has defined training requirements linked to their job function and GxP responsibilities.
+**If fail:** If roles are not clearly defined, conduct a RACI exercise first to establish responsibilities before defining training needs.
 
 ### Step 2: Design the Curriculum
 
@@ -122,8 +122,8 @@ Structure training into modules by topic:
 5. Q&A and clarification
 ```
 
-**Expected:** Each module has defined duration, delivery method, audience, and specific content outline.
-**On failure:** If content is too broad for the allocated time, split into sub-modules or create prerequisite chains.
+**Got:** Each module has defined duration, delivery method, audience, and specific content outline.
+**If fail:** If content is too broad for the allocated time, split into sub-modules or create prerequisite chains.
 
 ### Step 3: Create Competency Assessments
 
@@ -147,7 +147,7 @@ Define how competency is measured for each module:
 5. Describe one consequence of a data integrity failure for a pharmaceutical company. (5 points)
 
 **Passing score:** 16/20 (80%)
-**On failure:** Retraining required before re-assessment. Maximum 2 re-attempts.
+**If fail:** Retraining required before re-assessment. Maximum 2 re-attempts.
 
 ### Practical Assessment Template
 | Step | Task | Observed? | Performed Correctly? | Comments |
@@ -161,8 +161,8 @@ Define how competency is measured for each module:
 **Assessor:** _______ **Date:** _______ **Result:** Pass / Fail
 ```
 
-**Expected:** Assessments test both knowledge (understanding why) and skill (demonstrating how).
-**On failure:** If pass rates are below 70%, review the training materials for clarity before blaming the learners.
+**Got:** Assessments test both knowledge (understanding why) and skill (demonstrating how).
+**If fail:** If pass rates are below 70%, review the training materials for clarity before blaming the learners.
 
 ### Step 4: Define Training Records and Retention
 
@@ -185,8 +185,8 @@ Define how competency is measured for each module:
 | K. Jones | Admin | 2026-01-15 ✓ | 2026-01-17 ✓ | 2026-01-18 ✓ | 2026-01-20 ✓ | 2026-01-20 ✓ | Fully trained |
 ```
 
-**Expected:** Training records demonstrate that every person performing GxP activities was trained and assessed before performing those activities.
-**On failure:** If training records are incomplete, conduct a retrospective training gap assessment and implement immediate remediation training.
+**Got:** Training records demonstrate that every person performing GxP activities was trained and assessed before performing those activities.
+**If fail:** If training records are incomplete, conduct a retrospective training gap assessment and implement immediate remediation training.
 
 ### Step 5: Define Retraining Triggers
 
@@ -205,8 +205,8 @@ Define how competency is measured for each module:
 | Extended absence (>6 months) | Returning individual | Before resuming GxP activities | Yes — practical assessment |
 ```
 
-**Expected:** Retraining triggers are specific, measurable, and linked to defined timelines.
-**On failure:** If retraining is not completed before the trigger deadline, the individual must not perform the affected GxP activities until training is complete.
+**Got:** Retraining triggers are specific, measurable, and linked to defined timelines.
+**If fail:** If retraining is not completed before the trigger deadline, the individual must not perform the affected GxP activities until training is complete.
 
 ### Step 6: Compile the Training Programme Document
 
@@ -233,8 +233,8 @@ Define how competency is measured for each module:
 | Department Head | | | |
 ```
 
-**Expected:** Complete training programme approved and effective before system go-live or compliance deadline.
-**On failure:** If approval is delayed, implement interim training measures and document the plan to formalise.
+**Got:** Complete training programme approved and effective before system go-live or compliance deadline.
+**If fail:** If approval is delayed, implement interim training measures and document the plan to formalise.
 
 ## Validation
 
@@ -246,10 +246,10 @@ Define how competency is measured for each module:
 - [ ] Retraining triggers are defined with timelines and assessment requirements
 - [ ] Training programme approved by QA and management
 
-## Common Pitfalls
+## Pitfalls
 
 - **Training = reading the SOP**: Read-and-sign is appropriate for minor updates, not for initial training. New users need instructor-led training with hands-on practice.
-- **No competency assessment**: Training without assessment cannot demonstrate that learning occurred. Regulators expect evidence of competence, not just attendance.
+- **No competency assessment**: Training without assessment cannot demonstrate that learning occurred. Regulators expect evidence of competence, not attendance.
 - **Trainer not qualified**: Trainers must be demonstrably competent in the subject. "Train the trainer" records are frequently requested during inspections.
 - **Stale training matrix**: A training matrix that is not updated when people join, leave, or change roles creates compliance gaps. Integrate with HR processes.
 - **One-size-fits-all**: Administrators need deeper training than end users. Role-based curriculum avoids overwhelming some users while under-training others.

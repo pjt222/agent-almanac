@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Design serialization schemas using JSON Schema, Protocol Buffer definitions,
   or Apache Avro. Covers schema versioning, backwards compatibility, validation
@@ -56,8 +56,8 @@ Create well-versioned serialization schemas that evolve gracefully without break
 | XML Schema (XSD) | XML | Comprehensive typing, namespace support | Enterprise/legacy SOAP |
 | TypeBox/Zod | TypeScript | Type inference, runtime validation | TypeScript APIs |
 
-**Expected:** Schema system selected based on ecosystem, performance needs, and evolution requirements.
-**On failure:** If uncertain, start with JSON Schema — it has the broadest tooling support and can be layered onto existing JSON APIs.
+**Got:** Schema system selected based on ecosystem, performance needs, and evolution requirements.
+**If fail:** If uncertain, start with JSON Schema — it has the broadest tooling support and can be layered onto existing JSON APIs.
 
 ### Step 2: Design the Core Schema
 
@@ -146,8 +146,8 @@ enum Unit {
 }
 ```
 
-**Expected:** Schema is self-documenting with descriptions, constraints, and clear type definitions.
-**On failure:** If the data model is not yet stable, mark the schema as `draft` and avoid publishing to a registry.
+**Got:** Schema is self-documenting with descriptions, constraints, and clear type definitions.
+**If fail:** If the data model is not yet stable, mark the schema as `draft` and avoid publishing to a registry.
 
 ### Step 3: Plan for Schema Evolution
 
@@ -210,8 +210,8 @@ message Measurement {
 }
 ```
 
-**Expected:** Evolution plan documented: which changes are safe, which require new versions.
-**On failure:** If a breaking change is unavoidable, version the schema (v1 → v2) and maintain parallel support during migration.
+**Got:** Evolution plan documented: which changes are safe, which require new versions.
+**If fail:** If a breaking change is unavoidable, version the schema (v1 → v2) and maintain parallel support during migration.
 
 ### Step 4: Implement Schema Validation
 
@@ -257,8 +257,8 @@ if (!result.success) {
 }
 ```
 
-**Expected:** Validation runs on all incoming data at system boundaries (API endpoints, file ingestion).
-**On failure:** Log validation errors with the full payload (redacting sensitive fields) for debugging.
+**Got:** Validation runs on all incoming data at system boundaries (API endpoints, file ingestion).
+**If fail:** Log validation errors with the full payload (redacting sensitive fields) for debugging.
 
 ### Step 5: Document the Schema
 
@@ -289,8 +289,8 @@ Represents a single sensor reading with metadata.
 - **Policy**: Only additive, optional field changes between minor versions
 ```
 
-**Expected:** Documentation is auto-generated or stays in sync with the schema definition.
-**On failure:** If docs drift from schema, add a CI check that validates docs against the schema source.
+**Got:** Documentation is auto-generated or stays in sync with the schema definition.
+**If fail:** If docs drift from schema, add a CI check that validates docs against the schema source.
 
 ## Validation
 
@@ -302,12 +302,12 @@ Represents a single sensor reading with metadata.
 - [ ] Schema is versioned with a changelog
 - [ ] Round-trip test: serialize → deserialize → compare confirms no data loss
 
-## Common Pitfalls
+## Pitfalls
 
 - **Over-constraining too early**: Strict validation on a new schema blocks iteration. Start permissive (`additionalProperties: true`), tighten later.
 - **No default values**: Adding a required field without a default breaks all existing data. Always provide defaults for new fields.
 - **Ignoring null**: Many schemas don't handle null/missing fields clearly. Be explicit about nullable vs optional.
-- **Version in the payload, not the URL**: For long-lived data (storage, events), embed the schema version in the data itself, not just the endpoint URL.
+- **Version in the payload, not the URL**: For long-lived data (storage, events), embed the schema version in the data itself, not the endpoint URL.
 - **Enum exhaustiveness**: Adding a new enum value can crash consumers that use exhaustive switch statements. Document that unknown values should be handled gracefully.
 
 ## Related Skills

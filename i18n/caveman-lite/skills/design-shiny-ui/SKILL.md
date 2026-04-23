@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Design Shiny application UIs using bslib for theming, layout_columns
   for responsive grids, value boxes, cards, and custom CSS/SCSS.
@@ -91,9 +91,9 @@ ui <- page_sidebar(
 )
 ```
 
-**Expected:** Page layout matches the application's navigation and content needs.
+**Got:** Page layout matches the application's navigation and content needs.
 
-**On failure:** If the layout doesn't look right, check that you're using `page_sidebar()` / `page_navbar()` (bslib) not `fluidPage()` / `navbarPage()` (base shiny). The bslib versions have better defaults and theming support.
+**If fail:** If the layout doesn't look right, check that you're using `page_sidebar()` / `page_navbar()` (bslib) not `fluidPage()` / `navbarPage()` (base shiny). The bslib versions have better defaults and theming support.
 
 ### Step 2: Configure the bslib Theme
 
@@ -128,9 +128,9 @@ Use the interactive theme editor during development:
 bslib::bs_theme_preview(my_theme)
 ```
 
-**Expected:** App renders with consistent brand colors, fonts, and Bootstrap 5 components.
+**Got:** App renders with consistent brand colors, fonts, and Bootstrap 5 components.
 
-**On failure:** If fonts don't load, check internet access (Google Fonts requires it) or switch to system fonts: `font_collection("system-ui", "-apple-system", "Segoe UI")`. If theme variables don't apply, check that you're passing `theme` to the page function.
+**If fail:** If fonts don't load, check internet access (Google Fonts requires it) or switch to system fonts: `font_collection("system-ui", "-apple-system", "Segoe UI")`. If theme variables don't apply, check that you're passing `theme` to the page function.
 
 ### Step 3: Build the Layout with Cards and Columns
 
@@ -194,9 +194,9 @@ Key layout primitives:
 - `layout_sidebar()` — nested sidebar within cards
 - `navset_card_tab()` — tabbed cards
 
-**Expected:** Responsive grid layout that adapts to screen size.
+**Got:** Responsive grid layout that adapts to screen size.
 
-**On failure:** If columns stack unexpectedly on wide screens, check `col_widths` sum equals 12 (Bootstrap grid). If cards overlap, ensure `fill = FALSE` on non-filling rows.
+**If fail:** If columns stack unexpectedly on wide screens, check `col_widths` sum equals 12 (Bootstrap grid). If cards overlap, ensure `fill = FALSE` on non-filling rows.
 
 ### Step 4: Add Dynamic UI Elements
 
@@ -230,9 +230,9 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** UI elements update dynamically based on user selections and data.
+**Got:** UI elements update dynamically based on user selections and data.
 
-**On failure:** If dynamic UI flickers, use `conditionalPanel()` (CSS-based) instead of `renderUI()` where possible. If dynamic inputs lose their values on re-render, add `session$sendInputMessage()` to restore state.
+**If fail:** If dynamic UI flickers, use `conditionalPanel()` (CSS-based) instead of `renderUI()` where possible. If dynamic inputs lose their values on re-render, add `session$sendInputMessage()` to restore state.
 
 ### Step 5: Add Custom CSS/SCSS (Optional)
 
@@ -265,9 +265,9 @@ my_theme <- bslib::bs_theme(version = 5) |>
   bslib::bs_add_rules(sass::sass_file("www/custom.scss"))
 ```
 
-**Expected:** Custom styles applied without breaking bslib theming.
+**Got:** Custom styles applied without breaking bslib theming.
 
-**On failure:** If custom CSS conflicts with bslib, use Bootstrap CSS variables (`var(--bs-primary)`) instead of hardcoded colors. This ensures theme changes propagate to custom styles.
+**If fail:** If custom CSS conflicts with bslib, use Bootstrap CSS variables (`var(--bs-primary)`) instead of hardcoded colors. This ensures theme changes propagate to custom styles.
 
 ### Step 6: Ensure Accessibility
 
@@ -302,9 +302,9 @@ tags$main(
 )
 ```
 
-**Expected:** App meets WCAG 2.1 AA standards for color contrast, keyboard navigation, and screen reader compatibility.
+**Got:** App meets WCAG 2.1 AA standards for color contrast, keyboard navigation, and screen reader compatibility.
 
-**On failure:** Test with browser dev tools accessibility audit (Lighthouse). Check color contrast ratios with WebAIM's contrast checker. Ensure all interactive elements are keyboard-focusable.
+**If fail:** Test with browser dev tools accessibility audit (Lighthouse). Check color contrast ratios with WebAIM's contrast checker. Ensure all interactive elements are keyboard-focusable.
 
 ## Validation
 
@@ -317,7 +317,7 @@ tags$main(
 - [ ] Color contrast meets WCAG AA (4.5:1 for text)
 - [ ] Interactive elements are keyboard accessible
 
-## Common Pitfalls
+## Pitfalls
 
 - **Mixing old and new Shiny UI**: Don't mix `fluidPage()` with bslib components. Use `page_sidebar()`, `page_navbar()`, or `page_fillable()` exclusively.
 - **Hardcoded colors in CSS**: Use `var(--bs-primary)` instead of `#2c3e50`. Hardcoded colors break when the theme changes.

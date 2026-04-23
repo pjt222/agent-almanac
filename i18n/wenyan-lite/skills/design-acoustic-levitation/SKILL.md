@@ -26,38 +26,38 @@ metadata:
 
 # Design Acoustic Levitation
 
-Design and validate an acoustic levitation system by determining the acoustic radiation pressure required to balance gravity, selecting transducer and reflector geometry to form a stable standing wave, computing the positions and trapping strength of pressure nodes, and verifying that the trapped object is stable against lateral and axial perturbations.
+設計並驗證聲懸浮系統：定平衡重力所需之聲輻射壓，擇換能器與反射器幾何以形成穩定駐波，計算壓力節之位置與捕獲強度，並驗捕獲之物於側向與軸向擾動下穩定。
 
-## When to Use
+## 適用時機
 
-- Designing a contactless sample holder for chemical or biological experiments
-- Building an acoustic levitation demonstrator for education or outreach
-- Evaluating whether a given object can be levitated acoustically (size, density, and frequency constraints)
-- Selecting between single-axis (transducer-reflector) and phased array configurations
-- Calculating the node positions and trapping forces for a given transducer frequency and geometry
-- Extending a single-axis levitator to multi-axis manipulation using phased arrays
+- 為化學或生物實驗設計無接觸樣品座
+- 建教育或推廣用之聲懸浮演示器
+- 評定物可否聲懸浮（大小、密度與頻率之限）
+- 於單軸（換能器-反射器）與相控陣列配置間擇之
+- 為既定換能器頻率與幾何計算節位置與捕獲力
+- 以相控陣列擴展單軸懸浮器至多軸操控
 
-## Inputs
+## 輸入
 
-- **Required**: Object properties (mass, density, radius or characteristic dimension, compressibility if known)
-- **Required**: Target levitation medium (air, water, inert gas) with its density and speed of sound
-- **Optional**: Available transducer frequency (default: 40 kHz, common for hobbyist and lab systems)
-- **Optional**: Transducer power or voltage rating
-- **Optional**: Desired manipulation capability (static trapping only, or dynamic repositioning)
+- **必需**：物之性質（質量、密度、半徑或特徵尺寸，若知則壓縮率）
+- **必需**：目標懸浮介質（空氣、水、惰性氣體）及其密度與聲速
+- **可選**：可用之換能器頻率（預設 40 kHz，業餘與實驗室系統常見）
+- **可選**：換能器功率或電壓額定
+- **可選**：所欲之操控能力（僅靜態捕獲，或動態重定位）
 
-## Procedure
+## 步驟
 
-### Step 1: Determine Object Properties and Acoustic Contrast
+### 步驟一：定物之性質與聲學對比
 
-Characterize the object and the medium to establish the fundamental feasibility of acoustic levitation:
+表徵物與介質，以立聲懸浮之基本可行性：
 
-1. **Object parameters**: Record the mass m, density rho_p, radius a (or equivalent sphere radius for non-spherical objects), and bulk modulus K_p (compressibility kappa_p = 1/K_p). For rigid objects like metal spheres, K_p is effectively infinite.
-2. **Medium parameters**: Record the density rho_0, speed of sound c_0, and bulk modulus K_0 = rho_0 * c_0^2 for the host medium.
-3. **Acoustic contrast factor**: Compute the Gor'kov contrast factors that determine whether the object migrates to pressure nodes or antinodes:
-   - Monopole coefficient: f_1 = 1 - (K_0 / K_p) = 1 - (rho_0 * c_0^2) / (rho_p * c_p^2)
-   - Dipole coefficient: f_2 = 2 * (rho_p - rho_0) / (2 * rho_p + rho_0)
-   - For most solid objects in air, f_1 ~ 1 and f_2 ~ 1, so the object is trapped at pressure nodes (velocity antinodes).
-4. **Size constraint**: Verify that the object radius a is much smaller than the acoustic wavelength lambda = c_0 / f. The Gor'kov theory requires a << lambda (typically a < lambda/4). If this condition is not met, ray acoustics or full numerical simulation is needed.
+1. **物參數**：記質量 m、密度 rho_p、半徑 a（或非球形物之等效球半徑）、體積模量 K_p（壓縮率 kappa_p = 1/K_p）。金屬球等剛體，K_p 實為無窮。
+2. **介質參數**：記宿主介質之密度 rho_0、聲速 c_0、體積模量 K_0 = rho_0 * c_0^2。
+3. **聲學對比因子**：算 Gor'kov 對比因子，其決定物是遷至壓力節抑或波腹：
+   - 單極係數：f_1 = 1 - (K_0 / K_p) = 1 - (rho_0 * c_0^2) / (rho_p * c_p^2)
+   - 偶極係數：f_2 = 2 * (rho_p - rho_0) / (2 * rho_p + rho_0)
+   - 空氣中多數固體，f_1 ~ 1 而 f_2 ~ 1，故物捕於壓力節（速度波腹）。
+4. **大小之限**：驗物半徑 a 遠小於聲波長 lambda = c_0 / f。Gor'kov 理論需 a << lambda（通常 a < lambda/4）。若此條件不滿足，需射線聲學或完整數值模擬。
 
 ```markdown
 ## Object and Medium Parameters
@@ -69,25 +69,25 @@ Characterize the object and the medium to establish the fundamental feasibility 
 - **Trapping location**: [pressure node / pressure antinode]
 ```
 
-**Expected:** Complete characterization of the object and medium with contrast factors computed. The object should be confirmed to migrate toward pressure nodes (typical case for solids in air). The size constraint a << lambda is satisfied.
+**預期：** 完整表徵物與介質，算出對比因子。物應確認遷向壓力節（空氣中固體之典型情況）。大小之限 a << lambda 已滿足。
 
-**On failure:** If a / lambda > 0.25, the Gor'kov point-particle theory breaks down. Use numerical methods (finite element acoustic simulation) or experimental calibration instead. If f_1 and f_2 have opposite signs, the object may be trapped at an intermediate position rather than a clean node or antinode -- this requires careful Gor'kov potential mapping.
+**失敗時：** 若 a / lambda > 0.25，Gor'kov 點粒子理論崩潰。改用數值方法（有限元聲學模擬）或實驗校準。若 f_1 與 f_2 符號相反，物可能捕於中間位置而非純節或波腹——此需謹慎之 Gor'kov 勢映射。
 
-### Step 2: Calculate Required Acoustic Radiation Pressure
+### 步驟二：算所需之聲輻射壓
 
-Determine the acoustic field intensity needed to balance gravity:
+定平衡重力所需之聲場強度：
 
-1. **Acoustic radiation force**: For a small sphere at a pressure node in a one-dimensional standing wave, the time-averaged axial force is:
+1. **聲輻射力**：一維駐波中壓力節之小球，時均軸向力為：
    - F_ax = -(4 * pi / 3) * a^3 * [f_1 * (1 / (2 * rho_0 * c_0^2)) * d(p^2)/dz - (3 * f_2 * rho_0 / 4) * d(v^2)/dz]
-   - In a plane standing wave p(z,t) = P_0 * cos(kz) * cos(omega*t), this simplifies near a node to:
+   - 平面駐波 p(z,t) = P_0 * cos(kz) * cos(omega*t) 中，節近處簡為：
    - F_ax = (pi * a^3 * P_0^2 * k) / (3 * rho_0 * c_0^2) * Phi * sin(2kz)
-   - where Phi = f_1 + (3/2) * f_2 is the acoustic contrast factor and k = 2*pi/lambda.
-2. **Force balance**: Set the maximum radiation force (at sin(2kz) = 1, which occurs at lambda/8 from the node) equal to gravity:
+   - 其中 Phi = f_1 + (3/2) * f_2 為聲學對比因子，k = 2*pi/lambda。
+2. **力之平衡**：設最大輻射力（sin(2kz) = 1 時，即於節外 lambda/8 處）等於重力：
    - F_ax_max = (pi * a^3 * P_0^2 * k) / (3 * rho_0 * c_0^2) * Phi = m * g = (4/3) * pi * a^3 * rho_p * g
-   - Solve for the required pressure amplitude:
+   - 解所需之壓力振幅：
    - P_0 = sqrt(4 * rho_p * rho_0 * c_0^2 * g / (k * Phi))
-3. **Acoustic intensity**: Convert pressure amplitude to intensity: I = P_0^2 / (2 * rho_0 * c_0). Compare with the transducer's rated output.
-4. **Sound pressure level**: Express in dB SPL: L = 20 * log10(P_0 / 20e-6). Typical acoustic levitation in air requires 150-165 dB SPL.
+3. **聲強**：轉壓力振幅為強度：I = P_0^2 / (2 * rho_0 * c_0)。與換能器額定輸出比之。
+4. **聲壓級**：以 dB SPL 表：L = 20 * log10(P_0 / 20e-6)。空氣中典型聲懸浮需 150-165 dB SPL。
 
 ```markdown
 ## Acoustic Requirements
@@ -97,19 +97,19 @@ Determine the acoustic field intensity needed to balance gravity:
 - **Safety note**: [hearing protection required if > 120 dB at audible frequencies]
 ```
 
-**Expected:** A quantitative determination of the minimum acoustic pressure amplitude to achieve levitation, expressed in Pa, W/m^2, and dB SPL. The required intensity should be achievable with the specified or a commercially available transducer.
+**預期：** 最小聲壓振幅之定量決定，以 Pa、W/m^2、dB SPL 表之，以達懸浮。所需強度宜可由所定或市售換能器達成。
 
-**On failure:** If the required pressure amplitude exceeds what available transducers can produce, reduce the object mass or density, use a lighter material, or switch to a medium with higher density (e.g., levitate in a dense gas like SF6 to increase the radiation force). Alternatively, use multiple transducers in a focused array to concentrate acoustic energy at the trapping point.
+**失敗時：** 若所需壓力振幅超可用換能器所能產生者，減物質量或密度，用較輕之材，或換至密度較高之介質（如於 SF6 等稠氣中懸浮以增輻射力）。或用多換能器於聚焦陣列中以集聲能於捕獲點。
 
-### Step 3: Design Transducer-Reflector Geometry
+### 步驟三：設計換能器-反射器幾何
 
-Configure the physical hardware to produce a stable standing wave:
+配物理硬體以生穩定駐波：
 
-1. **Transducer selection**: Choose an ultrasonic transducer at frequency f (common: 28 kHz, 40 kHz, or 60-80 kHz piezoelectric transducers). Higher frequency gives smaller wavelength and tighter trapping, but reduces the maximum object size. Verify that the transducer can produce the required P_0 at the operating distance.
-2. **Reflector design**: Place a flat or concave reflector opposite the transducer. The reflector surface should be acoustically hard (high acoustic impedance mismatch with the medium). Metal or glass plates work well in air. A concave reflector concentrates the sound field and increases the pressure amplitude at the axis.
-3. **Cavity length**: Set the transducer-reflector distance L to an integer number of half-wavelengths: L = n * lambda/2, where n is a positive integer. This creates n pressure nodes between the transducer and reflector, spaced lambda/2 apart.
-4. **Node positions**: The pressure nodes are located at z_j = (2j - 1) * lambda/4 from the reflector surface, for j = 1, 2, ..., n. The node closest to the center of the cavity is typically the most stable trapping site.
-5. **Resonance tuning**: Fine-tune L by adjusting the transducer-reflector distance with a micrometer stage while monitoring the levitation force or the acoustic pressure with a microphone. The optimal distance produces the strongest standing wave.
+1. **換能器擇選**：擇頻率 f 之超聲波換能器（常見：28 kHz、40 kHz 或 60-80 kHz 之壓電換能器）。頻率高則波長小、捕獲緊，然最大物之大小減。驗換能器於操作距離上可生所需之 P_0。
+2. **反射器設計**：置平面或凹面反射器於換能器對面。反射器表面應聲學硬（與介質之聲阻抗不匹大）。空氣中金屬或玻璃板皆佳。凹面反射器集聲場，增軸上壓力振幅。
+3. **腔長**：設換能器-反射器距 L 為半波長之整數倍：L = n * lambda/2，n 為正整數。此於換能器與反射器間造 n 個壓力節，每隔 lambda/2。
+4. **節位置**：壓力節位於 z_j = (2j - 1) * lambda/4 處（自反射器表面量），j = 1, 2, ..., n。近腔中心之節通常為最穩定之捕獲點。
+5. **共振調諧**：以千分尺台調換能器-反射器距以細調 L，同時以麥克風監懸浮力或聲壓。最優距生最強駐波。
 
 ```markdown
 ## Geometry Design
@@ -121,25 +121,25 @@ Configure the physical hardware to produce a stable standing wave:
 - **Selected trapping node**: z_[j] = [value]
 ```
 
-**Expected:** A complete hardware specification with transducer, reflector, and cavity length determined. Node positions are computed and the trapping node is selected.
+**預期：** 完整硬體規格，定換能器、反射器、腔長。算出節位置，擇捕獲節。
 
-**On failure:** If no stable standing wave forms (common when L is not precisely n * lambda/2), adjust the cavity length in increments of 0.1 mm. Temperature changes shift c_0 and thus lambda, requiring re-tuning. If the transducer beam diverges too much for the cavity length, add a horn or waveguide to collimate the beam, or reduce L.
+**失敗時：** 若無穩駐波形成（常因 L 非精確為 n * lambda/2），以 0.1 mm 之增量調腔長。溫變移 c_0 進而移 lambda，須重調。若換能器波束於腔長內過發散，加號筒或波導以準直波束，或減 L。
 
-### Step 4: Compute Trapping Potential and Restoring Forces
+### 步驟四：算捕獲勢與恢復力
 
-Quantify the strength and spatial extent of the acoustic trap:
+量化聲阱之強度與空間範圍：
 
-1. **Gor'kov potential**: For a small sphere in the standing wave field, compute the Gor'kov potential:
+1. **Gor'kov 勢**：駐波場中小球之 Gor'kov 勢為：
    - U(r) = (4/3) * pi * a^3 * [(f_1 / (2 * rho_0 * c_0^2)) * <p^2> - (3 * f_2 * rho_0 / 4) * <v^2>]
-   - where <p^2> and <v^2> are the time-averaged squared pressure and velocity fields.
-   - The object is trapped at the minimum of U(r) + m*g*z (including gravity).
-2. **Axial restoring force**: Near the trapping node, expand F_z to first order:
-   - F_z ~ -k_z * delta_z, where k_z = (2 * pi * a^3 * P_0^2 * k^2) / (3 * rho_0 * c_0^2) * Phi
-   - The axial natural frequency is omega_z = sqrt(k_z / m).
-3. **Lateral restoring force**: In a finite-width beam, the lateral radiation force arises from the transverse intensity gradient. For a Gaussian beam profile with waist w:
-   - k_r ~ k_z * (a / w)^2 (approximate, lateral stiffness is weaker than axial)
-   - Lateral trapping is weaker than axial; this is the limiting factor for stability.
-4. **Trapping depth**: The maximum displacement before the object escapes the trap is determined by the potential well depth. For the axial direction, the well depth is Delta_U = F_ax_max * lambda / (2 * pi). Express as a multiple of the thermal energy k_B * T if relevant (always relevant for micrometer-scale particles, negligible for millimeter-scale objects in air).
+   - 其中 <p^2> 與 <v^2> 為時均壓力與速度場平方。
+   - 物捕於 U(r) + m*g*z（含重力）之最小處。
+2. **軸向恢復力**：捕獲節近處，將 F_z 一階展開：
+   - F_z ~ -k_z * delta_z，其中 k_z = (2 * pi * a^3 * P_0^2 * k^2) / (3 * rho_0 * c_0^2) * Phi
+   - 軸向自然頻率為 omega_z = sqrt(k_z / m)。
+3. **側向恢復力**：有限寬之波束中，側向輻射力來自橫向強度梯度。腰 w 之 Gaussian 波束輪廓：
+   - k_r ~ k_z * (a / w)^2（近似，側向剛度較軸向為弱）
+   - 側向捕獲較軸向為弱；此為穩定性之限制因素。
+4. **捕獲深度**：物逃阱前之最大位移由勢井深決定。軸向井深為 Delta_U = F_ax_max * lambda / (2 * pi)。若相關則以熱能 k_B * T 之倍數表（空氣中微米尺度粒子恆相關，毫米尺度物可忽）。
 
 ```markdown
 ## Trapping Analysis
@@ -151,19 +151,19 @@ Quantify the strength and spatial extent of the acoustic trap:
 - **Stiffness ratio**: k_z / k_r = [value] (lateral is weaker)
 ```
 
-**Expected:** Quantitative stiffness values for both axial and lateral directions, natural frequencies computed, and the trapping potential well depth determined. Lateral stiffness is confirmed to be positive (though weaker than axial).
+**預期：** 軸向與側向兩向之定量剛度值，算出自然頻率，定捕獲勢井深。確認側向剛度為正（然較軸向弱）。
 
-**On failure:** If the lateral stiffness is negative or negligibly small, the object will drift sideways out of the beam. Solutions include using a wider transducer (larger beam waist), adding lateral transducers, switching to a phased array configuration, or using a concave reflector to create a converging wavefront that provides stronger lateral confinement.
+**失敗時：** 若側向剛度為負或微小，物將側漂出波束。解法含用較寬之換能器（較大之波束腰）、加側向換能器、換至相控陣列配置、或用凹面反射器以造聚焦波前提供更強之側向約束。
 
-### Step 5: Verify Stability Against Perturbations
+### 步驟五：驗擾動之穩定性
 
-Confirm that the designed system will reliably trap and hold the object:
+確認所設系統可靠捕獲並持物：
 
-1. **Gravity offset**: The equilibrium position is shifted below the pressure node by delta_z = m * g / k_z. Verify that delta_z << lambda/4 (the distance to the potential maximum). If delta_z approaches lambda/4, the object falls out of the trap.
-2. **Air current sensitivity**: Estimate the drag force from ambient air currents. For a sphere, F_drag = 6 * pi * eta * a * v_air (Stokes drag). Compare with the lateral restoring force: the maximum tolerable air speed is v_max = k_r * a / (6 * pi * eta * a) = k_r / (6 * pi * eta).
-3. **Acoustic streaming**: The standing wave drives steady circulatory flows (Rayleigh streaming) with velocity v_stream ~ P_0^2 / (4 * rho_0 * c_0^3 * eta) * lambda. These flows exert drag on the levitated object. Verify that the streaming drag is smaller than the lateral restoring force.
-4. **Thermal effects**: Acoustic absorption heats the medium, changing c_0 and shifting the node positions. For high-intensity operation (> 160 dB SPL), estimate the temperature rise and the resulting node drift over the operating time.
-5. **Phased array extension** (if manipulation is needed): For dynamic object repositioning, replace the single transducer-reflector pair with a phased array of transducers. By adjusting the relative phases, the pressure node positions can be moved continuously, carrying the trapped object with them. The phase resolution determines the positioning precision: delta_z ~ lambda / (2 * pi * N_phase_bits).
+1. **重力偏移**：平衡位置於壓力節下偏 delta_z = m * g / k_z。驗 delta_z << lambda/4（至勢極大之距）。若 delta_z 接 lambda/4，物自阱落。
+2. **氣流敏感性**：估環境氣流之拖曳力。對球，F_drag = 6 * pi * eta * a * v_air（Stokes 拖曳）。與側向恢復力比之：最大可容風速為 v_max = k_r * a / (6 * pi * eta * a) = k_r / (6 * pi * eta)。
+3. **聲流**：駐波驅穩循環流（Rayleigh streaming），速度 v_stream ~ P_0^2 / (4 * rho_0 * c_0^3 * eta) * lambda。此等流對懸浮物施拖曳。驗聲流拖曳小於側向恢復力。
+4. **熱效應**：聲吸收熱介質，變 c_0 而移節位置。高強度操作（> 160 dB SPL）宜估溫升及操作期間之節漂。
+5. **相控陣列擴展**（若需操控）：動態物重定位時，以換能器相控陣列替單換能器-反射器對。調相對相可連續移壓力節位置，攜捕獲物同行。相解析度決位置精度：delta_z ~ lambda / (2 * pi * N_phase_bits)。
 
 ```markdown
 ## Stability Verification
@@ -175,33 +175,33 @@ Confirm that the designed system will reliably trap and hold the object:
 | Thermal drift | Delta_T = [val] K | Re-tune interval | [time] | [Acceptable/No] |
 ```
 
-**Expected:** All perturbation sources are quantified and shown to be within the trapping margins. The gravity offset is a small fraction of lambda/4. Air current and streaming effects do not overwhelm the lateral trap.
+**預期：** 所有擾動源已量化，並示於捕獲餘量內。重力偏移為 lambda/4 之小分數。氣流與聲流效應不壓倒側向阱。
 
-**On failure:** If the gravity offset is too large (heavy object, weak field), increase P_0 or use a higher frequency (stronger gradient per wavelength). If air currents are a problem, enclose the levitator in a draft shield. If acoustic streaming destabilizes the object, reduce the driving amplitude and use a reflector geometry that minimizes streaming vortices (e.g., a shallow concave reflector).
+**失敗時：** 若重力偏移過大（物重、場弱），增 P_0 或用更高頻率（每波長更強之梯度）。若氣流為患，將懸浮器封於擋風罩。若聲流擾物，減驅動振幅並用最小化流渦之反射器幾何（如淺凹反射器）。
 
-## Validation
+## 驗證
 
-- [ ] Object size satisfies a << lambda (Gor'kov theory applicable)
-- [ ] Acoustic contrast factors are computed and the trapping location (node/antinode) is identified
-- [ ] Required pressure amplitude P_0 is calculated and achievable with specified hardware
-- [ ] Transducer-reflector cavity length is set to n * lambda/2 with node positions computed
-- [ ] Axial and lateral stiffness are both positive
-- [ ] Gravity offset delta_z is a small fraction of lambda/4
-- [ ] Air current and acoustic streaming perturbations are within trapping margins
-- [ ] Safety considerations for high-SPL operation are documented
-- [ ] If phased array is used, phase control resolution and positioning precision are specified
+- [ ] 物之大小滿足 a << lambda（Gor'kov 理論適用）
+- [ ] 算出聲學對比因子，識別捕獲位置（節/波腹）
+- [ ] 所需壓力振幅 P_0 算出，可由所定硬體達成
+- [ ] 換能器-反射器腔長設為 n * lambda/2，算出節位置
+- [ ] 軸向與側向剛度皆為正
+- [ ] 重力偏移 delta_z 為 lambda/4 之小分數
+- [ ] 氣流與聲流擾動於捕獲餘量內
+- [ ] 高 SPL 操作之安全考量已載之
+- [ ] 若用相控陣列，載相控解析度與位置精度
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Violating the small-particle assumption**: The Gor'kov radiation force formula assumes a << lambda. For objects approaching lambda/4 in size, the point-particle approximation breaks down and the actual force can differ significantly (both in magnitude and direction) from the Gor'kov prediction. Use full-wave simulation for large objects.
-- **Ignoring lateral confinement**: Most introductory treatments focus on the axial (vertical) trapping force and neglect the much weaker lateral restoring force. In practice, lateral instability is the primary failure mode, especially for objects near the upper size limit.
-- **Forgetting acoustic streaming**: High-intensity standing waves always drive steady streaming flows. These flows exert drag on the levitated object that competes with the radiation force. Streaming is not a small effect -- it can be the dominant destabilizing influence at high SPL.
-- **Temperature sensitivity**: The speed of sound in air changes by about 0.6 m/s per degree Celsius. Over a 10-degree temperature swing, the wavelength shifts by about 2%, which moves the node positions by millimeters in a typical cavity. Long-running experiments need active length compensation or temperature control.
-- **Confusing pressure nodes with velocity nodes**: Pressure nodes are velocity antinodes and vice versa. Solid objects with positive contrast factors are trapped at pressure nodes (where the pressure oscillation is minimum and the velocity oscillation is maximum). Reversing this leads to trapping at the wrong position.
-- **Neglecting nonlinear effects at high amplitude**: Above approximately 155-160 dB SPL, nonlinear acoustic effects (harmonic generation, shock formation) become significant and reduce the effective trapping force compared to linear theory predictions.
+- **違小粒子假設**：Gor'kov 輻射力公式設 a << lambda。物大小近 lambda/4 時，點粒子近似崩潰，實際力可能顯著異於 Gor'kov 預測（大小與方向皆然）。對大物宜用全波模擬。
+- **忽側向約束**：多數入門處理聚焦軸向（垂直）捕獲力，忽較弱之側向恢復力。實務中，側向不穩為首要失敗模式，尤於近大小上限之物。
+- **忘聲流**：高強度駐波恆驅穩流。此等流對懸浮物施拖曳，與輻射力相爭。聲流非小效應——高 SPL 時可為主宰之不穩影響。
+- **溫度敏感**：空氣中聲速隨攝氏溫度每度變約 0.6 m/s。10 度溫擺下，波長移約 2%，於典型腔中移節位置數毫米。長時實驗需主動長度補償或溫控。
+- **混壓力節與速度節**：壓力節為速度波腹，反之亦然。正對比因子之固體物捕於壓力節（壓力振盪最小、速度振盪最大處）。反之致捕於錯位。
+- **忽高振幅之非線性效應**：約 155-160 dB SPL 以上，非線性聲效應（諧波生、激波形成）顯著而減有效捕獲力較線性理論預測為小。
 
-## Related Skills
+## 相關技能
 
-- `evaluate-levitation-mechanism` -- compare acoustic levitation with magnetic, electrostatic, and aerodynamic alternatives
-- `analyze-magnetic-levitation` -- complementary magnetic levitation analysis for comparison
-- `derive-theoretical-result` -- derive acoustic radiation pressure from first principles
+- `evaluate-levitation-mechanism` —— 比聲懸浮與磁、靜電、氣動替代
+- `analyze-magnetic-levitation` —— 供比較之互補磁懸浮分析
+- `derive-theoretical-result` —— 自第一原理推聲輻射壓

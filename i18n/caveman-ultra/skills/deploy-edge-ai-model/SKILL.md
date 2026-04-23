@@ -28,32 +28,32 @@ metadata:
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files, quantization scripts, and benchmark templates.
 
-Deploy ML models to edge devices with optimized inference, hardware acceleration, and on-device model management.
+ML → edge devices. Optimized inference, HW accel, on-device mgmt.
 
-## When to Use
+## Use When
 
-- Deploying LLMs (Gemma 4, Phi, Llama) to mobile devices via Google AI Edge Gallery
-- Converting models to TensorFlow Lite or ONNX for on-device inference
-- Quantizing models to INT8/INT4 for reduced memory and faster inference
-- Building Android/iOS apps with local AI capabilities
-- Selecting hardware delegates (GPU, NPU, DSP, Hexagon, CoreML)
-- Benchmarking inference latency and memory on target devices
-- Deploying MediaPipe tasks (vision, text, audio) to mobile or embedded platforms
+- LLMs (Gemma 4, Phi, Llama) → mobile via Google AI Edge Gallery
+- Convert → TFLite/ONNX for on-device
+- Quantize → INT8/INT4, less mem + faster
+- Android/iOS apps w/ local AI
+- HW delegate select (GPU, NPU, DSP, Hexagon, CoreML)
+- Bench latency + mem on target
+- MediaPipe tasks → mobile/embedded
 
-## Inputs
+## In
 
-- **Required**: Trained model (SavedModel, PyTorch, ONNX, or Hugging Face checkpoint)
+- **Required**: Trained model (SavedModel, PyTorch, ONNX, HF checkpoint)
 - **Required**: Target platform (Android, iOS, Linux embedded, browser)
-- **Required**: Target device constraints (RAM, storage, compute capability)
-- **Optional**: Calibration dataset for post-training quantization
-- **Optional**: Google AI Edge Gallery configuration for LLM deployment
-- **Optional**: Hardware delegate preferences (GPU, NPU, CPU-only)
+- **Required**: Device constraints (RAM, storage, compute)
+- **Optional**: Calibration dataset → post-training quant
+- **Optional**: AI Edge Gallery config → LLM deploy
+- **Optional**: HW delegate prefs
 
-## Procedure
+## Do
 
-### Step 1: Evaluate Model for Edge Deployment
+### Step 1: Eval model → edge
 
-Assess model size, latency requirements, and target device capabilities.
+Size, latency, device cap.
 
 ```python
 # assess_model.py
@@ -81,7 +81,7 @@ def assess_model_for_edge(saved_model_path, target_ram_mb=4096):
     return True
 ```
 
-Edge deployment decision matrix:
+Decision matrix:
 
 | Model Size | Device RAM | Recommended Action |
 |-----------|-----------|-------------------|
@@ -91,13 +91,13 @@ Edge deployment decision matrix:
 | 2-4 GB | 8+ GB | Gemma 4 via AI Edge Gallery with INT4 |
 | > 4 GB | 12+ GB | Weight streaming or cloud-edge hybrid |
 
-**Expected:** Model assessment completes, size and RAM ratios calculated, quantization recommendation generated based on device constraints.
+→ Assessment done, size/RAM ratios, quant recommendation by constraints.
 
-**On failure:** Verify SavedModel path is valid (`ls saved_model/`), check TensorFlow installation (`python -c "import tensorflow"`), ensure sufficient disk space for model loading, verify model format is supported.
+If err: SavedModel path valid (`ls saved_model/`), TF installed (`python -c "import tensorflow"`), disk space OK, format supported.
 
-### Step 2: Deploy LLMs via Google AI Edge Gallery
+### Step 2: LLMs via Google AI Edge Gallery
 
-Use Google AI Edge Gallery to deploy Gemma 4 and other LLMs to Android devices.
+Gemma 4 + LLMs → Android.
 
 ```bash
 # Clone AI Edge Gallery
@@ -111,7 +111,7 @@ cd ai-edge-gallery
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-Configure Gemma 4 model for AI Edge Gallery:
+Gemma 4 config:
 
 ```json
 {
@@ -142,7 +142,7 @@ Configure Gemma 4 model for AI Edge Gallery:
 }
 ```
 
-Programmatic on-device inference with LLM Inference API:
+Programmatic inference w/ LLM Inference API:
 
 ```python
 # gemma_edge_inference.py
@@ -169,13 +169,13 @@ for chunk in engine.generate_response_async("List three benefits of on-device AI
     print(chunk, end="", flush=True)
 ```
 
-**Expected:** AI Edge Gallery app builds and installs successfully, Gemma 4 model downloads to device, on-device inference produces coherent responses, GPU delegate activates for acceleration.
+→ App builds+installs, Gemma 4 downloads, coherent responses, GPU delegate active.
 
-**On failure:** Check Android SDK version >= 26 (`adb shell getprop ro.build.version.sdk`), verify device has sufficient storage for model download, ensure GPU delegate is supported (`adb logcat | grep -i delegate`), check Hugging Face model access permissions, verify ADB connection (`adb devices`).
+If err: SDK ≥ 26 (`adb shell getprop ro.build.version.sdk`), device storage OK, GPU delegate supported (`adb logcat | grep -i delegate`), HF access, ADB connection (`adb devices`).
 
-### Step 3: Convert and Quantize Models with TFLite
+### Step 3: Convert + quantize w/ TFLite
 
-Convert standard models to TFLite format with post-training quantization.
+Standard → TFLite w/ post-training quant.
 
 ```python
 # convert_tflite.py
@@ -226,7 +226,7 @@ def convert_to_tflite(saved_model_path, output_path, quantization="dynamic"):
 convert_to_tflite("saved_model/", "model_int8.tflite", quantization="int8")
 ```
 
-ONNX Runtime quantization alternative:
+ONNX Runtime quant alt:
 
 ```python
 # quantize_onnx.py
@@ -243,13 +243,13 @@ quantize_dynamic(
 # ... (see EXAMPLES.md for complete calibration workflow)
 ```
 
-**Expected:** TFLite model generated at specified path, model size reduced by 2-4x with INT8, inference accuracy within 1-2% of original, ONNX quantization produces valid model.
+→ TFLite gen'd, size -2-4x w/ INT8, accuracy within 1-2%, ONNX quant valid.
 
-**On failure:** Check TensorFlow version >= 2.15 for latest quantization support, verify representative dataset matches model input shape, ensure all ops are supported in TFLite (`converter.allow_custom_ops = True` as fallback), check ONNX opset version compatibility.
+If err: TF ≥ 2.15, rep dataset matches input shape, all ops supported (`converter.allow_custom_ops = True` fallback), ONNX opset compat.
 
-### Step 4: Configure Hardware Delegates
+### Step 4: HW delegates
 
-Select and configure hardware acceleration delegates for target devices.
+Select + config.
 
 ```python
 # configure_delegates.py
@@ -281,7 +281,7 @@ def create_interpreter_with_delegate(model_path, delegate="gpu"):
     return interpreter
 ```
 
-Delegate selection guide:
+Delegate guide:
 
 | Device | Best Delegate | Fallback | Notes |
 |--------|--------------|----------|-------|
@@ -292,13 +292,13 @@ Delegate selection guide:
 | Linux embedded | GPU (if available) | XNNPACK | RPi uses XNNPACK CPU |
 | Browser | WebGL / WebGPU | WASM SIMD | Via TensorFlow.js |
 
-**Expected:** Delegate loads without errors, inference runs on target accelerator, latency improves 2-10x over CPU-only depending on model and device.
+→ Delegate loads, inference on accel, latency 2-10x vs CPU-only.
 
-**On failure:** Verify delegate library exists on device, check device supports requested delegate (`adb shell cat /proc/cpuinfo` for CPU features), fall back to XNNPACK if GPU/NPU unavailable, check OpenCL support for GPU delegate, verify NNAPI version (`adb shell getprop ro.android.ndk.version`).
+If err: Lib on device, delegate supported (`adb shell cat /proc/cpuinfo`), fall back XNNPACK, OpenCL for GPU, NNAPI ver.
 
-### Step 5: Benchmark On-Device Performance
+### Step 5: Bench on-device
 
-Measure inference latency, memory usage, and power consumption on target devices.
+Latency, mem, power.
 
 ```bash
 # Use TFLite benchmark tool
@@ -325,7 +325,7 @@ adb shell /data/local/tmp/benchmark_model \
   --num_runs=50
 ```
 
-Python benchmarking:
+Python bench:
 
 ```python
 # benchmark_edge.py
@@ -360,13 +360,13 @@ def benchmark_inference(interpreter, input_data, num_runs=100):
     print(f"Throughput: {1000 / np.mean(latencies):.1f} inferences/sec")
 ```
 
-**Expected:** Benchmark produces latency percentiles, memory usage, and throughput metrics; GPU delegate shows 2-5x speedup over CPU for vision models; Gemma 4 2B achieves 10-30 tokens/sec on flagship phones.
+→ Latency percentiles + mem + throughput. GPU 2-5x vs CPU. Gemma 4 2B → 10-30 tok/sec flagship.
 
-**On failure:** Ensure benchmark binary matches device architecture (arm64-v8a), verify model pushed to device (`adb shell ls /data/local/tmp/`), check sufficient device storage, kill background apps to reduce memory pressure, verify thermal throttling not active (`adb shell cat /sys/class/thermal/thermal_zone*/temp`).
+If err: Bench binary matches arch (arm64-v8a), model pushed (`adb shell ls /data/local/tmp/`), storage OK, kill bg apps, thermal throttle check (`adb shell cat /sys/class/thermal/thermal_zone*/temp`).
 
-### Step 6: Package for Production Deployment
+### Step 6: Package → prod
 
-Build the final mobile application with embedded or downloadable model.
+Mobile app w/ embedded/downloadable model.
 
 ```kotlin
 // Android: EdgeAIManager.kt
@@ -402,7 +402,7 @@ class EdgeAIManager(private val context: Context) {
 }
 ```
 
-Model download and caching strategy:
+Download + cache:
 
 ```kotlin
 // ModelDownloader.kt
@@ -421,37 +421,37 @@ class ModelDownloader(private val context: Context) {
 }
 ```
 
-**Expected:** Android app builds with MediaPipe dependency, model loads on first launch, inference runs within latency budget, model cached after first download, graceful fallback when device is unsupported.
+→ App builds w/ MediaPipe, model loads first launch, latency OK, cached after download, fallback on unsupported.
 
-**On failure:** Check minSdk >= 26 in `build.gradle`, verify MediaPipe dependency version, ensure model file not corrupted (check SHA256), verify sufficient device storage for model, check ProGuard rules preserve MediaPipe classes, test on multiple device tiers.
+If err: `minSdk ≥ 26`, MediaPipe dep ver, model SHA256, storage, ProGuard preserves MediaPipe classes, test multi-device.
 
-## Validation
+## Check
 
-- [ ] Model converts to TFLite/ONNX without op compatibility errors
-- [ ] Quantized model accuracy within acceptable tolerance (< 2% degradation)
-- [ ] Hardware delegate loads and accelerates inference
-- [ ] Benchmark latency meets target (e.g., < 100ms for vision, < 50ms/token for LLM)
-- [ ] Memory usage stays within device budget
-- [ ] AI Edge Gallery successfully loads and runs Gemma 4 model
-- [ ] On-device LLM generates coherent responses
-- [ ] Application handles model download, caching, and updates
-- [ ] Graceful degradation on unsupported devices
-- [ ] Battery impact within acceptable range for target use case
+- [ ] Model → TFLite/ONNX w/o op errs
+- [ ] Quant accuracy < 2% degrade
+- [ ] HW delegate loads + accels
+- [ ] Latency meets target (< 100ms vision, < 50ms/tok LLM)
+- [ ] Mem within budget
+- [ ] AI Edge Gallery runs Gemma 4
+- [ ] On-device LLM coherent
+- [ ] App handles download/cache/update
+- [ ] Graceful degrade on unsupported
+- [ ] Battery acceptable
 
-## Common Pitfalls
+## Traps
 
-- **Unsupported ops in TFLite**: Custom ops fail conversion - use `converter.allow_custom_ops = True` or replace with supported alternatives, check op compatibility list
-- **Quantization accuracy loss**: INT4 degrades quality for sensitive tasks - use mixed precision, calibrate with representative data, evaluate on edge-specific test set
-- **Delegate initialization failure**: GPU delegate crashes on older devices - always implement CPU fallback, check delegate compatibility before loading
-- **Memory pressure on device**: Model + app exceeds available RAM - use memory-mapped models, implement model unloading, reduce batch size to 1
-- **Thermal throttling**: Sustained inference causes device overheating - implement duty cycling, reduce inference frequency, monitor thermal zones
-- **Model download size**: Large models over cellular data - offer Wi-Fi-only download, implement resumable downloads, use progressive model loading
-- **Version fragmentation**: Model works on some devices but not others - test on representative device matrix, use NNAPI version checks, maintain device compatibility database
+- **Unsupported TFLite ops**: Custom ops fail → `converter.allow_custom_ops = True` or replace, check compat list
+- **Quant accuracy loss**: INT4 degrades sensitive → mixed precision, calibrate w/ rep data
+- **Delegate init fail**: GPU crashes old devices → CPU fallback, check compat
+- **Mem pressure**: Model + app > RAM → memory-mapped, unload, batch=1
+- **Thermal throttle**: Sustained inference → overheat → duty cycle, reduce freq, monitor zones
+- **Download size**: Large over cellular → Wi-Fi-only, resumable, progressive
+- **Version fragmentation**: Works some not others → device matrix test, NNAPI ver checks, compat DB
 
-## Related Skills
+## →
 
-- `deploy-ml-model-serving` - Cloud-based model serving (complement to edge)
-- `monitor-model-drift` - Monitor model quality over time
-- `register-ml-model` - Register models before edge deployment
-- `create-dockerfile` - Containerize edge model conversion pipeline
-- `create-multistage-dockerfile` - Multi-stage builds for model conversion pipelines
+- `deploy-ml-model-serving` — cloud serving (complement to edge)
+- `monitor-model-drift` — quality over time
+- `register-ml-model` — register before edge deploy
+- `create-dockerfile` — containerize conversion pipeline
+- `create-multistage-dockerfile` — multi-stage builds

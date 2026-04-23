@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Deploy machine learning models to edge devices using Google AI Edge Gallery,
   TensorFlow Lite, ONNX Runtime, and MediaPipe. Covers model quantization
@@ -91,9 +91,9 @@ Edge deployment decision matrix:
 | 2-4 GB | 8+ GB | Gemma 4 via AI Edge Gallery with INT4 |
 | > 4 GB | 12+ GB | Weight streaming or cloud-edge hybrid |
 
-**Expected:** Model assessment completes, size and RAM ratios calculated, quantization recommendation generated based on device constraints.
+**Got:** Model assessment completes, size and RAM ratios calculated, quantization recommendation generated based on device constraints.
 
-**On failure:** Verify SavedModel path is valid (`ls saved_model/`), check TensorFlow installation (`python -c "import tensorflow"`), ensure sufficient disk space for model loading, verify model format is supported.
+**If fail:** Verify SavedModel path is valid (`ls saved_model/`), check TensorFlow installation (`python -c "import tensorflow"`), ensure sufficient disk space for model loading, verify model format is supported.
 
 ### Step 2: Deploy LLMs via Google AI Edge Gallery
 
@@ -169,9 +169,9 @@ for chunk in engine.generate_response_async("List three benefits of on-device AI
     print(chunk, end="", flush=True)
 ```
 
-**Expected:** AI Edge Gallery app builds and installs successfully, Gemma 4 model downloads to device, on-device inference produces coherent responses, GPU delegate activates for acceleration.
+**Got:** AI Edge Gallery app builds and installs successfully, Gemma 4 model downloads to device, on-device inference produces coherent responses, GPU delegate activates for acceleration.
 
-**On failure:** Check Android SDK version >= 26 (`adb shell getprop ro.build.version.sdk`), verify device has sufficient storage for model download, ensure GPU delegate is supported (`adb logcat | grep -i delegate`), check Hugging Face model access permissions, verify ADB connection (`adb devices`).
+**If fail:** Check Android SDK version >= 26 (`adb shell getprop ro.build.version.sdk`), verify device has sufficient storage for model download, ensure GPU delegate is supported (`adb logcat | grep -i delegate`), check Hugging Face model access permissions, verify ADB connection (`adb devices`).
 
 ### Step 3: Convert and Quantize Models with TFLite
 
@@ -243,9 +243,9 @@ quantize_dynamic(
 # ... (see EXAMPLES.md for complete calibration workflow)
 ```
 
-**Expected:** TFLite model generated at specified path, model size reduced by 2-4x with INT8, inference accuracy within 1-2% of original, ONNX quantization produces valid model.
+**Got:** TFLite model generated at specified path, model size reduced by 2-4x with INT8, inference accuracy within 1-2% of original, ONNX quantization produces valid model.
 
-**On failure:** Check TensorFlow version >= 2.15 for latest quantization support, verify representative dataset matches model input shape, ensure all ops are supported in TFLite (`converter.allow_custom_ops = True` as fallback), check ONNX opset version compatibility.
+**If fail:** Check TensorFlow version >= 2.15 for latest quantization support, verify representative dataset matches model input shape, ensure all ops are supported in TFLite (`converter.allow_custom_ops = True` as fallback), check ONNX opset version compatibility.
 
 ### Step 4: Configure Hardware Delegates
 
@@ -292,9 +292,9 @@ Delegate selection guide:
 | Linux embedded | GPU (if available) | XNNPACK | RPi uses XNNPACK CPU |
 | Browser | WebGL / WebGPU | WASM SIMD | Via TensorFlow.js |
 
-**Expected:** Delegate loads without errors, inference runs on target accelerator, latency improves 2-10x over CPU-only depending on model and device.
+**Got:** Delegate loads without errors, inference runs on target accelerator, latency improves 2-10x over CPU-only depending on model and device.
 
-**On failure:** Verify delegate library exists on device, check device supports requested delegate (`adb shell cat /proc/cpuinfo` for CPU features), fall back to XNNPACK if GPU/NPU unavailable, check OpenCL support for GPU delegate, verify NNAPI version (`adb shell getprop ro.android.ndk.version`).
+**If fail:** Verify delegate library exists on device, check device supports requested delegate (`adb shell cat /proc/cpuinfo` for CPU features), fall back to XNNPACK if GPU/NPU unavailable, check OpenCL support for GPU delegate, verify NNAPI version (`adb shell getprop ro.android.ndk.version`).
 
 ### Step 5: Benchmark On-Device Performance
 
@@ -360,9 +360,9 @@ def benchmark_inference(interpreter, input_data, num_runs=100):
     print(f"Throughput: {1000 / np.mean(latencies):.1f} inferences/sec")
 ```
 
-**Expected:** Benchmark produces latency percentiles, memory usage, and throughput metrics; GPU delegate shows 2-5x speedup over CPU for vision models; Gemma 4 2B achieves 10-30 tokens/sec on flagship phones.
+**Got:** Benchmark produces latency percentiles, memory usage, and throughput metrics; GPU delegate shows 2-5x speedup over CPU for vision models; Gemma 4 2B achieves 10-30 tokens/sec on flagship phones.
 
-**On failure:** Ensure benchmark binary matches device architecture (arm64-v8a), verify model pushed to device (`adb shell ls /data/local/tmp/`), check sufficient device storage, kill background apps to reduce memory pressure, verify thermal throttling not active (`adb shell cat /sys/class/thermal/thermal_zone*/temp`).
+**If fail:** Ensure benchmark binary matches device architecture (arm64-v8a), verify model pushed to device (`adb shell ls /data/local/tmp/`), check sufficient device storage, kill background apps to reduce memory pressure, verify thermal throttling not active (`adb shell cat /sys/class/thermal/thermal_zone*/temp`).
 
 ### Step 6: Package for Production Deployment
 
@@ -421,9 +421,9 @@ class ModelDownloader(private val context: Context) {
 }
 ```
 
-**Expected:** Android app builds with MediaPipe dependency, model loads on first launch, inference runs within latency budget, model cached after first download, graceful fallback when device is unsupported.
+**Got:** Android app builds with MediaPipe dependency, model loads on first launch, inference runs within latency budget, model cached after first download, graceful fallback when device is unsupported.
 
-**On failure:** Check minSdk >= 26 in `build.gradle`, verify MediaPipe dependency version, ensure model file not corrupted (check SHA256), verify sufficient device storage for model, check ProGuard rules preserve MediaPipe classes, test on multiple device tiers.
+**If fail:** Check minSdk >= 26 in `build.gradle`, verify MediaPipe dependency version, ensure model file not corrupted (check SHA256), verify sufficient device storage for model, check ProGuard rules preserve MediaPipe classes, test on multiple device tiers.
 
 ## Validation
 
@@ -438,7 +438,7 @@ class ModelDownloader(private val context: Context) {
 - [ ] Graceful degradation on unsupported devices
 - [ ] Battery impact within acceptable range for target use case
 
-## Common Pitfalls
+## Pitfalls
 
 - **Unsupported ops in TFLite**: Custom ops fail conversion - use `converter.allow_custom_ops = True` or replace with supported alternatives, check op compatibility list
 - **Quantization accuracy loss**: INT4 degrades quality for sensitive tasks - use mixed precision, calibrate with representative data, evaluate on edge-specific test set

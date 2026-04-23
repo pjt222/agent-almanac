@@ -23,47 +23,47 @@ metadata:
   tags: vercel, deployment, nextjs, hosting, ci-cd
 ---
 
-# Deploy to Vercel
+# 部署至 Vercel
 
-Deploy a Next.js application to Vercel with production configuration.
+部 Next.js 應於 Vercel 含生產配。
 
-## When to Use
+## 用
 
-- Deploying a Next.js app for the first time
-- Setting up preview deployments for pull requests
-- Configuring custom domains
-- Managing environment variables in production
+- 首次部 Next.js 應
+- 立拉請求預覽部署
+- 配自定域
+- 理生產環境變量
 
-## Inputs
+## 入
 
-- **Required**: Next.js application that builds successfully locally
-- **Required**: GitHub repository (recommended) or local project
-- **Optional**: Custom domain
-- **Optional**: Environment variables for production
+- **必**：本地構建成功之 Next.js 應
+- **必**：GitHub 倉庫（宜）或本地項目
+- **可**：自定域
+- **可**：生產環境變量
 
-## Procedure
+## 法
 
-### Step 1: Verify Local Build
+### 一：驗本地構建
 
 ```bash
 npm run build
 ```
 
-**Expected:** Build succeeds with no errors.
+**得：** 構建無錯成。
 
-**On failure:** Fix build errors before deploying. Common: TypeScript errors, missing dependencies, invalid imports.
+**敗：** 修構建錯後部。常見：TypeScript 錯、缺依賴、無效引入。
 
-### Step 2: Install Vercel CLI
+### 二：裝 Vercel CLI
 
 ```bash
 npm install -g vercel
 ```
 
-**Expected:** The `vercel` command is available globally and `vercel --version` prints the installed version.
+**得：** `vercel` 命令全局可用，`vercel --version` 印版本。
 
-**On failure:** If permission errors occur, use `sudo npm install -g vercel` or configure npm to use a user-local prefix. Verify Node.js is installed with `node --version`.
+**敗：** 權限錯→`sudo npm install -g vercel` 或配 npm 用戶本地前綴。`node --version` 驗 Node.js 已裝。
 
-### Step 3: Link and Deploy
+### 三：鏈接並部署
 
 ```bash
 # Login to Vercel
@@ -81,11 +81,11 @@ vercel
 # - Override settings? N
 ```
 
-**Expected:** Preview URL provided (e.g., `https://my-app-xxx.vercel.app`).
+**得：** 預覽 URL 給（如 `https://my-app-xxx.vercel.app`）。
 
-**On failure:** If `vercel login` fails, check internet connectivity and try browser-based authentication. If the deploy fails, review the build output for errors -- Vercel uses a clean environment, so all dependencies must be in `package.json`.
+**敗：** `vercel login` 失→查網，試瀏覽器認證。部失→察構建輸出錯——Vercel 用潔環境，諸依賴須於 `package.json`。
 
-### Step 4: Configure Environment Variables
+### 四：配環境變量
 
 ```bash
 # Add environment variables
@@ -96,51 +96,51 @@ vercel env add API_KEY production preview
 vercel env ls
 ```
 
-Or configure through the Vercel dashboard: Project Settings > Environment Variables.
+或經 Vercel 儀板：Project Settings > Environment Variables。
 
-**Expected:** `vercel env ls` shows all required environment variables configured for the correct environments (production, preview, development).
+**得：** `vercel env ls` 示諸需變量配於正環境（production、preview、development）。
 
-**On failure:** If variables are not appearing at runtime, verify the target environment matches (production vs preview). Redeploy after adding variables -- existing deployments do not pick up new variables automatically.
+**敗：** 運行時無變量→驗目標環境匹（production vs preview）。加變量後重部——現部不自動取新變量。
 
-### Step 5: Deploy to Production
+### 五：部至生產
 
 ```bash
 vercel --prod
 ```
 
-**Expected:** Production URL available (e.g., `https://my-app.vercel.app`).
+**得：** 生產 URL 可用（如 `https://my-app.vercel.app`）。
 
-**On failure:** Check deployment logs with `vercel logs` or in the Vercel dashboard. Common issues include missing environment variables in the production environment and build commands differing from local setup.
+**敗：** `vercel logs` 或 Vercel 儀板察部署日誌。常見：生產環境缺變量、構建命與本地異。
 
-### Step 6: Connect GitHub for Auto-Deploy (Recommended)
+### 六：連 GitHub 自動部署（宜）
 
-1. Go to https://vercel.com/new
-2. Import your GitHub repository
-3. Vercel automatically deploys on:
-   - Push to main -> Production deployment
-   - Pull request -> Preview deployment
+1. 至 https://vercel.com/new
+2. 引入 GitHub 倉
+3. Vercel 自動部於：
+   - 推 main → 生產部署
+   - 拉請求 → 預覽部署
 
-**Expected:** The Vercel dashboard shows the GitHub repository connected, and subsequent pushes to main trigger production deployments automatically.
+**得：** Vercel 儀板示 GitHub 倉已連，後推 main 自動觸發生產部署。
 
-**On failure:** If the repository does not appear in the import list, check that the Vercel GitHub app has access to the repository. Go to GitHub Settings > Applications > Vercel and grant access.
+**敗：** 倉未現於引入列→查 Vercel GitHub 應有倉訪問權。至 GitHub Settings > Applications > Vercel 授權。
 
-### Step 7: Configure Custom Domain
+### 七：配自定域
 
 ```bash
 vercel domains add my-domain.com
 ```
 
-Or through dashboard: Project Settings > Domains.
+或經儀板：Project Settings > Domains。
 
-Update DNS records as instructed by Vercel (typically CNAME or A record).
+按 Vercel 指示更 DNS 記錄（通常 CNAME 或 A）。
 
-**Expected:** `vercel domains ls` shows the custom domain as configured, and after DNS propagation (up to 48 hours), the domain resolves to the Vercel deployment.
+**得：** `vercel domains ls` 示自定域已配，DNS 傳播畢（至 48 時），域解至 Vercel 部署。
 
-**On failure:** If the domain shows "Invalid Configuration," verify DNS records match Vercel's instructions exactly. Use `dig my-domain.com` or an online DNS checker to confirm propagation.
+**敗：** 示「Invalid Configuration」→驗 DNS 記錄精匹 Vercel 指示。`dig my-domain.com` 或在線 DNS 檢確傳播。
 
-### Step 8: Optimize Configuration
+### 八：優化配置
 
-Create `vercel.json` for advanced settings:
+建 `vercel.json` 進階設：
 
 ```json
 {
@@ -157,29 +157,29 @@ Create `vercel.json` for advanced settings:
 }
 ```
 
-**Expected:** `vercel.json` is saved in the project root and the next deployment picks up the configuration (visible in the Vercel dashboard build logs).
+**得：** `vercel.json` 存項根，下部取配（於 Vercel 儀板構建日誌可見）。
 
-**On failure:** If the configuration is ignored, verify `vercel.json` is valid JSON with `jq . vercel.json`. Check the Vercel docs for your framework version, as some settings may have moved to `next.config.ts`.
+**敗：** 配忽→`jq . vercel.json` 驗有效 JSON。查 Vercel 文檔匹框架版本，某設可遷 `next.config.ts`。
 
-## Validation
+## 驗
 
-- [ ] `npm run build` succeeds locally
-- [ ] Preview deployment works and is accessible
-- [ ] Production deployment serves the application correctly
-- [ ] Environment variables are available in production
-- [ ] Custom domain resolves (if configured)
-- [ ] GitHub integration triggers deployments on push
+- [ ] `npm run build` 本地成
+- [ ] 預覽部署可達
+- [ ] 生產部署正確服務應
+- [ ] 生產環境變量可用
+- [ ] 自定域解（若配）
+- [ ] GitHub 集成推時觸部署
 
-## Common Pitfalls
+## 忌
 
-- **Build failing on Vercel but not locally**: Vercel uses a clean environment. Ensure all dependencies are in `package.json`, not just installed globally.
-- **Environment variables missing**: Variables must be added to Vercel, not just `.env.local`. Different environments (production, preview, development) have separate variable sets.
-- **Node.js version mismatch**: Set the Node.js version in Project Settings or `package.json` engines field.
-- **Large deployments**: Vercel has size limits. Use `.vercelignore` to exclude unnecessary files.
-- **API route timeouts**: Vercel serverless functions have a 10s timeout on the Hobby plan. Optimize or upgrade.
+- **本地成 Vercel 失**：Vercel 用潔環境。諸依賴須於 `package.json` 非僅全局裝。
+- **缺環境變量**：變量須加於 Vercel，非僅 `.env.local`。不同環境（production、preview、development）分別變量集。
+- **Node.js 版本異**：於 Project Settings 或 `package.json` engines 字段設 Node.js 版本。
+- **部署過大**：Vercel 有大小限。以 `.vercelignore` 排除不需檔。
+- **API 路超時**：Vercel 無服函於 Hobby 計畫 10s 超時。優化或升級。
 
-## Related Skills
+## 參
 
-- `scaffold-nextjs-app` - create the app to deploy
-- `setup-tailwind-typescript` - configure styling before deployment
-- `configure-git-repository` - Git setup for auto-deploy integration
+- `scaffold-nextjs-app`
+- `setup-tailwind-typescript`
+- `configure-git-repository`

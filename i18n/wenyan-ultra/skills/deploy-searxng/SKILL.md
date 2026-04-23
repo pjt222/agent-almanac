@@ -23,36 +23,36 @@ metadata:
   tags: searxng, self-hosted, search-engine, privacy, docker-compose, meta-search
 ---
 
-# Deploy SearXNG
+# 部署 SearXNG
 
-Deploy a self-hosted SearXNG meta search engine with Docker Compose and Nginx.
+以 Docker Compose+Nginx 部自託 SearXNG 元搜索。
 
-## When to Use
+## 用
 
-- Setting up a private, self-hosted search engine
-- Aggregating results from multiple search providers without tracking
-- Running a search instance for a team or organization
-- Replacing reliance on a single search provider
+- 建私人自託搜索
+- 聚合多源無跟蹤
+- 團隊/組織共享搜索
+- 替單一搜索提供商
 
-## Inputs
+## 入
 
-- **Required**: Server or machine with Docker installed
-- **Optional**: Domain name for public access
-- **Optional**: SSL certificate or Let's Encrypt setup
-- **Optional**: Custom engine preferences
+- **必**：有 Docker 之機
+- **可**：域名
+- **可**：SSL/Let's Encrypt
+- **可**：自定引擎偏好
 
-## Procedure
+## 法
 
-### Step 1: Create Project Structure
+### 一：建項目結構
 
 ```bash
 mkdir -p searxng/{config,nginx}
 cd searxng
 ```
 
-### Step 2: Write Docker Compose File
+### 二：書 Docker Compose
 
-`docker-compose.yml`:
+`docker-compose.yml`：
 
 ```yaml
 services:
@@ -91,9 +91,9 @@ networks:
     driver: bridge
 ```
 
-### Step 3: Configure SearXNG Settings
+### 三：配 SearXNG 設定
 
-`config/settings.yml`:
+`config/settings.yml`：
 
 ```yaml
 use_default_settings: true
@@ -152,15 +152,15 @@ engines:
     disabled: false
 ```
 
-Generate a secret key:
+生密鑰：
 
 ```bash
 openssl rand -hex 32
 ```
 
-### Step 4: Configure Nginx Frontend
+### 四：配 Nginx 前端
 
-`nginx/nginx.conf`:
+`nginx/nginx.conf`：
 
 ```nginx
 events {
@@ -190,9 +190,9 @@ http {
 }
 ```
 
-### Step 5: Configure Rate Limiting
+### 五：配限流
 
-`config/limiter.toml`:
+`config/limiter.toml`：
 
 ```toml
 [botdetection.ip_limit]
@@ -204,7 +204,7 @@ pass_ip = ["127.0.0.1/8", "::1/128"]
 pass_searxng_org = false
 ```
 
-### Step 6: Deploy and Verify
+### 六：部署並驗
 
 ```bash
 # Start the stack
@@ -220,13 +220,13 @@ curl -s http://localhost:8080 | head -5
 curl -s "http://localhost:8080/search?q=test&format=json" | head -20
 ```
 
-**Expected:** SearXNG responds on port 8080 through Nginx. Search queries return aggregated results.
+**得：** SearXNG 於 8080 經 Nginx 應。查詢返聚合結果。
 
-**On failure:** Check `docker compose logs searxng` for config errors. Verify `settings.yml` YAML syntax.
+**敗：** 察 `docker compose logs searxng` 覓配錯。驗 `settings.yml` YAML 語法。
 
-### Step 7: Add SSL (Production)
+### 七：加 SSL（生產）
 
-For public deployments, add SSL termination. Update `docker-compose.yml`:
+公開部署加 SSL。更 `docker-compose.yml`：
 
 ```yaml
 services:
@@ -250,9 +250,9 @@ volumes:
   certbot-webroot:
 ```
 
-See `configure-nginx` skill for the full SSL Nginx configuration.
+SSL Nginx 全配見 `configure-nginx` 技能。
 
-### Step 8: Updates and Maintenance
+### 八：更新與維護
 
 ```bash
 # Pull latest image
@@ -265,26 +265,26 @@ docker compose up -d
 cp -r config/ config-backup-$(date +%Y%m%d)/
 ```
 
-## Validation
+## 驗
 
-- [ ] SearXNG starts without errors in logs
-- [ ] Search queries return results from configured engines
-- [ ] Image proxy works (images load through SearXNG)
-- [ ] Rate limiter blocks excessive requests
-- [ ] Configuration persists across container restarts
-- [ ] Nginx proxies requests correctly
+- [ ] SearXNG 啟無錯於日誌
+- [ ] 查詢返配置引擎之結果
+- [ ] 圖代理工作（圖經 SearXNG 載）
+- [ ] 限流擋過量請求
+- [ ] 配置跨容器重啟持久
+- [ ] Nginx 正確代理
 
-## Common Pitfalls
+## 忌
 
-- **Missing secret_key**: SearXNG will refuse to start without a `secret_key` in settings.yml.
-- **Config permissions**: SearXNG writes to the config directory. The volume must be `:rw` not `:ro`.
-- **Engine blocks**: Some engines may block requests from server IPs. Rotate engines or use image proxy.
-- **YAML indentation**: `settings.yml` is sensitive to indentation. Validate with a YAML linter before deploying.
-- **Base URL mismatch**: `SEARXNG_BASE_URL` must match the actual URL users access, including protocol and trailing slash.
-- **DNS resolution in Docker**: Engines that use Google/Bing may need host network or proper DNS. Default Docker DNS usually works.
+- **缺 secret_key**：無此 SearXNG 拒啟。
+- **配權限**：SearXNG 寫配目錄。卷須 `:rw` 非 `:ro`。
+- **引擎封**：某引擎擋服務器 IP。輪替或用圖代理。
+- **YAML 縮進**：`settings.yml` 縮進敏感。部前以 YAML linter 驗。
+- **Base URL 不匹**：`SEARXNG_BASE_URL` 須匹用戶實訪 URL，含協議+尾斜線。
+- **Docker DNS 解析**：用 Google/Bing 引擎或需主機網絡或正 DNS。默認 Docker DNS 通常可。
 
-## Related Skills
+## 參
 
-- `setup-compose-stack` - general Docker Compose patterns used here
-- `configure-nginx` - Nginx configuration for SSL and security headers
-- `configure-reverse-proxy` - advanced proxy patterns for the Nginx frontend
+- `setup-compose-stack`
+- `configure-nginx`
+- `configure-reverse-proxy`

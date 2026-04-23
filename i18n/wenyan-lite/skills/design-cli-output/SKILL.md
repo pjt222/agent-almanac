@@ -32,30 +32,30 @@ metadata:
 
 # Design CLI Output
 
-Design consistent, multi-level terminal output for a command-line tool.
+為命令列工具設計一致之多層終端輸出。
 
-## When to Use
+## 適用時機
 
-- Building a new reporter module for a CLI tool
-- Adding warm or narrative output alongside standard transactional output
-- Standardizing output format across multiple commands
-- Designing JSON machine output parallel to human-readable output
-- Choosing colors, glyphs, and verbosity levels for a new terminal tool
+- 為 CLI 工具建新 reporter 模組
+- 於標準事務性輸出之外加暖或敘事輸出
+- 於多指令間統一輸出格式
+- 設計與人類可讀輸出並行之 JSON 機器輸出
+- 為新終端工具擇色、圖符與冗長度
 
-## Inputs
+## 輸入
 
-- **Required**: CLI tool name and primary audience (developers, operators, end users)
-- **Required**: Commands that need output formatting
-- **Optional**: Whether a "ceremony" or narrative output variant is desired
-- **Optional**: Branding constraints (color palette, tone)
+- **必需**：CLI 工具名與主要受眾（開發者、運維、終端用戶）
+- **必需**：需輸出格式化之指令
+- **可選**：是否需「儀式」或敘事輸出變體
+- **可選**：品牌約束（色盤、語氣）
 
-## Procedure
+## 步驟
 
-### Step 1: Define the Color Palette
+### 步驟一：定色盤
 
-Use chalk to create a named palette object:
+用 chalk 建命名色盤物件：
 
-**Standard palette** (transactional output):
+**標準色盤**（事務性輸出）：
 
 ```javascript
 let chalk;
@@ -71,7 +71,7 @@ const dim = chalk.dim;        // secondary info, paths
 const bold = chalk.bold;      // headers
 ```
 
-**Warm palette** (ceremony/narrative output):
+**暖色盤**（儀式/敘事輸出）：
 
 ```javascript
 const C = {
@@ -85,21 +85,21 @@ const C = {
 };
 ```
 
-Palette design rules:
-- Always provide a no-color fallback (the Proxy pattern above)
-- Use hex colors for custom palettes (`chalk.hex('#FF6B35')`)
-- Keep the fail/error color red regardless of palette theme
-- Name palette entries by semantic role, not visual appearance
+色盤設計規則：
+- 恆提供無色回退（如上之 Proxy 模式）
+- 自定色盤用 hex 色（`chalk.hex('#FF6B35')`）
+- 失敗/錯誤色保持紅色，不論色盤主題
+- 以語義角色命色盤項，非視覺外觀
 
-**Expected:** A palette object with named entries and a no-color fallback.
+**預期：** 具命名項與無色回退之色盤物件。
 
-**On failure:** If chalk is unavailable (piped output, CI), the Proxy fallback returns strings unchanged. Test with `NO_COLOR=1` environment variable.
+**失敗時：** 若 chalk 不可用（piped 輸出、CI），Proxy 回退返字串不變。以 `NO_COLOR=1` 環境變數測之。
 
-### Step 2: Choose Status Indicators
+### 步驟二：擇狀態指示符
 
-Select Unicode glyphs or ASCII characters for status communication:
+為狀態溝通擇 Unicode 圖符或 ASCII 字元：
 
-**ASCII (maximum compatibility):**
+**ASCII（最大相容性）：**
 
 ```
 +  created/installed (green)
@@ -108,7 +108,7 @@ Select Unicode glyphs or ASCII characters for status communication:
 !  error/warning (red)
 ```
 
-**Unicode (richer, needs UTF-8 terminal):**
+**Unicode（更豐富，需 UTF-8 終端）：**
 
 ```
 ✦  item/skill/practice (spark)
@@ -120,28 +120,28 @@ Select Unicode glyphs or ASCII characters for status communication:
 ✓  success (use sparingly — not all terminals render it well)
 ```
 
-Selection criteria:
-- ASCII for tools that run in CI or piped contexts
-- Unicode for tools with interactive terminal users
-- Offer both via a `--ascii` flag or `NO_COLOR` detection
-- Test glyphs in: macOS Terminal, Windows Terminal, VS Code terminal, SSH sessions
+擇選準則：
+- 於 CI 或 piped 情境中運行之工具用 ASCII
+- 具互動終端用戶之工具用 Unicode
+- 透過 `--ascii` 旗標或 `NO_COLOR` 偵測兩者兼供
+- 於 macOS Terminal、Windows Terminal、VS Code terminal、SSH 會話中測圖符
 
-**Expected:** A glyph set that communicates status at a glance without relying on color alone.
+**預期：** 一瞥即可溝通狀態而不恃色之圖符集。
 
-**On failure:** If a glyph renders as `?` or a box in testing, replace with the ASCII equivalent. The `+/-/=/!` set works everywhere.
+**失敗時：** 若圖符於測試中渲染為 `?` 或方框，以 ASCII 等效替之。`+/-/=/!` 集處處可用。
 
-### Step 3: Design Verbosity Levels
+### 步驟三：設計冗長度層級
 
-Every command should support four output levels:
+每指令應支援四輸出層級：
 
-| Level | Flag | Audience | Content |
+| 層級 | 旗標 | 受眾 | 內容 |
 |-------|------|----------|---------|
-| **Default** | (none) | Human at terminal | Formatted, colored, informative |
-| **Verbose** | `--verbose` or `--ceremonial` | Human wanting detail | Per-item breakdown, arrival sequences |
-| **Quiet** | `--quiet` | Scripts, CI | Minimal lines, status icons, no decoration |
-| **JSON** | `--json` | Machine consumers | Structured, parseable, complete |
+| **預設** | （無） | 終端前之人 | 格式化、著色、有料 |
+| **Verbose** | `--verbose` 或 `--ceremonial` | 欲詳情之人 | 逐項明細，到達序列 |
+| **Quiet** | `--quiet` | 腳本、CI | 極簡之行，狀態圖符，無裝飾 |
+| **JSON** | `--json` | 機器消費者 | 結構化、可解析、完整 |
 
-Implementation pattern:
+實作模式：
 
 ```javascript
 function output(data, options) {
@@ -161,43 +161,43 @@ function output(data, options) {
 }
 ```
 
-JSON output rules:
-- Always valid JSON (no mixing with human text)
-- Include all data the human output shows, plus machine-useful fields
-- Use consistent key naming across commands
-- Exit code 0 for success, 1 for errors (regardless of output mode)
+JSON 輸出規則：
+- 恆為有效 JSON（不混人類文字）
+- 含人類輸出所示之所有資料，加機器有用之欄位
+- 於指令間用一致之鍵命名
+- 成功出口碼 0，錯誤出口碼 1（不論輸出模式）
 
-**Expected:** Four clear output levels with consistent behavior across commands.
+**預期：** 四明層級，於指令間行為一致。
 
-**On failure:** If verbose mode is too noisy, make it opt-in (`--ceremonial`) rather than a graduated verbosity level.
+**失敗時：** 若 verbose 模式過噪，設其為自選（`--ceremonial`）而非漸進冗長度層級。
 
-### Step 4: Establish Voice Rules
+### 步驟四：立聲音規則
 
-Define the tone and style that all output functions follow. This prevents inconsistency across commands.
+定所有輸出函數遵循之語氣與風格。此防指令間不一致。
 
-Example voice rules (from the campfire reporter):
+聲音規則例（自 campfire reporter）：
 
-1. **Present tense, active voice**: "mystic arrives" not "mystic has been installed"
-2. **No exclamation marks**: Quiet confidence. The tool doesn't shout.
-3. **Metaphor replaces jargon**: "practices" not "dependencies" (only for ceremony mode)
-4. **Failures are honest, not catastrophic**: "A spark was lost" not "ERROR: installation failed with exit code 1"
-5. **Closing line reflects state**: Every operation ends with a status summary
-6. **No emoji**: Unicode glyphs carry visual weight without being decorative
-7. **Every word carries information**: If a word doesn't add understanding, remove it
+1. **現在時、主動語態**：「mystic arrives」非「mystic has been installed」
+2. **無驚嘆號**：靜之自信。工具不喊。
+3. **以隱喻替術語**：「practices」非「dependencies」（僅於儀式模式）
+4. **失敗誠實，非災難性**：「A spark was lost」非「ERROR: installation failed with exit code 1」
+5. **結語反映狀態**：每操作以狀態摘要結
+6. **無 emoji**：Unicode 圖符攜視覺重而不為裝飾
+7. **每字攜資訊**：若字不增理解，去之
 
-Voice rules for standard (non-ceremony) output:
-- Concise, factual lines
-- Status icon + item ID + context
-- Summary line with counts
-- Error messages suggest corrective actions
+標準（非儀式）輸出之聲音規則：
+- 簡潔、事實之行
+- 狀態圖符 + 項 ID + 情境
+- 具計數之摘要行
+- 錯誤訊息示補救行動
 
-**Expected:** A written set of 3-7 voice rules that output functions must follow.
+**預期：** 輸出函數須遵之 3-7 聲音規則之書面集。
 
-**On failure:** If rules feel arbitrary, test them: write the same output with and without each rule. If removing a rule doesn't change the output quality, the rule isn't needed.
+**失敗時：** 若規則感覺武斷，測之：以有無每規則書同一輸出。若去規則不改輸出品質，該規則不需。
 
-### Step 5: Implement Reporter Functions
+### 步驟五：實作 reporter 函數
 
-Organize output into a reporter module with focused functions:
+以聚焦之函數組輸出為 reporter 模組：
 
 ```javascript
 // reporter.js — standard output
@@ -211,13 +211,13 @@ export function error(msg) { ... }
 export { chalk };
 ```
 
-Each function follows the same structure:
-1. Handle empty/null input gracefully
-2. Compute layout (column widths, padding)
-3. Output with palette colors
-4. Summary line at the bottom
+每函數遵同結構：
+1. 優雅處理空/null 輸入
+2. 算佈局（欄寬、填充）
+3. 以色盤色輸出
+4. 底部摘要行
 
-For ceremony output, create a separate module:
+為儀式輸出建別模組：
 
 ```javascript
 // campfire-reporter.js — warm narrative output
@@ -229,13 +229,13 @@ export function printFireSummary({ team, fireData, reg }) { ... }
 export function printJson(data) { ... }
 ```
 
-**Expected:** Reporter functions that are independently usable — each handles its own formatting without depending on caller state.
+**預期：** 獨立可用之 reporter 函數——各自處理格式化而不依呼叫者狀態。
 
-**On failure:** If functions grow beyond ~50 lines, extract helpers. A reporter function should be easy to review in isolation.
+**失敗時：** 若函數長於 ~50 行，抽出輔助。reporter 函數應易於孤立地審閱。
 
-### Step 6: Test Output Across Environments
+### 步驟六：於諸環境測輸出
 
-Verify output renders correctly in different contexts:
+驗輸出於不同情境中正確渲染：
 
 ```bash
 # With colors (interactive terminal)
@@ -254,37 +254,37 @@ node cli/index.js campfire --json | jq .
 CI=true node cli/index.js audit
 ```
 
-Check for:
-- Colors display correctly in interactive mode
-- No ANSI escape codes leak into piped/redirected output
-- JSON is valid (pipe to `jq .` to verify)
-- Unicode glyphs render in the target terminals
-- Column alignment holds with varying content widths
+檢之於：
+- 色於互動模式中正確顯示
+- 無 ANSI 轉義碼漏入 piped/重定向輸出
+- JSON 有效（pipe 至 `jq .` 以驗）
+- Unicode 圖符於目標終端中渲染
+- 欄對齊於內容寬度變動時仍持
 
-**Expected:** Output is correct in all five contexts.
+**預期：** 輸出於所有五情境中皆正確。
 
-**On failure:** If ANSI codes leak, ensure chalk respects `NO_COLOR`. If Unicode breaks, provide an ASCII fallback mode.
+**失敗時：** 若 ANSI 碼漏，確 chalk 尊 `NO_COLOR`。若 Unicode 破，提供 ASCII 回退模式。
 
-## Validation
+## 驗證
 
-- [ ] Color palette has a no-color fallback
-- [ ] Status indicators work in both color and no-color modes
-- [ ] All four verbosity levels produce useful output
-- [ ] JSON output is valid and parseable by `jq`
-- [ ] Voice rules are documented and followed consistently
-- [ ] Reporter functions handle empty/null input gracefully
-- [ ] Output tested in: terminal, piped, NO_COLOR, CI
+- [ ] 色盤有無色回退
+- [ ] 狀態指示符於色與無色模式皆運作
+- [ ] 所有四冗長度層級生有用輸出
+- [ ] JSON 輸出有效且 `jq` 可解析
+- [ ] 聲音規則載之並一致遵循
+- [ ] reporter 函數優雅處理空/null 輸入
+- [ ] 輸出於此等測之：terminal、piped、NO_COLOR、CI
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Mixing human text with JSON**: In `--json` mode, output only valid JSON. A single stray line (like "DRY RUN") breaks JSON parsers. If the command must show both, separate them clearly or suppress the human text in JSON mode.
-- **Hardcoded column widths**: Content length varies. Use `Math.max(...items.map(i => i.id.length))` to compute padding dynamically.
-- **Color without meaning**: If color is the only way to distinguish success from failure, colorblind users and piped output lose information. Always pair color with a text indicator (`+`, `OK`, `ERR`).
-- **Ceremony in the wrong context**: Warm narrative output is appropriate for interactive terminal sessions. In CI, scripts, or `--quiet` mode, it adds noise. Gate ceremony output behind explicit flags.
-- **Forgetting the summary line**: Users scan the last line first. Every operation should end with a one-line summary (counts of success/failure/skipped).
+- **於 JSON 中混人類文字**：於 `--json` 模式僅輸出有效 JSON。單一漏行（如「DRY RUN」）破 JSON 解析器。若指令須兩者皆示，明離之或於 JSON 模式中抑人類文字。
+- **硬編碼欄寬**：內容長度變。用 `Math.max(...items.map(i => i.id.length))` 動態算填充。
+- **無義之色**：若色為區成敗之唯一法，則色盲用戶與 piped 輸出失資訊。恆以文字指示符（`+`、`OK`、`ERR`）配色。
+- **儀式於錯情境**：暖敘事輸出適於互動終端會話。於 CI、腳本或 `--quiet` 模式中，增噪。以顯式旗標閘儀式輸出。
+- **忘摘要行**：用戶先掃末行。每操作應以單行摘要結（成功/失敗/跳過之計數）。
 
-## Related Skills
+## 相關技能
 
-- `scaffold-cli-command` — the commands that use this output
-- `test-cli-application` — testing that output matches expectations
-- `build-cli-plugin` — plugins report results through this output system
+- `scaffold-cli-command` — 用此輸出之指令
+- `test-cli-application` — 測輸出合預期
+- `build-cli-plugin` — 插件透過此輸出系統報結果

@@ -25,34 +25,34 @@ metadata:
 
 # Derive Theoretical Result
 
-Produce a rigorous, step-by-step derivation of a theoretical result starting from stated axioms, first principles, or established theorems. Every algebraic or logical step is explicitly justified, limiting cases are verified, and the final result is presented with a complete notation glossary.
+Rigorous step-by-step derivation from axioms/first principles/theorems. Every step justified. Limiting cases checked. Final result + notation glossary.
 
-## When to Use
+## Use When
 
-- Deriving a formula, relation, or theorem from first principles (e.g., deriving the Euler-Lagrange equation from the action principle)
-- Proving a mathematical statement by logical deduction from axioms
-- Re-deriving a textbook result to verify it or adapt it to a modified context
-- Extending a known result to a more general setting (e.g., from flat spacetime to curved spacetime)
-- Producing a self-contained derivation for a paper, thesis, or technical report
+- Formula/theorem from first principles (e.g., Euler-Lagrange from action)
+- Math proof by logic from axioms
+- Re-derive textbook → verify/adapt
+- Extend known → more general (flat → curved spacetime)
+- Self-contained → paper/thesis/report
 
-## Inputs
+## In
 
-- **Required**: Target result to derive (equation, inequality, theorem statement, or relation)
-- **Required**: Starting point (axioms, postulates, previously established results, or Lagrangian/Hamiltonian)
-- **Optional**: Preferred proof technique (direct, by contradiction, by induction, variational, constructive)
-- **Optional**: Notation conventions to follow (if matching a specific textbook or collaborator's conventions)
-- **Optional**: Known intermediate results that may be cited without re-derivation
+- **Required**: Target result (equation, inequality, theorem, relation)
+- **Required**: Starting point (axioms, postulates, prior results, Lagrangian/Hamiltonian)
+- **Optional**: Proof technique (direct, contradiction, induction, variational, constructive)
+- **Optional**: Notation conventions
+- **Optional**: Known intermediate results citable w/o re-deriving
 
-## Procedure
+## Do
 
-### Step 1: State Starting Assumptions and Target Result
+### Step 1: State assumptions + target
 
-Write the derivation's contract explicitly before any calculation:
+Contract before calc:
 
-1. **Axioms and postulates**: List every assumption the derivation rests on. For physics, this includes the symmetry group, the action principle, or the postulates of quantum mechanics. For mathematics, this includes the axiom system and any previously proven lemmas.
-2. **Target result**: State the result to be derived in precise mathematical notation. If the result is an equation, write both sides. If it is an inequality, state the direction and the conditions for equality.
-3. **Scope and restrictions**: State the domain of validity (e.g., "valid for non-relativistic, spinless particles in three dimensions"). Identify what the derivation does not cover.
-4. **Notation declaration**: Define every symbol that will appear. This prevents ambiguity and makes the derivation self-contained.
+1. **Axioms + postulates**: Every assumption listed. Physics: symmetry group, action principle, QM postulates. Math: axiom sys + prior lemmas.
+2. **Target**: Precise notation. Equation → both sides. Inequality → direction + equality conds.
+3. **Scope**: Domain of validity (e.g., "non-relativistic, spinless, 3D"). State what not covered.
+4. **Notation**: Define every symbol. Self-contained.
 
 ```markdown
 ## Derivation Contract
@@ -64,19 +64,19 @@ Write the derivation's contract explicitly before any calculation:
   - ...
 ```
 
-**Expected:** A complete, unambiguous statement of what is being derived from what, with all notation defined upfront.
+→ Complete unambiguous statement. Notation up front.
 
-**On failure:** If the target result is ambiguous or the starting assumptions are incomplete, clarify before proceeding. A derivation with hidden assumptions is unreliable.
+If err: Target ambiguous/assumptions incomplete → clarify before proceed. Hidden assumptions → unreliable.
 
-### Step 2: Identify Required Mathematical Machinery
+### Step 2: Math toolkit
 
-Survey the tools needed and verify their applicability:
+Tools + applicability:
 
-1. **Algebraic techniques**: Identify required manipulations (tensor algebra, commutator algebra, matrix operations, series expansions). Verify that the structures involved satisfy the prerequisites (e.g., convergence conditions for series, invertibility for matrix operations).
-2. **Calculus and analysis**: Identify whether the derivation requires ordinary or partial differentiation, integration (and over what domain), functional derivatives, contour integration, or distribution theory. Verify regularity conditions (differentiability, integrability, analyticity).
-3. **Symmetry and group theory**: Identify representation-theoretic tools needed (irreducible representations, Clebsch-Gordan coefficients, character orthogonality, Wigner-Eckart theorem).
-4. **Topology and geometry** (if applicable): Identify geometric structures (manifolds, fiber bundles, connections) and topological constraints (boundary terms, winding numbers, index theorems).
-5. **Known identities and lemmas**: Collect the specific identities that will be invoked (e.g., Jacobi identity, Bianchi identity, integration by parts, Stokes' theorem). State each one explicitly so the derivation can cite them by name.
+1. **Algebra**: Tensor, commutator, matrix, series. Verify prereqs (convergence, invertibility).
+2. **Calc/analysis**: ODE/PDE, integration + domain, functional derivs, contour, distributions. Verify regularity (differentiability, integrability, analyticity).
+3. **Symmetry/group theory**: Irreps, Clebsch-Gordan, character orthogonality, Wigner-Eckart.
+4. **Topology/geometry** (if applicable): Manifolds, bundles, connections + topo constraints (boundary terms, winding, index).
+5. **Identities/lemmas**: Specific ones invoked (Jacobi, Bianchi, integration by parts, Stokes). State explicitly, cite by name.
 
 ```markdown
 ## Mathematical Toolkit
@@ -86,26 +86,26 @@ Survey the tools needed and verify their applicability:
 - **Identities to invoke**: [list with precise statements]
 ```
 
-**Expected:** A checklist of mathematical tools with their applicability conditions verified for the specific problem at hand.
+→ Checklist w/ applicability verified.
 
-**On failure:** If a required tool has unverified prerequisites (e.g., term-by-term differentiation of a series whose uniform convergence is unknown), flag it as a gap. Either prove the prerequisite or state it as an additional assumption.
+If err: Unverified prereqs (e.g., term-by-term diff w/o uniform convergence) → flag gap. Prove or state as additional assumption.
 
-### Step 3: Execute Derivation with Step-by-Step Justification
+### Step 3: Execute w/ justification
 
-Carry out the derivation with every step labeled and justified:
+Every step labeled + justified:
 
-1. **One operation per step**: Each numbered step performs exactly one algebraic or logical operation. Do not combine multiple manipulations into a single step.
-2. **Justification labels**: Tag each step with its justification. Common labels:
-   - `[by assumption]` -- invoking a stated axiom or assumption
-   - `[by definition]` -- using a previously declared definition
-   - `[by {identity name}]` -- applying a named identity (e.g., "by Jacobi identity")
-   - `[by Step N]` -- citing a previous step in this derivation
-   - `[by {theorem name}]` -- invoking an external theorem (stated in Step 2)
-3. **Intermediate checkpoints**: After every 5-10 steps, pause and verify:
-   - Units/dimensions are consistent on both sides
-   - Known symmetries are preserved
-   - The expression has the correct transformation properties
-4. **Branch points**: If the derivation branches (e.g., case analysis for degenerate vs. non-degenerate eigenvalues), treat each branch as a labeled sub-derivation and merge the results.
+1. **One op per step**: No combining.
+2. **Justification labels**:
+   - `[by assumption]` — stated axiom/assumption
+   - `[by definition]` — prior definition
+   - `[by {identity name}]` — named identity (e.g., "by Jacobi identity")
+   - `[by Step N]` — prior step
+   - `[by {theorem name}]` — external theorem (Step 2)
+3. **Checkpoints** (every 5-10 steps):
+   - Units/dimensions consistent
+   - Symmetries preserved
+   - Correct transformation props
+4. **Branches**: Case analysis → each branch labeled sub-derivation, merge.
 
 ```markdown
 ## Derivation
@@ -128,24 +128,21 @@ Carry out the derivation with every step labeled and justified:
 *Justification*: [final operation]  QED
 ```
 
-**Expected:** A linear sequence of steps from the starting point to the target result, with no gaps in logic. Every step is independently verifiable.
+→ Linear sequence, no logic gaps. Every step verifiable.
 
-**On failure:** If a step does not follow from the previous one, the derivation has a gap. Either insert the missing intermediate steps or identify the additional assumption needed. Never skip a step with "it can be shown that" unless the omitted result is a well-known identity listed in Step 2.
+If err: Step doesn't follow → gap. Insert intermediates or identify new assumption. No "it can be shown" unless well-known identity listed Step 2.
 
-### Step 4: Check Limiting Cases and Special Values
+### Step 4: Limiting cases + special values
 
-Validate the derived result against known physics or mathematics:
+Validate vs known:
 
-1. **Limiting cases**: Identify at least three limiting cases where the result should reduce to something known:
-   - A simpler, previously derived formula (e.g., non-relativistic limit of a relativistic result)
-   - A trivial case (e.g., setting a coupling constant to zero)
-   - An extreme parameter regime (e.g., high-temperature or low-temperature limit)
+1. **Limits** (≥3): Simpler prior formula (non-rel limit), trivial case (coupling=0), extreme regime (high/low T).
 
-2. **Special values**: Substitute specific values of parameters where the answer is known independently (e.g., n=1 for the hydrogen atom, d=3 for three-dimensional results).
+2. **Special values**: Known independent (n=1 hydrogen, d=3).
 
-3. **Symmetry checks**: Verify that the result transforms correctly under the symmetry group. If the result should be a scalar, check that it is invariant. If it should be a vector, check its transformation law.
+3. **Symmetry**: Correct under group. Scalar → invariant. Vector → transforms right.
 
-4. **Consistency with related results**: Check that the derived result is consistent with other known results in the same theory (e.g., Ward identities, sum rules, reciprocity relations).
+4. **Consistency**: Ward identities, sum rules, reciprocity.
 
 ```markdown
 ## Limiting Case Verification
@@ -155,19 +152,19 @@ Validate the derived result against known physics or mathematics:
 | ... | ... | ... | ... | ... |
 ```
 
-**Expected:** All limiting cases and special values produce the expected results. The derivation is internally consistent.
+→ All limits + special values match. Internally consistent.
 
-**On failure:** A failed limiting case indicates an error in the derivation. Trace the failure back by checking which step first produces an expression that fails the limit. Common causes: incorrect sign, missing factor of 2 or pi, wrong combinatorial coefficient, or a step where an order of limits matters.
+If err: Failed limit → err in derivation. Trace to first step producing fail. Common: sign, missing 2/π, wrong combinatorial coeff, wrong order of limits.
 
-### Step 5: Present Complete Derivation with Notation Glossary
+### Step 5: Final w/ notation glossary
 
-Assemble the final, polished derivation:
+Polished:
 
-1. **Narrative structure**: Write a brief introductory paragraph stating the physical or mathematical motivation, the approach, and the main result.
-2. **Derivation body**: Present the steps from Step 3, cleaned up for readability. Group related steps into logical blocks with descriptive headings (e.g., "Expanding the action to second order", "Applying the stationary phase condition").
-3. **Result box**: State the final result in a highlighted block, clearly separated from the derivation.
-4. **Notation glossary**: Compile every symbol used in the derivation with its meaning, units (if physical), and first occurrence.
-5. **Assumptions summary**: List all assumptions in a single place, distinguishing fundamental postulates from technical assumptions (e.g., smoothness, convergence).
+1. **Narrative**: Intro para → motivation, approach, main result.
+2. **Body**: Steps from Step 3 cleaned. Group → logical blocks w/ headings.
+3. **Result box**: Highlighted, separated.
+4. **Glossary**: Every symbol + meaning + units + first occurrence.
+5. **Assumptions summary**: All in one place, postulates vs technical (smoothness, convergence).
 
 ```markdown
 ## Final Result
@@ -186,32 +183,32 @@ Assemble the final, polished derivation:
 3. ...
 ```
 
-**Expected:** A self-contained document that a reader can follow from start to finish without consulting external references, except for the explicitly cited identities and theorems.
+→ Self-contained doc, followable start to finish w/o external refs (except cited identities + theorems).
 
-**On failure:** If the derivation is too long for a single document (more than ~50 steps), break it into lemmas. Derive each lemma separately, then assemble the main result by citing the lemmas.
+If err: Too long (>~50 steps) → break into lemmas. Derive each, assemble main result citing lemmas.
 
-## Validation
+## Check
 
-- [ ] All starting assumptions are explicitly stated before the first calculation step
-- [ ] Every derivation step has a labeled justification (no unjustified leaps)
-- [ ] Units and dimensions are consistent at every intermediate checkpoint
-- [ ] At least three limiting cases are checked and produce expected results
-- [ ] Special values match independently known answers
-- [ ] The result transforms correctly under the stated symmetry group
-- [ ] A notation glossary defines every symbol used
-- [ ] The derivation is complete: no steps are deferred with "it can be shown"
-- [ ] The domain of validity is explicitly stated with the final result
+- [ ] All starting assumptions stated before first calc
+- [ ] Every step labeled justification (no unjustified leaps)
+- [ ] Units/dimensions consistent at every checkpoint
+- [ ] ≥3 limiting cases checked + match
+- [ ] Special values match known
+- [ ] Result transforms correctly under stated symmetry
+- [ ] Glossary defines every symbol
+- [ ] No deferred "it can be shown"
+- [ ] Domain of validity stated w/ result
 
-## Common Pitfalls
+## Traps
 
-- **Hidden assumptions**: Assuming a function is analytic, a series converges, or an integral exists without stating it. Every regularity condition is an assumption and must be declared.
-- **Sign errors**: The most common mechanical error. Verify signs at every step by tracking them through substitutions. Cross-check against dimensional analysis (a sign error often produces a dimensionally inconsistent expression).
-- **Dropped boundary terms**: When integrating by parts or applying Stokes' theorem, boundary terms vanish only if specific conditions are met. State why they vanish (e.g., "because the field decays faster than 1/r at infinity").
-- **Order of limits**: Taking limits in the wrong order can give different results (e.g., thermodynamic limit before zero-temperature limit). State the order explicitly and justify it.
-- **Circular reasoning**: Using the result to be derived as an intermediate step. This is especially subtle when the result is a well-known formula that "seems obvious." Every step must follow from the stated starting point, not from familiarity with the answer.
-- **Notation collisions**: Using the same symbol for different quantities (e.g., 'E' for energy and for electric field). The notation glossary prevents this, but only if it is written before the derivation rather than after.
+- **Hidden assumptions**: Analyticity, convergence, integral existence w/o stating. Every regularity cond = assumption, declare.
+- **Sign errs**: Most common mech err. Track at every step. Cross-check dim analysis (sign err → dim inconsistent).
+- **Dropped boundary terms**: Integration by parts / Stokes → boundary terms vanish only under conds. State why (e.g., "field decays > 1/r at infinity").
+- **Order of limits**: Wrong order → diff results (thermodynamic before zero-T). State order explicit + justify.
+- **Circular reasoning**: Using result as intermediate. Subtle for "obvious" formulas. Every step from stated start, not answer familiarity.
+- **Notation collisions**: Same symbol for diff quantities (E = energy + E-field). Glossary prevents — IF written before derivation.
 
-## Related Skills
+## →
 
-- `formulate-quantum-problem` -- formulate the quantum mechanical framework before deriving results from it
-- `survey-theoretical-literature` -- find prior derivations of the same or related results for comparison
+- `formulate-quantum-problem` — formulate QM framework before deriving
+- `survey-theoretical-literature` — find prior derivations for comparison

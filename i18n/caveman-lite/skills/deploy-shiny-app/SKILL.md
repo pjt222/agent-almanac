@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Deploy Shiny applications to shinyapps.io, Posit Connect, or Docker
   containers. Covers rsconnect configuration, manifest generation,
@@ -64,9 +64,9 @@ Verify these files exist:
 - `renv.lock` (recommended for reproducible deployments)
 - `.Rprofile` does NOT call `mcptools::mcp_session()` in production
 
-**Expected:** App runs locally without errors and all dependencies are captured.
+**Got:** App runs locally without errors and all dependencies are captured.
 
-**On failure:** If `appDependencies()` reports missing packages, install them and update `renv.lock`. If the app uses system libraries (e.g., gdal, curl), note them for the Docker path.
+**If fail:** If `appDependencies()` reports missing packages, install them and update `renv.lock`. If the app uses system libraries (e.g., gdal, curl), note them for the Docker path.
 
 ### Step 2a: Deploy to shinyapps.io
 
@@ -96,9 +96,9 @@ SHINYAPPS_TOKEN=your_token_here
 SHINYAPPS_SECRET=your_secret_here
 ```
 
-**Expected:** App deployed and accessible at `https://your-account.shinyapps.io/my-app/`.
+**Got:** App deployed and accessible at `https://your-account.shinyapps.io/my-app/`.
 
-**On failure:** If authentication fails, regenerate tokens at shinyapps.io dashboard > Account > Tokens. If package installation fails on the server, check that all packages are available on CRAN — shinyapps.io cannot install from GitHub by default.
+**If fail:** If authentication fails, regenerate tokens at shinyapps.io dashboard > Account > Tokens. If package installation fails on the server, check that all packages are available on CRAN — shinyapps.io cannot install from GitHub by default.
 
 ### Step 2b: Deploy to Posit Connect
 
@@ -125,9 +125,9 @@ rsconnect::deployApp(
 )
 ```
 
-**Expected:** App deployed and accessible on the Posit Connect instance.
+**Got:** App deployed and accessible on the Posit Connect instance.
 
-**On failure:** If the server rejects the connection, verify the API key and server URL. If packages fail to install, check that Connect has access to the required repositories (CRAN, internal CRAN-like repos).
+**If fail:** If the server rejects the connection, verify the API key and server URL. If packages fail to install, check that Connect has access to the required repositories (CRAN, internal CRAN-like repos).
 
 ### Step 2c: Deploy with Docker
 
@@ -182,9 +182,9 @@ docker build -t myapp:latest .
 docker run -p 3838:3838 myapp:latest
 ```
 
-**Expected:** App accessible at `http://localhost:3838`.
+**Got:** App accessible at `http://localhost:3838`.
 
-**On failure:** If the build fails on package installation, add missing system libraries to the `apt-get install` line. If the app doesn't load, check Shiny Server logs: `docker exec <container> cat /var/log/shiny-server/*.log`.
+**If fail:** If the build fails on package installation, add missing system libraries to the `apt-get install` line. If the app doesn't load, check Shiny Server logs: `docker exec <container> cat /var/log/shiny-server/*.log`.
 
 ### Step 3: Verify Deployment
 
@@ -204,9 +204,9 @@ Manual verification checklist:
 3. Data connections work in the deployed environment
 4. Authentication/authorization works (if applicable)
 
-**Expected:** App responds with HTTP 200 and all features work.
+**Got:** App responds with HTTP 200 and all features work.
 
-**On failure:** Check server logs for the specific deployment platform. Common issues: environment variables not set in production, database connections using localhost instead of production URLs, or file paths that only exist locally.
+**If fail:** Check server logs for the specific deployment platform. Common issues: environment variables not set in production, database connections using localhost instead of production URLs, or file paths that only exist locally.
 
 ### Step 4: Configure Monitoring (Optional)
 
@@ -233,9 +233,9 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
   CMD curl -f http://localhost:3838/ || exit 1
 ```
 
-**Expected:** Monitoring configured for the deployment target.
+**Got:** Monitoring configured for the deployment target.
 
-**On failure:** If health checks fail intermittently, increase timeout values. Shiny apps can be slow to respond during initial load.
+**If fail:** If health checks fail intermittently, increase timeout values. Shiny apps can be slow to respond during initial load.
 
 ## Validation
 
@@ -246,7 +246,7 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
 - [ ] Credentials stored in `.Renviron` or CI secrets, not in code
 - [ ] renv.lock committed for reproducible dependency resolution
 
-## Common Pitfalls
+## Pitfalls
 
 - **Hardcoded file paths**: Replace absolute paths with `system.file()` (for package data) or environment variables (for external resources).
 - **Development-only dependencies**: Don't deploy `.Rprofile` that loads `mcptools::mcp_session()` or `devtools`. Use conditional loading or separate profiles.

@@ -32,30 +32,30 @@ metadata:
 
 # Design CLI Output
 
-Design consistent, multi-level terminal output for a command-line tool.
+Consistent multi-level terminal output for CLI.
 
-## When to Use
+## Use When
 
-- Building a new reporter module for a CLI tool
-- Adding warm or narrative output alongside standard transactional output
-- Standardizing output format across multiple commands
-- Designing JSON machine output parallel to human-readable output
-- Choosing colors, glyphs, and verbosity levels for a new terminal tool
+- New reporter module → CLI
+- Warm/narrative alongside transactional
+- Std across commands
+- JSON machine parallel to human
+- Colors, glyphs, verbosity for new tool
 
-## Inputs
+## In
 
-- **Required**: CLI tool name and primary audience (developers, operators, end users)
-- **Required**: Commands that need output formatting
-- **Optional**: Whether a "ceremony" or narrative output variant is desired
-- **Optional**: Branding constraints (color palette, tone)
+- **Required**: CLI name + audience (devs, ops, end users)
+- **Required**: Commands needing formatting
+- **Optional**: Ceremony/narrative variant?
+- **Optional**: Branding (palette, tone)
 
-## Procedure
+## Do
 
-### Step 1: Define the Color Palette
+### Step 1: Color palette
 
-Use chalk to create a named palette object:
+chalk → named palette:
 
-**Standard palette** (transactional output):
+**Standard** (transactional):
 
 ```javascript
 let chalk;
@@ -71,7 +71,7 @@ const dim = chalk.dim;        // secondary info, paths
 const bold = chalk.bold;      // headers
 ```
 
-**Warm palette** (ceremony/narrative output):
+**Warm** (ceremony/narrative):
 
 ```javascript
 const C = {
@@ -85,21 +85,21 @@ const C = {
 };
 ```
 
-Palette design rules:
-- Always provide a no-color fallback (the Proxy pattern above)
-- Use hex colors for custom palettes (`chalk.hex('#FF6B35')`)
-- Keep the fail/error color red regardless of palette theme
-- Name palette entries by semantic role, not visual appearance
+Rules:
+- No-color fallback (Proxy pattern)
+- Hex for custom (`chalk.hex('#FF6B35')`)
+- Fail/err → red regardless
+- Name by semantic role not visual
 
-**Expected:** A palette object with named entries and a no-color fallback.
+→ Palette obj w/ named entries + no-color fallback.
 
-**On failure:** If chalk is unavailable (piped output, CI), the Proxy fallback returns strings unchanged. Test with `NO_COLOR=1` environment variable.
+If err: chalk unavailable (piped, CI) → Proxy returns strings unchanged. Test `NO_COLOR=1`.
 
-### Step 2: Choose Status Indicators
+### Step 2: Status indicators
 
-Select Unicode glyphs or ASCII characters for status communication:
+Unicode glyphs or ASCII:
 
-**ASCII (maximum compatibility):**
+**ASCII (max compat):**
 
 ```
 +  created/installed (green)
@@ -108,7 +108,7 @@ Select Unicode glyphs or ASCII characters for status communication:
 !  error/warning (red)
 ```
 
-**Unicode (richer, needs UTF-8 terminal):**
+**Unicode (richer, UTF-8 term):**
 
 ```
 ✦  item/skill/practice (spark)
@@ -120,19 +120,19 @@ Select Unicode glyphs or ASCII characters for status communication:
 ✓  success (use sparingly — not all terminals render it well)
 ```
 
-Selection criteria:
-- ASCII for tools that run in CI or piped contexts
-- Unicode for tools with interactive terminal users
-- Offer both via a `--ascii` flag or `NO_COLOR` detection
-- Test glyphs in: macOS Terminal, Windows Terminal, VS Code terminal, SSH sessions
+Criteria:
+- ASCII → CI/piped
+- Unicode → interactive
+- Both via `--ascii` flag or `NO_COLOR`
+- Test: macOS Terminal, Windows Terminal, VS Code, SSH
 
-**Expected:** A glyph set that communicates status at a glance without relying on color alone.
+→ Glyph set communicates status at glance w/o color alone.
 
-**On failure:** If a glyph renders as `?` or a box in testing, replace with the ASCII equivalent. The `+/-/=/!` set works everywhere.
+If err: Glyph renders `?` or box → ASCII equiv. `+/-/=/!` works everywhere.
 
-### Step 3: Design Verbosity Levels
+### Step 3: Verbosity levels
 
-Every command should support four output levels:
+Every cmd supports 4:
 
 | Level | Flag | Audience | Content |
 |-------|------|----------|---------|
@@ -141,7 +141,7 @@ Every command should support four output levels:
 | **Quiet** | `--quiet` | Scripts, CI | Minimal lines, status icons, no decoration |
 | **JSON** | `--json` | Machine consumers | Structured, parseable, complete |
 
-Implementation pattern:
+Pattern:
 
 ```javascript
 function output(data, options) {
@@ -161,43 +161,43 @@ function output(data, options) {
 }
 ```
 
-JSON output rules:
-- Always valid JSON (no mixing with human text)
-- Include all data the human output shows, plus machine-useful fields
-- Use consistent key naming across commands
-- Exit code 0 for success, 1 for errors (regardless of output mode)
+JSON rules:
+- Always valid (no mix w/ human text)
+- Include all human data + machine fields
+- Consistent keys across cmds
+- Exit 0 success, 1 err (regardless of mode)
 
-**Expected:** Four clear output levels with consistent behavior across commands.
+→ 4 clear levels, consistent behavior across cmds.
 
-**On failure:** If verbose mode is too noisy, make it opt-in (`--ceremonial`) rather than a graduated verbosity level.
+If err: Verbose too noisy → opt-in (`--ceremonial`) not graduated.
 
-### Step 4: Establish Voice Rules
+### Step 4: Voice rules
 
-Define the tone and style that all output functions follow. This prevents inconsistency across commands.
+Tone + style. Prevents inconsistency.
 
-Example voice rules (from the campfire reporter):
+Ex (campfire reporter):
 
-1. **Present tense, active voice**: "mystic arrives" not "mystic has been installed"
-2. **No exclamation marks**: Quiet confidence. The tool doesn't shout.
-3. **Metaphor replaces jargon**: "practices" not "dependencies" (only for ceremony mode)
-4. **Failures are honest, not catastrophic**: "A spark was lost" not "ERROR: installation failed with exit code 1"
-5. **Closing line reflects state**: Every operation ends with a status summary
-6. **No emoji**: Unicode glyphs carry visual weight without being decorative
-7. **Every word carries information**: If a word doesn't add understanding, remove it
+1. **Present tense, active**: "mystic arrives" not "mystic has been installed"
+2. **No exclamation**: Quiet confidence.
+3. **Metaphor replaces jargon**: "practices" not "dependencies" (ceremony only)
+4. **Failures honest, not catastrophic**: "A spark was lost" not "ERROR: installation failed with exit code 1"
+5. **Closing line reflects state**: Every op ends summary
+6. **No emoji**: Unicode glyphs carry visual weight w/o decorative
+7. **Every word info**: If no understanding → remove
 
-Voice rules for standard (non-ceremony) output:
+Standard (non-ceremony):
 - Concise, factual lines
-- Status icon + item ID + context
-- Summary line with counts
-- Error messages suggest corrective actions
+- Status icon + item ID + ctx
+- Summary line w/ counts
+- Err msgs suggest actions
 
-**Expected:** A written set of 3-7 voice rules that output functions must follow.
+→ 3-7 voice rules output fns follow.
 
-**On failure:** If rules feel arbitrary, test them: write the same output with and without each rule. If removing a rule doesn't change the output quality, the rule isn't needed.
+If err: Rules arbitrary → test. Write same output w/ + w/o rule. If no change → rule not needed.
 
-### Step 5: Implement Reporter Functions
+### Step 5: Reporter fns
 
-Organize output into a reporter module with focused functions:
+Module w/ focused fns:
 
 ```javascript
 // reporter.js — standard output
@@ -211,13 +211,13 @@ export function error(msg) { ... }
 export { chalk };
 ```
 
-Each function follows the same structure:
-1. Handle empty/null input gracefully
-2. Compute layout (column widths, padding)
-3. Output with palette colors
-4. Summary line at the bottom
+Each fn:
+1. Handle empty/null gracefully
+2. Compute layout (col widths, padding)
+3. Output w/ palette
+4. Summary line at bottom
 
-For ceremony output, create a separate module:
+Ceremony → separate module:
 
 ```javascript
 // campfire-reporter.js — warm narrative output
@@ -229,13 +229,11 @@ export function printFireSummary({ team, fireData, reg }) { ... }
 export function printJson(data) { ... }
 ```
 
-**Expected:** Reporter functions that are independently usable — each handles its own formatting without depending on caller state.
+→ Independent fns, handle own formatting w/o caller state.
 
-**On failure:** If functions grow beyond ~50 lines, extract helpers. A reporter function should be easy to review in isolation.
+If err: Fn >~50 lines → extract helpers. Reviewable in isolation.
 
-### Step 6: Test Output Across Environments
-
-Verify output renders correctly in different contexts:
+### Step 6: Test across envs
 
 ```bash
 # With colors (interactive terminal)
@@ -254,37 +252,37 @@ node cli/index.js campfire --json | jq .
 CI=true node cli/index.js audit
 ```
 
-Check for:
-- Colors display correctly in interactive mode
-- No ANSI escape codes leak into piped/redirected output
-- JSON is valid (pipe to `jq .` to verify)
-- Unicode glyphs render in the target terminals
-- Column alignment holds with varying content widths
+Check:
+- Colors in interactive
+- No ANSI leaks in piped
+- JSON valid (`jq .`)
+- Unicode in target terminals
+- Col align w/ varying widths
 
-**Expected:** Output is correct in all five contexts.
+→ Output correct in all 5 contexts.
 
-**On failure:** If ANSI codes leak, ensure chalk respects `NO_COLOR`. If Unicode breaks, provide an ASCII fallback mode.
+If err: ANSI leaks → chalk respects `NO_COLOR`. Unicode breaks → ASCII fallback.
 
-## Validation
+## Check
 
-- [ ] Color palette has a no-color fallback
-- [ ] Status indicators work in both color and no-color modes
-- [ ] All four verbosity levels produce useful output
-- [ ] JSON output is valid and parseable by `jq`
-- [ ] Voice rules are documented and followed consistently
-- [ ] Reporter functions handle empty/null input gracefully
-- [ ] Output tested in: terminal, piped, NO_COLOR, CI
+- [ ] Palette has no-color fallback
+- [ ] Status indicators work color + no-color
+- [ ] All 4 verbosity levels useful
+- [ ] JSON valid + `jq`-parseable
+- [ ] Voice rules docs + followed
+- [ ] Reporter fns handle empty/null
+- [ ] Tested: terminal, piped, NO_COLOR, CI
 
-## Common Pitfalls
+## Traps
 
-- **Mixing human text with JSON**: In `--json` mode, output only valid JSON. A single stray line (like "DRY RUN") breaks JSON parsers. If the command must show both, separate them clearly or suppress the human text in JSON mode.
-- **Hardcoded column widths**: Content length varies. Use `Math.max(...items.map(i => i.id.length))` to compute padding dynamically.
-- **Color without meaning**: If color is the only way to distinguish success from failure, colorblind users and piped output lose information. Always pair color with a text indicator (`+`, `OK`, `ERR`).
-- **Ceremony in the wrong context**: Warm narrative output is appropriate for interactive terminal sessions. In CI, scripts, or `--quiet` mode, it adds noise. Gate ceremony output behind explicit flags.
-- **Forgetting the summary line**: Users scan the last line first. Every operation should end with a one-line summary (counts of success/failure/skipped).
+- **Mix human + JSON**: `--json` only valid JSON. Stray line ("DRY RUN") breaks parsers. Suppress human in JSON mode.
+- **Hardcoded col widths**: Varies. `Math.max(...items.map(i => i.id.length))` dyn.
+- **Color w/o meaning**: Color-only → colorblind + piped lose info. Pair w/ text (`+`, `OK`, `ERR`).
+- **Ceremony wrong ctx**: Interactive only. CI/scripts/`--quiet` = noise. Gate behind flags.
+- **Forget summary**: Users scan last line first. 1-line summary (counts).
 
-## Related Skills
+## →
 
-- `scaffold-cli-command` — the commands that use this output
-- `test-cli-application` — testing that output matches expectations
-- `build-cli-plugin` — plugins report results through this output system
+- `scaffold-cli-command` — cmds using this output
+- `test-cli-application` — test output matches
+- `build-cli-plugin` — plugins report results

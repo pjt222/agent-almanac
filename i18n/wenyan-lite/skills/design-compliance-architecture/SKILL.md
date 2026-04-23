@@ -27,30 +27,30 @@ metadata:
 
 # Design Compliance Architecture
 
-Establish the top-level compliance framework that maps regulations to systems, classifies criticality, and defines governance for a regulated environment.
+立頂層合規框架，以映法規於系統，分關鍵性等級，並為受規環境定治理。
 
-## When to Use
+## 適用時機
 
-- A new regulated facility, department, or programme is being established
-- An existing organisation needs to formalise its compliance posture across multiple systems
-- A regulatory gap analysis reveals missing system classification or validation strategy
-- Mergers, acquisitions, or reorganisations require harmonising compliance across entities
-- Preparing a site master file or quality manual that references computerized systems
+- 新受規設施、部門或計劃之立
+- 既有組織須於多系統間形式化其合規姿態
+- 法規缺口分析顯系統分類或驗證策略之缺
+- 合併、收購或重組需於實體間和諧合規
+- 備參照計算機系統之場所主檔或品質手冊
 
-## Inputs
+## 輸入
 
-- **Required**: List of computerized systems in scope (name, purpose, vendor/custom)
-- **Required**: Applicable regulatory frameworks (21 CFR Part 11, EU Annex 11, GMP, GLP, GCP, ICH Q7, ICH Q10)
-- **Required**: Organisational context (department, site, product types)
-- **Optional**: Existing validation master plan or quality manual
-- **Optional**: Previous audit findings or regulatory inspection observations
-- **Optional**: Organisational chart with quality and IT reporting lines
+- **必需**：範圍內計算機系統清單（名、用途、供應商/自定）
+- **必需**：適用之法規框架（21 CFR Part 11、EU Annex 11、GMP、GLP、GCP、ICH Q7、ICH Q10）
+- **必需**：組織情境（部門、場所、產品類型）
+- **可選**：既有驗證主計劃或品質手冊
+- **可選**：前稽核發現或法規檢查觀察
+- **可選**：具品質與 IT 匯報線之組織圖
 
-## Procedure
+## 步驟
 
-### Step 1: Build the System Inventory
+### 步驟一：建系統清單
 
-Create a comprehensive inventory of all computerized systems:
+建所有計算機系統之完整清單：
 
 ```markdown
 # System Inventory
@@ -64,12 +64,12 @@ Create a comprehensive inventory of all computerized systems:
 | SYS-004 | Windows Server | 2022 | Microsoft | File server | IT | Documents | 200 |
 ```
 
-**Expected:** Every system that creates, modifies, stores, retrieves, or transmits GxP-relevant data is listed.
-**On failure:** If system owners cannot provide complete information, document the gap and schedule a discovery workshop. Missing systems are a critical compliance risk.
+**預期：** 每一建、改、存、取或傳 GxP 相關資料之系統皆列之。
+**失敗時：** 若系統擁有者無法提供完整資訊，載之缺口並排發現工作坊。缺失系統為關鍵合規風險。
 
-### Step 2: Classify System Criticality
+### 步驟二：分系統關鍵性
 
-Assign each system a criticality tier:
+為每系統分關鍵性等級：
 
 ```markdown
 # System Criticality Classification
@@ -93,12 +93,12 @@ Assign each system a criticality tier:
 | SYS-004 | Windows Server | GxP-Supporting | Stores controlled documents but does not generate GxP data |
 ```
 
-**Expected:** Every system has a tier assignment with documented rationale.
-**On failure:** If a system's criticality is disputed, escalate to the quality council. When in doubt, classify one tier higher and reassess after a formal risk assessment.
+**預期：** 每系統皆有等級指派，並載理由。
+**失敗時：** 若系統之關鍵性有爭議，上報品質委員會。疑時，高分一級而後經正式風險評估再評之。
 
-### Step 3: Assign GAMP 5 Software Categories
+### 步驟三：指派 GAMP 5 軟體類別
 
-For each GxP-Critical and GxP-Supporting system, assign the GAMP 5 category:
+為每 GxP-Critical 與 GxP-Supporting 系統指派 GAMP 5 類別：
 
 ```markdown
 # GAMP 5 Category Assignment
@@ -111,18 +111,18 @@ For each GxP-Critical and GxP-Supporting system, assign the GAMP 5 category:
 | SYS-004 | Windows Server | 1 — Infrastructure | Operating system, no custom configuration | Low — Verify installation |
 ```
 
-Category reference:
-- **Category 1**: Infrastructure (OS, firmware) — verify installation
-- **Category 3**: Non-configured COTS — verify functionality as-is
-- **Category 4**: Configured product — verify all configurations
-- **Category 5**: Custom application — full lifecycle validation
+類別參考：
+- **Category 1**：基礎架構（OS、韌體）——驗安裝
+- **Category 3**：未配置之 COTS——驗其功能如是
+- **Category 4**：已配置之產品——驗所有配置
+- **Category 5**：自定應用——全生命週期驗證
 
-**Expected:** Category assignment aligns with how the system is used, not just what it is.
-**On failure:** If a system spans categories (e.g., COTS with custom add-ons), classify the custom portions as Category 5 and the base as Category 4.
+**預期：** 類別指派合系統之使用方式，非僅其為何。
+**失敗時：** 若系統跨類別（如 COTS 具自定附件），將自定部分分類為 Category 5，基礎分為 Category 4。
 
-### Step 4: Map Regulatory Requirements to Systems
+### 步驟四：映法規需求於系統
 
-Create a regulatory requirements traceability matrix:
+建法規需求可追溯矩陣：
 
 ```markdown
 # Regulatory Requirements Traceability Matrix
@@ -142,12 +142,12 @@ Create a regulatory requirements traceability matrix:
 | ICH Q10 | §1.8 | Knowledge management | SYS-001, SYS-003 | Procedural |
 ```
 
-**Expected:** Every applicable regulatory clause maps to at least one system, and every GxP-Critical system maps to the relevant regulatory clauses.
-**On failure:** Unmapped clauses represent compliance gaps. Create a remediation plan with timelines for each gap.
+**預期：** 每適用法規條款皆映至少一系統，每 GxP-Critical 系統皆映至相關法規條款。
+**失敗時：** 未映之條款為合規缺口。為每缺口建具時程之補救計劃。
 
-### Step 5: Define Validation Strategy Per System
+### 步驟五：為每系統定驗證策略
 
-Based on criticality, category, and regulatory mapping:
+依關鍵性、類別與法規映射：
 
 ```markdown
 # Validation Strategy Summary
@@ -160,14 +160,14 @@ Based on criticality, category, and regulatory mapping:
 | Windows Server | 1 | Supporting | Installation qualification | IQ checklist |
 ```
 
-Abbreviations: URS (User Requirements), RA (Risk Assessment), VP (Validation Plan), IQ/OQ/PQ (Installation/Operational/Performance Qualification), TM (Traceability Matrix), VSR (Validation Summary Report).
+縮寫：URS（用戶需求）、RA（風險評估）、VP（驗證計劃）、IQ/OQ/PQ（安裝/操作/性能驗證）、TM（可追溯矩陣）、VSR（驗證摘要報告）。
 
-**Expected:** Validation effort is proportional to risk — Category 5 GxP-Critical systems get full lifecycle; Category 1 infrastructure gets streamlined IQ.
-**On failure:** If stakeholders push for reduced validation of critical systems, document the risk acceptance with QA sign-off.
+**預期：** 驗證工作量與風險成比例——Category 5 GxP-Critical 系統得全生命週期；Category 1 基礎架構得簡化 IQ。
+**失敗時：** 若相關人促縮減關鍵系統之驗證，載之風險接受並得 QA 簽字。
 
-### Step 6: Design Governance Structure
+### 步驟六：設計治理結構
 
-Define the organisational framework for sustaining compliance:
+為維持合規定組織框架：
 
 ```markdown
 # Compliance Governance Structure
@@ -196,12 +196,12 @@ Define the organisational framework for sustaining compliance:
 | Data integrity incident | System Owner → QA Director | QA Director → Regulatory Affairs | 24 hours |
 ```
 
-**Expected:** Clear accountability for every compliance activity with no orphaned responsibilities.
-**On failure:** If roles overlap or are unassigned, convene a RACI workshop to resolve. Ambiguous ownership is a recurring regulatory citation.
+**預期：** 每一合規活動皆有明確之問責，無孤立之責任。
+**失敗時：** 若角色重疊或未指派，召 RACI 工作坊以解之。所有權含糊為反覆現之法規引用。
 
-### Step 7: Compile the Compliance Architecture Document
+### 步驟七：編寫合規架構文件
 
-Assemble all components into the master document:
+組所有組件入主文件：
 
 ```markdown
 # Compliance Architecture
@@ -243,32 +243,32 @@ Assemble all components into the master document:
 | Regulatory Affairs | | | |
 ```
 
-**Expected:** A single document that serves as the compliance blueprint for the entire regulated environment.
-**On failure:** If the document exceeds practical size, create a master document with references to subsidiary documents per system or domain.
+**預期：** 作整受規環境合規藍圖之單一文件。
+**失敗時：** 若文件超實用大小，建主文件並參每系統或領域之子文件。
 
-## Validation
+## 驗證
 
-- [ ] System inventory includes every system that handles GxP data
-- [ ] Every system has a criticality tier with documented rationale
-- [ ] GAMP 5 categories assigned to all GxP-Critical and GxP-Supporting systems
-- [ ] Regulatory requirements traceability matrix covers all applicable clauses
-- [ ] Every GxP-Critical system has a defined validation strategy
-- [ ] Governance structure defines roles, committees, and escalation paths
-- [ ] All documents have unique IDs and version control
-- [ ] Compliance architecture document is approved by quality and IT leadership
+- [ ] 系統清單含每一處理 GxP 資料之系統
+- [ ] 每系統有載理由之關鍵性等級
+- [ ] GAMP 5 類別指派於所有 GxP-Critical 與 GxP-Supporting 系統
+- [ ] 法規需求可追溯矩陣涵所有適用條款
+- [ ] 每 GxP-Critical 系統有明定之驗證策略
+- [ ] 治理結構定角色、委員會與升級路徑
+- [ ] 所有文件皆有唯一 ID 與版本控制
+- [ ] 合規架構文件得品質與 IT 領導之批准
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Incomplete inventory**: Missing systems are invisible to compliance. Use network scans, software asset management tools, and department interviews — not just asking IT.
-- **Binary thinking**: Systems are not simply "GxP" or "not GxP." The three-tier model (Critical, Supporting, Non-GxP) avoids both over-validation and under-validation.
-- **Category confusion**: GAMP 5 category describes what the software IS, but validation effort should reflect how it is USED. A Category 4 system used for batch release needs more testing than a Category 4 system used for scheduling.
-- **Static architecture**: The compliance architecture is a living document. New systems, regulatory changes, and audit findings all require updates.
-- **Governance without teeth**: Committees that exist on paper but never meet provide no compliance value. Define meeting cadence and quorum requirements.
+- **清單不全**：缺失系統對合規不可見。用網路掃描、軟體資產管理工具、部門訪談——非僅問 IT。
+- **二元思維**：系統非純「GxP」或「非 GxP」。三級模型（Critical、Supporting、Non-GxP）避過度與不足驗證。
+- **類別混淆**：GAMP 5 類別述軟體之「為何」，然驗證工作量宜反映其「如何用」。用於批次放行之 Category 4 系統需較用於排程之 Category 4 系統更多之測。
+- **架構靜止**：合規架構為活文件。新系統、法規變更與稽核發現皆需更新。
+- **治理無牙**：紙上存而從不開會之委員會不供合規價值。定會議節奏與法定人數要求。
 
-## Related Skills
+## 相關技能
 
-- `perform-csv-assessment` — execute the validation strategy defined here for individual systems
-- `manage-change-control` — operationalise the change control process defined in governance
-- `implement-electronic-signatures` — implement e-signature controls mapped in the regulatory matrix
-- `prepare-inspection-readiness` — use this architecture as the foundation for inspection preparation
-- `conduct-gxp-audit` — audit against the compliance architecture as the baseline
+- `perform-csv-assessment` — 對個別系統執行此處定之驗證策略
+- `manage-change-control` — 實作治理中定之變更控制流程
+- `implement-electronic-signatures` — 實作法規矩陣中映之電子簽名控制
+- `prepare-inspection-readiness` — 以此架構為檢查準備之基礎
+- `conduct-gxp-audit` — 以合規架構為基線稽核

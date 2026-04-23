@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Deploy machine learning models to production serving infrastructure using MLflow,
   BentoML, or Seldon Core with REST/gRPC endpoints, implement autoscaling, monitoring,
@@ -114,9 +114,9 @@ def test_prediction():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model server starts successfully, responds to HTTP POST requests, returns predictions in JSON format, Docker container runs without errors.
+**Got:** Model server starts successfully, responds to HTTP POST requests, returns predictions in JSON format, Docker container runs without errors.
 
-**On failure:** Check model URI is valid (`mlflow models list`), verify MLflow tracking server accessibility, ensure all model dependencies installed in container, check port availability (`netstat -tulpn | grep 8080`), verify model flavor compatibility, inspect container logs (`docker logs <container-id>`).
+**If fail:** Check model URI is valid (`mlflow models list`), verify MLflow tracking server accessibility, ensure all model dependencies installed in container, check port availability (`netstat -tulpn | grep 8080`), verify model flavor compatibility, inspect container logs (`docker logs <container-id>`).
 
 ### Step 2: Deploy with BentoML for Production Scale
 
@@ -200,9 +200,9 @@ curl -X POST http://$EXTERNAL_IP/predict \
   -d '{"instances": [{"tenure": 12, "monthly_charges": 70.35}]}'
 ```
 
-**Expected:** BentoML service builds successfully, container runs and serves predictions, Kubernetes deployment creates 3 replicas, load balancer exposes external endpoint, health checks pass.
+**Got:** BentoML service builds successfully, container runs and serves predictions, Kubernetes deployment creates 3 replicas, load balancer exposes external endpoint, health checks pass.
 
-**On failure:** Verify BentoML installation (`bentoml --version`), check model exists in BentoML store (`bentoml models list`), ensure Docker daemon running, verify Kubernetes cluster access (`kubectl cluster-info`), check resource limits not exceeded, inspect pod logs (`kubectl logs <pod-name>`), verify service selector matches pod labels.
+**If fail:** Verify BentoML installation (`bentoml --version`), check model exists in BentoML store (`bentoml models list`), ensure Docker daemon running, verify Kubernetes cluster access (`kubectl cluster-info`), check resource limits not exceeded, inspect pod logs (`kubectl logs <pod-name>`), verify service selector matches pod labels.
 
 ### Step 3: Implement Seldon Core for Advanced Features
 
@@ -262,9 +262,9 @@ helm install seldon-core seldon-core-operator \
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Seldon Core operator installed successfully, model deployment creates pods, REST endpoint responds to predictions, A/B test splits traffic correctly, Seldon Analytics records metrics.
+**Got:** Seldon Core operator installed successfully, model deployment creates pods, REST endpoint responds to predictions, A/B test splits traffic correctly, Seldon Analytics records metrics.
 
-**On failure:** Verify Seldon Core operator running (`kubectl get pods -n seldon-system`), check SeldonDeployment status (`kubectl describe seldondeployment`), ensure image registry accessible from cluster, verify model URI resolution, check RBAC permissions for Seldon operator, inspect model container logs.
+**If fail:** Verify Seldon Core operator running (`kubectl get pods -n seldon-system`), check SeldonDeployment status (`kubectl describe seldondeployment`), ensure image registry accessible from cluster, verify model URI resolution, check RBAC permissions for Seldon operator, inspect model container logs.
 
 ### Step 4: Implement Monitoring and Observability
 
@@ -310,9 +310,9 @@ Grafana dashboard JSON:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prometheus scrapes metrics successfully, Grafana dashboards display prediction throughput, latency percentiles, error rates, and active requests in real-time.
+**Got:** Prometheus scrapes metrics successfully, Grafana dashboards display prediction throughput, latency percentiles, error rates, and active requests in real-time.
 
-**On failure:** Verify Prometheus scrape targets are UP (`http://prometheus:9090/targets`), check metrics endpoint accessibility (`curl http://model-pod:8000/metrics`), ensure Kubernetes service discovery configured, verify Grafana data source connection, check firewall rules for metrics port.
+**If fail:** Verify Prometheus scrape targets are UP (`http://prometheus:9090/targets`), check metrics endpoint accessibility (`curl http://model-pod:8000/metrics`), ensure Kubernetes service discovery configured, verify Grafana data source connection, check firewall rules for metrics port.
 
 ### Step 5: Implement Autoscaling
 
@@ -350,9 +350,9 @@ kubectl run -it --rm load-generator --image=busybox --restart=Never -- /bin/sh -
 kubectl get hpa -n seldon --watch
 ```
 
-**Expected:** HPA monitors CPU/memory/custom metrics, scales replicas up under load, scales down after stabilization period, min/max replica limits respected.
+**Got:** HPA monitors CPU/memory/custom metrics, scales replicas up under load, scales down after stabilization period, min/max replica limits respected.
 
-**On failure:** Verify metrics-server running (`kubectl get deployment metrics-server -n kube-system`), check pod resource requests defined (HPA requires requests), ensure custom metrics available if used, verify RBAC permissions for HPA controller, check stabilization windows not too restrictive.
+**If fail:** Verify metrics-server running (`kubectl get deployment metrics-server -n kube-system`), check pod resource requests defined (HPA requires requests), ensure custom metrics available if used, verify RBAC permissions for HPA controller, check stabilization windows not too restrictive.
 
 ### Step 6: Implement Canary Deployment Strategy
 
@@ -384,9 +384,9 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Canary deployment starts with 0% traffic, gradual traffic shift occurs automatically, health checks pass at each stage, rollback triggered if metrics degrade, complete rollout after all stages pass.
+**Got:** Canary deployment starts with 0% traffic, gradual traffic shift occurs automatically, health checks pass at each stage, rollback triggered if metrics degrade, complete rollout after all stages pass.
 
-**On failure:** Verify Seldon deployment has multiple predictors, check traffic percentages sum to 100, ensure canary image exists and is pullable, verify Prometheus metrics available for health checks, check rollback logic executes correctly, inspect pod logs for both versions.
+**If fail:** Verify Seldon deployment has multiple predictors, check traffic percentages sum to 100, ensure canary image exists and is pullable, verify Prometheus metrics available for health checks, check rollback logic executes correctly, inspect pod logs for both versions.
 
 ## Validation
 
@@ -403,7 +403,7 @@ logger = logging.getLogger(__name__)
 - [ ] Canary deployment rolls out gradually
 - [ ] Rollback works when canary fails
 
-## Common Pitfalls
+## Pitfalls
 
 - **Cold start latency**: First request slow due to model loading - use readiness probes with adequate delay, implement model caching
 - **Memory leaks**: Long-running servers accumulate memory - monitor memory usage, implement periodic restarts, profile code

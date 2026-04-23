@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Design an A2A Agent Card (.well-known/agent.json) manifest describing agent
   capabilities, skills, authentication requirements, and supported content types.
@@ -72,9 +72,9 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 
 1.3. Set the canonical URL where the Agent Card will be served at `/.well-known/agent.json`.
 
-**Expected:** A complete identity block with name, description, URL, provider, and version.
+**Got:** A complete identity block with name, description, URL, provider, and version.
 
-**On failure:** If the agent serves multiple domains, consider whether it should be one agent with many skills or multiple agents with focused scopes. A2A favors focused agents with clear boundaries.
+**If fail:** If the agent serves multiple domains, consider whether it should be one agent with many skills or multiple agents with focused scopes. A2A favors focused agents with clear boundaries.
 
 ### Step 2: Enumerate Skills with Input/Output Schemas
 
@@ -122,9 +122,9 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 
 2.3. Ensure skill boundaries are clear and non-overlapping. Each task should map to exactly one skill.
 
-**Expected:** A skills array where each entry has id, name, description, tags, examples, and I/O modes.
+**Got:** A skills array where each entry has id, name, description, tags, examples, and I/O modes.
 
-**On failure:** If skills overlap significantly, merge them into a single broader skill with more examples. If a skill is too broad, split it into focused sub-skills.
+**If fail:** If skills overlap significantly, merge them into a single broader skill with more examples. If a skill is too broad, split it into focused sub-skills.
 
 ### Step 3: Configure Authentication
 
@@ -182,9 +182,9 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 
 3.3. Document the token/key provisioning process in the Agent Card's provider section or external documentation.
 
-**Expected:** An authentication block matching the deployment security requirements.
+**Got:** An authentication block matching the deployment security requirements.
 
-**On failure:** If OAuth 2.0 infrastructure is not available, start with API key authentication and plan migration. Never deploy a public agent with `none` authentication.
+**If fail:** If OAuth 2.0 infrastructure is not available, start with API key authentication and plan migration. Never deploy a public agent with `none` authentication.
 
 ### Step 4: Specify Capabilities
 
@@ -208,9 +208,9 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 
 4.3. Only set capabilities to `true` if the implementation fully supports them. Advertising unsupported capabilities breaks interoperability.
 
-**Expected:** A capabilities object with boolean flags matching actual implementation.
+**Got:** A capabilities object with boolean flags matching actual implementation.
 
-**On failure:** If unsure whether a capability will be implemented, set it to `false`. Capabilities can be added in future versions. Removing a capability is a breaking change.
+**If fail:** If unsure whether a capability will be implemented, set it to `false`. Capabilities can be added in future versions. Removing a capability is a breaking change.
 
 ### Step 5: Validate and Publish Agent Card
 
@@ -259,9 +259,9 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 curl -s https://agent.example.com/.well-known/agent.json | python3 -m json.tool
 ```
 
-**Expected:** A valid JSON Agent Card served at the well-known URL, parseable by any A2A client.
+**Got:** A valid JSON Agent Card served at the well-known URL, parseable by any A2A client.
 
-**On failure:** If JSON validation fails, use a JSON linter to identify syntax errors. If the URL is not reachable, check DNS, SSL certificates, and web server configuration. If CORS is needed, add `Access-Control-Allow-Origin` headers.
+**If fail:** If JSON validation fails, use a JSON linter to identify syntax errors. If the URL is not reachable, check DNS, SSL certificates, and web server configuration. If CORS is needed, add `Access-Control-Allow-Origin` headers.
 
 ## Validation
 
@@ -274,7 +274,7 @@ curl -s https://agent.example.com/.well-known/agent.json | python3 -m json.tool
 - [ ] A2A clients can fetch and parse the card successfully
 - [ ] Examples in skills are realistic and trigger the correct skill
 
-## Common Pitfalls
+## Pitfalls
 
 - **Overpromising capabilities**: Setting `streaming: true` or `pushNotifications: true` without implementation causes client failures when those features are used. Be conservative.
 - **Vague skill descriptions**: Descriptions like "does data stuff" prevent accurate skill matching. Be specific about inputs, outputs, and domains.

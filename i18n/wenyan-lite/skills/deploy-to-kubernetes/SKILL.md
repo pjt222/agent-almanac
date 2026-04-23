@@ -25,34 +25,34 @@ metadata:
 
 # Deploy to Kubernetes
 
-Deploy containerized applications to Kubernetes with production-ready configurations including health checks, resource management, and automated rollouts.
+部署容器化應用於 Kubernetes，具健康檢查、資源管理、自動化推出等生產級配置。
 
-## When to Use
+## 適用時機
 
-- Deploying new applications to Kubernetes clusters (EKS, GKE, AKS, self-hosted)
-- Migrating from Docker Compose or traditional VMs to container orchestration
-- Implementing zero-downtime rolling updates and rollbacks
-- Managing application configuration and secrets in Kubernetes
-- Setting up multi-environment deployments (dev, staging, production)
-- Creating reusable Helm charts for application distribution
+- 部署新應用於 Kubernetes 集群（EKS、GKE、AKS、自託管）
+- 自 Docker Compose 或傳統 VM 遷至容器編排
+- 行零停機滾動更新與回滾
+- 於 Kubernetes 管應用配置與秘鑰
+- 設多環境部署（dev、staging、production）
+- 建可重用之 Helm chart 以供應用分發
 
-## Inputs
+## 輸入
 
-- **Required**: Kubernetes cluster access (`kubectl cluster-info`)
-- **Required**: Container images pushed to registry (Docker Hub, ECR, GCR, Harbor)
-- **Required**: Application requirements (ports, environment variables, volumes)
-- **Optional**: TLS certificates for HTTPS ingress
-- **Optional**: Persistent storage requirements (StatefulSets, PVCs)
-- **Optional**: Helm CLI for chart-based deployments
+- **必需**：Kubernetes 集群存取（`kubectl cluster-info`）
+- **必需**：已推至登錄之容器映像（Docker Hub、ECR、GCR、Harbor）
+- **必需**：應用需求（埠、環境變數、卷宗）
+- **可選**：HTTPS ingress 之 TLS 憑證
+- **可選**：持久儲存需求（StatefulSets、PVCs）
+- **可選**：基於 chart 部署用之 Helm CLI
 
-## Procedure
+## 步驟
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 完整配置檔案與模板，見 [Extended Examples](references/EXAMPLES.md)。
 
 
-### Step 1: Create Namespace and Resource Quotas
+### 步驟一：建命名空間與資源配額
 
-Organize applications into namespaces with resource limits and RBAC.
+將應用分入命名空間，具資源限與 RBAC。
 
 ```bash
 # Create namespace
@@ -129,13 +129,13 @@ kubectl get limitrange -n myapp-prod
 kubectl get sa -n myapp-prod
 ```
 
-**Expected:** Namespace created with resource quotas limiting compute and storage. LimitRange sets default CPU/memory requests and limits. ServiceAccount configured with least-privilege RBAC.
+**預期：** 命名空間建成，具限計算與儲存之資源配額。LimitRange 設預設之 CPU/記憶體請求與限。ServiceAccount 以最小權限 RBAC 配之。
 
-**On failure:** For quota errors, verify cluster has sufficient resources with `kubectl describe nodes`. For RBAC errors, check cluster-admin permissions with `kubectl auth can-i create role --namespace myapp-prod`. Use `kubectl describe` on rejected resources to see quota/limit violations.
+**失敗時：** 配額錯誤時，以 `kubectl describe nodes` 驗集群資源是否足。RBAC 錯誤時，以 `kubectl auth can-i create role --namespace myapp-prod` 檢集群管理權限。於被拒資源用 `kubectl describe` 以見配額/限違反。
 
-### Step 2: Configure Application Secrets and ConfigMaps
+### 步驟二：配應用秘鑰與 ConfigMap
 
-Externalize configuration and sensitive data using ConfigMaps and Secrets.
+以 ConfigMap 與 Secret 外部化配置與敏感資料。
 
 ```bash
 # Create ConfigMap from literal values
@@ -175,7 +175,7 @@ kubectl get secret -n myapp-prod
 kubectl describe configmap myapp-config -n myapp-prod
 ```
 
-For more complex configurations, use YAML manifests:
+更複雜之配置宜用 YAML 清單：
 
 ```yaml
 # configmap.yaml
@@ -214,13 +214,13 @@ stringData:  # Automatically base64 encoded
   jwt-secret: "my-jwt-signing-key"
 ```
 
-**Expected:** ConfigMaps store non-sensitive configuration, Secrets store credentials/keys. Values accessible to Pods via environment variables or volume mounts. TLS secrets properly formatted for Ingress resources.
+**預期：** ConfigMap 存非敏感之配置，Secret 存憑證/金鑰。值透過環境變數或卷宗掛載供 Pod 存取。TLS 秘鑰合 Ingress 資源之格式。
 
-**On failure:** For encoding issues, use `stringData` instead of `data` in YAML. For TLS secret errors, verify certificate and key format with `openssl x509 -in tls.crt -text -noout`. For access issues, check ServiceAccount RBAC permissions. View decoded secret with `kubectl get secret myapp-secret -o jsonpath='{.data.api-key}' | base64 -d`.
+**失敗時：** 編碼問題時，YAML 中以 `stringData` 替 `data`。TLS 秘鑰錯誤時，以 `openssl x509 -in tls.crt -text -noout` 驗憑證與金鑰格式。存取問題時，查 ServiceAccount 之 RBAC 權限。以 `kubectl get secret myapp-secret -o jsonpath='{.data.api-key}' | base64 -d` 觀解碼之秘鑰。
 
-### Step 3: Create Deployment with Health Checks and Resource Limits
+### 步驟三：建具健康檢查與資源限之 Deployment
 
-Deploy application with production-ready configuration including probes and resource management.
+部署應用，具探針與資源管理之生產級配置。
 
 ```yaml
 # deployment.yaml
@@ -336,7 +336,7 @@ spec:
       - name: registry-credentials
 ```
 
-Apply and monitor deployment:
+應用並監部署：
 
 ```bash
 # Apply deployment
@@ -358,13 +358,13 @@ kubectl describe deployment myapp -n myapp-prod
 kubectl top pods -n myapp-prod -l app=myapp
 ```
 
-**Expected:** Deployment creates 3 replicas with rolling update strategy. Pods pass readiness probes before receiving traffic. Liveness probes restart unhealthy pods. Resource requests/limits prevent OOM kills. Logs show successful application startup.
+**預期：** Deployment 以滾動更新策略建 3 副本。Pod 於 readiness 探針通過後方收流量。Liveness 探針重啟不健康之 pod。資源請求/限防 OOM kill。日誌示應用成功啟動。
 
-**On failure:** For ImagePullBackOff, verify image exists and imagePullSecret is valid with `kubectl get secret registry-credentials -o yaml`. For CrashLoopBackOff, check logs with `kubectl logs pod-name --previous`. For probe failures, test endpoints manually with `kubectl port-forward` and `curl localhost:8080/healthz`. For OOMKilled pods, increase memory limits or investigate memory leaks.
+**失敗時：** ImagePullBackOff 時，以 `kubectl get secret registry-credentials -o yaml` 驗映像存且 imagePullSecret 有效。CrashLoopBackOff 時，以 `kubectl logs pod-name --previous` 查日誌。探針失敗時，以 `kubectl port-forward` 與 `curl localhost:8080/healthz` 人工測端點。Pod 被 OOMKilled 時，增記憶體限或查記憶體洩漏。
 
-### Step 4: Expose Application with Services and Load Balancers
+### 步驟四：以 Service 與負載均衡器暴露應用
 
-Create Service resources to expose applications internally and externally.
+建 Service 資源以於內部與外部暴露應用。
 
 ```yaml
 # service.yaml
@@ -376,7 +376,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Apply and test services:
+應用並測 Service：
 
 ```bash
 # Apply services
@@ -388,13 +388,13 @@ kubectl get svc -n myapp-prod
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** LoadBalancer Service provisions external LB with public IP/hostname. ClusterIP Service provides stable internal DNS. Endpoints list shows healthy Pod IPs. Curl requests succeed with expected responses.
+**預期：** LoadBalancer Service 配外部 LB 具公開 IP/主機名。ClusterIP Service 提供穩定之內部 DNS。Endpoints 列示健康之 Pod IP。Curl 請求以預期回應成功。
 
-**On failure:** For pending LoadBalancer, check cloud provider integration and quotas. For no endpoints, verify Pod labels match Service selector with `kubectl get pods --show-labels`. For connection refused, verify targetPort matches container port. Use `kubectl port-forward` to bypass Service layer for debugging.
+**失敗時：** LoadBalancer 懸而未決時，查雲提供者整合與配額。無 endpoints 時，以 `kubectl get pods --show-labels` 驗 Pod 標籤合 Service selector。連線被拒時，驗 targetPort 合容器埠。除錯時以 `kubectl port-forward` 繞過 Service 層。
 
-### Step 5: Configure Horizontal Pod Autoscaling
+### 步驟五：配水平 Pod 自動擴展
 
-Implement automatic scaling based on CPU/memory or custom metrics.
+依 CPU/記憶體或自定指標行自動擴展。
 
 ```yaml
 # hpa.yaml
@@ -406,7 +406,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Install metrics-server if not available:
+若 metrics-server 不可用則裝之：
 
 ```bash
 # Install metrics-server
@@ -418,13 +418,13 @@ kubectl top nodes
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** HPA monitors CPU/memory metrics. When thresholds exceeded, replicas scale up to maxReplicas. When load decreases, replicas scale down gradually (stabilization window prevents flapping). Metrics visible with `kubectl top`.
+**預期：** HPA 監 CPU/記憶體指標。超閾值時，副本擴至 maxReplicas。負載減時，副本漸縮（穩定窗防震盪）。指標以 `kubectl top` 可見。
 
-**On failure:** For "unknown" metrics, verify metrics-server is running and Pods have resource requests defined. For no scaling, check current utilization is actually exceeding targets with `kubectl top pods`. For flapping, increase stabilizationWindowSeconds. For slow scale-up, reduce periodSeconds in scaleUp policies.
+**失敗時：** 「unknown」指標時，驗 metrics-server 運行且 Pod 已定資源請求。無擴展時，以 `kubectl top pods` 查當前利用率實超目標。震盪時，增 stabilizationWindowSeconds。擴展慢時，於 scaleUp 策略中減 periodSeconds。
 
-### Step 6: Package Application with Helm Chart
+### 步驟六：以 Helm Chart 打包應用
 
-Create reusable Helm chart for multi-environment deployments.
+建可重用之 Helm chart 以供多環境部署。
 
 ```bash
 # Create Helm chart structure
@@ -436,47 +436,47 @@ cat > Chart.yaml <<EOF
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Helm chart packages all Kubernetes resources with templated values. Dry-run shows rendered manifests. Install deploys all resources in correct order. Upgrades perform rolling updates. Rollback reverts to previous revision.
+**預期：** Helm chart 以模板化值打包所有 Kubernetes 資源。乾執行示渲染之清單。裝以正確順序部署所有資源。升級行滾動更新。回滾還原至前一版本。
 
-**On failure:** For template errors, run `helm template .` to render locally without installing. For dependency issues, run `helm dependency update`. For value override failures, verify YAML path exists in values.yaml. Use `helm get manifest myapp -n myapp-prod` to see actual deployed resources.
+**失敗時：** 模板錯誤時，執 `helm template .` 以本地渲染而不安裝。依賴問題時，執 `helm dependency update`。值覆蓋失敗時，驗 YAML 路徑於 values.yaml 中存。以 `helm get manifest myapp -n myapp-prod` 觀實部署之資源。
 
-## Validation
+## 驗證
 
-- [ ] Pods in Running state with all containers ready
-- [ ] Readiness probes pass before Pods added to Service endpoints
-- [ ] Liveness probes restart unhealthy containers automatically
-- [ ] Resource requests and limits prevent OOM kills and node overcommit
-- [ ] Secrets and ConfigMaps mounted correctly with expected values
-- [ ] Services resolve via DNS (cluster.local) from other Pods
-- [ ] LoadBalancer/Ingress accessible from external networks
-- [ ] HPA scales replicas up under load and down when idle
-- [ ] Rolling updates complete with zero downtime
-- [ ] Logs collected and accessible via kubectl logs or centralized logging
+- [ ] Pod 於 Running 狀態，所有容器就緒
+- [ ] Readiness 探針於 Pod 加入 Service endpoints 前通過
+- [ ] Liveness 探針自動重啟不健康容器
+- [ ] 資源請求與限防 OOM kill 與節點超分
+- [ ] Secret 與 ConfigMap 以預期值正確掛載
+- [ ] Service 自他 Pod 透過 DNS（cluster.local）解析
+- [ ] LoadBalancer/Ingress 自外部網路可達
+- [ ] HPA 於負載下擴副本，於閒置時縮之
+- [ ] 滾動更新以零停機完成
+- [ ] 日誌透過 kubectl logs 或集中日誌收集並可達
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Missing readiness probes**: Pods receive traffic before fully started. Always implement readiness probes that verify application dependencies.
+- **缺 readiness 探針**：Pod 於完全啟動前收流量。恆實作驗應用依賴之 readiness 探針。
 
-- **Insufficient startup time**: Fast liveness probes kill slow-starting apps. Use startupProbe with generous failureThreshold for initialization.
+- **啟動時間不足**：快速 liveness 探針殺啟動慢之應用。用 startupProbe 具寬鬆 failureThreshold 以供初始化。
 
-- **No resource limits**: Pods consume unlimited CPU/memory causing node instability. Always set requests and limits.
+- **無資源限**：Pod 耗無限 CPU/記憶體致節點不穩。恆設請求與限。
 
-- **Hardcoded configuration**: Environment-specific values in manifests prevent reuse. Use ConfigMaps, Secrets, and Helm values.
+- **硬編碼配置**：清單中之環境特定值阻重用。用 ConfigMap、Secret、Helm values。
 
-- **Default service account**: Pods have unnecessary cluster permissions. Create dedicated ServiceAccounts with minimal RBAC.
+- **預設 service account**：Pod 有不必要之集群權限。建專用之 ServiceAccount 具最小 RBAC。
 
-- **No rolling update strategy**: Deployments recreate all Pods simultaneously causing downtime. Use RollingUpdate with maxUnavailable: 0.
+- **無滾動更新策略**：Deployment 同時重建所有 Pod 致停機。用 RollingUpdate 具 maxUnavailable: 0。
 
-- **Secrets in version control**: Sensitive data committed to Git. Use sealed-secrets, external-secrets-operator, or vault.
+- **秘鑰入版本控制**：敏感資料提交至 Git。用 sealed-secrets、external-secrets-operator 或 vault。
 
-- **No pod disruption budget**: Cluster maintenance drains nodes and breaks service. Create PodDisruptionBudget to ensure minimum available replicas.
+- **無 pod disruption budget**：集群維護排空節點致服務中斷。建 PodDisruptionBudget 以保最小可用副本。
 
-## Related Skills
+## 相關技能
 
-- `setup-docker-compose` - Container orchestration fundamentals before Kubernetes
-- `containerize-mcp-server` - Creating container images for deployment
-- `write-helm-chart` - Advanced Helm chart development
-- `manage-kubernetes-secrets` - SealedSecrets and external-secrets-operator
-- `configure-ingress-networking` - NGINX Ingress and cert-manager setup
-- `implement-gitops-workflow` - ArgoCD/Flux for declarative deployments
-- `setup-container-registry` - Image registry integration
+- `setup-docker-compose` - Kubernetes 前之容器編排基礎
+- `containerize-mcp-server` - 為部署建容器映像
+- `write-helm-chart` - 高級 Helm chart 開發
+- `manage-kubernetes-secrets` - SealedSecrets 與 external-secrets-operator
+- `configure-ingress-networking` - NGINX Ingress 與 cert-manager 設定
+- `implement-gitops-workflow` - 聲明式部署之 ArgoCD/Flux
+- `setup-container-registry` - 映像登錄整合

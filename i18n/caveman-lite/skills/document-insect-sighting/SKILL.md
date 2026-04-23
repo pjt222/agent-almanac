@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Record insect sightings with location, date, habitat, photography, behavior
   notes, preliminary identification, and citizen science submission. Covers
@@ -76,9 +76,9 @@ Sighting Record — Context:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete context record with date, time, precise location (ideally GPS coordinates), and weather conditions at the time of observation.
+**Got:** A complete context record with date, time, precise location (ideally GPS coordinates), and weather conditions at the time of observation.
 
-**On failure:** If GPS is unavailable, describe the location relative to landmarks (trail junctions, buildings, water features) with enough detail that the site could be relocated. If weather data is uncertain, estimate temperature range and note "overcast" or "clear" rather than leaving the field blank.
+**If fail:** If GPS is unavailable, describe the location relative to landmarks (trail junctions, buildings, water features) with enough detail that the site could be relocated. If weather data is uncertain, estimate temperature range and note "overcast" or "clear" rather than leaving the field blank.
 
 ### Step 2: Document Habitat and Microhabitat
 
@@ -108,9 +108,9 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A description of the habitat that places the insect in ecological context, including both the broad landscape and the immediate microhabitat where the insect was found.
+**Got:** A description of the habitat that places the insect in ecological context, including both the broad landscape and the immediate microhabitat where the insect was found.
 
-**On failure:** If the microhabitat is difficult to characterize (e.g., insect in flight), note what it was flying near or what it landed on. Record "in flight, 1m above meadow grasses" rather than leaving the field blank.
+**If fail:** If the microhabitat is difficult to characterize (e.g., insect in flight), note what it was flying near or what it landed on. Record "in flight, 1m above meadow grasses" rather than leaving the field blank.
 
 ### Step 3: Photograph with Diagnostic Quality
 
@@ -140,9 +140,9 @@ Tips for quality macro photographs:
   wings close (especially butterflies and dragonflies)
 ```
 
-**Expected:** At least 3 usable photographs: one dorsal, one lateral, and one with scale reference. Ideally 5 or more images covering multiple angles.
+**Got:** At least 3 usable photographs: one dorsal, one lateral, and one with scale reference. Ideally 5 or more images covering multiple angles.
 
-**On failure:** If the insect moves before multiple angles are captured, prioritize the dorsal view (top-down) as it carries the most diagnostic information for identification. A single sharp dorsal photograph is better than multiple blurry images. If the insect flies away before any photograph, sketch the body shape and note colors from memory immediately.
+**If fail:** If the insect moves before multiple angles are captured, prioritize the dorsal view (top-down) as it carries the most diagnostic information for identification. A single sharp dorsal photograph is better than multiple blurry images. If the insect flies away before any photograph, sketch the body shape and note colors from memory immediately.
 
 ### Step 4: Note Behavior and Interactions
 
@@ -176,9 +176,9 @@ Behavioral Notes:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** At least 3 behavioral observations recorded: activity, movement pattern, and abundance.
+**Got:** At least 3 behavioral observations recorded: activity, movement pattern, and abundance.
 
-**On failure:** If the insect is encountered briefly (e.g., lands and immediately flies away), record what you did observe and note the observation duration. Even "resting on leaf surface, solitary, flew when approached, observation duration 5 seconds" is useful data.
+**If fail:** If the insect is encountered briefly (e.g., lands and immediately flies away), record what you did observe and note the observation duration. Even "resting on leaf surface, solitary, flew when approached, observation duration 5 seconds" is useful data.
 
 ### Step 5: Preliminary Identification to Order
 
@@ -207,9 +207,9 @@ Quick Key to Major Insect Orders:
 3. If unsure, note: "Order uncertain — resembles [description]"
 ```
 
-**Expected:** A preliminary identification to order (e.g., "Coleoptera — beetle") or an honest "order uncertain" with a physical description.
+**Got:** A preliminary identification to order (e.g., "Coleoptera — beetle") or an honest "order uncertain" with a physical description.
 
-**On failure:** If the insect does not clearly match any order in the quick key, record the body shape, wing type, and number of legs. Platforms like iNaturalist will accept "Insecta" as a starting identification, and community identifiers will refine it. An honest "unknown" is always better than a forced guess.
+**If fail:** If the insect does not clearly match any order in the quick key, record the body shape, wing type, and number of legs. Platforms like iNaturalist will accept "Insecta" as a starting identification, and community identifiers will refine it. An honest "unknown" is always better than a forced guess.
 
 ### Step 6: Submit to Citizen Science Platform
 
@@ -239,9 +239,9 @@ Data Quality Tips:
 - "Research Grade" status requires 2+ agreeing identifications at species level
 ```
 
-**Expected:** A complete observation submitted to a citizen science platform with photographs, location, date, and preliminary identification, ready for community review.
+**Got:** A complete observation submitted to a citizen science platform with photographs, location, date, and preliminary identification, ready for community review.
 
-**On failure:** If no internet access is available in the field, save all photographs and notes locally with the intention to upload later. Most platforms allow backdated submissions. If you do not have an account, store the record in your personal journal — the data still has value for your own learning and can be uploaded later.
+**If fail:** If no internet access is available in the field, save all photographs and notes locally with the intention to upload later. Most platforms allow backdated submissions. If you do not have an account, store the record in your personal journal — the data still has value for your own learning and can be uploaded later.
 
 ## Validation
 
@@ -253,14 +253,14 @@ Data Quality Tips:
 - [ ] A preliminary identification to order was attempted (or honestly marked as unknown)
 - [ ] The observation was submitted to a citizen science platform or stored in a structured journal
 
-## Common Pitfalls
+## Pitfalls
 
 - **Approaching too quickly**: Many insects flee when approached rapidly. Move slowly and avoid casting your shadow over the subject. Photograph from farther away first, then gradually close distance
 - **Ignoring habitat context**: A photograph of an insect on a white wall loses the ecological context. Always include at least one in-situ photograph showing the insect in its natural setting
 - **Relying on a single photograph**: One image is often insufficient for identification. Wing pattern, leg structure, and antennae may only be visible from specific angles
 - **Forgetting scale**: Without a size reference, a 5mm beetle and a 50mm beetle can look identical in photographs. Always include a coin, ruler, or finger for scale
 - **Forcing an identification**: Submitting a confident but incorrect identification on citizen science platforms creates noise for researchers. "Insecta" or "order unknown" is always acceptable and preferred over a wrong genus or species
-- **Not recording negatives**: "No insects observed on milkweed patch" is valuable absence data for surveys. Record what you checked, not just what you found
+- **Not recording negatives**: "No insects observed on milkweed patch" is valuable absence data for surveys. Record what you checked, not what you found
 
 ## Related Skills
 

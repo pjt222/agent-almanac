@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Derive a theoretical result step-by-step from first principles or established
   theorems, with every step explicitly justified and special cases checked.
@@ -64,9 +64,9 @@ Write the derivation's contract explicitly before any calculation:
   - ...
 ```
 
-**Expected:** A complete, unambiguous statement of what is being derived from what, with all notation defined upfront.
+**Got:** A complete, unambiguous statement of what is being derived from what, with all notation defined upfront.
 
-**On failure:** If the target result is ambiguous or the starting assumptions are incomplete, clarify before proceeding. A derivation with hidden assumptions is unreliable.
+**If fail:** If the target result is ambiguous or the starting assumptions are incomplete, clarify before proceeding. A derivation with hidden assumptions is unreliable.
 
 ### Step 2: Identify Required Mathematical Machinery
 
@@ -86,9 +86,9 @@ Survey the tools needed and verify their applicability:
 - **Identities to invoke**: [list with precise statements]
 ```
 
-**Expected:** A checklist of mathematical tools with their applicability conditions verified for the specific problem at hand.
+**Got:** A checklist of mathematical tools with their applicability conditions verified for the specific problem at hand.
 
-**On failure:** If a required tool has unverified prerequisites (e.g., term-by-term differentiation of a series whose uniform convergence is unknown), flag it as a gap. Either prove the prerequisite or state it as an additional assumption.
+**If fail:** If a required tool has unverified prerequisites (e.g., term-by-term differentiation of a series whose uniform convergence is unknown), flag it as a gap. Either prove the prerequisite or state it as an additional assumption.
 
 ### Step 3: Execute Derivation with Step-by-Step Justification
 
@@ -128,9 +128,9 @@ Carry out the derivation with every step labeled and justified:
 *Justification*: [final operation]  QED
 ```
 
-**Expected:** A linear sequence of steps from the starting point to the target result, with no gaps in logic. Every step is independently verifiable.
+**Got:** A linear sequence of steps from the starting point to the target result, with no gaps in logic. Every step is independently verifiable.
 
-**On failure:** If a step does not follow from the previous one, the derivation has a gap. Either insert the missing intermediate steps or identify the additional assumption needed. Never skip a step with "it can be shown that" unless the omitted result is a well-known identity listed in Step 2.
+**If fail:** If a step does not follow from the previous one, the derivation has a gap. Either insert the missing intermediate steps or identify the additional assumption needed. Never skip a step with "it can be shown that" unless the omitted result is a well-known identity listed in Step 2.
 
 ### Step 4: Check Limiting Cases and Special Values
 
@@ -155,9 +155,9 @@ Validate the derived result against known physics or mathematics:
 | ... | ... | ... | ... | ... |
 ```
 
-**Expected:** All limiting cases and special values produce the expected results. The derivation is internally consistent.
+**Got:** All limiting cases and special values produce the expected results. The derivation is internally consistent.
 
-**On failure:** A failed limiting case indicates an error in the derivation. Trace the failure back by checking which step first produces an expression that fails the limit. Common causes: incorrect sign, missing factor of 2 or pi, wrong combinatorial coefficient, or a step where an order of limits matters.
+**If fail:** A failed limiting case indicates an error in the derivation. Trace the failure back by checking which step first produces an expression that fails the limit. Common causes: incorrect sign, missing factor of 2 or pi, wrong combinatorial coefficient, or a step where an order of limits matters.
 
 ### Step 5: Present Complete Derivation with Notation Glossary
 
@@ -186,9 +186,9 @@ Assemble the final, polished derivation:
 3. ...
 ```
 
-**Expected:** A self-contained document that a reader can follow from start to finish without consulting external references, except for the explicitly cited identities and theorems.
+**Got:** A self-contained document that a reader can follow from start to finish without consulting external references, except for the explicitly cited identities and theorems.
 
-**On failure:** If the derivation is too long for a single document (more than ~50 steps), break it into lemmas. Derive each lemma separately, then assemble the main result by citing the lemmas.
+**If fail:** If the derivation is too long for a single document (more than ~50 steps), break it into lemmas. Derive each lemma separately, then assemble the main result by citing the lemmas.
 
 ## Validation
 
@@ -202,7 +202,7 @@ Assemble the final, polished derivation:
 - [ ] The derivation is complete: no steps are deferred with "it can be shown"
 - [ ] The domain of validity is explicitly stated with the final result
 
-## Common Pitfalls
+## Pitfalls
 
 - **Hidden assumptions**: Assuming a function is analytic, a series converges, or an integral exists without stating it. Every regularity condition is an assumption and must be declared.
 - **Sign errors**: The most common mechanical error. Verify signs at every step by tracking them through substitutions. Cross-check against dimensional analysis (a sign error often produces a dimensionally inconsistent expression).

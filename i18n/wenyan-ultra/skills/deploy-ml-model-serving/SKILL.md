@@ -23,37 +23,36 @@ metadata:
   tags: model-serving, bentoml, seldon, rest-api, grpc
 ---
 
-# Deploy ML Model Serving
+# 部署 ML 模型服務
 
+> 詳例見 [Extended Examples](references/EXAMPLES.md)。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+部 ML 模型於生產：可擴服務設施、監控、A/B 測試。
 
-Deploy machine learning models to production with scalable serving infrastructure, monitoring, and A/B testing.
+## 用
 
-## When to Use
+- 訓好模型→生產實時推理
+- REST/gRPC 預測 API
+- 變載自動擴
+- 模型版本 A/B
+- 批→實時遷移
+- 構低時延預測服務
+- 理多版本生產
 
-- Deploying trained models to production for real-time inference
-- Setting up REST or gRPC APIs for model predictions
-- Implementing autoscaling for variable load patterns
-- Running A/B tests between model versions
-- Migrating from batch to real-time inference
-- Building low-latency prediction services
-- Managing multiple model versions in production
+## 入
 
-## Inputs
+- **必**：MLflow 註冊模型或訓好物
+- **必**：Kubernetes 集群或容編平
+- **必**：服務框架（MLflow、BentoML、Seldon Core、TorchServe）
+- **可**：GPU（深度學習）
+- **可**：監設施（Prometheus、Grafana）
+- **可**：負載均衡+入控
 
-- **Required**: Registered model in MLflow Model Registry or trained model artifact
-- **Required**: Kubernetes cluster or container orchestration platform
-- **Required**: Serving framework choice (MLflow, BentoML, Seldon Core, TorchServe)
-- **Optional**: GPU resources for deep learning models
-- **Optional**: Monitoring infrastructure (Prometheus, Grafana)
-- **Optional**: Load balancer and ingress controller
+## 法
 
-## Procedure
+### 一：以 MLflow 部署
 
-### Step 1: Deploy with MLflow Models Serving
-
-Use MLflow's built-in serving for quick deployment of scikit-learn, PyTorch, and TensorFlow models.
+速部 scikit-learn、PyTorch、TensorFlow。
 
 ```bash
 # Serve model locally for testing
@@ -72,7 +71,7 @@ curl -X POST http://localhost:5001/invocations \
   }'
 ```
 
-Docker deployment:
+Docker 部署：
 
 ```dockerfile
 # Dockerfile.mlflow-serving
@@ -86,7 +85,7 @@ ENV MLFLOW_TRACKING_URI=http://mlflow-server:5000
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Docker Compose for local testing:
+Docker Compose 本地測試：
 
 ```yaml
 # docker-compose.mlflow-serving.yml
@@ -100,7 +99,7 @@ services:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Test the deployment:
+測部署：
 
 ```python
 # test_mlflow_serving.py
@@ -114,13 +113,13 @@ def test_prediction():
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model server starts successfully, responds to HTTP POST requests, returns predictions in JSON format, Docker container runs without errors.
+**得：** 模型服務啟，應 HTTP POST，以 JSON 返預測，Docker 容器無錯。
 
-**On failure:** Check model URI is valid (`mlflow models list`), verify MLflow tracking server accessibility, ensure all model dependencies installed in container, check port availability (`netstat -tulpn | grep 8080`), verify model flavor compatibility, inspect container logs (`docker logs <container-id>`).
+**敗：** 查模型 URI（`mlflow models list`），驗 MLflow 跟蹤服務可達，確容器內依賴齊，查端口（`netstat -tulpn | grep 8080`），驗模型風味相容，察容器日誌（`docker logs <container-id>`）。
 
-### Step 2: Deploy with BentoML for Production Scale
+### 二：以 BentoML 部署生產
 
-Use BentoML for advanced serving with better performance and features.
+BentoML 高級服務。
 
 ```python
 # bentoml_service.py
@@ -134,7 +133,7 @@ import mlflow
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Build and containerize:
+構+容器化：
 
 ```bash
 # Build Bento
@@ -148,7 +147,7 @@ bentoml containerize customer_churn_classifier:latest \
 docker run -p 3000:3000 customer-churn:v1.0
 ```
 
-BentoML configuration:
+BentoML 配置：
 
 ```yaml
 # bentofile.yaml
@@ -168,7 +167,7 @@ docker:
   cuda_version: null  # Set to "11.6" for GPU support
 ```
 
-Kubernetes deployment:
+Kubernetes 部署：
 
 ```yaml
 # k8s/deployment.yaml
@@ -182,7 +181,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy to Kubernetes:
+部至 Kubernetes：
 
 ```bash
 # Apply Kubernetes manifests
@@ -200,13 +199,13 @@ curl -X POST http://$EXTERNAL_IP/predict \
   -d '{"instances": [{"tenure": 12, "monthly_charges": 70.35}]}'
 ```
 
-**Expected:** BentoML service builds successfully, container runs and serves predictions, Kubernetes deployment creates 3 replicas, load balancer exposes external endpoint, health checks pass.
+**得：** BentoML 服務構成，容器跑並服預測，K8s 部署建 3 副本，負載均衡露外，健康檢通。
 
-**On failure:** Verify BentoML installation (`bentoml --version`), check model exists in BentoML store (`bentoml models list`), ensure Docker daemon running, verify Kubernetes cluster access (`kubectl cluster-info`), check resource limits not exceeded, inspect pod logs (`kubectl logs <pod-name>`), verify service selector matches pod labels.
+**敗：** 驗 BentoML 裝（`bentoml --version`），查模型於 BentoML 庫（`bentoml models list`），確 Docker 守護跑，驗 K8s 集群訪（`kubectl cluster-info`），查資源限，察 pod 日誌（`kubectl logs <pod-name>`），驗選擇器匹 pod 標籤。
 
-### Step 3: Implement Seldon Core for Advanced Features
+### 三：以 Seldon Core 行進階功能
 
-Use Seldon Core for multi-model serving, A/B testing, and explainability.
+多模服務、A/B、可解釋。
 
 ```python
 # seldon_wrapper.py
@@ -220,7 +219,7 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Seldon deployment configuration:
+Seldon 部署配：
 
 ```yaml
 # seldon-deployment.yaml
@@ -234,7 +233,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-A/B testing configuration:
+A/B 測試配：
 
 ```yaml
 # seldon-ab-test.yaml
@@ -248,7 +247,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Deploy to Kubernetes:
+部至 Kubernetes：
 
 ```bash
 # Install Seldon Core operator
@@ -262,13 +261,13 @@ helm install seldon-core seldon-core-operator \
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Seldon Core operator installed successfully, model deployment creates pods, REST endpoint responds to predictions, A/B test splits traffic correctly, Seldon Analytics records metrics.
+**得：** Seldon 算子裝成，模部署建 pod，REST 應預測，A/B 流量分對，Seldon 分析錄指標。
 
-**On failure:** Verify Seldon Core operator running (`kubectl get pods -n seldon-system`), check SeldonDeployment status (`kubectl describe seldondeployment`), ensure image registry accessible from cluster, verify model URI resolution, check RBAC permissions for Seldon operator, inspect model container logs.
+**敗：** 驗 Seldon 算子跑（`kubectl get pods -n seldon-system`），查 SeldonDeployment 狀態（`kubectl describe seldondeployment`），確鏡像倉可達，驗模型 URI 解析，查 RBAC 權限，察模容器日誌。
 
-### Step 4: Implement Monitoring and Observability
+### 四：行監與可觀
 
-Add comprehensive monitoring for model serving infrastructure.
+加監控於模型服務設施。
 
 ```python
 # monitoring.py
@@ -282,7 +281,7 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Prometheus configuration:
+Prometheus 配：
 
 ```yaml
 # prometheus-config.yaml
@@ -296,7 +295,7 @@ scrape_configs:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Grafana dashboard JSON:
+Grafana 儀板 JSON：
 
 ```json
 {
@@ -310,13 +309,13 @@ Grafana dashboard JSON:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prometheus scrapes metrics successfully, Grafana dashboards display prediction throughput, latency percentiles, error rates, and active requests in real-time.
+**得：** Prometheus 抓成，Grafana 儀板示實時吞吐、時延百分位、錯率、活躍請求。
 
-**On failure:** Verify Prometheus scrape targets are UP (`http://prometheus:9090/targets`), check metrics endpoint accessibility (`curl http://model-pod:8000/metrics`), ensure Kubernetes service discovery configured, verify Grafana data source connection, check firewall rules for metrics port.
+**敗：** 驗 Prometheus 抓目標 UP（`http://prometheus:9090/targets`），查指標端點可達（`curl http://model-pod:8000/metrics`），確 K8s 服務發現配，驗 Grafana 數據源連，查防火牆指標端口。
 
-### Step 5: Implement Autoscaling
+### 五：行自動擴
 
-Configure horizontal pod autoscaling based on request load.
+配水平 pod 自動擴於請求負載。
 
 ```yaml
 # hpa.yaml
@@ -330,7 +329,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Apply autoscaling:
+施自動擴：
 
 ```bash
 # Enable metrics server (if not already installed)
@@ -350,13 +349,13 @@ kubectl run -it --rm load-generator --image=busybox --restart=Never -- /bin/sh -
 kubectl get hpa -n seldon --watch
 ```
 
-**Expected:** HPA monitors CPU/memory/custom metrics, scales replicas up under load, scales down after stabilization period, min/max replica limits respected.
+**得：** HPA 監 CPU/內存/自定指標，負載擴，穩定後縮，min/max 守。
 
-**On failure:** Verify metrics-server running (`kubectl get deployment metrics-server -n kube-system`), check pod resource requests defined (HPA requires requests), ensure custom metrics available if used, verify RBAC permissions for HPA controller, check stabilization windows not too restrictive.
+**敗：** 驗 metrics-server 跑（`kubectl get deployment metrics-server -n kube-system`），查 pod 資源請求定（HPA 需），確自定指標可用（若用），驗 HPA 控制器 RBAC，查穩定窗不過嚴。
 
-### Step 6: Implement Canary Deployment Strategy
+### 六：行金絲雀部署
 
-Gradually roll out new model versions with traffic shifting.
+漸進新模版本。
 
 ```yaml
 # canary-deployment.yaml
@@ -370,7 +369,7 @@ spec:
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-Gradual rollout script:
+漸進推出腳本：
 
 ```python
 # canary_rollout.py
@@ -384,42 +383,42 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Canary deployment starts with 0% traffic, gradual traffic shift occurs automatically, health checks pass at each stage, rollback triggered if metrics degrade, complete rollout after all stages pass.
+**得：** 金絲雀始 0% 流量，自動漸進轉移，各階健康檢通，指標劣即回滾，諸階通畢畢。
 
-**On failure:** Verify Seldon deployment has multiple predictors, check traffic percentages sum to 100, ensure canary image exists and is pullable, verify Prometheus metrics available for health checks, check rollback logic executes correctly, inspect pod logs for both versions.
+**敗：** 驗 Seldon 有多預測器，查流量比和 100，確金絲雀像存可拉，驗 Prometheus 指標可用於健康檢，查回滾邏輯執，察兩版 pod 日誌。
 
-## Validation
+## 驗
 
-- [ ] Model server responds to prediction requests
-- [ ] REST/gRPC endpoints functional and documented
-- [ ] Docker containers build and run successfully
-- [ ] Kubernetes deployment creates expected replicas
-- [ ] Load balancer exposes external endpoint
-- [ ] Health checks (liveness/readiness) pass
-- [ ] Prometheus metrics exported and scraped
-- [ ] Grafana dashboards display real-time metrics
-- [ ] Autoscaling triggers under load
-- [ ] A/B test splits traffic correctly
-- [ ] Canary deployment rolls out gradually
-- [ ] Rollback works when canary fails
+- [ ] 模型服務應預測
+- [ ] REST/gRPC 可用並錄文
+- [ ] Docker 容器構跑
+- [ ] K8s 部署建期望副本
+- [ ] 負載均衡露外
+- [ ] 健康檢（活躍/就緒）通
+- [ ] Prometheus 指標出+抓
+- [ ] Grafana 示實時
+- [ ] 自動擴觸
+- [ ] A/B 流量分對
+- [ ] 金絲雀漸進推出
+- [ ] 金絲雀失時回滾工作
 
-## Common Pitfalls
+## 忌
 
-- **Cold start latency**: First request slow due to model loading - use readiness probes with adequate delay, implement model caching
-- **Memory leaks**: Long-running servers accumulate memory - monitor memory usage, implement periodic restarts, profile code
-- **Dependency conflicts**: Model dependencies incompatible with serving framework - use exact pinned versions, test in Docker before deployment
-- **Resource limits too low**: Pods OOMKilled or CPU throttled - profile resource usage, set appropriate limits based on load testing
-- **Missing health checks**: Kubernetes routes traffic to unhealthy pods - implement proper liveness/readiness probes
-- **No rollback strategy**: Bad deployment without easy rollback - use canary deployments, keep previous version available
-- **Ignoring latency**: Focusing only on accuracy, not inference speed - benchmark latency, optimize model/code, use batching
-- **Single replica**: No high availability, downtime during deployments - use min 2 replicas, configure anti-affinity
-- **No monitoring**: Issues not detected until customers complain - implement comprehensive metrics from day one
-- **GPU not utilized**: GPU available but not used - set CUDA visible devices, verify GPU allocation in Kubernetes
+- **冷啟時延**：首請慢因載模→用就緒探+適延，行模緩存
+- **內存洩漏**：長跑累→監內存，週期重啟，剖碼
+- **依賴衝突**：與服務框架不容→精釘，Docker 前測
+- **資源限過低**：OOM/節流→剖用量，按壓測設限
+- **缺健康檢**：K8s 路不健康 pod→行活躍/就緒探
+- **無回滾策**：壞部無易回→用金絲雀，留前版
+- **忽時延**：只顧準非速→測時延，優化模/碼，批
+- **單副本**：無高可用，部署時宕→至少 2 副本，反親和
+- **無監**：至客訴始知→首日即監
+- **GPU 未用**：有而不用→設 CUDA 可見，驗 K8s GPU 分配
 
-## Related Skills
+## 參
 
-- `register-ml-model` - Register models before deploying them
-- `run-ab-test-models` - Implement A/B testing between model versions
-- `deploy-to-kubernetes` - General Kubernetes deployment patterns
-- `monitor-ml-model-performance` - Monitor model drift and degradation
-- `orchestrate-ml-pipeline` - Automate model retraining and deployment
+- `register-ml-model`
+- `run-ab-test-models`
+- `deploy-to-kubernetes`
+- `monitor-ml-model-performance`
+- `orchestrate-ml-pipeline`

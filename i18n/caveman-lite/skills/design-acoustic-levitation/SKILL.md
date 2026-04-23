@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Design an acoustic levitation system that uses standing waves to trap and
   suspend small objects at pressure nodes. Covers ultrasonic transducer
@@ -69,9 +69,9 @@ Characterize the object and the medium to establish the fundamental feasibility 
 - **Trapping location**: [pressure node / pressure antinode]
 ```
 
-**Expected:** Complete characterization of the object and medium with contrast factors computed. The object should be confirmed to migrate toward pressure nodes (typical case for solids in air). The size constraint a << lambda is satisfied.
+**Got:** Complete characterization of the object and medium with contrast factors computed. The object should be confirmed to migrate toward pressure nodes (typical case for solids in air). The size constraint a << lambda is satisfied.
 
-**On failure:** If a / lambda > 0.25, the Gor'kov point-particle theory breaks down. Use numerical methods (finite element acoustic simulation) or experimental calibration instead. If f_1 and f_2 have opposite signs, the object may be trapped at an intermediate position rather than a clean node or antinode -- this requires careful Gor'kov potential mapping.
+**If fail:** If a / lambda > 0.25, the Gor'kov point-particle theory breaks down. Use numerical methods (finite element acoustic simulation) or experimental calibration instead. If f_1 and f_2 have opposite signs, the object may be trapped at an intermediate position rather than a clean node or antinode -- this requires careful Gor'kov potential mapping.
 
 ### Step 2: Calculate Required Acoustic Radiation Pressure
 
@@ -97,9 +97,9 @@ Determine the acoustic field intensity needed to balance gravity:
 - **Safety note**: [hearing protection required if > 120 dB at audible frequencies]
 ```
 
-**Expected:** A quantitative determination of the minimum acoustic pressure amplitude to achieve levitation, expressed in Pa, W/m^2, and dB SPL. The required intensity should be achievable with the specified or a commercially available transducer.
+**Got:** A quantitative determination of the minimum acoustic pressure amplitude to achieve levitation, expressed in Pa, W/m^2, and dB SPL. The required intensity should be achievable with the specified or a commercially available transducer.
 
-**On failure:** If the required pressure amplitude exceeds what available transducers can produce, reduce the object mass or density, use a lighter material, or switch to a medium with higher density (e.g., levitate in a dense gas like SF6 to increase the radiation force). Alternatively, use multiple transducers in a focused array to concentrate acoustic energy at the trapping point.
+**If fail:** If the required pressure amplitude exceeds what available transducers can produce, reduce the object mass or density, use a lighter material, or switch to a medium with higher density (e.g., levitate in a dense gas like SF6 to increase the radiation force). Alternatively, use multiple transducers in a focused array to concentrate acoustic energy at the trapping point.
 
 ### Step 3: Design Transducer-Reflector Geometry
 
@@ -121,9 +121,9 @@ Configure the physical hardware to produce a stable standing wave:
 - **Selected trapping node**: z_[j] = [value]
 ```
 
-**Expected:** A complete hardware specification with transducer, reflector, and cavity length determined. Node positions are computed and the trapping node is selected.
+**Got:** A complete hardware specification with transducer, reflector, and cavity length determined. Node positions are computed and the trapping node is selected.
 
-**On failure:** If no stable standing wave forms (common when L is not precisely n * lambda/2), adjust the cavity length in increments of 0.1 mm. Temperature changes shift c_0 and thus lambda, requiring re-tuning. If the transducer beam diverges too much for the cavity length, add a horn or waveguide to collimate the beam, or reduce L.
+**If fail:** If no stable standing wave forms (common when L is not precisely n * lambda/2), adjust the cavity length in increments of 0.1 mm. Temperature changes shift c_0 and thus lambda, requiring re-tuning. If the transducer beam diverges too much for the cavity length, add a horn or waveguide to collimate the beam, or reduce L.
 
 ### Step 4: Compute Trapping Potential and Restoring Forces
 
@@ -151,9 +151,9 @@ Quantify the strength and spatial extent of the acoustic trap:
 - **Stiffness ratio**: k_z / k_r = [value] (lateral is weaker)
 ```
 
-**Expected:** Quantitative stiffness values for both axial and lateral directions, natural frequencies computed, and the trapping potential well depth determined. Lateral stiffness is confirmed to be positive (though weaker than axial).
+**Got:** Quantitative stiffness values for both axial and lateral directions, natural frequencies computed, and the trapping potential well depth determined. Lateral stiffness is confirmed to be positive (though weaker than axial).
 
-**On failure:** If the lateral stiffness is negative or negligibly small, the object will drift sideways out of the beam. Solutions include using a wider transducer (larger beam waist), adding lateral transducers, switching to a phased array configuration, or using a concave reflector to create a converging wavefront that provides stronger lateral confinement.
+**If fail:** If the lateral stiffness is negative or negligibly small, the object will drift sideways out of the beam. Solutions include using a wider transducer (larger beam waist), adding lateral transducers, switching to a phased array configuration, or using a concave reflector to create a converging wavefront that provides stronger lateral confinement.
 
 ### Step 5: Verify Stability Against Perturbations
 
@@ -175,9 +175,9 @@ Confirm that the designed system will reliably trap and hold the object:
 | Thermal drift | Delta_T = [val] K | Re-tune interval | [time] | [Acceptable/No] |
 ```
 
-**Expected:** All perturbation sources are quantified and shown to be within the trapping margins. The gravity offset is a small fraction of lambda/4. Air current and streaming effects do not overwhelm the lateral trap.
+**Got:** All perturbation sources are quantified and shown to be within the trapping margins. The gravity offset is a small fraction of lambda/4. Air current and streaming effects do not overwhelm the lateral trap.
 
-**On failure:** If the gravity offset is too large (heavy object, weak field), increase P_0 or use a higher frequency (stronger gradient per wavelength). If air currents are a problem, enclose the levitator in a draft shield. If acoustic streaming destabilizes the object, reduce the driving amplitude and use a reflector geometry that minimizes streaming vortices (e.g., a shallow concave reflector).
+**If fail:** If the gravity offset is too large (heavy object, weak field), increase P_0 or use a higher frequency (stronger gradient per wavelength). If air currents are a problem, enclose the levitator in a draft shield. If acoustic streaming destabilizes the object, reduce the driving amplitude and use a reflector geometry that minimizes streaming vortices (e.g., a shallow concave reflector).
 
 ## Validation
 
@@ -191,7 +191,7 @@ Confirm that the designed system will reliably trap and hold the object:
 - [ ] Safety considerations for high-SPL operation are documented
 - [ ] If phased array is used, phase control resolution and positioning precision are specified
 
-## Common Pitfalls
+## Pitfalls
 
 - **Violating the small-particle assumption**: The Gor'kov radiation force formula assumes a << lambda. For objects approaching lambda/4 in size, the point-particle approximation breaks down and the actual force can differ significantly (both in magnitude and direction) from the Gor'kov prediction. Use full-wave simulation for large objects.
 - **Ignoring lateral confinement**: Most introductory treatments focus on the axial (vertical) trapping force and neglect the much weaker lateral restoring force. In practice, lateral instability is the primary failure mode, especially for objects near the upper size limit.

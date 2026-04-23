@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Design practical electromagnetic devices including electromagnets, DC and
   brushless motors, generators, and transformers by bridging theory to
@@ -74,9 +74,9 @@ Define the complete set of design targets before selecting a topology:
 - **Duty cycle**: [continuous / intermittent (on-time/off-time) / pulsed]
 ```
 
-**Expected:** A complete, quantified set of requirements with no ambiguous specifications. Every requirement has a numerical value and units.
+**Got:** A complete, quantified set of requirements with no ambiguous specifications. Every requirement has a numerical value and units.
 
-**On failure:** If requirements conflict (e.g., high torque in a very small volume with high efficiency), identify the tradeoff explicitly and ask the designer to prioritize. Electromagnetic devices obey fundamental scaling laws: force scales with volume, losses scale with surface area, and thermal limits constrain the power density.
+**If fail:** If requirements conflict (e.g., high torque in a very small volume with high efficiency), identify the tradeoff explicitly and ask the designer to prioritize. Electromagnetic devices obey fundamental scaling laws: force scales with volume, losses scale with surface area, and thermal limits constrain the power density.
 
 ### Step 2: Select Topology
 
@@ -111,9 +111,9 @@ Choose the device configuration that best matches the requirements:
 - **Alternatives considered**: [and why rejected]
 ```
 
-**Expected:** A justified topology selection with clear reasoning tied to the requirements from Step 1, including acknowledged limitations.
+**Got:** A justified topology selection with clear reasoning tied to the requirements from Step 1, including acknowledged limitations.
 
-**On failure:** If no standard topology meets all requirements, consider a hybrid design (e.g., Halbach array for higher field with less material) or relax a secondary constraint. Document the tradeoff.
+**If fail:** If no standard topology meets all requirements, consider a hybrid design (e.g., Halbach array for higher field with less material) or relax a secondary constraint. Document the tradeoff.
 
 ### Step 3: Calculate Design Parameters
 
@@ -157,9 +157,9 @@ Compute the physical dimensions and electrical parameters from electromagnetic p
 - **Key performance**: [B-field / torque / voltage ratio = calculated value]
 ```
 
-**Expected:** Numerical values for all physical dimensions and electrical parameters, derived from electromagnetic equations with units checked at each step.
+**Got:** Numerical values for all physical dimensions and electrical parameters, derived from electromagnetic equations with units checked at each step.
 
-**On failure:** If the required turns do not fit in the available winding space, either increase the core size (larger window area), use finer wire (higher current density, but more heating), or reduce the performance target. If the core operates above B_max, increase the core cross-section or add turns (to reduce the flux for the same performance via a larger NI product with a larger gap).
+**If fail:** If the required turns do not fit in the available winding space, either increase the core size (larger window area), use finer wire (higher current density, but more heating), or reduce the performance target. If the core operates above B_max, increase the core cross-section or add turns (to reduce the flux for the same performance via a larger NI product with a larger gap).
 
 ### Step 4: Analyze Losses and Efficiency
 
@@ -209,9 +209,9 @@ Quantify every loss mechanism and compute overall efficiency:
 - **Temperature rise estimate**: Delta_T = P_total / (h * A_surface) = [K]
 ```
 
-**Expected:** A complete loss breakdown with each mechanism quantified, total efficiency computed, and temperature rise estimated to verify thermal feasibility.
+**Got:** A complete loss breakdown with each mechanism quantified, total efficiency computed, and temperature rise estimated to verify thermal feasibility.
 
-**On failure:** If efficiency is below the target, identify the dominant loss mechanism and address it: copper losses dominate in small devices (increase wire size or reduce turns), core losses dominate at high frequency (switch to lower-loss core material or reduce B_max), mechanical losses dominate at high speed (improve bearings). If the temperature rise exceeds the thermal limit, increase the cooling (forced air, heat sinks) or reduce the power density.
+**If fail:** If efficiency is below the target, identify the dominant loss mechanism and address it: copper losses dominate in small devices (increase wire size or reduce turns), core losses dominate at high frequency (switch to lower-loss core material or reduce B_max), mechanical losses dominate at high speed (improve bearings). If the temperature rise exceeds the thermal limit, increase the cooling (forced air, heat sinks) or reduce the power density.
 
 ### Step 5: Validate Against Requirements and Physical Constraints
 
@@ -262,9 +262,9 @@ Verify that the design meets all specifications and is physically realizable:
 | mu_r | [value] | [+/- %] | [Yes/No] |
 ```
 
-**Expected:** All requirements met with documented margins, thermal feasibility confirmed, and the most sensitive design parameter identified.
+**Got:** All requirements met with documented margins, thermal feasibility confirmed, and the most sensitive design parameter identified.
 
-**On failure:** If a requirement is not met, iterate by adjusting the topology (Step 2), design parameters (Step 3), or loss mitigation strategy (Step 4). If the design is thermally infeasible, consider: reducing the duty cycle, increasing the size (more surface area for cooling), switching to a higher temperature insulation class, or adding active cooling. Document each iteration.
+**If fail:** If a requirement is not met, iterate by adjusting the topology (Step 2), design parameters (Step 3), or loss mitigation strategy (Step 4). If the design is thermally infeasible, consider: reducing the duty cycle, increasing the size (more surface area for cooling), switching to a higher temperature insulation class, or adding active cooling. Document each iteration.
 
 ## Validation
 
@@ -280,7 +280,7 @@ Verify that the design meets all specifications and is physically realizable:
 - [ ] Sensitivity analysis identifies the tightest-tolerance parameter
 - [ ] The design is complete enough for a prototype to be built
 
-## Common Pitfalls
+## Pitfalls
 
 - **Ignoring magnetic circuit reluctance**: The air gap reluctance dominates in most practical devices (even a 1 mm gap has more reluctance than 100 mm of silicon steel core). Designing without a magnetic circuit model produces devices that perform far below expectations because the gap was not accounted for.
 - **Operating above core saturation**: Above the knee of the B-H curve, incremental permeability drops dramatically. Doubling the current does not double the flux. The device appears to "stop working" above saturation. Always check B_max in the narrowest core cross-section.

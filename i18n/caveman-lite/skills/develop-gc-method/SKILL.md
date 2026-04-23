@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Develop a gas chromatography method from scratch: define analytical objectives,
   select column chemistry, optimize temperature programming, choose carrier gas
@@ -59,9 +59,9 @@ Systematic development of a gas chromatography method covering column selection,
 4. Determine whether the method must meet a regulatory standard (EPA 8260, USP, etc.).
 5. Document throughput needs: maximum run time, injection volume, sample preparation constraints.
 
-**Expected:** A written specification listing analytes, matrix, detection limits, resolution requirements, and any regulatory or throughput constraints.
+**Got:** A written specification listing analytes, matrix, detection limits, resolution requirements, and any regulatory or throughput constraints.
 
-**On failure:** If analyte volatility data is unavailable, estimate boiling points from structural analogs or use a scouting run on a mid-polarity column to establish elution order.
+**If fail:** If analyte volatility data is unavailable, estimate boiling points from structural analogs or use a scouting run on a mid-polarity column to establish elution order.
 
 ### Step 2: Select the Column
 
@@ -83,9 +83,9 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
 4. Select film thickness (0.25-5.0 um): thicker films retain volatile analytes longer.
 5. For complex matrices, consider a guard column or retention gap.
 
-**Expected:** A column specification (phase, length, ID, film thickness) justified by analyte properties and separation requirements.
+**Got:** A column specification (phase, length, ID, film thickness) justified by analyte properties and separation requirements.
 
-**On failure:** If no single column resolves all critical pairs, plan a confirmation column with orthogonal selectivity (e.g., DB-1 primary, DB-WAX confirmatory).
+**If fail:** If no single column resolves all critical pairs, plan a confirmation column with orthogonal selectivity (e.g., DB-1 primary, DB-WAX confirmatory).
 
 ### Step 3: Optimize the Temperature Program
 
@@ -96,12 +96,12 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
    - Ultra-fast screening: 25-40 C/min on short thin-film columns
 3. Set the final temperature 10-20 C above the boiling point of the least volatile analyte.
 4. Add a final hold (2-5 min) to ensure complete elution and column bake-out.
-5. For critical pairs that co-elute, insert an isothermal hold at the temperature just before their elution, or reduce the ramp rate in that region.
+5. For critical pairs that co-elute, insert an isothermal hold at the temperature before their elution, or reduce the ramp rate in that region.
 6. Verify that the total run time meets throughput requirements.
 
-**Expected:** A temperature program (initial temp, hold, ramp rate(s), final temp, final hold) that separates all target analytes within the acceptable run time.
+**Got:** A temperature program (initial temp, hold, ramp rate(s), final temp, final hold) that separates all target analytes within the acceptable run time.
 
-**On failure:** If critical pairs remain unresolved after ramp optimization, revisit column selection (Step 2) or consider a multi-ramp program with slower rates in the problem region.
+**If fail:** If critical pairs remain unresolved after ramp optimization, revisit column selection (Step 2) or consider a multi-ramp program with slower rates in the problem region.
 
 ### Step 4: Select the Carrier Gas
 
@@ -120,9 +120,9 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
 4. Set the carrier gas flow to the optimal linear velocity for the chosen gas and column ID.
 5. Measure actual linear velocity using an unretained compound (e.g., methane on FID).
 
-**Expected:** Carrier gas selected with flow rate set to optimal linear velocity, verified by unretained peak measurement.
+**Got:** Carrier gas selected with flow rate set to optimal linear velocity, verified by unretained peak measurement.
 
-**On failure:** If efficiency is lower than expected at the set flow, generate a van Deemter curve (plate height vs. linear velocity) using 5-7 flow rates to find the true optimum.
+**If fail:** If efficiency is lower than expected at the set flow, generate a van Deemter curve (plate height vs. linear velocity) using 5-7 flow rates to find the true optimum.
 
 ### Step 5: Choose the Detector
 
@@ -142,9 +142,9 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
 5. Set detector temperature 20-50 C above the maximum oven temperature to prevent condensation.
 6. Optimize detector gas flows per manufacturer recommendations.
 
-**Expected:** Detector selected and configured with appropriate temperatures and gas flows for the target analytes.
+**Got:** Detector selected and configured with appropriate temperatures and gas flows for the target analytes.
 
-**On failure:** If detector sensitivity is insufficient at the required detection limits, consider concentrating the sample (larger injection volume, solvent evaporation) or switching to a more sensitive/selective detector.
+**If fail:** If detector sensitivity is insufficient at the required detection limits, consider concentrating the sample (larger injection volume, solvent evaporation) or switching to a more sensitive/selective detector.
 
 ### Step 6: Validate Initial Performance
 
@@ -160,9 +160,9 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
 5. Inject a matrix blank to identify potential interferents at target retention times.
 6. Document all parameters in a method summary sheet.
 
-**Expected:** System suitability criteria met for all analytes across replicate injections, with no carryover or matrix interferences at target retention windows.
+**Got:** System suitability criteria met for all analytes across replicate injections, with no carryover or matrix interferences at target retention windows.
 
-**On failure:** If tailing is observed, check for active sites (re-condition column, trim 0.5 m from inlet end, replace liner). If RSD exceeds limits, investigate autosampler precision and injection technique. If resolution is insufficient, return to Step 3 to refine the temperature program.
+**If fail:** If tailing is observed, check for active sites (re-condition column, trim 0.5 m from inlet end, replace liner). If RSD exceeds limits, investigate autosampler precision and injection technique. If resolution is insufficient, return to Step 3 to refine the temperature program.
 
 ## Validation
 
@@ -175,7 +175,7 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
 - [ ] Total run time meets throughput requirements
 - [ ] Method parameters are fully documented (column, temps, flows, detector settings)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Ignoring column bleed temperature limits**: Operating above the maximum isothermal temperature of the stationary phase causes elevated baseline, ghost peaks, and accelerated column degradation. Always check the column specification sheet.
 - **Oversized injection volumes**: Injecting too much solvent causes fronting peaks and poor resolution for early eluters. Match injection volume to column capacity (typically 0.5-2 uL for 0.25 mm ID columns in split mode).

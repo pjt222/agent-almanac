@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Implement AI-powered anomaly detection for operational metrics using time series analysis
   (Isolation Forest, Prophet, LSTM), alert correlation, and root cause analysis. Reduce
@@ -33,7 +33,7 @@ Apply machine learning to detect anomalies in operational metrics, correlate ale
 ## When to Use
 
 - Operations team overwhelmed by alert volume (>100 alerts/day)
-- Need to detect complex multi-metric anomalies (not just threshold breaches)
+- Need to detect complex multi-metric anomalies (not threshold breaches)
 - Seasonal patterns make static thresholds ineffective
 - Want to predict issues before they impact users (proactive detection)
 - Need to correlate related alerts to identify root cause
@@ -85,9 +85,9 @@ logging.basicConfig(level=logging.INFO)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Time series data loaded with regular intervals, missing values handled, features engineered for ML models.
+**Got:** Time series data loaded with regular intervals, missing values handled, features engineered for ML models.
 
-**On failure:** If Prometheus connection fails, verify URL and network access, if data gaps exist use forward-fill or interpolation, ensure timestamp column is datetime type, check for memory issues with large date ranges (process in chunks).
+**If fail:** If Prometheus connection fails, verify URL and network access, if data gaps exist use forward-fill or interpolation, ensure timestamp column is datetime type, check for memory issues with large date ranges (process in chunks).
 
 ### Step 2: Implement Isolation Forest for Multivariate Anomaly Detection
 
@@ -105,9 +105,9 @@ import joblib
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model trained on historical data, anomalies detected with scores, typically 0.5-2% of points flagged as anomalies.
+**Got:** Model trained on historical data, anomalies detected with scores, typically 0.5-2% of points flagged as anomalies.
 
-**On failure:** If too many anomalies (>5%), reduce contamination parameter or retrain on cleaner baseline period, if too few (<0.1%), increase contamination or check feature scaling, verify features have sufficient variance.
+**If fail:** If too many anomalies (>5%), reduce contamination parameter or retrain on cleaner baseline period, if too few (<0.1%), increase contamination or check feature scaling, verify features have sufficient variance.
 
 ### Step 3: Implement Prophet for Time Series Forecasting and Anomaly Detection
 
@@ -125,9 +125,9 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prophet models capture daily/weekly seasonality, anomalies detected when actual values fall outside 99% confidence interval, forecasts generated for capacity planning.
+**Got:** Prophet models capture daily/weekly seasonality, anomalies detected when actual values fall outside 99% confidence interval, forecasts generated for capacity planning.
 
-**On failure:** If Prophet takes too long (>5 min per metric), reduce history to 30 days or disable weekly_seasonality, if too many false positives increase interval_width to 0.995, if missing seasonal patterns add custom seasonalities, ensure timezone consistency in timestamps.
+**If fail:** If Prophet takes too long (>5 min per metric), reduce history to 30 days or disable weekly_seasonality, if too many false positives increase interval_width to 0.995, if missing seasonal patterns add custom seasonalities, ensure timezone consistency in timestamps.
 
 ### Step 4: Correlate Alerts and Identify Root Cause
 
@@ -145,9 +145,9 @@ import networkx as nx
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Related anomalies grouped into incidents, root causes identified based on dependency graph, incident summaries generated for investigation.
+**Got:** Related anomalies grouped into incidents, root causes identified based on dependency graph, incident summaries generated for investigation.
 
-**On failure:** If all anomalies separate incidents, increase time_window_minutes, if root cause detection unclear define metric_relationships explicitly based on architecture, verify timestamp sorting is correct.
+**If fail:** If all anomalies separate incidents, increase time_window_minutes, if root cause detection unclear define metric_relationships explicitly based on architecture, verify timestamp sorting is correct.
 
 ### Step 5: Integrate with Alerting System
 
@@ -165,9 +165,9 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** High-severity incidents trigger PagerDuty pages, medium-severity go to Slack, low-severity logged only, duplicate alerts suppressed within 15-minute window.
+**Got:** High-severity incidents trigger PagerDuty pages, medium-severity go to Slack, low-severity logged only, duplicate alerts suppressed within 15-minute window.
 
-**On failure:** Test webhook URLs with curl first, verify severity calculation produces reasonable values (0.5-0.9 range), check rate limiting doesn't suppress all alerts, ensure timezone handling is correct for last_alerts tracking.
+**If fail:** Test webhook URLs with curl first, verify severity calculation produces reasonable values (0.5-0.9 range), check rate limiting doesn't suppress all alerts, ensure timezone handling is correct for last_alerts tracking.
 
 ### Step 6: Deploy as Continuous Monitoring Service
 
@@ -185,9 +185,9 @@ from prophet_detector import ProphetAnomalyDetector
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Service runs continuously, detects anomalies every 5 minutes, alerts sent for incidents, logs all activity.
+**Got:** Service runs continuously, detects anomalies every 5 minutes, alerts sent for incidents, logs all activity.
 
-**On failure:** Verify scheduler process stays alive (use systemd/supervisor for production), check Prometheus connectivity, ensure models are loaded successfully, implement dead man's switch alert if service stops running, monitor memory usage (reload models periodically if memory grows).
+**If fail:** Verify scheduler process stays alive (use systemd/supervisor for production), check Prometheus connectivity, ensure models are loaded successfully, implement dead man's switch alert if service stops running, monitor memory usage (reload models periodically if memory grows).
 
 ## Validation
 
@@ -202,7 +202,7 @@ from prophet_detector import ProphetAnomalyDetector
 - [ ] False positive rate < 10% (validated against labeled data)
 - [ ] True positive rate > 80% for critical incidents
 
-## Common Pitfalls
+## Pitfalls
 
 - **Training on anomalous data**: Ensure baseline period used for training is clean (no incidents); manually review or use labeled data
 - **Ignoring seasonality**: Static models fail on daily/weekly patterns; use Prophet or add time features

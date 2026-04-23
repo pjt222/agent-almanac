@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Design terminal output for a CLI tool with chalk colors, Unicode glyphs,
   multiple verbosity levels (human, verbose, quiet, JSON), and consistent
@@ -91,9 +91,9 @@ Palette design rules:
 - Keep the fail/error color red regardless of palette theme
 - Name palette entries by semantic role, not visual appearance
 
-**Expected:** A palette object with named entries and a no-color fallback.
+**Got:** A palette object with named entries and a no-color fallback.
 
-**On failure:** If chalk is unavailable (piped output, CI), the Proxy fallback returns strings unchanged. Test with `NO_COLOR=1` environment variable.
+**If fail:** If chalk is unavailable (piped output, CI), the Proxy fallback returns strings unchanged. Test with `NO_COLOR=1` environment variable.
 
 ### Step 2: Choose Status Indicators
 
@@ -126,9 +126,9 @@ Selection criteria:
 - Offer both via a `--ascii` flag or `NO_COLOR` detection
 - Test glyphs in: macOS Terminal, Windows Terminal, VS Code terminal, SSH sessions
 
-**Expected:** A glyph set that communicates status at a glance without relying on color alone.
+**Got:** A glyph set that communicates status at a glance without relying on color alone.
 
-**On failure:** If a glyph renders as `?` or a box in testing, replace with the ASCII equivalent. The `+/-/=/!` set works everywhere.
+**If fail:** If a glyph renders as `?` or a box in testing, replace with the ASCII equivalent. The `+/-/=/!` set works everywhere.
 
 ### Step 3: Design Verbosity Levels
 
@@ -167,9 +167,9 @@ JSON output rules:
 - Use consistent key naming across commands
 - Exit code 0 for success, 1 for errors (regardless of output mode)
 
-**Expected:** Four clear output levels with consistent behavior across commands.
+**Got:** Four clear output levels with consistent behavior across commands.
 
-**On failure:** If verbose mode is too noisy, make it opt-in (`--ceremonial`) rather than a graduated verbosity level.
+**If fail:** If verbose mode is too noisy, make it opt-in (`--ceremonial`) rather than a graduated verbosity level.
 
 ### Step 4: Establish Voice Rules
 
@@ -191,9 +191,9 @@ Voice rules for standard (non-ceremony) output:
 - Summary line with counts
 - Error messages suggest corrective actions
 
-**Expected:** A written set of 3-7 voice rules that output functions must follow.
+**Got:** A written set of 3-7 voice rules that output functions must follow.
 
-**On failure:** If rules feel arbitrary, test them: write the same output with and without each rule. If removing a rule doesn't change the output quality, the rule isn't needed.
+**If fail:** If rules feel arbitrary, test them: write the same output with and without each rule. If removing a rule doesn't change the output quality, the rule isn't needed.
 
 ### Step 5: Implement Reporter Functions
 
@@ -229,9 +229,9 @@ export function printFireSummary({ team, fireData, reg }) { ... }
 export function printJson(data) { ... }
 ```
 
-**Expected:** Reporter functions that are independently usable — each handles its own formatting without depending on caller state.
+**Got:** Reporter functions that are independently usable — each handles its own formatting without depending on caller state.
 
-**On failure:** If functions grow beyond ~50 lines, extract helpers. A reporter function should be easy to review in isolation.
+**If fail:** If functions grow beyond ~50 lines, extract helpers. A reporter function should be easy to review in isolation.
 
 ### Step 6: Test Output Across Environments
 
@@ -261,9 +261,9 @@ Check for:
 - Unicode glyphs render in the target terminals
 - Column alignment holds with varying content widths
 
-**Expected:** Output is correct in all five contexts.
+**Got:** Output is correct in all five contexts.
 
-**On failure:** If ANSI codes leak, ensure chalk respects `NO_COLOR`. If Unicode breaks, provide an ASCII fallback mode.
+**If fail:** If ANSI codes leak, ensure chalk respects `NO_COLOR`. If Unicode breaks, provide an ASCII fallback mode.
 
 ## Validation
 
@@ -275,7 +275,7 @@ Check for:
 - [ ] Reporter functions handle empty/null input gracefully
 - [ ] Output tested in: terminal, piped, NO_COLOR, CI
 
-## Common Pitfalls
+## Pitfalls
 
 - **Mixing human text with JSON**: In `--json` mode, output only valid JSON. A single stray line (like "DRY RUN") breaks JSON parsers. If the command must show both, separate them clearly or suppress the human text in JSON mode.
 - **Hardcoded column widths**: Content length varies. Use `Math.max(...items.map(i => i.id.length))` to compute padding dynamically.

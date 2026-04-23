@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Deploy a self-hosted SearXNG meta search engine via Docker Compose.
   Covers settings.yml configuration, engine selection, result proxying,
@@ -220,9 +220,9 @@ curl -s http://localhost:8080 | head -5
 curl -s "http://localhost:8080/search?q=test&format=json" | head -20
 ```
 
-**Expected:** SearXNG responds on port 8080 through Nginx. Search queries return aggregated results.
+**Got:** SearXNG responds on port 8080 through Nginx. Search queries return aggregated results.
 
-**On failure:** Check `docker compose logs searxng` for config errors. Verify `settings.yml` YAML syntax.
+**If fail:** Check `docker compose logs searxng` for config errors. Verify `settings.yml` YAML syntax.
 
 ### Step 7: Add SSL (Production)
 
@@ -274,7 +274,7 @@ cp -r config/ config-backup-$(date +%Y%m%d)/
 - [ ] Configuration persists across container restarts
 - [ ] Nginx proxies requests correctly
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing secret_key**: SearXNG will refuse to start without a `secret_key` in settings.yml.
 - **Config permissions**: SearXNG writes to the config directory. The volume must be `:rw` not `:ro`.

@@ -26,29 +26,29 @@ metadata:
 
 # Deploy ShinyProxy
 
-Deploy ShinyProxy to host multiple containerized Shiny applications with authentication and usage tracking.
+Multi Shiny apps, containerized, w/ auth + usage tracking.
 
-## When to Use
+## Use When
 
-- Hosting multiple Shiny apps behind a single entry point
-- Need per-app authentication and access control
-- Deploying Shiny apps as isolated Docker containers
-- Scaling beyond single-app deployment (shinyapps.io or standalone Docker)
-- Requiring usage analytics and audit logging
+- Multi Shiny apps, single entry
+- Per-app auth + access ctrl
+- Apps as isolated Docker containers
+- Beyond single-app (shinyapps.io / standalone Docker)
+- Usage analytics + audit logging
 
-## Inputs
+## In
 
-- **Required**: One or more Shiny apps to deploy
-- **Required**: Server with Docker installed
-- **Optional**: Authentication provider (LDAP, OpenID, social)
-- **Optional**: Domain name and SSL certificate
-- **Optional**: Container orchestrator (Docker or Kubernetes)
+- **Required**: ≥1 Shiny apps
+- **Required**: Server w/ Docker
+- **Optional**: Auth provider (LDAP, OpenID, social)
+- **Optional**: Domain + SSL
+- **Optional**: Orchestrator (Docker or K8s)
 
-## Procedure
+## Do
 
-### Step 1: Create Shiny App Docker Images
+### Step 1: Shiny app Docker images
 
-Each Shiny app needs its own Docker image. Example `Dockerfile` for a Shiny app:
+Each app → own image:
 
 ```dockerfile
 FROM rocker/shiny:4.5.0
@@ -70,16 +70,16 @@ EXPOSE 3838
 CMD ["R", "-e", "shiny::runApp('/srv/shiny-server/app', host='0.0.0.0', port=3838)"]
 ```
 
-Build and test each app:
+Build + test:
 
 ```bash
 docker build -t myorg/dashboard:latest ./apps/dashboard/
 docker run --rm -p 3838:3838 myorg/dashboard:latest
 ```
 
-**Expected:** Each Shiny app runs independently in its own container.
+→ Each app runs in own container.
 
-### Step 2: Configure ShinyProxy
+### Step 2: Config ShinyProxy
 
 `application.yml`:
 
@@ -128,7 +128,7 @@ server:
   forward-headers-strategy: native
 ```
 
-### Step 3: Deploy ShinyProxy with Docker Compose
+### Step 3: Deploy w/ Compose
 
 `docker-compose.yml`:
 
@@ -167,15 +167,15 @@ docker compose up -d
 docker compose logs -f shinyproxy
 ```
 
-**Expected:** ShinyProxy starts on port 8080, shows login page, and lists configured apps.
+→ Starts on :8080, login page, lists apps.
 
-**On failure:** Check `docker compose logs shinyproxy`. Verify app images are available locally (`docker images`).
+If err: `docker compose logs shinyproxy`. Images local (`docker images`).
 
-### Step 4: Configure Authentication
+### Step 4: Auth
 
 #### Simple (built-in)
 
-As shown in Step 2 with `authentication: simple` and inline users.
+Step 2 `authentication: simple` + inline users.
 
 #### LDAP
 
@@ -206,9 +206,9 @@ proxy:
     roles-claim: realm_access.roles
 ```
 
-### Step 5: Add Reverse Proxy with Nginx
+### Step 5: Nginx reverse proxy
 
-For production, place Nginx in front of ShinyProxy:
+Prod → Nginx front:
 
 ```nginx
 map $http_upgrade $connection_upgrade {
@@ -238,11 +238,11 @@ server {
 }
 ```
 
-WebSocket support is critical — ShinyProxy and Shiny use WebSockets heavily.
+WebSocket critical → ShinyProxy + Shiny use WS heavily.
 
-### Step 6: Usage Tracking
+### Step 6: Usage tracking
 
-ShinyProxy logs usage events to its log file. For structured tracking, configure InfluxDB:
+Logs → file. Structured → InfluxDB:
 
 ```yaml
 proxy:
@@ -251,7 +251,7 @@ proxy:
   usage-stats-password: stats_password
 ```
 
-Add InfluxDB to the compose stack:
+Add InfluxDB:
 
 ```yaml
 services:
@@ -270,7 +270,7 @@ volumes:
   influxdata:
 ```
 
-### Step 7: App Resource Limits
+### Step 7: App resource limits
 
 ```yaml
 specs:
@@ -283,7 +283,7 @@ specs:
       R_MAX_MEM_SIZE: 768m
 ```
 
-### Step 8: Verify Deployment
+### Step 8: Verify
 
 ```bash
 # Check ShinyProxy health
@@ -297,30 +297,30 @@ curl -s -c cookies.txt -d "username=admin&password=admin_password" \
 curl -s -b cookies.txt http://localhost:8080/api/proxyspec
 ```
 
-**Expected:** Health endpoint returns `UP`. Login succeeds. Apps launch in isolated containers.
+→ Health `UP`, login OK, apps launch in isolated containers.
 
-## Validation
+## Check
 
-- [ ] ShinyProxy starts and shows login page
-- [ ] Authentication works for all configured users
-- [ ] Each Shiny app launches in its own container
-- [ ] WebSocket connections work (Shiny reactivity functions)
-- [ ] Access groups restrict app visibility correctly
-- [ ] Container cleanup works when users disconnect
-- [ ] Logs capture usage events
+- [ ] Starts + login page
+- [ ] Auth OK all users
+- [ ] Each app → own container
+- [ ] WS conns work (reactivity)
+- [ ] Access groups restrict
+- [ ] Container cleanup on disconnect
+- [ ] Logs capture usage
 
-## Common Pitfalls
+## Traps
 
-- **Docker socket permissions**: ShinyProxy needs Docker socket access to launch containers. Run as a user in the `docker` group or mount the socket.
-- **Network mismatch**: App containers must be on the same Docker network as ShinyProxy (`container-network` in specs must match).
-- **WebSocket proxy**: Nginx or other proxies in front of ShinyProxy must forward WebSocket upgrade headers.
-- **Image not found**: App images must be pulled or built locally on the Docker host before ShinyProxy tries to use them.
-- **Container cleanup**: If ShinyProxy crashes, orphaned app containers may remain. Use `docker ps` to check and clean up.
-- **Memory limits**: Shiny apps can consume significant memory. Set `container-memory-limit` to prevent a single app from starving others.
+- **Docker socket perms**: Needs socket access → user in `docker` group or mount socket
+- **Network mismatch**: Apps + ShinyProxy same Docker net (`container-network` in specs)
+- **WS proxy**: Nginx must forward WS upgrade headers
+- **Image not found**: Pull/build local on host before ShinyProxy uses
+- **Container cleanup**: ShinyProxy crash → orphan containers. `docker ps` check.
+- **Mem limits**: Shiny consumes → `container-memory-limit` prevents starving
 
-## Related Skills
+## →
 
-- `deploy-shiny-app` - single-app deployment to shinyapps.io, Posit Connect, or Docker
-- `configure-reverse-proxy` - reverse proxy patterns including WebSocket proxying
-- `create-dockerfile` - general Dockerfile creation for app images
-- `create-r-dockerfile` - R-specific Dockerfiles with rocker images
+- `deploy-shiny-app` — single-app deploy
+- `configure-reverse-proxy` — WS proxying patterns
+- `create-dockerfile` — Dockerfile creation
+- `create-r-dockerfile` — R-specific w/ rocker

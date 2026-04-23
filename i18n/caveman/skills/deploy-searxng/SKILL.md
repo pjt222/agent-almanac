@@ -25,14 +25,14 @@ metadata:
 
 # Deploy SearXNG
 
-Deploy a self-hosted SearXNG meta search engine with Docker Compose and Nginx.
+Deploy self-hosted SearXNG meta search engine with Docker Compose and Nginx.
 
-## When to Use
+## When Use
 
-- Setting up a private, self-hosted search engine
-- Aggregating results from multiple search providers without tracking
-- Running a search instance for a team or organization
-- Replacing reliance on a single search provider
+- Set up private, self-hosted search engine
+- Aggregate results from multiple search providers without tracking
+- Run search instance for team or organization
+- Replace reliance on single search provider
 
 ## Inputs
 
@@ -41,7 +41,7 @@ Deploy a self-hosted SearXNG meta search engine with Docker Compose and Nginx.
 - **Optional**: SSL certificate or Let's Encrypt setup
 - **Optional**: Custom engine preferences
 
-## Procedure
+## Steps
 
 ### Step 1: Create Project Structure
 
@@ -152,7 +152,7 @@ engines:
     disabled: false
 ```
 
-Generate a secret key:
+Generate secret key:
 
 ```bash
 openssl rand -hex 32
@@ -207,22 +207,22 @@ pass_searxng_org = false
 ### Step 6: Deploy and Verify
 
 ```bash
-# Start the stack
+# Start stack
 docker compose up -d
 
 # Check logs
 docker compose logs -f searxng
 
-# Verify it's running
+# Verify running
 curl -s http://localhost:8080 | head -5
 
-# Test a search
+# Test search
 curl -s "http://localhost:8080/search?q=test&format=json" | head -20
 ```
 
-**Expected:** SearXNG responds on port 8080 through Nginx. Search queries return aggregated results.
+**Got:** SearXNG responds on port 8080 through Nginx. Search queries return aggregated results.
 
-**On failure:** Check `docker compose logs searxng` for config errors. Verify `settings.yml` YAML syntax.
+**If fail:** Check `docker compose logs searxng` for config errors. Verify `settings.yml` YAML syntax.
 
 ### Step 7: Add SSL (Production)
 
@@ -250,7 +250,7 @@ volumes:
   certbot-webroot:
 ```
 
-See `configure-nginx` skill for the full SSL Nginx configuration.
+See `configure-nginx` skill for full SSL Nginx configuration.
 
 ### Step 8: Updates and Maintenance
 
@@ -265,7 +265,7 @@ docker compose up -d
 cp -r config/ config-backup-$(date +%Y%m%d)/
 ```
 
-## Validation
+## Checks
 
 - [ ] SearXNG starts without errors in logs
 - [ ] Search queries return results from configured engines
@@ -274,17 +274,17 @@ cp -r config/ config-backup-$(date +%Y%m%d)/
 - [ ] Configuration persists across container restarts
 - [ ] Nginx proxies requests correctly
 
-## Common Pitfalls
+## Pitfalls
 
-- **Missing secret_key**: SearXNG will refuse to start without a `secret_key` in settings.yml.
-- **Config permissions**: SearXNG writes to the config directory. The volume must be `:rw` not `:ro`.
-- **Engine blocks**: Some engines may block requests from server IPs. Rotate engines or use image proxy.
-- **YAML indentation**: `settings.yml` is sensitive to indentation. Validate with a YAML linter before deploying.
-- **Base URL mismatch**: `SEARXNG_BASE_URL` must match the actual URL users access, including protocol and trailing slash.
-- **DNS resolution in Docker**: Engines that use Google/Bing may need host network or proper DNS. Default Docker DNS usually works.
+- **Missing secret_key**: SearXNG refuses to start without `secret_key` in settings.yml.
+- **Config permissions**: SearXNG writes to config directory. Volume must be `:rw` not `:ro`.
+- **Engine blocks**: Some engines block requests from server IPs. Rotate engines or use image proxy.
+- **YAML indentation**: `settings.yml` sensitive to indentation. Validate with YAML linter before deploying.
+- **Base URL mismatch**: `SEARXNG_BASE_URL` must match actual URL users access, including protocol and trailing slash.
+- **DNS resolution in Docker**: Engines using Google/Bing may need host network or proper DNS. Default Docker DNS usually works.
 
-## Related Skills
+## See Also
 
 - `setup-compose-stack` - general Docker Compose patterns used here
 - `configure-nginx` - Nginx configuration for SSL and security headers
-- `configure-reverse-proxy` - advanced proxy patterns for the Nginx frontend
+- `configure-reverse-proxy` - advanced proxy patterns for Nginx frontend

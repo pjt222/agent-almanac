@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Design combinational logic circuits from a functional specification through
   gate-level implementation. Covers AND, OR, NOT, XOR, NAND, NOR gates;
@@ -65,9 +65,9 @@ Define the circuit's interface and behavior completely before any synthesis:
 - **Don't-care set**: [d(...) or "none"]
 ```
 
-**Expected:** A complete, unambiguous specification where every legal input combination maps to exactly one output value.
+**Got:** A complete, unambiguous specification where every legal input combination maps to exactly one output value.
 
-**On failure:** If the specification is ambiguous (e.g., missing cases, conflicting outputs for the same input), request clarification. Do not assume don't-care for unspecified inputs unless explicitly told to.
+**If fail:** If the specification is ambiguous (e.g., missing cases, conflicting outputs for the same input), request clarification. Do not assume don't-care for unspecified inputs unless explicitly told to.
 
 ### Step 2: Derive Minimal Boolean Expression
 
@@ -87,9 +87,9 @@ Obtain the simplest expression for each output using the evaluate-boolean-expres
 - **Shared sub-expressions**: [list, if any]
 ```
 
-**Expected:** A minimal Boolean expression for each output, with shared sub-expressions identified for multi-output circuits.
+**Got:** A minimal Boolean expression for each output, with shared sub-expressions identified for multi-output circuits.
 
-**On failure:** If the expressions appear non-minimal (more literals than expected for the function's complexity), re-run the K-map or Quine-McCluskey step from evaluate-boolean-expression. For functions with more than 6 variables, use Espresso or a similar heuristic minimizer.
+**If fail:** If the expressions appear non-minimal (more literals than expected for the function's complexity), re-run the K-map or Quine-McCluskey step from evaluate-boolean-expression. For functions with more than 6 variables, use Espresso or a similar heuristic minimizer.
 
 ### Step 3: Map to Gate-Level Schematic
 
@@ -117,9 +117,9 @@ Convert the Boolean expressions into a network of logic gates:
 - **Critical path depth**: [number of gate levels from input to output]
 ```
 
-**Expected:** A complete gate-level netlist where every output can be traced back to primary inputs through a chain of gates, with no floating (unconnected) inputs or outputs.
+**Got:** A complete gate-level netlist where every output can be traced back to primary inputs through a chain of gates, with no floating (unconnected) inputs or outputs.
 
-**On failure:** If the netlist has dangling wires or feedback loops (which are invalid in combinational circuits), recheck the mapping. Every signal must have exactly one driver and every gate input must connect to either a primary input or another gate's output.
+**If fail:** If the netlist has dangling wires or feedback loops (which are invalid in combinational circuits), recheck the mapping. Every signal must have exactly one driver and every gate input must connect to either a primary input or another gate's output.
 
 ### Step 4: Convert to Universal Gate Basis (Optional)
 
@@ -146,9 +146,9 @@ Transform the circuit to use only NAND gates or only NOR gates:
 - **Conversion netlist**: [updated table]
 ```
 
-**Expected:** A functionally equivalent circuit using only the target gate type, with redundant inversions eliminated via bubble pushing.
+**Got:** A functionally equivalent circuit using only the target gate type, with redundant inversions eliminated via bubble pushing.
 
-**On failure:** If the converted circuit has more inversions than expected, re-examine the bubble-pushing step. A common mistake is forgetting that NAND and NOR are self-dual under complementation -- applying De Morgan consistently from outputs back to inputs avoids this.
+**If fail:** If the converted circuit has more inversions than expected, re-examine the bubble-pushing step. A common mistake is forgetting that NAND and NOR are self-dual under complementation -- applying De Morgan consistently from outputs back to inputs avoids this.
 
 ### Step 5: Verify via Exhaustive Simulation
 
@@ -170,9 +170,9 @@ Confirm the circuit produces correct outputs for every possible input:
 - **Estimated worst-case delay**: [N * gate_delay]
 ```
 
-**Expected:** All test vectors pass. The circuit is functionally correct and the critical path depth is documented.
+**Got:** All test vectors pass. The circuit is functionally correct and the critical path depth is documented.
 
-**On failure:** If any vector fails, trace the signal path for that input combination gate by gate to find the first gate producing an incorrect output. Common causes: a wire connected to the wrong gate input, a missing inversion, or an error in the NAND/NOR conversion.
+**If fail:** If any vector fails, trace the signal path for that input combination gate by gate to find the first gate producing an incorrect output. Common causes: a wire connected to the wrong gate input, a missing inversion, or an error in the NAND/NOR conversion.
 
 ## Validation
 
@@ -187,14 +187,14 @@ Confirm the circuit produces correct outputs for every possible input:
 - [ ] Exhaustive simulation passes for all non-don't-care input combinations
 - [ ] Critical path depth is documented
 
-## Common Pitfalls
+## Pitfalls
 
 - **Combinational feedback loops**: Accidentally connecting a gate's output back to its own input chain creates a sequential element (latch), not a combinational circuit. If state is needed, use the build-sequential-circuit skill instead.
 - **Forgetting inversions in NAND/NOR conversion**: The most common conversion error is dropping a NOT gate during the De Morgan transformation. Always apply bubble pushing systematically from outputs to inputs, not ad hoc.
 - **Exceeding fan-in without decomposition**: A 5-input AND gate is not available in a 2-input library. Decompose into a balanced tree to minimize propagation delay, not a linear chain.
 - **Ignoring don't-cares**: Failing to exploit don't-care conditions during minimization leaves the circuit larger than necessary. Always include don't-cares when available.
 - **Confusing gate delay with wire delay**: In introductory design, gate delay dominates. In real VLSI, wire delay (interconnect capacitance) can exceed gate delay. Note this limitation when estimating timing.
-- **Multi-output hazards**: When multiple outputs share gates, changing one output's logic can inadvertently affect a shared sub-expression. Verify all outputs after any modification, not just the one being changed.
+- **Multi-output hazards**: When multiple outputs share gates, changing one output's logic can inadvertently affect a shared sub-expression. Verify all outputs after any modification, not the one being changed.
 
 ## Related Skills
 

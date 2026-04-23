@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Deploy applications to Kubernetes clusters using kubectl manifests for Deployments,
   Services, ConfigMaps, Secrets, and Ingress resources. Implement health checks, resource
@@ -129,9 +129,9 @@ kubectl get limitrange -n myapp-prod
 kubectl get sa -n myapp-prod
 ```
 
-**Expected:** Namespace created with resource quotas limiting compute and storage. LimitRange sets default CPU/memory requests and limits. ServiceAccount configured with least-privilege RBAC.
+**Got:** Namespace created with resource quotas limiting compute and storage. LimitRange sets default CPU/memory requests and limits. ServiceAccount configured with least-privilege RBAC.
 
-**On failure:** For quota errors, verify cluster has sufficient resources with `kubectl describe nodes`. For RBAC errors, check cluster-admin permissions with `kubectl auth can-i create role --namespace myapp-prod`. Use `kubectl describe` on rejected resources to see quota/limit violations.
+**If fail:** For quota errors, verify cluster has sufficient resources with `kubectl describe nodes`. For RBAC errors, check cluster-admin permissions with `kubectl auth can-i create role --namespace myapp-prod`. Use `kubectl describe` on rejected resources to see quota/limit violations.
 
 ### Step 2: Configure Application Secrets and ConfigMaps
 
@@ -214,9 +214,9 @@ stringData:  # Automatically base64 encoded
   jwt-secret: "my-jwt-signing-key"
 ```
 
-**Expected:** ConfigMaps store non-sensitive configuration, Secrets store credentials/keys. Values accessible to Pods via environment variables or volume mounts. TLS secrets properly formatted for Ingress resources.
+**Got:** ConfigMaps store non-sensitive configuration, Secrets store credentials/keys. Values accessible to Pods via environment variables or volume mounts. TLS secrets properly formatted for Ingress resources.
 
-**On failure:** For encoding issues, use `stringData` instead of `data` in YAML. For TLS secret errors, verify certificate and key format with `openssl x509 -in tls.crt -text -noout`. For access issues, check ServiceAccount RBAC permissions. View decoded secret with `kubectl get secret myapp-secret -o jsonpath='{.data.api-key}' | base64 -d`.
+**If fail:** For encoding issues, use `stringData` instead of `data` in YAML. For TLS secret errors, verify certificate and key format with `openssl x509 -in tls.crt -text -noout`. For access issues, check ServiceAccount RBAC permissions. View decoded secret with `kubectl get secret myapp-secret -o jsonpath='{.data.api-key}' | base64 -d`.
 
 ### Step 3: Create Deployment with Health Checks and Resource Limits
 
@@ -358,9 +358,9 @@ kubectl describe deployment myapp -n myapp-prod
 kubectl top pods -n myapp-prod -l app=myapp
 ```
 
-**Expected:** Deployment creates 3 replicas with rolling update strategy. Pods pass readiness probes before receiving traffic. Liveness probes restart unhealthy pods. Resource requests/limits prevent OOM kills. Logs show successful application startup.
+**Got:** Deployment creates 3 replicas with rolling update strategy. Pods pass readiness probes before receiving traffic. Liveness probes restart unhealthy pods. Resource requests/limits prevent OOM kills. Logs show successful application startup.
 
-**On failure:** For ImagePullBackOff, verify image exists and imagePullSecret is valid with `kubectl get secret registry-credentials -o yaml`. For CrashLoopBackOff, check logs with `kubectl logs pod-name --previous`. For probe failures, test endpoints manually with `kubectl port-forward` and `curl localhost:8080/healthz`. For OOMKilled pods, increase memory limits or investigate memory leaks.
+**If fail:** For ImagePullBackOff, verify image exists and imagePullSecret is valid with `kubectl get secret registry-credentials -o yaml`. For CrashLoopBackOff, check logs with `kubectl logs pod-name --previous`. For probe failures, test endpoints manually with `kubectl port-forward` and `curl localhost:8080/healthz`. For OOMKilled pods, increase memory limits or investigate memory leaks.
 
 ### Step 4: Expose Application with Services and Load Balancers
 
@@ -388,9 +388,9 @@ kubectl get svc -n myapp-prod
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** LoadBalancer Service provisions external LB with public IP/hostname. ClusterIP Service provides stable internal DNS. Endpoints list shows healthy Pod IPs. Curl requests succeed with expected responses.
+**Got:** LoadBalancer Service provisions external LB with public IP/hostname. ClusterIP Service provides stable internal DNS. Endpoints list shows healthy Pod IPs. Curl requests succeed with expected responses.
 
-**On failure:** For pending LoadBalancer, check cloud provider integration and quotas. For no endpoints, verify Pod labels match Service selector with `kubectl get pods --show-labels`. For connection refused, verify targetPort matches container port. Use `kubectl port-forward` to bypass Service layer for debugging.
+**If fail:** For pending LoadBalancer, check cloud provider integration and quotas. For no endpoints, verify Pod labels match Service selector with `kubectl get pods --show-labels`. For connection refused, verify targetPort matches container port. Use `kubectl port-forward` to bypass Service layer for debugging.
 
 ### Step 5: Configure Horizontal Pod Autoscaling
 
@@ -418,9 +418,9 @@ kubectl top nodes
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** HPA monitors CPU/memory metrics. When thresholds exceeded, replicas scale up to maxReplicas. When load decreases, replicas scale down gradually (stabilization window prevents flapping). Metrics visible with `kubectl top`.
+**Got:** HPA monitors CPU/memory metrics. When thresholds exceeded, replicas scale up to maxReplicas. When load decreases, replicas scale down gradually (stabilization window prevents flapping). Metrics visible with `kubectl top`.
 
-**On failure:** For "unknown" metrics, verify metrics-server is running and Pods have resource requests defined. For no scaling, check current utilization is actually exceeding targets with `kubectl top pods`. For flapping, increase stabilizationWindowSeconds. For slow scale-up, reduce periodSeconds in scaleUp policies.
+**If fail:** For "unknown" metrics, verify metrics-server is running and Pods have resource requests defined. For no scaling, check current utilization is exceeding targets with `kubectl top pods`. For flapping, increase stabilizationWindowSeconds. For slow scale-up, reduce periodSeconds in scaleUp policies.
 
 ### Step 6: Package Application with Helm Chart
 
@@ -436,9 +436,9 @@ cat > Chart.yaml <<EOF
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Helm chart packages all Kubernetes resources with templated values. Dry-run shows rendered manifests. Install deploys all resources in correct order. Upgrades perform rolling updates. Rollback reverts to previous revision.
+**Got:** Helm chart packages all Kubernetes resources with templated values. Dry-run shows rendered manifests. Install deploys all resources in correct order. Upgrades perform rolling updates. Rollback reverts to previous revision.
 
-**On failure:** For template errors, run `helm template .` to render locally without installing. For dependency issues, run `helm dependency update`. For value override failures, verify YAML path exists in values.yaml. Use `helm get manifest myapp -n myapp-prod` to see actual deployed resources.
+**If fail:** For template errors, run `helm template .` to render locally without installing. For dependency issues, run `helm dependency update`. For value override failures, verify YAML path exists in values.yaml. Use `helm get manifest myapp -n myapp-prod` to see actual deployed resources.
 
 ## Validation
 
@@ -453,7 +453,7 @@ cat > Chart.yaml <<EOF
 - [ ] Rolling updates complete with zero downtime
 - [ ] Logs collected and accessible via kubectl logs or centralized logging
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing readiness probes**: Pods receive traffic before fully started. Always implement readiness probes that verify application dependencies.
 

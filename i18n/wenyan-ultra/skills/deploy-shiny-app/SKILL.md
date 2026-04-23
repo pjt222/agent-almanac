@@ -23,30 +23,30 @@ metadata:
   tags: shiny, deployment, shinyapps-io, posit-connect, docker, rsconnect
 ---
 
-# Deploy Shiny App
+# 部署 Shiny 應用
 
-Deploy a Shiny application to shinyapps.io, Posit Connect, or a Docker container.
+部 Shiny 至 shinyapps.io、Posit Connect、或 Docker。
 
-## When to Use
+## 用
 
-- Publishing a Shiny app for external or internal users
-- Moving from local development to a hosted environment
-- Containerizing a Shiny app for Kubernetes or Docker deployment
-- Setting up automated deployment pipelines
+- 發 Shiny 予內外用戶
+- 本地開發→託管
+- Shiny→K8s/Docker 容器化
+- 立自動化部署管線
 
-## Inputs
+## 入
 
-- **Required**: Path to the Shiny application
-- **Required**: Deployment target (shinyapps.io, Posit Connect, or Docker)
-- **Optional**: Account name and token (for shinyapps.io/Connect)
-- **Optional**: Instance size preference
-- **Optional**: Custom domain or URL path
+- **必**：Shiny 應路徑
+- **必**：目標（shinyapps.io、Posit Connect、Docker）
+- **可**：帳號+令牌
+- **可**：實例規格
+- **可**：自定域/URL
 
-## Procedure
+## 法
 
-### Step 1: Prepare the Application
+### 一：備應用
 
-Ensure the app is self-contained and deployable:
+確自足可部：
 
 ```r
 # Check for missing dependencies
@@ -59,16 +59,16 @@ devtools::check()
 shiny::runApp("path/to/app")
 ```
 
-Verify these files exist:
-- `app.R` (or `ui.R` + `server.R`)
-- `renv.lock` (recommended for reproducible deployments)
-- `.Rprofile` does NOT call `mcptools::mcp_session()` in production
+驗此檔存：
+- `app.R`（或 `ui.R` + `server.R`）
+- `renv.lock`（宜，利重現部署）
+- `.Rprofile` 生產勿調 `mcptools::mcp_session()`
 
-**Expected:** App runs locally without errors and all dependencies are captured.
+**得：** 應用本地無錯跑，依賴齊。
 
-**On failure:** If `appDependencies()` reports missing packages, install them and update `renv.lock`. If the app uses system libraries (e.g., gdal, curl), note them for the Docker path.
+**敗：** `appDependencies()` 報缺包→裝並更 `renv.lock`。用系統庫（gdal、curl）→記為 Docker 路用。
 
-### Step 2a: Deploy to shinyapps.io
+### 二甲：部 shinyapps.io
 
 ```r
 # One-time account setup
@@ -88,7 +88,7 @@ rsconnect::deployApp(
 )
 ```
 
-Store credentials in `.Renviron` (never in code):
+憑證存 `.Renviron`（勿入碼）：
 
 ```bash
 # .Renviron
@@ -96,11 +96,11 @@ SHINYAPPS_TOKEN=your_token_here
 SHINYAPPS_SECRET=your_secret_here
 ```
 
-**Expected:** App deployed and accessible at `https://your-account.shinyapps.io/my-app/`.
+**得：** 應部署，於 `https://your-account.shinyapps.io/my-app/` 可達。
 
-**On failure:** If authentication fails, regenerate tokens at shinyapps.io dashboard > Account > Tokens. If package installation fails on the server, check that all packages are available on CRAN — shinyapps.io cannot install from GitHub by default.
+**敗：** 認證失→於 shinyapps.io 儀板 > Account > Tokens 重生令牌。服務器裝包失→查諸包於 CRAN，默認不裝 GitHub 包。
 
-### Step 2b: Deploy to Posit Connect
+### 二乙：部 Posit Connect
 
 ```r
 # Register server (one-time)
@@ -125,13 +125,13 @@ rsconnect::deployApp(
 )
 ```
 
-**Expected:** App deployed and accessible on the Posit Connect instance.
+**得：** 應於 Posit Connect 實例可達。
 
-**On failure:** If the server rejects the connection, verify the API key and server URL. If packages fail to install, check that Connect has access to the required repositories (CRAN, internal CRAN-like repos).
+**敗：** 拒連→驗 API 鑰+服務器 URL。裝包失→查 Connect 可訪需倉（CRAN、內部類 CRAN）。
 
-### Step 2c: Deploy with Docker
+### 二丙：Docker 部署
 
-Create a `Dockerfile`:
+建 `Dockerfile`：
 
 ```dockerfile
 FROM rocker/shiny-verse:4.4.0
@@ -159,7 +159,7 @@ EXPOSE 3838
 CMD ["/usr/bin/shiny-server"]
 ```
 
-Create `shiny-server.conf`:
+建 `shiny-server.conf`：
 
 ```
 run_as shiny;
@@ -175,18 +175,18 @@ server {
 }
 ```
 
-Build and run:
+構建+跑：
 
 ```bash
 docker build -t myapp:latest .
 docker run -p 3838:3838 myapp:latest
 ```
 
-**Expected:** App accessible at `http://localhost:3838`.
+**得：** 應於 `http://localhost:3838` 可達。
 
-**On failure:** If the build fails on package installation, add missing system libraries to the `apt-get install` line. If the app doesn't load, check Shiny Server logs: `docker exec <container> cat /var/log/shiny-server/*.log`.
+**敗：** 裝包時構建失→加缺系統庫至 `apt-get install`。應不載→察 Shiny Server 日誌：`docker exec <container> cat /var/log/shiny-server/*.log`。
 
-### Step 3: Verify Deployment
+### 三：驗部署
 
 ```r
 # Check the deployed URL responds
@@ -198,21 +198,21 @@ response <- httr::GET("http://localhost:3838/")
 httr::status_code(response)
 ```
 
-Manual verification checklist:
-1. App loads without errors
-2. All interactive elements respond
-3. Data connections work in the deployed environment
-4. Authentication/authorization works (if applicable)
+手動驗清單：
+1. 應無錯載
+2. 諸交互元響應
+3. 數據連於部署環工作
+4. 認證/授權工作（若適）
 
-**Expected:** App responds with HTTP 200 and all features work.
+**得：** 應以 HTTP 200 應，諸功能工作。
 
-**On failure:** Check server logs for the specific deployment platform. Common issues: environment variables not set in production, database connections using localhost instead of production URLs, or file paths that only exist locally.
+**敗：** 察特定部署平台之服務器日誌。常見：生產環境變量未設、數據庫連用 localhost 代生產 URL、僅本地存之檔路。
 
-### Step 4: Configure Monitoring (Optional)
+### 四：配監（可選）
 
 #### shinyapps.io
 
-Monitor via the dashboard at `https://www.shinyapps.io/admin/#/applications`.
+於儀板 `https://www.shinyapps.io/admin/#/applications` 監。
 
 #### Posit Connect
 
@@ -226,38 +226,38 @@ connectapi::connect(
 
 #### Docker
 
-Add health check to Dockerfile:
+Dockerfile 加健康檢：
 
 ```dockerfile
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
   CMD curl -f http://localhost:3838/ || exit 1
 ```
 
-**Expected:** Monitoring configured for the deployment target.
+**得：** 監配於目標部署。
 
-**On failure:** If health checks fail intermittently, increase timeout values. Shiny apps can be slow to respond during initial load.
+**敗：** 健康檢斷續失→增超時。Shiny 應初載可慢。
 
-## Validation
+## 驗
 
-- [ ] App deploys without errors
-- [ ] Deployed URL responds with HTTP 200
-- [ ] All interactive features work in production
-- [ ] Environment variables/secrets are configured (not hardcoded)
-- [ ] Credentials stored in `.Renviron` or CI secrets, not in code
-- [ ] renv.lock committed for reproducible dependency resolution
+- [ ] 應部署無錯
+- [ ] 部署 URL 以 HTTP 200 應
+- [ ] 諸交互功能生產工作
+- [ ] 環境變量/密鑰已配（非硬編碼）
+- [ ] 憑證存 `.Renviron` 或 CI 密鑰，非入碼
+- [ ] renv.lock 提交以利重現
 
-## Common Pitfalls
+## 忌
 
-- **Hardcoded file paths**: Replace absolute paths with `system.file()` (for package data) or environment variables (for external resources).
-- **Development-only dependencies**: Don't deploy `.Rprofile` that loads `mcptools::mcp_session()` or `devtools`. Use conditional loading or separate profiles.
-- **Missing system libraries in Docker**: R packages like sf, curl, and xml2 need system libraries. Add them to the Dockerfile's `apt-get install`.
-- **CRAN-only packages on shinyapps.io**: shinyapps.io only installs from CRAN by default. GitHub-only packages need the `remotes` package and explicit installation in the deployment.
-- **Forgotten environment variables**: Database credentials, API keys, and other secrets must be configured in the deployment environment separately from code.
+- **硬編碼檔路**：替絕對路以 `system.file()`（包數據）或環境變量（外資源）。
+- **僅開發之依賴**：勿部署載 `mcptools::mcp_session()` 或 `devtools` 之 `.Rprofile`。用條件載或分離剖面。
+- **Docker 缺系統庫**：sf、curl、xml2 需系統庫。加至 Dockerfile `apt-get install`。
+- **shinyapps.io 僅 CRAN**：默認僅 CRAN。僅 GitHub 包需 `remotes` 包+明示裝。
+- **忘環境變量**：數據庫憑證、API 鑰、其密須於部署環單獨配，非入碼。
 
-## Related Skills
+## 參
 
-- `scaffold-shiny-app` — create app structure before deployment
-- `create-r-dockerfile` — detailed Docker configuration for R projects
-- `setup-docker-compose` — multi-container setups for Shiny with databases
-- `setup-github-actions-ci` — CI/CD including automated deployment
-- `optimize-shiny-performance` — performance tuning before deploying to production
+- `scaffold-shiny-app`
+- `create-r-dockerfile`
+- `setup-docker-compose`
+- `setup-github-actions-ci`
+- `optimize-shiny-performance`

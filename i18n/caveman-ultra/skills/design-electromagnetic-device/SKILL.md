@@ -26,42 +26,42 @@ metadata:
 
 # Design Electromagnetic Device
 
-Design a practical electromagnetic device by specifying performance requirements, selecting an appropriate topology, calculating design parameters from electromagnetic first principles, analyzing losses and efficiency, and validating the design against physical constraints including thermal limits and material saturation.
+Spec perf → topology → compute from EM first principles → analyze losses + efficiency → validate vs thermal + saturation.
 
-## When to Use
+## Use When
 
-- Sizing an electromagnet (solenoid or toroidal) for a target field strength, pull force, or holding force
-- Selecting motor topology (DC brushed, brushless DC, stepper, induction) and computing torque, speed, and efficiency
-- Designing a generator for a specified voltage, current, and frequency output
-- Designing a transformer for a given voltage ratio, power rating, and frequency
-- Analyzing and minimizing losses: copper (I^2 R), core (hysteresis and eddy current), stray flux
+- Size electromagnet (solenoid/toroidal) for B-field, pull, hold force
+- Select motor topology (DC brushed, BLDC, stepper, induction), compute torque + speed + eff
+- Design generator → V, I, freq
+- Design transformer → V ratio, power, freq
+- Analyze + min losses: copper (I^2 R), core (hyst + eddy), stray flux
 
-## Inputs
+## In
 
-- **Required**: Device type (electromagnet, motor, generator, or transformer)
-- **Required**: Performance requirements (field strength, force, torque, voltage ratio, power, efficiency target)
-- **Required**: Operating conditions (supply voltage and current, frequency, duty cycle, ambient temperature)
-- **Optional**: Preferred core material (silicon steel, ferrite, powdered iron, air core) with B-H data
-- **Optional**: Size and weight constraints
-- **Optional**: Cost or manufacturing constraints
+- **Required**: Device type (electromagnet, motor, generator, transformer)
+- **Required**: Perf reqs (B, force, torque, V ratio, power, eff target)
+- **Required**: Operating (V, I, freq, duty, ambient T)
+- **Optional**: Core mat (silicon steel, ferrite, powdered iron, air) + B-H
+- **Optional**: Size/weight
+- **Optional**: Cost/mfg
 
-## Procedure
+## Do
 
-### Step 1: Specify Device Requirements and Operating Conditions
+### Step 1: Reqs + operating
 
-Define the complete set of design targets before selecting a topology:
+Full targets before topology:
 
-1. **Primary performance metric**: The single most important specification:
-   - Electromagnet: target B-field (Tesla) at a specified point, or pull force (Newtons) on a specified armature
-   - Motor: rated torque (N.m) at rated speed (RPM), or power (Watts) at rated speed
-   - Generator: output voltage (V), current (A), and frequency (Hz) at rated mechanical speed
-   - Transformer: primary and secondary voltages, power rating (VA), and operating frequency
+1. **Primary metric**:
+   - Electromagnet: B (T) at point, or pull force (N) on armature
+   - Motor: rated T (N.m) at RPM, or power (W) at RPM
+   - Generator: V, I, Hz at mech speed
+   - Transformer: V1, V2, VA, freq
 
-2. **Secondary specifications**: Efficiency target (%), maximum temperature rise above ambient (K), duty cycle (continuous, intermittent, or pulsed), physical envelope (maximum diameter, length, weight).
+2. **Secondary**: Eff (%), max T rise above ambient (K), duty (cont, intermittent, pulsed), envelope (max D, L, weight).
 
-3. **Supply constraints**: Available voltage and current, frequency (DC or AC with specified Hz), waveform (sinusoidal, PWM, trapezoidal).
+3. **Supply**: V, I, freq (DC/AC w/ Hz), waveform (sine, PWM, trapezoidal).
 
-4. **Environmental conditions**: Ambient temperature range, cooling method (natural convection, forced air, liquid), altitude (affects air cooling), and vibration/shock requirements.
+4. **Environment**: T range, cooling (nat convection, forced air, liquid), altitude, vibration/shock.
 
 ```markdown
 ## Design Requirements
@@ -74,33 +74,33 @@ Define the complete set of design targets before selecting a topology:
 - **Duty cycle**: [continuous / intermittent (on-time/off-time) / pulsed]
 ```
 
-**Expected:** A complete, quantified set of requirements with no ambiguous specifications. Every requirement has a numerical value and units.
+→ Complete quantified reqs, no ambiguity. Every req has val + units.
 
-**On failure:** If requirements conflict (e.g., high torque in a very small volume with high efficiency), identify the tradeoff explicitly and ask the designer to prioritize. Electromagnetic devices obey fundamental scaling laws: force scales with volume, losses scale with surface area, and thermal limits constrain the power density.
+If err: Conflict (high T in tiny vol + high eff) → identify tradeoff explicit. EM scaling: force ~ volume, losses ~ surface area, thermal constrains power density.
 
-### Step 2: Select Topology
+### Step 2: Topology
 
-Choose the device configuration that best matches the requirements:
+Config matches reqs:
 
-1. **Electromagnet topologies**:
-   - **Solenoid (cylindrical)**: Simple to wind, uniform interior field B = mu_0 n I (for long solenoid). Best for uniform-field applications. Air gap for pull-force applications.
-   - **Toroid**: No external stray field (all flux contained). Best when stray field must be minimized. Less uniform than solenoid for partial windings.
-   - **C-core / E-core**: High force in a compact volume. The air gap concentrates force. Standard for relays and holding magnets.
-   - **Helmholtz pair**: Two coils separated by one radius. Produces highly uniform field in the central region. Best for calibration and measurement.
+1. **Electromagnet**:
+   - **Solenoid** (cylindrical): Simple wind, uniform B = mu_0 n I. Uniform-field apps. Air gap for pull.
+   - **Toroid**: No stray field. Min stray. Less uniform for partial.
+   - **C-core / E-core**: High force compact. Air gap concentrates. Relays + hold magnets.
+   - **Helmholtz pair**: 2 coils sep by 1 radius. Uniform center. Calibration + measurement.
 
-2. **Motor topologies**:
-   - **DC brushed**: Simple drive (apply DC voltage), good low-speed torque. Brushes limit lifetime and speed. Torque: T = k_T * I.
-   - **Brushless DC (BLDC)**: Electronic commutation, higher speed and lifetime than brushed. Trapezoidal or sinusoidal drive. Dominant in modern applications.
-   - **Stepper**: Precise open-loop positioning (discrete steps, typically 1.8 or 0.9 degrees). Lower continuous torque than BLDC. Best for positioning without feedback.
-   - **AC induction**: Robust, no permanent magnets, simple construction. Speed determined by supply frequency and slip. Dominant in industrial power applications.
+2. **Motor**:
+   - **DC brushed**: Simple drive, good low-speed T. Brushes limit lifetime + speed. T = k_T * I.
+   - **BLDC**: Electronic commutation, higher speed + lifetime. Trapezoidal/sinusoidal. Modern dominant.
+   - **Stepper**: Precise open-loop (1.8 or 0.9 deg). Lower cont T than BLDC. Positioning w/o feedback.
+   - **AC induction**: Robust, no PM, simple. Speed = supply freq + slip. Industrial power.
 
-3. **Generator topologies**: Motors operated in reverse. A BLDC motor becomes a BLDC generator (back-EMF becomes output). An induction motor becomes an induction generator when driven above synchronous speed. Permanent magnet generators are preferred for small-scale (wind, hydro).
+3. **Generator**: Motors reversed. BLDC motor → BLDC gen (back-EMF = output). Induction above sync. PM gen for small (wind, hydro).
 
-4. **Transformer topologies**:
-   - **Core type**: Windings on a single leg of a rectangular core. Standard for power transformers.
-   - **Shell type**: Core surrounds the windings. Better magnetic shielding. Used in high-power applications.
-   - **Toroidal**: No air gap, low stray flux, compact. Higher winding cost. Used in audio and sensitive electronics.
-   - **Planar / PCB**: Windings are PCB traces. Low profile. Used in switched-mode power supplies at high frequency.
+4. **Transformer**:
+   - **Core type**: Windings on single leg. Std power.
+   - **Shell type**: Core around windings. Better shielding. High-power.
+   - **Toroidal**: No gap, low stray, compact. Higher winding cost. Audio + sensitive electronics.
+   - **Planar / PCB**: PCB trace windings. Low profile. SMPS at high freq.
 
 ```markdown
 ## Topology Selection
@@ -111,40 +111,40 @@ Choose the device configuration that best matches the requirements:
 - **Alternatives considered**: [and why rejected]
 ```
 
-**Expected:** A justified topology selection with clear reasoning tied to the requirements from Step 1, including acknowledged limitations.
+→ Justified selection tied to Step 1 reqs w/ acknowledged limitations.
 
-**On failure:** If no standard topology meets all requirements, consider a hybrid design (e.g., Halbach array for higher field with less material) or relax a secondary constraint. Document the tradeoff.
+If err: No std topology meets all → hybrid (Halbach array) or relax secondary. Doc tradeoff.
 
-### Step 3: Calculate Design Parameters
+### Step 3: Design params
 
-Compute the physical dimensions and electrical parameters from electromagnetic principles:
+Physical dims + elec params from EM principles:
 
-1. **Electromagnet design parameters**:
-   - Turns: N = B * l_core / (mu_0 * mu_r * I) for a solenoid of length l_core, or from the magnetic circuit: N * I = Phi * R_total (where R_total is the total reluctance)
-   - Wire gauge: Select for the required current density J (typically 3-6 A/mm^2 for continuous duty, up to 15 A/mm^2 for intermittent). Wire cross-section: A_wire = I / J.
-   - Core cross-section: A_core = Phi / B_max, where B_max is below saturation (typically 1.5-1.8 T for silicon steel, 0.3-0.5 T for ferrite)
-   - Air gap force: F = B^2 * A_gap / (2 * mu_0) (Maxwell stress tensor result)
-   - Winding resistance: R = rho_Cu * N * l_mean_turn / A_wire
+1. **Electromagnet**:
+   - Turns: N = B * l_core / (mu_0 * mu_r * I), or mag circuit: N * I = Phi * R_total
+   - Wire gauge: J (3-6 A/mm^2 cont, 15 A/mm^2 intermittent). A_wire = I / J.
+   - Core X-sec: A_core = Phi / B_max (below sat: 1.5-1.8 T silicon steel, 0.3-0.5 T ferrite)
+   - Gap force: F = B^2 * A_gap / (2 * mu_0) (Maxwell stress)
+   - R winding: R = rho_Cu * N * l_mean_turn / A_wire
 
-2. **Motor design parameters**:
-   - Torque constant: k_T = (2 * B * l * r * N) / (number of phases) for a simplified BLDC
-   - Back-EMF constant: k_E = k_T (in SI units, same numerical value)
-   - Rated current: I_rated = T_rated / k_T
-   - No-load speed: omega_no_load = V_supply / k_E
-   - Winding resistance from wire gauge and mean turn length
+2. **Motor**:
+   - Torque const: k_T = (2 * B * l * r * N) / phases (simplified BLDC)
+   - Back-EMF: k_E = k_T (SI)
+   - I_rated = T_rated / k_T
+   - omega_no_load = V_supply / k_E
+   - R from wire gauge + mean turn
 
-3. **Transformer design parameters**:
+3. **Transformer**:
    - Turns ratio: N_1 / N_2 = V_1 / V_2
-   - Core cross-section: A_core = V_1 / (4.44 * f * N_1 * B_max) (for sinusoidal excitation)
-   - Primary turns: N_1 = V_1 / (4.44 * f * B_max * A_core)
-   - Window area: A_window = (N_1 * A_wire1 + N_2 * A_wire2) / k_fill (fill factor k_fill typically 0.3-0.5)
-   - Core volume: V_core = A_core * l_mean_path
+   - Core X-sec: A_core = V_1 / (4.44 * f * N_1 * B_max) (sinusoidal)
+   - N_1 = V_1 / (4.44 * f * B_max * A_core)
+   - Window area: A_window = (N_1 * A_wire1 + N_2 * A_wire2) / k_fill (k_fill 0.3-0.5)
+   - Core vol: V_core = A_core * l_mean_path
 
-4. **Magnetic circuit analysis**: For devices with cores and air gaps:
-   - Reluctance of core: R_core = l_core / (mu_0 * mu_r * A_core)
-   - Reluctance of air gap: R_gap = l_gap / (mu_0 * A_gap) (note: much larger than R_core for small gaps)
-   - Total reluctance: R_total = R_core + R_gap (series) or 1/R_total = sum(1/R_i) (parallel)
-   - Flux: Phi = N * I / R_total
+4. **Mag circuit** (cores + gaps):
+   - R_core = l_core / (mu_0 * mu_r * A_core)
+   - R_gap = l_gap / (mu_0 * A_gap) (much > R_core for small gaps)
+   - R_total = R_core + R_gap (series), 1/R_total = sum(1/R_i) (parallel)
+   - Phi = N * I / R_total
 
 ```markdown
 ## Design Parameters
@@ -157,43 +157,43 @@ Compute the physical dimensions and electrical parameters from electromagnetic p
 - **Key performance**: [B-field / torque / voltage ratio = calculated value]
 ```
 
-**Expected:** Numerical values for all physical dimensions and electrical parameters, derived from electromagnetic equations with units checked at each step.
+→ Numerical vals for all dims + elec params from EM equations w/ units at each step.
 
-**On failure:** If the required turns do not fit in the available winding space, either increase the core size (larger window area), use finer wire (higher current density, but more heating), or reduce the performance target. If the core operates above B_max, increase the core cross-section or add turns (to reduce the flux for the same performance via a larger NI product with a larger gap).
+If err: Turns don't fit → bigger core (more window), finer wire (higher J, more heat), or reduce target. Core above B_max → bigger X-sec or more turns.
 
-### Step 4: Analyze Losses and Efficiency
+### Step 4: Losses + eff
 
-Quantify every loss mechanism and compute overall efficiency:
+Quantify all mechanisms + eff:
 
-1. **Copper losses (I^2 R)**:
-   - P_Cu = I^2 * R_winding (DC resistance losses)
-   - At high frequency, account for skin effect: R_AC / R_DC increases when wire diameter > 2 * delta (skin depth)
-   - Proximity effect in multi-layer windings further increases AC resistance
-   - Mitigation: use Litz wire (many thin insulated strands twisted together) for frequencies above ~10 kHz
+1. **Copper (I^2 R)**:
+   - P_Cu = I^2 * R_winding (DC)
+   - High freq: skin effect. R_AC / R_DC increases when diam > 2 * delta.
+   - Proximity effect in multi-layer → more AC R.
+   - Mitigate: Litz wire for >~10 kHz.
 
-2. **Core losses (hysteresis + eddy current)**:
-   - Hysteresis loss per unit volume per cycle: W_h = area of the B-H loop
-   - Hysteresis power: P_h = k_h * f * B_max^n * V_core (Steinmetz equation, n typically 1.6-2.0, k_h from material data)
-   - Eddy current power: P_e = k_e * f^2 * B_max^2 * t^2 * V_core (t = lamination thickness)
-   - Combined (generalized Steinmetz): P_core = k * f^alpha * B_max^beta * V_core (coefficients from manufacturer data sheets)
-   - Mitigation: laminated cores (typical lamination 0.25-0.5 mm for 50/60 Hz, thinner for higher frequency), ferrite cores for >100 kHz
+2. **Core (hyst + eddy)**:
+   - Hyst vol per cycle: W_h = area B-H loop
+   - P_h = k_h * f * B_max^n * V_core (Steinmetz, n 1.6-2.0, k_h from data)
+   - Eddy: P_e = k_e * f^2 * B_max^2 * t^2 * V_core (t = lamination thick)
+   - Combined (gen Steinmetz): P_core = k * f^alpha * B_max^beta * V_core
+   - Mitigate: laminated (0.25-0.5 mm for 50/60 Hz, thinner higher freq), ferrite for >100 kHz
 
-3. **Eddy current losses in conductors and structure**:
-   - Stray flux inducing currents in the frame, shields, and nearby conductors
-   - Particularly significant in large transformers and machines
-   - Mitigation: non-magnetic structural materials, magnetic shields
+3. **Eddy in conductors/structure**:
+   - Stray flux → currents in frame, shields, conductors
+   - Big in large transformers + machines
+   - Mitigate: non-mag struct mat, mag shields
 
-4. **Mechanical losses** (motors and generators):
-   - Friction in bearings: P_friction = T_friction * omega
-   - Windage (air resistance on rotor): P_windage approximately proportional to omega^3
-   - Brush friction (DC brushed motors): additional wear-dependent term
+4. **Mechanical** (motors, gens):
+   - Bearing friction: P_friction = T_friction * omega
+   - Windage (air): P_windage ~ omega^3
+   - Brush friction (DC brushed): wear-dependent
 
-5. **Efficiency calculation**:
-   - Electromagnet: efficiency is not the primary metric; focus on power consumption P = I^2 R for a given field/force
-   - Motor: eta = P_mechanical / P_electrical = (T * omega) / (V * I)
-   - Generator: eta = P_electrical / P_mechanical
+5. **Eff calc**:
+   - Electromagnet: not primary metric → focus P = I^2 R for field/force
+   - Motor: eta = P_mech / P_elec = (T * omega) / (V * I)
+   - Generator: eta = P_elec / P_mech
    - Transformer: eta = P_out / P_in = P_out / (P_out + P_Cu + P_core)
-   - Typical efficiencies: small motors 60-85%, large motors 90-97%, transformers 95-99%
+   - Typ: small motors 60-85%, large 90-97%, transformers 95-99%
 
 ```markdown
 ## Loss Analysis
@@ -209,40 +209,40 @@ Quantify every loss mechanism and compute overall efficiency:
 - **Temperature rise estimate**: Delta_T = P_total / (h * A_surface) = [K]
 ```
 
-**Expected:** A complete loss breakdown with each mechanism quantified, total efficiency computed, and temperature rise estimated to verify thermal feasibility.
+→ Loss breakdown, each quantified, eff, T rise for thermal feas.
 
-**On failure:** If efficiency is below the target, identify the dominant loss mechanism and address it: copper losses dominate in small devices (increase wire size or reduce turns), core losses dominate at high frequency (switch to lower-loss core material or reduce B_max), mechanical losses dominate at high speed (improve bearings). If the temperature rise exceeds the thermal limit, increase the cooling (forced air, heat sinks) or reduce the power density.
+If err: Eff below target → ID dominant. Copper → bigger wire or fewer turns. Core → lower-loss mat or reduce B_max. Mech → better bearings. T rise exceeds → more cooling or reduce density.
 
-### Step 5: Validate Against Requirements and Physical Constraints
+### Step 5: Validate
 
-Verify that the design meets all specifications and is physically realizable:
+Meets specs + physically realizable:
 
-1. **Performance verification**:
-   - Recompute the primary performance metric (B, force, torque, voltage) from the final design parameters
-   - Verify it meets or exceeds the requirement from Step 1
-   - Compute the margin: (achieved - required) / required as a percentage
+1. **Perf verify**:
+   - Recompute primary from final params
+   - Meets/exceeds Step 1
+   - Margin: (achieved - required) / required %
 
-2. **Saturation check**:
-   - Verify that B_max in the core is below the saturation flux density of the chosen material
-   - Check every section of the magnetic circuit (core legs, yoke, air gap fringing)
-   - The air gap region typically has the lowest flux density; the core section with the smallest cross-section has the highest
+2. **Saturation**:
+   - B_max < sat flux density of mat
+   - Every section (legs, yoke, gap fringing)
+   - Gap region lowest flux density, smallest X-sec has highest
 
-3. **Thermal check**:
-   - Estimate surface temperature: T_surface = T_ambient + P_total / (h * A_surface)
-   - For natural convection: h approximately 5-10 W/(m^2.K)
-   - For forced air: h approximately 25-100 W/(m^2.K)
-   - Wire insulation class limits: Class A (105 C), Class B (130 C), Class F (155 C), Class H (180 C)
-   - Core Curie temperature: silicon steel ~770 C (rarely a limit), ferrite ~200-300 C (can be a limit)
+3. **Thermal**:
+   - T_surface = T_ambient + P_total / (h * A_surface)
+   - Nat convection: h ~ 5-10 W/(m^2.K)
+   - Forced air: h ~ 25-100 W/(m^2.K)
+   - Insulation class: A (105°C), B (130°C), F (155°C), H (180°C)
+   - Core Curie: silicon steel ~770°C (rarely limit), ferrite ~200-300°C (can be limit)
 
-4. **Dimensional check**:
-   - Verify that the design fits within the specified envelope
-   - Check that the winding fits in the window area with the assumed fill factor
-   - Verify clearances and creepage distances for high-voltage designs
+4. **Dims**:
+   - Fits envelope
+   - Winding fits window w/ fill factor
+   - Clearance + creepage for HV
 
-5. **Design margin and sensitivity**:
-   - Compute how the primary metric changes with +/-10% variation in each key parameter (current, turns, air gap, core permeability)
-   - Identify the most sensitive parameter -- this drives the manufacturing tolerance
-   - For air-gapped designs, the gap length is almost always the most sensitive parameter
+5. **Margin + sensitivity**:
+   - +/-10% var each key param (I, turns, gap, mu_r)
+   - ID most sensitive → drives mfg tolerance
+   - Air-gap: gap length almost always most sensitive
 
 ```markdown
 ## Design Validation
@@ -262,37 +262,37 @@ Verify that the design meets all specifications and is physically realizable:
 | mu_r | [value] | [+/- %] | [Yes/No] |
 ```
 
-**Expected:** All requirements met with documented margins, thermal feasibility confirmed, and the most sensitive design parameter identified.
+→ All reqs met w/ docs margins, thermal OK, most sensitive param ID'd.
 
-**On failure:** If a requirement is not met, iterate by adjusting the topology (Step 2), design parameters (Step 3), or loss mitigation strategy (Step 4). If the design is thermally infeasible, consider: reducing the duty cycle, increasing the size (more surface area for cooling), switching to a higher temperature insulation class, or adding active cooling. Document each iteration.
+If err: Req not met → iterate topology (Step 2), params (Step 3), or loss mitigation (Step 4). Thermal infeasible → reduce duty, more size (cooling), higher-T insulation, active cooling. Doc each iter.
 
-## Validation
+## Check
 
-- [ ] All requirements are quantified with numerical values and units
-- [ ] Topology selection is justified and alternatives are documented
-- [ ] Magnetic circuit analysis is complete (reluctances, flux, NI product)
-- [ ] Wire gauge is selected for acceptable current density (3-6 A/mm^2 continuous, higher for intermittent)
-- [ ] Core operates below saturation flux density with margin
-- [ ] All loss mechanisms are quantified (copper, hysteresis, eddy current, mechanical)
-- [ ] Efficiency meets the target specification
-- [ ] Temperature rise is within the insulation class limit
-- [ ] Design fits within the physical envelope
-- [ ] Sensitivity analysis identifies the tightest-tolerance parameter
-- [ ] The design is complete enough for a prototype to be built
+- [ ] All reqs quantified w/ vals + units
+- [ ] Topology justified + alts docs
+- [ ] Mag circuit complete (reluctances, flux, NI)
+- [ ] Wire gauge for J (3-6 A/mm^2 cont)
+- [ ] Core below sat w/ margin
+- [ ] All losses quantified (copper, hyst, eddy, mech)
+- [ ] Eff meets target
+- [ ] T rise w/in insulation class
+- [ ] Fits envelope
+- [ ] Sensitivity ID's tightest-tolerance param
+- [ ] Complete for prototype build
 
-## Common Pitfalls
+## Traps
 
-- **Ignoring magnetic circuit reluctance**: The air gap reluctance dominates in most practical devices (even a 1 mm gap has more reluctance than 100 mm of silicon steel core). Designing without a magnetic circuit model produces devices that perform far below expectations because the gap was not accounted for.
-- **Operating above core saturation**: Above the knee of the B-H curve, incremental permeability drops dramatically. Doubling the current does not double the flux. The device appears to "stop working" above saturation. Always check B_max in the narrowest core cross-section.
-- **Undersizing copper for thermal limits**: Current density limits are thermal limits in disguise. A wire carrying 10 A/mm^2 in free air will overheat within minutes. Continuous-duty designs must stay below 5-6 A/mm^2 unless active cooling is provided.
-- **Neglecting fringing flux at air gaps**: Flux spreads out at an air gap, increasing the effective gap area. For gaps comparable to the core dimension, fringing can increase the effective area by 20-50%. Ignoring fringing underestimates the flux (and overestimates the required NI product).
-- **Using DC resistance at high frequency**: At 10 kHz, the skin depth in copper is about 0.66 mm. Standard magnet wire thicker than 1.3 mm diameter will have significantly higher AC resistance than DC resistance. Use Litz wire or parallel thin strands for high-frequency designs.
-- **Confusing motor constants k_T and k_E units**: The torque constant k_T (N.m/A) and back-EMF constant k_E (V.s/rad) are numerically equal in SI units. However, if k_E is expressed in V/kRPM (common in datasheets), a unit conversion is needed: k_T [N.m/A] = k_E [V/kRPM] * 60 / (2 * pi * 1000).
+- **Ignoring mag circuit reluctance**: Gap dominates (1 mm gap > 100 mm silicon steel core reluctance). No mag circuit model → devices far below expectations.
+- **Operating above sat**: Above B-H knee, incremental mu drops. Doubling I ≠ doubling flux. Appears to "stop working". Always check B_max in narrowest X-sec.
+- **Undersize copper for thermal**: J limits = thermal in disguise. 10 A/mm^2 free air → overheats in min. Cont-duty < 5-6 A/mm^2 w/o active cooling.
+- **Neglect fringing at gaps**: Flux spreads → effective gap area bigger. Gaps ~ core dim → fringing 20-50%. Ignoring → underestimate flux + overestimate NI.
+- **DC R at high freq**: 10 kHz skin depth in Cu ~ 0.66 mm. Magnet wire > 1.3 mm diam → AC R >> DC R. Litz or parallel thin strands.
+- **Confuse k_T vs k_E units**: k_T (N.m/A) + k_E (V.s/rad) numerically equal SI. BUT k_E in V/kRPM (datasheets) → convert: k_T [N.m/A] = k_E [V/kRPM] * 60 / (2 * pi * 1000).
 
-## Related Skills
+## →
 
-- `analyze-magnetic-field` -- compute the B-field from the designed current distribution for detailed field analysis
-- `solve-electromagnetic-induction` -- analyze the induction principles underlying motors, generators, and transformers
-- `formulate-maxwell-equations` -- full electromagnetic analysis for high-frequency devices, waveguides, and antennas
-- `simulate-cpu-architecture` -- digital control systems that drive modern motor controllers and power electronics
-- `analyze-tensegrity-system` -- structural analysis of tension-compression networks; shares prestress equilibrium methods with electromagnetic force balancing
+- `analyze-magnetic-field` — B-field from current dist for detailed analysis
+- `solve-electromagnetic-induction` — induction principles in motors/gens/transformers
+- `formulate-maxwell-equations` — full EM for high-freq, waveguides, antennas
+- `simulate-cpu-architecture` — digital ctrl sys driving motor controllers + power electronics
+- `analyze-tensegrity-system` — tension-compression networks; shares prestress equilibrium

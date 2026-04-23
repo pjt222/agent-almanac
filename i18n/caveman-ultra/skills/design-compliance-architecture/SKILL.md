@@ -27,30 +27,30 @@ metadata:
 
 # Design Compliance Architecture
 
-Establish the top-level compliance framework that maps regulations to systems, classifies criticality, and defines governance for a regulated environment.
+Top-level framework → regs to sys, criticality class, governance for regulated env.
 
-## When to Use
+## Use When
 
-- A new regulated facility, department, or programme is being established
-- An existing organisation needs to formalise its compliance posture across multiple systems
-- A regulatory gap analysis reveals missing system classification or validation strategy
-- Mergers, acquisitions, or reorganisations require harmonising compliance across entities
-- Preparing a site master file or quality manual that references computerized systems
+- New regulated facility/dept/program
+- Formalize compliance across multi sys
+- Gap analysis reveals missing class/valid strategy
+- M&A, reorg → harmonize compliance
+- Site master file / quality manual references
 
-## Inputs
+## In
 
-- **Required**: List of computerized systems in scope (name, purpose, vendor/custom)
-- **Required**: Applicable regulatory frameworks (21 CFR Part 11, EU Annex 11, GMP, GLP, GCP, ICH Q7, ICH Q10)
-- **Required**: Organisational context (department, site, product types)
-- **Optional**: Existing validation master plan or quality manual
-- **Optional**: Previous audit findings or regulatory inspection observations
-- **Optional**: Organisational chart with quality and IT reporting lines
+- **Required**: Sys list in scope (name, purpose, vendor/custom)
+- **Required**: Applicable reg frameworks (21 CFR Part 11, EU Annex 11, GMP, GLP, GCP, ICH Q7, ICH Q10)
+- **Required**: Org context (dept, site, product types)
+- **Optional**: Existing validation master plan
+- **Optional**: Prior audit findings / inspection obs
+- **Optional**: Org chart w/ quality + IT reporting
 
-## Procedure
+## Do
 
-### Step 1: Build the System Inventory
+### Step 1: System inventory
 
-Create a comprehensive inventory of all computerized systems:
+Comprehensive:
 
 ```markdown
 # System Inventory
@@ -64,12 +64,13 @@ Create a comprehensive inventory of all computerized systems:
 | SYS-004 | Windows Server | 2022 | Microsoft | File server | IT | Documents | 200 |
 ```
 
-**Expected:** Every system that creates, modifies, stores, retrieves, or transmits GxP-relevant data is listed.
-**On failure:** If system owners cannot provide complete information, document the gap and schedule a discovery workshop. Missing systems are a critical compliance risk.
+→ Every sys creating/modifying/storing/retrieving/transmitting GxP data listed.
 
-### Step 2: Classify System Criticality
+If err: Sys owners incomplete → doc gap, discovery workshop. Missing = critical risk.
 
-Assign each system a criticality tier:
+### Step 2: Classify criticality
+
+Tier per sys:
 
 ```markdown
 # System Criticality Classification
@@ -93,12 +94,13 @@ Assign each system a criticality tier:
 | SYS-004 | Windows Server | GxP-Supporting | Stores controlled documents but does not generate GxP data |
 ```
 
-**Expected:** Every system has a tier assignment with documented rationale.
-**On failure:** If a system's criticality is disputed, escalate to the quality council. When in doubt, classify one tier higher and reassess after a formal risk assessment.
+→ Every sys tiered w/ rationale.
 
-### Step 3: Assign GAMP 5 Software Categories
+If err: Disputed → escalate to quality council. When in doubt → tier up, reassess.
 
-For each GxP-Critical and GxP-Supporting system, assign the GAMP 5 category:
+### Step 3: GAMP 5 categories
+
+Each GxP-Critical + GxP-Supporting:
 
 ```markdown
 # GAMP 5 Category Assignment
@@ -111,18 +113,19 @@ For each GxP-Critical and GxP-Supporting system, assign the GAMP 5 category:
 | SYS-004 | Windows Server | 1 — Infrastructure | Operating system, no custom configuration | Low — Verify installation |
 ```
 
-Category reference:
-- **Category 1**: Infrastructure (OS, firmware) — verify installation
-- **Category 3**: Non-configured COTS — verify functionality as-is
-- **Category 4**: Configured product — verify all configurations
-- **Category 5**: Custom application — full lifecycle validation
+Category ref:
+- **Cat 1**: Infrastructure (OS, firmware) → verify install
+- **Cat 3**: Non-configured COTS → verify as-is
+- **Cat 4**: Configured → verify all configs
+- **Cat 5**: Custom → full lifecycle
 
-**Expected:** Category assignment aligns with how the system is used, not just what it is.
-**On failure:** If a system spans categories (e.g., COTS with custom add-ons), classify the custom portions as Category 5 and the base as Category 4.
+→ Category aligns w/ how used, not just what it is.
 
-### Step 4: Map Regulatory Requirements to Systems
+If err: Spans categories (COTS + custom add-ons) → custom = Cat 5, base = Cat 4.
 
-Create a regulatory requirements traceability matrix:
+### Step 4: Map reg reqs → sys
+
+Traceability matrix:
 
 ```markdown
 # Regulatory Requirements Traceability Matrix
@@ -142,12 +145,13 @@ Create a regulatory requirements traceability matrix:
 | ICH Q10 | §1.8 | Knowledge management | SYS-001, SYS-003 | Procedural |
 ```
 
-**Expected:** Every applicable regulatory clause maps to at least one system, and every GxP-Critical system maps to the relevant regulatory clauses.
-**On failure:** Unmapped clauses represent compliance gaps. Create a remediation plan with timelines for each gap.
+→ Every clause maps ≥1 sys. Every GxP-Critical maps to clauses.
 
-### Step 5: Define Validation Strategy Per System
+If err: Unmapped clauses = gaps. Remediation plan w/ timelines.
 
-Based on criticality, category, and regulatory mapping:
+### Step 5: Validation strategy per sys
+
+By criticality + category + reg mapping:
 
 ```markdown
 # Validation Strategy Summary
@@ -160,14 +164,15 @@ Based on criticality, category, and regulatory mapping:
 | Windows Server | 1 | Supporting | Installation qualification | IQ checklist |
 ```
 
-Abbreviations: URS (User Requirements), RA (Risk Assessment), VP (Validation Plan), IQ/OQ/PQ (Installation/Operational/Performance Qualification), TM (Traceability Matrix), VSR (Validation Summary Report).
+Abbrev: URS (User Reqs), RA (Risk Assess), VP (Valid Plan), IQ/OQ/PQ (Install/Operational/Perf Qual), TM (Trace Matrix), VSR (Valid Summary Report).
 
-**Expected:** Validation effort is proportional to risk — Category 5 GxP-Critical systems get full lifecycle; Category 1 infrastructure gets streamlined IQ.
-**On failure:** If stakeholders push for reduced validation of critical systems, document the risk acceptance with QA sign-off.
+→ Effort proportional to risk. Cat 5 GxP-Critical → full lifecycle. Cat 1 → streamlined IQ.
 
-### Step 6: Design Governance Structure
+If err: Stakeholders push reduced → doc risk acceptance w/ QA sign-off.
 
-Define the organisational framework for sustaining compliance:
+### Step 6: Governance
+
+Org framework → sustain compliance:
 
 ```markdown
 # Compliance Governance Structure
@@ -196,12 +201,13 @@ Define the organisational framework for sustaining compliance:
 | Data integrity incident | System Owner → QA Director | QA Director → Regulatory Affairs | 24 hours |
 ```
 
-**Expected:** Clear accountability for every compliance activity with no orphaned responsibilities.
-**On failure:** If roles overlap or are unassigned, convene a RACI workshop to resolve. Ambiguous ownership is a recurring regulatory citation.
+→ Clear accountability, no orphans.
 
-### Step 7: Compile the Compliance Architecture Document
+If err: Overlap/unassigned → RACI workshop. Ambiguous = recurring citation.
 
-Assemble all components into the master document:
+### Step 7: Compile master doc
+
+Assemble:
 
 ```markdown
 # Compliance Architecture
@@ -243,32 +249,33 @@ Assemble all components into the master document:
 | Regulatory Affairs | | | |
 ```
 
-**Expected:** A single document that serves as the compliance blueprint for the entire regulated environment.
-**On failure:** If the document exceeds practical size, create a master document with references to subsidiary documents per system or domain.
+→ Single blueprint for regulated env.
 
-## Validation
+If err: Too big → master + subsidiaries per sys/domain.
 
-- [ ] System inventory includes every system that handles GxP data
-- [ ] Every system has a criticality tier with documented rationale
-- [ ] GAMP 5 categories assigned to all GxP-Critical and GxP-Supporting systems
-- [ ] Regulatory requirements traceability matrix covers all applicable clauses
-- [ ] Every GxP-Critical system has a defined validation strategy
-- [ ] Governance structure defines roles, committees, and escalation paths
-- [ ] All documents have unique IDs and version control
-- [ ] Compliance architecture document is approved by quality and IT leadership
+## Check
 
-## Common Pitfalls
+- [ ] Inventory includes every sys w/ GxP data
+- [ ] Every sys → tier + rationale
+- [ ] GAMP 5 cats assigned → all GxP-Critical + Supporting
+- [ ] RRTM covers all applicable clauses
+- [ ] Every GxP-Critical → validation strategy
+- [ ] Governance: roles, committees, escalation
+- [ ] Docs have unique IDs + ver ctrl
+- [ ] Architecture doc approved by quality + IT
 
-- **Incomplete inventory**: Missing systems are invisible to compliance. Use network scans, software asset management tools, and department interviews — not just asking IT.
-- **Binary thinking**: Systems are not simply "GxP" or "not GxP." The three-tier model (Critical, Supporting, Non-GxP) avoids both over-validation and under-validation.
-- **Category confusion**: GAMP 5 category describes what the software IS, but validation effort should reflect how it is USED. A Category 4 system used for batch release needs more testing than a Category 4 system used for scheduling.
-- **Static architecture**: The compliance architecture is a living document. New systems, regulatory changes, and audit findings all require updates.
-- **Governance without teeth**: Committees that exist on paper but never meet provide no compliance value. Define meeting cadence and quorum requirements.
+## Traps
 
-## Related Skills
+- **Incomplete inventory**: Missing = invisible. Use network scans, SAM tools, dept interviews — not just IT.
+- **Binary thinking**: Not "GxP" vs "not". 3-tier (Critical, Supporting, Non-GxP) avoids over + under validation.
+- **Category confusion**: GAMP 5 = what software IS. Validation effort = how USED. Cat 4 batch release > Cat 4 scheduling.
+- **Static architecture**: Living doc. New sys, reg changes, audit findings → update.
+- **Governance no teeth**: Paper committees = no value. Define cadence + quorum.
 
-- `perform-csv-assessment` — execute the validation strategy defined here for individual systems
-- `manage-change-control` — operationalise the change control process defined in governance
-- `implement-electronic-signatures` — implement e-signature controls mapped in the regulatory matrix
-- `prepare-inspection-readiness` — use this architecture as the foundation for inspection preparation
-- `conduct-gxp-audit` — audit against the compliance architecture as the baseline
+## →
+
+- `perform-csv-assessment` — execute validation per sys
+- `manage-change-control` — operationalize change ctrl
+- `implement-electronic-signatures` — e-sig ctrls in RRTM
+- `prepare-inspection-readiness` — use as foundation
+- `conduct-gxp-audit` — audit vs architecture

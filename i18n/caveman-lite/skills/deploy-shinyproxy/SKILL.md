@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Deploy ShinyProxy for hosting multiple containerized Shiny applications.
   Covers ShinyProxy Docker deployment, application.yml configuration,
@@ -77,7 +77,7 @@ docker build -t myorg/dashboard:latest ./apps/dashboard/
 docker run --rm -p 3838:3838 myorg/dashboard:latest
 ```
 
-**Expected:** Each Shiny app runs independently in its own container.
+**Got:** Each Shiny app runs independently in its own container.
 
 ### Step 2: Configure ShinyProxy
 
@@ -167,9 +167,9 @@ docker compose up -d
 docker compose logs -f shinyproxy
 ```
 
-**Expected:** ShinyProxy starts on port 8080, shows login page, and lists configured apps.
+**Got:** ShinyProxy starts on port 8080, shows login page, and lists configured apps.
 
-**On failure:** Check `docker compose logs shinyproxy`. Verify app images are available locally (`docker images`).
+**If fail:** Check `docker compose logs shinyproxy`. Verify app images are available locally (`docker images`).
 
 ### Step 4: Configure Authentication
 
@@ -297,7 +297,7 @@ curl -s -c cookies.txt -d "username=admin&password=admin_password" \
 curl -s -b cookies.txt http://localhost:8080/api/proxyspec
 ```
 
-**Expected:** Health endpoint returns `UP`. Login succeeds. Apps launch in isolated containers.
+**Got:** Health endpoint returns `UP`. Login succeeds. Apps launch in isolated containers.
 
 ## Validation
 
@@ -309,7 +309,7 @@ curl -s -b cookies.txt http://localhost:8080/api/proxyspec
 - [ ] Container cleanup works when users disconnect
 - [ ] Logs capture usage events
 
-## Common Pitfalls
+## Pitfalls
 
 - **Docker socket permissions**: ShinyProxy needs Docker socket access to launch containers. Run as a user in the `docker` group or mount the socket.
 - **Network mismatch**: App containers must be on the same Docker network as ShinyProxy (`container-network` in specs must match).

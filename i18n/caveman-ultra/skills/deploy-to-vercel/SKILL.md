@@ -25,33 +25,33 @@ metadata:
 
 # Deploy to Vercel
 
-Deploy a Next.js application to Vercel with production configuration.
+Next.js → Vercel w/ prod config.
 
-## When to Use
+## Use When
 
-- Deploying a Next.js app for the first time
-- Setting up preview deployments for pull requests
-- Configuring custom domains
-- Managing environment variables in production
+- First-time Next.js deploy
+- Preview deploys → PRs
+- Custom domains
+- Prod env vars
 
-## Inputs
+## In
 
-- **Required**: Next.js application that builds successfully locally
-- **Required**: GitHub repository (recommended) or local project
+- **Required**: Next.js app builds locally
+- **Required**: GitHub repo (rec) or local
 - **Optional**: Custom domain
-- **Optional**: Environment variables for production
+- **Optional**: Prod env vars
 
-## Procedure
+## Do
 
-### Step 1: Verify Local Build
+### Step 1: Verify local build
 
 ```bash
 npm run build
 ```
 
-**Expected:** Build succeeds with no errors.
+→ Build OK, no errs.
 
-**On failure:** Fix build errors before deploying. Common: TypeScript errors, missing dependencies, invalid imports.
+If err: Fix build before deploy. Common: TS errs, missing deps, bad imports.
 
 ### Step 2: Install Vercel CLI
 
@@ -59,11 +59,11 @@ npm run build
 npm install -g vercel
 ```
 
-**Expected:** The `vercel` command is available globally and `vercel --version` prints the installed version.
+→ `vercel` cmd available, `vercel --version` works.
 
-**On failure:** If permission errors occur, use `sudo npm install -g vercel` or configure npm to use a user-local prefix. Verify Node.js is installed with `node --version`.
+If err: Perm errs → `sudo` or user-local prefix. `node --version`.
 
-### Step 3: Link and Deploy
+### Step 3: Link + deploy
 
 ```bash
 # Login to Vercel
@@ -81,11 +81,11 @@ vercel
 # - Override settings? N
 ```
 
-**Expected:** Preview URL provided (e.g., `https://my-app-xxx.vercel.app`).
+→ Preview URL (e.g., `https://my-app-xxx.vercel.app`).
 
-**On failure:** If `vercel login` fails, check internet connectivity and try browser-based authentication. If the deploy fails, review the build output for errors -- Vercel uses a clean environment, so all dependencies must be in `package.json`.
+If err: `vercel login` fail → check net, try browser auth. Deploy fail → review build out. Clean env → all deps in `package.json`.
 
-### Step 4: Configure Environment Variables
+### Step 4: Env vars
 
 ```bash
 # Add environment variables
@@ -96,51 +96,49 @@ vercel env add API_KEY production preview
 vercel env ls
 ```
 
-Or configure through the Vercel dashboard: Project Settings > Environment Variables.
+Or dashboard: Project Settings > Environment Variables.
 
-**Expected:** `vercel env ls` shows all required environment variables configured for the correct environments (production, preview, development).
+→ `vercel env ls` shows all vars in correct envs.
 
-**On failure:** If variables are not appearing at runtime, verify the target environment matches (production vs preview). Redeploy after adding variables -- existing deployments do not pick up new variables automatically.
+If err: Not at runtime → target env matches. Redeploy → existing deploys don't pick up new vars.
 
-### Step 5: Deploy to Production
+### Step 5: Prod deploy
 
 ```bash
 vercel --prod
 ```
 
-**Expected:** Production URL available (e.g., `https://my-app.vercel.app`).
+→ Prod URL (e.g., `https://my-app.vercel.app`).
 
-**On failure:** Check deployment logs with `vercel logs` or in the Vercel dashboard. Common issues include missing environment variables in the production environment and build commands differing from local setup.
+If err: `vercel logs` or dashboard. Common: missing prod env vars, build cmd diff from local.
 
-### Step 6: Connect GitHub for Auto-Deploy (Recommended)
+### Step 6: GitHub auto-deploy (rec)
 
-1. Go to https://vercel.com/new
-2. Import your GitHub repository
-3. Vercel automatically deploys on:
-   - Push to main -> Production deployment
-   - Pull request -> Preview deployment
+1. `https://vercel.com/new`
+2. Import GH repo
+3. Auto-deploy on:
+   - Push main → prod
+   - PR → preview
 
-**Expected:** The Vercel dashboard shows the GitHub repository connected, and subsequent pushes to main trigger production deployments automatically.
+→ Dashboard shows repo connected, pushes trigger prod auto.
 
-**On failure:** If the repository does not appear in the import list, check that the Vercel GitHub app has access to the repository. Go to GitHub Settings > Applications > Vercel and grant access.
+If err: Repo not in list → Vercel GH app access. GitHub Settings > Applications > Vercel.
 
-### Step 7: Configure Custom Domain
+### Step 7: Custom domain
 
 ```bash
 vercel domains add my-domain.com
 ```
 
-Or through dashboard: Project Settings > Domains.
+Or dashboard: Project Settings > Domains. Update DNS per Vercel.
 
-Update DNS records as instructed by Vercel (typically CNAME or A record).
+→ `vercel domains ls` shows configured, after propagation (≤48h) resolves.
 
-**Expected:** `vercel domains ls` shows the custom domain as configured, and after DNS propagation (up to 48 hours), the domain resolves to the Vercel deployment.
+If err: "Invalid Configuration" → DNS matches exactly. `dig my-domain.com` or DNS checker.
 
-**On failure:** If the domain shows "Invalid Configuration," verify DNS records match Vercel's instructions exactly. Use `dig my-domain.com` or an online DNS checker to confirm propagation.
+### Step 8: Optimize config
 
-### Step 8: Optimize Configuration
-
-Create `vercel.json` for advanced settings:
+`vercel.json`:
 
 ```json
 {
@@ -157,29 +155,29 @@ Create `vercel.json` for advanced settings:
 }
 ```
 
-**Expected:** `vercel.json` is saved in the project root and the next deployment picks up the configuration (visible in the Vercel dashboard build logs).
+→ `vercel.json` in root, next deploy picks up.
 
-**On failure:** If the configuration is ignored, verify `vercel.json` is valid JSON with `jq . vercel.json`. Check the Vercel docs for your framework version, as some settings may have moved to `next.config.ts`.
+If err: Ignored → `jq . vercel.json` valid. Framework ver → some moved to `next.config.ts`.
 
-## Validation
+## Check
 
-- [ ] `npm run build` succeeds locally
-- [ ] Preview deployment works and is accessible
-- [ ] Production deployment serves the application correctly
-- [ ] Environment variables are available in production
-- [ ] Custom domain resolves (if configured)
-- [ ] GitHub integration triggers deployments on push
+- [ ] `npm run build` OK locally
+- [ ] Preview deploy works
+- [ ] Prod deploy serves app
+- [ ] Env vars in prod
+- [ ] Custom domain resolves (if config'd)
+- [ ] GH integration triggers deploys
 
-## Common Pitfalls
+## Traps
 
-- **Build failing on Vercel but not locally**: Vercel uses a clean environment. Ensure all dependencies are in `package.json`, not just installed globally.
-- **Environment variables missing**: Variables must be added to Vercel, not just `.env.local`. Different environments (production, preview, development) have separate variable sets.
-- **Node.js version mismatch**: Set the Node.js version in Project Settings or `package.json` engines field.
-- **Large deployments**: Vercel has size limits. Use `.vercelignore` to exclude unnecessary files.
-- **API route timeouts**: Vercel serverless functions have a 10s timeout on the Hobby plan. Optimize or upgrade.
+- **Build fail Vercel not local**: Clean env → all deps in `package.json`, not just global
+- **Env vars missing**: Add to Vercel not `.env.local`. Envs separate.
+- **Node ver mismatch**: Set in Project Settings or `package.json` engines
+- **Large deploys**: Size limits. `.vercelignore` excludes.
+- **API timeout**: Hobby plan 10s. Optimize or upgrade.
 
-## Related Skills
+## →
 
-- `scaffold-nextjs-app` - create the app to deploy
-- `setup-tailwind-typescript` - configure styling before deployment
-- `configure-git-repository` - Git setup for auto-deploy integration
+- `scaffold-nextjs-app` — create app to deploy
+- `setup-tailwind-typescript` — config styling pre-deploy
+- `configure-git-repository` — Git setup for auto-deploy

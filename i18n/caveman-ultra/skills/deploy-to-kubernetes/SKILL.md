@@ -25,34 +25,33 @@ metadata:
 
 # Deploy to Kubernetes
 
-Deploy containerized applications to Kubernetes with production-ready configurations including health checks, resource management, and automated rollouts.
+Containerized apps → K8s. Prod-ready: health checks, resource mgmt, auto rollouts.
 
-## When to Use
+## Use When
 
-- Deploying new applications to Kubernetes clusters (EKS, GKE, AKS, self-hosted)
-- Migrating from Docker Compose or traditional VMs to container orchestration
-- Implementing zero-downtime rolling updates and rollbacks
-- Managing application configuration and secrets in Kubernetes
-- Setting up multi-environment deployments (dev, staging, production)
-- Creating reusable Helm charts for application distribution
+- New apps → K8s (EKS, GKE, AKS, self-hosted)
+- Compose/VMs → orchestration migrate
+- Zero-downtime rolling updates + rollbacks
+- Config + secrets mgmt
+- Multi-env (dev, staging, prod)
+- Reusable Helm charts
 
-## Inputs
+## In
 
-- **Required**: Kubernetes cluster access (`kubectl cluster-info`)
-- **Required**: Container images pushed to registry (Docker Hub, ECR, GCR, Harbor)
-- **Required**: Application requirements (ports, environment variables, volumes)
-- **Optional**: TLS certificates for HTTPS ingress
-- **Optional**: Persistent storage requirements (StatefulSets, PVCs)
-- **Optional**: Helm CLI for chart-based deployments
+- **Required**: Cluster access (`kubectl cluster-info`)
+- **Required**: Images in registry (Docker Hub, ECR, GCR, Harbor)
+- **Required**: App reqs (ports, env vars, volumes)
+- **Optional**: TLS certs → HTTPS ingress
+- **Optional**: Persistent storage (StatefulSets, PVCs)
+- **Optional**: Helm CLI
 
-## Procedure
+## Do
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
+### Step 1: Namespace + resource quotas
 
-### Step 1: Create Namespace and Resource Quotas
-
-Organize applications into namespaces with resource limits and RBAC.
+Orgs apps → namespaces w/ limits + RBAC.
 
 ```bash
 # Create namespace
@@ -129,13 +128,13 @@ kubectl get limitrange -n myapp-prod
 kubectl get sa -n myapp-prod
 ```
 
-**Expected:** Namespace created with resource quotas limiting compute and storage. LimitRange sets default CPU/memory requests and limits. ServiceAccount configured with least-privilege RBAC.
+→ NS created w/ quotas. LimitRange sets defaults. SA least-priv RBAC.
 
-**On failure:** For quota errors, verify cluster has sufficient resources with `kubectl describe nodes`. For RBAC errors, check cluster-admin permissions with `kubectl auth can-i create role --namespace myapp-prod`. Use `kubectl describe` on rejected resources to see quota/limit violations.
+If err: Quota → check nodes (`kubectl describe nodes`). RBAC → `kubectl auth can-i create role --namespace myapp-prod`. Rejected resources → `kubectl describe`.
 
-### Step 2: Configure Application Secrets and ConfigMaps
+### Step 2: Secrets + ConfigMaps
 
-Externalize configuration and sensitive data using ConfigMaps and Secrets.
+Externalize config + sensitive data.
 
 ```bash
 # Create ConfigMap from literal values
@@ -175,7 +174,7 @@ kubectl get secret -n myapp-prod
 kubectl describe configmap myapp-config -n myapp-prod
 ```
 
-For more complex configurations, use YAML manifests:
+Complex → YAML:
 
 ```yaml
 # configmap.yaml
@@ -214,13 +213,13 @@ stringData:  # Automatically base64 encoded
   jwt-secret: "my-jwt-signing-key"
 ```
 
-**Expected:** ConfigMaps store non-sensitive configuration, Secrets store credentials/keys. Values accessible to Pods via environment variables or volume mounts. TLS secrets properly formatted for Ingress resources.
+→ ConfigMaps → non-sensitive. Secrets → creds/keys. Pods read via env/volume. TLS → Ingress.
 
-**On failure:** For encoding issues, use `stringData` instead of `data` in YAML. For TLS secret errors, verify certificate and key format with `openssl x509 -in tls.crt -text -noout`. For access issues, check ServiceAccount RBAC permissions. View decoded secret with `kubectl get secret myapp-secret -o jsonpath='{.data.api-key}' | base64 -d`.
+If err: Encoding → use `stringData` not `data`. TLS → `openssl x509 -in tls.crt -text -noout`. Access → SA RBAC. Decode → `kubectl get secret myapp-secret -o jsonpath='{.data.api-key}' | base64 -d`.
 
-### Step 3: Create Deployment with Health Checks and Resource Limits
+### Step 3: Deployment w/ health + limits
 
-Deploy application with production-ready configuration including probes and resource management.
+Prod-ready w/ probes + resource mgmt.
 
 ```yaml
 # deployment.yaml
@@ -336,7 +335,7 @@ spec:
       - name: registry-credentials
 ```
 
-Apply and monitor deployment:
+Apply + monitor:
 
 ```bash
 # Apply deployment
@@ -358,13 +357,11 @@ kubectl describe deployment myapp -n myapp-prod
 kubectl top pods -n myapp-prod -l app=myapp
 ```
 
-**Expected:** Deployment creates 3 replicas with rolling update strategy. Pods pass readiness probes before receiving traffic. Liveness probes restart unhealthy pods. Resource requests/limits prevent OOM kills. Logs show successful application startup.
+→ 3 replicas rolling. Readiness pre-traffic. Liveness restarts unhealthy. Limits prevent OOM. Logs show startup.
 
-**On failure:** For ImagePullBackOff, verify image exists and imagePullSecret is valid with `kubectl get secret registry-credentials -o yaml`. For CrashLoopBackOff, check logs with `kubectl logs pod-name --previous`. For probe failures, test endpoints manually with `kubectl port-forward` and `curl localhost:8080/healthz`. For OOMKilled pods, increase memory limits or investigate memory leaks.
+If err: ImagePullBackOff → image + imagePullSecret (`kubectl get secret registry-credentials -o yaml`). CrashLoopBackOff → `kubectl logs pod-name --previous`. Probe fail → port-forward + curl. OOMKilled → increase mem or find leaks.
 
-### Step 4: Expose Application with Services and Load Balancers
-
-Create Service resources to expose applications internally and externally.
+### Step 4: Expose via Service + LB
 
 ```yaml
 # service.yaml
@@ -376,7 +373,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Apply and test services:
+Apply + test:
 
 ```bash
 # Apply services
@@ -388,13 +385,13 @@ kubectl get svc -n myapp-prod
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** LoadBalancer Service provisions external LB with public IP/hostname. ClusterIP Service provides stable internal DNS. Endpoints list shows healthy Pod IPs. Curl requests succeed with expected responses.
+→ LB → external IP. ClusterIP → stable internal DNS. Endpoints = healthy pod IPs. Curl OK.
 
-**On failure:** For pending LoadBalancer, check cloud provider integration and quotas. For no endpoints, verify Pod labels match Service selector with `kubectl get pods --show-labels`. For connection refused, verify targetPort matches container port. Use `kubectl port-forward` to bypass Service layer for debugging.
+If err: LB pending → cloud integration + quotas. No endpoints → `kubectl get pods --show-labels` matches selector. Refused → targetPort matches container. Debug → `kubectl port-forward` bypass.
 
-### Step 5: Configure Horizontal Pod Autoscaling
+### Step 5: HPA
 
-Implement automatic scaling based on CPU/memory or custom metrics.
+Auto scale on CPU/mem/custom.
 
 ```yaml
 # hpa.yaml
@@ -406,7 +403,7 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Install metrics-server if not available:
+Install metrics-server:
 
 ```bash
 # Install metrics-server
@@ -418,13 +415,13 @@ kubectl top nodes
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** HPA monitors CPU/memory metrics. When thresholds exceeded, replicas scale up to maxReplicas. When load decreases, replicas scale down gradually (stabilization window prevents flapping). Metrics visible with `kubectl top`.
+→ HPA monitors. Scale up on threshold, down gradual. Metrics via `kubectl top`.
 
-**On failure:** For "unknown" metrics, verify metrics-server is running and Pods have resource requests defined. For no scaling, check current utilization is actually exceeding targets with `kubectl top pods`. For flapping, increase stabilizationWindowSeconds. For slow scale-up, reduce periodSeconds in scaleUp policies.
+If err: "unknown" metrics → metrics-server running + pod requests defined. No scale → `kubectl top pods` vs target. Flapping → `stabilizationWindowSeconds`. Slow → reduce `periodSeconds`.
 
-### Step 6: Package Application with Helm Chart
+### Step 6: Helm chart
 
-Create reusable Helm chart for multi-environment deployments.
+Reusable, multi-env.
 
 ```bash
 # Create Helm chart structure
@@ -436,47 +433,40 @@ cat > Chart.yaml <<EOF
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Helm chart packages all Kubernetes resources with templated values. Dry-run shows rendered manifests. Install deploys all resources in correct order. Upgrades perform rolling updates. Rollback reverts to previous revision.
+→ Chart packages all resources. Dry-run renders. Install orders. Upgrades roll. Rollback reverts.
 
-**On failure:** For template errors, run `helm template .` to render locally without installing. For dependency issues, run `helm dependency update`. For value override failures, verify YAML path exists in values.yaml. Use `helm get manifest myapp -n myapp-prod` to see actual deployed resources.
+If err: Template → `helm template .` local render. Dep → `helm dependency update`. Values → path in values.yaml. Inspect → `helm get manifest myapp -n myapp-prod`.
 
-## Validation
+## Check
 
-- [ ] Pods in Running state with all containers ready
-- [ ] Readiness probes pass before Pods added to Service endpoints
-- [ ] Liveness probes restart unhealthy containers automatically
-- [ ] Resource requests and limits prevent OOM kills and node overcommit
-- [ ] Secrets and ConfigMaps mounted correctly with expected values
-- [ ] Services resolve via DNS (cluster.local) from other Pods
-- [ ] LoadBalancer/Ingress accessible from external networks
-- [ ] HPA scales replicas up under load and down when idle
-- [ ] Rolling updates complete with zero downtime
-- [ ] Logs collected and accessible via kubectl logs or centralized logging
+- [ ] Pods Running + all ready
+- [ ] Readiness pre-endpoints
+- [ ] Liveness restarts unhealthy
+- [ ] Reqs/limits prevent OOM + overcommit
+- [ ] Secrets/ConfigMaps mounted
+- [ ] Svcs DNS resolve (cluster.local)
+- [ ] LB/Ingress external
+- [ ] HPA scales up/down
+- [ ] Rolling zero-downtime
+- [ ] Logs → kubectl or centralized
 
-## Common Pitfalls
+## Traps
 
-- **Missing readiness probes**: Pods receive traffic before fully started. Always implement readiness probes that verify application dependencies.
+- **No readiness**: Traffic before ready. Always readiness probes verify deps.
+- **Insufficient startup**: Fast liveness kills slow apps. Use startupProbe w/ high failureThreshold.
+- **No resource limits**: Unlimited CPU/mem → node instability. Always set reqs + limits.
+- **Hardcoded config**: Env-specific in manifests → no reuse. ConfigMaps, Secrets, Helm values.
+- **Default SA**: Unnecessary perms. Dedicated SA + minimal RBAC.
+- **No rolling strategy**: Recreate all → downtime. RollingUpdate + maxUnavailable: 0.
+- **Secrets in VCS**: Sensitive → Git. Sealed-secrets, external-secrets-operator, or vault.
+- **No PDB**: Cluster maint drains → break. PodDisruptionBudget → min available.
 
-- **Insufficient startup time**: Fast liveness probes kill slow-starting apps. Use startupProbe with generous failureThreshold for initialization.
+## →
 
-- **No resource limits**: Pods consume unlimited CPU/memory causing node instability. Always set requests and limits.
-
-- **Hardcoded configuration**: Environment-specific values in manifests prevent reuse. Use ConfigMaps, Secrets, and Helm values.
-
-- **Default service account**: Pods have unnecessary cluster permissions. Create dedicated ServiceAccounts with minimal RBAC.
-
-- **No rolling update strategy**: Deployments recreate all Pods simultaneously causing downtime. Use RollingUpdate with maxUnavailable: 0.
-
-- **Secrets in version control**: Sensitive data committed to Git. Use sealed-secrets, external-secrets-operator, or vault.
-
-- **No pod disruption budget**: Cluster maintenance drains nodes and breaks service. Create PodDisruptionBudget to ensure minimum available replicas.
-
-## Related Skills
-
-- `setup-docker-compose` - Container orchestration fundamentals before Kubernetes
-- `containerize-mcp-server` - Creating container images for deployment
-- `write-helm-chart` - Advanced Helm chart development
-- `manage-kubernetes-secrets` - SealedSecrets and external-secrets-operator
-- `configure-ingress-networking` - NGINX Ingress and cert-manager setup
-- `implement-gitops-workflow` - ArgoCD/Flux for declarative deployments
-- `setup-container-registry` - Image registry integration
+- `setup-docker-compose` — container fundamentals pre-K8s
+- `containerize-mcp-server` — images for deploy
+- `write-helm-chart` — advanced Helm
+- `manage-kubernetes-secrets` — SealedSecrets + external-secrets-operator
+- `configure-ingress-networking` — NGINX Ingress + cert-manager
+- `implement-gitops-workflow` — ArgoCD/Flux declarative
+- `setup-container-registry` — registry integration

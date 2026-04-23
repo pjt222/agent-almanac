@@ -23,38 +23,38 @@ metadata:
   tags: slo, sli, sla, error-budget, burn-rate
 ---
 
-# Define SLO/SLI/SLA
+# 定 SLO/SLI/SLA
 
-Establish measurable reliability targets with Service Level Objectives, track them with indicators, and manage error budgets.
+以 SLO 立可測之信賴標的，以 SLI 察之，以錯額管之。
 
-## When to Use
+## 用時
 
-- Defining reliability targets for customer-facing services or APIs
-- Establishing clear expectations between service providers and consumers
-- Balancing feature velocity with system reliability through error budgets
-- Creating objective criteria for incident severity and response
-- Migrating from arbitrary uptime goals to data-driven reliability metrics
-- Implementing Site Reliability Engineering (SRE) practices
-- Measuring and improving service quality over time
+- 為面客之服或 API 定信賴標的
+- 立供者與用者之明約
+- 以錯額衡新功之速與系統之穩
+- 為事故輕重立客觀之則
+- 由妄定之在線標的移至據數之信賴量度
+- 行 SRE 之道
+- 久而量之，改服之質
 
-## Inputs
+## 入
 
-- **Required**: Service description and critical user journeys
-- **Required**: Historical metrics data (request rates, latencies, error rates)
-- **Optional**: Existing SLA commitments to customers
-- **Optional**: Business requirements for service availability and performance
-- **Optional**: Incident history and customer impact data
+- **必要**：服之述與關鍵用者歷程
+- **必要**：往昔量度（請求率、延時、錯率）
+- **可選**：已許客之 SLA
+- **可選**：業之可用與性能所求
+- **可選**：事故史與客受影之數
 
-## Procedure
+## 法
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 詳見 [Extended Examples](references/EXAMPLES.md) 全備之配置模板。
 
 
-### Step 1: Understand SLI, SLO, and SLA Hierarchy
+### 第一步：明 SLI、SLO、SLA 之次第
 
-Learn the relationship and differences between these three concepts.
+察此三者之別與所連。
 
-**Definitions**:
+**義**：
 
 ```markdown
 SLI (Service Level Indicator)
@@ -73,7 +73,7 @@ SLA (Service Level Agreement)
 - **Purpose**: External promise to customers with penalties
 ```
 
-**Hierarchy**:
+**次第**：
 ```
 SLA (99.9% uptime, customer refunds)
   ├─ SLO (99.95% success rate, internal target)
@@ -81,27 +81,27 @@ SLA (99.9% uptime, customer refunds)
   └─ Error Budget (0.05% failures allowed per month)
 ```
 
-**Key principle**: SLO should be **stricter** than SLA to provide buffer before customer impact.
+**要**：SLO 宜**嚴於** SLA，以作客受影之前之緩衝。
 
-Example:
-- **SLA**: 99.9% availability (customer promise)
-- **SLO**: 99.95% availability (internal target)
-- **Buffer**: 0.05% cushion before SLA breach
+舉例：
+- **SLA**：99.9% 可用（許客者）
+- **SLO**：99.95% 可用（內標）
+- **緩衝**：0.05% 至 SLA 破之前
 
-**Expected:** Team understands differences, agreement on which metrics become SLIs, alignment on SLO targets.
+**得：** 組員明其別，約哪些度為 SLI，同定 SLO 之標。
 
-**On failure:**
-- Review Google SRE book chapters on SLI/SLO/SLA
-- Conduct workshop with stakeholders to align on definitions
-- Start with simple success-rate SLI before complex latency SLOs
+**敗則：**
+- 重讀 Google SRE 書論 SLI/SLO/SLA 之章
+- 集關者開會以同其義
+- 由簡之成功率 SLI 始，延時 SLO 後議
 
-### Step 2: Select Appropriate SLIs
+### 第二步：擇適之 SLI
 
-Choose SLIs that reflect user experience and business impact.
+擇反映用者體驗與業之衝擊者。
 
-**The Four Golden Signals** (Google SRE):
+**四黃金信號**（Google SRE）：
 
-1. **Latency**: Time to serve a request
+1. **延時**：服一請求所費之時
    ```promql
    # P95 latency
    histogram_quantile(0.95,
@@ -109,26 +109,26 @@ Choose SLIs that reflect user experience and business impact.
    )
    ```
 
-2. **Traffic**: Demand on the system
+2. **流量**：系統所受之需
    ```promql
    # Requests per second
    sum(rate(http_requests_total[5m]))
    ```
 
-3. **Errors**: Rate of failed requests
+3. **錯**：敗之率
    ```promql
    # Error rate percentage
    sum(rate(http_requests_total{status=~"5.."}[5m]))
    / sum(rate(http_requests_total[5m])) * 100
    ```
 
-4. **Saturation**: How "full" the system is
+4. **飽和**：系統已盈幾何
    ```promql
    # CPU saturation
    avg(rate(node_cpu_seconds_total{mode!="idle"}[5m]))
    ```
 
-**Common SLI patterns**:
+**常見 SLI 模式**：
 
 ```yaml
 # Availability SLI
@@ -163,31 +163,31 @@ freshness:
   good_threshold: 1  # Always fresh
 ```
 
-**SLI selection criteria**:
-- **User-visible**: Reflects actual user experience
-- **Measurable**: Can be quantified from existing metrics
-- **Actionable**: Team can improve it through engineering work
-- **Meaningful**: Correlates with customer satisfaction
-- **Simple**: Easy to understand and explain
+**SLI 擇之則**：
+- **用者可見**：反映真實體驗
+- **可量**：可由既有度計之
+- **可為**：團隊可以工程之力改之
+- **有意**：與客戶滿意相關
+- **簡單**：易懂易釋
 
-Avoid:
-- Internal system metrics not visible to users (CPU, memory)
-- Vanity metrics that don't predict customer impact
-- Overly complex composite scores
+宜避者：
+- 用者不見之內部度（CPU、內存）
+- 虛榮之度，不預示客受影者
+- 過繁之複合分
 
-**Expected:** 2-4 SLIs selected per service, covering availability and latency at minimum, team agreement on measurement queries.
+**得：** 每服擇 2-4 SLI，最少含可用與延時；團隊同意其度查語。
 
-**On failure:**
-- Map user journey to identify critical failure points
-- Analyze incident history: which metrics predicted customer impact?
-- Validate SLI with A/B test: degrade metric, measure customer complaints
-- Start with simple availability SLI, add complexity iteratively
+**敗則：**
+- 繪用者歷程以識關鍵敗點
+- 析事故史：何度預示客受影？
+- 以 A/B 驗 SLI：劣其度，量客之怨
+- 由簡之可用 SLI 始，漸加繁
 
-### Step 3: Set SLO Targets and Time Windows
+### 第三步：立 SLO 標與時窗
 
-Define realistic and achievable reliability targets.
+定實際可達之信賴標。
 
-**SLO specification format**:
+**SLO 規格式**：
 
 ```yaml
 service: user-api
@@ -199,14 +199,14 @@ slos:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Time window selection**:
+**擇時窗**：
 
-Common windows:
-- **30 days** (monthly): Typical for external SLAs
-- **7 days** (weekly): Faster feedback for engineering teams
-- **1 day** (daily): High-frequency services requiring rapid response
+常見者：
+- **三十日**（月）：典外部 SLA
+- **七日**（週）：工程團之速反饋
+- **一日**（日）：高頻服需速應
 
-Example 30-day window error budget:
+三十日窗錯額例：
 ```
 SLO: 99.9% availability over 30 days
 Allowed failures: 0.1%
@@ -215,9 +215,9 @@ Error budget: 100,000 failed requests
 Daily budget: ~3,333 failed requests
 ```
 
-**Setting realistic targets**:
+**立實際之標**：
 
-1. **Baseline current performance**:
+1. **基於當前之表現**：
    ```promql
    # Check actual availability over past 90 days
    avg_over_time(
@@ -227,7 +227,7 @@ Daily budget: ~3,333 failed requests
    # Result: 99.95% → Set SLO at 99.9% (safer than current)
    ```
 
-2. **Calculate cost of nines**:
+2. **算九之價**：
    ```
    99%    → 7.2 hours downtime/month (low reliability)
    99.9%  → 43 minutes downtime/month (good)
@@ -236,24 +236,24 @@ Daily budget: ~3,333 failed requests
    99.999% → 26 seconds downtime/month (very expensive)
    ```
 
-3. **Balance user happiness vs engineering cost**:
-   - Too strict: Expensive, slows feature development
-   - Too loose: Poor user experience, customer churn
-   - **Sweet spot**: Slightly better than user expectations
+3. **衡用者之樂與工程之費**：
+   - 過嚴：費大，緩新功
+   - 過鬆：用者體驗劣，客散
+   - **甘處**：略優於用者之期
 
-**Expected:** SLO targets set with business stakeholder buy-in, documented with rationale, error budget calculated.
+**得：** SLO 標經業關者同意而立，有由有據，錯額已算。
 
-**On failure:**
-- Start with achievable target (e.g., 99% if current is 98.5%)
-- Iterate SLO targets quarterly based on actual performance
-- Get executive sponsorship for realistic targets vs "five nines" demands
-- Document cost-benefit analysis for each additional nine
+**敗則：**
+- 由可達之標始（如當前 98.5%，定 99%）
+- 依實際表現每季調 SLO
+- 求高層支持實際之標，非「五九」之妄求
+- 記每加一九之成本效益析
 
-### Step 4: Implement SLO Monitoring with Sloth
+### 第四步：以 Sloth 行 SLO 監
 
-Use Sloth to generate Prometheus recording rules and alerts from SLO specs.
+以 Sloth 由 SLO 規生 Prometheus 記錄律與警。
 
-**Install Sloth**:
+**裝 Sloth**：
 
 ```bash
 # Binary installation
@@ -265,7 +265,7 @@ sudo mv sloth-linux-amd64 /usr/local/bin/sloth
 docker pull ghcr.io/slok/sloth:latest
 ```
 
-**Create Sloth SLO specification** (`slos/user-api.yml`):
+**建 Sloth SLO 規**（`slos/user-api.yml`）：
 
 ```yaml
 version: "prometheus/v1"
@@ -277,7 +277,7 @@ slos:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Generate Prometheus rules**:
+**生 Prometheus 律**：
 
 ```bash
 # Generate recording and alerting rules
@@ -287,7 +287,7 @@ sloth generate -i slos/user-api.yml -o prometheus/rules/user-api-slo.yml
 promtool check rules prometheus/rules/user-api-slo.yml
 ```
 
-**Generated recording rules** (excerpt):
+**所生之記錄律**（節錄）：
 
 ```yaml
 groups:
@@ -299,7 +299,7 @@ groups:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Generated alerts**:
+**所生之警**：
 
 ```yaml
 groups:
@@ -311,7 +311,7 @@ groups:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Load rules into Prometheus**:
+**載律入 Prometheus**：
 
 ```yaml
 # prometheus.yml
@@ -319,25 +319,25 @@ rule_files:
   - "rules/user-api-slo.yml"
 ```
 
-Reload Prometheus:
+重載 Prometheus：
 ```bash
 curl -X POST http://localhost:9090/-/reload
 ```
 
-**Expected:** Sloth generates multi-window multi-burn-rate alerts, recording rules evaluate successfully, alerts fire appropriately during incidents.
+**得：** Sloth 生多窗多燒率警，記錄律成評，事故時警適發。
 
-**On failure:**
-- Validate YAML syntax with `yamllint slos/user-api.yml`
-- Check Sloth version compatibility (v0.11+ recommended)
-- Verify Prometheus recording rule evaluation: `curl http://localhost:9090/api/v1/rules`
-- Test with synthetic error injection to trigger alerts
-- Check Sloth documentation for SLI event query format
+**敗則：**
+- 以 `yamllint slos/user-api.yml` 驗 YAML 法
+- 察 Sloth 版（v0.11+ 宜）
+- 驗 Prometheus 記錄律評：`curl http://localhost:9090/api/v1/rules`
+- 以人造錯注測警
+- 察 Sloth 文檔之 SLI 事件查語
 
-### Step 5: Build Error Budget Dashboards
+### 第五步：建錯額儀表盤
 
-Visualize SLO compliance and error budget consumption in Grafana.
+於 Grafana 可視化 SLO 合規與錯額耗。
 
-**Grafana dashboard JSON** (excerpt):
+**Grafana 儀表盤 JSON**（節錄）：
 
 ```json
 {
@@ -349,14 +349,14 @@ Visualize SLO compliance and error budget consumption in Grafana.
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Key metrics to visualize**:
-- SLO target vs current SLI
-- Error budget remaining (percentage and absolute)
-- Burn rate (how fast budget is depleting)
-- Historical SLI trends (30-day rolling window)
-- Time to exhaustion (if current burn rate continues)
+**宜視之要度**：
+- SLO 標與當前 SLI
+- 錯額餘（百分比與絕對）
+- 燒率（額耗之速）
+- 歷史 SLI 趨勢（三十日滾動窗）
+- 至盡之時（若當前燒率續）
 
-**Error budget policy dashboard** (markdown panel):
+**錯額政策盤**（markdown 板）：
 
 ```markdown
 ## Error Budget Policy
@@ -368,19 +368,19 @@ Visualize SLO compliance and error budget consumption in Grafana.
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Dashboards show real-time SLO compliance, error budget depletion visible, team can make informed decisions about feature velocity.
+**得：** 儀表盤示實時 SLO 合規，錯額耗可見，團隊可明斷新功之速。
 
-**On failure:**
-- Verify recording rules exist: `curl http://localhost:9090/api/v1/rules | jq '.data.groups[].rules[] | select(.name | contains("slo:"))'`
-- Check Prometheus datasource in Grafana has correct URL
-- Validate query results in Explore view before adding to dashboard
-- Ensure time range set to appropriate window (e.g., 30d for monthly SLOs)
+**敗則：**
+- 驗記錄律存：`curl http://localhost:9090/api/v1/rules | jq '.data.groups[].rules[] | select(.name | contains("slo:"))'`
+- 察 Grafana 中 Prometheus 數據源 URL 是否正
+- 於 Explore 視圖驗查果後再入儀表盤
+- 確時域合宜（如月 SLO 用 30d）
 
-### Step 6: Establish Error Budget Policy
+### 第六步：立錯額政策
 
-Define organizational process for managing error budgets.
+定組織管錯額之程。
 
-**Error budget policy template**:
+**錯額政策模板**：
 
 ```yaml
 service: user-api
@@ -392,7 +392,7 @@ slo:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Automate policy enforcement**:
+**自動執政**：
 
 ```python
 # Example: Deployment gate script
@@ -404,7 +404,7 @@ def check_error_budget(service):
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-Integrate into CI/CD pipeline:
+合入 CI/CD 流程：
 
 ```yaml
 # .github/workflows/deploy.yml
@@ -421,40 +421,40 @@ jobs:
           kubectl apply -f deploy/
 ```
 
-**Expected:** Clear policy documented, automated gates prevent risky deployments during budget depletion, team alignment on reliability priorities.
+**得：** 政策已記明，自動閘阻額耗時之險部署，團隊同其信賴之要。
 
-**On failure:**
-- Start with manual policy enforcement (Slack reminders)
-- Gradually automate with soft gates (warnings, not blocks)
-- Get executive buy-in before hard gates (blocking deployments)
-- Review policy effectiveness quarterly, adjust thresholds as needed
+**敗則：**
+- 由人工行政始（Slack 提）
+- 漸自動以軟閘（警而不阻）
+- 硬閘（阻部署）前求高層之許
+- 每季察政策之效，調閾。
 
-## Validation
+## 驗
 
-- [ ] SLIs selected reflect user experience and business impact
-- [ ] SLO targets set with stakeholder agreement and documented rationale
-- [ ] Prometheus recording rules generate SLI metrics successfully
-- [ ] Multi-burn-rate alerts configured and tested with synthetic errors
-- [ ] Grafana dashboards show real-time SLO compliance and error budget
-- [ ] Error budget policy documented and communicated to team
-- [ ] Automated gates prevent risky deployments during budget depletion
-- [ ] Weekly/monthly SLO review meetings scheduled
-- [ ] Incident retrospectives include SLO impact analysis
-- [ ] SLO compliance reports shared with stakeholders
+- [ ] SLI 所擇反映用者體驗與業之衝擊
+- [ ] SLO 標經關者同意立，有由有據
+- [ ] Prometheus 記錄律成生 SLI 度
+- [ ] 多燒率警已配且以人造錯驗
+- [ ] Grafana 儀表盤示實時 SLO 合規與錯額
+- [ ] 錯額政策已記並告團隊
+- [ ] 自動閘阻額耗時之險部署
+- [ ] 週月 SLO 察會已定
+- [ ] 事故回顧含 SLO 衝擊析
+- [ ] SLO 合規報告告關者
 
-## Common Pitfalls
+## 陷
 
-- **Overly strict SLOs**: Setting "five nines" without cost analysis leads to burnout and slowed feature velocity. Start achievable, iterate up.
-- **Too many SLIs**: Tracking 10+ indicators creates confusion. Focus on 2-4 critical user-facing metrics.
-- **SLO without SLA buffer**: Setting SLO equal to SLA leaves no margin for error before customer impact. Keep 0.05-0.1% buffer.
-- **Ignoring error budget**: Tracking SLOs but not acting on budget depletion defeats the purpose. Enforce error budget policy.
-- **Vanity metrics as SLIs**: Using internal metrics (CPU, memory) instead of user-visible metrics (latency, errors) misaligns priorities.
-- **No stakeholder buy-in**: Engineering-only SLOs without product/business agreement lead to conflicts. Get executive sponsorship.
-- **Static SLOs**: Never reviewing or adjusting targets as system evolves. Revisit quarterly based on actual performance and user feedback.
+- **過嚴之 SLO**：無費析定「五九」致疲與緩功。由可達始，漸進。
+- **SLI 過多**：察 10+ 度成惑。聚焦 2-4 關鍵面客之度。
+- **SLO 無 SLA 緩衝**：SLO 等 SLA 則客受影前無餘地。留 0.05-0.1% 緩衝。
+- **忽錯額**：察 SLO 而不作額耗之應敗其意。行錯額政策。
+- **以虛榮度為 SLI**：用內部度（CPU、內存）而非用者可見度（延時、錯）偏其要。
+- **無關者同意**：唯工程之 SLO 而無產品業之同致衝突。求高層之支持。
+- **靜止之 SLO**：系統變而從不察調標。每季依實際表現與用者回饋重議。
 
 ## Related Skills
 
-- `setup-prometheus-monitoring` - Configure Prometheus to collect metrics for SLI calculation
-- `configure-alerting-rules` - Integrate SLO burn rate alerts with Alertmanager for on-call notifications
-- `build-grafana-dashboards` - Visualize SLO compliance and error budget consumption
-- `write-incident-runbook` - Include SLO impact in runbooks for prioritizing incident response
+- `setup-prometheus-monitoring` - 配 Prometheus 以集度供 SLI 算
+- `configure-alerting-rules` - 合 SLO 燒率警入 Alertmanager 供值班告
+- `build-grafana-dashboards` - 視 SLO 合規與錯額耗
+- `write-incident-runbook` - 於運行手冊含 SLO 衝擊以定事故應之先

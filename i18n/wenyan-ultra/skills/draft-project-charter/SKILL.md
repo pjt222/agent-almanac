@@ -23,33 +23,33 @@ metadata:
   tags: project-management, charter, scope, stakeholders, raci, risk-register
 ---
 
-# Draft a Project Charter
+# 項目章程
 
-Creates a structured project charter that establishes project boundaries, stakeholder agreements, and success criteria before detailed planning begins. Produces a comprehensive document covering scope, RACI assignments, milestone planning, and an initial risk register suitable for agile, classic, or hybrid project methodologies.
+立範圍、相關者、成敗、風險。
 
-## When to Use
+## 用
 
-- Kicking off a new project or initiative
-- Formalizing scope after an informal project start
-- Aligning stakeholders before detailed planning begins
-- Creating a reference document for scope decisions during execution
-- Transitioning from discovery/ideation to active project work
+- 啟新項→用
+- 非正式起→正名→用
+- 詳劃前→齊眾→用
+- 執行中→定範→用
+- 探索畢→實作→用
 
-## Inputs
+## 入
 
-- **Required**: Project name and brief description
-- **Required**: Primary stakeholder or sponsor
-- **Optional**: Existing documentation (proposals, briefs, emails)
-- **Optional**: Known constraints (budget, deadline, team size)
-- **Optional**: Methodology preference (agile, classic, hybrid)
+- **必**：項名+簡述
+- **必**：主要相關者/發起人
+- **可**：舊文（提案、簡報、郵件）
+- **可**：已知約束（預算、期限、人數）
+- **可**：方法（agile/classic/hybrid）
 
-## Procedure
+## 法
 
-### Step 1: Gather Project Context and Create Charter Template
+### 一：聚脈絡，立模
 
-Read any existing documentation (proposals, emails, briefs) to understand the project background. Identify the core problem or opportunity the project addresses. Create the charter file with a structured template that will be populated in subsequent steps.
+讀舊文。識核心問題。建章程文件。
 
-Create a file named `PROJECT-CHARTER-[PROJECT-NAME].md` with this template:
+建 `PROJECT-CHARTER-[PROJECT-NAME].md`：
 
 ```markdown
 # Project Charter: [Project Name]
@@ -114,73 +114,73 @@ Create a file named `PROJECT-CHARTER-[PROJECT-NAME].md` with this template:
 | Project Lead | | |
 ```
 
-Fill in the document ID using format PC-[PROJECT]-[YYYY]-[NNN] (e.g., PC-WEBSITE-2026-001). Write a problem statement (2-3 sentences) that describes the current situation, the gap, and the impact. Write a project purpose statement (1 paragraph) explaining what will be achieved.
+填 ID：PC-[PROJECT]-[YYYY]-[NNN]。問題陳述 2-3 句：現況、缺口、影響。目的 1 段。
 
-**Expected:** Charter file created with document ID, problem statement, and purpose filled in. Problem statement is specific and describes a measurable gap.
+**得：** 文件成，ID、問題、目的齊。問題具體可量。
 
-**On failure:** If project context is unclear, document specific questions for the sponsor in a QUESTIONS section at the top of the charter. If existing docs conflict, note contradictions in an OPEN ISSUES section and flag for stakeholder resolution.
+**敗：** 脈絡不明→於頭置 QUESTIONS 段錄問。文件矛盾→記 OPEN ISSUES。
 
-### Step 2: Define Scope Boundaries
+### 二：定範圍
 
-Create explicit lists of what is and is not included in the project scope. Write 3-5 in-scope deliverables with specific acceptance criteria for each. Write 3-5 out-of-scope items to prevent scope creep. Populate the Deliverables table with each deliverable, its acceptance criteria, and a target date.
+列入範與出範。入範交付物 3-5，各具驗收標準。出範 3-5 防蔓延。填交付表。
 
-**Expected:** Scope section has balanced in-scope and out-of-scope lists. Deliverables table contains 3-5 entries with specific, testable acceptance criteria. Target dates are realistic and sequenced logically.
+**得：** 入出平衡。表 3-5 項，標準可驗。日期合理有序。
 
-**On failure:** If deliverables are vague, break down each into sub-deliverables with concrete outputs. If acceptance criteria are missing, ask: "How would we demonstrate this deliverable is complete?" If target dates are unavailable, mark as TBD and flag for milestone planning session.
+**敗：** 模糊→拆子項。標準缺→問「何以證畢？」。日期無→標 TBD。
 
-### Step 3: Identify Stakeholders and Assign RACI
+### 三：識相關者，派 RACI
 
-List all individuals or groups who will be affected by, contribute to, or have decision authority over the project. Include their organizational role. Create a RACI matrix mapping each stakeholder to each deliverable using:
-- **R** (Responsible): Does the work
-- **A** (Accountable): Final decision authority (only one A per deliverable)
-- **C** (Consulted): Provides input before decisions
-- **I** (Informed): Kept updated on progress
+列受影響、貢獻、決策者。含組織角色。建 RACI 矩陣：
+- **R**（Responsible）：做事
+- **A**（Accountable）：終決（一交付物僅一 A）
+- **C**（Consulted）：決前諮詢
+- **I**（Informed）：知情
 
-Ensure each deliverable has exactly one A and at least one R.
+每交付物：恰一 A，至少一 R。
 
-**Expected:** Stakeholders table lists 5-10 people with their roles. RACI matrix has one A per deliverable column. No deliverable is missing an R or has multiple As. Sponsor is A for final approval.
+**得：** 表列 5-10 人。各列一 A。無缺 R、無多 A。發起人為終批之 A。
 
-**On failure:** If stakeholder list is incomplete, cross-reference with organization chart and meeting attendees from discovery phase. If multiple As are identified, escalate the conflict to the sponsor for decision authority clarification. If no R exists, flag deliverable as unassigned and requiring resource allocation.
+**敗：** 名單缺→對組織圖+探索期會議。多 A→上報發起人。無 R→標未派，須資源。
 
-### Step 4: Define Success Criteria and Milestones
+### 四：定成敗與里程碑
 
-Write 3-5 measurable success criteria using SMART format (Specific, Measurable, Achievable, Relevant, Time-bound). Each criterion should tie to a quantifiable measure and target value. Define 4-6 key milestones representing major project stages or deliverable completions, with target dates and dependencies on prior milestones.
+3-5 SMART 標準：具體、可量、可達、相關、有期。各繫量值+目標。4-6 里程碑，有日期+依賴。
 
-**Expected:** Success Criteria table has 3-5 entries with specific measures (e.g., "System uptime" measured as "% availability" with target "99.5%"). Milestones table shows logical project phases with realistic target dates. Dependencies are clearly noted.
+**得：** 表 3-5 項，量具體（如「系統在線」量為「%可用」目標「99.5%」）。里程碑合理有序，依賴明。
 
-**On failure:** If success criteria are vague (e.g., "improve quality"), rewrite as measurable outcomes with baseline and target values. If milestone dates are unrealistic, work backward from final deadline using estimated durations and buffers. If dependencies create circular logic, restructure milestone sequence or split conflicting milestones.
+**敗：** 模糊（「提升質」）→重寫可量。日期不實→由終期反推+緩衝。循環依賴→重序或拆分。
 
-### Step 5: Create Initial Risk Register
+### 五：建風險登記
 
-Identify 5-10 risks that could impact project success. For each risk, assess likelihood (Low/Medium/High) and impact (Low/Medium/High), then calculate severity. Define a specific mitigation strategy for each risk and assign a risk owner responsible for monitoring and response. Include at least one risk in each category: scope, schedule, resource, technical, and external.
+5-10 風險。各評可能（低/中/高）+影響（低/中/高）→嚴重度。定具體緩解+派所有者。至少各一：範圍、進度、資源、技術、外部。
 
-**Expected:** Risk Register has 5-10 entries covering scope, schedule, resource, technical, and external risks. Each risk has likelihood, impact, and severity assessed. Mitigation strategies are actionable and specific. Each risk has an assigned owner.
+**得：** 5-10 項涵五類。各具可能、影響、嚴重度。緩解可行具體。各有主。
 
-**On failure:** If risk list is incomplete, review scope boundaries, dependencies, stakeholder list, and assumptions for potential failure points. If mitigation strategies are generic ("monitor closely"), specify: What will be monitored? How often? What triggers action? If no one accepts risk ownership, assign to project lead temporarily and escalate to sponsor.
+**敗：** 缺→察範圍、依賴、相關者、假設尋失敗點。緩解泛（「密切監控」）→問「何→監？幾何時→監？何觸發？」。無人認領→暫派項目主，上報發起人。
 
-## Validation
+## 驗
 
-- [ ] Charter file created with document ID
-- [ ] Problem statement is specific and measurable
-- [ ] Scope has both in-scope and out-of-scope items
-- [ ] RACI matrix covers all deliverables
-- [ ] Success criteria are measurable (SMART)
-- [ ] At least 5 risks identified with mitigation strategies
-- [ ] Milestones have target dates
-- [ ] Approval section included
+- [ ] 章程文件建，具 ID
+- [ ] 問題具體可量
+- [ ] 範圍含入與出
+- [ ] RACI 覆所有交付物
+- [ ] 成敗可量（SMART）
+- [ ] 至少 5 風險+緩解
+- [ ] 里程碑有日期
+- [ ] 含批准段
 
-## Common Pitfalls
+## 忌
 
-- **Scope without boundaries**: Listing in-scope items without explicit out-of-scope items leads to scope creep. Always define what you won't do.
-- **Vague success criteria**: "Improve performance" is unmeasurable. Tie every criterion to a number with a baseline and target.
-- **Missing stakeholders**: Overlooked stakeholders surface late and derail the project. Cross-reference org charts and prior project communications.
-- **Risk register as checkbox**: Listing risks without actionable mitigation plans provides false confidence. Each risk needs a specific response strategy.
-- **Over-detailed charter**: The charter is a compass, not a map. Keep it to 2-4 pages. Detailed planning happens later.
+- **範圍無界**：只列入→蔓延。必定不為者。
+- **成敗模糊**：「提升性能」不可量。每標繫數+基線+目標。
+- **漏相關者**：晚現→翻局。查組織圖+舊通訊。
+- **風險作打勾**：無緩解計→假信心。每險需具體應對。
+- **章程過詳**：章程為羅盤非地圖。限 2-4 頁。詳劃後辦。
 
-## Related Skills
+## 參
 
-- `create-work-breakdown-structure` — decompose charter deliverables into work packages
-- `manage-backlog` — translate charter scope into a prioritized backlog
-- `plan-sprint` — plan the first sprint from charter deliverables
-- `generate-status-report` — report progress against charter milestones
-- `conduct-retrospective` — review charter assumptions after execution
+- `create-work-breakdown-structure`
+- `manage-backlog`
+- `plan-sprint`
+- `generate-status-report`
+- `conduct-retrospective`

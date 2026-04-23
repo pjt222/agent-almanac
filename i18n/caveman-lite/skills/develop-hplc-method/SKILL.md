@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-23"
 description: >
   Develop a high-performance liquid chromatography method: define separation goals,
   select column chemistry and mobile phase, optimize gradient and flow conditions,
@@ -62,9 +62,9 @@ Systematic development of a high-performance liquid chromatography method coveri
 4. Determine whether the method is for assay, impurity profiling, dissolution, content uniformity, or cleaning verification -- this drives the validation category.
 5. Decide between isocratic and gradient elution: use isocratic if all analytes elute within a retention factor range of 2 < k' < 10; otherwise use gradient.
 
-**Expected:** A specification document listing analytes with physicochemical properties, matrix description, performance criteria, and isocratic vs. gradient decision.
+**Got:** A specification document listing analytes with physicochemical properties, matrix description, performance criteria, and isocratic vs. gradient decision.
 
-**On failure:** If pKa or logP values are unknown, estimate from structure using prediction tools (ChemAxon, ACD/Labs) or run a scouting gradient on a C18 column at pH 3 and pH 7 to empirically assess retention behavior.
+**If fail:** If pKa or logP values are unknown, estimate from structure using prediction tools (ChemAxon, ACD/Labs) or run a scouting gradient on a C18 column at pH 3 and pH 7 to empirically assess retention behavior.
 
 ### Step 2: Select Column Chemistry
 
@@ -86,9 +86,9 @@ Choose the chromatographic mode and column based on analyte properties.
 4. Select column dimensions: 50-150 mm length, 2.1-4.6 mm ID. Narrower columns save solvent and improve MS sensitivity.
 5. For chiral separations, screen at least 3-4 chiral stationary phases with different selectors.
 
-**Expected:** Column chemistry, dimensions, and particle size selected with justification based on analyte properties.
+**Got:** Column chemistry, dimensions, and particle size selected with justification based on analyte properties.
 
-**On failure:** If initial scouting shows poor retention on C18, switch to a more retentive phase (phenyl-hexyl for aromatics) or a different mode (HILIC for polar compounds).
+**If fail:** If initial scouting shows poor retention on C18, switch to a more retentive phase (phenyl-hexyl for aromatics) or a different mode (HILIC for polar compounds).
 
 ### Step 3: Design Mobile Phase and Gradient
 
@@ -109,9 +109,9 @@ Choose the chromatographic mode and column based on analyte properties.
 4. Include a column wash step (95% organic, 2-3 min) and re-equilibration (initial conditions, 5-10 column volumes).
 5. For isocratic methods, target k' = 3-8 for the analytes of interest.
 
-**Expected:** Mobile phase composition (organic, aqueous, buffer/additive, pH) and gradient profile defined, with a scouting run confirming analyte elution within the programmed window.
+**Got:** Mobile phase composition (organic, aqueous, buffer/additive, pH) and gradient profile defined, with a scouting run confirming analyte elution within the programmed window.
 
-**On failure:** If selectivity is poor (analytes co-elute despite gradient optimization), change the organic modifier (ACN to MeOH or vice versa), adjust pH by 2 units, or add an ion-pair reagent for charged analytes.
+**If fail:** If selectivity is poor (analytes co-elute despite gradient optimization), change the organic modifier (ACN to MeOH or vice versa), adjust pH by 2 units, or add an ion-pair reagent for charged analytes.
 
 ### Step 4: Optimize Flow Rate and Temperature
 
@@ -127,9 +127,9 @@ Choose the chromatographic mode and column based on analyte properties.
 4. Evaluate the effect of flow rate on resolution: small increases in flow can improve throughput without significant resolution loss if operating near the van Deemter minimum.
 5. Document the optimal flow rate, column temperature, and resulting backpressure.
 
-**Expected:** Flow rate and column temperature optimized with backpressure within limits, resolution maintained or improved relative to initial conditions.
+**Got:** Flow rate and column temperature optimized with backpressure within limits, resolution maintained or improved relative to initial conditions.
 
-**On failure:** If backpressure is too high, reduce flow rate, increase temperature, or switch to a wider-bore or larger-particle column. If resolution degrades at higher temperature, return to 30 C and accept the longer run time.
+**If fail:** If backpressure is too high, reduce flow rate, increase temperature, or switch to a wider-bore or larger-particle column. If resolution degrades at higher temperature, return to 30 C and accept the longer run time.
 
 ### Step 5: Select the Detector
 
@@ -150,9 +150,9 @@ Choose the chromatographic mode and column based on analyte properties.
 5. For fluorescence, optimize excitation and emission wavelengths using a spectral scan of the analyte.
 6. Ensure mobile phase additives are compatible: no phosphate buffers with MS, no UV-absorbing additives at low wavelengths.
 
-**Expected:** Detector selected and configured (wavelength, gain, acquisition rate) appropriate for analyte chemistry and sensitivity requirements.
+**Got:** Detector selected and configured (wavelength, gain, acquisition rate) appropriate for analyte chemistry and sensitivity requirements.
 
-**On failure:** If UV sensitivity is insufficient at the required LOQ, consider fluorescence derivatization (e.g., OPA for amines, FMOC for amino acids) or switch to LC-MS/MS for maximum sensitivity and selectivity.
+**If fail:** If UV sensitivity is insufficient at the required LOQ, consider fluorescence derivatization (e.g., OPA for amines, FMOC for amino acids) or switch to LC-MS/MS for maximum sensitivity and selectivity.
 
 ### Step 6: Evaluate and Refine
 
@@ -170,9 +170,9 @@ Choose the chromatographic mode and column based on analyte properties.
    - Sensitivity: increase injection volume, concentrate the sample, or switch detector
 5. Lock the final method parameters and document all conditions.
 
-**Expected:** All system suitability criteria met; method resolves target analytes from matrix interferents and known degradation products; parameters documented for transfer.
+**Got:** All system suitability criteria met; method resolves target analytes from matrix interferents and known degradation products; parameters documented for transfer.
 
-**On failure:** If iterative adjustment does not resolve the issue, consider a fundamentally different approach (change chromatographic mode, 2D-LC, or derivatization) and return to Step 2.
+**If fail:** If iterative adjustment does not resolve the issue, consider a fundamentally different approach (change chromatographic mode, 2D-LC, or derivatization) and return to Step 2.
 
 ## Validation
 
@@ -186,7 +186,7 @@ Choose the chromatographic mode and column based on analyte properties.
 - [ ] Mobile phase compatible with selected detector
 - [ ] Method parameters fully documented (column, mobile phase, gradient, flow, temperature, detector)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Ignoring mobile phase pH for ionizable analytes**: Running at a pH near the analyte's pKa causes split peaks or poor reproducibility because the compound exists in two ionic forms. Buffer at least 2 pH units away from pKa.
 - **Using phosphate buffers with MS detection**: Phosphate is non-volatile and contaminates the MS source. Use formate or acetate buffers for LC-MS work.

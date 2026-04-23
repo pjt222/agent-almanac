@@ -25,17 +25,17 @@ metadata:
 
 # Define SLO/SLI/SLA
 
-Establish measurable reliability targets with Service Level Objectives, track them with indicators, and manage error budgets.
+Set measurable reliability targets with Service Level Objectives, track with indicators, manage error budgets.
 
-## When to Use
+## When Use
 
-- Defining reliability targets for customer-facing services or APIs
-- Establishing clear expectations between service providers and consumers
-- Balancing feature velocity with system reliability through error budgets
-- Creating objective criteria for incident severity and response
-- Migrating from arbitrary uptime goals to data-driven reliability metrics
-- Implementing Site Reliability Engineering (SRE) practices
-- Measuring and improving service quality over time
+- Define reliability targets for customer-facing services or APIs
+- Set clear expectations between service providers and consumers
+- Balance feature velocity with system reliability through error budgets
+- Create objective criteria for incident severity and response
+- Migrate from arbitrary uptime goals to data-driven reliability metrics
+- Implement Site Reliability Engineering (SRE) practices
+- Measure and improve service quality over time
 
 ## Inputs
 
@@ -45,14 +45,14 @@ Establish measurable reliability targets with Service Level Objectives, track th
 - **Optional**: Business requirements for service availability and performance
 - **Optional**: Incident history and customer impact data
 
-## Procedure
+## Steps
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
 
-### Step 1: Understand SLI, SLO, and SLA Hierarchy
+### Step 1: Grok SLI, SLO, SLA Hierarchy
 
-Learn the relationship and differences between these three concepts.
+Learn relationship and differences between three concepts.
 
 **Definitions**:
 
@@ -81,27 +81,27 @@ SLA (99.9% uptime, customer refunds)
   └─ Error Budget (0.05% failures allowed per month)
 ```
 
-**Key principle**: SLO should be **stricter** than SLA to provide buffer before customer impact.
+**Key rule**: SLO must be **stricter** than SLA. Gives buffer before customer impact.
 
 Example:
 - **SLA**: 99.9% availability (customer promise)
 - **SLO**: 99.95% availability (internal target)
 - **Buffer**: 0.05% cushion before SLA breach
 
-**Expected:** Team understands differences, agreement on which metrics become SLIs, alignment on SLO targets.
+**Got:** Team groks differences. Agreement on which metrics become SLIs. Alignment on SLO targets.
 
-**On failure:**
+**If fail:**
 - Review Google SRE book chapters on SLI/SLO/SLA
-- Conduct workshop with stakeholders to align on definitions
+- Run workshop with stakeholders to align on definitions
 - Start with simple success-rate SLI before complex latency SLOs
 
-### Step 2: Select Appropriate SLIs
+### Step 2: Pick SLIs
 
-Choose SLIs that reflect user experience and business impact.
+Pick SLIs reflecting user experience and business impact.
 
-**The Four Golden Signals** (Google SRE):
+**Four Golden Signals** (Google SRE):
 
-1. **Latency**: Time to serve a request
+1. **Latency**: Time to serve request
    ```promql
    # P95 latency
    histogram_quantile(0.95,
@@ -109,7 +109,7 @@ Choose SLIs that reflect user experience and business impact.
    )
    ```
 
-2. **Traffic**: Demand on the system
+2. **Traffic**: Demand on system
    ```promql
    # Requests per second
    sum(rate(http_requests_total[5m]))
@@ -122,7 +122,7 @@ Choose SLIs that reflect user experience and business impact.
    / sum(rate(http_requests_total[5m])) * 100
    ```
 
-4. **Saturation**: How "full" the system is
+4. **Saturation**: How "full" system is
    ```promql
    # CPU saturation
    avg(rate(node_cpu_seconds_total{mode!="idle"}[5m]))
@@ -163,31 +163,31 @@ freshness:
   good_threshold: 1  # Always fresh
 ```
 
-**SLI selection criteria**:
+**SLI pick criteria**:
 - **User-visible**: Reflects actual user experience
-- **Measurable**: Can be quantified from existing metrics
-- **Actionable**: Team can improve it through engineering work
+- **Measurable**: Quantifiable from existing metrics
+- **Actionable**: Team improves through engineering work
 - **Meaningful**: Correlates with customer satisfaction
-- **Simple**: Easy to understand and explain
+- **Simple**: Easy to grok and explain
 
 Avoid:
 - Internal system metrics not visible to users (CPU, memory)
-- Vanity metrics that don't predict customer impact
+- Vanity metrics not predicting customer impact
 - Overly complex composite scores
 
-**Expected:** 2-4 SLIs selected per service, covering availability and latency at minimum, team agreement on measurement queries.
+**Got:** 2-4 SLIs picked per service. Covers availability and latency at minimum. Team agreement on measurement queries.
 
-**On failure:**
-- Map user journey to identify critical failure points
-- Analyze incident history: which metrics predicted customer impact?
-- Validate SLI with A/B test: degrade metric, measure customer complaints
-- Start with simple availability SLI, add complexity iteratively
+**If fail:**
+- Map user journey. Find critical failure points
+- Analyze incident history. Which metrics predicted customer impact?
+- Validate SLI with A/B test. Degrade metric, measure customer complaints
+- Start with simple availability SLI. Add complexity iteratively
 
 ### Step 3: Set SLO Targets and Time Windows
 
-Define realistic and achievable reliability targets.
+Define realistic, achievable reliability targets.
 
-**SLO specification format**:
+**SLO spec format**:
 
 ```yaml
 service: user-api
@@ -204,7 +204,7 @@ slos:
 Common windows:
 - **30 days** (monthly): Typical for external SLAs
 - **7 days** (weekly): Faster feedback for engineering teams
-- **1 day** (daily): High-frequency services requiring rapid response
+- **1 day** (daily): High-frequency services needing rapid response
 
 Example 30-day window error budget:
 ```
@@ -237,19 +237,19 @@ Daily budget: ~3,333 failed requests
    ```
 
 3. **Balance user happiness vs engineering cost**:
-   - Too strict: Expensive, slows feature development
-   - Too loose: Poor user experience, customer churn
+   - Too strict: Expensive. Slows feature development
+   - Too loose: Poor user experience. Customer churn
    - **Sweet spot**: Slightly better than user expectations
 
-**Expected:** SLO targets set with business stakeholder buy-in, documented with rationale, error budget calculated.
+**Got:** SLO targets set with business stakeholder buy-in. Documented with rationale. Error budget calculated.
 
-**On failure:**
+**If fail:**
 - Start with achievable target (e.g., 99% if current is 98.5%)
 - Iterate SLO targets quarterly based on actual performance
 - Get executive sponsorship for realistic targets vs "five nines" demands
 - Document cost-benefit analysis for each additional nine
 
-### Step 4: Implement SLO Monitoring with Sloth
+### Step 4: Do SLO Monitoring with Sloth
 
 Use Sloth to generate Prometheus recording rules and alerts from SLO specs.
 
@@ -265,7 +265,7 @@ sudo mv sloth-linux-amd64 /usr/local/bin/sloth
 docker pull ghcr.io/slok/sloth:latest
 ```
 
-**Create Sloth SLO specification** (`slos/user-api.yml`):
+**Create Sloth SLO spec** (`slos/user-api.yml`):
 
 ```yaml
 version: "prometheus/v1"
@@ -324,14 +324,14 @@ Reload Prometheus:
 curl -X POST http://localhost:9090/-/reload
 ```
 
-**Expected:** Sloth generates multi-window multi-burn-rate alerts, recording rules evaluate successfully, alerts fire appropriately during incidents.
+**Got:** Sloth generates multi-window multi-burn-rate alerts. Recording rules evaluate successfully. Alerts fire during incidents.
 
-**On failure:**
+**If fail:**
 - Validate YAML syntax with `yamllint slos/user-api.yml`
 - Check Sloth version compatibility (v0.11+ recommended)
 - Verify Prometheus recording rule evaluation: `curl http://localhost:9090/api/v1/rules`
 - Test with synthetic error injection to trigger alerts
-- Check Sloth documentation for SLI event query format
+- Check Sloth docs for SLI event query format
 
 ### Step 5: Build Error Budget Dashboards
 
@@ -352,7 +352,7 @@ Visualize SLO compliance and error budget consumption in Grafana.
 **Key metrics to visualize**:
 - SLO target vs current SLI
 - Error budget remaining (percentage and absolute)
-- Burn rate (how fast budget is depleting)
+- Burn rate (how fast budget depletes)
 - Historical SLI trends (30-day rolling window)
 - Time to exhaustion (if current burn rate continues)
 
@@ -368,17 +368,17 @@ Visualize SLO compliance and error budget consumption in Grafana.
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Dashboards show real-time SLO compliance, error budget depletion visible, team can make informed decisions about feature velocity.
+**Got:** Dashboards show real-time SLO compliance. Error budget depletion visible. Team makes informed decisions about feature velocity.
 
-**On failure:**
+**If fail:**
 - Verify recording rules exist: `curl http://localhost:9090/api/v1/rules | jq '.data.groups[].rules[] | select(.name | contains("slo:"))'`
 - Check Prometheus datasource in Grafana has correct URL
 - Validate query results in Explore view before adding to dashboard
-- Ensure time range set to appropriate window (e.g., 30d for monthly SLOs)
+- Set time range to appropriate window (e.g., 30d for monthly SLOs)
 
-### Step 6: Establish Error Budget Policy
+### Step 6: Set Error Budget Policy
 
-Define organizational process for managing error budgets.
+Define org process for managing error budgets.
 
 **Error budget policy template**:
 
@@ -421,17 +421,17 @@ jobs:
           kubectl apply -f deploy/
 ```
 
-**Expected:** Clear policy documented, automated gates prevent risky deployments during budget depletion, team alignment on reliability priorities.
+**Got:** Clear policy documented. Automated gates prevent risky deployments during budget depletion. Team aligned on reliability priorities.
 
-**On failure:**
+**If fail:**
 - Start with manual policy enforcement (Slack reminders)
 - Gradually automate with soft gates (warnings, not blocks)
 - Get executive buy-in before hard gates (blocking deployments)
 - Review policy effectiveness quarterly, adjust thresholds as needed
 
-## Validation
+## Checks
 
-- [ ] SLIs selected reflect user experience and business impact
+- [ ] SLIs picked reflect user experience and business impact
 - [ ] SLO targets set with stakeholder agreement and documented rationale
 - [ ] Prometheus recording rules generate SLI metrics successfully
 - [ ] Multi-burn-rate alerts configured and tested with synthetic errors
@@ -442,17 +442,17 @@ jobs:
 - [ ] Incident retrospectives include SLO impact analysis
 - [ ] SLO compliance reports shared with stakeholders
 
-## Common Pitfalls
+## Pitfalls
 
-- **Overly strict SLOs**: Setting "five nines" without cost analysis leads to burnout and slowed feature velocity. Start achievable, iterate up.
+- **Overly strict SLOs**: "Five nines" without cost analysis leads to burnout and slowed feature velocity. Start achievable, iterate up.
 - **Too many SLIs**: Tracking 10+ indicators creates confusion. Focus on 2-4 critical user-facing metrics.
-- **SLO without SLA buffer**: Setting SLO equal to SLA leaves no margin for error before customer impact. Keep 0.05-0.1% buffer.
-- **Ignoring error budget**: Tracking SLOs but not acting on budget depletion defeats the purpose. Enforce error budget policy.
-- **Vanity metrics as SLIs**: Using internal metrics (CPU, memory) instead of user-visible metrics (latency, errors) misaligns priorities.
-- **No stakeholder buy-in**: Engineering-only SLOs without product/business agreement lead to conflicts. Get executive sponsorship.
+- **SLO without SLA buffer**: SLO equal to SLA leaves no margin before customer impact. Keep 0.05-0.1% buffer.
+- **Ignoring error budget**: Tracking SLOs but not acting on budget depletion defeats purpose. Enforce error budget policy.
+- **Vanity metrics as SLIs**: Internal metrics (CPU, memory) instead of user-visible metrics (latency, errors) misaligns priorities.
+- **No stakeholder buy-in**: Engineering-only SLOs without product/business agreement leads to conflicts. Get executive sponsorship.
 - **Static SLOs**: Never reviewing or adjusting targets as system evolves. Revisit quarterly based on actual performance and user feedback.
 
-## Related Skills
+## See Also
 
 - `setup-prometheus-monitoring` - Configure Prometheus to collect metrics for SLI calculation
 - `configure-alerting-rules` - Integrate SLO burn rate alerts with Alertmanager for on-call notifications
