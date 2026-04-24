@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate jigsaw puzzles via generate_puzzle() or geom_puzzle_*() with
   parameter validation against inst/config.yml. Supports rectangular,
@@ -24,45 +24,45 @@ metadata:
   tags: jigsawr, puzzle, svg, generation, ggplot2
 ---
 
-# Generate Puzzle
+# 生拼圖
 
-Generate jigsaw puzzles using the jigsawR package's unified API.
+用 jigsawR 包之統一 API 生拼圖。
 
-## When to Use
+## 用
 
-- Creating puzzle SVG files for a specific type and configuration
-- Testing puzzle generation with different parameters
-- Generating sample output for documentation or demos
-- Creating ggplot2 puzzle visualizations with geom_puzzle_*()
+- 某型與配置造拼圖 SVG
+- 不同參數試生
+- 生樣品供文檔或示
+- 用 geom_puzzle_*() 造 ggplot2 拼圖視覺
 
-## Inputs
+## 入
 
-- **Required**: Puzzle type (`"rectangular"`, `"hexagonal"`, `"concentric"`, `"voronoi"`, `"random"`, `"snic"`)
-- **Required**: Grid dimensions (type-dependent: `c(cols, rows)` or `c(rings)`)
-- **Optional**: Size in mm (default varies by type)
-- **Optional**: Seed for reproducibility (default: 42)
-- **Optional**: Offset (0 = interlocked, >0 = separated pieces)
-- **Optional**: Layout (`"grid"` or `"repel"` for rectangular)
-- **Optional**: Fusion groups (PILES notation string)
+- **必**：拼圖型（`"rectangular"`、`"hexagonal"`、`"concentric"`、`"voronoi"`、`"random"`、`"snic"`）
+- **必**：格維（依型：`c(cols, rows)` 或 `c(rings)`）
+- **可**：尺寸 mm（默依型異）
+- **可**：種（可復性，默 42）
+- **可**：偏移（0=互扣，>0=分離）
+- **可**：布局（`"grid"` 或 `"repel"`，rect）
+- **可**：融組（PILES 符號串）
 
-## Procedure
+## 行
 
-### Step 1: Read Config Constraints
+### 一：讀配約束
 
 ```bash
 R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 "$R_EXE" -e "cat(yaml::yaml.load_file('inst/config.yml')[['{TYPE}']]$grid$max)"
 ```
 
-Or read `inst/config.yml` directly to check valid ranges for the chosen type.
+或直讀 `inst/config.yml` 察所擇型之有效範圍。
 
-**Expected:** The min/max values for grid, size, tabsize, and other parameters are known for the chosen puzzle type.
+得：所擇型之 grid、size、tabsize 諸參之最小最大已知。
 
-**On failure:** If `config.yml` is missing or the type key doesn't exist, check that you are in the jigsawR project root and the package has been built at least once.
+敗：`config.yml` 缺或型鍵不存→查於 jigsawR 根且包至少建過一次。
 
-### Step 2: Determine Type and Parameters
+### 二：定型與參
 
-Map the user's request to valid `generate_puzzle()` arguments:
+用戶請求映為有效 `generate_puzzle()` 引數：
 
 | Type | grid | size | Extra params |
 |------|------|------|-------------|
@@ -73,13 +73,13 @@ Map the user's request to valid `generate_puzzle()` arguments:
 | random | `c(cols, rows)` | `c(width, height)` mm | `n_interior`, `tabsize` |
 | snic | `c(cols, rows)` | `c(width, height)` mm | `n_interior`, `compactness`, `tabsize` |
 
-**Expected:** User request mapped to valid `generate_puzzle()` arguments with correct `type`, `grid` dimensions, and `size` values within the ranges from config.yml.
+得：請求映為 `generate_puzzle()` 有效引數，型、grid、size 皆於 config.yml 範圍內。
 
-**On failure:** If unsure which parameter format to use, refer to the table above. Rectangular and voronoi types use `c(cols, rows)` for grid; hexagonal and concentric use `c(rings)`.
+敗：參形式不明→參表。矩形與 voronoi 用 `c(cols, rows)`；六與同心用 `c(rings)`。
 
-### Step 3: Create R Script
+### 三：造 R 腳本
 
-Write a script file (preferred over `-e` for complex commands):
+書腳本檔（複雜命令勝於 `-e`）：
 
 ```r
 library(jigsawR)
@@ -98,65 +98,65 @@ cat("SVG length:", nchar(result$svg_content), "\n")
 cat("Files:", paste(result$files, collapse = ", "), "\n")
 ```
 
-Save to a temporary script file.
+存於臨時腳本。
 
-**Expected:** An R script file saved to a temporary location containing `library(jigsawR)`, a `generate_puzzle()` call with all parameters, and diagnostic output lines.
+得：R 腳本檔存於臨時位，含 `library(jigsawR)`、`generate_puzzle()` 全參調用、診斷輸出。
 
-**On failure:** If the script has syntax errors, verify that all string arguments are quoted and numeric vectors use `c()`. Avoid complex shell escaping by always using script files.
+敗：語法誤→查字串皆引、數值向量用 `c()`。複雜殼轉義→必用腳本檔。
 
-### Step 4: Execute via WSL R
+### 四：經 WSL R 行
 
 ```bash
 R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 "$R_EXE" /path/to/script.R
 ```
 
-**Expected:** Script completes without errors. SVG file(s) written to `output/`.
+得：腳本無誤完成。SVG 寫於 `output/`。
 
-**On failure:** Check that renv is restored (`renv::restore()`). Verify package is loaded (`devtools::load_all()`). Do NOT use `--vanilla` flag (renv needs .Rprofile).
+敗：察 renv 已復（`renv::restore()`）。驗包已載（`devtools::load_all()`）。勿用 `--vanilla` 旗（renv 需 .Rprofile）。
 
-### Step 5: Verify Output
+### 五：驗出
 
-- SVG file exists in `output/` directory
-- SVG content starts with `<?xml` or `<svg`
-- Piece count matches expected: cols * rows (rectangular), ring formula (hex/concentric)
-- For ggplot2 approach, verify the plot object renders without error
+- SVG 檔存於 `output/`
+- SVG 內容以 `<?xml` 或 `<svg` 開
+- 片數符：cols * rows（矩）、環式（六/同心）
+- ggplot2 法→驗圖對象無誤繪
 
-**Expected:** SVG file exists in `output/`, content starts with `<?xml` or `<svg`, and piece count matches the grid specification (cols * rows for rectangular, ring formula for hex/concentric).
+得：SVG 檔存於 `output/`，內容以 `<?xml` 或 `<svg` 開，片數符格規格（矩用 cols*rows，六/同心用環式）。
 
-**On failure:** If SVG file is missing, check the `output/` directory exists. If piece count is wrong, verify grid dimensions match the puzzle type's expected formula. For ggplot2 output, check that the plot renders without error by wrapping in `tryCatch()`.
+敗：SVG 檔缺→察 `output/` 存。片數誤→驗格維合型式。ggplot2 出→以 `tryCatch()` 包察繪無誤。
 
-### Step 6: Save Output
+### 六：存出
 
-Generated files are saved to `output/` by default. The `result` object contains:
-- `$svg_content` — raw SVG string
-- `$pieces` — list of piece data
-- `$canvas_size` — dimensions
-- `$files` — paths to written files
+生成檔默存 `output/`。`result` 對象含：
+- `$svg_content`：生 SVG 串
+- `$pieces`：片數據列
+- `$canvas_size`：維
+- `$files`：寫檔之徑
 
-**Expected:** The `result` object contains `$svg_content`, `$pieces`, `$canvas_size`, and `$files` fields. Files listed in `$files` exist on disk.
+得：`result` 對象含 `$svg_content`、`$pieces`、`$canvas_size`、`$files`。`$files` 列之檔存於磁。
 
-**On failure:** If `$files` is empty, the puzzle may have generated in-memory only. Explicitly save with `writeLines(result$svg_content, "output/puzzle.svg")`.
+敗：`$files` 空→拼圖或僅生於內存。顯存以 `writeLines(result$svg_content, "output/puzzle.svg")`。
 
-## Validation
+## 驗
 
-- [ ] Script executes without errors
-- [ ] SVG file is well-formed XML
-- [ ] Piece count matches grid specification
-- [ ] Same seed produces identical output (reproducibility)
-- [ ] Parameters are within config.yml constraints
+- [ ] 腳本無誤行
+- [ ] SVG 檔乃良構 XML
+- [ ] 片數符格規格
+- [ ] 同種生同出（可復）
+- [ ] 參於 config.yml 約束內
 
-## Common Pitfalls
+## 忌
 
-- **Using `--vanilla` flag**: Breaks renv activation. Never use it.
-- **Complex `-e` commands**: Use script files instead; shell escaping causes Exit code 5.
-- **Grid vs size confusion**: Grid is piece count, size is physical dimensions in mm.
-- **Offset semantics**: 0 = assembled puzzle, positive = exploded/separated pieces.
-- **SNIC without package**: snic type requires the `snic` package installed.
+- **用 `--vanilla` 旗**：破 renv 啟動。絕勿用
+- **複雜 `-e` 命令**：用腳本檔；殼轉義致 Exit 5
+- **Grid 與 size 混**：格乃片數，size 乃物理 mm 維
+- **偏移語義**：0=組裝，正=散裂片
+- **SNIC 無包**：snic 型需 `snic` 包已裝
 
-## Related Skills
+## 參
 
-- `add-puzzle-type` — scaffold a new puzzle type end-to-end
-- `validate-piles-notation` — validate fusion group strings before passing to generate_puzzle()
-- `run-puzzle-tests` — run the test suite after generation changes
-- `write-testthat-tests` — add tests for new generation scenarios
+- `add-puzzle-type`
+- `validate-piles-notation`
+- `run-puzzle-tests`
+- `write-testthat-tests`

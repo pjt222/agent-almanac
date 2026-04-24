@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement audit trail functionality for R projects in regulated
   environments. Covers logging, provenance tracking, electronic
@@ -24,29 +24,29 @@ metadata:
   tags: audit-trail, logging, provenance, 21-cfr-part-11, data-integrity
 ---
 
-# Implement Audit Trail
+# 實審計追跡
 
-Add audit trail capabilities to R projects for regulatory compliance.
+加審計追跡能於 R 項目供法規合規。
 
-## When to Use
+## 用
 
-- R analysis requires electronic records compliance (21 CFR Part 11)
-- Need to track who did what, when, and why in an analysis
-- Implementing data provenance tracking
-- Creating tamper-evident analysis logs
+- R 析需電子記錄合規（21 CFR Part 11）
+- 需記析中誰於何時為何事
+- 施數據源追跡
+- 造防篡析記
 
-## Inputs
+## 入
 
-- **Required**: R project with data processing or analysis scripts
-- **Required**: Regulatory requirements (which audit trail elements are mandatory)
-- **Optional**: Existing logging infrastructure
-- **Optional**: Electronic signature requirements
+- **必**：含數據處理或析腳本之 R 項目
+- **必**：法規需求（哪些審跡元素必需）
+- **可**：既有記基建
+- **可**：電子簽需求
 
-## Procedure
+## 行
 
-### Step 1: Set Up Structured Logging
+### 一：立結構化日記
 
-Create `R/audit_log.R`:
+造 `R/audit_log.R`：
 
 ```r
 #' Initialize audit log for a session
@@ -100,11 +100,11 @@ log_audit_event <- function(event, description, details = list()) {
 }
 ```
 
-**Expected:** `R/audit_log.R` created with `init_audit_log()` and `log_audit_event()` functions. Calling `init_audit_log()` creates the `audit_logs/` directory and a timestamped JSONL file. Each log entry is a single JSON line with `timestamp`, `event`, `analyst`, and `session_id` fields.
+得：`R/audit_log.R` 造，含 `init_audit_log()` 與 `log_audit_event()` 函。調 `init_audit_log()` 造 `audit_logs/` 目錄與時戳 JSONL 檔。各記條為單 JSON 行，含 `timestamp`、`event`、`analyst`、`session_id` 諸欄。
 
-**On failure:** If `jsonlite::toJSON()` fails, ensure the `jsonlite` package is installed. If the log directory cannot be created, check file system permissions. If timestamps lack timezone, verify `%z` is supported on the platform.
+敗：`jsonlite::toJSON()` 敗→確 `jsonlite` 包已裝。記目錄不可造→察檔系權。時戳缺時區→驗 `%z` 於平台支援。
 
-### Step 2: Add Data Integrity Checks
+### 二：加數據完整性察
 
 ```r
 #' Compute and log data hash for integrity verification
@@ -144,11 +144,11 @@ verify_data_integrity <- function(data, expected_hash) {
 }
 ```
 
-**Expected:** `hash_data()` returns a SHA-256 hash string and logs a `DATA_HASH` event. `verify_data_integrity()` compares current data against a stored hash and logs a `DATA_VERIFY` event with PASS or FAIL status.
+得：`hash_data()` 返 SHA-256 散列串並記 `DATA_HASH` 事件。`verify_data_integrity()` 比當前數據於存散列並記 `DATA_VERIFY` 事件含 PASS 或 FAIL。
 
-**On failure:** If `digest::digest()` is not found, install the `digest` package. If hashes don't match for identical data, check that column order and data types are consistent between hashing and verification.
+敗：`digest::digest()` 未找→裝 `digest` 包。同數據散列不符→察散列與驗時欄順與數據型一致。
 
-### Step 3: Track Data Transformations
+### 三：追蹤數據變換
 
 ```r
 #' Wrap a data transformation with audit logging
@@ -179,11 +179,11 @@ audited_transform <- function(data, transform_fn, description) {
 }
 ```
 
-**Expected:** `audited_transform()` wraps any transformation function, logging input dimensions and hash, output dimensions and hash, and the transformation description as a `DATA_TRANSFORM` event.
+得：`audited_transform()` 包任變換函，記入維與散列、出維與散列、變換述為 `DATA_TRANSFORM` 事件。
 
-**On failure:** If the transform function errors, the audit event is not logged. Wrap the transform in `tryCatch()` to log both successes and failures. Ensure the transform function accepts and returns a data frame.
+敗：變換函誤→審計事件未記。以 `tryCatch()` 包變換以記成敗。確變換函受並返數據幀。
 
-### Step 4: Log Session Environment
+### 四：記會環境
 
 ```r
 #' Log complete session information for reproducibility
@@ -203,11 +203,11 @@ log_session_info <- function() {
 }
 ```
 
-**Expected:** A `SESSION_INFO` event logged with R version, platform, locale, attached packages with versions, and the renv lockfile hash (if applicable).
+得：`SESSION_INFO` 事件記含 R 版本、平台、區域、附載包與版本、renv 鎖檔散列（若用）。
 
-**On failure:** If `sessionInfo()` returns incomplete package information, ensure all packages are loaded via `library()` before calling `log_session_info()`. The renv lockfile hash will be `NA` if the project does not use renv.
+敗：`sessionInfo()` 返不全包訊→確諸包於調 `log_session_info()` 前經 `library()` 載。項目未用 renv→renv 鎖檔散列為 `NA`。
 
-### Step 5: Implement in Analysis Scripts
+### 五：於析腳本施行
 
 ```r
 # 01_analysis.R
@@ -241,13 +241,13 @@ log_audit_event("ANALYSIS_COMPLETE", "Primary efficacy analysis", list(
 log_session_info()
 ```
 
-**Expected:** Analysis scripts initialize the audit log at the start, log each data import, transformation, and analysis step, and record session info at the end. The JSONL log file captures the complete provenance chain.
+得：析腳本始時初化審跡，記各數據入、變換、析步，終時記會訊。JSONL 記檔捕全源鏈。
 
-**On failure:** If `init_audit_log()` is missing, ensure `R/audit_log.R` is sourced or the package is loaded. If events are missing from the log, verify that `log_audit_event()` is called after every significant operation.
+敗：`init_audit_log()` 缺→確 `R/audit_log.R` 源載或包已載。事件缺於記→驗 `log_audit_event()` 於各重要操作後調。
 
-### Step 6: Git-Based Change Control
+### 六：Git 變更控制
 
-Complement the application-level audit trail with git:
+補應用級審跡以 git：
 
 ```bash
 # Use signed commits for non-repudiation
@@ -260,31 +260,33 @@ Per change request CHG-042, approved by [Name] on [Date].
 Validation impact assessment: Low risk - additional derived variable."
 ```
 
-**Expected:** Git commits are signed (GPG) and use descriptive messages referencing change control IDs. The combination of application-level JSONL audit trail and git history provides a complete change control record.
+得：Git 提交已簽（GPG）且用述訊引變更控制 ID。應用級 JSONL 審跡與 git 史合成全變更控制記。
 
-**On failure:** If GPG signing fails, configure the signing key with `git config --global user.signingkey KEY_ID`. If the key is not set up, follow `gpg --gen-key` to create one.
+敗：GPG 簽敗→用 `git config --global user.signingkey KEY_ID` 配簽鍵。鍵未設→依 `gpg --gen-key` 造。
 
-## Validation
+## 驗
 
-- [ ] Audit log captures all required events (start, data access, transforms, analysis, export)
-- [ ] Timestamps use ISO 8601 format with timezone
-- [ ] Data hashes enable integrity verification
-- [ ] Session information is recorded
-- [ ] Logs are append-only (no deletion or modification)
-- [ ] Analyst identity is captured for each session
-- [ ] Log format is machine-readable (JSONL)
+- [ ] 審跡捕諸必需事件（始、數據訪、變換、析、出）
+- [ ] 時戳用 ISO 8601 格式含時區
+- [ ] 數據散列使完整性可驗
+- [ ] 會訊已記
+- [ ] 記僅附加（無刪改）
+- [ ] 各會捕析者身分
+- [ ] 記格式機可讀（JSONL）
 
-## Common Pitfalls
+## 忌
 
-- **Logging too much**: Focus on regulated events. Don't log every variable assignment.
-- **Mutable logs**: Audit logs must be append-only. Use JSONL (one JSON object per line).
-- **Missing timestamps**: Every event needs a timestamp with timezone.
-- **No session context**: Each log entry should reference the session for correlation.
-- **Forgetting to initialize**: Scripts must call `init_audit_log()` before any analysis.
+- **記過多**：專於受規事件。勿記諸變量賦值
+- **可變記**：審跡必僅附加。用 JSONL（每行一 JSON 對象）
+- **缺時戳**：各事件需含時區之時戳
+- **無會脈絡**：各記條應引會以相關
+- **忘初化**：腳本於諸析前必調 `init_audit_log()`
+- **敏感數據入記**：審跡不應存 PII 或秘密。僅記散列與元數據
+- **記不備份**：審記與數據同命保存
 
-## Related Skills
+## 參
 
-- `setup-gxp-r-project` - project structure for validated environments
-- `write-validation-documentation` - validation protocols and reports
-- `validate-statistical-output` - output verification methodology
-- `configure-git-repository` - version control as part of change control
+- `setup-gxp-r-project`
+- `write-validation-documentation`
+- `validate-statistical-output`
+- `configure-git-repository`

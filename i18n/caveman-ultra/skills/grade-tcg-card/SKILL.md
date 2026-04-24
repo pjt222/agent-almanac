@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Grade a trading card using PSA, BGS, or CGC standards. Covers observation-first
   assessment (adapted from meditate's unbiased observation), centering measurement,
@@ -26,52 +26,49 @@ metadata:
 
 # Grade TCG Card
 
-Assess and grade a trading card following professional grading standards (PSA, BGS, CGC). Uses an observation-first protocol adapted from the `meditate` skill to prevent grade anchoring — the most common grading bias.
+Grade card per PSA/BGS/CGC. Observation-first (from `meditate`) → no grade anchoring.
 
-## When to Use
+## Use When
 
-- Evaluating a card before submission to a professional grading service
-- Pre-screening a collection to identify high-grade candidates worth submitting
-- Settling disputes about card condition between buyers and sellers
-- Learning to grade consistently by following a structured assessment protocol
-- Estimating the grade-dependent value spread for a specific card
+- Pre-submission evaluation
+- Pre-screen collection → high-grade candidates
+- Settle buyer/seller disputes
+- Learn consistent grading
+- Estimate grade-value spread
 
-## Inputs
+## In
 
-- **Required**: Card identification (set, number, name, variant/edition)
-- **Required**: Card images or physical description (front and back)
-- **Required**: Grading standard to apply (PSA 1-10, BGS 1-10 with subgrades, CGC 1-10)
-- **Optional**: Known market value at different grades (for grade-value analysis)
-- **Optional**: Card game (Pokemon, Magic: The Gathering, Flesh and Blood, Kayou)
+- **Required**: card ID (set, #, name, variant)
+- **Required**: images or physical desc (front + back)
+- **Required**: standard (PSA 1-10, BGS 1-10 w/ subgrades, CGC 1-10)
+- **Optional**: known market value at grades
+- **Optional**: game (Pokemon, MTG, FaB, Kayou)
 
-## Procedure
+## Do
 
-### Step 1: Clear Bias — Observation Without Prejudgment
+### Step 1: Clear bias → observe w/o prejudgment
 
-Adapted from `meditate` Step 2-3: observe the card without anchoring to expected grade or market value.
+From `meditate` Step 2-3: observe w/o anchor to expected grade/value.
 
-1. Set aside any knowledge of the card's market value
-2. Do NOT look up recent sales or population reports before grading
-3. If you know the card is "valuable," acknowledge that bias explicitly:
-   - "I know this card is worth $X in PSA 10. I am setting that aside."
-4. Examine the card as a physical object first, not as a collectible
-5. Note your initial gut impression but do NOT let it anchor the assessment
-6. Label any premature grade thoughts as "anchoring" and return to observation
+1. Set aside market value
+2. DO NOT look up sales/population reports pre-grade
+3. Known valuable → explicit: "Worth $X PSA 10. Set aside."
+4. Examine as physical object
+5. Gut impression noted but NOT anchored
+6. Premature grade thoughts → "anchoring" → return to observation
 
-**Expected:** A neutral starting state where the card is assessed purely on physical condition, not market expectations. Grade anchoring (knowing the value before grading) is the #1 source of grading inconsistency.
+→ Neutral start. Grade anchoring = #1 source of inconsistency.
 
-**On failure:** If bias feels sticky (a high-value card makes you want to see a 10), write down the bias explicitly. Externalizing it reduces its influence. Proceed only when you can examine the card as a physical object.
+**If err:** bias sticky (high-value wants 10) → write bias explicit. Externalize → reduce influence. Proceed only as physical object.
 
-### Step 2: Centering Assessment
+### Step 2: Centering
 
-Measure the card's print centering on both faces.
-
-1. Measure the border width on all four sides of the front face:
-   - Left vs. right border (horizontal centering)
-   - Top vs. bottom border (vertical centering)
-   - Express as ratio: e.g., 55/45 left-right, 60/40 top-bottom
-2. Repeat for the back face
-3. Apply the grading standard's centering thresholds:
+1. Measure border all 4 sides front:
+   - L vs R (horizontal)
+   - T vs B (vertical)
+   - Ratio: 55/45 L-R, 60/40 T-B
+2. Repeat back
+3. Apply thresholds:
 
 ```
 PSA Centering Thresholds:
@@ -95,104 +92,98 @@ BGS Centering Subgrade:
 +------+-------------------+-------------------+
 ```
 
-4. Record the centering score for each axis and the applicable subgrade
+4. Record ratio per axis + subgrade.
 
-**Expected:** Numeric centering ratios for both faces with the corresponding grade/subgrade identified. This is the most objective measurement in the grading process.
+→ Numeric ratios both faces + grade/subgrade. Most objective measurement.
 
-**On failure:** If borders are too narrow to measure accurately (full-art cards, borderless prints), note "centering N/A — borderless" and skip to Step 3. Some grading services apply different standards for borderless cards.
+**If err:** borders too narrow (full-art, borderless) → "centering N/A — borderless", skip Step 3. Services differ for borderless.
 
-### Step 3: Surface Analysis
+### Step 3: Surface
 
-Examine the card's surface for defects.
-
-1. Examine the front surface under good lighting:
+1. Front under good light:
    - **Print defects**: ink spots, missing ink, print lines, color inconsistency
-   - **Surface scratches**: visible under direct and angled light
-   - **Whitening on surface**: haze or clouding of the surface layer
-   - **Indentations or impressions**: dents visible under raking light
-   - **Staining or discoloration**: yellowing, water marks, chemical damage
-2. Examine the back surface with the same criteria
-3. Check for factory defects vs. handling damage:
-   - Factory: print lines, miscut, crimping — may be less penalized
-   - Handling: scratches, dents, stains — always penalized
-4. Rate surface condition:
-   - Pristine (10): flawless under magnification
-   - Near-pristine (9-9.5): minor imperfections visible only under magnification
-   - Excellent (8-8.5): minor wear visible to naked eye
-   - Good (6-7): moderate wear, multiple minor defects
-   - Fair or below (1-5): significant damage visible
+   - **Scratches**: direct + angled light
+   - **Whitening**: haze/clouding
+   - **Indentations**: raking light
+   - **Stain/discoloration**: yellowing, water marks, chemical
+2. Back same criteria
+3. Factory vs handling:
+   - Factory: print lines, miscut, crimping → may be less penalized
+   - Handling: scratches, dents, stains → always penalized
+4. Rate:
+   - Pristine (10): flawless under mag
+   - Near-pristine (9-9.5): minor only under mag
+   - Excellent (8-8.5): minor naked eye
+   - Good (6-7): moderate, multiple
+   - Fair+ (1-5): significant
 
-**Expected:** A detailed surface inventory with each defect located, described, and severity-rated. Factory vs. handling defects distinguished.
+→ Defect inventory located + described + severity. Factory vs handling distinguished.
 
-**On failure:** If images are too low-resolution for surface analysis, note the limitation and provide a grade range rather than a point grade. Recommend physical inspection.
+**If err:** low-res images → provide range not point grade. Recommend physical.
 
-### Step 4: Edge and Corner Evaluation
+### Step 4: Edge + corner
 
-Assess the card's edges and corners for wear.
+1. 4 edges:
+   - **Whitening**: spots/lines along colored (most common)
+   - **Chipping**: edge layer missing
+   - **Roughness**: uneven / micro-tears
+   - **Foil separation**: holofoil delamination
+2. 4 corners:
+   - **Sharpness**: tip crisp
+   - **Rounding**: worn curve (slight/moderate/heavy)
+   - **Splitting**: layer separation (dings)
+   - **Bending**: turned/creased
+3. Rate same scale
+4. Note worst edge/corner
 
-1. Examine all four edges:
-   - **Whitening**: white spots or lines along colored edges (the most common defect)
-   - **Chipping**: small pieces of the edge layer missing
-   - **Roughness**: edge feels uneven or has micro-tears
-   - **Foil separation**: on holofoil cards, check for delamination at edges
-2. Examine all four corners:
-   - **Sharpness**: corner tip is crisp and pointed
-   - **Rounding**: corner tip is worn to a curve (slight, moderate, heavy)
-   - **Splitting**: layer separation visible at corner (dings)
-   - **Bending**: corner turned or creased
-3. Rate edge and corner condition using the same scale as surface
-4. Note which specific corners/edges have the worst condition
+→ Per-edge + per-corner. Worst limits overall grade.
 
-**Expected:** Per-edge and per-corner condition assessment. The worst individual corner/edge typically limits the overall grade.
+**If err:** in sleeve/toploader obscures → note which areas not fully assessed.
 
-**On failure:** If the card is in a sleeve or toploader that obscures edges, note which areas couldn't be fully assessed.
+### Step 5: Final grade
 
-### Step 5: Assign Final Grade
+1. **PSA** (1-10):
+   - Weakest sub limits final
+   - Perfect surface + 65/35 centering → cap PSA 8
+   - "Lowest limits" + adjust up if exceptional
+2. **BGS** (4 subgrades → overall):
+   - Centering, Edges, Corners, Surface each 1-10 in 0.5
+   - Overall = weighted avg, lowest subgrade limits
+   - BGS 10 Pristine → all 4 = 10
+   - BGS 9.5 Gem Mint → avg 9.5+ no sub <9
+3. **CGC** (similar to PSA w/ subgrades on label):
+   - Centering, Surface, Edges, Corners
+   - Overall = proprietary weighting
+4. Confidence:
+   - "PSA 8 (confident)" — clear, unlikely higher/lower
+   - "PSA 8-9 (borderline)" — either way
+   - "PSA 7-8 (uncertain)" — limited data
 
-Combine sub-assessments into the final grade.
+→ Final grade + confidence. BGS all 4 reported. Evidence from Steps 2-4.
 
-1. For **PSA grading** (single number 1-10):
-   - The final grade is limited by the weakest sub-assessment
-   - A card with perfect surface but 65/35 centering caps at PSA 8
-   - Apply the "lowest limits" principle, then adjust up if other areas are exceptional
-2. For **BGS grading** (four subgrades → overall):
-   - Assign subgrades: Centering, Edges, Corners, Surface (each 1-10 in 0.5 steps)
-   - Overall = weighted average, but the lowest subgrade limits the overall
-   - BGS 10 Pristine requires all four subgrades at 10
-   - BGS 9.5 Gem Mint requires average of 9.5+ with no subgrade below 9
-3. For **CGC grading** (similar to PSA with subgrades on label):
-   - Assign Centering, Surface, Edges, Corners
-   - Overall follows CGC's proprietary weighting
-4. State the final grade with confidence:
-   - "PSA 8 (confident)" — clear grade, unlikely to be higher or lower
-   - "PSA 8-9 (borderline)" — could go either way at the grading service
-   - "PSA 7-8 (uncertain)" — limited assessment data
+**If err:** inconclusive (scratch vs dirt) → range + recommend pro grading. Never confident w/ insufficient data.
 
-**Expected:** A final grade with confidence level. For BGS, all four subgrades reported. The grade is supported by evidence from Steps 2-4.
+## Check
 
-**On failure:** If the assessment is inconclusive (e.g., can't tell if a surface mark is a scratch or dirt), provide a grade range and recommend professional grading. Never assign a confident grade with insufficient data.
+- [ ] Bias check pre-grading (no anchoring)
+- [ ] Centering both faces w/ ratios
+- [ ] Surface examined (scratches, print, stain, indent)
+- [ ] All 4 edges + corners individually
+- [ ] Factory vs handling distinguished
+- [ ] Grade evidence-backed from each sub
+- [ ] Confidence stated
+- [ ] Standard applied correctly
 
-## Validation Checklist
+## Traps
 
-- [ ] Bias check completed before grading (no grade anchoring)
-- [ ] Centering measured on both faces with ratios recorded
-- [ ] Surface examined for scratches, print defects, staining, indentations
-- [ ] All four edges and corners individually assessed
-- [ ] Factory vs. handling defects distinguished
-- [ ] Final grade supported by evidence from each sub-assessment
-- [ ] Confidence level stated (confident, borderline, uncertain)
-- [ ] Grading standard correctly applied (PSA/BGS/CGC thresholds)
+- **Grade anchoring**: value knowledge → bias toward hoped-for grade. Physical first.
+- **Ignore back**: back surface + centering count. Many over-focus front.
+- **Factory vs handling confusion**: both affect grade differently.
+- **Holofoil over-grade**: hides scratches until angled. Multiple light angles.
+- **Centering illusion**: art placement can mislead. Measure borders not art.
 
-## Common Pitfalls
+## →
 
-- **Grade anchoring**: Knowing a card's value before grading biases the assessment toward the "hoped-for" grade. Always assess physically first
-- **Ignoring the back**: The back surface and back centering count. Many graders over-focus on the front
-- **Confusing factory with handling defects**: A factory print line is different from a scratch, but both affect the grade
-- **Over-grading holofoils**: Holographic and foil cards hide surface scratches until viewed at the right angle. Use multiple light angles
-- **Centering optical illusions**: Art placement can make centering appear better or worse than it is. Measure the borders, not the art
-
-## Related Skills
-
-- `build-tcg-deck` — Deck building where card condition affects tournament legality
-- `manage-tcg-collection` — Collection management with grade-based valuation
-- `meditate` — Source of the observation-without-prejudgment technique adapted for grading bias prevention
+- `build-tcg-deck` — condition affects tournament legality
+- `manage-tcg-collection` — grade-based valuation
+- `meditate` — source of observation-without-prejudgment

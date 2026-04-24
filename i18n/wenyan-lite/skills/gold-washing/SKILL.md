@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Alluvial gold recovery using panning, sluicing, and classification.
   Covers site reading (geological indicators, stream dynamics, pay streak
@@ -24,196 +24,189 @@ metadata:
   tags: prospecting, gold, panning, sluicing, alluvial, placer, geology
 ---
 
-# Gold Washing
+# 淘金
 
-Recover alluvial gold from stream deposits using panning, sluicing, and classification techniques.
+以淘盤、沖槽與篩分技法自溪流沉積中回收沖積金。
 
-## When to Use
+## 適用時機
 
-- You are prospecting in an area with known or suspected alluvial gold deposits
-- You want to sample a stream or river to test for gold presence
-- You are recreational panning and want to maximize recovery
-- You need to assess a site's gold potential before investing more effort
+- 於已知或疑有沖積金礦之地區探礦
+- 欲取溪河樣本以測金之存
+- 娛樂淘金欲最大化回收
+- 投入更多心力前欲評地點之金潛力
 
-## Inputs
+## 輸入
 
-- **Required**: A gold pan (14-16 inch, with riffles)
-- **Required**: Access to a stream, river, or alluvial deposit
-- **Optional**: Classifier/screen (1/4 inch mesh)
-- **Optional**: Sluice box (for higher volume processing)
-- **Optional**: Snuffer bottle or tweezers (for fine gold recovery)
-- **Optional**: Vial with water (for storing recovered gold)
-- **Optional**: Shovel and bucket for material collection
+- **必要**：淘盤（十四至十六吋，附溝紋）
+- **必要**：可及之溪、河或沖積沉積
+- **選擇性**：篩分器/篩網（四分之一吋網目）
+- **選擇性**：沖槽（更大量處理）
+- **選擇性**：吸管瓶或鑷子（細金回收）
+- **選擇性**：附水之瓶（存回收之金）
+- **選擇性**：鏟與桶以收材料
 
-## Procedure
+## 步驟
 
-### Step 1: Read the Site
+### 步驟一：讀地
 
-Gold is heavy (specific gravity 19.3) and concentrates predictably. Read the water and geology before digging.
+金重（比重 19.3）且可預期地聚集。掘前先讀水與地質。
 
 ```
-Where Gold Concentrates:
+金聚何處：
 
-INSIDE BENDS:
-Water slows on inside curves of a stream. Heavy materials
-(including gold) drop out of suspension here. Sample the
-gravel bar on the inside of bends.
+內彎：
+水於溪之內彎處減速。重材（含金）
+於此沉出懸浮。取彎內礫壩之樣。
 
-BEHIND OBSTRUCTIONS:
-Large rocks, fallen trees, and bedrock ledges create
-low-pressure zones behind them. Gold settles in these
-"shadow" areas.
+障礙後：
+大岩、倒木與基岩崖於後生低壓區。
+金於此等「陰影」區沉。
 
-BEDROCK CRACKS:
-Gold works its way into cracks and crevices in bedrock.
-Cleaning out bedrock cracks (crevicing) can be very productive.
+基岩裂：
+金鑽入基岩之裂縫。
+清出基岩裂縫（crevicing）可極富產。
 
-PAYSTREAKS:
-The heaviest concentration follows a line (paystreak) along
-the inside of the bend, continuing from one inside bend to the
-next. Experienced prospectors trace this line.
+富礦脈：
+最重聚集沿彎內側成線（富礦脈），
+自一彎內續至下一彎。熟練探礦者追此線。
 
-WHERE TO SAMPLE:
+何處取樣：
 +--------------------+------------------------------------------+
-| Feature            | Sample Location                          |
+| 特徵               | 取樣位置                                 |
 +--------------------+------------------------------------------+
-| Inside bend        | 1-2 feet above waterline in gravel bar   |
-| Behind boulder     | Downstream side, in the calm pocket      |
-| Bedrock exposure   | In cracks and depressions                |
-| Stream confluence  | Where tributary meets main stream        |
-| Old flood channels | Elevated terraces above current stream   |
+| 內彎               | 水線上一至二呎之礫壩                      |
+| 大石後             | 下游側之靜水區                            |
+| 基岩裸露           | 裂縫與凹陷中                              |
+| 溪流匯合           | 支流入主溪處                              |
+| 舊洪水道           | 現溪上方之高台                            |
 +--------------------+------------------------------------------+
 
-Geological Indicators:
-- Black sand (magnetite/hematite): gold's travel companion.
-  Where black sand concentrates, check for gold.
-- Quartz veins in surrounding rock: gold often forms in
-  quartz veins; erosion releases it into streams
-- Iron staining (rust-colored rock): indicates oxidation zone,
-  which can host gold deposits
+地質指標：
+- 黑砂（磁鐵礦/赤鐵礦）：金之旅伴。
+  黑砂聚處，查金。
+- 周圍岩之石英脈：金常於石英脈中形成；
+  侵蝕釋之於溪中
+- 鐵染（鏽色岩）：示氧化區，
+  可宿金礦
 ```
 
-**Expected:** You have identified 2-3 promising sample locations based on stream dynamics and geological indicators.
+**預期：** 已依溪流動態與地質指標識二至三有望取樣處。
 
-**On failure:** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). Even a single color (flake of gold) confirms the stream carries gold.
+**失敗時：** 若無明指標，系統取多處樣——每特徵一盤（內彎、障礙後、隨機礫壩）。即一色（金片）亦證溪流攜金。
 
-### Step 2: Classify and Collect Material
+### 步驟二：篩分並收材料
 
-Prepare the raw material for panning.
-
-```
-Collection Protocol:
-1. Fill a bucket from your chosen sample location
-2. Dig to bedrock if possible — gold concentrates on or near bedrock
-3. If bedrock is deep, sample the bottom 6-12 inches of gravel
-   (gold migrates downward through gravel over time)
-
-Classification:
-1. Place a 1/4 inch classifier over your gold pan or bucket
-2. Shovel material onto the classifier
-3. Shake and wash through — fine material drops into the pan,
-   large rocks and gravel remain on top
-4. Inspect oversized material briefly (nuggets can be caught
-   by the classifier) then discard
-5. Classified material is now ready for panning
-```
-
-**Expected:** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
-
-**On failure:** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
-
-### Step 3: Pan the Material
-
-The gold pan separates gold from lighter material using gravity and water.
+備原料以供淘洗。
 
 ```
-Panning Technique:
+收材協定：
+1. 自所擇取樣處裝桶
+2. 若可，掘至基岩——金於基岩上或近之聚集
+3. 若基岩深，取底部六至十二吋之礫
+   （金隨時間經礫下遷）
 
-INITIAL WASH:
-1. Submerge the pan in water (stream, bucket, or tub)
-2. Break up any clay or cemented material with your fingers
-3. Remove large stones by hand (inspect each for attached gold)
-
-STRATIFICATION:
-4. Shake the pan vigorously side to side (NOT circular) while
-   submerged — this settles heavy material to the bottom
-5. Tilt the pan slightly and allow lighter material to wash off
-   the front lip
-6. Shake, tilt, wash. Shake, tilt, wash. Repeat.
-
-FINE PANNING:
-7. As material reduces, you should see black sand concentrating
-8. Reduce water flow — gentle swirling now, not vigorous shaking
-9. Tilt the pan at a shallow angle and let a thin sheet of water
-   wash across the concentrate
-10. Gold (bright yellow, stays at the bottom) separates from
-    black sand (dark, slightly lighter)
-
-RECOVERY:
-11. Use a snuffer bottle to suck up individual flakes/pieces
-12. Or carefully pour off water and collect the concentrate
-13. Transfer gold to a vial with water for storage
-
-Common Errors:
-- Circular motion washes gold OVER the riffles and out of the pan.
-  Use side-to-side shaking for stratification.
-- Too aggressive: panning too fast loses fine gold. Be patient.
-- Not enough initial shaking: gold must sink to the bottom before
-  you start washing off material.
+篩分：
+1. 四分之一吋篩分器置淘盤或桶上
+2. 以鏟將材料置篩分器上
+3. 搖洗——細材落入盤，
+   大岩礫留上
+4. 短檢過大之材（篩可捕塊狀金）後棄之
+5. 已篩分之材今可淘洗
 ```
 
-**Expected:** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
+**預期：** 一盤或桶之已篩分材料（礫與砂小於四分之一吋），來自地質有望之處。
 
-**On failure:** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
+**失敗時：** 若不能及基岩，取可及者。淺樣較不含金但仍值測——洪水事件可於多深度沉金。
 
-### Step 4: Scale Up with a Sluice Box (Optional)
+### 步驟三：淘材料
 
-For processing larger volumes of material.
+淘盤以重力與水分離金於輕材。
 
 ```
-Sluice Box Operation:
-1. Set the sluice in running water at a slight angle (about
-   1 inch of drop per foot of length)
-2. Water should flow smoothly over the riffles — enough to move
-   sand but not enough to flush the riffles clean
-3. Feed classified material into the top of the sluice gradually
-4. Let the sluice work — gold is trapped behind the riffles,
-   lighter material washes through
-5. Clean the sluice every 20-30 minutes:
-   - Remove the sluice from the water carefully
-   - Wash the riffle mat into a bucket or gold pan
-   - Pan the concentrate to recover gold
+淘技：
 
-Sluice Calibration:
-- Too much water: gold bounces over riffles and is lost
-- Too little water: material builds up and buries the gold
-- Test with a lead split shot: drop it in the top of the sluice.
-  If it is caught by the riffles, gold will be too.
+初洗：
+1. 盤入水（溪、桶或盆）
+2. 以指拆黏土或膠結材
+3. 手除大石（逐一查附著之金）
+
+分層：
+4. 盤入水中時左右（非環形）劇搖——
+   此使重材沉底
+5. 盤微傾，令輕材自前唇沖出
+6. 搖、傾、沖。搖、傾、沖。重複。
+
+細淘：
+7. 材減時，應見黑砂聚集
+8. 減水流——今輕旋，非劇搖
+9. 盤淺傾，令一薄層水流過濃縮物
+10. 金（亮黃、留底）分離於黑砂
+    （暗、略輕）
+
+回收：
+11. 以吸管瓶吸單片/塊
+12. 或謹慎傾水並收濃縮物
+13. 金入附水之瓶以存
+
+常見錯：
+- 環形運動沖金過溝紋出盤。
+  用左右搖以分層。
+- 過劇：淘過速失細金。宜耐心。
+- 初搖不足：金須先沉底方可沖材。
 ```
 
-**Expected:** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
+**預期：** 所有重材（金、黑砂、石榴石）聚於盤底。金可見為亮黃片、扁平粒或（罕）小塊。
 
-**On failure:** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
+**失敗時：** 若謹慎淘後仍無金可見，該處或無金——或金過細不可見（粉金）。以放大鏡查。仍無則遷至他取樣處。
 
-## Validation
+### 步驟四：以沖槽放大（選擇性）
 
-- [ ] Site was read for geological indicators before sampling
-- [ ] Material was collected from a geologically promising location
-- [ ] Material was classified before panning
-- [ ] Panning used side-to-side shaking for stratification
-- [ ] Black sand concentrate was checked thoroughly for fine gold
-- [ ] Any gold recovered was stored safely in water in a sealed vial
-- [ ] The site was left without significant environmental disturbance
+為處理更大量之材料。
 
-## Common Pitfalls
+```
+沖槽操作：
+1. 將沖槽置流水中微傾（約每呎長
+   落一吋）
+2. 水應平順流過溝紋——足移砂
+   但不足沖清溝紋
+3. 將已篩分材逐漸入沖槽頂
+4. 讓沖槽工作——金陷於溝紋後，
+   輕材沖過
+5. 每二十至三十分清沖槽：
+   - 謹慎自水中取沖槽
+   - 將溝紋墊洗入桶或淘盤
+   - 淘濃縮物以回收金
 
-- **Panning too fast**: Impatience loses fine gold. A proper pan takes 5-10 minutes. Speed is the enemy of recovery
-- **Ignoring black sand**: If you see heavy black sand concentrating, gold is likely present — even if too fine to see without magnification
-- **Confusing pyrite with gold**: Pyrite (fool's gold) is lighter, breaks when pressed with a pin, and has a brassy rather than buttery yellow colour. Real gold is malleable and does not tarnish
-- **Sampling random locations**: Gold concentrates predictably. Sampling the middle of a straight stretch is far less productive than sampling the inside of a bend
-- **Environmental damage**: Respect waterways. Do not dig large holes in stream banks, do not use mercury (illegal in most jurisdictions and extremely toxic), and fill in any test holes
-- **Ignoring regulations**: Most jurisdictions require permits for gold prospecting, even recreational panning. Check local regulations before starting
+沖槽校準：
+- 水過多：金彈過溝紋而失
+- 水過少：材堆而埋金
+- 以鉛彈測：投之於沖槽頂。
+  若為溝紋捕，則金亦然。
+```
 
-## Related Skills
+**預期：** 高量處理，金聚於溝紋墊，經終淘回收。
 
-- `mineral-identification` — understanding rock and mineral types helps read geological indicators that point to gold-bearing areas
+**失敗時：** 若沖槽不捕測材（鉛彈），調角度或水流。沖槽應捕石英砂以重之一切。
+
+## 驗證
+
+- [ ] 取樣前已讀地之地質指標
+- [ ] 材料自地質有望之處收
+- [ ] 淘前已篩分
+- [ ] 淘用左右搖以分層
+- [ ] 黑砂濃縮物已徹底查細金
+- [ ] 所回收之金已安全存於密封瓶之水中
+- [ ] 離地時無顯著環境擾動
+
+## 常見陷阱
+
+- **淘過速**：不耐致失細金。正確之淘需五至十分鐘。速為回收之敵
+- **忽黑砂**：若見重黑砂聚集，金或存——即過細不經放大不可見
+- **黃鐵礦混於金**：黃鐵礦（愚人金）較輕，以針壓則碎，色黃銅而非奶油黃。真金可鍛延且不蝕
+- **隨機取樣**：金可預期聚集。取直段中央之樣遠遜於取彎內
+- **環境損害**：敬水道。勿於溪岸掘大洞，勿用水銀（多轄區違法且極毒），並填測試洞
+- **忽法規**：多轄區探金需許可，即娛樂淘金亦然。始前核地方法規
+
+## 相關技能
+
+- `mineral-identification` — 識岩與礦助讀地質指標指示含金區

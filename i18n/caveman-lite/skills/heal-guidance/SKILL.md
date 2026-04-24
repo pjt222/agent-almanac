@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Guide a person through healing modalities including energy work (reiki,
   chakra balancing), herbal remedies, basic first aid stabilization, and
@@ -76,9 +76,9 @@ Assessment Triage Matrix:
 
 Guide the person through self-assessment: "Where is the discomfort? When did it start? What makes it better or worse? Any known causes?" Listen actively and reflect back what you hear to confirm understanding.
 
-**Expected:** A clear picture of the primary complaint, its dimension (physical/energetic/emotional), and a prioritized plan of which steps to emphasize. The person feels heard and understood.
+**Got:** A clear picture of the primary complaint, its dimension (physical/energetic/emotional), and a prioritized plan of which steps to emphasize. The person feels heard and understood.
 
-**On failure:** If the condition is unclear, guide the person through the body scan in Step 7 to locate areas of tension, heat, or blocked energy before selecting a modality.
+**If fail:** If the condition is unclear, guide the person through the body scan in Step 7 to locate areas of tension, heat, or blocked energy before selecting a modality.
 
 ### Step 2: Recommend Modalities
 
@@ -109,9 +109,9 @@ Modality Selection Guide:
 
 Explain how modalities can be combined: "We could begin with breathwork to ground, move into energy healing for the primary issue, and close with an herbal tea for integration."
 
-**Expected:** A session plan with 1-3 modalities ordered by priority, estimated time per modality, and materials needed. The person understands the rationale and consents to proceed.
+**Got:** A session plan with 1-3 modalities ordered by priority, estimated time per modality, and materials needed. The person understands the rationale and consents to proceed.
 
-**On failure:** If the person is unsure, default to the holistic sequence (Step 7) — breathwork and visualization are universally safe and require no materials. Frame it as a gentle starting point.
+**If fail:** If the person is unsure, default to the holistic sequence (Step 7) — breathwork and visualization are universally safe and require no materials. Frame it as a gentle starting point.
 
 ### Step 3: Guide Energetic Connection
 
@@ -124,9 +124,9 @@ Coach the person into a grounded, centered state before any energy work begins.
 5. Help them set a clear intention: "State silently what you intend healing for"
 6. If they will work on another person, remind them to ask permission before touching
 
-**Expected:** The person reports warmth or activation in the hands. They appear calmer and more focused. Intention is clearly held.
+**Got:** The person reports warmth or activation in the hands. They appear calmer and more focused. Intention is clearly held.
 
-**On failure:** If they cannot settle into a grounded state, extend the breathwork from Step 7 before returning here. Reassure them that difficulty is normal and not a sign of inability. Suggest they simply focus on the breathing rhythm without forcing calm.
+**If fail:** If they cannot settle into a grounded state, extend the breathwork from Step 7 before returning here. Reassure them that difficulty is normal and not a sign of inability. Suggest they focus on the breathing rhythm without forcing calm.
 
 ### Step 4: Coach Energy Healing
 
@@ -162,9 +162,9 @@ Chakra Correspondence (for targeted energy work):
 6. "Follow your intuition — move to related areas if you feel drawn to"
 7. "To close, sweep your hands from head to feet, 5-10 cm from the body, three times"
 
-**Expected:** The person reports warmth, relaxation, tingling, or emotional release. Hands may feel temperature changes or pulsing. Session length: 15-30 minutes.
+**Got:** The person reports warmth, relaxation, tingling, or emotional release. Hands may feel temperature changes or pulsing. Session length: 15-30 minutes.
 
-**On failure:** If they notice no sensation, guide focus to the heart center (most universally responsive) and extend hold time to 7-10 minutes. If they are uncomfortable with touch, confirm hands-hovering. Reassure that energy work requires presence rather than belief — suggest returning to the grounding in Step 3 if focus has drifted.
+**If fail:** If they notice no sensation, guide focus to the heart center (most universally responsive) and extend hold time to 7-10 minutes. If they are uncomfortable with touch, confirm hands-hovering. Reassure that energy work requires presence rather than belief — suggest returning to the grounding in Step 3 if focus has drifted.
 
 ### Step 5: Guide Herbal Remedy Preparation
 
@@ -202,9 +202,9 @@ Use `purify-water` for safe water and `make-fire` for heating.
 
 Walk them through each preparation step, confirming plant identification at each stage.
 
-**Expected:** A prepared remedy appropriate to the condition, made from positively identified materials with clean water.
+**Got:** A prepared remedy appropriate to the condition, made from positively identified materials with clean water.
 
-**On failure:** If plant identification is uncertain, advise against ingestion. External poultices carry less risk but still require correct plant ID. If no suitable herbs are available, skip this step and rely on other modalities.
+**If fail:** If plant identification is uncertain, advise against ingestion. External poultices carry less risk but still require correct plant ID. If no suitable herbs are available, skip this step and rely on other modalities.
 
 ### Step 6: Guide First Aid Stabilization
 
@@ -216,9 +216,9 @@ For physical injuries, coach stabilization before applying any esoteric modaliti
 4. **Shock signs** (pale, cold, rapid pulse, confusion): "Lie flat, elevate the legs, stay warm, talk to them reassuringly"
 5. **Breathing difficulty**: "Sit upright, loosen clothing, coach slow breathing — 4 counts in, 6 counts out"
 
-**Expected:** Bleeding controlled, pain managed, shock prevented, and the person stabilized enough for transport or continued care.
+**Got:** Bleeding controlled, pain managed, shock prevented, and the person stabilized enough for transport or continued care.
 
-**On failure:** If bleeding does not stop with direct pressure after 15 minutes, guide pressure to the arterial pressure point upstream of the wound. If shock symptoms worsen, maintain warmth and consciousness while seeking emergency help. First aid stabilization takes absolute priority over all other modalities — communicate this clearly.
+**If fail:** If bleeding does not stop with direct pressure after 15 minutes, guide pressure to the arterial pressure point upstream of the wound. If shock symptoms worsen, maintain warmth and consciousness while seeking emergency help. First aid stabilization takes absolute priority over all other modalities — communicate this clearly.
 
 ### Step 7: Guide Holistic Techniques
 
@@ -245,9 +245,9 @@ These techniques can stand alone or weave into any other modality.
 5. "Continue down to the soles of your feet"
 6. Note any areas they report for targeted follow-up
 
-**Expected:** The person reports increased relaxation, reduced pain perception, or emotional release. Body scan identifies specific areas for targeted follow-up.
+**Got:** The person reports increased relaxation, reduced pain perception, or emotional release. Body scan identifies specific areas for targeted follow-up.
 
-**On failure:** If they cannot focus on visualization, simplify to breath-only. If body scan triggers emotional distress, slow down and offer the option to skip that body region. Reassure that the goal is never to force through resistance.
+**If fail:** If they cannot focus on visualization, simplify to breath-only. If body scan triggers emotional distress, slow down and offer the option to skip that body region. Reassure that the goal is never to force through resistance.
 
 ### Step 8: Close and Follow Through
 
@@ -260,9 +260,9 @@ These techniques can stand alone or weave into any other modality.
 7. For herbal remedies: specify dosage and frequency (typically 2-3 times daily for teas)
 8. Suggest follow-up if the condition is ongoing
 
-**Expected:** The person reports improvement or at least no worsening. A follow-up plan is in place for ongoing conditions.
+**Got:** The person reports improvement or at least no worsening. A follow-up plan is in place for ongoing conditions.
 
-**On failure:** If the condition worsened, reassess (return to Step 1) and consider a different modality. For persistent or serious physical conditions, recommend conventional medical attention — these modalities are complementary, not replacements for professional care.
+**If fail:** If the condition worsened, reassess (return to Step 1) and consider a different modality. For persistent or serious physical conditions, recommend conventional medical attention — these modalities are complementary, not replacements for professional care.
 
 ## Validation
 
@@ -276,9 +276,9 @@ These techniques can stand alone or weave into any other modality.
 - [ ] No modality was forced through the person's resistance
 - [ ] AI coached without claiming to transmit or channel energy itself
 
-## Common Pitfalls
+## Pitfalls
 
-- **Skipping physical stabilization**: Energy work on a bleeding wound is irresponsible — always guide stabilization first
+- **Skipping physical stabilization**: Energy work on a bleeding wound is irresponsible — guide stabilization first
 - **Misidentified herbs**: Incorrect plant identification can cause poisoning — when in doubt, advise against ingestion
 - **Rushing the grounding**: An ungrounded person attempting energy work transfers agitation — invest the time in Step 3
 - **Overriding the person's autonomy**: Never insist on continuing a technique they find uncomfortable — healing requires trust

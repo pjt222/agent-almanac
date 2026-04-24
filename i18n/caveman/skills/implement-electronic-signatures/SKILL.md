@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement electronic signatures compliant with 21 CFR Part 11 Subpart C
   and EU Annex 11. Covers signature manifestation (signer, date/time, meaning),
@@ -27,30 +27,30 @@ metadata:
 
 # Implement Electronic Signatures
 
-Design and implement electronic signature controls that meet 21 CFR Part 11 Subpart C and EU Annex 11 requirements for regulated electronic records.
+Design + implement electronic signature controls meeting 21 CFR Part 11 Subpart C + EU Annex 11 requirements for regulated electronic records.
 
-## When to Use
+## When Use
 
-- A computerized system requires legally binding electronic signatures for GxP records
-- Replacing wet-ink signatures with electronic equivalents in a regulated workflow
-- Implementing approval workflows for batch release, document approval, or data sign-off
+- Computerized system needs legally binding electronic signatures for GxP records
+- Replacing wet-ink signatures with electronic equivalents in regulated workflow
+- Implementing approval workflows for batch release, document approval, data sign-off
 - Regulatory gap assessment reveals missing signature controls
-- Building or configuring a system that must comply with 21 CFR 11.50–11.300
+- Building or configuring system that must comply with 21 CFR 11.50–11.300
 
 ## Inputs
 
-- **Required**: System description and signature use cases (what records are being signed)
+- **Required**: System description + signature use cases (what records are being signed)
 - **Required**: Applicable regulations (21 CFR Part 11, EU Annex 11, specific GxP context)
 - **Required**: Signature types needed (approval, review, acknowledgement, authorship)
 - **Optional**: Current authentication infrastructure (Active Directory, LDAP, SSO)
 - **Optional**: Existing electronic signature policy or SOPs
 - **Optional**: System vendor documentation on signature capabilities
 
-## Procedure
+## Steps
 
 ### Step 1: Assess Applicability of Electronic Signature Requirements
 
-Determine which 21 CFR Part 11 Subpart C provisions apply:
+Find which 21 CFR Part 11 Subpart C provisions apply:
 
 ```markdown
 # Electronic Signature Applicability Assessment
@@ -76,12 +76,13 @@ Determine which 21 CFR Part 11 Subpart C provisions apply:
 | Deviation closure | Deviation report | "Closed — CAPA effective" | As needed | Wet-ink |
 ```
 
-**Expected:** Every signature use case has a documented regulatory basis and defined meaning.
-**On failure:** If a use case does not require 21 CFR 11 compliance (e.g., non-GxP records), document the exclusion rationale and apply proportionate controls.
+**Got:** Every signature use case has documented regulatory basis + defined meaning.
+
+**If fail:** Use case doesn't need 21 CFR 11 compliance (non-GxP records)? Document exclusion rationale + apply proportionate controls.
 
 ### Step 2: Design Signature Manifestation
 
-Define what information the signature must display per 21 CFR 11.50:
+Define what info signature must display per 21 CFR 11.50:
 
 ```markdown
 # Signature Manifestation Specification
@@ -108,12 +109,13 @@ Every electronic signature must display:
 | CLOSE | "Closed — corrective action verified" | CAPA and deviation closure | QA |
 ```
 
-**Expected:** Signature manifestation is unambiguous — anyone viewing the signed record can identify who signed, when, and why.
-**On failure:** If the system cannot display all three elements in the record view, implement a signature detail page accessible from the signed record.
+**Got:** Signature manifestation unambiguous — anyone viewing signed record can identify who signed, when, why.
+
+**If fail:** System can't display all three elements in record view? Implement signature detail page accessible from signed record.
 
 ### Step 3: Implement Signature-to-Record Binding
 
-Ensure signatures cannot be removed, copied, or transferred between records (21 CFR 11.70):
+Ensure signatures cannot be removed, copied, transferred between records (21 CFR 11.70):
 
 ```markdown
 # Signature Binding Specification
@@ -135,12 +137,13 @@ Ensure signatures cannot be removed, copied, or transferred between records (21 
 - [ ] Binding survives record export (PDF, print includes signature metadata)
 ```
 
-**Expected:** A signed record and its signature are inseparable — modifying either invalidates the binding.
-**On failure:** If the system cannot enforce binding at the technical level, implement procedural controls (dual custody, periodic reconciliation) and document the compensating control.
+**Got:** Signed record + signature inseparable — modifying either invalidates binding.
+
+**If fail:** System can't enforce binding at technical level? Implement procedural controls (dual custody, periodic reconciliation) + document compensating control.
 
 ### Step 4: Configure Authentication Controls
 
-Implement the identity verification requirements per 21 CFR 11.100 and 11.200:
+Implement identity verification requirements per 21 CFR 11.100 + 11.200:
 
 ```markdown
 # Authentication Configuration
@@ -177,8 +180,9 @@ For non-biometric signatures (username + password):
 | Initial password | Must be changed on first use |
 ```
 
-**Expected:** Authentication enforces that only the identified individual can apply their signature.
-**On failure:** If the system does not support session-aware signature controls, require full re-authentication (username + password) for every signature event.
+**Got:** Authentication enforces that only identified individual can apply their signature.
+
+**If fail:** System doesn't support session-aware signature controls? Require full re-authentication (username + password) for every signature event.
 
 ### Step 5: Create Electronic Signature Policy
 
@@ -215,8 +219,9 @@ Signature: _____________ Date: _____________
 The organisation shall submit a certification to the FDA that electronic signatures used within its systems are intended to be the legally binding equivalent of handwritten signatures.
 ```
 
-**Expected:** Policy document is approved by quality, IT, and legal/regulatory affairs before electronic signatures go live.
-**On failure:** If legal counsel has not reviewed the policy, flag this as a compliance risk and obtain legal review before first use of electronic signatures.
+**Got:** Policy document approved by quality, IT, legal/regulatory affairs before electronic signatures go live.
+
+**If fail:** Legal counsel has not reviewed policy? Flag as compliance risk + obtain legal review before first use of electronic signatures.
 
 ### Step 6: Verify Implementation
 
@@ -239,33 +244,34 @@ Execute verification tests for all signature controls:
 | ES-010 | Verify audit trail captures signature event | Timestamp, user, meaning, record ID logged | | |
 ```
 
-**Expected:** All test cases pass, demonstrating that signature controls meet regulatory requirements.
-**On failure:** Failed test cases require remediation before the system goes live. Document failures as deviations and track resolution through change control.
+**Got:** All test cases pass, demonstrating signature controls meet regulatory requirements.
 
-## Validation
+**If fail:** Failed test cases need remediation before system goes live. Document failures as deviations + track resolution through change control.
+
+## Checks
 
 - [ ] Applicability assessment documents which 21 CFR 11 Subpart C provisions apply
-- [ ] Signature manifestation includes name, date/time, and meaning for every use case
-- [ ] Signature binding prevents removal, copying, or transfer of signatures
+- [ ] Signature manifestation includes name, date/time, meaning for every use case
+- [ ] Signature binding prevents removal, copying, transfer of signatures
 - [ ] Authentication requires two distinct identification components at first signing
 - [ ] Password policy meets minimum security requirements
-- [ ] Electronic signature policy approved by quality, IT, and legal
+- [ ] Electronic signature policy approved by quality, IT, legal
 - [ ] User certification forms collected for all signers
 - [ ] FDA certification submitted (if required under 11.300)
 - [ ] Verification tests pass for all signature controls
 
-## Common Pitfalls
+## Pitfalls
 
-- **Confusing authentication with electronic signature**: Logging in is authentication; signing a record is an electronic signature. They have different regulatory requirements.
-- **Shared accounts**: Any system with shared accounts cannot have compliant electronic signatures. Resolve shared accounts before implementing e-signatures.
-- **Missing meaning**: Signatures that show name and date but not the meaning ("Approved," "Reviewed") do not meet 21 CFR 11.50.
-- **Session handling**: Allowing continuous session signing without re-authentication undermines the identity assurance of the signature.
-- **Forgetting 11.300 certification**: Organisations using electronic signatures in FDA-regulated contexts must certify to the FDA that they intend e-signatures to be legally binding.
+- **Confusing authentication with electronic signature**: Logging in = authentication; signing record = electronic signature. Different regulatory requirements.
+- **Shared accounts**: Any system with shared accounts can't have compliant electronic signatures. Resolve shared accounts before implementing e-signatures.
+- **Missing meaning**: Signatures that show name + date but not meaning ("Approved," "Reviewed") do not meet 21 CFR 11.50.
+- **Session handling**: Allowing continuous session signing without re-authentication undermines identity assurance of signature.
+- **Forgetting 11.300 certification**: Organisations using electronic signatures in FDA-regulated contexts must certify to FDA that they intend e-signatures to be legally binding.
 
-## Related Skills
+## See Also
 
 - `design-compliance-architecture` — maps e-signature requirements across systems
 - `implement-audit-trail` — audit trail captures signature events
-- `write-validation-documentation` — verification tests are part of OQ documentation
+- `write-validation-documentation` — verification tests part of OQ documentation
 - `write-standard-operating-procedure` — SOP for electronic signature use
 - `manage-change-control` — changes to signature configuration go through change control

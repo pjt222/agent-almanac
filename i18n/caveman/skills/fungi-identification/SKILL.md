@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Field identification of fungi using morphological features, spore prints,
   habitat analysis, and seasonal context with a safety-first approach. Covers
@@ -27,30 +27,30 @@ metadata:
 
 # Fungi Identification
 
-Identify fungi in the field using morphological features, spore prints, habitat, and season with an absolute safety-first approach.
+Find mushroom ID in field. Use shape, spore prints, habitat, season. Safety first, always.
 
-## When to Use
+## When Use
 
-- You encounter an unknown fungus and need to identify it
-- You are foraging for edible mushrooms and need to confirm species before consumption
-- You want to assess whether fungi in your garden or property are harmful
-- You are building field identification skills through structured observation practice
-- You need to differentiate an edible species from a dangerous look-alike
+- Unknown fungus, need ID
+- Foraging edible mushrooms, confirm species before eat
+- Garden/property fungi: harmful?
+- Build field ID skill with structured observation
+- Tell edible from dangerous look-alike
 
 ## Inputs
 
-- **Required**: A fungus specimen or clear observation of one in situ
-- **Required**: Ability to observe fine morphological details (cap, gills, stem, base)
-- **Optional**: Field guide or reference material for the region
-- **Optional**: Paper and glass for spore prints
-- **Optional**: Knife for cross-section examination
+- **Required**: Fungus specimen or clear observation in situ
+- **Required**: Eye for fine detail (cap, gills, stem, base)
+- **Optional**: Field guide for region
+- **Optional**: Paper + glass for spore prints
+- **Optional**: Knife for cross-section
 - **Optional**: Hand lens (10x) for fine detail
 
-## Procedure
+## Steps
 
-### Step 1: The Cardinal Rule
+### Step 1: Cardinal Rule
 
-Before any identification work, internalize the absolute rule of mycology.
+Before any ID work, burn rule into head.
 
 ```
 CARDINAL RULE:
@@ -68,13 +68,13 @@ edible mushroom) is a missed meal.
 ALWAYS ERR TOWARD CAUTION.
 ```
 
-**Expected:** The cardinal rule is internalized before proceeding with identification.
+**Got:** Cardinal rule internalized before proceeding.
 
-**On failure:** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
+**If fail:** No failure mode for this step. Rule not internalized → do not proceed to field ID for consumption.
 
-### Step 2: Document the Habitat
+### Step 2: Document Habitat
 
-Context narrows identification before touching the specimen.
+Context narrows ID before touching specimen.
 
 ```
 Habitat Recording:
@@ -101,13 +101,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete habitat record that provides context for species-level identification.
+**Got:** Complete habitat record gives context for species ID.
 
-**On failure:** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
+**If fail:** Habitat unclear (urban garden, mixed plantings)? Record what visible. Incomplete habitat = lower ID confidence — factor into safety check.
 
 ### Step 3: Examine Morphological Features
 
-Systematic examination of the specimen itself.
+Systematic look at specimen.
 
 ```
 Morphological Checklist:
@@ -152,13 +152,13 @@ SPORE PRINT:
   black, rust-orange
 ```
 
-**Expected:** A complete morphological description covering all major features.
+**Got:** Full morphological description — all major features.
 
-**On failure:** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
+**If fail:** Feature not observable (no ring visible, may have been lost)? Record "not observed" not "absent." Distinction matters for ID.
 
-### Step 4: Identify Using Multiple Confirmations
+### Step 4: ID with Multiple Confirmations
 
-Cross-reference all data against reference material.
+Cross-reference all data vs reference material.
 
 ```
 Identification Protocol:
@@ -191,31 +191,31 @@ Confidence Levels:
 +----------+---------------------------+---------------------------+
 ```
 
-**Expected:** A species-level identification with explicit confidence level and look-alike assessment.
+**Got:** Species-level ID with explicit confidence + look-alike assessment.
 
-**On failure:** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
+**If fail:** ID stalls at genus level? OK for learning. For eating, only species-level "Certain" ID acceptable.
 
-## Validation
+## Checks
 
-- [ ] The cardinal rule was acknowledged before starting identification
-- [ ] Habitat was documented before examining the specimen
-- [ ] All morphological features were examined systematically
-- [ ] The base was excavated to check for a volva
-- [ ] A spore print was taken (if time allows)
-- [ ] Dangerous look-alikes were explicitly checked and eliminated
-- [ ] Confidence level was honestly assessed
-- [ ] Only "Certain" identifications were considered for consumption
+- [ ] Cardinal rule acknowledged before starting
+- [ ] Habitat documented before examining specimen
+- [ ] All morphological features examined systematically
+- [ ] Base excavated to check volva
+- [ ] Spore print taken (if time allows)
+- [ ] Dangerous look-alikes explicitly checked + eliminated
+- [ ] Confidence level honestly assessed
+- [ ] Only "Certain" IDs considered for eating
 
-## Common Pitfalls
+## Pitfalls
 
-- **Relying on a single feature**: "It looks like a chanterelle" based on colour alone. True chanterelles have false gills (ridges), grow from soil near trees, and have a specific apricot smell. False chanterelles and Jack-o'-lanterns share the colour but differ in every other feature
-- **Skipping the base examination**: Failing to dig up the base misses the volva — the single most important feature for identifying deadly Amanita species (death cap, destroying angel)
-- **Trusting apps blindly**: AI-based mushroom identification apps have significant error rates for look-alike species. Use them as a starting point, never as confirmation
-- **Assuming "common = safe"**: Abundance does not indicate edibility. Deadly species can be locally abundant
-- **Tasting unknown species**: Some mycologists use taste as a diagnostic tool, but this requires expert-level knowledge of which species are safe to taste. For non-experts, do not taste unknown fungi
-- **Ignoring temporal toxins**: Some species (e.g., Amanita phalloides) have pleasant taste and delayed symptoms. By the time symptoms appear (24-48 hours), liver damage is severe
+- **One-feature ID**: "Looks like chanterelle" by colour alone. True chanterelles have false gills (ridges), grow from soil near trees, apricot smell. False chanterelles + Jack-o'-lanterns share colour but differ every other feature
+- **Skipping base check**: No dig = no volva — single most important feature for deadly Amanita (death cap, destroying angel)
+- **Trust apps blind**: AI mushroom ID apps big error rates for look-alikes. Use as start, never as confirmation
+- **"Common = safe"**: Abundance no tell edibility. Deadly species can be locally abundant
+- **Tasting unknowns**: Some mycologists taste as diagnostic, needs expert knowledge of safe-to-taste species. Non-experts → no taste unknown fungi
+- **Ignoring delayed toxins**: Some species (Amanita phalloides) pleasant taste + delayed symptoms. When symptoms appear (24-48h), liver damage severe
 
-## Related Skills
+## See Also
 
-- `mushroom-cultivation` — growing known species eliminates identification risk entirely
-- `forage-plants` — complementary field identification skill; shares the multi-feature confirmation methodology
+- `mushroom-cultivation` — growing known species kills ID risk entire
+- `forage-plants` — complementary field ID skill; same multi-feature confirmation method

@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Grade a trading card using PSA, BGS, or CGC standards. Covers observation-first
   assessment (adapted from meditate's unbiased observation), centering measurement,
@@ -24,54 +24,54 @@ metadata:
   tags: tcg, grading, psa, bgs, cgc, pokemon, mtg, fab, kayou, cards, collecting
 ---
 
-# Grade TCG Card
+# TCG 卡之鑑級
 
-Assess and grade a trading card following professional grading standards (PSA, BGS, CGC). Uses an observation-first protocol adapted from the `meditate` skill to prevent grade anchoring — the most common grading bias.
+依專業鑑級標準（PSA、BGS、CGC）察並鑑交易卡。用自 `meditate` 技能改編之先察協議免鑑級錨定——最常見之鑑級偏見。
 
-## When to Use
+## 用時
 
-- Evaluating a card before submission to a professional grading service
-- Pre-screening a collection to identify high-grade candidates worth submitting
-- Settling disputes about card condition between buyers and sellers
-- Learning to grade consistently by following a structured assessment protocol
-- Estimating the grade-dependent value spread for a specific card
+- 送交專業鑑級前察卡
+- 預篩集以識值送之高級候選
+- 解買賣間卡況爭議
+- 依結構化察協議學穩定鑑級
+- 估特定卡之級依值差
 
-## Inputs
+## 入
 
-- **Required**: Card identification (set, number, name, variant/edition)
-- **Required**: Card images or physical description (front and back)
-- **Required**: Grading standard to apply (PSA 1-10, BGS 1-10 with subgrades, CGC 1-10)
-- **Optional**: Known market value at different grades (for grade-value analysis)
-- **Optional**: Card game (Pokemon, Magic: The Gathering, Flesh and Blood, Kayou)
+- **必要**：卡識別（系、號、名、變體/版）
+- **必要**：卡影像或物理描述（正反）
+- **必要**：所用鑑級標準（PSA 1-10、BGS 1-10 含子級、CGC 1-10）
+- **可選**：各級之已知市值（供級值析）
+- **可選**：卡遊戲（Pokemon、Magic: The Gathering、Flesh and Blood、Kayou）
 
-## Procedure
+## 法
 
-### Step 1: Clear Bias — Observation Without Prejudgment
+### 第一步：清偏——無預判之察
 
-Adapted from `meditate` Step 2-3: observe the card without anchoring to expected grade or market value.
+改自 `meditate` 第二至三步：察卡而不錨於預期級或市值。
 
-1. Set aside any knowledge of the card's market value
-2. Do NOT look up recent sales or population reports before grading
-3. If you know the card is "valuable," acknowledge that bias explicitly:
-   - "I know this card is worth $X in PSA 10. I am setting that aside."
-4. Examine the card as a physical object first, not as a collectible
-5. Note your initial gut impression but do NOT let it anchor the assessment
-6. Label any premature grade thoughts as "anchoring" and return to observation
+1. 置卡市值之知於一旁
+2. 鑑前勿查近售或族群報
+3. 若知卡「值錢」，顯承認偏見：
+   - 「知此卡於 PSA 10 值 $X。今置於旁。」
+4. 始察卡為物理對象，非收藏品
+5. 記初印象然勿令其錨察
+6. 標任何過早級念為「錨定」並返察
 
-**Expected:** A neutral starting state where the card is assessed purely on physical condition, not market expectations. Grade anchoring (knowing the value before grading) is the #1 source of grading inconsistency.
+**得：** 中性始態，純依物理狀察卡，非市期。鑑級錨定（鑑前知值）為鑑級不一之首因。
 
-**On failure:** If bias feels sticky (a high-value card makes you want to see a 10), write down the bias explicitly. Externalizing it reduces its influence. Proceed only when you can examine the card as a physical object.
+**敗則：** 若偏頑固（高值卡使欲見 10），顯書之。外化減其影響。唯可察卡為物理對象時繼。
 
-### Step 2: Centering Assessment
+### 第二步：置中察
 
-Measure the card's print centering on both faces.
+測卡印置中於兩面。
 
-1. Measure the border width on all four sides of the front face:
-   - Left vs. right border (horizontal centering)
-   - Top vs. bottom border (vertical centering)
-   - Express as ratio: e.g., 55/45 left-right, 60/40 top-bottom
-2. Repeat for the back face
-3. Apply the grading standard's centering thresholds:
+1. 測正面四側邊寬：
+   - 左對右邊（水平置中）
+   - 上對下邊（垂直置中）
+   - 以比表：如 55/45 左右、60/40 上下
+2. 反面重複
+3. 施鑑級標準之置中閾：
 
 ```
 PSA Centering Thresholds:
@@ -95,104 +95,104 @@ BGS Centering Subgrade:
 +------+-------------------+-------------------+
 ```
 
-4. Record the centering score for each axis and the applicable subgrade
+4. 記每軸置中分與所適子級
 
-**Expected:** Numeric centering ratios for both faces with the corresponding grade/subgrade identified. This is the most objective measurement in the grading process.
+**得：** 兩面之數值置中比與對應級/子級已識。此為鑑級中最客觀之測。
 
-**On failure:** If borders are too narrow to measure accurately (full-art cards, borderless prints), note "centering N/A — borderless" and skip to Step 3. Some grading services apply different standards for borderless cards.
+**敗則：** 若邊太窄不可準測（全圖卡、無邊印），記「置中 N/A——無邊」並跳第三步。有鑑級服務對無邊卡用異標準。
 
-### Step 3: Surface Analysis
+### 第三步：表面析
 
-Examine the card's surface for defects.
+察卡表面之瑕。
 
-1. Examine the front surface under good lighting:
-   - **Print defects**: ink spots, missing ink, print lines, color inconsistency
-   - **Surface scratches**: visible under direct and angled light
-   - **Whitening on surface**: haze or clouding of the surface layer
-   - **Indentations or impressions**: dents visible under raking light
-   - **Staining or discoloration**: yellowing, water marks, chemical damage
-2. Examine the back surface with the same criteria
-3. Check for factory defects vs. handling damage:
-   - Factory: print lines, miscut, crimping — may be less penalized
-   - Handling: scratches, dents, stains — always penalized
-4. Rate surface condition:
-   - Pristine (10): flawless under magnification
-   - Near-pristine (9-9.5): minor imperfections visible only under magnification
-   - Excellent (8-8.5): minor wear visible to naked eye
-   - Good (6-7): moderate wear, multiple minor defects
-   - Fair or below (1-5): significant damage visible
+1. 於良光下察正表：
+   - **印瑕**：墨斑、缺墨、印線、色不一
+   - **表面刮**：直光與斜光下可見
+   - **表面白化**：表層霧或濁
+   - **凹印**：斜光下可見之凹
+   - **染色或變色**：黃化、水印、化學損
+2. 以同準察反表
+3. 別工廠瑕與處置損：
+   - 工廠：印線、誤切、壓痕——或較少罰
+   - 處置：刮、凹、染——皆罰
+4. 表面況評：
+   - 原始（10）：放大下無瑕
+   - 近原始（9-9.5）：僅放大下見輕微瑕
+   - 優（8-8.5）：肉眼可見輕微磨
+   - 良（6-7）：中度磨，多輕瑕
+   - 次及以下（1-5）：見顯著損
 
-**Expected:** A detailed surface inventory with each defect located, described, and severity-rated. Factory vs. handling defects distinguished.
+**得：** 詳細表面清單，每瑕有位、述、嚴重度。工廠與處置瑕已別。
 
-**On failure:** If images are too low-resolution for surface analysis, note the limitation and provide a grade range rather than a point grade. Recommend physical inspection.
+**敗則：** 若影像解析度太低不可析表，標限並供級範而非點級。勸實察。
 
-### Step 4: Edge and Corner Evaluation
+### 第四步：邊與角察
 
-Assess the card's edges and corners for wear.
+察卡邊與角之磨。
 
-1. Examine all four edges:
-   - **Whitening**: white spots or lines along colored edges (the most common defect)
-   - **Chipping**: small pieces of the edge layer missing
-   - **Roughness**: edge feels uneven or has micro-tears
-   - **Foil separation**: on holofoil cards, check for delamination at edges
-2. Examine all four corners:
-   - **Sharpness**: corner tip is crisp and pointed
-   - **Rounding**: corner tip is worn to a curve (slight, moderate, heavy)
-   - **Splitting**: layer separation visible at corner (dings)
-   - **Bending**: corner turned or creased
-3. Rate edge and corner condition using the same scale as surface
-4. Note which specific corners/edges have the worst condition
+1. 察四邊：
+   - **白化**：色邊沿白點白線（最常瑕）
+   - **崩裂**：邊層小片缺
+   - **粗**：邊覺不平或有微裂
+   - **箔分**：全息箔卡察邊處分層
+2. 察四角：
+   - **銳**：角尖銳且尖
+   - **圓化**：角尖磨為弧（輕、中、重）
+   - **裂**：角處見層分（凹）
+   - **彎**：角折或摺
+3. 依表面同尺評邊角況
+4. 記最差之具體角/邊
 
-**Expected:** Per-edge and per-corner condition assessment. The worst individual corner/edge typically limits the overall grade.
+**得：** 每邊每角況察。最差之單角/邊常限總級。
 
-**On failure:** If the card is in a sleeve or toploader that obscures edges, note which areas couldn't be fully assessed.
+**敗則：** 若卡於套或頂載中遮邊，記不能全察之處。
 
-### Step 5: Assign Final Grade
+### 第五步：定末級
 
-Combine sub-assessments into the final grade.
+合諸子察為末級。
 
-1. For **PSA grading** (single number 1-10):
-   - The final grade is limited by the weakest sub-assessment
-   - A card with perfect surface but 65/35 centering caps at PSA 8
-   - Apply the "lowest limits" principle, then adjust up if other areas are exceptional
-2. For **BGS grading** (four subgrades → overall):
-   - Assign subgrades: Centering, Edges, Corners, Surface (each 1-10 in 0.5 steps)
-   - Overall = weighted average, but the lowest subgrade limits the overall
-   - BGS 10 Pristine requires all four subgrades at 10
-   - BGS 9.5 Gem Mint requires average of 9.5+ with no subgrade below 9
-3. For **CGC grading** (similar to PSA with subgrades on label):
-   - Assign Centering, Surface, Edges, Corners
-   - Overall follows CGC's proprietary weighting
-4. State the final grade with confidence:
-   - "PSA 8 (confident)" — clear grade, unlikely to be higher or lower
-   - "PSA 8-9 (borderline)" — could go either way at the grading service
-   - "PSA 7-8 (uncertain)" — limited assessment data
+1. **PSA 鑑級**（單數 1-10）：
+   - 末級為最弱子察所限
+   - 完美表面但 65/35 置中之卡封於 PSA 8
+   - 施「最低限」原則，若他區出眾則調上
+2. **BGS 鑑級**（四子級→總）：
+   - 賦子級：置中、邊、角、表面（各 1-10，0.5 步）
+   - 總 = 加權均，然最低子級限總
+   - BGS 10 Pristine 需四子級皆 10
+   - BGS 9.5 Gem Mint 需均 9.5+ 且無子級低於 9
+3. **CGC 鑑級**（似 PSA 附子級於標）：
+   - 賦置中、表面、邊、角
+   - 總依 CGC 專有加權
+4. 附信心陳末級：
+   - 「PSA 8（確定）」——清級，不太可能更高或低
+   - 「PSA 8-9（邊界）」——鑑級服務或任一方向
+   - 「PSA 7-8（不確）」——察資料有限
 
-**Expected:** A final grade with confidence level. For BGS, all four subgrades reported. The grade is supported by evidence from Steps 2-4.
+**得：** 附信心等之末級。BGS 者報四子級。級有第二至四步證據支。
 
-**On failure:** If the assessment is inconclusive (e.g., can't tell if a surface mark is a scratch or dirt), provide a grade range and recommend professional grading. Never assign a confident grade with insufficient data.
+**敗則：** 若察不確（如不能辨表痕為刮或塵），供級範並勸專業鑑級。勿以不足資料定確級。
 
-## Validation Checklist
+## 驗
 
-- [ ] Bias check completed before grading (no grade anchoring)
-- [ ] Centering measured on both faces with ratios recorded
-- [ ] Surface examined for scratches, print defects, staining, indentations
-- [ ] All four edges and corners individually assessed
-- [ ] Factory vs. handling defects distinguished
-- [ ] Final grade supported by evidence from each sub-assessment
-- [ ] Confidence level stated (confident, borderline, uncertain)
-- [ ] Grading standard correctly applied (PSA/BGS/CGC thresholds)
+- [ ] 鑑前已作偏見察（無級錨定）
+- [ ] 兩面置中已測並記比
+- [ ] 表面察刮、印瑕、染、凹
+- [ ] 四邊四角個別察
+- [ ] 工廠對處置瑕已別
+- [ ] 末級有每子察證據支
+- [ ] 信心等已陳（確定、邊界、不確）
+- [ ] 正施鑑級標準（PSA/BGS/CGC 閾）
 
-## Common Pitfalls
+## 陷
 
-- **Grade anchoring**: Knowing a card's value before grading biases the assessment toward the "hoped-for" grade. Always assess physically first
-- **Ignoring the back**: The back surface and back centering count. Many graders over-focus on the front
-- **Confusing factory with handling defects**: A factory print line is different from a scratch, but both affect the grade
-- **Over-grading holofoils**: Holographic and foil cards hide surface scratches until viewed at the right angle. Use multiple light angles
-- **Centering optical illusions**: Art placement can make centering appear better or worse than it is. Measure the borders, not the art
+- **級錨定**：鑑前知卡值偏察向「所望」級。始終先物理察
+- **忽反面**：反表與反置中皆計。多鑑級者過重正面
+- **工廠與處置瑕混**：工廠印線與刮異，然二者皆影響級
+- **過鑑全息箔**：全息與箔卡於特定角方見表刮。用多光角
+- **置中視錯覺**：圖位可使置中見較實好或差。測邊非圖
 
-## Related Skills
+## 參
 
-- `build-tcg-deck` — Deck building where card condition affects tournament legality
-- `manage-tcg-collection` — Collection management with grade-based valuation
-- `meditate` — Source of the observation-without-prejudgment technique adapted for grading bias prevention
+- `build-tcg-deck` — 卡況影響比賽合法之構組
+- `manage-tcg-collection` — 依級估值之集管
+- `meditate` — 改編作鑑級偏見防之無預判察技法源

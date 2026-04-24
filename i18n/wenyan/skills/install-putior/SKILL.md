@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Install and configure the putior R package for workflow visualization.
   Covers CRAN and GitHub installation, optional dependencies (mcptools,
@@ -24,28 +24,28 @@ metadata:
   tags: putior, install, workflow, mermaid, visualization, R
 ---
 
-# Install putior
+# 裝 putior
 
-Install the putior R package and its optional dependencies so the annotation-to-diagram pipeline is ready to use.
+裝 putior R 包及其可選依賴使注解至圖之管線可用。
 
-## When to Use
+## 用時
 
-- Setting up putior for the first time in a project or environment
-- Preparing a machine for workflow visualization tasks
-- A downstream skill (analyze-codebase-workflow, generate-workflow-diagram) requires putior to be installed
-- Restoring an environment after an R version upgrade or renv wipe
+- 於項目或環境首次設 putior
+- 為工作流可視化任務備機
+- 下游技能（analyze-codebase-workflow、generate-workflow-diagram）需 putior 已裝
+- R 版升或 renv 清後還原環境
 
-## Inputs
+## 入
 
-- **Required**: Access to an R installation (>= 4.1.0)
-- **Optional**: Whether to install from CRAN (default) or GitHub dev version
-- **Optional**: Which optional dependency groups to install: MCP (`mcptools`, `ellmer`), interactive (`shiny`, `shinyAce`), logging (`logger`), ACP (`plumber2`)
+- **必要**：可達之 R 裝（>= 4.1.0）
+- **可選**：自 CRAN（默）或 GitHub 開發版裝
+- **可選**：所裝之可選依組：MCP（`mcptools`、`ellmer`）、交互（`shiny`、`shinyAce`）、日志（`logger`）、ACP（`plumber2`）
 
-## Procedure
+## 法
 
-### Step 1: Verify R Installation
+### 第一步：驗 R 裝
 
-Confirm R is available and meets the minimum version requirement.
+確 R 可得且合最低版需。
 
 ```r
 R.Version()$version.string
@@ -57,13 +57,13 @@ R.Version()$version.string
 "/mnt/c/Program Files/R/R-4.5.2/bin/Rscript.exe" -e "cat(R.version.string)"
 ```
 
-**Expected:** R version string printed, >= 4.1.0.
+**得：** R 版串已印，>= 4.1.0。
 
-**On failure:** Install or upgrade R. On Windows, download from https://cran.r-project.org/bin/windows/base/. On Linux, use `sudo apt install r-base`.
+**敗則：** 裝或升 R。Windows 者自 https://cran.r-project.org/bin/windows/base/ 下。Linux 用 `sudo apt install r-base`。
 
-### Step 2: Install putior
+### 第二步：裝 putior
 
-Install from CRAN (stable) or GitHub (dev).
+自 CRAN（穩）或 GitHub（開發）裝。
 
 ```r
 # CRAN (recommended)
@@ -73,13 +73,13 @@ install.packages("putior")
 remotes::install_github("pjt222/putior")
 ```
 
-**Expected:** Package installs without errors. `library(putior)` loads silently.
+**得：** 包無誤裝。`library(putior)` 默載。
 
-**On failure:** If CRAN installation fails with "not available for this version of R", use the GitHub version. If GitHub fails, check that `remotes` is installed: `install.packages("remotes")`.
+**敗則：** 若 CRAN 裝敗報「此 R 版無」，用 GitHub 版。若 GitHub 敗，察 `remotes` 已裝：`install.packages("remotes")`。
 
-### Step 3: Install Optional Dependencies
+### 第三步：裝可選依賴
 
-Install optional packages based on required functionality.
+依所需功能裝可選包。
 
 ```r
 # MCP server integration (for AI assistant access)
@@ -97,13 +97,13 @@ install.packages("logger")
 install.packages("plumber2")
 ```
 
-**Expected:** Each package installs without errors.
+**得：** 每包無誤裝。
 
-**On failure:** For `mcptools`, ensure `remotes` is installed first. For system dependency errors on Linux, install the required libraries (e.g., `sudo apt install libcurl4-openssl-dev` for httr2 dependency).
+**敗則：** `mcptools` 者，確 `remotes` 先裝。Linux 系統依誤者，裝所需庫（如 httr2 依之 `sudo apt install libcurl4-openssl-dev`）。
 
-### Step 4: Verify Installation
+### 第四步：驗裝
 
-Run the basic pipeline to confirm everything works.
+行基本管線以確皆作。
 
 ```r
 library(putior)
@@ -127,38 +127,44 @@ writeLines("# put id:'test', label:'Hello putior'", tmp)
 cat(put_diagram(put(tmp)))
 ```
 
-**Expected:** Mermaid flowchart code printed to console containing `test` and `Hello putior`.
+**得：** Mermaid 流程圖碼印於控制台含 `test` 與 `Hello putior`。
 
-> **Key defaults**: All scan functions (`put()`, `put_auto()`, `put_generate()`, `put_merge()`) default to `recursive = TRUE`, scanning subdirectories automatically. This is a breaking change from pre-0.2.0 versions where the default was `FALSE`. All scan functions also accept an `exclude` parameter for regex-based file filtering (e.g., `put("./src/", exclude = "test_")`).
+> **要默認**：所有掃函（`put()`、`put_auto()`、`put_generate()`、`put_merge()`）默 `recursive = TRUE`，自動掃子目錄。此為 0.2.0 前版默 `FALSE` 之破變。所有掃函亦受 `exclude` 參為正則檔過（如 `put("./src/", exclude = "test_")`）。
 
-If the optional `shiny` package is installed, try the interactive sandbox:
+若可選 `shiny` 包已裝，試交互沙盒：
 
 ```r
 putior::run_sandbox()
 ```
 
-This launches a browser-based editor where you can experiment with PUT annotation syntax and see diagrams rendered in real time.
+此啟瀏覽器編輯器，可試 PUT 注解語法並實時見圖渲染。
 
-**On failure:** If `put` is not found, the package did not install correctly. Reinstall with `install.packages("putior", dependencies = TRUE)`. If the diagram is empty, verify the temp file was created and the annotation syntax uses single quotes inside double quotes.
+**敗則：** 若 `put` 未找，包未正裝。以 `install.packages("putior", dependencies = TRUE)` 重裝。若圖空，驗臨檔已創且注解語法用雙引號內單引號。
 
-## Validation
+## 驗
 
-- [ ] `library(putior)` loads without errors
-- [ ] `packageVersion("putior")` returns a valid version
-- [ ] `put()` with a file containing a valid PUT annotation returns a data frame with one row
-- [ ] `put_diagram()` produces Mermaid code starting with `flowchart`
-- [ ] All requested optional dependencies load without errors
+- [ ] `library(putior)` 無誤載
+- [ ] `packageVersion("putior")` 返有效版
+- [ ] `put()` 於含有效 PUT 注解之檔返一行資料框
+- [ ] `put_diagram()` 生始以 `flowchart` 之 Mermaid 碼
+- [ ] 所請可選依賴皆無誤載
 
-## Common Pitfalls
+## 陷
 
-- **Wrong quote nesting**: PUT annotations use single quotes inside the annotation: `id:'name'`, not `id:"name"` (which conflicts with the comment string delimiter in some contexts).
-- **Missing Pandoc for vignettes**: If you plan to build putior's vignettes locally, ensure `RSTUDIO_PANDOC` is set in `.Renviron`.
-- **renv isolation**: If the project uses renv, you must install putior inside the renv library. Run `renv::install("putior")` instead of `install.packages("putior")`.
-- **GitHub rate limits**: Installing `mcptools` from GitHub may fail without a `GITHUB_PAT`. Set one via `usethis::create_github_token()`.
+- **引號嵌套誤**：PUT 注解內用單引號：`id:'name'`
+- 如此：非 `id:"name"`（某語境中與注解串分隔衝）
+- **vignettes 缺 Pandoc**：若擬本地建 putior vignettes
+- 需確 `.Renviron` 設 `RSTUDIO_PANDOC`
+- **renv 隔離**：若項目用 renv，必於 renv 庫中裝 putior
+- 以 `renv::install("putior")` 代 `install.packages("putior")`
+- **GitHub 速限**：無 `GITHUB_PAT` 自 GitHub 裝 `mcptools` 或敗
+- 宜以 `usethis::create_github_token()` 設之
 
-## Related Skills
+## 參
 
-- `analyze-codebase-workflow` — next step after installation to survey a codebase
-- `configure-putior-mcp` — set up the MCP server after installing optional deps
-- `manage-renv-dependencies` — manage putior within an renv environment
-- `configure-mcp-server` — general MCP server configuration
+- `analyze-codebase-workflow` — 裝後次步察庫
+- `configure-putior-mcp` — 裝可選依後設 MCP 伺服器
+- `manage-renv-dependencies` — 於 renv 環境管 putior
+- `configure-mcp-server` — 通用 MCP 伺服器配置
+- `generate-workflow-diagram` — 裝後生工作流圖之下游技能
+- `annotate-source-files` — 注源檔為前提步驟

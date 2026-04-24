@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Field identification of fungi using morphological features, spore prints,
   habitat analysis, and seasonal context with a safety-first approach. Covers
@@ -68,9 +68,9 @@ edible mushroom) is a missed meal.
 ALWAYS ERR TOWARD CAUTION.
 ```
 
-**Expected:** The cardinal rule is internalized before proceeding with identification.
+**Got:** The cardinal rule is internalized before proceeding with identification.
 
-**On failure:** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
+**If fail:** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
 
 ### Step 2: Document the Habitat
 
@@ -101,9 +101,9 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete habitat record that provides context for species-level identification.
+**Got:** A complete habitat record that provides context for species-level identification.
 
-**On failure:** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
+**If fail:** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
 
 ### Step 3: Examine Morphological Features
 
@@ -152,9 +152,9 @@ SPORE PRINT:
   black, rust-orange
 ```
 
-**Expected:** A complete morphological description covering all major features.
+**Got:** A complete morphological description covering all major features.
 
-**On failure:** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
+**If fail:** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
 
 ### Step 4: Identify Using Multiple Confirmations
 
@@ -191,9 +191,9 @@ Confidence Levels:
 +----------+---------------------------+---------------------------+
 ```
 
-**Expected:** A species-level identification with explicit confidence level and look-alike assessment.
+**Got:** A species-level identification with explicit confidence level and look-alike assessment.
 
-**On failure:** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
+**If fail:** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
 
 ## Validation
 
@@ -206,7 +206,7 @@ Confidence Levels:
 - [ ] Confidence level was honestly assessed
 - [ ] Only "Certain" identifications were considered for consumption
 
-## Common Pitfalls
+## Pitfalls
 
 - **Relying on a single feature**: "It looks like a chanterelle" based on colour alone. True chanterelles have false gills (ridges), grow from soil near trees, and have a specific apricot smell. False chanterelles and Jack-o'-lanterns share the colour but differ in every other feature
 - **Skipping the base examination**: Failing to dig up the base misses the volva — the single most important feature for identifying deadly Amanita species (death cap, destroying angel)

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate a project status report by reading existing artifacts (charter,
   backlog, sprint plan, WBS), calculating metrics, identifying blockers,
@@ -56,9 +56,9 @@ Scan the project directory for PM artifacts:
 
 Read available files. Not all will exist — adapt the report to available data.
 
-**Expected:** At least one artifact read successfully, key metrics extracted.
+**Got:** At least one artifact read successfully, key metrics extracted.
 
-**On failure:** If no artifacts exist, report cannot be generated. Create a charter or backlog first using the `draft-project-charter` or `manage-backlog` skills.
+**If fail:** If no artifacts exist, report cannot be generated. Create a charter or backlog first using the `draft-project-charter` or `manage-backlog` skills.
 
 ### Step 2: Calculate Progress Metrics
 
@@ -85,9 +85,9 @@ Compute metrics from available data:
 | Schedule Variance | [+/-N days] | [+/-N days] | |
 ```
 
-**Expected:** 3-5 metrics calculated with previous period comparison.
+**Got:** 3-5 metrics calculated with previous period comparison.
 
-**On failure:** If no historical data exists (first report), omit Previous and Trend columns. If data is incomplete, note gaps in report footer with action items to establish tracking.
+**If fail:** If no historical data exists (first report), omit Previous and Trend columns. If data is incomplete, note gaps in report footer with action items to establish tracking.
 
 ### Step 3: Identify Blockers, Risks, and Issues
 
@@ -104,9 +104,9 @@ List active blockers and risks:
 
 Cross-reference against the charter risk register. Flag any new risks not previously identified.
 
-**Expected:** All active blockers and top risks documented with owners and actions.
+**Got:** All active blockers and top risks documented with owners and actions.
 
-**On failure:** If no blockers exist, explicitly state "No active blockers" — don't leave the section empty. If a blocker lacks an owner, escalate to project manager for assignment.
+**If fail:** If no blockers exist, explicitly state "No active blockers" — don't leave the section empty. If a blocker lacks an owner, escalate to project manager for assignment.
 
 ### Step 4: Summarize Accomplishments and Next Period Plan
 
@@ -124,9 +124,9 @@ Write two sections:
 - [Planned item/milestone with target]
 ```
 
-**Expected:** 3-5 accomplishments with concrete evidence, 3-5 planned items for next period.
+**Got:** 3-5 accomplishments with concrete evidence, 3-5 planned items for next period.
 
-**On failure:** If no accomplishments exist, report the reason (blocked, re-planning, team unavailable). If next period plan is unclear, list "Planning session scheduled for [date]" as the primary item.
+**If fail:** If no accomplishments exist, report the reason (blocked, re-planning, team unavailable). If next period plan is unclear, list "Planning session scheduled for [date]" as the primary item.
 
 ### Step 5: Assign RAG Indicators and Write Report
 
@@ -179,9 +179,9 @@ Write the complete report:
 
 Save as `STATUS-REPORT-[YYYY-MM-DD].md`.
 
-**Expected:** Complete status report saved with RAG indicators, metrics, and narrative.
+**Got:** Complete status report saved with RAG indicators, metrics, and narrative.
 
-**On failure:** If data is insufficient for RAG assessment, use ⚪ (Grey) indicating "insufficient data" and list what data needs to be collected for next report.
+**If fail:** If data is insufficient for RAG assessment, use ⚪ (Grey) indicating "insufficient data" and list what data needs to be collected for next report.
 
 ## Validation
 
@@ -194,12 +194,12 @@ Save as `STATUS-REPORT-[YYYY-MM-DD].md`.
 - [ ] Executive summary is 2-3 sentences, not a paragraph
 - [ ] Every blocker and risk has an owner and action with deadline
 
-## Common Pitfalls
+## Pitfalls
 
 - **Report without data**: Status reports must be evidence-based. Every claim should reference an artifact or metric.
 - **All green, all the time**: Persistent green RAG without evidence suggests the report isn't honest. Challenge green assessments.
 - **Blocker without owner**: Every blocker needs an owner and an action. Unowned blockers don't get resolved.
-- **Metric without context**: "Velocity = 18" means nothing without comparison. Always include previous period or target.
+- **Metric without context**: "Velocity = 18" means nothing without comparison. Include previous period or target.
 - **Too long**: A status report should be scannable in 2 minutes. Keep it to 1-2 pages.
 - **Missing decisions section**: If the project needs stakeholder decisions, make them explicit with deadlines.
 - **Stale data**: Using outdated artifacts leads to misleading reports. Verify artifact dates match reporting period.

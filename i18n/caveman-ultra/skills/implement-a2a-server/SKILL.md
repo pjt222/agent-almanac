@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement a JSON-RPC 2.0 A2A server with full task lifecycle management
   (submitted/working/completed/failed/canceled/input-required), SSE streaming,
@@ -25,33 +25,33 @@ metadata:
 
 # Implement A2A Server
 
-Build a fully compliant A2A server that handles JSON-RPC 2.0 requests, manages task lifecycle states, supports SSE streaming for real-time updates, and serves an Agent Card for discovery.
+A2A server: JSON-RPC 2.0 + task lifecycle + SSE + Agent Card discovery.
 
-## When to Use
+## Use When
 
-- Implementing an agent that participates in multi-agent A2A workflows
-- Building a backend for an Agent Card designed with `design-a2a-agent-card`
-- Adding A2A protocol support to an existing agent or service
-- Creating a reference A2A server implementation for testing
-- Deploying an agent that must interoperate with other A2A-compliant agents
+- Agent in multi-agent A2A workflow
+- Backend for Agent Card (`design-a2a-agent-card`)
+- Add A2A to existing agent/service
+- Reference server for testing
+- Deploy interoperable A2A agent
 
-## Inputs
+## In
 
-- **Required**: Agent Card (JSON) defining the agent's skills and capabilities
-- **Required**: Implementation language (TypeScript/Node.js or Python)
-- **Required**: Task execution logic for each skill defined in the Agent Card
-- **Optional**: Push notification webhook support (`true` or `false`)
-- **Optional**: Persistent task store (in-memory, Redis, PostgreSQL)
-- **Optional**: Authentication middleware matching the Agent Card's auth scheme
-- **Optional**: Maximum concurrent tasks limit
+- **Required**: Agent Card (JSON) defining skills + capabilities
+- **Required**: impl lang (TS/Node.js or Python)
+- **Required**: task exec logic per skill
+- **Optional**: push notification webhooks (bool)
+- **Optional**: persistent task store (memory, Redis, Postgres)
+- **Optional**: auth middleware matching Agent Card
+- **Optional**: max concurrent tasks
 
-## Procedure
+## Do
 
-### Step 1: Set Up Project with JSON-RPC 2.0 Handler
+### Step 1: Setup JSON-RPC 2.0 handler
 
-1.1. Initialize the project with HTTP server and JSON-RPC parsing:
+1.1. Init project w/ HTTP + JSON-RPC parsing:
 
-**TypeScript:**
+**TS:**
 
 ```bash
 mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
@@ -68,7 +68,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install fastapi uvicorn uuid6
 ```
 
-1.2. Create the JSON-RPC 2.0 request handler:
+1.2. JSON-RPC 2.0 req handler:
 
 ```typescript
 interface JsonRpcRequest {
@@ -106,7 +106,7 @@ function handleJsonRpc(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-1.3. Mount the JSON-RPC handler on a POST endpoint (typically `/`):
+1.3. Mount on POST endpoint (usually `/`):
 
 ```typescript
 app.post("/", (req, res) => {
@@ -115,7 +115,7 @@ app.post("/", (req, res) => {
 });
 ```
 
-1.4. Serve the Agent Card at `/.well-known/agent.json`:
+1.4. Serve Agent Card at `/.well-known/agent.json`:
 
 ```typescript
 app.get("/.well-known/agent.json", (req, res) => {
@@ -123,13 +123,13 @@ app.get("/.well-known/agent.json", (req, res) => {
 });
 ```
 
-**Expected:** An HTTP server that accepts JSON-RPC 2.0 requests and serves the Agent Card.
+→ HTTP server accepts JSON-RPC 2.0 + serves Agent Card.
 
-**On failure:** If JSON-RPC parsing fails, validate that the request body has `jsonrpc`, `method`, and `id` fields. Return `-32700` (Parse error) for malformed JSON and `-32600` (Invalid Request) for missing required fields.
+**If err:** parsing fails → validate req body has `jsonrpc`, `method`, `id`. Return `-32700` (Parse error) for malformed JSON, `-32600` (Invalid Request) for missing fields.
 
-### Step 2: Implement Task State Machine
+### Step 2: Task state machine
 
-2.1. Define the task model with all A2A lifecycle states:
+2.1. Task model w/ all A2A lifecycle states:
 
 ```typescript
 type TaskState =
@@ -164,7 +164,7 @@ type Part =
   | { type: "data"; data: Record<string, unknown> };
 ```
 
-2.2. Implement state transition rules:
+2.2. State transitions:
 
 ```
 submitted  -> working | failed | canceled
@@ -175,7 +175,7 @@ failed     -> (terminal)
 canceled   -> (terminal)
 ```
 
-2.3. Create a task store with CRUD operations:
+2.3. Task store w/ CRUD:
 
 ```typescript
 class TaskStore {
@@ -189,15 +189,15 @@ class TaskStore {
 }
 ```
 
-2.4. If `stateTransitionHistory` is enabled in the Agent Card, append each status change to the task's `history` array with timestamps.
+2.4. `stateTransitionHistory` enabled → append each status change to `history` w/ timestamps.
 
-**Expected:** A task store that enforces valid state transitions and maintains history.
+→ Task store enforces valid transitions + maintains history.
 
-**On failure:** If an invalid state transition is attempted (e.g., `completed` to `working`), return a JSON-RPC error with code `-32002` and a descriptive message. Never silently ignore invalid transitions.
+**If err:** invalid transition (completed → working) → JSON-RPC err code `-32002` + descriptive msg. NEVER silently ignore.
 
-### Step 3: Add tasks/send and tasks/get Methods
+### Step 3: tasks/send + tasks/get
 
-3.1. Implement `tasks/send` — the primary method for submitting tasks:
+3.1. `tasks/send` (primary):
 
 ```typescript
 function handleTaskSend(request: JsonRpcRequest): JsonRpcResponse {
@@ -233,7 +233,7 @@ function handleTaskSend(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-3.2. Implement `tasks/get` — retrieve task status and artifacts:
+3.2. `tasks/get`:
 
 ```typescript
 function handleTaskGet(request: JsonRpcRequest): JsonRpcResponse {
@@ -257,7 +257,7 @@ function handleTaskGet(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-3.3. Implement `tasks/cancel`:
+3.3. `tasks/cancel`:
 
 ```typescript
 function handleTaskCancel(request: JsonRpcRequest): JsonRpcResponse {
@@ -275,13 +275,13 @@ function handleTaskCancel(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-**Expected:** Working `tasks/send`, `tasks/get`, and `tasks/cancel` methods that correctly manage task lifecycle.
+→ Working `tasks/send`, `tasks/get`, `tasks/cancel` manage lifecycle.
 
-**On failure:** If skill matching fails, return the task in `failed` state with a descriptive message. If the task store is full, return `-32003` (resource exhausted).
+**If err:** skill match fails → task in `failed` state w/ descriptive msg. Store full → `-32003` (resource exhausted).
 
-### Step 4: Implement SSE Streaming for tasks/sendSubscribe
+### Step 4: SSE for tasks/sendSubscribe
 
-4.1. Create an SSE endpoint for streaming task updates:
+4.1. SSE endpoint:
 
 ```typescript
 app.post("/subscribe", (req, res) => {
@@ -343,7 +343,7 @@ function sendSSEEvent(res: Response, event: string, data: unknown): void {
 }
 ```
 
-4.2. Add an event emitter or pub/sub mechanism to the task store:
+4.2. Event emitter / pub-sub in task store:
 
 ```typescript
 class TaskStore {
@@ -366,49 +366,49 @@ class TaskStore {
 }
 ```
 
-4.3. Emit events from all task state transitions and artifact additions.
+4.3. Emit events from all state transitions + artifact additions.
 
-**Expected:** SSE streaming that sends real-time status and artifact events as the task progresses.
+→ SSE streams real-time status + artifact events.
 
-**On failure:** If SSE connection drops, the client should be able to reconnect and use `tasks/get` to retrieve the current state. Ensure the task store does not depend on active SSE connections.
+**If err:** SSE drops → client can reconnect + use `tasks/get` for current state. Store must not depend on active SSE.
 
-### Step 5: Add Push Notification Webhook Support
+### Step 5: Push webhook support
 
-5.1. If `pushNotifications` is enabled in the Agent Card, implement webhook registration via `tasks/pushNotification/set`:
-   - Accept a `PushNotificationConfig` with `url` (HTTPS required), optional `token`, and `events` array (`["status", "artifact"]`)
-   - Validate the webhook URL uses HTTPS; reject with error code `-32004` otherwise
-   - Store the config in the task store, keyed by task ID
+5.1. If `pushNotifications` in Agent Card → impl webhook registration via `tasks/pushNotification/set`:
+   - Accept `PushNotificationConfig` w/ `url` (HTTPS req'd), opt `token`, `events` array (`["status", "artifact"]`)
+   - Validate HTTPS → reject w/ `-32004` otherwise
+   - Store config in task store, keyed by task ID
 
-5.2. Send webhook callbacks on task state changes:
-   - On each state transition or artifact addition, check for a registered push config
-   - POST a JSON payload with `taskId`, `eventType`, `status`, and `timestamp` to the webhook URL
-   - Include `Authorization: Bearer <token>` header if a token was provided
+5.2. Webhook callbacks on state changes:
+   - Each transition / artifact → check registered config
+   - POST JSON payload w/ `taskId`, `eventType`, `status`, `timestamp`
+   - `Authorization: Bearer <token>` if provided
 
-5.3. Implement retry logic for failed webhooks (exponential backoff, max 3 retries).
+5.3. Retry logic (exponential backoff, max 3).
 
-5.4. Add `tasks/pushNotification/get` to retrieve the current push config for a task.
+5.4. `tasks/pushNotification/get` retrieves config.
 
-**Expected:** Webhook registration and delivery with retry logic.
+→ Webhook registration + delivery w/ retry.
 
-**On failure:** Push notification failures must never affect task execution. Log errors and continue. If the webhook URL is persistently unreachable, remove the subscription after max retries.
+**If err:** push failures MUST NOT affect task exec. Log + continue. Persistent unreachable → remove after max retries.
 
-### Step 6: Integrate with Agent Card for Discovery
+### Step 6: Agent Card for discovery
 
-6.1. Load and serve the Agent Card at startup:
-   - Parse `agent-card.json` and validate capabilities match implementation
-   - Throw at startup if the card advertises `streaming: true` but SSE is not enabled
-   - Throw at startup if the card advertises `pushNotifications: true` but webhooks are not enabled
+6.1. Load + serve at startup:
+   - Parse `agent-card.json` + validate capabilities match impl
+   - Throw startup if card advertises `streaming: true` but SSE disabled
+   - Throw if `pushNotifications: true` but webhooks disabled
 
-6.2. Add CORS headers for cross-origin Agent Card discovery:
-   - Set `Access-Control-Allow-Origin: *` on `/.well-known/agent.json`
-   - Allow `GET` and `OPTIONS` methods
+6.2. CORS for cross-origin discovery:
+   - `Access-Control-Allow-Origin: *` on `/.well-known/agent.json`
+   - Allow `GET` + `OPTIONS`
 
-6.3. Add authentication middleware matching the Agent Card's scheme:
-   - Skip authentication for `/.well-known/agent.json` (Agent Card is always public)
-   - For all other endpoints, validate the `Authorization` header or API key
-   - Return HTTP 401 with JSON-RPC error code `-32000` for unauthorized requests
+6.3. Auth middleware per card scheme:
+   - Skip auth on `/.well-known/agent.json` (always public)
+   - Other endpoints → validate `Authorization` / API key
+   - HTTP 401 + JSON-RPC `-32000` for unauthorized
 
-6.4. Start the server and verify end-to-end:
+6.4. Start + verify E2E:
 
 ```bash
 # Start server
@@ -423,36 +423,36 @@ curl -X POST http://localhost:3000/ \
   -d '{"jsonrpc":"2.0","id":1,"method":"tasks/send","params":{"id":"task-1","sessionId":"session-1","message":{"role":"user","parts":[{"type":"text","text":"Analyze my dataset"}]}}}'
 ```
 
-**Expected:** A running A2A server that serves its Agent Card, accepts tasks, and manages their full lifecycle.
+→ Running server serves Agent Card + accepts tasks + manages lifecycle.
 
-**On failure:** If the Agent Card capabilities do not match the implementation, the startup validation from 6.1 will catch the mismatch. Fix the implementation or update the Agent Card to match.
+**If err:** capabilities mismatch impl → startup validation (6.1) catches. Fix impl or update card.
 
-## Validation
+## Check
 
-- [ ] Server starts and serves Agent Card at `/.well-known/agent.json`
-- [ ] `tasks/send` creates tasks and transitions them through the lifecycle
-- [ ] `tasks/get` retrieves task status and artifacts
-- [ ] `tasks/cancel` moves tasks to the canceled state
-- [ ] SSE streaming sends real-time status and artifact events (if enabled)
-- [ ] Push notifications deliver webhooks on state changes (if enabled)
-- [ ] Invalid state transitions return appropriate JSON-RPC errors
-- [ ] Authentication rejects unauthorized requests (if configured)
-- [ ] Agent Card capabilities accurately reflect server implementation
-- [ ] All JSON-RPC responses include `jsonrpc: "2.0"` and correct `id`
+- [ ] Server serves Agent Card at `/.well-known/agent.json`
+- [ ] `tasks/send` creates + transitions lifecycle
+- [ ] `tasks/get` retrieves status + artifacts
+- [ ] `tasks/cancel` → canceled
+- [ ] SSE sends real-time status + artifact (if enabled)
+- [ ] Push webhooks deliver on state changes (if enabled)
+- [ ] Invalid transitions → JSON-RPC errors
+- [ ] Auth rejects unauthorized
+- [ ] Card capabilities match impl
+- [ ] All JSON-RPC responses include `jsonrpc: "2.0"` + correct `id`
 
-## Common Pitfalls
+## Traps
 
-- **Missing JSON-RPC error codes**: The A2A protocol defines specific error codes. Use `-32700` (parse error), `-32600` (invalid request), `-32601` (method not found), and custom codes for domain errors.
-- **Task ID collisions**: Use UUIDs for task IDs. If the client provides an ID, validate uniqueness before creating the task.
-- **SSE connection leaks**: Always clean up SSE subscriptions when the client disconnects. Use `req.on("close")` to detect disconnects.
-- **Blocking skill execution**: Long-running skills must execute asynchronously. Return the task in `submitted` or `working` state immediately, then update via events.
-- **Agent Card drift**: If the server implementation changes but the Agent Card is not updated, clients will have incorrect expectations. Validate at startup.
-- **Ignoring terminal states**: Once a task reaches `completed`, `failed`, or `canceled`, no further state transitions are allowed. Guard against this in the state machine.
+- **Missing JSON-RPC codes**: A2A defines specific. Use `-32700` (parse), `-32600` (invalid req), `-32601` (method not found), custom for domain errors.
+- **Task ID collisions**: UUIDs. Client-provided → validate uniqueness.
+- **SSE leaks**: clean up subscriptions on disconnect. `req.on("close")` detects.
+- **Blocking skill exec**: long-running → async. Return `submitted`/`working` immediately, update via events.
+- **Agent Card drift**: impl changes, card not updated → wrong client expectations. Validate at startup.
+- **Ignore terminal states**: completed/failed/canceled → no further transitions. Guard in state machine.
 
-## Related Skills
+## →
 
-- `design-a2a-agent-card` - design the Agent Card this server implements
-- `test-a2a-interop` - validate the server against A2A conformance tests
-- `build-custom-mcp-server` - MCP server patterns that inform A2A implementation
-- `scaffold-mcp-server` - scaffolding patterns applicable to A2A server setup
-- `configure-ingress-networking` - production deployment with TLS and routing
+- `design-a2a-agent-card` — design the card this server implements
+- `test-a2a-interop` — validate against A2A conformance tests
+- `build-custom-mcp-server` — MCP patterns inform A2A impl
+- `scaffold-mcp-server` — scaffolding applicable
+- `configure-ingress-networking` — prod deploy w/ TLS + routing

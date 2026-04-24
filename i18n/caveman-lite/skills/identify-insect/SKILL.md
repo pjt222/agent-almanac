@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify insects using body plan analysis, dichotomous keys to order, wing
   venation, mouthpart type, antennae form, leg and tarsal structure, and
@@ -77,9 +77,9 @@ Not an insect if:
 - No antennae → Arachnida
 ```
 
-**Expected:** Confirmation that the organism is an insect with 6 legs, 3 body regions, 1 pair of antennae, and 0-4 wings.
+**Got:** Confirmation that the organism is an insect with 6 legs, 3 body regions, 1 pair of antennae, and 0-4 wings.
 
-**On failure:** If the specimen has 8 legs, it is an arachnid — do not proceed with insect keys. If leg count is ambiguous (e.g., legs lost on preserved specimen), examine thoracic leg attachments — insects have 3 pairs of coxae on the pro-, meso-, and metathorax. If the body plan is genuinely unclear, record "Arthropoda — class uncertain" and note what features are visible.
+**If fail:** If the specimen has 8 legs, it is an arachnid — do not proceed with insect keys. If leg count is ambiguous (e.g., legs lost on preserved specimen), examine thoracic leg attachments — insects have 3 pairs of coxae on the pro-, meso-, and metathorax. If the body plan is genuinely unclear, record "Arthropoda — class uncertain" and note what features are visible.
 
 ### Step 2: Key to Order Using the Dichotomous Key
 
@@ -155,9 +155,9 @@ Simplified Dichotomous Key to Major Insect Orders:
      (many wingless forms exist within winged orders)
 ```
 
-**Expected:** Identification to order with a clear path through the key documented (e.g., "1a to 2b to 3a = Coleoptera").
+**Got:** Identification to order with a clear path through the key documented (e.g., "1a to 2b to 3a = Coleoptera").
 
-**On failure:** If the specimen does not clearly match any couplet, it may be a wingless form of a normally winged order (e.g., worker ants are wingless Hymenoptera, female bagworm moths are wingless Lepidoptera). Note which couplet caused difficulty and what features are ambiguous. Consult a more detailed regional key or photograph the specimen for expert review.
+**If fail:** If the specimen does not clearly match any couplet, it may be a wingless form of a normally winged order (e.g., worker ants are wingless Hymenoptera, female bagworm moths are wingless Lepidoptera). Note which couplet caused difficulty and what features are ambiguous. Consult a more detailed regional key or photograph the specimen for expert review.
 
 ### Step 3: Examine Wing Venation and Type
 
@@ -200,9 +200,9 @@ Venation Notes:
   Lepidoptera) indicate how front and hind wings link during flight
 ```
 
-**Expected:** Wing type classified and major venation features noted. For common orders, this may confirm or refine the order-level identification.
+**Got:** Wing type classified and major venation features noted. For common orders, this may confirm or refine the order-level identification.
 
-**On failure:** If wings are damaged, missing, or folded such that venation is not visible, note what can be seen (e.g., "elytra present, hind wings not examined") and proceed to the next step. Wing venation is most useful at the family level — order-level identification usually does not require detailed venation.
+**If fail:** If wings are damaged, missing, or folded such that venation is not visible, note what can be seen (e.g., "elytra present, hind wings not examined") and proceed to the next step. Wing venation is most useful at the family level — order-level identification usually does not require detailed venation.
 
 ### Step 4: Examine Mouthparts
 
@@ -237,9 +237,9 @@ Mouthpart Types:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Mouthpart type classified (chewing, piercing-sucking, siphoning, sponging, or chewing-lapping) and noted as consistent or inconsistent with the order identification from Step 2.
+**Got:** Mouthpart type classified (chewing, piercing-sucking, siphoning, sponging, or chewing-lapping) and noted as consistent or inconsistent with the order identification from Step 2.
 
-**On failure:** Mouthparts are often difficult to see on live or small specimens without magnification. If mouthparts cannot be examined, skip this step and note "mouthparts not examined." For photographs, a frontal view may reveal the mouthpart type. This step is confirmatory, not mandatory for order-level identification.
+**If fail:** Mouthparts are often difficult to see on live or small specimens without magnification. If mouthparts cannot be examined, skip this step and note "mouthparts not examined." For photographs, a frontal view may reveal the mouthpart type. This step is confirmatory, not mandatory for order-level identification.
 
 ### Step 5: Examine Antennae
 
@@ -292,9 +292,9 @@ Antenna Types:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Antenna form identified and recorded. The antennal type should be consistent with the order identified in Step 2 (e.g., lamellate antennae confirm Scarabaeidae within Coleoptera; capitate antennae confirm butterfly rather than moth within Lepidoptera).
+**Got:** Antenna form identified and recorded. The antennal type should be consistent with the order identified in Step 2 (e.g., lamellate antennae confirm Scarabaeidae within Coleoptera; capitate antennae confirm butterfly rather than moth within Lepidoptera).
 
-**On failure:** If antennae are broken, missing, or obscured in photographs, note "antennae not fully visible — appeared [filiform/clubbed/etc.] from what was observed." Antennal form is one of the most reliable features for family-level identification, so the loss of this character reduces confidence. Proceed to Step 6.
+**If fail:** If antennae are broken, missing, or obscured in photographs, note "antennae not fully visible — appeared [filiform/clubbed/etc.] from what was observed." Antennal form is one of the most reliable features for family-level identification, so the loss of this character reduces confidence. Proceed to Step 6.
 
 ### Step 6: Examine Legs and Tarsal Structure
 
@@ -340,9 +340,9 @@ Tarsal Formula:
   Variable: Check all three pairs — asymmetry is diagnostic
 ```
 
-**Expected:** Leg specialization type recorded and tarsal formula counted (if specimen allows). These features narrow identification within the order.
+**Got:** Leg specialization type recorded and tarsal formula counted (if specimen allows). These features narrow identification within the order.
 
-**On failure:** If the specimen is too small for tarsal segments to be counted without a microscope, note the overall leg shape and any obvious specialization (jumping legs, digging legs). Tarsal formula is most useful for Coleoptera families — for other orders, general leg shape is sufficient.
+**If fail:** If the specimen is too small for tarsal segments to be counted without a microscope, note the overall leg shape and any obvious specialization (jumping legs, digging legs). Tarsal formula is most useful for Coleoptera families — for other orders, general leg shape is sufficient.
 
 ### Step 7: Assign Confidence Level
 
@@ -389,9 +389,9 @@ Record your identification in this format:
   Similar taxa considered: [what else it might be and why rejected]
 ```
 
-**Expected:** A completed identification record with order (minimum), family and genus (if possible), explicit confidence level, and documentation of which features were examined and which were uncertain.
+**Got:** A completed identification record with order (minimum), family and genus (if possible), explicit confidence level, and documentation of which features were examined and which were uncertain.
 
-**On failure:** If the identification stalls at order level, that is a valid outcome. Record all features observed and submit photographs to expert forums or citizen science platforms. Many insects require specialist knowledge or even genital dissection for species-level identification — this is normal, not a failure of the method.
+**If fail:** If the identification stalls at order level, that is a valid outcome. Record all features observed and submit photographs to expert forums or citizen science platforms. Many insects require specialist knowledge or even genital dissection for species-level identification — this is normal, not a failure of the method.
 
 ## Validation
 
@@ -404,10 +404,10 @@ Record your identification in this format:
 - [ ] A confidence level was explicitly assigned (Certain/Probable/Possible/Unknown)
 - [ ] Similar taxa were considered and reasons for exclusion documented
 
-## Common Pitfalls
+## Pitfalls
 
-- **Skipping the body plan check**: Assuming an 8-legged arachnid is an insect because it "looks like a bug." Always count legs first. Ticks, mites, and harvestmen are commonly mistaken for insects
-- **Relying on color alone**: Color is the least reliable identification character in entomology. Many species are variable in color, and unrelated species can be nearly identical in coloration (mimicry). Always use structural features (wings, mouthparts, antennae) as primary characters
+- **Skipping the body plan check**: Assuming an 8-legged arachnid is an insect because it "looks like a bug." Count legs first. Ticks, mites, and harvestmen are commonly mistaken for insects
+- **Relying on color alone**: Color is the least reliable identification character in entomology. Many species are variable in color, and unrelated species can be nearly identical in coloration (mimicry). Use structural features (wings, mouthparts, antennae) as primary characters
 - **Not checking both sides of a couplet**: In a dichotomous key, read both options before choosing. Rushing through leads to wrong branches. If neither option fits well, back up to the previous couplet
 - **Ignoring sexual dimorphism**: Males and females of the same species can look dramatically different. Male moths may have bipectinate antennae while females have filiform. Male stag beetles have enormous mandibles while females do not. Consider both sexes
 - **Confusing larval and adult forms**: Immature insects (larvae, nymphs) often look nothing like adults. Caterpillars (Lepidoptera larvae) have more than 6 true legs. Grubs (Coleoptera larvae) may lack visible legs entirely. Keys for adults do not work on larvae

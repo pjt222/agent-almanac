@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Prepare herbal remedies from Hildegard von Bingen's Physica. Covers plant
   identification, preparation methods (tinctures, poultices, infusions, decoctions),
@@ -24,32 +24,32 @@ metadata:
   tags: hildegard, herbal, physica, remedy, tincture, poultice, infusion, medieval-medicine
 ---
 
-# Formulate Herbal Remedy
+# 合草藥
 
-Prepare traditional herbal remedies following Hildegard von Bingen's *Physica*, integrating medieval plant knowledge with preparation techniques.
+依 Hildegard《Physica》合草藥。
 
-## When to Use
+## 用
 
-- You need an herbal remedy for a specific ailment using Hildegardian pharmacopeia
-- You want to understand a plant's properties from *Physica*'s perspective
-- You need guidance on preparation methods (tincture, poultice, infusion, decoction)
-- You require dosage and safety information for a traditional remedy
-- You are researching medieval herbal medicine practices
-- You want to integrate Hildegard's plant wisdom into holistic health practice
+- 某疾→Hildegard 藥→用
+- 欲知 Physica 草性→用
+- 求製法（浸、敷、煎、酊）→用
+- 求量與忌→用
+- 究中世紀草藥→用
+- 合 Hildegard 於整全→用
 
-## Inputs
+## 入
 
-- **Required**: Ailment or condition to address (e.g., digestive upset, respiratory congestion, skin inflammation)
-- **Optional**: Known plant preferences or contraindications
-- **Optional**: Preparation preference (tincture for long-term use, infusion for acute, etc.)
-- **Optional**: User's temperament (sanguine, choleric, melancholic, phlegmatic) for tailored selection
-- **Optional**: Season and availability of fresh vs. dried herbs
+- **必**：疾（如胃亂、肺壅、膚炎）
+- **可**：所宜所忌之草
+- **可**：製法之擇（酊久、浸急）
+- **可**：體質（多血、膽、黑膽、黏液）
+- **可**：時令、鮮乾
 
-## Procedure
+## 行
 
-### Step 1: Identify the Plant in Physica
+### 一：辨草於 Physica
 
-Match the ailment to appropriate plants from Hildegard's *Physica* (Books I-IX: Plants, Elements, Trees, Stones, Fish, Birds, Animals, Reptiles, Metals).
+疾合草，取 Physica 九卷（草、元、木、石、魚、鳥、獸、蟲、金）。
 
 ```
 Common Ailments → Physica Plants:
@@ -83,13 +83,13 @@ Hildegard's Selection Principles:
 4. Seasonal availability: Fresh plants in growing season, dried in winter
 ```
 
-**Expected:** One to three plants identified that match the ailment's pattern (hot/cold, dry/damp) and are appropriate for the user's constitution.
+得：一至三草合疾之寒熱燥濕、合體質。
 
-**On failure:** If unsure of the condition's pattern, default to balanced, gentle plants (fennel, chamomile, yarrow) which Hildegard describes as suitable for most constitutions.
+敗：疾性未明→取中和（茴、甘菊、蓍）。
 
-### Step 2: Select Preparation Method
+### 二：擇製法
 
-Choose the appropriate extraction and delivery method based on the ailment's location, acuity, and plant properties.
+依疾位、急緩、草性。
 
 ```
 Preparation Methods from Medieval Tradition:
@@ -120,13 +120,13 @@ Decision Tree:
 - External + Chronic → Oil infusion or salve
 ```
 
-**Expected:** Preparation method selected that matches plant part (aerial vs. root), use case (acute vs. chronic), and application route (internal vs. external).
+得：製法合草之部、疾之急慢、入路內外。
 
-**On failure:** If uncertain, default to infusion — it is the safest and most forgiving method for beginners.
+敗：不定→浸。浸最安最寬。
 
-### Step 3: Prepare the Remedy with Dosage
+### 三：製與量
 
-Execute the preparation with precise measurements and technique.
+依法精量施技。
 
 ```
 INFUSION (for aerial parts: leaves, flowers):
@@ -167,13 +167,13 @@ OIL INFUSION (for external salves):
 5. Store in dark bottle; use within 6-12 months
 ```
 
-**Expected:** Remedy prepared according to method, with correct herb-to-menstruum ratio and appropriate steep/extraction time. Dosage guidelines clear for internal or external use.
+得：製合法、比合宜、時合度。量明於內外。
 
-**On failure:** If preparation seems too strong (bitter, burning sensation), dilute by half. If too weak (no noticeable effect after 3 days at proper dosage), increase herb quantity by 50% in next batch.
+敗：過強（苦、灼）→半稀。過弱（三日無感）→增草五分之一再製。
 
-### Step 4: Document Contraindications
+### 四：記忌
 
-Identify safety concerns, drug interactions, and populations who should avoid the remedy.
+辨安全、藥交、避用之群。
 
 ```
 Common Contraindications by Plant Category:
@@ -214,13 +214,13 @@ GENERAL CAUTIONS:
 - Surgery: Discontinue all herbs 2 weeks before scheduled surgery
 ```
 
-**Expected:** All relevant contraindications identified for the selected plant(s), with specific populations flagged (pregnancy, children, drug interactions).
+得：諸忌皆記。孕、幼、藥交皆標。
 
-**On failure:** If uncertain about contraindications, advise the user to consult a qualified herbalist or healthcare provider before use. Default to "Not recommended during pregnancy, breastfeeding, or for children under 12 without professional guidance."
+敗：忌未明→勸諮草師或醫師。默作「孕乳及十二歲下勿用」。
 
-### Step 5: Safety Review and Integration
+### 五：審與合
 
-Final check and guidance for monitoring effects and integrating into health practice.
+末審、觀效、納入日常。
 
 ```
 Safety Review Checklist:
@@ -252,35 +252,35 @@ Integration Notes:
   (warming herbs in winter, cooling herbs in summer)
 ```
 
-**Expected:** User has complete information: remedy preparation, dosage, contraindications, monitoring plan, and integration context. Safety disclaimers clear.
+得：用者盡知：製、量、忌、監、整合。免責明。
 
-**On failure:** If user expresses uncertainty about self-preparation, recommend consulting a trained herbalist for first preparation, then replicating at home once confident.
+敗：用者未自信→勸先從師製一次，後家中復。
 
-## Validation Checklist
+## 驗
 
-- [ ] Plant identified from Physica with appropriate temperature/moisture properties
-- [ ] Preparation method matches plant part (aerial = infusion, root = decoction, etc.)
-- [ ] Dosage guidelines provided with frequency and duration
-- [ ] Contraindications documented (pregnancy, drug interactions, specific conditions)
-- [ ] Safety review completed with monitoring protocol
-- [ ] User informed this is historical folk medicine, not medical diagnosis or treatment
-- [ ] Expected timeline for effect communicated (acute vs. chronic)
+- [ ] 草辨於 Physica，寒熱燥濕合
+- [ ] 製法合草部（地上→浸、根→煎）
+- [ ] 量明，頻、期皆記
+- [ ] 忌明（孕、藥交、疾）
+- [ ] 審畢，監護備
+- [ ] 用者知：古民間醫，非診斷
+- [ ] 時效告（急慢）
 
-## Common Pitfalls
+## 忌
 
-1. **Misidentification**: Using the wrong plant due to common name confusion. Always confirm botanical (Latin) name
-2. **Over-extraction**: Boiling delicate aerial parts destroys volatile oils. Use infusion (steeping), not decoction
-3. **Under-dosing**: Medieval preparations were often stronger than modern herbal teas. Follow traditional ratios
-4. **Ignoring Contraindications**: Pregnancy and drug interactions are serious. When in doubt, advise against use
-5. **Substituting Modern for Medieval**: Hildegard's plants reflect European medieval flora. Substitutions may not align with her temperament system
-6. **Expecting Pharmaceutical Speed**: Herbal medicine works gradually. Acute conditions: 1-3 days. Chronic: 2-4 weeks minimum
-7. **Solo Remedy Focus**: Hildegard's medicine is holistic. Remedies work best integrated with diet, prayer, rest, and seasonal rhythms
+1. **誤辨**：俗名混→必確拉丁名
+2. **過萃**：煎細葉毀揮發油→地上部取浸
+3. **量不足**：古方濃於今茶→守古比
+4. **忽忌**：孕、藥交皆重。疑則勿用
+5. **以今代古**：Hildegard 用歐洲中世紀草→代用或失體質系
+6. **期藥速**：草藥漸。急一至三日，慢二至四週最少
+7. **獨方觀**：Hildegard 整全。飲食、祈、息、時節並行
 
-## Related Skills
+## 參
 
-- `assess-holistic-health` — Temperament assessment informs plant selection (cold constitution → warming plants)
-- `practice-viriditas` — Connecting to viriditas enhances receptivity to plant medicine
-- `consult-natural-history` — Broader context of plants in Physica's cosmology
-- `heal` (esoteric domain) — Post-remedy health assessment and recovery monitoring
-- `prepare-soil` (gardening domain) — If growing medicinal herbs
-- `maintain-hand-tools` (bushcraft domain) — For harvesting and processing herbs
+- `assess-holistic-health`
+- `practice-viriditas`
+- `consult-natural-history`
+- `heal`
+- `prepare-soil`
+- `maintain-hand-tools`

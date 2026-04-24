@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Prepare herbal remedies from Hildegard von Bingen's Physica. Covers plant
   identification, preparation methods (tinctures, poultices, infusions, decoctions),
@@ -41,7 +41,7 @@ Prepare traditional herbal remedies following Hildegard von Bingen's *Physica*, 
 
 - **Required**: Ailment or condition to address (e.g., digestive upset, respiratory congestion, skin inflammation)
 - **Optional**: Known plant preferences or contraindications
-- **Optional**: Preparation preference (tincture for long-term use, infusion for acute, etc.)
+- **Optional**: Preparation preference (tincture for long-term use, infusion for acute)
 - **Optional**: User's temperament (sanguine, choleric, melancholic, phlegmatic) for tailored selection
 - **Optional**: Season and availability of fresh vs. dried herbs
 
@@ -83,13 +83,13 @@ Hildegard's Selection Principles:
 4. Seasonal availability: Fresh plants in growing season, dried in winter
 ```
 
-**Expected:** One to three plants identified that match the ailment's pattern (hot/cold, dry/damp) and are appropriate for the user's constitution.
+**Got:** One to three plants identified that match the ailment's pattern (hot/cold, dry/damp) and fit the user's constitution.
 
-**On failure:** If unsure of the condition's pattern, default to balanced, gentle plants (fennel, chamomile, yarrow) which Hildegard describes as suitable for most constitutions.
+**If fail:** If unsure of the condition's pattern, default to balanced, gentle plants (fennel, chamomile, yarrow) — Hildegard describes them as suitable for most constitutions.
 
 ### Step 2: Select Preparation Method
 
-Choose the appropriate extraction and delivery method based on the ailment's location, acuity, and plant properties.
+Choose extraction and delivery method based on ailment location, acuity, and plant properties.
 
 ```
 Preparation Methods from Medieval Tradition:
@@ -120,9 +120,9 @@ Decision Tree:
 - External + Chronic → Oil infusion or salve
 ```
 
-**Expected:** Preparation method selected that matches plant part (aerial vs. root), use case (acute vs. chronic), and application route (internal vs. external).
+**Got:** Preparation method selected that matches plant part (aerial vs. root), use case (acute vs. chronic), and application route (internal vs. external).
 
-**On failure:** If uncertain, default to infusion — it is the safest and most forgiving method for beginners.
+**If fail:** If uncertain, default to infusion — the safest and most forgiving method for beginners.
 
 ### Step 3: Prepare the Remedy with Dosage
 
@@ -167,9 +167,9 @@ OIL INFUSION (for external salves):
 5. Store in dark bottle; use within 6-12 months
 ```
 
-**Expected:** Remedy prepared according to method, with correct herb-to-menstruum ratio and appropriate steep/extraction time. Dosage guidelines clear for internal or external use.
+**Got:** Remedy prepared with correct herb-to-menstruum ratio and appropriate steep/extraction time. Dosage guidelines clear for internal or external use.
 
-**On failure:** If preparation seems too strong (bitter, burning sensation), dilute by half. If too weak (no noticeable effect after 3 days at proper dosage), increase herb quantity by 50% in next batch.
+**If fail:** If preparation is too strong (bitter, burning sensation), dilute by half. If too weak (no effect after 3 days at proper dosage), increase herb quantity by 50% in next batch.
 
 ### Step 4: Document Contraindications
 
@@ -214,9 +214,9 @@ GENERAL CAUTIONS:
 - Surgery: Discontinue all herbs 2 weeks before scheduled surgery
 ```
 
-**Expected:** All relevant contraindications identified for the selected plant(s), with specific populations flagged (pregnancy, children, drug interactions).
+**Got:** All relevant contraindications identified for the selected plant(s), with specific populations flagged (pregnancy, children, drug interactions).
 
-**On failure:** If uncertain about contraindications, advise the user to consult a qualified herbalist or healthcare provider before use. Default to "Not recommended during pregnancy, breastfeeding, or for children under 12 without professional guidance."
+**If fail:** If uncertain about contraindications, advise the user to consult a qualified herbalist or healthcare provider before use. Default to "Not recommended during pregnancy, breastfeeding, or for children under 12 without professional guidance."
 
 ### Step 5: Safety Review and Integration
 
@@ -252,21 +252,21 @@ Integration Notes:
   (warming herbs in winter, cooling herbs in summer)
 ```
 
-**Expected:** User has complete information: remedy preparation, dosage, contraindications, monitoring plan, and integration context. Safety disclaimers clear.
+**Got:** User has complete information: remedy preparation, dosage, contraindications, monitoring plan, and integration context. Safety disclaimers clear.
 
-**On failure:** If user expresses uncertainty about self-preparation, recommend consulting a trained herbalist for first preparation, then replicating at home once confident.
+**If fail:** If user expresses uncertainty about self-preparation, recommend consulting a trained herbalist for first preparation, then replicating at home once confident.
 
-## Validation Checklist
+## Validation
 
 - [ ] Plant identified from Physica with appropriate temperature/moisture properties
-- [ ] Preparation method matches plant part (aerial = infusion, root = decoction, etc.)
+- [ ] Preparation method matches plant part (aerial = infusion, root = decoction)
 - [ ] Dosage guidelines provided with frequency and duration
 - [ ] Contraindications documented (pregnancy, drug interactions, specific conditions)
 - [ ] Safety review completed with monitoring protocol
 - [ ] User informed this is historical folk medicine, not medical diagnosis or treatment
 - [ ] Expected timeline for effect communicated (acute vs. chronic)
 
-## Common Pitfalls
+## Pitfalls
 
 1. **Misidentification**: Using the wrong plant due to common name confusion. Always confirm botanical (Latin) name
 2. **Over-extraction**: Boiling delicate aerial parts destroys volatile oils. Use infusion (steeping), not decoction

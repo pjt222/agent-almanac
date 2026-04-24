@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify insects using body plan analysis, dichotomous keys to order, wing
   venation, mouthpart type, antennae form, leg and tarsal structure, and
@@ -28,30 +28,30 @@ metadata:
 
 # Identify Insect
 
-Identify insects using systematic morphological examination, dichotomous keys, and structured confidence assessment.
+ID insects with systematic morphological examination, dichotomous keys, structured confidence assessment.
 
-## When to Use
+## When Use
 
-- You have an unknown insect (live, photographed, or preserved) and need to identify it
-- You want to move beyond order-level placement to family or genus
-- You are working through a specimen collection and need consistent identification methods
-- You need to distinguish between visually similar orders or families
-- You are teaching or learning insect identification and want a structured approach
+- Unknown insect (live, photo, preserved) needs ID
+- Want to move beyond order-level to family or genus
+- Working through specimen collection, need consistent ID methods
+- Tell between visually similar orders or families
+- Teaching or learning insect ID, want structured approach
 
 ## Inputs
 
-- **Required**: An insect specimen or clear observation (live, photographed, or preserved)
-- **Required**: Ability to examine fine morphological details (wings, mouthparts, antennae, legs)
+- **Required**: Insect specimen or clear observation (live, photo, preserved)
+- **Required**: Can examine fine morphological details (wings, mouthparts, antennae, legs)
 - **Optional**: Hand lens (10x) or dissecting microscope for fine detail
-- **Optional**: Entomological field guide or dichotomous key for the region
-- **Optional**: Forceps and pins for manipulating preserved specimens
-- **Optional**: Photographs from multiple angles (dorsal, lateral, ventral, frontal)
+- **Optional**: Entomological field guide or dichotomous key for region
+- **Optional**: Forceps + pins for manipulating preserved specimens
+- **Optional**: Photos from multiple angles (dorsal, lateral, ventral, frontal)
 
-## Procedure
+## Steps
 
-### Step 1: Verify the Basic Body Plan
+### Step 1: Verify Basic Body Plan
 
-Confirm you are looking at an insect and not another arthropod. This step prevents misidentification at the most fundamental level.
+Confirm looking at insect not other arthropod. Prevents misidentification at most fundamental level.
 
 ```
 Arthropod Verification:
@@ -77,13 +77,13 @@ Not an insect if:
 - No antennae → Arachnida
 ```
 
-**Expected:** Confirmation that the organism is an insect with 6 legs, 3 body regions, 1 pair of antennae, and 0-4 wings.
+**Got:** Confirmation organism is insect with 6 legs, 3 body regions, 1 pair antennae, 0-4 wings.
 
-**On failure:** If the specimen has 8 legs, it is an arachnid — do not proceed with insect keys. If leg count is ambiguous (e.g., legs lost on preserved specimen), examine thoracic leg attachments — insects have 3 pairs of coxae on the pro-, meso-, and metathorax. If the body plan is genuinely unclear, record "Arthropoda — class uncertain" and note what features are visible.
+**If fail:** Specimen has 8 legs → arachnid, don't proceed with insect keys. Leg count ambiguous (legs lost on preserved specimen)? Examine thoracic leg attachments — insects have 3 pairs of coxae on pro-, meso-, metathorax. Body plan genuinely unclear? Record "Arthropoda — class uncertain", note visible features.
 
-### Step 2: Key to Order Using the Dichotomous Key
+### Step 2: Key to Order Using Dichotomous Key
 
-Work through the following simplified key one couplet at a time. At each couplet, choose the option that matches your specimen and follow the lead number.
+Work through simplified key one couplet at a time. Each couplet → choose option matching specimen + follow lead number.
 
 ```
 Simplified Dichotomous Key to Major Insect Orders:
@@ -155,13 +155,13 @@ Simplified Dichotomous Key to Major Insect Orders:
      (many wingless forms exist within winged orders)
 ```
 
-**Expected:** Identification to order with a clear path through the key documented (e.g., "1a to 2b to 3a = Coleoptera").
+**Got:** ID to order with clear path through key documented ("1a to 2b to 3a = Coleoptera").
 
-**On failure:** If the specimen does not clearly match any couplet, it may be a wingless form of a normally winged order (e.g., worker ants are wingless Hymenoptera, female bagworm moths are wingless Lepidoptera). Note which couplet caused difficulty and what features are ambiguous. Consult a more detailed regional key or photograph the specimen for expert review.
+**If fail:** Specimen doesn't match any couplet? May be wingless form of normally winged order (worker ants = wingless Hymenoptera, female bagworm moths = wingless Lepidoptera). Note which couplet caused difficulty + what features ambiguous. Consult more detailed regional key or photograph specimen for expert review.
 
-### Step 3: Examine Wing Venation and Type
+### Step 3: Examine Wing Venation + Type
 
-Wings carry diagnostic information at family and genus level beyond what the dichotomous key captures.
+Wings carry diagnostic info at family + genus level beyond dichotomous key.
 
 ```
 Wing Types by Order:
@@ -192,21 +192,21 @@ Wing Types by Order:
 +--------------------+------------------------------------------+
 
 Venation Notes:
-- Count the major longitudinal veins (costa, subcosta, radius, media,
-  cubitus, anal veins) — number and branching pattern are family-diagnostic
-- Note cross-veins forming cells — the number and shape of closed cells
+- Count major longitudinal veins (costa, subcosta, radius, media,
+  cubitus, anal veins) — number + branching pattern family-diagnostic
+- Note cross-veins forming cells — number + shape of closed cells
   help distinguish families
 - Wing coupling mechanisms (hamuli in Hymenoptera, frenulum in
-  Lepidoptera) indicate how front and hind wings link during flight
+  Lepidoptera) indicate how front + hind wings link during flight
 ```
 
-**Expected:** Wing type classified and major venation features noted. For common orders, this may confirm or refine the order-level identification.
+**Got:** Wing type classified + major venation features noted. Common orders → may confirm or refine order-level ID.
 
-**On failure:** If wings are damaged, missing, or folded such that venation is not visible, note what can be seen (e.g., "elytra present, hind wings not examined") and proceed to the next step. Wing venation is most useful at the family level — order-level identification usually does not require detailed venation.
+**If fail:** Wings damaged, missing, or folded such that venation not visible? Note what can be seen ("elytra present, hind wings not examined") + proceed. Wing venation most useful at family level — order-level ID usually doesn't need detailed venation.
 
 ### Step 4: Examine Mouthparts
 
-Mouthpart type reflects feeding ecology and is diagnostic at the order level.
+Mouthpart type reflects feeding ecology + diagnostic at order level.
 
 ```
 Mouthpart Types:
@@ -237,13 +237,13 @@ Mouthpart Types:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Mouthpart type classified (chewing, piercing-sucking, siphoning, sponging, or chewing-lapping) and noted as consistent or inconsistent with the order identification from Step 2.
+**Got:** Mouthpart type classified (chewing, piercing-sucking, siphoning, sponging, chewing-lapping) + noted consistent or inconsistent with order ID from Step 2.
 
-**On failure:** Mouthparts are often difficult to see on live or small specimens without magnification. If mouthparts cannot be examined, skip this step and note "mouthparts not examined." For photographs, a frontal view may reveal the mouthpart type. This step is confirmatory, not mandatory for order-level identification.
+**If fail:** Mouthparts often hard to see on live or small specimens without magnification. Can't examine? Skip + note "mouthparts not examined." Photos → frontal view may reveal mouthpart type. Step confirmatory, not mandatory for order-level ID.
 
 ### Step 5: Examine Antennae
 
-Antennal form is one of the most visually accessible features and is diagnostic at the family level in many orders.
+Antennal form one of most visually accessible features + diagnostic at family level in many orders.
 
 ```
 Antenna Types:
@@ -292,13 +292,13 @@ Antenna Types:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Antenna form identified and recorded. The antennal type should be consistent with the order identified in Step 2 (e.g., lamellate antennae confirm Scarabaeidae within Coleoptera; capitate antennae confirm butterfly rather than moth within Lepidoptera).
+**Got:** Antenna form identified + recorded. Antennal type consistent with order ID from Step 2 (lamellate confirms Scarabaeidae within Coleoptera; capitate confirms butterfly not moth within Lepidoptera).
 
-**On failure:** If antennae are broken, missing, or obscured in photographs, note "antennae not fully visible — appeared [filiform/clubbed/etc.] from what was observed." Antennal form is one of the most reliable features for family-level identification, so the loss of this character reduces confidence. Proceed to Step 6.
+**If fail:** Antennae broken, missing, obscured in photos? Note "antennae not fully visible — appeared [filiform/clubbed/etc.] from what observed." Antennal form most reliable for family-level ID, so loss reduces confidence. Proceed to Step 6.
 
-### Step 6: Examine Legs and Tarsal Structure
+### Step 6: Examine Legs + Tarsal Structure
 
-Leg specialization reveals the insect's ecology, and tarsal formula (number of segments per tarsus) is diagnostic at the family level in several orders.
+Leg specialization reveals insect ecology + tarsal formula (number of segments per tarsus) diagnostic at family level in several orders.
 
 ```
 Leg Specializations:
@@ -330,23 +330,23 @@ Leg Specializations:
 +--------------------+------------------------------------------+
 
 Tarsal Formula:
-- Count tarsal segments on front, middle, and hind legs
-- Express as 3 numbers (e.g., 5-5-5 means 5 segments on all legs)
+- Count tarsal segments on front, middle, hind legs
+- Express as 3 numbers (5-5-5 = 5 segments on all legs)
 - Common formulas:
   5-5-5: Most Coleoptera families, Hymenoptera, Neuroptera
   5-5-4: Cerambycidae, Chrysomelidae (apparent — actually cryptic 5th)
   4-4-4: Some smaller beetle families
   3-3-3: Some flies (Diptera)
-  Variable: Check all three pairs — asymmetry is diagnostic
+  Variable: Check all three pairs — asymmetry diagnostic
 ```
 
-**Expected:** Leg specialization type recorded and tarsal formula counted (if specimen allows). These features narrow identification within the order.
+**Got:** Leg specialization type recorded + tarsal formula counted (if specimen allows). Features narrow ID within order.
 
-**On failure:** If the specimen is too small for tarsal segments to be counted without a microscope, note the overall leg shape and any obvious specialization (jumping legs, digging legs). Tarsal formula is most useful for Coleoptera families — for other orders, general leg shape is sufficient.
+**If fail:** Specimen too small for tarsal segments without microscope? Note overall leg shape + any obvious specialization (jumping legs, digging legs). Tarsal formula most useful for Coleoptera families — other orders, general leg shape enough.
 
 ### Step 7: Assign Confidence Level
 
-Synthesize all observations into a final identification with an explicit confidence rating.
+Synthesize all observations into final ID with explicit confidence rating.
 
 ```
 Confidence Assessment:
@@ -389,33 +389,33 @@ Record your identification in this format:
   Similar taxa considered: [what else it might be and why rejected]
 ```
 
-**Expected:** A completed identification record with order (minimum), family and genus (if possible), explicit confidence level, and documentation of which features were examined and which were uncertain.
+**Got:** Completed ID record with order (minimum), family + genus (if possible), explicit confidence level, documentation of features examined + uncertain.
 
-**On failure:** If the identification stalls at order level, that is a valid outcome. Record all features observed and submit photographs to expert forums or citizen science platforms. Many insects require specialist knowledge or even genital dissection for species-level identification — this is normal, not a failure of the method.
+**If fail:** ID stalls at order level? Valid outcome. Record all features observed + submit photos to expert forums or citizen science platforms. Many insects need specialist knowledge or genital dissection for species-level ID — normal, not method failure.
 
-## Validation
+## Checks
 
-- [ ] The organism was confirmed as an insect (6 legs, 3 body regions, 1 pair antennae)
-- [ ] The dichotomous key was worked through systematically, documenting the path taken
-- [ ] Wing type was classified and venation features noted where visible
-- [ ] Mouthpart type was identified or noted as unexamined
-- [ ] Antenna form was identified using the standard terminology
-- [ ] Leg specialization and tarsal formula were recorded where possible
-- [ ] A confidence level was explicitly assigned (Certain/Probable/Possible/Unknown)
-- [ ] Similar taxa were considered and reasons for exclusion documented
+- [ ] Organism confirmed as insect (6 legs, 3 body regions, 1 pair antennae)
+- [ ] Dichotomous key worked through systematic, documenting path taken
+- [ ] Wing type classified + venation features noted where visible
+- [ ] Mouthpart type identified or noted as unexamined
+- [ ] Antenna form identified using standard terminology
+- [ ] Leg specialization + tarsal formula recorded where possible
+- [ ] Confidence level explicit assigned (Certain/Probable/Possible/Unknown)
+- [ ] Similar taxa considered + reasons for exclusion documented
 
-## Common Pitfalls
+## Pitfalls
 
-- **Skipping the body plan check**: Assuming an 8-legged arachnid is an insect because it "looks like a bug." Always count legs first. Ticks, mites, and harvestmen are commonly mistaken for insects
-- **Relying on color alone**: Color is the least reliable identification character in entomology. Many species are variable in color, and unrelated species can be nearly identical in coloration (mimicry). Always use structural features (wings, mouthparts, antennae) as primary characters
-- **Not checking both sides of a couplet**: In a dichotomous key, read both options before choosing. Rushing through leads to wrong branches. If neither option fits well, back up to the previous couplet
-- **Ignoring sexual dimorphism**: Males and females of the same species can look dramatically different. Male moths may have bipectinate antennae while females have filiform. Male stag beetles have enormous mandibles while females do not. Consider both sexes
-- **Confusing larval and adult forms**: Immature insects (larvae, nymphs) often look nothing like adults. Caterpillars (Lepidoptera larvae) have more than 6 true legs. Grubs (Coleoptera larvae) may lack visible legs entirely. Keys for adults do not work on larvae
-- **Forcing a species-level identification**: Many insect families contain hundreds of similar-looking species distinguishable only by genital morphology or DNA barcoding. An honest genus-level or family-level identification is more valuable than a wrong species name
+- **Skipping body plan check**: Assuming 8-legged arachnid is insect because "looks like bug." Always count legs first. Ticks, mites, harvestmen commonly mistaken for insects
+- **Relying on color alone**: Color least reliable ID character in entomology. Many species variable in color, unrelated species can be nearly identical in coloration (mimicry). Always use structural features (wings, mouthparts, antennae) as primary
+- **Not checking both sides of couplet**: Dichotomous key → read both options before choosing. Rushing leads to wrong branches. Neither option fits well? Back up to previous couplet
+- **Ignoring sexual dimorphism**: Males + females of same species can look dramatic different. Male moths may have bipectinate antennae while females have filiform. Male stag beetles have enormous mandibles while females don't. Consider both sexes
+- **Confusing larval + adult forms**: Immature insects (larvae, nymphs) often look nothing like adults. Caterpillars (Lepidoptera larvae) have more than 6 true legs. Grubs (Coleoptera larvae) may lack visible legs entire. Keys for adults don't work on larvae
+- **Forcing species-level ID**: Many insect families contain hundreds of similar-looking species distinguishable only by genital morphology or DNA barcoding. Honest genus-level or family-level ID more valuable than wrong species name
 
-## Related Skills
+## See Also
 
-- `document-insect-sighting` — record the sighting with photographs and metadata before or during identification
-- `observe-insect-behavior` — behavioral observations that supplement morphological identification with ecological context
-- `collect-preserve-specimens` — when a physical specimen is needed for definitive identification under magnification
-- `survey-insect-population` — applying identification skills across multiple specimens in a population-level survey
+- `document-insect-sighting` — record sighting with photos + metadata before or during ID
+- `observe-insect-behavior` — behavioral observations supplement morphological ID with ecological context
+- `collect-preserve-specimens` — physical specimen needed for definitive ID under magnification
+- `survey-insect-population` — apply ID skills across multiple specimens in population-level survey

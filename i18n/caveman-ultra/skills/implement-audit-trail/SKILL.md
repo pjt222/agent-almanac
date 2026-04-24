@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement audit trail functionality for R projects in regulated
   environments. Covers logging, provenance tracking, electronic
@@ -26,25 +26,25 @@ metadata:
 
 # Implement Audit Trail
 
-Add audit trail capabilities to R projects for regulatory compliance.
+R audit trail for regulatory compliance.
 
-## When to Use
+## Use When
 
-- R analysis requires electronic records compliance (21 CFR Part 11)
-- Need to track who did what, when, and why in an analysis
-- Implementing data provenance tracking
-- Creating tamper-evident analysis logs
+- 21 CFR Part 11 compliance req'd
+- Track who/what/when/why
+- Data provenance tracking
+- Tamper-evident analysis logs
 
-## Inputs
+## In
 
-- **Required**: R project with data processing or analysis scripts
-- **Required**: Regulatory requirements (which audit trail elements are mandatory)
-- **Optional**: Existing logging infrastructure
-- **Optional**: Electronic signature requirements
+- **Required**: R project w/ data processing / analysis
+- **Required**: regulatory reqs (mandatory elements)
+- **Optional**: existing logging infra
+- **Optional**: e-sig reqs
 
-## Procedure
+## Do
 
-### Step 1: Set Up Structured Logging
+### Step 1: Structured logging
 
 Create `R/audit_log.R`:
 
@@ -100,11 +100,11 @@ log_audit_event <- function(event, description, details = list()) {
 }
 ```
 
-**Expected:** `R/audit_log.R` created with `init_audit_log()` and `log_audit_event()` functions. Calling `init_audit_log()` creates the `audit_logs/` directory and a timestamped JSONL file. Each log entry is a single JSON line with `timestamp`, `event`, `analyst`, and `session_id` fields.
+→ `R/audit_log.R` created. `init_audit_log()` creates `audit_logs/` + timestamped JSONL. Each entry = 1 JSON line w/ `timestamp`, `event`, `analyst`, `session_id`.
 
-**On failure:** If `jsonlite::toJSON()` fails, ensure the `jsonlite` package is installed. If the log directory cannot be created, check file system permissions. If timestamps lack timezone, verify `%z` is supported on the platform.
+**If err:** `jsonlite::toJSON()` fails → install jsonlite. No log dir → FS perms. Missing TZ → check `%z` platform support.
 
-### Step 2: Add Data Integrity Checks
+### Step 2: Data integrity checks
 
 ```r
 #' Compute and log data hash for integrity verification
@@ -144,11 +144,11 @@ verify_data_integrity <- function(data, expected_hash) {
 }
 ```
 
-**Expected:** `hash_data()` returns a SHA-256 hash string and logs a `DATA_HASH` event. `verify_data_integrity()` compares current data against a stored hash and logs a `DATA_VERIFY` event with PASS or FAIL status.
+→ `hash_data()` returns SHA-256 + logs `DATA_HASH`. `verify_data_integrity()` compares vs stored + logs PASS/FAIL.
 
-**On failure:** If `digest::digest()` is not found, install the `digest` package. If hashes don't match for identical data, check that column order and data types are consistent between hashing and verification.
+**If err:** `digest::digest()` missing → install digest. Hashes not match on identical → check col order + types consistent.
 
-### Step 3: Track Data Transformations
+### Step 3: Track transformations
 
 ```r
 #' Wrap a data transformation with audit logging
@@ -179,11 +179,11 @@ audited_transform <- function(data, transform_fn, description) {
 }
 ```
 
-**Expected:** `audited_transform()` wraps any transformation function, logging input dimensions and hash, output dimensions and hash, and the transformation description as a `DATA_TRANSFORM` event.
+→ Wraps fn, logs in/out dims + hashes + desc as `DATA_TRANSFORM`.
 
-**On failure:** If the transform function errors, the audit event is not logged. Wrap the transform in `tryCatch()` to log both successes and failures. Ensure the transform function accepts and returns a data frame.
+**If err:** transform fn errors → event not logged. Wrap in `tryCatch()` for success + failure. Fn must accept + return DF.
 
-### Step 4: Log Session Environment
+### Step 4: Log session env
 
 ```r
 #' Log complete session information for reproducibility
@@ -203,11 +203,11 @@ log_session_info <- function() {
 }
 ```
 
-**Expected:** A `SESSION_INFO` event logged with R version, platform, locale, attached packages with versions, and the renv lockfile hash (if applicable).
+→ `SESSION_INFO` logged w/ R version, platform, locale, attached pkgs + versions, renv lockfile hash.
 
-**On failure:** If `sessionInfo()` returns incomplete package information, ensure all packages are loaded via `library()` before calling `log_session_info()`. The renv lockfile hash will be `NA` if the project does not use renv.
+**If err:** incomplete pkg info → load all via `library()` before call. renv hash NA if no renv.
 
-### Step 5: Implement in Analysis Scripts
+### Step 5: Implement in scripts
 
 ```r
 # 01_analysis.R
@@ -241,13 +241,13 @@ log_audit_event("ANALYSIS_COMPLETE", "Primary efficacy analysis", list(
 log_session_info()
 ```
 
-**Expected:** Analysis scripts initialize the audit log at the start, log each data import, transformation, and analysis step, and record session info at the end. The JSONL log file captures the complete provenance chain.
+→ Scripts init at start, log each import/transform/analysis, record session at end. JSONL captures full provenance chain.
 
-**On failure:** If `init_audit_log()` is missing, ensure `R/audit_log.R` is sourced or the package is loaded. If events are missing from the log, verify that `log_audit_event()` is called after every significant operation.
+**If err:** `init_audit_log()` missing → source `R/audit_log.R` or load pkg. Events missing → verify `log_audit_event()` after every significant op.
 
-### Step 6: Git-Based Change Control
+### Step 6: Git change control
 
-Complement the application-level audit trail with git:
+Complement app-level audit trail w/ git:
 
 ```bash
 # Use signed commits for non-repudiation
@@ -260,31 +260,31 @@ Per change request CHG-042, approved by [Name] on [Date].
 Validation impact assessment: Low risk - additional derived variable."
 ```
 
-**Expected:** Git commits are signed (GPG) and use descriptive messages referencing change control IDs. The combination of application-level JSONL audit trail and git history provides a complete change control record.
+→ Signed (GPG) commits w/ descriptive msgs referencing change control IDs. App-level JSONL + git = complete change control.
 
-**On failure:** If GPG signing fails, configure the signing key with `git config --global user.signingkey KEY_ID`. If the key is not set up, follow `gpg --gen-key` to create one.
+**If err:** GPG signing fails → `git config --global user.signingkey KEY_ID`. No key → `gpg --gen-key`.
 
-## Validation
+## Check
 
-- [ ] Audit log captures all required events (start, data access, transforms, analysis, export)
-- [ ] Timestamps use ISO 8601 format with timezone
-- [ ] Data hashes enable integrity verification
-- [ ] Session information is recorded
-- [ ] Logs are append-only (no deletion or modification)
-- [ ] Analyst identity is captured for each session
-- [ ] Log format is machine-readable (JSONL)
+- [ ] All req'd events captured (start, access, transforms, analysis, export)
+- [ ] Timestamps ISO 8601 + TZ
+- [ ] Hashes enable integrity verification
+- [ ] Session info recorded
+- [ ] Append-only (no delete/modify)
+- [ ] Analyst identity captured
+- [ ] Machine-readable JSONL
 
-## Common Pitfalls
+## Traps
 
-- **Logging too much**: Focus on regulated events. Don't log every variable assignment.
-- **Mutable logs**: Audit logs must be append-only. Use JSONL (one JSON object per line).
-- **Missing timestamps**: Every event needs a timestamp with timezone.
-- **No session context**: Each log entry should reference the session for correlation.
-- **Forgetting to initialize**: Scripts must call `init_audit_log()` before any analysis.
+- **Log too much**: focus on regulated events. Don't log every assignment.
+- **Mutable logs**: must be append-only. JSONL (1 JSON/line).
+- **Missing timestamps**: every event needs timestamp + TZ.
+- **No session context**: entry should ref session for correlation.
+- **Forget init**: must `init_audit_log()` before analysis.
 
-## Related Skills
+## →
 
-- `setup-gxp-r-project` - project structure for validated environments
-- `write-validation-documentation` - validation protocols and reports
-- `validate-statistical-output` - output verification methodology
-- `configure-git-repository` - version control as part of change control
+- `setup-gxp-r-project` — validated env structure
+- `write-validation-documentation` — protocols + reports
+- `validate-statistical-output` — output verification
+- `configure-git-repository` — version control as change control

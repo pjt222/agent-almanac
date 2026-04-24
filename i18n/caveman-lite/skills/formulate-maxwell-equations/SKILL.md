@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Work with the full set of Maxwell's equations in integral and differential
   form to analyze electromagnetic fields, waves, and energy transport. Use
@@ -26,7 +26,7 @@ metadata:
 
 # Formulate Maxwell Equations
 
-Analyze electromagnetic phenomena by stating the relevant Maxwell equations in appropriate form (integral or differential), applying boundary conditions and symmetry to reduce the system, solving the resulting partial differential equations for the fields, computing derived quantities such as the Poynting vector, radiation pressure, and wave impedance, and verifying the solution against known static and wave limits.
+Analyze electromagnetic phenomena: state the relevant Maxwell equations in appropriate form (integral or differential), apply boundary conditions and symmetry to reduce the system, solve the resulting PDEs for the fields, compute derived quantities (Poynting vector, radiation pressure, wave impedance), and verify the solution against known static and wave limits.
 
 ## When to Use
 
@@ -72,9 +72,9 @@ Write the complete set and select which equations constrain the problem:
 - **Displacement current**: [negligible / essential -- with justification]
 ```
 
-**Expected:** The four equations are stated, the relevant subset is identified with justification, and the displacement current is either included or explicitly argued to be negligible.
+**Got:** Four equations stated, relevant subset identified with justification, displacement current either included or argued negligible.
 
-**On failure:** If it is unclear whether the displacement current matters, estimate the ratio |epsilon_0 dE/dt| / |J|. If this ratio is comparable to or greater than 1, the displacement current must be retained. In vacuum with no free charges, the displacement current is always essential for wave propagation.
+**If fail:** If unclear whether the displacement current matters, estimate the ratio |epsilon_0 dE/dt| / |J|. If comparable to or greater than 1, retain the displacement current. In vacuum with no free charges, the displacement current is always essential for wave propagation.
 
 ### Step 2: Apply Boundary Conditions and Symmetry
 
@@ -111,9 +111,9 @@ Reduce the system using material interfaces and geometric symmetry:
 - **Gauge** (if using potentials): [Coulomb / Lorenz / other]
 ```
 
-**Expected:** All boundary conditions are stated at every interface, symmetry is exploited to reduce the dimensionality, and the problem is ready for PDE solution.
+**Got:** All boundary conditions stated at every interface, symmetry exploited to reduce dimensionality, problem ready for PDE solution.
 
-**On failure:** If boundary conditions are over-determined (more equations than unknowns at an interface), check that the number of field components matches the number of conditions. If under-determined, a boundary condition has been missed -- often the tangential H condition or the radiation condition at infinity.
+**If fail:** If boundary conditions are over-determined (more equations than unknowns at an interface), check that the number of field components matches the number of conditions. If under-determined, a boundary condition was missed — often the tangential H condition or the radiation condition at infinity.
 
 ### Step 3: Solve Resulting PDEs
 
@@ -158,9 +158,9 @@ Solve the Maxwell equations or their derived forms for the field quantities:
 - **Characteristic scales**: [wavelength, skin depth, decay length]
 ```
 
-**Expected:** Explicit field expressions satisfying Maxwell's equations and all boundary conditions, with the dispersion relation or eigenvalue spectrum if applicable.
+**Got:** Explicit field expressions satisfying Maxwell's equations and all boundary conditions, with dispersion relation or eigenvalue spectrum if applicable.
 
-**On failure:** If the PDE cannot be separated in the chosen coordinate system, try a different system or resort to numerical methods (finite difference, finite element). If the solution does not satisfy one of the Maxwell equations on back-substitution, there is an algebraic error in the derivation -- re-check the curl and divergence operations.
+**If fail:** If the PDE cannot be separated in the chosen coordinate system, try a different system or resort to numerical methods (finite difference, finite element). If the solution does not satisfy one of the Maxwell equations on back-substitution, there is an algebraic error — re-check the curl and divergence operations.
 
 ### Step 4: Compute Derived Quantities
 
@@ -202,9 +202,9 @@ Extract physically meaningful quantities from the field solution:
 - **Q-factor** (if resonant): Q = [value]
 ```
 
-**Expected:** All derived quantities computed with correct units, energy conservation verified via Poynting's theorem, and physically reasonable magnitudes.
+**Got:** All derived quantities computed with correct units, energy conservation verified via Poynting's theorem, physically reasonable magnitudes.
 
-**On failure:** If Poynting's theorem does not balance (du/dt + div(S) does not equal -J . E), there is an inconsistency between the E and B solutions. Re-verify that both fields satisfy all four Maxwell equations simultaneously. A common error is computing E and B from different approximations that are not mutually consistent.
+**If fail:** If Poynting's theorem does not balance (du/dt + div(S) does not equal -J . E), there is an inconsistency between the E and B solutions. Re-verify that both fields satisfy all four Maxwell equations. A common error is computing E and B from different approximations that are not mutually consistent.
 
 ### Step 5: Verify Against Known Limits
 
@@ -237,9 +237,9 @@ Check that the full solution reduces correctly in limiting cases:
 | Energy conservation | Poynting's theorem | balanced | [check] | [Yes/No] |
 ```
 
-**Expected:** All limits produce the correct known results. Energy conservation is satisfied to within numerical precision.
+**Got:** All limits produce the correct known results. Energy conservation is satisfied to within numerical precision.
 
-**On failure:** A failed limit is a definitive indicator of an error. The static limit failing suggests a problem in the source terms or boundary conditions. The plane wave limit failing suggests an error in the wave equation derivation. Energy conservation failing suggests inconsistency between E and B solutions. Trace the failure back to the specific step and correct before accepting the solution.
+**If fail:** A failed limit is a definitive indicator of an error. The static limit failing suggests a problem in the source terms or boundary conditions. The plane wave limit failing suggests an error in the wave equation derivation. Energy conservation failing suggests inconsistency between E and B solutions. Trace the failure back to the specific step and correct before accepting the solution.
 
 ## Validation
 
@@ -256,10 +256,10 @@ Check that the full solution reduces correctly in limiting cases:
 - [ ] Plane wave limit yields v = 1/sqrt(mu epsilon) and orthogonal E, B, k
 - [ ] The solution is complete enough for another researcher to reproduce
 
-## Common Pitfalls
+## Pitfalls
 
 - **Omitting the displacement current**: In the original Ampere's law (curl B = mu_0 J), taking the divergence gives div(J) = 0, which contradicts charge conservation when rho changes in time. The displacement current term mu_0 epsilon_0 dE/dt fixes this and is essential for wave propagation. Never drop it without verifying that dE/dt is negligible compared to J/epsilon_0.
-- **Inconsistent E and B solutions**: Solving for E and B independently (e.g., E from Gauss's law and B from Ampere's law) without verifying Faraday's law and Gauss's law for B can produce fields that are not mutually consistent. Always verify all four equations.
+- **Inconsistent E and B solutions**: Solving for E and B independently (e.g., E from Gauss's law and B from Ampere's law) without verifying Faraday's law and Gauss's law for B can produce fields that are not mutually consistent. Verify all four equations.
 - **Wrong boundary condition normal direction**: The convention n_hat x (H_1 - H_2) = K_f requires n_hat to point from medium 2 into medium 1. Reversing the direction flips the sign of the surface current condition.
 - **Confusing D, E, B, and H in materials**: In vacuum, D = epsilon_0 E and B = mu_0 H. In linear media, D = epsilon E and B = mu H. Maxwell's equations in matter use D and H for the free source terms and E and B for the force law. Mixing constitutive relations leads to factors of epsilon_r or mu_r errors.
 - **Phase velocity versus group velocity**: The wave speed v = omega/k is the phase velocity. Energy and information propagate at the group velocity v_g = d(omega)/dk. In dispersive media these differ, and using phase velocity for energy transport gives wrong results.

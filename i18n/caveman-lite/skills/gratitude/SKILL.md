@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI strength recognition — scanning for what is functioning well and
   understanding why. The complement to heal, which scans for drift and
@@ -60,9 +60,9 @@ Shift attention from problem-scanning to strength-scanning. This is a deliberate
    - **What tools are working well?** — Which ones feel natural, efficient, reliable?
    - **What about the project structure supports good work?** — Clear conventions, good documentation, sensible architecture?
 
-**Expected:** A genuine list of things that are working. Not forced positivity — honest recognition of actual strengths. If something is genuinely working well, name it specifically.
+**Got:** A genuine list of things that are working. Not forced positivity — honest recognition of actual strengths. If something is genuinely working well, name it specifically.
 
-**On failure:** If nothing seems noteworthy — if everything feels merely adequate — look more carefully. "Adequate" often masks "reliable," and reliability is a strength worth recognizing. The absence of problems is itself a form of health, maintained by patterns worth understanding.
+**If fail:** If nothing seems noteworthy — if everything feels merely adequate — look more carefully. "Adequate" often masks "reliable," and reliability is a strength worth recognizing. The absence of problems is itself a form of health, maintained by patterns worth understanding.
 
 ### Step 2: Understand Why
 
@@ -79,9 +79,9 @@ For each strength identified, trace the cause. Gratitude without understanding i
    - **Emergent strengths**: Patterns that work because of fortunate combinations — no single factor explains it
 3. Note which strengths are **fragile** (dependent on specific conditions) vs. **robust** (likely to persist across contexts)
 
-**Expected:** For each strength, a brief understanding of *why* it works. This understanding is what makes gratitude actionable — it transforms appreciation into knowledge that can be applied elsewhere.
+**Got:** For each strength, a brief understanding of *why* it works. This understanding is what makes gratitude actionable — it transforms appreciation into knowledge that can be applied elsewhere.
 
-**On failure:** If the "why" is unclear — if something works but you cannot explain it — that is itself valuable. An unexplained strength is worth protecting even when you cannot articulate its mechanism. Note it as "working for reasons not yet understood" rather than dismissing it.
+**If fail:** If the "why" is unclear — if something works but you cannot explain it — that is itself valuable. An unexplained strength is worth protecting even when you cannot articulate its mechanism. Note it as "working for reasons not yet understood" rather than dismissing it.
 
 ### Step 3: Build On
 
@@ -97,9 +97,9 @@ Convert appreciation into forward momentum. Gratitude is not just looking backwa
    - Should it be documented so others can preserve it?
 3. Identify one concrete action — something specific that builds on the strengths recognized. Not a vague intention ("keep doing what works") but a specific next step ("apply the communication pattern from this session to the documentation task coming up")
 
-**Expected:** At least one concrete action that builds on recognized strengths. The action should feel natural — an extension of what is already working, not a forced improvement.
+**Got:** At least one concrete action that builds on recognized strengths. The action should feel natural — an extension of what is already working, not a forced improvement.
 
-**On failure:** If no action emerges, the appreciation itself is sufficient. Not every gratitude session needs to produce a plan. Sometimes recognizing what works is the entire value — it adjusts the internal model toward confidence and away from anxiety.
+**If fail:** If no action emerges, the appreciation itself is sufficient. Not every gratitude session needs to produce a plan. Sometimes recognizing what works is the entire value — it adjusts the internal model toward confidence and away from anxiety.
 
 ### Step 4: Express
 
@@ -110,9 +110,9 @@ If appropriate, share the appreciation. Gratitude that remains internal is valua
 3. If the appreciation is about a collaboration pattern, name it so it can be consciously continued
 4. Keep expression brief and specific. "Your clear problem statements make this work efficient" is better than "you're great to work with"
 
-**Expected:** Expression that is genuine, specific, and proportionate. Not every gratitude session requires outward expression — sometimes the internal recognition is enough.
+**Got:** Expression that is genuine, specific, and proportionate. Not every gratitude session requires outward expression — sometimes the internal recognition is enough.
 
-**On failure:** If expression feels forced or performative, skip it. Performed gratitude is worse than unexpressed gratitude. The internal recognition has already done its work.
+**If fail:** If expression feels forced or performative, skip it. Performed gratitude is worse than unexpressed gratitude. The internal recognition has already done its work.
 
 ## Validation
 
@@ -123,7 +123,7 @@ If appropriate, share the appreciation. Gratitude that remains internal is valua
 - [ ] Expression, if offered, was specific and genuine — not generic praise
 - [ ] The gratitude practice was proportionate — not so brief it was token, not so long it became self-congratulatory
 
-## Common Pitfalls
+## Pitfalls
 
 - **Forced positivity**: Gratitude is not optimism. If things are genuinely not working, say so. Gratitude applies to what is actually strong, not to everything
 - **Generic appreciation**: "Everything is great" is not gratitude — it is avoidance of specificity. Name specific strengths with specific evidence

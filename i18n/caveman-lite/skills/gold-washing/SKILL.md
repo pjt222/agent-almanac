@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Alluvial gold recovery using panning, sluicing, and classification.
   Covers site reading (geological indicators, stream dynamics, pay streak
@@ -93,9 +93,9 @@ Geological Indicators:
   which can host gold deposits
 ```
 
-**Expected:** You have identified 2-3 promising sample locations based on stream dynamics and geological indicators.
+**Got:** 2-3 promising sample locations identified based on stream dynamics and geological indicators.
 
-**On failure:** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). Even a single color (flake of gold) confirms the stream carries gold.
+**If fail:** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). A single color (flake of gold) confirms the stream carries gold.
 
 ### Step 2: Classify and Collect Material
 
@@ -118,9 +118,9 @@ Classification:
 5. Classified material is now ready for panning
 ```
 
-**Expected:** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
+**Got:** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
 
-**On failure:** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
+**If fail:** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
 
 ### Step 3: Pan the Material
 
@@ -162,9 +162,9 @@ Common Errors:
   you start washing off material.
 ```
 
-**Expected:** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
+**Got:** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
 
-**On failure:** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
+**If fail:** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
 
 ### Step 4: Scale Up with a Sluice Box (Optional)
 
@@ -191,9 +191,9 @@ Sluice Calibration:
   If it is caught by the riffles, gold will be too.
 ```
 
-**Expected:** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
+**Got:** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
 
-**On failure:** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
+**If fail:** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
 
 ## Validation
 
@@ -205,7 +205,7 @@ Sluice Calibration:
 - [ ] Any gold recovered was stored safely in water in a sealed vial
 - [ ] The site was left without significant environmental disturbance
 
-## Common Pitfalls
+## Pitfalls
 
 - **Panning too fast**: Impatience loses fine gold. A proper pan takes 5-10 minutes. Speed is the enemy of recovery
 - **Ignoring black sand**: If you see heavy black sand concentrating, gold is likely present — even if too fine to see without magnification

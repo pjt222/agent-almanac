@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Alluvial gold recovery using panning, sluicing, and classification.
   Covers site reading (geological indicators, stream dynamics, pay streak
@@ -26,30 +26,30 @@ metadata:
 
 # Gold Washing
 
-Recover alluvial gold from stream deposits using panning, sluicing, and classification techniques.
+Pull alluvial gold from stream deposits. Panning, sluicing, classification.
 
-## When to Use
+## When Use
 
-- You are prospecting in an area with known or suspected alluvial gold deposits
-- You want to sample a stream or river to test for gold presence
-- You are recreational panning and want to maximize recovery
-- You need to assess a site's gold potential before investing more effort
+- Prospecting area with known or suspected alluvial gold deposits
+- Sample stream or river to test for gold presence
+- Recreational panning, want max recovery
+- Assess site gold potential before bigger effort
 
 ## Inputs
 
-- **Required**: A gold pan (14-16 inch, with riffles)
-- **Required**: Access to a stream, river, or alluvial deposit
+- **Required**: Gold pan (14-16 inch, with riffles)
+- **Required**: Access to stream, river, alluvial deposit
 - **Optional**: Classifier/screen (1/4 inch mesh)
-- **Optional**: Sluice box (for higher volume processing)
-- **Optional**: Snuffer bottle or tweezers (for fine gold recovery)
-- **Optional**: Vial with water (for storing recovered gold)
-- **Optional**: Shovel and bucket for material collection
+- **Optional**: Sluice box (higher volume processing)
+- **Optional**: Snuffer bottle or tweezers (fine gold recovery)
+- **Optional**: Vial with water (storing recovered gold)
+- **Optional**: Shovel + bucket for material collection
 
-## Procedure
+## Steps
 
-### Step 1: Read the Site
+### Step 1: Read Site
 
-Gold is heavy (specific gravity 19.3) and concentrates predictably. Read the water and geology before digging.
+Gold heavy (specific gravity 19.3). Concentrates predictable. Read water + geology before digging.
 
 ```
 Where Gold Concentrates:
@@ -93,13 +93,13 @@ Geological Indicators:
   which can host gold deposits
 ```
 
-**Expected:** You have identified 2-3 promising sample locations based on stream dynamics and geological indicators.
+**Got:** 2-3 promising sample locations found by stream dynamics + geological indicators.
 
-**On failure:** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). Even a single color (flake of gold) confirms the stream carries gold.
+**If fail:** No clear indicators? Sample multiple locations systematic — one pan from each feature (inside bend, behind obstacle, random gravel bar). Even single color (flake of gold) confirms stream carries gold.
 
-### Step 2: Classify and Collect Material
+### Step 2: Classify + Collect Material
 
-Prepare the raw material for panning.
+Prep raw material for panning.
 
 ```
 Collection Protocol:
@@ -118,13 +118,13 @@ Classification:
 5. Classified material is now ready for panning
 ```
 
-**Expected:** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
+**Got:** Pan or bucket of classified material (gravel + sand smaller than 1/4 inch), from geologically promising location.
 
-**On failure:** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
+**If fail:** Can't reach bedrock? Sample what accessible. Shallow samples less likely contain gold but worth testing — flood events deposit gold at various depths.
 
-### Step 3: Pan the Material
+### Step 3: Pan Material
 
-The gold pan separates gold from lighter material using gravity and water.
+Gold pan separates gold from lighter material with gravity + water.
 
 ```
 Panning Technique:
@@ -162,11 +162,11 @@ Common Errors:
   you start washing off material.
 ```
 
-**Expected:** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
+**Got:** All heavy material (gold, black sand, garnets) concentrates in pan bottom. Gold visible as bright yellow flakes, flattened grains, rarely small nuggets.
 
-**On failure:** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
+**If fail:** No gold visible after careful pan? Location may not contain gold — or gold may be too fine to see (flour gold). Check with hand lens. Still nothing → different sample location.
 
-### Step 4: Scale Up with a Sluice Box (Optional)
+### Step 4: Scale Up with Sluice Box (Optional)
 
 For processing larger volumes of material.
 
@@ -191,29 +191,29 @@ Sluice Calibration:
   If it is caught by the riffles, gold will be too.
 ```
 
-**Expected:** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
+**Got:** Higher volume processing with gold concentrated in riffle mat, recovered by final panning.
 
-**On failure:** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
+**If fail:** Sluice not catching test material (lead shot)? Adjust angle or water flow. Sluice should catch everything heavier than quartz sand.
 
-## Validation
+## Checks
 
-- [ ] Site was read for geological indicators before sampling
-- [ ] Material was collected from a geologically promising location
-- [ ] Material was classified before panning
+- [ ] Site read for geological indicators before sampling
+- [ ] Material collected from geologically promising location
+- [ ] Material classified before panning
 - [ ] Panning used side-to-side shaking for stratification
-- [ ] Black sand concentrate was checked thoroughly for fine gold
-- [ ] Any gold recovered was stored safely in water in a sealed vial
-- [ ] The site was left without significant environmental disturbance
+- [ ] Black sand concentrate checked thoroughly for fine gold
+- [ ] Gold recovered stored safe in water in sealed vial
+- [ ] Site left without significant environmental disturbance
 
-## Common Pitfalls
+## Pitfalls
 
-- **Panning too fast**: Impatience loses fine gold. A proper pan takes 5-10 minutes. Speed is the enemy of recovery
-- **Ignoring black sand**: If you see heavy black sand concentrating, gold is likely present — even if too fine to see without magnification
-- **Confusing pyrite with gold**: Pyrite (fool's gold) is lighter, breaks when pressed with a pin, and has a brassy rather than buttery yellow colour. Real gold is malleable and does not tarnish
-- **Sampling random locations**: Gold concentrates predictably. Sampling the middle of a straight stretch is far less productive than sampling the inside of a bend
-- **Environmental damage**: Respect waterways. Do not dig large holes in stream banks, do not use mercury (illegal in most jurisdictions and extremely toxic), and fill in any test holes
-- **Ignoring regulations**: Most jurisdictions require permits for gold prospecting, even recreational panning. Check local regulations before starting
+- **Panning too fast**: Impatience loses fine gold. Proper pan takes 5-10 min. Speed = enemy of recovery
+- **Ignoring black sand**: Heavy black sand concentrating → gold likely present — even too fine to see without magnification
+- **Confusing pyrite with gold**: Pyrite (fool's gold) lighter, breaks when pressed with pin, brassy not buttery yellow. Real gold malleable, doesn't tarnish
+- **Random locations**: Gold concentrates predictable. Middle of straight stretch far less productive than inside of bend
+- **Environmental damage**: Respect waterways. No large holes in stream banks, no mercury (illegal most jurisdictions + extremely toxic), fill test holes
+- **Ignoring regulations**: Most jurisdictions need permits for gold prospecting, even recreational panning. Check local regulations before starting
 
-## Related Skills
+## See Also
 
-- `mineral-identification` — understanding rock and mineral types helps read geological indicators that point to gold-bearing areas
+- `mineral-identification` — understanding rock + mineral types reads geological indicators for gold-bearing areas

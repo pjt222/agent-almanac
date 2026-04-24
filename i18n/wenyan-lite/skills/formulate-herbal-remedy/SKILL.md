@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Prepare herbal remedies from Hildegard von Bingen's Physica. Covers plant
   identification, preparation methods (tinctures, poultices, infusions, decoctions),
@@ -24,263 +24,259 @@ metadata:
   tags: hildegard, herbal, physica, remedy, tincture, poultice, infusion, medieval-medicine
 ---
 
-# Formulate Herbal Remedy
+# 制草藥方
 
-Prepare traditional herbal remedies following Hildegard von Bingen's *Physica*, integrating medieval plant knowledge with preparation techniques.
+依 Hildegard von Bingen 所著《Physica》製備傳統草藥方，融合中世紀草木之學與製法技藝。
 
-## When to Use
+## 適用時機
 
-- You need an herbal remedy for a specific ailment using Hildegardian pharmacopeia
-- You want to understand a plant's properties from *Physica*'s perspective
-- You need guidance on preparation methods (tincture, poultice, infusion, decoction)
-- You require dosage and safety information for a traditional remedy
-- You are researching medieval herbal medicine practices
-- You want to integrate Hildegard's plant wisdom into holistic health practice
+- 需依 Hildegard 藥典為特定疾患尋求草藥方
+- 欲從《Physica》視角理解某植物之性
+- 需製法指引（酊劑、敷膏、浸劑、煎劑）
+- 欲得傳統方劑之劑量與安全資訊
+- 研究中世紀草藥醫學
+- 欲將 Hildegard 草木智慧納入整體健康之修持
 
-## Inputs
+## 輸入
 
-- **Required**: Ailment or condition to address (e.g., digestive upset, respiratory congestion, skin inflammation)
-- **Optional**: Known plant preferences or contraindications
-- **Optional**: Preparation preference (tincture for long-term use, infusion for acute, etc.)
-- **Optional**: User's temperament (sanguine, choleric, melancholic, phlegmatic) for tailored selection
-- **Optional**: Season and availability of fresh vs. dried herbs
+- **必要**：所欲處置之疾患（如消化不適、呼吸壅塞、皮膚炎症）
+- **選擇性**：已知的植物偏好或禁忌
+- **選擇性**：製法偏好（長期用酊劑、急症用浸劑等）
+- **選擇性**：用者體質（多血、膽汁、憂鬱、黏液）以便擇藥
+- **選擇性**：季節與鮮草乾草之取得
 
-## Procedure
+## 步驟
 
-### Step 1: Identify the Plant in Physica
+### 步驟一：於 Physica 中識別植物
 
-Match the ailment to appropriate plants from Hildegard's *Physica* (Books I-IX: Plants, Elements, Trees, Stones, Fish, Birds, Animals, Reptiles, Metals).
+依疾患配《Physica》之植物（九卷：植物、元素、樹木、石、魚、鳥、獸、蛇、金屬）。
 
 ```
-Common Ailments → Physica Plants:
+常見疾患 → Physica 植物：
 ┌─────────────────────┬──────────────────────┬────────────────────┐
-│ Ailment             │ Primary Plants        │ Physica Reference  │
+│ 疾患                │ 主要植物             │ Physica 出處       │
 ├─────────────────────┼──────────────────────┼────────────────────┤
-│ Digestive upset     │ Fennel, Yarrow,      │ Book I, Ch. 1, 61  │
-│ (cold pattern)      │ Ginger, Galangal     │                    │
+│ 消化不適（寒性）    │ 茴香、蓍草、         │ 卷一，章一、六一   │
+│                     │ 薑、高良薑           │                    │
 ├─────────────────────┼──────────────────────┼────────────────────┤
-│ Respiratory         │ Lungwort, Elecampane,│ Book I, Ch. 95, 164│
-│ congestion          │ Hyssop, Anise        │                    │
+│ 呼吸壅塞            │ 肺草、土木香、       │ 卷一，章九五、一六四│
+│                     │ 牛膝草、茴香         │                    │
 ├─────────────────────┼──────────────────────┼────────────────────┤
-│ Skin inflammation   │ Violet, Plantain,    │ Book I, Ch. 34, 28 │
-│ (hot pattern)       │ Yarrow, Marigold     │                    │
+│ 皮膚炎症（熱性）    │ 紫羅蘭、車前、       │ 卷一，章三四、二八 │
+│                     │ 蓍草、金盞花         │                    │
 ├─────────────────────┼──────────────────────┼────────────────────┤
-│ Nervous agitation   │ Lavender, Lemon balm,│ Book I, Ch. 40, 123│
-│                     │ Chamomile, Valerian  │                    │
+│ 神經激擾            │ 薰衣草、香蜂草、     │ 卷一，章四○、一二三│
+│                     │ 洋甘菊、纈草         │                    │
 ├─────────────────────┼──────────────────────┼────────────────────┤
-│ Joint pain          │ Comfrey, St. John's  │ Book I, Ch. 21, 158│
-│ (cold/damp)         │ wort, Nettle, Birch  │                    │
+│ 關節疼痛（寒濕）    │ 聚合草、金絲桃、     │ 卷一，章二一、一五八│
+│                     │ 蕁麻、樺            │                    │
 └─────────────────────┴──────────────────────┴────────────────────┘
 
-Hildegard's Selection Principles:
-1. Temperature: Match plant temperature to condition pattern
-   - Cold conditions → warming plants (fennel, ginger, galangal)
-   - Hot conditions → cooling plants (violet, plantain, lettuce)
-2. Moisture: Match plant moisture to imbalance
-   - Dry conditions → moistening plants (mallow, linseed)
-   - Damp conditions → drying plants (yarrow, wormwood)
-3. Temperament alignment: Choose plants harmonious with user's constitution
-4. Seasonal availability: Fresh plants in growing season, dried in winter
+Hildegard 擇藥原則：
+1. 溫度：配藥性於病性
+   - 寒證 → 溫性藥（茴香、薑、高良薑）
+   - 熱證 → 涼性藥（紫羅蘭、車前、萵苣）
+2. 濕度：配藥性於偏失
+   - 乾證 → 潤性藥（錦葵、亞麻子）
+   - 濕證 → 燥性藥（蓍草、苦艾）
+3. 體質相合：擇與用者體質相諧之植物
+4. 時令取得：生長季用鮮草，冬日用乾草
 ```
 
-**Expected:** One to three plants identified that match the ailment's pattern (hot/cold, dry/damp) and are appropriate for the user's constitution.
+**預期：** 識得一至三種植物，與病性（寒熱乾濕）相配，合用者體質。
 
-**On failure:** If unsure of the condition's pattern, default to balanced, gentle plants (fennel, chamomile, yarrow) which Hildegard describes as suitable for most constitutions.
+**失敗時：** 若不確病性，則取平和溫厚之藥（茴香、洋甘菊、蓍草），Hildegard 言此類適多數體質。
 
-### Step 2: Select Preparation Method
+### 步驟二：擇製法
 
-Choose the appropriate extraction and delivery method based on the ailment's location, acuity, and plant properties.
+依病患之位、急緩與藥性，擇合宜之萃取與施用之法。
 
 ```
-Preparation Methods from Medieval Tradition:
+中世紀傳統製法：
 
 ┌──────────────┬────────────────────┬──────────────────┬──────────────┐
-│ Method       │ Best For           │ Duration         │ Shelf Life   │
+│ 法           │ 宜於               │ 用期             │ 存期         │
 ├──────────────┼────────────────────┼──────────────────┼──────────────┤
-│ INFUSION     │ Aerial parts       │ Acute conditions │ 24 hours     │
-│ (hot water)  │ (leaves, flowers)  │ Internal use     │ refrigerated │
+│ 浸劑         │ 地上部             │ 急症             │ 二十四時     │
+│ （熱水）     │ （葉、花）         │ 內服             │ 冷藏         │
 ├──────────────┼────────────────────┼──────────────────┼──────────────┤
-│ DECOCTION    │ Roots, bark, seeds │ Chronic use      │ 24 hours     │
-│ (boiled)     │ Hard plant parts   │ Deep ailments    │ refrigerated │
+│ 煎劑         │ 根、皮、子         │ 慢性             │ 二十四時     │
+│ （煮）       │ 堅硬部             │ 深疾             │ 冷藏         │
 ├──────────────┼────────────────────┼──────────────────┼──────────────┤
-│ TINCTURE     │ Long-term use      │ Chronic support  │ 2-5 years    │
-│ (alcohol)    │ Concentrated dose  │ Travel-friendly  │              │
+│ 酊劑         │ 長期用             │ 慢性支持         │ 二至五年     │
+│ （酒）       │ 濃縮劑             │ 便於旅行         │              │
 ├──────────────┼────────────────────┼──────────────────┼──────────────┤
-│ POULTICE     │ External wounds    │ Acute topical    │ Use fresh    │
-│ (crushed)    │ Skin conditions    │ Inflammation     │              │
+│ 敷膏         │ 外傷               │ 急性外用         │ 現做         │
+│ （搗）       │ 皮膚疾             │ 炎症             │              │
 ├──────────────┼────────────────────┼──────────────────┼──────────────┤
-│ OIL INFUSION │ Massage, salves    │ Skin/muscle care │ 6-12 months  │
-│ (oil carrier)│ External only      │ Long-term        │              │
+│ 浸油         │ 按摩、膏           │ 肌膚之養         │ 六至十二月   │
+│ （油為媒）   │ 僅外用             │ 長期             │              │
 └──────────────┴────────────────────┴──────────────────┴──────────────┘
 
-Decision Tree:
-- Internal + Acute → Infusion or decoction
-- Internal + Chronic → Tincture or daily decoction
-- External + Acute → Poultice
-- External + Chronic → Oil infusion or salve
+擇法樹：
+- 內服 + 急 → 浸劑或煎劑
+- 內服 + 慢 → 酊劑或日煎
+- 外用 + 急 → 敷膏
+- 外用 + 慢 → 浸油或膏
 ```
 
-**Expected:** Preparation method selected that matches plant part (aerial vs. root), use case (acute vs. chronic), and application route (internal vs. external).
+**預期：** 擇定之製法配合植物部（地上部 vs. 根）、用途（急 vs. 慢）、施用路（內 vs. 外）。
 
-**On failure:** If uncertain, default to infusion — it is the safest and most forgiving method for beginners.
+**失敗時：** 若不確，預設用浸劑——此法最安全，初學者易行。
 
-### Step 3: Prepare the Remedy with Dosage
+### 步驟三：依劑量製方
 
-Execute the preparation with precise measurements and technique.
-
-```
-INFUSION (for aerial parts: leaves, flowers):
-1. Measure: 1 tablespoon dried herb (or 2 tablespoons fresh) per 8 oz water
-2. Boil water, remove from heat
-3. Add herb, cover (to preserve volatile oils), steep 10-15 minutes
-4. Strain through fine mesh or cheesecloth
-5. Dosage: 1 cup 2-3 times daily, or as specific ailment requires
-
-DECOCTION (for roots, bark, seeds):
-1. Measure: 1 tablespoon dried root/bark per 8 oz water
-2. Combine in pot, bring to boil
-3. Reduce heat, simmer covered 20-30 minutes (up to 45 for hard roots)
-4. Strain while hot
-5. Dosage: 1/2 cup 2-3 times daily (more concentrated than infusion)
-
-TINCTURE (alcohol extraction, 4-6 week preparation):
-1. Ratio: 1 part dried herb to 5 parts menstruum (40-60% alcohol)
-2. Combine in amber glass jar, seal tightly
-3. Shake daily, store in dark place for 4-6 weeks
-4. Strain through cheesecloth, press to extract all liquid
-5. Dosage: 15-30 drops (approximately 1/2 to 1 dropper) 2-3 times daily,
-   diluted in water or tea
-
-POULTICE (fresh or rehydrated dried herb):
-1. Fresh: Crush or chew herb to release juices, apply directly to skin
-2. Dried: Rehydrate with hot water to paste consistency
-3. Apply to affected area, cover with clean cloth
-4. Replace every 2-4 hours or when dry
-5. Duration: Acute inflammation (24-48 hours), wounds (until healed)
-
-OIL INFUSION (for external salves):
-1. Ratio: Fill jar 3/4 with dried herb, cover completely with oil
-   (olive, almond, or sunflower)
-2. Method A (solar): Seal jar, place in sunny window 2-4 weeks, shake daily
-3. Method B (heat): Place jar in water bath (double boiler), low heat 2-4 hours
-4. Strain through cheesecloth, press herb matter to extract all oil
-5. Store in dark bottle; use within 6-12 months
-```
-
-**Expected:** Remedy prepared according to method, with correct herb-to-menstruum ratio and appropriate steep/extraction time. Dosage guidelines clear for internal or external use.
-
-**On failure:** If preparation seems too strong (bitter, burning sensation), dilute by half. If too weak (no noticeable effect after 3 days at proper dosage), increase herb quantity by 50% in next batch.
-
-### Step 4: Document Contraindications
-
-Identify safety concerns, drug interactions, and populations who should avoid the remedy.
+以精確之度量與技法行製備。
 
 ```
-Common Contraindications by Plant Category:
+浸劑（地上部：葉、花）：
+1. 量：每八盎司水用一湯匙乾草（或二湯匙鮮草）
+2. 煮水、離火
+3. 加草、蓋（護揮發油）、泡十至十五分鐘
+4. 以細網或粗布濾
+5. 劑量：日二至三次，每次一杯，或依疾患之需
 
-EMMENAGOGUES (stimulate menstruation):
-- Plants: Pennyroyal, Rue, Mugwort, Tansy, Wormwood
-- Avoid: Pregnancy (all trimesters), breastfeeding
-- Caution: Heavy menstrual flow
+煎劑（根、皮、子）：
+1. 量：每八盎司水用一湯匙乾根/皮
+2. 合於鍋中、煮沸
+3. 減火、加蓋慢煮二十至三十分（堅根可至四十五分）
+4. 趁熱濾
+5. 劑量：日二至三次，每次半杯（較浸劑濃）
 
-PHYTOESTROGENS (estrogen-like activity):
-- Plants: Fennel, Anise, Hops, Red clover, Licorice
-- Avoid: Hormone-sensitive cancers, pregnancy
-- Caution: If taking hormonal medications or birth control
+酊劑（酒萃取，四至六週製備）：
+1. 比例：乾草一份對酒五份（四十至六十度）
+2. 合於琥珀玻璃瓶中、密封
+3. 日搖之，置暗處四至六週
+4. 以粗布濾，壓取盡其液
+5. 劑量：日二至三次，每次十五至三十滴（約半至一滴管），稀釋於水或茶中
 
-BLOOD THINNERS (anticoagulant properties):
-- Plants: Garlic, Ginger (high dose), Feverfew, Ginkgo
-- Avoid: Before surgery (stop 2 weeks prior)
-- Caution: If taking warfarin, aspirin, or other anticoagulants
+敷膏（鮮草或水潤乾草）：
+1. 鮮：搗或嚼以出汁，直敷於膚
+2. 乾：以熱水潤為糊狀
+3. 敷患處、以淨布覆之
+4. 每二至四時易之或乾則易
+5. 時限：急炎（二十四至四十八時）、傷（至癒）
 
-HEPATOTOXIC (potential liver stress):
-- Plants: Comfrey (internal use), Pennyroyal, Kava
-- Avoid: Liver disease, alcohol use disorder
-- Caution: Long-term high-dose use
-
-PHOTOSENSITIZERS (increase sun sensitivity):
-- Plants: St. John's wort, Angelica, Celery seed
-- Avoid: Before sun exposure, with photosensitizing medications
-- Caution: Fair skin, history of skin cancer
-
-GENERAL CAUTIONS:
-- Pregnancy/Breastfeeding: Most herbs lack safety data; avoid unless
-  traditionally used for pregnancy (ginger, red raspberry leaf)
-- Children under 2: Avoid all herbal preparations except gentle teas
-  (chamomile, fennel)
-- Children 2-12: Use 1/4 to 1/2 adult dose, depending on age and weight
-- Elderly: Start with 1/2 dose; may be more sensitive to effects
-- Chronic illness: Consult healthcare provider before use
-- Surgery: Discontinue all herbs 2 weeks before scheduled surgery
+浸油（外用膏之底）：
+1. 比例：瓶裝至四分之三，以油（橄欖、杏仁、葵花）盡覆之
+2. 法甲（日曬）：封瓶，置日光窗二至四週，日搖之
+3. 法乙（熱）：瓶置水浴（雙層鍋），文火二至四時
+4. 以粗布濾，壓草以取盡其油
+5. 存於暗瓶；六至十二月內用
 ```
 
-**Expected:** All relevant contraindications identified for the selected plant(s), with specific populations flagged (pregnancy, children, drug interactions).
+**預期：** 依法製備方劑，草與媒之比例正確，浸泡或萃取時間合宜。內外用之劑量指引明確。
 
-**On failure:** If uncertain about contraindications, advise the user to consult a qualified herbalist or healthcare provider before use. Default to "Not recommended during pregnancy, breastfeeding, or for children under 12 without professional guidance."
+**失敗時：** 若方過強（苦、灼感），稀釋一半。若過弱（正確劑量三日無效），次批草量增五成。
 
-### Step 5: Safety Review and Integration
+### 步驟四：記禁忌
 
-Final check and guidance for monitoring effects and integrating into health practice.
+識安全顧慮、藥物交互作用及應避用之群體。
 
 ```
-Safety Review Checklist:
-- [ ] Plant correctly identified (botanical name confirmed)
-- [ ] Preparation method matches plant part and condition
-- [ ] Dosage is within traditional safe range
-- [ ] Contraindications reviewed and documented
-- [ ] User informed this is historical folk medicine, not medical advice
-- [ ] Expected timeline for effect noted (acute: 1-3 days; chronic: 2-4 weeks)
+依植物類別之常見禁忌：
 
-Monitoring Protocol:
-Days 1-3:
-- Note any immediate reactions (digestive upset, skin rash, headache)
-- If adverse reaction occurs, discontinue immediately
-- Positive signs: Symptom improvement, increased energy, better sleep
+催經藥（催月經）：
+- 植物：胡薄荷、芸香、艾、菊蒿、苦艾
+- 忌：妊娠（全期）、哺乳
+- 慎：經量過多
 
-Days 4-14:
-- Assess effectiveness: Are symptoms improving?
-- If no improvement by day 7 (acute) or day 14 (chronic), reassess plant selection
-- If partial improvement, continue; full effect may take 2-4 weeks
+植物雌激素（類雌激素活性）：
+- 植物：茴香、大茴香、啤酒花、紅三葉草、甘草
+- 忌：荷爾蒙敏感癌、妊娠
+- 慎：服用荷爾蒙藥或避孕藥者
 
-Integration Notes:
-- Herbal medicine works best in context: adequate sleep, whole foods diet,
-  stress management, and connection to nature
-- Hildegard's remedies are not isolated pharmaceutical interventions —
-  they are part of a holistic health practice
-- Record observations in a journal: date, remedy, dose, effects
-- Seasonal adjustment: Some remedies are more effective in specific seasons
-  (warming herbs in winter, cooling herbs in summer)
+血稀釋（抗凝血性）：
+- 植物：大蒜、薑（高劑量）、小白菊、銀杏
+- 忌：術前（前二週停用）
+- 慎：服 warfarin、阿斯匹靈或其他抗凝藥者
+
+肝毒性（潛在肝負擔）：
+- 植物：聚合草（內服）、胡薄荷、卡瓦
+- 忌：肝病、酒精濫用障礙
+- 慎：長期高劑量用
+
+光敏劑（增日光敏感）：
+- 植物：金絲桃、當歸、西芹子
+- 忌：日曬前、與光敏藥同用
+- 慎：白皙膚、皮膚癌史
+
+通用之慎：
+- 妊娠／哺乳：多數草藥無安全資料；除傳統孕婦用者（薑、覆盆子葉）外避用
+- 二歲以下幼童：避一切草藥製劑，唯溫和茶（洋甘菊、茴香）可
+- 二至十二歲童：用成人劑量四分之一至二分之一，依年齡體重定
+- 老者：始於半劑；對藥效可能更敏感
+- 慢性病：用前諮醫
+- 手術：術前二週停一切草藥
 ```
 
-**Expected:** User has complete information: remedy preparation, dosage, contraindications, monitoring plan, and integration context. Safety disclaimers clear.
+**預期：** 所選植物之禁忌盡識，特定群體標出（妊娠、幼童、藥物交互作用）。
 
-**On failure:** If user expresses uncertainty about self-preparation, recommend consulting a trained herbalist for first preparation, then replicating at home once confident.
+**失敗時：** 若不確禁忌，告用者諮合格草藥師或醫者。預設為「妊娠、哺乳或十二歲以下幼童無專業指導不建議使用」。
 
-## Validation Checklist
+### 步驟五：安全檢視與融入
 
-- [ ] Plant identified from Physica with appropriate temperature/moisture properties
-- [ ] Preparation method matches plant part (aerial = infusion, root = decoction, etc.)
-- [ ] Dosage guidelines provided with frequency and duration
-- [ ] Contraindications documented (pregnancy, drug interactions, specific conditions)
-- [ ] Safety review completed with monitoring protocol
-- [ ] User informed this is historical folk medicine, not medical diagnosis or treatment
-- [ ] Expected timeline for effect communicated (acute vs. chronic)
+末次檢查與監效、融入健康修持之指引。
 
-## Common Pitfalls
+```
+安全檢視清單：
+- [ ] 植物識別正確（已確認學名）
+- [ ] 製法配合植物部與病況
+- [ ] 劑量於傳統安全範圍內
+- [ ] 禁忌已審並記錄
+- [ ] 已告用者此為歷史民間醫學，非醫療建議
+- [ ] 生效時程已註（急：一至三日；慢：二至四週）
 
-1. **Misidentification**: Using the wrong plant due to common name confusion. Always confirm botanical (Latin) name
-2. **Over-extraction**: Boiling delicate aerial parts destroys volatile oils. Use infusion (steeping), not decoction
-3. **Under-dosing**: Medieval preparations were often stronger than modern herbal teas. Follow traditional ratios
-4. **Ignoring Contraindications**: Pregnancy and drug interactions are serious. When in doubt, advise against use
-5. **Substituting Modern for Medieval**: Hildegard's plants reflect European medieval flora. Substitutions may not align with her temperament system
-6. **Expecting Pharmaceutical Speed**: Herbal medicine works gradually. Acute conditions: 1-3 days. Chronic: 2-4 weeks minimum
-7. **Solo Remedy Focus**: Hildegard's medicine is holistic. Remedies work best integrated with diet, prayer, rest, and seasonal rhythms
+監測之法：
+第一至三日：
+- 記即時反應（消化不適、皮疹、頭痛）
+- 若有不良反應，立即停用
+- 正面跡象：症狀改善、精力增、睡眠佳
 
-## Related Skills
+第四至十四日：
+- 評效：症狀改善否？
+- 若第七日（急）或第十四日（慢）仍無改善，重審擇藥
+- 若部分改善，繼續；全效可能需二至四週
 
-- `assess-holistic-health` — Temperament assessment informs plant selection (cold constitution → warming plants)
-- `practice-viriditas` — Connecting to viriditas enhances receptivity to plant medicine
-- `consult-natural-history` — Broader context of plants in Physica's cosmology
-- `heal` (esoteric domain) — Post-remedy health assessment and recovery monitoring
-- `prepare-soil` (gardening domain) — If growing medicinal herbs
-- `maintain-hand-tools` (bushcraft domain) — For harvesting and processing herbs
+融入之註：
+- 草藥醫學於完整情境中最佳：睡眠足、全食飲食、
+  壓力管理、與自然連結
+- Hildegard 之方非孤立之藥物介入——
+  乃整體健康修持之一部
+- 記觀察於日誌：日期、方、劑、效
+- 季節調整：某些方於特定季節更有效
+  （冬用溫藥，夏用涼藥）
+```
+
+**預期：** 用者得完整資訊：方之製備、劑量、禁忌、監測計畫、融入情境。安全聲明明確。
+
+**失敗時：** 若用者自製不安，建議先諮受訓之草藥師首次製備，熟練後再家中複製。
+
+## 驗證
+
+- [ ] 從 Physica 識得植物，具合宜之溫濕性
+- [ ] 製法配合植物部（地上 = 浸劑、根 = 煎劑等）
+- [ ] 劑量指引含頻率與時長
+- [ ] 禁忌已記（妊娠、藥物交互、特定病況）
+- [ ] 安全檢視完畢，含監測之法
+- [ ] 已告用者此為歷史民間醫學，非醫療診斷或治療
+- [ ] 生效時程已傳達（急 vs. 慢）
+
+## 常見陷阱
+
+1. **誤識**：因俗名混淆而用錯植物。必確認植物之學名（拉丁文）
+2. **過萃**：煮沸脆弱地上部損揮發油。用浸（泡），非煎
+3. **欠劑**：中世紀製法常強於今之草茶。依傳統比例
+4. **忽視禁忌**：妊娠與藥物交互為要事。有疑則建議避用
+5. **以今代古**：Hildegard 之植物反映歐洲中世紀植物。替代恐不合其體質系統
+6. **期藥物之速**：草藥醫學效漸。急症：一至三日。慢症：至少二至四週
+7. **孤方思維**：Hildegard 之醫為整體。方於融入飲食、祈禱、休息、季節韻律時最佳
+
+## 相關技能
+
+- `assess-holistic-health` — 體質評估引導擇藥（寒體質 → 溫藥）
+- `practice-viriditas` — 連通 viriditas 增對草藥之接受
+- `consult-natural-history` — Physica 宇宙論中植物之廣義情境
+- `heal` (esoteric domain) — 方後健康評估與恢復監測
+- `prepare-soil` (gardening domain) — 若種藥草
+- `maintain-hand-tools` (bushcraft domain) — 採集與處理草藥

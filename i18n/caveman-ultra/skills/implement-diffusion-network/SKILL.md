@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement a generative diffusion model (DDPM or score-based) with noise
   scheduling, U-Net architecture, training loop, and sampling procedures
@@ -26,33 +26,31 @@ metadata:
 
 # Implement a Diffusion Network
 
-Build a denoising diffusion probabilistic model (DDPM) or score-based generative model from scratch, including the forward noising process, U-Net denoiser, training objective, reverse sampling procedure, and accelerated inference via DDIM or DPM-Solver.
+Build DDPM / score-based model from scratch: forward noising + U-Net denoiser + training objective + reverse sampling + DDIM/DPM-Solver acceleration.
 
-## When to Use
+## Use When
 
-- Building a generative model for image, audio, or molecular synthesis
-- Implementing DDPM or score-based diffusion from a research paper
-- Adding a custom noise schedule or conditioning mechanism to a diffusion pipeline
-- Replacing a GAN-based generator with a diffusion-based alternative
-- Prototyping a diffusion model before scaling to production with frameworks like diffusers
+- Generative model (image, audio, molecular synthesis)
+- DDPM / score-based from paper
+- Custom noise schedule / conditioning
+- Replace GAN generator w/ diffusion
+- Prototype pre-scale w/ diffusers
 
-## Inputs
+## In
 
-- **Required**: Training dataset (images, spectrograms, point clouds, or other continuous data)
-- **Required**: Target resolution and number of channels
-- **Required**: Compute budget (GPU type and count, training time limit)
-- **Optional**: Noise schedule type (default: cosine)
-- **Optional**: Number of diffusion timesteps T (default: 1000)
-- **Optional**: Conditioning signal (class labels, text embeddings, or other guidance)
-- **Optional**: Sampling acceleration method (default: DDIM with 50 steps)
+- **Required**: training dataset (images, spectrograms, point clouds, continuous)
+- **Required**: target resolution + channels
+- **Required**: compute budget (GPU type + count + time)
+- **Optional**: noise schedule (default cosine)
+- **Optional**: diffusion timesteps T (default 1000)
+- **Optional**: conditioning signal (class, text embed, guidance)
+- **Optional**: sampling acceleration (default DDIM 50)
 
-## Procedure
+## Do
 
-### Step 1: Define the Forward Process (Noise Schedule)
+### Step 1: Forward process (noise schedule)
 
-Configure the variance schedule that controls how data is progressively noised.
-
-1. Define the beta schedule (linear, cosine, or learned):
+1. Beta schedule (linear, cosine, learned):
 
 ```python
 import torch
@@ -72,7 +70,7 @@ def linear_beta_schedule(timesteps, beta_start=1e-4, beta_end=0.02):
     return torch.linspace(beta_start, beta_end, timesteps)
 ```
 
-2. Pre-compute the derived quantities used during training and sampling:
+2. Pre-compute derived quantities:
 
 ```python
 class DiffusionSchedule:
@@ -88,7 +86,7 @@ class DiffusionSchedule:
         )
 ```
 
-3. Implement the forward noising function (q-sample):
+3. Forward noising (q-sample):
 
 ```python
     def q_sample(self, x_0, t, noise=None):
@@ -100,7 +98,7 @@ class DiffusionSchedule:
         return sqrt_alpha * x_0 + sqrt_one_minus_alpha * noise
 ```
 
-4. Verify the schedule visually:
+4. Verify visually:
 
 ```python
 schedule = DiffusionSchedule(cosine_beta_schedule(1000))
@@ -109,15 +107,13 @@ print(f"alpha_cumprod at t=500: {schedule.alphas_cumprod[500]:.4f}")   # ~0.5 (h
 print(f"alpha_cumprod at t=999: {schedule.alphas_cumprod[999]:.4f}")   # ~0.0 (pure noise)
 ```
 
-**Expected:** `alphas_cumprod` decreases monotonically from near 1.0 to near 0.0. The cosine schedule should decrease more gradually than linear in the middle timesteps.
+→ `alphas_cumprod` monotonic decrease ~1.0 → ~0.0. Cosine more gradual than linear in middle.
 
-**On failure:** If `alphas_cumprod` does not reach near zero at t=T, the model will not learn to generate from pure noise. Increase T or adjust the schedule. If values go negative, check the clipping bounds on betas.
+**If err:** no near-zero at t=T → model won't learn from pure noise. Increase T or adjust schedule. Negative values → check beta clipping.
 
-### Step 2: Design the Denoising Network Architecture
+### Step 2: Denoising network (U-Net w/ time conditioning)
 
-Build a U-Net with time conditioning that predicts noise given a noisy input.
-
-1. Define the time embedding module:
+1. Time embedding:
 
 ```python
 import torch.nn as nn
@@ -136,7 +132,7 @@ class SinusoidalTimeEmbedding(nn.Module):
         return torch.cat([emb.sin(), emb.cos()], dim=-1)
 ```
 
-2. Define a residual block with time conditioning:
+2. Residual block w/ time conditioning:
 
 ```python
 class ResBlock(nn.Module):
@@ -156,7 +152,7 @@ class ResBlock(nn.Module):
         return h + self.skip(x)
 ```
 
-3. Assemble the U-Net with encoder, bottleneck, and decoder:
+3. U-Net w/ encoder + bottleneck + decoder:
 
 ```python
 class UNet(nn.Module):
@@ -174,7 +170,7 @@ class UNet(nn.Module):
         # (full implementation depends on resolution and channel config)
 ```
 
-4. Verify the architecture accepts inputs of the target resolution:
+4. Verify target resolution:
 
 ```python
 model = UNet(in_channels=3, base_channels=64)
@@ -185,15 +181,13 @@ assert out.shape == x_test.shape, f"Output shape {out.shape} != input shape {x_t
 print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
 ```
 
-**Expected:** The model outputs a tensor with the same shape as the input (predicting noise of matching dimensions). Parameter count should be proportional to resolution: approximately 30-60M for 64x64, 100-300M for 256x256.
+→ Output shape matches input. Param count: ~30-60M for 64×64, 100-300M for 256×256.
 
-**On failure:** Shape mismatches usually indicate incorrect downsampling/upsampling ratios. Verify that each encoder stage halves spatial dimensions and each decoder stage doubles them. GroupNorm requires channels to be divisible by the group count.
+**If err:** shape mismatch → incorrect down/up sample ratios. Each encoder halves, decoder doubles. GroupNorm channels divisible by group count.
 
-### Step 3: Implement the Training Loop
+### Step 3: Training loop
 
-Train the denoiser to predict the noise added at each timestep.
-
-1. Set up the training objective (simplified DDPM loss):
+1. Simplified DDPM loss:
 
 ```python
 def training_loss(model, schedule, x_0):
@@ -206,14 +200,14 @@ def training_loss(model, schedule, x_0):
     return loss
 ```
 
-2. Configure the optimizer and learning rate schedule:
+2. Optimizer + LR schedule:
 
 ```python
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=0.01)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100000)
 ```
 
-3. Run the training loop with logging:
+3. Training loop w/ logging:
 
 ```python
 from torch.utils.data import DataLoader
@@ -236,7 +230,7 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch}: loss={avg_loss:.4f}, lr={scheduler.get_last_lr()[0]:.6f}")
 ```
 
-4. Save checkpoints periodically:
+4. Periodic checkpoints:
 
 ```python
     if (epoch + 1) % 10 == 0:
@@ -248,15 +242,13 @@ for epoch in range(num_epochs):
         }, f"checkpoint_epoch_{epoch+1}.pt")
 ```
 
-**Expected:** Loss decreases steadily over training. For image data normalized to [-1, 1], initial loss should be near 1.0 (predicting random noise). After convergence, loss should be in the range 0.01-0.10 depending on data complexity.
+→ Loss decreases monotonically. Images [-1,1] → initial ~1.0 (random noise pred). Converged → 0.01-0.10 depending on complexity.
 
-**On failure:** If loss plateaus early (> 0.5), check: (a) data normalization (must be [-1, 1] or [0, 1] with matching final activation), (b) learning rate (try 3e-4 or 5e-5), (c) gradient clipping (1.0 is standard). If loss is NaN, reduce learning rate and check for division by zero in the schedule.
+**If err:** plateau early (>0.5) → (a) normalization must be [-1,1] or [0,1] w/ matching activation, (b) LR try 3e-4 or 5e-5, (c) grad clip 1.0. NaN → reduce LR, check schedule division by zero.
 
-### Step 4: Implement Sampling (Reverse Process)
+### Step 4: Sampling (reverse process)
 
-Generate new samples by iteratively denoising from pure Gaussian noise.
-
-1. Implement the standard DDPM sampling loop:
+1. Standard DDPM sampling:
 
 ```python
 @torch.no_grad()
@@ -287,22 +279,20 @@ def ddpm_sample(model, schedule, shape, device):
     return x
 ```
 
-2. Generate and visualize samples:
+2. Generate + visualize:
 
 ```python
 samples = ddpm_sample(model, schedule, shape=(16, 3, 64, 64), device=device)
 samples = (samples.clamp(-1, 1) + 1) / 2  # rescale to [0, 1]
 ```
 
-**Expected:** Generated samples show recognizable structure (not pure noise or uniform color). At 64x64 resolution with 100K+ training steps, outputs should visually resemble the training distribution.
+→ Samples show recognizable structure. 64×64 + 100K+ steps → visually resembles training dist.
 
-**On failure:** If samples are blurry, train longer or increase model capacity. If samples are noisy, the reverse process may have a bug -- verify that the schedule indexing matches training. If all samples look identical, check for mode collapse (try different random seeds).
+**If err:** blurry → train longer / increase capacity. Noisy → reverse bug; verify schedule indexing matches training. Identical samples → mode collapse; try diff seeds.
 
-### Step 5: Add Sampling Acceleration
+### Step 5: Sampling acceleration (DDIM / DPM-Solver)
 
-Reduce the number of sampling steps using DDIM or DPM-Solver.
-
-1. Implement DDIM sampling (deterministic, fewer steps):
+1. DDIM sampling (deterministic, fewer steps):
 
 ```python
 @torch.no_grad()
@@ -334,7 +324,7 @@ def ddim_sample(model, schedule, shape, device, num_steps=50, eta=0.0):
     return x
 ```
 
-2. Compare sample quality across step counts:
+2. Compare across step counts:
 
 ```python
 for n_steps in [10, 25, 50, 100, 250]:
@@ -343,7 +333,7 @@ for n_steps in [10, 25, 50, 100, 250]:
     # Save grid for visual comparison
 ```
 
-3. Benchmark sampling speed:
+3. Benchmark speed:
 
 ```python
 import time
@@ -355,15 +345,13 @@ for method, n_steps in [("DDPM", 1000), ("DDIM-50", 50), ("DDIM-25", 25)]:
     print(f"{method}: {elapsed:.2f}s per sample")
 ```
 
-**Expected:** DDIM with 50 steps produces samples visually comparable to DDPM with 1000 steps at 20x speed improvement. Quality degrades gracefully down to approximately 20-25 steps.
+→ DDIM 50 ≈ DDPM 1000 quality at 20× speed. Degrades gracefully down to ~20-25 steps.
 
-**On failure:** If DDIM samples are worse than DDPM at the same step count, verify the alpha indexing. DDIM uses `alphas_cumprod` directly, not `alphas`. If samples at low step counts are very noisy, try eta=0.0 (fully deterministic) first.
+**If err:** DDIM worse than DDPM at same count → verify alpha indexing. DDIM uses `alphas_cumprod` directly, not `alphas`. Low-step noisy → try eta=0.0 (deterministic) first.
 
-### Step 6: Evaluate Sample Quality
+### Step 6: Evaluate quality
 
-Quantify generation quality using standard metrics.
-
-1. Compute FID (Frechet Inception Distance):
+1. FID:
 
 ```python
 from torchmetrics.image.fid import FrechetInceptionDistance
@@ -386,7 +374,7 @@ fid_score = fid_metric.compute()
 print(f"FID: {fid_score:.2f}")
 ```
 
-2. Assess sample diversity (check for mode collapse):
+2. Diversity (mode collapse check):
 
 ```python
 # Compute pairwise LPIPS distances among generated samples
@@ -403,7 +391,7 @@ for i in range(n_pairs):
 print(f"Mean pairwise LPIPS: {np.mean(diversity_scores):.4f} (higher = more diverse)")
 ```
 
-3. Log results:
+3. Log:
 
 ```python
 results = {
@@ -416,33 +404,33 @@ results = {
 print("Evaluation results:", results)
 ```
 
-**Expected:** FID below 50 for a well-trained model on standard benchmarks (CIFAR-10, CelebA). LPIPS diversity above 0.4 indicates no mode collapse. State-of-the-art models achieve FID 2-10 on CIFAR-10.
+→ FID <50 well-trained on std benchmarks (CIFAR-10, CelebA). LPIPS >0.4 = no mode collapse. SOTA: FID 2-10 on CIFAR-10.
 
-**On failure:** High FID (>100) indicates training issues or insufficient epochs. Low diversity (LPIPS < 0.2) suggests mode collapse -- increase model capacity, check data augmentation, or train longer. Compute FID on at least 10K samples for stable estimates.
+**If err:** FID >100 → training issues or insufficient epochs. LPIPS <0.2 → mode collapse. Increase capacity / check augmentation / train longer. FID on ≥10K samples for stable estimates.
 
-## Validation
+## Check
 
-- [ ] Forward process produces pure noise at t=T (visual check and numeric: mean near 0, std near 1)
-- [ ] U-Net output shape matches input shape for all target resolutions
-- [ ] Training loss decreases monotonically over the first 1000 steps
-- [ ] DDPM sampling produces recognizable outputs after sufficient training
-- [ ] DDIM with 50 steps produces quality comparable to DDPM with 1000 steps
-- [ ] FID score is below 50 on the target dataset (adjust threshold for domain)
-- [ ] Sample diversity (LPIPS) confirms no mode collapse
-- [ ] Checkpoints are saved and loadable without errors
+- [ ] Forward → pure noise at t=T (mean ~0, std ~1)
+- [ ] U-Net output shape = input shape
+- [ ] Training loss monotonic first 1000 steps
+- [ ] DDPM sampling → recognizable output
+- [ ] DDIM 50 ≈ DDPM 1000 quality
+- [ ] FID <50 on target dataset
+- [ ] LPIPS confirms no mode collapse
+- [ ] Checkpoints saved + loadable
 
-## Common Pitfalls
+## Traps
 
-- **Wrong data normalization**: DDPM assumes data in [-1, 1]. If your images are in [0, 255], the loss will be enormous and training will diverge. Normalize before training and denormalize after sampling.
-- **Schedule indexing off by one**: The forward process uses `alphas_cumprod[t]` for the noised sample at step t. Off-by-one errors in sampling (using t+1 or t-1) produce visibly degraded samples.
-- **Forgetting gradient clipping**: Without `clip_grad_norm_(1.0)`, training is unstable for large models. This is especially critical in the early epochs.
-- **Too few sampling steps for DDIM**: Below 20 steps, DDIM quality degrades rapidly. Use at least 25 steps for acceptable results; 50 steps for near-DDPM quality.
-- **Evaluating FID on too few samples**: FID estimates are biased with small sample sizes. Use at least 10,000 generated images and 10,000 real images for stable FID computation.
-- **Ignoring EMA**: Exponential moving average of model weights significantly improves sample quality. Use a decay rate of 0.9999 and sample from the EMA model, not the training model.
+- **Wrong normalization**: DDPM assumes [-1,1]. [0,255] → huge loss + divergence. Normalize in + de-normalize out.
+- **Schedule indexing off-by-one**: forward uses `alphas_cumprod[t]` for step t. Off-by-one in sampling → visibly degraded.
+- **Forget grad clipping**: no `clip_grad_norm_(1.0)` → unstable large models. Critical early epochs.
+- **DDIM too few steps**: <20 quality degrades rapidly. ≥25 acceptable, 50 near-DDPM.
+- **FID too few samples**: biased estimates. ≥10K gen + 10K real for stable.
+- **Ignore EMA**: EMA weights significantly improve quality. Decay 0.9999, sample from EMA not training model.
 
-## Related Skills
+## →
 
-- `analyze-diffusion-dynamics` - mathematical foundations of the diffusion SDE that DDPM discretizes
-- `fit-drift-diffusion-model` - a different application of diffusion processes to cognitive modeling
-- `setup-gpu-training` - configuring GPU environments for diffusion model training
-- `containerize-application` - packaging diffusion inference pipelines in Docker
+- `analyze-diffusion-dynamics` — math foundations (SDE DDPM discretizes)
+- `fit-drift-diffusion-model` — diffusion for cognitive modeling
+- `setup-gpu-training` — GPU envs for training
+- `containerize-application` — package inference pipelines in Docker

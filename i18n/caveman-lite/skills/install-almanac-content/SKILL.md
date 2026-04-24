@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Install skills, agents, and teams from agent-almanac into any supported
   agentic framework using the CLI. Covers framework detection, content
@@ -66,9 +66,9 @@ agent-almanac detect
 
 This scans the working directory for configuration files and directories (`.claude/`, `.cursor/`, `.github/copilot-instructions/`, `.agents/`, etc.) and reports which frameworks are active.
 
-**Expected:** Output lists one or more detected frameworks with their adapter status. If no frameworks are detected, the universal adapter (`.agents/skills/`) is used as fallback.
+**Got:** Output lists one or more detected frameworks with their adapter status. If no frameworks are detected, the universal adapter (`.agents/skills/`) is used as fallback.
 
-**On failure:** If the CLI is not found, ensure it is installed and on PATH. If detection returns nothing and you know a framework is present, use `--framework <id>` to specify it explicitly. Run `agent-almanac list --domains` to verify the CLI can reach the registries.
+**If fail:** If the CLI is not found, ensure it is installed and on PATH. If detection returns nothing and you know a framework is present, use `--framework <id>` to specify it explicitly. Run `agent-almanac list --domains` to verify the CLI can reach the registries.
 
 ### Step 2: Search for Content
 
@@ -87,9 +87,9 @@ agent-almanac list --agents           # List all agents
 agent-almanac list --teams            # List all teams
 ```
 
-**Expected:** Search results or filtered lists display matching content with IDs and descriptions.
+**Got:** Search results or filtered lists display matching content with IDs and descriptions.
 
-**On failure:** If no results appear, try broader keywords. Verify the almanac root is reachable: `agent-almanac list` should show the full skill count. If it cannot find the root, pass `--source /path/to/agent-almanac`.
+**If fail:** If no results appear, try broader keywords. Verify the almanac root is reachable: `agent-almanac list` should show the full skill count. If it cannot find the root, pass `--source /path/to/agent-almanac`.
 
 ### Step 3: Install Content
 
@@ -120,9 +120,9 @@ agent-almanac install create-skill --global
 
 The CLI resolves the content from the registries, selects the appropriate adapter for each detected framework, and writes files to the framework-specific paths (e.g., `.claude/skills/` for Claude Code, `.cursor/rules/` for Cursor).
 
-**Expected:** Output confirms the number of items installed and the target framework(s). Installed content appears in the correct framework directory.
+**Got:** Output confirms the number of items installed and the target framework(s). Installed content appears in the correct framework directory.
 
-**On failure:** If items are not found, verify the ID matches the `name` field in the registry (`skills/_registry.yml`, `agents/_registry.yml`, `teams/_registry.yml`). If files already exist and installation is skipped, use `--force` to overwrite.
+**If fail:** If items are not found, verify the ID matches the `name` field in the registry (`skills/_registry.yml`, `agents/_registry.yml`, `teams/_registry.yml`). If files already exist and installation is skipped, use `--force` to overwrite.
 
 ### Step 4: Verify Installation
 
@@ -145,9 +145,9 @@ To see what is currently installed:
 agent-almanac list --installed
 ```
 
-**Expected:** Audit reports all installed items as healthy with no broken references. The `--installed` listing shows each item with its type and framework.
+**Got:** Audit reports all installed items as healthy with no broken references. The `--installed` listing shows each item with its type and framework.
 
-**On failure:** If the audit reports broken items, reinstall them with `--force`. If symlinks are broken, verify the almanac source path has not moved. Run `agent-almanac install <broken-id> --force` to repair.
+**If fail:** If the audit reports broken items, reinstall them with `--force`. If symlinks are broken, verify the almanac source path has not moved. Run `agent-almanac install <broken-id> --force` to repair.
 
 ### Step 5: Manage with a Manifest (Optional)
 
@@ -187,9 +187,9 @@ agent-almanac sync
 agent-almanac sync --dry-run  # Preview first
 ```
 
-**Expected:** Running `install` with no arguments reads the manifest and installs all declared content. Running `sync` brings the installed state into alignment with the manifest, adding missing items and removing undeclared ones.
+**Got:** Running `install` with no arguments reads the manifest and installs all declared content. Running `sync` brings the installed state into alignment with the manifest, adding missing items and removing undeclared ones.
 
-**On failure:** If `sync` reports "No agent-almanac.yml found", run `agent-almanac init` first. If the manifest resolves to 0 items, check that skill/agent/team IDs match the registry entries exactly. Comment lines starting with `#` are ignored.
+**If fail:** If `sync` reports "No agent-almanac.yml found", run `agent-almanac init` first. If the manifest resolves to 0 items, check that skill/agent/team IDs match the registry entries exactly. Comment lines starting with `#` are ignored.
 
 ### Step 6: Manage Teams as Campfires (Optional)
 
@@ -223,9 +223,9 @@ Shared skills are protected during scatter — if a skill is needed by another g
 
 All campfire commands support `--quiet` (standard reporter output) and `--json` (machine-parseable) for scripting.
 
-**Expected:** Teams are gathered and managed with state tracking. `campfire --all` shows fire states. `tend` reports health.
+**Got:** Teams are gathered and managed with state tracking. `campfire --all` shows fire states. `tend` reports health.
 
-**On failure:** If campfire state is corrupted, delete `.agent-almanac/state.json` and re-gather teams. If `gather` fails, check that the team name matches an entry in `teams/_registry.yml`.
+**If fail:** If campfire state is corrupted, delete `.agent-almanac/state.json` and re-gather teams. If `gather` fails, check that the team name matches an entry in `teams/_registry.yml`.
 
 ## Validation
 
@@ -235,10 +235,10 @@ All campfire commands support `--quiet` (standard reporter output) and `--json` 
 - [ ] Installed skills resolve in the target framework (e.g., `/skill-name` works in Claude Code)
 - [ ] If using a manifest, `agent-almanac sync --dry-run` reports no changes needed
 
-## Common Pitfalls
+## Pitfalls
 
-- **Forgetting `--with-deps` for agents and teams**: Installing an agent without `--with-deps` installs only the agent definition, not its referenced skills. The agent will be present but unable to follow its skill procedures. Always use `--with-deps` for agents and teams unless you have already installed the dependencies separately.
-- **Manifest drift**: After manually installing or removing content, the manifest falls out of sync with the actual installed state. Run `agent-almanac sync` periodically, or always install through the manifest to keep them aligned.
+- **Forgetting `--with-deps` for agents and teams**: Installing an agent without `--with-deps` installs only the agent definition, not its referenced skills. The agent will be present but unable to follow its skill procedures. Use `--with-deps` for agents and teams unless you have already installed the dependencies separately.
+- **Manifest drift**: After manually installing or removing content, the manifest falls out of sync with the actual installed state. Run `agent-almanac sync` periodically, or install through the manifest to keep them aligned.
 - **Scope confusion (project vs global)**: Content installed with `--global` goes to `~/.claude/skills/` (or equivalent), while project-scope content goes to `.claude/skills/` in the current directory. If a skill is not found, check whether it was installed in the wrong scope.
 - **Stale source path**: If the agent-almanac repository is moved or renamed, the `--source` path in manifests and auto-detection will break. Update the `source` field in `agent-almanac.yml` or re-run `agent-almanac init`.
 - **Framework not detected**: The detector looks for specific files and directories. A freshly initialized project may not have these yet. Use `--framework <id>` explicitly until the project has the expected structure, or rely on the universal adapter.

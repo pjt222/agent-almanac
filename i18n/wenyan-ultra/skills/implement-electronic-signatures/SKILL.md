@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement electronic signatures compliant with 21 CFR Part 11 Subpart C
   and EU Annex 11. Covers signature manifestation (signer, date/time, meaning),
@@ -25,32 +25,32 @@ metadata:
   tags: gxp, electronic-signatures, 21-cfr-11, eu-annex-11, compliance, authentication
 ---
 
-# Implement Electronic Signatures
+# 實電子簽名
 
-Design and implement electronic signature controls that meet 21 CFR Part 11 Subpart C and EU Annex 11 requirements for regulated electronic records.
+設並實電子簽名控以合 21 CFR Part 11 C 部與 EU Annex 11 對受規電子記錄之要。
 
-## When to Use
+## 用
 
-- A computerized system requires legally binding electronic signatures for GxP records
-- Replacing wet-ink signatures with electronic equivalents in a regulated workflow
-- Implementing approval workflows for batch release, document approval, or data sign-off
-- Regulatory gap assessment reveals missing signature controls
-- Building or configuring a system that must comply with 21 CFR 11.50–11.300
+- 電腦系統需供 GxP 記錄之法定束電子簽
+- 於受規工作流以電子簽替濕墨簽
+- 實批放、文批、數據簽收工作流
+- 法規差評揭缺簽控
+- 建或配須合 21 CFR 11.50–11.300 之系統
 
-## Inputs
+## 入
 
-- **Required**: System description and signature use cases (what records are being signed)
-- **Required**: Applicable regulations (21 CFR Part 11, EU Annex 11, specific GxP context)
-- **Required**: Signature types needed (approval, review, acknowledgement, authorship)
-- **Optional**: Current authentication infrastructure (Active Directory, LDAP, SSO)
-- **Optional**: Existing electronic signature policy or SOPs
-- **Optional**: System vendor documentation on signature capabilities
+- **必**：系統描與簽用例（所簽記錄）
+- **必**：適法規（21 CFR Part 11、EU Annex 11、特 GxP 脈絡）
+- **必**：所需簽型（批、審、認、著）
+- **可**：現認證基建（Active Directory、LDAP、SSO）
+- **可**：既電子簽策或 SOP
+- **可**：系統供應商之簽能文
 
-## Procedure
+## 行
 
-### Step 1: Assess Applicability of Electronic Signature Requirements
+### 一：評電子簽要之適用性
 
-Determine which 21 CFR Part 11 Subpart C provisions apply:
+定哪 21 CFR Part 11 C 部諸款適：
 
 ```markdown
 # Electronic Signature Applicability Assessment
@@ -76,12 +76,12 @@ Determine which 21 CFR Part 11 Subpart C provisions apply:
 | Deviation closure | Deviation report | "Closed — CAPA effective" | As needed | Wet-ink |
 ```
 
-**Expected:** Every signature use case has a documented regulatory basis and defined meaning.
-**On failure:** If a use case does not require 21 CFR 11 compliance (e.g., non-GxP records), document the exclusion rationale and apply proportionate controls.
+得：各簽用例皆有書法規基與明義。
+敗：某用例不需 21 CFR 11 合規（如非 GxP 記錄）→書排除由並施比例控。
 
-### Step 2: Design Signature Manifestation
+### 二：設簽呈現
 
-Define what information the signature must display per 21 CFR 11.50:
+依 21 CFR 11.50 定簽必顯之訊：
 
 ```markdown
 # Signature Manifestation Specification
@@ -108,12 +108,12 @@ Every electronic signature must display:
 | CLOSE | "Closed — corrective action verified" | CAPA and deviation closure | QA |
 ```
 
-**Expected:** Signature manifestation is unambiguous — anyone viewing the signed record can identify who signed, when, and why.
-**On failure:** If the system cannot display all three elements in the record view, implement a signature detail page accessible from the signed record.
+得：簽呈現無歧——任者觀已簽記錄可辨誰、何時、為何而簽。
+敗：系統不能於記錄視下顯三元素→施可由記錄視訪之簽詳頁。
 
-### Step 3: Implement Signature-to-Record Binding
+### 三：實簽-記綁
 
-Ensure signatures cannot be removed, copied, or transferred between records (21 CFR 11.70):
+確簽不可除、複或轉於記錄間（21 CFR 11.70）：
 
 ```markdown
 # Signature Binding Specification
@@ -135,12 +135,12 @@ Ensure signatures cannot be removed, copied, or transferred between records (21 
 - [ ] Binding survives record export (PDF, print includes signature metadata)
 ```
 
-**Expected:** A signed record and its signature are inseparable — modifying either invalidates the binding.
-**On failure:** If the system cannot enforce binding at the technical level, implement procedural controls (dual custody, periodic reconciliation) and document the compensating control.
+得：已簽記錄與其簽不可分——改任一即廢綁。
+敗：系統不能於技層強綁→實程控（雙保、定期對帳）並書補償控。
 
-### Step 4: Configure Authentication Controls
+### 四：配認證控
 
-Implement the identity verification requirements per 21 CFR 11.100 and 11.200:
+依 21 CFR 11.100 與 11.200 實身驗要：
 
 ```markdown
 # Authentication Configuration
@@ -177,10 +177,10 @@ For non-biometric signatures (username + password):
 | Initial password | Must be changed on first use |
 ```
 
-**Expected:** Authentication enforces that only the identified individual can apply their signature.
-**On failure:** If the system does not support session-aware signature controls, require full re-authentication (username + password) for every signature event.
+得：認證強唯所辨人方可施其簽。
+敗：系統不支會話感知簽控→每簽必全重認（用戶名+密）。
 
-### Step 5: Create Electronic Signature Policy
+### 五：造電子簽策
 
 ```markdown
 # Electronic Signature Policy
@@ -215,12 +215,12 @@ Signature: _____________ Date: _____________
 The organisation shall submit a certification to the FDA that electronic signatures used within its systems are intended to be the legally binding equivalent of handwritten signatures.
 ```
 
-**Expected:** Policy document is approved by quality, IT, and legal/regulatory affairs before electronic signatures go live.
-**On failure:** If legal counsel has not reviewed the policy, flag this as a compliance risk and obtain legal review before first use of electronic signatures.
+得：策文於電子簽上線前經質、IT、法/規之批。
+敗：法律顧未審策→標為合規險並於首用前求法律審。
 
-### Step 6: Verify Implementation
+### 六：驗施
 
-Execute verification tests for all signature controls:
+行諸簽控之驗試：
 
 ```markdown
 # E-Signature Verification Protocol
@@ -239,33 +239,33 @@ Execute verification tests for all signature controls:
 | ES-010 | Verify audit trail captures signature event | Timestamp, user, meaning, record ID logged | | |
 ```
 
-**Expected:** All test cases pass, demonstrating that signature controls meet regulatory requirements.
-**On failure:** Failed test cases require remediation before the system goes live. Document failures as deviations and track resolution through change control.
+得：諸試皆通，示簽控合法規要。
+敗：試敗需修然後系統上線。書敗為偏並經變控追解。
 
-## Validation
+## 驗
 
-- [ ] Applicability assessment documents which 21 CFR 11 Subpart C provisions apply
-- [ ] Signature manifestation includes name, date/time, and meaning for every use case
-- [ ] Signature binding prevents removal, copying, or transfer of signatures
-- [ ] Authentication requires two distinct identification components at first signing
-- [ ] Password policy meets minimum security requirements
-- [ ] Electronic signature policy approved by quality, IT, and legal
-- [ ] User certification forms collected for all signers
-- [ ] FDA certification submitted (if required under 11.300)
-- [ ] Verification tests pass for all signature controls
+- [ ] 適用性評書哪 21 CFR 11 C 部款適用
+- [ ] 諸用例之簽呈現含名、日時、義
+- [ ] 簽綁防除、複、轉
+- [ ] 首簽需二異身元
+- [ ] 密策符最低安全要
+- [ ] 電子簽策經質、IT、法批
+- [ ] 諸簽者之用者證書已收
+- [ ] FDA 證已提（若 11.300 需）
+- [ ] 諸簽控之驗試通
 
-## Common Pitfalls
+## 忌
 
-- **Confusing authentication with electronic signature**: Logging in is authentication; signing a record is an electronic signature. They have different regulatory requirements.
-- **Shared accounts**: Any system with shared accounts cannot have compliant electronic signatures. Resolve shared accounts before implementing e-signatures.
-- **Missing meaning**: Signatures that show name and date but not the meaning ("Approved," "Reviewed") do not meet 21 CFR 11.50.
-- **Session handling**: Allowing continuous session signing without re-authentication undermines the identity assurance of the signature.
-- **Forgetting 11.300 certification**: Organisations using electronic signatures in FDA-regulated contexts must certify to the FDA that they intend e-signatures to be legally binding.
+- **混認證與電子簽**：登乃認證；簽記錄乃電子簽。規要異
+- **共帳戶**：任系統有共帳戶→不能有合規電子簽。先解共帳戶
+- **缺義**：示名日而無義（「批」、「審」）之簽→不合 21 CFR 11.50
+- **會話處**：續會話簽無重認→削身分保證
+- **忘 11.300 證**：用電子簽於 FDA 規境者須向 FDA 證意為法束
 
-## Related Skills
+## 參
 
-- `design-compliance-architecture` — maps e-signature requirements across systems
-- `implement-audit-trail` — audit trail captures signature events
-- `write-validation-documentation` — verification tests are part of OQ documentation
-- `write-standard-operating-procedure` — SOP for electronic signature use
-- `manage-change-control` — changes to signature configuration go through change control
+- `design-compliance-architecture`
+- `implement-audit-trail`
+- `write-validation-documentation`
+- `write-standard-operating-procedure`
+- `manage-change-control`

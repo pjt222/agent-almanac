@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement audit trail functionality for R projects in regulated
   environments. Covers logging, provenance tracking, electronic
@@ -100,9 +100,9 @@ log_audit_event <- function(event, description, details = list()) {
 }
 ```
 
-**Expected:** `R/audit_log.R` created with `init_audit_log()` and `log_audit_event()` functions. Calling `init_audit_log()` creates the `audit_logs/` directory and a timestamped JSONL file. Each log entry is a single JSON line with `timestamp`, `event`, `analyst`, and `session_id` fields.
+**Got:** `R/audit_log.R` created with `init_audit_log()` and `log_audit_event()` functions. Calling `init_audit_log()` creates the `audit_logs/` directory and a timestamped JSONL file. Each log entry is a single JSON line with `timestamp`, `event`, `analyst`, and `session_id` fields.
 
-**On failure:** If `jsonlite::toJSON()` fails, ensure the `jsonlite` package is installed. If the log directory cannot be created, check file system permissions. If timestamps lack timezone, verify `%z` is supported on the platform.
+**If fail:** If `jsonlite::toJSON()` fails, ensure the `jsonlite` package is installed. If the log directory cannot be created, check file system permissions. If timestamps lack timezone, verify `%z` is supported on the platform.
 
 ### Step 2: Add Data Integrity Checks
 
@@ -144,9 +144,9 @@ verify_data_integrity <- function(data, expected_hash) {
 }
 ```
 
-**Expected:** `hash_data()` returns a SHA-256 hash string and logs a `DATA_HASH` event. `verify_data_integrity()` compares current data against a stored hash and logs a `DATA_VERIFY` event with PASS or FAIL status.
+**Got:** `hash_data()` returns a SHA-256 hash string and logs a `DATA_HASH` event. `verify_data_integrity()` compares current data against a stored hash and logs a `DATA_VERIFY` event with PASS or FAIL status.
 
-**On failure:** If `digest::digest()` is not found, install the `digest` package. If hashes don't match for identical data, check that column order and data types are consistent between hashing and verification.
+**If fail:** If `digest::digest()` is not found, install the `digest` package. If hashes don't match for identical data, check that column order and data types are consistent between hashing and verification.
 
 ### Step 3: Track Data Transformations
 
@@ -179,9 +179,9 @@ audited_transform <- function(data, transform_fn, description) {
 }
 ```
 
-**Expected:** `audited_transform()` wraps any transformation function, logging input dimensions and hash, output dimensions and hash, and the transformation description as a `DATA_TRANSFORM` event.
+**Got:** `audited_transform()` wraps any transformation function, logging input dimensions and hash, output dimensions and hash, and the transformation description as a `DATA_TRANSFORM` event.
 
-**On failure:** If the transform function errors, the audit event is not logged. Wrap the transform in `tryCatch()` to log both successes and failures. Ensure the transform function accepts and returns a data frame.
+**If fail:** If the transform function errors, the audit event is not logged. Wrap the transform in `tryCatch()` to log both successes and failures. Ensure the transform function accepts and returns a data frame.
 
 ### Step 4: Log Session Environment
 
@@ -203,9 +203,9 @@ log_session_info <- function() {
 }
 ```
 
-**Expected:** A `SESSION_INFO` event logged with R version, platform, locale, attached packages with versions, and the renv lockfile hash (if applicable).
+**Got:** A `SESSION_INFO` event logged with R version, platform, locale, attached packages with versions, and the renv lockfile hash (if applicable).
 
-**On failure:** If `sessionInfo()` returns incomplete package information, ensure all packages are loaded via `library()` before calling `log_session_info()`. The renv lockfile hash will be `NA` if the project does not use renv.
+**If fail:** If `sessionInfo()` returns incomplete package information, ensure all packages are loaded via `library()` before calling `log_session_info()`. The renv lockfile hash will be `NA` if the project does not use renv.
 
 ### Step 5: Implement in Analysis Scripts
 
@@ -241,9 +241,9 @@ log_audit_event("ANALYSIS_COMPLETE", "Primary efficacy analysis", list(
 log_session_info()
 ```
 
-**Expected:** Analysis scripts initialize the audit log at the start, log each data import, transformation, and analysis step, and record session info at the end. The JSONL log file captures the complete provenance chain.
+**Got:** Analysis scripts initialize the audit log at the start, log each data import, transformation, and analysis step, and record session info at the end. The JSONL log file captures the complete provenance chain.
 
-**On failure:** If `init_audit_log()` is missing, ensure `R/audit_log.R` is sourced or the package is loaded. If events are missing from the log, verify that `log_audit_event()` is called after every significant operation.
+**If fail:** If `init_audit_log()` is missing, ensure `R/audit_log.R` is sourced or the package is loaded. If events are missing from the log, verify that `log_audit_event()` is called after every significant operation.
 
 ### Step 6: Git-Based Change Control
 
@@ -260,9 +260,9 @@ Per change request CHG-042, approved by [Name] on [Date].
 Validation impact assessment: Low risk - additional derived variable."
 ```
 
-**Expected:** Git commits are signed (GPG) and use descriptive messages referencing change control IDs. The combination of application-level JSONL audit trail and git history provides a complete change control record.
+**Got:** Git commits are signed (GPG) and use descriptive messages referencing change control IDs. The combination of application-level JSONL audit trail and git history provides a complete change control record.
 
-**On failure:** If GPG signing fails, configure the signing key with `git config --global user.signingkey KEY_ID`. If the key is not set up, follow `gpg --gen-key` to create one.
+**If fail:** If GPG signing fails, configure the signing key with `git config --global user.signingkey KEY_ID`. If the key is not set up, follow `gpg --gen-key` to create one.
 
 ## Validation
 
@@ -274,7 +274,7 @@ Validation impact assessment: Low risk - additional derived variable."
 - [ ] Analyst identity is captured for each session
 - [ ] Log format is machine-readable (JSONL)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Logging too much**: Focus on regulated events. Don't log every variable assignment.
 - **Mutable logs**: Audit logs must be append-only. Use JSONL (one JSON object per line).

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate a Quarto-based tour report with embedded maps, daily itineraries,
   logistics tables, and accommodation/transport details. Produces a
@@ -23,62 +23,62 @@ metadata:
   tags: travel, report, quarto, itinerary, logistics
 ---
 
-# Generate Tour Report
+# 生行程報告
 
-Generate a formatted tour report with embedded maps, daily itineraries, logistics tables, and practical travel information.
+生含嵌入地圖、每日行程、後勤表格與實用旅行資訊之格式化行程報告。
 
-## When to Use
+## 適用時機
 
-- Compiling a planned tour into a shareable document
-- Creating an offline-accessible travel guide for a trip
-- Documenting a completed trip with photos, maps, and statistics
-- Producing a professional tour proposal for a group or client
-- Consolidating route, accommodation, and transport data into one document
+- 彙編已計畫行程為可分享文件
+- 建離線可用旅行指南
+- 以相片、地圖與統計記錄已完成之旅程
+- 為團體或客戶製專業行程提案
+- 合併路線、住宿與交通資料於一文件
 
-## Inputs
+## 輸入
 
-- **Required**: Route data (waypoints, legs, distances, times)
-- **Required**: Tour dates and duration
-- **Optional**: Accommodation details (name, address, confirmation numbers)
-- **Optional**: Transport bookings (flights, trains, car rental)
-- **Optional**: GPX tracks or spatial data for map embedding
-- **Optional**: Budget information (costs per category)
-- **Optional**: Photos or images to include
+- **必要**：路線資料（航點、段、距離、時間）
+- **必要**：行程日期與長度
+- **選擇性**：住宿詳情（名稱、地址、確認號）
+- **選擇性**：交通預訂（航班、火車、租車）
+- **選擇性**：GPX 軌跡或空間資料以嵌地圖
+- **選擇性**：預算資訊（各類成本）
+- **選擇性**：擬納入之相片或圖像
 
-## Procedure
+## 步驟
 
-### Step 1: Compile Route and POI Data
+### 步驟一：彙編路線與景點資料
 
-Gather all tour data into a structured format before building the report.
+建報告前收所有行程資料於結構化格式。
 
 ```
-Data Sources to Compile:
+彙編之資料來源：
 ┌────────────────────┬──────────────────────────────────────────┐
-│ Category           │ Required Fields                          │
+│ 類別               │ 必要欄位                                 │
 ├────────────────────┼──────────────────────────────────────────┤
-│ Route legs         │ From, To, distance_km, time_hrs, mode   │
-│ Waypoints          │ Name, lat, lon, arrival, departure, notes│
-│ Accommodation      │ Name, address, check-in/out, cost, conf#│
-│ Transport          │ Type, operator, depart, arrive, ref#     │
-│ Activities         │ Name, time, duration, cost, booking_req  │
-│ Emergency contacts │ Local emergency #, embassy, insurance    │
-│ POIs               │ Name, category, lat, lon, description    │
+│ 路線段             │ From、To、distance_km、time_hrs、mode    │
+│ 航點               │ Name、lat、lon、arrival、departure、notes│
+│ 住宿               │ Name、address、check-in/out、cost、conf#  │
+│ 交通               │ Type、operator、depart、arrive、ref#      │
+│ 活動               │ Name、time、duration、cost、booking_req   │
+│ 緊急聯絡           │ 當地急救號、使館、保險                    │
+│ 景點               │ Name、category、lat、lon、description     │
 └────────────────────┴──────────────────────────────────────────┘
 ```
 
-Organize data by day to support the daily section structure:
-1. Group waypoints and activities by date
-2. Assign each transport leg to a day
-3. Match accommodations to overnight dates
-4. Calculate daily totals (distance, time, cost)
+依日組織資料以支每日節結構：
+1. 依日期分組航點與活動
+2. 每交通段派一日
+3. 住宿配過夜日
+4. 算每日合計（距離、時間、成本）
 
-**Expected:** A complete data collection organized by day, with no gaps in the schedule (every night has accommodation, every leg has transport).
+**預期：** 依日組織之完整資料集，時程無缺口（每夜有住宿，每段有交通）。
 
-**On failure:** If data is incomplete, mark missing items with `[TBD]` placeholders and add them to a follow-up checklist at the end of the report. If dates don't align (e.g., arrival at accommodation before departure from previous stop), flag the conflict and adjust times.
+**失敗時：** 若資料不全，以 `[TBD]` 佔位記漏缺項目並加於報告末之後續清單。若日期不合（如抵住宿早於自前站出發），標衝突並調時間。
 
-### Step 2: Structure Daily Sections
+### 步驟二：建每日節結構
 
-Create the Quarto document skeleton with daily sections.
+建附每日節之 Quarto 文件骨架。
 
 ```yaml
 ---
@@ -104,42 +104,42 @@ execute:
 ---
 ```
 
-Structure the document as follows:
+依下結構建文件：
 
 ```
-Report Structure:
-1. Overview
-   - Tour summary (dates, total distance, highlights)
-   - Overview map (all waypoints, full route)
-   - Quick reference table (key dates, bookings, contacts)
+報告結構：
+1. 概覽
+   - 行程摘要（日期、總距離、亮點）
+   - 概覽地圖（所有航點、全路線）
+   - 速查表（關鍵日期、預訂、聯絡）
 
-2. Day 1: [Title]
-   - Day summary (start, end, km, hours)
-   - Route map for the day
-   - Timeline / schedule table
-   - Accommodation details
-   - POIs and activities
+2. 第一日：[標題]
+   - 當日摘要（起、止、公里、時數）
+   - 當日路線圖
+   - 時程/日程表
+   - 住宿詳情
+   - 景點與活動
 
-3. Day 2: [Title]
-   ... (repeat for each day)
+3. 第二日：[標題]
+   ...（每日重複）
 
-N. Logistics Appendix
-   - Full accommodation table
-   - Transport bookings table
-   - Packing checklist
-   - Emergency contacts
-   - Budget summary
+N. 後勤附錄
+   - 完整住宿表
+   - 交通預訂表
+   - 打包清單
+   - 緊急聯絡
+   - 預算摘要
 ```
 
-**Expected:** A complete .qmd file skeleton with YAML header, all daily sections as H2 headings, and placeholder content for each section.
+**預期：** 完整 .qmd 檔骨架，附 YAML 首，所有每日節為 H2 標題，每節含佔位內容。
 
-**On failure:** If the tour is too long for a single document (more than 14 days), consider splitting into weekly parts or using a tabset layout (`{.tabset}`) to keep the document navigable. If PDF output is required, ensure no interactive widgets are included (use static maps instead).
+**失敗時：** 若行程單一文件過長（逾十四日），可考慮分週或用標籤頁佈局（`{.tabset}`）以利導覽。若需 PDF 輸出，確無互動小工具（改用靜態地圖）。
 
-### Step 3: Embed Maps and Charts
+### 步驟三：嵌地圖與圖表
 
-Add spatial visualizations to each section.
+於每節加空間視覺化。
 
-**Overview map:**
+**概覽地圖：**
 
 ```r
 #| label: fig-overview-map
@@ -151,7 +151,7 @@ leaflet::leaflet() |>
   leaflet::addMarkers(data = stops, popup = ~paste(name, "<br>", date))
 ```
 
-**Daily route map:**
+**每日路線圖：**
 
 ```r
 #| label: fig-day1-map
@@ -164,7 +164,7 @@ leaflet::leaflet() |>
   leaflet::addCircleMarkers(data = day1_stops, radius = 6, popup = ~name)
 ```
 
-**Elevation profile (for hiking/cycling days):**
+**海拔剖面（健行/騎行日）：**
 
 ```r
 #| label: fig-day3-elevation
@@ -177,15 +177,15 @@ ggplot2::ggplot(day3_elevation, ggplot2::aes(x = dist_km, y = elev_m)) +
   ggplot2::labs(x = "Distance (km)", y = "Elevation (m)")
 ```
 
-**Expected:** Each daily section has at minimum a route map. Multi-modal days (driving + hiking) have both a road map and an elevation profile. Overview section has a map showing the complete tour.
+**預期：** 每日節至少有路線圖。多模式日（駕車+健行）兼有道路圖與海拔剖面。概覽節含示全行程之地圖。
 
-**On failure:** If leaflet maps fail to render (common in PDF mode), fall back to static maps using `tmap::tmap_mode("plot")` or `ggplot2` with `ggspatial::annotation_map_tile()`. If spatial data is not available for a day, include a simple text description of the route instead.
+**失敗時：** 若 leaflet 地圖無法渲染（PDF 模式常見），退回靜態地圖：用 `tmap::tmap_mode("plot")` 或 `ggplot2` 配 `ggspatial::annotation_map_tile()`。若某日空間資料不可得，以路線之簡單文字描述代之。
 
-### Step 4: Add Logistics Tables
+### 步驟四：加後勤表
 
-Insert structured tables for accommodations, transport, and budget.
+插入住宿、交通與預算之結構化表。
 
-**Accommodation table:**
+**住宿表：**
 
 ```markdown
 | Night | Date       | Accommodation      | Address            | Check-in | Cost   | Conf# |
@@ -195,7 +195,7 @@ Insert structured tables for accommodations, transport, and budget.
 | 3     | 2025-07-03 | Pension Edelweiss  | Dorfplatz 3        | 14:00    | EUR 72 | CD456 |
 ```
 
-**Transport table:**
+**交通表：**
 
 ```markdown
 | Date       | Type  | From          | To            | Depart | Arrive | Ref#   |
@@ -205,7 +205,7 @@ Insert structured tables for accommodations, transport, and budget.
 | 2025-07-04 | Train | Innsbruck     | Munich Hbf    | 16:45  | 18:30  | OBB567 |
 ```
 
-**Budget summary:**
+**預算摘要：**
 
 ```markdown
 | Category        | Estimated | Actual | Notes                   |
@@ -217,61 +217,61 @@ Insert structured tables for accommodations, transport, and budget.
 | **Total**       | **EUR 507** |      |                         |
 ```
 
-**Expected:** Complete logistics tables with all bookings listed chronologically. No missing dates in the accommodation table. Budget totals are calculated correctly.
+**預期：** 完整後勤表，所有預訂依時間列出。住宿表無漏日。預算合計正確計算。
 
-**On failure:** If booking details are not yet confirmed, use `[TBD]` and highlight the row. If the tour involves multiple currencies, add a currency column and include exchange rates in a footnote.
+**失敗時：** 若預訂詳情未定，用 `[TBD]` 並標示該列。若行程涉多幣別，加幣別欄並於註腳附匯率。
 
-### Step 5: Render Report
+### 步驟五：渲染報告
 
-Compile the Quarto document into the final output format.
+編譯 Quarto 文件為最終輸出格式。
 
 ```bash
-# Render to self-contained HTML (best for offline use)
+# 渲染為獨立 HTML（離線用佳）
 quarto render tour-report.qmd --to html
 
-# Render to PDF (for printing)
+# 渲染為 PDF（列印用）
 quarto render tour-report.qmd --to pdf
 
-# Preview with live reload during editing
+# 編輯時即時預覽
 quarto preview tour-report.qmd
 ```
 
-Post-rendering checks:
-1. Open the HTML file and verify all maps load correctly
-2. Test that the table of contents links work
-3. Verify all images and charts render at appropriate sizes
-4. Check that the self-contained HTML works offline (disconnect and reload)
-5. For PDF: verify page breaks fall at logical points (between days)
+渲染後檢查：
+1. 開 HTML 檔驗所有地圖正確載入
+2. 測目錄連結可用
+3. 驗所有圖像與圖表以合宜大小渲染
+4. 核獨立 HTML 離線可用（斷網重載）
+5. PDF：驗分頁點於合理位置（日間）
 
-**Expected:** A complete, self-contained document that works offline and contains all tour information in a navigable format.
+**預期：** 完整、獨立之文件，離線可用，所有行程資訊可導覽之格式。
 
-**On failure:** If rendering fails, check the R console for package errors (missing sf, leaflet, or ggplot2). If self-contained HTML is too large (over 20 MB), reduce map tile resolution or use PNG screenshots instead of interactive maps. If PDF rendering fails with LaTeX errors, install TinyTeX with `quarto install tinytex`.
+**失敗時：** 若渲染失敗，核 R 主控台之套件錯（漏 sf、leaflet 或 ggplot2）。若獨立 HTML 過大（逾二十 MB），降低圖層解析度或用 PNG 截圖替互動地圖。若 PDF 渲染以 LaTeX 錯失敗，以 `quarto install tinytex` 裝 TinyTeX。
 
-## Validation
+## 驗證
 
-- [ ] Report renders without errors in the target format
-- [ ] Overview map shows the complete route with all stops
-- [ ] Each day has a route map and schedule
-- [ ] Accommodation table covers every night of the trip
-- [ ] Transport table includes all legs
-- [ ] Budget totals are accurate
-- [ ] Self-contained HTML works offline
-- [ ] Table of contents navigates correctly to all sections
-- [ ] No [TBD] placeholders remain (or they are intentionally flagged)
+- [ ] 報告於目標格式無錯渲染
+- [ ] 概覽地圖示完整路線與所有停點
+- [ ] 每日有路線圖與時程
+- [ ] 住宿表含行程每夜
+- [ ] 交通表含所有段
+- [ ] 預算合計正確
+- [ ] 獨立 HTML 離線可用
+- [ ] 目錄正確導覽至所有節
+- [ ] 無殘留 [TBD] 佔位（或已刻意標示）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Interactive maps in PDF**: Leaflet and other HTML widgets cannot render in PDF. Always provide static map alternatives for PDF output.
-- **Oversized self-contained HTML**: Embedding many map tiles creates very large files. Limit zoom levels or use static map screenshots for tile-heavy maps.
-- **Missing time zones**: International tours cross time zones. Always specify the time zone for departure and arrival times to avoid confusion.
-- **Stale booking references**: Confirmation numbers and times can change. Include a "last updated" date and remind users to verify before travel.
-- **No offline fallback**: If the report relies on web-loaded map tiles, it will be blank offline. Use `self-contained: true` or pre-render maps as images.
-- **Inconsistent date formats**: Mix of DD/MM and MM/DD causes confusion. Use ISO 8601 (YYYY-MM-DD) consistently throughout.
+- **PDF 中之互動地圖**：Leaflet 與他 HTML 小工具於 PDF 中無法渲染。永為 PDF 輸出提供靜態地圖替代。
+- **獨立 HTML 過大**：嵌多圖層生極大檔。限縮放層級或用靜態地圖截圖於圖層密集之地圖。
+- **缺時區**：國際行程跨時區。永為出發抵達時間明指時區以免混淆。
+- **陳舊預訂參考**：確認號與時間可變。納入「最後更新」日期並提醒用戶旅行前驗證。
+- **無離線退路**：若報告依賴網載圖層，離線空白。用 `self-contained: true` 或預渲染地圖為圖像。
+- **日期格式不一**：DD/MM 與 MM/DD 混用致混淆。全文一致用 ISO 8601（YYYY-MM-DD）。
 
-## Related Skills
+## 相關技能
 
-- `plan-tour-route` — generates the route data compiled into this report
-- `create-spatial-visualization` — creates the maps and charts embedded in the report
-- `create-quarto-report` — general Quarto document creation and configuration
-- `plan-hiking-tour` — provides hiking-specific data for mountain tour reports
-- `check-hiking-gear` — generates packing checklists for the logistics appendix
+- `plan-tour-route` — 生此報告所彙編之路線資料
+- `create-spatial-visualization` — 建報告中嵌之地圖與圖表
+- `create-quarto-report` — 通用 Quarto 文件建立與配置
+- `plan-hiking-tour` — 為山地行程報告提供健行專屬資料
+- `check-hiking-gear` — 為後勤附錄產打包清單

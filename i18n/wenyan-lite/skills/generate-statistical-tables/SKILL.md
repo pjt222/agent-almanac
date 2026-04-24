@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate publication-ready statistical tables using gt, kableExtra,
   or flextable. Covers descriptive statistics, regression results,
@@ -24,41 +24,41 @@ metadata:
   tags: r, tables, gt, statistics, publication
 ---
 
-# Generate Statistical Tables
+# 生統計表
 
-Create publication-ready statistical tables for reports and manuscripts.
+為報告與手稿建可發表之統計表。
 
-## When to Use
+## 適用時機
 
-- Creating descriptive statistics tables
-- Formatting regression or ANOVA output
-- Building correlation matrices
-- Producing APA-style tables for academic papers
-- Generating tables for Quarto/R Markdown documents
+- 建描述統計表
+- 格式化迴歸或 ANOVA 輸出
+- 建相關矩陣
+- 為學術論文生 APA 風格表
+- 為 Quarto/R Markdown 文件生表
 
-## Inputs
+## 輸入
 
-- **Required**: Statistical analysis results (model objects, summary data)
-- **Required**: Output format (HTML, PDF, Word)
-- **Optional**: Style guide (APA, journal-specific)
-- **Optional**: Table numbering scheme
+- **必要**：統計分析結果（模型物件、摘要資料）
+- **必要**：輸出格式（HTML、PDF、Word）
+- **選擇性**：風格指引（APA、特定期刊）
+- **選擇性**：表編號方案
 
-## Procedure
+## 步驟
 
-### Step 1: Choose Table Package
+### 步驟一：擇表格套件
 
-| Package | Best for | Formats |
+| 套件 | 宜於 | 格式 |
 |---------|----------|---------|
-| `gt` | HTML, general-purpose | HTML, PDF, Word |
-| `kableExtra` | LaTeX/PDF documents | PDF, HTML |
-| `flextable` | Word documents | Word, PDF, HTML |
-| `gtsummary` | Clinical/statistical summaries | All via gt/flextable |
+| `gt` | HTML、通用 | HTML、PDF、Word |
+| `kableExtra` | LaTeX/PDF 文件 | PDF、HTML |
+| `flextable` | Word 文件 | Word、PDF、HTML |
+| `gtsummary` | 臨床/統計摘要 | 皆經 gt/flextable |
 
-**Expected:** A table package selected based on the output format and use case. The chosen package is installed and loadable.
+**預期：** 依輸出格式與用例擇一表格套件。所擇套件已裝可載。
 
-**On failure:** If the required package is not installed, run `install.packages("gt")` (or the appropriate package). For `gtsummary`, both `gt` and `gtsummary` must be installed.
+**失敗時：** 若所需套件未裝，執行 `install.packages("gt")`（或合宜套件）。用 `gtsummary` 須 `gt` 與 `gtsummary` 皆裝。
 
-### Step 2: Descriptive Statistics Table
+### 步驟二：描述統計表
 
 ```r
 library(gt)
@@ -88,11 +88,11 @@ gt(descriptives) |>
   )
 ```
 
-**Expected:** A `gt` table object with formatted means, SDs, and counts grouped by category. Column headers use proper statistical notation (italicized *M*, *SD*, *n*).
+**預期：** `gt` 表物件，含依類別分組之格式化均值、SD 與計數。欄首用正確統計標記（斜體 *M*、*SD*、*n*）。
 
-**On failure:** If `group_by()` produces unexpected results, verify the grouping variable exists and has the expected levels. If `fmt_number()` throws an error, ensure the target columns contain numeric data.
+**失敗時：** 若 `group_by()` 產意外結果，驗分組變數存且有預期層級。若 `fmt_number()` 拋錯，確目標欄含數值資料。
 
-### Step 3: Regression Results Table
+### 步驟三：迴歸結果表
 
 ```r
 model <- lm(outcome ~ predictor1 + predictor2 + predictor3, data = data)
@@ -108,11 +108,11 @@ tbl_regression(model) |>
   modify_caption("Table 2: Regression Results")
 ```
 
-**Expected:** A `gtsummary` regression table with bolded p-values, model fit statistics (R-squared, N) in a source note, and a descriptive caption.
+**預期：** `gtsummary` 迴歸表，p 值粗體，模型擬合統計（R 平方、N）於源註中，附描述性標題。
 
-**On failure:** If `tbl_regression()` fails, verify the input is a model object (e.g., `lm`, `glm`). If `add_glance_source_note()` errors, check that `broom` can tidy the model: `broom::glance(model)`.
+**失敗時：** 若 `tbl_regression()` 失敗，驗輸入為模型物件（如 `lm`、`glm`）。若 `add_glance_source_note()` 錯，核 `broom` 可整理模型：`broom::glance(model)`。
 
-### Step 4: Correlation Matrix
+### 步驟四：相關矩陣
 
 ```r
 library(gt)
@@ -120,7 +120,7 @@ library(gt)
 cor_matrix <- cor(data[, c("var1", "var2", "var3", "var4")],
                   use = "pairwise.complete.obs")
 
-# Format lower triangle
+# 格式化下三角
 cor_matrix[upper.tri(cor_matrix)] <- NA
 
 as.data.frame(cor_matrix) |>
@@ -131,11 +131,11 @@ as.data.frame(cor_matrix) |>
   tab_header(title = "Table 3", subtitle = "Correlation Matrix")
 ```
 
-**Expected:** A lower-triangle correlation matrix rendered as a `gt` table with blanked upper triangle, two decimal places, and a clear caption.
+**預期：** 下三角相關矩陣以 `gt` 表渲染，上三角留空，二位小數，附清晰標題。
 
-**On failure:** If `sub_missing()` does not blank the upper triangle, verify that `NA` values were set correctly with `cor_matrix[upper.tri(cor_matrix)] <- NA`. If variables are non-numeric, `cor()` will fail; filter to numeric columns first.
+**失敗時：** 若 `sub_missing()` 未空上三角，驗 `NA` 值正確設為 `cor_matrix[upper.tri(cor_matrix)] <- NA`。若變數非數值，`cor()` 將失敗；先篩選數值欄。
 
-### Step 5: ANOVA Table
+### 步驟五：ANOVA 表
 
 ```r
 aov_result <- aov(score ~ group * condition, data = data)
@@ -157,31 +157,31 @@ tbl_anova <- broom::tidy(aov_result) |>
   tab_header(title = "Table 4", subtitle = "ANOVA Results")
 ```
 
-**Expected:** A formatted ANOVA table with Source, *df*, *SS*, *MS*, *F*, and *p* columns. Interaction terms are clearly labeled and p-values are formatted to three decimal places.
+**預期：** 格式化之 ANOVA 表含 Source、*df*、*SS*、*MS*、*F* 與 *p* 欄。交互作用項清楚標示，p 值格式為三位小數。
 
-**On failure:** If `broom::tidy(aov_result)` produces unexpected columns, verify the model is an `aov` object. For Type III sums of squares, use `car::Anova(model, type = 3)` instead of base `aov()`.
+**失敗時：** 若 `broom::tidy(aov_result)` 產意外欄，驗模型為 `aov` 物件。欲 III 型平方和，用 `car::Anova(model, type = 3)` 替代原生 `aov()`。
 
-### Step 6: Save Tables
+### 步驟六：存表
 
 ```r
-# Save as HTML
+# 存為 HTML
 gtsave(my_table, "table1.html")
 
-# Save as Word
+# 存為 Word
 gtsave(my_table, "table1.docx")
 
-# Save as PNG image
+# 存為 PNG 圖
 gtsave(my_table, "table1.png")
 
-# For LaTeX/PDF (kableExtra)
+# 為 LaTeX/PDF（kableExtra）
 kableExtra::save_kable(kable_table, "table1.pdf")
 ```
 
-**Expected:** Table saved to the specified file format (HTML, Word, PNG, or PDF). The output file opens correctly in the appropriate application.
+**預期：** 表存於指定檔格式（HTML、Word、PNG 或 PDF）。輸出檔於合宜應用中正確開啟。
 
-**On failure:** If `gtsave()` fails for Word format, ensure the `webshot2` package is installed. For PDF output via `kableExtra`, ensure a LaTeX distribution (TinyTeX or MiKTeX) is installed.
+**失敗時：** 若 `gtsave()` 於 Word 格式失敗，確 `webshot2` 套件已裝。經 `kableExtra` 之 PDF 輸出須 LaTeX 發行版（TinyTeX 或 MiKTeX）已裝。
 
-### Step 7: Embed in Quarto Document
+### 步驟七：嵌於 Quarto 文件
 
 ````markdown
 ```{r}
@@ -195,29 +195,29 @@ gt(descriptives) |>
 See @tbl-descriptives for summary statistics.
 ````
 
-**Expected:** The table renders inline in the Quarto document with a cross-referenceable label (`@tbl-*`) and a proper caption. The table adapts to the document's output format automatically.
+**預期：** 表於 Quarto 文件中就地渲染，附可交叉參考之標籤（`@tbl-*`）與合宜標題。表自動適應文件輸出格式。
 
-**On failure:** If the table does not render, verify the chunk label starts with `tbl-` for Quarto cross-referencing. If formatting is lost in PDF, switch from `gt` to `kableExtra` for LaTeX-based output.
+**失敗時：** 若表未渲染，驗段標籤以 `tbl-` 始以便 Quarto 交叉參考。若 PDF 失格式，從 `gt` 改 `kableExtra` 以利 LaTeX 輸出。
 
-## Validation
+## 驗證
 
-- [ ] Table renders correctly in target format (HTML, PDF, Word)
-- [ ] Numbers are formatted consistently (decimal places, alignment)
-- [ ] Statistical notation follows the style guide (italicized, proper symbols)
-- [ ] Table has a clear caption and numbering
-- [ ] Column headers are meaningful
-- [ ] Notes/footnotes explain abbreviations or significance markers
+- [ ] 表於目標格式（HTML、PDF、Word）中正確渲染
+- [ ] 數字格式一致（小數位、對齊）
+- [ ] 統計標記依風格指引（斜體、正確符號）
+- [ ] 表有清晰標題與編號
+- [ ] 欄首有意義
+- [ ] 註腳解釋縮寫或顯著性標記
 
-## Common Pitfalls
+## 常見陷阱
 
-- **gt in PDF**: gt has limited PDF support. Use kableExtra for LaTeX-heavy documents.
-- **Rounding inconsistency**: Always use `fmt_number()` (gt) or `format()` rather than `round()` for display
-- **Missing values display**: Configure with `sub_missing()` in gt or `options(knitr.kable.NA = "")`
-- **Wide tables in PDF**: Tables exceeding page width need `landscape()` or font size reduction
-- **APA number formatting**: No leading zero for values bounded by 1 (p-values, correlations): ".03" not "0.03"
+- **PDF 中之 gt**：gt 之 PDF 支援有限。LaTeX 重文件用 kableExtra。
+- **四捨五入不一致**：顯示永用 `fmt_number()`（gt）或 `format()` 而非 `round()`
+- **缺失值顯示**：於 gt 以 `sub_missing()` 設或 `options(knitr.kable.NA = "")`
+- **PDF 中寬表**：超頁寬之表須 `landscape()` 或字體縮小
+- **APA 數字格式**：界限為一之值（p 值、相關）無前導零：".03" 非 "0.03"
 
-## Related Skills
+## 相關技能
 
-- `format-apa-report` - tables within APA manuscripts
-- `create-quarto-report` - embedding tables in reports
-- `build-parameterized-report` - tables that adapt to parameters
+- `format-apa-report` - APA 手稿中之表
+- `create-quarto-report` - 於報告中嵌表
+- `build-parameterized-report` - 適應參數之表

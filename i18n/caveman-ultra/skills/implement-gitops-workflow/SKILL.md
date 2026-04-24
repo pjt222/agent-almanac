@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement GitOps continuous delivery using Argo CD or Flux with app-of-apps pattern,
   automated sync policies, drift detection, and multi-environment promotion. Manage
@@ -25,34 +25,32 @@ metadata:
 
 # Implement GitOps Workflow
 
-Deploy and manage Kubernetes applications using GitOps principles with Argo CD or Flux for automated, auditable, and repeatable deployments.
+Deploy + manage K8s apps via GitOps: Argo CD / Flux → automated, auditable, repeatable.
 
-## When to Use
+## Use When
 
-- Implementing declarative infrastructure and application management
-- Migrating from imperative kubectl/helm commands to Git-driven deployments
-- Setting up multi-environment promotion workflows (dev → staging → prod)
-- Enforcing code review and approval gates for production deployments
-- Achieving compliance and audit requirements with Git history
-- Implementing disaster recovery with Git as single source of truth
+- Declarative infra + app mgmt
+- Migrate kubectl/helm → Git-driven
+- Multi-env promotion (dev → staging → prod)
+- Enforce code review + approval gates
+- Compliance + audit via Git history
+- DR w/ Git as SSOT
 
-## Inputs
+## In
 
-- **Required**: Kubernetes cluster with admin access (EKS, GKE, AKS, or self-hosted)
-- **Required**: Git repository for Kubernetes manifests and Helm charts
-- **Required**: Argo CD or Flux CLI installed
-- **Optional**: Sealed Secrets or External Secrets Operator for secrets management
-- **Optional**: Image Updater for automated image promotion
-- **Optional**: Prometheus for monitoring sync status
+- **Required**: K8s cluster admin (EKS, GKE, AKS, self-hosted)
+- **Required**: Git repo for manifests + Helm charts
+- **Required**: Argo CD or Flux CLI
+- **Optional**: Sealed Secrets / External Secrets Operator
+- **Optional**: Image Updater for auto promotion
+- **Optional**: Prometheus for sync monitoring
 
-## Procedure
+## Do
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
 
-### Step 1: Install Argo CD and Configure Repository Access
-
-Deploy Argo CD to cluster and connect to Git repository.
+### Step 1: Install Argo CD + configure repo
 
 ```bash
 # Create namespace
@@ -129,13 +127,11 @@ spec:
 EOF
 ```
 
-**Expected:** Argo CD installed in argocd namespace. UI accessible via port-forward or Ingress. Admin password changed from default. Git repository added with SSH or token authentication. Repository connection verified.
+→ Argo CD in argocd NS. UI via port-forward or Ingress. Admin pw changed. Repo added (SSH/token). Connection verified.
 
-**On failure:** For pod CrashLoopBackOff, check logs with `kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server`. For repository connection failures, verify token has repo access or SSH key added to deploy keys. For Ingress SSL issues, ensure cert-manager issued certificate successfully. For login failures, retrieve password again or reset via `kubectl delete secret argocd-initial-admin-secret -n argocd` and restart server.
+**If err:** CrashLoopBackOff → `kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server`. Repo fail → verify token has repo access or SSH key in deploy keys. Ingress SSL → ensure cert-manager issued. Login fail → retrieve pw again or `kubectl delete secret argocd-initial-admin-secret -n argocd` + restart.
 
-### Step 2: Create Application Manifest and Deploy First Application
-
-Define Argo CD Application resource with sync policies and health checks.
+### Step 2: App manifest + deploy first
 
 ```bash
 # Create Git repository structure
@@ -266,13 +262,11 @@ kubectl get all -n production
 argocd app sync myapp-prod  # Manual sync if automated disabled
 ```
 
-**Expected:** Application synced automatically from Git. Resources created in production namespace. Argo CD UI shows healthy status. Automated sync policies enable prune and self-heal. Sync succeeds within retry limits.
+→ App auto-synced from Git. Resources in prod NS. UI healthy. Auto sync w/ prune + self-heal. Sync succeeds within retry.
 
-**On failure:** For sync failures, check application events with `argocd app get myapp-prod` and `kubectl get events -n production`. For Kustomize build errors, test locally with `kustomize build apps/myapp/overlays/prod`. For namespace errors, verify namespace exists or enable CreateNamespace sync option. For pruning issues, check finalizers and owner references with `kubectl get <resource> -o yaml`.
+**If err:** sync fail → `argocd app get myapp-prod` + `kubectl get events -n production`. Kustomize build err → test local `kustomize build apps/myapp/overlays/prod`. NS err → verify exists or enable CreateNamespace. Pruning issues → check finalizers + owner refs.
 
-### Step 3: Implement App-of-Apps Pattern for Multi-Environment Management
-
-Create root application that manages child applications across environments.
+### Step 3: App-of-apps for multi-env
 
 ```bash
 # Create app-of-apps structure
@@ -284,13 +278,11 @@ apiVersion: argoproj.io/v1alpha1
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Root app manages all child applications. New applications automatically deployed when added to Git. Infrastructure applications deployed before app applications (via sync waves if needed). Projects enforce RBAC boundaries. App tree shows parent-child relationships.
+→ Root app manages all children. New apps auto-deployed on Git add. Infra apps before app apps (sync waves). Projects enforce RBAC. Tree shows parent-child.
 
-**On failure:** For circular dependencies, use sync waves to control order. For project permission errors, verify sourceRepos and destinations match application requirements. For recursive directory issues, ensure YAML files are valid and don't conflict. For missing child apps, check root app status with `argocd app get root-app`.
+**If err:** circular deps → sync waves control order. Project perm errs → verify sourceRepos + destinations match. Recursive dir issues → valid YAML no conflict. Missing children → `argocd app get root-app`.
 
-### Step 4: Configure Image Updater for Automated Deployments
-
-Set up Argo CD Image Updater to automatically promote new image versions.
+### Step 4: Image Updater for auto deploy
 
 ```bash
 # Install Argo CD Image Updater
@@ -302,13 +294,11 @@ apiVersion: argoproj.io/v1alpha1
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Image Updater monitors registry for new images matching tag patterns. Semantic versioning strategy updates to latest stable release. Git commits created automatically with new image tags. Applications sync with updated images. Staging uses digest strategy for immutable deployments.
+→ Updater monitors registry for new images matching tag patterns. Semver → latest stable. Git commits auto w/ new tags. Apps sync w/ updates. Staging uses digest (immutable).
 
-**On failure:** For registry access errors, verify image-updater has pull credentials via secret or ServiceAccount. For write-back failures, check git-creds secret has push permissions. For no updates detected, verify tag regex matches actual tags with `argocd-image-updater test ghcr.io/username/myapp`. For authentication issues, check image-updater logs for detailed error messages.
+**If err:** registry access → verify image-updater has pull creds (secret or SA). Write-back fail → check git-creds push perms. No updates → verify regex matches w/ `argocd-image-updater test ghcr.io/username/myapp`. Auth → check image-updater logs.
 
-### Step 5: Implement Progressive Delivery with Argo Rollouts
-
-Enable canary and blue-green deployments with automated rollback.
+### Step 5: Progressive delivery via Argo Rollouts
 
 ```bash
 # Install Argo Rollouts controller
@@ -320,13 +310,11 @@ curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kube
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Rollout progressively shifts traffic to canary. Analysis runs at each step, validating success rate. Automated promotion on success, rollback on failure. Argo CD syncs Rollout resources. Dashboard shows real-time rollout progress.
+→ Progressive traffic shift to canary. Analysis validates success rate each step. Auto-promote on success, rollback on fail. Argo CD syncs Rollouts. Dashboard shows real-time progress.
 
-**On failure:** For analysis failures, verify Prometheus accessible and query returns valid results. For traffic routing issues, check Ingress annotations and canary service endpoints. For stuck rollouts, manually promote or abort. For revision mismatch, ensure Argo CD sync policy doesn't conflict with Rollouts controller updates.
+**If err:** analysis fails → verify Prometheus accessible + query valid. Traffic routing → Ingress annotations + canary service endpoints. Stuck → manual promote/abort. Revision mismatch → ensure Argo CD sync policy no conflict w/ Rollouts controller.
 
-### Step 6: Configure Drift Detection and Webhook Notifications
-
-Monitor for manual changes and send alerts to Slack/email.
+### Step 6: Drift detection + webhook notifications
 
 ```bash
 # Configure drift detection in Application
@@ -338,46 +326,39 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Self-heal automatically reverts manual kubectl changes. Notifications sent to Slack on sync failures and successful deployments. Webhooks trigger external systems (PagerDuty, monitoring, ITSM). Drift alerts show what changed and who made changes (via Git history).
+→ Self-heal auto-reverts manual kubectl changes. Slack notif on sync fail + successful deploys. Webhooks trigger external (PagerDuty, monitoring, ITSM). Drift alerts show changes + who (via Git history).
 
-**On failure:** For self-heal not triggering, verify automated sync policy enabled and refresh interval not too long (default 3m). For notification failures, test Slack token with curl and verify bot added to channels. For ignored differences not working, check JSON pointer syntax matches resource structure. For webhook errors, check endpoint accessibility and authentication headers.
+**If err:** self-heal not triggering → verify auto sync enabled + refresh interval not too long (default 3m). Notif fails → test Slack token w/ curl + bot added to channels. Ignored diffs not working → check JSON pointer syntax. Webhook errs → endpoint accessibility + auth headers.
 
-## Validation
+## Check
 
-- [ ] Argo CD or Flux installed and accessible via UI/CLI
-- [ ] Git repository connected with proper authentication
-- [ ] Applications sync automatically from Git on commit
+- [ ] Argo CD / Flux installed + accessible
+- [ ] Git repo connected w/ auth
+- [ ] Apps auto-sync from Git on commit
 - [ ] Manual kubectl changes reverted by self-heal
-- [ ] App-of-apps pattern deploys multiple applications
-- [ ] Image Updater promotes new images based on tag patterns
-- [ ] Argo Rollouts perform progressive canary deployments
-- [ ] Notifications sent to Slack/email on sync events
-- [ ] Drift detection alerts on out-of-band changes
-- [ ] RBAC enforces project-level access controls
+- [ ] App-of-apps deploys multiple
+- [ ] Image Updater promotes by tag patterns
+- [ ] Argo Rollouts progressive canary
+- [ ] Notifications to Slack/email on sync
+- [ ] Drift detection alerts out-of-band
+- [ ] RBAC enforces project access
 
-## Common Pitfalls
+## Traps
 
-- **Automatic prune disabled**: Resources removed from Git remain in cluster. Enable `prune: true` in sync policy.
+- **Auto prune disabled**: removed from Git remain in cluster. `prune: true` in sync.
+- **No sync waves**: infra deployed after dependent apps. `argocd.argoproj.io/sync-wave` annotations.
+- **Ignoring HPA replicas**: sync fails b/c HPA changed count. Add `/spec/replicas` to ignoreDifferences.
+- **Write-back conflicts**: Updater commits conflict w/ manual. Separate branch or fine RBAC.
+- **Missing finalizers**: deletion leaves orphans. Add `resources-finalizer.argocd.argoproj.io`.
+- **No analysis templates**: Rollouts promote w/o validation. Impl AnalysisTemplates w/ metrics queries.
+- **Secrets in Git**: plaintext committed. Use Sealed Secrets / External Secrets.
+- **Self-heal too aggressive**: reverts legitimate emergency changes. Annotations temporarily disable or approval gates.
 
-- **No sync waves**: Infrastructure applications deployed after apps that depend on them. Use `argocd.argoproj.io/sync-wave` annotations to control order.
+## →
 
-- **Ignoring HPA-managed replicas**: Sync fails because HPA changed replica count. Add `/spec/replicas` to ignoreDifferences.
-
-- **Write-back conflicts**: Image Updater commits conflict with manual commits. Use separate branch or fine-grained RBAC for image updater.
-
-- **Missing finalizers**: Application deletion leaves orphaned resources. Add `resources-finalizer.argocd.argoproj.io` to Application metadata.
-
-- **No analysis templates**: Rollouts promote automatically without validation. Implement AnalysisTemplates with metrics queries.
-
-- **Secrets in Git**: Plaintext secrets committed to repository. Use Sealed Secrets or External Secrets Operator.
-
-- **Self-heal too aggressive**: Self-heal reverts legitimate emergency changes. Use annotations to temporarily disable or implement approval gates.
-
-## Related Skills
-
-- `configure-git-repository` - Setting up Git repository structure for GitOps
-- `manage-git-branches` - Branch strategies for environment promotion
-- `deploy-to-kubernetes` - Understanding Kubernetes resources managed by GitOps
-- `manage-kubernetes-secrets` - Sealed Secrets integration with Argo CD
-- `build-ci-cd-pipeline` - CI builds images, GitOps deploys them
-- `setup-container-registry` - Image promotion between registries
+- `configure-git-repository` — repo structure for GitOps
+- `manage-git-branches` — branch strategies for env promotion
+- `deploy-to-kubernetes` — K8s resources managed by GitOps
+- `manage-kubernetes-secrets` — Sealed Secrets integration
+- `build-ci-cd-pipeline` — CI builds, GitOps deploys
+- `setup-container-registry` — image promotion between registries

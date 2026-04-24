@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Alluvial gold recovery using panning, sluicing, and classification.
   Covers site reading (geological indicators, stream dynamics, pay streak
@@ -24,32 +24,32 @@ metadata:
   tags: prospecting, gold, panning, sluicing, alluvial, placer, geology
 ---
 
-# Gold Washing
+# 淘金
 
-Recover alluvial gold from stream deposits using panning, sluicing, and classification techniques.
+以盤、溜槽、分級自溪澤獲沖積金。
 
-## When to Use
+## 用時
 
-- You are prospecting in an area with known or suspected alluvial gold deposits
-- You want to sample a stream or river to test for gold presence
-- You are recreational panning and want to maximize recovery
-- You need to assess a site's gold potential before investing more effort
+- 於已知或疑有沖積金礦之地勘探
+- 取樣溪河以測金之存
+- 休閒淘金而欲最大回收
+- 投更多力前察一地之金潛
 
-## Inputs
+## 入
 
-- **Required**: A gold pan (14-16 inch, with riffles)
-- **Required**: Access to a stream, river, or alluvial deposit
-- **Optional**: Classifier/screen (1/4 inch mesh)
-- **Optional**: Sluice box (for higher volume processing)
-- **Optional**: Snuffer bottle or tweezers (for fine gold recovery)
-- **Optional**: Vial with water (for storing recovered gold)
-- **Optional**: Shovel and bucket for material collection
+- **必要**：金盤（14-16 吋，有槽）
+- **必要**：通於溪、河或沖積床
+- **可選**：分級篩（1/4 吋網）
+- **可選**：溜槽箱（大量處理）
+- **可選**：吸瓶或鑷（細金回收）
+- **可選**：帶水小瓶（儲金）
+- **可選**：鏟與桶收料
 
-## Procedure
+## 法
 
-### Step 1: Read the Site
+### 第一步：讀場
 
-Gold is heavy (specific gravity 19.3) and concentrates predictably. Read the water and geology before digging.
+金重（比重 19.3）且聚有跡。掘前先讀水地。
 
 ```
 Where Gold Concentrates:
@@ -93,13 +93,13 @@ Geological Indicators:
   which can host gold deposits
 ```
 
-**Expected:** You have identified 2-3 promising sample locations based on stream dynamics and geological indicators.
+**得：** 依溪動與地質跡已識兩三有望取樣處。
 
-**On failure:** If no clear indicators are visible, sample multiple locations systematically — one pan from each distinct feature (inside bend, behind obstacle, random gravel bar). Even a single color (flake of gold) confirms the stream carries gold.
+**敗則：** 若無明跡，系統多處取樣——每異特徵（內彎、障後、隨礫石灘）取一盤。一色（金片）即證溪帶金。
 
-### Step 2: Classify and Collect Material
+### 第二步：分級與收料
 
-Prepare the raw material for panning.
+備原料以待盤。
 
 ```
 Collection Protocol:
@@ -118,13 +118,13 @@ Classification:
 5. Classified material is now ready for panning
 ```
 
-**Expected:** A pan or bucket of classified material (gravel and sand smaller than 1/4 inch), sourced from a geologically promising location.
+**得：** 一盤或一桶分級料（1/4 吋以下之礫與砂），自地質有望處取。
 
-**On failure:** If you cannot reach bedrock, sample what is accessible. Shallow samples are less likely to contain gold but are still worth testing — flood events can deposit gold at various depths.
+**敗則：** 若不能達基岩，取可達者。淺樣含金較少，然仍可測——洪水可沉金於各深。
 
-### Step 3: Pan the Material
+### 第三步：盤料
 
-The gold pan separates gold from lighter material using gravity and water.
+金盤以重力與水分金於輕料。
 
 ```
 Panning Technique:
@@ -162,13 +162,13 @@ Common Errors:
   you start washing off material.
 ```
 
-**Expected:** All heavy material (gold, black sand, garnets) concentrates in the bottom of the pan. Gold is visible as bright yellow flakes, flattened grains, or (rarely) small nuggets.
+**得：** 所有重料（金、黑砂、石榴石）聚於盤底。金見為鮮黃片、扁粒、或稀有小塊。
 
-**On failure:** If no gold is visible after a careful pan, the location may not contain gold — or the gold may be too fine to see (flour gold). Check with a hand lens. If still nothing, move to a different sample location.
+**敗則：** 仔細盤後無金見，地或無金——或金太細不可見（麵粉金）。以手鏡察。若仍無，移他處取樣。
 
-### Step 4: Scale Up with a Sluice Box (Optional)
+### 第四步：以溜槽箱規模化（可選）
 
-For processing larger volumes of material.
+為處理大量料。
 
 ```
 Sluice Box Operation:
@@ -191,29 +191,31 @@ Sluice Calibration:
   If it is caught by the riffles, gold will be too.
 ```
 
-**Expected:** Higher volume processing with gold concentrated in the riffle mat, recovered by final panning.
+**得：** 較大量處理，金聚於槽毯，以末盤回收。
 
-**On failure:** If the sluice is not catching test material (lead shot), adjust the angle or water flow. The sluice should catch everything heavier than quartz sand.
+**敗則：** 若溜槽不截測料（鉛粒），調角或水流。溜槽應截重於石英砂之所有料。
 
-## Validation
+## 驗
 
-- [ ] Site was read for geological indicators before sampling
-- [ ] Material was collected from a geologically promising location
-- [ ] Material was classified before panning
-- [ ] Panning used side-to-side shaking for stratification
-- [ ] Black sand concentrate was checked thoroughly for fine gold
-- [ ] Any gold recovered was stored safely in water in a sealed vial
-- [ ] The site was left without significant environmental disturbance
+- [ ] 取樣前已讀地質跡
+- [ ] 料自地質有望處收
+- [ ] 料盤前已分級
+- [ ] 盤用左右搖動以分層
+- [ ] 黑砂集已仔細察細金
+- [ ] 所回收之金安全儲於水於密瓶
+- [ ] 場無顯著環境擾
 
-## Common Pitfalls
+## 陷
 
-- **Panning too fast**: Impatience loses fine gold. A proper pan takes 5-10 minutes. Speed is the enemy of recovery
-- **Ignoring black sand**: If you see heavy black sand concentrating, gold is likely present — even if too fine to see without magnification
-- **Confusing pyrite with gold**: Pyrite (fool's gold) is lighter, breaks when pressed with a pin, and has a brassy rather than buttery yellow colour. Real gold is malleable and does not tarnish
-- **Sampling random locations**: Gold concentrates predictably. Sampling the middle of a straight stretch is far less productive than sampling the inside of a bend
-- **Environmental damage**: Respect waterways. Do not dig large holes in stream banks, do not use mercury (illegal in most jurisdictions and extremely toxic), and fill in any test holes
-- **Ignoring regulations**: Most jurisdictions require permits for gold prospecting, even recreational panning. Check local regulations before starting
+- **盤過速**：急失細金。正盤需五至十分鐘。速為回收之敵
+- **忽黑砂**：若見重黑砂聚，金或存——雖無放大鏡不可見
+- **黃鐵礦混金**：黃鐵礦（愚人金）輕，針壓則碎，色黃偏銅非奶黃。真金有延展性不氧化
+- **隨取樣**：金聚有跡。取直段中部遠不如取內彎
+- **環境損害**：敬水道。勿於溪岸掘大坑，勿用汞（多地違法且劇毒），填回測坑
+- **忽法規**：多地需勘金許可，休閒淘金亦然。始前察地方法規
 
-## Related Skills
+## 參
 
-- `mineral-identification` — understanding rock and mineral types helps read geological indicators that point to gold-bearing areas
+- `mineral-identification` — 識岩石與礦物類助讀指金區之地質跡
+- `assess-holistic-health` — 淘金久行之身察
+- `forage-plants` — 勘探時之野外備草

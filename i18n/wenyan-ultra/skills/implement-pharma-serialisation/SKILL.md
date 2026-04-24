@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement pharmaceutical serialisation and track-and-trace systems compliant
   with EU FMD, US DSCSA, and other global regulations. Covers unique identifier
@@ -24,30 +24,30 @@ metadata:
   tags: serialisation, eu-fmd, dscsa, epcis, track-and-trace, pharma
 ---
 
-# Implement Pharmaceutical Serialisation
+# 實藥序列化
 
-Set up pharmaceutical serialisation systems for regulatory compliance with global track-and-trace mandates.
+立藥序列化系統以合全球追蹤法規。
 
-## When to Use
+## 用
 
-- Implementing serialisation for a new product launch in the EU or US market
-- Integrating with the European Medicines Verification System (EMVS/NMVS)
-- Designing DSCSA-compliant transaction information exchange
-- Building or integrating an EPCIS event repository for supply chain visibility
-- Extending serialisation to additional markets (China NMPA, Brazil ANVISA, etc.)
+- 為 EU 或 US 市新品上市實序列化
+- 與歐藥驗系（EMVS/NMVS）集成
+- 設 DSCSA 合之交易訊交
+- 建或集 EPCIS 事件倉供供應鏈見
+- 擴序列化至他市（中 NMPA、巴 ANVISA 等）
 
-## Inputs
+## 入
 
-- **Required**: Product information (GTIN, product code, dosage form, pack sizes)
-- **Required**: Target market regulations (EU FMD, DSCSA, or both)
-- **Required**: Packaging hierarchy (unit, bundle, case, pallet)
-- **Optional**: Existing ERP/MES system details for integration
-- **Optional**: Contract manufacturer serialisation capabilities
-- **Optional**: Verification endpoint specifications
+- **必**：產品訊（GTIN、產碼、劑型、包尺）
+- **必**：目標市法規（EU FMD、DSCSA 或皆）
+- **必**：包級（單、捆、箱、棧）
+- **可**：既 ERP/MES 系統細供集成
+- **可**：合同製商序列化能
+- **可**：驗端規
 
-## Procedure
+## 行
 
-### Step 1: Understand the Regulatory Landscape
+### 一：知法規界
 
 | Regulation | Region | Key Requirements | Deadline |
 |-----------|--------|------------------|----------|
@@ -57,24 +57,24 @@ Set up pharmaceutical serialisation systems for regulatory compliance with globa
 | Brazil ANVISA (SNCM) | Brazil | Serialisation of pharmaceuticals with IUM | Rolling |
 | Russia MDLP | Russia | Crypto-code per unit, mandatory scanning | Live |
 
-Key data elements per regulation:
+諸法規之關鍵數據元：
 
-**EU FMD unique identifier (per Delegated Regulation 2016/161):**
-- Product code (GTIN-14 from GS1)
-- Serial number (up to 20 alphanumeric characters, randomised)
-- Batch/lot number
-- Expiry date
+**EU FMD 唯一識別（依 Delegated Regulation 2016/161）：**
+- 產碼（GS1 之 GTIN-14）
+- 序號（至多 20 字母數字，隨化）
+- 批/批次號
+- 有效期
 
-**DSCSA transaction information:**
-- Product identifier (NDC/GTIN, serial number, lot, expiry)
-- Transaction information (date, entities, shipment details)
-- Transaction history and transaction statement
-- Verification at package level
+**DSCSA 交易訊：**
+- 產識（NDC/GTIN、序號、批、期）
+- 交易訊（日期、實體、裝運詳）
+- 交易史與交易聲明
+- 包級驗
 
-**Expected:** Clear understanding of which regulations apply to each product-market combination.
-**On failure:** Engage regulatory affairs to confirm market requirements before proceeding.
+得：各產品-市合之法規明。
+敗：用法規事務確市要再進。
 
-### Step 2: Design the Serialisation Data Model
+### 二：設序列化數模
 
 ```sql
 -- Core serialisation data model
@@ -115,7 +115,7 @@ CREATE TABLE epcis_events (
 );
 ```
 
-Aggregation hierarchy:
+集級：
 
 ```
 Pallet (SSCC)
@@ -124,10 +124,10 @@ Pallet (SSCC)
             └── Unit (GTIN + serial)
 ```
 
-**Expected:** Data model supports full pack hierarchy with EPCIS event tracking.
-**On failure:** If existing ERP schema conflicts, design an integration layer rather than modifying ERP directly.
+得：數模支全包級與 EPCIS 事件追。
+敗：既 ERP 架衝→設集成層而非改 ERP。
 
-### Step 3: Implement Serial Number Generation
+### 三：實序號生成
 
 ```python
 import secrets
@@ -163,29 +163,29 @@ def generate_serial_batch(gtin: str, batch_lot: str, expiry: str, count: int) ->
     ]
 ```
 
-**Expected:** Serial numbers are cryptographically random, unique per GTIN, and stored before printing.
-**On failure:** If a uniqueness collision occurs, regenerate the conflicting serial and log the event.
+得：序號為密隨，於 GTIN 內唯一，印前已存。
+敗：唯一性撞→重生衝突序並記事件。
 
-### Step 4: Implement GS1 DataMatrix Encoding
+### 四：實 GS1 DataMatrix 編
 
-The 2D DataMatrix barcode encodes the GS1 element string:
+2D DataMatrix 條碼編 GS1 元串：
 
 ```
 (01)GTIN(21)Serial(10)Batch(17)Expiry
 ```
 
-Example:
+例：
 ```
 (01)05012345678901(21)A1B2C3D4E5(10)LOT123(17)261231
 ```
 
-Where:
+其中：
 - AI(01) = GTIN-14
-- AI(21) = Serial number
-- AI(10) = Batch/lot number
-- AI(17) = Expiry date (YYMMDD)
+- AI(21) = 序號
+- AI(10) = 批/批次號
+- AI(17) = 有效期（YYMMDD）
 
-The GS1 DataMatrix uses FNC1 as a separator (GS character, ASCII 29) between variable-length fields.
+GS1 DataMatrix 於變長欄間用 FNC1 為分（GS 字，ASCII 29）。
 
 ```python
 def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -> str:
@@ -199,12 +199,12 @@ def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -
     return f"01{gtin}21{serial}{GS}10{batch}{GS}17{expiry}"
 ```
 
-**Expected:** Encoded strings verified by scanning test prints with a GS1-certified verifier (ISO 15415 grade C or above).
-**On failure:** If scan verification fails, check print quality, quiet zones, and encoding order.
+得：編串經 GS1 認驗器掃試印驗（ISO 15415 C 級以上）。
+敗：掃驗敗→察印質、靜區、編序。
 
-### Step 5: Integrate with National Verification Systems
+### 五：與國驗系集成
 
-#### EU FMD — EMVS/NMVS Integration
+#### EU FMD——EMVS/NMVS 集成
 
 ```
 MAH → Upload serial data → EU Hub → Distribute to National Systems (NMVS)
@@ -214,19 +214,19 @@ MAH → Upload serial data → EU Hub → Distribute to National Systems (NMVS)
                                       └── ... 31 markets
 ```
 
-API operations:
-1. **Upload** (MAH → EU Hub): Batch upload of commissioned serial numbers
-2. **Verify** (Pharmacy → NMVS): Check serial status before dispensing
-3. **Decommission** (Pharmacy → NMVS): Mark as dispensed at point of sale
-4. **Reactivate** (MAH → NMVS): Reverse accidental decommission
+API 操作：
+1. **上傳**（MAH → EU Hub）：批上傳已提交序號
+2. **驗**（藥房 → NMVS）：發放前察序態
+3. **退役**（藥房 → NMVS）：售點標為已配
+4. **重啟**（MAH → NMVS）：撤意外退役
 
-#### DSCSA — Verification Router Service
+#### DSCSA——驗路由服務
 
 ```
 Trading Partner A → VRS Request → Verification Router → MAH's VRS → Response
 ```
 
-Implement a VRS responder endpoint:
+實 VRS 應端：
 
 ```python
 # Simplified VRS endpoint (DSCSA verification)
@@ -247,12 +247,12 @@ async def verify_product(gtin: str, serial: str, lot: str, expiry: str):
     return {"verified": True, "status": record.status}
 ```
 
-**Expected:** Verification endpoints respond within 1 second with correct status.
-**On failure:** If national system upload fails, retry with exponential backoff and alert operations.
+得：驗端於一秒內以正態應。
+敗：國系統上傳敗→以指數退避重試並警運。
 
-### Step 6: Implement EPCIS Event Capture
+### 六：實 EPCIS 事件捕
 
-Record supply chain events in EPCIS 2.0 format:
+以 EPCIS 2.0 格記供應鏈事件：
 
 ```json
 {
@@ -269,38 +269,38 @@ Record supply chain events in EPCIS 2.0 format:
 }
 ```
 
-Key business steps in the pharma supply chain:
-- `commissioning` — serial number assigned to physical unit
-- `packing` — aggregation into cases/pallets
-- `shipping` — departure from a location
-- `receiving` — arrival at a location
-- `dispensing` — supplied to patient (decommission trigger)
+藥供應鏈之關鍵業務步：
+- `commissioning`——序號分配予物理單
+- `packing`——集成為箱/棧
+- `shipping`——自位發
+- `receiving`——至位抵
+- `dispensing`——配患（觸發退役）
 
-**Expected:** Every status change generates an EPCIS event with correct timestamps and locations.
-**On failure:** Failed event capture must be queued and retried; never silently dropped.
+得：各態變生 EPCIS 事件含正時戳位。
+敗：事件捕敗必隊並重試；絕勿默棄。
 
-## Validation
+## 驗
 
-- [ ] Serial numbers are randomised and unique per GTIN
-- [ ] GS1 DataMatrix encoding verified by barcode scanner (ISO 15415 grade C+)
-- [ ] Aggregation hierarchy correctly links units → bundles → cases → pallets
-- [ ] National verification system integration tested (upload, verify, decommission)
-- [ ] EPCIS events captured for all business steps
-- [ ] Verification endpoint responds within 1 second
-- [ ] Exception handling covers upload failures, scan failures, and network errors
+- [ ] 序號隨化且於 GTIN 內唯
+- [ ] GS1 DataMatrix 編經條碼掃驗（ISO 15415 C+）
+- [ ] 集級正連單→捆→箱→棧
+- [ ] 國驗系集成已試（上傳、驗、退役）
+- [ ] 諸業務步之 EPCIS 事件捕
+- [ ] 驗端於 1 秒應
+- [ ] 異常處涵上傳敗、掃敗、網誤
 
-## Common Pitfalls
+## 忌
 
-- **Sequential serial numbers**: EU FMD explicitly requires randomisation to prevent counterfeiting. Never use sequential numbering.
-- **Aggregation errors**: Disaggregation (breaking a case) must update the hierarchy. Shipping a case with wrong child associations causes verification failures downstream.
-- **Timezone handling**: EPCIS events must include timezone offset. Using local time without offset causes event ordering ambiguity across sites.
-- **Late uploads**: Serial data must be uploaded to national systems before product enters the supply chain. Late upload = product flagged as suspicious at pharmacy.
-- **Ignoring exceptions**: Legitimate products get flagged (false alerts) regularly. A process for investigating and resolving alerts is essential.
+- **序號順**：EU FMD 明需隨化以防偽。絕勿用順號
+- **集錯**：拆（破箱）必更級。發錯子關之箱致下游驗敗
+- **時區處**：EPCIS 事件必含時區偏。用本地時無偏→跨地事件序曖
+- **晚上傳**：序數據於產入供應鏈前必上傳至國系。晚上傳=產於藥房標可疑
+- **忽異常**：合法產常被標（假警）。究解警之程必有
 
-## Related Skills
+## 參
 
-- `perform-csv-assessment` — validate serialisation system as a computerised system
-- `conduct-gxp-audit` — audit serialisation processes
-- `implement-audit-trail` — audit trail for serialisation events
-- `serialize-data-formats` — general data serialisation (different domain, complementary concepts)
-- `design-serialization-schema` — schema design for data exchange formats
+- `perform-csv-assessment`
+- `conduct-gxp-audit`
+- `implement-audit-trail`
+- `serialize-data-formats`
+- `design-serialization-schema`

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement a generative diffusion model (DDPM or score-based) with noise
   scheduling, U-Net architecture, training loop, and sampling procedures
@@ -24,35 +24,35 @@ metadata:
   tags: diffusion, ddpm, generative-ai, denoising, score-matching, u-net
 ---
 
-# Implement a Diffusion Network
+# 建擴散網路
 
-Build a denoising diffusion probabilistic model (DDPM) or score-based generative model from scratch, including the forward noising process, U-Net denoiser, training objective, reverse sampling procedure, and accelerated inference via DDIM or DPM-Solver.
+自零建去噪擴散概率模型（DDPM）或基於分數之生成模型，含前向加噪過程、U-Net 去噪器、訓練目標、反向採樣過程與經 DDIM 或 DPM-Solver 加速推理。
 
-## When to Use
+## 適用時機
 
-- Building a generative model for image, audio, or molecular synthesis
-- Implementing DDPM or score-based diffusion from a research paper
-- Adding a custom noise schedule or conditioning mechanism to a diffusion pipeline
-- Replacing a GAN-based generator with a diffusion-based alternative
-- Prototyping a diffusion model before scaling to production with frameworks like diffusers
+- 為影像、音訊或分子合成建生成模型
+- 依研究論文建 DDPM 或分數基擴散
+- 於擴散流水中加自訂加噪計畫或條件機制
+- 以擴散為基之生成器代 GAN 基生成器
+- 以 diffusers 等生產框架擴展前原型化擴散模型
 
-## Inputs
+## 輸入
 
-- **Required**: Training dataset (images, spectrograms, point clouds, or other continuous data)
-- **Required**: Target resolution and number of channels
-- **Required**: Compute budget (GPU type and count, training time limit)
-- **Optional**: Noise schedule type (default: cosine)
-- **Optional**: Number of diffusion timesteps T (default: 1000)
-- **Optional**: Conditioning signal (class labels, text embeddings, or other guidance)
-- **Optional**: Sampling acceleration method (default: DDIM with 50 steps)
+- **必要**：訓練資料集（影像、頻譜圖、點雲或他連續資料）
+- **必要**：目標解析度與通道數
+- **必要**：計算預算（GPU 類與數、訓練時限）
+- **選擇性**：加噪計畫類（預設：cosine）
+- **選擇性**：擴散時步 T 數（預設：1000）
+- **選擇性**：條件訊號（類標、文嵌入或他引導）
+- **選擇性**：採樣加速法（預設：DDIM 五十步）
 
-## Procedure
+## 步驟
 
-### Step 1: Define the Forward Process (Noise Schedule)
+### 步驟一：定前向過程（加噪計畫）
 
-Configure the variance schedule that controls how data is progressively noised.
+配控資料如何漸加噪之變異計畫。
 
-1. Define the beta schedule (linear, cosine, or learned):
+1. 定 beta 計畫（線性、cosine 或學得）：
 
 ```python
 import torch
@@ -72,7 +72,7 @@ def linear_beta_schedule(timesteps, beta_start=1e-4, beta_end=0.02):
     return torch.linspace(beta_start, beta_end, timesteps)
 ```
 
-2. Pre-compute the derived quantities used during training and sampling:
+2. 預算訓練與採樣所用之衍生量：
 
 ```python
 class DiffusionSchedule:
@@ -88,7 +88,7 @@ class DiffusionSchedule:
         )
 ```
 
-3. Implement the forward noising function (q-sample):
+3. 實前向加噪函數（q-sample）：
 
 ```python
     def q_sample(self, x_0, t, noise=None):
@@ -100,7 +100,7 @@ class DiffusionSchedule:
         return sqrt_alpha * x_0 + sqrt_one_minus_alpha * noise
 ```
 
-4. Verify the schedule visually:
+4. 視覺驗計畫：
 
 ```python
 schedule = DiffusionSchedule(cosine_beta_schedule(1000))
@@ -109,15 +109,15 @@ print(f"alpha_cumprod at t=500: {schedule.alphas_cumprod[500]:.4f}")   # ~0.5 (h
 print(f"alpha_cumprod at t=999: {schedule.alphas_cumprod[999]:.4f}")   # ~0.0 (pure noise)
 ```
 
-**Expected:** `alphas_cumprod` decreases monotonically from near 1.0 to near 0.0. The cosine schedule should decrease more gradually than linear in the middle timesteps.
+**預期：** `alphas_cumprod` 自近 1.0 單調降至近 0.0。Cosine 計畫中間時步應較線性漸降。
 
-**On failure:** If `alphas_cumprod` does not reach near zero at t=T, the model will not learn to generate from pure noise. Increase T or adjust the schedule. If values go negative, check the clipping bounds on betas.
+**失敗時：** 若 `alphas_cumprod` 於 t=T 時未至近零，模型不能從純噪學生成。增 T 或調計畫。若值變負，核 betas 之截斷界。
 
-### Step 2: Design the Denoising Network Architecture
+### 步驟二：設計去噪網路架構
 
-Build a U-Net with time conditioning that predicts noise given a noisy input.
+建附時間條件、於噪輸入下預測噪之 U-Net。
 
-1. Define the time embedding module:
+1. 定時間嵌入模組：
 
 ```python
 import torch.nn as nn
@@ -136,7 +136,7 @@ class SinusoidalTimeEmbedding(nn.Module):
         return torch.cat([emb.sin(), emb.cos()], dim=-1)
 ```
 
-2. Define a residual block with time conditioning:
+2. 定帶時間條件之殘差區塊：
 
 ```python
 class ResBlock(nn.Module):
@@ -156,7 +156,7 @@ class ResBlock(nn.Module):
         return h + self.skip(x)
 ```
 
-3. Assemble the U-Net with encoder, bottleneck, and decoder:
+3. 以編碼、瓶頸與解碼組成 U-Net：
 
 ```python
 class UNet(nn.Module):
@@ -174,7 +174,7 @@ class UNet(nn.Module):
         # (full implementation depends on resolution and channel config)
 ```
 
-4. Verify the architecture accepts inputs of the target resolution:
+4. 驗架構接受目標解析度之輸入：
 
 ```python
 model = UNet(in_channels=3, base_channels=64)
@@ -185,15 +185,15 @@ assert out.shape == x_test.shape, f"Output shape {out.shape} != input shape {x_t
 print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
 ```
 
-**Expected:** The model outputs a tensor with the same shape as the input (predicting noise of matching dimensions). Parameter count should be proportional to resolution: approximately 30-60M for 64x64, 100-300M for 256x256.
+**預期：** 模型輸出與輸入同形之張量（預測匹配維度之噪）。參數數應比於解析度：64x64 約三千萬至六千萬、256x256 約一至三億。
 
-**On failure:** Shape mismatches usually indicate incorrect downsampling/upsampling ratios. Verify that each encoder stage halves spatial dimensions and each decoder stage doubles them. GroupNorm requires channels to be divisible by the group count.
+**失敗時：** 形不配常示下/上採樣比不正。驗每編碼階半空間維度、每解碼階倍之。GroupNorm 需通道數可除於組數。
 
-### Step 3: Implement the Training Loop
+### 步驟三：實訓練迴圈
 
-Train the denoiser to predict the noise added at each timestep.
+訓去噪器以預測每時步所加之噪。
 
-1. Set up the training objective (simplified DDPM loss):
+1. 設訓練目標（簡化 DDPM 損失）：
 
 ```python
 def training_loss(model, schedule, x_0):
@@ -206,14 +206,14 @@ def training_loss(model, schedule, x_0):
     return loss
 ```
 
-2. Configure the optimizer and learning rate schedule:
+2. 配優化器與學習率計畫：
 
 ```python
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, weight_decay=0.01)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=100000)
 ```
 
-3. Run the training loop with logging:
+3. 執訓練迴圈附日誌：
 
 ```python
 from torch.utils.data import DataLoader
@@ -236,7 +236,7 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch}: loss={avg_loss:.4f}, lr={scheduler.get_last_lr()[0]:.6f}")
 ```
 
-4. Save checkpoints periodically:
+4. 定期存檢查點：
 
 ```python
     if (epoch + 1) % 10 == 0:
@@ -248,15 +248,15 @@ for epoch in range(num_epochs):
         }, f"checkpoint_epoch_{epoch+1}.pt")
 ```
 
-**Expected:** Loss decreases steadily over training. For image data normalized to [-1, 1], initial loss should be near 1.0 (predicting random noise). After convergence, loss should be in the range 0.01-0.10 depending on data complexity.
+**預期：** 損失隨訓練穩降。資料歸一化於 [-1, 1]，初始損失應近 1.0（預測隨機噪）。收斂後，損失應於 0.01-0.10 範圍依資料複雜度。
 
-**On failure:** If loss plateaus early (> 0.5), check: (a) data normalization (must be [-1, 1] or [0, 1] with matching final activation), (b) learning rate (try 3e-4 or 5e-5), (c) gradient clipping (1.0 is standard). If loss is NaN, reduce learning rate and check for division by zero in the schedule.
+**失敗時：** 若損失早平（> 0.5），核：(a) 資料歸一化（須 [-1, 1] 或 [0, 1] 配最終激活），(b) 學習率（試 3e-4 或 5e-5），(c) 梯度截斷（1.0 為標準）。若損失為 NaN，降學習率並核計畫中除零。
 
-### Step 4: Implement Sampling (Reverse Process)
+### 步驟四：實採樣（反向過程）
 
-Generate new samples by iteratively denoising from pure Gaussian noise.
+自純高斯噪疊去噪以生新樣本。
 
-1. Implement the standard DDPM sampling loop:
+1. 實標準 DDPM 採樣迴圈：
 
 ```python
 @torch.no_grad()
@@ -287,22 +287,22 @@ def ddpm_sample(model, schedule, shape, device):
     return x
 ```
 
-2. Generate and visualize samples:
+2. 生並視覺化樣本：
 
 ```python
 samples = ddpm_sample(model, schedule, shape=(16, 3, 64, 64), device=device)
 samples = (samples.clamp(-1, 1) + 1) / 2  # rescale to [0, 1]
 ```
 
-**Expected:** Generated samples show recognizable structure (not pure noise or uniform color). At 64x64 resolution with 100K+ training steps, outputs should visually resemble the training distribution.
+**預期：** 生樣本現可辨結構（非純噪或均勻色）。64x64 解析度於十萬以上訓練步後，輸出視覺應似訓練分布。
 
-**On failure:** If samples are blurry, train longer or increase model capacity. If samples are noisy, the reverse process may have a bug -- verify that the schedule indexing matches training. If all samples look identical, check for mode collapse (try different random seeds).
+**失敗時：** 若樣本模糊，訓更久或增模型容量。若樣本噪雜，反向過程或有錯——驗計畫索引配訓練。若所有樣本似同，核模式崩潰（試不同隨機種）。
 
-### Step 5: Add Sampling Acceleration
+### 步驟五：加採樣加速
 
-Reduce the number of sampling steps using DDIM or DPM-Solver.
+以 DDIM 或 DPM-Solver 減採樣步數。
 
-1. Implement DDIM sampling (deterministic, fewer steps):
+1. 實 DDIM 採樣（確定性、較少步）：
 
 ```python
 @torch.no_grad()
@@ -334,7 +334,7 @@ def ddim_sample(model, schedule, shape, device, num_steps=50, eta=0.0):
     return x
 ```
 
-2. Compare sample quality across step counts:
+2. 較跨步數之樣本品質：
 
 ```python
 for n_steps in [10, 25, 50, 100, 250]:
@@ -343,7 +343,7 @@ for n_steps in [10, 25, 50, 100, 250]:
     # Save grid for visual comparison
 ```
 
-3. Benchmark sampling speed:
+3. 基準採樣速度：
 
 ```python
 import time
@@ -355,15 +355,15 @@ for method, n_steps in [("DDPM", 1000), ("DDIM-50", 50), ("DDIM-25", 25)]:
     print(f"{method}: {elapsed:.2f}s per sample")
 ```
 
-**Expected:** DDIM with 50 steps produces samples visually comparable to DDPM with 1000 steps at 20x speed improvement. Quality degrades gracefully down to approximately 20-25 steps.
+**預期：** DDIM 五十步生視覺上可比於 DDPM 一千步之樣本，速二十倍改善。品質於約二十至二十五步和緩降。
 
-**On failure:** If DDIM samples are worse than DDPM at the same step count, verify the alpha indexing. DDIM uses `alphas_cumprod` directly, not `alphas`. If samples at low step counts are very noisy, try eta=0.0 (fully deterministic) first.
+**失敗時：** 若同步數下 DDIM 樣本劣於 DDPM，驗 alpha 索引。DDIM 直用 `alphas_cumprod`，非 `alphas`。若低步數之樣本極噪，先試 eta=0.0（全確定性）。
 
-### Step 6: Evaluate Sample Quality
+### 步驟六：評樣本品質
 
-Quantify generation quality using standard metrics.
+以標準指標量生品質。
 
-1. Compute FID (Frechet Inception Distance):
+1. 算 FID（Frechet Inception Distance）：
 
 ```python
 from torchmetrics.image.fid import FrechetInceptionDistance
@@ -386,7 +386,7 @@ fid_score = fid_metric.compute()
 print(f"FID: {fid_score:.2f}")
 ```
 
-2. Assess sample diversity (check for mode collapse):
+2. 評樣本多樣性（核模式崩潰）：
 
 ```python
 # Compute pairwise LPIPS distances among generated samples
@@ -403,7 +403,7 @@ for i in range(n_pairs):
 print(f"Mean pairwise LPIPS: {np.mean(diversity_scores):.4f} (higher = more diverse)")
 ```
 
-3. Log results:
+3. 記結果：
 
 ```python
 results = {
@@ -416,33 +416,33 @@ results = {
 print("Evaluation results:", results)
 ```
 
-**Expected:** FID below 50 for a well-trained model on standard benchmarks (CIFAR-10, CelebA). LPIPS diversity above 0.4 indicates no mode collapse. State-of-the-art models achieve FID 2-10 on CIFAR-10.
+**預期：** 標準基準（CIFAR-10、CelebA）上訓練良好之模型 FID 低於五十。LPIPS 多樣性高於 0.4 示無模式崩潰。SOTA 模型於 CIFAR-10 達 FID 2-10。
 
-**On failure:** High FID (>100) indicates training issues or insufficient epochs. Low diversity (LPIPS < 0.2) suggests mode collapse -- increase model capacity, check data augmentation, or train longer. Compute FID on at least 10K samples for stable estimates.
+**失敗時：** 高 FID（>100）示訓練問題或訓不足。低多樣性（LPIPS < 0.2）示模式崩潰——增模型容量、核資料增強或訓更久。於至少一萬樣本上算 FID 以得穩定估計。
 
-## Validation
+## 驗證
 
-- [ ] Forward process produces pure noise at t=T (visual check and numeric: mean near 0, std near 1)
-- [ ] U-Net output shape matches input shape for all target resolutions
-- [ ] Training loss decreases monotonically over the first 1000 steps
-- [ ] DDPM sampling produces recognizable outputs after sufficient training
-- [ ] DDIM with 50 steps produces quality comparable to DDPM with 1000 steps
-- [ ] FID score is below 50 on the target dataset (adjust threshold for domain)
-- [ ] Sample diversity (LPIPS) confirms no mode collapse
-- [ ] Checkpoints are saved and loadable without errors
+- [ ] 前向過程於 t=T 產純噪（視覺核與數值：均值近 0、標準差近 1）
+- [ ] U-Net 輸出形於所有目標解析度下配輸入形
+- [ ] 訓練損失於首千步單調降
+- [ ] DDPM 採樣於充分訓練後產可辨輸出
+- [ ] DDIM 五十步產可比於 DDPM 一千步之品質
+- [ ] 目標資料集上 FID 分低於五十（依領域調閾）
+- [ ] 樣本多樣性（LPIPS）確無模式崩潰
+- [ ] 檢查點已存且可無錯載
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Wrong data normalization**: DDPM assumes data in [-1, 1]. If your images are in [0, 255], the loss will be enormous and training will diverge. Normalize before training and denormalize after sampling.
-- **Schedule indexing off by one**: The forward process uses `alphas_cumprod[t]` for the noised sample at step t. Off-by-one errors in sampling (using t+1 or t-1) produce visibly degraded samples.
-- **Forgetting gradient clipping**: Without `clip_grad_norm_(1.0)`, training is unstable for large models. This is especially critical in the early epochs.
-- **Too few sampling steps for DDIM**: Below 20 steps, DDIM quality degrades rapidly. Use at least 25 steps for acceptable results; 50 steps for near-DDPM quality.
-- **Evaluating FID on too few samples**: FID estimates are biased with small sample sizes. Use at least 10,000 generated images and 10,000 real images for stable FID computation.
-- **Ignoring EMA**: Exponential moving average of model weights significantly improves sample quality. Use a decay rate of 0.9999 and sample from the EMA model, not the training model.
+- **資料歸一化錯**：DDPM 假設資料於 [-1, 1]。若影像於 [0, 255]，損失將極大且訓練發散。訓前歸一化、採樣後反歸一化。
+- **計畫索引差一**：前向過程用 `alphas_cumprod[t]` 為 t 步之噪樣本。採樣中差一錯（用 t+1 或 t-1）產視覺降級之樣本。
+- **忘梯度截斷**：無 `clip_grad_norm_(1.0)`，大模型訓練不穩。早期尤關鍵。
+- **DDIM 採樣步過少**：二十步以下 DDIM 品質速降。至少二十五步以得可接受結果；五十步以得近 DDPM 品質。
+- **FID 於樣本過少上評**：FID 估計於小樣本量有偏。用至少一萬生影像與一萬真影像以得穩定 FID 計算。
+- **忽視 EMA**：模型權重之指數移動平均顯著改樣本品質。用 0.9999 之衰減率並自 EMA 模型採樣，非訓練模型。
 
-## Related Skills
+## 相關技能
 
-- `analyze-diffusion-dynamics` - mathematical foundations of the diffusion SDE that DDPM discretizes
-- `fit-drift-diffusion-model` - a different application of diffusion processes to cognitive modeling
-- `setup-gpu-training` - configuring GPU environments for diffusion model training
-- `containerize-application` - packaging diffusion inference pipelines in Docker
+- `analyze-diffusion-dynamics` - DDPM 離散化之擴散 SDE 之數學基
+- `fit-drift-diffusion-model` - 擴散過程於認知建模之不同應用
+- `setup-gpu-training` - 為擴散模型訓練配 GPU 環境
+- `containerize-application` - 於 Docker 中封裝擴散推理流水

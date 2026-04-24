@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Formulate a quantum mechanics or quantum chemistry problem with proper
   mathematical framework including Hilbert space, operators, boundary conditions,
@@ -26,34 +26,32 @@ metadata:
 
 # Formulate Quantum Problem
 
-Translate a physical system into a well-posed quantum mechanical problem by identifying the relevant degrees of freedom, constructing the Hamiltonian and state space, specifying boundary conditions, selecting an appropriate approximation method, and validating the formulation against known limits.
+Physical system → well-posed QM problem: ID DOFs → build H + Hilbert space → BCs → pick approx method → validate vs known limits.
 
-## When to Use
+## Use When
 
-- Setting up a quantum mechanics problem for analytic or numerical solution
-- Formulating a quantum chemistry calculation (molecular orbitals, electronic structure)
-- Translating a physical scenario into the Dirac or Schrodinger formalism
-- Choosing between perturbation theory, variational methods, DFT, or exact diagonalization
-- Preparing a theoretical model for comparison with experimental spectroscopic or scattering data
+- Set up QM problem for analytic/numerical solution
+- QChem calc (MOs, electronic structure)
+- Physical scenario → Dirac/Schrödinger
+- Choose perturbation / variational / DFT / exact diag
+- Theoretical model for spectroscopic/scattering comparison
 
-## Inputs
+## In
 
-- **Required**: Description of the physical system (atom, molecule, solid, field, etc.)
-- **Required**: Observable(s) of interest (energy spectrum, transition rates, ground state properties)
-- **Optional**: Experimental constraints or data to match (spectral lines, binding energies)
-- **Optional**: Desired accuracy level or computational budget
-- **Optional**: Preferred formalism (wave mechanics, matrix mechanics, second quantization, path integral)
+- **Required**: system desc (atom, molecule, solid, field)
+- **Required**: target observable (spectrum, rates, ground state)
+- **Optional**: experimental constraints
+- **Optional**: accuracy / compute budget
+- **Optional**: formalism (wave mech, matrix mech, 2nd quant, path int)
 
-## Procedure
+## Do
 
-### Step 1: Identify Physical System and Relevant Degrees of Freedom
+### Step 1: ID system + DOFs
 
-Characterize the system completely before writing any equations:
-
-1. **Particle content**: List all particles (electrons, nuclei, photons, phonons) and their quantum numbers (spin, charge, mass).
-2. **Symmetries**: Identify spatial symmetries (spherical, cylindrical, translational, crystal group), internal symmetries (spin rotation, gauge), and discrete symmetries (parity, time reversal).
-3. **Energy scales**: Determine the relevant energy scales to decide which degrees of freedom are active and which can be frozen or treated adiabatically.
-4. **Degrees of freedom reduction**: Apply the Born-Oppenheimer approximation if nuclear and electronic timescales separate. Identify collective coordinates if many-body simplifications apply.
+1. **Particles**: list (electrons, nuclei, photons, phonons) + quantum nums (spin, charge, mass)
+2. **Symmetries**: spatial (sph/cyl/trans/crystal), internal (spin/gauge), discrete (P, T)
+3. **Energy scales**: which DOFs active vs frozen/adiabatic
+4. **Reduction**: Born-Oppenheimer if nuclear/electronic timescales separate; collective coords for many-body
 
 ```markdown
 ## System Characterization
@@ -64,19 +62,17 @@ Characterize the system completely before writing any equations:
 - **Energy scale hierarchy**: [e.g., electronic >> vibrational >> rotational]
 ```
 
-**Expected:** A complete inventory of particles, quantum numbers, symmetries, and a justified selection of active versus frozen degrees of freedom.
+→ Complete inventory: particles, QNs, symmetries, active vs frozen justified.
 
-**On failure:** If the energy scale hierarchy is unclear, retain all degrees of freedom initially and flag the need for a scale analysis. Premature truncation leads to qualitatively wrong physics.
+**If err:** hierarchy unclear → keep all DOFs, flag for scale analysis. Premature truncation → wrong physics.
 
-### Step 2: Construct Hamiltonian and State Space
+### Step 2: Build H + Hilbert space
 
-Build the mathematical framework from the degrees of freedom identified in Step 1:
-
-1. **Hilbert space**: Define the state space. For finite-dimensional systems, specify the basis (e.g., spin-1/2 basis |up>, |down>). For infinite-dimensional systems, specify the function space (e.g., L2(R^3) for a single particle in 3D).
-2. **Kinetic terms**: Write the kinetic energy operator for each particle. In position representation, T = -hbar^2/(2m) nabla^2.
-3. **Potential terms**: Write all interaction potentials (Coulomb, harmonic, spin-orbit, external fields). Be explicit about functional form and coupling constants.
-4. **Composite Hamiltonian**: Assemble H = T + V, grouping terms by interaction type. For multi-particle systems, include exchange and correlation terms or note where they will enter via approximation.
-5. **Operator algebra**: Verify that the Hamiltonian is Hermitian. Identify constants of motion ([H, O] = 0) that can be used to block-diagonalize the problem.
+1. **Hilbert space**: finite-dim → basis (|↑>, |↓>). Infinite → function space (L²(R³) for 3D single particle).
+2. **Kinetic**: each particle. Position rep: T = -ℏ²/(2m) nabla².
+3. **Potential**: all interactions (Coulomb, harmonic, spin-orbit, external). Explicit form + coupling.
+4. **Composite H**: H = T + V, group by type. Multi-particle: exchange/correlation or note via approx.
+5. **Operator algebra**: H Hermitian? Constants of motion ([H,O]=0) → block-diagonalize.
 
 ```markdown
 ## Hamiltonian Structure
@@ -88,18 +84,16 @@ Build the mathematical framework from the degrees of freedom identified in Step 
 - **Symmetry-adapted basis**: [if block diagonalization is possible]
 ```
 
-**Expected:** A complete, Hermitian Hamiltonian with all terms explicitly written, the Hilbert space defined, and constants of motion identified.
+→ Complete Hermitian H w/ all terms, Hilbert space defined, constants of motion ID'd.
 
-**On failure:** If the Hamiltonian is not manifestly Hermitian, check for missing conjugate terms or gauge-dependent phases. If the Hilbert space is ambiguous (e.g., for relativistic particles), specify the formalism explicitly and note the issue.
+**If err:** not Hermitian → missing conjugate / gauge phase. Ambiguous Hilbert space (relativistic) → specify formalism.
 
-### Step 3: Specify Boundary and Initial Conditions
+### Step 3: BCs + initial conditions
 
-Constrain the problem to have a unique solution:
-
-1. **Boundary conditions**: For bound state problems, require normalizability (psi -> 0 at infinity). For scattering problems, specify incoming wave boundary conditions. For periodic systems, apply Bloch or Born-von Karman conditions.
-2. **Domain restrictions**: Specify the spatial domain. For a particle in a box, define the walls. For a hydrogen atom, define the radial and angular domains. For lattice models, define the lattice and its topology.
-3. **Initial state** (time-dependent problems): Define the state at t=0 as an expansion in the energy eigenbasis or as a wave packet with specified center and width.
-4. **Constraint equations**: For indistinguishable particles, enforce symmetrization (bosons) or antisymmetrization (fermions). For gauge theories, impose gauge-fixing conditions.
+1. **BCs**: bound → normalizability (psi→0 at ∞). Scattering → incoming wave. Periodic → Bloch / Born-von Karman.
+2. **Domain**: spatial. Box walls. H atom: radial + angular. Lattice + topology.
+3. **Initial state** (time-dep): t=0 expansion in eigenbasis or wave packet w/ center + width.
+4. **Constraints**: indistinguishable → sym (bosons) / antisym (fermions). Gauge → gauge-fixing.
 
 ```markdown
 ## Boundary and Initial Conditions
@@ -110,37 +104,35 @@ Constrain the problem to have a unique solution:
 - **Initial state** (if time-dependent): [specification]
 ```
 
-**Expected:** Boundary conditions that are physically motivated, mathematically consistent with the Hamiltonian's domain, and sufficient to determine a unique solution (or a well-defined scattering matrix).
+→ BCs physically motivated, consistent w/ H domain, unique solution (or scattering matrix).
 
-**On failure:** If boundary conditions are over- or under-determined, check the self-adjointness of the Hamiltonian on the chosen domain. Non-self-adjoint Hamiltonians require careful treatment of deficiency indices.
+**If err:** over/under-determined → check self-adjointness on domain. Non-self-adjoint → handle deficiency indices.
 
-### Step 4: Select Approximation Method
+### Step 4: Pick approx method
 
-Choose a solution strategy appropriate to the problem's structure:
+1. **Exact solvable**: matches known model (HO, H atom, Ising)? → exact + perturbation corrections.
 
-1. **Assess exact solvability**: Check if the problem reduces to a known exactly solvable model (harmonic oscillator, hydrogen atom, Ising model, etc.). If yes, use the exact solution as the primary result and perturbation theory for corrections.
+2. **Perturbation** (weak coupling):
+   - H = H0 + lambda V, H0 solvable
+   - lambda V small vs H0 level spacing
+   - Degeneracy? → degenerate perturbation
+   - Fits: weak interaction, few-body, analytic needed
 
-2. **Perturbation theory** (weak coupling):
-   - Split H = H0 + lambda V where H0 is exactly solvable
-   - Verify that lambda V is small compared to the level spacing of H0
-   - Check for degeneracy; use degenerate perturbation theory if needed
-   - Suitable when: interaction is weak, few-body system, analytic results needed
+3. **Variational** (ground state):
+   - Trial wf w/ params
+   - Satisfies BCs + symmetry
+   - Fits: ground state energy primary, many-body
 
-3. **Variational methods** (ground state focus):
-   - Choose a trial wave function with adjustable parameters
-   - Ensure the trial function satisfies boundary conditions and symmetry
-   - Suitable when: ground state energy is the primary target, many-body system
+4. **DFT** (many-electron):
+   - XC functional (LDA, GGA, hybrid)
+   - Basis (plane waves, Gaussian, NAOs)
+   - Fits: many-electron, ground state density + energy
 
-4. **Density Functional Theory** (many-electron systems):
-   - Choose the exchange-correlation functional (LDA, GGA, hybrid)
-   - Define the basis set (plane waves, Gaussian, numerical atomic orbitals)
-   - Suitable when: many-electron system, ground state density and energy needed
-
-5. **Numerical exact methods** (small systems, benchmarking):
-   - Exact diagonalization for small Hilbert spaces
-   - Quantum Monte Carlo for ground state sampling
-   - DMRG for one-dimensional or quasi-one-dimensional systems
-   - Suitable when: high accuracy is needed and the system is small enough
+5. **Numerical exact** (small/benchmark):
+   - Exact diag for small Hilbert
+   - QMC for ground state sampling
+   - DMRG for 1D/quasi-1D
+   - Fits: high accuracy, small system
 
 ```markdown
 ## Approximation Method Selection
@@ -151,19 +143,17 @@ Choose a solution strategy appropriate to the problem's structure:
 - **Alternatives considered**: [and why they were rejected]
 ```
 
-**Expected:** A justified choice of approximation method with a clear statement of expected accuracy and computational cost, plus documentation of alternatives considered.
+→ Justified method + expected accuracy + compute cost + alternatives.
 
-**On failure:** If no single method is clearly appropriate, formulate the problem for two methods and compare results. Disagreement between methods reveals the problem's difficulty and guides further refinement.
+**If err:** no single method fits → formulate for 2 + compare. Disagreement reveals difficulty.
 
-### Step 5: Validate Formulation Against Known Limits
+### Step 5: Validate vs limits
 
-Before solving, verify the formulation reproduces known physics:
-
-1. **Classical limit**: Take hbar -> 0 (or large quantum numbers) and verify that the Hamiltonian reduces to the correct classical mechanics.
-2. **Non-interacting limit**: Set coupling constants to zero and verify the solution is a product of single-particle states.
-3. **Symmetry limits**: Verify that the formulation respects all identified symmetries. Check that the Hamiltonian transforms correctly under the symmetry group.
-4. **Dimensional analysis**: Verify that every term in the Hamiltonian has units of energy. Check that the characteristic length, energy, and time scales are physically reasonable.
-5. **Known exact results**: If the system has known exact solutions in special cases (e.g., hydrogen atom for Z=1, harmonic oscillator for quadratic potential), verify the formulation reproduces them.
+1. **Classical** (ℏ→0 or large QNs): H reduces to classical mech.
+2. **Non-interacting**: couplings → 0 → product of single-particle states.
+3. **Symmetry**: respects all symmetries. H transforms correctly under group.
+4. **Dimensional**: every H term = energy. Length/energy/time scales reasonable.
+5. **Known exact**: special cases (H atom Z=1, HO quadratic) → reproduced.
 
 ```markdown
 ## Validation Checks
@@ -176,33 +166,33 @@ Before solving, verify the formulation reproduces known physics:
 | Known exact case | [reproduced result] | [Pass/Fail] |
 ```
 
-**Expected:** All validation checks pass. The formulation is self-consistent and ready for solution.
+→ All pass. Self-consistent, ready to solve.
 
-**On failure:** A failing validation check indicates an error in the Hamiltonian construction or boundary conditions. Trace the failure back to the specific term or condition and correct it before proceeding to solve.
+**If err:** fail → err in H construction or BCs. Trace to specific term/condition, fix before solving.
 
-## Validation
+## Check
 
-- [ ] All particles and quantum numbers are explicitly listed
-- [ ] The Hilbert space is defined with a clear basis
-- [ ] The Hamiltonian is Hermitian and all terms have correct units
-- [ ] Constants of motion are identified and used for simplification
-- [ ] Boundary conditions are physically motivated and mathematically sufficient
-- [ ] Particle statistics (bosonic/fermionic) are correctly enforced
-- [ ] Approximation method choice is justified with expected accuracy stated
-- [ ] Classical, non-interacting, and symmetry limits are checked
-- [ ] Known exact results are reproduced in special cases
-- [ ] The formulation is complete enough for another researcher to implement
+- [ ] Particles + QNs listed
+- [ ] Hilbert space + basis
+- [ ] H Hermitian + correct units
+- [ ] Constants of motion used
+- [ ] BCs physically + mathematically sufficient
+- [ ] Statistics (bos/ferm) enforced
+- [ ] Method justified + accuracy stated
+- [ ] Classical, non-interacting, symmetry limits checked
+- [ ] Known exact reproduced
+- [ ] Reproducible
 
-## Common Pitfalls
+## Traps
 
-- **Omitting degrees of freedom prematurely**: Freezing a degree of freedom without checking the energy scale hierarchy can miss qualitatively important physics. Always justify every reduction with an energy scale argument.
-- **Non-Hermitian Hamiltonian**: Forgetting conjugate terms in spin-orbit coupling or complex potentials. Always verify H = H-dagger explicitly.
-- **Wrong boundary conditions for scattering**: Using bound-state boundary conditions (normalizability) for a scattering problem discards the continuous spectrum entirely. Match boundary conditions to the physical question.
-- **Ignoring degeneracy in perturbation theory**: Applying non-degenerate perturbation theory to a degenerate level produces divergent corrections. Always check for degeneracy before expanding.
-- **Over-reliance on a single approximation**: Different methods have complementary failure modes. Variational methods give upper bounds but can miss excited states. Perturbation theory diverges at strong coupling. Cross-validate when possible.
-- **Dimensional inconsistency**: Mixing natural units (hbar = 1) with SI units in the same expression. Adopt a consistent unit system at the start and state it explicitly.
+- **Premature DOF drop**: freeze w/o energy scale arg → wrong physics. Justify every reduction.
+- **Non-Hermitian H**: missing conjugate in spin-orbit / complex V. Verify H=H† explicitly.
+- **Wrong scattering BCs**: bound-state BCs for scattering → discards continuum. Match to question.
+- **Degeneracy in perturbation**: non-deg perturbation on deg level → divergent. Check first.
+- **Single-method reliance**: variational → upper bound but misses excited; perturbation diverges at strong coupling. Cross-validate.
+- **Unit inconsistency**: mixing natural (ℏ=1) + SI. Pick consistent system, state explicitly.
 
-## Related Skills
+## →
 
-- `derive-theoretical-result` -- derive analytic results from the formulated problem
-- `survey-theoretical-literature` -- find prior work on similar quantum systems
+- `derive-theoretical-result` — analytic from formulated problem
+- `survey-theoretical-literature` — prior work on similar QM systems

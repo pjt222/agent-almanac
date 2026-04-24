@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate a Quarto-based tour report with embedded maps, daily itineraries,
   logistics tables, and accommodation/transport details. Produces a
@@ -25,31 +25,29 @@ metadata:
 
 # Generate Tour Report
 
-Generate a formatted tour report with embedded maps, daily itineraries, logistics tables, and practical travel information.
+Formatted tour report w/ maps, daily itineraries, logistics, travel info.
 
-## When to Use
+## Use When
 
-- Compiling a planned tour into a shareable document
-- Creating an offline-accessible travel guide for a trip
-- Documenting a completed trip with photos, maps, and statistics
-- Producing a professional tour proposal for a group or client
-- Consolidating route, accommodation, and transport data into one document
+- Compile planned tour → shareable doc
+- Offline travel guide
+- Completed trip w/ photos, maps, stats
+- Pro tour proposal
+- Consolidate route + accom + transport
 
-## Inputs
+## In
 
-- **Required**: Route data (waypoints, legs, distances, times)
-- **Required**: Tour dates and duration
-- **Optional**: Accommodation details (name, address, confirmation numbers)
-- **Optional**: Transport bookings (flights, trains, car rental)
-- **Optional**: GPX tracks or spatial data for map embedding
-- **Optional**: Budget information (costs per category)
-- **Optional**: Photos or images to include
+- **Required**: route data (waypoints, legs, distances, times)
+- **Required**: dates + duration
+- **Optional**: accom (name, address, conf#)
+- **Optional**: transport (flights, trains, car)
+- **Optional**: GPX tracks / spatial data
+- **Optional**: budget info
+- **Optional**: photos / images
 
-## Procedure
+## Do
 
-### Step 1: Compile Route and POI Data
-
-Gather all tour data into a structured format before building the report.
+### Step 1: Compile route + POI data
 
 ```
 Data Sources to Compile:
@@ -66,19 +64,17 @@ Data Sources to Compile:
 └────────────────────┴──────────────────────────────────────────┘
 ```
 
-Organize data by day to support the daily section structure:
-1. Group waypoints and activities by date
-2. Assign each transport leg to a day
-3. Match accommodations to overnight dates
-4. Calculate daily totals (distance, time, cost)
+Organize by day:
+1. Group waypoints + activities by date
+2. Assign transport leg to day
+3. Match accom to overnight dates
+4. Daily totals (distance, time, cost)
 
-**Expected:** A complete data collection organized by day, with no gaps in the schedule (every night has accommodation, every leg has transport).
+→ Complete collection by day, no gaps (every night = accom, every leg = transport).
 
-**On failure:** If data is incomplete, mark missing items with `[TBD]` placeholders and add them to a follow-up checklist at the end of the report. If dates don't align (e.g., arrival at accommodation before departure from previous stop), flag the conflict and adjust times.
+**If err:** incomplete → `[TBD]` placeholders + follow-up checklist. Dates misalign → flag + adjust.
 
-### Step 2: Structure Daily Sections
-
-Create the Quarto document skeleton with daily sections.
+### Step 2: Structure daily sections
 
 ```yaml
 ---
@@ -104,7 +100,7 @@ execute:
 ---
 ```
 
-Structure the document as follows:
+Structure:
 
 ```
 Report Structure:
@@ -131,13 +127,11 @@ N. Logistics Appendix
    - Budget summary
 ```
 
-**Expected:** A complete .qmd file skeleton with YAML header, all daily sections as H2 headings, and placeholder content for each section.
+→ Complete .qmd skeleton w/ YAML + H2 headings + placeholders.
 
-**On failure:** If the tour is too long for a single document (more than 14 days), consider splitting into weekly parts or using a tabset layout (`{.tabset}`) to keep the document navigable. If PDF output is required, ensure no interactive widgets are included (use static maps instead).
+**If err:** >14 days → split weekly or tabset. PDF → no interactive widgets (static maps).
 
-### Step 3: Embed Maps and Charts
-
-Add spatial visualizations to each section.
+### Step 3: Embed maps + charts
 
 **Overview map:**
 
@@ -164,7 +158,7 @@ leaflet::leaflet() |>
   leaflet::addCircleMarkers(data = day1_stops, radius = 6, popup = ~name)
 ```
 
-**Elevation profile (for hiking/cycling days):**
+**Elevation profile (hike/cycle):**
 
 ```r
 #| label: fig-day3-elevation
@@ -177,15 +171,13 @@ ggplot2::ggplot(day3_elevation, ggplot2::aes(x = dist_km, y = elev_m)) +
   ggplot2::labs(x = "Distance (km)", y = "Elevation (m)")
 ```
 
-**Expected:** Each daily section has at minimum a route map. Multi-modal days (driving + hiking) have both a road map and an elevation profile. Overview section has a map showing the complete tour.
+→ Each day ≥ route map. Multi-modal = road + elevation. Overview = full tour map.
 
-**On failure:** If leaflet maps fail to render (common in PDF mode), fall back to static maps using `tmap::tmap_mode("plot")` or `ggplot2` with `ggspatial::annotation_map_tile()`. If spatial data is not available for a day, include a simple text description of the route instead.
+**If err:** leaflet fails PDF → fallback `tmap::tmap_mode("plot")` or ggplot2 + `ggspatial::annotation_map_tile()`. No spatial → text description.
 
-### Step 4: Add Logistics Tables
+### Step 4: Logistics tables
 
-Insert structured tables for accommodations, transport, and budget.
-
-**Accommodation table:**
+**Accommodation:**
 
 ```markdown
 | Night | Date       | Accommodation      | Address            | Check-in | Cost   | Conf# |
@@ -195,7 +187,7 @@ Insert structured tables for accommodations, transport, and budget.
 | 3     | 2025-07-03 | Pension Edelweiss  | Dorfplatz 3        | 14:00    | EUR 72 | CD456 |
 ```
 
-**Transport table:**
+**Transport:**
 
 ```markdown
 | Date       | Type  | From          | To            | Depart | Arrive | Ref#   |
@@ -205,7 +197,7 @@ Insert structured tables for accommodations, transport, and budget.
 | 2025-07-04 | Train | Innsbruck     | Munich Hbf    | 16:45  | 18:30  | OBB567 |
 ```
 
-**Budget summary:**
+**Budget:**
 
 ```markdown
 | Category        | Estimated | Actual | Notes                   |
@@ -217,13 +209,11 @@ Insert structured tables for accommodations, transport, and budget.
 | **Total**       | **EUR 507** |      |                         |
 ```
 
-**Expected:** Complete logistics tables with all bookings listed chronologically. No missing dates in the accommodation table. Budget totals are calculated correctly.
+→ Complete logistics tables chronological, no missing dates, totals correct.
 
-**On failure:** If booking details are not yet confirmed, use `[TBD]` and highlight the row. If the tour involves multiple currencies, add a currency column and include exchange rates in a footnote.
+**If err:** unconfirmed → `[TBD]` + highlight row. Multi-currency → add column + footnote exchange rates.
 
-### Step 5: Render Report
-
-Compile the Quarto document into the final output format.
+### Step 5: Render
 
 ```bash
 # Render to self-contained HTML (best for offline use)
@@ -236,42 +226,42 @@ quarto render tour-report.qmd --to pdf
 quarto preview tour-report.qmd
 ```
 
-Post-rendering checks:
-1. Open the HTML file and verify all maps load correctly
-2. Test that the table of contents links work
-3. Verify all images and charts render at appropriate sizes
-4. Check that the self-contained HTML works offline (disconnect and reload)
-5. For PDF: verify page breaks fall at logical points (between days)
+Post-render checks:
+1. HTML opens, maps load
+2. TOC links work
+3. Images + charts render right sizes
+4. Self-contained HTML offline (disconnect + reload)
+5. PDF → page breaks logical (between days)
 
-**Expected:** A complete, self-contained document that works offline and contains all tour information in a navigable format.
+→ Complete self-contained doc, offline, navigable.
 
-**On failure:** If rendering fails, check the R console for package errors (missing sf, leaflet, or ggplot2). If self-contained HTML is too large (over 20 MB), reduce map tile resolution or use PNG screenshots instead of interactive maps. If PDF rendering fails with LaTeX errors, install TinyTeX with `quarto install tinytex`.
+**If err:** render fails → check R console pkg errors (sf, leaflet, ggplot2). HTML >20 MB → reduce tile res or PNG screenshots. PDF LaTeX fail → `quarto install tinytex`.
 
-## Validation
+## Check
 
-- [ ] Report renders without errors in the target format
-- [ ] Overview map shows the complete route with all stops
-- [ ] Each day has a route map and schedule
-- [ ] Accommodation table covers every night of the trip
-- [ ] Transport table includes all legs
-- [ ] Budget totals are accurate
-- [ ] Self-contained HTML works offline
-- [ ] Table of contents navigates correctly to all sections
-- [ ] No [TBD] placeholders remain (or they are intentionally flagged)
+- [ ] Renders no err in target format
+- [ ] Overview map = full route + stops
+- [ ] Each day has route map + schedule
+- [ ] Accom table = every night
+- [ ] Transport table = all legs
+- [ ] Budget totals accurate
+- [ ] Self-contained HTML offline
+- [ ] TOC navigates correctly
+- [ ] No `[TBD]` (or intentionally flagged)
 
-## Common Pitfalls
+## Traps
 
-- **Interactive maps in PDF**: Leaflet and other HTML widgets cannot render in PDF. Always provide static map alternatives for PDF output.
-- **Oversized self-contained HTML**: Embedding many map tiles creates very large files. Limit zoom levels or use static map screenshots for tile-heavy maps.
-- **Missing time zones**: International tours cross time zones. Always specify the time zone for departure and arrival times to avoid confusion.
-- **Stale booking references**: Confirmation numbers and times can change. Include a "last updated" date and remind users to verify before travel.
-- **No offline fallback**: If the report relies on web-loaded map tiles, it will be blank offline. Use `self-contained: true` or pre-render maps as images.
-- **Inconsistent date formats**: Mix of DD/MM and MM/DD causes confusion. Use ISO 8601 (YYYY-MM-DD) consistently throughout.
+- **Interactive maps in PDF**: leaflet/widgets no render PDF. Provide static alternative.
+- **Oversized HTML**: many tiles → huge file. Limit zoom or PNG screenshots.
+- **Missing TZ**: international crosses TZ. Always specify depart/arrive TZ.
+- **Stale bookings**: conf#/times change. "Last updated" date + remind verify.
+- **No offline fallback**: web-tile maps → blank offline. `self-contained: true` or pre-render.
+- **Inconsistent date fmt**: ISO 8601 (YYYY-MM-DD) throughout.
 
-## Related Skills
+## →
 
-- `plan-tour-route` — generates the route data compiled into this report
-- `create-spatial-visualization` — creates the maps and charts embedded in the report
-- `create-quarto-report` — general Quarto document creation and configuration
-- `plan-hiking-tour` — provides hiking-specific data for mountain tour reports
-- `check-hiking-gear` — generates packing checklists for the logistics appendix
+- `plan-tour-route` — route data fed into report
+- `create-spatial-visualization` — maps + charts
+- `create-quarto-report` — general Quarto
+- `plan-hiking-tour` — hiking-specific data
+- `check-hiking-gear` — packing checklists

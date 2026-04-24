@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Guide a person through healing modalities including energy work (reiki,
   chakra balancing), herbal remedies, basic first aid stabilization, and
@@ -25,274 +25,274 @@ metadata:
   tags: esoteric, healing, energy-work, reiki, herbalism, holistic, guidance
 ---
 
-# Heal (Guidance)
+# 療癒導引
 
-Guide a person through a layered healing approach combining energetic, herbal, physical, and holistic techniques to support recovery, balance, and wellbeing. The AI acts as an informed coach — it does not claim to transmit energy, but provides structured guidance through each modality.
+引導一人以結合能量、草藥、身體與整體技法之層次療癒路徑，助其康復、平衡與安康。AI 為知識型之教練——不稱傳能量，但循每法供結構化導引。
 
-## When to Use
+## 適用時機
 
-- A person describes a physical ailment or injury and wants structured guidance for stabilization and support
-- Someone reports energetic imbalance (persistent fatigue, emotional stagnation, disrupted sleep) and wants coaching through self-healing techniques
-- Herbal remedies are appropriate and the person has access to plant materials (see `forage-plants`)
-- A person requests guidance through a holistic session combining breathwork, visualization, and body scan
-- Post-meditation integration reveals areas needing directed healing attention (see `meditate-guidance`)
+- 有人述身體不適或傷而欲結構化導引以穩定與支持
+- 有人述能量失衡（持久疲勞、情緒滯、睡眠擾）而欲自療技法之教導
+- 草藥宜且人有植物材料（見 `forage-plants`）
+- 有人請合呼吸、觀想與身體掃描之整體會話導引
+- 禪修後整合顯需定向療癒注意之區（見 `meditate-guidance`）
 
-## Inputs
+## 輸入
 
-- **Required**: Description of the person's condition or intention (physical, energetic, emotional, or general wellness)
-- **Required**: Available resources (herbs, clean water, first aid supplies, quiet space)
-- **Optional**: Person's experience level with energy work (default: none assumed)
-- **Optional**: Known contraindications (allergies, medications, injuries, pregnancy)
-- **Optional**: Time available for the session (default: 30-60 minutes)
+- **必要**：人況或意圖之描述（身、能、情或一般安康）
+- **必要**：可用資源（草藥、淨水、急救用品、靜處）
+- **選擇性**：人之能量工作經驗層（預設：無）
+- **選擇性**：已知禁忌（過敏、用藥、傷、妊娠）
+- **選擇性**：可用於會話之時間（預設：三十至六十分鐘）
 
-## Procedure
+## 步驟
 
-### Step 1: Guide Holistic Assessment
+### 步驟一：導整體評估
 
-Before selecting any modality, help the person assess the full picture across physical, energetic, and emotional dimensions.
+擇任何法前，助人跨身體、能量與情緒維度評全貌。
 
 ```
-Assessment Triage Matrix:
+評估分類矩陣：
 ┌────────────────┬──────────────────────────┬──────────────────────────┐
-│ Dimension      │ Ask About                │ Action Priority          │
+│ 維度           │ 問                       │ 行動優先                 │
 ├────────────────┼──────────────────────────┼──────────────────────────┤
-│ Physical       │ Visible injury, bleeding,│ HIGH — stabilize first   │
-│                │ breathing difficulty,     │ (Step 6)                 │
-│                │ pain location/intensity  │                          │
+│ 身體           │ 可見之傷、出血、         │ 高 — 先穩定             │
+│                │ 呼吸困難、                │ （步驟六）               │
+│                │ 痛之位/度                │                          │
 ├────────────────┼──────────────────────────┼──────────────────────────┤
-│ Energetic      │ Temperature variations,  │ MEDIUM — address after   │
-│                │ tingling, heaviness,     │ physical stability       │
-│                │ numbness in body regions │ (Steps 3-4)              │
+│ 能量           │ 溫度變、                  │ 中 — 身穩後               │
+│                │ 刺、沉、                  │ 處之                      │
+│                │ 身區麻                    │ （步驟三至四）           │
 ├────────────────┼──────────────────────────┼──────────────────────────┤
-│ Emotional      │ Mood state, anxiety,     │ MEDIUM — weave through   │
-│                │ grief, agitation,        │ all steps via presence   │
-│                │ withdrawal               │ and breathwork (Step 7)  │
+│ 情緒           │ 情緒狀態、焦、            │ 中 — 貫各步              │
+│                │ 哀、躁、                  │ 經臨在與呼吸              │
+│                │ 退縮                      │ （步驟七）               │
 ├────────────────┼──────────────────────────┼──────────────────────────┤
-│ Environmental  │ Safety of location,      │ HIGH — secure space      │
-│                │ temperature, noise,      │ before beginning any     │
-│                │ available materials      │ modality                 │
+│ 環境           │ 位之安全、                │ 高 — 施任何法             │
+│                │ 溫、聲、                  │ 前安場                    │
+│                │ 可得材料                  │                          │
 └────────────────┴──────────────────────────┴──────────────────────────┘
 ```
 
-Guide the person through self-assessment: "Where is the discomfort? When did it start? What makes it better or worse? Any known causes?" Listen actively and reflect back what you hear to confirm understanding.
+導人自評：「不適於何處？何時始？何令佳或劣？有無已知因？」主動聽並反映所聞以確理解。
 
-**Expected:** A clear picture of the primary complaint, its dimension (physical/energetic/emotional), and a prioritized plan of which steps to emphasize. The person feels heard and understood.
+**預期：** 主訴之清晰全貌，其維度（身/能/情），以及應強調哪些步驟之優先計畫。人覺被聽見且被理解。
 
-**On failure:** If the condition is unclear, guide the person through the body scan in Step 7 to locate areas of tension, heat, or blocked energy before selecting a modality.
+**失敗時：** 若情況不明，導人以步驟七之身體掃描覓緊張、熱或阻能區，再擇法。
 
-### Step 2: Recommend Modalities
+### 步驟二：建議法
 
-Based on the assessment, recommend one or more modalities appropriate to the situation and explain why.
+依評估，建議一或多合宜之法並解其由。
 
 ```
-Modality Selection Guide:
+法之擇指南：
 ┌────────────────────┬──────────────────────────┬──────────────────────┐
-│ Modality           │ Best For                 │ Prerequisites        │
+│ 法                 │ 宜於                     │ 前提                 │
 ├────────────────────┼──────────────────────────┼──────────────────────┤
-│ Energy healing     │ Energetic imbalance,     │ Quiet space, focused │
-│ (Reiki/laying on)  │ emotional processing,    │ intention, grounded  │
-│                    │ stress, recovery support  │ practitioner state   │
+│ 能量療癒           │ 能量失衡、               │ 靜處、專注           │
+│ （靈氣/按手）      │ 情緒處理、               │ 意圖、接地           │
+│                    │ 壓力、康復支持            │ 施者狀態             │
 ├────────────────────┼──────────────────────────┼──────────────────────┤
-│ Herbal remedies    │ Digestive issues, minor  │ Identified plants,   │
-│                    │ wounds, inflammation,     │ clean water, fire    │
-│                    │ sleep support, immune     │ (see `make-fire`)    │
+│ 草藥方             │ 消化、微傷、              │ 已識之植物、         │
+│                    │ 炎症、                    │ 淨水、火             │
+│                    │ 睡眠、免疫                │ （見 `make-fire`）   │
 ├────────────────────┼──────────────────────────┼──────────────────────┤
-│ First aid          │ Bleeding, burns, sprains,│ First aid supplies   │
-│                    │ fracture stabilization,   │ or improvised        │
-│                    │ shock prevention          │ materials            │
+│ 急救               │ 出血、燒傷、扭傷、        │ 急救用品             │
+│                    │ 骨折穩定、                │ 或臨時材             │
+│                    │ 防休克                    │                      │
 ├────────────────────┼──────────────────────────┼──────────────────────┤
-│ Holistic           │ General wellness, anxiety,│ No materials needed  │
-│ (breath/visual.)   │ grounding, integration,  │ beyond a quiet space │
-│                    │ pain management           │                      │
+│ 整體               │ 一般安康、焦、            │ 除靜處外             │
+│ （呼吸/觀想）      │ 接地、整合、              │ 無需材               │
+│                    │ 痛管理                    │                      │
 └────────────────────┴──────────────────────────┴──────────────────────┘
 ```
 
-Explain how modalities can be combined: "We could begin with breathwork to ground, move into energy healing for the primary issue, and close with an herbal tea for integration."
+解法可如何合：「可始於呼吸以接地，進能量療癒於主要問題，以草藥茶收以整合。」
 
-**Expected:** A session plan with 1-3 modalities ordered by priority, estimated time per modality, and materials needed. The person understands the rationale and consents to proceed.
+**預期：** 有會話計畫，含一至三法依優先排序、每法估時與所需材料。人理解由並同意進行。
 
-**On failure:** If the person is unsure, default to the holistic sequence (Step 7) — breathwork and visualization are universally safe and require no materials. Frame it as a gentle starting point.
+**失敗時：** 若人不確，預設整體序列（步驟七）——呼吸與觀想普遍安全且不需材。以溫和起點框之。
 
-### Step 3: Guide Energetic Connection
+### 步驟三：導能量連結
 
-Coach the person into a grounded, centered state before any energy work begins.
+始任何能量工作前，教導人入接地、置中之狀態。
 
-1. Invite them to sit or stand with feet flat, spine straight
-2. Guide slow breathing: "Breathe in for 4 counts, hold for 2, breathe out for 6 counts"
-3. Lead a grounding visualization: "Imagine roots extending from your feet into the earth, drawing up stable, warm energy"
-4. Direct attention to the hands: "Notice any warmth, tingling, or pulsing in your palms"
-5. Help them set a clear intention: "State silently what you intend healing for"
-6. If they will work on another person, remind them to ask permission before touching
+1. 請其坐或立，足平、脊直
+2. 導慢呼吸：「吸四數，屏二，吐六數」
+3. 導接地觀想：「想根自足延入地，汲穩暖能」
+4. 注意導於手：「覺掌中任何暖、刺或脈動」
+5. 助其設清晰意圖：「默陳所意療癒者」
+6. 若其將為他人工作，提醒觸前得允
 
-**Expected:** The person reports warmth or activation in the hands. They appear calmer and more focused. Intention is clearly held.
+**預期：** 人報手中暖或激活。其顯更靜且更專。意圖清持。
 
-**On failure:** If they cannot settle into a grounded state, extend the breathwork from Step 7 before returning here. Reassure them that difficulty is normal and not a sign of inability. Suggest they simply focus on the breathing rhythm without forcing calm.
+**失敗時：** 若其不能入接地態，於此返前延步驟七之呼吸。保證其困難為常，非無能之兆。建議其僅專於呼吸節奏，勿強求靜。
 
-### Step 4: Coach Energy Healing
+### 步驟四：教能量療癒
 
-Guide the person through hands-on or hands-hovering technique over the affected area or energy center.
+導人以按手或懸手技法於患區或能量中心。
 
 ```
-Chakra Correspondence (for targeted energy work):
+脈輪對應（定向能量工作）：
 ┌──────────┬──────────────┬────────────────────────────────────────┐
-│ Chakra   │ Location     │ Associated With                        │
+│ 脈輪     │ 位            │ 關聯                                   │
 ├──────────┼──────────────┼────────────────────────────────────────┤
-│ Root     │ Base of spine│ Safety, grounding, physical vitality   │
+│ 根輪     │ 脊底         │ 安全、接地、身體活力                   │
 ├──────────┼──────────────┼────────────────────────────────────────┤
-│ Sacral   │ Below navel  │ Emotions, creativity, fluid balance    │
+│ 腹輪     │ 臍下         │ 情緒、創意、體液平衡                   │
 ├──────────┼──────────────┼────────────────────────────────────────┤
-│ Solar    │ Upper abdomen│ Willpower, digestion, confidence       │
-│ Plexus   │              │                                        │
+│ 太陽神   │ 上腹         │ 意志、消化、信心                       │
+│ 經叢輪   │              │                                        │
 ├──────────┼──────────────┼────────────────────────────────────────┤
-│ Heart    │ Center chest │ Love, grief, compassion, circulation   │
+│ 心輪     │ 胸中         │ 愛、哀、慈、循環                       │
 ├──────────┼──────────────┼────────────────────────────────────────┤
-│ Throat   │ Throat       │ Communication, expression, thyroid     │
+│ 喉輪     │ 喉           │ 溝通、表達、甲狀腺                     │
 ├──────────┼──────────────┼────────────────────────────────────────┤
-│ Third Eye│ Forehead     │ Intuition, vision, mental clarity      │
+│ 眉間輪   │ 額           │ 直覺、視、心清                         │
 ├──────────┼──────────────┼────────────────────────────────────────┤
-│ Crown    │ Top of head  │ Connection, higher awareness, sleep    │
+│ 頂輪     │ 頭頂         │ 連結、高覺、睡眠                       │
 └──────────┴──────────────┴────────────────────────────────────────┘
 ```
 
-1. "Hold your hands 5-10 cm above the area, or lightly on it"
-2. "Stay in this position for 3-5 minutes, breathing steadily"
-3. "What do you notice? Heat, cold, tingling, pulsing, or a pulling feeling?"
-4. If they report stuck energy (dense, cold, static): "Visualize light dissolving the blockage"
-5. If they report depleted energy (hollow, cool): "Visualize warm light filling the area"
-6. "Follow your intuition — move to related areas if you feel drawn to"
-7. "To close, sweep your hands from head to feet, 5-10 cm from the body, three times"
+1. 「持手於區上五至十公分，或輕置其上」
+2. 「保此姿三至五分鐘，穩呼吸」
+3. 「覺何？熱、冷、刺、脈動或拉感？」
+4. 若其報阻能（密、冷、靜）：「觀想光溶阻」
+5. 若其報耗能（空、涼）：「觀想暖光充區」
+6. 「依直覺——若感被引，移至相關區」
+7. 「閉時，手自頭至足離身五至十公分掃三次」
 
-**Expected:** The person reports warmth, relaxation, tingling, or emotional release. Hands may feel temperature changes or pulsing. Session length: 15-30 minutes.
+**預期：** 人報暖、放鬆、刺或情緒釋放。手可能感溫變或脈動。會話長：十五至三十分鐘。
 
-**On failure:** If they notice no sensation, guide focus to the heart center (most universally responsive) and extend hold time to 7-10 minutes. If they are uncomfortable with touch, confirm hands-hovering. Reassure that energy work requires presence rather than belief — suggest returning to the grounding in Step 3 if focus has drifted.
+**失敗時：** 若未覺感，導注意於心輪（最普遍反應）並延持時至七至十分鐘。若其不適觸，確認懸手。保證能量工作需臨在而非信仰——若專注已移，建議返步驟三之接地。
 
-### Step 5: Guide Herbal Remedy Preparation
+### 步驟五：導草藥方之製備
 
-When herbal support is appropriate, guide preparation from available materials.
+若草藥支持宜，自可得材料導製備。
 
 ```
-Herbal First Aid Formulary:
+草藥急救藥典：
 ┌───────────────┬─────────────────┬───────────────────────────────────┐
-│ Condition     │ Herb/Material   │ Preparation                       │
+│ 況            │ 草/材           │ 製法                              │
 ├───────────────┼─────────────────┼───────────────────────────────────┤
-│ Minor wound   │ Yarrow leaf     │ Chew or crush to poultice; apply  │
-│               │                 │ directly to clean wound            │
+│ 微傷          │ 蓍草葉          │ 嚼或搗為敷膏；                    │
+│               │                 │ 直敷於淨傷                         │
 ├───────────────┼─────────────────┼───────────────────────────────────┤
-│ Inflammation  │ Willow bark     │ Steep inner bark in hot water     │
-│               │                 │ 15 min; drink as tea (contains    │
-│               │                 │ salicin — natural aspirin)        │
+│ 炎症          │ 柳皮            │ 內皮浸熱水                        │
+│               │                 │ 十五分；飲為茶（含                 │
+│               │                 │ 水楊苷——天然阿斯匹靈）            │
 ├───────────────┼─────────────────┼───────────────────────────────────┤
-│ Digestive     │ Mint, ginger,   │ Steep fresh or dried leaves/root  │
-│ upset         │ chamomile       │ in hot water 10 min; sip slowly   │
+│ 消化          │ 薄荷、薑、      │ 鮮或乾葉/根浸                      │
+│ 不適          │ 洋甘菊          │ 熱水十分；慢啜                     │
 ├───────────────┼─────────────────┼───────────────────────────────────┤
-│ Anxiety/sleep │ Chamomile,      │ Steep flowers/leaves in hot water │
-│               │ lavender        │ 10 min; drink before rest         │
+│ 焦慮/睡眠     │ 洋甘菊、        │ 花/葉浸熱水                        │
+│               │ 薰衣草          │ 十分；寢前飲                       │
 ├───────────────┼─────────────────┼───────────────────────────────────┤
-│ Insect sting  │ Plantain leaf   │ Chew leaf to poultice; apply to   │
-│               │                 │ sting site for 10-15 min          │
+│ 蟲螫          │ 車前葉          │ 嚼葉為敷膏；敷於                  │
+│               │                 │ 螫處十至十五分                     │
 ├───────────────┼─────────────────┼───────────────────────────────────┤
-│ Immune support│ Elderberry,     │ Simmer berries/root 20 min;       │
-│               │ echinacea root  │ drink 1 cup 2-3x daily            │
+│ 免疫支持      │ 接骨木果、      │ 煮漿果/根二十分；                  │
+│               │ 紫錐花根        │ 日飲一杯二至三次                   │
 └───────────────┴─────────────────┴───────────────────────────────────┘
 
-CAUTION: Positive identification is essential before ingesting any plant.
-See `forage-plants` for identification protocols.
-Use `purify-water` for safe water and `make-fire` for heating.
+警：食任何植物前確識為要。
+見 `forage-plants` 之識別協定。
+用 `purify-water` 為安全水，用 `make-fire` 為加熱。
 ```
 
-Walk them through each preparation step, confirming plant identification at each stage.
+領其經每製備步，各階段確植物識別。
 
-**Expected:** A prepared remedy appropriate to the condition, made from positively identified materials with clean water.
+**預期：** 備成合況之方，用已確識材料與淨水。
 
-**On failure:** If plant identification is uncertain, advise against ingestion. External poultices carry less risk but still require correct plant ID. If no suitable herbs are available, skip this step and rely on other modalities.
+**失敗時：** 若植物識別不確，勸勿食。外敷膏風險較低但仍需正確植物識別。若無合宜草可得，略此步賴他法。
 
-### Step 6: Guide First Aid Stabilization
+### 步驟六：導急救穩定
 
-For physical injuries, coach stabilization before applying any esoteric modalities.
+為身傷，施任何深密法前教穩定。
 
-1. **Bleeding**: "Apply direct pressure with a clean cloth, elevate above the heart if possible, maintain pressure for 10-15 minutes without checking"
-2. **Burns**: "Cool with clean running water for 10-20 minutes, cover loosely with clean cloth — no ice, no butter"
-3. **Sprains**: "Rest the area, apply Ice or cold water, Compress with a firm but not tight wrap, Elevate"
-4. **Shock signs** (pale, cold, rapid pulse, confusion): "Lie flat, elevate the legs, stay warm, talk to them reassuringly"
-5. **Breathing difficulty**: "Sit upright, loosen clothing, coach slow breathing — 4 counts in, 6 counts out"
+1. **出血**：「以淨布直壓，可能時舉高於心，保壓十至十五分不查」
+2. **燒傷**：「以淨流水冷卻十至二十分，以淨布鬆蓋——無冰、無奶油」
+3. **扭傷**：「休之、敷冰或冷水、以堅而不緊之包壓、舉之」
+4. **休克跡**（蒼、冷、脈速、混亂）：「平躺、舉腿、保暖、安慰之」
+5. **呼吸困難**：「坐直、鬆衣、教慢呼吸——吸四數、吐六數」
 
-**Expected:** Bleeding controlled, pain managed, shock prevented, and the person stabilized enough for transport or continued care.
+**預期：** 血控、痛管、休克防、人穩足以送或續照。
 
-**On failure:** If bleeding does not stop with direct pressure after 15 minutes, guide pressure to the arterial pressure point upstream of the wound. If shock symptoms worsen, maintain warmth and consciousness while seeking emergency help. First aid stabilization takes absolute priority over all other modalities — communicate this clearly.
+**失敗時：** 若直壓十五分仍不止血，導壓至傷上游之動脈壓點。若休克症狀惡，保暖與意識而求急救。急救穩定對所有他法具絕對優先——明傳之。
 
-### Step 7: Guide Holistic Techniques
+### 步驟七：導整體技法
 
-These techniques can stand alone or weave into any other modality.
+此等技法可獨立或編入任何他法。
 
-**Breathwork** (5-10 minutes):
-1. "Breathe in for 4 counts, hold for 2, breathe out for 6 counts"
-2. For pain: "Focus on the breath, not the pain — on each exhale, imagine tension leaving that area"
-3. For anxiety: "Extend the exhale — breathe in for 4, out for 7 — this activates your calming response"
-4. For energy: "Try rapid breathing through the nose — 30 quick inhale-exhale cycles, then hold" (caution: may cause dizziness, warn them)
+**呼吸**（五至十分）：
+1. 「吸四數，屏二，吐六數」
+2. 痛：「專注於呼吸，非於痛——每吐想張力離該區」
+3. 焦：「延吐——吸四，吐七——此激活安之反應」
+4. 能量：「試鼻快呼吸——三十次快吸吐循環，然後屏」（慎：可致暈，警之）
 
-**Visualization** (5-10 minutes):
-1. "Imagine healing light — whatever color feels right — entering through the top of your head"
-2. "Direct that light toward the area that needs attention"
-3. "See the light dissolving any darkness, congestion, or pain"
-4. "Let it expand to fill your entire body"
-5. "Imagine your body enclosed in a protective sphere of that light"
+**觀想**（五至十分）：
+1. 「想療癒之光——任何感對之色——自頭頂入」
+2. 「導光向需注意之區」
+3. 「見光溶任何黑、阻或痛」
+4. 「令其擴充滿全身」
+5. 「想身為該光之護球所圍」
 
-**Body Scan** (10-15 minutes):
-1. "Start at the top of your head"
-2. "Move your attention slowly downward through each body region"
-3. "At each region, notice: tension, temperature, sensation, any emotion"
-4. "Where you find blockage, breathe into that area for 3-5 breaths"
-5. "Continue down to the soles of your feet"
-6. Note any areas they report for targeted follow-up
+**身體掃描**（十至十五分）：
+1. 「自頭頂始」
+2. 「緩移注意力下經各身區」
+3. 「每區覺：張力、溫度、感、任何情」
+4. 「覺阻處，吸入該區三至五呼吸」
+5. 「續下至足底」
+6. 註其報之任何區以供定向後續
 
-**Expected:** The person reports increased relaxation, reduced pain perception, or emotional release. Body scan identifies specific areas for targeted follow-up.
+**預期：** 人報增放鬆、減痛覺或情緒釋放。身體掃描識定向後續之具體區。
 
-**On failure:** If they cannot focus on visualization, simplify to breath-only. If body scan triggers emotional distress, slow down and offer the option to skip that body region. Reassure that the goal is never to force through resistance.
+**失敗時：** 若不能專注觀想，簡為呼吸為主。若身體掃描觸情緒痛苦，緩之並給選項略該身區。保證目標非強破抗拒。
 
-### Step 8: Close and Follow Through
+### 步驟八：閉與後續
 
-1. Allow 5-10 minutes of quiet rest after the session
-2. Offer water (see `purify-water` if in wilderness)
-3. Ask: "How do you feel compared to when we started?"
-4. Note any areas that shifted and any that remain unchanged
-5. Recommend ongoing self-care: continued breathwork, herbal tea, rest
-6. For energy work: advise extra water and rest for the remainder of the day
-7. For herbal remedies: specify dosage and frequency (typically 2-3 times daily for teas)
-8. Suggest follow-up if the condition is ongoing
+1. 會話後允五至十分之靜休
+2. 供水（若於野外見 `purify-water`）
+3. 問：「較始時感如何？」
+4. 註任何已變與任何未變之區
+5. 建議續自照：續呼吸、草藥茶、休
+6. 能量工作：勸當日餘時額外水與休
+7. 草藥方：明劑量與頻率（茶通常日二至三次）
+8. 若況持續建議後續
 
-**Expected:** The person reports improvement or at least no worsening. A follow-up plan is in place for ongoing conditions.
+**預期：** 人報改善或至少無惡化。持續況有後續計畫。
 
-**On failure:** If the condition worsened, reassess (return to Step 1) and consider a different modality. For persistent or serious physical conditions, recommend conventional medical attention — these modalities are complementary, not replacements for professional care.
+**失敗時：** 若況惡，重評（返步驟一）並考慮他法。持久或嚴重身體況，建議傳統醫療注意——此等法為補，非專業照顧之代替。
 
-## Validation
+## 驗證
 
-- [ ] Holistic assessment was completed before selecting modalities
-- [ ] Physical injuries were stabilized before esoteric modalities were applied
-- [ ] The person was grounded and centered before beginning energy work
-- [ ] Any herbs used were positively identified (see `forage-plants`)
-- [ ] Water used for remedies was safe (see `purify-water`)
-- [ ] Consent was obtained before hands-on or energy-directed work
-- [ ] Session included a closing integration period and follow-up plan
-- [ ] No modality was forced through the person's resistance
-- [ ] AI coached without claiming to transmit or channel energy itself
+- [ ] 擇法前已完成整體評估
+- [ ] 施深密法前身傷已穩定
+- [ ] 始能量工作前人已接地並置中
+- [ ] 所用草藥已確識（見 `forage-plants`）
+- [ ] 方用之水安全（見 `purify-water`）
+- [ ] 按手或能量定向工作前已得同意
+- [ ] 會話含閉之整合期與後續計畫
+- [ ] 無法強破人之抗拒
+- [ ] AI 教導而不稱傳或通能量
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Skipping physical stabilization**: Energy work on a bleeding wound is irresponsible — always guide stabilization first
-- **Misidentified herbs**: Incorrect plant identification can cause poisoning — when in doubt, advise against ingestion
-- **Rushing the grounding**: An ungrounded person attempting energy work transfers agitation — invest the time in Step 3
-- **Overriding the person's autonomy**: Never insist on continuing a technique they find uncomfortable — healing requires trust
-- **Substituting for professional care**: These modalities complement but do not replace emergency medicine or pharmaceutical treatment
-- **Ignoring emotional release**: Energy work can surface grief, anger, or memories — hold space without trying to fix or interpret
-- **AI overstepping**: The AI guides process and provides knowledge but does not claim to diagnose, prescribe, or transmit healing energy
+- **略身體穩定**：能量工作於流血之傷為不負責——永先導穩定
+- **誤識草**：錯之植物識別可致中毒——有疑則勸勿食
+- **趕接地**：未接地者試能量工作傳躁——於步驟三投時
+- **踰人之自主**：永勿堅持其覺不適之技法——療癒需信
+- **代專業照顧**：此等法補而非代急救醫學或藥物治療
+- **忽情緒釋放**：能量工作可浮哀、怒或憶——持空間而不試修或釋
+- **AI 越權**：AI 導過程並供知，但不稱診、開藥或傳療癒能
 
-## Related Skills
+## 相關技能
 
-- `heal` — the AI self-directed variant for internal subsystem assessment and rebalancing
-- `meditate-guidance` — meditation builds the focused awareness that underpins effective healing work
-- `remote-viewing-guidance` — shares non-local awareness coaching techniques useful for intuitive assessment
-- `mindfulness` — situational awareness and rapid grounding techniques support practitioner presence
-- `tai-chi` — qi cultivation through tai chi complements energetic healing modalities
-- `forage-plants` — source material for herbal remedies; covers safe plant identification
-- `purify-water` — safe water is needed for herbal preparations and post-session hydration
-- `make-fire` — required for heating water for herbal teas and infusions
+- `heal` — AI 自導之變體，為內子系統評估與重平衡
+- `meditate-guidance` — 禪修建有效療癒工作所基之專注覺
+- `remote-viewing-guidance` — 共非本地覺教導技法，為直覺評估有用
+- `mindfulness` — 情境覺與速接地技法支持施者臨在
+- `tai-chi` — 太極之氣培補能量療癒法
+- `forage-plants` — 草藥方之材源；涵安全植物識別
+- `purify-water` — 草藥製備與會話後補水需安全水
+- `make-fire` — 草藥茶與浸劑之熱水需

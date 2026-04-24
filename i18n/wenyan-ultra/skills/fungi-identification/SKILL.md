@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Field identification of fungi using morphological features, spore prints,
   habitat analysis, and seasonal context with a safety-first approach. Covers
@@ -25,32 +25,32 @@ metadata:
   tags: mycology, fungi, mushroom, identification, foraging, safety, spore-print
 ---
 
-# Fungi Identification
+# 辨菌
 
-Identify fungi in the field using morphological features, spore prints, habitat, and season with an absolute safety-first approach.
+用形、孢印、棲、時辨菌。安全至先。
 
-## When to Use
+## 用
 
-- You encounter an unknown fungus and need to identify it
-- You are foraging for edible mushrooms and need to confirm species before consumption
-- You want to assess whether fungi in your garden or property are harmful
-- You are building field identification skills through structured observation practice
-- You need to differentiate an edible species from a dangerous look-alike
+- 遇未知菌→辨
+- 採食者→食前必確種
+- 察庭園菌是否有害
+- 練形觀察
+- 分可食與致命類
 
-## Inputs
+## 入
 
-- **Required**: A fungus specimen or clear observation of one in situ
-- **Required**: Ability to observe fine morphological details (cap, gills, stem, base)
-- **Optional**: Field guide or reference material for the region
-- **Optional**: Paper and glass for spore prints
-- **Optional**: Knife for cross-section examination
-- **Optional**: Hand lens (10x) for fine detail
+- **必**：菌標本或現場清觀
+- **必**：細形觀能（蓋、褶、柄、基）
+- **可**：本域野外指南
+- **可**：紙與玻璃杯（孢印）
+- **可**：刀（切剖）
+- **可**：手鏡 10x（細節）
 
-## Procedure
+## 行
 
-### Step 1: The Cardinal Rule
+### 一：主則
 
-Before any identification work, internalize the absolute rule of mycology.
+一切辨前，內化菌學絕對則。
 
 ```
 CARDINAL RULE:
@@ -68,13 +68,13 @@ edible mushroom) is a missed meal.
 ALWAYS ERR TOWARD CAUTION.
 ```
 
-**Expected:** The cardinal rule is internalized before proceeding with identification.
+得：主則內化，方進。
 
-**On failure:** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
+敗：此步無失敗模。則未內化→勿進食用辨識。
 
-### Step 2: Document the Habitat
+### 二：記棲
 
-Context narrows identification before touching the specimen.
+脈絡先窄範圍，再觸標本。
 
 ```
 Habitat Recording:
@@ -101,13 +101,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete habitat record that provides context for species-level identification.
+得：棲地全記，為種級辨識提供脈絡。
 
-**On failure:** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
+敗：棲地不明（如都市雜種庭）→記所見。棲訊缺→辨識信心降，納入安全評估。
 
-### Step 3: Examine Morphological Features
+### 三：察形
 
-Systematic examination of the specimen itself.
+標本系統察。
 
 ```
 Morphological Checklist:
@@ -152,13 +152,13 @@ SPORE PRINT:
   black, rust-orange
 ```
 
-**Expected:** A complete morphological description covering all major features.
+得：形描全，涵諸大徵。
 
-**On failure:** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
+敗：某徵無法察（如環或已失）→記「未察」，非「無」。此分對辨識關鍵。
 
-### Step 4: Identify Using Multiple Confirmations
+### 四：多證確認
 
-Cross-reference all data against reference material.
+諸數據交叉參考資料。
 
 ```
 Identification Protocol:
@@ -191,31 +191,33 @@ Confidence Levels:
 +----------+---------------------------+---------------------------+
 ```
 
-**Expected:** A species-level identification with explicit confidence level and look-alike assessment.
+得：種級辨識，顯信心與類致命類評估。
 
-**On failure:** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
+敗：僅至屬級→學習可。食則僅「確定」方可。
 
-## Validation
+## 驗
 
-- [ ] The cardinal rule was acknowledged before starting identification
-- [ ] Habitat was documented before examining the specimen
-- [ ] All morphological features were examined systematically
-- [ ] The base was excavated to check for a volva
-- [ ] A spore print was taken (if time allows)
-- [ ] Dangerous look-alikes were explicitly checked and eliminated
-- [ ] Confidence level was honestly assessed
-- [ ] Only "Certain" identifications were considered for consumption
+- [ ] 辨前主則已承認
+- [ ] 察本前棲已記
+- [ ] 諸形徵皆系統察
+- [ ] 基已掘查菌托
+- [ ] 時允則取孢印
+- [ ] 類致命類已顯察並排除
+- [ ] 信心等級誠實評
+- [ ] 僅「確定」之辨可考食用
 
-## Common Pitfalls
+## 忌
 
-- **Relying on a single feature**: "It looks like a chanterelle" based on colour alone. True chanterelles have false gills (ridges), grow from soil near trees, and have a specific apricot smell. False chanterelles and Jack-o'-lanterns share the colour but differ in every other feature
-- **Skipping the base examination**: Failing to dig up the base misses the volva — the single most important feature for identifying deadly Amanita species (death cap, destroying angel)
-- **Trusting apps blindly**: AI-based mushroom identification apps have significant error rates for look-alike species. Use them as a starting point, never as confirmation
-- **Assuming "common = safe"**: Abundance does not indicate edibility. Deadly species can be locally abundant
-- **Tasting unknown species**: Some mycologists use taste as a diagnostic tool, but this requires expert-level knowledge of which species are safe to taste. For non-experts, do not taste unknown fungi
-- **Ignoring temporal toxins**: Some species (e.g., Amanita phalloides) have pleasant taste and delayed symptoms. By the time symptoms appear (24-48 hours), liver damage is severe
+- **倚單徵**：僅色似雞油菌。真雞油菌有偽褶、生土近樹、特定杏香。偽雞油與南瓜燈色同而他徵皆異
+- **略察基**：不掘基則失菌托——致命毒蠅傘之最要徵
+- **盲信應用**：AI 菌識誤率高。僅起點，非確認
+- **以常見=安全**：豐度非可食之證。致命種或地方豐
+- **嘗未知**：嘗為診斷需專家級。非專家勿嘗
+- **忽遲毒**：Amanita phalloides 味悅而症狀遲。症狀現時（24-48 時）肝損已重
+- **信群智**：「此地皆食此」未必全非誤。文化可誤傳，致命種或生同地
+- **信熟**：「常煮可除毒」於 Amanita 無效。熱不破毒肽
 
-## Related Skills
+## 參
 
-- `mushroom-cultivation` — growing known species eliminates identification risk entirely
-- `forage-plants` — complementary field identification skill; shares the multi-feature confirmation methodology
+- `mushroom-cultivation`
+- `forage-plants`

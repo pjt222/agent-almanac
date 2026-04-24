@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement GitOps continuous delivery using Argo CD or Flux with app-of-apps pattern,
   automated sync policies, drift detection, and multi-environment promotion. Manage
@@ -23,36 +23,36 @@ metadata:
   tags: gitops, argocd, flux, sync, drift-detection
 ---
 
-# Implement GitOps Workflow
+# 實 GitOps 工作流程
 
-Deploy and manage Kubernetes applications using GitOps principles with Argo CD or Flux for automated, auditable, and repeatable deployments.
+以 GitOps 原則用 Argo CD 或 Flux 部署並管 Kubernetes 應用，以自動化、可稽核、可重複部署。
 
-## When to Use
+## 適用時機
 
-- Implementing declarative infrastructure and application management
-- Migrating from imperative kubectl/helm commands to Git-driven deployments
-- Setting up multi-environment promotion workflows (dev → staging → prod)
-- Enforcing code review and approval gates for production deployments
-- Achieving compliance and audit requirements with Git history
-- Implementing disaster recovery with Git as single source of truth
+- 實聲明式基礎設施與應用管理
+- 自命令式 kubectl/helm 指令遷至 Git 驅動部署
+- 設多環境晉升工作流程（dev → staging → prod）
+- 為生產部署強制碼審與核准閘
+- 以 Git 歷史達合規與稽核要求
+- 以 Git 為唯一真實來源實災難恢復
 
-## Inputs
+## 輸入
 
-- **Required**: Kubernetes cluster with admin access (EKS, GKE, AKS, or self-hosted)
-- **Required**: Git repository for Kubernetes manifests and Helm charts
-- **Required**: Argo CD or Flux CLI installed
-- **Optional**: Sealed Secrets or External Secrets Operator for secrets management
-- **Optional**: Image Updater for automated image promotion
-- **Optional**: Prometheus for monitoring sync status
+- **必要**：附管理員存取之 Kubernetes 叢集（EKS、GKE、AKS 或自託）
+- **必要**：Kubernetes 清單與 Helm 圖之 Git 倉
+- **必要**：Argo CD 或 Flux CLI 已裝
+- **選擇性**：Sealed Secrets 或 External Secrets Operator 以管機密
+- **選擇性**：Image Updater 以自動化影像晉升
+- **選擇性**：Prometheus 以監同步狀態
 
-## Procedure
+## 步驟
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+> 見 [擴展範例](references/EXAMPLES.md) 之完整配置檔與模板。
 
 
-### Step 1: Install Argo CD and Configure Repository Access
+### 步驟一：裝 Argo CD 並配倉存取
 
-Deploy Argo CD to cluster and connect to Git repository.
+部署 Argo CD 於叢集並連 Git 倉。
 
 ```bash
 # Create namespace
@@ -129,13 +129,13 @@ spec:
 EOF
 ```
 
-**Expected:** Argo CD installed in argocd namespace. UI accessible via port-forward or Ingress. Admin password changed from default. Git repository added with SSH or token authentication. Repository connection verified.
+**預期：** Argo CD 裝於 argocd 命名空間。UI 經 port-forward 或 Ingress 可存取。管理員密碼已改。Git 倉已加，以 SSH 或 token 驗證。倉連線已驗。
 
-**On failure:** For pod CrashLoopBackOff, check logs with `kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server`. For repository connection failures, verify token has repo access or SSH key added to deploy keys. For Ingress SSL issues, ensure cert-manager issued certificate successfully. For login failures, retrieve password again or reset via `kubectl delete secret argocd-initial-admin-secret -n argocd` and restart server.
+**失敗時：** Pod CrashLoopBackOff 時，以 `kubectl logs -n argocd -l app.kubernetes.io/name=argocd-server` 核日誌。倉連失敗則驗 token 有倉存取或 SSH 金鑰已加於部署金鑰。Ingress SSL 問題確 cert-manager 成功發憑證。登入失敗則重取密碼或經 `kubectl delete secret argocd-initial-admin-secret -n argocd` 重設並重啟伺服器。
 
-### Step 2: Create Application Manifest and Deploy First Application
+### 步驟二：建應用清單並部署首應用
 
-Define Argo CD Application resource with sync policies and health checks.
+定 Argo CD Application 資源附同步政策與健康檢查。
 
 ```bash
 # Create Git repository structure
@@ -266,13 +266,13 @@ kubectl get all -n production
 argocd app sync myapp-prod  # Manual sync if automated disabled
 ```
 
-**Expected:** Application synced automatically from Git. Resources created in production namespace. Argo CD UI shows healthy status. Automated sync policies enable prune and self-heal. Sync succeeds within retry limits.
+**預期：** 應用自 Git 自動同步。資源建於 production 命名空間。Argo CD UI 顯健康狀態。自動化同步政策啟 prune 與自癒。同步於重試限內成功。
 
-**On failure:** For sync failures, check application events with `argocd app get myapp-prod` and `kubectl get events -n production`. For Kustomize build errors, test locally with `kustomize build apps/myapp/overlays/prod`. For namespace errors, verify namespace exists or enable CreateNamespace sync option. For pruning issues, check finalizers and owner references with `kubectl get <resource> -o yaml`.
+**失敗時：** 同步失敗時，以 `argocd app get myapp-prod` 與 `kubectl get events -n production` 核應用事件。Kustomize 建置錯則本地以 `kustomize build apps/myapp/overlays/prod` 測。命名空間錯則驗命名空間存或啟 CreateNamespace 同步選項。Prune 問題則核終結器與擁有者參考以 `kubectl get <resource> -o yaml`。
 
-### Step 3: Implement App-of-Apps Pattern for Multi-Environment Management
+### 步驟三：實 App-of-Apps 模式以多環境管理
 
-Create root application that manages child applications across environments.
+建根應用以管跨環境之子應用。
 
 ```bash
 # Create app-of-apps structure
@@ -284,13 +284,13 @@ apiVersion: argoproj.io/v1alpha1
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Root app manages all child applications. New applications automatically deployed when added to Git. Infrastructure applications deployed before app applications (via sync waves if needed). Projects enforce RBAC boundaries. App tree shows parent-child relationships.
+**預期：** 根應用管所有子應用。加於 Git 時新應用自動部署。基礎設施應用於應用前部署（必要時經同步波）。專案強制 RBAC 界。應用樹示父子關係。
 
-**On failure:** For circular dependencies, use sync waves to control order. For project permission errors, verify sourceRepos and destinations match application requirements. For recursive directory issues, ensure YAML files are valid and don't conflict. For missing child apps, check root app status with `argocd app get root-app`.
+**失敗時：** 循環依賴時，用同步波控順。專案權限錯則驗 sourceRepos 與 destinations 配應用要求。遞迴目錄問題則確 YAML 檔有效且不衝突。缺子應用則以 `argocd app get root-app` 核根應用狀態。
 
-### Step 4: Configure Image Updater for Automated Deployments
+### 步驟四：配 Image Updater 以自動部署
 
-Set up Argo CD Image Updater to automatically promote new image versions.
+設 Argo CD Image Updater 以自動晉升新影像版本。
 
 ```bash
 # Install Argo CD Image Updater
@@ -302,13 +302,13 @@ apiVersion: argoproj.io/v1alpha1
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Image Updater monitors registry for new images matching tag patterns. Semantic versioning strategy updates to latest stable release. Git commits created automatically with new image tags. Applications sync with updated images. Staging uses digest strategy for immutable deployments.
+**預期：** Image Updater 監註冊處配標籤模式之新影像。語義版本策略更新至最新穩定版。Git 提交自動建附新影像標籤。應用以更新影像同步。Staging 用摘要策略以不可變部署。
 
-**On failure:** For registry access errors, verify image-updater has pull credentials via secret or ServiceAccount. For write-back failures, check git-creds secret has push permissions. For no updates detected, verify tag regex matches actual tags with `argocd-image-updater test ghcr.io/username/myapp`. For authentication issues, check image-updater logs for detailed error messages.
+**失敗時：** 註冊處存取錯時，驗 image-updater 經 secret 或 ServiceAccount 有拉取憑證。回寫失敗則核 git-creds 密鑰有推送權限。未偵測到更新則驗標籤正則配實標籤以 `argocd-image-updater test ghcr.io/username/myapp`。驗證問題則核 image-updater 日誌以得詳錯訊息。
 
-### Step 5: Implement Progressive Delivery with Argo Rollouts
+### 步驟五：以 Argo Rollouts 實漸進交付
 
-Enable canary and blue-green deployments with automated rollback.
+啟金絲雀與藍綠部署附自動回滾。
 
 ```bash
 # Install Argo Rollouts controller
@@ -320,13 +320,13 @@ curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kube
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Rollout progressively shifts traffic to canary. Analysis runs at each step, validating success rate. Automated promotion on success, rollback on failure. Argo CD syncs Rollout resources. Dashboard shows real-time rollout progress.
+**預期：** Rollout 漸移流量至金絲雀。分析於每步執行，驗成功率。成功時自動晉升、失敗時回滾。Argo CD 同步 Rollout 資源。儀表板示即時 rollout 進展。
 
-**On failure:** For analysis failures, verify Prometheus accessible and query returns valid results. For traffic routing issues, check Ingress annotations and canary service endpoints. For stuck rollouts, manually promote or abort. For revision mismatch, ensure Argo CD sync policy doesn't conflict with Rollouts controller updates.
+**失敗時：** 分析失敗時，驗 Prometheus 可存取且查詢返有效結果。流量路由問題則核 Ingress 標註與金絲雀服務端點。Rollouts 卡時手動晉升或中止。版本不配時確 Argo CD 同步政策不與 Rollouts 控制器更新衝突。
 
-### Step 6: Configure Drift Detection and Webhook Notifications
+### 步驟六：配漂移偵測與 Webhook 通知
 
-Monitor for manual changes and send alerts to Slack/email.
+監手動變更並送警至 Slack/電郵。
 
 ```bash
 # Configure drift detection in Application
@@ -338,46 +338,46 @@ metadata:
 # ... (see EXAMPLES.md for complete configuration)
 ```
 
-**Expected:** Self-heal automatically reverts manual kubectl changes. Notifications sent to Slack on sync failures and successful deployments. Webhooks trigger external systems (PagerDuty, monitoring, ITSM). Drift alerts show what changed and who made changes (via Git history).
+**預期：** 自癒自動還原手動 kubectl 變更。通知於同步失敗與成功部署時送至 Slack。Webhook 觸發外部系統（PagerDuty、監控、ITSM）。漂移警示示何變與誰作變（經 Git 歷史）。
 
-**On failure:** For self-heal not triggering, verify automated sync policy enabled and refresh interval not too long (default 3m). For notification failures, test Slack token with curl and verify bot added to channels. For ignored differences not working, check JSON pointer syntax matches resource structure. For webhook errors, check endpoint accessibility and authentication headers.
+**失敗時：** 自癒不觸發時，驗自動同步政策已啟且更新間隔不過長（預設 3m）。通知失敗則以 curl 測 Slack token 並驗 bot 加於頻道。忽略差異不工作則核 JSON pointer 語法配資源結構。Webhook 錯則核端點可達性與驗證標頭。
 
-## Validation
+## 驗證
 
-- [ ] Argo CD or Flux installed and accessible via UI/CLI
-- [ ] Git repository connected with proper authentication
-- [ ] Applications sync automatically from Git on commit
-- [ ] Manual kubectl changes reverted by self-heal
-- [ ] App-of-apps pattern deploys multiple applications
-- [ ] Image Updater promotes new images based on tag patterns
-- [ ] Argo Rollouts perform progressive canary deployments
-- [ ] Notifications sent to Slack/email on sync events
-- [ ] Drift detection alerts on out-of-band changes
-- [ ] RBAC enforces project-level access controls
+- [ ] Argo CD 或 Flux 已裝且經 UI/CLI 可存取
+- [ ] Git 倉已連附合宜驗證
+- [ ] 應用於提交時自 Git 自動同步
+- [ ] 手動 kubectl 變更由自癒還原
+- [ ] App-of-apps 模式部署多應用
+- [ ] Image Updater 依標籤模式晉升新影像
+- [ ] Argo Rollouts 執行漸進金絲雀部署
+- [ ] 同步事件通知送至 Slack/電郵
+- [ ] 漂移偵測於帶外變更時警示
+- [ ] RBAC 強制專案級存取控制
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Automatic prune disabled**: Resources removed from Git remain in cluster. Enable `prune: true` in sync policy.
+- **自動 prune 禁用**：自 Git 移之資源留於叢集。於同步政策啟 `prune: true`。
 
-- **No sync waves**: Infrastructure applications deployed after apps that depend on them. Use `argocd.argoproj.io/sync-wave` annotations to control order.
+- **無同步波**：基礎設施應用於依其之應用後部署。用 `argocd.argoproj.io/sync-wave` 標註以控順。
 
-- **Ignoring HPA-managed replicas**: Sync fails because HPA changed replica count. Add `/spec/replicas` to ignoreDifferences.
+- **忽視 HPA 管之副本**：因 HPA 變副本數而同步失敗。加 `/spec/replicas` 於 ignoreDifferences。
 
-- **Write-back conflicts**: Image Updater commits conflict with manual commits. Use separate branch or fine-grained RBAC for image updater.
+- **回寫衝突**：Image Updater 提交與手動提交衝突。用分開分支或細粒 RBAC 為 image updater。
 
-- **Missing finalizers**: Application deletion leaves orphaned resources. Add `resources-finalizer.argocd.argoproj.io` to Application metadata.
+- **缺終結器**：應用刪除留孤資源。加 `resources-finalizer.argocd.argoproj.io` 於 Application 元資料。
 
-- **No analysis templates**: Rollouts promote automatically without validation. Implement AnalysisTemplates with metrics queries.
+- **無分析模板**：Rollouts 未驗而自動晉升。以指標查詢實 AnalysisTemplates。
 
-- **Secrets in Git**: Plaintext secrets committed to repository. Use Sealed Secrets or External Secrets Operator.
+- **機密於 Git**：明文機密提交於倉。用 Sealed Secrets 或 External Secrets Operator。
 
-- **Self-heal too aggressive**: Self-heal reverts legitimate emergency changes. Use annotations to temporarily disable or implement approval gates.
+- **自癒過激**：自癒還原合法緊急變更。用標註以暫禁或實核准閘。
 
-## Related Skills
+## 相關技能
 
-- `configure-git-repository` - Setting up Git repository structure for GitOps
-- `manage-git-branches` - Branch strategies for environment promotion
-- `deploy-to-kubernetes` - Understanding Kubernetes resources managed by GitOps
-- `manage-kubernetes-secrets` - Sealed Secrets integration with Argo CD
-- `build-ci-cd-pipeline` - CI builds images, GitOps deploys them
-- `setup-container-registry` - Image promotion between registries
+- `configure-git-repository` - 為 GitOps 設 Git 倉結構
+- `manage-git-branches` - 環境晉升之分支策略
+- `deploy-to-kubernetes` - 解 GitOps 所管之 Kubernetes 資源
+- `manage-kubernetes-secrets` - Sealed Secrets 與 Argo CD 整合
+- `build-ci-cd-pipeline` - CI 建影像，GitOps 部署之
+- `setup-container-registry` - 註冊處間之影像晉升

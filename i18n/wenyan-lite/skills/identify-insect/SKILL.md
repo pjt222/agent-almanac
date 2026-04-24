@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify insects using body plan analysis, dichotomous keys to order, wing
   venation, mouthpart type, antennae form, leg and tarsal structure, and
@@ -26,396 +26,393 @@ metadata:
   tags: entomology, insects, identification, taxonomy, dichotomous-key, morphology
 ---
 
-# Identify Insect
+# 識昆蟲
 
-Identify insects using systematic morphological examination, dichotomous keys, and structured confidence assessment.
+以系統形態察看、二分檢索表與結構化信心評估識昆蟲。
 
-## When to Use
+## 適用時機
 
-- You have an unknown insect (live, photographed, or preserved) and need to identify it
-- You want to move beyond order-level placement to family or genus
-- You are working through a specimen collection and need consistent identification methods
-- You need to distinguish between visually similar orders or families
-- You are teaching or learning insect identification and want a structured approach
+- 有未知昆蟲（活、拍照或保存）欲識之
+- 欲超目級至科或屬
+- 工作於樣本收藏需一致識別法
+- 欲區別視覺相似之目或科
+- 教或學昆蟲識別欲結構化路徑
 
-## Inputs
+## 輸入
 
-- **Required**: An insect specimen or clear observation (live, photographed, or preserved)
-- **Required**: Ability to examine fine morphological details (wings, mouthparts, antennae, legs)
-- **Optional**: Hand lens (10x) or dissecting microscope for fine detail
-- **Optional**: Entomological field guide or dichotomous key for the region
-- **Optional**: Forceps and pins for manipulating preserved specimens
-- **Optional**: Photographs from multiple angles (dorsal, lateral, ventral, frontal)
+- **必要**：昆蟲樣本或清晰觀察（活、拍照或保存）
+- **必要**：察細形態之能力（翅、口器、觸角、足）
+- **選擇性**：放大鏡（十倍）或解剖顯微鏡以察細節
+- **選擇性**：該地區之昆蟲野外圖鑑或二分檢索表
+- **選擇性**：鑷與針以操作保存之樣本
+- **選擇性**：多角之相片（背、側、腹、正）
 
-## Procedure
+## 步驟
 
-### Step 1: Verify the Basic Body Plan
+### 步驟一：驗基本體型
 
-Confirm you are looking at an insect and not another arthropod. This step prevents misidentification at the most fundamental level.
-
-```
-Arthropod Verification:
-+--------------------+------------------------------------------+
-| Feature            | Insect (Class Insecta)                   |
-+--------------------+------------------------------------------+
-| Legs               | Exactly 6 (3 pairs), attached to thorax  |
-+--------------------+------------------------------------------+
-| Body regions       | 3 distinct: head, thorax, abdomen        |
-+--------------------+------------------------------------------+
-| Antennae           | 1 pair on the head                       |
-+--------------------+------------------------------------------+
-| Eyes               | Typically 2 compound eyes + 0-3 ocelli   |
-+--------------------+------------------------------------------+
-| Wings              | 0, 2, or 4 (attached to thorax)          |
-+--------------------+------------------------------------------+
-
-Not an insect if:
-- 8 legs → Arachnida (spiders, scorpions, ticks, mites)
-- 10+ legs → Crustacea (isopods, amphipods) or Myriapoda
-- No distinct head → likely a mite or tick
-- 2 pairs antennae → Crustacea
-- No antennae → Arachnida
-```
-
-**Expected:** Confirmation that the organism is an insect with 6 legs, 3 body regions, 1 pair of antennae, and 0-4 wings.
-
-**On failure:** If the specimen has 8 legs, it is an arachnid — do not proceed with insect keys. If leg count is ambiguous (e.g., legs lost on preserved specimen), examine thoracic leg attachments — insects have 3 pairs of coxae on the pro-, meso-, and metathorax. If the body plan is genuinely unclear, record "Arthropoda — class uncertain" and note what features are visible.
-
-### Step 2: Key to Order Using the Dichotomous Key
-
-Work through the following simplified key one couplet at a time. At each couplet, choose the option that matches your specimen and follow the lead number.
+確所觀為昆蟲而非他節肢動物。此步防最基本之誤識。
 
 ```
-Simplified Dichotomous Key to Major Insect Orders:
+節肢動物驗證：
++--------------------+------------------------------------------+
+| 特徵               | 昆蟲（Insecta 綱）                       |
++--------------------+------------------------------------------+
+| 足                 | 恰六（三對），附於胸                     |
++--------------------+------------------------------------------+
+| 體區               | 三明：頭、胸、腹                         |
++--------------------+------------------------------------------+
+| 觸角               | 一對於頭                                 |
++--------------------+------------------------------------------+
+| 眼                 | 通常二複眼 + 0-3 單眼                   |
++--------------------+------------------------------------------+
+| 翅                 | 0、2 或 4（附於胸）                     |
++--------------------+------------------------------------------+
 
-1a. Wings present and visible ................................. go to 2
-1b. Wings absent (apterous) .................................. go to 12
-
-2a. One pair of wings (hind wings reduced to halteres) ....... DIPTERA
-    (flies, mosquitoes, midges, crane flies)
-2b. Two pairs of wings ........................................ go to 3
-
-3a. Front wings hardened, meeting in a straight line
-    down the back (elytra) ................................... COLEOPTERA
-    (beetles, weevils, ladybugs, fireflies)
-3b. Front wings not fully hardened as elytra ................. go to 4
-
-4a. Wings covered in scales (powdery when rubbed) ............ LEPIDOPTERA
-    (butterflies and moths)
-4b. Wings membranous or partly membranous, no scales ......... go to 5
-
-5a. Front wings half-leathery at base, membranous at
-    tip (hemelytra) .......................................... HEMIPTERA
-    (true bugs: stink bugs, assassin bugs, bed bugs)
-5b. Front wings uniformly membranous or uniformly
-    leathery ................................................. go to 6
-
-6a. Narrow waist between thorax and abdomen; hind wings
-    smaller than front wings; wings may hook together ........ HYMENOPTERA
-    (bees, wasps, ants, sawflies)
-6b. No narrow waist ........................................... go to 7
-
-7a. Long, narrow body; very large eyes covering most of
-    head; wings held out to sides or above body at rest ...... ODONATA
-    (dragonflies and damselflies)
-7b. Body not as above ......................................... go to 8
-
-8a. Hind legs greatly enlarged for jumping ................... ORTHOPTERA
-    (grasshoppers, crickets, katydids)
-8b. Hind legs not enlarged for jumping ....................... go to 9
-
-9a. Front wings straight, narrow, leathery (tegmina);
-    cerci prominent at abdomen tip ........................... DERMAPTERA
-    (earwigs) — if cerci are forceps-like
-    or BLATTODEA (cockroaches) — if cerci are short
-9b. Wings otherwise ........................................... go to 10
-
-10a. Tiny insects (under 5mm); wings fringed with long
-     hairs ................................................... THYSANOPTERA
-     (thrips)
-10b. Wings not fringed ........................................ go to 11
-
-11a. Two pairs of similar-sized membranous wings with
-     many veins; soft body; often near water ................. NEUROPTERA
-     (lacewings, antlions) or EPHEMEROPTERA (mayflies —
-     have 2-3 tail filaments) or PLECOPTERA (stoneflies —
-     have 2 tail filaments, wings fold flat)
-11b. Does not match above ..................................... record
-     features and consult a comprehensive regional key
-
-12a. Laterally flattened body; jumps .......................... SIPHONAPTERA
-     (fleas)
-12b. Pale, soft body; bead-like antennae; social,
-     found in wood or soil ................................... BLATTODEA
-     (termites, formerly Isoptera)
-12c. Very small (under 2mm); elongate; found on hosts ........ PHTHIRAPTERA
-     (lice)
-12d. 6 legs, wingless, does not match above .................. record
-     features and consult a comprehensive regional key
-     (many wingless forms exist within winged orders)
+非昆蟲若：
+- 八足 → 蛛形綱（蛛、蠍、蜱、蟎）
+- 十以上足 → 甲殼綱（等足、端足）或多足綱
+- 無明頭 → 可能為蟎或蜱
+- 二對觸角 → 甲殼綱
+- 無觸角 → 蛛形綱
 ```
 
-**Expected:** Identification to order with a clear path through the key documented (e.g., "1a to 2b to 3a = Coleoptera").
+**預期：** 確生物為六足、三體區、一對觸角、0-4 翅之昆蟲。
 
-**On failure:** If the specimen does not clearly match any couplet, it may be a wingless form of a normally winged order (e.g., worker ants are wingless Hymenoptera, female bagworm moths are wingless Lepidoptera). Note which couplet caused difficulty and what features are ambiguous. Consult a more detailed regional key or photograph the specimen for expert review.
+**失敗時：** 若樣本八足，乃蛛形類——勿進昆蟲檢索表。若足數模糊（如保存樣本失足），察胸足附著——昆蟲於前、中、後胸有三對基節。若體型真不清，記「節肢動物門——綱不確」並註所見特徵。
 
-### Step 3: Examine Wing Venation and Type
+### 步驟二：以二分檢索表定目
 
-Wings carry diagnostic information at family and genus level beyond what the dichotomous key captures.
-
-```
-Wing Types by Order:
-+--------------------+------------------------------------------+
-| Wing Type          | Orders                                   |
-+--------------------+------------------------------------------+
-| Elytra (hardened   | Coleoptera — front wings meet in a       |
-| front wings)       | straight line; hind wings membranous,    |
-|                    | folded beneath                           |
-+--------------------+------------------------------------------+
-| Hemelytra (partly  | Hemiptera — basal half leathery, distal  |
-| hardened)          | half membranous                          |
-+--------------------+------------------------------------------+
-| Tegmina (leathery  | Orthoptera, Blattodea — uniformly        |
-| front wings)       | leathery; hind wings membranous, folded  |
-+--------------------+------------------------------------------+
-| Scaled             | Lepidoptera — covered in overlapping     |
-|                    | scales; venation visible when descaled   |
-+--------------------+------------------------------------------+
-| Membranous (both   | Hymenoptera, Odonata, Neuroptera,        |
-| pairs)             | Ephemeroptera, Plecoptera                |
-+--------------------+------------------------------------------+
-| Halteres (reduced  | Diptera — hind wings reduced to knob-    |
-| hind wings)        | like balancing organs                    |
-+--------------------+------------------------------------------+
-| Fringed            | Thysanoptera — narrow wings with long    |
-|                    | marginal hairs                           |
-+--------------------+------------------------------------------+
-
-Venation Notes:
-- Count the major longitudinal veins (costa, subcosta, radius, media,
-  cubitus, anal veins) — number and branching pattern are family-diagnostic
-- Note cross-veins forming cells — the number and shape of closed cells
-  help distinguish families
-- Wing coupling mechanisms (hamuli in Hymenoptera, frenulum in
-  Lepidoptera) indicate how front and hind wings link during flight
-```
-
-**Expected:** Wing type classified and major venation features noted. For common orders, this may confirm or refine the order-level identification.
-
-**On failure:** If wings are damaged, missing, or folded such that venation is not visible, note what can be seen (e.g., "elytra present, hind wings not examined") and proceed to the next step. Wing venation is most useful at the family level — order-level identification usually does not require detailed venation.
-
-### Step 4: Examine Mouthparts
-
-Mouthpart type reflects feeding ecology and is diagnostic at the order level.
+逐對句經下簡化檢索表。每對句擇配樣本者並循導號。
 
 ```
-Mouthpart Types:
-+--------------------+------------------------------------------+
-| Type               | Description and Associated Orders        |
-+--------------------+------------------------------------------+
-| Chewing            | Mandibles with toothed or grinding       |
-| (mandibulate)      | surfaces. Coleoptera, Orthoptera,        |
-|                    | Hymenoptera (partially), Odonata larvae, |
-|                    | Neuroptera                               |
-+--------------------+------------------------------------------+
-| Piercing-sucking   | Elongate stylets within a beak-like      |
-|                    | rostrum. Hemiptera, Siphonaptera,        |
-|                    | Phthiraptera, some Diptera (mosquitoes)  |
-+--------------------+------------------------------------------+
-| Siphoning          | Coiled proboscis (haustellum) unrolled   |
-|                    | to feed on nectar. Lepidoptera (adults)  |
-+--------------------+------------------------------------------+
-| Sponging           | Fleshy labellum with pseudotracheal      |
-|                    | channels. Many Diptera (house flies)     |
-+--------------------+------------------------------------------+
-| Chewing-lapping    | Mandibles for manipulating + tongue       |
-|                    | (glossa) for lapping liquids.            |
-|                    | Hymenoptera (bees)                       |
-+--------------------+------------------------------------------+
-| Rasping-sucking    | Asymmetric mouthparts that rasp tissue   |
-|                    | and suck fluids. Thysanoptera            |
-+--------------------+------------------------------------------+
+主要昆蟲目之簡化二分檢索表：
+
+1a. 翅有可見 ................................. 至 2
+1b. 翅無（無翅） .............................. 至 12
+
+2a. 一對翅（後翅縮為平衡棒） .................. 雙翅目
+    （蠅、蚊、蚋、大蚊）
+2b. 二對翅 .................................... 至 3
+
+3a. 前翅硬化，於背成直線
+    合（鞘翅） ................................ 鞘翅目
+    （甲蟲、象鼻蟲、瓢蟲、螢）
+3b. 前翅未全硬化為鞘翅 ........................ 至 4
+
+4a. 翅覆鱗（磨之粉狀） ........................ 鱗翅目
+    （蝶與蛾）
+4b. 翅膜質或部分膜質，無鱗 .................... 至 5
+
+5a. 前翅基半皮質，尖端
+    膜質（半鞘翅） ............................ 半翅目
+    （真蟲：椿象、獵蝽、臭蟲）
+5b. 前翅均一膜質或均一
+    皮質 ...................................... 至 6
+
+6a. 胸腹間窄腰；後翅
+    小於前翅；翅可相鉤 ........................ 膜翅目
+    （蜂、胡蜂、蟻、葉蜂）
+6b. 無窄腰 .................................... 至 7
+
+7a. 身長窄；眼極大覆頭
+    大半；翅於止時外張或上舉 .................. 蜻蛉目
+    （蜻蜓與豆娘）
+7b. 身非上述 .................................. 至 8
+
+8a. 後腿大為跳用 .............................. 直翅目
+    （蝗、蟋蟀、螽斯）
+8b. 後腿非為跳而大 ............................ 至 9
+
+9a. 前翅直、窄、皮質（覆翅）；
+    腹端尾鬚顯 ................................ 革翅目
+    （蠼螋）——若尾鬚如鉗
+    或蜚蠊目（蟑螂）——若尾鬚短
+9b. 翅他狀 .................................... 至 10
+
+10a. 微小蟲（五毫米以下）；翅
+     緣有長毛 ................................. 纓翅目
+     （薊馬）
+10b. 翅無纓 ................................... 至 11
+
+11a. 二對相近之膜質翅，多脈；
+     身軟；常近水 ............................ 脈翅目
+     （草蛉、蟻蛉）或蜉蝣目（蜉蝣——
+     有二至三尾絲）或襀翅目（石蠅——
+     有二尾絲，翅平折）
+11b. 不配上者 ................................. 記
+     特徵並參完整地區檢索表
+
+12a. 身側扁；跳 ............................... 蚤目
+     （蚤）
+12b. 蒼白軟體；珠狀觸角；社會性，
+     於木或土中 ............................... 蜚蠊目
+     （白蟻，原等翅目）
+12c. 極小（二毫米以下）；細長；於宿主 ........ 蝨目
+     （蝨）
+12d. 六足、無翅，不配上 ...................... 記
+     特徵並參完整地區檢索表
+     （有翅目內多無翅形存）
 ```
 
-**Expected:** Mouthpart type classified (chewing, piercing-sucking, siphoning, sponging, or chewing-lapping) and noted as consistent or inconsistent with the order identification from Step 2.
+**預期：** 識別至目，附經檢索表之清晰路徑（如「1a 至 2b 至 3a = 鞘翅目」）。
 
-**On failure:** Mouthparts are often difficult to see on live or small specimens without magnification. If mouthparts cannot be examined, skip this step and note "mouthparts not examined." For photographs, a frontal view may reveal the mouthpart type. This step is confirmatory, not mandatory for order-level identification.
+**失敗時：** 若樣本不明配任對句，或為一般有翅目之無翅形（如工蟻為無翅膜翅目、袋蛾雌為無翅鱗翅目）。註哪對句致困難與何特徵模糊。參更詳地區檢索表或拍樣本以供專家審。
 
-### Step 5: Examine Antennae
+### 步驟三：察翅脈與翅類
 
-Antennal form is one of the most visually accessible features and is diagnostic at the family level in many orders.
+翅承科與屬級之診斷資訊，超檢索表所捕。
 
 ```
-Antenna Types:
+依目之翅類：
 +--------------------+------------------------------------------+
-| Form               | Description and Diagnostic Value         |
+| 翅類               | 目                                       |
 +--------------------+------------------------------------------+
-| Filiform           | Thread-like, segments similar in size.   |
-|                    | Many Orthoptera, some Coleoptera         |
+| 鞘翅（硬化         | 鞘翅目——前翅直線相合；                   |
+| 前翅）             | 後翅膜質，折於下                         |
 +--------------------+------------------------------------------+
-| Moniliform         | Bead-like, round segments. Termites,     |
-|                    | some Coleoptera                          |
+| 半鞘翅（部分       | 半翅目——基半皮質、尖半                   |
+| 硬化）             | 膜質                                     |
 +--------------------+------------------------------------------+
-| Clavate            | Gradually thickened toward tip.           |
-|                    | Some Coleoptera (darkling beetles)       |
+| 覆翅（皮質         | 直翅目、蜚蠊目——均一                     |
+| 前翅）             | 皮質；後翅膜質、折                       |
 +--------------------+------------------------------------------+
-| Capitate           | Abrupt terminal club. Butterflies        |
-|                    | (Lepidoptera: Rhopalocera)               |
+| 鱗翅               | 鱗翅目——覆重疊                           |
+|                    | 鱗；去鱗則脈可見                         |
 +--------------------+------------------------------------------+
-| Serrate            | Saw-toothed segments. Some Coleoptera    |
-|                    | (click beetles, jewel beetles)           |
+| 膜質（二對）       | 膜翅目、蜻蛉目、脈翅目、                  |
+|                    | 蜉蝣目、襀翅目                           |
 +--------------------+------------------------------------------+
-| Pectinate          | Comb-like branches on one side.          |
-|                    | Some moths, some Coleoptera              |
+| 平衡棒（縮         | 雙翅目——後翅縮為球狀                     |
+| 後翅）             | 平衡器                                   |
 +--------------------+------------------------------------------+
-| Bipectinate        | Comb-like branches on both sides.        |
-|                    | Many moths (especially males, for        |
-|                    | detecting pheromones)                    |
+| 纓狀               | 纓翅目——窄翅附長                         |
+|                    | 緣毛                                     |
 +--------------------+------------------------------------------+
-| Plumose            | Feathery, densely branched. Male         |
-|                    | mosquitoes and midges (Diptera)          |
+
+翅脈之註：
+- 數主縱脈（costa、subcosta、radius、media、
+  cubitus、anal 脈）——數與分支模式為科診斷
+- 註橫脈形閉室——閉室之數與形
+  助區別科
+- 翅連機制（膜翅目之掛鉤、鱗翅目之翅韁）
+  示飛行中前後翅如何連
+```
+
+**預期：** 翅類已分，主要翅脈特徵已註。常見目此或確或精目級識別。
+
+**失敗時：** 若翅損、缺或折致脈不可見，註所見（如「鞘翅有，後翅未察」）並進下步。翅脈於科級最有用——目級識別通常不需詳脈。
+
+### 步驟四：察口器
+
+口器型反映食性生態，於目級為診斷。
+
+```
+口器類：
 +--------------------+------------------------------------------+
-| Lamellate          | Terminal segments expanded into flat      |
-|                    | plates. Scarab beetles (Scarabaeidae)    |
+| 類                 | 描述與相關目                             |
 +--------------------+------------------------------------------+
-| Geniculate         | Elbowed — a long first segment (scape)   |
-|                    | followed by an angle. Ants, weevils,     |
-|                    | many Hymenoptera                         |
+| 咀嚼               | 附齒或磨面之大顎。                       |
+| （咀嚼式）         | 鞘翅目、直翅目、                         |
+|                    | 膜翅目（部分）、蜻蛉目幼、              |
+|                    | 脈翅目                                    |
 +--------------------+------------------------------------------+
-| Aristate           | Short, 3-segmented with a bristle        |
-|                    | (arista). Many Diptera (house flies,     |
-|                    | fruit flies)                             |
+| 刺吸               | 喙狀吻內之細長口針。                      |
+|                    | 半翅目、蚤目、                            |
+|                    | 蝨目、部分雙翅目（蚊）                    |
 +--------------------+------------------------------------------+
-| Stylate            | Short, with a terminal style (finger-    |
-|                    | like projection). Some Diptera           |
-|                    | (horse flies, robber flies)              |
+| 虹吸               | 卷喙（haustellum）展                      |
+|                    | 以吸花蜜。鱗翅目（成蟲）                  |
++--------------------+------------------------------------------+
+| 舐吸               | 肉質唇瓣附偽氣管                          |
+|                    | 通道。多雙翅目（家蠅）                   |
++--------------------+------------------------------------------+
+| 嚼舐               | 大顎以操作 + 舌                          |
+|                    | （glossa）以舐液。                       |
+|                    | 膜翅目（蜂）                              |
++--------------------+------------------------------------------+
+| 銼吸               | 不對稱口器銼組織                          |
+|                    | 吸液。纓翅目                              |
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Antenna form identified and recorded. The antennal type should be consistent with the order identified in Step 2 (e.g., lamellate antennae confirm Scarabaeidae within Coleoptera; capitate antennae confirm butterfly rather than moth within Lepidoptera).
+**預期：** 口器類已分（咀嚼、刺吸、虹吸、舐吸或嚼舐）並註是否合於步驟二之目識別。
 
-**On failure:** If antennae are broken, missing, or obscured in photographs, note "antennae not fully visible — appeared [filiform/clubbed/etc.] from what was observed." Antennal form is one of the most reliable features for family-level identification, so the loss of this character reduces confidence. Proceed to Step 6.
+**失敗時：** 無放大常難於活或小樣本察口器。若不能察，略此步並註「口器未察」。拍照之正視可顯口器類。此步為確認，非目級識別所需。
 
-### Step 6: Examine Legs and Tarsal Structure
+### 步驟五：察觸角
 
-Leg specialization reveals the insect's ecology, and tarsal formula (number of segments per tarsus) is diagnostic at the family level in several orders.
-
-```
-Leg Specializations:
-+--------------------+------------------------------------------+
-| Specialization     | Description and Examples                 |
-+--------------------+------------------------------------------+
-| Cursorial          | Long, slender, built for running.        |
-| (running)          | Ground beetles (Carabidae), cockroaches  |
-+--------------------+------------------------------------------+
-| Saltatorial        | Enlarged hind femora for jumping.         |
-| (jumping)          | Grasshoppers, fleas, flea beetles       |
-+--------------------+------------------------------------------+
-| Raptorial          | Front legs with spined femur and tibia    |
-| (grasping)         | for seizing prey. Praying mantises,      |
-|                    | some Hemiptera (ambush bugs)             |
-+--------------------+------------------------------------------+
-| Fossorial          | Front legs broad and flattened for        |
-| (digging)          | digging. Mole crickets, scarab larvae    |
-+--------------------+------------------------------------------+
-| Natatorial         | Hind legs flattened and fringed with      |
-| (swimming)         | hairs for rowing. Water beetles,         |
-|                    | water boatmen                            |
-+--------------------+------------------------------------------+
-| Scansorial         | Tarsi with adhesive pads or claws for     |
-| (climbing)         | gripping surfaces. Many beetles, flies   |
-+--------------------+------------------------------------------+
-| Corbiculate        | Hind tibiae with pollen basket (corbicula)|
-|                    | Honey bees, bumble bees                  |
-+--------------------+------------------------------------------+
-
-Tarsal Formula:
-- Count tarsal segments on front, middle, and hind legs
-- Express as 3 numbers (e.g., 5-5-5 means 5 segments on all legs)
-- Common formulas:
-  5-5-5: Most Coleoptera families, Hymenoptera, Neuroptera
-  5-5-4: Cerambycidae, Chrysomelidae (apparent — actually cryptic 5th)
-  4-4-4: Some smaller beetle families
-  3-3-3: Some flies (Diptera)
-  Variable: Check all three pairs — asymmetry is diagnostic
-```
-
-**Expected:** Leg specialization type recorded and tarsal formula counted (if specimen allows). These features narrow identification within the order.
-
-**On failure:** If the specimen is too small for tarsal segments to be counted without a microscope, note the overall leg shape and any obvious specialization (jumping legs, digging legs). Tarsal formula is most useful for Coleoptera families — for other orders, general leg shape is sufficient.
-
-### Step 7: Assign Confidence Level
-
-Synthesize all observations into a final identification with an explicit confidence rating.
+觸角形為最易見之特徵之一，多目於科級為診斷。
 
 ```
-Confidence Assessment:
+觸角類：
++--------------------+------------------------------------------+
+| 形                 | 描述與診斷值                             |
++--------------------+------------------------------------------+
+| 絲狀               | 線狀，節相似。                           |
+|                    | 多直翅目、部分鞘翅目                     |
++--------------------+------------------------------------------+
+| 念珠狀             | 珠狀，圓節。白蟻、                       |
+|                    | 部分鞘翅目                                |
++--------------------+------------------------------------------+
+| 棒狀               | 漸向尖端加粗。                           |
+|                    | 部分鞘翅目（擬步行蟲）                    |
++--------------------+------------------------------------------+
+| 錘狀               | 尖端急成棒。蝶                            |
+|                    | （鱗翅目：錘角亞目）                      |
++--------------------+------------------------------------------+
+| 鋸齒狀             | 鋸齒狀節。部分鞘翅目                      |
+|                    | （叩頭蟲、吉丁蟲）                        |
++--------------------+------------------------------------------+
+| 櫛齒狀             | 一側櫛齒。                                |
+|                    | 部分蛾、部分鞘翅目                        |
++--------------------+------------------------------------------+
+| 雙櫛齒狀           | 兩側櫛齒。                                |
+|                    | 多蛾（特雄，以                           |
+|                    | 偵費洛蒙）                                |
++--------------------+------------------------------------------+
+| 羽狀               | 羽毛狀，密分支。                          |
+|                    | 雄蚊與蚋（雙翅目）                        |
++--------------------+------------------------------------------+
+| 鰓葉狀             | 尖端節展為扁                              |
+|                    | 片。金龜子（Scarabaeidae）                |
++--------------------+------------------------------------------+
+| 膝狀               | 彎曲——長首節（柄節）                     |
+|                    | 後轉角。蟻、象鼻蟲、                      |
+|                    | 多膜翅目                                  |
++--------------------+------------------------------------------+
+| 芒狀               | 短三節附剛毛                              |
+|                    | （芒）。多雙翅目（家蠅、                  |
+|                    | 果蠅）                                    |
++--------------------+------------------------------------------+
+| 針狀               | 短，附尖端針狀物                          |
+|                    | （指狀突）。部分雙翅目                    |
+|                    | （虻、食蟲虻）                            |
++--------------------+------------------------------------------+
+```
+
+**預期：** 觸角形已識並記。觸角類應合於步驟二所識之目（如鰓葉狀觸角確鞘翅目內之金龜科；錘狀觸角確鱗翅目內為蝶非蛾）。
+
+**失敗時：** 若觸角斷、缺或於照片中遮，註「觸角未全可見——所見似絲狀/錘狀等」。觸角形為科級識別之最可靠特徵之一，此性失減信心。進步驟六。
+
+### 步驟六：察足與跗節結構
+
+足特化顯昆蟲之生態，跗節式（每跗節數）於多目於科級為診斷。
+
+```
+足特化：
++--------------------+------------------------------------------+
+| 特化               | 描述與例                                 |
++--------------------+------------------------------------------+
+| 步行足             | 長細，為跑建。                           |
+|                    | 步行蟲（Carabidae）、蟑螂                |
++--------------------+------------------------------------------+
+| 跳躍足             | 後股增為跳。                             |
+|                    | 蝗、蚤、跳甲                             |
++--------------------+------------------------------------------+
+| 捕捉足             | 前足附刺股脛                              |
+|                    | 為捕獵。螳螂、                            |
+|                    | 部分半翅目（獵蝽）                        |
++--------------------+------------------------------------------+
+| 開掘足             | 前足寬扁為                                |
+|                    | 掘。螻蛄、金龜子幼                       |
++--------------------+------------------------------------------+
+| 游泳足             | 後足扁附纓毛                              |
+|                    | 為划。水甲蟲、                           |
+|                    | 划蝽                                      |
++--------------------+------------------------------------------+
+| 攀援足             | 跗節附吸墊或爪以                          |
+|                    | 握面。多甲蟲、蠅                         |
++--------------------+------------------------------------------+
+| 花粉籃足           | 後脛有花粉籃                              |
+|                    | 蜜蜂、熊蜂                                |
++--------------------+------------------------------------------+
+
+跗節式：
+- 數前、中、後足之跗節
+- 以三數表（如 5-5-5 示各足皆五節）
+- 常見式：
+  5-5-5：多鞘翅目科、膜翅目、脈翅目
+  5-5-4：天牛科、金花蟲科（表面——實隱五）
+  4-4-4：部分小甲蟲科
+  3-3-3：部分蠅（雙翅目）
+  變：核三對——不對稱為診斷
+```
+
+**預期：** 足特化類已記，跗節式已數（若樣本許）。此等特徵於目內縮識別。
+
+**失敗時：** 若樣本過小無顯微鏡不能數跗節，註整體足形與任何顯著特化（跳足、掘足）。跗節式於鞘翅目科最有用——他目則整體足形足矣。
+
+### 步驟七：指派信心層
+
+合所有觀察為最終識別附明確信心評級。
+
+```
+信心評估：
 +----------+---------------------------+---------------------------+
-| Level    | Criteria                  | Action                    |
+| 層       | 標準                      | 行動                      |
 +----------+---------------------------+---------------------------+
-| Certain  | All morphological features| Record as confirmed ID.   |
-|          | match; keyed through      | Label specimen or          |
-|          | dichotomous key cleanly;  | observation with species   |
-|          | no similar species in     | name.                     |
-|          | region could be confused  |                           |
+| 確定     | 所有形態特徵              | 記為確認 ID。             |
+|          | 配；經二分                 | 樣本或觀察                 |
+|          | 檢索表順行；              | 標物種名。                 |
+|          | 地區中無可混之             |                           |
+|          | 相似物種                  |                           |
 +----------+---------------------------+---------------------------+
-| Probable | Most features match;      | Record as probable ID.    |
-|          | keyed to family or genus; | Note which features are   |
-|          | 1-2 features uncertain or | uncertain. Seek additional|
-|          | not examined              | references or expert      |
-|          |                          | confirmation.              |
+| 或然     | 多數特徵配；              | 記為或然 ID。             |
+|          | 定至科或屬；              | 註哪些特徵                 |
+|          | 一二特徵不確或             | 不確。求附加                |
+|          | 未察                      | 參考或專家確認             |
 +----------+---------------------------+---------------------------+
-| Possible | Some features match;      | Record as possible ID.    |
-|          | keyed to order but not    | Photograph thoroughly.    |
-|          | further; similar taxa not | Submit to expert forum or |
-|          | fully eliminated          | citizen science platform  |
-|          |                          | for community review.     |
+| 可能     | 部分特徵配；              | 記為可能 ID。             |
+|          | 定至目但不                 | 詳拍照。                   |
+|          | 更細；相似類               | 送專家論壇或公              |
+|          | 未全排除                   | 民科學平台社群審           |
 +----------+---------------------------+---------------------------+
-| Unknown  | Cannot key beyond class   | Record all visible        |
-|          | Insecta; features not     | features. Photograph.     |
-|          | matching available keys;  | Seek expert identification|
-|          | specimen too damaged for  | or use molecular methods  |
-|          | morphological ID          | (DNA barcoding).          |
+| 未知     | 不能超昆蟲綱；            | 記所有可見                 |
+|          | 特徵不配                  | 特徵。拍照。               |
+|          | 現有檢索表；               | 求專家識別                 |
+|          | 樣本損於                  | 或用分子法                 |
+|          | 形態 ID                    | （DNA 條碼）               |
 +----------+---------------------------+---------------------------+
 
-Record your identification in this format:
-  Order: [name]
-  Family: [name or "uncertain"]
-  Genus: [name or "uncertain"]
-  Species: [name or "uncertain"]
-  Confidence: [Certain / Probable / Possible / Unknown]
-  Features examined: [list which steps were completed]
-  Features uncertain: [list any ambiguous characters]
-  Similar taxa considered: [what else it might be and why rejected]
+以此格式記識別：
+  目：[名]
+  科：[名或「不確」]
+  屬：[名或「不確」]
+  種：[名或「不確」]
+  信心：[確定/或然/可能/未知]
+  已察特徵：[列哪些步驟已完]
+  不確特徵：[列任何模糊之特徵]
+  所考相似類：[他可能為何及拒之由]
 ```
 
-**Expected:** A completed identification record with order (minimum), family and genus (if possible), explicit confidence level, and documentation of which features were examined and which were uncertain.
+**預期：** 完整識別記錄含目（至少）、科與屬（若可能）、明確信心層、及所察與不確特徵之記錄。
 
-**On failure:** If the identification stalls at order level, that is a valid outcome. Record all features observed and submit photographs to expert forums or citizen science platforms. Many insects require specialist knowledge or even genital dissection for species-level identification — this is normal, not a failure of the method.
+**失敗時：** 若識別止於目級，此為有效結果。記所觀察之所有特徵並送相片於專家論壇或公民科學平台。多昆蟲需專家知或甚至生殖器解剖方可作物種級識別——此為常，非法之失敗。
 
-## Validation
+## 驗證
 
-- [ ] The organism was confirmed as an insect (6 legs, 3 body regions, 1 pair antennae)
-- [ ] The dichotomous key was worked through systematically, documenting the path taken
-- [ ] Wing type was classified and venation features noted where visible
-- [ ] Mouthpart type was identified or noted as unexamined
-- [ ] Antenna form was identified using the standard terminology
-- [ ] Leg specialization and tarsal formula were recorded where possible
-- [ ] A confidence level was explicitly assigned (Certain/Probable/Possible/Unknown)
-- [ ] Similar taxa were considered and reasons for exclusion documented
+- [ ] 生物確為昆蟲（六足、三體區、一對觸角）
+- [ ] 二分檢索表已系統經行，所行路徑已記
+- [ ] 翅類已分，可見時翅脈特徵已註
+- [ ] 口器類已識或註為未察
+- [ ] 觸角形已以標準術語識
+- [ ] 可能時足特化與跗節式已記
+- [ ] 信心層已明指派（確定/或然/可能/未知）
+- [ ] 相似類已考，排除之由已記
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Skipping the body plan check**: Assuming an 8-legged arachnid is an insect because it "looks like a bug." Always count legs first. Ticks, mites, and harvestmen are commonly mistaken for insects
-- **Relying on color alone**: Color is the least reliable identification character in entomology. Many species are variable in color, and unrelated species can be nearly identical in coloration (mimicry). Always use structural features (wings, mouthparts, antennae) as primary characters
-- **Not checking both sides of a couplet**: In a dichotomous key, read both options before choosing. Rushing through leads to wrong branches. If neither option fits well, back up to the previous couplet
-- **Ignoring sexual dimorphism**: Males and females of the same species can look dramatically different. Male moths may have bipectinate antennae while females have filiform. Male stag beetles have enormous mandibles while females do not. Consider both sexes
-- **Confusing larval and adult forms**: Immature insects (larvae, nymphs) often look nothing like adults. Caterpillars (Lepidoptera larvae) have more than 6 true legs. Grubs (Coleoptera larvae) may lack visible legs entirely. Keys for adults do not work on larvae
-- **Forcing a species-level identification**: Many insect families contain hundreds of similar-looking species distinguishable only by genital morphology or DNA barcoding. An honest genus-level or family-level identification is more valuable than a wrong species name
+- **略體型檢查**：假設八足蛛形類為昆蟲因「似蟲」。永先數足。蜱、蟎、盲蛛常誤為昆蟲
+- **僅依色**：色為昆蟲學最不可靠之識別特徵。多物種色變，非近親物種色可近同（擬態）。永以結構特徵（翅、口器、觸角）為主特徵
+- **不核對句兩方**：二分檢索表中，擇前讀兩選。趕行致錯分支。若皆不宜，退至前對句
+- **忽視雌雄二形**：同物種雌雄可異相。雄蛾或有雙櫛齒觸角而雌為絲狀。雄鍬形蟲有巨大顎而雌無。考雌雄皆
+- **混幼成形**：幼蟲（幼、若蟲）常不似成蟲。毛毛蟲（鱗翅目幼）足超六。蠐螬（鞘翅目幼）或全無可見足。成蟲之檢索表於幼蟲不工作
+- **強物種級識別**：多昆蟲科含數百相似物種僅以生殖器形態或 DNA 條碼可別。誠實之屬級或科級識別勝於錯物種名
 
-## Related Skills
+## 相關技能
 
-- `document-insect-sighting` — record the sighting with photographs and metadata before or during identification
-- `observe-insect-behavior` — behavioral observations that supplement morphological identification with ecological context
-- `collect-preserve-specimens` — when a physical specimen is needed for definitive identification under magnification
-- `survey-insect-population` — applying identification skills across multiple specimens in a population-level survey
+- `document-insect-sighting` — 識別前或識別中以相片與元資料記觀察
+- `observe-insect-behavior` — 行為觀察補形態識別以生態情境
+- `collect-preserve-specimens` — 需實體樣本以供放大下明識時
+- `survey-insect-population` — 群體級調查中於多樣本施識別技能

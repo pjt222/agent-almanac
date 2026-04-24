@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Install and configure the putior R package for workflow visualization.
   Covers CRAN and GitHub installation, optional dependencies (mcptools,
@@ -26,26 +26,24 @@ metadata:
 
 # Install putior
 
-Install the putior R package and its optional dependencies so the annotation-to-diagram pipeline is ready to use.
+Install putior R pkg + optional deps → annotation-to-diagram pipeline ready.
 
-## When to Use
+## Use When
 
-- Setting up putior for the first time in a project or environment
-- Preparing a machine for workflow visualization tasks
-- A downstream skill (analyze-codebase-workflow, generate-workflow-diagram) requires putior to be installed
-- Restoring an environment after an R version upgrade or renv wipe
+- First-time setup in project/env
+- Prep machine for workflow viz
+- Downstream skill (analyze-codebase-workflow, generate-workflow-diagram) needs it
+- Restore after R ver upgrade / renv wipe
 
-## Inputs
+## In
 
-- **Required**: Access to an R installation (>= 4.1.0)
-- **Optional**: Whether to install from CRAN (default) or GitHub dev version
-- **Optional**: Which optional dependency groups to install: MCP (`mcptools`, `ellmer`), interactive (`shiny`, `shinyAce`), logging (`logger`), ACP (`plumber2`)
+- **Required**: R install (≥4.1.0)
+- **Optional**: CRAN (default) or GitHub dev ver
+- **Optional**: opt deps: MCP (`mcptools`, `ellmer`), interactive (`shiny`, `shinyAce`), logging (`logger`), ACP (`plumber2`)
 
-## Procedure
+## Do
 
-### Step 1: Verify R Installation
-
-Confirm R is available and meets the minimum version requirement.
+### Step 1: Verify R install
 
 ```r
 R.Version()$version.string
@@ -57,13 +55,11 @@ R.Version()$version.string
 "/mnt/c/Program Files/R/R-4.5.2/bin/Rscript.exe" -e "cat(R.version.string)"
 ```
 
-**Expected:** R version string printed, >= 4.1.0.
+→ R version printed, ≥4.1.0.
 
-**On failure:** Install or upgrade R. On Windows, download from https://cran.r-project.org/bin/windows/base/. On Linux, use `sudo apt install r-base`.
+**If err:** install/upgrade R. Windows → https://cran.r-project.org/bin/windows/base/. Linux → `sudo apt install r-base`.
 
 ### Step 2: Install putior
-
-Install from CRAN (stable) or GitHub (dev).
 
 ```r
 # CRAN (recommended)
@@ -73,13 +69,11 @@ install.packages("putior")
 remotes::install_github("pjt222/putior")
 ```
 
-**Expected:** Package installs without errors. `library(putior)` loads silently.
+→ Installs no errors. `library(putior)` loads silently.
 
-**On failure:** If CRAN installation fails with "not available for this version of R", use the GitHub version. If GitHub fails, check that `remotes` is installed: `install.packages("remotes")`.
+**If err:** CRAN fails "not available for R ver" → use GitHub. GitHub fails → check `remotes` installed: `install.packages("remotes")`.
 
-### Step 3: Install Optional Dependencies
-
-Install optional packages based on required functionality.
+### Step 3: Optional deps
 
 ```r
 # MCP server integration (for AI assistant access)
@@ -97,13 +91,11 @@ install.packages("logger")
 install.packages("plumber2")
 ```
 
-**Expected:** Each package installs without errors.
+→ Each installs no errors.
 
-**On failure:** For `mcptools`, ensure `remotes` is installed first. For system dependency errors on Linux, install the required libraries (e.g., `sudo apt install libcurl4-openssl-dev` for httr2 dependency).
+**If err:** `mcptools` → `remotes` first. Linux system dep errs → install libs (e.g., `sudo apt install libcurl4-openssl-dev` for httr2).
 
-### Step 4: Verify Installation
-
-Run the basic pipeline to confirm everything works.
+### Step 4: Verify
 
 ```r
 library(putior)
@@ -127,38 +119,38 @@ writeLines("# put id:'test', label:'Hello putior'", tmp)
 cat(put_diagram(put(tmp)))
 ```
 
-**Expected:** Mermaid flowchart code printed to console containing `test` and `Hello putior`.
+→ Mermaid flowchart w/ `test` + `Hello putior`.
 
-> **Key defaults**: All scan functions (`put()`, `put_auto()`, `put_generate()`, `put_merge()`) default to `recursive = TRUE`, scanning subdirectories automatically. This is a breaking change from pre-0.2.0 versions where the default was `FALSE`. All scan functions also accept an `exclude` parameter for regex-based file filtering (e.g., `put("./src/", exclude = "test_")`).
+> **Key defaults**: All scan fns (`put()`, `put_auto()`, `put_generate()`, `put_merge()`) default `recursive = TRUE`, scan subdirs auto. Breaking change from pre-0.2.0 where default was FALSE. All accept `exclude` param for regex file filtering (e.g., `put("./src/", exclude = "test_")`).
 
-If the optional `shiny` package is installed, try the interactive sandbox:
+If `shiny` installed → interactive sandbox:
 
 ```r
 putior::run_sandbox()
 ```
 
-This launches a browser-based editor where you can experiment with PUT annotation syntax and see diagrams rendered in real time.
+Browser-based editor for PUT annotation syntax + real-time diagrams.
 
-**On failure:** If `put` is not found, the package did not install correctly. Reinstall with `install.packages("putior", dependencies = TRUE)`. If the diagram is empty, verify the temp file was created and the annotation syntax uses single quotes inside double quotes.
+**If err:** `put` not found → pkg didn't install correctly. Reinstall `install.packages("putior", dependencies = TRUE)`. Empty diagram → verify temp file + annotation uses single quotes inside double.
 
-## Validation
+## Check
 
-- [ ] `library(putior)` loads without errors
-- [ ] `packageVersion("putior")` returns a valid version
-- [ ] `put()` with a file containing a valid PUT annotation returns a data frame with one row
-- [ ] `put_diagram()` produces Mermaid code starting with `flowchart`
-- [ ] All requested optional dependencies load without errors
+- [ ] `library(putior)` loads no errors
+- [ ] `packageVersion("putior")` valid version
+- [ ] `put()` on valid PUT annotation → DF w/ 1 row
+- [ ] `put_diagram()` → Mermaid starting `flowchart`
+- [ ] All requested opt deps load no errors
 
-## Common Pitfalls
+## Traps
 
-- **Wrong quote nesting**: PUT annotations use single quotes inside the annotation: `id:'name'`, not `id:"name"` (which conflicts with the comment string delimiter in some contexts).
-- **Missing Pandoc for vignettes**: If you plan to build putior's vignettes locally, ensure `RSTUDIO_PANDOC` is set in `.Renviron`.
-- **renv isolation**: If the project uses renv, you must install putior inside the renv library. Run `renv::install("putior")` instead of `install.packages("putior")`.
-- **GitHub rate limits**: Installing `mcptools` from GitHub may fail without a `GITHUB_PAT`. Set one via `usethis::create_github_token()`.
+- **Wrong quote nesting**: PUT uses single quotes inside annotation: `id:'name'` not `id:"name"` (conflicts w/ comment string delim).
+- **Missing Pandoc for vignettes**: build local → set `RSTUDIO_PANDOC` in `.Renviron`.
+- **renv isolation**: renv project → install inside renv lib: `renv::install("putior")` not `install.packages()`.
+- **GitHub rate limits**: `mcptools` from GitHub may fail w/o `GITHUB_PAT`. Set via `usethis::create_github_token()`.
 
-## Related Skills
+## →
 
-- `analyze-codebase-workflow` — next step after installation to survey a codebase
-- `configure-putior-mcp` — set up the MCP server after installing optional deps
-- `manage-renv-dependencies` — manage putior within an renv environment
-- `configure-mcp-server` — general MCP server configuration
+- `analyze-codebase-workflow` — next step post-install
+- `configure-putior-mcp` — MCP server after opt deps
+- `manage-renv-dependencies` — putior within renv env
+- `configure-mcp-server` — general MCP config

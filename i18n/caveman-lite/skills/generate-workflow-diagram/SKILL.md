@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate themed Mermaid flowchart diagrams from putior workflow data.
   Covers theme selection (9 themes including 4 colorblind-safe), output
@@ -76,9 +76,9 @@ The workflow data frame may include a `node_type` column from annotations. Node 
 
 Each `node_type` also receives a corresponding CSS class (e.g., `class nodeId input;`) for theme-based styling.
 
-**Expected:** A data frame with at least one row, containing `id`, `label`, and optionally `input`, `output`, `source_file`, `node_type` columns.
+**Got:** A data frame with at least one row, containing `id`, `label`, and optionally `input`, `output`, `source_file`, `node_type` columns.
 
-**On failure:** If the data frame is empty, no annotations or patterns were found. Run `analyze-codebase-workflow` first, or check that annotations are syntactically valid with `put("./src/", validate = TRUE)`.
+**If fail:** If the data frame is empty, no annotations or patterns were found. Run `analyze-codebase-workflow` first, or check that annotations are syntactically valid with `put("./src/", validate = TRUE)`.
 
 ### Step 2: Select Theme and Options
 
@@ -109,9 +109,9 @@ Additional parameters:
 - `source_info_style`: How source file info is displayed on nodes (e.g., as subtitle)
 - `node_labels`: Format for node label text
 
-**Expected:** Theme names printed. Select one based on context.
+**Got:** Theme names printed. Select one based on context.
 
-**On failure:** If a theme name is not recognized, `put_diagram()` falls back to `"light"`. Check spelling.
+**If fail:** If a theme name is not recognized, `put_diagram()` falls back to `"light"`. Check spelling.
 
 ### Step 3: Custom Palette with `put_theme()` (Optional)
 
@@ -134,9 +134,9 @@ writeLines(mermaid_content, "workflow.mmd")
 
 `put_theme()` accepts `input`, `process`, `output`, `decision`, `artifact`, `start`, and `end` node types. Each takes a named vector `c(fill = "#hex", stroke = "#hex", color = "#hex")`. Unset types inherit from the `base` theme.
 
-**Expected:** Mermaid output with your custom classDef lines. Node shapes from `node_type` are preserved; only colors change. All node types use `stroke-width:2px` — override not currently supported via `put_theme()`.
+**Got:** Mermaid output with your custom classDef lines. Node shapes from `node_type` are preserved; only colors change. All node types use `stroke-width:2px` — override not currently supported via `put_theme()`.
 
-**On failure:** If the palette object is not a `putior_theme` class, `put_diagram()` raises a descriptive error. Ensure you pass the return value of `put_theme()`, not a raw list.
+**If fail:** If the palette object is not a `putior_theme` class, `put_diagram()` raises a descriptive error. Ensure you pass the return value of `put_theme()`, not a raw list.
 
 **Fallback — manual classDef replacement:** For fine-grained control beyond what `put_theme()` offers (e.g., per-type stroke widths), generate with a base theme and replace classDef lines manually:
 
@@ -181,9 +181,9 @@ cat(put_diagram(workflow,
 ))
 ```
 
-**Expected:** Valid Mermaid code starting with `flowchart TD` (or `LR` depending on direction). Nodes are connected by arrows showing data flow.
+**Got:** Valid Mermaid code starting with `flowchart TD` (or `LR` depending on direction). Nodes are connected by arrows showing data flow.
 
-**On failure:** If the output is `flowchart TD` with no nodes, the workflow data frame is empty. If connections are missing, check that output filenames match input filenames across nodes.
+**If fail:** If the output is `flowchart TD` with no nodes, the workflow data frame is empty. If connections are missing, check that output filenames match input filenames across nodes.
 
 ### Step 5: Embed in Target Document
 
@@ -220,9 +220,9 @@ cat(knitr::knit_child(text = mermaid_chunk, quiet = TRUE))
 DiagrammeR::mermaid(put_diagram(workflow, output = "raw"))
 ```
 
-**Expected:** Diagram renders correctly in the target format. GitHub renders mermaid code fences natively.
+**Got:** Diagram renders correctly in the target format. GitHub renders mermaid code fences natively.
 
-**On failure:** If GitHub doesn't render the diagram, ensure the code fence uses exactly ` ```mermaid ` (no extra attributes). For Quarto, ensure the `knit_child()` approach is used since direct variable interpolation in `{mermaid}` chunks is not supported.
+**If fail:** If GitHub doesn't render the diagram, ensure the code fence uses exactly ` ```mermaid ` (no extra attributes). For Quarto, ensure the `knit_child()` approach is used since direct variable interpolation in `{mermaid}` chunks is not supported.
 
 ## Validation
 
@@ -232,7 +232,7 @@ DiagrammeR::mermaid(put_diagram(workflow, output = "raw"))
 - [ ] Selected theme is applied (check init block in output for theme-specific colors)
 - [ ] Diagram renders correctly in the target format (GitHub, Quarto, etc.)
 
-## Common Pitfalls
+## Pitfalls
 
 - **Empty diagrams**: Usually means `put()` returned no rows. Check annotations exist and are syntactically valid.
 - **All nodes disconnected**: Output filenames must exactly match input filenames (including extension) for putior to draw connections. `data.csv` and `Data.csv` are different.

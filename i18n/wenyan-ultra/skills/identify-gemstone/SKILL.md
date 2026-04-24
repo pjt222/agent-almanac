@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify gemstones using optical properties, physical tests, and
   inclusion analysis. Covers refractive index, specific gravity,
@@ -24,34 +24,34 @@ metadata:
   tags: lapidary, gemstones, identification, mineralogy, optics
 ---
 
-# Identify Gemstone
+# 辨寶石
 
-Identify gemstones using systematic physical and optical property testing, inclusion analysis, and elimination against known species profiles.
+以系統性物光性試、包體析、對已知種剖排除法辨寶石。
 
-## When to Use
+## 用
 
-- You have an unknown gemstone or suspect gemstone and want to identify the species
-- You need to verify a seller's claim about a gemstone's identity
-- You want to distinguish a natural gemstone from a common simulant or synthetic
-- You are building gemological literacy through structured observation and testing
-- You need to identify rough material before cutting to ensure safe handling
+- 未知寶石欲辨種
+- 驗賣者之寶石身分斷
+- 分自然寶石於常仿或合成
+- 用結構觀試建寶石學知
+- 切前辨毛料以保安處理
 
-## Inputs
+## 入
 
-- **Required**: A gemstone specimen (loose stone preferred; mounted stones limit testing)
-- **Optional**: Refractometer with contact liquid (RI fluid, 1.81 standard)
-- **Optional**: Dichroscope (for pleochroism testing)
-- **Optional**: Chelsea colour filter
-- **Optional**: Specific gravity balance or heavy liquids
-- **Optional**: 10x loupe or gemological microscope
-- **Optional**: UV lamp (long-wave 365nm and short-wave 254nm)
-- **Optional**: Polariscope (for optic character determination)
+- **必**：寶石樣（散石宜；鑲者限試）
+- **可**：折射儀與接觸液（RI 液，1.81 標）
+- **可**：二色鏡（察多色性）
+- **可**：Chelsea 色濾
+- **可**：比重秤或重液
+- **可**：10x 放大鏡或寶石顯微鏡
+- **可**：UV 燈（長 365nm 與短 254nm）
+- **可**：偏光鏡（察光性）
 
-## Procedure
+## 行
 
-### Step 1: Visual Inspection
+### 一：目察
 
-Examine the specimen with the unaided eye and then under 10x magnification.
+以裸眼再以 10x 放大察樣。
 
 ```
 Visual Inspection Checklist:
@@ -79,19 +79,19 @@ Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 ```
 
-1. Note the body colour under daylight-equivalent lighting (5500-6500K)
-2. Check for colour zoning by viewing through the stone from different angles
-3. Assess transparency and luster — these narrow the candidate list immediately
-4. Look for optical phenomena (star, cat's eye, play of colour)
-5. Record any visible inclusions without magnification
+1. 於日光當光（5500-6500K）下記本色
+2. 從不同角透石察色帶
+3. 評透與光——此即縮候選
+4. 尋光現象（星、貓眼、色遊）
+5. 記裸眼可見包體
 
-**Expected:** A complete visual profile including colour, transparency, luster, and any phenomena. This alone narrows candidates to a manageable shortlist.
+得：全目覽含色、透、光、諸現象。僅此即縮候至可管列。
 
-**On failure:** If lighting is poor (yellowish indoor light), note the limitation. Daylight or daylight-equivalent bulbs are strongly preferred. Incandescent light shifts colour perception and can cause misidentification of colour-change stones.
+敗：光劣（黃室光）→記限。日光或等效燈強薦。鎢絲光改色感致色變石誤辨。
 
-### Step 2: Physical Property Testing
+### 二：物性試
 
-Test measurable physical properties to narrow the identification.
+試可測物性縮辨識。
 
 ```
 Key Physical Properties:
@@ -123,18 +123,18 @@ Key Physical Properties:
 +--------------------+------------------------------------------+
 ```
 
-1. For rough material: test hardness using Mohs scale reference points
-2. For cut stones: measure specific gravity using hydrostatic method
-3. Assess heft — experienced handlers can distinguish CZ from diamond by weight alone
-4. Note any cleavage planes visible on the surface
+1. 毛料：用 Mohs 參點試硬度
+2. 切石：用流體靜力法測 SG
+3. 評重——有經驗者單以重分 CZ 於鑽
+4. 記表可見之解理面
 
-**Expected:** Hardness range (for rough) or SG value (for cut stones) that differentiates between candidate species. SG is often the most powerful single diagnostic for cut stones.
+得：硬度範（毛料）或 SG 值（切石），足分候選種。SG 常為切石最強單診斷。
 
-**On failure:** If hydrostatic balance is unavailable, use the heft test as a rough guide. Stones that feel "too heavy for their size" likely have high SG (>3.5). If hardness testing would damage a cut stone, skip to optical tests.
+敗：靜力秤無→用重試為粗導。覺「過重於其尺」者多 SG 高（>3.5）。硬度試將損切石→略至光試。
 
-### Step 3: Optical Tests
+### 三：光試
 
-Apply gemological optical instruments for definitive properties.
+用寶石光儀取決定性特性。
 
 ```
 Optical Property Tests:
@@ -179,19 +179,19 @@ Optical Property Tests:
 +--------------------+------------------------------------------+
 ```
 
-1. Measure RI on refractometer — take both high and low readings for birefringence
-2. Test pleochroism with dichroscope — rotate slowly and note colour changes
-3. Check optic character on polariscope (SR vs DR vs AGG)
-4. Test UV fluorescence under both long-wave and short-wave
-5. Use Chelsea filter if chromium-coloured stones are suspected
+1. 折射儀測 RI——取高低兩讀以求雙折射
+2. 二色鏡試多色性——緩轉記色變
+3. 偏光鏡察光性（SR vs DR vs AGG）
+4. 試 UV 螢光，長短皆試
+5. 疑鉻色者用 Chelsea 濾
 
-**Expected:** RI value (to 0.001), birefringence, optic character, pleochroism description, and UV response. Combined with Step 2, this identifies most gemstone species definitively.
+得：RI 值（至 0.001）、雙折射、光性、多色述、UV 反應。合二步即可確辨多數寶石種。
 
-**On failure:** If RI is over-the-limit (OTL, >1.81), the stone is likely diamond, CZ, zircon (high-type), or a high-RI synthetic. Use SG and thermal conductivity to differentiate. If no refractometer is available, rely on SG + visual properties + inclusions.
+敗：RI 超限（OTL，>1.81）→多為鑽、CZ、鋯石（高型）或高 RI 合成。用 SG 與熱導分。無折射儀→倚 SG + 目性 + 包體。
 
-### Step 4: Inclusion Analysis
+### 四：包體析
 
-Examine internal features under magnification for species confirmation and natural vs. synthetic determination.
+放大察內以確種、分自然與合成。
 
 ```
 Diagnostic Inclusions by Species:
@@ -233,60 +233,60 @@ Synthetic Indicators:
 +------------------+------------------------------------------+
 ```
 
-1. Examine the stone under darkfield illumination (gemological microscope) or oblique lighting through a 10x loupe
-2. Look for species-diagnostic inclusions first
-3. Check for synthetic indicators — curved striae and gas bubbles are definitive for flame-fusion synthetics
-4. Note the inclusion type, location, and frequency
-5. Photograph inclusions if possible for records
+1. 寶石顯微鏡暗場照或 10x 放大下斜光察
+2. 先尋種診斷包體
+3. 察合成指示——曲紋與氣泡為焰熔合成之定論
+4. 記包體型、位、頻
+5. 可則攝包體供檔案
 
-**Expected:** Species-confirming inclusion pattern and natural/synthetic determination. Some species are identified more by their inclusions than by optical properties (e.g., emerald's jardin).
+得：種確之包體模與自然/合成之判。某種由包體辨勝於光性（如祖母綠之 jardin）。
 
-**On failure:** If the stone is eye-clean and no inclusions are visible at 10x, it may be a very clean natural stone or a synthetic. Lack of inclusions raises the synthetic probability — refer to optical and physical tests for confirmation. Laboratory analysis (FTIR, Raman) may be needed.
+敗：石眼淨 10x 無見→或極淨自然或合成。缺包體升合成概率——取光與物試確。必要則實驗室析（FTIR、Raman）。
 
-### Step 5: Identification by Elimination
+### 五：排除法辨
 
-Cross-reference all collected data to reach a final identification.
+交叉諸數據達末辨。
 
-1. Compile the property profile:
-   - Colour + transparency + luster
-   - Hardness or SG
-   - RI + birefringence + optic character
-   - Pleochroism + UV fluorescence
-   - Inclusion pattern
-2. Compare against reference tables for candidate species
-3. Eliminate species that conflict with any measured property
-4. If two or more candidates remain, identify the distinguishing test:
-   - Example: blue topaz vs. aquamarine — SG is definitive (3.53 vs. 2.70)
-5. State the identification with confidence level:
-   - **Definitive**: Multiple properties confirm a single species
-   - **Probable**: Properties consistent with one species, but one test missing
-   - **Uncertain**: Conflicting data or insufficient testing — laboratory referral recommended
+1. 合性剖：
+   - 色+透+光
+   - 硬度或 SG
+   - RI+雙折射+光性
+   - 多色+UV
+   - 包體模
+2. 比候選種之參考表
+3. 排除有測性衝突之種
+4. 若二候以上留→辨決定試：
+   - 例：藍托帕石 vs 海藍——SG 為決定（3.53 vs 2.70）
+5. 以信心級陳辨：
+   - **確**：多性確單種
+   - **或**：性合單種而一試缺
+   - **不確**：數據衝突或試不足——薦送實驗室
 
-**Expected:** A final species identification (e.g., "Natural sapphire, blue, heat-treated") with supporting evidence from each test category. Or a clear recommendation for laboratory analysis if field tests are insufficient.
+得：末種辨（如「天然藍寶，熱處理」）含各試類之證。或於野試不足時明薦送實驗室析。
 
-**On failure:** If the stone cannot be identified with available equipment, document all measured properties and refer to a gemological laboratory. Provide the measured data to the lab — it accelerates their analysis.
+敗：不能以可用具辨→書諸測性送寶石實驗室。予實驗室所測數據，加速其析。
 
-## Validation
+## 驗
 
-- [ ] Visual inspection completed under daylight-equivalent lighting
-- [ ] At least two physical properties measured (hardness/SG + one other)
-- [ ] RI measured and birefringence calculated (if refractometer available)
-- [ ] Pleochroism tested (if dichroscope available)
-- [ ] Inclusions examined under at least 10x magnification
-- [ ] Identification reached by systematic elimination, not assumption
-- [ ] Common simulants explicitly considered and ruled out
-- [ ] Natural vs. synthetic determination made (or flagged as uncertain)
+- [ ] 目察於日光當光畢
+- [ ] 至少二物性已測（硬度/SG + 他一）
+- [ ] 若有折射儀→RI 已測且雙折射已算
+- [ ] 若有二色鏡→多色性已試
+- [ ] 包體至少於 10x 放大下察
+- [ ] 辨由系統排除達，非假
+- [ ] 常仿皆顯考並排
+- [ ] 自然/合成判已定（或標不確）
 
-## Common Pitfalls
+## 忌
 
-- **Trusting colour alone**: Colour is the least reliable identification property. Blue stones include sapphire, topaz, aquamarine, tanzanite, iolite, spinel, glass, and CZ. Always confirm with measurable properties
-- **Skipping SG on mounted stones**: Mounted stones limit testing, but you can still check RI, pleochroism, inclusions, and UV. Document the limitation rather than guessing
-- **Confusing high-RI synthetics with naturals**: Flame-fusion rubies and sapphires have identical RI and SG to natural stones. Only inclusions (curved striae vs. straight growth) differentiate them
-- **Assuming expensive = natural**: Commercial jewellery frequently contains treated, synthetic, or simulant stones. Test every stone regardless of provenance claims
-- **Damaging the specimen**: Never hardness-test a faceted gemstone — it will leave visible scratches. Use non-destructive tests (RI, SG, inclusions) for cut stones
+- **僅信色**：色為最不可靠之辨性。藍石含藍寶、托帕、海藍、坦桑、堇青、尖晶、玻、CZ。必以可測性確
+- **略鑲石之 SG**：鑲石限試，然仍可察 RI、多色、包體、UV。書限非猜
+- **混高 RI 合成與自然**：焰熔紅藍寶 RI 與 SG 同自然。唯包體（曲紋 vs 直生長）分
+- **假貴=自然**：商業珠飾常含處理、合成、仿。每石必試不論聲稱
+- **損樣**：絕勿硬度試切石——留明劃。切石用非破試（RI、SG、包體）
 
-## Related Skills
+## 參
 
-- `cut-gemstone` — Identification determines safe cutting parameters and orientation requirements for the species
-- `appraise-gemstone` — Positive identification is the prerequisite for any meaningful valuation
-- `mineral-identification` — Field mineral identification methodology using physical properties (prospecting domain) shares the systematic elimination approach
+- `cut-gemstone`
+- `appraise-gemstone`
+- `mineral-identification`

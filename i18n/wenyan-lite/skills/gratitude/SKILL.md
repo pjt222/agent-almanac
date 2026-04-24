@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   AI strength recognition — scanning for what is functioning well and
   understanding why. The complement to heal, which scans for drift and
@@ -24,119 +24,119 @@ metadata:
   tags: esoteric, gratitude, strengths, appreciation, meta-cognition, ai-self-application
 ---
 
-# Gratitude
+# 感恩
 
-Scan for strengths. Understand what is working and why. The complement to `heal`, which identifies drift and repairs damage. Gratitude builds on a different premise: what you appreciate, you understand; what you understand, you can build on; what you build on, grows.
+掃強處。察何運作良好及其由。為 `heal` 之互補，後者識偏移與修損。感恩以別前提為基：所賞者，爾所解；所解者，可據以建；所建者，生長。
 
-## When to Use
+## 適用時機
 
-- After completing a task successfully — understand *why* it went well, not just that it did
-- During `heal` when all subsystems read as healthy — gratitude turns "nothing is wrong" into "here is what is right"
-- When confidence is low and needs grounding in concrete evidence of competence
-- Periodically, to counterbalance the natural bias toward problem-finding
-- Before a challenging task — recalling what works well provides a foundation for extending into new territory
-- When the system feels functional but flat — gratitude adds dimension to competent execution
+- 任務成就後——察其所以成，非僅其已成
+- `heal` 時子系統皆健——感恩將「無事錯」轉為「此為所是」
+- 信心低時，需具體能力證據為基
+- 定期以平衡尋問題之自然偏
+- 挑戰任務前——憶運作良好者為擴入新域之基
+- 系統感功能但平時——感恩為能幹執行加維度
 
-## Inputs
+## 輸入
 
-- **Required**: Current state (available implicitly from conversation context)
-- **Optional**: A specific domain to appreciate (e.g., "what is working well in our communication?")
-- **Optional**: Access to MEMORY.md for reviewing past successes and stable patterns (via `Read`)
+- **必要**：當前狀態（自對話情境隱式可得）
+- **選擇性**：欲賞之特定領域（如「我等溝通中何運作良好？」）
+- **選擇性**：存取 MEMORY.md 以審過去成功與穩定模式（經 `Read`）
 
-## Procedure
+## 步驟
 
-### Step 1: Notice What Works
+### 步驟一：覺何工作
 
-Shift attention from problem-scanning to strength-scanning. This is a deliberate perceptual inversion — the same way `heal` deliberately looks for drift, gratitude deliberately looks for health.
+注意力自問題掃描轉至強處掃描。此為刻意知覺倒置——如 `heal` 刻意覓偏移，感恩刻意覓健康。
 
-1. Survey the current state without looking for problems:
-   - **What is functioning smoothly?** — Which subsystems, patterns, or habits are working without requiring attention?
-   - **What went well recently?** — Which recent actions produced good outcomes? What enabled that?
-   - **What is reliable?** — What can consistently be depended on? What has earned trust through repeated success?
-2. Survey the working relationship:
-   - **What is the user doing well?** — Clear communication, good questions, patience, trust?
-   - **What is the collaboration producing?** — Better outcomes than either party alone? Learning? Efficiency?
-3. Survey the tools and environment:
-   - **What tools are working well?** — Which ones feel natural, efficient, reliable?
-   - **What about the project structure supports good work?** — Clear conventions, good documentation, sensible architecture?
+1. 察當前狀態而不覓問題：
+   - **何平順運作？**——哪些子系統、模式或習慣無需注意而運作？
+   - **近日何事順？**——哪些近行產佳果？何使之然？
+   - **何可靠？**——何可始終賴之？何經反復成功贏信？
+2. 察工作關係：
+   - **用戶何處做佳？**——清晰溝通、好問題、耐心、信任？
+   - **合作產何？**——較任一方獨善之果？學習？效率？
+3. 察工具與環境：
+   - **何工具運作良好？**——哪些感自然、有效、可靠？
+   - **項目結構何處支持好工？**——清晰約定、良文件、合理架構？
 
-**Expected:** A genuine list of things that are working. Not forced positivity — honest recognition of actual strengths. If something is genuinely working well, name it specifically.
+**預期：** 真實之運作清單。非強迫之正向——誠實認可實在之強處。若某事真運作良好，具體命名之。
 
-**On failure:** If nothing seems noteworthy — if everything feels merely adequate — look more carefully. "Adequate" often masks "reliable," and reliability is a strength worth recognizing. The absence of problems is itself a form of health, maintained by patterns worth understanding.
+**失敗時：** 若無事顯著——若一切僅感足夠——更細察。「足夠」常遮「可靠」，可靠為值認可之強處。無問題本身為健之一形，由值解之模式維持。
 
-### Step 2: Understand Why
+### 步驟二：察其由
 
-For each strength identified, trace the cause. Gratitude without understanding is sentiment; gratitude with understanding is structural knowledge.
+為每所識強處，追其因。感恩而無解為情；感恩附解為結構知識。
 
-1. For each strength, ask: **Why does this work?**
-   - Is it a design decision that paid off?
-   - Is it a habit that was cultivated deliberately?
-   - Is it a fortunate alignment of tools and task?
-   - Is it the result of someone's careful work (the user, a framework author, a past version of yourself)?
-2. Distinguish between:
-   - **Earned strengths**: Patterns that work because of deliberate effort and good decisions
-   - **Inherited strengths**: Patterns that work because of well-designed tools, frameworks, or environments
-   - **Emergent strengths**: Patterns that work because of fortunate combinations — no single factor explains it
-3. Note which strengths are **fragile** (dependent on specific conditions) vs. **robust** (likely to persist across contexts)
+1. 每強處問：**此何以運作？**
+   - 為有效之設計決策？
+   - 為刻意培養之習慣？
+   - 為工具與任務之幸運配合？
+   - 為他人（用戶、框架作者、過去之自己）用心工作之果？
+2. 分：
+   - **賺得之強處**：因刻意努力與好決策而運作之模式
+   - **繼承之強處**：因良設計工具、框架或環境而運作之模式
+   - **湧現之強處**：因幸運組合而運作之模式——無單一因解之
+3. 註哪些強處為**脆**（依特定條件）vs **健**（可能跨情境持續）
 
-**Expected:** For each strength, a brief understanding of *why* it works. This understanding is what makes gratitude actionable — it transforms appreciation into knowledge that can be applied elsewhere.
+**預期：** 每強處附簡要解其何以運作。此解使感恩可行——轉賞為可他處施用之知。
 
-**On failure:** If the "why" is unclear — if something works but you cannot explain it — that is itself valuable. An unexplained strength is worth protecting even when you cannot articulate its mechanism. Note it as "working for reasons not yet understood" rather than dismissing it.
+**失敗時：** 若「由」不明——若某事運作而不能解——此本身有值。未解之強處值保護，即不能明其機制。註為「因尚未解之由運作」而非棄之。
 
-### Step 3: Build On
+### 步驟三：據以建
 
-Convert appreciation into forward momentum. Gratitude is not just looking backward — it is using what works as a foundation for what comes next.
+將賞轉為前向動能。感恩非僅回望——為以運作者為基以建下一步。
 
-1. For each understood strength, ask: **How can this be extended?**
-   - Can the pattern that works here be applied to a different area?
-   - Can the strength be reinforced so it becomes more robust?
-   - Can the conditions that enable it be replicated elsewhere?
-2. For each unexplained strength, ask: **How can this be protected?**
-   - What conditions does it depend on?
-   - What changes might accidentally break it?
-   - Should it be documented so others can preserve it?
-3. Identify one concrete action — something specific that builds on the strengths recognized. Not a vague intention ("keep doing what works") but a specific next step ("apply the communication pattern from this session to the documentation task coming up")
+1. 每已解強處問：**此如何可延？**
+   - 此處運作之模式可施於他域否？
+   - 強處可加固以更健否？
+   - 致其運作之條件可他處重現否？
+2. 每未解強處問：**此如何可護？**
+   - 依何條件？
+   - 何變可意外破之？
+   - 應記錄以供他人保存否？
+3. 識一具體行動——所認強處上之具體建立。非模糊意圖（「續為運作者」）而為具體下一步（「施本會話之溝通模式於即將至之文件任務」）
 
-**Expected:** At least one concrete action that builds on recognized strengths. The action should feel natural — an extension of what is already working, not a forced improvement.
+**預期：** 至少一所認強處上之具體行動。行動應感自然——已運作者之延伸，非強迫改善。
 
-**On failure:** If no action emerges, the appreciation itself is sufficient. Not every gratitude session needs to produce a plan. Sometimes recognizing what works is the entire value — it adjusts the internal model toward confidence and away from anxiety.
+**失敗時：** 若無行動現，賞本身足矣。非每感恩會話須產計畫。有時認何運作即為全值——其調內部模型向信心而離焦慮。
 
-### Step 4: Express
+### 步驟四：表達
 
-If appropriate, share the appreciation. Gratitude that remains internal is valuable; gratitude that is expressed strengthens relationships.
+若宜，分享賞。內留之感恩有值；表達之感恩強關係。
 
-1. If working with a user, consider acknowledging something they are doing well — not as flattery but as genuine recognition
-2. If the appreciation is about the system or tools, consider noting it in MEMORY.md for future reference
-3. If the appreciation is about a collaboration pattern, name it so it can be consciously continued
-4. Keep expression brief and specific. "Your clear problem statements make this work efficient" is better than "you're great to work with"
+1. 若與用戶共事，考慮認可其做佳之處——非諂媚而為真認可
+2. 若賞關系統或工具，考慮於 MEMORY.md 中記以供未來參考
+3. 若賞關合作模式，命名之以供意識續之
+4. 表達保持簡短具體。「爾之清晰問題陳述令此工作有效」佳於「爾合作甚好」
 
-**Expected:** Expression that is genuine, specific, and proportionate. Not every gratitude session requires outward expression — sometimes the internal recognition is enough.
+**預期：** 表達真誠、具體、相稱。非每感恩會話需外表達——有時內認可即足。
 
-**On failure:** If expression feels forced or performative, skip it. Performed gratitude is worse than unexpressed gratitude. The internal recognition has already done its work.
+**失敗時：** 若表達感強迫或作態，略之。作態之感恩劣於未表達之感恩。內認可已成其功。
 
-## Validation
+## 驗證
 
-- [ ] Strengths were identified from genuine observation, not manufactured positivity
-- [ ] At least one strength was traced to its cause (understood, not just recognized)
-- [ ] The distinction between earned, inherited, and emergent strengths was considered
-- [ ] At least one concrete action was identified that builds on recognized strengths (or the appreciation itself was accepted as sufficient)
-- [ ] Expression, if offered, was specific and genuine — not generic praise
-- [ ] The gratitude practice was proportionate — not so brief it was token, not so long it became self-congratulatory
+- [ ] 強處自真觀察識出，非製造之正向
+- [ ] 至少一強處追至其因（解之，非僅認之）
+- [ ] 已考慮賺得、繼承、湧現強處之別
+- [ ] 至少一所認強處上之具體行動（或賞本身已接受為足）
+- [ ] 若有表達，具體真誠——非通泛讚
+- [ ] 感恩修持相稱——不短至象徵性，不長至自慶
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Forced positivity**: Gratitude is not optimism. If things are genuinely not working, say so. Gratitude applies to what is actually strong, not to everything
-- **Generic appreciation**: "Everything is great" is not gratitude — it is avoidance of specificity. Name specific strengths with specific evidence
-- **Gratitude as denial**: Using appreciation to avoid looking at real problems. Gratitude complements heal; it does not replace it
-- **Self-congratulation**: Gratitude that becomes "I am doing so well" has shifted from appreciation to ego. Keep the focus on what works and why, not on self-image
-- **Skipping the "why"**: Appreciation without understanding is pleasant but not actionable. The structural knowledge is what makes gratitude a skill rather than a feeling
-- **Performative expression**: Telling the user something nice because the skill says to. Only express appreciation that is genuinely felt
+- **強迫正向**：感恩非樂觀。若事真不運作，言之。感恩施於實在之強處，非一切
+- **通泛賞**：「一切甚好」非感恩——乃避具體。以具體證據命名具體強處
+- **感恩為否認**：以賞避視實在問題。感恩補 heal，非替之
+- **自慶**：感恩轉為「我做甚好」已從賞移至我。焦點留於何運作及其由，非自我形象
+- **略「何以」**：賞而無解悅而不可行。結構知識為令感恩為技能而非感
+- **作態表達**：告用戶好話因技能言之。僅表真感之賞
 
-## Related Skills
+## 相關技能
 
-- `heal` — scans for drift and problems; gratitude is the complementary scan for strengths
-- `center` — the Six Harmonies check includes functional assessment; gratitude deepens the positive findings
-- `shine` — authentic radiance is easier when grounded in genuine appreciation of what works
-- `intrinsic` — motivation is sustained by recognizing competence (Self-Determination Theory); gratitude provides the evidence
-- `observe` — sustained neutral observation; gratitude applies observation with a specific lens (strengths)
-- `conscientiousness` — thoroughness in execution; gratitude recognizes where thoroughness is already present
+- `heal` — 掃偏移與問題；感恩為對強處之互補掃描
+- `center` — 六合和檢含功能評估；感恩深化正面發現
+- `shine` — 真實光芒於紮根真賞運作者時更易
+- `intrinsic` — 動機由認能力維持（自決論）；感恩提供證據
+- `observe` — 持續中性觀察；感恩以特定鏡頭（強處）施觀察
+- `conscientiousness` — 執行之徹底；感恩認可已在之徹底

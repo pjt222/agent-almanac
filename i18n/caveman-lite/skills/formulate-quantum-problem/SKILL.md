@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Formulate a quantum mechanics or quantum chemistry problem with proper
   mathematical framework including Hilbert space, operators, boundary conditions,
@@ -26,7 +26,7 @@ metadata:
 
 # Formulate Quantum Problem
 
-Translate a physical system into a well-posed quantum mechanical problem by identifying the relevant degrees of freedom, constructing the Hamiltonian and state space, specifying boundary conditions, selecting an appropriate approximation method, and validating the formulation against known limits.
+Translate a physical system into a well-posed quantum mechanical problem: identify the relevant degrees of freedom, construct the Hamiltonian and state space, specify boundary conditions, select an approximation method, and validate the formulation against known limits.
 
 ## When to Use
 
@@ -48,7 +48,7 @@ Translate a physical system into a well-posed quantum mechanical problem by iden
 
 ### Step 1: Identify Physical System and Relevant Degrees of Freedom
 
-Characterize the system completely before writing any equations:
+Characterize the system completely before writing equations:
 
 1. **Particle content**: List all particles (electrons, nuclei, photons, phonons) and their quantum numbers (spin, charge, mass).
 2. **Symmetries**: Identify spatial symmetries (spherical, cylindrical, translational, crystal group), internal symmetries (spin rotation, gauge), and discrete symmetries (parity, time reversal).
@@ -64,9 +64,9 @@ Characterize the system completely before writing any equations:
 - **Energy scale hierarchy**: [e.g., electronic >> vibrational >> rotational]
 ```
 
-**Expected:** A complete inventory of particles, quantum numbers, symmetries, and a justified selection of active versus frozen degrees of freedom.
+**Got:** A complete inventory of particles, quantum numbers, symmetries, and a justified selection of active versus frozen degrees of freedom.
 
-**On failure:** If the energy scale hierarchy is unclear, retain all degrees of freedom initially and flag the need for a scale analysis. Premature truncation leads to qualitatively wrong physics.
+**If fail:** If the energy scale hierarchy is unclear, retain all degrees of freedom initially and flag the need for a scale analysis. Premature truncation leads to qualitatively wrong physics.
 
 ### Step 2: Construct Hamiltonian and State Space
 
@@ -88,9 +88,9 @@ Build the mathematical framework from the degrees of freedom identified in Step 
 - **Symmetry-adapted basis**: [if block diagonalization is possible]
 ```
 
-**Expected:** A complete, Hermitian Hamiltonian with all terms explicitly written, the Hilbert space defined, and constants of motion identified.
+**Got:** A complete, Hermitian Hamiltonian with all terms explicitly written, the Hilbert space defined, and constants of motion identified.
 
-**On failure:** If the Hamiltonian is not manifestly Hermitian, check for missing conjugate terms or gauge-dependent phases. If the Hilbert space is ambiguous (e.g., for relativistic particles), specify the formalism explicitly and note the issue.
+**If fail:** If the Hamiltonian is not manifestly Hermitian, check for missing conjugate terms or gauge-dependent phases. If the Hilbert space is ambiguous (e.g., for relativistic particles), specify the formalism explicitly and note the issue.
 
 ### Step 3: Specify Boundary and Initial Conditions
 
@@ -110,9 +110,9 @@ Constrain the problem to have a unique solution:
 - **Initial state** (if time-dependent): [specification]
 ```
 
-**Expected:** Boundary conditions that are physically motivated, mathematically consistent with the Hamiltonian's domain, and sufficient to determine a unique solution (or a well-defined scattering matrix).
+**Got:** Boundary conditions that are physically motivated, mathematically consistent with the Hamiltonian's domain, and sufficient to determine a unique solution (or a well-defined scattering matrix).
 
-**On failure:** If boundary conditions are over- or under-determined, check the self-adjointness of the Hamiltonian on the chosen domain. Non-self-adjoint Hamiltonians require careful treatment of deficiency indices.
+**If fail:** If boundary conditions are over- or under-determined, check the self-adjointness of the Hamiltonian on the chosen domain. Non-self-adjoint Hamiltonians require careful treatment of deficiency indices.
 
 ### Step 4: Select Approximation Method
 
@@ -151,9 +151,9 @@ Choose a solution strategy appropriate to the problem's structure:
 - **Alternatives considered**: [and why they were rejected]
 ```
 
-**Expected:** A justified choice of approximation method with a clear statement of expected accuracy and computational cost, plus documentation of alternatives considered.
+**Got:** A justified choice of approximation method with a clear statement of expected accuracy and computational cost, plus documentation of alternatives considered.
 
-**On failure:** If no single method is clearly appropriate, formulate the problem for two methods and compare results. Disagreement between methods reveals the problem's difficulty and guides further refinement.
+**If fail:** If no single method is clearly appropriate, formulate the problem for two methods and compare results. Disagreement between methods reveals the problem's difficulty and guides further refinement.
 
 ### Step 5: Validate Formulation Against Known Limits
 
@@ -176,9 +176,9 @@ Before solving, verify the formulation reproduces known physics:
 | Known exact case | [reproduced result] | [Pass/Fail] |
 ```
 
-**Expected:** All validation checks pass. The formulation is self-consistent and ready for solution.
+**Got:** All validation checks pass. The formulation is self-consistent and ready for solution.
 
-**On failure:** A failing validation check indicates an error in the Hamiltonian construction or boundary conditions. Trace the failure back to the specific term or condition and correct it before proceeding to solve.
+**If fail:** A failing validation check indicates an error in the Hamiltonian construction or boundary conditions. Trace the failure back to the specific term or condition and correct it before proceeding to solve.
 
 ## Validation
 
@@ -193,12 +193,12 @@ Before solving, verify the formulation reproduces known physics:
 - [ ] Known exact results are reproduced in special cases
 - [ ] The formulation is complete enough for another researcher to implement
 
-## Common Pitfalls
+## Pitfalls
 
-- **Omitting degrees of freedom prematurely**: Freezing a degree of freedom without checking the energy scale hierarchy can miss qualitatively important physics. Always justify every reduction with an energy scale argument.
-- **Non-Hermitian Hamiltonian**: Forgetting conjugate terms in spin-orbit coupling or complex potentials. Always verify H = H-dagger explicitly.
+- **Omitting degrees of freedom prematurely**: Freezing a degree of freedom without checking the energy scale hierarchy can miss qualitatively important physics. Justify every reduction with an energy scale argument.
+- **Non-Hermitian Hamiltonian**: Forgetting conjugate terms in spin-orbit coupling or complex potentials. Verify H = H-dagger explicitly.
 - **Wrong boundary conditions for scattering**: Using bound-state boundary conditions (normalizability) for a scattering problem discards the continuous spectrum entirely. Match boundary conditions to the physical question.
-- **Ignoring degeneracy in perturbation theory**: Applying non-degenerate perturbation theory to a degenerate level produces divergent corrections. Always check for degeneracy before expanding.
+- **Ignoring degeneracy in perturbation theory**: Applying non-degenerate perturbation theory to a degenerate level produces divergent corrections. Check for degeneracy before expanding.
 - **Over-reliance on a single approximation**: Different methods have complementary failure modes. Variational methods give upper bounds but can miss excited states. Perturbation theory diverges at strong coupling. Cross-validate when possible.
 - **Dimensional inconsistency**: Mixing natural units (hbar = 1) with SI units in the same expression. Adopt a consistent unit system at the start and state it explicitly.
 

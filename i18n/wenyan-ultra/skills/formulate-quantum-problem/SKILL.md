@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Formulate a quantum mechanics or quantum chemistry problem with proper
   mathematical framework including Hilbert space, operators, boundary conditions,
@@ -24,36 +24,36 @@ metadata:
   tags: theoretical, quantum-mechanics, quantum-chemistry, hilbert-space, formulation
 ---
 
-# Formulate Quantum Problem
+# 立量子問題
 
-Translate a physical system into a well-posed quantum mechanical problem by identifying the relevant degrees of freedom, constructing the Hamiltonian and state space, specifying boundary conditions, selecting an appropriate approximation method, and validating the formulation against known limits.
+析自由度、建 Hamiltonian 與狀空、定邊界、擇近似、驗極限。
 
-## When to Use
+## 用
 
-- Setting up a quantum mechanics problem for analytic or numerical solution
-- Formulating a quantum chemistry calculation (molecular orbitals, electronic structure)
-- Translating a physical scenario into the Dirac or Schrodinger formalism
-- Choosing between perturbation theory, variational methods, DFT, or exact diagonalization
-- Preparing a theoretical model for comparison with experimental spectroscopic or scattering data
+- 立量子力學題供析或數解
+- 立量子化學算（分子軌、電子結構）
+- 轉物理場景為 Schrodinger 或 Dirac 形
+- 擇攝動、變分、DFT 或精確對角
+- 備理論模比於譜或散射實驗
 
-## Inputs
+## 入
 
-- **Required**: Description of the physical system (atom, molecule, solid, field, etc.)
-- **Required**: Observable(s) of interest (energy spectrum, transition rates, ground state properties)
-- **Optional**: Experimental constraints or data to match (spectral lines, binding energies)
-- **Optional**: Desired accuracy level or computational budget
-- **Optional**: Preferred formalism (wave mechanics, matrix mechanics, second quantization, path integral)
+- **必**：系之描（原子、分子、固體、場）
+- **必**：所觀（能譜、躍遷率、基態性）
+- **可**：實驗約束或數據（譜線、結合能）
+- **可**：精度與算量預算
+- **可**：偏好之形（波、矩陣、二次量子化、路徑積分）
 
-## Procedure
+## 行
 
-### Step 1: Identify Physical System and Relevant Degrees of Freedom
+### 一：辨系與活自由度
 
-Characterize the system completely before writing any equations:
+寫式前全察：
 
-1. **Particle content**: List all particles (electrons, nuclei, photons, phonons) and their quantum numbers (spin, charge, mass).
-2. **Symmetries**: Identify spatial symmetries (spherical, cylindrical, translational, crystal group), internal symmetries (spin rotation, gauge), and discrete symmetries (parity, time reversal).
-3. **Energy scales**: Determine the relevant energy scales to decide which degrees of freedom are active and which can be frozen or treated adiabatically.
-4. **Degrees of freedom reduction**: Apply the Born-Oppenheimer approximation if nuclear and electronic timescales separate. Identify collective coordinates if many-body simplifications apply.
+1. **粒子**：列諸粒（電、核、光、聲子）及其量數（自旋、荷、質）
+2. **對稱**：空間（球、柱、平移、晶群）、內（自旋旋、規）、離散（宇稱、時反）
+3. **能階**：定相關能階，以擇活與凍或絕熱自由度
+4. **減自由度**：核/電時標分→用 Born-Oppenheimer。多體簡化→辨集體坐標
 
 ```markdown
 ## System Characterization
@@ -64,19 +64,19 @@ Characterize the system completely before writing any equations:
 - **Energy scale hierarchy**: [e.g., electronic >> vibrational >> rotational]
 ```
 
-**Expected:** A complete inventory of particles, quantum numbers, symmetries, and a justified selection of active versus frozen degrees of freedom.
+得：全目錄（粒、量數、對稱），活凍自由度皆明由。
 
-**On failure:** If the energy scale hierarchy is unclear, retain all degrees of freedom initially and flag the need for a scale analysis. Premature truncation leads to qualitatively wrong physics.
+敗：能階不明→先全留，標須尺度析。早截致質性謬誤。
 
-### Step 2: Construct Hamiltonian and State Space
+### 二：建 Hamiltonian 與狀空
 
-Build the mathematical framework from the degrees of freedom identified in Step 1:
+由一所辨自由度建數學架構：
 
-1. **Hilbert space**: Define the state space. For finite-dimensional systems, specify the basis (e.g., spin-1/2 basis |up>, |down>). For infinite-dimensional systems, specify the function space (e.g., L2(R^3) for a single particle in 3D).
-2. **Kinetic terms**: Write the kinetic energy operator for each particle. In position representation, T = -hbar^2/(2m) nabla^2.
-3. **Potential terms**: Write all interaction potentials (Coulomb, harmonic, spin-orbit, external fields). Be explicit about functional form and coupling constants.
-4. **Composite Hamiltonian**: Assemble H = T + V, grouping terms by interaction type. For multi-particle systems, include exchange and correlation terms or note where they will enter via approximation.
-5. **Operator algebra**: Verify that the Hamiltonian is Hermitian. Identify constants of motion ([H, O] = 0) that can be used to block-diagonalize the problem.
+1. **Hilbert 空間**：定狀空。有限維者定基（如自旋 1/2 基 |up>、|down>）。無限維者定函空（如單粒三維 L2(R^3)）
+2. **動能項**：各粒動能算子。位置表象 T = -hbar^2/(2m) nabla^2
+3. **位能項**：諸交互（Coulomb、諧、自旋軌、外場），形與耦合常數皆明
+4. **合成 Hamiltonian**：H = T + V，按類分組。多粒者含交換與關聯，或標明近似引入處
+5. **算子代數**：驗 Hermitian。辨守恆量（[H, O] = 0）以塊對角化
 
 ```markdown
 ## Hamiltonian Structure
@@ -88,18 +88,18 @@ Build the mathematical framework from the degrees of freedom identified in Step 
 - **Symmetry-adapted basis**: [if block diagonalization is possible]
 ```
 
-**Expected:** A complete, Hermitian Hamiltonian with all terms explicitly written, the Hilbert space defined, and constants of motion identified.
+得：完整 Hermitian H，諸項顯寫，Hilbert 空明，守恆量已辨。
 
-**On failure:** If the Hamiltonian is not manifestly Hermitian, check for missing conjugate terms or gauge-dependent phases. If the Hilbert space is ambiguous (e.g., for relativistic particles), specify the formalism explicitly and note the issue.
+敗：非顯 Hermitian→查漏共軛或規範相。Hilbert 空模糊（如相對論粒）→明形並標問題。
 
-### Step 3: Specify Boundary and Initial Conditions
+### 三：定邊界與初始
 
-Constrain the problem to have a unique solution:
+約束使解唯一：
 
-1. **Boundary conditions**: For bound state problems, require normalizability (psi -> 0 at infinity). For scattering problems, specify incoming wave boundary conditions. For periodic systems, apply Bloch or Born-von Karman conditions.
-2. **Domain restrictions**: Specify the spatial domain. For a particle in a box, define the walls. For a hydrogen atom, define the radial and angular domains. For lattice models, define the lattice and its topology.
-3. **Initial state** (time-dependent problems): Define the state at t=0 as an expansion in the energy eigenbasis or as a wave packet with specified center and width.
-4. **Constraint equations**: For indistinguishable particles, enforce symmetrization (bosons) or antisymmetrization (fermions). For gauge theories, impose gauge-fixing conditions.
+1. **邊界**：束縛態→規一化（psi → 0 於無窮）。散射→入波邊界。週期→Bloch 或 Born-von Karman
+2. **域限**：定空域。盒中粒→壁。氫原子→徑角域。晶格模→格與拓撲
+3. **初狀**（時變）：t=0 之狀，按能本徵展或波包中心與寬
+4. **約束式**：全同粒→對稱（玻）或反對稱（費）。規範論→規範固定
 
 ```markdown
 ## Boundary and Initial Conditions
@@ -110,37 +110,37 @@ Constrain the problem to have a unique solution:
 - **Initial state** (if time-dependent): [specification]
 ```
 
-**Expected:** Boundary conditions that are physically motivated, mathematically consistent with the Hamiltonian's domain, and sufficient to determine a unique solution (or a well-defined scattering matrix).
+得：邊界物理合理、與 H 域數學一致，足定唯一解（或明定散射矩陣）。
 
-**On failure:** If boundary conditions are over- or under-determined, check the self-adjointness of the Hamiltonian on the chosen domain. Non-self-adjoint Hamiltonians require careful treatment of deficiency indices.
+敗：過定或不足→查 H 於所選域之自伴性。非自伴 H 須處理缺陷指標。
 
-### Step 4: Select Approximation Method
+### 四：擇近似法
 
-Choose a solution strategy appropriate to the problem's structure:
+依題構擇解策：
 
-1. **Assess exact solvability**: Check if the problem reduces to a known exactly solvable model (harmonic oscillator, hydrogen atom, Ising model, etc.). If yes, use the exact solution as the primary result and perturbation theory for corrections.
+1. **察可精確解**：是否歸已知可精解模（諧振子、氫原子、Ising）。若然，主用精解，攝動為校正。
 
-2. **Perturbation theory** (weak coupling):
-   - Split H = H0 + lambda V where H0 is exactly solvable
-   - Verify that lambda V is small compared to the level spacing of H0
-   - Check for degeneracy; use degenerate perturbation theory if needed
-   - Suitable when: interaction is weak, few-body system, analytic results needed
+2. **攝動論**（弱耦）：
+   - H = H0 + lambda V，H0 可精解
+   - 驗 lambda V 小於 H0 之能距
+   - 察簡併；有則用簡併攝動
+   - 宜：交互弱、少體、需析解
 
-3. **Variational methods** (ground state focus):
-   - Choose a trial wave function with adjustable parameters
-   - Ensure the trial function satisfies boundary conditions and symmetry
-   - Suitable when: ground state energy is the primary target, many-body system
+3. **變分法**（基態）：
+   - 擇含參試波函
+   - 試函滿邊界與對稱
+   - 宜：基態能為主、多體
 
-4. **Density Functional Theory** (many-electron systems):
-   - Choose the exchange-correlation functional (LDA, GGA, hybrid)
-   - Define the basis set (plane waves, Gaussian, numerical atomic orbitals)
-   - Suitable when: many-electron system, ground state density and energy needed
+4. **密度泛函**（多電子）：
+   - 擇交換-關聯泛函（LDA、GGA、雜化）
+   - 定基組（平面波、高斯、數值原子軌）
+   - 宜：多電子、需基態密與能
 
-5. **Numerical exact methods** (small systems, benchmarking):
-   - Exact diagonalization for small Hilbert spaces
-   - Quantum Monte Carlo for ground state sampling
-   - DMRG for one-dimensional or quasi-one-dimensional systems
-   - Suitable when: high accuracy is needed and the system is small enough
+5. **數值精法**（小系、基準）：
+   - 精確對角：小 Hilbert 空
+   - 量子 Monte Carlo：基態取樣
+   - DMRG：一維或準一維
+   - 宜：需高精度而系足小
 
 ```markdown
 ## Approximation Method Selection
@@ -151,19 +151,19 @@ Choose a solution strategy appropriate to the problem's structure:
 - **Alternatives considered**: [and why they were rejected]
 ```
 
-**Expected:** A justified choice of approximation method with a clear statement of expected accuracy and computational cost, plus documentation of alternatives considered.
+得：擇法有明由，預期精度與算量明，備選亦已錄。
 
-**On failure:** If no single method is clearly appropriate, formulate the problem for two methods and compare results. Disagreement between methods reveals the problem's difficulty and guides further refinement.
+敗：無單法確宜→兩法並立比解。法異揭題難並導進一步精化。
 
-### Step 5: Validate Formulation Against Known Limits
+### 五：驗極限
 
-Before solving, verify the formulation reproduces known physics:
+解前驗陳立反映已知：
 
-1. **Classical limit**: Take hbar -> 0 (or large quantum numbers) and verify that the Hamiltonian reduces to the correct classical mechanics.
-2. **Non-interacting limit**: Set coupling constants to zero and verify the solution is a product of single-particle states.
-3. **Symmetry limits**: Verify that the formulation respects all identified symmetries. Check that the Hamiltonian transforms correctly under the symmetry group.
-4. **Dimensional analysis**: Verify that every term in the Hamiltonian has units of energy. Check that the characteristic length, energy, and time scales are physically reasonable.
-5. **Known exact results**: If the system has known exact solutions in special cases (e.g., hydrogen atom for Z=1, harmonic oscillator for quadratic potential), verify the formulation reproduces them.
+1. **古典極（hbar → 0）**：或大量數→驗 H 回正確古典力學
+2. **無交互極**：耦合常數置零→解應為單粒態積
+3. **對稱極**：形式應尊所辨對稱。H 於對稱群下變換正確
+4. **量綱析**：H 之諸項皆能量單位。特徵長、能、時標物理合理
+5. **已知精解**：特例（如 Z=1 氫原子、二次位諧振子）→驗形式復之
 
 ```markdown
 ## Validation Checks
@@ -176,33 +176,33 @@ Before solving, verify the formulation reproduces known physics:
 | Known exact case | [reproduced result] | [Pass/Fail] |
 ```
 
-**Expected:** All validation checks pass. The formulation is self-consistent and ready for solution.
+得：諸驗皆通。形式自洽，備解。
 
-**On failure:** A failing validation check indicates an error in the Hamiltonian construction or boundary conditions. Trace the failure back to the specific term or condition and correct it before proceeding to solve.
+敗：驗敗乃 H 構建或邊界之誤。溯至該項或條件修之，再進解。
 
-## Validation
+## 驗
 
-- [ ] All particles and quantum numbers are explicitly listed
-- [ ] The Hilbert space is defined with a clear basis
-- [ ] The Hamiltonian is Hermitian and all terms have correct units
-- [ ] Constants of motion are identified and used for simplification
-- [ ] Boundary conditions are physically motivated and mathematically sufficient
-- [ ] Particle statistics (bosonic/fermionic) are correctly enforced
-- [ ] Approximation method choice is justified with expected accuracy stated
-- [ ] Classical, non-interacting, and symmetry limits are checked
-- [ ] Known exact results are reproduced in special cases
-- [ ] The formulation is complete enough for another researcher to implement
+- [ ] 諸粒與量數皆顯列
+- [ ] Hilbert 空明，基明
+- [ ] H Hermitian，諸項單位正確
+- [ ] 守恆量已辨並用以簡化
+- [ ] 邊界物理合理、數學充足
+- [ ] 粒子統計（玻/費）正確施行
+- [ ] 近似法擇有由，預期精度明
+- [ ] 古典、無交互、對稱極皆察
+- [ ] 特例已知精解可復
+- [ ] 形式足供他研究者施行
 
-## Common Pitfalls
+## 忌
 
-- **Omitting degrees of freedom prematurely**: Freezing a degree of freedom without checking the energy scale hierarchy can miss qualitatively important physics. Always justify every reduction with an energy scale argument.
-- **Non-Hermitian Hamiltonian**: Forgetting conjugate terms in spin-orbit coupling or complex potentials. Always verify H = H-dagger explicitly.
-- **Wrong boundary conditions for scattering**: Using bound-state boundary conditions (normalizability) for a scattering problem discards the continuous spectrum entirely. Match boundary conditions to the physical question.
-- **Ignoring degeneracy in perturbation theory**: Applying non-degenerate perturbation theory to a degenerate level produces divergent corrections. Always check for degeneracy before expanding.
-- **Over-reliance on a single approximation**: Different methods have complementary failure modes. Variational methods give upper bounds but can miss excited states. Perturbation theory diverges at strong coupling. Cross-validate when possible.
-- **Dimensional inconsistency**: Mixing natural units (hbar = 1) with SI units in the same expression. Adopt a consistent unit system at the start and state it explicitly.
+- **早凍自由度**：不察能階而凍→或失質性物理。每減必以能階論證
+- **非 Hermitian H**：自旋軌或複位漏共軛項。必顯驗 H = H-dagger
+- **散射用束縛邊界**：用規一化於散射題→棄連續譜。邊界合物理題
+- **攝動忽簡併**：非簡併攝動施於簡併能階→校正發散。展開前必察簡併
+- **倚單近似**：諸法失敗模互補。變分予上界但或漏激發。攝動於強耦發散。可互驗
+- **量綱不一**：同式混自然單位（hbar = 1）與 SI。起始即擇一貫系並顯明
 
-## Related Skills
+## 參
 
-- `derive-theoretical-result` -- derive analytic results from the formulated problem
-- `survey-theoretical-literature` -- find prior work on similar quantum systems
+- `derive-theoretical-result`
+- `survey-theoretical-literature`

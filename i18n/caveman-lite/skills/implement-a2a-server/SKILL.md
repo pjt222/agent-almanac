@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement a JSON-RPC 2.0 A2A server with full task lifecycle management
   (submitted/working/completed/failed/canceled/input-required), SSE streaming,
@@ -123,9 +123,9 @@ app.get("/.well-known/agent.json", (req, res) => {
 });
 ```
 
-**Expected:** An HTTP server that accepts JSON-RPC 2.0 requests and serves the Agent Card.
+**Got:** An HTTP server that accepts JSON-RPC 2.0 requests and serves the Agent Card.
 
-**On failure:** If JSON-RPC parsing fails, validate that the request body has `jsonrpc`, `method`, and `id` fields. Return `-32700` (Parse error) for malformed JSON and `-32600` (Invalid Request) for missing required fields.
+**If fail:** If JSON-RPC parsing fails, validate that the request body has `jsonrpc`, `method`, and `id` fields. Return `-32700` (Parse error) for malformed JSON and `-32600` (Invalid Request) for missing required fields.
 
 ### Step 2: Implement Task State Machine
 
@@ -191,9 +191,9 @@ class TaskStore {
 
 2.4. If `stateTransitionHistory` is enabled in the Agent Card, append each status change to the task's `history` array with timestamps.
 
-**Expected:** A task store that enforces valid state transitions and maintains history.
+**Got:** A task store that enforces valid state transitions and maintains history.
 
-**On failure:** If an invalid state transition is attempted (e.g., `completed` to `working`), return a JSON-RPC error with code `-32002` and a descriptive message. Never silently ignore invalid transitions.
+**If fail:** If an invalid state transition is attempted (e.g., `completed` to `working`), return a JSON-RPC error with code `-32002` and a descriptive message. Never silently ignore invalid transitions.
 
 ### Step 3: Add tasks/send and tasks/get Methods
 
@@ -275,9 +275,9 @@ function handleTaskCancel(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-**Expected:** Working `tasks/send`, `tasks/get`, and `tasks/cancel` methods that correctly manage task lifecycle.
+**Got:** Working `tasks/send`, `tasks/get`, and `tasks/cancel` methods that correctly manage task lifecycle.
 
-**On failure:** If skill matching fails, return the task in `failed` state with a descriptive message. If the task store is full, return `-32003` (resource exhausted).
+**If fail:** If skill matching fails, return the task in `failed` state with a descriptive message. If the task store is full, return `-32003` (resource exhausted).
 
 ### Step 4: Implement SSE Streaming for tasks/sendSubscribe
 
@@ -368,9 +368,9 @@ class TaskStore {
 
 4.3. Emit events from all task state transitions and artifact additions.
 
-**Expected:** SSE streaming that sends real-time status and artifact events as the task progresses.
+**Got:** SSE streaming that sends real-time status and artifact events as the task progresses.
 
-**On failure:** If SSE connection drops, the client should be able to reconnect and use `tasks/get` to retrieve the current state. Ensure the task store does not depend on active SSE connections.
+**If fail:** If SSE connection drops, the client should be able to reconnect and use `tasks/get` to retrieve the current state. Ensure the task store does not depend on active SSE connections.
 
 ### Step 5: Add Push Notification Webhook Support
 
@@ -388,9 +388,9 @@ class TaskStore {
 
 5.4. Add `tasks/pushNotification/get` to retrieve the current push config for a task.
 
-**Expected:** Webhook registration and delivery with retry logic.
+**Got:** Webhook registration and delivery with retry logic.
 
-**On failure:** Push notification failures must never affect task execution. Log errors and continue. If the webhook URL is persistently unreachable, remove the subscription after max retries.
+**If fail:** Push notification failures must never affect task execution. Log errors and continue. If the webhook URL is persistently unreachable, remove the subscription after max retries.
 
 ### Step 6: Integrate with Agent Card for Discovery
 
@@ -423,9 +423,9 @@ curl -X POST http://localhost:3000/ \
   -d '{"jsonrpc":"2.0","id":1,"method":"tasks/send","params":{"id":"task-1","sessionId":"session-1","message":{"role":"user","parts":[{"type":"text","text":"Analyze my dataset"}]}}}'
 ```
 
-**Expected:** A running A2A server that serves its Agent Card, accepts tasks, and manages their full lifecycle.
+**Got:** A running A2A server that serves its Agent Card, accepts tasks, and manages their full lifecycle.
 
-**On failure:** If the Agent Card capabilities do not match the implementation, the startup validation from 6.1 will catch the mismatch. Fix the implementation or update the Agent Card to match.
+**If fail:** If the Agent Card capabilities do not match the implementation, the startup validation from 6.1 will catch the mismatch. Fix the implementation or update the Agent Card to match.
 
 ## Validation
 
@@ -440,11 +440,11 @@ curl -X POST http://localhost:3000/ \
 - [ ] Agent Card capabilities accurately reflect server implementation
 - [ ] All JSON-RPC responses include `jsonrpc: "2.0"` and correct `id`
 
-## Common Pitfalls
+## Pitfalls
 
 - **Missing JSON-RPC error codes**: The A2A protocol defines specific error codes. Use `-32700` (parse error), `-32600` (invalid request), `-32601` (method not found), and custom codes for domain errors.
 - **Task ID collisions**: Use UUIDs for task IDs. If the client provides an ID, validate uniqueness before creating the task.
-- **SSE connection leaks**: Always clean up SSE subscriptions when the client disconnects. Use `req.on("close")` to detect disconnects.
+- **SSE connection leaks**: Clean up SSE subscriptions when the client disconnects. Use `req.on("close")` to detect disconnects.
 - **Blocking skill execution**: Long-running skills must execute asynchronously. Return the task in `submitted` or `working` state immediately, then update via events.
 - **Agent Card drift**: If the server implementation changes but the Agent Card is not updated, clients will have incorrect expectations. Validate at startup.
 - **Ignoring terminal states**: Once a task reaches `completed`, `failed`, or `canceled`, no further state transitions are allowed. Guard against this in the state machine.

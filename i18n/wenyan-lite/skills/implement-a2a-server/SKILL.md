@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement a JSON-RPC 2.0 A2A server with full task lifecycle management
   (submitted/working/completed/failed/canceled/input-required), SSE streaming,
@@ -23,35 +23,35 @@ metadata:
   tags: a2a, server, json-rpc, task-lifecycle, streaming, sse
 ---
 
-# Implement A2A Server
+# 建 A2A 伺服器
 
-Build a fully compliant A2A server that handles JSON-RPC 2.0 requests, manages task lifecycle states, supports SSE streaming for real-time updates, and serves an Agent Card for discovery.
+建全合規之 A2A 伺服器，處理 JSON-RPC 2.0 請求、管任務生命週期狀態、支即時更新之 SSE 串流，並供 Agent Card 以利探索。
 
-## When to Use
+## 適用時機
 
-- Implementing an agent that participates in multi-agent A2A workflows
-- Building a backend for an Agent Card designed with `design-a2a-agent-card`
-- Adding A2A protocol support to an existing agent or service
-- Creating a reference A2A server implementation for testing
-- Deploying an agent that must interoperate with other A2A-compliant agents
+- 建參與多代理 A2A 工作流程之代理
+- 為以 `design-a2a-agent-card` 設計之 Agent Card 建後端
+- 為現有代理或服務加 A2A 協定支援
+- 為測試建參考 A2A 伺服器實作
+- 部署須與他 A2A 合規代理互通之代理
 
-## Inputs
+## 輸入
 
-- **Required**: Agent Card (JSON) defining the agent's skills and capabilities
-- **Required**: Implementation language (TypeScript/Node.js or Python)
-- **Required**: Task execution logic for each skill defined in the Agent Card
-- **Optional**: Push notification webhook support (`true` or `false`)
-- **Optional**: Persistent task store (in-memory, Redis, PostgreSQL)
-- **Optional**: Authentication middleware matching the Agent Card's auth scheme
-- **Optional**: Maximum concurrent tasks limit
+- **必要**：定代理技能與能力之 Agent Card（JSON）
+- **必要**：實作語言（TypeScript/Node.js 或 Python）
+- **必要**：Agent Card 定義之每技能之任務執行邏輯
+- **選擇性**：推送通知 webhook 支援（`true` 或 `false`）
+- **選擇性**：持久任務儲存（記憶體、Redis、PostgreSQL）
+- **選擇性**：配 Agent Card 驗證機制之驗證中介軟體
+- **選擇性**：最大並發任務限
 
-## Procedure
+## 步驟
 
-### Step 1: Set Up Project with JSON-RPC 2.0 Handler
+### 步驟一：以 JSON-RPC 2.0 處理器設專案
 
-1.1. Initialize the project with HTTP server and JSON-RPC parsing:
+1.1. 以 HTTP 伺服器與 JSON-RPC 解析初始化專案：
 
-**TypeScript:**
+**TypeScript：**
 
 ```bash
 mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
@@ -60,7 +60,7 @@ npm install express uuid
 npm install -D typescript @types/node @types/express tsx
 ```
 
-**Python:**
+**Python：**
 
 ```bash
 mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
@@ -68,7 +68,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install fastapi uvicorn uuid6
 ```
 
-1.2. Create the JSON-RPC 2.0 request handler:
+1.2. 建 JSON-RPC 2.0 請求處理器：
 
 ```typescript
 interface JsonRpcRequest {
@@ -106,7 +106,7 @@ function handleJsonRpc(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-1.3. Mount the JSON-RPC handler on a POST endpoint (typically `/`):
+1.3. 將 JSON-RPC 處理器掛於 POST 端點（通常 `/`）：
 
 ```typescript
 app.post("/", (req, res) => {
@@ -115,7 +115,7 @@ app.post("/", (req, res) => {
 });
 ```
 
-1.4. Serve the Agent Card at `/.well-known/agent.json`:
+1.4. 於 `/.well-known/agent.json` 供 Agent Card：
 
 ```typescript
 app.get("/.well-known/agent.json", (req, res) => {
@@ -123,13 +123,13 @@ app.get("/.well-known/agent.json", (req, res) => {
 });
 ```
 
-**Expected:** An HTTP server that accepts JSON-RPC 2.0 requests and serves the Agent Card.
+**預期：** HTTP 伺服器接受 JSON-RPC 2.0 請求並供 Agent Card。
 
-**On failure:** If JSON-RPC parsing fails, validate that the request body has `jsonrpc`, `method`, and `id` fields. Return `-32700` (Parse error) for malformed JSON and `-32600` (Invalid Request) for missing required fields.
+**失敗時：** 若 JSON-RPC 解析失敗，驗請求體有 `jsonrpc`、`method`、`id` 欄。對畸形 JSON 返 `-32700`（解析錯），對缺必要欄返 `-32600`（無效請求）。
 
-### Step 2: Implement Task State Machine
+### 步驟二：實任務狀態機
 
-2.1. Define the task model with all A2A lifecycle states:
+2.1. 定含所有 A2A 生命週期狀態之任務模型：
 
 ```typescript
 type TaskState =
@@ -164,7 +164,7 @@ type Part =
   | { type: "data"; data: Record<string, unknown> };
 ```
 
-2.2. Implement state transition rules:
+2.2. 實狀態轉換規則：
 
 ```
 submitted  -> working | failed | canceled
@@ -175,7 +175,7 @@ failed     -> (terminal)
 canceled   -> (terminal)
 ```
 
-2.3. Create a task store with CRUD operations:
+2.3. 建含 CRUD 操作之任務儲存：
 
 ```typescript
 class TaskStore {
@@ -189,15 +189,15 @@ class TaskStore {
 }
 ```
 
-2.4. If `stateTransitionHistory` is enabled in the Agent Card, append each status change to the task's `history` array with timestamps.
+2.4. 若 Agent Card 啟 `stateTransitionHistory`，每狀態變附時間戳附加於任務之 `history` 陣列。
 
-**Expected:** A task store that enforces valid state transitions and maintains history.
+**預期：** 任務儲存強制有效狀態轉換並維歷史。
 
-**On failure:** If an invalid state transition is attempted (e.g., `completed` to `working`), return a JSON-RPC error with code `-32002` and a descriptive message. Never silently ignore invalid transitions.
+**失敗時：** 若試無效狀態轉換（如 `completed` 至 `working`），以碼 `-32002` 附描述訊息返 JSON-RPC 錯。永勿默忽無效轉換。
 
-### Step 3: Add tasks/send and tasks/get Methods
+### 步驟三：加 tasks/send 與 tasks/get 方法
 
-3.1. Implement `tasks/send` — the primary method for submitting tasks:
+3.1. 實 `tasks/send`——提交任務之主方法：
 
 ```typescript
 function handleTaskSend(request: JsonRpcRequest): JsonRpcResponse {
@@ -233,7 +233,7 @@ function handleTaskSend(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-3.2. Implement `tasks/get` — retrieve task status and artifacts:
+3.2. 實 `tasks/get`——取任務狀態與工件：
 
 ```typescript
 function handleTaskGet(request: JsonRpcRequest): JsonRpcResponse {
@@ -257,7 +257,7 @@ function handleTaskGet(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-3.3. Implement `tasks/cancel`:
+3.3. 實 `tasks/cancel`：
 
 ```typescript
 function handleTaskCancel(request: JsonRpcRequest): JsonRpcResponse {
@@ -275,13 +275,13 @@ function handleTaskCancel(request: JsonRpcRequest): JsonRpcResponse {
 }
 ```
 
-**Expected:** Working `tasks/send`, `tasks/get`, and `tasks/cancel` methods that correctly manage task lifecycle.
+**預期：** 可用之 `tasks/send`、`tasks/get`、`tasks/cancel` 方法，正確管任務生命週期。
 
-**On failure:** If skill matching fails, return the task in `failed` state with a descriptive message. If the task store is full, return `-32003` (resource exhausted).
+**失敗時：** 若技能配對失敗，以描述訊息於 `failed` 態返任務。若任務儲存滿，返 `-32003`（資源耗盡）。
 
-### Step 4: Implement SSE Streaming for tasks/sendSubscribe
+### 步驟四：為 tasks/sendSubscribe 實 SSE 串流
 
-4.1. Create an SSE endpoint for streaming task updates:
+4.1. 建 SSE 端點以串流任務更新：
 
 ```typescript
 app.post("/subscribe", (req, res) => {
@@ -343,7 +343,7 @@ function sendSSEEvent(res: Response, event: string, data: unknown): void {
 }
 ```
 
-4.2. Add an event emitter or pub/sub mechanism to the task store:
+4.2. 於任務儲存加事件發射器或 pub/sub 機制：
 
 ```typescript
 class TaskStore {
@@ -366,49 +366,49 @@ class TaskStore {
 }
 ```
 
-4.3. Emit events from all task state transitions and artifact additions.
+4.3. 自所有任務狀態轉換與工件增加發事件。
 
-**Expected:** SSE streaming that sends real-time status and artifact events as the task progresses.
+**預期：** SSE 串流於任務進展時發即時狀態與工件事件。
 
-**On failure:** If SSE connection drops, the client should be able to reconnect and use `tasks/get` to retrieve the current state. Ensure the task store does not depend on active SSE connections.
+**失敗時：** 若 SSE 連線斷，客戶端應可重連並用 `tasks/get` 取當前狀態。確任務儲存不依活動 SSE 連線。
 
-### Step 5: Add Push Notification Webhook Support
+### 步驟五：加推送通知 Webhook 支援
 
-5.1. If `pushNotifications` is enabled in the Agent Card, implement webhook registration via `tasks/pushNotification/set`:
-   - Accept a `PushNotificationConfig` with `url` (HTTPS required), optional `token`, and `events` array (`["status", "artifact"]`)
-   - Validate the webhook URL uses HTTPS; reject with error code `-32004` otherwise
-   - Store the config in the task store, keyed by task ID
+5.1. 若 Agent Card 啟 `pushNotifications`，經 `tasks/pushNotification/set` 實 webhook 註冊：
+   - 接 `PushNotificationConfig` 附 `url`（必 HTTPS）、選擇性 `token` 與 `events` 陣列（`["status", "artifact"]`）
+   - 驗 webhook URL 用 HTTPS；否則以錯碼 `-32004` 拒之
+   - 儲存配置於任務儲存，以任務 ID 為鍵
 
-5.2. Send webhook callbacks on task state changes:
-   - On each state transition or artifact addition, check for a registered push config
-   - POST a JSON payload with `taskId`, `eventType`, `status`, and `timestamp` to the webhook URL
-   - Include `Authorization: Bearer <token>` header if a token was provided
+5.2. 於任務狀態變時發 webhook 回呼：
+   - 每狀態轉換或工件增加時核是否有註冊之推送配置
+   - POST 含 `taskId`、`eventType`、`status`、`timestamp` 之 JSON 負載至 webhook URL
+   - 若供 token 則納 `Authorization: Bearer <token>` 標頭
 
-5.3. Implement retry logic for failed webhooks (exponential backoff, max 3 retries).
+5.3. 為失敗之 webhook 實重試邏輯（指數退避，最多三次重試）。
 
-5.4. Add `tasks/pushNotification/get` to retrieve the current push config for a task.
+5.4. 加 `tasks/pushNotification/get` 以取任務當前推送配置。
 
-**Expected:** Webhook registration and delivery with retry logic.
+**預期：** Webhook 註冊與送達附重試邏輯。
 
-**On failure:** Push notification failures must never affect task execution. Log errors and continue. If the webhook URL is persistently unreachable, remove the subscription after max retries.
+**失敗時：** 推送通知失敗不得影響任務執行。記錯並續。若 webhook URL 持續不可達，最大重試後移訂閱。
 
-### Step 6: Integrate with Agent Card for Discovery
+### 步驟六：與 Agent Card 整合以利探索
 
-6.1. Load and serve the Agent Card at startup:
-   - Parse `agent-card.json` and validate capabilities match implementation
-   - Throw at startup if the card advertises `streaming: true` but SSE is not enabled
-   - Throw at startup if the card advertises `pushNotifications: true` but webhooks are not enabled
+6.1. 啟動時載並供 Agent Card：
+   - 解析 `agent-card.json` 並驗能力配實作
+   - 若卡宣 `streaming: true` 而 SSE 未啟，啟動時拋錯
+   - 若卡宣 `pushNotifications: true` 而 webhook 未啟，啟動時拋錯
 
-6.2. Add CORS headers for cross-origin Agent Card discovery:
-   - Set `Access-Control-Allow-Origin: *` on `/.well-known/agent.json`
-   - Allow `GET` and `OPTIONS` methods
+6.2. 為跨源 Agent Card 探索加 CORS 標頭：
+   - 於 `/.well-known/agent.json` 設 `Access-Control-Allow-Origin: *`
+   - 允 `GET` 與 `OPTIONS` 方法
 
-6.3. Add authentication middleware matching the Agent Card's scheme:
-   - Skip authentication for `/.well-known/agent.json` (Agent Card is always public)
-   - For all other endpoints, validate the `Authorization` header or API key
-   - Return HTTP 401 with JSON-RPC error code `-32000` for unauthorized requests
+6.3. 加配 Agent Card 機制之驗證中介軟體：
+   - 略 `/.well-known/agent.json` 之驗證（Agent Card 永為公開）
+   - 所有他端點驗 `Authorization` 標頭或 API 金鑰
+   - 未授權請求返 HTTP 401 附 JSON-RPC 錯碼 `-32000`
 
-6.4. Start the server and verify end-to-end:
+6.4. 啟動伺服器並端到端驗證：
 
 ```bash
 # Start server
@@ -423,36 +423,36 @@ curl -X POST http://localhost:3000/ \
   -d '{"jsonrpc":"2.0","id":1,"method":"tasks/send","params":{"id":"task-1","sessionId":"session-1","message":{"role":"user","parts":[{"type":"text","text":"Analyze my dataset"}]}}}'
 ```
 
-**Expected:** A running A2A server that serves its Agent Card, accepts tasks, and manages their full lifecycle.
+**預期：** 執行中之 A2A 伺服器供其 Agent Card、接任務、管其全生命週期。
 
-**On failure:** If the Agent Card capabilities do not match the implementation, the startup validation from 6.1 will catch the mismatch. Fix the implementation or update the Agent Card to match.
+**失敗時：** 若 Agent Card 能力不配實作，6.1 之啟動驗證將捕此不配。修實作或更新 Agent Card 以配之。
 
-## Validation
+## 驗證
 
-- [ ] Server starts and serves Agent Card at `/.well-known/agent.json`
-- [ ] `tasks/send` creates tasks and transitions them through the lifecycle
-- [ ] `tasks/get` retrieves task status and artifacts
-- [ ] `tasks/cancel` moves tasks to the canceled state
-- [ ] SSE streaming sends real-time status and artifact events (if enabled)
-- [ ] Push notifications deliver webhooks on state changes (if enabled)
-- [ ] Invalid state transitions return appropriate JSON-RPC errors
-- [ ] Authentication rejects unauthorized requests (if configured)
-- [ ] Agent Card capabilities accurately reflect server implementation
-- [ ] All JSON-RPC responses include `jsonrpc: "2.0"` and correct `id`
+- [ ] 伺服器啟且於 `/.well-known/agent.json` 供 Agent Card
+- [ ] `tasks/send` 建任務並令其經生命週期轉換
+- [ ] `tasks/get` 取任務狀態與工件
+- [ ] `tasks/cancel` 將任務移至 canceled 態
+- [ ] SSE 串流發即時狀態與工件事件（若啟）
+- [ ] 推送通知於狀態變時送達 webhook（若啟）
+- [ ] 無效狀態轉換返合宜之 JSON-RPC 錯
+- [ ] 驗證拒未授權請求（若配置）
+- [ ] Agent Card 能力精確反映伺服器實作
+- [ ] 所有 JSON-RPC 響應含 `jsonrpc: "2.0"` 與正確 `id`
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Missing JSON-RPC error codes**: The A2A protocol defines specific error codes. Use `-32700` (parse error), `-32600` (invalid request), `-32601` (method not found), and custom codes for domain errors.
-- **Task ID collisions**: Use UUIDs for task IDs. If the client provides an ID, validate uniqueness before creating the task.
-- **SSE connection leaks**: Always clean up SSE subscriptions when the client disconnects. Use `req.on("close")` to detect disconnects.
-- **Blocking skill execution**: Long-running skills must execute asynchronously. Return the task in `submitted` or `working` state immediately, then update via events.
-- **Agent Card drift**: If the server implementation changes but the Agent Card is not updated, clients will have incorrect expectations. Validate at startup.
-- **Ignoring terminal states**: Once a task reaches `completed`, `failed`, or `canceled`, no further state transitions are allowed. Guard against this in the state machine.
+- **缺 JSON-RPC 錯碼**：A2A 協定定特定錯碼。用 `-32700`（解析錯）、`-32600`（無效請求）、`-32601`（方法未覓）與領域錯之自訂碼
+- **任務 ID 衝突**：用 UUID 為任務 ID。若客戶端供 ID，建任務前驗唯一性
+- **SSE 連線洩漏**：客戶端斷時永清 SSE 訂閱。用 `req.on("close")` 偵斷
+- **阻塞技能執行**：長時技能須異步執行。即刻以 `submitted` 或 `working` 態返任務，再經事件更新
+- **Agent Card 漂移**：若伺服器實作變而 Agent Card 未更新，客戶端將有錯期望。啟動時驗
+- **忽視終態**：任務至 `completed`、`failed` 或 `canceled` 後不允進一步狀態轉換。於狀態機中守之
 
-## Related Skills
+## 相關技能
 
-- `design-a2a-agent-card` - design the Agent Card this server implements
-- `test-a2a-interop` - validate the server against A2A conformance tests
-- `build-custom-mcp-server` - MCP server patterns that inform A2A implementation
-- `scaffold-mcp-server` - scaffolding patterns applicable to A2A server setup
-- `configure-ingress-networking` - production deployment with TLS and routing
+- `design-a2a-agent-card` - 設計此伺服器所實之 Agent Card
+- `test-a2a-interop` - 對 A2A 合規測試驗伺服器
+- `build-custom-mcp-server` - MCP 伺服器模式引導 A2A 實作
+- `scaffold-mcp-server` - 適用於 A2A 伺服器設置之骨架模式
+- `configure-ingress-networking` - 附 TLS 與路由之生產部署

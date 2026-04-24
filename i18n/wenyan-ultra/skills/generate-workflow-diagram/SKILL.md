@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate themed Mermaid flowchart diagrams from putior workflow data.
   Covers theme selection (9 themes including 4 colorblind-safe), output
@@ -24,29 +24,29 @@ metadata:
   tags: putior, mermaid, diagram, theme, visualization, flowchart
 ---
 
-# Generate Workflow Diagram
+# 生工作流圖
 
-Generate a themed Mermaid flowchart diagram from putior workflow data and embed it in documentation.
+由 putior 工作流數據生題 Mermaid 流程圖並嵌文檔。
 
-## When to Use
+## 用
 
-- After annotating source files and ready to produce the visual diagram
-- Regenerating a diagram after workflow changes
-- Switching themes or output formats for different audiences
-- Embedding workflow diagrams in README, Quarto, or R Markdown documents
+- 源檔標註後欲出視覺圖
+- 工作流變後重生圖
+- 為不同受眾換題或出格式
+- 嵌工作流圖於 README、Quarto、R Markdown
 
-## Inputs
+## 入
 
-- **Required**: Workflow data from `put()`, `put_auto()`, or `put_merge()`
-- **Optional**: Theme name (default: `"light"`; options: light, dark, auto, minimal, github, viridis, magma, plasma, cividis)
-- **Optional**: Output target: console, file path, clipboard, or raw string
-- **Optional**: Interactive features: `show_source_info`, `enable_clicks`
+- **必**：工作流數據（由 `put()`、`put_auto()`、`put_merge()`）
+- **可**：題名（默 `"light"`；選：light、dark、auto、minimal、github、viridis、magma、plasma、cividis）
+- **可**：出目標：控台、檔徑、剪貼、原串
+- **可**：交互：`show_source_info`、`enable_clicks`
 
-## Procedure
+## 行
 
-### Step 1: Extract Workflow Data
+### 一：取工作流數據
 
-Obtain workflow data from one of three sources.
+由三源之一取工作流數據。
 
 ```r
 library(putior)
@@ -64,7 +64,7 @@ workflow <- put_auto("./src/")
 workflow <- put_merge("./src/", merge_strategy = "supplement")
 ```
 
-The workflow data frame may include a `node_type` column from annotations. Node types control Mermaid shapes:
+工作流數據幀或含來自標註之 `node_type` 列。節點型控 Mermaid 形：
 
 | `node_type` | Mermaid Shape | Use Case |
 |-------------|---------------|----------|
@@ -74,15 +74,15 @@ The workflow data frame may include a `node_type` column from annotations. Node 
 | `"decision"` | Diamond `{...}` | Conditional logic, branching |
 | `"start"` / `"end"` | Stadium `([...])` | Entry/terminal nodes |
 
-Each `node_type` also receives a corresponding CSS class (e.g., `class nodeId input;`) for theme-based styling.
+各 `node_type` 亦得相應 CSS 類（如 `class nodeId input;`）供題化。
 
-**Expected:** A data frame with at least one row, containing `id`, `label`, and optionally `input`, `output`, `source_file`, `node_type` columns.
+得：數據幀至少一列，含 `id`、`label`，可選 `input`、`output`、`source_file`、`node_type` 列。
 
-**On failure:** If the data frame is empty, no annotations or patterns were found. Run `analyze-codebase-workflow` first, or check that annotations are syntactically valid with `put("./src/", validate = TRUE)`.
+敗：數據幀空→無標註或模式。先行 `analyze-codebase-workflow`，或驗標註合語法用 `put("./src/", validate = TRUE)`。
 
-### Step 2: Select Theme and Options
+### 二：擇題與選項
 
-Choose a theme appropriate for the target audience.
+依目標受眾擇題。
 
 ```r
 # List all available themes
@@ -102,20 +102,20 @@ get_diagram_themes()
 # "cividis" — Blue→Gray→Yellow, maximum accessibility (no red-green)
 ```
 
-Additional parameters:
-- `direction`: Diagram flow direction — `"TD"` (top-down, default), `"LR"` (left-right), `"RL"`, `"BT"`
-- `show_artifacts`: `TRUE`/`FALSE` — show artifact nodes (files, data); can be noisy for large workflows (e.g., 16+ extra nodes)
-- `show_workflow_boundaries`: `TRUE`/`FALSE` — wrap each source file's nodes in a Mermaid subgraph
-- `source_info_style`: How source file info is displayed on nodes (e.g., as subtitle)
-- `node_labels`: Format for node label text
+他參：
+- `direction`：圖向——`"TD"`（上下，默）、`"LR"`（左右）、`"RL"`、`"BT"`
+- `show_artifacts`：`TRUE`/`FALSE`——示物件節點（檔、數據）；大工作流或噪（如 16+ 額外節點）
+- `show_workflow_boundaries`：`TRUE`/`FALSE`——各源檔節點裹入 Mermaid 子圖
+- `source_info_style`：源檔訊於節點顯示法（如副題）
+- `node_labels`：節點標籤文格式
 
-**Expected:** Theme names printed. Select one based on context.
+得：題名印出。依脈絡擇一。
 
-**On failure:** If a theme name is not recognized, `put_diagram()` falls back to `"light"`. Check spelling.
+敗：題名未識→`put_diagram()` 回退 `"light"`。察拼法。
 
-### Step 3: Custom Palette with `put_theme()` (Optional)
+### 三：用 `put_theme()` 自定調色（可選）
 
-If the 9 built-in themes don't match your project's palette, create a custom theme with `put_theme()`.
+九內建題不合→以 `put_theme()` 造自定題。
 
 ```r
 # Create custom palette — unspecified types inherit from base theme
@@ -132,13 +132,13 @@ mermaid_content <- put_diagram(workflow, palette = cyberpunk, output = "raw")
 writeLines(mermaid_content, "workflow.mmd")
 ```
 
-`put_theme()` accepts `input`, `process`, `output`, `decision`, `artifact`, `start`, and `end` node types. Each takes a named vector `c(fill = "#hex", stroke = "#hex", color = "#hex")`. Unset types inherit from the `base` theme.
+`put_theme()` 受 `input`、`process`、`output`、`decision`、`artifact`、`start`、`end` 節點型。各取命名向量 `c(fill = "#hex", stroke = "#hex", color = "#hex")`。未設型承基題。
 
-**Expected:** Mermaid output with your custom classDef lines. Node shapes from `node_type` are preserved; only colors change. All node types use `stroke-width:2px` — override not currently supported via `put_theme()`.
+得：Mermaid 出具自定 classDef 行。`node_type` 之形保，僅色變。諸節點型用 `stroke-width:2px`——`put_theme()` 當前未支援覆寫。
 
-**On failure:** If the palette object is not a `putior_theme` class, `put_diagram()` raises a descriptive error. Ensure you pass the return value of `put_theme()`, not a raw list.
+敗：調色非 `putior_theme` 類→`put_diagram()` 發明誤。確傳 `put_theme()` 返值，非原列。
 
-**Fallback — manual classDef replacement:** For fine-grained control beyond what `put_theme()` offers (e.g., per-type stroke widths), generate with a base theme and replace classDef lines manually:
+**回退——手動 classDef 替換：**欲 `put_theme()` 外之細控（如各型畫筆寬），用基題生後手換 classDef：
 
 ```r
 mermaid_content <- put_diagram(workflow, theme = "dark", output = "raw")
@@ -148,9 +148,9 @@ custom_defs <- c("  classDef input fill:#1a1a2e,stroke:#00ff88,stroke-width:3px,
 mermaid_content <- paste(c(lines, custom_defs), collapse = "\n")
 ```
 
-### Step 4: Generate Mermaid Output
+### 四：生 Mermaid 出
 
-Produce the diagram in the desired output mode.
+按所需出模生圖。
 
 ```r
 # Print to console (default)
@@ -181,15 +181,15 @@ cat(put_diagram(workflow,
 ))
 ```
 
-**Expected:** Valid Mermaid code starting with `flowchart TD` (or `LR` depending on direction). Nodes are connected by arrows showing data flow.
+得：有效 Mermaid 碼以 `flowchart TD`（或依向為 `LR`）開。諸節點以箭頭連示數據流。
 
-**On failure:** If the output is `flowchart TD` with no nodes, the workflow data frame is empty. If connections are missing, check that output filenames match input filenames across nodes.
+敗：出為 `flowchart TD` 無節點→數據幀空。連缺→察諸節點間出檔名符入檔名。
 
-### Step 5: Embed in Target Document
+### 五：嵌目標文檔
 
-Insert the diagram into the appropriate documentation format.
+將圖插入適文檔格式。
 
-**GitHub README (```mermaid code fence):**
+**GitHub README（```mermaid 碼欄）：**
 ````markdown
 ## Workflow
 
@@ -200,7 +200,7 @@ flowchart TD
 ```
 ````
 
-**Quarto document (native mermaid chunk via knit_child):**
+**Quarto 文（原生 mermaid 塊經 knit_child）：**
 ```r
 # Chunk 1: Generate code (visible, foldable)
 workflow <- put("./src/")
@@ -215,40 +215,40 @@ mermaid_chunk <- paste0("```{mermaid}\n", mermaid_code, "\n```")
 cat(knitr::knit_child(text = mermaid_chunk, quiet = TRUE))
 ```
 
-**R Markdown (with mermaid.js CDN or DiagrammeR):**
+**R Markdown（mermaid.js CDN 或 DiagrammeR）：**
 ```r
 DiagrammeR::mermaid(put_diagram(workflow, output = "raw"))
 ```
 
-**Expected:** Diagram renders correctly in the target format. GitHub renders mermaid code fences natively.
+得：圖於目標格式正確繪。GitHub 原生繪 mermaid 碼欄。
 
-**On failure:** If GitHub doesn't render the diagram, ensure the code fence uses exactly ` ```mermaid ` (no extra attributes). For Quarto, ensure the `knit_child()` approach is used since direct variable interpolation in `{mermaid}` chunks is not supported.
+敗：GitHub 不繪→確碼欄用精確 ` ```mermaid `（無額屬性）。Quarto→用 `knit_child()` 法；`{mermaid}` 塊不支援變量插值。
 
-## Validation
+## 驗
 
-- [ ] `put_diagram()` produces valid Mermaid code (starts with `flowchart`)
-- [ ] All expected nodes appear in the diagram
-- [ ] Data flow connections (arrows) are present between connected nodes
-- [ ] Selected theme is applied (check init block in output for theme-specific colors)
-- [ ] Diagram renders correctly in the target format (GitHub, Quarto, etc.)
+- [ ] `put_diagram()` 生有效 Mermaid（以 `flowchart` 開）
+- [ ] 諸預期節點皆現於圖
+- [ ] 連節點間之數據流連（箭頭）具
+- [ ] 所選題已應（察出之 init 塊含題特色）
+- [ ] 圖於目標格式（GitHub、Quarto 等）正確繪
 
-## Common Pitfalls
+## 忌
 
-- **Empty diagrams**: Usually means `put()` returned no rows. Check annotations exist and are syntactically valid.
-- **All nodes disconnected**: Output filenames must exactly match input filenames (including extension) for putior to draw connections. `data.csv` and `Data.csv` are different.
-- **Theme not visible on GitHub**: GitHub's mermaid renderer has limited theme support. The `"github"` theme is specifically designed for GitHub rendering. The `%%{init:...}%%` theme block may be ignored by some renderers.
-- **Quarto mermaid variable interpolation**: Quarto's `{mermaid}` chunks don't support R variables directly. Use the `knit_child()` technique described in Step 5.
-- **Clickable nodes not working**: Click directives require a renderer that supports Mermaid interaction events. GitHub's static renderer does not support clicks. Use a local Mermaid renderer or the putior Shiny sandbox.
-- **Self-referential meta-pipeline files**: Scanning a directory that includes the build script generating the diagram causes duplicate subgraph IDs and Mermaid errors. Use the `exclude` parameter to skip them at scan time:
+- **空圖**：常因 `put()` 返無列。察標註存且合語法
+- **諸節點皆斷**：出檔名須精確符入檔名（含副檔）供 putior 連。`data.csv` 與 `Data.csv` 異
+- **題於 GitHub 不顯**：GitHub 之 mermaid 繪器題支援有限。`"github"` 題專設。`%%{init:...}%%` 題塊或被部分繪器忽
+- **Quarto mermaid 變量插值**：Quarto 之 `{mermaid}` 塊不直支 R 變量。用步五之 `knit_child()` 法
+- **可點節點不作**：點指令需支 Mermaid 交互事件之繪器。GitHub 靜繪器不支點。用本機 Mermaid 繪器或 putior Shiny 沙盒
+- **自參元管線檔**：掃含生圖建腳本之目錄→子圖 ID 重並 Mermaid 誤。用 `exclude` 於掃時略：
   ```r
   workflow <- put("./src/", exclude = c("build-workflow\\.R$", "build-workflow\\.js$"))
   ```
-- **`show_artifacts = TRUE` too noisy**: Large projects may generate many artifact nodes (10–20+), cluttering the diagram. Use `show_artifacts = FALSE` and rely on `node_type` annotations to mark key inputs/outputs explicitly.
+- **`show_artifacts = TRUE` 過噪**：大項目或生眾物件節點（10-20+），亂圖。用 `show_artifacts = FALSE` 並倚 `node_type` 標註顯標關鍵入出
 
-## Related Skills
+## 參
 
-- `annotate-source-files` — prerequisite: files must be annotated before diagram generation
-- `analyze-codebase-workflow` — auto-detection can supplement manual annotations
-- `setup-putior-ci` — automate diagram regeneration in CI/CD
-- `create-quarto-report` — embed diagrams in Quarto reports
-- `build-pkgdown-site` — embed diagrams in pkgdown documentation sites
+- `annotate-source-files`
+- `analyze-codebase-workflow`
+- `setup-putior-ci`
+- `create-quarto-report`
+- `build-pkgdown-site`

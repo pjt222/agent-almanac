@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Extract data from web pages using the scrapling Python library — select the
   appropriate fetcher tier (HTTP, stealth Chromium, or full browser automation)
@@ -25,31 +25,27 @@ metadata:
 
 # Headless Web Scraping
 
-Extract data from web pages that resist simple HTTP requests — JS-rendered content,
-Cloudflare-protected sites, and dynamic SPAs — using scrapling's three-tier fetcher
-architecture and CSS-based data extraction.
+Extract from resistant pages (JS-rendered, Cloudflare, dynamic SPAs) via scrapling 3-tier fetcher + CSS extraction.
 
-## When to Use
+## Use When
 
-- Target page requires JavaScript rendering (SPA, React, Vue)
-- Site has anti-bot protections (Cloudflare Turnstile, TLS fingerprinting)
-- You need structured extraction of multiple elements via CSS selectors
-- Simple `WebFetch` or `requests.get()` returns empty or blocked responses
-- Extracting tabular data, link lists, or repeated DOM structures at scale
+- JS rendering (SPA, React, Vue)
+- Anti-bot (Cloudflare Turnstile, TLS fingerprint)
+- Structured multi-element via CSS
+- `WebFetch` / `requests.get()` empty or blocked
+- Tabular/list/repeated DOM at scale
 
-## Inputs
+## In
 
-- **Required**: Target URL or list of URLs to scrape
-- **Required**: Data to extract (CSS selectors, field names, or description of target elements)
-- **Optional**: Fetcher tier override (default: auto-select based on site behavior)
-- **Optional**: Output format (default: JSON; alternatives: CSV, Python dict)
-- **Optional**: Rate limit delay in seconds (default: 1)
+- **Required**: URL(s)
+- **Required**: data to extract (CSS selectors, field names, target desc)
+- **Optional**: fetcher tier override (default: auto)
+- **Optional**: out format (default JSON; CSV, dict)
+- **Optional**: rate limit sec (default 1)
 
-## Procedure
+## Do
 
-### Step 1: Select Fetcher Tier
-
-Determine which scrapling fetcher matches the target site's defenses.
+### Step 1: Select tier
 
 ```python
 # Decision matrix:
@@ -77,13 +73,11 @@ else:
 | Need to click buttons or scroll | `DynamicFetcher` |
 | altcha CAPTCHA present | None (cannot be automated) |
 
-**Expected:** One of the three tiers is identified. For most modern sites, `StealthyFetcher` is the correct starting point.
+→ 1 of 3 tiers. Modern sites → `StealthyFetcher` usual start.
 
-**On failure:** If all three tiers return blocked responses, check whether the site uses altcha CAPTCHA (proof-of-work challenge that cannot be bypassed). If so, document the limitation and provide manual extraction instructions instead.
+**If err:** all 3 blocked → check altcha CAPTCHA (PoW, cannot bypass). Document limitation + manual extraction.
 
-### Step 2: Configure the Fetcher
-
-Set up the selected fetcher with appropriate options.
+### Step 2: Configure
 
 ```python
 from scrapling import Fetcher, StealthyFetcher, DynamicFetcher
@@ -114,16 +108,14 @@ fetcher.configure(
 )
 ```
 
-**Expected:** Fetcher instance is configured and ready. No errors on instantiation. For `StealthyFetcher` and `DynamicFetcher`, a Chromium binary is available (scrapling manages this automatically on first run).
+→ Fetcher configured + ready. No err on init. Stealth/Dynamic → Chromium auto-managed first run.
 
-**On failure:**
-- `playwright` or browser binary not found -- run `python -m playwright install chromium`
-- Timeout on `configure()` -- increase timeout value or check network connectivity
-- Import error -- install scrapling: `pip install scrapling`
+**If err:**
+- `playwright` / browser binary missing → `python -m playwright install chromium`
+- `configure()` timeout → increase timeout or check network
+- Import err → `pip install scrapling`
 
-### Step 3: Fetch and Extract Data
-
-Navigate to the target URL and extract structured data using CSS selectors.
+### Step 3: Fetch + extract
 
 ```python
 # Fetch the page
@@ -149,7 +141,7 @@ urls = [link.get("href") for link in links]
 detail_html = response.find("div.description").html_content
 ```
 
-**Key API reference:**
+**API ref:**
 
 | Method | Purpose |
 |--------|---------|
@@ -159,16 +151,14 @@ detail_html = response.find("div.description").html_content
 | `element.get_all_text()` | All text content, recursively |
 | `element.html_content` | Raw inner HTML |
 
-**Expected:** Extracted data matches the visible page content. Elements are non-None and text content is non-empty for populated pages.
+→ Extracted data matches visible content. Non-None elements, non-empty text on populated pages.
 
-**On failure:**
-- `find()` returns `None` -- inspect the actual HTML (`response.html_content`) to verify the selector; the page may use different class names than expected
-- Empty text from `get_all_text()` -- content may be inside shadow DOM or an iframe; try `DynamicFetcher` with a `wait_selector`
-- Do NOT use `.css_first()` -- this is not part of the scrapling API (common confusion with other libraries)
+**If err:**
+- `find()` → `None` → inspect `response.html_content` for actual HTML; selectors may differ
+- Empty `get_all_text()` → shadow DOM / iframe → `DynamicFetcher` w/ `wait_selector`
+- NO `.css_first()` → not scrapling API (other lib confusion)
 
-### Step 4: Handle Failures and Edge Cases
-
-Implement fallback logic for CAPTCHA detection, empty responses, and session requirements.
+### Step 4: Handle failures + edge cases
 
 ```python
 import time
@@ -211,16 +201,14 @@ def scrape_with_fallback(url, selector):
     return None
 ```
 
-**Expected:** Function returns extracted text on success, or `None` with a diagnostic message when all tiers fail. CAPTCHA pages are detected and reported rather than retried indefinitely.
+→ Returns text on success, None + diagnostic on fail. CAPTCHA detected + reported not retried.
 
-**On failure:**
-- All tiers return 403 -- the site blocks all automated access (common with WIPO, TMview, some government databases); document the URL as requiring manual access
-- Timeout errors -- the page may be behind a slow CDN; increase timeout to 120s
-- Session/cookie errors -- the site may require login; add cookie handling or authenticate first
+**If err:**
+- All 403 → site blocks all automation (WIPO, TMview, gov DBs). Document as manual access.
+- Timeout → slow CDN → increase to 120s.
+- Session/cookie errs → login required → add cookie handling / auth.
 
-### Step 5: Rate Limiting and Ethical Scraping
-
-Implement delays and respect site policies before running at scale.
+### Step 5: Rate limit + ethical
 
 ```python
 import time
@@ -250,48 +238,48 @@ def scrape_urls(urls, selector, delay=1.0):
     return results
 ```
 
-**Ethical scraping checklist:**
+**Ethical checklist:**
 
-1. Check `robots.txt` before scraping -- respect `Disallow` directives
-2. Use a minimum 1-second delay between requests
-3. Identify your scraper with a descriptive User-Agent when possible
-4. Do not scrape personal data without legal basis
-5. Cache responses locally to avoid redundant requests
-6. Stop immediately if you receive a 429 (Too Many Requests)
+1. `robots.txt` first → respect `Disallow`
+2. Min 1-sec delay
+3. Descriptive User-Agent
+4. No personal data w/o legal basis
+5. Cache locally → avoid redundant reqs
+6. 429 → stop immediately
 
-**Expected:** Scraping runs at a controlled rate. `robots.txt` is checked before bulk operations. No 429 responses are triggered.
+→ Controlled rate. `robots.txt` checked pre-bulk. No 429.
 
-**On failure:**
-- 429 Too Many Requests -- increase delay to 3-5 seconds, or stop and retry later
-- `robots.txt` disallows the path -- respect the directive; do not override it
-- IP ban -- stop scraping immediately; the rate limiting was insufficient. If access is legitimate (public data, ToS-permitted, robots.txt-respected) and you must continue, see [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md) for network-layer escalation
+**If err:**
+- 429 → increase delay 3-5 sec, or stop + retry later
+- `robots.txt` disallow → respect, do not override
+- IP ban → stop immediately. If legit access (public, ToS-permit, robots-respect) must continue → see `rotate-scraping-proxies` for network-layer escalation
 
-## Validation
+## Check
 
-- [ ] Correct fetcher tier is selected (not over- or under-powered for the target)
-- [ ] `configure()` method is used (not deprecated constructor kwargs)
-- [ ] CSS selectors match actual page structure (verified against page source)
-- [ ] `.find()` / `.find_all()` API is used (not `.css_first()` or other library methods)
-- [ ] CAPTCHA detection is in place (altcha pages are reported, not retried)
-- [ ] Rate limiting is implemented for multi-URL scraping
-- [ ] `robots.txt` is checked before bulk operations
-- [ ] Extracted data is non-empty and structurally correct
+- [ ] Correct tier (not over/under)
+- [ ] `configure()` used (not deprecated constructor kwargs)
+- [ ] Selectors match actual structure (verified vs source)
+- [ ] `.find()` / `.find_all()` used (not `.css_first()`)
+- [ ] CAPTCHA detection (altcha reported, not retried)
+- [ ] Rate limit for multi-URL
+- [ ] `robots.txt` checked pre-bulk
+- [ ] Extracted data non-empty + correct
 
-## Common Pitfalls
+## Traps
 
-- **Using `.css_first()` instead of `.find()`**: scrapling uses `.find()` and `.find_all()` for element selection -- `.css_first()` belongs to a different library and will raise `AttributeError`
-- **Starting with DynamicFetcher**: Always try `Fetcher` first, then escalate -- `DynamicFetcher` is 10-50x slower due to full browser startup
-- **Constructor kwargs instead of `configure()`**: scrapling v0.4.x deprecated passing options to the constructor; always use the `configure()` method
-- **Ignoring altcha CAPTCHA**: No fetcher tier can solve altcha proof-of-work challenges -- detect them early and fall back to manual instructions
-- **No rate limiting**: Even if the site does not return 429, aggressive scraping can get your IP banned or cause service degradation
-- **Assuming stable selectors**: Website CSS classes change frequently -- validate selectors against current page source before each scraping campaign
+- **`.css_first()` instead `.find()`**: scrapling uses `.find()`/`.find_all()`. `.css_first()` = diff lib → `AttributeError`.
+- **Start w/ DynamicFetcher**: try Fetcher first. Dynamic 10-50× slower (full browser startup).
+- **Constructor kwargs**: scrapling v0.4.x deprecated → always `configure()`.
+- **Ignore altcha**: no tier solves altcha PoW → detect early + fallback manual.
+- **No rate limit**: even w/o 429 → IP ban / service degradation.
+- **Stable selectors**: CSS changes frequently → validate before each campaign.
 
-## Related Skills
+## →
 
-- [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md) -- network-layer escalation when client-side stealth is exhausted and IP bans block legitimate, ToS-permitted access
-- [use-graphql-api](../use-graphql-api/SKILL.md) -- structured API queries when the site offers a GraphQL endpoint (preferred over scraping)
-- [serialize-data-formats](../serialize-data-formats/SKILL.md) -- converting extracted data to JSON, CSV, or other formats
-- [deploy-searxng](../deploy-searxng/SKILL.md) -- self-hosted search engine that aggregates results from multiple sources
-- [forage-solutions](../forage-solutions/SKILL.md) -- broader pattern for gathering information from diverse sources
+- `rotate-scraping-proxies` — network-layer escalation when client-side stealth exhausted
+- `use-graphql-api` — GraphQL endpoint > scraping
+- `serialize-data-formats` — JSON/CSV conversion
+- `deploy-searxng` — self-hosted aggregator
+- `forage-solutions` — broader info gathering
 
 <!-- Keep under 500 lines. Extract large examples to references/EXAMPLES.md if needed. -->

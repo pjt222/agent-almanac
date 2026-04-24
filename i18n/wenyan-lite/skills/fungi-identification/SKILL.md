@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Field identification of fungi using morphological features, spore prints,
   habitat analysis, and seasonal context with a safety-first approach. Covers
@@ -25,197 +25,196 @@ metadata:
   tags: mycology, fungi, mushroom, identification, foraging, safety, spore-print
 ---
 
-# Fungi Identification
+# 識菌
 
-Identify fungi in the field using morphological features, spore prints, habitat, and season with an absolute safety-first approach.
+以形態特徵、孢印、棲地分析與時令情境於野識菌，絕以安全為先。
 
-## When to Use
+## 適用時機
 
-- You encounter an unknown fungus and need to identify it
-- You are foraging for edible mushrooms and need to confirm species before consumption
-- You want to assess whether fungi in your garden or property are harmful
-- You are building field identification skills through structured observation practice
-- You need to differentiate an edible species from a dangerous look-alike
+- 遇未知之菌，需識之
+- 採食用菌，食前須確認物種
+- 欲評院中或地上之菌是否有害
+- 以系統觀察練建立野識能力
+- 欲區別食用種與危險仿物
 
-## Inputs
+## 輸入
 
-- **Required**: A fungus specimen or clear observation of one in situ
-- **Required**: Ability to observe fine morphological details (cap, gills, stem, base)
-- **Optional**: Field guide or reference material for the region
-- **Optional**: Paper and glass for spore prints
-- **Optional**: Knife for cross-section examination
-- **Optional**: Hand lens (10x) for fine detail
+- **必要**：菌體或其原地之清晰觀察
+- **必要**：觀察細形態之能力（菌蓋、菌褶、菌柄、基部）
+- **選擇性**：該地區之野外圖鑑或參考資料
+- **選擇性**：紙與玻璃以作孢印
+- **選擇性**：刀以看切面
+- **選擇性**：放大鏡（十倍）以看細節
 
-## Procedure
+## 步驟
 
-### Step 1: The Cardinal Rule
+### 步驟一：首要法則
 
-Before any identification work, internalize the absolute rule of mycology.
-
-```
-CARDINAL RULE:
-If you are not 100% certain of the identification, DO NOT EAT IT.
-
-There is no "universal edibility test" for mushrooms.
-Some deadly species taste pleasant.
-Some deadly species have delayed symptoms (24-72 hours).
-Some deadly species have NO antidote.
-
-The cost of a false positive (eating a misidentified mushroom) is
-organ failure and death. The cost of a false negative (skipping an
-edible mushroom) is a missed meal.
-
-ALWAYS ERR TOWARD CAUTION.
-```
-
-**Expected:** The cardinal rule is internalized before proceeding with identification.
-
-**On failure:** There is no failure mode for this step. If the rule is not internalized, do not proceed to field identification for consumption purposes.
-
-### Step 2: Document the Habitat
-
-Context narrows identification before touching the specimen.
+行任何識別前，內化菌學之絕對法則。
 
 ```
-Habitat Recording:
+首要法則：
+若不能百分之百確認，切勿食之。
+
+無所謂「通用食用性測試」。
+有致命種味甘。
+有致命種症狀遲延（二十四至七十二時）。
+有致命種無解毒劑。
+
+偽陽性之代價（食誤識之菌）為器官衰竭與死。
+偽陰性之代價（錯過食用菌）僅失一餐。
+
+永向謹慎傾。
+```
+
+**預期：** 入識別前已內化首要法則。
+
+**失敗時：** 此步無失敗模式。若法則未內化，勿為食用而行野識別。
+
+### 步驟二：記棲地
+
+觸樣本前，情境先縮識別範圍。
+
+```
+棲地記錄：
 +--------------------+------------------------------------------+
-| Factor             | Record                                   |
+| 因子               | 記錄                                     |
 +--------------------+------------------------------------------+
-| Substrate          | Soil, wood (dead/living), dung, leaf      |
-|                    | litter, moss, other fungi                |
+| 基質               | 土、木（死/活）、糞、葉                   |
+|                    | 屑、苔、他菌                             |
 +--------------------+------------------------------------------+
-| Tree association   | What trees are within 10m? (Many fungi    |
-|                    | are mycorrhizal with specific tree genera)|
+| 樹木相關           | 十米內何樹？（許多菌                      |
+|                    | 與特定樹屬共生）                         |
 +--------------------+------------------------------------------+
-| Moisture           | Dry, damp, wet, waterlogged              |
+| 濕度               | 乾、潮、濕、積水                         |
 +--------------------+------------------------------------------+
-| Light              | Full shade, dappled, open                |
+| 光                 | 全陰、斑駁、開曠                         |
 +--------------------+------------------------------------------+
-| Season             | Early spring, late spring, summer, early  |
-|                    | autumn, late autumn, winter              |
+| 時令               | 早春、晚春、夏、早                        |
+|                    | 秋、晚秋、冬                             |
 +--------------------+------------------------------------------+
-| Altitude           | Lowland, mid-altitude, montane           |
+| 海拔               | 低地、中海拔、山地                       |
 +--------------------+------------------------------------------+
-| Growth pattern     | Solitary, scattered, clustered, ring,    |
-|                    | shelf/bracket                            |
+| 生長模式           | 獨生、散生、叢生、環生、                  |
+|                    | 架/托                                    |
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete habitat record that provides context for species-level identification.
+**預期：** 完整棲地記錄，為物種級識別提供情境。
 
-**On failure:** If habitat is unclear (e.g., urban garden with mixed plantings), record what is visible. Incomplete habitat data reduces identification confidence — factor this into the safety assessment.
+**失敗時：** 若棲地不明（如城市院落混植），記所見。棲地資料不全降低識別信心——當納入安全評估。
 
-### Step 3: Examine Morphological Features
+### 步驟三：察形態特徵
 
-Systematic examination of the specimen itself.
-
-```
-Morphological Checklist:
-
-CAP (Pileus):
-- Shape: convex, flat, concave, conical, umbonate, bell-shaped
-- Diameter (measure or estimate)
-- Surface: smooth, scaly, fibrous, slimy, dry, cracked
-- Colour (note if colour changes with age or moisture)
-- Margin: smooth, striate, inrolled, appendiculate (veil remnants)
-
-GILLS / PORES / SPINES (Hymenium):
-- Type: gills (lamellae), pores (tubes), spines (teeth), smooth
-- Attachment: free, adnexed, adnate, decurrent
-- Spacing: crowded, close, distant
-- Colour (important — note changes with age)
-- Bruising: do gills change colour when damaged?
-
-STEM (Stipe):
-- Height and diameter
-- Shape: equal, tapered, bulbous, club-shaped
-- Surface: smooth, fibrous, scaly, reticulate (netted)
-- Interior: solid, hollow, stuffed (pithy center)
-- Ring (annulus): present/absent, position, persistent/fragile
-- Volva (cup at base): present/absent — ALWAYS check by
-  carefully excavating the base (Amanita species have a volva)
-
-FLESH (Context):
-- Colour when cut
-- Colour change on exposure to air (note time to change)
-- Texture: firm, brittle, fibrous, gelatinous
-- Smell: mushroomy, anise, radish, flour, chlorine, unpleasant
-- Taste: (ONLY if species is confirmed non-deadly by an expert;
-  for unknown species, DO NOT taste)
-
-SPORE PRINT:
-- Remove the stem; place the cap gill-side down on paper
-  (half white, half dark paper to see any colour)
-- Cover with a glass or bowl to maintain humidity
-- Wait 4-12 hours
-- Record spore colour: white, cream, pink, brown, purple-brown,
-  black, rust-orange
-```
-
-**Expected:** A complete morphological description covering all major features.
-
-**On failure:** If a feature cannot be observed (e.g., no ring visible but it may have been lost), record it as "not observed" rather than "absent." The distinction matters for identification.
-
-### Step 4: Identify Using Multiple Confirmations
-
-Cross-reference all data against reference material.
+系統察看樣本本身。
 
 ```
-Identification Protocol:
-1. Use habitat + season to narrow to likely genera
-2. Use cap shape + gill type + spore colour to narrow to species group
-3. Check ALL features against the candidate species description
-4. Specifically check against dangerous look-alikes:
-   - Does this species have a deadly doppelganger?
-   - What feature distinguishes the edible from the deadly?
-   - Can I see that distinguishing feature clearly?
+形態清單：
 
-Confidence Levels:
+菌蓋（Pileus）：
+- 形：凸、平、凹、錐、鐘狀、中凸
+- 直徑（量或估）
+- 表：滑、鱗、纖維、黏、乾、裂
+- 色（記色是否隨齡或濕度變）
+- 邊緣：滑、條紋、內捲、附屬（菌幕遺物）
+
+菌褶／菌孔／菌齒（Hymenium）：
+- 類：菌褶、菌孔（管）、菌齒、滑
+- 著生：離生、彎生、貼生、延生
+- 疏密：擁擠、近、遠
+- 色（要——記隨齡之變）
+- 瘀傷：褶受損時色變否？
+
+菌柄（Stipe）：
+- 高與直徑
+- 形：等粗、漸細、塊莖狀、棒狀
+- 表：滑、纖維、鱗、網紋
+- 內部：實心、中空、有髓（心狀芯）
+- 菌環：有/無、位置、持久/脆
+- 菌托（基部之杯）：有/無——永謹慎
+  掘基部以查（鵝膏屬種有菌托）
+
+菌肉（Context）：
+- 切時之色
+- 露氣之色變（記變色所需時間）
+- 質：堅、脆、纖維、膠狀
+- 味：菌香、茴香、蘿蔔、麵粉、氯、不悅
+- 嘗：（僅於專家確認非致命後；
+  未知種勿嘗）
+
+孢印：
+- 去菌柄；菌蓋褶面朝下置紙上
+  （紙半白半黑以見任何色）
+- 以玻璃杯或碗蓋以保濕
+- 待四至十二時
+- 記孢色：白、奶油、粉、棕、紫棕、
+  黑、鐵鏽橙
+```
+
+**預期：** 涵蓋所有主要特徵之完整形態描述。
+
+**失敗時：** 若某特徵不可觀（如無菌環但或已脫落），記為「未觀察到」而非「缺」。此區別於識別為要。
+
+### 步驟四：以多重確認識之
+
+所有資料交叉參考於參考資料。
+
+```
+識別之法：
+1. 以棲地 + 時令縮至可能之屬
+2. 以菌蓋形 + 菌褶類 + 孢色縮至物種群
+3. 核所有特徵於候選物種之描述
+4. 特意核危險仿物：
+   - 此種有致命之雙生種否？
+   - 何特徵區別食用與致命？
+   - 可清楚見該區別特徵否？
+
+信心層級：
 +----------+---------------------------+---------------------------+
-| Level    | Criteria                  | Action                    |
+| 級       | 標準                      | 行動                      |
 +----------+---------------------------+---------------------------+
-| Certain  | All features match; no    | Safe to collect (for      |
-|          | look-alike confusion;     | experienced identifiers)  |
-|          | experienced with species  |                           |
+| 確定     | 所有特徵相配；無          | 可採集（於                |
+|          | 仿物混淆；                | 經驗識別者）              |
+|          | 熟悉該種                  |                           |
 +----------+---------------------------+---------------------------+
-| Probable | Most features match;      | DO NOT eat. Collect for   |
-|          | one or two uncertain;     | further study (spore      |
-|          | look-alike eliminated     | print, expert review)     |
+| 或然     | 多數特徵配；              | 勿食。為進一步研究        |
+|          | 一二不確；                | 採集（孢印、              |
+|          | 仿物已排除                | 專家審）                  |
 +----------+---------------------------+---------------------------+
-| Possible | Some features match;      | DO NOT eat. Photograph    |
-|          | look-alike not fully      | and seek expert opinion   |
-|          | eliminated                |                           |
+| 可能     | 部分特徵配；              | 勿食。拍照                |
+|          | 仿物未全然                | 求專家意見                |
+|          | 排除                      |                           |
 +----------+---------------------------+---------------------------+
-| Unknown  | Cannot narrow to species  | DO NOT eat. DO NOT        |
-|          |                          | handle extensively        |
+| 未知     | 不能縮至物種              | 勿食。勿                  |
+|          |                          | 多處理                    |
 +----------+---------------------------+---------------------------+
 ```
 
-**Expected:** A species-level identification with explicit confidence level and look-alike assessment.
+**預期：** 物種級識別附明確信心層級與仿物評估。
 
-**On failure:** If identification stalls at genus level, that is acceptable for learning purposes. For consumption, only species-level "Certain" identification is acceptable.
+**失敗時：** 若識別止於屬級，於學習目的可。為食用，僅「確定」之物種級識別可接受。
 
-## Validation
+## 驗證
 
-- [ ] The cardinal rule was acknowledged before starting identification
-- [ ] Habitat was documented before examining the specimen
-- [ ] All morphological features were examined systematically
-- [ ] The base was excavated to check for a volva
-- [ ] A spore print was taken (if time allows)
-- [ ] Dangerous look-alikes were explicitly checked and eliminated
-- [ ] Confidence level was honestly assessed
-- [ ] Only "Certain" identifications were considered for consumption
+- [ ] 識別前已承認首要法則
+- [ ] 察樣本前已記棲地
+- [ ] 所有形態特徵系統察看
+- [ ] 基部已掘以查菌托
+- [ ] 已作孢印（時間許可）
+- [ ] 危險仿物已明核並排除
+- [ ] 信心層級誠實評估
+- [ ] 僅「確定」識別方考慮食用
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Relying on a single feature**: "It looks like a chanterelle" based on colour alone. True chanterelles have false gills (ridges), grow from soil near trees, and have a specific apricot smell. False chanterelles and Jack-o'-lanterns share the colour but differ in every other feature
-- **Skipping the base examination**: Failing to dig up the base misses the volva — the single most important feature for identifying deadly Amanita species (death cap, destroying angel)
-- **Trusting apps blindly**: AI-based mushroom identification apps have significant error rates for look-alike species. Use them as a starting point, never as confirmation
-- **Assuming "common = safe"**: Abundance does not indicate edibility. Deadly species can be locally abundant
-- **Tasting unknown species**: Some mycologists use taste as a diagnostic tool, but this requires expert-level knowledge of which species are safe to taste. For non-experts, do not taste unknown fungi
-- **Ignoring temporal toxins**: Some species (e.g., Amanita phalloides) have pleasant taste and delayed symptoms. By the time symptoms appear (24-48 hours), liver damage is severe
+- **依單一特徵**：「此似雞油菌」僅憑色。真雞油菌有假褶（脊）、自樹旁土生、有杏香。假雞油菌與南瓜燈菌同色但其他特徵皆異
+- **略基部察**：不掘基部則漏菌托——致命鵝膏種（死帽、毀滅天使）識別之最要特徵
+- **盲信手機應用**：AI 識菌應用對仿物種之錯誤率顯著。為起點用，勿為確認之據
+- **以為「常見 = 安全」**：多產不示食用性。致命種可於地方多產
+- **嘗未知種**：有些菌學家以嘗為診斷工具，然此需專家級知識分辨何種可嘗。非專家勿嘗未知菌
+- **忽視遲延毒**：有種（如死帽菌）味甘而症狀遲延。症狀現時（二十四至四十八時），肝損已重
 
-## Related Skills
+## 相關技能
 
-- `mushroom-cultivation` — growing known species eliminates identification risk entirely
-- `forage-plants` — complementary field identification skill; shares the multi-feature confirmation methodology
+- `mushroom-cultivation` — 種已知種盡除識別風險
+- `forage-plants` — 互補之野識技能；共享多特徵確認之法

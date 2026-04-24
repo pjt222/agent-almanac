@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate publication-ready statistical tables using gt, kableExtra,
   or flextable. Covers descriptive statistics, regression results,
@@ -26,26 +26,26 @@ metadata:
 
 # Generate Statistical Tables
 
-Create publication-ready statistical tables for reports and manuscripts.
+Pub-ready stat tables for reports + manuscripts.
 
-## When to Use
+## Use When
 
-- Creating descriptive statistics tables
-- Formatting regression or ANOVA output
-- Building correlation matrices
-- Producing APA-style tables for academic papers
-- Generating tables for Quarto/R Markdown documents
+- Descriptive stats tables
+- Regression / ANOVA output format
+- Correlation matrices
+- APA-style academic
+- Quarto / R Markdown tables
 
-## Inputs
+## In
 
-- **Required**: Statistical analysis results (model objects, summary data)
-- **Required**: Output format (HTML, PDF, Word)
-- **Optional**: Style guide (APA, journal-specific)
-- **Optional**: Table numbering scheme
+- **Required**: stat results (models, summaries)
+- **Required**: out format (HTML, PDF, Word)
+- **Optional**: style guide (APA, journal)
+- **Optional**: numbering scheme
 
-## Procedure
+## Do
 
-### Step 1: Choose Table Package
+### Step 1: Choose pkg
 
 | Package | Best for | Formats |
 |---------|----------|---------|
@@ -54,11 +54,11 @@ Create publication-ready statistical tables for reports and manuscripts.
 | `flextable` | Word documents | Word, PDF, HTML |
 | `gtsummary` | Clinical/statistical summaries | All via gt/flextable |
 
-**Expected:** A table package selected based on the output format and use case. The chosen package is installed and loadable.
+→ Pkg selected by format + use case, installed + loadable.
 
-**On failure:** If the required package is not installed, run `install.packages("gt")` (or the appropriate package). For `gtsummary`, both `gt` and `gtsummary` must be installed.
+**If err:** missing → `install.packages("gt")` (or proper). `gtsummary` needs `gt` + `gtsummary`.
 
-### Step 2: Descriptive Statistics Table
+### Step 2: Descriptive stats
 
 ```r
 library(gt)
@@ -88,11 +88,11 @@ gt(descriptives) |>
   )
 ```
 
-**Expected:** A `gt` table object with formatted means, SDs, and counts grouped by category. Column headers use proper statistical notation (italicized *M*, *SD*, *n*).
+→ `gt` object w/ M, SD, n grouped, italic headers.
 
-**On failure:** If `group_by()` produces unexpected results, verify the grouping variable exists and has the expected levels. If `fmt_number()` throws an error, ensure the target columns contain numeric data.
+**If err:** `group_by()` unexpected → verify var + levels. `fmt_number()` err → numeric cols.
 
-### Step 3: Regression Results Table
+### Step 3: Regression results
 
 ```r
 model <- lm(outcome ~ predictor1 + predictor2 + predictor3, data = data)
@@ -108,11 +108,11 @@ tbl_regression(model) |>
   modify_caption("Table 2: Regression Results")
 ```
 
-**Expected:** A `gtsummary` regression table with bolded p-values, model fit statistics (R-squared, N) in a source note, and a descriptive caption.
+→ Regression table w/ bold p, fit stats note, caption.
 
-**On failure:** If `tbl_regression()` fails, verify the input is a model object (e.g., `lm`, `glm`). If `add_glance_source_note()` errors, check that `broom` can tidy the model: `broom::glance(model)`.
+**If err:** `tbl_regression()` fail → verify model obj (lm, glm). `add_glance_source_note()` err → check `broom::glance(model)`.
 
-### Step 4: Correlation Matrix
+### Step 4: Correlation matrix
 
 ```r
 library(gt)
@@ -131,11 +131,11 @@ as.data.frame(cor_matrix) |>
   tab_header(title = "Table 3", subtitle = "Correlation Matrix")
 ```
 
-**Expected:** A lower-triangle correlation matrix rendered as a `gt` table with blanked upper triangle, two decimal places, and a clear caption.
+→ Lower-triangle cor matrix w/ blanked upper, 2 dec, caption.
 
-**On failure:** If `sub_missing()` does not blank the upper triangle, verify that `NA` values were set correctly with `cor_matrix[upper.tri(cor_matrix)] <- NA`. If variables are non-numeric, `cor()` will fail; filter to numeric columns first.
+**If err:** `sub_missing()` not blanking → check NA set. Non-numeric → `cor()` fails → filter numeric.
 
-### Step 5: ANOVA Table
+### Step 5: ANOVA table
 
 ```r
 aov_result <- aov(score ~ group * condition, data = data)
@@ -157,11 +157,11 @@ tbl_anova <- broom::tidy(aov_result) |>
   tab_header(title = "Table 4", subtitle = "ANOVA Results")
 ```
 
-**Expected:** A formatted ANOVA table with Source, *df*, *SS*, *MS*, *F*, and *p* columns. Interaction terms are clearly labeled and p-values are formatted to three decimal places.
+→ ANOVA w/ Source, df, SS, MS, F, p. Interactions labeled, p to 3 dec.
 
-**On failure:** If `broom::tidy(aov_result)` produces unexpected columns, verify the model is an `aov` object. For Type III sums of squares, use `car::Anova(model, type = 3)` instead of base `aov()`.
+**If err:** `broom::tidy(aov_result)` unexpected cols → verify aov obj. Type III SS → `car::Anova(model, type = 3)`.
 
-### Step 6: Save Tables
+### Step 6: Save
 
 ```r
 # Save as HTML
@@ -177,11 +177,11 @@ gtsave(my_table, "table1.png")
 kableExtra::save_kable(kable_table, "table1.pdf")
 ```
 
-**Expected:** Table saved to the specified file format (HTML, Word, PNG, or PDF). The output file opens correctly in the appropriate application.
+→ Saved to format. Opens correctly.
 
-**On failure:** If `gtsave()` fails for Word format, ensure the `webshot2` package is installed. For PDF output via `kableExtra`, ensure a LaTeX distribution (TinyTeX or MiKTeX) is installed.
+**If err:** `gtsave()` Word fail → install `webshot2`. PDF via kableExtra → install TinyTeX/MiKTeX.
 
-### Step 7: Embed in Quarto Document
+### Step 7: Embed in Quarto
 
 ````markdown
 ```{r}
@@ -195,29 +195,29 @@ gt(descriptives) |>
 See @tbl-descriptives for summary statistics.
 ````
 
-**Expected:** The table renders inline in the Quarto document with a cross-referenceable label (`@tbl-*`) and a proper caption. The table adapts to the document's output format automatically.
+→ Renders inline w/ `@tbl-*` cross-ref + caption. Adapts to format.
 
-**On failure:** If the table does not render, verify the chunk label starts with `tbl-` for Quarto cross-referencing. If formatting is lost in PDF, switch from `gt` to `kableExtra` for LaTeX-based output.
+**If err:** no render → chunk label `tbl-` prefix. PDF formatting lost → switch gt → kableExtra.
 
-## Validation
+## Check
 
-- [ ] Table renders correctly in target format (HTML, PDF, Word)
-- [ ] Numbers are formatted consistently (decimal places, alignment)
-- [ ] Statistical notation follows the style guide (italicized, proper symbols)
-- [ ] Table has a clear caption and numbering
-- [ ] Column headers are meaningful
-- [ ] Notes/footnotes explain abbreviations or significance markers
+- [ ] Renders in target format
+- [ ] Consistent number format
+- [ ] Stat notation per style (italic, symbols)
+- [ ] Clear caption + numbering
+- [ ] Meaningful headers
+- [ ] Notes/footnotes explain abbrevs + sig markers
 
-## Common Pitfalls
+## Traps
 
-- **gt in PDF**: gt has limited PDF support. Use kableExtra for LaTeX-heavy documents.
-- **Rounding inconsistency**: Always use `fmt_number()` (gt) or `format()` rather than `round()` for display
-- **Missing values display**: Configure with `sub_missing()` in gt or `options(knitr.kable.NA = "")`
-- **Wide tables in PDF**: Tables exceeding page width need `landscape()` or font size reduction
-- **APA number formatting**: No leading zero for values bounded by 1 (p-values, correlations): ".03" not "0.03"
+- **gt in PDF**: limited. Use kableExtra for LaTeX.
+- **Rounding inconsistency**: `fmt_number()` (gt) / `format()` not `round()`.
+- **Missing values**: `sub_missing()` (gt) or `options(knitr.kable.NA = "")`.
+- **Wide PDF**: `landscape()` or font reduction.
+- **APA number**: no leading zero when ≤1 (p, corr): ".03" not "0.03".
 
-## Related Skills
+## →
 
-- `format-apa-report` - tables within APA manuscripts
-- `create-quarto-report` - embedding tables in reports
-- `build-parameterized-report` - tables that adapt to parameters
+- `format-apa-report` — APA manuscript tables
+- `create-quarto-report` — embed in reports
+- `build-parameterized-report` — param-adaptive tables

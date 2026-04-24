@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify insects using body plan analysis, dichotomous keys to order, wing
   venation, mouthpart type, antennae form, leg and tarsal structure, and
@@ -26,32 +26,32 @@ metadata:
   tags: entomology, insects, identification, taxonomy, dichotomous-key, morphology
 ---
 
-# Identify Insect
+# 辨蟲
 
-Identify insects using systematic morphological examination, dichotomous keys, and structured confidence assessment.
+用系統形察、二分鑰、結構信心評辨蟲。
 
-## When to Use
+## 用
 
-- You have an unknown insect (live, photographed, or preserved) and need to identify it
-- You want to move beyond order-level placement to family or genus
-- You are working through a specimen collection and need consistent identification methods
-- You need to distinguish between visually similar orders or families
-- You are teaching or learning insect identification and want a structured approach
+- 有未知蟲（活、照、製），需辨
+- 欲由目級進至科屬
+- 取樣集需一致辨法
+- 分相似目或科
+- 教或學蟲辨識欲結構法
 
-## Inputs
+## 入
 
-- **Required**: An insect specimen or clear observation (live, photographed, or preserved)
-- **Required**: Ability to examine fine morphological details (wings, mouthparts, antennae, legs)
-- **Optional**: Hand lens (10x) or dissecting microscope for fine detail
-- **Optional**: Entomological field guide or dichotomous key for the region
-- **Optional**: Forceps and pins for manipulating preserved specimens
-- **Optional**: Photographs from multiple angles (dorsal, lateral, ventral, frontal)
+- **必**：蟲樣或清察（活、照、製）
+- **必**：細形察能（翅、口、觸、足）
+- **可**：手鏡 10x 或解剖顯微
+- **可**：區域蟲野外指南或二分鑰
+- **可**：鑷與針（操製樣）
+- **可**：多角照（背、側、腹、正）
 
-## Procedure
+## 行
 
-### Step 1: Verify the Basic Body Plan
+### 一：驗基體制
 
-Confirm you are looking at an insect and not another arthropod. This step prevents misidentification at the most fundamental level.
+確乃蟲非他節肢。此步防最基誤辨。
 
 ```
 Arthropod Verification:
@@ -77,13 +77,13 @@ Not an insect if:
 - No antennae → Arachnida
 ```
 
-**Expected:** Confirmation that the organism is an insect with 6 legs, 3 body regions, 1 pair of antennae, and 0-4 wings.
+得：確為蟲，六足、三區、一對觸、0-4 翅。
 
-**On failure:** If the specimen has 8 legs, it is an arachnid — do not proceed with insect keys. If leg count is ambiguous (e.g., legs lost on preserved specimen), examine thoracic leg attachments — insects have 3 pairs of coxae on the pro-, meso-, and metathorax. If the body plan is genuinely unclear, record "Arthropoda — class uncertain" and note what features are visible.
+敗：有 8 足→蛛綱；勿行蟲鑰。足數曖（製樣失足）→察胸足連，蟲有三對基節於前、中、後胸。體制真不明→記「節肢——綱不明」並記可見徵。
 
-### Step 2: Key to Order Using the Dichotomous Key
+### 二：用二分鑰鑰至目
 
-Work through the following simplified key one couplet at a time. At each couplet, choose the option that matches your specimen and follow the lead number.
+逐對工作下列簡二分鑰。各對擇合樣之選，隨導號。
 
 ```
 Simplified Dichotomous Key to Major Insect Orders:
@@ -155,13 +155,13 @@ Simplified Dichotomous Key to Major Insect Orders:
      (many wingless forms exist within winged orders)
 ```
 
-**Expected:** Identification to order with a clear path through the key documented (e.g., "1a to 2b to 3a = Coleoptera").
+得：鑰至目，明路（如「1a→2b→3a=Coleoptera」）。
 
-**On failure:** If the specimen does not clearly match any couplet, it may be a wingless form of a normally winged order (e.g., worker ants are wingless Hymenoptera, female bagworm moths are wingless Lepidoptera). Note which couplet caused difficulty and what features are ambiguous. Consult a more detailed regional key or photograph the specimen for expert review.
+敗：樣不合任對→或為常翅目之無翅形（如工蟻乃無翅 Hymenoptera、雌袋蛾乃無翅 Lepidoptera）。記致難之對與曖徵。諮更詳區鑰或攝樣供專家審。
 
-### Step 3: Examine Wing Venation and Type
+### 三：察翅脈與型
 
-Wings carry diagnostic information at family and genus level beyond what the dichotomous key captures.
+翅於科屬級載超二分鑰之診斷訊。
 
 ```
 Wing Types by Order:
@@ -200,13 +200,13 @@ Venation Notes:
   Lepidoptera) indicate how front and hind wings link during flight
 ```
 
-**Expected:** Wing type classified and major venation features noted. For common orders, this may confirm or refine the order-level identification.
+得：翅型分，主脈特徵記。常目或可確或精目級辨。
 
-**On failure:** If wings are damaged, missing, or folded such that venation is not visible, note what can be seen (e.g., "elytra present, hind wings not examined") and proceed to the next step. Wing venation is most useful at the family level — order-level identification usually does not require detailed venation.
+敗：翅損、缺、折使脈不可見→記所見（如「elytra 在，後翅未察」）並進次步。脈於科級最有用——目級辨常不需詳脈。
 
-### Step 4: Examine Mouthparts
+### 四：察口
 
-Mouthpart type reflects feeding ecology and is diagnostic at the order level.
+口型反食生態，於目級診斷。
 
 ```
 Mouthpart Types:
@@ -237,13 +237,13 @@ Mouthpart Types:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Mouthpart type classified (chewing, piercing-sucking, siphoning, sponging, or chewing-lapping) and noted as consistent or inconsistent with the order identification from Step 2.
+得：口型分（咀、刺吸、虹吸、舔、咀舔），記合或不合二步所辨目。
 
-**On failure:** Mouthparts are often difficult to see on live or small specimens without magnification. If mouthparts cannot be examined, skip this step and note "mouthparts not examined." For photographs, a frontal view may reveal the mouthpart type. This step is confirmatory, not mandatory for order-level identification.
+敗：活或小樣常需放大見口。口不可察→略此步記「未察」。照之正視或揭口型。此步為確認，非目級辨必需。
 
-### Step 5: Examine Antennae
+### 五：察觸角
 
-Antennal form is one of the most visually accessible features and is diagnostic at the family level in many orders.
+觸角形為最易見之徵，多目於科級診斷。
 
 ```
 Antenna Types:
@@ -292,13 +292,13 @@ Antenna Types:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** Antenna form identified and recorded. The antennal type should be consistent with the order identified in Step 2 (e.g., lamellate antennae confirm Scarabaeidae within Coleoptera; capitate antennae confirm butterfly rather than moth within Lepidoptera).
+得：觸角形辨並記。觸角型應合二步所辨目（如 lamellate 確 Scarabaeidae 於 Coleoptera；capitate 確蝶非蛾於 Lepidoptera）。
 
-**On failure:** If antennae are broken, missing, or obscured in photographs, note "antennae not fully visible — appeared [filiform/clubbed/etc.] from what was observed." Antennal form is one of the most reliable features for family-level identification, so the loss of this character reduces confidence. Proceed to Step 6.
+敗：觸角斷、缺、於照遮→記「觸角未全見——所察為 [filiform/clubbed 等]」。觸角為科級辨識最可靠徵之一，失此徵降信心。進六步。
 
-### Step 6: Examine Legs and Tarsal Structure
+### 六：察足與跗節構
 
-Leg specialization reveals the insect's ecology, and tarsal formula (number of segments per tarsus) is diagnostic at the family level in several orders.
+足特化揭蟲生態，跗式（各跗節數）於諸目於科級診斷。
 
 ```
 Leg Specializations:
@@ -340,13 +340,13 @@ Tarsal Formula:
   Variable: Check all three pairs — asymmetry is diagnostic
 ```
 
-**Expected:** Leg specialization type recorded and tarsal formula counted (if specimen allows). These features narrow identification within the order.
+得：足特化型記，跗式計（若樣允）。此諸徵縮目內之辨。
 
-**On failure:** If the specimen is too small for tarsal segments to be counted without a microscope, note the overall leg shape and any obvious specialization (jumping legs, digging legs). Tarsal formula is most useful for Coleoptera families — for other orders, general leg shape is sufficient.
+敗：樣過小跗節不可數→記整足形與顯特化（跳足、掘足）。跗式於 Coleoptera 科最有用——他目整足形足。
 
-### Step 7: Assign Confidence Level
+### 七：定信心級
 
-Synthesize all observations into a final identification with an explicit confidence rating.
+合諸察成末辨並顯評信心。
 
 ```
 Confidence Assessment:
@@ -389,33 +389,33 @@ Record your identification in this format:
   Similar taxa considered: [what else it might be and why rejected]
 ```
 
-**Expected:** A completed identification record with order (minimum), family and genus (if possible), explicit confidence level, and documentation of which features were examined and which were uncertain.
+得：全辨記，含目（至少）、科屬（若可）、顯信心級、所察與所曖之徵。
 
-**On failure:** If the identification stalls at order level, that is a valid outcome. Record all features observed and submit photographs to expert forums or citizen science platforms. Many insects require specialist knowledge or even genital dissection for species-level identification — this is normal, not a failure of the method.
+敗：辨止於目級亦為有效果。記諸察並攝照提交專家壇或民科平台。多蟲需特專知或甚解生殖器方至種級辨——此為常，非法之敗。
 
-## Validation
+## 驗
 
-- [ ] The organism was confirmed as an insect (6 legs, 3 body regions, 1 pair antennae)
-- [ ] The dichotomous key was worked through systematically, documenting the path taken
-- [ ] Wing type was classified and venation features noted where visible
-- [ ] Mouthpart type was identified or noted as unexamined
-- [ ] Antenna form was identified using the standard terminology
-- [ ] Leg specialization and tarsal formula were recorded where possible
-- [ ] A confidence level was explicitly assigned (Certain/Probable/Possible/Unknown)
-- [ ] Similar taxa were considered and reasons for exclusion documented
+- [ ] 生物已確為蟲（六足、三區、一對觸）
+- [ ] 二分鑰系統行畢，記所取路
+- [ ] 翅型分，可見處脈特徵記
+- [ ] 口型辨或記未察
+- [ ] 觸角形用標準術辨
+- [ ] 足特化與跗式可能處記
+- [ ] 信心級顯分（Certain/Probable/Possible/Unknown）
+- [ ] 相似類已考並書排之由
 
-## Common Pitfalls
+## 忌
 
-- **Skipping the body plan check**: Assuming an 8-legged arachnid is an insect because it "looks like a bug." Always count legs first. Ticks, mites, and harvestmen are commonly mistaken for insects
-- **Relying on color alone**: Color is the least reliable identification character in entomology. Many species are variable in color, and unrelated species can be nearly identical in coloration (mimicry). Always use structural features (wings, mouthparts, antennae) as primary characters
-- **Not checking both sides of a couplet**: In a dichotomous key, read both options before choosing. Rushing through leads to wrong branches. If neither option fits well, back up to the previous couplet
-- **Ignoring sexual dimorphism**: Males and females of the same species can look dramatically different. Male moths may have bipectinate antennae while females have filiform. Male stag beetles have enormous mandibles while females do not. Consider both sexes
-- **Confusing larval and adult forms**: Immature insects (larvae, nymphs) often look nothing like adults. Caterpillars (Lepidoptera larvae) have more than 6 true legs. Grubs (Coleoptera larvae) may lack visible legs entirely. Keys for adults do not work on larvae
-- **Forcing a species-level identification**: Many insect families contain hundreds of similar-looking species distinguishable only by genital morphology or DNA barcoding. An honest genus-level or family-level identification is more valuable than a wrong species name
+- **略體制察**：以「似蟲」假 8 足蛛為蟲。必先數足。蜱、蟎、盲蛛常誤為蟲
+- **倚色**：色於蟲學最不可靠。多種色變，不相關種因擬而色近。必用構徵（翅、口、觸）為主
+- **不察二對選**：二分鑰中讀二選再擇。急則誤枝。皆不合→退前對
+- **忽二態**：同種雌雄或異大。雄蛾或 bipectinate 而雌 filiform。雄鍬甲顎大而雌不。二性皆考
+- **混幼成**：幼蟲常異於成。毛蟲（Lepidoptera 幼）有過六真足。蠐螬（Coleoptera 幼）或全缺可見足。成鑰不施於幼
+- **強至種級**：多蟲科含數百相似種，僅以生殖器或 DNA 條碼分。誠之屬級或科級辨勝於誤種名
 
-## Related Skills
+## 參
 
-- `document-insect-sighting` — record the sighting with photographs and metadata before or during identification
-- `observe-insect-behavior` — behavioral observations that supplement morphological identification with ecological context
-- `collect-preserve-specimens` — when a physical specimen is needed for definitive identification under magnification
-- `survey-insect-population` — applying identification skills across multiple specimens in a population-level survey
+- `document-insect-sighting`
+- `observe-insect-behavior`
+- `collect-preserve-specimens`
+- `survey-insect-population`

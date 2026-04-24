@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Work with the full set of Maxwell's equations in integral and differential
   form to analyze electromagnetic fields, waves, and energy transport. Use
@@ -24,44 +24,44 @@ metadata:
   tags: electromagnetism, maxwell-equations, electromagnetic-waves, poynting-vector, boundary-conditions
 ---
 
-# Formulate Maxwell Equations
+# 馬氏四方程
 
-Analyze electromagnetic phenomena by stating the relevant Maxwell equations in appropriate form (integral or differential), applying boundary conditions and symmetry to reduce the system, solving the resulting partial differential equations for the fields, computing derived quantities such as the Poynting vector, radiation pressure, and wave impedance, and verifying the solution against known static and wave limits.
+列馬氏四方程（積或微形）、應邊界與對稱、解 PDE、算 Poynting 及波阻、驗極限。
 
-## When to Use
+## 用
 
-- Solving a boundary value problem for E and B fields in a region with sources and material interfaces
-- Deriving the electromagnetic wave equation from first principles
-- Computing energy flow (Poynting vector) and momentum density of electromagnetic fields
-- Applying boundary conditions at interfaces between different media (dielectrics, conductors, magnetic materials)
-- Analyzing displacement current and its role in completing the Ampere-Maxwell equation
-- Connecting the static limits (Coulomb's law, Biot-Savart) to the unified time-dependent framework
+- 邊值問題求 E、B 於有源、有界面之域
+- 由本原推電磁波方程
+- 算能流（Poynting）、動量密度
+- 應介面邊界條件（介質、導體、磁料）
+- 析位移流於 Ampere-Maxwell 之作用
+- 連靜極（Coulomb、Biot-Savart）於統一時變架構
 
-## Inputs
+## 入
 
-- **Required**: Physical configuration (geometry, source charges and currents, material properties)
-- **Required**: Quantity to solve for (E-field, B-field, wave solution, energy flux, or boundary field values)
-- **Optional**: Symmetry information (planar, cylindrical, spherical, or no special symmetry)
-- **Optional**: Time dependence specification (static, harmonic at frequency omega, or general time-dependent)
-- **Optional**: Boundary conditions at material interfaces or conductor surfaces
+- **必**：物理配置（幾何、電荷流源、料性）
+- **必**：所求量（E、B、波解、能流、界面值）
+- **可**：對稱（平面、柱、球、無）
+- **可**：時變（靜、頻 omega、一般）
+- **可**：界面或導體表邊界條件
 
-## Procedure
+## 行
 
-### Step 1: State the Four Maxwell Equations and Identify Relevant Subset
+### 一：列四方程、擇相關
 
-Write the complete set and select which equations constrain the problem:
+全寫，擇所約束者：
 
-1. **Gauss's law for E**: div(E) = rho / epsilon_0 (differential) or closed_surface_integral(E . dA) = Q_enc / epsilon_0 (integral). Relates E-field divergence to charge density. Use for finding E from charge distributions with symmetry.
+1. **Gauss E 律**：div(E) = rho / epsilon_0（微）或 closed_surface_integral(E . dA) = Q_enc / epsilon_0（積）。E 散連電荷密度。有對稱之電荷分佈取 E 用。
 
-2. **Gauss's law for B**: div(B) = 0 (differential) or closed_surface_integral(B . dA) = 0 (integral). No magnetic monopoles. Every magnetic field line is a closed loop. Use as a consistency check on computed B-fields.
+2. **Gauss B 律**：div(B) = 0（微）或 closed_surface_integral(B . dA) = 0（積）。無磁單極。B 線皆閉環。驗 B 用。
 
-3. **Faraday's law**: curl(E) = -dB/dt (differential) or contour_integral(E . dl) = -d(Phi_B)/dt (integral). A changing B-field generates a curling E-field. Use for induction problems and wave derivation.
+3. **Faraday 律**：curl(E) = -dB/dt（微）或 contour_integral(E . dl) = -d(Phi_B)/dt（積）。B 變生 E 旋。感應與推波用。
 
-4. **Ampere-Maxwell law**: curl(B) = mu_0 J + mu_0 epsilon_0 dE/dt (differential) or contour_integral(B . dl) = mu_0 I_enc + mu_0 epsilon_0 d(Phi_E)/dt (integral). Current and changing E-field generate curling B-field. The displacement current term mu_0 epsilon_0 dE/dt is essential for wave propagation and current continuity.
+4. **Ampere-Maxwell 律**：curl(B) = mu_0 J + mu_0 epsilon_0 dE/dt（微）或 contour_integral(B . dl) = mu_0 I_enc + mu_0 epsilon_0 d(Phi_E)/dt（積）。流與 E 變生 B 旋。位移流 mu_0 epsilon_0 dE/dt 為波傳與流連續所必需。
 
-5. **Form selection**: Choose differential form for local field calculations, wave equations, and PDEs. Choose integral form for high-symmetry problems where the field can be extracted from the integral directly.
+5. **擇形**：局部、波、PDE 取微形。高對稱取積形。
 
-6. **Identify active equations**: Not all four equations are independent constraints in every problem. For electrostatics (dB/dt = 0, J = 0), only Gauss's law for E and curl(E) = 0 matter. For magnetostatics, Gauss's law for B and Ampere's law (without displacement current) suffice.
+6. **辨活方程**：非皆獨立。靜電（dB/dt = 0, J = 0）只 Gauss E 與 curl(E) = 0 有效。靜磁則 Gauss B 與 Ampere（無位移流）足。
 
 ```markdown
 ## Maxwell Equations for This Problem
@@ -72,35 +72,35 @@ Write the complete set and select which equations constrain the problem:
 - **Displacement current**: [negligible / essential -- with justification]
 ```
 
-**Expected:** The four equations are stated, the relevant subset is identified with justification, and the displacement current is either included or explicitly argued to be negligible.
+得：四方程已列，相關子集已辨並明由，位移流或留或明證可略。
 
-**On failure:** If it is unclear whether the displacement current matters, estimate the ratio |epsilon_0 dE/dt| / |J|. If this ratio is comparable to or greater than 1, the displacement current must be retained. In vacuum with no free charges, the displacement current is always essential for wave propagation.
+敗：位移流取捨未明→估 |epsilon_0 dE/dt| / |J| 之比。近 1 或過→必留。真空無電荷則恆須。
 
-### Step 2: Apply Boundary Conditions and Symmetry
+### 二：應邊界與對稱
 
-Reduce the system using material interfaces and geometric symmetry:
+用界面與幾何對稱減系：
 
-1. **Boundary conditions at material interfaces**: At the interface between media 1 and 2 with surface charge sigma_f and surface current K_f:
-   - Normal E: epsilon_1 E_1n - epsilon_2 E_2n = sigma_f
-   - Tangential E: E_1t = E_2t (continuous)
-   - Normal B: B_1n = B_2n (continuous)
-   - Tangential H: n_hat x (H_1 - H_2) = K_f (where n_hat points from 2 to 1)
+1. **介面邊界條件**：介質 1/2 之介，面電荷 sigma_f、面流 K_f：
+   - 法 E：epsilon_1 E_1n - epsilon_2 E_2n = sigma_f
+   - 切 E：E_1t = E_2t（連續）
+   - 法 B：B_1n = B_2n（連續）
+   - 切 H：n_hat x (H_1 - H_2) = K_f（n_hat 由 2 指 1）
 
-2. **Conductor boundary conditions**: At the surface of a perfect conductor:
-   - E_tangential = 0 (inside the conductor E = 0)
-   - B_normal = 0 (inside the conductor B = 0 for time-varying fields)
-   - Surface charge: sigma = epsilon_0 E_normal
-   - Surface current: K = (1/mu_0) n_hat x B
+2. **導體邊界**：完美導體面：
+   - E_tangential = 0（內 E = 0）
+   - B_normal = 0（時變內 B = 0）
+   - 面電荷：sigma = epsilon_0 E_normal
+   - 面流：K = (1/mu_0) n_hat x B
 
-3. **Symmetry reduction**: Use identified symmetries to reduce the number of independent variables:
-   - Planar symmetry: fields depend on one coordinate only (e.g., z), reducing PDEs to ODEs
-   - Cylindrical symmetry: fields depend on (rho, z) or rho only
-   - Spherical symmetry: fields depend on r only
-   - Translational invariance: Fourier transform in the invariant direction
+3. **對稱減**：用所辨對稱減獨立變數：
+   - 平面：場僅依一坐標（如 z），PDE→ODE
+   - 柱：場依 (rho, z) 或僅 rho
+   - 球：場僅依 r
+   - 平移不變：沿不變向 Fourier 變換
 
-4. **Gauge choice** (if using potentials): Select a gauge for the scalar potential phi and vector potential A:
-   - Coulomb gauge: div(A) = 0 (separates electrostatic and radiation contributions)
-   - Lorenz gauge: div(A) + mu_0 epsilon_0 d(phi)/dt = 0 (manifestly Lorentz-covariant, decouples wave equations)
+4. **規範擇**（用勢時）：選 phi 與 A 之規範：
+   - Coulomb：div(A) = 0（分靜電與輻射）
+   - Lorenz：div(A) + mu_0 epsilon_0 d(phi)/dt = 0（顯 Lorentz 協變，解耦波方程）
 
 ```markdown
 ## Boundary Conditions and Symmetry
@@ -111,43 +111,43 @@ Reduce the system using material interfaces and geometric symmetry:
 - **Gauge** (if using potentials): [Coulomb / Lorenz / other]
 ```
 
-**Expected:** All boundary conditions are stated at every interface, symmetry is exploited to reduce the dimensionality, and the problem is ready for PDE solution.
+得：諸界面邊界皆列，對稱已用以減維，問題備解 PDE。
 
-**On failure:** If boundary conditions are over-determined (more equations than unknowns at an interface), check that the number of field components matches the number of conditions. If under-determined, a boundary condition has been missed -- often the tangential H condition or the radiation condition at infinity.
+敗：邊界過定（方程多於未知）→查場分量與條件數是否合。不足→漏條件，常為切 H 或無窮遠輻射條件。
 
-### Step 3: Solve Resulting PDEs
+### 三：解 PDE
 
-Solve the Maxwell equations or their derived forms for the field quantities:
+解馬氏方程或其衍形求場量：
 
-1. **Wave equation derivation**: In a source-free, linear, homogeneous medium:
-   - Take the curl of Faraday's law: curl(curl(E)) = -d/dt(curl(B))
-   - Substitute Ampere-Maxwell: curl(curl(E)) = -mu epsilon d^2E/dt^2
-   - Use the vector identity: curl(curl(E)) = grad(div(E)) - nabla^2(E)
-   - With div(E) = 0 (no free charges): nabla^2(E) = mu epsilon d^2E/dt^2
-   - Wave speed: v = 1/sqrt(mu epsilon); in vacuum c = 1/sqrt(mu_0 epsilon_0)
-   - Identical equation holds for B
+1. **推波方程**：無源線性均勻介：
+   - 取 Faraday 旋：curl(curl(E)) = -d/dt(curl(B))
+   - 代 Ampere-Maxwell：curl(curl(E)) = -mu epsilon d^2E/dt^2
+   - 用向量恆等：curl(curl(E)) = grad(div(E)) - nabla^2(E)
+   - div(E) = 0（無自由電荷）：nabla^2(E) = mu epsilon d^2E/dt^2
+   - 波速：v = 1/sqrt(mu epsilon)；真空 c = 1/sqrt(mu_0 epsilon_0)
+   - B 同式
 
-2. **Plane wave solutions**: For a wave propagating in the z-direction:
-   - E(z, t) = E_0 exp[i(kz - omega t)] with k = omega/v = omega * sqrt(mu epsilon)
-   - B = (1/v) k_hat x E (perpendicular to E and propagation direction)
+2. **平面波解**：沿 z 向：
+   - E(z, t) = E_0 exp[i(kz - omega t)]，k = omega/v = omega * sqrt(mu epsilon)
+   - B = (1/v) k_hat x E（垂直於 E 與傳向）
    - |B| = |E|/v
-   - Polarization: linear, circular, or elliptical depending on E_0 components
+   - 偏振：依 E_0 分量為線、圓、橢
 
-3. **Laplace and Poisson equations** (static case):
-   - With no time dependence: nabla^2(phi) = -rho/epsilon_0 (Poisson) or nabla^2(phi) = 0 (Laplace)
-   - Solve by separation of variables in the appropriate coordinate system
-   - Match boundary conditions to determine expansion coefficients
+3. **Laplace 與 Poisson**（靜）：
+   - 無時變：nabla^2(phi) = -rho/epsilon_0（Poisson）或 nabla^2(phi) = 0（Laplace）
+   - 於合適坐標系分離變量
+   - 匹邊界以定係數
 
-4. **Guided waves and cavities**: For waveguides and resonant cavities:
-   - Decompose into TE (transverse electric) and TM (transverse magnetic) modes
-   - Apply conducting-wall boundary conditions
-   - Solve the eigenvalue problem for allowed propagation constants or resonant frequencies
-   - Cutoff frequency: omega_c = v * pi * sqrt((m/a)^2 + (n/b)^2) for a rectangular guide with dimensions a x b
+4. **導波與諧腔**：
+   - 分 TE（橫電）與 TM（橫磁）模
+   - 應導壁邊界
+   - 解本徵問題求傳播常數或諧頻
+   - 截止頻：omega_c = v * pi * sqrt((m/a)^2 + (n/b)^2)（矩形 a x b 導）
 
-5. **Skin depth in conductors**: For time-varying fields penetrating a conductor with conductivity sigma_c:
+5. **導體趨膚深**：時變場入導體（導率 sigma_c）：
    - delta = sqrt(2 / (omega mu sigma_c))
-   - Fields decay as exp(-z/delta) into the conductor
-   - At 60 Hz in copper: delta approximately 8.5 mm; at 1 GHz: delta approximately 2 micrometers
+   - 場於導體內 exp(-z/delta) 衰
+   - 銅 60 Hz：delta 約 8.5 mm；1 GHz：delta 約 2 微米
 
 ```markdown
 ## Field Solution
@@ -158,39 +158,39 @@ Solve the Maxwell equations or their derived forms for the field quantities:
 - **Characteristic scales**: [wavelength, skin depth, decay length]
 ```
 
-**Expected:** Explicit field expressions satisfying Maxwell's equations and all boundary conditions, with the dispersion relation or eigenvalue spectrum if applicable.
+得：場表式顯，滿足馬氏與諸邊界，色散或本徵譜並具。
 
-**On failure:** If the PDE cannot be separated in the chosen coordinate system, try a different system or resort to numerical methods (finite difference, finite element). If the solution does not satisfy one of the Maxwell equations on back-substitution, there is an algebraic error in the derivation -- re-check the curl and divergence operations.
+敗：選坐標系不可分→易系或取數值（有限差、有限元）。回代不符某方程→代數誤→重驗旋散運算。
 
-### Step 4: Compute Derived Quantities
+### 四：算衍量
 
-Extract physically meaningful quantities from the field solution:
+由場解取物理意量：
 
-1. **Poynting vector**: S = (1/mu_0) E x B (instantaneous energy flux, W/m^2):
-   - For plane waves: S = (1/mu_0) |E|^2 / v in the propagation direction
-   - Time-averaged Poynting vector: <S> = (1/2) Re(E x H*) for harmonic fields
-   - Intensity: I = |<S>| (power per unit area)
+1. **Poynting 向量**：S = (1/mu_0) E x B（瞬能流，W/m^2）：
+   - 平面波：S = (1/mu_0) |E|^2 / v 於傳向
+   - 時均：<S> = (1/2) Re(E x H*)（諧）
+   - 強度：I = |<S>|
 
-2. **Electromagnetic energy density**:
-   - u = (1/2)(epsilon_0 |E|^2 + |B|^2/mu_0) in vacuum
-   - u = (1/2)(E . D + B . H) in linear media
-   - Energy conservation: du/dt + div(S) = -J . E (Poynting's theorem)
+2. **電磁能密**：
+   - u = (1/2)(epsilon_0 |E|^2 + |B|^2/mu_0)（真空）
+   - u = (1/2)(E . D + B . H)（線性介）
+   - 能守：du/dt + div(S) = -J . E（Poynting 定理）
 
-3. **Radiation pressure**: For a plane wave incident on a surface:
-   - Perfect absorber: P_rad = I/c = <S>/c
-   - Perfect reflector: P_rad = 2I/c = 2<S>/c
-   - This is the momentum flux density of the electromagnetic field
+3. **輻射壓**：平面波射面：
+   - 全吸：P_rad = I/c = <S>/c
+   - 全反：P_rad = 2I/c = 2<S>/c
+   - 乃電磁場動量流密
 
-4. **Wave impedance**:
-   - In a medium: eta = sqrt(mu/epsilon) = mu * v
-   - In vacuum: eta_0 = sqrt(mu_0/epsilon_0) approximately 377 Ohms
-   - Relates E and H amplitudes: |E| = eta |H|
-   - Reflection coefficient at normal incidence: r = (eta_2 - eta_1)/(eta_2 + eta_1)
+4. **波阻**：
+   - 介中：eta = sqrt(mu/epsilon) = mu * v
+   - 真空：eta_0 = sqrt(mu_0/epsilon_0) 約 377 Ohms
+   - E/H 幅：|E| = eta |H|
+   - 法入反射係：r = (eta_2 - eta_1)/(eta_2 + eta_1)
 
-5. **Power dissipation and quality factor**:
-   - Ohmic loss per unit volume: p_loss = sigma |E|^2 / 2 (in a conductor)
-   - Quality factor of a cavity: Q = omega * (stored energy) / (power dissipated per cycle)
-   - Relates to the bandwidth of resonances: Delta_omega = omega / Q
+5. **耗散與品質因子**：
+   - 導體歐姆損：p_loss = sigma |E|^2 / 2
+   - 腔 Q：Q = omega * 儲能 / 每週期耗能
+   - 聯諧帶寬：Delta_omega = omega / Q
 
 ```markdown
 ## Derived Quantities
@@ -202,29 +202,29 @@ Extract physically meaningful quantities from the field solution:
 - **Q-factor** (if resonant): Q = [value]
 ```
 
-**Expected:** All derived quantities computed with correct units, energy conservation verified via Poynting's theorem, and physically reasonable magnitudes.
+得：諸量算畢，單位確，經 Poynting 定理驗能守，量級合理。
 
-**On failure:** If Poynting's theorem does not balance (du/dt + div(S) does not equal -J . E), there is an inconsistency between the E and B solutions. Re-verify that both fields satisfy all four Maxwell equations simultaneously. A common error is computing E and B from different approximations that are not mutually consistent.
+敗：Poynting 定理不均（du/dt + div(S) ≠ -J . E）→E、B 解互不一致。重驗二場同時滿四方程。常為 E、B 取不相容之近似。
 
-### Step 5: Verify Against Known Limits
+### 五：驗極限
 
-Check that the full solution reduces correctly in limiting cases:
+察全解於極限是否正確回落：
 
-1. **Static limit (omega -> 0)**: The solution should reduce to the electrostatic or magnetostatic result:
-   - E-field should satisfy Coulomb's law or the Laplace/Poisson equation
-   - B-field should satisfy the Biot-Savart law or Ampere's law (without displacement current)
-   - Displacement current vanishes: mu_0 epsilon_0 dE/dt -> 0
+1. **靜極（omega → 0）**：應回靜電或靜磁：
+   - E 應滿 Coulomb 或 Laplace/Poisson
+   - B 應滿 Biot-Savart 或 Ampere（無位移流）
+   - 位移流滅：mu_0 epsilon_0 dE/dt → 0
 
-2. **Plane wave limit**: In a source-free, unbounded medium, the solution should reduce to plane waves with v = 1/sqrt(mu epsilon) and the correct polarization.
+2. **平面波極**：無界無源介，應為平面波，v = 1/sqrt(mu epsilon)，偏振正確。
 
-3. **Perfect conductor limit (sigma -> infinity)**:
-   - Skin depth delta -> 0 (fields do not penetrate)
-   - Tangential E -> 0 at the surface
-   - Reflection coefficient r -> -1 (perfect reflection with phase inversion)
+3. **完美導體極（sigma → ∞）**：
+   - 趨膚 delta → 0
+   - 切 E → 0 於表
+   - 反射係 r → -1（完全反射並相位反轉）
 
-4. **Vacuum limit (epsilon_r = 1, mu_r = 1)**: Material-dependent quantities should reduce to their vacuum values. Wave speed should equal c. Impedance should equal eta_0 approximately 377 Ohms.
+4. **真空極（epsilon_r = 1, mu_r = 1）**：料依量應回真空值。波速應為 c。阻應為 eta_0 約 377 Ohms。
 
-5. **Energy conservation check**: Integrate Poynting's theorem over a closed volume. The rate of change of total field energy plus the power flowing out through the surface must equal the negative of the power delivered by currents inside the volume. Any imbalance indicates an error.
+5. **能守驗**：Poynting 定理積於閉域。全場能率變加面外流功率應等於域內電流負功率。失衡乃誤。
 
 ```markdown
 ## Limiting Case Verification
@@ -237,38 +237,38 @@ Check that the full solution reduces correctly in limiting cases:
 | Energy conservation | Poynting's theorem | balanced | [check] | [Yes/No] |
 ```
 
-**Expected:** All limits produce the correct known results. Energy conservation is satisfied to within numerical precision.
+得：諸極限皆返已知正確結果。能守達數值精度。
 
-**On failure:** A failed limit is a definitive indicator of an error. The static limit failing suggests a problem in the source terms or boundary conditions. The plane wave limit failing suggests an error in the wave equation derivation. Energy conservation failing suggests inconsistency between E and B solutions. Trace the failure back to the specific step and correct before accepting the solution.
+敗：極限敗乃誤之確證。靜極敗→源或邊界之問題。平面波極敗→波方程推導之誤。能守敗→E、B 解不一致。溯回指定步修正，方可接受解。
 
-## Validation
+## 驗
 
-- [ ] All four Maxwell equations are stated and the relevant subset is identified
-- [ ] Displacement current is included or explicitly justified as negligible
-- [ ] Boundary conditions are applied at every material interface
-- [ ] Symmetry is exploited to reduce the PDE dimensionality
-- [ ] The wave equation (or Laplace/Poisson equation) is correctly derived
-- [ ] Field solutions satisfy all four Maxwell equations on back-substitution
-- [ ] Poynting vector and energy density are computed with correct units (W/m^2 and J/m^3)
-- [ ] Poynting's theorem (energy conservation) is verified
-- [ ] Wave impedance and reflection/transmission coefficients are physically reasonable
-- [ ] Static limit reproduces Coulomb's law and Biot-Savart law
-- [ ] Plane wave limit yields v = 1/sqrt(mu epsilon) and orthogonal E, B, k
-- [ ] The solution is complete enough for another researcher to reproduce
+- [ ] 四方程皆列，相關子集已辨
+- [ ] 位移流或留或明證可略
+- [ ] 諸介面皆應邊界條件
+- [ ] 對稱已用以減 PDE 維
+- [ ] 波方程（或 Laplace/Poisson）正確推導
+- [ ] 場解回代滿四方程
+- [ ] Poynting 向量與能密算畢，單位確（W/m^2 與 J/m^3）
+- [ ] Poynting 定理（能守）已驗
+- [ ] 波阻與反射/透射係合理
+- [ ] 靜極回 Coulomb 與 Biot-Savart
+- [ ] 平面波極得 v = 1/sqrt(mu epsilon)，E、B、k 正交
+- [ ] 解足供他研究者復
 
-## Common Pitfalls
+## 忌
 
-- **Omitting the displacement current**: In the original Ampere's law (curl B = mu_0 J), taking the divergence gives div(J) = 0, which contradicts charge conservation when rho changes in time. The displacement current term mu_0 epsilon_0 dE/dt fixes this and is essential for wave propagation. Never drop it without verifying that dE/dt is negligible compared to J/epsilon_0.
-- **Inconsistent E and B solutions**: Solving for E and B independently (e.g., E from Gauss's law and B from Ampere's law) without verifying Faraday's law and Gauss's law for B can produce fields that are not mutually consistent. Always verify all four equations.
-- **Wrong boundary condition normal direction**: The convention n_hat x (H_1 - H_2) = K_f requires n_hat to point from medium 2 into medium 1. Reversing the direction flips the sign of the surface current condition.
-- **Confusing D, E, B, and H in materials**: In vacuum, D = epsilon_0 E and B = mu_0 H. In linear media, D = epsilon E and B = mu H. Maxwell's equations in matter use D and H for the free source terms and E and B for the force law. Mixing constitutive relations leads to factors of epsilon_r or mu_r errors.
-- **Phase velocity versus group velocity**: The wave speed v = omega/k is the phase velocity. Energy and information propagate at the group velocity v_g = d(omega)/dk. In dispersive media these differ, and using phase velocity for energy transport gives wrong results.
-- **Forgetting the radiation condition**: For scattering and radiation problems in unbounded domains, the solution must satisfy the Sommerfeld radiation condition (outgoing waves at infinity). Without this condition, the solution is not unique and may include unphysical incoming waves.
+- **略位移流**：原 Ampere（curl B = mu_0 J）取散得 div(J) = 0，與時變 rho 矛盾。位移流 mu_0 epsilon_0 dE/dt 補之，為波傳所必需。非驗 dE/dt 比 J/epsilon_0 可略，不可去。
+- **E、B 解不一致**：獨立解 E（Gauss E）與 B（Ampere）而不驗 Faraday 與 Gauss B→場互不一致。必驗全四方程。
+- **邊界法向誤**：n_hat x (H_1 - H_2) = K_f 之 n_hat 必由介 2 指介 1。反則面流條件變號。
+- **介中 D、E、B、H 混**：真空 D = epsilon_0 E、B = mu_0 H。線性介 D = epsilon E、B = mu H。馬氏介形用 D、H 表自由源，用 E、B 表力律。混構成關係致 epsilon_r 或 mu_r 倍誤。
+- **相速與群速**：v = omega/k 乃相速。能與信息以群速 v_g = d(omega)/dk 傳。色散介中二者異，用相速算能傳乃誤。
+- **略輻射條件**：散射與輻射於無界域，解必滿 Sommerfeld 輻射條件（無窮遠外行波）。否則解非唯一，或含非物理入射波。
 
-## Related Skills
+## 參
 
-- `analyze-magnetic-field` -- compute static B-fields that serve as the magnetostatic limit of Maxwell's equations
-- `solve-electromagnetic-induction` -- apply Faraday's law to specific induction geometries and RL circuits
-- `formulate-quantum-problem` -- quantize the electromagnetic field for quantum optics and QED
-- `derive-theoretical-result` -- carry out rigorous derivations of wave equations, Green's functions, and dispersion relations
-- `analyze-diffusion-dynamics` -- diffusion equations arise from Maxwell's equations in conducting media (skin effect)
+- `analyze-magnetic-field`
+- `solve-electromagnetic-induction`
+- `formulate-quantum-problem`
+- `derive-theoretical-result`
+- `analyze-diffusion-dynamics`

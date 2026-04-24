@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement pharmaceutical serialisation and track-and-trace systems compliant
   with EU FMD, US DSCSA, and other global regulations. Covers unique identifier
@@ -71,8 +71,8 @@ Key data elements per regulation:
 - Transaction history and transaction statement
 - Verification at package level
 
-**Expected:** Clear understanding of which regulations apply to each product-market combination.
-**On failure:** Engage regulatory affairs to confirm market requirements before proceeding.
+**Got:** Clear understanding of which regulations apply to each product-market combination.
+**If fail:** Engage regulatory affairs to confirm market requirements before proceeding.
 
 ### Step 2: Design the Serialisation Data Model
 
@@ -124,8 +124,8 @@ Pallet (SSCC)
             └── Unit (GTIN + serial)
 ```
 
-**Expected:** Data model supports full pack hierarchy with EPCIS event tracking.
-**On failure:** If existing ERP schema conflicts, design an integration layer rather than modifying ERP directly.
+**Got:** Data model supports full pack hierarchy with EPCIS event tracking.
+**If fail:** If existing ERP schema conflicts, design an integration layer rather than modifying ERP directly.
 
 ### Step 3: Implement Serial Number Generation
 
@@ -163,8 +163,8 @@ def generate_serial_batch(gtin: str, batch_lot: str, expiry: str, count: int) ->
     ]
 ```
 
-**Expected:** Serial numbers are cryptographically random, unique per GTIN, and stored before printing.
-**On failure:** If a uniqueness collision occurs, regenerate the conflicting serial and log the event.
+**Got:** Serial numbers are cryptographically random, unique per GTIN, and stored before printing.
+**If fail:** If a uniqueness collision occurs, regenerate the conflicting serial and log the event.
 
 ### Step 4: Implement GS1 DataMatrix Encoding
 
@@ -199,8 +199,8 @@ def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -
     return f"01{gtin}21{serial}{GS}10{batch}{GS}17{expiry}"
 ```
 
-**Expected:** Encoded strings verified by scanning test prints with a GS1-certified verifier (ISO 15415 grade C or above).
-**On failure:** If scan verification fails, check print quality, quiet zones, and encoding order.
+**Got:** Encoded strings verified by scanning test prints with a GS1-certified verifier (ISO 15415 grade C or above).
+**If fail:** If scan verification fails, check print quality, quiet zones, and encoding order.
 
 ### Step 5: Integrate with National Verification Systems
 
@@ -247,8 +247,8 @@ async def verify_product(gtin: str, serial: str, lot: str, expiry: str):
     return {"verified": True, "status": record.status}
 ```
 
-**Expected:** Verification endpoints respond within 1 second with correct status.
-**On failure:** If national system upload fails, retry with exponential backoff and alert operations.
+**Got:** Verification endpoints respond within 1 second with correct status.
+**If fail:** If national system upload fails, retry with exponential backoff and alert operations.
 
 ### Step 6: Implement EPCIS Event Capture
 
@@ -276,8 +276,8 @@ Key business steps in the pharma supply chain:
 - `receiving` — arrival at a location
 - `dispensing` — supplied to patient (decommission trigger)
 
-**Expected:** Every status change generates an EPCIS event with correct timestamps and locations.
-**On failure:** Failed event capture must be queued and retried; never silently dropped.
+**Got:** Every status change generates an EPCIS event with correct timestamps and locations.
+**If fail:** Failed event capture must be queued and retried; never silently dropped.
 
 ## Validation
 
@@ -289,7 +289,7 @@ Key business steps in the pharma supply chain:
 - [ ] Verification endpoint responds within 1 second
 - [ ] Exception handling covers upload failures, scan failures, and network errors
 
-## Common Pitfalls
+## Pitfalls
 
 - **Sequential serial numbers**: EU FMD explicitly requires randomisation to prevent counterfeiting. Never use sequential numbering.
 - **Aggregation errors**: Disaggregation (breaking a case) must update the hierarchy. Shipping a case with wrong child associations causes verification failures downstream.

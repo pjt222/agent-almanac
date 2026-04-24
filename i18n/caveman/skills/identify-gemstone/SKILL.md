@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Identify gemstones using optical properties, physical tests, and
   inclusion analysis. Covers refractive index, specific gravity,
@@ -26,32 +26,32 @@ metadata:
 
 # Identify Gemstone
 
-Identify gemstones using systematic physical and optical property testing, inclusion analysis, and elimination against known species profiles.
+ID gemstones using systematic physical + optical property testing, inclusion analysis, elimination vs known species profiles.
 
-## When to Use
+## When Use
 
-- You have an unknown gemstone or suspect gemstone and want to identify the species
-- You need to verify a seller's claim about a gemstone's identity
-- You want to distinguish a natural gemstone from a common simulant or synthetic
-- You are building gemological literacy through structured observation and testing
-- You need to identify rough material before cutting to ensure safe handling
+- Unknown gemstone or suspect gemstone, want to ID species
+- Verify seller's claim about gemstone identity
+- Tell natural gemstone from common simulant or synthetic
+- Build gemological literacy through structured observation + testing
+- ID rough material before cutting for safe handling
 
 ## Inputs
 
-- **Required**: A gemstone specimen (loose stone preferred; mounted stones limit testing)
+- **Required**: Gemstone specimen (loose stone preferred; mounted limit testing)
 - **Optional**: Refractometer with contact liquid (RI fluid, 1.81 standard)
-- **Optional**: Dichroscope (for pleochroism testing)
+- **Optional**: Dichroscope (pleochroism testing)
 - **Optional**: Chelsea colour filter
 - **Optional**: Specific gravity balance or heavy liquids
 - **Optional**: 10x loupe or gemological microscope
-- **Optional**: UV lamp (long-wave 365nm and short-wave 254nm)
-- **Optional**: Polariscope (for optic character determination)
+- **Optional**: UV lamp (long-wave 365nm + short-wave 254nm)
+- **Optional**: Polariscope (optic character determination)
 
-## Procedure
+## Steps
 
 ### Step 1: Visual Inspection
 
-Examine the specimen with the unaided eye and then under 10x magnification.
+Examine specimen with unaided eye then under 10x magnification.
 
 ```
 Visual Inspection Checklist:
@@ -79,19 +79,19 @@ Visual Inspection Checklist:
 +--------------------+------------------------------------------+
 ```
 
-1. Note the body colour under daylight-equivalent lighting (5500-6500K)
-2. Check for colour zoning by viewing through the stone from different angles
-3. Assess transparency and luster — these narrow the candidate list immediately
+1. Note body colour under daylight-equivalent lighting (5500-6500K)
+2. Check colour zoning by viewing through stone from different angles
+3. Assess transparency + luster — narrows candidates immediate
 4. Look for optical phenomena (star, cat's eye, play of colour)
 5. Record any visible inclusions without magnification
 
-**Expected:** A complete visual profile including colour, transparency, luster, and any phenomena. This alone narrows candidates to a manageable shortlist.
+**Got:** Complete visual profile — colour, transparency, luster, phenomena. Alone narrows candidates to manageable shortlist.
 
-**On failure:** If lighting is poor (yellowish indoor light), note the limitation. Daylight or daylight-equivalent bulbs are strongly preferred. Incandescent light shifts colour perception and can cause misidentification of colour-change stones.
+**If fail:** Lighting poor (yellowish indoor)? Note limitation. Daylight or daylight-equivalent bulbs strongly preferred. Incandescent shifts colour perception → misidentification of colour-change stones.
 
 ### Step 2: Physical Property Testing
 
-Test measurable physical properties to narrow the identification.
+Test measurable physical properties to narrow ID.
 
 ```
 Key Physical Properties:
@@ -123,14 +123,14 @@ Key Physical Properties:
 +--------------------+------------------------------------------+
 ```
 
-1. For rough material: test hardness using Mohs scale reference points
-2. For cut stones: measure specific gravity using hydrostatic method
-3. Assess heft — experienced handlers can distinguish CZ from diamond by weight alone
-4. Note any cleavage planes visible on the surface
+1. Rough material: test hardness using Mohs scale reference points
+2. Cut stones: measure specific gravity using hydrostatic method
+3. Assess heft — experienced handlers can tell CZ from diamond by weight alone
+4. Note any cleavage planes visible on surface
 
-**Expected:** Hardness range (for rough) or SG value (for cut stones) that differentiates between candidate species. SG is often the most powerful single diagnostic for cut stones.
+**Got:** Hardness range (rough) or SG value (cut stones) differentiates between candidate species. SG often most powerful single diagnostic for cut stones.
 
-**On failure:** If hydrostatic balance is unavailable, use the heft test as a rough guide. Stones that feel "too heavy for their size" likely have high SG (>3.5). If hardness testing would damage a cut stone, skip to optical tests.
+**If fail:** Hydrostatic balance unavailable? Use heft test as rough guide. Stones "too heavy for size" likely have high SG (>3.5). Hardness testing would damage cut stone? Skip to optical tests.
 
 ### Step 3: Optical Tests
 
@@ -179,19 +179,19 @@ Optical Property Tests:
 +--------------------+------------------------------------------+
 ```
 
-1. Measure RI on refractometer — take both high and low readings for birefringence
-2. Test pleochroism with dichroscope — rotate slowly and note colour changes
+1. Measure RI on refractometer — take both high + low readings for birefringence
+2. Test pleochroism with dichroscope — rotate slow + note colour changes
 3. Check optic character on polariscope (SR vs DR vs AGG)
-4. Test UV fluorescence under both long-wave and short-wave
-5. Use Chelsea filter if chromium-coloured stones are suspected
+4. Test UV fluorescence under both long-wave + short-wave
+5. Use Chelsea filter if chromium-coloured stones suspected
 
-**Expected:** RI value (to 0.001), birefringence, optic character, pleochroism description, and UV response. Combined with Step 2, this identifies most gemstone species definitively.
+**Got:** RI value (to 0.001), birefringence, optic character, pleochroism description, UV response. Combined with Step 2, IDs most gemstone species definitive.
 
-**On failure:** If RI is over-the-limit (OTL, >1.81), the stone is likely diamond, CZ, zircon (high-type), or a high-RI synthetic. Use SG and thermal conductivity to differentiate. If no refractometer is available, rely on SG + visual properties + inclusions.
+**If fail:** RI over-the-limit (OTL, >1.81)? Stone likely diamond, CZ, zircon (high-type), or high-RI synthetic. Use SG + thermal conductivity to differentiate. No refractometer? Rely on SG + visual properties + inclusions.
 
 ### Step 4: Inclusion Analysis
 
-Examine internal features under magnification for species confirmation and natural vs. synthetic determination.
+Examine internal features under magnification for species confirmation + natural vs synthetic determination.
 
 ```
 Diagnostic Inclusions by Species:
@@ -233,60 +233,60 @@ Synthetic Indicators:
 +------------------+------------------------------------------+
 ```
 
-1. Examine the stone under darkfield illumination (gemological microscope) or oblique lighting through a 10x loupe
+1. Examine stone under darkfield illumination (gemological microscope) or oblique lighting through 10x loupe
 2. Look for species-diagnostic inclusions first
-3. Check for synthetic indicators — curved striae and gas bubbles are definitive for flame-fusion synthetics
-4. Note the inclusion type, location, and frequency
+3. Check synthetic indicators — curved striae + gas bubbles definitive for flame-fusion synthetics
+4. Note inclusion type, location, frequency
 5. Photograph inclusions if possible for records
 
-**Expected:** Species-confirming inclusion pattern and natural/synthetic determination. Some species are identified more by their inclusions than by optical properties (e.g., emerald's jardin).
+**Got:** Species-confirming inclusion pattern + natural/synthetic determination. Some species IDed more by inclusions than optical properties (emerald's jardin).
 
-**On failure:** If the stone is eye-clean and no inclusions are visible at 10x, it may be a very clean natural stone or a synthetic. Lack of inclusions raises the synthetic probability — refer to optical and physical tests for confirmation. Laboratory analysis (FTIR, Raman) may be needed.
+**If fail:** Stone eye-clean + no inclusions visible at 10x? May be very clean natural stone or synthetic. Lack of inclusions raises synthetic probability — refer to optical + physical tests for confirmation. Laboratory analysis (FTIR, Raman) may be needed.
 
-### Step 5: Identification by Elimination
+### Step 5: ID by Elimination
 
-Cross-reference all collected data to reach a final identification.
+Cross-reference all collected data to reach final ID.
 
-1. Compile the property profile:
+1. Compile property profile:
    - Colour + transparency + luster
    - Hardness or SG
    - RI + birefringence + optic character
    - Pleochroism + UV fluorescence
    - Inclusion pattern
-2. Compare against reference tables for candidate species
+2. Compare vs reference tables for candidate species
 3. Eliminate species that conflict with any measured property
-4. If two or more candidates remain, identify the distinguishing test:
-   - Example: blue topaz vs. aquamarine — SG is definitive (3.53 vs. 2.70)
-5. State the identification with confidence level:
-   - **Definitive**: Multiple properties confirm a single species
-   - **Probable**: Properties consistent with one species, but one test missing
-   - **Uncertain**: Conflicting data or insufficient testing — laboratory referral recommended
+4. Two or more candidates remain? ID distinguishing test:
+   - Blue topaz vs aquamarine — SG definitive (3.53 vs 2.70)
+5. State ID with confidence level:
+   - **Definitive**: Multiple properties confirm single species
+   - **Probable**: Properties consistent with one species, one test missing
+   - **Uncertain**: Conflicting data or insufficient testing — lab referral recommended
 
-**Expected:** A final species identification (e.g., "Natural sapphire, blue, heat-treated") with supporting evidence from each test category. Or a clear recommendation for laboratory analysis if field tests are insufficient.
+**Got:** Final species ID ("Natural sapphire, blue, heat-treated") with supporting evidence from each test category. Or clear recommendation for lab analysis if field tests insufficient.
 
-**On failure:** If the stone cannot be identified with available equipment, document all measured properties and refer to a gemological laboratory. Provide the measured data to the lab — it accelerates their analysis.
+**If fail:** Stone can't be IDed with available equipment? Document all measured properties + refer to gemological laboratory. Provide measured data to lab — accelerates analysis.
 
-## Validation
+## Checks
 
-- [ ] Visual inspection completed under daylight-equivalent lighting
+- [ ] Visual inspection done under daylight-equivalent lighting
 - [ ] At least two physical properties measured (hardness/SG + one other)
-- [ ] RI measured and birefringence calculated (if refractometer available)
+- [ ] RI measured + birefringence computed (if refractometer available)
 - [ ] Pleochroism tested (if dichroscope available)
 - [ ] Inclusions examined under at least 10x magnification
-- [ ] Identification reached by systematic elimination, not assumption
-- [ ] Common simulants explicitly considered and ruled out
-- [ ] Natural vs. synthetic determination made (or flagged as uncertain)
+- [ ] ID reached by systematic elimination, not assumption
+- [ ] Common simulants explicit considered + ruled out
+- [ ] Natural vs synthetic determination made (or flagged as uncertain)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Trusting colour alone**: Colour is the least reliable identification property. Blue stones include sapphire, topaz, aquamarine, tanzanite, iolite, spinel, glass, and CZ. Always confirm with measurable properties
-- **Skipping SG on mounted stones**: Mounted stones limit testing, but you can still check RI, pleochroism, inclusions, and UV. Document the limitation rather than guessing
-- **Confusing high-RI synthetics with naturals**: Flame-fusion rubies and sapphires have identical RI and SG to natural stones. Only inclusions (curved striae vs. straight growth) differentiate them
-- **Assuming expensive = natural**: Commercial jewellery frequently contains treated, synthetic, or simulant stones. Test every stone regardless of provenance claims
-- **Damaging the specimen**: Never hardness-test a faceted gemstone — it will leave visible scratches. Use non-destructive tests (RI, SG, inclusions) for cut stones
+- **Trusting colour alone**: Colour least reliable ID property. Blue stones include sapphire, topaz, aquamarine, tanzanite, iolite, spinel, glass, CZ. Always confirm with measurable properties
+- **Skipping SG on mounted stones**: Mounted stones limit testing, but can still check RI, pleochroism, inclusions, UV. Document limitation not guess
+- **Confusing high-RI synthetics with naturals**: Flame-fusion rubies + sapphires have identical RI + SG to natural stones. Only inclusions (curved striae vs straight growth) differentiate
+- **Assuming expensive = natural**: Commercial jewellery frequently has treated, synthetic, simulant stones. Test every stone regardless of provenance claims
+- **Damaging specimen**: Never hardness-test faceted gemstone — leaves visible scratches. Use non-destructive tests (RI, SG, inclusions) for cut stones
 
-## Related Skills
+## See Also
 
-- `cut-gemstone` — Identification determines safe cutting parameters and orientation requirements for the species
-- `appraise-gemstone` — Positive identification is the prerequisite for any meaningful valuation
-- `mineral-identification` — Field mineral identification methodology using physical properties (prospecting domain) shares the systematic elimination approach
+- `cut-gemstone` — ID determines safe cutting parameters + orientation requirements for species
+- `appraise-gemstone` — Positive ID prerequisite for meaningful valuation
+- `mineral-identification` — Field mineral ID methodology using physical properties (prospecting domain) shares systematic elimination approach

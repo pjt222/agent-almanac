@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Install skills, agents, and teams from agent-almanac into any supported
   agentic framework using the CLI. Covers framework detection, content
@@ -31,54 +31,54 @@ metadata:
     - discovery
 ---
 
-# Install Almanac Content
+# 裝曆書內容
 
-Use the `agent-almanac` CLI to install skills, agents, and teams into any supported agentic framework.
+用 `agent-almanac` CLI 裝技能、代理、團於任何受支代理框。
 
-## When to Use
+## 用
 
-- Setting up a new project and need to install agentic skills, agents, or teams
-- Installing all skills from a specific domain (e.g., `r-packages`, `devops`)
-- Targeting multiple frameworks simultaneously (Claude Code, Cursor, Copilot, etc.)
-- Creating or syncing a declarative `agent-almanac.yml` manifest for reproducible setups
-- Auditing installed content for broken symlinks or stale references
+- 立新項目需裝代理技能、代理、團
+- 裝某域諸技能（如 `r-packages`、`devops`）
+- 同針多框（Claude Code、Cursor、Copilot 等）
+- 造或同 `agent-almanac.yml` 清單供可復設
+- 察已裝內容之斷符或陳引
 
-## Inputs
+## 入
 
-- **Required**: Content to install -- one or more skill, agent, or team IDs (e.g., `create-skill`, `r-developer`, `r-package-review`)
-- **Optional**: `--domain <domain>` -- install all skills from a domain instead of naming individual IDs
-- **Optional**: `--framework <id>` -- target a specific framework (default: auto-detect all)
-- **Optional**: `--with-deps` -- also install agent skills and team agents+skills
-- **Optional**: `--dry-run` -- preview changes without writing to disk
-- **Optional**: `--global` -- install to global scope instead of project scope
-- **Optional**: `--force` -- overwrite existing content
-- **Optional**: `--source <path>` -- explicit path to agent-almanac root (default: auto-detect)
+- **必**：所裝內容——一或多技能、代理、團 ID（如 `create-skill`、`r-developer`、`r-package-review`）
+- **可**：`--domain <domain>`——裝域之諸技能，非單 ID
+- **可**：`--framework <id>`——針特框（默：自動察諸）
+- **可**：`--with-deps`——亦裝代理之技能與團之代理+技能
+- **可**：`--dry-run`——預覽變而不寫磁
+- **可**：`--global`——裝至全局而非項目
+- **可**：`--force`——覆既有內容
+- **可**：`--source <path>`——明 agent-almanac 根（默：自測）
 
-## Procedure
+## 行
 
-### Step 1: Detect Frameworks
+### 一：察框
 
-Run framework detection to see which agentic tools are present in the current project:
+行框察以辨當目錄之代理具：
 
 ```bash
 agent-almanac detect
 ```
 
-This scans the working directory for configuration files and directories (`.claude/`, `.cursor/`, `.github/copilot-instructions/`, `.agents/`, etc.) and reports which frameworks are active.
+掃工作目錄之配置檔與目錄（`.claude/`、`.cursor/`、`.github/copilot-instructions/`、`.agents/` 等）並報活框。
 
-**Expected:** Output lists one or more detected frameworks with their adapter status. If no frameworks are detected, the universal adapter (`.agents/skills/`) is used as fallback.
+得：列一或多察框含其適配器態。無察→用通用適配器（`.agents/skills/`）回退。
 
-**On failure:** If the CLI is not found, ensure it is installed and on PATH. If detection returns nothing and you know a framework is present, use `--framework <id>` to specify it explicitly. Run `agent-almanac list --domains` to verify the CLI can reach the registries.
+敗：CLI 未找→確已裝且於 PATH。察返無而汝知有框→用 `--framework <id>` 顯定。行 `agent-almanac list --domains` 驗 CLI 可及倉。
 
-### Step 2: Search for Content
+### 二：搜內容
 
-Find skills, agents, or teams by keyword:
+以關鍵字找技能、代理、團：
 
 ```bash
 agent-almanac search <keyword>
 ```
 
-To browse by category:
+依類瀏：
 
 ```bash
 agent-almanac list --domains          # List all domains with skill counts
@@ -87,13 +87,13 @@ agent-almanac list --agents           # List all agents
 agent-almanac list --teams            # List all teams
 ```
 
-**Expected:** Search results or filtered lists display matching content with IDs and descriptions.
+得：搜果或過濾列示符內容含 ID 與述。
 
-**On failure:** If no results appear, try broader keywords. Verify the almanac root is reachable: `agent-almanac list` should show the full skill count. If it cannot find the root, pass `--source /path/to/agent-almanac`.
+敗：無果→試更泛鍵。驗曆書根可及：`agent-almanac list` 應示全技能數。不能找根→傳 `--source /path/to/agent-almanac`。
 
-### Step 3: Install Content
+### 三：裝內容
 
-Install one or more items by name:
+以名裝一或多項：
 
 ```bash
 # Install specific skills
@@ -118,47 +118,47 @@ agent-almanac install --domain esoteric --dry-run
 agent-almanac install create-skill --global
 ```
 
-The CLI resolves the content from the registries, selects the appropriate adapter for each detected framework, and writes files to the framework-specific paths (e.g., `.claude/skills/` for Claude Code, `.cursor/rules/` for Cursor).
+CLI 由倉解內容，擇各察框之合適適配器，並寫檔於框特徑（如 Claude Code 之 `.claude/skills/`，Cursor 之 `.cursor/rules/`）。
 
-**Expected:** Output confirms the number of items installed and the target framework(s). Installed content appears in the correct framework directory.
+得：輸確裝項數與目標框。已裝內容現於正框目錄。
 
-**On failure:** If items are not found, verify the ID matches the `name` field in the registry (`skills/_registry.yml`, `agents/_registry.yml`, `teams/_registry.yml`). If files already exist and installation is skipped, use `--force` to overwrite.
+敗：項未找→驗 ID 合倉中 `name` 欄（`skills/_registry.yml`、`agents/_registry.yml`、`teams/_registry.yml`）。檔已存而裝略→用 `--force` 覆。
 
-### Step 4: Verify Installation
+### 四：驗裝
 
-Run a health check on all installed content:
+察諸已裝內容之健：
 
 ```bash
 agent-almanac audit
 ```
 
-To audit a specific framework or scope:
+審特框或範：
 
 ```bash
 agent-almanac audit --framework claude-code
 agent-almanac audit --global
 ```
 
-To see what is currently installed:
+察當前已裝：
 
 ```bash
 agent-almanac list --installed
 ```
 
-**Expected:** Audit reports all installed items as healthy with no broken references. The `--installed` listing shows each item with its type and framework.
+得：審報諸已裝項皆健無斷引。`--installed` 列示各項含型與框。
 
-**On failure:** If the audit reports broken items, reinstall them with `--force`. If symlinks are broken, verify the almanac source path has not moved. Run `agent-almanac install <broken-id> --force` to repair.
+敗：審報斷項→以 `--force` 重裝。符斷→驗曆書源徑未移。行 `agent-almanac install <broken-id> --force` 修。
 
-### Step 5: Manage with a Manifest (Optional)
+### 五：以清單管（可選）
 
-For reproducible setups, use a declarative `agent-almanac.yml` manifest:
+供可復設，用聲明式 `agent-almanac.yml` 清單：
 
 ```bash
 # Generate a starter manifest
 agent-almanac init
 ```
 
-This creates `agent-almanac.yml` in the current directory with detected frameworks and placeholder content lists. Edit the file to declare desired skills, agents, and teams:
+於當目錄造 `agent-almanac.yml` 含察框與內容佔位列。編檔以聲所欲技能、代理、團：
 
 ```yaml
 source: /path/to/agent-almanac
@@ -174,26 +174,26 @@ teams:
   - r-package-review
 ```
 
-Then install everything declared in the manifest:
+再裝諸聲於清單者：
 
 ```bash
 agent-almanac install
 ```
 
-To reconcile installed state with the manifest (install missing, remove extra):
+調已裝態合清單（裝缺、除多）：
 
 ```bash
 agent-almanac sync
 agent-almanac sync --dry-run  # Preview first
 ```
 
-**Expected:** Running `install` with no arguments reads the manifest and installs all declared content. Running `sync` brings the installed state into alignment with the manifest, adding missing items and removing undeclared ones.
+得：無參行 `install` 讀清單並裝諸聲內容。行 `sync` 使裝態合清單，加缺項、除未聲者。
 
-**On failure:** If `sync` reports "No agent-almanac.yml found", run `agent-almanac init` first. If the manifest resolves to 0 items, check that skill/agent/team IDs match the registry entries exactly. Comment lines starting with `#` are ignored.
+敗：`sync` 報「No agent-almanac.yml found」→先行 `agent-almanac init`。清單解為 0 項→查技能/代理/團 ID 精符倉條。`#` 開之注行被忽。
 
-### Step 6: Manage Teams as Campfires (Optional)
+### 六：以營火管團（可選）
 
-The campfire commands provide a warm, team-oriented alternative to `install --team`:
+營火命令予以團為向之替 `install --team`：
 
 ```bash
 # Browse all available team circles
@@ -217,37 +217,37 @@ agent-almanac tend
 agent-almanac scatter tending
 ```
 
-Campfire state is tracked in `.agent-almanac/state.json` (git-ignored, local to the project). Fires have thermal states: **burning** (used within 7 days), **embers** (within 30 days), **cold** (30+ days). Running `tend` warms all fires and reports their health.
+營火態於 `.agent-almanac/state.json` 追（git 忽，於項目本地）。火有熱態：**burning**（7 日內用）、**embers**（30 日內）、**cold**（30+ 日）。行 `tend` 暖諸火並報其健。
 
-Shared skills are protected during scatter — if a skill is needed by another gathered fire, it remains installed. Shared agents walk between fires rather than being duplicated.
+共技於散時護——若他聚火需之，仍裝。共代理遊火間而非複。
 
-All campfire commands support `--quiet` (standard reporter output) and `--json` (machine-parseable) for scripting.
+諸營火命令支 `--quiet`（標報器輸出）與 `--json`（機可解）供腳本。
 
-**Expected:** Teams are gathered and managed with state tracking. `campfire --all` shows fire states. `tend` reports health.
+得：團聚而管以態追。`campfire --all` 示火態。`tend` 報健。
 
-**On failure:** If campfire state is corrupted, delete `.agent-almanac/state.json` and re-gather teams. If `gather` fails, check that the team name matches an entry in `teams/_registry.yml`.
+敗：營火態壞→刪 `.agent-almanac/state.json` 並重聚團。`gather` 敗→察團名合 `teams/_registry.yml` 之條目。
 
-## Validation
+## 驗
 
-- [ ] `agent-almanac detect` shows expected frameworks
-- [ ] `agent-almanac list --installed` shows all intended content
-- [ ] `agent-almanac audit` reports no broken items
-- [ ] Installed skills resolve in the target framework (e.g., `/skill-name` works in Claude Code)
-- [ ] If using a manifest, `agent-almanac sync --dry-run` reports no changes needed
+- [ ] `agent-almanac detect` 示預期框
+- [ ] `agent-almanac list --installed` 示諸意內容
+- [ ] `agent-almanac audit` 報無斷項
+- [ ] 已裝技能於目標框可解（如 Claude Code 之 `/skill-name` 作）
+- [ ] 用清單則 `agent-almanac sync --dry-run` 報無變需
 
-## Common Pitfalls
+## 忌
 
-- **Forgetting `--with-deps` for agents and teams**: Installing an agent without `--with-deps` installs only the agent definition, not its referenced skills. The agent will be present but unable to follow its skill procedures. Always use `--with-deps` for agents and teams unless you have already installed the dependencies separately.
-- **Manifest drift**: After manually installing or removing content, the manifest falls out of sync with the actual installed state. Run `agent-almanac sync` periodically, or always install through the manifest to keep them aligned.
-- **Scope confusion (project vs global)**: Content installed with `--global` goes to `~/.claude/skills/` (or equivalent), while project-scope content goes to `.claude/skills/` in the current directory. If a skill is not found, check whether it was installed in the wrong scope.
-- **Stale source path**: If the agent-almanac repository is moved or renamed, the `--source` path in manifests and auto-detection will break. Update the `source` field in `agent-almanac.yml` or re-run `agent-almanac init`.
-- **Framework not detected**: The detector looks for specific files and directories. A freshly initialized project may not have these yet. Use `--framework <id>` explicitly until the project has the expected structure, or rely on the universal adapter.
-- **Campfire thermal state confusion**: Fires go cold after 30 days without use. Running `agent-almanac tend` resets the timer for all gathered fires. If a fire shows as "cold," it is still fully installed — the thermal state reflects recency of use, not installation health.
+- **忘代理團之 `--with-deps`**：無 `--with-deps` 裝代理僅裝定義而非引技能。代理在而不能行其技能序。代理與團恆用 `--with-deps`，除已別裝依
+- **清單漂移**：手裝或除後，清單與實裝態分離。定期行 `agent-almanac sync`，或恆經清單裝以保齊
+- **範混（項目 vs 全局）**：`--global` 裝至 `~/.claude/skills/`（或等），項目範至當目錄之 `.claude/skills/`。技能未找→察是否裝錯範
+- **源徑陳**：agent-almanac 倉移或改名→清單與自動察之 `--source` 徑將斷。更 `agent-almanac.yml` 之 `source` 欄或重 `agent-almanac init`
+- **框未察**：察器尋特定檔與目錄。新項或無此。顯用 `--framework <id>` 直至項目有預期構，或倚通用適配器
+- **營火熱態混**：火於 30 日不用後冷。行 `agent-almanac tend` 重諸聚火之計。火顯「冷」——仍全裝；熱態映用之近性，非裝健
 
-## Related Skills
+## 參
 
-- `create-skill` -- author new skills to add to the almanac before installing them
-- `configure-mcp-server` -- set up MCP servers that agents may need after installation
-- `write-claude-md` -- configure CLAUDE.md to reference installed skills
-- `audit-discovery-symlinks` -- diagnose symlink issues for Claude Code skill discovery
-- `design-cli-output` -- terminal output patterns used by the CLI's reporter and campfire ceremony
+- `create-skill`
+- `configure-mcp-server`
+- `write-claude-md`
+- `audit-discovery-symlinks`
+- `design-cli-output`

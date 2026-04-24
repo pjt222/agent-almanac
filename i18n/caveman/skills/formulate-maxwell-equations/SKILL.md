@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Work with the full set of Maxwell's equations in integral and differential
   form to analyze electromagnetic fields, waves, and energy transport. Use
@@ -26,42 +26,42 @@ metadata:
 
 # Formulate Maxwell Equations
 
-Analyze electromagnetic phenomena by stating the relevant Maxwell equations in appropriate form (integral or differential), applying boundary conditions and symmetry to reduce the system, solving the resulting partial differential equations for the fields, computing derived quantities such as the Poynting vector, radiation pressure, and wave impedance, and verifying the solution against known static and wave limits.
+Crack EM stuff. State right Maxwell equations (integral or differential). Apply boundary + symmetry to shrink system. Solve PDEs for fields. Compute Poynting vector, radiation pressure, wave impedance. Verify against static + wave limits.
 
-## When to Use
+## When Use
 
-- Solving a boundary value problem for E and B fields in a region with sources and material interfaces
-- Deriving the electromagnetic wave equation from first principles
-- Computing energy flow (Poynting vector) and momentum density of electromagnetic fields
-- Applying boundary conditions at interfaces between different media (dielectrics, conductors, magnetic materials)
-- Analyzing displacement current and its role in completing the Ampere-Maxwell equation
-- Connecting the static limits (Coulomb's law, Biot-Savart) to the unified time-dependent framework
+- Boundary value problem for E + B fields, sources + material interfaces
+- Derive EM wave equation from first principles
+- Compute energy flow (Poynting vector) + momentum density of EM fields
+- Apply boundary conditions at media interfaces (dielectric, conductor, magnetic)
+- Analyze displacement current + role in Ampere-Maxwell
+- Connect static limits (Coulomb, Biot-Savart) to unified time-dependent framework
 
 ## Inputs
 
-- **Required**: Physical configuration (geometry, source charges and currents, material properties)
-- **Required**: Quantity to solve for (E-field, B-field, wave solution, energy flux, or boundary field values)
-- **Optional**: Symmetry information (planar, cylindrical, spherical, or no special symmetry)
-- **Optional**: Time dependence specification (static, harmonic at frequency omega, or general time-dependent)
-- **Optional**: Boundary conditions at material interfaces or conductor surfaces
+- **Required**: Physical setup (geometry, source charges + currents, material props)
+- **Required**: Quantity to solve (E, B, wave solution, energy flux, boundary field)
+- **Optional**: Symmetry (planar, cylindrical, spherical, none)
+- **Optional**: Time dependence (static, harmonic omega, general)
+- **Optional**: Boundary conditions at interfaces or conductor surfaces
 
-## Procedure
+## Steps
 
-### Step 1: State the Four Maxwell Equations and Identify Relevant Subset
+### Step 1: State Four Maxwell Equations + Pick Relevant Subset
 
-Write the complete set and select which equations constrain the problem:
+Write full set, choose which constrain problem:
 
-1. **Gauss's law for E**: div(E) = rho / epsilon_0 (differential) or closed_surface_integral(E . dA) = Q_enc / epsilon_0 (integral). Relates E-field divergence to charge density. Use for finding E from charge distributions with symmetry.
+1. **Gauss for E**: div(E) = rho / epsilon_0 (diff) or closed_surface_integral(E . dA) = Q_enc / epsilon_0 (int). E divergence to charge density. Use for E from charge with symmetry.
 
-2. **Gauss's law for B**: div(B) = 0 (differential) or closed_surface_integral(B . dA) = 0 (integral). No magnetic monopoles. Every magnetic field line is a closed loop. Use as a consistency check on computed B-fields.
+2. **Gauss for B**: div(B) = 0 (diff) or closed_surface_integral(B . dA) = 0 (int). No magnetic monopoles. Every B line closed loop. Consistency check on B.
 
-3. **Faraday's law**: curl(E) = -dB/dt (differential) or contour_integral(E . dl) = -d(Phi_B)/dt (integral). A changing B-field generates a curling E-field. Use for induction problems and wave derivation.
+3. **Faraday**: curl(E) = -dB/dt (diff) or contour_integral(E . dl) = -d(Phi_B)/dt (int). Changing B makes curling E. Induction + wave derivation.
 
-4. **Ampere-Maxwell law**: curl(B) = mu_0 J + mu_0 epsilon_0 dE/dt (differential) or contour_integral(B . dl) = mu_0 I_enc + mu_0 epsilon_0 d(Phi_E)/dt (integral). Current and changing E-field generate curling B-field. The displacement current term mu_0 epsilon_0 dE/dt is essential for wave propagation and current continuity.
+4. **Ampere-Maxwell**: curl(B) = mu_0 J + mu_0 epsilon_0 dE/dt (diff) or contour_integral(B . dl) = mu_0 I_enc + mu_0 epsilon_0 d(Phi_E)/dt (int). Current + changing E make curling B. Displacement current term mu_0 epsilon_0 dE/dt essential for wave + current continuity.
 
-5. **Form selection**: Choose differential form for local field calculations, wave equations, and PDEs. Choose integral form for high-symmetry problems where the field can be extracted from the integral directly.
+5. **Form pick**: Differential for local fields, wave equations, PDEs. Integral for high-symmetry where field extracts direct.
 
-6. **Identify active equations**: Not all four equations are independent constraints in every problem. For electrostatics (dB/dt = 0, J = 0), only Gauss's law for E and curl(E) = 0 matter. For magnetostatics, Gauss's law for B and Ampere's law (without displacement current) suffice.
+6. **Active equations**: Not all four independent every problem. Electrostatics (dB/dt = 0, J = 0) → only Gauss for E + curl(E) = 0 matter. Magnetostatics → Gauss for B + Ampere (no displacement current) enough.
 
 ```markdown
 ## Maxwell Equations for This Problem
@@ -72,35 +72,35 @@ Write the complete set and select which equations constrain the problem:
 - **Displacement current**: [negligible / essential -- with justification]
 ```
 
-**Expected:** The four equations are stated, the relevant subset is identified with justification, and the displacement current is either included or explicitly argued to be negligible.
+**Got:** Four equations stated. Relevant subset identified with justification. Displacement current included or explicitly argued negligible.
 
-**On failure:** If it is unclear whether the displacement current matters, estimate the ratio |epsilon_0 dE/dt| / |J|. If this ratio is comparable to or greater than 1, the displacement current must be retained. In vacuum with no free charges, the displacement current is always essential for wave propagation.
+**If fail:** Unclear if displacement current matters? Estimate |epsilon_0 dE/dt| / |J|. Ratio near 1 or bigger → keep displacement current. Vacuum no free charges → always essential for wave.
 
-### Step 2: Apply Boundary Conditions and Symmetry
+### Step 2: Apply Boundary Conditions + Symmetry
 
-Reduce the system using material interfaces and geometric symmetry:
+Shrink system with material interfaces + geometric symmetry:
 
-1. **Boundary conditions at material interfaces**: At the interface between media 1 and 2 with surface charge sigma_f and surface current K_f:
+1. **Boundary at material interfaces**: Medium 1 + 2, surface charge sigma_f + surface current K_f:
    - Normal E: epsilon_1 E_1n - epsilon_2 E_2n = sigma_f
    - Tangential E: E_1t = E_2t (continuous)
    - Normal B: B_1n = B_2n (continuous)
-   - Tangential H: n_hat x (H_1 - H_2) = K_f (where n_hat points from 2 to 1)
+   - Tangential H: n_hat x (H_1 - H_2) = K_f (n_hat from 2 to 1)
 
-2. **Conductor boundary conditions**: At the surface of a perfect conductor:
-   - E_tangential = 0 (inside the conductor E = 0)
-   - B_normal = 0 (inside the conductor B = 0 for time-varying fields)
+2. **Conductor boundary**: Perfect conductor surface:
+   - E_tangential = 0 (inside E = 0)
+   - B_normal = 0 (inside B = 0 for time-varying)
    - Surface charge: sigma = epsilon_0 E_normal
    - Surface current: K = (1/mu_0) n_hat x B
 
-3. **Symmetry reduction**: Use identified symmetries to reduce the number of independent variables:
-   - Planar symmetry: fields depend on one coordinate only (e.g., z), reducing PDEs to ODEs
-   - Cylindrical symmetry: fields depend on (rho, z) or rho only
-   - Spherical symmetry: fields depend on r only
-   - Translational invariance: Fourier transform in the invariant direction
+3. **Symmetry shrink**: Use symmetries to cut independent variables:
+   - Planar: fields depend one coord (z), PDEs → ODEs
+   - Cylindrical: depend (rho, z) or rho only
+   - Spherical: depend r only
+   - Translational invariance: Fourier transform invariant direction
 
-4. **Gauge choice** (if using potentials): Select a gauge for the scalar potential phi and vector potential A:
-   - Coulomb gauge: div(A) = 0 (separates electrostatic and radiation contributions)
-   - Lorenz gauge: div(A) + mu_0 epsilon_0 d(phi)/dt = 0 (manifestly Lorentz-covariant, decouples wave equations)
+4. **Gauge choice** (using potentials): Pick gauge for scalar phi + vector A:
+   - Coulomb: div(A) = 0 (splits electrostatic + radiation)
+   - Lorenz: div(A) + mu_0 epsilon_0 d(phi)/dt = 0 (Lorentz-covariant, decouples wave)
 
 ```markdown
 ## Boundary Conditions and Symmetry
@@ -111,43 +111,43 @@ Reduce the system using material interfaces and geometric symmetry:
 - **Gauge** (if using potentials): [Coulomb / Lorenz / other]
 ```
 
-**Expected:** All boundary conditions are stated at every interface, symmetry is exploited to reduce the dimensionality, and the problem is ready for PDE solution.
+**Got:** Boundary conditions stated every interface. Symmetry cuts dimension. Problem ready for PDE solution.
 
-**On failure:** If boundary conditions are over-determined (more equations than unknowns at an interface), check that the number of field components matches the number of conditions. If under-determined, a boundary condition has been missed -- often the tangential H condition or the radiation condition at infinity.
+**If fail:** Over-determined (more equations than unknowns)? Check field components match conditions. Under-determined? Missed condition — often tangential H or radiation at infinity.
 
-### Step 3: Solve Resulting PDEs
+### Step 3: Solve PDEs
 
-Solve the Maxwell equations or their derived forms for the field quantities:
+Solve Maxwell equations or derived forms for field quantities:
 
-1. **Wave equation derivation**: In a source-free, linear, homogeneous medium:
-   - Take the curl of Faraday's law: curl(curl(E)) = -d/dt(curl(B))
-   - Substitute Ampere-Maxwell: curl(curl(E)) = -mu epsilon d^2E/dt^2
-   - Use the vector identity: curl(curl(E)) = grad(div(E)) - nabla^2(E)
-   - With div(E) = 0 (no free charges): nabla^2(E) = mu epsilon d^2E/dt^2
-   - Wave speed: v = 1/sqrt(mu epsilon); in vacuum c = 1/sqrt(mu_0 epsilon_0)
-   - Identical equation holds for B
+1. **Wave equation derive**: Source-free, linear, homogeneous medium:
+   - Curl of Faraday: curl(curl(E)) = -d/dt(curl(B))
+   - Sub Ampere-Maxwell: curl(curl(E)) = -mu epsilon d^2E/dt^2
+   - Vector identity: curl(curl(E)) = grad(div(E)) - nabla^2(E)
+   - With div(E) = 0: nabla^2(E) = mu epsilon d^2E/dt^2
+   - Wave speed: v = 1/sqrt(mu epsilon); vacuum c = 1/sqrt(mu_0 epsilon_0)
+   - Same for B
 
-2. **Plane wave solutions**: For a wave propagating in the z-direction:
-   - E(z, t) = E_0 exp[i(kz - omega t)] with k = omega/v = omega * sqrt(mu epsilon)
-   - B = (1/v) k_hat x E (perpendicular to E and propagation direction)
+2. **Plane wave solutions**: Wave in z-direction:
+   - E(z, t) = E_0 exp[i(kz - omega t)], k = omega/v = omega * sqrt(mu epsilon)
+   - B = (1/v) k_hat x E (perpendicular E + propagation)
    - |B| = |E|/v
-   - Polarization: linear, circular, or elliptical depending on E_0 components
+   - Polarization: linear, circular, elliptical by E_0 components
 
-3. **Laplace and Poisson equations** (static case):
-   - With no time dependence: nabla^2(phi) = -rho/epsilon_0 (Poisson) or nabla^2(phi) = 0 (Laplace)
-   - Solve by separation of variables in the appropriate coordinate system
-   - Match boundary conditions to determine expansion coefficients
+3. **Laplace + Poisson** (static):
+   - No time: nabla^2(phi) = -rho/epsilon_0 (Poisson) or nabla^2(phi) = 0 (Laplace)
+   - Separation of variables in right coordinates
+   - Match boundary to pin expansion coefficients
 
-4. **Guided waves and cavities**: For waveguides and resonant cavities:
-   - Decompose into TE (transverse electric) and TM (transverse magnetic) modes
-   - Apply conducting-wall boundary conditions
-   - Solve the eigenvalue problem for allowed propagation constants or resonant frequencies
-   - Cutoff frequency: omega_c = v * pi * sqrt((m/a)^2 + (n/b)^2) for a rectangular guide with dimensions a x b
+4. **Guided waves + cavities**: Waveguides + resonant cavities:
+   - Split into TE (transverse electric) + TM (transverse magnetic) modes
+   - Apply conducting-wall boundary
+   - Eigenvalue problem → allowed propagation constants + resonant frequencies
+   - Cutoff: omega_c = v * pi * sqrt((m/a)^2 + (n/b)^2) for rectangular guide a x b
 
-5. **Skin depth in conductors**: For time-varying fields penetrating a conductor with conductivity sigma_c:
+5. **Skin depth in conductors**: Time-varying fields into conductor conductivity sigma_c:
    - delta = sqrt(2 / (omega mu sigma_c))
-   - Fields decay as exp(-z/delta) into the conductor
-   - At 60 Hz in copper: delta approximately 8.5 mm; at 1 GHz: delta approximately 2 micrometers
+   - Fields decay exp(-z/delta)
+   - 60 Hz copper: delta ~ 8.5 mm; 1 GHz: delta ~ 2 micrometers
 
 ```markdown
 ## Field Solution
@@ -158,39 +158,39 @@ Solve the Maxwell equations or their derived forms for the field quantities:
 - **Characteristic scales**: [wavelength, skin depth, decay length]
 ```
 
-**Expected:** Explicit field expressions satisfying Maxwell's equations and all boundary conditions, with the dispersion relation or eigenvalue spectrum if applicable.
+**Got:** Explicit field expressions satisfying Maxwell + all boundary. Dispersion relation or eigenvalue spectrum if applicable.
 
-**On failure:** If the PDE cannot be separated in the chosen coordinate system, try a different system or resort to numerical methods (finite difference, finite element). If the solution does not satisfy one of the Maxwell equations on back-substitution, there is an algebraic error in the derivation -- re-check the curl and divergence operations.
+**If fail:** PDE won't separate in chosen coordinates? Try different system or numerical (finite difference, finite element). Solution fails a Maxwell equation on back-sub? Algebraic error — re-check curl + divergence.
 
 ### Step 4: Compute Derived Quantities
 
-Extract physically meaningful quantities from the field solution:
+Pull physical quantities from field solution:
 
 1. **Poynting vector**: S = (1/mu_0) E x B (instantaneous energy flux, W/m^2):
-   - For plane waves: S = (1/mu_0) |E|^2 / v in the propagation direction
-   - Time-averaged Poynting vector: <S> = (1/2) Re(E x H*) for harmonic fields
-   - Intensity: I = |<S>| (power per unit area)
+   - Plane waves: S = (1/mu_0) |E|^2 / v in propagation direction
+   - Time-averaged: <S> = (1/2) Re(E x H*) for harmonic
+   - Intensity: I = |<S>| (power per area)
 
-2. **Electromagnetic energy density**:
+2. **EM energy density**:
    - u = (1/2)(epsilon_0 |E|^2 + |B|^2/mu_0) in vacuum
    - u = (1/2)(E . D + B . H) in linear media
    - Energy conservation: du/dt + div(S) = -J . E (Poynting's theorem)
 
-3. **Radiation pressure**: For a plane wave incident on a surface:
+3. **Radiation pressure**: Plane wave on surface:
    - Perfect absorber: P_rad = I/c = <S>/c
    - Perfect reflector: P_rad = 2I/c = 2<S>/c
-   - This is the momentum flux density of the electromagnetic field
+   - Momentum flux density of EM field
 
 4. **Wave impedance**:
-   - In a medium: eta = sqrt(mu/epsilon) = mu * v
-   - In vacuum: eta_0 = sqrt(mu_0/epsilon_0) approximately 377 Ohms
-   - Relates E and H amplitudes: |E| = eta |H|
-   - Reflection coefficient at normal incidence: r = (eta_2 - eta_1)/(eta_2 + eta_1)
+   - Medium: eta = sqrt(mu/epsilon) = mu * v
+   - Vacuum: eta_0 = sqrt(mu_0/epsilon_0) ~ 377 Ohms
+   - E + H amplitudes: |E| = eta |H|
+   - Reflection at normal: r = (eta_2 - eta_1)/(eta_2 + eta_1)
 
-5. **Power dissipation and quality factor**:
-   - Ohmic loss per unit volume: p_loss = sigma |E|^2 / 2 (in a conductor)
-   - Quality factor of a cavity: Q = omega * (stored energy) / (power dissipated per cycle)
-   - Relates to the bandwidth of resonances: Delta_omega = omega / Q
+5. **Power dissipation + quality factor**:
+   - Ohmic loss per volume: p_loss = sigma |E|^2 / 2 (conductor)
+   - Cavity Q-factor: Q = omega * (stored energy) / (power dissipated per cycle)
+   - Bandwidth of resonances: Delta_omega = omega / Q
 
 ```markdown
 ## Derived Quantities
@@ -202,29 +202,29 @@ Extract physically meaningful quantities from the field solution:
 - **Q-factor** (if resonant): Q = [value]
 ```
 
-**Expected:** All derived quantities computed with correct units, energy conservation verified via Poynting's theorem, and physically reasonable magnitudes.
+**Got:** All derived quantities with right units. Energy conservation verified via Poynting's theorem. Magnitudes physically reasonable.
 
-**On failure:** If Poynting's theorem does not balance (du/dt + div(S) does not equal -J . E), there is an inconsistency between the E and B solutions. Re-verify that both fields satisfy all four Maxwell equations simultaneously. A common error is computing E and B from different approximations that are not mutually consistent.
+**If fail:** Poynting's theorem won't balance (du/dt + div(S) != -J . E)? Inconsistency E + B solutions. Re-verify both fields satisfy all four Maxwell. Common error: E + B from different approximations not mutually consistent.
 
 ### Step 5: Verify Against Known Limits
 
-Check that the full solution reduces correctly in limiting cases:
+Check solution reduces correctly in limits:
 
-1. **Static limit (omega -> 0)**: The solution should reduce to the electrostatic or magnetostatic result:
-   - E-field should satisfy Coulomb's law or the Laplace/Poisson equation
-   - B-field should satisfy the Biot-Savart law or Ampere's law (without displacement current)
+1. **Static limit (omega -> 0)**: Solution → electrostatic or magnetostatic:
+   - E satisfies Coulomb or Laplace/Poisson
+   - B satisfies Biot-Savart or Ampere (no displacement current)
    - Displacement current vanishes: mu_0 epsilon_0 dE/dt -> 0
 
-2. **Plane wave limit**: In a source-free, unbounded medium, the solution should reduce to plane waves with v = 1/sqrt(mu epsilon) and the correct polarization.
+2. **Plane wave limit**: Source-free unbounded medium → plane waves, v = 1/sqrt(mu epsilon), correct polarization.
 
 3. **Perfect conductor limit (sigma -> infinity)**:
-   - Skin depth delta -> 0 (fields do not penetrate)
-   - Tangential E -> 0 at the surface
-   - Reflection coefficient r -> -1 (perfect reflection with phase inversion)
+   - Skin depth delta -> 0 (no penetration)
+   - Tangential E -> 0 at surface
+   - Reflection r -> -1 (perfect reflection phase inversion)
 
-4. **Vacuum limit (epsilon_r = 1, mu_r = 1)**: Material-dependent quantities should reduce to their vacuum values. Wave speed should equal c. Impedance should equal eta_0 approximately 377 Ohms.
+4. **Vacuum limit (epsilon_r = 1, mu_r = 1)**: Material-dependent → vacuum values. Wave speed = c. Impedance = eta_0 ~ 377 Ohms.
 
-5. **Energy conservation check**: Integrate Poynting's theorem over a closed volume. The rate of change of total field energy plus the power flowing out through the surface must equal the negative of the power delivered by currents inside the volume. Any imbalance indicates an error.
+5. **Energy conservation check**: Integrate Poynting's theorem over closed volume. Rate of change of total field energy + power flowing out = negative of power from currents inside. Any imbalance = error.
 
 ```markdown
 ## Limiting Case Verification
@@ -237,38 +237,38 @@ Check that the full solution reduces correctly in limiting cases:
 | Energy conservation | Poynting's theorem | balanced | [check] | [Yes/No] |
 ```
 
-**Expected:** All limits produce the correct known results. Energy conservation is satisfied to within numerical precision.
+**Got:** All limits produce correct known results. Energy conservation satisfied to numerical precision.
 
-**On failure:** A failed limit is a definitive indicator of an error. The static limit failing suggests a problem in the source terms or boundary conditions. The plane wave limit failing suggests an error in the wave equation derivation. Energy conservation failing suggests inconsistency between E and B solutions. Trace the failure back to the specific step and correct before accepting the solution.
+**If fail:** Failed limit = definite error. Static limit fail → source terms or boundary. Plane wave limit fail → wave equation derivation. Energy conservation fail → inconsistency E + B. Trace failure to step, fix before accepting.
 
-## Validation
+## Checks
 
-- [ ] All four Maxwell equations are stated and the relevant subset is identified
-- [ ] Displacement current is included or explicitly justified as negligible
-- [ ] Boundary conditions are applied at every material interface
-- [ ] Symmetry is exploited to reduce the PDE dimensionality
-- [ ] The wave equation (or Laplace/Poisson equation) is correctly derived
-- [ ] Field solutions satisfy all four Maxwell equations on back-substitution
-- [ ] Poynting vector and energy density are computed with correct units (W/m^2 and J/m^3)
-- [ ] Poynting's theorem (energy conservation) is verified
-- [ ] Wave impedance and reflection/transmission coefficients are physically reasonable
-- [ ] Static limit reproduces Coulomb's law and Biot-Savart law
-- [ ] Plane wave limit yields v = 1/sqrt(mu epsilon) and orthogonal E, B, k
-- [ ] The solution is complete enough for another researcher to reproduce
+- [ ] All four Maxwell equations stated + relevant subset identified
+- [ ] Displacement current included or explicitly justified negligible
+- [ ] Boundary conditions applied at every material interface
+- [ ] Symmetry shrinks PDE dimension
+- [ ] Wave equation (or Laplace/Poisson) correctly derived
+- [ ] Field solutions satisfy all four Maxwell on back-sub
+- [ ] Poynting vector + energy density with right units (W/m^2 + J/m^3)
+- [ ] Poynting's theorem (energy conservation) verified
+- [ ] Wave impedance + reflection/transmission coefficients reasonable
+- [ ] Static limit reproduces Coulomb + Biot-Savart
+- [ ] Plane wave limit gives v = 1/sqrt(mu epsilon) + orthogonal E, B, k
+- [ ] Solution complete enough for reproduction
 
-## Common Pitfalls
+## Pitfalls
 
-- **Omitting the displacement current**: In the original Ampere's law (curl B = mu_0 J), taking the divergence gives div(J) = 0, which contradicts charge conservation when rho changes in time. The displacement current term mu_0 epsilon_0 dE/dt fixes this and is essential for wave propagation. Never drop it without verifying that dE/dt is negligible compared to J/epsilon_0.
-- **Inconsistent E and B solutions**: Solving for E and B independently (e.g., E from Gauss's law and B from Ampere's law) without verifying Faraday's law and Gauss's law for B can produce fields that are not mutually consistent. Always verify all four equations.
-- **Wrong boundary condition normal direction**: The convention n_hat x (H_1 - H_2) = K_f requires n_hat to point from medium 2 into medium 1. Reversing the direction flips the sign of the surface current condition.
-- **Confusing D, E, B, and H in materials**: In vacuum, D = epsilon_0 E and B = mu_0 H. In linear media, D = epsilon E and B = mu H. Maxwell's equations in matter use D and H for the free source terms and E and B for the force law. Mixing constitutive relations leads to factors of epsilon_r or mu_r errors.
-- **Phase velocity versus group velocity**: The wave speed v = omega/k is the phase velocity. Energy and information propagate at the group velocity v_g = d(omega)/dk. In dispersive media these differ, and using phase velocity for energy transport gives wrong results.
-- **Forgetting the radiation condition**: For scattering and radiation problems in unbounded domains, the solution must satisfy the Sommerfeld radiation condition (outgoing waves at infinity). Without this condition, the solution is not unique and may include unphysical incoming waves.
+- **Dropping displacement current**: Original Ampere (curl B = mu_0 J), divergence gives div(J) = 0, contradicts charge conservation when rho changes in time. Term mu_0 epsilon_0 dE/dt fixes, essential for wave propagation. Never drop without verifying dE/dt negligible vs J/epsilon_0.
+- **Inconsistent E + B solutions**: Solving E + B independent (E from Gauss, B from Ampere) without verifying Faraday + Gauss for B → fields not mutually consistent. Always verify all four.
+- **Wrong boundary normal direction**: Convention n_hat x (H_1 - H_2) = K_f needs n_hat from medium 2 into 1. Reversed → flips surface current sign.
+- **Confusing D, E, B, H in materials**: Vacuum: D = epsilon_0 E + B = mu_0 H. Linear media: D = epsilon E + B = mu H. Maxwell in matter use D + H for free source, E + B for force law. Mixing → factor of epsilon_r or mu_r errors.
+- **Phase velocity vs group velocity**: Wave speed v = omega/k = phase velocity. Energy + info propagate at group velocity v_g = d(omega)/dk. Dispersive media differ, phase for energy transport → wrong.
+- **Forgetting radiation condition**: Scattering + radiation in unbounded domain → solution must satisfy Sommerfeld radiation condition (outgoing waves at infinity). Without it → not unique, may include unphysical incoming waves.
 
-## Related Skills
+## See Also
 
-- `analyze-magnetic-field` -- compute static B-fields that serve as the magnetostatic limit of Maxwell's equations
-- `solve-electromagnetic-induction` -- apply Faraday's law to specific induction geometries and RL circuits
-- `formulate-quantum-problem` -- quantize the electromagnetic field for quantum optics and QED
-- `derive-theoretical-result` -- carry out rigorous derivations of wave equations, Green's functions, and dispersion relations
-- `analyze-diffusion-dynamics` -- diffusion equations arise from Maxwell's equations in conducting media (skin effect)
+- `analyze-magnetic-field` -- compute static B-fields = magnetostatic limit of Maxwell
+- `solve-electromagnetic-induction` -- apply Faraday to induction geometries + RL circuits
+- `formulate-quantum-problem` -- quantize EM field for quantum optics + QED
+- `derive-theoretical-result` -- rigorous derivation of wave equations, Green's functions, dispersion
+- `analyze-diffusion-dynamics` -- diffusion equations from Maxwell in conducting media (skin effect)

@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate a project status report by reading existing artifacts (charter,
   backlog, sprint plan, WBS), calculating metrics, identifying blockers,
@@ -23,57 +23,57 @@ metadata:
   tags: project-management, status-report, metrics, rag, progress, blockers
 ---
 
-# Generate a Project Status Report
+# 項目狀況報告之生
 
-Produce a periodic status report by analyzing project artifacts, calculating progress metrics, and summarizing accomplishments, blockers, and upcoming work with RAG (Red/Amber/Green) health indicators.
+析項目成品、算進度、摘成就阻滯與後續、以 RAG（紅/琥/綠）健康指示生週期狀況報告。
 
-## When to Use
+## 用時
 
-- End of sprint or reporting period (weekly, biweekly, monthly)
-- Stakeholder requests for project health update
-- Before steering committee or governance meetings
-- When project health indicators change (e.g., new blocker or risk materializes)
-- Periodic checkpoint against charter milestones
+- 衝刺或報告期末（週、雙週、月）
+- 利益相關者求項目健康更新
+- 前指導委員會或治理會議
+- 項目健康指標變（如新阻滯或風險現）
+- 相對章程里程之週期察
 
-## Inputs
+## 入
 
-- **Required**: Reporting period (start date, end date)
-- **Required**: At least one project artifact (BACKLOG.md, SPRINT-PLAN.md, WBS.md, or PROJECT-CHARTER.md)
-- **Optional**: Previous status reports (for trend comparison)
-- **Optional**: Budget or resource tracking data
-- **Optional**: Risk register updates
+- **必要**：報告期（始、終日）
+- **必要**：至少一項目成品（BACKLOG.md、SPRINT-PLAN.md、WBS.md 或 PROJECT-CHARTER.md）
+- **可選**：前狀況報告（為趨勢比較）
+- **可選**：預算或資源跟蹤資料
+- **可選**：風險登記更新
 
-## Procedure
+## 法
 
-### Step 1: Read Existing Artifacts
+### 第一步：讀現有成品
 
-Scan the project directory for PM artifacts:
-- PROJECT-CHARTER.md — milestones, success criteria
-- BACKLOG.md — item counts by status, burn-down data
-- SPRINT-PLAN.md — sprint goal, committed items, task completion
-- WBS.md — work package completion percentages
-- Previous STATUS-REPORT-*.md files — trend data
+掃項目目錄察 PM 成品：
+- PROJECT-CHARTER.md — 里程、成功準則
+- BACKLOG.md — 按狀態計項、燃盡資料
+- SPRINT-PLAN.md — 衝刺目標、承諾項、任務完成
+- WBS.md — 工作包完成百分比
+- 前 STATUS-REPORT-*.md 檔 — 趨勢資料
 
-Read available files. Not all will exist — adapt the report to available data.
+讀可得檔。非必皆存——報告依可得資料適應。
 
-**Expected:** At least one artifact read successfully, key metrics extracted.
+**得：** 至少一成品成功讀取，要指標已抽。
 
-**On failure:** If no artifacts exist, report cannot be generated. Create a charter or backlog first using the `draft-project-charter` or `manage-backlog` skills.
+**敗則：** 無成品則無法生報告。先以 `draft-project-charter` 或 `manage-backlog` 技能創章程或待辦。
 
-### Step 2: Calculate Progress Metrics
+### 第二步：算進度指標
 
-Compute metrics from available data:
+自可得資料算指標：
 
-**Agile metrics** (from BACKLOG.md / SPRINT-PLAN.md):
-- Velocity: story points completed this sprint
-- Sprint completion: items done / items committed
-- Backlog burn-down: total remaining points vs previous period
-- Cycle time: average days from In Progress to Done
+**敏捷指標**（BACKLOG.md / SPRINT-PLAN.md）：
+- 速度：本衝刺完成之故事點
+- 衝刺完成：完成項 / 承諾項
+- 待辦燃盡：剩餘點對比前期
+- 週期時：平均從進行中至完成之日數
 
-**Classic metrics** (from WBS.md):
-- % complete: work packages done / total work packages
-- Schedule variance: planned milestone dates vs actual
-- Effort variance: estimated effort vs actual effort consumed
+**經典指標**（WBS.md）：
+- 完成率：完成工作包 / 總工作包
+- 進度差異：計劃里程日 vs 實際
+- 工作量差異：估計工作量 vs 實耗
 
 ```markdown
 ## Metrics
@@ -85,13 +85,13 @@ Compute metrics from available data:
 | Schedule Variance | [+/-N days] | [+/-N days] | |
 ```
 
-**Expected:** 3-5 metrics calculated with previous period comparison.
+**得：** 三至五指標已算，與前期比。
 
-**On failure:** If no historical data exists (first report), omit Previous and Trend columns. If data is incomplete, note gaps in report footer with action items to establish tracking.
+**敗則：** 若無歷史資料（首報），略 Previous 與 Trend 列。若資料不全，於報告腳注標間隙，附行動項以立跟蹤。
 
-### Step 3: Identify Blockers, Risks, and Issues
+### 第三步：識阻滯、風險、問題
 
-List active blockers and risks:
+列活動阻滯與風險：
 
 ```markdown
 ## Blockers & Risks
@@ -102,15 +102,15 @@ List active blockers and risks:
 | I-001 | Issue | [Description] | Medium | [Name] | Investigating | [Action] |
 ```
 
-Cross-reference against the charter risk register. Flag any new risks not previously identified.
+交叉比對章程風險登記。標任何前未識之新風險。
 
-**Expected:** All active blockers and top risks documented with owners and actions.
+**得：** 所有活動阻滯與頂風險皆記，附擁者與行動。
 
-**On failure:** If no blockers exist, explicitly state "No active blockers" — don't leave the section empty. If a blocker lacks an owner, escalate to project manager for assignment.
+**敗則：** 若無阻滯，顯陳「無活動阻滯」——勿留空。阻滯無擁者則升至項目經理指派。
 
-### Step 4: Summarize Accomplishments and Next Period Plan
+### 第四步：摘成就與下期計劃
 
-Write two sections:
+書二節：
 
 ```markdown
 ## Accomplishments (This Period)
@@ -124,13 +124,13 @@ Write two sections:
 - [Planned item/milestone with target]
 ```
 
-**Expected:** 3-5 accomplishments with concrete evidence, 3-5 planned items for next period.
+**得：** 三至五成就附具體證據，下期三至五計劃項。
 
-**On failure:** If no accomplishments exist, report the reason (blocked, re-planning, team unavailable). If next period plan is unclear, list "Planning session scheduled for [date]" as the primary item.
+**敗則：** 若無成就，報原因（受阻、重劃、隊不可得）。若下期計劃不明，列「計劃會排於 [日]」為主項。
 
-### Step 5: Assign RAG Indicators and Write Report
+### 第五步：賦 RAG 指示並書報告
 
-Assess project health across four dimensions:
+四維度察項目健康：
 
 | Dimension | Green | Amber | Red |
 |-----------|-------|-------|-----|
@@ -139,7 +139,7 @@ Assess project health across four dimensions:
 | **Budget** | Within 5% of plan | 5-15% over plan | >15% over plan or untracked |
 | **Quality** | Tests pass, criteria met | Minor quality issues | Critical defects or acceptance failures |
 
-Write the complete report:
+書完整報告：
 
 ```markdown
 # Status Report: [Project Name]
@@ -177,38 +177,38 @@ Write the complete report:
 *Report prepared by: [Name/Agent]*
 ```
 
-Save as `STATUS-REPORT-[YYYY-MM-DD].md`.
+存為 `STATUS-REPORT-[YYYY-MM-DD].md`。
 
-**Expected:** Complete status report saved with RAG indicators, metrics, and narrative.
+**得：** 完整狀況報告存，含 RAG 指示、指標、敘述。
 
-**On failure:** If data is insufficient for RAG assessment, use ⚪ (Grey) indicating "insufficient data" and list what data needs to be collected for next report.
+**敗則：** 若資料不足為 RAG 評估，用 ⚪（灰）示「資料不足」，列下期須收集之資料。
 
-## Validation
+## 驗
 
-- [ ] Status report file created with correct date-stamped filename
-- [ ] RAG indicators assigned for all four dimensions with justification
-- [ ] At least 3 metrics calculated from project artifacts
-- [ ] Blockers section present (even if "No active blockers")
-- [ ] Accomplishments listed with evidence
-- [ ] Next period plan included
-- [ ] Executive summary is 2-3 sentences, not a paragraph
-- [ ] Every blocker and risk has an owner and action with deadline
+- [ ] 狀況報告檔創有正日戳檔名
+- [ ] 四維度皆賦 RAG 指示有理由
+- [ ] 自項目成品算至少三指標
+- [ ] 阻滯節存（即使「無活動阻滯」）
+- [ ] 成就有證據列出
+- [ ] 下期計劃含入
+- [ ] 執行摘要二至三句，非段
+- [ ] 每阻滯與風險有擁者與行動與期限
 
-## Common Pitfalls
+## 陷
 
-- **Report without data**: Status reports must be evidence-based. Every claim should reference an artifact or metric.
-- **All green, all the time**: Persistent green RAG without evidence suggests the report isn't honest. Challenge green assessments.
-- **Blocker without owner**: Every blocker needs an owner and an action. Unowned blockers don't get resolved.
-- **Metric without context**: "Velocity = 18" means nothing without comparison. Always include previous period or target.
-- **Too long**: A status report should be scannable in 2 minutes. Keep it to 1-2 pages.
-- **Missing decisions section**: If the project needs stakeholder decisions, make them explicit with deadlines.
-- **Stale data**: Using outdated artifacts leads to misleading reports. Verify artifact dates match reporting period.
-- **Missing trend data**: First-time reports can't show trends, but subsequent reports must compare to previous periods.
+- **報告無資料**：狀況報告必有據。每聲明皆應參成品或指標
+- **恆綠不怠**：持綠 RAG 無據示報告不誠。挑戰綠評
+- **阻滯無擁者**：每阻滯需擁者與行動。無擁阻滯不解
+- **指標無語境**：「速度 = 18」無比較無義。必含前期或目標
+- **過長**：狀況報告應二分鐘可掃。保一至二頁
+- **缺決策節**：若項目需利益相關者決策，顯陳附期限
+- **資料陳舊**：用舊成品致誤報。驗成品日合報告期
+- **缺趨勢資料**：首報不能顯趨勢，然後續報必比前期
 
-## Related Skills
+## 參
 
-- `draft-project-charter` — charter provides milestones and success criteria for status tracking
-- `manage-backlog` — backlog metrics feed the status report
-- `plan-sprint` — sprint results provide velocity and completion data
-- `create-work-breakdown-structure` — WBS completion drives classic progress metrics
-- `conduct-retrospective` — status report data feeds the retrospective
+- `draft-project-charter` — 章程供狀況跟蹤之里程與成功準則
+- `manage-backlog` — 待辦指標入狀況報告
+- `plan-sprint` — 衝刺結果供速度與完成資料
+- `create-work-breakdown-structure` — WBS 完成驅動經典進度指標
+- `conduct-retrospective` — 狀況報告資料入回顧

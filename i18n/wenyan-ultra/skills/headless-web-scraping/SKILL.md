@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Extract data from web pages using the scrapling Python library — select the
   appropriate fetcher tier (HTTP, stealth Chromium, or full browser automation)
@@ -23,33 +23,31 @@ metadata:
   tags: web-scraping, headless, scrapling, automation, data-extraction
 ---
 
-# Headless Web Scraping
+# 無頭網抓
 
-Extract data from web pages that resist simple HTTP requests — JS-rendered content,
-Cloudflare-protected sites, and dynamic SPAs — using scrapling's three-tier fetcher
-architecture and CSS-based data extraction.
+由拒簡 HTTP 請求之網頁——JS 渲染、Cloudflare 護、動態 SPA——用 scrapling 三層取器架構與 CSS 析取。
 
-## When to Use
+## 用
 
-- Target page requires JavaScript rendering (SPA, React, Vue)
-- Site has anti-bot protections (Cloudflare Turnstile, TLS fingerprinting)
-- You need structured extraction of multiple elements via CSS selectors
-- Simple `WebFetch` or `requests.get()` returns empty or blocked responses
-- Extracting tabular data, link lists, or repeated DOM structures at scale
+- 目標頁需 JS 渲（SPA、React、Vue）
+- 站有反爬護（Cloudflare Turnstile、TLS 指紋察）
+- 需用 CSS 選多元素之結構析取
+- 簡單 `WebFetch` 或 `requests.get()` 返空或封
+- 大量取表數、鏈列、重複 DOM 構
 
-## Inputs
+## 入
 
-- **Required**: Target URL or list of URLs to scrape
-- **Required**: Data to extract (CSS selectors, field names, or description of target elements)
-- **Optional**: Fetcher tier override (default: auto-select based on site behavior)
-- **Optional**: Output format (default: JSON; alternatives: CSV, Python dict)
-- **Optional**: Rate limit delay in seconds (default: 1)
+- **必**：目標 URL 或列
+- **必**：所取之數（CSS 選、欄名或目標元素之描）
+- **可**：取器層覆（默：依站動自擇）
+- **可**：出格式（默 JSON；替 CSV、Python dict）
+- **可**：率限（秒，默 1）
 
-## Procedure
+## 行
 
-### Step 1: Select Fetcher Tier
+### 一：擇取器層
 
-Determine which scrapling fetcher matches the target site's defenses.
+定哪 scrapling 取器合目標站之護。
 
 ```python
 # Decision matrix:
@@ -77,13 +75,13 @@ else:
 | Need to click buttons or scroll | `DynamicFetcher` |
 | altcha CAPTCHA present | None (cannot be automated) |
 
-**Expected:** One of the three tiers is identified. For most modern sites, `StealthyFetcher` is the correct starting point.
+得：三層之一已定。多現代站→`StealthyFetcher` 為正確起點。
 
-**On failure:** If all three tiers return blocked responses, check whether the site uses altcha CAPTCHA (proof-of-work challenge that cannot be bypassed). If so, document the limitation and provide manual extraction instructions instead.
+敗：三層皆封→察站是否用 altcha CAPTCHA（工作量證明，不可繞）。若然，書限並予手取指示。
 
-### Step 2: Configure the Fetcher
+### 二：配取器
 
-Set up the selected fetcher with appropriate options.
+設所擇取器之合適選項。
 
 ```python
 from scrapling import Fetcher, StealthyFetcher, DynamicFetcher
@@ -114,16 +112,16 @@ fetcher.configure(
 )
 ```
 
-**Expected:** Fetcher instance is configured and ready. No errors on instantiation. For `StealthyFetcher` and `DynamicFetcher`, a Chromium binary is available (scrapling manages this automatically on first run).
+得：取器實例已配備就。實例化無誤。`StealthyFetcher` 與 `DynamicFetcher` 皆有 Chromium 二進制（scrapling 於首行自管）。
 
-**On failure:**
-- `playwright` or browser binary not found -- run `python -m playwright install chromium`
-- Timeout on `configure()` -- increase timeout value or check network connectivity
-- Import error -- install scrapling: `pip install scrapling`
+敗：
+- `playwright` 或瀏覽器二進制缺→行 `python -m playwright install chromium`
+- `configure()` 超時→增超時或察網連
+- 導入誤→裝 scrapling：`pip install scrapling`
 
-### Step 3: Fetch and Extract Data
+### 三：取頁並析數
 
-Navigate to the target URL and extract structured data using CSS selectors.
+導至目標 URL，用 CSS 選析取結構數據。
 
 ```python
 # Fetch the page
@@ -149,7 +147,7 @@ urls = [link.get("href") for link in links]
 detail_html = response.find("div.description").html_content
 ```
 
-**Key API reference:**
+**關鍵 API 參考：**
 
 | Method | Purpose |
 |--------|---------|
@@ -159,16 +157,16 @@ detail_html = response.find("div.description").html_content
 | `element.get_all_text()` | All text content, recursively |
 | `element.html_content` | Raw inner HTML |
 
-**Expected:** Extracted data matches the visible page content. Elements are non-None and text content is non-empty for populated pages.
+得：所析數符頁之可見內容。元素非 None，文非空（於有內容頁）。
 
-**On failure:**
-- `find()` returns `None` -- inspect the actual HTML (`response.html_content`) to verify the selector; the page may use different class names than expected
-- Empty text from `get_all_text()` -- content may be inside shadow DOM or an iframe; try `DynamicFetcher` with a `wait_selector`
-- Do NOT use `.css_first()` -- this is not part of the scrapling API (common confusion with other libraries)
+敗：
+- `find()` 返 `None`→察實際 HTML（`response.html_content`）驗選。頁或用異類名
+- `get_all_text()` 文空→內容或於 shadow DOM 或 iframe；試 `DynamicFetcher` 配 `wait_selector`
+- 勿用 `.css_first()`——非 scrapling API（常與他庫混）
 
-### Step 4: Handle Failures and Edge Cases
+### 四：處失敗與邊例
 
-Implement fallback logic for CAPTCHA detection, empty responses, and session requirements.
+為 CAPTCHA 察、空返、會話需實回退邏輯。
 
 ```python
 import time
@@ -211,16 +209,16 @@ def scrape_with_fallback(url, selector):
     return None
 ```
 
-**Expected:** Function returns extracted text on success, or `None` with a diagnostic message when all tiers fail. CAPTCHA pages are detected and reported rather than retried indefinitely.
+得：函於成返所析文，或於諸層皆敗時返 `None` 含診斷訊。CAPTCHA 頁察並報，非無限重試。
 
-**On failure:**
-- All tiers return 403 -- the site blocks all automated access (common with WIPO, TMview, some government databases); document the URL as requiring manual access
-- Timeout errors -- the page may be behind a slow CDN; increase timeout to 120s
-- Session/cookie errors -- the site may require login; add cookie handling or authenticate first
+敗：
+- 諸層皆 403→站封諸自動訪（WIPO、TMview、某政府庫常）；書 URL 需手訪
+- 超時誤→頁或在慢 CDN 後；增超時至 120s
+- 會話/cookie 誤→站或需登；加 cookie 處理或先認證
 
-### Step 5: Rate Limiting and Ethical Scraping
+### 五：率限與倫理爬
 
-Implement delays and respect site policies before running at scale.
+大規模前實延並敬站策。
 
 ```python
 import time
@@ -250,48 +248,48 @@ def scrape_urls(urls, selector, delay=1.0):
     return results
 ```
 
-**Ethical scraping checklist:**
+**倫理爬查單：**
 
-1. Check `robots.txt` before scraping -- respect `Disallow` directives
-2. Use a minimum 1-second delay between requests
-3. Identify your scraper with a descriptive User-Agent when possible
-4. Do not scrape personal data without legal basis
-5. Cache responses locally to avoid redundant requests
-6. Stop immediately if you receive a 429 (Too Many Requests)
+1. 爬前察 `robots.txt`——敬 `Disallow` 指令
+2. 請求間至少 1 秒延
+3. 可時以描述 User-Agent 識爬器
+4. 無法據勿爬人資
+5. 本地緩以避冗請
+6. 受 429（請求過多）→立停
 
-**Expected:** Scraping runs at a controlled rate. `robots.txt` is checked before bulk operations. No 429 responses are triggered.
+得：爬以控率行。大量前 `robots.txt` 已察。無 429 返現。
 
-**On failure:**
-- 429 Too Many Requests -- increase delay to 3-5 seconds, or stop and retry later
-- `robots.txt` disallows the path -- respect the directive; do not override it
-- IP ban -- stop scraping immediately; the rate limiting was insufficient. If access is legitimate (public data, ToS-permitted, robots.txt-respected) and you must continue, see [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md) for network-layer escalation
+敗：
+- 429 Too Many Requests→增延至 3-5 秒，或停後試
+- `robots.txt` 禁徑→敬指令；勿覆
+- IP 禁→即停爬；率限不足。若訪合法（公數、ToS 允、robots.txt 敬）且須續→參 [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md) 之網層升級
 
-## Validation
+## 驗
 
-- [ ] Correct fetcher tier is selected (not over- or under-powered for the target)
-- [ ] `configure()` method is used (not deprecated constructor kwargs)
-- [ ] CSS selectors match actual page structure (verified against page source)
-- [ ] `.find()` / `.find_all()` API is used (not `.css_first()` or other library methods)
-- [ ] CAPTCHA detection is in place (altcha pages are reported, not retried)
-- [ ] Rate limiting is implemented for multi-URL scraping
-- [ ] `robots.txt` is checked before bulk operations
-- [ ] Extracted data is non-empty and structurally correct
+- [ ] 正確取器層已擇（非過強或弱）
+- [ ] 用 `configure()` 方法（非棄構造器關鍵字）
+- [ ] CSS 選符實頁構（對頁源驗）
+- [ ] 用 `.find()`/`.find_all()` API（非 `.css_first()` 或他庫方法）
+- [ ] CAPTCHA 察就位（altcha 頁報，非試）
+- [ ] 多 URL 爬時率限已實
+- [ ] 大量前 `robots.txt` 已察
+- [ ] 析數非空且結構正確
 
-## Common Pitfalls
+## 忌
 
-- **Using `.css_first()` instead of `.find()`**: scrapling uses `.find()` and `.find_all()` for element selection -- `.css_first()` belongs to a different library and will raise `AttributeError`
-- **Starting with DynamicFetcher**: Always try `Fetcher` first, then escalate -- `DynamicFetcher` is 10-50x slower due to full browser startup
-- **Constructor kwargs instead of `configure()`**: scrapling v0.4.x deprecated passing options to the constructor; always use the `configure()` method
-- **Ignoring altcha CAPTCHA**: No fetcher tier can solve altcha proof-of-work challenges -- detect them early and fall back to manual instructions
-- **No rate limiting**: Even if the site does not return 429, aggressive scraping can get your IP banned or cause service degradation
-- **Assuming stable selectors**: Website CSS classes change frequently -- validate selectors against current page source before each scraping campaign
+- **用 `.css_first()` 非 `.find()`**：scrapling 用 `.find()` 與 `.find_all()` 選元素——`.css_first()` 屬他庫，將發 `AttributeError`
+- **始於 DynamicFetcher**：恆先試 `Fetcher`，後升級——`DynamicFetcher` 因全瀏啟而 10-50 倍慢
+- **用構造器關鍵字非 `configure()`**：scrapling v0.4.x 已棄構造器選；恆用 `configure()`
+- **忽 altcha CAPTCHA**：無取器層可解 altcha 工作量證明——早察之並回退手指
+- **無率限**：即站不返 429，激爬亦可致 IP 禁或服務退
+- **假選器穩**：網站 CSS 類變頻——各爬前對當前頁源驗選
 
-## Related Skills
+## 參
 
-- [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md) -- network-layer escalation when client-side stealth is exhausted and IP bans block legitimate, ToS-permitted access
-- [use-graphql-api](../use-graphql-api/SKILL.md) -- structured API queries when the site offers a GraphQL endpoint (preferred over scraping)
-- [serialize-data-formats](../serialize-data-formats/SKILL.md) -- converting extracted data to JSON, CSV, or other formats
-- [deploy-searxng](../deploy-searxng/SKILL.md) -- self-hosted search engine that aggregates results from multiple sources
-- [forage-solutions](../forage-solutions/SKILL.md) -- broader pattern for gathering information from diverse sources
+- [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md)
+- [use-graphql-api](../use-graphql-api/SKILL.md)
+- [serialize-data-formats](../serialize-data-formats/SKILL.md)
+- [deploy-searxng](../deploy-searxng/SKILL.md)
+- [forage-solutions](../forage-solutions/SKILL.md)
 
 <!-- Keep under 500 lines. Extract large examples to references/EXAMPLES.md if needed. -->

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate a project status report by reading existing artifacts (charter,
   backlog, sprint plan, WBS), calculating metrics, identifying blockers,
@@ -25,55 +25,55 @@ metadata:
 
 # Generate a Project Status Report
 
-Produce a periodic status report by analyzing project artifacts, calculating progress metrics, and summarizing accomplishments, blockers, and upcoming work with RAG (Red/Amber/Green) health indicators.
+Make periodic status report. Analyze project artifacts, compute progress metrics, summarize accomplishments, blockers, upcoming work with RAG (Red/Amber/Green) health indicators.
 
-## When to Use
+## When Use
 
 - End of sprint or reporting period (weekly, biweekly, monthly)
-- Stakeholder requests for project health update
+- Stakeholder asks for project health update
 - Before steering committee or governance meetings
-- When project health indicators change (e.g., new blocker or risk materializes)
-- Periodic checkpoint against charter milestones
+- Project health indicators change (new blocker or risk)
+- Periodic checkpoint vs charter milestones
 
 ## Inputs
 
-- **Required**: Reporting period (start date, end date)
-- **Required**: At least one project artifact (BACKLOG.md, SPRINT-PLAN.md, WBS.md, or PROJECT-CHARTER.md)
-- **Optional**: Previous status reports (for trend comparison)
+- **Required**: Reporting period (start + end date)
+- **Required**: At least one project artifact (BACKLOG.md, SPRINT-PLAN.md, WBS.md, PROJECT-CHARTER.md)
+- **Optional**: Previous status reports (trend comparison)
 - **Optional**: Budget or resource tracking data
 - **Optional**: Risk register updates
 
-## Procedure
+## Steps
 
 ### Step 1: Read Existing Artifacts
 
-Scan the project directory for PM artifacts:
+Scan project directory for PM artifacts:
 - PROJECT-CHARTER.md — milestones, success criteria
 - BACKLOG.md — item counts by status, burn-down data
 - SPRINT-PLAN.md — sprint goal, committed items, task completion
 - WBS.md — work package completion percentages
 - Previous STATUS-REPORT-*.md files — trend data
 
-Read available files. Not all will exist — adapt the report to available data.
+Read available files. Not all will exist — adapt report to available data.
 
-**Expected:** At least one artifact read successfully, key metrics extracted.
+**Got:** At least one artifact read successful, key metrics extracted.
 
-**On failure:** If no artifacts exist, report cannot be generated. Create a charter or backlog first using the `draft-project-charter` or `manage-backlog` skills.
+**If fail:** No artifacts exist? Report can't be generated. Create charter or backlog first with `draft-project-charter` or `manage-backlog`.
 
-### Step 2: Calculate Progress Metrics
+### Step 2: Compute Progress Metrics
 
 Compute metrics from available data:
 
 **Agile metrics** (from BACKLOG.md / SPRINT-PLAN.md):
-- Velocity: story points completed this sprint
+- Velocity: story points done this sprint
 - Sprint completion: items done / items committed
 - Backlog burn-down: total remaining points vs previous period
 - Cycle time: average days from In Progress to Done
 
 **Classic metrics** (from WBS.md):
-- % complete: work packages done / total work packages
+- % complete: work packages done / total
 - Schedule variance: planned milestone dates vs actual
-- Effort variance: estimated effort vs actual effort consumed
+- Effort variance: estimated effort vs actual
 
 ```markdown
 ## Metrics
@@ -85,13 +85,13 @@ Compute metrics from available data:
 | Schedule Variance | [+/-N days] | [+/-N days] | |
 ```
 
-**Expected:** 3-5 metrics calculated with previous period comparison.
+**Got:** 3-5 metrics computed with previous period comparison.
 
-**On failure:** If no historical data exists (first report), omit Previous and Trend columns. If data is incomplete, note gaps in report footer with action items to establish tracking.
+**If fail:** No historical data (first report)? Skip Previous + Trend columns. Data incomplete → note gaps in report footer with actions to establish tracking.
 
-### Step 3: Identify Blockers, Risks, and Issues
+### Step 3: Find Blockers, Risks, Issues
 
-List active blockers and risks:
+List active blockers + risks:
 
 ```markdown
 ## Blockers & Risks
@@ -102,13 +102,13 @@ List active blockers and risks:
 | I-001 | Issue | [Description] | Medium | [Name] | Investigating | [Action] |
 ```
 
-Cross-reference against the charter risk register. Flag any new risks not previously identified.
+Cross-reference vs charter risk register. Flag new risks not previously identified.
 
-**Expected:** All active blockers and top risks documented with owners and actions.
+**Got:** All active blockers + top risks documented with owners + actions.
 
-**On failure:** If no blockers exist, explicitly state "No active blockers" — don't leave the section empty. If a blocker lacks an owner, escalate to project manager for assignment.
+**If fail:** No blockers? State "No active blockers" — no empty section. Blocker without owner? Escalate to project manager.
 
-### Step 4: Summarize Accomplishments and Next Period Plan
+### Step 4: Summarize Accomplishments + Next Period Plan
 
 Write two sections:
 
@@ -124,11 +124,11 @@ Write two sections:
 - [Planned item/milestone with target]
 ```
 
-**Expected:** 3-5 accomplishments with concrete evidence, 3-5 planned items for next period.
+**Got:** 3-5 accomplishments with concrete evidence, 3-5 planned items for next period.
 
-**On failure:** If no accomplishments exist, report the reason (blocked, re-planning, team unavailable). If next period plan is unclear, list "Planning session scheduled for [date]" as the primary item.
+**If fail:** No accomplishments? Report reason (blocked, re-planning, team unavailable). Next period plan unclear → list "Planning session scheduled for [date]" as primary.
 
-### Step 5: Assign RAG Indicators and Write Report
+### Step 5: Assign RAG + Write Report
 
 Assess project health across four dimensions:
 
@@ -139,7 +139,7 @@ Assess project health across four dimensions:
 | **Budget** | Within 5% of plan | 5-15% over plan | >15% over plan or untracked |
 | **Quality** | Tests pass, criteria met | Minor quality issues | Critical defects or acceptance failures |
 
-Write the complete report:
+Write complete report:
 
 ```markdown
 # Status Report: [Project Name]
@@ -179,36 +179,36 @@ Write the complete report:
 
 Save as `STATUS-REPORT-[YYYY-MM-DD].md`.
 
-**Expected:** Complete status report saved with RAG indicators, metrics, and narrative.
+**Got:** Complete status report saved with RAG indicators, metrics, narrative.
 
-**On failure:** If data is insufficient for RAG assessment, use ⚪ (Grey) indicating "insufficient data" and list what data needs to be collected for next report.
+**If fail:** Data insufficient for RAG assessment? Use ⚪ (Grey) = "insufficient data", list what data needs collecting for next report.
 
-## Validation
+## Checks
 
-- [ ] Status report file created with correct date-stamped filename
+- [ ] Status report file created with date-stamped filename
 - [ ] RAG indicators assigned for all four dimensions with justification
-- [ ] At least 3 metrics calculated from project artifacts
+- [ ] At least 3 metrics computed from project artifacts
 - [ ] Blockers section present (even if "No active blockers")
 - [ ] Accomplishments listed with evidence
 - [ ] Next period plan included
-- [ ] Executive summary is 2-3 sentences, not a paragraph
-- [ ] Every blocker and risk has an owner and action with deadline
+- [ ] Executive summary 2-3 sentences, not paragraph
+- [ ] Every blocker + risk has owner + action with deadline
 
-## Common Pitfalls
+## Pitfalls
 
-- **Report without data**: Status reports must be evidence-based. Every claim should reference an artifact or metric.
-- **All green, all the time**: Persistent green RAG without evidence suggests the report isn't honest. Challenge green assessments.
-- **Blocker without owner**: Every blocker needs an owner and an action. Unowned blockers don't get resolved.
+- **Report without data**: Status reports must be evidence-based. Every claim references artifact or metric.
+- **All green always**: Persistent green RAG without evidence = not honest. Challenge green assessments.
+- **Blocker without owner**: Every blocker needs owner + action. Unowned blockers don't resolve.
 - **Metric without context**: "Velocity = 18" means nothing without comparison. Always include previous period or target.
-- **Too long**: A status report should be scannable in 2 minutes. Keep it to 1-2 pages.
-- **Missing decisions section**: If the project needs stakeholder decisions, make them explicit with deadlines.
-- **Stale data**: Using outdated artifacts leads to misleading reports. Verify artifact dates match reporting period.
-- **Missing trend data**: First-time reports can't show trends, but subsequent reports must compare to previous periods.
+- **Too long**: Status report scannable in 2 min. Keep to 1-2 pages.
+- **Missing decisions section**: Project needs stakeholder decisions? Make explicit with deadlines.
+- **Stale data**: Outdated artifacts → misleading reports. Verify artifact dates match reporting period.
+- **Missing trend data**: First-time reports can't show trends, but subsequent reports must compare.
 
-## Related Skills
+## See Also
 
-- `draft-project-charter` — charter provides milestones and success criteria for status tracking
-- `manage-backlog` — backlog metrics feed the status report
-- `plan-sprint` — sprint results provide velocity and completion data
+- `draft-project-charter` — charter provides milestones + success criteria for status tracking
+- `manage-backlog` — backlog metrics feed status report
+- `plan-sprint` — sprint results provide velocity + completion data
 - `create-work-breakdown-structure` — WBS completion drives classic progress metrics
-- `conduct-retrospective` — status report data feeds the retrospective
+- `conduct-retrospective` — status report data feeds retrospective

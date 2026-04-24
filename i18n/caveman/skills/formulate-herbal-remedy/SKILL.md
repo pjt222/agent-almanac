@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Prepare herbal remedies from Hildegard von Bingen's Physica. Covers plant
   identification, preparation methods (tinctures, poultices, infusions, decoctions),
@@ -26,30 +26,30 @@ metadata:
 
 # Formulate Herbal Remedy
 
-Prepare traditional herbal remedies following Hildegard von Bingen's *Physica*, integrating medieval plant knowledge with preparation techniques.
+Make plant medicine Hildegard way. Physica book. Medieval plant lore + prep technique.
 
-## When to Use
+## When Use
 
-- You need an herbal remedy for a specific ailment using Hildegardian pharmacopeia
-- You want to understand a plant's properties from *Physica*'s perspective
-- You need guidance on preparation methods (tincture, poultice, infusion, decoction)
-- You require dosage and safety information for a traditional remedy
-- You are researching medieval herbal medicine practices
-- You want to integrate Hildegard's plant wisdom into holistic health practice
+- Need herbal remedy for ailment, Hildegard pharmacopeia
+- Want plant properties from *Physica* view
+- Need prep method guidance — tincture, poultice, infusion, decoction
+- Need dosage + safety for traditional remedy
+- Research medieval plant medicine
+- Mix Hildegard plant wisdom into holistic health
 
 ## Inputs
 
-- **Required**: Ailment or condition to address (e.g., digestive upset, respiratory congestion, skin inflammation)
+- **Required**: Ailment (digestive upset, respiratory congestion, skin inflammation)
 - **Optional**: Known plant preferences or contraindications
-- **Optional**: Preparation preference (tincture for long-term use, infusion for acute, etc.)
-- **Optional**: User's temperament (sanguine, choleric, melancholic, phlegmatic) for tailored selection
-- **Optional**: Season and availability of fresh vs. dried herbs
+- **Optional**: Prep preference (tincture long-term, infusion acute)
+- **Optional**: User temperament (sanguine, choleric, melancholic, phlegmatic)
+- **Optional**: Season + fresh vs dried availability
 
-## Procedure
+## Steps
 
-### Step 1: Identify the Plant in Physica
+### Step 1: Find Plant in Physica
 
-Match the ailment to appropriate plants from Hildegard's *Physica* (Books I-IX: Plants, Elements, Trees, Stones, Fish, Birds, Animals, Reptiles, Metals).
+Match ailment to Hildegard *Physica* plants (Books I-IX: Plants, Elements, Trees, Stones, Fish, Birds, Animals, Reptiles, Metals).
 
 ```
 Common Ailments → Physica Plants:
@@ -72,24 +72,24 @@ Common Ailments → Physica Plants:
 │ (cold/damp)         │ wort, Nettle, Birch  │                    │
 └─────────────────────┴──────────────────────┴────────────────────┘
 
-Hildegard's Selection Principles:
-1. Temperature: Match plant temperature to condition pattern
-   - Cold conditions → warming plants (fennel, ginger, galangal)
-   - Hot conditions → cooling plants (violet, plantain, lettuce)
-2. Moisture: Match plant moisture to imbalance
-   - Dry conditions → moistening plants (mallow, linseed)
-   - Damp conditions → drying plants (yarrow, wormwood)
-3. Temperament alignment: Choose plants harmonious with user's constitution
-4. Seasonal availability: Fresh plants in growing season, dried in winter
+Hildegard Selection Rules:
+1. Temperature: match plant heat to condition
+   - Cold → warm plants (fennel, ginger, galangal)
+   - Hot → cool plants (violet, plantain, lettuce)
+2. Moisture: match plant wet to imbalance
+   - Dry → wet plants (mallow, linseed)
+   - Damp → dry plants (yarrow, wormwood)
+3. Temperament match: plant harmony with user constitution
+4. Season: fresh in growing time, dried in winter
 ```
 
-**Expected:** One to three plants identified that match the ailment's pattern (hot/cold, dry/damp) and are appropriate for the user's constitution.
+**Got:** One to three plants match pattern (hot/cold, dry/damp) and user constitution.
 
-**On failure:** If unsure of the condition's pattern, default to balanced, gentle plants (fennel, chamomile, yarrow) which Hildegard describes as suitable for most constitutions.
+**If fail:** Unsure of pattern? Default gentle plants (fennel, chamomile, yarrow). Hildegard says suit most constitutions.
 
-### Step 2: Select Preparation Method
+### Step 2: Pick Prep Method
 
-Choose the appropriate extraction and delivery method based on the ailment's location, acuity, and plant properties.
+Choose extraction + delivery by ailment location, acuity, plant parts.
 
 ```
 Preparation Methods from Medieval Tradition:
@@ -120,13 +120,13 @@ Decision Tree:
 - External + Chronic → Oil infusion or salve
 ```
 
-**Expected:** Preparation method selected that matches plant part (aerial vs. root), use case (acute vs. chronic), and application route (internal vs. external).
+**Got:** Prep method matches plant part (aerial vs root), use case (acute vs chronic), route (internal vs external).
 
-**On failure:** If uncertain, default to infusion — it is the safest and most forgiving method for beginners.
+**If fail:** Uncertain? Default infusion — safest, most forgiving for beginner.
 
-### Step 3: Prepare the Remedy with Dosage
+### Step 3: Prep Remedy with Dosage
 
-Execute the preparation with precise measurements and technique.
+Do prep. Precise measure, technique.
 
 ```
 INFUSION (for aerial parts: leaves, flowers):
@@ -167,13 +167,13 @@ OIL INFUSION (for external salves):
 5. Store in dark bottle; use within 6-12 months
 ```
 
-**Expected:** Remedy prepared according to method, with correct herb-to-menstruum ratio and appropriate steep/extraction time. Dosage guidelines clear for internal or external use.
+**Got:** Remedy done per method. Right herb-to-menstruum ratio + steep/extract time. Dosage clear for internal/external.
 
-**On failure:** If preparation seems too strong (bitter, burning sensation), dilute by half. If too weak (no noticeable effect after 3 days at proper dosage), increase herb quantity by 50% in next batch.
+**If fail:** Too strong (bitter, burn)? Dilute half. Too weak (no effect after 3 days proper dose)? Up herb amount 50% next batch.
 
 ### Step 4: Document Contraindications
 
-Identify safety concerns, drug interactions, and populations who should avoid the remedy.
+Flag safety, drug interactions, populations who must avoid.
 
 ```
 Common Contraindications by Plant Category:
@@ -214,13 +214,13 @@ GENERAL CAUTIONS:
 - Surgery: Discontinue all herbs 2 weeks before scheduled surgery
 ```
 
-**Expected:** All relevant contraindications identified for the selected plant(s), with specific populations flagged (pregnancy, children, drug interactions).
+**Got:** All contraindications listed for chosen plants. Specific populations flagged (pregnancy, children, drug interactions).
 
-**On failure:** If uncertain about contraindications, advise the user to consult a qualified herbalist or healthcare provider before use. Default to "Not recommended during pregnancy, breastfeeding, or for children under 12 without professional guidance."
+**If fail:** Uncertain about contraindications? Tell user see qualified herbalist or healthcare provider first. Default: "Not for pregnancy, breastfeeding, or children under 12 without professional guidance."
 
-### Step 5: Safety Review and Integration
+### Step 5: Safety Review + Integration
 
-Final check and guidance for monitoring effects and integrating into health practice.
+Last check + guidance for monitoring effects + health integration.
 
 ```
 Safety Review Checklist:
@@ -252,35 +252,35 @@ Integration Notes:
   (warming herbs in winter, cooling herbs in summer)
 ```
 
-**Expected:** User has complete information: remedy preparation, dosage, contraindications, monitoring plan, and integration context. Safety disclaimers clear.
+**Got:** User has all info: remedy prep, dosage, contraindications, monitor plan, integration context. Safety disclaimers clear.
 
-**On failure:** If user expresses uncertainty about self-preparation, recommend consulting a trained herbalist for first preparation, then replicating at home once confident.
+**If fail:** User uncertain about self-prep? Tell see trained herbalist first, then replicate home when confident.
 
-## Validation Checklist
+## Checks
 
-- [ ] Plant identified from Physica with appropriate temperature/moisture properties
-- [ ] Preparation method matches plant part (aerial = infusion, root = decoction, etc.)
-- [ ] Dosage guidelines provided with frequency and duration
-- [ ] Contraindications documented (pregnancy, drug interactions, specific conditions)
-- [ ] Safety review completed with monitoring protocol
-- [ ] User informed this is historical folk medicine, not medical diagnosis or treatment
-- [ ] Expected timeline for effect communicated (acute vs. chronic)
+- [ ] Plant from Physica with right heat/moisture properties
+- [ ] Prep method matches plant part (aerial = infusion, root = decoction)
+- [ ] Dosage given with frequency + duration
+- [ ] Contraindications documented (pregnancy, drugs, conditions)
+- [ ] Safety review + monitor plan done
+- [ ] User told: historical folk medicine, not medical diagnosis/treatment
+- [ ] Timeline for effect clear (acute vs chronic)
 
-## Common Pitfalls
+## Pitfalls
 
-1. **Misidentification**: Using the wrong plant due to common name confusion. Always confirm botanical (Latin) name
-2. **Over-extraction**: Boiling delicate aerial parts destroys volatile oils. Use infusion (steeping), not decoction
-3. **Under-dosing**: Medieval preparations were often stronger than modern herbal teas. Follow traditional ratios
-4. **Ignoring Contraindications**: Pregnancy and drug interactions are serious. When in doubt, advise against use
-5. **Substituting Modern for Medieval**: Hildegard's plants reflect European medieval flora. Substitutions may not align with her temperament system
-6. **Expecting Pharmaceutical Speed**: Herbal medicine works gradually. Acute conditions: 1-3 days. Chronic: 2-4 weeks minimum
-7. **Solo Remedy Focus**: Hildegard's medicine is holistic. Remedies work best integrated with diet, prayer, rest, and seasonal rhythms
+1. **Wrong plant**: Common name confusion. Always confirm botanical (Latin) name
+2. **Over-extract**: Boiling delicate aerial parts kills volatile oils. Use infusion (steep), not decoction
+3. **Under-dose**: Medieval preps often stronger than modern tea. Follow traditional ratios
+4. **Skip contraindications**: Pregnancy + drug interactions serious. Doubt = advise against
+5. **Modern substitute for medieval**: Hildegard plants = European medieval flora. Substitutes break temperament system
+6. **Want pharmaceutical speed**: Plant medicine slow. Acute: 1-3 days. Chronic: 2-4 weeks minimum
+7. **Solo remedy focus**: Hildegard medicine holistic. Works best with diet, prayer, rest, seasons
 
-## Related Skills
+## See Also
 
-- `assess-holistic-health` — Temperament assessment informs plant selection (cold constitution → warming plants)
-- `practice-viriditas` — Connecting to viriditas enhances receptivity to plant medicine
-- `consult-natural-history` — Broader context of plants in Physica's cosmology
-- `heal` (esoteric domain) — Post-remedy health assessment and recovery monitoring
-- `prepare-soil` (gardening domain) — If growing medicinal herbs
-- `maintain-hand-tools` (bushcraft domain) — For harvesting and processing herbs
+- `assess-holistic-health` — Temperament shapes plant choice (cold constitution → warm plants)
+- `practice-viriditas` — Viriditas connection boosts plant medicine receptivity
+- `consult-natural-history` — Broader Physica cosmology context
+- `heal` (esoteric domain) — Post-remedy health check + recovery
+- `prepare-soil` (gardening domain) — Growing medicinal herbs
+- `maintain-hand-tools` (bushcraft domain) — Harvest + process herbs

@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Grade a trading card using PSA, BGS, or CGC standards. Covers observation-first
   assessment (adapted from meditate's unbiased observation), centering measurement,
@@ -58,9 +58,9 @@ Adapted from `meditate` Step 2-3: observe the card without anchoring to expected
 5. Note your initial gut impression but do NOT let it anchor the assessment
 6. Label any premature grade thoughts as "anchoring" and return to observation
 
-**Expected:** A neutral starting state where the card is assessed purely on physical condition, not market expectations. Grade anchoring (knowing the value before grading) is the #1 source of grading inconsistency.
+**Got:** A neutral starting state where the card is assessed purely on physical condition, not market expectations. Grade anchoring (knowing the value before grading) is the #1 source of grading inconsistency.
 
-**On failure:** If bias feels sticky (a high-value card makes you want to see a 10), write down the bias explicitly. Externalizing it reduces its influence. Proceed only when you can examine the card as a physical object.
+**If fail:** If bias feels sticky (a high-value card makes you want to see a 10), write down the bias explicitly. Externalizing it reduces its influence. Proceed only when you can examine the card as a physical object.
 
 ### Step 2: Centering Assessment
 
@@ -97,9 +97,9 @@ BGS Centering Subgrade:
 
 4. Record the centering score for each axis and the applicable subgrade
 
-**Expected:** Numeric centering ratios for both faces with the corresponding grade/subgrade identified. This is the most objective measurement in the grading process.
+**Got:** Numeric centering ratios for both faces with the corresponding grade/subgrade identified. This is the most objective measurement in the grading process.
 
-**On failure:** If borders are too narrow to measure accurately (full-art cards, borderless prints), note "centering N/A — borderless" and skip to Step 3. Some grading services apply different standards for borderless cards.
+**If fail:** If borders are too narrow to measure accurately (full-art cards, borderless prints), note "centering N/A — borderless" and skip to Step 3. Some grading services apply different standards for borderless cards.
 
 ### Step 3: Surface Analysis
 
@@ -122,9 +122,9 @@ Examine the card's surface for defects.
    - Good (6-7): moderate wear, multiple minor defects
    - Fair or below (1-5): significant damage visible
 
-**Expected:** A detailed surface inventory with each defect located, described, and severity-rated. Factory vs. handling defects distinguished.
+**Got:** A detailed surface inventory with each defect located, described, and severity-rated. Factory vs. handling defects distinguished.
 
-**On failure:** If images are too low-resolution for surface analysis, note the limitation and provide a grade range rather than a point grade. Recommend physical inspection.
+**If fail:** If images are too low-resolution for surface analysis, note the limitation and provide a grade range rather than a point grade. Recommend physical inspection.
 
 ### Step 4: Edge and Corner Evaluation
 
@@ -143,9 +143,9 @@ Assess the card's edges and corners for wear.
 3. Rate edge and corner condition using the same scale as surface
 4. Note which specific corners/edges have the worst condition
 
-**Expected:** Per-edge and per-corner condition assessment. The worst individual corner/edge typically limits the overall grade.
+**Got:** Per-edge and per-corner condition assessment. The worst individual corner/edge typically limits the overall grade.
 
-**On failure:** If the card is in a sleeve or toploader that obscures edges, note which areas couldn't be fully assessed.
+**If fail:** If the card is in a sleeve or toploader that obscures edges, note which areas couldn't be fully assessed.
 
 ### Step 5: Assign Final Grade
 
@@ -168,11 +168,11 @@ Combine sub-assessments into the final grade.
    - "PSA 8-9 (borderline)" — could go either way at the grading service
    - "PSA 7-8 (uncertain)" — limited assessment data
 
-**Expected:** A final grade with confidence level. For BGS, all four subgrades reported. The grade is supported by evidence from Steps 2-4.
+**Got:** A final grade with confidence level. For BGS, all four subgrades reported. The grade is supported by evidence from Steps 2-4.
 
-**On failure:** If the assessment is inconclusive (e.g., can't tell if a surface mark is a scratch or dirt), provide a grade range and recommend professional grading. Never assign a confident grade with insufficient data.
+**If fail:** If the assessment is inconclusive (e.g., can't tell if a surface mark is a scratch or dirt), provide a grade range and recommend professional grading. Never assign a confident grade with insufficient data.
 
-## Validation Checklist
+## Validation
 
 - [ ] Bias check completed before grading (no grade anchoring)
 - [ ] Centering measured on both faces with ratios recorded
@@ -183,9 +183,9 @@ Combine sub-assessments into the final grade.
 - [ ] Confidence level stated (confident, borderline, uncertain)
 - [ ] Grading standard correctly applied (PSA/BGS/CGC thresholds)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Grade anchoring**: Knowing a card's value before grading biases the assessment toward the "hoped-for" grade. Always assess physically first
+- **Grade anchoring**: Knowing a card's value before grading biases the assessment toward the "hoped-for" grade. Assess physically first
 - **Ignoring the back**: The back surface and back centering count. Many graders over-focus on the front
 - **Confusing factory with handling defects**: A factory print line is different from a scratch, but both affect the grade
 - **Over-grading holofoils**: Holographic and foil cards hide surface scratches until viewed at the right angle. Use multiple light angles

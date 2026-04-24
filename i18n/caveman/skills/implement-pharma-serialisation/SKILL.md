@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement pharmaceutical serialisation and track-and-trace systems compliant
   with EU FMD, US DSCSA, and other global regulations. Covers unique identifier
@@ -28,13 +28,13 @@ metadata:
 
 Set up pharmaceutical serialisation systems for regulatory compliance with global track-and-trace mandates.
 
-## When to Use
+## When Use
 
-- Implementing serialisation for a new product launch in the EU or US market
-- Integrating with the European Medicines Verification System (EMVS/NMVS)
-- Designing DSCSA-compliant transaction information exchange
-- Building or integrating an EPCIS event repository for supply chain visibility
-- Extending serialisation to additional markets (China NMPA, Brazil ANVISA, etc.)
+- Implement serialisation for new product launch in EU or US market
+- Integrate with European Medicines Verification System (EMVS/NMVS)
+- Design DSCSA-compliant transaction information exchange
+- Build or integrate EPCIS event repository for supply chain visibility
+- Extend serialisation to additional markets (China NMPA, Brazil ANVISA)
 
 ## Inputs
 
@@ -45,9 +45,9 @@ Set up pharmaceutical serialisation systems for regulatory compliance with globa
 - **Optional**: Contract manufacturer serialisation capabilities
 - **Optional**: Verification endpoint specifications
 
-## Procedure
+## Steps
 
-### Step 1: Understand the Regulatory Landscape
+### Step 1: Understand Regulatory Landscape
 
 | Regulation | Region | Key Requirements | Deadline |
 |-----------|--------|------------------|----------|
@@ -71,10 +71,11 @@ Key data elements per regulation:
 - Transaction history and transaction statement
 - Verification at package level
 
-**Expected:** Clear understanding of which regulations apply to each product-market combination.
-**On failure:** Engage regulatory affairs to confirm market requirements before proceeding.
+**Got:** Clear understanding of which regulations apply to each product-market combination.
 
-### Step 2: Design the Serialisation Data Model
+**If fail:** Engage regulatory affairs to confirm market requirements before proceeding.
+
+### Step 2: Design Serialisation Data Model
 
 ```sql
 -- Core serialisation data model
@@ -124,8 +125,9 @@ Pallet (SSCC)
             └── Unit (GTIN + serial)
 ```
 
-**Expected:** Data model supports full pack hierarchy with EPCIS event tracking.
-**On failure:** If existing ERP schema conflicts, design an integration layer rather than modifying ERP directly.
+**Got:** Data model supports full pack hierarchy with EPCIS event tracking.
+
+**If fail:** Existing ERP schema conflicts? Design integration layer rather than modifying ERP direct.
 
 ### Step 3: Implement Serial Number Generation
 
@@ -163,12 +165,13 @@ def generate_serial_batch(gtin: str, batch_lot: str, expiry: str, count: int) ->
     ]
 ```
 
-**Expected:** Serial numbers are cryptographically random, unique per GTIN, and stored before printing.
-**On failure:** If a uniqueness collision occurs, regenerate the conflicting serial and log the event.
+**Got:** Serial numbers cryptographically random, unique per GTIN, stored before printing.
+
+**If fail:** Uniqueness collision occurs? Regenerate conflicting serial + log event.
 
 ### Step 4: Implement GS1 DataMatrix Encoding
 
-The 2D DataMatrix barcode encodes the GS1 element string:
+2D DataMatrix barcode encodes GS1 element string:
 
 ```
 (01)GTIN(21)Serial(10)Batch(17)Expiry
@@ -185,7 +188,7 @@ Where:
 - AI(10) = Batch/lot number
 - AI(17) = Expiry date (YYMMDD)
 
-The GS1 DataMatrix uses FNC1 as a separator (GS character, ASCII 29) between variable-length fields.
+GS1 DataMatrix uses FNC1 as separator (GS character, ASCII 29) between variable-length fields.
 
 ```python
 def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -> str:
@@ -199,8 +202,9 @@ def encode_gs1_element_string(gtin: str, serial: str, batch: str, expiry: str) -
     return f"01{gtin}21{serial}{GS}10{batch}{GS}17{expiry}"
 ```
 
-**Expected:** Encoded strings verified by scanning test prints with a GS1-certified verifier (ISO 15415 grade C or above).
-**On failure:** If scan verification fails, check print quality, quiet zones, and encoding order.
+**Got:** Encoded strings verified by scanning test prints with GS1-certified verifier (ISO 15415 grade C or above).
+
+**If fail:** Scan verification fails? Check print quality, quiet zones, encoding order.
 
 ### Step 5: Integrate with National Verification Systems
 
@@ -226,7 +230,7 @@ API operations:
 Trading Partner A → VRS Request → Verification Router → MAH's VRS → Response
 ```
 
-Implement a VRS responder endpoint:
+Implement VRS responder endpoint:
 
 ```python
 # Simplified VRS endpoint (DSCSA verification)
@@ -247,8 +251,9 @@ async def verify_product(gtin: str, serial: str, lot: str, expiry: str):
     return {"verified": True, "status": record.status}
 ```
 
-**Expected:** Verification endpoints respond within 1 second with correct status.
-**On failure:** If national system upload fails, retry with exponential backoff and alert operations.
+**Got:** Verification endpoints respond within 1 second with correct status.
+
+**If fail:** National system upload fails? Retry with exponential backoff + alert operations.
 
 ### Step 6: Implement EPCIS Event Capture
 
@@ -269,37 +274,38 @@ Record supply chain events in EPCIS 2.0 format:
 }
 ```
 
-Key business steps in the pharma supply chain:
+Key business steps in pharma supply chain:
 - `commissioning` — serial number assigned to physical unit
 - `packing` — aggregation into cases/pallets
-- `shipping` — departure from a location
-- `receiving` — arrival at a location
+- `shipping` — departure from location
+- `receiving` — arrival at location
 - `dispensing` — supplied to patient (decommission trigger)
 
-**Expected:** Every status change generates an EPCIS event with correct timestamps and locations.
-**On failure:** Failed event capture must be queued and retried; never silently dropped.
+**Got:** Every status change generates EPCIS event with correct timestamps + locations.
 
-## Validation
+**If fail:** Failed event capture must be queued + retried; never silently dropped.
 
-- [ ] Serial numbers are randomised and unique per GTIN
+## Checks
+
+- [ ] Serial numbers randomised + unique per GTIN
 - [ ] GS1 DataMatrix encoding verified by barcode scanner (ISO 15415 grade C+)
 - [ ] Aggregation hierarchy correctly links units → bundles → cases → pallets
 - [ ] National verification system integration tested (upload, verify, decommission)
 - [ ] EPCIS events captured for all business steps
 - [ ] Verification endpoint responds within 1 second
-- [ ] Exception handling covers upload failures, scan failures, and network errors
+- [ ] Exception handling covers upload failures, scan failures, network errors
 
-## Common Pitfalls
+## Pitfalls
 
-- **Sequential serial numbers**: EU FMD explicitly requires randomisation to prevent counterfeiting. Never use sequential numbering.
-- **Aggregation errors**: Disaggregation (breaking a case) must update the hierarchy. Shipping a case with wrong child associations causes verification failures downstream.
-- **Timezone handling**: EPCIS events must include timezone offset. Using local time without offset causes event ordering ambiguity across sites.
-- **Late uploads**: Serial data must be uploaded to national systems before product enters the supply chain. Late upload = product flagged as suspicious at pharmacy.
-- **Ignoring exceptions**: Legitimate products get flagged (false alerts) regularly. A process for investigating and resolving alerts is essential.
+- **Sequential serial numbers**: EU FMD explicit requires randomisation to prevent counterfeiting. Never use sequential numbering.
+- **Aggregation errors**: Disaggregation (breaking case) must update hierarchy. Shipping case with wrong child associations → verification failures downstream.
+- **Timezone handling**: EPCIS events must include timezone offset. Using local time without offset → event ordering ambiguity across sites.
+- **Late uploads**: Serial data must be uploaded to national systems before product enters supply chain. Late upload = product flagged suspicious at pharmacy.
+- **Ignoring exceptions**: Legitimate products get flagged (false alerts) regular. Process for investigating + resolving alerts essential.
 
-## Related Skills
+## See Also
 
-- `perform-csv-assessment` — validate serialisation system as a computerised system
+- `perform-csv-assessment` — validate serialisation system as computerised system
 - `conduct-gxp-audit` — audit serialisation processes
 - `implement-audit-trail` — audit trail for serialisation events
 - `serialize-data-formats` — general data serialisation (different domain, complementary concepts)

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Install and configure the putior R package for workflow visualization.
   Covers CRAN and GitHub installation, optional dependencies (mcptools,
@@ -26,26 +26,26 @@ metadata:
 
 # Install putior
 
-Install the putior R package and its optional dependencies so the annotation-to-diagram pipeline is ready to use.
+Install putior R package + optional dependencies so annotation-to-diagram pipeline ready to use.
 
-## When to Use
+## When Use
 
-- Setting up putior for the first time in a project or environment
-- Preparing a machine for workflow visualization tasks
-- A downstream skill (analyze-codebase-workflow, generate-workflow-diagram) requires putior to be installed
-- Restoring an environment after an R version upgrade or renv wipe
+- Setting up putior for first time in project or environment
+- Preparing machine for workflow visualization tasks
+- Downstream skill (analyze-codebase-workflow, generate-workflow-diagram) needs putior installed
+- Restoring environment after R version upgrade or renv wipe
 
 ## Inputs
 
-- **Required**: Access to an R installation (>= 4.1.0)
-- **Optional**: Whether to install from CRAN (default) or GitHub dev version
+- **Required**: Access to R installation (>= 4.1.0)
+- **Optional**: Install from CRAN (default) or GitHub dev version
 - **Optional**: Which optional dependency groups to install: MCP (`mcptools`, `ellmer`), interactive (`shiny`, `shinyAce`), logging (`logger`), ACP (`plumber2`)
 
-## Procedure
+## Steps
 
 ### Step 1: Verify R Installation
 
-Confirm R is available and meets the minimum version requirement.
+Confirm R available + meets minimum version requirement.
 
 ```r
 R.Version()$version.string
@@ -57,9 +57,9 @@ R.Version()$version.string
 "/mnt/c/Program Files/R/R-4.5.2/bin/Rscript.exe" -e "cat(R.version.string)"
 ```
 
-**Expected:** R version string printed, >= 4.1.0.
+**Got:** R version string printed, >= 4.1.0.
 
-**On failure:** Install or upgrade R. On Windows, download from https://cran.r-project.org/bin/windows/base/. On Linux, use `sudo apt install r-base`.
+**If fail:** Install or upgrade R. On Windows, download from https://cran.r-project.org/bin/windows/base/. On Linux, use `sudo apt install r-base`.
 
 ### Step 2: Install putior
 
@@ -73,9 +73,9 @@ install.packages("putior")
 remotes::install_github("pjt222/putior")
 ```
 
-**Expected:** Package installs without errors. `library(putior)` loads silently.
+**Got:** Package installs no errors. `library(putior)` loads silently.
 
-**On failure:** If CRAN installation fails with "not available for this version of R", use the GitHub version. If GitHub fails, check that `remotes` is installed: `install.packages("remotes")`.
+**If fail:** CRAN installation fails with "not available for this version of R"? Use GitHub version. GitHub fails? Check `remotes` installed: `install.packages("remotes")`.
 
 ### Step 3: Install Optional Dependencies
 
@@ -97,13 +97,13 @@ install.packages("logger")
 install.packages("plumber2")
 ```
 
-**Expected:** Each package installs without errors.
+**Got:** Each package installs no errors.
 
-**On failure:** For `mcptools`, ensure `remotes` is installed first. For system dependency errors on Linux, install the required libraries (e.g., `sudo apt install libcurl4-openssl-dev` for httr2 dependency).
+**If fail:** `mcptools` → ensure `remotes` installed first. System dependency errors on Linux? Install required libraries (`sudo apt install libcurl4-openssl-dev` for httr2 dependency).
 
 ### Step 4: Verify Installation
 
-Run the basic pipeline to confirm everything works.
+Run basic pipeline to confirm everything works.
 
 ```r
 library(putior)
@@ -127,38 +127,38 @@ writeLines("# put id:'test', label:'Hello putior'", tmp)
 cat(put_diagram(put(tmp)))
 ```
 
-**Expected:** Mermaid flowchart code printed to console containing `test` and `Hello putior`.
+**Got:** Mermaid flowchart code printed to console containing `test` + `Hello putior`.
 
-> **Key defaults**: All scan functions (`put()`, `put_auto()`, `put_generate()`, `put_merge()`) default to `recursive = TRUE`, scanning subdirectories automatically. This is a breaking change from pre-0.2.0 versions where the default was `FALSE`. All scan functions also accept an `exclude` parameter for regex-based file filtering (e.g., `put("./src/", exclude = "test_")`).
+> **Key defaults**: All scan functions (`put()`, `put_auto()`, `put_generate()`, `put_merge()`) default to `recursive = TRUE`, scanning subdirectories automatic. Breaking change from pre-0.2.0 versions where default was `FALSE`. All scan functions also accept `exclude` parameter for regex-based file filtering (`put("./src/", exclude = "test_")`).
 
-If the optional `shiny` package is installed, try the interactive sandbox:
+Optional `shiny` package installed? Try interactive sandbox:
 
 ```r
 putior::run_sandbox()
 ```
 
-This launches a browser-based editor where you can experiment with PUT annotation syntax and see diagrams rendered in real time.
+Launches browser-based editor where you experiment with PUT annotation syntax + see diagrams rendered real time.
 
-**On failure:** If `put` is not found, the package did not install correctly. Reinstall with `install.packages("putior", dependencies = TRUE)`. If the diagram is empty, verify the temp file was created and the annotation syntax uses single quotes inside double quotes.
+**If fail:** `put` not found? Package didn't install correctly. Reinstall with `install.packages("putior", dependencies = TRUE)`. Diagram empty? Verify temp file created + annotation syntax uses single quotes inside double quotes.
 
-## Validation
+## Checks
 
-- [ ] `library(putior)` loads without errors
-- [ ] `packageVersion("putior")` returns a valid version
-- [ ] `put()` with a file containing a valid PUT annotation returns a data frame with one row
+- [ ] `library(putior)` loads no errors
+- [ ] `packageVersion("putior")` returns valid version
+- [ ] `put()` with file containing valid PUT annotation returns data frame with one row
 - [ ] `put_diagram()` produces Mermaid code starting with `flowchart`
-- [ ] All requested optional dependencies load without errors
+- [ ] All requested optional dependencies load no errors
 
-## Common Pitfalls
+## Pitfalls
 
-- **Wrong quote nesting**: PUT annotations use single quotes inside the annotation: `id:'name'`, not `id:"name"` (which conflicts with the comment string delimiter in some contexts).
-- **Missing Pandoc for vignettes**: If you plan to build putior's vignettes locally, ensure `RSTUDIO_PANDOC` is set in `.Renviron`.
-- **renv isolation**: If the project uses renv, you must install putior inside the renv library. Run `renv::install("putior")` instead of `install.packages("putior")`.
-- **GitHub rate limits**: Installing `mcptools` from GitHub may fail without a `GITHUB_PAT`. Set one via `usethis::create_github_token()`.
+- **Wrong quote nesting**: PUT annotations use single quotes inside annotation: `id:'name'`, not `id:"name"` (conflicts with comment string delimiter in some contexts).
+- **Missing Pandoc for vignettes**: Plan to build putior vignettes locally? Ensure `RSTUDIO_PANDOC` set in `.Renviron`.
+- **renv isolation**: Project uses renv? Must install putior inside renv library. Run `renv::install("putior")` not `install.packages("putior")`.
+- **GitHub rate limits**: Installing `mcptools` from GitHub may fail without `GITHUB_PAT`. Set one via `usethis::create_github_token()`.
 
-## Related Skills
+## See Also
 
-- `analyze-codebase-workflow` — next step after installation to survey a codebase
-- `configure-putior-mcp` — set up the MCP server after installing optional deps
-- `manage-renv-dependencies` — manage putior within an renv environment
+- `analyze-codebase-workflow` — next step after installation to survey codebase
+- `configure-putior-mcp` — set up MCP server after installing optional deps
+- `manage-renv-dependencies` — manage putior within renv environment
 - `configure-mcp-server` — general MCP server configuration

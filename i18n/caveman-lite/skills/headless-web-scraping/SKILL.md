@@ -4,7 +4,7 @@ locale: caveman-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Extract data from web pages using the scrapling Python library — select the
   appropriate fetcher tier (HTTP, stealth Chromium, or full browser automation)
@@ -77,9 +77,9 @@ else:
 | Need to click buttons or scroll | `DynamicFetcher` |
 | altcha CAPTCHA present | None (cannot be automated) |
 
-**Expected:** One of the three tiers is identified. For most modern sites, `StealthyFetcher` is the correct starting point.
+**Got:** One of the three tiers is identified. For most modern sites, `StealthyFetcher` is the correct starting point.
 
-**On failure:** If all three tiers return blocked responses, check whether the site uses altcha CAPTCHA (proof-of-work challenge that cannot be bypassed). If so, document the limitation and provide manual extraction instructions instead.
+**If fail:** If all three tiers return blocked responses, check whether the site uses altcha CAPTCHA (proof-of-work challenge that cannot be bypassed). If so, document the limitation and provide manual extraction instructions instead.
 
 ### Step 2: Configure the Fetcher
 
@@ -114,9 +114,9 @@ fetcher.configure(
 )
 ```
 
-**Expected:** Fetcher instance is configured and ready. No errors on instantiation. For `StealthyFetcher` and `DynamicFetcher`, a Chromium binary is available (scrapling manages this automatically on first run).
+**Got:** Fetcher instance is configured and ready. No errors on instantiation. For `StealthyFetcher` and `DynamicFetcher`, a Chromium binary is available (scrapling manages this automatically on first run).
 
-**On failure:**
+**If fail:**
 - `playwright` or browser binary not found -- run `python -m playwright install chromium`
 - Timeout on `configure()` -- increase timeout value or check network connectivity
 - Import error -- install scrapling: `pip install scrapling`
@@ -159,9 +159,9 @@ detail_html = response.find("div.description").html_content
 | `element.get_all_text()` | All text content, recursively |
 | `element.html_content` | Raw inner HTML |
 
-**Expected:** Extracted data matches the visible page content. Elements are non-None and text content is non-empty for populated pages.
+**Got:** Extracted data matches the visible page content. Elements are non-None and text content is non-empty for populated pages.
 
-**On failure:**
+**If fail:**
 - `find()` returns `None` -- inspect the actual HTML (`response.html_content`) to verify the selector; the page may use different class names than expected
 - Empty text from `get_all_text()` -- content may be inside shadow DOM or an iframe; try `DynamicFetcher` with a `wait_selector`
 - Do NOT use `.css_first()` -- this is not part of the scrapling API (common confusion with other libraries)
@@ -211,9 +211,9 @@ def scrape_with_fallback(url, selector):
     return None
 ```
 
-**Expected:** Function returns extracted text on success, or `None` with a diagnostic message when all tiers fail. CAPTCHA pages are detected and reported rather than retried indefinitely.
+**Got:** Function returns extracted text on success, or `None` with a diagnostic message when all tiers fail. CAPTCHA pages are detected and reported rather than retried indefinitely.
 
-**On failure:**
+**If fail:**
 - All tiers return 403 -- the site blocks all automated access (common with WIPO, TMview, some government databases); document the URL as requiring manual access
 - Timeout errors -- the page may be behind a slow CDN; increase timeout to 120s
 - Session/cookie errors -- the site may require login; add cookie handling or authenticate first
@@ -259,9 +259,9 @@ def scrape_urls(urls, selector, delay=1.0):
 5. Cache responses locally to avoid redundant requests
 6. Stop immediately if you receive a 429 (Too Many Requests)
 
-**Expected:** Scraping runs at a controlled rate. `robots.txt` is checked before bulk operations. No 429 responses are triggered.
+**Got:** Scraping runs at a controlled rate. `robots.txt` is checked before bulk operations. No 429 responses are triggered.
 
-**On failure:**
+**If fail:**
 - 429 Too Many Requests -- increase delay to 3-5 seconds, or stop and retry later
 - `robots.txt` disallows the path -- respect the directive; do not override it
 - IP ban -- stop scraping immediately; the rate limiting was insufficient. If access is legitimate (public data, ToS-permitted, robots.txt-respected) and you must continue, see [rotate-scraping-proxies](../rotate-scraping-proxies/SKILL.md) for network-layer escalation
@@ -277,11 +277,11 @@ def scrape_urls(urls, selector, delay=1.0):
 - [ ] `robots.txt` is checked before bulk operations
 - [ ] Extracted data is non-empty and structurally correct
 
-## Common Pitfalls
+## Pitfalls
 
 - **Using `.css_first()` instead of `.find()`**: scrapling uses `.find()` and `.find_all()` for element selection -- `.css_first()` belongs to a different library and will raise `AttributeError`
-- **Starting with DynamicFetcher**: Always try `Fetcher` first, then escalate -- `DynamicFetcher` is 10-50x slower due to full browser startup
-- **Constructor kwargs instead of `configure()`**: scrapling v0.4.x deprecated passing options to the constructor; always use the `configure()` method
+- **Starting with DynamicFetcher**: Try `Fetcher` first, then escalate -- `DynamicFetcher` is 10-50x slower due to full browser startup
+- **Constructor kwargs instead of `configure()`**: scrapling v0.4.x deprecated passing options to the constructor; use the `configure()` method
 - **Ignoring altcha CAPTCHA**: No fetcher tier can solve altcha proof-of-work challenges -- detect them early and fall back to manual instructions
 - **No rate limiting**: Even if the site does not return 429, aggressive scraping can get your IP banned or cause service degradation
 - **Assuming stable selectors**: Website CSS classes change frequently -- validate selectors against current page source before each scraping campaign

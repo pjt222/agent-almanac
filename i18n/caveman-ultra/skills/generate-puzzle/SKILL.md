@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Generate jigsaw puzzles via generate_puzzle() or geom_puzzle_*() with
   parameter validation against inst/config.yml. Supports rectangular,
@@ -26,43 +26,41 @@ metadata:
 
 # Generate Puzzle
 
-Generate jigsaw puzzles using the jigsawR package's unified API.
+jigsawR unified API → generate puzzle.
 
-## When to Use
+## Use When
 
-- Creating puzzle SVG files for a specific type and configuration
-- Testing puzzle generation with different parameters
-- Generating sample output for documentation or demos
-- Creating ggplot2 puzzle visualizations with geom_puzzle_*()
+- Create puzzle SVG w/ type + config
+- Test generation w/ diff params
+- Sample out for docs/demos
+- ggplot2 puzzle viz w/ geom_puzzle_*()
 
-## Inputs
+## In
 
-- **Required**: Puzzle type (`"rectangular"`, `"hexagonal"`, `"concentric"`, `"voronoi"`, `"random"`, `"snic"`)
-- **Required**: Grid dimensions (type-dependent: `c(cols, rows)` or `c(rings)`)
-- **Optional**: Size in mm (default varies by type)
-- **Optional**: Seed for reproducibility (default: 42)
-- **Optional**: Offset (0 = interlocked, >0 = separated pieces)
-- **Optional**: Layout (`"grid"` or `"repel"` for rectangular)
-- **Optional**: Fusion groups (PILES notation string)
+- **Required**: type (`"rectangular"`, `"hexagonal"`, `"concentric"`, `"voronoi"`, `"random"`, `"snic"`)
+- **Required**: grid (type-dep: `c(cols, rows)` or `c(rings)`)
+- **Optional**: size mm (default varies)
+- **Optional**: seed (default 42)
+- **Optional**: offset (0=interlocked, >0=separated)
+- **Optional**: layout (`"grid"` or `"repel"` rect)
+- **Optional**: fusion groups (PILES string)
 
-## Procedure
+## Do
 
-### Step 1: Read Config Constraints
+### Step 1: Read config constraints
 
 ```bash
 R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 "$R_EXE" -e "cat(yaml::yaml.load_file('inst/config.yml')[['{TYPE}']]$grid$max)"
 ```
 
-Or read `inst/config.yml` directly to check valid ranges for the chosen type.
+Or read `inst/config.yml` direct → valid ranges for type.
 
-**Expected:** The min/max values for grid, size, tabsize, and other parameters are known for the chosen puzzle type.
+→ min/max for grid, size, tabsize known for type.
 
-**On failure:** If `config.yml` is missing or the type key doesn't exist, check that you are in the jigsawR project root and the package has been built at least once.
+**If err:** `config.yml` missing or type key missing → in jigsawR root? pkg built once?
 
-### Step 2: Determine Type and Parameters
-
-Map the user's request to valid `generate_puzzle()` arguments:
+### Step 2: Determine type + params
 
 | Type | grid | size | Extra params |
 |------|------|------|-------------|
@@ -73,13 +71,13 @@ Map the user's request to valid `generate_puzzle()` arguments:
 | random | `c(cols, rows)` | `c(width, height)` mm | `n_interior`, `tabsize` |
 | snic | `c(cols, rows)` | `c(width, height)` mm | `n_interior`, `compactness`, `tabsize` |
 
-**Expected:** User request mapped to valid `generate_puzzle()` arguments with correct `type`, `grid` dimensions, and `size` values within the ranges from config.yml.
+→ Req mapped to `generate_puzzle()` args, values in config.yml range.
 
-**On failure:** If unsure which parameter format to use, refer to the table above. Rectangular and voronoi types use `c(cols, rows)` for grid; hexagonal and concentric use `c(rings)`.
+**If err:** unsure format → see table. Rect + voronoi → `c(cols, rows)`; hex + concentric → `c(rings)`.
 
-### Step 3: Create R Script
+### Step 3: Create R script
 
-Write a script file (preferred over `-e` for complex commands):
+Script file preferred over `-e` for complex cmds.
 
 ```r
 library(jigsawR)
@@ -98,11 +96,11 @@ cat("SVG length:", nchar(result$svg_content), "\n")
 cat("Files:", paste(result$files, collapse = ", "), "\n")
 ```
 
-Save to a temporary script file.
+Save to tmp script file.
 
-**Expected:** An R script file saved to a temporary location containing `library(jigsawR)`, a `generate_puzzle()` call with all parameters, and diagnostic output lines.
+→ R script saved w/ `library(jigsawR)` + call + diag output.
 
-**On failure:** If the script has syntax errors, verify that all string arguments are quoted and numeric vectors use `c()`. Avoid complex shell escaping by always using script files.
+**If err:** syntax → verify string quoting + `c()` for num vectors. Use script files, avoid shell escape.
 
 ### Step 4: Execute via WSL R
 
@@ -111,52 +109,52 @@ R_EXE="/mnt/c/Program Files/R/R-4.5.0/bin/Rscript.exe"
 "$R_EXE" /path/to/script.R
 ```
 
-**Expected:** Script completes without errors. SVG file(s) written to `output/`.
+→ Completes no errors. SVG → `output/`.
 
-**On failure:** Check that renv is restored (`renv::restore()`). Verify package is loaded (`devtools::load_all()`). Do NOT use `--vanilla` flag (renv needs .Rprofile).
+**If err:** check renv restored (`renv::restore()`). Pkg loaded (`devtools::load_all()`). NO `--vanilla` (renv needs .Rprofile).
 
-### Step 5: Verify Output
+### Step 5: Verify out
 
-- SVG file exists in `output/` directory
-- SVG content starts with `<?xml` or `<svg`
-- Piece count matches expected: cols * rows (rectangular), ring formula (hex/concentric)
-- For ggplot2 approach, verify the plot object renders without error
+- SVG in `output/`
+- Starts `<?xml` or `<svg`
+- Piece count matches: cols × rows (rect), ring formula (hex/concentric)
+- ggplot2 → plot renders no err
 
-**Expected:** SVG file exists in `output/`, content starts with `<?xml` or `<svg`, and piece count matches the grid specification (cols * rows for rectangular, ring formula for hex/concentric).
+→ SVG exists, content valid, piece count matches.
 
-**On failure:** If SVG file is missing, check the `output/` directory exists. If piece count is wrong, verify grid dimensions match the puzzle type's expected formula. For ggplot2 output, check that the plot renders without error by wrapping in `tryCatch()`.
+**If err:** SVG missing → check `output/` exists. Count wrong → verify grid for type. ggplot2 → wrap `tryCatch()`.
 
-### Step 6: Save Output
+### Step 6: Save out
 
-Generated files are saved to `output/` by default. The `result` object contains:
+Default → `output/`. `result` contains:
 - `$svg_content` — raw SVG string
-- `$pieces` — list of piece data
-- `$canvas_size` — dimensions
-- `$files` — paths to written files
+- `$pieces` — piece data list
+- `$canvas_size` — dims
+- `$files` — paths
 
-**Expected:** The `result` object contains `$svg_content`, `$pieces`, `$canvas_size`, and `$files` fields. Files listed in `$files` exist on disk.
+→ `result` has `$svg_content`, `$pieces`, `$canvas_size`, `$files`. Files on disk.
 
-**On failure:** If `$files` is empty, the puzzle may have generated in-memory only. Explicitly save with `writeLines(result$svg_content, "output/puzzle.svg")`.
+**If err:** `$files` empty → in-memory only. Explicitly: `writeLines(result$svg_content, "output/puzzle.svg")`.
 
-## Validation
+## Check
 
-- [ ] Script executes without errors
-- [ ] SVG file is well-formed XML
-- [ ] Piece count matches grid specification
-- [ ] Same seed produces identical output (reproducibility)
-- [ ] Parameters are within config.yml constraints
+- [ ] Script no err
+- [ ] SVG well-formed XML
+- [ ] Piece count matches grid
+- [ ] Same seed → identical out
+- [ ] Params in config.yml range
 
-## Common Pitfalls
+## Traps
 
-- **Using `--vanilla` flag**: Breaks renv activation. Never use it.
-- **Complex `-e` commands**: Use script files instead; shell escaping causes Exit code 5.
-- **Grid vs size confusion**: Grid is piece count, size is physical dimensions in mm.
-- **Offset semantics**: 0 = assembled puzzle, positive = exploded/separated pieces.
-- **SNIC without package**: snic type requires the `snic` package installed.
+- **`--vanilla`**: breaks renv. Never.
+- **Complex `-e`**: script files → shell escape → Exit 5.
+- **Grid vs size**: grid=piece count, size=physical mm.
+- **Offset**: 0=assembled, >0=exploded.
+- **SNIC**: needs `snic` pkg installed.
 
-## Related Skills
+## →
 
-- `add-puzzle-type` — scaffold a new puzzle type end-to-end
-- `validate-piles-notation` — validate fusion group strings before passing to generate_puzzle()
-- `run-puzzle-tests` — run the test suite after generation changes
-- `write-testthat-tests` — add tests for new generation scenarios
+- `add-puzzle-type` — scaffold new type E2E
+- `validate-piles-notation` — validate fusion strings pre-call
+- `run-puzzle-tests` — test suite after gen changes
+- `write-testthat-tests` — tests for new scenarios
