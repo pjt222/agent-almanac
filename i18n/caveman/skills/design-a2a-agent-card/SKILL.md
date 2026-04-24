@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design an A2A Agent Card (.well-known/agent.json) manifest describing agent
   capabilities, skills, authentication requirements, and supported content types.
@@ -26,31 +26,31 @@ metadata:
 
 # Design A2A Agent Card
 
-Create a standards-compliant A2A Agent Card that advertises an agent's identity, skills, authentication requirements, and capabilities for discovery by other agents.
+Make A2A Agent Card. Advertises agent identity, skills, auth, capabilities. Other agents find it.
 
-## When to Use
+## When Use
 
-- Building an agent that must be discoverable by other A2A-compliant agents
-- Exposing agent capabilities for multi-agent orchestration
-- Migrating an existing agent to the A2A (Agent-to-Agent) protocol
-- Defining the public contract for an agent before implementation
-- Integrating with agent registries or directories that consume Agent Cards
+- Build agent others must discover via A2A
+- Expose agent capabilities for multi-agent orchestration
+- Migrate existing agent to A2A (Agent-to-Agent) protocol
+- Define public contract before implementation
+- Integrate with agent registries that read Agent Cards
 
 ## Inputs
 
-- **Required**: Agent name and description
-- **Required**: List of skills the agent can perform (name, description, input/output schemas)
-- **Required**: Base URL where the agent will be hosted
-- **Optional**: Authentication method (`none`, `oauth2`, `oidc`, `api-key`)
-- **Optional**: Supported content types beyond `text/plain` (e.g., `image/png`, `application/json`)
-- **Optional**: Capability flags (streaming, push notifications, state transition history)
-- **Optional**: Provider organization name and URL
+- **Required**: Agent name + description
+- **Required**: Skill list (name, description, input/output schemas)
+- **Required**: Base URL where agent hosted
+- **Optional**: Auth method (`none`, `oauth2`, `oidc`, `api-key`)
+- **Optional**: Content types beyond `text/plain` (e.g., `image/png`, `application/json`)
+- **Optional**: Capability flags (streaming, push notifications, state history)
+- **Optional**: Provider org name + URL
 
-## Procedure
+## Steps
 
-### Step 1: Define Agent Identity and Description
+### Step 1: Set Agent Identity + Description
 
-1.1. Choose the agent identity fields:
+1.1. Pick identity fields:
 
 ```json
 {
@@ -65,20 +65,20 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-1.2. Write a clear, actionable description that answers:
-   - What domains does this agent cover?
-   - What kinds of tasks can it handle?
-   - What are its limitations?
+1.2. Write clear, actionable description. Answer:
+   - What domains agent covers?
+   - What tasks handles?
+   - What limits?
 
-1.3. Set the canonical URL where the Agent Card will be served at `/.well-known/agent.json`.
+1.3. Set canonical URL where Agent Card served at `/.well-known/agent.json`.
 
-**Expected:** A complete identity block with name, description, URL, provider, and version.
+**Got:** Full identity block: name, description, URL, provider, version.
 
-**On failure:** If the agent serves multiple domains, consider whether it should be one agent with many skills or multiple agents with focused scopes. A2A favors focused agents with clear boundaries.
+**If fail:** Agent covers many domains? Decide: one agent, many skills? Or many agents, focused scope? A2A prefers focused agents, clear boundaries.
 
-### Step 2: Enumerate Skills with Input/Output Schemas
+### Step 2: List Skills with I/O Schemas
 
-2.1. Define each skill the agent can perform:
+2.1. Define each skill:
 
 ```json
 {
@@ -111,26 +111,26 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-2.2. For each skill, provide:
-   - **id**: Unique identifier (kebab-case)
-   - **name**: Human-readable display name
-   - **description**: What the skill does, in one to two sentences
-   - **tags**: Searchable keywords for discovery
-   - **examples**: Natural language task examples that trigger this skill
-   - **inputModes**: MIME types the skill accepts
-   - **outputModes**: MIME types the skill can produce
+2.2. Each skill needs:
+   - **id**: Unique ID (kebab-case)
+   - **name**: Human-readable name
+   - **description**: What skill does, 1-2 sentences
+   - **tags**: Keywords for discovery
+   - **examples**: Natural-language task examples that trigger skill
+   - **inputModes**: MIME types skill takes
+   - **outputModes**: MIME types skill produces
 
-2.3. Ensure skill boundaries are clear and non-overlapping. Each task should map to exactly one skill.
+2.3. Skill boundaries must be clear, no overlap. Each task → one skill.
 
-**Expected:** A skills array where each entry has id, name, description, tags, examples, and I/O modes.
+**Got:** Skills array. Each entry: id, name, description, tags, examples, I/O modes.
 
-**On failure:** If skills overlap significantly, merge them into a single broader skill with more examples. If a skill is too broad, split it into focused sub-skills.
+**If fail:** Skills overlap big? Merge into broader skill with more examples. Skill too broad? Split into focused sub-skills.
 
-### Step 3: Configure Authentication
+### Step 3: Config Auth
 
-3.1. Define the authentication scheme based on deployment context:
+3.1. Pick auth scheme by deploy context:
 
-**No authentication (local/trusted network):**
+**No auth (local/trusted network):**
 
 ```json
 {
@@ -140,7 +140,7 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-**OAuth 2.0 (recommended for production):**
+**OAuth 2.0 (best for prod):**
 
 ```json
 {
@@ -160,7 +160,7 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-**API Key (simple shared-secret):**
+**API Key (simple shared secret):**
 
 ```json
 {
@@ -175,20 +175,20 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-3.2. Choose the minimum viable authentication for the deployment environment:
-   - Local development: `none`
-   - Internal services: `apiKey`
-   - Public-facing agents: `oauth2` or `oidc`
+3.2. Pick minimum viable auth for env:
+   - Local dev: `none`
+   - Internal service: `apiKey`
+   - Public-facing: `oauth2` or `oidc`
 
-3.3. Document the token/key provisioning process in the Agent Card's provider section or external documentation.
+3.3. Document token/key provisioning in provider section or external docs.
 
-**Expected:** An authentication block matching the deployment security requirements.
+**Got:** Auth block matches deploy security needs.
 
-**On failure:** If OAuth 2.0 infrastructure is not available, start with API key authentication and plan migration. Never deploy a public agent with `none` authentication.
+**If fail:** No OAuth 2.0 infra? Start with API key, plan migration. Never deploy public agent with `none` auth.
 
-### Step 4: Specify Capabilities
+### Step 4: Declare Capabilities
 
-4.1. Declare what protocol features the agent supports:
+4.1. Declare protocol features agent supports:
 
 ```json
 {
@@ -200,21 +200,21 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-4.2. Set each capability flag based on implementation readiness:
+4.2. Set each flag by impl readiness:
 
-   - **streaming**: `true` if the agent supports SSE streaming via `tasks/sendSubscribe`. Enables real-time progress updates for long-running tasks.
-   - **pushNotifications**: `true` if the agent can send webhook callbacks when task state changes. Requires the agent to store and call back webhook URLs.
-   - **stateTransitionHistory**: `true` if the agent maintains a full history of task state transitions (submitted, working, completed, etc.). Useful for audit trails.
+   - **streaming**: `true` if agent supports SSE streaming via `tasks/sendSubscribe`. Real-time progress for long tasks.
+   - **pushNotifications**: `true` if agent can send webhook callbacks on state change. Agent stores + calls webhook URLs.
+   - **stateTransitionHistory**: `true` if agent keeps full state transition history (submitted, working, completed). Good for audit.
 
-4.3. Only set capabilities to `true` if the implementation fully supports them. Advertising unsupported capabilities breaks interoperability.
+4.3. Only set `true` if impl fully supports. Fake flags break interop.
 
-**Expected:** A capabilities object with boolean flags matching actual implementation.
+**Got:** Capabilities object. Flags match real impl.
 
-**On failure:** If unsure whether a capability will be implemented, set it to `false`. Capabilities can be added in future versions. Removing a capability is a breaking change.
+**If fail:** Unsure if capability coming? Set `false`. Add later. Removing capability = breaking change.
 
-### Step 5: Validate and Publish Agent Card
+### Step 5: Validate + Publish Agent Card
 
-5.1. Assemble the complete Agent Card:
+5.1. Assemble full card:
 
 ```json
 {
@@ -241,52 +241,52 @@ Create a standards-compliant A2A Agent Card that advertises an agent's identity,
 }
 ```
 
-5.2. Validate the Agent Card:
-   - Parse as JSON and verify no syntax errors
-   - Verify all required fields are present (name, description, url, skills)
-   - Verify each skill has id, name, description, and at least one input/output mode
-   - Verify the URL is reachable and serves the card at `/.well-known/agent.json`
+5.2. Validate:
+   - Parse as JSON, check no syntax err
+   - All required fields present (name, description, url, skills)
+   - Each skill has id, name, description, min 1 I/O mode
+   - URL reachable, serves card at `/.well-known/agent.json`
 
-5.3. Publish the Agent Card:
+5.3. Publish:
    - Serve at `https://<agent-url>/.well-known/agent.json`
    - Set `Content-Type: application/json`
-   - Enable CORS headers if cross-origin discovery is needed
-   - Register with any relevant agent directories or registries
+   - Enable CORS if cross-origin discovery needed
+   - Register with relevant agent registries
 
-5.4. Test discovery by fetching the card:
+5.4. Test by fetching:
 
 ```bash
 curl -s https://agent.example.com/.well-known/agent.json | python3 -m json.tool
 ```
 
-**Expected:** A valid JSON Agent Card served at the well-known URL, parseable by any A2A client.
+**Got:** Valid JSON Agent Card at well-known URL. Any A2A client can parse.
 
-**On failure:** If JSON validation fails, use a JSON linter to identify syntax errors. If the URL is not reachable, check DNS, SSL certificates, and web server configuration. If CORS is needed, add `Access-Control-Allow-Origin` headers.
+**If fail:** JSON invalid? Use linter to find syntax err. URL unreachable? Check DNS, SSL cert, web server config. CORS needed? Add `Access-Control-Allow-Origin` headers.
 
-## Validation
+## Checks
 
-- [ ] Agent Card is valid JSON with no syntax errors
-- [ ] All required fields are present: name, description, url, skills
-- [ ] Each skill has id, name, description, inputModes, and outputModes
-- [ ] Authentication scheme matches deployment security requirements
-- [ ] Capability flags accurately reflect implementation status
-- [ ] Agent Card is served at `/.well-known/agent.json` with correct Content-Type
-- [ ] A2A clients can fetch and parse the card successfully
-- [ ] Examples in skills are realistic and trigger the correct skill
+- [ ] Agent Card valid JSON, no syntax err
+- [ ] Required fields present: name, description, url, skills
+- [ ] Each skill has id, name, description, inputModes, outputModes
+- [ ] Auth scheme matches deploy security
+- [ ] Capability flags match impl
+- [ ] Served at `/.well-known/agent.json`, right Content-Type
+- [ ] A2A clients fetch + parse OK
+- [ ] Examples realistic, trigger right skill
 
-## Common Pitfalls
+## Pitfalls
 
-- **Overpromising capabilities**: Setting `streaming: true` or `pushNotifications: true` without implementation causes client failures when those features are used. Be conservative.
-- **Vague skill descriptions**: Descriptions like "does data stuff" prevent accurate skill matching. Be specific about inputs, outputs, and domains.
-- **Missing CORS headers**: Browser-based A2A clients cannot fetch the Agent Card without proper CORS configuration.
-- **Skill overlap**: If two skills could handle the same task, client agents cannot determine which to invoke. Ensure clear boundaries.
-- **Forgetting default modes**: If `defaultInputModes` and `defaultOutputModes` are omitted, clients may not know what content types to send.
-- **Version stagnation**: Update the Agent Card version when skills or capabilities change. Clients may cache old versions.
-- **Publishing before implementation**: The Agent Card is a contract. Publishing skills that are not yet implemented leads to runtime failures.
+- **Overpromising capabilities**: `streaming: true` or `pushNotifications: true` without impl = client fails when used. Be conservative.
+- **Vague skill description**: "does data stuff" blocks accurate matching. Be specific about inputs, outputs, domains.
+- **Missing CORS headers**: Browser A2A clients can't fetch Agent Card without CORS.
+- **Skill overlap**: Two skills handle same task → client can't pick. Keep boundaries clear.
+- **Forgetting default modes**: No `defaultInputModes`/`defaultOutputModes` → clients unsure what content types to send.
+- **Version stagnation**: Bump version when skills/capabilities change. Clients cache old versions.
+- **Publish before impl**: Agent Card = contract. Publishing unimplemented skills → runtime failure.
 
-## Related Skills
+## See Also
 
-- `implement-a2a-server` - implement the server behind the Agent Card
-- `test-a2a-interop` - validate Agent Card conformance and interoperability
-- `build-custom-mcp-server` - MCP server as alternative/complement to A2A
-- `configure-mcp-server` - MCP configuration patterns applicable to A2A setup
+- `implement-a2a-server` - impl server behind Agent Card
+- `test-a2a-interop` - validate Agent Card conformance + interop
+- `build-custom-mcp-server` - MCP as alt/complement to A2A
+- `configure-mcp-server` - MCP config patterns for A2A setup

@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design sustainable on-call rotations with balanced schedules, clear
   escalation policies, fatigue management, and handoff procedures. Minimize
@@ -25,29 +25,29 @@ metadata:
 
 # Design On-Call Rotation
 
-Create a sustainable on-call schedule that balances coverage with engineer well-being.
+Make sustainable on-call schedule. Balance coverage with engineer well-being.
 
-## When to Use
+## When Use
 
-- Setting up on-call for the first time
-- Scaling team from 2-3 to 5+ engineers
-- Addressing on-call burnout or alert fatigue
-- Improving incident response times
-- After post-mortem identifies handoff issues
+- Set up on-call first time
+- Scale team from 2-3 to 5+ engineers
+- Fight on-call burnout or alert fatigue
+- Speed up incident response
+- After post-mortem finds handoff issue
 
 ## Inputs
 
-- **Required**: Team size and time zones
-- **Required**: Service SLA requirements (response time, coverage hours)
-- **Optional**: Historical incident volume and timing
-- **Optional**: Budget for on-call compensation
+- **Required**: Team size + time zones
+- **Required**: Service SLA needs (response time, coverage hours)
+- **Optional**: Past incident volume + timing
+- **Optional**: Budget for on-call pay
 - **Optional**: Existing on-call tool (PagerDuty, Opsgenie)
 
-## Procedure
+## Steps
 
-### Step 1: Define Rotation Schedule
+### Step 1: Pick Rotation Schedule
 
-Choose rotation length based on team size:
+Pick rotation length by team size:
 
 ```markdown
 ## Rotation Models
@@ -77,7 +77,7 @@ Choose rotation length based on team size:
 - **Cons**: Risk of junior burnout
 ```
 
-Example schedule for 5-person team:
+Example 5-person team schedule:
 
 ```
 Week 1: Alice (Primary), Bob (Secondary)
@@ -87,11 +87,11 @@ Week 4: Bob (Primary), Charlie (Secondary)
 Week 5: Diana (Primary), Eve (Secondary)
 ```
 
-**Expected:** Schedule that rotates fairly and provides 24/7 coverage.
+**Got:** Schedule rotates fairly. 24/7 coverage.
 
-**On failure:** If coverage gaps exist, add more engineers or reduce SLA to business hours only.
+**If fail:** Coverage gaps? Add engineers or drop SLA to business hours only.
 
-### Step 2: Configure Escalation Policy
+### Step 2: Config Escalation Policy
 
 Set up tiered escalation in PagerDuty/Opsgenie:
 
@@ -122,7 +122,7 @@ escalation_policy:
           id: engineering_manager
 ```
 
-Create escalation flowchart:
+Escalation flowchart:
 
 ```
 Alert Fires
@@ -140,13 +140,13 @@ Manager Paged
 Repeat cycle (max 3 times)
 ```
 
-**Expected:** Clear escalation path with reasonable delays.
+**Got:** Clear escalation path. Reasonable delays.
 
-**On failure:** If escalations fire too often, shorten ack windows or check alert quality.
+**If fail:** Escalations fire too often? Shorten ack windows or check alert quality.
 
-### Step 3: Define Handoff Procedure
+### Step 3: Define Handoff
 
-Create a structured handoff checklist:
+Make structured handoff checklist:
 
 ```markdown
 ## On-Call Handoff Checklist
@@ -185,13 +185,13 @@ curl -X POST https://slack.com/api/chat.postMessage \
   }'
 ```
 
-**Expected:** Smooth knowledge transfer, no information loss between shifts.
+**Got:** Smooth knowledge transfer. No info loss between shifts.
 
-**On failure:** If incidents recur because incoming engineer didn't know about workarounds, make handoff mandatory.
+**If fail:** Incidents recur because incoming engineer missed workarounds? Make handoff mandatory.
 
-### Step 4: Implement Fatigue Management
+### Step 4: Fatigue Management
 
-Set rules to prevent burnout:
+Rules to stop burnout:
 
 ```markdown
 ## Fatigue Prevention Rules
@@ -233,13 +233,13 @@ count(ALERTS{alertstate="firing", hour_of_day>=22 or hour_of_day<6})
 histogram_quantile(0.95, rate(alert_ack_duration_seconds_bucket[7d]))
 ```
 
-**Expected:** On-call load is sustainable, engineers not chronically exhausted.
+**Got:** On-call load sustainable. Engineers not chronically exhausted.
 
-**On failure:** If burnout occurs despite rules, reduce alert volume or hire more engineers.
+**If fail:** Burnout despite rules? Cut alert volume or hire more engineers.
 
-### Step 5: Document Runbooks and Escalation Contacts
+### Step 5: Document Runbooks + Contacts
 
-Create an on-call reference guide:
+Make on-call reference guide:
 
 ```markdown
 # On-Call Quick Reference
@@ -269,11 +269,11 @@ Create an on-call reference guide:
 - **Security Incident**: Immediately escalate to Security Team, don't investigate alone
 ```
 
-**Expected:** On-call engineer can find any needed information in <2 minutes.
+**Got:** On-call engineer finds any needed info in <2 min.
 
-**On failure:** If engineers repeatedly ask "where is X?", centralize documentation.
+**If fail:** Engineers keep asking "where is X?"? Centralize docs.
 
-### Step 6: Schedule Regular On-Call Retrospectives
+### Step 6: Schedule On-Call Retros
 
 Review on-call experience monthly:
 
@@ -327,29 +327,29 @@ cat > oncall_report_2025-02.md <<EOF
 EOF
 ```
 
-**Expected:** On-call experience improves month-over-month, alert volume decreases.
+**Got:** On-call experience improves month-over-month. Alert volume drops.
 
-**On failure:** If metrics don't improve, escalate to leadership. May need to pause feature work to fix operational issues.
+**If fail:** Metrics don't improve? Escalate to leadership. May need to pause feature work, fix operational debt.
 
-## Validation
+## Checks
 
-- [ ] Rotation schedule covers all required hours (24/7 or business hours)
+- [ ] Rotation schedule covers all hours (24/7 or business hours)
 - [ ] Escalation policy tested (send test alerts)
-- [ ] Handoff procedure documented and shared with team
-- [ ] Fatigue management rules codified
-- [ ] On-call reference guide complete and accessible
-- [ ] Monthly retrospectives scheduled
-- [ ] On-call compensation approved (if applicable)
+- [ ] Handoff procedure documented + shared with team
+- [ ] Fatigue rules codified
+- [ ] On-call reference guide complete + accessible
+- [ ] Monthly retros scheduled
+- [ ] On-call comp approved (if applicable)
 
-## Common Pitfalls
+## Pitfalls
 
-- **Too few engineers**: 3 or fewer means on-call every 2-3 weeks, unsustainable. Minimum 5 for weekly rotation.
-- **No escalation delays**: Immediate manager escalation wastes senior time. Give primary 15 minutes to respond.
-- **Skipping handoffs**: Lack of context transfer leads to repeated mistakes. Make handoffs mandatory.
-- **Ignoring alert fatigue**: If engineers ignore alerts due to noise, critical issues get missed. Tune aggressively.
-- **No compensation**: On-call without pay or time off breeds resentment. Budget for it.
+- **Too few engineers**: 3 or fewer = on-call every 2-3 weeks, unsustainable. Min 5 for weekly rotation.
+- **No escalation delays**: Instant manager escalation wastes senior time. Give primary 15 min to respond.
+- **Skipping handoffs**: No context transfer = repeated mistakes. Make handoffs mandatory.
+- **Ignoring alert fatigue**: Engineers ignore alerts from noise → critical issues missed. Tune aggressively.
+- **No comp**: On-call with no pay/time off = resentment. Budget for it.
 
-## Related Skills
+## See Also
 
-- `configure-alerting-rules` - reduce alert noise that causes fatigue
-- `write-incident-runbook` - create runbooks referenced during on-call shifts
+- `configure-alerting-rules` - cut alert noise causing fatigue
+- `write-incident-runbook` - runbooks referenced during on-call shifts

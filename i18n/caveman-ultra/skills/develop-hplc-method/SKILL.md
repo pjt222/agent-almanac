@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Develop a high-performance liquid chromatography method: define separation goals,
   select column chemistry and mobile phase, optimize gradient and flow conditions,
@@ -23,52 +23,52 @@ metadata:
 
 # Develop an HPLC Method
 
-Systematic development of a high-performance liquid chromatography method covering mode selection, column chemistry, mobile phase and gradient design, flow and temperature optimization, detector choice, and iterative refinement for non-volatile, thermally labile, or polar analytes.
+Systematic HPLC dev: mode pick + col chem + mobile phase + gradient + flow/temp + detector + iterative refine for non-volatile, thermally labile, polar analytes.
 
-## When to Use
+## Use When
 
-- Analyzing compounds that are non-volatile, thermally labile, or too polar for GC
-- Developing a new HPLC-UV, HPLC-fluorescence, or LC-MS method from scratch
-- Adapting a literature or pharmacopeial HPLC method to a different column or instrument
-- Improving an existing method that suffers from poor resolution, long run times, or sensitivity issues
-- Selecting the appropriate chromatographic mode (reversed-phase, HILIC, ion-exchange, SEC, chiral)
+- Non-volatile / thermally labile / too polar for GC
+- New HPLC-UV, FLD, LC-MS from scratch
+- Adapt literature/compendial method → diff col/instrument
+- Improve existing: poor Rs, long runs, sensitivity
+- Pick chromatographic mode (RP, HILIC, IEX, SEC, chiral)
 
-## Inputs
+## In
 
 ### Required
 
-- **Target analytes**: Compound names, structures, molecular weights, pKa values, logP/logD
-- **Sample matrix**: Formulation, biological fluid, environmental extract, or neat solution
-- **Performance targets**: Required resolution, detection limits, quantitation range
+- **Target analytes**: Name + struct + MW + pKa + logP/logD
+- **Sample matrix**: Formulation, bio fluid, env extract, neat
+- **Perf targets**: Rs + LOD/LOQ + quant range
 
 ### Optional
 
-- **Reference method**: Compendial or literature method to use as a starting point
-- **Available columns**: Inventory of HPLC columns on hand
-- **Instrument configuration**: UHPLC vs. conventional HPLC, available detectors, column oven range
-- **Throughput requirements**: Maximum acceptable run time including re-equilibration
-- **Regulatory context**: ICH, USP, EPA, or other compliance framework
+- **Reference method**: Compendial/literature → start
+- **Available columns**: On-hand inventory
+- **Instrument**: UHPLC vs conventional, detectors, col oven
+- **Throughput**: Max run + re-equilibration
+- **Regulatory**: ICH, USP, EPA, etc
 
-## Procedure
+## Do
 
-### Step 1: Define Separation Goals
+### Step 1: Separation Goals
 
-1. Compile analyte properties: molecular weight, pKa, logP (or logD at relevant pH), chromophores, fluorophores, ionizable groups.
-2. Identify the sample matrix and expected interferents (excipients, endogenous compounds, degradation products).
-3. Specify performance criteria:
-   - Resolution between critical pairs (Rs >= 2.0 for regulated methods)
-   - Detection limits (LOD/LOQ)
-   - Acceptable run time including gradient re-equilibration
-4. Determine whether the method is for assay, impurity profiling, dissolution, content uniformity, or cleaning verification -- this drives the validation category.
-5. Decide between isocratic and gradient elution: use isocratic if all analytes elute within a retention factor range of 2 < k' < 10; otherwise use gradient.
+1. Compile analyte props: MW, pKa, logP (logD at pH), chromophores, fluorophores, ionizable.
+2. ID matrix + interferents (excipients, endogenous, degradants).
+3. Perf criteria:
+   - Rs critical pairs (≥ 2.0 regulated)
+   - LOD/LOQ
+   - Run time incl re-equilibration
+4. Assay / impurity profile / dissolution / content unif / clean verify → drives valid. category.
+5. Isocratic vs gradient: isocratic if all analytes 2 < k' < 10; else gradient.
 
-**Expected:** A specification document listing analytes with physicochemical properties, matrix description, performance criteria, and isocratic vs. gradient decision.
+→ Spec doc: analytes + props + matrix + perf + isocratic/gradient decision.
 
-**On failure:** If pKa or logP values are unknown, estimate from structure using prediction tools (ChemAxon, ACD/Labs) or run a scouting gradient on a C18 column at pH 3 and pH 7 to empirically assess retention behavior.
+If err: pKa/logP unknown → estimate from struct (ChemAxon, ACD/Labs) or scout gradient on C18 at pH 3 + pH 7 → empirical retention.
 
-### Step 2: Select Column Chemistry
+### Step 2: Col Chemistry
 
-Choose the chromatographic mode and column based on analyte properties.
+Mode + col by analyte props.
 
 | Mode | Column Chemistry | Mobile Phase | Best For |
 |---|---|---|---|
@@ -80,58 +80,58 @@ Choose the chromatographic mode and column based on analyte properties.
 | Size-exclusion (SEC) | Diol-bonded silica, polymer | Isocratic aqueous or organic buffer | Protein aggregates, polymers, molecular weight distribution |
 | Chiral | Polysaccharide (amylose/cellulose) | Normal-phase or polar organic mode | Enantiomeric separations, chiral purity |
 
-1. Default to reversed-phase C18 for small molecules with logP > 0.
-2. For analytes with logP < 0, evaluate HILIC or ion-exchange.
-3. Select particle size: sub-2 um for UHPLC (higher efficiency, higher backpressure), 3-5 um for conventional HPLC.
-4. Select column dimensions: 50-150 mm length, 2.1-4.6 mm ID. Narrower columns save solvent and improve MS sensitivity.
-5. For chiral separations, screen at least 3-4 chiral stationary phases with different selectors.
+1. Default RP C18 for small mols logP > 0.
+2. logP < 0 → HILIC or IEX.
+3. Particle size: sub-2 um for UHPLC (higher eff + backpressure), 3-5 um conventional.
+4. Col dim: 50-150 mm L, 2.1-4.6 mm ID. Narrow → save solvent + better MS.
+5. Chiral → screen 3-4 CSPs w/ diff selectors.
 
-**Expected:** Column chemistry, dimensions, and particle size selected with justification based on analyte properties.
+→ Col chem + dims + particle size picked w/ justification.
 
-**On failure:** If initial scouting shows poor retention on C18, switch to a more retentive phase (phenyl-hexyl for aromatics) or a different mode (HILIC for polar compounds).
+If err: poor retention on C18 → more retentive (phenyl-hexyl for aromatics) or diff mode (HILIC for polar).
 
-### Step 3: Design Mobile Phase and Gradient
+### Step 3: Mobile Phase + Gradient
 
-1. Select organic modifier:
-   - Acetonitrile (ACN): lower viscosity, sharper peaks, better UV transparency below 210 nm
-   - Methanol (MeOH): different selectivity, sometimes better for polar analytes, higher viscosity
-2. Select aqueous component and pH:
-   - For neutral analytes: water with 0.1% formic acid (MS-compatible) or phosphate buffer (UV only)
-   - For ionizable analytes: buffer the mobile phase 2 pH units away from analyte pKa to ensure a single ionic form
-   - pH 2-3 (formic/phosphoric acid): suppresses ionization of acids, good general starting point
-   - pH 6-8 (ammonium formate/acetate): for basic analytes or when selectivity at low pH is insufficient
-   - pH 9-11 (ammonium bicarbonate, BEH columns): for very basic compounds on high-pH-stable columns
-3. Design the gradient:
-   - Start at 5-10% organic, ramp to 90-95% organic over 10-20 min for initial scouting
-   - Evaluate the scouting chromatogram to identify the useful organic range
-   - Narrow the gradient to span only the elution window of interest
-   - Gradient slope: steeper = faster but lower resolution; shallower = better resolution but longer run
-4. Include a column wash step (95% organic, 2-3 min) and re-equilibration (initial conditions, 5-10 column volumes).
-5. For isocratic methods, target k' = 3-8 for the analytes of interest.
+1. Organic modifier:
+   - ACN: lower visc, sharper peaks, better UV <210 nm
+   - MeOH: diff selectivity, sometimes better polar, higher visc
+2. Aqueous + pH:
+   - Neutral: water + 0.1% formic acid (MS-compat) or phosphate buffer (UV only)
+   - Ionizable: buffer 2 pH units from pKa → single ionic form
+   - pH 2-3 (formic/phosphoric): suppresses acid ionization, good start
+   - pH 6-8 (ammonium formate/acetate): basic analytes or low pH selectivity insufficient
+   - pH 9-11 (ammonium bicarbonate, BEH cols): very basic on high-pH-stable cols
+3. Gradient:
+   - Start 5-10% organic → 90-95% over 10-20 min scouting
+   - Evaluate scouting → useful organic range
+   - Narrow gradient to elution window
+   - Steeper = faster lower Rs; shallower = better Rs longer
+4. Col wash (95% organic, 2-3 min) + re-equilibrate (5-10 col vol initial).
+5. Isocratic → k' = 3-8 for analytes.
 
-**Expected:** Mobile phase composition (organic, aqueous, buffer/additive, pH) and gradient profile defined, with a scouting run confirming analyte elution within the programmed window.
+→ Mobile phase (org + aq + buffer + pH) + gradient defined, scouting confirms elution in window.
 
-**On failure:** If selectivity is poor (analytes co-elute despite gradient optimization), change the organic modifier (ACN to MeOH or vice versa), adjust pH by 2 units, or add an ion-pair reagent for charged analytes.
+If err: poor selectivity (co-elution despite optimization) → swap modifier (ACN↔MeOH), shift pH 2 units, or ion-pair reagent for charged.
 
-### Step 4: Optimize Flow Rate and Temperature
+### Step 4: Flow + Temp
 
-1. Set initial flow rate based on column dimensions:
+1. Initial flow per col ID:
    - 4.6 mm ID: 1.0 mL/min
    - 3.0 mm ID: 0.4-0.6 mL/min
    - 2.1 mm ID: 0.2-0.4 mL/min
-2. Verify backpressure is within instrument and column limits (typically < 400 bar conventional, < 1200 bar UHPLC).
-3. Optimize column temperature:
-   - Start at 30 C for reproducibility (avoid ambient fluctuations)
-   - Increase to 40-60 C to reduce viscosity, lower backpressure, and sharpen peaks
-   - For chiral columns, temperature often has a strong effect on enantioselectivity -- screen 15-45 C
-4. Evaluate the effect of flow rate on resolution: small increases in flow can improve throughput without significant resolution loss if operating near the van Deemter minimum.
-5. Document the optimal flow rate, column temperature, and resulting backpressure.
+2. Backpressure within limits (< 400 bar conventional, < 1200 bar UHPLC).
+3. Col temp:
+   - Start 30 C → reproducibility (no ambient fluctuation)
+   - 40-60 C → lower visc, lower backpressure, sharper peaks
+   - Chiral → strong effect on enantioselectivity, screen 15-45 C
+4. Flow effect on Rs: small increases may improve throughput w/o Rs loss near van Deemter min.
+5. Doc flow + temp + backpressure.
 
-**Expected:** Flow rate and column temperature optimized with backpressure within limits, resolution maintained or improved relative to initial conditions.
+→ Flow + temp optimized, backpressure in limits, Rs maintained/improved.
 
-**On failure:** If backpressure is too high, reduce flow rate, increase temperature, or switch to a wider-bore or larger-particle column. If resolution degrades at higher temperature, return to 30 C and accept the longer run time.
+If err: backpressure too high → reduce flow, raise temp, or wider-bore/larger-particle col. Rs degrades at high temp → back to 30 C + accept longer run.
 
-### Step 5: Select the Detector
+### Step 5: Pick Detector
 
 | Detector | Principle | Sensitivity | Selectivity | Key Considerations |
 |---|---|---|---|---|
@@ -143,61 +143,61 @@ Choose the chromatographic mode and column based on analyte properties.
 | Charged aerosol (CAD) | Nebulization + corona discharge | ng range | Universal, non-volatile analytes | More uniform response than ELSD |
 | Mass spectrometry (MS) | m/z detection | pg-fg range | Structural, highest selectivity | Requires MS-compatible mobile phases |
 
-1. For analytes with UV chromophores (aromatic rings, conjugated systems), start with DAD -- it provides both quantitation and peak purity.
-2. For trace analysis in complex matrices, prefer MS (ESI or APCI) in SIM or MRM mode.
-3. For compounds without chromophores (sugars, lipids, polymers), use CAD, ELSD, or RI.
-4. Set detection wavelength at the analyte's absorption maximum (lambda-max) for best sensitivity, or at 210-220 nm for general screening.
-5. For fluorescence, optimize excitation and emission wavelengths using a spectral scan of the analyte.
-6. Ensure mobile phase additives are compatible: no phosphate buffers with MS, no UV-absorbing additives at low wavelengths.
+1. UV chromophores (aromatic, conjugated) → start DAD (quant + peak purity).
+2. Trace in complex matrices → MS (ESI or APCI) SIM or MRM.
+3. No chromophore (sugars, lipids, polymers) → CAD, ELSD, or RI.
+4. Wavelength at analyte lambda-max for sensitivity, or 210-220 nm general.
+5. FLD → optimize ex/em via spectral scan.
+6. Mobile phase additive compat: no phosphate w/ MS, no UV-absorbing at low lambda.
 
-**Expected:** Detector selected and configured (wavelength, gain, acquisition rate) appropriate for analyte chemistry and sensitivity requirements.
+→ Detector + config (lambda, gain, rate) for analyte chem + sensitivity.
 
-**On failure:** If UV sensitivity is insufficient at the required LOQ, consider fluorescence derivatization (e.g., OPA for amines, FMOC for amino acids) or switch to LC-MS/MS for maximum sensitivity and selectivity.
+If err: UV sensitivity insufficient at LOQ → FLD derivatization (OPA for amines, FMOC for AAs) or LC-MS/MS for max sensitivity + selectivity.
 
-### Step 6: Evaluate and Refine
+### Step 6: Evaluate + Refine
 
-1. Inject a system suitability standard 6 times and evaluate:
-   - Retention time RSD < 1.0%
+1. Inject suitability std 6× + evaluate:
+   - RT RSD < 1.0%
    - Peak area RSD < 2.0%
-   - Resolution of critical pair >= 2.0
-   - Tailing factor 0.8-1.5 for all peaks
-   - Theoretical plates per column specification
-2. Inject a placebo/matrix blank to check for interference at analyte retention times.
-3. Inject a stressed or spiked sample to verify the method separates degradation products from the main analyte(s).
-4. If any criterion fails, adjust one variable at a time:
-   - Poor resolution: change pH, gradient slope, or column chemistry
-   - Tailing: add amine modifier (TEA for basic analytes), change buffer, or try a different bonded phase
-   - Sensitivity: increase injection volume, concentrate the sample, or switch detector
-5. Lock the final method parameters and document all conditions.
+   - Rs critical pair ≥ 2.0
+   - Tailing 0.8-1.5 all
+   - Plates per col spec
+2. Inject placebo/matrix blank → interference at RTs.
+3. Inject stressed/spiked → method separates degradants from main analyte(s).
+4. If fail → adjust one var at a time:
+   - Poor Rs: pH, slope, or col chem
+   - Tailing: amine modifier (TEA for basic), change buffer, diff bonded phase
+   - Sensitivity: larger inj, concentrate, swap detector
+5. Lock final params + document.
 
-**Expected:** All system suitability criteria met; method resolves target analytes from matrix interferents and known degradation products; parameters documented for transfer.
+→ All suitability met, method resolves targets from matrix + degradants, params documented for transfer.
 
-**On failure:** If iterative adjustment does not resolve the issue, consider a fundamentally different approach (change chromatographic mode, 2D-LC, or derivatization) and return to Step 2.
+If err: iterative tune doesn't fix → fundamentally diff (change mode, 2D-LC, derivatization) → back to Step 2.
 
-## Validation
+## Check
 
-- [ ] All target analytes resolved with Rs >= 2.0 for critical pairs
-- [ ] Retention time RSD < 1.0% across 6 replicate injections
-- [ ] Peak area RSD < 2.0% across 6 replicate injections
-- [ ] Tailing factors 0.8-1.5 for all analyte peaks
-- [ ] No matrix interference at analyte retention times
-- [ ] Degradation products resolved from main analyte(s)
-- [ ] Run time (including re-equilibration) meets throughput requirements
-- [ ] Mobile phase compatible with selected detector
-- [ ] Method parameters fully documented (column, mobile phase, gradient, flow, temperature, detector)
+- [ ] All targets Rs ≥ 2.0 critical pairs
+- [ ] RT RSD < 1.0% 6 reps
+- [ ] Peak area RSD < 2.0% 6 reps
+- [ ] Tailing 0.8-1.5 all
+- [ ] No matrix interference at RTs
+- [ ] Degradants resolved from main
+- [ ] Run time (incl re-eq) meets throughput
+- [ ] Mobile phase compat w/ detector
+- [ ] All params documented (col, MP, gradient, flow, temp, detector)
 
-## Common Pitfalls
+## Traps
 
-- **Ignoring mobile phase pH for ionizable analytes**: Running at a pH near the analyte's pKa causes split peaks or poor reproducibility because the compound exists in two ionic forms. Buffer at least 2 pH units away from pKa.
-- **Using phosphate buffers with MS detection**: Phosphate is non-volatile and contaminates the MS source. Use formate or acetate buffers for LC-MS work.
-- **Insufficient re-equilibration after gradient**: The column must be flushed with at least 5-10 column volumes of initial mobile phase before the next injection. Inadequate re-equilibration causes retention time drift.
-- **Selecting too short a column for complex mixtures**: While short columns (50 mm) offer speed, they may not provide enough theoretical plates for multi-component separations. Start with 100-150 mm for method development.
-- **Neglecting system dwell volume**: The dwell volume (mixer to column head) delays the gradient reaching the column. This differs between instruments and causes method transfer failures. Measure and document it.
-- **Running HILIC like reversed-phase**: HILIC requires high organic (80-95% ACN) with a small aqueous fraction. Increasing aqueous content increases elution strength -- the opposite of RP. Equilibration times are also longer.
+- **Ignore MP pH for ionizable**: pH near pKa → split peaks / poor repro (two ionic forms). Buffer ≥ 2 pH units from pKa.
+- **Phosphate w/ MS**: Non-volatile, contaminates source. Formate or acetate for LC-MS.
+- **Insufficient re-eq**: Flush 5-10 col vols initial MP before next inj. Inadequate → RT drift.
+- **Too short col for complex mixes**: 50 mm → speed but not enough plates for multi-component. Start 100-150 mm for dev.
+- **Ignore dwell vol**: Mixer→head delay. Differs per instrument → method transfer fails. Measure + document.
+- **HILIC like RP**: HILIC needs high organic (80-95% ACN) + small aq. More aq → more elution strength (opposite of RP). Longer eq.
 
-## Related Skills
+## →
 
-- `develop-gc-method` -- gas chromatography method development for volatile and semi-volatile analytes
-- `interpret-chromatogram` -- reading and interpreting HPLC and GC chromatograms
-- `troubleshoot-separation` -- diagnosing and fixing peak shape, retention, and resolution problems
-- `validate-analytical-method` -- formal ICH Q2 validation of the developed HPLC method
+- `develop-gc-method` — GC method dev for volatile/semi-volatile
+- `interpret-chromatogram` — reading HPLC + GC chromatograms
+- `troubleshoot-separation` — diagnose peak shape/RT/Rs
+- `validate-analytical-method` — formal ICH Q2 valid. of HPLC method

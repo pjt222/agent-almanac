@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design combinational logic circuits from a functional specification through
   gate-level implementation. Covers AND, OR, NOT, XOR, NAND, NOR gates;
@@ -23,37 +23,37 @@ metadata:
   tags: digital-logic, combinational-circuits, logic-gates, nand-universality, adders
 ---
 
-# Design Logic Circuit
+# 設計邏輯電路
 
-Translate a functional specification into a combinational logic circuit by defining inputs and outputs, deriving a minimal Boolean expression, mapping it to a gate-level schematic, optionally converting to a universal gate basis (NAND-only or NOR-only), and verifying correctness through exhaustive simulation against the original truth table.
+由功能規格轉為門級實現之組合邏輯電路：定輸入輸出，導出最簡布林式，映射至門級電路圖，視需換至通用門基（NAND 唯或 NOR 唯），末以窮舉模擬對照原真值表驗其正確。
 
-## When to Use
+## 適用時機
 
-- Implementing a Boolean function as a physical or simulated gate network
-- Designing standard combinational building blocks (adders, multiplexers, decoders, comparators)
-- Converting an arbitrary gate network to NAND-only or NOR-only form for manufacturing constraints
-- Teaching or reviewing digital logic design from specification to schematic
-- Preparing the combinational datapath components needed by build-sequential-circuit or simulate-cpu-architecture
+- 將布林函數實作為物理或模擬之門網
+- 設計標準組合積木（加法器、多路選擇器、解碼器、比較器）
+- 因製造限制，將任意門網換為 NAND 唯或 NOR 唯形式
+- 由規格至電路圖，以教或審數位邏輯設計
+- 為 build-sequential-circuit 或 simulate-cpu-architecture 所需之組合資料通路備料
 
-## Inputs
+## 輸入
 
-- **Required**: Functional specification -- one of: truth table, Boolean expression, verbal description of input/output behavior, or a standard block name (e.g., "4-bit ripple-carry adder")
-- **Required**: Target gate library -- unrestricted (AND/OR/NOT), NAND-only, NOR-only, or a specific standard cell library
-- **Optional**: Optimization goal -- minimize gate count, minimize propagation delay (critical path), or minimize fan-out
-- **Optional**: Maximum fan-in constraint (e.g., 2-input gates only)
-- **Optional**: Don't-care conditions for inputs that will never occur
+- **必要**：功能規格——擇其一：真值表、布林表達式、輸入輸出行為之文字描述、標準模塊名（如「4 位漣波進位加法器」）
+- **必要**：目標門庫——不限（AND/OR/NOT）、NAND 唯、NOR 唯，或特定標準單元庫
+- **選擇**：優化目標——最少門數、最短傳播延遲（關鍵路徑）、或最低扇出
+- **選擇**：最大扇入限制（如唯 2 輸入門）
+- **選擇**：永不發生之輸入組合（don't-care）
 
-## Procedure
+## 步驟
 
-### Step 1: Specify Circuit Function
+### 步驟一：定電路功能
 
-Define the circuit's interface and behavior completely before any synthesis:
+於合成前備齊電路之介面與行為：
 
-1. **Input signals**: List all input signals with their names, bit widths, and valid ranges. For multi-bit inputs, specify bit ordering (MSB-first or LSB-first).
-2. **Output signals**: List all output signals with their names and bit widths.
-3. **Truth table**: Write the complete truth table mapping every input combination to the corresponding outputs. For circuits with many inputs, express the function algebraically or as a set of minterms/maxterms instead.
-4. **Don't-care conditions**: Identify input combinations that cannot occur in practice (e.g., BCD inputs 1010-1111) and mark them as don't-cares.
-5. **Timing requirements**: Note any propagation delay constraints, though combinational circuits have no clock -- timing here refers to worst-case gate delay through the critical path.
+1. **輸入信號**：列所有輸入信號之名、位寬、有效範圍。多位輸入須定位序（MSB 先或 LSB 先）。
+2. **輸出信號**：列所有輸出信號之名與位寬。
+3. **真值表**：寫全真值表，映每一輸入組合至對應輸出。輸入甚多時，代以代數式或 minterm/maxterm 集。
+4. **Don't-care 條件**：辨實務中不發生之輸入組合（如 BCD 之 1010-1111），標為 don't-care。
+5. **時序要求**：記傳播延遲之限。組合電路無時鐘——此「時序」指關鍵路徑上最壞門延遲。
 
 ```markdown
 ## Circuit Specification
@@ -65,18 +65,18 @@ Define the circuit's interface and behavior completely before any synthesis:
 - **Don't-care set**: [d(...) or "none"]
 ```
 
-**Expected:** A complete, unambiguous specification where every legal input combination maps to exactly one output value.
+**預期：** 規格完備無歧義，每一合法輸入組合恰映至一輸出值。
 
-**On failure:** If the specification is ambiguous (e.g., missing cases, conflicting outputs for the same input), request clarification. Do not assume don't-care for unspecified inputs unless explicitly told to.
+**失敗時：** 規格有歧（如漏案、同輸入出衝突輸出）時，請澄清。未經明示莫以未指定輸入為 don't-care。
 
-### Step 2: Derive Minimal Boolean Expression
+### 步驟二：導最簡布林式
 
-Obtain the simplest expression for each output using the evaluate-boolean-expression skill:
+用 evaluate-boolean-expression 技能為每輸出得最簡式：
 
-1. **Single-output functions**: For each output bit, apply evaluate-boolean-expression to get the minimal SOP (or POS, depending on which yields fewer gates).
-2. **Multi-output optimization**: If multiple outputs share common sub-expressions, identify shared product terms that can be factored out. This reduces total gate count at the expense of slightly more complex routing.
-3. **XOR detection**: Scan for XOR/XNOR patterns in the truth table (checkerboard patterns in the K-map). XOR gates are expensive in NAND/NOR-only implementations but efficient in standard libraries.
-4. **Record the expressions**: Document the minimal expression for each output, noting the literal count and the number of product/sum terms.
+1. **單輸出函數**：為每輸出位應用 evaluate-boolean-expression 得最簡 SOP（或 POS，視何者門數少）。
+2. **多輸出優化**：多輸出有共用子式者，辨可共用之積項以抽之。總門數減，然佈線稍繁。
+3. **XOR 偵測**：於真值表中（K-圖之棋盤格）查 XOR/XNOR 模式。XOR 門於 NAND/NOR 唯實現中成本高，於標準庫中則效。
+4. **記式**：錄每輸出之最簡式，計其字面數與積/和項數。
 
 ```markdown
 ## Minimal Expressions
@@ -87,22 +87,22 @@ Obtain the simplest expression for each output using the evaluate-boolean-expres
 - **Shared sub-expressions**: [list, if any]
 ```
 
-**Expected:** A minimal Boolean expression for each output, with shared sub-expressions identified for multi-output circuits.
+**預期：** 每輸出皆有最簡布林式，多輸出電路之共用子式已辨。
 
-**On failure:** If the expressions appear non-minimal (more literals than expected for the function's complexity), re-run the K-map or Quine-McCluskey step from evaluate-boolean-expression. For functions with more than 6 variables, use Espresso or a similar heuristic minimizer.
+**失敗時：** 式似非最簡（字面多於函數複雜度所應）時，重行 evaluate-boolean-expression 中 K-圖或 Quine-McCluskey 之步。變數逾 6 時用 Espresso 等啟發式簡化器。
 
-### Step 3: Map to Gate-Level Schematic
+### 步驟三：映至門級電路圖
 
-Convert the Boolean expressions into a network of logic gates:
+將布林式轉為門網：
 
-1. **Direct mapping (SOP)**: Each product term becomes a multi-input AND gate. The sum of products becomes an OR gate fed by the AND gates. Each complemented variable requires a NOT gate (or use NAND/NOR to absorb inversions).
-2. **Gate assignment**: For each gate, record:
-   - Gate type (AND, OR, NOT, XOR, NAND, NOR)
-   - Input signals (by name or from the output of another gate)
-   - Output signal name
-   - Fan-in (number of inputs)
-3. **Fan-in decomposition**: If a gate exceeds the maximum fan-in constraint, decompose it into a tree of smaller gates. For example, a 4-input AND with a 2-input constraint becomes two 2-input ANDs feeding a third 2-input AND.
-4. **Schematic notation**: Draw the circuit using text-based notation or describe the netlist in a structured format.
+1. **直接映射（SOP）**：每積項為多輸入 AND 門。諸積之和由 OR 門聚 AND 之輸出。每取反變數需 NOT 門（或以 NAND/NOR 吸之）。
+2. **門指派**：每門記：
+   - 門類（AND、OR、NOT、XOR、NAND、NOR）
+   - 輸入信號（依名或另一門之輸出）
+   - 輸出信號名
+   - 扇入（輸入數）
+3. **扇入分解**：門之扇入逾限者，分解為小門之樹。例如 4 輸入 AND 於 2 輸入限制下為二 2 輸入 AND 饋第三 2 輸入 AND。
+4. **電路圖記法**：以文字記法繪電路，或以結構化格式述其網表。
 
 ```markdown
 ## Gate-Level Netlist
@@ -117,25 +117,25 @@ Convert the Boolean expressions into a network of logic gates:
 - **Critical path depth**: [number of gate levels from input to output]
 ```
 
-**Expected:** A complete gate-level netlist where every output can be traced back to primary inputs through a chain of gates, with no floating (unconnected) inputs or outputs.
+**預期：** 網表完備，每輸出可經門鏈溯至原輸入，無浮空（未接）之輸入或輸出。
 
-**On failure:** If the netlist has dangling wires or feedback loops (which are invalid in combinational circuits), recheck the mapping. Every signal must have exactly one driver and every gate input must connect to either a primary input or another gate's output.
+**失敗時：** 網表有懸線或反饋環（組合電路所不許）時，重審映射。每信號恰有一驅動，每門輸入須接至原輸入或他門輸出。
 
-### Step 4: Convert to Universal Gate Basis (Optional)
+### 步驟四：換為通用門基（選擇性）
 
-Transform the circuit to use only NAND gates or only NOR gates:
+換電路為唯用 NAND 或唯用 NOR 門：
 
-1. **NAND-only conversion**:
-   - Replace each AND gate with a NAND followed by a NOT (NAND with tied inputs).
-   - Replace each OR gate using De Morgan: `A + B = ((A')*(B'))' = NAND(A', B')`, so use NOTs on inputs then NAND.
-   - Replace each NOT gate with a NAND gate with both inputs tied together: `A' = NAND(A, A)`.
-   - **Bubble pushing**: Simplify by canceling adjacent inversions. Two NOTs in series cancel. A NAND feeding a NOT is equivalent to an AND.
-2. **NOR-only conversion**:
-   - Replace each OR gate with a NOR followed by a NOT.
-   - Replace each AND gate using De Morgan: `A * B = ((A')+(B'))' = NOR(A', B')`.
-   - Replace each NOT gate with `NOR(A, A)`.
-   - Apply bubble pushing to cancel inversions.
-3. **Gate count comparison**: Record the gate count before and after conversion. NAND-only and NOR-only implementations typically use more gates but simplify manufacturing (single gate type on a chip).
+1. **NAND 唯換法**：
+   - 每 AND 門換為 NAND 繼之以 NOT（NAND 輸入共接）。
+   - 每 OR 門用 De Morgan：`A + B = ((A')*(B'))' = NAND(A', B')`，故輸入先 NOT 再 NAND。
+   - 每 NOT 門換為兩輸入共接之 NAND：`A' = NAND(A, A)`。
+   - **氣泡推移**：相鄰取反相消以簡之。兩 NOT 相繼相消。NAND 饋 NOT 即 AND。
+2. **NOR 唯換法**：
+   - 每 OR 門換為 NOR 繼之以 NOT。
+   - 每 AND 門用 De Morgan：`A * B = ((A')+(B'))' = NOR(A', B')`。
+   - 每 NOT 門換為 `NOR(A, A)`。
+   - 施氣泡推移以相消取反。
+3. **門數比較**：錄換前換後之門數。NAND 唯與 NOR 唯之實現常用門較多，然製造較易（晶片上唯一種門）。
 
 ```markdown
 ## Universal Gate Conversion
@@ -146,19 +146,19 @@ Transform the circuit to use only NAND gates or only NOR gates:
 - **Conversion netlist**: [updated table]
 ```
 
-**Expected:** A functionally equivalent circuit using only the target gate type, with redundant inversions eliminated via bubble pushing.
+**預期：** 所成電路功能等同，唯用目標門類，冗取反已由氣泡推移消之。
 
-**On failure:** If the converted circuit has more inversions than expected, re-examine the bubble-pushing step. A common mistake is forgetting that NAND and NOR are self-dual under complementation -- applying De Morgan consistently from outputs back to inputs avoids this.
+**失敗時：** 換後電路取反多於所應時，重審氣泡推移之步。常誤為忘 NAND 與 NOR 於取反下自對偶——由輸出向輸入一貫施 De Morgan 可免。
 
-### Step 5: Verify via Exhaustive Simulation
+### 步驟五：窮舉模擬驗證
 
-Confirm the circuit produces correct outputs for every possible input:
+驗電路於每可能輸入皆出正確值：
 
-1. **Simulation approach**: For circuits with up to 16 inputs (65,536 combinations), simulate every input exhaustively. For larger circuits, use targeted test vectors covering corner cases, boundary conditions, and random samples.
-2. **Propagate values**: For each input combination, propagate signal values gate by gate from inputs to outputs, respecting the topological order (no gate is evaluated before its inputs are ready).
-3. **Compare against specification**: Check each output against the truth table or expected function from Step 1. Don't-care outputs may be either 0 or 1.
-4. **Record results**: Log any mismatches with the failing input combination and the expected versus actual output.
-5. **Timing analysis** (optional): Count the gate levels on the longest path from any input to any output. Multiply by the per-gate delay to estimate worst-case propagation delay.
+1. **模擬法**：輸入至 16 位（65,536 組合）者，窮舉模擬之。更大者用定向測試向量，涵蓋角例、邊界條件、隨機取樣。
+2. **傳值**：每輸入組合，依拓撲序由輸入至輸出逐門傳信號值（門不早於其輸入就緒而估）。
+3. **對照規格**：據步驟一之真值表或所期函數驗每輸出。Don't-care 輸出或 0 或 1 皆可。
+4. **記結果**：錄任何不符，述失敗之輸入組合及期值對實值。
+5. **時序分析**（選擇性）：數任一輸入至任一輸出最長路之門層。乘以每門延遲以估最壞傳播延遲。
 
 ```markdown
 ## Simulation Results
@@ -170,34 +170,34 @@ Confirm the circuit produces correct outputs for every possible input:
 - **Estimated worst-case delay**: [N * gate_delay]
 ```
 
-**Expected:** All test vectors pass. The circuit is functionally correct and the critical path depth is documented.
+**預期：** 所有測試向量皆過。電路功能正確，關鍵路徑深度已錄。
 
-**On failure:** If any vector fails, trace the signal path for that input combination gate by gate to find the first gate producing an incorrect output. Common causes: a wire connected to the wrong gate input, a missing inversion, or an error in the NAND/NOR conversion.
+**失敗時：** 某向量失敗時，逐門追該輸入之信號路徑，尋第一出誤值之門。常因：線接錯門輸入、漏取反、NAND/NOR 換法有誤。
 
-## Validation
+## 驗證
 
-- [ ] All inputs and outputs are named and their bit widths are specified
-- [ ] The truth table or minterm list covers all legal input combinations
-- [ ] Boolean expressions are minimal (verified via K-map or Quine-McCluskey)
-- [ ] Every gate in the netlist has all inputs connected and exactly one output
-- [ ] No combinational feedback loops exist in the circuit
-- [ ] Fan-in constraints are respected (all gates within the maximum fan-in)
-- [ ] NAND/NOR conversion (if performed) preserves functional equivalence
-- [ ] Bubble pushing has been applied to eliminate redundant inversions
-- [ ] Exhaustive simulation passes for all non-don't-care input combinations
-- [ ] Critical path depth is documented
+- [ ] 所有輸入輸出皆命名，位寬已定
+- [ ] 真值表或 minterm 列涵蓋所有合法輸入組合
+- [ ] 布林式為最簡（經 K-圖或 Quine-McCluskey 驗之）
+- [ ] 網表中每門所有輸入皆接，恰一輸出
+- [ ] 電路中無組合反饋環
+- [ ] 扇入限制皆遵（所有門於最大扇入內）
+- [ ] NAND/NOR 換法（若行之）保持功能等同
+- [ ] 氣泡推移已施以消冗取反
+- [ ] 窮舉模擬對所有非 don't-care 輸入組合皆通過
+- [ ] 關鍵路徑深度已錄
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Combinational feedback loops**: Accidentally connecting a gate's output back to its own input chain creates a sequential element (latch), not a combinational circuit. If state is needed, use the build-sequential-circuit skill instead.
-- **Forgetting inversions in NAND/NOR conversion**: The most common conversion error is dropping a NOT gate during the De Morgan transformation. Always apply bubble pushing systematically from outputs to inputs, not ad hoc.
-- **Exceeding fan-in without decomposition**: A 5-input AND gate is not available in a 2-input library. Decompose into a balanced tree to minimize propagation delay, not a linear chain.
-- **Ignoring don't-cares**: Failing to exploit don't-care conditions during minimization leaves the circuit larger than necessary. Always include don't-cares when available.
-- **Confusing gate delay with wire delay**: In introductory design, gate delay dominates. In real VLSI, wire delay (interconnect capacitance) can exceed gate delay. Note this limitation when estimating timing.
-- **Multi-output hazards**: When multiple outputs share gates, changing one output's logic can inadvertently affect a shared sub-expression. Verify all outputs after any modification, not just the one being changed.
+- **組合反饋環**：誤接門輸出回至其自身輸入鏈，即成時序元件（鎖存器），非組合電路。若需狀態，改用 build-sequential-circuit 技能。
+- **NAND/NOR 換法中遺取反**：最常之換法誤為 De Morgan 變換中丟 NOT。由輸出向輸入一貫施氣泡推移，勿以臨時處置。
+- **扇入逾限而未分解**：5 輸入 AND 於 2 輸入庫中無。分解為平衡樹以減傳播延遲，非線性鏈。
+- **忽 don't-care**：簡化時不用 don't-care 條件，則電路大於所需。有之則必用。
+- **混淆門延遲與線延遲**：入門設計中以門延遲為主。實 VLSI 中線延遲（互連電容）可逾門延遲。估時序時須註此限。
+- **多輸出之冒險**：多輸出共用門時，改一輸出之邏輯可誤傷共用子式。改動後驗所有輸出，非唯所改者。
 
-## Related Skills
+## 相關技能
 
-- `evaluate-boolean-expression` -- derive the minimal Boolean expression used as input to this skill
-- `build-sequential-circuit` -- add state elements (flip-flops) to create sequential circuits
-- `simulate-cpu-architecture` -- use combinational blocks (ALU, mux, decoder) as datapath components
+- `evaluate-boolean-expression` -- 導本技能所用之最簡布林式
+- `build-sequential-circuit` -- 加狀態元件（觸發器）以成時序電路
+- `simulate-cpu-architecture` -- 以組合積木（ALU、多路選擇器、解碼器）為資料通路元件

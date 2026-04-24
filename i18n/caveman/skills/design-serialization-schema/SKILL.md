@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design serialization schemas using JSON Schema, Protocol Buffer definitions,
   or Apache Avro. Covers schema versioning, backwards compatibility, validation
@@ -26,27 +26,27 @@ metadata:
 
 # Design Serialization Schema
 
-Create well-versioned serialization schemas that evolve gracefully without breaking consumers.
+Make versioned serialization schemas. Evolve gracefully without breaking consumers.
 
-## When to Use
+## When Use
 
-- Defining a new API contract or data interchange format
-- Adding fields to an existing schema without breaking consumers
-- Migrating between schema versions
-- Choosing between schema systems (JSON Schema, Protobuf, Avro)
-- Documenting data validation rules for automated enforcement
+- Define new API contract or data interchange format
+- Add fields to existing schema without breaking consumers
+- Migrate between schema versions
+- Pick between schema systems (JSON Schema, Protobuf, Avro)
+- Document data validation rules for auto-enforcement
 
 ## Inputs
 
-- **Required**: Data model (entity relationships, field types, constraints)
-- **Required**: Compatibility requirements (who consumes this data, how long must old formats be readable)
+- **Required**: Data model (entity relations, field types, constraints)
+- **Required**: Compat needs (who consumes, how long must old formats read)
 - **Optional**: Existing schema to evolve
-- **Optional**: Performance requirements (validation speed, schema registry integration)
+- **Optional**: Perf needs (validation speed, schema registry integration)
 - **Optional**: Target serialization format (JSON, binary, columnar)
 
-## Procedure
+## Steps
 
-### Step 1: Choose a Schema System
+### Step 1: Pick Schema System
 
 | System | Format | Strengths | Best For |
 |--------|--------|-----------|----------|
@@ -56,10 +56,11 @@ Create well-versioned serialization schemas that evolve gracefully without break
 | XML Schema (XSD) | XML | Comprehensive typing, namespace support | Enterprise/legacy SOAP |
 | TypeBox/Zod | TypeScript | Type inference, runtime validation | TypeScript APIs |
 
-**Expected:** Schema system selected based on ecosystem, performance needs, and evolution requirements.
-**On failure:** If uncertain, start with JSON Schema — it has the broadest tooling support and can be layered onto existing JSON APIs.
+**Got:** Schema system picked by ecosystem, perf, evolution needs.
 
-### Step 2: Design the Core Schema
+**If fail:** Unsure? Start with JSON Schema — broadest tooling, layers onto existing JSON APIs.
+
+### Step 2: Design Core Schema
 
 #### JSON Schema example:
 
@@ -146,12 +147,13 @@ enum Unit {
 }
 ```
 
-**Expected:** Schema is self-documenting with descriptions, constraints, and clear type definitions.
-**On failure:** If the data model is not yet stable, mark the schema as `draft` and avoid publishing to a registry.
+**Got:** Schema self-documenting. Descriptions, constraints, clear types.
 
-### Step 3: Plan for Schema Evolution
+**If fail:** Data model not stable? Mark schema `draft`, don't publish to registry.
 
-Compatibility rules:
+### Step 3: Plan Schema Evolution
+
+Compat rules:
 
 | Change | Backwards Compatible? | Forwards Compatible? | Safe? |
 |--------|----------------------|---------------------|-------|
@@ -164,7 +166,7 @@ Compatibility rules:
 | Add enum value | Yes (if consumers ignore unknown) | No | Depends on implementation |
 | Remove enum value | No | Yes | No |
 
-Safe evolution strategy:
+Safe evolution:
 1. **Only add optional fields** with sensible defaults
 2. **Never remove or rename** — deprecate instead
 3. **Version the schema** in the identifier (`v1`, `v2`)
@@ -210,10 +212,11 @@ message Measurement {
 }
 ```
 
-**Expected:** Evolution plan documented: which changes are safe, which require new versions.
-**On failure:** If a breaking change is unavoidable, version the schema (v1 → v2) and maintain parallel support during migration.
+**Got:** Evolution plan documented. Safe changes vs new versions clear.
 
-### Step 4: Implement Schema Validation
+**If fail:** Breaking change unavoidable? Version schema (v1 → v2), keep parallel support during migration.
+
+### Step 4: Impl Schema Validation
 
 ```python
 # JSON Schema validation (Python)
@@ -257,12 +260,13 @@ if (!result.success) {
 }
 ```
 
-**Expected:** Validation runs on all incoming data at system boundaries (API endpoints, file ingestion).
-**On failure:** Log validation errors with the full payload (redacting sensitive fields) for debugging.
+**Got:** Validation runs on all incoming data at system boundaries (API endpoints, file ingestion).
 
-### Step 5: Document the Schema
+**If fail:** Log validation errors with full payload (redact sensitive fields) for debugging.
 
-Create a schema documentation page:
+### Step 5: Document Schema
+
+Make schema doc page:
 
 ```markdown
 # Measurement Schema (v1)
@@ -289,29 +293,30 @@ Represents a single sensor reading with metadata.
 - **Policy**: Only additive, optional field changes between minor versions
 ```
 
-**Expected:** Documentation is auto-generated or stays in sync with the schema definition.
-**On failure:** If docs drift from schema, add a CI check that validates docs against the schema source.
+**Got:** Docs auto-generated or stay in sync with schema definition.
 
-## Validation
+**If fail:** Docs drift from schema? Add CI check validating docs against schema source.
 
-- [ ] Schema uses appropriate system for the use case (JSON Schema, Protobuf, Avro)
-- [ ] All fields have types, descriptions, and constraints
-- [ ] Required vs optional fields are explicitly defined
+## Checks
+
+- [ ] Schema uses right system (JSON Schema, Protobuf, Avro)
+- [ ] All fields have types, descriptions, constraints
+- [ ] Required vs optional fields explicit
 - [ ] Evolution strategy documented (safe changes, versioning policy)
-- [ ] Validation implemented at system boundaries
-- [ ] Schema is versioned with a changelog
-- [ ] Round-trip test: serialize → deserialize → compare confirms no data loss
+- [ ] Validation at system boundaries
+- [ ] Schema versioned with changelog
+- [ ] Round-trip test: serialize → deserialize → compare, no data loss
 
-## Common Pitfalls
+## Pitfalls
 
-- **Over-constraining too early**: Strict validation on a new schema blocks iteration. Start permissive (`additionalProperties: true`), tighten later.
-- **No default values**: Adding a required field without a default breaks all existing data. Always provide defaults for new fields.
-- **Ignoring null**: Many schemas don't handle null/missing fields clearly. Be explicit about nullable vs optional.
-- **Version in the payload, not the URL**: For long-lived data (storage, events), embed the schema version in the data itself, not just the endpoint URL.
-- **Enum exhaustiveness**: Adding a new enum value can crash consumers that use exhaustive switch statements. Document that unknown values should be handled gracefully.
+- **Over-constraining too early**: Strict validation on new schema blocks iteration. Start permissive (`additionalProperties: true`), tighten later.
+- **No default values**: New required field without default breaks existing data. Always provide defaults for new fields.
+- **Ignoring null**: Many schemas don't handle null/missing cleanly. Be explicit: nullable vs optional.
+- **Version in payload, not URL**: Long-lived data (storage, events) → embed schema version in data itself, not just endpoint URL.
+- **Enum exhaustiveness**: New enum value can crash consumers using exhaustive switch. Document: unknown values handled gracefully.
 
-## Related Skills
+## See Also
 
-- `serialize-data-formats` — format selection and encoding/decoding implementation
-- `implement-pharma-serialisation` — pharmaceutical serialisation (regulatory schemas)
-- `write-validation-documentation` — validation documentation for regulated schemas
+- `serialize-data-formats` — format selection + encoding/decoding
+- `implement-pharma-serialisation` — pharma serialisation (regulatory schemas)
+- `write-validation-documentation` — validation docs for regulated schemas

@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design practical electromagnetic devices including electromagnets, DC and
   brushless motors, generators, and transformers by bridging theory to
@@ -24,44 +24,43 @@ metadata:
   tags: electromagnetism, device-design, motors, generators, transformers, electromagnets
 ---
 
-# Design Electromagnetic Device
+# 設計電磁器件
 
-Design a practical electromagnetic device by specifying performance requirements, selecting an appropriate topology, calculating design parameters from electromagnetic first principles, analyzing losses and efficiency, and validating the design against physical constraints including thermal limits and material saturation.
+設計實用之電磁器件：先定性能之要求，再擇合宜之形制，據電磁之本原算其諸參數，析其損耗與效率，末以物理之限（熱限、飽和）驗其所成。
 
-## When to Use
+## 適用時機
 
-- Sizing an electromagnet (solenoid or toroidal) for a target field strength, pull force, or holding force
-- Selecting motor topology (DC brushed, brushless DC, stepper, induction) and computing torque, speed, and efficiency
-- Designing a generator for a specified voltage, current, and frequency output
-- Designing a transformer for a given voltage ratio, power rating, and frequency
-- Analyzing and minimizing losses: copper (I^2 R), core (hysteresis and eddy current), stray flux
+- 為電磁鐵（螺線管或環形）定尺寸，以達目標磁場強度、拉力或吸持力
+- 擇電機形制（有刷直流、無刷直流、步進、感應），算其轉矩、轉速、效率
+- 為變壓器設計所求之電壓比、功率與頻率
+- 析並減損耗：銅損（I^2 R）、鐵芯損（磁滯與渦流）、雜散磁通
 
-## Inputs
+## 輸入
 
-- **Required**: Device type (electromagnet, motor, generator, or transformer)
-- **Required**: Performance requirements (field strength, force, torque, voltage ratio, power, efficiency target)
-- **Required**: Operating conditions (supply voltage and current, frequency, duty cycle, ambient temperature)
-- **Optional**: Preferred core material (silicon steel, ferrite, powdered iron, air core) with B-H data
-- **Optional**: Size and weight constraints
-- **Optional**: Cost or manufacturing constraints
+- **必要**：器件類別（電磁鐵、電機、發電機或變壓器）
+- **必要**：性能要求（磁場強度、拉力、轉矩、電壓比、功率、效率目標）
+- **必要**：運行條件（供電電壓與電流、頻率、占空比、環境溫度）
+- **選擇**：偏好之鐵芯材料（矽鋼、鐵氧體、粉末鐵、空芯）及其 B-H 數據
+- **選擇**：尺寸與重量約束
+- **選擇**：成本或製造約束
 
-## Procedure
+## 步驟
 
-### Step 1: Specify Device Requirements and Operating Conditions
+### 步驟一：定器件要求與運行條件
 
-Define the complete set of design targets before selecting a topology:
+於擇形制前，須備齊設計目標：
 
-1. **Primary performance metric**: The single most important specification:
-   - Electromagnet: target B-field (Tesla) at a specified point, or pull force (Newtons) on a specified armature
-   - Motor: rated torque (N.m) at rated speed (RPM), or power (Watts) at rated speed
-   - Generator: output voltage (V), current (A), and frequency (Hz) at rated mechanical speed
-   - Transformer: primary and secondary voltages, power rating (VA), and operating frequency
+1. **主性能指標**：單一最要之規格
+   - 電磁鐵：指定點之 B 場（Tesla），或指定銜鐵之拉力（Newton）
+   - 電機：額定轉矩（N.m）於額定轉速（RPM），或額定轉速之功率（Watt）
+   - 發電機：於額定機械轉速之輸出電壓（V）、電流（A）、頻率（Hz）
+   - 變壓器：原副邊電壓、功率（VA）、運行頻率
 
-2. **Secondary specifications**: Efficiency target (%), maximum temperature rise above ambient (K), duty cycle (continuous, intermittent, or pulsed), physical envelope (maximum diameter, length, weight).
+2. **次要規格**：效率目標（%）、最大溫升（K）、占空比（連續、間歇或脈衝）、物理包絡（最大直徑、長度、重量）。
 
-3. **Supply constraints**: Available voltage and current, frequency (DC or AC with specified Hz), waveform (sinusoidal, PWM, trapezoidal).
+3. **供電約束**：可用電壓與電流、頻率（DC 或指定 Hz 之 AC）、波形（正弦、PWM、梯形）。
 
-4. **Environmental conditions**: Ambient temperature range, cooling method (natural convection, forced air, liquid), altitude (affects air cooling), and vibration/shock requirements.
+4. **環境條件**：環境溫度範圍、冷卻方式（自然對流、強制風、液冷）、海拔（影響風冷）、振動與衝擊要求。
 
 ```markdown
 ## Design Requirements
@@ -74,33 +73,33 @@ Define the complete set of design targets before selecting a topology:
 - **Duty cycle**: [continuous / intermittent (on-time/off-time) / pulsed]
 ```
 
-**Expected:** A complete, quantified set of requirements with no ambiguous specifications. Every requirement has a numerical value and units.
+**預期：** 要求齊備且量化，無模糊之規格。每項皆有數值與單位。
 
-**On failure:** If requirements conflict (e.g., high torque in a very small volume with high efficiency), identify the tradeoff explicitly and ask the designer to prioritize. Electromagnetic devices obey fundamental scaling laws: force scales with volume, losses scale with surface area, and thermal limits constrain the power density.
+**失敗時：** 要求相互矛盾（例如：小體積內要求高轉矩兼高效率）時，須明示此權衡，請設計者排序。電磁器件遵循本原之標度律：力隨體積而增，損耗隨表面積而增，熱限束縛功率密度。
 
-### Step 2: Select Topology
+### 步驟二：擇形制
 
-Choose the device configuration that best matches the requirements:
+擇最合於要求之器件配置：
 
-1. **Electromagnet topologies**:
-   - **Solenoid (cylindrical)**: Simple to wind, uniform interior field B = mu_0 n I (for long solenoid). Best for uniform-field applications. Air gap for pull-force applications.
-   - **Toroid**: No external stray field (all flux contained). Best when stray field must be minimized. Less uniform than solenoid for partial windings.
-   - **C-core / E-core**: High force in a compact volume. The air gap concentrates force. Standard for relays and holding magnets.
-   - **Helmholtz pair**: Two coils separated by one radius. Produces highly uniform field in the central region. Best for calibration and measurement.
+1. **電磁鐵形制**：
+   - **螺線管（圓柱形）**：繞製易，內部場均勻 B = mu_0 n I（長螺線管）。最宜均勻場之用途。拉力用途設氣隙。
+   - **環形**：無外部雜散場（磁通全封於內）。雜散場須壓抑時用之。部分繞線時不如螺線管均勻。
+   - **C 形芯 / E 形芯**：小體積中得高力。氣隙聚力。繼電器與吸持磁鐵之常式。
+   - **Helmholtz 對**：兩線圈隔一半徑。中央區產生極均勻之場。最宜校準與測量。
 
-2. **Motor topologies**:
-   - **DC brushed**: Simple drive (apply DC voltage), good low-speed torque. Brushes limit lifetime and speed. Torque: T = k_T * I.
-   - **Brushless DC (BLDC)**: Electronic commutation, higher speed and lifetime than brushed. Trapezoidal or sinusoidal drive. Dominant in modern applications.
-   - **Stepper**: Precise open-loop positioning (discrete steps, typically 1.8 or 0.9 degrees). Lower continuous torque than BLDC. Best for positioning without feedback.
-   - **AC induction**: Robust, no permanent magnets, simple construction. Speed determined by supply frequency and slip. Dominant in industrial power applications.
+2. **電機形制**：
+   - **有刷直流**：驅動簡單（加直流電壓），低速轉矩佳。電刷限壽命與轉速。轉矩：T = k_T * I。
+   - **無刷直流（BLDC）**：電子換相，轉速與壽命皆勝有刷。梯形或正弦驅動。今世之主流。
+   - **步進**：精確開環定位（離散步，常 1.8 或 0.9 度）。連續轉矩不如 BLDC。無反饋之定位最宜。
+   - **交流感應**：堅固、無永磁、構造簡。轉速由供電頻率與滑差決定。工業動力應用之主流。
 
-3. **Generator topologies**: Motors operated in reverse. A BLDC motor becomes a BLDC generator (back-EMF becomes output). An induction motor becomes an induction generator when driven above synchronous speed. Permanent magnet generators are preferred for small-scale (wind, hydro).
+3. **發電機形制**：電機反向運行即是。BLDC 電機反向為 BLDC 發電機（反電動勢為輸出）。感應電機超同步轉速驅動即為感應發電機。小尺度（風、水）多用永磁發電機。
 
-4. **Transformer topologies**:
-   - **Core type**: Windings on a single leg of a rectangular core. Standard for power transformers.
-   - **Shell type**: Core surrounds the windings. Better magnetic shielding. Used in high-power applications.
-   - **Toroidal**: No air gap, low stray flux, compact. Higher winding cost. Used in audio and sensitive electronics.
-   - **Planar / PCB**: Windings are PCB traces. Low profile. Used in switched-mode power supplies at high frequency.
+4. **變壓器形制**：
+   - **芯式**：繞組繞於矩形芯之一柱。功率變壓器之常式。
+   - **殼式**：芯包繞組。磁屏蔽較佳。用於大功率。
+   - **環形**：無氣隙、雜散通量低、結構緊湊。繞製成本較高。用於音頻與敏感電子。
+   - **平面 / PCB**：繞組即 PCB 走線。扁平。用於高頻開關電源。
 
 ```markdown
 ## Topology Selection
@@ -111,40 +110,40 @@ Choose the device configuration that best matches the requirements:
 - **Alternatives considered**: [and why rejected]
 ```
 
-**Expected:** A justified topology selection with clear reasoning tied to the requirements from Step 1, including acknowledged limitations.
+**預期：** 形制之擇有據，明繫步驟一之要求，並承認其限制。
 
-**On failure:** If no standard topology meets all requirements, consider a hybrid design (e.g., Halbach array for higher field with less material) or relax a secondary constraint. Document the tradeoff.
+**失敗時：** 無現成形制能滿所有要求時，可考慮混合設計（如 Halbach 陣列以少料得高場）或寬次要約束。記錄其權衡。
 
-### Step 3: Calculate Design Parameters
+### 步驟三：算設計參數
 
-Compute the physical dimensions and electrical parameters from electromagnetic principles:
+據電磁本原算其物理尺寸與電氣參數：
 
-1. **Electromagnet design parameters**:
-   - Turns: N = B * l_core / (mu_0 * mu_r * I) for a solenoid of length l_core, or from the magnetic circuit: N * I = Phi * R_total (where R_total is the total reluctance)
-   - Wire gauge: Select for the required current density J (typically 3-6 A/mm^2 for continuous duty, up to 15 A/mm^2 for intermittent). Wire cross-section: A_wire = I / J.
-   - Core cross-section: A_core = Phi / B_max, where B_max is below saturation (typically 1.5-1.8 T for silicon steel, 0.3-0.5 T for ferrite)
-   - Air gap force: F = B^2 * A_gap / (2 * mu_0) (Maxwell stress tensor result)
-   - Winding resistance: R = rho_Cu * N * l_mean_turn / A_wire
+1. **電磁鐵設計參數**：
+   - 匝數：N = B * l_core / (mu_0 * mu_r * I)（長 l_core 之螺線管），或由磁路算之：N * I = Phi * R_total（R_total 為總磁阻）
+   - 線徑：依所需電流密度 J 擇之（連續工作常 3-6 A/mm^2，間歇可至 15 A/mm^2）。線截面積：A_wire = I / J。
+   - 芯截面：A_core = Phi / B_max，B_max 須低於飽和（矽鋼常 1.5-1.8 T，鐵氧體 0.3-0.5 T）
+   - 氣隙力：F = B^2 * A_gap / (2 * mu_0)（Maxwell 應力張量之結果）
+   - 繞組電阻：R = rho_Cu * N * l_mean_turn / A_wire
 
-2. **Motor design parameters**:
-   - Torque constant: k_T = (2 * B * l * r * N) / (number of phases) for a simplified BLDC
-   - Back-EMF constant: k_E = k_T (in SI units, same numerical value)
-   - Rated current: I_rated = T_rated / k_T
-   - No-load speed: omega_no_load = V_supply / k_E
-   - Winding resistance from wire gauge and mean turn length
+2. **電機設計參數**：
+   - 轉矩常數：k_T = (2 * B * l * r * N) / (相數)（簡化 BLDC）
+   - 反電動勢常數：k_E = k_T（SI 單位，數值相等）
+   - 額定電流：I_rated = T_rated / k_T
+   - 空載轉速：omega_no_load = V_supply / k_E
+   - 繞組電阻由線徑與平均匝長算出
 
-3. **Transformer design parameters**:
-   - Turns ratio: N_1 / N_2 = V_1 / V_2
-   - Core cross-section: A_core = V_1 / (4.44 * f * N_1 * B_max) (for sinusoidal excitation)
-   - Primary turns: N_1 = V_1 / (4.44 * f * B_max * A_core)
-   - Window area: A_window = (N_1 * A_wire1 + N_2 * A_wire2) / k_fill (fill factor k_fill typically 0.3-0.5)
-   - Core volume: V_core = A_core * l_mean_path
+3. **變壓器設計參數**：
+   - 匝比：N_1 / N_2 = V_1 / V_2
+   - 芯截面：A_core = V_1 / (4.44 * f * N_1 * B_max)（正弦激勵）
+   - 原邊匝數：N_1 = V_1 / (4.44 * f * B_max * A_core)
+   - 窗口面積：A_window = (N_1 * A_wire1 + N_2 * A_wire2) / k_fill（填充係數 k_fill 常 0.3-0.5）
+   - 芯體積：V_core = A_core * l_mean_path
 
-4. **Magnetic circuit analysis**: For devices with cores and air gaps:
-   - Reluctance of core: R_core = l_core / (mu_0 * mu_r * A_core)
-   - Reluctance of air gap: R_gap = l_gap / (mu_0 * A_gap) (note: much larger than R_core for small gaps)
-   - Total reluctance: R_total = R_core + R_gap (series) or 1/R_total = sum(1/R_i) (parallel)
-   - Flux: Phi = N * I / R_total
+4. **磁路分析**：對有芯有氣隙之器件：
+   - 芯磁阻：R_core = l_core / (mu_0 * mu_r * A_core)
+   - 氣隙磁阻：R_gap = l_gap / (mu_0 * A_gap)（注意：小氣隙之磁阻遠大於 R_core）
+   - 總磁阻：R_total = R_core + R_gap（串聯）或 1/R_total = sum(1/R_i)（並聯）
+   - 磁通：Phi = N * I / R_total
 
 ```markdown
 ## Design Parameters
@@ -157,43 +156,43 @@ Compute the physical dimensions and electrical parameters from electromagnetic p
 - **Key performance**: [B-field / torque / voltage ratio = calculated value]
 ```
 
-**Expected:** Numerical values for all physical dimensions and electrical parameters, derived from electromagnetic equations with units checked at each step.
+**預期：** 所有物理尺寸與電氣參數之數值，皆由電磁公式推出，各步單位俱驗。
 
-**On failure:** If the required turns do not fit in the available winding space, either increase the core size (larger window area), use finer wire (higher current density, but more heating), or reduce the performance target. If the core operates above B_max, increase the core cross-section or add turns (to reduce the flux for the same performance via a larger NI product with a larger gap).
+**失敗時：** 所需匝數不入繞線空間時，或增芯尺寸（大窗口面積）、或用細線（高電流密度，然熱更大）、或降性能目標。若芯運行高於 B_max，或增芯截面、或增匝數（以加大 NI 積配合大氣隙，減同性能之磁通）。
 
-### Step 4: Analyze Losses and Efficiency
+### 步驟四：析損耗與效率
 
-Quantify every loss mechanism and compute overall efficiency:
+量化每一損耗機制，算總效率：
 
-1. **Copper losses (I^2 R)**:
-   - P_Cu = I^2 * R_winding (DC resistance losses)
-   - At high frequency, account for skin effect: R_AC / R_DC increases when wire diameter > 2 * delta (skin depth)
-   - Proximity effect in multi-layer windings further increases AC resistance
-   - Mitigation: use Litz wire (many thin insulated strands twisted together) for frequencies above ~10 kHz
+1. **銅損（I^2 R）**：
+   - P_Cu = I^2 * R_winding（直流電阻損耗）
+   - 高頻時須計趨膚效應：線徑大於 2 * delta（趨膚深度）時 R_AC / R_DC 增
+   - 多層繞組之鄰近效應進一步增 AC 電阻
+   - 減損：頻率高於約 10 kHz 時用 Litz 線（多股細絕緣絞合）
 
-2. **Core losses (hysteresis + eddy current)**:
-   - Hysteresis loss per unit volume per cycle: W_h = area of the B-H loop
-   - Hysteresis power: P_h = k_h * f * B_max^n * V_core (Steinmetz equation, n typically 1.6-2.0, k_h from material data)
-   - Eddy current power: P_e = k_e * f^2 * B_max^2 * t^2 * V_core (t = lamination thickness)
-   - Combined (generalized Steinmetz): P_core = k * f^alpha * B_max^beta * V_core (coefficients from manufacturer data sheets)
-   - Mitigation: laminated cores (typical lamination 0.25-0.5 mm for 50/60 Hz, thinner for higher frequency), ferrite cores for >100 kHz
+2. **鐵芯損（磁滯 + 渦流）**：
+   - 每周期每單位體積之磁滯損：W_h = B-H 回線面積
+   - 磁滯功率：P_h = k_h * f * B_max^n * V_core（Steinmetz 方程，n 常 1.6-2.0，k_h 由材料數據）
+   - 渦流功率：P_e = k_e * f^2 * B_max^2 * t^2 * V_core（t = 疊片厚度）
+   - 合（廣義 Steinmetz）：P_core = k * f^alpha * B_max^beta * V_core（係數取自製造商數據表）
+   - 減損：疊片芯（50/60 Hz 常 0.25-0.5 mm，高頻更薄）、>100 kHz 用鐵氧體芯
 
-3. **Eddy current losses in conductors and structure**:
-   - Stray flux inducing currents in the frame, shields, and nearby conductors
-   - Particularly significant in large transformers and machines
-   - Mitigation: non-magnetic structural materials, magnetic shields
+3. **導體與結構之渦流損**：
+   - 雜散磁通於框架、屏蔽、鄰近導體中感應電流
+   - 大型變壓器與電機中尤顯
+   - 減損：非磁性結構材料、磁屏蔽
 
-4. **Mechanical losses** (motors and generators):
-   - Friction in bearings: P_friction = T_friction * omega
-   - Windage (air resistance on rotor): P_windage approximately proportional to omega^3
-   - Brush friction (DC brushed motors): additional wear-dependent term
+4. **機械損**（電機與發電機）：
+   - 軸承摩擦：P_friction = T_friction * omega
+   - 風阻（轉子之空氣阻力）：P_windage 約與 omega^3 成正比
+   - 電刷摩擦（有刷直流電機）：另有磨損相關項
 
-5. **Efficiency calculation**:
-   - Electromagnet: efficiency is not the primary metric; focus on power consumption P = I^2 R for a given field/force
-   - Motor: eta = P_mechanical / P_electrical = (T * omega) / (V * I)
-   - Generator: eta = P_electrical / P_mechanical
-   - Transformer: eta = P_out / P_in = P_out / (P_out + P_Cu + P_core)
-   - Typical efficiencies: small motors 60-85%, large motors 90-97%, transformers 95-99%
+5. **效率算法**：
+   - 電磁鐵：效率非主指標；關注給定場/力下之功耗 P = I^2 R
+   - 電機：eta = P_mechanical / P_electrical = (T * omega) / (V * I)
+   - 發電機：eta = P_electrical / P_mechanical
+   - 變壓器：eta = P_out / P_in = P_out / (P_out + P_Cu + P_core)
+   - 常見效率：小型電機 60-85%、大型電機 90-97%、變壓器 95-99%
 
 ```markdown
 ## Loss Analysis
@@ -209,40 +208,40 @@ Quantify every loss mechanism and compute overall efficiency:
 - **Temperature rise estimate**: Delta_T = P_total / (h * A_surface) = [K]
 ```
 
-**Expected:** A complete loss breakdown with each mechanism quantified, total efficiency computed, and temperature rise estimated to verify thermal feasibility.
+**預期：** 損耗分解俱全，每機制皆量化，總效率已算，溫升已估以驗熱可行。
 
-**On failure:** If efficiency is below the target, identify the dominant loss mechanism and address it: copper losses dominate in small devices (increase wire size or reduce turns), core losses dominate at high frequency (switch to lower-loss core material or reduce B_max), mechanical losses dominate at high speed (improve bearings). If the temperature rise exceeds the thermal limit, increase the cooling (forced air, heat sinks) or reduce the power density.
+**失敗時：** 效率低於目標時，辨主導之損耗機制而治之：小器件以銅損為主（增線徑或減匝）、高頻以鐵芯損為主（換低損材料或降 B_max）、高速以機械損為主（改進軸承）。溫升超熱限時，增冷卻（強制風、散熱器）或降功率密度。
 
-### Step 5: Validate Against Requirements and Physical Constraints
+### 步驟五：驗其合要求與物理限
 
-Verify that the design meets all specifications and is physically realizable:
+驗設計已滿所有規格，且物理可成：
 
-1. **Performance verification**:
-   - Recompute the primary performance metric (B, force, torque, voltage) from the final design parameters
-   - Verify it meets or exceeds the requirement from Step 1
-   - Compute the margin: (achieved - required) / required as a percentage
+1. **性能驗證**：
+   - 由最終設計參數重算主性能指標（B、力、轉矩、電壓）
+   - 驗其達或超過步驟一之要求
+   - 算餘裕：(achieved - required) / required 之百分比
 
-2. **Saturation check**:
-   - Verify that B_max in the core is below the saturation flux density of the chosen material
-   - Check every section of the magnetic circuit (core legs, yoke, air gap fringing)
-   - The air gap region typically has the lowest flux density; the core section with the smallest cross-section has the highest
+2. **飽和驗證**：
+   - 驗芯中之 B_max 低於所選材料之飽和磁通密度
+   - 查磁路每段（芯柱、軛、氣隙邊緣擴散）
+   - 氣隙區常磁通密度最低；芯之截面最小處磁通密度最高
 
-3. **Thermal check**:
-   - Estimate surface temperature: T_surface = T_ambient + P_total / (h * A_surface)
-   - For natural convection: h approximately 5-10 W/(m^2.K)
-   - For forced air: h approximately 25-100 W/(m^2.K)
-   - Wire insulation class limits: Class A (105 C), Class B (130 C), Class F (155 C), Class H (180 C)
-   - Core Curie temperature: silicon steel ~770 C (rarely a limit), ferrite ~200-300 C (can be a limit)
+3. **熱驗證**：
+   - 估表面溫度：T_surface = T_ambient + P_total / (h * A_surface)
+   - 自然對流：h 約 5-10 W/(m^2.K)
+   - 強制風冷：h 約 25-100 W/(m^2.K)
+   - 線絕緣等級限：A 級（105 C）、B 級（130 C）、F 級（155 C）、H 級（180 C）
+   - 芯 Curie 溫度：矽鋼約 770 C（少為限）、鐵氧體 200-300 C（或為限）
 
-4. **Dimensional check**:
-   - Verify that the design fits within the specified envelope
-   - Check that the winding fits in the window area with the assumed fill factor
-   - Verify clearances and creepage distances for high-voltage designs
+4. **尺寸驗證**：
+   - 驗設計入於所定包絡
+   - 查繞線入於窗口面積，合假定之填充係數
+   - 驗高壓設計之電氣間隙與爬電距離
 
-5. **Design margin and sensitivity**:
-   - Compute how the primary metric changes with +/-10% variation in each key parameter (current, turns, air gap, core permeability)
-   - Identify the most sensitive parameter -- this drives the manufacturing tolerance
-   - For air-gapped designs, the gap length is almost always the most sensitive parameter
+5. **設計餘裕與敏感度**：
+   - 算每一關鍵參數（電流、匝數、氣隙、芯磁導率）+/-10% 變動時主指標之變化
+   - 辨最敏感參數——此決定製造公差
+   - 有氣隙之設計，氣隙長度幾乎恆為最敏感之參數
 
 ```markdown
 ## Design Validation
@@ -262,37 +261,37 @@ Verify that the design meets all specifications and is physically realizable:
 | mu_r | [value] | [+/- %] | [Yes/No] |
 ```
 
-**Expected:** All requirements met with documented margins, thermal feasibility confirmed, and the most sensitive design parameter identified.
+**預期：** 諸要求皆達，餘裕有錄，熱可行已驗，最敏感參數已辨。
 
-**On failure:** If a requirement is not met, iterate by adjusting the topology (Step 2), design parameters (Step 3), or loss mitigation strategy (Step 4). If the design is thermally infeasible, consider: reducing the duty cycle, increasing the size (more surface area for cooling), switching to a higher temperature insulation class, or adding active cooling. Document each iteration.
+**失敗時：** 某要求未達時，迭代調形制（步驟二）、設計參數（步驟三）或減損策略（步驟四）。熱上不可行時，考慮：降占空比、增尺寸（多表面積以冷）、換高溫絕緣等級、或加主動冷卻。每次迭代皆錄。
 
-## Validation
+## 驗證
 
-- [ ] All requirements are quantified with numerical values and units
-- [ ] Topology selection is justified and alternatives are documented
-- [ ] Magnetic circuit analysis is complete (reluctances, flux, NI product)
-- [ ] Wire gauge is selected for acceptable current density (3-6 A/mm^2 continuous, higher for intermittent)
-- [ ] Core operates below saturation flux density with margin
-- [ ] All loss mechanisms are quantified (copper, hysteresis, eddy current, mechanical)
-- [ ] Efficiency meets the target specification
-- [ ] Temperature rise is within the insulation class limit
-- [ ] Design fits within the physical envelope
-- [ ] Sensitivity analysis identifies the tightest-tolerance parameter
-- [ ] The design is complete enough for a prototype to be built
+- [ ] 所有要求皆以數值與單位量化
+- [ ] 形制之擇有據，備案有錄
+- [ ] 磁路分析完備（磁阻、磁通、NI 積）
+- [ ] 線徑擇取合宜電流密度（連續 3-6 A/mm^2，間歇更高）
+- [ ] 芯運行低於飽和磁通密度，有餘裕
+- [ ] 所有損耗機制皆量化（銅、磁滯、渦流、機械）
+- [ ] 效率達規格目標
+- [ ] 溫升在絕緣等級限內
+- [ ] 設計入物理包絡
+- [ ] 敏感度分析辨最嚴公差之參數
+- [ ] 設計已備，足以造樣機
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Ignoring magnetic circuit reluctance**: The air gap reluctance dominates in most practical devices (even a 1 mm gap has more reluctance than 100 mm of silicon steel core). Designing without a magnetic circuit model produces devices that perform far below expectations because the gap was not accounted for.
-- **Operating above core saturation**: Above the knee of the B-H curve, incremental permeability drops dramatically. Doubling the current does not double the flux. The device appears to "stop working" above saturation. Always check B_max in the narrowest core cross-section.
-- **Undersizing copper for thermal limits**: Current density limits are thermal limits in disguise. A wire carrying 10 A/mm^2 in free air will overheat within minutes. Continuous-duty designs must stay below 5-6 A/mm^2 unless active cooling is provided.
-- **Neglecting fringing flux at air gaps**: Flux spreads out at an air gap, increasing the effective gap area. For gaps comparable to the core dimension, fringing can increase the effective area by 20-50%. Ignoring fringing underestimates the flux (and overestimates the required NI product).
-- **Using DC resistance at high frequency**: At 10 kHz, the skin depth in copper is about 0.66 mm. Standard magnet wire thicker than 1.3 mm diameter will have significantly higher AC resistance than DC resistance. Use Litz wire or parallel thin strands for high-frequency designs.
-- **Confusing motor constants k_T and k_E units**: The torque constant k_T (N.m/A) and back-EMF constant k_E (V.s/rad) are numerically equal in SI units. However, if k_E is expressed in V/kRPM (common in datasheets), a unit conversion is needed: k_T [N.m/A] = k_E [V/kRPM] * 60 / (2 * pi * 1000).
+- **忽磁路磁阻**：氣隙磁阻於多數實器件中為主（即 1 mm 氣隙之磁阻亦大於 100 mm 矽鋼芯）。無磁路模型之設計所成遠低於預期，因未計氣隙之故。
+- **芯於飽和之上運行**：B-H 曲線拐點之上，增量磁導率驟降。電流倍增不致磁通倍增。器件於飽和之上似「停工」。常驗最窄芯截面處之 B_max。
+- **銅線截面不足以承熱限**：電流密度限即熱限之別名。10 A/mm^2 之線於自由空氣中數分鐘即過熱。連續工作之設計須低於 5-6 A/mm^2，除非有主動冷卻。
+- **忽氣隙邊緣擴散**：磁通於氣隙處向外擴，有效氣隙面積增。氣隙與芯尺寸相當時，邊緣擴散可增有效面積 20-50%。忽之則低估磁通（並高估所需之 NI 積）。
+- **高頻用直流電阻**：10 kHz 時銅中趨膚深度約 0.66 mm。線徑大於 1.3 mm 之標準磁線其 AC 電阻遠大於 DC 電阻。高頻設計用 Litz 線或並聯細線。
+- **混淆電機常數 k_T 與 k_E 之單位**：轉矩常數 k_T（N.m/A）與反電動勢常數 k_E（V.s/rad）於 SI 單位中數值相等。然 k_E 若以 V/kRPM 表（數據表常用），須換算：k_T [N.m/A] = k_E [V/kRPM] * 60 / (2 * pi * 1000)。
 
-## Related Skills
+## 相關技能
 
-- `analyze-magnetic-field` -- compute the B-field from the designed current distribution for detailed field analysis
-- `solve-electromagnetic-induction` -- analyze the induction principles underlying motors, generators, and transformers
-- `formulate-maxwell-equations` -- full electromagnetic analysis for high-frequency devices, waveguides, and antennas
-- `simulate-cpu-architecture` -- digital control systems that drive modern motor controllers and power electronics
-- `analyze-tensegrity-system` -- structural analysis of tension-compression networks; shares prestress equilibrium methods with electromagnetic force balancing
+- `analyze-magnetic-field` -- 由所設電流分佈算 B 場以作詳細場分析
+- `solve-electromagnetic-induction` -- 析電機、發電機、變壓器所據之感應原理
+- `formulate-maxwell-equations` -- 高頻器件、波導、天線之全電磁分析
+- `simulate-cpu-architecture` -- 今世電機控制器與電力電子之數位控制系統
+- `analyze-tensegrity-system` -- 張拉-壓縮網絡之結構分析；其預應力平衡法與電磁力平衡相通

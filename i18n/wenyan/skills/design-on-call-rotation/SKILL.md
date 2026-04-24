@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design sustainable on-call rotations with balanced schedules, clear
   escalation policies, fatigue management, and handoff procedures. Minimize
@@ -23,31 +23,31 @@ metadata:
   tags: on-call, rotation, escalation, fatigue-management, handoff
 ---
 
-# Design On-Call Rotation
+# 值班輪替之設
 
-Create a sustainable on-call schedule that balances coverage with engineer well-being.
+立可久之值班表：排班衡平、升級明晰、防疲有節、交接有法，俾保事件響應而不疲其人。
 
-## When to Use
+## 用時
 
-- Setting up on-call for the first time
-- Scaling team from 2-3 to 5+ engineers
-- Addressing on-call burnout or alert fatigue
-- Improving incident response times
-- After post-mortem identifies handoff issues
+- 初立值班制
+- 由 2-3 人擴為 5 人以上之隊
+- 解值班過勞或告警疲勞
+- 改事件響應之時
+- 事後復盤指出交接之弊
 
-## Inputs
+## 入
 
-- **Required**: Team size and time zones
-- **Required**: Service SLA requirements (response time, coverage hours)
-- **Optional**: Historical incident volume and timing
-- **Optional**: Budget for on-call compensation
-- **Optional**: Existing on-call tool (PagerDuty, Opsgenie)
+- **必要**：隊之人數與時區
+- **必要**：服務 SLA 之要（響應時、覆蓋時段）
+- **可選**：歷史事件之量與時
+- **可選**：值班補償之預算
+- **可選**：現行值班工具（PagerDuty、Opsgenie）
 
-## Procedure
+## 法
 
-### Step 1: Define Rotation Schedule
+### 第一步：定輪班之表
 
-Choose rotation length based on team size:
+依隊之大小擇輪班之長：
 
 ```markdown
 ## Rotation Models
@@ -77,7 +77,7 @@ Choose rotation length based on team size:
 - **Cons**: Risk of junior burnout
 ```
 
-Example schedule for 5-person team:
+五人隊之表例：
 
 ```
 Week 1: Alice (Primary), Bob (Secondary)
@@ -87,13 +87,13 @@ Week 4: Bob (Primary), Charlie (Secondary)
 Week 5: Diana (Primary), Eve (Secondary)
 ```
 
-**Expected:** Schedule that rotates fairly and provides 24/7 coverage.
+**得：** 班表公轉且給 24/7 之覆蓋。
 
-**On failure:** If coverage gaps exist, add more engineers or reduce SLA to business hours only.
+**敗則：** 覆蓋有缺則增人或縮 SLA 為僅工作時段。
 
-### Step 2: Configure Escalation Policy
+### 第二步：設升級政策
 
-Set up tiered escalation in PagerDuty/Opsgenie:
+於 PagerDuty/Opsgenie 設分級升級：
 
 ```yaml
 # PagerDuty escalation policy (YAML representation)
@@ -122,7 +122,7 @@ escalation_policy:
           id: engineering_manager
 ```
 
-Create escalation flowchart:
+繪升級流程：
 
 ```
 Alert Fires
@@ -140,13 +140,13 @@ Manager Paged
 Repeat cycle (max 3 times)
 ```
 
-**Expected:** Clear escalation path with reasonable delays.
+**得：** 升級之路明，延時合理。
 
-**On failure:** If escalations fire too often, shorten ack windows or check alert quality.
+**敗則：** 升級過頻則縮確認之窗或察告警質量。
 
-### Step 3: Define Handoff Procedure
+### 第三步：定交接之法
 
-Create a structured handoff checklist:
+書結構化交接表：
 
 ```markdown
 ## On-Call Handoff Checklist
@@ -172,7 +172,7 @@ Create a structured handoff checklist:
 - Questions and clarifications
 ```
 
-Automate handoff reminders:
+自動化交接提醒：
 
 ```bash
 # Slack reminder script
@@ -185,13 +185,13 @@ curl -X POST https://slack.com/api/chat.postMessage \
   }'
 ```
 
-**Expected:** Smooth knowledge transfer, no information loss between shifts.
+**得：** 知識傳遞順暢，班次之間無信息流失。
 
-**On failure:** If incidents recur because incoming engineer didn't know about workarounds, make handoff mandatory.
+**敗則：** 因交接不足而事件復發則令交接為必行之程。
 
-### Step 4: Implement Fatigue Management
+### 第四步：施疲勞管理
 
-Set rules to prevent burnout:
+立規以防過勞：
 
 ```markdown
 ## Fatigue Prevention Rules
@@ -220,7 +220,7 @@ Set rules to prevent burnout:
 - **Swap**: Coordinate swap with team, update schedule
 ```
 
-Track alert fatigue metrics:
+追告警疲勞之指標：
 
 ```promql
 # Alerts per on-call engineer per week
@@ -233,13 +233,13 @@ count(ALERTS{alertstate="firing", hour_of_day>=22 or hour_of_day<6})
 histogram_quantile(0.95, rate(alert_ack_duration_seconds_bucket[7d]))
 ```
 
-**Expected:** On-call load is sustainable, engineers not chronically exhausted.
+**得：** 值班負荷可久，工程師不陷長久之疲。
 
-**On failure:** If burnout occurs despite rules, reduce alert volume or hire more engineers.
+**敗則：** 雖立規仍過勞則減告警之量或增人。
 
-### Step 5: Document Runbooks and Escalation Contacts
+### 第五步：書運行手冊與升級聯繫
 
-Create an on-call reference guide:
+作值班速查指南：
 
 ```markdown
 # On-Call Quick Reference
@@ -269,13 +269,13 @@ Create an on-call reference guide:
 - **Security Incident**: Immediately escalate to Security Team, don't investigate alone
 ```
 
-**Expected:** On-call engineer can find any needed information in <2 minutes.
+**得：** 值班者於二分鐘內可得所需之信息。
 
-**On failure:** If engineers repeatedly ask "where is X?", centralize documentation.
+**敗則：** 工程師屢問「某處何在」則集中文檔。
 
-### Step 6: Schedule Regular On-Call Retrospectives
+### 第六步：定期行值班復盤
 
-Review on-call experience monthly:
+月察值班之驗：
 
 ```markdown
 ## On-Call Retrospective Agenda (Monthly)
@@ -303,7 +303,7 @@ Review on-call experience monthly:
 - Share learnings from interesting incidents
 ```
 
-Track improvement over time:
+時追改善：
 
 ```bash
 # Generate monthly on-call report
@@ -327,29 +327,29 @@ cat > oncall_report_2025-02.md <<EOF
 EOF
 ```
 
-**Expected:** On-call experience improves month-over-month, alert volume decreases.
+**得：** 值班之驗月月見進，告警之量漸減。
 
-**On failure:** If metrics don't improve, escalate to leadership. May need to pause feature work to fix operational issues.
+**敗則：** 指標不進則上報於領導。或須暫停新功能之工以修運維之弊。
 
-## Validation
+## 驗
 
-- [ ] Rotation schedule covers all required hours (24/7 or business hours)
-- [ ] Escalation policy tested (send test alerts)
-- [ ] Handoff procedure documented and shared with team
-- [ ] Fatigue management rules codified
-- [ ] On-call reference guide complete and accessible
-- [ ] Monthly retrospectives scheduled
-- [ ] On-call compensation approved (if applicable)
+- [ ] 輪班表覆所需之時段（24/7 或工作時段）
+- [ ] 升級政策已測（發測試告警）
+- [ ] 交接程式已書且共享於隊
+- [ ] 疲勞管理規則已定
+- [ ] 值班速查指南已全且可訪
+- [ ] 月度復盤已排期
+- [ ] 值班補償已核准（若適）
 
-## Common Pitfalls
+## 陷
 
-- **Too few engineers**: 3 or fewer means on-call every 2-3 weeks, unsustainable. Minimum 5 for weekly rotation.
-- **No escalation delays**: Immediate manager escalation wastes senior time. Give primary 15 minutes to respond.
-- **Skipping handoffs**: Lack of context transfer leads to repeated mistakes. Make handoffs mandatory.
-- **Ignoring alert fatigue**: If engineers ignore alerts due to noise, critical issues get missed. Tune aggressively.
-- **No compensation**: On-call without pay or time off breeds resentment. Budget for it.
+- **人過少**：三人以下即每二三週一值，不可久。週輪最少五人
+- **無升級延時**：立刻升至經理費其時。先與主班十五分鐘以應
+- **略交接**：知識不傳致錯誤復發。交接宜為必行
+- **略告警疲勞**：工程師因噪而略告警則要事遺漏。宜嚴整調
+- **無補償**：值班無酬或無調休生怨。宜預此算
 
-## Related Skills
+## 參
 
-- `configure-alerting-rules` - reduce alert noise that causes fatigue
-- `write-incident-runbook` - create runbooks referenced during on-call shifts
+- `configure-alerting-rules` — 減告警之噪以除疲勞
+- `write-incident-runbook` — 書值班時所引之運行手冊

@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design serialization schemas using JSON Schema, Protocol Buffer definitions,
   or Apache Avro. Covers schema versioning, backwards compatibility, validation
@@ -26,42 +26,42 @@ metadata:
 
 # Design Serialization Schema
 
-Create well-versioned serialization schemas that evolve gracefully without breaking consumers.
+Versioned schemas → evolve w/o breaking consumers.
 
-## When to Use
+## Use When
 
-- Defining a new API contract or data interchange format
-- Adding fields to an existing schema without breaking consumers
-- Migrating between schema versions
-- Choosing between schema systems (JSON Schema, Protobuf, Avro)
-- Documenting data validation rules for automated enforcement
+- New API contract / data format
+- Add fields w/o break consumers
+- Migrate schema versions
+- Pick schema sys (JSON Schema, Protobuf, Avro)
+- Doc valid. rules → auto-enforce
 
-## Inputs
+## In
 
-- **Required**: Data model (entity relationships, field types, constraints)
-- **Required**: Compatibility requirements (who consumes this data, how long must old formats be readable)
-- **Optional**: Existing schema to evolve
-- **Optional**: Performance requirements (validation speed, schema registry integration)
-- **Optional**: Target serialization format (JSON, binary, columnar)
+- **Required**: Data model (entities, types, constraints)
+- **Required**: Compat reqs (consumers, old format lifetime)
+- **Optional**: Existing schema → evolve
+- **Optional**: Perf reqs (valid. speed, registry)
+- **Optional**: Target format (JSON, binary, columnar)
 
-## Procedure
+## Do
 
-### Step 1: Choose a Schema System
+### Step 1: Pick Schema Sys
 
-| System | Format | Strengths | Best For |
-|--------|--------|-----------|----------|
-| JSON Schema | JSON | Widely supported, flexible validation | REST APIs, config validation |
-| Protocol Buffers | Binary | Compact, fast, strong typing, built-in evolution | gRPC, microservices |
-| Apache Avro | Binary/JSON | Schema in data, excellent evolution support | Kafka, data pipelines |
-| XML Schema (XSD) | XML | Comprehensive typing, namespace support | Enterprise/legacy SOAP |
-| TypeBox/Zod | TypeScript | Type inference, runtime validation | TypeScript APIs |
+| Sys | Format | Strength | Best |
+|-----|--------|----------|------|
+| JSON Schema | JSON | Broad support, flex valid. | REST, config |
+| Protocol Buffers | Binary | Compact, fast, typed, evo built-in | gRPC, micro |
+| Apache Avro | Binary/JSON | Schema in data, great evo | Kafka, pipelines |
+| XML Schema (XSD) | XML | Deep typing, namespaces | Enterprise/SOAP |
+| TypeBox/Zod | TypeScript | Type inference + runtime valid. | TS APIs |
 
-**Expected:** Schema system selected based on ecosystem, performance needs, and evolution requirements.
-**On failure:** If uncertain, start with JSON Schema — it has the broadest tooling support and can be layered onto existing JSON APIs.
+→ Schema sys picked → ecosystem + perf + evo reqs.
+If err: unsure → start JSON Schema (broadest tooling, layers on JSON APIs).
 
-### Step 2: Design the Core Schema
+### Step 2: Core Schema
 
-#### JSON Schema example:
+#### JSON Schema ex:
 
 ```json
 {
@@ -101,7 +101,7 @@ Create well-versioned serialization schemas that evolve gracefully without break
 }
 ```
 
-#### Protocol Buffers example:
+#### Protocol Buffers ex:
 
 ```protobuf
 syntax = "proto3";
@@ -128,7 +128,7 @@ enum Unit {
 }
 ```
 
-#### Apache Avro example:
+#### Apache Avro ex:
 
 ```json
 {
@@ -146,31 +146,31 @@ enum Unit {
 }
 ```
 
-**Expected:** Schema is self-documenting with descriptions, constraints, and clear type definitions.
-**On failure:** If the data model is not yet stable, mark the schema as `draft` and avoid publishing to a registry.
+→ Schema self-doc → descriptions + constraints + clear types.
+If err: data model unstable → mark `draft`, skip registry.
 
-### Step 3: Plan for Schema Evolution
+### Step 3: Plan Evolution
 
-Compatibility rules:
+Compat rules:
 
-| Change | Backwards Compatible? | Forwards Compatible? | Safe? |
-|--------|----------------------|---------------------|-------|
+| Change | Back Compat? | Fwd Compat? | Safe? |
+|--------|--------------|-------------|-------|
 | Add optional field | Yes | Yes | Yes |
-| Add required field | No | Yes | No (breaks existing consumers) |
+| Add required field | No | Yes | No (breaks consumers) |
 | Remove optional field | Yes | No | Careful (producers may still send) |
 | Remove required field | Yes | No | Careful |
-| Rename a field | No | No | No (use alias + deprecation) |
-| Change field type | No | No | No (add new field, deprecate old) |
-| Add enum value | Yes (if consumers ignore unknown) | No | Depends on implementation |
+| Rename field | No | No | No (use alias + deprecate) |
+| Change field type | No | No | No (add new, deprecate old) |
+| Add enum value | Yes (if consumers ignore unknown) | No | Depends on impl |
 | Remove enum value | No | Yes | No |
 
-Safe evolution strategy:
-1. **Only add optional fields** with sensible defaults
-2. **Never remove or rename** — deprecate instead
-3. **Version the schema** in the identifier (`v1`, `v2`)
-4. **Use a schema registry** for binary formats (Confluent Schema Registry for Avro/Protobuf)
+Safe evo:
+1. **Only add optional fields** w/ defaults
+2. **Never remove/rename** → deprecate
+3. **Version schema** in id (`v1`, `v2`)
+4. **Schema registry** for binary (Confluent for Avro/Protobuf)
 
-#### Protobuf evolution rules:
+#### Protobuf evo rules:
 ```protobuf
 // v1 — original
 message Measurement {
@@ -210,10 +210,10 @@ message Measurement {
 }
 ```
 
-**Expected:** Evolution plan documented: which changes are safe, which require new versions.
-**On failure:** If a breaking change is unavoidable, version the schema (v1 → v2) and maintain parallel support during migration.
+→ Evo plan documented: safe changes + version reqs.
+If err: break unavoidable → version (v1 → v2), parallel support during migration.
 
-### Step 4: Implement Schema Validation
+### Step 4: Implement Valid.
 
 ```python
 # JSON Schema validation (Python)
@@ -257,12 +257,12 @@ if (!result.success) {
 }
 ```
 
-**Expected:** Validation runs on all incoming data at system boundaries (API endpoints, file ingestion).
-**On failure:** Log validation errors with the full payload (redacting sensitive fields) for debugging.
+→ Valid. on all incoming data at boundaries (API, ingestion).
+If err: log valid. errs w/ full payload (redact sensitive) for debug.
 
-### Step 5: Document the Schema
+### Step 5: Doc Schema
 
-Create a schema documentation page:
+Schema doc page:
 
 ```markdown
 # Measurement Schema (v1)
@@ -289,29 +289,29 @@ Represents a single sensor reading with metadata.
 - **Policy**: Only additive, optional field changes between minor versions
 ```
 
-**Expected:** Documentation is auto-generated or stays in sync with the schema definition.
-**On failure:** If docs drift from schema, add a CI check that validates docs against the schema source.
+→ Docs auto-gen or in sync w/ schema.
+If err: docs drift → CI check valid. docs vs schema source.
 
-## Validation
+## Check
 
-- [ ] Schema uses appropriate system for the use case (JSON Schema, Protobuf, Avro)
-- [ ] All fields have types, descriptions, and constraints
-- [ ] Required vs optional fields are explicitly defined
-- [ ] Evolution strategy documented (safe changes, versioning policy)
-- [ ] Validation implemented at system boundaries
-- [ ] Schema is versioned with a changelog
-- [ ] Round-trip test: serialize → deserialize → compare confirms no data loss
+- [ ] Schema sys matches use case (JSON Schema, Protobuf, Avro)
+- [ ] All fields: types + desc + constraints
+- [ ] Required vs optional explicit
+- [ ] Evo strategy documented (safe changes, versioning)
+- [ ] Valid. at boundaries
+- [ ] Versioned + changelog
+- [ ] Round-trip: serialize → deserialize → compare, no data loss
 
-## Common Pitfalls
+## Traps
 
-- **Over-constraining too early**: Strict validation on a new schema blocks iteration. Start permissive (`additionalProperties: true`), tighten later.
-- **No default values**: Adding a required field without a default breaks all existing data. Always provide defaults for new fields.
-- **Ignoring null**: Many schemas don't handle null/missing fields clearly. Be explicit about nullable vs optional.
-- **Version in the payload, not the URL**: For long-lived data (storage, events), embed the schema version in the data itself, not just the endpoint URL.
-- **Enum exhaustiveness**: Adding a new enum value can crash consumers that use exhaustive switch statements. Document that unknown values should be handled gracefully.
+- **Over-constrain early**: Strict valid. on new schema → blocks iteration. Start permissive (`additionalProperties: true`), tighten later.
+- **No defaults**: Add required field w/o default → breaks existing data. Always defaults for new fields.
+- **Null ignored**: Many schemas sloppy on null/missing. Explicit nullable vs optional.
+- **Version in URL not payload**: Long-lived data (storage, events) → embed ver in data, not just endpoint URL.
+- **Enum exhaustive**: New enum val crashes consumers w/ exhaustive switches. Doc unknown → handle gracefully.
 
-## Related Skills
+## →
 
-- `serialize-data-formats` — format selection and encoding/decoding implementation
-- `implement-pharma-serialisation` — pharmaceutical serialisation (regulatory schemas)
-- `write-validation-documentation` — validation documentation for regulated schemas
+- `serialize-data-formats` — format pick + encode/decode
+- `implement-pharma-serialisation` — pharma (regulatory schemas)
+- `write-validation-documentation` — valid. docs for regulated schemas

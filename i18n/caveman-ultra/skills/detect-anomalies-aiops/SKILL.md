@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement AI-powered anomaly detection for operational metrics using time series analysis
   (Isolation Forest, Prophet, LSTM), alert correlation, and root cause analysis. Reduce
@@ -28,32 +28,32 @@ metadata:
 
 > See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
 
-Apply machine learning to detect anomalies in operational metrics, correlate alerts, and reduce false positives.
+ML → anomalies in ops metrics + alert correlation + cut false positives.
 
-## When to Use
+## Use When
 
-- Operations team overwhelmed by alert volume (>100 alerts/day)
-- Need to detect complex multi-metric anomalies (not just threshold breaches)
-- Seasonal patterns make static thresholds ineffective
-- Want to predict issues before they impact users (proactive detection)
-- Need to correlate related alerts to identify root cause
-- Monitoring system generates too many false positives
-- Want to detect subtle performance degradation trends
+- Ops team drowns in alerts (>100/day)
+- Multi-metric anomalies (not just threshold)
+- Seasonal patterns → static thresholds fail
+- Predict issues before user impact
+- Correlate alerts → root cause
+- Monitoring → too many false positives
+- Subtle perf degradation trends
 
-## Inputs
+## In
 
-- **Required**: Time series metrics from monitoring system (CPU, memory, latency, error rate)
-- **Required**: Historical data (30-90 days minimum)
-- **Optional**: Alert history with labels (true positive / false positive)
-- **Optional**: System topology (service dependencies)
-- **Optional**: Log data for correlation
-- **Optional**: Deployment/change events for context
+- **Required**: Time series metrics (CPU, mem, latency, err rate)
+- **Required**: Historical data (30-90 days min)
+- **Optional**: Alert history w/ labels (TP/FP)
+- **Optional**: Sys topology (svc deps)
+- **Optional**: Logs → correlation
+- **Optional**: Deploy/change events → context
 
-## Procedure
+## Do
 
-### Step 1: Set Up Environment and Load Data
+### Step 1: Env + Load Data
 
-Install dependencies and prepare time series data for analysis.
+Install deps + prep time series.
 
 ```bash
 # Create virtual environment
@@ -71,7 +71,7 @@ pip install prometheus-api-client  # if using Prometheus
 pip install plotly matplotlib seaborn
 ```
 
-Load and prepare data:
+Load + prep:
 
 ```python
 # aiops/data_loader.py
@@ -85,13 +85,13 @@ logging.basicConfig(level=logging.INFO)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Time series data loaded with regular intervals, missing values handled, features engineered for ML models.
+→ Time series loaded w/ regular intervals, missing vals handled, features engineered.
 
-**On failure:** If Prometheus connection fails, verify URL and network access, if data gaps exist use forward-fill or interpolation, ensure timestamp column is datetime type, check for memory issues with large date ranges (process in chunks).
+If err: Prometheus conn fails → verify URL + net. Data gaps → forward-fill or interpolate. Ensure ts col is datetime. Mem issues on large ranges → chunks.
 
-### Step 2: Implement Isolation Forest for Multivariate Anomaly Detection
+### Step 2: Isolation Forest (Multivariate)
 
-Detect anomalies using unsupervised Isolation Forest algorithm.
+Unsupervised Isolation Forest.
 
 ```python
 # aiops/isolation_forest_detector.py
@@ -105,13 +105,13 @@ import joblib
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model trained on historical data, anomalies detected with scores, typically 0.5-2% of points flagged as anomalies.
+→ Model trained on history, anomalies scored, typically 0.5-2% flagged.
 
-**On failure:** If too many anomalies (>5%), reduce contamination parameter or retrain on cleaner baseline period, if too few (<0.1%), increase contamination or check feature scaling, verify features have sufficient variance.
+If err: too many (>5%) → reduce contamination or retrain on cleaner baseline. Too few (<0.1%) → increase contamination or check scaling. Verify features have variance.
 
-### Step 3: Implement Prophet for Time Series Forecasting and Anomaly Detection
+### Step 3: Prophet (Forecast + Anomaly)
 
-Use Facebook Prophet to model seasonality and detect deviations.
+Facebook Prophet → seasonality + deviations.
 
 ```python
 # aiops/prophet_detector.py
@@ -125,13 +125,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prophet models capture daily/weekly seasonality, anomalies detected when actual values fall outside 99% confidence interval, forecasts generated for capacity planning.
+→ Prophet captures daily/weekly seasonality, anomalies when actuals fall outside 99% CI, forecasts for capacity planning.
 
-**On failure:** If Prophet takes too long (>5 min per metric), reduce history to 30 days or disable weekly_seasonality, if too many false positives increase interval_width to 0.995, if missing seasonal patterns add custom seasonalities, ensure timezone consistency in timestamps.
+If err: too slow (>5 min/metric) → reduce history to 30 days or disable weekly_seasonality. Too many FP → interval_width to 0.995. Missing seasonal → custom seasonalities. TZ consistency in ts.
 
-### Step 4: Correlate Alerts and Identify Root Cause
+### Step 4: Correlate Alerts + Root Cause
 
-Group related anomalies and identify potential root causes.
+Group related anomalies, find causes.
 
 ```python
 # aiops/alert_correlation.py
@@ -145,13 +145,13 @@ import networkx as nx
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Related anomalies grouped into incidents, root causes identified based on dependency graph, incident summaries generated for investigation.
+→ Related anomalies → incidents, root causes via dep graph, incident summaries.
 
-**On failure:** If all anomalies separate incidents, increase time_window_minutes, if root cause detection unclear define metric_relationships explicitly based on architecture, verify timestamp sorting is correct.
+If err: all anomalies as separate → increase time_window_minutes. Root cause unclear → define metric_relationships per architecture. Verify ts sort.
 
-### Step 5: Integrate with Alerting System
+### Step 5: Integrate w/ Alerting
 
-Send intelligent alerts with context and suppression of noise.
+Smart alerts + noise suppress.
 
 ```python
 # aiops/intelligent_alerting.py
@@ -165,13 +165,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** High-severity incidents trigger PagerDuty pages, medium-severity go to Slack, low-severity logged only, duplicate alerts suppressed within 15-minute window.
+→ High sev → PagerDuty, med → Slack, low → log only, dupes suppressed in 15-min window.
 
-**On failure:** Test webhook URLs with curl first, verify severity calculation produces reasonable values (0.5-0.9 range), check rate limiting doesn't suppress all alerts, ensure timezone handling is correct for last_alerts tracking.
+If err: test webhook w/ curl first. Verify severity (0.5-0.9 range). Check rate limit doesn't suppress all. TZ handling for last_alerts.
 
-### Step 6: Deploy as Continuous Monitoring Service
+### Step 6: Deploy as Continuous Svc
 
-Set up automated pipeline that runs periodically.
+Auto pipeline on interval.
 
 ```python
 # aiops/monitoring_service.py
@@ -185,37 +185,37 @@ from prophet_detector import ProphetAnomalyDetector
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Service runs continuously, detects anomalies every 5 minutes, alerts sent for incidents, logs all activity.
+→ Svc runs continuous, detects every 5 min, alerts on incidents, logs all.
 
-**On failure:** Verify scheduler process stays alive (use systemd/supervisor for production), check Prometheus connectivity, ensure models are loaded successfully, implement dead man's switch alert if service stops running, monitor memory usage (reload models periodically if memory grows).
+If err: scheduler process alive (systemd/supervisor in prod). Verify Prometheus conn. Models loaded OK. Dead man's switch if svc stops. Monitor mem (reload models periodically if grows).
 
-## Validation
+## Check
 
-- [ ] Historical data loaded correctly with no missing timestamps
-- [ ] Isolation Forest detects known anomalies from test set
-- [ ] Prophet models capture daily/weekly seasonality in visualizations
-- [ ] Alert correlation groups temporally-related anomalies
-- [ ] Root cause detection identifies upstream issues correctly
-- [ ] Intelligent alerting suppresses duplicate alerts
-- [ ] Severity calculation produces reasonable scores (0.5-0.9)
-- [ ] Monitoring service runs continuously without crashes for 7+ days
-- [ ] False positive rate < 10% (validated against labeled data)
-- [ ] True positive rate > 80% for critical incidents
+- [ ] History loaded w/ no missing ts
+- [ ] Isolation Forest → known anomalies from test set
+- [ ] Prophet captures daily/weekly seasonality
+- [ ] Alert correlation groups time-related anomalies
+- [ ] Root cause → upstream issues correct
+- [ ] Smart alerting suppresses dupes
+- [ ] Severity scores (0.5-0.9)
+- [ ] Svc runs 7+ days no crash
+- [ ] FP rate <10% (labeled data)
+- [ ] TP rate >80% (critical incidents)
 
-## Common Pitfalls
+## Traps
 
-- **Training on anomalous data**: Ensure baseline period used for training is clean (no incidents); manually review or use labeled data
-- **Ignoring seasonality**: Static models fail on daily/weekly patterns; use Prophet or add time features
-- **Too sensitive thresholds**: 99% confidence intervals may flag normal peaks; start with 99.5% and tune based on false positives
-- **Not handling missing data**: Gaps in metrics cause model errors; implement robust preprocessing with interpolation
-- **Alert fatigue from low severity**: Filter alerts below severity threshold; focus on high-confidence anomalies
-- **Ignoring system topology**: Treating all metrics independently misses cascading failures; define dependency relationships
-- **Model drift**: Models trained on old data become stale; retrain monthly or when system changes
-- **Resource contention**: Running detection on every metric is expensive; prioritize critical services or sample metrics
+- **Train on anomaly data**: Baseline must be clean (no incidents). Manual review or labeled data.
+- **Ignore seasonality**: Static models fail on daily/weekly. Prophet or time features.
+- **Too sensitive**: 99% CI flags normal peaks. Start 99.5% + tune on FP.
+- **Skip missing data**: Gaps → model errors. Robust preprocess + interpolate.
+- **Alert fatigue from low sev**: Filter below threshold. High-conf only.
+- **Ignore topology**: Treating metrics solo misses cascades. Define deps.
+- **Model drift**: Old data → stale. Retrain monthly or on sys changes.
+- **Resource contention**: Detecting every metric costly. Prioritize critical svcs or sample.
 
-## Related Skills
+## →
 
-- `monitor-model-drift` - Detect when anomaly detection models degrade
-- `monitor-data-integrity` - Data quality checks before anomaly detection
-- `setup-prometheus-monitoring` - Collect operational metrics
-- `forecast-operational-metrics` - Capacity planning with Prophet forecasts
+- `monitor-model-drift` — detect when detection models degrade
+- `monitor-data-integrity` — data quality before detection
+- `setup-prometheus-monitoring` — collect ops metrics
+- `forecast-operational-metrics` — capacity planning w/ Prophet

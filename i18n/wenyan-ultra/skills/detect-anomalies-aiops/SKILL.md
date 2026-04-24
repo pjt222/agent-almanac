@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Implement AI-powered anomaly detection for operational metrics using time series analysis
   (Isolation Forest, Prophet, LSTM), alert correlation, and root cause analysis. Reduce
@@ -23,37 +23,36 @@ metadata:
   tags: aiops, anomaly-detection, isolation-forest, prophet, alert-correlation, time-series
 ---
 
-# Detect Anomalies for AIOps
+# AIOps 偵異
 
+> 見 [Extended Examples](references/EXAMPLES.md) 以得全配檔與範。
 
-> See [Extended Examples](references/EXAMPLES.md) for complete configuration files and templates.
+施機學以偵運行指標之異、聯警、減偽陽。
 
-Apply machine learning to detect anomalies in operational metrics, correlate alerts, and reduce false positives.
+## 用
 
-## When to Use
+- 運隊受警量淹（> 100 警／日）
+- 宜偵雜多指標之異（非僅越閾）
+- 季節模致靜閾失效
+- 欲預用者見前之患（主動偵）
+- 宜聯警以識根因
+- 監視生過多偽陽
+- 欲偵微效降之勢
 
-- Operations team overwhelmed by alert volume (>100 alerts/day)
-- Need to detect complex multi-metric anomalies (not just threshold breaches)
-- Seasonal patterns make static thresholds ineffective
-- Want to predict issues before they impact users (proactive detection)
-- Need to correlate related alerts to identify root cause
-- Monitoring system generates too many false positives
-- Want to detect subtle performance degradation trends
+## 入
 
-## Inputs
+- **必**：監視系之時序指標（CPU、記憶、延、錯率）
+- **必**：史數（至少 30-90 日）
+- **可**：有標警史（真／偽陽）
+- **可**：系拓撲（服務依）
+- **可**：聯用之誌
+- **可**：部署／變更事件為脈絡
 
-- **Required**: Time series metrics from monitoring system (CPU, memory, latency, error rate)
-- **Required**: Historical data (30-90 days minimum)
-- **Optional**: Alert history with labels (true positive / false positive)
-- **Optional**: System topology (service dependencies)
-- **Optional**: Log data for correlation
-- **Optional**: Deployment/change events for context
+## 行
 
-## Procedure
+### 一：備境並載數
 
-### Step 1: Set Up Environment and Load Data
-
-Install dependencies and prepare time series data for analysis.
+裝依並備析之時序數。
 
 ```bash
 # Create virtual environment
@@ -71,7 +70,7 @@ pip install prometheus-api-client  # if using Prometheus
 pip install plotly matplotlib seaborn
 ```
 
-Load and prepare data:
+載並備數：
 
 ```python
 # aiops/data_loader.py
@@ -85,13 +84,13 @@ logging.basicConfig(level=logging.INFO)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Time series data loaded with regular intervals, missing values handled, features engineered for ML models.
+得：時序數已載於定隔，缺值已處，特徵已造供機學模。
 
-**On failure:** If Prometheus connection fails, verify URL and network access, if data gaps exist use forward-fill or interpolation, ensure timestamp column is datetime type, check for memory issues with large date ranges (process in chunks).
+敗：Prometheus 連失→驗 URL 及網路。數有隙→前填或插。時戳欄宜為 datetime 類。大域致記憶問題→分塊處。
 
-### Step 2: Implement Isolation Forest for Multivariate Anomaly Detection
+### 二：施 Isolation Forest 以偵多變異常
 
-Detect anomalies using unsupervised Isolation Forest algorithm.
+以無監督 Isolation Forest 算偵異。
 
 ```python
 # aiops/isolation_forest_detector.py
@@ -105,13 +104,13 @@ import joblib
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Model trained on historical data, anomalies detected with scores, typically 0.5-2% of points flagged as anomalies.
+得：模於史數訓，異已偵有分，常 0.5-2% 點標為異。
 
-**On failure:** If too many anomalies (>5%), reduce contamination parameter or retrain on cleaner baseline period, if too few (<0.1%), increase contamination or check feature scaling, verify features have sufficient variance.
+敗：異過多（> 5%）→減 contamination 參或於更淨基線重訓。過少（< 0.1%）→增 contamination 或查特徵縮。驗特徵有足方差。
 
-### Step 3: Implement Prophet for Time Series Forecasting and Anomaly Detection
+### 三：施 Prophet 以時序預並偵異
 
-Use Facebook Prophet to model seasonality and detect deviations.
+用 Facebook Prophet 模季節並偵偏。
 
 ```python
 # aiops/prophet_detector.py
@@ -125,13 +124,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Prophet models capture daily/weekly seasonality, anomalies detected when actual values fall outside 99% confidence interval, forecasts generated for capacity planning.
+得：Prophet 模捕日／週季節，實值落 99% 信域外則偵為異，預以備容量計。
 
-**On failure:** If Prophet takes too long (>5 min per metric), reduce history to 30 days or disable weekly_seasonality, if too many false positives increase interval_width to 0.995, if missing seasonal patterns add custom seasonalities, ensure timezone consistency in timestamps.
+敗：Prophet 過慢（每指標 > 5 分）→減史至 30 日或關 weekly_seasonality。偽陽多→增 interval_width 至 0.995。缺季節模→加自定季節。時戳時區宜一致。
 
-### Step 4: Correlate Alerts and Identify Root Cause
+### 四：聯警並識根因
 
-Group related anomalies and identify potential root causes.
+組相關異並識可能根因。
 
 ```python
 # aiops/alert_correlation.py
@@ -145,13 +144,13 @@ import networkx as nx
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Related anomalies grouped into incidents, root causes identified based on dependency graph, incident summaries generated for investigation.
+得：相關異組為事件，根因由依圖識，事件摘為察。
 
-**On failure:** If all anomalies separate incidents, increase time_window_minutes, if root cause detection unclear define metric_relationships explicitly based on architecture, verify timestamp sorting is correct.
+敗：諸異各為獨事→增 time_window_minutes。根因不明→依架明定 metric_relationships。驗時戳序正。
 
-### Step 5: Integrate with Alerting System
+### 五：整合警系
 
-Send intelligent alerts with context and suppression of noise.
+送含脈絡之智警，抑噪。
 
 ```python
 # aiops/intelligent_alerting.py
@@ -165,13 +164,13 @@ logger = logging.getLogger(__name__)
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** High-severity incidents trigger PagerDuty pages, medium-severity go to Slack, low-severity logged only, duplicate alerts suppressed within 15-minute window.
+得：高危事件發 PagerDuty 呼，中危至 Slack，低危僅誌，15 分窗內抑重。
 
-**On failure:** Test webhook URLs with curl first, verify severity calculation produces reasonable values (0.5-0.9 range), check rate limiting doesn't suppress all alerts, ensure timezone handling is correct for last_alerts tracking.
+敗：先以 curl 試 webhook URL。驗危度算之值合理（0.5-0.9）。查速限勿抑諸警。last_alerts 之時區處宜正。
 
-### Step 6: Deploy as Continuous Monitoring Service
+### 六：部為持續監服
 
-Set up automated pipeline that runs periodically.
+設動管定期運。
 
 ```python
 # aiops/monitoring_service.py
@@ -185,37 +184,37 @@ from prophet_detector import ProphetAnomalyDetector
 # ... (see EXAMPLES.md for complete implementation)
 ```
 
-**Expected:** Service runs continuously, detects anomalies every 5 minutes, alerts sent for incidents, logs all activity.
+得：服持運，每 5 分偵異，警發於事，諸動皆誌。
 
-**On failure:** Verify scheduler process stays alive (use systemd/supervisor for production), check Prometheus connectivity, ensure models are loaded successfully, implement dead man's switch alert if service stops running, monitor memory usage (reload models periodically if memory grows).
+敗：排程程序宜存（生產用 systemd/supervisor）。查 Prometheus 連。驗模載成。設 dead man's switch 警若服停。察記憶用（記長則定期重載模）。
 
-## Validation
+## 驗
 
-- [ ] Historical data loaded correctly with no missing timestamps
-- [ ] Isolation Forest detects known anomalies from test set
-- [ ] Prophet models capture daily/weekly seasonality in visualizations
-- [ ] Alert correlation groups temporally-related anomalies
-- [ ] Root cause detection identifies upstream issues correctly
-- [ ] Intelligent alerting suppresses duplicate alerts
-- [ ] Severity calculation produces reasonable scores (0.5-0.9)
-- [ ] Monitoring service runs continuously without crashes for 7+ days
-- [ ] False positive rate < 10% (validated against labeled data)
-- [ ] True positive rate > 80% for critical incidents
+- [ ] 史數載正無缺時戳
+- [ ] Isolation Forest 偵測集已知異
+- [ ] Prophet 模於圖捕日／週季節
+- [ ] 警聯組時聯之異
+- [ ] 根因偵識上游患
+- [ ] 智警抑重警
+- [ ] 危度算出合理分（0.5-0.9）
+- [ ] 監服持運 7+ 日無崩
+- [ ] 偽陽率 < 10%（對已標數驗）
+- [ ] 關鍵事件真陽率 > 80%
 
-## Common Pitfalls
+## 忌
 
-- **Training on anomalous data**: Ensure baseline period used for training is clean (no incidents); manually review or use labeled data
-- **Ignoring seasonality**: Static models fail on daily/weekly patterns; use Prophet or add time features
-- **Too sensitive thresholds**: 99% confidence intervals may flag normal peaks; start with 99.5% and tune based on false positives
-- **Not handling missing data**: Gaps in metrics cause model errors; implement robust preprocessing with interpolation
-- **Alert fatigue from low severity**: Filter alerts below severity threshold; focus on high-confidence anomalies
-- **Ignoring system topology**: Treating all metrics independently misses cascading failures; define dependency relationships
-- **Model drift**: Models trained on old data become stale; retrain monthly or when system changes
-- **Resource contention**: Running detection on every metric is expensive; prioritize critical services or sample metrics
+- **訓於含異之數**：基線訓期宜淨（無事件）→人查或用有標數
+- **略季節**：靜模敗於日／週模→用 Prophet 或加時特
+- **閾過敏**：99% 信域可標常峰→始 99.5% 依偽陽調
+- **未處缺**：指標隙致模誤→固前處含插
+- **低危致警疲**：過濾危度下限→重高信異
+- **略系拓撲**：獨立視諸指標失連鎖敗→定依關係
+- **模漂**：舊訓模陳→月重訓或系變時
+- **資源爭**：每指標偵昂→先關鍵服或採樣
 
-## Related Skills
+## 參
 
-- `monitor-model-drift` - Detect when anomaly detection models degrade
-- `monitor-data-integrity` - Data quality checks before anomaly detection
-- `setup-prometheus-monitoring` - Collect operational metrics
-- `forecast-operational-metrics` - Capacity planning with Prophet forecasts
+- `monitor-model-drift`
+- `monitor-data-integrity`
+- `setup-prometheus-monitoring`
+- `forecast-operational-metrics`

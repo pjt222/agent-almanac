@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design Shiny application UIs using bslib for theming, layout_columns
   for responsive grids, value boxes, cards, and custom CSS/SCSS.
@@ -25,29 +25,29 @@ metadata:
 
 # Design Shiny UI
 
-Design responsive, accessible Shiny application interfaces using bslib theming, modern layout primitives, and custom CSS.
+Responsive, accessible Shiny UI. bslib theming, modern layout primitives, custom CSS.
 
-## When to Use
+## When Use
 
-- Building a new Shiny app UI from scratch
-- Modernizing an existing Shiny app from fluidPage to bslib
-- Applying brand theming (colors, fonts) to a Shiny app
-- Making a Shiny app responsive across screen sizes
-- Improving accessibility of a Shiny application
+- Build new Shiny app UI from scratch
+- Modernize existing Shiny app: fluidPage → bslib
+- Apply brand theming (colors, fonts) to Shiny app
+- Make Shiny app responsive across screen sizes
+- Improve accessibility
 
 ## Inputs
 
-- **Required**: Application purpose and target audience
+- **Required**: App purpose + target audience
 - **Required**: Layout type (sidebar, navbar, fillable, dashboard)
-- **Optional**: Brand colors and fonts
-- **Optional**: Whether to use custom CSS/SCSS (default: bslib only)
-- **Optional**: Accessibility requirements (WCAG level)
+- **Optional**: Brand colors + fonts
+- **Optional**: Use custom CSS/SCSS? (default: bslib only)
+- **Optional**: Accessibility needs (WCAG level)
 
-## Procedure
+## Steps
 
-### Step 1: Choose the Page Layout
+### Step 1: Pick Page Layout
 
-bslib provides several page constructors:
+bslib has several page constructors:
 
 ```r
 # Sidebar layout — most common for data apps
@@ -91,11 +91,11 @@ ui <- page_sidebar(
 )
 ```
 
-**Expected:** Page layout matches the application's navigation and content needs.
+**Got:** Page layout matches app's navigation + content needs.
 
-**On failure:** If the layout doesn't look right, check that you're using `page_sidebar()` / `page_navbar()` (bslib) not `fluidPage()` / `navbarPage()` (base shiny). The bslib versions have better defaults and theming support.
+**If fail:** Layout wrong? Check you use `page_sidebar()` / `page_navbar()` (bslib), not `fluidPage()` / `navbarPage()` (base shiny). bslib has better defaults + theming.
 
-### Step 2: Configure the bslib Theme
+### Step 2: Config bslib Theme
 
 ```r
 my_theme <- bslib::bs_theme(
@@ -122,17 +122,17 @@ ui <- page_sidebar(
 )
 ```
 
-Use the interactive theme editor during development:
+Use interactive theme editor during dev:
 
 ```r
 bslib::bs_theme_preview(my_theme)
 ```
 
-**Expected:** App renders with consistent brand colors, fonts, and Bootstrap 5 components.
+**Got:** App renders with consistent brand colors, fonts, Bootstrap 5 components.
 
-**On failure:** If fonts don't load, check internet access (Google Fonts requires it) or switch to system fonts: `font_collection("system-ui", "-apple-system", "Segoe UI")`. If theme variables don't apply, check that you're passing `theme` to the page function.
+**If fail:** Fonts don't load? Check internet (Google Fonts needs it) or switch to system fonts: `font_collection("system-ui", "-apple-system", "Segoe UI")`. Theme vars don't apply? Check `theme` is passed to page func.
 
-### Step 3: Build the Layout with Cards and Columns
+### Step 3: Build Layout with Cards + Columns
 
 ```r
 ui <- page_sidebar(
@@ -189,16 +189,16 @@ ui <- page_sidebar(
 
 Key layout primitives:
 - `layout_columns()` — responsive grid with `col_widths`
-- `card()` — content container with optional header/footer
-- `value_box()` — KPI display with icon and theme
-- `layout_sidebar()` — nested sidebar within cards
+- `card()` — content container, optional header/footer
+- `value_box()` — KPI display, icon + theme
+- `layout_sidebar()` — nested sidebar inside cards
 - `navset_card_tab()` — tabbed cards
 
-**Expected:** Responsive grid layout that adapts to screen size.
+**Got:** Responsive grid adapts to screen size.
 
-**On failure:** If columns stack unexpectedly on wide screens, check `col_widths` sum equals 12 (Bootstrap grid). If cards overlap, ensure `fill = FALSE` on non-filling rows.
+**If fail:** Columns stack odd on wide screens? `col_widths` sum must = 12 (Bootstrap grid). Cards overlap? Set `fill = FALSE` on non-filling rows.
 
-### Step 4: Add Dynamic UI Elements
+### Step 4: Add Dynamic UI
 
 ```r
 server <- function(input, output, session) {
@@ -230,13 +230,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** UI elements update dynamically based on user selections and data.
+**Got:** UI updates dynamically from user selections + data.
 
-**On failure:** If dynamic UI flickers, use `conditionalPanel()` (CSS-based) instead of `renderUI()` where possible. If dynamic inputs lose their values on re-render, add `session$sendInputMessage()` to restore state.
+**If fail:** Dynamic UI flickers? Use `conditionalPanel()` (CSS-based) not `renderUI()` where possible. Dynamic inputs lose values on re-render? Add `session$sendInputMessage()` to restore state.
 
-### Step 5: Add Custom CSS/SCSS (Optional)
+### Step 5: Custom CSS/SCSS (Optional)
 
-For styles beyond bslib theme variables:
+For styles beyond bslib theme vars:
 
 ```r
 # Inline CSS
@@ -258,16 +258,16 @@ ui <- page_sidebar(
 )
 ```
 
-For SCSS integration with bslib:
+SCSS integration with bslib:
 
 ```r
 my_theme <- bslib::bs_theme(version = 5) |>
   bslib::bs_add_rules(sass::sass_file("www/custom.scss"))
 ```
 
-**Expected:** Custom styles applied without breaking bslib theming.
+**Got:** Custom styles applied. bslib theming not broken.
 
-**On failure:** If custom CSS conflicts with bslib, use Bootstrap CSS variables (`var(--bs-primary)`) instead of hardcoded colors. This ensures theme changes propagate to custom styles.
+**If fail:** Custom CSS conflicts with bslib? Use Bootstrap CSS vars (`var(--bs-primary)`) not hardcoded colors. Theme changes then propagate.
 
 ### Step 6: Ensure Accessibility
 
@@ -302,33 +302,33 @@ tags$main(
 )
 ```
 
-**Expected:** App meets WCAG 2.1 AA standards for color contrast, keyboard navigation, and screen reader compatibility.
+**Got:** App meets WCAG 2.1 AA: color contrast, keyboard nav, screen reader compat.
 
-**On failure:** Test with browser dev tools accessibility audit (Lighthouse). Check color contrast ratios with WebAIM's contrast checker. Ensure all interactive elements are keyboard-focusable.
+**If fail:** Test with browser dev tools accessibility audit (Lighthouse). Check color contrast with WebAIM's checker. All interactive elements keyboard-focusable.
 
-## Validation
+## Checks
 
-- [ ] Page layout renders correctly on desktop and mobile widths
-- [ ] bslib theme applies consistently to all components
-- [ ] Value boxes display with correct themes and icons
-- [ ] Cards resize properly in the responsive grid
-- [ ] Custom CSS uses Bootstrap variables, not hardcoded values
-- [ ] All plots have alt text for screen readers
-- [ ] Color contrast meets WCAG AA (4.5:1 for text)
-- [ ] Interactive elements are keyboard accessible
+- [ ] Page layout renders right on desktop + mobile widths
+- [ ] bslib theme applies consistently
+- [ ] Value boxes display right themes + icons
+- [ ] Cards resize in responsive grid
+- [ ] Custom CSS uses Bootstrap vars, not hardcoded values
+- [ ] All plots have alt text
+- [ ] Color contrast ≥ WCAG AA (4.5:1 for text)
+- [ ] Interactive elements keyboard accessible
 
-## Common Pitfalls
+## Pitfalls
 
-- **Mixing old and new Shiny UI**: Don't mix `fluidPage()` with bslib components. Use `page_sidebar()`, `page_navbar()`, or `page_fillable()` exclusively.
-- **Hardcoded colors in CSS**: Use `var(--bs-primary)` instead of `#2c3e50`. Hardcoded colors break when the theme changes.
-- **Missing `fill = FALSE` on non-filling rows**: Value box rows and summary rows usually shouldn't stretch to fill available space. Set `fill = FALSE`.
-- **Google Fonts in offline environments**: If the app deploys to an air-gapped network, use system fonts or self-hosted font files instead of `font_google()`.
-- **Ignoring mobile**: Test with the browser responsive mode. `layout_columns` automatically stacks on narrow screens, but custom CSS may not.
+- **Mixing old + new Shiny UI**: Don't mix `fluidPage()` with bslib components. Use `page_sidebar()`, `page_navbar()`, or `page_fillable()` only.
+- **Hardcoded colors in CSS**: Use `var(--bs-primary)` not `#2c3e50`. Hardcoded colors break when theme changes.
+- **Missing `fill = FALSE` on non-filling rows**: Value box + summary rows usually shouldn't stretch. Set `fill = FALSE`.
+- **Google Fonts in offline env**: App deploys to air-gapped network? Use system fonts or self-hosted font files, not `font_google()`.
+- **Ignoring mobile**: Test with browser responsive mode. `layout_columns` auto-stacks on narrow screens, custom CSS may not.
 
-## Related Skills
+## See Also
 
-- `scaffold-shiny-app` — initial app setup including theme configuration
-- `build-shiny-module` — create modular UI components
-- `optimize-shiny-performance` — performance-conscious rendering
-- `review-web-design` — visual design review for layout, typography, and colour
-- `review-ux-ui` — usability and accessibility review
+- `scaffold-shiny-app` — initial app setup incl theme config
+- `build-shiny-module` — modular UI components
+- `optimize-shiny-performance` — perf-conscious rendering
+- `review-web-design` — visual design review: layout, typography, colour
+- `review-ux-ui` — usability + accessibility review

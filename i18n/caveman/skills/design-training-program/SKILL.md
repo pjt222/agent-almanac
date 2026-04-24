@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design a GxP training programme covering training needs analysis by role,
   curriculum design (regulatory awareness, system-specific, data integrity),
@@ -27,30 +27,30 @@ metadata:
 
 # Design Training Program
 
-Create a role-based GxP training programme with curriculum, competency assessments, and record management for regulated environments.
+Role-based GxP training programme. Curriculum, competency assessments, record management for regulated env.
 
-## When to Use
+## When Use
 
-- A new validated system requires user training before go-live
-- An audit finding cites inadequate training or missing training records
-- Organisational changes introduce new roles or responsibilities
-- Periodic review of the training programme is due
-- Regulatory inspection preparation requires demonstrating training adequacy
+- New validated system needs user training before go-live
+- Audit finding cites bad training or missing training records
+- Org changes bring new roles or responsibilities
+- Periodic review of training programme due
+- Regulatory inspection prep needs proof of training adequacy
 
 ## Inputs
 
-- **Required**: Systems and processes requiring trained personnel
-- **Required**: Role definitions (administrator, user, QA, management)
-- **Required**: Applicable regulatory requirements for training (GMP, GLP, GCP)
+- **Required**: Systems + processes needing trained personnel
+- **Required**: Role definitions (admin, user, QA, management)
+- **Required**: Regulatory training requirements (GMP, GLP, GCP)
 - **Optional**: Existing training materials or curricula
-- **Optional**: Competency gaps identified in audits or performance reviews
+- **Optional**: Competency gaps from audits or perf reviews
 - **Optional**: Training management system capabilities
 
-## Procedure
+## Steps
 
-### Step 1: Conduct Training Needs Analysis
+### Step 1: Do Training Needs Analysis
 
-Identify what each role needs to know:
+Find what each role needs to know:
 
 ```markdown
 # Training Needs Analysis
@@ -72,12 +72,13 @@ Identify what each role needs to know:
 | [Role] | [Current level] | [Required level] | [Gap description] | [H/M/L] |
 ```
 
-**Expected:** Every role has defined training requirements linked to their job function and GxP responsibilities.
-**On failure:** If roles are not clearly defined, conduct a RACI exercise first to establish responsibilities before defining training needs.
+**Got:** Every role has training needs linked to job function + GxP responsibilities.
 
-### Step 2: Design the Curriculum
+**If fail:** Roles unclear? Do RACI first. Set responsibilities before training needs.
 
-Structure training into modules by topic:
+### Step 2: Design Curriculum
+
+Break training into modules by topic:
 
 ```markdown
 # Training Curriculum
@@ -122,12 +123,13 @@ Structure training into modules by topic:
 5. Q&A and clarification
 ```
 
-**Expected:** Each module has defined duration, delivery method, audience, and specific content outline.
-**On failure:** If content is too broad for the allocated time, split into sub-modules or create prerequisite chains.
+**Got:** Each module: duration, delivery method, audience, content outline.
 
-### Step 3: Create Competency Assessments
+**If fail:** Content too broad for time? Split into sub-modules or prerequisite chains.
 
-Define how competency is measured for each module:
+### Step 3: Make Competency Assessments
+
+Define how competency measured per module:
 
 ```markdown
 # Competency Assessment Design
@@ -161,10 +163,11 @@ Define how competency is measured for each module:
 **Assessor:** _______ **Date:** _______ **Result:** Pass / Fail
 ```
 
-**Expected:** Assessments test both knowledge (understanding why) and skill (demonstrating how).
-**On failure:** If pass rates are below 70%, review the training materials for clarity before blaming the learners.
+**Got:** Assessments test knowledge (why) + skill (how).
 
-### Step 4: Define Training Records and Retention
+**If fail:** Pass rates < 70%? Review training materials for clarity before blaming learners.
+
+### Step 4: Define Training Records + Retention
 
 ```markdown
 # Training Record Management
@@ -185,8 +188,9 @@ Define how competency is measured for each module:
 | K. Jones | Admin | 2026-01-15 ✓ | 2026-01-17 ✓ | 2026-01-18 ✓ | 2026-01-20 ✓ | 2026-01-20 ✓ | Fully trained |
 ```
 
-**Expected:** Training records demonstrate that every person performing GxP activities was trained and assessed before performing those activities.
-**On failure:** If training records are incomplete, conduct a retrospective training gap assessment and implement immediate remediation training.
+**Got:** Training records show every person doing GxP activity was trained + assessed before.
+
+**If fail:** Training records incomplete? Do retrospective training gap assessment. Immediate remediation training.
 
 ### Step 5: Define Retraining Triggers
 
@@ -205,10 +209,11 @@ Define how competency is measured for each module:
 | Extended absence (>6 months) | Returning individual | Before resuming GxP activities | Yes — practical assessment |
 ```
 
-**Expected:** Retraining triggers are specific, measurable, and linked to defined timelines.
-**On failure:** If retraining is not completed before the trigger deadline, the individual must not perform the affected GxP activities until training is complete.
+**Got:** Retraining triggers specific, measurable, linked to timelines.
 
-### Step 6: Compile the Training Programme Document
+**If fail:** Retraining not done before trigger deadline? Individual must NOT do affected GxP activities until training done.
+
+### Step 6: Compile Training Programme Doc
 
 ```markdown
 # Training Programme
@@ -233,31 +238,32 @@ Define how competency is measured for each module:
 | Department Head | | | |
 ```
 
-**Expected:** Complete training programme approved and effective before system go-live or compliance deadline.
-**On failure:** If approval is delayed, implement interim training measures and document the plan to formalise.
+**Got:** Training programme approved + effective before system go-live or compliance deadline.
 
-## Validation
+**If fail:** Approval delayed? Interim training measures, document the formalisation plan.
 
-- [ ] Training needs analysis completed for all roles interacting with GxP systems
-- [ ] Curriculum modules defined with duration, delivery method, and content outline
-- [ ] Competency assessments exist for each module with defined passing criteria
-- [ ] Training matrix tracks all personnel against all required training
-- [ ] Training record retention meets regulatory requirements
-- [ ] Retraining triggers are defined with timelines and assessment requirements
-- [ ] Training programme approved by QA and management
+## Checks
 
-## Common Pitfalls
+- [ ] Training needs analysis done for all roles touching GxP systems
+- [ ] Curriculum modules defined: duration, delivery, content outline
+- [ ] Competency assessments exist per module, defined passing criteria
+- [ ] Training matrix tracks all personnel vs all required training
+- [ ] Training record retention meets regulatory needs
+- [ ] Retraining triggers defined: timelines + assessment needs
+- [ ] Training programme approved by QA + management
 
-- **Training = reading the SOP**: Read-and-sign is appropriate for minor updates, not for initial training. New users need instructor-led training with hands-on practice.
-- **No competency assessment**: Training without assessment cannot demonstrate that learning occurred. Regulators expect evidence of competence, not just attendance.
-- **Trainer not qualified**: Trainers must be demonstrably competent in the subject. "Train the trainer" records are frequently requested during inspections.
-- **Stale training matrix**: A training matrix that is not updated when people join, leave, or change roles creates compliance gaps. Integrate with HR processes.
-- **One-size-fits-all**: Administrators need deeper training than end users. Role-based curriculum avoids overwhelming some users while under-training others.
+## Pitfalls
 
-## Related Skills
+- **Training = reading the SOP**: Read-and-sign fits minor updates, not initial training. New users need instructor-led + hands-on.
+- **No competency assessment**: Training without assessment can't prove learning. Regulators expect competence evidence, not attendance.
+- **Trainer not qualified**: Trainers must be demonstrably competent. "Train the trainer" records often asked in inspections.
+- **Stale training matrix**: Not updated when people join/leave/change roles → compliance gaps. Integrate with HR.
+- **One-size-fits-all**: Admins need deeper training than end users. Role-based curriculum avoids overwhelming some, under-training others.
 
-- `write-standard-operating-procedure` — SOPs drive training content and retraining triggers
-- `design-compliance-architecture` — identifies which systems and roles require training
-- `conduct-gxp-audit` — audits frequently assess training adequacy
-- `manage-change-control` — system changes trigger retraining requirements
-- `prepare-inspection-readiness` — training records are a primary inspection target
+## See Also
+
+- `write-standard-operating-procedure` — SOPs drive training content + retraining triggers
+- `design-compliance-architecture` — shows which systems + roles need training
+- `conduct-gxp-audit` — audits often check training adequacy
+- `manage-change-control` — system changes trigger retraining
+- `prepare-inspection-readiness` — training records = primary inspection target

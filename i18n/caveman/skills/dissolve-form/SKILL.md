@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Perform controlled dismantling of rigid system structures while preserving
   essential capabilities (imaginal discs). Covers rigidity mapping, dissolution
@@ -27,70 +27,70 @@ metadata:
 
 # Dissolve Form
 
-Perform controlled dismantling of rigid system structures — dissolving calcified architecture, accumulated technical debt, and organizational rigidity while preserving the essential capabilities ("imaginal discs") that will seed the new form.
+Controlled dismantling of rigid system structures. Dissolve calcified architecture, technical debt, organizational rigidity. Preserve essential capabilities ("imaginal discs") that seed new form.
 
-## When to Use
+## When Use
 
-- Form assessment (see `assess-form`) classified the system as PREPARE or CRITICAL (too rigid to transform directly)
-- A system is so calcified that incremental change is impossible
-- Technical debt has compounded to the point where it blocks all forward progress
-- An organizational structure has become so rigid that it can't adapt to new requirements
-- Before `adapt-architecture` when the current form must be softened before it can be reshaped
-- Legacy system decommissioning where value must be extracted before shutdown
+- Form assessment (see `assess-form`) classified system as PREPARE or CRITICAL (too rigid to transform directly)
+- System so calcified, incremental change impossible
+- Technical debt compounded — blocks all forward progress
+- Organizational structure rigid, can't adapt to new requirements
+- Before `adapt-architecture` when current form must soften before reshape
+- Legacy system decommissioning — extract value before shutdown
 
 ## Inputs
 
 - **Required**: Form assessment showing high rigidity (from `assess-form`)
-- **Required**: Identification of essential capabilities to preserve (imaginal discs)
-- **Optional**: Target form (what should emerge after dissolution; may be unknown)
-- **Optional**: Dissolution timeline and constraints
+- **Required**: Essential capabilities to preserve (imaginal discs) identified
+- **Optional**: Target form (what emerges after dissolution; may be unknown)
+- **Optional**: Dissolution timeline + constraints
 - **Optional**: Stakeholder concerns about specific components
-- **Optional**: Previous dissolution attempts and their outcomes
+- **Optional**: Previous dissolution attempts + outcomes
 
-## Procedure
+## Steps
 
 ### Step 1: Identify Imaginal Discs
 
-In biological metamorphosis, imaginal discs are clusters of cells within the caterpillar that survive dissolution and become the butterfly's organs. Identify the essential capabilities that must survive.
+In biological metamorphosis, imaginal discs are clusters of cells within the caterpillar that survive dissolution and become the butterfly's organs. Identify essential capabilities that must survive.
 
-1. Catalog every capability the current system provides:
+1. Catalog every capability current system provides:
    - User-facing features
    - Data processing functions
    - Integration points with external systems
-   - Institutional knowledge embedded in the code/process
+   - Institutional knowledge embedded in code/process
    - Business rules (often implicit, undocumented)
 2. Classify each capability:
    - **Imaginal disc** (must survive): core business logic, critical integrations, irreplaceable data
-   - **Replaceable tissue** (can be rebuilt): UI, infrastructure, standard algorithms
-   - **Dead tissue** (should not survive): workarounds for bugs that no longer exist, compatibility shims for dead systems, features nobody uses
+   - **Replaceable tissue** (can rebuild): UI, infrastructure, standard algorithms
+   - **Dead tissue** (must not survive): workarounds for bugs gone, compatibility shims for dead systems, features nobody uses
 3. Extract imaginal discs into portable form:
-   - Document business rules explicitly (they may only exist as code comments or tribal knowledge)
+   - Document business rules explicitly (may only exist as code comments or tribal knowledge)
    - Extract critical algorithms into standalone, tested modules
    - Export essential data in format-independent representations
-   - Record integration contracts and their actual (not documented) behavior
+   - Record integration contracts + their actual (not documented) behavior
 
-**Expected:** A clear inventory of capabilities classified as essential (preserve), replaceable (rebuild), or dead (discard). Essential capabilities are extracted into portable form before dissolution begins.
+**Got:** Clear inventory of capabilities classified: essential (preserve), replaceable (rebuild), dead (discard). Essential capabilities extracted into portable form before dissolution begins.
 
-**On failure:** If imaginal disc identification is uncertain (stakeholders disagree on what's essential), err on the side of preservation. Extract more capabilities than you think you'll need — discarding after dissolution is easy; recovering lost knowledge is often impossible.
+**If fail:** Imaginal disc identification uncertain (stakeholders disagree on what's essential)? Err on side of preservation. Extract more capabilities than you think needed — discarding after dissolution is easy; recovering lost knowledge often impossible.
 
 ### Step 2: Map Dissolution Sequence
 
-Determine the order in which structural elements will be dissolved — outer layers first, core last.
+Determine order structural elements dissolve — outer layers first, core last.
 
 1. Order by dependency depth:
-   - Layer 1 (outermost): components with no dependents — nothing breaks when they're removed
+   - Layer 1 (outermost): components with no dependents — nothing breaks when removed
    - Layer 2: components whose dependents are only Layer 1 items (already dissolved)
-   - Layer 3: components with deeper dependencies — removing these requires careful interface management
-   - Layer N (core): load-bearing components that everything depends on — dissolved last
+   - Layer 3: components with deeper dependencies — removing these needs careful interface management
+   - Layer N (core): load-bearing components everything depends on — dissolved last
 2. For each layer, define:
-   - What is dissolved (removed, decommissioned, archived)
+   - What dissolves (removed, decommissioned, archived)
    - What replaces it (new component, nothing, or temporary stub)
-   - What interfaces must be maintained for the remaining layers
-   - How to verify the system still functions after this layer is dissolved
+   - What interfaces must be maintained for remaining layers
+   - How to verify system still functions after layer dissolved
 3. Create dissolution checkpoints:
-   - After each layer, the remaining system must be tested and verified operational
-   - Each checkpoint is a stable state from which dissolution can pause
-   - If a layer's dissolution causes unexpected breakage, restore from the previous checkpoint
+   - After each layer, remaining system must be tested + verified operational
+   - Each checkpoint = stable state from which dissolution can pause
+   - Layer's dissolution causes unexpected breakage? Restore from previous checkpoint
 
 ```
 Dissolution Sequence (outside in):
@@ -109,108 +109,108 @@ Dissolution Sequence (outside in):
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Expected:** A layer-ordered dissolution sequence where each step is safe (checkpoint verified) and reversible (previous checkpoint is restorable). The most critical components are dissolved last when the team has the most experience and confidence.
+**Got:** Layer-ordered dissolution sequence. Each step safe (checkpoint verified) + reversible (previous checkpoint restorable). Most critical components dissolved last — when team has most experience + confidence.
 
-**On failure:** If dependency mapping reveals circular dependencies (A depends on B depends on A), these cycles must be broken before sequenced dissolution is possible. Introduce an interface between A and B, break the cycle, then proceed with the sequence.
+**If fail:** Dependency mapping reveals circular dependencies (A depends on B depends on A)? Cycles must be broken before sequenced dissolution possible. Introduce interface between A + B, break cycle, then proceed.
 
 ### Step 3: Perform Interface Archaeology
 
-Before dissolving rigid structures, excavate and document their actual interfaces — not what's documented, but what's actually in use.
+Before dissolving rigid structures, excavate + document their actual interfaces — not what's documented, but what's actually in use.
 
 1. Instrument current interfaces:
    - Log every call, message, or data exchange at each interface
-   - Run for at least one full business cycle (daily, weekly, monthly — whatever is relevant)
+   - Run for at least one full business cycle (daily, weekly, monthly — whatever relevant)
    - Capture actual payload shapes, not just documented schemas
-2. Compare actual vs. documented behavior:
+2. Compare actual vs documented behavior:
    - What documented interfaces are never called? (candidates for Layer 1 dissolution)
    - What undocumented interfaces are actively used? (hidden dependencies — must be preserved or explicitly replaced)
-   - What edge cases does the actual traffic reveal that documentation doesn't mention?
-3. Build an interface contract from actual behavior:
-   - This contract becomes the specification for any replacement
-   - Include real examples of inputs and outputs
+   - What edge cases does actual traffic reveal that docs don't mention?
+3. Build interface contract from actual behavior:
+   - Contract becomes specification for any replacement
+   - Include real examples of inputs + outputs
    - Document error handling behavior (what actually happens, not what should happen)
 
-**Expected:** An empirically-derived interface contract that accurately represents how the system actually communicates, including undocumented behaviors and hidden dependencies.
+**Got:** Empirically-derived interface contract accurately represents how system actually communicates, incl undocumented behaviors + hidden dependencies.
 
-**On failure:** If instrumentation is too invasive (impacts performance or requires code changes), sample traffic instead of capturing everything. If the business cycle is too long to wait, use the available data supplemented by stakeholder interviews about "what calls what in which situations."
+**If fail:** Instrumentation too invasive (impacts performance or needs code changes)? Sample traffic instead of capturing everything. Business cycle too long to wait? Use available data plus stakeholder interviews about "what calls what in which situations."
 
 ### Step 4: Execute Controlled Dissolution
 
 Systematically remove structural elements while maintaining imaginal disc viability.
 
 1. Begin with Layer 1 (outermost, no dependents):
-   - Remove dead features and unused code
+   - Remove dead features + unused code
    - Archive (don't delete) for reference
    - Verify: system still passes all tests, no runtime errors
 2. Progress through each layer:
    - For each component being dissolved:
-     a. Verify imaginal discs have been extracted (Step 1)
+     a. Verify imaginal discs extracted (Step 1)
      b. Install replacement or stub (if dependents remain)
-     c. Remove the component
+     c. Remove component
      d. Run validation suite
      e. Monitor for unexpected side effects
-   - At each checkpoint: document the current system state, verify operational status
+   - At each checkpoint: document current system state, verify operational status
 3. Handle dissolution resistance:
    - Some components resist dissolution (hidden dependencies surface)
-   - When a removal causes unexpected breakage:
+   - Removal causes unexpected breakage?
      a. Restore from checkpoint
-     b. Investigate the hidden dependency
-     c. Add it to the interface archaeology (Step 3)
-     d. Create an explicit stub for the dependency
+     b. Investigate hidden dependency
+     c. Add to interface archaeology (Step 3)
+     d. Create explicit stub for dependency
      e. Re-attempt dissolution
 4. Track dissolution progress:
-   - Components remaining vs. dissolved
-   - Imaginal discs extracted and verified portable
-   - Unexpected dependencies discovered and handled
+   - Components remaining vs dissolved
+   - Imaginal discs extracted + verified portable
+   - Unexpected dependencies discovered + handled
 
-**Expected:** Systematic, verified dissolution of non-essential structure. After each layer, the remaining system is smaller, simpler, and still operational. Imaginal discs are preserved in portable form.
+**Got:** Systematic, verified dissolution of non-essential structure. After each layer, remaining system smaller, simpler, still operational. Imaginal discs preserved in portable form.
 
-**On failure:** If dissolution causes cascading failures, the layer ordering is wrong — there are hidden dependencies deeper than expected. Stop, restore, remap dependencies, and re-sequence. If dissolution reveals that an "imaginal disc" is more complex than expected, allocate more extraction time for that capability.
+**If fail:** Dissolution causes cascading failures? Layer ordering wrong — hidden dependencies deeper than expected. Stop, restore, remap dependencies, re-sequence. Dissolution reveals "imaginal disc" more complex than expected? Allocate more extraction time for that capability.
 
-### Step 5: Prepare the Foundation for Reconstruction
+### Step 5: Prepare Foundation for Reconstruction
 
-After dissolution, the remaining system should be a minimal viable core plus extracted imaginal discs ready for reconstruction.
+After dissolution, remaining system should be minimal viable core plus extracted imaginal discs ready for reconstruction.
 
-1. Assess the post-dissolution state:
+1. Assess post-dissolution state:
    - What remains? (minimal operational core + extracted capabilities)
-   - Is the remaining system maintainable? (can the team understand and modify it)
-   - Are all imaginal discs accessible and verified? (portable, tested, documented)
-2. Create the reconstruction manifest:
-   - List each imaginal disc with its contract, data, and test suite
-   - Specify the target architecture for reconstruction (or mark as "to be determined")
-   - Identify gaps: capabilities that were partially extracted or have quality concerns
+   - Is remaining system maintainable? (can team understand + modify it)
+   - Are all imaginal discs accessible + verified? (portable, tested, documented)
+2. Create reconstruction manifest:
+   - List each imaginal disc with contract, data, test suite
+   - Specify target architecture for reconstruction (or mark "to be determined")
+   - Identify gaps: capabilities partially extracted or with quality concerns
 3. Handoff to reconstruction:
-   - If the target form is known: proceed to `adapt-architecture` with the minimal core as starting point
-   - If the target form is unknown: operate on the minimal core while the target is designed
-   - Either way: the system is now flexible enough to be reshaped
+   - Target form known? Proceed to `adapt-architecture` with minimal core as starting point
+   - Target form unknown? Operate on minimal core while target designed
+   - Either way: system now flexible enough to reshape
 
-**Expected:** A minimal, maintainable system with clearly documented extracted capabilities. The foundation is clean and ready for reconstruction in whatever form is chosen.
+**Got:** Minimal, maintainable system with clearly documented extracted capabilities. Foundation clean, ready for reconstruction in whatever form chosen.
 
-**On failure:** If the post-dissolution system is less maintainable than expected, some essential structure was dissolved that should have been preserved. Check the imaginal disc inventory — if a critical capability is missing, it may still be recoverable from the archive. If the minimal core is too minimal to operate, some "replaceable tissue" was actually essential — restore it from the checkpoint.
+**If fail:** Post-dissolution system less maintainable than expected? Some essential structure was dissolved that should have been preserved. Check imaginal disc inventory — critical capability missing? May still be recoverable from archive. Minimal core too minimal to operate? Some "replaceable tissue" was actually essential — restore from checkpoint.
 
-## Validation
+## Checks
 
-- [ ] Imaginal discs are identified, extracted, and verified in portable form
-- [ ] Dissolution sequence is layered from outermost (no dependents) to core
-- [ ] Interface archaeology has captured actual (not just documented) behavior
-- [ ] Each dissolution layer has a verified checkpoint
-- [ ] No essential capability was lost during dissolution
-- [ ] Post-dissolution system is minimal, maintainable, and operational
-- [ ] Reconstruction manifest documents extracted capabilities and gaps
+- [ ] Imaginal discs identified, extracted, verified in portable form
+- [ ] Dissolution sequence layered outermost (no dependents) to core
+- [ ] Interface archaeology captured actual (not just documented) behavior
+- [ ] Each dissolution layer has verified checkpoint
+- [ ] No essential capability lost during dissolution
+- [ ] Post-dissolution system minimal, maintainable, operational
+- [ ] Reconstruction manifest documents extracted capabilities + gaps
 
-## Common Pitfalls
+## Pitfalls
 
-- **Dissolving without extracting**: Removing a rigid component before its essential capabilities are extracted destroys irreplaceable knowledge. Always extract imaginal discs first
-- **Trusting documentation over observation**: Documented interfaces often diverge from actual behavior. Interface archaeology (Step 3) reveals the truth; documentation shows the intent
-- **Dissolving the core first**: Removing load-bearing structures before their dependents are dissolved causes cascading failure. Always work outside-in
-- **Complete dissolution**: Dissolving everything to start from scratch sounds clean but loses institutional knowledge, battle-tested edge case handling, and operational continuity. Preserve imaginal discs
-- **Dissolution as punishment**: Dissolving a system "because it's bad" without a reconstruction plan creates a vacuum. Dissolution is the preparation for reconstruction, not an end in itself
+- **Dissolving without extracting**: Removing rigid component before essential capabilities extracted destroys irreplaceable knowledge. Always extract imaginal discs first.
+- **Trusting docs over observation**: Documented interfaces often diverge from actual behavior. Interface archaeology (Step 3) reveals truth; documentation shows intent.
+- **Dissolving core first**: Removing load-bearing structures before their dependents dissolved → cascading failure. Always work outside-in.
+- **Complete dissolution**: Dissolving everything to start from scratch sounds clean but loses institutional knowledge, battle-tested edge case handling, operational continuity. Preserve imaginal discs.
+- **Dissolution as punishment**: Dissolving system "because bad" without reconstruction plan creates vacuum. Dissolution = preparation for reconstruction, not end in itself.
 
-## Related Skills
+## See Also
 
-- `assess-form` — prerequisite assessment that identifies rigidity and triggers dissolution
-- `adapt-architecture` — the reconstruction skill that follows dissolution
-- `repair-damage` — for systems that need targeted repair rather than full dissolution
-- `build-consensus` — consensus before major dissolution prevents team fragmentation
+- `assess-form` — prerequisite assessment identifies rigidity + triggers dissolution
+- `adapt-architecture` — reconstruction skill that follows dissolution
+- `repair-damage` — for systems needing targeted repair rather than full dissolution
+- `build-consensus` — consensus before major dissolution stops team fragmentation
 - `decommission-validated-system` — formal decommissioning process for regulated systems
-- `conduct-post-mortem` — post-mortem analysis shares the investigative rigor of dissolution
+- `conduct-post-mortem` — post-mortem analysis shares investigative rigor of dissolution

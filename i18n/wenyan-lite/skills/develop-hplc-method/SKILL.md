@@ -4,7 +4,7 @@ locale: wenyan-lite
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Develop a high-performance liquid chromatography method: define separation goals,
   select column chemistry and mobile phase, optimize gradient and flow conditions,
@@ -21,54 +21,54 @@ metadata:
   tags: chromatography, hplc, liquid-chromatography, method-development, separation
 ---
 
-# Develop an HPLC Method
+# 開發 HPLC 方法
 
-Systematic development of a high-performance liquid chromatography method covering mode selection, column chemistry, mobile phase and gradient design, flow and temperature optimization, detector choice, and iterative refinement for non-volatile, thermally labile, or polar analytes.
+系統開發高效液相層析法：含模式擇、柱化學、流動相與梯度之設計、流量與溫度之優化、檢測器之擇、迭代精調，俾非揮發、熱不穩或極性分析物可分析之。
 
-## When to Use
+## 適用時機
 
-- Analyzing compounds that are non-volatile, thermally labile, or too polar for GC
-- Developing a new HPLC-UV, HPLC-fluorescence, or LC-MS method from scratch
-- Adapting a literature or pharmacopeial HPLC method to a different column or instrument
-- Improving an existing method that suffers from poor resolution, long run times, or sensitivity issues
-- Selecting the appropriate chromatographic mode (reversed-phase, HILIC, ion-exchange, SEC, chiral)
+- 分析非揮發、熱不穩或太極性而不宜 GC 之化合物
+- 自零開發 HPLC-UV、HPLC-螢光、LC-MS 之新法
+- 將文獻或藥典 HPLC 法改適於他柱或他儀器
+- 改既有法之病：分離差、運行久、靈敏不足
+- 擇合宜之層析模式（反相、HILIC、離子交換、SEC、手性）
 
-## Inputs
+## 輸入
 
-### Required
+### 必要
 
-- **Target analytes**: Compound names, structures, molecular weights, pKa values, logP/logD
-- **Sample matrix**: Formulation, biological fluid, environmental extract, or neat solution
-- **Performance targets**: Required resolution, detection limits, quantitation range
+- **目標分析物**：化合物名、結構、分子量、pKa 值、logP/logD
+- **樣品基質**：配方、生物流體、環境萃取、純溶液
+- **性能目標**：所需分離度、檢測限、定量範圍
 
-### Optional
+### 選擇
 
-- **Reference method**: Compendial or literature method to use as a starting point
-- **Available columns**: Inventory of HPLC columns on hand
-- **Instrument configuration**: UHPLC vs. conventional HPLC, available detectors, column oven range
-- **Throughput requirements**: Maximum acceptable run time including re-equilibration
-- **Regulatory context**: ICH, USP, EPA, or other compliance framework
+- **參考法**：用作起點之藥典或文獻法
+- **現有柱**：現有 HPLC 柱之清單
+- **儀器配置**：UHPLC 對比傳統 HPLC、可用檢測器、柱烘箱範圍
+- **通量要求**：最大可受之運行時間（含再平衡）
+- **監管背景**：ICH、USP、EPA 或他合規框架
 
-## Procedure
+## 步驟
 
-### Step 1: Define Separation Goals
+### 步驟一：定分離目標
 
-1. Compile analyte properties: molecular weight, pKa, logP (or logD at relevant pH), chromophores, fluorophores, ionizable groups.
-2. Identify the sample matrix and expected interferents (excipients, endogenous compounds, degradation products).
-3. Specify performance criteria:
-   - Resolution between critical pairs (Rs >= 2.0 for regulated methods)
-   - Detection limits (LOD/LOQ)
-   - Acceptable run time including gradient re-equilibration
-4. Determine whether the method is for assay, impurity profiling, dissolution, content uniformity, or cleaning verification -- this drives the validation category.
-5. Decide between isocratic and gradient elution: use isocratic if all analytes elute within a retention factor range of 2 < k' < 10; otherwise use gradient.
+1. 編分析物屬性：分子量、pKa、logP（或相關 pH 下之 logD）、發色團、螢光團、可電離基。
+2. 辨樣品基質與預期干擾物（輔料、內源性化合物、降解產物）。
+3. 定性能標準：
+   - 關鍵對之分離度（規範法 Rs >= 2.0）
+   - 檢測限（LOD/LOQ）
+   - 含梯度再平衡之可受運行時間
+4. 定法為含量、雜質分析、溶出、含量均一性或清潔驗證——此決驗證類別。
+5. 擇等度與梯度洗脫：所有分析物保留因子 2 < k' < 10 內皆洗脫時用等度，否則用梯度。
 
-**Expected:** A specification document listing analytes with physicochemical properties, matrix description, performance criteria, and isocratic vs. gradient decision.
+**預期：** 規格文件，列分析物及其物化屬性、基質描述、性能標準、等度對梯度之決。
 
-**On failure:** If pKa or logP values are unknown, estimate from structure using prediction tools (ChemAxon, ACD/Labs) or run a scouting gradient on a C18 column at pH 3 and pH 7 to empirically assess retention behavior.
+**失敗時：** pKa 或 logP 闕時，以結構預測工具（ChemAxon、ACD/Labs）估之，或於 C18 柱上 pH 3 與 pH 7 行偵察梯度以經驗評其保留行為。
 
-### Step 2: Select Column Chemistry
+### 步驟二：擇柱化學
 
-Choose the chromatographic mode and column based on analyte properties.
+依分析物屬性擇層析模式與柱。
 
 | Mode | Column Chemistry | Mobile Phase | Best For |
 |---|---|---|---|
@@ -80,58 +80,58 @@ Choose the chromatographic mode and column based on analyte properties.
 | Size-exclusion (SEC) | Diol-bonded silica, polymer | Isocratic aqueous or organic buffer | Protein aggregates, polymers, molecular weight distribution |
 | Chiral | Polysaccharide (amylose/cellulose) | Normal-phase or polar organic mode | Enantiomeric separations, chiral purity |
 
-1. Default to reversed-phase C18 for small molecules with logP > 0.
-2. For analytes with logP < 0, evaluate HILIC or ion-exchange.
-3. Select particle size: sub-2 um for UHPLC (higher efficiency, higher backpressure), 3-5 um for conventional HPLC.
-4. Select column dimensions: 50-150 mm length, 2.1-4.6 mm ID. Narrower columns save solvent and improve MS sensitivity.
-5. For chiral separations, screen at least 3-4 chiral stationary phases with different selectors.
+1. 小分子 logP > 0 者預設為反相 C18。
+2. logP < 0 之分析物，評 HILIC 或離子交換。
+3. 擇粒徑：UHPLC 用亞 2 um（效率高、背壓高），傳統 HPLC 用 3-5 um。
+4. 擇柱尺寸：長 50-150 mm、內徑 2.1-4.6 mm。窄柱省溶劑並增 MS 靈敏度。
+5. 手性分離者，至少篩 3-4 種具不同選擇子之手性固定相。
 
-**Expected:** Column chemistry, dimensions, and particle size selected with justification based on analyte properties.
+**預期：** 柱化學、尺寸、粒徑皆擇定，以分析物屬性為據。
 
-**On failure:** If initial scouting shows poor retention on C18, switch to a more retentive phase (phenyl-hexyl for aromatics) or a different mode (HILIC for polar compounds).
+**失敗時：** 初偵察示 C18 保留差時，換更強保留之固定相（芳香者用苯己基）或他模式（極性者用 HILIC）。
 
-### Step 3: Design Mobile Phase and Gradient
+### 步驟三：設計流動相與梯度
 
-1. Select organic modifier:
-   - Acetonitrile (ACN): lower viscosity, sharper peaks, better UV transparency below 210 nm
-   - Methanol (MeOH): different selectivity, sometimes better for polar analytes, higher viscosity
-2. Select aqueous component and pH:
-   - For neutral analytes: water with 0.1% formic acid (MS-compatible) or phosphate buffer (UV only)
-   - For ionizable analytes: buffer the mobile phase 2 pH units away from analyte pKa to ensure a single ionic form
-   - pH 2-3 (formic/phosphoric acid): suppresses ionization of acids, good general starting point
-   - pH 6-8 (ammonium formate/acetate): for basic analytes or when selectivity at low pH is insufficient
-   - pH 9-11 (ammonium bicarbonate, BEH columns): for very basic compounds on high-pH-stable columns
-3. Design the gradient:
-   - Start at 5-10% organic, ramp to 90-95% organic over 10-20 min for initial scouting
-   - Evaluate the scouting chromatogram to identify the useful organic range
-   - Narrow the gradient to span only the elution window of interest
-   - Gradient slope: steeper = faster but lower resolution; shallower = better resolution but longer run
-4. Include a column wash step (95% organic, 2-3 min) and re-equilibration (initial conditions, 5-10 column volumes).
-5. For isocratic methods, target k' = 3-8 for the analytes of interest.
+1. 擇有機改質劑：
+   - 乙腈（ACN）：黏度低、峰銳、210 nm 以下 UV 透明性較佳
+   - 甲醇（MeOH）：選擇性異，極性分析物或較佳，黏度較高
+2. 擇水相與 pH：
+   - 中性分析物：水加 0.1% 甲酸（MS 相容）或磷酸鹽緩衝液（僅 UV）
+   - 可電離分析物：流動相緩衝於分析物 pKa 外 2 pH 單位，以確保單一離子形
+   - pH 2-3（甲酸/磷酸）：抑酸之電離，通用之良好起點
+   - pH 6-8（甲酸銨/醋酸銨）：鹼性分析物或低 pH 選擇性不足者
+   - pH 9-11（碳酸氫銨、BEH 柱）：極鹼性化合物於高 pH 穩定柱上
+3. 設計梯度：
+   - 始於 5-10% 有機，10-20 分鐘內斜升至 90-95% 有機以作初偵察
+   - 評偵察圖譜以辨有用之有機範圍
+   - 將梯度縮至僅跨所關心之洗脫窗
+   - 梯度斜率：陡則快但分離度低；緩則分離度佳但運行久
+4. 加柱洗步（95% 有機，2-3 分鐘）與再平衡（初始條件，5-10 柱體積）。
+5. 等度法者，目標分析物之 k' 取 3-8。
 
-**Expected:** Mobile phase composition (organic, aqueous, buffer/additive, pH) and gradient profile defined, with a scouting run confirming analyte elution within the programmed window.
+**預期：** 流動相組成（有機、水、緩衝/添加、pH）與梯度輪廓俱定，偵察運行證分析物於所設窗內洗脫。
 
-**On failure:** If selectivity is poor (analytes co-elute despite gradient optimization), change the organic modifier (ACN to MeOH or vice versa), adjust pH by 2 units, or add an ion-pair reagent for charged analytes.
+**失敗時：** 選擇性差（梯度優化後分析物仍共洗脫）時，換有機改質劑（ACN 與 MeOH 互換）、pH 調 2 單位、或為帶電分析物加離子對試劑。
 
-### Step 4: Optimize Flow Rate and Temperature
+### 步驟四：優化流量與溫度
 
-1. Set initial flow rate based on column dimensions:
-   - 4.6 mm ID: 1.0 mL/min
-   - 3.0 mm ID: 0.4-0.6 mL/min
-   - 2.1 mm ID: 0.2-0.4 mL/min
-2. Verify backpressure is within instrument and column limits (typically < 400 bar conventional, < 1200 bar UHPLC).
-3. Optimize column temperature:
-   - Start at 30 C for reproducibility (avoid ambient fluctuations)
-   - Increase to 40-60 C to reduce viscosity, lower backpressure, and sharpen peaks
-   - For chiral columns, temperature often has a strong effect on enantioselectivity -- screen 15-45 C
-4. Evaluate the effect of flow rate on resolution: small increases in flow can improve throughput without significant resolution loss if operating near the van Deemter minimum.
-5. Document the optimal flow rate, column temperature, and resulting backpressure.
+1. 依柱尺寸設初始流量：
+   - 4.6 mm 內徑：1.0 mL/min
+   - 3.0 mm 內徑：0.4-0.6 mL/min
+   - 2.1 mm 內徑：0.2-0.4 mL/min
+2. 驗背壓於儀器與柱之限內（傳統常 < 400 bar，UHPLC < 1200 bar）。
+3. 優化柱溫：
+   - 始於 30 C 以求重現（避環境波動）
+   - 升至 40-60 C 以減黏度、降背壓、銳峰
+   - 手性柱溫度常強影響對映選擇性——篩 15-45 C
+4. 評流量對分離度之效：若接 van Deemter 最小值運行，流量微增可增通量而不顯著損分離度。
+5. 錄最佳流量、柱溫、所致背壓。
 
-**Expected:** Flow rate and column temperature optimized with backpressure within limits, resolution maintained or improved relative to initial conditions.
+**預期：** 流量與柱溫已優化，背壓於限內，分離度保持或較初始條件改善。
 
-**On failure:** If backpressure is too high, reduce flow rate, increase temperature, or switch to a wider-bore or larger-particle column. If resolution degrades at higher temperature, return to 30 C and accept the longer run time.
+**失敗時：** 背壓太高時，減流量、升溫、或換寬徑或大粒徑柱。高溫下分離度降時，回 30 C 並受運行較久。
 
-### Step 5: Select the Detector
+### 步驟五：擇檢測器
 
 | Detector | Principle | Sensitivity | Selectivity | Key Considerations |
 |---|---|---|---|---|
@@ -143,61 +143,61 @@ Choose the chromatographic mode and column based on analyte properties.
 | Charged aerosol (CAD) | Nebulization + corona discharge | ng range | Universal, non-volatile analytes | More uniform response than ELSD |
 | Mass spectrometry (MS) | m/z detection | pg-fg range | Structural, highest selectivity | Requires MS-compatible mobile phases |
 
-1. For analytes with UV chromophores (aromatic rings, conjugated systems), start with DAD -- it provides both quantitation and peak purity.
-2. For trace analysis in complex matrices, prefer MS (ESI or APCI) in SIM or MRM mode.
-3. For compounds without chromophores (sugars, lipids, polymers), use CAD, ELSD, or RI.
-4. Set detection wavelength at the analyte's absorption maximum (lambda-max) for best sensitivity, or at 210-220 nm for general screening.
-5. For fluorescence, optimize excitation and emission wavelengths using a spectral scan of the analyte.
-6. Ensure mobile phase additives are compatible: no phosphate buffers with MS, no UV-absorbing additives at low wavelengths.
+1. 有 UV 發色團之分析物（芳環、共軛系統），自 DAD 始——兼供定量與峰純度。
+2. 複雜基質之痕量分析，宜用 MS（ESI 或 APCI）之 SIM 或 MRM 模式。
+3. 無發色團之化合物（糖、脂、聚合物），用 CAD、ELSD 或 RI。
+4. 偵測波長設於分析物之吸收最大（lambda-max）以求最靈敏，或於 210-220 nm 以作通用篩查。
+5. 螢光者，以分析物之光譜掃描優化激發與發射波長。
+6. 確保流動相添加劑相容：MS 不用磷酸鹽緩衝液，低波長不用吸 UV 之添加劑。
 
-**Expected:** Detector selected and configured (wavelength, gain, acquisition rate) appropriate for analyte chemistry and sensitivity requirements.
+**預期：** 檢測器已擇並配（波長、增益、採集率），合於分析物化學與靈敏度要求。
 
-**On failure:** If UV sensitivity is insufficient at the required LOQ, consider fluorescence derivatization (e.g., OPA for amines, FMOC for amino acids) or switch to LC-MS/MS for maximum sensitivity and selectivity.
+**失敗時：** 所需 LOQ 下 UV 靈敏度不足時，考慮螢光衍生化（如胺之 OPA、胺基酸之 FMOC）或換 LC-MS/MS 以求最大靈敏度與選擇性。
 
-### Step 6: Evaluate and Refine
+### 步驟六：評並精調
 
-1. Inject a system suitability standard 6 times and evaluate:
-   - Retention time RSD < 1.0%
-   - Peak area RSD < 2.0%
-   - Resolution of critical pair >= 2.0
-   - Tailing factor 0.8-1.5 for all peaks
-   - Theoretical plates per column specification
-2. Inject a placebo/matrix blank to check for interference at analyte retention times.
-3. Inject a stressed or spiked sample to verify the method separates degradation products from the main analyte(s).
-4. If any criterion fails, adjust one variable at a time:
-   - Poor resolution: change pH, gradient slope, or column chemistry
-   - Tailing: add amine modifier (TEA for basic analytes), change buffer, or try a different bonded phase
-   - Sensitivity: increase injection volume, concentrate the sample, or switch detector
-5. Lock the final method parameters and document all conditions.
+1. 進系統適用性標準六次並評：
+   - 保留時間 RSD < 1.0%
+   - 峰面積 RSD < 2.0%
+   - 關鍵對之分離度 >= 2.0
+   - 所有峰之拖尾因子 0.8-1.5
+   - 每柱理論塔板數達規格
+2. 進安慰劑/基質空白以查分析物保留時間之干擾。
+3. 進應力或加標樣品以驗法能分降解產物與主分析物。
+4. 若任一標準失敗，每次調一變量：
+   - 分離差：改 pH、梯度斜率、柱化學
+   - 拖尾：加胺改質劑（鹼性者用 TEA）、換緩衝液、試他鍵合相
+   - 靈敏度：增進樣體積、濃縮樣品、換檢測器
+5. 鎖定最終法之參數並錄所有條件。
 
-**Expected:** All system suitability criteria met; method resolves target analytes from matrix interferents and known degradation products; parameters documented for transfer.
+**預期：** 所有系統適用性標準達；法可分目標分析物與基質干擾及已知降解產物；參數俱錄以供轉移。
 
-**On failure:** If iterative adjustment does not resolve the issue, consider a fundamentally different approach (change chromatographic mode, 2D-LC, or derivatization) and return to Step 2.
+**失敗時：** 迭代調整不解時，考慮根本之別法（換層析模式、2D-LC、衍生化）並回步驟二。
 
-## Validation
+## 驗證
 
-- [ ] All target analytes resolved with Rs >= 2.0 for critical pairs
-- [ ] Retention time RSD < 1.0% across 6 replicate injections
-- [ ] Peak area RSD < 2.0% across 6 replicate injections
-- [ ] Tailing factors 0.8-1.5 for all analyte peaks
-- [ ] No matrix interference at analyte retention times
-- [ ] Degradation products resolved from main analyte(s)
-- [ ] Run time (including re-equilibration) meets throughput requirements
-- [ ] Mobile phase compatible with selected detector
-- [ ] Method parameters fully documented (column, mobile phase, gradient, flow, temperature, detector)
+- [ ] 所有目標分析物分離，關鍵對 Rs >= 2.0
+- [ ] 六次重複進樣之保留時間 RSD < 1.0%
+- [ ] 六次重複進樣之峰面積 RSD < 2.0%
+- [ ] 所有分析物峰之拖尾因子 0.8-1.5
+- [ ] 分析物保留時間上無基質干擾
+- [ ] 降解產物與主分析物分離
+- [ ] 運行時間（含再平衡）滿通量要求
+- [ ] 流動相與所擇檢測器相容
+- [ ] 方法參數俱錄（柱、流動相、梯度、流量、溫度、檢測器）
 
-## Common Pitfalls
+## 常見陷阱
 
-- **Ignoring mobile phase pH for ionizable analytes**: Running at a pH near the analyte's pKa causes split peaks or poor reproducibility because the compound exists in two ionic forms. Buffer at least 2 pH units away from pKa.
-- **Using phosphate buffers with MS detection**: Phosphate is non-volatile and contaminates the MS source. Use formate or acetate buffers for LC-MS work.
-- **Insufficient re-equilibration after gradient**: The column must be flushed with at least 5-10 column volumes of initial mobile phase before the next injection. Inadequate re-equilibration causes retention time drift.
-- **Selecting too short a column for complex mixtures**: While short columns (50 mm) offer speed, they may not provide enough theoretical plates for multi-component separations. Start with 100-150 mm for method development.
-- **Neglecting system dwell volume**: The dwell volume (mixer to column head) delays the gradient reaching the column. This differs between instruments and causes method transfer failures. Measure and document it.
-- **Running HILIC like reversed-phase**: HILIC requires high organic (80-95% ACN) with a small aqueous fraction. Increasing aqueous content increases elution strength -- the opposite of RP. Equilibration times are also longer.
+- **可電離分析物忽流動相 pH**：於分析物 pKa 附近運行，致化合物存兩離子形而出裂峰或重現差。緩衝於 pKa 外至少 2 pH 單位。
+- **MS 偵測用磷酸鹽緩衝液**：磷酸鹽非揮發，污染 MS 源。LC-MS 工作用甲酸或醋酸緩衝液。
+- **梯度後再平衡不足**：柱於下次進樣前須以至少 5-10 柱體積之初始流動相沖之。再平衡不足致保留時間漂移。
+- **複雜混合物擇太短之柱**：短柱（50 mm）雖速，然多組分分離之理論塔板或不足。方法開發自 100-150 mm 始。
+- **忽系統死體積**：死體積（混合器至柱頭）延梯度至柱之時。儀器之間此異，致方法轉移失敗。須測並錄之。
+- **HILIC 當作反相運行**：HILIC 需高有機（80-95% ACN）配少水。增水則增洗脫力——與 RP 相反。平衡時間亦較久。
 
-## Related Skills
+## 相關技能
 
-- `develop-gc-method` -- gas chromatography method development for volatile and semi-volatile analytes
-- `interpret-chromatogram` -- reading and interpreting HPLC and GC chromatograms
-- `troubleshoot-separation` -- diagnosing and fixing peak shape, retention, and resolution problems
-- `validate-analytical-method` -- formal ICH Q2 validation of the developed HPLC method
+- `develop-gc-method` -- 揮發與半揮發分析物之氣相層析法開發
+- `interpret-chromatogram` -- 讀並解 HPLC 與 GC 圖譜
+- `troubleshoot-separation` -- 診斷並修峰形、保留、分離度之病
+- `validate-analytical-method` -- 所開發 HPLC 法之 ICH Q2 正式驗證

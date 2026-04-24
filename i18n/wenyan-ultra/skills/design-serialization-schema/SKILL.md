@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design serialization schemas using JSON Schema, Protocol Buffer definitions,
   or Apache Avro. Covers schema versioning, backwards compatibility, validation
@@ -24,29 +24,29 @@ metadata:
   tags: json-schema, protobuf, avro, schema-evolution, versioning, compatibility
 ---
 
-# Design Serialization Schema
+# 設序列化綱
 
-Create well-versioned serialization schemas that evolve gracefully without breaking consumers.
+立善版之序綱，演進而不破用者。
 
-## When to Use
+## 用
 
-- Defining a new API contract or data interchange format
-- Adding fields to an existing schema without breaking consumers
-- Migrating between schema versions
-- Choosing between schema systems (JSON Schema, Protobuf, Avro)
-- Documenting data validation rules for automated enforcement
+- 立新 API 契或數換格
+- 舊綱添欄而不破用者
+- 於綱版間遷
+- 擇綱系（JSON Schema、Protobuf、Avro）
+- 書數驗規以動施
 
-## Inputs
+## 入
 
-- **Required**: Data model (entity relationships, field types, constraints)
-- **Required**: Compatibility requirements (who consumes this data, how long must old formats be readable)
-- **Optional**: Existing schema to evolve
-- **Optional**: Performance requirements (validation speed, schema registry integration)
-- **Optional**: Target serialization format (JSON, binary, columnar)
+- **必**：數模（實體關、欄類、限）
+- **必**：相容求（誰用此數、舊格宜可讀多久）
+- **可**：可演之舊綱
+- **可**：效求（驗速、綱註冊表整合）
+- **可**：目序格（JSON、二進、列式）
 
-## Procedure
+## 行
 
-### Step 1: Choose a Schema System
+### 一：擇綱系
 
 | System | Format | Strengths | Best For |
 |--------|--------|-----------|----------|
@@ -56,12 +56,13 @@ Create well-versioned serialization schemas that evolve gracefully without break
 | XML Schema (XSD) | XML | Comprehensive typing, namespace support | Enterprise/legacy SOAP |
 | TypeBox/Zod | TypeScript | Type inference, runtime validation | TypeScript APIs |
 
-**Expected:** Schema system selected based on ecosystem, performance needs, and evolution requirements.
-**On failure:** If uncertain, start with JSON Schema — it has the broadest tooling support and can be layered onto existing JSON APIs.
+得：綱系依生態、效需、演求擇。
 
-### Step 2: Design the Core Schema
+敗：不定→始 JSON Schema—工具支援最廣，可疊於舊 JSON API。
 
-#### JSON Schema example:
+### 二：設核綱
+
+#### JSON Schema 例：
 
 ```json
 {
@@ -101,7 +102,7 @@ Create well-versioned serialization schemas that evolve gracefully without break
 }
 ```
 
-#### Protocol Buffers example:
+#### Protocol Buffers 例：
 
 ```protobuf
 syntax = "proto3";
@@ -128,7 +129,7 @@ enum Unit {
 }
 ```
 
-#### Apache Avro example:
+#### Apache Avro 例：
 
 ```json
 {
@@ -146,12 +147,13 @@ enum Unit {
 }
 ```
 
-**Expected:** Schema is self-documenting with descriptions, constraints, and clear type definitions.
-**On failure:** If the data model is not yet stable, mark the schema as `draft` and avoid publishing to a registry.
+得：綱自書，含述、限、明類定。
 
-### Step 3: Plan for Schema Evolution
+敗：數模未穩→標綱為 `draft` 勿發於註冊表。
 
-Compatibility rules:
+### 三：備綱演
+
+相容規：
 
 | Change | Backwards Compatible? | Forwards Compatible? | Safe? |
 |--------|----------------------|---------------------|-------|
@@ -164,13 +166,13 @@ Compatibility rules:
 | Add enum value | Yes (if consumers ignore unknown) | No | Depends on implementation |
 | Remove enum value | No | Yes | No |
 
-Safe evolution strategy:
-1. **Only add optional fields** with sensible defaults
-2. **Never remove or rename** — deprecate instead
-3. **Version the schema** in the identifier (`v1`, `v2`)
-4. **Use a schema registry** for binary formats (Confluent Schema Registry for Avro/Protobuf)
+安演策：
+1. **僅添可選欄**含合理默認
+2. **永勿去或改名**—宜棄用
+3. **於識中版綱**（`v1`、`v2`）
+4. **用綱註冊表**於二進格（Confluent Schema Registry 於 Avro/Protobuf）
 
-#### Protobuf evolution rules:
+#### Protobuf 演規：
 ```protobuf
 // v1 — original
 message Measurement {
@@ -192,7 +194,7 @@ message Measurement {
 }
 ```
 
-#### JSON Schema versioning:
+#### JSON Schema 版：
 ```json
 {
   "$id": "https://example.com/schemas/measurement/v2",
@@ -210,10 +212,11 @@ message Measurement {
 }
 ```
 
-**Expected:** Evolution plan documented: which changes are safe, which require new versions.
-**On failure:** If a breaking change is unavoidable, version the schema (v1 → v2) and maintain parallel support during migration.
+得：演計已書：何變安、何需新版。
 
-### Step 4: Implement Schema Validation
+敗：破變不可免→版綱（v1 → v2）並於遷間維並行支援。
+
+### 四：施綱驗
 
 ```python
 # JSON Schema validation (Python)
@@ -257,12 +260,13 @@ if (!result.success) {
 }
 ```
 
-**Expected:** Validation runs on all incoming data at system boundaries (API endpoints, file ingestion).
-**On failure:** Log validation errors with the full payload (redacting sensitive fields) for debugging.
+得：驗行於系邊界諸入數（API 端、檔攝）。
 
-### Step 5: Document the Schema
+敗：誌驗誤及全載（遮敏欄）以備除錯。
 
-Create a schema documentation page:
+### 五：書綱
+
+立綱書頁：
 
 ```markdown
 # Measurement Schema (v1)
@@ -289,29 +293,30 @@ Represents a single sensor reading with metadata.
 - **Policy**: Only additive, optional field changes between minor versions
 ```
 
-**Expected:** Documentation is auto-generated or stays in sync with the schema definition.
-**On failure:** If docs drift from schema, add a CI check that validates docs against the schema source.
+得：書動生或與綱定同步。
 
-## Validation
+敗：書漂離綱→加 CI 查以驗書對綱源。
 
-- [ ] Schema uses appropriate system for the use case (JSON Schema, Protobuf, Avro)
-- [ ] All fields have types, descriptions, and constraints
-- [ ] Required vs optional fields are explicitly defined
-- [ ] Evolution strategy documented (safe changes, versioning policy)
-- [ ] Validation implemented at system boundaries
-- [ ] Schema is versioned with a changelog
-- [ ] Round-trip test: serialize → deserialize → compare confirms no data loss
+## 驗
 
-## Common Pitfalls
+- [ ] 綱用案宜之系（JSON Schema、Protobuf、Avro）
+- [ ] 諸欄有類、述、限
+- [ ] 必 vs 可欄明定
+- [ ] 演策已書（安變、版策）
+- [ ] 系邊界已施驗
+- [ ] 綱已版含變誌
+- [ ] 往返測：序→反序→比確無數失
 
-- **Over-constraining too early**: Strict validation on a new schema blocks iteration. Start permissive (`additionalProperties: true`), tighten later.
-- **No default values**: Adding a required field without a default breaks all existing data. Always provide defaults for new fields.
-- **Ignoring null**: Many schemas don't handle null/missing fields clearly. Be explicit about nullable vs optional.
-- **Version in the payload, not the URL**: For long-lived data (storage, events), embed the schema version in the data itself, not just the endpoint URL.
-- **Enum exhaustiveness**: Adding a new enum value can crash consumers that use exhaustive switch statements. Document that unknown values should be handled gracefully.
+## 忌
 
-## Related Skills
+- **過早過限**：新綱嚴驗塞迭代→始寬（`additionalProperties: true`），後緊
+- **無默值**：添必欄而無默→破諸舊數→新欄常供默
+- **略 null**：多綱不明 null／缺欄→明 nullable vs optional
+- **於負載版而非 URL**：長壽數（存、事）→嵌綱版於數中，非僅端點 URL
+- **enum 窮舉**：添新 enum 值可崩用窮舉 switch 之用者→書無知值宜優雅處
 
-- `serialize-data-formats` — format selection and encoding/decoding implementation
-- `implement-pharma-serialisation` — pharmaceutical serialisation (regulatory schemas)
-- `write-validation-documentation` — validation documentation for regulated schemas
+## 參
+
+- `serialize-data-formats`
+- `implement-pharma-serialisation`
+- `write-validation-documentation`

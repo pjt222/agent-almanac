@@ -4,7 +4,7 @@ locale: wenyan-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design a GxP training programme covering training needs analysis by role,
   curriculum design (regulatory awareness, system-specific, data integrity),
@@ -25,32 +25,32 @@ metadata:
   tags: gxp, training, competency, compliance, quality-management, curriculum
 ---
 
-# Design Training Program
+# 設訓計
 
-Create a role-based GxP training programme with curriculum, competency assessments, and record management for regulated environments.
+立依職之 GxP 訓計，含課、能評、記管，以備受管境。
 
-## When to Use
+## 用
 
-- A new validated system requires user training before go-live
-- An audit finding cites inadequate training or missing training records
-- Organisational changes introduce new roles or responsibilities
-- Periodic review of the training programme is due
-- Regulatory inspection preparation requires demonstrating training adequacy
+- 新驗系上線前宜訓使者
+- 審現斥訓不足或記缺
+- 組變引新職責
+- 定期復訓計
+- 監察備需證訓足
 
-## Inputs
+## 入
 
-- **Required**: Systems and processes requiring trained personnel
-- **Required**: Role definitions (administrator, user, QA, management)
-- **Required**: Applicable regulatory requirements for training (GMP, GLP, GCP)
-- **Optional**: Existing training materials or curricula
-- **Optional**: Competency gaps identified in audits or performance reviews
-- **Optional**: Training management system capabilities
+- **必**：宜訓者之系及程
+- **必**：職定（管者、使者、QA、首）
+- **必**：適訓之規範（GMP、GLP、GCP）
+- **可**：既有訓材或課
+- **可**：審或效現之能缺
+- **可**：訓管系之能
 
-## Procedure
+## 行
 
-### Step 1: Conduct Training Needs Analysis
+### 一：作訓需析
 
-Identify what each role needs to know:
+識諸職所宜知：
 
 ```markdown
 # Training Needs Analysis
@@ -72,12 +72,13 @@ Identify what each role needs to know:
 | [Role] | [Current level] | [Required level] | [Gap description] | [H/M/L] |
 ```
 
-**Expected:** Every role has defined training requirements linked to their job function and GxP responsibilities.
-**On failure:** If roles are not clearly defined, conduct a RACI exercise first to establish responsibilities before defining training needs.
+得：諸職皆有訓求繫於其職與 GxP 責。
 
-### Step 2: Design the Curriculum
+敗：職未明→先作 RACI 以立責，後定訓需。
 
-Structure training into modules by topic:
+### 二：設課
+
+依題分訓為模：
 
 ```markdown
 # Training Curriculum
@@ -122,12 +123,13 @@ Structure training into modules by topic:
 5. Q&A and clarification
 ```
 
-**Expected:** Each module has defined duration, delivery method, audience, and specific content outline.
-**On failure:** If content is too broad for the allocated time, split into sub-modules or create prerequisite chains.
+得：各模有定時、交法、聽眾、具體內容綱。
 
-### Step 3: Create Competency Assessments
+敗：內過廣於配時→分為子模或立先修鏈。
 
-Define how competency is measured for each module:
+### 三：立能評
+
+定各模如何量能：
 
 ```markdown
 # Competency Assessment Design
@@ -161,10 +163,11 @@ Define how competency is measured for each module:
 **Assessor:** _______ **Date:** _______ **Result:** Pass / Fail
 ```
 
-**Expected:** Assessments test both knowledge (understanding why) and skill (demonstrating how).
-**On failure:** If pass rates are below 70%, review the training materials for clarity before blaming the learners.
+得：評測知（解何以）與能（示如何）。
 
-### Step 4: Define Training Records and Retention
+敗：過率低於 70%→先省訓材之明而勿咎學者。
+
+### 四：定訓記與留
 
 ```markdown
 # Training Record Management
@@ -185,10 +188,11 @@ Define how competency is measured for each module:
 | K. Jones | Admin | 2026-01-15 ✓ | 2026-01-17 ✓ | 2026-01-18 ✓ | 2026-01-20 ✓ | 2026-01-20 ✓ | Fully trained |
 ```
 
-**Expected:** Training records demonstrate that every person performing GxP activities was trained and assessed before performing those activities.
-**On failure:** If training records are incomplete, conduct a retrospective training gap assessment and implement immediate remediation training.
+得：訓記示諸行 GxP 事者皆於前受訓並評。
 
-### Step 5: Define Retraining Triggers
+敗：訓記缺→作回溯訓缺析並施速補訓。
+
+### 五：定重訓觸
 
 ```markdown
 # Retraining Triggers
@@ -205,10 +209,11 @@ Define how competency is measured for each module:
 | Extended absence (>6 months) | Returning individual | Before resuming GxP activities | Yes — practical assessment |
 ```
 
-**Expected:** Retraining triggers are specific, measurable, and linked to defined timelines.
-**On failure:** If retraining is not completed before the trigger deadline, the individual must not perform the affected GxP activities until training is complete.
+得：重訓觸具體、可量、繫於定時。
 
-### Step 6: Compile the Training Programme Document
+敗：重訓未於觸期前畢→該員勿行該 GxP 事至訓畢。
+
+### 六：合編訓計文
 
 ```markdown
 # Training Programme
@@ -233,31 +238,32 @@ Define how competency is measured for each module:
 | Department Head | | | |
 ```
 
-**Expected:** Complete training programme approved and effective before system go-live or compliance deadline.
-**On failure:** If approval is delayed, implement interim training measures and document the plan to formalise.
+得：全訓計於系上線或合規限前批並行。
 
-## Validation
+敗：批延→施臨時訓並書正式化之計。
 
-- [ ] Training needs analysis completed for all roles interacting with GxP systems
-- [ ] Curriculum modules defined with duration, delivery method, and content outline
-- [ ] Competency assessments exist for each module with defined passing criteria
-- [ ] Training matrix tracks all personnel against all required training
-- [ ] Training record retention meets regulatory requirements
-- [ ] Retraining triggers are defined with timelines and assessment requirements
-- [ ] Training programme approved by QA and management
+## 驗
 
-## Common Pitfalls
+- [ ] 諸與 GxP 系接觸之職已作訓需析
+- [ ] 課模已定時、交法、內綱
+- [ ] 各模有能評及過標
+- [ ] 訓矩追諸員對諸訓
+- [ ] 訓記留符規範
+- [ ] 重訓觸已定時線及評求
+- [ ] 訓計經 QA 及首批
 
-- **Training = reading the SOP**: Read-and-sign is appropriate for minor updates, not for initial training. New users need instructor-led training with hands-on practice.
-- **No competency assessment**: Training without assessment cannot demonstrate that learning occurred. Regulators expect evidence of competence, not just attendance.
-- **Trainer not qualified**: Trainers must be demonstrably competent in the subject. "Train the trainer" records are frequently requested during inspections.
-- **Stale training matrix**: A training matrix that is not updated when people join, leave, or change roles creates compliance gaps. Integrate with HR processes.
-- **One-size-fits-all**: Administrators need deeper training than end users. Role-based curriculum avoids overwhelming some users while under-training others.
+## 忌
 
-## Related Skills
+- **訓＝讀 SOP**：讀並籤宜於小改，非初訓→新員宜師授含實操
+- **無能評**：訓而無評不證學成→監察求能證而非僅出席
+- **訓師無資**：訓師宜能證於題→「訓訓師」記常於監察時索
+- **陳訓矩**：員入、離、改職時訓矩未更→致合規缺→與 HR 程整合
+- **一統而全**：管者需更深之訓→依職之課避某員溺而他員不足
 
-- `write-standard-operating-procedure` — SOPs drive training content and retraining triggers
-- `design-compliance-architecture` — identifies which systems and roles require training
-- `conduct-gxp-audit` — audits frequently assess training adequacy
-- `manage-change-control` — system changes trigger retraining requirements
-- `prepare-inspection-readiness` — training records are a primary inspection target
+## 參
+
+- `write-standard-operating-procedure`
+- `design-compliance-architecture`
+- `conduct-gxp-audit`
+- `manage-change-control`
+- `prepare-inspection-readiness`

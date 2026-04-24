@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Design Shiny application UIs using bslib for theming, layout_columns
   for responsive grids, value boxes, cards, and custom CSS/SCSS.
@@ -23,31 +23,31 @@ metadata:
   tags: shiny, bslib, ui, theming, layout, css, accessibility, responsive
 ---
 
-# Design Shiny UI
+# Shiny UI 之設
 
-Design responsive, accessible Shiny application interfaces using bslib theming, modern layout primitives, and custom CSS.
+用 bslib 主題化、現代化佈局原語、自定義 CSS，設響應且可及之 Shiny 應用界面。
 
-## When to Use
+## 用時
 
-- Building a new Shiny app UI from scratch
-- Modernizing an existing Shiny app from fluidPage to bslib
-- Applying brand theming (colors, fonts) to a Shiny app
-- Making a Shiny app responsive across screen sizes
-- Improving accessibility of a Shiny application
+- 自始構 Shiny 應用 UI
+- 將既有 Shiny 應用由 fluidPage 現代化為 bslib
+- 應用品牌主題（色、字）於 Shiny 應用
+- 使 Shiny 應用於諸屏尺寸下響應
+- 改 Shiny 應用之可及性
 
-## Inputs
+## 入
 
-- **Required**: Application purpose and target audience
-- **Required**: Layout type (sidebar, navbar, fillable, dashboard)
-- **Optional**: Brand colors and fonts
-- **Optional**: Whether to use custom CSS/SCSS (default: bslib only)
-- **Optional**: Accessibility requirements (WCAG level)
+- **必要**：應用之用與目標受眾
+- **必要**：佈局類型（sidebar、navbar、fillable、dashboard）
+- **可選**：品牌色與字
+- **可選**：是否用自定義 CSS/SCSS（默認：僅 bslib）
+- **可選**：可及性之要（WCAG 等級）
 
-## Procedure
+## 法
 
-### Step 1: Choose the Page Layout
+### 第一步：擇頁面佈局
 
-bslib provides several page constructors:
+bslib 提諸頁構造器：
 
 ```r
 # Sidebar layout — most common for data apps
@@ -91,11 +91,11 @@ ui <- page_sidebar(
 )
 ```
 
-**Expected:** Page layout matches the application's navigation and content needs.
+**得：** 頁面佈局合應用之導航與內容之需。
 
-**On failure:** If the layout doesn't look right, check that you're using `page_sidebar()` / `page_navbar()` (bslib) not `fluidPage()` / `navbarPage()` (base shiny). The bslib versions have better defaults and theming support.
+**敗則：** 佈局不如所願則察用 `page_sidebar()`/`page_navbar()`（bslib）而非 `fluidPage()`/`navbarPage()`（base shiny）。bslib 版本有更佳默認與主題支持。
 
-### Step 2: Configure the bslib Theme
+### 第二步：設 bslib 主題
 
 ```r
 my_theme <- bslib::bs_theme(
@@ -122,17 +122,17 @@ ui <- page_sidebar(
 )
 ```
 
-Use the interactive theme editor during development:
+開發時用交互主題編輯器：
 
 ```r
 bslib::bs_theme_preview(my_theme)
 ```
 
-**Expected:** App renders with consistent brand colors, fonts, and Bootstrap 5 components.
+**得：** 應用以一致之品牌色、字、Bootstrap 5 組件渲染。
 
-**On failure:** If fonts don't load, check internet access (Google Fonts requires it) or switch to system fonts: `font_collection("system-ui", "-apple-system", "Segoe UI")`. If theme variables don't apply, check that you're passing `theme` to the page function.
+**敗則：** 字不載則察互聯網（Google Fonts 需之）或改用系統字：`font_collection("system-ui", "-apple-system", "Segoe UI")`。主題變量不應用則察是否傳 `theme` 予頁函數。
 
-### Step 3: Build the Layout with Cards and Columns
+### 第三步：以卡片與列建佈局
 
 ```r
 ui <- page_sidebar(
@@ -187,18 +187,18 @@ ui <- page_sidebar(
 )
 ```
 
-Key layout primitives:
-- `layout_columns()` — responsive grid with `col_widths`
-- `card()` — content container with optional header/footer
-- `value_box()` — KPI display with icon and theme
-- `layout_sidebar()` — nested sidebar within cards
-- `navset_card_tab()` — tabbed cards
+要原語：
+- `layout_columns()` — 響應式網格，配 `col_widths`
+- `card()` — 內容容器，可選 header/footer
+- `value_box()` — KPI 顯示，帶圖示與主題
+- `layout_sidebar()` — 卡片內嵌側欄
+- `navset_card_tab()` — 選項卡式卡片
 
-**Expected:** Responsive grid layout that adapts to screen size.
+**得：** 響應式網格佈局，能隨屏尺寸而變。
 
-**On failure:** If columns stack unexpectedly on wide screens, check `col_widths` sum equals 12 (Bootstrap grid). If cards overlap, ensure `fill = FALSE` on non-filling rows.
+**敗則：** 寬屏上列意外堆疊則察 `col_widths` 之和等於 12（Bootstrap 網格）。卡片相疊則確保非填充行 `fill = FALSE`。
 
-### Step 4: Add Dynamic UI Elements
+### 第四步：加動態 UI 元素
 
 ```r
 server <- function(input, output, session) {
@@ -230,13 +230,13 @@ server <- function(input, output, session) {
 }
 ```
 
-**Expected:** UI elements update dynamically based on user selections and data.
+**得：** UI 元素隨用者所擇與資料而動態更新。
 
-**On failure:** If dynamic UI flickers, use `conditionalPanel()` (CSS-based) instead of `renderUI()` where possible. If dynamic inputs lose their values on re-render, add `session$sendInputMessage()` to restore state.
+**敗則：** 動態 UI 閃爍則盡用 `conditionalPanel()`（基於 CSS）代 `renderUI()`。動態輸入重渲染時失值則加 `session$sendInputMessage()` 以復其狀。
 
-### Step 5: Add Custom CSS/SCSS (Optional)
+### 第五步：加自定義 CSS/SCSS（可選）
 
-For styles beyond bslib theme variables:
+欲越 bslib 主題變量之樣式：
 
 ```r
 # Inline CSS
@@ -258,18 +258,18 @@ ui <- page_sidebar(
 )
 ```
 
-For SCSS integration with bslib:
+SCSS 與 bslib 整合：
 
 ```r
 my_theme <- bslib::bs_theme(version = 5) |>
   bslib::bs_add_rules(sass::sass_file("www/custom.scss"))
 ```
 
-**Expected:** Custom styles applied without breaking bslib theming.
+**得：** 自定義樣式已施，未破 bslib 主題。
 
-**On failure:** If custom CSS conflicts with bslib, use Bootstrap CSS variables (`var(--bs-primary)`) instead of hardcoded colors. This ensures theme changes propagate to custom styles.
+**敗則：** 自定義 CSS 與 bslib 衝突則用 Bootstrap CSS 變量（`var(--bs-primary)`）代硬編碼色。如此主題變更可傳至自定義樣式。
 
-### Step 6: Ensure Accessibility
+### 第六步：確保可及性
 
 ```r
 # Add ARIA labels to inputs
@@ -302,33 +302,33 @@ tags$main(
 )
 ```
 
-**Expected:** App meets WCAG 2.1 AA standards for color contrast, keyboard navigation, and screen reader compatibility.
+**得：** 應用合 WCAG 2.1 AA 之色差、鍵盤導航、屏讀相容。
 
-**On failure:** Test with browser dev tools accessibility audit (Lighthouse). Check color contrast ratios with WebAIM's contrast checker. Ensure all interactive elements are keyboard-focusable.
+**敗則：** 以瀏覽器開發工具之可及性審計（Lighthouse）測。以 WebAIM 對比檢查器察色差比。確保諸交互元素可由鍵盤聚焦。
 
-## Validation
+## 驗
 
-- [ ] Page layout renders correctly on desktop and mobile widths
-- [ ] bslib theme applies consistently to all components
-- [ ] Value boxes display with correct themes and icons
-- [ ] Cards resize properly in the responsive grid
-- [ ] Custom CSS uses Bootstrap variables, not hardcoded values
-- [ ] All plots have alt text for screen readers
-- [ ] Color contrast meets WCAG AA (4.5:1 for text)
-- [ ] Interactive elements are keyboard accessible
+- [ ] 頁面佈局於桌面與移動寬度下皆正渲染
+- [ ] bslib 主題一致施於諸組件
+- [ ] 值框以正確之主題與圖示顯示
+- [ ] 卡片於響應式網格中正確縮放
+- [ ] 自定義 CSS 用 Bootstrap 變量，非硬編碼
+- [ ] 諸圖皆有屏讀者所用之替代文本
+- [ ] 色對比合 WCAG AA（文本 4.5:1）
+- [ ] 交互元素可由鍵盤訪問
 
-## Common Pitfalls
+## 陷
 
-- **Mixing old and new Shiny UI**: Don't mix `fluidPage()` with bslib components. Use `page_sidebar()`, `page_navbar()`, or `page_fillable()` exclusively.
-- **Hardcoded colors in CSS**: Use `var(--bs-primary)` instead of `#2c3e50`. Hardcoded colors break when the theme changes.
-- **Missing `fill = FALSE` on non-filling rows**: Value box rows and summary rows usually shouldn't stretch to fill available space. Set `fill = FALSE`.
-- **Google Fonts in offline environments**: If the app deploys to an air-gapped network, use system fonts or self-hosted font files instead of `font_google()`.
-- **Ignoring mobile**: Test with the browser responsive mode. `layout_columns` automatically stacks on narrow screens, but custom CSS may not.
+- **新舊 Shiny UI 相混**：勿將 `fluidPage()` 與 bslib 組件相混。專用 `page_sidebar()`、`page_navbar()` 或 `page_fillable()`
+- **CSS 中硬編碼色**：用 `var(--bs-primary)` 代 `#2c3e50`。硬編碼色於主題變更時破
+- **非填充行缺 `fill = FALSE`**：值框行與摘要行常不宜填滿可用空間。設 `fill = FALSE`
+- **離線環境用 Google Fonts**：應用部署於隔離網絡則用系統字或自托管字文件代 `font_google()`
+- **略移動**：以瀏覽器響應模式測。`layout_columns` 於窄屏自動堆疊，然自定義 CSS 或不能
 
-## Related Skills
+## 參
 
-- `scaffold-shiny-app` — initial app setup including theme configuration
-- `build-shiny-module` — create modular UI components
-- `optimize-shiny-performance` — performance-conscious rendering
-- `review-web-design` — visual design review for layout, typography, and colour
-- `review-ux-ui` — usability and accessibility review
+- `scaffold-shiny-app` — 初始應用搭建含主題設置
+- `build-shiny-module` — 建模塊化 UI 組件
+- `optimize-shiny-performance` — 注重性能之渲染
+- `review-web-design` — 佈局、字體、色彩之視覺設計評議
+- `review-ux-ui` — 可用性與可及性評議

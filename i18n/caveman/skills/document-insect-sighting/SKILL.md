@@ -4,7 +4,7 @@ locale: caveman
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Record insect sightings with location, date, habitat, photography, behavior
   notes, preliminary identification, and citizen science submission. Covers
@@ -28,31 +28,31 @@ metadata:
 
 # Document Insect Sighting
 
-Record insect sightings with structured data, quality photographs, and citizen science submission for biodiversity research.
+Record insect sighting. Structured data, quality photos, citizen science submission for biodiversity research.
 
-## When to Use
+## When Use
 
-- You encounter an insect you want to document for personal records or research
-- You are contributing observations to citizen science platforms such as iNaturalist or BugGuide
-- You are building a systematic observation journal for a habitat or region
-- You want to support ecological surveys with georeferenced, photographed records
-- You are a beginner learning to notice and record insect diversity
+- See an insect, want to document for personal records or research
+- Contributing to citizen science platforms (iNaturalist, BugGuide)
+- Building systematic observation journal for habitat or region
+- Support ecological surveys with georeferenced photos
+- Beginner learning to notice + record insect diversity
 
 ## Inputs
 
-- **Required**: An insect sighting (live insect in the field or recently encountered specimen)
-- **Required**: A camera or smartphone capable of close-up photography
+- **Required**: Insect sighting (live insect in field or recently encountered specimen)
+- **Required**: Camera or smartphone with close-up photography
 - **Optional**: GPS device or smartphone with location services enabled
-- **Optional**: Notebook or field journal for written observations
-- **Optional**: Hand lens (10x) for fine detail observation
-- **Optional**: Ruler or coin for photographic scale reference
-- **Optional**: iNaturalist account or equivalent citizen science platform account
+- **Optional**: Notebook or field journal
+- **Optional**: Hand lens (10x) for fine detail
+- **Optional**: Ruler or coin for photo scale reference
+- **Optional**: iNaturalist or similar citizen science account
 
-## Procedure
+## Steps
 
-### Step 1: Record Location, Date, and Weather
+### Step 1: Record Location, Date, Weather
 
-Capture the context before approaching the insect. Many species are habitat-specific and seasonally active, so this metadata is as important as the photograph itself.
+Capture context before approaching insect. Many species habitat-specific + seasonally active → metadata as important as photo.
 
 ```
 Sighting Record — Context:
@@ -76,13 +76,13 @@ Sighting Record — Context:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete context record with date, time, precise location (ideally GPS coordinates), and weather conditions at the time of observation.
+**Got:** Full context record: date, time, precise location (ideally GPS), weather at observation time.
 
-**On failure:** If GPS is unavailable, describe the location relative to landmarks (trail junctions, buildings, water features) with enough detail that the site could be relocated. If weather data is uncertain, estimate temperature range and note "overcast" or "clear" rather than leaving the field blank.
+**If fail:** No GPS? Describe location vs landmarks (trail junctions, buildings, water features) — enough detail to relocate. Weather uncertain? Estimate temp range, note "overcast" or "clear" — never blank.
 
-### Step 2: Document Habitat and Microhabitat
+### Step 2: Document Habitat + Microhabitat
 
-Record where within the landscape the insect was found and what immediate substrate or structure it was using.
+Record where in landscape insect was found + what immediate substrate or structure it used.
 
 ```
 Habitat Recording:
@@ -108,13 +108,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A description of the habitat that places the insect in ecological context, including both the broad landscape and the immediate microhabitat where the insect was found.
+**Got:** Habitat description places insect in ecological context. Broad landscape + immediate microhabitat where insect found.
 
-**On failure:** If the microhabitat is difficult to characterize (e.g., insect in flight), note what it was flying near or what it landed on. Record "in flight, 1m above meadow grasses" rather than leaving the field blank.
+**If fail:** Microhabitat hard to characterize (insect in flight)? Note what it was flying near or what it landed on. Record "in flight, 1m above meadow grasses" — never blank.
 
 ### Step 3: Photograph with Diagnostic Quality
 
-Good photographs are the single most important element of a sighting record. Citizen science identifications rely almost entirely on image quality.
+Good photos = single most important element of sighting record. Citizen science IDs rely almost entirely on image quality.
 
 ```
 Photography Protocol:
@@ -140,13 +140,13 @@ Tips for quality macro photographs:
   wings close (especially butterflies and dragonflies)
 ```
 
-**Expected:** At least 3 usable photographs: one dorsal, one lateral, and one with scale reference. Ideally 5 or more images covering multiple angles.
+**Got:** Min 3 usable photos: dorsal, lateral, one with scale reference. Ideally 5+ images covering multiple angles.
 
-**On failure:** If the insect moves before multiple angles are captured, prioritize the dorsal view (top-down) as it carries the most diagnostic information for identification. A single sharp dorsal photograph is better than multiple blurry images. If the insect flies away before any photograph, sketch the body shape and note colors from memory immediately.
+**If fail:** Insect moves before multiple angles captured? Prioritize dorsal view — most diagnostic info for ID. One sharp dorsal > multiple blurry. Insect flies away before any photo? Sketch body shape, note colors from memory immediately.
 
-### Step 4: Note Behavior and Interactions
+### Step 4: Note Behavior + Interactions
 
-Behavioral observations add ecological value that photographs alone cannot capture.
+Behavioral observations add ecological value photos alone can't capture.
 
 ```
 Behavioral Notes:
@@ -176,13 +176,13 @@ Behavioral Notes:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** At least 3 behavioral observations recorded: activity, movement pattern, and abundance.
+**Got:** Min 3 behavioral observations: activity, movement pattern, abundance.
 
-**On failure:** If the insect is encountered briefly (e.g., lands and immediately flies away), record what you did observe and note the observation duration. Even "resting on leaf surface, solitary, flew when approached, observation duration 5 seconds" is useful data.
+**If fail:** Insect encountered briefly (lands, flies away)? Record what you did observe + note observation duration. Even "resting on leaf surface, solitary, flew when approached, duration 5 seconds" = useful data.
 
-### Step 5: Preliminary Identification to Order
+### Step 5: Preliminary ID to Order
 
-You do not need to identify the species. Placing the insect into its order narrows identification significantly and helps citizen science reviewers.
+Don't need species. Placing insect into its order narrows ID significantly + helps citizen science reviewers.
 
 ```
 Quick Key to Major Insect Orders:
@@ -207,13 +207,13 @@ Quick Key to Major Insect Orders:
 3. If unsure, note: "Order uncertain — resembles [description]"
 ```
 
-**Expected:** A preliminary identification to order (e.g., "Coleoptera — beetle") or an honest "order uncertain" with a physical description.
+**Got:** Preliminary ID to order (e.g., "Coleoptera — beetle") or honest "order uncertain" with physical description.
 
-**On failure:** If the insect does not clearly match any order in the quick key, record the body shape, wing type, and number of legs. Platforms like iNaturalist will accept "Insecta" as a starting identification, and community identifiers will refine it. An honest "unknown" is always better than a forced guess.
+**If fail:** Insect doesn't match any order in quick key? Record body shape, wing type, leg count. iNaturalist accepts "Insecta" as starting ID. Community refines. Honest "unknown" > forced guess.
 
 ### Step 6: Submit to Citizen Science Platform
 
-Upload the sighting to a platform where experts and community identifiers can verify and refine the identification.
+Upload sighting. Experts + community identifiers verify + refine ID.
 
 ```
 Submission Checklist for iNaturalist (or equivalent):
@@ -239,32 +239,32 @@ Data Quality Tips:
 - "Research Grade" status requires 2+ agreeing identifications at species level
 ```
 
-**Expected:** A complete observation submitted to a citizen science platform with photographs, location, date, and preliminary identification, ready for community review.
+**Got:** Full observation submitted to citizen science platform. Photos, location, date, preliminary ID. Ready for community review.
 
-**On failure:** If no internet access is available in the field, save all photographs and notes locally with the intention to upload later. Most platforms allow backdated submissions. If you do not have an account, store the record in your personal journal — the data still has value for your own learning and can be uploaded later.
+**If fail:** No internet in field? Save all photos + notes locally, upload later. Most platforms allow backdated submissions. No account? Store in personal journal — data still valuable for learning, upload later.
 
-## Validation
+## Checks
 
-- [ ] Date, time, and precise location were recorded before approaching the insect
-- [ ] Weather and habitat context were documented
-- [ ] At least 3 photographs were taken from different angles
-- [ ] At least one photograph includes a scale reference
-- [ ] Behavior and activity were noted
-- [ ] A preliminary identification to order was attempted (or honestly marked as unknown)
-- [ ] The observation was submitted to a citizen science platform or stored in a structured journal
+- [ ] Date, time, precise location recorded before approaching insect
+- [ ] Weather + habitat context documented
+- [ ] Min 3 photos from different angles
+- [ ] Min 1 photo with scale reference
+- [ ] Behavior + activity noted
+- [ ] Preliminary ID to order attempted (or honestly unknown)
+- [ ] Observation submitted to citizen science platform or stored in structured journal
 
-## Common Pitfalls
+## Pitfalls
 
-- **Approaching too quickly**: Many insects flee when approached rapidly. Move slowly and avoid casting your shadow over the subject. Photograph from farther away first, then gradually close distance
-- **Ignoring habitat context**: A photograph of an insect on a white wall loses the ecological context. Always include at least one in-situ photograph showing the insect in its natural setting
-- **Relying on a single photograph**: One image is often insufficient for identification. Wing pattern, leg structure, and antennae may only be visible from specific angles
-- **Forgetting scale**: Without a size reference, a 5mm beetle and a 50mm beetle can look identical in photographs. Always include a coin, ruler, or finger for scale
-- **Forcing an identification**: Submitting a confident but incorrect identification on citizen science platforms creates noise for researchers. "Insecta" or "order unknown" is always acceptable and preferred over a wrong genus or species
-- **Not recording negatives**: "No insects observed on milkweed patch" is valuable absence data for surveys. Record what you checked, not just what you found
+- **Approaching too quickly**: Many insects flee when approached fast. Move slow, avoid casting shadow over subject. Photograph far first, close gradually.
+- **Ignoring habitat context**: Photo of insect on white wall loses ecological context. Always include min 1 in-situ photo showing insect in natural setting.
+- **Relying on single photo**: One image often insufficient for ID. Wing pattern, leg structure, antennae only visible from specific angles.
+- **Forgetting scale**: No size reference? 5mm beetle + 50mm beetle look identical in photos. Always include coin, ruler, finger.
+- **Forcing ID**: Confident but wrong ID on citizen science platforms creates noise for researchers. "Insecta" or "order unknown" always acceptable, preferred over wrong genus or species.
+- **Not recording negatives**: "No insects observed on milkweed patch" = valuable absence data for surveys. Record what you checked, not just what you found.
 
-## Related Skills
+## See Also
 
-- `identify-insect` — detailed morphological identification procedure when you need to go beyond preliminary order-level placement
-- `observe-insect-behavior` — structured ethological observation protocols for deeper behavioral study
-- `collect-preserve-specimens` — when a physical specimen is needed for definitive identification
+- `identify-insect` — detailed morphological ID when you need beyond preliminary order-level
+- `observe-insect-behavior` — structured ethological observation protocols for deeper study
+- `collect-preserve-specimens` — when physical specimen needed for definitive ID
 - `survey-insect-population` — scaling individual sightings into systematic population-level surveys

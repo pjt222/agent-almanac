@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Draft a project charter that defines scope, stakeholders, success criteria,
   and initial risk register. Covers problem statement, RACI matrix, milestone
@@ -25,31 +25,31 @@ metadata:
 
 # Draft a Project Charter
 
-Creates a structured project charter that establishes project boundaries, stakeholder agreements, and success criteria before detailed planning begins. Produces a comprehensive document covering scope, RACI assignments, milestone planning, and an initial risk register suitable for agile, classic, or hybrid project methodologies.
+Structured charter → project bounds + stakeholder agreement + success criteria before detailed planning. Doc: scope + RACI + milestones + initial risk register. Agile/classic/hybrid.
 
-## When to Use
+## Use When
 
-- Kicking off a new project or initiative
-- Formalizing scope after an informal project start
-- Aligning stakeholders before detailed planning begins
-- Creating a reference document for scope decisions during execution
-- Transitioning from discovery/ideation to active project work
+- New project kickoff
+- Formalize scope after informal start
+- Align stakeholders before detailed planning
+- Reference doc for scope decisions during execution
+- Transition from discovery/ideation → active work
 
-## Inputs
+## In
 
-- **Required**: Project name and brief description
-- **Required**: Primary stakeholder or sponsor
-- **Optional**: Existing documentation (proposals, briefs, emails)
+- **Required**: Project name + brief desc
+- **Required**: Primary stakeholder/sponsor
+- **Optional**: Existing docs (proposals, briefs, emails)
 - **Optional**: Known constraints (budget, deadline, team size)
-- **Optional**: Methodology preference (agile, classic, hybrid)
+- **Optional**: Methodology pref (agile, classic, hybrid)
 
-## Procedure
+## Do
 
-### Step 1: Gather Project Context and Create Charter Template
+### Step 1: Gather Context + Template
 
-Read any existing documentation (proposals, emails, briefs) to understand the project background. Identify the core problem or opportunity the project addresses. Create the charter file with a structured template that will be populated in subsequent steps.
+Read existing docs (proposals, emails, briefs) → understand background. ID core problem/opportunity. Create charter file w/ structured template → populate subsequent steps.
 
-Create a file named `PROJECT-CHARTER-[PROJECT-NAME].md` with this template:
+File: `PROJECT-CHARTER-[PROJECT-NAME].md`:
 
 ```markdown
 # Project Charter: [Project Name]
@@ -114,73 +114,73 @@ Create a file named `PROJECT-CHARTER-[PROJECT-NAME].md` with this template:
 | Project Lead | | |
 ```
 
-Fill in the document ID using format PC-[PROJECT]-[YYYY]-[NNN] (e.g., PC-WEBSITE-2026-001). Write a problem statement (2-3 sentences) that describes the current situation, the gap, and the impact. Write a project purpose statement (1 paragraph) explaining what will be achieved.
+Fill doc ID → PC-[PROJECT]-[YYYY]-[NNN] (e.g., PC-WEBSITE-2026-001). Problem statement (2-3 sentences): current situation + gap + impact. Purpose (1 para): what will be achieved.
 
-**Expected:** Charter file created with document ID, problem statement, and purpose filled in. Problem statement is specific and describes a measurable gap.
+→ Charter file: doc ID + problem + purpose filled. Problem specific + measurable gap.
 
-**On failure:** If project context is unclear, document specific questions for the sponsor in a QUESTIONS section at the top of the charter. If existing docs conflict, note contradictions in an OPEN ISSUES section and flag for stakeholder resolution.
+If err: context unclear → QUESTIONS section at top for sponsor. Existing docs conflict → OPEN ISSUES + flag for stakeholder resolution.
 
-### Step 2: Define Scope Boundaries
+### Step 2: Scope Boundaries
 
-Create explicit lists of what is and is not included in the project scope. Write 3-5 in-scope deliverables with specific acceptance criteria for each. Write 3-5 out-of-scope items to prevent scope creep. Populate the Deliverables table with each deliverable, its acceptance criteria, and a target date.
+Explicit in-scope + out-of-scope. Write 3-5 in-scope deliverables + specific acceptance criteria each. Write 3-5 out-of-scope → prevent creep. Populate Deliverables table: deliverable + criteria + target date.
 
-**Expected:** Scope section has balanced in-scope and out-of-scope lists. Deliverables table contains 3-5 entries with specific, testable acceptance criteria. Target dates are realistic and sequenced logically.
+→ Scope balanced. Deliverables 3-5 w/ specific testable criteria. Dates realistic + sequenced.
 
-**On failure:** If deliverables are vague, break down each into sub-deliverables with concrete outputs. If acceptance criteria are missing, ask: "How would we demonstrate this deliverable is complete?" If target dates are unavailable, mark as TBD and flag for milestone planning session.
+If err: vague deliverables → break into sub-deliverables w/ concrete outputs. Criteria missing → ask "How would we demonstrate this is complete?". No dates → TBD, flag for milestone session.
 
-### Step 3: Identify Stakeholders and Assign RACI
+### Step 3: Stakeholders + RACI
 
-List all individuals or groups who will be affected by, contribute to, or have decision authority over the project. Include their organizational role. Create a RACI matrix mapping each stakeholder to each deliverable using:
-- **R** (Responsible): Does the work
-- **A** (Accountable): Final decision authority (only one A per deliverable)
-- **C** (Consulted): Provides input before decisions
-- **I** (Informed): Kept updated on progress
+List all affected/contributing/decision-authority individuals + org role. RACI matrix per stakeholder × deliverable:
+- **R** (Responsible): does work
+- **A** (Accountable): final decision authority (one A per deliverable)
+- **C** (Consulted): input before decisions
+- **I** (Informed): updated on progress
 
-Ensure each deliverable has exactly one A and at least one R.
+Each deliverable → exactly one A + ≥ one R.
 
-**Expected:** Stakeholders table lists 5-10 people with their roles. RACI matrix has one A per deliverable column. No deliverable is missing an R or has multiple As. Sponsor is A for final approval.
+→ Stakeholders 5-10 + roles. One A per deliverable column. No missing R / multiple As. Sponsor = A for final approval.
 
-**On failure:** If stakeholder list is incomplete, cross-reference with organization chart and meeting attendees from discovery phase. If multiple As are identified, escalate the conflict to the sponsor for decision authority clarification. If no R exists, flag deliverable as unassigned and requiring resource allocation.
+If err: list incomplete → cross-ref org chart + discovery meeting attendees. Multiple As → escalate to sponsor for clarification. No R → flag unassigned + resource allocation.
 
-### Step 4: Define Success Criteria and Milestones
+### Step 4: Success Criteria + Milestones
 
-Write 3-5 measurable success criteria using SMART format (Specific, Measurable, Achievable, Relevant, Time-bound). Each criterion should tie to a quantifiable measure and target value. Define 4-6 key milestones representing major project stages or deliverable completions, with target dates and dependencies on prior milestones.
+3-5 measurable criteria SMART (Specific + Measurable + Achievable + Relevant + Time-bound). Each → quantifiable measure + target. 4-6 key milestones = major stages/completions + target dates + deps on prior milestones.
 
-**Expected:** Success Criteria table has 3-5 entries with specific measures (e.g., "System uptime" measured as "% availability" with target "99.5%"). Milestones table shows logical project phases with realistic target dates. Dependencies are clearly noted.
+→ Criteria 3-5 w/ specific measures (e.g., "Uptime" = "% availability" target "99.5%"). Milestones logical + realistic. Deps clear.
 
-**On failure:** If success criteria are vague (e.g., "improve quality"), rewrite as measurable outcomes with baseline and target values. If milestone dates are unrealistic, work backward from final deadline using estimated durations and buffers. If dependencies create circular logic, restructure milestone sequence or split conflicting milestones.
+If err: criteria vague ("improve quality") → rewrite as measurable outcomes + baseline + target. Dates unrealistic → work backward from final deadline w/ durations + buffers. Circular deps → restructure sequence or split conflicting.
 
-### Step 5: Create Initial Risk Register
+### Step 5: Initial Risk Register
 
-Identify 5-10 risks that could impact project success. For each risk, assess likelihood (Low/Medium/High) and impact (Low/Medium/High), then calculate severity. Define a specific mitigation strategy for each risk and assign a risk owner responsible for monitoring and response. Include at least one risk in each category: scope, schedule, resource, technical, and external.
+5-10 risks. Per risk: likelihood (L/M/H) + impact (L/M/H) → severity. Specific mitigation + assigned owner. ≥1 per category: scope, schedule, resource, technical, external.
 
-**Expected:** Risk Register has 5-10 entries covering scope, schedule, resource, technical, and external risks. Each risk has likelihood, impact, and severity assessed. Mitigation strategies are actionable and specific. Each risk has an assigned owner.
+→ Register 5-10 across scope + schedule + resource + technical + external. Each w/ L + I + severity. Mitigations actionable + specific. Each has owner.
 
-**On failure:** If risk list is incomplete, review scope boundaries, dependencies, stakeholder list, and assumptions for potential failure points. If mitigation strategies are generic ("monitor closely"), specify: What will be monitored? How often? What triggers action? If no one accepts risk ownership, assign to project lead temporarily and escalate to sponsor.
+If err: incomplete → review scope + deps + stakeholders + assumptions for failure points. Generic mitigations ("monitor closely") → specify: what monitored, how often, what triggers action. No owner → assign project lead temp + escalate to sponsor.
 
-## Validation
+## Check
 
-- [ ] Charter file created with document ID
-- [ ] Problem statement is specific and measurable
-- [ ] Scope has both in-scope and out-of-scope items
-- [ ] RACI matrix covers all deliverables
-- [ ] Success criteria are measurable (SMART)
-- [ ] At least 5 risks identified with mitigation strategies
-- [ ] Milestones have target dates
+- [ ] Charter file created w/ doc ID
+- [ ] Problem specific + measurable
+- [ ] Scope has in + out-of-scope
+- [ ] RACI covers all deliverables
+- [ ] Criteria SMART
+- [ ] ≥5 risks w/ mitigations
+- [ ] Milestones w/ target dates
 - [ ] Approval section included
 
-## Common Pitfalls
+## Traps
 
-- **Scope without boundaries**: Listing in-scope items without explicit out-of-scope items leads to scope creep. Always define what you won't do.
-- **Vague success criteria**: "Improve performance" is unmeasurable. Tie every criterion to a number with a baseline and target.
-- **Missing stakeholders**: Overlooked stakeholders surface late and derail the project. Cross-reference org charts and prior project communications.
-- **Risk register as checkbox**: Listing risks without actionable mitigation plans provides false confidence. Each risk needs a specific response strategy.
-- **Over-detailed charter**: The charter is a compass, not a map. Keep it to 2-4 pages. Detailed planning happens later.
+- **Scope w/o bounds**: In-scope w/o out-of-scope → creep. Always define what NOT doing.
+- **Vague criteria**: "Improve perf" unmeasurable. Tie each to number + baseline + target.
+- **Missing stakeholders**: Overlooked ones surface late + derail. Cross-ref org charts + prior comms.
+- **Risk register as checkbox**: Risks w/o actionable mitigations = false confidence. Each needs specific response.
+- **Over-detailed charter**: Charter = compass, not map. 2-4 pages. Detailed planning later.
 
-## Related Skills
+## →
 
-- `create-work-breakdown-structure` — decompose charter deliverables into work packages
-- `manage-backlog` — translate charter scope into a prioritized backlog
-- `plan-sprint` — plan the first sprint from charter deliverables
-- `generate-status-report` — report progress against charter milestones
-- `conduct-retrospective` — review charter assumptions after execution
+- `create-work-breakdown-structure` — decompose deliverables → work packages
+- `manage-backlog` — charter scope → prioritized backlog
+- `plan-sprint` — first sprint from deliverables
+- `generate-status-report` — report vs milestones
+- `conduct-retrospective` — review assumptions after execution

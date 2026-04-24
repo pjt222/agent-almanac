@@ -4,7 +4,7 @@ locale: wenyan
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Record insect sightings with location, date, habitat, photography, behavior
   notes, preliminary identification, and citizen science submission. Covers
@@ -26,33 +26,33 @@ metadata:
   tags: entomology, insects, documentation, citizen-science, iNaturalist, photography
 ---
 
-# Document Insect Sighting
+# 蟲遇之錄
 
-Record insect sightings with structured data, quality photographs, and citizen science submission for biodiversity research.
+以結構資料、高質之影、公民科學之投稿記蟲遇，以資生物多樣性之究。
 
-## When to Use
+## 用時
 
-- You encounter an insect you want to document for personal records or research
-- You are contributing observations to citizen science platforms such as iNaturalist or BugGuide
-- You are building a systematic observation journal for a habitat or region
-- You want to support ecological surveys with georeferenced, photographed records
-- You are a beginner learning to notice and record insect diversity
+- 遇欲記之蟲作個人或究之錄
+- 投觀察於公民科學平臺（如 iNaturalist 或 BugGuide）
+- 為某生境或區域立系統觀察日誌
+- 欲以具地標且帶照之記支持生態調查
+- 初學察並記蟲之多樣
 
-## Inputs
+## 入
 
-- **Required**: An insect sighting (live insect in the field or recently encountered specimen)
-- **Required**: A camera or smartphone capable of close-up photography
-- **Optional**: GPS device or smartphone with location services enabled
-- **Optional**: Notebook or field journal for written observations
-- **Optional**: Hand lens (10x) for fine detail observation
-- **Optional**: Ruler or coin for photographic scale reference
-- **Optional**: iNaturalist account or equivalent citizen science platform account
+- **必要**：蟲之遇（野中活蟲或近遇標本）
+- **必要**：能近拍之相機或智慧手機
+- **可選**：GPS 裝置或開定位之智慧手機
+- **可選**：筆記本或野外日誌以書觀察
+- **可選**：手持放大鏡（10x）以察細節
+- **可選**：尺或硬幣以作照中比例參
+- **可選**：iNaturalist 或同類公民科學平臺之帳戶
 
-## Procedure
+## 法
 
-### Step 1: Record Location, Date, and Weather
+### 第一步：錄地、時、氣
 
-Capture the context before approaching the insect. Many species are habitat-specific and seasonally active, so this metadata is as important as the photograph itself.
+近蟲之前先捕上下文。諸種常限於特定生境與季，故此元資與照本身同要。
 
 ```
 Sighting Record — Context:
@@ -76,13 +76,13 @@ Sighting Record — Context:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A complete context record with date, time, precise location (ideally GPS coordinates), and weather conditions at the time of observation.
+**得：** 完整上下文錄，含日、時、精確位置（宜以 GPS 坐標）、觀察時之氣。
 
-**On failure:** If GPS is unavailable, describe the location relative to landmarks (trail junctions, buildings, water features) with enough detail that the site could be relocated. If weather data is uncertain, estimate temperature range and note "overcast" or "clear" rather than leaving the field blank.
+**敗則：** 無 GPS 則以地標（小徑交會、建築、水特徵）相對述位，足詳以能復至該處。氣資不確則估溫範圍，記「陰」或「晴」勿留空。
 
-### Step 2: Document Habitat and Microhabitat
+### 第二步：書生境與微生境
 
-Record where within the landscape the insect was found and what immediate substrate or structure it was using.
+記景觀中蟲所在及其用之即時基質或結構。
 
 ```
 Habitat Recording:
@@ -108,13 +108,13 @@ Habitat Recording:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** A description of the habitat that places the insect in ecological context, including both the broad landscape and the immediate microhabitat where the insect was found.
+**得：** 生境之述置蟲於生態上下文，含廣景與蟲所在之即時微生境。
 
-**On failure:** If the microhabitat is difficult to characterize (e.g., insect in flight), note what it was flying near or what it landed on. Record "in flight, 1m above meadow grasses" rather than leaving the field blank.
+**敗則：** 微生境難以述（如飛中之蟲）則記其飛近或落之物。書「飛於草地上 1 米」勿留空。
 
-### Step 3: Photograph with Diagnostic Quality
+### 第三步：以診斷之質攝影
 
-Good photographs are the single most important element of a sighting record. Citizen science identifications rely almost entirely on image quality.
+佳照為遇錄之最要元。公民科學之識幾全賴影質。
 
 ```
 Photography Protocol:
@@ -140,13 +140,13 @@ Tips for quality macro photographs:
   wings close (especially butterflies and dragonflies)
 ```
 
-**Expected:** At least 3 usable photographs: one dorsal, one lateral, and one with scale reference. Ideally 5 or more images covering multiple angles.
+**得：** 至少三可用照：背、側、含比例參者。宜五以上照覆多角。
 
-**On failure:** If the insect moves before multiple angles are captured, prioritize the dorsal view (top-down) as it carries the most diagnostic information for identification. A single sharp dorsal photograph is better than multiple blurry images. If the insect flies away before any photograph, sketch the body shape and note colors from memory immediately.
+**敗則：** 多角未捕前蟲已動則先背視（自上而下），其攜最多識別資訊。單清晰背照勝多模糊之影。蟲於任何照前飛去則即刻記身形與色於憶。
 
-### Step 4: Note Behavior and Interactions
+### 第四步：記行為與相作
 
-Behavioral observations add ecological value that photographs alone cannot capture.
+行為觀察增照所不能捕之生態值。
 
 ```
 Behavioral Notes:
@@ -176,13 +176,13 @@ Behavioral Notes:
 +--------------------+------------------------------------------+
 ```
 
-**Expected:** At least 3 behavioral observations recorded: activity, movement pattern, and abundance.
+**得：** 至少三行為觀察：活動、運動模式、豐度。
 
-**On failure:** If the insect is encountered briefly (e.g., lands and immediately flies away), record what you did observe and note the observation duration. Even "resting on leaf surface, solitary, flew when approached, observation duration 5 seconds" is useful data.
+**敗則：** 蟲短暫遇（如落即飛）則記所得之察並記觀察時長。即「落於葉上，獨，近則飛，觀察 5 秒」亦有用之資。
 
-### Step 5: Preliminary Identification to Order
+### 第五步：初識至目
 
-You do not need to identify the species. Placing the insect into its order narrows identification significantly and helps citizen science reviewers.
+不必識種。置蟲於其目大幅縮識範並助公民科學之審。
 
 ```
 Quick Key to Major Insect Orders:
@@ -207,13 +207,13 @@ Quick Key to Major Insect Orders:
 3. If unsure, note: "Order uncertain — resembles [description]"
 ```
 
-**Expected:** A preliminary identification to order (e.g., "Coleoptera — beetle") or an honest "order uncertain" with a physical description.
+**得：** 初識至目（如「鞘翅目——甲蟲」）或誠實之「目未定」附身形之述。
 
-**On failure:** If the insect does not clearly match any order in the quick key, record the body shape, wing type, and number of legs. Platforms like iNaturalist will accept "Insecta" as a starting identification, and community identifiers will refine it. An honest "unknown" is always better than a forced guess.
+**敗則：** 蟲不明合速查中任目則記身形、翅型、足數。iNaturalist 等平臺接「昆蟲綱」為初識，社群識者精之。誠實之「未知」恆勝強猜。
 
-### Step 6: Submit to Citizen Science Platform
+### 第六步：投於公民科學平臺
 
-Upload the sighting to a platform where experts and community identifiers can verify and refine the identification.
+將遇上傳至家與社群識者可驗並精識之平臺。
 
 ```
 Submission Checklist for iNaturalist (or equivalent):
@@ -239,32 +239,32 @@ Data Quality Tips:
 - "Research Grade" status requires 2+ agreeing identifications at species level
 ```
 
-**Expected:** A complete observation submitted to a citizen science platform with photographs, location, date, and preliminary identification, ready for community review.
+**得：** 完整觀察投於公民科學平臺，附照、位置、日期、初識，備社群審。
 
-**On failure:** If no internet access is available in the field, save all photographs and notes locally with the intention to upload later. Most platforms allow backdated submissions. If you do not have an account, store the record in your personal journal — the data still has value for your own learning and can be uploaded later.
+**敗則：** 野中無網則於本地存諸照與記以待後傳。諸平臺多允追溯投。若無帳戶則存於個人日誌——資仍有學習之值且可後傳。
 
-## Validation
+## 驗
 
-- [ ] Date, time, and precise location were recorded before approaching the insect
-- [ ] Weather and habitat context were documented
-- [ ] At least 3 photographs were taken from different angles
-- [ ] At least one photograph includes a scale reference
-- [ ] Behavior and activity were noted
-- [ ] A preliminary identification to order was attempted (or honestly marked as unknown)
-- [ ] The observation was submitted to a citizen science platform or stored in a structured journal
+- [ ] 近蟲之前已記日、時、精確位置
+- [ ] 氣與生境上下文已書
+- [ ] 已從不同角度攝至少三照
+- [ ] 至少一照含比例參
+- [ ] 行為與活動已記
+- [ ] 已試初識至目（或誠實標為未知）
+- [ ] 觀察已投公民科學平臺或存結構日誌
 
-## Common Pitfalls
+## 陷
 
-- **Approaching too quickly**: Many insects flee when approached rapidly. Move slowly and avoid casting your shadow over the subject. Photograph from farther away first, then gradually close distance
-- **Ignoring habitat context**: A photograph of an insect on a white wall loses the ecological context. Always include at least one in-situ photograph showing the insect in its natural setting
-- **Relying on a single photograph**: One image is often insufficient for identification. Wing pattern, leg structure, and antennae may only be visible from specific angles
-- **Forgetting scale**: Without a size reference, a 5mm beetle and a 50mm beetle can look identical in photographs. Always include a coin, ruler, or finger for scale
-- **Forcing an identification**: Submitting a confident but incorrect identification on citizen science platforms creates noise for researchers. "Insecta" or "order unknown" is always acceptable and preferred over a wrong genus or species
-- **Not recording negatives**: "No insects observed on milkweed patch" is valuable absence data for surveys. Record what you checked, not just what you found
+- **近之過速**：諸蟲急近則逃。緩行，勿以影遮蟲。先遠拍，漸近之
+- **略生境上下文**：蟲於白牆之照失生態上下文。恆含至少一現場照示蟲於自然之境
+- **賴單照**：單影常不足以識。翅紋、足構、觸角僅自特定角可見
+- **忘比例**：無尺參則 5mm 與 50mm 甲蟲於照中相似。恆含硬幣、尺或指以作比例
+- **強識**：於公民科學平臺投信心而誤之識為究者生噪。「昆蟲綱」或「目未知」恆可接且勝錯屬種
+- **不記空觀察**：「乳草斑未見蟲」於調查為有值之缺證。記所察，非僅所見
 
-## Related Skills
+## 參
 
-- `identify-insect` — detailed morphological identification procedure when you need to go beyond preliminary order-level placement
-- `observe-insect-behavior` — structured ethological observation protocols for deeper behavioral study
-- `collect-preserve-specimens` — when a physical specimen is needed for definitive identification
-- `survey-insect-population` — scaling individual sightings into systematic population-level surveys
+- `identify-insect` — 須超初步目識之詳形態識別
+- `observe-insect-behavior` — 更深行為究之結構化行為學觀察程式
+- `collect-preserve-specimens` — 須實體標本以作定識時
+- `survey-insect-population` — 將單遇擴為系統種群調查

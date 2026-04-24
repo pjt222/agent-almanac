@@ -4,7 +4,7 @@ locale: caveman-ultra
 source_locale: en
 source_commit: 82c77053
 translator: "Julius Brussee homage — caveman"
-translation_date: "2026-04-19"
+translation_date: "2026-04-24"
 description: >
   Develop a gas chromatography method from scratch: define analytical objectives,
   select column chemistry, optimize temperature programming, choose carrier gas
@@ -23,49 +23,49 @@ metadata:
 
 # Develop a GC Method
 
-Systematic development of a gas chromatography method covering column selection, temperature program optimization, carrier gas and detector choice, and initial performance verification for volatile and semi-volatile analytes.
+Systematic GC method dev: column pick + temp program + carrier + detector + initial perf check for volatile/semi-volatile analytes.
 
-## When to Use
+## Use When
 
-- Starting a new GC analysis for volatile or semi-volatile compounds
-- Adapting a published method to a different instrument or matrix
-- Replacing an existing method that no longer meets performance requirements
-- Developing a method for compounds with known boiling points and polarities
-- Transitioning from a packed-column method to a capillary method
+- New GC for volatile/semi-volatile compounds
+- Adapt published method → different instrument/matrix
+- Replace existing method failing perf
+- Method for compounds w/ known bp + polarity
+- Packed → capillary transition
 
-## Inputs
+## In
 
 ### Required
 
-- **Target analytes**: List of compounds with CAS numbers, molecular weights, and boiling points
-- **Sample matrix**: Description of the sample type (e.g., air, water extract, solvent solution, biological fluid)
-- **Detection limits**: Required LOD/LOQ for each analyte
+- **Target analytes**: Compounds + CAS + MW + bp
+- **Sample matrix**: Sample type (air, water extract, solvent, bio fluid)
+- **Detection limits**: LOD/LOQ per analyte
 
 ### Optional
 
-- **Reference method**: Published method (EPA, ASTM, pharmacopeial) to use as a starting point
-- **Available columns**: Inventory of columns already on hand
-- **Instrument configuration**: GC model, available detectors, autosampler type
-- **Throughput requirements**: Maximum acceptable run time per sample
-- **Regulatory framework**: GLP, GMP, EPA, or other compliance context
+- **Reference method**: Published (EPA, ASTM, pharmacopeial) → start
+- **Available columns**: On-hand inventory
+- **Instrument config**: GC model, detectors, autosampler
+- **Throughput**: Max run time/sample
+- **Regulatory**: GLP, GMP, EPA, etc
 
-## Procedure
+## Do
 
-### Step 1: Define Analytical Objectives
+### Step 1: Analytical Objectives
 
-1. List all target analytes with their physical properties (boiling point, polarity, molecular weight).
-2. Identify the sample matrix and any expected interferents or co-extractives.
-3. Specify required detection limits, quantitation range, and acceptable resolution between critical pairs.
-4. Determine whether the method must meet a regulatory standard (EPA 8260, USP, etc.).
-5. Document throughput needs: maximum run time, injection volume, sample preparation constraints.
+1. List analytes + props (bp, polarity, MW).
+2. ID matrix + expected interferents/co-extractives.
+3. Specify LOD/LOQ, quant range, Rs for critical pairs.
+4. Method must meet regulatory (EPA 8260, USP, etc)?
+5. Doc throughput: max run time, inj vol, prep constraints.
 
-**Expected:** A written specification listing analytes, matrix, detection limits, resolution requirements, and any regulatory or throughput constraints.
+→ Written spec: analytes + matrix + limits + Rs + regulatory/throughput.
 
-**On failure:** If analyte volatility data is unavailable, estimate boiling points from structural analogs or use a scouting run on a mid-polarity column to establish elution order.
+If err: volatility data missing → estimate bp from structural analogs or scout run on mid-polarity col for elution order.
 
-### Step 2: Select the Column
+### Step 2: Pick Column
 
-Choose column dimensions and stationary phase based on analyte polarity and separation difficulty.
+Dimensions + phase via analyte polarity + separation diff.
 
 | Column Type | Stationary Phase | Polarity | Typical Use Cases |
 |---|---|---|---|
@@ -77,33 +77,33 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
 | DB-FFAP | Modified PEG (nitroterephthalic acid) | Highly polar | Organic acids, free fatty acids |
 | DB-35 | 35% phenyl-methylpolysiloxane | Mid-low polarity | Polychlorinated biphenyls, confirmatory column |
 
-1. Match analyte polarity to stationary phase: like dissolves like.
-2. Select column length (15-60 m): longer columns give more plates but longer run times.
-3. Select inner diameter (0.25-0.53 mm): narrower gives better efficiency, wider gives more capacity.
-4. Select film thickness (0.25-5.0 um): thicker films retain volatile analytes longer.
-5. For complex matrices, consider a guard column or retention gap.
+1. Analyte polarity ↔ phase: like dissolves like.
+2. Length (15-60 m): longer → more plates, longer runs.
+3. ID (0.25-0.53 mm): narrower → better eff, wider → more capacity.
+4. Film (0.25-5.0 um): thicker → retain volatiles longer.
+5. Complex matrices → guard col or retention gap.
 
-**Expected:** A column specification (phase, length, ID, film thickness) justified by analyte properties and separation requirements.
+→ Col spec (phase + L + ID + film) justified by analyte + Rs reqs.
 
-**On failure:** If no single column resolves all critical pairs, plan a confirmation column with orthogonal selectivity (e.g., DB-1 primary, DB-WAX confirmatory).
+If err: no single col resolves all → confirm col w/ orthogonal selectivity (DB-1 primary, DB-WAX confirm).
 
-### Step 3: Optimize the Temperature Program
+### Step 3: Optimize Temp Program
 
-1. Set the initial oven temperature at or below the boiling point of the most volatile analyte (hold 1-2 min for solvent focusing).
-2. Apply a linear ramp. General starting points:
-   - Simple mixtures: 10-20 C/min
-   - Complex mixtures: 3-8 C/min for better resolution
-   - Ultra-fast screening: 25-40 C/min on short thin-film columns
-3. Set the final temperature 10-20 C above the boiling point of the least volatile analyte.
-4. Add a final hold (2-5 min) to ensure complete elution and column bake-out.
-5. For critical pairs that co-elute, insert an isothermal hold at the temperature just before their elution, or reduce the ramp rate in that region.
-6. Verify that the total run time meets throughput requirements.
+1. Initial oven ≤ bp of most volatile (hold 1-2 min → solvent focus).
+2. Linear ramp starts:
+   - Simple: 10-20 C/min
+   - Complex: 3-8 C/min (better Rs)
+   - Ultra-fast: 25-40 C/min on short thin-film
+3. Final temp 10-20 C above bp of least volatile.
+4. Final hold 2-5 min → full elution + bake-out.
+5. Co-eluting critical pairs → isothermal hold before elution, or slower ramp there.
+6. Verify total run time meets throughput.
 
-**Expected:** A temperature program (initial temp, hold, ramp rate(s), final temp, final hold) that separates all target analytes within the acceptable run time.
+→ Temp program (init + hold + ramp + final + hold) separates all targets in acceptable time.
 
-**On failure:** If critical pairs remain unresolved after ramp optimization, revisit column selection (Step 2) or consider a multi-ramp program with slower rates in the problem region.
+If err: critical pairs still unresolved after ramp → revisit col (Step 2) or multi-ramp w/ slower rates in problem region.
 
-### Step 4: Select the Carrier Gas
+### Step 4: Pick Carrier Gas
 
 | Property | Helium (He) | Hydrogen (H2) | Nitrogen (N2) |
 |---|---|---|---|
@@ -114,17 +114,17 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
 | Cost / availability | Expensive, supply concerns | Low cost, generator option | Very low cost |
 | Detector compatibility | All detectors | Not with ECD; caution with some MS | All detectors |
 
-1. Default to helium for general-purpose work and regulatory methods specifying He.
-2. Consider hydrogen for faster analysis or when helium supply is constrained; install hydrogen-specific leak detection and safety interlocks.
-3. Use nitrogen only for simple separations or when cost is the primary driver.
-4. Set the carrier gas flow to the optimal linear velocity for the chosen gas and column ID.
-5. Measure actual linear velocity using an unretained compound (e.g., methane on FID).
+1. Default He for general + regulatory methods specifying He.
+2. H2 for faster or when He supply constrained; install H2 leak detection + interlocks.
+3. N2 only for simple separations or when cost primary.
+4. Flow → optimal linear velocity for gas + col ID.
+5. Measure actual velocity via unretained (e.g., methane on FID).
 
-**Expected:** Carrier gas selected with flow rate set to optimal linear velocity, verified by unretained peak measurement.
+→ Carrier picked + flow at optimal velocity, verified by unretained peak.
 
-**On failure:** If efficiency is lower than expected at the set flow, generate a van Deemter curve (plate height vs. linear velocity) using 5-7 flow rates to find the true optimum.
+If err: eff lower than expected → van Deemter curve (plate height vs velocity) over 5-7 flows for true optimum.
 
-### Step 5: Choose the Detector
+### Step 5: Pick Detector
 
 | Detector | Selectivity | Sensitivity (approx.) | Linear Range | Best For |
 |---|---|---|---|---|
@@ -135,58 +135,58 @@ Choose column dimensions and stationary phase based on analyte polarity and sepa
 | MS (EI) | Structural identification | Low pg (scan), fg (SIM) | 10^5-10^6 | Unknowns, confirmation, trace analysis |
 | MS/MS | Highest selectivity | fg range | 10^5 | Complex matrices, ultra-trace, forensic |
 
-1. Match detector to analyte chemistry and required sensitivity.
-2. For quantitative work with simple matrices, FID is the default (robust, linear, low maintenance).
-3. For trace analysis in complex matrices, prefer MS in SIM mode or MS/MS in MRM mode.
-4. For halogenated compounds at trace levels, ECD provides the best sensitivity.
-5. Set detector temperature 20-50 C above the maximum oven temperature to prevent condensation.
-6. Optimize detector gas flows per manufacturer recommendations.
+1. Match detector to analyte chem + sensitivity.
+2. Quant in simple matrices → FID default (robust + linear + low maint).
+3. Trace in complex matrices → MS SIM or MS/MS MRM.
+4. Halogenated at trace → ECD best sensitivity.
+5. Detector temp 20-50 C above max oven → prevent condensation.
+6. Optimize detector gas flows per mfr.
 
-**Expected:** Detector selected and configured with appropriate temperatures and gas flows for the target analytes.
+→ Detector picked + config w/ temps + flows for targets.
 
-**On failure:** If detector sensitivity is insufficient at the required detection limits, consider concentrating the sample (larger injection volume, solvent evaporation) or switching to a more sensitive/selective detector.
+If err: sensitivity insufficient → concentrate sample (bigger inj, solvent evap) or more sensitive/selective detector.
 
-### Step 6: Validate Initial Performance
+### Step 6: Validate Initial Perf
 
-1. Prepare a system suitability standard containing all target analytes at mid-range concentration.
-2. Inject the standard 6 times consecutively.
+1. System suitability std: all targets at mid-range conc.
+2. Inject std 6× consec.
 3. Evaluate:
-   - Retention time RSD: must be < 1.0%
-   - Peak area RSD: must be < 2.0% (< 5.0% for trace-level)
-   - Resolution between critical pairs: Rs >= 1.5 (baseline) or >= 2.0 for regulated methods
-   - Peak tailing factor: 0.8-1.5 (USP criteria T <= 2.0)
-   - Theoretical plates (N): verify against column manufacturer specification
-4. Inject a blank to confirm absence of carryover or ghost peaks.
-5. Inject a matrix blank to identify potential interferents at target retention times.
-6. Document all parameters in a method summary sheet.
+   - RT RSD: < 1.0%
+   - Peak area RSD: < 2.0% (< 5.0% trace)
+   - Rs critical pairs: ≥ 1.5 (baseline) or ≥ 2.0 regulated
+   - Tailing factor: 0.8-1.5 (USP T ≤ 2.0)
+   - Theoretical plates N: vs col mfr spec
+4. Blank inj → no carryover/ghost peaks.
+5. Matrix blank → ID interferents at target RT.
+6. Doc all in method summary.
 
-**Expected:** System suitability criteria met for all analytes across replicate injections, with no carryover or matrix interferences at target retention windows.
+→ Suitability met across replicates, no carryover/matrix interference at target windows.
 
-**On failure:** If tailing is observed, check for active sites (re-condition column, trim 0.5 m from inlet end, replace liner). If RSD exceeds limits, investigate autosampler precision and injection technique. If resolution is insufficient, return to Step 3 to refine the temperature program.
+If err: tailing → check active sites (recondition, trim 0.5 m inlet, replace liner). RSD high → autosampler precision + inj technique. Rs low → Step 3 temp refinement.
 
-## Validation
+## Check
 
-- [ ] All target analytes are separated with Rs >= 1.5 for critical pairs
-- [ ] Retention time RSD < 1.0% over 6 replicate injections
-- [ ] Peak area RSD < 2.0% over 6 replicate injections
-- [ ] Peak tailing factors within 0.8-1.5 for all analytes
-- [ ] Blank injection shows no carryover above 0.1% of working concentration
-- [ ] Matrix blank shows no interferents at target retention windows
-- [ ] Total run time meets throughput requirements
-- [ ] Method parameters are fully documented (column, temps, flows, detector settings)
+- [ ] All targets Rs ≥ 1.5 critical pairs
+- [ ] RT RSD < 1.0% over 6 reps
+- [ ] Peak area RSD < 2.0% over 6 reps
+- [ ] Tailing 0.8-1.5 all analytes
+- [ ] Blank no carryover >0.1% working conc
+- [ ] Matrix blank no interference at targets
+- [ ] Run time meets throughput
+- [ ] All params documented (col, temps, flows, detector)
 
-## Common Pitfalls
+## Traps
 
-- **Ignoring column bleed temperature limits**: Operating above the maximum isothermal temperature of the stationary phase causes elevated baseline, ghost peaks, and accelerated column degradation. Always check the column specification sheet.
-- **Oversized injection volumes**: Injecting too much solvent causes fronting peaks and poor resolution for early eluters. Match injection volume to column capacity (typically 0.5-2 uL for 0.25 mm ID columns in split mode).
-- **Wrong liner for the injection mode**: Splitless injections require a single-taper or double-taper deactivated liner; split injections use a liner with glass wool. Mismatched liners cause poor reproducibility.
-- **Neglecting septum and liner maintenance**: Septum coring and liner contamination are the most common sources of ghost peaks and tailing. Replace septa every 50-100 injections and liners on a documented schedule.
-- **Skipping the van Deemter optimization**: Running at the manufacturer's default flow rate instead of the measured optimum wastes efficiency, especially when switching carrier gases.
-- **Insufficient column conditioning**: New columns must be conditioned (ramped to maximum temperature under carrier gas flow, no detector) to remove manufacturing residues before analytical use.
+- **Column bleed temp limit**: Above max isothermal → elevated baseline + ghost peaks + col degradation. Check spec sheet.
+- **Oversized inj**: Too much solvent → fronting + poor Rs early. Match inj vol to col capacity (0.5-2 uL for 0.25 mm ID split).
+- **Wrong liner**: Splitless → single/double-taper deactivated; split → w/ glass wool. Mismatch → poor repro.
+- **Septum/liner maint**: Coring + contamination = top sources of ghost peaks + tailing. Septa every 50-100 inj, liners scheduled.
+- **Skip van Deemter**: Mfr default flow not measured optimum → wasted eff, esp carrier gas swaps.
+- **Insufficient conditioning**: New cols → condition (ramp to max temp under carrier, no detector) to clear mfr residues.
 
-## Related Skills
+## →
 
-- `develop-hplc-method` -- liquid chromatography method development for non-volatile or thermally labile analytes
-- `interpret-chromatogram` -- reading and interpreting GC and HPLC chromatograms
-- `troubleshoot-separation` -- diagnosing and fixing peak shape, retention, and resolution problems
-- `validate-analytical-method` -- formal ICH Q2 validation of the developed GC method
+- `develop-hplc-method` — LC method dev for non-volatile/thermally labile
+- `interpret-chromatogram` — reading GC + HPLC chromatograms
+- `troubleshoot-separation` — diagnose peak shape/RT/Rs problems
+- `validate-analytical-method` — formal ICH Q2 valid. of GC method
